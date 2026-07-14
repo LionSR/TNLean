@@ -967,9 +967,12 @@ specialization of that Appendix~D definition.
 
 \begin{lemma}[Gauge invariance of fixed points and parent interactions]
     \label{lem:rfp_parent_gauge_invariance}
+    \lean{MPSTensor.GaugeEquiv.hasPhysicalBlockingIsometry}
+    \lean{MPSTensor.GaugeEquiv.hasPhysicalBlockingIsometry_iff}
     \lean{MPSTensor.GaugeEquiv.isTransferIdempotent_iff}
     \lean{MPSTensor.GaugeEquiv.parentInteraction_eq}
     \lean{MPSTensor.GaugeEquiv.localTerm_eq}
+    \lean{MPSTensor.GaugeEquiv.isNNCPH}
     \leanok
     \uses{def:gauge_equiv, def:mps_transfer_idempotence,
         def:parent_interaction}
@@ -978,6 +981,21 @@ specialization of that Appendix~D definition.
     canonical parent interaction and all its translated local terms are
     unchanged.
 \end{lemma}
+
+\begin{proof}\leanok
+    Suppose $B^i=XA^iX^{-1}$ for every physical letter. If the blocking
+    relation for $A$ is
+    \[
+        A^{i_1}A^{i_2}=\sum_j U^{j}_{i_1,i_2}A^j,
+    \]
+    then conjugation by $X$ gives the same relation for $B$. Hence transfer
+    idempotence is invariant under the similarity. At every length $L$, the
+    two tensors have the same local MPS space, so
+    \[
+        G_L(A)=G_L(B),\qquad h_i^{(N)}(A)=h_i^{(N)}(B).
+    \]
+    The parent-interaction identities and the commutation equations follow.
+\end{proof}
 
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor local terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
@@ -992,14 +1010,24 @@ specialization of that Appendix~D definition.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance}
+    \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance,
+        thm:left_canonical_rfp_chain_commutation}
     Put $A$ into its trace-preserving gauge.  This is a pure similarity, since
     the normal-tensor normalization fixes the transfer spectral radius at one.
     Similarity preserves the physical blocking relation and the local MPS
     spaces, hence also the canonical parent interactions.  In the
-    trace-preserving gauge, the Appendix~B virtual-bond projectors give the
-    adjacent three-site commutator; cyclic transport gives all pairwise
-    commutators on every chain with $N>2$.  Transporting back proves the claim.
+    trace-preserving gauge, the Appendix~B virtual-bond projectors give
+    \[
+        h_0^{(3)}h_1^{(3)}=h_1^{(3)}h_0^{(3)}.
+    \]
+    Cyclic transport and locality then give, for every $N>2$,
+    \[
+        h_i^{(N)}h_{i+1}^{(N)}=h_{i+1}^{(N)}h_i^{(N)},\qquad
+        h_i^{(N)}h_j^{(N)}=h_j^{(N)}h_i^{(N)}
+    \]
+    whenever the first pair is adjacent or the two supports are disjoint.
+    These cases exhaust all pairs of two-site terms on the periodic chain.
+    Transporting the parent interactions back proves the claim.
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
@@ -1007,8 +1035,9 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.rfp_implies_nncph_ground_state}
     \leanok
     \uses{thm:rfp_implies_nncph, def:is_nncph_ground_state}
-    If $A$ has nonzero virtual dimension and is a normal renormalization fixed
-    point, then for every chain length $N > 2$ the MPS vector $V^{(N)}(A)$
+    If $A$ has nonzero virtual dimension, is a normal tensor in the sense of
+    \cite{Cirac2016MPDO_arXiv}, and is a renormalization fixed point, then for
+    every chain length $N > 2$ the MPS vector $V^{(N)}(A)$
     satisfies the commutation and zero-energy equations for nearest-neighbor
     local terms:
     \[
