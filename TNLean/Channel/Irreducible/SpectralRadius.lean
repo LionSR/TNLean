@@ -7,6 +7,7 @@ import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
+import TNLean.Channel.Peripheral.Conjugation
 import TNLean.MPS.Core.TPGauge
 import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Algebra.Module.Equiv.Basic
@@ -25,6 +26,8 @@ for irreducible completely positive maps on `M_D(ℂ)`.
   is `r`.
 * `spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp`:
   the same statement as a real-valued identity.
+* `IsPrimitive.similarityMap_iff`: primitivity is invariant under the
+  positive-congruence similarity used for Perron gauges.
 
 ## Approach
 
@@ -116,6 +119,23 @@ private lemma spectralRadius_similarity_eq
     rw [hspec_left, hspec_alg, hspec_right]
   change spectralRadius ℂ (Φ (similarityMap (D := D) C E)) = spectralRadius ℂ (Φ E)
   rw [spectralRadius, spectralRadius, hspec]
+
+/-- Peripheral-spectrum primitivity is invariant under the positive-congruence
+similarity used to change Kraus gauges. -/
+theorem IsPrimitive.similarityMap_iff
+    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    _root_.IsPrimitive (similarityMap (D := D) C E) ↔
+      _root_.IsPrimitive E := by
+  have hsim :
+      similarityMap (D := D) C E =
+        (sandwichLinearEquiv (D := D) C hC).symm.conj E := by
+    apply LinearMap.ext
+    intro X
+    ext i j
+    simp [similarityMap, LinearEquiv.conj_apply, Matrix.mul_assoc]
+  rw [hsim]
+  exact IsPrimitive.conj_iff (sandwichLinearEquiv (D := D) C hC).symm E
 
 end SimilarityCLM
 
