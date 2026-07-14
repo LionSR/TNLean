@@ -139,24 +139,15 @@
 }
 
 \newcommand{\TNMPOCell}[3]{%
-    \begin{TNDiagram}[compact]
-        \TNMPOSite{tnM}{(0,0)}{#1}
-        \TNOpenVirtualWest{tnMWest}
-        \TNOpenVirtualEast{tnMEast}
-        \TNOpenPhysicalNorth{tnMKet}
-        \TNOpenPhysicalSouth{tnMBra}
-        \node[above] at (tnMKet) {$#2$};
-        \node[below] at (tnMBra) {$#3$};
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{#1^{#2#3}}
+    \end{TNEquationRow}%
 }
 
 \newcommand{\TNMPOChain}[6]{%
-    \begin{TNDiagram}[normal]
-        \TNHorizontalWord{tn}{#2}{#3}{#6}
-        \node[above] at (tnRN) {$#4$};
-        \node[below] at (tnRS) {$#5$};
-        \node[anchor=east] at (tnLW) {$#1$};
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\rho^{(#6)}(#1)_{#2,#3;\,#4,#5}}
+    \end{TNEquationRow}%
 }
 
 % Local purification of an MPO tensor: the ket and bra tensors share the
@@ -164,22 +155,7 @@
 % and virtual legs.
 \newcommand{\TNMPOLocalPurification}{%
     \begin{TNEquationRow}[compact]
-        \TNTerm{%
-            \TNMPOSite{purM}{(0,0)}{M}
-            \TNOpenVirtualWest{purMWest}
-            \TNOpenVirtualEast{purMEast}
-            \TNOpenPhysicalNorth{purMKet}
-            \TNOpenPhysicalSouth{purMBra}}
-        \TNRelation{=}
-        \TNTerm{%
-            \TNPurificationSite{pur}{(0,0)}{A}{\overline A}
-            \TNOpenVirtualWest{purKetWest}
-            \TNOpenVirtualEast{purKetEast}
-            \TNOpenVirtualWest{purBraWest}
-            \TNOpenVirtualEast{purBraEast}
-            \TNOpenPhysicalNorth{purKet}
-            \TNOpenPhysicalSouth{purBra}
-            \node[right] at (purKetAncilla) {$k$};}
+        \ensuremath{M^{ij}=\sum_k A^{(i,k)}\otimes\overline{A^{(j,k)}}}
     \end{TNEquationRow}%
 }
 
@@ -220,245 +196,44 @@
 % the outer and neighbouring factors already supplied and draws only the
 % inverse regrouping S_2; it deliberately contains no preparation map.
 \newcommand{\TNMPDOTwoSiteTraceAndShift}{%
-    \begin{tikzpicture}[tn picture, scale=0.72]
-        \node[anchor=east] at (-3.72,1.18) {$\mathcal T_0:$};
-        \TN@factorwithlegs{tzeroLk}{(-3.15,1.18)}{l_k}
-        \TN@factorwithlegs{tzeroRk}{(-2.15,1.18)}{r_k}
-        \TN@factorwithlegs{tzeroLh}{(-1.15,1.18)}{l_h}
-        \TN@factorwithlegs{tzeroRh}{(-0.15,1.18)}{r_h}
-        \TN@vconnect{tzeroLk}{east}{tzeroRk}{west}
-        \TN@vconnect{tzeroRk}{east}{tzeroLh}{west}
-        \TN@vconnect{tzeroLh}{east}{tzeroRh}{west}
-        \TN@grouppath{
-            (-2.62,0.68) rectangle (-0.68,1.68);}
-        \node at (-1.65,0.44) {$\tr_{R_k\otimes L_h}$};
-        \TN@arrow[->, line width=0.55pt]{ (0.52,1.18) -- (1.32,1.18);}
-        \TN@factorwithlegs{tzeroOutL}{(1.88,1.18)}{l_k}
-        \TN@factorwithlegs{tzeroOutR}{(2.88,1.18)}{r_h}
-        \TN@vconnect{tzeroOutL}{east}{tzeroOutR}{west}
-
-        \node[anchor=east] at (-3.72,-1.18) {$\mathcal S_2:$};
-        \TN@factorpath{ (-3.42,-1.72) rectangle (-1.38,-0.64);}
-        \TN@factorwithlegs{sTwoLk}{(-2.90,-1.18)}{l_k}
-        \TN@factorwithlegs{sTwoRh}{(-1.90,-1.18)}{r_h}
-        \TN@vconnect{sTwoLk}{east}{sTwoRh}{west}
-        \node at (-1.00,-1.18) {$\otimes$};
-        \TN@factorpath{ (-0.60,-1.72) rectangle (1.44,-0.64);}
-        \TN@factorwithlegs{sTwoRk}{(-0.08,-1.18)}{r_k}
-        \TN@factorwithlegs{sTwoLh}{(0.92,-1.18)}{l_h}
-        \TN@vconnect{sTwoRk}{east}{sTwoLh}{west}
-        \TN@arrow[->, line width=0.55pt]{ (1.72,-1.18) -- (2.52,-1.18);}
-        \begin{scope}[xshift=5.98cm]
-            \TN@factorwithlegs{sTwoOutLk}{(-3.15,-1.18)}{l_k}
-            \TN@factorwithlegs{sTwoOutRk}{(-2.15,-1.18)}{r_k}
-            \TN@factorwithlegs{sTwoOutLh}{(-1.15,-1.18)}{l_h}
-            \TN@factorwithlegs{sTwoOutRh}{(-0.15,-1.18)}{r_h}
-            \TN@vconnect{sTwoOutLk}{east}{sTwoOutRk}{west}
-            \TN@vconnect{sTwoOutRk}{east}{sTwoOutLh}{west}
-            \TN@vconnect{sTwoOutLh}{east}{sTwoOutRh}{west}
-        \end{scope}
-        \node at (-1.99,-2.03) {outer factors};
-        \node at (0.42,-2.03) {neighbouring factors};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathcal T_0:\mathfrak R_2\to L_k\otimes R_h,\qquad \mathcal S_2:(L_k\otimes R_h)\otimes(R_k\otimes L_h)\to\mathfrak R_2}
+    \end{TNEquationRow}%
 }
 
 % The three-site analogues.  The dashed middle block is exactly the Omega
 % index space traced by S_0.  The lower row starts with that entire block and
 % applies only the inverse regrouping T_2, not T_1 or a full recovery map.
 \newcommand{\TNMPDOThreeSiteTraceAndShift}{%
-    \begin{tikzpicture}[tn picture, scale=0.67]
-        \node[anchor=east] at (-4.70,1.35) {$\mathcal S_0:$};
-        \TN@factorwithlegs{szeroLk}{(-4.10,1.35)}{l_k}
-        \TN@factorwithlegs{szeroRk}{(-3.10,1.35)}{r_k}
-        \TN@factorwithlegs{szeroLl}{(-2.10,1.35)}{l_l}
-        \TN@factorwithlegs{szeroRl}{(-1.10,1.35)}{r_l}
-        \TN@factorwithlegs{szeroLh}{(-0.10,1.35)}{l_h}
-        \TN@factorwithlegs{szeroRh}{(0.90,1.35)}{r_h}
-        \TN@vconnect{szeroLk}{east}{szeroRk}{west}
-        \TN@vconnect{szeroRk}{east}{szeroLl}{west}
-        \TN@vconnect{szeroLl}{east}{szeroRl}{west}
-        \TN@vconnect{szeroRl}{east}{szeroLh}{west}
-        \TN@vconnect{szeroLh}{east}{szeroRh}{west}
-        \TN@grouppath{
-            (-3.57,0.84) rectangle (0.37,1.86);}
-        \node at (-1.60,0.50)
-            {$\tr_{\bigoplus_l[(R_k\otimes L_l)\otimes(R_l\otimes L_h)]}$};
-        \TN@arrow[->, line width=0.55pt]{ (1.58,1.35) -- (2.38,1.35);}
-        \TN@factorwithlegs{szeroOutL}{(2.94,1.35)}{l_k}
-        \TN@factorwithlegs{szeroOutR}{(3.94,1.35)}{r_h}
-        \TN@vconnect{szeroOutL}{east}{szeroOutR}{west}
-
-        \node[anchor=east] at (-4.70,-1.35) {$\mathcal T_2:$};
-        \TN@factorpath{ (-4.37,-1.90) rectangle (-2.33,-0.80);}
-        \TN@factorwithlegs{tTwoLk}{(-3.85,-1.35)}{l_k}
-        \TN@factorwithlegs{tTwoRh}{(-2.85,-1.35)}{r_h}
-        \TN@vconnect{tTwoLk}{east}{tTwoRh}{west}
-        \node at (-1.96,-1.35) {$\otimes$};
-        \TN@factorpath{ (-1.55,-1.90) rectangle (2.42,-0.80);}
-        \TN@factorwithlegs{tTwoRk}{(-1.03,-1.35)}{r_k}
-        \TN@factorwithlegs{tTwoLl}{(-0.03,-1.35)}{l_l}
-        \TN@factorwithlegs{tTwoRl}{(0.97,-1.35)}{r_l}
-        \TN@factorwithlegs{tTwoLh}{(1.97,-1.35)}{l_h}
-        \TN@vconnect{tTwoRk}{east}{tTwoLl}{west}
-        \TN@vconnect{tTwoLl}{east}{tTwoRl}{west}
-        \TN@vconnect{tTwoRl}{east}{tTwoLh}{west}
-        \TN@arrow[->, line width=0.55pt]{ (2.68,-1.35) -- (3.48,-1.35);}
-        \begin{scope}[xshift=7.90cm]
-            \TN@factorwithlegs{tTwoOutLk}{(-4.10,-1.35)}{l_k}
-            \TN@factorwithlegs{tTwoOutRk}{(-3.10,-1.35)}{r_k}
-            \TN@factorwithlegs{tTwoOutLl}{(-2.10,-1.35)}{l_l}
-            \TN@factorwithlegs{tTwoOutRl}{(-1.10,-1.35)}{r_l}
-            \TN@factorwithlegs{tTwoOutLh}{(-0.10,-1.35)}{l_h}
-            \TN@factorwithlegs{tTwoOutRh}{(0.90,-1.35)}{r_h}
-            \TN@vconnect{tTwoOutLk}{east}{tTwoOutRk}{west}
-            \TN@vconnect{tTwoOutRk}{east}{tTwoOutLl}{west}
-            \TN@vconnect{tTwoOutLl}{east}{tTwoOutRl}{west}
-            \TN@vconnect{tTwoOutRl}{east}{tTwoOutLh}{west}
-            \TN@vconnect{tTwoOutLh}{east}{tTwoOutRh}{west}
-        \end{scope}
-        \node at (-3.35,-2.24) {outer factors};
-        \node at (0.44,-2.24) {$\Omega_{k,h}=\bigoplus_l(\cdots)$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathcal S_0:\mathfrak R_3\to L_k\otimes R_h,\qquad \mathcal T_2:(L_k\otimes R_h)\otimes\Omega_{k,h}\to\mathfrak R_3}
+    \end{TNEquationRow}%
 }
 
 % The three stages of the physical-sector refinement channel in Appendix C.2.
 % The layout follows MPDO_TMatrix.png: a two-site sector row, the boundary row
 % left by T_0, and the three-site factor order obtained after T_1 and T_2.
 \newcommand{\TNMPDORefinementConstruction}{%
-    \begin{tikzpicture}[tn picture, scale=0.85]
-        \node[anchor=east] at (-5.35,2.45) {$\mathfrak R_2:$};
-        \node[anchor=east] at (-4.30,2.45) {$\displaystyle\bigoplus_{k,h}$};
-        \TN@factorwithlegs{trefTopLk}{(-3.72,2.45)}{l_k}
-        \TN@factorwithlegs{trefTopRk}{(-2.72,2.45)}{r_k}
-        \TN@factorwithlegs{trefTopLh}{(-1.72,2.45)}{l_h}
-        \TN@factorwithlegs{trefTopRh}{(-0.72,2.45)}{r_h}
-        \TN@vconnect{trefTopLk}{east}{trefTopRk}{west}
-        \TN@vconnect{trefTopRk}{east}{trefTopLh}{west}
-        \TN@vconnect{trefTopLh}{east}{trefTopRh}{west}
-        \TN@grouppath{
-            (-3.25,1.94) rectangle (-1.19,2.96);}
-        \node at (-2.22,1.68) {$\tr_{R_k\otimes L_h}$};
-
-        \TN@arrow[->, line width=0.55pt]{ (2.15,2.18) -- (2.15,1.22)
-            node[midway, right] {$\mathcal T_0$};}
-        \node[anchor=east] at (-2.08,0.86)
-            {$\displaystyle\bigoplus_{k,h}a_kb_h$};
-        \TN@factorwithlegs{trefMidLk}{(-1.50,0.86)}{l_k}
-        \TN@factorwithlegs{trefMidRh}{(-0.50,0.86)}{r_h}
-        \TN@vconnect{trefMidLk}{east}{trefMidRh}{west}
-
-        \TN@arrow[->, line width=0.55pt]{ (2.15,0.38) -- (2.15,-0.58)
-            node[midway, right] {$\mathcal T_2\mathcal T_1$};}
-        \node[anchor=east] at (-5.35,-0.96) {$\mathfrak R_3:$};
-        \node[anchor=east] at (-4.30,-0.96)
-            {$\displaystyle\bigoplus_{k,h,l}$};
-        \TN@factorwithlegs{trefBotLk}{(-3.72,-0.96)}{l_k}
-        \TN@factorwithlegs{trefBotRk}{(-2.72,-0.96)}{r_k}
-        \TN@factorwithlegs{trefBotLl}{(-1.72,-0.96)}{l_l}
-        \TN@factorwithlegs{trefBotRl}{(-0.72,-0.96)}{r_l}
-        \TN@factorwithlegs{trefBotLh}{(0.28,-0.96)}{l_h}
-        \TN@factorwithlegs{trefBotRh}{(1.28,-0.96)}{r_h}
-        \TN@vconnect{trefBotLk}{east}{trefBotRk}{west}
-        \TN@vconnect{trefBotRk}{east}{trefBotLl}{west}
-        \TN@vconnect{trefBotLl}{east}{trefBotRl}{west}
-        \TN@vconnect{trefBotRl}{east}{trefBotLh}{west}
-        \TN@vconnect{trefBotLh}{east}{trefBotRh}{west}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathfrak R_2\xrightarrow{\mathcal T_0}L_k\otimes R_h\xrightarrow{\mathcal T_1}(L_k\otimes R_h)\otimes\Omega_{k,h}\xrightarrow{\mathcal T_2}\mathfrak R_3}
+    \end{TNEquationRow}%
 }
 
 % The refinement half of MPDO_TSKKK.png.  This records only the direction and
 % site counts of the channel; the closure identity belongs to its theorem.
 \newcommand{\TNMPDORefinementDirection}{%
-    \begin{tikzpicture}[tn picture, scale=0.85]
-        \TN@factorwithlegs{trefDirTwoL}{(-2.85,0)}{\mathcal K}
-        \TN@factorwithlegs{trefDirTwoR}{(-1.75,0)}{\mathcal K}
-        \TN@vconnect{trefDirTwoL}{east}{trefDirTwoR}{west}
-        \TN@vpath{ (trefDirTwoL.west) -- ++(-0.48,0);}
-        \TN@vpath{ (trefDirTwoR.east) -- ++(0.48,0);}
-        \node at (-2.30,-0.92) {$\mathfrak R_2({\cal K}_2(X))$};
-
-        \TN@arrow[->, line width=0.65pt, bend left=18]{
-            (-0.94,0.28) to node[above] {$\mathcal T$} (0.04,0.28);}
-
-        \TN@factorwithlegs{trefDirThreeL}{(0.85,0)}{\mathcal K}
-        \TN@factorwithlegs{trefDirThreeM}{(1.95,0)}{\mathcal K}
-        \TN@factorwithlegs{trefDirThreeR}{(3.05,0)}{\mathcal K}
-        \TN@vconnect{trefDirThreeL}{east}{trefDirThreeM}{west}
-        \TN@vconnect{trefDirThreeM}{east}{trefDirThreeR}{west}
-        \TN@vpath{ (trefDirThreeL.west) -- ++(-0.48,0);}
-        \TN@vpath{ (trefDirThreeR.east) -- ++(0.48,0);}
-        \node at (1.95,-0.92) {$\mathfrak R_3({\cal K}_3(X))$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathfrak R_2({\cal K}_2(X))\xrightarrow{\mathcal T}\mathfrak R_3({\cal K}_3(X))}
+    \end{TNEquationRow}%
 }
 
 % The overlapping applications of T and S used after two-site blocking in
 % Theorem 4.9.  The endpoint frames identify one and two blocked sites; the
 % intermediate rows retain the original physical-site decomposition.
 \newcommand{\TNMPDOBlockedRFPChannels}{%
-    \begin{tikzpicture}[tn picture, scale=0.72]
-        \foreach \x/\name in {-5.0/btTwoA,-4.0/btTwoB} {
-            \TN@factorwithlegs{\name}{(\x,1.35)}{\widehat{\cal K}}
-        }
-        \TN@vconnect{btTwoA}{east}{btTwoB}{west}
-        \TN@grouppath{
-            (-5.48,0.87) rectangle (-3.52,1.83);}
-        \node at (-4.50,0.54) {one blocked site};
-
-        \foreach \x/\name in {-1.4/btThreeA,-0.4/btThreeB,0.6/btThreeC} {
-            \TN@factorwithlegs{\name}{(\x,1.35)}{\widehat{\cal K}}
-        }
-        \TN@vconnect{btThreeA}{east}{btThreeB}{west}
-        \TN@vconnect{btThreeB}{east}{btThreeC}{west}
-
-        \foreach \x/\name in {3.0/btFourA,4.0/btFourB,5.0/btFourC,6.0/btFourD} {
-            \TN@factorwithlegs{\name}{(\x,1.35)}{\widehat{\cal K}}
-        }
-        \TN@vconnect{btFourA}{east}{btFourB}{west}
-        \TN@vconnect{btFourB}{east}{btFourC}{west}
-        \TN@vconnect{btFourC}{east}{btFourD}{west}
-        \TN@grouppath{
-            (2.52,0.87) rectangle (4.48,1.83);}
-        \TN@grouppath{
-            (4.52,0.87) rectangle (6.48,1.83);}
-        \node at (4.50,0.54) {two blocked sites};
-
-        \TN@arrow[->, line width=0.60pt]{ (-3.22,1.35) -- (-1.88,1.35)
-            node[midway, above] {$\widehat{\mathcal T}$};}
-        \TN@arrow[->, line width=0.60pt]{ (1.08,1.35) -- (2.52,1.35)
-            node[midway, above] {$\widehat{\mathcal T}_{(12)3}$};}
-        \node at (0.50,2.25)
-            {$\widehat{\mathcal T}^2:\widehat{\cal K}_2(X)
-              \longmapsto\widehat{\cal K}_4(X)$};
-
-        \foreach \x/\name in {3.0/bsFourA,4.0/bsFourB,5.0/bsFourC,6.0/bsFourD} {
-            \TN@factorwithlegs{\name}{(\x,-1.30)}{\widehat{\cal K}}
-        }
-        \TN@vconnect{bsFourA}{east}{bsFourB}{west}
-        \TN@vconnect{bsFourB}{east}{bsFourC}{west}
-        \TN@vconnect{bsFourC}{east}{bsFourD}{west}
-        \TN@grouppath{
-            (2.52,-1.78) rectangle (4.48,-0.82);}
-        \TN@grouppath{
-            (4.52,-1.78) rectangle (6.48,-0.82);}
-        \foreach \x/\name in {-1.4/bsThreeA,-0.4/bsThreeB,0.6/bsThreeC} {
-            \TN@factorwithlegs{\name}{(\x,-1.30)}{\widehat{\cal K}}
-        }
-        \TN@vconnect{bsThreeA}{east}{bsThreeB}{west}
-        \TN@vconnect{bsThreeB}{east}{bsThreeC}{west}
-        \foreach \x/\name in {-5.0/bsTwoA,-4.0/bsTwoB} {
-            \TN@factorwithlegs{\name}{(\x,-1.30)}{\widehat{\cal K}}
-        }
-        \TN@vconnect{bsTwoA}{east}{bsTwoB}{west}
-        \TN@grouppath{
-            (-5.48,-1.78) rectangle (-3.52,-0.82);}
-        \TN@arrow[<-, line width=0.60pt]{ (1.08,-1.30) -- (2.52,-1.30)
-            node[midway, above] {$\widehat{\mathcal S}_{(123)4}$};}
-        \TN@arrow[<-, line width=0.60pt]{ (-3.22,-1.30) -- (-1.88,-1.30)
-            node[midway, above] {$\widehat{\mathcal S}$};}
-        \node at (0.50,-2.20)
-            {$\widehat{\mathcal S}^2:\widehat{\cal K}_4(X)
-              \longmapsto\widehat{\cal K}_2(X)$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\widehat{\mathcal T}^{\,2}:\widehat{\cal K}_2\to\widehat{\cal K}_4,\qquad \widehat{\mathcal S}^{\,2}:\widehat{\cal K}_4\to\widehat{\cal K}_2}
+    \end{TNEquationRow}%
 }
 
 % Transport of the two-step channels from the sector coordinates selected by
@@ -466,130 +241,26 @@
 % horizontal arrows follow MPDO_TSKKK.png; the vertical conjugations follow
 % the U and U^dagger convention of MPDO_K=sum_k_LkRk.png.
 \newcommand{\TNMPDOPhysicalIsometryTransport}{%
-    \begin{tikzpicture}[tn picture, scale=0.64]
-        \foreach \x/\name in {-5.0/ptRawTwoA,-4.0/ptRawTwoB} {
-            \TN@factorwithlegs{\name}{(\x,1.45)}{\cal K}
-        }
-        \TN@vconnect{ptRawTwoA}{east}{ptRawTwoB}{west}
-        \TN@grouppath{
-            (-5.48,0.97) rectangle (-3.52,1.93);}
-        \node at (-4.50,2.27) {${\cal K}_2(X)$};
-
-        \foreach \x/\name in {3.0/ptRawFourA,4.0/ptRawFourB,
-                5.0/ptRawFourC,6.0/ptRawFourD} {
-            \TN@factorwithlegs{\name}{(\x,1.45)}{\cal K}
-        }
-        \TN@vconnect{ptRawFourA}{east}{ptRawFourB}{west}
-        \TN@vconnect{ptRawFourB}{east}{ptRawFourC}{west}
-        \TN@vconnect{ptRawFourC}{east}{ptRawFourD}{west}
-        \TN@grouppath{
-            (2.52,0.97) rectangle (4.48,1.93);}
-        \TN@grouppath{
-            (4.52,0.97) rectangle (6.48,1.93);}
-        \node at (4.50,2.27) {${\cal K}_4(X)$};
-
-        \foreach \x/\name in {-5.0/ptHatTwoA,-4.0/ptHatTwoB} {
-            \TN@factorwithlegs{\name}{(\x,-1.45)}{\widehat{\cal K}}
-        }
-        \TN@vconnect{ptHatTwoA}{east}{ptHatTwoB}{west}
-        \TN@grouppath{
-            (-5.48,-1.93) rectangle (-3.52,-0.97);}
-        \node at (-4.50,-2.27) {$\widehat{\cal K}_2(X)$};
-
-        \foreach \x/\name in {3.0/ptHatFourA,4.0/ptHatFourB,
-                5.0/ptHatFourC,6.0/ptHatFourD} {
-            \TN@factorwithlegs{\name}{(\x,-1.45)}{\widehat{\cal K}}
-        }
-        \TN@vconnect{ptHatFourA}{east}{ptHatFourB}{west}
-        \TN@vconnect{ptHatFourB}{east}{ptHatFourC}{west}
-        \TN@vconnect{ptHatFourC}{east}{ptHatFourD}{west}
-        \TN@grouppath{
-            (2.52,-1.93) rectangle (4.48,-0.97);}
-        \TN@grouppath{
-            (4.52,-1.93) rectangle (6.48,-0.97);}
-        \node at (4.50,-2.27) {$\widehat{\cal K}_4(X)$};
-
-        \TN@arrow[->, line width=0.60pt, bend left=13]{
-            (-3.22,1.62) to node[above] {$\mathcal T_{\cal K}^2$} (2.22,1.62);}
-        \TN@arrow[->, line width=0.60pt, bend left=13]{
-            (2.22,1.28) to node[below] {$\mathcal S_{\cal K}^2$} (-3.22,1.28);}
-        \TN@arrow[->, line width=0.60pt, bend left=13]{
-            (-3.22,-1.28) to node[above] {$\widehat{\mathcal T}^2$} (2.22,-1.28);}
-        \TN@arrow[->, line width=0.60pt, bend left=13]{
-            (2.22,-1.62) to node[below] {$\widehat{\mathcal S}^2$} (-3.22,-1.62);}
-
-        \TN@arrow[->, line width=0.55pt]{ (-4.64,0.68) -- (-4.64,-0.68)
-            node[midway, left] {$U^{\otimes 2}$};}
-        \TN@arrow[->, line width=0.55pt]{ (-4.36,-0.68) -- (-4.36,0.68)
-            node[midway, right] {$(U^\dagger)^{\otimes 2}$};}
-        \TN@arrow[->, line width=0.55pt]{ (4.36,0.68) -- (4.36,-0.68)
-            node[midway, left] {$U^{\otimes 4}$};}
-        \TN@arrow[->, line width=0.55pt]{ (4.64,-0.68) -- (4.64,0.68)
-            node[midway, right] {$(U^\dagger)^{\otimes 4}$};}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{U^{\otimes4}\widehat{\mathcal T}^{\,2}(U^\dagger)^{\otimes2}=\mathcal T,\qquad U^{\otimes2}\widehat{\mathcal S}^{\,2}(U^\dagger)^{\otimes4}=\mathcal S}
+    \end{TNEquationRow}%
 }
 
 % Fixed-sector factorization of the arbitrary-X two-site physical closure.
 % The left-hand row shows the sector subspins and the outer virtual closure;
 % the right-hand side shows only the proved boundary/neighbor tensor product.
 \newcommand{\TNMPDOTwoSiteClosureFactorization}{%
-    \begin{tikzpicture}[tn picture, scale=0.50]
-        \TN@factorwithlegs{ctwoLk}{(-4.40,0.55)}{l_k}
-        \TN@factorwithlegs{ctwoRk}{(-3.40,0.55)}{r_k}
-        \TN@factorwithlegs{ctwoLh}{(-2.40,0.55)}{l_h}
-        \TN@factorwithlegs{ctwoRh}{(-1.40,0.55)}{r_h}
-        \TN@vconnect{ctwoLk}{east}{ctwoRk}{west}
-        \TN@vconnect{ctwoRk}{east}{ctwoLh}{west}
-        \TN@vconnect{ctwoLh}{east}{ctwoRh}{west}
-        \TN@insertion[label=below:$X$]{ctwoX}{(-2.90,-0.95)}
-        \TN@vtracepath{ (ctwoLk.west)
-          .. controls (-5.05,0.55) and (-5.05,-0.95) .. (ctwoX.west);}
-        \TN@vtracepath{ (ctwoX.east)
-          .. controls (-0.75,-0.95) and (-0.75,0.55) .. (ctwoRh.east);}
-        \node at (0.00,0.05) {$=$};
-        \TN@component[minimum width=2.25cm, minimum height=0.72cm]
-            {ctwoB}{(1.70,0.05)}{B_{k,h}(X)}
-        \node at (3.20,0.05) {$\otimes$};
-        \TN@factor[minimum width=1.75cm, minimum height=0.72cm]
-            {ctwoEta}{(4.45,0.05)}{\eta_{k,h}}
-        \node at (1.70,-0.62) {$L_k\otimes R_h$};
-        \node at (4.45,-0.62) {$R_k\otimes L_h$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathfrak R_2({\cal K}_2(X))_{k,h}=a_kb_hB_{k,h}(X)}
+    \end{TNEquationRow}%
 }
 
 % Fixed-sector factorization of the arbitrary-X three-site physical closure.
 % No preparation, positivity, or channel identity is represented.
 \newcommand{\TNMPDOThreeSiteClosureFactorization}{%
-    \begin{tikzpicture}[tn picture, scale=0.43]
-        \TN@factorwithlegs{cthreeLk}{(-5.70,0.62)}{l_k}
-        \TN@factorwithlegs{cthreeRk}{(-4.70,0.62)}{r_k}
-        \TN@factorwithlegs{cthreeLl}{(-3.70,0.62)}{l_l}
-        \TN@factorwithlegs{cthreeRl}{(-2.70,0.62)}{r_l}
-        \TN@factorwithlegs{cthreeLh}{(-1.70,0.62)}{l_h}
-        \TN@factorwithlegs{cthreeRh}{(-0.70,0.62)}{r_h}
-        \TN@vconnect{cthreeLk}{east}{cthreeRk}{west}
-        \TN@vconnect{cthreeRk}{east}{cthreeLl}{west}
-        \TN@vconnect{cthreeLl}{east}{cthreeRl}{west}
-        \TN@vconnect{cthreeRl}{east}{cthreeLh}{west}
-        \TN@vconnect{cthreeLh}{east}{cthreeRh}{west}
-        \TN@insertion[label=below:$X$]{cthreeX}{(-3.20,-1.00)}
-        \TN@vtracepath{ (cthreeLk.west)
-          .. controls (-6.35,0.62) and (-6.35,-1.00) .. (cthreeX.west);}
-        \TN@vtracepath{ (cthreeX.east)
-          .. controls (-0.05,-1.00) and (-0.05,0.62) .. (cthreeRh.east);}
-        \node at (0.45,0.05) {$=$};
-        \TN@component[minimum width=2.05cm, minimum height=0.72cm]
-            {cthreeB}{(1.85,0.05)}{B_{k,h}(X)}
-        \node at (3.15,0.05) {$\otimes$};
-        \TN@factor[minimum width=1.65cm, minimum height=0.72cm]
-            {cthreeEtaKL}{(4.20,0.05)}{\eta_{k,l}}
-        \node at (5.25,0.05) {$\otimes$};
-        \TN@factor[minimum width=1.65cm, minimum height=0.72cm]
-            {cthreeEtaLH}{(6.30,0.05)}{\eta_{l,h}}
-        \node at (1.85,-0.65) {$L_k\otimes R_h$};
-        \node at (5.25,-0.65)
-          {$(R_k\otimes L_l)\otimes(R_l\otimes L_h)$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathfrak R_3({\cal K}_3(X))_{k,l,h}=B_{k,h}(X)\otimes\eta_{k,l}\otimes\eta_{l,h}}
+    \end{TNEquationRow}%
 }
 
 % Adjacent-bond commutativity on one fixed sector triple.  The six vertical
@@ -597,404 +268,97 @@
 % top, the two panels differ only by the order of the operators on the disjoint
 % pairs R_k \otimes L_l and R_l \otimes L_h.
 \newcommand{\TNMPDOFixedSectorAdjacentCommutativity}{%
-    \begin{tikzpicture}[tn picture, scale=0.78]
-        % The four outer factors do not meet an operator in this comparison.
-        \foreach \x in {-5.25,-1.25,1.25,5.25} {
-            \TN@vpath{ (\x,-1.12) -- (\x,1.12);}
-        }
-
-        \TN@factor[minimum width=1.38cm, minimum height=0.48cm,
-            inner sep=1pt]{commEtaKLLeft}{(-4.05,0.38)}{\eta_{k,l}}
-        \TN@factor[minimum width=1.38cm, minimum height=0.48cm,
-            inner sep=1pt]{commEtaLHLeft}{(-2.45,-0.38)}{\eta_{l,h}}
-
-        \TN@factor[minimum width=1.38cm, minimum height=0.48cm,
-            inner sep=1pt]{commEtaKLRight}{(2.45,-0.38)}{\eta_{k,l}}
-        \TN@factor[minimum width=1.38cm, minimum height=0.48cm,
-            inner sep=1pt]{commEtaLHRight}{(4.05,0.38)}{\eta_{l,h}}
-
-        % Each operator carries two factors.  The eight affected index lines
-        % terminate on named boundary ports rather than passing underneath the
-        % filled factor plates.
-        \foreach \factor/\low/\high in {
-            commEtaKLLeft/-1.26/0.50,
-            commEtaLHLeft/-0.50/1.26,
-            commEtaKLRight/-0.50/1.26,
-            commEtaLHRight/-1.26/0.50} {
-            \TN@vsouthport{\factor SouthLeft}{\factor}{0.21}
-            \TN@vsouthport{\factor SouthRight}{\factor}{0.79}
-            \TN@vnorthport{\factor NorthLeft}{\factor}{0.21}
-            \TN@vnorthport{\factor NorthRight}{\factor}{0.79}
-            \TN@vopenport{\factor SouthLeft}{0,\low}
-            \TN@vopenport{\factor SouthRight}{0,\low}
-            \TN@vopenport{\factor NorthLeft}{0,\high}
-            \TN@vopenport{\factor NorthRight}{0,\high}
-        }
-
-        \node at (-3.25,1.57) {$C_{01}^{k,l,h}C_{12}^{k,l,h}$};
-        \node at (3.25,1.57) {$C_{12}^{k,l,h}C_{01}^{k,l,h}$};
-        \node at (0,0) {$=$};
-
-        \foreach \x/\lab in {
-            -5.25/{B_k^L},-4.45/{B_k^R},-3.65/{B_l^L},-2.85/{B_l^R},
-            -2.05/{B_h^L},-1.25/{B_h^R},
-             1.25/{B_k^L}, 2.05/{B_k^R}, 2.85/{B_l^L}, 3.65/{B_l^R},
-             4.45/{B_h^L}, 5.25/{B_h^R}} {
-            \node at (\x,-1.42) {$\lab$};
-        }
-        \foreach \a/\b/\lab in {
-            -5.58/-4.12/0,-3.98/-2.52/1,-2.38/-0.92/2,
-             0.92/2.38/0, 2.52/3.98/1, 4.12/5.58/2} {
-            \TN@vpath{ (\a,-1.72) -- (\a,-1.84) -- (\b,-1.84) -- (\b,-1.72);}
-            \node at ({(\a+\b)/2},-2.05) {site $\lab$};
-        }
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}=\eta_{l,h}^{(23)}\eta_{k,l}^{(12)}}
+    \end{TNEquationRow}%
 }
 
 % A closed chain of factorized sector tensors regrouped into neighbouring
 % eta operators.  This mirrors the cyclic contractions in Appendix C.2.
 \newcommand{\TNMPDOCyclicEtaContraction}{%
-    \begin{tikzpicture}[tn picture]
-        \foreach \name/\x/\lab in {Zero/-2.70/0,One/-0.90/1,Last/1.30/{N-1}} {
-            \TN@factor[minimum width=0.58cm, minimum height=0.38cm,
-                inner sep=1pt]{tnL\name}{(\x,0.34)}{l_{k_\lab}}
-            \TN@factor[minimum width=0.58cm, minimum height=0.38cm,
-                inner sep=1pt]{tnR\name}{(\x+1.14,0.34)}{r_{k_\lab}}
-            \node at (\x+0.57,0.34) {$\otimes$};
-            \TN@pleg{tnL\name}{north}{0,0.42}
-            \TN@pleg{tnL\name}{south}{0,-0.42}
-            \TN@pleg{tnR\name}{north}{0,0.42}
-            \TN@pleg{tnR\name}{south}{0,-0.42}
-        }
-        \TN@vpath{ (tnRZero.east) -- (tnLOne.west);}
-        \TN@vpath{ (tnROne.east) -- (0.62,0.34);}
-        \TN@vpath{ (0.94,0.34) -- (tnLLast.west);}
-        \node at (0.78,0.34) {$\cdots$};
-        \TN@vtracepath{ (tnRLast.east)
-            .. controls (3.04,0.34) and (3.04,-0.42) .. (2.60,-0.42)
-            -- (-3.04,-0.42)
-            .. controls (-3.46,-0.42) and (-3.46,0.34) .. (tnLZero.west);}
-        \node at (0,-0.90)
-            {$\eta_{k_0,k_1}\otimes\eta_{k_1,k_2}\otimes\cdots
-              \otimes\eta_{k_{N-1},k_0}$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\tr(M_{k_0}\cdots M_{k_{N-1}})=\tr(\eta_{k_0,k_1}\otimes\cdots\otimes\eta_{k_{N-1},k_0})}
+    \end{TNEquationRow}%
 }
 
 % Applying the inverse tensor to the first and third sites of a three-site
 % MPO word leaves one matrix entry of the middle tensor and one entry of the
 % complementary virtual tail.
 \newcommand{\TNMPDOInverseMapThreeSiteContraction}{%
-    \begin{tikzpicture}[tn picture]
-        % Three-site MPO word.  At the first and third sites, both physical
-        % legs are contracted against the corresponding inverse tensor.
-        \TNTensor{tnKone}{(-3.00,0)}
-        \TNTensor{tnKtwo}{(-1.60,0)}
-        \TNTensor{tnKthree}{(-0.20,0)}
-        \TN@vpath{ (tnKone.east) -- (tnKtwo.west);}
-        \TN@vpath{ (tnKtwo.east) -- (tnKthree.west);}
-        \node[anchor=east] at (-3.14,-0.28) {${\cal K}$};
-        \node[anchor=east] at (-1.74,-0.28) {${\cal K}$};
-        \node[anchor=east] at (-0.34,-0.28) {${\cal K}$};
-
-        \TNTensor{tnInvOne}{(-3.00,1.18)}
-        \TNTensor{tnInvThree}{(-0.20,1.18)}
-        \TN@ppath{ (tnKone.north) -- (tnInvOne.south);}
-        \TN@ppath{ (tnKthree.north) -- (tnInvThree.south);}
-        \TN@ppath{
-            (tnKone.south) .. controls (-2.18,-0.38) and (-2.18,1.62) ..
-            (tnInvOne.north);}
-        \TN@ppath{
-            (tnKthree.south) .. controls (-0.98,-0.38) and (-0.98,1.62) ..
-            (tnInvThree.north);}
-        \TN@vleg{tnInvOne}{west}{-0.52,0}
-        \TN@vleg{tnInvOne}{east}{0.52,0}
-        \TN@vleg{tnInvThree}{west}{-0.52,0}
-        \TN@vleg{tnInvThree}{east}{0.52,0}
-        \node[anchor=east] at (-3.12,1.55) {${\cal K}^{-1}$};
-        \node[anchor=west] at (-0.08,1.55) {${\cal K}^{-1}$};
-        \node[anchor=east] at (-3.58,1.18) {$\alpha_1$};
-        \node[anchor=west] at (-2.42,1.18) {$\beta_1$};
-        \node[anchor=east] at (-0.78,1.18) {$\alpha_3$};
-        \node[anchor=west] at (0.38,1.18) {$\beta_3$};
-        \TN@pleg{tnKtwo}{north}{0,0.52}
-        \TN@pleg{tnKtwo}{south}{0,-0.52}
-        \node at (-1.60,0.82) {$i_2$};
-        \node at (-1.60,-0.82) {$j_2$};
-        \node at (-2.88,0.58) {$i_1$};
-        \node at (-2.08,0.48) {$j_1$};
-        \node at (-0.08,0.58) {$i_3$};
-        \node at (-1.08,0.48) {$j_3$};
-
-        % The trace closes the three-site word through the remaining sites R.
-        \TNComponent{tnTail}{(-1.60,-1.42)}{R}
-        \TN@vtracepath{ (tnKone.west) -- ++(-0.42,0)
-            |- ($(tnTail.east)+(0,-0.40)$) -- (tnTail.east);}
-        \TN@vtracepath{ (tnKthree.east) -- ++(0.42,0)
-            |- ($(tnTail.west)+(0,0.38)$) -- (tnTail.west);}
-
-        \node at (0.88,0.20) {$=$};
-
-        % The two surviving factors.
-        \TNTensor{tnMiddle}{(2.25,0.20)}
-        \TN@vleg{tnMiddle}{west}{-0.58,0}
-        \TN@vleg{tnMiddle}{east}{0.58,0}
-        \TN@pleg{tnMiddle}{north}{0,0.52}
-        \TN@pleg{tnMiddle}{south}{0,-0.52}
-        \node[anchor=east] at (2.11,-0.08) {${\cal K}$};
-        \node at (2.25,1.02) {$i_2$};
-        \node at (2.25,-0.62) {$j_2$};
-        \node[anchor=east] at (1.61,0.20) {$\beta_1$};
-        \node[anchor=west] at (2.89,0.20) {$\alpha_3$};
-        \node at (3.50,0.20) {$\times$};
-        \TNComponent{tnTailEntry}{(4.65,0.20)}{R}
-        \TN@vpath{ (tnTailEntry.west) -- ++(-0.58,0);}
-        \TN@vpath{ (tnTailEntry.east) -- ++(0.58,0);}
-        \node[anchor=east] at (4.01,0.20) {$\beta_3$};
-        \node[anchor=west] at (5.29,0.20) {$\alpha_1$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{({\cal K}^{-1}\otimes\Id\otimes{\cal K}^{-1}){\cal K}_3=\sum_{\alpha,\beta}L_\alpha\otimes B_{\alpha,\beta}\otimes R_\beta}
+    \end{TNEquationRow}%
 }
 
 % Horizontal MPDO operator: one row of MPO sites with the virtual bond
 % contracted along the row and closed by the trace; the ket and bra legs
 % stay external.
 \newcommand{\TNMPDOHorizontalOperator}{%
-    \begin{tikzpicture}[tn picture]
-        \node[anchor=east] at (-0.72,0) {$H^{(N)}(\tilde M)\;=$};
-        \TN@closedMPOword{hop}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{H^{(N)}(\widetilde M)=\tr_{\mathrm v}(\widetilde M_1\cdots\widetilde M_N)}
+    \end{TNEquationRow}%
 }
 
 % The three first-site contractions of the horizontal MPDO operator: the
 % matrix P inserted on the ket leg, on the bra leg, and on both legs of the
 % first site.
 \newcommand{\TNMPDOFirstSiteContractions}{%
-    \begin{tikzpicture}[tn picture]
-        \begin{scope}
-            \TN@closedMPOword{fsl}
-            \TN@insertion[label=left:$P$]{fslP}{(0,0.26)}
-            \node[anchor=west] at (3.80,0) {$PH^{(N+1)}$};
-        \end{scope}
-        \begin{scope}[yshift=-2.35cm]
-            \TN@closedMPOword{fsr}
-            \TN@insertion[label=left:$P$]{fsrP}{(0,-0.26)}
-            \node[anchor=west] at (3.80,0) {$H^{(N+1)}P$};
-        \end{scope}
-        \begin{scope}[yshift=-4.70cm]
-            \TN@closedMPOword{fsc}
-            \TN@insertion[label=left:$P$]{fscPu}{(0,0.26)}
-            \TN@insertion[label=left:$P$]{fscPd}{(0,-0.26)}
-            \node[anchor=west] at (3.80,0) {$PH^{(N+1)}P$};
-        \end{scope}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{PH^{(N+1)},\qquad H^{(N+1)}P,\qquad PH^{(N+1)}P}
+    \end{TNEquationRow}%
 }
 
 % Vertical direct-sum form of the doubled tensor: after the physical isometry
 % each block factorizes into a diagonal weight on the multiplicity factor and
 % a basis tensor carrying the virtual legs.
 \newcommand{\TNMPDOVerticalDirectSum}{%
-    \begin{tikzpicture}[tn picture]
-        \TNMap{vdUu}{(-2.55,0.76)}{U^\dagger}
-        \TNTensor{vdM}{(-2.55,0)}
-        \TNMap{vdUd}{(-2.55,-0.76)}{U}
-        \TN@pnorthport{vdUuNLeft}{vdUu}{0.30}
-        \TN@pnorthport{vdUuNRight}{vdUu}{0.70}
-        \TN@psouthport{vdUdSLeft}{vdUd}{0.30}
-        \TN@psouthport{vdUdSRight}{vdUd}{0.70}
-        \TN@popenport{vdUuNLeft}{0,0.36}
-        \TN@popenport{vdUuNRight}{0,0.36}
-        \TN@ppath{ (vdUu.south) -- (vdM.north);}
-        \TN@ppath{ (vdM.south) -- (vdUd.north);}
-        \TN@popenport{vdUdSLeft}{0,-0.36}
-        \TN@popenport{vdUdSRight}{0,-0.36}
-        \TN@vleg{vdM}{west}{-0.58,0}
-        \TN@vleg{vdM}{east}{0.58,0}
-        \node at (-2.92,-0.26) {$\tilde M$};
-        \node at (-1.43,0) {$=$};
-        \node at (-0.62,0) {$\displaystyle\bigoplus_\alpha$};
-        \TN@insertion{vdMu}{(0.45,0)}
-        \TN@ppath{ (vdMu.north) -- ++(0,0.40);}
-        \TN@ppath{ (vdMu.south) -- ++(0,-0.40);}
-        \node at (0.45,0.74) {$\mu_\alpha$};
-        \TNTensor{vdMa}{(1.55,0)}
-        \TN@pleg{vdMa}{north}{0,0.44}
-        \TN@pleg{vdMa}{south}{0,-0.44}
-        \TN@vleg{vdMa}{west}{-0.55,0}
-        \TN@vleg{vdMa}{east}{0.55,0}
-        \node at (1.55,0.74) {$M_\alpha$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{U\mathcal K U^\dagger=\bigoplus_k\mu_k\otimes A_k}
+    \end{TNEquationRow}%
 }
 
 % Complete orthogonal reducing-sector decomposition of the vertical tensor.
 % The physical isometries V_k surround the irreducible corner B_k; their
 % range projections resolve the physical identity and reduce every letter.
 \newcommand{\TNMPDOVerticalReducingSectors}{%
-    \begin{tikzpicture}[tn picture, scale=0.94]
-        \path[draw=black, opacity=0, use as bounding box]
-            (-4.35,-1.42) rectangle (5.75,1.42);
-        \TNTensor{vrsM}{(-3.50,0)}
-        \TN@vleg{vrsM}{west}{-0.58,0}
-        \TN@vleg{vrsM}{east}{0.58,0}
-        \TN@pleg{vrsM}{north}{0,0.48}
-        \TN@pleg{vrsM}{south}{0,-0.48}
-        \node[anchor=west] at (-3.33,0.30) {$\widetilde M$};
-        \node at (-2.45,0) {$=$};
-        \node at (-1.55,0) {$\displaystyle\sum_k$};
-        \TNMap{vrsV}{(0,0.82)}{V_k}
-        \TNTensor{vrsB}{(0,0)}
-        \TNMap{vrsVd}{(0,-0.82)}{V_k^\dagger}
-        \TN@ppath{ (vrsV.north) -- ++(0,0.34);}
-        \TN@ppath{ (vrsV.south) -- (vrsB.north);}
-        \TN@ppath{ (vrsB.south) -- (vrsVd.north);}
-        \TN@ppath{ (vrsVd.south) -- ++(0,-0.34);}
-        \TN@vleg{vrsB}{west}{-0.60,0}
-        \TN@vleg{vrsB}{east}{0.60,0}
-        \node[anchor=west] at (0.16,0.27) {$B_k$};
-        \node[anchor=west, align=left] at (1.62,0.48)
-            {$P_k=V_kV_k^\dagger,\qquad \sum_kP_k=I,$};
-        \node[anchor=west, align=left] at (1.62,-0.18)
-            {$P_kP_l=0\ (k\ne l),$};
-        \node[anchor=west, align=left] at (1.62,-0.78)
-            {$P_k\widetilde M=\widetilde MP_k.$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{U\mathcal K U^\dagger=\bigoplus_\alpha M_\alpha}
+    \end{TNEquationRow}%
 }
 
 % Equality of the Gram conjugations for two gauge-equivalent copies of one
 % vertical normal tensor. The ordering of the four gauge factors follows
 % DAVID_Fig8.png in the proof of Proposition 4.13.
 \newcommand{\TNMPDOVerticalGaugeGramComparison}{%
-    \begin{tikzpicture}[tn picture]
-        \path[draw=black, opacity=0, use as bounding box]
-            (-3.45,-1.62) rectangle (3.45,1.62);
-        \begin{scope}[xshift=-1.80cm]
-            \TNTensor{vggL}{(0,0)}
-            \TN@ppath{ (vggL.west) -- ++(-0.72,0);}
-            \TN@ppath{ (vggL.east) -- ++(0.72,0);}
-            \TN@insertion[label=right:$X_{\alpha,k}$]{vggLX}{(0,0.58)}
-            \TN@insertion[label=right:$X_{\alpha,k}^{\dagger}$]{vggLXd}{(0,1.18)}
-            \TN@insertion[label=right:$X_{\alpha,k}^{-1}$]{vggLXi}{(0,-0.58)}
-            \TN@insertion[label=right:$(X_{\alpha,k}^{-1})^{\dagger}$]{vggLXid}{(0,-1.18)}
-            \TN@vpath{ (vggL.north) -- (vggLX.south);}
-            \TN@vpath{ (vggLX.north) -- (vggLXd.south);}
-            \TN@vpath{ (vggLXd.north) -- ++(0,0.30);}
-            \TN@vpath{ (vggL.south) -- (vggLXi.north);}
-            \TN@vpath{ (vggLXi.south) -- (vggLXid.north);}
-            \TN@vpath{ (vggLXid.south) -- ++(0,-0.30);}
-            \node[anchor=east] at (-0.16,0.18) {$M_\alpha$};
-        \end{scope}
-        \node at (0,0) {$=$};
-        \begin{scope}[xshift=1.80cm]
-            \TNTensor{vggR}{(0,0)}
-            \TN@ppath{ (vggR.west) -- ++(-0.72,0);}
-            \TN@ppath{ (vggR.east) -- ++(0.72,0);}
-            \TN@insertion[label=right:$X_{\alpha,1}$]{vggRX}{(0,0.58)}
-            \TN@insertion[label=right:$X_{\alpha,1}^{\dagger}$]{vggRXd}{(0,1.18)}
-            \TN@insertion[label=right:$X_{\alpha,1}^{-1}$]{vggRXi}{(0,-0.58)}
-            \TN@insertion[label=right:$(X_{\alpha,1}^{-1})^{\dagger}$]{vggRXid}{(0,-1.18)}
-            \TN@vpath{ (vggR.north) -- (vggRX.south);}
-            \TN@vpath{ (vggRX.north) -- (vggRXd.south);}
-            \TN@vpath{ (vggRXd.north) -- ++(0,0.30);}
-            \TN@vpath{ (vggR.south) -- (vggRXi.north);}
-            \TN@vpath{ (vggRXi.south) -- (vggRXid.north);}
-            \TN@vpath{ (vggRXid.south) -- ++(0,-0.30);}
-            \node[anchor=east] at (-0.16,0.18) {$M_\alpha$};
-        \end{scope}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{X_\alpha^\dagger X_\alpha=Y_\alpha^\dagger Y_\alpha}
+    \end{TNEquationRow}%
 }
 
 % Inverse-map contraction for an injective simple tensor: contracting the
 % inverse tensor with the tensor through the physical index identifies the
 % two pairs of virtual legs (the matrix units on the bond space).
 \newcommand{\TNMPDOInverseContraction}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{invT}{(0,0.55)}
-        \TNTensor{invB}{(0,-0.55)}
-        \TN@vleg{invT}{west}{-0.60,0}
-        \TN@vleg{invT}{east}{0.60,0}
-        \TN@vleg{invB}{west}{-0.60,0}
-        \TN@vleg{invB}{east}{0.60,0}
-        \TN@ppath{ (invT.south) -- (invB.north);}
-        \node at (-0.50,0.88) {$K^{-1}$};
-        \node at (-0.42,-0.88) {$K$};
-        \node at (1.35,0) {$=$};
-        \TN@vpath{ (1.90,0.55) -- (2.15,0.55)
-        .. controls (2.70,0.55) and (2.70,-0.55) .. (2.15,-0.55)
-        -- (1.90,-0.55);}
-        \TN@vpath{ (3.90,0.55) -- (3.65,0.55)
-        .. controls (3.10,0.55) and (3.10,-0.55) .. (3.65,-0.55)
-        -- (3.90,-0.55);}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{{\cal K}^{-1}{\cal K}=\Id}
+    \end{TNEquationRow}%
 }
 
 % The normalized three-site marginal of a four-site periodic MPO.  The first
 % three sites retain their two physical legs, while tracing the fourth site is
 % absorbed into the virtual closing operator R_4.
 \newcommand{\TNMPDONormalizedFourSiteTail}{%
-    \begin{tikzpicture}[tn picture]
-        \node at (-3.72,0) {$\sigma_3^{(4)}({\cal K})$};
-        \node at (-2.76,0) {$=$};
-
-        \TNTensor{tnTailOne}{(-1.48,0)}
-        \TNTensor{tnTailTwo}{(0,0)}
-        \TNTensor{tnTailThree}{(1.48,0)}
-        \TN@vpath{ (tnTailOne.east) -- (tnTailTwo.west);}
-        \TN@vpath{ (tnTailTwo.east) -- (tnTailThree.west);}
-
-        \foreach \n in {tnTailOne,tnTailTwo,tnTailThree} {
-            \TN@pleg{\n}{north}{0,0.48}
-            \TN@pleg{\n}{south}{0,-0.48}
-        }
-        \TN@uplabel{tnTailOne}{0.72}{i_1}
-        \TN@uplabel{tnTailTwo}{0.72}{i_2}
-        \TN@uplabel{tnTailThree}{0.72}{i_3}
-        \TN@downlabel{tnTailOne}{0.72}{j_1}
-        \TN@downlabel{tnTailTwo}{0.72}{j_2}
-        \TN@downlabel{tnTailThree}{0.72}{j_3}
-        \node[anchor=east] at (-1.62,0.25) {${\cal K}$};
-        \node[anchor=east] at (-0.14,0.25) {${\cal K}$};
-        \node[anchor=east] at (1.34,0.25) {${\cal K}$};
-
-        \TNComponent{tnFourSiteTail}{(0,-1.42)}{R_4}
-        \TN@vtracepath{ (tnTailOne.west) -- ++(-0.48,0)
-            |- ($(tnFourSiteTail.east)+(0,-0.40)$) -- (tnFourSiteTail.east);}
-        \TN@vtracepath{ (tnTailThree.east) -- ++(0.48,0)
-            |- ($(tnFourSiteTail.west)+(0,0.38)$) -- (tnFourSiteTail.west);}
-
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\tr_4({\cal K}_4)=\sum_\alpha L_\alpha\otimes B_\alpha\otimes R_\alpha}
+    \end{TNEquationRow}%
 }
 
 % Sectorwise comparison between the inverse-map contraction and the Hayashi
 % product in the basis adapted to the middle-site direct sum.
 \newcommand{\TNMPDOHayashiSectorComparison}{%
-    \begin{tikzpicture}[tn picture]
-        \node at (-4.55,0) {$R_{\beta_3,\alpha_1}$};
-        \node at (-3.65,0) {$\cdot$};
-
-        \TNTensor{tnSectorK}{(-2.45,0)}
-        \TN@vleg{tnSectorK}{west}{-0.72,0}
-        \TN@vleg{tnSectorK}{east}{0.72,0}
-        \node[anchor=east] at (-3.22,0) {$\beta_1$};
-        \node[anchor=west] at (-1.68,0) {$\alpha_3$};
-        \node[anchor=east] at (-2.58,0.25) {${\cal K}$};
-
-        \TNMap{tnSectorU}{(-2.45,0.88)}{U_B}
-        \TNMap{tnSectorUd}{(-2.45,-0.88)}{U_B^\dagger}
-        \TN@ppath{ (tnSectorK.north) -- (tnSectorU.south);}
-        \TN@ppath{ (tnSectorU.north) -- ++(0,0.34);}
-        \TN@ppath{ (tnSectorK.south) -- (tnSectorUd.north);}
-        \TN@ppath{ (tnSectorUd.south) -- ++(0,-0.34);}
-        \node[anchor=west] at (-1.92,0.88) {$k;l,r$};
-        \node[anchor=west] at (-1.92,-0.88) {$k;l',r'$};
-
-        \node at (-0.60,0) {$=$};
-        \node at (0.10,0) {$p_k$};
-        \TN@factor[minimum width=1.00cm, minimum height=0.62cm]
-            {tnSectorA}{(1.25,0)}{A^{(k)}_{\alpha_1,\beta_1}}
-        \node at (2.15,0) {$\otimes$};
-        \TN@factor[minimum width=1.00cm, minimum height=0.62cm]
-            {tnSectorB}{(3.25,0)}{B^{(k)}_{\alpha_3,\beta_3}}
-        \node at (1.25,0.62) {$l,l'$};
-        \node at (3.25,0.62) {$r,r'$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{R_{\beta_3,\alpha_1}{\cal K}_{\alpha_1,\beta_1}{\cal K}_{\alpha_2,\beta_2}{\cal K}_{\alpha_3,\beta_3}=B_{\alpha,\beta}}
+    \end{TNEquationRow}%
 }
 
 % Sector factorization: in the middle-site basis selected by U_B, every physical
@@ -1002,35 +366,9 @@
 % l_k \otimes r_k.  The placement of U_B and U_B^\dagger follows the theorem
 % orientation U_B K U_B^\dagger.
 \newcommand{\TNMPDOSectorFactorization}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{sfK}{(-2.65,0)}
-        \TN@vleg{sfK}{west}{-0.72,0}
-        \TN@vleg{sfK}{east}{0.72,0}
-        \node[anchor=east] at (-3.42,0) {$\beta_1$};
-        \node[anchor=west] at (-1.88,0) {$\alpha_3$};
-        \node[anchor=east] at (-2.78,0.25) {${\cal K}$};
-
-        \TNMap{sfU}{(-2.65,0.88)}{U_B}
-        \TNMap{sfUd}{(-2.65,-0.88)}{U_B^\dagger}
-        \TN@ppath{ (sfK.north) -- (sfU.south);}
-        \TN@ppath{ (sfU.north) -- ++(0,0.34);}
-        \TN@ppath{ (sfK.south) -- (sfUd.north);}
-        \TN@ppath{ (sfUd.south) -- ++(0,-0.34);}
-
-        \node at (-0.95,0) {$=$};
-        \node at (-0.10,0) {$\displaystyle\bigoplus_k$};
-        \TNTensor{sfL}{(1.10,0)}
-        \TNTensor{sfR}{(2.75,0)}
-        \TN@vpath{ (sfL.west) -- ++(-0.62,0);}
-        \node at (1.93,0) {$\otimes$};
-        \TN@vpath{ (sfR.east) -- ++(0.62,0);}
-        \TN@pleg{sfL}{north}{0,0.50}
-        \TN@pleg{sfL}{south}{0,-0.50}
-        \TN@pleg{sfR}{north}{0,0.50}
-        \TN@pleg{sfR}{south}{0,-0.50}
-        \node at (1.10,0.78) {$(l_k)_{\beta_1}$};
-        \node at (2.75,0.78) {$(r_k)_{\alpha_3}$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{U_B\mathcal K U_B^\dagger=\bigoplus_k l_k\otimes r_k}
+    \end{TNEquationRow}%
 }
 
 % Local-orthogonality contraction: sandwiching the ket and bra legs of one
@@ -1038,46 +376,9 @@
 % gives zero, as does the neighboring two-site contraction with P_1 dressing
 % both physical legs of the first site and P_2 both legs of the second.
 \newcommand{\TNMPDOLocalOrthogonality}{%
-    \begin{tikzpicture}[tn picture]
-        % One site, P_1 on the ket leg and P_2 on the bra leg.
-        \TNTensor{loA}{(0,0)}
-        \TN@vleg{loA}{west}{-0.50,0}
-        \TN@vleg{loA}{east}{0.50,0}
-        \TN@pleg{loA}{north}{0,1.00}
-        \TN@pleg{loA}{south}{0,-1.00}
-        \TN@insertion[label=left:$P_1$]{loAu}{(0,0.55)}
-        \TN@insertion[label=left:$P_2$]{loAd}{(0,-0.55)}
-        \node[anchor=west] at (0.12,-0.30) {${\cal K}$};
-        \node at (1.10,0) {$=$};
-        % One site, P_2 on the ket leg and P_1 on the bra leg.
-        \TNTensor{loB}{(2.20,0)}
-        \TN@vleg{loB}{west}{-0.50,0}
-        \TN@vleg{loB}{east}{0.50,0}
-        \TN@pleg{loB}{north}{0,1.00}
-        \TN@pleg{loB}{south}{0,-1.00}
-        \TN@insertion[label=left:$P_2$]{loBu}{(2.20,0.55)}
-        \TN@insertion[label=left:$P_1$]{loBd}{(2.20,-0.55)}
-        \node[anchor=west] at (2.32,-0.30) {${\cal K}$};
-        \node at (3.30,0) {$=$};
-        % Two neighboring sites, P_1 dressing both physical legs of the
-        % first site and P_2 both physical legs of the second.
-        \TNTensor{loCa}{(4.40,0)}
-        \TNTensor{loCb}{(5.60,0)}
-        \TN@vpath{ (loCa.east) -- (loCb.west);}
-        \TN@vleg{loCa}{west}{-0.50,0}
-        \TN@vleg{loCb}{east}{0.50,0}
-        \TN@pleg{loCa}{north}{0,1.00}
-        \TN@pleg{loCa}{south}{0,-1.00}
-        \TN@pleg{loCb}{north}{0,1.00}
-        \TN@pleg{loCb}{south}{0,-1.00}
-        \TN@insertion[label=left:$P_1$]{loCau}{(4.40,0.55)}
-        \TN@insertion[label=left:$P_1$]{loCad}{(4.40,-0.55)}
-        \TN@insertion[label=right:$P_2$]{loCbu}{(5.60,0.55)}
-        \TN@insertion[label=right:$P_2$]{loCbd}{(5.60,-0.55)}
-        \node[anchor=west] at (4.52,-0.30) {${\cal K}$};
-        \node[anchor=west] at (5.72,-0.30) {${\cal K}$};
-        \node at (6.65,0) {$=\;0$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{P_j\mathcal K_iP_{j^\prime}=0\quad\text{unless }i=j=j^\prime}
+    \end{TNEquationRow}%
 }
 
 % Inverse-tensor contraction for an injective MPS tensor: contracting the
@@ -1085,24 +386,9 @@
 % the virtual legs of the inverse with the corresponding virtual legs of the
 % tensor.
 \newcommand{\TNMPSInverseContraction}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{mpsiT}{(0,0.55)}
-        \TNTensor{mpsiB}{(0,-0.55)}
-        \TN@vleg{mpsiT}{west}{-0.60,0}
-        \TN@vleg{mpsiT}{east}{0.60,0}
-        \TN@vleg{mpsiB}{west}{-0.60,0}
-        \TN@vleg{mpsiB}{east}{0.60,0}
-        \TN@ppath{ (mpsiT.south) -- (mpsiB.north);}
-        \node at (-0.52,0.88) {$A^{-1}$};
-        \node at (-0.42,-0.88) {$A$};
-        \node at (1.35,0) {$=$};
-        \TN@vpath{ (1.90,0.55) -- (2.15,0.55)
-        .. controls (2.70,0.55) and (2.70,-0.55) .. (2.15,-0.55)
-        -- (1.90,-0.55);}
-        \TN@vpath{ (3.90,0.55) -- (3.65,0.55)
-        .. controls (3.10,0.55) and (3.10,-0.55) .. (3.65,-0.55)
-        -- (3.90,-0.55);}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A^{-1}A=\Id}
+    \end{TNEquationRow}%
 }
 
 % Coefficient form of a basis of normal tensors: the gauge X, one basis
@@ -1110,62 +396,16 @@
 % the block-index lines j and q; the coefficient tensor mu hangs on the two
 % index lines, so the direct sums are drawn as index lines.
 \newcommand{\TNBNTDecomposition}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@insertion[label=above:$X$]{bntX}{(0,0)}
-        \TNTensor{bntA}{(1.50,0)}
-        \TN@insertion[label=above:$X^{-1}$]{bntXi}{(3.00,0)}
-        \TN@vleg{bntX}{west}{-0.55,0}
-        \TN@vconnect{bntX}{east}{bntA}{west}
-        \TN@vconnect{bntA}{east}{bntXi}{west}
-        \TN@vleg{bntXi}{east}{0.55,0}
-        \TN@pleg{bntA}{north}{0,0.46}
-        \TN@label{bntA.north}{(0,0.70)}{i}
-        \node[anchor=west] at (1.62,-0.26) {$A_j$};
-        \node[anchor=east] at (-0.70,0) {$\alpha$};
-        \node[anchor=west] at (3.70,0) {$\beta$};
-        \TN@vpath{(-0.60,-0.62) -- (3.60,-0.62)}
-        \TN@vpath{(-0.60,-1.02) -- (3.60,-1.02)}
-        \node[anchor=east] at (-0.70,-0.62) {$j$};
-        \node[anchor=east] at (-0.70,-1.02) {$q$};
-        \TN@vpath{(bntX.south) -- (0,-1.02)}
-        \TN@vpath{(bntA.south) -- (1.50,-0.62)}
-        \TN@vpath{(bntXi.south) -- (3.00,-1.02)}
-        \TNComponent{bntMu}{(0.75,-1.60)}{\mu}
-        \TN@vnorthport{bntMuNLeft}{bntMu}{0.15}
-        \TN@vnorthport{bntMuNRight}{bntMu}{0.85}
-        \TN@vpath{(bntMuNLeft) -- (0.63,-0.62)}
-        \TN@vpath{(bntMuNRight) -- (0.87,-1.02)}
-        \TN@anonymousjunction{(0,-0.62)}
-        \TN@anonymousjunction{(0,-1.02)}
-        \TN@anonymousjunction{(1.50,-0.62)}
-        \TN@anonymousjunction{(3.00,-0.62)}
-        \TN@anonymousjunction{(3.00,-1.02)}
-        \TN@anonymousjunction{(0.63,-0.62)}
-        \TN@anonymousjunction{(0.87,-1.02)}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A=X\left(\bigoplus_j\mu_j\otimes A_j\right)X^{-1}}
+    \end{TNEquationRow}%
 }
 
 % Zero-correlation-length idempotence for the physical-trace transfer: the
 % trace-closed tensor equals the virtual product of two trace-closed copies.
 \newcommand{\TNMPDOZCLIdempotence}{%
     \begin{TNEquationRow}[compact]
-        \TNTerm{%
-            \TNMPOSite{zciM}{(0,0)}{M}
-            \TNOpenVirtualWest{zciMWest}
-            \TNOpenVirtualEast{zciMEast}
-            \TNTracePhysicalRight{zciMKet}{zciMBra}
-            \node[below] at (zciM) {$\mathcal T_M$};}
-        \TNRelation{=}
-        \TNTerm{%
-            \TNMPOSite{zciA}{(0,0)}{M}
-            \TNMPOSite{zciB}{(1.25,0)}{M}
-            \TNOpenVirtualWest{zciAWest}
-            \TNConnectVirtual{zciAEast}{zciBWest}
-            \TNOpenVirtualEast{zciBEast}
-            \TNTracePhysicalRight{zciAKet}{zciABra}
-            \TNTracePhysicalRight{zciBKet}{zciBBra}
-            \node[below] at (zciA) {$\mathcal T_M$};
-            \node[below] at (zciB) {$\mathcal T_M$};}
+        \ensuremath{\mathcal T_M=\mathcal T_M^2}
     \end{TNEquationRow}%
 }
 
@@ -1651,142 +891,35 @@
 }
 
 \newcommand{\TNRFPKrausIsometry}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@mpssite{rfkA}{(0,0)}{}
-        \TN@mpssite{rfkB}{(1.20,0)}{}
-        \TN@vopenport{rfkAW}{-\TN@virtualleglen,0}
-        \TNConnectVirtual{rfkAE}{rfkBW}
-        \TN@vopenport{rfkBE}{\TN@virtualleglen,0}
-        \TN@popenport{rfkAN}{0,\TN@physicalleglen}
-        \TN@popenport{rfkBN}{0,\TN@physicalleglen}
-        \TN@label{rfkANOpen}{(0,0.24)}{i_1}
-        \TN@label{rfkBNOpen}{(0,0.24)}{i_2}
-        \node[anchor=east] at (-0.14,-0.28) {$A$};
-        \node[anchor=west] at (1.34,-0.28) {$A$};
-        \node at (2.50,0) {$=$};
-        \node at (3.25,0) {$\displaystyle\sum_j$};
-        \TN@mpssite{rfkC}{(4.30,0)}{}
-        \TN@openhorizontalports{rfkC}
-        \node[anchor=west] at (4.44,-0.28) {$A$};
-        \TN@physicalsplitmap[inner xsep=10pt, inner ysep=2pt]
-            {rfkV}{(4.30,0.90)}{V}
-        \TNConnectPhysical{rfkCN}{rfkVTrunk}
-        \node[anchor=west] at (4.40,0.46) {$j$};
-        \TN@popenport{rfkVLeft}{0,0.34}
-        \TN@popenport{rfkVRight}{0,0.34}
-        \node at (4.10,1.62) {$i_1$};
-        \node at (4.50,1.62) {$i_2$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A^{i_1}A^{i_2}=\sum_jV^{i_1i_2}_jA^j}
+    \end{TNEquationRow}%
 }
 
 % Reverse fusion identity: the adjoint isometry applied to the two physical
 % legs of the contracted pair recovers the single tensor.
 \newcommand{\TNRFPKrausIsometryReverse}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@mpssite{rfrA}{(0,0)}{}
-        \TN@mpssite{rfrB}{(1.20,0)}{}
-        \TN@vopenport{rfrAW}{-\TN@virtualleglen,0}
-        \TNConnectVirtual{rfrAE}{rfrBW}
-        \TN@vopenport{rfrBE}{\TN@virtualleglen,0}
-        \node[anchor=east] at (-0.14,-0.28) {$A$};
-        \node[anchor=west] at (1.34,-0.28) {$A$};
-        \TN@physicalmergemap[minimum width=1.62cm]
-            {rfrV}{(0.60,0.90)}{V^\dagger}
-        \TNConnectPhysical{rfrAN}{rfrVLeft}
-        \TNConnectPhysical{rfrBN}{rfrVRight}
-        \TN@popenport{rfrVTrunk}{0,0.34}
-        \node[anchor=west] at (0.70,1.36) {$j$};
-        \node at (2.50,0) {$=$};
-        \TN@mpssite{rfrC}{(3.55,0)}{}
-        \TN@openhorizontalports{rfrC}
-        \TN@popenport{rfrCN}{0,\TN@physicalleglen}
-        \TN@label{rfrCNOpen}{(0,0.24)}{j}
-        \node[anchor=west] at (3.69,-0.28) {$A$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\sum_{i_1,i_2}(V^\dagger)^j_{i_1i_2}A^{i_1}A^{i_2}=A^j}
+    \end{TNEquationRow}%
 }
 
 % Isometry canonical form of a normal renormalization fixed point: the
 % virtual chain X, the diagonal weight, the isometry emitting the physical
 % leg, and X^{-1}.
 \newcommand{\TNRFPIsometryCanonicalForm}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{icfA}{(0,0)}
-        \TN@vleg{icfA}{west}{-0.55,0}
-        \TN@vleg{icfA}{east}{0.55,0}
-        \TN@pleg{icfA}{north}{0,0.46}
-        \TN@label{icfA.north}{(0,0.70)}{i}
-        \node[anchor=east] at (-0.14,-0.28) {$A$};
-        \node at (1.25,0) {$=$};
-        \TN@insertion[label=above:$X$]{icfX}{(2.20,0)}
-        \TN@insertion[label=above:$\sqrt\Lambda$]{icfL}{(3.20,0)}
-        \TN@bondpairmap{icfU}{(4.30,0.75)}{U}
-        \TN@insertion[label=above:$X^{-1}$]{icfXi}{(5.40,0)}
-        \TN@vport{icfXW}{icfX}{west}
-        \TN@vport{icfXE}{icfX}{east}
-        \TN@vport{icfLW}{icfL}{west}
-        \TN@vport{icfLE}{icfL}{east}
-        \TN@vport{icfXiW}{icfXi}{west}
-        \TN@vport{icfXiE}{icfXi}{east}
-        \TN@vopenport{icfXW}{-0.55,0}
-        \TNConnectVirtual{icfXE}{icfLW}
-        \TNConnectVirtualHV{icfLE}{icfULeft}
-        \TNConnectVirtualVH{icfURight}{icfXiW}
-        \TN@vopenport{icfXiE}{0.55,0}
-        \TN@popenport{icfUPhysical}{0,0.34}
-        \node at ($(icfUPhysicalOpen)+(0,0.22)$) {$i$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A=X\sqrt\Lambda\,U\,X^{-1}}
+    \end{TNEquationRow}%
 }
 
 % Per-block isometry canonical form of a renormalization fixed point in
 % canonical form: the same chain threaded by the block-index lines j and q,
 % with the coefficient tensor mu on the two index lines.
 \newcommand{\TNRFPIsometryCanonicalFormBlocks}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{icbA}{(0,0)}
-        \TN@vleg{icbA}{west}{-0.55,0}
-        \TN@vleg{icbA}{east}{0.55,0}
-        \TN@pleg{icbA}{north}{0,0.46}
-        \TN@label{icbA.north}{(0,0.70)}{i}
-        \node[anchor=east] at (-0.14,-0.28) {$A$};
-        \node at (1.25,0) {$=$};
-        \TN@sectorgauge{icbX}{(2.20,0)}{X}
-        \TN@insertion[label=above:$\sqrt\Lambda$]{icbL}{(3.20,0)}
-        \TN@bondpairmap{icbU}{(4.30,0.75)}{U}
-        \TN@inverseSectorgauge{icbXi}{(5.40,0)}{X^{-1}}
-        \TN@vport{icbLW}{icbL}{west}
-        \TN@vport{icbLE}{icbL}{east}
-        \TN@vopenport{icbXW}{-0.55,0}
-        \TNConnectVirtual{icbXE}{icbLW}
-        \TNConnectVirtualHV{icbLE}{icbULeft}
-        \TNConnectVirtualVH{icbURight}{icbXiW}
-        \TN@vopenport{icbXiE}{0.55,0}
-        \TN@popenport{icbUPhysical}{0,0.34}
-        \node at ($(icbUPhysicalOpen)+(0,0.22)$) {$i$};
-        \TN@vbus{icbJ}{(1.65,-0.62)}{(5.95,-0.62)}{j}
-        \TN@vparallelbus{icbQ}{icbJ}{-\TN@buspitch}{q}
-        \TN@vport{icbLBus}{icbL}{south}
-        \TN@vbusprojecttap{icbJ}{icbJX}{icbXBlock}
-        \TN@vbusprojecttap{icbQ}{icbQX}{icbXCopy}
-        \TNConnectVirtual{icbXBlock}{icbJX}
-        \TNConnectVirtual{icbXCopy}{icbQX}
-        \TN@vbusprojecttap{icbJ}{icbJL}{icbLBus}
-        \TNConnectVirtual{icbLBus}{icbJL}
-        \TN@vterminal{icbUBlock}{(icbULeft |- icbL)}
-        \TN@anonymousjunction{(icbUBlock)}
-        \TN@vbusprojecttap{icbJ}{icbJU}{icbUBlock}
-        \TNConnectVirtual{icbUBlock}{icbJU}
-        \TN@vbusprojecttap{icbJ}{icbJXi}{icbXiBlock}
-        \TN@vbusprojecttap{icbQ}{icbQXi}{icbXiCopy}
-        \TNConnectVirtual{icbXiBlock}{icbJXi}
-        \TNConnectVirtual{icbXiCopy}{icbQXi}
-        \TNComponent{icbMu}{(2.70,-1.60)}{\mu}
-        \TN@vnorthport{icbMuNLeft}{icbMu}{0.15}
-        \TN@vnorthport{icbMuNRight}{icbMu}{0.85}
-        \TN@vbusprojecttap{icbJ}{icbJMu}{icbMuNLeft}
-        \TN@vbusprojecttap{icbQ}{icbQMu}{icbMuNRight}
-        \TNConnectVirtual{icbMuNLeft}{icbJMu}
-        \TNConnectVirtual{icbMuNRight}{icbQMu}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A=X\left(\bigoplus_j\mu_j\otimes\sqrt{\Lambda_j}U_j\right)X^{-1}}
+    \end{TNEquationRow}%
 }
 
 % Two-site blocking of a simple MPO tensor: two copies contracted along one
@@ -1858,94 +991,26 @@
 % physical leg of the first site of the matrix product vector gives the
 % same vector as inserting Z.
 \newcommand{\TNMPDOFirstSiteInsertionHypothesis}{%
-    \begin{tikzpicture}[tn picture]
-        \begin{scope}
-            \TN@declareWordTensor{fihL}{(0,0)}
-            \TN@declareWordTensor{fihM}{(1.05,0)}
-            \TN@declareWordTensor{fihR}{(2.60,0)}
-            \TNConnectVirtual{fihLE}{fihMW}
-            \TN@vopenport{fihME}{0.45,0}
-            \TN@vopenport{fihRW}{-0.45,0}
-            \TN@vtracepath{(fihLW) -- (-0.42,0) -- (-0.42,-0.44)
-                -- (3.02,-0.44) -- (3.02,0) -- (fihRE)}
-            \TN@popenport{fihMN}{0,0.42}
-            \TN@popenport{fihRN}{0,0.42}
-            \TN@insertion[label=left:$Y$]{fihY}{(0,0.46)}
-            \TN@pport{fihYS}{fihY}{south}
-            \TN@pport{fihYN}{fihY}{north}
-            \TNConnectPhysical{fihLN}{fihYS}
-            \TN@popenport{fihYN}{0,0.40}
-            \node at (1.85,0) {$\cdots$};
-        \end{scope}
-        \node at (3.60,0) {$=$};
-        \begin{scope}[xshift=4.20cm]
-            \TN@declareWordTensor{fizL}{(0,0)}
-            \TN@declareWordTensor{fizM}{(1.05,0)}
-            \TN@declareWordTensor{fizR}{(2.60,0)}
-            \TNConnectVirtual{fizLE}{fizMW}
-            \TN@vopenport{fizME}{0.45,0}
-            \TN@vopenport{fizRW}{-0.45,0}
-            \TN@vtracepath{(fizLW) -- (-0.42,0) -- (-0.42,-0.44)
-                -- (3.02,-0.44) -- (3.02,0) -- (fizRE)}
-            \TN@popenport{fizMN}{0,0.42}
-            \TN@popenport{fizRN}{0,0.42}
-            \TN@insertion[label=left:$Z$]{fizZ}{(0,0.46)}
-            \TN@pport{fizZS}{fizZ}{south}
-            \TN@pport{fizZN}{fizZ}{north}
-            \TNConnectPhysical{fizLN}{fizZS}
-            \TN@popenport{fizZN}{0,0.40}
-            \node at (1.85,0) {$\cdots$};
-        \end{scope}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{YH^{(N)}(\widetilde M)=ZH^{(N)}(\widetilde M)}
+    \end{TNEquationRow}%
 }
 
 % Blockwise conclusion of the first-site agreement: the one-site insertions
 % of Y and Z agree on each basis tensor of the canonical form.
 \newcommand{\TNMPDOFirstSiteInsertionBlockwise}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{fibA}{(0,0)}
-        \TN@vleg{fibA}{west}{-0.60,0}
-        \TN@vleg{fibA}{east}{0.60,0}
-        \TN@pleg{fibA}{north}{0,0.86}
-        \TN@insertion[label=left:$Y$]{fibY}{(0,0.46)}
-        \node at (0,-0.32) {$A_k$};
-        \node at (1.45,0) {$=$};
-        \TNTensor{fibB}{(2.90,0)}
-        \TN@vleg{fibB}{west}{-0.60,0}
-        \TN@vleg{fibB}{east}{0.60,0}
-        \TN@pleg{fibB}{north}{0,0.86}
-        \TN@insertion[label=left:$Z$]{fibZ}{(2.90,0.46)}
-        \node at (2.90,-0.32) {$A_k$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{YA_k=ZA_k}
+    \end{TNEquationRow}%
 }
 
 % Trace pairing of a one-site insertion against a boundary operator: the
 % virtual loop closes the inserted site against W, and the pairing takes the
 % same value for the Y-insertion and the Z-insertion.
 \newcommand{\TNMPDOInsertionTracePairing}{%
-    \begin{tikzpicture}[tn picture]
-        \begin{scope}
-            \TNComponent{itpW}{(0,0)}{W}
-            \TNTensor{itpA}{(1.15,0)}
-            \TN@vconnect{itpW}{east}{itpA}{west}
-            \TN@pleg{itpA}{north}{0,0.86}
-            \TN@insertion[label=left:$Y$]{itpY}{(1.15,0.46)}
-            \TN@vtracepath{(itpW.west) -- ++(-0.35,0) -- (-0.62,-0.80)
-            -- (1.72,-0.80) -- (1.72,0) -- (itpA.east)}
-            \node at (0.55,-1.03) {$\tr$};
-        \end{scope}
-        \node at (2.70,0) {$=$};
-        \begin{scope}[xshift=4.05cm]
-            \TNComponent{itpWz}{(0,0)}{W}
-            \TNTensor{itpAz}{(1.15,0)}
-            \TN@vconnect{itpWz}{east}{itpAz}{west}
-            \TN@pleg{itpAz}{north}{0,0.86}
-            \TN@insertion[label=left:$Z$]{itpZ}{(1.15,0.46)}
-            \TN@vtracepath{(itpWz.west) -- ++(-0.35,0) -- (-0.62,-0.80)
-            -- (1.72,-0.80) -- (1.72,0) -- (itpAz.east)}
-            \node at (0.55,-1.03) {$\tr$};
-        \end{scope}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\tr(WYA_k)=\tr(WZA_k)}
+    \end{TNEquationRow}%
 }
 
 % Horizontal canonical form of the doubled tensor: the gauge X, one basis
@@ -1954,40 +1019,9 @@
 % tensors, so the basis tensor taps only the block line j while the gauge
 % factors tap both lines.
 \newcommand{\TNMPDOHorizontalCanonicalForm}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{hcfK}{(0,0)}
-        \TN@vleg{hcfK}{west}{-0.58,0}
-        \TN@vleg{hcfK}{east}{0.58,0}
-        \TN@pleg{hcfK}{north}{0,0.50}
-        \TN@pleg{hcfK}{south}{0,-0.50}
-        \node[anchor=east] at (-0.14,-0.28) {$K$};
-        \node at (1.30,0) {$=$};
-        \TN@sectorgauge{hcfX}{(2.55,0)}{X}
-        \TNTensor{hcfC}{(3.75,0)}
-        \TN@inverseSectorgauge{hcfXi}{(4.95,0)}{X^{-1}}
-        \TN@vleg{hcfX}{west}{-0.55,0}
-        \TN@vconnect{hcfX}{east}{hcfC}{west}
-        \TN@vconnect{hcfC}{east}{hcfXi}{west}
-        \TN@vleg{hcfXi}{east}{0.55,0}
-        \TN@pleg{hcfC}{north}{0,0.50}
-        \TN@pleg{hcfC}{south}{0,-0.50}
-        \node[anchor=west] at (3.89,0.32) {$\mathcal K$};
-        \TN@vbus{hcfJ}
-            {($(hcfX.center)+(-0.60,-\TN@busoffset)$)}
-            {($(hcfXi.center)+(0.60,-\TN@busoffset)$)}{j}
-        \TN@vparallelbus{hcfQ}{hcfJ}{-\TN@buspitch}{q}
-        \TN@vbusprojecttap{hcfJ}{hcfJX}{hcfXBlock}
-        \TN@vbusprojecttap{hcfQ}{hcfQX}{hcfXCopy}
-        \TNConnectVirtual{hcfXBlock}{hcfJX}
-        \TNConnectVirtual{hcfXCopy}{hcfQX}
-        \TN@vport{hcfCBlock}{hcfC}{-45}
-        \TN@vbusprojecttap{hcfJ}{hcfJC}{hcfCBlock}
-        \TNConnectVirtual{hcfCBlock}{hcfJC}
-        \TN@vbusprojecttap{hcfJ}{hcfJXi}{hcfXiBlock}
-        \TN@vbusprojecttap{hcfQ}{hcfQXi}{hcfXiCopy}
-        \TNConnectVirtual{hcfXiBlock}{hcfJXi}
-        \TNConnectVirtual{hcfXiCopy}{hcfQXi}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{K=X\left(\bigoplus_j\mathcal K_j\right)X^{-1}}
+    \end{TNEquationRow}%
 }
 
 % Inverse tensor of a block-injective canonical form: contracting the
@@ -1996,74 +1030,9 @@
 % inverse tensor and ties the block index of the inverse tensor to the
 % block line.
 \newcommand{\TNMPDOBlockInjectiveInverse}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{bijI}{(0,0.55)}
-        \TNTensor{bijK}{(0,-0.55)}
-        \TN@vleg{bijI}{west}{-0.55,0}
-        \TN@vleg{bijI}{east}{0.55,0}
-        \TN@vleg{bijK}{west}{-0.55,0}
-        \TN@vleg{bijK}{east}{0.55,0}
-        \TN@pconnect{bijI}{south}{bijK}{north}
-        \TN@vleg{bijI}{north}{0,0.42}
-        \node at (-0.58,0.90) {$K^{-1}$};
-        \node at (-0.42,-0.90) {$K$};
-        \node at (1.15,0) {$=$};
-        \begin{scope}[xshift=2.30cm]
-            \TN@sectorgauge{bijX}{(0.55,0)}{X}
-            \TNTensor{bijC}{(1.75,0)}
-            \TN@inverseSectorgauge{bijXi}{(2.95,0)}{X^{-1}}
-            \TN@vleg{bijX}{west}{-0.50,0}
-            \TN@vconnect{bijX}{east}{bijC}{west}
-            \TN@vconnect{bijC}{east}{bijXi}{west}
-            \TN@vleg{bijXi}{east}{0.50,0}
-            \node[anchor=west] at (1.89,-0.30) {$\mathcal K$};
-            \TNTensor{bijIt}{(1.75,1.00)}
-            \TN@vleg{bijIt}{west}{-0.50,0}
-            \TN@vleg{bijIt}{east}{0.50,0}
-            \TN@pconnect{bijIt}{south}{bijC}{north}
-            \TN@vleg{bijIt}{north}{0,0.42}
-            \node at (1.02,1.32) {$K^{-1}$};
-            \TN@vbus{bijJ}
-                {($(bijX.center)+(-0.55,-\TN@busoffset)$)}
-                {($(bijXi.center)+(0.55,-\TN@busoffset)$)}{j}
-            \TN@vparallelbus{bijQ}{bijJ}{-\TN@buspitch}{q}
-            \TN@vport{bijCBlock}{bijC}{south}
-            \TN@vbusprojecttap{bijJ}{bijJX}{bijXBlock}
-            \TN@vbusprojecttap{bijQ}{bijQX}{bijXCopy}
-            \TNConnectVirtual{bijXBlock}{bijJX}
-            \TNConnectVirtual{bijXCopy}{bijQX}
-            \TN@vbusprojecttap{bijJ}{bijJC}{bijCBlock}
-            \TNConnectVirtual{bijCBlock}{bijJC}
-            \TN@vbusprojecttap{bijJ}{bijJXi}{bijXiBlock}
-            \TN@vbusprojecttap{bijQ}{bijQXi}{bijXiCopy}
-            \TNConnectVirtual{bijXiBlock}{bijJXi}
-            \TNConnectVirtual{bijXiCopy}{bijQXi}
-        \end{scope}
-        \node at (6.25,0) {$=$};
-        \begin{scope}[xshift=6.70cm]
-            \TN@sectorgauge{bijPX}{(0.55,0)}{X}
-            \TN@inverseSectorgauge{bijPXi}{(2.95,0)}{X^{-1}}
-            \TN@vleg{bijPX}{west}{-0.50,0}
-            \TN@vleg{bijPXi}{east}{0.50,0}
-            \TN@vpath[rounded corners=3pt]{(bijPX.east) -- (1.05,0) -- (1.05,1.00) -- (1.35,1.00)}
-            \TN@vpath[rounded corners=3pt]{(bijPXi.west) -- (2.45,0) -- (2.45,1.00) -- (2.15,1.00)}
-            \TN@vbus{bijPJ}
-                {($(bijPX.center)+(-0.55,-\TN@busoffset)$)}
-                {($(bijPXi.center)+(0.55,-\TN@busoffset)$)}{}
-            \TN@vparallelbus{bijPQ}{bijPJ}{-\TN@buspitch}{}
-            \TN@vbusprojecttap{bijPJ}{bijPJX}{bijPXBlock}
-            \TN@vbusprojecttap{bijPQ}{bijPQX}{bijPXCopy}
-            \TNConnectVirtual{bijPXBlock}{bijPJX}
-            \TNConnectVirtual{bijPXCopy}{bijPQX}
-            \TN@vbusprojecttap{bijPJ}{bijPJXi}{bijPXiBlock}
-            \TN@vbusprojecttap{bijPQ}{bijPQXi}{bijPXiCopy}
-            \TNConnectVirtual{bijPXiBlock}{bijPJXi}
-            \TNConnectVirtual{bijPXiCopy}{bijPQXi}
-            \TN@vterminal{bijPBlockTop}{(1.75,1.50)}
-            \TN@vbusprojecttap{bijPJ}{bijPJBlock}{bijPBlockTop}
-            \TNConnectVirtual{bijPBlockTop}{bijPJBlock}
-        \end{scope}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{K^{-1}K=\bigoplus_j\Id_j}
+    \end{TNEquationRow}%
 }
 
 % Recovery of the tensor from the inverse map: contracting the inverse
@@ -2071,26 +1040,9 @@
 % against a further copy of the tensor returns the tensor itself; the
 % doubled physical index is drawn as a single thick leg.
 \newcommand{\TNMPDOInverseRecovery}{%
-    \begin{tikzpicture}[tn picture]
-        \TNTensor{irT}{(0,1.05)}
-        \TNTensor{irI}{(0,0)}
-        \TNTensor{irB}{(0,-1.05)}
-        \TN@pleg{irT}{north}{0,0.45}
-        \TN@vpath[rounded corners=3pt]{(irI.west) -- ++(-0.74,0) -- (-0.82,1.05) -- (irT.west)}
-        \TN@vpath[rounded corners=3pt]{(irI.east) -- ++(0.74,0) -- (0.82,1.05) -- (irT.east)}
-        \TN@pconnect{irI}{south}{irB}{north}
-        \TN@vleg{irB}{west}{-0.60,0}
-        \TN@vleg{irB}{east}{0.60,0}
-        \node[anchor=west] at (0.12,1.33) {$K$};
-        \node[anchor=west] at (0.12,0.30) {$K^{-1}$};
-        \node[anchor=east] at (-0.14,-1.33) {$K$};
-        \node at (1.85,0) {$=$};
-        \TNTensor{irR}{(3.05,0)}
-        \TN@vleg{irR}{west}{-0.60,0}
-        \TN@vleg{irR}{east}{0.60,0}
-        \TN@pleg{irR}{north}{0,0.45}
-        \node[anchor=east] at (2.91,-0.28) {$K$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{K\,K^{-1}K=K}
+    \end{TNEquationRow}%
 }
 
 % Projector absorption for a basis tensor: expanding the identity as the
