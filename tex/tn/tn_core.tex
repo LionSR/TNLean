@@ -537,6 +537,20 @@
     \draw[tn morphism arrow,rounded corners=3pt,#1] (#2) |- (#3);%
 }
 
+\newcommand{\TN@labeledmorphism}[4]{%
+    \TN@mterminal{#1From}{#2}%
+    \TN@mterminal{#1To}{#3}%
+    \draw[tn morphism arrow] (#1From) --
+        node[midway,above,tn label] {$#4$} (#1To);%
+}
+
+\newcommand{\TN@labeledcomparison}[4]{%
+    \TN@mterminal{#1From}{#2}%
+    \TN@mterminal{#1To}{#3}%
+    \draw[tn comparison arrow] (#1From) --
+        node[midway,above,tn label] {$#4$} (#1To);%
+}
+
 \newcommand{\TN@vconnect}[5][]{%
     \TN@vconnectpoints[#1]{#2.#3}{#4.#5}%
 }
