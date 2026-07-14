@@ -203,6 +203,56 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     gives the conclusion for the original tensors.
 \end{proof}
 
+\begin{theorem}[Simultaneous one-letter span after blocking a BNT]
+    \label{thm:cpsv_bnt_blocked_simultaneous_span}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        exists_blocked_wordTupleSpanTop_one}
+    \leanok
+    \uses{def:bnt_cpsv, def:blocked_tensor,
+        def:blockwise_product_word_span}
+    Let $(A_j)_{j=1}^g$ be a basis of normal tensors, with bond dimensions
+    $D_j$. There is a positive integer $L$ such that the one-letter
+    evaluations of the blocked tensors span the full product algebra:
+    \[
+        \spn_{\C}\left\{
+            \bigl((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i\bigr)
+            : 0\leq i<d^L
+        \right\}
+        = \prod_{j=1}^g \MN{D_j}.
+    \]
+    This is the existence form of simultaneous block injectivity associated
+    with \cite[lines~317--345]{Cirac2016MPDO_arXiv}; no numerical bound on
+    $L$ is asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge,
+        thm:normal_tp_primitive_irred,
+        thm:common_exact_block_injectivity_normal_left_canonical,
+        thm:wordspan_blk_inj_succ,
+        thm:peripheral_primitive_irreducible_overlap_one,
+        lem:bnt_direct_sum_block_separation_word_span,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:product_word_span_from_bnt_block_separation,
+        lem:gauge_invariance_block_injective}
+    Eventual linear independence implies $D_j>0$ for every $j$ and excludes
+    gauge-phase equivalence between two distinct blocks. Put every block in a
+    trace-preserving gauge. Normality gives a common positive length $p$ at
+    which every gauged block is $p$-block injective; this injectivity persists
+    at all larger lengths. Pairwise direct-sum separation at lengths $p$,
+    $p+1$, and $3(p+1)$ gives, for each ordered pair of distinct blocks, a
+    length-$3(p+1)$ polynomial equal to the identity on the first block and
+    zero on the second. Multiplying the $g-1$ pairwise polynomials gives a
+    selector for each block. Combining these selectors with the common
+    length-$p$ word spans yields the full product-algebra span at
+    \[
+        L=p+(g-1)3(p+1).
+    \]
+    Conjugation by the Perron gauges preserves this span. Finally, a one-letter
+    evaluation of $A_j^{[L]}$ is precisely a length-$L$ word evaluation of
+    $A_j$.
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     \TNBNTDecomposition

@@ -382,6 +382,7 @@ import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
+import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.LinearMarkedTensor
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
