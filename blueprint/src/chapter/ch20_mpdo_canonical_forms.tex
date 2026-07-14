@@ -1813,6 +1813,22 @@
     $X^\dagger X$ on the right gives the commutation.
 \end{proof}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOVerticalGaugeGramComparison
+    \caption{Equality of the Gram conjugations for two copies of the same
+    vertical normal tensor:
+    $(X_{\alpha,k}^{\dagger}X_{\alpha,k})M_\alpha
+    (X_{\alpha,k}^{\dagger}X_{\alpha,k})^{-1}
+    =(X_{\alpha,1}^{\dagger}X_{\alpha,1})M_\alpha
+    (X_{\alpha,1}^{\dagger}X_{\alpha,1})^{-1}$.
+    The horizontal Lemma~L gives this equality from self-adjointness of the
+    corresponding sector compressions. Normality is used only in the
+    subsequent proportionality argument. This is
+    \cite[Proposition~4.13, lines~1915--1921]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_vertical_gauge_gram_comparison}
+\end{figure}
+
 \begin{theorem}[Gram-matrix proportionality from the dressed-adjoint identities]
     \label{thm:eq3_of_dressed_adjoint}
     \lean{MPSTensor.IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint}

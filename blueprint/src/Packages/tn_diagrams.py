@@ -67,6 +67,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDOFirstSiteContractions": "",
     "TNMPDOVerticalDirectSum": "",
     "TNMPDOVerticalReducingSectors": "",
+    "TNMPDOVerticalGaugeGramComparison": "",
     "TNMPDOInverseContraction": "",
     "TNMPDOSectorPairing": "",
     "TNMPDOSectorZCLIdentity": "",

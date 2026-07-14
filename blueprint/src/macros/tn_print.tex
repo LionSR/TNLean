@@ -825,6 +825,49 @@
     \end{tikzpicture}%
 }
 
+% Equality of the Gram conjugations for two gauge-equivalent copies of one
+% vertical normal tensor. The ordering of the four gauge factors follows
+% DAVID_Fig8.png in the proof of Proposition 4.13.
+\newcommand{\TNMPDOVerticalGaugeGramComparison}{%
+    \begin{tikzpicture}[tn picture]
+        \path[draw=black, opacity=0, use as bounding box]
+            (-3.45,-1.62) rectangle (3.45,1.62);
+        \begin{scope}[xshift=-1.80cm]
+            \TN@tensordot{vggL}{(0,0)}
+            \draw[tn phys leg] (vggL.west) -- ++(-0.72,0);
+            \draw[tn phys leg] (vggL.east) -- ++(0.72,0);
+            \TN@opdotright{vggLX}{(0,0.58)}{X_{\alpha,k}}
+            \TN@opdotright{vggLXd}{(0,1.18)}{X_{\alpha,k}^{\dagger}}
+            \TN@opdotright{vggLXi}{(0,-0.58)}{X_{\alpha,k}^{-1}}
+            \TN@opdotright{vggLXid}{(0,-1.18)}{(X_{\alpha,k}^{-1})^{\dagger}}
+            \draw[tn leg] (vggL.north) -- (vggLX.south);
+            \draw[tn leg] (vggLX.north) -- (vggLXd.south);
+            \draw[tn leg] (vggLXd.north) -- ++(0,0.30);
+            \draw[tn leg] (vggL.south) -- (vggLXi.north);
+            \draw[tn leg] (vggLXi.south) -- (vggLXid.north);
+            \draw[tn leg] (vggLXid.south) -- ++(0,-0.30);
+            \node[anchor=east] at (-0.16,0.18) {$M_\alpha$};
+        \end{scope}
+        \node at (0,0) {$=$};
+        \begin{scope}[xshift=1.80cm]
+            \TN@tensordot{vggR}{(0,0)}
+            \draw[tn phys leg] (vggR.west) -- ++(-0.72,0);
+            \draw[tn phys leg] (vggR.east) -- ++(0.72,0);
+            \TN@opdotright{vggRX}{(0,0.58)}{X_{\alpha,1}}
+            \TN@opdotright{vggRXd}{(0,1.18)}{X_{\alpha,1}^{\dagger}}
+            \TN@opdotright{vggRXi}{(0,-0.58)}{X_{\alpha,1}^{-1}}
+            \TN@opdotright{vggRXid}{(0,-1.18)}{(X_{\alpha,1}^{-1})^{\dagger}}
+            \draw[tn leg] (vggR.north) -- (vggRX.south);
+            \draw[tn leg] (vggRX.north) -- (vggRXd.south);
+            \draw[tn leg] (vggRXd.north) -- ++(0,0.30);
+            \draw[tn leg] (vggR.south) -- (vggRXi.north);
+            \draw[tn leg] (vggRXi.south) -- (vggRXid.north);
+            \draw[tn leg] (vggRXid.south) -- ++(0,-0.30);
+            \node[anchor=east] at (-0.16,0.18) {$M_\alpha$};
+        \end{scope}
+    \end{tikzpicture}%
+}
+
 % Inverse-map contraction for an injective simple tensor: contracting the
 % inverse tensor with the tensor through the physical index identifies the
 % two pairs of virtual legs (the matrix units on the bond space).
