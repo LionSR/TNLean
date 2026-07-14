@@ -983,6 +983,8 @@ specialization of that Appendix~D definition.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence,
+        rem:product_pair_projectors}
     Suppose $B^i=XA^iX^{-1}$ for every physical letter. If the blocking
     relation for $A$ is
     \[
@@ -1011,7 +1013,7 @@ specialization of that Appendix~D definition.
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance,
-        thm:left_canonical_rfp_chain_commutation}
+        thm:left_canonical_rfp_chain_commutation, thm:gauge_invariance_normal}
     Put $A$ into its trace-preserving gauge.  This is a pure similarity, since
     the normal-tensor normalization fixes the transfer spectral radius at one.
     Similarity preserves the physical blocking relation and the local MPS

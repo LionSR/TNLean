@@ -172,8 +172,8 @@ theorem isTransferIdempotent_iff_hasPhysicalBlockingIsometry (A : MPSTensor d D)
 
 /-- A virtual gauge change preserves the physical blocking-isometry relation.
 
-This is the gauge covariance of the defining relation `AA=A` in
-arXiv:1606.00608, equation `AA=A` and Definition `defRFP`, lines 398--424. -/
+This is the gauge covariance of equation \(AA=A\) and the RFP definition in
+arXiv:1606.00608, lines 398--424. -/
 theorem GaugeEquiv.hasPhysicalBlockingIsometry {A B : MPSTensor d D}
     (h : GaugeEquiv A B) :
     HasPhysicalBlockingIsometry A → HasPhysicalBlockingIsometry B := by
