@@ -1259,6 +1259,34 @@ a contradiction.
     contradicting the preceding limit.
 \end{proof}
 
+\begin{theorem}[Gauge realization of prepared phase-equivalent NTs]%
+    \label{thm:prepared_phase_equiv_gauge}
+    \lean{MPSTensor.gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \leanok
+    \uses{def:mpv_block_phase_equiv, def:gauge_phase_equiv,
+        def:irreducible_tensor, def:tp_kraus, def:primitive_channel}
+    Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
+    bond dimensions $D_X$ and $D_Y$. If their MPV families differ by a nonzero
+    scalar power, then $D_X=D_Y$, and after identifying the bond spaces there
+    exist $G\in\GL_{D_Y}(\C)$ and $\zeta\in\C\setminus\{0\}$ such that, for every
+    physical index $i$,
+    \[
+        Y^i=\zeta G X^i G^{-1}.
+    \]
+    The scalar is not asserted to be positive, and the gauge is not asserted to
+    be unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:prepared_phase_equiv_dim_eq,
+        thm:not_gauge_phase_eventually_not_proportional}
+    Lemma~\ref{lem:prepared_phase_equiv_dim_eq} identifies the bond dimensions.
+    If no gauge-phase relation existed after this identification,
+    Theorem~\ref{thm:not_gauge_phase_eventually_not_proportional} would give a
+    length $N$ at which the two MPV states are not proportional. This contradicts
+    the assumed scalar-power identity at every length.
+\end{proof}
+
 \begin{lemma}[Prepared BNT representative classes preserve bond dimension]%
     \label{lem:prepared_phase_class_dim_eq}
     \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
