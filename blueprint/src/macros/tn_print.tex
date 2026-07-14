@@ -570,17 +570,17 @@
             \draw[tn leg] (\x,-1.12) -- (\x,1.12);
         }
 
-        \node[tn tensor box, rounded corners=2pt, minimum width=1.38cm,
+        \node[tn tensor box, minimum width=1.38cm,
             minimum height=0.48cm, inner sep=1pt]
             at (-4.05,0.38) {$\eta_{k,l}$};
-        \node[tn tensor box, rounded corners=2pt, minimum width=1.38cm,
+        \node[tn tensor box, minimum width=1.38cm,
             minimum height=0.48cm, inner sep=1pt]
             at (-2.45,-0.38) {$\eta_{l,h}$};
 
-        \node[tn tensor box, rounded corners=2pt, minimum width=1.38cm,
+        \node[tn tensor box, minimum width=1.38cm,
             minimum height=0.48cm, inner sep=1pt]
             at (2.45,-0.38) {$\eta_{k,l}$};
-        \node[tn tensor box, rounded corners=2pt, minimum width=1.38cm,
+        \node[tn tensor box, minimum width=1.38cm,
             minimum height=0.48cm, inner sep=1pt]
             at (4.05,0.38) {$\eta_{l,h}$};
 
@@ -699,7 +699,7 @@
         \node at (-1.08,0.48) {$j_3$};
 
         % The trace closes the three-site word through the remaining sites R.
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (tnTail) at (-1.60,-1.42) {$R$};
         \draw[tn virtual closure] (tnKone.west) -- ++(-0.42,0)
             |- ($(tnTail.east)+(0,-0.40)$) -- (tnTail.east);
@@ -720,7 +720,7 @@
         \node[anchor=east] at (1.61,0.20) {$\beta_1$};
         \node[anchor=west] at (2.89,0.20) {$\alpha_3$};
         \node at (3.50,0.20) {$\times$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (tnTailEntry) at (4.65,0.20) {$R$};
         \draw[tn leg] (tnTailEntry.west) -- ++(-0.58,0);
         \draw[tn leg] (tnTailEntry.east) -- ++(0.58,0);
@@ -810,10 +810,10 @@
         \node[anchor=west] at (-3.33,0.30) {$\widetilde M$};
         \node at (-2.45,0) {$=$};
         \node at (-1.55,0) {$\displaystyle\sum_k$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (vrsV) at (0,0.82) {$V_k$};
         \TN@tensordot{vrsB}{(0,0)}
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (vrsVd) at (0,-0.82) {$V_k^\dagger$};
         \draw[tn phys leg] (vrsV.north) -- ++(0,0.34);
         \draw[tn phys leg] (vrsV.south) -- (vrsB.north);
@@ -1015,7 +1015,7 @@
         \node[anchor=east] at (-0.14,0.25) {${\cal K}$};
         \node[anchor=east] at (1.34,0.25) {${\cal K}$};
 
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (tnFourSiteTail) at (0,-1.42) {$R_4$};
         \draw[tn virtual closure] (tnTailOne.west) -- ++(-0.48,0)
             |- ($(tnFourSiteTail.east)+(0,-0.40)$) -- (tnFourSiteTail.east);
@@ -1039,9 +1039,9 @@
         \node[anchor=west] at (-1.68,0) {$\alpha_3$};
         \node[anchor=east] at (-2.58,0.25) {${\cal K}$};
 
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (tnSectorU) at (-2.45,0.88) {$U_B$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (tnSectorUd) at (-2.45,-0.88) {$U_B^\dagger$};
         \draw[tn phys leg] (tnSectorK.north) -- (tnSectorU.south);
         \draw[tn phys leg] (tnSectorU.north) -- ++(0,0.34);
@@ -1077,9 +1077,9 @@
         \node[anchor=west] at (-1.88,0) {$\alpha_3$};
         \node[anchor=east] at (-2.78,0.25) {${\cal K}$};
 
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (sfU) at (-2.65,0.88) {$U_B$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (sfUd) at (-2.65,-0.88) {$U_B^\dagger$};
         \draw[tn phys leg] (sfK.north) -- (sfU.south);
         \draw[tn phys leg] (sfU.north) -- ++(0,0.34);
@@ -1238,9 +1238,9 @@
         \node (la) at (0,0) {$\alpha$};
         \node (lb) at (0.90,0) {$\beta$};
         \node (lc) at (1.80,0) {$\gamma$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (lab) at (0.45,0.78) {$U_{\alpha,\beta}^{\delta}$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (labc) at (1.12,1.62) {$U_{\delta,\gamma}^{\varepsilon}$};
         \draw[tn leg] (la.north) -- (lab.south west);
         \draw[tn leg] (lb.north) -- (lab.south east);
@@ -1253,9 +1253,9 @@
         \node (ra) at (4.20,0) {$\alpha$};
         \node (rb) at (5.10,0) {$\beta$};
         \node (rc) at (6.00,0) {$\gamma$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (rbc) at (5.55,0.78) {$U_{\beta,\gamma}^{\eta}$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (rabc) at (4.88,1.62) {$U_{\alpha,\eta}^{\varepsilon}$};
         \draw[tn leg] (rb.north) -- (rbc.south west);
         \draw[tn leg] (rc.north) -- (rbc.south east);
@@ -1279,9 +1279,9 @@
         \node (pfLa) at (-4.20,-1.20) {$a$};
         \node (pfLb) at (-3.20,-1.20) {$b$};
         \node (pfLc) at (-2.20,-1.20) {$c$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (pfLab) at (-3.70,-0.34) {$X^{e}_{ab,\mu}$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (pfLroot) at (-3.00,0.62) {$X^{d}_{ec,\nu}$};
         \draw[tn leg] (pfLa.north) -- (pfLab.south west);
         \draw[tn leg] (pfLb.north) -- (pfLab.south east);
@@ -1298,9 +1298,9 @@
         \node (pfRa) at (2.75,-1.20) {$a$};
         \node (pfRb) at (3.75,-1.20) {$b$};
         \node (pfRc) at (4.75,-1.20) {$c$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (pfRbc) at (4.25,-0.34) {$X^{f}_{bc,\lambda}$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (pfRroot) at (3.45,0.62) {$X^{d}_{af,\sigma}$};
         \draw[tn leg] (pfRb.north) -- (pfRbc.south west);
         \draw[tn leg] (pfRc.north) -- (pfRbc.south east);
@@ -1389,7 +1389,7 @@
         \node[anchor=west] at (3.43,-1.48)
             {$\mathcal H^{\mathrm R}_{\varepsilon}$};
         \node[anchor=west] at (3.43,-2.08) {$\C^{D_\varepsilon}$};
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
             (ffF) at (0,-1.48) {$F_\varepsilon$};
         \draw[<-, tn leg] (-3.36,-1.48) -- (ffF.west);
         \draw[<-, tn leg] (ffF.east) -- (3.36,-1.48);
@@ -1552,11 +1552,11 @@
 % direct sum without introducing an F-move.
 \newcommand{\TNMPDOBNTFusionIdentity}{%
     \begin{tikzpicture}[tn picture, scale=0.92]
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum height=1.16cm] (bfiU) at (-2.20,0) {$U_{\alpha,\beta}$};
         \TN@tensordot{bfiA}{(-0.95,0.42)}
         \TN@tensordot{bfiB}{(-0.95,-0.42)}
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum height=1.16cm] (bfiUd) at (0.30,0)
             {$U_{\alpha,\beta}^{\dagger}$};
         \draw[tn leg] (bfiU.north east) -- (bfiA.west);
@@ -1601,7 +1601,7 @@
         % U (M_alpha M_beta) = H U.
         \node[anchor=east] at (-4.72,2.35)
             {$U(M_\alpha M_\beta)=HU$};
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum height=1.10cm] (uzTopL) at (-3.78,2.35) {$U$};
         \TN@tensordot{uzTopA}{(-2.48,2.72)}
         \TN@tensordot{uzTopB}{(-2.48,1.98)}
@@ -1619,7 +1619,7 @@
         \node[tn tensor box, minimum width=0.72cm,
             minimum height=0.52cm, inner sep=1pt]
             (uzTopH) at (-0.52,2.35) {$H$};
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum height=1.10cm] (uzTopR) at (0.80,2.35) {$U$};
         \draw[tn leg] (uzTopH.west) -- ++(-0.42,0);
         \draw[tn leg] (uzTopH.east) -- (uzTopR.west);
@@ -1640,13 +1640,13 @@
         \TN@downleg{uzBotB}{0.34}
         \node at (-3.48,0.37) {$M_\alpha$};
         \node at (-3.48,-0.37) {$M_\beta$};
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum height=1.10cm] (uzBotL) at (-2.48,0) {$U^\dagger$};
         \draw[tn leg] (uzBotA.east) -- (uzBotL.north west);
         \draw[tn leg] (uzBotB.east) -- (uzBotL.south west);
         \draw[tn leg] (uzBotL.east) -- ++(0.42,0);
         \node at (-1.42,0) {$=$};
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum height=1.10cm] (uzBotR) at (-0.52,0) {$U^\dagger$};
         \node[tn tensor box, minimum width=0.72cm,
             minimum height=0.52cm, inner sep=1pt]
@@ -1673,13 +1673,13 @@
         \node at (-3.48,-2.05) {$M_\alpha$};
         \node at (-3.48,-2.79) {$M_\beta$};
         \node at (-2.68,-2.42) {$=$};
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum height=1.10cm] (uzRecUd) at (-1.72,-2.42)
             {$U^\dagger$};
         \node[tn tensor box, minimum width=0.72cm,
             minimum height=0.52cm, inner sep=1pt]
             (uzRecH) at (-0.40,-2.42) {$H$};
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum height=1.10cm] (uzRecU) at (0.92,-2.42) {$U$};
         \draw[tn leg] (uzRecUd.north west) -- ++(-0.52,0);
         \draw[tn leg] (uzRecUd.south west) -- ++(-0.52,0);
@@ -1845,7 +1845,7 @@
 \newcommand{\TNAppendixBAdjacentBondProjectors}{%
     \begin{tikzpicture}[tn picture, scale=0.92]
         \foreach \x/\name in {0/rfpUzero,2.20/rfpUone,4.40/rfpUtwo} {
-            \node[tn tensor box, minimum width=0.72cm, minimum height=0.58cm]
+            \node[tn map box, minimum width=0.72cm, minimum height=0.58cm]
                 (\name) at (\x,0.92) {$U$};
             \draw[tn phys leg] (\name.north) -- ++(0,0.42);
         }
@@ -1881,7 +1881,7 @@
 \newcommand{\TNAppendixBPhysicalSupportTransport}{%
     \begin{tikzpicture}[tn picture, scale=0.90]
         \foreach \x/\name in {0/rfpTzero,2.20/rfpTone,4.40/rfpTtwo} {
-            \node[tn tensor box, minimum width=0.72cm, minimum height=0.58cm]
+            \node[tn map box, minimum width=0.72cm, minimum height=0.58cm]
                 (\name) at (\x,0.72) {$U$};
             \draw[tn phys leg] (\name.north) -- ++(0,0.52);
             \fill[black] ($(\name.north)+(0,0.52)$) circle (1.4pt);
@@ -1987,7 +1987,7 @@
         \draw[tn leg] (rfrB.east) -- ++(0.60,0);
         \node[anchor=east] at (-0.14,-0.28) {$A$};
         \node[anchor=west] at (1.34,-0.28) {$A$};
-        \node[tn map box, inner sep=2pt,
+        \node[tn map box,
             minimum width=1.62cm] (rfrV) at (0.60,0.90) {$V^\dagger$};
         \draw[tn phys leg] (rfrA.north) -- (rfrA.north |- rfrV.south);
         \draw[tn phys leg] (rfrB.north) -- (rfrB.north |- rfrV.south);
@@ -2017,7 +2017,7 @@
         \node at (1.25,0) {$=$};
         \TN@opdotabove{icfX}{(2.20,0)}{X}
         \TN@opdotabove{icfL}{(3.20,0)}{\sqrt\Lambda}
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
         (icfU) at (4.30,0.75) {$U$};
         \TN@opdotabove{icfXi}{(5.40,0)}{X^{-1}}
         \draw[tn leg] (icfX.west) -- ++(-0.55,0);
@@ -2046,7 +2046,7 @@
         \node at (1.25,0) {$=$};
         \TN@opdotabove{icbX}{(2.20,0)}{X}
         \TN@opdotabove{icbL}{(3.20,0)}{\sqrt\Lambda}
-        \node[tn map box, inner sep=2pt]
+        \node[tn map box]
         (icbU) at (4.30,0.75) {$U$};
         \TN@opdotabove{icbXi}{(5.40,0)}{X^{-1}}
         \draw[tn leg] (icbX.west) -- ++(-0.55,0);
@@ -2066,7 +2066,7 @@
         \draw[tn leg] (icbL.south) -- (3.20,-0.62);
         \draw[tn leg] (4.16,0) -- (4.16,-0.62);
         \draw[tn leg] (icbXi.south) -- (5.40,-1.02);
-        \node[tn map box, inner sep=2pt]
+        \node[tn tensor box]
         (icbMu) at (2.70,-1.60) {$\mu$};
         \draw[tn leg] ($(icbMu.north)+(-0.12,0)$) -- (2.58,-0.62);
         \draw[tn leg] ($(icbMu.north)+(0.12,0)$) -- (2.82,-1.02);
@@ -2245,7 +2245,7 @@
 \newcommand{\TNMPDOInsertionTracePairing}{%
     \begin{tikzpicture}[tn picture]
         \begin{scope}
-            \node[tn map box, inner sep=2pt]
+            \node[tn map box]
             (itpW) at (0,0) {$W$};
             \TN@tensordot{itpA}{(1.15,0)}
             \draw[tn leg] (itpW.east) -- (itpA.west);
@@ -2258,7 +2258,7 @@
         \end{scope}
         \node at (2.70,0) {$=$};
         \begin{scope}[xshift=4.05cm]
-            \node[tn map box, inner sep=2pt]
+            \node[tn map box]
             (itpWz) at (0,0) {$W$};
             \TN@tensordot{itpAz}{(1.15,0)}
             \draw[tn leg] (itpWz.east) -- (itpAz.west);
