@@ -8,6 +8,10 @@ by a diagram before reading the surrounding proof.
 
 - Tensor sites are black dots. A physical index is drawn as a thicker vertical
   leg. Virtual indices are drawn as thinner horizontal or slanted legs.
+- A tensor that must carry a label is drawn as a neutral square box. A linear
+  map, including an isometry or coisometry, is drawn as a rounded blue box.
+  These labeled glyphs are distinct from the red dots used for matrices
+  inserted on individual legs.
 - An MPS tensor is a black dot with left and right virtual legs and one
   physical leg. A blocked MPS tensor is drawn by enclosing consecutive sites in
   a rectangle, with the blocked physical word represented by the external
@@ -34,6 +38,10 @@ by a diagram before reading the surrounding proof.
   physical legs, or by omitting the external physical legs only when the
   surrounding formula states the contraction, for example in a transfer map or
   an overlap.
+- Contracted indices are drawn with solid strokes. A one-dimensional periodic
+  trace is a rounded solid closure. Dashed strokes are reserved for grouping
+  boundaries, changes of multiplicity basis, and an explicitly identified
+  boundary of a periodic lattice; a purification contraction is not dashed.
 
 ## Blocks, Regions, and Labels
 
