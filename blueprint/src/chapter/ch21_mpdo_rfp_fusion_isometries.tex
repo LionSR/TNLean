@@ -1431,6 +1431,46 @@ separate step.
     \cite[lines~161, 181--200, and 269--277]{Bultinck2017Anyons}.
 \end{definition}
 
+\begin{theorem}[Complete zipper family from a source BNT]%
+    \label{thm:mpdo_blocked_bnt_complete_zipper}
+    \lean{MPOTensor.BNTFusionIsometryFamily.blockedFusionSynthesis}
+    \lean{MPOTensor.BNTFusionIsometryFamily.blockedFusionAnalysis}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        exists_blocked_completeZipperFusionFamily}
+    \leanok
+    \uses{thm:mpdo_bnt_common_positive_blocked_fusion,
+        thm:mpdo_pair_fusion_bnt_completeness,
+        thm:mpdo_one_letter_simultaneous_inverse,
+        def:mpdo_complete_zipper_fusion_family}
+    Suppose that the labelled tensors of a length-independent fusion family
+    form a source basis of normal tensors.  There is one common positive
+    blocking at which they determine a complete zipper fusion family.  Its
+    bond dimensions are the original labelled bond dimensions, its fusion
+    multiplicities are
+    \[
+        N_{\alpha\beta}^{\gamma}
+          =\dim\chi_{\alpha,\beta,\gamma},
+    \]
+    its synthesis map is the adjoint of $U_{\alpha,\beta}$, and its analysis
+    map is $U_{\alpha,\beta}$, after the canonical identification
+    $\mathbb C^{D_\alpha D_\beta}
+      \cong\mathbb C^{D_\alpha}\otimes\mathbb C^{D_\beta}$.
+    In particular, the two zipper identities, literal reconstruction,
+    injectivity, and the simultaneous block-letter inverse are conclusions;
+    none is an additional hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    Length independence makes every chi matrix the identity.  Use the common
+    positive BNT blocking for the labelled tensors and transport the fusion
+    equation through it.  Pair completeness gives
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, so analysis followed by
+    synthesis is the identity.  The other three matrix identities are the
+    two transported zipper equations and the reconstruction equation.  The
+    common one-letter product-algebra span supplies both block injectivity and
+    the simultaneous block-letter inverse.  These data are exactly those of
+    Definition~\ref{def:mpdo_complete_zipper_fusion_family}.
+\end{proof}
+
 \begin{theorem}[Printed F-move and inverse]%
     \label{thm:mpdo_complete_zipper_printed_fmove}
     \lean{MPOTensor.CompleteZipperFusionFamily.%
