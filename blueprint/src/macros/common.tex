@@ -7,6 +7,10 @@
 % Reset within subsections.  In a section without subsections, omit the zero
 % subsection index and number directly within the section.
 \newtheorem{theorem}{Theorem}[subsection]
+\makeatletter
+\@addtoreset{theorem}{section}
+\makeatother
+\renewcommand*{\theHtheorem}{\theHsubsection.\arabic{theorem}}
 \renewcommand{\thetheorem}{%
   \ifnum\value{subsection}=0
     \thesection.\arabic{theorem}%
