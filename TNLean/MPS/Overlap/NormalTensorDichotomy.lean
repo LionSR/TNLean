@@ -1,0 +1,125 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
+
+/-!
+# Normal-tensor overlap dichotomy
+
+Two normal tensors have rectangular matrix product vector overlap tending to zero, unless their
+bond dimensions agree and they are related by an invertible gauge and a unit phase. In the latter
+case the overlap modulus tends to one, and the matrix product vectors differ by the corresponding
+power of the phase at every positive length.
+
+## Main statements
+
+* `IsNormalTensor.overlap_dichotomy`: the overlap tends to zero, or its modulus tends to one and
+  the tensors are gauge-phase equivalent with a unit phase.
+* `IsNormalTensor.mpv_phase_alternative`: the overlap tends to zero, or the matrix product vectors
+  differ by a unit phase raised to each positive chain length.
+
+## References
+
+* Cirac--Pérez-García--Schuch--Verstraete, arXiv:1606.00608, Appendix A,
+  Lemma A.2 (equalMPS) and Corollary A.3 (eqV), lines 1080--1128.
+-/
+
+open scoped Matrix BigOperators ComplexOrder
+open Filter
+
+namespace MPSTensor
+
+variable {d D₁ D₂ : ℕ}
+
+/-- **Normal-tensor overlap dichotomy** (arXiv:1606.00608, Appendix A,
+Lemma A.2 (equalMPS), lines 1080--1119).
+
+For two normal tensors of positive, possibly different, bond dimensions, either the rectangular
+overlap tends to zero, or its modulus tends to one and the tensors are related by an invertible
+gauge and a unit phase. -/
+theorem IsNormalTensor.overlap_dichotomy
+    [NeZero D₁] [NeZero D₂]
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
+    Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) ∨
+      (Tendsto (fun N ↦ ‖mpvOverlap (d := d) A B N‖) atTop (nhds (1 : ℝ)) ∧
+        ∃ hdim : D₁ = D₂,
+          ∃ X : GL (Fin D₂) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+            ∀ i, B i = ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) A) i *
+              (↑(X⁻¹) : Matrix (Fin D₂) (Fin D₂) ℂ))) := by
+  obtain ⟨σA, _hσA, _hσAfix, hTPA, hGaugeA, _hPrimA, hIrrA⟩ := hA.exists_tpGauge
+  obtain ⟨σB, _hσB, _hσBfix, hTPB, hGaugeB, _hPrimB, hIrrB⟩ := hB.exists_tpGauge
+  let A' := tpGauge (d := d) (D := D₁) A σA
+  let B' := tpGauge (d := d) (D := D₂) B σB
+  have hOverlapGauge : ∀ N,
+      mpvOverlap (d := d) A B N = mpvOverlap (d := d) A' B' N := by
+    intro N
+    apply Finset.sum_congr rfl
+    intro w _hw
+    rw [GaugeEquiv.sameMPV hGaugeA N w, GaugeEquiv.sameMPV hGaugeB N w]
+  by_cases hdim : D₁ = D₂
+  · by_cases hGPE : GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) hdim) A) B
+    · right
+      rcases hGPE with ⟨X, ζ, _hζ, hrel⟩
+      have hζnorm : ‖ζ‖ = 1 :=
+        norm_eq_one_of_gaugePhase_cast_of_isNormalTensor hA hB hdim hrel
+      have hmpv : ∀ (N : ℕ) (w : Fin N → Fin d),
+          mpv B w = ζ ^ N * mpv A w := by
+        intro N w
+        rw [mpv_eq_pow_mul_of_gaugePhase
+          (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hrel N w,
+          mpv_cast_dim hdim A N w]
+      have hCrossEq : ∀ N,
+          mpvOverlap (d := d) A B N =
+            (star ζ) ^ N * mpvOverlap (d := d) A A N :=
+        mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul hmpv
+      have hCrossNormEq : ∀ N,
+          ‖mpvOverlap (d := d) A B N‖ = ‖mpvOverlap (d := d) A A N‖ := by
+        intro N
+        rw [hCrossEq N, norm_mul, norm_pow, norm_star, hζnorm, one_pow, one_mul]
+      have hSelfNorm : Tendsto (fun N ↦ ‖mpvOverlap (d := d) A A N‖)
+          atTop (nhds (1 : ℝ)) := by
+        simpa using hA.selfOverlap_tendsto_one.norm
+      refine ⟨hSelfNorm.congr fun N ↦ (hCrossNormEq N).symm, hdim, X, ζ, hζnorm, hrel⟩
+    · left
+      have hNotPrepared : ¬ GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor d) hdim) A') B' := by
+        intro hPrepared
+        exact hGPE (gaugePhaseEquiv_of_gaugeEquiv_left_right_cast
+          hdim hGaugeA hPrepared hGaugeB)
+      have hPrepared :=
+        mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
+          hdim A' B' hIrrA hIrrB hTPA hTPB hNotPrepared
+      exact hPrepared.congr' (Eventually.of_forall fun N ↦ (hOverlapGauge N).symm)
+  · left
+    have hPrepared := mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+      A' B' hIrrA hIrrB hTPA hTPB hdim
+    exact hPrepared.congr' (Eventually.of_forall fun N ↦ (hOverlapGauge N).symm)
+
+/-- **Exact phase alternative for normal tensors** (arXiv:1606.00608, Appendix A,
+Corollary A.3 (eqV), lines 1121--1128).
+
+For two normal tensors of positive, possibly different, bond dimensions, either the rectangular
+overlap tends to zero, or their matrix product vectors differ at every positive length by a fixed
+unit phase raised to that length. -/
+theorem IsNormalTensor.mpv_phase_alternative
+    [NeZero D₁] [NeZero D₂]
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
+    Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) ∨
+      ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ N, 0 < N →
+        mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
+  rcases hA.overlap_dichotomy hB with hzero | ⟨_hone, hdim, X, ζ, hζ, hrel⟩
+  · exact Or.inl hzero
+  · right
+    refine ⟨ζ, hζ, fun N _hN ↦ ?_⟩
+    ext w
+    simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hrel N w,
+      mpv_cast_dim hdim A N w]
+
+end MPSTensor
