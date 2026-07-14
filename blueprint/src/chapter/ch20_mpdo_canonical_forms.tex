@@ -2052,6 +2052,66 @@
     position, and positivity of $c$ permits cancellation without a phase.
 \end{proof}
 
+\begin{theorem}[Pairwise Gram conjugation of grouped vertical corners]
+    \label{thm:mpdo_pairwise_vertical_gram_conjugation}
+    \lean{MPOTensor.gramDressing}
+    \lean{MPOTensor.cornerGramCoefficients}
+    \lean{MPOTensor.IsMPDO.markedChainCoefficient_gramDressing_eq_reflectedAdjoint}
+    \lean{MPOTensor.IsMPDO.markedChainCoefficient_gramDressing_eq_of_two_corners}
+    \lean{MPOTensor.IsHorizontalCF.gramDressing_eq_of_two_grouped_corners}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo,
+        thm:mpdo_reflected_marked_chain,
+        cor:horizontal_cf_linear_marked_separation}
+    Let $M$ be in horizontal canonical form and generate positive
+    semidefinite operators at every length.  Suppose two vertical corners
+    are positive scalar multiples of similarities of the same tensor $A$:
+    \[
+        V_X^\dagger\widetilde M^vV_X
+          =c_X X A^vX^{-1},
+        \qquad
+        V_Y^\dagger\widetilde M^vV_Y
+          =c_Y Y A^vY^{-1},
+        \qquad c_X,c_Y>0.
+    \]
+    Then the two Gram conjugations agree for every vertical letter,
+    \[
+        (X^\dagger X)A^v(X^\dagger X)^{-1}
+        =(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}.
+    \]
+    Normality of $A$ is not required for this equality; it enters only in
+    the subsequent proportionality of the Gram matrices.  This is the
+    pairwise conclusion of Figures~7--8 in
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_reflected_marked_chain,
+        cor:horizontal_cf_linear_marked_separation}
+    Conjugate the open indices in the reflected marked-chain identity for
+    the first corner by $X^\dagger$.  Its left side becomes the marked chain
+    of $(X^\dagger X)A^v(X^\dagger X)^{-1}$, while the gauge factors on the
+    reflected side cancel and leave the marked chain of $A^\sharp$.  The
+    same calculation with $Y$ gives the identical reflected chain.  Thus the
+    two Gram-dressed marks have equal closed chains for every tail word.
+
+    These marks lie in the physical-letter span.  Indeed, with
+    \[
+        L_X=V_XX,
+        \qquad R_X=V_X(X^{-1})^\dagger,
+    \]
+    their coefficients are
+    \[
+        f^X_{(r,s),(i,j)}
+          =c_X^{-1}\overline{(L_X)_{ir}}(R_X)_{js},
+    \]
+    and similarly for $Y$.  The corner identities show that these linear
+    combinations are precisely the horizontal slices of the two
+    Gram-dressed tensors.  Physical-letter marked separation therefore
+    identifies every slice, hence every vertical letter.
+\end{proof}
+
 \begin{theorem}[Gram conjugation from the adjoint dressing]
     \label{thm:gram_conj_of_dressed_adjoint}
     \lean{Matrix.gram_conj_eq_of_dressed_target}
@@ -2099,8 +2159,9 @@
     (X_{\alpha,k}^{\dagger}X_{\alpha,k})^{-1}
     =(X_{\alpha,1}^{\dagger}X_{\alpha,1})M_\alpha
     (X_{\alpha,1}^{\dagger}X_{\alpha,1})^{-1}$.
-    The horizontal Lemma~L gives this equality from self-adjointness of the
-    corresponding sector compressions. Normality is used only in the
+    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives this
+    equality from self-adjointness of the corresponding sector compressions
+    and horizontal marked separation. Normality is used only in the
     subsequent proportionality argument. This is
     \cite[Proposition~4.13, lines~1915--1921]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_vertical_gauge_gram_comparison}
@@ -2114,6 +2175,7 @@
     \lean{Matrix.smul_mul_nonsing_inv_mem_unitaryGroup_of_gram_eq_smul}
     \leanok
     \uses{def:normal, thm:gram_conj_of_dressed_adjoint,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:normal_tensor_gram_rigidity}
     Let $M_\alpha$ be a normal tensor, and let $X$ and $Y$ be invertible
     gauges whose Gram matrices induce the same conjugation on each letter
@@ -2122,10 +2184,12 @@
     \[
         X^\dagger X=\omega\,Y^\dagger Y,
     \]
-    and $\omega^{-1/2}XY^{-1}$ is unitary.  The Figure~8 comparison in
-    \cite[Proposition~4.13, lines 1909--1921]{Cirac2016MPDO_arXiv} supplies
-    precisely this relative hypothesis for a sector and the distinguished
-    sector. In the normalization $Y=\Id$, the resulting unitary is
+    and $\omega^{-1/2}XY^{-1}$ is unitary.
+    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives the
+    Figure~8 comparison in
+    \cite[Proposition~4.13, lines 1909--1921]{Cirac2016MPDO_arXiv}.  This
+    comparison supplies precisely the relative hypothesis for a sector and
+    the distinguished sector. In the normalization $Y=\Id$, the resulting unitary is
     $\omega^{-1/2}X$.  The common-target declarations attached to this entry
     are conditional algebraic corollaries, not the reflected marked-chain
     statement itself.
@@ -2745,6 +2809,7 @@
         thm:mpdo_vertical_normal_sectors_with_isometries,
         thm:mpdo_vertical_bnt_grouping_with_isometries,
         thm:mpdo_reflected_marked_chain,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2783,6 +2848,7 @@
         thm:mpdo_vertical_complete_reducing_projectors,
         thm:mpdo_vertical_bnt_grouping_with_isometries,
         thm:mpdo_reflected_marked_chain,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2843,9 +2909,10 @@
     $c_{\alpha,1}=\nu_{\alpha,1}>0$.  From now on write
     $\mu_{\alpha,k}=c_{\alpha,k}$ for the positive coefficient in the
     source decomposition.  Theorem~\ref{thm:mpdo_reflected_marked_chain}
-    proves the Figure~7 identity for each such sector.  Once the reflected
-    form of Lemma~L compares a grouped sector with the distinguished sector
-    and gives the pairwise Gram-conjugation identity in Figure~8,
+    proves the Figure~7 identity for each such sector, and
+    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives the
+    pairwise Gram-conjugation identity in Figure~8 whenever the two grouped
+    corners have been transported to their common representative bond space.
     Theorem~\ref{thm:eq3_of_dressed_adjoint} derives the identity
     \[
         X_{\alpha,k}^\dagger X_{\alpha,k}
@@ -2867,11 +2934,11 @@
     the corresponding reconstruction identity; each
     $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
     copies of $M_\alpha$ exactly as in the finite regrouping of
-    Lemma~\ref{lem:vertical_grouping_equiv}. The remaining missing proof is the
-    reflected marked-chain and Lemma~L argument of lines 1909--1919: one must
-    compare two marked sector compressions, whose adjoints reverse the tail
-    word, and obtain their relative Gram-conjugation equality without making
-    a separate raw-adjoint identification for either sector.
+    Lemma~\ref{lem:vertical_grouping_equiv}. The remaining step is to transport
+    each grouped corner along the dimension equalities of the grouping
+    theorem so that
+    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} applies on the
+    common representative bond space.
     Consequently, the conclusion stated at lines 1903--1908 has not yet been
     derived from the matrix-product-density-operator hypotheses.  The generic
     block-row construction is already proved.  After the relative
