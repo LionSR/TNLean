@@ -169,10 +169,12 @@ separation supplies a nonzero compression.  Its trace is the sector weight
 $\mu_{\alpha,k}$ times a sector trace $d_\alpha$, so MPDO positivity forces
 $d_\alpha>0$ and $\mu_{\alpha,k}>0$ under the normalization
 $\mu_{\alpha,1}>0$ (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
-\path{TNLean/MPS/MPDO/SectorTrace.lean}). Granted the pairwise
-Gram-conjugation identity of the second displayed diagram at
-lines~1914--1919, transported blockwise by a reflected form of Lemma~L, the
-Gram matrix of each sector gauge $X_{\alpha,k}$ is
+\path{TNLean/MPS/MPDO/SectorTrace.lean}). The pairwise Gram-conjugation
+identity of the second displayed diagram at lines~1914--1919 is proved for
+two corners on a common representative bond space in
+\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  Together with the scalar
+commutant of a normal tensor, this identity shows that the Gram matrix of
+each sector gauge $X_{\alpha,k}$ is
 a positive real multiple of the reference Gram matrix,
 \[
 X_{\alpha,k}^\dagger X_{\alpha,k}
@@ -192,16 +194,11 @@ grouped into pairwise gauge-phase-distinct BNT representatives in
 \path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a positive
 coefficient, a unit-modulus phase, and an invertible bond-space gauge, while
 the physical isometries and the literal vertical reconstruction are retained.
-What remains open is the reflected marked-chain and Lemma~L argument of source
-lines~1909--1919.  Its fixed-index form exchanges the two oriented bond indices,
-and the adjoint marked chain reverses the tail word.  A corresponding
-reflected marked-chain form of Lemma~L is needed before the relative Gram
-theorem can normalize the gauges.  It must compare two grouped copies and
-derive their relative Gram-conjugation equality; identifying either copy
-separately with the raw reflected adjoint would force the non-gauge-invariant
-conclusion that the tensor itself is Hermitian.  The resulting sector maps
-must then be assembled into the final coisometry.  Consequently, the conclusion stated at
-lines~1903--1908 has not yet been derived from the MPDO hypotheses.
+The remaining step is to transport the grouped corners along their dependent
+dimension equalities to the common representative bond space required by the
+pairwise theorem.  The resulting sector maps must then be assembled into the
+final coisometry.  Consequently, the conclusion stated at lines~1903--1908
+has not yet been derived from the MPDO hypotheses.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of
