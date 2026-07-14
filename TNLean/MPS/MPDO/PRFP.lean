@@ -129,7 +129,7 @@ MPS tensor satisfying the global purification equation, and that purifying
 tensor is a pure-state renormalization fixed point. -/
 def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-    HasGlobalPurificationEquation M A ∧ MPSTensor.IsRFP (purificationTensor A)
+    HasGlobalPurificationEquation M A ∧ MPSTensor.IsTransferIdempotent (purificationTensor A)
 
 /-- Purification renormalization fixed point in the sense of arXiv:1606.00608,
 Definition `def:Puri-RFP` (lines 756--764): the tensor has a global
@@ -182,10 +182,10 @@ theorem HasPurificationRFPWitness.hasGlobalPurificationEquation {M : MPOTensor d
   exact ⟨dK, D', A, hglobal⟩
 
 /-- A purification-RFP witness contains a pure-state RFP purifying tensor. -/
-theorem HasPurificationRFPWitness.purifying_isRFP {M : MPOTensor d D}
+theorem HasPurificationRFPWitness.purifying_isTransferIdempotent {M : MPOTensor d D}
     (h : HasPurificationRFPWitness M) :
     ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-      MPSTensor.IsRFP (purificationTensor A) := by
+      MPSTensor.IsTransferIdempotent (purificationTensor A) := by
   rcases h with ⟨dK, D', A, _hglobal, hRFP⟩
   exact ⟨dK, D', A, hRFP⟩
 

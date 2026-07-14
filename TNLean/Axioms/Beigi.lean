@@ -120,7 +120,7 @@ normality and the RFP hypothesis.  The difference is recorded in
 See the module docstring for the formalization plan. -/
 axiom rfp_to_nncph_commute {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (_hNT : MPSTensor.IsNormal A)
-    (_hRFP : MPSTensor.IsRFP A) :
+    (_hRFP : MPSTensor.IsTransferIdempotent A) :
     ∀ N : ℕ, 2 < N → ∀ i j : Fin N,
       MPSTensor.localTerm A 2 N i * MPSTensor.localTerm A 2 N j =
         MPSTensor.localTerm A 2 N j * MPSTensor.localTerm A 2 N i
@@ -163,6 +163,6 @@ axiom beigi_nncph_to_rfp {d D : ℕ} [NeZero D]
       ∀ N : ℕ, 2 < N →
         LinearMap.ker (MPSTensor.parentHamiltonian B 2 N) =
           MPSTensor.bntMPSVectorSpan A N) :
-    MPSTensor.IsRFP B
+    MPSTensor.IsTransferIdempotent B
 
 end Axioms

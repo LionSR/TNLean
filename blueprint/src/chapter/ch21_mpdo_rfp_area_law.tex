@@ -420,8 +420,8 @@
 
 \begin{lemma}[RFP collapse of the operator-Schmidt Grams]
     \label{lem:rfp_schmidt_gram_collapse}
-    \lean{MPSTensor.schmidtLeft_gram_eq_of_isRFP,
-        MPSTensor.schmidtRight_gram_eq_of_isRFP}
+    \lean{MPSTensor.schmidtLeft_gram_eq_of_isTransferIdempotent,
+        MPSTensor.schmidtRight_gram_eq_of_isTransferIdempotent}
     \leanok
     \uses{def:mps_transfer_idempotence, lem:schmidt_gram_transfer_power}
     Let $A$ be a renormalization fixed point. For every $L\ge 1$ and
@@ -475,7 +475,7 @@
 
 \begin{theorem}[A renormalization fixed point saturates the area law]
     \label{thm:rfp-saturates-area-law}
-    \lean{MPSTensor.isSAL_of_isRFP}
+    \lean{MPSTensor.isSAL_of_isTransferIdempotent}
     \leanok
     \uses{def:mps_transfer_idempotence, def:pure_sal,
         lem:pure_block_entropy_env_charpoly,
@@ -531,7 +531,7 @@
 
 \begin{theorem}[A renormalization fixed point has a constant block-entropy chain]
     \label{thm:rfp_constant_entropy}
-    \lean{MPSTensor.pureBlockEntropy_eq_of_isRFP}
+    \lean{MPSTensor.pureBlockEntropy_eq_of_isTransferIdempotent}
     \leanok
     \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
     If an MPS tensor $A$ is a renormalization fixed point, then all block entropies

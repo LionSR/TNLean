@@ -385,7 +385,7 @@ hypothesis includes a physical-pair coefficient factorization; the later theorem
 `rfp_implies_nncph_of_leftCanonical` obtains the commutation conclusion directly
 from the Appendix B structural datum. -/
 theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
+    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
     (N : ℕ) (hN : 2 < N) :
@@ -408,7 +408,7 @@ zero-energy equation under the Appendix B extraction hypothesis. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_ground_state_of_appendixBExtraction
     (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
+    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
     (N : ℕ) (hN : 2 < N) :
@@ -433,7 +433,7 @@ the ground-space spanning equation; this theorem assumes it via
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning
     (B : MPSTensor d D) [NeZero D]
-    (hRFP : IsRFP B) (hNT : IsNormal B) (hLeft : IsLeftCanonical B)
+    (hRFP : IsTransferIdempotent B) (hNT : IsNormal B) (hLeft : IsLeftCanonical B)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP B hNT hRFP hLeft))
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
@@ -474,7 +474,7 @@ Definition 3.9.  This theorem records only the commutation equations under
 normality and the RFP hypothesis.  The difference is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsRFP A) (hNT : IsNormal A)
+    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A)
     (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N := by
   classical
@@ -496,7 +496,7 @@ vectors of the BNT components. This theorem proves only the commutation and
 zero-energy equations for \(V^{(N)}(A)\). Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsRFP A) (hNT : IsNormal A)
+    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A)
     (N : ℕ) (hN : 2 < N) :
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState (by omega)
@@ -516,7 +516,7 @@ terms commute, the periodic MPS vector \(V^{(N)}(B)\) has zero energy, and
   \ker H_2^{(N)}(B)=\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
 \]
 
-Note: with the present Lean definition, `IsRFP` is a normalization-sensitive
+Note: with the present Lean definition, `IsTransferIdempotent` is a normalization-sensitive
 idempotence equation for `transferMap A`, whereas `IsNNCPH` is invariant under
 nonzero scalar rescaling of the tensor. A final theorem should therefore include
 a normalization hypothesis, such as `IsLeftCanonical A`, before applying the
@@ -527,7 +527,7 @@ theorem nncph_implies_rfp (B : MPSTensor d D) [NeZero D]
     (hNNCPH : HasNNCPHGroundSpaces B A)
     (hNT : IsNormal B)
     (hLeft : IsLeftCanonical B) :
-    IsRFP B := by
+    IsTransferIdempotent B := by
   refine Axioms.beigi_nncph_to_rfp B A hBNT hNT hLeft ?_ ?_ ?_
   · intro N hN i j
     exact (hNNCPH N hN).isNNCPH i j

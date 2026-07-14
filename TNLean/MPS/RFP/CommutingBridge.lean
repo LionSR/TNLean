@@ -353,7 +353,7 @@ theorem AppendixBStructuralData.physicalIsometry_injective
 
 /-- The proved structural form gives a nonempty bundled Appendix B form. -/
 theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     Nonempty (AppendixBStructuralData A) := by
   classical
@@ -374,7 +374,7 @@ This is a noncomputable definition only because it chooses an element of the
 nonempty type produced by `AppendixBStructuralData.exists_ofRFP`; it introduces
 no new assumptions or trusted constants. -/
 noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     AppendixBStructuralData A :=
   Classical.choice (AppendixBStructuralData.exists_ofRFP A hNT hRFP hLeft)
@@ -882,7 +882,7 @@ for the commutation conclusion; the extraction remains relevant only to the
 separate physical-pair coefficient factorization. -/
 theorem commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
     (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))

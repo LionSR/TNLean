@@ -287,7 +287,7 @@ and rates for the single-tensor transfer map $\E_A$.
 \end{definition}
 
 \begin{definition}[Idempotent transfer-map criterion]\label{def:mps_transfer_idempotence}
-    \lean{MPSTensor.IsRFP}
+    \lean{MPSTensor.IsTransferIdempotent}
     \leanok
     \uses{def:transfer_map}
     The transfer map of $A$ satisfies the idempotence criterion when
@@ -296,7 +296,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[A physical blocking isometry gives transfer idempotence]
     \label{thm:physical_blocking_implies_transfer_idempotence}
-    \lean{MPSTensor.isRFP_of_kraus_isometry}
+    \lean{MPSTensor.isTransferIdempotent_of_kraus_isometry}
     \leanok
     \uses{def:mps_transfer_idempotence}
     Suppose there exists an isometry
@@ -318,7 +318,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Kraus-isometry criterion for transfer idempotence]%
     \label{thm:kraus_isometry_iff_transfer_idempotence}
-    \lean{MPSTensor.isRFP_iff_kraus_isometry}
+    \lean{MPSTensor.isTransferIdempotent_iff_kraus_isometry}
     \leanok
     \uses{def:mps_transfer_idempotence,
         thm:physical_blocking_implies_transfer_idempotence}
@@ -347,7 +347,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Physical and transfer-map fixed-point criteria]
     \label{thm:physical_blocking_isometry_iff_transfer_idempotence}
-    \lean{MPSTensor.isRFP_iff_hasPhysicalBlockingIsometry}
+    \lean{MPSTensor.isTransferIdempotent_iff_hasPhysicalBlockingIsometry}
     \leanok
     \uses{def:physical_blocking_isometry, def:mps_transfer_idempotence}
     The transfer map of an MPS tensor is idempotent if and only if the tensor
@@ -480,7 +480,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.halvedWeightTensor_eq_halvedDecomp_toTensor}
     \lean{MPSTensor.halvedWeightTensor_mpv}
     \lean{MPSTensor.halvedWeightTensor_sameMPV₂_halvedDecomp}
-    \lean{MPSTensor.halvedWeightTensor_not_isRFP}
+    \lean{MPSTensor.halvedWeightTensor_not_isTransferIdempotent}
     \leanok
     \uses{def:source_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf}
     Let $P$ be the canonical decomposition with one scalar basis tensor $C^0=(1)$,
@@ -527,7 +527,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Direct-sum RFP implies positive-gap BNT zero correlation length]%
     \label{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
-    \lean{MPSTensor.isPositiveGapBNTZCL_of_isRFP_directSum}
+    \lean{MPSTensor.isPositiveGapBNTZCL_of_isTransferIdempotent_directSum}
     \leanok
     \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence}
     Let $(A_j)_j$ be nonzero-dimensional, irreducible, left-canonical,
@@ -626,8 +626,8 @@ and rates for the single-tensor transfer map $\E_A$.
 \end{proof}
 
 \begin{theorem}[Rank-one classification for RFP transfer maps]%
-    \label{thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
-    \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isRFP_injective}
+    \label{thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \leanok
     \uses{def:mps_transfer_idempotence, def:injective, def:fixed_point_proj,
         thm:exponential_convergence_primitive}
@@ -651,7 +651,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \leanok
     \uses{thm:rfp_nt_structural_of_left_canonical,
         thm:rfp_nt_cfii_diagonal_fixed_point,
-        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     A normal tensor $A$ in canonical form~II that is a renormalization fixed
     point admits a decomposition $A^i = X \Lambda U^i X^{-1}$, where
     $\Lambda$ is diagonal positive, $\sum_i (U^i)^\dagger U^i=I$, and
@@ -677,7 +677,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \leanok
     \uses{thm:rfp_nt_structural_of_left_canonical,
         thm:rfp_nt_cfii_diagonal_fixed_point,
-        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     The same decomposition as the full structural form
     (Theorem~\ref{thm:rfp_nt_structural_full}) additionally records that the
     diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$.  This square-sum
@@ -689,7 +689,7 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_of_left_canonical,
         thm:rfp_nt_cfii_diagonal_fixed_point,
-        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     The diagonal fixed-point reduction and the rank-one classification of
     injective left-canonical renormalization fixed points produce the diagonal
     weights $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, so
@@ -898,7 +898,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Isometry canonical form implies the renormalization fixed-point property]%
     \label{thm:is_rfp_of_isometry_canonical_form}
-    \lean{MPSTensor.isRFP_of_isIsometryCanonicalForm}
+    \lean{MPSTensor.isTransferIdempotent_of_isIsometryCanonicalForm}
     \leanok
     \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence}
     A tensor in isometry canonical form is a renormalization fixed point. This is
@@ -982,7 +982,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Cross-block transfer vanishing for a direct-sum fixed point]%
     \label{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
-    \lean{MPSTensor.isBNTLocallyOrthogonal_of_isRFP_directSum}
+    \lean{MPSTensor.isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum}
     \leanok
     \uses{def:is_bnt_locally_orthogonal, def:mps_transfer_idempotence,
         def:mixed_transfer_rect}
@@ -1081,7 +1081,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{lemma}[Each block of a direct-sum fixed point is a fixed point]%
     \label{lem:isrfp_block_of_rfp_direct_sum}
-    \lean{MPSTensor.isRFP_block_of_isRFP_directSum}
+    \lean{MPSTensor.isTransferIdempotent_block_of_isTransferIdempotent_directSum}
     \leanok
     \uses{def:mps_transfer_idempotence, def:mixed_transfer_rect}
     If the direct sum $\bigoplus_k B_k$ is a renormalization fixed point, with
@@ -1097,7 +1097,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Residual-isometry form of the cross-block structure]%
     \label{thm:residual_isometry_of_rfp_direct_sum}
-    \lean{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}
+    \lean{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}
     \leanok
     \uses{def:is_residual_isometry_family, def:mps_transfer_idempotence,
         def:is_isometry_canonical_form}
@@ -1141,7 +1141,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[A direct sum of isometry-canonical-form blocks is a renormalization fixed point]%
     \label{thm:is_rfp_of_isometry_canonical_form_direct_sum}
-    \lean{MPSTensor.isRFP_directSumTensor_of_isIsometryCanonicalForm}
+    \lean{MPSTensor.isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm}
     \leanok
     \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence,
         def:mixed_transfer_rect}
@@ -1180,7 +1180,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Distinct-blocks renormalization fixed-point characterization]%
     \label{thm:rfp_directSumTensor_iff}
-    \lean{MPSTensor.isRFP_directSumTensor_iff}
+    \lean{MPSTensor.isTransferIdempotent_directSumTensor_iff}
     \leanok
     \uses{def:mps_transfer_idempotence, def:is_isometry_canonical_form,
         def:mixed_transfer_rect,
@@ -1229,8 +1229,8 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{corollary}[BNT basis direct-sum characterization]%
     \label{cor:rfp_bnt_basis_direct_sum_iff}
-    \lean{MPSTensor.IsBNTCanonicalForm.isRFP_basisDirectSum_iff}
-    \lean{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isRFP_basisDirectSum}
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_iff}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum}
     \leanok
     \uses{def:sector_bnt_cf, def:mps_transfer_idempotence,
         def:is_isometry_canonical_form, def:mixed_transfer_rect,
@@ -1470,7 +1470,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Idempotent transfer implies positive-gap physical CID]%
     \label{thm:is_positive_gap_physical_cid_of_is_rfp}
-    \lean{MPSTensor.isPositiveGapPhysicalCID_of_isRFP}
+    \lean{MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}
     \leanok
     \uses{def:mps_transfer_idempotence, def:is_positive_gap_physical_cid}
     If $\E_A^2=\E_A$, then physical correlations are independent of distance
@@ -1509,8 +1509,8 @@ and rates for the single-tensor transfer map $\E_A$.
 \end{definition}
 
 \begin{theorem}[Virtual-insertion distance independence implies RFP]%
-    \label{thm:isCID_implies_isRFP}
-    \lean{MPSTensor.isCID_implies_isRFP}
+    \label{thm:isCID_implies_isTransferIdempotent}
+    \lean{MPSTensor.isCID_implies_isTransferIdempotent}
     \leanok
     \uses{def:is_cid, def:mps_transfer_idempotence, def:transfer_map}
     If an MPS tensor admits a positive definite right fixed point and its

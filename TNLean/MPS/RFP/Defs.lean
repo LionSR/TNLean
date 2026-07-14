@@ -16,7 +16,7 @@ for a pure MPS tensor, following arXiv:1606.00608, Section 3.1
 
 The source definition is `HasPhysicalBlockingIsometry A`: multiplication of two
 tensor letters is obtained from one tensor letter by an isometry on the physical
-index. The equivalent predicate `IsRFP A` says that the associated completely
+index. The equivalent predicate `IsTransferIdempotent A` says that the associated completely
 positive transfer map is idempotent.
 -/
 
@@ -46,9 +46,9 @@ the completely positive map associated to `A` is idempotent,
 `E_A ∘ E_A = E_A`.
 
 The source defines the fixed-point property by a physical blocking isometry.
-Theorem `isRFP_iff_hasPhysicalBlockingIsometry` proves that the two conditions
+Theorem `isTransferIdempotent_iff_hasPhysicalBlockingIsometry` proves that the two conditions
 are equivalent. -/
-def IsRFP (A : MPSTensor d D) : Prop :=
+def IsTransferIdempotent (A : MPSTensor d D) : Prop :=
   transferMap A ∘ₗ transferMap A = transferMap A
 
 /-- If the product letters of an MPS tensor are obtained from its letters by a
@@ -56,13 +56,13 @@ rectangular isometry `V`, with `V†V = 1`, then the transfer map is idempotent.
 
 This is the Kraus-family implication used in arXiv:1606.00608, lines 1205--1209.
 
-See `isRFP_iff_kraus_isometry` for the full equivalence (both directions). -/
-theorem isRFP_of_kraus_isometry (A : MPSTensor d D)
+See `isTransferIdempotent_iff_kraus_isometry` for the full equivalence (both directions). -/
+theorem isTransferIdempotent_of_kraus_isometry (A : MPSTensor d D)
     (V : Matrix (Fin d × Fin d) (Fin d) ℂ)
     (hV : V.conjTranspose * V = 1)
     (hprod : ∀ i₁ i₂ : Fin d,
       A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j) :
-    IsRFP A := by
+    IsTransferIdempotent A := by
   -- Extract the orthogonality relation from V†V = 1.
   have hV_entry : ∀ j k : Fin d,
       ∑ x₁ : Fin d, ∑ x₂ : Fin d,
@@ -121,12 +121,12 @@ and the single family `{Aⱼ}` define the same CPM. By rectangular Kraus freedom
 (`kraus_rectangular_freedom'` from `KrausFreedom.lean`), they are related by a
 rectangular isometry `V` with `V†V = 1`.
 
-**Backward direction**: proved as `isRFP_of_kraus_isometry`.
+**Backward direction**: proved as `isTransferIdempotent_of_kraus_isometry`.
 
 See arXiv:1606.00608, Definition `defRFP`, lines 420--424, and its Kraus-family
 argument at lines 1205--1209; see also Wolf Theorem 2.1 item 4. -/
-theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
-    IsRFP A ↔
+theorem isTransferIdempotent_iff_kraus_isometry (A : MPSTensor d D) :
+    IsTransferIdempotent A ↔
       ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
         V.conjTranspose * V = 1 ∧
         ∀ i₁ i₂ : Fin d,
@@ -157,17 +157,17 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
       (fun p : Fin d × Fin d => A p.1 * A p.2) A hmap
       (by simp only [Fintype.card_fin, Fintype.card_prod]; exact Nat.le_mul_self d)
     exact ⟨V, hV_iso, fun i₁ i₂ => hV_decomp (i₁, i₂)⟩
-  · -- Backward direction: proved as `isRFP_of_kraus_isometry`
+  · -- Backward direction: proved as `isTransferIdempotent_of_kraus_isometry`
     rintro ⟨V, hV, hprod⟩
-    exact isRFP_of_kraus_isometry A V hV hprod
+    exact isTransferIdempotent_of_kraus_isometry A V hV hprod
 
 /-- Transfer-map idempotence is equivalent to the physical blocking-isometry
 definition of a pure-state renormalization fixed point.
 
 This identifies the transfer-map criterion with equation `AA=A` and Definition
 `defRFP` in arXiv:1606.00608, lines 398--424. -/
-theorem isRFP_iff_hasPhysicalBlockingIsometry (A : MPSTensor d D) :
-    IsRFP A ↔ HasPhysicalBlockingIsometry A := by
-  simpa only [HasPhysicalBlockingIsometry] using isRFP_iff_kraus_isometry A
+theorem isTransferIdempotent_iff_hasPhysicalBlockingIsometry (A : MPSTensor d D) :
+    IsTransferIdempotent A ↔ HasPhysicalBlockingIsometry A := by
+  simpa only [HasPhysicalBlockingIsometry] using isTransferIdempotent_iff_kraus_isometry A
 
 end MPSTensor

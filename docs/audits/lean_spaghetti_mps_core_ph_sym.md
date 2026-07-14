@@ -200,9 +200,9 @@ Method notes: line counts come from raw files; `sorry` counts are **actual place
 ### `TNLean/MPS/RFP/Defs.lean`
 
 - Size / placeholders: 158 lines, 0 actual `sorry`.
-- Long proofs >50 lines: `isRFP_of_kraus_isometry` (62 lines, 46-112).
+- Long proofs >50 lines: `isTransferIdempotent_of_kraus_isometry` (62 lines, 46-112).
 - Automation counts: plain `simp` 0, `omega` 0, `decide` 0.
-- Long proof: `isRFP_of_kraus_isometry` ([TNLean/MPS/RFP/Defs.lean:46](/Users/siruilu/Library/Mobile Documents/com~apple~CloudDocs/Research/Agent-Physics/MPSLean/TNLean/MPS/RFP/Defs.lean:46), 62 lines). It is self-contained but worth splitting if this file grows.
+- Long proof: `isTransferIdempotent_of_kraus_isometry` ([TNLean/MPS/RFP/Defs.lean:46](/Users/siruilu/Library/Mobile Documents/com~apple~CloudDocs/Research/Agent-Physics/MPSLean/TNLean/MPS/RFP/Defs.lean:46), 62 lines). It is self-contained but worth splitting if this file grows.
 - No `sorry`, no TODOs, no automation smell.
 
 ### `TNLean/MPS/RFP/StructuralForm.lean`
