@@ -1,0 +1,111 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{A raw-weight counterexample to the pure-state ZCL equivalence in
+Cirac--Perez-Garcia--Schuch--Verstraete 2017}
+\author{}
+\date{2026-07-14}
+
+\begin{document}
+\maketitle
+
+\section{Source statement and failed inference}
+
+The canonical form of \cite{Cirac2016MPDO_arXiv} permits repeated copies of a
+normal tensor with coefficients of modulus at most one, provided that at least
+one coefficient equals one.  In the notation of equation
+\path{eq:II_ABasicTensors},
+\[
+  A^i = \bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
+    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+\]
+Theorem~3.8, labelled \path{TheoremZCLPure} in the local source, asserts that a
+canonical-form tensor has zero correlation length if and only if its transfer
+matrix is idempotent.
+
+The converse argument begins at source lines 1248--1251.  It infers from
+$\mathbb E_A^2\ne\mathbb E_A$ that some normal basis tensor $A_j$ has a
+non-idempotent transfer matrix $\mathbb E_{j,j}$.  This inference omits the
+copy coefficients.  On the $(j,q;j',q')$ bond block, the full transfer matrix
+is
+\[
+  \mu_{j,q}\overline{\mu_{j',q'}}\,\mathbb E_{j,j'}.
+\]
+Thus the full transfer matrix can have an eigenvalue strictly between zero and
+one even when every $\mathbb E_{j,j}$ is idempotent.
+
+\section{Counterexample}
+
+Take one physical letter and the scalar normal tensor $C^0=(1)$.  Form the
+canonical tensor.  In the sector-adapted coordinates of this decomposition,
+\[
+  A^0 = C^0\oplus \tfrac12 C^0
+      = \begin{pmatrix}1&0\\0&\tfrac12\end{pmatrix}.
+\]
+This has one BNT component, two raw copies, and weights $1$ and $1/2$.  The
+weights satisfy precisely the source normalization: both have modulus at most
+one and the first equals one.  The matrix-product-vector coefficient at
+length $N$ is
+\[
+  V^{(N)}(A)=1+2^{-N},
+\]
+which is also the coefficient obtained from the two-copy BNT decomposition.
+
+There is only one BNT component, so local orthogonality is vacuous.  The
+physical Hilbert space of every finite region is one-dimensional.  Every
+physical observable is therefore scalar, and every two-region expectation is
+independent of the separation.  Hence $A$ satisfies the CID and local
+orthogonality conditions of Definition~3.6.
+
+The transfer map has the matrix units as eigenvectors, with eigenvalues
+\[
+  1,\quad \tfrac12,\quad \tfrac12,\quad \tfrac14.
+\]
+It is not idempotent.  Equivalently, the one-letter blocking equation required
+at a renormalization fixed point would give a scalar $v$ such that
+\[
+  (A^0)^2=vA^0.
+\]
+The $(0,0)$ entry gives $v=1$, while the $(1,1)$ entry would then assert
+$1/4=1/2$.
+
+All four assertions have kernel-checked proofs.\footnote{Formal conjunction:
+\leanid{MPSTensor.halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp}
+in \doclink{TNLean/MPS/RFP/BNTWeightCounterexample}.}
+
+\section{Consequence for the theorem surface}
+
+The unrestricted equivalence in Theorem~3.8 is false under the stated
+raw-weight canonical-form normalization.  The example disproves the
+zero-correlation-length implication to transfer idempotence.  It does not
+settle the converse implication for adjacent physical regions; the existing
+formal result in that direction assumes both complementary gaps are positive.
+
+A corrected theorem must remove the copy-weight eigenvalues from its
+conclusion.  Two possible formulations are to pass first to a canonical
+representative with one unit-weight copy of each BNT component, or to state an
+asymptotic assertion for the limiting transfer projector rather than literal
+idempotence of the raw tensor's transfer map.  A restriction merely requiring
+unit-modulus copy weights is insufficient: distinct phases can also destroy
+idempotence.  Any replacement must therefore state explicitly how repeated
+copies and their phases are treated.
+
+Issue~\ghissue{2597} should not retain the unrestricted biconditional as a
+proof target.  Its replacement should distinguish the false raw-tensor
+statement from any theorem about a selected representative of the generated
+matrix-product-vector family.
+
+The verdict is a source counterexample: the zero-correlation-length implication
+to transfer idempotence is false under the normalization stated in the cited
+canonical form.  It is not an open formalization gap.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
