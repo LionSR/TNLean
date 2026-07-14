@@ -517,6 +517,37 @@ boundary conditions (PBC).
     injective.
 \end{definition}
 
+\begin{lemma}[Gauge invariance of block injectivity]
+    \label{lem:gauge_invariance_block_injective}
+    \lean{MPSTensor.isNBlkInjective_of_gaugeEquiv}
+    \leanok
+    \uses{def:gauge_equiv, def:l_blk_injective}
+    If $A$ and $B$ are gauge equivalent and $A$ is $L$-block injective, then
+    $B$ is $L$-block injective.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:eval_word_gauge}
+    Conjugation by an invertible matrix maps the span of the length-$L$ words
+    of $A$ onto the span of the length-$L$ words of $B$. Since conjugation is
+    an automorphism of the full matrix algebra, fullness of the first span
+    implies fullness of the second.
+\end{proof}
+
+\begin{theorem}[Gauge transport of normality]
+    \label{thm:gauge_invariance_normal}
+    \lean{MPSTensor.isNormal_of_gaugeEquiv}
+    \leanok
+    \uses{def:gauge_equiv, def:normal}
+    If $A$ and $B$ are gauge equivalent and $A$ is normal, then $B$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_invariance_block_injective}
+    Apply Lemma~\ref{lem:gauge_invariance_block_injective} at a blocking length
+    for which $A$ is block-injective.
+\end{proof}
+
 \begin{remark}\leanok
     \uses{lem:primitive_implies_irreducible, thm:burnside_matrix,
         thm:normal_from_primitive_posdef, thm:algspan_to_normal,

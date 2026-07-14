@@ -7,15 +7,22 @@ import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.SharedInfra.SectorDecomposition
 
-open scoped Matrix BigOperators
-open Filter
-
 /-!
 # MPV phase covers for canonical-form block families
 
 This file contains the MPV phase-equivalence and phase-cover constructions used by the
-canonical-form equal-norm comparison and sector-comparison layers.
+canonical-form equal-norm and sector comparisons.
+
+## Main statements
+
+* `MPVBlockPhaseEquiv.dim_eq`: exact phase equivalence at every nonnegative
+  length forces equality of bond dimensions.
+* `MPVPhaseClassData.regroup_matrix`: a matrix-valued sum can be regrouped by
+phase classes and their copies.
 -/
+
+open scoped Matrix BigOperators
+open Filter
 
 namespace MPSTensor
 
@@ -57,6 +64,19 @@ lemma trans {DA DB DC : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
   intro N σ
   rw [hηmpv N σ, hζmpv N σ, mul_pow]
   ring
+
+/-- MPV phase equivalence at all lengths forces equality of bond dimensions.
+
+At length zero both MPV coefficients are traces of identity matrices, while
+the phase contributes the zeroth power `1`.  Thus the equality is simply
+`DB = DA`.  This observation uses the length-zero clause and does not hold for
+positive-length or merely eventual proportionality. -/
+lemma dim_eq {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
+    (h : MPVBlockPhaseEquiv A B) : DA = DB := by
+  obtain ⟨ζ, _hζ, hmpv⟩ := h
+  have hzero := hmpv 0 (fun i => Fin.elim0 i)
+  simp [mpv, coeff] at hzero
+  exact_mod_cast hzero.symm
 
 /-- Gauge-phase equivalence after a dimension cast gives rectangular MPV phase equivalence. -/
 lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB)
@@ -220,6 +240,17 @@ lemma exists_enum_eq (classes : MPVPhaseClassData blocks) (k : Fin r) :
   have hregroup := classes.regroup (fun x : Fin r => if x = k then (1 : ℂ) else 0)
   rw [hzero, hone] at hregroup
   exact zero_ne_one hregroup
+
+/-- Regroup a matrix-valued sum over the original block indices by phase
+classes and their copies. -/
+lemma regroup_matrix (classes : MPVPhaseClassData blocks) {n : ℕ}
+    (f : Fin r → Matrix (Fin n) (Fin n) ℂ) :
+    ∑ j : Fin classes.g, ∑ q : Fin (classes.copies j), f (classes.enum j q) =
+      ∑ k : Fin r, f k := by
+  apply Matrix.ext
+  intro a b
+  simp_rw [Matrix.sum_apply]
+  exact classes.regroup (fun k => f k a b)
 
 /-- The chosen MPV phase-class representatives span exactly the same finite-length MPV
 subspace as the original block family.
