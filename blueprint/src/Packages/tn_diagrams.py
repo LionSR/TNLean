@@ -136,6 +136,16 @@ _CONTROL_WORD_DELIMITER_PATTERN = re.compile(r"(\\[A-Za-z@]+)\s+")
 _UNTYPED_PORT_COMMAND_PATTERN = re.compile(
     r"\\TN@(?:port|betweenport|westport|eastport|northport|southport|registerport)\b"
 )
+_PRIVATE_COMMAND_PATTERN = re.compile(r"\\TN@[A-Za-z@]+")
+_CLIENT_TIKZ_PATTERN = re.compile(
+    r"\\begin\{tikzpicture\}|\\begin\{scope\}(?:\[[^]]*\])?|"
+    r"\\(?:draw|path|coordinate|node)\b"
+)
+_LOCAL_GEOMETRY_PATTERN = re.compile(
+    r"(?:scale|xshift|yshift)\s*=|"
+    r"(?:minimum\s+(?:width|height|size)|inner\s+sep|outer\s+sep|"
+    r"line\s+width|rounded\s+corners|fill|shape)\s*="
+)
 _TYPED_PORT_COMMAND_ARITIES = {
     "TN@vconnectports": (2, (0, 1)),
     "TN@vconnectportshv": (2, (0, 1)),
@@ -154,7 +164,7 @@ _TYPED_PORT_COMMAND_ARITIES = {
 }
 
 
-_DIAGRAM_ARGS: dict[str, str] = {
+_PARAMETERIZED_DIAGRAM_ARGS: dict[str, str] = {
     "TNTikZDiagram": "rendered body",
     "TNMPSLocal": "tensor label",
     "TNMPSWord": "tensor left right length",
@@ -164,63 +174,6 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNTransferMap": "tensor",
     "TNMPOCell": "tensor top bottom",
     "TNMPOChain": "tensor top_left bottom_left top_right bottom_right length",
-    "TNMPOLocalPurification": "",
-    "TNMPORenormalizationTS": "",
-    "TNEtaSectorDecomposition": "",
-    "TNMPDOTwoSiteTraceAndShift": "",
-    "TNMPDOThreeSiteTraceAndShift": "",
-    "TNMPDORefinementConstruction": "",
-    "TNMPDORefinementDirection": "",
-    "TNMPDOBlockedRFPChannels": "",
-    "TNMPDOPhysicalIsometryTransport": "",
-    "TNMPDOTwoSiteClosureFactorization": "",
-    "TNMPDOThreeSiteClosureFactorization": "",
-    "TNMPDOFixedSectorAdjacentCommutativity": "",
-    "TNMPDOCyclicEtaContraction": "",
-    "TNMPDOSectorAdaptedDecomposition": "",
-    "TNMPDOInverseMapThreeSiteContraction": "",
-    "TNMPDOHorizontalOperator": "",
-    "TNMPDOFirstSiteContractions": "",
-    "TNMPDOVerticalDirectSum": "",
-    "TNMPDOVerticalReducingSectors": "",
-    "TNMPDOVerticalGaugeGramComparison": "",
-    "TNMPDOInverseContraction": "",
-    "TNMPDOSectorPairing": "",
-    "TNMPDOSectorZCLIdentity": "",
-    "TNMPDONormalizedFourSiteTail": "",
-    "TNMPDOHayashiSectorComparison": "",
-    "TNMPDOSectorFactorization": "",
-    "TNMPDOLocalOrthogonality": "",
-    "TNMPSInverseContraction": "",
-    "TNBNTDecomposition": "",
-    "TNMPDOZCLIdempotence": "",
-    "TNMPDOFixedFinalFusionBracketings": "",
-    "TNMPDOFixedFinalComparisonUnitary": "",
-    "TNMPDOFourfoldBondReassociationPentagon": "",
-    "TNMPDOCompleteZipperFusionPentagon": "",
-    "TNMPDOPrintedFMove": "",
-    "TNMPDOBNTFusionIdentity": "",
-    "TNMPDOUnweightedZipperReconstruction": "",
-    "TNMPDOFusionTracePower": "",
-    "TNMPDORecursiveStructureOperator": "",
-    "TNAppendixBAdjacentBondProjectors": "",
-    "TNAppendixBPhysicalSupportTransport": "",
-    "TNAppendixBChainTransport": "",
-    "TNRFPKrausIsometry": "",
-    "TNRFPKrausIsometryReverse": "",
-    "TNRFPIsometryCanonicalForm": "",
-    "TNRFPIsometryCanonicalFormBlocks": "",
-    "TNMPDOTwoSiteBlocking": "",
-    "TNMPDOBNTVerticalProduct": "",
-    "TNMPDOBlockClosureMap": "",
-    "TNMPDOBNTOperatorTraceClosure": "",
-    "TNMPDOFirstSiteInsertionHypothesis": "",
-    "TNMPDOFirstSiteInsertionBlockwise": "",
-    "TNMPDOInsertionTracePairing": "",
-    "TNMPDOHorizontalCanonicalForm": "",
-    "TNMPDOBlockInjectiveInverse": "",
-    "TNMPDOInverseRecovery": "",
-    "TNMPDOProjectorAbsorption": "",
     "TNGaugeConjugation": "left physical right",
     "TNPhysicalRealization": "virtual physical",
     "TNLinearTwist": "twist label",
@@ -235,45 +188,28 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNBoundaryRegrow": "virtual left right length",
     "TNLocalEqualityStep": "left_virtual right_virtual physical",
     "TNGroundSpaceMap": "tensor left right length virtual",
-    "TNPEPSEdgeBlockingReduction": "",
-    "TNPEPSEdgeInsertedCoeff": "",
-    "TNPEPSThreeSiteInsertionComparison": "",
-    "TNPEPSInsertionPhysicalRealization": "",
-    "TNPEPSPhysicalToVirtualInsertion": "",
-    "TNPEPSEdgeInsertionEquality": "",
-    "TNPEPSEdgeGaugeAbsorption": "",
-    "TNPEPSTwoInjectiveTensorInsertionComparison": "",
-    "TNPEPSTwoInjectiveGaugeScalarReduction": "",
-    "TNPEPSOneVertexComplementComparison": "",
-    "TNPEPSInjectiveRegionUnion": "",
-    "TNPEPSInjectiveRegionUnionProof": "",
-    "TNPEPSNormalRegionsRS": "",
-    "TNPEPSNormalRegionT": "",
-    "TNPEPSNormalRectangleCover": "",
-    "TNPEPSNormalEdgeComplementTopCollar": "",
-    "TNPEPSNormalOneSiteSeparation": "",
-    "TNPEPSNormalEdgeBlockingReduction": "",
-    "TNPEPSNormalEdgeBlockingHypotheses": "",
-    "TNPEPSNormalBlockingHypotheses": "",
-    "TNPEPSTINormalGaugeAbsorption": "",
-    "TNPEPSEdgeGaugeOrientation": "",
-    "TNPEPSGaugeVertexAction": "",
-    "TNPEPSGaugeCancellation": "",
-    "TNPEPSBlockedMiddleLocalGaugeFormula": "",
-    "TNPEPSLocalGaugeExtraction": "",
-    "TNPEPSGlobalConsistency": "",
-    "TNPEPSLatticeState": "",
-    "TNPEPSLocalTensorStar": "",
-    "TNPEPSVertexInjectivityMap": "",
-    "TNPEPSStateContraction": "",
-    "TNPEPSTorusGeometry": "",
-    "TNPEPSVertexScalarBalance": "",
-    "TNKrausMap": "",
-    "TNStinespring": "",
-    "TNChoiMatrix": "",
-    "TNTransferMapTracePairing": "",
-    "TNTwoPointCorrelator": "",
 }
+
+
+def _declared_print_macro_arities() -> dict[str, int]:
+    """Read chapter-facing command names and arities from their TeX source."""
+
+    source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
+    return {
+        name: int(arity) if arity else 0
+        for name, arity in _PUBLIC_MACRO_PATTERN.findall(source)
+    }
+
+
+_PRINT_MACRO_ARITIES = _declared_print_macro_arities()
+_DIAGRAM_ARGS: dict[str, str] = dict(_PARAMETERIZED_DIAGRAM_ARGS)
+_DIAGRAM_ARGS.update(
+    {
+        name: ""
+        for name, arity in _PRINT_MACRO_ARITIES.items()
+        if arity == 0
+    }
+)
 
 
 def _diagram_arity(args: str) -> int:
@@ -614,6 +550,25 @@ def _noncore_tikz_style_locations() -> list[str]:
     ]
 
 
+def _client_source_paths() -> tuple[Path, ...]:
+    """Return every TeX source that consumes, rather than implements, TN atoms."""
+
+    chapters = tuple(sorted((_SRC_DIR / "chapter").rglob("*.tex")))
+    return (
+        _SRC_DIR / "macros/tn_print.tex",
+        _SLIDE_LIBRARY,
+        *chapters,
+    )
+
+
+def _client_pattern_locations(pattern: re.Pattern[str]) -> list[str]:
+    return [
+        location
+        for path in _client_source_paths()
+        for location in _pattern_locations(path, pattern)
+    ]
+
+
 def _public_macro_bodies(source: str) -> list[tuple[str, int, str]]:
     matches = list(_PUBLIC_MACRO_PATTERN.finditer(source))
     return [
@@ -909,6 +864,9 @@ def _semantic_audit_counts() -> dict[str, object]:
         "noncore_style_locations": _noncore_tikz_style_locations(),
         "ignored_arguments": ignored_arguments,
         "unused_diagrams": unused_diagrams,
+        "private_client_calls": _client_pattern_locations(_PRIVATE_COMMAND_PATTERN),
+        "raw_client_tikz": _client_pattern_locations(_CLIENT_TIKZ_PATTERN),
+        "local_geometry": _client_pattern_locations(_LOCAL_GEOMETRY_PATTERN),
     }
 
 
@@ -977,6 +935,12 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
     assert isinstance(noncore_style_locations, list)
     audited_sources = counts["audited_sources"]
     assert isinstance(audited_sources, dict)
+    private_client_calls = counts["private_client_calls"]
+    assert isinstance(private_client_calls, list)
+    raw_client_tikz = counts["raw_client_tikz"]
+    assert isinstance(raw_client_tikz, list)
+    local_geometry = counts["local_geometry"]
+    assert isinstance(local_geometry, list)
 
     if machine_readable:
         print(json.dumps(counts, indent=2, sort_keys=True))
@@ -1027,6 +991,12 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
         )
         if unused_diagrams:
             print("tensor-network unused public diagrams: " + ", ".join(unused_diagrams))
+        print(
+            "tensor-network client implementation debt: "
+            f"private calls={len(private_client_calls)}, "
+            f"raw TikZ operations={len(raw_client_tikz)}, "
+            f"local geometry overrides={len(local_geometry)}"
+        )
 
     if strict:
         failures = []
@@ -1064,6 +1034,27 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
                 "public tensor-network macros ignore declared arguments: "
                 + _format_ignored_arguments(ignored_arguments)
             )
+        if unused_diagrams:
+            failures.append(
+                "unused theorem diagram commands: " + ", ".join(unused_diagrams)
+            )
+        if private_client_calls:
+            failures.append(
+                "private TN@ commands outside tex/tn at "
+                + _abbreviate_locations(private_client_calls)
+            )
+        if raw_client_tikz:
+            failures.append(
+                "client-side TikZ operations bypass the public calculus at "
+                + _abbreviate_locations(raw_client_tikz)
+            )
+        if local_geometry:
+            failures.append(
+                "client-side numerical geometry or glyph overrides at "
+                + _abbreviate_locations(local_geometry)
+            )
+        if int(counts["literal_coordinates"]) >= 1360:
+            failures.append("literal coordinate count did not decrease from 1360")
         if failures:
             raise RuntimeError("Strict tensor-network audit failed: " + "; ".join(failures))
 
@@ -1193,7 +1184,7 @@ def _render_source_digest() -> str:
 
 
 def _latex_document(tex_call: str) -> str:
-    return rf"""\documentclass[tikz,border=2pt]{{standalone}}
+    return rf"""\documentclass[varwidth,border=2pt]{{standalone}}
 \usepackage{{amssymb,amsthm,amsmath,mathtools}}
 \usepackage{{tikz}}
 % standalone is based on article, which already supplies section and subsection.
