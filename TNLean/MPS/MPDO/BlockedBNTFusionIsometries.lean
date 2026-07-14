@@ -115,7 +115,7 @@ theorem blocked_fusion_of_lengthIndependent
 
 Source: arXiv:1606.00608, lines 986--1010; arXiv:1511.08090, equation
 `zippercondition2`, lines 193--196. -/
-theorem fusionIsometry_mul_blockedMulTensor_of_lengthIndependent
+theorem fusionIsometry_mul_blocked_mulTensor_of_lengthIndependent
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
@@ -139,7 +139,7 @@ theorem fusionIsometry_mul_blockedMulTensor_of_lengthIndependent
 
 Source: arXiv:1606.00608, lines 986--1010; arXiv:1511.08090, equation
 `zippercondition2`, lines 198--200. -/
-theorem blockedMulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent
+theorem blocked_mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
@@ -165,7 +165,7 @@ isometry and the unweighted blocked direct sum.
 
 Source: arXiv:1606.00608, lines 986--1010; arXiv:1511.08090, equation
 `inversegaugeone`, lines 181--191. -/
-theorem blockedMulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul
+theorem blocked_mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
@@ -201,7 +201,7 @@ for the label `γ` is `Fam.chi.dim α β γ`, the dimension of the chi space.
 
 Source: arXiv:1606.00608, BNT blocking at lines 317--345, equation
 `Ualphabeta` at lines 986--993, and length independence at lines 995--1010. -/
-theorem exists_positiveBlock_with_injectiveFusion
+theorem exists_positive_block_with_injective_fusion
     {g D : ℕ} (Fam : MPOTensor.BNTFusionIsometryFamily (Fin g) p)
     {A : MPSTensor (p * p) D}
     (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors A
@@ -254,10 +254,10 @@ theorem exists_positiveBlock_with_injectiveFusion
   refine ⟨L, hL, hSpanBlocked, fun γ ↦ hSpanBlocked.isInjective_one γ, ?_⟩
   intro α β I J
   exact ⟨Fam.blocked_fusion_of_lengthIndependent c hχ hLI hL α β I J,
-    Fam.fusionIsometry_mul_blockedMulTensor_of_lengthIndependent c hχ hLI hL α β I J,
-    Fam.blockedMulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent
+    Fam.fusionIsometry_mul_blocked_mulTensor_of_lengthIndependent c hχ hLI hL α β I J,
+    Fam.blocked_mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent
       c hχ hLI hL α β I J,
-    Fam.blockedMulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul
+    Fam.blocked_mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul
       c hχ hLI hL α β I J⟩
 
 end MPOTensor.BNTFusionIsometryFamily
