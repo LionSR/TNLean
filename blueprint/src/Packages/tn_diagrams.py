@@ -1196,12 +1196,7 @@ def _latex_document(tex_call: str) -> str:
     return rf"""\documentclass[tikz,border=2pt]{{standalone}}
 \usepackage{{amssymb,amsthm,amsmath,mathtools}}
 \usepackage{{tikz}}
-% macros/common numbers theorems within (sub)sections; the standalone class
-% provides no sectioning counters, so declare the ones it references before
-% inputting it (chapter kept for the pre-existing [chapter] compatibility).
 \newcounter{{chapter}}
-\newcounter{{section}}
-\newcounter{{subsection}}
 \input{{macros/common}}
 \input{{macros/tn_print}}
 \begin{{document}}
