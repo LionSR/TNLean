@@ -5,7 +5,10 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
 
 ## General Principles
 1. **Blueprint ↔ Lean must match.** Every `\lean{X}` tag must correspond to an actual Lean declaration. Every proof sketch must match what the Lean proof actually does — not a hand-wavy version of it.
-2. **Standalone.** `blueprint/` and `docs/slides/` are independent — no cross-references, no shared files. Each has its own macros, its own `references.bib`.
+2. **Standalone documents.** `blueprint/` and `docs/slides/` have separate
+   preambles, prose macros, bibliographies, and build entry points. They share
+   only the repository-wide tensor-network calculus in `tex/tn/`; neither
+   document tree imports files from the other.
 3. **Mathematical language only — zero Lean jargon.** See [`prose_style.md`](prose_style.md) Section 1 for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
 4. **No filler prose.** Only precise definitions, theorem statements, and proof sketches. No "this is important because..." or "the transfer map governs the spectral theory...".
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
@@ -122,14 +125,14 @@ enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
 Tensor-network diagram conventions are recorded separately in
 [`docs/tn_diagram_grammar.md`](tn_diagram_grammar.md).
 
-The tensor-network TikZ layer is split into private drawing primitives and a
-public mathematical vocabulary. The private primitives live in
-`blueprint/src/macros/tn_core.tex`; that file defines the common glyphs,
-lengths, and atomic drawing commands. Chapter-facing diagrams are defined in
-`blueprint/src/macros/tn_print.tex` and should be named by the mathematical
-move they depict. The web renderer in `blueprint/src/Packages/tn_diagrams.py`
-uses the same public commands and treats both TeX files as part of the diagram
-source.
+The repository-wide tensor-network calculus is split into semantic atoms and
+reusable compositions. Glyph meanings, theme slots, typed ports, and primitive
+contractions live in `tex/tn/tn_core.tex`; standard MPS, MPO, MPDO, PEPS, and
+fusion constructions live in `tex/tn/tn_library.tex`. Chapter-facing figures
+are defined in `blueprint/src/macros/tn_print.tex` and are named by the
+mathematical move they depict. The web renderer in
+`blueprint/src/Packages/tn_diagrams.py` compiles the same public commands from
+these three sources.
 
 PEPS blueprint statements should keep the relevant tensor-network diagram
 attached to the theorem, lemma, or definition whose content it depicts. If the

@@ -12,21 +12,21 @@ the object carrying that index.
 
 The common grammar describes a tensor network by small composable units. An
 atom is a named graphical object together with named ports on its boundary. A
-port represents one occurrence of an index. Two atoms are composed by
-contracting a virtual port with a virtual port, or a physical port with a
-physical port.
+port represents one occurrence of a virtual index, one occurrence of a physical
+index, or one endpoint of a morphism. Composition joins only ports of the same
+declared type.
 
 For example, the following construction places two tensors, names their four
 virtual ports, and contracts one pair:
 
 ```tex
 \TN@tensor{leftTensor}{(0,0)}
-\TN@port{leftIn}{leftTensor}{west}
-\TN@port{leftOut}{leftTensor}{east}
+\TN@vport{leftIn}{leftTensor}{west}
+\TN@vport{leftOut}{leftTensor}{east}
 
 \TN@tensor{rightTensor}{(1.4,0)}
-\TN@port{rightIn}{rightTensor}{west}
-\TN@port{rightOut}{rightTensor}{east}
+\TN@vport{rightIn}{rightTensor}{west}
+\TN@vport{rightOut}{rightTensor}{east}
 
 \TN@vopenport{leftIn}{-0.6,0}
 \TN@vconnectports{leftOut}{rightIn}
@@ -40,16 +40,17 @@ internal definitions. This example is written in the private macro scope,
 where `@` is a letter; a standalone use should be enclosed by
 `\makeatletter` and `\makeatother`.
 
-The general constructor `\TN@port{port}{object}{anchor}` names any standard
-TikZ anchor. For a rectangular object carrying several indices on one side,
-`\TN@westport`, `\TN@eastport`, `\TN@northport`, and `\TN@southport` place a
-port at a specified fraction of that side. The more general `\TN@betweenport`
-names a point at a specified fraction of any boundary segment.
-
-The typed composition operations are `\TN@vconnectports` and
-`\TN@pconnectports`. The typed open-index operations are `\TN@vopenport` and
-`\TN@popenport`. The anchor-based forms `\TN@vconnect`, `\TN@pconnect`,
-`\TN@vleg`, and `\TN@pleg` are concise forms for atoms defined together.
+The constructors `\TN@vport`, `\TN@pport`, and `\TN@mport` name a standard
+boundary anchor and register it as virtual, physical, or morphism-valued. For
+several ports on one side of a box, use a typed side constructor such as
+`\TN@vwestport` or `\TN@pnorthport`, or use `\TN@typedbetweenport` on a general
+boundary segment. The constructors `\TN@vterminal`, `\TN@pterminal`, and
+`\TN@mterminal` name external endpoints. The operations `\TN@vconnectports`,
+`\TN@pconnectports`, and `\TN@mconnectports` join like-typed ports and reject a
+type mismatch. The operations `\TN@vopenport` and `\TN@popenport` create a
+named external terminal and join it to the given port. The untyped and
+anchor-based forms remain only for compatibility inside older local
+constructions.
 
 ## Basic Glyphs
 
@@ -60,8 +61,9 @@ The typed composition operations are `\TN@vconnectports` and
   may carry the same label internally for legibility. A neutral square box
   denotes a named tensor whose internal contraction is suppressed. A displayed
   tensor-product or direct-sum factor is a pale plate. A linear map, including
-  an isometry or coisometry, is a rounded blue box, while a state displayed
-  without its constituent tensors is a rounded gray box. These glyphs are
+  an isometry or coisometry, is a rounded blue box. A state displayed without
+  its constituent tensors is a rounded gray box. A parenthesized algebraic
+  expression is shown in the distinct expression box. These glyphs are
   distinct from the red dots used for matrices inserted on individual legs.
 - A contraction junction is a black dot substantially smaller than a local
   tensor. It marks a common endpoint of several index lines and is not another
@@ -104,14 +106,13 @@ The typed composition operations are `\TN@vconnectports` and
   legs; it is not dashed and should not share an attachment point with an open
   virtual leg.
 
-Every contraction names both endpoint anchors. The constructions
-`\TN@vconnect` and `\TN@pconnect` join named objects, while `\TN@vleg` and
-`\TN@pleg` draw open indices. The constructions `\TN@vtracebelow`,
-`\TN@vtraceabove`, and `\TN@ptraceright` draw trace closures between objects;
-`\TN@vtraceportsbelow` and `\TN@vtraceportsabove` do the same between named
-ports. A line must not end at a numerical coordinate chosen to lie near a
-tensor or map. A red insertion divides an index line into two contractions
-ending on the red dot; it is not placed over an uninterrupted line.
+Every contraction joins two registered ports of the same type. Virtual trace
+closures join named ports through `\TN@vtraceportsbelow`,
+`\TN@vtraceportsabove`, or `\TN@vtraceportsright`; physical trace closures use
+the corresponding physical construction. An open index ends at an explicitly
+named typed terminal; it does not end at a numerical point chosen near a tensor
+or map. A red insertion divides an index line into two contractions ending on
+the insertion.
 
 Tensor products are written with $\otimes$. A horizontal line never means
 mere adjacency or tensor product. The construction `\TN@factorpair` displays
@@ -204,8 +205,8 @@ contracted index, the contraction is drawn explicitly instead.
   requires a new glyph, first record the mathematical meaning here and then add
   the corresponding private TikZ primitive and web-rendering support.
 - Repeated chain and square-lattice diagrams should be built from the atomic
-  and layout commands in `blueprint/src/macros/tn_core.tex` and
-  `blueprint/src/macros/tn_library.tex`, so that the public command records the
+  and layout commands in `tex/tn/tn_core.tex` and `tex/tn/tn_library.tex`, so
+  that the public command records the
   tensor network rather than a coordinate calculation.
 - Repeated PEPS graph motifs, such as a five-site edge patch, a two-injective
   comparison pair, or a trivalent residual-gauge vertex, should likewise be
@@ -215,16 +216,20 @@ contracted index, the contraction is drawn explicitly instead.
   when its mathematical content is specific to one chapter. This gives the
   printed and web blueprints one common definition. Chapter sources call the
   registered command and do not carry a second local TikZ construction.
-- Private glyphs, ports, and lengths belong in
-  `blueprint/src/macros/tn_core.tex`. Reusable MPS, MPO, MPDO, and PEPS
-  compositions belong in `blueprint/src/macros/tn_library.tex`.
-  Chapter-facing diagrams belong in `blueprint/src/macros/tn_print.tex`.
+- Semantic glyphs, theme slots, typed ports, and primitive contractions belong
+  in `tex/tn/tn_core.tex`. Reusable MPS, MPO, MPDO, PEPS, and fusion
+  compositions belong in `tex/tn/tn_library.tex`. Chapter-facing figures
+  belong in `blueprint/src/macros/tn_print.tex`; the two files under
+  `blueprint/src/macros/` with the core and library names are compatibility
+  entry points.
 
 The library provides `\TN@mpssite`, `\TN@mposite`, and `\TN@pepssite` for
 local tensor sites; `\TN@doublelayer` for the local contraction in a transfer
-construction; `\TN@splitmap` and `\TN@mergemap` for mirrored trivalent fusion
-maps; and `\TN@openMPSword`, `\TN@openMPOword`, and `\TN@closedMPOword` for
-standard finite words. These constructions determine
+construction; `\TN@operatorstate` for a density matrix or operator with paired
+system ports; `\TN@splitmap`, `\TN@mergemap`, and `\TN@fusionmap` for oriented
+trivalent maps; `\TN@squarelatticepatch` and `\TN@squarepepspatch` for finite
+square lattices; and `\TN@openMPSword`, `\TN@openMPOword`, and
+`\TN@closedMPOword` for standard finite words. These constructions determine
 the conventional index directions once. Each local site atom declares stable
 boundary ports and draws no open stub. The corresponding
 `\TN@mpssiteWithOpenLegs`, `\TN@mpositeWithOpenLegs`,
@@ -237,17 +242,17 @@ The web blueprint renders the same complete figure commands as cached SVG
 images. A new chapter-facing command therefore also requires an argument
 declaration in `blueprint/src/Packages/tn_diagrams.py` and a name in
 `blueprint/src/plastex_templates/TensorNetworkDiagrams.jinja2s`. A private
-construction in `tn_core.tex` or `tn_library.tex` requires no such declaration.
+construction in `tex/tn/tn_core.tex` or `tex/tn/tn_library.tex` requires no
+such declaration.
 
 ## Slide Diagrams
 
-The slide collection has an independent dark-background implementation in
-`docs/slides/tn_library_dark.tex`. It does not import blueprint files, since a
-presentation should remain compilable without the blueprint build environment.
-It nevertheless realizes the same graphical calculus: circular local-tensor
-atoms in the dark theme, red insertions, typed physical and virtual indices,
-solid trace closures, and dashed grouping boundaries. Rectangular components
-and rounded map and state boxes retain the meanings fixed above.
+The slide collection loads the shared semantic core and reusable atoms from
+`tex/tn/`. The file `docs/slides/tn_library_dark.tex` changes only the
+`tn theme ...` slots and defines the complete figures used by the slide
+collection. Thus the slides remain independent of the blueprint build files
+while sharing the meanings of tensors, insertions, maps, states, expressions,
+ports, contractions, traces, and grouping boundaries.
 
 The slide preamble imports this library. A slide should call one of its complete
 diagram commands rather than declare local tensor-network styles or draw a
