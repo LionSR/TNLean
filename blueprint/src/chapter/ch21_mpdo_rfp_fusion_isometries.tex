@@ -716,8 +716,8 @@ separate step.
     \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{definition}
 
-\begin{theorem}[Left range projection of the full triple-fusion comparison]%
-    \label{thm:mpdo_triple_fusion_comparison_left_range}
+\begin{lemma}[Left range projection of the full triple-fusion comparison]%
+    \label{lem:mpdo_triple_fusion_comparison_left_range}
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         tripleFusionComparison_mul_conjTranspose}
     \leanok
@@ -733,7 +733,7 @@ separate step.
     left iterated fusion map requires completeness of the fusion
     decomposition, corresponding to the invertible total fusion matrix in
     \cite[lines~181--191]{Bultinck2017Anyons}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_right_fusion_isometry_isometry,
         def:mpdo_operator_product_associator}
@@ -744,8 +744,8 @@ separate step.
     leave $U^{\mathrm L}(U^{\mathrm L})^{\dagger}$.
 \end{proof}
 
-\begin{theorem}[Right range projection of the full triple-fusion comparison]%
-    \label{thm:mpdo_triple_fusion_comparison_right_range}
+\begin{lemma}[Right range projection of the full triple-fusion comparison]%
+    \label{lem:mpdo_triple_fusion_comparison_right_range}
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         conjTranspose_mul_tripleFusionComparison}
     \leanok
@@ -760,7 +760,7 @@ separate step.
     The right side is not asserted to be the identity.  Surjectivity of the
     right iterated fusion map likewise requires completeness of the fusion
     decomposition.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_left_fusion_isometry_isometry,
         def:mpdo_operator_product_associator}
@@ -941,7 +941,7 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
     \leanok
-    \uses{thm:mpdo_triple_fusion_comparison_left_range,
+    \uses{lem:mpdo_triple_fusion_comparison_left_range,
         thm:mpdo_left_fusion_selector_completeness}
     Under the same hypotheses, the comparison of the full direct sums satisfies
     \[
@@ -959,7 +959,7 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_selectorWords}
     \leanok
-    \uses{thm:mpdo_triple_fusion_comparison_right_range,
+    \uses{lem:mpdo_triple_fusion_comparison_right_range,
         thm:mpdo_right_fusion_selector_completeness}
     Under the same hypotheses,
     \[

@@ -4,8 +4,15 @@
 % ==========================================================================
 
 % -- Theorem-like environments (collected by the dependency graph) ---------
-% Numbered continuously; add [chapter] to reset per chapter if desired.
-\newtheorem{theorem}{Theorem}[chapter]
+% Reset within subsections.  In a section without subsections, omit the zero
+% subsection index and number directly within the section.
+\newtheorem{theorem}{Theorem}[subsection]
+\renewcommand{\thetheorem}{%
+  \ifnum\value{subsection}=0
+    \thesection.\arabic{theorem}%
+  \else
+    \thesubsection.\arabic{theorem}%
+  \fi}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}

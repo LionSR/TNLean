@@ -19,7 +19,14 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
    `This is \cite[Theorem~4.1]{...}`. Do not write headings such as
    `Theorem 4.1` unless the source is also named and the title remains
    mathematically descriptive.
-8. **Match Lean's theorem/lemma/def exactly.** If Lean says `theorem X`, use `\begin{theorem}`. If Lean says `lemma X`, use `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition` keyword). Label prefix: `thm:` for theorem, `lem:` for lemma, `def:` for definition.
+8. **Match the primary Lean declaration exactly.** If the principal declaration
+   says `theorem X`, use `\begin{theorem}`; if it says `lemma X`, use
+   `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition`
+   keyword). Label prefixes are `thm:` for theorems, `lem:` for lemmas, `cor:`
+   for corollaries, and `def:` for definitions. Immediate projections and
+   accessor lemmas may share the parent entry as described below; the
+   environment then follows the principal declaration rather than each
+   subordinate `\lean{...}` tag.
 9. **Do not put prose quantifiers at the edge of displayed equations.** Avoid
    `\qquad \text{for all ...}` and similar tails in displays. State the
    quantifier in the surrounding sentence, or use mathematical quantifier
@@ -120,7 +127,38 @@ enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
 ## Blueprint Structure
 - `content.tex` is a router: `\input{chapter/ch01_intro}` etc.
 - Each chapter is a separate file in `chapter/`
-- Definitions/theorems numbered within chapters: `\newtheorem{theorem}{Theorem}[chapter]`
+- Definitions and results are numbered within the smallest displayed division:
+  within a subsection when one is present, and otherwise within the section.
+  Thus an entry in Subsection 22.4.4 is numbered `22.4.4.n`, while an entry
+  directly under Section 6.2 is numbered `6.2.n`.
+
+### Display hierarchy for formal declarations
+
+The blueprint is a mathematical document, not an inventory containing one
+numbered entry for every declaration. Apply the following hierarchy.
+
+1. Display definitions that introduce mathematical objects and theorems that
+   state source-level results or substantial new implications.
+2. Display a reusable intermediate consequence as a lemma. Display an
+   immediate named consequence of a theorem as a corollary when that relation
+   is mathematically informative.
+3. Do not give separate numbered entries to structure-field projections,
+   accessor statements, immediate unfoldings of a predicate, or the two
+   components of a conjunction already stated in a parent entry. Keep these
+   declarations in Lean, but attach their `\lean{...}` tags to the parent
+   definition, theorem, or lemma whose content contains them.
+4. When theorem data and an existential witness expose the same equations,
+   state the equations once at the natural mathematical level. Group the
+   transport declarations under that entry instead of repeating the same
+   statement for each representation of the data.
+5. Keep a separately numbered final formula only when later mathematics
+   cites the formula itself. Such a direct consequence should normally be a
+   lemma or corollary, not a theorem.
+
+Before removing an entry, search all `\uses` and `\ref` occurrences of its
+label. Redirect genuine dependencies to the retained parent result, and keep
+all declaration links on that result so that formalization coverage remains
+visible.
 
 Tensor-network diagram conventions are recorded separately in
 [`docs/tn_diagram_grammar.md`](tn_diagram_grammar.md).

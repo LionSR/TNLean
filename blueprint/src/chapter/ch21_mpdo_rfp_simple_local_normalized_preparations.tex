@@ -238,20 +238,15 @@
     hypothesis.
 \end{proof}
 
-\begin{theorem}[Nonemptiness of the Hayashi auxiliary spaces]
-    \label{thm:mpdo_hayashi_auxiliary_nonempty}
+\begin{lemma}[Nonemptiness of the Hayashi sector factors]
+    \label{lem:mpdo_hayashi_factor_nonempty}
     \lean{MPOTensor.ExplicitEtaOperators.dR_nonempty}
     \lean{MPOTensor.ExplicitEtaOperators.dL_nonempty}
-    \lean{MPOTensor.ExplicitEtaOperators.sector_nonempty}
-    \lean{MPOTensor.ExplicitEtaOperators.etaIndex_nonempty}
-    \lean{MPOTensor.ExplicitEtaOperators.omegaIndex_nonempty}
     \leanok
-    \uses{def:mpdo_eta_structure, def:mpdo_eta_omega,
+    \uses{def:mpdo_eta_structure,
       lem:mpdo_trace_one_nonempty}
-    Every left and right factor in a Hayashi sector is nonzero-dimensional,
-    and the set of sectors is nonempty. Consequently the spaces carrying
-    $\eta_{k,h}$ and $\Omega_{k,h}$ are nonzero-dimensional for all $k,h$.
-\end{theorem}
+    Every left and right factor in a Hayashi sector is nonzero-dimensional.
+\end{lemma}
 \begin{proof}
     \leanok
     A matrix on an empty index space has trace zero. Hence
@@ -261,12 +256,40 @@
       \Longrightarrow \dim B_k^R>0,
     \]
     and the same argument applied to $\rho_k^L$ gives
-    $d_k^L>0$. Moreover,
+    $d_k^L>0$.
+\end{proof}
+
+\begin{lemma}[Existence of a Hayashi sector]
+    \label{lem:mpdo_hayashi_sector_nonempty}
+    \lean{MPOTensor.ExplicitEtaOperators.sector_nonempty}
+    \leanok
+    \uses{def:mpdo_eta_structure}
+    The set of Hayashi sectors is nonempty.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The sector weights satisfy
     \[
       \sum_k p_k=1\Longrightarrow m>0.
     \]
-    Choosing one intermediate sector $l$ now supplies an element of every
-    direct-sum space carrying $\Omega_{k,h}$.
+\end{proof}
+
+\begin{lemma}[Nonemptiness of the neighboring auxiliary spaces]
+    \label{lem:mpdo_hayashi_auxiliary_nonempty}
+    \lean{MPOTensor.ExplicitEtaOperators.etaIndex_nonempty}
+    \lean{MPOTensor.ExplicitEtaOperators.omegaIndex_nonempty}
+    \leanok
+    \uses{def:mpdo_eta_omega, lem:mpdo_hayashi_factor_nonempty,
+      lem:mpdo_hayashi_sector_nonempty}
+    For every pair of sectors $(k,h)$, the spaces carrying
+    $\eta_{k,h}$ and $\Omega_{k,h}$ are nonzero-dimensional.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The tensor product carrying $\eta_{k,h}$ is nonzero-dimensional by
+    Lemma~\ref{lem:mpdo_hayashi_factor_nonempty}. Choosing an intermediate
+    sector $l$ by Lemma~\ref{lem:mpdo_hayashi_sector_nonempty} then supplies
+    an element of the direct-sum space carrying $\Omega_{k,h}$.
 \end{proof}
 
 \begin{definition}[Faithful uniform density matrix]
@@ -301,7 +324,7 @@
     \lean{MPOTensor.ExplicitEtaOperators.completedEtaPreparationMap}
     \leanok
     \uses{def:mpdo_normalized_eta_omega,
-      thm:mpdo_hayashi_auxiliary_nonempty,
+      lem:mpdo_hayashi_auxiliary_nonempty,
       def:mpdo_faithful_uniform_density}
     For every sector pair define
     \[
@@ -362,7 +385,7 @@
     \lean{MPOTensor.ExplicitEtaOperators.completedOmegaPreparationMap}
     \leanok
     \uses{def:mpdo_normalized_eta_omega,
-      thm:mpdo_hayashi_auxiliary_nonempty,
+      lem:mpdo_hayashi_auxiliary_nonempty,
       def:mpdo_faithful_uniform_density}
     For every sector pair define
     \[
