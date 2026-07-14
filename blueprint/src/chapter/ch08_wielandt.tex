@@ -1068,6 +1068,26 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     Lemma~\ref{lem:blocking_transfer}.
 \end{proof}
 
+\begin{theorem}[Common exact block-injectivity length]
+    \label{thm:common_exact_block_injectivity_normal_left_canonical}
+    \lean{MPSTensor.%
+        exists_common_isNBlkInjective_of_isNormal_leftCanonical}
+    \leanok
+    \uses{def:l_blk_injective, def:normal,
+        thm:bounded_injective_blocking_normal_left_canonical}
+    Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension,
+    left-canonical normal tensors. There is a positive integer $L$ such that
+    every $A_j$ is $L$-block injective.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply
+    Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical} to each
+    block. The product of the finitely many positive lengths is a common
+    positive multiple, and exact block injectivity persists under positive
+    multiples.
+\end{proof}
+
 \begin{corollary}[Uniform injective blocking for separated normal-canonical families]%
     \label{cor:uniform_injective_blocking_normal_bnt}
     \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
@@ -1349,6 +1369,27 @@ used to produce rank-one elements.
     The claim follows from the self-overlap convergence under a
     complementary transfer-map gap
     (Theorem~\ref{thm:primitive_overlap}).
+\end{proof}
+
+\begin{theorem}[Peripheral primitivity and irreducibility give normalized overlap]
+    \label{thm:peripheral_primitive_irreducible_overlap_one}
+    \lean{MPSTensor.%
+        overlap_tendsto_one_of_peripheralPrimitive_of_irreducible}
+    \leanok
+    \uses{def:primitive_channel, def:irreducible_tensor, def:mpv_overlap}
+    Let $A$ have positive bond dimension and satisfy
+    \[
+        \sum_i (A^i)^\dagger A^i=I.
+    \]
+    If $A$ is tensor-irreducible and the transfer map is primitive, then
+    $O_{AA}(N)\to1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:prim_overlap_one}
+    Irreducible Perron--Frobenius theory supplies a nonzero positive fixed
+    point. Peripheral primitivity gives a strict spectral-radius bound on the
+    complementary transfer map. Thus $A$ is a primitive MPS tensor, and
+    Theorem~\ref{thm:prim_overlap_one} applies.
 \end{proof}
 
 \section{Primitivity and normality}
