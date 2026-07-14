@@ -32,7 +32,13 @@ private theorem bondDim_pos_of_mpvState_ne_zero {A : MPSTensor d D} {N : ℕ}
   ext σ
   simp [mpvState, mpv, coeff, Matrix.trace]
 
-private theorem IsCPSVBasisOfNormalTensors.blocks_dim_pos
+/-- Every tensor in a basis of normal tensors has positive bond dimension.
+
+This follows from the eventual linear independence in the source BNT
+definition: each sufficiently long matrix product vector is nonzero.
+
+Source: arXiv:1606.00608, BNT definition at lines 271--274. -/
+theorem IsCPSVBasisOfNormalTensors.blocks_dim_pos
     {g : ℕ} {dim : Fin g → ℕ}
     {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
