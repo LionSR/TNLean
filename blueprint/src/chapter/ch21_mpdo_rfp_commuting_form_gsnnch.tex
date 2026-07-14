@@ -163,10 +163,8 @@
     \[
         \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
     \]
-    This is the commuting-form half of
-    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}, taking the $\eta$-local data as
-    given. Deriving these operators from saturation of the area law remains
-    open.
+    This is the implication from $\eta$-local structure to commuting form in
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}.
     % Gap documented in docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 \end{theorem}
 
@@ -195,9 +193,8 @@
     \leanok
     \uses{thm:mpdo_eta_local_structure_has_commuting_form,
         thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
-    Once the $\eta$-local structure gives the commuting nearest-neighbor
-    product form, adding the doubled-index transfer condition gives the
-    corresponding GSNNCH branch.
+    An $\eta$-local structure together with the doubled-index transfer
+    condition gives the corresponding GSNNCH branch.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -210,8 +207,8 @@
     \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
     \leanok
     \uses{thm:mpdo_eta_local_structure_has_commuting_form}
-    Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
-    into an $\eta$-local structure, the global commuting-form property follows.
+    A tensor equipped with the $\eta$-local structure determined by the
+    neighboring operators $\eta_{k,h}$ has the global commuting-form property.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -224,19 +221,18 @@
     \lean{MPOTensor.isGSNNCH_of_etaLocalStructure}
     \leanok
     \uses{thm:mpdo_eta_local_structure_is_gsnnch}
-    Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
-    into the $\eta$-local structure, the GSNNCH condition follows.
+    A tensor equipped with the $\eta$-local structure determined by the
+    neighboring operators $\eta_{k,h}$ satisfies the GSNNCH condition.
 \end{theorem}
 
 \begin{proof}\leanok
     This is the GSNNCH witness already carried by the $\eta$-local structure.
 \end{proof}
 
-\begin{remark}[Entropy-side construction]
-    The remaining entropy-side step is to derive from $\mathrm{SAL}(K)$ a
-    physical-sector factorization whose neighboring operators
-    $\eta_{k,h}$ are simultaneously positive semidefinite. Given such a
-    factorization, the two-site bond is
+\begin{remark}[Positive physical-sector factorization]
+    Suppose that $K$ satisfies $\mathrm{SAL}(K)$ and admits a physical-sector
+    factorization whose neighboring operators $\eta_{k,h}$ are simultaneously
+    positive semidefinite. The associated two-site bond is
     \begin{equation}\label{eq:mpdo_eta_bond_assembly}
         B=\sum_{k,h}
         \operatorname{Id}_{H_L^{(k)}}\otimes
@@ -250,8 +246,9 @@
         \qquad c_N>0,\qquad
         [B_{i,i+1},B_{j,j+1}]=0.
     \end{equation}
+    Under this hypothesis,
     Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
-    constructs the $\eta$-local structure and proves
+    gives the $\eta$-local structure and proves
     (\ref{eq:mpdo_eta_bond_assembly})--(\ref{eq:mpdo_eta_product_form}) with
     $c_N=1$. Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
     then gives the commuting-form conclusion. Adjacent translates commute on every
@@ -261,12 +258,10 @@
     Theorem~\ref{thm:mpdo_physical_two_site_crossed_bonds_comm}. Disjoint
     translates commute by
     Theorem~\ref{thm:mpdo_periodic_disjoint_physical_bonds_comm}. These cases
-    are assembled into pairwise commutativity at every length $N\geq2$ in
+    give pairwise commutativity at every length $N\geq2$ by
     Theorem~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}. Given the
     physical-sector factorization, the all-length product identity is
-    Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}. The remaining
-    entropy-side problem is precisely the construction of a coherently
-    positive physical-sector factorization from SAL.
+    Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}.
     The doubled-index transfer condition enters only in the subsequent RFP and
     GSNNCH branch conclusions.
 \end{remark}

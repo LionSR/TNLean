@@ -57,6 +57,7 @@
     This is the same-length product law carried by the theorem data.
 \end{proof}
 
+
 \begin{theorem}[BNT theorem data give the idempotent scalar law]%
     \label{thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum}
     \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum}
@@ -225,8 +226,8 @@
         =
         \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
     \]
-    The size, diagonal entries, and traces of powers of $\chi_{n,i,j,k}$
-    therefore agree with those of $\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}$.
+    Thus the two matrices have equal size, diagonal entries, and traces of all
+    powers.
 \end{theorem}
 \begin{proof}\leanok
     Apply the BNT-to-blocked witness construction to the comparison and the
@@ -309,4 +310,3 @@
     Apply the trace-power identity of the positive blocked-basis
     $\chi$-witness obtained from the theorem data.
 \end{proof}
-
