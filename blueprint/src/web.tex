@@ -8,6 +8,11 @@
 \usepackage{_tnlean_patches}
 \usepackage{tn_diagrams}
 
+% plasTeX already propagates section resets through subsection counters.
+\makeatletter
+\providecommand{\@addtoreset}[2]{}
+\makeatother
+
 \input{macros/common}
 \input{macros/web}
 \input{macros/tn_web}
