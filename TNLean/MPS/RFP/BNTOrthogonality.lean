@@ -367,13 +367,12 @@ theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
     {D : ℕ} [NeZero D] (A : MPSTensor d D) (hA : IsTransferIdempotent A)
     (hA_ne : transferMap A ≠ 0) (μ : Fin r → ℂ) (hμ : ∀ q, ‖μ q‖ = 1)
     (hRFP : IsTransferIdempotent
-      (directSumTensor (fun q : Fin r ↦ (fun i ↦ μ q • A i : MPSTensor d D)))) :
-    ∀ q q', μ q = μ q' := by
+      (directSumTensor (fun q : Fin r ↦ (fun i ↦ μ q • A i : MPSTensor d D))))
+    (q q' : Fin r) : μ q = μ q' := by
   have hμ_ne : ∀ q, μ q ≠ 0 := by
     intro q hq
     simpa [hq] using hμ q
-  have hphase : ∀ q q', μ q * starRingEnd ℂ (μ q') = 1 := by
-    intro q q'
+  have hphase : μ q * starRingEnd ℂ (μ q') = 1 := by
     have hidem :=
       (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
         (B := fun s : Fin r ↦ (fun i ↦ μ s • A i : MPSTensor d D))).mp hRFP q q'
@@ -381,7 +380,6 @@ theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
     apply scalar_eq_one_of_smul_idempotent (transferMap A) hA hA_ne
       (μ q * starRingEnd ℂ (μ q'))
       (mul_ne_zero (hμ_ne q) ((map_ne_zero (starRingEnd ℂ)).2 (hμ_ne q'))) hidem
-  intro q q'
   have hnormSq : Complex.normSq (μ q') = 1 := by
     rw [Complex.normSq_eq_norm_sq, hμ q']
     norm_num
@@ -392,7 +390,7 @@ theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
       norm_num
     _ = (μ q * starRingEnd ℂ (μ q')) * μ q' :=
       (mul_assoc (μ q) (starRingEnd ℂ (μ q')) (μ q')).symm
-    _ = 1 * μ q' := by rw [hphase q q']
+    _ = 1 * μ q' := by rw [hphase]
     _ = μ q' := one_mul (μ q')
 
 end BlockDecomposition
