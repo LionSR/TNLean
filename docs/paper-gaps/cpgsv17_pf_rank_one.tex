@@ -298,9 +298,37 @@ and
 {\scriptsize\leanid{MPOTensor.closedSectorTraceMatrix_normalized_relations}}
 in \doclink{TNLean/MPS/MPDO/SectorPairingTransfer}.}
 
+The normalized identities can also be placed on the same real trace matrix
+for which the strong-area-law argument proves primitivity.  After discarding
+only the zero-weight indices and choosing the coherent sector phases, set
+\[
+  T^*_{k,h}=\operatorname{Re}\operatorname{tr}(\eta_{k,h})
+  \qquad (p_kp_h\ne0).
+\]
+The left tensor of every zero-weight sector vanishes.  Consequently the
+physical-trace transfer still has the active rectangular factorization
+$LQ$, while positivity of the neighboring operators identifies $QL$ with
+the complexification of $T^*$.  The same scalar $\lambda>0$ therefore gives
+\[
+  T^*\ \text{primitive},
+  \qquad
+  (\lambda^{-1}T^*)^2=(\lambda^{-1}T^*)^3,
+  \qquad
+  \operatorname{tr}((\lambda^{-1}T^*)^N)
+    =\operatorname{tr}(\lambda^{-1}T^*)
+\]
+for every positive integer $N$.
+\footnote{\sloppy Formal declarations:
+{\scriptsize\leanid{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_normalized_relations_of_isSourceZCL}},
+{\scriptsize\leanid{MPOTensor.exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations}},
+and
+{\scriptsize\leanid{MPOTensor.exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL}}
+in \doclink{TNLean/MPS/MPDO/InverseMapActiveSectorZCL}.}
+
 This conclusion is the scale-invariant consequence of the displayed operator
-equation; it does not imply that the normalized trace matrix is
-idempotent or has rank one.  The remaining pairing route would have to prove
+equation; it does not imply that the normalized trace matrix is idempotent or
+semisimple, nor that it has rank one.  The remaining pairing route would have
+to prove
 linear independence of one of the two closed tensor families, or supply a
 different argument excluding the generalized zero-eigenspace.  The direct sum
 in the source's sector splitting at lines 1436--1448 concerns the physical
