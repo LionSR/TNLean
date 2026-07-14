@@ -1304,6 +1304,39 @@ separate step.
     identity factor and gives the two asserted identities.
 \end{proof}
 
+\begin{theorem}[Simultaneous inverse from a one-letter product-algebra span]%
+    \label{thm:mpdo_one_letter_simultaneous_inverse}
+    \lean{MPSTensor.WordTupleSpanTop.%
+        exists_one_letter_simultaneous_left_inverse}
+    \lean{MPSTensor.WordTupleSpanTop.exists_mpo_block_left_inverse}
+    \leanok
+    \uses{thm:cpsv_bnt_blocked_simultaneous_span}
+    Let $A_c^q\in M_{D_c}(\mathbb C)$ be a finite labelled tensor family.  If
+    the one-letter tuples
+    \[
+        q\longmapsto (A_c^q)_c
+    \]
+    span the full product algebra $\prod_c M_{D_c}(\mathbb C)$, then there
+    are coefficients $C_{(c,x,y),q}$ such that
+    \[
+        \sum_q C_{(c,x,y),q}(A_d^q)_{x'y'}
+          =\delta_{cd}\delta_{xx'}\delta_{yy'}.
+    \]
+    For an MPO tensor the letter is the ket--bra pair $q=(i,k)$, so the same
+    coefficients form the common block-letter left inverse used in
+    \cite[lines~269--277]{Bultinck2017Anyons}.  The full product-algebra span
+    is obtained after the common blocking described in
+    \cite[lines~427--431]{Bultinck2017Anyons}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Fix $(c,x,y)$ and consider the product-algebra element which is the matrix
+    unit $E_{xy}$ in block $c$ and zero in every other block.  By the spanning
+    hypothesis it is a linear combination of the one-letter tuples.  Reading
+    its $(x',y')$ entry in block $d$ gives the displayed identity.  Reindexing
+    the doubled physical letter by the ket--bra pair gives the MPO form.
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     \TNMPDOFixedFinalComparisonUnitary
