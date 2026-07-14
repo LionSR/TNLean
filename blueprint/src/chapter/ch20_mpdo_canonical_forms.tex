@@ -2862,6 +2862,103 @@
     gives a retained representative.
 \end{proof}
 
+\begin{theorem}[Nonvanishing of the vertical reshaping]
+    \label{thm:mpdo_vertical_tensor_nonzero}
+    \lean{MPOTensor.IsHorizontalCF.verticalTensor_ne_zero}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo}
+    If an MPO tensor $M$ is in horizontal canonical form, then its vertical
+    reshaping is nonzero:
+    \[
+        \widetilde M\ne 0.
+    \]
+    This is the nonvanishing observation used in
+    \cite[Proposition~4.13, lines~1895--1902]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+        lem:sector_bnt_weight_unit_exists_of_struct}
+    Write the doubled-index tensor in horizontal canonical form as
+    $\widehat M=GSG^{-1}$, where $S$ is the weighted direct sum of its basis
+    tensors.  Choose a copy whose weight has unit modulus.  Its basis tensor
+    cannot have every letter equal to zero, since left canonicity gives
+    \[
+        \sum_i (A^i)^\dagger A^i=\Id.
+    \]
+    The corresponding nonzero weight and nonzero letter give $S\ne0$, hence
+    $\widehat M\ne0$.  If $\widetilde M=0$, the bijection between its vertical
+    index and the two horizontal bond indices would give $\widehat M=0$, a
+    contradiction.
+\end{proof}
+
+\begin{theorem}[Algebraic BNT from a grouped vertical decomposition]
+    \label{thm:mpdo_vertical_grouped_is_bnt}
+    \lean{MPOTensor.IsHorizontalCF.isBNT_verticalTensor_of_grouping}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, def:bnt,
+        def:bnt_cpsv, def:mpv_phase_class_data}
+    Let $M$ be in horizontal canonical form and put $T=\widetilde M$.  Suppose
+    that $B_k$ has positive bond dimension $d_k$, that $\mu_k\in\C$, and that
+    $V_k:\C^{d_k}\to\C^d$ is an isometry for $0\leq k<r$.  Assume, for every
+    vertical letter $v$, that
+    \[
+        V_k^\dagger T_v=(\mu_k B_k^v)V_k^\dagger,
+        \qquad
+        T_v=\sum_{k=0}^{r-1}V_k(\mu_k B_k^v)V_k^\dagger.
+    \]
+    Partition the tensors $B_k$ into matrix-product-vector phase classes and
+    choose one representative $A_\alpha$ from each class.  If
+    $\{A_\alpha\}_\alpha$ is a basis of normal tensors in the spectral sense
+    for the weighted direct sum
+    \[
+        A_{\mathrm{ret}}=\bigoplus_{k=0}^{r-1}\mu_k B_k,
+    \]
+    then $\{A_\alpha\}_\alpha$ is an algebraic basis of normal tensors for
+    $T$.
+
+    This is the basis-of-normal-tensors conclusion in
+    \cite[Proposition~4.13, lines~1863--1921]{Cirac2016MPDO_arXiv}, stated for
+    the grouped decomposition before the final coisometry is formed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_vertical_tensor_nonzero,
+        thm:cpsv_normal_eventually_injective,
+        thm:mpv_decomposition, lem:mpv_phase_class_nonempty,
+        lem:mpv_zero_length}
+    The reconstruction and
+    Theorem~\ref{thm:mpdo_vertical_tensor_nonzero} imply $r>0$, so the phase
+    partition has a representative $A_{\alpha_0}$ of positive bond dimension
+    $d_{\alpha_0}$.
+
+    Put $C_k^v=\mu_kB_k^v$.  Induction on a word $w$ gives
+    \[
+        V_k^\dagger T^w=C_k^wV_k^\dagger.
+    \]
+    For a nonempty word $w=(v,w')$, reconstruction of its first letter,
+    cyclicity of trace, and $V_k^\dagger V_k=\Id$ therefore give
+    \begin{align*}
+        \tr(T^w)
+        &=\sum_k\tr\!\left(V_kC_k^vV_k^\dagger T^{w'}\right)\\
+        &=\sum_k\tr(C_k^vC_k^{w'})
+          =\sum_k\mu_k^{|w|}\tr(B_k^w)
+          =V^{(|w|)}(A_{\mathrm{ret}})_w.
+    \end{align*}
+    Hence the spectral BNT spanning identity for $A_{\mathrm{ret}}$ gives the
+    algebraic spanning identity for $T$ at every positive length.  At length
+    zero, assign coefficient $d/d_{\alpha_0}$ to $A_{\alpha_0}$ and zero to
+    the other representatives; then
+    \[
+        d=\frac{d}{d_{\alpha_0}}d_{\alpha_0}.
+    \]
+    Spectral normality implies algebraic normality for every representative,
+    and the eventual linear independence assertion is unchanged.  These are
+    the three algebraic BNT conditions.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
