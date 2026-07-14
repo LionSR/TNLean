@@ -3019,9 +3019,13 @@
 
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
-    \notready
+    \lean{MPOTensor.verticalCF_of_horizontalCF}
+    \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
         def:vertical_cf_mpdo,
+        thm:mpdo_vertical_grouped_is_bnt,
+        thm:mpdo_normalized_grouped_sector_maps,
+        thm:vertical_cf_of_grouped_orthogonal_sectors,
         thm:mpdo_opposite_corner_zero,
         thm:mpdo_first_site_invariant_comm,
         thm:representative_one_sub_mp_zero,
@@ -3063,7 +3067,11 @@
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo, def:bnt,
+        thm:mpdo_vertical_grouped_is_bnt,
+        thm:mpdo_normalized_grouped_sector_maps,
+        thm:vertical_cf_of_grouped_orthogonal_sectors,
         thm:mpdo_opposite_corner_zero,
         thm:mpdo_first_site_invariant_comm,
         thm:representative_one_sub_mp_zero,

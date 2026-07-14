@@ -195,16 +195,21 @@ grouped into pairwise gauge-phase-distinct BNT representatives in
 \path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a positive
 coefficient, a unit-modulus phase, and an invertible bond-space gauge, while
 the physical isometries and the literal vertical reconstruction are retained.
-What remains is to transport the unitary gauge normalizations to common
-representative bond spaces, compose them with the physical sector isometries,
-and assemble these normalized physical maps into the final coisometry.  The
-literal vertical canonical-form identity has therefore not yet been derived
-from the MPDO hypotheses.
+The unitary gauge normalizations are transported to the representative bond
+spaces and composed with the physical sector isometries in
+\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}.  The algebraic
+basis-of-normal-tensors property is established in
+\path{TNLean/MPS/MPDO/VerticalBNTConstruction.lean}, using exact
+reconstruction at positive lengths and a retained positive-dimensional
+representative at length zero.  The resulting orthogonal sector maps are
+assembled into the final coisometry in
+\path{TNLean/MPS/MPDO/VerticalCFFromHorizontal.lean}, which proves the literal
+vertical canonical-form identity from the MPDO hypotheses.
 
 \paragraph{Verdict.}
-This is an open gap: the source-faithful horizontal-to-vertical implication of
-Proposition~4.13 remains unformalized. The diagonal-restriction route is a
-false strengthening and cannot close that gap.
+The source-faithful horizontal-to-vertical implication of Proposition~4.13 is
+complete.  The diagonal-restriction route remains a false strengthening and
+plays no part in the proof.
 
 \bibliographystyle{alpha}
 \bibliography{references}

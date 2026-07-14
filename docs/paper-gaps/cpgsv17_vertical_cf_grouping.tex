@@ -220,31 +220,35 @@ $X_{\alpha,1}=\Id$, giving the normalization printed by the source
 The reflected marked-chain, two-sector separation, and dependent-dimension
 transport of source lines~1909--1919 are therefore complete, as is the
 positive scalar Gram identity and unitary normalization of every grouped
-gauge.  What remains is to transport these unitary gauges to common
-representative bond spaces, compose them with the physical sector isometries,
-and establish the normalized physical maps required by the final coisometry.
-Their generic assembly into the direct-sum coisometry $U$ is already
-proved by \path{Matrix.sigmaBlockRow_isCoisometry},
-\path{Matrix.sigmaBlockRow_conjugation}, and
-\path{Matrix.sigmaBlockRow_reconstruction}.  The remaining source-specific
-identifications are to transport the copy bond spaces along the dimension
-equalities supplied by the grouping theorem, index the sectors by dependent
-pairs $(\alpha,q)$, and identify the dependent disjoint union with the
-standard direct-sum coordinate space.  A retained representative is already
-supplied by
-\path{MPOTensor.IsHorizontalCF.exists_nonempty_verticalBNTGrouping} in
-\path{TNLean/MPS/MPDO/RetainedClass.lean}.  Thus only the source-specific
-normalized physical maps, their final coisometry, the direct-sum indexing,
-and the literal vertical canonical-form identity remain.  The original
+gauge.  The normalized gauges are transported to the representative bond
+spaces and composed with the physical sector isometries in
+\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}.  The resulting maps
+$W_{\alpha,q}$ have mutually orthogonal isometric ranges, satisfy the
+representative intertwining identities, and reconstruct every vertical letter
+exactly.
+
+The representatives are shown to form an algebraic basis of normal tensors
+for the original vertical tensor in
+\path{TNLean/MPS/MPDO/VerticalBNTConstruction.lean}.  At positive chain
+length this follows from the exact reconstruction and cyclicity of trace.  At
+length zero, one retained representative of positive bond dimension supplies
+the dimension identity required by the definition of a basis of normal
+tensors.
+
+Finally, \path{MPOTensor.verticalCF_of_horizontalCF} in
+\path{TNLean/MPS/MPDO/VerticalCFFromHorizontal.lean} applies the orthogonal
+sector coisometry theorem and identifies the dependent sector pairs
+$(\alpha,q)$ with the standard finite direct-sum coordinates.  This gives the
+literal vertical canonical-form identities of Proposition~4.13.  The original
 formulation of \ghissue{2536}, interpreted as a direct conversion of the
-horizontal scalar weights and diagonal restrictions, is therefore not a
-consequence of Proposition~4.13.
+horizontal scalar weights and diagonal restrictions, remains a false route
+rather than a consequence of the proposition.
 
 \paragraph{Verdict.}
-This is an open gap: Figure~8 and the normal-tensor Gram normalization are
-complete for the actual grouped sectors, but the normalized physical maps and
-their final coisometry have not yet been assembled from the
-matrix-product-density-operator hypotheses.
+The source-faithful horizontal-to-vertical implication of Proposition~4.13 is
+complete.  The proof follows the grouped vertical sectors used in the paper;
+it does not use the unsupported diagonal-restriction statement from
+\ghissue{2536}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
