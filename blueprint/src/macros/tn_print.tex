@@ -205,12 +205,12 @@
         \TN@subspinlink{tzeroOutL}{tzeroOutR}
 
         \node[anchor=east] at (-3.72,-1.18) {$\mathcal S_2:$};
-        \draw[rounded corners=2pt] (-3.42,-1.72) rectangle (-1.38,-0.64);
+        \draw[tn factor boundary] (-3.42,-1.72) rectangle (-1.38,-0.64);
         \TN@subspinbox{sTwoLk}{(-2.90,-1.18)}{l_k}
         \TN@subspinbox{sTwoRh}{(-1.90,-1.18)}{r_h}
         \TN@subspinlink{sTwoLk}{sTwoRh}
         \node at (-1.00,-1.18) {$\otimes$};
-        \draw[rounded corners=2pt] (-0.60,-1.72) rectangle (1.44,-0.64);
+        \draw[tn factor boundary] (-0.60,-1.72) rectangle (1.44,-0.64);
         \TN@subspinbox{sTwoRk}{(-0.08,-1.18)}{r_k}
         \TN@subspinbox{sTwoLh}{(0.92,-1.18)}{l_h}
         \TN@subspinlink{sTwoRk}{sTwoLh}
@@ -256,12 +256,12 @@
         \TN@subspinlink{szeroOutL}{szeroOutR}
 
         \node[anchor=east] at (-4.70,-1.35) {$\mathcal T_2:$};
-        \draw[rounded corners=2pt] (-4.37,-1.90) rectangle (-2.33,-0.80);
+        \draw[tn factor boundary] (-4.37,-1.90) rectangle (-2.33,-0.80);
         \TN@subspinbox{tTwoLk}{(-3.85,-1.35)}{l_k}
         \TN@subspinbox{tTwoRh}{(-2.85,-1.35)}{r_h}
         \TN@subspinlink{tTwoLk}{tTwoRh}
         \node at (-1.96,-1.35) {$\otimes$};
-        \draw[rounded corners=2pt] (-1.55,-1.90) rectangle (2.42,-0.80);
+        \draw[tn factor boundary] (-1.55,-1.90) rectangle (2.42,-0.80);
         \TN@subspinbox{tTwoRk}{(-1.03,-1.35)}{r_k}
         \TN@subspinbox{tTwoLl}{(-0.03,-1.35)}{l_l}
         \TN@subspinbox{tTwoRl}{(0.97,-1.35)}{r_l}
@@ -641,7 +641,7 @@
             {$\operatorname{reindex}_{\Phi_N}\!M_N(\widetilde{\cal K})$};
         \node at (-1.93,0) {$=$};
         \node at (-1.28,0) {$\displaystyle\bigoplus_{k_0,\ldots,k_{N-1}}$};
-        \draw[rounded corners=2pt] (-0.45,-0.58) rectangle (4.22,0.58);
+        \draw[tn factor boundary] (-0.45,-0.58) rectangle (4.22,0.58);
         \node[tn tensor box, minimum width=1.08cm, minimum height=0.44cm,
             inner sep=1pt] (tnEtaZero) at (0.30,0) {$\eta_{k_0,k_1}$};
         \node at (1.10,0) {$\otimes$};
@@ -2022,9 +2022,9 @@
         \TN@opdotabove{icfXi}{(5.40,0)}{X^{-1}}
         \draw[tn leg] (icfX.west) -- ++(-0.55,0);
         \draw[tn leg] (icfX.east) -- (icfL.west);
-        \draw[tn leg, rounded corners=2pt] (icfL.east)
+        \draw[tn bent leg] (icfL.east)
         -| ($(icfU.south)+(-0.14,0)$);
-        \draw[tn leg, rounded corners=2pt] ($(icfU.south)+(0.14,0)$)
+        \draw[tn bent leg] ($(icfU.south)+(0.14,0)$)
         |- (icfXi.west);
         \draw[tn leg] (icfXi.east) -- ++(0.55,0);
         \draw[tn phys leg] (icfU.north) -- ++(0,0.34);
@@ -2051,9 +2051,9 @@
         \TN@opdotabove{icbXi}{(5.40,0)}{X^{-1}}
         \draw[tn leg] (icbX.west) -- ++(-0.55,0);
         \draw[tn leg] (icbX.east) -- (icbL.west);
-        \draw[tn leg, rounded corners=2pt] (icbL.east)
+        \draw[tn bent leg] (icbL.east)
         -| ($(icbU.south)+(-0.14,0)$);
-        \draw[tn leg, rounded corners=2pt] ($(icbU.south)+(0.14,0)$)
+        \draw[tn bent leg] ($(icbU.south)+(0.14,0)$)
         |- (icbXi.west);
         \draw[tn leg] (icbXi.east) -- ++(0.55,0);
         \draw[tn phys leg] (icbU.north) -- ++(0,0.34);
@@ -2301,7 +2301,7 @@
         \node[anchor=east] at (1.86,-1.10) {$j$};
         \node[anchor=east] at (1.86,-1.50) {$q$};
         \draw[tn leg] (hcfX.south) -- (2.55,-1.50);
-        \draw[tn leg, rounded corners=2pt]
+        \draw[tn bent leg]
         (hcfC.center) -- (4.15,-0.40) -- (4.15,-1.10);
         \draw[tn leg] (hcfXi.south) -- (4.95,-1.50);
         \fill (2.55,-1.10) circle (0.05);
@@ -2364,9 +2364,9 @@
             \TN@opdotabove{bijPXi}{(2.95,0)}{X^{-1}}
             \draw[tn leg] (bijPX.west) -- ++(-0.50,0);
             \draw[tn leg] (bijPXi.east) -- ++(0.50,0);
-            \draw[tn virtual closure]
+            \draw[tn bent leg]
             (bijPX.east) -- (1.05,0) -- (1.05,1.00) -- (1.35,1.00);
-            \draw[tn virtual closure]
+            \draw[tn bent leg]
             (bijPXi.west) -- (2.45,0) -- (2.45,1.00) -- (2.15,1.00);
             \draw[tn leg] (1.75,1.50) -- (1.75,-1.10);
             \draw[tn leg] (0,-1.10) -- (3.50,-1.10);
@@ -2392,9 +2392,9 @@
         \TN@tensordot{irI}{(0,0)}
         \TN@tensordot{irB}{(0,-1.05)}
         \draw[tn phys leg] (irT.north) -- ++(0,0.45);
-        \draw[tn virtual closure]
+        \draw[tn bent leg]
         (irI.west) -- ++(-0.74,0) -- (-0.82,1.05) -- (irT.west);
-        \draw[tn virtual closure]
+        \draw[tn bent leg]
         (irI.east) -- ++(0.74,0) -- (0.82,1.05) -- (irT.east);
         \draw[tn phys leg] (irI.south) -- (irB.north);
         \TN@leftleg{irB}{0.60}

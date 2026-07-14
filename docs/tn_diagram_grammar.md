@@ -38,10 +38,14 @@ by a diagram before reading the surrounding proof.
   physical legs, or by omitting the external physical legs only when the
   surrounding formula states the contraction, for example in a transfer map or
   an overlap.
-- Contracted indices are drawn with solid strokes. A one-dimensional periodic
-  trace is a rounded solid closure. Dashed strokes are reserved for grouping
-  boundaries, changes of multiplicity basis, and an explicitly identified
-  boundary of a periodic lattice; a purification contraction is not dashed.
+- Contracted indices are drawn with solid strokes. An open contraction routed
+  around another glyph uses the shared bent-leg style; it is not a closure
+  merely because its path bends. A one-dimensional periodic trace is a rounded
+  solid closure. Solid rounded rectangles around tensor-product factors are
+  factor boundaries, distinct from dashed grouping boundaries. Dashed strokes
+  are reserved for grouping boundaries, changes of multiplicity basis, and an
+  explicitly identified boundary of a periodic lattice; a purification
+  contraction is not dashed.
 
 ## Blocks, Regions, and Labels
 
