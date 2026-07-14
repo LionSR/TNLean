@@ -1,12 +1,18 @@
 # Tensor-Network Diagram Grammar
 
-This document fixes the mathematical meaning of the tensor-network glyphs used
-in the blueprint and slide collection. The aim is that a reader can identify
-the object represented by a diagram before reading the surrounding proof.
+This document fixes the mathematical meaning of every tensor-network glyph in
+the repository. A reader should be able to identify the represented object
+before reading the surrounding proof.
 Graphical appearance carries mathematical meaning: changing a label does not
 change the kind of object represented, and changing the kind of object requires
 changing its graphical form. Every index line ends exactly at the boundary of
 the object carrying that index.
+
+The files `tex/tn/tn_core.tex` and `tex/tn/tn_library.tex` are the single
+source of truth. They determine the light and dark renderings, the PDF and web
+blueprints, the slides, the audit gallery, and the reference images. A client
+document may select a theme slot or a layout profile, but it may not redefine
+geometry, ports, glyphs, or contractions.
 
 ## Atomic Graphical Calculus
 
@@ -16,41 +22,56 @@ port represents one occurrence of a virtual index, one occurrence of a physical
 index, or one endpoint of a morphism. Composition joins only ports of the same
 declared type.
 
-For example, the following construction places two tensors, names their four
-virtual ports, and contracts one pair:
+For example, the following construction places two MPS sites and contracts one
+pair of virtual ports:
 
 ```tex
-\TN@tensor{leftTensor}{(0,0)}
-\TN@vport{leftIn}{leftTensor}{west}
-\TN@vport{leftOut}{leftTensor}{east}
-
-\TN@tensor{rightTensor}{(1.4,0)}
-\TN@vport{rightIn}{rightTensor}{west}
-\TN@vport{rightOut}{rightTensor}{east}
-
-\TN@vopenport{leftIn}{-0.6,0}
-\TN@vconnectports{leftOut}{rightIn}
-\TN@vopenport{rightOut}{0.6,0}
+\begin{TNDiagram}[normal]
+  \TNMPSSite{leftTensor}{(0,0)}{A}
+  \TNMPSSite{rightTensor}{(1.4,0)}{B}
+  \TNOpenVirtualWest{leftTensorWest}
+  \TNConnectVirtual{leftTensorEast}{rightTensorWest}
+  \TNOpenVirtualEast{rightTensorEast}
+\end{TNDiagram}
 ```
 
-The names `leftOut` and `rightIn` refer to exact boundary points; no numerical
+The names `leftTensorEast` and `rightTensorWest` refer to exact boundary
+points; no numerical
 coordinate is chosen to approximate either endpoint. The same atoms can be
 placed elsewhere or composed with different atoms without changing their
-internal definitions. This example is written in the private macro scope,
-where `@` is a letter; a standalone use should be enclosed by
-`\makeatletter` and `\makeatother`.
+internal definitions.
 
-The constructors `\TN@vport`, `\TN@pport`, and `\TN@mport` name a standard
-boundary anchor and register it as virtual, physical, or morphism-valued. For
-several ports on one side of a box, use a typed side constructor such as
-`\TN@vwestport` or `\TN@pnorthport`, or use `\TN@typedbetweenport` on a general
-boundary segment. The constructors `\TN@vterminal`, `\TN@pterminal`, and
-`\TN@mterminal` name external endpoints. The operations `\TN@vconnectports`,
-`\TN@pconnectports`, and `\TN@mconnectports` join like-typed ports and reject a
-type mismatch. The operations `\TN@vopenport` and `\TN@popenport` create a
-named external terminal and join it to the given port. The untyped and
-anchor-based forms remain only for compatibility inside older local
-constructions.
+Complete diagrams use `TNDiagram`. Short identities use `TNEquationRow`,
+`TNTerm`, and `TNRelation`. The `normal` profile is used for structural
+figures; `compact` is used for definitions and local identities. These profiles
+fix the pitches, leg lengths, branch positions, relation gaps, trace
+clearances, and outer margins.
+
+The operations `TNConnectVirtual`, `TNConnectPhysical`, and
+`TNConnectMorphism`, together with their typed orthogonal variants, join
+like-typed ports and reject a type mismatch. Typed `TNTrace...` commands form
+periodic or trace closures. `TNPortAlias` gives a declared port another role
+name while preserving its type. Direct use of a TikZ anchor is not a
+contraction operation.
+
+The standard port roles are as follows.
+
+| Atom | Virtual ports | Physical ports |
+|---|---|---|
+| MPS site | `West`, `East` | `Ket` |
+| MPO or MPDO site | `West`, `East` | `Ket` north, `Bra` south |
+| Rotated MPO or MPDO site | `North`, `South` | `Ket` west, `Bra` east |
+| PEPS site | `West`, `East`, `North`, `South` | `Ket` |
+| Trivalent map | `Combined`, `FactorOne`, `FactorTwo` | none, unless physical |
+
+For a stacked MPO product, `UpperBra` is contracted with `LowerKet`. An action
+map also exposes `StateOut`, `MPO`, and `StateIn`. A sector gauge has distinct
+`Block` and `Copy` ports. A purification site has two ancillary ports, joined
+by a straight physical contraction.
+
+Split, merge, fusion, cofusion, action, coaction, and physical blocking maps
+are orientations of one trivalent constructor. Thus the map box, branch
+fractions, and port roles have the same meaning in every occurrence.
 
 ## Basic Glyphs
 
@@ -270,7 +291,8 @@ contracted index, the contraction is drawn explicitly instead.
   `blueprint/src/macros/` with the core and library names are compatibility
   entry points.
 
-The library provides `\TN@mpssite`, `\TN@mposite`, and `\TN@pepssite` for
+The public library provides `\TNMPSSite`, `\TNMPOSite`, `\TNRotatedMPOSite`,
+and `\TNPEPSSite` for
 local tensor sites; `\TN@doublelayer` for the local contraction in a transfer
 construction; `\TN@operatorstate` for a density matrix or operator with paired
 system ports; `\TN@splitmap`, `\TN@mergemap`, `\TN@physicalsplitmap`,
@@ -289,13 +311,9 @@ free endpoints when a complete standalone object is required. A complete
 figure should compose these units rather than choose the same leg positions
 independently at each occurrence.
 
-The common lengths `\TN@layerpitch`, `\TN@virtualleglen`,
-`\TN@physicalleglen`, `\TN@traceclearance`, `\TN@busoffset`, and
-`\TN@buspitch` fix the standard separations. The two
-branch positions of a trivalent map are fixed by
-`\TN@branchfirstfraction` and `\TN@branchsecondfraction`. A theorem-level figure
-may scale the whole picture, but should not reproduce one of these distances
-as a local numerical constant.
+The named profiles fix all standard separations and the branch positions of a
+trivalent map. A theorem-level diagram selects `normal` or `compact`; it does
+not rescale the picture or reproduce one of these distances locally.
 
 The web blueprint renders the same complete figure commands as cached SVG
 images. A new chapter-facing command therefore also requires an argument
@@ -303,6 +321,32 @@ declaration in `blueprint/src/Packages/tn_diagrams.py` and a name in
 `blueprint/src/plastex_templates/TensorNetworkDiagrams.jinja2s`. A private
 construction in `tex/tn/tn_core.tex` or `tex/tn/tn_library.tex` requires no
 such declaration.
+
+Commands whose names contain `TN@` are private and occur only in `tex/tn/`.
+Blueprint diagrams, slides, examples, galleries, and tests use the public
+calculus.
+
+## Author Checklist
+
+- Every contraction has two named endpoints of the same type.
+- A line does not stop short of a port, pass behind a glyph, or enter a box
+  except through a declared port.
+- Curves represent genuine trace or periodic topology. Purification and other
+  ordinary local contractions are straight.
+- A semicircle is not used as bra or ket notation.
+- A glyph has one meaning throughout the repository; changing its label does
+  not change its object class.
+- Pure algebra remains algebra. A decorative enclosure does not turn a direct
+  sum or tensor product into a tensor network.
+- Definitions and local identities are compact displays rather than floats.
+- Labels are positioned relative to named ports and do not meet sites, lines,
+  or region boundaries.
+- Repeated pitches, leg lengths, branch positions, relation gaps, and loop
+  clearances are taken from the selected layout profile.
+- A figure is retained only when spatial topology, nontrivial routing, a
+  fusion tree, or a multistage construction is part of the assertion.
+- The isolated rendering and the actual page have both been inspected at
+  normal size. Their ink remains strictly inside the canvas boundary.
 
 ## Slide Diagrams
 

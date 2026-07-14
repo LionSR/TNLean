@@ -215,51 +215,79 @@
 
 % ---------- Oriented fusion maps ----------
 
-% A left-to-right fusion map with one trunk and two ordered branches.  The
-% atom retains the semantic rounded blue map glyph; its interface is named by
-% role rather than by absolute coordinates.  LabelTop and LabelBottom are
-% annotation coordinates, not tensor indices.
+% Every trivalent map is an orientation of one constructor.  Its ports are
+% named by mathematical role: Combined is the trunk, while FactorOne and
+% FactorTwo are the ordered branches.  The orientation changes only the
+% placement of these roles; it never changes the box or branch fractions.
+\newcommand{\TN@trivalentport}[4]{%
+    \csname TN@#1port\endcsname{#2}{#3}{#4}%
+}
+
+\newcommand{\TN@trivalentbetweenport}[5]{%
+    \csname TN@#1#2port\endcsname{#3}{#4}{#5}%
+}
+
+\newcommand{\TN@trivalentmap}[6][]{%
+    \TN@map[#1]{#2}{#3}{#4}%
+    \def\TN@triorientation{#5}%
+    \def\TN@triright{right}%
+    \def\TN@trileft{left}%
+    \def\TN@tridown{down}%
+    \def\TN@triup{up}%
+    \ifx\TN@triorientation\TN@triright
+        \TN@trivalentport{#6}{#2Combined}{#2}{west}%
+        \TN@trivalentbetweenport{#6}{east}{#2FactorOne}{#2}
+            {\TN@branchfirstfraction}%
+        \TN@trivalentbetweenport{#6}{east}{#2FactorTwo}{#2}
+            {\TN@branchsecondfraction}%
+    \else\ifx\TN@triorientation\TN@trileft
+        \TN@trivalentport{#6}{#2Combined}{#2}{east}%
+        \TN@trivalentbetweenport{#6}{west}{#2FactorOne}{#2}
+            {\TN@branchfirstfraction}%
+        \TN@trivalentbetweenport{#6}{west}{#2FactorTwo}{#2}
+            {\TN@branchsecondfraction}%
+    \else\ifx\TN@triorientation\TN@tridown
+        \TN@trivalentport{#6}{#2Combined}{#2}{south}%
+        \TN@trivalentport{#6}{#2FactorOne}{#2}{north west}%
+        \TN@trivalentport{#6}{#2FactorTwo}{#2}{north east}%
+    \else\ifx\TN@triorientation\TN@triup
+        \TN@trivalentport{#6}{#2Combined}{#2}{north}%
+        \TN@trivalentport{#6}{#2FactorOne}{#2}{south west}%
+        \TN@trivalentport{#6}{#2FactorTwo}{#2}{south east}%
+    \else
+        \PackageError{tnlean-tikz}{Unknown trivalent-map orientation `#5'}
+            {Use `right', `left', `down', or `up'.}%
+    \fi\fi\fi\fi
+    \coordinate (#2LabelTop) at (#2.north);%
+    \coordinate (#2LabelBottom) at (#2.south);%
+}
+
 \newcommand{\TN@splitmap}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@vport{#2Mid}{#2}{west}%
-    \TN@veastport{#2Up}{#2}{\TN@branchfirstfraction}%
-    \TN@veastport{#2Down}{#2}{\TN@branchsecondfraction}%
-    \coordinate (#2LabelTop) at (#2.north);%
-    \coordinate (#2LabelBottom) at (#2.south);%
+    \TN@trivalentmap[#1]{#2}{#3}{#4}{right}{v}%
+    \TN@aliasport{#2Mid}{#2Combined}%
+    \TN@aliasport{#2Up}{#2FactorOne}%
+    \TN@aliasport{#2Down}{#2FactorTwo}%
 }
 
-% The mirror image of \TN@splitmap: two ordered branches merge into one
-% trunk.  The port names have the same mathematical roles in both
-% orientations, so a split and a merge may be interchanged without exposing
-% TikZ anchors to the surrounding construction.
 \newcommand{\TN@mergemap}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@vport{#2Mid}{#2}{east}%
-    \TN@vwestport{#2Up}{#2}{\TN@branchfirstfraction}%
-    \TN@vwestport{#2Down}{#2}{\TN@branchsecondfraction}%
-    \coordinate (#2LabelTop) at (#2.north);%
-    \coordinate (#2LabelBottom) at (#2.south);%
+    \TN@trivalentmap[#1]{#2}{#3}{#4}{left}{v}%
+    \TN@aliasport{#2Mid}{#2Combined}%
+    \TN@aliasport{#2Up}{#2FactorOne}%
+    \TN@aliasport{#2Down}{#2FactorTwo}%
 }
 
-% A vertical fusion map has two ordered incoming sector ports and one outgoing
-% sector port.  The inverse orientation uses the same role names, so fusion
-% trees may be assembled without referring to TikZ anchors.
 \newcommand{\TN@fusionmap}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@vport{#2Left}{#2}{north west}%
-    \TN@vport{#2Right}{#2}{north east}%
-    \TN@vport{#2Out}{#2}{south}%
-    \coordinate (#2LabelTop) at (#2.north);%
-    \coordinate (#2LabelBottom) at (#2.south);%
+    \TN@trivalentmap[#1]{#2}{#3}{#4}{down}{v}%
+    \TN@aliasport{#2Out}{#2Combined}%
+    \TN@aliasport{#2Left}{#2FactorOne}%
+    \TN@aliasport{#2Right}{#2FactorTwo}%
 }
 
 \newcommand{\TN@cofusionmap}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@vport{#2In}{#2}{north}%
-    \TN@vport{#2Left}{#2}{south west}%
-    \TN@vport{#2Right}{#2}{south east}%
-    \coordinate (#2LabelTop) at (#2.north);%
-    \coordinate (#2LabelBottom) at (#2.south);%
+    \TN@trivalentmap[#1]{#2}{#3}{#4}{up}{v}%
+    \TN@aliasport{#2In}{#2Combined}%
+    \TN@aliasport{#2Left}{#2FactorOne}%
+    \TN@aliasport{#2Right}{#2FactorTwo}%
 }
 
 % An action tensor V_ax^y is a trivalent virtual map with role names inherited
@@ -268,16 +296,16 @@
 % interface names.
 \newcommand{\TN@actionmap}[4][]{%
     \TN@splitmap[#1]{#2}{#3}{#4}%
-    \TN@vterminal{#2StateOut}{(#2Mid)}%
-    \TN@vterminal{#2MPO}{(#2Up)}%
-    \TN@vterminal{#2StateIn}{(#2Down)}%
+    \TN@aliasport{#2StateOut}{#2Combined}%
+    \TN@aliasport{#2MPO}{#2FactorOne}%
+    \TN@aliasport{#2StateIn}{#2FactorTwo}%
 }
 
 \newcommand{\TN@coactionmap}[4][]{%
     \TN@mergemap[#1]{#2}{#3}{#4}%
-    \TN@vterminal{#2StateOut}{(#2Mid)}%
-    \TN@vterminal{#2MPO}{(#2Up)}%
-    \TN@vterminal{#2StateIn}{(#2Down)}%
+    \TN@aliasport{#2StateOut}{#2Combined}%
+    \TN@aliasport{#2MPO}{#2FactorOne}%
+    \TN@aliasport{#2StateIn}{#2FactorTwo}%
 }
 
 % A physical splitter has one incoming physical index and two ordered outgoing
@@ -285,17 +313,17 @@
 % atoms cover blocking and refinement isometries without assigning a virtual
 % type to any physical Hilbert-space index.
 \newcommand{\TN@physicalsplitmap}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@pport{#2Trunk}{#2}{south}%
-    \TN@pnorthport{#2Left}{#2}{\TN@branchfirstfraction}%
-    \TN@pnorthport{#2Right}{#2}{\TN@branchsecondfraction}%
+    \TN@trivalentmap[#1]{#2}{#3}{#4}{up}{p}%
+    \TN@aliasport{#2Trunk}{#2Combined}%
+    \TN@aliasport{#2Left}{#2FactorOne}%
+    \TN@aliasport{#2Right}{#2FactorTwo}%
 }
 
 \newcommand{\TN@physicalmergemap}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@psouthport{#2Left}{#2}{\TN@branchfirstfraction}%
-    \TN@psouthport{#2Right}{#2}{\TN@branchsecondfraction}%
-    \TN@pport{#2Trunk}{#2}{north}%
+    \TN@trivalentmap[#1]{#2}{#3}{#4}{down}{p}%
+    \TN@aliasport{#2Trunk}{#2Combined}%
+    \TN@aliasport{#2Left}{#2FactorOne}%
+    \TN@aliasport{#2Right}{#2FactorTwo}%
 }
 
 % A local isometry from two ordered virtual half-bonds to one physical site.
@@ -729,6 +757,231 @@
 
 \newcommand{\TN@pepsSquareTensor}[2]{%
     \TN@pepssiteWithOpenLegs{#1}{#2}{}%
+}
+
+% ---------- Public compositional calculus ----------
+
+% These commands are the sole author-facing vocabulary.  Blueprint chapters,
+% slides, galleries, and tests use them; the private \TN@... implementation is
+% confined to tex/tn.  Each semantic atom exposes long role names in addition
+% to the short internal names used by older complete diagrams.
+
+\newenvironment{TNDiagram}[1][normal]{%
+    \begingroup
+    \TNLayoutProfile{#1}%
+    \begin{tikzpicture}[tn picture]%
+}{%
+    \end{tikzpicture}%
+    \endgroup
+}
+
+\newenvironment{TNEquationRow}[1][compact]{%
+    \par\smallskip
+    \noindent\hbox to \linewidth\bgroup\hfil
+    \begingroup\TNLayoutProfile{#1}%
+}{%
+    \endgroup\hfil\egroup
+    \smallskip
+}
+
+\newcommand{\TNTerm}[2][compact]{%
+    \begingroup
+    \TNLayoutProfile{#1}%
+    \begin{tikzpicture}[tn picture]#2\end{tikzpicture}%
+    \endgroup
+}
+
+\newcommand{\TNRelation}[1]{%
+    \hspace{\TN@relationgap}\ensuremath{#1}\hspace{\TN@relationgap}%
+}
+
+\newcommand{\TNPortAlias}[2]{\TN@aliasport{#1}{#2}}
+\newcommand{\TNConnectVirtual}[2]{\TN@vconnectports{#1}{#2}}
+\newcommand{\TNConnectPhysical}[2]{\TN@pconnectports{#1}{#2}}
+\newcommand{\TNConnectMorphism}[2]{\TN@mconnectports{#1}{#2}}
+\newcommand{\TNConnectVirtualHV}[2]{\TN@vconnectportshv{#1}{#2}}
+\newcommand{\TNConnectVirtualVH}[2]{\TN@vconnectportsvh{#1}{#2}}
+\newcommand{\TNConnectPhysicalHV}[2]{\TN@pconnectportshv{#1}{#2}}
+\newcommand{\TNConnectPhysicalVH}[2]{\TN@pconnectportsvh{#1}{#2}}
+\newcommand{\TNConnectMorphismHV}[2]{\TN@mconnectportshv{#1}{#2}}
+\newcommand{\TNConnectMorphismVH}[2]{\TN@mconnectportsvh{#1}{#2}}
+\newcommand{\TNTraceVirtualBelow}[2]{%
+    \TN@vtraceportsbelow{#1}{#2}{\TN@traceclearance}{\TN@traceclearance}%
+}
+\newcommand{\TNTraceVirtualAbove}[2]{%
+    \TN@vtraceportsabove{#1}{#2}{\TN@traceclearance}{\TN@traceclearance}%
+}
+\newcommand{\TNTraceVirtualRight}[2]{%
+    \TN@vtraceportsright{#1}{#2}{\TN@traceclearance}{\TN@traceclearance}%
+}
+\newcommand{\TNTracePhysicalBelow}[2]{%
+    \TN@ptraceportsbelow{#1}{#2}{\TN@traceclearance}{\TN@traceclearance}%
+}
+\newcommand{\TNTracePhysicalAbove}[2]{%
+    \TN@ptraceportsabove{#1}{#2}{\TN@traceclearance}{\TN@traceclearance}%
+}
+\newcommand{\TNTracePhysicalRight}[2]{%
+    \TN@ptraceportsright{#1}{#2}{\TN@traceclearance}{\TN@traceclearance}%
+}
+
+\newcommand{\TNTensor}[2]{\TN@tensor{#1}{#2}}
+\newcommand{\TNComponent}[3]{\TN@component{#1}{#2}{#3}}
+\newcommand{\TNFactor}[3]{\TN@factor{#1}{#2}{#3}}
+\newcommand{\TNMap}[3]{\TN@map{#1}{#2}{#3}}
+\newcommand{\TNState}[3]{\TN@state{#1}{#2}{#3}}
+\newcommand{\TNExpression}[3]{\TN@expression{#1}{#2}{#3}}
+\newcommand{\TNInsertion}[3]{\TN@labeledinsertion{#1}{#2}{#3}}
+
+\newcommand{\TNMPSSite}[3]{%
+    \TN@mpssite{#1}{#2}{#3}%
+    \TN@aliasport{#1West}{#1W}%
+    \TN@aliasport{#1East}{#1E}%
+    \TN@aliasport{#1Ket}{#1N}%
+}
+
+\newcommand{\TNMPOSite}[3]{%
+    \TN@mposite{#1}{#2}{#3}%
+    \TN@aliasport{#1West}{#1W}%
+    \TN@aliasport{#1East}{#1E}%
+    \TN@aliasport{#1Ket}{#1N}%
+    \TN@aliasport{#1Bra}{#1S}%
+}
+
+\newcommand{\TNRotatedMPOSite}[3]{%
+    \TN@tensor{#1}{#2}%
+    \TN@vport{#1North}{#1}{north}%
+    \TN@vport{#1South}{#1}{south}%
+    \TN@pport{#1Ket}{#1}{west}%
+    \TN@pport{#1Bra}{#1}{east}%
+    \if\relax\detokenize{#3}\relax\else
+        \TN@label{#1}{(0.30,0.24)}{#3}%
+    \fi
+}
+
+\newcommand{\TNPEPSSite}[3]{%
+    \TN@pepssite{#1}{#2}{#3}%
+    \TN@aliasport{#1West}{#1W}%
+    \TN@aliasport{#1East}{#1E}%
+    \TN@aliasport{#1North}{#1N}%
+    \TN@aliasport{#1South}{#1S}%
+    \TN@aliasport{#1Ket}{#1P}%
+}
+
+\newcommand{\TNOpenVirtualWest}[1]{\TN@vopenport{#1}{-\TN@virtualleglen,0}}
+\newcommand{\TNOpenVirtualEast}[1]{\TN@vopenport{#1}{\TN@virtualleglen,0}}
+\newcommand{\TNOpenVirtualNorth}[1]{\TN@vopenport{#1}{0,\TN@virtualleglen}}
+\newcommand{\TNOpenVirtualSouth}[1]{\TN@vopenport{#1}{0,-\TN@virtualleglen}}
+\newcommand{\TNOpenPhysicalNorth}[1]{\TN@popenport{#1}{0,\TN@physicalleglen}}
+\newcommand{\TNOpenPhysicalSouth}[1]{\TN@popenport{#1}{0,-\TN@physicalleglen}}
+\newcommand{\TNOpenPhysicalWest}[1]{\TN@popenport{#1}{-\TN@physicalleglen,0}}
+\newcommand{\TNOpenPhysicalEast}[1]{\TN@popenport{#1}{\TN@physicalleglen,0}}
+
+\newcommand{\TNTrivalentMap}[6]{%
+    \TN@trivalentmap{#1}{#2}{#3}{#4}{#5}%
+    \if\relax\detokenize{#6}\relax\else
+        \TN@label{#1LabelTop}{(0,0.22)}{#6}%
+    \fi
+}
+\newcommand{\TNSplitMap}[3]{\TN@splitmap{#1}{#2}{#3}}
+\newcommand{\TNMergeMap}[3]{\TN@mergemap{#1}{#2}{#3}}
+\newcommand{\TNFusionMap}[3]{\TN@fusionmap{#1}{#2}{#3}}
+\newcommand{\TNCofusionMap}[3]{\TN@cofusionmap{#1}{#2}{#3}}
+\newcommand{\TNActionMap}[3]{\TN@actionmap{#1}{#2}{#3}}
+\newcommand{\TNCoactionMap}[3]{\TN@coactionmap{#1}{#2}{#3}}
+\newcommand{\TNPhysicalSplitMap}[3]{\TN@physicalsplitmap{#1}{#2}{#3}}
+\newcommand{\TNPhysicalMergeMap}[3]{\TN@physicalmergemap{#1}{#2}{#3}}
+
+% A stacked MPO product contracts exactly UpperBra with LowerKet.
+\newcommand{\TNStackedMPOProduct}[5]{%
+    \coordinate (#1Centre) at #2;%
+    \TNMPOSite{#1Upper}{($(#1Centre)+(0,\TN@layerpitch)$)}{#3}%
+    \TNMPOSite{#1Lower}{($(#1Centre)+(0,-\TN@layerpitch)$)}{#4}%
+    \TNConnectPhysical{#1UpperBra}{#1LowerKet}%
+    \if\relax\detokenize{#5}\relax\else
+        \TN@label{#1Centre}{(0.36,0)}{#5}%
+    \fi
+}
+
+% A weighted block uses the same stacked product and adds one virtual weight
+% on the outgoing upper bond.  The weight is part of the motif's interface.
+\newcommand{\TNWeightedMPOBlock}[6]{%
+    \TNStackedMPOProduct{#1}{#2}{#3}{#4}{#5}%
+    \TN@insertion[label=above:$#6$]
+        {#1Weight}{($(#1UpperEast)+(\TN@virtualleglen,0)$)}%
+    \TN@horizontalports{#1Weight}%
+    \TNConnectVirtual{#1UpperEast}{#1WeightW}%
+    \TN@aliasport{#1WeightedEast}{#1WeightE}%
+}
+
+% Purification has two distinct ancillary ports joined by a straight physical
+% contraction.  The external upper leg is Ket and the lower leg is Bra.
+\newcommand{\TNPurificationSite}[4]{%
+    \coordinate (#1Centre) at #2;%
+    \TN@tensor{#1KetTensor}{($(#1Centre)+(0,\TN@layerpitch)$)}%
+    \TN@tensor{#1BraTensor}{($(#1Centre)+(0,-\TN@layerpitch)$)}%
+    \TN@horizontalports{#1KetTensor}%
+    \TN@horizontalports{#1BraTensor}%
+    \TN@pport{#1Ket}{#1KetTensor}{north}%
+    \TN@pport{#1KetAncilla}{#1KetTensor}{south east}%
+    \TN@pport{#1BraAncilla}{#1BraTensor}{north east}%
+    \TN@pport{#1Bra}{#1BraTensor}{south}%
+    \TNConnectPhysical{#1KetAncilla}{#1BraAncilla}%
+    \TN@label{#1KetTensor}{(-0.30,0.24)}{#3}%
+    \TN@label{#1BraTensor}{(-0.30,-0.24)}{#4}%
+    \TN@aliasport{#1KetWest}{#1KetTensorW}%
+    \TN@aliasport{#1KetEast}{#1KetTensorE}%
+    \TN@aliasport{#1BraWest}{#1BraTensorW}%
+    \TN@aliasport{#1BraEast}{#1BraTensorE}%
+}
+
+% A compact trace cell is the common definition of M_alpha(X) and A_alpha(X).
+\newcommand{\TNCompactTraceCell}[5]{%
+    \coordinate (#1Centre) at #2;%
+    \TN@insertion[label=above:$#4$]
+        {#1Insertion}{($(#1Centre)+(-\TN@cellpitch/2,0)$)}%
+    \TN@horizontalports{#1Insertion}%
+    \TNMPOSite{#1Site}{($(#1Centre)+(\TN@cellpitch/2,0)$)}{}%
+    \TNConnectVirtual{#1InsertionE}{#1SiteWest}%
+    \TNTraceVirtualBelow{#1InsertionW}{#1SiteEast}%
+    \TN@label{#1Centre}{(0,-\TN@traceclearance-0.22)}{\tr}%
+    \TN@label{#1Site}{(0.32,0.26)}{#3}%
+    \if\relax\detokenize{#5}\relax\else
+        \TN@label{#1Centre}{(0,\TN@layerpitch)}{#5}%
+    \fi
+}
+
+% Horizontal and rotated vertical words use the common pitches and closures.
+\newcommand{\TNHorizontalWord}[4]{\TN@openMPOword{#1}{#2}{#3}{#2}{#3}{#4}}
+\newcommand{\TNVerticalWord}[4]{%
+    \coordinate (#1Centre) at #2;%
+    \TNRotatedMPOSite{#1Top}{($(#1Centre)+(0,\TN@cellpitch)$)}{#3}%
+    \TNRotatedMPOSite{#1Bottom}{($(#1Centre)+(0,-\TN@cellpitch)$)}{#3}%
+    \TN@vconnectports{#1TopSouth}{#1BottomNorth}%
+    \node at (#1Centre) {$\vdots$};%
+    \TNOpenPhysicalWest{#1TopKet}%
+    \TNOpenPhysicalEast{#1TopBra}%
+    \TNOpenPhysicalWest{#1BottomKet}%
+    \TNOpenPhysicalEast{#1BottomBra}%
+    \if\relax\detokenize{#4}\relax\else
+        \TNTraceVirtualRight{#1TopNorth}{#1BottomSouth}%
+    \fi
+}
+
+\newcommand{\TNSectorBus}[4]{\TN@vbus{#1}{#2}{#3}{#4}}
+\newcommand{\TNParallelSectorBus}[4]{\TN@vparallelbus{#1}{#2}{#3}{#4}}
+\newcommand{\TNSectorBusTap}[3]{\TN@vbustap{#1}{#2}{#3}}
+\newcommand{\TNThreeSiteChain}[4]{\TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}}
+
+% Two levels of the standard binary fusion tree.  All ports and branches are
+% inherited from the unique trivalent-map constructor.
+\newcommand{\TNBinaryFusionTree}[6]{%
+    \coordinate (#1Centre) at #2;%
+    \TNFusionMap{#1Lower}{($(#1Centre)+(0,-\TN@layerpitch)$)}{#6}%
+    \TNFusionMap{#1Upper}{($(#1Centre)+(0,\TN@layerpitch)$)}{#6}%
+    \TNConnectVirtual{#1UpperCombined}{#1LowerFactorOne}%
+    \TN@label{#1UpperFactorOne}{(-0.22,0.20)}{#3}%
+    \TN@label{#1UpperFactorTwo}{(0.22,0.20)}{#4}%
+    \TN@label{#1LowerFactorTwo}{(0.22,0.20)}{#5}%
 }
 
 \makeatother
