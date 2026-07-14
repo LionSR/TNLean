@@ -116,6 +116,38 @@
     \]
 \end{proof}
 
+\begin{theorem}[Tensor extension preserves trace-preserving complete positivity]
+    \label{thm:mpdo_tensor_map_id_cptp}
+    \lean{Matrix.tensorMapIdLM_isKrausCPTP}
+    \leanok
+    \uses{def:tensor_map_id, def:is_kraus_cptp}
+    Let $\mathcal S:\operatorname{End}_{\C}(H)\to
+        \operatorname{End}_{\C}(K)$ be trace-preserving and completely positive,
+    and let $R$ be another finite-dimensional space. Then
+    \[
+        \mathcal S\otimes\id_R:
+        \operatorname{End}_{\C}(H\otimes R)\longrightarrow
+        \operatorname{End}_{\C}(K\otimes R)
+    \]
+    is trace-preserving and completely positive. If $(A_a)_a$ is a Kraus
+    family for $\mathcal S$, then
+    $(A_a\otimes I_R)_a$ is a Kraus family for its tensor extension.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The tensor extension has the Kraus form
+    \[
+        (\mathcal S\otimes\id_R)(X)
+        =\sum_a (A_a\otimes I_R)X(A_a\otimes I_R)^\dagger.
+    \]
+    Its normalization follows from that of the original family:
+    \[
+        \sum_a (A_a\otimes I_R)^\dagger(A_a\otimes I_R)
+        =\left(\sum_a A_a^\dagger A_a\right)\otimes I_R
+        =I_H\otimes I_R.
+    \]
+\end{proof}
+
 \begin{definition}[Rectangular Kraus map]
     \label{def:mpdo_rectangular_kraus_map}
     \lean{Matrix.rectangularKrausMap}
