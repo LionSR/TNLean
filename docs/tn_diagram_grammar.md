@@ -41,11 +41,14 @@ by a diagram before reading the surrounding proof.
 - Contracted indices are drawn with solid strokes. An open contraction routed
   around another glyph uses the shared bent-leg style; it is not a closure
   merely because its path bends. A one-dimensional periodic trace is a rounded
-  solid closure. Solid rounded rectangles around tensor-product factors are
-  factor boundaries, distinct from dashed grouping boundaries. Dashed strokes
-  are reserved for grouping boundaries, changes of multiplicity basis, and an
-  explicitly identified boundary of a periodic lattice; a purification
-  contraction is not dashed.
+  solid closure, including when an operator splits the return path into two
+  pieces. Solid rounded rectangles around tensor-product factors are factor
+  boundaries, distinct from dashed grouping boundaries. Dashed strokes are
+  reserved for grouping boundaries, changes of multiplicity basis, and an
+  explicitly identified boundary of a periodic lattice. A purification
+  contraction is a solid physical-index stroke joining dedicated ancillary
+  legs; it is not dashed and should not share an attachment point with an open
+  virtual leg.
 
 ## Blocks, Regions, and Labels
 

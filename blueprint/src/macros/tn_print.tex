@@ -133,7 +133,8 @@
         \TN@upleg{tnA}{0.48}
         \TN@downleg{tnAc}{0.48}
         \draw[tn purification contraction]
-            (tnA.east) .. controls (0.88,0.52) and (0.88,-0.52) .. (tnAc.east);
+            (tnA.south east) .. controls (0.88,0.42) and (0.88,-0.42) ..
+            (tnAc.north east);
         \node at (-0.28,0.82) {$A$};
         \node at (-0.32,-0.82) {$\overline A$};
         \node at (0.95,0) {$k$};
@@ -509,9 +510,9 @@
         \TN@subspinlink{ctwoRk}{ctwoLh}
         \TN@subspinlink{ctwoLh}{ctwoRh}
         \TN@opdotbelow{ctwoX}{(-2.90,-0.95)}{X}
-        \draw[tn leg] (ctwoLk.west)
+        \draw[tn virtual closure] (ctwoLk.west)
           .. controls (-5.05,0.55) and (-5.05,-0.95) .. (ctwoX.west);
-        \draw[tn leg] (ctwoX.east)
+        \draw[tn virtual closure] (ctwoX.east)
           .. controls (-0.75,-0.95) and (-0.75,0.55) .. (ctwoRh.east);
         \node at (0.00,0.05) {$=$};
         \node[tn tensor box, minimum width=2.25cm,
@@ -540,9 +541,9 @@
         \TN@subspinlink{cthreeRl}{cthreeLh}
         \TN@subspinlink{cthreeLh}{cthreeRh}
         \TN@opdotbelow{cthreeX}{(-3.20,-1.00)}{X}
-        \draw[tn leg] (cthreeLk.west)
+        \draw[tn virtual closure] (cthreeLk.west)
           .. controls (-6.35,0.62) and (-6.35,-1.00) .. (cthreeX.west);
-        \draw[tn leg] (cthreeX.east)
+        \draw[tn virtual closure] (cthreeX.east)
           .. controls (-0.05,-1.00) and (-0.05,0.62) .. (cthreeRh.east);
         \node at (0.45,0.05) {$=$};
         \node[tn tensor box, minimum width=2.05cm,
@@ -907,7 +908,7 @@
         \TN@leftleg{spL}{0.60}
         \draw[tn phys leg] (spL.north) -- (0,0.41);
         \draw[tn phys leg] (spL.south) -- (0,-0.41);
-        \draw[tn phys leg] (0,0.41)
+        \draw[tn physical closure] (0,0.41)
         .. controls (0.46,0.41) and (0.46,-0.41) .. (0,-0.41);
         \node at (0,0.68) {$l_k$};
         \node[anchor=west] at (0.62,0) {$=\;|l_k)$};
@@ -915,7 +916,7 @@
         \TN@rightleg{spR}{0.60}
         \draw[tn phys leg] (spR.north) -- (3.05,0.41);
         \draw[tn phys leg] (spR.south) -- (3.05,-0.41);
-        \draw[tn phys leg] (3.05,0.41)
+        \draw[tn physical closure] (3.05,0.41)
         .. controls (2.59,0.41) and (2.59,-0.41) .. (3.05,-0.41);
         \node at (3.05,0.68) {$r_k$};
         \node[anchor=west] at (3.80,0) {$=\;(r_k|$};
@@ -924,11 +925,11 @@
         \draw[tn leg] (spTk.east) -- (spTh.west);
         \draw[tn phys leg] (spTk.north) -- (6.35,0.41);
         \draw[tn phys leg] (spTk.south) -- (6.35,-0.41);
-        \draw[tn phys leg] (6.35,0.41)
+        \draw[tn physical closure] (6.35,0.41)
         .. controls (5.89,0.41) and (5.89,-0.41) .. (6.35,-0.41);
         \draw[tn phys leg] (spTh.north) -- (7.35,0.41);
         \draw[tn phys leg] (spTh.south) -- (7.35,-0.41);
-        \draw[tn phys leg] (7.35,0.41)
+        \draw[tn physical closure] (7.35,0.41)
         .. controls (7.81,0.41) and (7.81,-0.41) .. (7.35,-0.41);
         \node at (6.35,0.68) {$r_k$};
         \node at (7.35,0.68) {$l_h$};
@@ -945,14 +946,14 @@
         \draw[tn leg] (zcAl.west) -- ++(-0.55,0);
         \draw[tn phys leg] (zcAl.north) -- (-0.50,0.41);
         \draw[tn phys leg] (zcAl.south) -- (-0.50,-0.41);
-        \draw[tn phys leg] (-0.50,0.41)
+        \draw[tn physical closure] (-0.50,0.41)
         .. controls (-0.04,0.41) and (-0.04,-0.41) .. (-0.50,-0.41);
         \node at (-0.50,0.68) {$l_k$};
         \TN@tensordot{zcAr}{(0.75,0)}
         \draw[tn leg] (zcAr.east) -- ++(0.55,0);
         \draw[tn phys leg] (zcAr.north) -- (0.75,0.41);
         \draw[tn phys leg] (zcAr.south) -- (0.75,-0.41);
-        \draw[tn phys leg] (0.75,0.41)
+        \draw[tn physical closure] (0.75,0.41)
         .. controls (0.29,0.41) and (0.29,-0.41) .. (0.75,-0.41);
         \node at (0.75,0.68) {$r_k$};
         \node at (1.90,0) {$=$};
@@ -961,27 +962,27 @@
         \draw[tn leg] (zcBlk.west) -- ++(-0.55,0);
         \draw[tn phys leg] (zcBlk.north) -- (3.85,0.41);
         \draw[tn phys leg] (zcBlk.south) -- (3.85,-0.41);
-        \draw[tn phys leg] (3.85,0.41)
+        \draw[tn physical closure] (3.85,0.41)
         .. controls (4.31,0.41) and (4.31,-0.41) .. (3.85,-0.41);
         \node at (3.85,0.68) {$l_k$};
         \TN@tensordot{zcBrk}{(5.10,0)}
         \draw[tn phys leg] (zcBrk.north) -- (5.10,0.41);
         \draw[tn phys leg] (zcBrk.south) -- (5.10,-0.41);
-        \draw[tn phys leg] (5.10,0.41)
+        \draw[tn physical closure] (5.10,0.41)
         .. controls (4.64,0.41) and (4.64,-0.41) .. (5.10,-0.41);
         \node at (5.10,0.68) {$r_k$};
         \TN@tensordot{zcBlh}{(5.90,0)}
         \draw[tn leg] (zcBrk.east) -- (zcBlh.west);
         \draw[tn phys leg] (zcBlh.north) -- (5.90,0.41);
         \draw[tn phys leg] (zcBlh.south) -- (5.90,-0.41);
-        \draw[tn phys leg] (5.90,0.41)
+        \draw[tn physical closure] (5.90,0.41)
         .. controls (6.36,0.41) and (6.36,-0.41) .. (5.90,-0.41);
         \node at (5.90,0.68) {$l_h$};
         \TN@tensordot{zcBrh}{(7.15,0)}
         \draw[tn leg] (zcBrh.east) -- ++(0.55,0);
         \draw[tn phys leg] (zcBrh.north) -- (7.15,0.41);
         \draw[tn phys leg] (zcBrh.south) -- (7.15,-0.41);
-        \draw[tn phys leg] (7.15,0.41)
+        \draw[tn physical closure] (7.15,0.41)
         .. controls (6.69,0.41) and (6.69,-0.41) .. (7.15,-0.41);
         \node at (7.15,0.68) {$r_h$};
     \end{tikzpicture}%
@@ -1711,10 +1712,10 @@
         \draw[tn leg] ($(ftpBR.west)+(-0.52,0)$) -- (ftpBR.west);
         \node at (2.15,0.52) {$\cdots$};
         \node at (2.15,-0.52) {$\cdots$};
-        \draw[tn leg] (ftpAL.west) -- ++(-0.40,0) -- ++(0,0.86)
+        \draw[tn virtual closure] (ftpAL.west) -- ++(-0.40,0) -- ++(0,0.86)
             -- ($(ftpAR.east)+(0.40,0.86)$) -- ($(ftpAR.east)+(0.40,0)$)
             -- (ftpAR.east);
-        \draw[tn leg] (ftpBL.west) -- ++(-0.40,0) -- ++(0,-0.86)
+        \draw[tn virtual closure] (ftpBL.west) -- ++(-0.40,0) -- ++(0,-0.86)
             -- ($(ftpBR.east)+(0.40,-0.86)$) -- ($(ftpBR.east)+(0.40,0)$)
             -- (ftpBR.east);
         \foreach \s in {L,M,R} {
@@ -1738,10 +1739,10 @@
         \draw[tn leg] ($(ftpGR.west)+(-0.52,0)$) -- (ftpGR.west);
         \node at (7.80,0.52) {$\cdots$};
         \node at (7.80,-0.52) {$\cdots$};
-        \draw[tn leg] (ftpCL.west) -- ++(-0.40,0) -- ++(0,0.86)
+        \draw[tn virtual closure] (ftpCL.west) -- ++(-0.40,0) -- ++(0,0.86)
             -- ($(ftpCR.east)+(0.40,0.86)$) -- ($(ftpCR.east)+(0.40,0)$)
             -- (ftpCR.east);
-        \draw[tn leg] (ftpGL.west) -- ++(-0.40,0) -- ++(0,-0.86)
+        \draw[tn virtual closure] (ftpGL.west) -- ++(-0.40,0) -- ++(0,-0.86)
             -- ($(ftpGR.east)+(0.40,-0.86)$) -- ($(ftpGR.east)+(0.40,0)$)
             -- (ftpGR.east);
         \foreach \s in {L,M,R} {
@@ -1923,7 +1924,7 @@
 \newcommand{\TNAppendixBChainTransport}{%
     \begin{tikzpicture}[tn picture, scale=0.92]
         \foreach \a/\name in {150/ctA,90/ctX,30/ctB,-30/ctC,-90/ctD,-150/ctE} {
-            \node[circle, fill=black, inner sep=1.6pt] (\name)
+            \node[tn tensor dot] (\name)
                 at ({1.34*cos(\a)},{1.02*sin(\a)}) {};
         }
         \draw[tn leg] (ctA) -- (ctX) -- (ctB) -- (ctC) -- (ctD) -- (ctE) -- (ctA);
@@ -1935,7 +1936,7 @@
         \draw[->, line width=0.7pt] (1.85,0) -- (2.75,0)
             node[midway, above] {$R_{i,\tau}^{(3)}$};
         \foreach \x/\name/\lab in {3.35/ctLA/A,4.55/ctLX/X,5.75/ctLB/B} {
-            \node[circle, fill=black, inner sep=1.6pt] (\name) at (\x,0) {};
+            \node[tn tensor dot] (\name) at (\x,0) {};
             \node at (\x,0.38) {$\lab$};
         }
         \draw[tn leg] (ctLA) -- (ctLX) -- (ctLB);
@@ -2725,8 +2726,8 @@
         \draw[tn leg] (-0.45,0) -- (1.55,0);
         \TN@upleg{pA}{0.38}
         \TN@upleg{pB}{0.38}
-        \draw[tn leg] (-0.45,0) -- (-0.45,-0.72) -- (pZ.west);
-        \draw[tn leg] (pZ.east) -- (1.55,-0.72) -- (1.55,0);
+        \draw[tn virtual closure] (-0.45,0) -- (-0.45,-0.72) -- (pZ.west);
+        \draw[tn virtual closure] (pZ.east) -- (1.55,-0.72) -- (1.55,0);
     \end{tikzpicture}%
 }
 
@@ -2743,8 +2744,8 @@
         \draw[tn leg] (-0.45,0) -- (3.40,0);
         \node at (2.05,0) {$\cdots$};
         \TN@opdotbelow{tnX}{(1.48,-0.82)}{#5}
-        \draw[tn leg] (-0.45,0) -- (-0.45,-0.82) -- (tnX.west);
-        \draw[tn leg] (tnX.east) -- (3.40,-0.82) -- (3.40,0);
+        \draw[tn virtual closure] (-0.45,0) -- (-0.45,-0.82) -- (tnX.west);
+        \draw[tn virtual closure] (tnX.east) -- (3.40,-0.82) -- (3.40,0);
     \end{tikzpicture}%
 }
 
