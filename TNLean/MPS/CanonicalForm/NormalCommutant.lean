@@ -20,18 +20,20 @@ These are the rigidity facts invoked at the step "since $M_\alpha$ is a NT in
 the vertical direction" in the proof of Proposition 4.13 of arXiv:1606.00608,
 line 1921: they produce equation eq3:proof.IV.12,
 $X_{\alpha,k}^\dagger X_{\alpha,k} = \omega_{\alpha,k}
-X_{\alpha,1}^\dagger X_{\alpha,1}$, in the normalization $X_{\alpha,1} = \Id$,
-together with the isometric normalization
-$U_{\alpha,k} = \omega_{\alpha,k}^{-1/2} X_{\alpha,k}$ of lines 1906--1908.
+X_{\alpha,1}^\dagger X_{\alpha,1}$ and the unitary normalization of the
+relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$.  In the source normalization
+$X_{\alpha,1} = \Id$, this is
+$U_{\alpha,k} = \omega_{\alpha,k}^{-1/2} X_{\alpha,k}$ from lines 1906--1908.
 The commutation hypothesis arises from the two displayed diagrams of lines
 1909--1919: the first diagram, transported blockwise by Lemma L, says that the
 sector-dressed tensor equals its adjoint dressing,
-$X A^i X^{-1} = (X^{-1})^\dagger (A^i)^\dagger X^\dagger$; the second diagram
-is its Gram-conjugation form, and in the normalization $X_{\alpha,1} = \Id$ it
-becomes the commutation of $X^\dagger X$ with every matrix of the tensor.
-The passage from the first diagram to the second and onward to eq3 is proved
-below; deriving the first diagram's blockwise identity from self-adjointness
-of the sector compressions within the vertical decomposition remains open.
+$X A^v X^{-1} = (X^{-1})^\dagger C^v X^\dagger$, where the fixed adjoint
+orientation gives $C^v=(A^{v^{\mathrm{op}}})^\dagger$.  The second diagram
+eliminates this common target between two sector gauges.  The resulting ratio
+of their Gram matrices commutes with every matrix of the tensor.  The passage
+from a common dressed target to the relative form of eq3 is proved below;
+deriving the common target from self-adjointness of the sector compressions,
+including the reflected tail word, remains open.
 
 ## Main results
 
@@ -45,12 +47,17 @@ of the sector compressions within the vertical decomposition remains open.
 * `Matrix.gram_conj_eq_conjTranspose_of_dressed_adjoint` /
   `Matrix.gram_conj_eq_gram_conj_of_dressed_adjoint` /
   `Matrix.commute_gram_of_dressed_adjoint_of_conjTranspose_eq`:
-  the passage from the first displayed diagram to the second, and to the
-  commutation of the Gram matrix with a self-adjoint letter.
+  same-letter specializations of the common-target argument.
+* `Matrix.gram_conj_eq_of_dressed_target` /
+  `Matrix.gram_conj_eq_gram_conj_of_common_dressed_target`:
+  the source-faithful common-target form of the two displayed diagrams.
+* `MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq` /
+  `MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target`:
+  the relative two-gauge form of eq3, without a self-adjoint-letter
+  hypothesis.
 * `MPSTensor.IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint` /
   `MPSTensor.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint`:
-  eq3 and its isometric normalization derived end to end from the
-  dressed-adjoint identities.
+  conditional same-letter specializations in the identity reference gauge.
 
 ## References
 
@@ -65,6 +72,27 @@ namespace Matrix
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- **From the first displayed diagram to the second** (arXiv:1606.00608,
+proof of Proposition 4.13, lines 1909--1919): if conjugation by an invertible
+gauge carries `B` to the dressing of a common target `C`, then conjugation by
+the Gram matrix carries `B` to `C`.  In the source, `C` is the adjoint of the
+letter with its oriented bond indices exchanged. -/
+theorem gram_conj_eq_of_dressed_target
+    {X B C : Matrix n n ℂ} (hX : IsUnit X.det)
+    (hdress : X * B * X⁻¹ = X⁻¹ᴴ * C * Xᴴ) :
+    Xᴴ * X * B * (Xᴴ * X)⁻¹ = C := by
+  have hXH : IsUnit (Xᴴ).det := by
+    rw [Matrix.det_conjTranspose]
+    exact hX.star
+  have h1 : Xᴴ * (X * B * X⁻¹) * X⁻¹ᴴ = Xᴴ * X * B * (Xᴴ * X)⁻¹ := by
+    rw [Matrix.mul_inv_rev, Matrix.conjTranspose_nonsing_inv]
+    simp only [Matrix.mul_assoc]
+  have h2 : Xᴴ * (X⁻¹ᴴ * C * Xᴴ) * X⁻¹ᴴ = C := by
+    rw [Matrix.conjTranspose_nonsing_inv, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
+      Matrix.mul_nonsing_inv _ hXH, Matrix.one_mul, Matrix.mul_assoc,
+      Matrix.mul_nonsing_inv _ hXH, Matrix.mul_one]
+  rw [← h1, hdress, h2]
+
+/-- **From the first displayed diagram to the second** (arXiv:1606.00608,
 proof of Proposition 4.13, lines 1909--1919): if a letter dressed by an
 invertible gauge equals its adjoint dressing,
 $XBX^{-1} = (X^{-1})^\dagger B^\dagger X^\dagger$, then conjugation by the
@@ -72,18 +100,19 @@ Gram matrix $X^\dagger X$ carries the letter to its adjoint. -/
 theorem gram_conj_eq_conjTranspose_of_dressed_adjoint
     {X B : Matrix n n ℂ} (hX : IsUnit X.det)
     (hdress : X * B * X⁻¹ = X⁻¹ᴴ * Bᴴ * Xᴴ) :
-    Xᴴ * X * B * (Xᴴ * X)⁻¹ = Bᴴ := by
-  have hXH : IsUnit (Xᴴ).det := by
-    rw [Matrix.det_conjTranspose]
-    exact hX.star
-  have h1 : Xᴴ * (X * B * X⁻¹) * X⁻¹ᴴ = Xᴴ * X * B * (Xᴴ * X)⁻¹ := by
-    rw [Matrix.mul_inv_rev, Matrix.conjTranspose_nonsing_inv]
-    simp only [Matrix.mul_assoc]
-  have h2 : Xᴴ * (X⁻¹ᴴ * Bᴴ * Xᴴ) * X⁻¹ᴴ = Bᴴ := by
-    rw [Matrix.conjTranspose_nonsing_inv, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
-      Matrix.mul_nonsing_inv _ hXH, Matrix.one_mul, Matrix.mul_assoc,
-      Matrix.mul_nonsing_inv _ hXH, Matrix.mul_one]
-  rw [← h1, hdress, h2]
+    Xᴴ * X * B * (Xᴴ * X)⁻¹ = Bᴴ :=
+  gram_conj_eq_of_dressed_target hX hdress
+
+/-- **The second displayed diagram** (arXiv:1606.00608, proof of Proposition
+4.13, lines 1914--1919): two gauges whose dressings carry the same letter `B`
+to the same target `C` have equal Gram conjugations. -/
+theorem gram_conj_eq_gram_conj_of_common_dressed_target
+    {X Y B C : Matrix n n ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
+    (hdX : X * B * X⁻¹ = X⁻¹ᴴ * C * Xᴴ)
+    (hdY : Y * B * Y⁻¹ = Y⁻¹ᴴ * C * Yᴴ) :
+    Xᴴ * X * B * (Xᴴ * X)⁻¹ = Yᴴ * Y * B * (Yᴴ * Y)⁻¹ := by
+  rw [gram_conj_eq_of_dressed_target hX hdX,
+    gram_conj_eq_of_dressed_target hY hdY]
 
 /-- **The second displayed diagram** (arXiv:1606.00608, proof of Proposition
 4.13, lines 1914--1919): two gauges whose dressings both equal the adjoint
@@ -93,15 +122,45 @@ theorem gram_conj_eq_gram_conj_of_dressed_adjoint
     {X Y B : Matrix n n ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
     (hdX : X * B * X⁻¹ = X⁻¹ᴴ * Bᴴ * Xᴴ)
     (hdY : Y * B * Y⁻¹ = Y⁻¹ᴴ * Bᴴ * Yᴴ) :
-    Xᴴ * X * B * (Xᴴ * X)⁻¹ = Yᴴ * Y * B * (Yᴴ * Y)⁻¹ := by
-  rw [gram_conj_eq_conjTranspose_of_dressed_adjoint hX hdX,
-    gram_conj_eq_conjTranspose_of_dressed_adjoint hY hdY]
+    Xᴴ * X * B * (Xᴴ * X)⁻¹ = Yᴴ * Y * B * (Yᴴ * Y)⁻¹ :=
+  gram_conj_eq_gram_conj_of_common_dressed_target hX hY hdX hdY
 
-/-- **The second diagram in the normalization $X_{\alpha,1} = \Id$**
-(arXiv:1606.00608, proof of Proposition 4.13, lines 1909--1919): for a
-self-adjoint letter, the dressed-adjoint identity makes the Gram matrix
-$X^\dagger X$ commute with the letter.  Self-adjointness of the letter is the
-first diagram for the sector $k = 1$ with $X_{\alpha,1} = \Id$. -/
+/-- **The relative commutant in the second displayed diagram**
+(arXiv:1606.00608, proof of Proposition 4.13, lines 1914--1921): if two
+invertible matrices have the same Gram conjugation of a matrix, then the
+ratio of their Gram matrices commutes with that matrix. -/
+theorem commute_gram_ratio_of_gram_conj_eq
+    {X Y B : Matrix n n ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
+    (h : Xᴴ * X * B * (Xᴴ * X)⁻¹ = Yᴴ * Y * B * (Yᴴ * Y)⁻¹) :
+    (Yᴴ * Y)⁻¹ * (Xᴴ * X) * B =
+      B * ((Yᴴ * Y)⁻¹ * (Xᴴ * X)) := by
+  have hGX : IsUnit (Xᴴ * X).det := by
+    rw [Matrix.det_mul, Matrix.det_conjTranspose]
+    exact hX.star.mul hX
+  have hGY : IsUnit (Yᴴ * Y).det := by
+    rw [Matrix.det_mul, Matrix.det_conjTranspose]
+    exact hY.star.mul hY
+  have hGYinv : (Yᴴ * Y)⁻¹ * (Yᴴ * Y) = 1 :=
+    Matrix.nonsing_inv_mul _ hGY
+  calc
+    (Yᴴ * Y)⁻¹ * (Xᴴ * X) * B =
+        (Yᴴ * Y)⁻¹ * (Xᴴ * X) * B * ((Xᴴ * X)⁻¹ * (Xᴴ * X)) := by
+          rw [Matrix.nonsing_inv_mul _ hGX, Matrix.mul_one]
+    _ = (Yᴴ * Y)⁻¹ *
+        (Xᴴ * X * B * (Xᴴ * X)⁻¹) * (Xᴴ * X) := by
+          simp only [Matrix.mul_assoc]
+    _ = (Yᴴ * Y)⁻¹ *
+        (Yᴴ * Y * B * (Yᴴ * Y)⁻¹) * (Xᴴ * X) := by rw [h]
+    _ = ((Yᴴ * Y)⁻¹ * (Yᴴ * Y)) * B *
+        ((Yᴴ * Y)⁻¹ * (Xᴴ * X)) := by noncomm_ring
+    _ = B * ((Yᴴ * Y)⁻¹ * (Xᴴ * X)) := by rw [hGYinv, Matrix.one_mul]
+
+/-- For a self-adjoint matrix, equality with its dressing by the inverse
+conjugate transpose makes the Gram matrix $X^\dagger X$ commute with it.
+
+This is a purely algebraic same-letter specialization.  The vertical-sector
+identity in arXiv:1606.00608, proof of Proposition 4.13, lines 1909--1919,
+instead exchanges the two oriented horizontal bond indices. -/
 theorem commute_gram_of_dressed_adjoint_of_conjTranspose_eq
     {X B : Matrix n n ℂ} (hX : IsUnit X.det)
     (hdress : X * B * X⁻¹ = X⁻¹ᴴ * Bᴴ * Xᴴ) (hB : Bᴴ = B) :
@@ -117,6 +176,32 @@ theorem commute_gram_of_dressed_adjoint_of_conjTranspose_eq
     _ = Xᴴ * X * B * (Xᴴ * X)⁻¹ * (Xᴴ * X) := by
       simp only [Matrix.mul_assoc]
     _ = B * (Xᴴ * X) := by rw [h]
+
+/-- A relative Gram identity gives the unitary normalization of the relative
+gauge.  This is the two-gauge form of the normalization used in
+arXiv:1606.00608, proof of Proposition 4.13, lines 1904--1908. -/
+theorem smul_mul_nonsing_inv_mem_unitaryGroup_of_gram_eq_smul
+    {X Y : Matrix n n ℂ} (hY : IsUnit Y.det) {ω : ℝ} (hω : 0 < ω)
+    (hgram : Xᴴ * X = (ω : ℂ) • (Yᴴ * Y)) :
+    ((Real.sqrt ω : ℂ))⁻¹ • (X * Y⁻¹) ∈ Matrix.unitaryGroup n ℂ := by
+  apply smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one hω
+  have hYH : IsUnit (Yᴴ).det := by
+    rw [Matrix.det_conjTranspose]
+    exact hY.star
+  have hleft : Y⁻¹ᴴ * Yᴴ = 1 := by
+    rw [Matrix.conjTranspose_nonsing_inv]
+    exact Matrix.nonsing_inv_mul _ hYH
+  have hright : Y * Y⁻¹ = 1 := Matrix.mul_nonsing_inv _ hY
+  calc
+    (X * Y⁻¹)ᴴ * (X * Y⁻¹) = Y⁻¹ᴴ * (Xᴴ * X) * Y⁻¹ := by
+      rw [Matrix.conjTranspose_mul]
+      noncomm_ring
+    _ = Y⁻¹ᴴ * ((ω : ℂ) • (Yᴴ * Y)) * Y⁻¹ := by rw [hgram]
+    _ = (ω : ℂ) • ((Y⁻¹ᴴ * Yᴴ) * (Y * Y⁻¹)) := by
+      simp only [Matrix.mul_smul, Matrix.smul_mul]
+      congr 1
+      noncomm_ring
+    _ = (ω : ℂ) • 1 := by rw [hleft, hright, Matrix.one_mul]
 
 end Matrix
 
@@ -142,6 +227,95 @@ theorem IsNormal.eq_smul_one_of_commute {A : MPSTensor d D} (hA : IsNormal A)
   obtain ⟨c, hc⟩ := Matrix.isScalar_of_commute_span_eq_top S hN hwords
   refine ⟨c, ?_⟩
   rw [hc, Matrix.scalar_apply, Matrix.smul_one_eq_diagonal]
+
+/-- **Relative equation eq3:proof.IV.12.**  If two invertible Gram matrices
+induce the same conjugation on every letter of a normal tensor, then one Gram
+matrix is a positive real multiple of the other:
+$X^\dagger X=\omega Y^\dagger Y$ with $\omega>0$.
+
+This is the conclusion drawn from the second displayed diagram in the proof
+of Proposition 4.13 of arXiv:1606.00608, lines 1914--1921.  It compares the
+sector $k$ directly with the distinguished sector $1$ and does not assume that
+the letters of the representative tensor are self-adjoint. -/
+theorem IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq
+    {A : MPSTensor d D} (hA : IsNormal A)
+    {X Y : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
+    (hgram : ∀ i,
+      Xᴴ * X * A i * (Xᴴ * X)⁻¹ = Yᴴ * Y * A i * (Yᴴ * Y)⁻¹) :
+    ∃ ω : ℝ, 0 < ω ∧ Xᴴ * X = (ω : ℂ) • (Yᴴ * Y) := by
+  have hGY : IsUnit (Yᴴ * Y).det := by
+    rw [Matrix.det_mul, Matrix.det_conjTranspose]
+    exact hY.star.mul hY
+  have hcomm : ∀ i, (Yᴴ * Y)⁻¹ * (Xᴴ * X) * A i =
+      A i * ((Yᴴ * Y)⁻¹ * (Xᴴ * X)) := fun i =>
+    Matrix.commute_gram_ratio_of_gram_conj_eq hX hY (hgram i)
+  obtain ⟨c, hc⟩ := hA.eq_smul_one_of_commute hcomm
+  have hcGram : Xᴴ * X = c • (Yᴴ * Y) := by
+    calc
+      Xᴴ * X = (Yᴴ * Y) * ((Yᴴ * Y)⁻¹ * (Xᴴ * X)) := by
+        rw [← Matrix.mul_assoc, Matrix.mul_nonsing_inv _ hGY, Matrix.one_mul]
+      _ = (Yᴴ * Y) * (c • 1) := by rw [hc]
+      _ = c • (Yᴴ * Y) := by
+        rw [Matrix.mul_smul, Matrix.mul_one]
+  rcases Nat.eq_zero_or_pos D with hD | hD
+  · subst D
+    refine ⟨1, by positivity, ?_⟩
+    ext i
+    exact i.elim0
+  · let i : Fin D := ⟨0, hD⟩
+    have hXunit : IsUnit X := (Matrix.isUnit_iff_isUnit_det X).mpr hX
+    have hYunit : IsUnit Y := (Matrix.isUnit_iff_isUnit_det Y).mpr hY
+    have hGXpd : (Xᴴ * X).PosDef :=
+      Matrix.PosDef.conjTranspose_mul_self X
+        (Matrix.mulVec_injective_of_isUnit hXunit)
+    have hGYpd : (Yᴴ * Y).PosDef :=
+      Matrix.PosDef.conjTranspose_mul_self Y
+        (Matrix.mulVec_injective_of_isUnit hYunit)
+    have hcEntry : (Xᴴ * X) i i = c * (Yᴴ * Y) i i := by
+      simpa [Matrix.smul_apply] using congr_fun (congr_fun hcGram i) i
+    have hcPos : (0 : ℂ) < c := by
+      apply pos_of_mul_pos_left
+      · rw [← hcEntry]
+        exact hGXpd.diag_pos
+      · exact hGYpd.diag_pos.le
+    obtain ⟨hcRe, hcIm⟩ := Complex.pos_iff.mp hcPos
+    refine ⟨c.re, hcRe, ?_⟩
+    rw [hcGram]
+    congr 1
+    exact (Complex.ext (Complex.ofReal_re c.re)
+      (by rw [Complex.ofReal_im]; exact hcIm)).symm
+
+/-- **Relative equation eq3 from the common dressed target.**  If two
+invertible gauges dress every letter of a normal tensor to the same target,
+then their Gram matrices differ by a positive real scalar.  The target may
+depend on the letter; for the MPO adjoint in Figure 7 it is the adjoint of the
+letter with exchanged oriented bond indices.
+
+Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1909--1921. -/
+theorem IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target
+    {A C : MPSTensor d D} (hA : IsNormal A)
+    {X Y : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
+    (hdX : ∀ i, X * A i * X⁻¹ = X⁻¹ᴴ * C i * Xᴴ)
+    (hdY : ∀ i, Y * A i * Y⁻¹ = Y⁻¹ᴴ * C i * Yᴴ) :
+    ∃ ω : ℝ, 0 < ω ∧ Xᴴ * X = (ω : ℂ) • (Yᴴ * Y) :=
+  hA.gram_eq_pos_smul_gram_of_gram_conj_eq hX hY fun i =>
+    Matrix.gram_conj_eq_gram_conj_of_common_dressed_target
+      hX hY (hdX i) (hdY i)
+
+/-- The relative gauge of the preceding theorem becomes unitary after
+division by the square root of its positive Gram scalar.  In the normalization
+$Y=\Id$, this is $\omega^{-1/2}X$ from arXiv:1606.00608, lines 1904--1908. -/
+theorem IsNormal.smul_mul_nonsing_inv_mem_unitaryGroup_of_common_dressed_target
+    {A C : MPSTensor d D} (hA : IsNormal A)
+    {X Y : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
+    (hdX : ∀ i, X * A i * X⁻¹ = X⁻¹ᴴ * C i * Xᴴ)
+    (hdY : ∀ i, Y * A i * Y⁻¹ = Y⁻¹ᴴ * C i * Yᴴ) :
+    ∃ ω : ℝ, 0 < ω ∧
+      ((Real.sqrt ω : ℂ))⁻¹ • (X * Y⁻¹) ∈ Matrix.unitaryGroup (Fin D) ℂ := by
+  obtain ⟨ω, hω, hgram⟩ :=
+    hA.gram_eq_pos_smul_gram_of_common_dressed_target hX hY hdX hdY
+  exact ⟨ω, hω,
+    Matrix.smul_mul_nonsing_inv_mem_unitaryGroup_of_gram_eq_smul hY hω hgram⟩
 
 /-- **Equation eq3:proof.IV.12 in the normalization $X_{\alpha,1} = \Id$.**
 If $X \ne 0$ and the Gram matrix $X^\dagger X$ commutes with every matrix of
@@ -194,13 +368,16 @@ theorem IsNormal.smul_mem_unitaryGroup_of_commute
   exact ⟨ω, hω,
     Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one hω hXX⟩
 
-/-- **Equation eq3:proof.IV.12 from the dressed-adjoint identities.**  If the
-gauge-dressed letters of a normal tensor equal their adjoint dressings (the
-first displayed diagram of arXiv:1606.00608, proof of Proposition 4.13, lines
-1909--1913, transported blockwise by Lemma L) and the letters are self-adjoint
-(the same identity for the sector $k = 1$ in the normalization
-$X_{\alpha,1} = \Id$), then $X^\dagger X = \omega\,\Id$ for a necessarily
-positive constant $\omega$. -/
+/-- If the gauge-dressed letters of a normal tensor equal their adjoint
+dressings and the letters themselves are self-adjoint, then
+$X^\dagger X = \omega\,\Id$ for a necessarily positive constant $\omega$.
+
+**Scope restriction (self-adjoint letters):** the fixed orientation of Figure
+7 instead has the common target $(A^{v^{\mathrm{op}}})^\dagger$ and does not
+assume $(A^v)^\dagger=A^v$.  Thus this theorem is only the same-letter
+specialization.  The relative common-target statement is
+`IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target`.  See
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint
     {A : MPSTensor d D} (hA : IsNormal A)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hX0 : X ≠ 0)
@@ -213,7 +390,11 @@ theorem IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint
 /-- **The isometric normalization from the dressed-adjoint identities**
 (arXiv:1606.00608, proof of Proposition 4.13, lines 1906--1908 and
 1909--1919): under the hypotheses of the preceding theorem,
-$\omega^{-1/2}X$ is unitary. -/
+$\omega^{-1/2}X$ is unitary.
+
+**Scope restriction (self-adjoint letters):** this is the normalization of the
+same-letter specialization, not the relative two-gauge conclusion of the
+source.  See `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint
     {A : MPSTensor d D} (hA : IsNormal A)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hX0 : X ≠ 0)

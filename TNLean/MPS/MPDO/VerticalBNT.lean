@@ -139,6 +139,7 @@ For each class `j` and copy `q`, the original normalized corner is
 `blocks (enum j q) = ζ j q · X j q · blocks (repr j) · (X j q)⁻¹`.
 
 The scalar `ζ j q` has unit norm, and it is one for the chosen representative.
+The gauge `X j q` is also the identity for the chosen representative.
 Consequently the coefficient `μ (enum j q) * ζ j q` in the literal vertical
 decomposition is positive.  The representatives form a basis of normal tensors
 for the corresponding weighted block tensor and are pairwise gauge-phase
@@ -173,6 +174,7 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
         (ζ : (j : Fin classes.g) → Fin (classes.copies j) → ℂ),
         (∀ j q, ‖ζ j q‖ = 1) ∧
         (∀ j q, ζ j q ≠ 0) ∧
+        (∀ j, X j ⟨0, classes.copies_pos j⟩ = 1) ∧
         (∀ j, ζ j ⟨0, classes.copies_pos j⟩ = 1) ∧
         (∀ j q v,
           blocks (classes.enum j q) v =
@@ -256,7 +258,7 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
               (blocks (classes.repr j))) v *
             (↑(X⁻¹) : Matrix (Fin (dim (classes.enum j q)))
               (Fin (dim (classes.enum j q))) ℂ))) ∧
-        (q = ⟨0, classes.copies_pos j⟩ → ζ = 1) := by
+        (q = ⟨0, classes.copies_pos j⟩ → X = 1 ∧ ζ = 1) := by
     intro j q
     by_cases hq : q = ⟨0, classes.copies_pos j⟩
     · have hEnum : classes.enum j q = classes.repr j := by
@@ -264,7 +266,7 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
         exact MPSTensor.mpvPhaseClassData_enum_zero_eq_repr blocks j
       have hdim : dim (classes.repr j) = dim (classes.enum j q) :=
         congrArg dim hEnum.symm
-      refine ⟨hdim, 1, 1, norm_one, one_ne_zero, ?_, fun _ => rfl⟩
+      refine ⟨hdim, 1, 1, norm_one, one_ne_zero, ?_, fun _ => ⟨rfl, rfl⟩⟩
       have hcast : cast (congr_arg (MPSTensor (D * D)) hdim)
           (blocks (classes.repr j)) = blocks (classes.enum j q) := by
         rw [cast_eq_iff_heq]
@@ -290,10 +292,13 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
       refine ⟨hdim, X, ζ, ?_, hζNe, hGauge, fun h => (hq h).elim⟩
       exact MPSTensor.norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
         (hNormal (classes.repr j)) (hNormal (classes.enum j q)) hdim hGauge
-  choose hdim X ζ hζNorm hζNe hGauge hζDist using hClassGauge
+  choose hdim X ζ hζNorm hζNe hGauge hDist using hClassGauge
+  have hXDist : ∀ j, X j ⟨0, classes.copies_pos j⟩ = 1 := by
+    intro j
+    exact (hDist j ⟨0, classes.copies_pos j⟩ rfl).1
   have hζDist' : ∀ j, ζ j ⟨0, classes.copies_pos j⟩ = 1 := by
     intro j
-    exact hζDist j ⟨0, classes.copies_pos j⟩ rfl
+    exact (hDist j ⟨0, classes.copies_pos j⟩ rfl).2
   have hCornerEq : ∀ j q v,
       μ (classes.enum j q) • blocks (classes.enum j q) v =
         (μ (classes.enum j q) * ζ j q) •
@@ -348,7 +353,7 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
     intro j q
     let q₀ : Fin (classes.copies j) := ⟨0, classes.copies_pos j⟩
     have hRefPos : (0 : ℂ) < μ (classes.enum j q₀) * ζ j q₀ := by
-      rw [hζDist j q₀ rfl]
+      rw [hζDist' j]
       simp only [mul_one, q₀]
       exact hμPos (classes.repr j)
     obtain ⟨N, hne⟩ := hCompression j q
@@ -393,7 +398,7 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
           (fun j => hNormal (classes.repr j)) classes.blocks_not_equiv
   refine ⟨r, dim, μ, blocks, V, hdimPos, hμPos, hNormal, hIso, hOrth,
     hInt, hIntStar, hCorner, hReconstruct, hdim, X, ζ, hζNorm, hζNe,
-    hζDist', hGauge, hBNT, classes.blocks_not_equiv, ?_, hSector, hCompression,
+    hXDist, hζDist', hGauge, hBNT, classes.blocks_not_equiv, ?_, hSector, hCompression,
     hCoeffPos, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro j q
     exact mul_ne_zero (hμPos (classes.enum j q)).ne' (hζNe j q)
