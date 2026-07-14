@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.MPDO.SectorTrace
 import TNLean.MPS.MPDO.VerticalSpectral
 
 /-!
@@ -12,18 +13,20 @@ import TNLean.MPS.MPDO.VerticalSpectral
 This file performs the gauge-phase grouping step in the proof of the vertical
 canonical form for matrix product density operators.  Starting from the
 spectrally normalized physical corners, it chooses one normal tensor from each
-matrix-product-vector phase class.  Every original corner is expressed as a
-nonzero complex scalar times an invertible conjugate of its representative.
-The physical isometries are retained unchanged, so all reducing identities and
-the literal reconstruction of every vertical letter survive the regrouping.
+matrix-product-vector phase class.  Every original corner is expressed using
+an invertible conjugation and a scalar of unit modulus, with the scalar of the
+chosen representative equal to one.  The physical isometries are retained
+unchanged, so all reducing identities and the literal reconstruction of every
+vertical letter survive the regrouping.
 
-This is the algebraic phase-class decomposition invoked in the first sentence
-of arXiv:1606.00608, line 1898.  It combines the BNT characterization at lines
-1135--1148 with the preceding isometry-preserving vertical sector theorem.  It
-does not prove the positive-diagonal isometry asserted at lines 1895--1896.  No
-positivity of the grouped coefficients and no unitarity of the gauges is
-asserted here; those are consequences of the subsequent MPDO argument at lines
-1898--1921.
+This is the phase-class decomposition and positivity argument of
+arXiv:1606.00608, lines 1898--1902.  It combines the BNT characterization at
+lines 1135--1148 with the preceding isometry-preserving vertical sector
+theorem.  For every grouped sector it constructs the physical selector, proves
+the corresponding loop identity, finds a nonzero finite-chain compression,
+and deduces that the grouped coefficient is positive.  The positive-diagonal
+isometry asserted at lines 1895--1896 and the gauge normalization and final
+coisometry argument at lines 1903--1921 are not included.
 
 ## Main statement
 
@@ -43,6 +46,91 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
+/-- A nonzero vertical corner of a horizontally canonical tensor has a
+nonzero first-site sector compression at some chain length.
+
+If every compression by `P` vanished, their matrix entries would say that the
+two-sided first-site insertion by `P` has the same matrix product vectors as
+zero.  Lemma L for the horizontal canonical form would then make the inserted
+tensor itself zero, forcing every corner $P\widetilde M_vP$ to vanish.  This is
+the separation assertion used in the proof of Proposition 4.13 of
+arXiv:1606.00608, line 1898. -/
+theorem IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
+    (P : Matrix (Fin d) (Fin d) ℂ)
+    (hcorner : ∃ v, P * verticalTensor M v * P ≠ 0) :
+    ∃ N, sectorCompression M P N ≠ 0 := by
+  by_contra hnone
+  simp only [not_exists, not_not] at hnone
+  have hAct : MPSTensor.FirstSiteActionAgree M.toMPSTensor
+      (MPSTensor.ketLeftBraRightAction P) 0 := by
+    intro N ρ
+    rw [MPSTensor.ketLeftBraRightAction_mpv]
+    simp only [Matrix.zero_apply, zero_mul, Finset.sum_const_zero]
+    have hentry := Matrix.ext_iff.mpr (hnone N)
+      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
+      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
+    rw [sectorCompression_def, mul_firstSiteMatrix_apply] at hentry
+    simp only [firstSiteMatrix_mul_apply] at hentry
+    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ,
+      Matrix.zero_apply] at hentry
+    rw [← hentry]
+    simp only [Finset.sum_mul]
+    exact Finset.sum_comm
+  have hInserted := hHorizontal.insertedTensor_eq_of_firstSiteActionAgree M hAct
+  have hTensor : ((M.ketLeftMul P).braRightMul P).toMPSTensor = 0 := by
+    rw [← insertedTensor_ketLeftBraRightAction_toMPSTensor]
+    rw [hInserted]
+    ext v a b
+    simp [MPSTensor.insertedTensor]
+  have hMzero : (M.ketLeftMul P).braRightMul P = 0 := by
+    funext i j
+    have hij := congrFun hTensor (finProdFinEquiv (i, j))
+    simpa [toMPSTensor] using hij
+  obtain ⟨v, hv⟩ := hcorner
+  apply hv
+  have hv0 : verticalTensor ((M.ketLeftMul P).braRightMul P) v = 0 := by
+    rw [hMzero]
+    rfl
+  rw [verticalTensor_braRightMul, verticalTensor_ketLeftMul] at hv0
+  exact hv0
+
+/-- A nonzero normal representative gives a nonzero physical range corner
+through an exact gauge-corner identity. -/
+private theorem exists_rangeProjection_corner_ne_zero
+    {n : ℕ} [NeZero n] (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    (hA : A.IsNormalTensor) (V : Matrix (Fin d) (Fin n) ℂ)
+    (hV : Vᴴ * V = 1) (X : GL (Fin n) ℂ) (ω : ℂ) (hω : ω ≠ 0)
+    (hcorner : ∀ v,
+      ω • ((X : Matrix (Fin n) (Fin n) ℂ) * A v *
+        (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ)) =
+          Vᴴ * verticalTensor M v * V) :
+    ∃ v, (V * Vᴴ) * verticalTensor M v * (V * Vᴴ) ≠ 0 := by
+  obtain ⟨v, hv⟩ := hA.exists_apply_ne_zero
+  refine ⟨v, ?_⟩
+  have hconj : (X : Matrix (Fin n) (Fin n) ℂ) * A v *
+      (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ) ≠ 0 := by
+    intro hzero
+    apply hv
+    have hcancel := congrArg
+      (fun Z : Matrix (Fin n) (Fin n) ℂ =>
+        (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ) * Z *
+          (X : Matrix (Fin n) (Fin n) ℂ)) hzero
+    simpa [Matrix.mul_assoc] using hcancel
+  have hsmall : Vᴴ * verticalTensor M v * V ≠ 0 := by
+    rw [← hcorner v]
+    exact smul_ne_zero hω hconj
+  intro hzero
+  apply hsmall
+  have hcancel := congrArg
+    (fun Z : Matrix (Fin d) (Fin d) ℂ => Vᴴ * Z * V) hzero
+  rw [show Vᴴ * ((V * Vᴴ) * verticalTensor M v * (V * Vᴴ)) * V =
+      Vᴴ * verticalTensor M v * V by
+    simp only [← Matrix.mul_assoc, hV, Matrix.one_mul]
+    rw [Matrix.mul_assoc (Vᴴ * verticalTensor M v * V) Vᴴ V,
+      hV, Matrix.mul_one]] at hcancel
+  simpa using hcancel
+
 /-- Group the normalized vertical corners of a horizontally canonical MPDO by
 their gauge-phase classes while retaining the physical reducing isometries.
 
@@ -50,15 +138,19 @@ For each class `j` and copy `q`, the original normalized corner is
 
 `blocks (enum j q) = ζ j q · X j q · blocks (repr j) · (X j q)⁻¹`.
 
-Consequently its coefficient in the literal vertical decomposition is the
-nonzero complex number `μ (enum j q) * ζ j q`.  The representatives form a
-basis of normal tensors for the corresponding weighted block tensor and are
-pairwise gauge-phase distinct.
+The scalar `ζ j q` has unit norm, and it is one for the chosen representative.
+Consequently the coefficient `μ (enum j q) * ζ j q` in the literal vertical
+decomposition is positive.  The representatives form a basis of normal tensors
+for the corresponding weighted block tensor and are pairwise gauge-phase
+distinct.  Each physical range projector satisfies the representative-loop
+identity and has a nonzero finite-chain compression.
 
-Source: the algebraic phase-class decomposition in the first sentence of
-arXiv:1606.00608, line 1898, using the BNT characterization at lines
+Source: the phase-class decomposition and positivity argument in
+arXiv:1606.00608, lines 1898--1902, using the BNT characterization at lines
 1135--1148 and the preceding isometry-preserving vertical sector theorem.  The
-positive-diagonal isometry asserted at lines 1895--1896 is not included. -/
+positive-diagonal isometry asserted at lines 1895--1896 and the subsequent
+gauge normalization and coisometry argument at lines 1903--1921 are not
+included. -/
 theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
@@ -79,7 +171,9 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
         (X : (j : Fin classes.g) → (q : Fin (classes.copies j)) →
           GL (Fin (dim (classes.enum j q))) ℂ)
         (ζ : (j : Fin classes.g) → Fin (classes.copies j) → ℂ),
+        (∀ j q, ‖ζ j q‖ = 1) ∧
         (∀ j q, ζ j q ≠ 0) ∧
+        (∀ j, ζ j ⟨0, classes.copies_pos j⟩ = 1) ∧
         (∀ j q v,
           blocks (classes.enum j q) v =
             ζ j q •
@@ -95,6 +189,13 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
         MPSTensor.BlocksNotGaugePhaseEquiv
           (d := D * D) (fun j => blocks (classes.repr j)) ∧
         (∀ j q, μ (classes.enum j q) * ζ j q ≠ 0) ∧
+        (∀ j q, SectorProjectorData M
+          (V (classes.enum j q) * (V (classes.enum j q))ᴴ)
+          (μ (classes.enum j q) * ζ j q)
+          (representativeLoop (blocks (classes.repr j)))) ∧
+        (∀ j q, ∃ N, sectorCompression M
+          (V (classes.enum j q) * (V (classes.enum j q))ᴴ) N ≠ 0) ∧
+        (∀ j q, (0 : ℂ) < μ (classes.enum j q) * ζ j q) ∧
         (∀ j q, (V (classes.enum j q))ᴴ * V (classes.enum j q) = 1) ∧
         (∀ j q l p, classes.enum j q ≠ classes.enum l p →
           (V (classes.enum j q))ᴴ * V (classes.enum l p) = 0) ∧
@@ -145,16 +246,54 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
   let classes := MPSTensor.mpvPhaseClassData blocks
   haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hdimPos k).ne'⟩
   have hClassGauge : ∀ j q,
-      ∃ hdim : dim (classes.repr j) = dim (classes.enum j q),
-        MPSTensor.GaugePhaseEquiv
-          (cast (congr_arg (MPSTensor (D * D)) hdim) (blocks (classes.repr j)))
-          (blocks (classes.enum j q)) := by
+      ∃ (hdim : dim (classes.repr j) = dim (classes.enum j q))
+        (X : GL (Fin (dim (classes.enum j q))) ℂ) (ζ : ℂ),
+        ‖ζ‖ = 1 ∧ ζ ≠ 0 ∧
+        (∀ v, blocks (classes.enum j q) v =
+          ζ • ((X : Matrix (Fin (dim (classes.enum j q)))
+              (Fin (dim (classes.enum j q))) ℂ) *
+            (cast (congr_arg (MPSTensor (D * D)) hdim)
+              (blocks (classes.repr j))) v *
+            (↑(X⁻¹) : Matrix (Fin (dim (classes.enum j q)))
+              (Fin (dim (classes.enum j q))) ℂ))) ∧
+        (q = ⟨0, classes.copies_pos j⟩ → ζ = 1) := by
     intro j q
-    exact MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
-      (hNormal (classes.repr j)) (hNormal (classes.enum j q))
-      (classes.enum_phase j q)
-  choose hdim hGaugePhase using hClassGauge
-  choose X ζ hζNe hGauge using hGaugePhase
+    by_cases hq : q = ⟨0, classes.copies_pos j⟩
+    · have hEnum : classes.enum j q = classes.repr j := by
+        rw [hq]
+        exact MPSTensor.mpvPhaseClassData_enum_zero_eq_repr blocks j
+      have hdim : dim (classes.repr j) = dim (classes.enum j q) :=
+        congrArg dim hEnum.symm
+      refine ⟨hdim, 1, 1, norm_one, one_ne_zero, ?_, fun _ => rfl⟩
+      have hcast : cast (congr_arg (MPSTensor (D * D)) hdim)
+          (blocks (classes.repr j)) = blocks (classes.enum j q) := by
+        rw [cast_eq_iff_heq]
+        exact hEnum.symm.rec HEq.rfl
+      intro v
+      calc
+        blocks (classes.enum j q) v =
+            (cast (congr_arg (MPSTensor (D * D)) hdim)
+              (blocks (classes.repr j))) v := congrFun hcast.symm v
+        _ = (1 : ℂ) •
+            ((1 : Matrix (Fin (dim (classes.enum j q)))
+                (Fin (dim (classes.enum j q))) ℂ) *
+              (cast (congr_arg (MPSTensor (D * D)) hdim)
+                (blocks (classes.repr j))) v *
+              (1 : Matrix (Fin (dim (classes.enum j q)))
+                (Fin (dim (classes.enum j q))) ℂ)) := by
+          rw [Matrix.one_mul, Matrix.mul_one, one_smul]
+    · obtain ⟨hdim, hGaugePhase⟩ :=
+        MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+          (hNormal (classes.repr j)) (hNormal (classes.enum j q))
+          (classes.enum_phase j q)
+      obtain ⟨X, ζ, hζNe, hGauge⟩ := hGaugePhase
+      refine ⟨hdim, X, ζ, ?_, hζNe, hGauge, fun h => (hq h).elim⟩
+      exact MPSTensor.norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
+        (hNormal (classes.repr j)) (hNormal (classes.enum j q)) hdim hGauge
+  choose hdim X ζ hζNorm hζNe hGauge hζDist using hClassGauge
+  have hζDist' : ∀ j, ζ j ⟨0, classes.copies_pos j⟩ = 1 := by
+    intro j
+    exact hζDist j ⟨0, classes.copies_pos j⟩ rfl
   have hCornerEq : ∀ j q v,
       μ (classes.enum j q) • blocks (classes.enum j q) v =
         (μ (classes.enum j q) * ζ j q) •
@@ -165,6 +304,55 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
               Matrix _ _ ℂ)) := by
     intro j q v
     rw [hGauge j q v, smul_smul]
+  have hGroupedCorner : ∀ j q v,
+      (μ (classes.enum j q) * ζ j q) •
+          ((X j q : Matrix (Fin (dim (classes.enum j q)))
+              (Fin (dim (classes.enum j q))) ℂ) *
+            (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+              (blocks (classes.repr j))) v *
+            (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
+              (Fin (dim (classes.enum j q))) ℂ)) =
+        (V (classes.enum j q))ᴴ * verticalTensor M v * V (classes.enum j q) := by
+    intro j q v
+    rw [← hCornerEq j q v]
+    exact hCorner (classes.enum j q) v
+  have hSector : ∀ j q, SectorProjectorData M
+      (V (classes.enum j q) * (V (classes.enum j q))ᴴ)
+      (μ (classes.enum j q) * ζ j q)
+      (representativeLoop (blocks (classes.repr j))) := by
+    intro j q
+    have hs := sectorProjectorData_of_gauge_corner M
+      (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+        (blocks (classes.repr j)))
+      (V (classes.enum j q)) (hIso (classes.enum j q)) (X j q)
+      (μ (classes.enum j q) * ζ j q) (hGroupedCorner j q)
+    rw [representativeLoop_cast (hdim j q)] at hs
+    exact hs
+  have hCompression : ∀ j q, ∃ N, sectorCompression M
+      (V (classes.enum j q) * (V (classes.enum j q))ᴴ) N ≠ 0 := by
+    intro j q
+    have hNormalCast : MPSTensor.IsNormalTensor
+        (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+          (blocks (classes.repr j))) :=
+      (MPSTensor.isNormalTensor_cast_iff (hdim j q)
+        (blocks (classes.repr j))).2 (hNormal (classes.repr j))
+    have hRange := exists_rangeProjection_corner_ne_zero M
+      (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+        (blocks (classes.repr j))) hNormalCast
+      (V (classes.enum j q)) (hIso (classes.enum j q)) (X j q)
+      (μ (classes.enum j q) * ζ j q)
+      (mul_ne_zero (hμPos (classes.enum j q)).ne' (hζNe j q))
+      (hGroupedCorner j q)
+    exact hHorizontal.exists_sectorCompression_ne_zero_of_corner M _ hRange
+  have hCoeffPos : ∀ j q, (0 : ℂ) < μ (classes.enum j q) * ζ j q := by
+    intro j q
+    let q₀ : Fin (classes.copies j) := ⟨0, classes.copies_pos j⟩
+    have hRefPos : (0 : ℂ) < μ (classes.enum j q₀) * ζ j q₀ := by
+      rw [hζDist j q₀ rfl]
+      simp only [mul_one, q₀]
+      exact hμPos (classes.repr j)
+    obtain ⟨N, hne⟩ := hCompression j q
+    exact sector_weight_pos hM (hSector j q₀) hRefPos (hSector j q) N hne
   have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors
       (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks)
       (fun j => ⟨dim (classes.repr j), blocks (classes.repr j)⟩) := by
@@ -204,8 +392,9 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
           (fun j => blocks (classes.repr j))
           (fun j => hNormal (classes.repr j)) classes.blocks_not_equiv
   refine ⟨r, dim, μ, blocks, V, hdimPos, hμPos, hNormal, hIso, hOrth,
-    hInt, hIntStar, hCorner, hReconstruct, hdim, X, ζ, hζNe, hGauge, hBNT,
-    classes.blocks_not_equiv, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+    hInt, hIntStar, hCorner, hReconstruct, hdim, X, ζ, hζNorm, hζNe,
+    hζDist', hGauge, hBNT, classes.blocks_not_equiv, ?_, hSector, hCompression,
+    hCoeffPos, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro j q
     exact mul_ne_zero (hμPos (classes.enum j q)).ne' (hζNe j q)
   · intro j q

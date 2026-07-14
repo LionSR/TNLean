@@ -142,6 +142,10 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 
 \begin{theorem}[Phase-equivalent normal tensors are gauge-phase equivalent]
     \label{thm:cpsv_normal_mpv_phase_gauge}
+    \lean{MPSTensor.IsNormalTensor.exists_apply_ne_zero}
+    \lean{MPSTensor.IsNormalTensor.selfOverlap_tendsto_one}
+    \lean{MPSTensor.isNormalTensor_cast_iff}
+    \lean{MPSTensor.norm_eq_one_of_gaugePhase_cast_of_isNormalTensor}
     \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor}
     \leanok
     \uses{def:nt_cpsv, def:mpv_block_phase_equiv,
@@ -153,7 +157,7 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
         \qquad (N\geq 0).
     \]
     Then the bond dimensions are equal and there is an invertible matrix $X$
-    and a nonzero scalar $\eta$ such that
+    and a scalar $\eta$ of unit modulus such that
     \[
         B^i=\eta X A^iX^{-1}
     \]
@@ -844,7 +848,10 @@ single family.
 
 \begin{definition}[MPV phase classes]%
     \label{def:mpv_phase_class_data}
-    \lean{MPSTensor.MPVPhaseEquiv, MPSTensor.MPVPhaseClassData, MPSTensor.mpvPhaseClassData}
+    \lean{MPSTensor.MPVPhaseEquiv}
+    \lean{MPSTensor.MPVPhaseClassData}
+    \lean{MPSTensor.mpvPhaseClassData}
+    \lean{MPSTensor.mpvPhaseClassData_enum_zero_eq_repr}
     \leanok
     For a finite family of blocks, put $j \sim k$ when there is a nonzero
     scalar factor $\zeta$ such that
@@ -854,9 +861,9 @@ single family.
         \zeta^N\ket{V^{(N)}(B_j)}
     \]
     for every length~$N$. The associated tuple enumerates the finite quotient,
-    chooses one representative per class, records the scalar relating the
-    representative to each member, and proves that distinct representatives are
-    not MPV-phase equivalent.
+    chooses one representative per class, enumerates that representative first
+    in its class, records the scalar relating the representative to each member,
+    and proves that distinct representatives are not MPV-phase equivalent.
 \end{definition}
 
 \begin{lemma}[Regrouping a matrix sum by MPV phase classes]
