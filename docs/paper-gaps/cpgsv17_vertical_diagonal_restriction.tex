@@ -181,11 +181,15 @@ the absence of periodic vectors already give an abstract positive-length
 normal-block decomposition
 (\path{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean}). The literal
 isometry-preserving refinement is now supplied by
-\path{TNLean/MPS/MPDO/VerticalSpectral.lean}. What remains open is to group
-the normal blocks. This must identify the grouped sector projectors
-with their loop identities and a nonvanishing compression, together with the
-derivation of the dressed-adjoint identities from self-adjointness of the
-sector compressions.
+\path{TNLean/MPS/MPDO/VerticalSpectral.lean}. The normal blocks are now
+grouped into pairwise gauge-phase-distinct BNT representatives in
+\path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a
+nonzero complex coefficient and an invertible bond-space gauge, while the
+physical isometries and the literal vertical reconstruction are retained.
+What remains open is to identify the grouped range projections with their
+loop identities and prove a nonvanishing compression, then derive positivity
+of the grouped coefficients and the dressed-adjoint identities needed to
+normalize the gauges to unitaries.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of

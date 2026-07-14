@@ -10,6 +10,7 @@ import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
+import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.Channel.KrausRepresentation
 import TNLean.Spectral.TransferOperatorGapNT
@@ -27,6 +28,10 @@ boundary-state invariance `V† Λ V = Λ`.
 
 * `TwistedTPGaugeSetup` — bundled TP-gauge data for the spectral radius bound
 * `transferMap_tpGauge_eq_similarityMap` — similarity transform of the transfer map
+* `isPrimitive_transferMap_tpGauge_iff` — invariance of primitivity under the
+  Perron gauge
+* `gaugePhaseEquiv_of_gaugeEquiv_left_right_cast` — transport of gauge-phase
+  equivalence across two gauges and a bond-dimension identification
 * `virtualUnitary_of_gaugePhaseEquiv_twisted` — normalization of a gauge-phase
   intertwiner to a unitary
 * `boundaryState_invariant_of_virtualUnitary` — boundary-state invariance `V† Λ V = Λ`
@@ -79,6 +84,19 @@ lemma transferMap_tpGauge_eq_similarityMap
               Matrix.mul_assoc]
   exact congrFun (congrFun hcalc i) j
 
+/-- Positive-definite TP gauging preserves peripheral-spectrum primitivity. -/
+lemma isPrimitive_transferMap_tpGauge_iff
+    (A : MPSTensor d D)
+    (σ : Matrix (Fin D) (Fin D) ℂ)
+    (hσ : σ.PosDef) :
+    _root_.IsPrimitive (transferMap (tpGauge (d := d) (D := D) A σ)) ↔
+      _root_.IsPrimitive (transferMap A) := by
+  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
+  have hS_det : S.det ≠ 0 := by
+    exact (isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ).ne_zero
+  rw [transferMap_tpGauge_eq_similarityMap A σ hσ]
+  exact IsPrimitive.similarityMap_iff S⁻¹ (by simpa [Matrix.det_nonsing_inv] using hS_det) _
+
 /-- TP gauging preserves irreducibility when the original transfer map is
 irreducible. -/
 lemma isIrreducibleTensor_tpGauge_of_isIrreducibleMap [NeZero D]
@@ -128,7 +146,20 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
     _ = ζ • (((Z⁻¹ * Y * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
           (((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ) :
             Matrix (Fin D) (Fin D) ℂ)) := by
-          simp [Matrix.mul_assoc, mul_inv_rev]
+      simp [Matrix.mul_assoc, mul_inv_rev]
+
+/-- Gauge equivalence on both sides transports a casted gauge-phase
+equivalence back to the original tensors. -/
+lemma gaugePhaseEquiv_of_gaugeEquiv_left_right_cast
+    {D₁ D₂ : ℕ} (hdim : D₁ = D₂)
+    {A A' : MPSTensor d D₁} {B B' : MPSTensor d D₂}
+    (hAA' : GaugeEquiv A A')
+    (hA'B' : GaugePhaseEquiv
+      (cast (congr_arg (MPSTensor d) hdim) A') B')
+    (hBB' : GaugeEquiv B B') :
+    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) A) B := by
+  subst hdim
+  simpa using gaugePhaseEquiv_of_gaugeEquiv_left_right hAA' hA'B' hBB'
 
 /-- Bundled TP-gauge data for a twisted MPS tensor, used to reduce the spectral radius
 bound to the TP-normalized setting in the string-order proofs. -/

@@ -2295,6 +2295,57 @@
     orthogonal complement is a zero sector.
 \end{proof}
 
+\begin{theorem}[Vertical normal sectors grouped into BNT representatives]
+    \label{thm:mpdo_vertical_bnt_grouping_with_isometries}
+    \lean{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+        def:bnt_cpsv, def:mpv_phase_class_data}
+    Under the same hypotheses, partition the normalized vertical sectors by
+    equality of their matrix product vector families up to a fixed phase per
+    site. There are normal representatives $M_\alpha$, an enumeration
+    $k=(\alpha,q)$ of the original sectors, invertible matrices
+    $X_{\alpha,q}$, and nonzero complex numbers $\zeta_{\alpha,q}$ such that
+    \[
+        B_{\alpha,q}^v
+        =\zeta_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
+    \]
+    The representatives are pairwise gauge-phase distinct and form a basis of
+    normal tensors for the weighted block tensor
+    $\bigoplus_k\mu_kB_k$. Every grouped coefficient
+    $\mu_{\alpha,q}\zeta_{\alpha,q}$ is nonzero. With the physical isometries
+    from Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
+    retained unchanged, one has both reducing identities, exact compression,
+    and the literal reconstruction
+    \[
+        \widetilde M_v
+        =\sum_\alpha\sum_q
+        V_{\alpha,q}
+        \bigl(\mu_{\alpha,q}\zeta_{\alpha,q}
+        X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
+        V_{\alpha,q}^\dagger .
+    \]
+    No positivity of the grouped coefficients and no unitarity of the gauges
+    is asserted at this stage. This is the decomposition at the beginning of
+    the last part of \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_vertical_normal_sectors_with_isometries,
+        thm:cpsv_normal_mpv_phase_gauge,
+        thm:cpsv_normal_separated_eventually_li}
+    Take one representative from each phase class. Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge}
+    gives equality of bond dimensions and the displayed letterwise gauge-phase
+    relation for every copy. Distinct representatives are gauge-phase
+    separated by construction, so
+    Theorem~\ref{thm:cpsv_normal_separated_eventually_li} gives eventual linear
+    independence. The phase-class regrouping of the finite sum gives the BNT
+    expansion. Substitution in the two intertwining identities, the compression
+    identity, and the literal reconstruction from
+    Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries} proves all
+    remaining assertions without altering any physical isometry.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
@@ -2308,6 +2359,7 @@
         thm:mpdo_vertical_irreducible_reducing_sectors,
         thm:mpdo_vertical_complete_reducing_projectors,
         thm:mpdo_vertical_normal_sectors_with_isometries,
+        thm:mpdo_vertical_bnt_grouping_with_isometries,
         thm:projector_closure_canonical_form,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,
@@ -2345,6 +2397,7 @@
         thm:mpdo_vertical_projector_closure,
         thm:mpdo_vertical_irreducible_reducing_sectors,
         thm:mpdo_vertical_complete_reducing_projectors,
+        thm:mpdo_vertical_bnt_grouping_with_isometries,
         thm:projector_closure_canonical_form,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,

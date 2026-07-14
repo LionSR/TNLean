@@ -10,7 +10,8 @@ import Mathlib.Order.Filter.AtTopBot.Basic
 This file contains the core definitions used throughout the MPS development:
 `MPSTensor`, word evaluation, MPV coefficients, gauge equivalence, and the
 notions of injectivity, block injectivity, and normality. It also proves the
-basic gauge-invariance lemmas for `evalWord` and `SameMPV`.
+basic gauge-invariance lemmas for `evalWord`, `SameMPV`, and eventual block
+injectivity.
 -/
 
 open scoped Matrix
@@ -469,5 +470,48 @@ theorem isInjective_of_gaugeEquiv {A B : MPSTensor d D}
       ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) = M := by
     simp [Matrix.mul_assoc]
   rwa [this] at key
+
+/-- Gauge equivalence preserves injectivity after any fixed blocking length. -/
+theorem isNBlkInjective_of_gaugeEquiv {A B : MPSTensor d D} {N : ℕ}
+    (hA : IsNBlkInjective A N) (hGauge : GaugeEquiv A B) :
+    IsNBlkInjective B N := by
+  obtain ⟨X, hX⟩ := hGauge
+  rw [IsNBlkInjective, eq_top_iff]
+  intro M _
+  have hM' : ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ) ∈
+      Submodule.span ℂ
+        (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) :=
+    hA ▸ Submodule.mem_top
+  have hConj : ∀ Y ∈ Submodule.span ℂ
+      (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)),
+      (X : Matrix _ _ ℂ) * Y *
+          ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) ∈
+        Submodule.span ℂ
+          (Set.range fun σ : Fin N → Fin d => evalWord B (List.ofFn σ)) := by
+    intro Y hY
+    induction hY using Submodule.span_induction with
+    | mem y hy =>
+      obtain ⟨σ, rfl⟩ := hy
+      rw [← evalWord_gauge X hX]
+      exact Submodule.subset_span (Set.mem_range_self σ)
+    | zero => simp
+    | add x y _ _ hx hy =>
+      simp only [Matrix.mul_add, Matrix.add_mul]
+      exact Submodule.add_mem _ hx hy
+    | smul c y _ hy =>
+      rw [Matrix.mul_smul, Matrix.smul_mul]
+      exact Submodule.smul_mem _ c hy
+  have key := hConj _ hM'
+  have hrecover : (X : Matrix _ _ ℂ) *
+      (((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ)) *
+      ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) = M := by
+    simp [Matrix.mul_assoc]
+  rwa [hrecover] at key
+
+/-- Gauge equivalence preserves eventual block injectivity. -/
+theorem isNormal_of_gaugeEquiv {A B : MPSTensor d D}
+    (hA : IsNormal A) (hGauge : GaugeEquiv A B) : IsNormal B := by
+  obtain ⟨N, hN⟩ := hA
+  exact ⟨N, isNBlkInjective_of_gaugeEquiv hN hGauge⟩
 
 end MPSTensor

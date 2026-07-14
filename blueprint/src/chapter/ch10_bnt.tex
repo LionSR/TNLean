@@ -40,6 +40,143 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
 \end{definition}
 
+\begin{lemma}[Perron gauges preserve primitivity]
+    \label{lem:perron_gauge_primitive_iff}
+    \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}
+    \leanok
+    \uses{def:primitive_channel}
+    Let $\sigma$ be positive definite. The transfer map of the Perron gauge
+    determined by $\sigma$ is primitive if and only if the original transfer
+    map is primitive.
+\end{lemma}
+
+\begin{proof}\leanok
+    The two transfer maps are similar through the invertible congruence
+    $X\mapsto\sigma^{-1/2}X\sigma^{-1/2}$. Similar linear maps have the same
+    spectrum, so the condition that $1$ is the only eigenvalue on the unit
+    circle is unchanged.
+\end{proof}
+
+\begin{theorem}[Spectral normality gives a pure trace-preserving gauge]
+    \label{thm:cpsv_normal_tp_gauge}
+    \lean{MPSTensor.IsNormalTensor.exists_tpGauge}
+    \leanok
+    \uses{def:nt_cpsv}
+    Let $A$ be a normal tensor of positive bond dimension in the sense of
+    \cite[Section~2.2]{Cirac2016MPDO_arXiv}. There is a positive definite
+    matrix $\sigma$ such that the gauge obtained from $\sigma$ is
+    trace-preserving, primitive, and irreducible. No scalar rescaling is
+    needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:perron_gauge_primitive_iff}
+    The irreducible Perron--Frobenius theorem gives positive definite right and
+    left eigenvectors with positive eigenvalues $r$ and $t$. The spectral
+    normalization gives $r=1$. Adjointness with respect to the trace pairing
+    gives
+    \[
+        r\,\Tr(\sigma\rho)=t\,\Tr(\sigma\rho).
+    \]
+    Since $\sigma$ and $\rho$ are positive definite, their pairing is nonzero,
+    hence $t=1$. Thus the Perron gauge is a pure similarity. Irreducibility and
+    primitivity are invariant under this similarity.
+\end{proof}
+
+\begin{theorem}[Spectral normality gives eventual block injectivity]
+    \label{thm:cpsv_normal_eventually_injective}
+    \lean{MPSTensor.IsNormalTensor.isNormal}
+    \leanok
+    \uses{def:nt_cpsv, def:normal}
+    Every positive-bond-dimension normal tensor in the sense of
+    \cite[Section~2.2]{Cirac2016MPDO_arXiv} is injective after blocking by some
+    finite length.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge, thm:normal_tp_primitive_irred}
+    Apply Theorem~\ref{thm:cpsv_normal_tp_gauge}. The trace-preserving,
+    primitive, irreducible representative is eventually block-injective, and
+    gauge invariance transports this conclusion back to the original tensor.
+\end{proof}
+
+\begin{lemma}[Exact MPV phase equivalence determines the bond dimension]
+    \label{lem:mpv_block_phase_equiv_dim_eq}
+    \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq}
+    \leanok
+    \uses{def:mpv_block_phase_equiv}
+    Suppose that, for two tensors $A$ and $B$ and some nonzero
+    $\zeta\in\C$,
+    \[
+        \ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}
+    \]
+    at every nonnegative length $N$. Then $A$ and $B$ have the same bond
+    dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    At length zero the two coefficients are the traces of the corresponding
+    identity matrices, while $\zeta^0=1$. Their equality is therefore equality
+    of the two bond dimensions.
+\end{proof}
+
+\begin{theorem}[Phase-equivalent normal tensors are gauge-phase equivalent]
+    \label{thm:cpsv_normal_mpv_phase_gauge}
+    \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_block_phase_equiv,
+        def:gauge_phase_equiv}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Suppose that, for some nonzero $\zeta\in\C$,
+    \[
+        \ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}
+        \qquad (N\geq 0).
+    \]
+    Then the bond dimensions are equal and there is an invertible matrix $X$
+    and a nonzero scalar $\eta$ such that
+    \[
+        B^i=\eta X A^iX^{-1}
+    \]
+    for every physical letter $i$. This is the gauge recovery used in
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpv_block_phase_equiv_dim_eq, thm:cpsv_normal_tp_gauge,
+        thm:nt_overlap_norm_one_gauge}
+    Lemma~\ref{lem:mpv_block_phase_equiv_dim_eq} gives equality of bond
+    dimensions. Apply Theorem~\ref{thm:cpsv_normal_tp_gauge} to both tensors.
+    Gauge invariance of matrix product vectors preserves the phase relation,
+    whose self-overlap identities imply unit modulus for the phase. The
+    unit-overlap rigidity theorem then gives a gauge-phase equivalence between
+    the trace-preserving representatives. Conjugating by the two Perron gauges
+    gives the asserted relation for $A$ and $B$.
+\end{proof}
+
+\begin{theorem}[Separated normal tensors are eventually independent]
+    \label{thm:cpsv_normal_separated_eventually_li}
+    \lean{MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv}
+    \leanok
+    \uses{def:nt_cpsv, def:blocks_not_gauge_phase_equiv}
+    Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension normal
+    tensors, no two of which are gauge-phase equivalent after identifying
+    equal bond dimensions. Then the matrix product vectors
+    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
+    sufficiently large $N$, as in
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge,
+        lem:bnt_finite_index_overlap_orthonormal_li}
+    Put every tensor in the pure trace-preserving gauge of
+    Theorem~\ref{thm:cpsv_normal_tp_gauge}. Distinct gauge-phase classes have
+    overlaps tending to zero, while each self-overlap tends to one. The finite
+    Gram matrix therefore tends to the identity and is invertible for all
+    sufficiently large lengths. Gauge invariance of matrix product vectors
+    gives the conclusion for the original tensors.
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     \TNBNTDecomposition
@@ -699,6 +836,23 @@ single family.
     representative to each member, and proves that distinct representatives are
     not MPV-phase equivalent.
 \end{definition}
+
+\begin{lemma}[Regrouping a matrix sum by MPV phase classes]
+    \label{lem:mpv_phase_class_regroup_matrix}
+    \lean{MPSTensor.MPVPhaseClassData.regroup_matrix}
+    \leanok
+    \uses{def:mpv_phase_class_data}
+    Let $F_k$ be a finite family of square matrices indexed by the original
+    blocks. If $k=(j,q)$ enumerates the copies in the MPV phase classes, then
+    \[
+        \sum_j\sum_q F_{j,q}=\sum_k F_k.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Evaluate both sides at a pair of matrix indices and apply the bijective
+    enumeration of the finite phase-class quotient.
+\end{proof}
 
 \begin{definition}[BNT canonical form]%
     \label{def:sector_bnt_cf}
