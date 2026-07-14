@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport
 import TNLean.MPS.Core.PhysicalReindexTransport
+import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 
@@ -172,6 +173,54 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     hXX.congr fun N => (hYX_norm_eq N).symm
   exact (dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
     Y X hIrrY hIrrX hTPY hTPX hYX).symm
+
+/-- **Gauge-phase realization of prepared phase-equivalent blocks.**
+
+Source: CPSV16, Proposition `prop:char-BNT`, lines 1135–1148.  If two
+left-canonical, primitive, irreducible blocks have MPV families related by a
+nonzero scalar power, then their bond dimensions agree and, after identifying
+the bond spaces, one is an invertible conjugate of the other up to a nonzero
+scalar.
+
+This is the gauge realization used in the BNT characterization.  It does not
+assert positivity of the scalar or unitarity of the gauge; those conclusions
+belong to the later MPDO-specific argument at arXiv:1606.00608, lines
+1899–1921. -/
+theorem gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
+    {DX DY : ℕ} [NeZero DX] [NeZero DY]
+    {X : MPSTensor d DX} {Y : MPSTensor d DY}
+    (hTPX : IsLeftCanonical X)
+    (hTPY : IsLeftCanonical Y)
+    (hPrimX : _root_.IsPrimitive (transferMap (d := d) (D := DX) X))
+    (hPrimY : _root_.IsPrimitive (transferMap (d := d) (D := DY) Y))
+    (hIrrX : IsIrreducibleTensor X)
+    (hIrrY : IsIrreducibleTensor Y)
+    (h : MPVBlockPhaseEquiv X Y) :
+    ∃ e : DX = DY,
+      GaugePhaseEquiv (cast (congr_arg (MPSTensor d) e) X) Y := by
+  classical
+  have e : DX = DY :=
+    dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
+      hTPX hTPY hPrimX hPrimY hIrrX hIrrY h
+  subst DY
+  refine ⟨rfl, ?_⟩
+  have hX_self :
+      Tendsto (fun N : ℕ => mpvOverlap (d := d) X X N) atTop (nhds (1 : ℂ)) :=
+    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (d := d) (D := DX) X hIrrX hTPX hPrimX
+  have hY_self :
+      Tendsto (fun N : ℕ => mpvOverlap (d := d) Y Y N) atTop (nhds (1 : ℂ)) :=
+    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (d := d) (D := DX) Y hIrrY hTPY hPrimY
+  by_contra hNot
+  obtain ⟨N, _, hN⟩ :=
+    exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
+      X Y hIrrX hIrrY hTPX hTPY hX_self hY_self hNot 0
+  have hSymm : MPVBlockPhaseEquiv Y X := MPVBlockPhaseEquiv.symm h
+  apply hN
+  refine ⟨hSymm.choose ^ N, ?_⟩
+  intro σ
+  exact hSymm.choose_spec.2 N σ
 
 /--
 **Prepared phase classes preserve the original bond dimensions.**
