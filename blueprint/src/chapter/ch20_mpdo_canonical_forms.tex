@@ -721,6 +721,62 @@
     Theorem~\ref{thm:representative_grouped_marked_separation}.
 \end{proof}
 
+\begin{corollary}[Physical-letter marked separation in horizontal canonical form]
+    \label{cor:horizontal_cf_linear_marked_separation}
+    \lean{MPSTensor.linearMarkedTensor}
+    \lean{MPSTensor.linearMarkedTensor_toTensorFromBlocks}
+    \lean{MPSTensor.SectorDecomposition.linearMarkedTensor_toTensor_eq_markedTensor}
+    \lean{MPSTensor.linearMarkedTensor_gauge}
+    \lean{MPSTensor.trace_linearMarkedTensor_mul_evalWord_gauge}
+    \lean{MPOTensor.IsHorizontalCF.linearMarkedTensor_eq_of_trace_agree}
+    \leanok
+    \uses{def:horizontal_cf_mpdo,
+        cor:bnt_marked_representative_separation}
+    Let $M$ be an MPO tensor in literal horizontal canonical form.  For two
+    coefficient families $f_{u,z}$ and $g_{u,z}$, put
+    \[
+        C^u=\sum_z f_{u,z}M^z,
+        \qquad
+        E^u=\sum_z g_{u,z}M^z.
+    \]
+    If, for every marked index $u$ and every word $w$,
+    \[
+        \tr(C^uM^w)=\tr(E^uM^w),
+    \]
+    then $C^u=E^u$ for every $u$.
+
+    The marks are required to lie in the span of the physical letters.  No
+    assertion is made for arbitrary bond-space matrices, since off-diagonal
+    matrices between repeated sectors are invisible to closed chains.  The
+    corollary is the physical-insertion consequence of
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv} used in the
+    contractions of
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{cor:bnt_marked_representative_separation}
+    Pass through the block-diagonal similarity in the literal horizontal
+    canonical form.  Linear combinations of physical letters are covariant
+    under this similarity, and cyclicity of the trace removes it from each
+    closed marked chain.  On the representative-indexed sector
+    decomposition one has
+    \[
+        C_{\mathrm{tot}}^u
+        =\bigoplus_{j,q}\mu_{j,q}
+          \sum_z f_{u,z}A_j^z,
+        \qquad
+        E_{\mathrm{tot}}^u
+        =\bigoplus_{j,q}\mu_{j,q}
+          \sum_z g_{u,z}A_j^z.
+    \]
+    Corollary~\ref{cor:bnt_marked_representative_separation} identifies the
+    two marks on every minimal representative.  Taking their weighted direct
+    sums and restoring the common block-diagonal similarity gives
+    $C^u=E^u$.
+\end{proof}
+
 \begin{theorem}[Representative and literal reduction from first-site contractions]
     \label{thm:representative_one_sub_mp_zero}
     \lean{MPSTensor.FirstSiteActionAgree.of_sameMPV}
