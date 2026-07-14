@@ -162,14 +162,14 @@ both intertwining identities, exact compression, and literal reconstruction
 of every vertical letter
 (\path{TNLean/MPS/MPDO/VerticalSpectral.lean}).
 
-The third stage now has conditional formalizations of its two closing
-arguments.  Granted orthogonal sector projectors whose insertion into the
-single-site vertical loop selects the sector contribution, the trace of the
-density operator compressed by the projector of sector $(\alpha,k)$ is
-identified as the sector weight $\mu_{\alpha,k}$ times a sector trace
-$d_\alpha$, and positivity of the nonzero compressions forces $d_\alpha>0$
-and $\mu_{\alpha,k}>0$ under the normalization $\mu_{\alpha,1}>0$
-(\path{TNLean/MPS/MPDO/SectorTrace.lean}).  Granted the dressed-adjoint
+The positive-weight part of the third stage is complete.  The physical range
+projector of every grouped sector has the required loop identity, with
+$(E_\alpha)_{ab}=\operatorname{tr}(M_\alpha^{(a,b)})$, and horizontal
+separation supplies a nonzero compression.  Its trace is the sector weight
+$\mu_{\alpha,k}$ times a sector trace $d_\alpha$, so MPDO positivity forces
+$d_\alpha>0$ and $\mu_{\alpha,k}>0$ under the normalization
+$\mu_{\alpha,1}>0$ (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
+\path{TNLean/MPS/MPDO/SectorTrace.lean}). Granted the dressed-adjoint
 identities of the two displayed diagrams at lines~1909--1919, transported
 blockwise by Lemma~L, the Gram matrix of each sector gauge $X_{\alpha,k}$ is
 a positive multiple $\omega_{\alpha,k}$ of the identity, in the normalization
@@ -183,13 +183,12 @@ normal-block decomposition
 isometry-preserving refinement is now supplied by
 \path{TNLean/MPS/MPDO/VerticalSpectral.lean}. The normal blocks are now
 grouped into pairwise gauge-phase-distinct BNT representatives in
-\path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a
-nonzero complex coefficient and an invertible bond-space gauge, while the
-physical isometries and the literal vertical reconstruction are retained.
-What remains open is to identify the grouped range projections with their
-loop identities and prove a nonvanishing compression, then derive positivity
-of the grouped coefficients and the dressed-adjoint identities needed to
-normalize the gauges to unitaries.
+\path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a positive
+coefficient, a unit-modulus phase, and an invertible bond-space gauge, while
+the physical isometries and the literal vertical reconstruction are retained.
+What remains open begins with the dressed-adjoint identities at source
+line~1903: they are needed to normalize the gauges to unitaries and assemble
+the final coisometry.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of

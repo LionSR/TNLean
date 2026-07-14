@@ -154,17 +154,21 @@ in
 \path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
 (\path{TNLean/MPS/MPDO/VerticalBNT.lean}).  One normal representative is
 chosen from each class.  Every copy has the same bond dimension as its
-representative and is a nonzero complex scalar times an invertible conjugate
-of that representative.  The representatives are pairwise gauge-phase
+representative and is a unit-modulus scalar times an invertible conjugate of
+that representative; the scalar of the chosen representative is one.  The
+representatives are pairwise gauge-phase
 distinct and form a basis of normal tensors for the weighted block tensor.
 The physical isometries are not changed: both intertwining identities, exact
 compression, and the literal reconstruction of each vertical letter survive
-the regrouping.  This is the algebraic phase-class decomposition invoked in
-the first sentence of source line~1898, obtained by combining the BNT
+the regrouping.  For every grouped sector, its physical range projector
+satisfies the representative-loop identity and gives a nonzero compression at
+some finite length.  The MPDO trace argument then proves that every grouped
+coefficient is positive.  This is the phase-class decomposition and positivity
+argument of source lines~1898--1902, obtained by combining the BNT
 characterization at lines~1135--1148 with the preceding isometry-preserving
 vertical sector theorem.  It does not formalize the positive-diagonal isometry
-asserted at lines~1895--1896.  Positivity of the grouped coefficients and
-unitarity of the gauges remain part of the subsequent argument.  Equality of
+asserted at lines~1895--1896 or the subsequent gauge normalization and final
+coisometry.  Equality of
 the bond dimensions within each phase class is obtained from non-decay of the
 positive-length rectangular overlap, as in Lemma~\texttt{equalMPS}; the
 empty-word coefficient is not used in this comparison.
@@ -177,16 +181,16 @@ chain length. The source prints an all-length inequality, whereas the proof
 only needs one noncommuting length; this local correction is recorded in
 \path{docs/paper-gaps/cpgsv17_periodic_sector_projector.tex}.
 
-Two further steps of source lines~1895--1921 now have conditional
-formalizations.  For the positive weights: granted an orthogonal sector
-projector $P_{\alpha,k}$ whose insertion into the single-site vertical loop
-selects the sector contribution $\mu_{\alpha,k}E_\alpha$, with
-$E_\alpha=\sum_u M_\alpha^{uu}$ the closed loop of the basis tensor
-(\path{MPOTensor.SectorProjectorData}), the trace of the compressed density
-operator is identified as $\mu_{\alpha,k}d_\alpha$, and positivity of the
-nonzero compressions (\path{MPOTensor.mpo_compress_trace_pos}) yields
-$d_\alpha>0$ and $\mu_{\alpha,k}>0$ under the normalization
-$\mu_{\alpha,1}>0$ (\path{MPOTensor.sector_weight_pos} in
+The positive-weight step of source lines~1898--1902 is now complete.  For each
+grouped physical range projector $P_{\alpha,k}$, its insertion into the
+single-site vertical loop selects the contribution
+$\mu_{\alpha,k}E_\alpha$, where
+$(E_\alpha)_{ab}=\operatorname{tr}(M_\alpha^{(a,b)})$.  This formula is
+independent of the copy index because cyclicity of trace removes the internal
+similarity.  Horizontal separation supplies a nonzero compression; its trace
+is $\mu_{\alpha,k}d_\alpha$, and positivity yields $d_\alpha>0$ and
+$\mu_{\alpha,k}>0$ under the normalization $\mu_{\alpha,1}>0$
+(\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
 \path{TNLean/MPS/MPDO/SectorTrace.lean}).  For the unitary gauges: granted
 the dressed-adjoint identities of the two displayed diagrams at source
 lines~1909--1919, transported blockwise by Lemma~L, the scalar commutant of
@@ -198,18 +202,14 @@ $\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ unitary
 (\path{MPSTensor.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint} in
 \path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).
 
-The remaining source-level gap begins after this grouping.  The ranges of the
-grouped physical isometries are already the selector projections
-$P_{\alpha,k}$ of source line~1898.  One must prove their single-site loop
-identities and show that the corresponding compressions are nonzero.  Positivity
-must then be used to show that the grouped coefficients are positive.  The copy
-embeddings must also be assembled into the single
+The remaining source-level gap begins with the dressed-adjoint argument at
+source line~1903.  The copy embeddings must be assembled into the single
 direct-sum coisometry $U$ (equivalently, the adjoint isometry) appearing in
 source lines~1895--1896, with the zero complement treated explicitly.  Finally,
 one must derive the dressed-adjoint identities from self-adjointness of the
 sector compressions and use them to replace each invertible gauge by a
 proportional unitary, as in source lines~1898--1921.
-These conclusions are not part of the grouping theorem.  The original
+These gauge and coisometry conclusions are not part of the grouping theorem.  The original
 formulation of \ghissue{2536}, interpreted as a direct conversion of the
 horizontal scalar weights and diagonal restrictions, is therefore not a
 consequence of Proposition~4.13.

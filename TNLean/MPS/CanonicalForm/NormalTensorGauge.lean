@@ -144,6 +144,77 @@ theorem IsNormalTensor.isNormal [NeZero D]
     isNormal_of_tp_primitive_irreducible _ hTP hPrim hIrr
   exact isNormal_of_gaugeEquiv hNormalGauge hGauge.symm
 
+/-- A normal tensor has a nonzero letter.
+
+Indeed, if every letter vanished, then its transfer map and hence its spectral
+radius would vanish, contradicting the spectral-radius-one normalization of
+arXiv:1606.00608, lines 231--235. -/
+theorem IsNormalTensor.exists_apply_ne_zero [NeZero D]
+    {A : MPSTensor d D} (h : IsNormalTensor A) : ∃ i, A i ≠ 0 := by
+  by_contra hzero
+  push Not at hzero
+  have hmap : transferMap (d := d) (D := D) A = 0 := by
+    ext X a b
+    simp [transferMap_apply, hzero]
+  have hspectral := h.spectral_radius_one
+  rw [hmap] at hspectral
+  simp at hspectral
+
+/-- The self-overlap of a normal tensor tends to one.
+
+The trace-preserving Perron gauge is a pure similarity, so it leaves every
+matrix product vector unchanged.  The assertion therefore follows from the
+primitive trace-preserving overlap limit.  This is the normalization used in
+the proof of Lemma `equalMPS` of arXiv:1606.00608, lines 1080--1097. -/
+theorem IsNormalTensor.selfOverlap_tendsto_one [NeZero D]
+    {A : MPSTensor d D} (hA : IsNormalTensor A) :
+    Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
+  obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
+  let A' := tpGauge (d := d) (D := D) A σ
+  have hPrepared : Tendsto (fun N => mpvOverlap (d := d) A' A' N)
+      atTop (nhds (1 : ℂ)) :=
+    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible A' hIrr hTP hPrim
+  apply hPrepared.congr'
+  filter_upwards with N
+  apply Finset.sum_congr rfl
+  intro w _
+  rw [GaugeEquiv.sameMPV hGauge N w]
+
+/-- Identifying equal bond dimensions does not change normality. -/
+theorem isNormalTensor_cast_iff {D₁ D₂ : ℕ} (hdim : D₁ = D₂)
+    (A : MPSTensor d D₁) :
+    IsNormalTensor (cast (congr_arg (MPSTensor d) hdim) A) ↔ IsNormalTensor A := by
+  subst D₂
+  rfl
+
+/-- The scalar in an explicit gauge-phase relation between normal tensors has
+unit norm.
+
+After identifying the bond dimensions, the gauge relation multiplies the
+self-overlap by powers of $\zeta\overline\zeta$.  Since both normalized
+self-overlaps tend to one, $\lVert\zeta\rVert=1$.  This is the phase
+normalization following Lemma `equalMPS` of arXiv:1606.00608, lines
+1080--1097. -/
+theorem norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNormalTensor A) (hB : IsNormalTensor B)
+    (hdim : D₁ = D₂) {X : GL (Fin D₂) ℂ} {ζ : ℂ}
+    (hrel : ∀ i, B i = ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) *
+      (cast (congr_arg (MPSTensor d) hdim) A) i *
+      (↑(X⁻¹) : Matrix (Fin D₂) (Fin D₂) ℂ))) :
+    ‖ζ‖ = 1 := by
+  subst D₂
+  have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖)
+      atTop (nhds (1 : ℝ)) := by
+    simpa using hA.selfOverlap_tendsto_one.norm
+  have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖)
+      atTop (nhds (1 : ℝ)) := by
+    simpa using hB.selfOverlap_tendsto_one.norm
+  exact norm_eq_one_of_selfOverlap_scale hAA hBB
+    (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+      (mpv_eq_pow_mul_of_gaugePhase A B X ζ hrel))
+
 /-- MPV phase equivalence between normal tensors is realized letterwise by a
 gauge and a nonzero scalar, after identifying their bond dimensions.
 
