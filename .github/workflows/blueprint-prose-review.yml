@@ -7,6 +7,7 @@ on:
       - "TNLean/**/*.lean"
       - "TNLean.lean"
       - "blueprint/src/**/*.tex"
+      - "tex/tn/**/*.tex"
 
 concurrency:
   group: blueprint-prose-review-${{ github.event.pull_request.number }}

@@ -1,216 +1,215 @@
-% Tensor-network diagrams for the independent TNLean slide collection.
+% Dark-theme complete diagrams over TNLean's universal tensor-network core.
 %
-% This file mirrors the mathematical graphical conventions of the blueprint
-% in a dark theme, but it has no dependency on blueprint sources.  Every
-% contracted index begins and ends at a named node anchor; an open index has
-% one named anchor and one deliberately free endpoint.  Dashed strokes are
-% reserved for grouping regions; contractions and trace closures are solid.
+% The semantic atoms, typed ports, and contractions are shared verbatim with
+% the blueprint.  This file changes only the theme slots and defines the six
+% complete figures used by the slide collection.
+\input{../../tex/tn/tn_core} % chktex 27 (repository-relative shared source)
+\input{../../tex/tn/tn_library} % chktex 27 (repository-relative shared source)
 
 \tikzset{
-  slidetn/picture/.style={transform shape, font=\scriptsize},
-  slidetn/tensor/.style={
+  tn theme picture/.style={transform shape, font=\scriptsize},
+  tn theme tensor/.style={
     circle, draw=white, fill=black, minimum size=6.5mm,
     inner sep=1.5pt, text=white, thick, font=\scriptsize\bfseries
   },
-  slidetn/component/.style={
+  tn theme component/.style={
     rectangle, draw=dimwhite, fill=cardbg, minimum height=7mm,
     inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
   },
-  slidetn/map/.style={
+  tn theme factor/.style={
+    rectangle, draw=dimwhite, fill=black!55, minimum height=7mm,
+    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
+  },
+  tn theme map/.style={
     rectangle, rounded corners=2pt, draw=leanblue, fill=cardbg,
     inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
   },
-  slidetn/state/.style={
+  tn theme state/.style={
     rectangle, rounded corners=2pt, draw=dimwhite, fill=black!55,
     inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
   },
-  slidetn/insertion/.style={
+  tn theme expression/.style={
+    rectangle, rounded corners=0.7pt, draw=amber, fill=cardbg,
+    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
+  },
+  tn theme insertion/.style={
     circle, draw=white, fill=softred, minimum size=5.5mm,
     inner sep=1pt, text=black, thick, font=\scriptsize\bfseries
   },
-  slidetn/virtual wire/.style={draw=white, line width=0.8pt},
-  slidetn/physical wire/.style={draw=leangreen!80!white, line width=1.2pt},
-  slidetn/trace/.style={slidetn/virtual wire, rounded corners=3pt},
-  slidetn/grouping/.style={draw=dimwhite, densely dashed, rounded corners=2pt},
-  slidetn/label/.style={text=dimwhite, font=\scriptsize}
+  tn theme junction/.style={circle, fill=white, inner sep=0.8pt},
+  tn theme virtual wire/.style={draw=white, line width=0.8pt},
+  tn theme physical wire/.style={draw=leangreen!80!white, line width=1.2pt},
+  tn theme trace/.style={rounded corners=3pt},
+  tn theme factor region/.style={draw=dimwhite, rounded corners=2pt},
+  tn theme grouping region/.style={
+    draw=dimwhite, densely dashed, rounded corners=2pt
+  },
+  tn theme annotation/.style={draw=dimwhite, thick},
+  tn theme label/.style={text=dimwhite, font=\scriptsize}
 }
 
-\newcommand{\SlideTNTensor}[3]{%
-  \node[slidetn/tensor] (#1) at #2 {$#3$};%
-}
+\makeatletter
 
-\newcommand{\SlideTNComponent}[3]{%
-  \node[slidetn/component] (#1) at #2 {$#3$};%
-}
-
-\newcommand{\SlideTNState}[3]{%
-  \node[slidetn/state] (#1) at #2 {$#3$};%
-}
-
-\newcommand{\SlideTNInsertion}[3]{%
-  \node[slidetn/insertion] (#1) at #2 {$#3$};%
-}
-
-\newcommand{\SlideTNPhysicalLeg}[2]{%
-  \draw[slidetn/physical wire] (#1.north) -- ++(0,0.48);%
-  \if\relax\detokenize{#2}\relax\else
-    \node[above, slidetn/label] at ($(#1.north)+(0,0.48)$) {$#2$};%
-  \fi
-}
-
-\newcommand{\SlideTNVirtualBond}[2]{%
-  \draw[slidetn/virtual wire] (#1.east) -- (#2.west);%
-}
-
-\newcommand{\SlideTNOpenLeft}[1]{%
-  \draw[slidetn/virtual wire] (#1.west) -- ++(-0.48,0);%
-}
-
-\newcommand{\SlideTNOpenRight}[1]{%
-  \draw[slidetn/virtual wire] (#1.east) -- ++(0.48,0);%
-}
-
-\newcommand{\SlideTNOmittedChain}[2]{%
-  \draw[slidetn/virtual wire] (#1.east) -- ++(0.38,0);%
-  \draw[slidetn/virtual wire] (#2.west) -- ++(-0.38,0);%
-  \node[text=dimwhite] at ($(#1.east)!0.5!(#2.west)$) {$\cdots$};%
-}
-
-\newcommand{\SlideTNTraceClosure}[3]{%
-  \draw[slidetn/trace] (#1.west) -- ++(-0.42,0) -- ++(0,-#3)
-    -| ($(#2.east)+(0.42,0)$) -- (#2.east);%
-}
-
-% A common periodic MPS word.  Omitted sites are denoted by two open solid
-% stubs and an ellipsis, never by a dashed contraction.
+% A common periodic MPS word.  Omitted sites are represented by two typed
+% external terminals and an ellipsis; the trace is a port-to-port closure.
 \newcommand{\SlideTNPeriodicMPS}[2]{%
-  \begin{tikzpicture}[slidetn/picture]
-    \SlideTNTensor{sltnAone}{(0,0)}{#1}
-    \SlideTNTensor{sltnAtwo}{(1.30,0)}{#1}
-    \SlideTNTensor{sltnApen}{(3.25,0)}{#1}
-    \SlideTNTensor{sltnAlast}{(4.55,0)}{#1}
-    \SlideTNVirtualBond{sltnAone}{sltnAtwo}
-    \SlideTNOmittedChain{sltnAtwo}{sltnApen}
-    \SlideTNVirtualBond{sltnApen}{sltnAlast}
-    \SlideTNPhysicalLeg{sltnAone}{i_1}
-    \SlideTNPhysicalLeg{sltnAtwo}{i_2}
-    \SlideTNPhysicalLeg{sltnApen}{i_{#2-1}}
-    \SlideTNPhysicalLeg{sltnAlast}{i_{#2}}
-    \SlideTNTraceClosure{sltnAone}{sltnAlast}{0.78}
-    \node[slidetn/label] at (2.28,-1.02) {trace; bond dimension $D$};
+  \begin{tikzpicture}[tn picture]
+    \TN@labeledmpssite{sltnAone}{(0,0)}{#1}
+    \TN@labeledmpssite{sltnAtwo}{(1.30,0)}{#1}
+    \TN@labeledmpssite{sltnApen}{(3.25,0)}{#1}
+    \TN@labeledmpssite{sltnAlast}{(4.55,0)}{#1}
+    \TN@vconnectports{sltnAoneE}{sltnAtwoW}
+    \TN@vopenport{sltnAtwoE}{0.38,0}
+    \TN@vopenport{sltnApenW}{-0.38,0}
+    \TN@vconnectports{sltnApenE}{sltnAlastW}
+    \TN@popenport{sltnAoneN}{0,0.48}
+    \TN@popenport{sltnAtwoN}{0,0.48}
+    \TN@popenport{sltnApenN}{0,0.48}
+    \TN@popenport{sltnAlastN}{0,0.48}
+    \TN@label{sltnAoneNOpen}{(0,0.22)}{i_1}
+    \TN@label{sltnAtwoNOpen}{(0,0.22)}{i_2}
+    \TN@label{sltnApenNOpen}{(0,0.22)}{i_{#2-1}}
+    \TN@label{sltnAlastNOpen}{(0,0.22)}{i_{#2}}
+    \TN@vtraceportsbelow{sltnAoneW}{sltnAlastE}{0.42}{0.78}
+    \node[tn label] at (2.28,0) {$\cdots$};
+    \node[tn label] at (2.28,-1.02) {trace; bond dimension $D$};
   \end{tikzpicture}%
 }
 
 % The left-hand tensor is B, matching B^i = X A^i X^{-1}.
 \newcommand{\SlideTNGaugeConjugation}[3]{%
-  \begin{tikzpicture}[slidetn/picture]
-    \SlideTNTensor{sltnB}{(0,0)}{#1}
-    \SlideTNOpenLeft{sltnB}
-    \SlideTNOpenRight{sltnB}
-    \SlideTNPhysicalLeg{sltnB}{i}
-    \node[text=white, font=\Large] at (1.35,0) {$=$};
-    \SlideTNInsertion{sltnX}{(2.35,0)}{#3}
-    \SlideTNTensor{sltnA}{(3.55,0)}{#2}
-    \SlideTNInsertion{sltnXi}{(4.80,0)}{#3^{-1}}
-    \SlideTNOpenLeft{sltnX}
-    \SlideTNVirtualBond{sltnX}{sltnA}
-    \SlideTNVirtualBond{sltnA}{sltnXi}
-    \SlideTNOpenRight{sltnXi}
-    \SlideTNPhysicalLeg{sltnA}{i}
+  \begin{tikzpicture}[tn picture]
+    \TN@labeledmpssite{sltnB}{(0,0)}{#1}
+    \TN@vopenport{sltnBW}{-0.48,0}
+    \TN@vopenport{sltnBE}{0.48,0}
+    \TN@popenport{sltnBN}{0,0.48}
+    \TN@label{sltnBNOpen}{(0,0.22)}{i}
+    \node[tn label, text=white, font=\Large] at (1.35,0) {$=$};
+    \TN@vinsertion{sltnX}{(2.35,0)}{#3}
+    \TN@labeledmpssite{sltnA}{(3.55,0)}{#2}
+    \TN@vinsertion{sltnXi}{(4.80,0)}{#3^{-1}}
+    \TN@vopenport{sltnXW}{-0.48,0}
+    \TN@vconnectports{sltnXE}{sltnAW}
+    \TN@vconnectports{sltnAE}{sltnXiW}
+    \TN@vopenport{sltnXiE}{0.48,0}
+    \TN@popenport{sltnAN}{0,0.48}
+    \TN@label{sltnANOpen}{(0,0.22)}{i}
   \end{tikzpicture}%
 }
 
 \newcommand{\SlideTNBlockingIdentity}[3]{%
-  \begin{tikzpicture}[slidetn/picture, scale=0.82]
-    \SlideTNComponent{sltnC}{(0,0)}{#1}
-    \SlideTNOpenLeft{sltnC}
-    \SlideTNOpenRight{sltnC}
-    \SlideTNPhysicalLeg{sltnC}{(i_1,\ldots,i_{#3})}
-    \node[text=white, font=\Large] at (1.25,0) {$=$};
-    \SlideTNTensor{sltnBone}{(2.10,0)}{#2}
-    \SlideTNTensor{sltnBtwo}{(3.25,0)}{#2}
-    \SlideTNTensor{sltnBlast}{(5.15,0)}{#2}
-    \SlideTNOpenLeft{sltnBone}
-    \SlideTNVirtualBond{sltnBone}{sltnBtwo}
-    \SlideTNOmittedChain{sltnBtwo}{sltnBlast}
-    \SlideTNOpenRight{sltnBlast}
-    \SlideTNPhysicalLeg{sltnBone}{i_1}
-    \SlideTNPhysicalLeg{sltnBtwo}{i_2}
-    \SlideTNPhysicalLeg{sltnBlast}{i_{#3}}
-    \draw[decorate, decoration={brace, mirror, amplitude=4pt}, dimwhite, thick]
+  \begin{tikzpicture}[tn picture, scale=0.82]
+    \TN@vcomponent{sltnC}{(0,0)}{#1}
+    \TN@pport{sltnCN}{sltnC}{north}
+    \TN@vopenport{sltnCW}{-0.48,0}
+    \TN@vopenport{sltnCE}{0.48,0}
+    \TN@popenport{sltnCN}{0,0.48}
+    \TN@label{sltnCNOpen}{(0,0.22)}{(i_1,\ldots,i_{#3})}
+    \node[tn label, text=white, font=\Large] at (1.25,0) {$=$};
+    \TN@labeledmpssite{sltnBone}{(2.10,0)}{#2}
+    \TN@labeledmpssite{sltnBtwo}{(3.25,0)}{#2}
+    \TN@labeledmpssite{sltnBlast}{(5.15,0)}{#2}
+    \TN@vopenport{sltnBoneW}{-0.48,0}
+    \TN@vconnectports{sltnBoneE}{sltnBtwoW}
+    \TN@vopenport{sltnBtwoE}{0.38,0}
+    \TN@vopenport{sltnBlastW}{-0.38,0}
+    \TN@vopenport{sltnBlastE}{0.48,0}
+    \TN@popenport{sltnBoneN}{0,0.48}
+    \TN@popenport{sltnBtwoN}{0,0.48}
+    \TN@popenport{sltnBlastN}{0,0.48}
+    \TN@label{sltnBoneNOpen}{(0,0.22)}{i_1}
+    \TN@label{sltnBtwoNOpen}{(0,0.22)}{i_2}
+    \TN@label{sltnBlastNOpen}{(0,0.22)}{i_{#3}}
+    \node[tn label] at (4.20,0) {$\cdots$};
+    \TN@annotationpath[decorate,
+      decoration={brace, mirror, amplitude=4pt}]{
       (1.72,-0.58) -- (5.55,-0.58)
-      node[midway, below=5pt, slidetn/label] {$#3$ copies};
+      node[midway, below=5pt, tn label] {$#3$ copies};}
   \end{tikzpicture}%
 }
 
 \newcommand{\SlideTNMixedTransfer}[4]{%
-  \begin{tikzpicture}[slidetn/picture]
-    \SlideTNState{sltnRho}{(-1.15,0)}{#3}
+  \begin{tikzpicture}[tn picture]
+    \TN@state{sltnRho}{(-1.15,0)}{#3}
+    \TN@veastport{sltnRhoTop}{sltnRho}{0.25}
+    \TN@veastport{sltnRhoBottom}{sltnRho}{0.75}
     \foreach \name/\x in {One/0,Two/1.30,Pen/3.25,Last/4.55} {
-      \SlideTNTensor{sltnTop\name}{(\x,0.72)}{#1}
+      \TN@labeledmposite{sltnTop\name}{(\x,0.72)}{#1}
+      \TN@labeledmposite{sltnBot\name}{(\x,-0.72)}{#2^\dagger}
     }
-    \foreach \name/\x in {One/0,Two/1.30,Pen/3.25,Last/4.55} {
-      \SlideTNTensor{sltnBot\name}{(\x,-0.72)}{#2^\dagger}
-    }
-    \draw[slidetn/virtual wire] (sltnRho.north east) -- (sltnTopOne.west);
-    \draw[slidetn/virtual wire] (sltnRho.south east) -- (sltnBotOne.west);
-    \SlideTNVirtualBond{sltnTopOne}{sltnTopTwo}
-    \SlideTNVirtualBond{sltnBotOne}{sltnBotTwo}
-    \SlideTNOmittedChain{sltnTopTwo}{sltnTopPen}
-    \SlideTNOmittedChain{sltnBotTwo}{sltnBotPen}
-    \SlideTNVirtualBond{sltnTopPen}{sltnTopLast}
-    \SlideTNVirtualBond{sltnBotPen}{sltnBotLast}
-    \SlideTNOpenRight{sltnTopLast}
-    \SlideTNOpenRight{sltnBotLast}
+    \TN@vconnectports{sltnRhoTop}{sltnTopOneW}
+    \TN@vconnectports{sltnRhoBottom}{sltnBotOneW}
+    \TN@vconnectports{sltnTopOneE}{sltnTopTwoW}
+    \TN@vconnectports{sltnBotOneE}{sltnBotTwoW}
+    \TN@vopenport{sltnTopTwoE}{0.38,0}
+    \TN@vopenport{sltnTopPenW}{-0.38,0}
+    \TN@vopenport{sltnBotTwoE}{0.38,0}
+    \TN@vopenport{sltnBotPenW}{-0.38,0}
+    \TN@vconnectports{sltnTopPenE}{sltnTopLastW}
+    \TN@vconnectports{sltnBotPenE}{sltnBotLastW}
+    \TN@vopenport{sltnTopLastE}{0.48,0}
+    \TN@vopenport{sltnBotLastE}{0.48,0}
     \foreach \name in {One,Two,Pen,Last} {
-      \draw[slidetn/physical wire] (sltnTop\name.south) -- (sltnBot\name.north);
+      \TN@pconnectports{sltnTop\name S}{sltnBot\name N}
     }
-    \node[slidetn/label, anchor=west] at (5.35,0) {$\mathcal F^{#4}_{#1,#2}(#3)$};
+    \node[tn label] at (2.28,0.72) {$\cdots$};
+    \node[tn label] at (2.28,-0.72) {$\cdots$};
+    \node[tn label, anchor=west] at (5.35,0)
+      {$\mathcal F^{#4}_{#1,#2}(#3)$};
   \end{tikzpicture}%
 }
 
 \newcommand{\SlideTNTransferMap}[2]{%
-  \begin{tikzpicture}[slidetn/picture]
-    \SlideTNState{sltnInput}{(-1.55,0)}{#2}
-    \SlideTNTensor{sltnKet}{(0,0.72)}{#1}
-    \SlideTNTensor{sltnBra}{(0,-0.72)}{\overline{#1}}
-    \draw[slidetn/virtual wire] (sltnInput.north east) -- (sltnKet.west);
-    \draw[slidetn/virtual wire] (sltnInput.south east) -- (sltnBra.west);
-    \draw[slidetn/physical wire] (sltnKet.south) -- (sltnBra.north)
-      node[midway, right, slidetn/label] {$\sum_i$};
-    \SlideTNOpenRight{sltnKet}
-    \SlideTNOpenRight{sltnBra}
-    \node[slidetn/label, anchor=west] at (0.95,0) {$\mathcal E_{#1}(#2)$};
+  \begin{tikzpicture}[tn picture]
+    \TN@state{sltnInput}{(-1.55,0)}{#2}
+    \TN@veastport{sltnInputTop}{sltnInput}{0.25}
+    \TN@veastport{sltnInputBottom}{sltnInput}{0.75}
+    \TN@labeledmposite{sltnKet}{(0,0.72)}{#1}
+    \TN@labeledmposite{sltnBra}{(0,-0.72)}{\overline{#1}}
+    \TN@vconnectports{sltnInputTop}{sltnKetW}
+    \TN@vconnectports{sltnInputBottom}{sltnBraW}
+    \TN@pconnectports{sltnKetS}{sltnBraN}
+    \TN@vopenport{sltnKetE}{0.48,0}
+    \TN@vopenport{sltnBraE}{0.48,0}
+    \node[tn label] at (0.32,0) {$\sum_i$};
+    \node[tn label, anchor=west] at (0.95,0)
+      {$\mathcal E_{#1}(#2)$};
   \end{tikzpicture}%
 }
 
 \newcommand{\SlideTNBlockingComparison}[2]{%
-  \begin{tikzpicture}[slidetn/picture, scale=0.82]
-    \node[slidetn/label, anchor=east] at (-0.55,0.75) {chain of $N$:};
+  \begin{tikzpicture}[tn picture, scale=0.82]
+    \node[tn label, anchor=east] at (-0.55,0.75) {chain of $N$:};
     \foreach \x/\name in {0/One,0.85/Two,1.70/Three,4.05/Pen,4.90/Last} {
-      \SlideTNTensor{sltnP\name}{(\x,0.75)}{#1}
-      \SlideTNPhysicalLeg{sltnP\name}{}
+      \TN@labeledmpssite{sltnP\name}{(\x,0.75)}{#1}
+      \TN@popenport{sltnP\name N}{0,0.48}
     }
-    \SlideTNVirtualBond{sltnPOne}{sltnPTwo}
-    \SlideTNVirtualBond{sltnPTwo}{sltnPThree}
-    \SlideTNOmittedChain{sltnPThree}{sltnPPen}
-    \SlideTNVirtualBond{sltnPPen}{sltnPLast}
-    \SlideTNOpenLeft{sltnPOne}
-    \SlideTNOpenRight{sltnPLast}
-    \node[slidetn/label, anchor=east] at (-0.55,-0.85) {after blocking $#2$:};
-    \SlideTNComponent{sltnBlockOne}{(0.65,-0.85)}{#1^{(#2)}}
-    \SlideTNComponent{sltnBlockTwo}{(2.45,-0.85)}{#1^{(#2)}}
-    \SlideTNComponent{sltnBlockLast}{(4.25,-0.85)}{#1^{(#2)}}
-    \SlideTNVirtualBond{sltnBlockOne}{sltnBlockTwo}
-    \SlideTNVirtualBond{sltnBlockTwo}{sltnBlockLast}
-    \SlideTNOpenLeft{sltnBlockOne}
-    \SlideTNOpenRight{sltnBlockLast}
-    \SlideTNPhysicalLeg{sltnBlockOne}{}
-    \SlideTNPhysicalLeg{sltnBlockTwo}{}
-    \SlideTNPhysicalLeg{sltnBlockLast}{}
-    \draw[slidetn/grouping] (-0.20,0.30) -- (-0.20,-0.35);
-    \draw[slidetn/grouping] (1.55,0.30) -- (1.55,-0.35);
-    \draw[slidetn/grouping] (3.65,0.30) -- (3.65,-0.35);
-    \draw[slidetn/grouping] (5.30,0.30) -- (5.30,-0.35);
+    \TN@vconnectports{sltnPOneE}{sltnPTwoW}
+    \TN@vconnectports{sltnPTwoE}{sltnPThreeW}
+    \TN@vopenport{sltnPThreeE}{0.38,0}
+    \TN@vopenport{sltnPPenW}{-0.38,0}
+    \TN@vconnectports{sltnPPenE}{sltnPLastW}
+    \TN@vopenport{sltnPOneW}{-0.48,0}
+    \TN@vopenport{sltnPLastE}{0.48,0}
+    \node[tn label] at (2.88,0.75) {$\cdots$};
+    \node[tn label, anchor=east] at (-0.55,-0.85)
+      {after blocking $#2$:};
+    \TN@vcomponent{sltnBlockOne}{(0.65,-0.85)}{#1^{(#2)}}
+    \TN@vcomponent{sltnBlockTwo}{(2.45,-0.85)}{#1^{(#2)}}
+    \TN@vcomponent{sltnBlockLast}{(4.25,-0.85)}{#1^{(#2)}}
+    \foreach \name in {One,Two,Last} {
+      \TN@pport{sltnBlock\name N}{sltnBlock\name}{north}
+      \TN@popenport{sltnBlock\name N}{0,0.48}
+    }
+    \TN@vconnectports{sltnBlockOneE}{sltnBlockTwoW}
+    \TN@vconnectports{sltnBlockTwoE}{sltnBlockLastW}
+    \TN@vopenport{sltnBlockOneW}{-0.48,0}
+    \TN@vopenport{sltnBlockLastE}{0.48,0}
+    \TN@grouppath{(-0.20,0.30) -- (-0.20,-0.35);}
+    \TN@grouppath{(1.55,0.30) -- (1.55,-0.35);}
+    \TN@grouppath{(3.65,0.30) -- (3.65,-0.35);}
+    \TN@grouppath{(5.30,0.30) -- (5.30,-0.35);}
   \end{tikzpicture}%
 }
+
+\makeatother
