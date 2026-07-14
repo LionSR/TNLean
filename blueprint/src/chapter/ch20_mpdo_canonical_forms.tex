@@ -2652,9 +2652,11 @@
 \end{proof}
 \begin{lemma}[A retained vertical phase class exists]
     \label{lem:mpdo_vertical_retained_class_nonempty}
-    \notready
+    \lean{MPOTensor.IsHorizontalCF.exists_nonempty_verticalBNTGrouping}
+    \leanok
     \uses{def:horizontal_cf_mpdo,
-        thm:mpdo_vertical_bnt_grouping_with_isometries}
+        thm:mpdo_vertical_bnt_grouping_with_isometries,
+        lem:mpv_phase_class_nonempty}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}, the retained
     vertical decomposition has at least one sector and hence at least one
@@ -2662,6 +2664,7 @@
 \end{lemma}
 
 \begin{proof}
+    \leanok
     The unit-modulus weight witness in the horizontal canonical form, together
     with left canonicity of its representative, makes the doubled-index tensor
     nonzero.  Hence its vertical reshaping $\widetilde M$ is nonzero.  If the
