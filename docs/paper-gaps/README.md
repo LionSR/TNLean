@@ -63,10 +63,12 @@ For MPDO renormalization fixed points:
   one-component, hence locally orthogonal, BNT, but its transfer map is not
   idempotent. It identifies the failed inference at source lines 1248--1251.
 - `cpsv16_rfp_isometry_scope.tex` records the normalization and cross-block
-  content of the source's equation `III_isometry`, together with the remaining
-  canonical-form hypotheses. It also records the ambiguity between a literal
-  virtual-block reading of the repeated-copy display `III_CFI_RFP` and the
-  accompanying physical direct-sum interpretation: the one-letter phase-flip
+  content of the source's equation `III_isometry`. The blockwise hypotheses are
+  now derived from the single BNT canonical-form predicate for the
+  multiplicity-one basis direct sum. The note also records the ambiguity
+  between a literal virtual-block reading of the repeated-copy display
+  `III_CFI_RFP` and its accompanying physical direct-sum interpretation: the
+  one-letter phase-flip
   tensor fails both `AA=A` and whole-tensor transfer-map idempotence. The source
   relation `AA=A` and its unrestricted equivalence with transfer-map
   idempotence are formalized; the physical-space meaning of the repeated-copy

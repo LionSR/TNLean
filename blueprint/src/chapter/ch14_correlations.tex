@@ -1227,6 +1227,50 @@ and rates for the single-tensor transfer map $\E_A$.
     (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form_direct_sum}).
 \end{proof}
 
+\begin{corollary}[BNT basis direct-sum characterization]%
+    \label{cor:rfp_bnt_basis_direct_sum_iff}
+    \lean{MPSTensor.IsBNTCanonicalForm.isRFP_basisDirectSum_iff}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isRFP_basisDirectSum}
+    \leanok
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence,
+        def:is_isometry_canonical_form, def:mixed_transfer_rect,
+        def:is_residual_isometry_family}
+    Let $P$ be in BNT canonical form, with distinct basis tensors $(B_j)_j$.
+    Then the direct sum containing one copy of each basis tensor is a
+    renormalization fixed point if and only if every $B_j$ is in isometry
+    canonical form and
+    \[
+        \E_{j,j'}=0 \qquad (j\ne j').
+    \]
+    This is the multiplicity-one, phase-one specialization of
+    \cite[Theorem~III and Corollary~III.3]{Cirac2016MPDO_arXiv}.  It concerns
+    the direct sum of the basis representatives, not the repeated-copy tensor
+    carrying the weights $\mu_{j,q}$.
+
+    Moreover, if the basis direct sum is a renormalization fixed point, there
+    are invertible matrices $X_j$, positive trace-normalized diagonal weights
+    $\Lambda_j$, and residual tensors $U_j$ such that
+    \[
+        B_j^i=X_j\sqrt{\Lambda_j}\,U_j^iX_j^{-1},
+    \]
+    and the family $(U_j)_j$ satisfies the full residual isometry condition,
+    including the cross-block equations for $j\ne j'$.
+% The physical-space construction of the repeated-copy index is recorded in
+% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:rfp_directSumTensor_iff}
+    Positive basis dimensions supply the nonzero bond spaces.  For each basis
+    tensor, irreducibility and left-canonical normalization are part of the BNT
+    canonical form.  Its normalized self-overlap converges to one; the periodic
+    self-overlap formula therefore forces peripheral period one, and hence
+    normality.  Gauge-phase distinctness is also part of the BNT canonical
+    form.  The equivalence now follows from
+    Theorem~\ref{thm:rfp_directSumTensor_iff}; the same derived hypotheses in
+    Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum} give the residual
+    isometry family.
+\end{proof}
+
 \begin{theorem}[Ambiguity of the literal repeated-phase display]%
     \label{thm:phase_flip_tensor_not_rfp}
     \lean{MPSTensor.phaseFlipTensor_literal_display_ambiguity}
