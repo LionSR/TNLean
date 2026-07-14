@@ -87,24 +87,7 @@
 
         \column{0.4\textwidth}
         \begin{center}
-            \begin{tikzpicture}[
-                tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt, minimum size=6mm, text=white},
-                bond/.style={thick, white},
-                phys/.style={thick, leangreen!80!white}
-            ]
-                \node[tn] (A1) at (0,0) {$A$};
-                \node[tn] (A2) at (1.2,0) {$A$};
-                \node[tn] (A3) at (2.4,0) {$A$};
-                
-                \draw[bond] (A1) -- (A2);
-                \draw[bond] (A2) -- (A3);
-                
-                \draw[phys] (A1.north) -- ++(0,0.4);
-                \draw[phys] (A2.north) -- ++(0,0.4);
-                \draw[phys] (A3.north) -- ++(0,0.4);
-                
-                \draw[bond, dashed] (A1.west) to[bend left=45] (A3.east);
-            \end{tikzpicture}
+            \SlideTNPeriodicMPS{A}{N}
             \\ \vspace{0.5em}
             {\footnotesize Periodic Boundary Conditions (Trace)}
         \end{center}

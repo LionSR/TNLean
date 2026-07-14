@@ -55,13 +55,13 @@ name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
 name: TNPermutationTwistLabeled TNPermutationTwist TNTwistedTransfer
 {{ obj.tn_svg_html }}
 
-name: TNCondCOne TNCondCTwo TNStringOrderParameter TNVirtualInsertion
+name: TNCondCOne TNCondCTwo TNStringOrderParameter
 {{ obj.tn_svg_html }}
 
 name: TNInternalTraceInsertion TNExternalTraceInsertion TNBoundaryRegrow
 {{ obj.tn_svg_html }}
 
-name: TNLocalEqualityStep TNPeriodicGauge TNGroundSpaceMap
+name: TNLocalEqualityStep TNGroundSpaceMap
 {{ obj.tn_svg_html }}
 
 name: TNPEPSEdgeGaugeOrientation TNPEPSGaugeVertexAction
