@@ -1081,10 +1081,18 @@ and rates for the single-tensor transfer map $\E_A$.
     \]
 \end{theorem}
 \begin{proof}\leanok
-    The pairwise criterion and
-    Lemma~\ref{lem:mixed_transfer_rect_smul} show that
-    $(\mu_q\overline{\mu_{q'}})\E_A$ is idempotent. Since $\E_A$ is nonzero
-    and idempotent,
+    The pairwise criterion
+    (Theorem~\ref{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed})
+    gives that $\E_{\mu_qA,\mu_{q'}A}$ is idempotent.
+    Lemma~\ref{lem:mixed_transfer_rect_smul} and
+    $\E_{A,A}=\E_A$ give
+    \[
+        \E_{\mu_qA,\mu_{q'}A}
+        =\mu_q\overline{\mu_{q'}}\E_{A,A}
+        =\mu_q\overline{\mu_{q'}}\E_A.
+    \]
+    Hence $(\mu_q\overline{\mu_{q'}})\E_A$ is idempotent. Since $\E_A$ is
+    nonzero and idempotent,
     \[
         (\mu_q\overline{\mu_{q'}})^2\E_A
         =\mu_q\overline{\mu_{q'}}\E_A
