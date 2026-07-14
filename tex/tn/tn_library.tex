@@ -867,10 +867,34 @@
 % profile-controlled clearance; the general form is reserved for irregular
 % regions and takes a relative displacement rather than a page coordinate.
 \newcommand{\TNLabel}[3]{\TN@label{#1}{#2}{#3}}
-\newcommand{\TNLabelAbove}[2]{\TN@label[anchor=south]{#1}{(0,0.24)}{#2}}
-\newcommand{\TNLabelBelow}[2]{\TN@label[anchor=north]{#1}{(0,-0.24)}{#2}}
-\newcommand{\TNLabelLeft}[2]{\TN@label[anchor=east]{#1}{(-0.24,0)}{#2}}
-\newcommand{\TNLabelRight}[2]{\TN@label[anchor=west]{#1}{(0.24,0)}{#2}}
+\newcommand{\TNLabelAbove}[2]{%
+    \TN@label[anchor=south]{#1}{(0,\TN@labelclearance)}{#2}%
+}
+\newcommand{\TNLabelBelow}[2]{%
+    \TN@label[anchor=north]{#1}{(0,-\TN@labelclearance)}{#2}%
+}
+\newcommand{\TNLabelLeft}[2]{%
+    \TN@label[anchor=east]{#1}{(-\TN@labelclearance,0)}{#2}%
+}
+\newcommand{\TNLabelRight}[2]{%
+    \TN@label[anchor=west]{#1}{(\TN@labelclearance,0)}{#2}%
+}
+\newcommand{\TNSelectedLabelAbove}[2]{%
+    \TN@label[anchor=south,tn region label selected]
+        {#1}{(0,\TN@labelclearance)}{#2}%
+}
+\newcommand{\TNSelectedLabelBelow}[2]{%
+    \TN@label[anchor=north,tn region label selected]
+        {#1}{(0,-\TN@labelclearance)}{#2}%
+}
+\newcommand{\TNSecondaryLabelAbove}[2]{%
+    \TN@label[anchor=south,tn region label secondary]
+        {#1}{(0,\TN@labelclearance)}{#2}%
+}
+\newcommand{\TNSecondaryLabelBelow}[2]{%
+    \TN@label[anchor=north,tn region label secondary]
+        {#1}{(0,-\TN@labelclearance)}{#2}%
+}
 
 % A placed annotation is not a tensor-network object and therefore carries no
 % index ports.  Naming the point keeps later labels and arrows compositional.
@@ -915,6 +939,16 @@
 }
 
 % Regions and explanatory marks do not represent index contractions.
+\newcommand{\TNCanvas}[2]{\TN@canvas{#1}{#2}}
+\newcommand{\TNGroupingRegion}[3]{%
+    \TN@groupregion{#1}{#2}{#3}%
+}
+\newcommand{\TNGroupingRegionAbove}[3]{%
+    \TN@groupregionabove{#1}{#2}{#3}%
+}
+\newcommand{\TNGroupingRegionSelectedBelow}[3]{%
+    \TN@groupregionselectedbelow{#1}{#2}{#3}%
+}
 \newcommand{\TNGroupBoundary}[1]{\TN@grouppath{#1}}
 \newcommand{\TNFactorBoundary}[1]{\TN@factorpath{#1}}
 \newcommand{\TNAnnotation}[1]{\TN@annotationpath{#1}}
