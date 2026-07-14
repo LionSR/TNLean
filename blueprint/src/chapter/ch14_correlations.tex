@@ -980,6 +980,73 @@ and rates for the single-tensor transfer map $\E_A$.
     \]
 \end{proof}
 
+\begin{lemma}[Pairwise idempotence of the block transfer sum]%
+    \label{lem:block_transfer_sum_idempotent_of_pairwise_mixed}
+    \lean{MPSTensor.blockTransferSum_idempotent_of_pairwise_mixedTransferMap₂}
+    \leanok
+    \uses{def:mixed_transfer_rect, lem:block_diagonal_transfer_sum_to_block}
+    Let $(B_k)_k$ be a family of tensors. If every mixed transfer operator
+    $\E_{j,j'}$ is idempotent, then the block transfer sum $\mathcal S_B$ is
+    idempotent:
+    \[
+        \mathcal S_B\bigl(\mathcal S_B(X)\bigr)=\mathcal S_B(X).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block}, the $(j,j')$
+    block satisfies
+    \[
+        \bigl(\mathcal S_B^2(X)\bigr)_{j,j'}
+        = \E_{j,j'}^2(X_{j,j'})
+        = \E_{j,j'}(X_{j,j'})
+        = \bigl(\mathcal S_B(X)\bigr)_{j,j'}.
+    \]
+    Equality on every block gives the asserted equality on the total bond
+    space.
+\end{proof}
+
+\begin{theorem}[Pairwise mixed-transfer criterion for a direct sum]%
+    \label{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
+    \lean{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:mixed_transfer_rect,
+        lem:block_diagonal_transfer_sum_to_block,
+        lem:block_transfer_sum_idempotent_of_pairwise_mixed}
+    Suppose every bond dimension is positive. The transfer map of
+    $\bigoplus_k B_k$ is idempotent if and only if, for every pair $j,j'$,
+    the mixed transfer operator is idempotent:
+    \[
+        \E_{\oplus_k B_k}^2=\E_{\oplus_k B_k}
+        \quad\Longleftrightarrow\quad
+        \E_{j,j'}^2=\E_{j,j'}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block}, the $(j,j')$
+    block of the direct-sum transfer map depends only on the $(j,j')$ block of
+    its argument and is obtained by applying $\E_{j,j'}$. Thus pairwise
+    idempotence gives
+    \[
+        \bigl(\E_{\oplus_k B_k}^2(X)\bigr)_{j,j'}
+        = \E_{j,j'}^2(X_{j,j'})
+        = \E_{j,j'}(X_{j,j'})
+        = \bigl(\E_{\oplus_k B_k}(X)\bigr)_{j,j'}
+    \]
+    for every pair of blocks, and hence gives idempotence on the total bond
+    space, as in
+    Lemma~\ref{lem:block_transfer_sum_idempotent_of_pairwise_mixed}.
+    Conversely, every matrix $M$ of the appropriate rectangular size occurs as
+    the $(j,j')$ block of some $Y$ on the total bond space. Applying
+    Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} and whole-tensor
+    idempotence gives
+    \[
+        \E_{j,j'}^2(M)
+        = \bigl(\E_{\oplus_k B_k}^2(Y)\bigr)_{j,j'}
+        = \bigl(\E_{\oplus_k B_k}(Y)\bigr)_{j,j'}
+        = \E_{j,j'}(M).
+    \]
+\end{proof}
+
 \begin{theorem}[Cross-block transfer vanishing for a direct-sum fixed point]%
     \label{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     \lean{MPSTensor.isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum}
