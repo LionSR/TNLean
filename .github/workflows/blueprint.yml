@@ -10,6 +10,7 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'blueprint/src/**'
+      - 'docs/slides/**'
       - '.github/workflows/blueprint.yml'
       - 'home_page/**'
       - 'scripts/blueprint_bibtex.py'
@@ -44,6 +45,9 @@ jobs:
           PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
             --check \
             --check-peps-usage \
+            --check-slides \
+            --audit \
+            --audit-strict \
             --smoke-render
 
       - name: Write status badges

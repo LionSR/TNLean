@@ -131,28 +131,7 @@
         \column{0.46\textwidth}
         \vspace{0.4em}
         \begin{center}
-        \begin{tikzpicture}[
-            tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt,
-              minimum size=7mm, thick, text=white, font=\small},
-            bond/.style={thick, white},
-            phys/.style={thick, leangreen!80!white}
-        ]
-            \node[tn] (A1) at (0,0) {$A$};
-            \node[tn] (A2) at (1.4,0) {$A$};
-            \node[tn] (A3) at (2.8,0) {$A$};
-            \node[tn] (A4) at (4.2,0) {$A$};
-            \foreach \a in {A1,A2,A3,A4}
-                \draw[phys] (\a.north) -- ++(0,0.55);
-            \node[font=\scriptsize, text=dimwhite] at (0,0.82) {$i_1$};
-            \node[font=\scriptsize, text=dimwhite] at (1.4,0.82) {$i_2$};
-            \node[font=\scriptsize, text=dimwhite] at (2.8,0.82) {$i_3$};
-            \node[font=\scriptsize, text=dimwhite] at (4.2,0.82) {$i_N$};
-            \draw[bond] (A1.east) -- (A2.west);
-            \draw[bond] (A2.east) -- (A3.west);
-            \draw[bond,dashed] (A3.east) -- (A4.west);
-            \draw[bond] (A1.west) -- ++(-0.5,0) node[left,font=\scriptsize,text=dimwhite]{$\tr$};
-            \draw[bond] (A4.east) -- ++(0.5,0);
-        \end{tikzpicture}
+        \SlideTNPeriodicMPS{A}{N}
         \end{center}
         \vspace{0.6em}
         {\footnotesize\textcolor{dimwhite}{MPS are the workhorse of quantum many-body physics: DMRG, tensor networks, topological order, quantum error correction. The FT characterizes the classification up to gauge.}}

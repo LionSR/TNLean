@@ -51,8 +51,6 @@
   arrdw/.style={-{Stealth}, thick, dimwhite, dashed},
   stat/.style={rounded corners=5pt, fill=cardbg, draw=leangreen!50, text=white,
     minimum width=2.7cm, minimum height=1.5cm, align=center, font=\small},
-  tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt,
-    minimum size=7mm, thick, text=white, font=\small},
 }
 
 % --- Title metadata ---
@@ -153,34 +151,7 @@
 %---------- Frame 6: Matrix product states (diagram-led) ----------
 \begin{frame}{Matrix product states}
     \begin{center}
-    \begin{tikzpicture}[bond/.style={thick,white}, phys/.style={thick,leangreen!80!white}]
-        % Sites
-        \node[tn] (A1) at (0,0)   {$A$};
-        \node[tn] (A2) at (1.6,0) {$A$};
-        \node[tn] (A3) at (3.2,0) {$A$};
-        \node[tn] (A4) at (4.8,0) {$A$};
-        \node[tn] (A5) at (6.4,0) {$A$};
-        % Physical legs
-        \foreach \a in {A1,A2,A3,A4,A5}
-            \draw[phys] (\a.north) -- ++(0,0.55);
-        \node[font=\scriptsize,text=dimwhite] at (0,0.82)   {$i_1$};
-        \node[font=\scriptsize,text=dimwhite] at (1.6,0.82) {$i_2$};
-        \node[font=\scriptsize,text=dimwhite] at (3.2,0.82) {$i_3$};
-        \node[font=\scriptsize,text=dimwhite] at (4.8,0.82) {$\cdots$};
-        \node[font=\scriptsize,text=dimwhite] at (6.4,0.82) {$i_N$};
-        % Bond legs
-        \draw[bond] (A1.east) -- (A2.west);
-        \draw[bond] (A2.east) -- (A3.west);
-        \draw[bond,dashed] (A3.east) -- (A4.west);
-        \draw[bond] (A4.east) -- (A5.west);
-        % Clean rectangular wrap-around
-        \coordinate (rL) at ($(A5.east) + (0.5,0)$);
-        \coordinate (rB) at ($(rL) + (0,-0.95)$);
-        \coordinate (lL) at ($(A1.west) + (-0.5,0)$);
-        \coordinate (lB) at ($(lL) + (0,-0.95)$);
-        \draw[bond] (A5.east) -- (rL) -- (rB) -- (lB) -- (lL) -- (A1.west);
-        \node[font=\scriptsize,text=dimwhite] at (3.2,-1.20) {trace (PBC)};
-    \end{tikzpicture}
+    \SlideTNPeriodicMPS{A}{N}
     \end{center}
     \vspace{0.4em}
     \textbf{Translation-invariant MPS~\cite{Cirac2017Annals}.} For $A = (A^i)_{i=0}^{d-1}$ with $A^i \in \MD$,
@@ -255,44 +226,7 @@
 \begin{frame}{Beyond the injective case --- where autonomy stalled}
     \vspace{-0.2em}
     \begin{center}
-    \begin{tikzpicture}[
-        scale=0.92, transform shape,
-        bond/.style={thick,white},
-        phys/.style={thick,leangreen!80!white},
-        bigtn/.style={draw=amber, fill=amber!20!cardbg, rounded corners=2pt,
-            minimum width=2.3cm, minimum height=8mm, thick, text=white, font=\small}
-    ]
-        % Panel A: original chain
-        \begin{scope}[shift={(0,0)}]
-            \foreach \i in {0,1,2,3,4,5,6,7} {
-                \node[tn] (P\i) at (\i*0.85, 0) {\scriptsize $A$};
-            }
-            \foreach \i in {0,...,6} {
-                \pgfmathtruncatemacro{\j}{\i+1}
-                \draw[bond] (P\i.east) -- (P\j.west);
-            }
-            \foreach \i in {0,...,7} {
-                \draw[phys] (P\i.north) -- ++(0,0.3);
-            }
-            \node[font=\scriptsize, text=dimwhite] at (-1.0,0) {chain of $N$:};
-        \end{scope}
-        % Panel B: blocked chain
-        \begin{scope}[shift={(0,-1.8)}]
-            \node[bigtn] (B0) at (0.85, 0) {$A^{(L)}$};
-            \node[bigtn] (B1) at (3.40, 0) {$A^{(L)}$};
-            \node[bigtn] (B2) at (5.95, 0) {$A^{(L)}$};
-            \draw[bond] (B0.east) -- (B1.west);
-            \draw[bond] (B1.east) -- (B2.west);
-            \foreach \n in {B0,B1,B2}
-                \draw[phys] (\n.north) -- ++(0,0.3);
-            \node[font=\scriptsize, text=dimwhite] at (-1.0,0) {after blocking $L$:};
-        \end{scope}
-        % Dashed bracket linking panel A blocks to B0
-        \draw[dimwhite!60, dashed] (-0.30,0.35) -- (-0.30,-1.45);
-        \draw[dimwhite!60, dashed] (2.25,0.35) -- (2.25,-1.45);
-        \draw[dimwhite!60, dashed] (4.80,0.35) -- (4.80,-1.45);
-        \draw[dimwhite!60, dashed] (7.10,0.35) -- (7.10,-1.45);
-    \end{tikzpicture}
+    \SlideTNBlockingComparison{A}{L}
     \end{center}
     \vspace{0.2em}
     \[
