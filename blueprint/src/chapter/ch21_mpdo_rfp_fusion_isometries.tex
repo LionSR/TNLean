@@ -369,6 +369,80 @@ them.
     letter and apply the fusion identity between the two inserted factors.
 \end{proof}
 
+\begin{theorem}[Common positive blocking of the BNT fusion isometries]
+    \label{thm:mpdo_bnt_common_positive_blocked_fusion}
+    \lean{MPSTensor.wordTupleSpanTop_reindexPhysical_equiv}
+    \lean{MPSTensor.WordTupleSpanTop.isInjective_one}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        blockedUnweightedDirectSumLetter}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        blocked_fusion_of_lengthIndependent}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        fusionIsometry_mul_blocked_mulTensor_of_lengthIndependent}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        blocked_mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        blocked_mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        exists_positive_block_with_injective_fusion}
+    \leanok
+    \uses{thm:cpsv_bnt_blocked_simultaneous_span,
+        thm:mpdo_positive_blocking_doubled_index,
+        thm:mpdo_positive_blocking_product,
+        thm:mpdo_bnt_length_independent_zipper}
+    Suppose that the labelled doubled-index tensors form the basis of normal
+    tensors, and that their fusion-isometry family has positive trace-power
+    coefficients independent of the positive chain length.  Then there is
+    one integer $L>0$ such that the blocked tensors $M_\gamma^{[L]}$ span
+    their full product matrix algebra in one letter.  Hence every
+    $M_\gamma^{[L]}$ is injective.
+
+    For this same $L$, write
+    \[
+      P_{\alpha,\beta}^{I J}
+        =(M_\alpha^{[L]}M_\beta^{[L]})^{I J},
+      \qquad
+      H_{\alpha,\beta}^{I J}
+        =\bigoplus_\gamma
+          1_{r_{\alpha,\beta,\gamma}}
+            \otimes (M_\gamma^{[L]})^{I J},
+    \]
+    where $r_{\alpha,\beta,\gamma}$ is the dimension of the specialized
+    chi space.  The original fusion isometry satisfies
+    \[
+      U_{\alpha,\beta}P_{\alpha,\beta}^{I J}
+          U_{\alpha,\beta}^\dagger
+        =H_{\alpha,\beta}^{I J},
+    \]
+    the two blocked zipper identities
+    \[
+      U_{\alpha,\beta}P_{\alpha,\beta}^{I J}
+        =H_{\alpha,\beta}^{I J}U_{\alpha,\beta},
+      \qquad
+      P_{\alpha,\beta}^{I J}U_{\alpha,\beta}^\dagger
+        =U_{\alpha,\beta}^\dagger H_{\alpha,\beta}^{I J},
+    \]
+    and the literal reconstruction
+    \[
+      P_{\alpha,\beta}^{I J}
+        =U_{\alpha,\beta}^\dagger
+          H_{\alpha,\beta}^{I J}U_{\alpha,\beta}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the positive block length supplied by simultaneous BNT blocking.
+    The canonical pairing of the blocked ket and bra words transfers the
+    one-letter product-algebra span to the blocked MPO tensors, and projection
+    to each labelled factor gives injectivity.  Along a nonempty block, the
+    products of the conjugated fusion letters telescope using only
+    $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.  Length independence
+    replaces every chi matrix by the identity on its own chi space.  The two
+    zipper identities and reconstruction then follow by multiplying the
+    blocked fusion identity by $U_{\alpha,\beta}$ or
+    $U_{\alpha,\beta}^\dagger$ on the appropriate side.
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     \TNMPDOUnweightedZipperReconstruction

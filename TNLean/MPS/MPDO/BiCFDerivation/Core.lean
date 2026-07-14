@@ -76,6 +76,65 @@ def WordTupleSpanTop
     (L : ℕ) : Prop :=
   Submodule.span ℂ (Set.range (wordTuple A L)) = ⊤
 
+/-- Reindexing the common physical alphabet by an equivalence preserves the
+simultaneous word-tuple span.
+
+This is the index transport used in the simultaneous BNT blocking of
+arXiv:1606.00608, lines 317--345. -/
+theorem wordTupleSpanTop_reindexPhysical_equiv {d' : ℕ}
+    (e : Fin d' ≃ Fin d) (A : (k : Fin r) → MPSTensor d (dim k)) (L : ℕ) :
+    WordTupleSpanTop (fun k ↦ reindexPhysical e (A k)) L ↔
+      WordTupleSpanTop A L := by
+  unfold WordTupleSpanTop
+  have hRange :
+      Set.range (wordTuple (fun k ↦ reindexPhysical e (A k)) L) =
+        Set.range (wordTuple A L) := by
+    ext X
+    constructor
+    · rintro ⟨w, rfl⟩
+      refine ⟨fun i ↦ e (w i), ?_⟩
+      funext k
+      simp [wordTuple, evalWord_reindexPhysical, List.map_ofFn,
+        Function.comp_def]
+    · rintro ⟨w, rfl⟩
+      refine ⟨fun i ↦ e.symm (w i), ?_⟩
+      funext k
+      simp [wordTuple, evalWord_reindexPhysical, List.map_ofFn,
+        Function.comp_def]
+  rw [hRange]
+
+/-- A simultaneous one-letter span makes every member of the tensor family
+injective.
+
+This is the projection to one labelled block in the simultaneous block
+injectivity statement of arXiv:1606.00608, lines 317--345. -/
+theorem WordTupleSpanTop.isInjective_one
+    {A : (k : Fin r) → MPSTensor d (dim k)}
+    (hSpan : WordTupleSpanTop A 1) (j : Fin r) :
+    IsInjective (A j) := by
+  classical
+  unfold IsInjective
+  apply top_unique
+  intro X _
+  let Xj : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
+    fun k ↦ if h : k = j then h ▸ X else 0
+  have hXj : Xj ∈ Submodule.span ℂ (Set.range (wordTuple A 1)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  have hcomponent : Xj j ∈ Submodule.span ℂ (Set.range (A j)) := by
+    exact Submodule.span_induction (p := fun Y _ ↦
+        Y j ∈ Submodule.span ℂ (Set.range (A j)))
+      (fun Y hY ↦ by
+        rcases hY with ⟨w, rfl⟩
+        apply Submodule.subset_span
+        refine ⟨w 0, ?_⟩
+        simp [wordTuple, List.ofFn_succ])
+      (Submodule.zero_mem _)
+      (fun Y Z _ _ hY hZ ↦ Submodule.add_mem _ hY hZ)
+      (fun c Y _ hY ↦ Submodule.smul_mem _ c hY)
+      hXj
+  simpa [Xj] using hcomponent
+
 /-- Index type for a matrix entry inside a block family. -/
 abbrev BlockEntryIndex (dim : Fin r → ℕ) :=
   Σ k : Fin r, Fin (dim k) × Fin (dim k)

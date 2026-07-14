@@ -642,14 +642,24 @@ zero on the others.  One-letter injectivity and selector coefficients can
 therefore be extracted after the same common blocking, without adding either
 property to the definition of a BNT.
 
-For the positive-diagonal fusion family, the remaining construction begins by
-linking its final-label tensors to the BNT witness that is already part of the
-source assumptions.  The simultaneous inverse must then be extracted from the
-blocked span and reindexed in the fusion coordinates.  After transporting the
-fusion equations through the same blocking, one must prove
-$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$, assemble the synthesis and
-analysis maps with their biorthogonality, prove both zipper equations and
-\texttt{inversegaugeone}, and construct
+For the positive-diagonal fusion family, under the explicit hypothesis that
+identifies the labelled doubled-index tensors with a BNT witness, transport
+through the same positive block length is now formalized by
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+exists_positive_block_with_injective_fusion}.  The theorem derives the common
+one-letter span and injectivity of every blocked labelled tensor, and proves
+the blocked conjugation identity, both zipper orientations, and literal
+reconstruction.  Its multiplicity is exactly the dimension of the
+specialized chi space.  The positive-length condition is essential: at block
+length zero the conjugation identity would assert the unproved coisometry
+$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$.
+
+The remaining construction is therefore narrower.  One must first construct
+this identification from the RFP tensor and the BNT of its vertical canonical
+form.  The simultaneous inverse must then be extracted from the blocked span
+and reindexed in the fusion coordinates.  One must derive the coisometry
+rather than assume it, assemble synthesis and analysis maps with their
+biorthogonality, and construct
 \leanid{MPOTensor.CompleteZipperFusionFamily}.  The existing printed
 $F$-matrix and pentagon theorem can then be applied to this family.
 
