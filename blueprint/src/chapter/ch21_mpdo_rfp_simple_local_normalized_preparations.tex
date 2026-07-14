@@ -957,6 +957,18 @@
 \end{proof}
 \end{samepage}
 
+On each fixed $(k,h)$-summand, the controlled maps $\mathcal T_0$ and
+$\mathcal S_0$ discard coherences between distinct outer summands and take the
+displayed partial trace in each diagonal summand. In particular,
+$\mathcal S_0$ traces the whole space
+\[
+  \bigoplus_l
+  \bigl[(R_k\otimes L_l)\otimes(R_l\otimes L_h)\bigr].
+\]
+The shifts $\mathcal S_2$ and $\mathcal T_2$ are global reindexings, with all
+displayed tensor factors present at their inputs
+\cite[Appendix~C.2, lines~1521--1559]{Cirac2016MPDO_arXiv}.
+
 \begin{figure}[ht]
     \centering
     $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber is drawn
@@ -969,13 +981,7 @@
 
     \smallskip
     \TNMPDOThreeSiteTraceAndShift
-    \caption{Schematics on a fixed $(k,h)$-summand of the global $\bigoplus_{k,h}$ index
-    space. The controlled maps $\mathcal T_0$ and $\mathcal S_0$ discard coherences between
-    distinct outer summands and take the displayed trace in each diagonal summand; the shifts
-    $\mathcal S_2$ and $\mathcal T_2$ are global reindexings. The $l$-labelled boxes depict one
-    summand, but $\mathcal S_0$ traces the entire
-    $\bigoplus_l[(R_k\otimes L_l)\otimes(R_l\otimes L_h)]$. Both shifts begin with all displayed
-    factors supplied; no preparation or recovery identity is shown
-    \cite[Appendix~C.2, lines~1521--1559]{Cirac2016MPDO_arXiv}.}
+    \caption{Fiberwise partial traces and regrouping maps on two and three
+    physical sites. One $(k,h)$-summand and one $l$-summand are drawn.}
     \label{fig:mpdo_regrouping_partial_trace_maps}
 \end{figure}

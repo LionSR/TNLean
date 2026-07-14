@@ -129,26 +129,31 @@
     this property is preserved under composition.
 \end{proof}
 
+On the active $(k,h)$-sector, $\mathcal T_0$ traces $R_k\otimes L_h$, leaving
+$a_kb_h$ times the operator on $L_k\otimes R_h$. The preparation
+$\mathcal T_1$ then adjoins
+\[
+  \widehat\Omega_{k,h}
+  =(a_kb_h)^{-1}\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h}),
+\]
+and $\mathcal T_2$ orders the result as
+\[
+  (L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h).
+\]
+The two rows in Figure~\ref{fig:mpdo_physical_sector_refinement_channel} use
+the sitewise sector coordinates $\mathfrak R_2$ and $\mathfrak R_3$
+\cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
+  {Cirac2016MPDO_arXiv}.
+
 \begin{figure}[ht]
     \centering
     \TNMPDORefinementConstruction
 
     \medskip
     \TNMPDORefinementDirection
-    \caption{Physical-sector construction of the refinement channel
-    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. On a two-site closure,
-    the first stage traces $R_k\otimes L_h$ and leaves $a_kb_h$ multiplying
-    the operator on $L_k\otimes R_h$. On an active sector pair, the second
-    stage adjoins
-    $\widehat\Omega_{k,h}=(a_kb_h)^{-1}
-      \bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})$, and the final stage orders
-    the factors as
-    $(L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h)$.
-    The upper and lower rows lie in the sitewise sector coordinates
-    $\mathfrak R_2$ and $\mathfrak R_3$, respectively. The lower schematic
-    records the intended two-site to three-site action in
-    \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
-      {Cirac2016MPDO_arXiv}; no refinement closure identity is asserted here.}
+    \caption{The refinement channel
+    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$ in physical-sector
+    coordinates.}
     \label{fig:mpdo_physical_sector_refinement_channel}
 \end{figure}
 
