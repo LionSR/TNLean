@@ -30,6 +30,9 @@ the sector projector acting on one site, as in the diagrams of that proof.
 * `verticalLoop` / `verticalLoopWith`:
   the closed single-site vertical loop $E = \sum_i M^{ii}$, and the loop with a
   matrix $P$ inserted, $E_P = \sum_{i,j} P_{ji}\,M^{ij}$.
+* `representativeLoop`:
+  the closed loop of a vertical representative, defined entrywise by
+  $(E_\alpha)_{ab}=\operatorname{tr}(M_\alpha^{(a,b)})$.
 * `sectorCompression`:
   the compression $P_1H^{(N+1)}P_1$ of the density operator by a matrix
   acting on the first site.
@@ -62,19 +65,17 @@ the sector projector acting on one site, as in the diagrams of that proof.
   normalization $\mu_{\alpha,1}>0$ this forces $d_\alpha^{(N+1)}>0$ and
   $\mu_{\alpha,k}>0$.
 
-## What the vertical decomposition must supply
+## Application to the vertical decomposition
 
-The vertical canonical decomposition of Proposition 4.13 (still open, see
-`TNLean.MPS.MPDO.VerticalCF`) must produce, for each sector $(\alpha,k)$, the
-orthogonal projector $P_{\alpha,k}$ together with its `SectorProjectorData`:
-the loop identity holds with $\mu = \mu_{\alpha,k}$ and
-$E_\alpha = \sum_u M_\alpha^{uu}$ the closed loop of the vertical basis
-tensor, *independently of $k$*, because the sector gauge $X_{\alpha,k}$
-cancels under the single-site loop trace,
-$\tr(X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}) = \tr(M_\alpha)$ on the vertical
-index.  The nonvanishing of a sector compression at some length, which the
-paper derives from the horizontal canonical form (arXiv:1606.00608,
-line 1898), enters here as a hypothesis.
+The grouped decomposition in `TNLean.MPS.MPDO.VerticalBNT` constructs, for
+each sector $(\alpha,k)$, the orthogonal projector $P_{\alpha,k}$ and its
+`SectorProjectorData`.  The representative loop is defined entrywise by
+$(E_\alpha)_{ab}=\operatorname{tr}(M_\alpha^{(a,b)})$.  It is independent of
+$k$ because cyclicity of trace removes the internal similarity
+$X_{\alpha,k}M_\alpha^{(a,b)}X_{\alpha,k}^{-1}$.  The same decomposition uses
+the horizontal canonical form to find a nonzero sector compression, and hence
+deduces the positivity of every grouped coefficient.  The remaining argument
+of Proposition 4.13 begins with the dressed adjoints at line 1903.
 
 ## References
 
@@ -114,6 +115,38 @@ the proof of Proposition 4.13 of arXiv:1606.00608, lines 1895--1902. -/
 noncomputable def verticalLoopWith (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   ∑ a : Fin d, ∑ i : Fin d, P a i • M i a
+
+/-- The closed loop of a vertical representative tensor, written entrywise as
+
+\[
+  (E_A)_{ab}=\operatorname{tr}(A^{(a,b)}).
+\]
+
+This is the matrix $E_\alpha$ in the proof of Proposition 4.13 of
+arXiv:1606.00608, lines 1898--1901. -/
+noncomputable def representativeLoop (A : MPSTensor (D * D) n) :
+    Matrix (Fin D) (Fin D) ℂ :=
+  fun a b => Matrix.trace (A (finProdFinEquiv (a, b)))
+
+/-- Identifying equal representative bond dimensions does not change the
+closed representative loop. -/
+@[simp] theorem representativeLoop_cast {n m : ℕ} (hdim : n = m)
+    (A : MPSTensor (D * D) n) :
+    representativeLoop (cast (congr_arg (MPSTensor (D * D)) hdim) A) =
+      representativeLoop A := by
+  subst m
+  rfl
+
+/-- Entrywise, the loop with a physical insertion is the trace of the
+corresponding vertically viewed letter after multiplication by the insertion.
+This is the marked single-site contraction in arXiv:1606.00608, line 1898. -/
+theorem verticalLoopWith_apply_eq_trace_mul_verticalTensor
+    (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) (a b : Fin D) :
+    verticalLoopWith M P a b =
+      Matrix.trace (P * verticalTensor M (finProdFinEquiv (a, b))) := by
+  simp only [verticalLoopWith, Matrix.sum_apply, Matrix.smul_apply,
+    Matrix.trace, Matrix.diag, Matrix.mul_apply, verticalTensor_finProdFinEquiv,
+    smul_eq_mul]
 
 /-- Inserting the identity recovers the plain vertical loop. -/
 @[simp] theorem verticalLoopWith_one (M : MPOTensor d D) :
@@ -314,12 +347,11 @@ the proof of Proposition 4.13 of arXiv:1606.00608, line 1898:
   contribution, $E_P = \mu\,E_\alpha$.
 
 In the source decomposition the loop identity holds with
-$\mu = \mu_{\alpha,k}$ and $E_\alpha = \sum_u M_\alpha^{uu}$ the closed
-vertical loop of the basis tensor $M_\alpha$, independently of $k$: the
-sector gauge cancels under the single-site loop trace,
-$\tr(X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}) = \tr(M_\alpha)$ on the vertical
-index.  The still-open vertical decomposition of Proposition 4.13 must
-supply this data; see the module documentation. -/
+$\mu = \mu_{\alpha,k}$ and
+$(E_\alpha)_{ab}=\operatorname{tr}(M_\alpha^{(a,b)})$, independently of $k$:
+cyclicity of trace removes the internal similarity
+$X_{\alpha,k}M_\alpha^{(a,b)}X_{\alpha,k}^{-1}$.  The grouped decomposition in
+`TNLean.MPS.MPDO.VerticalBNT` supplies this data. -/
 structure SectorProjectorData (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) (μ : ℂ)
     (Eα : Matrix (Fin D) (Fin D) ℂ) : Prop where
@@ -331,6 +363,53 @@ structure SectorProjectorData (M : MPOTensor d D)
   sector: the inserted loop is the sector weight times the closed loop of the
   sector's basis tensor. -/
   loop_eq : verticalLoopWith M P = μ • Eα
+
+/-- An isometric vertical corner related to a representative by an invertible
+gauge determines the corresponding sector projector and loop identity.
+
+For $P=VV^\dagger$, cyclicity of trace gives
+
+\[
+  \operatorname{tr}(P\widetilde M_{ab})
+  =\operatorname{tr}(V^\dagger\widetilde M_{ab}V)
+  =\omega\operatorname{tr}(A^{(a,b)}),
+\]
+
+where the internal similarity cancels.  This is the sector-loop computation
+in the proof of Proposition 4.13 of arXiv:1606.00608, line 1898. -/
+theorem sectorProjectorData_of_gauge_corner
+    (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    (V : Matrix (Fin d) (Fin n) ℂ) (hV : Vᴴ * V = 1)
+    (X : GL (Fin n) ℂ) (ω : ℂ)
+    (hcorner : ∀ v,
+      ω • ((X : Matrix (Fin n) (Fin n) ℂ) * A v *
+        (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ)) =
+          Vᴴ * verticalTensor M v * V) :
+    SectorProjectorData M (V * Vᴴ) ω (representativeLoop A) := by
+  refine ⟨?_, ?_, ?_⟩
+  · calc
+      (V * Vᴴ) * (V * Vᴴ) = V * (Vᴴ * V) * Vᴴ := by
+        simp only [Matrix.mul_assoc]
+      _ = V * Vᴴ := by rw [hV, Matrix.mul_one]
+  · change (V * Vᴴ)ᴴ = V * Vᴴ
+    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+  · ext a b
+    rw [verticalLoopWith_apply_eq_trace_mul_verticalTensor]
+    calc
+      Matrix.trace ((V * Vᴴ) * verticalTensor M (finProdFinEquiv (a, b))) =
+          Matrix.trace
+            ((Vᴴ * verticalTensor M (finProdFinEquiv (a, b))) * V) := by
+        rw [Matrix.mul_assoc]
+        exact Matrix.trace_mul_comm V
+          (Vᴴ * verticalTensor M (finProdFinEquiv (a, b)))
+      _ = Matrix.trace
+          (ω • ((X : Matrix (Fin n) (Fin n) ℂ) *
+            A (finProdFinEquiv (a, b)) *
+              (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ))) :=
+        congrArg Matrix.trace (hcorner _).symm
+      _ = (ω • representativeLoop A) a b := by
+        rw [Matrix.trace_smul, MPSTensor.trace_conj_eq]
+        rfl
 
 /-- **The sector trace identity**
 (arXiv:1606.00608, proof of Proposition 4.13, line 1898): the trace of the

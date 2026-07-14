@@ -1541,6 +1541,9 @@
     \label{def:mpdo_vertical_loops}
     \lean{MPOTensor.verticalLoop}
     \lean{MPOTensor.verticalLoopWith}
+    \lean{MPOTensor.representativeLoop}
+    \lean{MPOTensor.representativeLoop_cast}
+    \lean{MPOTensor.verticalLoopWith_apply_eq_trace_mul_verticalTensor}
     \lean{MPOTensor.verticalLoopWith_one}
     \lean{MPOTensor.verticalLoop_ketLeftMul}
     \lean{MPOTensor.verticalLoop_braRightMul}
@@ -1566,9 +1569,13 @@
     \[
         d_\alpha^{(N+1)}=\tr\bigl(E_\alpha\,E^{N}\bigr).
     \]
-    When $E_\alpha$ is the closed vertical loop of the basis tensor
-    $M_\alpha$, this is the scalar $d_\alpha$ displayed in the proof of
-    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, resolved by chain length:
+    For a representative tensor $M_\alpha$ whose letters are indexed by
+    horizontal bond pairs, its closed vertical loop is defined entrywise by
+    \[
+        (E_\alpha)_{ab}=\tr\bigl(M_\alpha^{(a,b)}\bigr).
+    \]
+    In this case the chain trace is the scalar $d_\alpha$ displayed in the
+    proof of \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, resolved by chain length:
     one loop of $M_\alpha$ followed by loops of $M$, closed by the
     horizontal trace.
 \end{definition}
@@ -1624,6 +1631,7 @@
 \begin{definition}[Sector projectors of the vertical decomposition]
     \label{def:mpdo_sector_projector}
     \lean{MPOTensor.SectorProjectorData}
+    \lean{MPOTensor.sectorProjectorData_of_gauge_corner}
     \leanok
     \uses{def:mpdo_vertical_loops, def:vertical_tensor_mpdo}
     A matrix $P\in M_d(\C)$ is a sector projector for the weight
@@ -1639,15 +1647,32 @@
     physical space in the proof of
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, the projector
     $P_{\alpha,k}$ selecting the sector $(\alpha,k)$ has this property with
-    $\mu=\mu_{\alpha,k}$ and $E_\alpha$ the closed vertical loop of
-    $M_\alpha$ --- independently of $k$, because the sector gauge
-    $X_{\alpha,k}$ cancels under the single-site loop trace,
-    $\sum_i(X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1})^{ii}=\sum_i M_\alpha^{ii}$.
-    The irreducible reducing projections have been constructed in
-    Theorem~\ref{thm:mpdo_vertical_complete_reducing_projectors}. Their
-    identification with the grouped normal sectors above, including the loop
-    identity $E_P=\mu E_\alpha$, remains open.
+    $\mu=\mu_{\alpha,k}$ and
+    $(E_\alpha)_{ab}=\tr(M_\alpha^{(a,b)})$, independently of $k$.  Indeed,
+    cyclicity of trace cancels the internal similarity
+    $X_{\alpha,k}M_\alpha^{(a,b)}X_{\alpha,k}^{-1}$.  Applied to the physical
+    isometry of a grouped normal sector, the gauge-corner identity constructs
+    the projector and proves its loop identity.
 \end{definition}
+
+\begin{theorem}[A nonzero vertical corner has a nonzero sector compression]
+    \label{thm:mpdo_grouped_sector_compression_nonzero}
+    \lean{MPOTensor.IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo_vertical_loops,
+        def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero}
+    Let $M$ be horizontally canonical and let $P$ be a matrix for which
+    $P\widetilde M_vP$ is nonzero for some vertical letter $v$.  Then the
+    first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
+    This is the separation step used in
+    \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    If every compression vanished, its matrix entries would say that the
+    first-site insertion by $P$ has the same matrix product vectors as zero.
+    Lemma~L for the horizontal canonical form would then force the inserted
+    tensor itself to vanish, contrary to the assumed nonzero corner.
+\end{proof}
 
 \begin{theorem}[The sector trace identity]
     \label{thm:mpdo_sector_trace_identity}
@@ -2305,7 +2330,8 @@
     equality of their matrix product vector families up to a fixed nonzero
     scalar per site. There are normal representatives $M_\alpha$, an enumeration
     $k=(\alpha,q)$ of the original sectors, invertible matrices
-    $X_{\alpha,q}$, and nonzero complex numbers $\zeta_{\alpha,q}$ such that
+    $X_{\alpha,q}$, and complex numbers $\zeta_{\alpha,q}$ of unit modulus,
+    with $\zeta_{\alpha,1}=1$, such that
     \[
         B_{\alpha,q}^v
         =\zeta_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
@@ -2313,7 +2339,7 @@
     The representatives are pairwise gauge-phase distinct and form a basis of
     normal tensors for the weighted block tensor
     $\bigoplus_k\mu_kB_k$. Every grouped coefficient
-    $\mu_{\alpha,q}\zeta_{\alpha,q}$ is nonzero. With the physical isometries
+    $\mu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
     from Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
     retained unchanged, one has both reducing identities, exact compression,
     and the literal reconstruction
@@ -2325,25 +2351,35 @@
         X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
         V_{\alpha,q}^\dagger .
     \]
-    No positivity of the grouped coefficients and no unitarity of the gauges
-    is asserted at this stage. This is the decomposition at the beginning of
-    the last part of \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+    For each pair $(\alpha,q)$, the range projector of $V_{\alpha,q}$ obeys
+    the representative-loop identity and gives a nonzero compression at some
+    finite length. This is the decomposition and positivity argument of
+    \cite[Proposition~4.13, lines 1898--1902]{Cirac2016MPDO_arXiv}. The gauge
+    normalization beginning at line 1903 is not asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_vertical_normal_sectors_with_isometries,
         thm:cpsv_normal_mpv_phase_gauge,
-        thm:cpsv_normal_separated_eventually_li}
+        thm:cpsv_normal_separated_eventually_li,
+        thm:mpdo_grouped_sector_compression_nonzero,
+        def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
     Take one representative from each phase class. Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge}
     gives equality of bond dimensions and the displayed letterwise gauge-phase
     relation for every copy. Distinct representatives are gauge-phase
     separated by construction, so
     Theorem~\ref{thm:cpsv_normal_separated_eventually_li} gives eventual linear
     independence. The phase-class regrouping of the finite sum gives the BNT
-    expansion. Substitution in the two intertwining identities, the compression
-    identity, and the literal reconstruction from
+    expansion. The representative copy has phase one, while the self-overlap
+    normalization of normal tensors shows that every phase has unit modulus.
+    Substitution in the two intertwining identities, the compression identity,
+    and the literal reconstruction from
     Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries} proves all
-    remaining assertions without altering any physical isometry.
+    remaining algebraic assertions without altering any physical isometry.
+    Cyclicity of trace gives the sector-loop identities. The nonzero-corner
+    separation theorem supplies a nonzero compression for every sector, and
+    the sector trace identity and MPDO positivity then make every grouped
+    coefficient positive.
 \end{proof}
 
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
@@ -2428,8 +2464,8 @@
     removes the zero corners and spectrally normalizes the remaining corners
     while retaining their physical isometries, both intertwining identities,
     exact compression, and literal reconstruction of every vertical letter.
-    The remaining source argument must group the resulting normal tensors,
-    obtaining
+    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries} groups the
+    resulting normal tensors, obtaining
     \[
         \widetilde M
         =\bigoplus_{\alpha,k}\mu_{\alpha,k}X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}
@@ -2437,8 +2473,10 @@
     carried by the physical space, with normal tensors $M_\alpha$ whose
     letters remain indexed by the horizontal bond pairs.  These blocks are not
     obtained by restricting the horizontal blocks to diagonal physical pairs,
-    as Theorem~\ref{thm:diagonal_restriction_not_normal} shows.  Positivity
-    then gives $\mu_{\alpha,k}>0$:
+    as Theorem~\ref{thm:diagonal_restriction_not_normal} shows. It also
+    identifies the physical range projectors with the grouped sectors, proves
+    their loop identities, and finds a nonzero compression for each sector.
+    Positivity then gives $\mu_{\alpha,k}>0$:
     Theorem~\ref{thm:mpdo_sector_compression_trace_pos} supplies the positive
     traces of the nonzero sector compressions,
     Theorem~\ref{thm:mpdo_sector_trace_identity} identifies each such trace
@@ -2459,12 +2497,8 @@
     the corresponding reconstruction identity; each
     $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
     copies of $M_\alpha$ exactly as in the finite regrouping of
-    Lemma~\ref{lem:vertical_grouping_equiv}.  Deriving the dressed-adjoint
-    identities from self-adjointness of the sector compressions via Lemma L
-    within the spectrally normalized vertical decomposition remains open.
-    The remaining construction must also identify the reducing projectors
-    above with the grouped sector projectors of
-    Definition~\ref{def:mpdo_sector_projector}, prove their loop identities
-    and the nonvanishing of a sector compression at some length, and assemble
-    the positive weights and proportional-unitary gauges.
+    Lemma~\ref{lem:vertical_grouping_equiv}. The remaining source-level gap
+    begins at line 1903: one must derive the dressed-adjoint identities from
+    self-adjointness of the sector compressions via Lemma L, normalize the
+    sector gauges to unitaries, and assemble the final coisometry.
 \end{proof}

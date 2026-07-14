@@ -372,4 +372,18 @@ noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
     regroup := hRegroup
   }
 
+/-- The distinguished first member of each concrete phase class is its chosen
+representative.
+
+This is the normalization used for the copy labelled $k=1$ in the proof of
+Proposition 4.13 of arXiv:1606.00608, line 1898. -/
+@[simp] theorem mpvPhaseClassData_enum_zero_eq_repr
+    {r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (j : Fin (mpvPhaseClassData blocks).g) :
+    (mpvPhaseClassData blocks).enum j
+        ⟨0, (mpvPhaseClassData blocks).copies_pos j⟩ =
+      (mpvPhaseClassData blocks).repr j :=
+  rfl
+
 end MPSTensor
