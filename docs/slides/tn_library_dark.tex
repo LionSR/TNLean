@@ -31,21 +31,8 @@
 % external terminals and an ellipsis; the trace is a port-to-port closure.
 \newcommand{\SlideTNPeriodicMPS}[2]{%
   \begin{TNDiagram}[normal]
-    \foreach \name/\x/\i in {One/0/i_1,Two/1.30/i_2,
-        Pen/3.25/i_{#2-1},Last/4.55/i_{#2}} {
-      \TNMPSSite{sltnA\name}{(\x,0)}{#1}
-      \TNOpenPhysicalNorth{sltnA\name Ket}
-      \TNLabelAbove{sltnA\name Ket}{\i}
-    }
-    \TNConnectVirtual{sltnAOneEast}{sltnATwoWest}
-    \TNOpenVirtualEast{sltnATwoEast}
-    \TNOpenVirtualWest{sltnAPenWest}
-    \TNConnectVirtual{sltnAPenEast}{sltnALastWest}
-    \TNTraceVirtualBelow{sltnAOneWest}{sltnALastEast}
-    \TNPoint{sltnOmitted}{(2.28,0)}
-    \TNPoint{sltnTraceLabel}{(2.28,-1.02)}
-    \TNLabel{sltnOmitted}{(0,0)}{\cdots}
-    \TNLabel{sltnTraceLabel}{(0,0)}{\text{trace; bond dimension }D}
+    \TNCyclicMPSWord{sltnWord}{#1}{#2}
+      {\text{trace; bond dimension }D}
   \end{TNDiagram}%
 }
 
@@ -61,19 +48,9 @@
     }%
     \TNRelation{=}%
     \TNTerm[normal]{%
-      \TNInsertion{sltnX}{(0,0)}{#3}
-      \TNMPSSite{sltnA}{(1.20,0)}{#2}
-      \TNInsertion{sltnXi}{(2.45,0)}{#3^{-1}}
-      \TNVirtualPort{sltnXWest}{sltnX}{west}
-      \TNVirtualPort{sltnXEast}{sltnX}{east}
-      \TNVirtualPort{sltnXiWest}{sltnXi}{west}
-      \TNVirtualPort{sltnXiEast}{sltnXi}{east}
-      \TNOpenVirtualWest{sltnXWest}
-      \TNConnectVirtual{sltnXEast}{sltnAWest}
-      \TNConnectVirtual{sltnAEast}{sltnXiWest}
-      \TNOpenVirtualEast{sltnXiEast}
-      \TNOpenPhysicalNorth{sltnAKet}
-      \TNLabelAbove{sltnAKet}{i}%
+      \TNGaugeConjugatedMPSSite{sltnGauge}{(0,0)}
+        {#2}{#3}{#3^{-1}}%
+      \TNLabelAbove{sltnGaugeSiteKet}{i}%
     }%
   \end{TNEquationRow}%
 }

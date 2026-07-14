@@ -54,10 +54,15 @@ def light_source(renderer) -> str:
         "TNState": r"\begin{TNDiagram}[PROFILE]\TNState{a}{(0,0)}{\rho}\end{TNDiagram}",
         "TNExpression": r"\begin{TNDiagram}[PROFILE]\TNExpression{a}{(0,0)}{X\oplus Y}\end{TNDiagram}",
         "TNInsertion": r"\begin{TNDiagram}[PROFILE]\TNInsertion{a}{(0,0)}{X}\end{TNDiagram}",
+        "TNJunction": r"\begin{TNDiagram}[PROFILE]\TNJunction{a}{(0,0)}\end{TNDiagram}",
+        "TNOperatorState": r"\begin{TNDiagram}[PROFILE]\TNOperatorState{a}{(0,0)}{\rho}\end{TNDiagram}",
+        "TNSectorGauge": r"\begin{TNDiagram}[PROFILE]\TNSectorGauge{a}{(0,0)}{X_{j,q}}\end{TNDiagram}",
+        "TNInverseSectorGauge": r"\begin{TNDiagram}[PROFILE]\TNInverseSectorGauge{a}{(0,0)}{X_{j,q}^{-1}}\end{TNDiagram}",
         "TNMPSSite": r"\begin{TNDiagram}[PROFILE]\TNMPSSite{a}{(0,0)}{A}\end{TNDiagram}",
         "TNMPOSite": r"\begin{TNDiagram}[PROFILE]\TNMPOSite{a}{(0,0)}{M}\end{TNDiagram}",
         "TNRotatedMPOSite": r"\begin{TNDiagram}[PROFILE]\TNRotatedMPOSite{a}{(0,0)}{M}\end{TNDiagram}",
         "TNPEPSSite": r"\begin{TNDiagram}[PROFILE]\TNPEPSSite{a}{(0,0)}{A}\end{TNDiagram}",
+        "TNDoubleLayer": r"\begin{TNDiagram}[PROFILE]\TNDoubleLayer{a}{(0,0.40)}{(0,-0.40)}\end{TNDiagram}",
         "TNPurificationSite": r"\begin{TNDiagram}[PROFILE]\TNPurificationSite{a}{(0,0)}{A}{\overline A}\end{TNDiagram}",
         "TNStackedMPOProduct": r"\begin{TNDiagram}[PROFILE]\TNStackedMPOProduct{a}{(0,0)}{M_\alpha}{M_\beta}{}\end{TNDiagram}",
         "TNCompactTraceCell": r"\begin{TNDiagram}[PROFILE]\TNCompactTraceCell{a}{(0,0)}{M_\alpha}{X}{M_\alpha(X)}\end{TNDiagram}",
@@ -97,8 +102,8 @@ def dark_source() -> str:
         "SlideTNPeriodicMPS": r"\SlideTNPeriodicMPS{A}{N}",
         "SlideTNGaugeConjugation": r"\SlideTNGaugeConjugation{A}{B}{X}",
         "SlideTNBlockingIdentity": r"\SlideTNBlockingIdentity{A}{B}{L}",
-        "SlideTNBlockingComparison": r"\SlideTNBlockingComparison{A}{B}{L}",
-        "SlideTNMixedTransfer": r"\SlideTNMixedTransfer{A}{B}{\rho}",
+        "SlideTNBlockingComparison": r"\SlideTNBlockingComparison{A}{L}",
+        "SlideTNMixedTransfer": r"\SlideTNMixedTransfer{A}{B}{\rho}{N}",
         "SlideTNTransferMap": r"\SlideTNTransferMap{A}{\rho}",
     }
     pages = [labelled_page(name, call) for name, call in calls.items()]
@@ -111,6 +116,8 @@ def dark_source() -> str:
 \definecolor{{dimwhite}}{{RGB}}{{180,180,180}}
 \definecolor{{leangreen}}{{RGB}}{{34,180,34}}
 \definecolor{{leanblue}}{{RGB}}{{70,130,180}}
+\definecolor{{amber}}{{RGB}}{{255,191,0}}
+\definecolor{{softred}}{{RGB}}{{220,80,80}}
 \pagecolor{{darkbg}}\color{{white}}
 \pagestyle{{empty}}
 \input{{macros/common}}

@@ -494,9 +494,12 @@
     \TN@declareWordTensor{#1one}{(1.00,0)}
     \TN@declareWordTensor{#1two}{(2.00,0)}
     \TN@declareWordTensor{#1three}{(3.00,0)}
-    \TN@label[anchor=north]{#1one}{(0,-0.16)}{#2}
-    \TN@label[anchor=north]{#1two}{(0,-0.16)}{#3}
-    \TN@label[anchor=north]{#1three}{(0,-0.16)}{#4}%
+    \TN@label[anchor=north]{#1one}
+        {(0,-\TN@traceclearance-0.12)}{#2}
+    \TN@label[anchor=north]{#1two}
+        {(0,-\TN@traceclearance-0.12)}{#3}
+    \TN@label[anchor=north]{#1three}
+        {(0,-\TN@traceclearance-0.12)}{#4}%
 }
 
 \newcommand{\TN@connectThreeSiteChain}[1]{%
@@ -560,8 +563,12 @@
     \TN@popenport{#1threeN}{0,0.46}%
 }
 
-\newcommand{\TN@pepsFiveSitePatch}[1]{%
-    \TN@pepsvertex{#1one}{(0,0)}{}
+\newcommand{\TN@pepsFiveSitePatchBase}[1]{%
+    % The first physical leg points north: a north-east leg would cross the
+    % long two--five virtual bond below.
+    \TN@tensor{#1one}{(0,0)}
+    \TN@pport{#1oneP}{#1one}{north}%
+    \TN@popenport{#1oneP}{0,\TN@physicalleglen}%
     \TN@pepsvertex{#1two}{(1.00,0)}{}
     \TN@pepsvertex{#1three}{(1.50,1.00)}{}
     \TN@pepsvertex{#1four}{(0.60,1.50)}{}
@@ -571,7 +578,27 @@
     \TN@vedge{#1edgeThreeFour}{#1three}{151}{#1four}{331}%
     \TN@vedge{#1edgeFourFive}{#1four}{west}{#1five}{east}%
     \TN@vedge{#1edgeFiveOne}{#1five}{292}{#1one}{112}%
+}
+
+\newcommand{\TN@pepsFiveSitePatch}[1]{%
+    \TN@pepsFiveSitePatchBase{#1}%
     \TN@vedge{#1edgeTwoFive}{#1two}{137}{#1five}{317}%
+}
+
+% The distinguished two--five edge is split at a typed insertion rather than
+% drawn first and covered afterwards.
+\newcommand{\TN@pepsFiveSiteEdgeInsertion}[2]{%
+    \TN@pepsFiveSitePatchBase{#1}%
+    \TN@insertion{#1EdgeInsertion}
+        {($(#1two)!0.50!(#1five)$)}%
+    \TN@vport{#1TwoToInsertion}{#1two}{137}%
+    \TN@vport{#1InsertionToTwo}{#1EdgeInsertion}{317}%
+    \TN@vport{#1InsertionToFive}{#1EdgeInsertion}{137}%
+    \TN@vport{#1FiveToInsertion}{#1five}{317}%
+    \TN@vconnectports{#1TwoToInsertion}{#1InsertionToTwo}%
+    \TN@vconnectports{#1InsertionToFive}{#1FiveToInsertion}%
+    \TN@label[anchor=south]{#1EdgeInsertion.north}
+        {(0,\TN@labelclearance)}{#2}%
 }
 
 \newcommand{\TN@pepsFiveSitePatchLabels}[6]{%
@@ -585,25 +612,86 @@
 \newcommand{\TN@twoInjectiveInsertionPair}[4]{%
     \TN@tensor{#1one}{(0,0)}
     \TN@tensor{#1two}{(2.50,0)}
-    \TN@pleg{#1one}{north}{0,0.42}
-    \TN@pleg{#1two}{north}{0,0.42}
-    \TN@insertion[label=above:$#4$]{#1X}{(1.25,0.45)}
-    \TN@vconnectcurve{#1one}{30}{30}{180}{#1X}{west}
-    \TN@vconnectcurve{#1X}{east}{0}{150}{#1two}{150}
-    \TN@vconnectbendright{#1one}{-8}{12}{#1two}{188}
-    \TN@vconnectbendright{#1one}{-28}{38}{#1two}{208}
-    \node at (1.25,-0.08) {$\vdots$};
-    \node at ($(#1one.south)+(0,-0.30)$) {$#2$};
-    \node at ($(#1two.south)+(0,-0.30)$) {$#3$};%
+    \TN@pport{#1oneP}{#1one}{north}%
+    \TN@pport{#1twoP}{#1two}{north}%
+    \TN@popenport{#1oneP}{0,\TN@physicalleglen}%
+    \TN@popenport{#1twoP}{0,\TN@physicalleglen}%
+    \TN@vport{#1oneUpper}{#1one}{20}%
+    \TN@vport{#1oneMiddle}{#1one}{east}%
+    \TN@vport{#1oneLower}{#1one}{-20}%
+    \TN@vport{#1twoUpper}{#1two}{160}%
+    \TN@vport{#1twoMiddle}{#1two}{west}%
+    \TN@vport{#1twoLower}{#1two}{200}%
+    \TN@insertion{#1X}{($(#1oneUpper)!0.50!(#1twoUpper)$)}%
+    \TN@vport{#1XWest}{#1X}{west}%
+    \TN@vport{#1XEast}{#1X}{east}%
+    \TN@vconnectports{#1oneUpper}{#1XWest}%
+    \TN@vconnectports{#1XEast}{#1twoUpper}%
+    \TN@vconnectports{#1oneMiddle}{#1twoMiddle}%
+    \TN@vconnectports{#1oneLower}{#1twoLower}%
+    \TN@label[anchor=south]{#1X.north}{(0,\TN@labelclearance)}{#4}%
+    \TN@label[anchor=north]{#1one.south}{(0,-\TN@labelclearance)}{#2}%
+    \TN@label[anchor=north]{#1two.south}{(0,-\TN@labelclearance)}{#3}%
 }
 
 \newcommand{\TN@threeLegTensorFan}[2]{%
     \TN@tensor{#1}{(0,0)}
-    \TN@pleg{#1}{north}{0,0.42}
-    \TN@vleg{#1}{31}{0.64,0.38}
-    \TN@vleg{#1}{-4}{0.67,-0.04}
-    \TN@vleg{#1}{-40}{0.54,-0.46}
-    \node at ($(#1.south)+(0,-0.30)$) {$#2$};%
+    \TN@pport{#1P}{#1}{north}%
+    \TN@popenport{#1P}{0,\TN@physicalleglen}%
+    \TN@vport{#1Upper}{#1}{35}%
+    \TN@vport{#1Middle}{#1}{east}%
+    \TN@vport{#1Lower}{#1}{-35}%
+    \TN@vterminal{#1UpperEnd}{(\TN@gaugeradius,\TN@gaugediagonal)}%
+    \TN@vterminal{#1MiddleEnd}{(\TN@gaugeradius,0)}%
+    \TN@vterminal{#1LowerEnd}{(\TN@gaugeradius,-\TN@gaugediagonal)}%
+    \TN@vconnectports{#1Upper}{#1UpperEnd}%
+    \TN@vconnectports{#1Middle}{#1MiddleEnd}%
+    \TN@vconnectports{#1Lower}{#1LowerEnd}%
+    \TN@label[anchor=north]{#1.south}{(0,-\TN@labelclearance)}{#2}%
+}
+
+\newcommand{\TN@threeLegTensorFanInsertion}[4]{%
+    \TN@tensor{#1}{(0,0)}
+    \TN@pport{#1P}{#1}{north}%
+    \TN@popenport{#1P}{0,\TN@physicalleglen}%
+    \TN@vport{#1Upper}{#1}{35}%
+    \TN@vport{#1Middle}{#1}{east}%
+    \TN@vport{#1Lower}{#1}{-35}%
+    \TN@vterminal{#1UpperEnd}{(\TN@gaugeradius,\TN@gaugediagonal)}%
+    \TN@vterminal{#1MiddleEnd}{(\TN@gaugeradius,0)}%
+    \TN@vterminal{#1LowerEnd}{(\TN@gaugeradius,-\TN@gaugediagonal)}%
+    \ifnum#3=1\relax
+        \TN@insertion{#1Insertion}{($(#1Upper)!0.52!(#1UpperEnd)$)}%
+        \TN@vport{#1InsertionIn}{#1Insertion}{215}%
+        \TN@vport{#1InsertionOut}{#1Insertion}{35}%
+        \TN@vconnectports{#1Upper}{#1InsertionIn}%
+        \TN@vconnectports{#1InsertionOut}{#1UpperEnd}%
+        \TN@vconnectports{#1Middle}{#1MiddleEnd}%
+        \TN@vconnectports{#1Lower}{#1LowerEnd}%
+        \TN@label[anchor=south]{#1Insertion.north}
+            {(0,\TN@labelclearance)}{#4}%
+    \else\ifnum#3=2\relax
+        \TN@insertion{#1Insertion}{($(#1Middle)!0.52!(#1MiddleEnd)$)}%
+        \TN@vport{#1InsertionIn}{#1Insertion}{west}%
+        \TN@vport{#1InsertionOut}{#1Insertion}{east}%
+        \TN@vconnectports{#1Upper}{#1UpperEnd}%
+        \TN@vconnectports{#1Middle}{#1InsertionIn}%
+        \TN@vconnectports{#1InsertionOut}{#1MiddleEnd}%
+        \TN@vconnectports{#1Lower}{#1LowerEnd}%
+        \TN@label[anchor=south]{#1Insertion.north}
+            {(0,\TN@labelclearance)}{#4}%
+    \else
+        \TN@insertion{#1Insertion}{($(#1Lower)!0.52!(#1LowerEnd)$)}%
+        \TN@vport{#1InsertionIn}{#1Insertion}{145}%
+        \TN@vport{#1InsertionOut}{#1Insertion}{-35}%
+        \TN@vconnectports{#1Upper}{#1UpperEnd}%
+        \TN@vconnectports{#1Middle}{#1MiddleEnd}%
+        \TN@vconnectports{#1Lower}{#1InsertionIn}%
+        \TN@vconnectports{#1InsertionOut}{#1LowerEnd}%
+        \TN@label[anchor=north]{#1Insertion.south}
+            {(0,-\TN@labelclearance)}{#4}%
+    \fi\fi
+    \TN@label[anchor=north]{#1.south}{(0,-\TN@labelclearance)}{#2}%
 }
 
 % A lattice site is a genuine four-port tensor atom.  The generic patch below
@@ -741,8 +829,9 @@
         \path[tn region collar] (0.3,2.55) rectangle (1.7,3.18);
         \path[tn region collar] (1.3,2.55) rectangle (2.7,3.18);
     \end{scope}
-    \node[tn region label collar, fill=white, fill opacity=0.82,
-        text opacity=1, inner sep=1pt] at (1.75,2.75) {top collar};%
+    \TN@annotationterminal{tnTopCollarLabel}{(1.50,3.18)}%
+    \TN@label[anchor=south,tn region label collar]{tnTopCollarLabel}
+        {(0,\TN@labelclearance)}{\text{top collar}}%
 }
 
 \newcommand{\TN@pepsBlockedNormalChain}{%
@@ -790,6 +879,22 @@
     \smallskip
 }
 
+% Several related identities share one relation column.  Each cell remains an
+% intrinsic TNTerm, while the tabular structure aligns the relations without
+% introducing diagram-specific coordinates or padding.
+\newenvironment{TNEquationRows}[1][compact]{%
+    \par\smallskip
+    \begingroup
+    \TNLayoutProfile{#1}%
+    \noindent\hfill
+    \begin{tabular}{@{}r@{}c@{}l@{}}%
+}{%
+    \end{tabular}%
+    \hfill\mbox{}\par
+    \endgroup
+    \smallskip
+}
+
 \newcommand{\TNTerm}[2][compact]{%
     \begingroup
     \TNLayoutProfile{#1}%
@@ -800,6 +905,10 @@
 \newcommand{\TNRelation}[1]{%
     \hspace{\TN@relationgap}\ensuremath{#1}\hspace{\TN@relationgap}%
 }
+
+% Public symbolic pitch for intrinsically composed terms.  Its numerical value
+% belongs to the selected layout profile.
+\newcommand{\TNCellPitch}{\TN@cellpitch}
 
 \newcommand{\TNPortAlias}[2]{\TN@aliasport{#1}{#2}}
 \newcommand{\TNVirtualPort}[3]{\TN@vport{#1}{#2}{#3}}
@@ -1097,7 +1206,8 @@
     \TN@label{#1Centre}{(0,-\TN@traceclearance-0.22)}{\tr}%
     \TN@label{#1Site}{(0.32,0.26)}{#3}%
     \if\relax\detokenize{#5}\relax\else
-        \TN@label{#1Centre}{(0,\TN@layerpitch)}{#5}%
+        \TN@label{#1Centre}
+            {(0,\TN@layerpitch+\TN@labelclearance)}{#5}%
     \fi
 }
 
@@ -1132,6 +1242,9 @@
     \TN@boxedThreeSitePhysicalTwo{#1}{#2}{#3}{#4}{#5}%
 }
 \newcommand{\TNPEPSFiveSitePatch}[1]{\TN@pepsFiveSitePatch{#1}}
+\newcommand{\TNPEPSFiveSiteEdgeInsertion}[2]{%
+    \TN@pepsFiveSiteEdgeInsertion{#1}{#2}%
+}
 \newcommand{\TNPEPSFiveSiteLabels}[6]{%
     \TN@pepsFiveSitePatchLabels{#1}{#2}{#3}{#4}{#5}{#6}%
 }
@@ -1141,6 +1254,9 @@
     \TN@twoInjectiveInsertionPair{#1}{#2}{#3}{#4}%
 }
 \newcommand{\TNPEPSThreeLegFan}[2]{\TN@threeLegTensorFan{#1}{#2}}
+\newcommand{\TNPEPSThreeLegFanInsertion}[4]{%
+    \TN@threeLegTensorFanInsertion{#1}{#2}{#3}{#4}%
+}
 
 % Selected regions used when a five-site PEPS patch is reduced to a blocked
 % three-site word.  The labels are arguments; the topology and clearances are
@@ -1188,6 +1304,141 @@
 \newcommand{\TNPEPSNormalCollar}{\TN@pepsNormalCollar}
 \newcommand{\TNPEPSBlockedNormalChain}{\TN@pepsBlockedNormalChain}
 \newcommand{\TNPEPSSquareTensor}[2]{\TN@pepsSquareTensor{#1}{#2}}
+
+% A four-bond gauge star has one fixed geometry in every client.  The gauge
+% labels face away from the central tensor, leaving every incidence visible.
+\newcommand{\TNFourBondGaugeStar}[6]{%
+    \coordinate (#1Centre) at #2;%
+    \TNTensor{#1Tensor}{(#1Centre)}%
+    \TNPhysicalPort{#1Physical}{#1Tensor}{north}%
+    \TNOpenPhysicalNorth{#1Physical}%
+    \TNInsertion{#1WestInsertion}
+        {($(#1Centre)+(-\TN@gaugeradius,0)$)}{}%
+    \TNInsertion{#1EastInsertion}
+        {($(#1Centre)+(\TN@gaugeradius,0)$)}{}%
+    \TNInsertion{#1SouthWestInsertion}
+        {($(#1Centre)+(-\TN@gaugediagonal,-\TN@gaugeradius)$)}{}%
+    \TNInsertion{#1SouthEastInsertion}
+        {($(#1Centre)+(\TN@gaugediagonal,-\TN@gaugeradius)$)}{}%
+    \TNVirtualPort{#1TensorWest}{#1Tensor}{west}%
+    \TNVirtualPort{#1TensorEast}{#1Tensor}{east}%
+    \TNVirtualPort{#1TensorSouthWest}{#1Tensor}{225}%
+    \TNVirtualPort{#1TensorSouthEast}{#1Tensor}{315}%
+    \TNVirtualPort{#1WestInner}{#1WestInsertion}{east}%
+    \TNVirtualPort{#1WestOuter}{#1WestInsertion}{west}%
+    \TNVirtualPort{#1EastInner}{#1EastInsertion}{west}%
+    \TNVirtualPort{#1EastOuter}{#1EastInsertion}{east}%
+    \TNVirtualPort{#1SouthWestInner}{#1SouthWestInsertion}{45}%
+    \TNVirtualPort{#1SouthWestOuter}{#1SouthWestInsertion}{225}%
+    \TNVirtualPort{#1SouthEastInner}{#1SouthEastInsertion}{135}%
+    \TNVirtualPort{#1SouthEastOuter}{#1SouthEastInsertion}{315}%
+    \TNConnectVirtual{#1WestInner}{#1TensorWest}%
+    \TNConnectVirtual{#1TensorEast}{#1EastInner}%
+    \TNConnectVirtual{#1TensorSouthWest}{#1SouthWestInner}%
+    \TNConnectVirtual{#1TensorSouthEast}{#1SouthEastInner}%
+    \TNOpenVirtualWest{#1WestOuter}%
+    \TNOpenVirtualEast{#1EastOuter}%
+    \TNOpenVirtualSouth{#1SouthWestOuter}%
+    \TNOpenVirtualSouth{#1SouthEastOuter}%
+    \TN@label[anchor=south]{#1WestInsertion.north}
+        {(0,\TN@labelclearance)}{#3}%
+    \TN@label[anchor=south]{#1EastInsertion.north}
+        {(0,\TN@labelclearance)}{#4}%
+    \TN@label[anchor=north east]{#1SouthWestInsertion.south west}
+        {(-\TN@labelclearance,-\TN@labelclearance)}{#5}%
+    \TN@label[anchor=north west]{#1SouthEastInsertion.south east}
+        {(\TN@labelclearance,-\TN@labelclearance)}{#6}%
+}
+
+% Cardinal version used for a translation-invariant square PEPS tensor.
+\newcommand{\TNCardinalGaugeCross}[6]{%
+    \coordinate (#1Centre) at #2;%
+    \TNTensor{#1Tensor}{(#1Centre)}%
+    \TNPhysicalPort{#1Physical}{#1Tensor}{45}%
+    \TNOpenPhysicalNorth{#1Physical}%
+    \TNInsertion{#1WestInsertion}
+        {($(#1Centre)+(-\TN@gaugeradius,0)$)}{}%
+    \TNInsertion{#1EastInsertion}
+        {($(#1Centre)+(\TN@gaugeradius,0)$)}{}%
+    \TNInsertion{#1SouthInsertion}
+        {($(#1Centre)+(0,-\TN@gaugeradius)$)}{}%
+    \TNInsertion{#1NorthInsertion}
+        {($(#1Centre)+(0,\TN@gaugeradius)$)}{}%
+    \TNVirtualPort{#1TensorWest}{#1Tensor}{west}%
+    \TNVirtualPort{#1TensorEast}{#1Tensor}{east}%
+    \TNVirtualPort{#1TensorSouth}{#1Tensor}{south}%
+    \TNVirtualPort{#1TensorNorth}{#1Tensor}{north}%
+    \TNVirtualPort{#1WestInner}{#1WestInsertion}{east}%
+    \TNVirtualPort{#1WestOuter}{#1WestInsertion}{west}%
+    \TNVirtualPort{#1EastInner}{#1EastInsertion}{west}%
+    \TNVirtualPort{#1EastOuter}{#1EastInsertion}{east}%
+    \TNVirtualPort{#1SouthInner}{#1SouthInsertion}{north}%
+    \TNVirtualPort{#1SouthOuter}{#1SouthInsertion}{south}%
+    \TNVirtualPort{#1NorthInner}{#1NorthInsertion}{south}%
+    \TNVirtualPort{#1NorthOuter}{#1NorthInsertion}{north}%
+    \TNConnectVirtual{#1WestInner}{#1TensorWest}%
+    \TNConnectVirtual{#1TensorEast}{#1EastInner}%
+    \TNConnectVirtual{#1SouthInner}{#1TensorSouth}%
+    \TNConnectVirtual{#1TensorNorth}{#1NorthInner}%
+    \TNOpenVirtualWest{#1WestOuter}%
+    \TNOpenVirtualEast{#1EastOuter}%
+    \TNOpenVirtualSouth{#1SouthOuter}%
+    \TNOpenVirtualNorth{#1NorthOuter}%
+    \TN@label[anchor=east]{#1WestInsertion.west}
+        {(-\TN@labelclearance,0)}{#3}%
+    \TN@label[anchor=west]{#1EastInsertion.east}
+        {(\TN@labelclearance,0)}{#4}%
+    \TN@label[anchor=north]{#1SouthInsertion.south}
+        {(0,-\TN@labelclearance)}{#5}%
+    \TN@label[anchor=south]{#1NorthInsertion.north}
+        {(0,\TN@labelclearance)}{#6}%
+}
+
+% A periodic MPS word owns its common pitch, omitted-site gap, trace closure,
+% and trace-aware site-label baseline.
+\newcommand{\TNCyclicMPSWord}[4]{%
+    \coordinate (#1Centre) at (0,0);%
+    \TNMPSSite{#1One}{(0,0)}{}%
+    \TNMPSSite{#1Two}{(\TN@chainsep,0)}{}%
+    \TNMPSSite{#1Penultimate}{(\TN@chainright-\TN@chainsep,0)}{}%
+    \TNMPSSite{#1Last}{(\TN@chainright,0)}{}%
+    \foreach \name/\index in
+        {One/i_1,Two/i_2,Penultimate/i_{#3-1},Last/i_{#3}} {%
+        \TNOpenPhysicalNorth{#1\name Ket}%
+        \TNLabelAbove{#1\name Ket}{\index}%
+        \TN@label[anchor=north]{#1\name.south}
+            {(0,-\TN@labelclearance)}{#2}%
+    }%
+    \TNConnectVirtual{#1OneEast}{#1TwoWest}%
+    \TNOpenVirtualEast{#1TwoEast}%
+    \TNOpenVirtualWest{#1PenultimateWest}%
+    \TNConnectVirtual{#1PenultimateEast}{#1LastWest}%
+    \TNTraceVirtualBelow{#1OneWest}{#1LastEast}%
+    \TN@annotationterminal{#1Omitted}{(\TN@chainellipsisx,0)}%
+    \TN@annotationterminal{#1TraceLabel}
+        {(\TN@chainellipsisx,-\TN@traceclearance-\TN@annotationclearance)}%
+    \TN@label{#1Omitted}{(0,0)}{\cdots}%
+    \TN@label[anchor=north]{#1TraceLabel}{(0,0)}{#4}%
+}
+
+% Gauge conjugation of one MPS tensor is shared by blueprint and slides.
+\newcommand{\TNGaugeConjugatedMPSSite}[5]{%
+    \coordinate (#1Centre) at #2;%
+    \TNMPSSite{#1Site}{(#1Centre)}{#3}%
+    \TNInsertion{#1Left}
+        {($(#1Centre)+(-\TN@cellpitch,0)$)}{#4}%
+    \TNInsertion{#1Right}
+        {($(#1Centre)+(\TN@cellpitch,0)$)}{#5}%
+    \TNVirtualPort{#1LeftWest}{#1Left}{west}%
+    \TNVirtualPort{#1LeftEast}{#1Left}{east}%
+    \TNVirtualPort{#1RightWest}{#1Right}{west}%
+    \TNVirtualPort{#1RightEast}{#1Right}{east}%
+    \TNOpenVirtualWest{#1LeftWest}%
+    \TNConnectVirtual{#1LeftEast}{#1SiteWest}%
+    \TNConnectVirtual{#1SiteEast}{#1RightWest}%
+    \TNOpenVirtualEast{#1RightEast}%
+    \TNOpenPhysicalNorth{#1SiteKet}%
+}
 
 \newcommand{\TNMorphismArrow}[4]{\TN@labeledmorphism{#1}{#2}{#3}{#4}}
 \newcommand{\TNComparisonArrow}[4]{\TN@labeledcomparison{#1}{#2}{#3}{#4}}
