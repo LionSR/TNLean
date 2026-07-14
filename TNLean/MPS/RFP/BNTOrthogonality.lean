@@ -330,6 +330,69 @@ theorem isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_is
       _ = transferMap (directSumTensor B) (Matrix.reindex e e Y) :=
             (transferMap_directSumTensor_reindex B Y).symm
 
+/-- A nonzero idempotent linear map cannot remain idempotent after multiplication
+by a nonzero scalar other than one. -/
+private lemma scalar_eq_one_of_smul_idempotent
+    {D₁ D₂ : ℕ}
+    (F : Matrix (Fin D₁) (Fin D₂) ℂ →ₗ[ℂ]
+      Matrix (Fin D₁) (Fin D₂) ℂ)
+    (hF : IsIdempotentElem F) (hF_ne : F ≠ 0) (c : ℂ) (hc : c ≠ 0)
+    (hcF : IsIdempotentElem (c • F)) : c = 1 := by
+  change F * F = F at hF
+  change (c • F) * (c • F) = c • F at hcF
+  have hcF' : (c * c) • F = c • F := by
+    calc
+      (c * c) • F = (c • F) * (c • F) := by rw [smul_mul_smul, hF]
+      _ = c • F := hcF
+  have hzero : (c * c - c) • F = 0 := by
+    calc
+      (c * c - c) • F = (c * c) • F - c • F := sub_smul (c * c) c F
+      _ = c • F - c • F := by rw [hcF']
+      _ = 0 := sub_self (c • F)
+  have hscalar : c * c - c = 0 :=
+    (smul_eq_zero.mp hzero).resolve_right hF_ne
+  have hmul : c * c = c * 1 := by
+    simpa only [mul_one] using sub_eq_zero.mp hscalar
+  exact mul_left_cancel₀ hc hmul
+
+/-- If a nonzero transfer-idempotent tensor is repeated with unit-modulus scalar
+coefficients and the literal bond direct sum is transfer-idempotent, then all
+coefficients are equal.
+
+**Local fix (see `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`):** This is the
+corrected literal-block consequence of CPSV16, Theorem charact-MPS, lines
+543--563. The printed independent-phase statement does not specify the additional
+physical-space construction needed to avoid these mixed copy equations. -/
+theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
+    {D : ℕ} [NeZero D] (A : MPSTensor d D) (hA : IsTransferIdempotent A)
+    (hA_ne : transferMap A ≠ 0) (μ : Fin r → ℂ) (hμ : ∀ q, ‖μ q‖ = 1)
+    (hRFP : IsTransferIdempotent
+      (directSumTensor (fun q : Fin r ↦ (fun i ↦ μ q • A i : MPSTensor d D))))
+    (q q' : Fin r) : μ q = μ q' := by
+  have hμ_ne : ∀ q, μ q ≠ 0 := by
+    intro q hq
+    simpa [hq] using hμ q
+  have hphase : μ q * starRingEnd ℂ (μ q') = 1 := by
+    have hidem :=
+      (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
+        (B := fun s : Fin r ↦ (fun i ↦ μ s • A i : MPSTensor d D))).mp hRFP q q'
+    rw [mixedTransferMap₂_smul, mixedTransferMap₂_self] at hidem
+    apply scalar_eq_one_of_smul_idempotent (transferMap A) hA hA_ne
+      (μ q * starRingEnd ℂ (μ q'))
+      (mul_ne_zero (hμ_ne q) ((map_ne_zero (starRingEnd ℂ)).2 (hμ_ne q'))) hidem
+  have hnormSq : Complex.normSq (μ q') = 1 := by
+    rw [Complex.normSq_eq_norm_sq, hμ q']
+    norm_num
+  calc
+    μ q = μ q * 1 := (mul_one (μ q)).symm
+    _ = μ q * (starRingEnd ℂ (μ q') * μ q') := by
+      rw [← Complex.normSq_eq_conj_mul_self, hnormSq]
+      norm_num
+    _ = (μ q * starRingEnd ℂ (μ q')) * μ q' :=
+      (mul_assoc (μ q) (starRingEnd ℂ (μ q')) (μ q')).symm
+    _ = 1 * μ q' := by rw [hphase]
+    _ = μ q' := one_mul (μ q')
+
 end BlockDecomposition
 
 /-! ## Spectral gap forces the off-diagonal operator to vanish -/
