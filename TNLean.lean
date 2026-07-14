@@ -392,6 +392,7 @@ import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.MPDO.CyclicProjector
 import TNLean.MPS.MPDO.VerticalSpectral
 import TNLean.MPS.MPDO.VerticalBNT
+import TNLean.MPS.MPDO.RetainedClass
 import TNLean.MPS.MPDO.SectorTrace
 import TNLean.MPS.MPDO.ReflectedMarkedChain
 import TNLean.MPS.MPDO.BiCFDerivation
