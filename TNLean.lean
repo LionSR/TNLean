@@ -383,6 +383,7 @@ import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
+import TNLean.MPS.MPDO.LinearMarkedTensor
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.HorizontalBNT
