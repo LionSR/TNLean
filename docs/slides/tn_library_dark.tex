@@ -53,163 +53,138 @@
 % A common periodic MPS word.  Omitted sites are represented by two typed
 % external terminals and an ellipsis; the trace is a port-to-port closure.
 \newcommand{\SlideTNPeriodicMPS}[2]{%
-  \begin{tikzpicture}[tn picture]
-    \TN@labeledmpssite{sltnAone}{(0,0)}{#1}
-    \TN@labeledmpssite{sltnAtwo}{(1.30,0)}{#1}
-    \TN@labeledmpssite{sltnApen}{(3.25,0)}{#1}
-    \TN@labeledmpssite{sltnAlast}{(4.55,0)}{#1}
-    \TN@vconnectports{sltnAoneE}{sltnAtwoW}
-    \TN@vopenport{sltnAtwoE}{0.38,0}
-    \TN@vopenport{sltnApenW}{-0.38,0}
-    \TN@vconnectports{sltnApenE}{sltnAlastW}
-    \TN@popenport{sltnAoneN}{0,0.48}
-    \TN@popenport{sltnAtwoN}{0,0.48}
-    \TN@popenport{sltnApenN}{0,0.48}
-    \TN@popenport{sltnAlastN}{0,0.48}
-    \TN@label{sltnAoneNOpen}{(0,0.22)}{i_1}
-    \TN@label{sltnAtwoNOpen}{(0,0.22)}{i_2}
-    \TN@label{sltnApenNOpen}{(0,0.22)}{i_{#2-1}}
-    \TN@label{sltnAlastNOpen}{(0,0.22)}{i_{#2}}
-    \TN@vtraceportsbelow{sltnAoneW}{sltnAlastE}{0.42}{0.78}
+  \begin{TNDiagram}[normal]
+    \foreach \name/\x/\i in {One/0/i_1,Two/1.30/i_2,
+        Pen/3.25/i_{#2-1},Last/4.55/i_{#2}} {
+      \TNMPSSite{sltnA\name}{(\x,0)}{#1}
+      \TNOpenPhysicalNorth{sltnA\name Ket}
+      \node[tn label, above] at (sltnA\name Ket) {$\i$};
+    }
+    \TNConnectVirtual{sltnAOneEast}{sltnATwoWest}
+    \TNOpenVirtualEast{sltnATwoEast}
+    \TNOpenVirtualWest{sltnAPenWest}
+    \TNConnectVirtual{sltnAPenEast}{sltnALastWest}
+    \TNTraceVirtualBelow{sltnAOneWest}{sltnALastEast}
     \node[tn label] at (2.28,0) {$\cdots$};
     \node[tn label] at (2.28,-1.02) {trace; bond dimension $D$};
-  \end{tikzpicture}%
+  \end{TNDiagram}%
 }
 
 % The left-hand tensor is B, matching B^i = X A^i X^{-1}.
 \newcommand{\SlideTNGaugeConjugation}[3]{%
-  \begin{tikzpicture}[tn picture]
-    \TN@labeledmpssite{sltnB}{(0,0)}{#1}
-    \TN@vopenport{sltnBW}{-0.48,0}
-    \TN@vopenport{sltnBE}{0.48,0}
-    \TN@popenport{sltnBN}{0,0.48}
-    \TN@label{sltnBNOpen}{(0,0.22)}{i}
+  \begin{TNDiagram}[normal]
+    \TNMPSSite{sltnB}{(0,0)}{#1}
+    \TNOpenVirtualWest{sltnBWest}
+    \TNOpenVirtualEast{sltnBEast}
+    \TNOpenPhysicalNorth{sltnBKet}
+    \node[tn label, above] at (sltnBKet) {$i$};
     \node[tn label, text=white, font=\Large] at (1.35,0) {$=$};
-    \TN@vinsertion{sltnX}{(2.35,0)}{#3}
-    \TN@labeledmpssite{sltnA}{(3.55,0)}{#2}
-    \TN@vinsertion{sltnXi}{(4.80,0)}{#3^{-1}}
-    \TN@vopenport{sltnXW}{-0.48,0}
-    \TN@vconnectports{sltnXE}{sltnAW}
-    \TN@vconnectports{sltnAE}{sltnXiW}
-    \TN@vopenport{sltnXiE}{0.48,0}
-    \TN@popenport{sltnAN}{0,0.48}
-    \TN@label{sltnANOpen}{(0,0.22)}{i}
-  \end{tikzpicture}%
+    \TNInsertion{sltnX}{(2.35,0)}{#3}
+    \TNMPSSite{sltnA}{(3.55,0)}{#2}
+    \TNInsertion{sltnXi}{(4.80,0)}{#3^{-1}}
+    \TNVirtualPort{sltnXWest}{sltnX}{west}
+    \TNVirtualPort{sltnXEast}{sltnX}{east}
+    \TNVirtualPort{sltnXiWest}{sltnXi}{west}
+    \TNVirtualPort{sltnXiEast}{sltnXi}{east}
+    \TNOpenVirtualWest{sltnXWest}
+    \TNConnectVirtual{sltnXEast}{sltnAWest}
+    \TNConnectVirtual{sltnAEast}{sltnXiWest}
+    \TNOpenVirtualEast{sltnXiEast}
+    \TNOpenPhysicalNorth{sltnAKet}
+    \node[tn label, above] at (sltnAKet) {$i$};
+  \end{TNDiagram}%
 }
 
 \newcommand{\SlideTNBlockingIdentity}[3]{%
-  \begin{tikzpicture}[tn picture, scale=0.82]
-    \TN@vcomponent{sltnC}{(0,0)}{#1}
-    \TN@pport{sltnCN}{sltnC}{north}
-    \TN@vopenport{sltnCW}{-0.48,0}
-    \TN@vopenport{sltnCE}{0.48,0}
-    \TN@popenport{sltnCN}{0,0.48}
-    \TN@label{sltnCNOpen}{(0,0.22)}{(i_1,\ldots,i_{#3})}
+  \begin{TNDiagram}[compact]
+    \TNMPSSite{sltnC}{(0,0)}{#1}
+    \TNOpenVirtualWest{sltnCWest}
+    \TNOpenVirtualEast{sltnCEast}
+    \TNOpenPhysicalNorth{sltnCKet}
+    \node[tn label, above] at (sltnCKet) {$(i_1,\ldots,i_{#3})$};
     \node[tn label, text=white, font=\Large] at (1.25,0) {$=$};
-    \TN@labeledmpssite{sltnBone}{(2.10,0)}{#2}
-    \TN@labeledmpssite{sltnBtwo}{(3.25,0)}{#2}
-    \TN@labeledmpssite{sltnBlast}{(5.15,0)}{#2}
-    \TN@vopenport{sltnBoneW}{-0.48,0}
-    \TN@vconnectports{sltnBoneE}{sltnBtwoW}
-    \TN@vopenport{sltnBtwoE}{0.38,0}
-    \TN@vopenport{sltnBlastW}{-0.38,0}
-    \TN@vopenport{sltnBlastE}{0.48,0}
-    \TN@popenport{sltnBoneN}{0,0.48}
-    \TN@popenport{sltnBtwoN}{0,0.48}
-    \TN@popenport{sltnBlastN}{0,0.48}
-    \TN@label{sltnBoneNOpen}{(0,0.22)}{i_1}
-    \TN@label{sltnBtwoNOpen}{(0,0.22)}{i_2}
-    \TN@label{sltnBlastNOpen}{(0,0.22)}{i_{#3}}
+    \foreach \name/\x/\i in {One/2.10/i_1,Two/3.25/i_2,Last/5.15/i_{#3}} {
+      \TNMPSSite{sltnB\name}{(\x,0)}{#2}
+      \TNOpenPhysicalNorth{sltnB\name Ket}
+      \node[tn label, above] at (sltnB\name Ket) {$\i$};
+    }
+    \TNOpenVirtualWest{sltnBOneWest}
+    \TNConnectVirtual{sltnBOneEast}{sltnBTwoWest}
+    \TNOpenVirtualEast{sltnBTwoEast}
+    \TNOpenVirtualWest{sltnBLastWest}
+    \TNOpenVirtualEast{sltnBLastEast}
     \node[tn label] at (4.20,0) {$\cdots$};
-    \TN@annotationterminal{sltnBraceL}{(1.72,-0.58)}
-    \TN@annotationterminal{sltnBraceR}{(5.55,-0.58)}
-    \TN@spanbracebelow[text=dimwhite]
-      {sltnBraceL}{sltnBraceR}{#3\text{ copies}}
-  \end{tikzpicture}%
+    \node[tn label] at (3.64,-0.68) {#3 copies};
+  \end{TNDiagram}%
 }
 
 \newcommand{\SlideTNMixedTransfer}[4]{%
-  \begin{tikzpicture}[tn picture, scale=0.92]
-    \TN@state{sltnRho}{(-1.15,0)}{#3}
-    \TN@veastport{sltnRhoTop}{sltnRho}{0.25}
-    \TN@veastport{sltnRhoBottom}{sltnRho}{0.75}
+  \begin{TNDiagram}[compact]
     \foreach \name/\x in {One/0,Two/1.30,Pen/3.25,Last/4.55} {
-      \TN@labeledmposite{sltnTop\name}{(\x,0.72)}{#1}
-      \TN@labeledmposite{sltnBot\name}{(\x,-0.72)}{#2^\dagger}
+      \TNStackedMPOProduct{sltn\name}{(\x,0)}{#1}{#2^\dagger}{}
     }
-    \TN@vconnectports{sltnRhoTop}{sltnTopOneW}
-    \TN@vconnectports{sltnRhoBottom}{sltnBotOneW}
-    \TN@vconnectports{sltnTopOneE}{sltnTopTwoW}
-    \TN@vconnectports{sltnBotOneE}{sltnBotTwoW}
-    \TN@vopenport{sltnTopTwoE}{0.38,0}
-    \TN@vopenport{sltnTopPenW}{-0.38,0}
-    \TN@vopenport{sltnBotTwoE}{0.38,0}
-    \TN@vopenport{sltnBotPenW}{-0.38,0}
-    \TN@vconnectports{sltnTopPenE}{sltnTopLastW}
-    \TN@vconnectports{sltnBotPenE}{sltnBotLastW}
-    \TN@vopenport{sltnTopLastE}{0.48,0}
-    \TN@vopenport{sltnBotLastE}{0.48,0}
-    \foreach \name in {One,Two,Pen,Last} {
-      \TN@pconnectports{sltnTop\name S}{sltnBot\name N}
-    }
+    \TNOpenVirtualWest{sltnOneUpperWest}
+    \TNOpenVirtualWest{sltnOneLowerWest}
+    \TNConnectVirtual{sltnOneUpperEast}{sltnTwoUpperWest}
+    \TNConnectVirtual{sltnOneLowerEast}{sltnTwoLowerWest}
+    \TNOpenVirtualEast{sltnTwoUpperEast}
+    \TNOpenVirtualEast{sltnTwoLowerEast}
+    \TNOpenVirtualWest{sltnPenUpperWest}
+    \TNOpenVirtualWest{sltnPenLowerWest}
+    \TNConnectVirtual{sltnPenUpperEast}{sltnLastUpperWest}
+    \TNConnectVirtual{sltnPenLowerEast}{sltnLastLowerWest}
+    \TNOpenVirtualEast{sltnLastUpperEast}
+    \TNOpenVirtualEast{sltnLastLowerEast}
+    \node[tn label, anchor=east] at (-0.62,0) {$#3$};
     \node[tn label] at (2.28,0.72) {$\cdots$};
     \node[tn label] at (2.28,-0.72) {$\cdots$};
     \node[tn label, anchor=west] at (5.20,0)
       {$\mathcal F^{#4}_{#1,#2}(#3)$};
-  \end{tikzpicture}%
+  \end{TNDiagram}%
 }
 
 \newcommand{\SlideTNTransferMap}[2]{%
-  \begin{tikzpicture}[tn picture]
-    \TN@state{sltnInput}{(-1.55,0)}{#2}
-    \TN@veastport{sltnInputTop}{sltnInput}{0.25}
-    \TN@veastport{sltnInputBottom}{sltnInput}{0.75}
-    \TN@labeledmposite{sltnKet}{(0,0.72)}{#1}
-    \TN@labeledmposite{sltnBra}{(0,-0.72)}{\overline{#1}}
-    \TN@vconnectports{sltnInputTop}{sltnKetW}
-    \TN@vconnectports{sltnInputBottom}{sltnBraW}
-    \TN@pconnectports{sltnKetS}{sltnBraN}
-    \TN@vopenport{sltnKetE}{0.48,0}
-    \TN@vopenport{sltnBraE}{0.48,0}
+  \begin{TNDiagram}[normal]
+    \TNStackedMPOProduct{sltn}{(0,0)}{#1}{\overline{#1}}{}
+    \TNOpenVirtualWest{sltnUpperWest}
+    \TNOpenVirtualWest{sltnLowerWest}
+    \TNOpenVirtualEast{sltnUpperEast}
+    \TNOpenVirtualEast{sltnLowerEast}
+    \node[tn label, anchor=east] at (-0.62,0) {$#2$};
     \node[tn label] at (0.32,0) {$\sum_i$};
     \node[tn label, anchor=west] at (0.95,0)
       {$\mathcal E_{#1}(#2)$};
-  \end{tikzpicture}%
+  \end{TNDiagram}%
 }
 
 \newcommand{\SlideTNBlockingComparison}[2]{%
-  \begin{tikzpicture}[tn picture, scale=0.82]
+  \begin{TNDiagram}[compact]
     \node[tn label, anchor=east] at (-0.55,0.75) {chain of $N$:};
     \foreach \x/\name in {0/One,0.85/Two,1.70/Three,4.05/Pen,4.90/Last} {
-      \TN@labeledmpssite{sltnP\name}{(\x,0.75)}{#1}
-      \TN@popenport{sltnP\name N}{0,0.48}
+      \TNMPSSite{sltnP\name}{(\x,0.75)}{#1}
+      \TNOpenPhysicalNorth{sltnP\name Ket}
     }
-    \TN@vconnectports{sltnPOneE}{sltnPTwoW}
-    \TN@vconnectports{sltnPTwoE}{sltnPThreeW}
-    \TN@vopenport{sltnPThreeE}{0.38,0}
-    \TN@vopenport{sltnPPenW}{-0.38,0}
-    \TN@vconnectports{sltnPPenE}{sltnPLastW}
-    \TN@vopenport{sltnPOneW}{-0.48,0}
-    \TN@vopenport{sltnPLastE}{0.48,0}
+    \TNConnectVirtual{sltnPOneEast}{sltnPTwoWest}
+    \TNConnectVirtual{sltnPTwoEast}{sltnPThreeWest}
+    \TNOpenVirtualEast{sltnPThreeEast}
+    \TNOpenVirtualWest{sltnPPenWest}
+    \TNConnectVirtual{sltnPPenEast}{sltnPLastWest}
+    \TNOpenVirtualWest{sltnPOneWest}
+    \TNOpenVirtualEast{sltnPLastEast}
     \node[tn label] at (2.88,0.75) {$\cdots$};
     \node[tn label, anchor=east] at (-0.55,-0.85)
       {after blocking $#2$:};
-    \TN@vcomponent{sltnBlockOne}{(0.65,-0.85)}{#1^{(#2)}}
-    \TN@vcomponent{sltnBlockTwo}{(2.45,-0.85)}{#1^{(#2)}}
-    \TN@vcomponent{sltnBlockLast}{(4.25,-0.85)}{#1^{(#2)}}
+    \TNMPSSite{sltnBlockOne}{(0.65,-0.85)}{#1^{(#2)}}
+    \TNMPSSite{sltnBlockTwo}{(2.45,-0.85)}{#1^{(#2)}}
+    \TNMPSSite{sltnBlockLast}{(4.25,-0.85)}{#1^{(#2)}}
     \foreach \name in {One,Two,Last} {
-      \TN@pport{sltnBlock\name N}{sltnBlock\name}{north}
-      \TN@popenport{sltnBlock\name N}{0,0.48}
+      \TNOpenPhysicalNorth{sltnBlock\name Ket}
     }
-    \TN@vconnectports{sltnBlockOneE}{sltnBlockTwoW}
-    \TN@vconnectports{sltnBlockTwoE}{sltnBlockLastW}
-    \TN@vopenport{sltnBlockOneW}{-0.48,0}
-    \TN@vopenport{sltnBlockLastE}{0.48,0}
-    \TN@grouppath{(-0.20,0.30) -- (-0.20,-0.35);}
-    \TN@grouppath{(1.55,0.30) -- (1.55,-0.35);}
-    \TN@grouppath{(3.65,0.30) -- (3.65,-0.35);}
-    \TN@grouppath{(5.30,0.30) -- (5.30,-0.35);}
-  \end{tikzpicture}%
+    \TNConnectVirtual{sltnBlockOneEast}{sltnBlockTwoWest}
+    \TNConnectVirtual{sltnBlockTwoEast}{sltnBlockLastWest}
+    \TNOpenVirtualWest{sltnBlockOneWest}
+    \TNOpenVirtualEast{sltnBlockLastEast}
+  \end{TNDiagram}%
 }
 
 \makeatother
