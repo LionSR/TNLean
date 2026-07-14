@@ -132,6 +132,7 @@ _OFFSET_ANCHOR_POINT_PATTERN = re.compile(
 )
 _SIMPLE_NODE_NAME_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
 _SYMBOLIC_PORT_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
+_CONTROL_WORD_DELIMITER_PATTERN = re.compile(r"(\\[A-Za-z@]+)\s+")
 _UNTYPED_PORT_COMMAND_PATTERN = re.compile(
     r"\\TN@(?:port|betweenport|westport|eastport|northport|southport|registerport)\b"
 )
@@ -433,7 +434,13 @@ def _assert_typed_port_syntax() -> None:
             if len(arguments) != arity:
                 malformed.append(_source_line(path, offset))
                 continue
-            endpoints = [re.sub(r"\s+", "", arguments[index]) for index in endpoint_indices]
+            # TeX discards whitespace used to terminate a control word, as in
+            # ``\\name E``.  Other whitespace survives tokenization and cannot
+            # belong to a symbolic port identifier.
+            endpoints = [
+                _CONTROL_WORD_DELIMITER_PATTERN.sub(r"\1", arguments[index]).strip()
+                for index in endpoint_indices
+            ]
             if any(not _SYMBOLIC_PORT_PATTERN.fullmatch(value) for value in endpoints):
                 malformed.append(_source_line(path, offset))
             if option and forbidden_options.search(option):
