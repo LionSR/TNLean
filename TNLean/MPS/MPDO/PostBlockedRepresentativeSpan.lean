@@ -201,6 +201,88 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     (fun j ↦ hBlkPos j (L - selectorLength) hPrefixPos) hSelectors
   simpa [Nat.sub_add_cancel hSelectorLength_le] using hSpan
 
+/-- The representatives of a BNT canonical form have eventual simultaneous word-tuple span.
+
+Choose a common positive block-injectivity length `p`.  Block injectivity propagates to every
+length at least `p`.  The three-block separation argument then gives pairwise separating words
+of length `6 * p`; multiplying them gives one selector for each representative.  Appending a
+long enough block-injective prefix spans the full product of representative matrix algebras.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, lines 1848--1858. -/
+theorem eventuallyRepresentativeWordTupleSpan
+    (hCF : IsBNTCanonicalForm P) :
+    P.EventuallyRepresentativeWordTupleSpan := by
+  classical
+  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+  obtain ⟨p, hp, hAtP⟩ := hCF.exists_common_basis_isNBlkInjective
+  have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →
+      IsNBlkInjective (P.basis j) n := by
+    intro j n hpn
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hpn
+    clear hpn
+    induction k with
+    | zero => simpa using hAtP j
+    | succ k ih =>
+        simpa [Nat.add_assoc] using
+          (isNBlkInjective_succ_of_isNBlkInjective
+            (P.basis j) (Nat.add_pos_left hp k) ih)
+  let L₀ := 2 * p - 1
+  have hBlk0 : ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) L₀ := by
+    intro j
+    apply hAtLeastP j
+    dsimp [L₀]
+    omega
+  have hBlk1 : ∀ j : Fin P.basisCount,
+      IsNBlkInjective (P.basis j) (L₀ + 1) := by
+    intro j
+    apply hAtLeastP j
+    dsimp [L₀]
+    omega
+  have hBlk3 : ∀ j : Fin P.basisCount,
+      IsNBlkInjective (P.basis j)
+        ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
+    intro j
+    apply hAtLeastP j
+    dsimp [L₀]
+    omega
+  have hIrr : HasIrreducibleBlocks (d := d) P.basis :=
+    HasIrreducibleBlocks.ofForall hCF.basis_irreducible
+  have hLeft : IsLeftCanonicalBlockFamily (d := d) P.basis :=
+    IsLeftCanonicalBlockFamily.ofForall hCF.basis_left_canonical
+  have hOverlap : HasNormalizedSelfOverlap (d := d) P.basis :=
+    HasNormalizedSelfOverlap.ofForall hCF.basis_normalized_self_overlap
+  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
+    hCF.basis_distinct
+  have hL₀ : 0 < L₀ := by
+    dsimp [L₀]
+    omega
+  have hSepRaw :=
+    forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
+      P.basis hIrr hLeft hOverlap hBlocks hBlk0 hBlk1 hBlk3 hL₀
+  have hLength : (L₀ + 1) + ((L₀ + 1) + (L₀ + 1)) = 6 * p := by
+    dsimp [L₀]
+    omega
+  have hSep : ∀ k j : Fin P.basisCount, j ≠ k →
+      PairTraceSeparatingAt (P.basis k) (P.basis j) (6 * p) := by
+    intro k j hjk
+    rw [← hLength]
+    exact hSepRaw k j hjk
+  have hPair : HasPairBlockSeparatingWords P.basis (6 * p) :=
+    hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt P.basis hSep
+  let selectorLength := (P.basisCount - 1) * (6 * p)
+  have hSelectors : HasBlockSelectorWords P.basis selectorLength := by
+    simpa [selectorLength] using
+      hasBlockSelectorWords_of_pairBlockSeparatingWords P.basis hPair
+  change ∃ L₁ : ℕ, ∀ L ≥ L₁, WordTupleSpanTop P.basis L
+  refine ⟨selectorLength + p, ?_⟩
+  intro L hL
+  have hSelectorLength_le : selectorLength ≤ L := by omega
+  have hPrefix : p ≤ L - selectorLength := by omega
+  have hSpan := wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
+    P.basis (fun j ↦ hAtLeastP j (L - selectorLength) hPrefix) hSelectors
+  simpa [Nat.sub_add_cancel hSelectorLength_le] using hSpan
+
 /-- Representative-grouped Lemma L for an already injectively blocked BNT
 canonical form.
 
