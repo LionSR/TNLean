@@ -99,6 +99,14 @@ condition, which is not part of this predicate. -/
 def IsNNCPH (A : MPSTensor d D) (N : ℕ) : Prop :=
   IsCommutingParentHam A 2 N
 
+/-- Gauge-equivalent tensors have the same nearest-neighbor parent-Hamiltonian
+commutation equations. -/
+theorem GaugeEquiv.isNNCPH {A B : MPSTensor d D} (h : GaugeEquiv A B) {N : ℕ} :
+    IsNNCPH A N → IsNNCPH B N := by
+  intro hA i j
+  rw [← h.localTerm_eq 2 N i, ← h.localTerm_eq 2 N j]
+  exact hA i j
+
 /-- The commutation and zero-energy equations for the nearest-neighbor
 commuting parent-Hamiltonian statement: the length-two local terms commute and
 annihilate the periodic MPS vector V^{(N)}(A).
