@@ -43,8 +43,12 @@
     tn contraction/.style={tn leg},
     tn phys contraction/.style={tn phys leg},
     tn purification contraction/.style={tn phys contraction},
+    % A bent leg is an ordinary open contraction whose route contains a
+    % corner.  It is not a trace or periodic closure.
+    tn bent leg/.style={tn leg, rounded corners=3pt},
     tn virtual closure/.style={tn contraction, rounded corners=3pt},
     tn physical closure/.style={tn phys contraction, rounded corners=3pt},
+    tn factor boundary/.style={tn leg, rounded corners=2pt},
     tn grouping boundary/.style={densely dashed, rounded corners=2pt},
     tn basis change/.style={densely dashed, line width=0.4pt},
     tn periodic identification/.style={
