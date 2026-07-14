@@ -51,7 +51,8 @@ theorem schmidtLeft_gram_apply (A : MPSTensor d D) (L : ℕ) (a b : Fin D × Fin
 Idempotence of the transfer map collapses its positive powers, so the
 operator-Schmidt left Gram of an L-block agrees with the single-site one for
 every L ≥ 1. This is the algebraic core of area-law saturation. -/
-theorem schmidtLeft_gram_eq_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A)
+theorem schmidtLeft_gram_eq_of_isTransferIdempotent
+    (A : MPSTensor d D) (hRFP : IsTransferIdempotent A)
     {L : ℕ} (hL : 1 ≤ L) :
     (schmidtLeft A L)ᴴ * schmidtLeft A L = (schmidtLeft A 1)ᴴ * schmidtLeft A 1 := by
   have hIdem : IsIdempotentElem (transferMap A) := hRFP
@@ -79,7 +80,8 @@ theorem schmidtRight_gram_apply (A : MPSTensor d D) (M : ℕ) (p q : Fin D × Fi
 
 /-- **The right Gram is block-size independent for a renormalization fixed point.**
 This is the complement analogue of the left-Gram collapse theorem. -/
-theorem schmidtRight_gram_eq_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A)
+theorem schmidtRight_gram_eq_of_isTransferIdempotent
+    (A : MPSTensor d D) (hRFP : IsTransferIdempotent A)
     {M : ℕ} (hM : 1 ≤ M) :
     schmidtRight A M * (schmidtRight A M)ᴴ = schmidtRight A 1 * (schmidtRight A 1)ᴴ := by
   have hIdem : IsIdempotentElem (transferMap A) := hRFP
@@ -134,13 +136,14 @@ Source: arXiv:1606.00608, Proposition ZCLandSALpure, lines 606--608. The
 cited proposition assumes canonical form; this statement proves the same
 implication from transfer-map idempotence alone, so the source proposition
 follows as a special case. -/
-theorem isSAL_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A) : IsSAL A := by
+theorem isSAL_of_isTransferIdempotent
+    (A : MPSTensor d D) (hRFP : IsTransferIdempotent A) : IsSAL A := by
   intro N L hL1 hLlt
   rw [pureBlockEntropy_eq_env_charpoly, pureBlockEntropy_eq_env_charpoly,
-    schmidtRight_gram_eq_of_isRFP A hRFP (show 1 ≤ N - L by omega),
-    schmidtLeft_gram_eq_of_isRFP A hRFP hL1,
-    schmidtRight_gram_eq_of_isRFP A hRFP (show 1 ≤ N - (L + 1) by omega),
-    schmidtLeft_gram_eq_of_isRFP A hRFP (show 1 ≤ L + 1 by omega)]
+    schmidtRight_gram_eq_of_isTransferIdempotent A hRFP (show 1 ≤ N - L by omega),
+    schmidtLeft_gram_eq_of_isTransferIdempotent A hRFP hL1,
+    schmidtRight_gram_eq_of_isTransferIdempotent A hRFP (show 1 ≤ N - (L + 1) by omega),
+    schmidtLeft_gram_eq_of_isTransferIdempotent A hRFP (show 1 ≤ L + 1 by omega)]
 
 /-- **A renormalization fixed point has a constant block-entropy chain.**
 A renormalization fixed point saturates the area law, and for an
@@ -148,10 +151,11 @@ area-law-saturating tensor the block entropy is independent of the block size.
 Hence every pair of block entropies with 1 ≤ L, L' ≤ ⌊N/2⌋ coincides, giving the
 constant chain S₁ = S₂ = ⋯ = S_{⌊N/2⌋}. This is the explicit constant-entropy
 form of the area-law saturation (arXiv:1606.00608, Definition 3.13, line 600). -/
-theorem pureBlockEntropy_eq_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A)
+theorem pureBlockEntropy_eq_of_isTransferIdempotent
+    (A : MPSTensor d D) (hRFP : IsTransferIdempotent A)
     {N L L' : ℕ} (hL1 : 1 ≤ L) (hLN : L ≤ N / 2) (hL'1 : 1 ≤ L') (hL'N : L' ≤ N / 2) :
     pureBlockEntropy A N L (hLN.trans (Nat.div_le_self N 2)) =
       pureBlockEntropy A N L' (hL'N.trans (Nat.div_le_self N 2)) :=
-  pureBlockEntropy_eq_of_isSAL A (isSAL_of_isRFP A hRFP) hL1 hLN hL'1 hL'N
+  pureBlockEntropy_eq_of_isSAL A (isSAL_of_isTransferIdempotent A hRFP) hL1 hLN hL'1 hL'N
 
 end MPSTensor

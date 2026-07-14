@@ -263,7 +263,7 @@ operators between distinct blocks vanish,
   \mathcal{E}_{j,j'}=\sum_i A_j^i\otimes\overline{A_{j'}^i}=0
   \qquad (j\ne j'),
 \]
-formalized by \leanid{MPSTensor.isBNTLocallyOrthogonal_of_isRFP_directSum}.  The
+formalized by \leanid{MPSTensor.isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum}.  The
 argument decomposes the direct-sum transfer map block by block
 (\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}): whole-tensor idempotence
 makes each $\mathcal{E}_{j,j'}$ idempotent, and the same-dimension and
@@ -289,7 +289,7 @@ with the within-block orthonormality of the isometry canonical form, this is the
 full source isometry condition \path{eq:III_isometry}, packaged as the predicate
 \leanid{MPSTensor.IsResidualIsometryFamily} and established under whole-tensor
 renormalization fixed point of the direct sum by
-\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  This is the
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.  This is the
 residual-isometry content of Corollary~III.cor3 at the normal-tensor-block level.
 
 \section{Backward direction (multiplicity-one)}
@@ -299,13 +299,13 @@ normal-tensor-block level.  If each block $B_k$ is in isometry canonical form an
 the cross-block mixed transfer operators vanish, $\mathcal{E}_{j,j'}=0$ for
 $j\ne j'$, then the direct sum $\bigoplus_k B_k$ is a renormalization fixed
 point,\footnote{Formal declaration:
-\leanid{MPSTensor.isRFP_directSumTensor_of_isIsometryCanonicalForm} in
+\leanid{MPSTensor.isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm} in
 \doclink{TNLean/MPS/RFP/ResidualIsometry}.} by
 \leanid{MPSTensor.blockTransferSum_idempotent_of_isIsometryCanonicalForm}.  The
 direct-sum transfer map decomposes block by block
 (\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}): the diagonal blocks are
 the per-block transfer maps, idempotent by
-\leanid{MPSTensor.isRFP_of_isIsometryCanonicalForm}, and the off-diagonal blocks
+\leanid{MPSTensor.isTransferIdempotent_of_isIsometryCanonicalForm}, and the off-diagonal blocks
 vanish by the cross-block hypothesis, which is the $j\ne j'$ part of
 \path{eq:III_isometry} and so belongs to the source isometry form rather than
 being an added assumption.
@@ -321,12 +321,12 @@ satisfy the defining physical-isometry relation.
 
 For a sector decomposition $P$ satisfying the single BNT canonical-form
 predicate, the explicit blockwise hypotheses are now eliminated.  The theorem
-\leanid{MPSTensor.IsBNTCanonicalForm.isRFP_basisDirectSum_iff} derives positive
+\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_iff} derives positive
 bond dimensions, normality, irreducibility, left-canonical normalization, and
 gauge-phase distinctness from that predicate and gives the preceding
 characterization for the direct sum of the basis representatives.  Under the
 forward hypothesis,
-\leanid{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isRFP_basisDirectSum}
+\leanid{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum}
 also supplies the trace-normalized decompositions and the full residual
 isometry family.  This discharges the canonical-form extraction for the
 multiplicity-one basis direct sum.  It does not identify that direct sum with
@@ -381,8 +381,8 @@ For the matrix unit $E_{01}$ one has
   \mathcal E_A^2(E_{01})=E_{01}.
 \]
 Thus $\mathcal E_A^2\ne\mathcal E_A$.  The formal theorem
-\leanid{MPSTensor.phaseFlipTensor_not_isRFP} proves that this tensor does not
-satisfy the present predicate \leanid{MPSTensor.IsRFP}.
+\leanid{MPSTensor.phaseFlipTensor_not_isTransferIdempotent} proves that this tensor does not
+satisfy the present predicate \leanid{MPSTensor.IsTransferIdempotent}.
 
 The calculation therefore does not show that a source RFP is rejected by the
 formal predicate.  Rather, it exposes an ambiguity in taking the displayed
@@ -392,7 +392,7 @@ isometry relation \path{AA=A} (local source
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:420--425}).  It is formalized by
 \leanid{MPSTensor.HasPhysicalBlockingIsometry}.  The unrestricted equivalence
 between this relation and transfer-map idempotence is
-\leanid{MPSTensor.isRFP_iff_hasPhysicalBlockingIsometry}; it is the Kraus-family
+\leanid{MPSTensor.isTransferIdempotent_iff_hasPhysicalBlockingIsometry}; it is the Kraus-family
 argument at source lines 1205--1209.  The source then states the repeated-copy
 form in Theorem~\path{charact-MPS}, including the independent unit phases
 (local source
@@ -445,7 +445,7 @@ $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and the square-root dressing
 $\sqrt\Lambda$ of the unit isometry.  The cross-block $\delta_{j,j'}$
 orthogonality equations of \path{eq:III_isometry} are formalized at the
 normal-tensor-block level by
-\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  For the
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.  For the
 multiplicity-one basis direct sum, the single BNT canonical-form predicate now
 supplies all blockwise hypotheses and the residual family.  The remaining part
 is a faithful treatment of repeated phase copies at the physical-isometry

@@ -45,11 +45,11 @@ namespace MPSTensor
 /-! ### GHZ -/
 
 /-- The GHZ tensor has zero correlation length: its idempotent transfer map
-(`ghz_isRFP`) yields correlations independent of the separation.  This is the
+(`ghz_isTransferIdempotent`) yields correlations independent of the separation.  This is the
 contrast with the AKLT state, whose subleading eigenvalue `-1/3` gives a finite
 correlation length. -/
 theorem ghz_isZCL : IsZCL ghzTensor :=
-  (zcl_iff_idempotent_transfer ghzTensor).mpr ghz_isRFP
+  (zcl_iff_idempotent_transfer ghzTensor).mpr ghz_isTransferIdempotent
 
 /-! ### Cluster -/
 

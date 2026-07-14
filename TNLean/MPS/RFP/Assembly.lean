@@ -47,7 +47,7 @@ Proved by `zcl_iff_idempotent_transfer.symm`. -/
 theorem rfp_iff_zcl {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (_hCF : IsCanonicalForm μ A) (k : Fin r) :
-    IsRFP (A k) ↔ IsZCL (A k) :=
+    IsTransferIdempotent (A k) ↔ IsZCL (A k) :=
   (zcl_iff_idempotent_transfer (A k)).symm
 
 end MPSTensor

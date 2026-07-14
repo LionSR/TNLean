@@ -26,7 +26,7 @@ The proof assembles the following ingredients:
 * `rfp_nt_structural_of_leftCanonical` — left-canonical normal RFP ⟹ injective
 * `rfp_nt_cfii_diagonal_fixedPoint` — after unitary conjugation, a diagonal
   positive-definite fixed point for the transfer map exists
-* `transferMap_eq_fixedPointProj_of_isRFP_injective` — for an injective
+* `transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective` — for an injective
   left-canonical RFP tensor, the transfer map equals `fixedPointProj ρ`, i.e.
   `X ↦ (tr X / tr ρ) • ρ`
 * an explicit normalized matrix-unit Kraus family for `fixedPointProj ρ`,
@@ -84,7 +84,7 @@ The plain structural form `rfp_nt_structural_full` is the equivalent formulation
 that drops the square-sum conjunct; the trace-normalized form
 `isIsometryCanonicalForm_of_rfp_nt` is the one that consumes it. -/
 theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
       (U : MPSTensor d D),
@@ -117,7 +117,7 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
   have hB_inj : IsInjective B := by
     rw [hB_eq_gauge]
     exact isInjective_conjugate (d := d) A hInjA X hX_det
-  obtain ⟨V₀, hV₀_iso, hV₀_prod⟩ := (isRFP_iff_kraus_isometry A).1 hRFP
+  obtain ⟨V₀, hV₀_iso, hV₀_prod⟩ := (isTransferIdempotent_iff_kraus_isometry A).1 hRFP
   have hB_prod : ∀ i₁ i₂ : Fin d,
       B i₁ * B i₂ = ∑ j : Fin d, V₀ (i₁, i₂) j • B j := by
     intro i₁ i₂
@@ -132,12 +132,12 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
         rw [hV₀_prod i₁ i₂]
       _ = ∑ j : Fin d, V₀ (i₁, i₂) j • B j := by
         simp [B, Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
-  have hB_rfp : IsRFP B :=
-    (isRFP_iff_kraus_isometry B).2 ⟨V₀, hV₀_iso, hB_prod⟩
+  have hB_rfp : IsTransferIdempotent B :=
+    (isTransferIdempotent_iff_kraus_isometry B).2 ⟨V₀, hV₀_iso, hB_prod⟩
   have htr : Matrix.trace ρ ≠ 0 := ne_of_gt hρ_pd.trace_pos
   have hB_proj : transferMap B = fixedPointProj ρ htr := by
     simpa [htr] using
-      transferMap_eq_fixedPointProj_of_isRFP_injective
+      transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective
         B hB_inj hB_rfp hB_left ρ hρ_pd hB_fix
   have hρ_eq_diag : ρ = Matrix.diagonal (fun k => ρ k k) := by
     ext i j
@@ -477,13 +477,13 @@ left-canonical equation and the scaled pair-index orthonormality
 
 The proof combines the diagonal fixed-point reduction
 `rfp_nt_cfii_diagonal_fixedPoint`, the rank-one classification
-`transferMap_eq_fixedPointProj_of_isRFP_injective`, and an explicit Kraus
+`transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective`, and an explicit Kraus
 realization of `fixedPointProj`. Applying `kraus_rectangular_freedom'`
 identifies the physical-index coefficients with an isometry. The matrix units
 are normalized by \(D^{-1/2}\), so the resulting matrix entries carry the
 displayed factor \(D^{-1}\). -/
 theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
       (U : MPSTensor d D),
@@ -616,7 +616,7 @@ line 1300) and keeps \(U\) a genuine unit isometry.
 `IsIsometryCanonicalForm` and in
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     IsIsometryCanonicalForm A := by
   classical
@@ -713,7 +713,7 @@ restriction is recorded in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
 Elimination: prove a whole-family isometry form with trace-normalized diagonal
 weights and orthogonality between distinct blocks. -/
 theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
       (U : MPSTensor d D),
@@ -748,7 +748,7 @@ normal/RFP/left-canonical hypotheses from a whole-tensor canonical-form
 fixed-point condition is a separate step. -/
 theorem isIsometryCanonicalForm_of_rfp_nt_blocks {r : ℕ} {dim : Fin r → ℕ}
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))
+    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsTransferIdempotent (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
     ∀ k, IsIsometryCanonicalForm (A k) :=
   fun k => isIsometryCanonicalForm_of_rfp_nt (A k) (hNT k) (hRFP k) (hLeft k)
@@ -779,7 +779,7 @@ Deriving the per-block normal/RFP/left-canonical hypotheses from a whole-tensor
 canonical-form fixed-point condition is a separate step. -/
 theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))
+    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsTransferIdempotent (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
     ∀ k, ∃ (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (Λ : Fin (dim k) → ℝ)
       (U : MPSTensor d (dim k)),
@@ -806,7 +806,7 @@ the full source assertion is recorded as a remaining gap in
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem rfp_nt_structural_full_blocks_unit_pair {r : ℕ} {dim : Fin r → ℕ}
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))
+    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsTransferIdempotent (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
     ∀ k, ∃ (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
       (Λ : Fin (dim k) → ℝ) (U : MPSTensor d (dim k)),
@@ -884,7 +884,7 @@ line 543; single-block Lemma charact-NT-pure-RFP, lines 1271--1301).
 A tensor in isometry canonical form is a renormalization fixed point: if
 $A^i = X\sqrt\Lambda\,U^i X^{-1}$ with $\Lambda$ diagonal, positive,
 trace-normalized, and $U$ a unit pair-index isometry, then `transferMap A` is
-idempotent, so `IsRFP A` holds. The source calls this implication trivial
+idempotent, so `IsTransferIdempotent A` holds. The source calls this implication trivial
 (line 1297).
 
 The transfer map has the rank-one closed form $E_A(Y) = \varphi(Y)\,R$ with
@@ -893,8 +893,8 @@ $\varphi(Y) = \operatorname{tr}(X^{-1} Y (X^{-1})^\dagger)$, so idempotence
 reduces to $\varphi(R) = \operatorname{tr}\Lambda = 1$, the trace normalization.
 This is a faithful formalization of the source implication: it carries no
 hypothesis beyond `IsIsometryCanonicalForm`. -/
-theorem isRFP_of_isIsometryCanonicalForm (A : MPSTensor d D)
-    (h : IsIsometryCanonicalForm A) : IsRFP A := by
+theorem isTransferIdempotent_of_isIsometryCanonicalForm (A : MPSTensor d D)
+    (h : IsIsometryCanonicalForm A) : IsTransferIdempotent A := by
   classical
   obtain ⟨X, Λ, U, hX_det, hΛ_pos, hΛ_sum, hU_pair, hA_eq⟩ := h
   set Dr : Mat := Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) with hDr

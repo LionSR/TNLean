@@ -33,7 +33,7 @@ The following conditions are introduced:
 * `IsZCL A` — the conjunction of local orthogonality and CID.
 
 The proved local result identifies this single-block convention with an
-idempotent transfer map (`IsRFP`). The source BNT predicate is now stated, but
+idempotent transfer map (`IsTransferIdempotent`). The source BNT predicate is now stated, but
 its equivalence with transfer idempotence remains open and is tracked in
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`.
 -/
@@ -159,7 +159,8 @@ of both positive gap sizes.
 **Scope restriction:** adjacent regions are not covered because idempotence
 does not identify $\mathbb{E}^0$ with $\mathbb{E}$.  This is recorded in
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
-theorem isPositiveGapPhysicalCID_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A) :
+theorem isPositiveGapPhysicalCID_of_isTransferIdempotent
+    (A : MPSTensor d D) (hRFP : IsTransferIdempotent A) :
     IsPositiveGapPhysicalCID A := by
   intro L₁ L₂ O₁ O₂ n₁ n₂ m₁ m₂ _ _ hn₁ hn₂ hm₁ hm₂ _
   have hIdem : IsIdempotentElem (transferMap A) := hRFP
@@ -175,7 +176,8 @@ theorem isPositiveGapPhysicalCID_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A) :
 
 /-- Local orthogonality in the single-block convention used by this file:
 the self-transfer map is idempotent. Thus, for one tensor `A`, this is
-definitionally equivalent to `IsRFP A` (see `isLocallyOrthogonal_iff_isRFP`).
+definitionally equivalent to `IsTransferIdempotent A` (see
+`isLocallyOrthogonal_iff_isTransferIdempotent`).
 
 **Scope restriction (arXiv:1606.00608, Definition 3.5):** in the source, local
 orthogonality is a BNT-level condition: for distinct BNT components `j ≠ k`, the
@@ -183,12 +185,12 @@ mixed transfer maps vanish. This one-tensor predicate has no mixed sectors and
 does not formalize those equations. The missing BNT-level statement is recorded
 in `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
-  IsRFP A
+  IsTransferIdempotent A
 
-/-- `IsLocallyOrthogonal` is definitionally equal to `IsRFP` for a single
+/-- `IsLocallyOrthogonal` is definitionally equal to `IsTransferIdempotent` for a single
 BNT block. -/
-lemma isLocallyOrthogonal_iff_isRFP (A : MPSTensor d D) :
-    IsLocallyOrthogonal A ↔ IsRFP A :=
+lemma isLocallyOrthogonal_iff_isTransferIdempotent (A : MPSTensor d D) :
+    IsLocallyOrthogonal A ↔ IsTransferIdempotent A :=
   Iff.rfl
 
 /-- BNT-level local orthogonality (arXiv:1606.00608, Definition 3.5):
@@ -319,12 +321,12 @@ virtual bond matrices, rather than the physical block observables in
 arXiv:1606.00608, Definition 3.3 and the theorem at lines 498--502. The missing
 physical-realization step from lines 1250--1258 is recorded in
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
-theorem isCID_implies_isRFP
+theorem isCID_implies_isTransferIdempotent
     (A : MPSTensor d D)
     (ρR : Matrix (Fin D) (Fin D) ℂ)
     (hρ_pd : ρR.PosDef)
     (hρ_fix : transferMap A ρR = ρR)
-    (hCID : IsCID A) : IsRFP A := by
+    (hCID : IsCID A) : IsTransferIdempotent A := by
   change transferMap A ∘ₗ transferMap A = transferMap A
   obtain ⟨u, rfl⟩ := hρ_pd.isUnit
   apply LinearMap.ext; intro Z
@@ -340,9 +342,10 @@ theorem isCID_implies_isRFP
     Matrix.zero_mul, Matrix.trace_zero]
   exact sub_eq_zero.mpr (trace_mul_transferMap_sq_eq_of_isCID A ↑u hρ_pd hρ_fix hCID X N)
 
-/-- Single-block ZCL is equivalent to transfer-map idempotence (i.e. `IsRFP`).
+/-- Single-block ZCL is equivalent to transfer-map idempotence (i.e. `IsTransferIdempotent`).
 
-Forward: `IsZCL → IsRFP` is immediate since `IsLocallyOrthogonal = IsRFP`.
+Forward: `IsZCL → IsTransferIdempotent` is immediate since
+`IsLocallyOrthogonal = IsTransferIdempotent`.
 Reverse: $E^2 = E$ implies $E^n = E$ for $n \geq 1$ by
 `IsIdempotentElem.pow_eq`,
 so the connected correlator is independent of separation, giving CID.
@@ -354,7 +357,7 @@ single-block idempotence/CID equivalence under the convention above; it is not
 the full BNT-level theorem. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem zcl_iff_idempotent_transfer (A : MPSTensor d D) :
-    IsZCL A ↔ IsRFP A := by
+    IsZCL A ↔ IsTransferIdempotent A := by
   constructor
   · exact fun ⟨hLO, _⟩ => hLO
   · intro hRFP

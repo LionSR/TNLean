@@ -103,11 +103,11 @@ $\mathcal E(E_{01})=-E_{01}$ after one application.
 Together with `phaseFlipTensor_no_blocking_coefficient`, this distinguishes the
 literal virtual-block reading of III_CFI_RFP from the physical-isometry
 interpretation in arXiv:1606.00608, lines 559--563. -/
-theorem phaseFlipTensor_not_isRFP : ¬ IsRFP phaseFlipTensor := by
+theorem phaseFlipTensor_not_isTransferIdempotent : ¬ IsTransferIdempotent phaseFlipTensor := by
   intro hRFP
   have h := LinearMap.congr_fun hRFP (!![0, 1; 0, 0] : Matrix (Fin 2) (Fin 2) ℂ)
   have h01 := congrFun (congrFun h 0) 1
-  norm_num [IsRFP, LinearMap.comp_apply, transferMap_apply, phaseFlipTensor,
+  norm_num [IsTransferIdempotent, LinearMap.comp_apply, transferMap_apply, phaseFlipTensor,
     Matrix.mul_apply, Matrix.conjTranspose_apply] at h01
   norm_num [Matrix.vecMul, dotProduct] at h01
   norm_num [Matrix.mul_apply, Matrix.conjTranspose_apply] at h01
@@ -126,9 +126,9 @@ theorem phaseFlipTensor_literal_display_ambiguity :
     IsIsometryCanonicalForm scalarUnitTensor ∧
     (¬ ∃ v : ℂ,
       phaseFlipTensor 0 * phaseFlipTensor 0 = v • phaseFlipTensor 0) ∧
-    ¬ IsRFP phaseFlipTensor := by
+    ¬ IsTransferIdempotent phaseFlipTensor := by
   exact ⟨phaseFlipTensor_is_two_phase_copies,
     scalarUnitTensor_isIsometryCanonicalForm, phaseFlipTensor_no_blocking_coefficient,
-    phaseFlipTensor_not_isRFP⟩
+    phaseFlipTensor_not_isTransferIdempotent⟩
 
 end MPSTensor

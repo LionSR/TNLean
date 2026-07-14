@@ -24,7 +24,7 @@ line 747):
   `M^{ij} = ∑_k A^{(i,k)} ⊗ conj(A^{(j,k)})`,
 
 and imposes the local condition that such a purification exists with `A` a
-pure-state renormalization fixed point (`MPSTensor.IsRFP`, arXiv:1606.00608,
+pure-state renormalization fixed point (`MPSTensor.IsTransferIdempotent`, arXiv:1606.00608,
 Definition 3.2).
 
 ## Scope
@@ -97,7 +97,7 @@ def IsLocalPurificationRFP (M : MPOTensor d D) : Prop :=
     (e : Fin D ≃ Fin D' × Fin D'),
     (∀ i j : Fin d, M i j = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
-    ∧ MPSTensor.IsRFP (purificationTensor A)
+    ∧ MPSTensor.IsTransferIdempotent (purificationTensor A)
 
 /-- The local purification-RFP condition has the local purification structure:
 its purifying data is an `IsLPDO` witness (the RFP condition on the purifying
@@ -183,7 +183,7 @@ lemma transferMap_witnessM :
 
 /-- The combined spin-ancilla tensor is a pure-state RFP: its transfer map is the
 identity, since the amplitudes satisfy `∑ |A|² = 1`. -/
-lemma witnessAcombined_isRFP : MPSTensor.IsRFP witnessAcombined := by
+lemma witnessAcombined_isTransferIdempotent : MPSTensor.IsTransferIdempotent witnessAcombined := by
   have h : MPSTensor.transferMap witnessAcombined = LinearMap.id := by
     refine LinearMap.ext fun X => ?_
     ext a b
@@ -199,7 +199,7 @@ lemma witnessAcombined_isRFP : MPSTensor.IsRFP witnessAcombined := by
       e0.2, e1.1, e1.2, e2.1, e2.2, e3.1, e3.2, witnessAmplitude, Fin.reduceEq, ↓reduceIte,
       zero_mul, add_zero, ← starRingEnd_apply, map_inv₀, Complex.conj_ofReal]
     linear_combination (2 * X 0 0) * sqrt2_inv_mul_self
-  rw [MPSTensor.IsRFP, h, LinearMap.comp_id]
+  rw [MPSTensor.IsTransferIdempotent, h, LinearMap.comp_id]
 
 /-- **The local purification-RFP condition does not imply literal zero-correlation
 length.** There is an MPO tensor satisfying `IsLocalPurificationRFP` whose
@@ -210,7 +210,7 @@ the canonical-form deviation documented in
 theorem exists_isLocalPurificationRFP_not_isZCL :
     ∃ M : MPOTensor 2 1, IsLocalPurificationRFP M ∧ ¬ IsZCL M := by
   refine ⟨witnessM, ⟨2, 1, witnessA, (finProdFinEquiv (m := 1) (n := 1)).symm, fun _ _ => rfl,
-    witnessAcombined_isRFP⟩, ?_⟩
+    witnessAcombined_isTransferIdempotent⟩, ?_⟩
   intro hZCL
   rw [IsZCL, transferMap_witnessM] at hZCL
   have hfun := LinearMap.congr_fun hZCL (1 : Matrix (Fin 1) (Fin 1) ℂ)
@@ -421,7 +421,7 @@ theorem mpo_eq_purificationDensity {dK D' : ℕ}
 /-- **The local purification condition implies the source purification
 renormalization fixed point.** A tensor satisfying `IsLocalPurificationRFP`
 carries a purifying family that is a pure-state renormalization fixed point
-(`MPSTensor.IsRFP`) and whose ancilla contraction is the tensor; by
+(`MPSTensor.IsTransferIdempotent`) and whose ancilla contraction is the tensor; by
 `mpo_eq_purificationDensity` that contraction satisfies the global purification
 equation at every positive system size, so the same family witnesses `IsPRFP`
 (arXiv:1606.00608, Definition 4.4, line 758).

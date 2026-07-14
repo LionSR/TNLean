@@ -92,7 +92,7 @@ Conclusion:
 
 Lean defines
 
-- `IsLocallyOrthogonal A := IsRFP A`
+- `IsLocallyOrthogonal A := IsTransferIdempotent A`
 
 for a single tensor. The blueprint text is mostly careful, but the sentence about the full multi-block BNT notion can be read as if the tagged declaration already formalizes that richer notion. It does not. The mixed-transfer-operator vanishing is not part of the declaration tagged here.
 
@@ -106,7 +106,7 @@ This is not as bad as the two correlation theorems, but the prose is broader tha
 The blueprint statement matches the **local definitions used in the chapter**:
 
 - `IsZCL A := IsLocallyOrthogonal A ∧ IsCID A`
-- `IsLocallyOrthogonal A := IsRFP A`
+- `IsLocallyOrthogonal A := IsTransferIdempotent A`
 
 So the statement is not false relative to Lean. But it is worth noting that the Lean result is much closer to a single-tensor definitional equivalence than to a full formalization of the richer multiblock theorem from the paper.
 
@@ -188,10 +188,10 @@ More natural mathematical prose would be:
 - `MPSTensor.exponential_convergence_of_primitive`
 - `MPSTensor.correlation_length_bound` (statement fine; rate formula in prose is stronger than Lean)
 - `MPSTensor.spectral_gap_of_injective`
-- `MPSTensor.IsRFP`
+- `MPSTensor.IsTransferIdempotent`
 - `MPSTensor.rg_flow_converges_of_cf` (quantification over block `k` should be made more explicit)
 - `MPSTensor.IsCID` (though the universal quantification over all PosDef fixed points could be stated more explicitly)
-- `MPSTensor.isCID_implies_isRFP`
+- `MPSTensor.isCID_implies_isTransferIdempotent`
 - `MPSTensor.zcl_iff_idempotent_transfer` (single-tensor simplified version)
 
 ### Tags with real statement mismatch

@@ -34,7 +34,7 @@ idempotent (whole-tensor RFP, via the block
 decomposition), and then to have spectral radius `< 1` (distinct irreducible
 left-canonical blocks, splitting on equal versus unequal bond dimension); an
 idempotent operator with spectral radius `< 1` is `0`.  The diagonal lemma
-`transferMap_eq_fixedPointProj_of_isRFP_injective` does *not* compose across
+`transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective` does *not* compose across
 blocks and is not used here.
 -/
 
@@ -187,7 +187,7 @@ theorem transferMap_directSumTensor_reindex
 the block-diagonal transfer sum idempotent. -/
 theorem blockTransferSum_blockTransferSum
     (B : (k : Fin r) → MPSTensor d (dim k))
-    (hRFP : IsRFP (directSumTensor B))
+    (hRFP : IsTransferIdempotent (directSumTensor B))
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
     blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
   classical
@@ -227,9 +227,9 @@ private lemma exists_toBlock_eq (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')
 
 /-- Whole-tensor RFP of the direct sum
 makes every (in particular off-diagonal) mixed transfer operator idempotent. -/
-theorem mixedTransferMap₂_isIdempotentElem_of_isRFP_directSum
+theorem mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
     (B : (k : Fin r) → MPSTensor d (dim k))
-    (hRFP : IsRFP (directSumTensor B)) (j j' : Fin r)
+    (hRFP : IsTransferIdempotent (directSumTensor B)) (j j' : Fin r)
     [NeZero (dim j)] [NeZero (dim j')] :
     IsIdempotentElem (mixedTransferMap₂ (B j) (B j')) := by
   classical
@@ -346,17 +346,17 @@ at line 584.
 The load-bearing hypothesis is whole-tensor RFP of the direct sum (the source's
 "`A` in CF is RFP"), strictly stronger than per-block RFP.  The diagonal
 `j = j'` case is `IsIsometryCanonicalForm`. -/
-theorem isBNTLocallyOrthogonal_of_isRFP_directSum
+theorem isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum
     (B : (k : Fin r) → MPSTensor d (dim k))
     [∀ k, NeZero (dim k)]
     (hirr : ∀ k, IsIrreducibleTensor (B k))
     (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
     (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k))
-    (hRFP : IsRFP (directSumTensor B)) :
+    (hRFP : IsTransferIdempotent (directSumTensor B)) :
     IsBNTLocallyOrthogonal B := by
   intro j j' hjj'
-  have hidem := mixedTransferMap₂_isIdempotentElem_of_isRFP_directSum B hRFP j j'
+  have hidem := mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum B hRFP j j'
   have hsr : mixedTransferSpectralRadius₂ (B j) (B j') < 1 := by
     by_cases hdim : dim j = dim j'
     · exact mixedTransferSpectralRadius₂_lt_one_of_dim_eq (B j) (B j')
@@ -381,14 +381,14 @@ arXiv:1606.00608, lines 498--502 and 1248--1250, for the explicit unweighted
 direct-sum representative. The physical CID part follows from
 $\mathcal E_A^n=\mathcal E_A$ for $n\geq 1$ in the two-observable transfer
 formula at lines 490--496; the local-orthogonality part is
-`isBNTLocallyOrthogonal_of_isRFP_directSum`.
+`isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum`.
 
 **Scope restriction (positive gaps and explicit direct sum):** the source CID
 definition includes adjacent regions, whereas the predicate below assumes both
 complementary gaps are positive.  The source also allows scalar multiplicities
 and a possible bond gauge.  Both restrictions are recorded in
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
-theorem isPositiveGapBNTZCL_of_isRFP_directSum
+theorem isPositiveGapBNTZCL_of_isTransferIdempotent_directSum
     (B : (k : Fin r) → MPSTensor d (dim k))
     [∀ k, NeZero (dim k)]
     (hBNT : IsCPSVBasisOfNormalTensors (directSumTensor B)
@@ -397,10 +397,10 @@ theorem isPositiveGapBNTZCL_of_isRFP_directSum
     (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
     (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k))
-    (hRFP : IsRFP (directSumTensor B)) :
+    (hRFP : IsTransferIdempotent (directSumTensor B)) :
     IsPositiveGapBNTZCL (directSumTensor B) B := by
-  refine ⟨hBNT, isPositiveGapPhysicalCID_of_isRFP (directSumTensor B) hRFP, ?_⟩
-  exact isBNTLocallyOrthogonal_of_isRFP_directSum B hirr hleft hdist hRFP
+  refine ⟨hBNT, isPositiveGapPhysicalCID_of_isTransferIdempotent (directSumTensor B) hRFP, ?_⟩
+  exact isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum B hirr hleft hdist hRFP
 
 end Main
 

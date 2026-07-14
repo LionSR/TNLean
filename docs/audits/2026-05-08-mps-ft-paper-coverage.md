@@ -65,13 +65,13 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Theorem 3.1** (l.398, `thm:renormalization-flow`) | 398–405 | RFP limit ⇔ Aⁱ¹ Aⁱ² = Σ U_(i₁,i₂),j Aʲ for isometry U | `TNLean/MPS/RFP/Defs.lean` (`IsRFP`, `isRFP_iff_kraus_isometry`); `RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | `leanok` |
-| Defn RFP (l.420, `defRFP`) | 420–424 | RFP for pure case: AA = UA for isometry U | `TNLean/MPS/RFP/Defs.lean` (`IsRFP`) | `leanok` |
+| **Theorem 3.1** (l.398, `thm:renormalization-flow`) | 398–405 | RFP limit ⇔ Aⁱ¹ Aⁱ² = Σ U_(i₁,i₂),j Aʲ for isometry U | `TNLean/MPS/RFP/Defs.lean` (`HasPhysicalBlockingIsometry`, `isTransferIdempotent_iff_kraus_isometry`); `RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | `leanok` |
+| Defn RFP (l.420, `defRFP`) | 420–424 | RFP for pure case: AA = UA for isometry U | `TNLean/MPS/RFP/Defs.lean` (`HasPhysicalBlockingIsometry`) | `leanok` |
 | Defn CID (l.438) | 438–446 | Correlations independent of distance | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`IsCID`) | `leanok` |
 | Defn LO (l.468, `DefLO`) | 468–474 | Local orthogonality: ∑ᵢ Aⁱⱼ ⊗ Āⁱⱼ' = 0 | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`IsLocallyOrthogonal`) | `leanok` |
 | Defn ZCL (l.476) | 476–478 | ZCL = LO ∧ CID | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`IsZCL`) | `leanok` |
 | Defn Transfer matrix (l.482) | 482–488 | 𝔼 = ∑ᵢ Aⁱ ⊗ Āⁱ | `TNLean/MPS/Core/Transfer.lean` (`transferMap`) | `leanok` |
-| **Theorem 3.8** (l.500, `TheoremZCLPure`) | 500–503 | **ZCL ⇔ 𝔼² = 𝔼** (i.e., transfer map idempotent) | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`zcl_iff_idempotent_transfer`), `isCID_implies_isRFP` | `leanok` |
+| **Theorem 3.8** (l.500, `TheoremZCLPure`) | 500–503 | **ZCL ⇔ 𝔼² = 𝔼** (i.e., transfer map idempotent) | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`zcl_iff_idempotent_transfer`), `isCID_implies_isTransferIdempotent` | `leanok` |
 | Defn Parent Ham. (l.522) | 522–525 | NNCPH definition | `TNLean/MPS/ParentHamiltonian/Commuting.lean` (`IsNNCPH`) | `leanok` |
 | **Theorem 3.10** (l.534, `thm:main-MPS`) | 534–541 | **RFP ⇔ ZCL ⇔ NNCPH** (three-way equivalence) | `TNLean/MPS/RFP/Assembly.lean` (`rfp_iff_zcl` for RFP↔ZCL); `ParentHamiltonian/Commuting.lean` (`rfp_implies_nncph`, `nncph_implies_rfp`) | **partial** — `rfp_implies_nncph` uses `Axioms.rfp_to_nncph_commute` (axiom-backed); `nncph_implies_rfp` now consumes the BNT relation `IsBNT` and the all-chain ground-space condition `HasNNCPHGroundSpaces`, but still uses `Axioms.beigi_nncph_to_rfp` (axiom-backed). Tracked by #2633 in the arXiv:1606.00608 audit context recorded by #2380. |
 | **Theorem 3.11** (l.543, `thm:charact-MPS`) | 543–555 | **Structural characterization of RFP**: CF tensor is RFP iff Aⁱ = ⊕ⱼ ⊕_q μ_j,q X_j,q Λ_j Uⁱⱼ X_j,q⁻¹ with U isometry | `TNLean/MPS/RFP/StructuralForm.lean` (`rfp_cf_structural`, `rfp_bnt_structural`, `rfp_nt_structural_full`) | `leanok` |

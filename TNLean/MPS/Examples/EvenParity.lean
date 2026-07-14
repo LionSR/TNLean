@@ -29,7 +29,7 @@ lies in a non-trivial SPT phase.
 
 ## Main results
 
-* `evenParity_isRFP` : the tensor is a renormalization fixed point
+* `evenParity_isTransferIdempotent` : the tensor is a renormalization fixed point
 * `evenParity_not_isInjective` : the tensor is not injective
 * `evenParity_isOnSiteSymmetric_Z2` : the tensor is on-site symmetric under Z₂
 -/
@@ -90,7 +90,8 @@ theorem evenParity_transferMap_idempotent :
   ring
 
 /-- The even-parity tensor is a renormalization fixed point. -/
-theorem evenParity_isRFP : IsRFP evenParityTensor := evenParity_transferMap_idempotent
+theorem evenParity_isTransferIdempotent : IsTransferIdempotent evenParityTensor :=
+  evenParity_transferMap_idempotent
 
 /-! ### Non-injectivity -/
 

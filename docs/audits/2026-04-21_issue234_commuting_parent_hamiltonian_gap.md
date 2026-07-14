@@ -97,7 +97,8 @@ After the wrappers and Appendix B structural data above, the missing internal th
 
 A theorem of the following shape is still not present:
 
-- **target shape**: `IsRFP A` + normality (+ the normalization data needed to invoke the Appendix B
+- **target shape**: `IsTransferIdempotent A` + normality
+  (+ the normalization data needed to invoke the Appendix B
   form) `→ AppendixBProductPairExtraction (AppendixBStructuralData.ofRFP A ...)`
   (and hence `ProductPairBridge A`)
 
