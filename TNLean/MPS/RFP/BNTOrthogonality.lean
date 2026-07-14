@@ -26,6 +26,9 @@ The diagonal `j = j'` case is `IsIsometryCanonicalForm`
   transfer sum: its `(j, j')` bond block acts as
   `mixedTransferMap₂ (B j) (B j')`.  This is the reusable foundation, parallel
   to `evalWord_blockDiagonal'`.
+* `isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem`
+  — exact reduction of whole-tensor transfer idempotence to every mixed block
+  pair.
 
 ## Route
 
@@ -254,6 +257,78 @@ theorem mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
     _ = (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
           rw [blockTransferSum_blockTransferSum B hRFP]
     _ = mixedTransferMap₂ (B j) (B j') Z := e1.symm
+
+/-- If every mixed transfer operator of a block family is idempotent, then the
+block-diagonal transfer sum is idempotent.
+
+The transfer sum acts independently on each $(j,j')$ bond block through
+`mixedTransferMap₂ (B j) (B j')`. Thus its idempotence is checked one block pair
+at a time. This is the exact direct-sum algebra needed when interpreting the
+repeated-block display in arXiv:1606.00608, Theorem charact-MPS, lines 543--555. -/
+theorem blockTransferSum_idempotent_of_pairwise_mixedTransferMap₂
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hidem : ∀ j j', IsIdempotentElem (mixedTransferMap₂ (B j) (B j')))
+    (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
+    blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
+  classical
+  have hStage1 : ∀ (W : Matrix ((k : Fin r) × Fin (dim k))
+        ((k : Fin r) × Fin (dim k)) ℂ) (j j' : Fin r),
+      (blockTransferSum B W).submatrix (blockIncl j dim) (blockIncl j' dim) =
+        mixedTransferMap₂ (B j) (B j')
+          (W.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
+    intro W j j'
+    simpa only [blockTransferSum] using blockDiagonal'_transferSum_toBlock B W j j'
+  have blockEq : ∀ j j' : Fin r,
+      (blockTransferSum B (blockTransferSum B Y)).submatrix
+          (blockIncl j dim) (blockIncl j' dim) =
+        (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
+    intro j j'
+    rw [hStage1 (blockTransferSum B Y) j j', hStage1 Y j j']
+    simpa only [Module.End.mul_apply] using
+      LinearMap.congr_fun (hidem j j')
+        (Y.submatrix (blockIncl j dim) (blockIncl j' dim))
+  ext jx jy
+  obtain ⟨j, a⟩ := jx
+  obtain ⟨j', a'⟩ := jy
+  simpa only [Matrix.submatrix_apply, blockIncl] using
+    congrFun (congrFun (blockEq j j') a) a'
+
+/-- Transfer idempotence of a direct-sum tensor is equivalent to idempotence of
+every mixed transfer operator between its blocks.
+
+This statement includes both diagonal and off-diagonal block pairs. In
+particular, repeated virtual copies cannot be checked only one block at a time:
+their mixed transfer operators also enter the whole-tensor idempotence equation.
+See arXiv:1606.00608, Theorem charact-MPS, lines 543--555. -/
+theorem isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
+    [∀ k, NeZero (dim k)] (B : (k : Fin r) → MPSTensor d (dim k)) :
+    IsTransferIdempotent (directSumTensor B) ↔
+      ∀ j j', IsIdempotentElem (mixedTransferMap₂ (B j) (B j')) := by
+  constructor
+  · intro hRFP j j'
+    exact mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
+      B hRFP j j'
+  · intro hidem
+    classical
+    set e := finSigmaFinEquiv (m := r) (n := dim)
+    change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+      transferMap (directSumTensor B)
+    refine LinearMap.ext fun Z => ?_
+    rw [LinearMap.comp_apply]
+    obtain ⟨Y, rfl⟩ : ∃ Y, Matrix.reindex e e Y = Z :=
+      ⟨(Matrix.reindex e e).symm Z, (Matrix.reindex e e).apply_symm_apply Z⟩
+    calc
+      transferMap (directSumTensor B)
+            (transferMap (directSumTensor B) (Matrix.reindex e e Y)) =
+          transferMap (directSumTensor B)
+            (Matrix.reindex e e (blockTransferSum B Y)) := by
+              rw [transferMap_directSumTensor_reindex B Y]
+      _ = Matrix.reindex e e (blockTransferSum B (blockTransferSum B Y)) :=
+            transferMap_directSumTensor_reindex B (blockTransferSum B Y)
+      _ = Matrix.reindex e e (blockTransferSum B Y) := by
+            rw [blockTransferSum_idempotent_of_pairwise_mixedTransferMap₂ B hidem Y]
+      _ = transferMap (directSumTensor B) (Matrix.reindex e e Y) :=
+            (transferMap_directSumTensor_reindex B Y).symm
 
 end BlockDecomposition
 

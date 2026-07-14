@@ -290,37 +290,14 @@ theorem blockTransferSum_idempotent_of_isIsometryCanonicalForm
     (hortho : ∀ j j' : Fin r, j ≠ j' → mixedTransferMap₂ (B j) (B j') = 0)
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
     blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
-  classical
-  have hStage1 : ∀ (W : Matrix ((k : Fin r) × Fin (dim k))
-        ((k : Fin r) × Fin (dim k)) ℂ) (j j' : Fin r),
-      (blockTransferSum B W).submatrix (blockIncl j dim) (blockIncl j' dim) =
-        mixedTransferMap₂ (B j) (B j')
-          (W.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
-    intro W j j'
-    simpa only [blockTransferSum] using blockDiagonal'_transferSum_toBlock B W j j'
-  have blockEq : ∀ j j' : Fin r,
-      (blockTransferSum B (blockTransferSum B Y)).submatrix
-          (blockIncl j dim) (blockIncl j' dim) =
-        (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
-    intro j j'
-    -- Rewrite both the doubly-applied outer block and the once-applied inner
-    -- block to `mixedTransferMap₂ (B j) (B j')` of the corresponding submatrix
-    -- of `Y`, so the goal becomes idempotence of that per-pair operator.
-    rw [hStage1 (blockTransferSum B Y) j j', hStage1 Y j j']
-    by_cases hjj' : j = j'
-    · subst hjj'
-      rw [mixedTransferMap₂_self]
-      have hRFPj : IsTransferIdempotent (B j) :=
-        isTransferIdempotent_of_isIsometryCanonicalForm (B j) (hCF j)
-      simpa only [LinearMap.comp_apply] using
-        LinearMap.congr_fun hRFPj (Y.submatrix (blockIncl j dim) (blockIncl j dim))
-    · rw [hortho j j' hjj']
-      simp
-  ext jx jy
-  obtain ⟨j, a⟩ := jx
-  obtain ⟨j', a'⟩ := jy
-  simpa only [Matrix.submatrix_apply, blockIncl] using
-    congrFun (congrFun (blockEq j j') a) a'
+  apply blockTransferSum_idempotent_of_pairwise_mixedTransferMap₂ B (Y := Y)
+  intro j j'
+  by_cases hjj' : j = j'
+  · subst hjj'
+    rw [mixedTransferMap₂_self]
+    exact isTransferIdempotent_of_isIsometryCanonicalForm (B j) (hCF j)
+  · rw [hortho j j' hjj']
+    exact IsIdempotentElem.zero
 
 /-- **Backward direction of the structural characterization of pure-state
 renormalization fixed points** (arXiv:1606.00608, Theorem charact-MPS, line 543),
