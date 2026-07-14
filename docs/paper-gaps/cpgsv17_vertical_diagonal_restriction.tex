@@ -170,9 +170,10 @@ $\mu_{\alpha,k}$ times a sector trace $d_\alpha$, so MPDO positivity forces
 $d_\alpha>0$ and $\mu_{\alpha,k}>0$ under the normalization
 $\mu_{\alpha,1}>0$ (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
 \path{TNLean/MPS/MPDO/SectorTrace.lean}). The pairwise Gram-conjugation
-identity of the second displayed diagram at lines~1914--1919 is proved for
-two corners on a common representative bond space in
-\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  Together with the scalar
+identity of the second displayed diagram at lines~1914--1919 is proved in
+\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}, and its dependent transport
+to the actual grouped sectors is proved in
+\path{TNLean/MPS/MPDO/GroupedFigure8.lean}.  Together with the scalar
 commutant of a normal tensor, this identity shows that the Gram matrix of
 each sector gauge $X_{\alpha,k}$ is
 a positive real multiple of the reference Gram matrix,
@@ -194,9 +195,8 @@ grouped into pairwise gauge-phase-distinct BNT representatives in
 \path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a positive
 coefficient, a unit-modulus phase, and an invertible bond-space gauge, while
 the physical isometries and the literal vertical reconstruction are retained.
-The remaining step is to transport the grouped corners along their dependent
-dimension equalities to the common representative bond space required by the
-pairwise theorem.  The resulting sector maps must then be assembled into the
+What remains is to apply normal-tensor Gram rigidity to this grouped
+comparison, normalize the resulting sector maps, and assemble them into the
 final coisometry.  Consequently, the conclusion stated at lines~1903--1908
 has not yet been derived from the MPDO hypotheses.
 
