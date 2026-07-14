@@ -24,9 +24,11 @@ literal horizontal canonical form and is carried out in
 
 The file also specializes the positive-semidefinite power-commutation theorem
 to matrix product density operators.  This is only the final operator
-implication in source lines 1888--1893. The passage from a nontrivial vertical
-period to an orthogonal projector and its exclusion are carried out in
-`TNLean.MPS.MPDO.CyclicProjector`.
+implication in source lines 1888--1893.  The cyclic projector and its word
+invariance are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`; for a
+tensor in literal horizontal canonical form, one noncommuting length suffices
+for the periodic-sector contradiction, so the stronger all-length condition is
+not required.
 
 ## Main definitions
 
@@ -383,8 +385,8 @@ representation and the commutation family at *every* length, but does not
 transport its conclusion back to `M`'s own letters), this theorem needs only
 the commutation hypothesis at chain length `2`, applies to `M`'s own tensor
 directly, and does not extend to chain length `1` (`mpo M 1`).  The missing
-literal-gauge transport is recorded in
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.  At chain length `1`,
+literal-gauge transport for the general case is supplied in
+`TNLean/MPS/MPDO/HorizontalBNT.lean`.  At chain length `1`,
 the single trailing letter is the identity matrix, giving only a
 trace-level identity, not enough to separate the opposite-corner difference. -/
 theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
@@ -438,10 +440,12 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
 density operator commutes with the density operator itself.
 
 This is the final operator implication in the contradiction at
-arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12). It does not
+arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  It does not
 construct the orthogonal projector $Q$ associated with a nontrivial vertical
-period or establish its commutation with $[H^{(N)}]^p$; these steps are proved
-in `TNLean.MPS.MPDO.CyclicProjector`. -/
+period or establish its commutation with $[H^{(N)}]^p$.  Those ingredients are
+combined in `TNLean/MPS/MPDO/CyclicProjector.lean`, where one noncommuting
+length gives the contradiction for a tensor in literal horizontal canonical
+form. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     {p : ℕ} (hp : p ≠ 0) {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hQ : Commute Q (mpo M N ^ p)) : Commute Q (mpo M N) :=

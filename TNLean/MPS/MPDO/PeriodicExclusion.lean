@@ -156,9 +156,11 @@ commutation identities eq2:proof.IV.12, and positive semidefiniteness of the
 density operators rules such a projector out.
 
 **Scope restriction (conditional on the supplied projector):** the source
-proves this step outright, drawing the projector from the general theory of
-the peripheral spectrum; here that implication is the explicit hypothesis.
-Recorded in `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
+draws the projector from the general theory of the peripheral spectrum; here
+that implication is the explicit all-length hypothesis.  The general theorem
+for a tensor in literal horizontal canonical form is proved in
+`TNLean/MPS/MPDO/CyclicProjector.lean` from one noncommuting length.  Recorded
+in `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 theorem hasNoPeriodicVectors_verticalTensor (M : MPOTensor d D)
     (hM : IsMPDO M) (hYield : PeriodicVectorYieldsProjector M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
