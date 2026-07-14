@@ -80,6 +80,74 @@
     \label{fig:mpdo_two_site_blocking}
 \end{figure}
 
+\begin{definition}[Positive-length physical blocking of an MPO tensor]
+    \label{def:mpdo_positive_physical_blocking}
+    \lean{MPOTensor.blockTensor}
+    \lean{MPOTensor.blockTensor_apply}
+    \leanok
+    For a positive integer $L$, group $L$ adjacent physical sites and denote
+    the resulting local tensor by $M^{[L]}$.  It has a length-$L$ ket word
+    $I=(i_1,\ldots,i_L)$ and a length-$L$ bra word
+    $J=(j_1,\ldots,j_L)$ as its physical indices, and
+    \[
+        \bigl(M^{[L]}\bigr)^{I,J}
+          =M^{i_1j_1}\cdots M^{i_Lj_L}.
+    \]
+    Thus the ket and bra words are grouped separately.  This is the MPO
+    version of the physical blocking used for the basis of normal tensors in
+    \cite[lines~317--345]{Cirac2016MPDO_arXiv}.  It is a local tensor, not the
+    closed-chain operator $O_L(M)$ of
+    \cite[lines~962--967]{Cirac2016MPDO_arXiv}.
+
+    The algebraic definition also assigns the identity matrix to the empty
+    product at $L=0$.  This total convention has no physical role here; every
+    blocking result below assumes $L>0$.
+\end{definition}
+
+\begin{theorem}[Doubled-index form of positive MPO blocking]
+    \label{thm:mpdo_positive_blocking_doubled_index}
+    \lean{MPOTensor.blockedDoubledIndexEquiv}
+    \lean{MPOTensor.decodeBlock_blockedDoubledIndexEquiv}
+    \lean{MPOTensor.toMPSTensor_blockTensor}
+    \lean{MPOTensor.isInjective_toMPSTensor_blockTensor_iff}
+    \leanok
+    \uses{def:mpdo_positive_physical_blocking, def:blocked_tensor}
+    Let $L>0$.  Pairing the ket and bra letters site by site gives the
+    canonical identification
+    \[
+      \{0,\ldots,d^L-1\}^2
+        \simeq \{0,\ldots,d^2-1\}^L.
+    \]
+    Under this identification, the doubled-index MPS tensor of $M^{[L]}$
+    is the physical reindexing of the $L$-blocked doubled-index MPS tensor
+    of $M$.  In particular, one is injective if and only if the other is.
+\end{theorem}
+
+\begin{proof}\leanok
+    Decode the blocked ket and bra words, pair their letters at each site,
+    and compare the two ordered matrix products.  Physical reindexing by a
+    bijection preserves the span of the tensor matrices.
+\end{proof}
+
+\begin{theorem}[Positive blocking commutes with the MPO product]
+    \label{thm:mpdo_positive_blocking_product}
+    \lean{MPOTensor.blockTensor_mulTensor}
+    \leanok
+    \uses{def:mpdo_positive_physical_blocking, def:mpdo_operator_product}
+    For $L>0$ and two MPO tensors $M,N$ with the same physical dimension,
+    let juxtaposition denote the MPO tensor product obtained by contracting
+    the intermediate physical index.  Then
+    \[
+        (MN)^{[L]}=M^{[L]}N^{[L]}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the product tensor and sum over its length-$L$ intermediate
+    physical word.  Reindexing this word by one blocked physical index gives
+    the product of the two blocked tensors.
+\end{proof}
+
 \begin{definition}[Two-site blocking of an MPO tensor]
     \label{def:mpdo_two_site_blocking}
     \lean{MPOTensor.blockTwo}
