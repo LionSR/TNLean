@@ -2229,20 +2229,20 @@
         lem:irreducible_transfer_perron_pair,
         lem:irreducible_block_spectral_normalization}
     Under the same hypotheses, there are positive integers $d_k$, positive
-    scalars $\mu_k$, normal tensors $B_k$ of bond dimension $d_k$, and
+    scalars $\nu_k$, normal tensors $B_k$ of bond dimension $d_k$, and
     isometries $V_k:\C^{d_k}\to\C^d$ with pairwise orthogonal ranges. For
     every sector $k$ and every vertical letter $v$,
     \[
-        \widetilde M_vV_k=V_k(\mu_kB_k^v),
+        \widetilde M_vV_k=V_k(\nu_kB_k^v),
         \qquad
-        V_k^\dagger\widetilde M_v=(\mu_kB_k^v)V_k^\dagger,
+        V_k^\dagger\widetilde M_v=(\nu_kB_k^v)V_k^\dagger,
         \qquad
-        \mu_kB_k^v=V_k^\dagger\widetilde M_vV_k.
+        \nu_kB_k^v=V_k^\dagger\widetilde M_vV_k.
     \]
     Moreover, every vertical letter is reconstructed literally by
     \[
         \widetilde M_v
-        =\sum_k V_k(\mu_kB_k^v)V_k^\dagger.
+        =\sum_k V_k(\nu_kB_k^v)V_k^\dagger.
     \]
 \end{theorem}
 
@@ -2255,7 +2255,7 @@
     Retain exactly the irreducible corners containing a nonzero letter. The
     Perron--Frobenius eigenvalue of each retained corner is positive, and the
     absence of nontrivial periodic vectors makes the inverse-square-root
-    rescaling normal. Put the removed square root into $\mu_k$ and reindex the
+    rescaling normal. Put the removed square root into $\nu_k$ and reindex the
     retained corners. The original complete reducing decomposition expresses
     each vertical letter as the sum of all compressed corners; every omitted
     summand vanishes, which gives the displayed reconstruction. Thus the
@@ -2281,8 +2281,8 @@
     \]
     The representatives are pairwise gauge-phase distinct and form a basis of
     normal tensors for the weighted block tensor
-    $\bigoplus_k\mu_kB_k$. Every grouped coefficient
-    $\mu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
+    $\bigoplus_k\nu_kB_k$. Every grouped coefficient
+    $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
     from Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
     retained unchanged, one has both reducing identities, exact compression,
     and the literal reconstruction
@@ -2290,7 +2290,7 @@
         \widetilde M_v
         =\sum_\alpha\sum_q
         V_{\alpha,q}
-        \bigl(\mu_{\alpha,q}\zeta_{\alpha,q}
+        \bigl(\nu_{\alpha,q}\zeta_{\alpha,q}
         X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
         V_{\alpha,q}^\dagger .
     \]
@@ -2397,6 +2397,93 @@
     % Lean adapter: this final reindexing is `finSigmaFinEquiv`.
 \end{proof}
 
+\begin{theorem}[Dressed adjoint from all-length sector compressions]
+    \label{thm:mpdo_grouped_sector_dressed_adjoint}
+    \notready
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo}
+    Let $M$ be in horizontal canonical form and generate matrix product
+    density operators.  Let $A$ be a normal vertical tensor, let
+    $V:\C^n\to\C^d$ be an isometry, let $X\in\GL_n(\C)$, and let
+    $c>0$.  Suppose that these matrices and maps satisfy the identities of one
+    reducing vertical sector: for every vertical letter $v$,
+    \[
+        \widetilde M_vV
+          =V\bigl(cXA^vX^{-1}\bigr),
+        \qquad
+        V^\dagger\widetilde M_v
+          =\bigl(cXA^vX^{-1}\bigr)V^\dagger,
+    \]
+    and
+    \[
+        cXA^vX^{-1}=V^\dagger\widetilde M_vV.
+    \]
+    For a vertical letter $v=(a,b)$, write
+    $v^{\mathrm{op}}=(b,a)$.  Then, for every vertical letter $v$, the gauge
+    dressing agrees with the adjoint dressing of the oppositely oriented
+    letter:
+    \[
+        XA^vX^{-1}
+        =(X^{-1})^\dagger(A^{v^{\mathrm{op}}})^\dagger X^\dagger.
+    \]
+    This is the dressed-target conclusion obtained from the two displayed
+    diagrams and Lemma~L in
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpdo_sector_compression_trace_pos,
+        thm:mpo_adjoint_reflection, lem:vertical_tensor_adjoint_reflection,
+        thm:mpo_translation_invariant,
+        thm:representative_one_sub_mp_zero}
+    Put $P=VV^\dagger$.  For every $N\geq 1$, the compression
+    $P_1H^{(N)}P_1$ is positive semidefinite, and is therefore self-adjoint.
+    Taking its adjoint produces the reflected chain of the adjoint tensor and
+    reverses the tail word.  The adjoint-reflection identity exchanges the two
+    oriented bond indices.  Cyclic translation of the periodic chain then
+    returns the marked sector to the first site.  Thus the first-site
+    contractions for $A^v$ and $(A^{v^{\mathrm{op}}})^\dagger$ agree for every
+    chain length and every pair of physical configurations.  This is the input
+    required by a reflected marked-chain form of the horizontal Lemma~L.  The
+    existing same-tail first-site-action theorem does not cover the reversed
+    tail word.  Proving this generalized separation statement is the open
+    step.  Conditional on that statement, the corresponding inserted tensors
+    are equal on the original bond space.
+
+    Compress that tensor equality on the left by $V^\dagger$ and on the right
+    by $V$.  The reducing and corner identities give
+    \[
+        cXA^vX^{-1}
+        =\overline c\,(X^{-1})^\dagger
+        (A^{v^{\mathrm{op}}})^\dagger X^\dagger.
+    \]
+    Since $c>0$, one has $\overline c=c\ne0$; cancelling $c$ gives the
+    asserted dressed-adjoint identity.  The existence of one nonzero sector
+    compression is not used here: that existential statement belongs to the
+    preceding proof that $c$ is positive, whereas Lemma~L requires the
+    self-adjoint compression identity at every length.
+\end{proof}
+
+\begin{lemma}[A retained vertical phase class exists]
+    \label{lem:mpdo_vertical_retained_class_nonempty}
+    \notready
+    \uses{def:horizontal_cf_mpdo,
+        thm:mpdo_vertical_bnt_grouping_with_isometries}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}, the retained
+    vertical decomposition has at least one sector and hence at least one
+    phase class.
+\end{lemma}
+
+\begin{proof}
+    The unit-modulus weight witness in the horizontal canonical form, together
+    with left canonicity of its representative, makes the doubled-index tensor
+    nonzero.  Hence its vertical reshaping $\widetilde M$ is nonzero.  If the
+    retained decomposition had no sector, its literal reconstruction formula
+    would make every letter of $\widetilde M$ zero, a contradiction.  Passing
+    from the nonempty finite set of retained sectors to its phase partition
+    gives a retained representative.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
@@ -2411,15 +2498,14 @@
         thm:mpdo_vertical_complete_reducing_projectors,
         thm:mpdo_vertical_normal_sectors_with_isometries,
         thm:mpdo_vertical_bnt_grouping_with_isometries,
+        thm:mpdo_grouped_sector_dressed_adjoint,
+        thm:vertical_sector_coisometry,
+        lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,
         thm:mpdo_sector_trace_identity,
         thm:mpdo_sector_weight_pos,
-        thm:normal_tensor_gram_rigidity,
-        thm:mpo_adjoint_reflection,
-        lem:vertical_tensor_adjoint_reflection,
-        thm:gram_conj_of_dressed_adjoint,
         thm:eq3_of_dressed_adjoint,
         lem:mpv_diagonal_tensor,
         lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
@@ -2450,15 +2536,14 @@
         thm:mpdo_vertical_irreducible_reducing_sectors,
         thm:mpdo_vertical_complete_reducing_projectors,
         thm:mpdo_vertical_bnt_grouping_with_isometries,
+        thm:mpdo_grouped_sector_dressed_adjoint,
+        thm:vertical_sector_coisometry,
+        lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,
         thm:mpdo_sector_trace_identity,
         thm:mpdo_sector_weight_pos,
-        thm:normal_tensor_gram_rigidity,
-        thm:mpo_adjoint_reflection,
-        lem:vertical_tensor_adjoint_reflection,
-        thm:gram_conj_of_dressed_adjoint,
         thm:eq3_of_dressed_adjoint,
         thm:cpsv_normal_eventually_injective,
         thm:gauge_invariance,
@@ -2484,10 +2569,17 @@
     while retaining their physical isometries, both intertwining identities,
     exact compression, and literal reconstruction of every vertical letter.
     Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries} groups the
-    resulting normal tensors, obtaining
+    resulting normal tensors.  Write $\nu_{\alpha,k}$ for the raw sector
+    weight, $\zeta_{\alpha,k}$ for the phase of its chosen representative,
+    and
+    \[
+        c_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}.
+    \]
+    The grouped decomposition is
     \[
         \widetilde M
-        =\bigoplus_{\alpha,k}\mu_{\alpha,k}X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}
+        =\bigoplus_{\alpha,k}c_{\alpha,k}
+        X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}
     \]
     carried by the physical space, with normal tensors $M_\alpha$ whose
     letters remain indexed by the horizontal bond pairs.  These blocks are not
@@ -2495,16 +2587,28 @@
     as Theorem~\ref{thm:diagonal_restriction_not_normal} shows. It also
     identifies the physical range projectors with the grouped sectors, proves
     their loop identities, and finds a nonzero compression for each sector.
-    Positivity then gives $\mu_{\alpha,k}>0$:
+    Positivity then gives $c_{\alpha,k}>0$:
     Theorem~\ref{thm:mpdo_sector_compression_trace_pos} supplies the positive
     traces of the nonzero sector compressions,
     Theorem~\ref{thm:mpdo_sector_trace_identity} identifies each such trace
-    as $\mu_{\alpha,k}d_\alpha$, and
+    as $c_{\alpha,k}d_\alpha$, and
     Theorem~\ref{thm:mpdo_sector_weight_pos} concludes $d_\alpha>0$ and
-    $\mu_{\alpha,k}>0$ from the normalization $\mu_{\alpha,1}>0$.
-    Once the common reflected-adjoint target in the first diagram has been
-    obtained for each grouped sector, Theorem~\ref{thm:eq3_of_dressed_adjoint}
-    derives the identity
+    $c_{\alpha,k}>0$ from the normalization
+    $c_{\alpha,1}=\nu_{\alpha,1}>0$.  From now on write
+    $\mu_{\alpha,k}=c_{\alpha,k}$ for the positive coefficient in the
+    source decomposition, and put
+    $P_{\alpha,k}=V_{\alpha,k}V_{\alpha,k}^\dagger$.  The remaining
+    all-length marked-chain step is isolated in
+    Theorem~\ref{thm:mpdo_grouped_sector_dressed_adjoint}.  Applied to each
+    grouped sector with $c=c_{\alpha,k}=\mu_{\alpha,k}$, it gives, for
+    $v=(a,b)$,
+    \[
+        X_{\alpha,k}M_\alpha^vX_{\alpha,k}^{-1}
+        =(X_{\alpha,k}^{-1})^\dagger
+        (M_\alpha^{(b,a)})^\dagger X_{\alpha,k}^\dagger.
+    \]
+    The target $(M_\alpha^{(b,a)})^\dagger$ is independent of $k$.
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} therefore derives the identity
     \[
         X_{\alpha,k}^\dagger X_{\alpha,k}
         =\omega_{\alpha,k}\,X_{\alpha,1}^\dagger X_{\alpha,1},
@@ -2513,40 +2617,50 @@
     $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ of the sector gauges
     from the two-gauge form of the displayed identities.  The grouped
     decomposition fixes $X_{\alpha,1}=\Id$, so this relative normalization is
-    the source's $U_{\alpha,k}$.  Composing the sector unitaries would yield the
-    coisometry $U$ with
+    the source's $U_{\alpha,k}$.  Put
+    $W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}$.  Conditional on the dressed-adjoint
+    theorem, these are isometries with orthogonal ranges, and their block
+    relations become the intertwining and literal reconstruction hypotheses of
+    Theorem~\ref{thm:vertical_sector_coisometry} after the representative bond
+    spaces have been identified.  That theorem supplies all the remaining
+    coisometry algebra and, once the source-specific identifications below are
+    made, gives $U$ with
     $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ and
     the corresponding reconstruction identity; each
     $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
     copies of $M_\alpha$ exactly as in the finite regrouping of
-    Lemma~\ref{lem:vertical_grouping_equiv}. The remaining missing proof is the
-    reflected marked-chain and Lemma~L argument of lines 1909--1919: one must
-    transport the Hermiticity of each marked sector compression, whose adjoint
-    reverses the tail word, to obtain the common reflected-adjoint target.
-    Consequently, the conclusion stated at lines 1903--1908 has not yet been
-    derived from the matrix-product-density-operator hypotheses.  After
-    applying the relative normalization proved above, the remaining sector
-    maps must be assembled into the final coisometry.
+    Lemma~\ref{lem:vertical_grouping_equiv}.  Since
+    Theorem~\ref{thm:mpdo_grouped_sector_dressed_adjoint} remains open, the
+    conclusion stated at lines 1903--1908 has not yet been derived from the
+    matrix-product-density-operator hypotheses.  The generic block-row
+    construction is already proved.  The remaining source-specific
+    identifications are to form the normalized sector isometries above,
+    transport each copy bond space to its representative bond space using the
+    dimension equalities supplied by the grouping theorem, regard the sectors
+    as dependent pairs $(\alpha,q)$, and identify their dependent disjoint
+    union with the standard direct-sum coordinate space.
+    % Lean adapter: the four steps use the normalized gauges, `hdim`, the pair
+    % `(alpha, q)`, and `finSigmaFinEquiv`, respectively.
 
     Conditional on that construction, the algebraic basis-of-normal-tensors
     clauses are verified as follows.  With the notation of the grouping
-    theorem, its spectral BNT property applies to
+    theorem, its spectral BNT property applies to the raw weighted tensor
     \[
         A_{\mathrm{ret}}
-        =\bigoplus_{\alpha,k}\mu_{\alpha,k}B_{\alpha,k}.
+        =\bigoplus_{\alpha,k}\nu_{\alpha,k}B_{\alpha,k}.
     \]
     Theorem~\ref{thm:cpsv_normal_eventually_injective} makes every
     $M_\alpha$ algebraically normal.  Eventual linear independence is
     unchanged because the representatives themselves are unchanged.
 
-    For the spanning clause, set
-    $c_{\alpha,k}=\mu_{\alpha,k}\zeta_{\alpha,k}>0$ and let
+    For the spanning clause, let
     $\mathcal X=\bigoplus_{\alpha,k}X_{\alpha,k}$.  The gauge-phase identities
-    give the square block gauge
+    and $\mu_{\alpha,k}=c_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}$ give the
+    square block gauge
     \[
         A_{\mathrm{ret}}=\mathcal X B\mathcal X^{-1},
         \qquad
-        B=\bigoplus_{\alpha,k}c_{\alpha,k}M_\alpha.
+        B=\bigoplus_{\alpha,k}\mu_{\alpha,k}M_\alpha.
     \]
     Theorem~\ref{thm:gauge_invariance} therefore transfers the spectral BNT
     spanning identity from $A_{\mathrm{ret}}$ to $B$.  For every nonempty
@@ -2562,8 +2676,13 @@
     the span of those of the $M_\alpha$.
 
     The empty chain is separate because the bond dimensions of
-    $\widetilde M$ and $B$ may differ.  Choose one retained representative
-    $M_{\alpha_0}$ of bond dimension $d_{\alpha_0}>0$.  By
+    $\widetilde M$ and $B$ may differ.  Before choosing a representative, one
+    needs the nonemptiness assertion in
+    Lemma~\ref{lem:mpdo_vertical_retained_class_nonempty}; this is a separate
+    open obligation, since the present grouping theorem does not include
+    nonemptiness in its conclusion.  Once that lemma is proved, choose a
+    retained representative $M_{\alpha_0}$ of bond dimension
+    $d_{\alpha_0}>0$.  By
     Lemma~\ref{lem:mpv_zero_length}, assigning it the coefficient
     $d/d_{\alpha_0}$ and assigning zero to the other representatives gives
     the length-zero coefficient $d$ of $\widetilde M$.  This proves the
