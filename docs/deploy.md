@@ -25,8 +25,9 @@ cd .lake/build/doc && python3 -m http.server 8080   # opens http://localhost:808
 
 ## Deploy Blueprint (fast)
 
-Builds `leanblueprint pdf/web` and pushes blueprint + homepage to `gh-pages`.
-Does not touch `/docs/` — existing API docs are preserved.
+Builds the full PDF and web blueprint, builds the separate chapters 1--12
+FT-MPS PDF, and pushes the blueprint and homepage to `gh-pages`. Does not touch
+`/docs/` — existing API docs are preserved.
 
 ```bash
 ./scripts/deploy-blueprint.sh
