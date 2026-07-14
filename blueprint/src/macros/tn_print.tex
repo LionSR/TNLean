@@ -1135,85 +1135,70 @@
 % The two fixed-final-label fusion trees.  The dashed bridge records the
 % F-change of multiplicity basis that remains to be constructed.
 \newcommand{\TNMPDOFixedFinalFusionBracketings}{%
-    \begin{tikzpicture}[tn picture, scale=0.92]
-        \node (la) at (0,0) {$\alpha$};
-        \node (lb) at (0.90,0) {$\beta$};
-        \node (lc) at (1.80,0) {$\gamma$};
-        \TN@cofusionmap{lab}{(0.45,0.78)}{U_{\alpha,\beta}^{\delta}}
-        \TN@cofusionmap{labc}{(1.12,1.62)}{U_{\delta,\gamma}^{\varepsilon}}
-        \TN@vport{laOut}{la}{north}
-        \TN@vport{lbOut}{lb}{north}
-        \TN@vport{lcOut}{lc}{north}
-        \TN@vconnectports{laOut}{labLeft}
-        \TN@vconnectports{lbOut}{labRight}
-        \TN@vconnectports{labIn}{labcLeft}
-        \TN@vconnectports{lcOut}{labcRight}
-        \TN@vopenport{labcIn}{0,0.42}
-        \node[above] at (labcInOpen) {$\varepsilon$};
-        \node at (0.90,-0.48) {$((\alpha\beta)\gamma)$};
+    \begin{TNDiagram}[normal]
+        \path[use as bounding box] (-4.70,-2.05) rectangle (4.70,1.55);
+        \TNCofusionMap{ffLeftLower}{(-3.35,-0.72)}{U_{\alpha,\beta}^{\delta}}
+        \TNCofusionMap{ffLeftUpper}{(-2.80,0.55)}{U_{\delta,\gamma}^{\varepsilon}}
+        \TNConnectVirtual{ffLeftLowerCombined}{ffLeftUpperFactorOne}
+        \TNOpenVirtualSouth{ffLeftLowerFactorOne}
+        \TNOpenVirtualSouth{ffLeftLowerFactorTwo}
+        \TNOpenVirtualSouth{ffLeftUpperFactorTwo}
+        \TNOpenVirtualNorth{ffLeftUpperCombined}
+        \node[below] at (ffLeftLowerFactorOneOpen) {$\alpha$};
+        \node[below] at (ffLeftLowerFactorTwoOpen) {$\beta$};
+        \node[below] at (ffLeftUpperFactorTwoOpen) {$\gamma$};
+        \node[above] at (ffLeftUpperCombinedOpen) {$\varepsilon$};
+        \node at (-3.00,-1.72) {$((\alpha\beta)\gamma)$};
 
-        \node (ra) at (4.20,0) {$\alpha$};
-        \node (rb) at (5.10,0) {$\beta$};
-        \node (rc) at (6.00,0) {$\gamma$};
-        \TN@cofusionmap{rbc}{(5.55,0.78)}{U_{\beta,\gamma}^{\eta}}
-        \TN@cofusionmap{rabc}{(4.88,1.62)}{U_{\alpha,\eta}^{\varepsilon}}
-        \TN@vport{raOut}{ra}{north}
-        \TN@vport{rbOut}{rb}{north}
-        \TN@vport{rcOut}{rc}{north}
-        \TN@vconnectports{rbOut}{rbcLeft}
-        \TN@vconnectports{rcOut}{rbcRight}
-        \TN@vconnectports{raOut}{rabcLeft}
-        \TN@vconnectports{rbcIn}{rabcRight}
-        \TN@vopenport{rabcIn}{0,0.42}
-        \node[above] at (rabcInOpen) {$\varepsilon$};
-        \node at (5.10,-0.48) {$(\alpha(\beta\gamma))$};
+        \TNCofusionMap{ffRightLower}{(3.35,-0.72)}{U_{\beta,\gamma}^{\eta}}
+        \TNCofusionMap{ffRightUpper}{(2.80,0.55)}{U_{\alpha,\eta}^{\varepsilon}}
+        \TNConnectVirtual{ffRightLowerCombined}{ffRightUpperFactorTwo}
+        \TNOpenVirtualSouth{ffRightUpperFactorOne}
+        \TNOpenVirtualSouth{ffRightLowerFactorOne}
+        \TNOpenVirtualSouth{ffRightLowerFactorTwo}
+        \TNOpenVirtualNorth{ffRightUpperCombined}
+        \node[below] at (ffRightUpperFactorOneOpen) {$\alpha$};
+        \node[below] at (ffRightLowerFactorOneOpen) {$\beta$};
+        \node[below] at (ffRightLowerFactorTwoOpen) {$\gamma$};
+        \node[above] at (ffRightUpperCombinedOpen) {$\varepsilon$};
+        \node at (3.00,-1.72) {$(\alpha(\beta\gamma))$};
 
-        \TN@comparisonarrow[densely dashed, line width=0.4pt]{
-            (labc.east) -- node[above] {$F_{\varepsilon}^{\alpha\beta\gamma}$}
-            (rabc.west)}
-    \end{tikzpicture}%
+        \TNComparisonArrow{ffBracketingChange}{(ffLeftUpper.east)}
+            {(ffRightUpper.west)}{F_{\varepsilon}^{\alpha\beta\gamma}}
+    \end{TNDiagram}%
 }
 
 % The source-oriented F-move.  The left tree is expanded in the basis of
 % right trees.  The multiplicity labels and the direction of F agree with
 % equation (Fmove) of arXiv:1511.08090.
 \newcommand{\TNMPDOPrintedFMove}{%
-    \begin{tikzpicture}[tn picture, scale=0.92]
-        \node (pfLa) at (-4.20,-1.20) {$a$};
-        \node (pfLb) at (-3.20,-1.20) {$b$};
-        \node (pfLc) at (-2.20,-1.20) {$c$};
-        \TN@cofusionmap{pfLab}{(-3.70,-0.34)}{X^{e}_{ab,\mu}}
-        \TN@cofusionmap{pfLroot}{(-3.00,0.62)}{X^{d}_{ec,\nu}}
-        \TN@vport{pfLaOut}{pfLa}{north}
-        \TN@vport{pfLbOut}{pfLb}{north}
-        \TN@vport{pfLcOut}{pfLc}{north}
-        \TN@vconnectports{pfLaOut}{pfLabLeft}
-        \TN@vconnectports{pfLbOut}{pfLabRight}
-        \TN@vconnectports{pfLabIn}{pfLrootLeft}
-        \TN@vconnectports{pfLcOut}{pfLrootRight}
-        \TN@vopenport{pfLrootIn}{0,0.42}
-        \node[above] at (pfLrootInOpen) {$d$};
-
-        \node at (-0.65,-0.12) {$=$};
-        \node at (0.15,-0.12) {$\displaystyle\sum_{f,\lambda,\sigma}$};
-        \node at (1.33,-0.12)
+    \begin{TNDiagram}[normal]
+            \TNCofusionMap{pfLeftLower}{(-4.25,-0.55)}{X^{e}_{ab,\mu}}
+            \TNCofusionMap{pfLeftUpper}{(-3.70,0.70)}{X^{d}_{ec,\nu}}
+            \TNConnectVirtual{pfLeftLowerCombined}{pfLeftUpperFactorOne}
+            \TNOpenVirtualSouth{pfLeftLowerFactorOne}
+            \TNOpenVirtualSouth{pfLeftLowerFactorTwo}
+            \TNOpenVirtualSouth{pfLeftUpperFactorTwo}
+            \TNOpenVirtualNorth{pfLeftUpperCombined}
+            \node[below] at (pfLeftLowerFactorOneOpen) {$a$};
+            \node[below] at (pfLeftLowerFactorTwoOpen) {$b$};
+            \node[below] at (pfLeftUpperFactorTwoOpen) {$c$};
+            \node[above] at (pfLeftUpperCombinedOpen) {$d$};
+        \node at (-1.55,0) {$=\displaystyle\sum_{f,\lambda,\sigma}$};
+        \node at (0.25,0)
             {$\displaystyle(F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}$};
-
-        \node (pfRa) at (2.75,-1.20) {$a$};
-        \node (pfRb) at (3.75,-1.20) {$b$};
-        \node (pfRc) at (4.75,-1.20) {$c$};
-        \TN@cofusionmap{pfRbc}{(4.25,-0.34)}{X^{f}_{bc,\lambda}}
-        \TN@cofusionmap{pfRroot}{(3.45,0.62)}{X^{d}_{af,\sigma}}
-        \TN@vport{pfRaOut}{pfRa}{north}
-        \TN@vport{pfRbOut}{pfRb}{north}
-        \TN@vport{pfRcOut}{pfRc}{north}
-        \TN@vconnectports{pfRbOut}{pfRbcLeft}
-        \TN@vconnectports{pfRcOut}{pfRbcRight}
-        \TN@vconnectports{pfRaOut}{pfRrootLeft}
-        \TN@vconnectports{pfRbcIn}{pfRrootRight}
-        \TN@vopenport{pfRrootIn}{0,0.42}
-        \node[above] at (pfRrootInOpen) {$d$};
-    \end{tikzpicture}%
+            \TNCofusionMap{pfRightLower}{(3.15,-0.55)}{X^{f}_{bc,\lambda}}
+            \TNCofusionMap{pfRightUpper}{(2.60,0.70)}{X^{d}_{af,\sigma}}
+            \TNConnectVirtual{pfRightLowerCombined}{pfRightUpperFactorTwo}
+            \TNOpenVirtualSouth{pfRightUpperFactorOne}
+            \TNOpenVirtualSouth{pfRightLowerFactorOne}
+            \TNOpenVirtualSouth{pfRightLowerFactorTwo}
+            \TNOpenVirtualNorth{pfRightUpperCombined}
+            \node[below] at (pfRightUpperFactorOneOpen) {$a$};
+            \node[below] at (pfRightLowerFactorOneOpen) {$b$};
+            \node[below] at (pfRightLowerFactorTwoOpen) {$c$};
+            \node[above] at (pfRightUpperCombinedOpen) {$d$};
+    \end{TNDiagram}%
 }
 
 % The fixed-final comparison argument in three graphical steps.  A
@@ -1223,115 +1208,65 @@
 % final bond space.  The last line records two-sided unitarity, but deliberately
 % contains no four-fold reassociation or pentagon claim.
 \newcommand{\TNMPDOFixedFinalComparisonUnitary}{%
-    \begin{tikzpicture}[tn picture, scale=0.86]
-        % Positive-length simultaneous selector.
-        \node[anchor=east] at (-4.62,2.82) {\textup{selector}};
-        \node[anchor=east] at (-4.62,2.42) {$S>0$};
-        \foreach \x/\s in {-3.90/L,-2.86/M,-0.66/R} {
-            \TN@tensor{ffSel\s}{(\x,2.62)}
-            \TN@pleg{ffSel\s}{north}{0,0.31}
-            \TN@pleg{ffSel\s}{south}{0,-0.31}
-        }
-        \TN@vconnect{ffSelL}{east}{ffSelM}{west}
-        \TN@vleg{ffSelM}{east}{0.49,0}
-        \TN@vport{ffSelRW}{ffSelR}{west}
-        \TN@vopenport{ffSelRW}{-0.49,0}
-        \TN@vleg{ffSelL}{west}{-0.34,0}
-        \TN@vleg{ffSelR}{east}{0.34,0}
-        \node at (-1.76,2.62) {$\cdots$};
-        \node at (-2.28,2.14) {$M_{\varepsilon'}^{w}$};
-        \TN@grouppath{(-4.33,2.03) rectangle (-0.23,3.17)}
-        \node[tn label, fill=white, inner sep=1pt] at (-2.28,3.17)
-            {$\displaystyle\sum_{|w|=S}c_{\varepsilon}(w)\,(\,\cdot\,)^{w}$};
-        \TN@mterminal{ffSelectorSource}{(0.12,2.62)}
-        \TN@mterminal{ffSelectorTarget}{(1.05,2.62)}
-        \TN@mconnectports{ffSelectorSource}{ffSelectorTarget}
-        \node[anchor=west] at (1.18,2.62)
-            {$\displaystyle
-              \begin{cases}
-                1_{D_\varepsilon},&\varepsilon'=\varepsilon,\\[-1pt]
-                0,&\varepsilon'\ne\varepsilon.
-              \end{cases}$};
+    \begin{TNDiagram}[normal]
+        \path[use as bounding box] (-5.90,-3.45) rectangle (5.90,3.25);
+        \node[anchor=east] at (-5.10,2.35) {\textup{selector}, $S>0$};
+        \TNMPOSite{ffSelL}{(-3.90,2.35)}{}
+        \TNMPOSite{ffSelM}{(-2.55,2.35)}{M_{\varepsilon'}^{w}}
+        \TNMPOSite{ffSelR}{(-1.20,2.35)}{}
+        \TNConnectVirtual{ffSelLEast}{ffSelMWest}
+        \TNConnectVirtual{ffSelMEast}{ffSelRWest}
+        \TNOpenVirtualWest{ffSelLWest}
+        \TNOpenVirtualEast{ffSelREast}
+        \node[above] at (-2.55,2.78)
+            {$\sum_{|w|=S}c_{\varepsilon}(w)(\,\cdot\,)^{w}$};
+        \TNMorphismArrow{ffSelectorArrow}{(-0.35,2.35)}{(0.60,2.35)}{}
+        \node[anchor=west] at (0.78,2.35)
+            {$\delta_{\varepsilon,\varepsilon'}1_{D_\varepsilon}$};
 
-        % Off-diagonal corners of the comparison vanish.  The two small trees
-        % retain the bracketing convention of the source F-move figures.
-        \node[anchor=east] at (-4.62,0.48) {\textup{sector cut}};
-        \node (ffLa) at (-3.92,-0.20) {$\alpha$};
-        \node (ffLb) at (-3.32,-0.20) {$\beta$};
-        \node (ffLc) at (-2.72,-0.20) {$\gamma$};
-        \TN@map[inner sep=1.2pt]{ffLab}{(-3.62,0.35)}{U_{\alpha,\beta}}
-        \TN@map[inner sep=1.2pt]{ffLroot}{(-3.17,0.94)}{U^{\mathrm L}}
-        \TN@vconnect{ffLa}{north}{ffLab}{south west}
-        \TN@vconnect{ffLb}{north}{ffLab}{south east}
-        \TN@vconnect{ffLab}{north}{ffLroot}{south west}
-        \TN@vconnect{ffLc}{north}{ffLroot}{south east}
-        \node[above=1pt] at (ffLroot.north) {$\varepsilon$};
-
-        \node (ffRa) at (2.48,-0.20) {$\alpha$};
-        \node (ffRb) at (3.08,-0.20) {$\beta$};
-        \node (ffRc) at (3.68,-0.20) {$\gamma$};
-        \TN@map[inner sep=1.2pt]{ffRbc}{(3.38,0.35)}{U_{\beta,\gamma}}
-        \TN@map[inner sep=1.2pt]{ffRroot}{(2.93,0.94)}{U^{\mathrm R}}
-        \TN@vconnect{ffRb}{north}{ffRbc}{south west}
-        \TN@vconnect{ffRc}{north}{ffRbc}{south east}
-        \TN@vconnect{ffRa}{north}{ffRroot}{south west}
-        \TN@vconnect{ffRbc}{north}{ffRroot}{south east}
-        \node[above=1pt] at (ffRroot.north) {$\varepsilon'$};
-        \TN@mport{ffLComparison}{ffLroot}{east}
-        \TN@mport{ffRComparison}{ffRroot}{west}
-        \TN@mconnectports{ffRComparison}{ffLComparison}
-        \node[above] at ($(ffLComparison)!0.5!(ffRComparison)$)
-            {$C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}$};
-        \node[anchor=west] at (4.18,0.94)
+        \node[anchor=east] at (-5.10,0.30) {\textup{sector cut}};
+        \TNBinaryFusionTree{ffCutLeft}{(-2.65,0.20)}
+            {\alpha}{\beta}{\gamma}{U^{\mathrm L}}
+        \TNBinaryFusionTree{ffCutRight}{(2.65,0.20)}
+            {\alpha}{\beta}{\gamma}{U^{\mathrm R}}
+        \TNOpenVirtualSouth{ffCutLeftLowerCombined}
+        \TNOpenVirtualSouth{ffCutRightLowerCombined}
+        \TNComparisonArrow{ffSectorComparison}{(ffCutLeftUpper.east)}
+            {(ffCutRightUpper.west)}
+            {C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}}
+        \node[anchor=west] at (4.25,0.20)
             {$=0\quad(\varepsilon\ne\varepsilon')$};
 
-        % The surviving corner splits into the multiplicity F-matrix and the
-        % identity on the final MPO bond space.
-        \node[anchor=east] at (-4.62,-1.76) {\textup{diagonal corner}};
-        \node[anchor=east] at (-3.43,-1.48)
-            {$\mathcal H^{\mathrm L}_{\varepsilon}$};
-        \node[anchor=east] at (-3.43,-2.08) {$\C^{D_\varepsilon}$};
-        \node[anchor=west] at (3.43,-1.48)
-            {$\mathcal H^{\mathrm R}_{\varepsilon}$};
-        \node[anchor=west] at (3.43,-2.08) {$\C^{D_\varepsilon}$};
-        \TN@map{ffF}{(0,-1.48)}{F_\varepsilon}
-        \TN@mport{ffFW}{ffF}{west}
-        \TN@mport{ffFE}{ffF}{east}
-        \TN@mterminal{ffHLeft}{(-3.36,-1.48)}
-        \TN@mterminal{ffHRight}{(3.36,-1.48)}
-        \TN@mterminal{ffDLeft}{(-3.36,-2.08)}
-        \TN@mterminal{ffDRight}{(3.36,-2.08)}
-        \TN@mconnectports{ffHRight}{ffFE}
-        \TN@mconnectports{ffFW}{ffHLeft}
-        \TN@mconnectports{ffDRight}{ffDLeft}
-        \node[below] at ($(ffDLeft)!0.5!(ffDRight)$)
-            {$1_{D_\varepsilon}$};
-        \node at (0,-2.62)
-            {$C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon},\qquad
-              D_\varepsilon>0$};
-        \node at (0,-3.15)
+        \node[anchor=east] at (-5.10,-2.15) {\textup{diagonal corner}};
+        \TNExpression{ffLeftSpace}{(-3.35,-2.15)}
+            {\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}}
+        \TNMap{ffF}{(0,-2.15)}{F_\varepsilon\otimes1_{D_\varepsilon}}
+        \TNExpression{ffRightSpace}{(3.35,-2.15)}
+            {\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}}
+        \TNMorphismArrow{ffDiagonalLeft}{(ffLeftSpace.east)}{(ffF.west)}{}
+        \TNMorphismArrow{ffDiagonalRight}{(ffF.east)}{(ffRightSpace.west)}{}
+        \node at (0,-3.05)
             {$F_\varepsilon F_\varepsilon^\dagger=1,\qquad
               F_\varepsilon^\dagger F_\varepsilon=1$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 % The associahedron for four ordinary bond-coordinate factors.  The upper
 % three-edge route and lower two-edge route have the same endpoints.  This is
 % only Cartesian-product reassociation; the edges do not represent F-matrices.
 \newcommand{\TNMPDOFourfoldBondReassociationPentagon}{%
-    \begin{tikzpicture}[tn picture, scale=0.92]
-        \TN@expression[inner sep=3pt]{assocL}{(-5.00,0)}{(((A\times B)\times C)\times D)}
-        \TN@expression[inner sep=3pt]{assocLI}{(-3.00,1.80)}{((A\times(B\times C))\times D)}
-        \TN@expression[inner sep=3pt]{assocM}{(1.00,1.80)}{(A\times((B\times C)\times D))}
-        \TN@expression[inner sep=3pt]{assocR}{(4.20,0)}{(A\times(B\times(C\times D)))}
-        \TN@expression[inner sep=3pt]{assocP}{(-0.30,-1.80)}{((A\times B)\times(C\times D))}
-
-        \TN@arrow[line width=0.7pt]{(assocL) -- node[above left] {$r_1$} (assocLI)}
-        \TN@arrow[line width=0.7pt]{(assocLI) -- node[above] {$r_2$} (assocM)}
-        \TN@arrow[line width=0.7pt]{(assocM) -- node[above right] {$r_3$} (assocR)}
-        \TN@arrow[line width=0.7pt]{(assocL) -- node[below left] {$s_1$} (assocP)}
-        \TN@arrow[line width=0.7pt]{(assocP) -- node[below right] {$s_2$} (assocR)}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNExpression{assocL}{(-5.25,0)}{(((A\times B)\times C)\times D)}
+        \TNExpression{assocLI}{(-3.10,2.05)}{((A\times(B\times C))\times D)}
+        \TNExpression{assocM}{(1.20,2.05)}{(A\times((B\times C)\times D))}
+        \TNExpression{assocR}{(5.25,0)}{(A\times(B\times(C\times D)))}
+        \TNExpression{assocP}{(0,-2.05)}{((A\times B)\times(C\times D))}
+        \TNMorphismArrow{assocRone}{(assocL)}{(assocLI)}{r_1}
+        \TNMorphismArrow{assocRtwo}{(assocLI)}{(assocM)}{r_2}
+        \TNMorphismArrow{assocRthree}{(assocM)}{(assocR)}{r_3}
+        \TNMorphismArrow{assocSone}{(assocL)}{(assocP)}{s_1}
+        \TNMorphismArrow{assocStwo}{(assocP)}{(assocR)}{s_2}
+    \end{TNDiagram}%
 }
 
 % The five genuine fusion trees in the MPO pentagon.  Unlike the Cartesian
@@ -1339,143 +1274,104 @@
 % every internal label is a fusion-sector label.  The arrangement follows
 % Figure `pentagon` (n13.pdf) of arXiv:1511.08090.
 \newcommand{\TNMPDOCompleteZipperFusionPentagon}{%
-    \begin{tikzpicture}[tn picture, scale=0.82]
+    \begin{TNDiagram}[normal]
+        \path[use as bounding box] (-6.25,-4.30) rectangle (6.25,4.10);
         % (((a b) c) d)
-        \TN@vterminal{pLa}{(-5.70,0.75)}
-        \TN@vterminal{pLb}{(-5.15,0.75)}
-        \TN@vterminal{pLc}{(-4.60,0.75)}
-        \TN@vterminal{pLd}{(-4.05,0.75)}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pLf}{(-5.42,0.22)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pLg}{(-5.00,-0.28)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pLe}{(-4.56,-0.80)}{}
-        \TN@vterminal{pLroot}{(-4.56,-1.28)}
-        \TN@vconnectports{pLa}{pLfLeft}
-        \TN@vconnectports{pLb}{pLfRight}
-        \TN@vconnectports{pLfOut}{pLgLeft}
-        \TN@vconnectports{pLc}{pLgRight}
-        \TN@vconnectports{pLgOut}{pLeLeft}
-        \TN@vconnectports{pLd}{pLeRight}
-        \TN@vconnectports{pLeOut}{pLroot}
-        \foreach \n/\t in {pLa/a,pLb/b,pLc/c,pLd/d}
+        \TNFusionMap{pLf}{(-5.42,0.22)}{}
+        \TNFusionMap{pLg}{(-5.00,-0.55)}{}
+        \TNFusionMap{pLe}{(-4.56,-1.32)}{}
+        \TNOpenVirtualNorth{pLfFactorOne}
+        \TNOpenVirtualNorth{pLfFactorTwo}
+        \TNConnectVirtual{pLfCombined}{pLgFactorOne}
+        \TNOpenVirtualNorth{pLgFactorTwo}
+        \TNConnectVirtual{pLgCombined}{pLeFactorOne}
+        \TNOpenVirtualNorth{pLeFactorTwo}
+        \TNOpenVirtualSouth{pLeCombined}
+        \foreach \n/\t in {pLfFactorOneOpen/a,pLfFactorTwoOpen/b,
+            pLgFactorTwoOpen/c,pLeFactorTwoOpen/d}
             \node[above] at (\n) {$\t$};
         \node[left] at ($(pLfOut)!0.5!(pLgLeft)$) {$f$};
         \node[left] at ($(pLgOut)!0.5!(pLeLeft)$) {$g$};
-        \node[below] at (pLroot) {$e$};
+        \node[below] at (pLeCombinedOpen) {$e$};
 
         % ((a (b c)) d)
-        \TN@vterminal{pLIa}{(-4.20,3.52)}
-        \TN@vterminal{pLIb}{(-3.65,3.52)}
-        \TN@vterminal{pLIc}{(-3.10,3.52)}
-        \TN@vterminal{pLId}{(-2.55,3.52)}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pLIh}{(-3.38,2.99)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pLIg}{(-3.78,2.49)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pLIe}{(-3.28,1.97)}{}
-        \TN@vterminal{pLIroot}{(-3.28,1.49)}
-        \TN@vconnectports{pLIb}{pLIhLeft}
-        \TN@vconnectports{pLIc}{pLIhRight}
-        \TN@vconnectports{pLIa}{pLIgLeft}
-        \TN@vconnectports{pLIhOut}{pLIgRight}
-        \TN@vconnectports{pLIgOut}{pLIeLeft}
-        \TN@vconnectports{pLId}{pLIeRight}
-        \TN@vconnectports{pLIeOut}{pLIroot}
-        \foreach \n/\t in {pLIa/a,pLIb/b,pLIc/c,pLId/d}
+        \TNFusionMap{pLIh}{(-3.38,2.99)}{}
+        \TNFusionMap{pLIg}{(-3.78,2.22)}{}
+        \TNFusionMap{pLIe}{(-3.28,1.45)}{}
+        \TNOpenVirtualNorth{pLIhFactorOne}
+        \TNOpenVirtualNorth{pLIhFactorTwo}
+        \TNOpenVirtualNorth{pLIgFactorOne}
+        \TNConnectVirtual{pLIhCombined}{pLIgFactorTwo}
+        \TNConnectVirtual{pLIgCombined}{pLIeFactorOne}
+        \TNOpenVirtualNorth{pLIeFactorTwo}
+        \TNOpenVirtualSouth{pLIeCombined}
+        \foreach \n/\t in {pLIgFactorOneOpen/a,pLIhFactorOneOpen/b,
+            pLIhFactorTwoOpen/c,pLIeFactorTwoOpen/d}
             \node[above] at (\n) {$\t$};
         \node[right] at ($(pLIhOut)!0.5!(pLIgRight)$) {$h$};
         \node[left] at ($(pLIgOut)!0.5!(pLIeLeft)$) {$g$};
-        \node[below] at (pLIroot) {$e$};
+        \node[below] at (pLIeCombinedOpen) {$e$};
 
         % a ((b c) d)
-        \TN@vterminal{pMa}{(0.10,3.52)}
-        \TN@vterminal{pMb}{(0.65,3.52)}
-        \TN@vterminal{pMc}{(1.20,3.52)}
-        \TN@vterminal{pMd}{(1.75,3.52)}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pMh}{(0.92,2.99)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pMi}{(1.34,2.49)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pMe}{(0.84,1.97)}{}
-        \TN@vterminal{pMroot}{(0.84,1.49)}
-        \TN@vconnectports{pMb}{pMhLeft}
-        \TN@vconnectports{pMc}{pMhRight}
-        \TN@vconnectports{pMhOut}{pMiLeft}
-        \TN@vconnectports{pMd}{pMiRight}
-        \TN@vconnectports{pMa}{pMeLeft}
-        \TN@vconnectports{pMiOut}{pMeRight}
-        \TN@vconnectports{pMeOut}{pMroot}
-        \foreach \n/\t in {pMa/a,pMb/b,pMc/c,pMd/d}
+        \TNFusionMap{pMh}{(0.92,2.99)}{}
+        \TNFusionMap{pMi}{(1.34,2.22)}{}
+        \TNFusionMap{pMe}{(0.84,1.45)}{}
+        \TNOpenVirtualNorth{pMhFactorOne}
+        \TNOpenVirtualNorth{pMhFactorTwo}
+        \TNConnectVirtual{pMhCombined}{pMiFactorOne}
+        \TNOpenVirtualNorth{pMiFactorTwo}
+        \TNOpenVirtualNorth{pMeFactorOne}
+        \TNConnectVirtual{pMiCombined}{pMeFactorTwo}
+        \TNOpenVirtualSouth{pMeCombined}
+        \foreach \n/\t in {pMeFactorOneOpen/a,pMhFactorOneOpen/b,
+            pMhFactorTwoOpen/c,pMiFactorTwoOpen/d}
             \node[above] at (\n) {$\t$};
         \node[left] at ($(pMhOut)!0.5!(pMiLeft)$) {$h$};
         \node[right] at ($(pMiOut)!0.5!(pMeRight)$) {$i$};
-        \node[below] at (pMroot) {$e$};
+        \node[below] at (pMeCombinedOpen) {$e$};
 
         % a (b (c d))
-        \TN@vterminal{pRa}{(4.05,0.75)}
-        \TN@vterminal{pRb}{(4.60,0.75)}
-        \TN@vterminal{pRc}{(5.15,0.75)}
-        \TN@vterminal{pRd}{(5.70,0.75)}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pRj}{(5.42,0.22)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pRi}{(5.00,-0.28)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pRe}{(4.56,-0.80)}{}
-        \TN@vterminal{pRroot}{(4.56,-1.28)}
-        \TN@vconnectports{pRc}{pRjLeft}
-        \TN@vconnectports{pRd}{pRjRight}
-        \TN@vconnectports{pRb}{pRiLeft}
-        \TN@vconnectports{pRjOut}{pRiRight}
-        \TN@vconnectports{pRa}{pReLeft}
-        \TN@vconnectports{pRiOut}{pReRight}
-        \TN@vconnectports{pReOut}{pRroot}
-        \foreach \n/\t in {pRa/a,pRb/b,pRc/c,pRd/d}
+        \TNFusionMap{pRj}{(5.42,0.22)}{}
+        \TNFusionMap{pRi}{(5.00,-0.55)}{}
+        \TNFusionMap{pRe}{(4.56,-1.32)}{}
+        \TNOpenVirtualNorth{pRjFactorOne}
+        \TNOpenVirtualNorth{pRjFactorTwo}
+        \TNOpenVirtualNorth{pRiFactorOne}
+        \TNConnectVirtual{pRjCombined}{pRiFactorTwo}
+        \TNOpenVirtualNorth{pReFactorOne}
+        \TNConnectVirtual{pRiCombined}{pReFactorTwo}
+        \TNOpenVirtualSouth{pReCombined}
+        \foreach \n/\t in {pReFactorOneOpen/a,pRiFactorOneOpen/b,
+            pRjFactorOneOpen/c,pRjFactorTwoOpen/d}
             \node[above] at (\n) {$\t$};
         \node[right] at ($(pRjOut)!0.5!(pRiRight)$) {$j$};
         \node[right] at ($(pRiOut)!0.5!(pReRight)$) {$i$};
-        \node[below] at (pRroot) {$e$};
+        \node[below] at (pReCombinedOpen) {$e$};
 
         % (a b) (c d)
-        \TN@vterminal{pPa}{(-0.85,-2.10)}
-        \TN@vterminal{pPb}{(-0.30,-2.10)}
-        \TN@vterminal{pPc}{(0.30,-2.10)}
-        \TN@vterminal{pPd}{(0.85,-2.10)}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pPf}{(-0.58,-2.63)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pPj}{(0.58,-2.63)}{}
-        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
-            inner sep=0.4pt]{pPe}{(0,-3.18)}{}
-        \TN@vterminal{pProot}{(0,-3.66)}
-        \TN@vconnectports{pPa}{pPfLeft}
-        \TN@vconnectports{pPb}{pPfRight}
-        \TN@vconnectports{pPc}{pPjLeft}
-        \TN@vconnectports{pPd}{pPjRight}
-        \TN@vconnectports{pPfOut}{pPeLeft}
-        \TN@vconnectports{pPjOut}{pPeRight}
-        \TN@vconnectports{pPeOut}{pProot}
-        \foreach \n/\t in {pPa/a,pPb/b,pPc/c,pPd/d}
+        \TNFusionMap{pPf}{(-0.72,-2.63)}{}
+        \TNFusionMap{pPj}{(0.72,-2.63)}{}
+        \TNFusionMap{pPe}{(0,-3.48)}{}
+        \TNOpenVirtualNorth{pPfFactorOne}
+        \TNOpenVirtualNorth{pPfFactorTwo}
+        \TNOpenVirtualNorth{pPjFactorOne}
+        \TNOpenVirtualNorth{pPjFactorTwo}
+        \TNConnectVirtual{pPfCombined}{pPeFactorOne}
+        \TNConnectVirtual{pPjCombined}{pPeFactorTwo}
+        \TNOpenVirtualSouth{pPeCombined}
+        \foreach \n/\t in {pPfFactorOneOpen/a,pPfFactorTwoOpen/b,
+            pPjFactorOneOpen/c,pPjFactorTwoOpen/d}
             \node[above] at (\n) {$\t$};
         \node[left] at ($(pPfOut)!0.5!(pPeLeft)$) {$f$};
         \node[right] at ($(pPjOut)!0.5!(pPeRight)$) {$j$};
-        \node[below] at (pProot) {$e$};
+        \node[below] at (pPeCombinedOpen) {$e$};
 
-        \TN@arrow[line width=0.7pt]{(-4.48,1.10) -- node[above left]
-            {$F^{abc}_{g}$} (-3.95,1.73)}
-        \TN@arrow[line width=0.7pt]{(-2.20,2.72) -- node[above]
-            {$F^{ahd}_{e}$} (-0.25,2.72)}
-        \TN@arrow[line width=0.7pt]{(1.80,1.78) -- node[above right]
-            {$F^{bcd}_{i}$} (4.15,1.08)}
-        \TN@arrow[line width=0.7pt]{(-3.95,-1.05) -- node[below left]
-            {$F^{fcd}_{e}$} (-1.02,-2.15)}
-        \TN@arrow[line width=0.7pt]{(1.02,-2.15) -- node[below right]
-            {$F^{abj}_{e}$} (3.95,-1.05)}
-    \end{tikzpicture}%
+        \TNMorphismArrow{pentagonOne}{(-4.48,1.10)}{(-3.95,1.73)}{F^{abc}_{g}}
+        \TNMorphismArrow{pentagonTwo}{(-2.20,2.72)}{(-0.25,2.72)}{F^{ahd}_{e}}
+        \TNMorphismArrow{pentagonThree}{(1.80,1.78)}{(4.15,1.08)}{F^{bcd}_{i}}
+        \TNMorphismArrow{pentagonFour}{(-3.95,-1.05)}{(-1.02,-2.15)}{F^{fcd}_{e}}
+        \TNMorphismArrow{pentagonFive}{(1.02,-2.15)}{(3.95,-1.05)}{F^{abj}_{e}}
+    \end{TNDiagram}%
 }
 
 % Local BNT fusion identity from CPSV16, eq. (Ualphabeta).  The left-hand
@@ -1483,42 +1379,30 @@
 % the outgoing factors.  The right-hand side records the weighted final-sector
 % direct sum without introducing an F-move.
 \newcommand{\TNMPDOBNTFusionIdentity}{%
-    \begin{tikzpicture}[tn picture, scale=0.92]
-        \TN@splitmap[minimum height=1.16cm]
-            {bfiU}{(-2.20,0)}{U_{\alpha,\beta}}
-        \TN@mposite{bfiA}{(-0.95,0.42)}{}
-        \TN@mposite{bfiB}{(-0.95,-0.42)}{}
-        \TN@mergemap[minimum height=1.16cm]
-            {bfiUd}{(0.30,0)}{U_{\alpha,\beta}^{\dagger}}
-        \TN@vconnectports{bfiUUp}{bfiAW}
-        \TN@vconnectports{bfiUDown}{bfiBW}
-        \TN@vconnectports{bfiAE}{bfiUdUp}
-        \TN@vconnectports{bfiBE}{bfiUdDown}
-        \TN@vopenport{bfiUMid}{-0.48,0}
-        \TN@vopenport{bfiUdMid}{0.48,0}
-        \TN@pconnect{bfiA}{south}{bfiB}{north}
-        \TN@pleg{bfiA}{north}{0,0.42}
-        \TN@pleg{bfiB}{south}{0,-0.42}
-        \node at (-0.68,0.68) {$M_\alpha$};
-        \node at (-0.68,-0.68) {$M_\beta$};
-        \node at (-1.17,1.06) {$i$};
-        \node at (-1.17,-1.06) {$j$};
-
-        \node at (1.42,0) {$=$};
-        \node at (2.32,0) {$\displaystyle\bigoplus_\gamma$};
-        \TN@factor[minimum width=1.08cm, minimum height=0.48cm, inner sep=1pt]
-            {bfiChi}{(3.65,0.55)}{\chi_{\alpha,\beta,\gamma}}
-        \TN@tensor{bfiG}{(3.65,-0.36)}
-        \TN@vleg{bfiChi}{west}{-0.48,0}
-        \TN@vleg{bfiChi}{east}{0.48,0}
-        \TN@vleg{bfiG}{west}{-0.48,0}
-        \TN@vleg{bfiG}{east}{0.48,0}
-        \TN@pleg{bfiG}{north}{0,0.42}
-        \TN@pleg{bfiG}{south}{0,-0.42}
-        \node[anchor=west] at (3.88,-0.66) {$M_\gamma$};
-        \node at (3.46,0.20) {$i$};
-        \node at (3.46,-0.92) {$j$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+            \TNSplitMap{bfiU}{(-3.65,0)}{U_{\alpha,\beta}}
+            \TNStackedMPOProduct{bfiProduct}{(-2.35,0)}{M_\alpha}{M_\beta}{}
+            \TNMergeMap{bfiUd}{(-1.05,0)}{U_{\alpha,\beta}^{\dagger}}
+            \TNConnectVirtual{bfiUFactorOne}{bfiProductUpperWest}
+            \TNConnectVirtual{bfiUFactorTwo}{bfiProductLowerWest}
+            \TNConnectVirtual{bfiProductUpperEast}{bfiUdFactorOne}
+            \TNConnectVirtual{bfiProductLowerEast}{bfiUdFactorTwo}
+            \TNOpenVirtualWest{bfiUCombined}
+            \TNOpenVirtualEast{bfiUdCombined}
+            \TNOpenPhysicalNorth{bfiProductUpperKet}
+            \TNOpenPhysicalSouth{bfiProductLowerBra}
+            \node[above] at (bfiProductUpperKetOpen) {$i$};
+            \node[below] at (bfiProductLowerBraOpen) {$j$};
+        \node at (0.45,0) {$=\displaystyle\bigoplus_\gamma$};
+            \TNWeightedMPOBlock{bfiBlock}{(2.30,0)}
+                {M_\gamma}{M_\gamma}{}{\chi_{\alpha,\beta,\gamma}}
+            \TNOpenVirtualWest{bfiBlockWeightW}
+            \TNOpenVirtualEast{bfiBlockWeightedEast}
+            \TNOpenVirtualWest{bfiBlockLowerWest}
+            \TNOpenVirtualEast{bfiBlockLowerEast}
+            \TNOpenPhysicalNorth{bfiBlockUpperKet}
+            \TNOpenPhysicalSouth{bfiBlockLowerBra}
+    \end{TNDiagram}%
 }
 
 % The two unweighted zipper directions and the resulting reconstruction of a
@@ -1527,239 +1411,115 @@
 % the present MPDO fusion family.  The final row uses U^\dagger U = 1 only;
 % it deliberately does not depict U U^\dagger = 1.
 \newcommand{\TNMPDOUnweightedZipperReconstruction}{%
-    \begin{tikzpicture}[tn picture, scale=0.95]
-        % U (M_alpha M_beta) = H U.
-        \node[anchor=east] at (-4.72,2.35)
-            {$U(M_\alpha M_\beta)=HU$};
-        \TN@splitmap[minimum height=1.10cm]{uzTopL}{(-3.78,2.35)}{U}
-        \TN@mposite{uzTopA}{(-2.48,2.72)}{}
-        \TN@mposite{uzTopB}{(-2.48,1.98)}{}
-        \TN@vopenport{uzTopLMid}{-0.42,0}
-        \TN@vconnectports{uzTopLUp}{uzTopAW}
-        \TN@vconnectports{uzTopLDown}{uzTopBW}
-        \TN@vopenport{uzTopAE}{0.42,0}
-        \TN@vopenport{uzTopBE}{0.42,0}
-        \TN@pconnect{uzTopA}{south}{uzTopB}{north}
-        \TN@pleg{uzTopA}{north}{0,0.34}
-        \TN@pleg{uzTopB}{south}{0,-0.34}
-        \node at (-2.18,2.72) {$M_\alpha$};
-        \node at (-2.18,1.98) {$M_\beta$};
-        \node at (-1.42,2.35) {$=$};
-        \TN@component[minimum width=0.72cm, minimum height=0.52cm, inner sep=1pt]
-            {uzTopH}{(-0.52,2.35)}{H}
-        \TN@splitmap[minimum height=1.10cm]{uzTopR}{(0.80,2.35)}{U}
-        \TN@vport{uzTopHW}{uzTopH}{west}
-        \TN@vport{uzTopHE}{uzTopH}{east}
-        \TN@vopenport{uzTopHW}{-0.42,0}
-        \TN@vconnectports{uzTopHE}{uzTopRMid}
-        \TN@vopenport{uzTopRUp}{0.56,0}
-        \TN@vopenport{uzTopRDown}{0.56,0}
-        \TN@pleg{uzTopH}{north}{0,0.34}
-        \TN@pleg{uzTopH}{south}{0,-0.34}
+    \begin{TNEquationRow}[compact]
+      \TNTerm{\TNSplitMap{uzOneU}{(-3.80,2.20)}{U_{\alpha,\beta}}
+            \TNStackedMPOProduct{uzOneP}{(-2.65,2.20)}{M_\alpha}{M_\beta}{}
+            \TNConnectVirtual{uzOneUFactorOne}{uzOnePUpperWest}
+            \TNConnectVirtual{uzOneUFactorTwo}{uzOnePLowerWest}
+            \TNOpenVirtualWest{uzOneUCombined}
+            \TNOpenVirtualEast{uzOnePUpperEast}
+            \TNOpenVirtualEast{uzOnePLowerEast}
+        \node at (-1.55,2.20) {$=$};
+        \TNMPOSite{uzOneH}{(-0.35,2.20)}{H_{\alpha,\beta}^{ij}}
+            \TNSplitMap{uzOneR}{(1.15,2.20)}{U_{\alpha,\beta}}
+            \TNConnectVirtual{uzOneHEast}{uzOneRCombined}
+            \TNOpenVirtualWest{uzOneHWest}
+            \TNOpenVirtualEast{uzOneRFactorOne}
+            \TNOpenVirtualEast{uzOneRFactorTwo}
 
-        % (M_alpha M_beta) U^dagger = U^dagger H.
-        \node[anchor=east] at (-4.72,0)
-            {$(M_\alpha M_\beta)U^\dagger=U^\dagger H$};
-        \TN@mposite{uzBotA}{(-3.78,0.37)}{}
-        \TN@mposite{uzBotB}{(-3.78,-0.37)}{}
-        \TN@vopenport{uzBotAW}{-0.42,0}
-        \TN@vopenport{uzBotBW}{-0.42,0}
-        \TN@pconnect{uzBotA}{south}{uzBotB}{north}
-        \TN@pleg{uzBotA}{north}{0,0.34}
-        \TN@pleg{uzBotB}{south}{0,-0.34}
-        \node at (-3.48,0.37) {$M_\alpha$};
-        \node at (-3.48,-0.37) {$M_\beta$};
-        \TN@mergemap[minimum height=1.10cm]{uzBotL}{(-2.48,0)}{U^\dagger}
-        \TN@vconnectports{uzBotAE}{uzBotLUp}
-        \TN@vconnectports{uzBotBE}{uzBotLDown}
-        \TN@vopenport{uzBotLMid}{0.42,0}
-        \node at (-1.42,0) {$=$};
-        \TN@mergemap[minimum height=1.10cm]{uzBotR}{(-0.52,0)}{U^\dagger}
-        \TN@component[minimum width=0.72cm, minimum height=0.52cm, inner sep=1pt]
-            {uzBotH}{(0.80,0)}{H}
-        \TN@vport{uzBotHW}{uzBotH}{west}
-        \TN@vport{uzBotHE}{uzBotH}{east}
-        \TN@vopenport{uzBotRUp}{-0.56,0}
-        \TN@vopenport{uzBotRDown}{-0.56,0}
-        \TN@vconnectports{uzBotRMid}{uzBotHW}
-        \TN@vopenport{uzBotHE}{0.42,0}
-        \TN@pleg{uzBotH}{north}{0,0.34}
-        \TN@pleg{uzBotH}{south}{0,-0.34}
+        \TNStackedMPOProduct{uzTwoP}{(-3.80,0)}{M_\alpha}{M_\beta}{}
+            \TNMergeMap{uzTwoU}{(-2.65,0)}{U_{\alpha,\beta}^{\dagger}}
+            \TNConnectVirtual{uzTwoPUpperEast}{uzTwoUFactorOne}
+            \TNConnectVirtual{uzTwoPLowerEast}{uzTwoUFactorTwo}
+            \TNOpenVirtualWest{uzTwoPUpperWest}
+            \TNOpenVirtualWest{uzTwoPLowerWest}
+            \TNOpenVirtualEast{uzTwoUCombined}
+        \node at (-1.55,0) {$=$};
+        \TNMergeMap{uzTwoL}{(-0.35,0)}{U_{\alpha,\beta}^{\dagger}}
+            \TNMPOSite{uzTwoH}{(1.15,0)}{H_{\alpha,\beta}^{ij}}
+            \TNConnectVirtual{uzTwoLCombined}{uzTwoHWest}
+            \TNOpenVirtualWest{uzTwoLFactorOne}
+            \TNOpenVirtualWest{uzTwoLFactorTwo}
+            \TNOpenVirtualEast{uzTwoHEast}
 
-        % Local reconstruction M_alpha M_beta = U^dagger H U.
-        \node[anchor=east] at (-4.72,-2.42)
-            {$M_\alpha M_\beta=U^\dagger H U$};
-        \TN@mposite{uzRecA}{(-3.78,-2.05)}{}
-        \TN@mposite{uzRecB}{(-3.78,-2.79)}{}
-        \TN@vopenport{uzRecAW}{-0.42,0}
-        \TN@vopenport{uzRecBW}{-0.42,0}
-        \TN@vopenport{uzRecAE}{0.42,0}
-        \TN@vopenport{uzRecBE}{0.42,0}
-        \TN@pconnect{uzRecA}{south}{uzRecB}{north}
-        \TN@pleg{uzRecA}{north}{0,0.34}
-        \TN@pleg{uzRecB}{south}{0,-0.34}
-        \node at (-3.48,-2.05) {$M_\alpha$};
-        \node at (-3.48,-2.79) {$M_\beta$};
-        \node at (-2.68,-2.42) {$=$};
-        \TN@mergemap[minimum height=1.10cm]{uzRecUd}{(-1.72,-2.42)}{U^\dagger}
-        \TN@component[minimum width=0.72cm, minimum height=0.52cm, inner sep=1pt]
-            {uzRecH}{(-0.40,-2.42)}{H}
-        \TN@splitmap[minimum height=1.10cm]{uzRecU}{(0.92,-2.42)}{U}
-        \TN@vport{uzRecHW}{uzRecH}{west}
-        \TN@vport{uzRecHE}{uzRecH}{east}
-        \TN@vopenport{uzRecUdUp}{-0.52,0}
-        \TN@vopenport{uzRecUdDown}{-0.52,0}
-        \TN@vconnectports{uzRecUdMid}{uzRecHW}
-        \TN@vconnectports{uzRecHE}{uzRecUMid}
-        \TN@vopenport{uzRecUUp}{0.52,0}
-        \TN@vopenport{uzRecUDown}{0.52,0}
-        \TN@pleg{uzRecH}{north}{0,0.34}
-        \TN@pleg{uzRecH}{south}{0,-0.34}
-        \node[anchor=west] at (-1.72,-3.48)
-            {local reconstruction; not total-fusion completeness};
-    \end{tikzpicture}%
+        \TNStackedMPOProduct{uzThreeP}{(-3.80,-2.20)}{M_\alpha}{M_\beta}{}
+            \TNOpenVirtualWest{uzThreePUpperWest}
+            \TNOpenVirtualWest{uzThreePLowerWest}
+            \TNOpenVirtualEast{uzThreePUpperEast}
+            \TNOpenVirtualEast{uzThreePLowerEast}
+        \node at (-2.65,-2.20) {$=$};
+        \TNMergeMap{uzThreeL}{(-1.45,-2.20)}{U_{\alpha,\beta}^{\dagger}}
+            \TNMPOSite{uzThreeH}{(0,-2.20)}{H_{\alpha,\beta}^{ij}}
+            \TNSplitMap{uzThreeR}{(1.45,-2.20)}{U_{\alpha,\beta}}
+            \TNConnectVirtual{uzThreeLCombined}{uzThreeHWest}
+            \TNConnectVirtual{uzThreeHEast}{uzThreeRCombined}
+            \TNOpenVirtualWest{uzThreeLFactorOne}
+            \TNOpenVirtualWest{uzThreeLFactorTwo}
+            \TNOpenVirtualEast{uzThreeRFactorOne}
+            \TNOpenVirtualEast{uzThreeRFactorTwo}}
+    \end{TNEquationRow}%
 }
 
 % Closing an L-site chain of the local BNT fusion identity.  On the right the
 % multiplicity loop and the M_gamma loop are disjoint, so their traces factor.
 \newcommand{\TNMPDOFusionTracePower}{%
-    \begin{tikzpicture}[tn picture, scale=0.82]
-        \foreach \x/\s in {0/L,1.10/M,3.20/R} {
-            \TN@tensor{ftpA\s}{(\x,0.52)}
-            \TN@tensor{ftpB\s}{(\x,-0.52)}
-            \TN@pconnect{ftpA\s}{south}{ftpB\s}{north}
-        }
-        \TN@vconnect{ftpAL}{east}{ftpAM}{west}
-        \TN@vleg{ftpAM}{east}{0.52,0}
-        \TN@vport{ftpARW}{ftpAR}{west}
-        \TN@vopenport{ftpARW}{-0.52,0}
-        \TN@vconnect{ftpBL}{east}{ftpBM}{west}
-        \TN@vleg{ftpBM}{east}{0.52,0}
-        \TN@vport{ftpBRW}{ftpBR}{west}
-        \TN@vopenport{ftpBRW}{-0.52,0}
-        \node at (2.15,0.52) {$\cdots$};
-        \node at (2.15,-0.52) {$\cdots$};
-        \TN@vtracepath{(ftpAL.west) -- ++(-0.40,0) -- ++(0,0.86)
-            -- ($(ftpAR.east)+(0.40,0.86)$) -- ($(ftpAR.east)+(0.40,0)$)
-            -- (ftpAR.east)}
-        \TN@vtracepath{(ftpBL.west) -- ++(-0.40,0) -- ++(0,-0.86)
-            -- ($(ftpBR.east)+(0.40,-0.86)$) -- ($(ftpBR.east)+(0.40,0)$)
-            -- (ftpBR.east)}
-        \foreach \s in {L,M,R} {
-            \TN@pleg{ftpA\s}{north}{0,0.34}
-            \TN@pleg{ftpB\s}{south}{0,-0.34}
-        }
-        \node[anchor=east] at (-0.60,0.52) {$M_\alpha$};
-        \node[anchor=east] at (-0.60,-0.52) {$M_\beta$};
-        \node at (4.20,0) {$=$};
-        \node at (4.82,0) {$\displaystyle\sum_\gamma$};
-
-        \foreach \x/\s in {5.65/L,6.75/M,8.85/R} {
-            \TN@insertion{ftpC\s}{(\x,0.52)}
-            \TN@tensor{ftpG\s}{(\x,-0.52)}
-        }
-        \TN@vconnect{ftpCL}{east}{ftpCM}{west}
-        \TN@vleg{ftpCM}{east}{0.52,0}
-        \TN@vport{ftpCRW}{ftpCR}{west}
-        \TN@vopenport{ftpCRW}{-0.52,0}
-        \TN@vconnect{ftpGL}{east}{ftpGM}{west}
-        \TN@vleg{ftpGM}{east}{0.52,0}
-        \TN@vport{ftpGRW}{ftpGR}{west}
-        \TN@vopenport{ftpGRW}{-0.52,0}
-        \node at (7.80,0.52) {$\cdots$};
-        \node at (7.80,-0.52) {$\cdots$};
-        \TN@vtracepath{(ftpCL.west) -- ++(-0.40,0) -- ++(0,0.86)
-            -- ($(ftpCR.east)+(0.40,0.86)$) -- ($(ftpCR.east)+(0.40,0)$)
-            -- (ftpCR.east)}
-        \TN@vtracepath{(ftpGL.west) -- ++(-0.40,0) -- ++(0,-0.86)
-            -- ($(ftpGR.east)+(0.40,-0.86)$) -- ($(ftpGR.east)+(0.40,0)$)
-            -- (ftpGR.east)}
-        \foreach \s in {L,M,R} {
-            \TN@pleg{ftpG\s}{north}{0,0.34}
-            \TN@pleg{ftpG\s}{south}{0,-0.34}
-        }
-        \node[anchor=east] at (5.05,0.52) {$\chi_{\alpha,\beta,\gamma}$};
-        \node[anchor=east] at (5.05,-0.52) {$M_\gamma$};
-        \node at (2.15,-1.80) {$L\text{ sites}$};
-        \node at (7.80,-1.80) {$L\text{ sites}$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+            \TNStackedMPOProduct{ftpLeftA}{(-5.20,0)}{M_\alpha}{M_\beta}{}
+            \TNStackedMPOProduct{ftpLeftB}{(-4.00,0)}{M_\alpha}{M_\beta}{}
+            \TNStackedMPOProduct{ftpLeftC}{(-2.80,0)}{M_\alpha}{M_\beta}{}
+            \TNConnectVirtual{ftpLeftAUpperEast}{ftpLeftBUpperWest}
+            \TNConnectVirtual{ftpLeftBUpperEast}{ftpLeftCUpperWest}
+            \TNConnectVirtual{ftpLeftALowerEast}{ftpLeftBLowerWest}
+            \TNConnectVirtual{ftpLeftBLowerEast}{ftpLeftCLowerWest}
+            \TNTraceVirtualAbove{ftpLeftAUpperWest}{ftpLeftCUpperEast}
+            \TNTraceVirtualBelow{ftpLeftALowerWest}{ftpLeftCLowerEast}
+            \node at (-4.00,-1.45) {$L\text{ sites}$};
+        \node at (-1.05,0) {$=\displaystyle\sum_\gamma$};
+            \TNStackedMPOProduct{ftpRightA}{(0.80,0)}
+                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{}
+            \TNStackedMPOProduct{ftpRightB}{(2.00,0)}
+                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{}
+            \TNStackedMPOProduct{ftpRightC}{(3.20,0)}
+                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{}
+            \TNConnectVirtual{ftpRightAUpperEast}{ftpRightBUpperWest}
+            \TNConnectVirtual{ftpRightBUpperEast}{ftpRightCUpperWest}
+            \TNConnectVirtual{ftpRightALowerEast}{ftpRightBLowerWest}
+            \TNConnectVirtual{ftpRightBLowerEast}{ftpRightCLowerWest}
+            \TNTraceVirtualAbove{ftpRightAUpperWest}{ftpRightCUpperEast}
+            \TNTraceVirtualBelow{ftpRightALowerWest}{ftpRightCLowerEast}
+            \node at (2.00,-1.45) {$L\text{ sites}$};
+    \end{TNDiagram}%
 }
 
 % Recursive contraction for the structure operator Q in CPSV16, lines
 % 999--1008.  Each X has the four ordered indices k, alpha, beta, gamma;
 % the lower wires retain earlier labels while the recursion proceeds.
 \newcommand{\TNMPDORecursiveStructureOperator}{%
-    \begin{tikzpicture}[tn picture, scale=0.82]
-        \path[use as bounding box] (-5.75,-1.90) rectangle (5.55,1.48);
-        \node at (-5.34,-0.08) {$Q=$};
-
-        % First visible fusion factor.
-        \TN@map[minimum width=0.76cm, minimum height=0.66cm, inner sep=1pt]
-            {rqXone}{(-4.58,-0.44)}{X}
-        \foreach \x in {-3.92,-3.68,-3.44} {
-            \TN@vpath{(\x,-1.28) -- (\x,1.30)}
-        }
-        \foreach \y/\x in {-0.18/-3.92,-0.34/-3.68,-0.50/-3.44} {
-            \TN@vpath{(rqXone.east |- 0,\y) -- (\x,\y)}
-            \TN@anonymousjunction{(\x,\y)}
-        }
-
-        % Second factor; the lowest wire from the first factor is retained.
-        \TN@map[minimum width=0.76cm, minimum height=0.66cm, inner sep=1pt]
-            {rqXtwo}{(-2.76,-0.02)}{X}
-        \foreach \x in {-2.10,-1.86,-1.62} {
-            \TN@vpath{(\x,-1.28) -- (\x,1.30)}
-        }
-        \foreach \y/\x in {0.24/-2.10,0.08/-1.86,-0.08/-1.62} {
-            \TN@vpath{(rqXtwo.east |- 0,\y) -- (\x,\y)}
-            \TN@anonymousjunction{(\x,\y)}
-        }
-
-        % Third factor; each preceding lower wire ends on the middle vertical
-        % of the next fusion bundle.
-        \TN@map[minimum width=0.76cm, minimum height=0.66cm, inner sep=1pt]
-            {rqXthree}{(-0.94,0.40)}{X}
-        \foreach \x in {-0.28,-0.04,0.20} {
-            \TN@vpath{(\x,-1.28) -- (\x,1.30)}
-        }
-        \foreach \y/\x in {0.66/-0.28,0.50/-0.04,0.34/0.20} {
-            \TN@vpath{(rqXthree.east |- 0,\y) -- (\x,\y)}
-            \TN@anonymousjunction{(\x,\y)}
-        }
-        \TN@vpath{(rqXone.east |- 0,-0.66) -- (-1.86,-0.66)}
-        \TN@anonymousjunction{(-1.86,-0.66)}
-        \TN@vpath{(rqXtwo.east |- 0,-0.24) -- (-0.04,-0.24)}
-        \TN@anonymousjunction{(-0.04,-0.24)}
-        \TN@vpath{(rqXthree.east |- 0,0.10) -- (1.02,0.10)}
-
-        \node at (1.30,0.10) {$\cdots$};
-
-        % Final visible factor and the terminal traced tensor.
-        \TN@map[minimum width=0.76cm, minimum height=0.66cm, inner sep=1pt]{rqXlast}{(2.40,0.48)}{X}
-        \foreach \x in {3.06,3.30,3.54} {
-            \TN@vpath{(\x,-1.28) -- (\x,1.30)}
-        }
-        \foreach \y/\x in {0.74/3.06,0.58/3.30,0.42/3.54} {
-            \TN@vpath{(rqXlast.east |- 0,\y) -- (\x,\y)}
-            \TN@anonymousjunction{(\x,\y)}
-        }
-        \TN@vpath{(rqXlast.east |- 0,0.26) -- (3.84,0.26)}
-        \TN@vpath{(3.84,-1.28) -- (3.84,1.30)}
-        \TN@anonymousjunction{(3.84,0.26)}
-        \TN@vpath{(1.58,0.10) -- (3.30,0.10)}
-        \TN@anonymousjunction{(3.30,0.10)}
-        \TN@anonymousjunction{(3.84,-0.66)}
-
-        \TN@component[minimum width=0.82cm, minimum height=0.68cm, inner sep=1pt]
-            {rqM}{(4.72,-0.66)}{M_\gamma}
-        \TN@vpath{(3.84,-0.66) -- (rqM.west)}
-        \TN@vleg{rqM}{north}{0,0.72}
-        \TN@vleg{rqM}{south}{0,-0.34}
-        \TN@vtracepath{(rqM.south west) .. controls +(0,-0.38) and +(0,-0.38)
-            .. (rqM.south east)}
-        \node[below] at (rqM.south |- 0,-1.58)
-            {$\operatorname{tr}(M_\gamma)$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \path[use as bounding box] (-5.75,-1.55) rectangle (5.15,1.55);
+        \node at (-5.25,0) {$Q=$};
+        \TNMPOSite{rqOne}{(-4.15,0)}{X}
+        \TNMPOSite{rqTwo}{(-2.70,0)}{X}
+        \TNMPOSite{rqThree}{(-1.25,0)}{X}
+        \TNConnectVirtual{rqOneEast}{rqTwoWest}
+        \TNConnectVirtual{rqTwoEast}{rqThreeWest}
+        \TNOpenVirtualWest{rqOneWest}
+        \TNOpenPhysicalNorth{rqOneKet}
+        \TNOpenPhysicalSouth{rqOneBra}
+        \TNOpenPhysicalNorth{rqTwoKet}
+        \TNOpenPhysicalSouth{rqTwoBra}
+        \TNOpenPhysicalNorth{rqThreeKet}
+        \TNOpenPhysicalSouth{rqThreeBra}
+        \node at (0,0) {$\cdots$};
+        \TNMPOSite{rqLast}{(1.25,0)}{X}
+        \TNCompactTraceCell{rqTrace}{(3.35,0)}{M_\gamma}{1}{}
+        \TNConnectVirtual{rqLastEast}{rqTraceInsertionW}
+        \TNOpenPhysicalNorth{rqLastKet}
+        \TNOpenPhysicalSouth{rqLastBra}
+        \node[above] at (rqTwoKetOpen) {$k$};
+        \node[below] at (rqTwoBraOpen) {$\alpha,\beta,\gamma$};
+        \node[below] at (rqTraceCentre |- 0,-1.25) {$\tr(M_\gamma)$};
+    \end{TNDiagram}%
 }
 
 % Fusion isometry of the renormalization fixed-point characterization: two
@@ -1771,34 +1531,26 @@
 % physical site, while the two highlighted rank-one projectors act on the
 % separate bonds shared by adjacent sites.
 \newcommand{\TNAppendixBAdjacentBondProjectors}{%
-    \begin{tikzpicture}[tn picture, scale=0.92]
-        \foreach \x/\name in {0/rfpUzero,2.20/rfpUone,4.40/rfpUtwo} {
-            \TN@map[minimum width=0.72cm, minimum height=0.58cm]{\name}{(\x,0.92)}{U}
-            \TN@vsouthport{\name Left}{\name}{0.28}
-            \TN@vsouthport{\name Right}{\name}{0.72}
-            \TN@pleg{\name}{north}{0,0.42}
-        }
-        \TN@state[minimum width=0.68cm, minimum height=0.50cm]{rfpPhiZero}{(1.10,0)}{\varphi}
-        \TN@state[minimum width=0.68cm, minimum height=0.50cm]{rfpPhiOne}{(3.30,0)}{\varphi}
-        \TN@vport{rfpPhiZeroW}{rfpPhiZero}{west}
-        \TN@vport{rfpPhiZeroE}{rfpPhiZero}{east}
-        \TN@vport{rfpPhiOneW}{rfpPhiOne}{west}
-        \TN@vport{rfpPhiOneE}{rfpPhiOne}{east}
-        \TN@vpath{(rfpUzeroLeft) -- ++(0,-0.42) -- (rfpPhiZeroW)}
-        \TN@vpath{(rfpPhiZeroE) -- ++(0.36,0) -- (rfpUoneLeft)}
-        \TN@vpath{(rfpUoneRight) -- ++(0,-0.42) -- (rfpPhiOneW)}
-        \TN@vpath{(rfpPhiOneE) -- ++(0.36,0) -- (rfpUtwoRight)}
-        \TN@vpath{(rfpUzeroRight) -- ++(0,-0.80) -- ++(-0.76,0)}
-        \TN@vpath{(rfpUtwoLeft) -- ++(0,-0.80) -- ++(0.76,0)}
-        \TN@selectedpath[rounded corners=3pt, line width=0.4pt]{
-            ($(rfpPhiZero.south west)+(-0.07,-0.07)$) rectangle
-            ($(rfpPhiZero.north east)+(0.07,0.07)$)}
-        \TN@selectedpath[rounded corners=3pt, line width=0.4pt]{
-            ($(rfpPhiOne.south west)+(-0.07,-0.07)$) rectangle
-            ($(rfpPhiOne.north east)+(0.07,0.07)$)}
-        \node[red] at (1.10,-0.55) {$P_{01}$};
-        \node[red] at (3.30,-0.55) {$P_{12}$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNFusionMap{rfpUzero}{(-2.40,0.85)}{U_0}
+        \TNFusionMap{rfpUone}{(0,0.85)}{U_1}
+        \TNFusionMap{rfpUtwo}{(2.40,0.85)}{U_2}
+        \TNMPSSite{rfpPhiZero}{(-1.20,-0.45)}{\varphi_{01}}
+        \TNMPSSite{rfpPhiOne}{(1.20,-0.45)}{\varphi_{12}}
+        \TNConnectVirtualVH{rfpUzeroFactorTwo}{rfpPhiZeroWest}
+        \TNConnectVirtualVH{rfpUoneFactorOne}{rfpPhiZeroEast}
+        \TNConnectVirtualVH{rfpUoneFactorTwo}{rfpPhiOneWest}
+        \TNConnectVirtualVH{rfpUtwoFactorOne}{rfpPhiOneEast}
+        \TNOpenVirtualNorth{rfpUzeroFactorOne}
+        \TNOpenVirtualNorth{rfpUtwoFactorTwo}
+        \TNOpenVirtualSouth{rfpUzeroCombined}
+        \TNOpenVirtualSouth{rfpUoneCombined}
+        \TNOpenVirtualSouth{rfpUtwoCombined}
+        \node[tn grouping region, fit=(rfpPhiZero)] {};
+        \node[tn grouping region, fit=(rfpPhiOne)] {};
+        \node[red, below] at (rfpPhiZero) {$P_{01}$};
+        \node[red, below] at (rfpPhiOne) {$P_{12}$};
+    \end{TNDiagram}%
 }
 
 % Isometric transport of the two virtual bond projectors to the adjacent
@@ -1806,67 +1558,59 @@
 % source's three U tensors and diagonal bond vectors; the upper red brackets
 % record the two overlapping physical supports.
 \newcommand{\TNAppendixBPhysicalSupportTransport}{%
-    \begin{tikzpicture}[tn picture, scale=0.90]
-        \foreach \x/\name in {0/rfpTzero,2.20/rfpTone,4.40/rfpTtwo} {
-            \TN@map[minimum width=0.72cm, minimum height=0.58cm]{\name}{(\x,0.72)}{U}
-            \TN@vsouthport{\name Left}{\name}{0.28}
-            \TN@vsouthport{\name Right}{\name}{0.72}
-            \TN@pleg{\name}{north}{0,0.52}
-            \TN@anonymousjunction{($(\name.north)+(0,0.52)$)}
-        }
-        \TN@state[minimum width=0.68cm, minimum height=0.50cm]{rfpTPhiZero}{(1.10,-0.12)}{\varphi}
-        \TN@state[minimum width=0.68cm, minimum height=0.50cm]{rfpTPhiOne}{(3.30,-0.12)}{\varphi}
-        \TN@vport{rfpTPhiZeroW}{rfpTPhiZero}{west}
-        \TN@vport{rfpTPhiZeroE}{rfpTPhiZero}{east}
-        \TN@vport{rfpTPhiOneW}{rfpTPhiOne}{west}
-        \TN@vport{rfpTPhiOneE}{rfpTPhiOne}{east}
-        \TN@vpath{(rfpTzeroLeft) -- ++(0,-0.42) -- (rfpTPhiZeroW)}
-        \TN@vpath{(rfpTPhiZeroE) -- ++(0.36,0) -- (rfpToneLeft)}
-        \TN@vpath{(rfpToneRight) -- ++(0,-0.42) -- (rfpTPhiOneW)}
-        \TN@vpath{(rfpTPhiOneE) -- ++(0.36,0) -- (rfpTtwoRight)}
-        \TN@vpath{(rfpTzeroRight) -- ++(0,-0.80) -- ++(-0.76,0)}
-        \TN@vpath{(rfpTtwoLeft) -- ++(0,-0.80) -- ++(0.76,0)}
-        \TN@selectedpath[rounded corners=4pt]{(-0.34,1.44) rectangle (2.54,1.74)}
-        \TN@selectedpath[rounded corners=4pt]{(1.86,1.84) rectangle (4.74,2.14)}
-        \node[red, anchor=east] at (-0.40,1.59) {$(P_2)_{01}$};
-        \node[red, anchor=west] at (4.80,1.99) {$(P_2)_{12}$};
-        \TN@selectedpath[rounded corners=3pt, line width=0.4pt]{
-            ($(rfpTPhiZero.south west)+(-0.07,-0.07)$) rectangle
-            ($(rfpTPhiZero.north east)+(0.07,0.07)$)}
-        \TN@selectedpath[rounded corners=3pt, line width=0.4pt]{
-            ($(rfpTPhiOne.south west)+(-0.07,-0.07)$) rectangle
-            ($(rfpTPhiOne.north east)+(0.07,0.07)$)}
-        \node[red] at (1.10,-0.68) {$P_{01}$};
-        \node[red] at (3.30,-0.68) {$P_{12}$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNFusionMap{rfpTzero}{(-2.40,0.65)}{U_0}
+        \TNFusionMap{rfpTone}{(0,0.65)}{U_1}
+        \TNFusionMap{rfpTtwo}{(2.40,0.65)}{U_2}
+        \TNMPSSite{rfpTPhiZero}{(-1.20,-0.65)}{\varphi_{01}}
+        \TNMPSSite{rfpTPhiOne}{(1.20,-0.65)}{\varphi_{12}}
+        \TNConnectVirtualVH{rfpTzeroFactorTwo}{rfpTPhiZeroWest}
+        \TNConnectVirtualVH{rfpToneFactorOne}{rfpTPhiZeroEast}
+        \TNConnectVirtualVH{rfpToneFactorTwo}{rfpTPhiOneWest}
+        \TNConnectVirtualVH{rfpTtwoFactorOne}{rfpTPhiOneEast}
+        \TNOpenVirtualSouth{rfpTzeroCombined}
+        \TNOpenVirtualSouth{rfpToneCombined}
+        \TNOpenVirtualSouth{rfpTtwoCombined}
+        \node[tn grouping region, fit=(rfpTzero)(rfpTone),
+            label=above:{$(P_2)_{01}$}] {};
+        \node[tn grouping region, fit=(rfpTone)(rfpTtwo),
+            label=above:{$(P_2)_{12}$}] {};
+        \node[red, below] at (rfpTPhiZero) {$P_{01}$};
+        \node[red, below] at (rfpTPhiOne) {$P_{12}$};
+    \end{TNDiagram}%
 }
 
 % Cyclic transport of the local three-site Appendix B commutator.  The left
 % panel shows one three-site window inside an N-site ring; the right panel is
 % the source AXB window with its two overlapping length-two interactions.
 \newcommand{\TNAppendixBChainTransport}{%
-    \begin{tikzpicture}[tn picture, scale=0.92]
-        \foreach \a/\name in {150/ctA,90/ctX,30/ctB,-30/ctC,-90/ctD,-150/ctE} {
-            \TN@tensor[inner sep=1.6pt]{\name}{({1.34*cos(\a)},{1.02*sin(\a)})}
-        }
-        \TN@vpath{(ctA) -- (ctX) -- (ctB) -- (ctC) -- (ctD) -- (ctE) -- (ctA)}
-        \TN@selectedpath[line width=2.2pt]{(ctA) -- (ctX)}
-        \TN@secondarypath[line width=2.2pt]{(ctX) -- (ctB)}
-        \node[red, anchor=east] at ($(ctA)+(-0.34,0.18)$) {$h_i$};
-        \node[blue, anchor=west] at ($(ctB)+(0.34,0.18)$) {$h_{i+1}$};
-        \node at (0,-1.46) {$N>2$};
-        \TN@arrow[line width=0.7pt]{(1.85,0) -- (2.75,0)
-            node[midway, above] {$R_{i,\tau}^{(3)}$}}
-        \foreach \x/\name/\lab in {3.35/ctLA/A,4.55/ctLX/X,5.75/ctLB/B} {
-            \TN@tensor[inner sep=1.6pt]{\name}{(\x,0)}
-            \node at (\x,0.38) {$\lab$};
-        }
-        \TN@vpath{(ctLA) -- (ctLX) -- (ctLB)}
-        \TN@selectedpath[line width=1.0pt]{($(ctLA)+(0,-0.30)$) --
-            node[below] {$h_0^{(3)}$} ($(ctLX)+(0,-0.30)$)}
-        \TN@secondarypath[line width=1.0pt]{($(ctLX)+(0,-0.78)$) --
-            node[below] {$h_1^{(3)}$} ($(ctLB)+(0,-0.78)$)}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNMPSSite{ctA}{(-2.20,0)}{A}
+        \TNMPSSite{ctX}{(-1.10,1.15)}{X}
+        \TNMPSSite{ctB}{(0.25,1.15)}{B}
+        \TNMPSSite{ctC}{(1.35,0)}{}
+        \TNMPSSite{ctD}{(0.25,-1.15)}{}
+        \TNMPSSite{ctE}{(-1.10,-1.15)}{}
+        \TNConnectVirtual{ctAEast}{ctXWest}
+        \TNConnectVirtual{ctXEast}{ctBWest}
+        \TNConnectVirtual{ctBEast}{ctCWest}
+        \TNConnectVirtual{ctCEast}{ctDWest}
+        \TNConnectVirtual{ctDEast}{ctEWest}
+        \TNConnectVirtual{ctEEast}{ctAWest}
+        \node[red, above left] at (ctX) {$h_i$};
+        \node[blue, above right] at (ctX) {$h_{i+1}$};
+        \node at (-0.45,-1.75) {$N>2$};
+        \TNMorphismArrow{ctTransport}{(2.00,0)}{(3.15,0)}{R_{i,\tau}^{(3)}}
+        \TNMPSSite{ctLA}{(3.80,0)}{A}
+        \TNMPSSite{ctLX}{(5.20,0)}{X}
+        \TNMPSSite{ctLB}{(6.60,0)}{B}
+        \TNConnectVirtual{ctLAEast}{ctLXWest}
+        \TNConnectVirtual{ctLXEast}{ctLBWest}
+        \TNOpenVirtualWest{ctLAWest}
+        \TNOpenVirtualEast{ctLBEast}
+        \node[red, below] at ($(ctLA)!0.5!(ctLX)$) {$h_0^{(3)}$};
+        \node[blue, below] at ($(ctLX)!0.5!(ctLB)$) {$h_1^{(3)}$};
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNRFPKrausIsometry}{%

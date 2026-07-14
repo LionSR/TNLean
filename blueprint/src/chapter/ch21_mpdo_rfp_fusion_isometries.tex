@@ -264,19 +264,15 @@ them.
     Definition~\ref{def:mpdo_bnt_label_idempotent_coefficient_form}.
 \end{definition}
 
-\begin{figure}[ht]
+The following compact display is the tensor identity in
+\cite[Theorem~4.14(iii), equation~(89), lines~986--991]
+{Cirac2016MPDO_arXiv}.  Its arrangement follows the physical isometry and
+direct-sum decomposition in
+\cite[Proposition~4.13, lines~943--959]{Cirac2016MPDO_arXiv}.
+\begin{center}
     \centering
     \TNMPDOBNTFusionIdentity
-    \caption{The local fusion isometry: the two vertically concatenated basis
-        tensors are conjugated by $U_{\alpha,\beta}$ into the weighted direct
-        sum $\bigoplus_\gamma\chi_{\alpha,\beta,\gamma}\otimes M_\gamma$.
-        This is precisely the tensor identity in
-        \cite[Theorem~4.14(iii), equation~(89), lines~986--991]
-        {Cirac2016MPDO_arXiv}; its graphical arrangement follows the physical
-        isometry and direct-sum picture of
-        \cite[Proposition~4.13, lines~943--959]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_bnt_fusion_identity}
-\end{figure}
+\end{center}
 
 \begin{theorem}[Weighted zipper identities]%
     \label{thm:mpdo_bnt_weighted_zipper}
@@ -443,25 +439,21 @@ them.
     $U_{\alpha,\beta}^\dagger$ on the appropriate side.
 \end{proof}
 
-\begin{figure}[ht]
+The three rows below are, respectively, the two unweighted zipper identities
+and their local reconstruction consequence.  The symbol
+$H$ denotes $H_{\alpha,\beta}^{ij}$, and the open physical legs carry the
+indices $i,j$.  The reconstruction uses only
+$U_{\alpha,\beta}^{\dagger}U_{\alpha,\beta}=1$; it does not assert
+$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, surjectivity, or completeness
+of the total fusion space.  The zipper orientation is that of
+\cite[Section~3, Equations~(19)--(21)]{Bultinck2017Anyons}; the MPDO identity
+is \cite[Theorem~4.14(iii), lines~986--991]{Cirac2016MPDO_arXiv}, with identity
+weights in the length-independent case at
+\cite[line~1010]{Cirac2016MPDO_arXiv}.
+\begin{center}
     \centering
     \TNMPDOUnweightedZipperReconstruction
-    \caption{The two unweighted zipper directions and their local
-        reconstruction consequence. Here
-        $H=H_{\alpha,\beta}^{ij}$ and the physical indices are carried by the
-        vertical legs. The final row uses only
-        $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ to recover the product
-        letter. It does not assert
-        $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, surjectivity of the
-        fusion map, total-fusion completeness, or invertibility of a
-        fixed-final comparison. The layout follows the zipper figures of
-        \cite[Section~3, Equations~(19)--(21)]{Bultinck2017Anyons}; in the
-        MPDO specialization the fusion identity is
-        \cite[Theorem~4.14(iii), lines~986--991]{Cirac2016MPDO_arXiv}, and the
-        identity weights follow from the length-independent case at
-        \cite[line~1010]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_unweighted_zipper_reconstruction}
-\end{figure}
+\end{center}
 
 \begin{definition}[Operator family of a fusion-isometry family]%
     \label{def:mpdo_bnt_fusion_operator_family}
