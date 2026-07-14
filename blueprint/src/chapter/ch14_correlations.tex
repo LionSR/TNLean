@@ -423,7 +423,8 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{definition}[BNT zero correlation length]%
     \label{def:source_bnt_zcl}
-    \notready
+    \lean{MPSTensor.IsPhysicalBNTZCL}
+    \leanok
     \uses{def:bnt_cpsv, def:source_physical_cid,
         def:is_bnt_locally_orthogonal}
     A BNT family has zero correlation length when the associated matrix-product
@@ -431,6 +432,20 @@ and rates for the single-tensor transfer map $\E_A$.
     regions and the BNT components are locally orthogonal.  This is
     \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{lemma}[Source BNT zero correlation length implies its positive-gap form]%
+    \label{lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
+    \lean{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}
+    \leanok
+    \uses{def:source_bnt_zcl, def:is_positive_gap_bnt_zcl}
+    If a BNT family has zero correlation length for all disjoint physical
+    regions, then it has positive-gap BNT zero correlation length.
+\end{lemma}
+\begin{proof}\leanok
+    Restrict the physical distance-independence condition to configurations in
+    which both complementary gaps are positive. The BNT relation and local
+    orthogonality are unchanged.
+\end{proof}
 
 \begin{theorem}[Direct-sum RFP implies positive-gap BNT zero correlation length]%
     \label{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
@@ -1230,16 +1245,6 @@ and rates for the single-tensor transfer map $\E_A$.
     \]
 \end{definition}
 
-\begin{definition}[Physical correlations independent of distance]%
-    \label{def:source_physical_cid}
-    \notready
-    \uses{def:transfer_map}
-    For every pair of observables supported on disjoint physical regions,
-    translating either observable without crossing the other leaves their
-    expectation unchanged.  This includes adjacent regions and is
-    \cite[Definition~3.3]{Cirac2016MPDO_arXiv}.
-\end{definition}
-
 \begin{definition}[Physical observable transfer]
     \label{def:physical_observable_transfer}
     \lean{MPSTensor.physicalObservableTransfer}
@@ -1273,6 +1278,28 @@ and rates for the single-tensor transfer map $\E_A$.
     \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{definition}[Physical correlations independent of distance]%
+    \label{def:source_physical_cid}
+    \lean{MPSTensor.IsPhysicalCID}
+    \leanok
+    \uses{def:physical_two_point_expectation}
+    Let $O_1,O_2$ act on two disjoint contiguous regions of positive lengths
+    $L_1,L_2\geq1$ in a periodic chain, with complementary gap lengths
+    $n_1,n_2\geq0$. Physical correlations are independent of distance when, for
+    every $m_1,m_2\geq0$ satisfying
+    $n_1+n_2=m_1+m_2$, one has
+    \[
+      \operatorname{Tr}_{\MN{D}}\!\left(
+        \E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
+      =
+      \operatorname{Tr}_{\MN{D}}\!\left(
+        \E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
+    \]
+    Thus either region may be translated without crossing the other. Zero
+    gaps, corresponding to adjacent regions, are included. This is
+    \cite[Definition~3.3 and lines~490--496]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{definition}[Positive-gap physical distance independence]%
     \label{def:is_positive_gap_physical_cid}
     \lean{MPSTensor.IsPositiveGapPhysicalCID}
@@ -1285,8 +1312,8 @@ and rates for the single-tensor transfer map $\E_A$.
         \langle\boldsymbol j|O|\boldsymbol i\rangle
         A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger .
     \]
-    Place two finite-block observables $O_1,O_2$ on a periodic chain, with
-    positive complementary gap lengths $n_1,n_2$.  The tensor has
+    Place two observables $O_1,O_2$ on nonempty finite blocks of a periodic
+    chain, with positive complementary gap lengths $n_1,n_2$. The tensor has
     \emph{positive-gap physical correlations independent of distance} when the expectation
     is unchanged upon replacing these gaps by positive $m_1,m_2$ satisfying
     $n_1+n_2=m_1+m_2$:
@@ -1302,6 +1329,18 @@ and rates for the single-tensor transfer map $\E_A$.
     Theorem~3.8]{Cirac2016MPDO_arXiv}, restricted to positive complementary
     gaps.  It excludes adjacent regions.
 \end{definition}
+
+\begin{lemma}[Physical CID implies positive-gap physical CID]%
+    \label{lem:is_positive_gap_physical_cid_of_physical_cid}
+    \lean{MPSTensor.isPositiveGapPhysicalCID_of_isPhysicalCID}
+    \leanok
+    \uses{def:source_physical_cid, def:is_positive_gap_physical_cid}
+    Correlations independent of distance for all disjoint physical regions are
+    independent of distance when both complementary gaps are positive.
+\end{lemma}
+\begin{proof}\leanok
+    Restrict the four gap lengths to positive integers.
+\end{proof}
 
 \begin{theorem}[Idempotent transfer implies positive-gap physical CID]%
     \label{thm:is_positive_gap_physical_cid_of_is_rfp}
