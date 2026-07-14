@@ -426,16 +426,19 @@ marked as formalized without a corrected source statement.
 
 The canonical-form extraction is discharged for the multiplicity-one basis
 direct sum by the two theorems cited above.  For the literal repeated virtual
-block sum, the next formal step is to combine the pairwise mixed-transfer
-criterion with the scaling law
+block sum, the scaling law is
 \[
   \mathcal E_{\mu B,\nu C}
     = \mu\overline\nu\,\mathcal E_{B,C}.
 \]
-For two copies of the same trace-normalized isometry-canonical block, this
-forces $\mu_q\overline{\mu_{q'}}=1$ and hence equality of all phases within that
-copy class.  This yields a mathematically correct literal-block replacement,
-but it must be labelled as a correction rather than as the printed theorem.
+It is formalized by \leanid{MPSTensor.mixedTransferMap₂_smul}.  Combining it
+with the pairwise mixed-transfer criterion proves that, for repeated copies of
+a nonzero transfer-idempotent block, whole-tensor idempotence forces
+$\mu_q\overline{\mu_{q'}}=1$ and hence equality of all unit-modulus phases.
+This corrected literal-block theorem is
+\leanid{MPSTensor.phases_eq_of_isTransferIdempotent_directSum_scaled_self}.
+Thus the literal-block replacement is complete, but it is a correction rather
+than a formalization of the printed independent-phase theorem.
 
 The independent-phase statement itself requires an author correction or an
 erratum specifying the missing $q$-dependent physical map, its isometry

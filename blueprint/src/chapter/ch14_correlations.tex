@@ -1047,6 +1047,58 @@ and rates for the single-tensor transfer map $\E_A$.
     \]
 \end{proof}
 
+\begin{lemma}[Scaling of a rectangular mixed transfer operator]%
+    \label{lem:mixed_transfer_rect_smul}
+    \lean{MPSTensor.mixedTransferMap₂_smul}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    For complex scalars $c,e$ and tensors $A,B$ of possibly different bond
+    dimensions,
+    \[
+        \E_{cA,eB}=c\overline e\,\E_{A,B}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Conjugate transposition changes the second scalar to its complex conjugate:
+    \[
+        \sum_i (cA^i)X(eB^i)^\dagger
+        =c\overline e\sum_i A^iX(B^i)^\dagger.
+    \]
+\end{proof}
+
+\begin{theorem}[Phase coherence for literal repeated blocks]%
+    \label{thm:literal_repeated_blocks_phase_coherence}
+    \lean{MPSTensor.phases_eq_of_isTransferIdempotent_directSum_scaled_self}
+    \leanok
+    \uses{def:mps_transfer_idempotence, lem:mixed_transfer_rect_smul,
+        thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
+    Let $A$ have positive bond dimension and a nonzero idempotent transfer map.
+    Let $\mu_q$ have unit modulus. If the literal bond direct sum
+    $\bigoplus_q \mu_qA$ has an idempotent transfer map, then
+    \[
+        \mu_q=\mu_{q'}
+    \]
+    for every pair $q,q'$.
+\end{theorem}
+\begin{proof}\leanok
+    The pairwise criterion and
+    Lemma~\ref{lem:mixed_transfer_rect_smul} show that
+    $(\mu_q\overline{\mu_{q'}})\E_A$ is idempotent. Since $\E_A$ is nonzero
+    and idempotent,
+    \[
+        (\mu_q\overline{\mu_{q'}})^2\E_A
+        =\mu_q\overline{\mu_{q'}}\E_A
+        \quad\Longrightarrow\quad
+        \mu_q\overline{\mu_{q'}}=1.
+    \]
+    Unit modulus then gives $\mu_q=\mu_{q'}$.
+
+    This is the exact conclusion for the literal virtual direct sum in
+    \cite[Theorem~III, lines~543--563]{Cirac2016MPDO_arXiv}. The printed
+    independent-phase statement requires a physical-space interpretation that
+    is not specified by an equation in the cited passage.
+\end{proof}
+
 \begin{theorem}[Cross-block transfer vanishing for a direct-sum fixed point]%
     \label{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     \lean{MPSTensor.isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum}
