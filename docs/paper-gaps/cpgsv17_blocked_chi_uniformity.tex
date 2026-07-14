@@ -673,13 +673,22 @@ is neither needed nor used: although its conjugation formula would reduce to
 coisometry, the equality above is instead derived from positive-length BNT
 selectors.
 
-The remaining construction is therefore narrower.  One must first construct
-the identification from the RFP tensor and the BNT of its vertical canonical
-form.  The simultaneous inverse must then be extracted from the blocked span
-and reindexed in the fusion coordinates.  One must assemble the synthesis and
-analysis maps with their biorthogonality and construct
-\leanid{MPOTensor.CompleteZipperFusionFamily}.  The existing printed
-$F$-matrix and pentagon theorem can then be applied to this family.
+The simultaneous block-letter inverse is extracted from the same one-letter
+product-algebra span by
+\leanid{MPSTensor.WordTupleSpanTop.exists_mpo_block_left_inverse}.  Reindexing
+the product bond space as a pair, the adjoint of $U_{\alpha,\beta}$ is the
+synthesis map and $U_{\alpha,\beta}$ is the analysis map.  These maps and all
+the derived blocked identities are assembled by
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+exists_blocked_completeZipperFusionFamily}.  Consequently the existing
+printed $F$-matrix and pentagon theorem apply to the length-independent source
+BNT fusion family without an additional injectivity, selector, inverse, or
+coisometry hypothesis.
+
+The remaining upstream construction is different: one must obtain the
+labelled fusion-isometry family and its identification with the BNT of the
+vertical canonical form from the RFP tensor itself.  That Appendix
+C.3--C.4 obligation is not supplied by the complete-zipper assembly above.
 
 Independently of this positive-diagonal specialization, the source-faithful
 complete zipper fusion structure is now formalized by
