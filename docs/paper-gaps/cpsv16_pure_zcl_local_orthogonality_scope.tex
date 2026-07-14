@@ -82,18 +82,36 @@ already contains $\mathbb E_A^2=\mathbb E_A$.
 
 This is a useful local statement, but it is not the source theorem at
 lines 498--502 and 1248--1268. The source theorem uses unrestricted physical CID
-together with the BNT-family mixed-sector equations (LO).  That source
-predicate has no formal counterpart; in particular, it is not the
-virtual-insertion predicate \leanid{MPSTensor.IsBNTZCL}.
+together with the BNT-family mixed-sector equations (LO). The source predicates
+now have formal counterparts. The predicate \leanid{MPSTensor.IsPhysicalCID}
+quantifies over two nonempty physical blocks and arbitrary natural
+complementary gap lengths, including zero, and requires the two-region
+expectation to be unchanged when the gaps are redistributed with fixed sum.
+The predicate \leanid{MPSTensor.IsPhysicalBNTZCL} is the conjunction of the BNT
+relation, this unrestricted physical CID condition, and BNT local
+orthogonality.
+
+These new predicates state Definitions~3.3 and 3.6; they do not prove the
+equivalence in Theorem~3.8. In particular, the theorem
+\leanid{MPSTensor.zcl_iff_idempotent_transfer} still concerns the older
+single-block and virtual-insertion predicates.
 
 \section{Elimination plan}
 
-The formalization now has a BNT-family version of local orthogonality,
+The formalization has a BNT-family version of local orthogonality,
 \leanid{MPSTensor.IsBNTLocallyOrthogonal}, carrying the equations
-$\mathbb E_{j,j'}=0$ for all $j\ne j'$, and two BNT-family predicates built on
-it.  Writing $\mathrm{BNT}(A)$ for the condition that the family is a basis of
-normal tensors for $A$, the predicate \leanid{MPSTensor.IsBNTZCL} uses the
-virtual-insertion condition,
+$\mathbb E_{j,j'}=0$ for all $j\ne j'$. Writing $\mathrm{BNT}(A)$ for the
+condition that the family is a basis of normal tensors for $A$, the source
+predicate is now
+\[
+  \mathrm{ZCL}_{\mathrm{BNT}}(A)
+  :=
+  \mathrm{BNT}(A)\wedge
+  \mathrm{CID}_{\rm physical}(A)\wedge
+  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr).
+\]
+Its formal name is \leanid{MPSTensor.IsPhysicalBNTZCL}. The older predicate
+\leanid{MPSTensor.IsBNTZCL} uses the virtual-insertion condition,
 \[
   \mathrm{ZCL}^{\mathrm{virt}}_{\mathrm{BNT}}(A)
   :=
@@ -114,17 +132,13 @@ matrices. The positive-gap formal predicate uses the physical condition below,
 \]
 where $\mathrm{CID}^{\mathrm{pos}}_{\mathrm{physical}}$ is the positive-gap
 physical predicate.\footnote{The formal predicate is
-\path{MPSTensor.IsPositiveGapPhysicalCID}.} Neither
-predicate contains the unrestricted physical CID of Definition~3.3, so the
-source zero-correlation-length predicate
-\[
-  \mathrm{ZCL}_{\mathrm{BNT}}(A)
-  :=
-  \mathrm{CID}_{\rm physical}(A)\wedge
-  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr)
-\]
-remains without a formal counterpart.
-The remaining target theorem for tensors in canonical form is then
+\path{MPSTensor.IsPositiveGapPhysicalCID}.} The unrestricted predicate implies
+this positive-gap restriction by
+\leanid{MPSTensor.isPositiveGapPhysicalCID_of_isPhysicalCID}; the analogous
+BNT implication is
+\leanid{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}.
+
+The remaining target theorem for tensors in canonical form is
 \[
   \mathrm{ZCL}_{\mathrm{BNT}}(A)
   \Longleftrightarrow
@@ -139,8 +153,8 @@ The present theorem is therefore a scope restriction: it records the one-block
 idempotence/CID consequence, while the BNT-level equivalence remains open.
 
 There is a second distinction in the correlation predicate. Definition~3.3
-quantifies over physical observables on arbitrary finite regions, and the
-two-observable formula at lines 490--496 inserts such an observable through
+quantifies over physical observables on arbitrary nonempty finite regions, and
+the two-observable formula at lines 490--496 inserts such an observable through
 
 \[
   \mathbb E_O(X)
@@ -170,8 +184,10 @@ proves\footnote{The formal theorem is
   \operatorname{CID}_{\rm physical}^{\text{positive gaps}}(A).
 \]
 
-This is not yet Definition~3.3, which quantifies over all disjoint regions and
-therefore includes adjacent regions. For an adjacent pair, one complementary
+The positive-gap predicate is not Definition~3.3, which quantifies over all
+disjoint regions and therefore includes adjacent regions. The unrestricted
+predicate \leanid{MPSTensor.IsPhysicalCID} now records Definition~3.3. For an
+adjacent pair, one complementary
 transfer power in the formula at lines 490--496 is $\mathbb E_A^0=1$. Idempotence gives
 $\mathbb E_A^n=\mathbb E_A$ only for $n\geq1$ and does not identify
 $\mathbb E_A^0$ with $\mathbb E_A$.  The positive-gap theorem is consequently
@@ -191,9 +207,9 @@ predicate avoids this boundary-state issue.
 
 Accordingly, \leanid{MPSTensor.IsBNTZCL} remains the virtual-insertion
 surrogate, while \leanid{MPSTensor.IsPositiveGapBNTZCL} names the physical
-positive-gap condition.  Neither is Definition~3.6.  The unrestricted source
-BNT zero-correlation-length predicate and its equivalence with transfer
-idempotence remain open.
+positive-gap condition. Neither is Definition~3.6; that definition is now
+\leanid{MPSTensor.IsPhysicalBNTZCL}. Its equivalence with transfer idempotence
+remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -17,6 +17,7 @@ tensors, following arXiv:1606.00608 Section 3.2
 
 The following conditions are introduced:
 
+* `IsPhysicalCID A` — the source condition for all disjoint physical regions.
 * `IsPositiveGapPhysicalCID A` — physical block-observable correlations are
   independent of distance when both complementary gaps are positive.
 * `IsCID A` — the stronger virtual-insertion CID condition used by the current
@@ -25,13 +26,15 @@ The following conditions are introduced:
   transfer-map idempotence.
 * `IsBNTLocallyOrthogonal blocks` — the source BNT-level mixed-sector
   equations.
+* `IsPhysicalBNTZCL A blocks` — the source BNT zero-correlation-length
+  condition.
 * `IsBNTZCL A blocks` — the older virtual-insertion BNT surrogate.
 * `IsPositiveGapBNTZCL A blocks` — the physical positive-gap BNT condition.
 * `IsZCL A` — the conjunction of local orthogonality and CID.
 
 The proved local result identifies this single-block convention with an
-idempotent transfer map (`IsRFP`).  Neither BNT predicate records the source
-condition for all disjoint regions; the full BNT-level ZCL theorem is tracked in
+idempotent transfer map (`IsRFP`). The source BNT predicate is now stated, but
+its equivalence with transfer idempotence remains open and is tracked in
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`.
 -/
 
@@ -70,6 +73,25 @@ noncomputable def physicalTwoPointExpectation (A : MPSTensor d D)
     (physicalObservableTransfer A L₂ O₂ ∘ₗ ((transferMap A) ^ n₂) ∘ₗ
       physicalObservableTransfer A L₁ O₁ ∘ₗ ((transferMap A) ^ n₁))
 
+/-- Physical correlations independent of distance in the sense of
+arXiv:1606.00608, Definition 3.3 (lines 437--445): for two observables on
+disjoint contiguous regions, translating one region without crossing the
+other does not change the expectation. In the periodic-chain formula at
+lines 490--496, the two complementary gap lengths may therefore be
+redistributed while their sum, and hence the chain length, remains fixed.
+
+The physical block lengths are positive, as the source regions are nonempty.
+The gap lengths are arbitrary natural numbers. In particular, a zero gap
+represents adjacent regions, as permitted by the source definition. -/
+def IsPhysicalCID (A : MPSTensor d D) : Prop :=
+  ∀ (L₁ L₂ : ℕ)
+    (O₁ : Matrix (Fin L₁ → Fin d) (Fin L₁ → Fin d) ℂ)
+    (O₂ : Matrix (Fin L₂ → Fin d) (Fin L₂ → Fin d) ℂ)
+    (n₁ n₂ m₁ m₂ : ℕ),
+    1 ≤ L₁ → 1 ≤ L₂ → n₁ + n₂ = m₁ + m₂ →
+    physicalTwoPointExpectation A L₁ L₂ O₁ O₂ n₁ n₂ =
+      physicalTwoPointExpectation A L₁ L₂ O₁ O₂ m₁ m₂
+
 /-- Positive-gap physical correlations independent of distance, in the transfer
 formula surrounding arXiv:1606.00608, Definition 3.3 (lines 437--445) and the
 two-observable formula at lines 490--496: translating either physical block
@@ -77,8 +99,9 @@ observable through the unobserved part of a fixed periodic chain does not change
 two-region expectation.  Thus the two complementary gaps may change while
 their sum, and hence the chain length, remains fixed.
 
-The definition permits observables on blocks of arbitrary finite lengths and
-does not replace physical observables by arbitrary virtual bond matrices.
+The definition permits observables on blocks of arbitrary positive finite
+lengths and does not replace physical observables by arbitrary virtual bond
+matrices.
 
 **Scope restriction (arXiv:1606.00608, Definition 3.3):** the source quantifies
 over all disjoint regions, including adjacent regions.  Here both complementary
@@ -91,9 +114,18 @@ def IsPositiveGapPhysicalCID (A : MPSTensor d D) : Prop :=
     (O₁ : Matrix (Fin L₁ → Fin d) (Fin L₁ → Fin d) ℂ)
     (O₂ : Matrix (Fin L₂ → Fin d) (Fin L₂ → Fin d) ℂ)
     (n₁ n₂ m₁ m₂ : ℕ),
+    1 ≤ L₁ → 1 ≤ L₂ →
     1 ≤ n₁ → 1 ≤ n₂ → 1 ≤ m₁ → 1 ≤ m₂ → n₁ + n₂ = m₁ + m₂ →
     physicalTwoPointExpectation A L₁ L₂ O₁ O₂ n₁ n₂ =
       physicalTwoPointExpectation A L₁ L₂ O₁ O₂ m₁ m₂
+
+/-- Physical CID implies its positive-gap restriction. This is the direct
+restriction of arXiv:1606.00608, Definition 3.3 (lines 437--445), to positive
+complementary gaps. -/
+theorem isPositiveGapPhysicalCID_of_isPhysicalCID (A : MPSTensor d D)
+    (hCID : IsPhysicalCID A) : IsPositiveGapPhysicalCID A := by
+  intro L₁ L₂ O₁ O₂ n₁ n₂ m₁ m₂ hL₁ hL₂ _ _ _ _ hsum
+  exact hCID L₁ L₂ O₁ O₂ n₁ n₂ m₁ m₂ hL₁ hL₂ hsum
 
 /-- Virtual-insertion correlations independent of distance: the connected
 two-point expression through the transfer map is constant in the separation
@@ -129,7 +161,7 @@ does not identify $\mathbb{E}^0$ with $\mathbb{E}$.  This is recorded in
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isPositiveGapPhysicalCID_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A) :
     IsPositiveGapPhysicalCID A := by
-  intro L₁ L₂ O₁ O₂ n₁ n₂ m₁ m₂ hn₁ hn₂ hm₁ hm₂ _
+  intro L₁ L₂ O₁ O₂ n₁ n₂ m₁ m₂ _ _ hn₁ hn₂ hm₁ hm₂ _
   have hIdem : IsIdempotentElem (transferMap A) := hRFP
   have hpow_n₁ : (transferMap A) ^ n₁ = transferMap A :=
     hIdem.pow_eq (by omega)
@@ -178,6 +210,16 @@ lemma isBNTLocallyOrthogonal_iff
       ∀ j j' : Fin g, j ≠ j' → mixedTransferMap₂ (blocks j) (blocks j') = 0 :=
   Iff.rfl
 
+/-- BNT zero correlation length in the source sense of arXiv:1606.00608,
+Definition 3.6 (lines 476--478): `blocks` is a basis of normal tensors for
+`A`, the physical correlations of `A` satisfy Definition 3.3 (lines 437--445),
+and distinct BNT components satisfy the local-orthogonality equations of
+Definition 3.5 (lines 467--474). -/
+def IsPhysicalBNTZCL (A : MPSTensor d D)
+    (blocks : (j : Fin g) → MPSTensor d (dim j)) : Prop :=
+  IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, blocks j⟩) ∧
+    IsPhysicalCID A ∧ IsBNTLocallyOrthogonal blocks
+
 /-- BNT-level virtual-insertion zero correlation length: `blocks` is a basis of
 normal tensors for `A`, the virtual correlator is independent of distance, and
 the mixed-sector local-orthogonality equations hold.
@@ -225,6 +267,15 @@ lemma isPositiveGapBNTZCL_iff (A : MPSTensor d D)
       IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, blocks j⟩) ∧
         IsPositiveGapPhysicalCID A ∧ IsBNTLocallyOrthogonal blocks :=
   Iff.rfl
+
+/-- Source BNT zero correlation length implies its positive-gap restriction.
+The CID component is restricted from all disjoint regions in arXiv:1606.00608,
+Definition 3.3 (lines 437--445), while the BNT and local-orthogonality
+components of Definition 3.6 (lines 476--478) are unchanged. -/
+theorem isPositiveGapBNTZCL_of_isPhysicalBNTZCL (A : MPSTensor d D)
+    (blocks : (j : Fin g) → MPSTensor d (dim j))
+    (hZCL : IsPhysicalBNTZCL A blocks) : IsPositiveGapBNTZCL A blocks := by
+  exact ⟨hZCL.1, isPositiveGapPhysicalCID_of_isPhysicalCID A hZCL.2.1, hZCL.2.2⟩
 
 /-- Zero correlation length in the single-block convention: a tensor has ZCL
 when it satisfies the local idempotence convention above and has correlations
