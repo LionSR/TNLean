@@ -117,7 +117,7 @@
 }
 
 % Local purification of an MPO tensor: the ket and bra tensors share the
-% ancillary index (curved contraction on the right) and retain their physical
+% ancillary index (straight contraction on the right) and retain their physical
 % and virtual legs.
 \newcommand{\TNMPOLocalPurification}{%
     \begin{tikzpicture}[tn picture]
@@ -126,7 +126,7 @@
         \TN@vleg{tnM}{east}{0.62,0}
         \TN@pleg{tnM}{north}{0,0.58}
         \TN@pleg{tnM}{south}{0,-0.58}
-        \node at (-2.35,-0.34) {$M$};
+        \node[anchor=east] at (-2.50,-0.30) {$M$};
         \node at (-1.20,0) {$=$};
         \TN@tensor{tnA}{(0,0.52)}
         \TN@tensor{tnAc}{(0,-0.52)}
@@ -136,11 +136,12 @@
         \TN@vleg{tnAc}{east}{0.62,0}
         \TN@pleg{tnA}{north}{0,0.48}
         \TN@pleg{tnAc}{south}{0,-0.48}
-        \TN@ppath{
-            (tnA.-35) .. controls (0.88,0.42) and (0.88,-0.42) .. (tnAc.35);}
+        \TN@pport{tnAK}{tnA}{-35}
+        \TN@pport{tnAcK}{tnAc}{35}
+        \TN@pconnectports{tnAK}{tnAcK}
         \node at (-0.28,0.82) {$A$};
         \node at (-0.32,-0.82) {$\overline A$};
-        \node at (0.95,0) {$k$};
+        \node at (0.34,0) {$k$};
     \end{tikzpicture}%
 }
 
@@ -1264,27 +1265,33 @@
         \node (la) at (0,0) {$\alpha$};
         \node (lb) at (0.90,0) {$\beta$};
         \node (lc) at (1.80,0) {$\gamma$};
-        \TN@map{lab}{(0.45,0.78)}{U_{\alpha,\beta}^{\delta}}
-        \TN@map{labc}{(1.12,1.62)}{U_{\delta,\gamma}^{\varepsilon}}
-        \TN@vconnect{la}{north}{lab}{south west}
-        \TN@vconnect{lb}{north}{lab}{south east}
-        \TN@vconnect{lab}{north}{labc}{south west}
-        \TN@vconnect{lc}{north}{labc}{south east}
-        \TN@vpath{(labc.north) -- ++(0,0.42)
-            node[above] {$\varepsilon$}}
+        \TN@cofusionmap{lab}{(0.45,0.78)}{U_{\alpha,\beta}^{\delta}}
+        \TN@cofusionmap{labc}{(1.12,1.62)}{U_{\delta,\gamma}^{\varepsilon}}
+        \TN@vport{laOut}{la}{north}
+        \TN@vport{lbOut}{lb}{north}
+        \TN@vport{lcOut}{lc}{north}
+        \TN@vconnectports{laOut}{labLeft}
+        \TN@vconnectports{lbOut}{labRight}
+        \TN@vconnectports{labIn}{labcLeft}
+        \TN@vconnectports{lcOut}{labcRight}
+        \TN@vopenport{labcIn}{0,0.42}
+        \node[above] at (labcInOpen) {$\varepsilon$};
         \node at (0.90,-0.48) {$((\alpha\beta)\gamma)$};
 
         \node (ra) at (4.20,0) {$\alpha$};
         \node (rb) at (5.10,0) {$\beta$};
         \node (rc) at (6.00,0) {$\gamma$};
-        \TN@map{rbc}{(5.55,0.78)}{U_{\beta,\gamma}^{\eta}}
-        \TN@map{rabc}{(4.88,1.62)}{U_{\alpha,\eta}^{\varepsilon}}
-        \TN@vconnect{rb}{north}{rbc}{south west}
-        \TN@vconnect{rc}{north}{rbc}{south east}
-        \TN@vconnect{ra}{north}{rabc}{south west}
-        \TN@vconnect{rbc}{north}{rabc}{south east}
-        \TN@vpath{(rabc.north) -- ++(0,0.42)
-            node[above] {$\varepsilon$}}
+        \TN@cofusionmap{rbc}{(5.55,0.78)}{U_{\beta,\gamma}^{\eta}}
+        \TN@cofusionmap{rabc}{(4.88,1.62)}{U_{\alpha,\eta}^{\varepsilon}}
+        \TN@vport{raOut}{ra}{north}
+        \TN@vport{rbOut}{rb}{north}
+        \TN@vport{rcOut}{rc}{north}
+        \TN@vconnectports{rbOut}{rbcLeft}
+        \TN@vconnectports{rcOut}{rbcRight}
+        \TN@vconnectports{raOut}{rabcLeft}
+        \TN@vconnectports{rbcIn}{rabcRight}
+        \TN@vopenport{rabcIn}{0,0.42}
+        \node[above] at (rabcInOpen) {$\varepsilon$};
         \node at (5.10,-0.48) {$(\alpha(\beta\gamma))$};
 
         \TN@comparisonarrow[densely dashed, line width=0.4pt]{
@@ -1301,14 +1308,17 @@
         \node (pfLa) at (-4.20,-1.20) {$a$};
         \node (pfLb) at (-3.20,-1.20) {$b$};
         \node (pfLc) at (-2.20,-1.20) {$c$};
-        \TN@map{pfLab}{(-3.70,-0.34)}{X^{e}_{ab,\mu}}
-        \TN@map{pfLroot}{(-3.00,0.62)}{X^{d}_{ec,\nu}}
-        \TN@vconnect{pfLa}{north}{pfLab}{south west}
-        \TN@vconnect{pfLb}{north}{pfLab}{south east}
-        \TN@vconnect{pfLab}{north}{pfLroot}{south west}
-        \TN@vconnect{pfLc}{north}{pfLroot}{south east}
-        \TN@vpath{(pfLroot.north) -- ++(0,0.42)
-            node[above] {$d$}}
+        \TN@cofusionmap{pfLab}{(-3.70,-0.34)}{X^{e}_{ab,\mu}}
+        \TN@cofusionmap{pfLroot}{(-3.00,0.62)}{X^{d}_{ec,\nu}}
+        \TN@vport{pfLaOut}{pfLa}{north}
+        \TN@vport{pfLbOut}{pfLb}{north}
+        \TN@vport{pfLcOut}{pfLc}{north}
+        \TN@vconnectports{pfLaOut}{pfLabLeft}
+        \TN@vconnectports{pfLbOut}{pfLabRight}
+        \TN@vconnectports{pfLabIn}{pfLrootLeft}
+        \TN@vconnectports{pfLcOut}{pfLrootRight}
+        \TN@vopenport{pfLrootIn}{0,0.42}
+        \node[above] at (pfLrootInOpen) {$d$};
 
         \node at (-0.65,-0.12) {$=$};
         \node at (0.15,-0.12) {$\displaystyle\sum_{f,\lambda,\sigma}$};
@@ -1318,14 +1328,17 @@
         \node (pfRa) at (2.75,-1.20) {$a$};
         \node (pfRb) at (3.75,-1.20) {$b$};
         \node (pfRc) at (4.75,-1.20) {$c$};
-        \TN@map{pfRbc}{(4.25,-0.34)}{X^{f}_{bc,\lambda}}
-        \TN@map{pfRroot}{(3.45,0.62)}{X^{d}_{af,\sigma}}
-        \TN@vconnect{pfRb}{north}{pfRbc}{south west}
-        \TN@vconnect{pfRc}{north}{pfRbc}{south east}
-        \TN@vconnect{pfRa}{north}{pfRroot}{south west}
-        \TN@vconnect{pfRbc}{north}{pfRroot}{south east}
-        \TN@vpath{(pfRroot.north) -- ++(0,0.42)
-            node[above] {$d$}}
+        \TN@cofusionmap{pfRbc}{(4.25,-0.34)}{X^{f}_{bc,\lambda}}
+        \TN@cofusionmap{pfRroot}{(3.45,0.62)}{X^{d}_{af,\sigma}}
+        \TN@vport{pfRaOut}{pfRa}{north}
+        \TN@vport{pfRbOut}{pfRb}{north}
+        \TN@vport{pfRcOut}{pfRc}{north}
+        \TN@vconnectports{pfRbOut}{pfRbcLeft}
+        \TN@vconnectports{pfRcOut}{pfRbcRight}
+        \TN@vconnectports{pfRaOut}{pfRrootLeft}
+        \TN@vconnectports{pfRbcIn}{pfRrootRight}
+        \TN@vopenport{pfRrootIn}{0,0.42}
+        \node[above] at (pfRrootInOpen) {$d$};
     \end{tikzpicture}%
 }
 
@@ -1628,7 +1641,7 @@
         \TN@vleg{bfiG}{east}{0.48,0}
         \TN@pleg{bfiG}{north}{0,0.42}
         \TN@pleg{bfiG}{south}{0,-0.42}
-        \node at (3.94,-0.36) {$M_\gamma$};
+        \node[anchor=west] at (3.88,-0.66) {$M_\gamma$};
         \node at (3.46,0.20) {$i$};
         \node at (3.46,-0.92) {$j$};
     \end{tikzpicture}%
@@ -1984,30 +1997,28 @@
 
 \newcommand{\TNRFPKrausIsometry}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{rfkA}{(0,0)}
-        \TN@tensor{rfkB}{(1.20,0)}
-        \TN@vleg{rfkA}{west}{-0.60,0}
-        \TN@vconnect{rfkA}{east}{rfkB}{west}
-        \TN@vleg{rfkB}{east}{0.60,0}
-        \TN@pleg{rfkA}{north}{0,0.46}
-        \TN@pleg{rfkB}{north}{0,0.46}
-        \TN@label{rfkA.north}{(0,0.70)}{i_1}
-        \TN@label{rfkB.north}{(0,0.70)}{i_2}
+        \TN@mpssite{rfkA}{(0,0)}{}
+        \TN@mpssite{rfkB}{(1.20,0)}{}
+        \TN@vopenport{rfkAW}{-\TN@virtualleglen,0}
+        \TN@vconnectports{rfkAE}{rfkBW}
+        \TN@vopenport{rfkBE}{\TN@virtualleglen,0}
+        \TN@popenport{rfkAN}{0,\TN@physicalleglen}
+        \TN@popenport{rfkBN}{0,\TN@physicalleglen}
+        \TN@label{rfkANOpen}{(0,0.24)}{i_1}
+        \TN@label{rfkBNOpen}{(0,0.24)}{i_2}
         \node[anchor=east] at (-0.14,-0.28) {$A$};
         \node[anchor=west] at (1.34,-0.28) {$A$};
         \node at (2.50,0) {$=$};
         \node at (3.25,0) {$\displaystyle\sum_j$};
-        \TN@tensor{rfkC}{(4.30,0)}
-        \TN@vleg{rfkC}{west}{-0.55,0}
-        \TN@vleg{rfkC}{east}{0.55,0}
+        \TN@mpssite{rfkC}{(4.30,0)}{}
+        \TN@openhorizontalports{rfkC}
         \node[anchor=west] at (4.44,-0.28) {$A$};
-        \TN@map[inner xsep=10pt, inner ysep=2pt]{rfkV}{(4.30,0.90)}{V}
-        \TN@pconnect{rfkC}{north}{rfkV}{south}
+        \TN@physicalsplitmap[inner xsep=10pt, inner ysep=2pt]
+            {rfkV}{(4.30,0.90)}{V}
+        \TN@pconnectports{rfkCN}{rfkVTrunk}
         \node[anchor=west] at (4.40,0.46) {$j$};
-        \TN@pnorthport{rfkVNLeft}{rfkV}{0.28}
-        \TN@pnorthport{rfkVNRight}{rfkV}{0.72}
-        \TN@popenport{rfkVNLeft}{0,0.34}
-        \TN@popenport{rfkVNRight}{0,0.34}
+        \TN@popenport{rfkVLeft}{0,0.34}
+        \TN@popenport{rfkVRight}{0,0.34}
         \node at (4.10,1.62) {$i_1$};
         \node at (4.50,1.62) {$i_2$};
     \end{tikzpicture}%
@@ -2017,24 +2028,24 @@
 % legs of the contracted pair recovers the single tensor.
 \newcommand{\TNRFPKrausIsometryReverse}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{rfrA}{(0,0)}
-        \TN@tensor{rfrB}{(1.20,0)}
-        \TN@vleg{rfrA}{west}{-0.60,0}
-        \TN@vconnect{rfrA}{east}{rfrB}{west}
-        \TN@vleg{rfrB}{east}{0.60,0}
+        \TN@mpssite{rfrA}{(0,0)}{}
+        \TN@mpssite{rfrB}{(1.20,0)}{}
+        \TN@vopenport{rfrAW}{-\TN@virtualleglen,0}
+        \TN@vconnectports{rfrAE}{rfrBW}
+        \TN@vopenport{rfrBE}{\TN@virtualleglen,0}
         \node[anchor=east] at (-0.14,-0.28) {$A$};
         \node[anchor=west] at (1.34,-0.28) {$A$};
-        \TN@map[minimum width=1.62cm]{rfrV}{(0.60,0.90)}{V^\dagger}
-        \TN@ppath{(rfrA.north) -- (rfrA.north |- rfrV.south)}
-        \TN@ppath{(rfrB.north) -- (rfrB.north |- rfrV.south)}
-        \TN@pleg{rfrV}{north}{0,0.34}
+        \TN@physicalmergemap[minimum width=1.62cm]
+            {rfrV}{(0.60,0.90)}{V^\dagger}
+        \TN@pconnectports{rfrAN}{rfrVLeft}
+        \TN@pconnectports{rfrBN}{rfrVRight}
+        \TN@popenport{rfrVTrunk}{0,0.34}
         \node[anchor=west] at (0.70,1.36) {$j$};
         \node at (2.50,0) {$=$};
-        \TN@tensor{rfrC}{(3.55,0)}
-        \TN@vleg{rfrC}{west}{-0.55,0}
-        \TN@vleg{rfrC}{east}{0.55,0}
-        \TN@pleg{rfrC}{north}{0,0.46}
-        \TN@label{rfrC.north}{(0,0.70)}{j}
+        \TN@mpssite{rfrC}{(3.55,0)}{}
+        \TN@openhorizontalports{rfrC}
+        \TN@popenport{rfrCN}{0,\TN@physicalleglen}
+        \TN@label{rfrCNOpen}{(0,0.24)}{j}
         \node[anchor=west] at (3.69,-0.28) {$A$};
     \end{tikzpicture}%
 }
@@ -2053,19 +2064,21 @@
         \node at (1.25,0) {$=$};
         \TN@insertion[label=above:$X$]{icfX}{(2.20,0)}
         \TN@insertion[label=above:$\sqrt\Lambda$]{icfL}{(3.20,0)}
-        \TN@map{icfU}{(4.30,0.75)}{U}
+        \TN@bondpairmap{icfU}{(4.30,0.75)}{U}
         \TN@insertion[label=above:$X^{-1}$]{icfXi}{(5.40,0)}
-        \TN@vleg{icfX}{west}{-0.55,0}
-        \TN@vconnect{icfX}{east}{icfL}{west}
-        \TN@vsouthport{icfUSLeft}{icfU}{0.18}
-        \TN@vsouthport{icfUSRight}{icfU}{0.82}
-        \TN@vpath[rounded corners=3pt]{(icfL.east)
-        -| (icfUSLeft)}
-        \TN@vpath[rounded corners=3pt]{(icfUSRight)
-        |- (icfXi.west)}
-        \TN@vleg{icfXi}{east}{0.55,0}
-        \TN@pleg{icfU}{north}{0,0.34}
-        \node at ($(icfU.north)+(0,0.56)$) {$i$};
+        \TN@vport{icfXW}{icfX}{west}
+        \TN@vport{icfXE}{icfX}{east}
+        \TN@vport{icfLW}{icfL}{west}
+        \TN@vport{icfLE}{icfL}{east}
+        \TN@vport{icfXiW}{icfXi}{west}
+        \TN@vport{icfXiE}{icfXi}{east}
+        \TN@vopenport{icfXW}{-0.55,0}
+        \TN@vconnectports{icfXE}{icfLW}
+        \TN@vconnectportshv{icfLE}{icfULeft}
+        \TN@vconnectportsvh{icfURight}{icfXiW}
+        \TN@vopenport{icfXiE}{0.55,0}
+        \TN@popenport{icfUPhysical}{0,0.34}
+        \node at ($(icfUPhysicalOpen)+(0,0.22)$) {$i$};
     \end{tikzpicture}%
 }
 
@@ -2081,43 +2094,43 @@
         \TN@label{icbA.north}{(0,0.70)}{i}
         \node[anchor=east] at (-0.14,-0.28) {$A$};
         \node at (1.25,0) {$=$};
-        \TN@insertion[label=above:$X$]{icbX}{(2.20,0)}
+        \TN@sectorgauge{icbX}{(2.20,0)}{X}
         \TN@insertion[label=above:$\sqrt\Lambda$]{icbL}{(3.20,0)}
-        \TN@map{icbU}{(4.30,0.75)}{U}
-        \TN@insertion[label=above:$X^{-1}$]{icbXi}{(5.40,0)}
-        \TN@vleg{icbX}{west}{-0.55,0}
-        \TN@vconnect{icbX}{east}{icbL}{west}
-        \TN@vsouthport{icbUSLeft}{icbU}{0.18}
-        \TN@vsouthport{icbUSRight}{icbU}{0.82}
-        \TN@vpath[rounded corners=3pt]{(icbL.east)
-        -| (icbUSLeft)}
-        \TN@vpath[rounded corners=3pt]{(icbUSRight)
-        |- (icbXi.west)}
-        \TN@vleg{icbXi}{east}{0.55,0}
-        \TN@pleg{icbU}{north}{0,0.34}
-        \node at ($(icbU.north)+(0,0.56)$) {$i$};
-        \TN@vpath{(1.65,-0.62) -- (5.95,-0.62)}
-        \TN@vpath{(1.65,-1.02) -- (5.95,-1.02)}
-        \node[anchor=east] at (1.56,-0.62) {$j$};
-        \node[anchor=east] at (1.56,-1.02) {$q$};
-        \TN@vpath{(icbX.south) -- (2.20,-1.02)}
-        \TN@vpath{(icbL.south) -- (3.20,-0.62)}
-        \TN@vpath{(4.16,0) -- (4.16,-0.62)}
-        \TN@vpath{(icbXi.south) -- (5.40,-1.02)}
+        \TN@bondpairmap{icbU}{(4.30,0.75)}{U}
+        \TN@inverseSectorgauge{icbXi}{(5.40,0)}{X^{-1}}
+        \TN@vport{icbLW}{icbL}{west}
+        \TN@vport{icbLE}{icbL}{east}
+        \TN@vopenport{icbXW}{-0.55,0}
+        \TN@vconnectports{icbXE}{icbLW}
+        \TN@vconnectportshv{icbLE}{icbULeft}
+        \TN@vconnectportsvh{icbURight}{icbXiW}
+        \TN@vopenport{icbXiE}{0.55,0}
+        \TN@popenport{icbUPhysical}{0,0.34}
+        \node at ($(icbUPhysicalOpen)+(0,0.22)$) {$i$};
+        \TN@vbus{icbJ}{(1.65,-0.62)}{(5.95,-0.62)}{j}
+        \TN@vparallelbus{icbQ}{icbJ}{-\TN@buspitch}{q}
+        \TN@vport{icbLBus}{icbL}{south}
+        \TN@vbusprojecttap{icbJ}{icbJX}{icbXBlock}
+        \TN@vbusprojecttap{icbQ}{icbQX}{icbXCopy}
+        \TN@vconnectports{icbXBlock}{icbJX}
+        \TN@vconnectports{icbXCopy}{icbQX}
+        \TN@vbusprojecttap{icbJ}{icbJL}{icbLBus}
+        \TN@vconnectports{icbLBus}{icbJL}
+        \TN@vterminal{icbUBlock}{(icbULeft |- icbL)}
+        \TN@anonymousjunction{(icbUBlock)}
+        \TN@vbusprojecttap{icbJ}{icbJU}{icbUBlock}
+        \TN@vconnectports{icbUBlock}{icbJU}
+        \TN@vbusprojecttap{icbJ}{icbJXi}{icbXiBlock}
+        \TN@vbusprojecttap{icbQ}{icbQXi}{icbXiCopy}
+        \TN@vconnectports{icbXiBlock}{icbJXi}
+        \TN@vconnectports{icbXiCopy}{icbQXi}
         \TN@component{icbMu}{(2.70,-1.60)}{\mu}
         \TN@vnorthport{icbMuNLeft}{icbMu}{0.15}
         \TN@vnorthport{icbMuNRight}{icbMu}{0.85}
-        \TN@vpath{(icbMuNLeft) -- (2.58,-0.62)}
-        \TN@vpath{(icbMuNRight) -- (2.82,-1.02)}
-        \TN@anonymousjunction{(2.20,-0.62)}
-        \TN@anonymousjunction{(2.20,-1.02)}
-        \TN@anonymousjunction{(3.20,-0.62)}
-        \TN@anonymousjunction{(4.16,0)}
-        \TN@anonymousjunction{(4.16,-0.62)}
-        \TN@anonymousjunction{(5.40,-0.62)}
-        \TN@anonymousjunction{(5.40,-1.02)}
-        \TN@anonymousjunction{(2.58,-0.62)}
-        \TN@anonymousjunction{(2.82,-1.02)}
+        \TN@vbusprojecttap{icbJ}{icbJMu}{icbMuNLeft}
+        \TN@vbusprojecttap{icbQ}{icbQMu}{icbMuNRight}
+        \TN@vconnectports{icbMuNLeft}{icbJMu}
+        \TN@vconnectports{icbMuNRight}{icbQMu}
     \end{tikzpicture}%
 }
 
@@ -2331,9 +2344,9 @@
         \TN@pleg{hcfK}{south}{0,-0.50}
         \node[anchor=east] at (-0.14,-0.28) {$K$};
         \node at (1.30,0) {$=$};
-        \TN@insertion[label=above:$X$]{hcfX}{(2.55,0)}
+        \TN@sectorgauge{hcfX}{(2.55,0)}{X}
         \TN@tensor{hcfC}{(3.75,0)}
-        \TN@insertion[label=above:$X^{-1}$]{hcfXi}{(4.95,0)}
+        \TN@inverseSectorgauge{hcfXi}{(4.95,0)}{X^{-1}}
         \TN@vleg{hcfX}{west}{-0.55,0}
         \TN@vconnect{hcfX}{east}{hcfC}{west}
         \TN@vconnect{hcfC}{east}{hcfXi}{west}
@@ -2341,19 +2354,21 @@
         \TN@pleg{hcfC}{north}{0,0.50}
         \TN@pleg{hcfC}{south}{0,-0.50}
         \node[anchor=west] at (3.89,0.32) {$\mathcal K$};
-        \TN@vpath{(1.95,-1.10) -- (5.55,-1.10)}
-        \TN@vpath{(1.95,-1.50) -- (5.55,-1.50)}
-        \node[anchor=east] at (1.86,-1.10) {$j$};
-        \node[anchor=east] at (1.86,-1.50) {$q$};
-        \TN@vpath{(hcfX.south) -- (2.55,-1.50)}
+        \TN@vbus{hcfJ}
+            {($(hcfX.center)+(-0.60,-\TN@busoffset)$)}
+            {($(hcfXi.center)+(0.60,-\TN@busoffset)$)}{j}
+        \TN@vparallelbus{hcfQ}{hcfJ}{-\TN@buspitch}{q}
+        \TN@vbusprojecttap{hcfJ}{hcfJX}{hcfXBlock}
+        \TN@vbusprojecttap{hcfQ}{hcfQX}{hcfXCopy}
+        \TN@vconnectports{hcfXBlock}{hcfJX}
+        \TN@vconnectports{hcfXCopy}{hcfQX}
         \TN@vport{hcfCBlock}{hcfC}{-45}
-        \TN@vpath[rounded corners=3pt]{(hcfCBlock) -- (4.15,-0.40) -- (4.15,-1.10)}
-        \TN@vpath{(hcfXi.south) -- (4.95,-1.50)}
-        \TN@anonymousjunction{(2.55,-1.10)}
-        \TN@anonymousjunction{(2.55,-1.50)}
-        \TN@anonymousjunction{(4.15,-1.10)}
-        \TN@anonymousjunction{(4.95,-1.10)}
-        \TN@anonymousjunction{(4.95,-1.50)}
+        \TN@vbusprojecttap{hcfJ}{hcfJC}{hcfCBlock}
+        \TN@vconnectports{hcfCBlock}{hcfJC}
+        \TN@vbusprojecttap{hcfJ}{hcfJXi}{hcfXiBlock}
+        \TN@vbusprojecttap{hcfQ}{hcfQXi}{hcfXiCopy}
+        \TN@vconnectports{hcfXiBlock}{hcfJXi}
+        \TN@vconnectports{hcfXiCopy}{hcfQXi}
     \end{tikzpicture}%
 }
 
@@ -2376,9 +2391,9 @@
         \node at (-0.42,-0.90) {$K$};
         \node at (1.15,0) {$=$};
         \begin{scope}[xshift=2.30cm]
-            \TN@insertion[label=above:$X$]{bijX}{(0.55,0)}
+            \TN@sectorgauge{bijX}{(0.55,0)}{X}
             \TN@tensor{bijC}{(1.75,0)}
-            \TN@insertion[label=above:$X^{-1}$]{bijXi}{(2.95,0)}
+            \TN@inverseSectorgauge{bijXi}{(2.95,0)}{X^{-1}}
             \TN@vleg{bijX}{west}{-0.50,0}
             \TN@vconnect{bijX}{east}{bijC}{west}
             \TN@vconnect{bijC}{east}{bijXi}{west}
@@ -2390,37 +2405,45 @@
             \TN@pconnect{bijIt}{south}{bijC}{north}
             \TN@vleg{bijIt}{north}{0,0.42}
             \node at (1.02,1.32) {$K^{-1}$};
-            \TN@vpath{(0,-1.10) -- (3.50,-1.10)}
-            \TN@vpath{(0,-1.50) -- (3.50,-1.50)}
-            \node[anchor=east] at (-0.09,-1.10) {$j$};
-            \node[anchor=east] at (-0.09,-1.50) {$q$};
-            \TN@vpath{(bijX.south) -- (0.55,-1.50)}
-            \TN@vpath{(bijC.south) -- (1.75,-1.10)}
-            \TN@vpath{(bijXi.south) -- (2.95,-1.50)}
-            \TN@anonymousjunction{(0.55,-1.10)}
-            \TN@anonymousjunction{(0.55,-1.50)}
-            \TN@anonymousjunction{(1.75,-1.10)}
-            \TN@anonymousjunction{(2.95,-1.10)}
-            \TN@anonymousjunction{(2.95,-1.50)}
+            \TN@vbus{bijJ}
+                {($(bijX.center)+(-0.55,-\TN@busoffset)$)}
+                {($(bijXi.center)+(0.55,-\TN@busoffset)$)}{j}
+            \TN@vparallelbus{bijQ}{bijJ}{-\TN@buspitch}{q}
+            \TN@vport{bijCBlock}{bijC}{south}
+            \TN@vbusprojecttap{bijJ}{bijJX}{bijXBlock}
+            \TN@vbusprojecttap{bijQ}{bijQX}{bijXCopy}
+            \TN@vconnectports{bijXBlock}{bijJX}
+            \TN@vconnectports{bijXCopy}{bijQX}
+            \TN@vbusprojecttap{bijJ}{bijJC}{bijCBlock}
+            \TN@vconnectports{bijCBlock}{bijJC}
+            \TN@vbusprojecttap{bijJ}{bijJXi}{bijXiBlock}
+            \TN@vbusprojecttap{bijQ}{bijQXi}{bijXiCopy}
+            \TN@vconnectports{bijXiBlock}{bijJXi}
+            \TN@vconnectports{bijXiCopy}{bijQXi}
         \end{scope}
         \node at (6.25,0) {$=$};
         \begin{scope}[xshift=6.70cm]
-            \TN@insertion[label=above:$X$]{bijPX}{(0.55,0)}
-            \TN@insertion[label=above:$X^{-1}$]{bijPXi}{(2.95,0)}
+            \TN@sectorgauge{bijPX}{(0.55,0)}{X}
+            \TN@inverseSectorgauge{bijPXi}{(2.95,0)}{X^{-1}}
             \TN@vleg{bijPX}{west}{-0.50,0}
             \TN@vleg{bijPXi}{east}{0.50,0}
             \TN@vpath[rounded corners=3pt]{(bijPX.east) -- (1.05,0) -- (1.05,1.00) -- (1.35,1.00)}
             \TN@vpath[rounded corners=3pt]{(bijPXi.west) -- (2.45,0) -- (2.45,1.00) -- (2.15,1.00)}
-            \TN@vpath{(1.75,1.50) -- (1.75,-1.10)}
-            \TN@vpath{(0,-1.10) -- (3.50,-1.10)}
-            \TN@vpath{(0,-1.50) -- (3.50,-1.50)}
-            \TN@vpath{(bijPX.south) -- (0.55,-1.50)}
-            \TN@vpath{(bijPXi.south) -- (2.95,-1.50)}
-            \TN@anonymousjunction{(0.55,-1.10)}
-            \TN@anonymousjunction{(0.55,-1.50)}
-            \TN@anonymousjunction{(1.75,-1.10)}
-            \TN@anonymousjunction{(2.95,-1.10)}
-            \TN@anonymousjunction{(2.95,-1.50)}
+            \TN@vbus{bijPJ}
+                {($(bijPX.center)+(-0.55,-\TN@busoffset)$)}
+                {($(bijPXi.center)+(0.55,-\TN@busoffset)$)}{}
+            \TN@vparallelbus{bijPQ}{bijPJ}{-\TN@buspitch}{}
+            \TN@vbusprojecttap{bijPJ}{bijPJX}{bijPXBlock}
+            \TN@vbusprojecttap{bijPQ}{bijPQX}{bijPXCopy}
+            \TN@vconnectports{bijPXBlock}{bijPJX}
+            \TN@vconnectports{bijPXCopy}{bijPQX}
+            \TN@vbusprojecttap{bijPJ}{bijPJXi}{bijPXiBlock}
+            \TN@vbusprojecttap{bijPQ}{bijPQXi}{bijPXiCopy}
+            \TN@vconnectports{bijPXiBlock}{bijPJXi}
+            \TN@vconnectports{bijPXiCopy}{bijPQXi}
+            \TN@vterminal{bijPBlockTop}{(1.75,1.50)}
+            \TN@vbusprojecttap{bijPJ}{bijPJBlock}{bijPBlockTop}
+            \TN@vconnectports{bijPBlockTop}{bijPJBlock}
         \end{scope}
     \end{tikzpicture}%
 }
@@ -2681,7 +2704,7 @@
     \begin{tikzpicture}[tn picture]
         \TN@tensor{tnL}{(0,0)}
         \TN@tensor{tnR}{(1.60,0)}
-        \TN@insertion[label=below:$#3$]{tnY}{(0.80,-0.78)}
+        \TN@insertion[label=above:$#3$]{tnY}{(0.80,-0.78)}
         \TN@pleg{tnL}{north}{0,\TN@physleglen}
         \TN@pleg{tnR}{north}{0,\TN@physleglen}
         \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
@@ -2891,10 +2914,10 @@
         \begin{scope}[xshift=2.30cm]
             \TN@tensor{absBt}{(0,0)}
             \TN@pleg{absBt}{north}{0,0.44}
-            \TN@insertion[label=left:$Z_{e_1}^{\pm1}$]{absL}{(-0.70,0)}
-            \TN@insertion[label=right:$Z_{e_2}^{\pm1}$]{absR}{(0.70,0)}
-            \TN@insertion[label=below:$Z_{e_3}^{\pm1}$]{absDL}{(-0.48,-0.60)}
-            \TN@insertion[label=below:$Z_{e_4}^{\pm1}$]{absDR}{(0.48,-0.60)}
+            \TN@insertion[label=above:$Z_{e_1}^{\pm1}$]{absL}{(-0.70,0)}
+            \TN@insertion[label=above:$Z_{e_2}^{\pm1}$]{absR}{(0.70,0)}
+            \TN@insertion[label=left:$Z_{e_3}^{\pm1}$]{absDL}{(-0.48,-0.60)}
+            \TN@insertion[label=right:$Z_{e_4}^{\pm1}$]{absDR}{(0.48,-0.60)}
             \TN@vleg{absL}{west}{-0.28,0}
             \TN@vconnect{absL}{east}{absBt}{west}
             \TN@vconnect{absBt}{east}{absR}{west}
@@ -3164,11 +3187,11 @@
         \path[tn region complement, fill=none]
             (0.3,0.3) -- (1.2,0.3) -- (1.2,0.8) -- (1.7,0.8) --
             (1.7,1.7) -- (0.3,1.7) -- cycle;
-        \node[tn region label complement] at (1.48,1.35) {$U$};
         \node[tn region label selected] at (0.75,0.55) {$2\times3$};
         \node[tn region label secondary] at (1.20,1.25) {$3\times2$};
-        \node at (0.98,-0.55)
-        {$U=\bigcup_j C_j,\quad C_j\cong 2\times3\ \mathrm{or}\ 3\times2$};
+        \node[align=center] at (0.98,-0.68)
+        {$U=\bigcup_j C_j,$\\[-1pt]
+        $C_j\cong 2\times3\ \mathrm{or}\ 3\times2$};
     \end{tikzpicture}%
 }
 
@@ -3196,7 +3219,6 @@
             \TN@pepsNormalSquareLattice
             \TN@pepsNormalRegionR
             \TN@pepsNormalSingleSiteDifference
-            \node at (1.00,0.98) {$R$};
         \end{scope}
         \node at (2.85,2.00) {$\subset$};
         \begin{scope}[xshift=3.55cm]
@@ -3204,8 +3226,8 @@
             \TN@pepsNormalSquareLattice
             \TN@pepsNormalRegionS
             \TN@pepsNormalSingleSiteDifference
-            \node at (1.00,0.98) {$S=R\cup\{v\}$};
         \end{scope}
+        \node at (4.55,0.52) {$S=R\cup\{v\}$};
     \end{tikzpicture}%
 }
 
@@ -3255,7 +3277,6 @@
                 \TN@pepsNormalSquareLattice
                 \TN@pepsNormalRegionR
                 \TN@pepsNormalSingleSiteDifference
-                \node at (1.00,0.98) {$R$};
             \end{scope}
             \node at (2.85,2.00) {$\subset$};
             \begin{scope}[xshift=3.55cm]
@@ -3263,9 +3284,9 @@
                 \TN@pepsNormalSquareLattice
                 \TN@pepsNormalRegionS
                 \TN@pepsNormalSingleSiteDifference
-                \node at (1.00,0.98) {$S=R\cup\{v\}$};
             \end{scope}
-            \node at (2.85,0.98) {one-site comparison};
+            \node at (4.55,0.52) {$S=R\cup\{v\}$};
+            \node at (2.85,0.20) {one-site comparison};
         \end{scope}
     \end{tikzpicture}%
 }
@@ -3280,10 +3301,10 @@
         \begin{scope}[xshift=2.35cm]
             \TN@tensor{tiA}{(0,0)}
             \TN@pleg{tiA}{45}{0.34,0.34}
-            \TN@insertion[label=left:$X$]{tiXL}{(-0.76,0)}
-            \TN@insertion[label=right:$X^{-1}$]{tiXR}{(0.76,0)}
-            \TN@insertion[label=below:$Y$]{tiYD}{(0,-0.76)}
-            \TN@insertion[label=above:$Y^{-1}$]{tiYU}{(0,0.76)}
+            \TN@insertion[label=above:$X$]{tiXL}{(-0.76,0)}
+            \TN@insertion[label=above:$X^{-1}$]{tiXR}{(0.76,0)}
+            \TN@insertion[label=left:$Y$]{tiYD}{(0,-0.76)}
+            \TN@insertion[label=left:$Y^{-1}$]{tiYU}{(0,0.76)}
             \TN@vleg{tiXL}{west}{-0.24,0}
             \TN@vconnect{tiXL}{east}{tiA}{west}
             \TN@vconnect{tiA}{east}{tiXR}{west}
@@ -3521,10 +3542,10 @@
         \TN@vconnectports{vbS}{vbZSN}
         \TN@vconnectports{vbZSS}{vbSOpen}
         \TN@pconnectports{vbP}{vbPOpen}
-        \node at (-0.52,0.28) {$c_{v,e_1}$};
-        \node at (0.52,0.28) {$c_{v,e_2}$};
-        \node at (0.44,0.5) {$c_{v,e_3}$};
-        \node at (0.44,-0.5) {$c_{v,e_4}$};
+        \node at (-0.58,0.28) {$c_{v,e_1}$};
+        \node at (0.62,-0.28) {$c_{v,e_2}$};
+        \node at (-0.42,0.60) {$c_{v,e_3}$};
+        \node at (0.42,-0.60) {$c_{v,e_4}$};
         \node at (2.35,0) {$\displaystyle\prod_{e \ni v} c_{v,e} = 1$};
     \end{tikzpicture}%
 }

@@ -10,7 +10,7 @@
 % region boundaries are separate semantic marks and do not represent indices.
 % Dashed curves indicate grouping, a basis change, or an identified periodic
 % boundary.  Tensor labels do not change the glyph used for the tensor.
-\usetikzlibrary{backgrounds,calc,fit}
+\usetikzlibrary{backgrounds,calc,decorations.pathreplacing,fit}
 
 \tikzset{
     % Theme slots.  These are the only styles a light or dark document should
@@ -148,9 +148,23 @@
         execute at begin picture={\global\advance\TN@pictureid by 1\relax}
     }}
 
-\def\TN@physleglen{0.42}
+% Universal layout parameters.  Complete diagrams may scale the surrounding
+% picture, but constructions should use these names rather than repeat the
+% corresponding numerical distances.  A layer pitch is the displacement of
+% one layer from the midline; paired layers therefore lie two pitches apart.
+\def\TN@layerpitch{0.50}
+\def\TN@virtualleglen{0.60}
+\def\TN@physicalleglen{0.42}
+\def\TN@traceclearance{0.42}
+\def\TN@busoffset{1.10}
+\def\TN@buspitch{0.40}
+\def\TN@branchfirstfraction{0.28}
+\def\TN@branchsecondfraction{0.72}
+
+% Compatibility names used by the established library constructions.
+\def\TN@physleglen{\TN@physicalleglen}
 \def\TN@physlabeloff{0.68}
-\def\TN@doublelayersep{0.50}
+\def\TN@doublelayersep{\TN@layerpitch}
 \def\TN@chainsep{1.45}
 \def\TN@chainright{4.20}
 \def\TN@chainellipsisx{2.82}
@@ -289,6 +303,12 @@
     \TN@registerport{#1}{morphism}%
 }
 
+% Annotation endpoints carry no tensor index type.  They name only the support
+% of a brace or other explanatory mark.
+\newcommand{\TN@annotationterminal}[2]{%
+    \coordinate (#1) at #2;%
+}
+
 % A port may also lie at a specified fraction of a boundary segment.  This is
 % useful for a box carrying several indices on the same side.
 \newcommand{\TN@betweenport}[4]{%
@@ -414,6 +434,20 @@
     \TN@pconnectpoints[#1]{#2}{#3}%
 }
 
+% Orthogonal contractions retain typed endpoints.  The order in the command
+% name records whether the first segment is horizontal or vertical.
+\newcommand{\TN@vconnectportshv}[3][]{%
+    \TN@assertporttype{#2}{virtual}%
+    \TN@assertporttype{#3}{virtual}%
+    \draw[tn virtual wire,rounded corners=3pt,#1] (#2) -| (#3);%
+}
+
+\newcommand{\TN@vconnectportsvh}[3][]{%
+    \TN@assertporttype{#2}{virtual}%
+    \TN@assertporttype{#3}{virtual}%
+    \draw[tn virtual wire,rounded corners=3pt,#1] (#2) |- (#3);%
+}
+
 \newcommand{\TN@mconnectports}[3][]{%
     \TN@assertporttype{#2}{morphism}%
     \TN@assertporttype{#3}{morphism}%
@@ -505,6 +539,31 @@
         -| ($(#3)+(#4,-#5)$) -- ++(-#4,0) -- (#3);%
 }
 
+% Physical trace closures have the same compositional interface and geometry
+% as virtual trace closures, but their endpoints and strokes retain physical
+% index type.  The last two arguments are the horizontal and vertical
+% clearances.
+\newcommand{\TN@ptraceportsbelow}[5][]{%
+    \TN@assertporttype{#2}{physical}%
+    \TN@assertporttype{#3}{physical}%
+    \draw[tn physical trace,#1] (#2) -- ++(-#4,0) -- ++(0,-#5)
+        -| ($(#3)+(#4,0)$) -- (#3);%
+}
+
+\newcommand{\TN@ptraceportsabove}[5][]{%
+    \TN@assertporttype{#2}{physical}%
+    \TN@assertporttype{#3}{physical}%
+    \draw[tn physical trace,#1] (#2) -- ++(-#4,0) -- ++(0,#5)
+        -| ($(#3)+(#4,0)$) -- (#3);%
+}
+
+\newcommand{\TN@ptraceportsright}[5][]{%
+    \TN@assertporttype{#2}{physical}%
+    \TN@assertporttype{#3}{physical}%
+    \draw[tn physical trace,#1] (#2) -- ++(0,#5)
+        -| ($(#3)+(#4,-#5)$) -- ++(-#4,0) -- (#3);%
+}
+
 % General paths remain available for closures and lattice edges whose route is
 % not a single segment.  Complete contractions should still use the anchored
 % connect commands above whenever both endpoint objects are named.
@@ -552,6 +611,21 @@
     \draw[tn annotation,#1] #2;%
 }
 
+% A span brace is an annotation, not an index line.  Its endpoints may be any
+% named coordinates, including typed terminals, since the brace contracts no
+% tensor indices.
+\newcommand{\TN@spanbraceabove}[4][]{%
+    \draw[tn annotation,decorate,
+        decoration={brace,amplitude=3pt,raise=2pt},#1]
+        (#2) -- (#3) node[midway,above=5pt] {$#4$};%
+}
+
+\newcommand{\TN@spanbracebelow}[4][]{%
+    \draw[tn annotation,decorate,
+        decoration={brace,amplitude=3pt,raise=2pt,mirror},#1]
+        (#2) -- (#3) node[midway,below=5pt] {$#4$};%
+}
+
 \newcommand{\TN@openwire}[5][]{%
     \draw[#2,#1] (#3.#4) -- ++(#5);%
 }
@@ -585,13 +659,15 @@
 
 % Trace closures are index lines, not region boundaries.
 \newcommand{\TN@vtracebelow}[3]{%
-    \draw[tn virtual trace] (#1.west) -- ++(-0.42,0) -- ++(0,-#3)
-        -| ($(#2.east)+(0.42,0)$) -- (#2.east);%
+    \draw[tn virtual trace] (#1.west) -- ++(-\TN@traceclearance,0)
+        -- ++(0,-#3) -| ($(#2.east)+(\TN@traceclearance,0)$)
+        -- (#2.east);%
 }
 
 \newcommand{\TN@vtraceabove}[3]{%
-    \draw[tn virtual trace] (#1.west) -- ++(-0.42,0) -- ++(0,#3)
-        -| ($(#2.east)+(0.42,0)$) -- (#2.east);%
+    \draw[tn virtual trace] (#1.west) -- ++(-\TN@traceclearance,0)
+        -- ++(0,#3) -| ($(#2.east)+(\TN@traceclearance,0)$)
+        -- (#2.east);%
 }
 
 \newcommand{\TN@vtraceright}[3]{%
@@ -600,7 +676,7 @@
 
 \newcommand{\TN@ptraceright}[3]{%
     \draw[tn physical trace] (#1.north) -- ++(0,#3)
-        -| ($(#1.center)!0.5!(#2.center)+(0.42,0)$)
+        -| ($(#1.center)!0.5!(#2.center)+(\TN@traceclearance,0)$)
         |- ($(#2.south)+(0,-#3)$) -- (#2.south);%
 }
 
