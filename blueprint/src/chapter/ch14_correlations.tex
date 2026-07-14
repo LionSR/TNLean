@@ -286,7 +286,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \cite[Definition~3.2]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Idempotent transfer-map criterion]\label{def:is_rfp}
+\begin{definition}[Idempotent transfer-map criterion]\label{def:mps_transfer_idempotence}
     \lean{MPSTensor.IsRFP}
     \leanok
     \uses{def:transfer_map}
@@ -295,10 +295,10 @@ and rates for the single-tensor transfer map $\E_A$.
 \end{definition}
 
 \begin{theorem}[A physical blocking isometry gives transfer idempotence]
-    \label{thm:kraus_isometry_implies_rfp}
+    \label{thm:physical_blocking_implies_transfer_idempotence}
     \lean{MPSTensor.isRFP_of_kraus_isometry}
     \leanok
-    \uses{def:is_rfp}
+    \uses{def:mps_transfer_idempotence}
     Suppose there exists an isometry
     $V : \C^d \to \C^{d^2}$, written as coefficients $V_{(i_1,i_2),j}$, such
     that
@@ -320,7 +320,8 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:kraus_isometry_iff_transfer_idempotence}
     \lean{MPSTensor.isRFP_iff_kraus_isometry}
     \leanok
-    \uses{def:is_rfp, thm:kraus_isometry_implies_rfp}
+    \uses{def:mps_transfer_idempotence,
+        thm:physical_blocking_implies_transfer_idempotence}
     The transfer map of $A$ is idempotent if and only if there exists an
     isometry $V : \C^d \to \C^{d^2}$, written as coefficients
     $V_{(i_1,i_2),j}$ with $V^\dagger V = 1$, such that
@@ -330,9 +331,11 @@ and rates for the single-tensor transfer map $\E_A$.
     for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:kraus_isometry_implies_rfp, thm:kraus_rectangular_freedom'}
+    \uses{thm:physical_blocking_implies_transfer_idempotence,
+        thm:kraus_rectangular_freedom'}
     The backward implication is
-    Theorem~\ref{thm:kraus_isometry_implies_rfp}. For the forward implication,
+    Theorem~\ref{thm:physical_blocking_implies_transfer_idempotence}. For the
+    forward implication,
     expanding $\E_A^2 = \E_A$ as a Kraus sum gives, for every $X$,
     \[
         \sum_{i_1,i_2}(A^{i_1} A^{i_2})\,X\,(A^{i_1} A^{i_2})^\dagger
@@ -346,7 +349,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:physical_blocking_isometry_iff_transfer_idempotence}
     \lean{MPSTensor.isRFP_iff_hasPhysicalBlockingIsometry}
     \leanok
-    \uses{def:physical_blocking_isometry, def:is_rfp,
+    \uses{def:physical_blocking_isometry, def:mps_transfer_idempotence,
         thm:kraus_isometry_iff_transfer_idempotence}
     The transfer map of an MPS tensor is idempotent if and only if the tensor
     has a physical blocking isometry.
@@ -384,7 +387,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{def:is_locally_orthogonal}
     \lean{MPSTensor.IsLocallyOrthogonal}
     \leanok
-    \uses{def:is_rfp}
+    \uses{def:mps_transfer_idempotence}
     For the single-block convention used here, local orthogonality means
     \[
         \E_A^2=\E_A .
@@ -479,7 +482,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.halvedWeightTensor_sameMPV₂_halvedDecomp}
     \lean{MPSTensor.halvedWeightTensor_not_isRFP}
     \leanok
-    \uses{def:source_bnt_zcl, def:is_rfp, def:sector_bnt_cf}
+    \uses{def:source_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf}
     Let $P$ be the canonical decomposition with one scalar basis tensor $C^0=(1)$,
     two one-dimensional copies, and respective weights $1$ and $1/2$. Write
     $A=\mathcal A(P)$ for its assembled tensor. Relative to these sector
@@ -526,7 +529,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isRFP_directSum}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:is_rfp}
+    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence}
     Let $(A_j)_j$ be nonzero-dimensional, irreducible, left-canonical,
     pairwise gauge-phase-distinct BNT components.  If the direct-sum tensor
     $A=\bigoplus_j A_j$ satisfies $\E_A^2=\E_A$, then $A$ has positive-gap
@@ -561,7 +564,7 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
     \lean{MPSTensor.rfp_nt_structural}
     \leanok
-    \uses{def:is_rfp, def:normal, def:injective}
+    \uses{def:mps_transfer_idempotence, def:normal, def:injective}
     If $A$ is a nonzero normal RFP tensor, then $A$ is injective.
 \end{theorem}
 \begin{proof}\leanok
@@ -575,7 +578,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:rfp_nt_structural_of_left_canonical}
     \lean{MPSTensor.rfp_nt_structural_of_leftCanonical}
     \leanok
-    \uses{def:is_rfp, def:normal, def:injective}
+    \uses{def:mps_transfer_idempotence, def:normal, def:injective}
     Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
     \[
         \sum_i (A^i)^\dagger A^i = \Id.
@@ -596,7 +599,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:rfp_nt_cfii_diagonal_fixed_point}
     \lean{MPSTensor.rfp_nt_cfii_diagonal_fixedPoint}
     \leanok
-    \uses{def:is_rfp, def:normal, def:transfer_map}
+    \uses{def:mps_transfer_idempotence, def:normal, def:transfer_map}
     Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
     \[
         \sum_i (A^i)^\dagger A^i = \Id.
@@ -626,7 +629,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
     \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isRFP_injective}
     \leanok
-    \uses{def:is_rfp, def:injective, def:fixed_point_proj,
+    \uses{def:mps_transfer_idempotence, def:injective, def:fixed_point_proj,
         thm:exponential_convergence_primitive}
     Let $A$ be an injective left-canonical RFP tensor with positive-definite
     fixed point $\rho$ of the transfer map $\E_A$. Then
@@ -897,7 +900,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:is_rfp_of_isometry_canonical_form}
     \lean{MPSTensor.isRFP_of_isIsometryCanonicalForm}
     \leanok
-    \uses{def:is_isometry_canonical_form, def:is_rfp}
+    \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence}
     A tensor in isometry canonical form is a renormalization fixed point. This is
     the backward direction of the structural characterization of pure-state
     renormalization fixed points in \cite[Section~3]{Cirac2016MPDO_arXiv}, which
@@ -981,7 +984,8 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     \lean{MPSTensor.isBNTLocallyOrthogonal_of_isRFP_directSum}
     \leanok
-    \uses{def:is_bnt_locally_orthogonal, def:is_rfp, def:mixed_transfer_rect}
+    \uses{def:is_bnt_locally_orthogonal, def:mps_transfer_idempotence,
+        def:mixed_transfer_rect}
     Let $(A_j)_j$ be a family of distinct irreducible left-canonical blocks, no
     two of which are gauge-phase equivalent, and suppose the direct sum
     $\bigoplus_j A_j$ is a renormalization fixed point. Then for every pair of
@@ -1079,7 +1083,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{lem:isrfp_block_of_rfp_direct_sum}
     \lean{MPSTensor.isRFP_block_of_isRFP_directSum}
     \leanok
-    \uses{def:is_rfp, def:mixed_transfer_rect}
+    \uses{def:mps_transfer_idempotence, def:mixed_transfer_rect}
     If the direct sum $\bigoplus_k B_k$ is a renormalization fixed point, with
     $\dim_k \ge 1$ for all $k$, then each block $B_j$ is a renormalization fixed
     point.
@@ -1095,7 +1099,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:residual_isometry_of_rfp_direct_sum}
     \lean{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}
     \leanok
-    \uses{def:is_residual_isometry_family, def:is_rfp,
+    \uses{def:is_residual_isometry_family, def:mps_transfer_idempotence,
         def:is_isometry_canonical_form}
     Let $(A_j)_j$ be a family of normal, irreducible, left-canonical blocks, no
     two of which are gauge-phase equivalent, with $\dim_j \ge 1$ for all $j$, and
@@ -1139,7 +1143,8 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:is_rfp_of_isometry_canonical_form_direct_sum}
     \lean{MPSTensor.isRFP_directSumTensor_of_isIsometryCanonicalForm}
     \leanok
-    \uses{def:is_isometry_canonical_form, def:is_rfp, def:mixed_transfer_rect}
+    \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence,
+        def:mixed_transfer_rect}
     Let $(B_k)_k$ be a family of tensors, each in isometry canonical form, whose
     cross-block mixed transfer operators vanish, $\E_{j,j'}=0$ for $j\ne j'$. Then
     the direct sum $\bigoplus_k B_k$ is a renormalization fixed point. This is the
@@ -1177,7 +1182,8 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:rfp_directSumTensor_iff}
     \lean{MPSTensor.isRFP_directSumTensor_iff}
     \leanok
-    \uses{def:is_rfp, def:is_isometry_canonical_form, def:mixed_transfer_rect,
+    \uses{def:mps_transfer_idempotence, def:is_isometry_canonical_form,
+        def:mixed_transfer_rect,
         def:normal, def:irreducible_tensor, def:gauge_phase_equiv}
     Let $(B_k)_k$ be a family of normal, irreducible, left-canonical blocks with
     $\dim_k \ge 1$ for all $k$, no two of which are gauge-phase equivalent. Then
@@ -1225,7 +1231,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:phase_flip_tensor_not_rfp}
     \lean{MPSTensor.phaseFlipTensor_literal_display_ambiguity}
     \leanok
-    \uses{def:is_rfp, def:is_isometry_canonical_form}
+    \uses{def:mps_transfer_idempotence, def:is_isometry_canonical_form}
     Let $B$ be the one-letter, one-dimensional tensor $B^0=(1)$, and form two
     block-diagonal copies with phases $1$ and $-1$:
     \[
@@ -1238,7 +1244,7 @@ and rates for the single-tensor transfer map $\E_A$.
     accompanying interpretation in which the copy index also belongs to the
     physical direct sum: there is no scalar $v$ such that
     $(A^0)^2=vA^0$. In particular, $A$ is not a renormalization fixed point
-    in the sense of Definition~\ref{def:is_rfp}.
+    in the sense of Definition~\ref{def:mps_transfer_idempotence}.
 % Source ambiguity: equation III_CFI_RFP at lines 543--554 admits this literal
 % virtual-block substitution, while lines 559--563 require j,q to contribute
 % to both physical and virtual direct sums; see
@@ -1300,7 +1306,8 @@ and rates for the single-tensor transfer map $\E_A$.
 \end{proof}
 
 \begin{remark}\label{rem:zero_correlation_length}
-    \uses{thm:spectral_radius_le_one, def:correlation_length, def:is_rfp}
+    \uses{thm:spectral_radius_le_one, def:correlation_length,
+        def:mps_transfer_idempotence}
     When the transfer map is idempotent ($\E^2=\E$), connected correlations become
     separation-independent for all separations $n \ge 1$.
     Informally, this corresponds to zero correlation length ($\xi=0$).
@@ -1421,7 +1428,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:is_positive_gap_physical_cid_of_is_rfp}
     \lean{MPSTensor.isPositiveGapPhysicalCID_of_isRFP}
     \leanok
-    \uses{def:is_rfp, def:is_positive_gap_physical_cid}
+    \uses{def:mps_transfer_idempotence, def:is_positive_gap_physical_cid}
     If $\E_A^2=\E_A$, then physical correlations are independent of distance
     whenever both complementary gaps are positive.
 \end{theorem}
@@ -1461,7 +1468,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:isCID_implies_isRFP}
     \lean{MPSTensor.isCID_implies_isRFP}
     \leanok
-    \uses{def:is_cid, def:is_rfp, def:transfer_map}
+    \uses{def:is_cid, def:mps_transfer_idempotence, def:transfer_map}
     If an MPS tensor admits a positive definite right fixed point and its
     virtual-insertion correlator is independent of distance, then its transfer
     map is idempotent.
@@ -1479,7 +1486,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:zcl_iff_idempotent_transfer}
     \lean{MPSTensor.zcl_iff_idempotent_transfer}
     \leanok
-    \uses{def:is_rfp, def:is_cid, def:is_locally_orthogonal}
+    \uses{def:mps_transfer_idempotence, def:is_cid, def:is_locally_orthogonal}
     Under the single-block convention above,
     \[
         \bigl(\E_A^2=\E_A \ \text{and}\ \operatorname{CID}(A)\bigr)
@@ -1503,7 +1510,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:rfp_iff_zcl}
     \lean{MPSTensor.rfp_iff_zcl}
     \leanok
-    \uses{def:is_canonical_form, def:is_rfp, def:is_zcl}
+    \uses{def:is_canonical_form, def:mps_transfer_idempotence, def:is_zcl}
     Let $A^i=\bigoplus_k \mu_k A_k^i$ be a tensor in canonical form. For each
     $k$, the tensor $A_k$ is a renormalization fixed point if and only if
     $A_k$ has zero correlation length.
