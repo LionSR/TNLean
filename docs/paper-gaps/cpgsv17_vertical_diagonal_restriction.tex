@@ -169,9 +169,10 @@ separation supplies a nonzero compression.  Its trace is the sector weight
 $\mu_{\alpha,k}$ times a sector trace $d_\alpha$, so MPDO positivity forces
 $d_\alpha>0$ and $\mu_{\alpha,k}>0$ under the normalization
 $\mu_{\alpha,1}>0$ (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
-\path{TNLean/MPS/MPDO/SectorTrace.lean}). Granted the dressed-adjoint
-identities of the two displayed diagrams at lines~1909--1919, transported
-blockwise by Lemma~L, the Gram matrix of each sector gauge $X_{\alpha,k}$ is
+\path{TNLean/MPS/MPDO/SectorTrace.lean}). Granted the pairwise
+Gram-conjugation identity of the second displayed diagram at
+lines~1914--1919, transported blockwise by a reflected form of Lemma~L, the
+Gram matrix of each sector gauge $X_{\alpha,k}$ is
 a positive real multiple of the reference Gram matrix,
 \[
 X_{\alpha,k}^\dagger X_{\alpha,k}
@@ -195,8 +196,11 @@ What remains open is the reflected marked-chain and Lemma~L argument of source
 lines~1909--1919.  Its fixed-index form exchanges the two oriented bond indices,
 and the adjoint marked chain reverses the tail word.  A corresponding
 reflected marked-chain form of Lemma~L is needed before the relative Gram
-theorem can normalize the gauges; the resulting sector maps must then be
-assembled into the final coisometry.  Consequently, the conclusion stated at
+theorem can normalize the gauges.  It must compare two grouped copies and
+derive their relative Gram-conjugation equality; identifying either copy
+separately with the raw reflected adjoint would force the non-gauge-invariant
+conclusion that the tensor itself is Hermitian.  The resulting sector maps
+must then be assembled into the final coisometry.  Consequently, the conclusion stated at
 lines~1903--1908 has not yet been derived from the MPDO hypotheses.
 
 \paragraph{Verdict.}

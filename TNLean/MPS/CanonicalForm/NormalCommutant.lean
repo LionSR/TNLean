@@ -24,16 +24,13 @@ X_{\alpha,1}^\dagger X_{\alpha,1}$ and the unitary normalization of the
 relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$.  In the source normalization
 $X_{\alpha,1} = \Id$, this is
 $U_{\alpha,k} = \omega_{\alpha,k}^{-1/2} X_{\alpha,k}$ from lines 1906--1908.
-The commutation hypothesis arises from the two displayed diagrams of lines
-1909--1919: the first diagram, transported blockwise by Lemma L, says that the
-sector-dressed tensor equals its adjoint dressing,
-$X A^v X^{-1} = (X^{-1})^\dagger C^v X^\dagger$, where the fixed adjoint
-orientation gives $C^v=(A^{v^{\mathrm{op}}})^\dagger$.  The second diagram
-eliminates this common target between two sector gauges.  The resulting ratio
-of their Gram matrices commutes with every matrix of the tensor.  The passage
-from a common dressed target to the relative form of eq3 is proved below;
-deriving the common target from self-adjointness of the sector compressions,
-including the reflected tail word, remains open.
+The commutation hypothesis is the relative conclusion of the two displayed
+diagrams at lines 1909--1919.  Hermiticity first gives a reflected marked-chain
+identity whose adjoint reverses the unmarked tail.  Lemma L is then applied to
+two sectors together, producing equality of their Gram conjugations.  The
+resulting ratio of Gram matrices commutes with every matrix of the tensor.
+The passage from this relative equality to eq3 is proved below; deriving the
+relative equality from the reflected marked chains remains open.
 
 ## Main results
 
@@ -50,7 +47,7 @@ including the reflected tail word, remains open.
   same-letter specializations of the common-target argument.
 * `Matrix.gram_conj_eq_of_dressed_target` /
   `Matrix.gram_conj_eq_gram_conj_of_common_dressed_target`:
-  the source-faithful common-target form of the two displayed diagrams.
+  conditional algebraic consequences of an abstract common target.
 * `MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq` /
   `MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target`:
   the relative two-gauge form of eq3, without a self-adjoint-letter
@@ -71,11 +68,13 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- **From the first displayed diagram to the second** (arXiv:1606.00608,
-proof of Proposition 4.13, lines 1909--1919): if conjugation by an invertible
-gauge carries `B` to the dressing of a common target `C`, then conjugation by
-the Gram matrix carries `B` to `C`.  In the source, `C` is the adjoint of the
-letter with its oriented bond indices exchanged. -/
+/-- If conjugation by an invertible gauge carries `B` to the dressing of an
+abstract target `C`, then conjugation by the Gram matrix carries `B` to `C`.
+
+This is a conditional algebraic route to the relative Gram identity in
+arXiv:1606.00608, proof of Proposition 4.13, lines 1909--1919.  The source's
+reflected marked-chain argument does not identify such a target separately
+for each sector. -/
 theorem gram_conj_eq_of_dressed_target
     {X B C : Matrix n n ℂ} (hX : IsUnit X.det)
     (hdress : X * B * X⁻¹ = X⁻¹ᴴ * C * Xᴴ) :
@@ -285,13 +284,14 @@ theorem IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq
     exact (Complex.ext (Complex.ofReal_re c.re)
       (by rw [Complex.ofReal_im]; exact hcIm)).symm
 
-/-- **Relative equation eq3 from the common dressed target.**  If two
+/-- **Conditional relative equation eq3 from a common dressed target.**  If two
 invertible gauges dress every letter of a normal tensor to the same target,
 then their Gram matrices differ by a positive real scalar.  The target may
-depend on the letter; for the MPO adjoint in Figure 7 it is the adjoint of the
-letter with exchanged oriented bond indices.
+depend on the letter.
 
-Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1909--1921. -/
+This is an algebraic consequence of the Figure 8 equality in
+arXiv:1606.00608, proof of Proposition 4.13, lines 1909--1921.  It is not the
+source-facing reflected marked-chain statement. -/
 theorem IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target
     {A C : MPSTensor d D} (hA : IsNormal A)
     {X Y : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
@@ -372,11 +372,11 @@ theorem IsNormal.smul_mem_unitaryGroup_of_commute
 dressings and the letters themselves are self-adjoint, then
 $X^\dagger X = \omega\,\Id$ for a necessarily positive constant $\omega$.
 
-**Scope restriction (self-adjoint letters):** the fixed orientation of Figure
-7 instead has the common target $(A^{v^{\mathrm{op}}})^\dagger$ and does not
-assume $(A^v)^\dagger=A^v$.  Thus this theorem is only the same-letter
-specialization.  The relative common-target statement is
-`IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target`.  See
+**Scope restriction (self-adjoint letters):** the reflected marked-chain
+argument of Figure 7 does not assume $(A^v)^\dagger=A^v$ and does not assert
+an individual dressed-adjoint identity.  Thus this theorem is only a
+same-letter conditional specialization.  The source-facing relative theorem
+is `IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq`.  See
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint
     {A : MPSTensor d D} (hA : IsNormal A)
