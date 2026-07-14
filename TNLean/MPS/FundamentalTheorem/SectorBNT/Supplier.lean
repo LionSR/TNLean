@@ -170,18 +170,8 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     rw [hYX_eq N, norm_mul, norm_pow, hζ_norm, one_pow, one_mul]
   have hYX : Tendsto (fun N => ‖mpvOverlap (d := d) Y X N‖) atTop (𝓝 (1 : ℝ)) :=
     hXX.congr fun N => (hYX_norm_eq N).symm
-  have hDYDX : DY = DX := by
-    by_contra hD
-    have hzero :
-        Tendsto (fun N => mpvOverlap (d := d) Y X N) atTop (𝓝 (0 : ℂ)) :=
-      mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
-        Y X hIrrY hIrrX hTPY hTPX hD
-    have hnorm_zero :
-        Tendsto (fun N => ‖mpvOverlap (d := d) Y X N‖) atTop (𝓝 (0 : ℝ)) := by
-      simpa using hzero.norm
-    have h10 : (1 : ℝ) = 0 := tendsto_nhds_unique hYX hnorm_zero
-    exact one_ne_zero h10
-  exact hDYDX.symm
+  exact (dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
+    Y X hIrrY hIrrX hTPY hTPX hYX).symm
 
 /--
 **Prepared phase classes preserve the original bond dimensions.**

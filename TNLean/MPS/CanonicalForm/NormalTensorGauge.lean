@@ -151,8 +151,10 @@ This is the grouping implication in arXiv:1606.00608, Lemma `equalMPS`
 (lines 1080--1117) and Proposition `prop:char-BNT` (lines 1135--1148).
 Each tensor is first put into its trace-preserving Perron gauge.  The gauges
 are pure similarities because both tensors have spectral radius one.  The
-trace-preserving equal-overlap theorem supplies the gauge-phase relation, which
-is then transported back to the original tensors. -/
+rectangular overlap-decay theorem gives equality of the bond dimensions from
+the positive-length overlaps, without using the empty word.  The
+trace-preserving equal-overlap theorem then supplies the gauge-phase relation,
+which is transported back to the original tensors. -/
 theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
     {DX DY : ℕ} [NeZero DX] [NeZero DY]
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
@@ -162,12 +164,10 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
       GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) hdim) X) Y := by
   classical
-  have hdim : DX = DY := h.dim_eq
-  subst hdim
   obtain ⟨σX, _hσX, _hσXfix, hTPX, hGaugeX, hPrimX, hIrrX⟩ := hX.exists_tpGauge
   obtain ⟨σY, _hσY, _hσYfix, hTPY, hGaugeY, hPrimY, hIrrY⟩ := hY.exists_tpGauge
   let X' := tpGauge (d := d) (D := DX) X σX
-  let Y' := tpGauge (d := d) (D := DX) Y σY
+  let Y' := tpGauge (d := d) (D := DY) Y σY
   have hPhase : MPVBlockPhaseEquiv X' Y' := by
     obtain ⟨ζ, hζ, hmpv⟩ := h
     refine ⟨ζ, hζ, ?_⟩
@@ -209,6 +209,10 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
   have hCrossNorm : Tendsto
       (fun N => ‖mpvOverlap (d := d) X' Y' N‖) atTop (nhds (1 : ℝ)) :=
     hSelfNorm.congr fun N => (hCrossNormEq N).symm
+  have hdim : DX = DY :=
+    dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
+      X' Y' hIrrX hIrrY hTPX hTPY hCrossNorm
+  subst DY
   have hGaugePhase : GaugePhaseEquiv X' Y' :=
     gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
       X' Y' hIrrX hIrrY hTPX hTPY hCrossNorm

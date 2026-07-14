@@ -17,8 +17,10 @@ nonzero complex scalar times an invertible conjugate of its representative.
 The physical isometries are retained unchanged, so all reducing identities and
 the literal reconstruction of every vertical letter survive the regrouping.
 
-The conclusion is precisely the display at arXiv:1606.00608, lines 1895--1898,
-using the general BNT construction at lines 259--301 and 1135--1148.  No
+This is the algebraic phase-class decomposition invoked in the first sentence
+of arXiv:1606.00608, line 1898.  It combines the BNT characterization at lines
+1135--1148 with the preceding isometry-preserving vertical sector theorem.  It
+does not prove the positive-diagonal isometry asserted at lines 1895--1896.  No
 positivity of the grouped coefficients and no unitarity of the gauges is
 asserted here; those are consequences of the subsequent MPDO argument at lines
 1898--1921.
@@ -53,8 +55,10 @@ nonzero complex number `μ (enum j q) * ζ j q`.  The representatives form a
 basis of normal tensors for the corresponding weighted block tensor and are
 pairwise gauge-phase distinct.
 
-Source: arXiv:1606.00608, Proposition `prop:vertical`, lines 1895--1898;
-Definition and characterization of a BNT, lines 259--301 and 1135--1148. -/
+Source: the algebraic phase-class decomposition in the first sentence of
+arXiv:1606.00608, line 1898, using the BNT characterization at lines
+1135--1148 and the preceding isometry-preserving vertical sector theorem.  The
+positive-diagonal isometry asserted at lines 1895--1896 is not included. -/
 theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
