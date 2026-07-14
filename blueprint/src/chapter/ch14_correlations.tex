@@ -270,16 +270,32 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \section{Renormalization fixed points and zero correlation length}
 
-\begin{definition}[Renormalization fixed point]\label{def:is_rfp}
+\begin{definition}[Physical blocking isometry]
+    \label{def:physical_blocking_isometry}
+    \lean{MPSTensor.HasPhysicalBlockingIsometry}
+    \leanok
+    An MPS tensor $A$ is a \emph{renormalization fixed point} if there is an
+    isometry $V\colon \C^d\to\C^{d^2}$, with coefficients
+    $V_{(i_1,i_2),j}$ and $V^\dagger V=1$, such that, for all physical indices
+    $i_1,i_2$,
+    \begin{equation}\label{eq:corr_physical_blocking_isometry}
+        A^{i_1}A^{i_2}
+        =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j.
+    \end{equation}
+    This is the relation $AA=A$ in
+    \cite[Definition~3.2]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Idempotent transfer-map criterion]\label{def:is_rfp}
     \lean{MPSTensor.IsRFP}
     \leanok
     \uses{def:transfer_map}
-    An MPS tensor $A$ is a \emph{renormalization fixed point} (RFP) when its
-    transfer map is idempotent, $\E_A \circ \E_A = \E_A$.
-    See \cite[Definition~3.2]{Cirac2016MPDO_arXiv}.
+    The transfer map of $A$ satisfies the idempotence criterion when
+    $\E_A\circ\E_A=\E_A$.
 \end{definition}
 
-\begin{theorem}[Kraus-isometry criterion for RFP]\label{thm:kraus_isometry_implies_rfp}
+\begin{theorem}[A physical blocking isometry gives transfer idempotence]
+    \label{thm:kraus_isometry_implies_rfp}
     \lean{MPSTensor.isRFP_of_kraus_isometry}
     \leanok
     \uses{def:is_rfp}
@@ -290,8 +306,7 @@ and rates for the single-tensor transfer map $\E_A$.
         A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
     \end{equation}
     for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
-    Then $A$ is a renormalization fixed point.
-    This is the backward direction of \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
+    Then $\E_A^2=\E_A$.
 \end{theorem}
 \begin{proof}\leanok
     Expanding $\E_A^2$ gives a double Kraus sum indexed by pairs $(i_1,i_2)$.
@@ -301,19 +316,18 @@ and rates for the single-tensor transfer map $\E_A$.
     $\{A^j\}$, hence $\E_A^2 = \E_A$.
 \end{proof}
 
-\begin{theorem}[Renormalization-fixed-point characterization]%
-    \label{thm:renormalization_flow}
+\begin{theorem}[Kraus-isometry criterion for transfer idempotence]%
+    \label{thm:kraus_isometry_iff_transfer_idempotence}
     \lean{MPSTensor.isRFP_iff_kraus_isometry}
     \leanok
     \uses{def:is_rfp, thm:kraus_isometry_implies_rfp}
-    An MPS tensor $A$ is a renormalization fixed point if and only if there
-    exists an isometry $V : \C^d \to \C^{d^2}$, written as coefficients
+    The transfer map of $A$ is idempotent if and only if there exists an
+    isometry $V : \C^d \to \C^{d^2}$, written as coefficients
     $V_{(i_1,i_2),j}$ with $V^\dagger V = 1$, such that
     \begin{equation}\label{eq:corr_AA_isometry}
         A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
     \end{equation}
     for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
-    This is \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:kraus_isometry_implies_rfp, thm:kraus_rectangular_freedom'}
@@ -327,6 +341,29 @@ and rates for the single-tensor transfer map $\E_A$.
     Theorem~\ref{thm:kraus_rectangular_freedom'} then supplies the isometry $V$
     relating the two Kraus families.
 \end{proof}
+
+\begin{theorem}[Physical and transfer-map fixed-point criteria]
+    \label{thm:physical_blocking_isometry_iff_transfer_idempotence}
+    \lean{MPSTensor.isRFP_iff_hasPhysicalBlockingIsometry}
+    \leanok
+    \uses{def:physical_blocking_isometry, def:is_rfp,
+        thm:kraus_isometry_iff_transfer_idempotence}
+    The transfer map of an MPS tensor is idempotent if and only if the tensor
+    has a physical blocking isometry.
+\end{theorem}
+\begin{proof}\leanok
+    This is Theorem~\ref{thm:kraus_isometry_iff_transfer_idempotence}, with the
+    physical blocking relation written as
+    Definition~\ref{def:physical_blocking_isometry}.
+\end{proof}
+
+\begin{theorem}[Limits of the renormalization flow]
+    \label{thm:renormalization_flow}
+    \uses{def:physical_blocking_isometry}
+    A tensor appears as a limit of the two-site renormalization flow if and only
+    if it has a physical blocking isometry. This is
+    \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
+\end{theorem}
 
 \begin{figure}[ht]
     \centering

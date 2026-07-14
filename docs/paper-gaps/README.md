@@ -67,7 +67,10 @@ For MPDO renormalization fixed points:
   canonical-form hypotheses. It also records the ambiguity between a literal
   virtual-block reading of the repeated-copy display `III_CFI_RFP` and the
   accompanying physical direct-sum interpretation: the one-letter phase-flip
-  tensor fails both `AA=A` and whole-tensor transfer-map idempotence.
+  tensor fails both `AA=A` and whole-tensor transfer-map idempotence. The source
+  relation `AA=A` and its unrestricted equivalence with transfer-map
+  idempotence are formalized; the physical-space meaning of the repeated-copy
+  index remains open.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 

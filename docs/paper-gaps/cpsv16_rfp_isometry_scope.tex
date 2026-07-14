@@ -375,12 +375,14 @@ The calculation therefore does not show that a source RFP is rejected by the
 formal predicate.  Rather, it exposes an ambiguity in taking the displayed
 matrix formula independently of its accompanying physical-space
 interpretation.  The source definition of a pure-state RFP is the physical
-isometry relation
-\path{AA=A} (local source
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:420--425}), whereas the present
-formal predicate is literal idempotence of the transfer map.  The source then
-states the repeated-copy form in Theorem~\path{charact-MPS}, including the
-independent unit phases (local source
+isometry relation \path{AA=A} (local source
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:420--425}).  It is formalized by
+\leanid{MPSTensor.HasPhysicalBlockingIsometry}.  The unrestricted equivalence
+between this relation and transfer-map idempotence is
+\leanid{MPSTensor.isRFP_iff_hasPhysicalBlockingIsometry}; it is the Kraus-family
+argument at source lines 1205--1209.  The source then states the repeated-copy
+form in Theorem~\path{charact-MPS}, including the independent unit phases
+(local source
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:543--554}).  For the two-phase
 virtual-block reading above, neither \path{AA=A} nor literal whole-tensor
 idempotence holds.  Consequently this tensor must not be called a source RFP.
@@ -402,11 +404,13 @@ Second, the repeated-copy index $q$ must be represented at the level at which
 the source physical isometry acts.  It cannot be collapsed into a block-diagonal
 bond tensor and then tested by literal whole-tensor transfer-map idempotence,
 because the phase-flip tensor then fails the source relation \path{AA=A} as well
-as transfer-map idempotence.  A
-source-faithful characterization should formalize the relation \path{AA=A}
-itself, or an equivalent physical-isometry predicate, and prove its precise
-relation to transfer-map idempotence after stating the necessary canonical-form
-or quotient conditions.
+as transfer-map idempotence.  The relation \path{AA=A} and its unrestricted
+equivalence with transfer-map idempotence are now formalized.  The remaining
+problem is therefore not the fixed-point predicate: it is a precise
+physical-space construction of the $q$-copies that agrees with the prose at
+source lines 559--563.  Until such a construction is stated, the independent
+phases in the displayed virtual block sum do not give a valid backward
+implication.
 
 \section{Conclusion}
 
