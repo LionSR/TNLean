@@ -14,9 +14,8 @@
     \[
         \eta_{k,h}=\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}.
     \]
-    It acts on the neighboring bond space $B_k^{R}\otimes B_h^{L}$
-    (Figure~\ref{fig:mpdo_eta_sector_decomposition}). This is the operator
-    displayed in
+    It acts on the neighboring bond space $B_k^{R}\otimes B_h^{L}$. This is
+    the operator displayed in
     \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -890,17 +889,12 @@
       {Cirac2016MPDO_arXiv}.
 \end{theorem}
 
-\begin{figure}[ht]
-    \centering
+On the sector triple $(k,l,h)$, the two operators act on distinct neighboring
+factors, while the outer factors $B_k^L$ and $B_h^R$ remain unchanged.  Their
+commutativity is therefore the local identity
+\begin{center}
     \TNMPDOFixedSectorAdjacentCommutativity
-    \caption{On the sector triple $(k,l,h)$, the operator
-    $\eta_{k,l}$ acts only on $B_k^R\otimes B_l^L$, whereas $\eta_{l,h}$ acts
-    only on $B_l^R\otimes B_h^L$. The outer factors $B_k^L$ and $B_h^R$ are
-    unchanged.
-    Thus exchanging the vertical order of the two operators leaves the
-    contraction unchanged, which is the displayed fixed-sector commutativity.}
-    \label{fig:mpdo_fixed_sector_adjacent_bonds_comm}
-\end{figure}
+\end{center}
 
 \begin{proof}
     \leanok

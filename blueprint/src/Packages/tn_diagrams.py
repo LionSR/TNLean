@@ -211,6 +211,50 @@ _DIAGRAM_ARGS.update(
     }
 )
 
+# A figure is retained only when spatial routing is part of the mathematical
+# assertion.  Every other chapter-facing diagram is a compact display.  The
+# list is intentionally explicit: changing a display into a numbered figure
+# therefore requires a reviewable metadata change as well as a TeX edit.
+_FIGURE_DIAGRAMS = frozenset(
+    {
+        "TNBNTDecomposition",
+        "TNMPDOBlockedRFPChannels",
+        "TNMPDOCompleteZipperFusionPentagon",
+        "TNMPDOCyclicEtaContraction",
+        "TNMPDOFirstSiteContractions",
+        "TNMPDOFirstSiteInsertionBlockwise",
+        "TNMPDOFirstSiteInsertionHypothesis",
+        "TNMPDOFixedFinalComparisonUnitary",
+        "TNMPDOFixedFinalFusionBracketings",
+        "TNMPDOFourfoldBondReassociationPentagon",
+        "TNMPDOFusionTracePower",
+        "TNMPDOHorizontalCanonicalForm",
+        "TNMPDOInverseMapThreeSiteContraction",
+        "TNMPDOLocalOrthogonality",
+        "TNMPDONormalizedFourSiteTail",
+        "TNMPDOPhysicalIsometryTransport",
+        "TNMPDOPrintedFMove",
+        "TNMPDORecursiveStructureOperator",
+        "TNMPDORefinementConstruction",
+        "TNMPDORefinementDirection",
+        "TNMPDOThreeSiteClosureFactorization",
+        "TNMPDOThreeSiteTraceAndShift",
+        "TNMPDOTwoSiteClosureFactorization",
+        "TNMPDOTwoSiteTraceAndShift",
+        "TNMPDOVerticalDirectSum",
+        "TNMPDOVerticalGaugeGramComparison",
+        "TNMPDOVerticalReducingSectors",
+        "TNRFPIsometryCanonicalForm",
+        "TNRFPIsometryCanonicalFormBlocks",
+        "TNRFPKrausIsometry",
+        "TNRFPKrausIsometryReverse",
+    }
+)
+_DIAGRAM_ROLES = {
+    name: "figure" if name in _FIGURE_DIAGRAMS else "display"
+    for name in _DIAGRAM_ARGS
+}
+
 
 def _diagram_arity(args: str) -> int:
     return len(args.split())
@@ -329,6 +373,40 @@ def _mask_tex_comments(source: str) -> str:
 def _pattern_locations(path: Path, pattern: re.Pattern[str]) -> list[str]:
     text = _mask_tex_comments(path.read_text(encoding="utf-8"))
     return [_source_line(path, match.start()) for match in pattern.finditer(text)]
+
+
+def _assert_diagram_roles_match_chapters() -> None:
+    """Check display/figure metadata against every chapter use."""
+
+    actual: dict[str, set[str]] = {name: set() for name in _DIAGRAM_ARGS}
+    call_pattern = re.compile(r"\\(TN[A-Z]\w*)")
+    figure_pattern = re.compile(r"\\begin\{figure\}.*?\\end\{figure\}", re.DOTALL)
+    for path in sorted((_SRC_DIR / "chapter").rglob("*.tex")):
+        source = _mask_tex_comments(path.read_text(encoding="utf-8"))
+        figure_spans = [match.span() for match in figure_pattern.finditer(source)]
+        for match in call_pattern.finditer(source):
+            name = match.group(1)
+            if name not in actual:
+                continue
+            role = (
+                "figure"
+                if any(start <= match.start() < end for start, end in figure_spans)
+                else "display"
+            )
+            actual[name].add(role)
+
+    mixed = sorted(name for name, roles in actual.items() if len(roles) > 1)
+    mismatched = sorted(
+        name
+        for name, roles in actual.items()
+        if roles and roles != {_DIAGRAM_ROLES[name]}
+    )
+    stale_figures = sorted(_FIGURE_DIAGRAMS - set(_DIAGRAM_ARGS))
+    if mixed or mismatched or stale_figures:
+        raise RuntimeError(
+            "Tensor-network display/figure roles are inconsistent "
+            f"(mixed={mixed}, mismatched={mismatched}, stale={stale_figures})."
+        )
 
 
 def _assert_no_chapter_local_tikz() -> None:
@@ -478,13 +556,27 @@ def _assert_slide_diagram_contract() -> None:
         re.findall(r"^\s*(tn theme [^/]+?)/\.style", core_source, re.MULTILINE)
     )
     slide_tn_style_keys = set(
-        re.findall(r"^\s*(tn [^/]+?)/\.style", library_source, re.MULTILINE)
+        re.findall(
+            r"^\s*(tn [^/]+?)/\.(?:append )?style",
+            library_source,
+            re.MULTILINE,
+        )
     )
     invalid_theme_keys = sorted(slide_tn_style_keys - core_theme_keys)
     if invalid_theme_keys:
         raise RuntimeError(
             "The slide theme may replace only declared tn theme slots: "
             + ", ".join(invalid_theme_keys)
+        )
+
+    theme_geometry = re.compile(
+        r"(?:baseline|scale|xshift|yshift|shape|font|line width|"
+        r"minimum (?:width|height|size)|inner sep|outer sep|rounded corners)\s*="
+    )
+    if theme_geometry.search(_mask_tex_comments(library_source)):
+        raise RuntimeError(
+            "The slide theme may change only the palette; tensor-network "
+            "geometry and typography belong to tex/tn/tn_core.tex."
         )
 
     duplicate_kernel = re.compile(
@@ -567,6 +659,35 @@ def _client_pattern_locations(pattern: re.Pattern[str]) -> list[str]:
         for path in _client_source_paths()
         for location in _pattern_locations(path, pattern)
     ]
+
+
+def _mask_slide_theme(source: str) -> str:
+    """Mask declared slide-theme blocks while retaining source offsets."""
+
+    characters = list(source)
+    for match in re.finditer(r"\\tikzset\s*", source):
+        offset = _skip_tex_space(source, match.end())
+        if offset >= len(source) or source[offset] != "{":
+            continue
+        _, end = _tex_group(source, offset, "{", "}")
+        characters[match.start() : end] = " " * (end - match.start())
+    return "".join(characters)
+
+
+def _client_geometry_locations() -> list[str]:
+    """Locate client geometry, excluding the audited palette-only theme."""
+
+    locations = []
+    for path in _client_source_paths():
+        source = path.read_text(encoding="utf-8")
+        if path == _SLIDE_LIBRARY:
+            source = _mask_slide_theme(source)
+        source = _mask_tex_comments(source)
+        locations.extend(
+            _source_line(path, match.start())
+            for match in _LOCAL_GEOMETRY_PATTERN.finditer(source)
+        )
+    return locations
 
 
 def _public_macro_bodies(source: str) -> list[tuple[str, int, str]]:
@@ -866,7 +987,7 @@ def _semantic_audit_counts() -> dict[str, object]:
         "unused_diagrams": unused_diagrams,
         "private_client_calls": _client_pattern_locations(_PRIVATE_COMMAND_PATTERN),
         "raw_client_tikz": _client_pattern_locations(_CLIENT_TIKZ_PATTERN),
-        "local_geometry": _client_pattern_locations(_LOCAL_GEOMETRY_PATTERN),
+        "local_geometry": _client_geometry_locations(),
     }
 
 
@@ -920,6 +1041,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
 
     _assert_diagram_args_match_print_macros()
     _assert_diagram_templates_cover_registered_macros()
+    _assert_diagram_roles_match_chapters()
     _assert_no_chapter_local_tikz()
     _assert_typed_port_syntax()
     _assert_no_raw_glyph_nodes()
@@ -1369,8 +1491,9 @@ class _TNTikZDiagram(Command):
                 )
             return _missing_tools_html(tex_call)
 
+        role = _DIAGRAM_ROLES[self.macroName]
         return (
-            '<img class="tn-svg" '
+            f'<img class="tn-svg tn-svg-{role}" '
             f'src="{escape(src, quote=True)}" '
             f'alt="{escape(tex_call, quote=True)}">'
         )

@@ -263,20 +263,20 @@
     property and the older per-copy trace-separation hypotheses.
 \end{remark}
 
-\begin{figure}[ht]
-    \centering
-    \TNMPDOBlockInjectiveInverse
-    \caption{The inverse tensor of a block-injective canonical form:
-    contracting $K^{-1}$ with the doubled physical index of the canonical
-    form passes the virtual legs of the gauge factors $X$ and $X^{-1}$ to
-    the virtual legs of $K^{-1}$ and ties its block index to the block
-    line $j$, which is the matrix-unit identity
-    $\sum_p(\mathcal K_j^p)_{\alpha,\beta}
+The inverse tensor of a block-injective canonical form satisfies
+\[
+    \sum_p(\mathcal K_j^p)_{\alpha,\beta}
     (K^{-1,p}_{j'})_{\alpha',\beta'}
-    =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}$.
-    This is \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_block_injective_inverse}
-\end{figure}
+    =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
+\]
+Contracting $K^{-1}$ with the doubled physical index passes the virtual legs
+of $X$ and $X^{-1}$ to $K^{-1}$ and identifies its block index with the line
+$j$:
+\begin{center}
+    \TNMPDOBlockInjectiveInverse
+\end{center}
+This is the inverse identity in
+\cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[Finite block-separation criterion]
     \label{thm:propblockinj_abstract}
@@ -912,17 +912,14 @@
     of the two first-site insertions.
 \end{proof}
 
-\begin{figure}[ht]
-    \centering
+The trace-pairing step used above is the following local identity:
+\begin{center}
     \TNMPDOInsertionTracePairing
-    \caption{The trace-pairing step in the proof of the preceding lemma: for
-    every $W$ in the span of the length-$N$ word evaluations of the
-    canonical form, $\tr(WA^Y)=\tr(WA^Z)$, where $A^Y$ denotes the tensor
-    with $Y$ applied to its physical index. Compare the two displays in the
-    proof of Lemma~L,
-    \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_insertion_trace_pairing}
-\end{figure}
+\end{center}
+For every $W$ in the span of the length-$N$ word evaluations of the
+canonical form, it states $\tr(WA^Y)=\tr(WA^Z)$, where $A^Y$ is obtained by
+applying $Y$ to the physical index.  Compare the two displays in the proof of
+Lemma~L, \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[One-sided invariant corners of positive operators]
     \label{thm:mpdo_opposite_corner_zero}
@@ -999,18 +996,15 @@
     \]
 \end{definition}
 
-\begin{figure}[ht]
-    \centering
+The horizontal operator $H^{(N)}(\widetilde M)$ is the cyclic word
+\begin{center}
     \TNMPDOHorizontalOperator
-    \caption{The horizontal operator $H^{(N)}(\tilde M)$: one row of $N$
-    copies of $\tilde M$, with the virtual bond contracted along the row and
-    closed by the trace, while every ket and bra leg stays external. Reading
-    the ket--bra pair at each site as one doubled index identifies the
-    entries of $H^{(N)}$ with the matrix product vector of the doubled-index
-    tensor. This is the contraction displayed in the proof of
-    \cite[Proposition~4.13, lines~1876--1880]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_horizontal_operator}
-\end{figure}
+\end{center}
+Its virtual indices are contracted around the row, while every ket and bra
+index remains external.  Reading each ket--bra pair as one doubled index
+identifies its entries with the matrix product vector of the doubled-index
+tensor.  This is the contraction in
+\cite[Proposition~4.13, lines~1876--1880]{Cirac2016MPDO_arXiv}.
 
 \begin{lemma}[Coefficient form of the three first-site contractions]
     \label{lem:mpdo_three_first_site_contraction_coefficients}
