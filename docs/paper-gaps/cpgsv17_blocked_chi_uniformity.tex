@@ -630,10 +630,28 @@ under the explicit assumption $0<D_\varepsilon$.  The dimensional
 qualification is necessary because injectivity is vacuous when
 $D_\varepsilon=0$.  Thus the fixed-final invertibility obstruction has been
 removed under the simultaneous-selector, present-blocking injectivity, and
-positive-bond-dimension hypotheses.  The remaining steps are to derive those
-hypotheses from the source assumptions, identify the orientation convention
-with the printed $F$-matrix, and prove the pentagon-like equation mentioned at
-lines~995--999.
+positive-bond-dimension hypotheses.
+
+For an arbitrary coefficient-form BNT, the positive dimensions, a common
+positive blocking length, and the simultaneous one-letter span of the blocked
+representatives are now derived by
+\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.%
+exists_blocked_wordTupleSpanTop_one}.  In particular, that theorem supplies
+a span containing every tuple that is the identity on one labelled block and
+zero on the others.  One-letter injectivity and selector coefficients can
+therefore be extracted after the same common blocking, without adding either
+property to the definition of a BNT.
+
+For the positive-diagonal fusion family, the remaining construction begins by
+linking its final-label tensors to the BNT witness that is already part of the
+source assumptions.  The simultaneous inverse must then be extracted from the
+blocked span and reindexed in the fusion coordinates.  After transporting the
+fusion equations through the same blocking, one must prove
+$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$, assemble the synthesis and
+analysis maps with their biorthogonality, prove both zipper equations and
+\texttt{inversegaugeone}, and construct
+\leanid{MPOTensor.CompleteZipperFusionFamily}.  The existing printed
+$F$-matrix and pentagon theorem can then be applied to this family.
 
 Independently of this positive-diagonal specialization, the source-faithful
 complete zipper fusion structure is now formalized by
