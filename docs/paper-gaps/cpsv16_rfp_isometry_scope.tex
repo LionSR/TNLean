@@ -332,6 +332,20 @@ isometry family.  This discharges the canonical-form extraction for the
 multiplicity-one basis direct sum.  It does not identify that direct sum with
 the repeated-copy tensor carrying the weights $\mu_{j,q}$.
 
+For a literal direct sum of any block family $(B_k)_k$, whole-tensor transfer
+idempotence has now been reduced exactly to the mixed block equations
+\[
+  \mathcal E_{\oplus_k B_k}^2=\mathcal E_{\oplus_k B_k}
+  \quad\Longleftrightarrow\quad
+  \mathcal E_{j,j'}^2=\mathcal E_{j,j'}
+  \quad\text{for every }j,j'.
+\]
+This is formalized by
+\leanid{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem}.
+It shows that repeated virtual copies necessarily impose equations between
+distinct copies of the same normal tensor; checking only the representative
+block omits part of the whole-tensor fixed-point condition.
+
 \section{Ambiguity of a literal repeated-phase reading}
 
 Equation~\path{III_CFI_RFP} allows a fixed normal tensor indexed by $j$ to occur
@@ -384,11 +398,9 @@ Thus $\mathcal E_A^2\ne\mathcal E_A$.  The formal theorem
 \leanid{MPSTensor.phaseFlipTensor_not_isTransferIdempotent} proves that this tensor does not
 satisfy the present predicate \leanid{MPSTensor.IsTransferIdempotent}.
 
-The calculation therefore does not show that a source RFP is rejected by the
-formal predicate.  Rather, it exposes an ambiguity in taking the displayed
-matrix formula independently of its accompanying physical-space
-interpretation.  The source definition of a pure-state RFP is the physical
-isometry relation \path{AA=A} (local source
+The calculation exposes a gap between the displayed theorem and its
+accompanying physical-space interpretation.  The source definition of a
+pure-state RFP is the physical isometry relation \path{AA=A} (local source
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:420--425}).  It is formalized by
 \leanid{MPSTensor.HasPhysicalBlockingIsometry}.  The unrestricted equivalence
 between this relation and transfer-map idempotence is
@@ -398,25 +410,37 @@ form in Theorem~\path{charact-MPS}, including the independent unit phases
 (local source
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:543--554}).  For the two-phase
 virtual-block reading above, neither \path{AA=A} nor literal whole-tensor
-idempotence holds.  Consequently this tensor must not be called a source RFP.
-Before formalizing the full characterization, the copy index must be represented
-in a way that implements the physical direct sum described at lines 559--563.
+idempotence holds.
+
+The displayed isometry equation at lines 551--554 contains $j$ but no $q$.
+The prose at lines 561--563 says that $j,q$ participate in physical and virtual
+direct sums, but it gives neither a $q$-indexed isometry nor an equation for such
+an isometry.  In particular, a formal construction would also require a
+dimension condition for embedding the resulting direct sum into the physical
+space; no such condition occurs in the theorem.  Adding these data to a Lean
+statement would therefore add hypotheses absent from the cited statement and
+would violate the faithfulness rule.  The full repeated-copy theorem cannot be
+marked as formalized without a corrected source statement.
 
 \section{Elimination plan}
 
 The canonical-form extraction is discharged for the multiplicity-one basis
-direct sum by the two theorems cited above.  The remaining gap is the
-repeated-copy index $q$, which must be represented at the level at which
-the source physical isometry acts.  It cannot be collapsed into a block-diagonal
-bond tensor and then tested by literal whole-tensor transfer-map idempotence,
-because the phase-flip tensor then fails the source relation \path{AA=A} as well
-as transfer-map idempotence.  The relation \path{AA=A} and its unrestricted
-equivalence with transfer-map idempotence are now formalized.  The remaining
-problem is therefore not the fixed-point predicate: it is a precise
-physical-space construction of the $q$-copies that agrees with the prose at
-source lines 559--563.  Until such a construction is stated, the independent
-phases in the displayed virtual block sum do not give a valid backward
-implication.
+direct sum by the two theorems cited above.  For the literal repeated virtual
+block sum, the next formal step is to combine the pairwise mixed-transfer
+criterion with the scaling law
+\[
+  \mathcal E_{\mu B,\nu C}
+    = \mu\overline\nu\,\mathcal E_{B,C}.
+\]
+For two copies of the same trace-normalized isometry-canonical block, this
+forces $\mu_q\overline{\mu_{q'}}=1$ and hence equality of all phases within that
+copy class.  This yields a mathematically correct literal-block replacement,
+but it must be labelled as a correction rather than as the printed theorem.
+
+The independent-phase statement itself requires an author correction or an
+erratum specifying the missing $q$-dependent physical map, its isometry
+equation, and the necessary dimension hypothesis.  No such data will be
+introduced as new assumptions merely to obtain a formal equivalence.
 
 \section{Conclusion}
 
@@ -448,11 +472,13 @@ normal-tensor-block level by
 \leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.  For the
 multiplicity-one basis direct sum, the single BNT canonical-form predicate now
 supplies all blockwise hypotheses and the residual family.  The remaining part
-is a faithful treatment of repeated phase copies at the physical-isometry
-level.  The tensor $A^0=\operatorname{diag}(1,-1)$ proves that this
-cannot be represented by a literal virtual block diagonal on a one-dimensional
-physical space: that reading fails both \path{AA=A} and whole-tensor
-transfer-map idempotence.
+of the printed theorem is not presently a well-specified mathematical
+statement: its displayed isometry omits $q$, while the prose invokes an
+unspecified physical direct sum.  The tensor
+$A^0=\operatorname{diag}(1,-1)$ proves that the literal virtual-block reading
+fails both \path{AA=A} and whole-tensor transfer-map idempotence.  The formal
+development therefore records the exact literal-block criterion and leaves the
+independent-phase claim unmarked pending a corrected source statement.
 
 \bibliographystyle{alpha}
 \bibliography{references}
