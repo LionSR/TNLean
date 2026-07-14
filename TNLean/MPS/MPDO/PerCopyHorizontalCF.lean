@@ -264,9 +264,11 @@ insertions agree on every canonical-form block.
 This formalizes the doubled-index rotation implicit in the displayed
 equation of the proof of Proposition 4.13 of arXiv:1606.00608,
 lines 1873--1887.  It does not prove that a one-sided invariant projection
-for the vertically viewed tensor supplies the first entrywise identity; that
-further identification remains part of the horizontal-to-vertical
-canonical-form argument.
+for the vertically viewed tensor supplies the first entrywise identity.  The
+corresponding invariant-projection conclusion is proved by
+`IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor`; the complete
+horizontal-to-vertical implication is
+`MPOTensor.verticalCF_of_horizontalCF`.
 
 **Scope restriction (per-block separation):** inherited from
 `blockwise_insert_eq_of_mpv_agree` via `blockwise_opposite_insert_eq_of_mpv_agree`
