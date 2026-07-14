@@ -9,8 +9,11 @@
 \newtheorem{theorem}{Theorem}[subsection]
 \makeatletter
 \@addtoreset{theorem}{section}
+% Only meaningful once hyperref has defined \theHtheorem (web/PDF builds);
+% skip it in bare standalone compiles (e.g. tensor-network smoke renders).
+\@ifundefined{theHtheorem}{}{%
+  \renewcommand*{\theHtheorem}{\theHsubsection.\arabic{theorem}}}
 \makeatother
-\renewcommand*{\theHtheorem}{\theHsubsection.\arabic{theorem}}
 \renewcommand{\thetheorem}{%
   \ifnum\value{subsection}=0
     \thesection.\arabic{theorem}%
