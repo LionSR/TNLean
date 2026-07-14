@@ -202,9 +202,10 @@ For a CPSV normal tensor, the spectral-radius-one normalization supplies a pure
 trace-preserving gauge.  Gauge invariance of the physical RFP relation and of
 the canonical parent interactions transports the preceding result to
 \leanid{MPSTensor.rfp_implies_nncph} and
-\leanid{MPSTensor.rfp_implies_nncph_ground_state}.  Thus the forward
-commutation axiom has been eliminated in the single-normal-tensor scope.
-The reverse theorem now consumes both the explicit BNT relation
+\leanid{MPSTensor.rfp_implies_nncph_ground_state}.  Hence these declarations
+prove the commutation and zero-energy equations for a single CPSV normal
+tensor without an external axiom.
+The reverse theorem requires both the explicit BNT relation
 \leanid{MPSTensor.IsBNT} and the named all-chain condition
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
 the axiom \leanid{Axioms.beigi_nncph_to_rfp}.
@@ -223,7 +224,7 @@ including the spanning condition in the parent-Hamiltonian ground-space clause:
   \forall N>2,\; |V^{(N)}(A)\rangle
   \text{ is a ground state of a NNCPH}.
 \end{align}
-The forward commutation implication now uses the basic-vector form in
+The forward commutation implication uses the basic-vector form in
 Theorem~3.11 and the corresponding local projectors.  The reverse implication
 must internalize Beigi's
 one-dimensional nearest-neighbor commuting-Hamiltonian ground-space
