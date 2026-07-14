@@ -1,0 +1,262 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Formalization-Derived Corrections to Wolf's \emph{Quantum Channels \& Operations}}
+\author{}
+\date{2026-07-13}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+This note records only discrepancies in Michael M.~Wolf's \emph{Quantum
+Channels \& Operations: Guided Tour} that were exposed by the present Lean
+formalization or by a paper-gap analysis required to state a formal theorem
+faithfully. It is not a general errata list for the lecture notes. Its main
+body records only formalization-derived corrections; the final appendix records
+three separately audited local PDF--transcription errors. Each item quotes the
+relevant printed statement, gives the locally correct replacement, and explains
+why the correction is necessary.
+\end{abstract}
+
+\section{Scope}
+
+The source PDFs are stored in \path{Notes/WolfNotePDF/}; the local
+transcription is in \path{Notes/WolfNoteTexSource/}. The corresponding
+formalization and paper-gap records are named explicitly below. A distinction
+is essential:
+\begin{itemize}
+  \item a \emph{source error} is a printed mathematical assertion that is false
+    as stated;
+  \item a \emph{well-posedness correction} makes an implicit boundary convention
+    explicit, without changing the substantive theorem;
+  \item a \emph{formalization scope gap} is not an erratum: it records that the
+    current Lean theorem is narrower than the source or that an auxiliary proof
+    remains incomplete.
+\end{itemize}
+
+Only the first two kinds belong in the formalization-derived main body. The
+appendix keeps transcription errors visibly separate from that record.
+
+\section{The trace sign in the Lorentz-cone converse}
+\label{sec:lorentz}
+
+\paragraph{Formalization trigger.}
+The formal proof of the converse trace inequality requires nonnegativity of the
+trace. Its declaration is
+\path{Matrix.IsHermitian.posSemidef_of_trace_re_nonneg_of_card_sub_one_mul_trace_sq_re_le}
+in \doclink{TNLean/Analysis/MatrixTraceInequalities}. The discrepancy is
+tracked in \path{docs/paper-gaps/wolf_ch3_lorentz_cone_trace_sign.tex}.
+
+\paragraph{Printed source and its role.}
+The proposition occurs at the end of the discussion of automorphisms of the
+positive cone in Chapter~3.  Its first part gives the elementary necessary
+inequality for a positive semidefinite Hermitian matrix; the second part is
+intended to characterize the corresponding Lorentz cone.  Chapter~3,
+Proposition~3.7 in the local PDF (book p.~66; cited as Proposition~3.9 in a
+different numbering used by the formalization) states, for Hermitian $A$,
+\begin{equation}\tag{printed converse}
+  \operatorname{tr}(A)^2\geq(d-1)\operatorname{tr}(A^2)
+  \quad\Longrightarrow\quad A\geq0.
+\end{equation}
+
+\paragraph{Correction.}
+The valid converse is
+\begin{equation}\tag{formalized converse}
+  A=A^\dagger,\qquad
+  \operatorname{tr}(A)\geq0,\qquad
+  \operatorname{tr}(A)^2\geq(d-1)\operatorname{tr}(A^2)
+  \quad\Longrightarrow\quad A\geq0.
+\end{equation}
+In the complex-matrix Lean statement the traces are expressed through real
+parts; for Hermitian matrices these are the same real quantities.
+
+\paragraph{Why the correction is necessary.}
+Take $A=-I_d$. It is Hermitian and not positive semidefinite, but
+\begin{equation}
+  \operatorname{tr}(A)^2=d^2
+  \geq d(d-1)=(d-1)\operatorname{tr}(A^2).
+\end{equation}
+Thus the squared inequality alone describes both orientations of the Lorentz
+cone. The condition $\operatorname{tr}(A)\geq0$ selects the positive sheet.
+It is also used by the proof: when a negative eigenvalue is present, the source
+bounds $\operatorname{tr}(A)$ above by a nonnegative quantity and then squares
+that bound. Squaring is justified only after fixing the sign of the trace.
+
+\paragraph{Classification.}
+This is a genuine source error. The unrestricted printed converse should not
+be claimed as formalized; the formal theorem proves the corrected,
+trace-nonnegative statement.
+
+\section{The nonempty-family boundary in the Radon--Nikodym theorem}
+\label{sec:radon-nikodym}
+
+\paragraph{Formalization trigger.}
+The Lean theorem
+\leanid{IsCPMap.radon_nikodym_of_stinespring} makes the finite index type
+nonempty. The boundary is documented in
+\path{docs/paper-gaps/wolf_radon_nikodym_nonempty_family.tex}.
+
+\paragraph{Printed source and its role.}
+This theorem is the immediate instrument-valued corollary of the preceding
+comparison theorem for ordered completely positive maps.  A supplied
+Stinespring representation of the total map is held fixed, and the theorem
+resolves each CP component by a positive effect on the same dilation space.
+Chapter~2, Theorem~2.4 (book p.~39) says:
+\begin{quote}
+``Let $\{T_i\}$ be a set of completely positive linear maps such that
+$\sum_iT_i=T$ \ldots\ Then there is a set of positive operators $P_i\in M_r$
+which sum up to $I_r$ such that
+$T_i(A)=V^\dagger(A\otimes P_i)V$.''
+\end{quote}
+
+\paragraph{Formal statement.}
+The formal theorem uses a \emph{nonempty finite family}
+$\{T_i\}_{i\in\iota}$ and concludes
+\begin{equation}
+  \sum_{i\in\iota}P_i=I_r,
+  \qquad
+  T_i(A)=V^\dagger(A\otimes P_i)V.
+\end{equation}
+
+\paragraph{Why the boundary is needed.}
+If the index type is empty, then $\sum_iT_i=T$ forces $T=0$. Taking the zero
+Stinespring matrix $V=0$ still satisfies the representation hypothesis, but the
+printed conclusion would require
+\begin{equation}
+  0=\sum_iP_i=I_r,
+\end{equation}
+which is false when the dilation space has nonzero dimension. For the intended
+notion of a quantum instrument, a nonempty finite outcome family is the
+substantive case.
+
+\paragraph{Classification.}
+This is a local well-posedness correction, not an assertion that the
+nonempty-case Radon--Nikodym theorem is false. The source's word ``set'' and
+summation notation leave the boundary implicit; Lean must state it.
+
+\section{Formalization gaps that are not source corrections}
+
+The following Wolf-specific paper-gap notes are intentionally \emph{not}
+errata entries:
+\begin{itemize}
+  \item \path{wolf_prop28_square_case.tex}: the current normal-form theorem is
+    the square-dimensional special case of Wolf's rectangular statement;
+  \item \path{wolf_lemma_3_1_top_index_scope.tex},
+    \path{wolf_prop_3_2_top_index_scope.tex}, and
+    \path{wolf_t_eta_top_index_scope.tex}: endpoint Schmidt-rank cases that
+    were formalization scope gaps and are now resolved;
+  \item \path{wolf_reduction_criterion_schmidt_premise.tex}: the
+    Schmidt-number premise was a formalization dependency and is now resolved;
+  \item \path{wolf_ex3_1_choi_positivity_subcase_scope.tex}: the development
+    proves selected parameter families, not the full source range;
+  \item \path{wolf_ch5_operator_jensen_lieb.tex} and
+    \path{wolf_cor67_maximal_support_restriction.tex}: these describe
+    formalization boundaries and their resolution, not a false printed theorem.
+\end{itemize}
+
+\section{Conclusion}
+
+At present the formalization-derived record contains one genuine mathematical
+source error (Section~\ref{sec:lorentz}) and one explicit boundary convention
+(Section~\ref{sec:radon-nikodym}).  These are the only corrections asserted by
+the Lean documentation itself.
+
+\appendix
+\section{Corrected errors in the local LaTeX transcription}
+\label{app:transcription}
+
+This appendix is deliberately placed last.  Its entries were found by comparing
+the source PDFs with the local transcription; they are \emph{not} claims that a
+Lean proof forced a correction to Wolf's statement.  Each was a mathematically
+material transcription error and has now been corrected in the local TeX.
+
+\subsection{The Choi marginal: $\tau_B$ versus $\operatorname{tr}_B\tau$}
+
+\textbf{Source context.}  In Chapter~2, immediately after deriving the
+coordinate expression for the Choi--Jamiolkowski correspondence in
+Eq.~(2.4), Wolf explains the channel--state dictionary.  For a channel
+$T:M_d\to M_{d'}$, the first factor is the output factor $A$ and the second is
+the untouched input/reference factor $B$.  The PDF (book p.~34) states:
+\begin{quote}
+``If $T$ is a quantum channel in the Schr\"odinger picture, then $\tau$ is a
+density operator with reduced density matrix $\tau_B=\one/d$.''
+\end{quote}
+Thus $\tau_B$ denotes $\operatorname{tr}_A\tau$.
+
+\textbf{Transcription and correction.}  A previous local transcription at
+\path{ch02_representations.tex:113--114} changed the displayed marginal to
+$\operatorname{tr}_B\tau=\one/d$.  It has been corrected to retain Wolf's
+notation; equivalently, one may spell out
+\begin{equation}
+  \tau_B=\operatorname{tr}_A\tau=\frac{\one_d}{d}.
+\end{equation}
+
+\textbf{Reason.}  Trace preservation is equivalent to the last identity.  The
+other marginal satisfies $\operatorname{tr}_B\tau=T(\one)/d$ and is maximally
+mixed precisely when $T$ is unital.  Hence the local transcription accidentally
+turns a trace-preserving assertion into a stronger and generally false unitality
+assertion.
+
+\subsection{The conjugation in the proof of Kramer's theorem}
+
+\textbf{Source context.}  Chapter~3 proves Kramer's theorem for a Hermitian
+$H$ commuting with an anti-unitary symmetry $T=\Gamma V$, where $V^T=-V$.
+After showing that $V^\dagger\lvert\overline\psi\rangle$ is another eigenvector,
+the PDF (book p.~62, Eq.~(3.29)) establishes orthogonality by the chain
+\begin{equation}\tag{PDF (3.29)}
+ \langle\psi\mid V^\dagger\mid\overline\psi\rangle
+ =-\langle\psi\mid\overline V\mid\overline\psi\rangle
+ =-\overline{\langle\overline\psi\mid V\mid\psi\rangle}.
+\end{equation}
+The final conjugation is then identified with
+$\langle\psi\mid V^\dagger\mid\overline\psi\rangle$, proving that this scalar
+is its own negative.
+
+\textbf{Transcription and correction.}  A previous local TeX version at
+\path{ch03_positive_not_completely.tex:515} omitted the outer bar in the final
+term.  It has been corrected to the source-faithful and mathematically
+necessary term $-\overline{\langle\overline\psi\mid V\mid\psi\rangle}$.
+
+\textbf{Reason.}  Componentwise,
+\begin{equation}
+ \langle\psi\mid\overline V\mid\overline\psi\rangle
+ =\overline{\langle\overline\psi\mid V\mid\psi\rangle}.
+\end{equation}
+Without the conjugation the equality is false in general, and the final
+self-cancellation in the orthogonality argument does not follow.
+
+\subsection{The order of the conjugated factors in Example~5.3}
+
+\textbf{Source context.}  Chapter~5 studies the adjoint of the map
+$T(X)=\tfrac12(X^T+\tfrac12\operatorname{tr}(X)\one)$ as an example of a
+Schwarz map that need not be $2$-positive.  In the traceless case, the PDF
+(book p.~77, Eq.~(5.10)) subtracts the product
+\begin{equation}\tag{PDF (5.10), relevant term}
+  \frac14\,\overline A A^T
+\end{equation}
+from $T^*(A^\dagger A)$.
+
+\textbf{Transcription and correction.}  A previous local TeX version at
+\path{ch05_schwarz_inequalities.tex:373,377} instead wrote
+$A\overline A^{\,T}$.  It has been corrected to $\overline A A^T$, as in the
+source.
+
+\textbf{Reason.}  Since $T^*(A)=A^T/2$ for traceless $A$,
+\begin{equation}
+ T^*(A^\dagger)T^*(A)
+ =\frac14(A^\dagger)^T A^T
+ =\frac14\,\overline A A^T.
+\end{equation}
+The transcribed matrix $A\overline A^{\,T}=AA^\dagger$ is generally a
+different operator, even though both matrices are positive semidefinite and
+the final positivity conclusion in the example survives.
+
+\end{document}
