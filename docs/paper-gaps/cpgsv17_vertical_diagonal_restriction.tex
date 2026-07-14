@@ -147,9 +147,15 @@ formalized:
   QH^{(N)}=H^{(N)}Q.
 \]
 A nontrivial vertical period now yields the displaced cyclic projector and its
-word invariance.  The remaining step is the fixed-length interface: the
-present noncommutation predicate asks for a contradiction at every individual
-chain length, while Lemma~L consumes the simultaneous positive-length family.
+word invariance. The horizontal canonical-form version of Lemma~L supplies a
+chain length at which the displaced projector fails to commute; positivity at
+that length gives the contradiction. Thus nontrivial vertical periods are
+excluded without the stronger all-length inequality printed in the source.
+
+Invariant-projector closure is also established for the vertically viewed
+tensor, and it gives a complete orthogonal family of irreducible reducing
+corners with exact physical isometries
+(\path{TNLean/MPS/MPDO/VerticalReduction.lean}).
 
 The third stage now has conditional formalizations of its two closing
 arguments.  Granted orthogonal sector projectors whose insertion into the
@@ -165,11 +171,16 @@ a positive multiple $\omega_{\alpha,k}$ of the identity, in the normalization
 $X_{\alpha,1}=\Id$, and the normalized gauge
 $\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ is unitary, because a normal tensor
 has scalar commutant
-(\path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).  What remains open is
-the independent vertical canonical-form construction itself, which must
-supply the sector projectors with their loop identities and a nonvanishing
-compression, together with the derivation of the dressed-adjoint identities
-from self-adjointness of the sector compressions.
+(\path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}). Projector closure and
+the absence of periodic vectors already give an abstract positive-length
+normal-block decomposition
+(\path{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean}). What remains
+open is the refinement that retains the physical isometries and reducing
+projections through zero-corner removal and spectral normalization, and then
+groups the normal blocks. This must identify the grouped sector projectors
+with their loop identities and a nonvanishing compression, together with the
+derivation of the dressed-adjoint identities from self-adjointness of the
+sector compressions.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of
