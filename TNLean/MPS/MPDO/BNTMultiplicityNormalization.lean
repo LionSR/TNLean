@@ -23,7 +23,7 @@ obligations.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem IV.13(ii) and Appendix C.4, lines 2048--2085
+  Theorem IV.13(ii) and Appendix C.4, lines 2048--2064
 -/
 
 open scoped BigOperators

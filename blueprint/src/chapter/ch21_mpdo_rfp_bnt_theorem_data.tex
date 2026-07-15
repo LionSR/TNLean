@@ -76,6 +76,21 @@
     \]
 \end{lemma}
 
+\begin{proof}\leanok
+    The chi representation at length one gives
+    \[
+        c^{(1)}_{\alpha,\beta,\gamma}
+        =\tr(\chi_{\alpha,\beta,\gamma}).
+    \]
+    Substitution into the idempotent law
+    \[
+        m_\gamma
+        =\sum_{\alpha,\beta}
+          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
+    \]
+    gives the stated identity.
+\end{proof}
+
 \begin{theorem}[Multiplicity trace normalization from the spectrum comparison
     and BNT algebra clause]%
     \label{thm:mpdo_bnt_multiplicity_trace_normalization}
@@ -114,8 +129,23 @@
         \left(\sum_j\mu_{\beta,j}\right)
         \left(\sum_k\chi_{\alpha,\beta,\gamma,k}\right).
     \]
-    The one-site trace identities and the length-one idempotent law of the BNT
-    algebra clause give the final equality.
+    The identities
+    \[
+        \sum_i\mu_{\alpha,i}=m_\alpha,
+        \qquad
+        \sum_j\mu_{\beta,j}=m_\beta,
+        \qquad
+        \sum_k\chi_{\alpha,\beta,\gamma,k}
+          =c^{(1)}_{\alpha,\beta,\gamma}
+    \]
+    therefore give
+    \[
+        \tr(\nu_\gamma)
+        =\sum_{\alpha,\beta}
+          m_\alpha m_\beta c^{(1)}_{\alpha,\beta,\gamma}
+        =m_\gamma,
+    \]
+    where the final equality is the length-one idempotent law.
 \end{proof}
 
 \begin{definition}[BNT-label theorem data]%
