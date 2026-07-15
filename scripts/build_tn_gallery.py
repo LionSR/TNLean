@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Build the labelled tensor-network audit gallery.
 
-The gallery is derived from the public TeX declarations and the renderer's
-parameter metadata.  It contains every public atom in both layout profiles,
-every registered chapter-facing diagram, and every dark-theme slide diagram.
-No second diagram registry is maintained here.
+The gallery is derived entirely from the public TeX declarations.  It contains
+every registered atom, every chapter-facing diagram, and every dark-theme slide
+diagram.  No second diagram registry is maintained here.
 """
 
 from __future__ import annotations
@@ -45,48 +44,50 @@ def labelled_page(label: str, body: str) -> str:
 """
 
 
-def light_source(renderer) -> str:
-    atoms = {
-        "TNTensor": r"\begin{TNDiagram}[PROFILE]\TNTensor{a}{(0,0)}\end{TNDiagram}",
-        "TNComponent": r"\begin{TNDiagram}[PROFILE]\TNComponent{a}{(0,0)}{C}\end{TNDiagram}",
-        "TNFactor": r"\begin{TNDiagram}[PROFILE]\TNFactor{a}{(0,0)}{V\otimes W}\end{TNDiagram}",
-        "TNMap": r"\begin{TNDiagram}[PROFILE]\TNMap{a}{(0,0)}{U}\end{TNDiagram}",
-        "TNState": r"\begin{TNDiagram}[PROFILE]\TNState{a}{(0,0)}{\rho}\end{TNDiagram}",
-        "TNExpression": r"\begin{TNDiagram}[PROFILE]\TNExpression{a}{(0,0)}{X\oplus Y}\end{TNDiagram}",
-        "TNInsertion": r"\begin{TNDiagram}[PROFILE]\TNInsertion{a}{(0,0)}{X}\end{TNDiagram}",
-        "TNJunction": r"\begin{TNDiagram}[PROFILE]\TNJunction{a}{(0,0)}\end{TNDiagram}",
-        "TNOperatorState": r"\begin{TNDiagram}[PROFILE]\TNOperatorState{a}{(0,0)}{\rho}\end{TNDiagram}",
-        "TNSectorGauge": r"\begin{TNDiagram}[PROFILE]\TNSectorGauge{a}{(0,0)}{X_{j,q}}\end{TNDiagram}",
-        "TNInverseSectorGauge": r"\begin{TNDiagram}[PROFILE]\TNInverseSectorGauge{a}{(0,0)}{X_{j,q}^{-1}}\end{TNDiagram}",
-        "TNMPSSite": r"\begin{TNDiagram}[PROFILE]\TNMPSSite{a}{(0,0)}{A}\end{TNDiagram}",
-        "TNMPOSite": r"\begin{TNDiagram}[PROFILE]\TNMPOSite{a}{(0,0)}{M}\end{TNDiagram}",
-        "TNRotatedMPOSite": r"\begin{TNDiagram}[PROFILE]\TNRotatedMPOSite{a}{(0,0)}{M}\end{TNDiagram}",
-        "TNPEPSSite": r"\begin{TNDiagram}[PROFILE]\TNPEPSSite{a}{(0,0)}{A}\end{TNDiagram}",
-        "TNDoubleLayer": r"\begin{TNDiagram}[PROFILE]\TNDoubleLayer{a}{(0,0.40)}{(0,-0.40)}\end{TNDiagram}",
-        "TNPurificationSite": r"\begin{TNDiagram}[PROFILE]\TNPurificationSite{a}{(0,0)}{A}{\overline A}\end{TNDiagram}",
-        "TNStackedMPOProduct": r"\begin{TNDiagram}[PROFILE]\TNStackedMPOProduct{a}{(0,0)}{M_\alpha}{M_\beta}{}\end{TNDiagram}",
-        "TNCompactTraceCell": r"\begin{TNDiagram}[PROFILE]\TNCompactTraceCell{a}{(0,0)}{M_\alpha}{X}{M_\alpha(X)}\end{TNDiagram}",
-    }
-    pages = []
-    for profile in ("normal", "compact"):
-        for name, call in atoms.items():
-            pages.append(labelled_page(f"{name} [{profile}]", call.replace("PROFILE", profile)))
-        for orientation in ("right", "left", "down", "up"):
-            call = (
-                r"\begin{TNDiagram}[PROFILE]"
-                rf"\TNTrivalentMap{{a}}{{(0,0)}}{{U}}{{{orientation}}}{{v}}{{}}"
-                r"\end{TNDiagram}"
-            ).replace("PROFILE", profile)
-            pages.append(
-                labelled_page(f"TNTrivalentMap {orientation} [{profile}]", call)
-            )
+def declared_diagram_page(declaration) -> str:
+    contexts = ", ".join(declaration.contexts)
+    label = (
+        f"{declaration.name} | role={declaration.role} | "
+        f"profile={declaration.profile} | context={contexts}"
+    )
+    return rf"""
+\clearpage
+\noindent\texttt{{\detokenize{{{label}}}}}
 
-    for name in renderer._DIAGRAM_ARGS:
-        pages.append(labelled_page(name, renderer._sample_tex_call(name)))
+\vspace{{1.5em}}
+\noindent Actual publication size
+\begin{{center}}
+{declaration.sample}
+\end{{center}}
+
+\vfill
+\noindent Magnified inspection view
+\begin{{center}}
+\scalebox{{1.75}}{{{declaration.sample}}}
+\end{{center}}
+\vfill
+"""
+
+
+def light_source(renderer) -> str:
+    pages = []
+    for atom in renderer.atom_declarations():
+        port_schema = ", ".join(
+            f"{port.name}:{port.kind}" for port in atom.ports
+        ) or "no ports"
+        pages.append(
+            labelled_page(
+                f"{atom.name} | profile={atom.profile} | ports={port_schema}",
+                atom.sample,
+            )
+        )
+
+    for declaration in renderer.diagram_declarations():
+        pages.append(declared_diagram_page(declaration))
 
     return rf"""\documentclass[10pt]{{article}}
 \usepackage[paperwidth=18in,paperheight=12in,margin=0.55in]{{geometry}}
-\usepackage{{amsmath,amssymb,amsthm,mathtools,tikz}}
+\usepackage{{amsmath,amssymb,amsthm,mathtools,tikz,graphicx}}
 \newcounter{{chapter}}
 \pagestyle{{empty}}
 \input{{macros/common}}
@@ -97,16 +98,11 @@ def light_source(renderer) -> str:
 """
 
 
-def dark_source() -> str:
-    calls = {
-        "SlideTNPeriodicMPS": r"\SlideTNPeriodicMPS{A}{N}",
-        "SlideTNGaugeConjugation": r"\SlideTNGaugeConjugation{A}{B}{X}",
-        "SlideTNBlockingIdentity": r"\SlideTNBlockingIdentity{A}{B}{L}",
-        "SlideTNBlockingComparison": r"\SlideTNBlockingComparison{A}{L}",
-        "SlideTNMixedTransfer": r"\SlideTNMixedTransfer{A}{B}{\rho}{N}",
-        "SlideTNTransferMap": r"\SlideTNTransferMap{A}{\rho}",
-    }
-    pages = [labelled_page(name, call) for name, call in calls.items()]
+def dark_source(renderer) -> str:
+    pages = [
+        labelled_page(name, call)
+        for name, call in renderer.slide_diagram_samples()
+    ]
     return rf"""\documentclass[10pt]{{article}}
 \usepackage[paperwidth=18in,paperheight=12in,margin=0.55in]{{geometry}}
 \usepackage{{amsmath,amssymb,amsthm,mathtools,tikz,xcolor}}
@@ -155,7 +151,7 @@ def compile_tex(stem: str, source: str) -> Path:
 def main() -> int:
     renderer = load_renderer()
     light = compile_tex("tn_gallery_light", light_source(renderer))
-    dark = compile_tex("tn_gallery_dark", dark_source())
+    dark = compile_tex("tn_gallery_dark", dark_source(renderer))
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     pdfunite = shutil.which("pdfunite")
     if pdfunite is None:

@@ -130,7 +130,10 @@ def main() -> int:
                 raise RuntimeError(f"{name}: raster difference {score:.4f} exceeds 0.012")
             print(f"{name}: {score:.4f}")
         if args.all_registered:
-            rendered = renderer._smoke_render(renderer._DIAGRAM_ARGS)
+            rendered = renderer._smoke_render(
+                declaration.name
+                for declaration in renderer.diagram_declarations()
+            )
             for svg in rendered:
                 name = svg.stem.removeprefix("tn-smoke-")
                 png = temporary / f"registered-{name}.png"

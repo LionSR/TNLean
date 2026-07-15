@@ -18,6 +18,7 @@ import posixpath
 import re
 import shutil
 import subprocess
+from dataclasses import dataclass
 from functools import lru_cache
 from html import escape
 from pathlib import Path
@@ -34,30 +35,22 @@ _REPO_ROOT = _SRC_DIR.parents[1]
 _TN_SHARED_DIR = _REPO_ROOT / "tex/tn"
 _TN_CORE_FILE = _TN_SHARED_DIR / "tn_core.tex"
 _TN_LIBRARY_FILE = _TN_SHARED_DIR / "tn_library.tex"
+_TN_ATOMS_FILE = _TN_SHARED_DIR / "tn_atoms.tex"
+_TN_CATALOGUE_FILE = _TN_SHARED_DIR / "tn_catalogue.tex"
 _CACHE_DIR = _SRC_DIR / ".tn_svg_cache"
 _SVG_SUBDIR = "tn_svg"
 _RENDER_SOURCE_FILES = (
     _SRC_DIR / "macros/common.tex",
     _TN_CORE_FILE,
     _TN_LIBRARY_FILE,
+    _TN_ATOMS_FILE,
+    _TN_CATALOGUE_FILE,
     _SRC_DIR / "macros/tn_print.tex",
 )
 _TEMPLATE_FILE = _SRC_DIR / "plastex_templates/TensorNetworkDiagrams.jinja2s"
 _SLIDE_DIR = _REPO_ROOT / "docs/slides"
 _SLIDE_LIBRARY = _SLIDE_DIR / "tn_library_dark.tex"
 
-_EXPECTED_SLIDE_DIAGRAM_CALLS = {
-    "SlideTNPeriodicMPS": 7,
-    "SlideTNGaugeConjugation": 2,
-    "SlideTNBlockingIdentity": 1,
-    "SlideTNBlockingComparison": 1,
-    "SlideTNMixedTransfer": 1,
-    "SlideTNTransferMap": 1,
-}
-
-_PUBLIC_MACRO_PATTERN = re.compile(
-    r"^\\newcommand\{\\(TN(?!@)\w+)\}(?:\[(\d+)\])?", re.MULTILINE
-)
 _LITERAL_COORDINATE_PATTERN = re.compile(
     r"(?<![A-Za-z])\((-?\d+(?:\.\d+)?(?:cm)?),"
     r"(-?\d+(?:\.\d+)?(?:cm)?)\)"
@@ -164,155 +157,89 @@ _TYPED_PORT_COMMAND_ARITIES = {
 }
 
 
-_PARAMETERIZED_DIAGRAM_ARGS: dict[str, str] = {
-    "TNTikZDiagram": "rendered body",
-    "TNMPSLocal": "tensor label",
-    "TNMPSWord": "tensor left right length",
-    "TNMPV": "tensor left right length",
-    "TNBlocking": "tensor left right length",
-    "TNMPVOverlap": "left right length",
-    "TNTransferMap": "tensor",
-    "TNMPOCell": "tensor top bottom",
-    "TNMPOChain": "tensor top_left bottom_left top_right bottom_right length",
-    "TNGaugeConjugation": "left physical right",
-    "TNPhysicalRealization": "virtual physical",
-    "TNLinearTwist": "twist label",
-    "TNPermutationTwistLabeled": "left right permutation",
-    "TNPermutationTwist": "left right",
-    "TNTwistedTransfer": "twist",
-    "TNCondCOne": "twist virtual label",
-    "TNCondCTwo": "virtual",
-    "TNStringOrderParameter": "twist length",
-    "TNInternalTraceInsertion": "left right virtual",
-    "TNExternalTraceInsertion": "left right virtual",
-    "TNBoundaryRegrow": "virtual left right length",
-    "TNLocalEqualityStep": "left_virtual right_virtual physical",
-    "TNGroundSpaceMap": "tensor left right length virtual",
-}
+@dataclass(frozen=True)
+class DiagramDeclaration:
+    """One chapter-facing diagram, as declared in ``tn_catalogue.tex``."""
+
+    name: str
+    arguments: tuple[str, ...]
+    role: str
+    profile: str
+    sample: str
+    contexts: tuple[str, ...]
+    body: str
+    source_line: int
+
+    @property
+    def plastex_args(self) -> str:
+        return " ".join(self.arguments)
 
 
-def _declared_print_macro_arities() -> dict[str, int]:
-    """Read chapter-facing command names and arities from their TeX source."""
+@dataclass(frozen=True)
+class AtomPort:
+    """One named, typed port in an atomic tensor-network glyph."""
 
-    source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
-    return {
-        name: int(arity) if arity else 0
-        for name, arity in _PUBLIC_MACRO_PATTERN.findall(source)
-    }
+    name: str
+    kind: str
 
 
-_PRINT_MACRO_ARITIES = _declared_print_macro_arities()
-_DIAGRAM_ARGS: dict[str, str] = dict(_PARAMETERIZED_DIAGRAM_ARGS)
-_DIAGRAM_ARGS.update(
-    {
-        name: ""
-        for name, arity in _PRINT_MACRO_ARITIES.items()
-        if arity == 0
-    }
-)
+@dataclass(frozen=True)
+class AtomDeclaration:
+    """One public atom, as declared in ``tn_atoms.tex``."""
 
-# A figure is retained only when spatial routing is part of the mathematical
-# assertion.  Every other chapter-facing diagram is a compact display.  The
-# list is intentionally explicit: changing a display into a numbered figure
-# therefore requires a reviewable metadata change as well as a TeX edit.
-_FIGURE_DIAGRAMS = frozenset(
-    {
-        "TNBNTDecomposition",
-        "TNMPDOBlockedRFPChannels",
-        "TNMPDOCompleteZipperFusionPentagon",
-        "TNMPDOCyclicEtaContraction",
-        "TNMPDOFirstSiteContractions",
-        "TNMPDOFirstSiteInsertionBlockwise",
-        "TNMPDOFirstSiteInsertionHypothesis",
-        "TNMPDOFixedFinalComparisonUnitary",
-        "TNMPDOFixedFinalFusionBracketings",
-        "TNMPDOFourfoldBondReassociationPentagon",
-        "TNMPDOFusionTracePower",
-        "TNMPDOHorizontalCanonicalForm",
-        "TNMPDOInverseMapThreeSiteContraction",
-        "TNMPDOLocalOrthogonality",
-        "TNMPDONormalizedFourSiteTail",
-        "TNMPDOPhysicalIsometryTransport",
-        "TNMPDOPrintedFMove",
-        "TNMPDORecursiveStructureOperator",
-        "TNMPDORefinementConstruction",
-        "TNMPDORefinementDirection",
-        "TNMPDOThreeSiteClosureFactorization",
-        "TNMPDOThreeSiteTraceAndShift",
-        "TNMPDOTwoSiteClosureFactorization",
-        "TNMPDOTwoSiteTraceAndShift",
-        "TNMPDOVerticalDirectSum",
-        "TNMPDOVerticalGaugeGramComparison",
-        "TNMPDOVerticalReducingSectors",
-        "TNRFPIsometryCanonicalForm",
-        "TNRFPIsometryCanonicalFormBlocks",
-        "TNRFPKrausIsometry",
-        "TNRFPKrausIsometryReverse",
-    }
-)
-_DIAGRAM_ROLES = {
-    name: "figure" if name in _FIGURE_DIAGRAMS else "display"
-    for name in _DIAGRAM_ARGS
-}
+    name: str
+    ports: tuple[AtomPort, ...]
+    profile: str
+    sample: str
+    source_line: int
 
 
-def _diagram_arity(args: str) -> int:
-    return len(args.split())
+# These mappings are initialized from ``\TNDeclareDiagram`` after the balanced
+# TeX-group reader has been defined below.  They remain aliases for the
+# renderer's internal consumers; no names or metadata are stated in Python.
+_DIAGRAM_DECLARATIONS: dict[str, DiagramDeclaration]
+_DIAGRAM_ARGS: dict[str, str]
+_DIAGRAM_ROLES: dict[str, str]
+_DIAGRAM_PROFILES: dict[str, str]
+_DIAGRAM_CONTEXTS: dict[str, tuple[str, ...]]
+_ATOM_DECLARATIONS: dict[str, AtomDeclaration]
 
 
-def _sample_arg_value(name: str) -> str:
-    values = {
-        "tensor": "A",
-        "label": "i",
-        "left": "i",
-        "middle": "j",
-        "right": "k",
-        "length": "L",
-        "top": "i",
-        "bottom": "j",
-        "top_left": "i_1",
-        "bottom_left": "j_1",
-        "top_right": "i_N",
-        "bottom_right": "j_N",
-        "physical": "i",
-        "virtual": "X",
-        "twist": "u",
-        "permutation": "\\sigma",
-        "left_virtual": "X",
-        "right_virtual": "Y",
-        "rendered": "\\TNPEPSNormalRegionT",
-        "body": "\\TNMPSLocal{A}{i}",
-    }
-    return values.get(name, "x")
+def diagram_declarations() -> tuple[DiagramDeclaration, ...]:
+    """Return the catalogue declarations in their TeX source order."""
+
+    return tuple(_DIAGRAM_DECLARATIONS.values())
+
+
+def atom_declarations() -> tuple[AtomDeclaration, ...]:
+    """Return the atom declarations in their TeX source order."""
+
+    return tuple(_ATOM_DECLARATIONS.values())
 
 
 def _sample_tex_call(name: str) -> str:
-    args = _DIAGRAM_ARGS[name].split()
-    return rf"\{name}" + "".join("{" + _sample_arg_value(arg) + "}" for arg in args)
+    return _DIAGRAM_DECLARATIONS[name].sample
 
 
 def _assert_diagram_args_match_print_macros() -> None:
-    pattern = re.compile(r"\\newcommand\{\\(TN(?!@)\w+)\}(?:\[(\d+)\])?")
-    source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
-    print_arities = {
-        name: int(arity) if arity else 0
-        for name, arity in pattern.findall(source)
-    }
-    expected_arities = {
-        name: _diagram_arity(args)
-        for name, args in _DIAGRAM_ARGS.items()
-    }
-    if print_arities != expected_arities:
-        missing = sorted(set(print_arities) - set(expected_arities))
-        stale = sorted(set(expected_arities) - set(print_arities))
-        mismatched = sorted(
-            name
-            for name in set(print_arities) & set(expected_arities)
-            if print_arities[name] != expected_arities[name]
+    """Reject a second chapter-diagram definition outside the catalogue."""
+
+    duplicates: list[str] = []
+    pattern = re.compile(r"\\(?:newcommand|renewcommand)\{\\(TN(?!@)\w+)\}")
+    for path in (_SRC_DIR / "macros/tn_print.tex", _TN_LIBRARY_FILE):
+        if not path.exists():
+            continue
+        source = _mask_tex_comments(path.read_text(encoding="utf-8"))
+        duplicates.extend(
+            _source_line(path, match.start())
+            for match in pattern.finditer(source)
+            if match.group(1) in _DIAGRAM_DECLARATIONS
         )
+    if duplicates:
         raise RuntimeError(
-            "Tensor-network diagram arities are out of sync with macros/tn_print.tex "
-            f"(missing={missing}, stale={stale}, mismatched={mismatched})."
+            "Chapter-facing tensor-network diagrams must be defined only by "
+            "\\TNDeclareDiagram in tex/tn/tn_catalogue.tex: "
+            + _abbreviate_locations(duplicates)
         )
 
 
@@ -324,13 +251,16 @@ def _assert_diagram_templates_cover_registered_macros() -> None:
         for line in pattern.findall(template)
         for name in line.split()
     }
-    registered_names = set(_DIAGRAM_ARGS)
-    missing = sorted(registered_names - rendered_names)
-    stale = sorted(rendered_names - registered_names)
-    if missing or stale:
+    required = {"TensorNetworkDiagram"}
+    stale_registrations = sorted(
+        name for name in rendered_names if name in _DIAGRAM_DECLARATIONS
+    )
+    if not required <= rendered_names or stale_registrations:
         raise RuntimeError(
-            "Tensor-network diagram HTML templates are out of sync with "
-            f"registered macros (missing={missing}, stale={stale})."
+            "Tensor-network diagrams must share the catalogue-independent "
+            "TensorNetworkDiagram HTML template "
+            f"(missing={sorted(required - rendered_names)}, "
+            f"parallel_registrations={stale_registrations})."
         )
 
 
@@ -376,7 +306,7 @@ def _pattern_locations(path: Path, pattern: re.Pattern[str]) -> list[str]:
 
 
 def _assert_diagram_roles_match_chapters() -> None:
-    """Check display/figure metadata against every chapter use."""
+    """Check declared roles and contexts against every chapter use."""
 
     actual: dict[str, set[str]] = {name: set() for name in _DIAGRAM_ARGS}
     call_pattern = re.compile(r"\\(TN[A-Z]\w*)")
@@ -401,11 +331,32 @@ def _assert_diagram_roles_match_chapters() -> None:
         for name, roles in actual.items()
         if roles and roles != {_DIAGRAM_ROLES[name]}
     )
-    stale_figures = sorted(_FIGURE_DIAGRAMS - set(_DIAGRAM_ARGS))
-    if mixed or mismatched or stale_figures:
+    declared_contexts = {
+        name: set(declaration.contexts) - {"renderer"}
+        for name, declaration in _DIAGRAM_DECLARATIONS.items()
+    }
+    actual_contexts: dict[str, set[str]] = {
+        name: set() for name in _DIAGRAM_DECLARATIONS
+    }
+    for path in sorted((_SRC_DIR / "chapter").rglob("*.tex")):
+        relative = path.relative_to(_SRC_DIR).as_posix()
+        source = _mask_tex_comments(path.read_text(encoding="utf-8"))
+        for match in call_pattern.finditer(source):
+            if match.group(1) in actual_contexts:
+                actual_contexts[match.group(1)].add(relative)
+    context_mismatches = {
+        name: {
+            "declared": sorted(declared_contexts[name]),
+            "actual": sorted(actual_contexts[name]),
+        }
+        for name in _DIAGRAM_DECLARATIONS
+        if declared_contexts[name] != actual_contexts[name]
+    }
+    if mixed or mismatched or context_mismatches:
         raise RuntimeError(
-            "Tensor-network display/figure roles are inconsistent "
-            f"(mixed={mixed}, mismatched={mismatched}, stale={stale_figures})."
+            "Tensor-network display/figure roles or chapter contexts are inconsistent "
+            f"(mixed={mixed}, mismatched={mismatched}, "
+            f"contexts={context_mismatches})."
         )
 
 
@@ -432,7 +383,7 @@ def _assert_no_chapter_local_tikz() -> None:
 def _assert_typed_port_syntax() -> None:
     """Require typed compositions to use symbolic ports and typed constructors."""
 
-    sources = (_SRC_DIR / "macros/tn_print.tex", _TN_LIBRARY_FILE, _SLIDE_LIBRARY)
+    sources = (_TN_CATALOGUE_FILE, _TN_LIBRARY_FILE, _SLIDE_LIBRARY)
     command_names = frozenset(_TYPED_PORT_COMMAND_ARITIES)
     malformed: list[str] = []
     untyped: list[str] = []
@@ -488,7 +439,7 @@ def _assert_no_raw_glyph_nodes() -> None:
         r"(?:^|,)\s*tn (?:label|region label \w+|vertex distinguished)(?:,|$)"
     )
     violations: list[str] = []
-    for path in (_SRC_DIR / "macros/tn_print.tex", _TN_LIBRARY_FILE, _SLIDE_LIBRARY):
+    for path in (_TN_CATALOGUE_FILE, _TN_LIBRARY_FILE, _SLIDE_LIBRARY):
         source = _mask_tex_comments(path.read_text(encoding="utf-8"))
         for match in re.finditer(r"\\node\s*\[([^]]*)\]", source):
             options = match.group(1)
@@ -515,10 +466,13 @@ def _assert_slide_diagram_contract() -> None:
     deck_source = "\n".join(path.read_text(encoding="utf-8") for path in decks)
     calls = re.findall(r"\\(SlideTN[A-Z]\w*)\b", deck_source)
     counts = {name: calls.count(name) for name in sorted(set(calls))}
-    if counts != _EXPECTED_SLIDE_DIAGRAM_CALLS:
+    declared_slides = _declared_slide_diagram_arities()
+    unknown = sorted(set(counts) - set(declared_slides))
+    unused = sorted(set(declared_slides) - set(counts))
+    if unknown or unused:
         raise RuntimeError(
-            "Slide tensor-network diagram calls differ from the audited collection "
-            f"(actual={counts}, expected={_EXPECTED_SLIDE_DIAGRAM_CALLS})."
+            "Slide tensor-network definitions and deck calls disagree "
+            f"(unknown={unknown}, unused={unused})."
         )
 
     legacy_style = re.compile(
@@ -628,6 +582,33 @@ def _assert_slide_diagram_contract() -> None:
         raise RuntimeError(f"Slide tensor-network macros ignore arguments: {ignored}")
 
 
+def _declared_slide_diagram_arities() -> dict[str, int]:
+    """Read slide diagram names and arities from the dark-theme source."""
+
+    if not _SLIDE_LIBRARY.is_file():
+        return {}
+    source = _mask_tex_comments(_SLIDE_LIBRARY.read_text(encoding="utf-8"))
+    pattern = re.compile(
+        r"^\\newcommand\{\\(SlideTN[A-Z]\w*)\}(?:\[(\d+)\])?",
+        re.MULTILINE,
+    )
+    declarations: dict[str, int] = {}
+    for name, raw_arity in pattern.findall(source):
+        if name in declarations:
+            raise RuntimeError(f"Duplicate slide tensor-network diagram: {name}.")
+        declarations[name] = int(raw_arity or 0)
+    return declarations
+
+
+def slide_diagram_samples() -> tuple[tuple[str, str], ...]:
+    """Generate gallery samples directly from the slide macro definitions."""
+
+    return tuple(
+        (name, rf"\{name}" + "{A}" * arity)
+        for name, arity in _declared_slide_diagram_arities().items()
+    )
+
+
 def _noncore_tikz_style_locations() -> list[str]:
     """Locate semantic style declarations outside the universal TN core."""
 
@@ -690,18 +671,19 @@ def _client_geometry_locations() -> list[str]:
     return locations
 
 
-def _public_macro_bodies(source: str) -> list[tuple[str, int, str]]:
-    matches = list(_PUBLIC_MACRO_PATTERN.finditer(source))
-    return [
-        (
-            match.group(1),
-            int(match.group(2) or 0),
-            source[match.end() : matches[index + 1].start()]
-            if index + 1 < len(matches)
-            else source[match.end() :],
-        )
-        for index, match in enumerate(matches)
-    ]
+def _catalogue_pattern_locations(pattern: re.Pattern[str]) -> list[str]:
+    """Locate client-level constructs inside declared diagram bodies."""
+
+    return _pattern_locations(_TN_CATALOGUE_FILE, pattern)
+
+
+def _catalogue_geometry_locations() -> list[str]:
+    """Locate numerical placement and local appearance in the catalogue."""
+
+    combined = re.compile(
+        _LITERAL_COORDINATE_PATTERN.pattern + "|" + _LOCAL_GEOMETRY_PATTERN.pattern
+    )
+    return _catalogue_pattern_locations(combined)
 
 
 def _skip_tex_space(source: str, offset: int) -> int:
@@ -760,8 +742,290 @@ def _tex_command_calls(
     return calls
 
 
+def _tex_declaration_calls(
+    source: str, command_name: str
+) -> list[tuple[str, list[str], int, str | None]]:
+    """Read top-level, line-initial calls to a declaration command."""
+
+    pattern = re.compile(
+        r"^[ \t]*\\" + re.escape(command_name) + r"(?=\s*\{)",
+        re.MULTILINE,
+    )
+    calls = []
+    for match in pattern.finditer(source):
+        offset = _skip_tex_space(source, match.end())
+        groups = []
+        while offset < len(source) and source[offset] == "{":
+            group, offset = _tex_group(source, offset, "{", "}")
+            groups.append(group)
+            offset = _skip_tex_space(source, offset)
+        calls.append((command_name, groups, match.start(), None))
+    return calls
+
+
+def _parse_argument_schema(raw_schema: str, *, location: str) -> tuple[str, ...]:
+    """Parse the comma-separated plasTeX argument names in one declaration."""
+
+    if not raw_schema.strip():
+        return ()
+    arguments = tuple(part.strip() for part in raw_schema.split(","))
+    invalid = [
+        argument
+        for argument in arguments
+        if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", argument)
+    ]
+    duplicates = sorted(
+        argument for argument in set(arguments) if arguments.count(argument) > 1
+    )
+    if invalid or duplicates:
+        raise RuntimeError(
+            f"Invalid tensor-network argument schema at {location} "
+            f"(invalid={invalid}, duplicates={duplicates})."
+        )
+    return arguments
+
+
+def _parse_contexts(raw_contexts: str, *, name: str, location: str) -> tuple[str, ...]:
+    """Parse and validate comma-separated source contexts."""
+
+    contexts = tuple(part.strip() for part in raw_contexts.split(","))
+    if not contexts or any(not context for context in contexts):
+        raise RuntimeError(f"{name} has an empty chapter context at {location}.")
+    duplicates = sorted(
+        context for context in set(contexts) if contexts.count(context) > 1
+    )
+    if duplicates:
+        raise RuntimeError(
+            f"{name} repeats chapter contexts at {location}: {duplicates}."
+        )
+    for context in contexts:
+        if context == "renderer":
+            continue
+        if not re.fullmatch(r"chapter/[A-Za-z0-9_./-]+\.tex", context):
+            raise RuntimeError(
+                f"{name} has invalid chapter context {context!r} at {location}."
+            )
+        path = (_SRC_DIR / context).resolve()
+        try:
+            path.relative_to((_SRC_DIR / "chapter").resolve())
+        except ValueError as error:
+            raise RuntimeError(
+                f"{name} chapter context escapes blueprint/src/chapter at {location}."
+            ) from error
+        if not path.is_file():
+            raise RuntimeError(
+                f"{name} names a missing chapter context {context!r} at {location}."
+            )
+    return contexts
+
+
+def _assert_exact_sample_call(
+    sample: str, *, name: str, arity: int, location: str
+) -> None:
+    """Require a complete sample call to the declaration itself."""
+
+    source = sample.strip()
+    match = re.match(r"\\" + re.escape(name) + r"(?=[^A-Za-z@]|\Z)", source)
+    if match is None:
+        raise RuntimeError(
+            f"{name} has a sample that is not a call to itself at {location}."
+        )
+    offset = _skip_tex_space(source, match.end())
+    if offset < len(source) and source[offset] == "[":
+        raise RuntimeError(f"{name} has an optional sample argument at {location}.")
+    arguments = []
+    while offset < len(source) and source[offset] == "{":
+        argument, offset = _tex_group(source, offset, "{", "}")
+        arguments.append(argument)
+        offset = _skip_tex_space(source, offset)
+    if offset != len(source) or len(arguments) != arity:
+        raise RuntimeError(
+            f"{name} sample arity is inconsistent at {location} "
+            f"(declared={arity}, sample={len(arguments)})."
+        )
+
+
+def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
+    r"""Read and validate every ``\TNDeclareDiagram`` catalogue record."""
+
+    if not _TN_CATALOGUE_FILE.is_file():
+        raise RuntimeError(
+            "Missing tensor-network declaration catalogue: "
+            f"{_TN_CATALOGUE_FILE.relative_to(_REPO_ROOT)}"
+        )
+    source = _mask_tex_comments(_TN_CATALOGUE_FILE.read_text(encoding="utf-8"))
+    calls = _tex_declaration_calls(source, "TNDeclareDiagram")
+    if not calls:
+        raise RuntimeError("tn_catalogue.tex contains no \\TNDeclareDiagram records.")
+
+    declarations: dict[str, DiagramDeclaration] = {}
+    for _, groups, offset, option in calls:
+        location = _source_line(_TN_CATALOGUE_FILE, offset)
+        if option is not None or len(groups) != 7:
+            raise RuntimeError(
+                "\\TNDeclareDiagram requires exactly seven mandatory groups at "
+                f"{location} (found {len(groups)})."
+            )
+        raw_name, raw_schema, raw_role, raw_profile, sample, raw_contexts, body = groups
+        name = raw_name.strip()
+        role = raw_role.strip()
+        profile = raw_profile.strip()
+        if not re.fullmatch(r"TN[A-Z][A-Za-z0-9]*", name):
+            raise RuntimeError(f"Invalid diagram name {name!r} at {location}.")
+        if name in declarations:
+            previous = declarations[name]
+            raise RuntimeError(
+                f"Duplicate diagram declaration {name} at {location}; first declared "
+                f"at tex/tn/tn_catalogue.tex:{previous.source_line}."
+            )
+        arguments = _parse_argument_schema(raw_schema, location=location)
+        if len(arguments) > 9:
+            raise RuntimeError(f"{name} exceeds TeX's nine-argument limit at {location}.")
+        if role not in {"display", "figure"}:
+            raise RuntimeError(f"{name} has invalid role {role!r} at {location}.")
+        if profile not in {"compact", "normal"}:
+            raise RuntimeError(f"{name} has invalid profile {profile!r} at {location}.")
+        contexts = _parse_contexts(
+            raw_contexts, name=name, location=location
+        )
+        if "renderer" in contexts and (name != "TNTikZDiagram" or len(contexts) != 1):
+            raise RuntimeError(
+                f"The renderer context is reserved for TNTikZDiagram at {location}."
+            )
+        _assert_exact_sample_call(
+            sample, name=name, arity=len(arguments), location=location
+        )
+        referenced = {int(index) for index in re.findall(r"#([1-9])", body)}
+        out_of_range = sorted(index for index in referenced if index > len(arguments))
+        ignored = [
+            index
+            for index in range(1, len(arguments) + 1)
+            if index not in referenced
+        ]
+        if out_of_range:
+            raise RuntimeError(
+                f"{name} has inconsistent body arguments at {location} "
+                f"(ignored={ignored}, out_of_range={out_of_range})."
+            )
+        declarations[name] = DiagramDeclaration(
+            name=name,
+            arguments=arguments,
+            role=role,
+            profile=profile,
+            sample=sample.strip(),
+            contexts=contexts,
+            body=body,
+            source_line=int(location.rsplit(":", 1)[1]),
+        )
+    return declarations
+
+
+def _parse_atom_ports(
+    raw_ports: str, *, name: str, location: str
+) -> tuple[AtomPort, ...]:
+    """Parse the atom's comma-separated ``Port:kind`` schema."""
+
+    if not raw_ports.strip():
+        return ()
+    ports: list[AtomPort] = []
+    for entry in raw_ports.split(","):
+        pieces = [piece.strip() for piece in entry.split(":")]
+        if (
+            len(pieces) != 2
+            or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", pieces[0])
+            or pieces[1] not in {"virtual", "physical", "morphism"}
+        ):
+            raise RuntimeError(
+                f"{name} has invalid atom port entry {entry!r} at {location}."
+            )
+        ports.append(AtomPort(*pieces))
+    duplicates = sorted(
+        port_name
+        for port_name in {port.name for port in ports}
+        if sum(port.name == port_name for port in ports) > 1
+    )
+    if duplicates:
+        raise RuntimeError(
+            f"{name} repeats atom ports at {location}: {duplicates}."
+        )
+    return tuple(ports)
+
+
+def _load_atom_declarations() -> dict[str, AtomDeclaration]:
+    r"""Read and validate every ``\TNDeclareAtom`` registry record."""
+
+    if not _TN_ATOMS_FILE.is_file():
+        raise RuntimeError(
+            "Missing tensor-network atom registry: "
+            f"{_TN_ATOMS_FILE.relative_to(_REPO_ROOT)}"
+        )
+    source = _mask_tex_comments(_TN_ATOMS_FILE.read_text(encoding="utf-8"))
+    calls = _tex_declaration_calls(source, "TNDeclareAtom")
+    if not calls:
+        raise RuntimeError("tn_atoms.tex contains no \\TNDeclareAtom records.")
+    declarations: dict[str, AtomDeclaration] = {}
+    for _, groups, offset, option in calls:
+        location = _source_line(_TN_ATOMS_FILE, offset)
+        if option is not None or len(groups) != 4:
+            raise RuntimeError(
+                "\\TNDeclareAtom requires exactly four mandatory groups at "
+                f"{location} (found {len(groups)})."
+            )
+        raw_name, raw_ports, raw_profile, raw_sample = groups
+        name = raw_name.strip()
+        profile = raw_profile.strip()
+        sample = raw_sample.strip()
+        if not re.fullmatch(r"TN[A-Z][A-Za-z0-9]*", name):
+            raise RuntimeError(f"Invalid atom name {name!r} at {location}.")
+        if name in declarations:
+            previous = declarations[name]
+            raise RuntimeError(
+                f"Duplicate atom declaration {name} at {location}; first declared "
+                f"at tex/tn/tn_atoms.tex:{previous.source_line}."
+            )
+        if profile not in {"compact", "normal"}:
+            raise RuntimeError(f"{name} has invalid profile {profile!r} at {location}.")
+        if not sample:
+            raise RuntimeError(
+                f"{name} has an empty atom sample at {location}."
+            )
+        declarations[name] = AtomDeclaration(
+            name=name,
+            ports=_parse_atom_ports(raw_ports, name=name, location=location),
+            profile=profile,
+            sample=sample,
+            source_line=int(location.rsplit(":", 1)[1]),
+        )
+    return declarations
+
+
+_DIAGRAM_DECLARATIONS = _load_diagram_declarations()
+_ATOM_DECLARATIONS = _load_atom_declarations()
+_DUPLICATE_PUBLIC_NAMES = sorted(
+    set(_DIAGRAM_DECLARATIONS) & set(_ATOM_DECLARATIONS)
+)
+if _DUPLICATE_PUBLIC_NAMES:
+    raise RuntimeError(
+        "Names occur in both the atom registry and diagram catalogue: "
+        + ", ".join(_DUPLICATE_PUBLIC_NAMES)
+    )
+_DIAGRAM_ARGS = {
+    name: declaration.plastex_args
+    for name, declaration in _DIAGRAM_DECLARATIONS.items()
+}
+_DIAGRAM_ROLES = {
+    name: declaration.role for name, declaration in _DIAGRAM_DECLARATIONS.items()
+}
+_DIAGRAM_PROFILES = {
+    name: declaration.profile for name, declaration in _DIAGRAM_DECLARATIONS.items()
+}
+_DIAGRAM_CONTEXTS = {
+    name: declaration.contexts for name, declaration in _DIAGRAM_DECLARATIONS.items()
+}
+
+
 def _tex_macro_definitions(source: str) -> list[tuple[str, str, int]]:
-    """Return complete ``newcommand`` bodies with their source offsets."""
+    """Return complete macro and diagram bodies with their source offsets."""
 
     pattern = re.compile(
         r"^\\newcommand\{\\(?P<name>[A-Za-z@]+)\}(?:\[\d+\])?",
@@ -776,6 +1040,13 @@ def _tex_macro_definitions(source: str) -> list[tuple[str, str, int]]:
         definitions.append((match.group("name"), body, offset + 1))
         if body_end <= offset:
             raise AssertionError("balanced TeX group did not advance")
+    definitions.extend(
+        (groups[0].strip(), groups[6], offset)
+        for _, groups, offset, option in _tex_declaration_calls(
+            source, "TNDeclareDiagram"
+        )
+        if option is None and len(groups) == 7
+    )
     return definitions
 
 
@@ -902,16 +1173,19 @@ def _source_semantic_debt(path: Path, source: str) -> dict[str, object]:
 def _semantic_audit_counts() -> dict[str, object]:
     """Collect migration measures without assigning mathematical meaning to them."""
 
-    print_path = _SRC_DIR / "macros/tn_print.tex"
+    catalogue_path = _TN_CATALOGUE_FILE
     core_path = _TN_CORE_FILE
-    print_source = print_path.read_text(encoding="utf-8")
+    catalogue_source = catalogue_path.read_text(encoding="utf-8")
     core_source = core_path.read_text(encoding="utf-8")
     library_path = _TN_LIBRARY_FILE
     library_source = (
         library_path.read_text(encoding="utf-8") if library_path.exists() else ""
     )
     private_source = core_source + "\n" + library_source
-    public_macros = _public_macro_bodies(print_source)
+    public_macros = [
+        (declaration.name, len(declaration.arguments), declaration.body)
+        for declaration in diagram_declarations()
+    ]
     chapter_paths = sorted((_SRC_DIR / "chapter").rglob("*.tex"))
     chapter_sources = [path.read_text(encoding="utf-8") for path in chapter_paths]
     chapter_source = "\n".join(chapter_sources)
@@ -932,7 +1206,9 @@ def _semantic_audit_counts() -> dict[str, object]:
     )
 
     audited_sources = {
-        "macros/tn_print.tex": _source_semantic_debt(print_path, print_source),
+        "tex/tn/tn_catalogue.tex": _source_semantic_debt(
+            catalogue_path, catalogue_source
+        ),
         "tex/tn/tn_library.tex": _source_semantic_debt(library_path, library_source),
     }
     raw_glyph_counts = {
@@ -955,6 +1231,7 @@ def _semantic_audit_counts() -> dict[str, object]:
         for source_debt in audited_sources.values()
     )
     return {
+        "atoms": len(_ATOM_DECLARATIONS),
         "registered": len(_DIAGRAM_ARGS),
         "public": len(public_macros),
         "concrete": sum(r"\begin{tikzpicture}" in body for _, _, body in public_macros),
@@ -973,9 +1250,11 @@ def _semantic_audit_counts() -> dict[str, object]:
         "core_styles": len(
             re.findall(r"^\s*tn [^/]+?/\.style", core_source, re.MULTILINE)
         ),
-        "literal_coordinates": len(_LITERAL_COORDINATE_PATTERN.findall(print_source)),
-        "draw_commands": len(re.findall(r"\\draw\b", print_source)),
-        "node_commands": len(re.findall(r"\\node\b", print_source)),
+        "literal_coordinates": len(
+            _LITERAL_COORDINATE_PATTERN.findall(catalogue_source)
+        ),
+        "draw_commands": len(re.findall(r"\\draw\b", catalogue_source)),
+        "node_commands": len(re.findall(r"\\node\b", catalogue_source)),
         "raw_glyph_counts": raw_glyph_counts,
         "direct_wire_commands": direct_wire_commands,
         "legacy_wire_commands": legacy_wire_commands,
@@ -988,6 +1267,11 @@ def _semantic_audit_counts() -> dict[str, object]:
         "private_client_calls": _client_pattern_locations(_PRIVATE_COMMAND_PATTERN),
         "raw_client_tikz": _client_pattern_locations(_CLIENT_TIKZ_PATTERN),
         "local_geometry": _client_geometry_locations(),
+        "catalogue_private_calls": _catalogue_pattern_locations(
+            _PRIVATE_COMMAND_PATTERN
+        ),
+        "catalogue_raw_tikz": _catalogue_pattern_locations(_CLIENT_TIKZ_PATTERN),
+        "catalogue_geometry": _catalogue_geometry_locations(),
     }
 
 
@@ -1063,13 +1347,20 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
     assert isinstance(raw_client_tikz, list)
     local_geometry = counts["local_geometry"]
     assert isinstance(local_geometry, list)
+    catalogue_private_calls = counts["catalogue_private_calls"]
+    assert isinstance(catalogue_private_calls, list)
+    catalogue_raw_tikz = counts["catalogue_raw_tikz"]
+    assert isinstance(catalogue_raw_tikz, list)
+    catalogue_geometry = counts["catalogue_geometry"]
+    assert isinstance(catalogue_geometry, list)
 
     if machine_readable:
         print(json.dumps(counts, indent=2, sort_keys=True))
     else:
         print(
             "tensor-network semantic audit: "
-            f"{counts['concrete']} concrete diagrams, {counts['registered']} registrations, "
+            f"{counts['atoms']} atoms, {counts['concrete']} concrete diagrams, "
+            f"{counts['registered']} registrations, "
             f"{counts['chapter_calls']} calls to {counts['chapter_commands']} commands in "
             f"{counts['chapter_files']} chapter files"
         )
@@ -1119,6 +1410,12 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
             f"raw TikZ operations={len(raw_client_tikz)}, "
             f"local geometry overrides={len(local_geometry)}"
         )
+        print(
+            "tensor-network catalogue implementation debt: "
+            f"private calls={len(catalogue_private_calls)}, "
+            f"raw TikZ operations={len(catalogue_raw_tikz)}, "
+            f"local geometry overrides={len(catalogue_geometry)}"
+        )
 
     if strict:
         failures = []
@@ -1135,7 +1432,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
                 ("direct_tn_draw_locations", "legacy_wire_locations"),
             )
             failures.append(
-                "raw glyph aliases or tensor-network draws in macros/tn_print.tex "
+                "raw glyph aliases or tensor-network draws in tex/tn/tn_catalogue.tex "
                 "and tex/tn/tn_library.tex "
                 f"(glyphs={raw_glyph_total}, wires={raw_wire_total}) at "
                 + _abbreviate_locations(raw_locations)
@@ -1175,8 +1472,22 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
                 "client-side numerical geometry or glyph overrides at "
                 + _abbreviate_locations(local_geometry)
             )
-        if int(counts["literal_coordinates"]) >= 1360:
-            failures.append("literal coordinate count did not decrease from 1360")
+        if catalogue_private_calls:
+            failures.append(
+                "catalogue declarations call private implementation commands at "
+                + _abbreviate_locations(catalogue_private_calls)
+            )
+        if catalogue_raw_tikz:
+            failures.append(
+                "catalogue declarations contain raw TikZ operations at "
+                + _abbreviate_locations(catalogue_raw_tikz)
+            )
+        if catalogue_geometry:
+            failures.append(
+                "catalogue declarations contain numerical placement or local "
+                "appearance overrides at "
+                + _abbreviate_locations(catalogue_geometry)
+            )
         if failures:
             raise RuntimeError("Strict tensor-network audit failed: " + "; ".join(failures))
 
@@ -1208,15 +1519,15 @@ def _read_chapter_with_includes(path: Path, seen: set[Path] | None = None) -> st
 
 def _assert_peps_macros_used_in_chapter() -> None:
     intentionally_unused: set[str] = set()
-    pattern = re.compile(r"\\newcommand\{\\(TNPEPS\w+)\}(?:\[\d+\])?")
-    source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
-    peps_macros = sorted(set(pattern.findall(source)))
+    peps_macros = sorted(
+        name for name in _DIAGRAM_DECLARATIONS if name.startswith("TNPEPS")
+    )
     chapter = _read_chapter_with_includes(_SRC_DIR / "chapter/ch24_peps_ft.tex")
     stale_records = sorted(intentionally_unused - set(peps_macros))
     if stale_records:
         raise RuntimeError(
             "Recorded intentionally unused PEPS diagram macros are not public "
-            f"macros in tn_print.tex: {stale_records}"
+            f"declarations in tn_catalogue.tex: {stale_records}"
         )
     unused = [
         name
@@ -1239,7 +1550,9 @@ _assert_diagram_args_match_print_macros()
 
 def _tex_call(obj: Command) -> str:
     if obj.macroName == "TNTikZDiagram":
-        rendered = stringify_tex_item(obj.attributes.get("rendered", "")).strip()
+        rendered = stringify_tex_item(
+            obj.attributes.get("rendered_body", "")
+        ).strip()
         if rendered:
             if rendered.startswith("\\"):
                 return rendered
@@ -1476,6 +1789,7 @@ def _svg_for(obj: Command, tex_call: str) -> str | None:
 
 class _TNTikZDiagram(Command):
     blockType = False
+    templateName = "TensorNetworkDiagram"
 
     @property
     def tn_svg_html(self) -> str:
@@ -1577,6 +1891,7 @@ def _main(argv: list[str] | None = None) -> int:
     if args.check:
         _assert_diagram_args_match_print_macros()
         _assert_diagram_templates_cover_registered_macros()
+        _assert_diagram_roles_match_chapters()
         print(f"checked {len(_DIAGRAM_ARGS)} tensor-network diagram registrations")
 
     if args.check_peps_usage:
@@ -1585,7 +1900,11 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.check_slides:
         _assert_slide_diagram_contract()
-        slide_calls = sum(_EXPECTED_SLIDE_DIAGRAM_CALLS.values())
+        deck_source = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in sorted(_SLIDE_DIR.glob("presentation*.tex"))
+        )
+        slide_calls = len(re.findall(r"\\SlideTN[A-Z]\w*\b", deck_source))
         print(
             f"checked {slide_calls} tensor-network diagrams under the shared "
             "calculus and slide theme"
