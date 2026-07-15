@@ -688,6 +688,7 @@ import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.Semigroup.Perturbation
 import TNLean.Channel.Semigroup.GeneratorDefs
 import TNLean.Channel.Semigroup.LindbladForm
+import TNLean.Channel.Semigroup.PauliDissipation
 import TNLean.Channel.Semigroup.KossakowskiForm
 import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.LiouvillianKernel
