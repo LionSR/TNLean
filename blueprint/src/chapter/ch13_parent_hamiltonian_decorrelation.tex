@@ -138,13 +138,21 @@ fixes the original operator.  These are the support-projector identities used in
     \lean{Matrix.PosSemidef.partialTraceLeft}
     \leanok
     \uses{def:partial_trace_left}
-    If $\rho\geq 0$, then $\operatorname{tr}_L\rho\geq 0$.
+    For finite-dimensional $H_L$ and $H_R$, if $\rho\geq 0$, then
+    $\operatorname{tr}_L\rho\geq 0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The partial trace is the sum, over a basis of $H_L$, of positive
-    semidefinite principal submatrices of $\rho$.
+    If $\rho^{(k)}$ is the principal submatrix indexed by
+    $\{k\}\times H_R$, then
+    \[
+        (\operatorname{tr}_L\rho)_{r,s}
+        =\sum_k\rho_{(k,r),(k,s)}
+        =\sum_k\rho^{(k)}_{r,s}.
+    \]
+    Each $\rho^{(k)}$ is positive semidefinite, and hence so is their finite
+    sum.
 \end{proof}
 
 \begin{lemma}[Adjoint identity for the left partial trace]
@@ -300,8 +308,17 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
         \qquad
         K=\frac{O-O^\dagger}{2\mathrm{i}},
     \]
-    where $H=H^\dagger$ and $K=K^\dagger$.  Expand the decorrelation
-    expression in both observables; its four Hermitian pairs vanish.
+    where $H=H^\dagger$ and $K=K^\dagger$.  For analogous decompositions
+    $O=H+\mathrm{i}K$ and $O'=H'+\mathrm{i}K'$,
+    \begin{align*}
+        P O(\mathbf 1-P)O'P
+        &=P H(\mathbf 1-P)H'P
+          +\mathrm{i}P H(\mathbf 1-P)K'P\\
+        &\quad+\mathrm{i}P K(\mathbf 1-P)H'P
+          -P K(\mathbf 1-P)K'P.
+    \end{align*}
+    Each summand vanishes by observable decorrelation applied to its two
+    Hermitian components.
 \end{proof}
 
 \begin{theorem}[Reverse order of decorrelation]
