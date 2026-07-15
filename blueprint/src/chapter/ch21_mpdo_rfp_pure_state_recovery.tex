@@ -217,6 +217,23 @@
     \]
 \end{definition}
 
+\begin{theorem}[Rectangular Kraus resolution]
+    \label{thm:mpdo_rectangular_kraus_map_cptp}
+    \lean{Matrix.rectangularKrausMap_isKrausCPTP}
+    \leanok
+    \uses{def:is_kraus_cptp, def:mpdo_rectangular_kraus_map}
+    Let $(A_a:H\to K)_a$ be a finite family of rectangular operators. If
+    \[
+        \sum_a A_a^\dagger A_a=I_H,
+    \]
+    then $X\mapsto\sum_a A_aXA_a^\dagger$ is trace-preserving and completely
+    positive.
+\end{theorem}
+\begin{proof}\leanok
+    The displayed family is already a Kraus representation, and the assumed
+    identity is precisely its trace-preserving normalization.
+\end{proof}
+
 \begin{theorem}[Relabeling a rectangular Kraus family]
     \label{thm:mpdo_rectangular_kraus_map_equiv}
     \lean{Matrix.rectangularKrausMap_equiv}
@@ -302,7 +319,8 @@
     \label{thm:mpdo_controlled_kraus_map_cptp}
     \lean{Matrix.controlledKrausMap_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_controlled_kraus_map, def:is_kraus_cptp}
+    \uses{def:mpdo_controlled_kraus_map,
+        thm:mpdo_rectangular_kraus_map_cptp}
     Suppose that for every $k$ the sectorwise Kraus family resolves the
     identity:
     \[
@@ -313,14 +331,15 @@
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_rectangular_kraus_map_cptp}
     Each embedded operator has support in one summand, and therefore
     \[
         \sum_{k,a}\widetilde A_{k,a}^{\dagger}\widetilde A_{k,a}
         =\bigoplus_k\left(\sum_a A_{k,a}^{\dagger}A_{k,a}\right)
         =\bigoplus_k I_{H_k}=I_H.
     \]
-    The displayed Kraus form gives complete positivity, while this identity
-    gives trace preservation.
+    Apply Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} to the combined
+    rectangular Kraus family $(\widetilde A_{k,a})_{k,a}$.
 \end{proof}
 
 \begin{definition}[Right partial trace]
@@ -363,13 +382,15 @@
     \label{lem:mpdo_right_partial_trace_cptp}
     \lean{Matrix.partialTraceRightLM_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_right_partial_trace_map, def:is_kraus_cptp}
+    \uses{def:mpdo_right_partial_trace_map,
+        thm:mpdo_rectangular_kraus_map_cptp}
     The map $\tr_{B}$ is trace-preserving and completely positive for arbitrary
     finite-dimensional spaces $A$ and $B$.
 \end{lemma}
 
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_rectangular_kraus_map_cptp}
     For each basis vector $e_k$ of $B$, define
     $V_k:A\otimes B\to A$ by
     \[
@@ -381,6 +402,7 @@
         \qquad
         \sum_k V_k^\dagger V_k=I_{A\otimes B}.
     \]
+    Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} applies.
 \end{proof}
 
 \begin{definition}[State-preparation map]
@@ -454,8 +476,9 @@
     \label{lem:mpdo_state_preparation_cptp}
     \lean{Matrix.preparationMap_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_state_preparation_map, def:is_kraus_cptp,
-      def:mpdo_state_preparation_kraus}
+    \uses{def:mpdo_state_preparation_map,
+      def:mpdo_state_preparation_kraus,
+      thm:mpdo_rectangular_kraus_map_cptp}
     If $\rho\geq0$ and $\tr(\rho)=1$, then
     $\mathcal P_\rho:X\mapsto X\otimes\rho$ is trace-preserving completely
     positive.
@@ -463,18 +486,14 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_rectangular_kraus_map_equiv,
+    \uses{thm:mpdo_rectangular_kraus_map_cptp,
       thm:mpdo_state_preparation_kraus_action,
       thm:mpdo_state_preparation_kraus_resolution}
-    Relabel an orthonormal basis of the ancillary space by
-    $\{0,\ldots,\dim B-1\}$. Theorem~\ref{thm:mpdo_rectangular_kraus_map_equiv}
-    shows that this relabeling leaves the Kraus map unchanged, and
-    Theorem~\ref{thm:mpdo_state_preparation_kraus_action} gives
-    \[
-        \sum_j A_jXA_j^\dagger=X\otimes\rho.
-    \]
+    Theorem~\ref{thm:mpdo_state_preparation_kraus_action} identifies the map
+    with the rectangular Kraus family $(A_j)_j$, and
     Theorem~\ref{thm:mpdo_state_preparation_kraus_resolution} gives
-    $\sum_j A_j^\dagger A_j=I_A$.
+    $\sum_j A_j^\dagger A_j=I_A$. Apply
+    Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp}.
 \end{proof}
 
 \begin{definition}[Physical closure maps]
