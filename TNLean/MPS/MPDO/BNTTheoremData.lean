@@ -111,14 +111,6 @@ variable {data : AlgebraStructureData d D} {Λ : Type*} {O : ℕ → Type*}
 def positiveChi : PositiveBNTLabelChiTracePowerForm H.coeffs :=
   H.algebraClause.positiveChi
 
-/-- The same-length product law carried by BNT-label theorem data. -/
-theorem same_length_product : H.operators.HasSameLengthProductForm H.coeffs :=
-  H.algebraClause.sameLengthProduct
-
-/-- The idempotent scalar law carried by BNT-label theorem data. -/
-theorem idempotent : H.traceScalars.HasIdempotentCoefficientForm H.coeffs :=
-  H.algebraClause.idempotent
-
 /-- Build BNT-label theorem data in the source-side case where the coefficient
 family is canonically determined by the same diagonal
 \(\chi_{\alpha,\beta,\gamma}\)-family.
@@ -160,7 +152,7 @@ Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem same_length_product_form :
     H.operators.HasSameLengthProductForm H.coeffs :=
-  H.same_length_product
+  H.algebraClause.sameLengthProduct
 
 /-- The idempotent coefficient predicate carried by BNT-label theorem data.
 
@@ -168,7 +160,7 @@ Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem idempotent_coefficient_form :
     H.traceScalars.HasIdempotentCoefficientForm H.coeffs :=
-  H.idempotent
+  H.algebraClause.idempotent
 
 /-- Positivity of the BNT-label chi matrices carried by theorem data.
 
@@ -250,7 +242,7 @@ theorem same_length_product_form_ofChi :
       (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
   intro L hL α β
   rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum
-    (op := H.operators) H.same_length_product L hL α β]
+    (op := H.operators) H.same_length_product_form L hL α β]
   refine Finset.sum_congr rfl ?_
   intro γ _hγ
   rw [H.coeff_eq_ofChi_coeff L hL α β γ]
@@ -283,7 +275,7 @@ theorem idempotent_coefficient_form_ofChi :
       (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
   intro γ
   rw [BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum
-    (m := H.traceScalars) H.idempotent γ]
+    (m := H.traceScalars) H.idempotent_coefficient_form γ]
   refine Finset.sum_congr rfl ?_
   intro α _hα
   refine Finset.sum_congr rfl ?_
@@ -323,7 +315,7 @@ theorem same_length_product_eq_sum
     H.operators.operator L α * H.operators.operator L β =
       ∑ γ : Λ, H.coeffs.coeff L α β γ • H.operators.operator L γ :=
   BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum
-    (op := H.operators) H.same_length_product L hL α β
+    (op := H.operators) H.same_length_product_form L hL α β
 
 /-- The idempotent scalar equation carried by theorem data.
 
@@ -335,7 +327,7 @@ theorem idempotent_eq_sum (γ : Λ) :
         H.coeffs.coeff 1 α β γ *
           (H.traceScalars.traceScalar α * H.traceScalars.traceScalar β) :=
   BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum
-    (m := H.traceScalars) H.idempotent γ
+    (m := H.traceScalars) H.idempotent_coefficient_form γ
 
 /-- The blocked-basis/BNT-label coefficient comparison carried by theorem data.
 

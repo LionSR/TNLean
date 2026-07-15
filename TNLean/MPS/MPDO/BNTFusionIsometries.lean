@@ -55,8 +55,8 @@ evaluations, and the word evaluation of the fused tensor splits block by
 block with the chi factors accumulating into matrix powers.
 
 Together with the length-one idempotent scalar law from statement (iii),
-`BNTFusionIsometryFamily.toBNTAlgebraClause` packages this product identity
-and the positive trace-power witness as the algebra clause of statement (ii).
+`BNTFusionIsometryFamily.toBNTAlgebraClause` combines this product identity
+and the positive trace-power witness into the algebra clause of statement (ii).
 
 The family is hypothesis-carrying: nothing here constructs the tensors, the
 chi matrices, or the isometries from an MPDO tensor. That construction is
