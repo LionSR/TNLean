@@ -64,7 +64,8 @@ end PeriodicMPSTensor
 /-- `IsPeriodic m A` bundles irreducibility, left-canonical normalization,
 peripheral spectrum equal to the `m`-th roots of unity, and positivity of `m`.
 
-This is the periodic analogue of primitivity data in arXiv:1708.00029, Section 2.1. -/
+This is the periodic analogue of the primitivity conditions in arXiv:1708.00029,
+Section 2.1. -/
 structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   /-- No nontrivial invariant projection. -/
   irreducible : IsIrreducibleTensor A
@@ -77,10 +78,10 @@ structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
     peripheralEigenvalues (transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
 
 /-- A positive period has a primitive root in `ℂ`; this is a consequence of
-the period, not additional periodicity data.
+the period, not an additional periodicity hypothesis.
 
 Existence of this root is automatic over `ℂ` and is therefore not part of the
-periodicity data in arXiv:1708.00029, Section 2.1. -/
+periodicity hypotheses in arXiv:1708.00029, Section 2.1. -/
 theorem IsPeriodic.primitiveRoot {m : ℕ} {A : MPSTensor d D}
     (hA : IsPeriodic m A) : ∃ ω : ℂ, IsPrimitiveRoot ω m :=
   ⟨Complex.exp (2 * Real.pi * Complex.I / m),
