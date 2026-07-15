@@ -130,10 +130,21 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
         lem:block_separating_equations_from_pairwise_separation}
     For a prescribed matrix $X_k$ on block $k$, choose an anchor block $j$.
     Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a length-
-    $3(L_0+1)$ tuple whose $k$- and $j$-components are $(X_k,0)$. Multiplying
-    by identity--zero selectors for the other $r-2$ blocks gives a tuple
-    supported only on block $k$, at length $3(r-1)(L_0+1)$. Summing these
-    tuples over $k$ realizes every element of the product algebra.
+    $3(L_0+1)$ tuple $M$ with $(M_k,M_j)=(X_k,0)$. For every
+    $\ell\notin\{k,j\}$, choose a selector $N^{(\ell)}$ with
+    $N^{(\ell)}_k=I$ and $N^{(\ell)}_\ell=0$, and put
+    \[
+        C_t=M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t.
+    \]
+    Then
+    \[
+        C_k=X_k,\qquad C_j=0,\qquad
+        C_\ell=M_\ell(\cdots)0(\cdots)=0
+        \quad(\ell\notin\{k,j\}).
+    \]
+    Thus $C$ is supported only on block $k$, at length
+    $3(r-1)(L_0+1)$. Summing these tuples over $k$ realizes every element of
+    the product algebra.
 \end{proof}
 
 \begin{lemma}[Blockwise matrix equality from trace pairings]
