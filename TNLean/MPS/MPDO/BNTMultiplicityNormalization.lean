@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.MPDO.BNTTheoremData
 
 /-!
@@ -18,7 +19,9 @@ multiplicity matrix with the one-site trace scalar for γ.
 
 The comparison of the two vertical canonical decompositions and the
 construction of the trace-preserving completely positive maps remain separate
-obligations.
+obligations.  Once that comparison supplies eventual equality of the
+sectorwise positive power sums, `ofEventuallyEqualPowerSums` constructs the
+required equality of multiplicity spectra.
 
 ## References
 
@@ -26,7 +29,7 @@ obligations.
   Theorem IV.13(ii) and Appendix C.4, lines 2048--2064
 -/
 
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace MPOTensor
 
@@ -79,6 +82,87 @@ namespace BNTMultiplicitySpectrumComparison
 variable {Λ : Type*} [Fintype Λ] {χ : DiagonalChiFamily Λ}
   {m : BNTLabelTraceScalarFamily Λ}
   (C : BNTMultiplicitySpectrumComparison χ m)
+
+/-- Eventual equality of the positive power sums, together with positivity of
+all multiplicity and chi entries, constructs the multiplicity-spectrum
+comparison.
+
+This is precisely the application of the Appendix power-sum lemma after the
+one-site algebraic expansion and the two-site vertical canonical form have
+been matched sectorwise.  It does not establish that matching or derive the
+eventual power-sum equality from a matrix product density operator.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 2048--2058, using the finite
+power-sum lemma at lines 1155--1163. -/
+noncomputable def ofEventuallyEqualPowerSums
+    (χ : DiagonalChiFamily Λ) (m : BNTLabelTraceScalarFamily Λ)
+    (hχ : χ.PosEntries)
+    (oneDim : Λ → ℕ) (oneEntry : ∀ α : Λ, Fin (oneDim α) → ℂ)
+    (onePos : ∀ α i, (0 : ℂ) < oneEntry α i)
+    (oneTrace : ∀ α : Λ, ∑ i, oneEntry α i = m.traceScalar α)
+    (twoDim : Λ → ℕ) (twoEntry : ∀ γ : Λ, Fin (twoDim γ) → ℂ)
+    (twoPos : ∀ γ r, (0 : ℂ) < twoEntry γ r)
+    {L₀ : ℕ}
+    (powerSums : ∀ γ : Λ, ∀ L : ℕ, L₀ < L →
+      (∑ r, twoEntry γ r ^ L) =
+        ∑ x : BNTProductMultiplicityIndex χ oneDim γ,
+          (oneEntry x.1 x.2.2.1 * oneEntry x.2.1 x.2.2.2.1 *
+            χ.entry x.1 x.2.1 γ x.2.2.2.2) ^ L) :
+    BNTMultiplicitySpectrumComparison χ m where
+  oneDim := oneDim
+  oneEntry := oneEntry
+  oneTrace := oneTrace
+  twoDim := twoDim
+  twoEntry := twoEntry
+  spectrum_eq := by
+    classical
+    intro γ
+    let I := BNTProductMultiplicityIndex χ oneDim γ
+    let productEntry : I → ℂ := fun x =>
+      oneEntry x.1 x.2.2.1 * oneEntry x.2.1 x.2.2.2.1 *
+        χ.entry x.1 x.2.1 γ x.2.2.2.2
+    let e : Fin (Fintype.card I) ≃ I := (Fintype.equivFin I).symm
+    have hTwoNe : ∀ r, twoEntry γ r ≠ 0 :=
+      fun r => (twoPos γ r).ne'
+    have hProductNe : ∀ x : I, productEntry x ≠ 0 := by
+      intro x
+      exact mul_ne_zero
+        (mul_ne_zero (onePos x.1 x.2.2.1).ne'
+          (onePos x.2.1 x.2.2.2.1).ne')
+        (hχ x.1 x.2.1 γ x.2.2.2.2).ne'
+    have hEventually : ∀ L : ℕ, L₀ + 1 ≤ L →
+        (∑ r, twoEntry γ r ^ L) =
+          ∑ i : Fin (Fintype.card I), (productEntry (e i)) ^ L := by
+      intro L hL
+      calc
+        (∑ r, twoEntry γ r ^ L) =
+            ∑ x : I, (productEntry x) ^ L := by
+          simpa [I, productEntry] using powerSums γ L (by omega)
+        _ = ∑ i : Fin (Fintype.card I), (productEntry (e i)) ^ L :=
+          (e.sum_comp fun x => (productEntry x) ^ L).symm
+    have hAll : ∀ L : ℕ,
+        (∑ r, twoEntry γ r ^ L) =
+          ∑ i : Fin (Fintype.card I), (productEntry (e i)) ^ L :=
+      MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero
+        (twoEntry γ) (fun i => productEntry (e i)) hTwoNe
+        (fun i => hProductNe (e i)) hEventually
+    have hMultiset :=
+      (Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card
+        (twoDim γ) (Fintype.card I) (twoEntry γ)
+        (fun i => productEntry (e i)) hTwoNe (fun i => hProductNe (e i))
+        (fun L _ _ => hAll L)).2
+    rw [show Finset.univ.val.map (fun i => productEntry (e i)) =
+        Finset.univ.val.map productEntry by
+      calc
+        Finset.univ.val.map (fun i => productEntry (e i)) =
+            (Finset.univ.map e.toEmbedding).val.map productEntry := by
+          rw [Finset.map_val, Multiset.map_map]
+          rfl
+        _ = Finset.univ.val.map productEntry := by
+          congr 2
+          ext x
+          simp] at hMultiset
+    exact hMultiset
 
 /-- Summing the sectorwise multiplicity-spectrum comparison gives the
 corresponding equality of traces.
