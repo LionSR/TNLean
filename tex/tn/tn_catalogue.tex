@@ -1261,6 +1261,8 @@
 % source figure II_RFP_MPS.png: each U acts on the two virtual halves at one
 % physical site, while the two highlighted rank-one projectors act on the
 % separate bonds shared by adjacent sites.
+\input{tn_motifs_symmetry.tex} % chktex 27 (resolved in the TikZ library directory)
+
 \TNDeclareDiagram
     {TNAppendixBAdjacentBondProjectors}
     {}
@@ -1269,12 +1271,11 @@
     {\TNAppendixBAdjacentBondProjectors}
     {chapter/ch13_parent_hamiltonian_commuting_gap.tex}{%
     \begin{TNDiagram}[normal]
-        \TNCanvas{(-3.20,-2.00)}{(3.20,1.70)}
-        \TNFusionMap{rfpUzero}{(-2.40,0.85)}{U_0}
-        \TNFusionMap{rfpUone}{(0,0.85)}{U_1}
-        \TNFusionMap{rfpUtwo}{(2.40,0.85)}{U_2}
-        \TNMPSSite{rfpPhiZero}{(-1.20,-0.45)}{\varphi_{01}}
-        \TNMPSSite{rfpPhiOne}{(1.20,-0.45)}{\varphi_{12}}
+        \TNFusionMap{rfpUzero}{at=origin}{U_0}
+        \TNFusionMap{rfpUone}{right=of rfpUzero}{U_1}
+        \TNFusionMap{rfpUtwo}{right=of rfpUone}{U_2}
+        \TNMPSSite{rfpPhiZero}{below right=of rfpUzero}{\varphi_{01}}
+        \TNMPSSite{rfpPhiOne}{below right=of rfpUone}{\varphi_{12}}
         \TNConnectVirtualVH{rfpUzeroFactorTwo}{rfpPhiZeroWest}
         \TNConnectVirtualVH{rfpUoneFactorOne}{rfpPhiZeroEast}
         \TNConnectVirtualVH{rfpUoneFactorTwo}{rfpPhiOneWest}
@@ -1303,12 +1304,11 @@
     {\TNAppendixBPhysicalSupportTransport}
     {chapter/ch13_parent_hamiltonian_commuting_gap.tex}{%
     \begin{TNDiagram}[normal]
-        \TNCanvas{(-3.20,-2.00)}{(3.20,2.25)}
-        \TNFusionMap{rfpTzero}{(-2.40,0.65)}{U_0}
-        \TNFusionMap{rfpTone}{(0,0.65)}{U_1}
-        \TNFusionMap{rfpTtwo}{(2.40,0.65)}{U_2}
-        \TNMPSSite{rfpTPhiZero}{(-1.20,-0.65)}{\varphi_{01}}
-        \TNMPSSite{rfpTPhiOne}{(1.20,-0.65)}{\varphi_{12}}
+        \TNFusionMap{rfpTzero}{at=origin}{U_0}
+        \TNFusionMap{rfpTone}{right=of rfpTzero}{U_1}
+        \TNFusionMap{rfpTtwo}{right=of rfpTone}{U_2}
+        \TNMPSSite{rfpTPhiZero}{below right=of rfpTzero}{\varphi_{01}}
+        \TNMPSSite{rfpTPhiOne}{below right=of rfpTone}{\varphi_{12}}
         \TNConnectVirtualVH{rfpTzeroFactorTwo}{rfpTPhiZeroWest}
         \TNConnectVirtualVH{rfpToneFactorOne}{rfpTPhiZeroEast}
         \TNConnectVirtualVH{rfpToneFactorTwo}{rfpTPhiOneWest}
@@ -1337,37 +1337,35 @@
     {normal}
     {\TNAppendixBChainTransport}
     {chapter/ch13_parent_hamiltonian_commuting_gap.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNCanvas{(-3.00,-2.10)}{(7.35,1.80)}
-        \TNMPSSite{ctA}{(-2.20,0)}{A}
-        \TNMPSSite{ctX}{(-1.10,1.15)}{X}
-        \TNMPSSite{ctB}{(0.25,1.15)}{B}
-        \TNMPSSite{ctC}{(1.35,0)}{}
-        \TNMPSSite{ctD}{(0.25,-1.15)}{}
-        \TNMPSSite{ctE}{(-1.10,-1.15)}{}
-        \TNConnectVirtual{ctAEast}{ctXWest}
-        \TNConnectVirtual{ctXEast}{ctBWest}
-        \TNConnectVirtual{ctBEast}{ctCWest}
-        \TNConnectVirtual{ctCEast}{ctDWest}
-        \TNConnectVirtual{ctDEast}{ctEWest}
-        \TNConnectVirtual{ctEEast}{ctAWest}
-        \TNSelectedLabelAbove{ctX}{h_i}
-        \TNSecondaryLabelAbove{ctB}{h_{i+1}}
-        \TNPoint{ctLengthCondition}{(-0.45,-1.75)}
-        \TNLabel{ctLengthCondition}{(0,0)}{N>2}
-        \TNMorphismArrow{ctTransport}{(2.00,0)}{(3.15,0)}{R_{i,\tau}^{(3)}}
-        \TNMPSSite{ctLA}{(3.80,0)}{A}
-        \TNMPSSite{ctLX}{(5.20,0)}{X}
-        \TNMPSSite{ctLB}{(6.60,0)}{B}
-        \TNConnectVirtual{ctLAEast}{ctLXWest}
-        \TNConnectVirtual{ctLXEast}{ctLBWest}
-        \TNOpenVirtualWest{ctLAWest}
-        \TNOpenVirtualEast{ctLBEast}
-        \TNPoint{ctLeftInteraction}{($(ctLA)!0.5!(ctLX)$)}
-        \TNPoint{ctRightInteraction}{($(ctLX)!0.5!(ctLB)$)}
-        \TNSelectedLabelBelow{ctLeftInteraction}{h_0^{(3)}}
-        \TNSecondaryLabelBelow{ctRightInteraction}{h_1^{(3)}}
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNMPSSite{ctA}{at=origin}{A}
+            \TNMPSSite{ctX}{above right=of ctA}{X}
+            \TNMPSSite{ctB}{right=of ctX}{B}
+            \TNMPSSite{ctC}{below right=of ctB}{}
+            \TNMPSSite{ctD}{below left=of ctC}{}
+            \TNMPSSite{ctE}{left=of ctD}{}
+            \TNConnectVirtual{ctAEast}{ctXWest}
+            \TNConnectVirtual{ctXEast}{ctBWest}
+            \TNConnectVirtual{ctBEast}{ctCWest}
+            \TNConnectVirtual{ctCEast}{ctDWest}
+            \TNConnectVirtual{ctDEast}{ctEWest}
+            \TNConnectVirtual{ctEEast}{ctAWest}
+            \TNSelectedLabelAbove{ctX}{h_i}
+            \TNSecondaryLabelAbove{ctB}{h_{i+1}}
+            \TNLabelBelow{ctD}{N>2}}
+        \TNRelation{\xrightarrow{R_{i,\tau}^{(3)}}}
+        \TNTerm[normal]{%
+            \TNMPSSite{ctLA}{at=origin}{A}
+            \TNMPSSite{ctLX}{right=of ctLA}{X}
+            \TNMPSSite{ctLB}{right=of ctLX}{B}
+            \TNConnectVirtual{ctLAEast}{ctLXWest}
+            \TNConnectVirtual{ctLXEast}{ctLBWest}
+            \TNOpenVirtualWest{ctLAWest}
+            \TNOpenVirtualEast{ctLBEast}
+            \TNSelectedLabelBelow{ctLAEast}{h_0^{(3)}}
+            \TNSecondaryLabelBelow{ctLXEast}{h_1^{(3)}}}
+    \end{TNEquationRow}%
 }
 
 \TNDeclareDiagram
@@ -1438,15 +1436,15 @@
     {chapter/ch21_mpdo_rfp_blocked_rfp.tex}{%
     \begin{TNEquationRow}[compact]
         \TNTerm{%
-            \TNMPOSite{tsbM}{(0,0)}{M}
+            \TNMPOSite{tsbM}{at=origin}{M}
             \TNOpenVirtualWest{tsbMWest}
             \TNOpenVirtualEast{tsbMEast}
             \TNOpenPhysicalNorth{tsbMKet}
             \TNOpenPhysicalSouth{tsbMBra}}
         \TNRelation{=}
         \TNTerm{%
-            \TNMPOSite{tsbKa}{(0,0)}{K}
-            \TNMPOSite{tsbKb}{(1.25,0)}{K}
+            \TNMPOSite{tsbKa}{at=origin}{K}
+            \TNMPOSite{tsbKb}{right=of tsbKa}{K}
             \TNOpenVirtualWest{tsbKaWest}
             \TNConnectVirtual{tsbKaEast}{tsbKbWest}
             \TNOpenVirtualEast{tsbKbEast}
@@ -1468,7 +1466,7 @@
     {chapter/ch21_mpdo_rfp_blocked_rfp.tex}{%
     \begin{TNEquationRow}[compact]
         \TNTerm{%
-            \TNStackedMPOProduct{vp}{(0,0)}{\mathcal K_y}{\mathcal K_x}{}
+            \TNStackedMPOProduct{vp}{at=origin}{\mathcal K_y}{\mathcal K_x}{}
             \TNOpenVirtualWest{vpUpperWest}
             \TNOpenVirtualEast{vpUpperEast}
             \TNOpenVirtualWest{vpLowerWest}
@@ -1492,10 +1490,10 @@
     {chapter/ch21_mpdo_rfp_algebra_tower.tex}{%
     \begin{TNEquationRow}[compact]
         \ensuremath{M_\alpha(X)=}
-        \TNTerm{\TNCompactTraceCell{bcm}{(0,0)}{M_\alpha}{X}{}}
+        \TNTerm{\TNSymmetryTraceCell{bcm}{M_\alpha}{X}{}}
         \qquad
         \ensuremath{A_\alpha(X)=}
-        \TNTerm{\TNCompactTraceCell{bca}{(0,0)}{A_\alpha}{X}{}}
+        \TNTerm{\TNSymmetryTraceCell{bca}{A_\alpha}{X}{}}
     \end{TNEquationRow}%
 }
 
@@ -1511,7 +1509,7 @@
     {chapter/ch21_mpdo_rfp_bnt_coefficients.tex}{%
     \begin{TNEquationRow}[compact]
         \ensuremath{O_L(M_\alpha)=}
-        \TNTerm{\TNVerticalWord{botc}{(0,0)}{M_\alpha}{closed}}
+        \TNTerm{\TNSymmetryVerticalWord{botc}{M_\alpha}{closed}}
     \end{TNEquationRow}%
 }
 
@@ -1640,7 +1638,7 @@
      chapter/ch23_algebraic_ft.tex,
      chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \TNGaugeConjugatedMPSSite{tnGauge}{(0,0)}{#2}{#1}{#3}
+        \TNGaugeConjugatedMPSSite{tnGauge}{at=origin}{#2}{#1}{#3}
     \end{TNDiagram}%
 }
 
@@ -1651,20 +1649,31 @@
     {normal}
     {\TNPhysicalRealization{X}{i}}
     {chapter/ch23_algebraic_ft.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNTensor{tnA1}{(0,0)}
-        \TNVirtualPort{tnA1OpenWestPort}{tnA1}{west}\TNOpenVirtualWest{tnA1OpenWestPort}
-        \TNPhysicalPort{tnA1OpenKetPort}{tnA1}{north}\TNOpenPhysicalNorth{tnA1OpenKetPort}
-        \TNInsertion{tnX}{(0.78,0)}{#1}
-        \TNVirtualPort{tnA1TotnX}{tnA1}{east}\TNVirtualPort{tnXTotnA1}{tnX}{west}\TNConnectVirtual{tnA1TotnX}{tnXTotnA1}
-        \TNVirtualPort{tnXOpenEastPort}{tnX}{east}\TNOpenVirtualEast{tnXOpenEastPort}
-        \TNPlacedLabel{tnClientLabel1084}{(1.78,0)}{=}
-        \TNTensor{tnA2}{(2.65,0)}
-        \TNVirtualPort{tnA2OpenWestPort}{tnA2}{west}\TNOpenVirtualWest{tnA2OpenWestPort}
-        \TNVirtualPort{tnA2OpenEastPort}{tnA2}{east}\TNOpenVirtualEast{tnA2OpenEastPort}
-        \TNInsertion{tnO}{(2.65,0.74)}{#2}
-        \TNPhysicalPort{tnA2TotnO}{tnA2}{north}\TNPhysicalPort{tnOTotnA2}{tnO}{south}\TNConnectPhysical{tnA2TotnO}{tnOTotnA2}
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNTensor{tnA1}{at=origin}
+            \TNInsertion{tnX}{right=of tnA1}{#1}
+            \TNVirtualPort{tnA1OpenWestPort}{tnA1}{west}
+            \TNOpenVirtualWest{tnA1OpenWestPort}
+            \TNPhysicalPort{tnA1OpenKetPort}{tnA1}{north}
+            \TNOpenPhysicalNorth{tnA1OpenKetPort}
+            \TNVirtualPort{tnA1TotnX}{tnA1}{east}
+            \TNVirtualPort{tnXTotnA1}{tnX}{west}
+            \TNConnectVirtual{tnA1TotnX}{tnXTotnA1}
+            \TNVirtualPort{tnXOpenEastPort}{tnX}{east}
+            \TNOpenVirtualEast{tnXOpenEastPort}}
+        \TNRelation{=}
+        \TNTerm[normal]{%
+            \TNTensor{tnA2}{at=origin}
+            \TNVirtualPort{tnA2OpenWestPort}{tnA2}{west}
+            \TNOpenVirtualWest{tnA2OpenWestPort}
+            \TNVirtualPort{tnA2OpenEastPort}{tnA2}{east}
+            \TNOpenVirtualEast{tnA2OpenEastPort}
+            \TNInsertion{tnO}{above=of tnA2}{#2}
+            \TNPhysicalPort{tnA2TotnO}{tnA2}{north}
+            \TNPhysicalPort{tnOTotnA2}{tnO}{south}
+            \TNConnectPhysical{tnA2TotnO}{tnOTotnA2}}
+    \end{TNEquationRow}%
 }
 
 % Fix (#401): use a dedicated physical-leg operator insertion for
@@ -1677,12 +1686,14 @@
     {\TNLinearTwist{u}{i}}
     {chapter/ch12_symmetry.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{tnA}{(0,0)}
+        \TNTensor{tnA}{at=origin}
         \TNVirtualPort{tnAOpenWestPort}{tnA}{west}\TNOpenVirtualWest{tnAOpenWestPort}
         \TNVirtualPort{tnAOpenEastPort}{tnA}{east}\TNOpenVirtualEast{tnAOpenEastPort}
-        \TNInsertion{tnu}{(0,0.64)}{#1}
-        \TNPhysicalPort{tnATotnu}{tnA}{north}\TNPhysicalPort{tnuTotnA}{tnu}{south}\TNConnectPhysical{tnATotnu}{tnuTotnA}
-        \TNPlacedLabel{tnClientLabel1102}{($(tnu.north)+(0,0.18)$)}{#2}
+        \TNInsertion{tnu}{above=of tnA}{#1}
+        \TNPhysicalPort{tnATotnu}{tnA}{north}
+        \TNPhysicalPort{tnuTotnA}{tnu}{south}
+        \TNConnectPhysical{tnATotnu}{tnuTotnA}
+        \TNLabelAbove{tnu.north}{#2}
     \end{TNDiagram}%
 }
 
@@ -1695,19 +1706,27 @@
     {normal}
     {\TNPermutationTwistLabeled{i}{k}{\sigma}}
     {chapter/ch12_symmetry.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNTensor{tnL}{(0,0)}
-        \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
-        \TNVirtualPort{tnLOpenEastPort}{tnL}{east}\TNOpenVirtualEast{tnLOpenEastPort}
-        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
-        \TNLabelAbove{tnL}{#1}
-        \TNPlacedLabel{tnClientLabel1115}{(1.55,0)}{\xrightarrow{\ #3\ }}
-        \TNTensor{tnR}{(3.30,0)}
-        \TNVirtualPort{tnROpenWestPort}{tnR}{west}\TNOpenVirtualWest{tnROpenWestPort}
-        \TNVirtualPort{tnROpenEastPort}{tnR}{east}\TNOpenVirtualEast{tnROpenEastPort}
-        \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
-        \TNLabelAbove{tnR}{#2}
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNTensor{tnL}{at=origin}
+            \TNVirtualPort{tnLOpenWestPort}{tnL}{west}
+            \TNOpenVirtualWest{tnLOpenWestPort}
+            \TNVirtualPort{tnLOpenEastPort}{tnL}{east}
+            \TNOpenVirtualEast{tnLOpenEastPort}
+            \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}
+            \TNOpenPhysicalNorth{tnLOpenKetPort}
+            \TNLabelAbove{tnL}{#1}}
+        \TNRelation{\xrightarrow{#3}}
+        \TNTerm[normal]{%
+            \TNTensor{tnR}{at=origin}
+            \TNVirtualPort{tnROpenWestPort}{tnR}{west}
+            \TNOpenVirtualWest{tnROpenWestPort}
+            \TNVirtualPort{tnROpenEastPort}{tnR}{east}
+            \TNOpenVirtualEast{tnROpenEastPort}
+            \TNPhysicalPort{tnROpenKetPort}{tnR}{north}
+            \TNOpenPhysicalNorth{tnROpenKetPort}
+            \TNLabelAbove{tnR}{#2}}
+    \end{TNEquationRow}%
 }
 
 \TNDeclareDiagram
@@ -1728,20 +1747,8 @@
     {\TNTwistedTransfer{u}}
     {chapter/ch12_symmetry.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{tnUp}{(0,0.48)}
-        \TNTensor{tnDn}{(0,-0.48)}
-        \TNVirtualPort{tnUpOpenWestPort}{tnUp}{west}\TNOpenVirtualWest{tnUpOpenWestPort}
-        \TNVirtualPort{tnDnOpenWestPort}{tnDn}{west}\TNOpenVirtualWest{tnDnOpenWestPort}
-        \TNVirtualPort{tnUpOpenEastPort}{tnUp}{east}\TNOpenVirtualEast{tnUpOpenEastPort}
-        \TNVirtualPort{tnDnOpenEastPort}{tnDn}{east}\TNOpenVirtualEast{tnDnOpenEastPort}
-        \TNInsertion{tnu}{(0,0)}{}
-        \TNLabelRight{tnu}{#1}
-        \TNPhysicalPort{tnUpTotnu}{tnUp}{south}\TNPhysicalPort{tnuTotnUp}{tnu}{north}\TNConnectPhysical{tnUpTotnu}{tnuTotnUp}
-        \TNPhysicalPort{tnuTotnDn}{tnu}{south}\TNPhysicalPort{tnDnTotnu}{tnDn}{north}\TNConnectPhysical{tnuTotnDn}{tnDnTotnu}
-        \TNPlacedLabel{tnClientLabel1139}{(-1.25,0)}{X}
-        \TNPlacedLabel{tnClientLabel1140}{(1.52,0)}{\E_{#1}(X)}
-        \TNPlacedLabel{tnClientLabel1141}{($(tnUp.north)+(0,0.28)$)}{n}
-        \TNPlacedLabel{tnClientLabel1142}{($(tnDn.south)+(0,-0.28)$)}{n'}
+        \TNSymmetryTransferCell{tnTransfer}{at=origin}
+            {#1}{X}{\E_{#1}(X)}{n}{n'}
     \end{TNDiagram}%
 }
 
@@ -1752,25 +1759,39 @@
     {normal}
     {\TNCondCOne{u}{X}{i}}
     {chapter/ch12_symmetry.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNTensor{tnL}{(0,0)}
-        \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
-        \TNVirtualPort{tnLOpenEastPort}{tnL}{east}\TNOpenVirtualEast{tnLOpenEastPort}
-        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
-        \TNInsertion{tnu}{(0,0.64)}{#1}
-        \TNPhysicalPort{tnLTotnu}{tnL}{north}\TNPhysicalPort{tnuTotnL}{tnu}{south}\TNConnectPhysical{tnLTotnu}{tnuTotnL}
-        \TNPlacedLabel{tnClientLabel1154}{($(tnu.north)+(0,0.18)$)}{#3}
-        \TNPlacedLabel{tnClientLabel1155}{(1.65,0)}{=}
-        \TNInsertion{tnXl}{(3.15,0)}{#2}
-        \TNTensor{tnA}{(4.20,0)}
-        \TNInsertion{tnXr}{(5.25,0)}{#2^\dagger}
-        \TNVirtualPort{tnXlOpenWestPort}{tnXl}{west}\TNOpenVirtualWest{tnXlOpenWestPort}
-        \TNVirtualPort{tnXlTotnA}{tnXl}{east}\TNVirtualPort{tnATotnXl}{tnA}{west}\TNConnectVirtual{tnXlTotnA}{tnATotnXl}
-        \TNVirtualPort{tnATotnXr}{tnA}{east}\TNVirtualPort{tnXrTotnA}{tnXr}{west}\TNConnectVirtual{tnATotnXr}{tnXrTotnA}
-        \TNVirtualPort{tnXrOpenEastPort}{tnXr}{east}\TNOpenVirtualEast{tnXrOpenEastPort}
-        \TNPhysicalPort{tnAOpenKetPort}{tnA}{north}\TNOpenPhysicalNorth{tnAOpenKetPort}
-        \TNLabelAbove{tnA}{#3}
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNTensor{tnL}{at=origin}
+            \TNVirtualPort{tnLOpenWestPort}{tnL}{west}
+            \TNOpenVirtualWest{tnLOpenWestPort}
+            \TNVirtualPort{tnLOpenEastPort}{tnL}{east}
+            \TNOpenVirtualEast{tnLOpenEastPort}
+            \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}
+            \TNOpenPhysicalNorth{tnLOpenKetPort}
+            \TNInsertion{tnu}{above=of tnL}{#1}
+            \TNPhysicalPort{tnLTotnu}{tnL}{north}
+            \TNPhysicalPort{tnuTotnL}{tnu}{south}
+            \TNConnectPhysical{tnLTotnu}{tnuTotnL}
+            \TNLabelAbove{tnu.north}{#3}}
+        \TNRelation{=}
+        \TNTerm[normal]{%
+            \TNInsertion{tnXl}{at=origin}{#2}
+            \TNTensor{tnA}{right=of tnXl}
+            \TNInsertion{tnXr}{right=of tnA}{#2^\dagger}
+            \TNVirtualPort{tnXlOpenWestPort}{tnXl}{west}
+            \TNOpenVirtualWest{tnXlOpenWestPort}
+            \TNVirtualPort{tnXlTotnA}{tnXl}{east}
+            \TNVirtualPort{tnATotnXl}{tnA}{west}
+            \TNConnectVirtual{tnXlTotnA}{tnATotnXl}
+            \TNVirtualPort{tnATotnXr}{tnA}{east}
+            \TNVirtualPort{tnXrTotnA}{tnXr}{west}
+            \TNConnectVirtual{tnATotnXr}{tnXrTotnA}
+            \TNVirtualPort{tnXrOpenEastPort}{tnXr}{east}
+            \TNOpenVirtualEast{tnXrOpenEastPort}
+            \TNPhysicalPort{tnAOpenKetPort}{tnA}{north}
+            \TNOpenPhysicalNorth{tnAOpenKetPort}
+            \TNLabelAbove{tnA}{#3}}
+    \end{TNEquationRow}%
 }
 
 \TNDeclareDiagram
@@ -1780,31 +1801,45 @@
     {normal}
     {\TNCondCTwo{X}}
     {chapter/ch12_symmetry.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNInsertion{tnVL}{(-1.15,0.48)}{#1}
-        \TNInsertion{tnVdL}{(-1.15,-0.48)}{#1^\dagger}
-        \TNTensor{tnLUp}{(0,0.48)}
-        \TNTensor{tnLDn}{(0,-0.48)}
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+        \TNInsertion{tnVL}{at=origin}{#1}
+        \TNInsertion{tnVdL}{below=of tnVL}{#1^\dagger}
+        \TNTensor{tnLUp}{right=of tnVL}
+        \TNTensor{tnLDn}{right=of tnVdL}
         \TNVirtualPort{tnVLOpenWestPort}{tnVL}{west}\TNOpenVirtualWest{tnVLOpenWestPort}
         \TNVirtualPort{tnVdLOpenWestPort}{tnVdL}{west}\TNOpenVirtualWest{tnVdLOpenWestPort}
-        \TNVirtualPort{tnVLTotnLUp}{tnVL}{east}\TNVirtualPort{tnLUpTotnVL}{tnLUp}{west}\TNConnectVirtual{tnVLTotnLUp}{tnLUpTotnVL}
-        \TNVirtualPort{tnVdLTotnLDn}{tnVdL}{east}\TNVirtualPort{tnLDnTotnVdL}{tnLDn}{west}\TNConnectVirtual{tnVdLTotnLDn}{tnLDnTotnVdL}
+        \TNVirtualPort{tnVLTotnLUp}{tnVL}{east}
+        \TNVirtualPort{tnLUpTotnVL}{tnLUp}{west}
+        \TNConnectVirtual{tnVLTotnLUp}{tnLUpTotnVL}
+        \TNVirtualPort{tnVdLTotnLDn}{tnVdL}{east}
+        \TNVirtualPort{tnLDnTotnVdL}{tnLDn}{west}
+        \TNConnectVirtual{tnVdLTotnLDn}{tnLDnTotnVdL}
         \TNVirtualPort{tnLUpOpenEastPort}{tnLUp}{east}\TNOpenVirtualEast{tnLUpOpenEastPort}
         \TNVirtualPort{tnLDnOpenEastPort}{tnLDn}{east}\TNOpenVirtualEast{tnLDnOpenEastPort}
-        \TNPhysicalPort{tnLUpTotnLDn}{tnLUp}{south}\TNPhysicalPort{tnLDnTotnLUp}{tnLDn}{north}\TNConnectPhysical{tnLUpTotnLDn}{tnLDnTotnLUp}
-        \TNPlacedLabel{tnClientLabel1181}{(1.55,0)}{=}
-        \TNTensor{tnRUp}{(3.10,0.48)}
-        \TNTensor{tnRDn}{(3.10,-0.48)}
-        \TNInsertion{tnVR}{(4.25,0.48)}{#1}
-        \TNInsertion{tnVdR}{(4.25,-0.48)}{#1^\dagger}
+        \TNPhysicalPort{tnLUpTotnLDn}{tnLUp}{south}
+        \TNPhysicalPort{tnLDnTotnLUp}{tnLDn}{north}
+        \TNConnectPhysical{tnLUpTotnLDn}{tnLDnTotnLUp}}
+        \TNRelation{=}
+        \TNTerm[normal]{%
+        \TNTensor{tnRUp}{at=origin}
+        \TNTensor{tnRDn}{below=of tnRUp}
+        \TNInsertion{tnVR}{right=of tnRUp}{#1}
+        \TNInsertion{tnVdR}{right=of tnRDn}{#1^\dagger}
         \TNVirtualPort{tnRUpOpenWestPort}{tnRUp}{west}\TNOpenVirtualWest{tnRUpOpenWestPort}
         \TNVirtualPort{tnRDnOpenWestPort}{tnRDn}{west}\TNOpenVirtualWest{tnRDnOpenWestPort}
-        \TNVirtualPort{tnRUpTotnVR}{tnRUp}{east}\TNVirtualPort{tnVRTotnRUp}{tnVR}{west}\TNConnectVirtual{tnRUpTotnVR}{tnVRTotnRUp}
-        \TNVirtualPort{tnRDnTotnVdR}{tnRDn}{east}\TNVirtualPort{tnVdRTotnRDn}{tnVdR}{west}\TNConnectVirtual{tnRDnTotnVdR}{tnVdRTotnRDn}
+        \TNVirtualPort{tnRUpTotnVR}{tnRUp}{east}
+        \TNVirtualPort{tnVRTotnRUp}{tnVR}{west}
+        \TNConnectVirtual{tnRUpTotnVR}{tnVRTotnRUp}
+        \TNVirtualPort{tnRDnTotnVdR}{tnRDn}{east}
+        \TNVirtualPort{tnVdRTotnRDn}{tnVdR}{west}
+        \TNConnectVirtual{tnRDnTotnVdR}{tnVdRTotnRDn}
         \TNVirtualPort{tnVROpenEastPort}{tnVR}{east}\TNOpenVirtualEast{tnVROpenEastPort}
         \TNVirtualPort{tnVdROpenEastPort}{tnVdR}{east}\TNOpenVirtualEast{tnVdROpenEastPort}
-        \TNPhysicalPort{tnRUpTotnRDn}{tnRUp}{south}\TNPhysicalPort{tnRDnTotnRUp}{tnRDn}{north}\TNConnectPhysical{tnRUpTotnRDn}{tnRDnTotnRUp}
-    \end{TNDiagram}%
+        \TNPhysicalPort{tnRUpTotnRDn}{tnRUp}{south}
+        \TNPhysicalPort{tnRDnTotnRUp}{tnRDn}{north}
+        \TNConnectPhysical{tnRUpTotnRDn}{tnRDnTotnRUp}}
+    \end{TNEquationRow}%
 }
 
 \TNDeclareDiagram
@@ -1815,41 +1850,7 @@
     {\TNStringOrderParameter{u}{L}}
     {chapter/ch12_symmetry.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{tnLam}{(-1.15,0)}
-        \TNPlacedLabel{tnClientLabel1199}{($(tnLam.south)+(0,-0.28)$)}{\Lambda}
-        \TNTensor{tnU1}{(0,0.48)}
-        \TNTensor{tnD1}{(0,-0.48)}
-        \TNTensor{tnU2}{(1.55,0.48)}
-        \TNTensor{tnD2}{(1.55,-0.48)}
-        \TNTensor{tnU3}{(4.30,0.48)}
-        \TNTensor{tnD3}{(4.30,-0.48)}
-        \TNInsertion{tnuA}{(0,0)}{}
-        \TNInsertion{tnuB}{(1.55,0)}{}
-        \TNInsertion{tnuC}{(4.30,0)}{}
-        \TNLabelRight{tnuA}{#1}
-        \TNLabelRight{tnuB}{#1}
-        \TNLabelLeft{tnuC}{#1}
-        \TNVirtualPort{tnLamTotnU1}{tnLam}{east}\TNVirtualPort{tnU1TotnLam}{tnU1}{west}\TNConnectVirtual{tnLamTotnU1}{tnU1TotnLam}
-        \TNVirtualPort{tnLamTotnD1}{tnLam}{east}\TNVirtualPort{tnD1TotnLam}{tnD1}{west}\TNConnectVirtual{tnLamTotnD1}{tnD1TotnLam}
-        \TNVirtualPort{tnU1TotnU2}{tnU1}{east}\TNVirtualPort{tnU2TotnU1}{tnU2}{west}\TNConnectVirtual{tnU1TotnU2}{tnU2TotnU1}
-        \TNVirtualPort{tnD1TotnD2}{tnD1}{east}\TNVirtualPort{tnD2TotnD1}{tnD2}{west}\TNConnectVirtual{tnD1TotnD2}{tnD2TotnD1}
-        \TNVirtualPort{tnU2OpenEastPort}{tnU2}{east}\TNOpenVirtualEast{tnU2OpenEastPort}
-        \TNVirtualPort{tnD2OpenEastPort}{tnD2}{east}\TNOpenVirtualEast{tnD2OpenEastPort}
-        \TNVirtualPort{tnU3OpenWestPort}{tnU3}{west}\TNOpenVirtualWest{tnU3OpenWestPort}
-        \TNVirtualPort{tnD3OpenWestPort}{tnD3}{west}\TNOpenVirtualWest{tnD3OpenWestPort}
-        \TNVirtualPort{tnU3Trace}{tnU3}{east}
-        \TNVirtualPort{tnD3Trace}{tnD3}{east}
-        \TNTraceVirtualRight{tnU3Trace}{tnD3Trace}
-        \TNPhysicalPort{tnU1TotnuA}{tnU1}{south}\TNPhysicalPort{tnuATotnU1}{tnuA}{north}\TNConnectPhysical{tnU1TotnuA}{tnuATotnU1}
-        \TNPhysicalPort{tnuATotnD1}{tnuA}{south}\TNPhysicalPort{tnD1TotnuA}{tnD1}{north}\TNConnectPhysical{tnuATotnD1}{tnD1TotnuA}
-        \TNPhysicalPort{tnU2TotnuB}{tnU2}{south}\TNPhysicalPort{tnuBTotnU2}{tnuB}{north}\TNConnectPhysical{tnU2TotnuB}{tnuBTotnU2}
-        \TNPhysicalPort{tnuBTotnD2}{tnuB}{south}\TNPhysicalPort{tnD2TotnuB}{tnD2}{north}\TNConnectPhysical{tnuBTotnD2}{tnD2TotnuB}
-        \TNPhysicalPort{tnU3TotnuC}{tnU3}{south}\TNPhysicalPort{tnuCTotnU3}{tnuC}{north}\TNConnectPhysical{tnU3TotnuC}{tnuCTotnU3}
-        \TNPhysicalPort{tnuCTotnD3}{tnuC}{south}\TNPhysicalPort{tnD3TotnuC}{tnD3}{north}\TNConnectPhysical{tnuCTotnD3}{tnD3TotnuC}
-        \TNPlacedLabel{tnClientLabel1226}{(2.92,0.48)}{\cdots} % chktex 11
-        \TNPlacedLabel{tnClientLabel1227}{(2.92,-0.48)}{\cdots} % chktex 11
-        \TNPlacedLabel{tnClientLabel1228}{(5.55,0)}{\tr}
-        \TNPlacedLabel{tnClientLabel1229}{(2.92,-1.02)}{#2}
+        \TNSymmetryStringOrderWord{tnString}{#1}{#2}
     \end{TNDiagram}%
 }
 
@@ -1861,19 +1862,23 @@
     {\TNInternalTraceInsertion{i}{k}{X}}
     {chapter/ch23_algebraic_ft.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{tnL}{(0,0)}
-        \TNInsertion{tnX}{(0.80,0)}{#3}
-        \TNTensor{tnR}{(1.60,0)}
+        \TNTensor{tnL}{at=origin}
+        \TNInsertion{tnX}{right=of tnL}{#3}
+        \TNTensor{tnR}{right=of tnX}
         \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
         \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
         \TNLabelAbove{tnL}{#1}
         \TNLabelAbove{tnR}{#2}
-        \TNVirtualPort{tnLTotnX}{tnL}{east}\TNVirtualPort{tnXTotnL}{tnX}{west}\TNConnectVirtual{tnLTotnX}{tnXTotnL}
-        \TNVirtualPort{tnXTotnR}{tnX}{east}\TNVirtualPort{tnRTotnX}{tnR}{west}\TNConnectVirtual{tnXTotnR}{tnRTotnX}
+        \TNVirtualPort{tnLTotnX}{tnL}{east}
+        \TNVirtualPort{tnXTotnL}{tnX}{west}
+        \TNConnectVirtual{tnLTotnX}{tnXTotnL}
+        \TNVirtualPort{tnXTotnR}{tnX}{east}
+        \TNVirtualPort{tnRTotnX}{tnR}{west}
+        \TNConnectVirtual{tnXTotnR}{tnRTotnX}
         \TNVirtualPort{tnLTrace}{tnL}{west}
         \TNVirtualPort{tnRTrace}{tnR}{east}
         \TNTraceVirtualBelow{tnLTrace}{tnRTrace}
-        \TNPlacedLabel{tnClientLabel1247}{(0.80,-0.88)}{\tr}
+        \TNLabelBelow{tnX}{\tr}
     \end{TNDiagram}%
 }
 
@@ -1885,14 +1890,16 @@
     {\TNExternalTraceInsertion{i}{k}{X}}
     {chapter/ch23_algebraic_ft.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{tnL}{(0,0)}
-        \TNTensor{tnR}{(1.60,0)}
-        \TNInsertion{tnY}{(0.80,-0.78)}{#3}
+        \TNTensor{tnL}{at=origin}
+        \TNTensor{tnR}{right=of tnL}
+        \TNInsertion{tnY}{below=of tnL}{#3}
         \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
         \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
         \TNLabelAbove{tnL}{#1}
         \TNLabelAbove{tnR}{#2}
-        \TNVirtualPort{tnLTotnR}{tnL}{east}\TNVirtualPort{tnRTotnL}{tnR}{west}\TNConnectVirtual{tnLTotnR}{tnRTotnL}
+        \TNVirtualPort{tnLTotnR}{tnL}{east}
+        \TNVirtualPort{tnRTotnL}{tnR}{west}
+        \TNConnectVirtual{tnLTotnR}{tnRTotnL}
         \TNVirtualPort{tnLTrace}{tnL}{west}
         \TNVirtualPort{tnYTraceLeft}{tnY}{west}
         \TNVirtualPort{tnYTraceRight}{tnY}{east}
@@ -1912,21 +1919,27 @@
     {chapter/ch13_parent_hamiltonian_injective_ground_spaces.tex,
      chapter/ch23_algebraic_ft.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{rA}{(0,0)}
-        \TNTensor{rB}{(1.05,0)}
-        \TNTensor{rC}{(2.10,0)}
-        \TNInsertion{rX}{(3.55,0)}{#1}
+        \TNTensor{rA}{at=origin}
+        \TNTensor{rB}{right=of rA}
+        \TNTensor{rC}{right=of rB}
+        \TNInsertion{rX}{right=of rC}{#1}
         \foreach \n in {rA,rB,rC} {
                 \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
             }
         \TNLabelAbove{rA}{#2}
         \TNLabelAbove{rC}{#3}
         \TNVirtualPort{rAOpenWestPort}{rA}{west}\TNOpenVirtualWest{rAOpenWestPort}
-        \TNVirtualPort{rATorB}{rA}{east}\TNVirtualPort{rBTorA}{rB}{west}\TNConnectVirtual{rATorB}{rBTorA}
-        \TNVirtualPort{rBTorC}{rB}{east}\TNVirtualPort{rCTorB}{rC}{west}\TNConnectVirtual{rBTorC}{rCTorB}
-        \TNVirtualPort{rCTorX}{rC}{east}\TNVirtualPort{rXTorC}{rX}{west}\TNConnectVirtual{rCTorX}{rXTorC}
+        \TNVirtualPort{rATorB}{rA}{east}
+        \TNVirtualPort{rBTorA}{rB}{west}
+        \TNConnectVirtual{rATorB}{rBTorA}
+        \TNVirtualPort{rBTorC}{rB}{east}
+        \TNVirtualPort{rCTorB}{rC}{west}
+        \TNConnectVirtual{rBTorC}{rCTorB}
+        \TNVirtualPort{rCTorX}{rC}{east}
+        \TNVirtualPort{rXTorC}{rX}{west}
+        \TNConnectVirtual{rCTorX}{rXTorC}
         \TNVirtualPort{rXOpenEastPort}{rX}{east}\TNOpenVirtualEast{rXOpenEastPort}
-        \TNPlacedLabel{tnClientLabel1287}{(1.78,-0.58)}{#4}
+        \TNLabelBelow{rB}{#4}
     \end{TNDiagram}%
 }
 
@@ -1937,27 +1950,37 @@
     {normal}
     {\TNLocalEqualityStep{X}{Y}{i}}
     {chapter/ch23_algebraic_ft.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNTensor{lA}{(0,0)}
-        \TNInsertion{lX}{(0.82,0)}{#1}
-        \TNTensor{lB}{(1.65,0)}
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+        \TNTensor{lA}{at=origin}
+        \TNInsertion{lX}{right=of lA}{#1}
+        \TNTensor{lB}{right=of lX}
         \TNPhysicalPort{lBOpenKetPort}{lB}{north}\TNOpenPhysicalNorth{lBOpenKetPort}
         \TNLabelAbove{lB}{#3}
         \TNVirtualPort{lAOpenWestPort}{lA}{west}\TNOpenVirtualWest{lAOpenWestPort}
-        \TNVirtualPort{lATolX}{lA}{east}\TNVirtualPort{lXTolA}{lX}{west}\TNConnectVirtual{lATolX}{lXTolA}
-        \TNVirtualPort{lXTolB}{lX}{east}\TNVirtualPort{lBTolX}{lB}{west}\TNConnectVirtual{lXTolB}{lBTolX}
-        \TNVirtualPort{lBOpenEastPort}{lB}{east}\TNOpenVirtualEast{lBOpenEastPort}
-        \TNPlacedLabel{tnClientLabel1302}{(2.85,0)}{=}
-        \TNTensor{rA}{(4.10,0)}
-        \TNInsertion{rX}{(4.92,0)}{#2}
-        \TNTensor{rB}{(5.75,0)}
+        \TNVirtualPort{lATolX}{lA}{east}
+        \TNVirtualPort{lXTolA}{lX}{west}
+        \TNConnectVirtual{lATolX}{lXTolA}
+        \TNVirtualPort{lXTolB}{lX}{east}
+        \TNVirtualPort{lBTolX}{lB}{west}
+        \TNConnectVirtual{lXTolB}{lBTolX}
+        \TNVirtualPort{lBOpenEastPort}{lB}{east}\TNOpenVirtualEast{lBOpenEastPort}}
+        \TNRelation{=}
+        \TNTerm[normal]{%
+        \TNTensor{rA}{at=origin}
+        \TNInsertion{rX}{right=of rA}{#2}
+        \TNTensor{rB}{right=of rX}
         \TNPhysicalPort{rBOpenKetPort}{rB}{north}\TNOpenPhysicalNorth{rBOpenKetPort}
         \TNLabelAbove{rB}{#3}
         \TNVirtualPort{rAOpenWestPort}{rA}{west}\TNOpenVirtualWest{rAOpenWestPort}
-        \TNVirtualPort{rATorX}{rA}{east}\TNVirtualPort{rXTorA}{rX}{west}\TNConnectVirtual{rATorX}{rXTorA}
-        \TNVirtualPort{rXTorB}{rX}{east}\TNVirtualPort{rBTorX}{rB}{west}\TNConnectVirtual{rXTorB}{rBTorX}
-        \TNVirtualPort{rBOpenEastPort}{rB}{east}\TNOpenVirtualEast{rBOpenEastPort}
-    \end{TNDiagram}%
+        \TNVirtualPort{rATorX}{rA}{east}
+        \TNVirtualPort{rXTorA}{rX}{west}
+        \TNConnectVirtual{rATorX}{rXTorA}
+        \TNVirtualPort{rXTorB}{rX}{east}
+        \TNVirtualPort{rBTorX}{rB}{west}
+        \TNConnectVirtual{rXTorB}{rBTorX}
+        \TNVirtualPort{rBOpenEastPort}{rB}{east}\TNOpenVirtualEast{rBOpenEastPort}}
+    \end{TNEquationRow}%
 }
 
 \TNDeclareDiagram
@@ -1968,29 +1991,31 @@
     {\TNGroundSpaceMap{A}{i}{k}{L}{X}}
     {chapter/ch13_parent_hamiltonian_injective_ground_spaces.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{tnL}{(0,0)}
-        \TNTensor{tnM}{(1.15,0)}
-        \TNTensor{tnR}{(2.95,0)}
+        \TNTensor{tnL}{at=origin}
+        \TNTensor{tnM}{right=of tnL}
+        \TNOmission{tnOmission}{right=of tnM}
+        \TNTensor{tnR}{right=of tnOmission}
         \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
         \TNPhysicalPort{tnMOpenKetPort}{tnM}{north}\TNOpenPhysicalNorth{tnMOpenKetPort}
         \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
         \TNLabelAbove{tnL}{#2}
         \TNLabelAbove{tnR}{#3}
         \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
-        \TNVirtualPort{tnLTotnM}{tnL}{east}\TNVirtualPort{tnMTotnL}{tnM}{west}\TNConnectVirtual{tnLTotnM}{tnMTotnL}
+        \TNVirtualPort{tnLTotnM}{tnL}{east}
+        \TNVirtualPort{tnMTotnL}{tnM}{west}
+        \TNConnectVirtual{tnLTotnM}{tnMTotnL}
         \TNVirtualPort{tnMOpenEastPort}{tnM}{east}\TNOpenVirtualEast{tnMOpenEastPort}
         \TNVirtualPort{tnROpenWestPort}{tnR}{west}\TNOpenVirtualWest{tnROpenWestPort}
         \TNVirtualPort{tnROpenEastPort}{tnR}{east}\TNOpenVirtualEast{tnROpenEastPort}
-        \TNPlacedLabel{tnClientLabel1330}{(2.05,0)}{\cdots} % chktex 11
-        \TNInsertion{tnX}{(1.48,-0.82)}{#5}
+        \TNInsertion{tnX}{below=of tnOmission}{#5}
         \TNVirtualPort{tnLTrace}{tnL}{west}
         \TNVirtualPort{tnXTraceLeft}{tnX}{west}
         \TNVirtualPort{tnXTraceRight}{tnX}{east}
         \TNVirtualPort{tnRTrace}{tnR}{east}
         \TNConnectVirtualVH{tnLTrace}{tnXTraceLeft}
         \TNConnectVirtualHV{tnXTraceRight}{tnRTrace}
-        \TNPlacedLabel{tnClientLabel1338}{($(tnM.south)+(0,-0.28)$)}{#1}
-        \TNPlacedLabel{tnClientLabel1339}{(2.05,-0.55)}{#4}
+        \TNLabelBelow{tnM}{#1}
+        \TNLabelBelow{tnOmission}{#4}
     \end{TNDiagram}%
 }
 
