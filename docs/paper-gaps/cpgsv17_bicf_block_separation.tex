@@ -9,7 +9,7 @@
 
 \title{Finite-Length Block Separation in the CPGSV17 Proposition \texttt{propblockinj}}
 \author{}
-\date{2026-07-13}
+\date{2026-07-15}
 
 \begin{document}
 \maketitle
@@ -211,6 +211,53 @@ The finitely many normal representatives have a common positive
 block-injectivity length by taking a common multiple of their individual
 lengths.  Consequently the representative-indexed Lemma L now follows from
 the BNT canonical-form predicate itself.
+
+The numerical Wielandt part has since been sharpened to the exact common
+length used in the source estimate.  If the representative dimensions are
+$D_j$ and the flattened canonical-form tensor has bond dimension $D$, then
+$D_j\leq D$.  Quantum Wielandt gives an injective length
+$L_j\leq D_j^4$ for the $j$th representative, and positive-length propagation
+therefore makes every representative injective at the single exact length
+$D^4$.  This is formalized by
+\texttt{basis\_isNBlkInjective\_totalDim\_pow\_four}; the preceding
+single-tensor statement is
+\texttt{isNBlkInjective\_pow\_four\_of\_isNormal\_leftCanonical}.
+No nonempty-family assumption is required: for an empty representative family
+the universal statement is vacuous, while every use involving a chosen
+representative supplies positivity from its bond dimension.
+
+It remains useful to distinguish the selector length from the full tuple-span
+length in the present proof.  Put $g$ for the number of minimal
+representatives and set $L_0=D^4$.  The proved pair-separation argument has
+length $3(L_0+1)$, and multiplying one pair selector for each of the other
+representatives gives block selectors of length
+\[
+    3(g-1)(D^4+1).
+\]
+Since every representative has positive dimension and occurs at least once,
+$g\leq D$; hence this selector length is at most the source length
+$3(D^4+1)(D-1)$.  The existing conversion from selectors to the whole product
+algebra, however, concatenates an additional injective prefix of length
+$D^4+1$.  Its exact length is therefore
+\[
+    (D^4+1)+3(g-1)(D^4+1)=(3g-2)(D^4+1).
+\]
+This is within the source length when $g\leq D-1$, but exceeds it by
+$D^4+1$ in the extremal case $g=D$.  Thus the remaining mathematical point is
+not quantum Wielandt and is not the construction of the block selectors.  It
+is the source's direct-sum step which obtains arbitrary matrices in the chosen
+block without paying a separate injective prefix.  Adding an assumed finite
+separation witness would conceal precisely this point and is not an acceptable
+substitute.
+
+Once that direct-sum step is supplied, the final arithmetic is elementary:
+for $D\geq1$,
+\[
+  3(D^4+1)(D-1)
+  =3(D^5-D^4+D-1)
+  \leq 3D^5,
+\]
+because $D-1\leq D^4$.
 
 The public horizontal canonical-form predicate has now been replaced by the
 representative-indexed formulation.  It quantifies a BNT sector decomposition
