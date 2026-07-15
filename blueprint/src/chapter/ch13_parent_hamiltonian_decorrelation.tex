@@ -274,8 +274,30 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Each lift tensors the given operator with identities on the complementary
-    factors. Tensoring with identities preserves products and adjoints.
+    For the two-factor lifts,
+    \[
+        (M_{AX}\otimes\mathbf 1_B)(N_{AX}\otimes\mathbf 1_B)
+        =(M_{AX}N_{AX})\otimes\mathbf 1_B,
+        \qquad
+        (\mathbf 1_A\otimes M_{XB})(\mathbf 1_A\otimes N_{XB})
+        =\mathbf 1_A\otimes(M_{XB}N_{XB}).
+    \]
+    \[
+        (M_{AX}\otimes\mathbf 1_B)^\dagger
+          =M_{AX}^\dagger\otimes\mathbf 1_B,
+        \qquad
+        (\mathbf 1_A\otimes M_{XB})^\dagger
+          =\mathbf 1_A\otimes M_{XB}^\dagger,
+    \]
+    and similarly
+    \[
+        (M_A\otimes\mathbf 1_{XB})^\dagger
+          =M_A^\dagger\otimes\mathbf 1_{XB},
+        \qquad
+        (\mathbf 1_{AX}\otimes M_B)^\dagger
+          =\mathbf 1_{AX}\otimes M_B^\dagger,
+    \]
+    with the tensor factors reassociated to the tripartite space.
 \end{proof}
 
 \begin{definition}[Tripartite observable decorrelation]
@@ -341,8 +363,8 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \lean{TripartiteDecorrelation.IsDecorrelated.reverse}
     \leanok
     \uses{def:tripartite_decorrelation}
-    If $P=P^\dagger$ and $A$ and $B$ are decorrelated, then, for all
-    observables $O_A$ and $O_B$,
+    If $P=P^\dagger$ and $A$ and $B$ are decorrelated, then, for arbitrary
+    complex matrices $O_A$ and $O_B$,
     \[
         P O_B(\mathbf 1-P)O_A P=0.
     \]
@@ -515,8 +537,12 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Apply the two right-marginal support absorption identities to the
-    bipartition $A|XB$.
+    For the bipartition $A|XB$, the two support-absorption identities give
+    \[
+        (\mathbf 1_A\otimes P_{XB})P
+        =P
+        =P(\mathbf 1_A\otimes P_{XB}).
+    \]
 \end{proof}
 
 \begin{theorem}[Absorption by the lifted $AX$ support projector]
@@ -535,8 +561,13 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Reassociate the tripartite space as $AX|B$ and apply the two
-    left-marginal support absorption identities.
+    After reassociating the tripartite space as $AX|B$, the two
+    support-absorption identities give
+    \[
+        (P_{AX}\otimes\mathbf 1_B)P
+        =P
+        =P(P_{AX}\otimes\mathbf 1_B).
+    \]
 \end{proof}
 
 \begin{theorem}[Product of the two marginal support projectors]
@@ -587,13 +618,25 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       TripartiteDecorrelation.CommutingParentHamiltonian.hproduct}
     \leanok
     \uses{def:tripartite_parent_commuting_hamiltonian}
-    Let $P$, $P_{AX}$, and $P_{XB}$ be orthogonal projectors, and suppose that
-    $P_{AX}$ and $P_{XB}$ commute.  Then
+    Let $P$, $P_{AX}$, and $P_{XB}$ be orthogonal projectors, and write their
+    lifts to the tripartite space as
+    \[
+        \widehat P_{AX}=P_{AX}\otimes\mathbf 1_B,
+        \qquad
+        \widehat P_{XB}=\mathbf 1_A\otimes P_{XB}.
+    \]
+    Suppose that the lifted projectors commute:
+    \[
+        \widehat P_{AX}\widehat P_{XB}
+        =\widehat P_{XB}\widehat P_{AX}.
+    \]
+    Then
     \[
         \operatorname{ran}P
-        =\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}
+        =\operatorname{ran}\widehat P_{AX}\cap
+          \operatorname{ran}\widehat P_{XB}
         \quad\Longleftrightarrow\quad
-        P_{AX}P_{XB}=P.
+        \widehat P_{AX}\widehat P_{XB}=P.
     \]
     This is the passage from
     \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv} to the
@@ -602,11 +645,13 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    A vector lies in the range of $P_{AX}P_{XB}$ precisely when it is fixed by
-    both commuting idempotents.  Hence
+    A vector lies in the range of
+    $\widehat P_{AX}\widehat P_{XB}$ precisely when it is fixed by both
+    commuting idempotents. Hence
     \[
-        \operatorname{ran}(P_{AX}P_{XB})
-        =\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}.
+        \operatorname{ran}(\widehat P_{AX}\widehat P_{XB})
+        =\operatorname{ran}\widehat P_{AX}\cap
+          \operatorname{ran}\widehat P_{XB}.
     \]
     The product is again an orthogonal projector.  Orthogonal projectors with
     equal ranges are equal, giving the forward implication; the reverse
