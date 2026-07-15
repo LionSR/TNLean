@@ -10,73 +10,82 @@
 % region boundaries are separate semantic marks and do not represent indices.
 % Dashed curves indicate grouping, a basis change, or an identified periodic
 % boundary.  Tensor labels do not change the glyph used for the tensor.
-\usetikzlibrary{backgrounds,calc,decorations.pathreplacing,fit}
+\usetikzlibrary{backgrounds,calc,decorations.pathreplacing,fit,matrix,positioning}
+
+% The calculus uses a restrained semantic palette.  A theme changes these
+% colour tokens, but never geometry, typography, or the meaning of a stroke.
+\colorlet{tnInk}{black!92}
+\colorlet{tnSecondaryInk}{black!55}
+\colorlet{tnAccent}{red!65!black}
+\colorlet{tnRegion}{blue!65!black}
+\colorlet{tnSector}{violet!65!black}
 
 \tikzset{
     % Theme slots.  These are the only styles a light or dark document should
     % replace.  Semantic styles below never change meaning between themes.
     tn theme picture/.style={
-            baseline=-0.1cm,
-            transform shape,
-            font=\scriptsize
+            baseline=-0.1cm
         },
     tn theme tensor/.style={
-            draw,
-            fill,
+            draw=tnInk,
+            fill=tnInk,
+            text=tnInk,
             shape=circle,
             inner sep=0.055cm
         },
     tn theme insertion/.style={
-            draw=red!75!black,
-            fill=red!28,
-            text=black,
+            draw=tnAccent,
+            fill=tnAccent!18,
+            text=tnInk,
             shape=circle,
             inner sep=0.055cm
         },
     tn theme junction/.style={
-            fill,
+            fill=tnInk,
             shape=circle,
             inner sep=0.020cm
         },
     tn theme component/.style={
-            draw,
+            draw=tnSecondaryInk,
             fill=white,
             inner sep=1.4pt
         },
     tn theme factor/.style={
-            draw=black!65,
-            fill=black!5,
+            draw=tnSecondaryInk,
+            fill=tnSecondaryInk!5,
             inner sep=1.4pt
         },
     tn theme map/.style={
-            draw,
+            draw=tnSecondaryInk,
             rounded corners=2pt,
-            fill=blue!8,
+            fill=white,
             inner sep=2pt
         },
     tn theme state/.style={
-            draw=black!65,
+            draw=tnSecondaryInk,
             rounded corners=2pt,
-            fill=black!4,
+            fill=tnSecondaryInk!4,
             inner sep=2pt
         },
     tn theme expression/.style={
-            draw=black!65,
+            draw=tnSecondaryInk,
             rounded corners=0.7pt,
             fill=white,
             inner sep=2pt
         },
-    tn theme virtual wire/.style={line width=0.4pt},
-    tn theme physical wire/.style={line width=0.7pt},
+    tn theme virtual wire/.style={draw=tnInk, line width=0.55pt},
+    tn theme physical wire/.style={draw=tnInk, line width=0.55pt},
     tn theme trace/.style={rounded corners=3pt},
-    tn theme factor region/.style={draw=black!65, rounded corners=2pt},
+    tn theme factor region/.style={draw=tnSecondaryInk, rounded corners=2pt,
+            line width=0.80pt},
     tn theme grouping region/.style={
-            draw=black!65,
+            draw=tnSecondaryInk,
             densely dashed,
-            rounded corners=2pt
+            rounded corners=2pt,
+            line width=0.80pt
         },
-    tn theme annotation/.style={draw=black!65, line width=0.4pt},
-    tn theme label/.style={},
+    tn theme annotation/.style={draw=tnSecondaryInk, line width=0.40pt},
+    tn theme label/.style={text=tnInk},
     % Semantic node classes.  Their names and meanings are theme-independent.
     tn picture/.style={tn theme picture},
     tn tensor node/.style={tn theme tensor},
@@ -99,51 +108,140 @@
     tn grouping region/.style={tn theme grouping region},
     tn annotation/.style={tn theme annotation},
     tn label/.style={tn theme label},
-    tn basis change mark/.style={densely dashed, line width=0.4pt},
+    tn basis change mark/.style={densely dashed, line width=0.40pt},
     tn periodic mark/.style={tn virtual wire, densely dashed, ->},
-    tn morphism arrow/.style={->, line width=0.60pt},
-    tn comparison arrow/.style={<->, line width=0.60pt},
-    tn selected path/.style={red, line width=0.70pt},
-    tn secondary path/.style={blue, line width=0.70pt},
+    tn morphism arrow/.style={draw=tnInk, ->, line width=0.55pt},
+    tn comparison arrow/.style={draw=tnInk, <->, line width=0.55pt},
+    tn selected path/.style={draw=tnAccent, line width=0.80pt},
+    tn secondary path/.style={draw=tnRegion, line width=0.80pt},
     tn region selected/.style={
-            draw=red!75!black,
-            fill=red!28,
-            thick,
+            draw=tnAccent,
+            fill=tnAccent!12,
+            line width=0.80pt,
             rounded corners=1mm
         },
     tn region secondary/.style={
-            draw=blue!75!black,
-            fill=blue!24,
-            thick,
+            draw=tnRegion,
+            fill=tnRegion!10,
+            line width=0.80pt,
             rounded corners=1mm
         },
     tn region complement/.style={
-            draw=black!55,
-            fill=black!8,
+            draw=tnSecondaryInk,
+            fill=tnSecondaryInk!8,
             densely dashed,
-            thick,
+            line width=0.80pt,
             rounded corners=1mm
         },
     tn region collar/.style={
-            draw=purple!70!black,
-            fill=purple!18,
-            thick,
+            draw=tnSector,
+            fill=tnSector!10,
+            line width=0.80pt,
             rounded corners=1mm
         },
-    tn edge distinguished/.style={line width=0.6mm, green!65!black},
+    tn edge distinguished/.style={line width=0.80pt, draw=tnAccent},
     tn vertex distinguished/.style={
             circle,
-            draw=black!65,
-            fill=yellow!75!white,
-            thick
+            draw=tnInk,
+            fill=white,
+            line width=0.80pt
         },
-    tn region label selected/.style={text=red!75!black},
-    tn region label secondary/.style={text=blue!75!black},
-    tn region label complement/.style={text=black!65},
-    tn region label collar/.style={text=purple!70!black}
+    tn region label selected/.style={text=tnAccent},
+    tn region label secondary/.style={text=tnRegion},
+    tn region label complement/.style={text=tnSecondaryInk},
+    tn region label collar/.style={text=tnSector}
+}
+
+% Every semantic glyph is an instance of this one TikZ pic.  The public atom
+% constructors choose the semantic style and declare the corresponding ports;
+% the pic owns the canonical glyph geometry.
+\tikzset{
+    tn pic name/.store in=\TNpicname,
+    tn pic style/.store in=\TNpicstyle,
+    tn pic contents/.store in=\TNpiccontents,
+    tn current pic options/.style={},
+    pics/tn atom/.style={
+        code={
+            \node[\TNpicstyle,tn current pic options]
+                (\TNpicname) at (0,0) {\TNpiccontents};
+        }
+    }
 }
 
 \makeatletter
+
+% ---------- Semantic registry and event stream ----------
+
+% Ports are stored in one picture-local property map.  The textual event
+% stream is deliberately simple: it is both human-readable and stable under
+% TeX-engine changes, and the repository audit canonicalizes it as a labelled
+% graph after rendering.
+\ExplSyntaxOn
+\prop_new:N \g__tn_port_type_prop
+\prop_new:N \g__tn_alias_source_prop
+\iow_new:N \g__tn_event_iow
+
+\AtBeginDocument
+  { \iow_open:Nn \g__tn_event_iow { \c_sys_jobname_str.tnlog } }
+\AtEndDocument { \iow_close:N \g__tn_event_iow }
+
+\cs_new_protected:Npn \tn_event:n #1
+  { \iow_now:Nx \g__tn_event_iow { #1 } }
+
+\cs_new:Npn \tn_port_key:n #1
+  { \int_use:N \TN@pictureid / \tl_to_str:e {#1} }
+
+\cs_new_protected:Npn \tn_port_register:nn #1#2
+  {
+    \prop_if_in:NeTF \g__tn_port_type_prop { \tn_port_key:n {#1} }
+      {
+        \PackageError{tnlean-tikz}{Duplicate tensor-network port `#1'}
+          {Every atom and alias must expose a distinct port name.}
+      }
+      {
+        \prop_gput:Nee \g__tn_port_type_prop
+          { \tn_port_key:n {#1} } {#2}
+        \tn_event:n
+          { port|picture=\int_use:N\TN@pictureid|name=\tl_to_str:e{#1}|type=#2 }
+      }
+  }
+
+\cs_new_protected:Npn \tn_alias_register:nnn #1#2#3
+  {
+    \prop_if_in:NeTF \g__tn_alias_source_prop { \tn_port_key:n {#2} }
+      {
+        \prop_get:NeN \g__tn_alias_source_prop { \tn_port_key:n {#2} }
+          \l_tmpa_tl
+        \str_if_eq:eeT { \tl_to_str:e {#1} } { \tl_to_str:V \l_tmpa_tl }
+          {
+            \PackageError{tnlean-tikz}{Cyclic tensor-network alias `#1'}
+              {Aliases must terminate at an atom port.}
+          }
+      }
+      { }
+    \tn_port_register:nn {#1} {#3}
+    \prop_gput:Nee \g__tn_alias_source_prop
+      { \tn_port_key:n {#1} } { \tl_to_str:e {#2} }
+    \tn_event:n
+      { alias|picture=\int_use:N\TN@pictureid|name=\tl_to_str:e{#1}|source=\tl_to_str:e{#2}|type=#3 }
+  }
+
+\cs_new_eq:NN \TNEventInternal \tn_event:n
+\cs_new_eq:NN \TNPortRegisterInternal \tn_port_register:nn
+\cs_new_eq:NN \TNAliasRegisterInternal \tn_alias_register:nnn
+
+\cs_new_protected:Npn \tn_place_object:nn #1#2
+  {
+    \tl_if_eq:nnTF {#2} {at=origin}
+      { \coordinate (#1Placement) at (0,0); }
+      {
+        \tl_if_in:nnTF {#2} {=}
+          { \node[coordinate,#2] (#1Placement) {}; }
+          { \coordinate (#1Placement) at #2; }
+      }
+  }
+\cs_new_eq:NN \TNPlaceObjectInternal \tn_place_object:nn
+\ExplSyntaxOff
 
 % Port declarations are local to one picture.  The registry itself is global
 % so declarations made inside a TikZ loop remain visible after that loop ends.
@@ -221,7 +319,14 @@
 % ---------- Semantic nodes ----------
 
 \newcommand{\TN@node}[5][]{%
-    \node[#2,#1] (#3) at #4 {#5};%
+    \TNPlaceObjectInternal{#3}{#4}%
+    \tikzset{tn current pic options/.style={#1}}%
+    \pic[
+        tn pic name={#3},
+        tn pic style={#2},
+        tn pic contents={#5}
+    ] at (#3Placement) {tn atom};%
+    \TNEventInternal{atom|picture=\the\TN@pictureid|name=#3|kind=#2}%
 }
 
 \newcommand{\TN@tensor}[3][]{%
@@ -231,7 +336,7 @@
 % A label may be placed inside a tensor glyph when the output medium requires
 % it for legibility.  The glyph and hence the mathematical kind do not change.
 \newcommand{\TN@labeledtensor}[4][]{%
-    \TN@node[#1]{tn tensor node}{#2}{#3}{$#4$}%
+    \TN@node[#1]{tn tensor node}{#2}{#3}{$\scriptstyle #4$}%
 }
 
 % Anonymous tensor sites are used for lattice backgrounds whose sites are not
@@ -241,23 +346,23 @@
 }
 
 \newcommand{\TN@component}[4][]{%
-    \TN@node[#1]{tn component node}{#2}{#3}{$#4$}%
+    \TN@node[#1]{tn component node}{#2}{#3}{$\scriptstyle #4$}%
 }
 
 \newcommand{\TN@factor}[4][]{%
-    \TN@node[#1]{tn factor node}{#2}{#3}{$#4$}%
+    \TN@node[#1]{tn factor node}{#2}{#3}{$\scriptstyle #4$}%
 }
 
 \newcommand{\TN@map}[4][]{%
-    \TN@node[#1]{tn map node}{#2}{#3}{$#4$}%
+    \TN@node[#1]{tn map node}{#2}{#3}{$\scriptstyle #4$}%
 }
 
 \newcommand{\TN@state}[4][]{%
-    \TN@node[#1]{tn state node}{#2}{#3}{$#4$}%
+    \TN@node[#1]{tn state node}{#2}{#3}{$\scriptstyle #4$}%
 }
 
 \newcommand{\TN@expression}[4][]{%
-    \TN@node[#1]{tn expression node}{#2}{#3}{$#4$}%
+    \TN@node[#1]{tn expression node}{#2}{#3}{$\scriptstyle #4$}%
 }
 
 \newcommand{\TN@insertion}[3][]{%
@@ -286,7 +391,7 @@
 
 % An external label does not alter the glyph of the object it names.
 \newcommand{\TN@label}[4][]{%
-    \node[tn label,#1] at ($(#2)+#3$) {$#4$};%
+    \node[tn label,#1] at ($(#2)+#3$) {$\scriptstyle #4$};%
 }
 
 % ---------- Named ports ----------
@@ -294,6 +399,7 @@
 % Every composable object gives each boundary index a stable name and a type.
 % The registry lets contractions reject physical--virtual mismatches.
 \newcommand{\TN@registerport}[2]{%
+    \TNPortRegisterInternal{#1}{#2}%
     \expandafter\gdef\csname
         TN@porttype@\the\TN@pictureid @#1\endcsname{#2}%
 }
@@ -316,6 +422,15 @@
     }%
 }
 
+\newcommand{\TN@assertdifferentports}[2]{%
+    \edef\TN@firstendpoint{#1}%
+    \edef\TN@secondendpoint{#2}%
+    \ifx\TN@firstendpoint\TN@secondendpoint
+        \PackageError{tnlean-tikz}{A trace cannot join port `#1' to itself}
+            {Choose two distinct typed endpoints for the trace.}%
+    \fi
+}
+
 % A checked alias retains both the position and the registered type of the
 % original port.  It is used when one atom exposes both an object-independent
 % role (for example Combined) and a theorem-specific role (for example MPO).
@@ -327,6 +442,7 @@
         \coordinate (#1) at (#2);%
         \edef\TN@aliasedporttype{\csname
             TN@porttype@\the\TN@pictureid @#2\endcsname}%
+        \TNAliasRegisterInternal{#1}{#2}{\TN@aliasedporttype}%
         \expandafter\xdef\csname
             TN@porttype@\the\TN@pictureid @#1\endcsname{\TN@aliasedporttype}%
     }%
@@ -494,12 +610,14 @@
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \TN@vconnectpoints[#1]{#2}{#3}%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=straight}%
 }
 
 \newcommand{\TN@pconnectports}[3][]{%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \TN@pconnectpoints[#1]{#2}{#3}%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=straight}%
 }
 
 % Orthogonal contractions retain typed endpoints.  The order in the command
@@ -508,36 +626,42 @@
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual wire,rounded corners=3pt,#1] (#2) -| (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=orthogonal-hv}%
 }
 
 \newcommand{\TN@vconnectportsvh}[3][]{%
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual wire,rounded corners=3pt,#1] (#2) |- (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=orthogonal-vh}%
 }
 
 \newcommand{\TN@pconnectportshv}[3][]{%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical wire,rounded corners=3pt,#1] (#2) -| (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=orthogonal-hv}%
 }
 
 \newcommand{\TN@pconnectportsvh}[3][]{%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical wire,rounded corners=3pt,#1] (#2) |- (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=orthogonal-vh}%
 }
 
 \newcommand{\TN@mconnectports}[3][]{%
     \TN@assertporttype{#2}{morphism}%
     \TN@assertporttype{#3}{morphism}%
     \TN@connectpoints[#1]{tn morphism arrow}{#2}{#3}%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=morphism|from=#2|to=#3|route=straight}%
 }
 
 \newcommand{\TN@mcompareports}[3][]{%
     \TN@assertporttype{#2}{morphism}%
     \TN@assertporttype{#3}{morphism}%
     \TN@connectpoints[#1]{tn comparison arrow}{#2}{#3}%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=morphism|from=#2|to=#3|route=comparison}%
 }
 
 \newcommand{\TN@mconnectportshv}[3][]{%
@@ -623,26 +747,32 @@
 % A trace closure is itself composable when its two endpoints are named ports.
 % The last two arguments give the horizontal and vertical clearances.
 \newcommand{\TN@vtraceportsbelow}[5][]{%
+    \TN@assertdifferentports{#2}{#3}%
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual trace,#1] (#2) -- ++(-#4,0) -- ++(0,-#5)
         -| ($(#3)+(#4,0)$) -- (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=trace-below}%
 }
 
 \newcommand{\TN@vtraceportsabove}[5][]{%
+    \TN@assertdifferentports{#2}{#3}%
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual trace,#1] (#2) -- ++(-#4,0) -- ++(0,#5)
         -| ($(#3)+(#4,0)$) -- (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=trace-above}%
 }
 
 % A vertical pair of ports may be traced around the right of an object.  The
 % last two arguments give the horizontal and vertical clearances.
 \newcommand{\TN@vtraceportsright}[5][]{%
+    \TN@assertdifferentports{#2}{#3}%
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual trace,#1] (#2) -- ++(0,#5)
         -| ($(#3)+(#4,-#5)$) -- ++(-#4,0) -- (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=trace-right}%
 }
 
 % Physical trace closures have the same compositional interface and geometry
@@ -650,24 +780,30 @@
 % index type.  The last two arguments are the horizontal and vertical
 % clearances.
 \newcommand{\TN@ptraceportsbelow}[5][]{%
+    \TN@assertdifferentports{#2}{#3}%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical trace,#1] (#2) -- ++(-#4,0) -- ++(0,-#5)
         -| ($(#3)+(#4,0)$) -- (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=trace-below}%
 }
 
 \newcommand{\TN@ptraceportsabove}[5][]{%
+    \TN@assertdifferentports{#2}{#3}%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical trace,#1] (#2) -- ++(-#4,0) -- ++(0,#5)
         -| ($(#3)+(#4,0)$) -- (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=trace-above}%
 }
 
 \newcommand{\TN@ptraceportsright}[5][]{%
+    \TN@assertdifferentports{#2}{#3}%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical trace,#1] (#2) -- ++(0,#5)
         -| ($(#3)+(#4,-#5)$) -- ++(-#4,0) -- (#3);%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=trace-right}%
 }
 
 % General paths remain available for closures and lattice edges whose route is

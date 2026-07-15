@@ -1,3 +1,6 @@
-% Compatibility entry point for the repository-wide tensor-network library.
-\input{../../tex/tn/tn_core} % chktex 27 (job-dir-relative path)
-\input{../../tex/tn/tn_library} % chktex 27 (job-dir-relative path)
+% Repository-wide tensor-network calculus.  The input path is local to this
+% entry point; clients load the sole public TikZ library by name.
+\makeatletter
+\def\input@path{{../../tex/tn/}}
+\makeatother
+\usetikzlibrary{tn}
