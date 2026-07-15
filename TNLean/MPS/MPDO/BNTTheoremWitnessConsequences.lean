@@ -65,10 +65,8 @@ theorem exists_positive_length_coeff_eq_ofChi {data : AlgebraStructureData d D}
       ∀ L : ℕ, 0 < L → ∀ α β γ : W.Label,
         W.coeffs.coeff L α β γ =
           (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff L α β γ := by
-  rcases h with ⟨W⟩
-  refine ⟨W, ?_⟩
-  intro L hL α β γ
-  exact W.coeff_eq_ofChi_coeff L hL α β γ
+  obtain ⟨W⟩ := h
+  exact ⟨W, fun L hL α β γ => W.coeff_eq_ofChi_coeff L hL α β γ⟩
 
 /-- Existence of the source BNT-label witness gives a concrete witness whose
 source product and idempotent laws are written with the canonical coefficient
@@ -111,12 +109,8 @@ theorem exists_source_ofChi_equations {data : AlgebraStructureData d D}
           ∑ α : W.Label, ∑ β : W.Label,
             (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff 1 α β γ *
               (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β)) := by
-  rcases h with ⟨W⟩
-  refine ⟨W, ?_, ?_⟩
-  · intro L hL α β
-    exact W.same_length_product_eq_sum_ofChi L hL α β
-  · intro γ
-    exact W.idempotent_eq_sum_ofChi γ
+  obtain ⟨W⟩ := h
+  exact ⟨W, W.same_length_product_eq_sum_ofChi, W.idempotent_eq_sum_ofChi⟩
 
 /-- Existence of the source BNT-label witness gives a concrete witness whose
 blocked-basis \(\chi\)-family is the pullback of the BNT-label
@@ -133,10 +127,8 @@ theorem exists_blocked_chi_pullback {data : AlgebraStructureData d D}
       ∀ (n : ℕ) (hn : 0 < n),
         W.positiveBlockedChi.toDiagonal n =
           W.positiveChi.chi.comap (W.blockedComparison.blockedLabel n hn) := by
-  rcases h with ⟨W⟩
-  refine ⟨W, ?_⟩
-  intro n hn
-  exact W.positiveBlockedChi_toDiagonal_of_pos n hn
+  obtain ⟨W⟩ := h
+  exact ⟨W, W.positiveBlockedChi_toDiagonal_of_pos⟩
 
 /-- Existence of the source BNT-label witness gives the blocked-basis
 comparison equation before the \(\chi\)-trace formula is substituted.
@@ -164,10 +156,8 @@ theorem exists_blocked_coefficient_comparison {data : AlgebraStructureData d D}
             (W.sourceLabel n hn i)
             (W.sourceLabel n hn j)
             (W.targetLabel n hn k) := by
-  rcases h with ⟨W⟩
-  refine ⟨W, ?_⟩
-  intro n hn i j k
-  exact W.blocked_coeff_eq n hn i j k
+  obtain ⟨W⟩ := h
+  exact ⟨W, W.blocked_coeff_eq⟩
 
 /-- Existence of the source BNT-label witness gives the blocked-basis
 comparison equation with the canonical coefficient family determined by the
@@ -190,10 +180,8 @@ theorem exists_blocked_coefficient_comparison_ofChi {data : AlgebraStructureData
             (W.sourceLabel n hn i)
             (W.sourceLabel n hn j)
             (W.targetLabel n hn k) := by
-  rcases h with ⟨W⟩
-  refine ⟨W, ?_⟩
-  intro n hn i j k
-  exact W.blocked_coeff_eq_ofChi n hn i j k
+  obtain ⟨W⟩ := h
+  exact ⟨W, W.blocked_coeff_eq_ofChi⟩
 
 /-- Existence of the source BNT-label witness gives the two source equations
 written with the BNT-label coefficients \(c^{(L)}_{\alpha,\beta,\gamma}\).
@@ -224,12 +212,8 @@ theorem exists_source_coefficient_equations {data : AlgebraStructureData d D}
           ∑ α : W.Label, ∑ β : W.Label,
             W.coeffs.coeff 1 α β γ *
               (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β)) := by
-  rcases h with ⟨W⟩
-  refine ⟨W, ?_, ?_⟩
-  · intro L hL α β
-    exact W.same_length_product_eq_sum L hL α β
-  · intro γ
-    exact W.idempotent_eq_sum γ
+  obtain ⟨W⟩ := h
+  exact ⟨W, W.same_length_product_eq_sum, W.idempotent_eq_sum⟩
 
 /-- Existence of the source BNT-label witness gives the two source equations
 with the coefficients written as traces of the corresponding
@@ -264,12 +248,8 @@ theorem exists_source_chi_trace_equations {data : AlgebraStructureData d D}
           ∑ α : W.Label, ∑ β : W.Label,
             (W.positiveChi.chi.matrix α β γ).trace *
               (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β)) := by
-  rcases h with ⟨W⟩
-  refine ⟨W, ?_, ?_⟩
-  · intro L hL α β
-    exact W.same_length_product_eq_sum_chi_trace_pow L hL α β
-  · intro γ
-    exact W.idempotent_eq_sum_chi_trace γ
+  obtain ⟨W⟩ := h
+  exact ⟨W, W.same_length_product_eq_sum_chi_trace_pow, W.idempotent_eq_sum_chi_trace⟩
 
 end HasBNTLabelTheoremWitness
 

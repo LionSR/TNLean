@@ -126,8 +126,8 @@ the elimination plan for coherent sector rephasing. -/
 theorem sectorReaches_iff_directedWalkReaches {hη : EtaStructure ρ}
     (eta : etaOperators hη) (k h : Fin hη.m) :
     SectorReaches eta k h ↔
-      TNLean.Algebra.DirectedWalk.Reaches (IsSectorEdge eta) k h := by
-  exact (TNLean.Algebra.DirectedWalk.reaches_iff_reflTransGen _).symm
+      TNLean.Algebra.DirectedWalk.Reaches (IsSectorEdge eta) k h :=
+  (TNLean.Algebra.DirectedWalk.reaches_iff_reflTransGen _).symm
 
 /-- Recurrence of the nonzero sector support is exactly the return-walk
 hypothesis for its directed edge relation.

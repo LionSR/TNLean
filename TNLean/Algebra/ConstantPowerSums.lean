@@ -79,8 +79,7 @@ theorem eq_zero_or_eq_one_of_forall_sum_pow_eq {x : ι → ℝ} (hx : ∀ k, 0 �
       exact mul_le_of_le_one_left (hx k) (hle k)
     linarith
   have hj := (Finset.sum_eq_zero_iff_of_nonneg hterm).mp hzero j (Finset.mem_univ j)
-  have hfactor : x j * (1 - x j) = 0 := by ring_nf; linarith
-  rcases mul_eq_zero.mp hfactor with h | h
+  rcases mul_eq_zero.mp (show x j * (1 - x j) = 0 by nlinarith) with h | h
   · exact Or.inl h
   · exact Or.inr (by linarith)
 

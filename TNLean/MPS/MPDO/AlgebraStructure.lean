@@ -561,9 +561,7 @@ theorem adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra
     exact hFix
   have hSub : (lam - 1) • X = 0 := by
     rw [sub_smul, hLamX, one_smul, sub_self]
-  rcases smul_eq_zero.mp hSub with hLam_sub | hX_zero
-  · exact sub_eq_zero.mp hLam_sub
-  · exact (hX_ne hX_zero).elim
+  exact sub_eq_zero.mp <| (smul_eq_zero.mp hSub).resolve_right hX_ne
 
 /-- Under the current algebra-structure predicate, the adjoint fixed points of
 every positive blocked transfer map coincide with the adjoint fixed points of
@@ -772,15 +770,15 @@ the `L`-th power. -/
 theorem matrix_pow (n : ℕ) (i j : BlockedIndex data n)
     (k : BlockedIndex data (2 * n)) (L : ℕ) :
     χ.matrix n i j k ^ L =
-      Matrix.diagonal fun r => (χ.entry n i j k r) ^ L := by
-  exact (χ.toDiagonal n).matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
+      Matrix.diagonal fun r => (χ.entry n i j k r) ^ L :=
+  (χ.toDiagonal n).matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
 
 /-- The trace of the `L`-th power of a blocked chi matrix is the corresponding
 finite sum of `L`-th powers of its diagonal entries. -/
 lemma trace_matrix_pow (n : ℕ) (i j : BlockedIndex data n)
     (k : BlockedIndex data (2 * n)) (L : ℕ) :
-    (χ.matrix n i j k ^ L).trace = χ.tracePowerCoeff n i j k L := by
-  exact (χ.toDiagonal n).trace_matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
+    (χ.matrix n i j k ^ L).trace = χ.tracePowerCoeff n i j k L :=
+  (χ.toDiagonal n).trace_matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
 
 /-- Positivity of every diagonal entry in the blocked chi family. -/
 def PosEntries : Prop :=

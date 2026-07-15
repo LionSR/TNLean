@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.RFP.StructuralFull
 
@@ -18,10 +19,9 @@ sum in the physical space after applying the isometry (lines 559--563).  The
 one-letter virtual-block reading does not realize that additional physical
 direct sum: its blocked matrix is the identity and is not a scalar multiple of
 $\operatorname{diag}(1,-1)$.  It therefore fails the defining physical-isometry
-relation $AA=A$ (lines 396--425), and its transfer map is not idempotent.  The
-example
-records an ambiguity between the literal displayed matrix formula and its
-accompanying physical-space interpretation; it is not asserted to be a source
+relation $AA=A$ (lines 396--425), and its transfer map is not idempotent. The
+example records an ambiguity between the literal displayed matrix formula and
+its accompanying physical-space interpretation; it is not asserted to be a source
 renormalization fixed point.
 -/
 
@@ -103,7 +103,8 @@ $\mathcal E(E_{01})=-E_{01}$ after one application.
 Together with `phaseFlipTensor_no_blocking_coefficient`, this distinguishes the
 literal virtual-block reading of III_CFI_RFP from the physical-isometry
 interpretation in arXiv:1606.00608, lines 559--563. -/
-theorem phaseFlipTensor_not_isTransferIdempotent : ¬ IsTransferIdempotent phaseFlipTensor := by
+theorem phaseFlipTensor_not_isTransferIdempotent :
+    ¬ IsTransferIdempotent phaseFlipTensor := by
   intro hRFP
   have h := LinearMap.congr_fun hRFP (!![0, 1; 0, 0] : Matrix (Fin 2) (Fin 2) ℂ)
   have h01 := congrFun (congrFun h 0) 1
@@ -126,8 +127,8 @@ theorem phaseFlipTensor_literal_display_ambiguity :
     IsIsometryCanonicalForm scalarUnitTensor ∧
     (¬ ∃ v : ℂ,
       phaseFlipTensor 0 * phaseFlipTensor 0 = v • phaseFlipTensor 0) ∧
-    ¬ IsTransferIdempotent phaseFlipTensor := by
-  exact ⟨phaseFlipTensor_is_two_phase_copies,
+    ¬ IsTransferIdempotent phaseFlipTensor :=
+  ⟨phaseFlipTensor_is_two_phase_copies,
     scalarUnitTensor_isIsometryCanonicalForm, phaseFlipTensor_no_blocking_coefficient,
     phaseFlipTensor_not_isTransferIdempotent⟩
 

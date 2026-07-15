@@ -1,13 +1,14 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.Defs
+import Mathlib.Data.Matrix.PEquiv
+import Mathlib.LinearAlgebra.Matrix.Reindex
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.PartialTrace
-import Mathlib.Data.Matrix.PEquiv
-import Mathlib.LinearAlgebra.Matrix.Reindex
+import TNLean.MPS.MPDO.Defs
 
 /-!
 # Trace-preserving completely positive maps in Kraus form
@@ -748,21 +749,12 @@ lemma preparationMap_isKrausCPTP
     [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
     (hρtr : ρ.trace = 1) : IsKrausCPTP (Matrix.preparationMap (α := α) ρ) := by
   classical
-  let R := hρ.isHermitian.cfc Real.sqrt
-  have hRherm : R.IsHermitian := hρ.cfc_sqrt_isHermitian
-  have hRR : R * R = ρ := hρ.cfc_sqrt_mul_self
-  refine ⟨Fintype.card β,
-    fun j => preparationKraus ρ hρ ((Fintype.equivFin β).symm j), ?_, ?_⟩
-  · intro X
-    ext p q
-    change X p.1 q.1 * ρ p.2 q.2 = _
-    have hRRentry : ρ p.2 q.2 = (R * R) p.2 q.2 :=
-      congrArg (fun M : Matrix β β ℂ => M p.2 q.2) hRR.symm
-    rw [hRRentry, Matrix.mul_apply, Finset.mul_sum, Matrix.sum_apply]
-    rw [← Equiv.sum_comp (Fintype.equivFin β).symm]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [preparationKraus_mul_conjTranspose_apply]
-    rw [hRherm.apply]
-  · exact preparationKraus_resolution ρ hρ hρtr
+  let e := Fintype.equivFin β
+  let A := fun j : β => preparationKraus (α := α) ρ hρ j
+  refine ⟨Fintype.card β, fun j => A (e.symm j), ?_, preparationKraus_resolution ρ hρ hρtr⟩
+  intro X
+  have hmap : rectangularKrausMap (fun j => A (e.symm j)) = preparationMap ρ :=
+    rectangularKrausMap_equiv e A |>.trans (rectangularKrausMap_preparationKraus_eq ρ hρ)
+  exact DFunLike.congr_fun hmap.symm X
 
 end Matrix
