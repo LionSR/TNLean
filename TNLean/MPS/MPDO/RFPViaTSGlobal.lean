@@ -33,6 +33,10 @@ nonvanishing condition are recorded in
 * `MPOTensor.refineFirstSite_physCloseN` and
   `MPOTensor.coarsenFirstTwoSites_physCloseN`: the localized maps respectively
   insert and remove one tensor in every physical closure.
+* `MPOTensor.refineFirstSite_mpo` and `MPOTensor.coarsenFirstTwoSites_mpo`:
+  the localized maps respectively insert and remove one tensor in every periodic MPO.
+* `MPOTensor.exists_global_renormalization_maps`: a renormalization fixed point
+  supplies localized channels with the global physical-closure identities.
 
 ## References
 

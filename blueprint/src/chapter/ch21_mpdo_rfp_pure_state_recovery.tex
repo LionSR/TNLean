@@ -679,9 +679,15 @@
     \]
     Equality of all blocks proves the refinement identity.  Interchanging
     $M_1$, $M_2$ and using $\mathcal S[M_2(Y)]=M_1(Y)$ proves the coarsening
-    identity.  Taking the virtual closure to be the identity and using the
-    identification of this closure with the periodic MPO gives the two
-    periodic-ring identities.
+    identity.  Setting $X=1$ and using
+    $M_N(1)=\rho^{(N)}(M)$
+    (Lemma~\ref{lem:phys_close_identity}) gives the periodic-ring identities
+    \[
+      \widehat{\mathcal T}_N[\rho^{(N+1)}(M)]
+        =\rho^{(N+2)}(M),\qquad
+      \widehat{\mathcal S}_N[\rho^{(N+2)}(M)]
+        =\rho^{(N+1)}(M).
+    \]
 \end{proof}
 
 \begin{definition}[Diagonal pure-state embedding as an MPO]\label{def:to_mpo_tensor}
