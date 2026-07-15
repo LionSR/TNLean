@@ -18,8 +18,8 @@ on short finite index types.
 
 * `finThreeArrowEquiv`: identifies a function on `Fin 3` with a right-associated triple.
 * `finFourArrowEquiv`: identifies a function on `Fin 4` with a right-associated quadruple.
-* `MPOTensor.firstSiteRestEquiv`: separates the first coordinate from a finite tuple.
-* `MPOTensor.firstTwoSitesRestEquiv`: separates the first two coordinates.
+* `finSuccArrowEquiv`: separates the first coordinate from a finite tuple.
+* `finAddTwoArrowEquiv`: separates the first two coordinates.
 
 ## Main statements
 
@@ -80,40 +80,36 @@ coordinates in order. -/
   funext i
   fin_cases i <;> rfl
 
-namespace MPOTensor
-
 /-! ### A fixed initial segment and a variable remaining tuple -/
 
-/-- Separate the first physical index from the remaining `N` indices. -/
-def firstSiteRestEquiv (d N : ℕ) :
-    (Fin (N + 1) → Fin d) ≃ Fin d × (Fin N → Fin d) :=
-  (Fin.consEquiv fun _ : Fin (N + 1) ↦ Fin d).symm
+/-- Separate the first coordinate from the remaining `N` coordinates. -/
+def finSuccArrowEquiv (α : Type*) (N : ℕ) :
+    (Fin (N + 1) → α) ≃ α × (Fin N → α) :=
+  (Fin.consEquiv fun _ : Fin (N + 1) ↦ α).symm
 
-@[simp] theorem firstSiteRestEquiv_apply (d N : ℕ)
-    (σ : Fin (N + 1) → Fin d) :
-    firstSiteRestEquiv d N σ = (σ 0, Fin.tail σ) :=
+@[simp] theorem finSuccArrowEquiv_apply {α : Type*} (N : ℕ)
+    (σ : Fin (N + 1) → α) :
+    finSuccArrowEquiv α N σ = (σ 0, Fin.tail σ) :=
   rfl
 
-@[simp] theorem firstSiteRestEquiv_symm_apply (d N : ℕ)
-    (p : Fin d × (Fin N → Fin d)) :
-    (firstSiteRestEquiv d N).symm p = Fin.cons p.1 p.2 :=
+@[simp] theorem finSuccArrowEquiv_symm_apply {α : Type*} (N : ℕ)
+    (p : α × (Fin N → α)) :
+    (finSuccArrowEquiv α N).symm p = Fin.cons p.1 p.2 :=
   rfl
 
-/-- Separate the first two physical indices from the remaining `N` indices. -/
-def firstTwoSitesRestEquiv (d N : ℕ) :
-    (Fin (N + 2) → Fin d) ≃ (Fin d × Fin d) × (Fin N → Fin d) :=
-  (firstSiteRestEquiv d (N + 1)).trans
-    ((Equiv.prodCongr (Equiv.refl (Fin d)) (firstSiteRestEquiv d N)).trans
-      (Equiv.prodAssoc (Fin d) (Fin d) (Fin N → Fin d)).symm)
+/-- Separate the first two coordinates from the remaining `N` coordinates. -/
+def finAddTwoArrowEquiv (α : Type*) (N : ℕ) :
+    (Fin (N + 2) → α) ≃ (α × α) × (Fin N → α) :=
+  (finSuccArrowEquiv α (N + 1)).trans
+    ((Equiv.prodCongr (Equiv.refl α) (finSuccArrowEquiv α N)).trans
+      (Equiv.prodAssoc α α (Fin N → α)).symm)
 
-@[simp] theorem firstTwoSitesRestEquiv_apply (d N : ℕ)
-    (σ : Fin (N + 2) → Fin d) :
-    firstTwoSitesRestEquiv d N σ = ((σ 0, σ 1), Fin.tail (Fin.tail σ)) :=
+@[simp] theorem finAddTwoArrowEquiv_apply {α : Type*} (N : ℕ)
+    (σ : Fin (N + 2) → α) :
+    finAddTwoArrowEquiv α N σ = ((σ 0, σ 1), Fin.tail (Fin.tail σ)) :=
   rfl
 
-@[simp] theorem firstTwoSitesRestEquiv_symm_apply (d N : ℕ)
-    (p : (Fin d × Fin d) × (Fin N → Fin d)) :
-    (firstTwoSitesRestEquiv d N).symm p = Fin.cons p.1.1 (Fin.cons p.1.2 p.2) :=
+@[simp] theorem finAddTwoArrowEquiv_symm_apply {α : Type*} (N : ℕ)
+    (p : (α × α) × (Fin N → α)) :
+    (finAddTwoArrowEquiv α N).symm p = Fin.cons p.1.1 (Fin.cons p.1.2 p.2) :=
   rfl
-
-end MPOTensor
