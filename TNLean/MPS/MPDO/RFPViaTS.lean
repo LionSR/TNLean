@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.FinTupleEquiv
+import TNLean.Algebra.TracePairing
 import TNLean.MPS.MPDO.KrausCPTP
+import TNLean.MPS.MPDO.ZCL
 
 /-!
 # MPDO renormalization fixed point via trace-preserving CP maps (Definition 4.1)
@@ -45,6 +47,10 @@ the predicate.
   one-site, two-site, and three-site specializations.
 * `MPOTensor.IsRFPViaTS`: Definition 4.1, the tp-CP-map renormalization
   fixed point.
+* `MPOTensor.physTraceTransfer_sq_of_isRFPViaTS`: Definition 4.1 implies
+  idempotence of the physical-trace transfer.
+* `MPOTensor.isSourceZCL_of_isRFPViaTS`: the resulting source
+  zero-correlation-length statement when the physical-trace transfer is nonzero.
 
 ## References
 
@@ -136,6 +142,16 @@ noncomputable def physClose1 (M : MPOTensor d D) :
 @[simp] lemma physClose1_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
     (i j : Fin d) : physClose1 M X i j = Matrix.trace (M i j * X) := rfl
 
+/-- The trace of the one-site physical closure is the trace pairing with the
+physical-trace transfer.
+
+Source: arXiv:1606.00608, Definition 4.1, line 657, and Proposition
+`propsimple`, lines 1333--1340. -/
+theorem trace_physClose1_eq (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace (physClose1 M X) = Matrix.trace (physTraceTransfer M * X) := by
+  rw [physTraceTransfer, Finset.sum_mul, Matrix.trace_sum]
+  rfl
+
 /-- Under the canonical equivalence between one-site configurations and
 physical indices, the length-one closure is `physClose1`. This is the one-site
 operator in arXiv:1606.00608, Definition 4.1, line 657 and figure MPDO_XM. -/
@@ -165,6 +181,18 @@ noncomputable def physClose2 (M : MPOTensor d D) :
 @[simp] lemma physClose2_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
     (i j : Fin d × Fin d) :
     physClose2 M X i j = Matrix.trace (M i.1 j.1 * M i.2 j.2 * X) := rfl
+
+/-- The trace of the two-site physical closure is the trace pairing with the
+square of the physical-trace transfer.
+
+Source: arXiv:1606.00608, Definition 4.1, line 657, and Proposition
+`propsimple`, lines 1333--1340. -/
+theorem trace_physClose2_eq (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace (physClose2 M X) =
+      Matrix.trace (physTraceTransfer M * physTraceTransfer M * X) := by
+  change (∑ p : Fin d × Fin d, Matrix.trace (M p.1 p.1 * M p.2 p.2 * X)) = _
+  rw [Fintype.sum_prod_type]
+  simp only [physTraceTransfer, Finset.sum_mul, Matrix.mul_sum, Matrix.trace_sum]
 
 /-- Under the canonical equivalence between two-site configurations and pairs
 of physical indices, the length-two closure is `physClose2`. This is the
@@ -236,15 +264,45 @@ intertwining the one-site and two-site physical operators, namely
 
 This is the source's tp-CP-map renormalization fixed point. It is *distinct* from
 `MPOTensor.IsRFP`, the transfer-map idempotence (zero-correlation-length)
-condition: Definition 4.1 is strictly stronger for general MPDO. The implication
-`IsRFPViaTS M → IsRFP M` (Theorem 4.9, direction i ⟹ ii) is deferred future
-work (#2382, #826). -/
+condition on the doubled-index completely positive map. Theorem
+`physTraceTransfer_sq_of_isRFPViaTS` proves the source zero-correlation-length
+identity for the physical-trace transfer. It does not identify this identity
+with doubled-index transfer-map idempotence. -/
 def IsRFPViaTS (M : MPOTensor d D) : Prop :=
   ∃ (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ),
     IsKrausCPTP S ∧ IsKrausCPTP T ∧
     (∀ X, S (physClose2 M X) = physClose1 M X) ∧
     (∀ X, T (physClose1 M X) = physClose2 M X)
+
+/-- Definition 4.1 implies literal idempotence of the physical-trace transfer.
+
+This is the zero-correlation-length part of arXiv:1606.00608, Proposition
+`propsimple`, lines 1333--1340: trace preservation of the map from one site to
+two sites identifies the traces of the one-site and two-site physical closures
+for every virtual boundary matrix. -/
+theorem physTraceTransfer_sq_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M) :
+    physTraceTransfer M * physTraceTransfer M = physTraceTransfer M := by
+  obtain ⟨_, T, _, hT, _, hT_close⟩ := h
+  apply sub_eq_zero.mp
+  apply (Matrix.trace_mul_right_eq_zero_iff _).mp
+  intro X
+  rw [Matrix.sub_mul, Matrix.trace_sub, ← trace_physClose2_eq M X,
+    ← trace_physClose1_eq M X, ← hT_close X, hT.trace_map, sub_self]
+
+/-- Definition 4.1 gives source zero correlation length when the physical-trace
+transfer is nonzero.
+
+**Scope restriction (nonzero transfer):** The source assumes that the tensor is
+in canonical form and generates normalized density operators. The bare
+predicate `IsRFPViaTS` does not include these standing hypotheses, so the
+nonzero transfer is stated explicitly. This restriction is documented in
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+
+Source: arXiv:1606.00608, Proposition `propsimple`, lines 1333--1340. -/
+theorem isSourceZCL_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M)
+    (h0 : physTraceTransfer M ≠ 0) : IsSourceZCL M :=
+  isSourceZCL_of_physTraceTransfer_sq M h0 (physTraceTransfer_sq_of_isRFPViaTS M h)
 
 @[deprecated _root_.finThreeArrowEquiv (since := "2026-07-13")]
 alias finThreeArrowEquiv := _root_.finThreeArrowEquiv

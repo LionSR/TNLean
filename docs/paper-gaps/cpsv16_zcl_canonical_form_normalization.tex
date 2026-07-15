@@ -62,8 +62,10 @@ the doubled-index MPS transfer rather than by the MPDO ZCL diagram.
 
 \paragraph{Classification.} This is a wrong-transfer-object gap: the current
 formal predicate records doubled-index CP-transfer idempotence, while the source
-definition uses the physical-trace transfer. Until the latter transfer is
-formalized, unrestricted source ZCL remains open.
+definition uses the physical-trace transfer. The latter is now formalized as
+\texttt{MPOTensor.physTraceTransfer}, with source ZCL recorded by
+\texttt{MPOTensor.IsSourceZCL}; no identification with the doubled-index
+predicate is asserted.
 
 This deviation is witnessed in the development by
 \texttt{MPOTensor.exists\_isLocalPurificationRFP\_not\_isZCL}. Take $d=d_K=2$,
@@ -102,18 +104,20 @@ options:
   fusion and algebra statements, not the source's ZCL transfer.
 \end{enumerate}
 
-Until one of these is in place, \texttt{IsZCL} should be documented as a
-doubled-index CP-transfer idempotence condition, not as the unrestricted source
-Definition~4.2. The
-$\text{PRFP}\Leftrightarrow\text{ZCL}$ equivalence remains open
-(issues \#2395, \#2421).
+Option~1 is now in place. The predicate \texttt{IsZCL} remains documented as a
+doubled-index CP-transfer idempotence condition, while
+\texttt{IsSourceZCL} records Definition~4.2. For the renormalization condition
+of Definition~4.1, the forward implication to source ZCL is now proved under
+the explicit nonzero-transfer hypothesis above. The PRFP implication, the
+reverse implication in Theorem~4.9, and the full strong-area-law assembly
+remain open.
 
 \section{The faithful definition and its consequences}
 
 The faithful reading is Option~1 (source ZCL transfer). Writing $\mathcal T_M$
 for the physical-trace transfer, the normalized condition is
 \[
-  \texttt{IsZCL}\ M\ :=\ \mathcal T_M\ne 0\ \wedge\
+  \texttt{IsSourceZCL}\ M\ :=\ \mathcal T_M\ne 0\ \wedge\
   \exists\, \lambda\in\mathbb R,\ 0<\lambda
   \ \wedge\ \mathcal T_M^2 = \lambda\, \mathcal T_M .
 \]
@@ -140,6 +144,27 @@ but not ZCL under the definition above. Every source-facing description that
 calls the doubled-index literal notion ``definitionally zero correlation
 length'' must be weakened to a separate bridge, with the nonzero hypothesis
 stated explicitly.
+
+\paragraph{Definition~4.1 now gives the forward physical-trace equation.}
+The theorem
+\texttt{MPOTensor.physTraceTransfer\_sq\_of\_isRFPViaTS} formalizes the
+zero-correlation-length calculation in Appendix~C, Proposition
+\texttt{propsimple}, source lines 1333--1340. This proposition proves the first
+implication of Theorem~4.9 by establishing both ZCL and SAL; the present Lean
+theorem formalizes only its ZCL calculation. For every virtual matrix $X$,
+trace preservation of the one-to-two map gives
+\[
+  \operatorname{tr}(\mathcal T_M^2X)
+  =\operatorname{tr}(M_2(X))
+  =\operatorname{tr}(M_1(X))
+  =\operatorname{tr}(\mathcal T_MX).
+\]
+Nondegeneracy of the trace pairing yields
+$\mathcal T_M^2=\mathcal T_M$. Together with
+$\mathcal T_M\ne0$, this gives \texttt{MPOTensor.IsSourceZCL}. The explicit
+nonzero hypothesis is necessary because the bare predicate
+\texttt{IsRFPViaTS} omits the source's standing canonical-form and normalized
+MPDO assumptions.
 
 \paragraph{Effect on the purification witness.} The diagonal purification of
 Section~3 has $\mathcal T_M=1$, hence satisfies the source ZCL equation already.

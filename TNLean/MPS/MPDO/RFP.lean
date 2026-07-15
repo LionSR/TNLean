@@ -15,8 +15,9 @@ Note that `IsRFP` is the idempotence / zero-correlation-length condition, not th
 paper's renormalization-fixed-point Definition 4.1 (paper label RFPMixedTS, the
 existence of two trace-preserving CP maps), which is an a priori different notion
 for general MPDO; see the faithfulness note on `MPOTensor.IsRFP`. Definition 4.1
-is stated as `MPOTensor.IsRFPViaTS`; the theorem deriving idempotence from it is
-future work (#826, #237).
+is stated as `MPOTensor.IsRFPViaTS`. It implies idempotence of the distinct
+physical-trace transfer, as proved in `MPOTensor.physTraceTransfer_sq_of_isRFPViaTS`;
+no implication to the doubled-index equation in this file is asserted.
 
 ## Main results
 
