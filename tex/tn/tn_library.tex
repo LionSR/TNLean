@@ -974,6 +974,21 @@
     \hspace{\TN@relationgap}\ensuremath{#1}\hspace{\TN@relationgap}%
 }
 
+% An omission is part of the topology of a word, not a freely placed label.
+\newcommand{\TNOmission}[2]{%
+    \node[tn label,#2] (#1) {$\cdots$};% chktex 11
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=omission}%
+}
+
+% The omitted column of a double-layer word retains one mark in each layer.
+\newcommand{\TNStackedOmission}[2]{%
+    \TNOmission{#1Upper}{#2}%
+    \node[tn label,below=2\TN@layerpitch cm of #1Upper]
+        (#1Lower) {$\cdots$};% chktex 11
+    \coordinate (#1Centre) at ($(#1Upper)!0.5!(#1Lower)$);%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=stacked-omission}%
+}
+
 % Public symbolic pitch for intrinsically composed terms.  Its numerical value
 % belongs to the selected layout profile.
 \newcommand{\TNCellPitch}{\TN@cellpitch}
@@ -1238,9 +1253,17 @@
 
 % A stacked MPO product contracts exactly UpperBra with LowerKet.
 \newcommand{\TNStackedMPOProduct}[5]{%
-    \coordinate (#1Centre) at #2;%
-    \TNMPOSite{#1Upper}{($(#1Centre)+(0,\TN@layerpitch)$)}{#3}%
-    \TNMPOSite{#1Lower}{($(#1Centre)+(0,-\TN@layerpitch)$)}{#4}%
+    \TNPlacementDispatch{#2}{%
+        \TNMPOSite{#1Upper}{#2}{#3}%
+        \TNMPOSite{#1Lower}
+            {below=2\TN@layerpitch cm of #1Upper}{#4}%
+        \coordinate (#1Centre) at
+            ($(#1Upper.center)!0.5!(#1Lower.center)$);%
+    }{%
+        \coordinate (#1Centre) at #2;%
+        \TNMPOSite{#1Upper}{($(#1Centre)+(0,\TN@layerpitch)$)}{#3}%
+        \TNMPOSite{#1Lower}{($(#1Centre)+(0,-\TN@layerpitch)$)}{#4}%
+    }%
     \TNConnectPhysical{#1UpperBra}{#1LowerKet}%
     \if\relax\detokenize{#5}\relax\else
         \TN@label{#1Centre}{(0.36,0)}{#5}%
@@ -1583,12 +1606,19 @@
 
 % Gauge conjugation of one MPS tensor is shared by blueprint and slides.
 \newcommand{\TNGaugeConjugatedMPSSite}[5]{%
-    \coordinate (#1Centre) at #2;%
-    \TNMPSSite{#1Site}{(#1Centre)}{#3}%
-    \TNInsertion{#1Left}
-        {($(#1Centre)+(-\TN@cellpitch,0)$)}{#4}%
-    \TNInsertion{#1Right}
-        {($(#1Centre)+(\TN@cellpitch,0)$)}{#5}%
+    \TNPlacementDispatch{#2}{%
+        \TNMPSSite{#1Site}{#2}{#3}%
+        \coordinate (#1Centre) at (#1Site.center);%
+        \TNInsertion{#1Left}{left=of #1Site}{#4}%
+        \TNInsertion{#1Right}{right=of #1Site}{#5}%
+    }{%
+        \coordinate (#1Centre) at #2;%
+        \TNMPSSite{#1Site}{(#1Centre)}{#3}%
+        \TNInsertion{#1Left}
+            {($(#1Centre)+(-\TN@cellpitch,0)$)}{#4}%
+        \TNInsertion{#1Right}
+            {($(#1Centre)+(\TN@cellpitch,0)$)}{#5}%
+    }%
     \TNVirtualPort{#1LeftWest}{#1Left}{west}%
     \TNVirtualPort{#1LeftEast}{#1Left}{east}%
     \TNVirtualPort{#1RightWest}{#1Right}{west}%

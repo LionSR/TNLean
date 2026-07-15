@@ -241,6 +241,9 @@
       }
   }
 \cs_new_eq:NN \TNPlaceObjectInternal \tn_place_object:nn
+\cs_new_protected:Npn \tn_placement_dispatch:nnn #1#2#3
+  { \tl_if_in:nnTF {#1} {=} {#2} {#3} }
+\cs_new_eq:NN \TNPlacementDispatch \tn_placement_dispatch:nnn
 \ExplSyntaxOff
 
 % Port declarations are local to one picture.  The registry itself is global
