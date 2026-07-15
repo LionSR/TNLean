@@ -1,0 +1,2270 @@
+% Catalogue of chapter-facing tensor-network diagrams.
+%
+% Each declaration contains the mathematical command, its argument schema,
+% display role, layout profile, audit sample, and chapter context.  The
+% repository-wide TikZ library loads this file after the tensor-network core
+% and motif library.
+
+\ExplSyntaxOn
+
+\cs_if_exist:NT \TNDeclareDiagram
+  {
+    \PackageError { tn }
+      { The~tensor-network~diagram~catalogue~was~loaded~more~than~once }
+      { Load~the~TikZ~library~tn~once;~it~loads~the~catalogue~itself. }
+    \ExplSyntaxOff
+    \tex_endinput:D
+  }
+\cs_if_exist:NF \TNMPSSite
+  {
+    \PackageError { tn }
+      { The~tensor-network~diagram~catalogue~was~loaded~before~its~library }
+      { Load~tn_core.tex~and~tn_library.tex~before~tn_catalogue.tex. }
+    \ExplSyntaxOff
+    \tex_endinput:D
+  }
+
+\seq_new:N \g_tn_diagram_names_seq
+\prop_new:N \g_tn_diagram_arguments_prop
+\prop_new:N \g_tn_diagram_roles_prop
+\prop_new:N \g_tn_diagram_profiles_prop
+\prop_new:N \g_tn_diagram_samples_prop
+\prop_new:N \g_tn_diagram_contexts_prop
+
+\msg_new:nnn { tn } { invalid-diagram-name }
+    { The~diagram~name~'#1'~must~have~the~form~TNName. }
+\msg_new:nnn { tn } { duplicate-diagram }
+    { The~diagram~'#1'~has~already~been~declared. }
+\msg_new:nnn { tn } { invalid-argument-name }
+    { The~argument~name~'#1'~must~be~lower-case~snake~case. }
+\msg_new:nnn { tn } { duplicate-argument }
+    { The~argument~'#1'~occurs~twice~in~one~diagram~schema. }
+\msg_new:nnn { tn } { invalid-diagram-role }
+    { The~diagram~role~'#1'~must~be~'display'~or~'figure'. }
+\msg_new:nnn { tn } { invalid-diagram-profile }
+    { The~diagram~profile~'#1'~must~be~'compact'~or~'normal'. }
+\msg_new:nnn { tn } { empty-diagram-metadata }
+    { The~diagram~'#1'~has~an~empty~#2~field. }
+
+\seq_new:N \l_tn_diagram_arguments_seq
+\tl_new:N \l_tn_diagram_signature_tl
+
+\cs_new_protected:Npn \tn_declare_diagram:nnnnnnn #1#2#3#4#5#6#7
+  {
+    \regex_match:nnF { \A TN [A-Za-z]+ \Z } {#1}
+      { \msg_error:nnn { tn } { invalid-diagram-name } {#1} }
+    \seq_if_in:NnT \g_tn_diagram_names_seq {#1}
+      { \msg_error:nnn { tn } { duplicate-diagram } {#1} }
+    \seq_clear:N \l_tn_diagram_arguments_seq
+    \clist_map_inline:nn {#2}
+      {
+        \regex_match:nnF { \A [a-z] [a-z0-9_]* \Z } {##1}
+          { \msg_error:nnn { tn } { invalid-argument-name } {##1} }
+        \seq_if_in:NnT \l_tn_diagram_arguments_seq {##1}
+          { \msg_error:nnn { tn } { duplicate-argument } {##1} }
+        \seq_put_right:Nn \l_tn_diagram_arguments_seq {##1}
+      }
+    \str_case:nnF {#3}
+      { {display} {} {figure} {} }
+      { \msg_error:nnn { tn } { invalid-diagram-role } {#3} }
+    \str_case:nnF {#4}
+      { {compact} {} {normal} {} }
+      { \msg_error:nnn { tn } { invalid-diagram-profile } {#4} }
+    \tl_if_blank:nT {#5}
+      { \msg_error:nnnn { tn } { empty-diagram-metadata } {#1} {sample} }
+    \tl_if_blank:nT {#6}
+      { \msg_error:nnnn { tn } { empty-diagram-metadata } {#1} {context} }
+    \tl_set:Nx \l_tn_diagram_signature_tl
+      { \prg_replicate:nn { \clist_count:n {#2} } {m} }
+    \exp_args:NcV \NewDocumentCommand {#1} \l_tn_diagram_signature_tl
+      {
+        \TNEventInternal
+          {diagram|name=#1|role=#3|profile=#4|context=\tl_to_str:n{#6}}
+        #7
+      }
+    \seq_gput_right:Nn \g_tn_diagram_names_seq {#1}
+    \prop_gput:Nnn \g_tn_diagram_arguments_prop {#1} {#2}
+    \prop_gput:Nnn \g_tn_diagram_roles_prop {#1} {#3}
+    \prop_gput:Nnn \g_tn_diagram_profiles_prop {#1} {#4}
+    \prop_gput:Nnn \g_tn_diagram_samples_prop {#1} {#5}
+    \prop_gput:Nnn \g_tn_diagram_contexts_prop {#1} {#6}
+  }
+
+\NewDocumentCommand \TNDeclareDiagram { m m m m m m +m }
+  { \tn_declare_diagram:nnnnnnn {#1} {#2} {#3} {#4} {#5} {#6} {#7} }
+
+\ExplSyntaxOff
+
+\makeatletter
+
+% ---------- Public semantic macros ----------
+
+\input{tn_motifs_mpdo.tex} % chktex 27 (resolved within the TikZ library directory)
+
+\TNDeclareDiagram
+    {TNMPSLocal}
+    {tensor,label}
+    {display}
+    {compact}
+    {\TNMPSLocal{A}{i}}
+    {chapter/ch02_mps.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNMPSSite{tnA}{at=origin}{#1}
+        \TNOpenVirtualWest{tnAWest}
+        \TNOpenVirtualEast{tnAEast}
+        \TNOpenPhysicalNorth{tnAKet}
+        \TNLabelAbove{tnAKetOpen}{#2}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNMPSWord}
+    {tensor,left,right,length}
+    {display}
+    {compact}
+    {\TNMPSWord{A}{i}{k}{L}}
+    {chapter/ch02_mps.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNMPSSite{tnL}{at=origin}{}
+        \TNMPSSite{tnM}{right=of tnL}{}
+        \TNOmission{tnWordOmission}{right=of tnM}
+        \TNMPSSite{tnR}{right=of tnWordOmission}{}
+        \TNConnectVirtual{tnLEast}{tnMWest}
+        \TNOpenVirtualWest{tnLWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenVirtualWest{tnRWest}
+        \TNOpenVirtualEast{tnREast}
+        \TNOpenPhysicalNorth{tnLKet}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalNorth{tnRKet}
+        \TNLabelAbove{tnLKetOpen}{#2}
+        \TNLabelAbove{tnRKetOpen}{#3}
+        \TNLabelBelow{tnWordOmission}{#4}
+        \TNLabelLeft{tnL}{#1}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNMPV}
+    {tensor,left,right,length}
+    {display}
+    {compact}
+    {\TNMPV{A}{i}{k}{L}}
+    {chapter/ch02_mps.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNMPSSite{tnL}{at=origin}{}
+        \TNMPSSite{tnM}{right=of tnL}{}
+        \TNOmission{tnMPVOmission}{right=of tnM}
+        \TNMPSSite{tnR}{right=of tnMPVOmission}{}
+        \TNConnectVirtual{tnLEast}{tnMWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenVirtualWest{tnRWest}
+        \TNOpenPhysicalNorth{tnLKet}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalNorth{tnRKet}
+        \TNTraceVirtualBelow{tnLWest}{tnREast}
+        \TNLabelAbove{tnLKetOpen}{#2}
+        \TNLabelAbove{tnRKetOpen}{#3}
+        \TNLabelLeft{tnL}{#1}
+        \TNLabelBelow{tnMPVOmission}{#4}
+    \end{TNDiagram}%
+}
+
+% Blocking: L neighbouring local tensors grouped (dashed box) into one
+% blocked tensor; physical legs poke out the top, the outer virtual legs
+% become the blocked bond.
+\TNDeclareDiagram
+    {TNBlocking}
+    {tensor,left,right,length}
+    {display}
+    {compact}
+    {\TNBlocking{A}{i}{k}{L}}
+    {chapter/ch02_mps.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNMPSSite{tnL}{at=origin}{}
+        \TNMPSSite{tnM}{right=of tnL}{}
+        \TNOmission{tnBlockingOmission}{right=of tnM}
+        \TNMPSSite{tnR}{right=of tnBlockingOmission}{}
+        \TNConnectVirtual{tnLEast}{tnMWest}
+        \TNOpenVirtualWest{tnLWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenVirtualWest{tnRWest}
+        \TNOpenVirtualEast{tnREast}
+        \TNOpenPhysicalNorth{tnLKet}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalNorth{tnRKet}
+        \TNLabelAbove{tnLKetOpen}{#2}
+        \TNLabelAbove{tnRKetOpen}{#3}
+        \TNLabelBelow{tnBlockingOmission}{#4}
+        \TNGroupFit{tnBlockingBoundary}
+            {(tnL)(tnM)(tnBlockingOmission)(tnR)}
+        \TNLabelLeft{tnBlockingBoundary}{#1}
+    \end{TNDiagram}%
+}
+
+% MPV overlap: the top row carries copies of #1, the bottom row the conjugate
+% copies of #2; the shared physical indices are contracted between the rows and
+% both virtual rings are closed by the trace (the boxes above and below).
+\TNDeclareDiagram
+    {TNMPVOverlap}
+    {left,right,length}
+    {display}
+    {compact}
+    {\TNMPVOverlap{i}{k}{L}}
+    {chapter/ch02_mps.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNMPDOOverlapWord{ovu}{at=origin}{#1}{#2}{#3}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNTransferMap}
+    {tensor}
+    {display}
+    {compact}
+    {\TNTransferMap{A}}
+    {chapter/ch02_mps.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNStackedMPOProduct{tn}{at=origin}{}{\overline{#1}}{}
+        \TNOpenVirtualWest{tnUpperWest}
+        \TNOpenVirtualWest{tnLowerWest}
+        \TNOpenVirtualEast{tnUpperEast}
+        \TNOpenVirtualEast{tnLowerEast}
+        \TNLabelLeft{tnCentre}{X}
+        \TNLabelRight{tnCentre}{\E_{#1}(X)}
+        \TNLabelRight{tnUpperBra}{i}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNMPOCell}
+    {tensor,top,bottom}
+    {display}
+    {compact}
+    {\TNMPOCell{A}{i}{j}}
+    {chapter/ch20_mpdo_foundations.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNMPOSite{tnM}{at=origin}{#1}
+        \TNOpenVirtualWest{tnMWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalSouth{tnMBra}
+        \TNLabelAbove{tnMKetOpen}{#2}
+        \TNLabelBelow{tnMBraOpen}{#3}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNMPOChain}
+    {tensor,top_left,bottom_left,top_right,bottom_right,length}
+    {display}
+    {normal}
+    {\TNMPOChain{A}{i_1}{j_1}{i_N}{j_N}{L}}
+    {chapter/ch20_mpdo_foundations.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNIndexedPeriodicMPOWord{tn}{#2}{#3}{#4}{#5}{#6}{#1}
+    \end{TNDiagram}%
+}
+
+% Local purification of an MPO tensor: the ket and bra tensors share the
+% ancillary index (straight contraction on the right) and retain their physical
+% and virtual legs.
+\TNDeclareDiagram
+    {TNMPOLocalPurification}
+    {}
+    {display}
+    {compact}
+    {\TNMPOLocalPurification}
+    {chapter/ch20_mpdo_foundations.tex}{%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNMPOSite{purM}{at=origin}{M}
+            \TNOpenVirtualWest{purMWest}
+            \TNOpenVirtualEast{purMEast}
+            \TNOpenPhysicalNorth{purMKet}
+            \TNOpenPhysicalSouth{purMBra}}
+        \TNRelation{=}
+        \TNTerm{%
+            \TNMPDOPurificationMotif{pur}{at=origin}
+            \TNOpenVirtualWest{purKetWest}
+            \TNOpenVirtualEast{purKetEast}
+            \TNOpenVirtualWest{purBraWest}
+            \TNOpenVirtualEast{purBraEast}
+            \TNOpenPhysicalNorth{purKet}
+            \TNOpenPhysicalSouth{purBra}
+            \TNLabelRight{purAncillaMid}{k}}
+    \end{TNEquationRow}%
+}
+
+% The physical renormalization maps of the mixed-state RFP definition.
+\TNDeclareDiagram
+    {TNMPORenormalizationTS}
+    {}
+    {display}
+    {compact}
+    {\TNMPORenormalizationTS}
+    {chapter/ch21_mpdo_rfp_pure_state_recovery.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{M_1(X)=}
+        \TNTerm{%
+            \TNMPOSite{rtsOne}{at=origin}{M}
+            \TNOpenVirtualWest{rtsOneWest}
+            \TNOpenVirtualEast{rtsOneEast}
+            \TNOpenPhysicalNorth{rtsOneKet}
+            \TNOpenPhysicalSouth{rtsOneBra}}
+        \TNRelation{\xrightleftharpoons[\mathcal S]{\mathcal T}}
+        \TNTerm{%
+            \TNMPOSite{rtsLeft}{at=origin}{M}
+            \TNMPOSite{rtsRight}{right=of rtsLeft}{M}
+            \TNOpenVirtualWest{rtsLeftWest}
+            \TNConnectVirtual{rtsLeftEast}{rtsRightWest}
+            \TNOpenVirtualEast{rtsRightEast}
+            \TNOpenPhysicalNorth{rtsLeftKet}
+            \TNOpenPhysicalSouth{rtsLeftBra}
+            \TNOpenPhysicalNorth{rtsRightKet}
+            \TNOpenPhysicalSouth{rtsRightBra}}
+        \ensuremath{=M_2(X)}
+    \end{TNEquationRow}%
+}
+
+% Contraction of neighbouring right and left sector tensors.
+\TNDeclareDiagram
+    {TNEtaSectorDecomposition}
+    {}
+    {display}
+    {compact}
+    {\TNEtaSectorDecomposition}
+    {chapter/ch21_mpdo_rfp_simple_local_closed_sector_rephasing.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\eta_{k,h}=r_k l_h}
+    \end{TNEquationRow}%
+}
+
+% The two proved two-site operations from Appendix C.2.  The upper row is the
+% regrouping followed by T_0's partial trace.  The lower row begins with both
+% the outer and neighbouring factors already supplied and draws only the
+% inverse regrouping S_2; it deliberately contains no preparation map.
+\TNDeclareDiagram
+    {TNMPDOTwoSiteTraceAndShift}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOTwoSiteTraceAndShift}
+    {chapter/ch21_mpdo_rfp_simple_local_normalized_preparations.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathcal T_0:\mathfrak R_2\to L_k\otimes R_h,\qquad \mathcal S_2:(L_k\otimes R_h)\otimes(R_k\otimes L_h)\to\mathfrak R_2}
+    \end{TNEquationRow}%
+}
+
+% The three-site analogues.  The dashed middle block is exactly the Omega
+% index space traced by S_0.  The lower row starts with that entire block and
+% applies only the inverse regrouping T_2, not T_1 or a full recovery map.
+\TNDeclareDiagram
+    {TNMPDOThreeSiteTraceAndShift}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOThreeSiteTraceAndShift}
+    {chapter/ch21_mpdo_rfp_simple_local_normalized_preparations.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathcal S_0:\mathfrak R_3\to L_k\otimes R_h,\qquad \mathcal T_2:(L_k\otimes R_h)\otimes\Omega_{k,h}\to\mathfrak R_3}
+    \end{TNEquationRow}%
+}
+
+% The three stages of the physical-sector refinement channel in Appendix C.2.
+% The layout follows MPDO_TMatrix.png: a two-site sector row, the boundary row
+% left by T_0, and the three-site factor order obtained after T_1 and T_2.
+\TNDeclareDiagram
+    {TNMPDORefinementConstruction}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDORefinementConstruction}
+    {chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathfrak R_2\xrightarrow{\mathcal T_0}L_k\otimes R_h\xrightarrow{\mathcal T_1}(L_k\otimes R_h)\otimes\Omega_{k,h}\xrightarrow{\mathcal T_2}\mathfrak R_3}
+    \end{TNEquationRow}%
+}
+
+% The refinement half of MPDO_TSKKK.png.  This records only the direction and
+% site counts of the channel; the closure identity belongs to its theorem.
+\TNDeclareDiagram
+    {TNMPDORefinementDirection}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDORefinementDirection}
+    {chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathfrak R_2({\cal K}_2(X))\xrightarrow{\mathcal T}\mathfrak R_3({\cal K}_3(X))}
+    \end{TNEquationRow}%
+}
+
+% The overlapping applications of T and S used after two-site blocking in
+% Theorem 4.9.  The endpoint frames identify one and two blocked sites; the
+% intermediate rows retain the original physical-site decomposition.
+\TNDeclareDiagram
+    {TNMPDOBlockedRFPChannels}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOBlockedRFPChannels}
+    {chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\widehat{\mathcal T}^{\,2}:}
+        \TNTerm{%
+            \TNMPDOFactorChainTwo{btTwo}{at=origin}{\widehat{\cal K}}%
+            \TNGroupFit{btTwoBlock}{(btTwoSite1)(btTwoSite2)}%
+            \TNLabelBelow{btTwoBlock.south}{\text{one blocked site}}}
+        \TNRelation{\xrightarrow{\widehat{\mathcal T}}}
+        \TNTerm{\TNMPDOFactorChainThree{btThree}{at=origin}{\widehat{\cal K}}}
+        \TNRelation{\xrightarrow{\widehat{\mathcal T}_{(12)3}}}
+        \TNTerm{%
+            \TNMPDOFactorChainFour{btFour}{at=origin}{\widehat{\cal K}}%
+            \TNGroupFit{btFourLeftBlock}{(btFourSite1)(btFourSite2)}%
+            \TNGroupFit{btFourRightBlock}{(btFourSite3)(btFourSite4)}%
+            \TNLabelBelow{btFourLeftBlock.south}{\text{two blocked sites}}}
+    \end{TNEquationRow}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\widehat{\mathcal S}^{\,2}:}
+        \TNTerm{%
+            \TNMPDOFactorChainFour{bsFour}{at=origin}{\widehat{\cal K}}%
+            \TNGroupFit{bsFourLeftBlock}{(bsFourSite1)(bsFourSite2)}%
+            \TNGroupFit{bsFourRightBlock}{(bsFourSite3)(bsFourSite4)}}
+        \TNRelation{\xrightarrow{\widehat{\mathcal S}_{(123)4}}}
+        \TNTerm{\TNMPDOFactorChainThree{bsThree}{at=origin}{\widehat{\cal K}}}
+        \TNRelation{\xrightarrow{\widehat{\mathcal S}}}
+        \TNTerm{%
+            \TNMPDOFactorChainTwo{bsTwo}{at=origin}{\widehat{\cal K}}%
+            \TNGroupFit{bsTwoBlock}{(bsTwoSite1)(bsTwoSite2)}}
+    \end{TNEquationRow}%
+}
+
+% Transport of the two-step channels from the sector coordinates selected by
+% the physical isometry back to the original physical coordinates. The
+% horizontal arrows follow MPDO_TSKKK.png; the vertical conjugations follow
+% the U and U^dagger convention of MPDO_K=sum_k_LkRk.png.
+\TNDeclareDiagram
+    {TNMPDOPhysicalIsometryTransport}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOPhysicalIsometryTransport}
+    {chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{U^{\otimes4}\widehat{\mathcal T}^{\,2}(U^\dagger)^{\otimes2}=\mathcal T,\qquad U^{\otimes2}\widehat{\mathcal S}^{\,2}(U^\dagger)^{\otimes4}=\mathcal S}
+    \end{TNEquationRow}%
+}
+
+% Fixed-sector factorization of the arbitrary-X two-site physical closure.
+% The left-hand row shows the sector subspins and the outer virtual closure;
+% the right-hand side shows only the proved boundary/neighbor tensor product.
+\TNDeclareDiagram
+    {TNMPDOTwoSiteClosureFactorization}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOTwoSiteClosureFactorization}
+    {chapter/ch21_mpdo_rfp_simple_local_bond_products.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathfrak R_2({\cal K}_2(X))_{k,h}=a_kb_hB_{k,h}(X)}
+    \end{TNEquationRow}%
+}
+
+% Fixed-sector factorization of the arbitrary-X three-site physical closure.
+% No preparation, positivity, or channel identity is represented.
+\TNDeclareDiagram
+    {TNMPDOThreeSiteClosureFactorization}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOThreeSiteClosureFactorization}
+    {chapter/ch21_mpdo_rfp_simple_local_bond_products.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathfrak R_3({\cal K}_3(X))_{k,l,h}=B_{k,h}(X)\otimes\eta_{k,l}\otimes\eta_{l,h}}
+    \end{TNEquationRow}%
+}
+
+% Adjacent-bond commutativity on one fixed sector triple.  The six vertical
+% lines are the factors L_k, R_k, L_l, R_l, L_h, R_h.  Reading from bottom to
+% top, the two panels differ only by the order of the operators on the disjoint
+% pairs R_k \otimes L_l and R_l \otimes L_h.
+\TNDeclareDiagram
+    {TNMPDOFixedSectorAdjacentCommutativity}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOFixedSectorAdjacentCommutativity}
+    {chapter/ch21_mpdo_rfp_simple_local_bond_products.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}=\eta_{l,h}^{(23)}\eta_{k,l}^{(12)}}
+    \end{TNEquationRow}%
+}
+
+% A closed chain of factorized sector tensors regrouped into neighbouring
+% eta operators.  This mirrors the cyclic contractions in Appendix C.2.
+\TNDeclareDiagram
+    {TNMPDOCyclicEtaContraction}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOCyclicEtaContraction}
+    {chapter/ch21_mpdo_rfp_simple_local_closed_sector_rephasing.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\tr(M_{k_0}\cdots M_{k_{N-1}})=\tr(\eta_{k_0,k_1}\otimes\cdots\otimes\eta_{k_{N-1},k_0})}
+    \end{TNEquationRow}%
+}
+
+% Applying the inverse tensor to the first and third sites of a three-site
+% MPO word leaves one matrix entry of the middle tensor and one entry of the
+% complementary virtual tail.
+\TNDeclareDiagram
+    {TNMPDOInverseMapThreeSiteContraction}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOInverseMapThreeSiteContraction}
+    {chapter/ch21_mpdo_rfp_simple_local_markov_factorization.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{({\cal K}^{-1}\otimes\Id\otimes{\cal K}^{-1}){\cal K}_3=\sum_{\alpha,\beta}L_\alpha\otimes B_{\alpha,\beta}\otimes R_\beta}
+    \end{TNEquationRow}%
+}
+
+% Horizontal MPDO operator: one row of MPO sites with the virtual bond
+% contracted along the row and closed by the trace; the ket and bra legs
+% stay external.
+\TNDeclareDiagram
+    {TNMPDOHorizontalOperator}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOHorizontalOperator}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{H^{(N)}(\widetilde M)=\tr_{\mathrm v}(\widetilde M_1\cdots\widetilde M_N)}
+    \end{TNEquationRow}%
+}
+
+% The three first-site contractions of the horizontal MPDO operator: the
+% matrix P inserted on the ket leg, on the bra leg, and on both legs of the
+% first site.
+\TNDeclareDiagram
+    {TNMPDOFirstSiteContractions}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOFirstSiteContractions}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{PH^{(N+1)},\qquad H^{(N+1)}P,\qquad PH^{(N+1)}P}
+    \end{TNEquationRow}%
+}
+
+% Vertical direct-sum form of the doubled tensor: after the physical isometry
+% each block factorizes into a diagonal weight on the multiplicity factor and
+% a basis tensor carrying the virtual legs.
+\TNDeclareDiagram
+    {TNMPDOVerticalDirectSum}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOVerticalDirectSum}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{U\mathcal K U^\dagger=\bigoplus_k\mu_k\otimes A_k}
+    \end{TNEquationRow}%
+}
+
+% Complete orthogonal reducing-sector decomposition of the vertical tensor.
+% The physical isometries V_k surround the irreducible corner B_k; their
+% range projections resolve the physical identity and reduce every letter.
+\TNDeclareDiagram
+    {TNMPDOVerticalReducingSectors}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOVerticalReducingSectors}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{U\mathcal K U^\dagger=\bigoplus_\alpha M_\alpha}
+    \end{TNEquationRow}%
+}
+
+% Equality of the Gram conjugations for two gauge-equivalent copies of one
+% vertical normal tensor. The ordering of the four gauge factors follows
+% DAVID_Fig8.png in the proof of Proposition 4.13.
+\TNDeclareDiagram
+    {TNMPDOVerticalGaugeGramComparison}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOVerticalGaugeGramComparison}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{X_\alpha^\dagger X_\alpha=Y_\alpha^\dagger Y_\alpha}
+    \end{TNEquationRow}%
+}
+
+% Inverse-map contraction for an injective simple tensor: contracting the
+% inverse tensor with the tensor through the physical index identifies the
+% two pairs of virtual legs (the matrix units on the bond space).
+\TNDeclareDiagram
+    {TNMPDOInverseContraction}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOInverseContraction}
+    {chapter/ch21_mpdo_rfp_simple_local_markov_factorization.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{{\cal K}^{-1}{\cal K}=\Id}
+    \end{TNEquationRow}%
+}
+
+% The normalized three-site marginal of a four-site periodic MPO.  The first
+% three sites retain their two physical legs, while tracing the fourth site is
+% absorbed into the virtual closing operator R_4.
+\TNDeclareDiagram
+    {TNMPDONormalizedFourSiteTail}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDONormalizedFourSiteTail}
+    {chapter/ch21_mpdo_rfp_simple_local_markov_factorization.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\tr_4({\cal K}_4)=\sum_\alpha L_\alpha\otimes B_\alpha\otimes R_\alpha}
+    \end{TNEquationRow}%
+}
+
+% Sectorwise comparison between the inverse-map contraction and the Hayashi
+% product in the basis adapted to the middle-site direct sum.
+\TNDeclareDiagram
+    {TNMPDOHayashiSectorComparison}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOHayashiSectorComparison}
+    {chapter/ch21_mpdo_rfp_simple_local_markov_factorization.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{R_{\beta_3,\alpha_1}\,\cdot\,}
+        \TNTerm{%
+            \TNMPOSite{hscK}{at=origin}{\widetilde\kappa^{(k)}}
+            \TNOpenVirtualWest{hscKWest}
+            \TNOpenVirtualEast{hscKEast}
+            \TNOpenPhysicalNorth{hscKKet}
+            \TNOpenPhysicalSouth{hscKBra}
+            \TNLabelLeft{hscKWestOpen}{\beta_1}
+            \TNLabelRight{hscKEastOpen}{\alpha_3}
+            \TNLabelAbove{hscKKetOpen}{k;l,r}
+            \TNLabelBelow{hscKBraOpen}{k;l',r'}}
+        \TNRelation{=}
+        \ensuremath{p_k}
+        \TNTerm{%
+            \TNFactor{hscA}{at=origin}{A^{(k)}_{\alpha_1,\beta_1}}
+            \TNLabelAbove{hscA}{l,l'}}
+        \TNRelation{\otimes}
+        \TNTerm{%
+            \TNFactor{hscB}{at=origin}{B^{(k)}_{\alpha_3,\beta_3}}
+            \TNLabelAbove{hscB}{r,r'}}
+    \end{TNEquationRow}%
+}
+
+% Sector factorization: in the middle-site basis selected by U_B, every physical
+% slice of the injective tensor is a direct sum of the sector products
+% l_k \otimes r_k.  The placement of U_B and U_B^\dagger follows the theorem
+% orientation U_B K U_B^\dagger.
+\TNDeclareDiagram
+    {TNMPDOSectorFactorization}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOSectorFactorization}
+    {chapter/ch21_mpdo_rfp_simple_local_markov_factorization.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{U_B\mathcal K U_B^\dagger=\bigoplus_k l_k\otimes r_k}
+    \end{TNEquationRow}%
+}
+
+% Local-orthogonality contraction: sandwiching the ket and bra legs of one
+% tensor between the orthogonal projectors P_1 and P_2, in either order,
+% gives zero, as does the neighboring two-site contraction with P_1 dressing
+% both physical legs of the first site and P_2 both legs of the second.
+\TNDeclareDiagram
+    {TNMPDOLocalOrthogonality}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOLocalOrthogonality}
+    {chapter/ch21_mpdo_rfp_simple_local_primitivity.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{P_j\mathcal K_iP_{j^\prime}=0\quad\text{unless }i=j=j^\prime}
+    \end{TNEquationRow}%
+}
+
+% Inverse-tensor contraction for an injective MPS tensor: contracting the
+% inverse tensor with the tensor through the shared physical index identifies
+% the virtual legs of the inverse with the corresponding virtual legs of the
+% tensor.
+\TNDeclareDiagram
+    {TNMPSInverseContraction}
+    {}
+    {display}
+    {compact}
+    {\TNMPSInverseContraction}
+    {chapter/ch02_mps.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A^{-1}A=\Id}
+    \end{TNEquationRow}%
+}
+
+% Coefficient form of a basis of normal tensors: the gauge X, one basis
+% tensor with its physical leg, and X^{-1} on the virtual chain, threaded by
+% the block-index lines j and q; the coefficient tensor mu hangs on the two
+% index lines, so the direct sums are drawn as index lines.
+\TNDeclareDiagram
+    {TNBNTDecomposition}
+    {}
+    {figure}
+    {normal}
+    {\TNBNTDecomposition}
+    {chapter/ch10_bnt.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNMPDOBNTDecompositionMotif{bnt}{at=origin}
+    \end{TNDiagram}%
+}
+
+% Zero-correlation-length idempotence for the physical-trace transfer: the
+% trace-closed tensor equals the virtual product of two trace-closed copies.
+\TNDeclareDiagram
+    {TNMPDOZCLIdempotence}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOZCLIdempotence}
+    {chapter/ch21_mpdo_rfp_foundations.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\mathcal T_M=\mathcal T_M^2}
+    \end{TNEquationRow}%
+}
+
+% The two fixed-final-label fusion trees.  The dashed bridge records the
+% F-change of multiplicity basis that remains to be constructed.
+\TNDeclareDiagram
+    {TNMPDOFixedFinalFusionBracketings}
+    {}
+    {figure}
+    {normal}
+    {\TNMPDOFixedFinalFusionBracketings}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNMPDOLeftCofusionTree{ffLeft}{at=origin}
+                {U_{\alpha,\beta}^{\delta}}
+                {U_{\delta,\gamma}^{\varepsilon}}
+                {\alpha}{\beta}{\gamma}{\varepsilon}
+                {((\alpha\beta)\gamma)}}
+        \TNRelation{\xleftrightarrow{F_{\varepsilon}^{\alpha\beta\gamma}}}
+        \TNTerm[normal]{%
+            \TNMPDORightCofusionTree{ffRight}{at=origin}
+                {U_{\beta,\gamma}^{\eta}}
+                {U_{\alpha,\eta}^{\varepsilon}}
+                {\alpha}{\beta}{\gamma}{\varepsilon}
+                {(\alpha(\beta\gamma))}}
+    \end{TNEquationRow}%
+}
+
+% The source-oriented F-move.  The left tree is expanded in the basis of
+% right trees.  The multiplicity labels and the direction of F agree with
+% equation (Fmove) of arXiv:1511.08090.
+\TNDeclareDiagram
+    {TNMPDOPrintedFMove}
+    {}
+    {figure}
+    {normal}
+    {\TNMPDOPrintedFMove}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNMPDOLeftCofusionTree{pfLeft}{at=origin}
+                {X^{e}_{ab,\mu}}{X^{d}_{ec,\nu}}
+                {a}{b}{c}{d}{}}
+        \TNRelation{=\displaystyle\sum_{f,\lambda,\sigma}
+            (F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}}
+        \TNTerm[normal]{%
+            \TNMPDORightCofusionTree{pfRight}{at=origin}
+                {X^{f}_{bc,\lambda}}{X^{d}_{af,\sigma}}
+                {a}{b}{c}{d}{}}
+    \end{TNEquationRow}%
+}
+
+% The fixed-final comparison argument in three graphical steps.  A
+% positive-length simultaneous word selector isolates one final label, the
+% resulting comparison is block diagonal in that label, and injectivity
+% identifies each diagonal corner with F tensored with the identity on the
+% final bond space.  The last line records two-sided unitarity, but deliberately
+% contains no four-fold reassociation or pentagon claim.
+\TNDeclareDiagram
+    {TNMPDOFixedFinalComparisonUnitary}
+    {}
+    {figure}
+    {normal}
+    {\TNMPDOFixedFinalComparisonUnitary}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNEquationRows}[normal]
+      \ensuremath{\textup{selector},\ S>0:\quad}
+        \TNTerm[normal]{%
+            \TNMPOSite{ffSelL}{at=origin}{}
+            \TNMPOSite{ffSelM}{right=of ffSelL}{M_{\varepsilon'}^{w}}
+            \TNMPOSite{ffSelR}{right=of ffSelM}{}
+            \TNConnectVirtual{ffSelLEast}{ffSelMWest}
+            \TNConnectVirtual{ffSelMEast}{ffSelRWest}
+            \TNOpenVirtualWest{ffSelLWest}
+            \TNOpenVirtualEast{ffSelREast}
+            \TNLabelAbove{ffSelM}
+                {\sum_{|w|=S}c_{\varepsilon}(w)(\,\cdot\,)^{w}}}
+        & \TNRelation{\longmapsto} &
+        \ensuremath{\delta_{\varepsilon,\varepsilon'}1_{D_\varepsilon}}
+        \\
+      \ensuremath{\textup{sector cut}:\quad}
+        \TNTerm[normal]{%
+            \TNMPDOBinaryFusionTree{ffCutLeft}{at=origin}
+                {\alpha}{\beta}{\gamma}{U^{\mathrm L}}}
+        & \TNRelation{
+            C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}} &
+        \TNTerm[normal]{%
+            \TNMPDOBinaryFusionTree{ffCutRight}{at=origin}
+                {\alpha}{\beta}{\gamma}{U^{\mathrm R}}}
+        \ensuremath{=0\quad(\varepsilon\ne\varepsilon')}
+        \\
+      \ensuremath{\textup{diagonal corner}:\quad}
+        \TNTerm[normal]{%
+            \TNExpression{ffLeftSpace}{at=origin}
+                {\mathcal H^{\mathrm L}_{\varepsilon}
+                    \otimes\C^{D_\varepsilon}}
+            \TNMap{ffF}{right=of ffLeftSpace}
+                {F_\varepsilon\otimes1_{D_\varepsilon}}
+            \TNExpression{ffRightSpace}{right=of ffF}
+                {\mathcal H^{\mathrm R}_{\varepsilon}
+                    \otimes\C^{D_\varepsilon}}
+            \TNMorphismArrow{ffDiagonalLeft}
+                {(ffLeftSpace.east)}{(ffF.west)}{}
+            \TNMorphismArrow{ffDiagonalRight}
+                {(ffF.east)}{(ffRightSpace.west)}{}}
+        & \TNRelation{\Longrightarrow} &
+        \ensuremath{F_\varepsilon F_\varepsilon^\dagger=1,\quad
+            F_\varepsilon^\dagger F_\varepsilon=1}
+    \end{TNEquationRows}%
+}
+
+% The associahedron for four ordinary bond-coordinate factors.  The upper
+% three-edge route and lower two-edge route have the same endpoints.  This is
+% only Cartesian-product reassociation; the edges do not represent F-matrices.
+\TNDeclareDiagram
+    {TNMPDOFourfoldBondReassociationPentagon}
+    {}
+    {figure}
+    {normal}
+    {\TNMPDOFourfoldBondReassociationPentagon}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNExpression{assocL}{at=origin}{(((A\times B)\times C)\times D)}
+        \TNExpression{assocLI}{above right=of assocL}
+            {((A\times(B\times C))\times D)}
+        \TNExpression{assocM}{right=of assocLI}
+            {(A\times((B\times C)\times D))}
+        \TNExpression{assocR}{below right=of assocM}
+            {(A\times(B\times(C\times D)))}
+        \TNExpression{assocP}{below right=of assocL}
+            {((A\times B)\times(C\times D))}
+        \TNMorphismArrow{assocRone}{(assocL)}{(assocLI)}{r_1}
+        \TNMorphismArrow{assocRtwo}{(assocLI)}{(assocM)}{r_2}
+        \TNMorphismArrow{assocRthree}{(assocM)}{(assocR)}{r_3}
+        \TNMorphismArrow{assocSone}{(assocL)}{(assocP)}{s_1}
+        \TNMorphismArrow{assocStwo}{(assocP)}{(assocR)}{s_2}
+    \end{TNDiagram}%
+}
+
+% The five genuine fusion trees in the MPO pentagon.  Unlike the Cartesian
+% reassociation diagram above, every edge is a printed-orientation F-move and
+% every internal label is a fusion-sector label.  The arrangement follows
+% Figure `pentagon` (n13.pdf) of arXiv:1511.08090.
+\TNDeclareDiagram
+    {TNMPDOCompleteZipperFusionPentagon}
+    {}
+    {figure}
+    {normal}
+    {\TNMPDOCompleteZipperFusionPentagon}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNMPDOCompleteFusionPentagonMotif{pentagon}{at=origin}
+    \end{TNDiagram}%
+}
+
+% Local BNT fusion identity from CPSV16, eq. (Ualphabeta).  The left-hand
+% isometry combines the two incoming bond factors, while its adjoint separates
+% the outgoing factors.  The right-hand side records the weighted final-sector
+% direct sum without introducing an F-move.
+\TNDeclareDiagram
+    {TNMPDOBNTFusionIdentity}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOBNTFusionIdentity}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNSplitMap{bfiU}{at=origin}{U_{\alpha,\beta}}
+            \TNStackedMPOProduct{bfiProduct}{right=of bfiU}
+                {M_\alpha}{M_\beta}{}
+            \TNMergeMap{bfiUd}{right=of bfiProductUpper}
+                {U_{\alpha,\beta}^{\dagger}}
+            \TNConnectVirtual{bfiUFactorOne}{bfiProductUpperWest}
+            \TNConnectVirtual{bfiUFactorTwo}{bfiProductLowerWest}
+            \TNConnectVirtual{bfiProductUpperEast}{bfiUdFactorOne}
+            \TNConnectVirtual{bfiProductLowerEast}{bfiUdFactorTwo}
+            \TNOpenVirtualWest{bfiUCombined}
+            \TNOpenVirtualEast{bfiUdCombined}
+            \TNOpenPhysicalNorth{bfiProductUpperKet}
+            \TNOpenPhysicalSouth{bfiProductLowerBra}
+            \TNLabelAbove{bfiProductUpperKetOpen}{i}
+            \TNLabelBelow{bfiProductLowerBraOpen}{j}}
+        \TNRelation{=\displaystyle\bigoplus_\gamma}
+        \TNTerm{%
+            \TNWeightedMPOBlock{bfiBlock}{at=origin}
+                {M_\gamma}{M_\gamma}{}{\chi_{\alpha,\beta,\gamma}}
+            \TNOpenVirtualWest{bfiBlockWeightW}
+            \TNOpenVirtualEast{bfiBlockWeightedEast}
+            \TNOpenVirtualWest{bfiBlockLowerWest}
+            \TNOpenVirtualEast{bfiBlockLowerEast}
+            \TNOpenPhysicalNorth{bfiBlockUpperKet}
+            \TNOpenPhysicalSouth{bfiBlockLowerBra}}
+    \end{TNEquationRow}%
+}
+
+% The two unweighted zipper directions and the resulting reconstruction of a
+% product letter.  This follows the graphical arrangement of the zipper
+% figures in Bultinck et al., arXiv:1511.08090, while using the notation of
+% the present MPDO fusion family.  The final row uses U^\dagger U = 1 only;
+% it deliberately does not depict U U^\dagger = 1.
+\TNDeclareDiagram
+    {TNMPDOUnweightedZipperReconstruction}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOUnweightedZipperReconstruction}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNEquationRows}[compact]
+      \TNTerm{\TNSplitMap{uzOneU}{at=origin}{U_{\alpha,\beta}}
+            \TNStackedMPOProduct{uzOneP}{right=of uzOneU}{}{}{}
+            \TNConnectVirtual{uzOneUFactorOne}{uzOnePUpperWest}
+            \TNConnectVirtual{uzOneUFactorTwo}{uzOnePLowerWest}
+            \TNOpenVirtualWest{uzOneUCombined}
+            \TNOpenVirtualEast{uzOnePUpperEast}
+            \TNOpenVirtualEast{uzOnePLowerEast}
+            \TNLabelAbove{uzOnePUpperKet}{M_\alpha}
+            \TNLabelBelow{uzOnePLowerBra}{M_\beta}}
+        & \TNRelation{=} &
+        \TNTerm{\TNMPOSite{uzOneH}{at=origin}{}
+            \TNSplitMap{uzOneR}{right=of uzOneH}{U_{\alpha,\beta}}
+            \TNConnectVirtual{uzOneHEast}{uzOneRCombined}
+            \TNOpenVirtualWest{uzOneHWest}
+            \TNOpenVirtualEast{uzOneRFactorOne}
+            \TNOpenVirtualEast{uzOneRFactorTwo}
+            \TNLabelBelow{uzOneHBra}{H_{\alpha,\beta}^{ij}}} \\
+      \TNTerm{\TNStackedMPOProduct{uzTwoP}{at=origin}{}{}{}
+            \TNMergeMap{uzTwoU}{right=of uzTwoPUpper}
+                {U_{\alpha,\beta}^{\dagger}}
+            \TNConnectVirtual{uzTwoPUpperEast}{uzTwoUFactorOne}
+            \TNConnectVirtual{uzTwoPLowerEast}{uzTwoUFactorTwo}
+            \TNOpenVirtualWest{uzTwoPUpperWest}
+            \TNOpenVirtualWest{uzTwoPLowerWest}
+            \TNOpenVirtualEast{uzTwoUCombined}
+            \TNLabelAbove{uzTwoPUpperKet}{M_\alpha}
+            \TNLabelBelow{uzTwoPLowerBra}{M_\beta}}
+        & \TNRelation{=} &
+        \TNTerm{\TNMergeMap{uzTwoL}{at=origin}{U_{\alpha,\beta}^{\dagger}}
+            \TNMPOSite{uzTwoH}{right=of uzTwoL}{}
+            \TNConnectVirtual{uzTwoLCombined}{uzTwoHWest}
+            \TNOpenVirtualWest{uzTwoLFactorOne}
+            \TNOpenVirtualWest{uzTwoLFactorTwo}
+            \TNOpenVirtualEast{uzTwoHEast}
+            \TNLabelBelow{uzTwoHBra}{H_{\alpha,\beta}^{ij}}} \\
+      \TNTerm{\TNStackedMPOProduct{uzThreeP}{at=origin}{}{}{}
+            \TNOpenVirtualWest{uzThreePUpperWest}
+            \TNOpenVirtualWest{uzThreePLowerWest}
+            \TNOpenVirtualEast{uzThreePUpperEast}
+            \TNOpenVirtualEast{uzThreePLowerEast}
+            \TNLabelAbove{uzThreePUpperKet}{M_\alpha}
+            \TNLabelBelow{uzThreePLowerBra}{M_\beta}}
+        & \TNRelation{=} &
+        \TNTerm{\TNMergeMap{uzThreeL}{at=origin}{U_{\alpha,\beta}^{\dagger}}
+            \TNMPOSite{uzThreeH}{right=of uzThreeL}{}
+            \TNSplitMap{uzThreeR}{right=of uzThreeH}{U_{\alpha,\beta}}
+            \TNConnectVirtual{uzThreeLCombined}{uzThreeHWest}
+            \TNConnectVirtual{uzThreeHEast}{uzThreeRCombined}
+            \TNOpenVirtualWest{uzThreeLFactorOne}
+            \TNOpenVirtualWest{uzThreeLFactorTwo}
+            \TNOpenVirtualEast{uzThreeRFactorOne}
+            \TNOpenVirtualEast{uzThreeRFactorTwo}
+            \TNLabelBelow{uzThreeHBra}{H_{\alpha,\beta}^{ij}}}
+    \end{TNEquationRows}%
+}
+
+% Closing an L-site chain of the local BNT fusion identity.  On the right the
+% multiplicity loop and the M_gamma loop are disjoint, so their traces factor.
+\TNDeclareDiagram
+    {TNMPDOFusionTracePower}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOFusionTracePower}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNMPDOStackedPeriodicWord{ftpLeft}{at=origin}
+                {M_\alpha}{M_\beta}{L\text{ sites}}}
+        \TNRelation{=\displaystyle\sum_\gamma}
+        \TNTerm{%
+            \TNMPDOStackedPeriodicWord{ftpRight}{at=origin}
+                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{L\text{ sites}}}
+    \end{TNEquationRow}%
+}
+
+% Recursive contraction for the structure operator Q in CPSV16, lines
+% 999--1008.  Each X has the four ordered indices k, alpha, beta, gamma;
+% the lower wires retain earlier labels while the recursion proceeds.
+\TNDeclareDiagram
+    {TNMPDORecursiveStructureOperator}
+    {}
+    {figure}
+    {normal}
+    {\TNMPDORecursiveStructureOperator}
+    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
+    \begin{TNEquationRow}[normal]
+        \ensuremath{Q=}
+        \TNTerm[normal]{%
+            \TNMPDORecursiveStructureMotif{rq}{at=origin}}
+    \end{TNEquationRow}%
+}
+
+% Appendix B basic-vector geometry.  This is the vector counterpart of the
+% source figure II_RFP_MPS.png: each U acts on the two virtual halves at one
+% physical site, while the two highlighted rank-one projectors act on the
+% separate bonds shared by adjacent sites.
+\input{tn_motifs_symmetry.tex} % chktex 27 (resolved in the TikZ library directory)
+
+\TNDeclareDiagram
+    {TNAppendixBAdjacentBondProjectors}
+    {}
+    {display}
+    {normal}
+    {\TNAppendixBAdjacentBondProjectors}
+    {chapter/ch13_parent_hamiltonian_commuting_gap.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNAppendixBProjectorChainMotif{rfpU}{}{}
+    \end{TNDiagram}%
+}
+
+% Isometric transport of the two virtual bond projectors to the adjacent
+% physical two-site basic-support projectors.  The upper row retains the
+% source's three U tensors and diagonal bond vectors; the upper red brackets
+% record the two overlapping physical supports.
+\TNDeclareDiagram
+    {TNAppendixBPhysicalSupportTransport}
+    {}
+    {display}
+    {normal}
+    {\TNAppendixBPhysicalSupportTransport}
+    {chapter/ch13_parent_hamiltonian_commuting_gap.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNAppendixBProjectorChainMotif{rfpT}{(P_2)_{01}}{(P_2)_{12}}
+    \end{TNDiagram}%
+}
+
+% Cyclic transport of the local three-site Appendix B commutator.  The left
+% panel shows one three-site window inside an N-site ring; the right panel is
+% the source AXB window with its two overlapping length-two interactions.
+\TNDeclareDiagram
+    {TNAppendixBChainTransport}
+    {}
+    {display}
+    {normal}
+    {\TNAppendixBChainTransport}
+    {chapter/ch13_parent_hamiltonian_commuting_gap.tex}{%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNMPSSite{ctA}{at=origin}{A}
+            \TNMPSSite{ctX}{above right=of ctA}{X}
+            \TNMPSSite{ctB}{right=of ctX}{B}
+            \TNMPSSite{ctC}{below right=of ctB}{}
+            \TNMPSSite{ctD}{below left=of ctC}{}
+            \TNMPSSite{ctE}{left=of ctD}{}
+            \TNConnectVirtual{ctAEast}{ctXWest}
+            \TNConnectVirtual{ctXEast}{ctBWest}
+            \TNConnectVirtual{ctBEast}{ctCWest}
+            \TNConnectVirtual{ctCEast}{ctDWest}
+            \TNConnectVirtual{ctDEast}{ctEWest}
+            \TNConnectVirtual{ctEEast}{ctAWest}
+            \TNSelectedLabelAbove{ctX}{h_i}
+            \TNSecondaryLabelAbove{ctB}{h_{i+1}}
+            \TNLabelBelow{ctD}{N>2}}
+        \TNRelation{\xrightarrow{R_{i,\tau}^{(3)}}}
+        \TNTerm[normal]{%
+            \TNMPSSite{ctLA}{at=origin}{A}
+            \TNMPSSite{ctLX}{right=of ctLA}{X}
+            \TNMPSSite{ctLB}{right=of ctLX}{B}
+            \TNConnectVirtual{ctLAEast}{ctLXWest}
+            \TNConnectVirtual{ctLXEast}{ctLBWest}
+            \TNOpenVirtualWest{ctLAWest}
+            \TNOpenVirtualEast{ctLBEast}
+            \TNSelectedLabelBelow{ctLAEast}{h_0^{(3)}}
+            \TNSecondaryLabelBelow{ctLXEast}{h_1^{(3)}}}
+    \end{TNEquationRow}%
+}
+
+\TNDeclareDiagram
+    {TNRFPKrausIsometry}
+    {}
+    {figure}
+    {compact}
+    {\TNRFPKrausIsometry}
+    {chapter/ch26_mps_rfp_core.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A^{i_1}A^{i_2}=\sum_jV^{i_1i_2}_jA^j}
+    \end{TNEquationRow}%
+}
+
+% Reverse fusion identity: the adjoint isometry applied to the two physical
+% legs of the contracted pair recovers the single tensor.
+\TNDeclareDiagram
+    {TNRFPKrausIsometryReverse}
+    {}
+    {figure}
+    {compact}
+    {\TNRFPKrausIsometryReverse}
+    {chapter/ch26_mps_rfp_core.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\sum_{i_1,i_2}(V^\dagger)^j_{i_1i_2}A^{i_1}A^{i_2}=A^j}
+    \end{TNEquationRow}%
+}
+
+% Isometry canonical form of a normal renormalization fixed point: the
+% virtual chain X, the diagonal weight, the isometry emitting the physical
+% leg, and X^{-1}.
+\TNDeclareDiagram
+    {TNRFPIsometryCanonicalForm}
+    {}
+    {figure}
+    {compact}
+    {\TNRFPIsometryCanonicalForm}
+    {chapter/ch26_mps_rfp_core.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A=X\sqrt\Lambda\,U\,X^{-1}}
+    \end{TNEquationRow}%
+}
+
+% Per-block isometry canonical form of a renormalization fixed point in
+% canonical form: the same chain threaded by the block-index lines j and q,
+% with the coefficient tensor mu on the two index lines.
+\TNDeclareDiagram
+    {TNRFPIsometryCanonicalFormBlocks}
+    {}
+    {figure}
+    {compact}
+    {\TNRFPIsometryCanonicalFormBlocks}
+    {chapter/ch26_mps_rfp_core.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{A=X\left(\bigoplus_j\mu_j\otimes\sqrt{\Lambda_j}U_j\right)X^{-1}}
+    \end{TNEquationRow}%
+}
+
+% Two-site blocking of a simple MPO tensor: two copies contracted along one
+% virtual bond, with the two ket legs and the two bra legs grouped into the
+% blocked physical indices (dashed box).
+\TNDeclareDiagram
+    {TNMPDOTwoSiteBlocking}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOTwoSiteBlocking}
+    {chapter/ch21_mpdo_rfp_blocked_rfp.tex}{%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNMPOSite{tsbM}{at=origin}{M}
+            \TNOpenVirtualWest{tsbMWest}
+            \TNOpenVirtualEast{tsbMEast}
+            \TNOpenPhysicalNorth{tsbMKet}
+            \TNOpenPhysicalSouth{tsbMBra}}
+        \TNRelation{=}
+        \TNTerm{%
+            \TNMPOSite{tsbKa}{at=origin}{K}
+            \TNMPOSite{tsbKb}{right=of tsbKa}{K}
+            \TNOpenVirtualWest{tsbKaWest}
+            \TNConnectVirtual{tsbKaEast}{tsbKbWest}
+            \TNOpenVirtualEast{tsbKbEast}
+            \TNOpenPhysicalNorth{tsbKaKet}
+            \TNOpenPhysicalSouth{tsbKaBra}
+            \TNOpenPhysicalNorth{tsbKbKet}
+            \TNOpenPhysicalSouth{tsbKbBra}}
+    \end{TNEquationRow}%
+}
+
+% Vertical product of two distinct basis tensors, contracted through the
+% shared physical index.
+\TNDeclareDiagram
+    {TNMPDOBNTVerticalProduct}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOBNTVerticalProduct}
+    {chapter/ch21_mpdo_rfp_blocked_rfp.tex}{%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNStackedMPOProduct{vp}{at=origin}{\mathcal K_y}{\mathcal K_x}{}
+            \TNOpenVirtualWest{vpUpperWest}
+            \TNOpenVirtualEast{vpUpperEast}
+            \TNOpenVirtualWest{vpLowerWest}
+            \TNOpenVirtualEast{vpLowerEast}
+            \TNOpenPhysicalNorth{vpUpperKet}
+            \TNOpenPhysicalSouth{vpLowerBra}}
+        \TNRelation{=}
+        \ensuremath{0\qquad(x\ne y)}
+    \end{TNEquationRow}%
+}
+
+% The two block closure maps: a boundary insertion on the virtual bond of a
+% block tensor, with the virtual loop closed by the trace, gives an operator
+% on the open physical legs.
+\TNDeclareDiagram
+    {TNMPDOBlockClosureMap}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOBlockClosureMap}
+    {chapter/ch21_mpdo_rfp_algebra_tower.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{M_\alpha(X)=}
+        \TNTerm{\TNSymmetryTraceCell{bcm}{M_\alpha}{X}{}}
+        \qquad
+        \ensuremath{A_\alpha(X)=}
+        \TNTerm{\TNSymmetryTraceCell{bca}{A_\alpha}{X}{}}
+    \end{TNEquationRow}%
+}
+
+% The BNT-label operator O_L(M_alpha): L vertically read copies of M_alpha
+% are multiplied along the vertical index and closed by the trace, while the
+% horizontal legs remain open.  This follows source figure MPDO_O_L_A_.png.
+\TNDeclareDiagram
+    {TNMPDOBNTOperatorTraceClosure}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOBNTOperatorTraceClosure}
+    {chapter/ch21_mpdo_rfp_bnt_coefficients.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{O_L(M_\alpha)=}
+        \TNTerm{\TNSymmetryVerticalWord{botc}{M_\alpha}{closed}}
+    \end{TNEquationRow}%
+}
+
+% First-site insertion agreement on the closed word: inserting Y on the
+% physical leg of the first site of the matrix product vector gives the
+% same vector as inserting Z.
+\TNDeclareDiagram
+    {TNMPDOFirstSiteInsertionHypothesis}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOFirstSiteInsertionHypothesis}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{YH^{(N)}(\widetilde M)=ZH^{(N)}(\widetilde M)}
+    \end{TNEquationRow}%
+}
+
+% Blockwise conclusion of the first-site agreement: the one-site insertions
+% of Y and Z agree on each basis tensor of the canonical form.
+\TNDeclareDiagram
+    {TNMPDOFirstSiteInsertionBlockwise}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOFirstSiteInsertionBlockwise}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{YA_k=ZA_k}
+    \end{TNEquationRow}%
+}
+
+% Trace pairing of a one-site insertion against a boundary operator: the
+% virtual loop closes the inserted site against W, and the pairing takes the
+% same value for the Y-insertion and the Z-insertion.
+\TNDeclareDiagram
+    {TNMPDOInsertionTracePairing}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOInsertionTracePairing}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\tr(WYA_k)=\tr(WZA_k)}
+    \end{TNEquationRow}%
+}
+
+% Horizontal canonical form of the doubled tensor: the gauge X, one basis
+% tensor carrying the ket and bra legs, and X^{-1}, threaded by the
+% block-index lines j and q; the weights are absorbed into the basis
+% tensors, so the basis tensor taps only the block line j while the gauge
+% factors tap both lines.
+\TNDeclareDiagram
+    {TNMPDOHorizontalCanonicalForm}
+    {}
+    {figure}
+    {compact}
+    {\TNMPDOHorizontalCanonicalForm}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{K=X\left(\bigoplus_j\mathcal K_j\right)X^{-1}}
+    \end{TNEquationRow}%
+}
+
+% Inverse tensor of a block-injective canonical form: contracting the
+% inverse tensor with the doubled physical index of the canonical form
+% passes the virtual legs of the gauge factors to the virtual legs of the
+% inverse tensor and ties the block index of the inverse tensor to the
+% block line.
+\TNDeclareDiagram
+    {TNMPDOBlockInjectiveInverse}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOBlockInjectiveInverse}
+    {chapter/ch20_mpdo_canonical_forms.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{K^{-1}K=\bigoplus_j\Id_j}
+    \end{TNEquationRow}%
+}
+
+% Recovery of the tensor from the inverse map: contracting the inverse
+% tensor with the doubled physical index and closing its virtual legs
+% against a further copy of the tensor returns the tensor itself; the
+% doubled physical index is drawn as a single thick leg.
+\TNDeclareDiagram
+    {TNMPDOInverseRecovery}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOInverseRecovery}
+    {chapter/ch21_mpdo_rfp_simple_local_markov_factorization.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{K\,K^{-1}K=K}
+    \end{TNEquationRow}%
+}
+
+% Projector absorption for a basis tensor: expanding the identity as the
+% sum of the orthogonal projectors on the ket and bra legs leaves only the
+% diagonal term, so the tensor absorbs its own projector on either side.
+\TNDeclareDiagram
+    {TNMPDOProjectorAbsorption}
+    {}
+    {display}
+    {compact}
+    {\TNMPDOProjectorAbsorption}
+    {chapter/ch21_mpdo_rfp_blocked_rfp.tex}{%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{
+            \mathcal K_i
+            =\sum_{j,j'}P_j\,\mathcal K_i\,P_{j'}
+            =P_i\,\mathcal K_i
+            =\mathcal K_i\,P_i}
+    \end{TNEquationRow}%
+}
+
+\TNDeclareDiagram
+    {TNGaugeConjugation}
+    {left,physical,right}
+    {display}
+    {normal}
+    {\TNGaugeConjugation{i}{i}{k}}
+    {chapter/ch02_mps.tex,
+     chapter/ch03_single.tex,
+     chapter/ch12_symmetry.tex,
+     chapter/ch23_algebraic_ft.tex,
+     chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNGaugeConjugatedMPSSite{tnGauge}{at=origin}{#2}{#1}{#3}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPhysicalRealization}
+    {virtual,physical}
+    {display}
+    {normal}
+    {\TNPhysicalRealization{X}{i}}
+    {chapter/ch23_algebraic_ft.tex}{%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNTensor{tnA1}{at=origin}
+            \TNInsertion{tnX}{right=of tnA1}{#1}
+            \TNVirtualPort{tnA1OpenWestPort}{tnA1}{west}
+            \TNOpenVirtualWest{tnA1OpenWestPort}
+            \TNPhysicalPort{tnA1OpenKetPort}{tnA1}{north}
+            \TNOpenPhysicalNorth{tnA1OpenKetPort}
+            \TNVirtualPort{tnA1TotnX}{tnA1}{east}
+            \TNVirtualPort{tnXTotnA1}{tnX}{west}
+            \TNConnectVirtual{tnA1TotnX}{tnXTotnA1}
+            \TNVirtualPort{tnXOpenEastPort}{tnX}{east}
+            \TNOpenVirtualEast{tnXOpenEastPort}}
+        \TNRelation{=}
+        \TNTerm[normal]{%
+            \TNTensor{tnA2}{at=origin}
+            \TNVirtualPort{tnA2OpenWestPort}{tnA2}{west}
+            \TNOpenVirtualWest{tnA2OpenWestPort}
+            \TNVirtualPort{tnA2OpenEastPort}{tnA2}{east}
+            \TNOpenVirtualEast{tnA2OpenEastPort}
+            \TNInsertion{tnO}{above=of tnA2}{#2}
+            \TNPhysicalPort{tnA2TotnO}{tnA2}{north}
+            \TNPhysicalPort{tnOTotnA2}{tnO}{south}
+            \TNConnectPhysical{tnA2TotnO}{tnOTotnA2}}
+    \end{TNEquationRow}%
+}
+
+% Fix (#401): use a dedicated physical-leg operator insertion for
+% general linear twists, and keep permutation twists for index relabellings.
+\TNDeclareDiagram
+    {TNLinearTwist}
+    {twist,label}
+    {display}
+    {normal}
+    {\TNLinearTwist{u}{i}}
+    {chapter/ch12_symmetry.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnA}{at=origin}
+        \TNVirtualPort{tnAOpenWestPort}{tnA}{west}\TNOpenVirtualWest{tnAOpenWestPort}
+        \TNVirtualPort{tnAOpenEastPort}{tnA}{east}\TNOpenVirtualEast{tnAOpenEastPort}
+        \TNInsertion{tnu}{above=of tnA}{#1}
+        \TNPhysicalPort{tnATotnu}{tnA}{north}
+        \TNPhysicalPort{tnuTotnA}{tnu}{south}
+        \TNConnectPhysical{tnATotnu}{tnuTotnA}
+        \TNLabelAbove{tnu.north}{#2}
+    \end{TNDiagram}%
+}
+
+% Fix (#401): make the relabelling arrow explicit so multi-step
+% permutation diagrams can distinguish \sigma_h from \sigma_g.
+\TNDeclareDiagram
+    {TNPermutationTwistLabeled}
+    {left,right,permutation}
+    {display}
+    {normal}
+    {\TNPermutationTwistLabeled{i}{k}{\sigma}}
+    {chapter/ch12_symmetry.tex}{%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNTensor{tnL}{at=origin}
+            \TNVirtualPort{tnLOpenWestPort}{tnL}{west}
+            \TNOpenVirtualWest{tnLOpenWestPort}
+            \TNVirtualPort{tnLOpenEastPort}{tnL}{east}
+            \TNOpenVirtualEast{tnLOpenEastPort}
+            \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}
+            \TNOpenPhysicalNorth{tnLOpenKetPort}
+            \TNLabelAbove{tnL}{#1}}
+        \TNRelation{\xrightarrow{#3}}
+        \TNTerm[normal]{%
+            \TNTensor{tnR}{at=origin}
+            \TNVirtualPort{tnROpenWestPort}{tnR}{west}
+            \TNOpenVirtualWest{tnROpenWestPort}
+            \TNVirtualPort{tnROpenEastPort}{tnR}{east}
+            \TNOpenVirtualEast{tnROpenEastPort}
+            \TNPhysicalPort{tnROpenKetPort}{tnR}{north}
+            \TNOpenPhysicalNorth{tnROpenKetPort}
+            \TNLabelAbove{tnR}{#2}}
+    \end{TNEquationRow}%
+}
+
+\TNDeclareDiagram
+    {TNPermutationTwist}
+    {left,right}
+    {display}
+    {normal}
+    {\TNPermutationTwist{i}{k}}
+    {chapter/ch12_symmetry.tex}{%
+    \TNPermutationTwistLabeled{#1}{#2}{\sigma_g}%
+}
+
+\TNDeclareDiagram
+    {TNTwistedTransfer}
+    {twist}
+    {display}
+    {normal}
+    {\TNTwistedTransfer{u}}
+    {chapter/ch12_symmetry.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNSymmetryTransferCell{tnTransfer}{at=origin}
+            {#1}{X}{\E_{#1}(X)}{n}{n'}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNCondCOne}
+    {twist,virtual,label}
+    {display}
+    {normal}
+    {\TNCondCOne{u}{X}{i}}
+    {chapter/ch12_symmetry.tex}{%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNTensor{tnL}{at=origin}
+            \TNVirtualPort{tnLOpenWestPort}{tnL}{west}
+            \TNOpenVirtualWest{tnLOpenWestPort}
+            \TNVirtualPort{tnLOpenEastPort}{tnL}{east}
+            \TNOpenVirtualEast{tnLOpenEastPort}
+            \TNInsertion{tnu}{above=of tnL}{#1}
+            \TNPhysicalPort{tnLTotnu}{tnL}{north}
+            \TNPhysicalPort{tnuTotnL}{tnu}{south}
+            \TNConnectPhysical{tnLTotnu}{tnuTotnL}
+            \TNLabelAbove{tnu.north}{#3}}
+        \TNRelation{=}
+        \TNTerm[normal]{%
+            \TNInsertion{tnXl}{at=origin}{#2}
+            \TNTensor{tnA}{right=of tnXl}
+            \TNInsertion{tnXr}{right=of tnA}{#2^\dagger}
+            \TNVirtualPort{tnXlOpenWestPort}{tnXl}{west}
+            \TNOpenVirtualWest{tnXlOpenWestPort}
+            \TNVirtualPort{tnXlTotnA}{tnXl}{east}
+            \TNVirtualPort{tnATotnXl}{tnA}{west}
+            \TNConnectVirtual{tnXlTotnA}{tnATotnXl}
+            \TNVirtualPort{tnATotnXr}{tnA}{east}
+            \TNVirtualPort{tnXrTotnA}{tnXr}{west}
+            \TNConnectVirtual{tnATotnXr}{tnXrTotnA}
+            \TNVirtualPort{tnXrOpenEastPort}{tnXr}{east}
+            \TNOpenVirtualEast{tnXrOpenEastPort}
+            \TNPhysicalPort{tnAOpenKetPort}{tnA}{north}
+            \TNOpenPhysicalNorth{tnAOpenKetPort}
+            \TNLabelAbove{tnA}{#3}}
+    \end{TNEquationRow}%
+}
+
+\TNDeclareDiagram
+    {TNCondCTwo}
+    {virtual}
+    {display}
+    {normal}
+    {\TNCondCTwo{X}}
+    {chapter/ch12_symmetry.tex}{%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+        \TNInsertion{tnVL}{at=origin}{#1}
+        \TNInsertion{tnVdL}{below=of tnVL}{#1^\dagger}
+        \TNTensor{tnLUp}{right=of tnVL}
+        \TNTensor{tnLDn}{right=of tnVdL}
+        \TNVirtualPort{tnVLOpenWestPort}{tnVL}{west}\TNOpenVirtualWest{tnVLOpenWestPort}
+        \TNVirtualPort{tnVdLOpenWestPort}{tnVdL}{west}\TNOpenVirtualWest{tnVdLOpenWestPort}
+        \TNVirtualPort{tnVLTotnLUp}{tnVL}{east}
+        \TNVirtualPort{tnLUpTotnVL}{tnLUp}{west}
+        \TNConnectVirtual{tnVLTotnLUp}{tnLUpTotnVL}
+        \TNVirtualPort{tnVdLTotnLDn}{tnVdL}{east}
+        \TNVirtualPort{tnLDnTotnVdL}{tnLDn}{west}
+        \TNConnectVirtual{tnVdLTotnLDn}{tnLDnTotnVdL}
+        \TNVirtualPort{tnLUpOpenEastPort}{tnLUp}{east}\TNOpenVirtualEast{tnLUpOpenEastPort}
+        \TNVirtualPort{tnLDnOpenEastPort}{tnLDn}{east}\TNOpenVirtualEast{tnLDnOpenEastPort}
+        \TNPhysicalPort{tnLUpTotnLDn}{tnLUp}{south}
+        \TNPhysicalPort{tnLDnTotnLUp}{tnLDn}{north}
+        \TNConnectPhysical{tnLUpTotnLDn}{tnLDnTotnLUp}}
+        \TNRelation{=}
+        \TNTerm[normal]{%
+        \TNTensor{tnRUp}{at=origin}
+        \TNTensor{tnRDn}{below=of tnRUp}
+        \TNInsertion{tnVR}{right=of tnRUp}{#1}
+        \TNInsertion{tnVdR}{right=of tnRDn}{#1^\dagger}
+        \TNVirtualPort{tnRUpOpenWestPort}{tnRUp}{west}\TNOpenVirtualWest{tnRUpOpenWestPort}
+        \TNVirtualPort{tnRDnOpenWestPort}{tnRDn}{west}\TNOpenVirtualWest{tnRDnOpenWestPort}
+        \TNVirtualPort{tnRUpTotnVR}{tnRUp}{east}
+        \TNVirtualPort{tnVRTotnRUp}{tnVR}{west}
+        \TNConnectVirtual{tnRUpTotnVR}{tnVRTotnRUp}
+        \TNVirtualPort{tnRDnTotnVdR}{tnRDn}{east}
+        \TNVirtualPort{tnVdRTotnRDn}{tnVdR}{west}
+        \TNConnectVirtual{tnRDnTotnVdR}{tnVdRTotnRDn}
+        \TNVirtualPort{tnVROpenEastPort}{tnVR}{east}\TNOpenVirtualEast{tnVROpenEastPort}
+        \TNVirtualPort{tnVdROpenEastPort}{tnVdR}{east}\TNOpenVirtualEast{tnVdROpenEastPort}
+        \TNPhysicalPort{tnRUpTotnRDn}{tnRUp}{south}
+        \TNPhysicalPort{tnRDnTotnRUp}{tnRDn}{north}
+        \TNConnectPhysical{tnRUpTotnRDn}{tnRDnTotnRUp}}
+    \end{TNEquationRow}%
+}
+
+\TNDeclareDiagram
+    {TNStringOrderParameter}
+    {twist,length}
+    {display}
+    {normal}
+    {\TNStringOrderParameter{u}{L}}
+    {chapter/ch12_symmetry.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNSymmetryStringOrderWord{tnString}{#1}{#2}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNInternalTraceInsertion}
+    {left,right,virtual}
+    {display}
+    {normal}
+    {\TNInternalTraceInsertion{i}{k}{X}}
+    {chapter/ch23_algebraic_ft.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnL}{at=origin}
+        \TNInsertion{tnX}{right=of tnL}{#3}
+        \TNTensor{tnR}{right=of tnX}
+        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
+        \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
+        \TNLabelAbove{tnL}{#1}
+        \TNLabelAbove{tnR}{#2}
+        \TNVirtualPort{tnLTotnX}{tnL}{east}
+        \TNVirtualPort{tnXTotnL}{tnX}{west}
+        \TNConnectVirtual{tnLTotnX}{tnXTotnL}
+        \TNVirtualPort{tnXTotnR}{tnX}{east}
+        \TNVirtualPort{tnRTotnX}{tnR}{west}
+        \TNConnectVirtual{tnXTotnR}{tnRTotnX}
+        \TNVirtualPort{tnLTrace}{tnL}{west}
+        \TNVirtualPort{tnRTrace}{tnR}{east}
+        \TNTraceVirtualBelow{tnLTrace}{tnRTrace}
+        \TNLabelBelow{tnX}{\tr}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNExternalTraceInsertion}
+    {left,right,virtual}
+    {display}
+    {normal}
+    {\TNExternalTraceInsertion{i}{k}{X}}
+    {chapter/ch23_algebraic_ft.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnL}{at=origin}
+        \TNTensor{tnR}{right=of tnL}
+        \TNInsertion{tnY}{below=of tnL}{#3}
+        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
+        \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
+        \TNLabelAbove{tnL}{#1}
+        \TNLabelAbove{tnR}{#2}
+        \TNVirtualPort{tnLTotnR}{tnL}{east}
+        \TNVirtualPort{tnRTotnL}{tnR}{west}
+        \TNConnectVirtual{tnLTotnR}{tnRTotnL}
+        \TNVirtualPort{tnLTrace}{tnL}{west}
+        \TNVirtualPort{tnYTraceLeft}{tnY}{west}
+        \TNVirtualPort{tnYTraceRight}{tnY}{east}
+        \TNVirtualPort{tnRTrace}{tnR}{east}
+        \TNConnectVirtualVH{tnLTrace}{tnYTraceLeft}
+        \TNConnectVirtualHV{tnYTraceRight}{tnRTrace}
+        \TNLabelBelow{tnY.south}{\tr}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNBoundaryRegrow}
+    {virtual,left,right,length}
+    {display}
+    {normal}
+    {\TNBoundaryRegrow{X}{i}{k}{L}}
+    {chapter/ch13_parent_hamiltonian_injective_ground_spaces.tex,
+     chapter/ch23_algebraic_ft.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNTensor{rA}{at=origin}
+        \TNTensor{rB}{right=of rA}
+        \TNTensor{rC}{right=of rB}
+        \TNInsertion{rX}{right=of rC}{#1}
+        \foreach \n in {rA,rB,rC} {
+                \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
+            }
+        \TNLabelAbove{rA}{#2}
+        \TNLabelAbove{rC}{#3}
+        \TNVirtualPort{rAOpenWestPort}{rA}{west}\TNOpenVirtualWest{rAOpenWestPort}
+        \TNVirtualPort{rATorB}{rA}{east}
+        \TNVirtualPort{rBTorA}{rB}{west}
+        \TNConnectVirtual{rATorB}{rBTorA}
+        \TNVirtualPort{rBTorC}{rB}{east}
+        \TNVirtualPort{rCTorB}{rC}{west}
+        \TNConnectVirtual{rBTorC}{rCTorB}
+        \TNVirtualPort{rCTorX}{rC}{east}
+        \TNVirtualPort{rXTorC}{rX}{west}
+        \TNConnectVirtual{rCTorX}{rXTorC}
+        \TNVirtualPort{rXOpenEastPort}{rX}{east}\TNOpenVirtualEast{rXOpenEastPort}
+        \TNLabelBelow{rB}{#4}
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNLocalEqualityStep}
+    {left_virtual,right_virtual,physical}
+    {display}
+    {normal}
+    {\TNLocalEqualityStep{X}{Y}{i}}
+    {chapter/ch23_algebraic_ft.tex}{%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+        \TNTensor{lA}{at=origin}
+        \TNInsertion{lX}{right=of lA}{#1}
+        \TNTensor{lB}{right=of lX}
+        \TNPhysicalPort{lBOpenKetPort}{lB}{north}\TNOpenPhysicalNorth{lBOpenKetPort}
+        \TNLabelAbove{lB}{#3}
+        \TNVirtualPort{lAOpenWestPort}{lA}{west}\TNOpenVirtualWest{lAOpenWestPort}
+        \TNVirtualPort{lATolX}{lA}{east}
+        \TNVirtualPort{lXTolA}{lX}{west}
+        \TNConnectVirtual{lATolX}{lXTolA}
+        \TNVirtualPort{lXTolB}{lX}{east}
+        \TNVirtualPort{lBTolX}{lB}{west}
+        \TNConnectVirtual{lXTolB}{lBTolX}
+        \TNVirtualPort{lBOpenEastPort}{lB}{east}\TNOpenVirtualEast{lBOpenEastPort}}
+        \TNRelation{=}
+        \TNTerm[normal]{%
+        \TNTensor{rA}{at=origin}
+        \TNInsertion{rX}{right=of rA}{#2}
+        \TNTensor{rB}{right=of rX}
+        \TNPhysicalPort{rBOpenKetPort}{rB}{north}\TNOpenPhysicalNorth{rBOpenKetPort}
+        \TNLabelAbove{rB}{#3}
+        \TNVirtualPort{rAOpenWestPort}{rA}{west}\TNOpenVirtualWest{rAOpenWestPort}
+        \TNVirtualPort{rATorX}{rA}{east}
+        \TNVirtualPort{rXTorA}{rX}{west}
+        \TNConnectVirtual{rATorX}{rXTorA}
+        \TNVirtualPort{rXTorB}{rX}{east}
+        \TNVirtualPort{rBTorX}{rB}{west}
+        \TNConnectVirtual{rXTorB}{rBTorX}
+        \TNVirtualPort{rBOpenEastPort}{rB}{east}\TNOpenVirtualEast{rBOpenEastPort}}
+    \end{TNEquationRow}%
+}
+
+\TNDeclareDiagram
+    {TNGroundSpaceMap}
+    {tensor,left,right,length,virtual}
+    {display}
+    {normal}
+    {\TNGroundSpaceMap{A}{i}{k}{L}{X}}
+    {chapter/ch13_parent_hamiltonian_injective_ground_spaces.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnL}{at=origin}
+        \TNTensor{tnM}{right=of tnL}
+        \TNOmission{tnOmission}{right=of tnM}
+        \TNTensor{tnR}{right=of tnOmission}
+        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
+        \TNPhysicalPort{tnMOpenKetPort}{tnM}{north}\TNOpenPhysicalNorth{tnMOpenKetPort}
+        \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
+        \TNLabelAbove{tnL}{#2}
+        \TNLabelAbove{tnR}{#3}
+        \TNVirtualPort{tnLTotnM}{tnL}{east}
+        \TNVirtualPort{tnMTotnL}{tnM}{west}
+        \TNConnectVirtual{tnLTotnM}{tnMTotnL}
+        \TNVirtualPort{tnMOpenEastPort}{tnM}{east}\TNOpenVirtualEast{tnMOpenEastPort}
+        \TNVirtualPort{tnROpenWestPort}{tnR}{west}\TNOpenVirtualWest{tnROpenWestPort}
+        \TNInsertion{tnX}{below=of tnOmission}{#5}
+        \TNVirtualPort{tnLTrace}{tnL}{west}
+        \TNVirtualPort{tnXTraceLeft}{tnX}{west}
+        \TNVirtualPort{tnXTraceRight}{tnX}{east}
+        \TNVirtualPort{tnRTrace}{tnR}{east}
+        \TNConnectVirtualVH{tnLTrace}{tnXTraceLeft}
+        \TNConnectVirtualHV{tnXTraceRight}{tnRTrace}
+        \TNLabelBelow{tnM}{#1}
+        \TNLabelBelow{tnOmission}{#4}
+    \end{TNDiagram}%
+}
+
+% ---------- PEPS diagrams ----------
+\input{tn_motifs_peps.tex} % chktex 27 (shared PEPS and transfer motifs)
+
+\TNDeclareDiagram
+    {TNPEPSEdgeBlockingReduction}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSEdgeBlockingReduction}
+    {chapter/ch24_peps_ft_edge_middle.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSEdgeBlockingReductionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSEdgeInsertedCoeff}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSEdgeInsertedCoeff}
+    {chapter/ch24_peps_ft_edge_middle.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSEdgeInsertedCoeffMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSThreeSiteInsertionComparison}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSThreeSiteInsertionComparison}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSThreeSiteInsertionComparisonMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSInsertionPhysicalRealization}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSInsertionPhysicalRealization}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSInsertionPhysicalRealizationMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSPhysicalToVirtualInsertion}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSPhysicalToVirtualInsertion}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSPhysicalToVirtualInsertionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSEdgeInsertionEquality}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSEdgeInsertionEquality}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSEdgeInsertionEqualityMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSEdgeGaugeAbsorption}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSEdgeGaugeAbsorption}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSEdgeGaugeAbsorptionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSTwoInjectiveTensorInsertionComparison}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSTwoInjectiveTensorInsertionComparison}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSTwoInjectiveTensorInsertionComparisonMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSTwoInjectiveGaugeScalarReduction}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSTwoInjectiveGaugeScalarReduction}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSTwoInjectiveGaugeScalarReductionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSOneVertexComplementComparison}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSOneVertexComplementComparison}
+    {chapter/ch24_peps_ft_region_transfer_covariance.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSOneVertexComplementComparisonMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSInjectiveRegionUnion}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSInjectiveRegionUnion}
+    {chapter/ch24_peps_ft_normal_union.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSInjectiveRegionUnionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSInjectiveRegionUnionProof}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSInjectiveRegionUnionProof}
+    {chapter/ch24_peps_ft_normal_union.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSInjectiveRegionUnionProofMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSNormalRegionsRS}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSNormalRegionsRS}
+    {chapter/ch24_peps_ft_normal_square.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalRegionsRSMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSNormalRegionT}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSNormalRegionT}
+    {chapter/ch24_peps_ft_normal_square.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalRegionTDiagramMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSNormalRectangleCover}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSNormalRectangleCover}
+    {chapter/ch24_peps_ft_normal_square.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalRectangleCoverMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSNormalEdgeComplementTopCollar}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSNormalEdgeComplementTopCollar}
+    {chapter/ch24_peps_ft_normal_square.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalEdgeComplementTopCollarMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSNormalOneSiteSeparation}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSNormalOneSiteSeparation}
+    {chapter/ch24_peps_ft_normal_square.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalOneSiteSeparationMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSNormalEdgeBlockingReduction}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSNormalEdgeBlockingReduction}
+    {chapter/ch24_peps_ft_normal_square.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalEdgeBlockingReductionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSNormalEdgeBlockingHypotheses}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSNormalEdgeBlockingHypotheses}
+    {chapter/ch24_peps_ft_normal_square.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalEdgeBlockingHypothesesMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSNormalBlockingHypotheses}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSNormalBlockingHypotheses}
+    {chapter/ch24_peps_ft_normal_capstone.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalBlockingHypothesesMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSTINormalGaugeAbsorption}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSTINormalGaugeAbsorption}
+    {chapter/ch24_peps_ft_normal_square.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSTINormalGaugeAbsorptionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSEdgeGaugeOrientation}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSEdgeGaugeOrientation}
+    {chapter/ch24_peps_ft_balanced_edge_scalars.tex,
+     chapter/ch24_peps_ft_foundations.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSEdgeGaugeOrientationMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSGaugeVertexAction}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSGaugeVertexAction}
+    {chapter/ch24_peps_ft_balanced_edge_scalars.tex,
+     chapter/ch24_peps_ft_foundations.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSGaugeVertexActionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSGaugeCancellation}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSGaugeCancellation}
+    {chapter/ch24_peps_ft_foundations.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSGaugeCancellationMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSBlockedMiddleLocalGaugeFormula}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSBlockedMiddleLocalGaugeFormula}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSBlockedMiddleLocalGaugeFormulaMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSLocalGaugeExtraction}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSLocalGaugeExtraction}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSLocalGaugeExtractionMotif
+    \end{TNDiagram}%
+}
+
+\TNDeclareDiagram
+    {TNPEPSGlobalConsistency}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSGlobalConsistency}
+    {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSGlobalConsistencyMotif
+    \end{TNDiagram}%
+}
+
+% ---------- Pedagogical PEPS overview diagrams ----------
+
+% A PEPS on a square lattice. Each black dot is the local tensor at a vertex;
+% the thin horizontal and vertical bonds are the virtual edges of the finite
+% graph; the short thick diagonal stub at every vertex is the physical leg.
+\TNDeclareDiagram
+    {TNPEPSLatticeState}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSLatticeState}
+    {chapter/ch24_peps_ft.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSLatticeStateMotif
+    \end{TNDiagram}%
+}
+
+% A single local tensor at a vertex $v$: the thick diagonal stub is the
+% physical index $\sigma$, the four thin legs are the incident virtual edges.
+\TNDeclareDiagram
+    {TNPEPSLocalTensorStar}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSLocalTensorStar}
+    {chapter/ch24_peps_ft_foundations.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSLocalTensorStarMotif
+    \end{TNDiagram}%
+}
+
+% Vertex injectivity. Reading the local tensor as the map sending a virtual
+% configuration $\eta$ on the incident edges to the physical vector
+% $A_v(\eta,\cdot)\in\C^d$, vertex injectivity is the linear independence of
+% this family.
+\TNDeclareDiagram
+    {TNPEPSVertexInjectivityMap}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSVertexInjectivityMap}
+    {chapter/ch24_peps_ft.tex,
+     chapter/ch24_peps_ft_foundations.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSVertexInjectivityMapMotif
+    \end{TNDiagram}%
+}
+
+% The state coefficient as a contraction. On the five-vertex example graph
+% (pentagon with one chord) the physical legs stay open while every virtual
+% bond is summed over; the coefficient is the resulting scalar.
+\TNDeclareDiagram
+    {TNPEPSStateContraction}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSStateContraction}
+    {chapter/ch24_peps_ft.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSStateContractionMotif
+    \end{TNDiagram}%
+}
+
+% Torus geometry. A finite square-lattice patch whose opposite boundary bonds
+% are identified, so the columns and rows are read modulo $n$ and $m$.
+\TNDeclareDiagram
+    {TNPEPSTorusGeometry}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSTorusGeometry}
+    {chapter/ch24_peps_ft_torus.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSTorusGeometryMotif
+    \end{TNDiagram}%
+}
+
+% Vertex balance of edge scalars. The endpoint reading $c_{v,e}$ on each
+% incident edge; the gauge is balanced at $v$ when the incident readings
+% multiply to one.
+\TNDeclareDiagram
+    {TNPEPSVertexScalarBalance}
+    {}
+    {display}
+    {normal}
+    {\TNPEPSVertexScalarBalance}
+    {chapter/ch24_peps_ft_balanced_edge_scalars.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNPEPSVertexScalarBalanceMotif
+    \end{TNDiagram}%
+}
+
+% ---------- Quantum-channel representation diagrams ----------
+
+% Kraus representation T(rho) = sum_i K_i rho K_i^dagger as a double-layer
+% contraction: the Kraus index i is summed between the K_i (ket) and
+% K_i^dagger (bra) layers; rho enters on the left, T(rho) leaves on the right.
+\TNDeclareDiagram
+    {TNKrausMap}
+    {}
+    {display}
+    {compact}
+    {\TNKrausMap}
+    {chapter/ch16_channel_representations.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNKrausMapMotif
+    \end{TNDiagram}%
+}
+
+% Stinespring dilation T(rho) = tr_E[V rho V^dagger]: the isometry V and its
+% adjoint map the system into a larger space; the environment E is traced out
+% (the loop on the right), leaving the channel output T(rho) on the system legs.
+\TNDeclareDiagram
+    {TNStinespring}
+    {}
+    {display}
+    {compact}
+    {\TNStinespring}
+    {chapter/ch16_channel_representations.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNStinespringMotif
+    \end{TNDiagram}%
+}
+
+% Choi--Jamiolkowski isomorphism tau = (T tensor id)(|Omega><Omega|): the channel
+% T (double layer) has its input legs bent around the maximally entangled pair
+% |Omega|, presenting the map as a matrix on the doubled space.
+\TNDeclareDiagram
+    {TNChoiMatrix}
+    {}
+    {display}
+    {compact}
+    {\TNChoiMatrix}
+    {chapter/ch16_channel_representations.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNChoiMatrixMotif
+    \end{TNDiagram}%
+}
+
+% Trace-pairing transfer form
+% T(rho)=sum_{i,j} t_ij tr(sigma_j rho) sigma_i.  The trace loop passes through
+% rho and sigma_j; the scalar coefficient t_ij joins the two basis labels, and
+% sigma_i supplies the output matrix legs.
+\TNDeclareDiagram
+    {TNTransferMapTracePairing}
+    {}
+    {display}
+    {compact}
+    {\TNTransferMapTracePairing}
+    {chapter/ch16_channel_representations.tex}{%
+    \begin{TNDiagram}[compact]
+        \TNTransferMapTracePairingMotif
+    \end{TNDiagram}%
+}
+
+% Two-point correlator <X_0 Y_n> = tr(Y E_A^n(X rho^R)): on the transfer-map
+% (M_D) line, start from the fixed point rho^R, insert X, propagate by n copies
+% of the transfer map E_A, insert Y, and close the line by the trace.
+\TNDeclareDiagram
+    {TNTwoPointCorrelator}
+    {}
+    {display}
+    {normal}
+    {\TNTwoPointCorrelator}
+    {chapter/ch14_correlations.tex}{%
+    \begin{TNDiagram}[normal]
+        \TNTwoPointCorrelatorMotif
+    \end{TNDiagram}%
+}
+
+\makeatother

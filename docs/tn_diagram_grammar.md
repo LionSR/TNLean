@@ -1,359 +1,227 @@
-# Tensor-Network Diagram Grammar
+# Tensor-network diagram calculus
 
-This document fixes the mathematical meaning of every tensor-network glyph in
-the repository. A reader should be able to identify the represented object
-before reading the surrounding proof.
-Graphical appearance carries mathematical meaning: changing a label does not
-change the kind of object represented, and changing the kind of object requires
-changing its graphical form. Every index line ends exactly at the boundary of
-the object carrying that index.
+This document specifies the tensor-network notation used in the blueprint and
+the accompanying slides.  A diagram is a labelled network of typed ports.  Its
+mathematical content is determined by its atoms, its contractions, and its open
+interfaces; numerical canvas coordinates are not part of the notation.
 
-The files `tex/tn/tn_core.tex` and `tex/tn/tn_library.tex` are the single
-source of truth. They determine the light and dark renderings, the PDF and web
-blueprints, the slides, the audit gallery, and the reference images. A client
-document may select a theme slot or a layout profile, but it may not redefine
-geometry, ports, glyphs, or contractions.
+The implementation is the repository-local TikZ library in `tex/tn/`, loaded by
 
-## Atomic Graphical Calculus
+```tex
+\usetikzlibrary{tn}
+```
 
-The common grammar describes a tensor network by small composable units. An
-atom is a named graphical object together with named ports on its boundary. A
-port represents one occurrence of a virtual index, one occurrence of a physical
-index, or one endpoint of a morphism. Composition joins only ports of the same
-declared type.
+The library is the single source of glyph geometry, layout dimensions,
+typography, colours, port schemas, reusable motifs, and chapter-diagram
+declarations.  Chapter and slide sources use only the public commands described
+below.
 
-For example, the following construction places two MPS sites and contracts one
-pair of virtual ports:
+## Mathematical conventions
+
+- A solid line joining two ports denotes contraction of the corresponding
+  indices.  Ordinary contractions are straight whenever the topology permits.
+- Virtual and physical indices are distinct types.  A morphism endpoint is a
+  third type and is used for maps between complete networks rather than tensor
+  indices.  The library rejects a contraction between unlike types.
+- A curved line is reserved for a trace or a genuinely periodic identification.
+  Orthogonal routing may be used when a straight contraction would obscure the
+  order of composition.
+- Independent contractions are laid out without crossings.  Coincident lines
+  meet only at a declared junction.
+- Colour is redundant.  Labels, topology, line form, or boundary form preserve
+  every distinction in greyscale.
+- Tensor products and direct sums are written as mathematical symbols.  They
+  are not represented by index contractions.
+
+The first atom of a term is placed at its origin.  Every subsequent atom is
+placed relative to a named atom:
 
 ```tex
 \begin{TNDiagram}[normal]
-  \TNMPSSite{leftTensor}{(0,0)}{A}
-  \TNMPSSite{rightTensor}{(1.4,0)}{B}
-  \TNOpenVirtualWest{leftTensorWest}
-  \TNConnectVirtual{leftTensorEast}{rightTensorWest}
-  \TNOpenVirtualEast{rightTensorEast}
+  \TNMPSSite{leftTensor}{at=origin}{A}
+  \TNMPSSite{rightTensor}{right=of leftTensor}{B}
+  \TNConnectVirtual{leftTensorE}{rightTensorW}
+  \TNOpenVirtualWest{leftTensorW}
+  \TNOpenVirtualEast{rightTensorE}
+  \TNOpenPhysicalNorth{leftTensorN}
+  \TNOpenPhysicalNorth{rightTensorN}
 \end{TNDiagram}
 ```
 
-The names `leftTensorEast` and `rightTensorWest` refer to exact boundary
-points; no numerical
-coordinate is chosen to approximate either endpoint. The same atoms can be
-placed elsewhere or composed with different atoms without changing their
-internal definitions.
+The name of an atom is local to one `TNDiagram`.  It prefixes the names of all
+ports on that atom.  Thus `leftTensorE` is the east virtual port of
+`leftTensor`.
 
-Complete diagrams use `TNDiagram`. Short identities use `TNEquationRow`,
-`TNTerm`, and `TNRelation`; related identities use `TNEquationRows` so that
-their relation signs share one column. The `normal` profile is used for structural
-figures; `compact` is used for definitions and local identities. These profiles
-fix the pitches, leg lengths, branch positions, relation gaps, trace
-clearances, and outer margins.
+## Public vocabulary
 
-The operations `TNConnectVirtual`, `TNConnectPhysical`, and
-`TNConnectMorphism`, together with their typed orthogonal variants, join
-like-typed ports and reject a type mismatch. Typed `TNTrace...` commands form
-periodic or trace closures. `TNPortAlias` gives a declared port another role
-name while preserving its type. Direct use of a TikZ anchor is not a
-contraction operation.
+The following marked block is checked against the TeX declarations by the
+semantic audit.  It deliberately lists the small constructive vocabulary, not
+the named chapter diagrams derived from the catalogue.
 
-The standard port roles are as follows.
+<!-- TN-PUBLIC-VOCABULARY:BEGIN -->
+
+The structural containers are `TNDiagram`, `TNTerm`, `TNRelation`, and
+`TNEquationRow`.  Layout profiles are selected by `TNLayoutProfile` and are
+named `normal` and `compact`.
+
+The declared atoms and oriented maps are `TNTensor`, `TNComponent`, `TNFactor`,
+`TNMap`, `TNState`, `TNExpression`, `TNInsertion`, `TNJunction`,
+`TNOperatorState`, `TNSectorGauge`, `TNInverseSectorGauge`, `TNMPSSite`,
+`TNMPOSite`, `TNRotatedMPOSite`, `TNPEPSSite`, `TNDoubleLayer`,
+`TNPurificationSite`, `TNStackedMPOProduct`, `TNCompactTraceCell`,
+`TNTrivalentMapRight`, `TNTrivalentMapLeft`, `TNTrivalentMapDown`, and
+`TNTrivalentMapUp`.  A general oriented trivalent map is made with
+`TNTrivalentMap`; its named specializations are `TNSplitMap`, `TNMergeMap`,
+`TNFusionMap`, `TNCofusionMap`, `TNActionMap`, `TNCoactionMap`,
+`TNPhysicalSplitMap`, and `TNPhysicalMergeMap`.
+
+Typed composition uses `TNConnectVirtual`, `TNConnectPhysical`, and
+`TNConnectMorphism`.  Orthogonal variants are `TNConnectVirtualHV`,
+`TNConnectVirtualVH`, `TNConnectPhysicalHV`, `TNConnectPhysicalVH`,
+`TNConnectMorphismHV`, and `TNConnectMorphismVH`.  Traces use
+`TNTraceVirtualBelow`, `TNTraceVirtualAbove`, `TNTraceVirtualRight`,
+`TNTracePhysicalBelow`, `TNTracePhysicalAbove`, and `TNTracePhysicalRight`.
+Named aliases use `TNPortAlias`.  Open interfaces use `TNOpenVirtualWest`,
+`TNOpenVirtualEast`, `TNOpenVirtualNorth`, `TNOpenVirtualSouth`,
+`TNOpenPhysicalWest`, `TNOpenPhysicalEast`, `TNOpenPhysicalNorth`, and
+`TNOpenPhysicalSouth`.
+
+Labels attached to mathematical objects use `TNLabelAbove`, `TNLabelBelow`,
+`TNLabelLeft`, or `TNLabelRight`.  Grouped regions use `TNGroupingRegion`,
+`TNGroupingRegionAbove`, or `TNGroupingRegionSelectedBelow` and are fitted to
+named atoms.  Repeated omissions use `TNOmission` or `TNStackedOmission`.
+
+<!-- TN-PUBLIC-VOCABULARY:END -->
+
+Raw points, arbitrary anchors, arbitrary paths, and freely placed labels are
+not public notation.  In particular, clients must not use `TNPoint`,
+`TNPointBetween`, `TNLabel`, `TNPlacedLabel`, any `TNPlacedLabel...` variant,
+`TNCanvas`, `TNGroupBoundary`, `TNFactorBoundary`, `TNAnnotation`,
+`TNSelectedPath`, `TNSecondaryPath`, `TNSelectedRegionPath`,
+`TNSecondaryRegionPath`, or `TNComplementRegionPath`.  Raw TikZ drawing,
+coordinates, shifts, scales, line widths, fills, padding, and box dimensions
+are likewise forbidden in chapters, slides, and catalogue declarations.
+
+## Port schemas
+
+Port roles are mathematical and do not change when a glyph is rotated or
+reflected.
 
 | Atom | Virtual ports | Physical ports |
 |---|---|---|
 | MPS site | `West`, `East` | `Ket` |
-| MPO or MPDO site | `West`, `East` | `Ket` north, `Bra` south |
-| Rotated MPO or MPDO site | `North`, `South` | `Ket` west, `Bra` east |
+| MPO site | `West`, `East` | `Ket`, `Bra` |
+| Rotated MPO site | `North`, `South` | `Ket`, `Bra` |
 | PEPS site | `West`, `East`, `North`, `South` | `Ket` |
-| Trivalent map | `Combined`, `FactorOne`, `FactorTwo` | none, unless physical |
+| Operator state | `WestKet`, `WestBra`, `EastKet`, `EastBra` | none |
+| Sector gauge | `West`, `East`, `Block`, `Copy` | none |
+| Inverse sector gauge | `West`, `East`, `Block`, `Copy` | none |
+| Double layer | `UpperWest`, `UpperEast`, `LowerWest`, `LowerEast` | contracted internally |
+| Purification site | `KetWest`, `KetEast`, `BraWest`, `BraEast` | `Ket`, `Bra`, `KetAncilla`, `BraAncilla` |
+| Stacked MPO product | `UpperWest`, `UpperEast`, `LowerWest`, `LowerEast` | `UpperKet`, `LowerBra` |
+| Compact trace cell | none | contracted internally |
 
-For a stacked MPO product, `UpperBra` is contracted with `LowerKet`. An action
-map also exposes `StateOut`, `MPO`, and `StateIn`. A sector gauge has distinct
-`Block` and `Copy` ports. A purification site has two ancillary ports, joined
-by a straight physical contraction.
+Every trivalent map has the virtual roles `Combined`, `FactorOne`, and
+`FactorTwo`.  In the right orientation `Combined` lies to the west; in the left
+orientation it lies to the east.  In the down orientation it lies to the south;
+in the up orientation it lies to the north.  These rotations change placement,
+not meaning.  Physical split and merge maps use the same ordered roles with
+physical port type.
 
-Split, merge, fusion, cofusion, action, coaction, and physical blocking maps
-are orientations of one trivalent constructor. Thus the map box, branch
-fractions, and port roles have the same meaning in every occurrence.
+Aliases may supply a theorem-specific name such as `MPO` or `StateIn`, but the
+alias retains the type of its source and must terminate at a declared atom
+port.  Duplicate names, missing ports, incompatible aliases, alias cycles, and
+a trace whose endpoints coincide are errors.
 
-## Basic Glyphs
+## Placement, labels, and regions
 
-- Tensor sites are black dots. A physical index is drawn as a thicker vertical
-  leg. Virtual indices are drawn as thinner horizontal or slanted legs.
-- A tensor label is placed outside its black dot; a label does not change the
-  kind of object. Dark slides change only the palette, not the geometry or
-  typography of the glyph. A neutral square box
-  denotes a named tensor whose internal contraction is suppressed. A displayed
-  tensor-product or direct-sum factor is a pale plate. A linear map, including
-  an isometry or coisometry, is a rounded blue box. A state displayed without
-  its constituent tensors is a rounded gray box. A parenthesized algebraic
-  expression is shown in the distinct expression box. These glyphs are
-  distinct from the red dots used for matrices inserted on individual legs.
-- A contraction junction is a black dot substantially smaller than a local
-  tensor. It marks a common endpoint of several index lines and is not another
-  tensor.
-- An MPS tensor is a black dot with left and right virtual legs and one
-  physical leg. A blocked MPS tensor is drawn by enclosing consecutive sites in
-  a rectangle, with the blocked physical word represented by the external
-  physical legs of the block.
-- An MPO or MPDO tensor is drawn as the corresponding double-layer object. The
-  two physical legs of a ket-bra pair should remain visible unless the diagram
-  explicitly represents their contraction.
-- A PEPS tensor is a black dot with the appropriate local virtual legs in the
-  lattice directions and a physical leg. A PEPS region is drawn as a rectangle
-  or polygon around the sites in the region, not as a new tensor site.
-- A virtual operator, gauge, or arbitrary matrix insertion is a fixed-size red
-  dot on a virtual leg, with its label placed outside the dot by a profile
-  clearance. A physical operation is the same fixed marker on a physical leg.
-  Its diameter does not depend on the length of its label. These two cases
-  should not be interchanged. The directional `TNLabelAbove`, `TNLabelBelow`,
-  `TNLabelLeft`, and `TNLabelRight` operations choose the clear side when the
-  insertion lies inside a vertical or horizontal composition.
-- A gauge transform is a virtual operator insertion together with its inverse
-  on the adjacent oriented virtual leg when the diagram represents a
-  cancellation. If only one red dot is shown, the diagram represents a single
-  inserted matrix, not a completed gauge cancellation.
-- A physical isometry or coarse-graining map is drawn on the physical legs, not
-  on the virtual bonds. It should be visually distinct from a virtual gauge.
-- A diagonal weight, fixed-point density, or scalar block weight is drawn as a
-  labeled operator on the virtual index or on the block label, according to the
-  source formula. It should not be represented by relabeling a tensor site.
-- A contracted physical index is indicated by joining the corresponding
-  physical legs, or by omitting the external physical legs only when the
-  surrounding formula states the contraction, for example in a transfer map or
-  an overlap.
-- Contracted indices are drawn with solid strokes. An open contraction routed
-  around another glyph uses the shared bent-leg style; it is not a closure
-  merely because its path bends. A one-dimensional periodic trace is a rounded
-  solid closure, including when an operator splits the return path into two
-  pieces. Solid rounded rectangles around tensor-product factors are factor
-  boundaries, distinct from dashed grouping boundaries. Dashed strokes are
-  reserved for grouping boundaries, changes of multiplicity basis, and an
-  explicitly identified boundary of a periodic lattice. A purification
-  contraction is a solid physical-index stroke joining dedicated ancillary
-  legs; it is not dashed and should not share an attachment point with an open
-  virtual leg.
+Allowed placement keys are `at=origin`, `left=of`, `right=of`, `above=of`,
+`below=of`, and the four diagonal relations to a named atom.  Canonical glyph
+and motif definitions may contain numerical geometry inside `tex/tn/`; clients
+may not.  PEPS constructions are specified by integer lattice indices and
+adjacency data rather than canvas positions.
 
-Every contraction joins two registered ports of the same type. Virtual trace
-closures join named ports through `\TNTraceVirtualBelow`,
-`\TNTraceVirtualAbove`, or `\TNTraceVirtualRight`; physical trace closures use
-`\TNTracePhysicalBelow`, `\TNTracePhysicalAbove`, or
-`\TNTracePhysicalRight`. An open index ends at an explicitly named typed
-terminal; it does not end at a numerical point chosen near a tensor or map. A
-red insertion divides an index line into two contractions ending on the
-insertion.
+A label belongs to an atom, a port, a contraction, or a fitted region boundary.
+It must not float at an unrelated point of the canvas.  Indices use
+`\scriptscriptstyle`; glyph labels use `\scriptstyle`.  All typography inherits
+the ambient mathematical font.
 
-The operations `\TNOpenVirtualWest`, `\TNOpenVirtualEast`,
-`\TNOpenVirtualNorth`, `\TNOpenVirtualSouth`, and their physical analogues
-extend a declared port by the common leg length. Consequently two occurrences
-of the same local tensor have the same boundary geometry.
+Fitted boundaries indicate factors, regions, sectors, or stages of a
+construction.  They are used only when the enclosure has mathematical meaning.
+Decorative boxes and backgrounds are omitted.  Curved boundaries and region
+colours never substitute for labels.
 
-Trivalent maps are typed by their mathematical domain and codomain. The maps
-`\TNSplitMap` and `\TNMergeMap` have only virtual ports, while
-`\TNPhysicalSplitMap` and `\TNPhysicalMergeMap` have only physical ports. The
-general `\TNTrivalentMap` fixes the same box and branch geometry for mixed
-interfaces. Each orientation uses the roles `Combined`, `FactorOne`, and
-`FactorTwo`. Thus blocking a physical Hilbert space, fusing virtual sectors,
-and realizing a physical site from two virtual half-bonds cannot be confused
-by a change of labels or by reflecting the map.
+## Display form and figure form
 
-The action tensors of an MPO on an MPS are constructed by `\TNActionMap` and
-`\TNCoactionMap`. Their three virtual ports are named `MPO`, `StateIn`, and
-`StateOut`, corresponding to the blocks \(a\), \(x\), and \(y\) in
-\(V_{ax}^{y,i}\). The glyph remains the ordinary trivalent linear-map box;
-the additional names record the module roles of its indices.
+A local definition, contraction identity, or short equality is a mathematical
+display.  A diagram is a numbered figure only when spatial topology,
+multi-stage routing, a lattice region, or a substantial fusion tree is itself
+part of the mathematical assertion.  Captions are reserved for these figures.
+The role is recorded in the catalogue declaration and is checked against every
+chapter use.
 
-A canonical-form gauge \(X_{j,q}\) is constructed by `\TNSectorGauge`.
-Besides the horizontal bond ports `W` and `E`, it has distinct virtual ports
-`Block` and `Copy` for the indices \(j\) and \(q\). Attaching these ports
-separately to parallel sector buses preserves the distinction between the two
-indices. The reflected construction `\TNInverseSectorGauge` retains these
-port roles while reversing their planar order for \(X_{j,q}^{-1}\).
+Each chapter-facing construction has one declaration:
 
-A sector index which passes through several factors is represented by
-`\TNSectorBus`. Its endpoints and every contraction point are named virtual
-ports. A parallel sector index is obtained from it by `\TNParallelSectorBus`,
-which inherits the same horizontal extent and applies a common signed
-displacement. A tap is placed by `\TNSectorBusTap`; its endpoint remains a
-named virtual port.
+```tex
+\TNDeclareDiagram
+  {TNExampleIdentity}
+  {left,right}
+  {display}
+  {normal}
+  {\TNExampleIdentity{A}{B}}
+  {chapter/example.tex}
+  {<body composed from public atoms and contractions>}
+```
 
-Orthogonal virtual contractions use `\TNConnectVirtualHV` or
-`\TNConnectVirtualVH`; the suffix records the order of the horizontal and
-vertical segments. The corresponding physical and morphism operations follow
-the same convention. An annotation endpoint is declared by `\TNPoint`, which
-deliberately carries no index type.
+The seven fields are respectively the command name, argument schema, display
+role, layout profile, audit sample, page context, and body.  The renderer and
+gallery read these declarations directly; no parallel list of names, roles,
+arguments, or examples is maintained in Python.
 
-Tensor products are written with $\otimes$. A horizontal line never means
-mere adjacency or tensor product. The construction `\TNFactorPair` displays
-two factor plates and places $\otimes$ between them. When two factors carry a
-contracted index, the contraction is drawn explicitly instead.
+## Themes and dimensions
 
-## Blocks, Regions, and Labels
+The print theme uses `black!92` for primary ink, `black!55` for secondary ink,
+and `red!65!black` for the accent.  Blue and violet occur only when a region or
+sector distinction is mathematically genuine.  The dark theme uses `white!94`,
+`white!60`, and `orange!80!white`, with cyan and magenta for the corresponding
+region and sector distinctions.
 
-- A rectangle around several tensor sites denotes a blocked tensor or an
-  injective region. The label under the rectangle names the blocked tensor or
-  the region, not an auxiliary construction in the formalization.
-- Labels should be mathematical labels from the source statement whenever
-  possible: for example \(A^{[L]}\), \(R\), \(S\), \(T\), \(X\), \(Y\), or
-  \(\lambda\). Avoid labels that name a local proof step rather than the
-  tensor, region, or operator appearing in the paper.
-- When the blueprint translates a boxed tensor diagram from a source paper into
-  the local dot convention, the translation must preserve the distinction
-  between tensor sites, blocked regions, virtual insertions, physical
-  operations, and gauges. A box in the source may become a rectangle around
-  several dots, but it should not become a single dot unless the source is
-  explicitly passing to a blocked tensor.
+Ordinary structure has line width 0.55 pt, secondary guides 0.40 pt, and
+distinguished boundaries 0.80 pt.  These values and all spacing dimensions are
+defined centrally.  The `normal` and `compact` profiles choose discrete reading
+dimensions; they do not scale a completed diagram.  A construction that is too
+wide is divided into aligned terms, rows, or panels rather than reduced below
+its intended reading size.
 
-## Canonical Examples
+## Audit and gallery
 
-- The transfer map \(\E_A(X) = \sum_i A^i X (A^i)^\dagger\) is drawn as a
-  double-layer contraction with the physical index summed and \(X\) inserted on
-  the virtual leg.
-- MPS blocking is drawn by enclosing consecutive tensor sites and leaving the
-  boundary virtual legs external. The physical word is represented by the
-  physical legs inside the block.
-- The RFP isometry criterion is drawn with the isometry on physical legs and
-  the virtual fixed-point operator on the virtual index.
-- A PEPS gauge move is drawn as oriented virtual gauges on incident edges of a
-  local tensor, with the absorbed tensor labeled \(\widetilde B_v\).
-- A PEPS edge insertion is drawn as a single virtual matrix on the chosen edge;
-  the physical realization of that insertion is a separate diagram with the
-  operator on a neighboring physical leg.
+Every rendered diagram emits a semantic event log containing its atoms, ports,
+aliases, contractions, and motif boundaries.  The audit checks the event
+stream, canonicalizes the labelled network graph, and rejects ill-typed
+contractions.  It also rejects private implementation commands, raw TikZ,
+client geometry, stale declarations, ignored arguments, and repeated
+four-to-eight-atom topologies that should be a named motif.
 
-## PEPS Fundamental-Theorem Diagrams
+The generated gallery contains every declared atom and every registered
+diagram.  Atom pages state the complete typed port schema.  Diagram pages show
+the actual publication size and a tightly cropped magnified view, together with
+the command name, role, profile, and page context.  Print and dark-theme crops
+retain at least 3 pt of clear margin between ink and canvas boundary.
 
-- A PEPS edge-blocking diagram should show the chosen edge and then the
-  corresponding three-site chain. The pre-blocking side should keep enough of
-  the original graph visible to identify the two endpoint regions and the
-  complementary middle block, following the source-paper convention of marking
-  the two endpoints separately from the boxed complement.
-  In the diagram corresponding to `eq:block_to_mps` in arXiv:1804.04964,
-  the upper-left circled endpoint is \(A'_1\), the lower-left circled endpoint
-  is \(A'_2\), and the boxed complement is \(A'_3\); do not interchange the two
-  endpoint labels.
-- In diagrams following arXiv:1804.04964, Section 3, the matrix-insertion
-  comparison is represented by an arbitrary virtual matrix on a bond in the
-  first three-site chain and the corresponding virtual matrix in the second
-  chain. The physical-realization step is represented separately by putting the
-  resulting physical operation on either neighboring physical leg.
-- The converse physical-to-virtual step should be represented separately:
-  two neighboring physical operations that act identically on the state
-  determine a virtual operation on their shared bond.
-- The post-absorption comparison corresponding to equation `eq:inj_equal_edge`
-  should be preceded by the local absorption of the edge gauges into the
-  second tensor family. The absorption picture should draw the incident
-  oriented edge gauges at a vertex of the \(B\)-tensor and label the resulting
-  tensor \(\widetilde B_v\). The subsequent `eq:inj_equal_edge` comparison is
-  a separate theorem-level step and should be drawn on the full PEPS graph, not
-  only on the blocked three-site chain, because the paper uses it for every
-  edge of the original graph.
-- The final injective-PEPS comparison should not be folded into the local gauge
-  sketch. First draw the generalized two-injective-tensor comparison from
-  Lemma `inj_equal_tensors_2`, with several shared virtual bonds and an
-  arbitrary insertion on one bond. Its proof should also draw the residual
-  virtual operators on the exposed legs after the second injective tensor is
-  inverted, since this is where the paper proves that those operators are
-  scalar. Then draw the one-vertex-versus-complement specialization: two
-  injective regions that differ by one vertex imply proportionality of the two
-  local tensors after the edge gauges have been absorbed.
-- Normal-PEPS diagrams from arXiv:1804.04964, Section 3, should be attached to
-  their own normal theorem nodes. The union-of-injective-regions picture should
-  show the four regions \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and
-  \((A\cup B)^c\). The square-lattice normal proof should show the regions
-  \(R\), \(S\), and \(T\), then the red/blue/complementary blocking around a
-  distinguished edge, before reusing the three-site injective-chain theorem.
-  The translationally invariant normal gauge formula should distinguish the
-  horizontal gauge \(X\) from the vertical gauge \(Y\).
+## Author checklist
 
-## Public Commands
+Before adding or changing a diagram, verify the following.
 
-- Public tensor-network commands should be named by the mathematical move they
-  draw. A chapter should not use an unattached generic diagram when the proof
-  step is a specific contraction, insertion, blocking, or gauge absorption.
-- Public commands should be built from the common glyphs above. If a diagram
-  requires a new glyph, first record the mathematical meaning here and then add
-  the corresponding private TikZ primitive and web-rendering support.
-- Repeated chain and square-lattice diagrams should be built from the atomic
-  and layout commands in `tex/tn/tn_core.tex` and `tex/tn/tn_library.tex`, so
-  that the public command records the
-  tensor network rather than a coordinate calculation.
-- Repeated PEPS graph motifs, such as a five-site edge patch, a two-injective
-  comparison pair, or a trivalent residual-gauge vertex, should likewise be
-  factored through private layout commands before being used in theorem-level
-  public diagrams.
-- A theorem-level figure belongs in `blueprint/src/macros/tn_print.tex`, even
-  when its mathematical content is specific to one chapter. This gives the
-  printed and web blueprints one common definition. Chapter sources call the
-  registered command and do not carry a second local TikZ construction.
-- Semantic glyphs, theme slots, typed ports, and primitive contractions belong
-  in `tex/tn/tn_core.tex`. Reusable MPS, MPO, MPDO, PEPS, and fusion
-  compositions belong in `tex/tn/tn_library.tex`. Chapter-facing figures
-  belong in `blueprint/src/macros/tn_print.tex`; the two files under
-  `blueprint/src/macros/` with the core and library names are compatibility
-  entry points.
-
-The public library provides `\TNMPSSite`, `\TNMPOSite`, `\TNRotatedMPOSite`,
-and `\TNPEPSSite` for local tensor sites; `\TNDoubleLayer` for the local
-contraction in a transfer construction; `\TNOperatorState` for a density
-matrix or operator with paired system ports; `\TNSplitMap`, `\TNMergeMap`,
-`\TNPhysicalSplitMap`, `\TNPhysicalMergeMap`, and `\TNFusionMap` for typed
-trivalent maps; `\TNSectorBus` for a virtual sector line;
-`\TNSquarePEPSPatch` for a finite square lattice; and `\TNHorizontalWord` and
-`\TNVerticalWord` for standard finite words. The common gauge and periodic
-constructions are `\TNGaugeConjugatedMPSSite`, `\TNFourBondGaugeStar`,
-`\TNCardinalGaugeCross`, and `\TNCyclicMPSWord`. MPS and MPO words are declared by
-distinct constructors, since an MPS site has one physical index whereas an MPO
-site has two. These constructions determine the conventional index directions
-once. Each local atom declares stable boundary ports; the `\TNOpen...`
-operations extend only those declared ports. A complete figure composes these
-units rather than choosing the same leg positions independently at each
-occurrence.
-
-The named profiles fix all standard separations and the branch positions of a
-trivalent map. A theorem-level diagram selects `normal` or `compact`; it does
-not rescale the picture or reproduce one of these distances locally.
-
-The web blueprint renders the same complete figure commands as cached SVG
-images. Zero-argument registrations are derived from the TeX declarations.
-Only parameterized chapter commands require an argument declaration in
-`blueprint/src/Packages/tn_diagrams.py`; every chapter-facing command also has
-an explicit `display` or `figure` role and an HTML template entry. A private
-construction in `tex/tn/tn_core.tex` or `tex/tn/tn_library.tex` requires no
-such declaration.
-
-Commands whose names contain `TN@` are private and occur only in `tex/tn/`.
-Blueprint diagrams, slides, examples, galleries, and tests use the public
-calculus.
-
-## Author Checklist
-
-- Every contraction has two named endpoints of the same type.
-- A line does not stop short of a port, pass behind a glyph, or enter a box
-  except through a declared port.
-- Curves represent genuine trace or periodic topology. Purification and other
-  ordinary local contractions are straight.
-- A semicircle is not used as bra or ket notation.
-- A glyph has one meaning throughout the repository; changing its label does
-  not change its object class.
-- Pure algebra remains algebra. A decorative enclosure does not turn a direct
-  sum or tensor product into a tensor network.
-- Definitions and local identities are compact displays rather than floats.
-- Labels are positioned relative to named ports and do not meet sites, lines,
-  or region boundaries.
-- Repeated pitches, leg lengths, branch positions, relation gaps, and loop
-  clearances are taken from the selected layout profile.
-- A figure is retained only when spatial topology, nontrivial routing, a
-  fusion tree, or a multistage construction is part of the assertion.
-- The isolated rendering and the actual page have both been inspected at
-  normal size. Their ink remains strictly inside the canvas boundary.
-
-## Slide Diagrams
-
-The slide collection loads the shared semantic core and reusable atoms from
-`tex/tn/`. The file `docs/slides/tn_library_dark.tex` appends only palette
-choices to the `tn theme ...` slots and defines the complete figures used by
-the slide collection. Thus the slides remain independent of the blueprint
-build files while sharing the meanings of tensors, insertions, maps, states,
-expressions, ports, contractions, traces, and grouping boundaries.
-
-The slide preamble imports this library. A slide should call one of its complete
-diagram commands rather than declare local tensor-network styles or draw a
-second version of a standard construction.
+1. The mathematical objects, port types, open interfaces, and contraction
+   order agree with the source statement.
+2. Atoms are named by their mathematical role and placed only relative to
+   previously named atoms or lattice indices.
+3. Every contraction joins compatible named ports.  Traces and crossings are
+   explicit; ordinary contractions remain straight.
+4. Labels belong to semantic anchors and remain clear of sites, wires, and
+   boundaries.  Colour supplies no unique information.
+5. A topology repeated in four or more atoms is expressed by a shared motif.
+6. The declaration records its arguments, role, profile, sample, and every
+   page context.  No argument is ignored.
+7. The strict semantic audit, gallery, print and dark renders, and the relevant
+   pages have been inspected at their actual reading size.
