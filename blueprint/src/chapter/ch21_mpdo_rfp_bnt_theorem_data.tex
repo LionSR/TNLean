@@ -91,12 +91,13 @@
     gives the stated identity.
 \end{proof}
 
-\begin{theorem}[Eventual power sums determine the multiplicity spectrum]%
-    \label{thm:mpdo_bnt_eventual_power_sums_determine_multiplicity_spectrum}
+\begin{definition}[Multiplicity-spectrum comparison from eventual power sums]%
+    \label{def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison.%
         ofEventuallyEqualPowerSums}
     \leanok
     \uses{def:mpdo_bnt_multiplicity_spectrum_comparison,
+        lem:eventual_power_sum_equality_all_exponents,
         thm:bounded_power_sum_multiset}
     Suppose that every entry of the one-site multiplicity matrices, every
     entry of the two-site multiplicity matrices, and every entry of the
@@ -118,8 +119,7 @@
     then the entries on the two sides agree as multisets.  Together with the
     displayed one-site trace identity, the one-site and two-site multiplicity
     entries and their dimensions define a BNT multiplicity-spectrum comparison.
-\end{theorem}
-\begin{proof}\leanok
+
     Positivity makes all entries nonzero.  Eventual equality of two finite
     sums of geometric sequences gives, for every $L\geq 1$,
     \[
@@ -131,7 +131,7 @@
     \]
     The finite power-sum identity determines both the cardinality and the
     multiset of entries.
-\end{proof}
+\end{definition}
 
 \begin{theorem}[Multiplicity trace normalization from the spectrum comparison
     and BNT algebra clause]%
