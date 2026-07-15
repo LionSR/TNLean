@@ -37,10 +37,12 @@ fixes the original operator.  These are the support-projector identities used in
 
 \begin{proof}
     \leanok
-    In product-basis coordinates, the diagonal entry contributed by each
-    right basis vector is one, while every off-diagonal entry vanishes.
-    Summing over the right basis therefore gives
-    $(\dim H_R)\mathbf 1_L$.
+    In product-basis coordinates,
+    \[
+        \bigl(\operatorname{tr}_R\mathbf 1_{L\otimes R}\bigr)_{ij}
+        =\sum_k\delta_{ij}
+        =(\dim H_R)\delta_{ij}.
+    \]
 \end{proof}
 
 \begin{lemma}[Adjoint identity for the right partial trace]
@@ -137,8 +139,13 @@ fixes the original operator.  These are the support-projector identities used in
 
 \begin{proof}
     \leanok
-    Take complex conjugates entrywise and use Hermiticity of $\rho$ inside
-    the finite sum.
+    Entrywise Hermiticity gives
+    \[
+        \overline{(\operatorname{tr}_L\rho)_{r,s}}
+        =\sum_k\overline{\rho_{(k,r),(k,s)}}
+        =\sum_k\rho_{(k,s),(k,r)}
+        =(\operatorname{tr}_L\rho)_{s,r}.
+    \]
 \end{proof}
 
 \begin{theorem}[Positivity of the left partial trace]
@@ -443,7 +450,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \lean{TripartiteDecorrelation.supportAX, TripartiteDecorrelation.supportXB}
     \leanok
     \uses{def:partial_trace_left}
-    Let $P_{AX}$ and $P_{XB}$ be the support projectors of
+    For a Hermitian operator $P$, let $P_{AX}$ and $P_{XB}$ be the support projectors of
     $\operatorname{tr}_B P$ and $\operatorname{tr}_A P$, respectively, as in
     \cite[Appendix~D.2, lines 2225--2229]{Cirac2016MPDO_arXiv}.
 \end{definition}
