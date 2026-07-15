@@ -387,7 +387,7 @@ def _assert_diagram_roles_match_chapters() -> None:
         if roles and roles != {_DIAGRAM_CATALOGUE.declaration(name).role}
     )
     declared_contexts = {
-        declaration.name: set(declaration.contexts) - {"renderer"}
+        declaration.name: set(declaration.contexts)
         for declaration in diagram_declarations()
     }
     actual_contexts: dict[str, set[str]] = {
@@ -961,8 +961,6 @@ def _parse_contexts(raw_contexts: str, *, name: str, location: str) -> tuple[str
             f"{name} repeats chapter contexts at {location}: {duplicates}."
         )
     for context in contexts:
-        if context == "renderer":
-            continue
         if not re.fullmatch(r"chapter/[A-Za-z0-9_./-]+\.tex", context):
             raise RuntimeError(
                 f"{name} has invalid chapter context {context!r} at {location}."
@@ -1052,10 +1050,6 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
         contexts = _parse_contexts(
             raw_contexts, name=name, location=location
         )
-        if "renderer" in contexts and (name != "TNTikZDiagram" or len(contexts) != 1):
-            raise RuntimeError(
-                f"The renderer context is reserved for TNTikZDiagram at {location}."
-            )
         _assert_exact_sample_call(
             sample, name=name, arity=len(arguments), location=location
         )
@@ -1274,7 +1268,7 @@ def _ignored_diagram_arguments() -> dict[str, list[int]]:
 
     ignored: dict[str, list[int]] = {}
     for declaration in diagram_declarations():
-        if not declaration.arguments or declaration.name == "TNTikZDiagram":
+        if not declaration.arguments:
             continue
         referenced = _unescaped_parameter_indices(declaration.body)
         missing = [
@@ -1323,7 +1317,7 @@ def _semantic_audit_counts() -> dict[str, object]:
     unused_diagrams = sorted(
         name
         for name, _, _ in public_macros
-        if name != "TNTikZDiagram" and name not in chapter_calls
+        if name not in chapter_calls
     )
 
     audited_sources = {
@@ -1659,7 +1653,6 @@ def _assert_peps_macros_used_in_chapter() -> None:
         for name in peps_macros
         if (
             rf"\{name}" not in chapter
-            and rf"\TNTikZDiagram{{{name}}}" not in chapter
             and name not in intentionally_unused
         )
     ]
@@ -1674,15 +1667,6 @@ _assert_no_duplicate_diagram_definitions()
 
 
 def _tex_call(obj: Command) -> str:
-    if obj.macroName == "TNTikZDiagram":
-        rendered = stringify_tex_item(
-            obj.attributes.get("rendered_body", "")
-        ).strip()
-        if rendered:
-            if rendered.startswith("\\"):
-                return rendered
-            return "\\" + rendered
-
     source = getattr(obj, "source", "").strip()
     if source.startswith(rf"\{obj.macroName}"):
         return source
@@ -1915,7 +1899,7 @@ def _svg_for(obj: Command, tex_call: str) -> str | None:
     return _svg_src(obj, svg_path, output_dir)
 
 
-class _TNTikZDiagram(Command):
+class _TensorNetworkDiagramCommand(Command):
     blockType = False
     # plasTeX's renderer reads ``templateName`` as a string attribute of the
     # command; see ``plasTeX.Renderers.Renderer.render``.
@@ -1948,7 +1932,7 @@ for _declaration in diagram_declarations():
     _macro_name = _declaration.name
     globals()[_macro_name] = type(
         _macro_name,
-        (_TNTikZDiagram,),
+        (_TensorNetworkDiagramCommand,),
         {"args": _declaration.plastex_args, "macroName": _macro_name},
     )
 
