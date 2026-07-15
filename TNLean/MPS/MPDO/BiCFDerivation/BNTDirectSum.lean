@@ -464,6 +464,24 @@ theorem exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_
     wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1
       A hIrr hLeft hOverlap hBlocks hBlk0 hBlk1 hBlk3 hL₀⟩
 
+/-- The elementary numerical estimate in the sharp BNT block-separation bound. -/
+theorem three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five
+    {D : ℕ} (hD : 0 < D) :
+    3 * ((D - 1) * (D ^ 4 + 1)) ≤ 3 * D ^ 5 := by
+  have hDleD4 : D ≤ D ^ 4 := by
+    simpa using (pow_le_pow_right' (a := D) hD (by omega : 1 ≤ 4))
+  have hDsubLeD4 : D - 1 ≤ D ^ 4 :=
+    (Nat.sub_le D 1).trans hDleD4
+  have hCore : (D - 1) * (D ^ 4 + 1) ≤ D ^ 5 := by
+    calc
+      (D - 1) * (D ^ 4 + 1) = (D - 1) * D ^ 4 + (D - 1) := by ring
+      _ ≤ (D - 1) * D ^ 4 + D ^ 4 := Nat.add_le_add_left hDsubLeD4 _
+      _ = (D - 1) * D ^ 4 + 1 * D ^ 4 := by rw [one_mul]
+      _ = ((D - 1) + 1) * D ^ 4 := (Nat.add_mul (D - 1) 1 (D ^ 4)).symm
+      _ = D * D ^ 4 := by rw [Nat.sub_add_cancel (by omega)]
+      _ = D ^ 5 := by ring
+  exact Nat.mul_le_mul_left 3 hCore
+
 namespace IsBNTCanonicalForm
 
 variable {P : SectorDecomposition d}
@@ -541,31 +559,13 @@ theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
                 ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))) :=
         Nat.mul_le_mul_right _ hPredLe
       refine hFirst.trans ?_
-      have hDleD4 : P.totalDim ≤ P.totalDim ^ 4 := by
-        simpa using
-          (pow_le_pow_right' (a := P.totalDim) hDpos (by omega : 1 ≤ 4))
-      have hDsubLeD4 : P.totalDim - 1 ≤ P.totalDim ^ 4 :=
-        (Nat.sub_le P.totalDim 1).trans hDleD4
-      have hCore :
-          (P.totalDim - 1) * (P.totalDim ^ 4 + 1) ≤ P.totalDim ^ 5 := by
-        calc
-          (P.totalDim - 1) * (P.totalDim ^ 4 + 1) =
-              (P.totalDim - 1) * P.totalDim ^ 4 + (P.totalDim - 1) := by ring
-          _ ≤ (P.totalDim - 1) * P.totalDim ^ 4 + P.totalDim ^ 4 :=
-            Nat.add_le_add_left hDsubLeD4 _
-          _ = (P.totalDim - 1) * P.totalDim ^ 4 + 1 * P.totalDim ^ 4 := by
-            rw [one_mul]
-          _ = ((P.totalDim - 1) + 1) * P.totalDim ^ 4 :=
-            (Nat.add_mul (P.totalDim - 1) 1 (P.totalDim ^ 4)).symm
-          _ = P.totalDim * P.totalDim ^ 4 := by
-            rw [Nat.sub_add_cancel (by omega)]
-          _ = P.totalDim ^ 5 := by ring
       calc
         (P.totalDim - 1) *
             ((P.totalDim ^ 4 + 1) +
               ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))) =
             3 * ((P.totalDim - 1) * (P.totalDim ^ 4 + 1)) := by ring
-        _ ≤ 3 * P.totalDim ^ 5 := Nat.mul_le_mul_left 3 hCore
+        _ ≤ 3 * P.totalDim ^ 5 :=
+          three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five hDpos
 
 end IsBNTCanonicalForm
 

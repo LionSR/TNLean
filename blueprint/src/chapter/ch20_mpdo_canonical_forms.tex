@@ -302,12 +302,35 @@ This is the inverse identity in
     nondegeneracy of the trace pairing gives finite-length trace separation.
 \end{proof}
 
+\begin{lemma}[Single-block word-tuple span]
+    \label{lem:single_block_word_tuple_span}
+    \lean{MPSTensor.wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, rem:word_tuple_span_top}
+    Let $(A_j)_{j=0}^{g-1}$ be a family with $g=1$. If its unique block is
+    $L$-block injective, then the simultaneous length-$L$ word evaluations
+    span the full one-block product algebra.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:l_blk_injective, rem:word_tuple_span_top}
+    For every matrix $X$, block injectivity gives coefficients such that
+    \[
+        X=\sum_{|w|=L}c_wA_0^w.
+    \]
+    Since the family has only the block $A_0$, this is precisely the required
+    simultaneous word-tuple spanning identity.
+\end{proof}
+
 \begin{theorem}[Sharp finite-length block separation]
     \label{thm:sharp_bnt_block_separation}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
+    \lean{MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five}
     \leanok
     \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
         thm:sector_basis_dimension_le_total_dimension,
+        lem:single_block_word_tuple_span,
         lem:bnt_direct_sum_block_separation_word_span}
     Let $P$ be a BNT canonical form with total bond dimension $D$. There is a
     positive integer $N\leq3D^5$ such that the simultaneous word evaluations
