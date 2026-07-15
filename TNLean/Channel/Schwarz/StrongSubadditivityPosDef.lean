@@ -614,15 +614,14 @@ theorem kron_marginal_support [NeZero dA]
   -- kernel projection of ρR
   set Q : Matrix R R ℂ := 1 - hρR.isHermitian.supportProj with hQ
   have hQh : Q.IsHermitian := by
-    rw [hQ]; exact (Matrix.isHermitian_one).sub hρR.isHermitian.supportProj_isHermitian
+    rw [hQ]
+    exact hρR.isHermitian.one_sub_supportProj_isHermitian
   have hQ2 : Q * Q = Q := by
-    have hPidem := hρR.isHermitian.supportProj_idem
-    have hexpand : Q * Q = 1 - hρR.isHermitian.supportProj - hρR.isHermitian.supportProj
-        + hρR.isHermitian.supportProj * hρR.isHermitian.supportProj := by
-      rw [hQ]; noncomm_ring
-    rw [hexpand, hPidem, hQ]; abel
+    rw [hQ]
+    exact hρR.isHermitian.one_sub_supportProj_idem
   have hQann : Q * ρR = 0 := by
-    rw [hQ, Matrix.sub_mul, Matrix.one_mul, hρR.isHermitian.supportProj_mul_self, sub_self]
+    rw [hQ]
+    exact hρR.isHermitian.one_sub_supportProj_mul_self
   -- the lift of Q annihilates ρ on the left (bipartite marginal support)
   have hliftQ : liftLeftA (dA := dA) Q * ρ = 0 := by
     refine hρ.proj_mul_eq_zero_of_trace_eq_zero (hliftHerm Q hQh) ?_ ?_

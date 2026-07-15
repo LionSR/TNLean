@@ -18,6 +18,84 @@ orthogonal-projector, or ground-space-intersection hypotheses of Appendix~D.2.
 % source definition. See
 % docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
 
+The following preparatory result is independent of the decorrelation
+condition.  For a positive semidefinite operator on a bipartite space, the
+support projector of the retained left marginal, lifted to the full space,
+fixes the original operator.  These are the support-projector identities used in
+\cite[Appendix~D.2, lines 2225--2235]{Cirac2016MPDO_arXiv}.
+
+\begin{lemma}[Adjoint identity for the right partial trace]
+    \label{lem:trace_lift_left_factor_mul}
+    \lean{Matrix.trace_leftKroneckerEmbed_mul}
+    \leanok
+    For every operator $M$ on $H_L$ and every operator $\rho$ on
+    $H_L\otimes H_R$,
+    \[
+        \operatorname{tr}((M\otimes\mathbf 1_R)\rho)
+        =\operatorname{tr}(M\operatorname{tr}_R\rho).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both traces in product bases and sum first over the identity entry
+    on $H_R$.
+\end{proof}
+
+\begin{theorem}[Left absorption by the marginal support projector]
+    \label{thm:marginal_support_left_absorption}
+    \lean{Matrix.PosSemidef.leftKroneckerEmbed_supportProj_mul_self}
+    \leanok
+    \uses{lem:trace_lift_left_factor_mul}
+    Let $\rho$ be positive semidefinite on $H_L\otimes H_R$, and let $P_L$ be
+    the orthogonal projector onto the support of $\operatorname{tr}_R\rho$.
+    Then
+    \[
+        (P_L\otimes\mathbf 1_R)\rho=\rho.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Set $Q_L=\mathbf 1_L-P_L$.  Since
+    $Q_L\operatorname{tr}_R\rho=0$, the adjoint identity gives
+    \[
+        \operatorname{tr}\bigl((Q_L\otimes\mathbf 1_R)\rho\bigr)
+        =\operatorname{tr}(Q_L\operatorname{tr}_R\rho)=0.
+    \]
+    Positivity of $\rho$ then implies
+    $(Q_L\otimes\mathbf 1_R)\rho=0$.  Finally,
+    $\mathbf 1-(Q_L\otimes\mathbf 1_R)=P_L\otimes\mathbf 1_R$ gives the
+    claim.
+\end{proof}
+
+\begin{theorem}[Right absorption by the marginal support projector]
+    \label{thm:marginal_support_right_absorption}
+    \lean{Matrix.PosSemidef.mul_leftKroneckerEmbed_supportProj_self}
+    \leanok
+    \uses{thm:marginal_support_left_absorption}
+    Under the same assumptions,
+    \[
+        \rho(P_L\otimes\mathbf 1_R)=\rho.
+    \]
+    For $H_L=H_A\otimes H_X$ and $H_R=H_B$, the two absorption identities are
+    precisely the $P_{AX}$ support-projector identities in
+    \cite[Appendix~D.2, lines 2228--2235]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply $(\cdot)^\dagger$ to the left absorption identity.  Since
+    $\rho^\dagger=\rho$ and
+    $(P_L\otimes\mathbf 1_R)^\dagger=P_L\otimes\mathbf 1_R$,
+    \[
+        \rho(P_L\otimes\mathbf 1_R)
+        =\bigl[(P_L\otimes\mathbf 1_R)\rho\bigr]^\dagger
+        =\rho^\dagger
+        =\rho.
+    \]
+\end{proof}
+
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
     \lean{Decorrelation.IsDecorrelated}
     \leanok
