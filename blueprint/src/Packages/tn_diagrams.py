@@ -160,6 +160,7 @@ class DiagramDeclaration:
     sample: str
     contexts: tuple[str, ...]
     body: str
+    ignored_arguments: tuple[int, ...]
     source_line: int
 
     @property
@@ -1009,6 +1010,67 @@ def _assert_exact_sample_call(
         )
 
 
+_LAYOUT_ENVIRONMENT_DEFAULT_PROFILES = {
+    "TNDiagram": "normal",
+    "TNEquationRow": "compact",
+    "TNEquationRows": "compact",
+}
+_LAYOUT_ENVIRONMENT_PATTERN = re.compile(
+    r"\\begin\s*\{(TNDiagram|TNEquationRows?)\}"
+    r"(?:\s*\[([^\]]*)\])?"
+)
+
+
+def _diagram_body_profile(
+    body: str,
+    *,
+    name: str,
+    location: str,
+    previous_declarations: dict[str, DiagramDeclaration],
+) -> str:
+    """Read the effective layout profile from one diagram body."""
+
+    environments = list(_LAYOUT_ENVIRONMENT_PATTERN.finditer(body))
+    if environments:
+        profiles = {
+            match.group(2).strip()
+            if match.group(2) is not None
+            else _LAYOUT_ENVIRONMENT_DEFAULT_PROFILES[match.group(1)]
+            for match in environments
+        }
+        invalid_profiles = profiles - {"compact", "normal"}
+        if invalid_profiles:
+            invalid = ", ".join(repr(profile) for profile in sorted(invalid_profiles))
+            raise RuntimeError(
+                f"{name} uses an invalid layout profile {invalid} at {location}."
+            )
+        if len(profiles) == 1:
+            return profiles.pop()
+        raise RuntimeError(
+            f"{name} uses conflicting layout profiles at {location}: "
+            f"{', '.join(sorted(profiles))}."
+        )
+
+    source = body.strip()
+    match = re.match(r"\\(TN[A-Za-z]+)(?=[^A-Za-z@]|\Z)", source)
+    if match is not None and match.group(1) in previous_declarations:
+        target = previous_declarations[match.group(1)]
+        offset = _skip_tex_space(source, match.end())
+        arguments = []
+        while offset < len(source) and source[offset] == "{":
+            argument, offset = _tex_group(source, offset, "{", "}")
+            arguments.append(argument)
+            offset = _skip_tex_space(source, offset)
+        if offset == len(source) and len(arguments) == len(target.arguments):
+            return target.profile
+
+    raise RuntimeError(
+        f"{name} has no unique layout profile at {location}; its body must contain "
+        "one TNDiagram, TNEquationRow, or TNEquationRows environment, or delegate "
+        "exactly to an earlier diagram declaration."
+    )
+
+
 def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
     r"""Read and validate every ``\TNDeclareDiagram`` catalogue record."""
 
@@ -1051,6 +1113,17 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
             raise RuntimeError(f"{name} has invalid role {role!r} at {location}.")
         if profile not in {"compact", "normal"}:
             raise RuntimeError(f"{name} has invalid profile {profile!r} at {location}.")
+        body_profile = _diagram_body_profile(
+            body,
+            name=name,
+            location=location,
+            previous_declarations=declarations,
+        )
+        if body_profile != profile:
+            raise RuntimeError(
+                f"{name} declares profile {profile!r} but its body uses "
+                f"{body_profile!r} at {location}."
+            )
         contexts = _parse_contexts(
             raw_contexts, name=name, location=location
         )
@@ -1077,6 +1150,7 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
             sample=sample.strip(),
             contexts=contexts,
             body=body,
+            ignored_arguments=tuple(ignored),
             source_line=int(location.rsplit(":", 1)[1]),
         )
     return declarations
@@ -1314,19 +1388,11 @@ def _source_semantic_debt(path: Path, source: str) -> dict[str, object]:
 def _ignored_diagram_arguments() -> dict[str, list[int]]:
     """Return declared arguments which do not occur in their diagram bodies."""
 
-    ignored: dict[str, list[int]] = {}
-    for declaration in diagram_declarations():
-        if not declaration.arguments:
-            continue
-        referenced = _unescaped_parameter_indices(declaration.body)
-        missing = [
-            index
-            for index in range(1, len(declaration.arguments) + 1)
-            if index not in referenced
-        ]
-        if missing:
-            ignored[declaration.name] = missing
-    return ignored
+    return {
+        declaration.name: list(declaration.ignored_arguments)
+        for declaration in diagram_declarations()
+        if declaration.ignored_arguments
+    }
 
 
 def _assert_diagram_arguments_used() -> None:
