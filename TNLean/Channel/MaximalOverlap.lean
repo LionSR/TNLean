@@ -191,6 +191,28 @@ theorem mul_supportProj_self (hA : A.IsHermitian) : A * hA.supportProj = A := by
   have h2 := congrArg Matrix.conjTranspose hA.supportProj_mul_self
   rwa [Matrix.conjTranspose_mul, hA.supportProj_isHermitian.eq, hA.eq] at h2
 
+/-- The complementary projection of the support of a Hermitian matrix is
+Hermitian. -/
+theorem one_sub_supportProj_isHermitian (hA : A.IsHermitian) :
+    (1 - hA.supportProj).IsHermitian :=
+  Matrix.isHermitian_one.sub hA.supportProj_isHermitian
+
+/-- The complementary projection of the support of a Hermitian matrix is
+idempotent. -/
+theorem one_sub_supportProj_idem (hA : A.IsHermitian) :
+    (1 - hA.supportProj) * (1 - hA.supportProj) = 1 - hA.supportProj := by
+  calc
+    (1 - hA.supportProj) * (1 - hA.supportProj) =
+        1 - hA.supportProj - hA.supportProj + hA.supportProj * hA.supportProj := by
+      noncomm_ring
+    _ = 1 - hA.supportProj := by rw [hA.supportProj_idem]; abel
+
+/-- The complementary projection of the support of a Hermitian matrix
+annihilates that matrix on the left. -/
+theorem one_sub_supportProj_mul_self (hA : A.IsHermitian) :
+    (1 - hA.supportProj) * A = 0 := by
+  rw [Matrix.sub_mul, Matrix.one_mul, hA.supportProj_mul_self, sub_self]
+
 /-! ### Rank of a Hermitian projection -/
 
 /-- Each eigenvalue of a Hermitian idempotent squares to itself.  Diagonalizing
