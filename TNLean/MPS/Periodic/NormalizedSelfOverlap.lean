@@ -128,7 +128,7 @@ theorem isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
         simpa [hAdj] using hstarEig
       exact ⟨hzEig, by simpa using hstarNorm⟩
   have hPeriodic : IsPeriodic m A :=
-    ⟨hIrr, hLeft, hm', hPeriphA, ⟨γ, hγroot'⟩⟩
+    ⟨hIrr, hLeft, hm', hPeriphA⟩
   have hmul : Tendsto (fun k : ℕ ↦ m * k) atTop atTop := by
     refine tendsto_atTop.2 fun b ↦ ?_
     filter_upwards [eventually_ge_atTop b] with a ha

@@ -106,7 +106,7 @@ theorem isPeriodic_smul_of_norm_one
     simp [hsc]
   refine ⟨isIrreducibleTensor_smul hc_ne A hA.irreducible,
     leftCanonical_smul_of_norm_one c hc A hA.leftCanonical,
-    hA.period_pos, ?_, hA.primitiveRoot⟩
+    hA.period_pos, ?_⟩
   simpa [hTransfer] using hA.peripheral_eq
 
 /-- Scaling a tensor by `c` scales MPVs by `c^N`. -/

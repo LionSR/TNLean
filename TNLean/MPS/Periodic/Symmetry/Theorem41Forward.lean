@@ -159,7 +159,7 @@ theorem isPeriodic_kraus_isometry
     simpa [hEq] using hIrrMapB
   refine ⟨isIrreducibleTensor_of_isIrreducibleMap C hIrrMapC,
     isLeftCanonical_kraus_isometry B W hW hB.leftCanonical,
-    hB.period_pos, ?_, hB.primitiveRoot⟩
+    hB.period_pos, ?_⟩
   simpa [C, hEq] using hB.peripheral_eq
 
 private theorem sameMPV₂_toTensorFromBlocks_sum_smul_ofFn
