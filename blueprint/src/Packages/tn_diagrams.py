@@ -902,17 +902,39 @@ def _tex_command_calls(
 
 
 def _tex_declaration_calls(
-    source: str, command_name: str
+    source: str, command_name: str, *, arity: int
 ) -> list[TexDeclarationCall]:
-    """Read top-level, line-initial calls to a declaration command."""
+    """Read declarations and reject complete calls that are not line-initial."""
 
-    pattern = re.compile(
-        r"^[ \t]*\\" + re.escape(command_name) + r"(?=\s*\{)",
+    command_pattern = r"\\" + re.escape(command_name) + r"(?=[^A-Za-z@]|\Z)"
+    line_pattern = re.compile(
+        r"^[ \t]*(?P<call>" + command_pattern + r")(?=\s*\{)",
         re.MULTILINE,
     )
-    calls: list[TexDeclarationCall] = []
-    for match in pattern.finditer(source):
+    line_matches = list(line_pattern.finditer(source))
+    line_call_offsets = {match.start("call") for match in line_matches}
+    missed_calls = []
+    for match in re.finditer(command_pattern, source):
+        if match.start() in line_call_offsets:
+            continue
         offset = _skip_tex_space(source, match.end())
+        group_count = 0
+        while offset < len(source) and source[offset] == "{":
+            _, offset = _tex_group(source, offset, "{", "}")
+            group_count += 1
+            offset = _skip_tex_space(source, offset)
+        if group_count >= arity:
+            missed_calls.append(match)
+    if missed_calls:
+        line = source.count("\n", 0, missed_calls[0].start()) + 1
+        raise RuntimeError(
+            f"\\{command_name} must begin a source line; found a non-line-initial "
+            f"call at line {line}."
+        )
+
+    calls: list[TexDeclarationCall] = []
+    for match in line_matches:
+        offset = _skip_tex_space(source, match.end("call"))
         groups: list[str] = []
         group_offsets: list[int] = []
         while offset < len(source) and source[offset] == "{":
@@ -923,7 +945,7 @@ def _tex_declaration_calls(
         calls.append(
             TexDeclarationCall(
                 groups=tuple(groups),
-                source_offset=match.start(),
+                source_offset=match.start("call"),
                 group_offsets=tuple(group_offsets),
             )
         )
@@ -1093,7 +1115,7 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
             f"{_TN_CATALOGUE_FILE.relative_to(_REPO_ROOT)}"
         )
     source = _mask_tex_comments(_TN_CATALOGUE_FILE.read_text(encoding="utf-8"))
-    calls = _tex_declaration_calls(source, "TNDeclareDiagram")
+    calls = _tex_declaration_calls(source, "TNDeclareDiagram", arity=7)
     if not calls:
         raise RuntimeError("tn_catalogue.tex contains no \\TNDeclareDiagram records.")
 
@@ -1209,7 +1231,7 @@ def _load_atom_declarations() -> dict[str, AtomDeclaration]:
             f"{_TN_ATOMS_FILE.relative_to(_REPO_ROOT)}"
         )
     source = _mask_tex_comments(_TN_ATOMS_FILE.read_text(encoding="utf-8"))
-    calls = _tex_declaration_calls(source, "TNDeclareAtom")
+    calls = _tex_declaration_calls(source, "TNDeclareAtom", arity=4)
     if not calls:
         raise RuntimeError("tn_atoms.tex contains no \\TNDeclareAtom records.")
     declarations: dict[str, AtomDeclaration] = {}
@@ -1283,7 +1305,7 @@ def _tex_macro_definitions(source: str) -> list[tuple[str, str, int]]:
             raise AssertionError("balanced TeX group did not advance")
     definitions.extend(
         (call.groups[0].strip(), call.groups[6], call.group_offsets[6])
-        for call in _tex_declaration_calls(source, "TNDeclareDiagram")
+        for call in _tex_declaration_calls(source, "TNDeclareDiagram", arity=7)
         if len(call.groups) == 7
     )
     return definitions
