@@ -126,7 +126,11 @@
     blocked $\chi$-family with positive diagonal entries such that, for
     every positive blocked length $n$,
     \[
-        c^{(n)}_{i,j,k} = \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
+        \chi_{n,i,j,k}
+        = \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)},
+        \qquad
+        c^{(n)}_{i,j,k}
+        = \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
     \]
     The blocked-basis $\chi$-family is the pullback of the BNT-label
     $\chi$-family along the source and target comparison maps
@@ -149,9 +153,15 @@
         lem:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
     For every positive blocked length $n$, the blocked-basis coefficients
     obtained from an existential BNT-label theorem witness are traces of
-    powers of the pulled-back blocked-basis $\chi$-matrices,
+    powers of the BNT-label $\chi$-matrices selected by the source and target
+    maps. Equivalently, they are traces of powers of the pulled-back
+    blocked-basis $\chi$-matrices:
     \[
-        c^{(n)}_{i,j,k} = \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
+        c^{(n)}_{i,j,k}
+        = \operatorname{tr}\!\left(
+            \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
+        \right)
+        = \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
     \]
 \end{corollary}
 \begin{proof}\leanok
