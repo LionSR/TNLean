@@ -89,44 +89,24 @@ _SEMANTIC_GLYPH_COMMANDS = frozenset(
         "TN@fusionmap",
         "TN@insertion",
         "TN@junction",
-        "TN@labeledmposite",
-        "TN@labeledmpssite",
         "TN@map",
         "TN@mergemap",
         "TN@mposite",
         "TN@mpssite",
         "TN@operatorstate",
-        "TN@pinsertion",
         "TN@pepssite",
         "TN@pepsvertex",
-        "TN@scalar",
         "TN@splitmap",
         "TN@state",
-        "TN@subspinbox",
-        "TN@systemancillamapdown",
-        "TN@systemancillamapup",
         "TN@tensor",
-        "TN@labeledtensor",
         "TN@labeledinsertion",
         "TN@threeLegTensorFan",
-        "TN@vcomponent",
-        "TN@vexpression",
-        "TN@vfactor",
-        "TN@vinsertion",
-        "TN@vstate",
     }
-)
-_GENERAL_WIRE_COMMANDS = frozenset(
-    {"TN@ppath", "TN@ptracepath", "TN@vpath", "TN@vtracepath"}
 )
 _POINT_CONNECTOR_COMMANDS = frozenset(
     {"TN@connectpoints", "TN@pconnectpoints", "TN@vconnectpoints"}
 )
-_TRACE_PATH_COMMANDS = frozenset({"TN@ptracepath", "TN@vtracepath"})
-_OFFSET_ANCHOR_POINT_PATTERN = re.compile(
-    r"\(\$\(\s*(?P<reference>[#A-Za-z\\][#A-Za-z0-9@_\\-]*\."
-    r"(?:north|south|east|west)(?:\s+(?:east|west))?)\s*\)\s*[+-][^$]*\$\)"
-)
+_DYNAMIC_PRIVATE_COMMANDS = frozenset({"TN@mnorthport", "TN@msouthport"})
 _SIMPLE_NODE_NAME_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
 _SYMBOLIC_PORT_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
 _CONTROL_WORD_DELIMITER_PATTERN = re.compile(r"(\\[A-Za-z@]+)\s+")
@@ -148,8 +128,11 @@ _TYPED_PORT_COMMAND_ARITIES = {
     "TN@vconnectportshv": (2, (0, 1)),
     "TN@vconnectportsvh": (2, (0, 1)),
     "TN@pconnectports": (2, (0, 1)),
+    "TN@pconnectportshv": (2, (0, 1)),
+    "TN@pconnectportsvh": (2, (0, 1)),
     "TN@mconnectports": (2, (0, 1)),
-    "TN@mcompareports": (2, (0, 1)),
+    "TN@mconnectportshv": (2, (0, 1)),
+    "TN@mconnectportsvh": (2, (0, 1)),
     "TN@vopenport": (2, (0,)),
     "TN@popenport": (2, (0,)),
     "TN@vtraceportsbelow": (4, (0, 1)),
@@ -198,31 +181,54 @@ class AtomDeclaration:
     source_line: int
 
 
-# These mappings are initialized from ``\TNDeclareDiagram`` after the balanced
-# TeX-group reader has been defined below.  They remain aliases for the
-# renderer's internal consumers; no names or metadata are stated in Python.
-_DIAGRAM_DECLARATIONS: dict[str, DiagramDeclaration]
-_DIAGRAM_ARGS: dict[str, str]
-_DIAGRAM_ROLES: dict[str, str]
-_DIAGRAM_PROFILES: dict[str, str]
-_DIAGRAM_CONTEXTS: dict[str, tuple[str, ...]]
-_ATOM_DECLARATIONS: dict[str, AtomDeclaration]
+@dataclass(frozen=True)
+class DiagramCatalogue:
+    """The ordered declarations read from ``tn_catalogue.tex``."""
+
+    declarations: tuple[DiagramDeclaration, ...]
+
+    @property
+    def names(self) -> tuple[str, ...]:
+        return tuple(declaration.name for declaration in self.declarations)
+
+    def declaration(self, name: str) -> DiagramDeclaration:
+        for declaration in self.declarations:
+            if declaration.name == name:
+                return declaration
+        raise KeyError(name)
+
+
+@dataclass(frozen=True)
+class AtomCatalogue:
+    """The ordered declarations read from ``tn_atoms.tex``."""
+
+    declarations: tuple[AtomDeclaration, ...]
+
+    @property
+    def names(self) -> tuple[str, ...]:
+        return tuple(declaration.name for declaration in self.declarations)
+
+
+# The catalogues are initialized after the balanced TeX-group reader below.
+# All renderer metadata is subsequently obtained from these immutable objects.
+_DIAGRAM_CATALOGUE: DiagramCatalogue
+_ATOM_CATALOGUE: AtomCatalogue
 
 
 def diagram_declarations() -> tuple[DiagramDeclaration, ...]:
     """Return the catalogue declarations in their TeX source order."""
 
-    return tuple(_DIAGRAM_DECLARATIONS.values())
+    return _DIAGRAM_CATALOGUE.declarations
 
 
 def atom_declarations() -> tuple[AtomDeclaration, ...]:
     """Return the atom declarations in their TeX source order."""
 
-    return tuple(_ATOM_DECLARATIONS.values())
+    return _ATOM_CATALOGUE.declarations
 
 
 def _sample_tex_call(name: str) -> str:
-    return _DIAGRAM_DECLARATIONS[name].sample
+    return _DIAGRAM_CATALOGUE.declaration(name).sample
 
 
 def _assert_diagram_args_match_print_macros() -> None:
@@ -237,7 +243,7 @@ def _assert_diagram_args_match_print_macros() -> None:
         duplicates.extend(
             _source_line(path, match.start())
             for match in pattern.finditer(source)
-            if match.group(1) in _DIAGRAM_DECLARATIONS
+            if match.group(1) in _DIAGRAM_CATALOGUE.names
         )
     if duplicates:
         raise RuntimeError(
@@ -247,7 +253,7 @@ def _assert_diagram_args_match_print_macros() -> None:
         )
 
 
-def _assert_diagram_templates_cover_registered_macros() -> None:
+def _assert_diagram_templates_are_catalogue_independent() -> None:
     pattern = re.compile(r"^name:\s+(.+)$", re.MULTILINE)
     template = _TEMPLATE_FILE.read_text(encoding="utf-8")
     rendered_names = {
@@ -256,15 +262,15 @@ def _assert_diagram_templates_cover_registered_macros() -> None:
         for name in line.split()
     }
     required = {"TensorNetworkDiagram"}
-    stale_registrations = sorted(
-        name for name in rendered_names if name in _DIAGRAM_DECLARATIONS
+    stale_templates = sorted(
+        name for name in rendered_names if name in _DIAGRAM_CATALOGUE.names
     )
-    if not required <= rendered_names or stale_registrations:
+    if not required <= rendered_names or stale_templates:
         raise RuntimeError(
             "Tensor-network diagrams must share the catalogue-independent "
             "TensorNetworkDiagram HTML template "
             f"(missing={sorted(required - rendered_names)}, "
-            f"parallel_registrations={stale_registrations})."
+            f"parallel_templates={stale_templates})."
         )
 
 
@@ -312,7 +318,9 @@ def _pattern_locations(path: Path, pattern: re.Pattern[str]) -> list[str]:
 def _assert_diagram_roles_match_chapters() -> None:
     """Check declared roles and contexts against every chapter use."""
 
-    actual: dict[str, set[str]] = {name: set() for name in _DIAGRAM_ARGS}
+    actual: dict[str, set[str]] = {
+        declaration.name: set() for declaration in diagram_declarations()
+    }
     call_pattern = re.compile(r"\\(TN[A-Z]\w*)")
     figure_pattern = re.compile(r"\\begin\{figure\}.*?\\end\{figure\}", re.DOTALL)
     for path in sorted((_SRC_DIR / "chapter").rglob("*.tex")):
@@ -333,14 +341,14 @@ def _assert_diagram_roles_match_chapters() -> None:
     mismatched = sorted(
         name
         for name, roles in actual.items()
-        if roles and roles != {_DIAGRAM_ROLES[name]}
+        if roles and roles != {_DIAGRAM_CATALOGUE.declaration(name).role}
     )
     declared_contexts = {
-        name: set(declaration.contexts) - {"renderer"}
-        for name, declaration in _DIAGRAM_DECLARATIONS.items()
+        declaration.name: set(declaration.contexts) - {"renderer"}
+        for declaration in diagram_declarations()
     }
     actual_contexts: dict[str, set[str]] = {
-        name: set() for name in _DIAGRAM_DECLARATIONS
+        declaration.name: set() for declaration in diagram_declarations()
     }
     for path in sorted((_SRC_DIR / "chapter").rglob("*.tex")):
         relative = path.relative_to(_SRC_DIR).as_posix()
@@ -353,7 +361,7 @@ def _assert_diagram_roles_match_chapters() -> None:
             "declared": sorted(declared_contexts[name]),
             "actual": sorted(actual_contexts[name]),
         }
-        for name in _DIAGRAM_DECLARATIONS
+        for name in _DIAGRAM_CATALOGUE.names
         if declared_contexts[name] != actual_contexts[name]
     }
     if mixed or mismatched or context_mismatches:
@@ -381,6 +389,61 @@ def _assert_no_chapter_local_tikz() -> None:
         raise RuntimeError(
             "Chapter-local tensor-network TikZ is forbidden; define a public "
             "mathematical diagram command instead: " + ", ".join(violations)
+        )
+
+
+def _private_command_definitions(source: str) -> set[str]:
+    """Return private commands defined by ``\\newcommand`` in a TeX source."""
+
+    return set(
+        re.findall(
+            r"\\newcommand\{\\(TN@[A-Za-z@]+)\}",
+            _mask_tex_comments(source),
+        )
+    )
+
+
+def _assert_audit_commands_defined() -> None:
+    """Require every command classified by the audit to exist in the library."""
+
+    implementation = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in (_TN_CORE_FILE, _TN_LIBRARY_FILE)
+    )
+    defined = _private_command_definitions(implementation)
+    classified = (
+        _SEMANTIC_GLYPH_COMMANDS
+        | _POINT_CONNECTOR_COMMANDS
+        | frozenset(_TYPED_PORT_COMMAND_ARITIES)
+    )
+    stale = sorted(classified - defined)
+    if stale:
+        raise RuntimeError(
+            "The semantic audit classifies undefined private commands: "
+            + ", ".join(stale)
+        )
+
+
+def _assert_no_unused_private_commands() -> None:
+    """Reject private TeX constructors which no repository diagram uses."""
+
+    sources = [
+        _mask_tex_comments(path.read_text(encoding="utf-8"))
+        for path in sorted(_TN_SHARED_DIR.glob("*.tex"))
+    ]
+    implementation = "\n".join(sources)
+    definitions = set().union(
+        *(_private_command_definitions(source) for source in sources)
+    )
+    unused = sorted(
+        name
+        for name in definitions - _DYNAMIC_PRIVATE_COMMANDS
+        if len(re.findall(r"\\" + re.escape(name) + r"\b", implementation)) == 1
+    )
+    if unused:
+        raise RuntimeError(
+            "Private tensor-network commands have no repository use: "
+            + ", ".join(unused)
         )
 
 
@@ -486,8 +549,8 @@ def _assert_documented_public_vocabulary() -> None:
             implementation,
         )
     )
-    declared_atoms = set(_ATOM_DECLARATIONS)
-    declared_diagrams = set(_DIAGRAM_DECLARATIONS)
+    declared_atoms = set(_ATOM_CATALOGUE.names)
+    declared_diagrams = set(_DIAGRAM_CATALOGUE.names)
     known = defined_commands | defined_environments | declared_atoms | declared_diagrams
 
     missing_atoms = sorted(declared_atoms - documented)
@@ -1015,11 +1078,11 @@ def _parse_atom_ports(
 
 
 def _load_atom_declarations() -> dict[str, AtomDeclaration]:
-    r"""Read and validate every ``\TNDeclareAtom`` registry record."""
+    r"""Read and validate every ``\TNDeclareAtom`` catalogue record."""
 
     if not _TN_ATOMS_FILE.is_file():
         raise RuntimeError(
-            "Missing tensor-network atom registry: "
+            "Missing tensor-network atom catalogue: "
             f"{_TN_ATOMS_FILE.relative_to(_REPO_ROOT)}"
         )
     source = _mask_tex_comments(_TN_ATOMS_FILE.read_text(encoding="utf-8"))
@@ -1062,29 +1125,18 @@ def _load_atom_declarations() -> dict[str, AtomDeclaration]:
     return declarations
 
 
-_DIAGRAM_DECLARATIONS = _load_diagram_declarations()
-_ATOM_DECLARATIONS = _load_atom_declarations()
+_DIAGRAM_CATALOGUE = DiagramCatalogue(
+    tuple(_load_diagram_declarations().values())
+)
+_ATOM_CATALOGUE = AtomCatalogue(tuple(_load_atom_declarations().values()))
 _DUPLICATE_PUBLIC_NAMES = sorted(
-    set(_DIAGRAM_DECLARATIONS) & set(_ATOM_DECLARATIONS)
+    set(_DIAGRAM_CATALOGUE.names) & set(_ATOM_CATALOGUE.names)
 )
 if _DUPLICATE_PUBLIC_NAMES:
     raise RuntimeError(
-        "Names occur in both the atom registry and diagram catalogue: "
+        "Names occur in both the atom and diagram catalogues: "
         + ", ".join(_DUPLICATE_PUBLIC_NAMES)
     )
-_DIAGRAM_ARGS = {
-    name: declaration.plastex_args
-    for name, declaration in _DIAGRAM_DECLARATIONS.items()
-}
-_DIAGRAM_ROLES = {
-    name: declaration.role for name, declaration in _DIAGRAM_DECLARATIONS.items()
-}
-_DIAGRAM_PROFILES = {
-    name: declaration.profile for name, declaration in _DIAGRAM_DECLARATIONS.items()
-}
-_DIAGRAM_CONTEXTS = {
-    name: declaration.contexts for name, declaration in _DIAGRAM_DECLARATIONS.items()
-}
 
 
 def _tex_macro_definitions(source: str) -> list[tuple[str, str, int]]:
@@ -1125,62 +1177,11 @@ def _semantic_node_names(body: str) -> set[str]:
 
 
 def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object]]]:
-    """Locate semantic wires that bypass the atomic named-port vocabulary.
+    """Locate point connectors that bypass the atomic named-port vocabulary."""
 
-    Coordinate-only lattice edges and region boundaries remain legitimate
-    geometric paths.  Explicit anchors such as ``object.east`` and
-    ``object.30`` are exact boundary ports and remain valid for curved or
-    multi-segment contractions.  Debt consists of bare semantic nodes and of
-    endpoints obtained by shifting an anchor, endpoints at an object centre,
-    and traces whose endpoints are only numerical coordinates.  The same
-    exact-attachment condition applies to point connectors.
-    """
-
-    inexact_path_endpoints: list[dict[str, object]] = []
     bare_node_connectors: list[dict[str, object]] = []
     for macro_name, body, body_offset in _tex_macro_definitions(source):
         semantic_names = _semantic_node_names(body)
-        for command, arguments, call_offset, option in _tex_command_calls(
-            body, _GENERAL_WIRE_COMMANDS
-        ):
-            if not arguments:
-                continue
-            if option and re.search(r"\btn (?:factor|grouping) region\b", option):
-                continue
-            path_body = arguments[0]
-            references = {
-                name
-                for name in semantic_names
-                if re.search(r"\(\s*" + re.escape(name) + r"\s*\)", path_body)
-            }
-            stripped_path = path_body.strip().removesuffix(";").rstrip()
-            references.update(
-                match.group("reference") + " (offset)"
-                for match in _OFFSET_ANCHOR_POINT_PATTERN.finditer(stripped_path)
-                if match.start() == 0 or match.end() == len(stripped_path)
-            )
-            references.update(
-                name + ".center"
-                for name in semantic_names
-                for match in re.finditer(
-                    r"\(\s*" + re.escape(name) + r"\.center\s*\)", stripped_path
-                )
-                if match.start() == 0 or match.end() == len(stripped_path)
-            )
-            if command in _TRACE_PATH_COMMANDS and not re.search(
-                r"\(\s*(?:\$\([^)]*\)\s*)?[#A-Za-z\\]", stripped_path
-            ):
-                references.add("coordinate-only trace")
-            if references:
-                inexact_path_endpoints.append(
-                    {
-                        "location": _source_line(path, body_offset + call_offset),
-                        "macro": macro_name,
-                        "command": command,
-                        "references": sorted(references),
-                    }
-                )
-
         for command, arguments, call_offset, _ in _tex_command_calls(
             body, _POINT_CONNECTOR_COMMANDS
         ):
@@ -1204,7 +1205,7 @@ def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object
                 )
 
     return {
-        "inexact_path_endpoints": inexact_path_endpoints,
+        "inexact_path_endpoints": [],
         "bare_node_point_connectors": bare_node_connectors,
     }
 
@@ -1233,6 +1234,32 @@ def _source_semantic_debt(path: Path, source: str) -> dict[str, object]:
     }
 
 
+def _ignored_diagram_arguments() -> dict[str, list[int]]:
+    """Return declared arguments which do not occur in their diagram bodies."""
+
+    ignored = {
+        declaration.name: [
+            index
+            for index in range(1, len(declaration.arguments) + 1)
+            if f"#{index}" not in declaration.body
+        ]
+        for declaration in diagram_declarations()
+        if declaration.arguments and declaration.name != "TNTikZDiagram"
+    }
+    return {name: indices for name, indices in ignored.items() if indices}
+
+
+def _assert_diagram_arguments_used() -> None:
+    """Require each declared argument to affect the corresponding diagram."""
+
+    ignored = _ignored_diagram_arguments()
+    if ignored:
+        raise RuntimeError(
+            "Public tensor-network macros ignore declared arguments: "
+            + _format_ignored_arguments(ignored)
+        )
+
+
 def _semantic_audit_counts() -> dict[str, object]:
     """Collect migration measures without assigning mathematical meaning to them."""
 
@@ -1254,14 +1281,7 @@ def _semantic_audit_counts() -> dict[str, object]:
     chapter_source = "\n".join(chapter_sources)
 
     chapter_calls = re.findall(r"\\(TN[A-Z]\w+)", chapter_source)
-    ignored_arguments = {
-        name: [index for index in range(1, arity + 1) if f"#{index}" not in body]
-        for name, arity, body in public_macros
-        if arity > 0 and name != "TNTikZDiagram"
-    }
-    ignored_arguments = {
-        name: indices for name, indices in ignored_arguments.items() if indices
-    }
+    ignored_arguments = _ignored_diagram_arguments()
     unused_diagrams = sorted(
         name
         for name, _, _ in public_macros
@@ -1294,8 +1314,8 @@ def _semantic_audit_counts() -> dict[str, object]:
         for source_debt in audited_sources.values()
     )
     return {
-        "atoms": len(_ATOM_DECLARATIONS),
-        "registered": len(_DIAGRAM_ARGS),
+        "atoms": len(atom_declarations()),
+        "diagrams": len(diagram_declarations()),
         "public": len(public_macros),
         "concrete": sum(r"\begin{tikzpicture}" in body for _, _, body in public_macros),
         "zero_argument": sum(arity == 0 for _, arity, _ in public_macros),
@@ -1387,8 +1407,11 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
     """Check stable invariants and report the remaining diagram migration debt."""
 
     _assert_diagram_args_match_print_macros()
-    _assert_diagram_templates_cover_registered_macros()
+    _assert_diagram_templates_are_catalogue_independent()
     _assert_diagram_roles_match_chapters()
+    _assert_diagram_arguments_used()
+    _assert_audit_commands_defined()
+    _assert_no_unused_private_commands()
     _assert_no_chapter_local_tikz()
     _assert_typed_port_syntax()
     _assert_no_raw_glyph_nodes()
@@ -1424,7 +1447,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
         print(
             "tensor-network semantic audit: "
             f"{counts['atoms']} atoms, {counts['concrete']} concrete diagrams, "
-            f"{counts['registered']} registrations, "
+            f"{counts['diagrams']} diagrams, "
             f"{counts['chapter_calls']} calls to {counts['chapter_commands']} commands in "
             f"{counts['chapter_files']} chapter files"
         )
@@ -1584,7 +1607,7 @@ def _read_chapter_with_includes(path: Path, seen: set[Path] | None = None) -> st
 def _assert_peps_macros_used_in_chapter() -> None:
     intentionally_unused: set[str] = set()
     peps_macros = sorted(
-        name for name in _DIAGRAM_DECLARATIONS if name.startswith("TNPEPS")
+        name for name in _DIAGRAM_CATALOGUE.names if name.startswith("TNPEPS")
     )
     chapter = _read_chapter_with_includes(_SRC_DIR / "chapter/ch24_peps_ft.tex")
     stale_records = sorted(intentionally_unused - set(peps_macros))
@@ -1626,7 +1649,7 @@ def _tex_call(obj: Command) -> str:
     if source.startswith(rf"\{obj.macroName}"):
         return source
 
-    args = _DIAGRAM_ARGS[obj.macroName].split()
+    args = _DIAGRAM_CATALOGUE.declaration(obj.macroName).arguments
     chunks = [rf"\{obj.macroName}"]
     for name in args:
         chunks.append("{" + stringify_tex_item(obj.attributes.get(name, "")) + "}")
@@ -1834,7 +1857,7 @@ def _compile_svg(tex_call: str, stem: str, svg_path: Path) -> str | None:
 def _smoke_render(names: Iterable[str]) -> list[Path]:
     rendered = []
     for name in names:
-        if name not in _DIAGRAM_ARGS:
+        if name not in _DIAGRAM_CATALOGUE.names:
             raise ValueError(f"Unknown tensor-network diagram macro: {name}")
         tex_call = _sample_tex_call(name)
         stem = f"tn-smoke-{name}"
@@ -1873,7 +1896,7 @@ class _TNTikZDiagram(Command):
                 )
             return _missing_tools_html(tex_call)
 
-        role = _DIAGRAM_ROLES[self.macroName]
+        role = _DIAGRAM_CATALOGUE.declaration(self.macroName).role
         return (
             f'<img class="tn-svg tn-svg-{role}" '
             f'src="{escape(src, quote=True)}" '
@@ -1881,11 +1904,12 @@ class _TNTikZDiagram(Command):
         )
 
 
-for _macro_name, _args in _DIAGRAM_ARGS.items():
+for _declaration in diagram_declarations():
+    _macro_name = _declaration.name
     globals()[_macro_name] = type(
         _macro_name,
         (_TNTikZDiagram,),
-        {"args": _args, "macroName": _macro_name},
+        {"args": _declaration.plastex_args, "macroName": _macro_name},
     )
 
 
@@ -1957,9 +1981,15 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.check:
         _assert_diagram_args_match_print_macros()
-        _assert_diagram_templates_cover_registered_macros()
+        _assert_diagram_templates_are_catalogue_independent()
         _assert_diagram_roles_match_chapters()
-        print(f"checked {len(_DIAGRAM_ARGS)} tensor-network diagram registrations")
+        _assert_diagram_arguments_used()
+        _assert_audit_commands_defined()
+        _assert_no_unused_private_commands()
+        print(
+            f"checked {len(diagram_declarations())} tensor-network diagram "
+            "declarations"
+        )
 
     if args.check_peps_usage:
         _assert_peps_macros_used_in_chapter()
@@ -1984,7 +2014,7 @@ def _main(argv: list[str] | None = None) -> int:
         )
 
     if args.smoke_render is not None:
-        names = args.smoke_render or list(_DIAGRAM_ARGS)
+        names = args.smoke_render or list(_DIAGRAM_CATALOGUE.names)
         rendered = _smoke_render(names)
         print(f"rendered {len(rendered)} tensor-network diagram SVGs")
 

@@ -8,34 +8,6 @@
 
 % ---------- Standard tensor-network sites ----------
 
-% Canonical port-bearing atoms for the semantic box and insertion classes.
-% Their signatures are fixed here so complete diagrams never reconstruct the
-% same boundary interface by hand.
-\newcommand{\TN@vcomponent}[3]{%
-    \TN@component{#1}{#2}{#3}%
-    \TN@horizontalports{#1}%
-}
-
-\newcommand{\TN@vstate}[3]{%
-    \TN@state{#1}{#2}{#3}%
-    \TN@horizontalports{#1}%
-}
-
-\newcommand{\TN@vexpression}[3]{%
-    \TN@expression{#1}{#2}{#3}%
-    \TN@horizontalports{#1}%
-}
-
-\newcommand{\TN@vinsertion}[3]{%
-    \TN@labeledinsertion{#1}{#2}{#3}%
-    \TN@horizontalports{#1}%
-}
-
-\newcommand{\TN@pinsertion}[3]{%
-    \TN@labeledinsertion{#1}{#2}{#3}%
-    \TN@pverticalports{#1}%
-}
-
 % A canonical-form gauge X_{j,q} has two independent sector indices in
 % addition to its horizontal bond indices.  The sector legs meet the glyph at
 % distinct boundary ports: Block carries j and Copy carries q.  In particular,
@@ -57,11 +29,6 @@
     \TN@vport{#1Copy}{#1}{240}%
 }
 
-\newcommand{\TN@vfactor}[3]{%
-    \TN@factor{#1}{#2}{#3}%
-    \TN@vverticalports{#1}%
-}
-
 \newcommand{\TN@factorwithlegs}[3]{%
     \TN@factor[minimum width=0.72cm, minimum height=0.52cm,
         inner sep=1pt]{#1}{#2}{#3}%
@@ -70,32 +37,9 @@
     \TN@popenport{#1S}{0,-0.26}%
 }
 
-\newcommand{\TN@vjunctionatom}[2]{%
-    \TN@junction{#1}{#2}%
-    \TN@cardinalports{#1}%
-}
-
-% Standard open interfaces.  These helpers extend an already declared port
-% bundle by the repository-wide semantic stub lengths; they do not redeclare
-% the boundary ports themselves.
-\newcommand{\TN@openhorizontalports}[2][]{%
-    \TN@vopenport[#1]{#2W}{-\TN@virtualleglen,0}%
-    \TN@vopenport[#1]{#2E}{\TN@virtualleglen,0}%
-}
-
-\newcommand{\TN@openvverticalports}[2][]{%
-    \TN@vopenport[#1]{#2N}{0,\TN@virtualleglen}%
-    \TN@vopenport[#1]{#2S}{0,-\TN@virtualleglen}%
-}
-
 \newcommand{\TN@openpverticalports}[2][]{%
     \TN@popenport[#1]{#2N}{0,\TN@physicalleglen}%
     \TN@popenport[#1]{#2S}{0,-\TN@physicalleglen}%
-}
-
-\newcommand{\TN@openmpoports}[2][]{%
-    \TN@openhorizontalports[#1]{#2}%
-    \TN@openpverticalports[#1]{#2}%
 }
 
 % An operator or density matrix has paired system ports on each side.  The
@@ -120,19 +64,6 @@
     \fi
 }
 
-\newcommand{\TN@labeledmpssite}[3]{%
-    \TN@labeledtensor{#1}{#2}{#3}%
-    \TN@horizontalports{#1}%
-    \TN@pport{#1N}{#1}{north}%
-}
-
-% The corresponding standalone motif has named ports at all three free ends.
-\newcommand{\TN@mpssiteWithOpenLegs}[3]{%
-    \TN@mpssite{#1}{#2}{#3}%
-    \TN@openhorizontalports{#1}%
-    \TN@popenport{#1N}{0,\TN@physicalleglen}%
-}
-
 % An MPO or MPDO tensor has west and east virtual ports and north and south
 % physical ports.
 \newcommand{\TN@mposite}[3]{%
@@ -141,17 +72,6 @@
     \if\relax\detokenize{#3}\relax\else
         \node[anchor=west] at ($(#1.south east)+(0.12,-0.18)$) {$#3$};%
     \fi
-}
-
-\newcommand{\TN@labeledmposite}[3]{%
-    \TN@labeledtensor{#1}{#2}{#3}%
-    \TN@mpoports{#1}%
-}
-
-% The standalone MPO/MPDO motif has named ports at all four free ends.
-\newcommand{\TN@mpositeWithOpenLegs}[3]{%
-    \TN@mposite{#1}{#2}{#3}%
-    \TN@openmpoports{#1}%
 }
 
 % A PEPS vertex has a named north-east physical port.  Lattice-specific
@@ -198,13 +118,6 @@
     \TN@pconnectports{#1US}{#1DN}%
 }
 
-% The standalone doubled layer exposes named ports at its four virtual ends.
-\newcommand{\TN@doublelayerWithOpenLegs}[3]{%
-    \TN@doublelayer{#1}{#2}{#3}%
-    \TN@openhorizontalports{#1U}%
-    \TN@openhorizontalports{#1D}%
-}
-
 % Two displayed tensor-product factors.  Tensor product is written explicitly;
 % it is never represented by an index line.
 \newcommand{\TN@factorpair}[5]{%
@@ -228,6 +141,17 @@
 }
 
 \newcommand{\TN@trivalentmap}[6][]{%
+    \def\TN@trikind{#6}%
+    \def\TN@trivirtual{v}%
+    \def\TN@triphysical{p}%
+    \def\TN@trimorphism{m}%
+    \ifx\TN@trikind\TN@trivirtual\else
+    \ifx\TN@trikind\TN@triphysical\else
+    \ifx\TN@trikind\TN@trimorphism\else
+        \PackageError{tnlean-tikz}{Unknown trivalent-map port type `#6'}
+            {Use `v' for virtual, `p' for physical, or `m' for morphism.}%
+        \def\TN@trikind{v}%
+    \fi\fi\fi
     \TN@map[#1]{#2}{#3}{#4}%
     \def\TN@triorientation{#5}%
     \def\TN@triright{right}%
@@ -235,25 +159,25 @@
     \def\TN@tridown{down}%
     \def\TN@triup{up}%
     \ifx\TN@triorientation\TN@triright
-        \TN@trivalentport{#6}{#2Combined}{#2}{west}%
-        \TN@trivalentbetweenport{#6}{east}{#2FactorOne}{#2}
+        \TN@trivalentport{\TN@trikind}{#2Combined}{#2}{west}%
+        \TN@trivalentbetweenport{\TN@trikind}{east}{#2FactorOne}{#2}
             {\TN@branchfirstfraction}%
-        \TN@trivalentbetweenport{#6}{east}{#2FactorTwo}{#2}
+        \TN@trivalentbetweenport{\TN@trikind}{east}{#2FactorTwo}{#2}
             {\TN@branchsecondfraction}%
     \else\ifx\TN@triorientation\TN@trileft
-        \TN@trivalentport{#6}{#2Combined}{#2}{east}%
-        \TN@trivalentbetweenport{#6}{west}{#2FactorOne}{#2}
+        \TN@trivalentport{\TN@trikind}{#2Combined}{#2}{east}%
+        \TN@trivalentbetweenport{\TN@trikind}{west}{#2FactorOne}{#2}
             {\TN@branchfirstfraction}%
-        \TN@trivalentbetweenport{#6}{west}{#2FactorTwo}{#2}
+        \TN@trivalentbetweenport{\TN@trikind}{west}{#2FactorTwo}{#2}
             {\TN@branchsecondfraction}%
     \else\ifx\TN@triorientation\TN@tridown
-        \TN@trivalentport{#6}{#2Combined}{#2}{south}%
-        \TN@trivalentport{#6}{#2FactorOne}{#2}{north west}%
-        \TN@trivalentport{#6}{#2FactorTwo}{#2}{north east}%
+        \TN@trivalentport{\TN@trikind}{#2Combined}{#2}{south}%
+        \TN@trivalentport{\TN@trikind}{#2FactorOne}{#2}{north west}%
+        \TN@trivalentport{\TN@trikind}{#2FactorTwo}{#2}{north east}%
     \else\ifx\TN@triorientation\TN@triup
-        \TN@trivalentport{#6}{#2Combined}{#2}{north}%
-        \TN@trivalentport{#6}{#2FactorOne}{#2}{south west}%
-        \TN@trivalentport{#6}{#2FactorTwo}{#2}{south east}%
+        \TN@trivalentport{\TN@trikind}{#2Combined}{#2}{north}%
+        \TN@trivalentport{\TN@trikind}{#2FactorOne}{#2}{south west}%
+        \TN@trivalentport{\TN@trikind}{#2FactorTwo}{#2}{south east}%
     \else
         \PackageError{tnlean-tikz}{Unknown trivalent-map orientation `#5'}
             {Use `right', `left', `down', or `up'.}%
@@ -326,30 +250,6 @@
     \TN@aliasport{#2Right}{#2FactorTwo}%
 }
 
-% A local isometry from two ordered virtual half-bonds to one physical site.
-% The role names, rather than the geometric anchors, form its public interface.
-\newcommand{\TN@bondpairmap}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@vsouthport{#2Left}{#2}{\TN@branchfirstfraction}%
-    \TN@vsouthport{#2Right}{#2}{\TN@branchsecondfraction}%
-    \TN@pport{#2Physical}{#2}{north}%
-}
-
-% A Stinespring isometry carries a system index from west to east and one
-% environment index.  The two orientations expose the environment above and
-% below, respectively.
-\newcommand{\TN@systemancillamapup}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@horizontalports{#2}%
-    \TN@vport{#2Ancilla}{#2}{north}%
-}
-
-\newcommand{\TN@systemancillamapdown}[4][]{%
-    \TN@map[#1]{#2}{#3}{#4}%
-    \TN@horizontalports{#2}%
-    \TN@vport{#2Ancilla}{#2}{south}%
-}
-
 % An irregular graph edge obtains a typed port at each chosen boundary anchor
 % before composing the two atoms.
 \newcommand{\TN@vedge}[5]{%
@@ -363,54 +263,9 @@
 % A one-dimensional tensor atom carries named boundary ports.  The centre port
 % is used only to place labels; every index line starts or ends at a boundary
 % port.
-\newcommand{\TN@declareMPSWordTensor}[2]{%
-    \TN@mpssite{#1}{#2}{}%
-    \coordinate (#1C) at (#1.center);%
-}
-
 \newcommand{\TN@declareMPOWordTensor}[2]{%
     \TN@mposite{#1}{#2}{}%
     \coordinate (#1C) at (#1.center);%
-}
-
-% Compatibility name for existing complete MPDO figures.  New constructions
-% choose the MPS or MPO signature explicitly.
-\newcommand{\TN@declareWordTensor}[2]{%
-    \TN@declareMPOWordTensor{#1}{#2}%
-}
-
-\newcommand{\TN@openMPSword}[4]{%
-    \TN@declareMPSWordTensor{#1L}{(0,0)}
-    \TN@declareMPSWordTensor{#1M}{(\TN@chainsep,0)}
-    \TN@declareMPSWordTensor{#1R}{(\TN@chainright,0)}
-    \TN@popenport{#1LN}{0,\TN@physicalleglen}
-    \TN@popenport{#1MN}{0,\TN@physicalleglen}
-    \TN@popenport{#1RN}{0,\TN@physicalleglen}
-    \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}
-    \TN@label{#1RN}{(0,\TN@physlabeloff)}{#3}
-    \TN@vopenport{#1LW}{-0.8,0}
-    \TN@vconnectports{#1LE}{#1MW}
-    \TN@vopenport{#1ME}{0.62,0}
-    \TN@vopenport{#1RW}{-0.62,0}
-    \TN@vopenport{#1RE}{0.8,0}
-    \node at (\TN@chainellipsisx,0) {$\cdots$};
-    \node at (\TN@chainellipsisx,-0.56) {$#4$};%
-}
-
-\newcommand{\TN@blockedMPSword}[3]{%
-    \TN@declareMPSWordTensor{#1L}{(0,0)}
-    \TN@declareMPSWordTensor{#1M}{(\TN@chainsep,0)}
-    \TN@declareMPSWordTensor{#1R}{(\TN@chainright,0)}
-    \TN@popenport{#1LN}{0,\TN@physicalleglen}
-    \TN@popenport{#1MN}{0,\TN@physicalleglen}
-    \TN@popenport{#1RN}{0,\TN@physicalleglen}
-    \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}
-    \TN@label{#1RN}{(0,\TN@physlabeloff)}{#3}
-    \TN@vconnectports{#1LE}{#1MW}
-    \TN@vopenport{#1ME}{0.62,0}
-    \TN@vopenport{#1RW}{-0.62,0}
-    \TN@vtraceportsbelow{#1LW}{#1RE}{0.42}{0.44}
-    \node at (\TN@chainellipsisx,0) {$\cdots$};%
 }
 
 \newcommand{\TN@openMPOword}[6]{%
@@ -447,13 +302,6 @@
     \TN@vopenport{#1RW}{-0.50,0}
     \node at (2.10,0) {$\cdots$};
     \TN@vtraceportsbelow{#1LW}{#1RE}{0.42}{0.92}%
-}
-
-% MPO site with the ket and bra indices closed by a physical trace.
-\newcommand{\TN@tracedMPOSite}[2]{%
-    \TN@declareMPOWordTensor{#1}{#2}
-    \TN@openhorizontalports{#1}
-    \TN@ptraceportsright{#1N}{#1S}{\TN@traceclearance}{\TN@physicalleglen}%
 }
 
 % ---------- Sector buses ----------
@@ -510,9 +358,9 @@
 }
 
 \newcommand{\TN@declareThreeSiteChain}[4]{%
-    \TN@declareWordTensor{#1one}{(1.00,0)}
-    \TN@declareWordTensor{#1two}{(2.00,0)}
-    \TN@declareWordTensor{#1three}{(3.00,0)}
+    \TN@declareMPOWordTensor{#1one}{(1.00,0)}
+    \TN@declareMPOWordTensor{#1two}{(2.00,0)}
+    \TN@declareMPOWordTensor{#1three}{(3.00,0)}
     \TN@label[anchor=north]{#1one}
         {(0,-\TN@traceclearance-0.12)}{#2}
     \TN@label[anchor=north]{#1two}
@@ -860,12 +708,16 @@
 
 \newcommand{\TN@pepsBlockedNormalChain}{%
     \TN@factorpath{(0.50,0) rectangle (3.50,-0.46)}
-    \TN@vpath[tn edge distinguished]{(1.00,0) -- (2.00,0)}
     \foreach \x/\lab in {1/A_1,2/A_2,3/A_3} {
             \TN@tensor{normalBlock\x}{(\x,0)}
-            \TN@pleg{normalBlock\x}{north}{0,0.46}
+            \TN@pport{normalBlock\x N}{normalBlock\x}{north}
+            \TN@popenport{normalBlock\x N}{0,0.46}
             \node at ($(normalBlock\x.south)+(0,-0.30)$) {$\lab$};
         }%
+    \TN@vport{normalBlockOneEast}{normalBlock1}{east}
+    \TN@vport{normalBlockTwoWest}{normalBlock2}{west}
+    \TN@vconnectports[tn edge distinguished]
+        {normalBlockOneEast}{normalBlockTwoWest}%
 }
 
 \newcommand{\TN@pepsSquareTensor}[2]{%
@@ -876,8 +728,7 @@
 
 % These commands are the sole author-facing vocabulary.  Blueprint chapters,
 % slides, galleries, and tests use them; the private \TN@... implementation is
-% confined to tex/tn.  Each semantic atom exposes long role names in addition
-% to the short internal names used by older complete diagrams.
+% confined to tex/tn.  Each semantic atom exposes long mathematical role names.
 
 \newenvironment{TNDiagram}[1][normal]{%
     \begingroup
