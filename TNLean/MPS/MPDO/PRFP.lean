@@ -24,10 +24,14 @@ configurations.
 
 The source text immediately after Definition 4.4 observes that tracing the
 ancilla gives a trace-preserving completely positive map on the spin degrees of
-freedom. This structure is proved separately for the ancillary trace map, so
-that the source-named predicate `IsPRFP` remains the literal Definition 4.4
-statement. The theorem equating purification RFP with zero correlation length
-remains a separate open result.
+freedom. This structure is proved separately for the ancillary trace map.
+
+The predicate `IsPRFP` below records the displayed positive-length equation and
+pure-state transfer idempotence literally. It is a bare global predicate: the
+zero purifying tensor satisfies it, although the source theorem at lines
+775--786 concerns nondegenerate density operators. The repaired tensor-level
+predicate `IsNondegeneratePRFP` and its normalized PRFP--ZCL equivalence are in
+`TNLean.MPS.MPDO.LocalPurificationRFP`.
 
 ## Main definitions
 
@@ -38,7 +42,8 @@ remains a separate open result.
 * `MPOTensor.ancillaryTraceMap`: the spin map obtained by tracing the ancilla.
 * `MPOTensor.HasTracePreservingSpinReduction`: the tpCPM condition for that map.
 * `MPOTensor.HasPurificationRFPWitness`: the source purification-RFP witness.
-* `MPOTensor.IsPRFP`: the source purification-RFP predicate.
+* `MPOTensor.IsPRFP`: the bare positive-length global purification-RFP
+  predicate.
 * `MPOTensor.IsPRFPWithTracePreservingSpinReduction`: the PRFP predicate
   viewed together with the proved trace-preserving spin reduction.
 
@@ -123,17 +128,25 @@ theorem hasTracePreservingSpinReduction (d dK : ℕ) :
     HasTracePreservingSpinReduction d dK :=
   ancillaryTraceMap_isKrausCPTP d dK
 
-/-- The purification-RFP witness from arXiv:1606.00608,
+/-- The bare positive-length purification-RFP witness from arXiv:1606.00608,
 Definition `def:Puri-RFP` (lines 756--764): there is a purifying spin-ancilla
 MPS tensor satisfying the global purification equation, and that purifying
-tensor is a pure-state renormalization fixed point. -/
+tensor is a pure-state renormalization fixed point.
+
+This literal package does not include the nondegeneracy implicit in the density
+operators of the equivalence theorem at lines 775--786, and therefore admits
+the zero purifying tensor. -/
 def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
     HasGlobalPurificationEquation M A ∧ MPSTensor.IsTransferIdempotent (purificationTensor A)
 
-/-- Purification renormalization fixed point in the sense of arXiv:1606.00608,
-Definition `def:Puri-RFP` (lines 756--764): the tensor has a global
-purification-RFP witness. -/
+/-- Bare global purification renormalization fixed-point predicate: the tensor
+has a positive-length global purification-RFP witness as displayed in
+arXiv:1606.00608, Definition `def:Puri-RFP` (lines 756--764).
+
+The nondegenerate tensor-level repair is `IsNondegeneratePRFP`; the distinction
+is forced by the zero-purifier obstruction documented in
+`docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
 def IsPRFP (M : MPOTensor d D) : Prop :=
   HasPurificationRFPWitness M
 

@@ -87,22 +87,26 @@ one-site tpCPM; it is not the two-map mixed-state RFP condition
 \path{RFPMixedTS}. The definitions are now present in
 \path{TNLean/MPS/MPDO/PRFP.lean}: the global equation is
 \leanid{MPOTensor.HasGlobalPurificationEquation}, the pure-state witness is
-\leanid{MPOTensor.HasPurificationRFPWitness}, and the source predicate is
-\leanid{MPOTensor.IsPRFP}. The ancillary-trace map is
+\leanid{MPOTensor.HasPurificationRFPWitness}, and the bare positive-length
+global predicate is \leanid{MPOTensor.IsPRFP}. The latter records the displayed
+equation and pure-state transfer idempotence, but not the nondegeneracy implicit
+when the source speaks of density operators. The ancillary-trace map is
 \leanid{MPOTensor.ancillaryTraceMap}; its Kraus-form trace-preserving
 complete positivity is
 \leanid{MPOTensor.ancillaryTraceMap_isKrausCPTP}, and the corresponding
 spin-reduction condition is
 \leanid{MPOTensor.HasTracePreservingSpinReduction}. Only after the remaining
-theorem is proved should the theorem
+global-to-local theorem is proved should an equivalence
 \[
   \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
 \]
-be attached to the source theorem.
+be attached to the bare global predicate. The normalized local equivalence is
+recorded below under its exact tensor-level hypothesis.
 
-No theorem should assert that source PRFP fails to imply ZCL. Any future
-counterexample must instead be phrased for a separate local-purification
-predicate and must not be cited as Definition \path{def:Puri-RFP}.
+No theorem should assert that the normalized, nondegenerate source PRFP fails to
+imply ZCL. A counterexample to the bare Lean predicate must be identified as a
+failure of its missing nondegeneracy condition, not as a counterexample to the
+source theorem.
 
 \section{Status}
 
@@ -129,13 +133,25 @@ via \leanid{MPOTensor.IsLPDO.isMPDO}.
 This local predicate is not Definition \path{def:Puri-RFP}. The source-level
 positive-length global purification equation and the trace-preserving structure
 appearing after the ancillary trace are recorded separately in
-\path{TNLean/MPS/MPDO/PRFP.lean}. The equivalence
+\path{TNLean/MPS/MPDO/PRFP.lean}. The repaired predicate
+\leanid{MPOTensor.IsNondegeneratePRFP} combines the local purification-RFP
+identity with $\mathcal T_M\neq0$. The theorem
+\leanid{MPOTensor.isNondegeneratePRFP_iff} proves
 \[
-  \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
+  \operatorname{NondegeneratePRFP}(M)
+  \Longleftrightarrow
+  \left(
+    \operatorname{LPDO}(M),\quad
+    \mathcal T_M\neq0,\quad
+    \mathcal T_M^2=\mathcal T_M
+  \right).
 \]
-therefore remains open.
+This is the normalized tensor-level PRFP--ZCL equivalence. The implication for
+a tensor known only through the positive-length global equation remains open,
+because equality of periodic finite-chain density operators does not by itself
+recover the local tensor identity.
 
-\section{Forward implication on the physical-trace transfer}
+\section{Normalized local equivalence on the physical-trace transfer}
 
 The forward implication of the source theorem (lines 775--786), from a
 purification renormalization fixed point to zero correlation length,
@@ -144,7 +160,7 @@ purification renormalization fixed point to zero correlation length,
 $M^{ij}=(\sum_k A^{(i,k)}\otimes\overline{A^{(j,k)}})_e$, not the global
 Definition \path{def:Puri-RFP} at line 758) and to the physical-trace-transfer
 notion of zero correlation length, is formalized as below; the unrestricted
-source implication remains open (see the Status section). That the object
+global implication remains open (see the Status section). That the object
 $\mathcal T_M=\sum_i M^{ii}$ (Definition~4.2, lines 735--739) is the source
 zero-correlation-length object is the verdict of the companion note
 \path{cpsv16_zcl_canonical_form_normalization.tex}. The theorem
@@ -154,6 +170,20 @@ $\mathcal T_M$ idempotent, $\mathcal T_M\,\mathcal T_M=\mathcal T_M$, with no
 extra hypothesis: the transfer matrix of the pure-state purifying tensor is
 idempotent, and closing the physical legs of $M$ transports this idempotence
 through the bond identification and the Kronecker factor swap.
+
+The converse transport is also valid. The theorem
+\leanid{MPOTensor.purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq}
+proves, for a fixed local purification,
+\[
+  \leanid{MPSTensor.IsTransferIdempotent}(\widehat A)
+  \Longleftrightarrow
+  \mathcal T_M^2=\mathcal T_M.
+\]
+Both the bond identification and the Kronecker-factor swap are bijective
+reindexings, so idempotence transports in both directions; faithfulness of the
+transfer-matrix representation recovers transfer-map idempotence. Existentially
+packaging the purifying data gives
+\leanid{MPOTensor.isLocalPurificationRFP_iff_isLPDO_and_physTraceTransfer_sq}.
 
 The source-faithful conclusion that $M$ has source zero correlation length,
 \leanid{MPOTensor.isSourceZCL_of_isLocalPurificationRFP}, carries the extra
@@ -165,8 +195,26 @@ renormalization fixed point, yet $\mathcal T_M=0$, so the conclusion fails. The
 hypothesis $\mathcal T_M\neq 0$ reflects the source purification renormalization
 fixed point being a normalized pure-state fixed point with leading eigenvalue
 $1$, a normalization that \leanid{MPOTensor.IsLocalPurificationRFP} drops.
-Eliminating the hypothesis requires the normalized purification condition, which
-remains open together with the full equivalence.
+The theorem \leanid{MPOTensor.exists_isPRFP_not_isSourceZCL} now records this
+zero-purifier obstruction for the bare global predicate itself.
+
+\section{Remaining density-form obstruction}
+
+The third clause of the source theorem, equations \path{PuriRFP}--
+\path{PuriRFP-BNT} at lines 765--773, expands the purifying pure-state RFP into
+its canonical repeated-copy form. A full formalization of this clause cannot
+currently be obtained from the printed statement without adding data. The
+underlying pure-state display \path{III_CFI_RFP} permits independent phases
+$\mu_{j,q}$, while the physical isometry equation \path{eq:III_isometry} has no
+copy index $q$ and supplies no dimension condition for a copy-dependent physical
+direct sum. The literal virtual-block reading is false, as proved by the
+two-phase counterexample recorded in
+\path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex} and closed issue~\#2598.
+
+Consequently the normalized local PRFP--ZCL equivalence is complete, whereas
+the repeated-copy density formula remains source-obstructed pending an author
+correction or erratum. No copy-indexed physical map or additional structural
+hypothesis should be introduced merely to force that printed formula.
 
 \bibliographystyle{alpha}
 \bibliography{references}
