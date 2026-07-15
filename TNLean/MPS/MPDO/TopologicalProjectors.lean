@@ -25,14 +25,13 @@ $U_{\alpha,\beta}^\dagger Q_{\alpha,\beta}U_{\alpha,\beta}$ is again an
 orthogonal projection.
 
 These are the one-fusion-step projector statements in the recursive
-construction denoted by `Projector-Q` in the source.  The spectral
-decomposition of the terminal matrices, iteration along an arbitrary chain,
-and the commuting Gibbs decomposition are separate steps.
+construction at source lines 999--1010.  The spectral decomposition of the
+terminal matrices, iteration along an arbitrary chain, and the commuting Gibbs
+decomposition are separate steps.
 
 ## References
 
-* arXiv:1606.00608, equation `Projector-Q` and the discussion at lines
-  999--1016.
+* arXiv:1606.00608, lines 999--1016.
 -/
 
 open scoped Matrix Kronecker
@@ -43,10 +42,10 @@ namespace MPOTensor.BNTFusionIsometryFamily
 variable {g p : ℕ}
 variable (Fam : BNTFusionIsometryFamily (Fin g) p)
 
-/-- The single fusion layer of the operator $Q$ from equation `Projector-Q`,
+/-- The single fusion layer of the operator $Q$ at source lines 999--1010,
 with terminal matrices $P_\gamma$.
 
-Source: arXiv:1606.00608, equation `Projector-Q`, lines 999--1010 of
+Source: arXiv:1606.00608, lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def projectorQBlock
     (P : ∀ γ : Fin g,
@@ -58,8 +57,8 @@ noncomputable def projectorQBlock
         (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) ℂ :=
   Matrix.blockDiagonal' fun γ => Fam.chi.matrix α β γ ⊗ₖ P γ
 
-/-- In the length-independent case, the chi matrices in a single
-`Projector-Q` layer are identities.
+/-- In the length-independent case, the chi matrices in a single fusion layer
+are identities.
 
 Source: arXiv:1606.00608, lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -77,8 +76,9 @@ theorem projectorQBlock_eq_unweighted
   unfold projectorQBlock
   simp_rw [Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI]
 
-/-- A single `Projector-Q` layer is a projection when its terminal matrices
-are projections and the structure coefficients are length independent.
+/-- A single fusion layer is a self-adjoint idempotent when its terminal
+matrices are self-adjoint idempotents and the structure coefficients are
+length independent.
 
 Source: arXiv:1606.00608, lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -106,7 +106,7 @@ theorem projectorQBlock_isStarProjection
       simpa [Matrix.star_eq_conjTranspose] using (hP γ).isSelfAdjoint.star_eq
     rw [hPγ]
 
-/-- The `Projector-Q` layer transported to the product bond space by the
+/-- The fusion-layer operator transported to the product bond space by the
 fusion map.
 
 Source: arXiv:1606.00608, lines 999--1010 of
@@ -121,11 +121,11 @@ noncomputable def conjugatedProjectorQBlock
     Fam.fusionIsometry α β
 
 /-- For a source basis of normal tensors, the fusion map is unitary in the
-length-independent case, so conjugating a `Projector-Q` layer gives an
+length-independent case, so conjugating the fusion-layer operator gives an
 orthogonal projection on the product bond space.
 
-Source: arXiv:1606.00608, BNT separation at lines 317--345, equation
-`Ualphabeta` at lines 986--993, and `Projector-Q` at lines 999--1010 of
+Source: arXiv:1606.00608, BNT separation at lines 317--345, the fusion map at
+lines 986--993, and the recursive projector at lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem conjugatedProjectorQBlock_isOrthogonalProjection
     {D : ℕ} {A : MPSTensor (p * p) D}
