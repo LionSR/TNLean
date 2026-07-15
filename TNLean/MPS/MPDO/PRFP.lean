@@ -134,7 +134,7 @@ Definition 4.4 (lines 756--764): there is a purifying spin-ancilla
 MPS tensor satisfying the global purification equation, and that purifying
 tensor is a pure-state renormalization fixed point.
 
-This literal package does not include the nondegeneracy implicit in the density
+This witness predicate does not include the nondegeneracy implicit in the density
 operators of the equivalence theorem at lines 775--786, and therefore admits
 the zero purifying tensor. -/
 def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=

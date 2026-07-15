@@ -96,12 +96,13 @@ complete positivity is
 \leanid{MPOTensor.ancillaryTraceMap_isKrausCPTP}, and the corresponding
 spin-reduction condition is
 \leanid{MPOTensor.HasTracePreservingSpinReduction}. Only after the remaining
-global-to-local theorem is proved should an equivalence
-\[
-  \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
-\]
-be attached to the bare global predicate. The normalized local equivalence is
-recorded below under its exact tensor-level hypothesis.
+global-to-local theorem is proved may the nondegenerate global predicate be
+identified with the local purification condition.  Its normalized endpoint is
+the nonzero idempotence equation for the physical-trace transfer.  Passing from
+that equation to the source zero-correlation-length condition, whose scalar is
+an arbitrary positive number, requires a separate normalization statement.
+No equivalence with zero correlation length can be attached to the bare global
+predicate, since the zero purifying tensor is a counterexample.
 
 No theorem should assert that the normalized, nondegenerate source PRFP fails to
 imply ZCL. A counterexample to the bare Lean predicate must be identified as a
