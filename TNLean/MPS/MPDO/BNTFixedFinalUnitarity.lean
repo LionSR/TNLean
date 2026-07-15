@@ -111,32 +111,6 @@ theorem sigmaDiagonal_conjTranspose_mul_eq_one
     simp [hz]
   · simp
 
-private theorem mul_conjTranspose_eq_one_of_kronecker_one
-    {m n : Type*} [DecidableEq m] [Fintype n]
-    {D : ℕ} (hD : 0 < D)
-    (F : Matrix m n ℂ)
-    (hF : (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-      (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ = 1) :
-    F * Fᴴ = 1 := by
-  let b : Fin D := ⟨0, hD⟩
-  ext i j
-  have hentry := congrArg (fun M => M (i, b) (j, b)) hF
-  simpa [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
-    Matrix.one_apply, b] using hentry
-
-private theorem conjTranspose_mul_eq_one_of_kronecker_one
-    {m n : Type*} [Fintype m] [DecidableEq n]
-    {D : ℕ} (hD : 0 < D)
-    (F : Matrix m n ℂ)
-    (hF : (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ *
-      (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) = 1) :
-    Fᴴ * F = 1 := by
-  let b : Fin D := ⟨0, hD⟩
-  ext i j
-  have hentry := congrArg (fun M => M (i, b) (j, b)) hF
-  simpa [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
-    Matrix.one_apply, b] using hentry
-
 end Matrix
 
 namespace MPOTensor.BNTFusionIsometryFamily

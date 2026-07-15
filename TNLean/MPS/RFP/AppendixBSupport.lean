@@ -304,36 +304,42 @@ def AppendixBStructuralData.replaceVirtualBond12
     (p : Fin 3 → Fin D × Fin D) (k : Fin D) : Fin 3 → Fin D × Fin D :=
   fun t ↦ if t = 1 then ((p 1).1, k) else if t = 2 then (k, (p 2).2) else p t
 
+/-- Replacing the first virtual bond updates the outgoing index at site zero. -/
 @[simp] theorem AppendixBStructuralData.replaceVirtualBond01_zero
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
     hStruct.replaceVirtualBond01 p k 0 = ((p 0).1, k) := by
   simp [AppendixBStructuralData.replaceVirtualBond01]
 
+/-- Replacing the first virtual bond updates the incoming index at site one. -/
 @[simp] theorem AppendixBStructuralData.replaceVirtualBond01_one
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
     hStruct.replaceVirtualBond01 p k 1 = (k, (p 1).2) := by
   simp [AppendixBStructuralData.replaceVirtualBond01]
 
+/-- Replacing the first virtual bond leaves site two unchanged. -/
 @[simp] theorem AppendixBStructuralData.replaceVirtualBond01_two
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
     hStruct.replaceVirtualBond01 p k 2 = p 2 := by
   simp [AppendixBStructuralData.replaceVirtualBond01]
 
+/-- Replacing the second virtual bond leaves site zero unchanged. -/
 @[simp] theorem AppendixBStructuralData.replaceVirtualBond12_zero
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
     hStruct.replaceVirtualBond12 p k 0 = p 0 := by
   simp [AppendixBStructuralData.replaceVirtualBond12]
 
+/-- Replacing the second virtual bond updates the outgoing index at site one. -/
 @[simp] theorem AppendixBStructuralData.replaceVirtualBond12_one
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
     hStruct.replaceVirtualBond12 p k 1 = ((p 1).1, k) := by
   simp [AppendixBStructuralData.replaceVirtualBond12]
 
+/-- Replacing the second virtual bond updates the incoming index at site two. -/
 @[simp] theorem AppendixBStructuralData.replaceVirtualBond12_two
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
@@ -435,12 +441,14 @@ def AppendixBStructuralData.replaceTwoSiteVirtualBond
     (p : Fin 2 → Fin D × Fin D) (k : Fin D) : Fin 2 → Fin D × Fin D :=
   fun t ↦ if t = 0 then ((p 0).1, k) else (k, (p 1).2)
 
+/-- Two-site bond replacement updates the outgoing index at site zero. -/
 @[simp] theorem AppendixBStructuralData.replaceTwoSiteVirtualBond_zero
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (p : Fin 2 → Fin D × Fin D) (k : Fin D) :
     hStruct.replaceTwoSiteVirtualBond p k 0 = ((p 0).1, k) := by
   simp [AppendixBStructuralData.replaceTwoSiteVirtualBond]
 
+/-- Two-site bond replacement updates the incoming index at site one. -/
 @[simp] theorem AppendixBStructuralData.replaceTwoSiteVirtualBond_one
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (p : Fin 2 → Fin D × Fin D) (k : Fin D) :
@@ -479,11 +487,13 @@ def AppendixBStructuralData.twoSiteVirtualBondConfig
     (a c k : Fin D) : Fin 2 → Fin D × Fin D :=
   fun t ↦ if t = 0 then (a, k) else (k, c)
 
+/-- The first site of a two-site virtual bond configuration is `(a, k)`. -/
 @[simp] theorem AppendixBStructuralData.twoSiteVirtualBondConfig_zero
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (a c k : Fin D) :
     hStruct.twoSiteVirtualBondConfig a c k 0 = (a, k) := by
   simp [AppendixBStructuralData.twoSiteVirtualBondConfig]
 
+/-- The second site of a two-site virtual bond configuration is `(k, c)`. -/
 @[simp] theorem AppendixBStructuralData.twoSiteVirtualBondConfig_one
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (a c k : Fin D) :
     hStruct.twoSiteVirtualBondConfig a c k 1 = (k, c) := by
@@ -867,13 +877,9 @@ theorem AppendixBStructuralData.twoSiteBasicSupportProjection_idempotent
     hStruct.twoSiteBasicSupportProjection * hStruct.twoSiteBasicSupportProjection =
       hStruct.twoSiteBasicSupportProjection := by
   rw [hStruct.twoSiteBasicSupportProjection_eq_complement]
-  apply LinearMap.ext
-  intro v
-  simp only [Module.End.mul_apply, LinearMap.sub_apply, Module.End.one_apply, map_sub]
-  have hq := LinearMap.congr_fun (parentInteraction_idempotent hStruct.coreTensor 2) v
-  simp only [Module.End.mul_apply] at hq
-  rw [hq]
-  abel
+  change IsIdempotentElem (1 - parentInteraction hStruct.coreTensor 2)
+  exact (show IsIdempotentElem (parentInteraction hStruct.coreTensor 2) from
+    parentInteraction_idempotent hStruct.coreTensor 2).one_sub
 
 /-- The range of the support projector is the range of the bond-insertion
 embedding \(U^{\otimes2}I_\varphi\).

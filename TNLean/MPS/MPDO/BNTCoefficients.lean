@@ -146,9 +146,8 @@ Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 lemma ofChi_hasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) :
-    (ofChi χ).HasPositiveLengthChiTracePowerForm χ := by
-  intro L _hL α β γ
-  rfl
+    (ofChi χ).HasPositiveLengthChiTracePowerForm χ :=
+  fun _ _ _ _ _ => rfl
 
 end BNTLabelCoefficientFamily
 
@@ -466,10 +465,8 @@ theorem HasSameLengthProductForm.eq_sum_chi_trace_pow [Fintype Λ]
     (L : ℕ) (hL : 0 < L) (α β : Λ) :
     op.operator L α * op.operator L β =
       ∑ γ : Λ, (hχ.chi.matrix α β γ ^ L).trace • op.operator L γ := by
-  rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum (op := op) hop L hL α β]
-  refine Finset.sum_congr rfl ?_
-  intro γ _hγ
-  rw [hχ.eq_trace_pow L hL α β γ]
+  simpa only [hχ.eq_trace_pow L hL] using
+    BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum (op := op) hop L hL α β
 
 /-- The same-length BNT product formula for the canonical coefficient family
 associated to a \(\chi\)-family, written directly with trace-power
@@ -487,10 +484,8 @@ theorem HasSameLengthProductForm.eq_sum_ofChi_trace_pow [Fintype Λ]
     (L : ℕ) (hL : 0 < L) (α β : Λ) :
     op.operator L α * op.operator L β =
       ∑ γ : Λ, (χ.matrix α β γ ^ L).trace • op.operator L γ := by
-  rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum (op := op) hop L hL α β]
-  refine Finset.sum_congr rfl ?_
-  intro γ _hγ
-  rw [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow]
+  simpa only [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow] using
+    BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum (op := op) hop L hL α β
 
 end BNTLabelOperatorFamily
 
@@ -511,13 +506,8 @@ theorem HasIdempotentCoefficientForm.eq_sum_chi_trace [Fintype Λ]
     m.traceScalar γ =
       ∑ α : Λ, ∑ β : Λ,
         (hχ.chi.matrix α β γ).trace * (m.traceScalar α * m.traceScalar β) := by
-  rw [BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum (m := m) hm γ]
-  refine Finset.sum_congr rfl ?_
-  intro α _hα
-  refine Finset.sum_congr rfl ?_
-  intro β _hβ
-  rw [hχ.eq_trace_pow 1 Nat.zero_lt_one α β γ]
-  simp
+  simpa only [hχ.eq_trace_pow 1 Nat.zero_lt_one, pow_one] using
+    BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum (m := m) hm γ
 
 /-- The BNT idempotent scalar identity for the canonical coefficient family
 associated to a \(\chi\)-family, written directly with length-one traces.
@@ -533,13 +523,8 @@ theorem HasIdempotentCoefficientForm.eq_sum_ofChi_trace [Fintype Λ]
     m.traceScalar γ =
       ∑ α : Λ, ∑ β : Λ,
         (χ.matrix α β γ).trace * (m.traceScalar α * m.traceScalar β) := by
-  rw [BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum (m := m) hm γ]
-  refine Finset.sum_congr rfl ?_
-  intro α _hα
-  refine Finset.sum_congr rfl ?_
-  intro β _hβ
-  rw [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow]
-  simp
+  simpa only [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow, pow_one] using
+    BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum (m := m) hm γ
 
 end BNTLabelTraceScalarFamily
 

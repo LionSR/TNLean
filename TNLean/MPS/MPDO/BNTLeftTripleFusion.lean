@@ -41,17 +41,6 @@ open Matrix
 
 namespace MPOTensor
 
-/-- Conjugating a block-diagonal matrix by another block-diagonal matrix acts block by block.
-
-Source: bookkeeping lemma, not paper-specific. -/
-private theorem blockDiagonal'_conj {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {m' n' : ι → Type*} [∀ i, Fintype (n' i)]
-    (F : ∀ i, Matrix (m' i) (n' i) ℂ) (G : ∀ i, Matrix (n' i) (n' i) ℂ) :
-    Matrix.blockDiagonal' F * Matrix.blockDiagonal' G * (Matrix.blockDiagonal' F)ᴴ =
-      Matrix.blockDiagonal' fun i => F i * G i * (F i)ᴴ := by
-  rw [Matrix.blockDiagonal'_conjTranspose, ← Matrix.blockDiagonal'_mul,
-    ← Matrix.blockDiagonal'_mul]
-
 /-- A sum, over the physical index `j`, of Kronecker products with a fixed left spectator factor
 `X` reassociates against `finProdFinEquiv` and `Equiv.prodAssoc` to exhibit the sum as `X` tensored
 with the corresponding letter of the product tensor `mulTensor Y Z`. The reindexing equivalence
@@ -78,22 +67,6 @@ private theorem kronecker_sum_mulTensor {p a bd1 bd2 : ℕ} (X : Matrix (Fin a) 
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun j _ => ?_
   ring
-
-/-- Reindexing only the row space of a conjugating matrix by an equivalence commutes with the
-conjugation: applying the reindexed matrix is the same as applying the original matrix and then
-reindexing the result on both sides.
-
-Source: bookkeeping lemma, not paper-specific. -/
-private theorem submatrix_left_conj {l m u : Type*} [Fintype l] (A : Matrix m l ℂ)
-    (r : u ≃ m) (X : Matrix l l ℂ) :
-    (A.submatrix r id) * X * (A.submatrix r id)ᴴ = (A * X * Aᴴ).submatrix r r := by
-  have step1 : A.submatrix r id * X = (A * X).submatrix r id :=
-    (Matrix.submatrix_mul A X r id id Function.bijective_id).symm
-  have step2 : (A * X).submatrix r id * (A.submatrix r id)ᴴ =
-      (A * X * Aᴴ).submatrix r r := by
-    rw [Matrix.conjTranspose_submatrix]
-    exact (Matrix.submatrix_mul (A * X) Aᴴ r id r Function.bijective_id).symm
-  rw [step1, step2]
 
 namespace BNTFusionIsometryFamily
 
@@ -333,10 +306,12 @@ theorem stays within the source's own objects and records one concrete conjugati
 such an equation would relate to the corresponding identity for the right bracketing
 `M_α (M_β M_γ)`; that comparison is left to a follow-up.
 
-The block content is stated as `χ_{α,β,δ} ⊗ (χ_{δ,γ,ε} ⊗ tensor_ε^{ij})`, right-associated in
-the Kronecker product, rather than the left-associated
-`(χ_{α,β,δ} ⊗ χ_{δ,γ,ε}) ⊗ tensor_ε^{ij}`: a harmless reassociation of the same three factors in
-the same order, forced by the natural bond splitting of `mulTensor`.
+The block content is stated as
+`χ_{α,β,δ} ⊗ (χ_{δ,γ,ε} ⊗ tensor_ε^{ij})`, right-associated in the Kronecker product,
+rather than the left-associated `(χ_{α,β,δ} ⊗ χ_{δ,γ,ε}) ⊗ tensor_ε^{ij}`. This is a
+harmless reassociation of the same three factors in the same order, forced by the natural bond
+splitting
+of `mulTensor`.
 
 Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--993, and the associativity remark, lines
 995--999, of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -347,7 +322,7 @@ theorem leftFusion_apply (α β γ : Λ) (i k : Fin p) :
       Matrix.blockDiagonal' fun δ => Matrix.blockDiagonal' fun ε =>
         Fam.chi.matrix α β δ ⊗ₖ (Fam.chi.matrix δ γ ε ⊗ₖ Fam.tensor ε i k) := by
   unfold leftFusionIsometry
-  rw [submatrix_left_conj]
+  rw [Matrix.submatrix_left_conj_equiv]
   have hreassoc :
       Matrix.blockDiagonal' (Fam.blockPiece α β γ) * Fam.fuseFirstTwoStep α β γ *
           (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k *
@@ -359,7 +334,8 @@ theorem leftFusion_apply (α β γ : Λ) (i k : Fin p) :
           (Matrix.blockDiagonal' (Fam.blockPiece α β γ))ᴴ := by
     rw [Matrix.conjTranspose_mul]
     simp only [Matrix.mul_assoc]
-  rw [hreassoc, Fam.fuseFirstTwoStep_apply, Fam.pairBond_sum_blockDiagonal, blockDiagonal'_conj]
+  rw [hreassoc, Fam.fuseFirstTwoStep_apply, Fam.pairBond_sum_blockDiagonal,
+    Matrix.blockDiagonal'_conj]
   simp_rw [Fam.blockPiece_apply]
   rw [tripleFlatten_blockDiagonal']
 

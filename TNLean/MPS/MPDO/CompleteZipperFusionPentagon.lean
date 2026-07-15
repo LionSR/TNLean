@@ -327,13 +327,16 @@ noncomputable def twoEdgeInversePrintedFMatrix (a b c d e : Λ) :
   Fus.pairToLeftAssocInversePrintedFMatrix a b c d e *
     Fus.rightAssocToPairInversePrintedFMatrix a b c d e
 
-private theorem mul_kronecker_one {l m n : Type*} [Fintype m]
-    (A : Matrix l m ℂ) (B : Matrix m n ℂ) (D : ℕ) :
-    (A * B) ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
-      (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-        (B ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-  simpa only [Matrix.one_mul] using Matrix.mul_kronecker_mul A B
-    (1 : Matrix (Fin D) (Fin D) ℂ) 1
+private theorem rectangular_inverse_unique {l m : Type*}
+    [Fintype l] [Fintype m] [DecidableEq l] [DecidableEq m]
+    (A C : Matrix l m ℂ) (B : Matrix m l ℂ) (hAB : A * B = 1) (hBC : B * C = 1) :
+    A = C := by
+  calc
+    A = A * 1 := (Matrix.mul_one A).symm
+    _ = A * (B * C) := congrArg (A * ·) hBC.symm
+    _ = (A * B) * C := (Matrix.mul_assoc A B C).symm
+    _ = 1 * C := congrArg (· * C) hAB
+    _ = C := Matrix.one_mul C
 
 private theorem rightAssocToMiddleInverse_mul_middleToRightAssoc
     (a b c d e : Λ) :
@@ -820,10 +823,8 @@ theorem threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix
               rw [Matrix.mul_assoc]
       _ = Fus.twoEdgePrintedFMatrix a b c d e ⊗ₖ I := by
             rw [Fus.rightAssocFourfoldAnalysis_mul_synthesis, Matrix.one_mul]
-  funext x y
-  let z : Fin (Fus.bondDim e) := ⟨0, Fus.bondDim_pos e⟩
-  have hEntry := congrArg (fun M => M (x, z) (y, z)) hLift
-  simpa [I, Matrix.one_apply, z] using hEntry
+  apply Matrix.kronecker_one_injective (Fus.bondDim_pos e)
+  simpa only [I] using hLift
 
 /-- The inverse-orientation composites around the fourfold associahedron
 are equal.  This is the matrix orientation printed in equation
@@ -884,18 +885,7 @@ theorem threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix
         Fus.twoEdgeInversePrintedFMatrix a b c d e = 1 := by
     rw [Fus.threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix]
     exact hTwoRight
-  calc
-    Fus.threeEdgeInversePrintedFMatrix a b c d e =
-      Fus.threeEdgeInversePrintedFMatrix a b c d e *
-        (Fus.threeEdgePrintedFMatrix a b c d e *
-          Fus.twoEdgeInversePrintedFMatrix a b c d e) := by
-            rw [hThreeRight, Matrix.mul_one]
-    _ = (Fus.threeEdgeInversePrintedFMatrix a b c d e *
-          Fus.threeEdgePrintedFMatrix a b c d e) *
-        Fus.twoEdgeInversePrintedFMatrix a b c d e := by
-          rw [Matrix.mul_assoc]
-    _ = Fus.twoEdgeInversePrintedFMatrix a b c d e := by
-          rw [hThreeLeft, Matrix.one_mul]
+  exact rectangular_inverse_unique _ _ _ hThreeLeft hThreeRight
 
 /-- The literal indexed pentagon equation for the inverse-orientation
 `F`-matrix entries.

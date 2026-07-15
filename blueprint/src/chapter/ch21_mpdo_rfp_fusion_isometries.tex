@@ -239,6 +239,48 @@ them.
     the fixed factors accumulate into the matrix power $X_\gamma^L$.
 \end{proof}
 
+\begin{lemma}[Blockwise conjugation and restriction]
+    \label{lem:matrix_block_conjugation_restriction}
+    \lean{Matrix.blockDiagonal'_conj, Matrix.submatrix_left_conj_equiv}
+    \leanok
+    Let $F=\bigoplus_a F_a$ and $G=\bigoplus_a G_a$. Then
+    \[
+        FGF^\dagger=\bigoplus_a F_aG_aF_a^\dagger.
+    \]
+    Moreover, if $r$ is a bijective reindexing of the row space of a matrix
+    $A$, then
+    \[
+        A_r X A_r^\dagger=(AXA^\dagger)_{r,r},
+    \]
+    where $A_r$ denotes the corresponding row reindexing.
+\end{lemma}
+\begin{proof}\leanok
+    The first identity follows because block-diagonal matrices
+    multiply blockwise. The second follows by commuting bijective row
+    reindexing with multiplication and adjunction.
+\end{proof}
+
+\begin{lemma}[Cancellation of a nonempty identity factor]
+    \label{lem:matrix_kronecker_identity_cancellation}
+    \lean{Matrix.kronecker_one_injective, Matrix.mul_kronecker_one,
+        Matrix.mul_eq_one_of_kronecker_one,
+        Matrix.mul_conjTranspose_eq_one_of_kronecker_one,
+        Matrix.conjTranspose_mul_eq_one_of_kronecker_one}
+    \leanok
+    Let $D>0$. The map $A\mapsto A\otimes I_D$ is injective and preserves
+    matrix products. Consequently,
+    \[
+        (F\otimes I_D)(G\otimes I_D)=I \implies FG=I.
+    \]
+    In particular, orthonormal rows or columns of $F\otimes I_D$ imply the
+    corresponding orthonormality of $F$.
+\end{lemma}
+\begin{proof}\leanok
+    Evaluate the amplified identity on one basis vector of the nonzero
+    factor. Multiplicativity of the Kronecker product gives the product and
+    adjoint specializations.
+\end{proof}
+
 \begin{definition}[Fusion-isometry family]%
     \label{def:mpdo_bnt_fusion_isometry_family}
     \lean{MPOTensor.BNTFusionIsometryFamily}
@@ -638,7 +680,8 @@ separate step.
     \label{thm:mpdo_left_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFusion_apply}
     \leanok
-    \uses{def:mpdo_left_fusion_isometry, def:mpdo_operator_product}
+    \uses{def:mpdo_left_fusion_isometry, def:mpdo_operator_product,
+        lem:matrix_block_conjugation_restriction}
     Site by site,
     \[
         U^{\mathrm L}_{\alpha,\beta,\gamma}\,
@@ -651,12 +694,13 @@ separate step.
     \]
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:matrix_block_conjugation_restriction}
     Apply the fusion identity for $U_{\alpha,\beta}$ to the first two
     tensors, summed against the physical index contracting with the third
-    tensor; regrouping the resulting sum block by block over $\delta$
-    exhibits it as $\chi_{\alpha,\beta,\delta}$ tensored with a letter of the
-    product tensor $M_\delta M_\gamma$, to which the fusion identity for
-    $U_{\delta,\gamma}$ applies.
+    tensor. Regroup the result over $\delta$ and use blockwise conjugation to
+    obtain $\chi_{\alpha,\beta,\delta}$ tensored with a letter of
+    $M_\delta M_\gamma$. The fusion identity for $U_{\delta,\gamma}$ gives the
+    second direct sum.
 \end{proof}
 
 \begin{definition}[Iterated fusion isometry of a triple product, right
@@ -695,7 +739,8 @@ separate step.
     \label{thm:mpdo_right_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFusion_apply}
     \leanok
-    \uses{def:mpdo_right_fusion_isometry, def:mpdo_operator_product}
+    \uses{def:mpdo_right_fusion_isometry, def:mpdo_operator_product,
+        lem:matrix_block_conjugation_restriction}
     Site by site,
     \[
         U^{\mathrm R}_{\alpha,\beta,\gamma}\,
@@ -708,15 +753,17 @@ separate step.
     \]
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:matrix_block_conjugation_restriction}
     Apply the fusion identity for $U_{\beta,\gamma}$ to $M_\beta M_\gamma$.
     In the summand indexed by $\delta$, exchange the first multiplicity
-    factor with the bond space of $M_\alpha$ and regroup the contraction as
+    factor with the bond space of $M_\alpha$. Blockwise conjugation regroups
+    the contraction as
     \[
         \chi_{\beta,\gamma,\delta}\otimes
         (M_\alpha M_\delta)^{i j}.
     \]
-    The fusion identity for $U_{\alpha,\delta}$ then gives the stated direct
-    sum over $\varepsilon$.
+    The fusion identity for $U_{\alpha,\delta}$ gives the sum over
+    $\varepsilon$.
 \end{proof}
 
 \begin{definition}[Full comparison of the two triple-fusion orders]%
@@ -1196,7 +1243,8 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusion_apply}
     \leanok
     \uses{def:mpdo_final_sector_fusion_maps,
-        def:mpdo_operator_product, thm:mpdo_left_fusion_apply}
+        def:mpdo_operator_product, thm:mpdo_left_fusion_apply,
+        lem:matrix_block_conjugation_restriction}
     For every final label $\varepsilon$, the left-associated restriction
     satisfies the positive-diagonal weighted identity
     \[
@@ -1210,9 +1258,11 @@ separate step.
     \]
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:matrix_block_conjugation_restriction}
     Restrict Theorem~\ref{thm:mpdo_left_fusion_apply} to the rows and columns
-    whose final label is $\varepsilon$.  The outer block-diagonal matrix then
-    retains precisely the displayed $\varepsilon$-blocks.
+    whose final label is $\varepsilon$. Reindexing the conjugating matrix
+    commutes with conjugation, and the outer block-diagonal matrix retains
+    precisely the displayed $\varepsilon$-blocks.
 \end{proof}
 
 \begin{theorem}[Right triple fusion at a fixed final label]%
@@ -1220,7 +1270,8 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusion_apply}
     \leanok
     \uses{def:mpdo_final_sector_fusion_maps,
-        def:mpdo_operator_product, thm:mpdo_right_fusion_apply}
+        def:mpdo_operator_product, thm:mpdo_right_fusion_apply,
+        lem:matrix_block_conjugation_restriction}
     For every final label $\varepsilon$, the right-associated restriction
     satisfies the positive-diagonal weighted identity
     \[
@@ -1234,9 +1285,11 @@ separate step.
     \]
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:matrix_block_conjugation_restriction}
     Restrict Theorem~\ref{thm:mpdo_right_fusion_apply} to the rows and columns
-    whose final label is $\varepsilon$.  The outer block-diagonal matrix then
-    retains precisely the displayed $\varepsilon$-blocks.
+    whose final label is $\varepsilon$. Reindexing the conjugating matrix
+    commutes with conjugation, and the outer block-diagonal matrix retains
+    precisely the displayed $\varepsilon$-blocks.
 \end{proof}
 
 \begin{theorem}[Injective fixed-final intertwiners]%
@@ -1389,7 +1442,8 @@ separate step.
     \leanok
     \uses{def:mpdo_final_label_selector_words,
         def:mpdo_final_sector_multiplicity_spaces,
-        def:mpdo_triple_fusion_comparison}
+        def:mpdo_triple_fusion_comparison,
+        lem:matrix_kronecker_identity_cancellation}
     Assume the hypotheses of
     Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_unitary}.
     Suppose in addition that $M_\varepsilon$ is injective at the present
@@ -1413,7 +1467,8 @@ separate step.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_triple_fusion_comparison_final_sector_kronecker,
-        thm:mpdo_triple_fusion_comparison_final_sector_unitary}
+        thm:mpdo_triple_fusion_comparison_final_sector_unitary,
+        lem:matrix_kronecker_identity_cancellation}
     Injectivity gives
     $C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon}$.
     Substitute this expression into the two identities for $C_\varepsilon$:
@@ -1424,8 +1479,8 @@ separate step.
         (F_\varepsilon^\dagger F_\varepsilon)
           \otimes1_{D_\varepsilon}=1.
     \]
-    Since $D_\varepsilon>0$, evaluation at any bond basis vector cancels the
-    identity factor and gives the two asserted identities.
+    Since $D_\varepsilon>0$, Lemma~\ref{lem:matrix_kronecker_identity_cancellation}
+    removes the identity factor and gives the two asserted identities.
 \end{proof}
 
 \begin{theorem}[Simultaneous inverse from a one-letter product-algebra span]%
@@ -1566,6 +1621,26 @@ separate step.
     Definition~\ref{def:mpdo_complete_zipper_fusion_family}.
 \end{proof}
 
+\begin{definition}[One-letter final-block selector]
+    \label{def:mpdo_complete_zipper_final_block_selector}
+    \lean{MPOTensor.CompleteZipperFusionFamily.finalBlockSelector,
+        MPOTensor.CompleteZipperFusionFamily.finalBlockSelector_apply,
+        MPOTensor.CompleteZipperFusionFamily.finalBlockSelector_sum}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family}
+    Fix a final label $d$. Summing the diagonal matrix-unit coefficients of
+    the simultaneous block inverse defines scalars $s_d(i,j)$ satisfying
+    \[
+        \sum_{i,j}s_d(i,j)B_e^{ij}
+        =\begin{cases}
+            I_{D_d},&e=d,\\
+            0,&e\ne d.
+          \end{cases}
+    \]
+    Thus one physical letter selects the identity on the chosen final block
+    and annihilates every other final block.
+\end{definition}
+
 \begin{theorem}[Printed F-move and inverse]%
     \label{thm:mpdo_complete_zipper_printed_fmove}
     \lean{MPOTensor.CompleteZipperFusionFamily.%
@@ -1575,7 +1650,9 @@ separate step.
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         inversePrintedFMatrix_mul_printedFMatrix}
     \leanok
-    \uses{def:mpdo_complete_zipper_fusion_family}
+    \uses{def:mpdo_complete_zipper_fusion_family,
+        def:mpdo_complete_zipper_final_block_selector,
+        lem:matrix_kronecker_identity_cancellation}
     Fix $a,b,c,d\in\Lambda$.  There is an invertible matrix
     \[
         F^{abc}_d:
@@ -1597,6 +1674,8 @@ separate step.
     the printed $F$-move of \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{def:mpdo_complete_zipper_final_block_selector,
+        lem:matrix_kronecker_identity_cancellation}
     Form the full left- and right-associated synthesis matrices $L$ and $R$
     and their analysis matrices $L^+$ and $R^+$.  Applying the reconstruction
     equation twice to the two associative decompositions gives
@@ -1604,9 +1683,10 @@ separate step.
         B_{abc}^{il}=L D_{\mathrm L}^{il}L^+
           =R D_{\mathrm R}^{il}R^+.
     \]
-    Contract this equality with the simultaneous inverse of the final block
-    letters and sum the diagonal final-label matrix units.  The two direct
-    sums $D_{\mathrm L}$ and $D_{\mathrm R}$ both contract to the identity.
+    Contract this equality with the one-letter final-block selector from
+    Definition~\ref{def:mpdo_complete_zipper_final_block_selector}. The two
+    direct sums $D_{\mathrm L}$ and $D_{\mathrm R}$ both contract to the
+    identity.
     Consequently,
     \[
         P:=LL^+=RR^+,
@@ -1632,7 +1712,10 @@ separate step.
     \]
     Restricting $R(R^+L)=L$ to this corner gives the displayed $F$-move.
     The corresponding fixed-final corner of $L^+R$, together with
-    $(R^+L)(L^+R)=1=(L^+R)(R^+L)$, gives the two inverse identities.
+    $(R^+L)(L^+R)=1=(L^+R)(R^+L)$, gives amplified inverse identities.
+    Lemma~\ref{lem:matrix_kronecker_identity_cancellation} removes the
+    nonempty bond-space identity factor and yields the two inverse identities
+    for $F^{abc}_d$.
 \end{proof}
 
 \begin{figure}[ht]
@@ -1721,7 +1804,8 @@ separate step.
     \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon}
     \leanok
     \uses{def:mpdo_complete_zipper_fourfold_fusion_data,
-        thm:mpdo_complete_zipper_printed_fmove}
+        thm:mpdo_complete_zipper_printed_fmove,
+        lem:matrix_kronecker_identity_cancellation}
     The three-edge and two-edge composites of the forward printed
     $F$-matrices are equal.  The corresponding composites of the inverse
     $F$-matrices are also equal.  In the upper/lower convention of
@@ -1740,13 +1824,16 @@ separate step.
     the $F$-move convention.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:matrix_kronecker_identity_cancellation}
     Apply the elementary three-block $F$-move along each of the five edges.
-    Both paths then give the same expansion in the right-associated fourfold
-    fusion map.  Its analysis map is a left inverse, by three successive
-    applications of fusion-tensor biorthogonality, so the forward composites
-    are equal.  The reverse composites are two-sided inverses of this common
-    matrix, hence they coincide.  Taking a matrix entry gives the displayed
-    identity.
+    Both paths give the same expansion in the right-associated fourfold
+    fusion map. Its analysis map is a left inverse, by three successive
+    applications of fusion-tensor biorthogonality. This gives equality after
+    tensoring with the identity on the nonzero final bond space, and
+    Lemma~\ref{lem:matrix_kronecker_identity_cancellation} gives equality of
+    the forward composites. The reverse composites are two-sided inverses of
+    this common matrix, hence they coincide. Taking a matrix entry gives the
+    displayed identity.
 \end{proof}
 
 \begin{theorem}[Coherence of four bond-coordinate reassociations]%

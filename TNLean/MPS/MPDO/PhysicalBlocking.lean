@@ -58,6 +58,7 @@ noncomputable def blockTensor (M : MPOTensor d D) (L : ℕ) :
     MPOTensor (MPSTensor.blockPhysDim d L) D :=
   fun i j => evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j)
 
+/-- Evaluating a blocked tensor gives the corresponding pair of blocked words. -/
 @[simp]
 lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
     (i j : Fin (MPSTensor.blockPhysDim d L)) :
@@ -82,6 +83,7 @@ noncomputable def blockedDoubledIndexEquiv (d L : ℕ) :
     (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv) |>.trans
     (MPSTensor.decodeBlockEquiv (d * d) L).symm
 
+/-- Decoding the doubled blocked index pairs the ket and bra letters pointwise. -/
 @[simp]
 lemma decodeBlock_blockedDoubledIndexEquiv (d L : ℕ)
     (ij : Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L))

@@ -521,20 +521,21 @@ theorem rightTripleAnalysisFull_mul_synthesis (a b c : Λ) :
     Fus.rightSecondAnalysis_mul_synthesis]
 
 
-/-- The coefficient selecting the diagonal matrix units of one final block.
+/-- The one-letter coefficient obtained by summing the diagonal matrix-unit selectors for a
+fixed final block.
 
 Source: arXiv:1511.08090, the simultaneous inverse at lines 269--277. -/
-private noncomputable def supportFinalBlockSelector
-    (d : Λ) (ik : Fin p × Fin p) : ℂ :=
+noncomputable def finalBlockSelector (d : Λ) (ik : Fin p × Fin p) : ℂ :=
   ∑ x : Fin (Fus.bondDim d), Fus.blockLeftInverse ⟨d, x, x⟩ ik
 
-private theorem supportFinalBlockSelector_apply (d e : Λ)
-    (x y : Fin (Fus.bondDim e)) :
+/-- Contracting a fixed-final-block selector with a matrix entry selects that final block and
+its diagonal entries. -/
+theorem finalBlockSelector_apply (d e : Λ) (x y : Fin (Fus.bondDim e)) :
     (∑ i : Fin p, ∑ l : Fin p,
-      Fus.supportFinalBlockSelector d (i, l) * Fus.tensor e i l x y) =
+      Fus.finalBlockSelector d (i, l) * Fus.tensor e i l x y) =
       if h : d = e then if _ : h ▸ x = y then 1 else 0 else 0 := by
   classical
-  simp only [supportFinalBlockSelector, Finset.sum_mul]
+  simp only [finalBlockSelector, Finset.sum_mul]
   calc
     (∑ i : Fin p, ∑ l : Fin p, ∑ z : Fin (Fus.bondDim d),
         Fus.blockLeftInverse ⟨d, z, z⟩ (i, l) * Fus.tensor e i l x y) =
@@ -555,16 +556,18 @@ private theorem supportFinalBlockSelector_apply (d e : Λ)
       · simp_rw [Fus.blockLeftInverse_apply d e]
         simp [h]
 
-private theorem supportFinalBlockSelector_sum (d e : Λ) :
+/-- Contracting a fixed-final-block selector with a labelled tensor gives the identity on the
+selected block and zero on every other block. -/
+theorem finalBlockSelector_sum (d e : Λ) :
     (∑ i : Fin p, ∑ l : Fin p,
-      Fus.supportFinalBlockSelector d (i, l) •
+      Fus.finalBlockSelector d (i, l) •
         (Fus.tensor e i l : Matrix (Fin (Fus.bondDim e))
           (Fin (Fus.bondDim e)) ℂ)) =
       if d = e then 1 else 0 := by
   classical
   funext x y
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
-  rw [Fus.supportFinalBlockSelector_apply d e x y]
+  rw [Fus.finalBlockSelector_apply d e x y]
   by_cases h : d = e
   · subst e
     simp [Matrix.one_apply]
@@ -575,7 +578,7 @@ for every final label.
 
 Source: arXiv:1511.08090, the simultaneous inverse at lines 269--277. -/
 private noncomputable def totalBlockSelector (ik : Fin p × Fin p) : ℂ :=
-  ∑ d : Λ, Fus.supportFinalBlockSelector d ik
+  ∑ d : Λ, Fus.finalBlockSelector d ik
 
 /-- Contracting the total selector with any labelled block letter gives the
 identity matrix.
@@ -590,19 +593,19 @@ private theorem totalBlockSelector_sum (e : Λ) :
   simp only [totalBlockSelector, Finset.sum_smul]
   calc
     (∑ i : Fin p, ∑ l : Fin p, ∑ d : Λ,
-        Fus.supportFinalBlockSelector d (i, l) • Fus.tensor e i l) =
+        Fus.finalBlockSelector d (i, l) • Fus.tensor e i l) =
         ∑ i : Fin p, ∑ d : Λ, ∑ l : Fin p,
-          Fus.supportFinalBlockSelector d (i, l) • Fus.tensor e i l := by
+          Fus.finalBlockSelector d (i, l) • Fus.tensor e i l := by
       apply Finset.sum_congr rfl
       intro i hi
       exact Finset.sum_comm
     _ = ∑ d : Λ, ∑ i : Fin p, ∑ l : Fin p,
-          Fus.supportFinalBlockSelector d (i, l) • Fus.tensor e i l :=
+          Fus.finalBlockSelector d (i, l) • Fus.tensor e i l :=
       Finset.sum_comm
     _ = ∑ d : Λ, if d = e then 1 else 0 := by
       apply Finset.sum_congr rfl
       intro d hd
-      exact Fus.supportFinalBlockSelector_sum d e
+      exact Fus.finalBlockSelector_sum d e
     _ = 1 := by simp
 
 /-- Contracting final-block letters with the total selector gives the identity

@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.Defs
 import TNLean.Analysis.Entropy
@@ -50,6 +51,28 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 
 open scoped Matrix ComplexOrder BigOperators
 open Matrix Finset
+
+/-- A function on a finite interval is constant when it agrees at each pair of
+successive indices. -/
+theorem eq_of_forall_succ_eq_of_mem_Icc {α : Sort*} {a n i j : ℕ}
+    (f : (m : ℕ) → m ≤ n → α)
+    (hstep : ∀ m, a ≤ m → (hm : m < n) → f m hm.le = f (m + 1) hm)
+    (hai : a ≤ i) (hin : i ≤ n) (haj : a ≤ j) (hjn : j ≤ n) :
+    f i hin = f j hjn := by
+  have climb : ∀ k m, a ≤ m → ∀ h : m + k ≤ n,
+      f m (Nat.le_add_right m k |>.trans h) = f (m + k) h := by
+    intro k
+    induction k with
+    | zero => intro m _ _; rfl
+    | succ k ih =>
+        intro m ham h
+        have hmk : m + k < n := by omega
+        exact (ih m ham hmk.le).trans (hstep (m + k) (by omega) hmk)
+  rcases le_total i j with hij | hji
+  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hij
+    exact climb k i hai hjn
+  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hji
+    exact (climb k j haj hin).symm
 
 /-! ## Translation invariance of the periodic MPDO
 
@@ -321,8 +344,10 @@ theorem blockReducedState_comp {d L K₁ K₂ : ℕ}
     blockReducedState d L K₁ (blockReducedState d (L + K₁) K₂ X)
       = blockReducedState d L (K₁ + K₂)
           (X.submatrix
-            (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂)) (Equiv.refl (Fin d))).symm
-            (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂)) (Equiv.refl (Fin d))).symm) := by
+            (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂))
+              (Equiv.refl (Fin d))).symm
+            (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂))
+              (Equiv.refl (Fin d))).symm) := by
   rw [blockReducedState, blockReducedState, Matrix.partialTraceRight_submatrix_left,
     Matrix.submatrix_submatrix, Matrix.partialTraceRight_partialTraceRight,
     Matrix.partialTraceRight_submatrix_right (blockSplitEquiv d K₁ K₂),
@@ -476,23 +501,9 @@ theorem mutualInfoChain_eq_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
   dsimp only
   let hMpdo : IsMPDO M := Classical.choose hSAL
   rcases Classical.choose_spec hSAL with ⟨_, hstep⟩
-  -- Climbing `k` steps from a block size `m` stays an equality while `m + k ≤ ⌊N/2⌋`.
-  have climb : ∀ k m : ℕ, 1 ≤ m → ∀ h : m + k ≤ N / 2,
-      mutualInfoChain M N m
-          ((Nat.le_add_right m k).trans (h.trans (Nat.div_le_self N 2))) (hMpdo N)
-        = mutualInfoChain M N (m + k) (h.trans (Nat.div_le_self N 2)) (hMpdo N) := by
-    intro k
-    induction k with
-    | zero => intro m _ _; rfl
-    | succ k ih =>
-      intro m hm1 h
-      have hmk : m + k < N / 2 := by omega
-      exact (ih m hm1 (le_of_lt hmk)).trans (hstep N (m + k) (by omega) hmk)
-  rcases le_total L L' with hle | hle
-  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hle
-    exact climb k L hL1 hL'N
-  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hle
-    exact (climb k L' hL'1 hLN).symm
+  apply eq_of_forall_succ_eq_of_mem_Icc
+    (fun m hm => mutualInfoChain M N m (hm.trans (Nat.div_le_self N 2)) (hMpdo N))
+    (fun m hm hmn => hstep N m hm hmn) hL1 hLN hL'1 hL'N
 
 end MPOTensor
 

@@ -935,7 +935,7 @@ theorem isTransferIdempotent_of_isIsometryCanonicalForm (A : MPSTensor d D)
       show Xᴴ * (X⁻¹)ᴴ = (X⁻¹ * X)ᴴ from (Matrix.conjTranspose_mul X⁻¹ X).symm,
       hXinvX, Matrix.conjTranspose_one, Matrix.mul_one, Matrix.trace_diagonal,
       ← Complex.ofReal_sum, hΛ_sum, Complex.ofReal_one]
-  show transferMap A ∘ₗ transferMap A = transferMap A
+  change transferMap A ∘ₗ transferMap A = transferMap A
   apply LinearMap.ext
   intro Y
   simp only [LinearMap.comp_apply]

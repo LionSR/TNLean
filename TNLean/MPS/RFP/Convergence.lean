@@ -2,11 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.Core.Transfer
 import TNLean.PiAlgebra.CanonicalFormSepAux
-import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.QuantitativeGap
-import TNLean.MPS.RFP.Defs
 
 /-!
 # RG flow convergence for canonical-form MPS tensors

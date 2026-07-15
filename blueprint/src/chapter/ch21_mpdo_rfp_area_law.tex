@@ -40,11 +40,23 @@
     This is \cite[Definition~4.6, line~811]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{lemma}[Constancy on a finite interval]
+    \label{lem:finite_interval_constancy}
+    \lean{eq_of_forall_succ_eq_of_mem_Icc}
+    \leanok
+    Let $f$ be defined on the integer interval $[a,n]$. If
+    $f(m)=f(m+1)$ for every $a\le m<n$, then $f(i)=f(j)$ for all
+    $i,j\in[a,n]$.
+\end{lemma}
+\begin{proof}\leanok
+    Compose the successive equalities from the smaller index to the larger.
+\end{proof}
+
 \begin{lemma}[Saturation telescopes to a constant mutual information]
     \label{lem:sal_const}
     \lean{MPOTensor.mutualInfoChain_eq_of_isSAL}
     \leanok
-    \uses{def:is_sal}
+    \uses{def:is_sal, lem:finite_interval_constancy}
     If an MPO tensor $M$ saturates the area law, then the mutual informations
     coincide for all $1\le L, L'\le \lfloor N/2\rfloor$:
     \[
@@ -52,10 +64,10 @@
     \]
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:is_sal}
-    The defining condition supplies the single-step equalities $I_m = I_{m+1}$ for
-    $1\le m<\lfloor N/2\rfloor$. Climbing one step at a time from the smaller of $L$
-    and $L'$ up to the larger composes these into the stated equality.
+    \uses{def:is_sal, lem:finite_interval_constancy}
+    The defining condition supplies $I_m=I_{m+1}$ throughout the interval
+    $1\le m<\lfloor N/2\rfloor$. Apply
+    Lemma~\ref{lem:finite_interval_constancy}.
 \end{proof}
 
 \begin{theorem}[Tripartite marginals as block entropies]
@@ -323,19 +335,46 @@
     $I_L = S_L + S_{N-L} - S_N$, using $N-(N-L) = L$.
 \end{proof}
 
+\begin{lemma}[Positive rank of a normalized state]
+    \label{lem:trace_one_positive_rank}
+    \lean{Matrix.PosSemidef.rank_pos_of_trace_one}
+    \leanok
+    A positive semidefinite matrix of trace one has positive rank.
+\end{lemma}
+\begin{proof}\leanok
+    If its rank were zero, every eigenvalue would vanish, contradicting that
+    their sum is the trace, which equals one.
+\end{proof}
+
+\begin{lemma}[Zero entropy in rank one]
+    \label{lem:rank_one_entropy_zero}
+    \lean{vonNeumannEntropy_eq_zero_of_rank_le_one}
+    \leanok
+    \uses{lem:trace_one_positive_rank, thm:entropy_le_log_rank,
+        thm:entropy_nonneg}
+    A positive semidefinite matrix of trace one and rank at most one has zero
+    von Neumann entropy.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:trace_one_positive_rank, thm:entropy_le_log_rank,
+        thm:entropy_nonneg}
+    Its rank is positive by Lemma~\ref{lem:trace_one_positive_rank}, hence it is
+    exactly one. The rank bound gives $S\le\log 1=0$, while entropy is
+    nonnegative.
+\end{proof}
+
 \begin{lemma}[Entropy of the empty block]
     \label{lem:block_entropy_zero}
     \lean{blockEntropy_zero}
     \leanok
-    \uses{def:block_entropy, thm:entropy_le_log_rank, lem:block_entropy_nonneg}
+    \uses{def:block_entropy, lem:rank_one_entropy_zero}
     For a normalized positive semidefinite finite-chain operator, the block entropy of
     the empty block vanishes: $S_0 = 0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:entropy_le_log_rank, lem:block_entropy_nonneg}
-    The reduced state of zero spins is one-dimensional, so its rank is one and the rank
-    bound on the entropy gives $S_0 \le \log 1 = 0$; with $S_0 \ge 0$ this forces
-    $S_0 = 0$.
+    \uses{lem:rank_one_entropy_zero}
+    The reduced state of zero spins is one-dimensional, so its rank is at most
+    one. Lemma~\ref{lem:rank_one_entropy_zero} gives $S_0=0$.
 \end{proof}
 
 \begin{lemma}[Empty-block mutual information vanishes]
@@ -734,8 +773,8 @@
 \begin{proposition}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
     \lean{MPSTensor.pureBlockEntropy_le}
     \leanok
-    \uses{lem:operator_schmidt_rank, thm:entropy_le_log_rank,
-        lem:reduced_pure_block_state_density}
+    \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank,
+        thm:entropy_le_log_rank, lem:reduced_pure_block_state_density}
     Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
     For every block length $L\le N$,
     \[
@@ -746,12 +785,13 @@
     by a constant independent of the block size.
 \end{proposition}
 \begin{proof}\leanok
-    \uses{lem:reduced_pure_block_state_density}
+    \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank,
+        thm:entropy_le_log_rank, lem:reduced_pure_block_state_density}
     The reduced state $\rho_L^{(N)}(A)$ is a density matrix
-    (Lemma~\ref{lem:reduced_pure_block_state_density}) of rank at most $D^2$ by
-    Lemma~\ref{lem:operator_schmidt_rank}. By the rank bound on the entropy
-    (Theorem~\ref{thm:entropy_le_log_rank}),
-    $S_L^{(N)}(A) \le \log(D^2) = 2\log D$.
+    (Lemma~\ref{lem:reduced_pure_block_state_density}), so its rank is positive
+    by Lemma~\ref{lem:trace_one_positive_rank}. Its rank is at most $D^2$ by
+    Lemma~\ref{lem:operator_schmidt_rank}. The rank bound on the entropy gives
+    $S_L^{(N)}(A)\le\log(D^2)=2\log D$.
 \end{proof}
 
 \begin{lemma}[Nonnegativity of the pure-state block entropy]
@@ -807,7 +847,7 @@
     \label{lem:pure_sal_const}
     \lean{MPSTensor.pureBlockEntropy_eq_of_isSAL}
     \leanok
-    \uses{def:pure_sal}
+    \uses{def:pure_sal, lem:finite_interval_constancy}
     If an MPS tensor $A$ saturates the area law, then the block entropies
     coincide for all $1\le L, L'\le \lfloor N/2\rfloor$:
     \[
@@ -815,11 +855,11 @@
     \]
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:pure_sal}
-    The defining condition supplies the single-step equalities
-    $S_m^{(N)}(A) = S_{m+1}^{(N)}(A)$ for $1\le m<\lfloor N/2\rfloor$. Climbing one
-    step at a time from the smaller of $L$ and $L'$ up to the larger composes these
-    into the stated equality.
+    \uses{def:pure_sal, lem:finite_interval_constancy}
+    The defining condition supplies
+    $S_m^{(N)}(A)=S_{m+1}^{(N)}(A)$ throughout the interval
+    $1\le m<\lfloor N/2\rfloor$. Apply
+    Lemma~\ref{lem:finite_interval_constancy}.
 \end{proof}
 
 \begin{lemma}[Pure-state mutual information is twice the block entropy]
