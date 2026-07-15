@@ -443,8 +443,8 @@
 
 \begin{definition}[Physical closure maps]
     \label{def:phys_close}
-    \lean{MPOTensor.physCloseN, MPOTensor.physCloseN_apply,
-      MPOTensor.physClose1, MPOTensor.physClose2, MPOTensor.physClose3}
+    \lean{MPOTensor.physCloseN, MPOTensor.physClose1,
+      MPOTensor.physClose2, MPOTensor.physClose3}
     \leanok
     \uses{def:mpo_eval_word}
     For an MPO tensor $M$, a length $N$, and a virtual operator $X$, define the
@@ -464,6 +464,23 @@
     $N=2,3$ occur in
     \cite[Proposition~C.7, lines~1510--1516]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{lemma}[Matrix entries of a physical closure]
+    \label{lem:phys_close_apply}
+    \lean{MPOTensor.physCloseN_apply}
+    \leanok
+    \uses{def:phys_close}
+    For physical words $\boldsymbol i,\boldsymbol j$ of length $N$,
+    \[
+        M_N(X)_{\boldsymbol i,\boldsymbol j}
+        =\tr\!\left(M^{i_0j_0}\cdots M^{i_{N-1}j_{N-1}}X\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the defining matrix entry of the physical closure.
+\end{proof}
 
 \begin{theorem}[One- and two-site physical closures]
     \label{thm:phys_close_one_two}
@@ -531,11 +548,7 @@
 \begin{definition}[Renormalization maps on a longer ring]
     \label{def:mpdo_global_renormalization_maps}
     \lean{MPOTensor.firstSiteRestEquiv,
-      MPOTensor.firstSiteRestEquiv_apply,
-      MPOTensor.firstSiteRestEquiv_symm_apply,
       MPOTensor.firstTwoSitesRestEquiv,
-      MPOTensor.firstTwoSitesRestEquiv_apply,
-      MPOTensor.firstTwoSitesRestEquiv_symm_apply,
       MPOTensor.refineFirstSite,
       MPOTensor.coarsenFirstTwoSites}
     \leanok
@@ -545,14 +558,33 @@
     $\mathcal T:M_d\to M_{d^2}$ and $\mathcal S:M_{d^2}\to M_d$, define
     \[
        \widehat{\mathcal T}_N
-       =\mathcal T\otimes\id_N,
+       =\mathcal T\otimes\id_{N},
        \qquad
        \widehat{\mathcal S}_N
-       =\mathcal S\otimes\id_N,
+       =\mathcal S\otimes\id_{N},
     \]
     using these regroupings.  Thus $N=0$ leaves no spectator site, but the
     maps still act on a one-site or two-site operator; no empty ring occurs.
 \end{definition}
+
+\begin{lemma}[Regrouping the first physical sites]
+    \label{lem:mpdo_global_renormalization_regrouping}
+    \lean{MPOTensor.firstSiteRestEquiv_apply,
+      MPOTensor.firstSiteRestEquiv_symm_apply,
+      MPOTensor.firstTwoSitesRestEquiv_apply,
+      MPOTensor.firstTwoSitesRestEquiv_symm_apply}
+    \leanok
+    \uses{def:mpdo_global_renormalization_maps}
+    The regrouping equivalences and their inverses preserve every physical
+    component: they merely separate the first site, or the first two sites,
+    from the remaining word.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both identities follow by evaluating the corresponding product-index
+    equivalence and its inverse.
+\end{proof}
 
 \begin{lemma}[Localized renormalization maps are channels]
     \label{lem:mpdo_global_renormalization_maps_cptp}

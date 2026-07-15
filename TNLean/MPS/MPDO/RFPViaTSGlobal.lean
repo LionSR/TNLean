@@ -38,7 +38,7 @@ nonvanishing condition are recorded in
   Definition 4.1 and Appendix C, lines 1333--1341
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix
 
 namespace MPOTensor
 
