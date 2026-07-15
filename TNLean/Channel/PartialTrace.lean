@@ -18,12 +18,16 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
 
 * `Matrix.partialTraceRight`: trace over the second factor for a general product
   index
+* `Matrix.partialTraceLeft`: trace over the first factor for a general product
+  index
 * `Matrix.traceLeft` (`tr_A`): trace over the first (left) tensor factor
 * `Matrix.traceRight` (`tr_B`): trace over the second (right) tensor factor
 
 ## Main results
 
 * `Matrix.partialTraceRight_apply`: elementwise formula for the general right
+  partial trace
+* `Matrix.partialTraceLeft_apply`: elementwise formula for the general left
   partial trace
 * `Matrix.partialTraceRightLM`: the general right partial trace as a complex
   linear map
@@ -42,6 +46,7 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 2][Wolf2012QChannels]
+* arXiv:1606.00608, Appendix D.2, lines 2225--2229: tripartite marginals.
 -/
 
 open scoped Matrix ComplexOrder
@@ -148,6 +153,51 @@ theorem partialTraceRight_one [DecidableEq α] [DecidableEq β] :
   · simp [hij]
 
 end GeneralRight
+
+/-! ## General partial trace over the first factor -/
+
+section GeneralLeft
+
+variable {α β : Type*} [Fintype α]
+
+/-- **Partial trace over the first factor** of a product index `α × β`.
+
+For a matrix `X` indexed by `α × β`, this produces the `β × β` matrix
+
+  `(partialTraceLeft X) i j = ∑ k : α, X (k, i) (k, j)`.
+
+The channel-theory partial trace `Matrix.traceLeft` is the specialization to
+`α = Fin d` and `β = Fin d'`.  This is also the (XB) marginal used in
+arXiv:1606.00608, Appendix D.2, lines 2225--2229. -/
+noncomputable def partialTraceLeft (X : Matrix (α × β) (α × β) ℂ) :
+    Matrix β β ℂ :=
+  fun i j => ∑ k : α, X (k, i) (k, j)
+
+@[simp]
+theorem partialTraceLeft_apply (X : Matrix (α × β) (α × β) ℂ) (i j : β) :
+    partialTraceLeft X i j = ∑ k : α, X (k, i) (k, j) := rfl
+
+/-- The partial trace over the first factor preserves Hermiticity. -/
+theorem partialTraceLeft_isHermitian {X : Matrix (α × β) (α × β) ℂ}
+    (hX : X.IsHermitian) : (partialTraceLeft X).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro i j
+  simp only [partialTraceLeft_apply, star_sum]
+  exact Finset.sum_congr rfl fun k _ => hX.apply (k, i) (k, j)
+
+/-- The partial trace over the first factor preserves positive semidefiniteness.
+The reduced state is a sum of submatrices of `X`, one per traced-out index. -/
+theorem PosSemidef.partialTraceLeft [Finite β] {X : Matrix (α × β) (α × β) ℂ}
+    (hX : X.PosSemidef) : (Matrix.partialTraceLeft X).PosSemidef := by
+  cases nonempty_fintype β
+  have h_eq : (Matrix.partialTraceLeft X : Matrix β β ℂ)
+      = ∑ k : α, X.submatrix (fun b => (k, b)) (fun b => (k, b)) := by
+    ext i j
+    simp only [partialTraceLeft_apply, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [h_eq]
+  exact Matrix.posSemidef_sum _ fun _ _ => hX.submatrix _
+
+end GeneralLeft
 
 /-- The trace is invariant under reindexing a matrix by an equivalence of its
 index type. -/
