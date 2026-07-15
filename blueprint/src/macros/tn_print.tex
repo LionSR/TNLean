@@ -140,15 +140,21 @@
 }
 
 \newcommand{\TNMPOCell}[3]{%
-    \begin{TNEquationRow}[compact]
-        \ensuremath{#1^{#2#3}}
-    \end{TNEquationRow}%
+    \begin{TNDiagram}[compact]
+        \TNMPOSite{tnM}{(0,0)}{#1}
+        \TNOpenVirtualWest{tnMWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalSouth{tnMBra}
+        \TNLabelAbove{tnMKetOpen}{#2}
+        \TNLabelBelow{tnMBraOpen}{#3}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNMPOChain}[6]{%
-    \begin{TNEquationRow}[compact]
-        \ensuremath{\rho^{(#6)}(#1)_{#2,#3;\,#4,#5}}
-    \end{TNEquationRow}%
+    \begin{TNDiagram}[normal]
+        \TNIndexedPeriodicMPOWord{tn}{#2}{#3}{#4}{#5}{#6}{#1}
+    \end{TNDiagram}%
 }
 
 % Local purification of an MPO tensor: the ket and bra tensors share the
@@ -156,7 +162,22 @@
 % and virtual legs.
 \newcommand{\TNMPOLocalPurification}{%
     \begin{TNEquationRow}[compact]
-        \ensuremath{M^{ij}=\sum_k A^{(i,k)}\otimes\overline{A^{(j,k)}}}
+        \TNTerm{%
+            \TNMPOSite{purM}{(0,0)}{M}
+            \TNOpenVirtualWest{purMWest}
+            \TNOpenVirtualEast{purMEast}
+            \TNOpenPhysicalNorth{purMKet}
+            \TNOpenPhysicalSouth{purMBra}}
+        \TNRelation{=}
+        \TNTerm{%
+            \TNPurificationSite{pur}{(0,0)}{A}{\overline A}
+            \TNOpenVirtualWest{purKetWest}
+            \TNOpenVirtualEast{purKetEast}
+            \TNOpenVirtualWest{purBraWest}
+            \TNOpenVirtualEast{purBraEast}
+            \TNOpenPhysicalNorth{purKet}
+            \TNOpenPhysicalSouth{purBra}
+            \TNLabelRight{purAncillaMid}{k}}
     \end{TNEquationRow}%
 }
 
@@ -233,7 +254,34 @@
 % intermediate rows retain the original physical-site decomposition.
 \newcommand{\TNMPDOBlockedRFPChannels}{%
     \begin{TNEquationRow}[compact]
-        \ensuremath{\widehat{\mathcal T}^{\,2}:\widehat{\cal K}_2\to\widehat{\cal K}_4,\qquad \widehat{\mathcal S}^{\,2}:\widehat{\cal K}_4\to\widehat{\cal K}_2}
+        \ensuremath{\widehat{\mathcal T}^{\,2}:}
+        \TNTerm{%
+            \TNFactorChainTwo{btTwo}{(0,0)}{\widehat{\cal K}}%
+            \TNGroupFit{btTwoBlock}{(btTwoSite1)(btTwoSite2)}%
+            \TNLabelBelow{btTwoBlock.south}{\text{one blocked site}}}
+        \TNRelation{\xrightarrow{\widehat{\mathcal T}}}
+        \TNTerm{\TNFactorChainThree{btThree}{(0,0)}{\widehat{\cal K}}}
+        \TNRelation{\xrightarrow{\widehat{\mathcal T}_{(12)3}}}
+        \TNTerm{%
+            \TNFactorChainFour{btFour}{(0,0)}{\widehat{\cal K}}%
+            \TNGroupFit{btFourLeftBlock}{(btFourSite1)(btFourSite2)}%
+            \TNGroupFit{btFourRightBlock}{(btFourSite3)(btFourSite4)}%
+            \TNPointBetween{btFourBlocksLabel}
+                {btFourLeftBlock.south}{btFourRightBlock.south}%
+            \TNLabelBelow{btFourBlocksLabel}{\text{two blocked sites}}}
+    \end{TNEquationRow}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\widehat{\mathcal S}^{\,2}:}
+        \TNTerm{%
+            \TNFactorChainFour{bsFour}{(0,0)}{\widehat{\cal K}}%
+            \TNGroupFit{bsFourLeftBlock}{(bsFourSite1)(bsFourSite2)}%
+            \TNGroupFit{bsFourRightBlock}{(bsFourSite3)(bsFourSite4)}}
+        \TNRelation{\xrightarrow{\widehat{\mathcal S}_{(123)4}}}
+        \TNTerm{\TNFactorChainThree{bsThree}{(0,0)}{\widehat{\cal K}}}
+        \TNRelation{\xrightarrow{\widehat{\mathcal S}}}
+        \TNTerm{%
+            \TNFactorChainTwo{bsTwo}{(0,0)}{\widehat{\cal K}}%
+            \TNGroupFit{bsTwoBlock}{(bsTwoSite1)(bsTwoSite2)}}
     \end{TNEquationRow}%
 }
 
@@ -358,7 +406,26 @@
 % product in the basis adapted to the middle-site direct sum.
 \newcommand{\TNMPDOHayashiSectorComparison}{%
     \begin{TNEquationRow}[compact]
-        \ensuremath{R_{\beta_3,\alpha_1}{\cal K}_{\alpha_1,\beta_1}{\cal K}_{\alpha_2,\beta_2}{\cal K}_{\alpha_3,\beta_3}=B_{\alpha,\beta}}
+        \ensuremath{R_{\beta_3,\alpha_1}\,\cdot\,}
+        \TNTerm{%
+            \TNMPOSite{hscK}{(0,0)}{\widetilde\kappa^{(k)}}
+            \TNOpenVirtualWest{hscKWest}
+            \TNOpenVirtualEast{hscKEast}
+            \TNOpenPhysicalNorth{hscKKet}
+            \TNOpenPhysicalSouth{hscKBra}
+            \TNLabelLeft{hscKWestOpen}{\beta_1}
+            \TNLabelRight{hscKEastOpen}{\alpha_3}
+            \TNLabelAbove{hscKKetOpen}{k;l,r}
+            \TNLabelBelow{hscKBraOpen}{k;l',r'}}
+        \TNRelation{=}
+        \ensuremath{p_k}
+        \TNTerm{%
+            \TNFactor{hscA}{(0,0)}{A^{(k)}_{\alpha_1,\beta_1}}
+            \TNLabelAbove{hscA}{l,l'}}
+        \TNRelation{\otimes}
+        \TNTerm{%
+            \TNFactor{hscB}{(0,0)}{B^{(k)}_{\alpha_3,\beta_3}}
+            \TNLabelAbove{hscB}{r,r'}}
     \end{TNEquationRow}%
 }
 
@@ -397,9 +464,9 @@
 % the block-index lines j and q; the coefficient tensor mu hangs on the two
 % index lines, so the direct sums are drawn as index lines.
 \newcommand{\TNBNTDecomposition}{%
-    \begin{TNEquationRow}[compact]
-        \ensuremath{A=X\left(\bigoplus_j\mu_j\otimes A_j\right)X^{-1}}
-    \end{TNEquationRow}%
+    \begin{TNDiagram}[normal]
+        \TNBNTCoefficientDecomposition{bnt}{(0,0)}
+    \end{TNDiagram}%
 }
 
 % Zero-correlation-length idempotence for the physical-trace transfer: the
