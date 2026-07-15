@@ -61,7 +61,7 @@ private theorem physicalCoordinateMatrixN_isometry
   simp_rw [hentry]
   rw [Fintype.prod_boole]
   congr 1
-  exact funext_iff
+  exact propext funext_iff.symm
 
 /-- The sitewise physical coordinate matrix is a coisometry. -/
 private theorem physicalCoordinateMatrixN_coisometry
@@ -88,7 +88,7 @@ private theorem physicalCoordinateMatrixN_coisometry
   simp_rw [hentry]
   rw [Fintype.prod_boole]
   congr 1
-  exact funext_iff
+  exact propext funext_iff.symm
 
 private theorem list_prod_sum_ofFn {a n : Type*} [Fintype a]
     [Fintype n] [DecidableEq n] {N : ℕ}
