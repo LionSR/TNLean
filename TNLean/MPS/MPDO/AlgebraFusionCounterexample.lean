@@ -133,9 +133,10 @@ private theorem phaseFlipTensor_transferMap_pow_fixed_iff
       simp only [hij, ↓reduceIte] at hentry
       have hzero : ((-7 / 25 : ℂ) ^ n - 1) * X i j = 0 := by
         linear_combination hentry
-      rcases mul_eq_zero.mp hzero with hcoeff | hentryZero
-      · exact ((phaseFlip_eigenvalue_pow_ne_one hn) (sub_eq_zero.mp hcoeff)).elim
-      · simp [hij, hentryZero]
+      have hentryZero : X i j = 0 :=
+        (mul_eq_zero.mp hzero).resolve_left <|
+          sub_ne_zero.mpr (phaseFlip_eigenvalue_pow_ne_one hn)
+      simp [hij, hentryZero]
   · intro hX
     exact phaseFlipTensor_transferMap_pow_fixed hX n
 
@@ -207,8 +208,8 @@ of `IsRFP_MPDO_via_algebra`. -/
 theorem exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion :
     ∃ (M : MPOTensor 2 2) (ρ : Matrix (Fin 2) (Fin 2) ℂ),
       Kraus.IsTP M.toMPSTensor ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
-        IsRFP_MPDO_via_algebra M ∧ ¬IsRFP_MPDO_via_fusion M := by
-  exact ⟨phaseFlipTensor.toMPOTensor, 1, phaseFlipMPO_isTP,
+        IsRFP_MPDO_via_algebra M ∧ ¬IsRFP_MPDO_via_fusion M :=
+  ⟨phaseFlipTensor.toMPOTensor, 1, phaseFlipMPO_isTP,
     Matrix.PosDef.one (n := Fin 2) (R := ℂ), phaseFlipMPO_one_fixed,
     phaseFlipMPO_isRFP_MPDO_via_algebra, phaseFlipMPO_not_isRFP_MPDO_via_fusion⟩
 

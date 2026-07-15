@@ -37,6 +37,14 @@ namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
+private theorem exists_matrix_entry_ne_zero {m n : Type*}
+    (A : Matrix m n ℂ) (hA : A ≠ 0) : ∃ i j, A i j ≠ 0 := by
+  by_contra h
+  push Not at h
+  apply hA
+  ext i j
+  exact h i j
+
 /-- The virtual matrix obtained from a matrix entry within physical sector
 `k`. Its `(beta, alpha)` entry is the product of the corresponding left and
 right sector-tensor entries. -/
@@ -101,29 +109,12 @@ theorem exists_two_edge_return_of_neighboringOperator_ne_zero
     ∃ j : Fin F.sectorCount,
       F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0 := by
   classical
-  obtain ⟨ex, ey, heta⟩ : ∃ ex ey, F.neighboringOperator k h ex ey ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    apply hkh
-    ext x y
-    exact hall x y
+  obtain ⟨ex, ey, heta⟩ := exists_matrix_entry_ne_zero _ hkh
   obtain ⟨⟨kx, ky, hkxy⟩, ⟨hx, hy, hhxy⟩⟩ := hnonzero hkh
-  obtain ⟨beta, alpha, hkentry⟩ :
-      ∃ beta alpha, F.sectorVirtualMatrix k kx ky beta alpha ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    apply hkxy
-    ext beta alpha
-    exact hall beta alpha
+  obtain ⟨beta, alpha, hkentry⟩ := exists_matrix_entry_ne_zero _ hkxy
   have hkleft : F.leftTensor k beta kx.1 ky.1 ≠ 0 :=
     left_ne_zero_of_mul hkentry
-  obtain ⟨delta, gamma, hhentry⟩ :
-      ∃ delta gamma, F.sectorVirtualMatrix h hx hy delta gamma ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    apply hhxy
-    ext delta gamma
-    exact hall delta gamma
+  obtain ⟨delta, gamma, hhentry⟩ := exists_matrix_entry_ne_zero _ hhxy
   have hhright : F.rightTensor h gamma hx.2 hy.2 ≠ 0 :=
     right_ne_zero_of_mul hhentry
   let x : F.SectorIndex k := (kx.1, ex.1)

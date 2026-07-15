@@ -419,8 +419,7 @@
     \lean{Matrix.preparationMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_state_preparation_map, def:is_kraus_cptp,
-      def:mpdo_state_preparation_kraus,
-      thm:mpdo_state_preparation_kraus_resolution}
+      def:mpdo_state_preparation_kraus}
     If $\rho\geq0$ and $\tr(\rho)=1$, then
     $\mathcal P_\rho:X\mapsto X\otimes\rho$ is trace-preserving completely
     positive.
@@ -428,13 +427,18 @@
 
 \begin{proof}
     \leanok
-    The operators from Definition~\ref{def:mpdo_state_preparation_kraus}
-    satisfy
+    \uses{thm:mpdo_rectangular_kraus_map_equiv,
+      thm:mpdo_state_preparation_kraus_action,
+      thm:mpdo_state_preparation_kraus_resolution}
+    Relabel an orthonormal basis of the ancillary space by
+    $\{0,\ldots,\dim B-1\}$. Theorem~\ref{thm:mpdo_rectangular_kraus_map_equiv}
+    shows that this relabeling leaves the Kraus map unchanged, and
+    Theorem~\ref{thm:mpdo_state_preparation_kraus_action} gives
     \[
-        \sum_j A_jXA_j^\dagger=X\otimes RR=X\otimes\rho,
+        \sum_j A_jXA_j^\dagger=X\otimes\rho.
     \]
-    and Theorem~\ref{thm:mpdo_state_preparation_kraus_resolution} gives their
-    resolution of the identity.
+    Theorem~\ref{thm:mpdo_state_preparation_kraus_resolution} gives
+    $\sum_j A_j^\dagger A_j=I_A$.
 \end{proof}
 
 \begin{definition}[Physical closure maps]

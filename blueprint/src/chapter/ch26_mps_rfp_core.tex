@@ -231,14 +231,14 @@
     \uses{def:source_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf}
     Let $P$ be the canonical decomposition with one scalar basis tensor $C^0=(1)$,
     two one-dimensional copies, and respective weights $1$ and $1/2$. Write
-    $A=\mathcal A(P)$ for its assembled tensor. Relative to these sector
-    coordinates, $A^0$ has block form
+    $A=\mathcal A(P)$ for the tensor represented by $P$. Relative to these
+    sector coordinates, $A^0$ has block form
     \[
         \begin{pmatrix}1&0\\0&\tfrac12\end{pmatrix}.
     \]
     The weights $(1,1/2)$ satisfy the raw-weight BNT canonical-form
-    normalization, and the resulting canonical assembly is exactly $A$.
-    Moreover,
+    normalization, and the corresponding canonical decomposition represents
+    $A$. Its MPV coefficient at length $N$ is
     \[
         V^{(N)}(A)=1+2^{-N}.
     \]
@@ -1190,8 +1190,8 @@
     the direct sum of the basis representatives, not the repeated-copy tensor
     carrying the weights $\mu_{j,q}$.
 
-    Moreover, if the basis direct sum is a renormalization fixed point, there
-    are invertible matrices $X_j$, positive trace-normalized diagonal weights
+    If the basis direct sum is a renormalization fixed point, there are also
+    invertible matrices $X_j$, positive trace-normalized diagonal weights
     $\Lambda_j$, and residual tensors $U_j$ such that
     \[
         B_j^i=X_j\sqrt{\Lambda_j}\,U_j^iX_j^{-1},
@@ -1253,8 +1253,7 @@
     Taking the witness data of
     Definition~\ref{def:is_isometry_canonical_form} to be
     $X=\Lambda=U^0=(1)$, the scalar representative is in isometry canonical
-    form; moreover,
-    $|1|=|-1|=1$.
+    form, and $|1|=|-1|=1$.
     Direct multiplication gives $(A^0)^2=I$. Comparing diagonal entries in
     $I=vA^0$ would give simultaneously $v=1$ and $v=-1$, which is impossible.
     On the off-diagonal matrix unit $E_{01}$, the transfer map is conjugation by

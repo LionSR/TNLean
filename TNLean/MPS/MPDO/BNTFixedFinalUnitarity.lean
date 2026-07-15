@@ -190,6 +190,20 @@ def rightTripleFinalEquiv (α β γ : Λ) :
   rcases x with ⟨δ, μ, ν, b⟩
   rfl
 
+private theorem leftTripleFinalEquiv_symm_comp (α β γ ε : Λ) :
+    (Fam.leftTripleFinalEquiv α β γ).symm ∘
+        (fun x : Fam.LeftFinalIndex α β γ ε => ⟨ε, x⟩) =
+      Fam.leftFinalRow α β γ ε := by
+  funext x
+  exact Fam.leftTripleFinalEquiv_symm_sigmaMk α β γ ε x
+
+private theorem rightTripleFinalEquiv_symm_comp (α β γ ε : Λ) :
+    (Fam.rightTripleFinalEquiv α β γ).symm ∘
+        (fun x : Fam.RightFinalIndex α β γ ε => ⟨ε, x⟩) =
+      Fam.rightFinalRow α β γ ε := by
+  funext x
+  exact Fam.rightTripleFinalEquiv_symm_sigmaMk α β γ ε x
+
 /-- **A fixed-final comparison corner has a right adjoint inverse.**
 
 Suppose that common words of one positive length separate the final-label
@@ -216,18 +230,6 @@ theorem tripleFusionComparison_finalSector_mul_conjTranspose_eq_one
   let C := Fam.tripleFusionComparison α β γ
   let C' := C.submatrix (Fam.leftTripleFinalEquiv α β γ).symm
     (Fam.rightTripleFinalEquiv α β γ).symm
-  have hleft (i : Λ) :
-      (Fam.leftTripleFinalEquiv α β γ).symm ∘
-          (fun x : Fam.LeftFinalIndex α β γ i => ⟨i, x⟩) =
-        Fam.leftFinalRow α β γ i := by
-    funext x
-    simp
-  have hright (i : Λ) :
-      (Fam.rightTripleFinalEquiv α β γ).symm ∘
-          (fun x : Fam.RightFinalIndex α β γ i => ⟨i, x⟩) =
-        Fam.rightFinalRow α β γ i := by
-    funext x
-    simp
   have hunit : C' * C'ᴴ = 1 := by
     unfold C'
     rw [Matrix.conjTranspose_submatrix,
@@ -239,12 +241,13 @@ theorem tripleFusionComparison_finalSector_mul_conjTranspose_eq_one
         (fun x : Fam.LeftFinalIndex α β γ i => ⟨i, x⟩)
         (fun y : Fam.RightFinalIndex α β γ j => ⟨j, y⟩) = 0 := by
     intro i j hji
-    simpa only [C', Matrix.submatrix_submatrix, hleft, hright] using
+    simpa only [C', Matrix.submatrix_submatrix,
+      leftTripleFinalEquiv_symm_comp, rightTripleFinalEquiv_symm_comp] using
       Fam.tripleFusionComparison_finalSector_submatrix_eq_zero
         c hχ hLI hSel α β γ i j hji
-  have hdiag := Matrix.sigmaDiagonal_mul_conjTranspose_eq_one C' hunit hoff ε
-  simp only [C', Matrix.submatrix_submatrix, hleft, hright] at hdiag
-  exact hdiag
+  simpa only [C', Matrix.submatrix_submatrix,
+    leftTripleFinalEquiv_symm_comp, rightTripleFinalEquiv_symm_comp] using
+    Matrix.sigmaDiagonal_mul_conjTranspose_eq_one C' hunit hoff ε
 
 /-- **A fixed-final comparison corner also has a left adjoint inverse.**
 
@@ -275,18 +278,6 @@ theorem conjTranspose_mul_tripleFusionComparison_finalSector_eq_one
   let C := Fam.tripleFusionComparison α β γ
   let C' := C.submatrix (Fam.leftTripleFinalEquiv α β γ).symm
     (Fam.rightTripleFinalEquiv α β γ).symm
-  have hleft (i : Λ) :
-      (Fam.leftTripleFinalEquiv α β γ).symm ∘
-          (fun x : Fam.LeftFinalIndex α β γ i => ⟨i, x⟩) =
-        Fam.leftFinalRow α β γ i := by
-    funext x
-    simp
-  have hright (i : Λ) :
-      (Fam.rightTripleFinalEquiv α β γ).symm ∘
-          (fun x : Fam.RightFinalIndex α β γ i => ⟨i, x⟩) =
-        Fam.rightFinalRow α β γ i := by
-    funext x
-    simp
   have hunit : C'ᴴ * C' = 1 := by
     unfold C'
     rw [Matrix.conjTranspose_submatrix,
@@ -298,12 +289,13 @@ theorem conjTranspose_mul_tripleFusionComparison_finalSector_eq_one
         (fun x : Fam.LeftFinalIndex α β γ j => ⟨j, x⟩)
         (fun y : Fam.RightFinalIndex α β γ i => ⟨i, y⟩) = 0 := by
     intro i j hji
-    simpa only [C', Matrix.submatrix_submatrix, hleft, hright] using
+    simpa only [C', Matrix.submatrix_submatrix,
+      leftTripleFinalEquiv_symm_comp, rightTripleFinalEquiv_symm_comp] using
       Fam.tripleFusionComparison_finalSector_submatrix_eq_zero
         c hχ hLI hSel α β γ j i hji.symm
-  have hdiag := Matrix.sigmaDiagonal_conjTranspose_mul_eq_one C' hunit hoff ε
-  simp only [C', Matrix.submatrix_submatrix, hleft, hright] at hdiag
-  exact hdiag
+  simpa only [C', Matrix.submatrix_submatrix,
+    leftTripleFinalEquiv_symm_comp, rightTripleFinalEquiv_symm_comp] using
+    Matrix.sigmaDiagonal_conjTranspose_mul_eq_one C' hunit hoff ε
 
 /-- **Conditional unitarity of the fixed-final multiplicity matrix.**
 
