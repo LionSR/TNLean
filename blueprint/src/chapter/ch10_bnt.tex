@@ -1078,9 +1078,11 @@ single family.
     \label{thm:bnt_periodic_self_overlap_tendsto}
     \lean{MPSTensor.periodicSelfOverlap_tendsto}
     \leanok
-    \uses{def:mpv_overlap}
-    Let $D>0$. If $A$ is an $m$-periodic MPS tensor with bond dimension $D$,
-    then
+    \uses{def:mpv_overlap,def:irreducible_tensor,def:left_canonical_tensor,
+      def:peripheral_eigenvalues}
+    Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
+    with bond dimension $D$, and suppose that the peripheral eigenvalues of
+    its transfer map are exactly $\{z\in\mathbb C:z^m=1\}$. Then
     \[
         O_{AA}(mn)\longrightarrow m.
     \]
