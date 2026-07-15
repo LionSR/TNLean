@@ -100,7 +100,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 |---|---|---|---|---|
 | Defn CFII (l.1058) | 1058–1060 | CFII: CF + trace-preserving CPM + full-rank diagonal fixed point | `TNLean/MPS/CanonicalForm/Existence.lean` (`CFII` data) | `leanok` |
 | **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` (`IsNormalTensor.overlap_dichotomy`) | `leanok` |
-| **Corollary `eqV`** (l.1121) | 1121–1128 | NMPV overlap → 0 or equal up to phase factor e^{iφN} | `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` (`IsNormalTensor.mpv_phase_alternative`) | `leanok` for positive chain lengths |
+| **Corollary `eqV`** (l.1121) | 1121–1128 | NMPV overlap → 0 or equal up to phase factor e^{iφN} | `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` (`IsNormalTensor.mpv_phase_alternative`) | `leanok` |
 | **Corollary `Lem1`** (l.1131) | 1131–1133 | Orthogonal NMPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean` (`exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`) | `leanok` |
 | **Lemma `Lem:app_simple`** (l.1156) | 1156–1163 | Power-sum equality ⇒ multiset equality | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; used by `FundamentalTheorem/SectorWeightComparison.lean` | `leanok` |
 | **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII version: X, X_k unitary | No current source-faithful Lean theorem identified; CFII normalization data live in `TNLean/MPS/CanonicalForm/Existence.lean` | **open** |

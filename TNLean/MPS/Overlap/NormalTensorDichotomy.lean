@@ -10,14 +10,14 @@ import TNLean.MPS.CanonicalForm.NormalTensorGauge
 Two normal tensors have rectangular matrix product vector overlap tending to zero, unless their
 bond dimensions agree and they are related by an invertible gauge and a unit phase. In the latter
 case the overlap modulus tends to one, and the matrix product vectors differ by the corresponding
-power of the phase at every positive length.
+power of the phase at every length.
 
 ## Main statements
 
 * `IsNormalTensor.overlap_dichotomy`: the overlap tends to zero, or its modulus tends to one and
   the tensors are gauge-phase equivalent with a unit phase.
 * `IsNormalTensor.mpv_phase_alternative`: the overlap tends to zero, or the matrix product vectors
-  differ by a unit phase raised to each positive chain length.
+  differ by a unit phase raised to each chain length.
 
 ## References
 
@@ -103,19 +103,19 @@ theorem IsNormalTensor.overlap_dichotomy
 Corollary A.3 (eqV), lines 1121--1128).
 
 For two normal tensors of positive, possibly different, bond dimensions, either the rectangular
-overlap tends to zero, or their matrix product vectors differ at every positive length by a fixed
-unit phase raised to that length. -/
+overlap tends to zero, or their matrix product vectors differ at every length by a fixed unit phase
+raised to that length. -/
 theorem IsNormalTensor.mpv_phase_alternative
     [NeZero D₁] [NeZero D₂]
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) ∨
-      ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ N, 0 < N →
+      ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ N,
         mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
   rcases hA.overlap_dichotomy hB with hzero | ⟨_hone, hdim, X, ζ, hζ, hrel⟩
   · exact Or.inl hzero
   · right
-    refine ⟨ζ, hζ, fun N _hN ↦ ?_⟩
+    refine ⟨ζ, hζ, fun N ↦ ?_⟩
     ext w
     simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
     rw [mpv_eq_pow_mul_of_gaugePhase

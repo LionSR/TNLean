@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{CPSV16 Lemma~\texttt{equalMPS} Gauge-Phase Components}
+\title{CPSV16 Lemma~\texttt{equalMPS} Gauge-Phase Components and Resolution}
 \author{}
 \date{2026-05-10}
 
@@ -123,10 +123,15 @@ after the rectangular dimension conclusion has been supplied separately.
 The same-bond-dimension gauge component is formalized without the
 source-absent MPV proportionality hypothesis. The rectangular
 bond-dimension conclusion $D_a=D_b$ follows from the rectangular overlap-decay
-theorem through its non-decay contrapositive. Together these two components
-recover the structural conclusion of the unit-overlap branch of
-Lemma~\texttt{equalMPS}, though the upstream normal-tensor periodicity and
-dichotomy statements remain separate from this note.
+theorem through its non-decay contrapositive. The theorem
+\leanid{MPSTensor.IsNormalTensor.overlap_dichotomy} in
+\path{TNLean/MPS/Overlap/NormalTensorDichotomy.lean} now assembles these
+components with normalized self-overlap into the full normal-tensor dichotomy
+and structural conclusion of Lemma~\texttt{equalMPS}. Its corollary
+\leanid{MPSTensor.IsNormalTensor.mpv_phase_alternative} proves the exact
+phase relation for every chain length, as stated in Corollary~\texttt{eqV}.
+Thus the gap recorded by this note is closed; the preceding sections retain the
+mathematical decomposition used in the proof.
 
 \bibliographystyle{alpha}
 \bibliography{references}
