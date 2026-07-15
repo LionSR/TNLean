@@ -689,32 +689,34 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
 \label{sec:stinespring}
 %% =========================================================
 
-The Stinespring dilation realizes the channel through an isometry $V$ into a
-larger space, $T(\rho)=\tr_E[V\rho V^\dagger]$; tracing out the
-environment $E$ returns the channel:
+For a normalized Kraus family, the Stinespring construction realizes the
+channel through an isometry $V$ into a larger space,
+$T(\rho)=\tr_E[V\rho V^\dagger]$; tracing out the environment $E$ returns the
+channel:
 \begin{center}
     \TNStinespring
 \end{center}
 
-\begin{definition}[Stinespring isometry]\label{def:stinespring_v}
+\begin{definition}[Stinespring matrix]\label{def:stinespring_v}
     \lean{stinespringV}
     \leanok
-    \uses{def:cp_map}
-    Given Kraus operators $\{K_j\}_{j=0}^{r-1}$ with
-    $K_j \in \MN{D}$, the \emph{Stinespring isometry}
-    $V : \C^D \to \C^D \otimes \C^r$ is the
-    $(D \cdot r) \times D$ matrix
+    Given possibly rectangular Kraus operators
+    $K_j:\C^{d_{\mathrm{in}}}\to\C^{d_{\mathrm{out}}}$, the
+    \emph{Stinespring matrix}
+    $V:\C^{d_{\mathrm{in}}}\to
+       \C^{d_{\mathrm{out}}}\otimes\C^r$ is defined by
     \[
         V_{(i,j),k} = (K_j)_{ik}.
     \]
-    This implements $V = \sum_j K_j \otimes \ket{j}$.
+    Thus $V = \sum_j K_j \otimes \ket{j}$. It is an isometry precisely when
+    the Kraus family satisfies the trace-preserving normalization.
 \end{definition}
 
-\begin{lemma}[Entry formula for the Stinespring isometry]\label{lem:stinespring_v_apply}
+\begin{lemma}[Entry formula for the Stinespring matrix]\label{lem:stinespring_v_apply}
     \lean{stinespringV_apply}
     \leanok
     \uses{def:stinespring_v}
-    For indices $i,k \in \{0,\ldots,D-1\}$ and $j \in \{0,\ldots,r-1\}$,
+    For output index $i$, input index $k$, and $j\in\{0,\ldots,r-1\}$,
     \[
         V_{(i,j),k} = (K_j)_{ik}.
     \]
@@ -724,7 +726,7 @@ environment $E$ returns the channel:
     \lean{stinespringV_conjTranspose_mul}
     \leanok
     \uses{def:stinespring_v}
-    The Stinespring isometry satisfies
+    The Stinespring matrix satisfies
     \[
         V^\dagger V = \sum_{j=0}^{r-1} K_j^\dagger K_j.
     \]

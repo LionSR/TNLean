@@ -127,6 +127,38 @@
     $I_L \le I_{L+1}$ after subtracting $S_N$.
 \end{proof}
 
+\begin{theorem}[Data processing for bipartite mutual information]
+    \label{thm:mpdo_mutual_information_data_processing}
+    \lean{IsKrausCPTP.mutualInformation_tensorMapId_le,
+      IsKrausCPTP.mutualInformation_idTensorMap_le,
+      IsKrausCPTP.mutualInformation_tensorMapBoth_le}
+    \leanok
+    \uses{def:is_kraus_cptp, def:mutual_information}
+    Let $\rho_{AB}$ be a bipartite density operator, and let
+    $\Phi_A$ and $\Psi_B$ be trace-preserving completely positive maps whose
+    input and output matrix algebras may have different dimensions. Then
+    \[
+      I(A':B')_{(\Phi_A\otimes\Psi_B)(\rho)}
+        \leq I(A:B)_\rho.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mutual_information_monotone_tripartite}
+    Choose a rectangular Stinespring isometry for $\Phi_A$. Conjugating by
+    the isometry preserves the entropy of the joint state and of the first
+    marginal, since the two matrices have the same nonzero eigenvalues.
+    Tracing out the Stinespring environment gives $\Phi_A$, and strong
+    subadditivity in the form
+    \[
+      I(R:A')\leq I(R:A'E)
+    \]
+    therefore proves data processing on the first factor. Exchanging the
+    two tensor factors gives the corresponding result for $\Psi_B$.
+    Applying the two one-sided inequalities successively proves the claim.
+\end{proof}
+
 \begin{lemma}[Nonnegativity of block entropies]
     \label{lem:block_entropy_nonneg}
     \lean{blockEntropy_nonneg}

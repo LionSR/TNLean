@@ -99,6 +99,8 @@ import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
+import TNLean.Channel.KrausCPTP
+import TNLean.Channel.LocalizedKrausCPTP
 import TNLean.Channel.OrderedCP
 import TNLean.Channel.CompletelyPositiveBridge
 import TNLean.Channel.RadonNikodym
@@ -129,6 +131,7 @@ import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
+import TNLean.Entropy.MutualInformationDataProcessing
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
 import TNLean.Axioms.OperatorConvexity
 -- Layer 2b: Lieb concavity on the full sub-boundary region (Wolf Thm 5.15)
@@ -408,8 +411,6 @@ import TNLean.MPS.MPDO.VerticalCanonicalForm
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.MPDO.RFP
-import TNLean.MPS.MPDO.KrausCPTP
-import TNLean.MPS.MPDO.LocalizedKrausCPTP
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.RFPViaTSGlobal
 import TNLean.MPS.MPDO.PhysicalBlocking
