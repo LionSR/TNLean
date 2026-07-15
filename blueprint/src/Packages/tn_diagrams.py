@@ -708,7 +708,9 @@ def _assert_slide_diagram_contract() -> None:
             "the universal TN core."
         )
 
-    catalogue_source = _SLIDE_CATALOGUE.read_text(encoding="utf-8")
+    catalogue_source = _mask_tex_comments(
+        _SLIDE_CATALOGUE.read_text(encoding="utf-8")
+    )
     raw_slide_draw = re.compile(
         r"^[ \t]*\\(?:draw|path|coordinate|fill|filldraw|shade|shadedraw)\b",
         re.MULTILINE,
