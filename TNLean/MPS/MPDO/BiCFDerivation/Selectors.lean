@@ -362,7 +362,7 @@ For a chosen block, one pair interpolant gives the prescribed matrix on that
 block and zero on an anchor block. Multiplying by identity--zero pair
 selectors for the remaining `r - 2` blocks kills every other component without
 adding a separate injective prefix. This is the finite-dimensional direct-sum
-step in Perez-Garcia--Verstraete--Wolf--Cirac, lines 1346--1408. -/
+step in arXiv:quant-ph/0608197, lines 1346--1408. -/
 theorem wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
     (hr : 2 ≤ r)

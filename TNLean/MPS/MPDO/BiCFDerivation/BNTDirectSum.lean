@@ -12,7 +12,7 @@ import TNLean.MPS.Periodic.NormalizedSelfOverlap
 
 This file connects the same-dimension BNT separation hypothesis to the
 parent-Hamiltonian uniqueness input in the direct-sum proof of
-Perez-Garcia--Verstraete--Wolf--Cirac, lines 1346--1408.
+arXiv:quant-ph/0608197, lines 1346--1408.
 
 The intermediate statements keep the direct-sum hypotheses explicit:
 `BlocksNotGaugePhaseEquiv` gives the long-chain non-proportional MPV witness,
@@ -31,7 +31,7 @@ variable {d L : ℕ}
 directness conclusion once the direct-sum injectivity hypotheses are supplied.
 
 This is the BNT-facing form of the equal-size branch of the direct-sum proof in
-Perez-Garcia--Verstraete--Wolf--Cirac, lines 1346--1408. The theorem does
+arXiv:quant-ph/0608197, lines 1346--1408. The theorem does
 not infer injectivity or transport non-equivalence through blocking; those
 inputs remain explicit. It is exported for the pair-trace theorem below and for
 downstream direct-sum comparisons that need the image-space directness statement
@@ -62,7 +62,7 @@ theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge
 /-- Same-dimension BNT-separated blocks give the PGVWC directness conclusion from
 Condition C1 at a finite length \(L_0\).
 
-Perez-Garcia--Verstraete--Wolf--Cirac, lines 1346--1408, first uses Condition
+The proof in arXiv:quant-ph/0608197, lines 1346--1408, first uses Condition
 C1 in each block at length \(L_0\), then compares the spaces
 \(\mathcal G_{L_0+1}^{A^j}\). This version follows that length convention and
 does not assume one-site injectivity. -/
@@ -193,7 +193,7 @@ Condition C1 at \(L_0\), without the one-site special case of Condition C1.
 
 The length is \(3(L_0+1)\), written as
 \((L_0+1)+((L_0+1)+(L_0+1))\) to match the formal concatenation of the three
-blocks in Perez-Garcia--Verstraete--Wolf--Cirac, lines 1346--1408. -/
+blocks in arXiv:quant-ph/0608197, lines 1346--1408. -/
 theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -232,7 +232,7 @@ full product algebra at the source length \(3(r-1)(L_0+1)\).
 The pairwise three-block argument supplies an arbitrary value on one block and
 zero on an anchor block. Identity--zero pair selectors remove the remaining
 blocks without a separate injective prefix. This is the induction length in
-Perez-Garcia--Verstraete--Wolf--Cirac, lines 1346--1408. -/
+arXiv:quant-ph/0608197, lines 1346--1408. -/
 theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -298,7 +298,7 @@ theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEqu
 three-block length, once the direct-sum injectivity hypotheses are supplied.
 
 This is the selector-facing consequence of the direct-sum input in
-Perez-Garcia--Verstraete--Wolf--Cirac, lines 1346--1408: homogeneous trace separation at
+arXiv:quant-ph/0608197, lines 1346--1408: homogeneous trace separation at
 \(L+(L+L)\) is converted into equations selecting one block against another. -/
 theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
