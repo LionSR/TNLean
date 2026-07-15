@@ -284,7 +284,7 @@ def _assert_no_duplicate_diagram_definitions() -> None:
 
 def _assert_diagram_templates_are_catalogue_independent() -> None:
     pattern = re.compile(r"^name:\s+(.+)$", re.MULTILINE)
-    template = _TEMPLATE_FILE.read_text(encoding="utf-8")
+    template = _read_required_text(_TEMPLATE_FILE)
     rendered_names = {
         name
         for line in pattern.findall(template)
@@ -312,6 +312,18 @@ def _source_line(path: Path, offset: int) -> str:
     except ValueError:
         relative = path
     return f"{relative}:{text.count(chr(10), 0, offset) + 1}"
+
+
+def _read_required_text(path: Path) -> str:
+    """Read a required repository file with a stable audit diagnostic."""
+
+    if not path.is_file():
+        try:
+            relative = path.relative_to(_REPO_ROOT)
+        except ValueError:
+            relative = path
+        raise RuntimeError(f"Missing required tensor-network file: {relative}.")
+    return path.read_text(encoding="utf-8")
 
 
 def _mask_tex_comments(source: str) -> str:
@@ -455,7 +467,7 @@ def _assert_audit_commands_defined() -> None:
     """Require every command classified by the audit to exist in the library."""
 
     implementation = "\n".join(
-        path.read_text(encoding="utf-8")
+        _read_required_text(path)
         for path in (_TN_CORE_FILE, _TN_LIBRARY_FILE)
     )
     defined = _private_command_definitions(implementation)
@@ -569,7 +581,7 @@ def _assert_no_raw_glyph_nodes() -> None:
 def _assert_documented_public_vocabulary() -> None:
     """Keep the mathematical style guide synchronized with the TeX API."""
 
-    source = _GRAMMAR_FILE.read_text(encoding="utf-8")
+    source = _read_required_text(_GRAMMAR_FILE)
     begin_marker = "<!-- TN-PUBLIC-VOCABULARY:BEGIN -->"
     end_marker = "<!-- TN-PUBLIC-VOCABULARY:END -->"
     if source.count(begin_marker) != 1 or source.count(end_marker) != 1:
@@ -581,7 +593,7 @@ def _assert_documented_public_vocabulary() -> None:
     documented = set(re.findall(r"`(TN[A-Za-z0-9]+)`", block))
 
     implementation = "\n".join(
-        path.read_text(encoding="utf-8")
+        _read_required_text(path)
         for path in (_TN_CORE_FILE, _TN_LIBRARY_FILE)
     )
     defined_commands = set(
@@ -676,7 +688,7 @@ def _assert_slide_diagram_contract() -> None:
             "and slide catalogue: " + ", ".join(missing_inputs)
         )
 
-    core_source = _TN_CORE_FILE.read_text(encoding="utf-8")
+    core_source = _read_required_text(_TN_CORE_FILE)
     palette_pattern = re.compile(
         r"^\s*\\colorlet\{(tn[A-Za-z]+)\}", re.MULTILINE
     )
@@ -1056,16 +1068,16 @@ _LAYOUT_ENVIRONMENT_PATTERN = re.compile(
 )
 
 
-def _diagram_body_profile(
-    body: str,
+def _source_layout_profile(
+    source_text: str,
     *,
     name: str,
     location: str,
     previous_declarations: dict[str, DiagramDeclaration],
 ) -> str:
-    """Read the effective layout profile from one diagram body."""
+    """Read the effective layout profile from a diagram body or atom sample."""
 
-    environments = list(_LAYOUT_ENVIRONMENT_PATTERN.finditer(body))
+    environments = list(_LAYOUT_ENVIRONMENT_PATTERN.finditer(source_text))
     if environments:
         profiles = {
             match.group(2).strip()
@@ -1086,7 +1098,7 @@ def _diagram_body_profile(
             f"{', '.join(sorted(profiles))}."
         )
 
-    source = body.strip()
+    source = source_text.strip()
     match = re.match(r"\\(TN[A-Za-z]+)(?=[^A-Za-z@]|\Z)", source)
     if match is not None and match.group(1) in previous_declarations:
         target = previous_declarations[match.group(1)]
@@ -1148,7 +1160,7 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
             raise RuntimeError(f"{name} has invalid role {role!r} at {location}.")
         if profile not in {"compact", "normal"}:
             raise RuntimeError(f"{name} has invalid profile {profile!r} at {location}.")
-        body_profile = _diagram_body_profile(
+        body_profile = _source_layout_profile(
             body,
             name=name,
             location=location,
@@ -1263,6 +1275,17 @@ def _load_atom_declarations() -> dict[str, AtomDeclaration]:
                 f"{name} has an empty atom sample at {location}."
             )
         _assert_atom_sample_self_call(sample, name=name, location=location)
+        sample_profile = _source_layout_profile(
+            sample,
+            name=f"{name} atom sample",
+            location=location,
+            previous_declarations={},
+        )
+        if sample_profile != profile:
+            raise RuntimeError(
+                f"{name} declares profile {profile!r} but its atom sample uses "
+                f"{sample_profile!r} at {location}."
+            )
         declarations[name] = AtomDeclaration(
             name=name,
             ports=_parse_atom_ports(raw_ports, name=name, location=location),
@@ -1445,13 +1468,9 @@ def _assert_diagram_arguments_used() -> None:
 def _semantic_audit_counts() -> dict[str, object]:
     """Collect migration measures without assigning mathematical meaning to them."""
 
-    catalogue_source = _TN_CATALOGUE_FILE.read_text(encoding="utf-8")
-    core_source = _TN_CORE_FILE.read_text(encoding="utf-8")
-    library_source = (
-        _TN_LIBRARY_FILE.read_text(encoding="utf-8")
-        if _TN_LIBRARY_FILE.exists()
-        else ""
-    )
+    catalogue_source = _read_required_text(_TN_CATALOGUE_FILE)
+    core_source = _read_required_text(_TN_CORE_FILE)
+    library_source = _read_required_text(_TN_LIBRARY_FILE)
     private_source = core_source + "\n" + library_source
     public_macros = [
         (declaration.name, len(declaration.arguments), declaration.body)
