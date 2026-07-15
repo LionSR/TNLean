@@ -179,8 +179,15 @@ fixes the original operator.  These are the support-projector identities used in
 
 \begin{proof}
     \leanok
-    Apply the preceding trace identity to $\mathbf 1_R-P_R$.  Its lift has
-    zero expectation against $\rho$, hence annihilates $\rho$ by positivity.
+    Set $Q=\mathbf 1_R-P_R$.  The preceding trace identity gives
+    \[
+        \operatorname{tr}\bigl((\mathbf 1_L\otimes Q)\rho\bigr)
+        =\operatorname{tr}\bigl(Q\operatorname{tr}_L\rho\bigr)=0,
+    \]
+    since $P_R$ is the support projector of $\operatorname{tr}_L\rho$.
+    Positivity of $\rho$ then gives
+    $(\mathbf 1_L\otimes Q)\rho=0$, and hence
+    $(\mathbf 1_L\otimes P_R)\rho=\rho$.
 \end{proof}
 
 \begin{theorem}[Right absorption by the right marginal support]
