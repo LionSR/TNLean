@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 # The local projectors in the length-independent fusion form
 
 For the length-independent case following Theorem IV.13 of
-arXiv:1606.00608, every diagonal matrix
+arXiv:1606.00608, every structure matrix
 $\chi_{\alpha,\beta,\gamma}$ is the identity on its multiplicity space.
 Consequently, if the terminal matrices $P_\gamma$ are orthogonal
 projections, then
