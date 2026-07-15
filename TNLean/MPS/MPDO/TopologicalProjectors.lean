@@ -35,7 +35,6 @@ decomposition are separate steps.
 -/
 
 open scoped Matrix Kronecker
-open Matrix
 
 namespace MPOTensor.BNTFusionIsometryFamily
 
