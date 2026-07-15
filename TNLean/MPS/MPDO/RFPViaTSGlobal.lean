@@ -14,7 +14,8 @@ The maps in Definition 4.1 of arXiv:1606.00608 act on one or two neighboring
 physical sites. Tensoring them with the identity on the remaining sites gives
 trace-preserving completely positive maps whose local closure identities extend
 to a chain of any length. These are the channel identities used in the
-strong-area-law argument of arXiv:1606.00608, Appendix C, lines 1333--1341.
+argument establishing saturation of the area law in arXiv:1606.00608,
+Appendix C, lines 1333--1341.
 
 The remaining local-channel data-processing theorem and the source standing
 nonvanishing condition are recorded in
@@ -136,7 +137,7 @@ closure, then its localization at the first site inserts one copy of the tensor
 in a closure of arbitrary length.
 
 This is the global channel identity used when `T` is applied to the first spin
-of the first interval in the proof of the strong area law.
+of the first interval in the proof of saturation of the area law.
 
 Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 theorem refineFirstSite_physCloseN (M : MPOTensor d D)
@@ -161,7 +162,7 @@ closure, then its localization at the first two sites removes one copy of the
 tensor from a closure of arbitrary length.
 
 This is the global channel identity used when `S` is applied to the first two
-spins of the second interval in the proof of the strong area law.
+spins of the second interval in the proof of saturation of the area law.
 
 Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 theorem coarsenFirstTwoSites_physCloseN (M : MPOTensor d D)
@@ -211,7 +212,7 @@ theorem coarsenFirstTwoSites_mpo (M : MPOTensor d D)
 of trace-preserving completely positive maps whose localizations insert and
 remove a tensor in physical closures of every length.
 
-This is the global channel statement used in the proof of the strong area law
+This is the global channel statement used to prove saturation of the area law
 in arXiv:1606.00608, Appendix C. The parameter `N` counts the sites on which the
 identity channel acts; even when `N = 0`, the input closure contains one or two
 physical sites, so no empty-chain operator is involved.
