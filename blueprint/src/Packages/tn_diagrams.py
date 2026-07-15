@@ -364,9 +364,17 @@ def _assert_diagram_roles_match_chapters() -> None:
     actual: dict[str, set[str]] = {
         declaration.name: set() for declaration in diagram_declarations()
     }
+    declared_contexts = {
+        declaration.name: set(declaration.contexts)
+        for declaration in diagram_declarations()
+    }
+    actual_contexts: dict[str, set[str]] = {
+        declaration.name: set() for declaration in diagram_declarations()
+    }
     call_pattern = re.compile(r"\\(TN[A-Z]\w*)")
     figure_pattern = re.compile(r"\\begin\{figure\}.*?\\end\{figure\}", re.DOTALL)
     for path in sorted((_SRC_DIR / "chapter").rglob("*.tex")):
+        relative = path.relative_to(_SRC_DIR).as_posix()
         source = _mask_tex_comments(path.read_text(encoding="utf-8"))
         figure_spans = [match.span() for match in figure_pattern.finditer(source)]
         for match in call_pattern.finditer(source):
@@ -379,6 +387,7 @@ def _assert_diagram_roles_match_chapters() -> None:
                 else "display"
             )
             actual[name].add(role)
+            actual_contexts[name].add(relative)
 
     mixed = sorted(name for name, roles in actual.items() if len(roles) > 1)
     mismatched = sorted(
@@ -386,19 +395,6 @@ def _assert_diagram_roles_match_chapters() -> None:
         for name, roles in actual.items()
         if roles and roles != {_DIAGRAM_CATALOGUE.declaration(name).role}
     )
-    declared_contexts = {
-        declaration.name: set(declaration.contexts)
-        for declaration in diagram_declarations()
-    }
-    actual_contexts: dict[str, set[str]] = {
-        declaration.name: set() for declaration in diagram_declarations()
-    }
-    for path in sorted((_SRC_DIR / "chapter").rglob("*.tex")):
-        relative = path.relative_to(_SRC_DIR).as_posix()
-        source = _mask_tex_comments(path.read_text(encoding="utf-8"))
-        for match in call_pattern.finditer(source):
-            if match.group(1) in actual_contexts:
-                actual_contexts[match.group(1)].add(relative)
     context_mismatches = {
         name: {
             "declared": sorted(declared_contexts[name]),
@@ -672,21 +668,18 @@ def _assert_slide_diagram_contract() -> None:
         )
 
     core_source = _TN_CORE_FILE.read_text(encoding="utf-8")
-    core_theme_keys = set(
-        re.findall(r"^\s*(tn theme [^/]+?)/\.style", core_source, re.MULTILINE)
+    palette_pattern = re.compile(
+        r"^\s*\\colorlet\{(tn[A-Za-z]+)\}", re.MULTILINE
     )
-    slide_tn_style_keys = set(
-        re.findall(
-            r"^\s*(tn [^/]+?)/\.(?:append )?style",
-            library_source,
-            re.MULTILINE,
-        )
-    )
-    invalid_theme_keys = sorted(slide_tn_style_keys - core_theme_keys)
-    if invalid_theme_keys:
+    core_palette_keys = set(palette_pattern.findall(core_source))
+    slide_palette_keys = set(palette_pattern.findall(library_source))
+    missing_palette_keys = sorted(core_palette_keys - slide_palette_keys)
+    invalid_palette_keys = sorted(slide_palette_keys - core_palette_keys)
+    if missing_palette_keys or invalid_palette_keys:
         raise RuntimeError(
-            "The slide theme may replace only declared tn theme slots: "
-            + ", ".join(invalid_theme_keys)
+            "The slide palette overrides must match the color slots declared in "
+            "tex/tn/tn_core.tex "
+            f"(missing={missing_palette_keys}, invalid={invalid_palette_keys})."
         )
 
     theme_geometry = re.compile(
