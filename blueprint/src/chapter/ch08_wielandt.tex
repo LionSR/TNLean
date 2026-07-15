@@ -1068,6 +1068,32 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     Lemma~\ref{lem:blocking_transfer}.
 \end{proof}
 
+\begin{theorem}[Exact quantum-Wielandt blocking length]
+    \label{thm:exact_pow_four_block_injectivity_normal_left_canonical}
+    \lean{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}
+    \leanok
+    \uses{thm:bounded_injective_blocking_normal_left_canonical,
+        thm:wordspan_blk_inj_succ}
+    Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
+    Then
+    \[
+        S_{D^4}(A)=\MN{D};
+    \]
+    equivalently, $A$ is $D^4$-block injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:bounded_injective_blocking_normal_left_canonical,
+        thm:wordspan_blk_inj_succ}
+    Choose $L$ with $0<L\leq D^4$ and $S_L(A)=\MN{D}$, and write
+    \[
+        D^4=L+k.
+    \]
+    Induction on $k$, using positive-length propagation at each step, gives
+    $S_{L+k}(A)=\MN{D}$.
+\end{proof}
+
 \begin{theorem}[Common exact block-injectivity length]
     \label{thm:common_exact_block_injectivity_normal_left_canonical}
     \lean{MPSTensor.%

@@ -292,18 +292,39 @@ This is the inverse identity in
 \begin{proof}
     \leanok
     \uses{rem:word_tuple_span_top}
-    This is the direct implication from the finite-length hypotheses to the
-    finite-length trace-separation statement.  General BNT canonical-form
-    hypotheses now yield a finite representative-indexed witness.  Quantum
-    Wielandt and positive-length propagation give the common exact injective
-    length $D^4$, and the existing pair-separation argument constructs the
-    source-length block selectors.  What remains open in the sharper
-    proposition of \cite[lines~340--345]{Cirac2016MPDO_arXiv} is the direct-sum
-    step which obtains the full product-algebra span at that same length,
-    without concatenating a further injective prefix.  The exact numerical
-    comparison is recorded in
-    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+    If the common injective prefix has length $L$ and the selector has length
+    $S$, concatenation gives simultaneous words of length $L+S$.  For every
+    tuple $(X_j)_j$, the resulting coefficients satisfy
+    \[
+        \sum_{|w|=L+S}c_w A_j^w=X_j.
+    \]
+    Hence the simultaneous word tuples span the product algebra, and
+    nondegeneracy of the trace pairing gives finite-length trace separation.
 \end{proof}
+
+\begin{remark}[Sharp finite-length block separation]
+    \label{rem:sharp_bnt_block_separation_gap}
+    \notready
+    \uses{thm:bnt_representatives_exact_total_dimension_pow_four}
+    Let $D$ be the total bond dimension and $g$ the number of minimal
+    representatives.  The common exact injective length is $D^4$, while the
+    pair-separation argument gives selectors of length
+    \[
+        3(g-1)(D^4+1)\leq3(D-1)(D^4+1).
+    \]
+    Concatenating a separate injective prefix gives the longer length
+    \[
+        (3g-2)(D^4+1).
+    \]
+    The sharp bound in \cite[lines~340--345]{Cirac2016MPDO_arXiv} remains an
+    open gap: one must obtain arbitrary matrices in the selected block at the
+    selector length itself.  Once this direct-sum step is proved, the final
+    estimate is
+    \[
+        3(D^4+1)(D-1)\leq3D^5.
+    \]
+    % Detailed audit: docs/paper-gaps/cpgsv17_bicf_block_separation.tex.
+\end{remark}
 
 \begin{definition}[Representative word-tuple separation]
     \label{def:representative_word_tuple_span}
