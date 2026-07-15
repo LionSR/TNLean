@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.TensorMap
-import TNLean.MPS.MPDO.KrausCPTP
+import TNLean.Channel.KrausCPTP
 
 /-!
 # Localized trace-preserving completely positive maps

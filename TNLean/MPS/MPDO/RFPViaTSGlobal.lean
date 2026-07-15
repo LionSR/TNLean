@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
-import TNLean.MPS.MPDO.LocalizedKrausCPTP
+import TNLean.Channel.LocalizedKrausCPTP
 import TNLean.MPS.MPDO.RFPViaTS
 
 /-!
@@ -17,8 +17,9 @@ to a chain of any length. These are the channel identities used in the
 argument establishing saturation of the area law in arXiv:1606.00608,
 Appendix C, lines 1333--1341.
 
-The remaining local-channel data-processing theorem and the source standing
-nonvanishing condition are recorded in
+The required local-channel data-processing inequality is proved in
+`TNLean.Entropy.MutualInformationDataProcessing`. The remaining steps in the
+source argument are recorded in
 `docs/paper-gaps/cpsv16_rfp_sal_data_processing.tex`.
 
 ## Main definitions

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.TracePairing
-import TNLean.MPS.MPDO.KrausCPTP
+import TNLean.Channel.KrausCPTP
 import TNLean.MPS.MPDO.ZCL
 
 /-!
@@ -154,8 +154,7 @@ noncomputable def physClose1 (M : MPOTensor d D) :
 /-- The trace of the one-site physical closure is the trace pairing with the
 physical-trace transfer.
 
-Source: arXiv:1606.00608, Definition 4.1, line 657, and Proposition
-`propsimple`, lines 1333--1340. -/
+Source: arXiv:1606.00608, Definition 4.1, line 657, and lines 1333--1340. -/
 theorem trace_physClose1_eq (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (physClose1 M X) = Matrix.trace (physTraceTransfer M * X) := by
   rw [physTraceTransfer, Finset.sum_mul, Matrix.trace_sum]
@@ -194,8 +193,7 @@ noncomputable def physClose2 (M : MPOTensor d D) :
 /-- The trace of the two-site physical closure is the trace pairing with the
 square of the physical-trace transfer.
 
-Source: arXiv:1606.00608, Definition 4.1, line 657, and Proposition
-`propsimple`, lines 1333--1340. -/
+Source: arXiv:1606.00608, Definition 4.1, line 657, and lines 1333--1340. -/
 theorem trace_physClose2_eq (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (physClose2 M X) =
       Matrix.trace (physTraceTransfer M * physTraceTransfer M * X) := by
@@ -286,8 +284,8 @@ def IsRFPViaTS (M : MPOTensor d D) : Prop :=
 
 /-- Definition 4.1 implies literal idempotence of the physical-trace transfer.
 
-This is the zero-correlation-length part of arXiv:1606.00608, Proposition
-`propsimple`, lines 1333--1340: trace preservation of the map from one site to
+This is the zero-correlation-length part of arXiv:1606.00608, lines 1333--1340:
+trace preservation of the map from one site to
 two sites identifies the traces of the one-site and two-site physical closures
 for every virtual boundary matrix. -/
 theorem physTraceTransfer_sq_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M) :
@@ -308,7 +306,7 @@ predicate `IsRFPViaTS` does not include these standing hypotheses, so the
 nonzero transfer is stated explicitly. This restriction is documented in
 `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1333--1340. -/
+Source: arXiv:1606.00608, lines 1333--1340. -/
 theorem isSourceZCL_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M)
     (h0 : physTraceTransfer M ≠ 0) : IsSourceZCL M :=
   isSourceZCL_of_physTraceTransfer_sq M h0 (physTraceTransfer_sq_of_isRFPViaTS M h)
