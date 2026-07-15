@@ -91,6 +91,49 @@
     gives the stated identity.
 \end{proof}
 
+\begin{theorem}[Eventual power sums determine the multiplicity spectrum]%
+    \label{thm:mpdo_bnt_eventual_power_sums_determine_multiplicity_spectrum}
+    \lean{MPOTensor.BNTMultiplicitySpectrumComparison.%
+        ofEventuallyEqualPowerSums}
+    \leanok
+    \uses{def:mpdo_bnt_multiplicity_spectrum_comparison,
+        thm:bounded_power_sum_multiset}
+    Suppose that every entry of the one-site multiplicity matrices, every
+    entry of the two-site multiplicity matrices, and every entry of the
+    matrices $\chi_{\alpha,\beta,\gamma}$ is positive.  Suppose also that
+    \[
+        \sum_i \mu_{\alpha,i}=m_\alpha
+        \qquad\text{for every }\alpha.
+    \]
+    If, for every $\gamma$ and all sufficiently large $L$,
+    \[
+        \sum_r \nu_{\gamma,r}^{L}
+        =
+        \sum_{\alpha,\beta,i,j,k}
+        \bigl(
+          \mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}
+        \bigr)^L,
+    \]
+    then the entries on the two sides agree as multisets.  Together with the
+    displayed one-site trace identity, these data define a BNT
+    multiplicity-spectrum comparison.
+\end{theorem}
+\begin{proof}\leanok
+    Positivity makes all entries nonzero.  Eventual equality of two finite
+    sums of geometric sequences gives
+    \[
+        \sum_r \nu_{\gamma,r}^{L}
+        =
+        \sum_{\alpha,\beta,i,j,k}
+        \bigl(\mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}\bigr)^L
+        \qquad (L\geq 1).
+    \]
+    The finite power-sum identity determines both the cardinality and the
+    multiset of entries.
+\end{proof}
+
 \begin{theorem}[Multiplicity trace normalization from the spectrum comparison
     and BNT algebra clause]%
     \label{thm:mpdo_bnt_multiplicity_trace_normalization}
