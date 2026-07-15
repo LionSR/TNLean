@@ -1,3 +1,40 @@
+\begin{definition}[BNT algebra clause]%
+    \label{def:mpdo_bnt_algebra_clause}
+    \lean{MPOTensor.BNTAlgebraClause}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_bnt_label_operator_family,
+        def:mpdo_bnt_label_trace_scalar_family,
+        def:mpdo_diagonal_chi_family,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        def:mpdo_bnt_label_same_length_product_form,
+        def:mpdo_bnt_label_idempotent_coefficient_form}
+    Fix a coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$, BNT-label
+    operators $O_L(M_\alpha)$, and trace scalars
+    $m_\alpha=\operatorname{tr}(\mu_\alpha)$. They satisfy the
+    \emph{BNT algebra clause} when there is a length-independent family of
+    positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ such that, for
+    every $L>0$,
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}),
+    \]
+    the same-length product law holds,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        =\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+    \]
+    and the trace scalars satisfy
+    \[
+        m_\gamma=\sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+    \]
+    This is the algebra statement in
+    \cite[Theorem~4.14(ii), source label \texttt{thm:IV.13},
+        lines~972--985]{Cirac2016MPDO_arXiv}, before comparison with a chosen
+    blocked basis.
+\end{definition}
+
 \begin{definition}[BNT-label theorem data]%
     \label{def:mpdo_bnt_label_theorem_data}
     \lean{MPOTensor.BNTLabelTheoremData}
@@ -20,18 +57,11 @@
     \lean{MPOTensor.BNTLabelTheoremData.blockedComparison_ofChi}
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_ofChi}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_bnt_label_operator_family,
-        def:mpdo_bnt_label_trace_scalar_family,
-        def:mpdo_bnt_label_same_length_product_form,
-        def:mpdo_bnt_label_idempotent_coefficient_form,
-        def:mpdo_positive_bnt_label_chi_trace_power_form,
+    \uses{def:mpdo_bnt_algebra_clause,
         def:mpdo_bnt_blocked_basis_label_assignment,
         def:mpdo_bnt_blocked_basis_coefficient_comparison}
-    The BNT-label theorem data consist of the fixed BNT-label coefficient
-    system, the same-length BNT operator family and product identity, the trace
-    scalars and idempotent condition, the positive length-independent
-    $\chi$-witness, and the comparison with the chosen blocked bases.
+    The BNT-label theorem data consist of a BNT algebra clause together with
+    the comparison with the chosen blocked bases.
     Explicitly, for every $L>0$ the product law is
     \[
         O_L(M_\alpha)O_L(M_\beta)

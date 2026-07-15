@@ -27,6 +27,40 @@ open scoped BigOperators ComplexOrder
 
 namespace MPOTensor
 
+/-- The algebra clause of arXiv:1606.00608, Theorem 4.14(ii) (source label
+`thm:IV.13`), before comparison with a chosen blocked basis.
+
+The coefficient family remains an independent object.  The positive chi
+witness identifies it with traces of powers of one length-independent family
+of positive diagonal matrices at every positive chain length.  The remaining
+fields are the same-length product law and the length-one idempotent scalar
+law.
+
+Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`, lines
+972--985, and Appendix C.4, lines 1929--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTAlgebraClause {Λ : Type*} [Fintype Λ] {O : ℕ → Type*}
+    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+    [∀ L : ℕ, Mul (O L)]
+    (coeffs : BNTLabelCoefficientFamily Λ)
+    (operators : BNTLabelOperatorFamily Λ O)
+    (traceScalars : BNTLabelTraceScalarFamily Λ) where
+  /-- The positive length-independent BNT-label chi witness.
+
+  Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`,
+  lines 972--985. -/
+  positiveChi : PositiveBNTLabelChiTracePowerForm coeffs
+  /-- The operators satisfy the same-length product law.
+
+  Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`,
+  lines 976--980. -/
+  sameLengthProduct : operators.HasSameLengthProductForm coeffs
+  /-- The trace scalars satisfy the length-one idempotent law.
+
+  Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`,
+  lines 981--985. -/
+  idempotent : traceScalars.HasIdempotentCoefficientForm coeffs
+
 /-- The BNT-label data asserted by the source theorem, together with its
 blocked-basis comparison.
 
@@ -57,22 +91,12 @@ structure BNTLabelTheoremData (data : AlgebraStructureData d D)
   Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   traceScalars : BNTLabelTraceScalarFamily Λ
-  /-- The same-length BNT product law.
+  /-- The BNT algebra clause before comparison with a chosen blocked basis.
 
-  Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
+  Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`,
+  lines 972--985, and Appendix C.4, lines 1925--1942 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-  sameLengthProduct : operators.HasSameLengthProductForm coeffs
-  /-- The idempotent scalar condition.
-
-  Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
-  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-  idempotent : traceScalars.HasIdempotentCoefficientForm coeffs
-  /-- The positive length-independent BNT-label chi witness.
-
-  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-  Appendix C.4, lines 1925--1942 of
-  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-  positiveChi : PositiveBNTLabelChiTracePowerForm coeffs
+  algebraClause : BNTAlgebraClause coeffs operators traceScalars
   /-- Comparison of the chosen blocked-basis coefficients with the BNT labels.
 
   Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
@@ -85,6 +109,18 @@ namespace BNTLabelTheoremData
 variable {data : AlgebraStructureData d D} {Λ : Type*} {O : ℕ → Type*}
   [Fintype Λ] [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
   [∀ L : ℕ, Mul (O L)] (H : BNTLabelTheoremData data Λ O)
+
+/-- The positive chi witness carried by BNT-label theorem data. -/
+def positiveChi : PositiveBNTLabelChiTracePowerForm H.coeffs :=
+  H.algebraClause.positiveChi
+
+/-- The same-length product law carried by BNT-label theorem data. -/
+theorem sameLengthProduct : H.operators.HasSameLengthProductForm H.coeffs :=
+  H.algebraClause.sameLengthProduct
+
+/-- The idempotent scalar law carried by BNT-label theorem data. -/
+theorem idempotent : H.traceScalars.HasIdempotentCoefficientForm H.coeffs :=
+  H.algebraClause.idempotent
 
 /-- Build BNT-label theorem data in the source-side case where the coefficient
 family is canonically determined by the same diagonal
@@ -115,9 +151,10 @@ noncomputable def ofChi (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
   coeffs := BNTLabelCoefficientFamily.ofChi χ
   operators := operators
   traceScalars := traceScalars
-  sameLengthProduct := sameLengthProduct
-  idempotent := idempotent
-  positiveChi := PositiveBNTLabelChiTracePowerForm.ofChi χ hχ
+  algebraClause := {
+    positiveChi := PositiveBNTLabelChiTracePowerForm.ofChi χ hχ
+    sameLengthProduct := sameLengthProduct
+    idempotent := idempotent }
   blockedComparison := blockedComparison
 
 /-- The same-length product predicate carried by BNT-label theorem data.
