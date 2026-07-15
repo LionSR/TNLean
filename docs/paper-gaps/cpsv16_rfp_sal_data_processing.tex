@@ -1,0 +1,113 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The remaining data-processing step in the strong-area-law consequence
+of MPDO renormalization fixed points}
+\author{}
+\date{2026-07-15}
+
+\begin{document}
+\maketitle
+
+\section{Source statement and proof}
+
+Definition~4.1 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
+(local label \texttt{RFPMixedTS},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:638--660}) defines a mixed-state
+renormalization fixed point by trace-preserving completely positive maps
+$\mathcal S$ and $\mathcal T$ satisfying
+\[
+  \mathcal S[M_2(X)]=M_1(X),
+  \qquad
+  \mathcal T[M_1(X)]=M_2(X)
+\]
+for every virtual boundary operator $X$.
+
+Theorem~4.9, implication (i)$\Rightarrow$(ii)
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:849--893}), is stated for a
+simple tensor $\mathcal K$ in biCF generating density operators.  Its
+Appendix~C proof, Proposition \texttt{propsimple}
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1331--1341}), treats a bipartition
+of a ring into consecutive intervals $A$ and $B$.  It applies $\mathcal T$ to
+the first spin of $A$ and $\mathcal S$ to the first two spins of $B$.  The
+closure identities return the same tensor ring with one spin transferred from
+$B$ to $A$.  Since these are local channels, data processing gives
+\[
+  I_{L+1}\leq I_L.
+\]
+Proposition~4.5 supplies the reverse inequality $I_L\leq I_{L+1}$, hence
+equality and the strong area law.
+
+The entropic convention immediately preceding Definition~4.6
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:792--793}) normalizes every
+operator by its trace.  The source theorem therefore uses, as standing data,
+that the tensor generates nonzero density operators at the lengths under
+consideration; it does not add an independent nonvanishing hypothesis to
+Proposition \texttt{propsimple}.
+
+\section{Formalized part of the source path}
+
+The local condition is \texttt{MPOTensor.IsRFPViaTS}.  The file
+\path{TNLean/MPS/MPDO/RFPViaTSGlobal.lean} now defines the localized maps
+\texttt{refineFirstSite} and \texttt{coarsenFirstTwoSites}.  It proves that
+they are trace-preserving completely positive and that, for every $N$ and
+virtual operator $X$,
+\[
+  \widehat{\mathcal T}_N[M_{N+1}(X)]=M_{N+2}(X),
+  \qquad
+  \widehat{\mathcal S}_N[M_{N+2}(X)]=M_{N+1}(X).
+\]
+Taking $X$ to be the identity gives the corresponding identities for every
+periodic MPO operator.  Here $N$ counts the spectator sites.  Thus $N=0$
+still describes a map from one site to two sites, or conversely; it does not
+introduce an empty-chain state.
+
+The opposite mutual-information inequality is already formalized as
+\texttt{MPOTensor.mutualInfoChain\_monotone}.  It is obtained from strong
+subadditivity by enlarging one interval by one physical site.
+
+\section{Exact remaining implications}
+
+Two source-faithful ingredients remain before the implication to
+\texttt{MPOTensor.IsSAL} can be stated without an additional hypothesis.
+
+\begin{enumerate}
+  \item \textbf{Local-channel data processing.}
+  The entropy library proves mutual-information monotonicity under discarding
+  a subsystem, and the channel library contains Kraus-form local channels.
+  There is not yet a theorem stating that mutual information cannot increase
+  when arbitrary trace-preserving completely positive maps act separately on
+  the two factors.  The required theorem should be proved either from a
+  Stinespring isometry followed by the existing partial-trace inequality, or
+  from relative-entropy data processing for an arbitrary Kraus channel.  It
+  must then be combined with the cyclic regrouping that places the $A$ and $B$
+  boundary sites in the first tensor factors.
+
+  \item \textbf{The source standing nonvanishing condition.}
+  The current predicate \texttt{MPOTensor.IsMPDO} asserts positivity but
+  permits the zero operator.  The available per-copy horizontal canonical-form
+  structure is stronger than the source's grouped biCF and also permits
+  degenerate empty or zero-dimensional data.  Consequently the present API
+  does not derive, from a faithful formal counterpart of ``simple in biCF
+  generating density operators'', that
+  $\operatorname{tr}(\operatorname{mpo}(\mathcal K,N))\ne0$ for every relevant
+  $N$.  This must be repaired by formalizing the source simple-biCF standing
+  data, including generation of normalized density operators, and deriving the
+  nonvanishing used by the normalization in Definition~4.6.
+\end{enumerate}
+
+Neither point is resolved by adding
+$\forall N,\operatorname{tr}(\operatorname{mpo}(\mathcal K,N))\ne0$ as a new
+hypothesis to the source-labelled theorem: that would be a stronger-hypothesis
+surrogate.  Once the two ingredients above are available, the source proof
+applies the two localized channels, invokes data processing to obtain
+$I_{L+1}\leq I_L$, and combines this with the already formalized inequality
+$I_L\leq I_{L+1}$.
+
+\end{document}

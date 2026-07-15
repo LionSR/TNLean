@@ -528,6 +528,81 @@
     \TNMPORenormalizationTS
 \end{definition}
 
+\begin{definition}[Renormalization maps on a longer ring]
+    \label{def:mpdo_global_renormalization_maps}
+    \lean{MPOTensor.firstSiteRestEquiv,
+      MPOTensor.firstTwoSitesRestEquiv,
+      MPOTensor.refineFirstSite,
+      MPOTensor.coarsenFirstTwoSites}
+    \leanok
+    \uses{def:is_rfp_via_ts}
+    Let $N$ count the sites that are left unchanged.  Regroup a ring of
+    $N+1$ sites as one site followed by $N$ sites, and a ring of $N+2$ sites
+    as two sites followed by $N$ sites.  For physical maps
+    $\mathcal T:M_d\to M_{d^2}$ and $\mathcal S:M_{d^2}\to M_d$, define
+    \[
+       \widehat{\mathcal T}_N
+       =\mathcal T\otimes\id_N,
+       \qquad
+       \widehat{\mathcal S}_N
+       =\mathcal S\otimes\id_N,
+    \]
+    using these regroupings.  Thus $N=0$ leaves no spectator site, but the
+    maps still act on a one-site or two-site operator; no empty ring occurs.
+\end{definition}
+
+\begin{lemma}[Localized renormalization maps are channels]
+    \label{lem:mpdo_global_renormalization_maps_cptp}
+    \lean{MPOTensor.refineFirstSite_isKrausCPTP,
+      MPOTensor.coarsenFirstTwoSites_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_global_renormalization_maps, def:is_kraus_cptp}
+    If $\mathcal S$ and $\mathcal T$ are trace-preserving completely positive,
+    then so are $\widehat{\mathcal S}_N$ and
+    $\widehat{\mathcal T}_N$ for every $N$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Tensor each Kraus operator with the identity on the spectator sites and
+    conjugate by the two regrouping equivalences.
+\end{proof}
+
+\begin{theorem}[Global action of the renormalization maps]
+    \label{thm:mpdo_global_renormalization_maps}
+    \lean{MPOTensor.refineFirstSite_physCloseN,
+      MPOTensor.coarsenFirstTwoSites_physCloseN,
+      MPOTensor.physCloseN_identity_eq_mpo,
+      MPOTensor.refineFirstSite_mpo,
+      MPOTensor.coarsenFirstTwoSites_mpo,
+      MPOTensor.exists_global_renormalization_maps}
+    \leanok
+    \uses{def:phys_close, def:is_rfp_via_ts,
+      def:mpdo_global_renormalization_maps,
+      lem:mpdo_global_renormalization_maps_cptp}
+    Suppose that $\mathcal S[M_2(X)]=M_1(X)$ and
+    $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator $X$.  Then, for
+    every $N$ and $X$,
+    \[
+      \widehat{\mathcal S}_N[M_{N+2}(X)]=M_{N+1}(X),
+      \qquad
+      \widehat{\mathcal T}_N[M_{N+1}(X)]=M_{N+2}(X).
+    \]
+    In particular, these identities hold for every periodic MPO operator.
+    Hence the two maps supplied by a renormalization fixed point act on rings
+    of every length as required in the proof of
+    \cite[Proposition \texttt{propsimple}, lines~1333--1341]
+    {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    After separating the first one or two sites, each matrix block is the
+    corresponding one-site or two-site closure, with the remaining word
+    absorbed into the virtual boundary operator.  Apply the defining local
+    closure identity to every block.
+\end{proof}
+
 \begin{definition}[Diagonal pure-state embedding as an MPO]\label{def:to_mpo_tensor}
     \lean{MPSTensor.toMPOTensor}
     \leanok
