@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.Entropy.StrongSubadditivity
@@ -143,8 +144,14 @@ theorem append_glue {d N m k k' : ℕ} (u : Fin m → Fin d) (w : Fin k → Fin 
   · have hL : Fin.cast h2 j = Fin.castAdd k' ⟨j.val, hj⟩ := by apply Fin.ext; simp
     have hR : Fin.cast h3 j = Fin.castAdd k ⟨j.val, hj⟩ := by apply Fin.ext; simp
     rw [hL, hR, Fin.append_left, Fin.append_left]
-  · have hL : Fin.cast h2 j = Fin.natAdd m ⟨j.val - m, by omega⟩ := by apply Fin.ext; simp; omega
-    have hR : Fin.cast h3 j = Fin.natAdd m ⟨j.val - m, by omega⟩ := by apply Fin.ext; simp; omega
+  · have hL : Fin.cast h2 j = Fin.natAdd m ⟨j.val - m, by omega⟩ := by
+      apply Fin.ext
+      simp
+      omega
+    have hR : Fin.cast h3 j = Fin.natAdd m ⟨j.val - m, by omega⟩ := by
+      apply Fin.ext
+      simp
+      omega
     rw [hL, hR, Fin.append_right, Fin.append_right]
     rfl
 
@@ -306,6 +313,8 @@ theorem reducedBlockState_cast {d D : ℕ} (M : MPOTensor d D) {N k k' : ℕ} (h
       = M.reducedBlockState N k' (by omega) (W ∘ Fin.cast h) (W' ∘ Fin.cast h) := by
   subst h; rfl
 
+/-- Reassociating the length of three appended configurations does not change
+that configuration. -/
 theorem append_assoc_cast {d a b c : ℕ} (A' : Fin a → Fin d) (B1 : Fin b → Fin d)
     (C1 : Fin c → Fin d) :
     (Fin.append (Fin.append A' B1) C1) ∘ Fin.cast (show a + (b + c) = a + b + c by omega)
@@ -448,16 +457,8 @@ theorem blockEntropy_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
     reducedBlockState_posSemidef M N 0 (Nat.zero_le N) hM
   have hTr : (reducedBlockState M N 0 (Nat.zero_le N)).trace = 1 :=
     reducedBlockState_trace M N 0 (Nat.zero_le N) htr
-  have hcard : Fintype.card (Fin 0 → Fin d) = 1 := by simp
-  have hle : (reducedBlockState M N 0 (Nat.zero_le N)).rank ≤ 1 :=
-    hcard ▸ Matrix.rank_le_card_width _
-  have hupper : M.blockEntropy N 0 (Nat.zero_le N) hM ≤ 0 := by
-    have h := vonNeumannEntropy_le_log_rank hPSD hTr
-    have hlog : Real.log ((reducedBlockState M N 0 (Nat.zero_le N)).rank : ℝ) ≤ 0 :=
-      Real.log_nonpos (by positivity) (by exact_mod_cast hle)
-    exact le_trans h hlog
-  have hlower : 0 ≤ M.blockEntropy N 0 (Nat.zero_le N) hM := blockEntropy_nonneg M _ hM htr
-  linarith
+  apply vonNeumannEntropy_eq_zero_of_rank_le_one hPSD hTr
+  simpa using Matrix.rank_le_card_width (reducedBlockState M N 0 (Nat.zero_le N))
 
 /-- The mutual information of the empty block vanishes, $I_0 = 0$. -/
 theorem mutualInfoChain_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)

@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.RFP.Defs
@@ -64,7 +65,7 @@ the doubled-index MPS tensor `M.toMPSTensor`. Both statements assert
 idempotence of the same transfer map. -/
 theorem isZCL_iff_toMPSTensor_isTransferIdempotent (M : MPOTensor d D) :
     IsZCL M ↔ MPSTensor.IsTransferIdempotent (M.toMPSTensor) := by
-  simp [IsZCL, MPSTensor.IsTransferIdempotent]
+  rw [IsZCL, MPSTensor.IsTransferIdempotent, transferMap_eq_toMPSTensor]
 
 /-- The **physical-trace transfer** `𝒯_M = ∑_i M^{ii}` of an MPO tensor: the
 single bond matrix obtained by closing the ket and bra physical legs of one

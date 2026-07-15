@@ -36,6 +36,8 @@ dimensions.
   positive property.
 * `Matrix.equivReindexMap_isKrausCPTP`: reindexing by an equivalence is
   trace-preserving completely positive.
+* `Matrix.rectangularKrausMap_isKrausCPTP`: any finite Kraus family resolving
+  the identity defines a trace-preserving completely positive map.
 * `Matrix.controlledKrausMap_sameBlock_apply`: the action on each diagonal
   summand of an orthogonally controlled Kraus map.
 * `Matrix.controlledKrausMap_apply_of_ne`: the vanishing of its off-diagonal
@@ -247,6 +249,19 @@ theorem rectangularKrausMap_equiv
   intro X
   exact Equiv.sum_comp e.symm (fun i : κ => A i * X * (A i)ᴴ)
 
+/-- A finite rectangular Kraus family resolving the identity defines a
+trace-preserving completely positive map. -/
+theorem rectangularKrausMap_isKrausCPTP
+    {κ α β : Type*} [Fintype κ] [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (A : κ → Matrix β α ℂ)
+    (hA : ∑ i, (A i)ᴴ * A i = (1 : Matrix α α ℂ)) :
+    IsKrausCPTP (rectangularKrausMap A) := by
+  let e := Fintype.equivFin κ
+  refine ⟨Fintype.card κ, fun i => A (e.symm i), ?_, ?_⟩
+  · intro X
+    exact DFunLike.congr_fun (rectangularKrausMap_equiv e A).symm X
+  · exact (e.symm.sum_comp fun i => (A i)ᴴ * A i).trans hA
+
 section ControlledDirectSum
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -381,51 +396,38 @@ theorem controlledKrausMap_isKrausCPTP (r : ι → ℕ)
     (A : (i : ι) → Fin (r i) → Matrix (β i) (α i) ℂ)
     (htp : ∀ i, ∑ j, (A i j)ᴴ * A i j = (1 : Matrix (α i) (α i) ℂ)) :
     IsKrausCPTP (controlledKrausMap r A) := by
-  let e := Fintype.equivFin (Σ i, Fin (r i))
-  refine ⟨Fintype.card (Σ i, Fin (r i)),
-    fun j ↦ singleBlock (e.symm j).1 (A (e.symm j).1 (e.symm j).2), ?_, ?_⟩
-  · intro X
-    change (∑ p : Σ i, Fin (r i), singleBlock p.1 (A p.1 p.2) * X *
-      (singleBlock p.1 (A p.1 p.2))ᴴ) = _
-    rw [← e.symm.sum_comp]
-  · change (∑ j : Fin (Fintype.card (Σ i, Fin (r i))),
-        (singleBlock (e.symm j).1 (A (e.symm j).1 (e.symm j).2))ᴴ *
-          singleBlock (e.symm j).1 (A (e.symm j).1 (e.symm j).2)) = 1
-    have hsum :
-        (∑ p : Σ i, Fin (r i),
-          (singleBlock p.1 (A p.1 p.2))ᴴ * singleBlock p.1 (A p.1 p.2)) = 1 := by
-      rw [Fintype.sum_sigma]
-      simp_rw [singleBlock_conjTranspose_mul]
-      have hinner (i : ι) :
-          (∑ j, Matrix.blockDiagonal' (Pi.single i ((A i j)ᴴ * A i j))) =
-            Matrix.blockDiagonal' (Pi.single i (∑ j, (A i j)ᴴ * A i j)) := by
-        change (∑ j, (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
-          (Pi.single i ((A i j)ᴴ * A i j))) =
-            (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
-              (Pi.single i (∑ j, (A i j)ᴴ * A i j))
-        rw [← map_sum (Matrix.blockDiagonal'AddMonoidHom α α ℂ)]
-        congr 1
-        funext k
-        by_cases hki : k = i
-        · subst k
-          simp
-        · simp [hki]
-      simp_rw [hinner, htp]
-      change (∑ i, (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
-        (Pi.single i (1 : Matrix (α i) (α i) ℂ))) = 1
-      rw [← map_sum (Matrix.blockDiagonal'AddMonoidHom α α ℂ)]
-      have hfamily :
-          (∑ i, Pi.single i (1 : Matrix (α i) (α i) ℂ)) =
-            (1 : ∀ i, Matrix (α i) (α i) ℂ) := by
-        funext i
-        simpa only [Finset.sum_apply, Pi.one_apply] using
-          Fintype.sum_pi_single i fun j ↦ (1 : Matrix (α j) (α j) ℂ)
-      rw [hfamily]
-      change Matrix.blockDiagonal' (1 : ∀ i, Matrix (α i) (α i) ℂ) = 1
-      exact Matrix.blockDiagonal'_one
-    exact (Equiv.sum_comp e.symm fun p : Σ i, Fin (r i) ↦
-      (singleBlock p.1 (A p.1 p.2))ᴴ * singleBlock p.1 (A p.1 p.2)).trans hsum
-
+  apply rectangularKrausMap_isKrausCPTP
+  change (∑ p : Σ i, Fin (r i),
+    (singleBlock p.1 (A p.1 p.2))ᴴ * singleBlock p.1 (A p.1 p.2)) = 1
+  rw [Fintype.sum_sigma]
+  simp_rw [singleBlock_conjTranspose_mul]
+  have hinner (i : ι) :
+      (∑ j, Matrix.blockDiagonal' (Pi.single i ((A i j)ᴴ * A i j))) =
+        Matrix.blockDiagonal' (Pi.single i (∑ j, (A i j)ᴴ * A i j)) := by
+    change (∑ j, (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
+      (Pi.single i ((A i j)ᴴ * A i j))) =
+        (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
+          (Pi.single i (∑ j, (A i j)ᴴ * A i j))
+    rw [← map_sum (Matrix.blockDiagonal'AddMonoidHom α α ℂ)]
+    congr 1
+    funext k
+    by_cases hki : k = i
+    · subst k
+      simp
+    · simp [hki]
+  simp_rw [hinner, htp]
+  change (∑ i, (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
+    (Pi.single i (1 : Matrix (α i) (α i) ℂ))) = 1
+  rw [← map_sum (Matrix.blockDiagonal'AddMonoidHom α α ℂ)]
+  have hfamily :
+      (∑ i, Pi.single i (1 : Matrix (α i) (α i) ℂ)) =
+        (1 : ∀ i, Matrix (α i) (α i) ℂ) := by
+    funext i
+    simpa only [Finset.sum_apply, Pi.one_apply] using
+      Fintype.sum_pi_single i fun j ↦ (1 : Matrix (α j) (α j) ℂ)
+  rw [hfamily]
+  change Matrix.blockDiagonal' (1 : ∀ i, Matrix (α i) (α i) ℂ) = 1
+  exact Matrix.blockDiagonal'_one
 end ControlledDirectSum
 
 private def partialTraceRightKraus
@@ -506,50 +508,36 @@ lemma partialTraceRightLM_isKrausCPTP
     {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β] :
     IsKrausCPTP (partialTraceRightLM (α := α) (β := β)) := by
   classical
-  let e := (Fintype.equivFin β).symm
-  refine ⟨Fintype.card β,
-    fun k => partialTraceRightKraus (α := α) (β := β) (e k), ?_, ?_⟩
-  · intro X
+  have hmap :
+      rectangularKrausMap (partialTraceRightKraus (α := α) (β := β)) =
+        partialTraceRightLM := by
+    apply LinearMap.ext
+    intro X
     ext i j
-    change (∑ k : β, X (i, k) (j, k)) =
-      (∑ c : Fin (Fintype.card β),
-        partialTraceRightKraus (α := α) (β := β) (e c) * X *
-          (partialTraceRightKraus (α := α) (β := β) (e c))ᴴ) i j
+    change
+      (∑ k : β, partialTraceRightKraus (α := α) (β := β) k * X *
+        (partialTraceRightKraus (α := α) (β := β) k)ᴴ) i j =
+        ∑ k : β, X (i, k) (j, k)
     rw [Matrix.sum_apply]
-    calc
-      ∑ k : β, X (i, k) (j, k) =
-          ∑ c : Fin (Fintype.card β), X (i, e c) (j, e c) :=
-        (Equiv.sum_comp e (fun k : β => X (i, k) (j, k))).symm
-      _ = _ := Finset.sum_congr rfl fun c _ =>
-        (partialTraceRightKraus_mul_conjTranspose_apply X (e c) i j).symm
-  · change (∑ c : Fin (Fintype.card β),
-      (partialTraceRightKraus (α := α) (β := β) (e c))ᴴ *
-        partialTraceRightKraus (α := α) (β := β) (e c)) = 1
-    calc
-      _ = ∑ k : β, (partialTraceRightKraus (α := α) (β := β) k)ᴴ *
-          partialTraceRightKraus (α := α) (β := β) k :=
-        Equiv.sum_comp e (fun k : β =>
-          (partialTraceRightKraus (α := α) (β := β) k)ᴴ *
-            partialTraceRightKraus (α := α) (β := β) k)
-      _ = 1 := by
-        ext p q
-        by_cases hpq : p = q
-        · subst q
-          rw [Matrix.sum_apply, Matrix.one_apply_eq]
-          rw [Finset.sum_eq_single p.2]
-          · simp [partialTraceRightKraus_conjTranspose_mul_apply]
-          · intro k _ hk
-            simp [partialTraceRightKraus_conjTranspose_mul_apply, hk]
-          · intro hmem
-            simp at hmem
-        · rw [Matrix.sum_apply, Matrix.one_apply_ne hpq]
-          apply Finset.sum_eq_zero
-          intro k _
-          have hnot : ¬ (p.1 = q.1 ∧ k = p.2 ∧ k = q.2) := by
-            intro h
-            apply hpq
-            exact Prod.ext h.1 (h.2.1.symm.trans h.2.2)
-          simp [partialTraceRightKraus_conjTranspose_mul_apply, hnot]
+    exact Finset.sum_congr rfl fun k _ =>
+      partialTraceRightKraus_mul_conjTranspose_apply X k i j
+  rw [← hmap]
+  apply rectangularKrausMap_isKrausCPTP
+  ext p q
+  by_cases hpq : p = q
+  · subst q
+    rw [Matrix.sum_apply, Matrix.one_apply_eq, Finset.sum_eq_single p.2]
+    · simp [partialTraceRightKraus_conjTranspose_mul_apply]
+    · intro k _ hk
+      simp [partialTraceRightKraus_conjTranspose_mul_apply, hk]
+    · simp
+  · rw [Matrix.sum_apply, Matrix.one_apply_ne hpq]
+    apply Finset.sum_eq_zero
+    intro k _
+    have hnot : ¬ (p.1 = q.1 ∧ k = p.2 ∧ k = q.2) := by
+      rintro ⟨h₁, h₂, h₃⟩
+      exact hpq (Prod.ext h₁ (h₂.symm.trans h₃))
+    simp [partialTraceRightKraus_conjTranspose_mul_apply, hnot]
 
 private noncomputable def chosenKrausRank
     {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
@@ -712,15 +700,12 @@ theorem rectangularKrausMap_preparationKraus_eq
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [preparationKraus_mul_conjTranspose_apply, hRherm.apply]
 
-/-- The explicit preparation Kraus family resolves the identity,
-$\sum_j A_j^\dagger A_j=I$, when the prepared matrix has trace one. -/
-theorem preparationKraus_resolution
+private theorem preparationKraus_sum_conjTranspose_mul
     {α β : Type*} [Fintype α] [DecidableEq α]
     [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
     (hρtr : ρ.trace = 1) :
-    ∑ j : Fin (Fintype.card β),
-      (preparationKraus (α := α) ρ hρ ((Fintype.equivFin β).symm j))ᴴ *
-        preparationKraus (α := α) ρ hρ ((Fintype.equivFin β).symm j) = 1 := by
+    ∑ j : β, (preparationKraus (α := α) ρ hρ j)ᴴ *
+      preparationKraus (α := α) ρ hρ j = 1 := by
   classical
   let R := hρ.isHermitian.cfc Real.sqrt
   have hRherm : R.IsHermitian := hρ.cfc_sqrt_isHermitian
@@ -736,16 +721,23 @@ theorem preparationKraus_resolution
   by_cases hab : a = b
   · subst b
     rw [Matrix.one_apply_eq, Matrix.sum_apply]
-    simp_rw [preparationKraus_conjTranspose_mul_apply, if_pos]
-    change (∑ x : Fin (Fintype.card β),
-      ∑ t : β, star (R t ((Fintype.equivFin β).symm x)) *
-        R t ((Fintype.equivFin β).symm x)) = 1
-    exact (Equiv.sum_comp (Fintype.equivFin β).symm
-      (fun j : β => ∑ t : β, star (R t j) * R t j)).trans hsum
+    simpa only [preparationKraus_conjTranspose_mul_apply, if_pos] using hsum
   · rw [Matrix.one_apply_ne hab, Matrix.sum_apply]
-    apply Finset.sum_eq_zero
-    intro j _
-    rw [preparationKraus_conjTranspose_mul_apply, if_neg hab]
+    exact Finset.sum_eq_zero fun j _ => by
+      rw [preparationKraus_conjTranspose_mul_apply, if_neg hab]
+
+/-- The explicit preparation Kraus family resolves the identity,
+$\sum_j A_j^\dagger A_j=I$, when the prepared matrix has trace one. -/
+theorem preparationKraus_resolution
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
+    (hρtr : ρ.trace = 1) :
+    ∑ j : Fin (Fintype.card β),
+      (preparationKraus (α := α) ρ hρ ((Fintype.equivFin β).symm j))ᴴ *
+        preparationKraus (α := α) ρ hρ ((Fintype.equivFin β).symm j) = 1 :=
+  ((Fintype.equivFin β).symm.sum_comp fun j : β =>
+    (preparationKraus (α := α) ρ hρ j)ᴴ * preparationKraus (α := α) ρ hρ j).trans
+      (preparationKraus_sum_conjTranspose_mul ρ hρ hρtr)
 
 /-- Adjoining a positive-semidefinite matrix of trace one is a
 trace-preserving completely positive map.  Its Kraus operators are obtained
@@ -758,22 +750,8 @@ lemma preparationMap_isKrausCPTP
     {α β : Type*} [Fintype α] [DecidableEq α]
     [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
     (hρtr : ρ.trace = 1) : IsKrausCPTP (Matrix.preparationMap (α := α) ρ) := by
-  classical
-  let R := hρ.isHermitian.cfc Real.sqrt
-  have hRherm : R.IsHermitian := hρ.cfc_sqrt_isHermitian
-  have hRR : R * R = ρ := hρ.cfc_sqrt_mul_self
-  refine ⟨Fintype.card β,
-    fun j => preparationKraus ρ hρ ((Fintype.equivFin β).symm j), ?_, ?_⟩
-  · intro X
-    ext p q
-    change X p.1 q.1 * ρ p.2 q.2 = _
-    have hRRentry : ρ p.2 q.2 = (R * R) p.2 q.2 :=
-      congrArg (fun M : Matrix β β ℂ => M p.2 q.2) hRR.symm
-    rw [hRRentry, Matrix.mul_apply, Finset.mul_sum, Matrix.sum_apply]
-    rw [← Equiv.sum_comp (Fintype.equivFin β).symm]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [preparationKraus_mul_conjTranspose_apply]
-    rw [hRherm.apply]
-  · exact preparationKraus_resolution ρ hρ hρtr
+  rw [← rectangularKrausMap_preparationKraus_eq ρ hρ]
+  exact rectangularKrausMap_isKrausCPTP _
+    (preparationKraus_sum_conjTranspose_mul ρ hρ hρtr)
 
 end Matrix

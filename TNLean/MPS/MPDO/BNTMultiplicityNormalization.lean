@@ -151,18 +151,9 @@ noncomputable def ofEventuallyEqualPowerSums
         (twoDim γ) (Fintype.card I) (twoEntry γ)
         (fun i => productEntry (e i)) hTwoNe (fun i => hProductNe (e i))
         (fun L _ _ => hAll L)).2
-    have hMap :
-        Multiset.map e (Finset.univ : Finset (Fin (Fintype.card I))).val =
-          (Finset.univ : Finset I).val :=
-      Multiset.map_univ_val_equiv e
-    rw [show Finset.univ.val.map (fun i => productEntry (e i)) =
-        Finset.univ.val.map productEntry by
-      calc
-        Finset.univ.val.map (fun i => productEntry (e i)) =
-            (Finset.univ.val.map e).map productEntry :=
-          (Multiset.map_map productEntry e Finset.univ.val).symm
-        _ = Finset.univ.val.map productEntry := by
-          rw [hMap]] at hMultiset
+    change Finset.univ.val.map (twoEntry γ) =
+      Finset.univ.val.map (productEntry ∘ e) at hMultiset
+    rw [← Multiset.map_map, Multiset.map_univ_val_equiv] at hMultiset
     exact hMultiset
 
 /-- Summing the sectorwise multiplicity-spectrum comparison gives the
@@ -229,10 +220,9 @@ theorem twoTrace_eq_traceScalar
     (hIdempotent :
       m.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
     (γ : Λ) :
-    ∑ r, C.twoEntry γ r = m.traceScalar γ := by
-  rw [C.sum_twoEntry_eq_sum_products, C.sum_products_eq]
-  symm
-  exact hIdempotent γ
+    ∑ r, C.twoEntry γ r = m.traceScalar γ :=
+  (C.sum_twoEntry_eq_sum_products γ).trans <|
+    (C.sum_products_eq γ).trans (hIdempotent γ).symm
 
 end BNTMultiplicitySpectrumComparison
 

@@ -72,6 +72,30 @@ the Appendix C.3--C.4 obligation recorded in
 open scoped Matrix BigOperators ComplexOrder Kronecker
 open Matrix
 
+namespace Matrix
+
+/-- Conjugating a dependent block-diagonal matrix by another dependent block-diagonal matrix
+acts blockwise. -/
+theorem blockDiagonal'_conj {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {m n : ι → Type*} [∀ i, Fintype (n i)] (F : ∀ i, Matrix (m i) (n i) ℂ)
+    (G : ∀ i, Matrix (n i) (n i) ℂ) :
+    blockDiagonal' F * blockDiagonal' G * (blockDiagonal' F)ᴴ =
+      blockDiagonal' fun i => F i * G i * (F i)ᴴ := by
+  rw [blockDiagonal'_conjTranspose, ← blockDiagonal'_mul, ← blockDiagonal'_mul]
+
+/-- Reindexing the row space of a conjugating matrix by an equivalence commutes with
+conjugation. -/
+theorem submatrix_left_conj_equiv {l m u : Type*} [Fintype l] (A : Matrix m l ℂ)
+    (r : u ≃ m) (X : Matrix l l ℂ) :
+    A.submatrix r id * X * (A.submatrix r id)ᴴ = (A * X * Aᴴ).submatrix r r := by
+  have hleft : A.submatrix r id * X = (A * X).submatrix r id :=
+    (submatrix_mul A X r id id Function.bijective_id).symm
+  rw [hleft]
+  rw [conjTranspose_submatrix]
+  exact (submatrix_mul (A * X) Aᴴ r id r Function.bijective_id).symm
+
+end Matrix
+
 namespace MPOTensor
 
 /-- The fusion-isometry family of arXiv:1606.00608, Theorem IV.13(iii),

@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Spectrum
@@ -30,6 +31,10 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 * `vonNeumannEntropy_nonneg_of_posSemidef_trace_one`: `S(ρ) ≥ 0` for
   positive semidefinite matrices of trace `1`, over any finite index type
 * `vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices
+* `Matrix.PosSemidef.rank_pos_of_trace_one`: a trace-one positive semidefinite
+  matrix has positive rank
+* `vonNeumannEntropy_eq_zero_of_rank_le_one`: a rank-at-most-one density matrix
+  has zero entropy
 * `traceA_ABC_isHermitian`, `traceC_ABC_isHermitian`, `traceAC_ABC_isHermitian`:
   tripartite partial traces preserve Hermiticity
 * `isSSAEquality_submatrix_prodEquiv`: equality in strong subadditivity is
@@ -315,6 +320,22 @@ theorem posSemidef_trace_one_eigenvalues_sum_one
     h ▸ hρ_tr
   exact_mod_cast key
 
+omit [DecidableEq n] in
+/-- A positive semidefinite trace-one matrix has positive rank. -/
+theorem Matrix.PosSemidef.rank_pos_of_trace_one
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hρ_tr : ρ.trace = 1) :
+    0 < ρ.rank := by
+  classical
+  rw [hρ.isHermitian.rank_eq_card_non_zero_eigs, Fintype.card_pos_iff]
+  by_contra h
+  simp only [not_nonempty_iff] at h
+  have hzero : ∀ i, hρ.isHermitian.eigenvalues i = 0 := fun i => by
+    by_contra hi
+    exact h.false ⟨i, hi⟩
+  have hsum := posSemidef_trace_one_eigenvalues_sum_one hρ hρ_tr
+  rw [Finset.sum_eq_zero (fun i _ => hzero i)] at hsum
+  exact one_ne_zero hsum.symm
+
 /-- The eigenvalues of a positive semidefinite trace-one matrix lie in `[0, 1]`. -/
 theorem posSemidef_trace_one_eigenvalues_le_one
     {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hρ_tr : ρ.trace = 1) (i : n) :
@@ -354,20 +375,7 @@ theorem vonNeumannEntropy_le_log_rank
     rw [hρ.isHermitian.rank_eq_card_non_zero_eigs, hk, ht, ← hlam, Fintype.card_subtype]
   -- the eigenvalues sum to one
   have hsum_one : ∑ i : n, lam i = 1 := posSemidef_trace_one_eigenvalues_sum_one hρ hρ_tr
-  -- the support is nonempty, hence `k > 0`
-  have hk_pos : 0 < k := by
-    rw [hk, Finset.card_pos]
-    by_contra h
-    rw [Finset.not_nonempty_iff_eq_empty] at h
-    have hz : ∀ i, lam i = 0 := by
-      intro i
-      by_contra hi
-      have hmem : i ∈ t := by rw [ht]; exact Finset.mem_filter.mpr ⟨Finset.mem_univ i, hi⟩
-      rw [h] at hmem
-      simp at hmem
-    have : ∑ i : n, lam i = 0 := Finset.sum_eq_zero fun i _ => hz i
-    rw [this] at hsum_one
-    exact one_ne_zero hsum_one.symm
+  have hk_pos : 0 < k := hrank ▸ hρ.rank_pos_of_trace_one hρ_tr
   have hkR : (0 : ℝ) < k := by exact_mod_cast hk_pos
   -- restrict the sums to the support (zero eigenvalues contribute nothing)
   have hsum_t : ∑ i ∈ t, lam i = 1 := by
@@ -406,6 +414,18 @@ theorem vonNeumannEntropy_le_log_rank
   have hmul := mul_le_mul_of_nonneg_left hJensen hkR.le
   rw [hlhs, hrhs] at hmul
   rwa [hrank]
+
+/-- A positive semidefinite trace-one matrix of rank at most one has zero von
+Neumann entropy. -/
+theorem vonNeumannEntropy_eq_zero_of_rank_le_one
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hρ_tr : ρ.trace = 1)
+    (hrank : ρ.rank ≤ 1) :
+    vonNeumannEntropy ρ hρ.isHermitian = 0 := by
+  apply le_antisymm
+  · refine (vonNeumannEntropy_le_log_rank hρ hρ_tr).trans ?_
+    exact Real.log_nonpos (by exact_mod_cast (hρ.rank_pos_of_trace_one hρ_tr).le)
+      (by exact_mod_cast hrank)
+  · exact vonNeumannEntropy_nonneg_of_posSemidef_trace_one hρ hρ_tr
 
 end VonNeumannEntropyDensity
 

@@ -128,21 +128,10 @@ private theorem inverseCorner_eq_kronecker_one (a b c d : Λ) :
         (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ) :=
   Classical.choose_spec (Fus.exists_inverseCorner_eq_kronecker_one a b c d)
 
-private theorem multiplicity_mul_eq_one_of_amplification
-    {m n : Type*} [Fintype n] [DecidableEq m] {D : ℕ} (hD : 0 < D)
-    (F : Matrix m n ℂ) (G : Matrix n m ℂ)
-    (h : (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-      (G ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) = 1) :
-    F * G = 1 := by
-  let z : Fin D := ⟨0, hD⟩
-  funext x y
-  have hEntry := congrArg (fun M => M (x, z) (y, z)) h
-  simpa [← Matrix.mul_kronecker_mul, Matrix.one_apply, z] using hEntry
-
 /-- The printed matrix followed by the opposite comparison is the identity. -/
 theorem printedFMatrix_mul_inversePrintedFMatrix (a b c d : Λ) :
     Fus.printedFMatrix a b c d * Fus.inversePrintedFMatrix a b c d = 1 := by
-  apply multiplicity_mul_eq_one_of_amplification (Fus.bondDim_pos d)
+  apply Matrix.mul_eq_one_of_kronecker_one (Fus.bondDim_pos d)
   change (Fus.printedFMatrix a b c d ⊗ₖ
       (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ)) *
       (Fus.inversePrintedFMatrix a b c d ⊗ₖ
@@ -200,7 +189,7 @@ theorem printedFMatrix_mul_inversePrintedFMatrix (a b c d : Λ) :
 /-- The opposite comparison followed by the printed matrix is the identity. -/
 theorem inversePrintedFMatrix_mul_printedFMatrix (a b c d : Λ) :
     Fus.inversePrintedFMatrix a b c d * Fus.printedFMatrix a b c d = 1 := by
-  apply multiplicity_mul_eq_one_of_amplification (Fus.bondDim_pos d)
+  apply Matrix.mul_eq_one_of_kronecker_one (Fus.bondDim_pos d)
   change (Fus.inversePrintedFMatrix a b c d ⊗ₖ
       (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ)) *
       (Fus.printedFMatrix a b c d ⊗ₖ

@@ -2,11 +2,10 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.LocalSupport
-import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.RFP.StructuralFull
-import Mathlib.Data.Fin.Basic
 
 /-!
 # Basic-vector form and translated two-site parent terms
@@ -89,6 +88,7 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
     have hj : j.val < 2 := j.isLt
     omega⟩
 
+/-- Evaluating a physical pair window selects sites `2 * p` and `2 * p + 1`. -/
 @[simp] lemma productPairWindow_apply (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N)
     (j : Fin 2) :
     productPairWindow N σ p j = σ ⟨2 * p.val + j.val, by
@@ -114,6 +114,7 @@ therefore has to be justified separately from the source formula. -/
 def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :=
   fun σ => ∏ p : Fin N, ψ₂ (productPairWindow N σ p)
 
+/-- The zero-fold physical pair product is the constant-one state. -/
 @[simp] lemma productPairState_zero (ψ₂ : NSiteSpace d 2) :
     productPairState ψ₂ 0 = fun _ => (1 : ℂ) := by
   funext σ
@@ -158,6 +159,7 @@ structure HasProductPairLocalProjectors (A : MPSTensor d D) (N : ℕ) where
   hlocal : ∀ i, localTerm A 2 N i = proj i
   hcomm : ∀ i j, proj i * proj j = proj j * proj i
 
+/-- Each local term supplied by `HasProductPairLocalProjectors` is idempotent. -/
 theorem HasProductPairLocalProjectors.localTerm_idempotent
     {A : MPSTensor d D} {N : ℕ}
     (hPair : HasProductPairLocalProjectors A N) (i : Fin N) :
@@ -216,6 +218,7 @@ theorem ProductPairBridge.commuting_twoSite_localTerms
         localTerm A 2 N j * localTerm A 2 N i :=
   (hBridge.localProjectors N hN).commuting_twoSite_localTerms
 
+/-- Every local term supplied by a product-pair bridge is idempotent. -/
 theorem ProductPairBridge.localTerm_idempotent
     {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (hN : 2 < N)
     (i : Fin N) :
@@ -344,12 +347,8 @@ Source: arXiv:1606.00608, Theorem 3.11 and isometry equation (3.16), lines
 543--578. -/
 theorem AppendixBStructuralData.physicalIsometry_injective
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    Function.Injective hStruct.physicalIsometry := by
-  intro v w hvw
-  have hv := LinearMap.congr_fun hStruct.physicalIsometryLeftInverse_comp v
-  have hw := LinearMap.congr_fun hStruct.physicalIsometryLeftInverse_comp w
-  have hvw' := congrArg hStruct.physicalIsometryLeftInverse hvw
-  exact hv.symm.trans (hvw'.trans hw)
+    Function.Injective hStruct.physicalIsometry :=
+  LinearMap.injective_of_comp_eq_id _ _ hStruct.physicalIsometryLeftInverse_comp
 
 /-- The proved structural form gives a nonempty bundled Appendix B form. -/
 theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
@@ -403,6 +402,7 @@ noncomputable def AppendixBStructuralData.coreTensor {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : MPSTensor d D :=
   fun i => Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i
 
+/-- The Appendix B core tensor is the residual tensor weighted by the diagonal factor. -/
 @[simp] theorem AppendixBStructuralData.coreTensor_apply {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) (i : Fin d) :
     hStruct.coreTensor i = Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i :=

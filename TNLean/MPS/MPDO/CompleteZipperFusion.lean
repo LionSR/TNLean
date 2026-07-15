@@ -156,54 +156,6 @@ def leftFinalRow (a b c d : Λ) :
       Fus.LeftTripleIndex a b c :=
   fun x => ⟨d, x⟩
 
-/-- The one-letter coefficient which selects the block with final label `d`.
-
-Source: arXiv:1511.08090, the simultaneous inverse at lines 269--277. -/
-private noncomputable def finalBlockSelector (d : Λ) (ik : Fin p × Fin p) : ℂ :=
-  ∑ x : Fin (Fus.bondDim d), Fus.blockLeftInverse ⟨d, x, x⟩ ik
-
-private theorem finalBlockSelector_apply (d e : Λ)
-    (x y : Fin (Fus.bondDim e)) :
-    (∑ i : Fin p, ∑ k : Fin p,
-      Fus.finalBlockSelector d (i, k) * Fus.tensor e i k x y) =
-      if h : d = e then if _ : h ▸ x = y then 1 else 0 else 0 := by
-  classical
-  simp only [finalBlockSelector, Finset.sum_mul]
-  calc
-    (∑ i : Fin p, ∑ k : Fin p, ∑ z : Fin (Fus.bondDim d),
-        Fus.blockLeftInverse ⟨d, z, z⟩ (i, k) * Fus.tensor e i k x y) =
-        ∑ z : Fin (Fus.bondDim d), ∑ i : Fin p, ∑ k : Fin p,
-          Fus.blockLeftInverse ⟨d, z, z⟩ (i, k) * Fus.tensor e i k x y := by
-      calc
-        _ = ∑ i : Fin p, ∑ z : Fin (Fus.bondDim d), ∑ k : Fin p,
-            Fus.blockLeftInverse ⟨d, z, z⟩ (i, k) * Fus.tensor e i k x y := by
-          apply Finset.sum_congr rfl
-          intro i hi
-          exact Finset.sum_comm
-        _ = _ := Finset.sum_comm
-    _ = if h : d = e then if _ : h ▸ x = y then 1 else 0 else 0 := by
-      by_cases h : d = e
-      · subst e
-        simp_rw [Fus.blockLeftInverse_apply d d]
-        simp
-      · simp_rw [Fus.blockLeftInverse_apply d e]
-        simp [h]
-
-private theorem finalBlockSelector_sum (d e : Λ) :
-    (∑ i : Fin p, ∑ k : Fin p,
-      Fus.finalBlockSelector d (i, k) •
-        (Fus.tensor e i k : Matrix (Fin (Fus.bondDim e))
-          (Fin (Fus.bondDim e)) ℂ)) =
-      if d = e then 1 else 0 := by
-  classical
-  funext x y
-  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
-  rw [Fus.finalBlockSelector_apply d e x y]
-  by_cases h : d = e
-  · subst e
-    simp [Matrix.one_apply]
-  · simp [h]
-
 private theorem rectangularIntertwiner_eq_zero (d e : Λ) (hde : d ≠ e)
     (C : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim e)) ℂ)
     (hC : ∀ (i k : Fin p), Fus.tensor d i k * C = C * Fus.tensor e i k) :
