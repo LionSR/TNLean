@@ -33,8 +33,6 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 
 * `blockReducedState`: the reduced state of the first `L` of `L + K` contiguous
   spins, using the general right partial trace `Matrix.partialTraceRight`.
-* `MPOTensor.normalizedMPO`: the normalized density operator
-  `σ^{(N)}(M) = ρ^{(N)}(M) / tr[ρ^{(N)}(M)]`.
 * `MPOTensor.reducedBlockState`: the reduced state of the first `L` spins of
   `σ^{(N)}(M)`.
 * `MPOTensor.blockEntropy`: the block entropy `S_L`.
@@ -381,16 +379,6 @@ theorem blockReducedState_submatrix_finCongr {d L K K' : ℕ} (h : L + K = L + K
 namespace MPOTensor
 
 variable {d D : ℕ}
-
-/-- The **normalized density operator** of the MPO for system size `N`:
-
-  `σ^{(N)}(M) = ρ^{(N)}(M) / tr[ρ^{(N)}(M)]`.
-
-This is the convention of arXiv:1606.00608, line 792: entropic quantities are
-always taken on the normalized state. -/
-noncomputable def normalizedMPO (M : MPOTensor d D) (N : ℕ) :
-    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-  (Matrix.trace (mpo M N))⁻¹ • mpo M N
 
 /-- The normalized MPO is positive semidefinite when `M` generates an MPDO: the
 normalizing scalar `(tr ρ)⁻¹` is a nonnegative real, so it preserves positive

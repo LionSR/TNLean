@@ -31,6 +31,7 @@ Verstraete):
 * `MPOTensor.evalWord`: word evaluation for MPO tensors (product of 4-index
   matrices along a pair of ket/bra words).
 * `MPOTensor.mpo`: the MPO operator family for system size `N`.
+* `MPOTensor.normalizedMPO`: the operator family divided by its trace.
 * `MPOTensor.transferMap`: the MPO transfer map
   `E_M(X) = ∑_{i,j} M^{ij} X (M^{ij})†`.
 * `MPOTensor.IsHermitian`: local hermiticity predicate on the tensor.
@@ -169,6 +170,15 @@ noncomputable def mpo (M : MPOTensor d D) (N : ℕ) :
 @[simp] lemma mpo_apply (M : MPOTensor d D) (N : ℕ)
     (σ τ : Fin N → Fin d) :
     mpo M N σ τ = mpoMatrixEntry M σ τ := rfl
+
+/-- The **normalized density operator** of the MPO for system size `N`:
+
+  `σ^{(N)}(M) = ρ^{(N)}(M) / tr[ρ^{(N)}(M)]`.
+
+This is the convention of arXiv:1606.00608, line 792. -/
+noncomputable def normalizedMPO (M : MPOTensor d D) (N : ℕ) :
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
+  (Matrix.trace (mpo M N))⁻¹ • mpo M N
 
 /-! ### Hermiticity -/
 
