@@ -38,6 +38,8 @@ This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
 * `MPOTensor.HasCommutingBondProduct`
 * `MPOTensor.GSNNCHData`
 * `MPOTensor.HasGSNNCHFormAt`
+* `MPOTensor.HasGSNNCHForm`
+* `MPOTensor.IsGSNNCHAt`
 * `MPOTensor.IsGSNNCH`
 
 ## References
@@ -442,7 +444,8 @@ orthogonal one-site spaces. -/
 noncomputable def twoSiteSectorProjection
     (P : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ :=
-  Matrix.of fun σ τ ↦ P (σ 0) (τ 0) * P (σ 1) (τ 1)
+  Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+    (finTwoArrowEquiv (Fin d)).symm (P ⊗ₖ P)
 
 @[simp] theorem twoSiteSectorProjection_one :
     twoSiteSectorProjection (d := d) 1 = 1 := by
@@ -455,11 +458,11 @@ noncomputable def twoSiteSectorProjection
         · exact h0
         · exact h1
       subst τ
-      simp [twoSiteSectorProjection, Matrix.one_apply]
+      simp [twoSiteSectorProjection, finTwoArrowEquiv]
     · have hστ : σ ≠ τ := fun h ↦ h1 (congrFun h 1)
-      simp [twoSiteSectorProjection, Matrix.one_apply, h1, hστ]
+      simp [twoSiteSectorProjection, finTwoArrowEquiv, h1, hστ]
   · have hστ : σ ≠ τ := fun h ↦ h0 (congrFun h 0)
-    simp [twoSiteSectorProjection, Matrix.one_apply, h0, hστ]
+    simp [twoSiteSectorProjection, finTwoArrowEquiv, h0, hστ]
 
 /-- A witness for a single-bond commuting-product presentation at chain length
 `N`. This auxiliary condition has no explicit outer sector decomposition.
