@@ -268,12 +268,12 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
       ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
 
-/-- **Left-canonical normal tensor is block injective at length `D ^ 4`.**
+/-- **Left-canonical normal tensor is block injective at length $D^4$.**
 
 The bounded Wielandt theorem above produces an injective length at most
-`D ^ 4`.  Positive-length block injectivity propagates to every larger length,
-so one may use the same exact length `D ^ 4` for every tensor of bond dimension
-`D`.
+$D^4$.  Positive-length block injectivity propagates to every larger length,
+so one may use the same exact length $D^4$ for every tensor of bond dimension
+$D$.
 
 Source: arXiv:1606.00608, line 332. -/
 theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
