@@ -21,6 +21,8 @@ subadditivity.
 
 * `IsKrausCPTP.mutualInformation_tensorMapId_le`: mutual-information data
   processing for a local rectangular channel on the first tensor factor.
+* `IsKrausCPTP.mutualInformation_idTensorMap_le`: mutual-information data
+  processing for a local rectangular channel on the second tensor factor.
 * `IsKrausCPTP.mutualInformation_tensorMapBoth_le`: mutual-information data
   processing for independent local rectangular channels on both factors.
 
@@ -135,7 +137,7 @@ private theorem traceA_localStinespring_eq_sandwich
 
 /-- A trace-preserving map on the first factor leaves the second marginal
 unchanged. -/
-theorem IsKrausCPTP.traceLeft_tensorMapId
+private theorem traceLeft_tensorMapId
     {dIn dOut dR : ℕ}
     {S : Matrix (Fin dIn) (Fin dIn) ℂ →ₗ[ℂ]
       Matrix (Fin dOut) (Fin dOut) ℂ} (hS : IsKrausCPTP S)
@@ -178,7 +180,7 @@ private theorem traceLeft_submatrix_swap
 
 /-- Mutual information is independent of the proof of Hermiticity and is
 congruent under equality of the underlying bipartite matrices. -/
-theorem Entropy.mutualInformation_congr
+private theorem mutualInformation_congr
     {dA dB : ℕ}
     {ρ σ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
     (h : ρ = σ) (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) :
@@ -188,7 +190,7 @@ theorem Entropy.mutualInformation_congr
 
 /-- Bipartite mutual information is invariant under exchanging the two tensor
 factors. -/
-theorem Entropy.mutualInformation_submatrix_swap
+private theorem mutualInformation_submatrix_swap
     {dA dB : ℕ}
     (ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
     (hρ : ρ.IsHermitian) :
@@ -259,8 +261,8 @@ theorem IsKrausCPTP.mutualInformation_tensorMapId_le
     Entropy.mutualInformation (Matrix.tensorMapId S ρ)
         (hS.tensorMapId_posSemidef hρ).isHermitian ≤
       Entropy.mutualInformation ρ hρ.isHermitian := by
+  have hS' := hS
   obtain ⟨r, A, hA, hAres⟩ := hS
-  have hS' : IsKrausCPTP S := ⟨r, A, hA, hAres⟩
   let V : Matrix (Fin dOut × Fin r) (Fin dIn) ℂ := stinespringV A
   have hV : Vᴴ * V = 1 := by
     change (stinespringV A)ᴴ * stinespringV A = 1
@@ -304,7 +306,7 @@ theorem IsKrausCPTP.mutualInformation_tensorMapId_le
         congrArg Matrix.traceRight hC
       _ = Matrix.traceLeft (Matrix.tensorMapId S ρ) :=
         traceRight_submatrix_swap (Matrix.tensorMapId S ρ)
-      _ = Matrix.traceLeft ρ := hS'.traceLeft_tensorMapId ρ
+      _ = Matrix.traceLeft ρ := traceLeft_tensorMapId hS' ρ
   have hAτ : Matrix.traceA_ABC τ = V * Matrix.traceRight ρ * Vᴴ := by
     change Matrix.traceA_ABC
         ((localStinespringV (δ := Fin dR) V * ρ *
@@ -361,10 +363,10 @@ theorem IsKrausCPTP.mutualInformation_tensorMapId_le
           Entropy.mutualInformation
             ((Matrix.tensorMapId S ρ).submatrix Prod.swap Prod.swap)
             (hσ.isHermitian.submatrix Prod.swap) := by
-        exact Entropy.mutualInformation_congr hC _ _
+        exact mutualInformation_congr hC _ _
       _ = Entropy.mutualInformation (Matrix.tensorMapId S ρ)
           hσ.isHermitian :=
-        Entropy.mutualInformation_submatrix_swap
+        mutualInformation_submatrix_swap
           (Matrix.tensorMapId S ρ) hσ.isHermitian
   have hright :
       Entropy.vonNeumannEntropy
@@ -485,12 +487,12 @@ theorem IsKrausCPTP.mutualInformation_idTensorMap_le
           (hσ.isHermitian.submatrix Prod.swap) := rfl
     _ = Entropy.mutualInformation (Matrix.tensorMapId S ρ')
           hσ.isHermitian :=
-      Entropy.mutualInformation_submatrix_swap
+      mutualInformation_submatrix_swap
         (Matrix.tensorMapId S ρ') hσ.isHermitian
     _ ≤ Entropy.mutualInformation ρ' hρ'.isHermitian :=
       hS.mutualInformation_tensorMapId_le ρ' hρ' htr'
     _ = Entropy.mutualInformation ρ hρ.isHermitian :=
-      Entropy.mutualInformation_submatrix_swap ρ hρ.isHermitian
+      mutualInformation_submatrix_swap ρ hρ.isHermitian
 
 /-- Data processing for independent rectangular trace-preserving completely
 positive maps acting on the two factors of a bipartite density matrix.  This

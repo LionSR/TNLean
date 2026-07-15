@@ -722,6 +722,27 @@ channel:
     \]
 \end{lemma}
 
+\begin{definition}[Stinespring matrix with a finite index set]
+    \label{def:stinespring_v_gen}
+    \lean{stinespringVGen}
+    \leanok
+    \uses{def:stinespring_v}
+    For a Kraus family $(K_j)_{j\in J}$ indexed by an arbitrary finite set
+    $J$, define
+    \[
+      (V_J)_{(i,j),k}=(K_j)_{ik}.
+    \]
+\end{definition}
+
+\begin{lemma}[Entry formula for the finite-index Stinespring matrix]
+    \label{lem:stinespring_v_gen_apply}
+    \lean{stinespringVGen_apply}
+    \leanok
+    \uses{def:stinespring_v_gen}
+    The finite-index Stinespring matrix satisfies
+    $(V_J)_{(i,j),k}=(K_j)_{ik}$.
+\end{lemma}
+
 \begin{theorem}[Stinespring Gram identity]\label{thm:stinespring_v_conjTranspose_mul}
     \lean{stinespringV_conjTranspose_mul}
     \leanok
@@ -731,6 +752,34 @@ channel:
         V^\dagger V = \sum_{j=0}^{r-1} K_j^\dagger K_j.
     \]
 \end{theorem}
+
+\begin{definition}[Local Stinespring matrix]\label{def:local_stinespring_v}
+    \lean{localStinespringV}
+    \leanok
+    \uses{def:stinespring_v}
+    If a Stinespring matrix $V:\C^{d_{\mathrm{in}}}\to
+    \C^{d_{\mathrm{out}}}$ acts on the first factor while a finite-dimensional
+    space $R$ is left unchanged, the corresponding local Stinespring matrix is
+    \[
+        W=V\otimes\Id_R.
+    \]
+\end{definition}
+
+\begin{theorem}[Local Stinespring isometry]
+    \label{thm:local_stinespring_v_conjTranspose_mul}
+    \lean{localStinespringV_conjTranspose_mul}
+    \leanok
+    \uses{def:local_stinespring_v}
+    If $V^\dagger V=\Id$, then
+    \[
+        (V\otimes\Id_R)^\dagger(V\otimes\Id_R)=\Id.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Use $(A\otimes B)(C\otimes D)=AC\otimes BD$ and
+    $\Id\otimes\Id=\Id$.
+\end{proof}
 
 \begin{theorem}[Stinespring dual representation]\label{thm:stinespring_dual_representation}
     \lean{stinespring_dual_representation}
@@ -759,6 +808,8 @@ channel:
     \lean{stinespringV_isometry_iff_kraus_normalized}
     \leanok
     \uses{def:stinespring_v, def:trace_preserving}
+    In the square specialization
+    $d_{\mathrm{in}}=d_{\mathrm{out}}=D$, one has
     $V^\dagger V = \Id_D$ if and only if
     $\sum_j K_j^\dagger K_j = \Id_D$.
     In particular, $V$ is an isometry precisely when the Kraus map is
