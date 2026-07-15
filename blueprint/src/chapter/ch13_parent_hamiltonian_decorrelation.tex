@@ -18,8 +18,8 @@ orthogonal-projector, or ground-space-intersection hypotheses of Appendix~D.2.
 % source definition. See
 % docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
 
-The first source-faithful step toward the converse is independent of
-decorrelation.  For a positive semidefinite operator on a bipartite space, the
+The following preparatory result is independent of the decorrelation
+condition.  For a positive semidefinite operator on a bipartite space, the
 support projector of the retained left marginal, lifted to the full space,
 fixes the original operator.  These are the support-projector identities used in
 \cite[Appendix~D.2, lines 2225--2235]{Cirac2016MPDO_arXiv}.
@@ -57,10 +57,16 @@ fixes the original operator.  These are the support-projector identities used in
 
 \begin{proof}
     \leanok
-    The complementary projector $Q_L=\mathbf 1_L-P_L$ annihilates the
-    marginal.  The partial-trace adjoint identity shows that its lift has zero
-    expectation against $\rho$.  Positivity then implies
-    $(Q_L\otimes\mathbf 1_R)\rho=0$, which is equivalent to the claim.
+    Set $Q_L=\mathbf 1_L-P_L$.  Since
+    $Q_L\operatorname{tr}_R\rho=0$, the adjoint identity gives
+    \[
+        \operatorname{tr}\bigl((Q_L\otimes\mathbf 1_R)\rho\bigr)
+        =\operatorname{tr}(Q_L\operatorname{tr}_R\rho)=0.
+    \]
+    Positivity of $\rho$ then implies
+    $(Q_L\otimes\mathbf 1_R)\rho=0$.  Finally,
+    $\mathbf 1-(Q_L\otimes\mathbf 1_R)=P_L\otimes\mathbf 1_R$ gives the
+    claim.
 \end{proof}
 
 \begin{theorem}[Right absorption by the marginal support projector]
