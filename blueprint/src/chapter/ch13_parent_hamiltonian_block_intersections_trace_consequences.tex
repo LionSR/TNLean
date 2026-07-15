@@ -112,9 +112,7 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
     \leanok
-    \uses{lem:direct_sum_two_block_dimension_step,
-        lem:pair_product_span_arbitrary_first_value,
-        lem:pair_trace_separation_to_pairwise_block_separation,
+    \uses{lem:pair_product_span_arbitrary_first_value,
         lem:block_separating_equations_from_pairwise_separation}
     Under the hypotheses of the preceding lemma, suppose $r\geq2$. Then the
     simultaneous block-word tuples at the source length
@@ -126,7 +124,9 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
 
 \begin{proof}
     \leanok
-    \uses{lem:pair_product_span_arbitrary_first_value,
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:pair_product_span_arbitrary_first_value,
         lem:block_separating_equations_from_pairwise_separation}
     For a prescribed matrix $X_k$ on block $k$, choose an anchor block $j$.
     Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a length-

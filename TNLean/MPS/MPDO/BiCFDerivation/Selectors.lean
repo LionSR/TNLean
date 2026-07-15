@@ -858,11 +858,11 @@ any blocking length `L` there is only one word `w : Fin L → Fin 1`, and
 
 for that unique word, while `Δ ≠ 0`. Therefore `HasBiCF A` fails.
 
-The new predicate `PropBlockInjective` expresses one abstract finite-length route,
+The predicate `PropBlockInjective` expresses one abstract finite-length route,
 while `wordEntryFamily` gives a second, equivalent linear-algebra criterion.
-What remains open is to derive either of those finite-length witnesses from the
-repository's current BNT / canonical-form hypotheses, i.e. to formalize the full
-content of arXiv:1606.00608, lines 340--345.
+For a basis of normal tensors, the additional separation hypotheses provide
+such a finite-length witness; they do not follow from the three fields in the
+counterexample alone.
 -/
 
 end MPOTensor
