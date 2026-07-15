@@ -251,10 +251,17 @@
     its stated raw-weight BNT normalization.
 \end{theorem}
 \begin{proof}\leanok
-    The two diagonal entries in the one-letter blocking equation
-    $(A^0)^2=vA^0$ would give respectively $v=1$ and $1/4=1/2$. Hence no such
-    scalar exists. The physical distance-independence assertion follows because
-    every observable on a one-letter physical space is scalar.
+    The $(0,0)$ and $(1,1)$ entries of the one-letter blocking equation
+    $(A^0)^2=vA^0$ would give
+    \[
+        1=v\cdot 1
+        \qquad\text{and}\qquad
+        \frac14=v\cdot\frac12.
+    \]
+    The first equality forces $v=1$, while substitution in the second gives
+    $1/4=1/2$, a contradiction. Hence no such scalar exists. The physical
+    distance-independence assertion follows because every observable on a
+    one-letter physical space is scalar.
 \end{proof}
 
 \begin{lemma}[Source BNT zero correlation length implies its positive-gap form]%
@@ -926,15 +933,26 @@
 % The U-level conversion is recorded in docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:block_diagonal_transfer_sum_to_block}
+    \uses{lem:block_diagonal_transfer_sum_to_block,
+        thm:transfer_operator_gap_irr_tp,
+        thm:transfer_operator_gap_rect_irr_tp,
+        lem:idempotent_spectral_radius_zero}
     By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} the $(j,j')$ bond
     block of the direct-sum transfer map acts as $\E_{j,j'}$. Whole-tensor
     idempotence $\E^2=\E$ therefore restricts to each block as
-    $\E_{j,j'}^2=\E_{j,j'}$. For distinct irreducible left-canonical blocks that
-    are not gauge-phase equivalent the mixed transfer operator has spectral radius
-    below one, $\rho(\E_{j,j'})<1$ --- by the same-dimension gauge rigidity when
-    the bond dimensions agree, and by the dimension-mismatch gap otherwise. Then
-    $\E_{j,j'} = \E_{j,j'}^n \to 0$ as $n\to\infty$, so $\E_{j,j'}=0$.
+    $\E_{j,j'}^2=\E_{j,j'}$. For distinct irreducible left-canonical blocks,
+    Theorem~\ref{thm:transfer_operator_gap_irr_tp} gives
+    $\rho_{\spec}(\E_{j,j'})<1$ when the bond dimensions agree, because the
+    blocks are not gauge-phase equivalent;
+    Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} gives the same
+    inequality when the bond dimensions differ. Consequently,
+    Lemma~\ref{lem:idempotent_spectral_radius_zero} gives
+    \[
+        \E_{j,j'}^2=\E_{j,j'},\qquad
+        \rho_{\spec}(\E_{j,j'})<1
+        \quad\Longrightarrow\quad
+        \E_{j,j'}=0.
+    \]
 \end{proof}
 
 \begin{definition}[Residual isometry family]%
