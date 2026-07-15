@@ -27,17 +27,17 @@ open scoped BigOperators ComplexOrder
 
 namespace MPOTensor
 
-/-- The algebra clause of arXiv:1606.00608, Theorem 4.14(ii) (source label
-`thm:IV.13`), before comparison with a chosen blocked basis.
+/-- The algebra clause of arXiv:1606.00608, Theorem 4.14(ii), before comparison
+with a chosen blocked basis.
 
 The coefficient family remains an independent object.  The positive chi
 witness identifies it with traces of powers of one length-independent family
 of positive diagonal matrices at every positive chain length.  The remaining
-fields are the same-length product law and the length-one idempotent scalar
-law.
+conditions are the same-length product law and the length-one idempotent
+scalar law.
 
-Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`, lines
-972--985, and Appendix C.4, lines 1929--1942 of
+Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985, and Appendix C.4,
+lines 1929--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTAlgebraClause {Λ : Type*} [Fintype Λ] {O : ℕ → Type*}
     [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
@@ -47,18 +47,15 @@ structure BNTAlgebraClause {Λ : Type*} [Fintype Λ] {O : ℕ → Type*}
     (traceScalars : BNTLabelTraceScalarFamily Λ) where
   /-- The positive length-independent BNT-label chi witness.
 
-  Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`,
-  lines 972--985. -/
+  Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985. -/
   positiveChi : PositiveBNTLabelChiTracePowerForm coeffs
   /-- The operators satisfy the same-length product law.
 
-  Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`,
-  lines 976--980. -/
+  Source: arXiv:1606.00608, Theorem 4.14(ii), lines 976--980. -/
   sameLengthProduct : operators.HasSameLengthProductForm coeffs
   /-- The trace scalars satisfy the length-one idempotent law.
 
-  Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`,
-  lines 981--985. -/
+  Source: arXiv:1606.00608, Theorem 4.14(ii), lines 981--985. -/
   idempotent : traceScalars.HasIdempotentCoefficientForm coeffs
 
 /-- The BNT-label data asserted by the source theorem, together with its
@@ -93,8 +90,8 @@ structure BNTLabelTheoremData (data : AlgebraStructureData d D)
   traceScalars : BNTLabelTraceScalarFamily Λ
   /-- The BNT algebra clause before comparison with a chosen blocked basis.
 
-  Source: arXiv:1606.00608, Theorem 4.14(ii), source label `thm:IV.13`,
-  lines 972--985, and Appendix C.4, lines 1925--1942 of
+  Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985, and Appendix C.4,
+  lines 1925--1942 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   algebraClause : BNTAlgebraClause coeffs operators traceScalars
   /-- Comparison of the chosen blocked-basis coefficients with the BNT labels.
@@ -115,7 +112,7 @@ def positiveChi : PositiveBNTLabelChiTracePowerForm H.coeffs :=
   H.algebraClause.positiveChi
 
 /-- The same-length product law carried by BNT-label theorem data. -/
-theorem sameLengthProduct : H.operators.HasSameLengthProductForm H.coeffs :=
+theorem same_length_product : H.operators.HasSameLengthProductForm H.coeffs :=
   H.algebraClause.sameLengthProduct
 
 /-- The idempotent scalar law carried by BNT-label theorem data. -/
@@ -163,7 +160,7 @@ Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem same_length_product_form :
     H.operators.HasSameLengthProductForm H.coeffs :=
-  H.sameLengthProduct
+  H.same_length_product
 
 /-- The idempotent coefficient predicate carried by BNT-label theorem data.
 
@@ -253,7 +250,7 @@ theorem same_length_product_form_ofChi :
       (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
   intro L hL α β
   rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum
-    (op := H.operators) H.sameLengthProduct L hL α β]
+    (op := H.operators) H.same_length_product L hL α β]
   refine Finset.sum_congr rfl ?_
   intro γ _hγ
   rw [H.coeff_eq_ofChi_coeff L hL α β γ]
@@ -326,7 +323,7 @@ theorem same_length_product_eq_sum
     H.operators.operator L α * H.operators.operator L β =
       ∑ γ : Λ, H.coeffs.coeff L α β γ • H.operators.operator L γ :=
   BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum
-    (op := H.operators) H.sameLengthProduct L hL α β
+    (op := H.operators) H.same_length_product L hL α β
 
 /-- The idempotent scalar equation carried by theorem data.
 
