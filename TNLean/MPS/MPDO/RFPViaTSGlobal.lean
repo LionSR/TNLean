@@ -56,9 +56,9 @@ noncomputable def refineFirstSite
       Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (N : ℕ) :
     Matrix (Fin (N + 1) → Fin d) (Fin (N + 1) → Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin (N + 2) → Fin d) (Fin (N + 2) → Fin d) ℂ :=
-  Matrix.equivReindexMap (firstTwoSitesRestEquiv d N).symm ∘ₗ
+  Matrix.equivReindexMap (finAddTwoArrowEquiv (Fin d) N).symm ∘ₗ
     Matrix.tensorMapIdLM (δ := Fin N → Fin d) T ∘ₗ
-      Matrix.equivReindexMap (firstSiteRestEquiv d N)
+      Matrix.equivReindexMap (finSuccArrowEquiv (Fin d) N)
 
 /-- Apply a two-to-one physical map to the first two sites and leave the
 remaining `N` sites unchanged.
@@ -69,9 +69,9 @@ noncomputable def coarsenFirstTwoSites
       Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     Matrix (Fin (N + 2) → Fin d) (Fin (N + 2) → Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin (N + 1) → Fin d) (Fin (N + 1) → Fin d) ℂ :=
-  Matrix.equivReindexMap (firstSiteRestEquiv d N).symm ∘ₗ
+  Matrix.equivReindexMap (finSuccArrowEquiv (Fin d) N).symm ∘ₗ
     Matrix.tensorMapIdLM (δ := Fin N → Fin d) S ∘ₗ
-      Matrix.equivReindexMap (firstTwoSitesRestEquiv d N)
+      Matrix.equivReindexMap (finAddTwoArrowEquiv (Fin d) N)
 
 /-- Localizing a one-to-two channel at the first site again gives a
 trace-preserving completely positive map.
@@ -84,9 +84,9 @@ theorem refineFirstSite_isKrausCPTP
     IsKrausCPTP (refineFirstSite T N) := by
   exact isKrausCPTP_comp
     (isKrausCPTP_comp
-      (Matrix.equivReindexMap_isKrausCPTP (firstSiteRestEquiv d N))
+      (Matrix.equivReindexMap_isKrausCPTP (finSuccArrowEquiv (Fin d) N))
       (Matrix.tensorMapIdLM_isKrausCPTP hT))
-    (Matrix.equivReindexMap_isKrausCPTP (firstTwoSitesRestEquiv d N).symm)
+    (Matrix.equivReindexMap_isKrausCPTP (finAddTwoArrowEquiv (Fin d) N).symm)
 
 /-- Localizing a two-to-one channel at the first two sites again gives a
 trace-preserving completely positive map.
@@ -99,9 +99,9 @@ theorem coarsenFirstTwoSites_isKrausCPTP
     IsKrausCPTP (coarsenFirstTwoSites S N) := by
   exact isKrausCPTP_comp
     (isKrausCPTP_comp
-      (Matrix.equivReindexMap_isKrausCPTP (firstTwoSitesRestEquiv d N))
+      (Matrix.equivReindexMap_isKrausCPTP (finAddTwoArrowEquiv (Fin d) N))
       (Matrix.tensorMapIdLM_isKrausCPTP hS))
-    (Matrix.equivReindexMap_isKrausCPTP (firstSiteRestEquiv d N).symm)
+    (Matrix.equivReindexMap_isKrausCPTP (finSuccArrowEquiv (Fin d) N).symm)
 
 /-! ### Action on physical closures -/
 
@@ -110,7 +110,7 @@ the remaining word absorbed into the virtual boundary matrix. -/
 private theorem firstSiteSlice_physCloseN (M : MPOTensor d D) (N : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) (u v : Fin N → Fin d) :
     Matrix.bipartiteSlice
-        (Matrix.equivReindexMap (firstSiteRestEquiv d N)
+        (Matrix.equivReindexMap (finSuccArrowEquiv (Fin d) N)
           (physCloseN M (N + 1) X)) u v =
       physClose1 M (evalWord M (List.ofFn u) (List.ofFn v) * X) := by
   ext i j
@@ -123,7 +123,7 @@ the remaining word absorbed into the virtual boundary matrix. -/
 private theorem firstTwoSitesSlice_physCloseN (M : MPOTensor d D) (N : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) (u v : Fin N → Fin d) :
     Matrix.bipartiteSlice
-        (Matrix.equivReindexMap (firstTwoSitesRestEquiv d N)
+        (Matrix.equivReindexMap (finAddTwoArrowEquiv (Fin d) N)
           (physCloseN M (N + 2) X)) u v =
       physClose2 M (evalWord M (List.ofFn u) (List.ofFn v) * X) := by
   ext i j
@@ -148,11 +148,11 @@ theorem refineFirstSite_physCloseN (M : MPOTensor d D)
       physCloseN M (N + 2) X := by
   ext σ τ
   change Matrix.tensorMapId T
-      (Matrix.equivReindexMap (firstSiteRestEquiv d N)
+      (Matrix.equivReindexMap (finSuccArrowEquiv (Fin d) N)
         (physCloseN M (N + 1) X))
-      (firstTwoSitesRestEquiv d N σ) (firstTwoSitesRestEquiv d N τ) = _
+      (finAddTwoArrowEquiv (Fin d) N σ) (finAddTwoArrowEquiv (Fin d) N τ) = _
   rw [Matrix.tensorMapId_apply]
-  simp only [firstTwoSitesRestEquiv_apply]
+  simp only [finAddTwoArrowEquiv_apply]
   rw [firstSiteSlice_physCloseN, hT]
   simp [List.ofFn_succ, evalWord_cons, Matrix.mul_assoc, Fin.tail_def]
 
@@ -173,11 +173,11 @@ theorem coarsenFirstTwoSites_physCloseN (M : MPOTensor d D)
       physCloseN M (N + 1) X := by
   ext σ τ
   change Matrix.tensorMapId S
-      (Matrix.equivReindexMap (firstTwoSitesRestEquiv d N)
+      (Matrix.equivReindexMap (finAddTwoArrowEquiv (Fin d) N)
         (physCloseN M (N + 2) X))
-      (firstSiteRestEquiv d N σ) (firstSiteRestEquiv d N τ) = _
+      (finSuccArrowEquiv (Fin d) N σ) (finSuccArrowEquiv (Fin d) N τ) = _
   rw [Matrix.tensorMapId_apply]
-  simp only [firstSiteRestEquiv_apply]
+  simp only [finSuccArrowEquiv_apply]
   rw [firstTwoSitesSlice_physCloseN, hS]
   simp [List.ofFn_succ, evalWord_cons, Matrix.mul_assoc, Fin.tail_def]
 

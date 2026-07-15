@@ -563,36 +563,43 @@
     \TNMPORenormalizationTS
 \end{definition}
 
+\begin{definition}[Initial-coordinate regroupings]
+    \label{def:finite_tuple_regroupings}
+    \lean{finSuccArrowEquiv,
+      finAddTwoArrowEquiv}
+    \leanok
+    Let $R_1$ identify an $(N+1)$-tuple with its first coordinate and the
+    remaining $N$-tuple.  Let $R_2$ identify an $(N+2)$-tuple with its first
+    two coordinates and the remaining $N$-tuple.
+\end{definition}
+
 \begin{definition}[Renormalization maps on a longer ring]
     \label{def:mpdo_global_renormalization_maps}
-    \lean{MPOTensor.firstSiteRestEquiv,
-      MPOTensor.firstTwoSitesRestEquiv,
-      MPOTensor.refineFirstSite,
+    \lean{MPOTensor.refineFirstSite,
       MPOTensor.coarsenFirstTwoSites}
     \leanok
-    Let $N$ count the sites that are left unchanged.  Regroup a ring of
-    $N+1$ sites as one site followed by $N$ sites, and a ring of $N+2$ sites
-    as two sites followed by $N$ sites.  For physical maps
+    \uses{def:finite_tuple_regroupings}
+    Let $N$ count the sites that are left unchanged.  For physical maps
     $\mathcal T:M_d\to M_{d^2}$ and $\mathcal S:M_{d^2}\to M_d$, define
     \[
        \widehat{\mathcal T}_N
-       =\mathcal T\otimes\id_{N},
+       =\mathcal T\otimes\id_{d^N},
        \qquad
        \widehat{\mathcal S}_N
-       =\mathcal S\otimes\id_{N},
+       =\mathcal S\otimes\id_{d^N},
     \]
-    using these regroupings.  Thus $N=0$ leaves no spectator site, but the
+    using $R_1$ and $R_2$.  Thus $N=0$ leaves no spectator site, but the
     maps still act on a one-site or two-site operator; no empty ring occurs.
 \end{definition}
 
 \begin{lemma}[Regrouping the first physical sites]
     \label{lem:mpdo_global_renormalization_regrouping}
-    \lean{MPOTensor.firstSiteRestEquiv_apply,
-      MPOTensor.firstSiteRestEquiv_symm_apply,
-      MPOTensor.firstTwoSitesRestEquiv_apply,
-      MPOTensor.firstTwoSitesRestEquiv_symm_apply}
+    \lean{finSuccArrowEquiv_apply,
+      finSuccArrowEquiv_symm_apply,
+      finAddTwoArrowEquiv_apply,
+      finAddTwoArrowEquiv_symm_apply}
     \leanok
-    \uses{def:mpdo_global_renormalization_maps}
+    \uses{def:finite_tuple_regroupings}
     For a physical word $\sigma$ of length $N+1$,
     \[
       R_1(\sigma)=\bigl(\sigma_0,(\sigma_1,\ldots,\sigma_N)\bigr),
@@ -631,11 +638,11 @@
     \leanok
     If $(K_j)_j$ are Kraus operators for $\mathcal T$ with
     $\sum_j K_j^\dagger K_j=I_d$, then the localized map has Kraus operators
-    $K_j\otimes I_N$, and
+    $K_j\otimes I_{d^N}$, and
     \[
-      \sum_j (K_j\otimes I_N)^\dagger(K_j\otimes I_N)
-        =\left(\sum_j K_j^\dagger K_j\right)\otimes I_N
-        =I_d\otimes I_N.
+      \sum_j (K_j\otimes I_{d^N})^\dagger(K_j\otimes I_{d^N})
+        =\left(\sum_j K_j^\dagger K_j\right)\otimes I_{d^N}
+        =I_d\otimes I_{d^N}.
     \]
     The two regroupings are unitary conjugations and preserve complete
     positivity and the trace.  The argument for $\mathcal S$ is identical.

@@ -150,6 +150,21 @@ physical indices, as in
     \]
 \end{definition}
 
+\begin{lemma}[Coordinates of the four-site regrouping]
+    \label{lem:fin_four_arrow_equiv_coordinates}
+    \lean{finFourArrowEquiv_apply, finFourArrowEquiv_symm_apply}
+    \leanok
+    \uses{def:mpdo_four_site_physical_closure}
+    The canonical four-coordinate regrouping and its inverse satisfy
+    \[
+        R_4(\sigma)
+          =(\sigma_0,(\sigma_1,(\sigma_2,\sigma_3))),
+        \qquad
+        R_4^{-1}(i_0,(i_1,(i_2,i_3)))
+          =(i_0,i_1,i_2,i_3).
+    \]
+\end{lemma}
+
 \begin{theorem}[General and right-associated four-site closures]
     \label{thm:mpdo_phys_close_four}
     \lean{MPOTensor.physCloseN_four_eq_physClose4}
