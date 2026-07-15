@@ -1241,9 +1241,20 @@ def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object
                 )
 
     duplicate_port_anchors: list[dict[str, object]] = []
-    port_commands = frozenset(
-        {"TNPhysicalPort", "TNVirtualPort", "TNVirtualNorthPort", "TNVirtualSouthPort"}
-    )
+    port_command_sides = {
+        "TNVirtualPort": "anchor",
+        "TNPhysicalPort": "anchor",
+        "TNMorphismPort": "anchor",
+        "TNVirtualWestPort": "west",
+        "TNVirtualEastPort": "east",
+        "TNVirtualNorthPort": "north",
+        "TNVirtualSouthPort": "south",
+        "TNPhysicalWestPort": "west",
+        "TNPhysicalEastPort": "east",
+        "TNPhysicalNorthPort": "north",
+        "TNPhysicalSouthPort": "south",
+    }
+    port_commands = frozenset(port_command_sides)
     for macro_name, body, body_offset in _tex_macro_definitions(source):
         anchors: dict[tuple[str, str], tuple[str, int]] = {}
         for command, arguments, call_offset, _ in _tex_command_calls(body, port_commands):
@@ -1252,10 +1263,7 @@ def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object
             port_name, node_name, anchor_name = (
                 argument.strip() for argument in arguments
             )
-            side = {
-                "TNVirtualNorthPort": "north",
-                "TNVirtualSouthPort": "south",
-            }.get(command, "anchor")
+            side = port_command_sides[command]
             key = (node_name, f"{side}:{anchor_name}")
             previous = anchors.get(key)
             if previous is not None and previous[0] != port_name:
