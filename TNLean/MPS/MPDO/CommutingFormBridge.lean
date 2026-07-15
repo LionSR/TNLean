@@ -22,8 +22,11 @@ gives a coherently positive physical-sector factorization satisfying
 \]
 Consequently, `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` constructs
 the eta-local structure from injectivity and SAL alone. Zero correlation length
-is not used in Proposition C.8; it enters only in the later GSNNCH-with-ZCL and
-RFP consequences.
+is not used in Proposition C.8; it enters only in the later
+single-bond commuting-form-with-ZCL and RFP consequences. The full source
+GSNNCH definition also contains an orthogonal sector sum and natural
+multiplicities; see
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 
 ## Main declarations
 
@@ -194,14 +197,21 @@ theorem positive_commuting_product_form
   ⟨(data.formAt N hN).bond_pos, data.formAt_bondAt_comm N hN,
     data.exists_positive_scalar_mpo_eq_product N hN⟩
 
-/-- The chain-level GSNNCH witness induced by the local `η`-structure at a fixed
-chain length. -/
+/-- The chain-level single-bond commuting-product witness induced by the
+local `η`-structure at a fixed chain length.
+
+**Scope restriction (single-bond presentation):** No equivalence with the
+explicit source sector decomposition is asserted. See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 theorem isGSNNCHAt (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
     IsGSNNCHAt (mpo M N) :=
   (data.formAt N hN).isGSNNCHAt_of_realizes (data.formAt_realizes N hN)
 
-/-- The explicit `η`-local structure yields a GSNNCH witness on every finite
-chain. -/
+/-- The explicit `η`-local structure yields the single-bond
+commuting-product witness on every finite chain.
+
+**Scope restriction (single-bond presentation):** See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 theorem isGSNNCH (data : EtaLocalStructureData M) : IsGSNNCH M :=
   fun N hN => data.isGSNNCHAt N hN
 
@@ -210,11 +220,16 @@ theorem hasCommutingForm (data : EtaLocalStructureData M) : HasCommutingForm M :
   fun N hN => ⟨data.formAt N hN, data.formAt_realizes N hN⟩
 
 /-- The explicit `η`-local structure, together with ZCL, gives the
-GSNNCH-with-ZCL case of the simple-MPDO equivalence.
+single-bond commuting-product condition with ZCL.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 the assembled neighboring operators give a commuting nearest-neighbor product
-form. Adding ZCL gives item (iii) of Theorem 4.9 in the simple-MPDO case. -/
+form.
+
+**Scope restriction (single-bond presentation):** No equivalence with the
+orthogonal sector sum and natural multiplicities in item (iii) of Theorem 4.9
+is proved here. See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 theorem isGSNNCHWithZCL (data : EtaLocalStructureData M) (hZCL : IsZCL M) :
     IsGSNNCHWithZCL M :=
   (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL M).2 ⟨data.hasCommutingForm, hZCL⟩
@@ -228,13 +243,20 @@ theorem hasCommutingForm_of_etaLocalStructure {M : MPOTensor d D}
     (hEta : EtaLocalStructureData M) : HasCommutingForm M :=
   hEta.hasCommutingForm
 
-/-- The explicit local `η`-structure also yields the GSNNCH condition. -/
+/-- The explicit local `η`-structure also yields the single-bond
+commuting-product condition.
+
+**Scope restriction (single-bond presentation):** See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 theorem isGSNNCH_of_etaLocalStructure {M : MPOTensor d D}
     (hEta : EtaLocalStructureData M) : IsGSNNCH M :=
   hEta.isGSNNCH
 
 /-- Once the explicit local `η`-structure has been assembled, adding ZCL gives
-the GSNNCH-with-ZCL case of the simple-MPDO equivalence. -/
+the single-bond commuting-product condition with ZCL.
+
+**Scope restriction (single-bond presentation):** See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 theorem isGSNNCHWithZCL_of_etaLocalStructure {M : MPOTensor d D}
     (hEta : EtaLocalStructureData M) (hZCL : IsZCL M) : IsGSNNCHWithZCL M :=
   hEta.isGSNNCHWithZCL hZCL

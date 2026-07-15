@@ -1,0 +1,131 @@
+\section{Gibbs states of nearest-neighbor commuting Hamiltonians}
+
+\begin{definition}[GSNNCH]\label{def:mpdo_source_gsnnch}
+    \notready
+    A density operator on a periodic chain is a Gibbs state of a
+    nearest-neighbor commuting Hamiltonian if
+    \[
+        \rho^{(N)}
+        \propto
+        \bigoplus_x n_x
+        \exp\!\left(-\sum_{j=1}^N\tau_j(h^{(x)})\right),
+        \qquad n_x\in\N,
+    \]
+    where the one-site spaces belonging to distinct labels $x$ are
+    orthogonal and
+    $[h^{(x)},\tau_1(h^{(x)})]=0$. With the projector-limit convention of
+    \cite[Definition~4.8, lines~829--850]{Cirac2016MPDO_arXiv}, this is
+    equivalently
+    \[
+        \rho^{(N)}
+        \propto
+        \bigoplus_x n_x
+        \prod_{j=1}^N\tau_j(B^{(x)}),
+        \qquad B^{(x)}\geq0,
+    \]
+    with commuting neighboring translates. The orthogonal sum and the
+    multiplicities are part of the definition.
+\end{definition}
+
+The following single-bond presentation does not make the sector labels or
+multiplicities explicit. Its bond acts on the full two-site space and may
+itself be block diagonal. No equivalence between this presentation and
+Definition~\ref{def:mpdo_source_gsnnch} is assumed.
+% Scope boundary: the missing comparison with the explicit sector decomposition
+% is documented in docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+
+\begin{definition}[Single-bond commuting-form data for an MPDO]
+    \label{def:mpdo_commuting_form_data}
+    \lean{MPOTensor.CommutingFormData}
+    \leanok
+    \uses{def:mpo_tensor}
+    For a fixed chain length $N \ge 2$, this consists of one positive
+    semidefinite two-site operator $B\ge0$ whose translated copies commute
+    pairwise on the periodic $N$-site chain:
+    \[
+        [B_{i,i+1},B_{j,j+1}]=0.
+    \]
+\end{definition}
+
+\begin{definition}[Single-bond commuting form]
+    \label{def:mpdo_has_commuting_form}
+    \lean{MPOTensor.HasCommutingForm}
+    \leanok
+    \uses{def:mpdo_commuting_form_data, def:mpo_tensor}
+    An MPO tensor $M$ has the single-bond commuting-form property if for
+    every $N \ge 2$ there is a two-site operator $B$ as in
+    Definition~\ref{def:mpdo_commuting_form_data} and a constant $c>0$ such
+    that
+    \[
+        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
+\end{definition}
+
+\begin{definition}[Single-bond product predicate]
+    \label{def:mpdo_is_gsnnch}
+    \lean{MPOTensor.IsGSNNCH}
+    \leanok
+    \uses{def:mpdo_has_commuting_form}
+    This condition asks, for every chain length $N\geq2$, for one positive
+    bond on the full two-site space and one positive normalization such that
+    \[
+        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1},
+        \qquad c>0,\qquad B\ge0,
+        \qquad [B_{i,i+1},B_{j,j+1}]=0.
+    \]
+    The bond may itself be block diagonal. The condition contains no explicit
+    sector labels or multiplicities and is not identified here with
+    Definition~\ref{def:mpdo_source_gsnnch}.
+    % Scope restriction (single-bond presentation): see
+    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+\end{definition}
+
+\begin{theorem}[Single-bond predicate iff single-bond commuting form]
+    \label{thm:mpdo_is_gsnnch_iff_has_commuting_form}
+    \lean{MPOTensor.isGSNNCH_iff_hasCommutingForm}
+    \leanok
+    \uses{def:mpdo_is_gsnnch, def:mpdo_has_commuting_form}
+    The single-bond product predicate is equivalent to the existence of
+    single-bond commuting-form data on every finite chain. This is an
+    equivalence between two presentations of the same condition; it does not
+    compare that condition with Definition~\ref{def:mpdo_source_gsnnch}.
+    % Scope restriction (single-bond presentation): see
+    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expanding the two definitions gives the same identity
+    $\rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}$ with $c>0$.
+\end{proof}
+
+\begin{definition}[Single-bond predicate with doubled-index idempotence]
+    \label{def:mpdo_is_gsnnch_zcl}
+    \lean{MPOTensor.IsGSNNCHWithZCL}
+    \leanok
+    \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
+    This is the conjunction of the single-bond condition with the
+    doubled-index transfer identity
+    \[
+        \E_M\circ\E_M=\E_M.
+    \]
+    The source physical-trace condition is
+    Definition~\ref{def:mpo_source_zcl}.
+    % Scope restriction (single-bond presentation): see
+    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+\end{definition}
+
+\begin{theorem}[Restricted predicate with idempotence iff restricted form with it]
+    \label{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
+    \lean{MPOTensor.isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL}
+    \leanok
+    \uses{def:mpdo_is_gsnnch_zcl,
+        thm:mpdo_is_gsnnch_iff_has_commuting_form}
+    The single-bond condition with doubled-index transfer idempotence is
+    equivalent to the conjunction of the single-bond commuting-form
+    property with that same idempotence condition.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the restricted conjunction and apply
+    Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
+\end{proof}
