@@ -1,0 +1,101 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Sector Decomposition in the GSNNCH Definition of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete}
+\author{}
+\date{2026-07-15}
+
+\begin{document}
+\maketitle
+
+\section{Source definition}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete define a density operator on a
+periodic chain to be a Gibbs state of a nearest-neighbor commuting Hamiltonian
+when
+\[
+  \rho^{(N)}
+  \propto
+  \bigoplus_x n_x
+  \exp\!\left(-\sum_{j=1}^N\tau_j(h^{(x)})\right),
+  \qquad n_x\in\mathbb N,
+\]
+where the one-site spaces belonging to distinct labels $x$ are orthogonal and
+$[h^{(x)},\tau_1(h^{(x)})]=0$
+in arXiv:1606.00608, Definition~4.8, lines~829--842. With the
+projector-limit convention stated immediately afterward, this is equivalently
+\[
+  \rho^{(N)}
+  \propto
+  \bigoplus_x n_x
+  \prod_{j=1}^N\tau_j(B^{(x)}),
+  \qquad B^{(x)}\geq0.
+\]
+The neighboring translates commute; see arXiv:1606.00608, lines~843--850.
+
+The direct sum and the multiplicities are part of the definition.  Passing
+from the exponential form to positive semidefinite bonds does not remove
+them.
+
+\section{Present formal boundary}
+
+The structure \leanid{MPOTensor.GSNNCHData} contains one positive two-site
+bond on the full local space, one positive normalization, and the product of
+its translates.  Thus \leanid{MPOTensor.IsGSNNCH} records the single-bond
+presentation
+\[
+  \rho^{(N)}=c_N\prod_{j=1}^N\tau_j(B_N),
+  \qquad c_N>0,
+\]
+without explicit sector or multiplicity data. The corresponding equivalence
+theorem merely identifies two presentations of this same single-bond
+condition.
+
+The single bond acts on the full two-site space and may itself be block
+diagonal.  It may therefore encode part or all of a source sector
+decomposition implicitly.  Conversely, each fixed source sector has a
+single-bond product form.  What is missing is a theorem comparing the two
+presentations: neither an assembly of the explicit sector data into the
+single-bond structure nor an extraction of the sector data from such a bond
+has been proved.
+
+\section{Elimination plan}
+
+A source-faithful structure should contain a finite sector type, mutually
+orthogonal one-site sector embeddings, multiplicities $n_x\in\mathbb N$, and
+one commuting positive bond $B^{(x)}$ for each sector.  Its represented chain
+operator must be the orthogonal direct sum of the corresponding periodic bond
+products.  The required completion has three parts:
+
+\begin{enumerate}
+  \item define the finite-chain orthogonal direct sum and prove positivity and
+        translation invariance;
+  \item construct the source GSNNCH data from the physical-sector
+        factorization in Appendix C.2, retaining all sector multiplicities;
+  \item prove the precise relationship between the single-bond presentation
+        and the source-faithful predicate, and use that result in the
+        simple-MPDO equivalence.
+\end{enumerate}
+
+Until these steps are complete, the blueprint states the source definition
+separately and describes every use of \leanid{MPOTensor.IsGSNNCH} as a
+single-bond presentation without claiming equivalence with the explicit
+sector decomposition.
+
+\section{Classification}
+
+Verdict: scope restriction with an open comparison gap.  The present formal
+predicate records only the single-bond presentation and does not retain the
+explicit sector spaces or their natural multiplicities.  The source GSNNCH
+definition is therefore stated separately in the blueprint and remains
+unformalized.  Neither direction of the comparison between these two
+presentations is claimed until the constructions above have been proved.
+
+\end{document}

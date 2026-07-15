@@ -38,6 +38,12 @@ unless they are cited by one of the current blueprint chapters above.
 
 For MPDO renormalization fixed points:
 
+- `cpsv16_gsnnch_sector_decomposition.tex` records that
+  `MPOTensor.IsGSNNCH` describes a single-bond commuting-product presentation
+  without explicit sector or multiplicity data.  The source definition uses
+  an orthogonal direct sum of sectors with natural multiplicities.  No
+  equivalence between the two presentations has yet been proved, so the
+  source definition is stated separately in the blueprint.
 - `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` records the missing
   coherent positive choice for the inverse-map neighboring operators in
   Appendix C.2. The comparison with the conjugated Hayashi decomposition,
