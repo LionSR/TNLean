@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MarginalSupport
 import TNLean.Channel.MaximalOverlap
 
@@ -14,6 +15,8 @@ semidefinite operator on both sides.
 
 ## Main results
 
+* `Matrix.trace_leftKroneckerEmbed_mul`: adjoint identity between the right
+  partial trace and the left tensor embedding.
 * `Matrix.PosSemidef.leftKroneckerEmbed_supportProj_mul_self`: left absorption
   by the lifted support projector of the right partial trace.
 * `Matrix.PosSemidef.mul_leftKroneckerEmbed_supportProj_self`: the corresponding
@@ -33,6 +36,26 @@ namespace Matrix
 section Bipartite
 
 variable {L R : Type*} [Fintype L] [DecidableEq L] [Fintype R] [DecidableEq R]
+
+/-- Partial trace over the right factor and the left tensor embedding are
+adjoint for the trace pairing:
+\(\operatorname{tr}((M\otimes\mathbf 1)\rho)
+=\operatorname{tr}(M\operatorname{tr}_R\rho)\). -/
+theorem trace_leftKroneckerEmbed_mul (M : Matrix L L ℂ)
+    (ρ : Matrix (L × R) (L × R) ℂ) :
+    (leftKroneckerEmbed (n := R) M * ρ).trace = (M * partialTraceRight ρ).trace := by
+  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type,
+    leftKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
+    partialTraceRight_apply, Finset.mul_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  refine Finset.sum_congr rfl fun r _ => ?_
+  rw [Finset.sum_eq_single r]
+  · simp
+  · intro s _ hrs
+    simp [Ne.symm hrs]
+  · simp
 
 /-- The lifted support projector of the right partial trace fixes a positive
 semidefinite bipartite operator on the left.

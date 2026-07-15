@@ -85,8 +85,15 @@ fixes the original operator.  These are the support-projector identities used in
 
 \begin{proof}
     \leanok
-    Take the adjoint of the left absorption identity and use that both $\rho$
-    and the lifted support projector are Hermitian.
+    Apply $(\cdot)^\dagger$ to the left absorption identity.  Since
+    $\rho^\dagger=\rho$ and
+    $(P_L\otimes\mathbf 1_R)^\dagger=P_L\otimes\mathbf 1_R$,
+    \[
+        \rho(P_L\otimes\mathbf 1_R)
+        =\bigl[(P_L\otimes\mathbf 1_R)\rho\bigr]^\dagger
+        =\rho^\dagger
+        =\rho.
+    \]
 \end{proof}
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}

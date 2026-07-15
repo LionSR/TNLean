@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Analysis.CfcKronecker
+import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Data.Complex.Basic
@@ -25,8 +25,6 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
 
 * `Matrix.partialTraceRight_apply`: elementwise formula for the general right
   partial trace
-* `Matrix.trace_leftKroneckerEmbed_mul`: adjoint identity between the right
-  partial trace and the left tensor embedding
 * `Matrix.partialTraceRightLM`: the general right partial trace as a complex
   linear map
 * `Matrix.traceLeft_apply`: elementwise formula for `tr_A`
@@ -101,26 +99,6 @@ theorem trace_partialTraceRight [Fintype α] (X : Matrix (α × β) (α × β) �
     (partialTraceRight X).trace = X.trace := by
   simp only [Matrix.trace, Matrix.diag, partialTraceRight_apply]
   rw [Fintype.sum_prod_type]
-
-/-- Partial trace over the right factor and the left tensor embedding are
-adjoint for the trace pairing:
-\(\operatorname{tr}((M\otimes\mathbf 1)\rho)
-=\operatorname{tr}(M\operatorname{tr}_R\rho)\). -/
-theorem trace_leftKroneckerEmbed_mul [Fintype α] [DecidableEq α] [DecidableEq β]
-    (M : Matrix α α ℂ) (ρ : Matrix (α × β) (α × β) ℂ) :
-    (leftKroneckerEmbed (n := β) M * ρ).trace = (M * partialTraceRight ρ).trace := by
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type,
-    leftKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
-    partialTraceRight_apply, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  refine Finset.sum_congr rfl fun r _ => ?_
-  rw [Finset.sum_eq_single r]
-  · simp
-  · intro s _ hrs
-    simp [Ne.symm hrs]
-  · simp
 
 /-- The partial trace over the right factor of a Kronecker product is the
 retained matrix multiplied by the trace of the discarded matrix. -/
