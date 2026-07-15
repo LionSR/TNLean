@@ -19,6 +19,10 @@
 \colorlet{tnAccent}{red!65!black}
 \colorlet{tnRegion}{blue!65!black}
 \colorlet{tnSector}{violet!65!black}
+\colorlet{tnPaper}{white}
+\colorlet{tnTensorText}{white}
+\colorlet{tnInsertionFill}{tnAccent!18!tnPaper}
+\colorlet{tnInsertionText}{tnInk}
 
 \tikzset{
     % Theme slots.  These are the only styles a light or dark document should
@@ -29,14 +33,14 @@
     tn theme tensor/.style={
             draw=tnInk,
             fill=tnInk,
-            text=tnInk,
+            text=tnTensorText,
             shape=circle,
             inner sep=0.055cm
         },
     tn theme insertion/.style={
             draw=tnAccent,
-            fill=tnAccent!18,
-            text=tnInk,
+            fill=tnInsertionFill,
+            text=tnInsertionText,
             shape=circle,
             inner sep=0.055cm
         },
@@ -47,30 +51,30 @@
         },
     tn theme component/.style={
             draw=tnSecondaryInk,
-            fill=white,
+            fill=tnPaper,
             inner sep=1.4pt
         },
     tn theme factor/.style={
             draw=tnSecondaryInk,
-            fill=tnSecondaryInk!5,
+            fill=tnSecondaryInk!5!tnPaper,
             inner sep=1.4pt
         },
     tn theme map/.style={
             draw=tnSecondaryInk,
             rounded corners=2pt,
-            fill=white,
+            fill=tnPaper,
             inner sep=2pt
         },
     tn theme state/.style={
             draw=tnSecondaryInk,
             rounded corners=2pt,
-            fill=tnSecondaryInk!4,
+            fill=tnSecondaryInk!4!tnPaper,
             inner sep=2pt
         },
     tn theme expression/.style={
             draw=tnSecondaryInk,
             rounded corners=0.7pt,
-            fill=white,
+            fill=tnPaper,
             inner sep=2pt
         },
     tn theme virtual wire/.style={draw=tnInk, line width=0.55pt},
@@ -116,26 +120,26 @@
     tn secondary path/.style={draw=tnRegion, line width=0.80pt},
     tn region selected/.style={
             draw=tnAccent,
-            fill=tnAccent!12,
+            fill=tnAccent!12!tnPaper,
             line width=0.80pt,
             rounded corners=1mm
         },
     tn region secondary/.style={
             draw=tnRegion,
-            fill=tnRegion!10,
+            fill=tnRegion!10!tnPaper,
             line width=0.80pt,
             rounded corners=1mm
         },
     tn region complement/.style={
             draw=tnSecondaryInk,
-            fill=tnSecondaryInk!8,
+            fill=tnSecondaryInk!8!tnPaper,
             densely dashed,
             line width=0.80pt,
             rounded corners=1mm
         },
     tn region collar/.style={
             draw=tnSector,
-            fill=tnSector!10,
+            fill=tnSector!10!tnPaper,
             line width=0.80pt,
             rounded corners=1mm
         },
@@ -143,7 +147,7 @@
     tn vertex distinguished/.style={
             circle,
             draw=tnInk,
-            fill=white,
+            fill=tnPaper,
             line width=0.80pt
         },
     tn region label selected/.style={text=tnAccent},
@@ -263,6 +267,7 @@
 % shift individual atoms.
 \newcommand{\TN@normalprofile}{%
     \def\TN@layerpitch{0.50}%
+    \def\TN@stackedseparation{1.00cm}%
     \def\TN@virtualleglen{0.60}%
     \def\TN@physicalleglen{0.42}%
     \def\TN@traceclearance{0.42}%
@@ -285,6 +290,7 @@
 
 \newcommand{\TN@compactprofile}{%
     \def\TN@layerpitch{0.40}%
+    \def\TN@stackedseparation{0.80cm}%
     \def\TN@virtualleglen{0.48}%
     \def\TN@physicalleglen{0.34}%
     \def\TN@traceclearance{0.34}%

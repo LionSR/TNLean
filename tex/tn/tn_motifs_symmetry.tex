@@ -6,6 +6,38 @@
 
 \makeatletter
 
+% Three adjacent fusion maps with the two intervening rank-one bond
+% projectors.  Empty upper labels expose the two outer virtual factors;
+% nonempty labels display the overlapping transported physical supports.
+\newcommand{\TNAppendixBProjectorChainMotif}[3]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=adjacent-projector-chain}%
+    \TNFusionMap{#1Zero}{at=origin}{U_0}%
+    \TNFusionMap{#1One}{right=of #1Zero}{U_1}%
+    \TNFusionMap{#1Two}{right=of #1One}{U_2}%
+    \TNMPSSite{#1PhiZero}{below right=of #1Zero}{\varphi_{01}}%
+    \TNMPSSite{#1PhiOne}{below right=of #1One}{\varphi_{12}}%
+    \TNConnectVirtualVH{#1ZeroFactorTwo}{#1PhiZeroWest}%
+    \TNConnectVirtualVH{#1OneFactorOne}{#1PhiZeroEast}%
+    \TNConnectVirtualVH{#1OneFactorTwo}{#1PhiOneWest}%
+    \TNConnectVirtualVH{#1TwoFactorOne}{#1PhiOneEast}%
+    \if\relax\detokenize{#2}\relax
+        \TNOpenVirtualNorth{#1ZeroFactorOne}%
+        \TNOpenVirtualNorth{#1TwoFactorTwo}%
+    \else
+        \TNGroupingRegionAbove{#1ZeroOneRegion}
+            {(#1Zero)(#1One)}{#2}%
+        \TNGroupingRegionAbove{#1OneTwoRegion}
+            {(#1One)(#1Two)}{#3}%
+    \fi
+    \TNOpenVirtualSouth{#1ZeroCombined}%
+    \TNOpenVirtualSouth{#1OneCombined}%
+    \TNOpenVirtualSouth{#1TwoCombined}%
+    \TNGroupingRegionSelectedBelow{#1PhiZeroRegion}
+        {(#1PhiZero)}{P_{01}}%
+    \TNGroupingRegionSelectedBelow{#1PhiOneRegion}
+        {(#1PhiOne)}{P_{12}}%
+}
+
 % The existing trace-cell and vertical-word constructions use a centre point.
 % These wrappers give catalogue terms a coordinate-free origin convention.
 \newcommand{\TNSymmetryTraceCell}[4]{%
