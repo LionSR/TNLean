@@ -88,8 +88,11 @@ conjugation. -/
 theorem submatrix_left_conj_equiv {l m u : Type*} [Fintype l] (A : Matrix m l ℂ)
     (r : u ≃ m) (X : Matrix l l ℂ) :
     A.submatrix r id * X * (A.submatrix r id)ᴴ = (A * X * Aᴴ).submatrix r r := by
-  rw [← submatrix_mul A X r id id Function.bijective_id, conjTranspose_submatrix,
-    ← submatrix_mul (A * X) Aᴴ r id r Function.bijective_id]
+  have hleft : A.submatrix r id * X = (A * X).submatrix r id :=
+    (submatrix_mul A X r id id Function.bijective_id).symm
+  rw [hleft]
+  rw [conjTranspose_submatrix]
+  exact (submatrix_mul (A * X) Aᴴ r id r Function.bijective_id).symm
 
 end Matrix
 

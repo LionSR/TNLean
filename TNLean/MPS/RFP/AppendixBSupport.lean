@@ -877,7 +877,9 @@ theorem AppendixBStructuralData.twoSiteBasicSupportProjection_idempotent
     hStruct.twoSiteBasicSupportProjection * hStruct.twoSiteBasicSupportProjection =
       hStruct.twoSiteBasicSupportProjection := by
   rw [hStruct.twoSiteBasicSupportProjection_eq_complement]
-  exact (parentInteraction_idempotent hStruct.coreTensor 2).one_sub
+  change IsIdempotentElem (1 - parentInteraction hStruct.coreTensor 2)
+  exact (show IsIdempotentElem (parentInteraction hStruct.coreTensor 2) from
+    parentInteraction_idempotent hStruct.coreTensor 2).one_sub
 
 /-- The range of the support projector is the range of the bond-insertion
 embedding \(U^{\otimes2}I_\varphi\).

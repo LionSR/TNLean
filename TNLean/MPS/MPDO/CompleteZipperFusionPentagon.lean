@@ -327,13 +327,16 @@ noncomputable def twoEdgeInversePrintedFMatrix (a b c d e : Λ) :
   Fus.pairToLeftAssocInversePrintedFMatrix a b c d e *
     Fus.rightAssocToPairInversePrintedFMatrix a b c d e
 
-private theorem rectangular_inverse_unique {l m : Type*} [Fintype l] [Fintype m]
+private theorem rectangular_inverse_unique {l m : Type*}
+    [Fintype l] [Fintype m] [DecidableEq l] [DecidableEq m]
     (A C : Matrix l m ℂ) (B : Matrix m l ℂ) (hAB : A * B = 1) (hBC : B * C = 1) :
     A = C := by
   calc
-    A = A * (B * C) := by rw [hBC, Matrix.mul_one]
-    _ = (A * B) * C := by rw [Matrix.mul_assoc]
-    _ = C := by rw [hAB, Matrix.one_mul]
+    A = A * 1 := (Matrix.mul_one A).symm
+    _ = A * (B * C) := congrArg (A * ·) hBC.symm
+    _ = (A * B) * C := (Matrix.mul_assoc A B C).symm
+    _ = 1 * C := congrArg (· * C) hAB
+    _ = C := Matrix.one_mul C
 
 private theorem rightAssocToMiddleInverse_mul_middleToRightAssoc
     (a b c d e : Λ) :
@@ -835,16 +838,48 @@ theorem threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix
   have hThreeLeft :
       Fus.threeEdgeInversePrintedFMatrix a b c d e *
         Fus.threeEdgePrintedFMatrix a b c d e = 1 := by
-    simp only [threeEdgeInversePrintedFMatrix, threeEdgePrintedFMatrix,
-      Matrix.mul_assoc, Fus.rightAssocToMiddleInverse_mul_middleToRightAssoc,
-      Matrix.one_mul, Fus.middleToLeftInnerInverse_mul_leftInnerToMiddle,
-      Matrix.mul_one, Fus.leftInnerToLeftAssocInverse_mul_leftAssocToLeftInner]
+    calc
+      Fus.threeEdgeInversePrintedFMatrix a b c d e *
+          Fus.threeEdgePrintedFMatrix a b c d e =
+        Fus.leftInnerToLeftAssocInversePrintedFMatrix a b c d e *
+          (Fus.middleToLeftInnerInversePrintedFMatrix a b c d e *
+            ((Fus.rightAssocToMiddleInversePrintedFMatrix a b c d e *
+                Fus.middleToRightAssocPrintedFMatrix a b c d e) *
+              Fus.leftInnerToMiddlePrintedFMatrix a b c d e) *
+            Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e) := by
+              simp only [threeEdgeInversePrintedFMatrix,
+                threeEdgePrintedFMatrix, Matrix.mul_assoc]
+      _ = Fus.leftInnerToLeftAssocInversePrintedFMatrix a b c d e *
+          (Fus.middleToLeftInnerInversePrintedFMatrix a b c d e *
+            Fus.leftInnerToMiddlePrintedFMatrix a b c d e) *
+          Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e := by
+            rw [Fus.rightAssocToMiddleInverse_mul_middleToRightAssoc,
+              Matrix.one_mul]
+            simp only [Matrix.mul_assoc]
+      _ = Fus.leftInnerToLeftAssocInversePrintedFMatrix a b c d e *
+          Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e := by
+            rw [Fus.middleToLeftInnerInverse_mul_leftInnerToMiddle,
+              Matrix.mul_one]
+      _ = 1 := Fus.leftInnerToLeftAssocInverse_mul_leftAssocToLeftInner
+        a b c d e
   have hTwoRight :
       Fus.twoEdgePrintedFMatrix a b c d e *
         Fus.twoEdgeInversePrintedFMatrix a b c d e = 1 := by
-    simp only [twoEdgePrintedFMatrix, twoEdgeInversePrintedFMatrix,
-      Matrix.mul_assoc, Fus.leftAssocToPair_mul_pairToLeftAssocInverse,
-      Matrix.one_mul, Fus.pairToRightAssoc_mul_rightAssocToPairInverse]
+    calc
+      Fus.twoEdgePrintedFMatrix a b c d e *
+          Fus.twoEdgeInversePrintedFMatrix a b c d e =
+        Fus.pairToRightAssocPrintedFMatrix a b c d e *
+          ((Fus.leftAssocToPairPrintedFMatrix a b c d e *
+              Fus.pairToLeftAssocInversePrintedFMatrix a b c d e) *
+            Fus.rightAssocToPairInversePrintedFMatrix a b c d e) := by
+              simp only [twoEdgePrintedFMatrix,
+                twoEdgeInversePrintedFMatrix, Matrix.mul_assoc]
+      _ = Fus.pairToRightAssocPrintedFMatrix a b c d e *
+          Fus.rightAssocToPairInversePrintedFMatrix a b c d e := by
+            rw [Fus.leftAssocToPair_mul_pairToLeftAssocInverse,
+              Matrix.one_mul]
+      _ = 1 := Fus.pairToRightAssoc_mul_rightAssocToPairInverse
+        a b c d e
   have hThreeRight :
       Fus.threeEdgePrintedFMatrix a b c d e *
         Fus.twoEdgeInversePrintedFMatrix a b c d e = 1 := by

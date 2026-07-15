@@ -219,7 +219,7 @@ private noncomputable def edgePartialProduct
     Matrix.one_apply]
   rw [Fintype.prod_boole]
   congr 1
-  exact funext_iff
+  exact propext funext_iff.symm
 
 @[simp] private theorem edgePartialProduct_univ
     (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
