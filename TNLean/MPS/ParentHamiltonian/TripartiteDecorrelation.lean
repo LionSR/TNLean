@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.MarginalSupportAbsorption
 import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
 import Mathlib.Data.Matrix.Basis
+import Mathlib.LinearAlgebra.Complex.Module
 
 /-!
 # Tripartite support projectors for decorrelation
@@ -313,45 +314,6 @@ def IsDecorrelated (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) : Prop :=
   ∀ OA : Matrix A A ℂ, ∀ OB : Matrix B B ℂ,
     P * liftA OA * (1 - P) * liftB OB * P = 0
 
-private noncomputable def hermitianPart
-    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) : Matrix ι ι ℂ :=
-  (1 / 2 : ℂ) • (M + Mᴴ)
-
-private noncomputable def imaginaryHermitianPart
-    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) : Matrix ι ι ℂ :=
-  (Complex.I / 2 : ℂ) • (Mᴴ - M)
-
-private theorem hermitianPart_isHermitian
-    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) :
-    (hermitianPart M).IsHermitian := by
-  rw [Matrix.IsHermitian, hermitianPart, Matrix.conjTranspose_smul,
-    Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose]
-  simp
-  abel
-
-private theorem imaginaryHermitianPart_isHermitian
-    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) :
-    (imaginaryHermitianPart M).IsHermitian := by
-  rw [Matrix.IsHermitian, imaginaryHermitianPart, Matrix.conjTranspose_smul,
-    Matrix.conjTranspose_sub, Matrix.conjTranspose_conjTranspose]
-  have hI : star (Complex.I / 2 : ℂ) = -(Complex.I / 2) := by
-    apply Complex.ext <;> norm_num
-  rw [hI]
-  ext i j
-  simp [sub_eq_add_neg]
-  ring
-
-private theorem matrix_eq_hermitianPart_add_I_smul
-    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) :
-    M = hermitianPart M + Complex.I • imaginaryHermitianPart M := by
-  have hI : Complex.I * (Complex.I / 2 : ℂ) = -(1 : ℂ) / 2 := by
-    rw [div_eq_mul_inv, ← mul_assoc, Complex.I_mul_I]
-    ring
-  ext i j
-  simp [hermitianPart, imaginaryHermitianPart, smul_add, smul_smul, hI,
-    sub_eq_add_neg]
-  ring
-
 private theorem liftA_add (M N : Matrix A A ℂ) :
     liftA (X := X) (B := B) (M + N) = liftA M + liftA N := by
   exact map_add (Matrix.leftKroneckerEmbed (m := A) (n := X × B)) M N
@@ -379,16 +341,27 @@ theorem isObservableDecorrelated_iff
     IsObservableDecorrelated P ↔ IsDecorrelated P := by
   constructor
   · intro hobs OA OB
-    let HA := hermitianPart OA
-    let KA := imaginaryHermitianPart OA
-    let HB := hermitianPart OB
-    let KB := imaginaryHermitianPart OB
-    have hHA : HA.IsHermitian := hermitianPart_isHermitian OA
-    have hKA : KA.IsHermitian := imaginaryHermitianPart_isHermitian OA
-    have hHB : HB.IsHermitian := hermitianPart_isHermitian OB
-    have hKB : KB.IsHermitian := imaginaryHermitianPart_isHermitian OB
-    rw [matrix_eq_hermitianPart_add_I_smul OA,
-      matrix_eq_hermitianPart_add_I_smul OB]
+    let HA : Matrix A A ℂ := realPart OA
+    let KA : Matrix A A ℂ := imaginaryPart OA
+    let HB : Matrix B B ℂ := realPart OB
+    let KB : Matrix B B ℂ := imaginaryPart OB
+    have hHA : HA.IsHermitian := by
+      rw [Matrix.IsHermitian]
+      exact (realPart OA).2
+    have hKA : KA.IsHermitian := by
+      rw [Matrix.IsHermitian]
+      exact (imaginaryPart OA).2
+    have hHB : HB.IsHermitian := by
+      rw [Matrix.IsHermitian]
+      exact (realPart OB).2
+    have hKB : KB.IsHermitian := by
+      rw [Matrix.IsHermitian]
+      exact (imaginaryPart OB).2
+    have hOA : OA = HA + Complex.I • KA :=
+      (realPart_add_I_smul_imaginaryPart OA).symm
+    have hOB : OB = HB + Complex.I • KB :=
+      (realPart_add_I_smul_imaginaryPart OB).symm
+    rw [hOA, hOB]
     simp only [liftA_add, liftA_smul, liftB_add, liftB_smul,
       Matrix.mul_add, Matrix.add_mul, Matrix.mul_smul, Matrix.smul_mul]
     rw [hobs HA HB hHA hHB, hobs HA KB hHA hKB,
