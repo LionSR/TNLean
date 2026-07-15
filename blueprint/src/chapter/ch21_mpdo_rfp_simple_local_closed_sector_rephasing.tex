@@ -13,9 +13,8 @@
         \qquad
         (r_k|_{\gamma}:=\tr\left[(r_k)_{\gamma}\right].
     \]
-    These are the closed tensors displayed in
-    \cite[Appendix~C.2, lines~1473--1477]{Cirac2016MPDO_arXiv} and depicted
-    in Figure~\ref{fig:mpdo_sector_pairing}.
+    These are the closed tensors of
+    \cite[Appendix~C.2, lines~1473--1477]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Closed-sector pairing operator]
@@ -281,14 +280,13 @@
     This is immediate from the definition of $\eta_{k,h}$.
 \end{proof}
 
-\begin{figure}[ht]
-    \centering
+Neighboring right and left sector tensors meet in the bond operator
+$\eta_{k,h}=r_k l_h$:
+\begin{center}
     \TNEtaSectorDecomposition
-    \caption{Neighboring right and left sector tensors meet in the bond
-    operator $\eta_{k,h}=r_k l_h$, as in
-    \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_eta_sector_decomposition}
-\end{figure}
+\end{center}
+This is the contraction in
+\cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[Cyclic contraction of the sector tensors]
     \label{thm:mpdo_cyclic_sector_contraction}
@@ -490,16 +488,6 @@
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}. It does not
     assert that the individual neighboring operators are positive.
 \end{theorem}
-
-\begin{figure}[ht]
-    \centering
-    \TNMPDOSectorAdaptedDecomposition
-    \caption{The closed MPO in sector-adapted coordinates is a direct sum of
-    cyclic products of neighboring operators. The diagram represents only
-    this algebraic decomposition; no positivity is asserted. Compare
-    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_sector_adapted_decomposition}
-\end{figure}
 
 \begin{proof}
     \leanok

@@ -27,11 +27,11 @@
             inner sep=0.055cm
         },
     tn theme insertion/.style={
-            draw,
-            fill,
+            draw=red!75!black,
+            fill=red!28,
+            text=black,
             shape=circle,
-            inner sep=0.055cm,
-            red
+            inner sep=0.055cm
         },
     tn theme junction/.style={
             fill,
@@ -70,7 +70,11 @@
     tn theme physical wire/.style={line width=0.7pt},
     tn theme trace/.style={rounded corners=3pt},
     tn theme factor region/.style={draw=black!65, rounded corners=2pt},
-    tn theme grouping region/.style={densely dashed, rounded corners=2pt},
+    tn theme grouping region/.style={
+            draw=black!65,
+            densely dashed,
+            rounded corners=2pt
+        },
     tn theme annotation/.style={draw=black!65, line width=0.4pt},
     tn theme label/.style={},
     % Semantic node classes.  Their names and meanings are theme-independent.
@@ -148,26 +152,71 @@
         execute at begin picture={\global\advance\TN@pictureid by 1\relax}
     }}
 
-% Universal layout parameters.  Complete diagrams may scale the surrounding
-% picture, but constructions should use these names rather than repeat the
-% corresponding numerical distances.  A layer pitch is the displacement of
-% one layer from the midline; paired layers therefore lie two pitches apart.
-\def\TN@layerpitch{0.50}
-\def\TN@virtualleglen{0.60}
-\def\TN@physicalleglen{0.42}
-\def\TN@traceclearance{0.42}
-\def\TN@busoffset{1.10}
-\def\TN@buspitch{0.40}
-\def\TN@branchfirstfraction{0.28}
-\def\TN@branchsecondfraction{0.72}
+% Universal layout parameters.  Complete diagrams select a named layout
+% profile; constructions use these names rather than repeat numerical
+% distances.  A layer pitch is the displacement of one layer from the
+% midline; paired layers therefore lie two pitches apart.
+% A layout profile fixes all repeated local distances.  The normal profile is
+% used for structural figures; compact is used for definitions and local
+% identities.  Client diagrams select a profile by name and do not rescale or
+% shift individual atoms.
+\newcommand{\TN@normalprofile}{%
+    \def\TN@layerpitch{0.50}%
+    \def\TN@virtualleglen{0.60}%
+    \def\TN@physicalleglen{0.42}%
+    \def\TN@traceclearance{0.42}%
+    \def\TN@busoffset{1.10}%
+    \def\TN@buspitch{0.40}%
+    \def\TN@branchfirstfraction{0.28}%
+    \def\TN@branchsecondfraction{0.72}%
+    \def\TN@cellpitch{1.10}%
+    \def\TN@rowgap{0.52em}%
+    \def\TN@relationgap{0.72em}%
+    \def\TN@physlabeloff{0.68}%
+    \def\TN@labelclearance{0.24}%
+    \def\TN@annotationclearance{0.34}%
+    \def\TN@chainsep{1.45}%
+    \def\TN@chainright{4.20}%
+    \def\TN@chainellipsisx{2.82}%
+    \def\TN@gaugeradius{0.74}%
+    \def\TN@gaugediagonal{0.54}%
+}
 
-% Compatibility names used by the established library constructions.
+\newcommand{\TN@compactprofile}{%
+    \def\TN@layerpitch{0.40}%
+    \def\TN@virtualleglen{0.48}%
+    \def\TN@physicalleglen{0.34}%
+    \def\TN@traceclearance{0.34}%
+    \def\TN@busoffset{0.88}%
+    \def\TN@buspitch{0.32}%
+    \def\TN@branchfirstfraction{0.30}%
+    \def\TN@branchsecondfraction{0.70}%
+    \def\TN@cellpitch{0.90}%
+    \def\TN@rowgap{0.40em}%
+    \def\TN@relationgap{0.56em}%
+    \def\TN@physlabeloff{0.56}%
+    \def\TN@labelclearance{0.24}%
+    \def\TN@annotationclearance{0.28}%
+    \def\TN@chainsep{1.18}%
+    \def\TN@chainright{3.42}%
+    \def\TN@chainellipsisx{2.30}%
+    \def\TN@gaugeradius{0.62}%
+    \def\TN@gaugediagonal{0.45}%
+}
+
+\tikzset{
+    tn layout profile/.is choice,
+    tn layout profile/normal/.code={\TN@normalprofile},
+    tn layout profile/compact/.code={\TN@compactprofile}
+}
+
+\newcommand{\TNLayoutProfile}[1]{\tikzset{tn layout profile=#1}}
+
+% Select the sole default at load time.  The compatibility names below are
+% aliases, not a second set of numerical parameters.
+\TNLayoutProfile{normal}
 \def\TN@physleglen{\TN@physicalleglen}
-\def\TN@physlabeloff{0.68}
 \def\TN@doublelayersep{\TN@layerpitch}
-\def\TN@chainsep{1.45}
-\def\TN@chainright{4.20}
-\def\TN@chainellipsisx{2.82}
 
 % ---------- Semantic nodes ----------
 
@@ -216,7 +265,10 @@
 }
 
 \newcommand{\TN@labeledinsertion}[4][]{%
-    \TN@node[#1]{tn insertion node}{#2}{#3}{$#4$}%
+    \TN@node[#1]{tn insertion node}{#2}{#3}{}%
+    \if\relax\detokenize{#4}\relax\else
+        \TN@label[anchor=south]{#2.north}{(0,\TN@labelclearance)}{#4}%
+    \fi
 }
 
 \newcommand{\TN@junction}[3][]{%
@@ -261,6 +313,22 @@
                 {Only two virtual ports, two physical ports, or two morphism
                  ports may be joined.}%
         \fi
+    }%
+}
+
+% A checked alias retains both the position and the registered type of the
+% original port.  It is used when one atom exposes both an object-independent
+% role (for example Combined) and a theorem-specific role (for example MPO).
+\newcommand{\TN@aliasport}[2]{%
+    \@ifundefined{TN@porttype@\the\TN@pictureid @#2}{%
+        \PackageError{tnlean-tikz}{Cannot alias undeclared port `#2'}
+            {Declare the source port before calling \string\TNPortAlias.}%
+    }{%
+        \coordinate (#1) at (#2);%
+        \edef\TN@aliasedporttype{\csname
+            TN@porttype@\the\TN@pictureid @#2\endcsname}%
+        \expandafter\xdef\csname
+            TN@porttype@\the\TN@pictureid @#1\endcsname{\TN@aliasedporttype}%
     }%
 }
 
@@ -448,6 +516,18 @@
     \draw[tn virtual wire,rounded corners=3pt,#1] (#2) |- (#3);%
 }
 
+\newcommand{\TN@pconnectportshv}[3][]{%
+    \TN@assertporttype{#2}{physical}%
+    \TN@assertporttype{#3}{physical}%
+    \draw[tn physical wire,rounded corners=3pt,#1] (#2) -| (#3);%
+}
+
+\newcommand{\TN@pconnectportsvh}[3][]{%
+    \TN@assertporttype{#2}{physical}%
+    \TN@assertporttype{#3}{physical}%
+    \draw[tn physical wire,rounded corners=3pt,#1] (#2) |- (#3);%
+}
+
 \newcommand{\TN@mconnectports}[3][]{%
     \TN@assertporttype{#2}{morphism}%
     \TN@assertporttype{#3}{morphism}%
@@ -458,6 +538,32 @@
     \TN@assertporttype{#2}{morphism}%
     \TN@assertporttype{#3}{morphism}%
     \TN@connectpoints[#1]{tn comparison arrow}{#2}{#3}%
+}
+
+\newcommand{\TN@mconnectportshv}[3][]{%
+    \TN@assertporttype{#2}{morphism}%
+    \TN@assertporttype{#3}{morphism}%
+    \draw[tn morphism arrow,rounded corners=3pt,#1] (#2) -| (#3);%
+}
+
+\newcommand{\TN@mconnectportsvh}[3][]{%
+    \TN@assertporttype{#2}{morphism}%
+    \TN@assertporttype{#3}{morphism}%
+    \draw[tn morphism arrow,rounded corners=3pt,#1] (#2) |- (#3);%
+}
+
+\newcommand{\TN@labeledmorphism}[4]{%
+    \TN@mterminal{#1From}{#2}%
+    \TN@mterminal{#1To}{#3}%
+    \draw[tn morphism arrow] (#1From) --
+        node[midway,above,tn label] {$#4$} (#1To);%
+}
+
+\newcommand{\TN@labeledcomparison}[4]{%
+    \TN@mterminal{#1From}{#2}%
+    \TN@mterminal{#1To}{#3}%
+    \draw[tn comparison arrow] (#1From) --
+        node[midway,above,tn label] {$#4$} (#1To);%
 }
 
 \newcommand{\TN@vconnect}[5][]{%
@@ -682,6 +788,12 @@
 
 % ---------- Semantic regions ----------
 
+% A complete diagram may reserve a rectangular canvas independently of its
+% ink.  This fixes uniform outer margins without exposing a client-side path.
+\newcommand{\TN@canvas}[2]{%
+    \path[use as bounding box] #1 rectangle #2;%
+}
+
 \newcommand{\TN@region}[5][]{%
     \begin{scope}[on background layer]
         \node[#2, fit=#4, inner sep=4pt, #1] (#3) {#5};%
@@ -690,6 +802,18 @@
 
 \newcommand{\TN@groupregion}[4][]{%
     \TN@region[#1]{tn grouping region}{#2}{#3}{#4}%
+}
+
+\newcommand{\TN@groupregionabove}[3]{%
+    \TN@groupregion{#1}{#2}{}%
+    \TN@label[anchor=south]
+        {#1.north}{(0,\TN@annotationclearance)}{#3}%
+}
+
+\newcommand{\TN@groupregionselectedbelow}[3]{%
+    \TN@groupregion{#1}{#2}{}%
+    \TN@label[anchor=north,tn region label selected]
+        {#1.south}{(0,-\TN@annotationclearance)}{#3}%
 }
 
 \newcommand{\TN@factorregion}[4][]{%
