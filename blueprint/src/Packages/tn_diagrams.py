@@ -50,6 +50,7 @@ _RENDER_SOURCE_FILES = (
 _TEMPLATE_FILE = _SRC_DIR / "plastex_templates/TensorNetworkDiagrams.jinja2s"
 _SLIDE_DIR = _REPO_ROOT / "docs/slides"
 _SLIDE_LIBRARY = _SLIDE_DIR / "tn_library_dark.tex"
+_GRAMMAR_FILE = _REPO_ROOT / "docs/tn_diagram_grammar.md"
 
 _LITERAL_COORDINATE_PATTERN = re.compile(
     r"(?<![A-Za-z])\((-?\d+(?:\.\d+)?(?:cm)?),"
@@ -449,6 +450,66 @@ def _assert_no_raw_glyph_nodes() -> None:
         raise RuntimeError(
             "Raw tensor-network glyph appearance is forbidden outside semantic "
             "node constructors: " + _abbreviate_locations(violations)
+        )
+
+
+def _assert_documented_public_vocabulary() -> None:
+    """Keep the mathematical style guide synchronized with the TeX API."""
+
+    source = _GRAMMAR_FILE.read_text(encoding="utf-8")
+    begin_marker = "<!-- TN-PUBLIC-VOCABULARY:BEGIN -->"
+    end_marker = "<!-- TN-PUBLIC-VOCABULARY:END -->"
+    if source.count(begin_marker) != 1 or source.count(end_marker) != 1:
+        raise RuntimeError(
+            "docs/tn_diagram_grammar.md must contain one checked public-"
+            "vocabulary block."
+        )
+    block = source.split(begin_marker, 1)[1].split(end_marker, 1)[0]
+    documented = set(re.findall(r"`(TN[A-Za-z0-9]+)`", block))
+
+    implementation = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in (_TN_CORE_FILE, _TN_LIBRARY_FILE)
+    )
+    defined_commands = set(
+        re.findall(
+            r"\\(?:newcommand|renewcommand)\{\\(TN(?!@)[A-Za-z0-9]+)\}",
+            implementation,
+        )
+    )
+    defined_environments = set(
+        re.findall(
+            r"\\(?:newenvironment|NewDocumentEnvironment)\{(TN[A-Za-z0-9]+)\}",
+            implementation,
+        )
+    )
+    declared_atoms = set(_ATOM_DECLARATIONS)
+    declared_diagrams = set(_DIAGRAM_DECLARATIONS)
+    known = defined_commands | defined_environments | declared_atoms | declared_diagrams
+
+    missing_atoms = sorted(declared_atoms - documented)
+    stale = sorted(documented - known)
+    forbidden = {
+        "TNPoint",
+        "TNPointBetween",
+        "TNLabel",
+        "TNPlacedLabel",
+        "TNCanvas",
+        "TNGroupBoundary",
+        "TNFactorBoundary",
+        "TNAnnotation",
+        "TNSelectedPath",
+        "TNSecondaryPath",
+        "TNSelectedRegionPath",
+        "TNSecondaryRegionPath",
+        "TNComplementRegionPath",
+    }
+    documented_escape_hatches = sorted(documented & forbidden)
+    if missing_atoms or stale or documented_escape_hatches:
+        raise RuntimeError(
+            "The checked tensor-network vocabulary is inconsistent "
+            f"(missing_atoms={missing_atoms}, stale={stale}, "
+            f"escape_hatches={documented_escape_hatches})."
         )
 
 
@@ -1329,6 +1390,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
     _assert_no_chapter_local_tikz()
     _assert_typed_port_syntax()
     _assert_no_raw_glyph_nodes()
+    _assert_documented_public_vocabulary()
 
     counts = _semantic_audit_counts()
     raw_glyph_counts = counts["raw_glyph_counts"]
@@ -1719,7 +1781,7 @@ def _dvisvgm_command(stem: str, ext: str, svg_path: Path) -> list[str]:
         shutil.which("dvisvgm") or "dvisvgm",
         "--no-fonts",
         "--exact",
-        "--bbox=2pt",
+        "--bbox=3pt",
         f"--output={svg_path}",
     ]
     if ext == "pdf":
