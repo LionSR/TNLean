@@ -152,6 +152,9 @@ private theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ
 sites gives the original closed chain of length `N * L`, after the canonical
 identification of blocked configurations with unblocked configurations.
 
+The algebraic identity holds for every natural `L`; its interpretation as
+blocking adjacent physical sites requires `L > 0`.
+
 This is the finite-index form of the physical blocking used when placing the
 one-site tensor and its two-site blocking in vertical canonical form in
 arXiv:1606.00608, Appendix C.4, lines 1952--2017. -/
@@ -168,8 +171,8 @@ theorem mpo_blockTensor_eq_reindex (M : MPOTensor d D) (L N : ℕ) :
 
 For positive `L`, this is the blocking operation used throughout the vertical
 canonical-form comparison of arXiv:1606.00608, Appendix C.4, lines 1952--2017.
-The algebraic definition is total at `L = 0`, where the same conclusion also
-holds but has no physical interpretation as a blocking operation. -/
+The statement holds for every natural `L`; `L = 0` is only the formal base
+value of the algebraic definitions, not a physical blocking operation. -/
 theorem IsMPDO.blockTensor {M : MPOTensor d D} (hM : IsMPDO M) (L : ℕ) :
     IsMPDO (blockTensor M L) := by
   intro N
