@@ -33,6 +33,7 @@ docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 * `MPOTensor.TranslationInvariantBondData`
 * `MPOTensor.EtaLocalStructureData`
 * `MPOTensor.hasCommutingForm_of_etaLocalStructure`
+* `MPOTensor.hasCommutingBondProduct_of_etaLocalStructure`
 * `MPOTensor.hasGSNNCHForm_of_etaLocalStructure`
 * `MPOTensor.hasCommutingBondProductWithZCL_of_etaLocalStructure`
 
