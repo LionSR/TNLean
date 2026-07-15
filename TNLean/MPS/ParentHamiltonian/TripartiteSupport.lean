@@ -23,8 +23,8 @@ the absorption property of the projector onto the support of a marginal.
 
 ## References
 
-* arXiv:1606.00608, Appendix D.2, lines 2225--2235, especially equations
-  `varphiPAXB` and `Propproj`.
+* arXiv:1606.00608, Appendix D.2, lines 2225--2235: the bipartite state
+  identity and the support-projector absorption identity.
 -/
 
 open scoped Matrix ComplexOrder Kronecker
@@ -58,9 +58,11 @@ theorem trace_leftKroneckerEmbed_mul
 /-- The lifted support projector of the right partial trace fixes a positive
 semidefinite bipartite operator on the left.
 
-This is the operator form of the first equality in equation `Propproj` of
-arXiv:1606.00608, Appendix D.2, lines 2225--2235.  Taking the left factor to be
-\(A\otimes X\) and the right factor to be \(B\) gives
+This is the operator form of the left support-projector absorption identity in
+arXiv:1606.00608, Appendix D.2, lines 2225--2235.  The source takes \(\rho\) to
+be the orthogonal projector \(P_{AXB}\); the same argument holds for every
+positive semidefinite \(\rho\).  Taking the left factor to be \(A\otimes X\)
+and the right factor to be \(B\) gives
 \((P_{AX}\otimes\mathbf 1_B)P_{AXB}=P_{AXB}\). -/
 theorem PosSemidef.leftKroneckerEmbed_supportProj_mul_self
     {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef) :
@@ -73,22 +75,16 @@ theorem PosSemidef.leftKroneckerEmbed_supportProj_mul_self
   set Q : Matrix L L ℂ := 1 - P with hQ
   have hQherm : Q.IsHermitian := by
     rw [hQ]
-    exact Matrix.isHermitian_one.sub hσpos.isHermitian.supportProj_isHermitian
-  have hPidem : P * P = P := by
-    rw [hP]
-    exact hσpos.isHermitian.supportProj_idem
+    exact hσpos.isHermitian.one_sub_supportProj_isHermitian
   have hQidem : Q * Q = Q := by
-    calc
-      Q * Q = 1 - P - P + P * P := by rw [hQ]; noncomm_ring
-      _ = Q := by rw [hPidem, hQ]; abel
-  have hPσ : P * σ = σ := by
-    rw [hP]
-    exact hσpos.isHermitian.supportProj_mul_self
+    rw [hQ, hP]
+    exact hσpos.isHermitian.one_sub_supportProj_idem
   have hQσ : Q * σ = 0 := by
-    rw [hQ, Matrix.sub_mul, Matrix.one_mul, hPσ, sub_self]
+    rw [hQ, hP]
+    exact hσpos.isHermitian.one_sub_supportProj_mul_self
   have hliftQherm : (leftKroneckerEmbed (n := R) Q).IsHermitian := by
-    rw [Matrix.IsHermitian, leftKroneckerEmbed_apply, Matrix.conjTranspose_kronecker,
-      hQherm.eq, Matrix.conjTranspose_one]
+    change (leftKroneckerEmbed (n := R) Q)ᴴ = leftKroneckerEmbed (n := R) Q
+    rw [← star_eq_conjTranspose, ← map_star, star_eq_conjTranspose, hQherm.eq]
   have hliftQidem :
       leftKroneckerEmbed (n := R) Q * leftKroneckerEmbed (n := R) Q =
         leftKroneckerEmbed (n := R) Q := by
@@ -107,8 +103,8 @@ theorem PosSemidef.leftKroneckerEmbed_supportProj_mul_self
 positive semidefinite bipartite operator on the right.
 
 Together with `PosSemidef.leftKroneckerEmbed_supportProj_mul_self`, this proves
-both equalities in equation `Propproj` of arXiv:1606.00608, Appendix D.2,
-lines 2228--2235, for the \(AX|B\) bipartition. -/
+both support-projector absorption identities of arXiv:1606.00608,
+Appendix D.2, lines 2228--2235, for the \(AX|B\) bipartition. -/
 theorem PosSemidef.mul_leftKroneckerEmbed_supportProj_self
     {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef) :
     ρ * leftKroneckerEmbed (n := R)
@@ -117,9 +113,10 @@ theorem PosSemidef.mul_leftKroneckerEmbed_supportProj_self
   have hliftHerm :
       (leftKroneckerEmbed (n := R)
         (Matrix.PosSemidef.partialTraceRight hρ).isHermitian.supportProj).IsHermitian := by
-    rw [Matrix.IsHermitian, leftKroneckerEmbed_apply, Matrix.conjTranspose_kronecker,
-      (Matrix.PosSemidef.partialTraceRight hρ).isHermitian.supportProj_isHermitian.eq,
-      Matrix.conjTranspose_one]
+    change (leftKroneckerEmbed (n := R)
+      (Matrix.PosSemidef.partialTraceRight hρ).isHermitian.supportProj)ᴴ = _
+    rw [← star_eq_conjTranspose, ← map_star, star_eq_conjTranspose,
+      (Matrix.PosSemidef.partialTraceRight hρ).isHermitian.supportProj_isHermitian.eq]
   have h := congrArg Matrix.conjTranspose hleft
   rwa [Matrix.conjTranspose_mul, hρ.isHermitian.eq, hliftHerm.eq] at h
 
