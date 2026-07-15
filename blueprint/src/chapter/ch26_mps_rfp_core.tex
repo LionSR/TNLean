@@ -1203,13 +1203,25 @@
 % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:rfp_directSumTensor_iff}
+    \uses{thm:rfp_directSumTensor_iff,
+        thm:postblocked_representative_grouped_insert_eq,
+        thm:primitive_iff_period_one,
+        thm:normal_tp_primitive_irred}
     Positive basis dimensions supply the nonzero bond spaces.  For each basis
     tensor, irreducibility and left-canonical normalization are part of the BNT
-    canonical form.  Its normalized self-overlap converges to one; the periodic
-    self-overlap formula therefore forces peripheral period one, and hence
-    normality.  Gauge-phase distinctness is also part of the BNT canonical
-    form.  The equivalence now follows from
+    canonical form.  If $m_j>0$ is the peripheral period of $B_j$, the
+    normalized self-overlap hypothesis and the periodic self-overlap formula
+    used in Theorem~\ref{thm:postblocked_representative_grouped_insert_eq} give,
+    along the same subsequence,
+    \[
+        \lim_{k\to\infty}O_{B_jB_j}(m_jk)=1,
+        \qquad
+        \lim_{k\to\infty}O_{B_jB_j}(m_jk)=m_j.
+    \]
+    Hence $m_j=1$.  The transfer map is primitive by
+    Theorem~\ref{thm:primitive_iff_period_one}, and normality follows from
+    Theorem~\ref{thm:normal_tp_primitive_irred}.  Gauge-phase distinctness is
+    also part of the BNT canonical form.  The equivalence now follows from
     Theorem~\ref{thm:rfp_directSumTensor_iff}; the same derived hypotheses in
     Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum} give the residual
     isometry family.
