@@ -99,6 +99,8 @@
 
 % ---------- Public semantic macros ----------
 
+\input{tn_motifs_mpdo.tex} % chktex 27 (resolved within the TikZ library directory)
+
 \TNDeclareDiagram
     {TNTikZDiagram}
     {name,rendered_body}
@@ -115,7 +117,7 @@
     {\TNMPSLocal{A}{i}}
     {chapter/ch02_mps.tex}{%
     \begin{TNDiagram}[compact]
-        \TNMPSSite{tnA}{(0,0)}{#1}
+        \TNMPSSite{tnA}{at=origin}{#1}
         \TNOpenVirtualWest{tnAWest}
         \TNOpenVirtualEast{tnAEast}
         \TNOpenPhysicalNorth{tnAKet}
@@ -131,9 +133,10 @@
     {\TNMPSWord{A}{i}{k}{L}}
     {chapter/ch02_mps.tex}{%
     \begin{TNDiagram}[compact]
-        \TNMPSSite{tnL}{(0,0)}{}
-        \TNMPSSite{tnM}{(1.35,0)}{}
-        \TNMPSSite{tnR}{(4.05,0)}{}
+        \TNMPSSite{tnL}{at=origin}{}
+        \TNMPSSite{tnM}{right=of tnL}{}
+        \TNOmission{tnWordOmission}{right=of tnM}
+        \TNMPSSite{tnR}{right=of tnWordOmission}{}
         \TNConnectVirtual{tnLEast}{tnMWest}
         \TNOpenVirtualWest{tnLWest}
         \TNOpenVirtualEast{tnMEast}
@@ -144,9 +147,8 @@
         \TNOpenPhysicalNorth{tnRKet}
         \TNLabelAbove{tnLKetOpen}{#2}
         \TNLabelAbove{tnRKetOpen}{#3}
-        \TNPlacedLabel{tnWordEllipsis}{(2.70,0)}{\cdots} % chktex 11
-        \TNPlacedLabel{tnWordLength}{(2.70,-0.56)}{#4}
-        \TNPlacedLabelLeft{tnWordName}{(-0.85,0)}{#1}
+        \TNLabelBelow{tnWordOmission}{#4}
+        \TNLabelLeft{tnL}{#1}
     \end{TNDiagram}%
 }
 
@@ -158,9 +160,10 @@
     {\TNMPV{A}{i}{k}{L}}
     {chapter/ch02_mps.tex}{%
     \begin{TNDiagram}[compact]
-        \TNMPSSite{tnL}{(0,0)}{}
-        \TNMPSSite{tnM}{(1.35,0)}{}
-        \TNMPSSite{tnR}{(4.05,0)}{}
+        \TNMPSSite{tnL}{at=origin}{}
+        \TNMPSSite{tnM}{right=of tnL}{}
+        \TNOmission{tnMPVOmission}{right=of tnM}
+        \TNMPSSite{tnR}{right=of tnMPVOmission}{}
         \TNConnectVirtual{tnLEast}{tnMWest}
         \TNOpenVirtualEast{tnMEast}
         \TNOpenVirtualWest{tnRWest}
@@ -170,9 +173,8 @@
         \TNTraceVirtualBelow{tnLWest}{tnREast}
         \TNLabelAbove{tnLKetOpen}{#2}
         \TNLabelAbove{tnRKetOpen}{#3}
-        \TNPlacedLabel{tnMPVEllipsis}{(2.70,0)}{\cdots} % chktex 11
-        \TNPlacedLabelLeft{tnMPVName}{(-0.85,0)}{#1}
-        \TNPlacedLabel{tnMPVLength}{(2.70,-0.70)}{#4}
+        \TNLabelLeft{tnL}{#1}
+        \TNLabelBelow{tnMPVOmission}{#4}
     \end{TNDiagram}%
 }
 
@@ -187,9 +189,10 @@
     {\TNBlocking{A}{i}{k}{L}}
     {chapter/ch02_mps.tex}{%
     \begin{TNDiagram}[compact]
-        \TNMPSSite{tnL}{(0,0)}{}
-        \TNMPSSite{tnM}{(1.35,0)}{}
-        \TNMPSSite{tnR}{(4.05,0)}{}
+        \TNMPSSite{tnL}{at=origin}{}
+        \TNMPSSite{tnM}{right=of tnL}{}
+        \TNOmission{tnBlockingOmission}{right=of tnM}
+        \TNMPSSite{tnR}{right=of tnBlockingOmission}{}
         \TNConnectVirtual{tnLEast}{tnMWest}
         \TNOpenVirtualWest{tnLWest}
         \TNOpenVirtualEast{tnMEast}
@@ -200,9 +203,10 @@
         \TNOpenPhysicalNorth{tnRKet}
         \TNLabelAbove{tnLKetOpen}{#2}
         \TNLabelAbove{tnRKetOpen}{#3}
-        \TNPlacedLabel{tnBlockingEllipsis}{(2.70,0)}{\cdots} % chktex 11
-        \TNPlacedLabel{tnBlockingLength}{(2.70,-0.56)}{#4}
-        \TNGroupFit{tnBlockingBoundary}{(tnL)(tnM)(tnR)}
+        \TNLabelBelow{tnBlockingOmission}{#4}
+        \TNGroupFit{tnBlockingBoundary}
+            {(tnL)(tnM)(tnBlockingOmission)(tnR)}
+        \TNLabelLeft{tnBlockingBoundary}{#1}
     \end{TNDiagram}%
 }
 
@@ -217,24 +221,7 @@
     {\TNMPVOverlap{i}{k}{L}}
     {chapter/ch02_mps.tex}{%
     \begin{TNDiagram}[compact]
-        \foreach \n/\x in {L/0,M/1.35,R/4.05} {
-            \TNMPOSite{ovu\n}{(\x,0.48)}{}
-            \TNMPOSite{ovd\n}{(\x,-0.48)}{}
-            \TNConnectPhysical{ovu\n Bra}{ovd\n Ket}
-        }
-        \TNConnectVirtual{ovuLEast}{ovuMWest}
-        \TNOpenVirtualEast{ovuMEast}
-        \TNOpenVirtualWest{ovuRWest}
-        \TNTraceVirtualAbove{ovuLWest}{ovuREast}
-        \TNConnectVirtual{ovdLEast}{ovdMWest}
-        \TNOpenVirtualEast{ovdMEast}
-        \TNOpenVirtualWest{ovdRWest}
-        \TNTraceVirtualBelow{ovdLWest}{ovdREast}
-        % single centred ellipsis in the omitted-site column (no line crosses it)
-        \TNPlacedLabel{ovuEllipsis}{(2.70,0)}{\cdots} % chktex 11
-        \TNPlacedLabelLeft{ovuUpperName}{(-0.85,0.42)}{#1}
-        \TNPlacedLabelLeft{ovuLowerName}{(-0.85,-0.42)}{\overline{#2}}
-        \TNPlacedLabel{ovuLength}{(2.70,-1.08)}{#3}
+        \TNMPDOOverlapWord{ovu}{at=origin}{#1}{#2}{#3}
     \end{TNDiagram}%
 }
 
@@ -246,15 +233,14 @@
     {\TNTransferMap{A}}
     {chapter/ch02_mps.tex}{%
     \begin{TNDiagram}[compact]
-        \TNStackedMPOProduct{tn}{(0,0)}{}{\overline{#1}}{}
+        \TNStackedMPOProduct{tn}{at=origin}{}{\overline{#1}}{}
         \TNOpenVirtualWest{tnUpperWest}
         \TNOpenVirtualWest{tnLowerWest}
         \TNOpenVirtualEast{tnUpperEast}
         \TNOpenVirtualEast{tnLowerEast}
-        \TNPlacedLabel{tnTransferInput}{(-1.18,0)}{X}
-        \TNPlacedLabel{tnTransferOutput}{(1.36,0)}{\E_{#1}(X)}
-        \TNPlacedLabel{tnTransferIndex}
-            {($(tnUpperBra)!0.5!(tnLowerKet)+(0.24,0)$)}{i}
+        \TNLabelLeft{tnCentre}{X}
+        \TNLabelRight{tnCentre}{\E_{#1}(X)}
+        \TNLabelRight{tnUpperBra}{i}
     \end{TNDiagram}%
 }
 
@@ -266,7 +252,7 @@
     {\TNMPOCell{A}{i}{j}}
     {chapter/ch20_mpdo_foundations.tex}{%
     \begin{TNDiagram}[compact]
-        \TNMPOSite{tnM}{(0,0)}{#1}
+        \TNMPOSite{tnM}{at=origin}{#1}
         \TNOpenVirtualWest{tnMWest}
         \TNOpenVirtualEast{tnMEast}
         \TNOpenPhysicalNorth{tnMKet}
@@ -300,14 +286,14 @@
     {chapter/ch20_mpdo_foundations.tex}{%
     \begin{TNEquationRow}[compact]
         \TNTerm{%
-            \TNMPOSite{purM}{(0,0)}{M}
+            \TNMPOSite{purM}{at=origin}{M}
             \TNOpenVirtualWest{purMWest}
             \TNOpenVirtualEast{purMEast}
             \TNOpenPhysicalNorth{purMKet}
             \TNOpenPhysicalSouth{purMBra}}
         \TNRelation{=}
         \TNTerm{%
-            \TNPurificationSite{pur}{(0,0)}{A}{\overline A}
+            \TNMPDOPurificationMotif{pur}{at=origin}
             \TNOpenVirtualWest{purKetWest}
             \TNOpenVirtualEast{purKetEast}
             \TNOpenVirtualWest{purBraWest}
@@ -329,15 +315,15 @@
     \begin{TNEquationRow}[compact]
         \ensuremath{M_1(X)=}
         \TNTerm{%
-            \TNMPOSite{rtsOne}{(0,0)}{M}
+            \TNMPOSite{rtsOne}{at=origin}{M}
             \TNOpenVirtualWest{rtsOneWest}
             \TNOpenVirtualEast{rtsOneEast}
             \TNOpenPhysicalNorth{rtsOneKet}
             \TNOpenPhysicalSouth{rtsOneBra}}
         \TNRelation{\xrightleftharpoons[\mathcal S]{\mathcal T}}
         \TNTerm{%
-            \TNMPOSite{rtsLeft}{(0,0)}{M}
-            \TNMPOSite{rtsRight}{(1.25,0)}{M}
+            \TNMPOSite{rtsLeft}{at=origin}{M}
+            \TNMPOSite{rtsRight}{right=of rtsLeft}{M}
             \TNOpenVirtualWest{rtsLeftWest}
             \TNConnectVirtual{rtsLeftEast}{rtsRightWest}
             \TNOpenVirtualEast{rtsRightEast}
@@ -435,31 +421,29 @@
     \begin{TNEquationRow}[compact]
         \ensuremath{\widehat{\mathcal T}^{\,2}:}
         \TNTerm{%
-            \TNFactorChainTwo{btTwo}{(0,0)}{\widehat{\cal K}}%
+            \TNMPDOFactorChainTwo{btTwo}{at=origin}{\widehat{\cal K}}%
             \TNGroupFit{btTwoBlock}{(btTwoSite1)(btTwoSite2)}%
             \TNLabelBelow{btTwoBlock.south}{\text{one blocked site}}}
         \TNRelation{\xrightarrow{\widehat{\mathcal T}}}
-        \TNTerm{\TNFactorChainThree{btThree}{(0,0)}{\widehat{\cal K}}}
+        \TNTerm{\TNMPDOFactorChainThree{btThree}{at=origin}{\widehat{\cal K}}}
         \TNRelation{\xrightarrow{\widehat{\mathcal T}_{(12)3}}}
         \TNTerm{%
-            \TNFactorChainFour{btFour}{(0,0)}{\widehat{\cal K}}%
+            \TNMPDOFactorChainFour{btFour}{at=origin}{\widehat{\cal K}}%
             \TNGroupFit{btFourLeftBlock}{(btFourSite1)(btFourSite2)}%
             \TNGroupFit{btFourRightBlock}{(btFourSite3)(btFourSite4)}%
-            \TNPointBetween{btFourBlocksLabel}
-                {btFourLeftBlock.south}{btFourRightBlock.south}%
-            \TNLabelBelow{btFourBlocksLabel}{\text{two blocked sites}}}
+            \TNLabelBelow{btFourLeftBlock.south}{\text{two blocked sites}}}
     \end{TNEquationRow}%
     \begin{TNEquationRow}[compact]
         \ensuremath{\widehat{\mathcal S}^{\,2}:}
         \TNTerm{%
-            \TNFactorChainFour{bsFour}{(0,0)}{\widehat{\cal K}}%
+            \TNMPDOFactorChainFour{bsFour}{at=origin}{\widehat{\cal K}}%
             \TNGroupFit{bsFourLeftBlock}{(bsFourSite1)(bsFourSite2)}%
             \TNGroupFit{bsFourRightBlock}{(bsFourSite3)(bsFourSite4)}}
         \TNRelation{\xrightarrow{\widehat{\mathcal S}_{(123)4}}}
-        \TNTerm{\TNFactorChainThree{bsThree}{(0,0)}{\widehat{\cal K}}}
+        \TNTerm{\TNMPDOFactorChainThree{bsThree}{at=origin}{\widehat{\cal K}}}
         \TNRelation{\xrightarrow{\widehat{\mathcal S}}}
         \TNTerm{%
-            \TNFactorChainTwo{bsTwo}{(0,0)}{\widehat{\cal K}}%
+            \TNMPDOFactorChainTwo{bsTwo}{at=origin}{\widehat{\cal K}}%
             \TNGroupFit{bsTwoBlock}{(bsTwoSite1)(bsTwoSite2)}}
     \end{TNEquationRow}%
 }
@@ -671,7 +655,7 @@
     \begin{TNEquationRow}[compact]
         \ensuremath{R_{\beta_3,\alpha_1}\,\cdot\,}
         \TNTerm{%
-            \TNMPOSite{hscK}{(0,0)}{\widetilde\kappa^{(k)}}
+            \TNMPOSite{hscK}{at=origin}{\widetilde\kappa^{(k)}}
             \TNOpenVirtualWest{hscKWest}
             \TNOpenVirtualEast{hscKEast}
             \TNOpenPhysicalNorth{hscKKet}
@@ -683,11 +667,11 @@
         \TNRelation{=}
         \ensuremath{p_k}
         \TNTerm{%
-            \TNFactor{hscA}{(0,0)}{A^{(k)}_{\alpha_1,\beta_1}}
+            \TNFactor{hscA}{at=origin}{A^{(k)}_{\alpha_1,\beta_1}}
             \TNLabelAbove{hscA}{l,l'}}
         \TNRelation{\otimes}
         \TNTerm{%
-            \TNFactor{hscB}{(0,0)}{B^{(k)}_{\alpha_3,\beta_3}}
+            \TNFactor{hscB}{at=origin}{B^{(k)}_{\alpha_3,\beta_3}}
             \TNLabelAbove{hscB}{r,r'}}
     \end{TNEquationRow}%
 }
@@ -752,7 +736,7 @@
     {\TNBNTDecomposition}
     {chapter/ch10_bnt.tex}{%
     \begin{TNDiagram}[normal]
-        \TNBNTCoefficientDecomposition{bnt}{(0,0)}
+        \TNMPDOBNTDecompositionMotif{bnt}{at=origin}
     \end{TNDiagram}%
 }
 
@@ -779,39 +763,21 @@
     {normal}
     {\TNMPDOFixedFinalFusionBracketings}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNCanvas{(-4.70,-2.05)}{(4.70,1.55)}
-        \TNCofusionMap{ffLeftLower}{(-3.35,-0.72)}{U_{\alpha,\beta}^{\delta}}
-        \TNCofusionMap{ffLeftUpper}{(-2.80,0.55)}{U_{\delta,\gamma}^{\varepsilon}}
-        \TNConnectVirtual{ffLeftLowerCombined}{ffLeftUpperFactorOne}
-        \TNOpenVirtualSouth{ffLeftLowerFactorOne}
-        \TNOpenVirtualSouth{ffLeftLowerFactorTwo}
-        \TNOpenVirtualSouth{ffLeftUpperFactorTwo}
-        \TNOpenVirtualNorth{ffLeftUpperCombined}
-        \TNLabelBelow{ffLeftLowerFactorOneOpen}{\alpha}
-        \TNLabelBelow{ffLeftLowerFactorTwoOpen}{\beta}
-        \TNLabelBelow{ffLeftUpperFactorTwoOpen}{\gamma}
-        \TNLabelAbove{ffLeftUpperCombinedOpen}{\varepsilon}
-        \TNPoint{ffLeftBracketing}{(-3.00,-1.72)}
-        \TNLabel{ffLeftBracketing}{(0,0)}{((\alpha\beta)\gamma)}
-
-        \TNCofusionMap{ffRightLower}{(3.35,-0.72)}{U_{\beta,\gamma}^{\eta}}
-        \TNCofusionMap{ffRightUpper}{(2.80,0.55)}{U_{\alpha,\eta}^{\varepsilon}}
-        \TNConnectVirtual{ffRightLowerCombined}{ffRightUpperFactorTwo}
-        \TNOpenVirtualSouth{ffRightUpperFactorOne}
-        \TNOpenVirtualSouth{ffRightLowerFactorOne}
-        \TNOpenVirtualSouth{ffRightLowerFactorTwo}
-        \TNOpenVirtualNorth{ffRightUpperCombined}
-        \TNLabelBelow{ffRightUpperFactorOneOpen}{\alpha}
-        \TNLabelBelow{ffRightLowerFactorOneOpen}{\beta}
-        \TNLabelBelow{ffRightLowerFactorTwoOpen}{\gamma}
-        \TNLabelAbove{ffRightUpperCombinedOpen}{\varepsilon}
-        \TNPoint{ffRightBracketing}{(3.00,-1.72)}
-        \TNLabel{ffRightBracketing}{(0,0)}{(\alpha(\beta\gamma))}
-
-        \TNComparisonArrow{ffBracketingChange}{(ffLeftUpper.east)}
-            {(ffRightUpper.west)}{F_{\varepsilon}^{\alpha\beta\gamma}}
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNMPDOLeftCofusionTree{ffLeft}{at=origin}
+                {U_{\alpha,\beta}^{\delta}}
+                {U_{\delta,\gamma}^{\varepsilon}}
+                {\alpha}{\beta}{\gamma}{\varepsilon}
+                {((\alpha\beta)\gamma)}}
+        \TNRelation{\xleftrightarrow{F_{\varepsilon}^{\alpha\beta\gamma}}}
+        \TNTerm[normal]{%
+            \TNMPDORightCofusionTree{ffRight}{at=origin}
+                {U_{\beta,\gamma}^{\eta}}
+                {U_{\alpha,\eta}^{\varepsilon}}
+                {\alpha}{\beta}{\gamma}{\varepsilon}
+                {(\alpha(\beta\gamma))}}
+    \end{TNEquationRow}%
 }
 
 % The source-oriented F-move.  The left tree is expanded in the basis of
@@ -824,35 +790,18 @@
     {normal}
     {\TNMPDOPrintedFMove}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
-    \begin{TNDiagram}[normal]
-            \TNCofusionMap{pfLeftLower}{(-4.25,-0.55)}{X^{e}_{ab,\mu}}
-            \TNCofusionMap{pfLeftUpper}{(-3.70,0.70)}{X^{d}_{ec,\nu}}
-            \TNConnectVirtual{pfLeftLowerCombined}{pfLeftUpperFactorOne}
-            \TNOpenVirtualSouth{pfLeftLowerFactorOne}
-            \TNOpenVirtualSouth{pfLeftLowerFactorTwo}
-            \TNOpenVirtualSouth{pfLeftUpperFactorTwo}
-            \TNOpenVirtualNorth{pfLeftUpperCombined}
-            \TNLabelBelow{pfLeftLowerFactorOneOpen}{a}
-            \TNLabelBelow{pfLeftLowerFactorTwoOpen}{b}
-            \TNLabelBelow{pfLeftUpperFactorTwoOpen}{c}
-            \TNLabelAbove{pfLeftUpperCombinedOpen}{d}
-        \TNPoint{pfRelation}{(-1.55,0)}
-        \TNLabel{pfRelation}{(0,0)}{=\displaystyle\sum_{f,\lambda,\sigma}}
-        \TNPoint{pfCoefficient}{(0.25,0)}
-        \TNLabel{pfCoefficient}{(0,0)}
-            {\displaystyle(F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}}
-            \TNCofusionMap{pfRightLower}{(3.15,-0.55)}{X^{f}_{bc,\lambda}}
-            \TNCofusionMap{pfRightUpper}{(2.60,0.70)}{X^{d}_{af,\sigma}}
-            \TNConnectVirtual{pfRightLowerCombined}{pfRightUpperFactorTwo}
-            \TNOpenVirtualSouth{pfRightUpperFactorOne}
-            \TNOpenVirtualSouth{pfRightLowerFactorOne}
-            \TNOpenVirtualSouth{pfRightLowerFactorTwo}
-            \TNOpenVirtualNorth{pfRightUpperCombined}
-            \TNLabelBelow{pfRightUpperFactorOneOpen}{a}
-            \TNLabelBelow{pfRightLowerFactorOneOpen}{b}
-            \TNLabelBelow{pfRightLowerFactorTwoOpen}{c}
-            \TNLabelAbove{pfRightUpperCombinedOpen}{d}
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[normal]
+        \TNTerm[normal]{%
+            \TNMPDOLeftCofusionTree{pfLeft}{at=origin}
+                {X^{e}_{ab,\mu}}{X^{d}_{ec,\nu}}
+                {a}{b}{c}{d}{}}
+        \TNRelation{=\displaystyle\sum_{f,\lambda,\sigma}
+            (F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}}
+        \TNTerm[normal]{%
+            \TNMPDORightCofusionTree{pfRight}{at=origin}
+                {X^{f}_{bc,\lambda}}{X^{d}_{af,\sigma}}
+                {a}{b}{c}{d}{}}
+    \end{TNEquationRow}%
 }
 
 % The fixed-final comparison argument in three graphical steps.  A
@@ -868,53 +817,50 @@
     {normal}
     {\TNMPDOFixedFinalComparisonUnitary}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNCanvas{(-5.90,-3.45)}{(5.90,3.25)}
-        \TNPoint{ffSelectorHeading}{(-5.10,2.35)}
-        \TNLabelLeft{ffSelectorHeading}{\textup{selector},\ S>0}
-        \TNMPOSite{ffSelL}{(-3.90,2.35)}{}
-        \TNMPOSite{ffSelM}{(-2.55,2.35)}{M_{\varepsilon'}^{w}}
-        \TNMPOSite{ffSelR}{(-1.20,2.35)}{}
-        \TNConnectVirtual{ffSelLEast}{ffSelMWest}
-        \TNConnectVirtual{ffSelMEast}{ffSelRWest}
-        \TNOpenVirtualWest{ffSelLWest}
-        \TNOpenVirtualEast{ffSelREast}
-        \TNPoint{ffSelectorFormula}{(-2.55,2.78)}
-        \TNLabelAbove{ffSelectorFormula}
-            {\sum_{|w|=S}c_{\varepsilon}(w)(\,\cdot\,)^{w}}
-        \TNMorphismArrow{ffSelectorArrow}{(-0.35,2.35)}{(0.60,2.35)}{}
-        \TNPoint{ffSelectorValue}{(0.78,2.35)}
-        \TNLabelRight{ffSelectorValue}
-            {\delta_{\varepsilon,\varepsilon'}1_{D_\varepsilon}}
-
-        \TNPoint{ffSectorHeading}{(-5.10,0.30)}
-        \TNLabelLeft{ffSectorHeading}{\textup{sector cut}}
-        \TNBinaryFusionTree{ffCutLeft}{(-2.65,0.20)}
-            {\alpha}{\beta}{\gamma}{U^{\mathrm L}}
-        \TNBinaryFusionTree{ffCutRight}{(2.65,0.20)}
-            {\alpha}{\beta}{\gamma}{U^{\mathrm R}}
-        \TNOpenVirtualSouth{ffCutLeftLowerCombined}
-        \TNOpenVirtualSouth{ffCutRightLowerCombined}
-        \TNComparisonArrow{ffSectorComparison}{(ffCutLeftUpper.east)}
-            {(ffCutRightUpper.west)}
-            {C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}}
-        \TNPoint{ffSectorValue}{(4.25,0.20)}
-        \TNLabelRight{ffSectorValue}{=0\quad(\varepsilon\ne\varepsilon')}
-
-        \TNPoint{ffDiagonalHeading}{(-5.10,-2.15)}
-        \TNLabelLeft{ffDiagonalHeading}{\textup{diagonal corner}}
-        \TNExpression{ffLeftSpace}{(-3.35,-2.15)}
-            {\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}}
-        \TNMap{ffF}{(0,-2.15)}{F_\varepsilon\otimes1_{D_\varepsilon}}
-        \TNExpression{ffRightSpace}{(3.35,-2.15)}
-            {\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}}
-        \TNMorphismArrow{ffDiagonalLeft}{(ffLeftSpace.east)}{(ffF.west)}{}
-        \TNMorphismArrow{ffDiagonalRight}{(ffF.east)}{(ffRightSpace.west)}{}
-        \TNPoint{ffUnitarity}{(0,-3.05)}
-        \TNLabel{ffUnitarity}{(0,0)}
-            {F_\varepsilon F_\varepsilon^\dagger=1,\qquad
-              F_\varepsilon^\dagger F_\varepsilon=1}
-    \end{TNDiagram}%
+    \begin{TNEquationRows}[normal]
+      \ensuremath{\textup{selector},\ S>0:\quad}
+        \TNTerm[normal]{%
+            \TNMPOSite{ffSelL}{at=origin}{}
+            \TNMPOSite{ffSelM}{right=of ffSelL}{M_{\varepsilon'}^{w}}
+            \TNMPOSite{ffSelR}{right=of ffSelM}{}
+            \TNConnectVirtual{ffSelLEast}{ffSelMWest}
+            \TNConnectVirtual{ffSelMEast}{ffSelRWest}
+            \TNOpenVirtualWest{ffSelLWest}
+            \TNOpenVirtualEast{ffSelREast}
+            \TNLabelAbove{ffSelM}
+                {\sum_{|w|=S}c_{\varepsilon}(w)(\,\cdot\,)^{w}}}
+        & \TNRelation{\longmapsto} &
+        \ensuremath{\delta_{\varepsilon,\varepsilon'}1_{D_\varepsilon}}
+        \\
+      \ensuremath{\textup{sector cut}:\quad}
+        \TNTerm[normal]{%
+            \TNMPDOBinaryFusionTree{ffCutLeft}{at=origin}
+                {\alpha}{\beta}{\gamma}{U^{\mathrm L}}}
+        & \TNRelation{
+            C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}} &
+        \TNTerm[normal]{%
+            \TNMPDOBinaryFusionTree{ffCutRight}{at=origin}
+                {\alpha}{\beta}{\gamma}{U^{\mathrm R}}}
+        \ensuremath{=0\quad(\varepsilon\ne\varepsilon')}
+        \\
+      \ensuremath{\textup{diagonal corner}:\quad}
+        \TNTerm[normal]{%
+            \TNExpression{ffLeftSpace}{at=origin}
+                {\mathcal H^{\mathrm L}_{\varepsilon}
+                    \otimes\C^{D_\varepsilon}}
+            \TNMap{ffF}{right=of ffLeftSpace}
+                {F_\varepsilon\otimes1_{D_\varepsilon}}
+            \TNExpression{ffRightSpace}{right=of ffF}
+                {\mathcal H^{\mathrm R}_{\varepsilon}
+                    \otimes\C^{D_\varepsilon}}
+            \TNMorphismArrow{ffDiagonalLeft}
+                {(ffLeftSpace.east)}{(ffF.west)}{}
+            \TNMorphismArrow{ffDiagonalRight}
+                {(ffF.east)}{(ffRightSpace.west)}{}}
+        & \TNRelation{\Longrightarrow} &
+        \ensuremath{F_\varepsilon F_\varepsilon^\dagger=1,\quad
+            F_\varepsilon^\dagger F_\varepsilon=1}
+    \end{TNEquationRows}%
 }
 
 % The associahedron for four ordinary bond-coordinate factors.  The upper
@@ -928,11 +874,15 @@
     {\TNMPDOFourfoldBondReassociationPentagon}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
     \begin{TNDiagram}[normal]
-        \TNExpression{assocL}{(-5.25,0)}{(((A\times B)\times C)\times D)}
-        \TNExpression{assocLI}{(-3.10,2.05)}{((A\times(B\times C))\times D)}
-        \TNExpression{assocM}{(1.20,2.05)}{(A\times((B\times C)\times D))}
-        \TNExpression{assocR}{(5.25,0)}{(A\times(B\times(C\times D)))}
-        \TNExpression{assocP}{(0,-2.05)}{((A\times B)\times(C\times D))}
+        \TNExpression{assocL}{at=origin}{(((A\times B)\times C)\times D)}
+        \TNExpression{assocLI}{above right=of assocL}
+            {((A\times(B\times C))\times D)}
+        \TNExpression{assocM}{right=of assocLI}
+            {(A\times((B\times C)\times D))}
+        \TNExpression{assocR}{below right=of assocM}
+            {(A\times(B\times(C\times D)))}
+        \TNExpression{assocP}{below right=of assocL}
+            {((A\times B)\times(C\times D))}
         \TNMorphismArrow{assocRone}{(assocL)}{(assocLI)}{r_1}
         \TNMorphismArrow{assocRtwo}{(assocLI)}{(assocM)}{r_2}
         \TNMorphismArrow{assocRthree}{(assocM)}{(assocR)}{r_3}
@@ -953,117 +903,7 @@
     {\TNMPDOCompleteZipperFusionPentagon}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
     \begin{TNDiagram}[normal]
-        \TNCanvas{(-6.75,-4.45)}{(6.75,4.55)}
-        % (((a b) c) d)
-        \TNFusionMap{pLf}{(-5.42,0.22)}{}
-        \TNFusionMap{pLg}{(-5.00,-0.55)}{}
-        \TNFusionMap{pLe}{(-4.56,-1.32)}{}
-        \TNOpenVirtualNorth{pLfFactorOne}
-        \TNOpenVirtualNorth{pLfFactorTwo}
-        \TNConnectVirtual{pLfCombined}{pLgFactorOne}
-        \TNOpenVirtualNorth{pLgFactorTwo}
-        \TNConnectVirtual{pLgCombined}{pLeFactorOne}
-        \TNOpenVirtualNorth{pLeFactorTwo}
-        \TNOpenVirtualSouth{pLeCombined}
-        \TNLabelAbove{pLfFactorOneOpen}{a}
-        \TNLabelAbove{pLfFactorTwoOpen}{b}
-        \TNLabelAbove{pLgFactorTwoOpen}{c}
-        \TNLabelAbove{pLeFactorTwoOpen}{d}
-        \TNPoint{pLfInternal}{($(pLfOut)!0.5!(pLgLeft)$)}
-        \TNPoint{pLgInternal}{($(pLgOut)!0.5!(pLeLeft)$)}
-        \TNLabelLeft{pLfInternal}{f}
-        \TNLabelLeft{pLgInternal}{g}
-        \TNLabelBelow{pLeCombinedOpen}{e}
-
-        % ((a (b c)) d)
-        \TNFusionMap{pLIh}{(-3.38,2.99)}{}
-        \TNFusionMap{pLIg}{(-3.78,2.22)}{}
-        \TNFusionMap{pLIe}{(-3.28,1.45)}{}
-        \TNOpenVirtualNorth{pLIhFactorOne}
-        \TNOpenVirtualNorth{pLIhFactorTwo}
-        \TNOpenVirtualNorth{pLIgFactorOne}
-        \TNConnectVirtual{pLIhCombined}{pLIgFactorTwo}
-        \TNConnectVirtual{pLIgCombined}{pLIeFactorOne}
-        \TNOpenVirtualNorth{pLIeFactorTwo}
-        \TNOpenVirtualSouth{pLIeCombined}
-        \TNLabelAbove{pLIgFactorOneOpen}{a}
-        \TNLabelAbove{pLIhFactorOneOpen}{b}
-        \TNLabelAbove{pLIhFactorTwoOpen}{c}
-        \TNLabelAbove{pLIeFactorTwoOpen}{d}
-        \TNPoint{pLIhInternal}{($(pLIhOut)!0.5!(pLIgRight)$)}
-        \TNPoint{pLIgInternal}{($(pLIgOut)!0.5!(pLIeLeft)$)}
-        \TNLabelLeft{pLIhInternal}{h}
-        \TNLabelLeft{pLIgInternal}{g}
-        \TNLabelBelow{pLIeCombinedOpen}{e}
-
-        % a ((b c) d)
-        \TNFusionMap{pMh}{(0.92,2.99)}{}
-        \TNFusionMap{pMi}{(1.34,2.22)}{}
-        \TNFusionMap{pMe}{(0.84,1.45)}{}
-        \TNOpenVirtualNorth{pMhFactorOne}
-        \TNOpenVirtualNorth{pMhFactorTwo}
-        \TNConnectVirtual{pMhCombined}{pMiFactorOne}
-        \TNOpenVirtualNorth{pMiFactorTwo}
-        \TNOpenVirtualNorth{pMeFactorOne}
-        \TNConnectVirtual{pMiCombined}{pMeFactorTwo}
-        \TNOpenVirtualSouth{pMeCombined}
-        \TNLabelAbove{pMeFactorOneOpen}{a}
-        \TNLabelAbove{pMhFactorOneOpen}{b}
-        \TNLabelAbove{pMhFactorTwoOpen}{c}
-        \TNLabelAbove{pMiFactorTwoOpen}{d}
-        \TNPoint{pMhInternal}{($(pMhOut)!0.5!(pMiLeft)$)}
-        \TNPoint{pMiInternal}{($(pMiOut)!0.5!(pMeRight)$)}
-        \TNLabelRight{pMhInternal}{h}
-        \TNLabelRight{pMiInternal}{i}
-        \TNLabelBelow{pMeCombinedOpen}{e}
-
-        % a (b (c d))
-        \TNFusionMap{pRj}{(5.42,0.22)}{}
-        \TNFusionMap{pRi}{(5.00,-0.55)}{}
-        \TNFusionMap{pRe}{(4.56,-1.32)}{}
-        \TNOpenVirtualNorth{pRjFactorOne}
-        \TNOpenVirtualNorth{pRjFactorTwo}
-        \TNOpenVirtualNorth{pRiFactorOne}
-        \TNConnectVirtual{pRjCombined}{pRiFactorTwo}
-        \TNOpenVirtualNorth{pReFactorOne}
-        \TNConnectVirtual{pRiCombined}{pReFactorTwo}
-        \TNOpenVirtualSouth{pReCombined}
-        \TNLabelAbove{pReFactorOneOpen}{a}
-        \TNLabelAbove{pRiFactorOneOpen}{b}
-        \TNLabelAbove{pRjFactorOneOpen}{c}
-        \TNLabelAbove{pRjFactorTwoOpen}{d}
-        \TNPoint{pRjInternal}{($(pRjOut)!0.5!(pRiRight)$)}
-        \TNPoint{pRiInternal}{($(pRiOut)!0.5!(pReRight)$)}
-        \TNLabelRight{pRjInternal}{j}
-        \TNLabelRight{pRiInternal}{i}
-        \TNLabelBelow{pReCombinedOpen}{e}
-
-        % (a b) (c d)
-        \TNFusionMap{pPf}{(-0.72,-2.63)}{}
-        \TNFusionMap{pPj}{(0.72,-2.63)}{}
-        \TNFusionMap{pPe}{(0,-3.48)}{}
-        \TNOpenVirtualNorth{pPfFactorOne}
-        \TNOpenVirtualNorth{pPfFactorTwo}
-        \TNOpenVirtualNorth{pPjFactorOne}
-        \TNOpenVirtualNorth{pPjFactorTwo}
-        \TNConnectVirtual{pPfCombined}{pPeFactorOne}
-        \TNConnectVirtual{pPjCombined}{pPeFactorTwo}
-        \TNOpenVirtualSouth{pPeCombined}
-        \TNLabelAbove{pPfFactorOneOpen}{a}
-        \TNLabelAbove{pPfFactorTwoOpen}{b}
-        \TNLabelAbove{pPjFactorOneOpen}{c}
-        \TNLabelAbove{pPjFactorTwoOpen}{d}
-        \TNPoint{pPfInternal}{($(pPfOut)!0.5!(pPeLeft)$)}
-        \TNPoint{pPjInternal}{($(pPjOut)!0.5!(pPeRight)$)}
-        \TNLabelLeft{pPfInternal}{f}
-        \TNLabelRight{pPjInternal}{j}
-        \TNLabelBelow{pPeCombinedOpen}{e}
-
-        \TNMorphismArrow{pentagonOne}{(-4.48,1.10)}{(-3.95,1.73)}{F^{abc}_{g}}
-        \TNMorphismArrow{pentagonTwo}{(-2.20,2.72)}{(-0.25,2.72)}{F^{ahd}_{e}}
-        \TNMorphismArrow{pentagonThree}{(1.80,1.78)}{(4.15,1.08)}{F^{bcd}_{i}}
-        \TNMorphismArrow{pentagonFour}{(-3.95,-1.05)}{(-1.02,-2.15)}{F^{fcd}_{e}}
-        \TNMorphismArrow{pentagonFive}{(1.02,-2.15)}{(3.95,-1.05)}{F^{abj}_{e}}
+        \TNMPDOCompleteFusionPentagonMotif{pentagon}{at=origin}
     \end{TNDiagram}%
 }
 
@@ -1078,10 +918,13 @@
     {compact}
     {\TNMPDOBNTFusionIdentity}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
-    \begin{TNDiagram}[compact]
-            \TNSplitMap{bfiU}{(-3.65,0)}{U_{\alpha,\beta}}
-            \TNStackedMPOProduct{bfiProduct}{(-2.35,0)}{M_\alpha}{M_\beta}{}
-            \TNMergeMap{bfiUd}{(-1.05,0)}{U_{\alpha,\beta}^{\dagger}}
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNSplitMap{bfiU}{at=origin}{U_{\alpha,\beta}}
+            \TNStackedMPOProduct{bfiProduct}{right=of bfiU}
+                {M_\alpha}{M_\beta}{}
+            \TNMergeMap{bfiUd}{right=of bfiProductUpper}
+                {U_{\alpha,\beta}^{\dagger}}
             \TNConnectVirtual{bfiUFactorOne}{bfiProductUpperWest}
             \TNConnectVirtual{bfiUFactorTwo}{bfiProductLowerWest}
             \TNConnectVirtual{bfiProductUpperEast}{bfiUdFactorOne}
@@ -1091,18 +934,18 @@
             \TNOpenPhysicalNorth{bfiProductUpperKet}
             \TNOpenPhysicalSouth{bfiProductLowerBra}
             \TNLabelAbove{bfiProductUpperKetOpen}{i}
-            \TNLabelBelow{bfiProductLowerBraOpen}{j}
-        \TNPoint{bfiRelation}{(0.45,0)}
-        \TNLabel{bfiRelation}{(0,0)}{=\displaystyle\bigoplus_\gamma}
-            \TNWeightedMPOBlock{bfiBlock}{(2.30,0)}
+            \TNLabelBelow{bfiProductLowerBraOpen}{j}}
+        \TNRelation{=\displaystyle\bigoplus_\gamma}
+        \TNTerm{%
+            \TNWeightedMPOBlock{bfiBlock}{at=origin}
                 {M_\gamma}{M_\gamma}{}{\chi_{\alpha,\beta,\gamma}}
             \TNOpenVirtualWest{bfiBlockWeightW}
             \TNOpenVirtualEast{bfiBlockWeightedEast}
             \TNOpenVirtualWest{bfiBlockLowerWest}
             \TNOpenVirtualEast{bfiBlockLowerEast}
             \TNOpenPhysicalNorth{bfiBlockUpperKet}
-            \TNOpenPhysicalSouth{bfiBlockLowerBra}
-    \end{TNDiagram}%
+            \TNOpenPhysicalSouth{bfiBlockLowerBra}}
+    \end{TNEquationRow}%
 }
 
 % The two unweighted zipper directions and the resulting reconstruction of a
@@ -1118,8 +961,8 @@
     {\TNMPDOUnweightedZipperReconstruction}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
     \begin{TNEquationRows}[compact]
-      \TNTerm{\TNSplitMap{uzOneU}{(0,0)}{U_{\alpha,\beta}}
-            \TNStackedMPOProduct{uzOneP}{(\TNCellPitch,0)}{}{}{}
+      \TNTerm{\TNSplitMap{uzOneU}{at=origin}{U_{\alpha,\beta}}
+            \TNStackedMPOProduct{uzOneP}{right=of uzOneU}{}{}{}
             \TNConnectVirtual{uzOneUFactorOne}{uzOnePUpperWest}
             \TNConnectVirtual{uzOneUFactorTwo}{uzOnePLowerWest}
             \TNOpenVirtualWest{uzOneUCombined}
@@ -1128,15 +971,16 @@
             \TNLabelAbove{uzOnePUpperKet}{M_\alpha}
             \TNLabelBelow{uzOnePLowerBra}{M_\beta}}
         & \TNRelation{=} &
-        \TNTerm{\TNMPOSite{uzOneH}{(0,0)}{}
-            \TNSplitMap{uzOneR}{(\TNCellPitch,0)}{U_{\alpha,\beta}}
+        \TNTerm{\TNMPOSite{uzOneH}{at=origin}{}
+            \TNSplitMap{uzOneR}{right=of uzOneH}{U_{\alpha,\beta}}
             \TNConnectVirtual{uzOneHEast}{uzOneRCombined}
             \TNOpenVirtualWest{uzOneHWest}
             \TNOpenVirtualEast{uzOneRFactorOne}
             \TNOpenVirtualEast{uzOneRFactorTwo}
             \TNLabelBelow{uzOneHBra}{H_{\alpha,\beta}^{ij}}} \\
-      \TNTerm{\TNStackedMPOProduct{uzTwoP}{(0,0)}{}{}{}
-            \TNMergeMap{uzTwoU}{(\TNCellPitch,0)}{U_{\alpha,\beta}^{\dagger}}
+      \TNTerm{\TNStackedMPOProduct{uzTwoP}{at=origin}{}{}{}
+            \TNMergeMap{uzTwoU}{right=of uzTwoPUpper}
+                {U_{\alpha,\beta}^{\dagger}}
             \TNConnectVirtual{uzTwoPUpperEast}{uzTwoUFactorOne}
             \TNConnectVirtual{uzTwoPLowerEast}{uzTwoUFactorTwo}
             \TNOpenVirtualWest{uzTwoPUpperWest}
@@ -1145,14 +989,14 @@
             \TNLabelAbove{uzTwoPUpperKet}{M_\alpha}
             \TNLabelBelow{uzTwoPLowerBra}{M_\beta}}
         & \TNRelation{=} &
-        \TNTerm{\TNMergeMap{uzTwoL}{(0,0)}{U_{\alpha,\beta}^{\dagger}}
-            \TNMPOSite{uzTwoH}{(\TNCellPitch,0)}{}
+        \TNTerm{\TNMergeMap{uzTwoL}{at=origin}{U_{\alpha,\beta}^{\dagger}}
+            \TNMPOSite{uzTwoH}{right=of uzTwoL}{}
             \TNConnectVirtual{uzTwoLCombined}{uzTwoHWest}
             \TNOpenVirtualWest{uzTwoLFactorOne}
             \TNOpenVirtualWest{uzTwoLFactorTwo}
             \TNOpenVirtualEast{uzTwoHEast}
             \TNLabelBelow{uzTwoHBra}{H_{\alpha,\beta}^{ij}}} \\
-      \TNTerm{\TNStackedMPOProduct{uzThreeP}{(0,0)}{}{}{}
+      \TNTerm{\TNStackedMPOProduct{uzThreeP}{at=origin}{}{}{}
             \TNOpenVirtualWest{uzThreePUpperWest}
             \TNOpenVirtualWest{uzThreePLowerWest}
             \TNOpenVirtualEast{uzThreePUpperEast}
@@ -1160,9 +1004,9 @@
             \TNLabelAbove{uzThreePUpperKet}{M_\alpha}
             \TNLabelBelow{uzThreePLowerBra}{M_\beta}}
         & \TNRelation{=} &
-        \TNTerm{\TNMergeMap{uzThreeL}{(0,0)}{U_{\alpha,\beta}^{\dagger}}
-            \TNMPOSite{uzThreeH}{(\TNCellPitch,0)}{}
-            \TNSplitMap{uzThreeR}{(2*\TNCellPitch,0)}{U_{\alpha,\beta}}
+        \TNTerm{\TNMergeMap{uzThreeL}{at=origin}{U_{\alpha,\beta}^{\dagger}}
+            \TNMPOSite{uzThreeH}{right=of uzThreeL}{}
+            \TNSplitMap{uzThreeR}{right=of uzThreeH}{U_{\alpha,\beta}}
             \TNConnectVirtual{uzThreeLCombined}{uzThreeHWest}
             \TNConnectVirtual{uzThreeHEast}{uzThreeRCombined}
             \TNOpenVirtualWest{uzThreeLFactorOne}
@@ -1182,35 +1026,15 @@
     {compact}
     {\TNMPDOFusionTracePower}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
-    \begin{TNDiagram}[compact]
-            \TNStackedMPOProduct{ftpLeftA}{(-5.20,0)}{M_\alpha}{M_\beta}{}
-            \TNStackedMPOProduct{ftpLeftB}{(-4.00,0)}{M_\alpha}{M_\beta}{}
-            \TNStackedMPOProduct{ftpLeftC}{(-2.80,0)}{M_\alpha}{M_\beta}{}
-            \TNConnectVirtual{ftpLeftAUpperEast}{ftpLeftBUpperWest}
-            \TNConnectVirtual{ftpLeftBUpperEast}{ftpLeftCUpperWest}
-            \TNConnectVirtual{ftpLeftALowerEast}{ftpLeftBLowerWest}
-            \TNConnectVirtual{ftpLeftBLowerEast}{ftpLeftCLowerWest}
-            \TNTraceVirtualAbove{ftpLeftAUpperWest}{ftpLeftCUpperEast}
-            \TNTraceVirtualBelow{ftpLeftALowerWest}{ftpLeftCLowerEast}
-            \TNPoint{ftpLeftLength}{(-4.00,-1.45)}
-            \TNLabel{ftpLeftLength}{(0,0)}{L\text{ sites}}
-        \TNPoint{ftpRelation}{(-1.05,0)}
-        \TNLabel{ftpRelation}{(0,0)}{=\displaystyle\sum_\gamma}
-            \TNStackedMPOProduct{ftpRightA}{(0.80,0)}
-                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{}
-            \TNStackedMPOProduct{ftpRightB}{(2.00,0)}
-                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{}
-            \TNStackedMPOProduct{ftpRightC}{(3.20,0)}
-                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{}
-            \TNConnectVirtual{ftpRightAUpperEast}{ftpRightBUpperWest}
-            \TNConnectVirtual{ftpRightBUpperEast}{ftpRightCUpperWest}
-            \TNConnectVirtual{ftpRightALowerEast}{ftpRightBLowerWest}
-            \TNConnectVirtual{ftpRightBLowerEast}{ftpRightCLowerWest}
-            \TNTraceVirtualAbove{ftpRightAUpperWest}{ftpRightCUpperEast}
-            \TNTraceVirtualBelow{ftpRightALowerWest}{ftpRightCLowerEast}
-            \TNPoint{ftpRightLength}{(2.00,-1.45)}
-            \TNLabel{ftpRightLength}{(0,0)}{L\text{ sites}}
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNMPDOStackedPeriodicWord{ftpLeft}{at=origin}
+                {M_\alpha}{M_\beta}{L\text{ sites}}}
+        \TNRelation{=\displaystyle\sum_\gamma}
+        \TNTerm{%
+            \TNMPDOStackedPeriodicWord{ftpRight}{at=origin}
+                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{L\text{ sites}}}
+    \end{TNEquationRow}%
 }
 
 % Recursive contraction for the structure operator Q in CPSV16, lines
@@ -1223,34 +1047,11 @@
     {normal}
     {\TNMPDORecursiveStructureOperator}
     {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNCanvas{(-5.75,-1.55)}{(5.15,1.55)}
-        \TNPoint{rqRelation}{(-5.25,0)}
-        \TNLabel{rqRelation}{(0,0)}{Q=}
-        \TNMPOSite{rqOne}{(-4.15,0)}{X}
-        \TNMPOSite{rqTwo}{(-2.70,0)}{X}
-        \TNMPOSite{rqThree}{(-1.25,0)}{X}
-        \TNConnectVirtual{rqOneEast}{rqTwoWest}
-        \TNConnectVirtual{rqTwoEast}{rqThreeWest}
-        \TNOpenVirtualWest{rqOneWest}
-        \TNOpenPhysicalNorth{rqOneKet}
-        \TNOpenPhysicalSouth{rqOneBra}
-        \TNOpenPhysicalNorth{rqTwoKet}
-        \TNOpenPhysicalSouth{rqTwoBra}
-        \TNOpenPhysicalNorth{rqThreeKet}
-        \TNOpenPhysicalSouth{rqThreeBra}
-        \TNPoint{rqEllipsis}{(0,0)}
-        \TNLabel{rqEllipsis}{(0,0)}{\cdots} % chktex 11
-        \TNMPOSite{rqLast}{(1.25,0)}{X}
-        \TNCompactTraceCell{rqTrace}{(3.35,0)}{M_\gamma}{1}{}
-        \TNConnectVirtual{rqLastEast}{rqTraceInsertionW}
-        \TNOpenPhysicalNorth{rqLastKet}
-        \TNOpenPhysicalSouth{rqLastBra}
-        \TNLabelAbove{rqTwoKetOpen}{k}
-        \TNLabelBelow{rqTwoBraOpen}{\alpha,\beta,\gamma}
-        \TNPoint{rqTraceLabel}{(rqTraceCentre |- 0,-1.25)}
-        \TNLabelBelow{rqTraceLabel}{\tr(M_\gamma)}
-    \end{TNDiagram}%
+    \begin{TNEquationRow}[normal]
+        \ensuremath{Q=}
+        \TNTerm[normal]{%
+            \TNMPDORecursiveStructureMotif{rq}{at=origin}}
+    \end{TNEquationRow}%
 }
 
 % Fusion isometry of the renormalization fixed-point characterization: two
