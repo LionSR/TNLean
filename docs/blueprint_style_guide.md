@@ -207,11 +207,18 @@ If LaTeX reports `! File ended while scanning use of \@newl@bel` on startup:
 - After rebuild, copy fresh `print.bbl` → `web.bbl`
 
 ## Build Commands
+
+The complete blueprint uses `blueprint/src/content.tex` as its chapter router.
+The Fundamental Theorem of Matrix Product States volume uses the restricted
+router `blueprint/src/content_ft_mps.tex` and is built by the repository script
+shown below.
+
 ```bash
 leanblueprint pdf     # PDF → blueprint/print/print.pdf
 leanblueprint web     # HTML → blueprint/web/
 leanblueprint serve   # local server at http://0.0.0.0:8000/
 leanblueprint all     # pdf + web + checkdecls
+./scripts/build_blueprint_ch01_12.sh  # FT--MPS PDF → blueprint/print/print12.pdf
 ```
 
 ## Fact-Check Lessons
