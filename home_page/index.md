@@ -12,7 +12,7 @@ them. Chapters 1&ndash;12 of the blueprint contain this theorem, the theory
 its proof rests on (quantum channels, Perron&ndash;Frobenius theory, the
 quantum Wielandt inequality, canonical forms), and a first application to
 symmetry-protected topological phases. This part is available as a separate
-PDF via the "Blueprint ch. 1&ndash;12" button above.
+PDF via the "FT&ndash;MPS Blueprint" button above.
 
 The library goes beyond these chapters: parent Hamiltonians, matrix-product
 density operators and renormalization fixed points, correlation decay,
