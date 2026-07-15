@@ -7,18 +7,18 @@
 
 \input{command}
 
-\title{Finite-Length Block Separation in the CPGSV17 Proposition \texttt{propblockinj}}
+\title{Sharp Finite-Length Block Separation for Canonical-Form Tensors}
 \author{}
-\date{2026-07-13}
+\date{2026-07-15}
 
 \begin{document}
 \maketitle
 
 \section{The assertion}
 
-The finite-length block-separation step in the proposition labelled
-\texttt{propblockinj} in Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete is the
-point at issue \cite[lines~340--345]{Cirac2016MPDO_arXiv}.\footnote{For traceability,
+The sharp block-injectivity proposition of Cirac, P\'erez-Garc\'ia, Schuch,
+and Verstraete is the point at issue
+\cite[lines~340--345]{Cirac2016MPDO_arXiv}.\footnote{For traceability,
     this note corresponds to \href{https://github.com/LionSR/TNLean/issues/1043}{issue \#1043}.
     Related formal work is recorded in
     \href{https://github.com/LionSR/TNLean/issues/587}{issue \#587} and
@@ -40,19 +40,15 @@ combination of common physical words whose evaluation on block $j$ gives $X_j$
 for every $j$.
 
 The source first invokes the quantum Wielandt theorem: after at most $D^4$
-blockings, each normal tensor becomes injective. It then cites David2006 for the
-cross-block step: if $L$ is a blocking length after which every normal block is
-injective, then after $3(L+1)(D-1)$ blockings the tensor is block
-injective. The proposition records the resulting bound in the following form: after
-blocking at most $3D^5$ spins, every tensor in canonical form is in
-block-injective canonical form. This is the assertion labelled
-\texttt{propblockinj} in the local source
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~340--345. The definition of
-block-injective canonical form immediately preceding it is
-\texttt{defnbi}, lines~318--322. The cited reference is the paper's item
-\texttt{David2006}, namely
-P\'erez-Garc\'ia--Verstraete--Wolf--Cirac
-\cite{PerezGarcia2007MPSReps}.
+blockings, each normal tensor becomes injective.  It then invokes the
+cross-block argument of P\'erez-Garc\'ia--Verstraete--Wolf--Cirac
+\cite{PerezGarcia2007MPSReps}: if $L$ is a blocking length after which every
+normal block is injective, then after $3(L+1)(D-1)$ blockings the tensor is
+block injective.  The proposition records the resulting bound in the following
+form: after blocking at most $3D^5$ spins, every tensor in canonical form is in
+block-injective canonical form.  The statement is at lines~340--345 of the
+local source, immediately after the definition of block-injective canonical
+form at lines~318--322.
 
 \section{The older per-copy formulation}
 
@@ -78,11 +74,11 @@ entrywise linear-independence criterion: the scalar functions
 $w\mapsto (A_j^w)_{\alpha\beta}$, indexed by the block and by a matrix entry in
 that block, are linearly independent at one common length. This implies the
 product-algebra span, hence the trace-separation property. The third is a
-selector-word formulation of \texttt{propblockinj}: after a common blocking length
-each block is injective, and after a further finite length there are word
-polynomials which are the identity on one chosen block and vanish on all the
-others. Concatenating an injective prefix with such a selector suffix gives the
-full product-algebra span.
+selector-word formulation of the sharp block-injectivity proposition: after a
+common blocking length each block is injective, and after a further finite
+length there are word polynomials which are the identity on one chosen block
+and vanish on all the others. Concatenating an injective prefix with such a
+selector suffix gives the full product-algebra span.
 
 In the formal files, these three finite-length criteria suffice to produce the
 older per-copy trace-separation conclusion.\footnote{The criteria are
@@ -97,7 +93,7 @@ older per-copy trace-separation conclusion.\footnote{The criteria are
     \texttt{HorizontalCFData} constructors such as
     \texttt{horizontalCFData\_of\_propBlockInjective}.  The blueprint records
     these restricted criteria in its finite-witness remark.}
-Thus \texttt{propblockinj} has not been asserted without proof.  These
+Thus the sharp block-injectivity proposition has not been asserted without proof.  These
 statements remain correct restricted results, but the public horizontal
 canonical-form predicate no longer uses them.  It is now stated through a
 representative-indexed BNT sector decomposition, so repeated copies are
@@ -121,7 +117,7 @@ This example is formalized as \texttt{duplicateScalarBlocks} and its lemmas in
 \path{docs/counterexamples.md}, lines 29--35. It shows that the additional
 finite-length witness in the formal hypotheses is genuinely stronger than the
 other horizontal canonical-form assumptions. It does not refute
-the CPGSV17 proposition \texttt{propblockinj}. The duplicate scalar blocks are
+the source's sharp block-injectivity proposition. The duplicate scalar blocks are
 related by similarity and phase, and therefore do not form a minimal basis of
 normal tensors in the sense of the source characterization.
 
@@ -162,7 +158,7 @@ to combine the source's block-injectivity argument with Lemma L; they
 introduce no additional hypothesis beyond block injectivity for the
 converse.
 
-\section{Conclusion}
+\section{Classification}
 
 The original counterexample should not be read as a source erratum.  A
 small counterexample shows only that per-copy blockwise injectivity,
@@ -173,7 +169,7 @@ The representative-level source theorem is now composed with the canonical-form
 hypotheses.  Positive-length block injectivity
 propagates from length $L$ to length $L+1$ without a normalization hypothesis:
 the identity
-$S_{L+1}(A)=\spn\{A_i\}_iS_L(A)$, together with the same identity at length
+$S_{L+1}(A)=\operatorname{span}\{A_i\}_iS_L(A)$, together with the same identity at length
 $L$, gives the result.  Physical blocking of a sector decomposition has also
 been defined explicitly: it preserves the representative and copy indices,
 replaces $A_j$ by $A_j^{[p]}$, replaces $\mu_{j,q}$ by $\mu_{j,q}^p$, and gives
@@ -212,6 +208,59 @@ block-injectivity length by taking a common multiple of their individual
 lengths.  Consequently the representative-indexed Lemma L now follows from
 the BNT canonical-form predicate itself.
 
+The numerical Wielandt part has since been sharpened to the exact common
+length used in the source estimate.  If the representative dimensions are
+$D_j$ and the flattened canonical-form tensor has bond dimension $D$, then
+$D_j\leq D$.  Quantum Wielandt gives an injective length
+$L_j\leq D_j^4$ for the $j$th representative, and positive-length propagation
+therefore makes every representative injective at the single exact length
+$D^4$.  This exact common length has been formalized.\footnote{Formal
+    declarations:
+    \leanid{MPSTensor.SectorDecomposition.basisDim_le_totalDim},
+    \leanid{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}, and
+    \leanid{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}.}
+
+It remains useful to distinguish identity--zero selectors from the full tuple
+span.  Put $g$ for the number of minimal representatives and set $L_0=D^4$.
+The proved two-block argument gives the full pair span at length $3(L_0+1)$;
+in particular it can realize $(X,0)$ on a chosen block and one anchor block.
+For $g\geq2$, multiplying this pair polynomial by $g-2$ identity--zero
+selectors for the remaining representatives should give a tuple equal to $X$
+on the chosen block and zero elsewhere, at total length
+\[
+    3(g-1)(D^4+1).
+\]
+Since every representative has positive dimension and occurs at least once,
+$g\leq D$; hence this target length is at most the source length
+$3(D^4+1)(D-1)$.  The existing conversion from selectors to the whole product
+algebra instead concatenates an additional injective prefix of length
+$D^4$.
+\footnote{Formal declaration:
+\leanid{MPSTensor.hasBiCF_of_propBlockInjective}.}
+Its exact length is therefore
+\[
+    D^4+3(g-1)(D^4+1).
+\]
+This is within the source length when $g\leq D-1$, but exceeds it by
+$D^4$ in the extremal case $g=D$.  Thus the remaining multi-block
+mathematical point is not quantum Wielandt.  It is the simultaneous
+interpolation statement which realizes $(X,0)$ on the chosen anchor pair
+while multiplying by identity--zero selectors for the remaining
+representatives, without paying a separate injective prefix.  The
+case $g=1$ has no direct-sum obstruction and is handled by ordinary block
+injectivity.  Adding an assumed finite separation witness would conceal the
+multi-block point and is not an acceptable substitute.
+
+Once that simultaneous interpolation is supplied, the final arithmetic is
+elementary:
+for $D\geq1$,
+\[
+  3(D^4+1)(D-1)
+  =3(D^5-D^4+D-1)
+  \leq 3D^5,
+\]
+because $D-1\leq D^4$.
+
 The public horizontal canonical-form predicate has now been replaced by the
 representative-indexed formulation.  It quantifies a BNT sector decomposition
 whose total bond dimension equals the original bond dimension and which is
@@ -230,11 +279,15 @@ decomposition from the resulting reducing projections, and proving the
 subsequent positivity and isometric normalization of its sectors, are separate
 parts of that proposition.
 
-Separately, the numerical bound in the full block-injectivity proposition still
-requires the David2006 argument: from minimality of the basis of normal tensors
-and single-block injectivity after Wielandt blocking, produce a common selector
-with length $3(L+1)(D-1)$ and hence the stated $3D^5$ bound.  The source-level
-Lemma L needs the existence of a suitable finite length, not this sharp bound.
+The sharp numerical statement is therefore classified as an \emph{open gap}.
+For $g\geq2$, the sole remaining conceptual blocker identified here is the
+simultaneous interpolation of one arbitrary anchor-pair value with
+identity--zero pair selectors on all remaining representatives.  The formal
+proof will also require routine
+named lemmas for $g\leq D$, specialization to $L_0=D^4$, and
+$3(D^4+1)(D-1)\leq3D^5$.  For $g=1$, ordinary block injectivity supplies the
+result directly.  The source-level Lemma L needs only the existence of a
+suitable finite length, not this sharp estimate.
 
 \bibliographystyle{alpha}
 \bibliography{references}

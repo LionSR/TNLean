@@ -128,7 +128,7 @@ theorem isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
         simpa [hAdj] using hstarEig
       exact ⟨hzEig, by simpa using hstarNorm⟩
   have hPeriodic : IsPeriodic m A :=
-    ⟨hIrr, hLeft, hm', hPeriphA, ⟨γ, hγroot'⟩⟩
+    ⟨hIrr, hLeft, hm', hPeriphA⟩
   have hmul : Tendsto (fun k : ℕ ↦ m * k) atTop atTop := by
     refine tendsto_atTop.2 fun b ↦ ?_
     filter_upwards [eventually_ge_atTop b] with a ha
@@ -152,6 +152,33 @@ end MPSTensor
 namespace MPSTensor.IsBNTCanonicalForm
 
 variable {d : ℕ} {P : SectorDecomposition d}
+
+/-- Every representative of a BNT canonical form is block injective at the
+common length $D^4$, where $D$ is the total bond dimension.
+
+For the $j$th representative $A_j$ with bond dimension $D_j$, quantum
+Wielandt gives exact block injectivity at $D_j^4$.  Since $D_j \leq D$,
+positive-length block injectivity propagates to the common length $D^4$.
+
+Source: arXiv:1606.00608, line 332. -/
+theorem basis_isNBlkInjective_totalDim_pow_four
+    (hCF : IsBNTCanonicalForm P) :
+    ∀ j : Fin P.basisCount,
+      IsNBlkInjective (P.basis j) (P.totalDim ^ 4) := by
+  intro j
+  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+  have hNormal : IsNormal (P.basis j) :=
+    isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
+      (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
+        (hCF.basis_normalized_self_overlap j)
+  have hOwn : IsNBlkInjective (P.basis j) ((P.basisDim j) ^ 4) :=
+    isNBlkInjective_pow_four_of_isNormal_leftCanonical
+      (P.basis j) (hCF.basis_left_canonical j) hNormal
+  have hOwnPos : 0 < (P.basisDim j) ^ 4 :=
+    Nat.pow_pos (hCF.basis_dim_pos j)
+  have hPow : (P.basisDim j) ^ 4 ≤ P.totalDim ^ 4 :=
+    Nat.pow_le_pow_left (P.basisDim_le_totalDim j) 4
+  exact isNBlkInjective_of_le hOwnPos hOwn hPow
 
 /-- The finitely many representatives of a BNT canonical form have one common
 positive block-injectivity length.

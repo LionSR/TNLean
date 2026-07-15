@@ -292,13 +292,44 @@ This is the inverse identity in
 \begin{proof}
     \leanok
     \uses{rem:word_tuple_span_top}
-    This is the direct implication from the finite-length hypotheses to the
-    finite-length trace-separation statement.  General BNT canonical-form
-    hypotheses now yield a finite representative-indexed witness.  What remains
-    open in the sharper block-injectivity proposition of
-    \cite[lines~340--345]{Cirac2016MPDO_arXiv} is the stated numerical bound
-    $3D^5$ and its particular selector construction.
+    If the common injective prefix has length $L$ and the selector has length
+    $S$, concatenation gives simultaneous words of length $L+S$.  For every
+    tuple $(X_j)_j$, the resulting coefficients satisfy
+    \[
+        \sum_{|w|=L+S}c_w A_j^w=X_j.
+    \]
+    Hence the simultaneous word tuples span the product algebra, and
+    nondegeneracy of the trace pairing gives finite-length trace separation.
 \end{proof}
+
+\begin{remark}[Sharp finite-length block separation]
+    \label{rem:sharp_bnt_block_separation_gap}
+    \notready
+    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
+        lem:bnt_direct_sum_block_separation_word_span}
+    Let $D$ be the total bond dimension and $g$ the number of minimal
+    representatives.  The common exact injective length is $D^4$.  For
+    $g\geq2$, the pair-separation argument works at length $3(D^4+1)$.  The
+    missing simultaneous interpolation statement should realize $(X,0)$
+    on one anchor pair and multiply by identity--zero selectors for the other
+    $g-2$ representatives.  It would give the target length
+    \[
+        3(g-1)(D^4+1)\leq3(D-1)(D^4+1).
+    \]
+    The preceding argument instead concatenates a separate injective prefix
+    and gives the longer length
+    \[
+        D^4+3(g-1)(D^4+1).
+    \]
+    Thus the sharp bound in \cite[lines~340--345]{Cirac2016MPDO_arXiv} reduces
+    to the stated anchor-pair interpolation.  The case $g=1$ follows directly
+    from ordinary block injectivity.  For $g\geq2$, the interpolation and the
+    elementary estimates above give
+    \[
+        3(D^4+1)(D-1)\leq3D^5.
+    \]
+    % Detailed audit: docs/paper-gaps/cpgsv17_bicf_block_separation.tex.
+\end{remark}
 
 \begin{definition}[Representative word-tuple separation]
     \label{def:representative_word_tuple_span}
@@ -566,7 +597,6 @@ This is the inverse identity in
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective}
-    \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_common_basis_isNBlkInjective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree}

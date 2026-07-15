@@ -192,7 +192,6 @@ theorem isPeriodic_rotatePhysical (m : ℕ) (A : MPSTensor d D) (u : Matrix (Fin
   leftCanonical := isLeftCanonical_rotatePhysical A u hu hA.leftCanonical
   period_pos := hA.period_pos
   peripheral_eq := by rw [transferMap_rotatePhysical A u hu]; exact hA.peripheral_eq
-  primitiveRoot := hA.primitiveRoot
 
 /-! ### SameMPV₂ preservation under rotation -/
 
