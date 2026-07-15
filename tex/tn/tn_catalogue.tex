@@ -1523,8 +1523,6 @@
             \TNOpenVirtualWest{tnLOpenWestPort}
             \TNVirtualPort{tnLOpenEastPort}{tnL}{east}
             \TNOpenVirtualEast{tnLOpenEastPort}
-            \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}
-            \TNOpenPhysicalNorth{tnLOpenKetPort}
             \TNInsertion{tnu}{above=of tnL}{#1}
             \TNPhysicalPort{tnLTotnu}{tnL}{north}
             \TNPhysicalPort{tnuTotnL}{tnu}{south}
@@ -1757,13 +1755,11 @@
         \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
         \TNLabelAbove{tnL}{#2}
         \TNLabelAbove{tnR}{#3}
-        \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
         \TNVirtualPort{tnLTotnM}{tnL}{east}
         \TNVirtualPort{tnMTotnL}{tnM}{west}
         \TNConnectVirtual{tnLTotnM}{tnMTotnL}
         \TNVirtualPort{tnMOpenEastPort}{tnM}{east}\TNOpenVirtualEast{tnMOpenEastPort}
         \TNVirtualPort{tnROpenWestPort}{tnR}{west}\TNOpenVirtualWest{tnROpenWestPort}
-        \TNVirtualPort{tnROpenEastPort}{tnR}{east}\TNOpenVirtualEast{tnROpenEastPort}
         \TNInsertion{tnX}{below=of tnOmission}{#5}
         \TNVirtualPort{tnLTrace}{tnL}{west}
         \TNVirtualPort{tnXTraceLeft}{tnX}{west}
