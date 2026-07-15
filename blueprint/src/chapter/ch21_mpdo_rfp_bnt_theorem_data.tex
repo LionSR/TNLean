@@ -24,7 +24,6 @@
     \lean{MPOTensor.BNTLabelTheoremData.chi_entry_pos}
     \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_chi_trace}
-    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow}
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family,
         def:mpdo_bnt_label_operator_family,
@@ -80,23 +79,30 @@
     positive BNT-label $\chi$-witness belonging to the theorem data.
 \end{proof}
 
-\begin{corollary}[Pulled-back blocked coefficient formula]%
+\begin{corollary}[Blocked coefficient trace-power formulas]%
     \label{cor:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_positiveBlockedChi_trace_pow}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form,
         lem:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
-    The positive-length blocked-basis coefficients are traces of powers of the
-    pulled-back blocked-basis $\chi$-matrices obtained from BNT-label
-    theorem data: for every positive blocked length $n$,
+    For every positive blocked length $n$, the blocked-basis coefficients are
+    traces of powers of the BNT-label $\chi$-matrices selected by the source
+    and target label maps. Equivalently, they are traces of powers of the
+    pulled-back blocked-basis matrices $\chi_{n,i,j,k}$:
     \[
         c^{(n)}_{i,j,k}
+        =
+        \operatorname{tr}\!\left(
+            \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
+        \right)
         =
         \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
     \]
 \end{corollary}
 \begin{proof}\leanok
-    Apply the trace-power identity of the positive blocked-basis
-    $\chi$-witness obtained from the theorem data.
+    The blocked-basis comparison identifies the coefficient with the trace
+    power of the BNT-label matrix selected by the source and target maps. By
+    definition, the pulled-back matrix $\chi_{n,i,j,k}$ is this same matrix.
 \end{proof}
