@@ -379,8 +379,8 @@ theorem isObservableDecorrelated_iff
 /-- The adjoint form of decorrelation, with the order of the two separated
 observables reversed.
 
-This is the second equality in arXiv:1606.00608, Appendix D.2, equation
-`decorr`, lines 2194--2198. -/
+This is the adjoint-reversed decorrelation equality in arXiv:1606.00608,
+Appendix D.2, lines 2194--2198. -/
 theorem IsDecorrelated.reverse
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     (hPherm : P.IsHermitian) (hdec : IsDecorrelated P)
