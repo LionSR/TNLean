@@ -443,7 +443,8 @@
 
 \begin{definition}[Physical closure maps]
     \label{def:phys_close}
-    \lean{MPOTensor.physCloseN, MPOTensor.physClose1,
+    \lean{MPOTensor.physCloseN, MPOTensor.physCloseN_apply,
+      MPOTensor.physClose1,
       MPOTensor.physClose2, MPOTensor.physClose3}
     \leanok
     \uses{def:mpo_eval_word}
@@ -464,23 +465,6 @@
     $N=2,3$ occur in
     \cite[Proposition~C.7, lines~1510--1516]{Cirac2016MPDO_arXiv}.
 \end{definition}
-
-\begin{lemma}[Matrix entries of a physical closure]
-    \label{lem:phys_close_apply}
-    \lean{MPOTensor.physCloseN_apply}
-    \leanok
-    \uses{def:phys_close}
-    For physical words $\boldsymbol i,\boldsymbol j$ of length $N$,
-    \[
-        M_N(X)_{\boldsymbol i,\boldsymbol j}
-        =\tr\!\left(M^{i_0j_0}\cdots M^{i_{N-1}j_{N-1}}X\right).
-    \]
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    This is the defining matrix entry of the physical closure.
-\end{proof}
 
 \begin{lemma}[Periodic closure]
     \label{lem:phys_close_identity}
