@@ -42,11 +42,23 @@
     Then $\E_A^2=\E_A$.
 \end{theorem}
 \begin{proof}\leanok
-    Expanding $\E_A^2$ gives a double Kraus sum indexed by pairs $(i_1,i_2)$.
-    Substituting the decomposition~(\ref{eq:corr_kraus_isometry_decomp}) and
-    using the isometry relation
-    $V^\dagger V = 1$ collapses the double sum to the single Kraus family
-    $\{A^j\}$, hence $\E_A^2 = \E_A$.
+    Substituting the decomposition~(\ref{eq:corr_kraus_isometry_decomp}) into
+    the double Kraus sum gives, for every bond matrix $X$,
+    \[
+        \begin{aligned}
+        \E_A^2(X)
+        &= \sum_{i_1,i_2}(A^{i_1}A^{i_2})X(A^{i_1}A^{i_2})^\dagger \\
+        &= \sum_{j,k}\left(
+            \sum_{i_1,i_2}
+            V_{(i_1,i_2),j}\overline{V_{(i_1,i_2),k}}
+        \right)A^jX(A^k)^\dagger \\
+        &= \sum_{j,k}(V^\dagger V)_{j,k}A^jX(A^k)^\dagger
+         = \sum_{j,k}\delta_{j,k}A^jX(A^k)^\dagger \\
+        &= \sum_j A^jX(A^j)^\dagger
+         = \E_A(X).
+        \end{aligned}
+    \]
+    Hence $\E_A^2=\E_A$.
 \end{proof}
 
 \begin{theorem}[Kraus-isometry criterion for transfer idempotence]%
