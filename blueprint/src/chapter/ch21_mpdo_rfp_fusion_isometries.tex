@@ -531,43 +531,37 @@ weights in the length-independent case at
     coefficients $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{proof}
 
-\begin{theorem}[Fusion isometries imply the BNT algebra clause]%
-    \label{thm:mpdo_bnt_fusion_implies_algebra_clause}
+\begin{definition}[BNT algebra clause derived from fusion isometries]%
+    \label{def:mpdo_bnt_fusion_algebra_clause}
     \lean{MPOTensor.BNTFusionIsometryFamily.toBNTAlgebraClause}
     \leanok
     \uses{def:mpdo_bnt_algebra_clause,
         def:mpdo_bnt_fusion_isometry_family,
-        def:mpdo_bnt_label_idempotent_coefficient_form}
+        def:mpdo_bnt_label_idempotent_coefficient_form,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        thm:mpdo_fusion_same_length_product}
     Suppose the fusion-isometry identity holds with positive diagonal matrices
     $\chi_{\alpha,\beta,\gamma}$, and suppose the trace scalars satisfy the
     length-one idempotent law for the corresponding trace-power coefficients.
-    Then the concrete operators $O_L(M_\alpha)$ satisfy the BNT algebra clause
-    with the same diagonal matrices and trace scalars. This is implication
-    (iii)$\Rightarrow$(ii) of
-    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}; it does not assert either of the
-    implications involving the renormalization fixed-point condition.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:mpdo_fusion_same_length_product,
-        def:mpdo_positive_bnt_label_chi_trace_power_form}
-    The positive chi witness gives, for $L>0$,
+    The resulting BNT algebra clause has coefficients, for $L>0$,
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
         =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}),
     \]
-    and positivity of every diagonal entry. The preceding theorem gives
+    and records positivity of every diagonal entry. Its product field is
     \[
         O_L(M_\alpha)O_L(M_\beta)
         =\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
     \]
-    while the remaining hypothesis is
+    and its idempotent field is the assumed identity
     \[
         m_\gamma=\sum_{\alpha,\beta}
         c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
     \]
-    These are precisely the three fields of the BNT algebra clause.
-\end{proof}
+    This construction realizes implication (iii)$\Rightarrow$(ii) of
+    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}; it does not assert either of the
+    implications involving the renormalization fixed-point condition.
+\end{definition}
 
 \begin{figure}[ht]
     \centering
