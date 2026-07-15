@@ -194,8 +194,8 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     \[
         O_{AB}(N)\longrightarrow 0,
     \]
-    or their bond dimensions are equal and there are $X\in\GL_D(\C)$ and
-    $\zeta\in\C$, with $|\zeta|=1$, such that
+    or their bond dimensions are equal; call the common value $D$. Then there
+    are $X\in\GL_D(\C)$ and $\zeta\in\C$, with $|\zeta|=1$, such that
     \[
         B^i=\zeta X A^iX^{-1}
     \]
@@ -212,11 +212,13 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     dimensions differ, rectangular overlap decay gives $O_{AB}(N)\to0$. If
     their dimensions agree but they are not gauge-phase equivalent, the
     equal-dimension overlap-decay theorem gives the same conclusion. In the
-    remaining case, $B^i=\zeta X A^iX^{-1}$. The gauge-phase relation gives
+    remaining case, $B^i=\zeta X A^iX^{-1}$. By
+    Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge}, $|\zeta|=1$. Its proof uses
+    the gauge-phase relation to obtain
     \[
         O_{BB}(N)=|\zeta|^{2N}O_{AA}(N).
     \]
-    Since both self-overlaps tend to one, this forces $|\zeta|=1$, and hence
+    The two self-overlap limits force the asserted unit norm. Hence
     \[
         O_{AB}(N)=\overline{\zeta}^{\,N}O_{AA}(N),
         \qquad |O_{AB}(N)|=|O_{AA}(N)|\longrightarrow1.
