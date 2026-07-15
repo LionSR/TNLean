@@ -913,6 +913,75 @@ separate step.
     Theorem~\ref{thm:mpdo_pair_fusion_selector_completeness}.
 \end{proof}
 
+\begin{definition}[One fusion layer of the topological projector]%
+    \label{def:mpdo_topological_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
+    \lean{MPOTensor.BNTFusionIsometryFamily.conjugatedProjectorQBlock}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    Let $P_\gamma$ be operators on the terminal bond spaces.  Define one
+    fusion layer of the recursive operator $Q$ by
+    \[
+        Q_{\alpha,\beta}
+          =\bigoplus_\gamma
+             \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
+    \]
+    Its transport to the product bond space is
+    \[
+        \widehat Q_{\alpha,\beta}
+          =U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}.
+    \]
+\end{definition}
+
+\begin{theorem}[Projection property of one fusion layer]%
+    \label{thm:mpdo_topological_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_eq_unweighted}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
+    \leanok
+    \uses{def:mpdo_topological_projector_one_fusion,
+        thm:mpdo_pair_fusion_bnt_completeness,
+        thm:mpdo_bnt_length_independent_zipper}
+    Let $P_\gamma$ be self-adjoint idempotents on the terminal bond spaces.
+    Suppose that the matrices $\chi_{\alpha,\beta,\gamma}$ have the
+    positive-length trace-power form of the label-coefficient family and that
+    this family is independent of the positive chain length.  Then
+    \[
+        Q_{\alpha,\beta}
+          =\bigoplus_\gamma
+             1_{r_{\alpha,\beta}^{\gamma}}\otimes P_\gamma
+    \]
+    is self-adjoint and idempotent.  If the labelled tensors form a basis of
+    normal tensors, then $\widehat Q_{\alpha,\beta}$ is an orthogonal
+    projection.  This is the single recursive fusion step in
+    \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    The trace-power hypothesis and length independence give
+    $\chi_{\alpha,\beta,\gamma}=1$.  Hence
+    \[
+      Q_{\alpha,\beta}^{\dagger}
+        =\bigoplus_\gamma(1\otimes P_\gamma^{\dagger})
+        =Q_{\alpha,\beta},
+      \qquad
+      Q_{\alpha,\beta}^{2}
+        =\bigoplus_\gamma(1\otimes P_\gamma^{2})
+        =Q_{\alpha,\beta}.
+    \]
+    By Theorem~\ref{thm:mpdo_pair_fusion_bnt_completeness},
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$.  Therefore
+    \[
+      \widehat Q_{\alpha,\beta}^{\dagger}=\widehat Q_{\alpha,\beta},
+      \qquad
+      \widehat Q_{\alpha,\beta}^{2}
+        =U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}
+          (U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger})
+          Q_{\alpha,\beta}U_{\alpha,\beta}
+        =\widehat Q_{\alpha,\beta}.
+    \]
+\end{proof}
+
 \begin{theorem}[Left iterated fusion completeness]%
     \label{thm:mpdo_left_fusion_selector_completeness}
     \lean{MPOTensor.BNTFusionIsometryFamily.%
