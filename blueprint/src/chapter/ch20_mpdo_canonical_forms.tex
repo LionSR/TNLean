@@ -302,34 +302,44 @@ This is the inverse identity in
     nondegeneracy of the trace pairing gives finite-length trace separation.
 \end{proof}
 
-\begin{remark}[Sharp finite-length block separation]
-    \label{rem:sharp_bnt_block_separation_gap}
-    \notready
+\begin{theorem}[Sharp finite-length block separation]
+    \label{thm:sharp_bnt_block_separation}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
+    \leanok
     \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
+        thm:sector_basis_dimension_le_total_dimension,
         lem:bnt_direct_sum_block_separation_word_span}
-    Let $D$ be the total bond dimension and $g$ the number of minimal
-    representatives.  The common exact injective length is $D^4$.  For
-    $g\geq2$, the pair-separation argument works at length $3(D^4+1)$.  The
-    missing simultaneous interpolation statement should realize $(X,0)$
-    on one anchor pair and multiply by identity--zero selectors for the other
-    $g-2$ representatives.  It would give the target length
+    Let $P$ be a BNT canonical form with total bond dimension $D$. There is a
+    positive integer $N\leq3D^5$ such that the simultaneous word evaluations
+    of the minimal representatives at length $N$ span their full product
+    matrix algebra.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $g$ be the number of minimal representatives. The common exact
+    injective length is $D^4$. If $g=1$, ordinary block injectivity gives the
+    simultaneous span at length $D^4$.
+
+    Suppose $g\geq2$. Positive-length propagation gives block injectivity at
+    lengths $D^4+1$ and $3(D^4+1)$. The pair-separation argument therefore
+    gives the full pair span at length $3(D^4+1)$ for every pair of distinct
+    representatives. For each chosen block, realize an arbitrary value on
+    that block and zero on an anchor block, then multiply by identity--zero
+    selectors for the remaining $g-2$ representatives. Summing these
+    block-supported tuples gives the full simultaneous span at length
     \[
-        3(g-1)(D^4+1)\leq3(D-1)(D^4+1).
+        N=3(g-1)(D^4+1).
     \]
-    The preceding argument instead concatenates a separate injective prefix
-    and gives the longer length
+    Each representative has positive dimension and occurs at least once, so
+    $g\leq D$. Hence
     \[
-        D^4+3(g-1)(D^4+1).
+        N\leq3(D-1)(D^4+1)\leq3D^5,
     \]
-    Thus the sharp bound in \cite[lines~340--345]{Cirac2016MPDO_arXiv} reduces
-    to the stated anchor-pair interpolation.  The case $g=1$ follows directly
-    from ordinary block injectivity.  For $g\geq2$, the interpolation and the
-    elementary estimates above give
-    \[
-        3(D^4+1)(D-1)\leq3D^5.
-    \]
-    % Detailed audit: docs/paper-gaps/cpgsv17_bicf_block_separation.tex.
-\end{remark}
+    where the last inequality follows from $D-1\leq D^4$.
+    This is the bound in
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv}.
+\end{proof}
 
 \begin{definition}[Representative word-tuple separation]
     \label{def:representative_word_tuple_span}
@@ -382,8 +392,9 @@ This is the inverse identity in
     In the first auxiliary assertion, eventual representative word-tuple
     separation is an explicit assumption.  The later post-blocked theorem
     derives the needed finite representative separation from the full BNT
-    canonical-form hypotheses.  The source's sharp $3D^5$ bound remains
-    separate, as recorded in
+    canonical-form hypotheses. The sharp $3D^5$ representative-separation
+    bound is Theorem~\ref{thm:sharp_bnt_block_separation}; its detailed source
+    comparison is recorded in
     \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
 \end{theorem}
 

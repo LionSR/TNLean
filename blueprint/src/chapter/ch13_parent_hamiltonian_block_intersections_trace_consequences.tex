@@ -13,6 +13,9 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
     \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
     \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
+    \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
     \leanok
     \uses{lem:direct_sum_two_block_dimension_step,
         lem:pair_trace_separation_to_pairwise_block_separation,
@@ -45,9 +48,9 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
         \qquad
         \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega=0.
     \]
-    Consequently the simultaneous block-word tuples at length
+    If $r\geq2$, the simultaneous block-word tuples at the source length
     \[
-        (L_0+1)+(r-1)3(L_0+1)
+        3(r-1)(L_0+1)
     \]
     span the full product algebra
     \[
@@ -62,10 +65,13 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     normalized BNT representatives.
     Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
     converts these trace-separation equations into the displayed pairwise
-    block-separating equations. Multiplying the equations for the $r-1$
-    blocks different from $k$ gives a block-separating equation for $k$, and
-    Lemma~\ref{lem:product_word_span_from_bnt_block_separation} then supplies the
-    displayed product span.
+    block-separating equations. To realize a prescribed matrix $X_k$ on block
+    $k$, choose an anchor block and use the full pair span to realize
+    $(X_k,0)$ on that pair. Multiply this element by identity--zero selectors
+    for the other $r-2$ blocks. The resulting tuple equals $X_k$ on block $k$
+    and vanishes on every other block, at length $3(r-1)(L_0+1)$. Summing
+    these tuples over $k$ realizes an arbitrary element of the product
+    algebra.
 \end{proof}
 
 \begin{lemma}[Blockwise matrix equality from trace pairings]

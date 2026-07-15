@@ -143,14 +143,27 @@ selector and product-span construction.\footnote{%
 \leanid{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv};
 \leanid{MPSTensor.exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}.}
 
-The already-injective BNT conclusion is now stated directly from explicit
-separated-block hypotheses, with the required injective-block hypotheses kept
-visible. In that form, when the selected BNT blocks are already injective at
-the required common lengths, the selector datum and the resulting finite
-direct-sum span are theorems rather than identity-padding assumptions.\footnote{%
+The BNT conclusion is stated directly from explicit separated-block
+hypotheses, with the required finite-length injectivity hypotheses visible.
+These hypotheses may begin at an arbitrary positive common length $L_0$;
+positive-length propagation supplies the longer lengths used in the proof.
+The selector datum and the resulting finite direct-sum span are theorems rather
+than identity-padding assumptions.\footnote{%
 \leanid{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv};
 \leanid{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum};
-\leanid{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}.}
+\leanid{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors};
+and their Condition-C1 variants in
+\path{TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean}.}
+
+The sharp direct-sum interpolation does not concatenate a separate injective
+prefix. Full pair span at a common length $S$ realizes an arbitrary value
+$(X,0)$ on a chosen block and one anchor block. Multiplication by $b-2$
+identity--zero selectors removes the remaining blocks. Hence the full
+simultaneous span holds at length $(b-1)S$. For
+$S=3(L_0+1)$ this is exactly the source length
+$3(b-1)(L_0+1)$.\footnote{%
+\leanid{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop};
+\leanid{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}.}
 
 The downstream consumers of the direct-sum input are threefold. The exact-length
 span of a direct-sum block family and its two-block trace-dual form are expressed
@@ -166,39 +179,27 @@ exact-length span for a canonical-form BNT family.\footnote{%
 
 \section{Conclusion}
 
-The formalized theorems cover the $L_0=1$ case: when the selected BNT blocks
-are already injective at length one (as supplied by the one-copy
-normal-canonical BNT formulation together with irreducible-block hypotheses),
-their pairwise not-gauge-phase-equivalence data and the fixed lengths from
-one-site injectivity imply the homogeneous pair-trace separation and
-product-word-span conclusions needed downstream. For this special case the
-formal result matches the
-paper's conclusion: distinct BNT representatives yield a direct-sum span at a
-common finite length. However, it does not formalize the full generality of the
-paper's direct-sum theorem. The older representation paper states the result for
-arbitrary $L_0$, ordered block sizes, and $b\ge2$ blocks; those features are
-replaced here by one-copy normal-canonical BNT and explicit separated-block
-hypotheses. The general-$L_0$ case, in which each normal block needs a
-Wielandt-type blocking step to reach
-length-$L_0$ injectivity, is not covered by these theorems alone; it requires
-the separate bounded and common injective-blocking results. The old warning
-against replacing exact-length span by cumulative span therefore remains
-mathematically important for that general setting.
+The arbitrary-$L_0$ direct-sum interpolation needed for the BNT specialization
+is now formalized at the exact source length $3(b-1)(L_0+1)$. The resulting
+span is homogeneous and positive-length, not cumulative. The length-zero
+identity is only the neutral base of a finite product over no remaining
+selectors. The case $b=1$ is treated separately by ordinary block injectivity.
 
-For the full after-blocking normal-CF-BNT route, the conclusion is still
-conditional. The bounded and common injective-blocking results now supply the
-Wielandt part of the input, but the final CPSV theorem is not yet unconditional:
-the proof still has to transport the blocked BNT separation hypotheses through
-the chosen reblocking/reindexing maps and feed the blocked not-GPE facts into
-the BNT sector-data theorem \leanid{MPSTensor.ft_sector_bnt_equal_sector_data}.
-That transport is the remaining bridge between the already-injective direct-sum
-theorem surface and the canonical-form after-blocking comparison.
+For a BNT canonical form of total bond dimension $D$, the common quantum
+Wielandt length is $L_0=D^4$. Every representative has positive dimension and
+occurs at least once, so $b\leq D$. The formal theorem consequently gives a
+positive simultaneous-span length at most
+\[
+  3(b-1)(D^4+1)\leq3(D-1)(D^4+1)\leq3D^5.
+\]
+This closes the sharp block-separation input cited by the 2016 MPDO source.\footnote{%
+\leanid{MPSTensor.SectorDecomposition.basisCount_le_totalDim};
+\leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}.}
 
-Accordingly, the blueprint should present the David/P\'erez-Garc\'ia
-exact-length direct-sum input as formalized for the already-injective BNT
-specialization, while keeping the after-blocking CPSV statement visibly
-conditional until the reblocking transport and blocked BNT-separation handling
-have landed.
+This conclusion concerns the finite-length direct-sum span. Other statements
+in the Fundamental Theorem that compare two canonical-form tensors still
+require their own reblocking and sector-data arguments; those are logically
+separate from the direct-sum input proved here.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -93,11 +93,9 @@ older per-copy trace-separation conclusion.\footnote{The criteria are
     \texttt{HorizontalCFData} constructors such as
     \texttt{horizontalCFData\_of\_propBlockInjective}.  The blueprint records
     these restricted criteria in its finite-witness remark.}
-Thus the sharp block-injectivity proposition has not been asserted without proof.  These
-statements remain correct restricted results, but the public horizontal
-canonical-form predicate no longer uses them.  It is now stated through a
-representative-indexed BNT sector decomposition, so repeated copies are
-grouped before the separation argument.
+These statements remain correct restricted results. The sharp proposition is
+now proved separately for a representative-indexed BNT sector decomposition,
+so repeated copies are grouped before the separation argument.
 
 \section{The counterexample boundary}
 
@@ -177,8 +175,8 @@ the coefficient identity
 \[
     c_{P^{[p]},j}^{(N)}=c_{P,j}^{(Np)}.
 \]
-The tensor assembled from this blocked decomposition has the same MPV family
-as the physical blocking of the original assembled tensor.
+The tensor obtained from this blocked decomposition has the same MPV family
+as the physical blocking of the original tensor.
 
 The representative-separation step has now been obtained without asserting
 preservation of the full canonical-form predicate.  If $p>0$ and every
@@ -220,46 +218,52 @@ $D^4$.  This exact common length has been formalized.\footnote{Formal
     \leanid{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}, and
     \leanid{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}.}
 
-It remains useful to distinguish identity--zero selectors from the full tuple
-span.  Put $g$ for the number of minimal representatives and set $L_0=D^4$.
-The proved two-block argument gives the full pair span at length $3(L_0+1)$;
-in particular it can realize $(X,0)$ on a chosen block and one anchor block.
-For $g\geq2$, multiplying this pair polynomial by $g-2$ identity--zero
-selectors for the remaining representatives should give a tuple equal to $X$
-on the chosen block and zero elsewhere, at total length
+The direct-sum interpolation is now complete. Put $g$ for the number of
+minimal representatives and set $L_0=D^4$. The two-block argument gives the
+full pair span at length $S=3(L_0+1)$. For a chosen block $k$, choose an anchor
+block $j\ne k$ and use this pair span to realize an arbitrary pair $(X_k,0)$.
+Multiply that word polynomial by one identity--zero selector for each of the
+remaining $g-2$ blocks. The resulting simultaneous tuple equals $X_k$ on
+block $k$ and vanishes on every other block, at length
 \[
-    3(g-1)(D^4+1).
+    (g-1)S=3(g-1)(D^4+1).
 \]
-Since every representative has positive dimension and occurs at least once,
-$g\leq D$; hence this target length is at most the source length
-$3(D^4+1)(D-1)$.  The existing conversion from selectors to the whole product
-algebra instead concatenates an additional injective prefix of length
-$D^4$.
-\footnote{Formal declaration:
-\leanid{MPSTensor.hasBiCF_of_propBlockInjective}.}
-Its exact length is therefore
-\[
-    D^4+3(g-1)(D^4+1).
-\]
-This is within the source length when $g\leq D-1$, but exceeds it by
-$D^4$ in the extremal case $g=D$.  Thus the remaining multi-block
-mathematical point is not quantum Wielandt.  It is the simultaneous
-interpolation statement which realizes $(X,0)$ on the chosen anchor pair
-while multiplying by identity--zero selectors for the remaining
-representatives, without paying a separate injective prefix.  The
-case $g=1$ has no direct-sum obstruction and is handled by ordinary block
-injectivity.  Adding an assumed finite separation witness would conceal the
-multi-block point and is not an acceptable substitute.
+Summing these block-supported tuples over $k$ realizes every element of the
+full product algebra. No separate injective prefix is used. The length-zero
+identity occurs only as the neutral base of the finite product when there are
+no remaining selectors; it is not a padding hypothesis or a separate case in
+the theorem.
 
-Once that simultaneous interpolation is supplied, the final arithmetic is
-elementary:
-for $D\geq1$,
+If $g=1$, ordinary block injectivity gives the required span at length $D^4$.
+If $g\geq2$, positivity of the representative dimensions and multiplicities
+gives $g\leq D$. The remaining arithmetic is
 \[
   3(D^4+1)(D-1)
   =3(D^5-D^4+D-1)
   \leq 3D^5,
 \]
 because $D-1\leq D^4$.
+
+The formal proof is recorded by the following declarations:
+\begin{itemize}
+  \item
+  \leanid{MPSTensor.exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop}
+  realizes the arbitrary anchor-pair value;
+  \item
+  \leanid{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
+  and
+  \leanid{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
+  prove the direct-sum interpolation at length $(g-1)S$;
+  \item
+  \leanid{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
+  specializes the result to the source length $3(g-1)(L_0+1)$;
+  \item
+  \leanid{MPSTensor.SectorDecomposition.basisCount_le_totalDim}
+  proves $g\leq D$;
+  \item
+  \leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
+  gives a positive simultaneous-span length at most $3D^5$.
+\end{itemize}
 
 The public horizontal canonical-form predicate has now been replaced by the
 representative-indexed formulation.  It quantifies a BNT sector decomposition
@@ -279,15 +283,12 @@ decomposition from the resulting reducing projections, and proving the
 subsequent positivity and isometric normalization of its sectors, are separate
 parts of that proposition.
 
-The sharp numerical statement is therefore classified as an \emph{open gap}.
-For $g\geq2$, the sole remaining conceptual blocker identified here is the
-simultaneous interpolation of one arbitrary anchor-pair value with
-identity--zero pair selectors on all remaining representatives.  The formal
-proof will also require routine
-named lemmas for $g\leq D$, specialization to $L_0=D^4$, and
-$3(D^4+1)(D-1)\leq3D^5$.  For $g=1$, ordinary block injectivity supplies the
-result directly.  The source-level Lemma L needs only the existence of a
-suitable finite length, not this sharp estimate.
+The sharp numerical statement is therefore classified as \emph{closed}. The
+proof has the source hypothesis set: BNT canonical form supplies normality,
+left-canonicality, normalized self-overlap, and pairwise gauge-phase
+inequivalence; no finite separation witness is added as a hypothesis. The
+source-level Lemma L needs only existence of a suitable finite length, while
+the formal theorem also establishes the stated bound $3D^5$.
 
 \bibliographystyle{alpha}
 \bibliography{references}
