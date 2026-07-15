@@ -913,6 +913,46 @@ separate step.
     Theorem~\ref{thm:mpdo_pair_fusion_selector_completeness}.
 \end{proof}
 
+\begin{theorem}[One fusion layer of the topological projector]%
+    \label{thm:mpdo_topological_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_eq_unweighted}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionIsometryFamily.conjugatedProjectorQBlock}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
+    \leanok
+    \uses{thm:mpdo_pair_fusion_bnt_completeness,
+        thm:mpdo_bnt_length_independent_zipper}
+    Let $P_\gamma$ be orthogonal projections on the terminal bond spaces.
+    For one layer of the recursive operator $Q$ in equation
+    \texttt{Projector-Q}, set
+    \[
+        Q_{\alpha,\beta}
+          =\bigoplus_\gamma
+             \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
+    \]
+    If the positive trace-power coefficients are independent of the positive
+    chain length, then
+    \[
+        Q_{\alpha,\beta}
+          =\bigoplus_\gamma
+             1_{r_{\alpha,\beta}^{\gamma}}\otimes P_\gamma
+    \]
+    is an orthogonal projection.  If the labelled tensors form a basis of
+    normal tensors, then
+    $U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is also an
+    orthogonal projection.  This is the single recursive fusion step in
+    \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Length independence makes each diagonal matrix
+    $\chi_{\alpha,\beta,\gamma}$ the identity.  Direct sums and tensoring
+    with an identity preserve self-adjointness and idempotence.  By
+    Theorem~\ref{thm:mpdo_pair_fusion_bnt_completeness}, the fusion map is
+    unitary, so conjugation by it preserves an orthogonal projection.
+\end{proof}
+
 \begin{theorem}[Left iterated fusion completeness]%
     \label{thm:mpdo_left_fusion_selector_completeness}
     \lean{MPOTensor.BNTFusionIsometryFamily.%

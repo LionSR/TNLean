@@ -484,6 +484,7 @@ import TNLean.MPS.MPDO.BNTTripleFusionComparison
 import TNLean.MPS.MPDO.BNTFinalSectorFusion
 import TNLean.MPS.MPDO.BNTFourfoldFusionIndices
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
+import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.BNTFixedFinalUnitarity
 import TNLean.MPS.MPDO.CompleteZipperFusion
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
