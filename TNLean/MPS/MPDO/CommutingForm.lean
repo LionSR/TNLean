@@ -15,9 +15,13 @@ arXiv:1606.00608 Section 4.4 and Appendix C.2.
 For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
 semidefinite two-site matrix `B`, together with proofs that its translated
 copies on the periodic chain pairwise commute and that their product
-reproduces `ρ` up to a positive scalar. This is the projector-limit version of
-the commuting-form definition in arXiv:1606.00608. This file defines the
-commuting-form witness and proves the GSNNCH equivalence built from it. The
+reproduces `ρ` up to a positive scalar. This is a single-bond presentation of
+the projector-limit form in arXiv:1606.00608. The source definition instead
+makes an orthogonal direct sum over sectors and natural multiplicities
+explicit. An arbitrary bond on the full local space may itself be block
+diagonal, and no equivalence with the source presentation is proved here.
+This file defines the single-bond witness and proves the equivalence between
+its two presentations. The
 theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` proves the
 entropy-side implication from SAL; its local structure gives
 `HasCommutingForm` through `MPOTensor.EtaLocalStructureData.hasCommutingForm`.
@@ -31,7 +35,7 @@ This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
 * `MPOTensor.CommutingFormData`
 * `MPOTensor.HasCommutingForm`
 * `MPOTensor.GSNNCHData`
-* `MPOTensor.IsGSNNCH`
+* `MPOTensor.IsGSNNCH` (single-bond presentation)
 * `MPOTensor.isGSNNCH_iff_hasCommutingForm`
 * `MPOTensor.IsGSNNCHWithZCL`
 
@@ -430,11 +434,16 @@ def HasCommutingForm (M : MPOTensor d D) : Prop :=
 /-- A GSNNCH witness at chain length `N`: a commuting-form witness together with
 its positive normalization constant.
 
-This states the commuting-form definition in the equivalent positive-operator form
+**Scope restriction (single-bond presentation):** This states the positive-operator form
 `ρ⁽ᴺ⁾ = c ∏ᵢ B_{i,i+1}`, where `c > 0` and the translated bond operators
-commute pairwise. The paper's exponential form is recovered by taking
+commute pairwise. The exponential form of that sector is recovered by taking
 `B_{i,i+1} = e^{-h_{i,i+1}}` or, more generally, by the projector-limit
-convention following that definition. -/
+convention following the source definition. The full definition in
+arXiv:1606.00608, lines 829--850, also has an orthogonal direct sum over
+sectors with natural multiplicities. The bond here acts on the full local
+space and may itself be block diagonal; no equivalence with the explicit
+sector presentation is proved. See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 structure GSNNCHData (d N : ℕ) where
   /-- The underlying commuting-form data. -/
   form : CommutingFormData d N
@@ -458,12 +467,22 @@ theorem realizes_form_state (data : GSNNCHData d N) :
 
 end GSNNCHData
 
-/-- Chain-level GSNNCH predicate. -/
+/-- The chain-level single-bond presentation associated with the source
+GSNNCH condition.
+
+**Scope restriction (single-bond presentation):** No equivalence with the
+explicit source sector decomposition is asserted. See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 def IsGSNNCHAt {d N : ℕ} (ρ : ChainOperator d N) : Prop :=
   ∃ data : GSNNCHData d N, ρ = data.state
 
-/-- Global GSNNCH predicate for an MPO tensor: every chain length `N ≥ 2`
-produces a GSNNCH operator in the sense of the commuting-form definition. -/
+/-- Global single-bond commuting-product predicate for an MPO tensor: every
+chain length `N ≥ 2` has the restricted form represented by `IsGSNNCHAt`.
+
+**Scope restriction (single-bond presentation):** The source GSNNCH definition
+has explicit sector and multiplicity data, while the bond here may itself be
+block diagonal. No equivalence is asserted. See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 def IsGSNNCH (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N → IsGSNNCHAt (mpo M N)
 
@@ -507,12 +526,21 @@ theorem hasCommutingForm_of_isGSNNCH {M : MPOTensor d D}
     (hM : IsGSNNCH M) : HasCommutingForm M := fun N hN =>
   (isGSNNCHAt_iff_exists_commutingForm (mpo M N)).mp (hM N hN)
 
+/-- The two presentations of the single-bond commuting-product condition
+are equivalent.
+
+**Scope restriction (single-bond presentation):** This does not establish an
+equivalence with the explicit source GSNNCH sector decomposition. See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 theorem isGSNNCH_iff_hasCommutingForm (M : MPOTensor d D) :
     IsGSNNCH M ↔ HasCommutingForm M :=
   ⟨hasCommutingForm_of_isGSNNCH, isGSNNCH_of_hasCommutingForm⟩
 
-/-- The GSNNCH-with-zero-correlation-length branch of the simple-MPDO
-equivalence. -/
+/-- The single-bond commuting-product condition together with doubled-index
+zero correlation length.
+
+**Scope restriction (single-bond presentation):** See
+docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 def IsGSNNCHWithZCL (M : MPOTensor d D) : Prop :=
   IsGSNNCH M ∧ IsZCL M
 

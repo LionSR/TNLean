@@ -1,103 +1,11 @@
-\section{Commuting form and GSNNCH}
-
-\begin{definition}[Commuting-form data for an MPDO]
-    \label{def:mpdo_commuting_form_data}
-    \lean{MPOTensor.CommutingFormData}
-    \leanok
-    \uses{def:mpo_tensor}
-    For a fixed chain length $N \ge 2$, this consists of a positive
-    semidefinite two-site operator $B\ge0$ whose translated copies commute
-    pairwise on the periodic $N$-site chain:
-    \[
-        [B_{i,i+1},B_{j,j+1}]=0.
-    \]
-\end{definition}
-
-\begin{definition}[Commuting form]
-    \label{def:mpdo_has_commuting_form}
-    \lean{MPOTensor.HasCommutingForm}
-    \leanok
-    \uses{def:mpdo_commuting_form_data, def:mpo_tensor}
-    An MPO tensor $M$ has the commuting-form property if for every $N \ge 2$
-    there is a two-site operator $B$ as in
-    Definition~\ref{def:mpdo_commuting_form_data} and a constant $c>0$ such
-    that
-    \[
-        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
-    \]
-\end{definition}
-
-\begin{definition}[GSNNCH]
-    \label{def:mpdo_is_gsnnch}
-    \lean{MPOTensor.IsGSNNCH}
-    \leanok
-    \uses{def:mpdo_has_commuting_form}
-    An MPO tensor $M$ is a Gibbs state of a nearest-neighbor commuting
-    Hamiltonian if for every $N\ge2$ its finite-chain operator admits the
-    equivalent positive-operator presentation
-    \[
-        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1},
-        \qquad c>0,\qquad B\ge0,\qquad [B_{i,i+1},B_{j,j+1}]=0.
-    \]
-    The projector-limit convention in
-    \cite{Cirac2016MPDO_arXiv}
-    identifies this with the exponential Gibbs form.
-\end{definition}
-
-\begin{theorem}[GSNNCH iff commuting form]
-    \label{thm:mpdo_is_gsnnch_iff_has_commuting_form}
-    \lean{MPOTensor.isGSNNCH_iff_hasCommutingForm}
-    \leanok
-    \uses{def:mpdo_is_gsnnch, def:mpdo_has_commuting_form}
-    For an MPO tensor, the GSNNCH condition is equivalent to the existence of
-    commuting-form data on every finite chain.
-\end{theorem}
-
-\begin{proof}\leanok
-    Both directions unfold to the same identity
-    $\rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}$ with $c>0$: a commuting-form
-    witness for $M$ at length $N$ together with its constant $c$ is exactly a
-    GSNNCH witness for $M$ at length $N$ with that same constant, and
-    conversely.
-\end{proof}
-
-\begin{definition}[GSNNCH with doubled-index transfer idempotence]
-    \label{def:mpdo_is_gsnnch_zcl}
-    \lean{MPOTensor.IsGSNNCHWithZCL}
-    \leanok
-    \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
-    This is the conjunction of the GSNNCH condition with the doubled-index
-    transfer condition
-    \[
-        \E_M\circ\E_M=\E_M.
-    \]
-    It is the doubled-index analogue of the ZCL clause in item~(iii) of
-    the simple-MPDO equivalence in \cite{Cirac2016MPDO_arXiv}; the
-    source physical-trace condition is Definition~\ref{def:mpo_source_zcl}.
-\end{definition}
-
-\begin{theorem}[GSNNCH with doubled-index idempotence iff commuting form with it]
-    \label{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
-    \lean{MPOTensor.isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL}
-    \leanok
-    \uses{def:mpdo_is_gsnnch_zcl, thm:mpdo_is_gsnnch_iff_has_commuting_form}
-    The GSNNCH branch with doubled-index transfer idempotence is equivalent to
-    the conjunction of the commuting-form property with that same idempotence
-    condition.
-\end{theorem}
-
-\begin{proof}\leanok
-    Unfold the definition of the GSNNCH branch with doubled-index transfer
-    idempotence and apply
-    Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
-\end{proof}
+\section{Single-bond commuting form from the local structure}
 
 \begin{definition}[Translation-invariant two-site bond]
     \label{def:mpdo_translation_invariant_bond_data}
     \lean{MPOTensor.TranslationInvariantBondData}
     \leanok
     \uses{def:mpdo_commuting_form_data}
-    This records a single positive semidefinite two-site bond $B\ge0$ whose
+    This records one positive semidefinite two-site bond $B\ge0$ whose
     translated copies commute pairwise on the periodic $N$-site chain at
     every chain length $N\ge2$:
     \[
@@ -105,18 +13,21 @@
     \]
 \end{definition}
 
-\begin{definition}[$\eta$-local commuting-form data]
+\begin{definition}[$\eta$-local single-bond commuting-form data]
     \label{def:mpdo_eta_local_structure_data}
     \lean{MPOTensor.EtaLocalStructureData}
     \leanok
     \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_has_commuting_form}
-    This defines the eta-local form of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}:
+    This defines the one-bond eta-local form constructed in
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}:
     a two-site bond $B$ as in
     Definition~\ref{def:mpdo_translation_invariant_bond_data} together with,
     for every chain length $N\ge2$, a constant $c>0$ such that
     \[
         \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
     \]
+    The bond acts on the full two-site space. No identification with the
+    explicit sector data of Definition~\ref{def:mpdo_source_gsnnch} is made.
 \end{definition}
 
 \begin{definition}[Finite-chain bond form]
@@ -131,7 +42,7 @@
     commuting-form data at every length $N \ge 2$.
 \end{definition}
 
-\begin{theorem}[$\eta$-local structure carries commuting form]
+\begin{theorem}[$\eta$-local structure carries single-bond commuting form]
     \label{thm:mpdo_eta_local_structure_has_commuting_form}
     \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
     \lean{MPOTensor.EtaLocalStructureData.formAt_realizes}
@@ -141,7 +52,8 @@
     \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
-    The $\eta$-local structure itself determines a commuting-form witness for
+    The $\eta$-local structure itself determines a single-bond
+    commuting-form witness for
     every chain length $N \ge 2$: writing $B$ for its bond, the translated
     copies commute,
     \[
@@ -151,8 +63,11 @@
     \[
         \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
     \]
-    This is the implication from $\eta$-local structure to commuting form in
-    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}.
+    This is the one-bond product conclusion used in
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}. Its relation to the explicit
+    source sector decomposition is not asserted here.
+    % Scope restriction (single-bond presentation): see
+    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
     % Gap documented in docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 \end{theorem}
 
@@ -161,21 +76,25 @@
     provided by the $\eta$-local structure.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure gives GSNNCH]
+\begin{theorem}[$\eta$-local structure gives the restricted GSNNCH predicate]
     \label{thm:mpdo_eta_local_structure_is_gsnnch}
     \lean{MPOTensor.EtaLocalStructureData.isGSNNCH}
     \lean{MPOTensor.isGSNNCH_of_etaLocalStructure}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_is_gsnnch}
-    The same $\eta$-local structure gives a GSNNCH witness on every finite
-    periodic chain.
+    The same $\eta$-local structure gives a single-bond product witness
+    on every finite periodic chain.
+    The statement does not identify this witness with the explicit sector
+    decomposition of Definition~\ref{def:mpdo_source_gsnnch}.
+    % Scope restriction (single-bond presentation): see
+    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 \end{theorem}
 
 \begin{proof}\leanok
     Evaluate the local structure at each chain length $N \ge 2$.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure with doubled-index idempotence]
+\begin{theorem}[Restricted commuting form with doubled-index idempotence]
     \label{thm:mpdo_eta_local_structure_is_gsnnch_zcl}
     \lean{MPOTensor.EtaLocalStructureData.isGSNNCHWithZCL}
     \lean{MPOTensor.isGSNNCHWithZCL_of_etaLocalStructure}
@@ -183,7 +102,9 @@
     \uses{thm:mpdo_eta_local_structure_has_commuting_form,
         thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
     An $\eta$-local structure together with the doubled-index transfer
-    condition gives the corresponding GSNNCH branch.
+    condition gives the corresponding single-bond branch.
+    % Scope restriction (single-bond presentation): see
+    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -225,5 +146,5 @@
     physical-sector factorization, the all-length product identity is
     Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}.
     The doubled-index transfer condition enters only in the subsequent RFP and
-    GSNNCH branch conclusions.
+    single-bond branch conclusions.
 \end{remark}

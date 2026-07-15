@@ -1,0 +1,62 @@
+\subsection{Local simple-MPDO structure}
+
+\begin{definition}[Local simple-MPDO structure]
+    \label{def:simple_mpdo_local_structure_data}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData}
+    \leanok
+    \uses{thm:sal_implies_eta_structure}
+    This structure records the local ingredients of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}: a normalized three-site reduced
+    state with equality in strong subadditivity, the resulting Markov
+    decomposition, and a primitive matrix $T$ satisfying
+    \[
+        \operatorname{tr}(T)=1,
+        \qquad
+        \operatorname{tr}(T^m)=\operatorname{tr}(T)
+    \]
+    for every positive integer $m$, together with a rank-one factorization
+    \[
+        T = a b^\top, \qquad a \cdot b = 1.
+    \]
+\end{definition}
+
+\begin{theorem}[Local simple-MPDO structure from corrected rank-one criteria]
+    \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPairingIdempotent}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef}
+    \leanok
+    \uses{def:simple_mpdo_local_structure_data, thm:sal_implies_eta_structure,
+        thm:psd_trace_powers_rank_one_t, thm:pairing_idempotent_rank_one_t}
+    There are two sufficient forms of the local conclusion associated with
+    \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}. In the first,
+    $T$ is positive semidefinite,
+    $\operatorname{tr}(T)=1$, and
+    $\operatorname{tr}(T^m)=1$ for every positive integer $m$; the spectral
+    theorem then gives
+    \[
+        T = a b^\top, \qquad a \cdot b = 1.
+    \]
+    In the second, $T$ is the sector trace matrix of linearly independent
+    sector tensors satisfying the zero-correlation-length pairing identity.
+    This identity implies $T^2=T$, so trace one gives the same rank-one
+    factorization. In this second form the constancy of the positive-power
+    traces is a conclusion rather than an assumption.
+\end{theorem}
+
+The physical supports are locally orthogonal:
+\begin{center}
+    \TNMPDOBNTVerticalProduct
+\end{center}
+In contraction notation, local orthogonality is
+$\mathcal K_y^*\mathcal K_x=0$ whenever $x\ne y$.
+This is \cite[Theorem~4.9(iv), lines~863--868]{Cirac2016MPDO_arXiv}.
+
+Expanding $\sum_jP_j=\Id$ on both physical indices and using the local
+orthogonality relations leaves only the diagonal term:
+\begin{center}
+    \TNMPDOProjectorAbsorption
+\end{center}
+Equivalently, each local tensor is supported on its own sector:
+$\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
+This is the calculation in
+\cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
