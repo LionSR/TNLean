@@ -1821,6 +1821,7 @@
 }
 
 % ---------- PEPS diagrams ----------
+\input{tn_motifs_peps.tex} % chktex 27 (shared PEPS and transfer motifs)
 
 \TNDeclareDiagram
     {TNPEPSEdgeBlockingReduction}
@@ -1830,23 +1831,7 @@
     {\TNPEPSEdgeBlockingReduction}
     {chapter/ch24_peps_ft_edge_middle.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1347}{(0,0)}
-            \TNPEPSFiveSitePatch{blockC}
-            \TNPEPSEdgeBlockingRegions{blockC}{A'_2}{A'_1}{A'_3}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1357}{(2.70,0.70)}{\rightsquigarrow}
-        \begin{TNPanel}{tnClientPanel1358}{(3.75cm,0.70cm)}
-            \TNTensor{blkL}{(0.80,0)}
-            \TNTensor{blkM}{(2.10,0)}
-            \TNTensor{blkR}{(3.40,0)}
-            \TNFactorFit{blockedWordBoundary}{(blkL)(blkM)(blkR)}
-            \foreach \n in {blkL,blkM,blkR} {
-                    \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
-                }
-            \TNPlacedLabel{tnClientLabel1366}{($(blkL.south)+(0,-0.30)$)}{A'_1}
-            \TNPlacedLabel{tnClientLabel1367}{($(blkM.south)+(0,-0.30)$)}{A'_3}
-            \TNPlacedLabel{tnClientLabel1368}{($(blkR.south)+(0,-0.30)$)}{A'_2}
-        \end{TNPanel}
+        \TNPEPSEdgeBlockingReductionMotif
     \end{TNDiagram}%
 }
 
@@ -1858,7 +1843,7 @@
     {\TNPEPSEdgeInsertedCoeff}
     {chapter/ch24_peps_ft_edge_middle.tex}{%
     \begin{TNDiagram}[normal]
-        \TNThreeSiteInsertion{edgeCoeff}{A'_1}{A'_3}{A'_2}{X}
+        \TNPEPSEdgeInsertedCoeffMotif
     \end{TNDiagram}%
 }
 
@@ -1870,13 +1855,7 @@
     {\TNPEPSThreeSiteInsertionComparison}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1381}{(0,0)}
-            \TNThreeSiteInsertion{insA}{A_1}{A_2}{A_3}{X}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1384}{(4.20,0)}{=}
-        \begin{TNPanel}{tnClientPanel1385}{(4.90cm,0)}
-            \TNThreeSiteInsertion{insB}{B_1}{B_2}{B_3}{Y}
-        \end{TNPanel}
+        \TNPEPSThreeSiteInsertionComparisonMotif
     \end{TNDiagram}%
 }
 
@@ -1888,34 +1867,7 @@
     {\TNPEPSInsertionPhysicalRealization}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1393}{(0,0)}
-            \TNTensor{realLeftA}{(0,0)}
-            \TNPhysicalPort{realLeftAOpenKetPort}{realLeftA}{north}\TNOpenPhysicalNorth{realLeftAOpenKetPort}
-            \TNVirtualPort{realLeftAOpenEastPort}{realLeftA}{east}\TNOpenVirtualEast{realLeftAOpenEastPort}
-            \TNVirtualPort{realLeftAOpenSouthPort}{realLeftA}{south}\TNOpenVirtualSouth{realLeftAOpenSouthPort}
-            \TNInsertion{realLeftM}{(-0.56,0)}{M}
-            \TNVirtualPort{realLeftMOpenWestPort}{realLeftM}{west}\TNOpenVirtualWest{realLeftMOpenWestPort}
-            \TNVirtualPort{realLeftMTorealLeftA}{realLeftM}{east}\TNVirtualPort{realLeftATorealLeftM}{realLeftA}{west}\TNConnectVirtual{realLeftMTorealLeftA}{realLeftATorealLeftM}
-            \TNLabelRight{realLeftA.south}{A_u}
-            \TNPlacedLabel{tnClientLabel1402}{(-0.56,-0.35)}{e}
-            \TNPlacedLabel{tnClientLabel1403}{(0.72,-0.36)}{\eta_{\widehat e}}
-            \TNPlacedLabel{tnClientLabel1404}{($(realLeftA.north)+(0,0.73)$)}{i}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1406}{(1.80,0)}{=}
-        \begin{TNPanel}{tnClientPanel1407}{(3.20cm,0)}
-            \TNTensor{realRightA}{(0,0)}
-            \TNPhysicalPort{realRightAOpenKetPort}{realRightA}{north}\TNOpenPhysicalNorth{realRightAOpenKetPort}
-            \TNInsertion{realRightO}{(0,0.62)}{}
-            \TNPhysicalPort{realRightATorealRightO}{realRightA}{north}\TNPhysicalPort{realRightOTorealRightA}{realRightO}{south}\TNConnectPhysical{realRightATorealRightO}{realRightOTorealRightA}
-            \TNPhysicalPort{realRightOOpenKetPort}{realRightO}{north}\TNOpenPhysicalNorth{realRightOOpenKetPort}
-            \TNVirtualPort{realRightAOpenWestPort}{realRightA}{west}\TNOpenVirtualWest{realRightAOpenWestPort}
-            \TNVirtualPort{realRightAOpenEastPort}{realRightA}{east}\TNOpenVirtualEast{realRightAOpenEastPort}
-            \TNVirtualPort{realRightAOpenSouthPort}{realRightA}{south}\TNOpenVirtualSouth{realRightAOpenSouthPort}
-            \TNLabelRight{realRightA.south}{A_u}
-            \TNPlacedLabel{tnClientLabel1417}{(-0.72,-0.36)}{\eta_e}
-            \TNPlacedLabel{tnClientLabel1418}{(0.72,-0.36)}{\eta_{\widehat e}}
-            \TNPlacedLabel{tnClientLabel1419}{($(realRightO.north)+(0,0.55)$)}{O(A_u(\eta_e,\eta_{\widehat e}))}
-        \end{TNPanel}
+        \TNPEPSInsertionPhysicalRealizationMotif
     \end{TNDiagram}%
 }
 
@@ -1927,17 +1879,7 @@
     {\TNPEPSPhysicalToVirtualInsertion}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1426}{(0,0)}
-            \TNThreeSitePhysicalFirst{physVirtL}{B_1}{B_2}{B_3}{O_1}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1429}{(3.75,0)}{=}
-        \begin{TNPanel}{tnClientPanel1430}{(4.15cm,0)}
-            \TNThreeSitePhysicalSecond{physVirtR}{B_1}{B_2}{B_3}{O_2}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1433}{(7.95,0)}{\Longrightarrow}
-        \begin{TNPanel}{tnClientPanel1434}{(8.40cm,0)}
-            \TNThreeSiteInsertion{physVirtW}{B_1}{B_2}{B_3}{W}
-        \end{TNPanel}
+        \TNPEPSPhysicalToVirtualInsertionMotif
     \end{TNDiagram}%
 }
 
@@ -1949,17 +1891,7 @@
     {\TNPEPSEdgeInsertionEquality}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1442}{(0,0)}
-            \TNPEPSFiveSiteEdgeInsertion{edgeEqA}{X}
-            \TNPEPSFiveSiteLabels{edgeEqA}{A_1}{A_2}{A_3}{A_4}{A_5}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1448}{(2.75,0.70)}{=}
-        \begin{TNPanel}{tnClientPanel1449}{(4.15cm,0)}
-            \TNPEPSFiveSiteEdgeInsertion{edgeEqB}{X}
-            \TNPEPSFiveSiteLabels{edgeEqB}
-            {\widetilde B_1}{\widetilde B_2}{\widetilde B_3}
-            {\widetilde B_4}{\widetilde B_5}
-        \end{TNPanel}
+        \TNPEPSEdgeInsertionEqualityMotif
     \end{TNDiagram}%
 }
 
@@ -1971,22 +1903,7 @@
     {\TNPEPSEdgeGaugeAbsorption}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1462}{(0,0)}
-            \TNTensor{absB}{(0,0)}
-            \TNPhysicalPort{absBOpenKetPort}{absB}{north}\TNOpenPhysicalNorth{absBOpenKetPort}
-            \TNVirtualPort{absBOpenWestPort}{absB}{west}\TNOpenVirtualWest{absBOpenWestPort}
-            \TNVirtualPort{absBOpenEastPort}{absB}{east}\TNOpenVirtualEast{absBOpenEastPort}
-            \TNVirtualPort{absBOpen225Port}{absB}{225}\TNOpenVirtualSouth{absBOpen225Port}
-            \TNVirtualPort{absBOpen315Port}{absB}{315}\TNOpenVirtualSouth{absBOpen315Port}
-            \TNPlacedLabel{tnClientLabel1469}{($(absB.south)+(0,-0.95)$)}{B_v}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1471}{(1.45,0)}{\longmapsto}
-        \begin{TNPanel}{tnClientPanel1472}{(3.10cm,0)}
-            \TNFourBondGaugeStar{absGauge}{(0,0)}
-                {Z_{e_1}^{\pm1}}{Z_{e_2}^{\pm1}}
-                {Z_{e_3}^{\pm1}}{Z_{e_4}^{\pm1}}
-            \TNLabelBelow{absGaugeCaption}{\widetilde B_v}
-        \end{TNPanel}
+        \TNPEPSEdgeGaugeAbsorptionMotif
     \end{TNDiagram}%
 }
 
@@ -1998,13 +1915,7 @@
     {\TNPEPSTwoInjectiveTensorInsertionComparison}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1494}{(0,0)}
-            \TNPEPSTwoInjectivePair{twoInjA}{A_1}{A_2}{X}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1497}{(3.20,0)}{=}
-        \begin{TNPanel}{tnClientPanel1498}{(3.90cm,0)}
-            \TNPEPSTwoInjectivePair{twoInjB}{B_1}{B_2}{X}
-        \end{TNPanel}
+        \TNPEPSTwoInjectiveTensorInsertionComparisonMotif
     \end{TNDiagram}%
 }
 
@@ -2016,21 +1927,7 @@
     {\TNPEPSTwoInjectiveGaugeScalarReduction}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1506}{(0,0)}
-            \TNPEPSThreeLegFan{gaugeRedA}{A_1}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1509}{(1.25,0)}{=}
-        \begin{TNPanel}{tnClientPanel1510}{(2.05cm,0)}
-            \TNPEPSThreeLegFanInsertion{gaugeRedBZ}{B_1}{3}{Z}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1514}{(3.30,0)}{=}
-        \begin{TNPanel}{tnClientPanel1515}{(4.10cm,0)}
-            \TNPEPSThreeLegFanInsertion{gaugeRedBU}{B_1}{1}{U}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1519}{(5.35,0)}{=}
-        \begin{TNPanel}{tnClientPanel1520}{(6.15cm,0)}
-            \TNPEPSThreeLegFanInsertion{gaugeRedBW}{B_1}{2}{W}
-        \end{TNPanel}
+        \TNPEPSTwoInjectiveGaugeScalarReductionMotif
     \end{TNDiagram}%
 }
 
@@ -2042,45 +1939,7 @@
     {\TNPEPSOneVertexComplementComparison}
     {chapter/ch24_peps_ft_region_transfer_covariance.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1529}{(0,0)}
-            \TNTensor{oneSiteAR}{(1.00,0)}
-            \TNTensor{oneSiteA}{(2.00,0)}
-            \TNPhysicalPort{oneSiteAROpenKetPort}{oneSiteAR}{north}\TNOpenPhysicalNorth{oneSiteAROpenKetPort}
-            \TNPhysicalPort{oneSiteAOpenKetPort}{oneSiteA}{north}\TNOpenPhysicalNorth{oneSiteAOpenKetPort}
-            \TNVirtualPort{oneSiteAROpenWestPort}{oneSiteAR}{west}\TNOpenVirtualWest{oneSiteAROpenWestPort}
-            \TNVirtualPort{oneSiteARTooneSiteA}{oneSiteAR}{east}\TNVirtualPort{oneSiteATooneSiteAR}{oneSiteA}{west}\TNConnectVirtual{oneSiteARTooneSiteA}{oneSiteATooneSiteAR}
-            \TNVirtualPort{oneSiteAOpenEastPort}{oneSiteA}{east}\TNOpenVirtualEast{oneSiteAOpenEastPort}
-            \TNPlacedLabel{tnClientLabel1537}{($(oneSiteAR.south)+(0,-0.30)$)}{A_R}
-            \TNPlacedLabel{tnClientLabel1538}{($(oneSiteA.south)+(0,-0.30)$)}{A_v}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1540}{(3.12,0)}{=}
-        \begin{TNPanel}{tnClientPanel1541}{(3.55cm,0)}
-            \TNTensor{oneSiteAS}{(1.00,0)}
-            \TNPhysicalPort{oneSiteASOpenKetPort}{oneSiteAS}{north}\TNOpenPhysicalNorth{oneSiteASOpenKetPort}
-            \TNVirtualPort{oneSiteASOpenWestPort}{oneSiteAS}{west}\TNOpenVirtualWest{oneSiteASOpenWestPort}
-            \TNVirtualPort{oneSiteASOpenEastPort}{oneSiteAS}{east}\TNOpenVirtualEast{oneSiteASOpenEastPort}
-            \TNPlacedLabel{tnClientLabel1546}{($(oneSiteAS.south)+(0,-0.30)$)}{A_S}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1548}{(5.42,0)}{\propto}
-        \begin{TNPanel}{tnClientPanel1549}{(5.95cm,0)}
-            \TNTensor{oneSiteBS}{(1.00,0)}
-            \TNPhysicalPort{oneSiteBSOpenKetPort}{oneSiteBS}{north}\TNOpenPhysicalNorth{oneSiteBSOpenKetPort}
-            \TNVirtualPort{oneSiteBSOpenWestPort}{oneSiteBS}{west}\TNOpenVirtualWest{oneSiteBSOpenWestPort}
-            \TNVirtualPort{oneSiteBSOpenEastPort}{oneSiteBS}{east}\TNOpenVirtualEast{oneSiteBSOpenEastPort}
-            \TNPlacedLabel{tnClientLabel1554}{($(oneSiteBS.south)+(0,-0.30)$)}{\widetilde B_S}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1556}{(7.82,0)}{=}
-        \begin{TNPanel}{tnClientPanel1557}{(8.25cm,0)}
-            \TNTensor{oneSiteBR}{(1.00,0)}
-            \TNTensor{oneSiteB}{(2.00,0)}
-            \TNPhysicalPort{oneSiteBROpenKetPort}{oneSiteBR}{north}\TNOpenPhysicalNorth{oneSiteBROpenKetPort}
-            \TNPhysicalPort{oneSiteBOpenKetPort}{oneSiteB}{north}\TNOpenPhysicalNorth{oneSiteBOpenKetPort}
-            \TNVirtualPort{oneSiteBROpenWestPort}{oneSiteBR}{west}\TNOpenVirtualWest{oneSiteBROpenWestPort}
-            \TNVirtualPort{oneSiteBRTooneSiteB}{oneSiteBR}{east}\TNVirtualPort{oneSiteBTooneSiteBR}{oneSiteB}{west}\TNConnectVirtual{oneSiteBRTooneSiteB}{oneSiteBTooneSiteBR}
-            \TNVirtualPort{oneSiteBOpenEastPort}{oneSiteB}{east}\TNOpenVirtualEast{oneSiteBOpenEastPort}
-            \TNPlacedLabel{tnClientLabel1565}{($(oneSiteBR.south)+(0,-0.30)$)}{\widetilde B_R}
-            \TNPlacedLabel{tnClientLabel1566}{($(oneSiteB.south)+(0,-0.30)$)}{\widetilde B_v}
-        \end{TNPanel}
+        \TNPEPSOneVertexComplementComparisonMotif
     \end{TNDiagram}%
 }
 
@@ -2092,37 +1951,7 @@
     {\TNPEPSInjectiveRegionUnion}
     {chapter/ch24_peps_ft_normal_union.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{unionAB}{(0,0)}
-        \TNTensor{unionI}{(1.50,1.50)}
-        \TNTensor{unionBA}{(3.00,0)}
-        \TNTensor{unionC}{(1.50,0.45)}
-        \foreach \n in {unionAB,unionI,unionBA,unionC} {
-                \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
-            }
-        \TNVirtualPort{unionABToI}{unionAB}{45}
-        \TNVirtualPort{unionIToAB}{unionI}{225}
-        \TNVirtualPort{unionIToBA}{unionI}{315}
-        \TNVirtualPort{unionBAToI}{unionBA}{135}
-        \TNVirtualPort{unionBAToC}{unionBA}{163}
-        \TNVirtualPort{unionCToBA}{unionC}{343}
-        \TNVirtualPort{unionCToAB}{unionC}{197}
-        \TNVirtualPort{unionABToC}{unionAB}{17}
-        \TNVirtualPort{unionABToBA}{unionAB}{east}
-        \TNVirtualPort{unionBAToAB}{unionBA}{west}
-        \TNVirtualPort{unionIToC}{unionI}{south}
-        \TNVirtualPort{unionCToI}{unionC}{north}
-        \TNConnectVirtual{unionABToI}{unionIToAB}
-        \TNConnectVirtual{unionIToBA}{unionBAToI}
-        \TNConnectVirtual{unionBAToC}{unionCToBA}
-        \TNConnectVirtual{unionCToAB}{unionABToC}
-        \TNConnectVirtual{unionABToBA}{unionBAToAB}
-        \TNConnectVirtual{unionIToC}{unionCToI}
-        \TNLabelLeft{unionAB}{A\setminus B}
-        \TNLabelAbove{unionI}{A\cap B}
-        \TNLabelRight{unionBA}{B\setminus A}
-        \TNPoint{unionBaseLabel}
-            {($(unionABToBA)!0.5!(unionBAToAB)$)}
-        \TNLabelBelow{unionBaseLabel}{(A\cup B)^c}
+        \TNPEPSInjectiveRegionUnionMotif
     \end{TNDiagram}%
 }
 
@@ -2134,109 +1963,7 @@
     {\TNPEPSInjectiveRegionUnionProof}
     {chapter/ch24_peps_ft_normal_union.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1607}{(0,0)}
-            \TNTensor{proofAB}{(0,0)}
-            \TNTensor{proofI}{(0.70,0.70)}
-            \TNTensor{proofBA}{(2.00,0)}
-            \TNInsertion{proofX}{(1.30,-0.70)}{}
-            \foreach \n in {proofAB,proofI,proofBA} {
-                    \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
-                }
-            \TNVirtualPort{proofABToI}{proofAB}{45}
-            \TNVirtualPort{proofIToAB}{proofI}{225}
-            \TNVirtualPort{proofIToBA}{proofI}{-28}
-            \TNVirtualPort{proofBAToI}{proofBA}{152}
-            \TNVirtualPort{proofBAToX}{proofBA}{225}
-            \TNVirtualPort{proofXToBA}{proofX}{45}
-            \TNVirtualPort{proofXToAB}{proofX}{152}
-            \TNVirtualPort{proofABToX}{proofAB}{-28}
-            \TNVirtualPort{proofABToBA}{proofAB}{east}
-            \TNVirtualPort{proofBAToAB}{proofBA}{west}
-            \TNVirtualPort{proofIToX}{proofI}{-67}
-            \TNVirtualPort{proofXToI}{proofX}{113}
-            \TNConnectVirtual{proofABToI}{proofIToAB}
-            \TNConnectVirtual{proofIToBA}{proofBAToI}
-            \TNConnectVirtual{proofBAToX}{proofXToBA}
-            \TNConnectVirtual{proofXToAB}{proofABToX}
-            \TNConnectVirtual{proofABToBA}{proofBAToAB}
-            \TNConnectVirtual{proofIToX}{proofXToI}
-            \TNPlacedLabel{tnClientLabel1633}{($(proofX)+(0,-0.34)$)}{X}
-            \TNPlacedLabel{tnClientLabel1634}{(1.00,-1.18)}{=0}
-        \end{TNPanel}
-        \TNMorphismArrow{proofArrowOne}{(2.60,0.00)}{(3.20,0.00)}{A^{-1}}
-        \begin{TNPanel}{tnClientPanel1637}{(3.80cm,0)}
-            \TNPoint{proofAone}{(0,0)}
-            \TNPoint{proofItwo}{(0.70,0.70)}
-            \TNTensor{proofBAone}{(2.00,0)}
-            \TNInsertion{proofXone}{(1.30,-0.70)}{}
-            \TNPhysicalPort{proofBAoneOpenKetPort}{proofBAone}{north}\TNOpenPhysicalNorth{proofBAoneOpenKetPort}
-            \TNVirtualPort{proofBAoneToX}{proofBAone}{225}
-            \TNVirtualPort{proofXoneToBA}{proofXone}{45}
-            \TNVirtualPort{proofXoneToA}{proofXone}{152}
-            \TNVirtualPort{proofXoneToI}{proofXone}{113}
-            \TNVirtualPort{proofBAoneToA}{proofBAone}{west}
-            \TNVirtualPort{proofBAoneToI}{proofBAone}{152}
-            \TNVirtualTerminal{proofXoneToAEnd}{($(proofXone)!0.34!(proofAone)$)}
-            \TNVirtualTerminal{proofXoneToIEnd}{($(proofXone)!0.34!(proofItwo)$)}
-            \TNVirtualTerminal{proofBAoneToAEnd}{($(proofBAone)!0.34!(proofAone)$)}
-            \TNVirtualTerminal{proofBAoneToIEnd}{($(proofBAone)!0.34!(proofItwo)$)}
-            \TNConnectVirtual{proofBAoneToX}{proofXoneToBA}
-            \TNConnectVirtual{proofXoneToA}{proofXoneToAEnd}
-            \TNConnectVirtual{proofXoneToI}{proofXoneToIEnd}
-            \TNConnectVirtual{proofBAoneToA}{proofBAoneToAEnd}
-            \TNConnectVirtual{proofBAoneToI}{proofBAoneToIEnd}
-            \TNPlacedLabel{tnClientLabel1658}{($(proofXone)+(0,-0.34)$)}{X}
-            \TNPlacedLabel{tnClientLabel1659}{(1.00,-1.18)}{=0}
-        \end{TNPanel}
-        \TNMorphismArrow{proofArrowTwo}{(6.45,0.00)}{(7.05,0.00)}{A\cap B}
-        \begin{TNPanel}{tnClientPanel1662}{(7.70cm,0)}
-            \TNPoint{proofAtwo}{(0,0)}
-            \TNTensor{proofItwoNode}{(0.70,0.70)}
-            \TNTensor{proofBAtwo}{(2.00,0)}
-            \TNInsertion{proofXtwo}{(1.30,-0.70)}{}
-            \foreach \n in {proofItwoNode,proofBAtwo} {
-                    \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
-                }
-            \TNVirtualPort{proofBAtwoToX}{proofBAtwo}{225}
-            \TNVirtualPort{proofXtwoToBA}{proofXtwo}{45}
-            \TNVirtualPort{proofXtwoToI}{proofXtwo}{113}
-            \TNVirtualPort{proofItwoNodeToX}{proofItwoNode}{-67}
-            \TNVirtualPort{proofItwoNodeToBA}{proofItwoNode}{-28}
-            \TNVirtualPort{proofBAtwoToI}{proofBAtwo}{152}
-            \TNVirtualPort{proofXtwoToA}{proofXtwo}{152}
-            \TNVirtualPort{proofBAtwoToA}{proofBAtwo}{west}
-            \TNVirtualPort{proofItwoNodeToA}{proofItwoNode}{225}
-            \TNVirtualTerminal{proofXtwoToAEnd}{($(proofXtwo)!0.34!(proofAtwo)$)}
-            \TNVirtualTerminal{proofBAtwoToAEnd}{($(proofBAtwo)!0.34!(proofAtwo)$)}
-            \TNVirtualTerminal{proofItwoToAEnd}{
-                ($(proofItwoNode)!0.34!(proofAtwo)$)}
-            \TNConnectVirtual{proofBAtwoToX}{proofXtwoToBA}
-            \TNConnectVirtual{proofXtwoToI}{proofItwoNodeToX}
-            \TNConnectVirtual{proofItwoNodeToBA}{proofBAtwoToI}
-            \TNConnectVirtual{proofXtwoToA}{proofXtwoToAEnd}
-            \TNConnectVirtual{proofBAtwoToA}{proofBAtwoToAEnd}
-            \TNConnectVirtual{proofItwoNodeToA}{proofItwoToAEnd}
-            \TNPlacedLabel{tnClientLabel1689}{($(proofXtwo)+(0,-0.34)$)}{X}
-            \TNPlacedLabel{tnClientLabel1690}{(1.00,-1.18)}{=0}
-        \end{TNPanel}
-        \TNMorphismArrow{proofArrowThree}{(10.35,0.00)}{(10.95,0.00)}{B^{-1}}
-        \begin{TNPanel}{tnClientPanel1693}{(11.55cm,0)}
-            \TNPoint{proofAthree}{(0,0)}
-            \TNPoint{proofIthree}{(0.70,0.70)}
-            \TNPoint{proofBAthree}{(2.00,0)}
-            \TNInsertion{proofXthree}{(1.30,-0.70)}{}
-            \TNVirtualPort{proofXthreeToA}{proofXthree}{152}
-            \TNVirtualPort{proofXthreeToI}{proofXthree}{113}
-            \TNVirtualPort{proofXthreeToBA}{proofXthree}{45}
-            \TNVirtualTerminal{proofXthreeToAEnd}{($(proofXthree)!0.34!(proofAthree)$)}
-            \TNVirtualTerminal{proofXthreeToIEnd}{($(proofXthree)!0.34!(proofIthree)$)}
-            \TNVirtualTerminal{proofXthreeToBAEnd}{
-                ($(proofXthree)!0.34!(proofBAthree)$)}
-            \TNConnectVirtual{proofXthreeToA}{proofXthreeToAEnd}
-            \TNConnectVirtual{proofXthreeToI}{proofXthreeToIEnd}
-            \TNConnectVirtual{proofXthreeToBA}{proofXthreeToBAEnd}
-            \TNPlacedLabel{tnClientLabel1708}{($(proofXthree)+(0,-0.34)$)}{X=0}
-        \end{TNPanel}
+        \TNPEPSInjectiveRegionUnionProofMotif
     \end{TNDiagram}%
 }
 
@@ -2248,17 +1975,7 @@
     {\TNPEPSNormalRegionsRS}
     {chapter/ch24_peps_ft_normal_square.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1715}{(0,0)}
-            \TNPEPSNormalTallWindow
-            \TNPEPSNormalSquareLattice
-            \TNPEPSNormalRegionR
-        \end{TNPanel}
-        \TNPlacedLabel{normalRegionsAnd}{(2.85,2.00)}{\text{and}}
-        \begin{TNPanel}{tnClientPanel1721}{(3.55cm,0)}
-            \TNPEPSNormalTallWindow
-            \TNPEPSNormalSquareLattice
-            \TNPEPSNormalRegionS
-        \end{TNPanel}
+        \TNPEPSNormalRegionsRSMotif
     \end{TNDiagram}%
 }
 
@@ -2270,9 +1987,7 @@
     {\TNPEPSNormalRegionT}
     {chapter/ch24_peps_ft_normal_square.tex}{%
     \begin{TNDiagram}[normal]
-        \TNPEPSNormalUpperWindow
-        \TNPEPSNormalSquareLattice
-        \TNPEPSNormalRegionTMotif
+        \TNPEPSNormalRegionTDiagramMotif
     \end{TNDiagram}%
 }
 
@@ -2283,9 +1998,8 @@
     {normal}
     {\TNPEPSNormalRectangleCover}
     {chapter/ch24_peps_ft_normal_square.tex}{%
-        \begin{TNDiagram}[normal]
-        \TNSquarePEPSPatch{coverGrid}{4}{4}{0.5}
-        \TNPEPSRectangleCoverRegions
+    \begin{TNDiagram}[normal]
+        \TNPEPSNormalRectangleCoverMotif
     \end{TNDiagram}%
 }
 
@@ -2297,18 +2011,7 @@
     {\TNPEPSNormalEdgeComplementTopCollar}
     {chapter/ch24_peps_ft_normal_square.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1755}{(0,0)}
-            \TNPEPSNormalFullWindow
-            \TNPEPSNormalSquareLattice
-            \TNPEPSNormalRegionTMotif
-            \TNPEPSNormalCollar
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1761}{(3.72,1.48)}{=}
-        \begin{TNPanel}{tnClientPanel1762}{(4.35cm,0)}
-            \TNPEPSNormalFullWindow
-            \TNPEPSNormalComplementBlock
-            \TNPEPSNormalSquareLattice
-        \end{TNPanel}
+        \TNPEPSNormalEdgeComplementTopCollarMotif
     \end{TNDiagram}%
 }
 
@@ -2320,20 +2023,7 @@
     {\TNPEPSNormalOneSiteSeparation}
     {chapter/ch24_peps_ft_normal_square.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1772}{(0,0)}
-            \TNPEPSNormalTallWindow
-            \TNPEPSNormalSquareLattice
-            \TNPEPSNormalRegionR
-            \TNPEPSNormalSingleSiteDifference
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1778}{(2.85,2.00)}{\subset}
-        \begin{TNPanel}{tnClientPanel1779}{(3.55cm,0)}
-            \TNPEPSNormalTallWindow
-            \TNPEPSNormalSquareLattice
-            \TNPEPSNormalRegionS
-            \TNPEPSNormalSingleSiteDifference
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1785}{(4.55,0.52)}{S=R\cup\{v\}}
+        \TNPEPSNormalOneSiteSeparationMotif
     \end{TNDiagram}%
 }
 
@@ -2345,18 +2035,7 @@
     {\TNPEPSNormalEdgeBlockingReduction}
     {chapter/ch24_peps_ft_normal_square.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1791}{(0,0)}
-            \TNPEPSNormalFullWindow
-            \TNPEPSNormalComplementBlock
-            \TNPEPSNormalSquareLattice
-            \TNPEPSNormalDistinguishedEdge
-            \TNPEPSNormalSelectedBlock
-            \TNPEPSNormalSecondaryBlock
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1799}{(3.75,1.45)}{\Rightarrow}
-        \begin{TNPanel}{tnClientPanel1800}{(4.45cm,1.50cm)}
-            \TNPEPSBlockedNormalChain
-        \end{TNPanel}
+        \TNPEPSNormalEdgeBlockingReductionMotif
     \end{TNDiagram}%
 }
 
@@ -2368,12 +2047,7 @@
     {\TNPEPSNormalEdgeBlockingHypotheses}
     {chapter/ch24_peps_ft_normal_square.tex}{%
     \begin{TNDiagram}[normal]
-        \TNPEPSNormalFullWindow
-        \TNPEPSNormalComplementBlock
-        \TNPEPSNormalSquareLattice
-        \TNPEPSNormalDistinguishedEdge
-        \TNPEPSNormalSelectedBlock
-        \TNPEPSNormalSecondaryBlock
+        \TNPEPSNormalEdgeBlockingHypothesesMotif
     \end{TNDiagram}%
 }
 
@@ -2385,34 +2059,7 @@
     {\TNPEPSNormalBlockingHypotheses}
     {chapter/ch24_peps_ft_normal_capstone.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1819}{(0,0)}
-            \TNPEPSNormalFullWindow
-            \TNPEPSNormalComplementBlock
-            \TNPEPSNormalSquareLattice
-            \TNPEPSNormalDistinguishedEdge
-            \TNPEPSNormalSelectedBlock
-            \TNPEPSNormalSecondaryBlock
-        \end{TNPanel}
-        \TNPlacedLabel{blockingDescription}{(1.50,-0.58)}{\text{edge blocking}}
-        \TNPlacedLabel{blockingAnd}{(3.75,1.45)}{\text{and}}
-        \begin{TNPanel}{tnClientPanel1829}{(4.60cm,-0.20cm)}
-            \begin{TNPanel}{tnClientPanel1830}{(0,0)}
-                \TNPEPSNormalTallWindow
-                \TNPEPSNormalSquareLattice
-                \TNPEPSNormalRegionR
-                \TNPEPSNormalSingleSiteDifference
-            \end{TNPanel}
-            \TNPlacedLabel{tnClientLabel1836}{(2.85,2.00)}{\subset}
-            \begin{TNPanel}{tnClientPanel1837}{(3.55cm,0)}
-                \TNPEPSNormalTallWindow
-                \TNPEPSNormalSquareLattice
-                \TNPEPSNormalRegionS
-                \TNPEPSNormalSingleSiteDifference
-            \end{TNPanel}
-            \TNPlacedLabel{tnClientLabel1843}{(4.55,0.52)}{S=R\cup\{v\}}
-            \TNPlacedLabel{oneSiteDescription}{(2.85,0.20)}
-                {\text{one-site comparison}}
-        \end{TNPanel}
+        \TNPEPSNormalBlockingHypothesesMotif
     \end{TNDiagram}%
 }
 
@@ -2424,16 +2071,7 @@
     {\TNPEPSTINormalGaugeAbsorption}
     {chapter/ch24_peps_ft_normal_square.tex}{%
     \begin{TNDiagram}[normal]
-        \begin{TNPanel}{tnClientPanel1851}{(0,0)}
-            \TNPEPSSquareTensor{tiB}{(0,0)}
-            \TNPlacedLabel{tnClientLabel1853}{($(tiB.south)+(0,-0.88)$)}{B}
-        \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1855}{(1.45,0)}{=}
-        \begin{TNPanel}{tnClientPanel1856}{(3.00cm,0)}
-            \TNCardinalGaugeCross{tiGauge}{(0,0)}
-                {X}{X^{-1}}{Y}{Y^{-1}}
-            \TNLabelBelow{tiGaugeCaption}{\lambda A}
-        \end{TNPanel}
+        \TNPEPSTINormalGaugeAbsorptionMotif
     \end{TNDiagram}%
 }
 
@@ -2446,16 +2084,7 @@
     {chapter/ch24_peps_ft_balanced_edge_scalars.tex,
      chapter/ch24_peps_ft_foundations.tex}{%
     \begin{TNDiagram}[normal]
-        \TNPEPSSite{tnU}{(0,0)}{}
-        \TNPEPSSite{tnW}{(3.30,0)}{}
-        \TNInsertion{tnXl}{(1.00,0)}{X_e}
-        \TNInsertion{tnXr}{(2.30,0)}{(X_e^{-1})^\top}
-        \TNVirtualPort{tnUTotnXl}{tnU}{east}\TNVirtualPort{tnXlTotnU}{tnXl}{west}\TNConnectVirtual{tnUTotnXl}{tnXlTotnU}
-        \TNVirtualPort{tnXlTotnXr}{tnXl}{east}\TNVirtualPort{tnXrTotnXl}{tnXr}{west}\TNConnectVirtual{tnXlTotnXr}{tnXrTotnXl}
-        \TNVirtualPort{tnXrTotnW}{tnXr}{east}\TNVirtualPort{tnWTotnXr}{tnW}{west}\TNConnectVirtual{tnXrTotnW}{tnWTotnXr}
-        \TNPlacedLabel{tnClientLabel1885}{(1.65,0.72)}{e = (u,w)}
-        \TNPlacedLabel{tnClientLabel1886}{($(tnU.south)+(0,-0.28)$)}{u}
-        \TNPlacedLabel{tnClientLabel1887}{($(tnW.south)+(0,-0.28)$)}{w}
+        \TNPEPSEdgeGaugeOrientationMotif
     \end{TNDiagram}%
 }
 
@@ -2468,10 +2097,7 @@
     {chapter/ch24_peps_ft_balanced_edge_scalars.tex,
      chapter/ch24_peps_ft_foundations.tex}{%
     \begin{TNDiagram}[normal]
-        \TNFourBondGaugeStar{tnGaugeAction}{(0,0)}
-            {M_{ve_1}}{M_{ve_2}}{M_{ve_3}}{M_{ve_4}}
-        \TNLabelAbove{tnGaugeActionPhysicalOpen}{\sigma}
-        \TNLabelBelow{tnGaugeActionCaption}{A_v \mapsto A_v^X}
+        \TNPEPSGaugeVertexActionMotif
     \end{TNDiagram}%
 }
 
@@ -2483,20 +2109,7 @@
     {\TNPEPSGaugeCancellation}
     {chapter/ch24_peps_ft_foundations.tex}{%
     \begin{TNDiagram}[normal]
-        \TNPEPSSite{tnL}{(0,0)}{}
-        \TNInsertion{tnX}{(0.92,0)}{}
-        \TNInsertion{tnXt}{(2.18,0)}{}
-        \TNPEPSSite{tnR}{(3.10,0)}{}
-        \TNVirtualPort{tnLTotnX}{tnL}{east}\TNVirtualPort{tnXTotnL}{tnX}{west}\TNConnectVirtual{tnLTotnX}{tnXTotnL}
-        \TNVirtualPort{tnXTotnXt}{tnX}{east}\TNVirtualPort{tnXtTotnX}{tnXt}{west}\TNConnectVirtual{tnXTotnXt}{tnXtTotnX}
-        \TNVirtualPort{tnXtTotnR}{tnXt}{east}\TNVirtualPort{tnRTotnXt}{tnR}{west}\TNConnectVirtual{tnXtTotnR}{tnRTotnXt}
-        \TNPlacedLabel{tnClientLabel1921}{($(tnX.north)+(0,0.28)$)}{X_e(j,i)}
-        \TNPlacedLabel{tnClientLabel1922}{($(tnXt.north)+(0,0.28)$)}{((X_e^{-1})^\top)(j,k)}
-        \TNPlacedLabel{tnClientLabel1923}{(4.20,0)}{=}
-        \TNPEPSSite{tnL2}{(5.15,0)}{}
-        \TNPEPSSite{tnR2}{(6.65,0)}{}
-        \TNVirtualPort{tnL2TotnR2}{tnL2}{east}\TNVirtualPort{tnR2TotnL2}{tnR2}{west}\TNConnectVirtual{tnL2TotnR2}{tnR2TotnL2}
-        \TNPlacedLabel{tnClientLabel1927}{(5.90,0.54)}{\sum_j X_e(j,i)\,((X_e^{-1})^\top)(j,k) = \delta(i,k)}
+        \TNPEPSGaugeCancellationMotif
     \end{TNDiagram}%
 }
 
@@ -2508,23 +2121,7 @@
     {\TNPEPSBlockedMiddleLocalGaugeFormula}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{bmA}{(0,0)}
-        \TNTensor{bmB}{(2.55,0)}
-        \foreach \n in {bmA,bmB} {
-            \TNVirtualPort{\n West}{\n}{west}\TNOpenVirtualWest{\n West}
-            \TNVirtualPort{\n East}{\n}{east}\TNOpenVirtualEast{\n East}
-            \TNVirtualPort{\n North}{\n}{north}\TNOpenVirtualNorth{\n North}
-            \TNVirtualPort{\n SouthWest}{\n}{220}
-            \TNOpenVirtualSouth{\n SouthWest}
-            \TNVirtualPort{\n SouthEast}{\n}{300}
-            \TNOpenVirtualSouth{\n SouthEast}
-        }
-        \TNPhysicalPort{bmAOpenKetPort}{bmA}{45}\TNOpenPhysicalNorth{bmAOpenKetPort}
-        \TNPhysicalPort{bmBOpenKetPort}{bmB}{45}\TNOpenPhysicalNorth{bmBOpenKetPort}
-        \TNPlacedLabel{tnClientLabel1946}{($(bmA)+(0,-0.62)$)}{A_v}
-        \TNPlacedLabel{tnClientLabel1947}{($(bmB)+(0,-0.62)$)}{B_v}
-        \TNPlacedLabel{tnClientLabel1948}{(1.28,0.25)}{\prod_{e\ni v}X_e}
-        \TNMorphismArrow{blockedMiddleArrow}{(0.62,0)}{(1.93,0)}{}
+        \TNPEPSBlockedMiddleLocalGaugeFormulaMotif
     \end{TNDiagram}%
 }
 
@@ -2536,29 +2133,7 @@
     {\TNPEPSLocalGaugeExtraction}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{tnLv}{(0,0)}
-        \TNPhysicalPort{tnLvOpenKetPort}{tnLv}{45}\TNOpenPhysicalNorth{tnLvOpenKetPort}
-        \TNPlacedLabel{tnClientLabel1957}{($(tnLv.45)+(0.38,0.48)$)}{\sigma}
-        \TNVirtualPort{tnLvOpenWestPort}{tnLv}{west}\TNOpenVirtualWest{tnLvOpenWestPort}
-        \TNVirtualPort{tnLvOpenEastPort}{tnLv}{east}\TNOpenVirtualEast{tnLvOpenEastPort}
-        \TNVirtualPort{tnLvOpen225Port}{tnLv}{225}\TNOpenVirtualSouth{tnLvOpen225Port}
-        \TNVirtualPort{tnLvOpen315Port}{tnLv}{315}\TNOpenVirtualSouth{tnLvOpen315Port}
-        \TNPlacedLabel{tnClientLabel1962}{(0,-1.42)}{\mathrm{star}(v)}
-        \TNPlacedLabel{tnClientLabel1963}{(2.85,0)}{\xrightarrow[\text{left inverse}]{\text{injective}}}
-        \TNTensor{tnRv}{(5.70,0)}
-        \TNPhysicalPort{tnRvOpenKetPort}{tnRv}{45}\TNOpenPhysicalNorth{tnRvOpenKetPort}
-        \TNPlacedLabel{tnClientLabel1966}{($(tnRv.45)+(0.38,0.48)$)}{\sigma}
-        \TNInsertion{tnRl}{(4.62,0)}{}
-        \TNInsertion{tnRr}{(6.78,0)}{}
-        \TNInsertion{tnRdl}{(4.95,-0.86)}{}
-        \TNInsertion{tnRdr}{(6.45,-0.86)}{}
-        \TNVirtualPort{tnRlOpenWestPort}{tnRl}{west}\TNOpenVirtualWest{tnRlOpenWestPort}
-        \TNVirtualPort{tnRlTotnRv}{tnRl}{east}\TNVirtualPort{tnRvTotnRl}{tnRv}{west}\TNConnectVirtual{tnRlTotnRv}{tnRvTotnRl}
-        \TNVirtualPort{tnRvTotnRr}{tnRv}{east}\TNVirtualPort{tnRrTotnRv}{tnRr}{west}\TNConnectVirtual{tnRvTotnRr}{tnRrTotnRv}
-        \TNVirtualPort{tnRrOpenEastPort}{tnRr}{east}\TNOpenVirtualEast{tnRrOpenEastPort}
-        \TNVirtualPort{tnRvTotnRdl}{tnRv}{225}\TNVirtualPort{tnRdlTotnRv}{tnRdl}{north}\TNConnectVirtual{tnRvTotnRdl}{tnRdlTotnRv}
-        \TNVirtualPort{tnRvTotnRdr}{tnRv}{315}\TNVirtualPort{tnRdrTotnRv}{tnRdr}{north}\TNConnectVirtual{tnRvTotnRdr}{tnRdrTotnRv}
-        \TNPlacedLabel{tnClientLabel1977}{(5.70,-1.42)}{\text{local edge gauges}}
+        \TNPEPSLocalGaugeExtractionMotif
     \end{TNDiagram}%
 }
 
@@ -2570,20 +2145,7 @@
     {\TNPEPSGlobalConsistency}
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
-        \TNPEPSSite{tnU}{(0,0)}{}
-        \TNPEPSSite{tnW}{(3.35,0)}{}
-        \TNVirtualPort{tnUOpenWestPort}{tnU}{west}\TNOpenVirtualWest{tnUOpenWestPort}
-        \TNVirtualPort{tnWOpenEastPort}{tnW}{east}\TNOpenVirtualEast{tnWOpenEastPort}
-        \TNVirtualPort{tnUOpen225Port}{tnU}{225}\TNOpenVirtualSouth{tnUOpen225Port}
-        \TNVirtualPort{tnWOpen315Port}{tnW}{315}\TNOpenVirtualSouth{tnWOpen315Port}
-        \TNInsertion{tnXl}{(1.02,0)}{X_e}
-        \TNInsertion{tnXr}{(2.33,0)}{(X_e^{-1})^\top}
-        \TNVirtualPort{tnUTotnXl}{tnU}{east}\TNVirtualPort{tnXlTotnU}{tnXl}{west}\TNConnectVirtual{tnUTotnXl}{tnXlTotnU}
-        \TNVirtualPort{tnXlTotnXr}{tnXl}{east}\TNVirtualPort{tnXrTotnXl}{tnXr}{west}\TNConnectVirtual{tnXlTotnXr}{tnXrTotnXl}
-        \TNVirtualPort{tnXrTotnW}{tnXr}{east}\TNVirtualPort{tnWTotnXr}{tnW}{west}\TNConnectVirtual{tnXrTotnW}{tnWTotnXr}
-        \TNPlacedLabel{tnClientLabel1994}{(1.67,0.78)}{\text{shared edge } e}
-        \TNPlacedLabel{tnClientLabel1995}{($(tnU.south)+(0,-0.28)$)}{u}
-        \TNPlacedLabel{tnClientLabel1996}{($(tnW.south)+(0,-0.28)$)}{w}
+        \TNPEPSGlobalConsistencyMotif
     \end{TNDiagram}%
 }
 
@@ -2600,7 +2162,7 @@
     {\TNPEPSLatticeState}
     {chapter/ch24_peps_ft.tex}{%
     \begin{TNDiagram}[normal]
-        \TNSquarePEPSPatch{pl}{2}{2}{1}
+        \TNPEPSLatticeStateMotif
     \end{TNDiagram}%
 }
 
@@ -2614,18 +2176,7 @@
     {\TNPEPSLocalTensorStar}
     {chapter/ch24_peps_ft_foundations.tex}{%
     \begin{TNDiagram}[normal]
-        \TNPEPSSite{lt}{(0,0)}{}
-        \TNOpenVirtualWest{ltWest}
-        \TNOpenVirtualEast{ltEast}
-        \TNOpenVirtualNorth{ltNorth}
-        \TNOpenVirtualSouth{ltSouth}
-        \TNOpenPhysicalNorth{ltKet}
-        \TNPlacedLabel{tnClientLabel2021}{(0.66,0.62)}{\sigma}
-        \TNPlacedLabel{tnClientLabel2022}{(-0.98,0)}{e_1}
-        \TNPlacedLabel{tnClientLabel2023}{(0.98,0)}{e_2}
-        \TNPlacedLabel{tnClientLabel2024}{(0,0.86)}{e_3}
-        \TNPlacedLabel{tnClientLabel2025}{(0,-0.86)}{e_4}
-        \TNPlacedLabel{tnClientLabel2026}{(-0.40,-0.34)}{A_v}
+        \TNPEPSLocalTensorStarMotif
     \end{TNDiagram}%
 }
 
@@ -2642,19 +2193,7 @@
     {chapter/ch24_peps_ft.tex,
      chapter/ch24_peps_ft_foundations.tex}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{vi}{(0,0)}
-        \TNPhysicalPort{viOpenKetPort}{vi}{45}\TNOpenPhysicalNorth{viOpenKetPort}
-        \TNPlacedLabel{tnClientLabel2038}{(0.72,0.72)}{\C^d}
-        \TNVirtualPort{viOpenWestPort}{vi}{west}\TNOpenVirtualWest{viOpenWestPort}
-        \TNVirtualPort{viOpenEastPort}{vi}{east}\TNOpenVirtualEast{viOpenEastPort}
-        \TNVirtualPort{viOpen225Port}{vi}{225}\TNOpenVirtualSouth{viOpen225Port}
-        \TNVirtualPort{viOpen315Port}{vi}{315}\TNOpenVirtualSouth{viOpen315Port}
-        \TNPlacedLabel{tnClientLabel2043}{(0,-1.04)}{\eta}
-        \TNPlacedLabel{injectivityLabel}{(1.95,0.30)}{\text{injective}}
-        \TNPlacedLabel{tnClientLabel2045}{(1.95,0)}{\longmapsto}
-        \TNPlacedLabel{injectivityConclusion}{(4.45,0)}
-            {\substack{\{A_v(\eta,\cdot)\}_{\eta}\text{ linearly}\\
-             \text{independent in }\C^d}}
+        \TNPEPSVertexInjectivityMapMotif
     \end{TNDiagram}%
 }
 
@@ -2669,8 +2208,7 @@
     {\TNPEPSStateContraction}
     {chapter/ch24_peps_ft.tex}{%
     \begin{TNDiagram}[normal]
-        \TNPEPSFiveSitePatch{sc}
-        \TNPEPSFiveSiteLabels{sc}{A_1}{A_2}{A_3}{A_4}{A_5}
+        \TNPEPSStateContractionMotif
     \end{TNDiagram}%
 }
 
@@ -2684,17 +2222,7 @@
     {\TNPEPSTorusGeometry}
     {chapter/ch24_peps_ft_torus.tex}{%
     \begin{TNDiagram}[normal]
-        \TNSquarePEPSPatch{tg}{2}{2}{1}
-        \foreach \y in {0,1,2} {
-            \TNOpenVirtualEast{tg2\y E}
-            \TNOpenVirtualWest{tg0\y W}
-        }
-        \foreach \x in {0,1,2} {
-            \TNOpenVirtualNorth{tg\x2N}
-            \TNOpenVirtualSouth{tg\x0S}
-        }
-        \TNPlacedLabel{torusDescription}{(1,-1.15)}
-            {\text{rows and columns identified modulo }n,m}
+        \TNPEPSTorusGeometryMotif
     \end{TNDiagram}%
 }
 
@@ -2709,38 +2237,7 @@
     {\TNPEPSVertexScalarBalance}
     {chapter/ch24_peps_ft_balanced_edge_scalars.tex}{%
     \begin{TNDiagram}[normal]
-        \TNPEPSSite{vb}{(0,0)}{}
-        \TNVirtualTerminal{vbWOpen}{($(vbW)+(-0.58,0)$)}
-        \TNVirtualTerminal{vbEOpen}{($(vbE)+(0.58,0)$)}
-        \TNVirtualTerminal{vbNOpen}{($(vbN)+(0,0.58)$)}
-        \TNVirtualTerminal{vbSOpen}{($(vbS)+(0,-0.58)$)}
-        \TNPhysicalTerminal{vbPOpen}{($(vbP)+(0.38,0.38)$)}
-        \TNInsertion{vbZW}{(-0.5,0)}{}
-        \TNInsertion{vbZE}{(0.5,0)}{}
-        \TNInsertion{vbZN}{(0,0.5)}{}
-        \TNInsertion{vbZS}{(0,-0.5)}{}
-        \TNVirtualPort{vbZWW}{vbZW}{west}
-        \TNVirtualPort{vbZWE}{vbZW}{east}
-        \TNVirtualPort{vbZEW}{vbZE}{west}
-        \TNVirtualPort{vbZEE}{vbZE}{east}
-        \TNVirtualPort{vbZNN}{vbZN}{north}
-        \TNVirtualPort{vbZNS}{vbZN}{south}
-        \TNVirtualPort{vbZSN}{vbZS}{north}
-        \TNVirtualPort{vbZSS}{vbZS}{south}
-        \TNConnectVirtual{vbW}{vbZWE}
-        \TNConnectVirtual{vbZWW}{vbWOpen}
-        \TNConnectVirtual{vbE}{vbZEW}
-        \TNConnectVirtual{vbZEE}{vbEOpen}
-        \TNConnectVirtual{vbN}{vbZNS}
-        \TNConnectVirtual{vbZNN}{vbNOpen}
-        \TNConnectVirtual{vbS}{vbZSN}
-        \TNConnectVirtual{vbZSS}{vbSOpen}
-        \TNConnectPhysical{vbP}{vbPOpen}
-        \TNPlacedLabel{tnClientLabel2110}{(-0.58,0.28)}{c_{v,e_1}}
-        \TNPlacedLabel{tnClientLabel2111}{(0.62,-0.28)}{c_{v,e_2}}
-        \TNPlacedLabel{tnClientLabel2112}{(-0.42,0.60)}{c_{v,e_3}}
-        \TNPlacedLabel{tnClientLabel2113}{(0.42,-0.60)}{c_{v,e_4}}
-        \TNPlacedLabel{tnClientLabel2114}{(2.35,0)}{\displaystyle\prod_{e \ni v} c_{v,e} = 1}
+        \TNPEPSVertexScalarBalanceMotif
     \end{TNDiagram}%
 }
 
@@ -2757,13 +2254,7 @@
     {\TNKrausMap}
     {chapter/ch16_channel_representations.tex}{%
     \begin{TNDiagram}[compact]
-        \TNStackedMPOProduct{kr}{(0,0)}{K_i}{K_i^\dagger}{i}
-        \TNOpenVirtualWest{krUpperWest}
-        \TNOpenVirtualWest{krLowerWest}
-        \TNOpenVirtualEast{krUpperEast}
-        \TNOpenVirtualEast{krLowerEast}
-        \TNPlacedLabelLeft{tnClientLabel2130}{(-0.70,0)}{\rho}
-        \TNPlacedLabelRight{tnClientLabel2131}{(0.70,0)}{T(\rho)}
+        \TNKrausMapMotif
     \end{TNDiagram}%
 }
 
@@ -2778,13 +2269,7 @@
     {\TNStinespring}
     {chapter/ch16_channel_representations.tex}{%
     \begin{TNDiagram}[compact]
-        \TNStackedMPOProduct{s}{(0,0)}{V}{V^\dagger}{E}
-        \TNOpenVirtualWest{sUpperWest}
-        \TNOpenVirtualWest{sLowerWest}
-        \TNOpenVirtualEast{sUpperEast}
-        \TNOpenVirtualEast{sLowerEast}
-        \TNPlacedLabelLeft{tnClientLabel2145}{(-0.70,0)}{\rho}
-        \TNPlacedLabelRight{tnClientLabel2146}{(0.70,0)}{\tr_E[V\rho V^\dagger]}
+        \TNStinespringMotif
     \end{TNDiagram}%
 }
 
@@ -2799,13 +2284,7 @@
     {\TNChoiMatrix}
     {chapter/ch16_channel_representations.tex}{%
     \begin{TNDiagram}[compact]
-        \TNStackedMPOProduct{cm}{(0,0)}{T}{\mathrm{id}}{}
-        \TNOpenVirtualWest{cmUpperWest}
-        \TNOpenVirtualWest{cmLowerWest}
-        \TNOpenVirtualEast{cmUpperEast}
-        \TNOpenVirtualEast{cmLowerEast}
-        \TNPlacedLabelLeft{tnClientLabel2160}{(-0.70,0)}{\ket{\Omega}\!\bra{\Omega}}
-        \TNPlacedLabelRight{tnClientLabel2161}{(0.70,0)}{\tau}
+        \TNChoiMatrixMotif
     \end{TNDiagram}%
 }
 
@@ -2821,12 +2300,7 @@
     {\TNTransferMapTracePairing}
     {chapter/ch16_channel_representations.tex}{%
     \begin{TNDiagram}[compact]
-        \TNCompactTraceCell{tp}{(0,0)}{\sigma_j}{\rho}{}
-        \TNExpression{tpCoeff}{(2.10,0)}{t_{ij}}
-        \TNExpression{tpOut}{(3.45,0)}{\sigma_i}
-        \TNPlacedLabel{tnClientLabel2174}{(1.35,0)}{\cdot}
-        \TNPlacedLabel{tnClientLabel2175}{(2.78,0)}{\cdot}
-        \TNPlacedLabelRight{tnClientLabel2176}{(4.15,0)}{=T(\rho)}
+        \TNTransferMapTracePairingMotif
     \end{TNDiagram}%
 }
 
@@ -2841,19 +2315,7 @@
     {\TNTwoPointCorrelator}
     {chapter/ch14_correlations.tex}{%
     \begin{TNDiagram}[normal]
-        \TNComponent{coR}{(0,0)}{\rho^R}
-        \TNInsertion{coX}{(1.05,0)}{}
-        \TNMap{coE}{(2.3,0)}{\E_A^n}
-        \TNInsertion{coY}{(3.55,0)}{}
-        \TNVirtualPort{coRTocoX}{coR}{east}\TNVirtualPort{coXTocoR}{coX}{west}\TNConnectVirtual{coRTocoX}{coXTocoR}
-        \TNVirtualPort{coXTocoE}{coX}{east}\TNVirtualPort{coETocoX}{coE}{west}\TNConnectVirtual{coXTocoE}{coETocoX}
-        \TNVirtualPort{coETocoY}{coE}{east}\TNVirtualPort{coYTocoE}{coY}{west}\TNConnectVirtual{coETocoY}{coYTocoE}
-        \TNPlacedLabel{tnClientLabel2192}{(1.05,0.28)}{X}
-        \TNPlacedLabel{tnClientLabel2193}{(3.55,0.28)}{Y}
-        \TNVirtualPort{coRTrace}{coR}{west}
-        \TNVirtualPort{coYTrace}{coY}{east}
-        \TNTraceVirtualBelow{coRTrace}{coYTrace}
-        \TNPlacedLabel{tnClientLabel2197}{(1.8,-1.08)}{\tr}
+        \TNTwoPointCorrelatorMotif
     \end{TNDiagram}%
 }
 
