@@ -248,7 +248,11 @@ def _assert_no_duplicate_diagram_definitions() -> None:
     """Reject a second chapter-diagram definition outside the catalogue."""
 
     duplicates: list[str] = []
-    pattern = re.compile(r"\\(?:newcommand|renewcommand)\{\\(TN(?!@)\w+)\}")
+    pattern = re.compile(
+        r"\\(?:(?:new|renew|provide)command|"
+        r"(?:New|Renew|Provide|Declare)DocumentCommand)"
+        r"\*?\s*(?:\{\s*)?\\(TN(?!@)\w+)"
+    )
     for path in (_SRC_DIR / "macros/tn_print.tex", _TN_LIBRARY_FILE):
         if not path.exists():
             continue
@@ -797,27 +801,12 @@ def _client_pattern_locations(pattern: re.Pattern[str]) -> list[str]:
     ]
 
 
-def _mask_slide_theme(source: str) -> str:
-    """Mask declared slide-theme blocks while retaining source offsets."""
-
-    characters = list(source)
-    for match in re.finditer(r"\\tikzset\s*", source):
-        offset = _skip_tex_space(source, match.end())
-        if offset >= len(source) or source[offset] != "{":
-            continue
-        _, end = _tex_group(source, offset, "{", "}")
-        characters[match.start() : end] = " " * (end - match.start())
-    return "".join(characters)
-
-
 def _client_geometry_locations() -> list[str]:
-    """Locate client geometry, excluding the audited palette-only theme."""
+    """Locate geometry specified by clients of the tensor-network calculus."""
 
     locations = []
     for path in _client_source_paths():
         source = path.read_text(encoding="utf-8")
-        if path == _SLIDE_LIBRARY:
-            source = _mask_slide_theme(source)
         source = _mask_tex_comments(source)
         locations.extend(
             _source_line(path, match.start())
