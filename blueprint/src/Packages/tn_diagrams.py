@@ -249,11 +249,21 @@ def _assert_no_duplicate_diagram_definitions() -> None:
 
     duplicates: list[str] = []
     pattern = re.compile(
-        r"\\(?:(?:new|renew|provide)command|"
-        r"(?:New|Renew|Provide|Declare)DocumentCommand)"
-        r"\*?\s*(?:\{\s*)?\\(TN(?!@)\w+)"
+        r"\\(?:"
+        r"(?:(?:new|renew|provide)command|"
+        r"(?:New|Renew|Provide|Declare)DocumentCommand)\*?\s*(?:\{\s*)?"
+        r"|(?:def|gdef|edef|xdef|let)\s*"
+        r")\\(TN(?!@)\w+)"
     )
-    for path in (_SRC_DIR / "macros/tn_print.tex", _TN_LIBRARY_FILE):
+    definition_sources = (
+        _SRC_DIR / "macros/tn_print.tex",
+        *sorted(
+            path
+            for path in _TN_SHARED_DIR.glob("*.tex")
+            if path != _TN_CATALOGUE_FILE
+        ),
+    )
+    for path in definition_sources:
         if not path.exists():
             continue
         source = _mask_tex_comments(path.read_text(encoding="utf-8"))
