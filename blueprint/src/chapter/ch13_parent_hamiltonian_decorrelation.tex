@@ -4,14 +4,16 @@
 This section develops the idempotent-product formulation used for the
 decorrelation implication from Appendix~D. It is not the full source condition.
 In \cite[Appendix~D.2]{Cirac2016MPDO_arXiv}, the parent commuting Hamiltonian
-condition is stated for local projectors $Q_{AX}$ and $Q_{XB}$ with
+condition is stated for local projectors $Q_{AX}$ and $Q_{XB}$.  Writing hats
+for their lifts to the tripartite space, the condition is
 \[
-    [Q_{AX},Q_{XB}]=0,\qquad
+    [\widehat Q_{AX},\widehat Q_{XB}]=0,\qquad
     K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB}).
 \]
 Writing $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ gives, for the idempotent
-$P_K$ used below, the identity $P_{AX}P_{XB}=P_K$. The following definition
-records this idempotent-product consequence, not the tensor-product locality,
+$P_K$ used below, the full-space identity
+$\widehat P_{AX}\widehat P_{XB}=P_K$. The following definition records this
+idempotent-product consequence abstractly, not the tensor-product locality,
 orthogonal-projector, or ground-space-intersection hypotheses of Appendix~D.2.
 % Scope restriction: this section keeps the idempotent-product consequence
 % and not the tensor-product locality or orthogonal-projector hypotheses of the
@@ -437,9 +439,8 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       thm:tripartite_marginal_matrix_units}
     If $A,B$ are decorrelated, then
     \[
-        \rho_{XB}(\mathbf 1-P)\rho_{AX}=0,
+        \widehat\rho_{XB}(\mathbf 1-P)\widehat\rho_{AX}=0.
     \]
-    where each reduced operator is lifted to the tripartite space.
 \end{theorem}
 
 \begin{proof}
@@ -461,7 +462,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       thm:tripartite_marginal_matrix_units}
     If $P=P^\dagger$ and $A,B$ are decorrelated, then
     \[
-        \rho_{AX}(\mathbf 1-P)\rho_{XB}=0.
+        \widehat\rho_{AX}(\mathbf 1-P)\widehat\rho_{XB}=0.
     \]
 \end{theorem}
 
@@ -483,7 +484,9 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \uses{def:partial_trace_left}
     For a Hermitian operator $P$, let $P_{AX}$ and $P_{XB}$ be the support projectors of
     $\operatorname{tr}_B P$ and $\operatorname{tr}_A P$, respectively, as in
-    \cite[Appendix~D.2, lines 2225--2229]{Cirac2016MPDO_arXiv}.
+    \cite[Appendix~D.2, lines 2225--2229]{Cirac2016MPDO_arXiv}.  Write
+    $\widehat P_{AX}$ and $\widehat P_{XB}$ for their lifts to the tripartite
+    space.
 \end{definition}
 
 \begin{theorem}[Decorrelation for the two marginal supports]
@@ -496,9 +499,9 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       thm:tripartite_reverse_marginal_complementary_product_zero}
     If $P=P^\dagger$ and $A,B$ are decorrelated, then
     \[
-        P_{XB}(\mathbf 1-P)P_{AX}=0,
+        \widehat P_{XB}(\mathbf 1-P)\widehat P_{AX}=0,
         \qquad
-        P_{AX}(\mathbf 1-P)P_{XB}=0.
+        \widehat P_{AX}(\mathbf 1-P)\widehat P_{XB}=0.
     \]
 \end{theorem}
 
@@ -512,18 +515,18 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \]
     Hence
     \[
-        P_{XB}(\mathbf 1-P)P_{AX}
-        =g(\rho_{XB})
-          \bigl[\rho_{XB}(\mathbf 1-P)\rho_{AX}\bigr]
-          g(\rho_{AX})
+        \widehat P_{XB}(\mathbf 1-P)\widehat P_{AX}
+        =\widehat{g(\rho_{XB})}
+          \bigl[\widehat\rho_{XB}(\mathbf 1-P)\widehat\rho_{AX}\bigr]
+          \widehat{g(\rho_{AX})}
         =0,
     \]
     and, in the reverse order,
     \[
-        P_{AX}(\mathbf 1-P)P_{XB}
-        =g(\rho_{AX})
-          \bigl[\rho_{AX}(\mathbf 1-P)\rho_{XB}\bigr]
-          g(\rho_{XB})
+        \widehat P_{AX}(\mathbf 1-P)\widehat P_{XB}
+        =\widehat{g(\rho_{AX})}
+          \bigl[\widehat\rho_{AX}(\mathbf 1-P)\widehat\rho_{XB}\bigr]
+          \widehat{g(\rho_{XB})}
         =0.
     \]
     % Local fix for source lines 2236--2252: see
@@ -540,7 +543,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       thm:right_marginal_support_right_absorption}
     For $P\geq0$,
     \[
-        P_{XB}P=P=PP_{XB}.
+        \widehat P_{XB}P=P=P\widehat P_{XB}.
     \]
 \end{theorem}
 
@@ -564,7 +567,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       thm:marginal_support_right_absorption}
     For $P\geq0$,
     \[
-        P_{AX}P=P=PP_{AX}.
+        \widehat P_{AX}P=P=P\widehat P_{AX}.
     \]
 \end{theorem}
 
@@ -589,7 +592,9 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       thm:tripartite_complementary_product_zero}
     If $P=P^\dagger=P^2$ and $A$ and $B$ are decorrelated relative to $P$, then
     \[
-        P_{XB}P_{AX}=P=P_{AX}P_{XB}.
+        \widehat P_{XB}\widehat P_{AX}
+        =P
+        =\widehat P_{AX}\widehat P_{XB}.
     \]
 \end{theorem}
 
@@ -598,14 +603,16 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     Inserting $\mathbf 1=P+(\mathbf 1-P)$ between the two support projectors
     gives
     \[
-        P_{XB}P_{AX}
-        =P_{XB}PP_{AX}+P_{XB}(\mathbf 1-P)P_{AX}
+        \widehat P_{XB}\widehat P_{AX}
+        =\widehat P_{XB}P\widehat P_{AX}
+          +\widehat P_{XB}(\mathbf 1-P)\widehat P_{AX}
         =P+0
         =P.
     \]
     Here the second equality uses the support-absorption identities and
     Theorem~\ref{thm:tripartite_complementary_product_zero}.  The same
-    calculation with the two factors reversed gives $P_{AX}P_{XB}=P$.
+    calculation with the two factors reversed gives
+    $\widehat P_{AX}\widehat P_{XB}=P$.
 \end{proof}
 
 \begin{definition}[Parent commuting Hamiltonian on the tripartite space]
@@ -620,7 +627,8 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     ground-space intersection condition
     \[
         \operatorname{ran}P
-        =\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}.
+        =\operatorname{ran}\widehat P_{AX}
+          \cap\operatorname{ran}\widehat P_{XB}.
     \]
     Thus $Q_{AX}=\mathbf 1-P_{AX}$ and
     $Q_{XB}=\mathbf 1-P_{XB}$ are exactly the commuting parent terms of
@@ -698,19 +706,21 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
     Starting from commuting parent projectors, first use the ground-space
     intersection theorem to write
-    $P=P_{AX}P_{XB}=P_{XB}P_{AX}$.  Locality gives
-    $[O_A,P_{XB}]=[O_B,P_{AX}]=0$, while
+    $P=\widehat P_{AX}\widehat P_{XB}
+      =\widehat P_{XB}\widehat P_{AX}$.  Locality gives
+    $[O_A,\widehat P_{XB}]=[O_B,\widehat P_{AX}]=0$, while
     \[
-        P_{XB}(\mathbf 1-P)P_{AX}=0.
+        \widehat P_{XB}(\mathbf 1-P)\widehat P_{AX}=0.
     \]
     Therefore, using the two locality commutators,
     \[
     \begin{aligned}
         P O_A(\mathbf 1-P)O_B P
-        &=(P_{AX}P_{XB})O_A(\mathbf 1-P)O_B(P_{AX}P_{XB})\\
-        &=P_{AX}O_A
-          \bigl[P_{XB}(\mathbf 1-P)P_{AX}\bigr]
-          O_B P_{XB}\\
+        &=(\widehat P_{AX}\widehat P_{XB})O_A(\mathbf 1-P)O_B
+          (\widehat P_{AX}\widehat P_{XB})\\
+        &=\widehat P_{AX}O_A
+          \bigl[\widehat P_{XB}(\mathbf 1-P)\widehat P_{AX}\bigr]
+          O_B\widehat P_{XB}\\
         &=0.
     \end{aligned}
     \]

@@ -570,8 +570,8 @@ theorem IsDecorrelated.reverse_supports_mul_complement_mul_eq_zero
 /-- The lifted support projector of the \(XB\) marginal fixes the tripartite
 operator on the left.
 
-This is the \(P_{XB}P_{AXB}=P_{AXB}\) marginal-support absorption identity in
-arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
+This is the \(\widehat P_{XB}P_{AXB}=P_{AXB}\) marginal-support absorption
+identity in arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
 theorem liftSupportXB_mul_self
     {ρ : Matrix (A × (X × B)) (A × (X × B)) ℂ} (hρ : ρ.PosSemidef) :
     liftXB (supportXB hρ.isHermitian) * ρ = ρ := by
@@ -580,8 +580,8 @@ theorem liftSupportXB_mul_self
 /-- The lifted support projector of the \(XB\) marginal fixes the tripartite
 operator on the right.
 
-This is the \(P_{AXB}P_{XB}=P_{AXB}\) marginal-support absorption identity in
-arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
+This is the \(P_{AXB}\widehat P_{XB}=P_{AXB}\) marginal-support absorption
+identity in arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
 theorem mul_liftSupportXB_self
     {ρ : Matrix (A × (X × B)) (A × (X × B)) ℂ} (hρ : ρ.PosSemidef) :
     ρ * liftXB (supportXB hρ.isHermitian) = ρ := by
@@ -590,8 +590,8 @@ theorem mul_liftSupportXB_self
 /-- The lifted support projector of the \(AX\) marginal fixes the tripartite
 operator on the left.
 
-This is the \(P_{AX}P_{AXB}=P_{AXB}\) marginal-support absorption identity in
-arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
+This is the \(\widehat P_{AX}P_{AXB}=P_{AXB}\) marginal-support absorption
+identity in arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
 theorem liftSupportAX_mul_self
     {ρ : Matrix (A × (X × B)) (A × (X × B)) ℂ} (hρ : ρ.PosSemidef) :
     liftAX (supportAX hρ.isHermitian) * ρ = ρ := by
@@ -602,8 +602,8 @@ theorem liftSupportAX_mul_self
 /-- The lifted support projector of the \(AX\) marginal fixes the tripartite
 operator on the right.
 
-This is the \(P_{AXB}P_{AX}=P_{AXB}\) marginal-support absorption identity in
-arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
+This is the \(P_{AXB}\widehat P_{AX}=P_{AXB}\) marginal-support absorption
+identity in arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
 theorem mul_liftSupportAX_self
     {ρ : Matrix (A × (X × B)) (A × (X × B)) ℂ} (hρ : ρ.PosSemidef) :
     ρ * liftAX (supportAX hρ.isHermitian) = ρ := by
@@ -773,9 +773,10 @@ space, written in terms of the local ground-space projectors.
 
 The Hamiltonian terms of arXiv:1606.00608, Appendix D.2, Definition D.2,
 lines 2205--2218, are \(Q_{AX}=1-P_{AX}\) and \(Q_{XB}=1-P_{XB}\).  The
-ground-space intersection condition
-\(\operatorname{ran}P=\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}\)
-is taken directly from Definition D.2. -/
+ground-space intersection condition, with hats denoting the full tripartite
+lifts, is
+\(\operatorname{ran}P=\operatorname{ran}\widehat P_{AX}\cap
+\operatorname{ran}\widehat P_{XB}\), as in Definition D.2. -/
 structure CommutingParentHamiltonian
     (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) where
   /-- The orthogonal projector onto \(K_{AX}\), as in arXiv:1606.00608,

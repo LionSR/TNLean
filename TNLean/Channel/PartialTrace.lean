@@ -248,7 +248,7 @@ trace over the first factor produces a `d' × d'` matrix:
   `(traceLeft X) i j = ∑ k, X (k, i) (k, j)` -/
 noncomputable def traceLeft (X : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
     Matrix (Fin d') (Fin d') ℂ :=
-  fun i j => ∑ k : Fin d, X (k, i) (k, j)
+  partialTraceLeft X
 
 /-- **Partial trace over the second (right) tensor factor** (`tr_B`).
 

@@ -26,18 +26,30 @@ Definition~D.2 of \cite{Cirac2016MPDO_arXiv} states the parent commuting
 Hamiltonian condition for a tripartite Hilbert space
 \(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\).  It uses local
 projectors \(Q_{AX}\) and \(Q_{XB}\).  Let \(K_{AX}\) and \(K_{XB}\) denote
-their kernels.  The source condition is\footnote{Local source:
+their kernels, and write
+\[
+  \widehat Q_{AX}=Q_{AX}\otimes I_B,
+  \qquad
+  \widehat Q_{XB}=I_A\otimes Q_{XB}
+\]
+for their lifts to the tripartite space.  The source condition is\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}:2205--2218, labels
 \path{QAXQXB} and \path{KAXBKAXKXB}.}
 \begin{align}
-  [Q_{AX},Q_{XB}]&=0,\\
+  [\widehat Q_{AX},\widehat Q_{XB}]&=0,\\
   K_{AXB}&=(K_{AX}\otimes\mathcal H_B)
     \cap(\mathcal H_A\otimes K_{XB}).
 \end{align}
 The proof of Proposition~D.3 then writes
-\(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), and uses the product identity
+\(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\).  Their lifts
+\[
+  \widehat P_{AX}=P_{AX}\otimes I_B,
+  \qquad
+  \widehat P_{XB}=I_A\otimes P_{XB}
+\]
+satisfy the product identity
 \begin{align}
-  P_{AX}P_{XB}=P_{AXB}.
+  \widehat P_{AX}\widehat P_{XB}=P_{AXB}.
 \end{align}
 This is the identity obtained from commuting orthogonal projectors onto the two
 local kernels \(K_{AX}\) and \(K_{XB}\).\footnote{Local source:
@@ -48,9 +60,10 @@ The explicit tripartite declaration
 range-intersection equality itself.  The equivalence
 \[
   \operatorname{ran}P_{AXB}
-    =\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}
+    =\operatorname{ran}\widehat P_{AX}\cap
+      \operatorname{ran}\widehat P_{XB}
   \quad\Longleftrightarrow\quad
-  P_{AX}P_{XB}=P_{AXB}
+  \widehat P_{AX}\widehat P_{XB}=P_{AXB}
 \]
 for commuting orthogonal projectors is proved by
 \leanid{TripartiteDecorrelation.}
