@@ -45,6 +45,15 @@
     \]
 \end{proof}
 
+\begin{lemma}[Positivity preservation for Kraus maps]
+    \label{lem:is_kraus_cptp_map_pos}
+    \lean{IsKrausCPTP.map_posSemidef}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    If $\mathcal S$ is trace-preserving completely positive and $X\geq0$, then
+    $\mathcal S(X)\geq0$.
+\end{lemma}
+
 \begin{lemma}[Identity map is trace-preserving completely positive]
     \label{lem:is_kraus_cptp_id}
     \lean{isKrausCPTP_id}
@@ -80,6 +89,33 @@
     Take the sole Kraus operator to be $V$. Its resolution of the identity is
     precisely $V^\dagger V=I_H$.
 \end{proof}
+
+\begin{definition}[Single-Kraus map]
+    \label{def:mpdo_single_kraus_map}
+    \lean{sandwichMap}
+    \leanok
+    For a rectangular matrix $V:H\to K$, define the linear map
+    \[
+      \Phi_V(X)=VXV^\dagger.
+    \]
+\end{definition}
+
+\begin{lemma}[Evaluation of the single-Kraus map]
+    \label{lem:mpdo_single_kraus_map_apply}
+    \lean{sandwichMap_apply}
+    \leanok
+    \uses{def:mpdo_single_kraus_map}
+    For every matrix $X$, one has $\Phi_V(X)=VXV^\dagger$.
+\end{lemma}
+
+\begin{theorem}[The single-Kraus map of an isometry is a channel]
+    \label{thm:mpdo_single_kraus_map_cptp}
+    \lean{sandwichMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_single_kraus_map, thm:mpdo_single_kraus_isometry_cptp}
+    If $V^\dagger V=I_H$, then $\Phi_V$ is trace-preserving and completely
+    positive.
+\end{theorem}
 
 \begin{definition}[Matrix reindexing along an equivalence]
     \label{def:mpdo_equiv_reindex_map}

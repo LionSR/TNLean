@@ -15,8 +15,8 @@ for an explicit isometry `V` constructed from the Kraus operators (Wolf Eq. (2.1
 
 ## Main definitions
 
-* `stinespringV`: the Stinespring isometry `V = ∑ⱼ Kⱼ ⊗ |j⟩`, a `(D·r) × D`
-  matrix satisfying `V(i, j) k = (Kⱼ)_{ik}`
+* `stinespringV`: the Stinespring matrix `V = ∑ⱼ Kⱼ ⊗ |j⟩` for a possibly
+  rectangular Kraus family, satisfying `V(i, j) k = (Kⱼ)_{ik}`
 * `stinespringV_apply`: entrywise evaluation lemma for `stinespringV`
 * `stinespringPi`: the concrete finite-dimensional representation `π(A) = A ⊗ 𝟙_r`
 
@@ -34,37 +34,55 @@ for an explicit isometry `V` constructed from the Kraus operators (Wolf Eq. (2.1
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 2.2][Wolf2012QChannels]
 -/
 
-open scoped Matrix
+open scoped Matrix Kronecker
 open Matrix Finset BigOperators
 
 variable {D : ℕ}
 
-/-! ### Stinespring isometry construction -/
+/-! ### Stinespring matrix construction -/
 
-/-- The Stinespring isometry `V : ℂ^D → ℂ^D ⊗ ℂ^r` constructed from Kraus operators.
+/-- The Stinespring matrix `V : ℂ^α → ℂ^β ⊗ ℂ^r` constructed from a possibly
+rectangular Kraus family.
 
-Concretely, `V` is a `(D·r) × D` matrix defined by `V (i, j) k = (Kⱼ)_{ik}`.
+Concretely, `V` is defined by `V (i, j) k = (Kⱼ)_{ik}`.
 This encodes `V = ∑ⱼ Kⱼ ⊗ |j⟩`, where `|j⟩` is the `j`-th standard basis vector. -/
-noncomputable def stinespringV {r : ℕ}
-    (K : Fin r → Matrix (Fin D) (Fin D) ℂ) :
-    Matrix (Fin D × Fin r) (Fin D) ℂ :=
+noncomputable def stinespringV {r : ℕ} {α β : Type*}
+    (K : Fin r → Matrix β α ℂ) :
+    Matrix (β × Fin r) α ℂ :=
   fun ⟨i, j⟩ k => K j i k
 
 @[simp]
-theorem stinespringV_apply {r : ℕ}
-    (K : Fin r → Matrix (Fin D) (Fin D) ℂ) (i : Fin D)
-    (j : Fin r) (k : Fin D) :
+theorem stinespringV_apply {r : ℕ} {α β : Type*}
+    (K : Fin r → Matrix β α ℂ) (i : β)
+    (j : Fin r) (k : α) :
     stinespringV K (i, j) k = K j i k := rfl
 
-/-- `V†V = ∑ⱼ Kⱼ†Kⱼ` for the Stinespring isometry. -/
-theorem stinespringV_conjTranspose_mul {r : ℕ}
-    (K : Fin r → Matrix (Fin D) (Fin D) ℂ) :
+/-- `V†V = ∑ⱼ Kⱼ†Kⱼ` for the Stinespring matrix. -/
+theorem stinespringV_conjTranspose_mul {r : ℕ} {α β : Type*} [Fintype β]
+    (K : Fin r → Matrix β α ℂ) :
     (stinespringV K)ᴴ * stinespringV K =
       ∑ j : Fin r, (K j)ᴴ * K j := by
   ext a b
   simp only [Matrix.conjTranspose_apply, Matrix.mul_apply, stinespringV_apply,
     Fintype.sum_prod_type, Matrix.sum_apply]
   exact Finset.sum_comm
+
+/-- Tensor a Stinespring matrix with the identity on an untouched finite
+factor. -/
+noncomputable def localStinespringV
+    {α β δ : Type*} [Fintype δ] [DecidableEq δ]
+    (V : Matrix β α ℂ) : Matrix (β × δ) (α × δ) ℂ :=
+  V ⊗ₖ (1 : Matrix δ δ ℂ)
+
+/-- Tensoring an isometry with an identity matrix again gives an isometry. -/
+theorem localStinespringV_conjTranspose_mul
+    {α β δ : Type*} [DecidableEq α] [Fintype β]
+    [Fintype δ] [DecidableEq δ] (V : Matrix β α ℂ)
+    (hV : Vᴴ * V = 1) :
+    (localStinespringV (δ := δ) V)ᴴ * localStinespringV (δ := δ) V = 1 := by
+  rw [localStinespringV, Matrix.conjTranspose_kronecker,
+    Matrix.conjTranspose_one, ← Matrix.mul_kronecker_mul, hV,
+    Matrix.one_mul, Matrix.one_kronecker_one]
 
 /-- **Stinespring isometry condition** (Wolf Theorem 2.2):
 `V†V = 𝟙` if and only if `∑ⱼ Kⱼ†Kⱼ = 𝟙`, i.e., the Kraus operators are normalized
@@ -107,14 +125,14 @@ This is the same coordinate construction as `stinespringV`; the latter is kept
 `Fin`-indexed because most channel declarations use a natural number as Kraus
 rank. Wolf's Radon--Nikodym theorem for instruments naturally groups Kraus
 operators by a finite outcome type. -/
-noncomputable def stinespringVGen {η : Type*}
-    (K : η → Matrix (Fin D) (Fin D) ℂ) :
-    Matrix (Fin D × η) (Fin D) ℂ :=
+noncomputable def stinespringVGen {η α β : Type*}
+    (K : η → Matrix β α ℂ) :
+    Matrix (β × η) α ℂ :=
   fun ⟨i, j⟩ k => K j i k
 
 @[simp]
-theorem stinespringVGen_apply {η : Type*}
-    (K : η → Matrix (Fin D) (Fin D) ℂ) (i : Fin D) (j : η) (k : Fin D) :
+theorem stinespringVGen_apply {η α β : Type*}
+    (K : η → Matrix β α ℂ) (i : β) (j : η) (k : α) :
     stinespringVGen K (i, j) k = K j i k := rfl
 
 /-- Stinespring dual representation for a Kraus family indexed by an arbitrary
