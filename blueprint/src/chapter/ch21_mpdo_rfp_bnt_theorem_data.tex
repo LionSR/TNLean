@@ -19,11 +19,6 @@
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq}
     \lean{MPOTensor.BNTLabelTheoremData.blockedComparison_ofChi}
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_ofChi}
-    \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow}
-    \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_ofChi_coeff}
-    \lean{MPOTensor.BNTLabelTheoremData.chi_entry_pos}
-    \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow}
-    \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_chi_trace}
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family,
         def:mpdo_bnt_label_operator_family,
@@ -48,6 +43,52 @@
     canonical coefficient family determined by the $\chi$-matrices carried by
     the data, with the corresponding displayed equations.
 \end{definition}
+
+\begin{theorem}[Source BNT coefficient and product formulas]%
+    \label{thm:mpdo_bnt_label_theorem_data_source_formulas}
+    \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_ofChi_coeff}
+    \lean{MPOTensor.BNTLabelTheoremData.chi_entry_pos}
+    \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_chi_trace}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data}
+    Let $c^{(L)}_{\alpha,\beta,\gamma}$ be the coefficient family and let
+    $\chi_{\alpha,\beta,\gamma}$ be the positive diagonal matrices carried by
+    the theorem data.  For every $L>0$,
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+        =c^{\chi,(L)}_{\alpha,\beta,\gamma}
+        =\operatorname{tr}\!\left(
+            \chi_{\alpha,\beta,\gamma}^{\,L}
+        \right),
+    \]
+    where $c^{\chi}$ is the canonical coefficient family determined by
+    $\chi$, and every diagonal entry of every
+    $\chi_{\alpha,\beta,\gamma}$ is strictly positive.  Consequently the
+    same-length product and the length-one idempotent identity take the
+    explicit forms
+    \[
+        O^{(L)}_\alpha O^{(L)}_\beta
+        =\sum_\gamma
+          \operatorname{tr}\!\left(
+              \chi_{\alpha,\beta,\gamma}^{\,L}
+          \right)O^{(L)}_\gamma,
+        \qquad L>0,
+    \]
+    and
+    \[
+        m_\gamma
+        =\sum_{\alpha,\beta}
+          \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+          m_\alpha m_\beta.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The positive trace-power witness identifies the given coefficients with
+    the canonical trace-power family.  Substitute this identity into the
+    product law and its length-one idempotent specialization.
+\end{proof}
 
 \begin{theorem}[BNT theorem data give a positive blocked $\chi$ witness]%
     \label{thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
