@@ -135,6 +135,10 @@ enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
   within a subsection when one is present, and otherwise within the section.
   Thus an entry in Subsection 22.4.4 is numbered `22.4.4.n`, while an entry
   directly under Section 6.2 is numbered `6.2.n`.
+- Do not introduce a redundant sole division. If all of a chapter lies in one
+  section, remove that wrapper and promote its subsections to sections. If a
+  section would contain only one subsection, promote that subsection to a
+  section or remove the unnecessary subdivision.
 
 ### Display hierarchy for formal declarations
 
