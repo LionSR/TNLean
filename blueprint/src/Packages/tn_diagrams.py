@@ -1290,7 +1290,7 @@ def _hash_tex(tex: str) -> str:
     digest = hashlib.sha256()
     digest.update(_render_source_digest().encode("ascii"))
     digest.update(b"\0")
-    digest.update(tex.encode("utf-8"))
+    digest.update(_latex_document(tex).encode("utf-8"))
     return digest.hexdigest()[:16]
 
 
