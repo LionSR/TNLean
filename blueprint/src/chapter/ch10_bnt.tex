@@ -185,7 +185,12 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     \leanok
     \uses{def:nt_cpsv, def:mpv_overlap, def:gauge_phase_equiv}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
-    dimensions. Then either
+    dimensions. Their self-overlaps satisfy
+    \[
+        O_{AA}(N)\longrightarrow 1,
+        \qquad O_{BB}(N)\longrightarrow 1.
+    \]
+    Moreover, either
     \[
         O_{AB}(N)\longrightarrow 0,
     \]
@@ -207,8 +212,11 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     dimensions differ, rectangular overlap decay gives $O_{AB}(N)\to0$. If
     their dimensions agree but they are not gauge-phase equivalent, the
     equal-dimension overlap-decay theorem gives the same conclusion. In the
-    remaining case, $B^i=\zeta X A^iX^{-1}$. Normalization gives
-    $|\zeta|=1$, and hence
+    remaining case, $B^i=\zeta X A^iX^{-1}$. The gauge-phase relation gives
+    \[
+        O_{BB}(N)=|\zeta|^{2N}O_{AA}(N).
+    \]
+    Since both self-overlaps tend to one, this forces $|\zeta|=1$, and hence
     \[
         O_{AB}(N)=\overline{\zeta}^{\,N}O_{AA}(N),
         \qquad |O_{AB}(N)|=|O_{AA}(N)|\longrightarrow1.
