@@ -1,0 +1,132 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The remaining data-processing step for saturation of the area law
+of MPDO renormalization fixed points}
+\author{}
+\date{2026-07-15}
+
+\begin{document}
+\maketitle
+
+\section{Source statement and proof}
+
+Definition~4.1 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete defines a
+mixed-state renormalization fixed point by trace-preserving completely positive
+maps $\mathcal S$ and $\mathcal T$ satisfying\footnote{Source label
+\texttt{RFPMixedTS},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:638--660}.}
+\[
+  \mathcal S[M_2(X)]=M_1(X),
+  \qquad
+  \mathcal T[M_1(X)]=M_2(X)
+\]
+for every virtual boundary operator $X$.
+
+Theorem~4.9, implication (i)$\Rightarrow$(ii), is stated for a simple tensor
+$\mathcal K$ in biCF generating density operators.\footnote{Source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:849--893}.}
+Its Appendix~C proof treats a bipartition of a ring into consecutive intervals
+$A$ and $B$.\footnote{Source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1331--1341}.}
+It applies $\mathcal T$ to the first spin of $A$ and $\mathcal S$ to the first
+two spins of $B$.  The closure identities return the same tensor ring with one
+spin transferred from $B$ to $A$.  Since these are local channels, data
+processing gives
+\[
+  I_{L+1}\leq I_L.
+\]
+Proposition~4.5 supplies the reverse inequality $I_L\leq I_{L+1}$, hence
+equality and saturation of the area law.
+
+The entropic convention immediately preceding Definition~4.6 normalizes every
+operator by its trace.\footnote{Source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:792--793}.}
+The source theorem therefore uses, as standing data,
+that the tensor generates nonzero density operators at the lengths under
+consideration; it does not add an independent nonvanishing hypothesis to the
+Appendix~C proposition.
+
+\section{The established global identities}
+
+Let $N$ denote the number of spectator sites.  Tensoring the local maps with
+the identity on these sites gives trace-preserving completely positive maps
+$\widehat{\mathcal T}_N$ and $\widehat{\mathcal S}_N$.  The local closure
+identities imply, for every $N$ and every virtual operator $X$,
+\[
+  \widehat{\mathcal T}_N[M_{N+1}(X)]=M_{N+2}(X),
+  \qquad
+  \widehat{\mathcal S}_N[M_{N+2}(X)]=M_{N+1}(X).
+\]
+These identities, including the trace-preserving completely positive
+property, have been proved for arbitrary $N$.\footnote{Formal declarations:
+\leanid{MPOTensor.refineFirstSite_isKrausCPTP},
+\leanid{MPOTensor.coarsenFirstTwoSites_isKrausCPTP},
+\leanid{MPOTensor.refineFirstSite_physCloseN}, and
+\leanid{MPOTensor.coarsenFirstTwoSites_physCloseN} in
+\doclink{TNLean/MPS/MPDO/RFPViaTSGlobal}.}
+Taking $X=1$ gives the corresponding identities for every periodic tensor
+ring.  If $N=0$, the local map still acts from one site to two sites, or
+conversely; no operator on an empty ring is introduced.
+
+Strong subadditivity already gives the opposite inequality
+\[
+  I_L\leq I_{L+1}
+\]
+by adjoining one physical site to an interval.\footnote{Formal declaration:
+\leanid{MPOTensor.mutualInfoChain_monotone}.}
+
+\section{Exact remaining implications}
+
+Two source-faithful ingredients remain before the implication to the strong
+area law can be stated without an additional hypothesis.
+
+\begin{enumerate}
+  \item \textbf{Local-channel data processing.}
+  For a bipartite density operator $\rho_{AB}$ and trace-preserving completely
+  positive maps $\Phi_A$ and $\Psi_B$, one needs
+  \[
+    I(A':B')_{(\Phi_A\otimes\Psi_B)(\rho)}
+      \leq I(A:B)_\rho.
+  \]
+  This may be derived from Stinespring dilations followed by monotonicity under
+  partial trace, or from relative-entropy data processing.  The result must
+  then be combined with the cyclic regrouping that places the two boundary
+  sites in the first tensor factors.  The available entropy results treat
+  discarding a subsystem, but not yet this arbitrary pair of local channels.
+
+  \item \textbf{The source standing nonvanishing condition.}
+  The present formal condition for a matrix product density operator asserts
+  positivity at every length but permits the zero operator.\footnote{Formal
+  declaration: \leanid{MPOTensor.IsMPDO}.}
+  The available per-copy horizontal canonical form is stronger than the
+  source's grouped biCF and still admits degenerate empty data.  It therefore
+  does not yet imply, from the source condition ``simple in biCF generating
+  density operators'', that
+  $\tr(\operatorname{mpo}(\mathcal K,N))\ne0$ for every relevant
+  $N$.  This must be repaired by formalizing the source simple-biCF standing
+  data, including generation of normalized density operators, and deriving the
+  nonvanishing used by the normalization in Definition~4.6.
+\end{enumerate}
+
+Neither point is resolved by adding
+$\forall N,\tr(\operatorname{mpo}(\mathcal K,N))\ne0$ as a new
+hypothesis to the source-labelled theorem, since that condition is absent from
+the printed statement.  Once the two ingredients above are available, the
+source proof applies the two localized channels, invokes data processing to obtain
+$I_{L+1}\leq I_L$, and combines this with the already formalized inequality
+$I_L\leq I_{L+1}$.
+
+\paragraph{Classification.}
+This is an open gap.  The global tensor-ring identities are proved, but the
+mutual-information data-processing theorem and the derivation of nonzero
+normalization from the source's simple-biCF convention remain necessary for a
+faithful proof of saturation of the area law.
+
+\end{document}
