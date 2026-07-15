@@ -96,6 +96,345 @@ fixes the original operator.  These are the support-projector identities used in
     \]
 \end{proof}
 
+\begin{definition}[Partial trace over the left factor]
+    \label{def:partial_trace_left}
+    \lean{Matrix.partialTraceLeft, Matrix.partialTraceLeft_apply}
+    \leanok
+    For an operator $\rho$ on $H_L\otimes H_R$, define
+    \[
+        (\operatorname{tr}_L\rho)_{r,s}
+        =\sum_l \rho_{(l,r),(l,s)}.
+    \]
+\end{definition}
+
+\begin{theorem}[Hermiticity of the left partial trace]
+    \label{thm:partial_trace_left_hermitian}
+    \lean{Matrix.partialTraceLeft_isHermitian}
+    \leanok
+    \uses{def:partial_trace_left}
+    If $\rho=\rho^\dagger$, then
+    $\operatorname{tr}_L\rho=(\operatorname{tr}_L\rho)^\dagger$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take complex conjugates entrywise and use Hermiticity of $\rho$ inside
+    the finite sum.
+\end{proof}
+
+\begin{theorem}[Positivity of the left partial trace]
+    \label{thm:partial_trace_left_pos}
+    \lean{Matrix.PosSemidef.partialTraceLeft}
+    \leanok
+    \uses{def:partial_trace_left}
+    If $\rho\geq 0$, then $\operatorname{tr}_L\rho\geq 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The partial trace is the sum, over a basis of $H_L$, of positive
+    semidefinite principal submatrices of $\rho$.
+\end{proof}
+
+\begin{lemma}[Adjoint identity for the left partial trace]
+    \label{lem:trace_lift_right_factor_mul}
+    \lean{Matrix.trace_rightKroneckerEmbed_mul}
+    \leanok
+    \uses{def:partial_trace_left}
+    For every operator $M$ on $H_R$,
+    \[
+        \operatorname{tr}((\mathbf 1_L\otimes M)\rho)
+        =\operatorname{tr}(M\operatorname{tr}_L\rho).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both traces in product bases and sum over the identity entry on
+    $H_L$.
+\end{proof}
+
+\begin{theorem}[Left absorption by the right marginal support]
+    \label{thm:right_marginal_support_left_absorption}
+    \lean{Matrix.PosSemidef.rightKroneckerEmbed_supportProj_mul_self}
+    \leanok
+    \uses{thm:partial_trace_left_pos,lem:trace_lift_right_factor_mul}
+    If $P_R$ is the support projector of $\operatorname{tr}_L\rho$, then
+    \[
+        (\mathbf 1_L\otimes P_R)\rho=\rho.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the preceding trace identity to $\mathbf 1_R-P_R$.  Its lift has
+    zero expectation against $\rho$, hence annihilates $\rho$ by positivity.
+\end{proof}
+
+\begin{theorem}[Right absorption by the right marginal support]
+    \label{thm:right_marginal_support_right_absorption}
+    \lean{Matrix.PosSemidef.mul_rightKroneckerEmbed_supportProj_self}
+    \leanok
+    \uses{thm:right_marginal_support_left_absorption}
+    Under the same assumptions,
+    \[
+        \rho(\mathbf 1_L\otimes P_R)=\rho.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take adjoints in the left absorption identity.
+\end{proof}
+
+We now use the explicit tripartite indexing
+$H_A\otimes(H_X\otimes H_B)$.  Reassociation identifies it with
+$(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
+
+\begin{definition}[Tripartite local lifts]
+    \label{def:tripartite_local_lifts}
+    \lean{TripartiteDecorrelation.liftAX, TripartiteDecorrelation.liftXB,
+      TripartiteDecorrelation.liftA, TripartiteDecorrelation.liftB}
+    \leanok
+    Operators on $AX$, $XB$, $A$, and $B$ are lifted to the full tripartite
+    space by tensoring with identities on their complementary factors.
+\end{definition}
+
+\begin{definition}[Tripartite decorrelation]
+    \label{def:tripartite_decorrelation}
+    \lean{TripartiteDecorrelation.IsDecorrelated}
+    \leanok
+    \uses{def:tripartite_local_lifts}
+    Regions $A$ and $B$ are decorrelated relative to $P$ if, for all operators
+    $O_A$ and $O_B$,
+    \[
+        P O_A(\mathbf 1-P)O_B P=0.
+    \]
+    This is \cite[Definition~D.1, lines 2187--2191]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Reverse order of decorrelation]
+    \label{thm:tripartite_decorrelation_reverse}
+    \lean{TripartiteDecorrelation.IsDecorrelated.reverse}
+    \leanok
+    \uses{def:tripartite_decorrelation}
+    If $P=P^\dagger$, decorrelation also gives
+    \[
+        P O_B(\mathbf 1-P)O_A P=0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply decorrelation to $O_A^\dagger$ and $O_B^\dagger$, and take adjoints.
+\end{proof}
+
+\begin{definition}[Tripartite reduced operators]
+    \label{def:tripartite_marginals}
+    \lean{TripartiteDecorrelation.marginalAX,
+      TripartiteDecorrelation.marginalXB}
+    \leanok
+    The two reduced operators are
+    \[
+        \rho_{AX}=\operatorname{tr}_B P,
+        \qquad
+        \rho_{XB}=\operatorname{tr}_A P.
+    \]
+\end{definition}
+
+\begin{theorem}[Matrix-unit expansions of the reduced operators]
+    \label{thm:tripartite_marginal_matrix_units}
+    \lean{TripartiteDecorrelation.lift_marginalAX_eq_sum,
+      TripartiteDecorrelation.lift_marginalXB_eq_sum}
+    \leanok
+    \uses{def:tripartite_local_lifts,def:tripartite_marginals}
+    For matrix units on $A$ and $B$,
+    \[
+        \mathbf 1_A\otimes\rho_{XB}
+          =\sum_{a,k}E^A_{ak}P E^A_{ka},
+        \qquad
+        \rho_{AX}\otimes\mathbf 1_B
+          =\sum_{b,k}E^B_{bk}P E^B_{kb}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Evaluate both sides in the product basis.  The two matrix units force the
+    contracted row and column indices to agree, leaving the corresponding
+    partial trace.
+\end{proof}
+
+\begin{theorem}[Decorrelation for the two reduced operators]
+    \label{thm:tripartite_marginal_complementary_product_zero}
+    \lean{TripartiteDecorrelation.IsDecorrelated.marginals_mul_complement_mul_eq_zero,
+      TripartiteDecorrelation.IsDecorrelated.reverse_marginals_mul_complement_mul_eq_zero}
+    \leanok
+    \uses{def:tripartite_decorrelation,
+      thm:tripartite_decorrelation_reverse,
+      thm:tripartite_marginal_matrix_units}
+    If $P=P^\dagger$ and $A,B$ are decorrelated, then
+    \[
+        \rho_{XB}(\mathbf 1-P)\rho_{AX}=0,
+        \qquad
+        \rho_{AX}(\mathbf 1-P)\rho_{XB}=0,
+    \]
+    where each reduced operator is lifted to the tripartite space.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Substitute the matrix-unit expansions.  Every summand contains one of the
+    two decorrelation products and is therefore zero.
+\end{proof}
+
+\begin{definition}[Tripartite marginal support projectors]
+    \label{def:tripartite_marginal_supports}
+    \lean{TripartiteDecorrelation.supportAX, TripartiteDecorrelation.supportXB}
+    \leanok
+    \uses{def:partial_trace_left}
+    Let $P_{AX}$ and $P_{XB}$ be the support projectors of
+    $\operatorname{tr}_B P$ and $\operatorname{tr}_A P$, respectively, as in
+    \cite[Appendix~D.2, lines 2225--2229]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Decorrelation for the two marginal supports]
+    \label{thm:tripartite_complementary_product_zero}
+    \lean{TripartiteDecorrelation.IsDecorrelated.supports_mul_complement_mul_eq_zero,
+      TripartiteDecorrelation.IsDecorrelated.reverse_supports_mul_complement_mul_eq_zero}
+    \leanok
+    \uses{def:tripartite_marginal_supports,
+      thm:tripartite_marginal_complementary_product_zero}
+    Under the same assumptions,
+    \[
+        P_{XB}(\mathbf 1-P)P_{AX}=0,
+        \qquad
+        P_{AX}(\mathbf 1-P)P_{XB}=0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $g(0)=0$ and $g(x)=x^{-1}$ when $x\ne0$, functional calculus gives
+    \[
+        P_{AX}=g(\rho_{AX})\rho_{AX}=\rho_{AX}g(\rho_{AX}),
+        \qquad
+        P_{XB}=g(\rho_{XB})\rho_{XB}=\rho_{XB}g(\rho_{XB}).
+    \]
+    Multiply the two reduced-operator identities by the appropriate outer
+    factors.
+    % Local fix for source lines 2236--2252: see
+    % docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex.
+\end{proof}
+
+\begin{theorem}[Absorption by the lifted $XB$ support projector]
+    \label{thm:tripartite_xb_support_absorption}
+    \lean{TripartiteDecorrelation.liftSupportXB_mul_self,
+      TripartiteDecorrelation.mul_liftSupportXB_self}
+    \leanok
+    \uses{def:tripartite_local_lifts,def:tripartite_marginal_supports,
+      thm:right_marginal_support_left_absorption,
+      thm:right_marginal_support_right_absorption}
+    For $P\geq0$,
+    \[
+        P_{XB}P=P=PP_{XB}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the two right-marginal support absorption identities to the
+    bipartition $A|XB$.
+\end{proof}
+
+\begin{theorem}[Absorption by the lifted $AX$ support projector]
+    \label{thm:tripartite_ax_support_absorption}
+    \lean{TripartiteDecorrelation.liftSupportAX_mul_self,
+      TripartiteDecorrelation.mul_liftSupportAX_self}
+    \leanok
+    \uses{def:tripartite_local_lifts,def:tripartite_marginal_supports,
+      thm:marginal_support_left_absorption,
+      thm:marginal_support_right_absorption}
+    For $P\geq0$,
+    \[
+        P_{AX}P=P=PP_{AX}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Reassociate the tripartite space as $AX|B$ and apply the two
+    left-marginal support absorption identities.
+\end{proof}
+
+\begin{theorem}[Product of the two marginal support projectors]
+    \label{thm:tripartite_support_products}
+    \lean{TripartiteDecorrelation.supportProducts_eq}
+    \leanok
+    \uses{def:tripartite_marginal_supports,
+      thm:tripartite_xb_support_absorption,
+      thm:tripartite_ax_support_absorption,
+      thm:tripartite_complementary_product_zero}
+    If $P=P^\dagger=P^2$ and $A$ and $B$ are decorrelated relative to $P$, then
+    \[
+        P_{XB}P_{AX}=P=P_{AX}P_{XB}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Insert $\mathbf 1=P+(\mathbf 1-P)$ between the two support projectors.
+    The complementary term vanishes by decorrelation, while absorption gives
+    $P_{XB}PP_{AX}=P$ and $P_{AX}PP_{XB}=P$.
+\end{proof}
+
+\begin{definition}[Parent commuting Hamiltonian on the tripartite space]
+    \label{def:tripartite_parent_commuting_hamiltonian}
+    \lean{TripartiteDecorrelation.CommutingParentHamiltonian,
+      TripartiteDecorrelation.HasCommutingParentHamiltonian}
+    \leanok
+    \uses{def:tripartite_local_lifts}
+    There are orthogonal projectors $P_{AX}$ and $P_{XB}$ on the two local
+    factors whose lifts commute and satisfy
+    \[
+        P_{AX}P_{XB}=P.
+    \]
+    Equivalently, $Q_{AX}=\mathbf 1-P_{AX}$ and
+    $Q_{XB}=\mathbf 1-P_{XB}$ are the commuting parent terms of
+    \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv}, and the
+    ground space of their sum is the range of $P$.
+\end{definition}
+
+\begin{theorem}[Parent commuting Hamiltonian--decorrelation equivalence]
+    \label{thm:tripartite_parent_iff_decorrelated}
+    \lean{TripartiteDecorrelation.CommutingParentHamiltonian.isDecorrelated,
+      TripartiteDecorrelation.IsDecorrelated.hasCommutingParentHamiltonian,
+      TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}
+    \leanok
+    \uses{def:tripartite_decorrelation,
+      def:tripartite_parent_commuting_hamiltonian,
+      thm:tripartite_support_products}
+    Let $P=P^\dagger=P^2$.  Then $P$ is the ground-space projector of a
+    parent commuting Hamiltonian on $AX$ and $XB$ if and only if regions
+    $A$ and $B$ are decorrelated.
+    This is \cite[Proposition~D.3, lines 2221--2289]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For the forward implication, take the support projectors of
+    $\rho_{AX}$ and $\rho_{XB}$.  The preceding product theorem proves their
+    commutation and identifies their product with $P$.
+
+    Conversely, write $P=P_{AX}P_{XB}=P_{XB}P_{AX}$.  Locality gives
+    $[O_A,P_{XB}]=[O_B,P_{AX}]=0$, while
+    \[
+        P_{XB}(\mathbf 1-P)P_{AX}=0.
+    \]
+    Moving the two observables past the projectors therefore gives
+    $P O_A(\mathbf 1-P)O_B P=0$.
+\end{proof}
+
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
     \lean{Decorrelation.IsDecorrelated}
     \leanok

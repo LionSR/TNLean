@@ -184,21 +184,29 @@ it is not an additional assumption.
 
 \section{Elimination plan}
 
+The general finite-dimensional tripartite equivalence is now recorded by
+\leanid{TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}.  Its
+parent condition uses orthogonal projectors on the explicit factors
+\(AX\) and \(XB\); their lifted product is \(P_{AXB}\), equivalently their
+lifted ranges have the source intersection.  The forward direction constructs
+these projectors as the supports of the two marginals, and the reverse
+direction uses their locality and product identity.  The local correction to
+the marginal-support expansion at source lines 2236--2252 is documented in
+\path{docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex}.
+
 The coefficient-space analogue of the algebraic and kernel-intersection clauses
 is now proved: the operators are the canonical orthogonal parent interactions
 \(q_2(A)\), their lifts commute, and their kernel intersection is \(G_3(A)\).
 It remains to construct the source projectors on the two stated tensor factors
 and identify their transported actions with these coefficient-space maps.  The
 conditional comparison theorem cited above records precisely this missing
-identification.  This also does not complete the general decorrelation
-equivalence of Proposition~D.3.  In particular,
+identification.  This remaining comparison belongs to the RFP application,
+not to the general decorrelation equivalence.  In particular,
 \leanid{Decorrelation.HasCommutingParentHam} remains only its algebraic
 idempotent-product consequence, and the generic
 \leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian} structure does not
-itself record self-adjointness.  The concrete canonical parent interactions
-used here are orthogonal by construction, but the general statement should
-require self-adjointness explicitly and establish both directions of
-Proposition~D.3.  That work is tracked separately by \ghissue{190}.
+itself record self-adjointness.  The explicit tripartite condition above does
+record self-adjointness and proves both directions of Proposition~D.3.
 
 For Theorem~3.10, the remaining obligations are instead the full
 canonical-form scope and the all-chain ground-space spanning statement.  They
