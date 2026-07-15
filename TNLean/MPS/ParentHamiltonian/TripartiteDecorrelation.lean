@@ -502,10 +502,10 @@ repairs the unsupported single-slice assertion in arXiv:1606.00608,
 Appendix D.2, lines 2236--2252, while retaining the calculation in lines
 2253--2258.
 
-**Local fix (CPSV16 Appendix D.2):** A basis vector of a marginal support need
-not be one partial contraction.  The reduced-operator expansion and
-reciprocal-on-support factorization above replace that step.  Documented in
-`docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex`. -/
+**Local fix (`docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex`):**
+A basis vector of a marginal support need not be one partial contraction.  The
+reduced-operator expansion and reciprocal-on-support factorization above
+replace that step. -/
 theorem IsDecorrelated.supports_mul_complement_mul_eq_zero
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     (hPherm : P.IsHermitian) (hdec : IsDecorrelated P) :
@@ -536,10 +536,10 @@ theorem IsDecorrelated.supports_mul_complement_mul_eq_zero
 /-- The reverse-order product of the two marginal support projectors through
 the complement of \(P\) also vanishes.
 
-**Local fix (CPSV16 Appendix D.2):** As in the forward-order theorem, the
-reduced-operator expansion and reciprocal-on-support factorization replace the
-unsupported single-contraction step at source lines 2236--2252. Documented in
-`docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex`. -/
+**Local fix (`docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex`):**
+As in the forward-order theorem, the reduced-operator expansion and
+reciprocal-on-support factorization replace the unsupported single-contraction
+step at source lines 2236--2252. -/
 theorem IsDecorrelated.reverse_supports_mul_complement_mul_eq_zero
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     (hPherm : P.IsHermitian) (hdec : IsDecorrelated P) :
@@ -570,8 +570,8 @@ theorem IsDecorrelated.reverse_supports_mul_complement_mul_eq_zero
 /-- The lifted support projector of the \(XB\) marginal fixes the tripartite
 operator on the left.
 
-This is the \(P_{XB}P_{AXB}=P_{AXB}\) identity in arXiv:1606.00608,
-Appendix D.2, equation `Propproj`, lines 2228--2235. -/
+This is the \(P_{XB}P_{AXB}=P_{AXB}\) marginal-support absorption identity in
+arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
 theorem liftSupportXB_mul_self
     {ρ : Matrix (A × (X × B)) (A × (X × B)) ℂ} (hρ : ρ.PosSemidef) :
     liftXB (supportXB hρ.isHermitian) * ρ = ρ := by
@@ -580,8 +580,8 @@ theorem liftSupportXB_mul_self
 /-- The lifted support projector of the \(XB\) marginal fixes the tripartite
 operator on the right.
 
-This is the \(P_{AXB}P_{XB}=P_{AXB}\) identity in arXiv:1606.00608,
-Appendix D.2, equation `Propproj`, lines 2228--2235. -/
+This is the \(P_{AXB}P_{XB}=P_{AXB}\) marginal-support absorption identity in
+arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
 theorem mul_liftSupportXB_self
     {ρ : Matrix (A × (X × B)) (A × (X × B)) ℂ} (hρ : ρ.PosSemidef) :
     ρ * liftXB (supportXB hρ.isHermitian) = ρ := by
@@ -590,8 +590,8 @@ theorem mul_liftSupportXB_self
 /-- The lifted support projector of the \(AX\) marginal fixes the tripartite
 operator on the left.
 
-This is the \(P_{AX}P_{AXB}=P_{AXB}\) identity in arXiv:1606.00608,
-Appendix D.2, equation `Propproj`, lines 2228--2235. -/
+This is the \(P_{AX}P_{AXB}=P_{AXB}\) marginal-support absorption identity in
+arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
 theorem liftSupportAX_mul_self
     {ρ : Matrix (A × (X × B)) (A × (X × B)) ℂ} (hρ : ρ.PosSemidef) :
     liftAX (supportAX hρ.isHermitian) * ρ = ρ := by
@@ -602,8 +602,8 @@ theorem liftSupportAX_mul_self
 /-- The lifted support projector of the \(AX\) marginal fixes the tripartite
 operator on the right.
 
-This is the \(P_{AXB}P_{AX}=P_{AXB}\) identity in arXiv:1606.00608,
-Appendix D.2, equation `Propproj`, lines 2228--2235. -/
+This is the \(P_{AXB}P_{AX}=P_{AXB}\) marginal-support absorption identity in
+arXiv:1606.00608, Appendix D.2, lines 2228--2235. -/
 theorem mul_liftSupportAX_self
     {ρ : Matrix (A × (X × B)) (A × (X × B)) ℂ} (hρ : ρ.PosSemidef) :
     ρ * liftAX (supportAX hρ.isHermitian) = ρ := by
@@ -613,9 +613,10 @@ theorem mul_liftSupportAX_self
 
 /-- The two marginal support projectors multiply to the tripartite projector.
 
-This is arXiv:1606.00608, Appendix D.2, equation `PXBAXetc`,
-lines 2236--2258.  The proof uses reduced-operator matrix-unit expansions and
-reciprocal-on-support factorization, so no commutation hypothesis is assumed. -/
+These are the marginal-support projector product identities in
+arXiv:1606.00608, Appendix D.2, lines 2236--2258.  The proof uses
+reduced-operator matrix-unit expansions and reciprocal-on-support
+factorization, so no commutation hypothesis is assumed. -/
 theorem supportProducts_eq
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     (hPherm : P.IsHermitian) (hPidem : P * P = P)
@@ -679,8 +680,9 @@ theorem range_mul_eq_inter
 
 /-- Hermitian idempotent matrices with the same range are equal.
 
-This is the uniqueness fact used between arXiv:1606.00608, Appendix D.2,
-Definition D.2, lines 2205--2218, and equation `arrggg`, lines 2279--2289. -/
+This is the uniqueness fact used to identify the projector onto the
+ground-space intersection in arXiv:1606.00608, Appendix D.2, Definition D.2,
+lines 2205--2218, with the product projector in lines 2279--2289. -/
 theorem hermitian_idempotent_eq_of_range_eq
     {I : Type*} [Fintype I] [DecidableEq I]
     (S T : Matrix I I ℂ)
@@ -721,8 +723,9 @@ def HasGroundSpaceIntersection
 condition is equivalent to the corresponding projector-product identity.
 
 This proves that the range-intersection condition of arXiv:1606.00608,
-Appendix D.2, Definition D.2, lines 2205--2218, is equivalent to the
-projector-product identity at equation `arrggg`, lines 2279--2289. -/
+Appendix D.2, Definition D.2, lines 2205--2218, is equivalent to the identity
+in lines 2279--2289 that the tripartite ground-space projector is the product
+of the two local ground-space projectors. -/
 theorem hasGroundSpaceIntersection_iff_product_eq
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     {PAX : Matrix (A × X) (A × X) ℂ}
@@ -793,8 +796,9 @@ structure CommutingParentHamiltonian
   /-- The \(XB\) ground-space projector is idempotent, corresponding to the
   projector assumption in arXiv:1606.00608, Appendix D.2, lines 2205--2208. -/
   hXBidem : PXB * PXB = PXB
-  /-- The two lifted ground-space projectors commute, equivalent to equation
-  `QAXQXB` in arXiv:1606.00608, Appendix D.2, lines 2207--2214. -/
+  /-- The two lifted ground-space projectors commute, equivalently the local
+  Hamiltonian projectors commute as required in arXiv:1606.00608,
+  Appendix D.2, lines 2207--2214. -/
   hcomm : liftAX PAX * liftXB PXB = liftXB PXB * liftAX PAX
   /-- The range of \(P\) is the intersection of the two lifted local
   ground spaces, as in arXiv:1606.00608, Appendix D.2, lines 2212--2218. -/

@@ -244,8 +244,17 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \lean{TripartiteDecorrelation.liftAX, TripartiteDecorrelation.liftXB,
       TripartiteDecorrelation.liftA, TripartiteDecorrelation.liftB}
     \leanok
-    Operators on $AX$, $XB$, $A$, and $B$ are lifted to the full tripartite
-    space by tensoring with identities on their complementary factors.
+    Writing $\widehat M_R$ for the lift of an operator $M_R$ supported on
+    $R\in\{AX,XB,A,B\}$, the four lifts to
+    $H_A\otimes(H_X\otimes H_B)$ are
+    \begin{align*}
+        \widehat M_{AX} &= M_{AX}\otimes\mathbf 1_B,
+        & \widehat M_{XB} &= \mathbf 1_A\otimes M_{XB},\\
+        \widehat M_A &= M_A\otimes\mathbf 1_{XB},
+        & \widehat M_B &= \mathbf 1_{AX}\otimes M_B.
+    \end{align*}
+    The first and fourth formulas use the canonical identification
+    $(H_A\otimes H_X)\otimes H_B\cong H_A\otimes(H_X\otimes H_B)$.
 \end{definition}
 
 \begin{lemma}[Products and adjoints of tripartite lifts]
