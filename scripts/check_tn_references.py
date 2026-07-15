@@ -10,13 +10,14 @@ import sys
 import tempfile
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageStat
+from PIL import Image, ImageChops, ImageDraw, ImageOps, ImageStat
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "blueprint/src"
 RENDERER = SRC / "Packages/tn_diagrams.py"
 REFERENCES = ROOT / "docs/tn_reference"
+COMPARISON_SHEET = ROOT / "output/tn_reference_before_after.png"
 
 REFERENCE_CALLS = {
     "straight_purification": (
@@ -53,6 +54,7 @@ def load_renderer():
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Cannot load {RENDERER}")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -75,14 +77,18 @@ def assert_margin(image: Image.Image, name: str) -> None:
     rgba = image.convert("RGBA")
     background = Image.new("RGBA", rgba.size, "white")
     difference = ImageChops.difference(rgba, background).convert("L")
+    bounding_box = difference.getbbox()
+    if bounding_box is None:
+        raise RuntimeError(f"{name}: raster contains no visible ink")
+    left, top, right, bottom = bounding_box
     width, height = difference.size
-    boundary = Image.new("L", difference.size)
-    boundary.paste(difference.crop((0, 0, width, 1)), (0, 0))
-    boundary.paste(difference.crop((0, height - 1, width, height)), (0, height - 1))
-    boundary.paste(difference.crop((0, 0, 1, height)), (0, 0))
-    boundary.paste(difference.crop((width - 1, 0, width, height)), (width - 1, 0))
-    if boundary.getbbox() is not None:
-        raise RuntimeError(f"{name}: ink touches the raster boundary")
+    # dvisvgm adds 3 pt and rsvg-convert rasterizes at zoom 2.  At the SVG
+    # reference density this is eight pixels; allow one pixel for antialiasing.
+    clear_margin = min(left, top, width - right, height - bottom)
+    if clear_margin < 7:
+        raise RuntimeError(
+            f"{name}: clear raster margin is {clear_margin}px, below 3pt"
+        )
 
 
 def difference_score(actual: Image.Image, expected: Image.Image) -> float:
@@ -92,6 +98,30 @@ def difference_score(actual: Image.Image, expected: Image.Image) -> float:
         actual.convert("RGB"), expected.convert("RGB")
     )
     return sum(ImageStat.Stat(difference).mean) / (3 * 255)
+
+
+def write_comparison_sheet(
+    comparisons: list[tuple[str, Image.Image, Image.Image, float]],
+) -> None:
+    """Write one publication-review sheet, one row per compared reference."""
+
+    width, row_height = 1600, 430
+    sheet = Image.new("RGB", (width, row_height * len(comparisons)), "white")
+    draw = ImageDraw.Draw(sheet)
+    for index, (name, before, after, score) in enumerate(comparisons):
+        top = index * row_height
+        draw.text((24, top + 18), name, fill="black")
+        draw.text((770, top + 18), f"difference={score:.4f}", fill="black")
+        draw.text((24, top + 46), "before", fill="black")
+        draw.text((824, top + 46), "after", fill="black")
+        for left, image in ((24, before), (824, after)):
+            panel = ImageOps.contain(image.convert("RGB"), (740, row_height - 88))
+            x = left + (740 - panel.width) // 2
+            y = top + 74 + (row_height - 88 - panel.height) // 2
+            sheet.paste(panel, (x, y))
+        draw.line((0, top + row_height - 1, width, top + row_height - 1), fill="#cccccc")
+    COMPARISON_SHEET.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(COMPARISON_SHEET)
 
 
 def main() -> int:
@@ -106,9 +136,21 @@ def main() -> int:
         action="store_true",
         help="render every registered diagram and reject boundary contact",
     )
+    parser.add_argument(
+        "--margins-only",
+        action="store_true",
+        help="check crop margins without comparing approved reference pixels",
+    )
+    parser.add_argument(
+        "--comparison-sheet",
+        action="store_true",
+        help="write a before-and-after sheet for visual approval",
+    )
     args = parser.parse_args()
     renderer = load_renderer()
     REFERENCES.mkdir(parents=True, exist_ok=True)
+    comparisons: list[tuple[str, Image.Image, Image.Image, float]] = []
+    failures: list[str] = []
     with tempfile.TemporaryDirectory(prefix="tn-reference-") as directory:
         temporary = Path(directory)
         for name, call in REFERENCE_CALLS.items():
@@ -123,20 +165,36 @@ def main() -> int:
             if args.update:
                 actual.save(expected_path)
                 continue
+            if args.margins_only:
+                continue
             if not expected_path.exists():
                 raise RuntimeError(f"Missing approved reference {expected_path}")
-            score = difference_score(actual, Image.open(expected_path))
+            expected = Image.open(expected_path)
+            score = difference_score(actual, expected)
+            comparisons.append((name, expected.copy(), actual.copy(), score))
             if score > 0.012:
-                raise RuntimeError(f"{name}: raster difference {score:.4f} exceeds 0.012")
+                failures.append(f"{name}: {score:.4f}")
+                continue
             print(f"{name}: {score:.4f}")
         if args.all_registered:
-            rendered = renderer._smoke_render(renderer._DIAGRAM_ARGS)
+            rendered = renderer._smoke_render(
+                declaration.name
+                for declaration in renderer.diagram_declarations()
+            )
             for svg in rendered:
                 name = svg.stem.removeprefix("tn-smoke-")
                 png = temporary / f"registered-{name}.png"
                 rasterize(svg, png)
                 assert_margin(Image.open(png), name)
             print(f"registered boundary checks: {len(rendered)}")
+    if args.comparison_sheet:
+        write_comparison_sheet(comparisons)
+        print(COMPARISON_SHEET)
+    if failures:
+        raise RuntimeError(
+            "Raster differences exceed 0.012 pending visual approval: "
+            + ", ".join(failures)
+        )
     return 0
 
 

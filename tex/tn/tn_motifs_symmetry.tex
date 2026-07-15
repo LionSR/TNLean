@@ -1,0 +1,135 @@
+% Shared tensor-network constructions for symmetry and parent-Hamiltonian diagrams.
+%
+% These motifs own the fixed local geometry of transfer cells and string-order
+% words.  Catalogue declarations supply only mathematical labels and relative
+% placement relations.
+
+\makeatletter
+
+% Three adjacent fusion maps with the two intervening rank-one bond
+% projectors.  Empty upper labels expose the two outer virtual factors;
+% nonempty labels display the overlapping transported physical supports.
+\newcommand{\TNAppendixBProjectorChainMotif}[3]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=adjacent-projector-chain}%
+    \TNFusionMap{#1Zero}{at=origin}{U_0}%
+    \TNFusionMap{#1One}{right=of #1Zero}{U_1}%
+    \TNFusionMap{#1Two}{right=of #1One}{U_2}%
+    \TNMPSSite{#1PhiZero}{below right=of #1Zero}{\varphi_{01}}%
+    \TNMPSSite{#1PhiOne}{below right=of #1One}{\varphi_{12}}%
+    \TNConnectVirtualVH{#1ZeroFactorTwo}{#1PhiZeroWest}%
+    \TNConnectVirtualVH{#1OneFactorOne}{#1PhiZeroEast}%
+    \TNConnectVirtualVH{#1OneFactorTwo}{#1PhiOneWest}%
+    \TNConnectVirtualVH{#1TwoFactorOne}{#1PhiOneEast}%
+    \if\relax\detokenize{#2}\relax
+        \TNOpenVirtualNorth{#1ZeroFactorOne}%
+        \TNOpenVirtualNorth{#1TwoFactorTwo}%
+    \else
+        \TNGroupingRegionAbove{#1ZeroOneRegion}
+            {(#1Zero)(#1One)}{#2}%
+        \TNGroupingRegionAbove{#1OneTwoRegion}
+            {(#1One)(#1Two)}{#3}%
+    \fi
+    \TNOpenVirtualSouth{#1ZeroCombined}%
+    \TNOpenVirtualSouth{#1OneCombined}%
+    \TNOpenVirtualSouth{#1TwoCombined}%
+    \TNGroupingRegionSelectedBelow{#1PhiZeroRegion}
+        {(#1PhiZero)}{P_{01}}%
+    \TNGroupingRegionSelectedBelow{#1PhiOneRegion}
+        {(#1PhiOne)}{P_{12}}%
+}
+
+% The existing trace-cell and vertical-word constructions use a centre point.
+% These wrappers give catalogue terms a coordinate-free origin convention.
+\newcommand{\TNSymmetryTraceCell}[4]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=trace-cell}%
+    \TNCompactTraceCell{#1}{(0,0)}{#2}{#3}{#4}%
+}
+
+\newcommand{\TNSymmetryVerticalWord}[3]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=vertical-word}%
+    \TNVerticalWord{#1}{(0,0)}{#2}{#3}%
+}
+
+% A twisted two-layer cell: an upper and a lower tensor layer meet the physical
+% insertion #1Twist, and the two layers expose four virtual ports.  This local
+% geometry is shared by the transfer cell and the string-order cell below.
+\newcommand{\TN@twistlayers}[2]{%
+    \TNInsertion{#1Twist}{#2}{}%
+    \TNTensor{#1Upper}{above=\TN@layerpitch cm of #1Twist}% chktex 1
+    \TNTensor{#1Lower}{below=\TN@layerpitch cm of #1Twist}% chktex 1
+    \TNVirtualPort{#1UpperWest}{#1Upper}{west}%
+    \TNVirtualPort{#1UpperEast}{#1Upper}{east}%
+    \TNVirtualPort{#1LowerWest}{#1Lower}{west}%
+    \TNVirtualPort{#1LowerEast}{#1Lower}{east}%
+}
+
+% The vertical physical contraction of a twisted cell: the insertion meets both
+% layers along the shared physical index.
+\newcommand{\TN@twistphysical}[1]{%
+    \TNPhysicalPort{#1UpperPhysical}{#1Upper}{south}%
+    \TNPhysicalPort{#1TwistUpper}{#1Twist}{north}%
+    \TNPhysicalPort{#1TwistLower}{#1Twist}{south}%
+    \TNPhysicalPort{#1LowerPhysical}{#1Lower}{north}%
+    \TNConnectPhysical{#1UpperPhysical}{#1TwistUpper}%
+    \TNConnectPhysical{#1TwistLower}{#1LowerPhysical}%
+}
+
+% One twisted transfer cell.  The remaining arguments name the twist, input,
+% output, and layer indices; the four virtual ports are opened to the sides.
+\newcommand{\TNSymmetryTransferCell}[7]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=transfer-cell}%
+    \TN@twistlayers{#1}{#2}%
+    \TNOpenVirtualWest{#1UpperWest}%
+    \TNOpenVirtualWest{#1LowerWest}%
+    \TNOpenVirtualEast{#1UpperEast}%
+    \TNOpenVirtualEast{#1LowerEast}%
+    \TN@twistphysical{#1}%
+    \TNLabelAbove{#1Twist}{#3}%
+    \TNLabelLeft{#1Twist}{#4}%
+    \TNLabelRight{#1Twist}{#5}%
+    \TNLabelAbove{#1Upper}{#6}%
+    \TNLabelBelow{#1Lower}{#7}%
+}
+
+% A local cell in a string-order word has the same twisted two-layer geometry
+% but leaves its virtual ports available to the surrounding word.
+\newcommand{\TN@stringcell}[3]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=string-cell}%
+    \TN@twistlayers{#1}{#2}%
+    \TN@twistphysical{#1}%
+    \if\relax\detokenize{#3}\relax\else
+        \TNLabelRight{#1Twist}{#3}%
+    \fi
+}
+
+% The string-order word consists of two displayed cells, an omitted middle
+% column, and the final traced cell.  Its topology is fixed independently of L.
+\newcommand{\TNSymmetryStringOrderWord}[3]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=string-order-word}%
+    \TNTensor{#1Weight}{at=origin}%
+    \TNLabelBelow{#1Weight}{\Lambda}%
+    \TN@stringcell{#1First}{right=of #1Weight}{#2}%
+    \TN@stringcell{#1Second}
+        {right=\TN@chainsep cm of #1FirstTwist}{#2}% chktex 1
+    \TN@stringcell{#1Last}
+        {right=\TN@chainright cm of #1FirstTwist}{}% chktex 1
+    \TNVirtualPort{#1WeightUpper}{#1Weight}{35}%
+    \TNVirtualPort{#1WeightLower}{#1Weight}{-35}%
+    \TNConnectVirtual{#1WeightUpper}{#1FirstUpperWest}%
+    \TNConnectVirtual{#1WeightLower}{#1FirstLowerWest}%
+    \TNConnectVirtual{#1FirstUpperEast}{#1SecondUpperWest}%
+    \TNConnectVirtual{#1FirstLowerEast}{#1SecondLowerWest}%
+    \TNOpenVirtualEast{#1SecondUpperEast}%
+    \TNOpenVirtualEast{#1SecondLowerEast}%
+    \TNOpenVirtualWest{#1LastUpperWest}%
+    \TNOpenVirtualWest{#1LastLowerWest}%
+    \TNTraceVirtualRight{#1LastUpperEast}{#1LastLowerEast}%
+    \TNOmission{#1UpperOmission}
+        {right=\TN@cellpitch cm of #1SecondUpper}% chktex 1
+    \TNOmission{#1LowerOmission}
+        {right=\TN@cellpitch cm of #1SecondLower}% chktex 1
+    \TNLabelBelow{#1LowerOmission}{#3}%
+    \TNLabelLeft{#1LastTwist}{#2}%
+}
+
+\makeatother

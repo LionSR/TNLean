@@ -1,163 +1,21 @@
-% Dark-theme complete diagrams over TNLean's universal tensor-network core.
+% Dark-theme loader for TNLean's tensor-network calculus.
 %
-% The semantic atoms, typed ports, and contractions are shared verbatim with
-% the blueprint.  This file changes only the theme slots and defines the six
-% complete figures used by the slide collection.
-\input{../../tex/tn/tn_core} % chktex 27 (repository-relative shared source)
-\input{../../tex/tn/tn_library} % chktex 27 (repository-relative shared source)
-
-\tikzset{
-  % A theme changes palette only.  Geometry, dimensions, baselines, and type
-  % remain those of the repository-wide calculus loaded above.
-  tn theme tensor/.append style={draw=white, fill=black, text=white},
-  tn theme component/.append style={draw=dimwhite, fill=cardbg, text=white},
-  tn theme factor/.append style={draw=dimwhite, fill=black!55, text=white},
-  tn theme map/.append style={draw=leanblue, fill=cardbg, text=white},
-  tn theme state/.append style={draw=dimwhite, fill=black!55, text=white},
-  tn theme expression/.append style={draw=amber, fill=cardbg, text=white},
-  tn theme insertion/.append style={draw=white, fill=softred, text=black},
-  tn theme junction/.append style={fill=white},
-  tn theme virtual wire/.append style={draw=white},
-  tn theme physical wire/.append style={draw=leangreen!80!white},
-  tn theme factor region/.append style={draw=dimwhite},
-  tn theme grouping region/.append style={draw=dimwhite},
-  tn theme annotation/.append style={draw=dimwhite},
-  tn theme label/.append style={text=dimwhite}
-}
-
+% The shared TikZ library fixes all geometry, typography, and mathematical
+% meaning.  This file supplies only the dark palette and loads the six complete
+% diagrams used by the slide collection.
 \makeatletter
-
-% A common periodic MPS word.  Omitted sites are represented by two typed
-% external terminals and an ellipsis; the trace is a port-to-port closure.
-\newcommand{\SlideTNPeriodicMPS}[2]{%
-  \begin{TNDiagram}[normal]
-    \TNCyclicMPSWord{sltnWord}{#1}{#2}
-      {\text{trace; bond dimension }D}
-  \end{TNDiagram}%
-}
-
-% The left-hand tensor is B, matching B^i = X A^i X^{-1}.
-\newcommand{\SlideTNGaugeConjugation}[3]{%
-  \begin{TNEquationRow}[normal]
-    \TNTerm[normal]{%
-      \TNMPSSite{sltnB}{(0,0)}{#1}
-      \TNOpenVirtualWest{sltnBWest}
-      \TNOpenVirtualEast{sltnBEast}
-      \TNOpenPhysicalNorth{sltnBKet}
-      \TNLabelAbove{sltnBKet}{i}%
-    }%
-    \TNRelation{=}%
-    \TNTerm[normal]{%
-      \TNGaugeConjugatedMPSSite{sltnGauge}{(0,0)}
-        {#2}{#3}{#3^{-1}}%
-      \TNLabelAbove{sltnGaugeSiteKet}{i}%
-    }%
-  \end{TNEquationRow}%
-}
-
-\newcommand{\SlideTNBlockingIdentity}[3]{%
-  \begin{TNEquationRow}[compact]
-    \TNTerm{%
-      \TNMPSSite{sltnC}{(0,0)}{#1}
-      \TNOpenVirtualWest{sltnCWest}
-      \TNOpenVirtualEast{sltnCEast}
-      \TNOpenPhysicalNorth{sltnCKet}
-      \TNLabelAbove{sltnCKet}{(i_1,\ldots,i_{#3})}%
-    }%
-    \TNRelation{=}%
-    \TNTerm{%
-      \foreach \name/\x/\i in {One/0/i_1,Two/1.15/i_2,Last/3.05/i_{#3}} {
-        \TNMPSSite{sltnB\name}{(\x,0)}{#2}
-        \TNOpenPhysicalNorth{sltnB\name Ket}
-        \TNLabelAbove{sltnB\name Ket}{\i}
-      }
-      \TNOpenVirtualWest{sltnBOneWest}
-      \TNConnectVirtual{sltnBOneEast}{sltnBTwoWest}
-      \TNOpenVirtualEast{sltnBTwoEast}
-      \TNOpenVirtualWest{sltnBLastWest}
-      \TNOpenVirtualEast{sltnBLastEast}
-      \TNPoint{sltnOmitted}{(2.10,0)}
-      \TNPoint{sltnMultiplicity}{(1.54,-0.68)}
-      \TNLabel{sltnOmitted}{(0,0)}{\cdots}
-      \TNLabel{sltnMultiplicity}{(0,0)}{\text{#3 copies}}%
-    }%
-  \end{TNEquationRow}%
-}
-
-\newcommand{\SlideTNMixedTransfer}[4]{%
-  \begin{TNDiagram}[compact]
-    \foreach \name/\x in {One/0,Two/1.30,Pen/3.25,Last/4.55} {
-      \TNStackedMPOProduct{sltn\name}{(\x,0)}{#1}{#2^\dagger}{}
-    }
-    \TNOpenVirtualWest{sltnOneUpperWest}
-    \TNOpenVirtualWest{sltnOneLowerWest}
-    \TNConnectVirtual{sltnOneUpperEast}{sltnTwoUpperWest}
-    \TNConnectVirtual{sltnOneLowerEast}{sltnTwoLowerWest}
-    \TNOpenVirtualEast{sltnTwoUpperEast}
-    \TNOpenVirtualEast{sltnTwoLowerEast}
-    \TNOpenVirtualWest{sltnPenUpperWest}
-    \TNOpenVirtualWest{sltnPenLowerWest}
-    \TNConnectVirtual{sltnPenUpperEast}{sltnLastUpperWest}
-    \TNConnectVirtual{sltnPenLowerEast}{sltnLastLowerWest}
-    \TNOpenVirtualEast{sltnLastUpperEast}
-    \TNOpenVirtualEast{sltnLastLowerEast}
-    \TNPoint{sltnInput}{(-0.62,0)}
-    \TNPoint{sltnUpperOmitted}{(2.28,0.72)}
-    \TNPoint{sltnLowerOmitted}{(2.28,-0.72)}
-    \TNPoint{sltnOutput}{(5.20,0)}
-    \TNLabelLeft{sltnInput}{#3}
-    \TNLabel{sltnUpperOmitted}{(0,0)}{\cdots}
-    \TNLabel{sltnLowerOmitted}{(0,0)}{\cdots}
-    \TNLabelRight{sltnOutput}{\mathcal F^{#4}_{#1,#2}(#3)}
-  \end{TNDiagram}%
-}
-
-\newcommand{\SlideTNTransferMap}[2]{%
-  \begin{TNDiagram}[normal]
-    \TNStackedMPOProduct{sltn}{(0,0)}{#1}{\overline{#1}}{}
-    \TNOpenVirtualWest{sltnUpperWest}
-    \TNOpenVirtualWest{sltnLowerWest}
-    \TNOpenVirtualEast{sltnUpperEast}
-    \TNOpenVirtualEast{sltnLowerEast}
-    \TNPoint{sltnInput}{(-0.62,0)}
-    \TNPoint{sltnSum}{(0.32,0)}
-    \TNPoint{sltnOutput}{(0.95,0)}
-    \TNLabelLeft{sltnInput}{#2}
-    \TNLabel{sltnSum}{(0,0)}{\sum_i}
-    \TNLabelRight{sltnOutput}{\mathcal E_{#1}(#2)}
-  \end{TNDiagram}%
-}
-
-\newcommand{\SlideTNBlockingComparison}[2]{%
-  \begin{TNDiagram}[compact]
-    \TNPoint{sltnChainLabel}{(-0.55,0.75)}
-    \TNLabelLeft{sltnChainLabel}{\text{chain of }N\text{:}}
-    \foreach \x/\name in {0/One,0.85/Two,1.70/Three,4.05/Pen,4.90/Last} {
-      \TNMPSSite{sltnP\name}{(\x,0.75)}{#1}
-      \TNOpenPhysicalNorth{sltnP\name Ket}
-    }
-    \TNConnectVirtual{sltnPOneEast}{sltnPTwoWest}
-    \TNConnectVirtual{sltnPTwoEast}{sltnPThreeWest}
-    \TNOpenVirtualEast{sltnPThreeEast}
-    \TNOpenVirtualWest{sltnPPenWest}
-    \TNConnectVirtual{sltnPPenEast}{sltnPLastWest}
-    \TNOpenVirtualWest{sltnPOneWest}
-    \TNOpenVirtualEast{sltnPLastEast}
-    \TNPoint{sltnOmitted}{(2.88,0.75)}
-    \TNPoint{sltnBlockedLabel}{(-0.55,-0.85)}
-    \TNLabel{sltnOmitted}{(0,0)}{\cdots}
-    \TNLabelLeft{sltnBlockedLabel}{\text{after blocking }#2\text{:}}
-    \TNMPSSite{sltnBlockOne}{(0.65,-0.85)}{#1^{(#2)}}
-    \TNMPSSite{sltnBlockTwo}{(2.45,-0.85)}{#1^{(#2)}}
-    \TNMPSSite{sltnBlockLast}{(4.25,-0.85)}{#1^{(#2)}}
-    \foreach \name in {One,Two,Last} {
-      \TNOpenPhysicalNorth{sltnBlock\name Ket}
-    }
-    \TNConnectVirtual{sltnBlockOneEast}{sltnBlockTwoWest}
-    \TNConnectVirtual{sltnBlockTwoEast}{sltnBlockLastWest}
-    \TNOpenVirtualWest{sltnBlockOneWest}
-    \TNOpenVirtualEast{sltnBlockLastEast}
-  \end{TNDiagram}%
-}
-
+\def\input@path{{../../tex/tn/}}
 \makeatother
+\usetikzlibrary{tn}
+
+\colorlet{tnInk}{white!94}
+\colorlet{tnSecondaryInk}{white!60}
+\colorlet{tnAccent}{orange!80!white}
+\colorlet{tnRegion}{cyan!80!white}
+\colorlet{tnSector}{magenta!75!white}
+\colorlet{tnPaper}{darkbg}
+\colorlet{tnTensorText}{darkbg}
+\colorlet{tnInsertionFill}{tnAccent}
+\colorlet{tnInsertionText}{darkbg}
+
+\input{tn_slide_catalogue}
