@@ -211,6 +211,21 @@ fusion formulation must construct the BNT-label theorem witness from the MPDO
 tensor and then use the one-site retract criterion
 \leanid{MPOTensor.fusionIsometryData_one_iff_isRFP}.
 
+The scalar normalization step is now isolated independently of the still
+missing channel construction.  The structure
+\leanid{MPOTensor.BNTMultiplicitySpectrumComparison} records the one-site
+traces and the sectorwise multiset equality obtained from the vertical BNT
+comparison at lines~2048--2058.  Given this comparison, the BNT algebra
+clause proves
+\[
+    \tr(\nu_\gamma)=m_\gamma
+\]
+through
+\leanid{MPOTensor.BNTAlgebraClause.%
+twoMultiplicityTrace_eq_traceScalar}.  Thus the idempotent law now discharges
+the precise scalar obligation at lines~2058--2064; it does not construct the
+comparison from the MPDO tensor and does not yet define the maps $T$ and $S$.
+
 \section{BNT-label coefficient objects and remaining elimination plan}
 
 The same-length coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$, indexed
