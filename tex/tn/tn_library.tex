@@ -434,9 +434,10 @@
 }
 
 % Trace-closed MPO word with open ket and bra indices.
-\newcommand{\TN@closedMPOword}[1]{%
+\newcommand{\TN@closedMPOword}[2]{%
     \TN@declareMPOWordTensor{#1L}{(0,0)}
-    \TN@declareMPOWordTensor{#1M}{(1.15,0)}
+    \TN@mposite{#1M}{(1.15,0)}{#2}%
+    \coordinate (#1MC) at (#1M.center);%
     \TN@declareMPOWordTensor{#1R}{(3.05,0)}
     \TN@openpverticalports{#1L}
     \TN@openpverticalports{#1M}
@@ -489,6 +490,24 @@
 }
 
 % ---------- Repeated finite constructions ----------
+
+% Short factor words occur in the blocked-channel constructions.  One indexed
+% constructor fixes their pitch and interfaces; the arity-specific public
+% names below are semantic aliases rather than independent geometries.
+\newcommand{\TN@factorChain}[4]{%
+    \coordinate (#1Centre) at #2;%
+    \foreach \TN@index in {1,...,#3} {%
+        \TNVirtualFactorSite{#1Site\TN@index}
+            {($(#1Centre)+({(\TN@index-1)*\TN@cellpitch},0)$)}{#4}%
+    }%
+    \pgfmathtruncatemacro{\TN@lastbond}{#3-1}%
+    \foreach \TN@index [evaluate=\TN@index as \TN@next using
+            int(\TN@index+1)] in {1,...,\TN@lastbond} {%
+        \TN@vconnectports{#1Site\TN@index E}{#1Site\TN@next W}%
+    }%
+    \TN@vopenport{#1Site1W}{-\TN@virtualleglen,0}%
+    \TN@vopenport{#1Site#3E}{\TN@virtualleglen,0}%
+}
 
 \newcommand{\TN@declareThreeSiteChain}[4]{%
     \TN@declareWordTensor{#1one}{(1.00,0)}
@@ -923,6 +942,9 @@
 \newcommand{\TNPhysicalTerminal}[2]{\TN@pterminal{#1}{#2}}
 \newcommand{\TNMorphismTerminal}[2]{\TN@mterminal{#1}{#2}}
 \newcommand{\TNPoint}[2]{\TN@annotationterminal{#1}{#2}}
+\newcommand{\TNPointBetween}[3]{%
+    \TN@annotationterminal{#1}{($(#2)!0.5!(#3)$)}%
+}
 \newcommand{\TNVirtualWestPort}[3]{\TN@vwestport{#1}{#2}{#3}}
 \newcommand{\TNVirtualEastPort}[3]{\TN@veastport{#1}{#2}{#3}}
 \newcommand{\TNVirtualNorthPort}[3]{\TN@vnorthport{#1}{#2}{#3}}
@@ -1106,6 +1128,17 @@
     \TN@aliasport{#1Bra}{#1S}%
 }
 
+% A displayed factor with the same four external roles as an MPO site.  It is
+% used when the source decomposes a tensor into named local factors rather than
+% introducing a new tensor site.
+\newcommand{\TNVirtualFactorSite}[3]{%
+    \TN@factorwithlegs{#1}{#2}{#3}%
+    \TN@aliasport{#1West}{#1W}%
+    \TN@aliasport{#1East}{#1E}%
+    \TN@aliasport{#1Ket}{#1N}%
+    \TN@aliasport{#1Bra}{#1S}%
+}
+
 \newcommand{\TNRotatedMPOSite}[3]{%
     \TN@tensor{#1}{#2}%
     \TN@vport{#1North}{#1}{north}%
@@ -1194,6 +1227,8 @@
     \TN@pport{#1BraAncilla}{#1BraTensor}{north east}%
     \TN@pport{#1Bra}{#1BraTensor}{south}%
     \TNConnectPhysical{#1KetAncilla}{#1BraAncilla}%
+    \TN@annotationterminal{#1AncillaMid}
+        {($(#1KetAncilla)!0.5!(#1BraAncilla)$)}%
     \TN@label{#1KetTensor}{(-0.30,0.24)}{#3}%
     \TN@label{#1BraTensor}{(-0.30,-0.24)}{#4}%
     \TN@aliasport{#1KetWest}{#1KetTensorW}%
@@ -1221,6 +1256,17 @@
 
 % Horizontal and rotated vertical words use the common pitches and closures.
 \newcommand{\TNHorizontalWord}[4]{\TN@openMPOword{#1}{#2}{#3}{#2}{#3}{#4}}
+% A periodic MPO word has the same indexed endpoints as an open word, but its
+% outer virtual ports are joined by the canonical rounded trace closure.
+\newcommand{\TNIndexedPeriodicMPOWord}[7]{%
+    \TN@closedMPOword{#1}{#7}%
+    \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}%
+    \TN@label{#1LS}{(0,-\TN@physlabeloff)}{#3}%
+    \TN@label{#1RN}{(0,\TN@physlabeloff)}{#4}%
+    \TN@label{#1RS}{(0,-\TN@physlabeloff)}{#5}%
+    \TNPoint{#1Length}{(2.10,-0.62)}%
+    \TNLabel{#1Length}{(0,0)}{#6}%
+}
 \newcommand{\TNVerticalWord}[4]{%
     \coordinate (#1Centre) at #2;%
     \TNRotatedMPOSite{#1Top}{($(#1Centre)+(0,\TN@cellpitch)$)}{#3}%
@@ -1239,6 +1285,62 @@
 \newcommand{\TNSectorBus}[4]{\TN@vbus{#1}{#2}{#3}{#4}}
 \newcommand{\TNParallelSectorBus}[4]{\TN@vparallelbus{#1}{#2}{#3}{#4}}
 \newcommand{\TNSectorBusTap}[3]{\TN@vbustap{#1}{#2}{#3}}
+\newcommand{\TNSectorBusProjectTap}[3]{%
+    \TN@vbusprojecttap{#1}{#2}{#3}%
+}
+\newcommand{\TNFactorChainTwo}[3]{\TN@factorChain{#1}{#2}{2}{#3}}
+\newcommand{\TNFactorChainThree}[3]{\TN@factorChain{#1}{#2}{3}{#3}}
+\newcommand{\TNFactorChainFour}[3]{\TN@factorChain{#1}{#2}{4}{#3}}
+
+% Coefficient form of a basis of normal tensors.  The horizontal bond passes
+% through the two gauges and the normal tensor.  The parallel sector buses
+% retain the distinct block and copy indices, and the coefficient component
+% meets each bus through its own typed port.
+\newcommand{\TNBNTCoefficientDecomposition}[2]{%
+    \coordinate (#1Centre) at #2;%
+    \TNSectorGauge{#1Gauge}
+        {($(#1Centre)+(-\TN@cellpitch-\TN@cellpitch,0)$)}{X_{j,q}}%
+    \TNMPSSite{#1Tensor}{(#1Centre)}{}%
+    \TNLabelRight{#1Tensor.south east}{A_j}%
+    \TNInverseSectorGauge{#1Inverse}
+        {($(#1Centre)+(\TN@cellpitch+\TN@cellpitch,0)$)}{X_{j,q}^{-1}}%
+    \TNConnectVirtual{#1GaugeE}{#1TensorWest}%
+    \TNConnectVirtual{#1TensorEast}{#1InverseW}%
+    \TNOpenVirtualWest{#1GaugeW}%
+    \TNOpenVirtualEast{#1InverseE}%
+    \TNOpenPhysicalNorth{#1TensorKet}%
+    \TNLabelLeft{#1GaugeWOpen}{\alpha}%
+    \TNLabelRight{#1InverseEOpen}{\beta}%
+    \TNLabelAbove{#1TensorKetOpen}{i}%
+
+    \TNVirtualSouthPort{#1TensorBlock}{#1Tensor}{0.5}%
+    \TNSectorBus{#1BlockBus}
+        {($(#1GaugeBlock)+(0,-\TN@layerpitch)$)}
+        {($(#1InverseBlock)+(0,-\TN@layerpitch)$)}{j}%
+    \TNParallelSectorBus{#1CopyBus}{#1BlockBus}{-\TN@layerpitch}{q}%
+
+    \TNSectorBusProjectTap{#1BlockBus}{#1GaugeBlockTap}{#1GaugeBlock}%
+    \TNSectorBusProjectTap{#1BlockBus}{#1TensorBlockTap}{#1TensorBlock}%
+    \TNSectorBusProjectTap{#1BlockBus}{#1InverseBlockTap}{#1InverseBlock}%
+    \TNSectorBusProjectTap{#1CopyBus}{#1GaugeCopyTap}{#1GaugeCopy}%
+    \TNSectorBusProjectTap{#1CopyBus}{#1InverseCopyTap}{#1InverseCopy}%
+    \TNConnectVirtual{#1GaugeBlock}{#1GaugeBlockTap}%
+    \TNConnectVirtual{#1TensorBlock}{#1TensorBlockTap}%
+    \TNConnectVirtual{#1InverseBlock}{#1InverseBlockTap}%
+    \TNConnectVirtual{#1GaugeCopy}{#1GaugeCopyTap}%
+    \TNConnectVirtual{#1InverseCopy}{#1InverseCopyTap}%
+
+    \TNComponent{#1Coefficient}
+        {($(#1Centre)+(0,-\TN@layerpitch-\TN@layerpitch/2)$)}{\mu}%
+    \TNVirtualNorthPort{#1CoefficientBlock}{#1Coefficient}{0.5}%
+    \TNVirtualSouthPort{#1CoefficientCopy}{#1Coefficient}{0.5}%
+    \TNSectorBusProjectTap
+        {#1BlockBus}{#1CoefficientBlockTap}{#1CoefficientBlock}%
+    \TNSectorBusProjectTap
+        {#1CopyBus}{#1CoefficientCopyTap}{#1CoefficientCopy}%
+    \TNConnectVirtual{#1CoefficientBlock}{#1CoefficientBlockTap}%
+    \TNConnectVirtual{#1CoefficientCopy}{#1CoefficientCopyTap}%
+}
 \newcommand{\TNThreeSiteChain}[4]{\TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}}
 \newcommand{\TNThreeSiteInsertion}[5]{%
     \TN@boxedThreeSiteInsertion{#1}{#2}{#3}{#4}{#5}%
