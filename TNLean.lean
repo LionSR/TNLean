@@ -247,6 +247,7 @@ import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Channel.Peripheral.CyclicGroup
 import TNLean.Channel.Semigroup.RelaxationConditions
+import TNLean.Channel.Semigroup.HamiltonianIndependentContractivity
 -- Layer 2c: Spectral theory (QPF + transfer-operator gaps)
 import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
