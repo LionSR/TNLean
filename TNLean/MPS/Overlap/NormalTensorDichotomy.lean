@@ -7,15 +7,15 @@ import TNLean.MPS.CanonicalForm.NormalTensorGauge
 /-!
 # Normal-tensor overlap dichotomy
 
-Two normal tensors have rectangular matrix product vector overlap tending to zero, unless their
-bond dimensions agree and they are related by an invertible gauge and a unit phase. In the latter
-case the overlap modulus tends to one, and the matrix product vectors differ by the corresponding
-power of the phase at every length.
+The self-overlap of each normal tensor tends to one. Two normal tensors have rectangular matrix
+product vector overlap tending to zero, unless their bond dimensions agree and they are related by
+an invertible gauge and a unit phase. In the latter case the overlap modulus tends to one, and the
+matrix product vectors differ by the corresponding power of the phase at every length.
 
 ## Main statements
 
-* `IsNormalTensor.overlap_dichotomy`: the overlap tends to zero, or its modulus tends to one and
-  the tensors are gauge-phase equivalent with a unit phase.
+* `IsNormalTensor.overlap_dichotomy`: both self-overlaps tend to one, and the cross-overlap tends
+  to zero or has modulus tending to one with gauge-phase equivalence by a unit phase.
 * `IsNormalTensor.mpv_phase_alternative`: the overlap tends to zero, or the matrix product vectors
   differ by a unit phase raised to each chain length.
 
@@ -33,22 +33,25 @@ namespace MPSTensor
 variable {d D₁ D₂ : ℕ}
 
 /-- **Normal-tensor overlap dichotomy** (arXiv:1606.00608, Appendix A,
-Lemma A.2 (equalMPS), lines 1080--1119).
+Lemma A.2 (equalMPS), lines 1080--1117).
 
-For two normal tensors of positive, possibly different, bond dimensions, either the rectangular
-overlap tends to zero, or its modulus tends to one and the tensors are related by an invertible
-gauge and a unit phase. -/
+For two normal tensors of positive, possibly different, bond dimensions, both self-overlaps tend
+to one. Their rectangular overlap either tends to zero, or its modulus tends to one and the tensors
+are related by an invertible gauge and a unit phase. -/
 theorem IsNormalTensor.overlap_dichotomy
     [NeZero D₁] [NeZero D₂]
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
-    Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) ∨
-      (Tendsto (fun N ↦ ‖mpvOverlap (d := d) A B N‖) atTop (nhds (1 : ℝ)) ∧
-        ∃ hdim : D₁ = D₂,
-          ∃ X : GL (Fin D₂) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
-            ∀ i, B i = ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) *
-              (cast (congr_arg (MPSTensor d) hdim) A) i *
-              (↑(X⁻¹) : Matrix (Fin D₂) (Fin D₂) ℂ))) := by
+    (Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds 1) ∧
+      Tendsto (fun N ↦ mpvOverlap (d := d) B B N) atTop (nhds 1)) ∧
+        (Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) ∨
+          (Tendsto (fun N ↦ ‖mpvOverlap (d := d) A B N‖) atTop (nhds (1 : ℝ)) ∧
+            ∃ hdim : D₁ = D₂,
+              ∃ X : GL (Fin D₂) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+                ∀ i, B i = ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) *
+                  (cast (congr_arg (MPSTensor d) hdim) A) i *
+                  (↑(X⁻¹) : Matrix (Fin D₂) (Fin D₂) ℂ)))) := by
+  refine ⟨⟨hA.selfOverlap_tendsto_one, hB.selfOverlap_tendsto_one⟩, ?_⟩
   obtain ⟨σA, _hσA, _hσAfix, hTPA, hGaugeA, _hPrimA, hIrrA⟩ := hA.exists_tpGauge
   obtain ⟨σB, _hσB, _hσBfix, hTPB, hGaugeB, _hPrimB, hIrrB⟩ := hB.exists_tpGauge
   let A' := tpGauge (d := d) (D := D₁) A σA
@@ -112,7 +115,7 @@ theorem IsNormalTensor.mpv_phase_alternative
     Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) ∨
       ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ N,
         mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
-  rcases hA.overlap_dichotomy hB with hzero | ⟨_hone, hdim, X, ζ, hζ, hrel⟩
+  rcases hA.overlap_dichotomy hB with ⟨_hself, hzero | ⟨_hone, hdim, X, ζ, hζ, hrel⟩⟩
   · exact Or.inl hzero
   · right
     refine ⟨ζ, hζ, fun N ↦ ?_⟩
