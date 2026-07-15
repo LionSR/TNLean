@@ -137,6 +137,39 @@ physical indices, as in
     the product of the two blocked tensors.
 \end{proof}
 
+\begin{theorem}[Closed MPO chains under physical blocking]
+    \label{thm:mpdo_closed_chain_physical_blocking}
+    \lean{MPOTensor.mpo_blockTensor_eq_reindex}
+    \lean{MPOTensor.IsMPDO.blockTensor}
+    \leanok
+    \uses{def:mpdo_positive_physical_blocking, def:mpo_family, def:mpdo}
+    Let $L>0$, and let
+    \[
+        \Phi_{N,L}:
+        \{0,\ldots,d^L-1\}^N
+        \longrightarrow \{0,\ldots,d-1\}^{NL}
+    \]
+    concatenate the $N$ blocked words.  For blocked configurations
+    $\sigma$ and $\tau$,
+    \[
+        \rho^{(N)}\bigl(M^{[L]}\bigr)_{\sigma,\tau}
+        =\rho^{(NL)}(M)_{\Phi_{N,L}(\sigma),\Phi_{N,L}(\tau)}.
+    \]
+    Consequently, if $M$ generates an MPDO, then $M^{[L]}$ generates an
+    MPDO.  This is the closed-chain identification implicit when the one-site
+    tensor and its two-site blocking are placed in vertical canonical form in
+    \cite[Appendix~C.4, lines~1952--2017]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpo_eval_word_append}
+    Concatenating the $N$ pairs of length-$L$ words turns the product of the
+    blocked matrices into the product of the original $NL$ matrices.  Taking
+    the virtual trace gives the displayed equality.  The map $\Phi_{N,L}$ is
+    a bijection, and conjugating a positive semidefinite matrix by its
+    permutation matrix preserves positive semidefiniteness.
+\end{proof}
+
 \begin{definition}[Two-site blocking of an MPO tensor]
     \label{def:mpdo_two_site_blocking}
     \lean{MPOTensor.blockTwo}

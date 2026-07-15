@@ -21,6 +21,9 @@ arXiv:1606.00608.
 
 * `MPOTensor.blockTensor`: the tensor obtained by blocking an arbitrary number
   of adjacent sites.
+* `MPOTensor.mpo_blockTensor_eq_reindex`: closing a blocked chain gives the
+  corresponding longer unblocked chain.
+* `MPOTensor.IsMPDO.blockTensor`: physical blocking preserves the MPDO property.
 * `MPOTensor.blockTwo`: the tensor obtained by blocking two adjacent sites.
 * `MPOTensor.physClose4`: the right-associated four-site physical closure.
 * `MPOTensor.physClose1_blockTwo_eq_physClose2`: one blocked site is two original sites.
@@ -30,9 +33,11 @@ arXiv:1606.00608.
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Theorem 4.9, lines 851--856
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Appendix C.4, lines 1952--2017
 -/
 
-open scoped Matrix
+open scoped Matrix ComplexOrder
 
 namespace MPOTensor
 
@@ -128,6 +133,49 @@ theorem blockTensor_mulTensor {D₁ D₂ : ℕ}
   rw [← (MPSTensor.decodeBlockEquiv d L).sum_comp]
   simp only [MPSTensor.decodeBlockEquiv_apply, blockTensor_apply,
     MPSTensor.wordOfBlock]
+
+private theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ}
+    (s t : Fin N → Fin (MPSTensor.blockPhysDim d L)) :
+    evalWord (blockTensor M L) (List.ofFn s) (List.ofFn t) =
+      evalWord M (MPSTensor.flattenBlockedWord d L (List.ofFn s))
+        (MPSTensor.flattenBlockedWord d L (List.ofFn t)) := by
+  induction N with
+  | zero =>
+      simp [MPSTensor.flattenBlockedWord]
+  | succ N ih =>
+      simp only [List.ofFn_succ, evalWord_cons, blockTensor_apply,
+        MPSTensor.flattenBlockedWord_cons]
+      rw [ih]
+      rw [evalWord_append M _ _ _ _ (by simp)]
+
+/-- Closing a chain of `N` tensors after blocking `L` consecutive physical
+sites gives the original closed chain of length `N * L`, after the canonical
+identification of blocked configurations with unblocked configurations.
+
+This is the finite-index form of the physical blocking used when placing the
+one-site tensor and its two-site blocking in vertical canonical form in
+arXiv:1606.00608, Appendix C.4, lines 1952--2017. -/
+theorem mpo_blockTensor_eq_reindex (M : MPOTensor d D) (L N : ℕ) :
+    mpo (blockTensor M L) N =
+      Matrix.reindex (MPSTensor.blockedConfigEquiv d N L).symm
+        (MPSTensor.blockedConfigEquiv d N L).symm (mpo M (N * L)) := by
+  ext σ τ
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, mpo_apply, mpoMatrixEntry]
+  rw [evalWord_blockTensor_ofFn]
+  simp only [Equiv.symm_symm, MPSTensor.ofFn_blockedConfigEquiv]
+
+/-- Physical blocking preserves global positivity of the closed MPO family.
+
+For positive `L`, this is the blocking operation used throughout the vertical
+canonical-form comparison of arXiv:1606.00608, Appendix C.4, lines 1952--2017.
+The algebraic definition is total at `L = 0`, where the same conclusion also
+holds but has no physical interpretation as a blocking operation. -/
+theorem IsMPDO.blockTensor {M : MPOTensor d D} (hM : IsMPDO M) (L : ℕ) :
+    IsMPDO (blockTensor M L) := by
+  intro N
+  rw [mpo_blockTensor_eq_reindex]
+  rw [Matrix.reindex_apply]
+  exact (hM (N * L)).submatrix _
 
 /-! ### Two-site blocking -/
 
