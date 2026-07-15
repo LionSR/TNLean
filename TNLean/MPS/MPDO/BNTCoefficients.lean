@@ -133,7 +133,7 @@ def HasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) : Prop :=
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
+lemma HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
     {χ : DiagonalChiFamily Λ} (h : c.HasPositiveLengthChiTracePowerForm χ)
     (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
     c.coeff L α β γ = (χ.matrix α β γ ^ L).trace := by
@@ -145,7 +145,7 @@ positive-length trace-power form with respect to that same \(\chi\)-family.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_hasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) :
+lemma ofChi_hasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) :
     (ofChi χ).HasPositiveLengthChiTracePowerForm χ := by
   intro L _hL α β γ
   rfl
@@ -439,7 +439,7 @@ def ofChi (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries) :
 
 /-- A positive BNT-label chi witness gives the trace formula at every positive
 length. -/
-theorem eq_trace_pow (h : PositiveBNTLabelChiTracePowerForm c)
+lemma eq_trace_pow (h : PositiveBNTLabelChiTracePowerForm c)
     (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
     c.coeff L α β γ = (h.chi.matrix α β γ ^ L).trace :=
   BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
@@ -561,7 +561,7 @@ def blockedLabel (cmp : BNTBlockedBasisCoefficientComparison data c)
 
 /-- A blocked-basis/BNT-label coefficient comparison transports a positive
 BNT-label chi trace-power witness to each blocked-basis coefficient. -/
-theorem blocked_coeff_eq_trace_pow
+lemma blocked_coeff_eq_trace_pow
     (cmp : BNTBlockedBasisCoefficientComparison data c)
     (hχ : PositiveBNTLabelChiTracePowerForm c)
     (n : ℕ) (hn : 0 < n)
@@ -584,7 +584,7 @@ from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem blocked_coeff_eq_ofChi_trace_pow
+lemma blocked_coeff_eq_ofChi_trace_pow
     {χ : DiagonalChiFamily Λ}
     (cmp :
       BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ))
@@ -716,7 +716,7 @@ blocked-basis chi matrix.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem blocked_coeff_eq_pulledBlockedChi_trace_pow
+lemma blocked_coeff_eq_pulledBlockedChi_trace_pow
     (cmp : BNTBlockedBasisCoefficientComparison data c)
     (hχ : PositiveBNTLabelChiTracePowerForm c)
     (n : ℕ) (hn : 0 < n)

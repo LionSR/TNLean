@@ -9,7 +9,11 @@ corresponding Lean declarations with `\lean{...}` and `\leanok` tags.
 
 - `src/` contains the LaTeX source.
 - `src/chapter/` contains one file per chapter.
-- `src/content.tex` is the chapter router.
+- `src/content.tex` is the chapter router for the full Tensor Network Theory
+  blueprint.
+- `src/content_ft_mps.tex` contains the separate Fundamental Theorem of Matrix
+  Product States volume, comprising exactly chapters 1--12.
+- `src/print_ft_mps.tex` is the PDF entry point for that FT--MPS volume.
 - `src/macros/` contains blueprint-specific macros and diagram commands.
 - `src/references.bib` is the blueprint bibliography.
 - `print/` and `web/` are generated outputs.
@@ -29,6 +33,15 @@ leanblueprint web
 `leanblueprint checkdecls` should be run after adding or changing `\lean{...}`
 tags.  The PDF and web builds regenerate `blueprint/print/` and
 `blueprint/web/`.
+
+Build the separate FT--MPS volume from the repository root:
+
+```bash
+./scripts/build_blueprint_ch01_12.sh
+```
+
+This writes `blueprint/print/print12.pdf`; the full build remains at
+`blueprint/print/print.pdf`.
 
 ## Writing Conventions
 

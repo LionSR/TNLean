@@ -13,4 +13,6 @@ cd "$REPO_ROOT/blueprint"
 leanblueprint pdf
 leanblueprint web
 
+"$REPO_ROOT/scripts/build_blueprint_ch01_12.sh"
+
 exec "$REPO_ROOT/scripts/deploy-to-gh-pages.sh"

@@ -15,6 +15,10 @@ on:
       - '.github/workflows/blueprint.yml'
       - 'home_page/**'
       - 'scripts/blueprint_bibtex.py'
+      - 'scripts/build_blueprint_ch01_12.sh'
+      - 'scripts/deploy-blueprint.sh'
+      - 'scripts/deploy-docs.sh'
+      - 'scripts/deploy-to-gh-pages.sh'
       - 'scripts/write_badges.py'
   workflow_dispatch:
 
@@ -84,7 +88,7 @@ jobs:
             exit 1
           fi
 
-      - name: Build first-12-chapters release PDF
+      - name: Build FT-MPS blueprint volume
         run: ./scripts/build_blueprint_ch01_12.sh
 
       - name: Deploy to gh-pages

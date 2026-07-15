@@ -14,6 +14,11 @@
     \lean{MPOTensor.BNTLabelTheoremData.targetLabel}
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi}
     \lean{MPOTensor.BNTLabelTheoremData.ofChi}
+    \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum}
+    \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum}
+    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq}
+    \lean{MPOTensor.BNTLabelTheoremData.blockedComparison_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_ofChi}
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family,
         def:mpdo_bnt_label_operator_family,
@@ -27,6 +32,24 @@
     system, the same-length BNT operator family and product identity, the trace
     scalars and idempotent condition, the positive length-independent
     $\chi$-witness, and the comparison with the chosen blocked bases.
+    Explicitly, for every $L>0$ the product law is
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        =\sum_\gamma
+          c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+    \]
+    while the idempotent scalar law is
+    \[
+        m_\gamma
+        =\sum_{\alpha,\beta}
+          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+    \]
+    For every positive blocked length $n$ and blocked-basis indices $i,j,k$,
+    the source and target label maps $\sigma_n,\tau_n$ give the comparison
+    \[
+        c^{(n)}_{i,j,k}
+        =c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+    \]
     They also determine the pulled-back blocked-basis $\chi$-family. These
     data are the source-side hypotheses from which the blocked-basis
     consequences below are derived.
@@ -39,172 +62,54 @@
     the data, with the corresponding displayed equations.
 \end{definition}
 
-\begin{theorem}[BNT theorem data give the same-length product law]%
-    \label{thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum}
-    \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_label_same_length_product_eq_sum}
-    BNT-label theorem data give the same-length product equation
-    \[
-        O_L(M_\alpha)O_L(M_\beta)
-        = \sum_\gamma
-        c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma)
-    \]
-    for every positive length $L$.
-\end{theorem}
-\begin{proof}\leanok
-    This is the same-length product law carried by the theorem data.
-\end{proof}
-
-
-\begin{theorem}[BNT theorem data give the idempotent scalar law]%
-    \label{thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum}
-    \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_label_idempotent_coefficient_eq_sum}
-    BNT-label theorem data give the idempotent scalar equation
-    \[
-        m_\gamma =
-        \sum_{\alpha,\beta}
-        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
-    \]
-\end{theorem}
-\begin{proof}\leanok
-    This is the idempotent coefficient law carried by the theorem data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give the blocked coefficient comparison]%
-    \label{thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
-    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq}
-    \lean{MPOTensor.BNTLabelTheoremData.blockedComparison_ofChi}
-    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_ofChi}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_blocked_basis_coefficient_eq,
-        thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
-    BNT-label theorem data give, for every positive blocked length $n$ and
-    blocked-basis indices $i,j,k$, the comparison between the blocked-basis
-    coefficients and the BNT-label coefficients through the source and target
-    label maps $\sigma_n,\tau_n$,
-    \[
-        c^{(n)}_{i,j,k}
-        =
-        c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
-    \]
-    Since the positive-length coefficients agree with the canonical
-    coefficient family determined by the same $\chi$-matrices, the
-    comparison can also be written as
-    \[
-        c^{(n)}_{i,j,k}
-        =
-        \operatorname{tr}\bigl(
-        \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
-        \bigr).
-    \]
-\end{theorem}
-\begin{proof}\leanok
-    This is the blocked-basis coefficient comparison carried by the theorem
-    data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give coefficient trace powers]%
-    \label{thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
+\begin{theorem}[Source BNT coefficient and product formulas]%
+    \label{thm:mpdo_bnt_label_theorem_data_source_formulas}
     \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_ofChi_coeff}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
-    BNT-label theorem data give the coefficient identity
-    $c^{(L)}_{\alpha,\beta,\gamma}
-        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
-    for every positive length $L$. Equivalently, at every positive length, the
-    coefficient family agrees with the canonical coefficient family determined
-    by the same $\chi$-matrices.
-\end{theorem}
-\begin{proof}\leanok
-    This is the positive-length $\chi$-trace identity belonging to the
-    positive BNT-label $\chi$-witness in the theorem data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give positive chi entries]%
-    \label{thm:mpdo_bnt_label_theorem_data_chi_entry_pos}
     \lean{MPOTensor.BNTLabelTheoremData.chi_entry_pos}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        def:mpdo_positive_bnt_label_chi_trace_power_form}
-    BNT-label theorem data give, for all labels $\alpha,\beta,\gamma$ and
-    every diagonal-entry index $r$,
-    \[
-        0 < \chi_{\alpha,\beta,\gamma,r}.
-    \]
-\end{theorem}
-\begin{proof}\leanok
-    This is the positivity condition carried by the positive BNT-label
-    $\chi$-witness in the theorem data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give the chi-trace product law]%
-    \label{thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow}
-    For every positive length $L$, BNT-label theorem data give the
-    same-length product expansion with coefficients written as traces of
-    powers of the length-independent $\chi_{\alpha,\beta,\gamma}$-matrices,
-    \[
-        O_L(M_\alpha)O_L(M_\beta)
-        = \sum_\gamma
-        \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{\,L}\bigr) O_L(M_\gamma).
-    \]
-\end{theorem}
-\begin{proof}\leanok
-    Apply the chi-trace product law to the product identity and the positive
-    BNT-label $\chi$-witness belonging to the theorem data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give the chi-trace idempotent law]%
-    \label{thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace}
     \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_chi_trace}
     \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace}
-    BNT-label theorem data give
+    \uses{def:mpdo_bnt_label_theorem_data}
+    Let $c^{(L)}_{\alpha,\beta,\gamma}$ be the coefficient family and let
+    $\chi_{\alpha,\beta,\gamma}$ be the positive diagonal matrices carried by
+    the theorem data.  For every $L>0$,
     \[
-        m_\gamma =
-        \sum_{\alpha,\beta}
-        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
-        m_\alpha m_\beta.
+        c^{(L)}_{\alpha,\beta,\gamma}
+        =c^{\chi,(L)}_{\alpha,\beta,\gamma}
+        =\operatorname{tr}\!\left(
+            \chi_{\alpha,\beta,\gamma}^{\,L}
+        \right),
+    \]
+    where $c^{\chi}$ is the canonical coefficient family determined by
+    $\chi$, and every diagonal entry of every
+    $\chi_{\alpha,\beta,\gamma}$ is strictly positive.  Consequently, for
+    every $L>0$, the same-length product identity reads
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        =\sum_\gamma
+          \operatorname{tr}\!\left(
+              \chi_{\alpha,\beta,\gamma}^{\,L}
+          \right)O_L(M_\gamma),
+    \]
+    and, at $L=1$, the idempotent identity reads
+    \[
+        m_\gamma
+        =\sum_{\alpha,\beta}
+          \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+          m_\alpha m_\beta.
     \]
 \end{theorem}
 \begin{proof}\leanok
-    Apply the chi-trace idempotent law to the idempotent condition and the
-    positive BNT-label $\chi$-witness belonging to the theorem data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give blocked coefficient trace powers]%
-    \label{thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow}
-    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow}
-    BNT-label theorem data give the blocked-basis coefficient trace-power
-    formula obtained by pulling the BNT-label
-    $\chi_{\alpha,\beta,\gamma}$-matrices back along the blocked-basis
-    comparison maps: for every positive blocked length $n$,
+    The positive trace-power witness gives
     \[
-        c^{(n)}_{i,j,k}
-        =
-        \operatorname{tr}\bigl(
-        \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
-        \bigr).
+        c^{(L)}_{\alpha,\beta,\gamma}
+        =\operatorname{tr}\!\left(
+            \chi_{\alpha,\beta,\gamma}^{\,L}
+        \right).
     \]
-\end{theorem}
-\begin{proof}\leanok
-    Apply the blocked-basis coefficient trace-power theorem to the comparison
-    and the positive BNT-label $\chi$-witness belonging to the theorem data.
+    Substitution into the product law and its length-one idempotent
+    specialization gives the displayed formulas.
 \end{proof}
 
 \begin{theorem}[BNT theorem data give a positive blocked $\chi$ witness]%
@@ -214,6 +119,9 @@
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_tracePowerCoeff_of_pos}
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_dim_of_pos}
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_trace_matrix_pow_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_tracePower}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_posEntries}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_entry_pos}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
@@ -234,79 +142,30 @@
     positive BNT-label $\chi$-witness belonging to the theorem data.
 \end{proof}
 
-\begin{theorem}[BNT theorem data give blocked trace-power form]%
-    \label{thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_trace_power}
-    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_tracePower}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
-    The pulled-back blocked-basis $\chi$-family obtained from BNT-label
-    theorem data satisfies, for every positive blocked length $n$, the
-    blocked trace-power identity
-    \[
-        c^{(n)}_{i,j,k}
-        =
-        \sum_r \chi_{n,i,j,k,r}^{\,n}.
-    \]
-\end{theorem}
-\begin{proof}\leanok
-    This is the trace-power part of the positive blocked-basis
-    $\chi$-witness obtained from the theorem data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give positive blocked chi families]%
-    \label{thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_pos_entries}
-    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_posEntries}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
-    The pulled-back blocked-basis $\chi$-family obtained from BNT-label
-    theorem data has positive diagonal entries: for every blocked length $n$,
-    indices $i,j,k$, and entry index $r$,
-    \[
-        0 < \chi_{n,i,j,k,r}.
-    \]
-\end{theorem}
-\begin{proof}\leanok
-    This is the positivity part of the positive blocked-basis
-    $\chi$-witness obtained from the theorem data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give positive pulled-back blocked entries]%
-    \label{thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_entry_pos}
-    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_entry_pos}
-    \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
-    The pulled-back blocked-basis $\chi$-entries obtained from BNT-label
-    theorem data are positive: for every blocked length $n$,
-    indices $i,j,k$, and entry index $r$,
-    \[
-        0 < \chi_{n,i,j,k,r}.
-    \]
-\end{theorem}
-\begin{proof}\leanok
-    This is the positivity part of the positive blocked-basis
-    $\chi$-witness obtained from the theorem data.
-\end{proof}
-
-\begin{theorem}[BNT theorem data give pulled-back blocked trace powers]%
-    \label{thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow}
+\begin{corollary}[Blocked coefficient trace-power formulas]%
+    \label{cor:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_positiveBlockedChi_trace_pow}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form,
-        thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
-    The positive-length blocked-basis coefficients are traces of powers of the
-    pulled-back blocked-basis $\chi$-matrices obtained from BNT-label
-    theorem data: for every positive blocked length $n$,
+        lem:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
+    For every positive blocked length $n$, the blocked-basis coefficients are
+    traces of powers of the BNT-label $\chi$-matrices selected by the source
+    and target label maps. Equivalently, they are traces of powers of the
+    pulled-back blocked-basis matrices $\chi_{n,i,j,k}$:
     \[
         c^{(n)}_{i,j,k}
         =
+        \operatorname{tr}\!\left(
+            \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
+        \right)
+        =
         \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
     \]
-\end{theorem}
+\end{corollary}
 \begin{proof}\leanok
-    Apply the trace-power identity of the positive blocked-basis
-    $\chi$-witness obtained from the theorem data.
+    The blocked-basis comparison identifies the coefficient with the trace
+    power of the BNT-label matrix selected by the source and target maps. By
+    definition, the pulled-back matrix $\chi_{n,i,j,k}$ is this same matrix.
 \end{proof}
