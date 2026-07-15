@@ -8,6 +8,7 @@
 % subsection index and number directly within the section.
 \newtheorem{theorem}{Theorem}[subsection]
 \makeatletter
+\@addtoreset{theorem}{chapter}
 \@addtoreset{theorem}{section}
 % Only meaningful once hyperref has defined \theHtheorem (web/PDF builds);
 % skip it in bare standalone compiles (e.g. tensor-network smoke renders).
