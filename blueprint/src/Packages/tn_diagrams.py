@@ -244,7 +244,7 @@ def _sample_tex_call(name: str) -> str:
     return _DIAGRAM_CATALOGUE.declaration(name).sample
 
 
-def _assert_diagram_args_match_print_macros() -> None:
+def _assert_no_duplicate_diagram_definitions() -> None:
     """Reject a second chapter-diagram definition outside the catalogue."""
 
     duplicates: list[str] = []
@@ -1445,7 +1445,7 @@ def _abbreviate_locations(locations: list[str], limit: int = 16) -> str:
 def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
     """Check stable invariants and report the remaining diagram migration debt."""
 
-    _assert_diagram_args_match_print_macros()
+    _assert_no_duplicate_diagram_definitions()
     _assert_diagram_templates_are_catalogue_independent()
     _assert_diagram_roles_match_chapters()
     _assert_diagram_arguments_used()
@@ -1671,7 +1671,7 @@ def _assert_peps_macros_used_in_chapter() -> None:
         )
 
 
-_assert_diagram_args_match_print_macros()
+_assert_no_duplicate_diagram_definitions()
 
 
 def _tex_call(obj: Command) -> str:
@@ -1918,6 +1918,8 @@ def _svg_for(obj: Command, tex_call: str) -> str | None:
 
 class _TNTikZDiagram(Command):
     blockType = False
+    # plasTeX's renderer reads ``templateName`` as a string attribute of the
+    # command; see ``plasTeX.Renderers.Renderer.render``.
     templateName = "TensorNetworkDiagram"
 
     @property
@@ -1959,7 +1961,7 @@ def _main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--check",
         action="store_true",
-        help="check that Python arities match public TeX macros",
+        help="check catalogue metadata and reject duplicate diagram definitions",
     )
     parser.add_argument(
         "--check-peps-usage",
@@ -2019,7 +2021,7 @@ def _main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.check:
-        _assert_diagram_args_match_print_macros()
+        _assert_no_duplicate_diagram_definitions()
         _assert_diagram_templates_are_catalogue_independent()
         _assert_diagram_roles_match_chapters()
         _assert_diagram_arguments_used()
