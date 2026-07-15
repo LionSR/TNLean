@@ -134,7 +134,7 @@ via \leanid{MPOTensor.IsLPDO.isMPDO}.
 This local predicate is not Definition \path{def:Puri-RFP}. The source-level
 positive-length global purification equation and the trace-preserving structure
 appearing after the ancillary trace are recorded separately in
-\path{TNLean/MPS/MPDO/PRFP.lean}. The repaired predicate
+\path{TNLean/MPS/MPDO/PRFP.lean}. The nondegenerate predicate
 \leanid{MPOTensor.IsNondegeneratePRFP} combines the local purification-RFP
 identity with $\mathcal T_M\neq0$. The theorem
 \leanid{MPOTensor.isNondegeneratePRFP_iff} proves
@@ -147,10 +147,12 @@ identity with $\mathcal T_M\neq0$. The theorem
     \mathcal T_M^2=\mathcal T_M
   \right).
 \]
-This is the normalized tensor-level PRFP--ZCL equivalence. The implication for
-a tensor known only through the positive-length global equation remains open,
-because equality of periodic finite-chain density operators does not by itself
-recover the local tensor identity.
+This is an exact structural characterization of the nondegenerate local
+purification predicate. It is not yet the source PRFP--ZCL equivalence of
+Theorem~4.4. The forward implication from this predicate to source zero
+correlation length is proved below. The converse from source zero correlation
+length, and the passage from a tensor known only through the positive-length
+global equation to the local tensor identity, remain open.
 
 \section{Normalized local equivalence on the physical-trace transfer}
 
@@ -212,10 +214,12 @@ direct sum. The literal virtual-block reading is false, as proved by the
 two-phase counterexample recorded in
 \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex} and closed issue~\#2598.
 
-Consequently the normalized local PRFP--ZCL equivalence is complete, whereas
-the repeated-copy density formula remains source-obstructed pending an author
-correction or erratum. No copy-indexed physical map or additional structural
-hypothesis should be introduced merely to force that printed formula.
+Consequently the normalized local PRFP-to-ZCL implication is complete. The
+converse implication required for the source equivalence remains open, as does
+the global-to-local passage from Definition~4.3. The repeated-copy density
+formula remains source-obstructed pending an author correction or erratum. No
+copy-indexed physical map or additional structural hypothesis should be
+introduced merely to force that printed formula.
 
 \bibliographystyle{alpha}
 \bibliography{references}

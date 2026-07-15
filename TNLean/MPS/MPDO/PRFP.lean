@@ -9,7 +9,7 @@ import TNLean.MPS.RFP.Defs
 # Purification renormalization fixed points for MPDO tensors
 
 This file states the purification renormalization fixed-point data from
-arXiv:1606.00608 (Cirac--Perez-Garcia--Schuch--Verstraete), Definition 4.4,
+arXiv:1606.00608 (Cirac--Perez-Garcia--Schuch--Verstraete), Definition 4.3,
 lines 756--764.
 
 The source definition is global in the system size: an MPO tensor `M` is written
@@ -22,7 +22,7 @@ density is obtained by tracing the ancillary legs. This file encodes that
 equality as an equality of the finite-chain matrices indexed by spin
 configurations.
 
-The source text immediately after Definition 4.4 observes that tracing the
+The source text immediately after Definition 4.3 observes that tracing the
 ancilla gives a trace-preserving completely positive map on the spin degrees of
 freedom. This structure is proved separately for the ancillary trace map.
 
@@ -30,7 +30,8 @@ The predicate `IsPRFP` below records the displayed positive-length equation and
 pure-state transfer idempotence literally. It is a bare global predicate: the
 zero purifying tensor satisfies it, although the source theorem at lines
 775--786 concerns nondegenerate density operators. The nondegenerate tensor-level
-predicate `IsNondegeneratePRFP` and its normalized PRFP--ZCL equivalence are in
+predicate `IsNondegeneratePRFP`, its structural characterization, and its
+forward implication to source zero correlation length are in
 `TNLean.MPS.MPDO.LocalPurificationRFP`.
 
 ## Main definitions
@@ -50,7 +51,7 @@ predicate `IsNondegeneratePRFP` and its normalized PRFP--ZCL equivalence are in
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  the global purification equation (line 751), Definition 4.4 (line 758), and the
+  the global purification equation (line 751), Definition 4.3 (line 758), and the
   tpCPM discussion after tracing ancillas (lines 761--764).
 -/
 
@@ -107,7 +108,7 @@ def HasGlobalPurificationEquation (M : MPOTensor d D)
   ∀ N : ℕ, 0 < N → mpo M N = purificationDensity A N
 
 /-- The post-ancilla spin reduction is trace-preserving and completely positive.
-This records the tpCPM described after arXiv:1606.00608, Definition 4.4
+This records the tpCPM described after arXiv:1606.00608, Definition 4.3
 (lines 761--764), without imposing the two-map mixed-state RFP
 condition of Definition 4.1. -/
 def HasTracePreservingSpinReduction (d dK : ℕ) : Prop :=
@@ -130,7 +131,7 @@ theorem hasTracePreservingSpinReduction (d dK : ℕ) :
   ancillaryTraceMap_isKrausCPTP d dK
 
 /-- The bare positive-length purification-RFP witness from arXiv:1606.00608,
-Definition 4.4 (lines 756--764): there is a purifying spin-ancilla
+Definition 4.3 (lines 756--764): there is a purifying spin-ancilla
 MPS tensor satisfying the global purification equation, and that purifying
 tensor is a pure-state renormalization fixed point.
 
@@ -143,7 +144,7 @@ def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=
 
 /-- Bare global purification renormalization fixed-point predicate: the tensor
 has a positive-length global purification-RFP witness as displayed in
-arXiv:1606.00608, Definition 4.4 (lines 756--764).
+arXiv:1606.00608, Definition 4.3 (lines 756--764).
 
 The nondegenerate tensor-level predicate is `IsNondegeneratePRFP`; the distinction
 is forced by the zero-purifier obstruction documented in
@@ -152,7 +153,7 @@ def IsPRFP (M : MPOTensor d D) : Prop :=
   HasPurificationRFPWitness M
 
 /-- Purification RFP viewed together with the trace-preserving spin structure
-recorded after Definition 4.4 in arXiv:1606.00608, lines 761--764.
+recorded after Definition 4.3 in arXiv:1606.00608, lines 761--764.
 
 The trace-preserving completely positive map is the ancillary trace map, and
 `hasTracePreservingSpinReduction` proves this structure for every ancillary
@@ -173,7 +174,7 @@ theorem IsPRFPWithTracePreservingSpinReduction.isPRFP {M : MPOTensor d D}
   h
 
 /-- A purification RFP has the trace-preserving spin reduction recorded after
-arXiv:1606.00608, Definition 4.4, lines 761--764. -/
+arXiv:1606.00608, Definition 4.3, lines 761--764. -/
 theorem IsPRFP.withTracePreservingSpinReduction {M : MPOTensor d D}
     (h : IsPRFP M) : IsPRFPWithTracePreservingSpinReduction M :=
   h
