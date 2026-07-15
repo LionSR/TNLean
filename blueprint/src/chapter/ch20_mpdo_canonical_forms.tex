@@ -310,22 +310,21 @@ This is the inverse identity in
     Let $D$ be the total bond dimension and $g$ the number of minimal
     representatives.  The common exact injective length is $D^4$.  For
     $g\geq2$, the pair-separation argument works at length $3(D^4+1)$.  The
-    missing direct-sum assembly should realize $(X,0)$ on one anchor pair and
-    multiply by identity--zero selectors for the other $g-2$ representatives,
-    giving the target length
+    The missing simultaneous interpolation statement should realize $(X,0)$
+    on one anchor pair and multiply by identity--zero selectors for the other
+    $g-2$ representatives.  It would give the target length
     \[
         3(g-1)(D^4+1)\leq3(D-1)(D^4+1).
     \]
-    The presently formalized conversion instead concatenates a separate
-    injective prefix and gives the longer length
+    The preceding argument instead concatenates a separate injective prefix
+    and gives the longer length
     \[
         D^4+3(g-1)(D^4+1).
     \]
-    The sharp bound in \cite[lines~340--345]{Cirac2016MPDO_arXiv} remains an
-    open gap: the preceding anchor-pair assembly has not yet been formalized.
-    The case $g=1$ is handled separately by ordinary block injectivity.  Once
-    the multi-block assembly and the routine specialization and arithmetic
-    lemmas are proved, the final estimate is
+    Thus the sharp bound in \cite[lines~340--345]{Cirac2016MPDO_arXiv} reduces
+    to the stated anchor-pair interpolation.  The case $g=1$ follows directly
+    from ordinary block injectivity.  For $g\geq2$, the interpolation and the
+    elementary estimates above give
     \[
         3(D^4+1)(D-1)\leq3D^5.
     \]
