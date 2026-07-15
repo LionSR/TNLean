@@ -9,7 +9,9 @@ import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization
 
 This module builds block-selector word families from pairwise separation and
 collects the resulting finite-length witnesses into horizontal canonical-form
-data.
+data. It also proves the direct-sum interpolation step: a common full pair span
+at length $S$ gives a full simultaneous span at length $(r-1)S$, without
+adding a positive-length padding or an injective prefix.
 -/
 
 open scoped Matrix BigOperators
@@ -18,15 +20,16 @@ namespace MPSTensor
 
 variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ}
 
-/-- Pair product-span at length `S` gives a length-`S` selector for the first
-block of the pair. -/
-theorem hasBlockSelectorOn_of_pairWordTupleSpanTop
+/-- Full pair product-span realizes an arbitrary matrix on the first block and
+zero on the second, without prescribing the values on the remaining blocks. -/
+theorem exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
-    {k j : Fin r} (hSpan : PairWordTupleSpanTop (A k) (A j) S) :
-    HasBlockSelectorOn A k S {j} := by
+    {k j : Fin r} (hSpan : PairWordTupleSpanTop (A k) (A j) S)
+    (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :
+    ∃ M : (l : Fin r) → Matrix (Fin (dim l)) (Fin (dim l)) ℂ,
+      M ∈ Submodule.span ℂ (Set.range (wordTuple A S)) ∧ M k = X ∧ M j = 0 := by
   classical
-  have htarget : ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (0 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+  have htarget : (X, (0 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
       Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) S)) := by
     rw [hSpan]
     exact Submodule.mem_top
@@ -41,13 +44,25 @@ theorem hasBlockSelectorOn_of_pairWordTupleSpanTop
       (LinearMap.fst ℂ (Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
         (Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) hc
     simpa [M, pairWordTuple, Fintype.linearCombination_apply] using hk
-  · intro l hl
-    have hlj : l = j := by simpa using hl
-    subst l
-    have hj := congrArg
+  · have hj := congrArg
       (LinearMap.snd ℂ (Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
         (Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) hc
     simpa [M, pairWordTuple, Fintype.linearCombination_apply] using hj
+
+/-- Pair product-span at length $S$ gives a length-$S$ selector for the first
+block of the pair. -/
+theorem hasBlockSelectorOn_of_pairWordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    {k j : Fin r} (hSpan : PairWordTupleSpanTop (A k) (A j) S) :
+    HasBlockSelectorOn A k S {j} := by
+  obtain ⟨M, hM, hMk, hMj⟩ :=
+    exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop
+      A hSpan (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+  refine ⟨M, hM, hMk, ?_⟩
+  intro l hl
+  have hlj : l = j := by simpa using hl
+  subst l
+  exact hMj
 
 /-- Pair trace-separation at length `S` gives a length-`S` selector for the
 first block of the pair. -/
@@ -245,19 +260,6 @@ theorem wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window
   rw [← hlen]
   exact hpad
 
-/-- The empty word is the identity on every block, so it selects a block on the
-empty target set. -/
-theorem hasBlockSelectorOn_empty
-    (A : (k : Fin r) → MPSTensor d (dim k)) (k : Fin r) :
-    HasBlockSelectorOn A k 0 ∅ := by
-  classical
-  refine ⟨wordTuple A 0 (fun i => Fin.elim0 i), ?_, ?_, ?_⟩
-  · exact Submodule.subset_span ⟨fun i => Fin.elim0 i, rfl⟩
-  · simp [wordTuple]
-  · intro j hj
-    have hnot : j ∉ (∅ : Finset (Fin r)) := by simp
-    exact False.elim (hnot hj)
-
 /-- Multiplying two partial selectors for the same block produces a selector
 that vanishes on the union of their target sets. -/
 theorem HasBlockSelectorOn.mul
@@ -289,7 +291,12 @@ theorem hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
   revert htargets
   refine Finset.induction_on targets ?base ?step
   · intro _
-    simpa using hasBlockSelectorOn_empty A k
+    have hEmpty : HasBlockSelectorOn A k 0 ∅ := by
+      refine ⟨wordTuple A 0 (fun i ↦ Fin.elim0 i), ?_, ?_, ?_⟩
+      · exact Submodule.subset_span ⟨fun i ↦ Fin.elim0 i, rfl⟩
+      · simp [wordTuple]
+      · simp
+    simpa using hEmpty
   · intro j targets hj_not_mem ih htargets_insert
     have htargets_tail : ∀ l : Fin r, l ∈ targets → l ≠ k := by
       intro l hl
@@ -306,6 +313,116 @@ theorem hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
       rw [Finset.card_insert_of_notMem hj_not_mem]
       exact Nat.succ_mul targets.card S
     simpa [hsets, hlen] using hmul
+
+/-- If a finite block family has exactly one block, block injectivity of that
+block gives the simultaneous word-tuple spanning property. -/
+theorem wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
+    (A : (k : Fin r) → MPSTensor d (dim k)) {L : ℕ}
+    (hr : r = 1) (hInj : ∀ k : Fin r, IsNBlkInjective (A k) L) :
+    WordTupleSpanTop A L := by
+  classical
+  let k₀ : Fin r := ⟨0, by omega⟩
+  unfold WordTupleSpanTop
+  apply top_unique
+  intro X _
+  have hX : X k₀ ∈ Submodule.span ℂ
+      (Set.range fun w : Fin L → Fin d ↦ evalWord (A k₀) (List.ofFn w)) := by
+    rw [hInj k₀]
+    exact Submodule.mem_top
+  obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hX
+  refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨c, ?_⟩
+  funext k
+  have hk : k = k₀ := by
+    apply Fin.ext
+    omega
+  subst k
+  simpa [wordTuple] using hc
+
+/-- If every distinct pair has full product span at length $S$, then for at
+least two blocks the simultaneous tuples have full span at length
+$(r-1)S$.
+
+For a chosen block, one pair interpolant gives the prescribed matrix on that
+block and zero on an anchor block. Multiplying by identity--zero pair
+selectors for the remaining $r-2$ blocks kills every other component without
+adding a separate injective prefix. This is the finite-dimensional direct-sum
+step in arXiv:quant-ph/0608197, lines 1346--1408. -/
+theorem wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (hr : 2 ≤ r)
+    (hPair : ∀ k j : Fin r, j ≠ k → PairWordTupleSpanTop (A k) (A j) S) :
+    WordTupleSpanTop A ((r - 1) * S) := by
+  classical
+  letI : Nontrivial (Fin r) := Fin.nontrivial_iff_two_le.mpr hr
+  unfold WordTupleSpanTop
+  apply top_unique
+  intro X _
+  have hContribution : ∀ k : Fin r,
+      ∃ M : (l : Fin r) → Matrix (Fin (dim l)) (Fin (dim l)) ℂ,
+        M ∈ Submodule.span ℂ (Set.range (wordTuple A ((r - 1) * S))) ∧
+          M k = X k ∧ ∀ l : Fin r, l ≠ k → M l = 0 := by
+    intro k
+    obtain ⟨j, hjk⟩ := exists_ne k
+    obtain ⟨M, hM, hMk, hMj⟩ :=
+      exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop
+        A (hPair k j hjk) (X k)
+    let targets : Finset (Fin r) := (Finset.univ.erase k).erase j
+    have htargets : ∀ l : Fin r, l ∈ targets → l ≠ k := by
+      intro l hl
+      exact (Finset.mem_erase.mp (Finset.mem_erase.mp hl).2).1
+    have hSelectors : HasPairBlockSeparatingWords A S :=
+      hasPairBlockSeparatingWords_of_forall_pairWordTupleSpanTop A hPair
+    obtain ⟨N, hN, hNk, hNzero⟩ :=
+      hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
+        A hSelectors k targets htargets
+    have hcard : targets.card = r - 2 := by
+      simp [targets, hjk, Fintype.card_fin]
+      omega
+    have hlen : S + targets.card * S = (r - 1) * S := by
+      calc
+        S + targets.card * S = 1 * S + (r - 2) * S := by rw [hcard, one_mul]
+        _ = (1 + (r - 2)) * S := (Nat.add_mul 1 (r - 2) S).symm
+        _ = (r - 1) * S := by
+          congr 1
+          omega
+    let C : (l : Fin r) → Matrix (Fin (dim l)) (Fin (dim l)) ℂ :=
+      fun l ↦ M l * N l
+    refine ⟨C, ?_, ?_, ?_⟩
+    · have hC := pointwise_mul_mem_span_wordTuple_add A hM hN
+      rw [hlen] at hC
+      exact hC
+    · simp [C, hMk, hNk]
+    · intro l hlk
+      by_cases hlj : l = j
+      · subst l
+        simp [C, hMj]
+      · have hltarget : l ∈ targets := by
+          simp [targets, hlk, hlj]
+        simp [C, hNzero l hltarget]
+  choose M hM hMdiag hMoff using hContribution
+  have hsum : (∑ k : Fin r, M k) ∈
+      Submodule.span ℂ (Set.range (wordTuple A ((r - 1) * S))) :=
+    Submodule.sum_mem _ fun k _ ↦ hM k
+  have hsum_eq : (∑ k : Fin r, M k) = X := by
+    funext l
+    rw [Finset.sum_apply, Finset.sum_eq_single l]
+    · exact hMdiag l
+    · intro k _ hkl
+      exact hMoff k l hkl.symm
+    · intro hl
+      exact False.elim (hl (Finset.mem_univ l))
+  rw [hsum_eq] at hsum
+  exact hsum
+
+/-- Pair trace separation at a common length gives the same sharp
+simultaneous word-tuple span for a family of at least two blocks. -/
+theorem wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (hr : 2 ≤ r)
+    (hPair : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    WordTupleSpanTop A ((r - 1) * S) :=
+  wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop A hr fun k j hjk ↦
+    pairWordTupleSpanTop_of_pairTraceSeparatingAt (A k) (A j) (hPair k j hjk)
 
 /-- Tuple-span selectors on `Finset.univ.erase k` recover coefficient-based
 block-selector words. -/
@@ -741,11 +858,11 @@ any blocking length `L` there is only one word `w : Fin L → Fin 1`, and
 
 for that unique word, while `Δ ≠ 0`. Therefore `HasBiCF A` fails.
 
-The new predicate `PropBlockInjective` expresses one abstract finite-length route,
+The predicate `PropBlockInjective` expresses one abstract finite-length route,
 while `wordEntryFamily` gives a second, equivalent linear-algebra criterion.
-What remains open is to derive either of those finite-length witnesses from the
-repository's current BNT / canonical-form hypotheses, i.e. to formalize the full
-content of arXiv:1606.00608, lines 340--345.
+For a basis of normal tensors, the additional separation hypotheses provide
+such a finite-length witness; they do not follow from the three fields in the
+counterexample alone.
 -/
 
 end MPOTensor

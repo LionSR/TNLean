@@ -5,18 +5,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness
 import TNLean.MPS.MPDO.BiCFDerivation.Selectors
+import TNLean.MPS.Periodic.NormalizedSelfOverlap
 
 /-!
 # BNT input for the equal-size direct-sum branch
 
 This file connects the same-dimension BNT separation hypothesis to the
-parent-Hamiltonian uniqueness input for David--Perez-Garcia--Schuch--Wolf,
-Lemma `lem:direct-sum`.
+parent-Hamiltonian uniqueness input in the direct-sum proof of
+arXiv:quant-ph/0608197, lines 1346--1408.
 
-The statement deliberately keeps the direct-sum hypotheses explicit:
+The intermediate statements keep the direct-sum hypotheses explicit:
 `BlocksNotGaugePhaseEquiv` gives the long-chain non-proportional MPV witness,
-while injectivity and length-`L` block injectivity are still separate inputs to
-the parent-Hamiltonian argument.
+while injectivity and finite-length block injectivity are separate inputs to
+the parent-Hamiltonian argument. The final theorem derives these inputs from a
+BNT canonical form and proves the source bound \(3D^5\).
 -/
 
 open scoped Matrix BigOperators
@@ -28,8 +30,8 @@ variable {d L : ℕ}
 /-- Same-dimension BNT-separated blocks give the equal-size direct-sum
 directness conclusion once the direct-sum injectivity hypotheses are supplied.
 
-This is the BNT-facing form of the equal-size branch of
-David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`.  The theorem does
+This is the BNT-facing form of the equal-size branch of the direct-sum proof in
+arXiv:quant-ph/0608197, lines 1346--1408. The theorem does
 not infer injectivity or transport non-equivalence through blocking; those
 inputs remain explicit. It is exported for the pair-trace theorem below and for
 downstream direct-sum comparisons that need the image-space directness statement
@@ -60,10 +62,10 @@ theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge
 /-- Same-dimension BNT-separated blocks give the PGVWC directness conclusion from
 Condition C1 at a finite length \(L_0\).
 
-PGVWC07, Lemma `lem:direct-sum`, first uses Condition C1 in each block at
-length \(L_0\), then compares the spaces \(\mathcal G_{L_0+1}^{A^j}\). This
-version follows that length convention and does not assume one-site
-injectivity. -/
+The proof in arXiv:quant-ph/0608197, lines 1346--1408, first uses Condition
+C1 in each block at length \(L_0\), then compares the spaces
+\(\mathcal G_{L_0+1}^{A^j}\). This version follows that length convention and
+does not assume one-site injectivity. -/
 theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -191,7 +193,7 @@ Condition C1 at \(L_0\), without the one-site special case of Condition C1.
 
 The length is \(3(L_0+1)\), written as
 \((L_0+1)+((L_0+1)+(L_0+1))\) to match the formal concatenation of the three
-blocks in PGVWC07, Lemma `lem:direct-sum`. -/
+blocks in arXiv:quant-ph/0608197, lines 1346--1408. -/
 theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -223,6 +225,32 @@ theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
       hL₀
   · exact pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne
       (hBlk1 k) (hBlk1 j) (hBlk3 k) (hBlk3 j) hdim
+
+/-- For at least two BNT representatives, the direct-sum word tuples span the
+full product algebra at the source length \(3(r-1)(L_0+1)\).
+
+The pairwise three-block argument supplies an arbitrary value on one block and
+zero on an anchor block. Identity--zero pair selectors remove the remaining
+blocks without a separate injective prefix. This is the induction length in
+arXiv:quant-ph/0608197, lines 1346--1408. -/
+theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    {L₀ : ℕ}
+    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk3 : ∀ k : Fin r,
+      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+    (hL₀ : 0 < L₀) (hr : 2 ≤ r) :
+    WordTupleSpanTop A
+      ((r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) :=
+  wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt A hr
+    (forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
+      A hIrr hLeft hOverlap hBlocks hBlk0 hBlk1 hBlk3 hL₀)
 
 /-- Existential common-length form of
 `forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv`.
@@ -269,8 +297,8 @@ theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEqu
 /-- BNT-separated blocks give common pairwise block-separating equations at the
 three-block length, once the direct-sum injectivity hypotheses are supplied.
 
-This is the selector-facing consequence of the direct-sum input used in
-PGVWC07, Lemma `lem:direct-sum`: the homogeneous trace separation at
+This is the selector-facing consequence of the direct-sum input in
+arXiv:quant-ph/0608197, lines 1346--1408: homogeneous trace separation at
 \(L+(L+L)\) is converted into equations selecting one block against another. -/
 theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -435,5 +463,110 @@ theorem exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_
   ⟨(L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))),
     wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1
       A hIrr hLeft hOverlap hBlocks hBlk0 hBlk1 hBlk3 hL₀⟩
+
+/-- The elementary numerical estimate in the sharp BNT block-separation bound. -/
+theorem three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five
+    {D : ℕ} (hD : 0 < D) :
+    3 * ((D - 1) * (D ^ 4 + 1)) ≤ 3 * D ^ 5 := by
+  have hDleD4 : D ≤ D ^ 4 := by
+    simpa using (pow_le_pow_right' (a := D) hD (by omega : 1 ≤ 4))
+  have hDsubLeD4 : D - 1 ≤ D ^ 4 :=
+    (Nat.sub_le D 1).trans hDleD4
+  have hCore : (D - 1) * (D ^ 4 + 1) ≤ D ^ 5 := by
+    calc
+      (D - 1) * (D ^ 4 + 1) = (D - 1) * D ^ 4 + (D - 1) := by ring
+      _ ≤ (D - 1) * D ^ 4 + D ^ 4 := Nat.add_le_add_left hDsubLeD4 _
+      _ = (D - 1) * D ^ 4 + 1 * D ^ 4 := by rw [one_mul]
+      _ = ((D - 1) + 1) * D ^ 4 := (Nat.add_mul (D - 1) 1 (D ^ 4)).symm
+      _ = D * D ^ 4 := by rw [Nat.sub_add_cancel (by omega)]
+      _ = D ^ 5 := by ring
+  exact Nat.mul_le_mul_left 3 hCore
+
+namespace IsBNTCanonicalForm
+
+variable {P : SectorDecomposition d}
+
+/-- A BNT canonical form has a simultaneous representative word span at some
+positive length at most \(3D^5\), where \(D\) is the total bond dimension.
+
+For two or more representatives, this is the source estimate
+\(3(g-1)(D^4+1)\leq 3D^5\). For one representative, ordinary block
+injectivity at \(D^4\) gives the conclusion. This is the sharp
+block-injectivity proposition of arXiv:1606.00608, lines 340--345. -/
+theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
+    (hCF : IsBNTCanonicalForm P) :
+    ∃ N : ℕ, 0 < N ∧ N ≤ 3 * P.totalDim ^ 5 ∧ WordTupleSpanTop P.basis N := by
+  classical
+  obtain ⟨j₀, _q₀, _hweight⟩ := hCF.weight_unit_exists
+  have hDpos : 0 < P.totalDim :=
+    lt_of_lt_of_le (hCF.basis_dim_pos j₀) (P.basisDim_le_totalDim j₀)
+  have hD4pos : 0 < P.totalDim ^ 4 := Nat.pow_pos hDpos
+  have hBlk0 : ∀ j : Fin P.basisCount,
+      IsNBlkInjective (P.basis j) (P.totalDim ^ 4) :=
+    hCF.basis_isNBlkInjective_totalDim_pow_four
+  by_cases hCountOne : P.basisCount = 1
+  · refine ⟨P.totalDim ^ 4, hD4pos, ?_, ?_⟩
+    · calc
+        P.totalDim ^ 4 = P.totalDim ^ 4 * 1 := by simp
+        _ ≤ P.totalDim ^ 4 * (3 * P.totalDim) := by
+          exact Nat.mul_le_mul_left _ (by omega)
+        _ = 3 * P.totalDim ^ 5 := by ring
+    · exact wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
+        P.basis hCountOne hBlk0
+  · have hCountTwo : 2 ≤ P.basisCount := by
+      have hCountPos : 0 < P.basisCount :=
+        lt_of_le_of_lt (Nat.zero_le j₀) j₀.isLt
+      omega
+    letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+      fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+    have hBlk1 : ∀ j : Fin P.basisCount,
+        IsNBlkInjective (P.basis j) (P.totalDim ^ 4 + 1) := by
+      intro j
+      exact isNBlkInjective_of_le hD4pos (hBlk0 j) (by omega)
+    have hBlk3 : ∀ j : Fin P.basisCount,
+        IsNBlkInjective (P.basis j)
+          ((P.totalDim ^ 4 + 1) +
+            ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))) := by
+      intro j
+      exact isNBlkInjective_of_le hD4pos (hBlk0 j) (by omega)
+    have hIrr : HasIrreducibleBlocks (d := d) P.basis :=
+      HasIrreducibleBlocks.ofForall hCF.basis_irreducible
+    have hLeft : IsLeftCanonicalBlockFamily (d := d) P.basis :=
+      IsLeftCanonicalBlockFamily.ofForall hCF.basis_left_canonical
+    have hOverlap : HasNormalizedSelfOverlap (d := d) P.basis :=
+      HasNormalizedSelfOverlap.ofForall hCF.basis_normalized_self_overlap
+    have hSpan : WordTupleSpanTop P.basis
+        ((P.basisCount - 1) *
+          ((P.totalDim ^ 4 + 1) +
+            ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1)))) :=
+      wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
+        P.basis hIrr hLeft hOverlap hCF.basis_distinct
+        hBlk0 hBlk1 hBlk3 hD4pos hCountTwo
+    refine ⟨(P.basisCount - 1) *
+      ((P.totalDim ^ 4 + 1) +
+        ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))), ?_, ?_, hSpan⟩
+    · exact Nat.mul_pos (by omega) (by omega)
+    · have hCountLe : P.basisCount ≤ P.totalDim :=
+        P.basisCount_le_totalDim hCF.basis_dim_pos
+      have hPredLe : P.basisCount - 1 ≤ P.totalDim - 1 :=
+        Nat.sub_le_sub_right hCountLe 1
+      have hFirst :
+          (P.basisCount - 1) *
+              ((P.totalDim ^ 4 + 1) +
+                ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))) ≤
+            (P.totalDim - 1) *
+              ((P.totalDim ^ 4 + 1) +
+                ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))) :=
+        Nat.mul_le_mul_right _ hPredLe
+      refine hFirst.trans ?_
+      calc
+        (P.totalDim - 1) *
+            ((P.totalDim ^ 4 + 1) +
+              ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))) =
+            3 * ((P.totalDim - 1) * (P.totalDim ^ 4 + 1)) := by ring
+        _ ≤ 3 * P.totalDim ^ 5 :=
+          three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five hDpos
+
+end IsBNTCanonicalForm
 
 end MPSTensor

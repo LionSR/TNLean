@@ -11,9 +11,9 @@ import TNLean.MPS.MPDO.BiCFDerivation.DiagonalRestrictionCounterexample
 This module retains the historical import path for the MPDO biCF derivation
 layer while the finite-length criteria are organized by their mathematical
 role. It imports the proof-complete obstruction and criterion layer. The
-direct-sum uniqueness capstone remains available from its own files, but is not
-imported here while it depends on the unfinished parent-Hamiltonian uniqueness
-argument.
+direct-sum uniqueness and sharp BNT block-separation theorems remain available
+from their own files; they are not imported here because this historical path
+is intended to retain the lighter criterion layer.
 
 The supporting modules are:
 
@@ -42,9 +42,9 @@ The supporting modules are:
   two injective block states have distinct MPV lines.
 * `TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum` — the BNT-facing direct-sum
   form that supplies that distinctness input from separated same-dimension
-  blocks and gives the fixed three-block pair separation for all ordered pairs,
-  while keeping the direct-sum injectivity hypotheses explicit. This capstone
-  is imported directly by users who need the unfinished uniqueness route.
+  blocks, gives the fixed three-block pair separation for all ordered pairs,
+  and proves the sharp \(3D^5\) simultaneous representative span. This heavier
+  theorem is imported directly by users who need the BNT conclusion.
 
 ## References
 
