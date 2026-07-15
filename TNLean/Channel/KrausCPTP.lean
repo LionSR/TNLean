@@ -30,7 +30,7 @@ dimensions.
   completely positive.
 * `sandwichMap`: the linear map given by conjugation with one rectangular
   matrix.
-* `sandwichMap_isKrausCPTP`: an isometric sandwich map is trace-preserving
+* `sandwichMap_isKrausCPTP`: an isometric single-Kraus map is trace-preserving
   completely positive.
 * `isKrausCPTP_comp`: composition preserves the trace-preserving completely
   positive property.
@@ -80,8 +80,7 @@ theorem IsKrausCPTP.map_posSemidef
 
 /-- A rectangular Kraus map whose Kraus operators resolve the identity
 preserves the matrix trace. This is the trace-preservation property used for
-the physical maps in arXiv:1606.00608, Proposition `propsimple`, lines
-1333--1340. -/
+the physical maps in arXiv:1606.00608, lines 1333--1340. -/
 theorem IsKrausCPTP.trace_map
     {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
     {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S)
@@ -113,7 +112,7 @@ theorem isKrausCPTP_of_singleKraus {α β : Type*} [Fintype α] [DecidableEq α]
     simpa only [Fin.sum_univ_one] using hform X
   · simpa only [Fin.sum_univ_one] using hV
 
-/-- The single-Kraus sandwich by a rectangular matrix. -/
+/-- The linear map associated with a single rectangular Kraus operator. -/
 noncomputable def sandwichMap {α β : Type*} [Fintype α] [Fintype β]
     (V : Matrix β α ℂ) : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ where
   toFun X := V * X * Vᴴ
@@ -125,7 +124,7 @@ noncomputable def sandwichMap {α β : Type*} [Fintype α] [Fintype β]
     sandwichMap V X = V * X * Vᴴ :=
   rfl
 
-/-- The sandwich map associated with an isometry is trace-preserving and
+/-- The single-Kraus map associated with an isometry is trace-preserving and
 completely positive. -/
 theorem sandwichMap_isKrausCPTP {α β : Type*}
     [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
