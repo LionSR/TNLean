@@ -751,12 +751,16 @@
     \edef\TN@normalgridprefix{normalGrid\the\TN@normalgridserial}%
     \TN@squarelatticepatch{\TN@normalgridprefix}{6}{6}{0.5}%
     \foreach \j in {0,...,6} { % chktex 11
-        \TN@vopenport{\TN@normalgridprefix0\j W}{-1,0}%
-        \TN@vopenport{\TN@normalgridprefix6\j E}{1,0}%
+        \TN@vopenport{\TN@normalgridprefix0\j W}
+            {-\TN@virtualleglen,0}%
+        \TN@vopenport{\TN@normalgridprefix6\j E}
+            {\TN@virtualleglen,0}%
     }%
     \foreach \i in {0,...,6} { % chktex 11
-        \TN@vopenport{\TN@normalgridprefix\i0S}{0,-1}%
-        \TN@vopenport{\TN@normalgridprefix\i6N}{0,1}%
+        \TN@vopenport{\TN@normalgridprefix\i0S}
+            {0,-\TN@virtualleglen}%
+        \TN@vopenport{\TN@normalgridprefix\i6N}
+            {0,\TN@virtualleglen}%
     }%
 }
 
@@ -829,7 +833,8 @@
         \path[tn region collar] (0.3,2.55) rectangle (1.7,3.18);
         \path[tn region collar] (1.3,2.55) rectangle (2.7,3.18);
     \end{scope}
-    \TN@annotationterminal{tnTopCollarLabel}{(1.50,3.18)}%
+    \TN@annotationterminal{tnTopCollarLabel}
+        {(\TN@normalgridprefix36NOpen)}%
     \TN@label[anchor=south,tn region label collar]{tnTopCollarLabel}
         {(0,\TN@labelclearance)}{\text{top collar}}%
 }
@@ -1074,7 +1079,10 @@
 % their bounds here makes clipping part of the shared PEPS presentation,
 % rather than a chapter-local adjustment.
 \newcommand{\TNPEPSNormalFullWindow}{%
-    \clip (-0.25,-0.25) rectangle (3.25,3.25);%
+    \clip (-0.25,-0.25) rectangle
+        ($(3.25,3.00)+(0,\TN@virtualleglen)
+            +(0,\TN@labelclearance)
+            +(0,\TN@annotationclearance)$);%
 }
 \newcommand{\TNPEPSNormalTallWindow}{%
     \clip (-0.25,0.75) rectangle (2.25,3.25);%
@@ -1311,7 +1319,9 @@
     \coordinate (#1Centre) at #2;%
     \TNTensor{#1Tensor}{(#1Centre)}%
     \TNPhysicalPort{#1Physical}{#1Tensor}{north}%
-    \TNOpenPhysicalNorth{#1Physical}%
+    \TNPhysicalTerminal{#1PhysicalOpen}
+        {($(#1Physical)+(0,\TN@physicalleglen)$)}%
+    \TNConnectPhysical{#1Physical}{#1PhysicalOpen}%
     \TNInsertion{#1WestInsertion}
         {($(#1Centre)+(-\TN@gaugeradius,0)$)}{}%
     \TNInsertion{#1EastInsertion}
@@ -1340,6 +1350,8 @@
     \TNOpenVirtualEast{#1EastOuter}%
     \TNOpenVirtualSouth{#1SouthWestOuter}%
     \TNOpenVirtualSouth{#1SouthEastOuter}%
+    \TN@annotationterminal{#1Caption}
+        {($(#1Centre)+(0,-\TN@gaugeradius-\TN@virtualleglen)$)}%
     \TN@label[anchor=south]{#1WestInsertion.north}
         {(0,\TN@labelclearance)}{#3}%
     \TN@label[anchor=south]{#1EastInsertion.north}
@@ -1384,12 +1396,14 @@
     \TNOpenVirtualEast{#1EastOuter}%
     \TNOpenVirtualSouth{#1SouthOuter}%
     \TNOpenVirtualNorth{#1NorthOuter}%
-    \TN@label[anchor=east]{#1WestInsertion.west}
-        {(-\TN@labelclearance,0)}{#3}%
-    \TN@label[anchor=west]{#1EastInsertion.east}
-        {(\TN@labelclearance,0)}{#4}%
-    \TN@label[anchor=north]{#1SouthInsertion.south}
-        {(0,-\TN@labelclearance)}{#5}%
+    \TN@annotationterminal{#1Caption}
+        {($(#1Centre)+(0,-\TN@gaugeradius-\TN@virtualleglen)$)}%
+    \TN@label[anchor=south]{#1WestInsertion.north}
+        {(0,\TN@labelclearance)}{#3}%
+    \TN@label[anchor=south]{#1EastInsertion.north}
+        {(0,\TN@labelclearance)}{#4}%
+    \TN@label[anchor=east]{#1SouthInsertion.west}
+        {(-\TN@labelclearance,0)}{#5}%
     \TN@label[anchor=south]{#1NorthInsertion.north}
         {(0,\TN@labelclearance)}{#6}%
 }

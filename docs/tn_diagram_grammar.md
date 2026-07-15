@@ -42,7 +42,8 @@ placed elsewhere or composed with different atoms without changing their
 internal definitions.
 
 Complete diagrams use `TNDiagram`. Short identities use `TNEquationRow`,
-`TNTerm`, and `TNRelation`. The `normal` profile is used for structural
+`TNTerm`, and `TNRelation`; related identities use `TNEquationRows` so that
+their relation signs share one column. The `normal` profile is used for structural
 figures; `compact` is used for definitions and local identities. These profiles
 fix the pitches, leg lengths, branch positions, relation gaps, trace
 clearances, and outer margins.
@@ -99,9 +100,13 @@ fractions, and port roles have the same meaning in every occurrence.
 - A PEPS tensor is a black dot with the appropriate local virtual legs in the
   lattice directions and a physical leg. A PEPS region is drawn as a rectangle
   or polygon around the sites in the region, not as a new tensor site.
-- A virtual operator, gauge, or arbitrary matrix insertion is a red dot on a
-  virtual leg. A physical operation is a red dot on a physical leg. These two
-  cases should not be interchanged.
+- A virtual operator, gauge, or arbitrary matrix insertion is a fixed-size red
+  dot on a virtual leg, with its label placed outside the dot by a profile
+  clearance. A physical operation is the same fixed marker on a physical leg.
+  Its diameter does not depend on the length of its label. These two cases
+  should not be interchanged. The directional `TNLabelAbove`, `TNLabelBelow`,
+  `TNLabelLeft`, and `TNLabelRight` operations choose the clear side when the
+  insertion lies inside a vertical or horizontal composition.
 - A gauge transform is a virtual operator insertion together with its inverse
   on the adjacent oriented virtual leg when the diagram represents a
   cancellation. If only one red dot is shown, the diagram represents a single
@@ -292,7 +297,9 @@ matrix or operator with paired system ports; `\TNSplitMap`, `\TNMergeMap`,
 `\TNPhysicalSplitMap`, `\TNPhysicalMergeMap`, and `\TNFusionMap` for typed
 trivalent maps; `\TNSectorBus` for a virtual sector line;
 `\TNSquarePEPSPatch` for a finite square lattice; and `\TNHorizontalWord` and
-`\TNVerticalWord` for standard finite words. MPS and MPO words are declared by
+`\TNVerticalWord` for standard finite words. The common gauge and periodic
+constructions are `\TNGaugeConjugatedMPSSite`, `\TNFourBondGaugeStar`,
+`\TNCardinalGaugeCross`, and `\TNCyclicMPSWord`. MPS and MPO words are declared by
 distinct constructors, since an MPS site has one physical index whereas an MPO
 site has two. These constructions determine the conventional index directions
 once. Each local atom declares stable boundary ports; the `\TNOpen...`

@@ -1172,7 +1172,8 @@
         \TNVirtualPort{tnDnOpenWestPort}{tnDn}{west}\TNOpenVirtualWest{tnDnOpenWestPort}
         \TNVirtualPort{tnUpOpenEastPort}{tnUp}{east}\TNOpenVirtualEast{tnUpOpenEastPort}
         \TNVirtualPort{tnDnOpenEastPort}{tnDn}{east}\TNOpenVirtualEast{tnDnOpenEastPort}
-        \TNInsertion{tnu}{(0,0)}{#1}
+        \TNInsertion{tnu}{(0,0)}{}
+        \TNLabelRight{tnu}{#1}
         \TNPhysicalPort{tnUpTotnu}{tnUp}{south}\TNPhysicalPort{tnuTotnUp}{tnu}{north}\TNConnectPhysical{tnUpTotnu}{tnuTotnUp}
         \TNPhysicalPort{tnuTotnDn}{tnu}{south}\TNPhysicalPort{tnDnTotnu}{tnDn}{north}\TNConnectPhysical{tnuTotnDn}{tnDnTotnu}
         \TNPlacedLabel{tnClientLabel1139}{(-1.25,0)}{X}
@@ -1242,9 +1243,12 @@
         \TNTensor{tnD2}{(1.55,-0.48)}
         \TNTensor{tnU3}{(4.30,0.48)}
         \TNTensor{tnD3}{(4.30,-0.48)}
-        \TNInsertion{tnuA}{(0,0)}{#1}
-        \TNInsertion{tnuB}{(1.55,0)}{#1}
-        \TNInsertion{tnuC}{(4.30,0)}{#1}
+        \TNInsertion{tnuA}{(0,0)}{}
+        \TNInsertion{tnuB}{(1.55,0)}{}
+        \TNInsertion{tnuC}{(4.30,0)}{}
+        \TNLabelRight{tnuA}{#1}
+        \TNLabelRight{tnuB}{#1}
+        \TNLabelLeft{tnuC}{#1}
         \TNVirtualPort{tnLamTotnU1}{tnLam}{east}\TNVirtualPort{tnU1TotnLam}{tnU1}{west}\TNConnectVirtual{tnLamTotnU1}{tnU1TotnLam}
         \TNVirtualPort{tnLamTotnD1}{tnLam}{east}\TNVirtualPort{tnD1TotnLam}{tnD1}{west}\TNConnectVirtual{tnLamTotnD1}{tnD1TotnLam}
         \TNVirtualPort{tnU1TotnU2}{tnU1}{east}\TNVirtualPort{tnU2TotnU1}{tnU2}{west}\TNConnectVirtual{tnU1TotnU2}{tnU2TotnU1}
@@ -1497,14 +1501,12 @@
             \TNVirtualPort{absBOpen315Port}{absB}{315}\TNOpenVirtualSouth{absBOpen315Port}
             \TNPlacedLabel{tnClientLabel1469}{($(absB.south)+(0,-0.95)$)}{B_v}
         \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1471}{(1.15,0)}{\longmapsto}
-        \begin{TNPanel}{tnClientPanel1472}{(2.30cm,0)}
+        \TNPlacedLabel{tnClientLabel1471}{(1.45,0)}{\longmapsto}
+        \begin{TNPanel}{tnClientPanel1472}{(3.10cm,0)}
             \TNFourBondGaugeStar{absGauge}{(0,0)}
                 {Z_{e_1}^{\pm1}}{Z_{e_2}^{\pm1}}
                 {Z_{e_3}^{\pm1}}{Z_{e_4}^{\pm1}}
-            \TNPoint{absGaugeLabel}
-                {($(absGaugeSouthWestOuter)!0.5!(absGaugeSouthEastOuter)$)}
-            \TNLabelBelow{absGaugeLabel}{\widetilde B_v}
+            \TNLabelBelow{absGaugeCaption}{\widetilde B_v}
         \end{TNPanel}
     \end{TNDiagram}%
 }
@@ -1863,11 +1865,11 @@
             \TNPEPSSquareTensor{tiB}{(0,0)}
             \TNPlacedLabel{tnClientLabel1853}{($(tiB.south)+(0,-0.88)$)}{B}
         \end{TNPanel}
-        \TNPlacedLabel{tnClientLabel1855}{(1.25,0)}{=}
-        \begin{TNPanel}{tnClientPanel1856}{(2.35cm,0)}
+        \TNPlacedLabel{tnClientLabel1855}{(1.45,0)}{=}
+        \begin{TNPanel}{tnClientPanel1856}{(3.00cm,0)}
             \TNCardinalGaugeCross{tiGauge}{(0,0)}
                 {X}{X^{-1}}{Y}{Y^{-1}}
-            \TNLabelBelow{tiGaugeSouthOuter}{\lambda A}
+            \TNLabelBelow{tiGaugeCaption}{\lambda A}
         \end{TNPanel}
     \end{TNDiagram}%
 }
@@ -1891,11 +1893,8 @@
     \begin{TNDiagram}[normal]
         \TNFourBondGaugeStar{tnGaugeAction}{(0,0)}
             {M_{ve_1}}{M_{ve_2}}{M_{ve_3}}{M_{ve_4}}
-        \TNLabelRight{tnGaugeActionPhysical}{\sigma}
-        \TNPoint{tnGaugeActionLabel}
-            {($(tnGaugeActionSouthWestOuter)!0.5!
-                (tnGaugeActionSouthEastOuter)$)}
-        \TNLabelBelow{tnGaugeActionLabel}{A_v \mapsto A_v^X}
+        \TNLabelAbove{tnGaugeActionPhysicalOpen}{\sigma}
+        \TNLabelBelow{tnGaugeActionCaption}{A_v \mapsto A_v^X}
     \end{TNDiagram}%
 }
 
