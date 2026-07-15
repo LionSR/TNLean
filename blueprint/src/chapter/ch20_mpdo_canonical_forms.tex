@@ -305,21 +305,27 @@ This is the inverse identity in
 \begin{remark}[Sharp finite-length block separation]
     \label{rem:sharp_bnt_block_separation_gap}
     \notready
-    \uses{thm:bnt_representatives_exact_total_dimension_pow_four}
+    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
+        lem:bnt_direct_sum_block_separation_word_span}
     Let $D$ be the total bond dimension and $g$ the number of minimal
-    representatives.  The common exact injective length is $D^4$, while the
-    pair-separation argument gives selectors of length
+    representatives.  The common exact injective length is $D^4$.  For
+    $g\geq2$, the pair-separation argument works at length $3(D^4+1)$.  The
+    missing direct-sum assembly should realize $(X,0)$ on one anchor pair and
+    multiply by identity--zero selectors for the other $g-2$ representatives,
+    giving the target length
     \[
         3(g-1)(D^4+1)\leq3(D-1)(D^4+1).
     \]
-    Concatenating a separate injective prefix gives the longer length
+    The presently formalized conversion instead concatenates a separate
+    injective prefix and gives the longer length
     \[
         (3g-2)(D^4+1).
     \]
     The sharp bound in \cite[lines~340--345]{Cirac2016MPDO_arXiv} remains an
-    open gap: one must obtain arbitrary matrices in the selected block at the
-    selector length itself.  Once this direct-sum step is proved, the final
-    estimate is
+    open gap: the preceding anchor-pair assembly has not yet been formalized.
+    The case $g=1$ is handled separately by ordinary block injectivity.  Once
+    the multi-block assembly and the routine specialization and arithmetic
+    lemmas are proved, the final estimate is
     \[
         3(D^4+1)(D-1)\leq3D^5.
     \]
@@ -592,7 +598,6 @@ This is the inverse identity in
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective}
-    \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_common_basis_isNBlkInjective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree}

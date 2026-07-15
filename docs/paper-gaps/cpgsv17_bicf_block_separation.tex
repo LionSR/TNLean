@@ -220,29 +220,32 @@ $D^4$.  This exact common length has been formalized.\footnote{Formal
     \leanid{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}, and
     \leanid{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}.}
 
-It remains useful to distinguish the selector length from the full tuple-span
-length in the present proof.  Put $g$ for the number of minimal
-representatives and set $L_0=D^4$.  The proved pair-separation argument has
-length $3(L_0+1)$, and multiplying one pair selector for each of the other
-representatives gives block selectors of length
+It remains useful to distinguish identity--zero selectors from the full tuple
+span.  Put $g$ for the number of minimal representatives and set $L_0=D^4$.
+The proved two-block argument gives the full pair span at length $3(L_0+1)$;
+in particular it can realize $(X,0)$ on a chosen block and one anchor block.
+For $g\geq2$, multiplying this pair polynomial by $g-2$ identity--zero
+selectors for the remaining representatives should give a tuple equal to $X$
+on the chosen block and zero elsewhere, at total length
 \[
     3(g-1)(D^4+1).
 \]
 Since every representative has positive dimension and occurs at least once,
-$g\leq D$; hence this selector length is at most the source length
+$g\leq D$; hence this target length is at most the source length
 $3(D^4+1)(D-1)$.  The existing conversion from selectors to the whole product
-algebra, however, concatenates an additional injective prefix of length
+algebra instead concatenates an additional injective prefix of length
 $D^4+1$.  Its exact length is therefore
 \[
     (D^4+1)+3(g-1)(D^4+1)=(3g-2)(D^4+1).
 \]
 This is within the source length when $g\leq D-1$, but exceeds it by
-$D^4+1$ in the extremal case $g=D$.  Thus the remaining mathematical point is
-not quantum Wielandt and is not the construction of the block selectors.  It
-is the source's direct-sum step which obtains arbitrary matrices in the chosen
-block without paying a separate injective prefix.  Adding an assumed finite
-separation witness would conceal precisely this point and is not an acceptable
-substitute.
+$D^4+1$ in the extremal case $g=D$.  Thus the remaining multi-block
+mathematical point is not quantum Wielandt.  It is the direct-sum assembly
+which combines one full pair-span element $(X,0)$ with the remaining
+identity--zero selectors, without paying a separate injective prefix.  The
+case $g=1$ has no direct-sum obstruction and is handled by ordinary block
+injectivity.  Adding an assumed finite separation witness would conceal the
+multi-block point and is not an acceptable substitute.
 
 Once that direct-sum step is supplied, the final arithmetic is elementary:
 for $D\geq1$,
@@ -272,12 +275,13 @@ subsequent positivity and isometric normalization of its sectors, are separate
 parts of that proposition.
 
 The sharp numerical statement is therefore classified as an \emph{open gap}.
-The sole remaining blocker identified here is the direct-sum step: from the
-minimal BNT representatives and the block selectors of length
-$3(L+1)(D-1)$, obtain arbitrary matrices in the selected block without
-concatenating a further injective prefix.  This gives the stated $3D^5$ bound.
-The source-level Lemma L needs only the existence of a suitable finite length,
-not this sharp estimate.
+For $g\geq2$, the sole remaining conceptual blocker identified here is the
+direct-sum assembly of one arbitrary anchor-pair value with the remaining
+identity--zero pair selectors.  The formal proof will also require routine
+named lemmas for $g\leq D$, specialization to $L_0=D^4$, and
+$3(D^4+1)(D-1)\leq3D^5$.  For $g=1$, ordinary block injectivity supplies the
+result directly.  The source-level Lemma L needs only the existence of a
+suitable finite length, not this sharp estimate.
 
 \bibliographystyle{alpha}
 \bibliography{references}
