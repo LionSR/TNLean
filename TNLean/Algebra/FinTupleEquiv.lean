@@ -18,6 +18,8 @@ on short finite index types.
 
 * `finThreeArrowEquiv`: identifies a function on `Fin 3` with a right-associated triple.
 * `finFourArrowEquiv`: identifies a function on `Fin 4` with a right-associated quadruple.
+* `MPOTensor.firstSiteRestEquiv`: separates the first coordinate from a finite tuple.
+* `MPOTensor.firstTwoSitesRestEquiv`: separates the first two coordinates.
 
 ## Main statements
 
@@ -77,3 +79,41 @@ coordinates in order. -/
     (finFourArrowEquiv α).symm x = ![x.1, x.2.1, x.2.2.1, x.2.2.2] := by
   funext i
   fin_cases i <;> rfl
+
+namespace MPOTensor
+
+/-! ### A fixed initial segment and a variable remaining tuple -/
+
+/-- Separate the first physical index from the remaining `N` indices. -/
+def firstSiteRestEquiv (d N : ℕ) :
+    (Fin (N + 1) → Fin d) ≃ Fin d × (Fin N → Fin d) :=
+  (Fin.consEquiv fun _ : Fin (N + 1) ↦ Fin d).symm
+
+@[simp] theorem firstSiteRestEquiv_apply (d N : ℕ)
+    (σ : Fin (N + 1) → Fin d) :
+    firstSiteRestEquiv d N σ = (σ 0, Fin.tail σ) :=
+  rfl
+
+@[simp] theorem firstSiteRestEquiv_symm_apply (d N : ℕ)
+    (p : Fin d × (Fin N → Fin d)) :
+    (firstSiteRestEquiv d N).symm p = Fin.cons p.1 p.2 :=
+  rfl
+
+/-- Separate the first two physical indices from the remaining `N` indices. -/
+def firstTwoSitesRestEquiv (d N : ℕ) :
+    (Fin (N + 2) → Fin d) ≃ (Fin d × Fin d) × (Fin N → Fin d) :=
+  (firstSiteRestEquiv d (N + 1)).trans
+    ((Equiv.prodCongr (Equiv.refl (Fin d)) (firstSiteRestEquiv d N)).trans
+      (Equiv.prodAssoc (Fin d) (Fin d) (Fin N → Fin d)).symm)
+
+@[simp] theorem firstTwoSitesRestEquiv_apply (d N : ℕ)
+    (σ : Fin (N + 2) → Fin d) :
+    firstTwoSitesRestEquiv d N σ = ((σ 0, σ 1), Fin.tail (Fin.tail σ)) :=
+  rfl
+
+@[simp] theorem firstTwoSitesRestEquiv_symm_apply (d N : ℕ)
+    (p : (Fin d × Fin d) × (Fin N → Fin d)) :
+    (firstTwoSitesRestEquiv d N).symm p = Fin.cons p.1.1 (Fin.cons p.1.2 p.2) :=
+  rfl
+
+end MPOTensor

@@ -486,7 +486,7 @@
     \label{lem:phys_close_identity}
     \lean{MPOTensor.physCloseN_identity_eq_mpo}
     \leanok
-    \uses{def:phys_close, def:mpo_tensor}
+    \uses{def:phys_close, def:mpo_family}
     Closing the virtual legs with the identity gives the periodic MPO
     operator:
     \[
@@ -595,20 +595,19 @@
     \uses{def:mpdo_global_renormalization_maps}
     For a physical word $\sigma$ of length $N+1$,
     \[
-      R_1(\sigma)=\bigl(\sigma(0),\operatorname{tail}(\sigma)\bigr),
+      R_1(\sigma)=\bigl(\sigma_0,(\sigma_1,\ldots,\sigma_N)\bigr),
       \qquad
-      R_1^{-1}(i,\sigma')=\operatorname{cons}(i,\sigma').
+      R_1^{-1}\bigl(i,(a_1,\ldots,a_N)\bigr)=(i,a_1,\ldots,a_N).
     \]
     For a physical word $\sigma$ of length $N+2$,
     \[
       R_2(\sigma)
-        =\bigl((\sigma(0),\sigma(1)),
-          \operatorname{tail}(\operatorname{tail}(\sigma))\bigr),
+        =\bigl((\sigma_0,\sigma_1),(\sigma_2,\ldots,\sigma_{N+1})\bigr),
     \]
     and
     \[
-      R_2^{-1}((i,j),\sigma')
-        =\operatorname{cons}\bigl(i,\operatorname{cons}(j,\sigma')\bigr).
+      R_2^{-1}\bigl((i,j),(a_1,\ldots,a_N)\bigr)
+        =(i,j,a_1,\ldots,a_N).
     \]
 \end{lemma}
 
