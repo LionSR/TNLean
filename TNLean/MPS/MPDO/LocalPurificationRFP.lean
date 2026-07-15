@@ -11,14 +11,14 @@ import TNLean.MPS.MPDO.ZCL
 # Local purification RFP condition for MPDO tensors
 
 This file records a local tensor-level purification condition for MPDO tensors.
-It is motivated by the purification tensor formula `Psipuri` in arXiv:1606.00608
+It is motivated by the purification tensor formula in arXiv:1606.00608
 (Cirac--Perez-Garcia--Schuch--Verstraete), line 747, but it is not the source
 purification-RFP definition.
 
 A tensor `M` generating MPDOs need not be a renormalization fixed point in the
 transfer-map sense. Instead one writes `M` through a purifying MPS tensor `A`
 whose physical leg carries a spin index together with an ancillary index, so that
-`M` is the ancilla contraction of `A` with its conjugate (the `Psipuri` graphic,
+`M` is the ancilla contraction of `A` with its conjugate (the purification graphic,
 line 747):
 
   `M^{ij} = ∑_k A^{(i,k)} ⊗ conj(A^{(j,k)})`,
@@ -74,7 +74,8 @@ pure-state RFP.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, `Psipuri`
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, the
+  purification tensor formula
   (line 747), pure-state RFP Definition 3.2.
 -/
 
@@ -97,7 +98,7 @@ and the purifying tensor `A`, viewed as an MPS tensor on the combined
 spin–ancilla index `Fin (d * dK)`, is a pure-state renormalization fixed point.
 
 **Scope restriction:** This is a local tensor condition motivated by
-arXiv:1606.00608, `Psipuri` (line 747), not the source PRFP definition itself.
+arXiv:1606.00608, line 747, not the source PRFP definition itself.
 The positive-length global purification equation is recorded separately in
 `TNLean.MPS.MPDO.PRFP`; see
 `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
@@ -109,7 +110,7 @@ def IsLocalPurificationRFP (M : MPOTensor d D) : Prop :=
     ∧ MPSTensor.IsTransferIdempotent (purificationTensor A)
 
 /-- A nondegenerate purification renormalization fixed point is a tensor in the
-local purification form of arXiv:1606.00608, `Psipuri` (line 747), whose
+local purification form of arXiv:1606.00608, line 747, whose
 purifying tensor is a pure-state RFP and whose physical-trace transfer is
 nonzero.
 
@@ -294,9 +295,10 @@ the physical legs of M transports that idempotence to 𝒯_M. -/
 
 /-- **Pure-state RFP is equivalent to normalized physical-trace idempotence for
 a fixed local purification.** Suppose `M` is the ancilla contraction of `A`
-through the bond identification `e`, as in arXiv:1606.00608, `Psipuri` and
-`eq:MPDO-Puri-1`, lines 744--751. Then the purifying tensor is a pure-state RFP
-if and only if the physical-trace transfer 𝒯_M = ∑_i M^{ii} is idempotent.
+through the bond identification `e`, as in the purification tensor and global
+purification equations of arXiv:1606.00608, lines 744--751. Then the purifying
+tensor is a pure-state RFP if and only if the physical-trace transfer
+𝒯_M = ∑_i M^{ii} is idempotent.
 
 The purifying tensor A has transfer matrix K' = ∑_p conj(A_p) ⊗ A_p
 (`MPSTensor.transferMatrix_eq`). Closing the ket and bra physical legs of M
@@ -311,7 +313,7 @@ known only through equality of their periodic finite-chain density operators.
 
 **Scope restriction (local normalized form):** The source theorem is phrased
 for the global purification equation. This result assumes the tensor identity
-shown in `Psipuri` and uses the normalized representative
+shown at arXiv:1606.00608, line 747, and uses the normalized representative
 𝒯_M² = 𝒯_M. The global-to-local step and the rescaling of a general
 source-ZCL representative remain separate. Documented in
 `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
@@ -392,7 +394,8 @@ renormalization fixed point, then its physical-trace transfer is idempotent.
 
 This is the forward direction of
 `purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq`; source:
-arXiv:1606.00608, `Psipuri` and Definition `def:Puri-RFP`, lines 744--758. -/
+arXiv:1606.00608, the purification tensor formula and Definition 4.4,
+lines 744--758. -/
 theorem physTraceTransfer_sq_of_isLocalPurificationRFP (M : MPOTensor d D)
     (h : IsLocalPurificationRFP M) :
     physTraceTransfer M * physTraceTransfer M = physTraceTransfer M := by
@@ -405,7 +408,7 @@ pure-state RFP if and only if it has the local purification form and its
 physical-trace transfer is idempotent.
 
 This is the tensor-level, normalized PRFP--ZCL equivalence supported by the
-purification graphic `Psipuri` and the theorem at arXiv:1606.00608, lines
+purification graphic and the theorem at arXiv:1606.00608, lines
 744--786. The statement retains the local tensor identity; it does not infer
 that identity from equality of periodic finite-chain density operators.
 
@@ -554,7 +557,7 @@ theorem isPRFP_of_isLocalPurificationRFP {M : MPOTensor d D}
 
 /-- A nondegenerate purification RFP satisfies the positive-length global
 purification predicate `IsPRFP` of arXiv:1606.00608, Definition
-`def:Puri-RFP`, lines 744--758. -/
+4.4, lines 744--758. -/
 theorem IsNondegeneratePRFP.isPRFP {M : MPOTensor d D}
     (h : IsNondegeneratePRFP M) : IsPRFP M :=
   isPRFP_of_isLocalPurificationRFP h.1
