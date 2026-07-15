@@ -13,6 +13,8 @@ cd "$REPO_ROOT/blueprint"
 leanblueprint pdf
 leanblueprint web
 
+"$REPO_ROOT/scripts/build_blueprint_ch01_12.sh"
+
 echo "==> Building API docs (this may take a while)..."
 cd "$REPO_ROOT/docbuild"
 lake build TNLean:docs

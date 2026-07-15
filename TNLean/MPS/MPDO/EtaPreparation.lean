@@ -57,7 +57,7 @@ abbrev OmegaIndex (k h : Fin hη.m) :=
 
 /-- Every right Hayashi factor is nonempty. This follows from the trace-one
 right density matrix, without a separate dimension hypothesis. -/
-theorem dR_nonempty (hη : EtaStructure rhoABC) (k : Fin hη.m) :
+lemma dR_nonempty (hη : EtaStructure rhoABC) (k : Fin hη.m) :
     Nonempty (Fin (hη.dR k)) := by
   have hp : Nonempty (Fin (hη.dR k) × Fin dC) :=
     Matrix.nonempty_of_trace_eq_one (hη.ρ_right k) (hη.hρ_right_dm k).2
@@ -65,14 +65,14 @@ theorem dR_nonempty (hη : EtaStructure rhoABC) (k : Fin hη.m) :
 
 /-- Every left Hayashi factor is nonempty. This follows from the trace-one
 left density matrix, without a separate dimension hypothesis. -/
-theorem dL_nonempty (hη : EtaStructure rhoABC) (k : Fin hη.m) :
+lemma dL_nonempty (hη : EtaStructure rhoABC) (k : Fin hη.m) :
     Nonempty (Fin (hη.dL k)) := by
   have hp : Nonempty (Fin dA × Fin (hη.dL k)) :=
     Matrix.nonempty_of_trace_eq_one (hη.ρ_left k) (hη.hρ_left_dm k).2
   exact hp.map Prod.snd
 
 /-- The Hayashi sector set is nonempty because its probabilities sum to one. -/
-theorem sector_nonempty (hη : EtaStructure rhoABC) : Nonempty (Fin hη.m) := by
+lemma sector_nonempty (hη : EtaStructure rhoABC) : Nonempty (Fin hη.m) := by
   classical
   by_contra h
   haveI : IsEmpty (Fin hη.m) := not_nonempty_iff.mp h
@@ -82,7 +82,7 @@ theorem sector_nonempty (hη : EtaStructure rhoABC) : Nonempty (Fin hη.m) := by
   norm_num at hsum
 
 /-- The neighboring-operator space is nonempty for every sector pair. -/
-theorem etaIndex_nonempty (hη : EtaStructure rhoABC) (k h : Fin hη.m) :
+lemma etaIndex_nonempty (hη : EtaStructure rhoABC) (k h : Fin hη.m) :
     Nonempty (EtaIndex (hη := hη) k h) := by
   letI := dR_nonempty hη k
   letI := dL_nonempty hη h
@@ -90,7 +90,7 @@ theorem etaIndex_nonempty (hη : EtaStructure rhoABC) (k h : Fin hη.m) :
 
 /-- The direct-sum neighboring-operator space is nonempty for every sector
 pair. -/
-theorem omegaIndex_nonempty (hη : EtaStructure rhoABC) (k h : Fin hη.m) :
+lemma omegaIndex_nonempty (hη : EtaStructure rhoABC) (k h : Fin hη.m) :
     Nonempty (OmegaIndex (hη := hη) k h) := by
   rcases sector_nonempty hη with ⟨l⟩
   letI := dR_nonempty hη k

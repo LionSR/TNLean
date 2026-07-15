@@ -37,7 +37,7 @@ definition and theorem in ordinary mathematical language and links it to the
 Lean proof. It is available as a
 [web version](https://lionsr.github.io/TNLean/blueprint/), a
 [full PDF](https://lionsr.github.io/TNLean/blueprint.pdf), and a
-[separate PDF of chapters 1-12](https://lionsr.github.io/TNLean/blueprint-ch01-12.pdf),
+[separate FT-MPS PDF](https://lionsr.github.io/TNLean/blueprint-ch01-12.pdf),
 the fundamental-theorem part that is being released first. The generated
 [API documentation](https://lionsr.github.io/TNLean/docs/) covers every
 declaration in the Lean source.
@@ -227,7 +227,7 @@ leanblueprint checkdecls
 leanblueprint web   # or: leanblueprint pdf / leanblueprint all
 ```
 
-The chapters 1-12 release volume is built by
+The FT-MPS release volume is built by
 `scripts/build_blueprint_ch01_12.sh` and published automatically with the
 rest of the site.
 

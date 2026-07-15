@@ -4,8 +4,36 @@
 % ==========================================================================
 
 % -- Theorem-like environments (collected by the dependency graph) ---------
-% Numbered continuously; add [chapter] to reset per chapter if desired.
-\newtheorem{theorem}{Theorem}[chapter]
+% Reset within subsections.  In a section without subsections, omit the zero
+% subsection index and number directly within the section.
+\newtheorem{theorem}{Theorem}[subsection]
+\makeatletter
+\@addtoreset{theorem}{chapter}
+\@addtoreset{theorem}{section}
+% Only meaningful once hyperref has defined \theHtheorem (web/PDF builds);
+% skip it in bare standalone compiles (e.g. tensor-network smoke renders).
+\@ifundefined{theHtheorem}{}{%
+  \renewcommand*{\theHtheorem}{%
+    \ifnum\value{section}=0
+      \theHchapter.\arabic{theorem}%
+    \else
+      \ifnum\value{subsection}=0
+        \theHsection.\arabic{theorem}%
+      \else
+        \theHsubsection.\arabic{theorem}%
+      \fi
+    \fi}}
+\makeatother
+\renewcommand{\thetheorem}{%
+  \ifnum\value{section}=0
+    \thechapter.\arabic{theorem}%
+  \else
+    \ifnum\value{subsection}=0
+      \thesection.\arabic{theorem}%
+    \else
+      \thesubsection.\arabic{theorem}%
+    \fi
+  \fi}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}

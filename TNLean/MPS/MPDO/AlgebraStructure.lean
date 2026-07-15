@@ -777,7 +777,7 @@ theorem matrix_pow (n : ℕ) (i j : BlockedIndex data n)
 
 /-- The trace of the `L`-th power of a blocked chi matrix is the corresponding
 finite sum of `L`-th powers of its diagonal entries. -/
-theorem trace_matrix_pow (n : ℕ) (i j : BlockedIndex data n)
+lemma trace_matrix_pow (n : ℕ) (i j : BlockedIndex data n)
     (k : BlockedIndex data (2 * n)) (L : ℕ) :
     (χ.matrix n i j k ^ L).trace = χ.tracePowerCoeff n i j k L := by
   exact (χ.toDiagonal n).trace_matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
@@ -853,7 +853,7 @@ variable {data : AlgebraStructureData d D}
 
 /-- The positive blocked chi witness gives the trace formula for every positive
 blocked multiplication coefficient. -/
-theorem eq_trace_pow (h : PositiveBlockedStructureChiTracePowerForm data)
+lemma eq_trace_pow (h : PositiveBlockedStructureChiTracePowerForm data)
     (n : ℕ) (hn : 0 < n)
     (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)) :
     data.blockedStructureCoefficients n i j k =

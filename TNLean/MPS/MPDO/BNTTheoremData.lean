@@ -485,7 +485,7 @@ data satisfies the blocked trace-power predicate.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem positiveBlockedChi_tracePower :
+lemma positiveBlockedChi_tracePower :
     data.HasBlockedStructureChiTracePowerForm H.positiveBlockedChi :=
   H.toPositiveBlockedStructureChiTracePowerForm.tracePower
 
@@ -495,7 +495,7 @@ data has positive diagonal entries.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem positiveBlockedChi_posEntries :
+lemma positiveBlockedChi_posEntries :
     H.positiveBlockedChi.PosEntries :=
   H.toPositiveBlockedStructureChiTracePowerForm.posEntries
 
@@ -505,7 +505,7 @@ data are positive.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem positiveBlockedChi_entry_pos
+lemma positiveBlockedChi_entry_pos
     (n : ℕ) (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
     (r : Fin (H.positiveBlockedChi.dim n i j k)) :
@@ -518,7 +518,7 @@ traces of powers of the pulled-back blocked-basis chi matrices.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem blocked_coeff_eq_positiveBlockedChi_trace_pow
+lemma blocked_coeff_eq_positiveBlockedChi_trace_pow
     (n : ℕ) (hn : 0 < n)
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) :

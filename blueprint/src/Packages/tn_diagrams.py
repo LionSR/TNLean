@@ -1196,6 +1196,9 @@ def _latex_document(tex_call: str) -> str:
     return rf"""\documentclass[tikz,border=2pt]{{standalone}}
 \usepackage{{amssymb,amsthm,amsmath,mathtools}}
 \usepackage{{tikz}}
+% standalone is based on article, which already supplies section and subsection.
+% Those counters give the local displayed-theorem numbering. Only chapter is
+% absent, so define it before loading macros/common.
 \newcounter{{chapter}}
 \input{{macros/common}}
 \input{{macros/tn_print}}

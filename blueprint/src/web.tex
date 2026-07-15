@@ -8,6 +8,11 @@
 \usepackage{_tnlean_patches}
 \usepackage{tn_diagrams}
 
+% plasTeX already propagates section resets through subsection counters.
+\makeatletter
+\providecommand{\@addtoreset}[2]{}
+\makeatother
+
 \input{macros/common}
 \input{macros/web}
 \input{macros/tn_web}
@@ -18,7 +23,7 @@
 \github{https://github.com/LionSR/TNLean}
 \dochome{../docs}
 
-\title{Fundamental Theorem of Matrix Product States}
+\title{Tensor Network Theory: A formalization blueprint}
 \author{Sirui Lu, Erickson Tjoa, and J.\ Ignacio Cirac}
 \date{Last update: \today}
 

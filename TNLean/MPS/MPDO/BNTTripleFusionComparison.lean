@@ -122,7 +122,7 @@ requires completeness of the fusion decomposition, which is the additional
 hypothesis in the invertible total fusion-matrix argument of the source.
 
 Source: arXiv:1511.08090, source lines 181--191 and 237--252. -/
-theorem tripleFusionComparison_mul_conjTranspose (α β γ : Λ) :
+lemma tripleFusionComparison_mul_conjTranspose (α β γ : Λ) :
     Fam.tripleFusionComparison α β γ * (Fam.tripleFusionComparison α β γ)ᴴ =
       Fam.leftFusionIsometry α β γ * (Fam.leftFusionIsometry α β γ)ᴴ := by
   unfold tripleFusionComparison
@@ -150,7 +150,7 @@ requires completeness of the fusion decomposition, which is the additional
 hypothesis in the invertible total fusion-matrix argument of the source.
 
 Source: arXiv:1511.08090, source lines 181--191 and 237--252. -/
-theorem conjTranspose_mul_tripleFusionComparison (α β γ : Λ) :
+lemma conjTranspose_mul_tripleFusionComparison (α β γ : Λ) :
     (Fam.tripleFusionComparison α β γ)ᴴ * Fam.tripleFusionComparison α β γ =
       Fam.rightFusionIsometry α β γ * (Fam.rightFusionIsometry α β γ)ᴴ := by
   unfold tripleFusionComparison
