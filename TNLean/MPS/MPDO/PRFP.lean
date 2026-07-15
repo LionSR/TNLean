@@ -29,7 +29,7 @@ freedom. This structure is proved separately for the ancillary trace map.
 The predicate `IsPRFP` below records the displayed positive-length equation and
 pure-state transfer idempotence literally. It is a bare global predicate: the
 zero purifying tensor satisfies it, although the source theorem at lines
-775--786 concerns nondegenerate density operators. The repaired tensor-level
+775--786 concerns nondegenerate density operators. The nondegenerate tensor-level
 predicate `IsNondegeneratePRFP` and its normalized PRFP--ZCL equivalence are in
 `TNLean.MPS.MPDO.LocalPurificationRFP`.
 

@@ -269,7 +269,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \]
     and $\widehat A$ is a pure-state renormalization fixed point. These are the
     displayed conditions of Definition~4.4 in
-    \cite[lines~756--764]{Cirac2016MPDO_arXiv}; the repaired nondegenerate
+    \cite[lines~756--764]{Cirac2016MPDO_arXiv}; the nondegenerate
     tensor-level predicate is Definition~\ref{def:is_nondegenerate_prfp}.
 \end{definition}
 
@@ -285,6 +285,21 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \cite[lines~761--764]{Cirac2016MPDO_arXiv}, without adding a separate
     hypothesis to Definition~4.4.
 \end{definition}
+
+\begin{lemma}[Forgetting the recorded spin reduction]
+    \label{lem:mpdo_prfp_trace_preserving_spin_reduction_iff}
+    \lean{MPOTensor.IsPRFPWithTracePreservingSpinReduction.isPRFP,
+      MPOTensor.IsPRFP.withTracePreservingSpinReduction}
+    \leanok
+    \uses{def:mpdo_prfp_trace_preserving_spin_reduction}
+    Recording the trace-preserving ancillary reduction does not change the
+    purification RFP condition:
+    \[
+        \operatorname{PRFP}_{\mathrm{tp}}(M)
+        \quad\Longleftrightarrow\quad
+        \operatorname{PRFP}(M).
+    \]
+\end{lemma}
 
 \begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
     \lean{MPOTensor.IsLocalPurificationRFP}
@@ -478,7 +493,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.isLocalPurificationRFP_iff_isLPDO_and_physTraceTransfer_sq}
     \leanok
     \uses{def:is_local_purification_rfp, def:lpdo,
-        thm:purification_tensor_rfp_iff_physical_trace_idempotent}
+        thm:purification_tensor_rfp_iff_physical_trace_idempotent,
+        thm:phys_trace_transfer_sq_of_local_purification_rfp}
     An MPO tensor satisfies the local purification RFP condition if and only if
     it has a local purification and its physical-trace transfer is idempotent:
     \[
@@ -500,7 +516,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.isNondegeneratePRFP_iff}
     \leanok
     \uses{def:is_nondegenerate_prfp, def:lpdo,
-        thm:local_purification_rfp_iff_lpdo_physical_trace_idempotent}
+        thm:local_purification_rfp_iff_lpdo_physical_trace_idempotent,
+        thm:phys_trace_transfer_sq_of_local_purification_rfp}
     An MPO tensor is a nondegenerate purification renormalization fixed point if
     and only if it is a local purification density operator
     (Definition~\ref{def:lpdo}) and
@@ -562,7 +579,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
-    The repaired predicate supplies both the local purification RFP condition
+    Definition~\ref{def:is_nondegenerate_prfp} supplies both the local
+    purification RFP condition
     and the nonzero physical-trace transfer required by
     Theorem~\ref{thm:source_zcl_of_local_purification_rfp}.
 \end{proof}
