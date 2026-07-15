@@ -1010,6 +1010,19 @@ def _assert_exact_sample_call(
         )
 
 
+def _assert_atom_sample_self_call(
+    sample: str, *, name: str, location: str
+) -> None:
+    """Require an atom sample to contain exactly one call to that atom."""
+
+    calls = _tex_command_calls(sample, frozenset({name}))
+    if len(calls) != 1:
+        raise RuntimeError(
+            f"{name} atom sample must contain exactly one call to itself at "
+            f"{location} (found={len(calls)})."
+        )
+
+
 _LAYOUT_ENVIRONMENT_DEFAULT_PROFILES = {
     "TNDiagram": "normal",
     "TNEquationRow": "compact",
@@ -1227,6 +1240,7 @@ def _load_atom_declarations() -> dict[str, AtomDeclaration]:
             raise RuntimeError(
                 f"{name} has an empty atom sample at {location}."
             )
+        _assert_atom_sample_self_call(sample, name=name, location=location)
         declarations[name] = AtomDeclaration(
             name=name,
             ports=_parse_atom_ports(raw_ports, name=name, location=location),
