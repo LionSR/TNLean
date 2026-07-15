@@ -11,8 +11,8 @@ corresponding Lean declarations with `\lean{...}` and `\leanok` tags.
 - `src/chapter/` contains one file per chapter.
 - `src/content.tex` is the chapter router for the full Tensor Network Theory
   blueprint.
-- `src/content_ft_mps.tex` contains exactly chapters 1--12 for the separate
-  Fundamental Theorem of Matrix Product States volume.
+- `src/content_ft_mps.tex` contains the separate Fundamental Theorem of Matrix
+  Product States volume, comprising exactly chapters 1--12.
 - `src/print_ft_mps.tex` is the PDF entry point for that FT--MPS volume.
 - `src/macros/` contains blueprint-specific macros and diagram commands.
 - `src/references.bib` is the blueprint bibliography.

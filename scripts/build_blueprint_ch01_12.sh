@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build the paper-release blueprint PDF restricted to the first twelve
-# chapters (ch01_intro through ch12_symmetry) as blueprint/print/print12.pdf.
+# Build the FT--MPS blueprint volume (ch01_intro through ch12_symmetry) as
+# blueprint/print/print12.pdf.
 #
 # Run after scripts/blueprint_bibtex.py (which refreshes src/references.bib).
 # The blueprint sources are copied to a temporary directory and the dedicated
