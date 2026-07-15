@@ -8,51 +8,14 @@
 \makeatother
 \usetikzlibrary{tn}
 
-\colorlet{tnDarkInk}{white!94}
-\colorlet{tnDarkSecondaryInk}{white!60}
-\colorlet{tnDarkAccent}{orange!80!white}
-\colorlet{tnDarkSelected}{cyan!80!white}
-\colorlet{tnDarkSecondary}{magenta!75!white}
-
-\tikzset{
-  tn theme tensor/.append style={
-    draw=tnDarkInk, fill=tnDarkInk, text=darkbg
-  },
-  tn theme component/.append style={
-    draw=tnDarkSecondaryInk, fill=darkbg, text=tnDarkInk
-  },
-  tn theme factor/.append style={
-    draw=tnDarkSecondaryInk, fill=darkbg, text=tnDarkInk
-  },
-  tn theme map/.append style={
-    draw=tnDarkSecondaryInk, fill=darkbg, text=tnDarkInk
-  },
-  tn theme state/.append style={
-    draw=tnDarkSecondaryInk, fill=darkbg, text=tnDarkInk
-  },
-  tn theme expression/.append style={
-    draw=tnDarkSecondaryInk, fill=darkbg, text=tnDarkInk
-  },
-  tn theme insertion/.append style={
-    draw=tnDarkAccent, fill=tnDarkAccent, text=darkbg
-  },
-  tn theme junction/.append style={fill=tnDarkInk},
-  tn theme virtual wire/.append style={draw=tnDarkInk},
-  tn theme physical wire/.append style={draw=tnDarkInk},
-  tn theme factor region/.append style={draw=tnDarkSecondaryInk},
-  tn theme grouping region/.append style={draw=tnDarkSecondaryInk},
-  tn theme annotation/.append style={draw=tnDarkSecondaryInk},
-  tn theme label/.append style={text=tnDarkSecondaryInk},
-  tn selected path/.append style={draw=tnDarkSelected},
-  tn secondary path/.append style={draw=tnDarkSecondary},
-  tn region selected/.append style={
-    draw=tnDarkSelected, fill=tnDarkSelected!16!darkbg
-  },
-  tn region secondary/.append style={
-    draw=tnDarkSecondary, fill=tnDarkSecondary!14!darkbg
-  },
-  tn region label selected/.append style={text=tnDarkSelected},
-  tn region label secondary/.append style={text=tnDarkSecondary}
-}
+\colorlet{tnInk}{white!94}
+\colorlet{tnSecondaryInk}{white!60}
+\colorlet{tnAccent}{orange!80!white}
+\colorlet{tnRegion}{cyan!80!white}
+\colorlet{tnSector}{magenta!75!white}
+\colorlet{tnPaper}{darkbg}
+\colorlet{tnTensorText}{darkbg}
+\colorlet{tnInsertionFill}{tnAccent}
+\colorlet{tnInsertionText}{darkbg}
 
 \input{tn_slide_catalogue}

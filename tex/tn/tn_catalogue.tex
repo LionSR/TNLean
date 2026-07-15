@@ -1072,24 +1072,7 @@
     {\TNAppendixBAdjacentBondProjectors}
     {chapter/ch13_parent_hamiltonian_commuting_gap.tex}{%
     \begin{TNDiagram}[normal]
-        \TNFusionMap{rfpUzero}{at=origin}{U_0}
-        \TNFusionMap{rfpUone}{right=of rfpUzero}{U_1}
-        \TNFusionMap{rfpUtwo}{right=of rfpUone}{U_2}
-        \TNMPSSite{rfpPhiZero}{below right=of rfpUzero}{\varphi_{01}}
-        \TNMPSSite{rfpPhiOne}{below right=of rfpUone}{\varphi_{12}}
-        \TNConnectVirtualVH{rfpUzeroFactorTwo}{rfpPhiZeroWest}
-        \TNConnectVirtualVH{rfpUoneFactorOne}{rfpPhiZeroEast}
-        \TNConnectVirtualVH{rfpUoneFactorTwo}{rfpPhiOneWest}
-        \TNConnectVirtualVH{rfpUtwoFactorOne}{rfpPhiOneEast}
-        \TNOpenVirtualNorth{rfpUzeroFactorOne}
-        \TNOpenVirtualNorth{rfpUtwoFactorTwo}
-        \TNOpenVirtualSouth{rfpUzeroCombined}
-        \TNOpenVirtualSouth{rfpUoneCombined}
-        \TNOpenVirtualSouth{rfpUtwoCombined}
-        \TNGroupingRegionSelectedBelow{rfpPhiZeroRegion}
-            {(rfpPhiZero)}{P_{01}}
-        \TNGroupingRegionSelectedBelow{rfpPhiOneRegion}
-            {(rfpPhiOne)}{P_{12}}
+        \TNAppendixBProjectorChainMotif{rfpU}{}{}
     \end{TNDiagram}%
 }
 
@@ -1105,26 +1088,7 @@
     {\TNAppendixBPhysicalSupportTransport}
     {chapter/ch13_parent_hamiltonian_commuting_gap.tex}{%
     \begin{TNDiagram}[normal]
-        \TNFusionMap{rfpTzero}{at=origin}{U_0}
-        \TNFusionMap{rfpTone}{right=of rfpTzero}{U_1}
-        \TNFusionMap{rfpTtwo}{right=of rfpTone}{U_2}
-        \TNMPSSite{rfpTPhiZero}{below right=of rfpTzero}{\varphi_{01}}
-        \TNMPSSite{rfpTPhiOne}{below right=of rfpTone}{\varphi_{12}}
-        \TNConnectVirtualVH{rfpTzeroFactorTwo}{rfpTPhiZeroWest}
-        \TNConnectVirtualVH{rfpToneFactorOne}{rfpTPhiZeroEast}
-        \TNConnectVirtualVH{rfpToneFactorTwo}{rfpTPhiOneWest}
-        \TNConnectVirtualVH{rfpTtwoFactorOne}{rfpTPhiOneEast}
-        \TNOpenVirtualSouth{rfpTzeroCombined}
-        \TNOpenVirtualSouth{rfpToneCombined}
-        \TNOpenVirtualSouth{rfpTtwoCombined}
-        \TNGroupingRegionAbove{rfpTzeroOneRegion}
-            {(rfpTzero)(rfpTone)}{(P_2)_{01}}
-        \TNGroupingRegionAbove{rfpToneTwoRegion}
-            {(rfpTone)(rfpTtwo)}{(P_2)_{12}}
-        \TNGroupingRegionSelectedBelow{rfpTPhiZeroRegion}
-            {(rfpTPhiZero)}{P_{01}}
-        \TNGroupingRegionSelectedBelow{rfpTPhiOneRegion}
-            {(rfpTPhiOne)}{P_{12}}
+        \TNAppendixBProjectorChainMotif{rfpT}{(P_2)_{01}}{(P_2)_{12}}
     \end{TNDiagram}%
 }
 

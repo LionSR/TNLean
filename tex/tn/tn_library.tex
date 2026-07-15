@@ -941,7 +941,7 @@
 % The omitted column of a double-layer word retains one mark in each layer.
 \newcommand{\TNStackedOmission}[2]{%
     \TNOmission{#1Upper}{#2}%
-    \node[tn label,below=2\TN@layerpitch cm of #1Upper]
+    \node[tn label,below=\TN@stackedseparation of #1Upper]
         (#1Lower) {$\cdots$};% chktex 11
     \coordinate (#1Centre) at ($(#1Upper)!0.5!(#1Lower)$);%
     \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=stacked-omission}%
@@ -958,10 +958,6 @@
 \newcommand{\TNVirtualTerminal}[2]{\TN@vterminal{#1}{#2}}
 \newcommand{\TNPhysicalTerminal}[2]{\TN@pterminal{#1}{#2}}
 \newcommand{\TNMorphismTerminal}[2]{\TN@mterminal{#1}{#2}}
-\newcommand{\TNPoint}[2]{\TN@annotationterminal{#1}{#2}}
-\newcommand{\TNPointBetween}[3]{%
-    \TN@annotationterminal{#1}{($(#2)!0.5!(#3)$)}%
-}
 \newcommand{\TNVirtualWestPort}[3]{\TN@vwestport{#1}{#2}{#3}}
 \newcommand{\TNVirtualEastPort}[3]{\TN@veastport{#1}{#2}{#3}}
 \newcommand{\TNVirtualNorthPort}[3]{\TN@vnorthport{#1}{#2}{#3}}
@@ -1013,13 +1009,20 @@
     \TN@aliasport{#1EastKet}{#1EUp}%
     \TN@aliasport{#1EastBra}{#1EDown}%
 }
-\newcommand{\TNSectorGauge}[3]{\TN@sectorgauge{#1}{#2}{#3}}
-\newcommand{\TNInverseSectorGauge}[3]{\TN@inverseSectorgauge{#1}{#2}{#3}}
+\newcommand{\TNSectorGauge}[3]{%
+    \TN@sectorgauge{#1}{#2}{#3}%
+    \TN@aliasport{#1West}{#1W}%
+    \TN@aliasport{#1East}{#1E}%
+}
+\newcommand{\TNInverseSectorGauge}[3]{%
+    \TN@inverseSectorgauge{#1}{#2}{#3}%
+    \TN@aliasport{#1West}{#1W}%
+    \TN@aliasport{#1East}{#1E}%
+}
 
 % Labels attach to a named object or port.  The four directional forms use a
 % profile-controlled clearance; the general form is reserved for irregular
 % regions and takes a relative displacement rather than a page coordinate.
-\newcommand{\TNLabel}[3]{\TN@label{#1}{#2}{#3}}
 \newcommand{\TNLabelAbove}[2]{%
     \TN@label[anchor=south]{#1}{(0,\TN@labelclearance)}{#2}%
 }
@@ -1049,29 +1052,6 @@
         {#1}{(0,-\TN@labelclearance)}{#2}%
 }
 
-% A placed annotation is not a tensor-network object and therefore carries no
-% index ports.  Naming the point keeps later labels and arrows compositional.
-\newcommand{\TNPlacedLabel}[3]{%
-    \TN@annotationterminal{#1}{#2}%
-    \TN@label{#1}{(0,0)}{#3}%
-}
-\newcommand{\TNPlacedLabelAbove}[3]{%
-    \TN@annotationterminal{#1}{#2}%
-    \TN@label[anchor=south]{#1}{(0,0)}{#3}%
-}
-\newcommand{\TNPlacedLabelBelow}[3]{%
-    \TN@annotationterminal{#1}{#2}%
-    \TN@label[anchor=north]{#1}{(0,0)}{#3}%
-}
-\newcommand{\TNPlacedLabelLeft}[3]{%
-    \TN@annotationterminal{#1}{#2}%
-    \TN@label[anchor=east]{#1}{(0,0)}{#3}%
-}
-\newcommand{\TNPlacedLabelRight}[3]{%
-    \TN@annotationterminal{#1}{#2}%
-    \TN@label[anchor=west]{#1}{(0,0)}{#3}%
-}
-
 % A panel gives a named origin to one stage of a comparison without exposing
 % TikZ scopes to theorem diagrams.  Its origin is global placement; all local
 % geometry remains the responsibility of the atoms and motifs it contains.
@@ -1092,7 +1072,6 @@
 }
 
 % Regions and explanatory marks do not represent index contractions.
-\newcommand{\TNCanvas}[2]{\TN@canvas{#1}{#2}}
 \newcommand{\TNGroupingRegion}[3]{%
     \TN@groupregion{#1}{#2}{#3}%
 }
@@ -1102,18 +1081,6 @@
 \newcommand{\TNGroupingRegionSelectedBelow}[3]{%
     \TN@groupregionselectedbelow{#1}{#2}{#3}%
 }
-\newcommand{\TNGroupBoundary}[1]{\TN@grouppath{#1}}
-\newcommand{\TNFactorBoundary}[1]{\TN@factorpath{#1}}
-\newcommand{\TNAnnotation}[1]{\TN@annotationpath{#1}}
-\newcommand{\TNSelectedPath}[1]{\TN@selectedpath{#1}}
-\newcommand{\TNSecondaryPath}[1]{\TN@secondarypath{#1}}
-\newcommand{\TNRegion}[4]{\TN@region{#1}{#2}{#3}{#4}}
-\newcommand{\TNSelectedRegionPath}[1]{\path[tn region selected] #1;}
-\newcommand{\TNSecondaryRegionPath}[1]{\path[tn region secondary] #1;}
-\newcommand{\TNComplementRegionPath}[1]{%
-    \path[tn region complement, fill=none] #1;%
-}
-
 % The normal-region figures use three canonical viewing windows.  Keeping
 % their bounds here makes clipping part of the shared PEPS presentation,
 % rather than a chapter-local adjustment.
@@ -1214,7 +1181,7 @@
     \TNPlacementDispatch{#2}{%
         \TNMPOSite{#1Upper}{#2}{#3}%
         \TNMPOSite{#1Lower}
-            {below=2\TN@layerpitch cm of #1Upper}{#4}%
+            {below=\TN@stackedseparation of #1Upper}{#4}%
         \coordinate (#1Centre) at
             ($(#1Upper.center)!0.5!(#1Lower.center)$);%
     }{%
@@ -1242,7 +1209,8 @@
 % Purification has two distinct ancillary ports joined by a straight physical
 % contraction.  The external upper leg is Ket and the lower leg is Bra.
 \newcommand{\TNPurificationSite}[4]{%
-    \coordinate (#1Centre) at #2;%
+    \TNPlaceObjectInternal{#1Centre}{#2}%
+    \coordinate (#1Centre) at (#1CentrePlacement);%
     \TN@tensor{#1KetTensor}{($(#1Centre)+(0,\TN@layerpitch)$)}%
     \TN@tensor{#1BraTensor}{($(#1Centre)+(0,-\TN@layerpitch)$)}%
     \TN@horizontalports{#1KetTensor}%
@@ -1264,7 +1232,8 @@
 
 % A compact trace cell is the common definition of M_alpha(X) and A_alpha(X).
 \newcommand{\TNCompactTraceCell}[5]{%
-    \coordinate (#1Centre) at #2;%
+    \TNPlaceObjectInternal{#1Centre}{#2}%
+    \coordinate (#1Centre) at (#1CentrePlacement);%
     \TN@insertion[label=above:$#4$]
         {#1Insertion}{($(#1Centre)+(-\TN@cellpitch/2,0)$)}%
     \TN@horizontalports{#1Insertion}%
@@ -1289,8 +1258,8 @@
     \TN@label{#1LS}{(0,-\TN@physlabeloff)}{#3}%
     \TN@label{#1RN}{(0,\TN@physlabeloff)}{#4}%
     \TN@label{#1RS}{(0,-\TN@physlabeloff)}{#5}%
-    \TNPoint{#1Length}{(2.10,-0.62)}%
-    \TNLabel{#1Length}{(0,0)}{#6}%
+    \TN@annotationterminal{#1Length}{(2.10,-0.62)}%
+    \TN@label{#1Length}{(0,0)}{#6}%
 }
 \newcommand{\TNVerticalWord}[4]{%
     \coordinate (#1Centre) at #2;%
