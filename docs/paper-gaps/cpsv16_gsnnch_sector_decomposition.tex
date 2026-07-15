@@ -51,6 +51,9 @@ sector type, its orthogonal one-site sector projections, the natural
 multiplicities, and one positive commuting bond in every sector.  The
 predicates \leanid{MPOTensor.IsGSNNCHAt} and
 \leanid{MPOTensor.IsGSNNCH} therefore retain the data in Definition~4.8.
+The chain-level predicate requires positivity and unit trace, while the
+tensor-level predicate applies it to the normalized operator
+\leanid{MPOTensor.normalizedMPO} at each length $N\geq2$.
 
 The separate structure \leanid{MPOTensor.CommutingBondProductData} records
 the auxiliary single-bond presentation
