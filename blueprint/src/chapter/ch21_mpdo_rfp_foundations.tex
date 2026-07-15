@@ -301,6 +301,12 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \]
 \end{lemma}
 
+\begin{proof}
+    \leanok
+    Immediate from the equivalence in
+    Definition~\ref{def:mpdo_prfp_trace_preserving_spin_reduction}.
+\end{proof}
+
 \begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
     \lean{MPOTensor.IsLocalPurificationRFP}
     \leanok
@@ -664,6 +670,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.exists_isPRFP_not_isSourceZCL}
     \leanok
     \uses{def:mpdo_is_prfp, def:mpo_source_zcl,
+        def:is_local_purification_rfp,
         thm:is_prfp_of_local_purification_rfp}
     There is an MPO tensor satisfying the bare positive-length global
     purification RFP predicate which does not have source zero correlation

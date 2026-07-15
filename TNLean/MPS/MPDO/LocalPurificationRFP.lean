@@ -427,7 +427,7 @@ theorem isLocalPurificationRFP_iff_isLPDO_and_physTraceTransfer_sq
     exact ⟨dK, D', A, e, hM,
       (purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq A e hM).mpr hT⟩
 
-/-- **Repaired nondegenerate PRFP equivalence.** A tensor satisfies
+/-- **Nondegenerate PRFP equivalence.** A tensor satisfies
 `IsNondegeneratePRFP` if and only if it has the local purification form and its
 physical-trace transfer is nonzero and idempotent.
 

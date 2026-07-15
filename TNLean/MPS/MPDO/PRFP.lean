@@ -145,7 +145,7 @@ def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=
 has a positive-length global purification-RFP witness as displayed in
 arXiv:1606.00608, Definition 4.4 (lines 756--764).
 
-The nondegenerate tensor-level repair is `IsNondegeneratePRFP`; the distinction
+The nondegenerate tensor-level predicate is `IsNondegeneratePRFP`; the distinction
 is forced by the zero-purifier obstruction documented in
 `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
 def IsPRFP (M : MPOTensor d D) : Prop :=
