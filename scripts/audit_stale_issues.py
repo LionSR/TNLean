@@ -522,12 +522,12 @@ def _self_test(repo_root: Path) -> int:
     beigi_path = repo_root / "TNLean" / "Axioms" / "Beigi.lean"
     beigi_line = 0
     for idx, line in enumerate(beigi_path.read_text(errors="replace").splitlines(), start=1):
-        if re.match(r"\s*axiom\s+rfp_to_nncph_commute\b", line):
+        if re.match(r"\s*axiom\s+beigi_nncph_to_rfp\b", line):
             beigi_line = idx
             break
     if beigi_line == 0:
         print("self-test FAILED:", file=sys.stderr)
-        print("  - could not locate rfp_to_nncph_commute axiom line", file=sys.stderr)
+        print("  - could not locate beigi_nncph_to_rfp axiom line", file=sys.stderr)
         return 1
 
     synthetic = {
@@ -538,7 +538,7 @@ def _self_test(repo_root: Path) -> int:
             f"Refers to `TNLean/Axioms/Beigi.lean:{beigi_line}`, "
             "`TNLean/Does/Not/Exist.lean:10`, and to "
             "`definitely_not_a_real_declaration`.\n"
-            "Also cites the sanctioned axiom `Axioms.rfp_to_nncph_commute`.\n"
+            "Also cites the sanctioned axiom `Axioms.beigi_nncph_to_rfp`.\n"
             "Also cites the structure field "
             "`AppendixBProductPairExtraction.localProjectors`.\n"
             "Also mentions `scripts/audit_stale_issues.py` (should be ignored)."
@@ -559,7 +559,7 @@ def _self_test(repo_root: Path) -> int:
         problems.append(
             "axiom line was incorrectly flagged as no longer unproved"
         )
-    if "Axioms.rfp_to_nncph_commute" in r.missing_decls:
+    if "Axioms.beigi_nncph_to_rfp" in r.missing_decls:
         problems.append(
             "sanctioned axiom was incorrectly flagged as a missing declaration"
         )

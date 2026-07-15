@@ -775,7 +775,7 @@ The non-Archive Lean sources contain eight actual axiom declarations:
 - `posMap_rpow_convex_jensen`
 - `posMap_log_concave_jensen`
 - `lieb_concavity_axiom`
-- `Axioms.rfp_to_nncph_commute`
+- the former RFP-to-NNCPH commutation axiom (since eliminated)
 - `Axioms.beigi_nncph_to_rfp`
 - `strong_subadditivity`
 - `hayashi_ssa_equality_characterization`
@@ -1020,7 +1020,7 @@ checkout:
 - `posMap_rpow_convex_jensen`
 - `posMap_log_concave_jensen`
 - `lieb_concavity_axiom`
-- `Axioms.rfp_to_nncph_commute`
+- the former RFP-to-NNCPH commutation axiom (since eliminated)
 - `Axioms.beigi_nncph_to_rfp`
 - `strong_subadditivity`
 - `hayashi_ssa_equality_characterization`
@@ -1050,8 +1050,9 @@ The present usefulness check is:
   the cyclic sector contraction in periodic overlap.
 - `lieb_concavity_axiom`: useful for Ando--Lieb trace concavity.  Its trace
   inequality has no direct target among the current proof placeholders.
-- `Axioms.rfp_to_nncph_commute` and `Axioms.beigi_nncph_to_rfp`: useful for the
-  parent-Hamiltonian RFP--NNCPH equivalence.  They do not supply the sector
+- the former forward commutation axiom and `Axioms.beigi_nncph_to_rfp`: useful for the
+  parent-Hamiltonian RFP--NNCPH equivalence at the date of this audit.  The
+  forward axiom has since been eliminated. They do not supply the sector
   phase-coboundary contraction in `Case3.lean`.
 - `strong_subadditivity` and `hayashi_ssa_equality_characterization`: useful
   for the entropy/MPDO Markov-chain branch.  They do not enter the Lorentz

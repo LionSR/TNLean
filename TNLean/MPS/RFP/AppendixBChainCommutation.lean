@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.RFP.AppendixBCommutation
 
 /-!
@@ -132,8 +133,8 @@ length-two parent interactions on every periodic chain of length (N>2).
 This internalizes the commutation part of arXiv:1606.00608,
 Theorem 3.10(i) implies (iii), in the left-canonical scope used by the proved
 Appendix B structural theorem.  It does not use
-`Axioms.rfp_to_nncph_commute` and does not assert the ground-space spanning
-clause of Definition 3.9.
+an external commutation assumption and does not assert the ground-space
+spanning clause of Definition 3.9.
 
 **Scope restriction (left-canonical commutation):** The source theorem is stated
 for tensors in canonical form.  This theorem assumes the left-canonical gauge
@@ -170,5 +171,56 @@ theorem rfp_implies_nncph_ground_state_of_leftCanonical
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph_of_leftCanonical A hRFP hNT hLeft N hN).isNNCPHGroundState
     (by omega)
+
+/-- A normal renormalization fixed-point tensor has commuting length-two parent
+interactions on every periodic chain of length (N>2).
+
+The normal-tensor hypothesis is the spectral-radius-one condition of
+arXiv:1606.00608, lines 231--235.  Its positive Perron eigenvector gives a pure
+virtual gauge into the left-canonical form at source lines 1058--1077.  Gauge
+invariance of the RFP relation and of the canonical parent interactions then
+reduces the result to `rfp_implies_nncph_of_leftCanonical`.
+
+This proves the commutation part of arXiv:1606.00608, Theorem 3.10(i) implies
+(iii), source lines 534--540 and proof line 1307.  The all-chain ground-space
+spanning equation remains separate.
+
+**Scope restriction (single normal tensor):** The source theorem is stated for
+canonical-form tensors, which may contain several normal sectors and repeated
+copies. This theorem treats one CPSV normal tensor. The extension to the full
+canonical-form scope is documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
+theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
+    (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A)
+    (N : ℕ) (hN : 2 < N) :
+    IsNNCPH A N := by
+  obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge
+  have hRFP' : IsTransferIdempotent (tpGauge (d := d) (D := D) A σ) :=
+    hGauge.isTransferIdempotent_iff.mp hRFP
+  have hNormal' : IsNormal (tpGauge (d := d) (D := D) A σ) :=
+    isNormal_of_gaugeEquiv hNT.isNormal hGauge
+  have hNN := rfp_implies_nncph_of_leftCanonical
+    (tpGauge (d := d) (D := D) A σ) hRFP' hNormal' hLeft N hN
+  exact hGauge.symm.isNNCPH hNN
+
+/-- Ground-vector form of `rfp_implies_nncph`.
+
+Besides the proved commutation equations, the periodic MPS vector is annihilated
+by every two-site parent interaction.  The source all-chain ground-space
+spanning equation remains separate.
+
+Source: arXiv:1606.00608, Definition 3.9, lines 517--524, and Theorem 3.10,
+lines 534--540.
+
+**Scope restriction (single normal tensor and ground vector):** The source
+theorem is stated for canonical-form tensors and includes the all-chain
+ground-space spanning equation. This theorem treats one CPSV normal tensor and
+proves only commutation and annihilation of its periodic MPS vector. Documented
+in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
+theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
+    (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A)
+    (N : ℕ) (hN : 2 < N) :
+    IsNNCPHGroundState A N :=
+  (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState (by omega)
 
 end MPSTensor

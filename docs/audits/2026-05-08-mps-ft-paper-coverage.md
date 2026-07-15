@@ -73,7 +73,7 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 | Defn Transfer matrix (l.482) | 482–488 | 𝔼 = ∑ᵢ Aⁱ ⊗ Āⁱ | `TNLean/MPS/Core/Transfer.lean` (`transferMap`) | `leanok` |
 | **Theorem 3.8** (l.500, `TheoremZCLPure`) | 500–503 | **ZCL ⇔ 𝔼² = 𝔼** (i.e., transfer map idempotent) | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`zcl_iff_idempotent_transfer`), `isCID_implies_isTransferIdempotent` | `leanok` |
 | Defn Parent Ham. (l.522) | 522–525 | NNCPH definition | `TNLean/MPS/ParentHamiltonian/Commuting.lean` (`IsNNCPH`) | `leanok` |
-| **Theorem 3.10** (l.534, `thm:main-MPS`) | 534–541 | **RFP ⇔ ZCL ⇔ NNCPH** (three-way equivalence) | `TNLean/MPS/RFP/Assembly.lean` (`rfp_iff_zcl` for RFP↔ZCL); `ParentHamiltonian/Commuting.lean` (`rfp_implies_nncph`, `nncph_implies_rfp`) | **partial** — `rfp_implies_nncph` uses `Axioms.rfp_to_nncph_commute` (axiom-backed); `nncph_implies_rfp` now consumes the BNT relation `IsBNT` and the all-chain ground-space condition `HasNNCPHGroundSpaces`, but still uses `Axioms.beigi_nncph_to_rfp` (axiom-backed). Tracked by #2633 in the arXiv:1606.00608 audit context recorded by #2380. |
+| **Theorem 3.10** (l.534, `thm:main-MPS`) | 534–541 | **RFP ⇔ ZCL ⇔ NNCPH** (three-way equivalence) | `TNLean/MPS/RFP/Assembly.lean` (`rfp_iff_zcl` for RFP↔ZCL); `RFP/AppendixBChainCommutation.lean` (`rfp_implies_nncph`); `ParentHamiltonian/Commuting.lean` (`nncph_implies_rfp`) | **partial** — the forward commutation theorem is proved for one CPSV normal tensor by the pure trace-preserving gauge passage; the family-level ZCL statement and ground-space spanning clause remain open, while `nncph_implies_rfp` still uses `Axioms.beigi_nncph_to_rfp` (axiom-backed). Tracked by #2633 in the arXiv:1606.00608 audit context recorded by #2380. |
 | **Theorem 3.11** (l.543, `thm:charact-MPS`) | 543–555 | **Structural characterization of RFP**: CF tensor is RFP iff Aⁱ = ⊕ⱼ ⊕_q μ_j,q X_j,q Λ_j Uⁱⱼ X_j,q⁻¹ with U isometry | `TNLean/MPS/RFP/StructuralForm.lean` (`rfp_cf_structural`, `rfp_bnt_structural`, `rfp_nt_structural_full`) | `leanok` |
 | Corollary III.3 (l.583, `III_cor3`) | 583–590 | BNT elements of RFP have form A_j = X_j Λ_j Uⁱⱼ X_j⁻¹ | `TNLean/MPS/RFP/StructuralForm.lean` (covered by `rfp_nt_structural`) | `leanok` |
 | Prop (l.606) | 606–? | RFP convergence for tensors in CF | `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | `leanok` |
@@ -228,7 +228,11 @@ as a hypothesis.
 | `ParentHamiltonian/DegenerateGS.lean` | 1 | Degenerate ground space construction |
 | `ParentHamiltonian/Martingale.lean` | 1 | Martingale convergence argument |
 
-The CPSV16 Theorem 3.10 (RFP ⇔ NNCPH) proof in `ParentHamiltonian/Commuting.lean` uses the `Axioms.rfp_to_nncph_commute` and `Axioms.beigi_nncph_to_rfp` axioms, tracked by #2633. The reverse implication now takes the BNT relation `IsBNT` and the all-chain ground-space condition `HasNNCPHGroundSpaces`, but the Beigi classification is still not internalized.
+The CPSV16 Theorem 3.10 (RFP ⇔ NNCPH) reverse implication still uses the
+`Axioms.beigi_nncph_to_rfp` axiom, tracked by #2633. The forward commutation
+theorem is internal for one CPSV normal tensor. The reverse implication takes
+the BNT relation `IsBNT` and the all-chain ground-space condition
+`HasNNCPHGroundSpaces`, but the Beigi classification is still not internalized.
 
 ### 4.3 PEPS (out of scope)
 
