@@ -436,8 +436,13 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \quad\Longleftrightarrow\quad
         \mathcal T_M^2=\mathcal T_M.
     \]
-    Faithfulness of the transfer-matrix representation identifies the first
-    equality with idempotence of the transfer map of $A$.
+    Injectivity of the transfer-matrix representation gives
+    \[
+        (K')^2=K'
+        \quad\Longleftrightarrow\quad
+        \mathcal E_{\widehat A}\circ\mathcal E_{\widehat A}
+          =\mathcal E_{\widehat A}.
+    \]
 \end{proof}
 
 \begin{theorem}[Physical-trace transfer is idempotent under the local purification RFP condition]
@@ -487,10 +492,11 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:nondegenerate_prfp_iff_lpdo_normalized_zcl}
     \lean{MPOTensor.isNondegeneratePRFP_iff}
     \leanok
-    \uses{def:is_nondegenerate_prfp,
+    \uses{def:is_nondegenerate_prfp, def:lpdo,
         thm:local_purification_rfp_iff_lpdo_physical_trace_idempotent}
     An MPO tensor is a nondegenerate purification renormalization fixed point if
-    and only if it has a local purification and
+    and only if it is a local purification density operator
+    (Definition~\ref{def:lpdo}) and
     \[
         \mathcal T_M\ne0,
         \qquad
