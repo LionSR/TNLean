@@ -3,15 +3,14 @@ import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 /-!
 # Word-span extension and word transport for block-injective matrix tensors
 
-This file provides the linear-algebraic inputs of the overlapping-window route
-to the closed-chain corollaries of the Fundamental Theorem for normal PEPS
+This file provides word-transport results for the overlapping-window route to
+the closed-chain corollaries of the Fundamental Theorem for normal PEPS
 (arXiv:1804.04964, Section `normal_alt`, lines 1915--2295 of
-`Papers/1804.04964/paper_normal.tex`), at the matrix-tensor level:
+`Papers/1804.04964/paper_normal.tex`):
 
-* `MPSTensor.isNBlkInjective_of_le`: block injectivity at length `L > 0`
-  extends to every length `m ≥ L` — the chain form of "any region of at least
-  size [`L`] is also injective" (arXiv:1804.04964, line 1940, after the union
-  lemma `lem:injective_union`, lines 1324--1417).
+* `MPSTensor.exists_linearMap_apply_eq`: a linear map extends prescribed
+  values on a spanning family when those prescriptions respect all linear
+  relations.
 * `MPSTensor.eq_of_trace_mul_evalWord_eq`: two matrices with the same trace
   pairing against a spanning family of word products are equal — the
   uniqueness of virtual insertions (arXiv:1804.04964, lines 1940--1960: equal
