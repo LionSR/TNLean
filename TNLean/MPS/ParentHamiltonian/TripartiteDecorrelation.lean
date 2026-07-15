@@ -672,7 +672,7 @@ theorem range_mul_eq_inter
 /-- Hermitian idempotent matrices with the same range are equal.
 
 This is the uniqueness fact used between arXiv:1606.00608, Appendix D.2,
-Definition D.2, lines 2205--2218, and equation `arrggg`, lines 2259--2277. -/
+Definition D.2, lines 2205--2218, and equation `arrggg`, lines 2279--2289. -/
 theorem hermitian_idempotent_eq_of_range_eq
     {I : Type*} [Fintype I] [DecidableEq I]
     (S T : Matrix I I ℂ)
@@ -713,7 +713,7 @@ def HasGroundSpaceIntersection
 condition is equivalent to the corresponding projector-product identity.
 
 This proves the bridge from arXiv:1606.00608, Appendix D.2, Definition D.2,
-lines 2205--2218, to equation `arrggg`, lines 2259--2277. -/
+lines 2205--2218, to equation `arrggg`, lines 2279--2289. -/
 theorem hasGroundSpaceIntersection_iff_product_eq
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     {PAX : Matrix (A × X) (A × X) ℂ}
@@ -760,8 +760,10 @@ theorem hasGroundSpaceIntersection_iff_product_eq
 space, written in terms of the local ground-space projectors.
 
 The Hamiltonian terms of arXiv:1606.00608, Appendix D.2, Definition D.2,
-lines 2205--2218, are \(Q_{AX}=1-P_{AX}\) and \(Q_{XB}=1-P_{XB}\).  The final
-field is the literal ground-space intersection condition in that definition. -/
+lines 2205--2218, are \(Q_{AX}=1-P_{AX}\) and \(Q_{XB}=1-P_{XB}\).  The
+ground-space intersection condition
+\(\operatorname{ran}P=\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}\)
+is taken directly from Definition D.2. -/
 structure CommutingParentHamiltonian
     (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) where
   /-- The orthogonal projector onto \(K_{AX}\), as in arXiv:1606.00608,
@@ -792,7 +794,7 @@ structure CommutingParentHamiltonian
 /-- The literal ground-space intersection condition of Definition D.2 gives
 the projector-product identity used in the proof of Proposition D.3.
 
-Source: arXiv:1606.00608, Appendix D.2, lines 2205--2218 and 2259--2277. -/
+Source: arXiv:1606.00608, Appendix D.2, lines 2205--2218 and 2279--2289. -/
 theorem CommutingParentHamiltonian.hproduct
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     (hparent : CommutingParentHamiltonian P)
