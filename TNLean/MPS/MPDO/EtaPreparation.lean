@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.KrausCPTP
+import TNLean.Channel.KrausCPTP
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.Algebra.MatrixAux
 

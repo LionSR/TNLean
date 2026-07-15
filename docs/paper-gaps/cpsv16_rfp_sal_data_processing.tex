@@ -7,8 +7,8 @@
 
 \input{command}
 
-\title{The remaining data-processing step for saturation of the area law
-of MPDO renormalization fixed points}
+\title{The remaining steps in deriving saturation of the area law from MPDO
+renormalization fixed points}
 \author{}
 \date{2026-07-15}
 
@@ -82,25 +82,31 @@ Strong subadditivity already gives the opposite inequality
 by adjoining one physical site to an interval.\footnote{Formal declaration:
 \leanid{MPOTensor.mutualInfoChain_monotone}.}
 
-\section{Exact remaining implications}
+\section{The established data-processing inequality}
 
-Two source-faithful ingredients remain before the implication to the strong
-area law can be stated without an additional hypothesis.
+For a bipartite density operator $\rho_{AB}$ and rectangular
+trace-preserving completely positive maps $\Phi_A$ and $\Psi_B$, the required
+inequality
+\[
+  I(A':B')_{(\Phi_A\otimes\Psi_B)(\rho)}
+    \leq I(A:B)_\rho
+\]
+is now proved.\footnote{Formal declarations:
+\leanid{IsKrausCPTP.mutualInformation_tensorMapId_le},
+\leanid{IsKrausCPTP.mutualInformation_idTensorMap_le}, and
+\leanid{IsKrausCPTP.mutualInformation_tensorMapBoth_le} in
+\doclink{TNLean/Entropy/MutualInformationDataProcessing}.}
+The proof chooses a rectangular Stinespring isometry, uses invariance of
+entropy under that isometry, and then invokes monotonicity under discarding
+the environment.  Exchanging the two tensor factors and applying the
+one-sided inequality twice gives the two-channel form used by the source.
+
+\section{Exact remaining steps}
+
+Two source-faithful steps remain before the implication to saturation of the
+area law is established.
 
 \begin{enumerate}
-  \item \textbf{Local-channel data processing.}
-  For a bipartite density operator $\rho_{AB}$ and trace-preserving completely
-  positive maps $\Phi_A$ and $\Psi_B$, one needs
-  \[
-    I(A':B')_{(\Phi_A\otimes\Psi_B)(\rho)}
-      \leq I(A:B)_\rho.
-  \]
-  This may be derived from Stinespring dilations followed by monotonicity under
-  partial trace, or from relative-entropy data processing.  The result must
-  then be combined with the cyclic regrouping that places the two boundary
-  sites in the first tensor factors.  The available entropy results treat
-  discarding a subsystem, but not yet this arbitrary pair of local channels.
-
   \item \textbf{The source standing nonvanishing condition.}
   The present formal condition for a matrix product density operator asserts
   positivity at every length but permits the zero operator.\footnote{Formal
@@ -113,20 +119,31 @@ area law can be stated without an additional hypothesis.
   $N$.  This must be repaired by formalizing the source simple-biCF standing
   data, including generation of normalized density operators, and deriving the
   nonvanishing used by the normalization in Definition~4.6.
+
+  \item \textbf{Application to the source bipartition.}
+  The global closure identities and the abstract data-processing inequality
+  have not yet been assembled into the inequality $I_{L+1}\leq I_L$ used in
+  Appendix~C. One must reindex the periodic operator according to the
+  consecutive intervals $A$ and $B$, localize $\mathcal T$ on the first spin
+  of $A$ and $\mathcal S$ on the first two spins of $B$, and identify the two
+  channel outputs with the normalized states defining $I_{L+1}$ and $I_L$.
+  This is the formal counterpart of lines 1333--1341; it is not supplied by
+  the channel theorem alone.
 \end{enumerate}
 
-Neither point is resolved by adding
+The first point is not resolved by adding
 $\forall N,\tr(\operatorname{mpo}(\mathcal K,N))\ne0$ as a new
 hypothesis to the source-labelled theorem, since that condition is absent from
-the printed statement.  Once the two ingredients above are available, the
-source proof applies the two localized channels, invokes data processing to obtain
+the printed statement. Once both remaining steps are established, the source
+proof applies the two localized channels, invokes data processing to obtain
 $I_{L+1}\leq I_L$, and combines this with the already formalized inequality
 $I_L\leq I_{L+1}$.
 
 \paragraph{Classification.}
-This is an open gap.  The global tensor-ring identities are proved, but the
-mutual-information data-processing theorem and the derivation of nonzero
-normalization from the source's simple-biCF convention remain necessary for a
-faithful proof of saturation of the area law.
+This is an open gap.  The global tensor-ring identities and the required
+mutual-information data-processing theorem are proved. The derivation of
+nonzero normalization from the source's simple-biCF convention and the
+application to the source bipartition remain necessary for a faithful proof
+of saturation of the area law.
 
 \end{document}
