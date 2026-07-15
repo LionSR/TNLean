@@ -127,6 +127,10 @@ enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
 ## Blueprint Structure
 - `content.tex` is a router: `\input{chapter/ch01_intro}` etc.
 - Each chapter is a separate file in `chapter/`
+- The `chNN_` prefix is a stable subject identifier, not the chapter's displayed
+  position.  The order of the `\input` commands in the relevant content router
+  determines the order in the book; do not renumber existing chapter files when
+  that order changes.
 - Definitions and results are numbered within the smallest displayed division:
   within a subsection when one is present, and otherwise within the section.
   Thus an entry in Subsection 22.4.4 is numbered `22.4.4.n`, while an entry
