@@ -27,7 +27,7 @@ open scoped BigOperators ComplexOrder
 
 namespace MPOTensor
 
-/-- The algebra clause of arXiv:1606.00608, Theorem 4.14(ii), before comparison
+/-- The algebra clause of arXiv:1606.00608, Theorem IV.13(ii), before comparison
 with a chosen blocked basis.
 
 The coefficient family remains an independent object.  The positive chi
@@ -36,7 +36,7 @@ of positive diagonal matrices at every positive chain length.  The remaining
 conditions are the same-length product law and the length-one idempotent
 scalar law.
 
-Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985, and Appendix C.4,
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
 lines 1929--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTAlgebraClause {Λ : Type*} [Fintype Λ] {O : ℕ → Type*}
@@ -47,15 +47,15 @@ structure BNTAlgebraClause {Λ : Type*} [Fintype Λ] {O : ℕ → Type*}
     (traceScalars : BNTLabelTraceScalarFamily Λ) where
   /-- The positive length-independent BNT-label chi witness.
 
-  Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985. -/
+  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985. -/
   positiveChi : PositiveBNTLabelChiTracePowerForm coeffs
   /-- The operators satisfy the same-length product law.
 
-  Source: arXiv:1606.00608, Theorem 4.14(ii), lines 976--980. -/
+  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 976--980. -/
   sameLengthProduct : operators.HasSameLengthProductForm coeffs
   /-- The trace scalars satisfy the length-one idempotent law.
 
-  Source: arXiv:1606.00608, Theorem 4.14(ii), lines 981--985. -/
+  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985. -/
   idempotent : traceScalars.HasIdempotentCoefficientForm coeffs
 
 /-- The BNT-label data asserted by the source theorem, together with its
@@ -90,7 +90,7 @@ structure BNTLabelTheoremData (data : AlgebraStructureData d D)
   traceScalars : BNTLabelTraceScalarFamily Λ
   /-- The BNT algebra clause before comparison with a chosen blocked basis.
 
-  Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985, and Appendix C.4,
+  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
   lines 1925--1942 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   algebraClause : BNTAlgebraClause coeffs operators traceScalars
