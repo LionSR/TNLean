@@ -30,6 +30,8 @@ arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac).
 - `wordSpan_succ_eq_mul_left`: S_{n+1} = span(A) * S_n
 - `isNBlkInjective_succ_of_isNBlkInjective`: positive-length block injectivity
   propagates by one site
+- `isNBlkInjective_of_le`: positive-length block injectivity propagates to
+  every greater length
 - `cumulativeSpan_stable`: If T_n = T_{n+1}, then T_m = T_n for all m ≥ n
 - `cumulativeSpan_finrank_le`: dim(T_n) ≤ D²
 - `cumulativeSpan_finrank_strict_mono`: strict inclusion ⇒ strict dim growth
@@ -135,6 +137,19 @@ theorem isNBlkInjective_succ_of_isNBlkInjective
       wordSpan_succ_eq_mul_left A n
     _ ≤ Submodule.span ℂ (Set.range A) * wordSpan A (n + 1) :=
       mul_le_mul' le_rfl hprev_le
+
+/-- Block injectivity at a positive length propagates to every greater length.
+
+Source context: arXiv:1804.04964, line 1940, specialized to a closed chain
+with one site-independent tensor. -/
+theorem isNBlkInjective_of_le {A : MPSTensor d D} {L m : ℕ}
+    (hLpos : 0 < L) (hL : IsNBlkInjective A L) (hLm : L ≤ m) :
+    IsNBlkInjective A m := by
+  induction m, hLm using Nat.le_induction with
+  | base => exact hL
+  | succ m hLm ih =>
+      exact isNBlkInjective_succ_of_isNBlkInjective A
+        (lt_of_lt_of_le hLpos hLm) ih
 
 /-! ### cumulativeSpan: T_n(A) -/
 

@@ -207,14 +207,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
       prepared hTP (fun j => (hdimPos j).ne') hPreparedNormal
   have hAtLeastP : ∀ j n, p ≤ n → IsNBlkInjective (prepared j) n := by
     intro j n hpn
-    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hpn
-    clear hpn
-    induction k with
-    | zero => simpa using hAtP j
-    | succ k ih =>
-        simpa [Nat.add_assoc] using
-          (isNBlkInjective_succ_of_isNBlkInjective
-            (prepared j) (Nat.add_pos_left hp k) ih)
+    exact isNBlkInjective_of_le hp (hAtP j) hpn
   have hPreparedIrr : HasIrreducibleBlocks (d := d) prepared :=
     HasIrreducibleBlocks.ofForall hIrr
   have hPreparedLeft : IsLeftCanonicalBlockFamily (d := d) prepared :=
