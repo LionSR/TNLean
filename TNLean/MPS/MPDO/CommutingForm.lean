@@ -573,7 +573,11 @@ theorem hasCommutingBondProductWithZCL_iff_hasCommutingForm_and_isZCL
 nearest-neighbor commuting Hamiltonian on a periodic chain.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 829--850, in the equivalent
-positive-bond form of equation `rhoNCommv2`. -/
+positive-bond form of equation `rhoNCommv2`.  Lines 839--840 decompose the
+global Hilbert space into uniform product sectors and require the corresponding
+one-site spaces to be mutually orthogonal.  They do not assert that those
+one-site spaces exhaust a larger one-site ambient space, so no local resolution
+of the identity is imposed here. -/
 structure GSNNCHData (d N : ℕ) where
   /-- The source definition concerns a genuine nearest-neighbor chain.
   Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
