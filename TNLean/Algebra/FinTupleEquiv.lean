@@ -23,6 +23,10 @@ on short finite index types.
 
 ## Main statements
 
+* `finSuccArrowEquiv_apply`: gives the first coordinate and the remaining tuple.
+* `finSuccArrowEquiv_symm_apply`: reconstructs a tuple from its first coordinate and tail.
+* `finAddTwoArrowEquiv_apply`: gives the first two coordinates and the remaining tuple.
+* `finAddTwoArrowEquiv_symm_apply`: reconstructs a tuple from its first two coordinates and tail.
 * `finThreeArrowEquiv_apply`: gives the ordered coordinates of the forward map.
 * `finThreeArrowEquiv_symm_apply`: gives the ordered coordinates of the inverse map.
 * `finFourArrowEquiv_apply`: gives the ordered coordinates of the forward map.
@@ -87,11 +91,13 @@ def finSuccArrowEquiv (α : Type*) (N : ℕ) :
     (Fin (N + 1) → α) ≃ α × (Fin N → α) :=
   (Fin.consEquiv fun _ : Fin (N + 1) ↦ α).symm
 
+/-- The forward identification extracts the first coordinate and the remaining tuple. -/
 @[simp] theorem finSuccArrowEquiv_apply {α : Type*} (N : ℕ)
     (σ : Fin (N + 1) → α) :
     finSuccArrowEquiv α N σ = (σ 0, Fin.tail σ) :=
   rfl
 
+/-- The inverse identification reconstructs a tuple from its first coordinate and tail. -/
 @[simp] theorem finSuccArrowEquiv_symm_apply {α : Type*} (N : ℕ)
     (p : α × (Fin N → α)) :
     (finSuccArrowEquiv α N).symm p = Fin.cons p.1 p.2 :=
@@ -104,11 +110,13 @@ def finAddTwoArrowEquiv (α : Type*) (N : ℕ) :
     ((Equiv.prodCongr (Equiv.refl α) (finSuccArrowEquiv α N)).trans
       (Equiv.prodAssoc α α (Fin N → α)).symm)
 
+/-- The forward identification extracts the first two coordinates and the remaining tuple. -/
 @[simp] theorem finAddTwoArrowEquiv_apply {α : Type*} (N : ℕ)
     (σ : Fin (N + 2) → α) :
     finAddTwoArrowEquiv α N σ = ((σ 0, σ 1), Fin.tail (Fin.tail σ)) :=
   rfl
 
+/-- The inverse identification reconstructs a tuple from its first two coordinates and tail. -/
 @[simp] theorem finAddTwoArrowEquiv_symm_apply {α : Type*} (N : ℕ)
     (p : (α × α) × (Fin N → α)) :
     (finAddTwoArrowEquiv α N).symm p = Fin.cons p.1.1 (Fin.cons p.1.2 p.2) :=

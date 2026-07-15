@@ -11,10 +11,10 @@ import TNLean.MPS.MPDO.RFPViaTS
 # Global action of the MPDO renormalization maps
 
 The maps in Definition 4.1 of arXiv:1606.00608 act on one or two neighboring
-physical sites. This file tensors those maps with the identity on the remaining
-sites and proves that their local closure identities extend to a chain of any
-length. These are the channel identities used in the strong-area-law argument
-of arXiv:1606.00608, Appendix C, lines 1333--1341.
+physical sites. Tensoring them with the identity on the remaining sites gives
+trace-preserving completely positive maps whose local closure identities extend
+to a chain of any length. These are the channel identities used in the
+strong-area-law argument of arXiv:1606.00608, Appendix C, lines 1333--1341.
 
 The remaining local-channel data-processing theorem and the source standing
 nonvanishing condition are recorded in
