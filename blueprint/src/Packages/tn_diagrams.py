@@ -49,7 +49,6 @@ _RENDER_SOURCE_FILES = (
     *_TN_MOTIF_FILES,
     _TN_CATALOGUE_FILE,
     _TN_ENTRYPOINT_FILE,
-    _SRC_DIR / "macros/tn_print.tex",
 )
 _TEMPLATE_FILE = _SRC_DIR / "plastex_templates/TensorNetworkDiagrams.jinja2s"
 _SLIDE_DIR = _REPO_ROOT / "docs/slides"
@@ -257,13 +256,10 @@ def _assert_no_duplicate_diagram_definitions() -> None:
         r"|(?:def|gdef|edef|xdef|let)\s*"
         r")\\(TN(?!@)\w+)"
     )
-    definition_sources = (
-        _SRC_DIR / "macros/tn_print.tex",
-        *sorted(
-            path
-            for path in _TN_SHARED_DIR.glob("*.tex")
-            if path != _TN_CATALOGUE_FILE
-        ),
+    definition_sources = tuple(
+        path
+        for path in sorted(_TN_SHARED_DIR.glob("*.tex"))
+        if path != _TN_CATALOGUE_FILE
     )
     for path in definition_sources:
         if not path.exists():
@@ -800,7 +796,6 @@ def _client_source_paths() -> tuple[Path, ...]:
 
     chapters = tuple(sorted((_SRC_DIR / "chapter").rglob("*.tex")))
     return (
-        _SRC_DIR / "macros/tn_print.tex",
         _SLIDE_LIBRARY,
         _SLIDE_CATALOGUE,
         *chapters,
@@ -1774,7 +1769,7 @@ def _latex_document(tex_call: str) -> str:
 % absent, so define it before loading macros/common.
 \newcounter{{chapter}}
 \input{{macros/common}}
-\input{{macros/tn_print}}
+\usetikzlibrary{{tn}}
 \begin{{document}}
 {tex_call}
 \end{{document}}

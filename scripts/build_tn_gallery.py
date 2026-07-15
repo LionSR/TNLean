@@ -100,7 +100,7 @@ def light_source(renderer) -> str:
 \newcounter{{chapter}}
 \pagestyle{{empty}}
 \input{{macros/common}}
-\input{{macros/tn_print}}
+\usetikzlibrary{{tn}}
 \begin{{document}}
 {''.join(pages)}
 \end{{document}}

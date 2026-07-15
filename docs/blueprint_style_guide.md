@@ -171,14 +171,13 @@ visible.
 Tensor-network diagram conventions are recorded separately in
 [`docs/tn_diagram_grammar.md`](tn_diagram_grammar.md).
 
-The repository-wide tensor-network calculus is split into semantic atoms and
-reusable compositions. Glyph meanings, theme slots, typed ports, and primitive
+The repository-wide tensor-network calculus is loaded with
+`\usetikzlibrary{tn}`. Glyph meanings, theme slots, typed ports, and primitive
 contractions live in `tex/tn/tn_core.tex`; standard MPS, MPO, MPDO, PEPS, and
-fusion constructions live in `tex/tn/tn_library.tex`. Chapter-facing figures
-are defined in `blueprint/src/macros/tn_print.tex` and are named by the
-mathematical move they depict. The web renderer in
-`blueprint/src/Packages/tn_diagrams.py` compiles the same public commands from
-these three sources.
+fusion constructions live in `tex/tn/tn_library.tex`. Chapter-facing diagrams
+are declared in `tex/tn/tn_catalogue.tex` and are named by the mathematical
+move they depict. The web renderer in
+`blueprint/src/Packages/tn_diagrams.py` compiles these same public declarations.
 
 PEPS blueprint statements should keep the relevant tensor-network diagram
 attached to the theorem, lemma, or definition whose content it depicts. If the
