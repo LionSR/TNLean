@@ -95,7 +95,9 @@
     \TNPhysicalPort{#1LowerPhysical}{#1Lower}{north}%
     \TNConnectPhysical{#1UpperPhysical}{#1TwistUpper}%
     \TNConnectPhysical{#1TwistLower}{#1LowerPhysical}%
-    \TNLabelRight{#1Twist}{#3}%
+    \if\relax\detokenize{#3}\relax\else
+        \TNLabelRight{#1Twist}{#3}%
+    \fi
 }
 
 % The string-order word consists of two displayed cells, an omitted middle
@@ -108,9 +110,9 @@
     \TN@stringcell{#1Second}
         {right=\TN@chainsep cm of #1FirstTwist}{#2}% chktex 1
     \TN@stringcell{#1Last}
-        {right=\TN@chainright cm of #1FirstTwist}{#2}% chktex 1
-    \TNVirtualPort{#1WeightUpper}{#1Weight}{east}%
-    \TNVirtualPort{#1WeightLower}{#1Weight}{east}%
+        {right=\TN@chainright cm of #1FirstTwist}{}% chktex 1
+    \TNVirtualPort{#1WeightUpper}{#1Weight}{35}%
+    \TNVirtualPort{#1WeightLower}{#1Weight}{-35}%
     \TNConnectVirtual{#1WeightUpper}{#1FirstUpperWest}%
     \TNConnectVirtual{#1WeightLower}{#1FirstLowerWest}%
     \TNConnectVirtual{#1FirstUpperEast}{#1SecondUpperWest}%
@@ -126,7 +128,6 @@
         {right=\TN@cellpitch cm of #1SecondLower}% chktex 1
     \TNLabelBelow{#1LowerOmission}{#3}%
     \TNLabelLeft{#1LastTwist}{#2}%
-    \TNLabelRight{#1LastTwist}{\tr}%
 }
 
 \makeatother

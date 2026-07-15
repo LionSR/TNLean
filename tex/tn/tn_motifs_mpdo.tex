@@ -264,6 +264,8 @@
     \TNMPDOCompactTraceMotif{#1Trace}{right=2cm of #1Last}{M_\gamma}{1}{}%
     \TNConnectVirtual{#1OneEast}{#1TwoWest}%
     \TNConnectVirtual{#1TwoEast}{#1ThreeWest}%
+    \TNOpenVirtualEast{#1ThreeEast}%
+    \TNOpenVirtualWest{#1LastWest}%
     \TNConnectVirtual{#1LastEast}{#1TraceInsertionW}%
     \TNOpenVirtualWest{#1OneWest}%
     \foreach \name in {One,Two,Three,Last} {%
