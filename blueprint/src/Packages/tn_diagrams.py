@@ -37,6 +37,7 @@ _TN_CORE_FILE = _TN_SHARED_DIR / "tn_core.tex"
 _TN_LIBRARY_FILE = _TN_SHARED_DIR / "tn_library.tex"
 _TN_ATOMS_FILE = _TN_SHARED_DIR / "tn_atoms.tex"
 _TN_CATALOGUE_FILE = _TN_SHARED_DIR / "tn_catalogue.tex"
+_TN_MOTIF_FILES = tuple(sorted(_TN_SHARED_DIR.glob("tn_motifs_*.tex")))
 _CACHE_DIR = _SRC_DIR / ".tn_svg_cache"
 _SVG_SUBDIR = "tn_svg"
 _RENDER_SOURCE_FILES = (
@@ -44,12 +45,14 @@ _RENDER_SOURCE_FILES = (
     _TN_CORE_FILE,
     _TN_LIBRARY_FILE,
     _TN_ATOMS_FILE,
+    *_TN_MOTIF_FILES,
     _TN_CATALOGUE_FILE,
     _SRC_DIR / "macros/tn_print.tex",
 )
 _TEMPLATE_FILE = _SRC_DIR / "plastex_templates/TensorNetworkDiagrams.jinja2s"
 _SLIDE_DIR = _REPO_ROOT / "docs/slides"
 _SLIDE_LIBRARY = _SLIDE_DIR / "tn_library_dark.tex"
+_SLIDE_CATALOGUE = _TN_SHARED_DIR / "tn_slide_catalogue.tex"
 _GRAMMAR_FILE = _REPO_ROOT / "docs/tn_diagram_grammar.md"
 
 _LITERAL_COORDINATE_PATTERN = re.compile(
@@ -553,10 +556,7 @@ def _assert_slide_diagram_contract() -> None:
         )
 
     library_source = _SLIDE_LIBRARY.read_text(encoding="utf-8")
-    required_shared_inputs = (
-        r"\input{../../tex/tn/tn_core}",
-        r"\input{../../tex/tn/tn_library}",
-    )
+    required_shared_inputs = (r"\usetikzlibrary{tn}", r"\input{tn_slide_catalogue}")
     missing_inputs = [
         path for path in required_shared_inputs if path not in library_source
     ]
@@ -605,11 +605,12 @@ def _assert_slide_diagram_contract() -> None:
             "the universal TN core."
         )
 
+    catalogue_source = _SLIDE_CATALOGUE.read_text(encoding="utf-8")
     raw_slide_draw = re.compile(
         r"^[ \t]*\\(?:draw|path|coordinate|fill|filldraw|shade|shadedraw)\b",
         re.MULTILINE,
     )
-    if raw_slide_draw.search(library_source):
+    if raw_slide_draw.search(catalogue_source):
         raise RuntimeError(
             "Complete slide tensor networks must compose universal TN commands, "
             "not contain raw TikZ paths or coordinates."
@@ -619,7 +620,7 @@ def _assert_slide_diagram_contract() -> None:
         r"\\TN@(?:v|p)(?:connect|open|trace)[A-Za-z@]*"
         r"(?:\[[^\]]*(?:dashed|densely dashed)[^\]]*\])"
     )
-    if dashed_contraction.search(library_source):
+    if dashed_contraction.search(catalogue_source):
         raise RuntimeError(
             "A slide contraction or trace is dashed; dashed strokes are reserved "
             "for grouping regions."
@@ -628,13 +629,13 @@ def _assert_slide_diagram_contract() -> None:
     macro_pattern = re.compile(
         r"^\\newcommand\{\\(SlideTN[A-Z]\w*)\}\[(\d+)\]", re.MULTILINE
     )
-    matches = list(macro_pattern.finditer(library_source))
+    matches = list(macro_pattern.finditer(catalogue_source))
     ignored: dict[str, list[int]] = {}
     for index, match in enumerate(matches):
         body_end = matches[index + 1].start() if index + 1 < len(matches) else len(
-            library_source
+            catalogue_source
         )
-        body = library_source[match.end() : body_end]
+        body = catalogue_source[match.end() : body_end]
         arity = int(match.group(2))
         missing = [argument for argument in range(1, arity + 1) if f"#{argument}" not in body]
         if missing:
@@ -644,11 +645,11 @@ def _assert_slide_diagram_contract() -> None:
 
 
 def _declared_slide_diagram_arities() -> dict[str, int]:
-    """Read slide diagram names and arities from the dark-theme source."""
+    """Read slide diagram names and arities from the shared slide catalogue."""
 
-    if not _SLIDE_LIBRARY.is_file():
+    if not _SLIDE_CATALOGUE.is_file():
         return {}
-    source = _mask_tex_comments(_SLIDE_LIBRARY.read_text(encoding="utf-8"))
+    source = _mask_tex_comments(_SLIDE_CATALOGUE.read_text(encoding="utf-8"))
     pattern = re.compile(
         r"^\\newcommand\{\\(SlideTN[A-Z]\w*)\}(?:\[(\d+)\])?",
         re.MULTILINE,
@@ -691,6 +692,7 @@ def _client_source_paths() -> tuple[Path, ...]:
     return (
         _SRC_DIR / "macros/tn_print.tex",
         _SLIDE_LIBRARY,
+        _SLIDE_CATALOGUE,
         *chapters,
     )
 
@@ -1712,6 +1714,9 @@ def _run(cmd: Iterable[str], *, cwd: Path) -> subprocess.CompletedProcess[str]:
 @lru_cache(maxsize=1)
 def _tex_env() -> dict[str, str]:
     env = os.environ.copy()
+    env["TEXINPUTS"] = (
+        str(_TN_SHARED_DIR) + "//:" + env.get("TEXINPUTS", "")
+    )
     kpsewhich = shutil.which("kpsewhich")
     if kpsewhich is None:
         return env

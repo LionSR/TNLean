@@ -117,9 +117,9 @@ reflected.
 | Sector gauge | `West`, `East`, `Block`, `Copy` | none |
 | Inverse sector gauge | `West`, `East`, `Block`, `Copy` | none |
 | Double layer | `UpperWest`, `UpperEast`, `LowerWest`, `LowerEast` | contracted internally |
-| Purification site | `KetWest`, `KetEast`, `BraWest`, `BraEast` | `Ket`, `Bra`, `AncillaKet`, `AncillaBra` |
+| Purification site | `KetWest`, `KetEast`, `BraWest`, `BraEast` | `Ket`, `Bra`, `KetAncilla`, `BraAncilla` |
 | Stacked MPO product | `UpperWest`, `UpperEast`, `LowerWest`, `LowerEast` | `UpperKet`, `LowerBra` |
-| Compact trace cell | `West`, `East` | contracted internally |
+| Compact trace cell | none | contracted internally |
 
 Every trivalent map has the virtual roles `Combined`, `FactorOne`, and
 `FactorTwo`.  In the right orientation `Combined` lies to the west; in the left

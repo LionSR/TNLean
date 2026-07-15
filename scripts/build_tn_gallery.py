@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -57,17 +58,19 @@ def declared_diagram_page(declaration) -> str:
     return rf"""
 \clearpage
 \noindent\texttt{{\detokenize{{{label}}}}}
-
-\vspace{{1.5em}}
+\vfill
 \noindent Actual publication size
 \begin{{center}}
 \adjustbox{{margin=3pt}}{{{declaration.sample}}}
 \end{{center}}
-
+\vfill
+\clearpage
+\noindent\texttt{{\detokenize{{{label} | magnified inspection}}}}
 \vfill
 \noindent Magnified inspection view
 \begin{{center}}
-\scalebox{{1.75}}{{\adjustbox{{margin=3pt}}{{{declaration.sample}}}}}
+\adjustbox{{max width=.96\textwidth,max totalheight=.86\textheight}}{{%
+\scalebox{{1.75}}{{\adjustbox{{margin=3pt}}{{{declaration.sample}}}}}}}
 \end{{center}}
 \vfill
 """
@@ -132,16 +135,19 @@ def compile_tex(stem: str, source: str) -> Path:
     BUILD.mkdir(parents=True, exist_ok=True)
     tex = BUILD / f"{stem}.tex"
     tex.write_text(source, encoding="utf-8")
+    environment = os.environ.copy()
+    shared_tex = str(ROOT / "tex/tn") + "//:"
+    environment["TEXINPUTS"] = shared_tex + environment.get("TEXINPUTS", "")
     result = subprocess.run(
         [
-            "latexmk",
-            "-lualatex",
+            "lualatex",
             "-interaction=nonstopmode",
             "-halt-on-error",
-            f"-outdir={BUILD}",
+            f"-output-directory={BUILD}",
             str(tex),
         ],
         cwd=SRC,
+        env=environment,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -196,7 +202,8 @@ def semantic_graphs(event_log: Path, *, theme: str) -> list[dict[str, object]]:
                 raise RuntimeError(f"Duplicate {kind} {name} in picture {picture}")
             collection[name] = fields["kind" if kind == "atom" else "type"]
         elif kind in {"alias", "connection", "motif"}:
-            collection = record[f"{kind}s"]
+            collection_name = "aliases" if kind == "alias" else f"{kind}s"
+            collection = record[collection_name]
             assert isinstance(collection, list)
             collection.append(fields)
 
@@ -266,12 +273,84 @@ def semantic_graphs(event_log: Path, *, theme: str) -> list[dict[str, object]]:
     return canonical
 
 
+def _owning_atom(endpoint: str, atoms: dict[str, str]) -> str | None:
+    owners = [name for name in atoms if endpoint.startswith(name)]
+    return max(owners, key=len) if owners else None
+
+
+def assert_repeated_topologies_are_motifs(graphs: list[dict[str, object]]) -> None:
+    """Reject repeated connected four-to-eight-atom graphs without a motif."""
+
+    occurrences: dict[tuple[object, ...], set[str]] = defaultdict(set)
+    for graph in graphs:
+        atoms = {
+            str(atom["name"]): str(atom["kind"])
+            for atom in graph["atoms"]  # type: ignore[union-attr]
+        }
+        if not 4 <= len(atoms) <= 8 or graph["motifs"]:
+            continue
+        incident: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
+        edges = []
+        for connection in graph["connections"]:  # type: ignore[union-attr]
+            left = _owning_atom(str(connection["from"]), atoms)
+            right = _owning_atom(str(connection["to"]), atoms)
+            if left is None or right is None or left == right:
+                continue
+            edge_kind = (str(connection["type"]), str(connection["route"]))
+            incident[left].append((*edge_kind, atoms[right]))
+            incident[right].append((*edge_kind, atoms[left]))
+            edges.append(tuple(sorted((atoms[left], atoms[right]))) + edge_kind)
+
+        reached = set()
+        frontier = [next(iter(atoms))]
+        while frontier:
+            atom = frontier.pop()
+            if atom in reached:
+                continue
+            reached.add(atom)
+            frontier.extend(
+                neighbour
+                for connection in graph["connections"]  # type: ignore[union-attr]
+                for neighbour in (
+                    _owning_atom(str(connection["from"]), atoms),
+                    _owning_atom(str(connection["to"]), atoms),
+                )
+                if neighbour is not None and atom in {
+                    _owning_atom(str(connection["from"]), atoms),
+                    _owning_atom(str(connection["to"]), atoms),
+                }
+            )
+        if reached != set(atoms):
+            continue
+
+        signature = (
+            str(graph["theme"]),
+            tuple(
+                sorted((atoms[name], tuple(sorted(incident[name]))) for name in atoms)
+            ),
+            tuple(sorted(edges)),
+        )
+        occurrences[signature].add(str(graph["diagram"]))
+
+    repeated = sorted(
+        sorted(diagrams)
+        for diagrams in occurrences.values()
+        if len(diagrams) > 1
+    )
+    if repeated:
+        raise RuntimeError(
+            "Repeated connected four-to-eight-atom topologies lack a named motif: "
+            + "; ".join(", ".join(diagrams) for diagrams in repeated)
+        )
+
+
 def main() -> int:
     renderer = load_renderer()
     light = compile_tex("tn_gallery_light", light_source(renderer))
     dark = compile_tex("tn_gallery_dark", dark_source(renderer))
     graphs = semantic_graphs(BUILD / "tn_gallery_light.tnlog", theme="print")
     graphs.extend(semantic_graphs(BUILD / "tn_gallery_dark.tnlog", theme="dark"))
+    assert_repeated_topologies_are_motifs(graphs)
     SEMANTIC_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     SEMANTIC_OUTPUT.write_text(
         json.dumps(graphs, indent=2, sort_keys=True) + "\n",
