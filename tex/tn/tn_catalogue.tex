@@ -76,7 +76,12 @@
       { \msg_error:nnnn { tn } { empty-diagram-metadata } {#1} {context} }
     \tl_set:Nx \l_tn_diagram_signature_tl
       { \prg_replicate:nn { \clist_count:n {#2} } {m} }
-    \exp_args:NcV \NewDocumentCommand {#1} \l_tn_diagram_signature_tl {#7}
+    \exp_args:NcV \NewDocumentCommand {#1} \l_tn_diagram_signature_tl
+      {
+        \TNEventInternal
+          {diagram|name=#1|role=#3|profile=#4|context=\tl_to_str:n{#6}}
+        #7
+      }
     \seq_gput_right:Nn \g_tn_diagram_names_seq {#1}
     \prop_gput:Nnn \g_tn_diagram_arguments_prop {#1} {#2}
     \prop_gput:Nnn \g_tn_diagram_roles_prop {#1} {#3}
