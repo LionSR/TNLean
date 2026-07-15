@@ -426,7 +426,10 @@ theorem IsDecorrelated.marginals_mul_complement_mul_eq_zero
       rw [hdec (Matrix.single k a 1) (Matrix.single b l 1), Matrix.mul_zero,
         Matrix.zero_mul]
 
-/-- The reverse-order reduced-operator product also vanishes. -/
+/-- The reverse-order reduced-operator product also vanishes.
+
+This is the adjoint-reversed matrix-unit calculation in arXiv:1606.00608,
+Appendix D.2, lines 2236--2258. -/
 theorem IsDecorrelated.reverse_marginals_mul_complement_mul_eq_zero
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     (hPherm : P.IsHermitian) (hdec : IsDecorrelated P) :
@@ -531,7 +534,12 @@ theorem IsDecorrelated.supports_mul_complement_mul_eq_zero
         Matrix.zero_mul]
 
 /-- The reverse-order product of the two marginal support projectors through
-the complement of \(P\) also vanishes. -/
+the complement of \(P\) also vanishes.
+
+**Local fix (CPSV16 Appendix D.2):** As in the forward-order theorem, the
+reduced-operator expansion and reciprocal-on-support factorization replace the
+unsupported single-contraction step at source lines 2236--2252. Documented in
+`docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex`. -/
 theorem IsDecorrelated.reverse_supports_mul_complement_mul_eq_zero
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     (hPherm : P.IsHermitian) (hdec : IsDecorrelated P) :
