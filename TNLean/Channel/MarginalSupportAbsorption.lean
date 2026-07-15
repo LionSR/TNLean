@@ -97,8 +97,16 @@ theorem PosSemidef.leftKroneckerEmbed_supportProj_mul_self
   have hsplit :
       (1 : Matrix (L × R) (L × R) ℂ) - leftKroneckerEmbed (n := R) Q =
         leftKroneckerEmbed (n := R) P := by
-    rw [← map_one (leftKroneckerEmbed (m := L) (n := R)), ← map_sub, hQ]
-    abel
+    have hQP : (1 : Matrix L L ℂ) - Q = P := by
+      rw [hQ]
+      abel
+    calc
+      (1 : Matrix (L × R) (L × R) ℂ) - leftKroneckerEmbed (n := R) Q =
+          leftKroneckerEmbed (n := R) 1 - leftKroneckerEmbed (n := R) Q := by
+            rw [map_one]
+      _ = leftKroneckerEmbed (n := R) (1 - Q) :=
+        (map_sub (leftKroneckerEmbed (m := L) (n := R)) 1 Q).symm
+      _ = leftKroneckerEmbed (n := R) P := by rw [hQP]
   rw [← hsplit, Matrix.sub_mul, Matrix.one_mul, hliftQρ, sub_zero]
 
 /-- The lifted support projector of the right partial trace also fixes a
