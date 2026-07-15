@@ -591,9 +591,6 @@ structure GSNNCHData (d N : ℕ) where
   Source: arXiv:1606.00608, lines 838--842. -/
   sectorProjection_orthogonal : ∀ {x y : Fin sectorCount}, x ≠ y →
     sectorProjection x * sectorProjection y = 0
-  /-- The orthogonal one-site sectors decompose the local Hilbert space.
-  Source: arXiv:1606.00608, lines 838--842. -/
-  sectorProjection_sum : ∑ x : Fin sectorCount, sectorProjection x = 1
   /-- The positive two-site operator `B^(x)` in each sector.
   Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
   bond : Fin sectorCount → Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ
@@ -653,7 +650,6 @@ noncomputable def ofCommutingFormData
   sectorProjection_orthogonal := by
     intro x y hxy
     exact (hxy (Subsingleton.elim x y)).elim
-  sectorProjection_sum := by simp
   bond := fun _ ↦ form.bond
   bond_pos := fun _ ↦ form.bond_pos
   bond_supported := by
