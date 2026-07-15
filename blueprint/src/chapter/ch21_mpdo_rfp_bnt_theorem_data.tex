@@ -101,13 +101,21 @@
     \]
     This is the normalization used for the preparation matrix
     $\nu_\gamma/m_\gamma$ in the algebra-to-RFP implication of
-    \cite[Appendix~C.4, lines~2058--2071]{Cirac2016MPDO_arXiv}.
+    \cite[Appendix~C.4, lines~2058--2064]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    Sum the multiset equality of the two spectra.  The resulting product sum
-    factors into the two one-site traces and
-    $\operatorname{tr}(\chi_{\alpha,\beta,\gamma})$.  The length-one
-    idempotent law of the BNT algebra clause gives the final equality.
+    Sum the multiset equality of the two spectra.  For each
+    $\alpha,\beta,\gamma$, the resulting product sum satisfies
+    \[
+        \sum_{i,j,k}
+          \mu_{\alpha,i}\mu_{\beta,j}\chi_{\alpha,\beta,\gamma,k}
+        =
+        \left(\sum_i\mu_{\alpha,i}\right)
+        \left(\sum_j\mu_{\beta,j}\right)
+        \left(\sum_k\chi_{\alpha,\beta,\gamma,k}\right).
+    \]
+    The one-site trace identities and the length-one idempotent law of the BNT
+    algebra clause give the final equality.
 \end{proof}
 
 \begin{definition}[BNT-label theorem data]%

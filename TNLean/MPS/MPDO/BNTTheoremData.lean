@@ -58,6 +58,33 @@ structure BNTAlgebraClause {Λ : Type*} [Fintype Λ] {O : ℕ → Type*}
   Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985. -/
   idempotent : traceScalars.HasIdempotentCoefficientForm coeffs
 
+namespace BNTAlgebraClause
+
+variable {Λ : Type*} [Fintype Λ] {O : ℕ → Type*}
+  [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+  [∀ L : ℕ, Mul (O L)]
+  {c : BNTLabelCoefficientFamily Λ} {operators : BNTLabelOperatorFamily Λ O}
+  {m : BNTLabelTraceScalarFamily Λ}
+  (H : BNTAlgebraClause c operators m)
+
+/-- The idempotent law of a BNT algebra clause may be transferred to the
+canonical coefficient family determined by its chi matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 1933--1942. -/
+theorem idempotent_coefficient_form_ofChi :
+    m.HasIdempotentCoefficientForm
+      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
+  intro γ
+  rw [H.idempotent γ]
+  apply Finset.sum_congr rfl
+  intro α _
+  apply Finset.sum_congr rfl
+  intro β _
+  rw [BNTLabelCoefficientFamily.ofChi_coeff,
+    ← H.positiveChi.tracePower 1 Nat.zero_lt_one α β γ]
+
+end BNTAlgebraClause
+
 /-- The BNT-label data asserted by the source theorem, together with its
 blocked-basis comparison.
 
@@ -272,15 +299,8 @@ Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem idempotent_coefficient_form_ofChi :
     H.traceScalars.HasIdempotentCoefficientForm
-      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
-  intro γ
-  rw [BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum
-    (m := H.traceScalars) H.idempotent_coefficient_form γ]
-  refine Finset.sum_congr rfl ?_
-  intro α _hα
-  refine Finset.sum_congr rfl ?_
-  intro β _hβ
-  rw [H.coeff_eq_ofChi_coeff 1 Nat.zero_lt_one α β γ]
+      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) :=
+  H.algebraClause.idempotent_coefficient_form_ofChi
 
 /-- The idempotent scalar equation carried by theorem data, written with the
 canonical coefficient family determined by the same

@@ -89,18 +89,8 @@ theorem sum_twoEntry_eq_sum_products (γ : Λ) :
     ∑ r, C.twoEntry γ r =
       ∑ x : BNTProductMultiplicityIndex χ C.oneDim γ,
         C.oneEntry x.1 x.2.2.1 * C.oneEntry x.2.1 x.2.2.2.1 *
-          χ.entry x.1 x.2.1 γ x.2.2.2.2 := by
-  classical
-  have h := congrArg Multiset.sum (C.spectrum_eq γ)
-  change (Finset.univ.val.map (C.twoEntry γ)).sum =
-    (Finset.univ.val.map fun x : BNTProductMultiplicityIndex χ C.oneDim γ =>
-      C.oneEntry x.1 x.2.2.1 * C.oneEntry x.2.1 x.2.2.2.1 *
-        χ.entry x.1 x.2.1 γ x.2.2.2.2).sum at h
-  change (Finset.univ.val.map (C.twoEntry γ)).sum =
-    (Finset.univ.val.map fun x : BNTProductMultiplicityIndex χ C.oneDim γ =>
-      C.oneEntry x.1 x.2.2.1 * C.oneEntry x.2.1 x.2.2.2.1 *
-        χ.entry x.1 x.2.1 γ x.2.2.2.2).sum
-  exact h
+          χ.entry x.1 x.2.1 γ x.2.2.2.2 :=
+  congrArg Multiset.sum (C.spectrum_eq γ)
 
 /-- The product multiplicity sum factors into the one-site traces and the
 length-one chi coefficient.
@@ -148,7 +138,7 @@ preparation map by dividing the two-site multiplicity matrix by this scalar.
 No channel or renormalization fixed-point conclusion is asserted here.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 1933--1942, and
-Appendix C.4, lines 2058--2071 of
+Appendix C.4, lines 2058--2064 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem twoTrace_eq_traceScalar
     (hIdempotent :
@@ -170,23 +160,6 @@ variable {Λ : Type*} [Fintype Λ] {O : ℕ → Type*}
   {m : BNTLabelTraceScalarFamily Λ}
   (H : BNTAlgebraClause c operators m)
 
-/-- The idempotent law of a BNT algebra clause may be transferred to the
-canonical coefficient family determined by its chi matrices.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 1933--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem idempotent_coefficient_form_ofChi :
-    m.HasIdempotentCoefficientForm
-      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
-  intro γ
-  rw [H.idempotent γ]
-  apply Finset.sum_congr rfl
-  intro α _
-  apply Finset.sum_congr rfl
-  intro β _
-  rw [BNTLabelCoefficientFamily.ofChi_coeff,
-    ← H.positiveChi.tracePower 1 Nat.zero_lt_one α β γ]
-
 /-- A BNT algebra clause, together with the multiplicity-spectrum comparison
 of the one-site and two-site vertical canonical decompositions, identifies the
 two-site multiplicity trace with the corresponding one-site trace scalar.
@@ -197,7 +170,7 @@ trace-one matrix once positivity and nonzero sector weights have been supplied
 by the canonical decomposition.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 1933--1942, and
-Appendix C.4, lines 2048--2071 of
+Appendix C.4, lines 2048--2064 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem twoMultiplicityTrace_eq_traceScalar
     (C : BNTMultiplicitySpectrumComparison H.positiveChi.chi m) (γ : Λ) :
