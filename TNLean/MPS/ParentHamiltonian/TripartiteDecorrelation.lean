@@ -720,8 +720,9 @@ def HasGroundSpaceIntersection
 /-- For commuting orthogonal projectors, the source ground-space intersection
 condition is equivalent to the corresponding projector-product identity.
 
-This proves the bridge from arXiv:1606.00608, Appendix D.2, Definition D.2,
-lines 2205--2218, to equation `arrggg`, lines 2279--2289. -/
+This proves that the range-intersection condition of arXiv:1606.00608,
+Appendix D.2, Definition D.2, lines 2205--2218, is equivalent to the
+projector-product identity at equation `arrggg`, lines 2279--2289. -/
 theorem hasGroundSpaceIntersection_iff_product_eq
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     {PAX : Matrix (A × X) (A × X) ℂ}
