@@ -9,6 +9,11 @@
 % sense only for the web version, such as dependency graph
 % macros.
 
+% Leave enough room for two-digit section numbers in the table of contents.
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{3em}}
+\makeatother
+
 
 % Print-side status badges for LeanBlueprint annotations.  The web build uses
 % plasTeX userdata to put the same information in theorem headers and graph
