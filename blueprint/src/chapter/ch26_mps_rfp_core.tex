@@ -355,11 +355,11 @@
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible,
         thm:form_II}
     By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, the tensor $A$
-    is injective. Therefore its transfer map is irreducible, and hence $A$ is
-    irreducible as a tensor. Applying Theorem~\ref{thm:form_II} gives a
-    unitary conjugate $B$ for which the trace-preserving normalization remains
-    valid and a diagonal positive definite matrix $\Lambda$ with
-    $\E_B(\Lambda) = \Lambda$.
+    is injective. By Theorem~\ref{thm:injective_irreducible}, its transfer map
+    $\E_A$ is irreducible, and hence $A$ is irreducible as a tensor. Applying
+    Theorem~\ref{thm:form_II} gives a unitary conjugate $B$ for which the
+    trace-preserving normalization remains valid and a diagonal positive
+    definite matrix $\Lambda$ with $\E_B(\Lambda) = \Lambda$.
 \end{proof}
 
 \begin{theorem}[Rank-one classification for RFP transfer maps]%
@@ -1427,9 +1427,16 @@
     % additionally require realizing virtual insertions by physical observables.
 \end{theorem}
 \begin{proof}\leanok
-    Trace nondegeneracy and invertibility of the fixed point reduce
-    idempotence to equality of the connected correlator at separations
-    $n=2$ and $n=1$.
+    Let $\rho>0$ be the fixed point.  For every matrix $Z$, invertibility gives
+    $Z=(Z\rho^{-1})\rho$.  Apply distance independence with
+    $X=Z\rho^{-1}$, the second insertion $N$, and separations $2$ and $1$.
+    The identical disconnected terms cancel.  Thus, for every $N$,
+    \[
+        \operatorname{tr}\!\left(N\E_A^2(Z)\right)
+        =\operatorname{tr}\!\left(N\E_A(Z)\right).
+    \]
+    Nondegeneracy of the trace pairing yields
+    $\E_A^2(Z)=\E_A(Z)$ for every $Z$, hence $\E_A^2=\E_A$.
 \end{proof}
 
 \begin{theorem}[Zero correlation length iff idempotent transfer]%
