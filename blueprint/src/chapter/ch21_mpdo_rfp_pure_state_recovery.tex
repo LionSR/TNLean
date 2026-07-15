@@ -320,7 +320,7 @@
     \lean{Matrix.controlledKrausMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_controlled_kraus_map,
-        thm:mpdo_rectangular_kraus_map_cptp}
+        def:is_kraus_cptp}
     Suppose that for every $k$ the sectorwise Kraus family resolves the
     identity:
     \[
@@ -383,7 +383,7 @@
     \lean{Matrix.partialTraceRightLM_isKrausCPTP}
     \leanok
     \uses{def:mpdo_right_partial_trace_map,
-        thm:mpdo_rectangular_kraus_map_cptp}
+        def:is_kraus_cptp}
     The map $\tr_{B}$ is trace-preserving and completely positive for arbitrary
     finite-dimensional spaces $A$ and $B$.
 \end{lemma}
@@ -478,7 +478,7 @@
     \leanok
     \uses{def:mpdo_state_preparation_map,
       def:mpdo_state_preparation_kraus,
-      thm:mpdo_rectangular_kraus_map_cptp}
+      def:is_kraus_cptp}
     If $\rho\geq0$ and $\tr(\rho)=1$, then
     $\mathcal P_\rho:X\mapsto X\otimes\rho$ is trace-preserving completely
     positive.
