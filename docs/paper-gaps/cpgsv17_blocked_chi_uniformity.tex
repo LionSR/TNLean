@@ -226,6 +226,29 @@ twoMultiplicityTrace_eq_traceScalar}.  Thus the idempotent law now discharges
 the precise scalar obligation at lines~2058--2064; it does not construct the
 comparison from the MPDO tensor and does not yet define the maps $T$ and $S$.
 
+The power-sum part of the preceding comparison is also isolated.  The
+constructor
+\leanid{MPOTensor.BNTMultiplicitySpectrumComparison.%
+ofEventuallyEqualPowerSums} proves that positivity and eventual sectorwise
+equality of the power sums imply the required multiset equality.  It combines
+the geometric-sequence extrapolation already used in the BNT Fundamental
+Theorem with the unequal-cardinality power-sum identity, and therefore proves
+the power-sum step used at lines~2053--2058.
+
+What remains before this constructor can be applied is the tensor-level BNT
+comparison at lines~2048--2058.  The current
+\leanid{MPOTensor.BNTAlgebraClause} does not identify its abstract operator
+family with the concrete operators $O_L(M_\alpha)$ of a chosen one-site
+vertical canonical form, and it does not identify its trace scalars with the
+entries of the corresponding matrices $\mu_\alpha$.  Moreover, the current
+vertical canonical-form theorem supplies a decomposition of $M$, but no
+single object simultaneously records that decomposition, a vertical
+canonical decomposition of the two-site blocked tensor, and the relabelling
+and unitary identifications of their BNT sectors.  Such an object must yield
+the displayed eventual power-sum equality from the same-length algebra law;
+the constructor above then supplies the spectrum comparison without any
+further mathematical hypothesis.
+
 \section{BNT-label coefficient objects and remaining elimination plan}
 
 The same-length coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$, indexed
