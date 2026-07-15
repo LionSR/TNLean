@@ -299,7 +299,18 @@ def assert_repeated_topologies_are_motifs(graphs: list[dict[str, object]]) -> No
         for connection in graph["connections"]:  # type: ignore[union-attr]
             left = _owning_atom(str(connection["from"]), atoms)
             right = _owning_atom(str(connection["to"]), atoms)
-            if left is None or right is None or left == right:
+            if left is None or right is None:
+                unresolved = [
+                    str(connection[endpoint])
+                    for endpoint, owner in (("from", left), ("to", right))
+                    if owner is None
+                ]
+                raise RuntimeError(
+                    "Topology audit cannot assign connection endpoint(s) "
+                    f"{', '.join(unresolved)} to an atom in "
+                    f"{graph['diagram']} (picture {graph['picture']})."
+                )
+            if left == right:
                 continue
             edge_kind = (str(connection["type"]), str(connection["route"]))
             incident[left].append((*edge_kind, atoms[right]))
