@@ -56,7 +56,7 @@ ports on that atom.  Thus `leftTensorE` is the east virtual port of
 
 The following marked block is checked against the TeX declarations by the
 semantic audit.  It deliberately lists the small constructive vocabulary, not
-the 114 named chapter diagrams derived from the catalogue.
+the named chapter diagrams derived from the catalogue.
 
 <!-- TN-PUBLIC-VOCABULARY:BEGIN -->
 
@@ -165,7 +165,7 @@ Each chapter-facing construction has one declaration:
 ```tex
 \TNDeclareDiagram
   {TNExampleIdentity}
-  {leftLabel,rightLabel}
+  {left,right}
   {display}
   {normal}
   {\TNExampleIdentity{A}{B}}

@@ -294,6 +294,7 @@ def assert_repeated_topologies_are_motifs(graphs: list[dict[str, object]]) -> No
         if not 4 <= len(atoms) <= 8 or graph["motifs"]:
             continue
         incident: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
+        neighbours: dict[str, set[str]] = defaultdict(set)
         edges = []
         for connection in graph["connections"]:  # type: ignore[union-attr]
             left = _owning_atom(str(connection["from"]), atoms)
@@ -303,6 +304,8 @@ def assert_repeated_topologies_are_motifs(graphs: list[dict[str, object]]) -> No
             edge_kind = (str(connection["type"]), str(connection["route"]))
             incident[left].append((*edge_kind, atoms[right]))
             incident[right].append((*edge_kind, atoms[left]))
+            neighbours[left].add(right)
+            neighbours[right].add(left)
             edges.append(tuple(sorted((atoms[left], atoms[right]))) + edge_kind)
 
         reached = set()
@@ -312,18 +315,7 @@ def assert_repeated_topologies_are_motifs(graphs: list[dict[str, object]]) -> No
             if atom in reached:
                 continue
             reached.add(atom)
-            frontier.extend(
-                neighbour
-                for connection in graph["connections"]  # type: ignore[union-attr]
-                for neighbour in (
-                    _owning_atom(str(connection["from"]), atoms),
-                    _owning_atom(str(connection["to"]), atoms),
-                )
-                if neighbour is not None and atom in {
-                    _owning_atom(str(connection["from"]), atoms),
-                    _owning_atom(str(connection["to"]), atoms),
-                }
-            )
+            frontier.extend(neighbours[atom])
         if reached != set(atoms):
             continue
 

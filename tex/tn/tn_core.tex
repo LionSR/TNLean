@@ -564,20 +564,27 @@
     \TN@connectpoints[#1]{tn physical wire}{#2}{#3}%
 }
 
+% Every port-to-port contraction emits one connection event.  The repository
+% audit rebuilds the diagram graph from these lines, so the field order is
+% fixed and must match across all routes.
+\newcommand{\TN@connectevent}[4]{%
+    \TNEventInternal{connection|picture=\the\TN@pictureid|type=#1|from=#2|to=#3|route=#4}%
+}
+
 % Port-to-port composition is the preferred form when a construction is
 % assembled from independently defined atoms.
 \newcommand{\TN@vconnectports}[3][]{%
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \TN@vconnectpoints[#1]{#2}{#3}%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=straight}%
+    \TN@connectevent{virtual}{#2}{#3}{straight}%
 }
 
 \newcommand{\TN@pconnectports}[3][]{%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \TN@pconnectpoints[#1]{#2}{#3}%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=straight}%
+    \TN@connectevent{physical}{#2}{#3}{straight}%
 }
 
 % Orthogonal contractions retain typed endpoints.  The order in the command
@@ -586,47 +593,49 @@
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual wire,rounded corners=3pt,#1] (#2) -| (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=orthogonal-hv}%
+    \TN@connectevent{virtual}{#2}{#3}{orthogonal-hv}%
 }
 
 \newcommand{\TN@vconnectportsvh}[3][]{%
     \TN@assertporttype{#2}{virtual}%
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual wire,rounded corners=3pt,#1] (#2) |- (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=orthogonal-vh}%
+    \TN@connectevent{virtual}{#2}{#3}{orthogonal-vh}%
 }
 
 \newcommand{\TN@pconnectportshv}[3][]{%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical wire,rounded corners=3pt,#1] (#2) -| (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=orthogonal-hv}%
+    \TN@connectevent{physical}{#2}{#3}{orthogonal-hv}%
 }
 
 \newcommand{\TN@pconnectportsvh}[3][]{%
     \TN@assertporttype{#2}{physical}%
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical wire,rounded corners=3pt,#1] (#2) |- (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=orthogonal-vh}%
+    \TN@connectevent{physical}{#2}{#3}{orthogonal-vh}%
 }
 
 \newcommand{\TN@mconnectports}[3][]{%
     \TN@assertporttype{#2}{morphism}%
     \TN@assertporttype{#3}{morphism}%
     \TN@connectpoints[#1]{tn morphism arrow}{#2}{#3}%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=morphism|from=#2|to=#3|route=straight}%
+    \TN@connectevent{morphism}{#2}{#3}{straight}%
 }
 
 \newcommand{\TN@mconnectportshv}[3][]{%
     \TN@assertporttype{#2}{morphism}%
     \TN@assertporttype{#3}{morphism}%
     \draw[tn morphism arrow,rounded corners=3pt,#1] (#2) -| (#3);%
+    \TN@connectevent{morphism}{#2}{#3}{orthogonal-hv}%
 }
 
 \newcommand{\TN@mconnectportsvh}[3][]{%
     \TN@assertporttype{#2}{morphism}%
     \TN@assertporttype{#3}{morphism}%
     \draw[tn morphism arrow,rounded corners=3pt,#1] (#2) |- (#3);%
+    \TN@connectevent{morphism}{#2}{#3}{orthogonal-vh}%
 }
 
 \newcommand{\TN@labeledmorphism}[4]{%
@@ -651,7 +660,7 @@
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual trace,#1] (#2) -- ++(-#4,0) -- ++(0,-#5)
         -| ($(#3)+(#4,0)$) -- (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=trace-below}%
+    \TN@connectevent{virtual}{#2}{#3}{trace-below}%
 }
 
 \newcommand{\TN@vtraceportsabove}[5][]{%
@@ -660,7 +669,7 @@
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual trace,#1] (#2) -- ++(-#4,0) -- ++(0,#5)
         -| ($(#3)+(#4,0)$) -- (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=trace-above}%
+    \TN@connectevent{virtual}{#2}{#3}{trace-above}%
 }
 
 % A vertical pair of ports may be traced around the right of an object.  The
@@ -671,7 +680,7 @@
     \TN@assertporttype{#3}{virtual}%
     \draw[tn virtual trace,#1] (#2) -- ++(0,#5)
         -| ($(#3)+(#4,-#5)$) -- ++(-#4,0) -- (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=virtual|from=#2|to=#3|route=trace-right}%
+    \TN@connectevent{virtual}{#2}{#3}{trace-right}%
 }
 
 % Physical trace closures have the same compositional interface and geometry
@@ -684,7 +693,7 @@
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical trace,#1] (#2) -- ++(-#4,0) -- ++(0,-#5)
         -| ($(#3)+(#4,0)$) -- (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=trace-below}%
+    \TN@connectevent{physical}{#2}{#3}{trace-below}%
 }
 
 \newcommand{\TN@ptraceportsabove}[5][]{%
@@ -693,7 +702,7 @@
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical trace,#1] (#2) -- ++(-#4,0) -- ++(0,#5)
         -| ($(#3)+(#4,0)$) -- (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=trace-above}%
+    \TN@connectevent{physical}{#2}{#3}{trace-above}%
 }
 
 \newcommand{\TN@ptraceportsright}[5][]{%
@@ -702,7 +711,7 @@
     \TN@assertporttype{#3}{physical}%
     \draw[tn physical trace,#1] (#2) -- ++(0,#5)
         -| ($(#3)+(#4,-#5)$) -- ++(-#4,0) -- (#3);%
-    \TNEventInternal{connection|picture=\the\TN@pictureid|type=physical|from=#2|to=#3|route=trace-right}%
+    \TN@connectevent{physical}{#2}{#3}{trace-right}%
 }
 
 \newcommand{\TN@selectedpath}[2][]{%

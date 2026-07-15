@@ -50,10 +50,10 @@
     \TNVerticalWord{#1}{(0,0)}{#2}{#3}%
 }
 
-% One twisted transfer cell: two tensor layers meet at the physical insertion.
-% The remaining arguments name the twist, input, output, and layer indices.
-\newcommand{\TNSymmetryTransferCell}[7]{%
-    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=transfer-cell}%
+% A twisted two-layer cell: an upper and a lower tensor layer meet the physical
+% insertion #1Twist, and the two layers expose four virtual ports.  This local
+% geometry is shared by the transfer cell and the string-order cell below.
+\newcommand{\TN@twistlayers}[2]{%
     \TNInsertion{#1Twist}{#2}{}%
     \TNTensor{#1Upper}{above=\TN@layerpitch cm of #1Twist}% chktex 1
     \TNTensor{#1Lower}{below=\TN@layerpitch cm of #1Twist}% chktex 1
@@ -61,16 +61,29 @@
     \TNVirtualPort{#1UpperEast}{#1Upper}{east}%
     \TNVirtualPort{#1LowerWest}{#1Lower}{west}%
     \TNVirtualPort{#1LowerEast}{#1Lower}{east}%
-    \TNOpenVirtualWest{#1UpperWest}%
-    \TNOpenVirtualWest{#1LowerWest}%
-    \TNOpenVirtualEast{#1UpperEast}%
-    \TNOpenVirtualEast{#1LowerEast}%
+}
+
+% The vertical physical contraction of a twisted cell: the insertion meets both
+% layers along the shared physical index.
+\newcommand{\TN@twistphysical}[1]{%
     \TNPhysicalPort{#1UpperPhysical}{#1Upper}{south}%
     \TNPhysicalPort{#1TwistUpper}{#1Twist}{north}%
     \TNPhysicalPort{#1TwistLower}{#1Twist}{south}%
     \TNPhysicalPort{#1LowerPhysical}{#1Lower}{north}%
     \TNConnectPhysical{#1UpperPhysical}{#1TwistUpper}%
     \TNConnectPhysical{#1TwistLower}{#1LowerPhysical}%
+}
+
+% One twisted transfer cell.  The remaining arguments name the twist, input,
+% output, and layer indices; the four virtual ports are opened to the sides.
+\newcommand{\TNSymmetryTransferCell}[7]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=transfer-cell}%
+    \TN@twistlayers{#1}{#2}%
+    \TNOpenVirtualWest{#1UpperWest}%
+    \TNOpenVirtualWest{#1LowerWest}%
+    \TNOpenVirtualEast{#1UpperEast}%
+    \TNOpenVirtualEast{#1LowerEast}%
+    \TN@twistphysical{#1}%
     \TNLabelAbove{#1Twist}{#3}%
     \TNLabelLeft{#1Twist}{#4}%
     \TNLabelRight{#1Twist}{#5}%
@@ -78,23 +91,12 @@
     \TNLabelBelow{#1Lower}{#7}%
 }
 
-% A local cell in a string-order word has the same vertical contraction but
-% leaves its horizontal ports available to the surrounding word.
+% A local cell in a string-order word has the same twisted two-layer geometry
+% but leaves its virtual ports available to the surrounding word.
 \newcommand{\TN@stringcell}[3]{%
     \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=string-cell}%
-    \TNInsertion{#1Twist}{#2}{}%
-    \TNTensor{#1Upper}{above=\TN@layerpitch cm of #1Twist}% chktex 1
-    \TNTensor{#1Lower}{below=\TN@layerpitch cm of #1Twist}% chktex 1
-    \TNVirtualPort{#1UpperWest}{#1Upper}{west}%
-    \TNVirtualPort{#1UpperEast}{#1Upper}{east}%
-    \TNVirtualPort{#1LowerWest}{#1Lower}{west}%
-    \TNVirtualPort{#1LowerEast}{#1Lower}{east}%
-    \TNPhysicalPort{#1UpperPhysical}{#1Upper}{south}%
-    \TNPhysicalPort{#1TwistUpper}{#1Twist}{north}%
-    \TNPhysicalPort{#1TwistLower}{#1Twist}{south}%
-    \TNPhysicalPort{#1LowerPhysical}{#1Lower}{north}%
-    \TNConnectPhysical{#1UpperPhysical}{#1TwistUpper}%
-    \TNConnectPhysical{#1TwistLower}{#1LowerPhysical}%
+    \TN@twistlayers{#1}{#2}%
+    \TN@twistphysical{#1}%
     \if\relax\detokenize{#3}\relax\else
         \TNLabelRight{#1Twist}{#3}%
     \fi

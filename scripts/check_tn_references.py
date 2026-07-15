@@ -103,7 +103,7 @@ def difference_score(actual: Image.Image, expected: Image.Image) -> float:
 def write_comparison_sheet(
     comparisons: list[tuple[str, Image.Image, Image.Image, float]],
 ) -> None:
-    """Write one publication-review sheet containing all seven references."""
+    """Write one publication-review sheet, one row per compared reference."""
 
     width, row_height = 1600, 430
     sheet = Image.new("RGB", (width, row_height * len(comparisons)), "white")

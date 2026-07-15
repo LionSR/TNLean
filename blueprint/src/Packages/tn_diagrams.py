@@ -1215,8 +1215,10 @@ def _semantic_node_names(body: str) -> set[str]:
 def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object]]]:
     """Locate point connectors that bypass the atomic named-port vocabulary."""
 
+    macro_definitions = _tex_macro_definitions(source)
+
     bare_node_connectors: list[dict[str, object]] = []
-    for macro_name, body, body_offset in _tex_macro_definitions(source):
+    for macro_name, body, body_offset in macro_definitions:
         semantic_names = _semantic_node_names(body)
         for command, arguments, call_offset, _ in _tex_command_calls(
             body, _POINT_CONNECTOR_COMMANDS
@@ -1255,7 +1257,7 @@ def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object
         "TNPhysicalSouthPort": "south",
     }
     port_commands = frozenset(port_command_sides)
-    for macro_name, body, body_offset in _tex_macro_definitions(source):
+    for macro_name, body, body_offset in macro_definitions:
         anchors: dict[tuple[str, str], tuple[str, int]] = {}
         for command, arguments, call_offset, _ in _tex_command_calls(body, port_commands):
             if len(arguments) != 3:
@@ -1341,13 +1343,12 @@ def _assert_diagram_arguments_used() -> None:
 def _semantic_audit_counts() -> dict[str, object]:
     """Collect migration measures without assigning mathematical meaning to them."""
 
-    catalogue_path = _TN_CATALOGUE_FILE
-    core_path = _TN_CORE_FILE
-    catalogue_source = catalogue_path.read_text(encoding="utf-8")
-    core_source = core_path.read_text(encoding="utf-8")
-    library_path = _TN_LIBRARY_FILE
+    catalogue_source = _TN_CATALOGUE_FILE.read_text(encoding="utf-8")
+    core_source = _TN_CORE_FILE.read_text(encoding="utf-8")
     library_source = (
-        library_path.read_text(encoding="utf-8") if library_path.exists() else ""
+        _TN_LIBRARY_FILE.read_text(encoding="utf-8")
+        if _TN_LIBRARY_FILE.exists()
+        else ""
     )
     private_source = core_source + "\n" + library_source
     public_macros = [
