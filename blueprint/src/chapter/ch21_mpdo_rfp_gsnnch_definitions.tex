@@ -1,7 +1,13 @@
 \section{Gibbs states of nearest-neighbor commuting Hamiltonians}
 
 \begin{definition}[GSNNCH]\label{def:mpdo_source_gsnnch}
-    \notready
+    \lean{MPOTensor.GSNNCHData}
+    \lean{MPOTensor.HasGSNNCHFormAt}
+    \lean{MPOTensor.HasGSNNCHForm}
+    \lean{MPOTensor.IsGSNNCHAt}
+    \lean{MPOTensor.IsGSNNCH}
+    \leanok
+    \uses{def:mpo_tensor}
     A density operator on a periodic chain is a Gibbs state of a
     nearest-neighbor commuting Hamiltonian if
     \[
@@ -27,12 +33,10 @@
     multiplicities are part of the definition.
 \end{definition}
 
-The following single-bond presentation does not make the sector labels or
-multiplicities explicit. Its bond acts on the full two-site space and may
-itself be block diagonal. No equivalence between this presentation and
-Definition~\ref{def:mpdo_source_gsnnch} is assumed.
-% Scope boundary: the missing comparison with the explicit sector decomposition
-% is documented in docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+The following auxiliary single-bond presentation does not make the sector
+labels or multiplicities explicit. Its bond acts on the full two-site space.
+It gives the one-sector case of
+Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 
 \begin{definition}[Single-bond commuting-form data for an MPDO]
     \label{def:mpdo_commuting_form_data}
@@ -62,8 +66,10 @@ Definition~\ref{def:mpdo_source_gsnnch} is assumed.
 \end{definition}
 
 \begin{definition}[Single-bond product predicate]
-    \label{def:mpdo_is_gsnnch}
-    \lean{MPOTensor.IsGSNNCH}
+    \label{def:mpdo_has_commuting_bond_product}
+    \lean{MPOTensor.CommutingBondProductData}
+    \lean{MPOTensor.HasCommutingBondProductAt}
+    \lean{MPOTensor.HasCommutingBondProduct}
     \leanok
     \uses{def:mpdo_has_commuting_form}
     This condition asks, for every chain length $N\geq2$, for one positive
@@ -73,24 +79,19 @@ Definition~\ref{def:mpdo_source_gsnnch} is assumed.
         \qquad c>0,\qquad B\ge0,
         \qquad [B_{i,i+1},B_{j,j+1}]=0.
     \]
-    The bond may itself be block diagonal. The condition contains no explicit
-    sector labels or multiplicities and is not identified here with
-    Definition~\ref{def:mpdo_source_gsnnch}.
-    % Scope restriction (single-bond presentation): see
-    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+    This auxiliary condition contains no explicit sector labels or
+    multiplicities.
 \end{definition}
 
 \begin{theorem}[Single-bond predicate iff single-bond commuting form]
-    \label{thm:mpdo_is_gsnnch_iff_has_commuting_form}
-    \lean{MPOTensor.isGSNNCH_iff_hasCommutingForm}
+    \label{thm:mpdo_has_commuting_bond_product_iff_has_commuting_form}
+    \lean{MPOTensor.hasCommutingBondProduct_iff_hasCommutingForm}
     \leanok
-    \uses{def:mpdo_is_gsnnch, def:mpdo_has_commuting_form}
+    \uses{def:mpdo_has_commuting_bond_product,
+        def:mpdo_has_commuting_form}
     The single-bond product predicate is equivalent to the existence of
     single-bond commuting-form data on every finite chain. This is an
-    equivalence between two presentations of the same condition; it does not
-    compare that condition with Definition~\ref{def:mpdo_source_gsnnch}.
-    % Scope restriction (single-bond presentation): see
-    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+    equivalence between two presentations of the same condition.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -99,10 +100,10 @@ Definition~\ref{def:mpdo_source_gsnnch} is assumed.
 \end{proof}
 
 \begin{definition}[Single-bond predicate with doubled-index idempotence]
-    \label{def:mpdo_is_gsnnch_zcl}
-    \lean{MPOTensor.IsGSNNCHWithZCL}
+    \label{def:mpdo_has_commuting_bond_product_zcl}
+    \lean{MPOTensor.HasCommutingBondProductWithZCL}
     \leanok
-    \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
+    \uses{def:mpdo_has_commuting_bond_product, def:mpo_is_zcl}
     This is the conjunction of the single-bond condition with the
     doubled-index transfer identity
     \[
@@ -110,16 +111,14 @@ Definition~\ref{def:mpdo_source_gsnnch} is assumed.
     \]
     The source physical-trace condition is
     Definition~\ref{def:mpo_source_zcl}.
-    % Scope restriction (single-bond presentation): see
-    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 \end{definition}
 
 \begin{theorem}[Restricted predicate with idempotence iff restricted form with it]
-    \label{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
-    \lean{MPOTensor.isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL}
+    \label{thm:mpdo_has_commuting_bond_product_zcl_iff_has_commuting_form_and_is_zcl}
+    \lean{MPOTensor.hasCommutingBondProductWithZCL_iff_hasCommutingForm_and_isZCL}
     \leanok
-    \uses{def:mpdo_is_gsnnch_zcl,
-        thm:mpdo_is_gsnnch_iff_has_commuting_form}
+    \uses{def:mpdo_has_commuting_bond_product_zcl,
+        thm:mpdo_has_commuting_bond_product_iff_has_commuting_form}
     The single-bond condition with doubled-index transfer idempotence is
     equivalent to the conjunction of the single-bond commuting-form
     property with that same idempotence condition.
@@ -127,5 +126,24 @@ Definition~\ref{def:mpdo_source_gsnnch} is assumed.
 
 \begin{proof}\leanok
     Expand the restricted conjunction and apply
-    Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
+    Theorem~\ref{thm:mpdo_has_commuting_bond_product_iff_has_commuting_form}.
+\end{proof}
+
+\begin{theorem}[A single bond gives one GSNNCH sector]
+    \label{thm:mpdo_commuting_bond_product_has_gsnnch_form}
+    \lean{MPOTensor.GSNNCHData.ofCommutingFormData}
+    \lean{MPOTensor.CommutingFormData.hasGSNNCHFormAt_of_realizes}
+    \lean{MPOTensor.hasGSNNCHFormAt_of_hasCommutingBondProductAt}
+    \lean{MPOTensor.hasGSNNCHForm_of_hasCommutingBondProduct}
+    \leanok
+    \uses{def:mpdo_source_gsnnch,
+        def:mpdo_has_commuting_bond_product}
+    A single positive commuting bond is the one-sector instance of the
+    explicit GSNNCH decomposition, with sector projection equal to the
+    identity and multiplicity one.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take one sector, its one-site projection to be the identity, its
+    multiplicity to be one, and its bond to be the given bond.
 \end{proof}

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.RFP
+import TNLean.Channel.Irreducible.Basic
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 
@@ -15,13 +16,12 @@ arXiv:1606.00608 Section 4.4 and Appendix C.2.
 For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
 semidefinite two-site matrix `B`, together with proofs that its translated
 copies on the periodic chain pairwise commute and that their product
-reproduces `ρ` up to a positive scalar. This is a single-bond presentation of
-the projector-limit form in arXiv:1606.00608. The source definition instead
-makes an orthogonal direct sum over sectors and natural multiplicities
-explicit. An arbitrary bond on the full local space may itself be block
-diagonal, and no equivalence with the source presentation is proved here.
-This file defines the single-bond witness and proves the equivalence between
-its two presentations. The
+reproduces `ρ` up to a positive scalar. The auxiliary
+`CommutingBondProductData` records this single-bond presentation. The separate
+`GSNNCHData` follows Definition 4.8 by recording the orthogonal one-site
+sectors, their natural multiplicities, and one positive bond in every sector.
+The single-bond presentation gives its one-sector case; the converse comparison
+is not asserted. The
 theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` proves the
 entropy-side implication from SAL; its local structure gives
 `HasCommutingForm` through `MPOTensor.EtaLocalStructureData.hasCommutingForm`.
@@ -34,10 +34,11 @@ This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
 * `MPOTensor.embedLocalOperator`
 * `MPOTensor.CommutingFormData`
 * `MPOTensor.HasCommutingForm`
+* `MPOTensor.CommutingBondProductData`
+* `MPOTensor.HasCommutingBondProduct`
 * `MPOTensor.GSNNCHData`
-* `MPOTensor.IsGSNNCH` (single-bond presentation)
-* `MPOTensor.isGSNNCH_iff_hasCommutingForm`
-* `MPOTensor.IsGSNNCHWithZCL`
+* `MPOTensor.HasGSNNCHFormAt`
+* `MPOTensor.IsGSNNCH`
 
 ## References
 
@@ -432,58 +433,268 @@ def HasCommutingForm (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N →
     ∃ data : CommutingFormData d N, data.Realizes (mpo M N)
 
-/-- A GSNNCH witness at chain length `N`: a commuting-form witness together with
-its positive normalization constant.
+/-- The projection onto the two-site sector determined by a one-site
+orthogonal projection.
 
-**Scope restriction (single-bond presentation):** This states the positive-operator form
-`ρ⁽ᴺ⁾ = c ∏ᵢ B_{i,i+1}`, where `c > 0` and the translated bond operators
-commute pairwise. The exponential form of that sector is recovered by taking
-`B_{i,i+1} = e^{-h_{i,i+1}}` or, more generally, by the projector-limit
-convention following the source definition. The full definition in
-arXiv:1606.00608, lines 829--850, also has an orthogonal direct sum over
-sectors with natural multiplicities. The bond here acts on the full local
-space and may itself be block diagonal; no equivalence with the explicit
-sector presentation is proved. See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
-structure GSNNCHData (d N : ℕ) where
-  /-- The underlying commuting-form data. -/
+Source: arXiv:1606.00608, Definition 4.8, lines 838--842: for each sector
+label, the global sector space is the tensor product of the corresponding
+orthogonal one-site spaces. -/
+noncomputable def twoSiteSectorProjection
+    (P : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ :=
+  Matrix.of fun σ τ ↦ P (σ 0) (τ 0) * P (σ 1) (τ 1)
+
+@[simp] theorem twoSiteSectorProjection_one :
+    twoSiteSectorProjection (d := d) 1 = 1 := by
+  ext σ τ
+  by_cases h0 : σ 0 = τ 0
+  · by_cases h1 : σ 1 = τ 1
+    · have hστ : σ = τ := by
+        funext i
+        fin_cases i
+        · exact h0
+        · exact h1
+      subst τ
+      simp [twoSiteSectorProjection, Matrix.one_apply]
+    · have hστ : σ ≠ τ := fun h ↦ h1 (congrFun h 1)
+      simp [twoSiteSectorProjection, Matrix.one_apply, h1, hστ]
+  · have hστ : σ ≠ τ := fun h ↦ h0 (congrFun h 0)
+    simp [twoSiteSectorProjection, Matrix.one_apply, h0, hστ]
+
+/-- A witness for a single-bond commuting-product presentation at chain length
+`N`. This auxiliary condition has no explicit outer sector decomposition.
+
+Source comparison: arXiv:1606.00608, Definition 4.8, lines 829--850. The
+source GSNNCH condition is defined separately below. -/
+structure CommutingBondProductData (d N : ℕ) where
+  /-- The underlying positive commuting bond. -/
   form : CommutingFormData d N
-  /-- Positive normalization constant. -/
+  /-- The positive scalar multiplying the bond product. -/
   normalization : ℝ
-  /-- The normalization constant is strictly positive. -/
+  /-- Strict positivity of the scalar multiplying the bond product. -/
   normalization_pos : 0 < normalization
+
+namespace CommutingBondProductData
+
+variable {N : ℕ}
+
+/-- The chain operator represented by a single commuting bond. -/
+noncomputable def state (data : CommutingBondProductData d N) : ChainOperator d N :=
+  (data.normalization : ℂ) • data.form.product
+
+/-- A single-bond witness realizes its represented chain operator. -/
+theorem realizes_form_state (data : CommutingBondProductData d N) :
+    data.form.Realizes data.state :=
+  ⟨data.normalization, data.normalization_pos, rfl⟩
+
+end CommutingBondProductData
+
+/-- The chain-level single-bond commuting-product condition. -/
+def HasCommutingBondProductAt {d N : ℕ} (ρ : ChainOperator d N) : Prop :=
+  ∃ data : CommutingBondProductData d N, ρ = data.state
+
+/-- Every chain generated by the MPO tensor has a single-bond
+commuting-product presentation. -/
+def HasCommutingBondProduct (M : MPOTensor d D) : Prop :=
+  ∀ N : ℕ, 2 ≤ N → HasCommutingBondProductAt (mpo M N)
+
+namespace CommutingFormData
+
+variable {N : ℕ}
+
+/-- Adjoin a positive normalization to a commuting-form witness. -/
+def toCommutingBondProductData
+    (data : CommutingFormData d N) (c : ℝ) (hc : 0 < c) :
+    CommutingBondProductData d N where
+  form := data
+  normalization := c
+  normalization_pos := hc
+
+/-- Any commuting-form realization yields a single-bond product witness. -/
+theorem hasCommutingBondProductAt_of_realizes (data : CommutingFormData d N)
+    {ρ : ChainOperator d N} (hρ : data.Realizes ρ) : HasCommutingBondProductAt ρ := by
+  rcases hρ with ⟨c, hc, hρ⟩
+  refine ⟨data.toCommutingBondProductData c hc, ?_⟩
+  simpa [CommutingBondProductData.state, toCommutingBondProductData] using hρ
+
+end CommutingFormData
+
+/-- A chain operator has a single-bond product presentation exactly when it
+has a commuting-form realization. -/
+theorem hasCommutingBondProductAt_iff_exists_commutingForm
+    {d N : ℕ} (ρ : ChainOperator d N) :
+    HasCommutingBondProductAt ρ ↔
+      ∃ data : CommutingFormData d N, data.Realizes ρ := by
+  constructor
+  · rintro ⟨data, rfl⟩
+    exact ⟨data.form, data.realizes_form_state⟩
+  · rintro ⟨data, hρ⟩
+    exact data.hasCommutingBondProductAt_of_realizes hρ
+
+/-- A global commuting form gives a single-bond product witness at every
+chain length. -/
+theorem hasCommutingBondProduct_of_hasCommutingForm {M : MPOTensor d D}
+    (hM : HasCommutingForm M) : HasCommutingBondProduct M := by
+  intro N hN
+  obtain ⟨data, hdata⟩ := hM N hN
+  exact data.hasCommutingBondProductAt_of_realizes hdata
+
+/-- Single-bond witnesses at every chain length give a global commuting
+form. -/
+theorem hasCommutingForm_of_hasCommutingBondProduct {M : MPOTensor d D}
+    (hM : HasCommutingBondProduct M) : HasCommutingForm M := fun N hN ↦
+  (hasCommutingBondProductAt_iff_exists_commutingForm (mpo M N)).mp (hM N hN)
+
+/-- The two presentations of the single-bond commuting-product condition are
+equivalent. -/
+theorem hasCommutingBondProduct_iff_hasCommutingForm (M : MPOTensor d D) :
+    HasCommutingBondProduct M ↔ HasCommutingForm M :=
+  ⟨hasCommutingForm_of_hasCommutingBondProduct,
+    hasCommutingBondProduct_of_hasCommutingForm⟩
+
+/-- The single-bond commuting-product condition together with the
+doubled-index transfer identity. -/
+def HasCommutingBondProductWithZCL (M : MPOTensor d D) : Prop :=
+  HasCommutingBondProduct M ∧ IsZCL M
+
+/-- The single-bond condition with doubled-index transfer idempotence is
+equivalent to a commuting form with the same idempotence condition. -/
+theorem hasCommutingBondProductWithZCL_iff_hasCommutingForm_and_isZCL
+    (M : MPOTensor d D) :
+    HasCommutingBondProductWithZCL M ↔ HasCommutingForm M ∧ IsZCL M := by
+  rw [HasCommutingBondProductWithZCL,
+    hasCommutingBondProduct_iff_hasCommutingForm]
+
+/-- Source-faithful sector decomposition for a Gibbs state of a
+nearest-neighbor commuting Hamiltonian on a periodic chain.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850, in the equivalent
+positive-bond form of equation `rhoNCommv2`. -/
+structure GSNNCHData (d N : ℕ) where
+  /-- The source definition concerns a genuine nearest-neighbor chain.
+  Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+  hN : 2 ≤ N
+  /-- Number of orthogonal global sectors labelled by `x`.
+  Source: arXiv:1606.00608, lines 836--842. -/
+  sectorCount : ℕ
+  /-- Natural multiplicity `n_x` of each sector.
+  Source: arXiv:1606.00608, equations `rhoNComm` and `rhoNCommv2`. -/
+  multiplicity : Fin sectorCount → ℕ
+  /-- Orthogonal projection onto the one-site space `H_n^x`.
+  Source: arXiv:1606.00608, lines 838--842. -/
+  sectorProjection : Fin sectorCount → Matrix (Fin d) (Fin d) ℂ
+  /-- Each one-site sector projection is orthogonal.
+  Source: arXiv:1606.00608, lines 838--842. -/
+  sectorProjection_isOrthogonal :
+    ∀ x : Fin sectorCount, IsOrthogonalProjection (sectorProjection x)
+  /-- Distinct one-site sector projections have orthogonal ranges.
+  Source: arXiv:1606.00608, lines 838--842. -/
+  sectorProjection_orthogonal : ∀ {x y : Fin sectorCount}, x ≠ y →
+    sectorProjection x * sectorProjection y = 0
+  /-- The orthogonal one-site sectors decompose the local Hilbert space.
+  Source: arXiv:1606.00608, lines 838--842. -/
+  sectorProjection_sum : ∑ x : Fin sectorCount, sectorProjection x = 1
+  /-- The positive two-site operator `B^(x)` in each sector.
+  Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
+  bond : Fin sectorCount → Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ
+  /-- Positivity of every sector bond.
+  Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
+  bond_pos : ∀ x : Fin sectorCount, (bond x).PosSemidef
+  /-- The bond `B^(x)` acts within `H_x ⊗ H_x`.
+  Source: arXiv:1606.00608, lines 838--850. -/
+  bond_supported : ∀ x : Fin sectorCount,
+    twoSiteSectorProjection (sectorProjection x) * bond x *
+      twoSiteSectorProjection (sectorProjection x) = bond x
+  /-- The bond commutes with its translate by one site.
+  Source: arXiv:1606.00608, Definition 4.8 and equation `rhoNCommv2`. -/
+  neighboring_comm : ∀ x : Fin sectorCount,
+    embedLocalOperator (d := d) 2 N hN ⟨0, by omega⟩ (bond x) *
+        embedLocalOperator (d := d) 2 N hN ⟨1, by omega⟩ (bond x) =
+      embedLocalOperator (d := d) 2 N hN ⟨1, by omega⟩ (bond x) *
+        embedLocalOperator (d := d) 2 N hN ⟨0, by omega⟩ (bond x)
 
 namespace GSNNCHData
 
 variable {N : ℕ}
 
-/-- The chain operator represented by a GSNNCH witness. -/
-noncomputable def state (data : GSNNCHData d N) : ChainOperator d N :=
-  (data.normalization : ℂ) • data.form.product
+/-- The translate `τ_i(B^(x))` of a sector bond. -/
+noncomputable def bondAt (data : GSNNCHData d N)
+    (x : Fin data.sectorCount) (i : Fin N) : ChainOperator d N :=
+  embedLocalOperator (d := d) 2 N data.hN i (data.bond x)
 
-/-- Every GSNNCH witness gives back the underlying commuting-form realization. -/
-theorem realizes_form_state (data : GSNNCHData d N) :
-    data.form.Realizes data.state :=
-  ⟨data.normalization, data.normalization_pos, rfl⟩
+/-- The periodic product of the translated bonds in sector `x`. -/
+noncomputable def sectorProduct (data : GSNNCHData d N)
+    (x : Fin data.sectorCount) : ChainOperator d N :=
+  (List.ofFn fun i : Fin N ↦ data.bondAt x i).prod
+
+/-- The unnormalized orthogonal sector sum
+`⊕_x n_x ∏_j τ_j(B^(x))` from equation `rhoNCommv2`.
+
+Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
+noncomputable def unnormalizedState (data : GSNNCHData d N) : ChainOperator d N :=
+  ∑ x : Fin data.sectorCount, (data.multiplicity x : ℂ) • data.sectorProduct x
+
+/-- The sector decomposition realizes a chain operator up to the positive
+normalization denoted by proportionality in equation `rhoNCommv2`.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+def Realizes (data : GSNNCHData d N) (ρ : ChainOperator d N) : Prop :=
+  ∃ c : ℝ, 0 < c ∧ ρ = (c : ℂ) • data.unnormalizedState
+
+/-- A single positive commuting bond is the one-sector case of the source
+GSNNCH sector decomposition. -/
+noncomputable def ofCommutingFormData
+    (form : CommutingFormData d N) : GSNNCHData d N where
+  hN := form.hN
+  sectorCount := 1
+  multiplicity := fun _ ↦ 1
+  sectorProjection := fun _ ↦ 1
+  sectorProjection_isOrthogonal := fun _ ↦ ⟨Matrix.isHermitian_one, by simp⟩
+  sectorProjection_orthogonal := by
+    intro x y hxy
+    exact (hxy (Subsingleton.elim x y)).elim
+  sectorProjection_sum := by simp
+  bond := fun _ ↦ form.bond
+  bond_pos := fun _ ↦ form.bond_pos
+  bond_supported := by
+    intro x
+    simp [twoSiteSectorProjection_one]
+  neighboring_comm := fun _ ↦ form.bond_comm _ _
+
+@[simp] theorem ofCommutingFormData_unnormalizedState
+    (form : CommutingFormData d N) :
+    (ofCommutingFormData form).unnormalizedState = form.product := by
+  simp [unnormalizedState, sectorProduct, bondAt, ofCommutingFormData,
+    CommutingFormData.product, CommutingFormData.bondAt]
 
 end GSNNCHData
 
-/-- The chain-level single-bond presentation associated with the source
-GSNNCH condition.
+/-- A chain operator has the explicit sector form in Definition 4.8, without
+separately asserting density-matrix normalization.
 
-**Scope restriction (single-bond presentation):** No equivalence with the
-explicit source sector decomposition is asserted. See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+def HasGSNNCHFormAt {d N : ℕ} (ρ : ChainOperator d N) : Prop :=
+  ∃ data : GSNNCHData d N, data.Realizes ρ
+
+/-- Every chain operator generated by the MPO tensor has the explicit sector
+form in Definition 4.8, without separately asserting density-matrix
+normalization.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+def HasGSNNCHForm (M : MPOTensor d D) : Prop :=
+  ∀ N : ℕ, 2 ≤ N → HasGSNNCHFormAt (mpo M N)
+
+/-- A density operator is GSNNCH when it has the explicit orthogonal sector
+decomposition of Definition 4.8.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 def IsGSNNCHAt {d N : ℕ} (ρ : ChainOperator d N) : Prop :=
-  ∃ data : GSNNCHData d N, ρ = data.state
+  ρ.PosSemidef ∧ ρ.trace = 1 ∧ HasGSNNCHFormAt ρ
 
-/-- Global single-bond commuting-product predicate for an MPO tensor: every
-chain length `N ≥ 2` has the restricted form represented by `IsGSNNCHAt`.
+/-- Every finite-chain density operator generated by the MPO tensor satisfies
+the source GSNNCH definition.
 
-**Scope restriction (single-bond presentation):** The source GSNNCH definition
-has explicit sector and multiplicity data, while the bond here may itself be
-block diagonal. No equivalence is asserted. See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 def IsGSNNCH (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N → IsGSNNCHAt (mpo M N)
 
@@ -491,66 +702,47 @@ namespace CommutingFormData
 
 variable {N : ℕ}
 
-/-- A commuting-form witness together with a positive normalization constant
-induces GSNNCH data. -/
-def toGSNNCHData (data : CommutingFormData d N) (c : ℝ) (hc : 0 < c) :
-    GSNNCHData d N where
-  form := data
-  normalization := c
-  normalization_pos := hc
+/-- A single-bond commuting-form realization gives the one-sector instance
+of the source GSNNCH form.
 
-/-- Any commuting-form realization yields a GSNNCH witness for the same chain
-operator. -/
-theorem isGSNNCHAt_of_realizes (data : CommutingFormData d N)
-    {ρ : ChainOperator d N} (hρ : data.Realizes ρ) : IsGSNNCHAt ρ := by
+Source comparison: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+theorem hasGSNNCHFormAt_of_realizes (data : CommutingFormData d N)
+    {ρ : ChainOperator d N} (hρ : data.Realizes ρ) : HasGSNNCHFormAt ρ := by
   rcases hρ with ⟨c, hc, hρ⟩
-  refine ⟨data.toGSNNCHData c hc, ?_⟩
-  simpa [GSNNCHData.state, toGSNNCHData] using hρ
+  refine ⟨GSNNCHData.ofCommutingFormData data, c, hc, ?_⟩
+  simpa using hρ
 
 end CommutingFormData
 
-/-- A chain operator is GSNNCH exactly when it has a commuting-form realization. -/
-theorem isGSNNCHAt_iff_exists_commutingForm {d N : ℕ} (ρ : ChainOperator d N) :
-    IsGSNNCHAt ρ ↔ ∃ data : CommutingFormData d N, data.Realizes ρ := by
-  constructor
-  · rintro ⟨data, rfl⟩
-    exact ⟨data.form, data.realizes_form_state⟩
-  · rintro ⟨data, hρ⟩
-    exact data.isGSNNCHAt_of_realizes hρ
+/-- Every single-bond commuting-product presentation is a one-sector source
+GSNNCH presentation.
 
-/-- A global commuting form gives a GSNNCH witness at every chain length. -/
-theorem isGSNNCH_of_hasCommutingForm {M : MPOTensor d D}
-    (hM : HasCommutingForm M) : IsGSNNCH M := by
+Source comparison: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+theorem hasGSNNCHFormAt_of_hasCommutingBondProductAt
+    {ρ : ChainOperator d N} (hρ : HasCommutingBondProductAt ρ) :
+    HasGSNNCHFormAt ρ := by
+  rw [hasCommutingBondProductAt_iff_exists_commutingForm] at hρ
+  obtain ⟨data, hdata⟩ := hρ
+  exact data.hasGSNNCHFormAt_of_realizes hdata
+
+/-- A global single-bond commuting-product presentation gives the one-sector
+instance of the explicit source sector form at every chain length.
+
+Source comparison: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+theorem hasGSNNCHForm_of_hasCommutingBondProduct
+    {M : MPOTensor d D} (hM : HasCommutingBondProduct M) :
+    HasGSNNCHForm M := fun N hN ↦
+  hasGSNNCHFormAt_of_hasCommutingBondProductAt (hM N hN)
+
+/-- If the MPO operators are density operators, a global single-bond
+presentation is a special case of the source GSNNCH condition. -/
+theorem isGSNNCH_of_hasCommutingBondProduct
+    {M : MPOTensor d D} (hM : HasCommutingBondProduct M)
+    (hDensity : ∀ N : ℕ, 2 ≤ N →
+      (mpo M N).PosSemidef ∧ (mpo M N).trace = 1) :
+    IsGSNNCH M := by
   intro N hN
-  obtain ⟨data, hdata⟩ := hM N hN
-  exact data.isGSNNCHAt_of_realizes hdata
-
-/-- GSNNCH data at every chain length gives a global commuting form. -/
-theorem hasCommutingForm_of_isGSNNCH {M : MPOTensor d D}
-    (hM : IsGSNNCH M) : HasCommutingForm M := fun N hN =>
-  (isGSNNCHAt_iff_exists_commutingForm (mpo M N)).mp (hM N hN)
-
-/-- The two presentations of the single-bond commuting-product condition
-are equivalent.
-
-**Scope restriction (single-bond presentation):** This does not establish an
-equivalence with the explicit source GSNNCH sector decomposition. See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
-theorem isGSNNCH_iff_hasCommutingForm (M : MPOTensor d D) :
-    IsGSNNCH M ↔ HasCommutingForm M :=
-  ⟨hasCommutingForm_of_isGSNNCH, isGSNNCH_of_hasCommutingForm⟩
-
-/-- The single-bond commuting-product condition together with doubled-index
-zero correlation length.
-
-**Scope restriction (single-bond presentation):** See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
-def IsGSNNCHWithZCL (M : MPOTensor d D) : Prop :=
-  IsGSNNCH M ∧ IsZCL M
-
-/-- The GSNNCH-with-ZCL condition is a global commuting form together with ZCL. -/
-theorem isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL (M : MPOTensor d D) :
-    IsGSNNCHWithZCL M ↔ HasCommutingForm M ∧ IsZCL M := by
-  rw [IsGSNNCHWithZCL, isGSNNCH_iff_hasCommutingForm]
+  exact ⟨(hDensity N hN).1, (hDensity N hN).2,
+    hasGSNNCHFormAt_of_hasCommutingBondProductAt (hM N hN)⟩
 
 end MPOTensor
