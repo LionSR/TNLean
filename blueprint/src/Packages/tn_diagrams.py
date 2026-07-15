@@ -1,10 +1,10 @@
 r"""plasTeX renderers for TNLean tensor-network diagrams.
 
-The PDF blueprint renders the chapter-facing ``\TN...`` macros from
-``macros/tn_print.tex`` together with the repository-wide core and library in
-``tex/tn``.  The web blueprint invokes the same public commands and compiles
-the same TeX sources to cached SVG files.  Thus the semantic TikZ calculus is
-common to print and web output.
+The chapter-facing ``\TN...`` commands are declared in
+``tex/tn/tn_catalogue.tex`` and use the repository-wide semantic TikZ library
+loaded by ``\usetikzlibrary{tn}``.  The PDF and web blueprints invoke the same
+public commands and compile the same TeX sources.  Thus the semantic TikZ
+calculus is common to print and web output.
 """
 
 from __future__ import annotations
@@ -672,8 +672,8 @@ def _assert_slide_diagram_contract() -> None:
     ]
     if missing_inputs:
         raise RuntimeError(
-            "The slide tensor-network theme must load the universal core and "
-            "library: " + ", ".join(missing_inputs)
+            "The slide tensor-network theme must load the universal TikZ library "
+            "and slide catalogue: " + ", ".join(missing_inputs)
         )
 
     core_source = _TN_CORE_FILE.read_text(encoding="utf-8")
@@ -1240,7 +1240,41 @@ def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object
                     }
                 )
 
-    return {"bare_node_point_connectors": bare_node_connectors}
+    duplicate_port_anchors: list[dict[str, object]] = []
+    port_commands = frozenset(
+        {"TNPhysicalPort", "TNVirtualPort", "TNVirtualNorthPort", "TNVirtualSouthPort"}
+    )
+    for macro_name, body, body_offset in _tex_macro_definitions(source):
+        anchors: dict[tuple[str, str], tuple[str, int]] = {}
+        for command, arguments, call_offset, _ in _tex_command_calls(body, port_commands):
+            if len(arguments) != 3:
+                continue
+            port_name, node_name, anchor_name = (
+                argument.strip() for argument in arguments
+            )
+            side = {
+                "TNVirtualNorthPort": "north",
+                "TNVirtualSouthPort": "south",
+            }.get(command, "anchor")
+            key = (node_name, f"{side}:{anchor_name}")
+            previous = anchors.get(key)
+            if previous is not None and previous[0] != port_name:
+                duplicate_port_anchors.append(
+                    {
+                        "location": _source_line(path, body_offset + call_offset),
+                        "macro": macro_name,
+                        "node": node_name,
+                        "anchor": anchor_name,
+                        "ports": [previous[0], port_name],
+                    }
+                )
+            else:
+                anchors[key] = (port_name, call_offset)
+
+    return {
+        "bare_node_point_connectors": bare_node_connectors,
+        "duplicate_port_anchors": duplicate_port_anchors,
+    }
 
 
 def _source_semantic_debt(path: Path, source: str) -> dict[str, object]:
@@ -1325,10 +1359,10 @@ def _semantic_audit_counts() -> dict[str, object]:
     )
 
     audited_sources = {
-        "tex/tn/tn_catalogue.tex": _source_semantic_debt(
-            catalogue_path, catalogue_source
-        ),
-        "tex/tn/tn_library.tex": _source_semantic_debt(library_path, library_source),
+        str(path.relative_to(_REPO_ROOT)): _source_semantic_debt(
+            path, path.read_text(encoding="utf-8")
+        )
+        for path in _AUDITED_DIAGRAM_SOURCES
     }
     raw_glyph_counts = {
         name: sum(
@@ -1555,8 +1589,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
                 ("direct_tn_draw_locations", "legacy_wire_locations"),
             )
             failures.append(
-                "raw glyph aliases or tensor-network draws in tex/tn/tn_catalogue.tex "
-                "and tex/tn/tn_library.tex "
+                "raw glyph aliases or tensor-network draws in shared diagram sources "
                 f"(glyphs={raw_glyph_total}, wires={raw_wire_total}) at "
                 + _abbreviate_locations(raw_locations)
             )
@@ -1564,10 +1597,11 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
         if named_port_total:
             port_locations = _debt_locations(
                 audited_sources,
-                ("bare_node_point_connectors",),
+                ("bare_node_point_connectors", "duplicate_port_anchors"),
             )
             failures.append(
-                "semantic contractions bypass the atomic named-port vocabulary "
+                "semantic contractions bypass the atomic named-port vocabulary or "
+                "declare two ports at one node anchor "
                 f"({named_port_total} calls) at "
                 + _abbreviate_locations(port_locations)
             )
