@@ -531,11 +531,14 @@
 \begin{definition}[Renormalization maps on a longer ring]
     \label{def:mpdo_global_renormalization_maps}
     \lean{MPOTensor.firstSiteRestEquiv,
+      MPOTensor.firstSiteRestEquiv_apply,
+      MPOTensor.firstSiteRestEquiv_symm_apply,
       MPOTensor.firstTwoSitesRestEquiv,
+      MPOTensor.firstTwoSitesRestEquiv_apply,
+      MPOTensor.firstTwoSitesRestEquiv_symm_apply,
       MPOTensor.refineFirstSite,
       MPOTensor.coarsenFirstTwoSites}
     \leanok
-    \uses{def:is_rfp_via_ts}
     Let $N$ count the sites that are left unchanged.  Regroup a ring of
     $N+1$ sites as one site followed by $N$ sites, and a ring of $N+2$ sites
     as two sites followed by $N$ sites.  For physical maps
@@ -578,8 +581,7 @@
       MPOTensor.exists_global_renormalization_maps}
     \leanok
     \uses{def:phys_close, def:is_rfp_via_ts,
-      def:mpdo_global_renormalization_maps,
-      lem:mpdo_global_renormalization_maps_cptp}
+      def:mpdo_global_renormalization_maps}
     Suppose that $\mathcal S[M_2(X)]=M_1(X)$ and
     $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator $X$.  Then, for
     every $N$ and $X$,

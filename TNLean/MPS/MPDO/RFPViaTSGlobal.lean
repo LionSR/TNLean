@@ -214,15 +214,6 @@ theorem coarsenFirstTwoSites_physCloseN (M : MPOTensor d D)
   rw [firstTwoSitesSlice_physCloseN, hS]
   simp [List.ofFn_succ, evalWord_cons, Matrix.mul_assoc, Fin.tail_def]
 
-/-- Closing the virtual boundary by the identity matrix gives the periodic MPO
-operator.
-
-Source: arXiv:1606.00608, lines 638--654 and Definition 4.1. -/
-theorem physCloseN_identity_eq_mpo (M : MPOTensor d D) (N : ℕ) :
-    physCloseN M N (1 : Matrix (Fin D) (Fin D) ℂ) = mpo M N := by
-  ext σ τ
-  simp [mpoMatrixEntry]
-
 /-- The localized refinement map inserts one site in every periodic MPO
 operator whenever the one-to-two closure identity of Definition 4.1 holds.
 
