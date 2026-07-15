@@ -69,6 +69,12 @@ private theorem exists_circle_smul_posSemidef_of_sectorEdge
   rw [hqzero, hqone] at hpos
   exact hpos
 
+private theorem smul_posSemidef_of_not_sectorEdge
+    {hη : EtaStructure ρ} (eta : etaOperators hη) {k h : Fin hη.m}
+    (c : ℂ) (hkh : ¬IsSectorEdge eta k h) : (c • eta k h).PosSemidef := by
+  rw [show eta k h = 0 from not_ne_iff.mp hkh, smul_zero]
+  exact Matrix.PosSemidef.zero
+
 /-- **Coherent positive vertex rephasing under recurrent support.** If every
 cyclic tensor product of a neighboring-operator family is positive
 semidefinite and every nonzero support edge lies on a directed cycle, then
@@ -96,13 +102,8 @@ theorem exists_vertexPhase_smul_posSemidef
   have hκpos : ∀ k h, (((κ k h : Circle) : ℂ) • eta k h).PosSemidef := by
     intro k h
     by_cases hkh : IsSectorEdge eta k h
-    · rw [show κ k h = Classical.choose (hedge hkh) by simp [κ, hkh]]
-      exact Classical.choose_spec (hedge hkh)
-    · have heta : eta k h = 0 := not_ne_iff.mp hkh
-      simpa [heta] using
-        (Matrix.PosSemidef.zero :
-          (0 : Matrix (Fin (hη.dR k) × Fin (hη.dL h))
-            (Fin (hη.dR k) × Fin (hη.dL h)) ℂ).PosSemidef)
+    · simpa only [κ, dif_pos hkh] using Classical.choose_spec (hedge hkh)
+    · exact smul_posSemidef_of_not_sectorEdge eta _ hkh
   have hclosed : ∀ (a : Fin hη.m)
       (w : TNLean.Algebra.DirectedWalk (IsSectorEdge eta) a a),
       TNLean.Algebra.DirectedWalk.weight (IsSectorEdge eta) κ w = 1 := by
@@ -154,11 +155,7 @@ theorem exists_vertexPhase_smul_posSemidef
   by_cases hkh : IsSectorEdge eta k h
   · rw [← hz hkh]
     exact hκpos k h
-  · have heta : eta k h = 0 := not_ne_iff.mp hkh
-    simpa [heta] using
-      (Matrix.PosSemidef.zero :
-        (0 : Matrix (Fin (hη.dR k) × Fin (hη.dL h))
-          (Fin (hη.dR k) × Fin (hη.dL h)) ℂ).PosSemidef)
+  · exact smul_posSemidef_of_not_sectorEdge eta _ hkh
 
 /-- **Positive inverse-map sector factorization under recurrent support.**
 The inverse-map sector tensors can be rephased so that all neighboring

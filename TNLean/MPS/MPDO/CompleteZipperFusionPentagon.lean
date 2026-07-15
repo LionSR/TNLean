@@ -327,6 +327,14 @@ noncomputable def twoEdgeInversePrintedFMatrix (a b c d e : Λ) :
   Fus.pairToLeftAssocInversePrintedFMatrix a b c d e *
     Fus.rightAssocToPairInversePrintedFMatrix a b c d e
 
+private theorem mul_kronecker_one {l m n : Type*} [Fintype m]
+    (A : Matrix l m ℂ) (B : Matrix m n ℂ) (D : ℕ) :
+    (A * B) ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
+      (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
+        (B ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
+  simpa only [Matrix.one_mul] using Matrix.mul_kronecker_mul A B
+    (1 : Matrix (Fin D) (Fin D) ℂ) 1
+
 private theorem rightAssocToMiddleInverse_mul_middleToRightAssoc
     (a b c d e : Λ) :
     Fus.rightAssocToMiddleInversePrintedFMatrix a b c d e *
@@ -749,38 +757,10 @@ theorem rightAssocFourfoldSynthesis_mul_threeEdgePrintedFMatrix
         (Fus.threeEdgePrintedFMatrix a b c d e ⊗ₖ
           (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
       Fus.leftAssocFourfoldSynthesis a b c d e := by
-  rw [threeEdgePrintedFMatrix]
-  have hLast :
-      ((Fus.middleToRightAssocPrintedFMatrix a b c d e *
-            Fus.leftInnerToMiddlePrintedFMatrix a b c d e) *
-          Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e) ⊗ₖ
-          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) =
-        ((Fus.middleToRightAssocPrintedFMatrix a b c d e *
-            Fus.leftInnerToMiddlePrintedFMatrix a b c d e) ⊗ₖ
-              (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) *
-          (Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e ⊗ₖ
-            (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) := by
-    simpa only [Matrix.one_mul] using Matrix.mul_kronecker_mul
-      (Fus.middleToRightAssocPrintedFMatrix a b c d e *
-        Fus.leftInnerToMiddlePrintedFMatrix a b c d e)
-      (Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e)
-      (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) 1
-  have hFirst :
-      (Fus.middleToRightAssocPrintedFMatrix a b c d e *
-          Fus.leftInnerToMiddlePrintedFMatrix a b c d e) ⊗ₖ
-          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) =
-        (Fus.middleToRightAssocPrintedFMatrix a b c d e ⊗ₖ
-          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) *
-          (Fus.leftInnerToMiddlePrintedFMatrix a b c d e ⊗ₖ
-            (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) := by
-    simpa only [Matrix.one_mul] using Matrix.mul_kronecker_mul
-      (Fus.middleToRightAssocPrintedFMatrix a b c d e)
-      (Fus.leftInnerToMiddlePrintedFMatrix a b c d e)
-      (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) 1
-  rw [hLast, hFirst, ← Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc]
-  rw [Fus.rightAssocFourfoldSynthesis_mul_middleToRightAssocPrintedFMatrix]
-  rw [Fus.middleFourfoldSynthesis_mul_leftInnerToMiddlePrintedFMatrix]
+  rw [threeEdgePrintedFMatrix, mul_kronecker_one, mul_kronecker_one,
+    ← Matrix.mul_assoc, ← Matrix.mul_assoc,
+    Fus.rightAssocFourfoldSynthesis_mul_middleToRightAssocPrintedFMatrix,
+    Fus.middleFourfoldSynthesis_mul_leftInnerToMiddlePrintedFMatrix]
   exact Fus.leftInnerFourfoldSynthesis_mul_leftAssocToLeftInnerPrintedFMatrix
     a b c d e
 
@@ -794,21 +774,8 @@ theorem rightAssocFourfoldSynthesis_mul_twoEdgePrintedFMatrix
         (Fus.twoEdgePrintedFMatrix a b c d e ⊗ₖ
           (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
       Fus.leftAssocFourfoldSynthesis a b c d e := by
-  rw [twoEdgePrintedFMatrix]
-  have hPath :
-      (Fus.pairToRightAssocPrintedFMatrix a b c d e *
-          Fus.leftAssocToPairPrintedFMatrix a b c d e) ⊗ₖ
-          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) =
-        (Fus.pairToRightAssocPrintedFMatrix a b c d e ⊗ₖ
-          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) *
-          (Fus.leftAssocToPairPrintedFMatrix a b c d e ⊗ₖ
-            (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) := by
-    simpa only [Matrix.one_mul] using Matrix.mul_kronecker_mul
-      (Fus.pairToRightAssocPrintedFMatrix a b c d e)
-      (Fus.leftAssocToPairPrintedFMatrix a b c d e)
-      (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) 1
-  rw [hPath, ← Matrix.mul_assoc]
-  rw [Fus.rightAssocFourfoldSynthesis_mul_pairToRightAssocPrintedFMatrix]
+  rw [twoEdgePrintedFMatrix, mul_kronecker_one, ← Matrix.mul_assoc,
+    Fus.rightAssocFourfoldSynthesis_mul_pairToRightAssocPrintedFMatrix]
   exact Fus.pairFourfoldSynthesis_mul_leftAssocToPairPrintedFMatrix
     a b c d e
 

@@ -1,11 +1,12 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
-import TNLean.MPS.RFP.Defs
 import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.Correlations
+import TNLean.MPS.Core.Transfer
+import TNLean.MPS.RFP.Defs
 import TNLean.Spectral.MixedTransfer
 
 /-!
@@ -165,13 +166,13 @@ theorem isPositiveGapPhysicalCID_of_isTransferIdempotent
   intro L₁ L₂ O₁ O₂ n₁ n₂ m₁ m₂ _ _ hn₁ hn₂ hm₁ hm₂ _
   have hIdem : IsIdempotentElem (transferMap A) := hRFP
   have hpow_n₁ : (transferMap A) ^ n₁ = transferMap A :=
-    hIdem.pow_eq (by omega)
+    hIdem.pow_eq (Nat.ne_of_gt hn₁)
   have hpow_n₂ : (transferMap A) ^ n₂ = transferMap A :=
-    hIdem.pow_eq (by omega)
+    hIdem.pow_eq (Nat.ne_of_gt hn₂)
   have hpow_m₁ : (transferMap A) ^ m₁ = transferMap A :=
-    hIdem.pow_eq (by omega)
+    hIdem.pow_eq (Nat.ne_of_gt hm₁)
   have hpow_m₂ : (transferMap A) ^ m₂ = transferMap A :=
-    hIdem.pow_eq (by omega)
+    hIdem.pow_eq (Nat.ne_of_gt hm₂)
   simp only [physicalTwoPointExpectation, hpow_n₁, hpow_n₂, hpow_m₁, hpow_m₂]
 
 /-- Local orthogonality in the single-block convention used by this file:
@@ -276,8 +277,8 @@ Definition 3.3 (lines 437--445), while the BNT and local-orthogonality
 components of Definition 3.6 (lines 476--478) are unchanged. -/
 theorem isPositiveGapBNTZCL_of_isPhysicalBNTZCL (A : MPSTensor d D)
     (blocks : (j : Fin g) → MPSTensor d (dim j))
-    (hZCL : IsPhysicalBNTZCL A blocks) : IsPositiveGapBNTZCL A blocks := by
-  exact ⟨hZCL.1, isPositiveGapPhysicalCID_of_isPhysicalCID A hZCL.2.1, hZCL.2.2⟩
+    (hZCL : IsPhysicalBNTZCL A blocks) : IsPositiveGapBNTZCL A blocks :=
+  ⟨hZCL.1, isPositiveGapPhysicalCID_of_isPhysicalCID A hZCL.2.1, hZCL.2.2⟩
 
 /-- Zero correlation length in the single-block convention: a tensor has ZCL
 when it satisfies the local idempotence convention above and has correlations
@@ -364,9 +365,9 @@ theorem zcl_iff_idempotent_transfer (A : MPSTensor d D) :
     refine ⟨hRFP, fun ρR _ _ X Y n m hn hm => ?_⟩
     have hIdem : IsIdempotentElem (transferMap A) := hRFP
     have hpow_n : (transferMap A) ^ n = transferMap A :=
-      hIdem.pow_eq (by omega)
+      hIdem.pow_eq (Nat.ne_of_gt hn)
     have hpow_m : (transferMap A) ^ m = transferMap A :=
-      hIdem.pow_eq (by omega)
+      hIdem.pow_eq (Nat.ne_of_gt hm)
     simp only [connectedCorrelator_def, twoPointExpectation_transfer,
       hpow_n, hpow_m]
 
