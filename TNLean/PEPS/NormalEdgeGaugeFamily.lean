@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import TNLean.PEPS.NormalEdgeBlockingInterior
 import TNLean.PEPS.NormalEdgeSingleCrossing
 import TNLean.PEPS.CoherentFrameInstance2
@@ -147,10 +153,11 @@ theorem gl_conj_unique_scalar {n : ℕ} (Z Z' : GL (Fin n) ℂ)
   -- The scalar is nonzero: when the bond space is empty pick `1`, else use `det W`.
   rcases isEmpty_or_nonempty (Fin n) with hempty | hne
   · exact ⟨1, by simp only [Units.val_one, one_smul]; exact Subsingleton.elim _ _⟩
-  · have hc0 : c ≠ 0 := by
+  · letI : Nonempty (Fin n) := hne
+    have hc0 : c ≠ 0 := by
       rintro rfl
       rw [hc, hscal, zero_smul] at hWunit
-      rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_zero hne] at hWunit
+      rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_zero] at hWunit
       exact not_isUnit_zero hWunit
     refine ⟨Units.mk0 c hc0, ?_⟩
     have hZ'mZmW : Z'm = Zm * W := by

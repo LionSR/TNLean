@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import TNLean.PEPS.FundamentalTheorem
 
 /-!
@@ -389,8 +395,8 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
       rintro h0
       have hu : IsUnit (0 : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :=
         h0 ▸ hUnitY v ie
-      obtain ⟨i⟩ := hneVertex v ie
-      rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_zero ⟨i⟩] at hu
+      letI : Nonempty (Fin (A.bondDim ie.1)) := hneVertex v ie
+      rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_zero] at hu
       exact not_isUnit_zero hu
     have hab : a • edgeGaugeAt A Y v ie = b • edgeGaugeAt A Y v ie := ha ▸ hb
     exact sub_eq_zero.mp (by
@@ -414,8 +420,8 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     have hrel := hcvProp e.1.1 ⟨e, Or.inl rfl⟩
     rw [hloIncX, hloIncY, h0, zero_smul] at hrel
     have hXunit : IsUnit (X e).val := (X e).isUnit
-    obtain ⟨i⟩ := hneVertex e.1.1 ⟨e, Or.inl rfl⟩
-    rw [hrel, Matrix.isUnit_iff_isUnit_det, Matrix.det_zero ⟨i⟩] at hXunit
+    letI : Nonempty (Fin (A.bondDim e)) := hneVertex e.1.1 ⟨e, Or.inl rfl⟩
+    rw [hrel, Matrix.isUnit_iff_isUnit_det, Matrix.det_zero] at hXunit
     exact not_isUnit_zero hXunit
   -- The edge-scalar family.
   set c : (e : Edge G) → Units ℂ :=
