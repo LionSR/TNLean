@@ -1,0 +1,281 @@
+% Reusable MPDO and fusion motifs for the chapter-facing diagram catalogue.
+%
+% The commands in this file own the geometry of repeated connected graphs.
+% Catalogue declarations select only a profile, an origin, and mathematical
+% labels; they do not prescribe canvas coordinates.
+
+\makeatletter
+
+\newcommand{\TNMPDOMotifEvent}[2]{%
+    \TNEventInternal
+        {motif|picture=\the\TN@pictureid|name=#1|kind=#2}%
+}
+
+% Adapters for older intrinsic motifs whose public placement argument is a
+% named coordinate.  The adapter gives them the same relative-placement
+% interface as the semantic atoms.
+\newcommand{\TNMPDOPurificationMotif}[2]{%
+    \TNMPDOMotifEvent{#1}{purification}%
+    \TNPlaceObjectInternal{#1Origin}{#2}%
+    \TNPurificationSite{#1}{(#1OriginPlacement)}{A}{\overline A}%
+}
+
+\newcommand{\TNMPDOCompactTraceMotif}[5]{%
+    \TNMPDOMotifEvent{#1}{compact-trace}%
+    \TNPlaceObjectInternal{#1Origin}{#2}%
+    \TNCompactTraceCell{#1}{(#1OriginPlacement)}{#3}{#4}{#5}%
+}
+
+\newcommand{\TNMPDOFactorChainTwo}[3]{%
+    \TNMPDOMotifEvent{#1}{factor-chain-two}%
+    \TNPlaceObjectInternal{#1Origin}{#2}%
+    \TNFactorChainTwo{#1}{(#1OriginPlacement)}{#3}%
+}
+
+\newcommand{\TNMPDOFactorChainThree}[3]{%
+    \TNMPDOMotifEvent{#1}{factor-chain-three}%
+    \TNPlaceObjectInternal{#1Origin}{#2}%
+    \TNFactorChainThree{#1}{(#1OriginPlacement)}{#3}%
+}
+
+\newcommand{\TNMPDOFactorChainFour}[3]{%
+    \TNMPDOMotifEvent{#1}{factor-chain-four}%
+    \TNPlaceObjectInternal{#1Origin}{#2}%
+    \TNFactorChainFour{#1}{(#1OriginPlacement)}{#3}%
+}
+
+\newcommand{\TNMPDOBNTDecompositionMotif}[2]{%
+    \TNMPDOMotifEvent{#1}{bnt-coefficient-decomposition}%
+    \TNPlaceObjectInternal{#1Origin}{#2}%
+    \TNBNTCoefficientDecomposition{#1}{(#1OriginPlacement)}%
+}
+
+\newcommand{\TNMPDOBinaryFusionTree}[6]{%
+    \TNMPDOMotifEvent{#1}{binary-fusion-tree}%
+    \TNPlaceObjectInternal{#1Origin}{#2}%
+    \TNBinaryFusionTree{#1}{(#1OriginPlacement)}{#3}{#4}{#5}{#6}%
+    \TNOpenVirtualSouth{#1LowerCombined}%
+}
+
+% Three representative sites of a double-layer overlap word, with a genuine
+% omitted column between the second and final sites.
+\newcommand{\TNMPDOOverlapWord}[5]{%
+    \TNMPDOMotifEvent{#1}{overlap-word}%
+    \TNStackedMPOProduct{#1Left}{#2}{}{}{}%
+    \TNStackedMPOProduct{#1Middle}{right=of #1LeftUpper}{}{}{}%
+    \TNStackedOmission{#1Omission}{right=of #1MiddleUpper}%
+    \TNStackedMPOProduct{#1Right}{right=of #1OmissionUpper}{}{}{}%
+    \TNConnectVirtual{#1LeftUpperEast}{#1MiddleUpperWest}%
+    \TNOpenVirtualEast{#1MiddleUpperEast}%
+    \TNOpenVirtualWest{#1RightUpperWest}%
+    \TNTraceVirtualAbove{#1LeftUpperWest}{#1RightUpperEast}%
+    \TNConnectVirtual{#1LeftLowerEast}{#1MiddleLowerWest}%
+    \TNOpenVirtualEast{#1MiddleLowerEast}%
+    \TNOpenVirtualWest{#1RightLowerWest}%
+    \TNTraceVirtualBelow{#1LeftLowerWest}{#1RightLowerEast}%
+    \TNLabelLeft{#1LeftUpper}{#3}%
+    \TNLabelLeft{#1LeftLower}{\overline{#4}}%
+    \TNLabelBelow{#1OmissionLower}{#5}%
+}
+
+% The two bracketings of a three-input cofusion tree.  The placement argument
+% locates the lower map; the second map is positioned by its incidence role.
+\newcommand{\TNMPDOLeftCofusionTree}[9]{%
+    \TNMPDOMotifEvent{#1}{left-cofusion-tree}%
+    \TNCofusionMap{#1Lower}{#2}{#3}%
+    \TNCofusionMap{#1Upper}{above right=of #1Lower}{#4}%
+    \TNConnectVirtual{#1LowerCombined}{#1UpperFactorOne}%
+    \TNOpenVirtualSouth{#1LowerFactorOne}%
+    \TNOpenVirtualSouth{#1LowerFactorTwo}%
+    \TNOpenVirtualSouth{#1UpperFactorTwo}%
+    \TNOpenVirtualNorth{#1UpperCombined}%
+    \TNLabelBelow{#1LowerFactorOneOpen}{#5}%
+    \TNLabelBelow{#1LowerFactorTwoOpen}{#6}%
+    \TNLabelBelow{#1UpperFactorTwoOpen}{#7}%
+    \TNLabelAbove{#1UpperCombinedOpen}{#8}%
+    \TNLabelBelow{#1Lower}{#9}%
+}
+
+\newcommand{\TNMPDORightCofusionTree}[9]{%
+    \TNMPDOMotifEvent{#1}{right-cofusion-tree}%
+    \TNCofusionMap{#1Lower}{#2}{#3}%
+    \TNCofusionMap{#1Upper}{above left=of #1Lower}{#4}%
+    \TNConnectVirtual{#1LowerCombined}{#1UpperFactorTwo}%
+    \TNOpenVirtualSouth{#1UpperFactorOne}%
+    \TNOpenVirtualSouth{#1LowerFactorOne}%
+    \TNOpenVirtualSouth{#1LowerFactorTwo}%
+    \TNOpenVirtualNorth{#1UpperCombined}%
+    \TNLabelBelow{#1UpperFactorOneOpen}{#5}%
+    \TNLabelBelow{#1LowerFactorOneOpen}{#6}%
+    \TNLabelBelow{#1LowerFactorTwoOpen}{#7}%
+    \TNLabelAbove{#1UpperCombinedOpen}{#8}%
+    \TNLabelBelow{#1Lower}{#9}%
+}
+
+% The five four-input fusion trees.  Each command exposes the three map nodes
+% so the pentagon arrows can attach directly to the corresponding trees.
+\newcommand{\TNMPDOFusionTreeFourLeft}[2]{%
+    \TNMPDOMotifEvent{#1}{fusion-tree-four-left}%
+    \TNFusionMap{#1First}{#2}{}%
+    \TNFusionMap{#1Second}{below right=of #1First}{}%
+    \TNFusionMap{#1Root}{below right=of #1Second}{}%
+    \TNOpenVirtualNorth{#1FirstFactorOne}%
+    \TNOpenVirtualNorth{#1FirstFactorTwo}%
+    \TNConnectVirtual{#1FirstCombined}{#1SecondFactorOne}%
+    \TNOpenVirtualNorth{#1SecondFactorTwo}%
+    \TNConnectVirtual{#1SecondCombined}{#1RootFactorOne}%
+    \TNOpenVirtualNorth{#1RootFactorTwo}%
+    \TNOpenVirtualSouth{#1RootCombined}%
+    \TNLabelAbove{#1FirstFactorOneOpen}{a}%
+    \TNLabelAbove{#1FirstFactorTwoOpen}{b}%
+    \TNLabelAbove{#1SecondFactorTwoOpen}{c}%
+    \TNLabelAbove{#1RootFactorTwoOpen}{d}%
+    \TNLabelLeft{#1FirstCombined}{f}%
+    \TNLabelLeft{#1SecondCombined}{g}%
+    \TNLabelBelow{#1RootCombinedOpen}{e}%
+}
+
+\newcommand{\TNMPDOFusionTreeFourLeftInner}[2]{%
+    \TNMPDOMotifEvent{#1}{fusion-tree-four-left-inner}%
+    \TNFusionMap{#1First}{#2}{}%
+    \TNFusionMap{#1Second}{below left=of #1First}{}%
+    \TNFusionMap{#1Root}{below right=of #1Second}{}%
+    \TNOpenVirtualNorth{#1FirstFactorOne}%
+    \TNOpenVirtualNorth{#1FirstFactorTwo}%
+    \TNOpenVirtualNorth{#1SecondFactorOne}%
+    \TNConnectVirtual{#1FirstCombined}{#1SecondFactorTwo}%
+    \TNConnectVirtual{#1SecondCombined}{#1RootFactorOne}%
+    \TNOpenVirtualNorth{#1RootFactorTwo}%
+    \TNOpenVirtualSouth{#1RootCombined}%
+    \TNLabelAbove{#1SecondFactorOneOpen}{a}%
+    \TNLabelAbove{#1FirstFactorOneOpen}{b}%
+    \TNLabelAbove{#1FirstFactorTwoOpen}{c}%
+    \TNLabelAbove{#1RootFactorTwoOpen}{d}%
+    \TNLabelLeft{#1FirstCombined}{h}%
+    \TNLabelLeft{#1SecondCombined}{g}%
+    \TNLabelBelow{#1RootCombinedOpen}{e}%
+}
+
+\newcommand{\TNMPDOFusionTreeFourMiddle}[2]{%
+    \TNMPDOMotifEvent{#1}{fusion-tree-four-middle}%
+    \TNFusionMap{#1First}{#2}{}%
+    \TNFusionMap{#1Second}{below right=of #1First}{}%
+    \TNFusionMap{#1Root}{below left=of #1Second}{}%
+    \TNOpenVirtualNorth{#1FirstFactorOne}%
+    \TNOpenVirtualNorth{#1FirstFactorTwo}%
+    \TNConnectVirtual{#1FirstCombined}{#1SecondFactorOne}%
+    \TNOpenVirtualNorth{#1SecondFactorTwo}%
+    \TNOpenVirtualNorth{#1RootFactorOne}%
+    \TNConnectVirtual{#1SecondCombined}{#1RootFactorTwo}%
+    \TNOpenVirtualSouth{#1RootCombined}%
+    \TNLabelAbove{#1RootFactorOneOpen}{a}%
+    \TNLabelAbove{#1FirstFactorOneOpen}{b}%
+    \TNLabelAbove{#1FirstFactorTwoOpen}{c}%
+    \TNLabelAbove{#1SecondFactorTwoOpen}{d}%
+    \TNLabelRight{#1FirstCombined}{h}%
+    \TNLabelRight{#1SecondCombined}{i}%
+    \TNLabelBelow{#1RootCombinedOpen}{e}%
+}
+
+\newcommand{\TNMPDOFusionTreeFourRight}[2]{%
+    \TNMPDOMotifEvent{#1}{fusion-tree-four-right}%
+    \TNFusionMap{#1First}{#2}{}%
+    \TNFusionMap{#1Second}{below left=of #1First}{}%
+    \TNFusionMap{#1Root}{below left=of #1Second}{}%
+    \TNOpenVirtualNorth{#1FirstFactorOne}%
+    \TNOpenVirtualNorth{#1FirstFactorTwo}%
+    \TNOpenVirtualNorth{#1SecondFactorOne}%
+    \TNConnectVirtual{#1FirstCombined}{#1SecondFactorTwo}%
+    \TNOpenVirtualNorth{#1RootFactorOne}%
+    \TNConnectVirtual{#1SecondCombined}{#1RootFactorTwo}%
+    \TNOpenVirtualSouth{#1RootCombined}%
+    \TNLabelAbove{#1RootFactorOneOpen}{a}%
+    \TNLabelAbove{#1SecondFactorOneOpen}{b}%
+    \TNLabelAbove{#1FirstFactorOneOpen}{c}%
+    \TNLabelAbove{#1FirstFactorTwoOpen}{d}%
+    \TNLabelRight{#1FirstCombined}{j}%
+    \TNLabelRight{#1SecondCombined}{i}%
+    \TNLabelBelow{#1RootCombinedOpen}{e}%
+}
+
+\newcommand{\TNMPDOFusionTreeFourPair}[2]{%
+    \TNMPDOMotifEvent{#1}{fusion-tree-four-pair}%
+    \TNFusionMap{#1Left}{#2}{}%
+    \TNFusionMap{#1Right}{right=of #1Left}{}%
+    \TNFusionMap{#1Root}{below right=of #1Left}{}%
+    \TNOpenVirtualNorth{#1LeftFactorOne}%
+    \TNOpenVirtualNorth{#1LeftFactorTwo}%
+    \TNOpenVirtualNorth{#1RightFactorOne}%
+    \TNOpenVirtualNorth{#1RightFactorTwo}%
+    \TNConnectVirtual{#1LeftCombined}{#1RootFactorOne}%
+    \TNConnectVirtual{#1RightCombined}{#1RootFactorTwo}%
+    \TNOpenVirtualSouth{#1RootCombined}%
+    \TNLabelAbove{#1LeftFactorOneOpen}{a}%
+    \TNLabelAbove{#1LeftFactorTwoOpen}{b}%
+    \TNLabelAbove{#1RightFactorOneOpen}{c}%
+    \TNLabelAbove{#1RightFactorTwoOpen}{d}%
+    \TNLabelLeft{#1LeftCombined}{f}%
+    \TNLabelRight{#1RightCombined}{j}%
+    \TNLabelBelow{#1RootCombinedOpen}{e}%
+}
+
+% The five trees and five F-moves form one canonical pentagon motif.  Numerical
+% separations are confined here because the pentagon is itself a named
+% construction rather than page-local placement.
+\newcommand{\TNMPDOCompleteFusionPentagonMotif}[2]{%
+    \TNMPDOMotifEvent{#1}{complete-fusion-pentagon}%
+    \TNMPDOFusionTreeFourLeft{#1L}{#2}%
+    \TNMPDOFusionTreeFourLeftInner{#1LI}
+        {above right=3cm and 3cm of #1LFirst}%
+    \TNMPDOFusionTreeFourMiddle{#1M}{right=4cm of #1LIFirst}%
+    \TNMPDOFusionTreeFourRight{#1R}{below right=3cm and 3cm of #1MFirst}%
+    \TNMPDOFusionTreeFourPair{#1P}{below left=3cm and 3cm of #1MRoot}%
+    \TNMorphismArrow{#1ArrowOne}{(#1LFirst.north)}{(#1LISecond.west)}{F^{abc}_{g}}%
+    \TNMorphismArrow{#1ArrowTwo}{(#1LIFirst.east)}{(#1MFirst.west)}{F^{ahd}_{e}}%
+    \TNMorphismArrow{#1ArrowThree}{(#1MSecond.east)}{(#1RFirst.north)}{F^{bcd}_{i}}%
+    \TNMorphismArrow{#1ArrowFour}{(#1LRoot.east)}{(#1PLeft.west)}{F^{fcd}_{e}}%
+    \TNMorphismArrow{#1ArrowFive}{(#1PRight.east)}{(#1RRoot.west)}{F^{abj}_{e}}%
+}
+
+% A three-cell periodic double-layer word.  Both layers close independently,
+% so the two traces remain distinct in the event graph.
+\newcommand{\TNMPDOStackedPeriodicWord}[5]{%
+    \TNMPDOMotifEvent{#1}{stacked-periodic-word}%
+    \TNStackedMPOProduct{#1Left}{#2}{#3}{#4}{}%
+    \TNStackedMPOProduct{#1Middle}{right=of #1LeftUpper}{#3}{#4}{}%
+    \TNStackedMPOProduct{#1Right}{right=of #1MiddleUpper}{#3}{#4}{}%
+    \TNConnectVirtual{#1LeftUpperEast}{#1MiddleUpperWest}%
+    \TNConnectVirtual{#1MiddleUpperEast}{#1RightUpperWest}%
+    \TNConnectVirtual{#1LeftLowerEast}{#1MiddleLowerWest}%
+    \TNConnectVirtual{#1MiddleLowerEast}{#1RightLowerWest}%
+    \TNTraceVirtualAbove{#1LeftUpperWest}{#1RightUpperEast}%
+    \TNTraceVirtualBelow{#1LeftLowerWest}{#1RightLowerEast}%
+    \TNLabelBelow{#1MiddleLower}{#5}%
+}
+
+% Recursive Q word with a semantic omitted column and a trace cell at its
+% right boundary.
+\newcommand{\TNMPDORecursiveStructureMotif}[2]{%
+    \TNMPDOMotifEvent{#1}{recursive-structure-operator}%
+    \TNMPOSite{#1One}{#2}{X}%
+    \TNMPOSite{#1Two}{right=of #1One}{X}%
+    \TNMPOSite{#1Three}{right=of #1Two}{X}%
+    \TNOmission{#1Omission}{right=of #1Three}%
+    \TNMPOSite{#1Last}{right=of #1Omission}{X}%
+    \TNMPDOCompactTraceMotif{#1Trace}{right=2cm of #1Last}{M_\gamma}{1}{}%
+    \TNConnectVirtual{#1OneEast}{#1TwoWest}%
+    \TNConnectVirtual{#1TwoEast}{#1ThreeWest}%
+    \TNConnectVirtual{#1LastEast}{#1TraceInsertionW}%
+    \TNOpenVirtualWest{#1OneWest}%
+    \foreach \name in {One,Two,Three,Last} {%
+        \TNOpenPhysicalNorth{#1\name Ket}%
+        \TNOpenPhysicalSouth{#1\name Bra}%
+    }%
+    \TNLabelAbove{#1TwoKetOpen}{k}%
+    \TNLabelBelow{#1TwoBraOpen}{\alpha,\beta,\gamma}%
+    \TNLabelBelow{#1TraceCentre}{\tr(M_\gamma)}%
+}
+
+\makeatother
+
+\endinput
