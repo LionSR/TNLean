@@ -1510,9 +1510,22 @@
     Theorem~\ref{thm:halved_weight_zcl_not_rfp}.
 \end{theorem}
 \begin{proof}\leanok
-    The forward direction extracts the idempotence hypothesis. The reverse uses
-    $\E^n = \E$ for $n \ge 1$ to show the connected correlator is
-    separation-independent.
+    The forward direction extracts the idempotence hypothesis.  Conversely,
+    idempotence gives $\E_A^n=\E_A$ for every $n\geq 1$.  Hence, for every
+    positive-definite right fixed point $\rho^R$, every pair of virtual
+    matrices $X,Y$, and every $n\geq 1$,
+    \[
+        \begin{aligned}
+        C(X,Y;n)
+        &=\operatorname{tr}\!\left(Y\E_A^n(X\rho^R)\right)
+          -\operatorname{tr}(X\rho^R)\operatorname{tr}(Y\rho^R)\\
+        &=\operatorname{tr}\!\left(Y\E_A(X\rho^R)\right)
+          -\operatorname{tr}(X\rho^R)\operatorname{tr}(Y\rho^R)\\
+        &=C(X,Y;1).
+        \end{aligned}
+    \]
+    Thus the connected correlator is independent of every positive
+    separation.
 \end{proof}
 
 \begin{theorem}[Single-block RFP iff ZCL inside a canonical form]%
