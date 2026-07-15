@@ -153,6 +153,41 @@ namespace MPSTensor.IsBNTCanonicalForm
 
 variable {d : ℕ} {P : SectorDecomposition d}
 
+/-- Every representative of a BNT canonical form is block injective at the
+common length `P.totalDim ^ 4`.
+
+For representative `j`, quantum Wielandt gives exact block injectivity at
+`(P.basisDim j) ^ 4`.  The representative occurs in the flattened sector
+tensor, hence `P.basisDim j ≤ P.totalDim`, and positive-length block
+injectivity propagates to the common length.
+
+Source: arXiv:1606.00608, lines 332--344. -/
+theorem basis_isNBlkInjective_totalDim_pow_four
+    (hCF : IsBNTCanonicalForm P) :
+    ∀ j : Fin P.basisCount,
+      IsNBlkInjective (P.basis j) (P.totalDim ^ 4) := by
+  intro j
+  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+  have hNormal : IsNormal (P.basis j) :=
+    isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
+      (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
+        (hCF.basis_normalized_self_overlap j)
+  have hOwn : IsNBlkInjective (P.basis j) ((P.basisDim j) ^ 4) :=
+    isNBlkInjective_pow_four_of_isNormal_leftCanonical
+      (P.basis j) (hCF.basis_left_canonical j) hNormal
+  have hOwnPos : 0 < (P.basisDim j) ^ 4 :=
+    Nat.pow_pos (hCF.basis_dim_pos j)
+  have hPow : (P.basisDim j) ^ 4 ≤ P.totalDim ^ 4 :=
+    Nat.pow_le_pow_left (P.basisDim_le_totalDim j) 4
+  obtain ⟨k, hD⟩ := Nat.exists_eq_add_of_le hPow
+  rw [hD]
+  clear hD
+  induction k with
+  | zero => simpa using hOwn
+  | succ k ih =>
+      rw [Nat.add_succ]
+      exact isNBlkInjective_succ_of_isNBlkInjective (P.basis j) (by omega) ih
+
 /-- The finitely many representatives of a BNT canonical form have one common
 positive block-injectivity length.
 

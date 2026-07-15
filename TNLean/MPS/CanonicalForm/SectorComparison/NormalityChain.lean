@@ -268,6 +268,32 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
       ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
 
+/-- **Left-canonical normal tensor is block injective at length `D ^ 4`.**
+
+The bounded Wielandt theorem above produces an injective length at most
+`D ^ 4`.  Positive-length block injectivity propagates to every larger length,
+so one may use the same exact length `D ^ 4` for every tensor of bond dimension
+`D`.
+
+Source: arXiv:1606.00608, lines 332--344. -/
+theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hN : IsNormal A) :
+    IsNBlkInjective A (D ^ 4) := by
+  obtain ⟨L, hLpos, hLle, hL⟩ :=
+    exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical A hTP hN
+  have hL' : IsNBlkInjective A L :=
+    (isNBlkInjective_iff_blockTensor_isInjective A L).2 hL
+  obtain ⟨k, hD⟩ := Nat.exists_eq_add_of_le hLle
+  rw [hD]
+  clear hD
+  induction k with
+  | zero => simpa using hL'
+  | succ k ih =>
+      rw [Nat.add_succ]
+      exact isNBlkInjective_succ_of_isNBlkInjective A (by omega) ih
+
 /-!
 ## IsNormal is preserved by blocking
 
