@@ -114,6 +114,7 @@ import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.KleinInequality
 import TNLean.Analysis.MarginalSupport
+import TNLean.Channel.MarginalSupport
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
@@ -271,7 +272,6 @@ import TNLean.MPS.ParentHamiltonian.BoundaryBlockMatEq
 import TNLean.Axioms.Beigi
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Decorrelation
-import TNLean.MPS.ParentHamiltonian.TripartiteSupport
 import TNLean.MPS.ParentHamiltonian.Martingale
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 -- The finite-chain uniqueness capstone is not part of this foundational layer.

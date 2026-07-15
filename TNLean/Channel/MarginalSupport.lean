@@ -3,21 +3,19 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Analysis.MarginalSupport
-import TNLean.Analysis.CfcKronecker
 import TNLean.Channel.MaximalOverlap
 
 /-!
 # Support projectors of bipartite marginals
 
-This file begins the tensor-product formulation of the decorrelation-to-parent
-implication in the parent-commuting-Hamiltonian equivalence.  Its first step is
-the absorption property of the projector onto the support of a marginal.
+This file proves that the support projector of a bipartite marginal, tensored
+with the identity on the discarded factor, fixes the original positive
+semidefinite operator on both sides.
 
 ## Main results
 
-* `Matrix.PosSemidef.leftKroneckerEmbed_supportProj_mul_self`: the lifted support
-  projector of the right partial trace fixes the original positive
-  semidefinite operator on the left.
+* `Matrix.PosSemidef.leftKroneckerEmbed_supportProj_mul_self`: left absorption
+  by the lifted support projector of the right partial trace.
 * `Matrix.PosSemidef.mul_leftKroneckerEmbed_supportProj_self`: the corresponding
   right absorption identity.
 
@@ -35,25 +33,6 @@ namespace Matrix
 section Bipartite
 
 variable {L R : Type*} [Fintype L] [DecidableEq L] [Fintype R] [DecidableEq R]
-
-/-- Partial trace and tensor-product lift are adjoint for the trace pairing:
-\(\operatorname{tr}((M\otimes\mathbf 1)\rho)
-=\operatorname{tr}(M\operatorname{tr}_R\rho)\). -/
-theorem trace_leftKroneckerEmbed_mul
-    (M : Matrix L L ℂ) (ρ : Matrix (L × R) (L × R) ℂ) :
-    (leftKroneckerEmbed (n := R) M * ρ).trace = (M * partialTraceRight ρ).trace := by
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type,
-    leftKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
-    partialTraceRight_apply, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  refine Finset.sum_congr rfl fun r _ => ?_
-  rw [Finset.sum_eq_single r]
-  · simp
-  · intro s _ hrs
-    simp [Ne.symm hrs]
-  · simp
 
 /-- The lifted support projector of the right partial trace fixes a positive
 semidefinite bipartite operator on the left.
