@@ -26,8 +26,8 @@ below.
 - A curved line is reserved for a trace or a genuinely periodic identification.
   Orthogonal routing may be used when a straight contraction would obscure the
   order of composition.
-- A crossing is never left implicit.  Coincident lines meet only at a declared
-  junction; noninteracting lines cross only at a declared bridge.
+- Independent contractions are laid out without crossings.  Coincident lines
+  meet only at a declared junction.
 - Colour is redundant.  Labels, topology, line form, or boundary form preserve
   every distinction in greyscale.
 - Tensor products and direct sums are written as mathematical symbols.  They
@@ -196,12 +196,11 @@ its intended reading size.
 ## Audit and gallery
 
 Every rendered diagram emits a semantic event log containing its atoms, ports,
-aliases, contractions, motif boundaries, and declared crossings.  The audit
-checks the event stream, canonicalizes the labelled network graph, and rejects
-ill-typed or incomplete constructions.  It also rejects private implementation
-commands, raw TikZ, client geometry, stale declarations, ignored arguments,
-undeclared crossings, and repeated four-to-eight-atom topologies that should be
-a named motif.
+aliases, contractions, and motif boundaries.  The audit checks the event
+stream, canonicalizes the labelled network graph, and rejects ill-typed
+contractions.  It also rejects private implementation commands, raw TikZ,
+client geometry, stale declarations, ignored arguments, and repeated
+four-to-eight-atom topologies that should be a named motif.
 
 The generated gallery contains every declared atom and every registered
 diagram.  Atom pages state the complete typed port schema.  Diagram pages show
