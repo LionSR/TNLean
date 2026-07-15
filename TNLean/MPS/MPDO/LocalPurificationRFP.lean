@@ -51,6 +51,9 @@ pure-state RFP.
 
 ## Main results
 
+* `MPOTensor.purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq`:
+  for a fixed local purification, the purifying tensor is a pure-state RFP if
+  and only if the physical-trace transfer is idempotent.
 * `MPOTensor.IsLocalPurificationRFP.isLPDO`: the local condition supplies an
   LPDO witness.
 * `MPOTensor.IsLocalPurificationRFP.isMPDO`: the local condition generates
