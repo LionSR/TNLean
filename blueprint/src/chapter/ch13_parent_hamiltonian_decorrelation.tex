@@ -24,22 +24,10 @@ support projector of the retained left marginal, lifted to the full space,
 fixes the original operator.  These are the support-projector identities used in
 \cite[Appendix~D.2, lines 2225--2235]{Cirac2016MPDO_arXiv}.
 
-\begin{definition}[Lift from the left tensor factor]
-    \label{def:lift_left_factor}
-    \lean{Matrix.liftLeftFactor}
-    \leanok
-    If $M$ acts on a finite-dimensional space $H_L$, its lift to
-    $H_L\otimes H_R$ is
-    \[
-        M\otimes \mathbf 1_R.
-    \]
-\end{definition}
-
 \begin{lemma}[Adjoint identity for the right partial trace]
     \label{lem:trace_lift_left_factor_mul}
-    \lean{Matrix.trace_liftLeftFactor_mul}
+    \lean{Matrix.trace_leftKroneckerEmbed_mul}
     \leanok
-    \uses{def:lift_left_factor}
     For every operator $M$ on $H_L$ and every operator $\rho$ on
     $H_L\otimes H_R$,
     \[
@@ -56,9 +44,9 @@ fixes the original operator.  These are the support-projector identities used in
 
 \begin{theorem}[Left absorption by the marginal support projector]
     \label{thm:marginal_support_left_absorption}
-    \lean{Matrix.PosSemidef.liftLeftFactor_supportProj_mul_self}
+    \lean{Matrix.PosSemidef.leftKroneckerEmbed_supportProj_mul_self}
     \leanok
-    \uses{def:lift_left_factor,lem:trace_lift_left_factor_mul}
+    \uses{lem:trace_lift_left_factor_mul}
     Let $\rho$ be positive semidefinite on $H_L\otimes H_R$, and let $P_L$ be
     the orthogonal projector onto the support of $\operatorname{tr}_R\rho$.
     Then
@@ -77,9 +65,9 @@ fixes the original operator.  These are the support-projector identities used in
 
 \begin{theorem}[Right absorption by the marginal support projector]
     \label{thm:marginal_support_right_absorption}
-    \lean{Matrix.PosSemidef.mul_liftLeftFactor_supportProj_self}
+    \lean{Matrix.PosSemidef.mul_leftKroneckerEmbed_supportProj_self}
     \leanok
-    \uses{def:lift_left_factor,thm:marginal_support_left_absorption}
+    \uses{thm:marginal_support_left_absorption}
     Under the same assumptions,
     \[
         \rho(P_L\otimes\mathbf 1_R)=\rho.
