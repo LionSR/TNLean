@@ -17,9 +17,10 @@ WORK_DIR="$(mktemp -d)"
 trap 'rm -rf "$WORK_DIR"' EXIT
 
 echo "==> Copying blueprint sources..."
-mkdir -p "$WORK_DIR/blueprint"
-cp -R "$REPO_ROOT/blueprint/src" "$WORK_DIR/blueprint/src"
-cp -R "$REPO_ROOT/tex" "$WORK_DIR/tex"
+mkdir -p "$WORK_DIR/blueprint/src" "$WORK_DIR/tex"
+rsync -a --exclude='.tn_svg_cache/' \
+  "$REPO_ROOT/blueprint/src/" "$WORK_DIR/blueprint/src/"
+cp -R "$REPO_ROOT/tex/tn" "$WORK_DIR/tex/tn"
 
 # Verify that the dedicated router contains exactly ch01_* through ch12_*.
 echo "==> Checking the FT--MPS chapter router..."
