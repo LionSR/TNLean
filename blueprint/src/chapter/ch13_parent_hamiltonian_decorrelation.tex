@@ -586,9 +586,17 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Insert $\mathbf 1=P+(\mathbf 1-P)$ between the two support projectors.
-    The complementary term vanishes by decorrelation, while absorption gives
-    $P_{XB}PP_{AX}=P$ and $P_{AX}PP_{XB}=P$.
+    Inserting $\mathbf 1=P+(\mathbf 1-P)$ between the two support projectors
+    gives
+    \[
+        P_{XB}P_{AX}
+        =P_{XB}PP_{AX}+P_{XB}(\mathbf 1-P)P_{AX}
+        =P+0
+        =P.
+    \]
+    Here the second equality uses the support-absorption identities and
+    Theorem~\ref{thm:tripartite_complementary_product_zero}.  The same
+    calculation with the two factors reversed gives $P_{AX}P_{XB}=P$.
 \end{proof}
 
 \begin{definition}[Parent commuting Hamiltonian on the tripartite space]
