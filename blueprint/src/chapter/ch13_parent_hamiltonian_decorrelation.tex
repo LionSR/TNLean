@@ -200,18 +200,54 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     space by tensoring with identities on their complementary factors.
 \end{definition}
 
-\begin{definition}[Tripartite decorrelation]
-    \label{def:tripartite_decorrelation}
-    \lean{TripartiteDecorrelation.IsDecorrelated}
+\begin{definition}[Tripartite observable decorrelation]
+    \label{def:tripartite_observable_decorrelation}
+    \lean{TripartiteDecorrelation.IsObservableDecorrelated}
     \leanok
     \uses{def:tripartite_local_lifts}
-    Regions $A$ and $B$ are decorrelated relative to $P$ if, for all operators
-    $O_A$ and $O_B$,
+    Regions $A$ and $B$ are decorrelated relative to $P$ if, for all Hermitian
+    observables $O_A=O_A^\dagger$ and $O_B=O_B^\dagger$,
     \[
         P O_A(\mathbf 1-P)O_B P=0.
     \]
     This is \cite[Definition~D.1, lines 2187--2191]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{definition}[Complex-linear extension of decorrelation]
+    \label{def:tripartite_decorrelation}
+    \lean{TripartiteDecorrelation.IsDecorrelated}
+    \leanok
+    \uses{def:tripartite_local_lifts}
+    The complex-linear extension requires
+    \[
+        P O_A(\mathbf 1-P)O_B P=0
+    \]
+    for arbitrary complex matrices $O_A$ and $O_B$.
+\end{definition}
+
+\begin{theorem}[Observable and complex-linear decorrelation are equivalent]
+    \label{thm:tripartite_observable_decorrelation_iff}
+    \lean{TripartiteDecorrelation.isObservableDecorrelated_iff}
+    \leanok
+    \uses{def:tripartite_observable_decorrelation,
+      def:tripartite_decorrelation}
+    Observable decorrelation holds if and only if its complex-linear extension
+    holds.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every complex matrix has the decomposition
+    \[
+        O=H+\mathrm{i}K,
+        \qquad
+        H=\frac{O+O^\dagger}{2},
+        \qquad
+        K=\frac{O-O^\dagger}{2\mathrm{i}},
+    \]
+    where $H=H^\dagger$ and $K=K^\dagger$.  Expand the decorrelation
+    expression in both observables; its four Hermitian pairs vanish.
+\end{proof}
 
 \begin{theorem}[Reverse order of decorrelation]
     \label{thm:tripartite_decorrelation_reverse}
@@ -265,27 +301,41 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     partial trace.
 \end{proof}
 
-\begin{theorem}[Decorrelation for the two reduced operators]
+\begin{theorem}[Decorrelation for the reduced operators]
     \label{thm:tripartite_marginal_complementary_product_zero}
-    \lean{TripartiteDecorrelation.IsDecorrelated.marginals_mul_complement_mul_eq_zero,
-      TripartiteDecorrelation.IsDecorrelated.reverse_marginals_mul_complement_mul_eq_zero}
+    \lean{TripartiteDecorrelation.IsDecorrelated.marginals_mul_complement_mul_eq_zero}
     \leanok
     \uses{def:tripartite_decorrelation,
-      thm:tripartite_decorrelation_reverse,
       thm:tripartite_marginal_matrix_units}
-    If $P=P^\dagger$ and $A,B$ are decorrelated, then
+    If $A,B$ are decorrelated, then
     \[
         \rho_{XB}(\mathbf 1-P)\rho_{AX}=0,
-        \qquad
-        \rho_{AX}(\mathbf 1-P)\rho_{XB}=0,
     \]
     where each reduced operator is lifted to the tripartite space.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Substitute the matrix-unit expansions.  Every summand contains one of the
-    two decorrelation products and is therefore zero.
+    Substitute the matrix-unit expansions.  Every summand contains a
+    decorrelation product and is therefore zero.
+\end{proof}
+
+\begin{theorem}[Reverse reduced-operator decorrelation]
+    \label{thm:tripartite_reverse_marginal_complementary_product_zero}
+    \lean{TripartiteDecorrelation.IsDecorrelated.reverse_marginals_mul_complement_mul_eq_zero}
+    \leanok
+    \uses{thm:tripartite_decorrelation_reverse,
+      thm:tripartite_marginal_matrix_units}
+    If $P=P^\dagger$ and $A,B$ are decorrelated, then
+    \[
+        \rho_{AX}(\mathbf 1-P)\rho_{XB}=0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Substitute the matrix-unit expansions and use reverse-order
+    decorrelation in every summand.
 \end{proof}
 
 \begin{definition}[Tripartite marginal support projectors]
@@ -304,8 +354,9 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       TripartiteDecorrelation.IsDecorrelated.reverse_supports_mul_complement_mul_eq_zero}
     \leanok
     \uses{def:tripartite_marginal_supports,
-      thm:tripartite_marginal_complementary_product_zero}
-    Under the same assumptions,
+      thm:tripartite_marginal_complementary_product_zero,
+      thm:tripartite_reverse_marginal_complementary_product_zero}
+    If $P=P^\dagger$ and $A,B$ are decorrelated, then
     \[
         P_{XB}(\mathbf 1-P)P_{AX}=0,
         \qquad
@@ -321,8 +372,22 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
         \qquad
         P_{XB}=g(\rho_{XB})\rho_{XB}=\rho_{XB}g(\rho_{XB}).
     \]
-    Multiply the two reduced-operator identities by the appropriate outer
-    factors.
+    Hence
+    \[
+        P_{XB}(\mathbf 1-P)P_{AX}
+        =g(\rho_{XB})
+          \bigl[\rho_{XB}(\mathbf 1-P)\rho_{AX}\bigr]
+          g(\rho_{AX})
+        =0,
+    \]
+    and, in the reverse order,
+    \[
+        P_{AX}(\mathbf 1-P)P_{XB}
+        =g(\rho_{AX})
+          \bigl[\rho_{AX}(\mathbf 1-P)\rho_{XB}\bigr]
+          g(\rho_{XB})
+        =0.
+    \]
     % Local fix for source lines 2236--2252: see
     % docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex.
 \end{proof}
@@ -405,8 +470,8 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     ground space of their sum is the range of $P$.
 \end{definition}
 
-\begin{theorem}[Parent commuting Hamiltonian--decorrelation equivalence]
-    \label{thm:tripartite_parent_iff_decorrelated}
+\begin{theorem}[Parent commuting Hamiltonian--complex-linear decorrelation equivalence]
+    \label{thm:tripartite_parent_iff_complex_linear_decorrelated}
     \lean{TripartiteDecorrelation.CommutingParentHamiltonian.isDecorrelated,
       TripartiteDecorrelation.IsDecorrelated.hasCommutingParentHamiltonian,
       TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}
@@ -416,23 +481,52 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
       thm:tripartite_support_products}
     Let $P=P^\dagger=P^2$.  Then $P$ is the ground-space projector of a
     parent commuting Hamiltonian on $AX$ and $XB$ if and only if regions
-    $A$ and $B$ are decorrelated.
+    $A$ and $B$ satisfy complex-linear decorrelation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Starting from decorrelation, take the support projectors of
+    $\rho_{AX}$ and $\rho_{XB}$.  The preceding product theorem proves their
+    commutation and identifies their product with $P$.
+
+    Starting from commuting parent projectors, write
+    $P=P_{AX}P_{XB}=P_{XB}P_{AX}$.  Locality gives
+    $[O_A,P_{XB}]=[O_B,P_{AX}]=0$, while
+    \[
+        P_{XB}(\mathbf 1-P)P_{AX}=0.
+    \]
+    Therefore, using the two locality commutators,
+    \[
+    \begin{aligned}
+        P O_A(\mathbf 1-P)O_B P
+        &=(P_{AX}P_{XB})O_A(\mathbf 1-P)O_B(P_{AX}P_{XB})\\
+        &=P_{AX}O_A
+          \bigl[P_{XB}(\mathbf 1-P)P_{AX}\bigr]
+          O_B P_{XB}\\
+        &=0.
+    \end{aligned}
+    \]
+\end{proof}
+
+\begin{theorem}[Parent commuting Hamiltonian--observable decorrelation equivalence]
+    \label{thm:tripartite_parent_iff_decorrelated}
+    \lean{TripartiteDecorrelation.parentHamiltonian_iff_observableDecorrelated}
+    \leanok
+    \uses{def:tripartite_observable_decorrelation,
+      thm:tripartite_observable_decorrelation_iff,
+      thm:tripartite_parent_iff_complex_linear_decorrelated}
+    Let $P=P^\dagger=P^2$.  Then $P$ is the ground-space projector of a
+    parent commuting Hamiltonian on $AX$ and $XB$ if and only if regions
+    $A$ and $B$ are decorrelated when tested on Hermitian observables.
     This is \cite[Proposition~D.3, lines 2221--2289]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    For the forward implication, take the support projectors of
-    $\rho_{AX}$ and $\rho_{XB}$.  The preceding product theorem proves their
-    commutation and identifies their product with $P$.
-
-    Conversely, write $P=P_{AX}P_{XB}=P_{XB}P_{AX}$.  Locality gives
-    $[O_A,P_{XB}]=[O_B,P_{AX}]=0$, while
-    \[
-        P_{XB}(\mathbf 1-P)P_{AX}=0.
-    \]
-    Moving the two observables past the projectors therefore gives
-    $P O_A(\mathbf 1-P)O_B P=0$.
+    Combine the complex-linear parent equivalence with the decomposition
+    $O=H+\mathrm{i}K$ from
+    Theorem~\ref{thm:tripartite_observable_decorrelation_iff}.
 \end{proof}
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}

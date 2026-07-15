@@ -15,6 +15,9 @@ explicit tensor product \(H_A\otimes H_X\otimes H_B\).
 
 ## Main definitions
 
+* `TripartiteDecorrelation.IsObservableDecorrelated`: the source condition,
+  tested on Hermitian observables.
+* `TripartiteDecorrelation.IsDecorrelated`: its complex-linear extension.
 * `TripartiteDecorrelation.supportAX`: support projector of the \(AX\) marginal.
 * `TripartiteDecorrelation.supportXB`: support projector of the \(XB\) marginal.
 * `TripartiteDecorrelation.HasCommutingParentHamiltonian`: existence of local
@@ -24,6 +27,8 @@ explicit tensor product \(H_A\otimes H_X\otimes H_B\).
 
 ## Main results
 
+* `TripartiteDecorrelation.isObservableDecorrelated_iff`: equivalence of the
+  source and complex-linear decorrelation conditions.
 * `TripartiteDecorrelation.liftSupportAX_mul_self` and its right-handed form.
 * `TripartiteDecorrelation.liftSupportXB_mul_self` and its right-handed form.
 * `TripartiteDecorrelation.IsDecorrelated.supports_mul_complement_mul_eq_zero`:
@@ -31,11 +36,13 @@ explicit tensor product \(H_A\otimes H_X\otimes H_B\).
 * `TripartiteDecorrelation.supportProducts_eq`: the two support-product
   identities obtained from decorrelation.
 * `TripartiteDecorrelation.parentHamiltonian_iff_decorrelated`: Proposition
-  D.3 on the explicit tripartite space.
+  D.3 in complex-linear form on the explicit tripartite space.
+* `TripartiteDecorrelation.parentHamiltonian_iff_observableDecorrelated`:
+  source-facing Proposition D.3.
 
 ## References
 
-* arXiv:1606.00608, Appendix D.2, lines 2187--2258.
+* arXiv:1606.00608, Appendix D.2, lines 2187--2289.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder Kronecker
@@ -263,13 +270,109 @@ theorem lift_marginalAX_eq_sum (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) 
       b = c := h.1.symm
       _ = b' := h.2
 
-/-- Decorrelation of the separated regions \(A\) and \(B\) relative to a
-tripartite projector \(P\).
+/-- Source-facing decorrelation of the separated regions \(A\) and \(B\),
+tested on Hermitian observables.
 
-See arXiv:1606.00608, Appendix D.2, Definition D.1, lines 2187--2191. -/
+This is exactly arXiv:1606.00608, Appendix D.2, Definition D.1,
+lines 2187--2191. -/
+def IsObservableDecorrelated
+    (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) : Prop :=
+  ∀ OA : Matrix A A ℂ, ∀ OB : Matrix B B ℂ,
+    OA.IsHermitian → OB.IsHermitian →
+      P * liftA OA * (1 - P) * liftB OB * P = 0
+
+/-- Bilinear extension of decorrelation from Hermitian observables to all
+complex matrices on the separated regions.
+
+The equivalence with arXiv:1606.00608, Appendix D.2, Definition D.1,
+lines 2187--2191, is proved in `isObservableDecorrelated_iff`. -/
 def IsDecorrelated (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) : Prop :=
   ∀ OA : Matrix A A ℂ, ∀ OB : Matrix B B ℂ,
     P * liftA OA * (1 - P) * liftB OB * P = 0
+
+private noncomputable def hermitianPart
+    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) : Matrix ι ι ℂ :=
+  (1 / 2 : ℂ) • (M + Mᴴ)
+
+private noncomputable def imaginaryHermitianPart
+    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) : Matrix ι ι ℂ :=
+  (Complex.I / 2 : ℂ) • (Mᴴ - M)
+
+private theorem hermitianPart_isHermitian
+    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) :
+    (hermitianPart M).IsHermitian := by
+  rw [Matrix.IsHermitian, hermitianPart, Matrix.conjTranspose_smul,
+    Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose]
+  simp
+  abel
+
+private theorem imaginaryHermitianPart_isHermitian
+    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) :
+    (imaginaryHermitianPart M).IsHermitian := by
+  rw [Matrix.IsHermitian, imaginaryHermitianPart, Matrix.conjTranspose_smul,
+    Matrix.conjTranspose_sub, Matrix.conjTranspose_conjTranspose]
+  have hI : star (Complex.I / 2 : ℂ) = -(Complex.I / 2) := by
+    apply Complex.ext <;> norm_num
+  rw [hI]
+  ext i j
+  simp [sub_eq_add_neg]
+  ring
+
+private theorem matrix_eq_hermitianPart_add_I_smul
+    {ι : Type*} [Fintype ι] (M : Matrix ι ι ℂ) :
+    M = hermitianPart M + Complex.I • imaginaryHermitianPart M := by
+  have hI : Complex.I * (Complex.I / 2 : ℂ) = -(1 : ℂ) / 2 := by
+    rw [div_eq_mul_inv, ← mul_assoc, Complex.I_mul_I]
+    ring
+  ext i j
+  simp [hermitianPart, imaginaryHermitianPart, smul_add, smul_smul, hI,
+    sub_eq_add_neg]
+  ring
+
+private theorem liftA_add (M N : Matrix A A ℂ) :
+    liftA (X := X) (B := B) (M + N) = liftA M + liftA N := by
+  exact map_add (Matrix.leftKroneckerEmbed (m := A) (n := X × B)) M N
+
+private theorem liftA_smul (c : ℂ) (M : Matrix A A ℂ) :
+    liftA (X := X) (B := B) (c • M) = c • liftA M := by
+  exact map_smul (Matrix.leftKroneckerEmbed (m := A) (n := X × B)) c M
+
+private theorem liftB_add (M N : Matrix B B ℂ) :
+    liftB (A := A) (X := X) (M + N) = liftB M + liftB N := by
+  simp only [liftB, map_add]
+
+private theorem liftB_smul (c : ℂ) (M : Matrix B B ℂ) :
+    liftB (A := A) (X := X) (c • M) = c • liftB M := by
+  simp only [liftB, map_smul]
+
+/-- Testing decorrelation on Hermitian observables is equivalent to testing it
+on arbitrary complex matrices.
+
+This identifies the source quantification in arXiv:1606.00608, Appendix D.2,
+Definition D.1, lines 2187--2191, with the all-matrix form used by the
+matrix-unit calculation in lines 2236--2258. -/
+theorem isObservableDecorrelated_iff
+    {P : Matrix (A × (X × B)) (A × (X × B)) ℂ} :
+    IsObservableDecorrelated P ↔ IsDecorrelated P := by
+  constructor
+  · intro hobs OA OB
+    let HA := hermitianPart OA
+    let KA := imaginaryHermitianPart OA
+    let HB := hermitianPart OB
+    let KB := imaginaryHermitianPart OB
+    have hHA : HA.IsHermitian := hermitianPart_isHermitian OA
+    have hKA : KA.IsHermitian := imaginaryHermitianPart_isHermitian OA
+    have hHB : HB.IsHermitian := hermitianPart_isHermitian OB
+    have hKB : KB.IsHermitian := imaginaryHermitianPart_isHermitian OB
+    rw [matrix_eq_hermitianPart_add_I_smul OA,
+      matrix_eq_hermitianPart_add_I_smul OB]
+    simp only [liftA_add, liftA_smul, liftB_add, liftB_smul,
+      Matrix.mul_add, Matrix.add_mul, Matrix.mul_smul, Matrix.smul_mul]
+    rw [hobs HA HB hHA hHB, hobs HA KB hHA hKB,
+      hobs KA HB hKA hHB, hobs KA KB hKA hKB]
+    simp
+  · intro hdec OA OB _ _
+    exact hdec OA OB
 
 /-- The adjoint form of decorrelation, with the order of the two separated
 observables reversed.
@@ -650,5 +753,19 @@ theorem parentHamiltonian_iff_decorrelated
     HasCommutingParentHamiltonian P ↔ IsDecorrelated P :=
   ⟨fun hparent => hparent.elim fun parent => parent.isDecorrelated hPidem,
     fun hdec => hdec.hasCommutingParentHamiltonian hPherm hPidem⟩
+
+/-- **Source-facing parent commuting Hamiltonian--decorrelation equivalence.**
+
+For an orthogonal projector (P_{AXB}), there are commuting parent terms on
+(AX) and (XB) with ground projector (P_{AXB}) if and only if the
+Hermitian-observable decorrelation condition of arXiv:1606.00608,
+Appendix D.2, Definition D.1, holds.  This is Proposition D.3,
+lines 2221--2289. -/
+theorem parentHamiltonian_iff_observableDecorrelated
+    {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
+    (hPherm : P.IsHermitian) (hPidem : P * P = P) :
+    HasCommutingParentHamiltonian P ↔ IsObservableDecorrelated P :=
+  (parentHamiltonian_iff_decorrelated hPherm hPidem).trans
+    isObservableDecorrelated_iff.symm
 
 end TripartiteDecorrelation

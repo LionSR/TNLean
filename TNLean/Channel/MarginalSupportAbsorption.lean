@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MarginalSupport
 import TNLean.Channel.MaximalOverlap
+import TNLean.Channel.PartialTrace
 
 /-!
 # Support projectors of bipartite marginals
@@ -143,41 +144,6 @@ end Bipartite
 section LeftMarginal
 
 variable {L R : Type*} [Fintype L] [DecidableEq L] [Fintype R] [DecidableEq R]
-
-/-- Partial trace over the left factor of a matrix indexed by `L × R`:
-\((\operatorname{tr}_L \rho)_{r,s}=\sum_l \rho_{(l,r),(l,s)}\).
-
-See arXiv:1606.00608, Appendix D.2, lines 2225--2229. -/
-noncomputable def partialTraceLeft (ρ : Matrix (L × R) (L × R) ℂ) : Matrix R R ℂ :=
-  fun r s => ∑ l : L, ρ (l, r) (l, s)
-
-omit [DecidableEq L] [Fintype R] [DecidableEq R] in
-@[simp]
-theorem partialTraceLeft_apply (ρ : Matrix (L × R) (L × R) ℂ) (r s : R) :
-    partialTraceLeft ρ r s = ∑ l : L, ρ (l, r) (l, s) := rfl
-
-omit [DecidableEq L] [Fintype R] [DecidableEq R] in
-/-- Partial trace over the left factor preserves Hermiticity. -/
-theorem partialTraceLeft_isHermitian {ρ : Matrix (L × R) (L × R) ℂ}
-    (hρ : ρ.IsHermitian) : (Matrix.partialTraceLeft ρ).IsHermitian := by
-  apply Matrix.IsHermitian.ext
-  intro r s
-  simp only [partialTraceLeft_apply, star_sum]
-  exact Finset.sum_congr rfl fun l _ => hρ.apply (l, r) (l, s)
-
-omit [DecidableEq L] [Fintype R] [DecidableEq R] in
-/-- Partial trace over the left factor preserves positive semidefiniteness.
-
-This supplies the positive \(XB\) marginal used in arXiv:1606.00608,
-Appendix D.2, lines 2225--2229. -/
-theorem PosSemidef.partialTraceLeft {ρ : Matrix (L × R) (L × R) ℂ}
-    (hρ : ρ.PosSemidef) : (Matrix.partialTraceLeft ρ).PosSemidef := by
-  have heq : Matrix.partialTraceLeft ρ =
-      ∑ l : L, ρ.submatrix (fun r : R => (l, r)) (fun r : R => (l, r)) := by
-    ext r s
-    simp only [partialTraceLeft_apply, Matrix.sum_apply, Matrix.submatrix_apply]
-  rw [heq]
-  exact Matrix.posSemidef_sum _ fun l _ => hρ.submatrix (fun r => (l, r))
 
 /-- Partial trace over the left factor and the right tensor embedding are
 adjoint for the trace pairing:
