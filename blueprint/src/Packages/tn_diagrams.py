@@ -54,6 +54,11 @@ _SLIDE_DIR = _REPO_ROOT / "docs/slides"
 _SLIDE_LIBRARY = _SLIDE_DIR / "tn_library_dark.tex"
 _SLIDE_CATALOGUE = _TN_SHARED_DIR / "tn_slide_catalogue.tex"
 _GRAMMAR_FILE = _REPO_ROOT / "docs/tn_diagram_grammar.md"
+_AUDITED_DIAGRAM_SOURCES = tuple(
+    path
+    for path in sorted(_TN_SHARED_DIR.glob("*.tex"))
+    if path != _TN_CORE_FILE
+) + (_SLIDE_LIBRARY,)
 
 _LITERAL_COORDINATE_PATTERN = re.compile(
     r"(?<![A-Za-z])\((-?\d+(?:\.\d+)?(?:cm)?),"
@@ -106,7 +111,6 @@ _SEMANTIC_GLYPH_COMMANDS = frozenset(
 _POINT_CONNECTOR_COMMANDS = frozenset(
     {"TN@connectpoints", "TN@pconnectpoints", "TN@vconnectpoints"}
 )
-_DYNAMIC_PRIVATE_COMMANDS = frozenset({"TN@mnorthport", "TN@msouthport"})
 _SIMPLE_NODE_NAME_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
 _SYMBOLIC_PORT_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
 _CONTROL_WORD_DELIMITER_PATTERN = re.compile(r"(\\[A-Za-z@]+)\s+")
@@ -179,6 +183,15 @@ class AtomDeclaration:
     profile: str
     sample: str
     source_line: int
+
+
+@dataclass(frozen=True)
+class TexDeclarationCall:
+    """One line-initial TeX declaration and the offsets of its group bodies."""
+
+    groups: tuple[str, ...]
+    source_offset: int
+    group_offsets: tuple[int, ...]
 
 
 @dataclass(frozen=True)
@@ -294,12 +307,7 @@ def _mask_tex_comments(source: str) -> str:
         if characters[index] != "%":
             index += 1
             continue
-        backslashes = 0
-        cursor = index - 1
-        while cursor >= 0 and characters[cursor] == "\\":
-            backslashes += 1
-            cursor -= 1
-        if backslashes % 2:
+        if _is_escaped(source, index):
             index += 1
             continue
         cursor = index
@@ -308,6 +316,27 @@ def _mask_tex_comments(source: str) -> str:
             cursor += 1
         index = cursor
     return "".join(characters)
+
+
+def _is_escaped(source: str, offset: int) -> bool:
+    """Whether the character at ``offset`` follows an odd backslash run."""
+
+    backslashes = 0
+    cursor = offset - 1
+    while cursor >= 0 and source[cursor] == "\\":
+        backslashes += 1
+        cursor -= 1
+    return backslashes % 2 == 1
+
+
+def _unescaped_parameter_indices(source: str) -> set[int]:
+    """Return the TeX macro parameters ``#1`` through ``#9`` used in source."""
+
+    return {
+        int(match.group(1))
+        for match in re.finditer(r"#([1-9])", source)
+        if not _is_escaped(source, match.start())
+    }
 
 
 def _pattern_locations(path: Path, pattern: re.Pattern[str]) -> list[str]:
@@ -437,7 +466,7 @@ def _assert_no_unused_private_commands() -> None:
     )
     unused = sorted(
         name
-        for name in definitions - _DYNAMIC_PRIVATE_COMMANDS
+        for name in definitions
         if len(re.findall(r"\\" + re.escape(name) + r"\b", implementation)) == 1
     )
     if unused:
@@ -450,7 +479,6 @@ def _assert_no_unused_private_commands() -> None:
 def _assert_typed_port_syntax() -> None:
     """Require typed compositions to use symbolic ports and typed constructors."""
 
-    sources = (_TN_CATALOGUE_FILE, _TN_LIBRARY_FILE, _SLIDE_LIBRARY)
     command_names = frozenset(_TYPED_PORT_COMMAND_ARITIES)
     malformed: list[str] = []
     untyped: list[str] = []
@@ -458,7 +486,7 @@ def _assert_typed_port_syntax() -> None:
         r"(?:^|,)\s*(?:<?-+>?|dashed|densely dashed|tn (?:grouping|factor) region|"
         r"tn (?:morphism|comparison) arrow)\s*(?:,|$)"
     )
-    for path in sources:
+    for path in _AUDITED_DIAGRAM_SOURCES:
         source = _mask_tex_comments(path.read_text(encoding="utf-8"))
         untyped.extend(
             _source_line(path, match.start())
@@ -506,7 +534,7 @@ def _assert_no_raw_glyph_nodes() -> None:
         r"(?:^|,)\s*tn (?:label|region label \w+|vertex distinguished)(?:,|$)"
     )
     violations: list[str] = []
-    for path in (_TN_CATALOGUE_FILE, _TN_LIBRARY_FILE, _SLIDE_LIBRARY):
+    for path in _AUDITED_DIAGRAM_SOURCES:
         source = _mask_tex_comments(path.read_text(encoding="utf-8"))
         for match in re.finditer(r"\\node\s*\[([^]]*)\]", source):
             options = match.group(1)
@@ -700,7 +728,8 @@ def _assert_slide_diagram_contract() -> None:
         )
         body = catalogue_source[match.end() : body_end]
         arity = int(match.group(2))
-        missing = [argument for argument in range(1, arity + 1) if f"#{argument}" not in body]
+        referenced = _unescaped_parameter_indices(body)
+        missing = [argument for argument in range(1, arity + 1) if argument not in referenced]
         if missing:
             ignored[match.group(1)] = missing
     if ignored:
@@ -833,7 +862,7 @@ def _tex_group(source: str, offset: int, opener: str, closer: str) -> tuple[str,
         raise ValueError(f"expected {opener!r} at source offset {offset}")
     depth = 0
     for index in range(offset, len(source)):
-        escaped = index > 0 and source[index - 1] == "\\"
+        escaped = _is_escaped(source, index)
         if source[index] == opener and not escaped:
             depth += 1
         elif source[index] == closer and not escaped:
@@ -870,22 +899,30 @@ def _tex_command_calls(
 
 def _tex_declaration_calls(
     source: str, command_name: str
-) -> list[tuple[str, list[str], int, str | None]]:
+) -> list[TexDeclarationCall]:
     """Read top-level, line-initial calls to a declaration command."""
 
     pattern = re.compile(
         r"^[ \t]*\\" + re.escape(command_name) + r"(?=\s*\{)",
         re.MULTILINE,
     )
-    calls = []
+    calls: list[TexDeclarationCall] = []
     for match in pattern.finditer(source):
         offset = _skip_tex_space(source, match.end())
-        groups = []
+        groups: list[str] = []
+        group_offsets: list[int] = []
         while offset < len(source) and source[offset] == "{":
+            group_offsets.append(offset + 1)
             group, offset = _tex_group(source, offset, "{", "}")
             groups.append(group)
             offset = _skip_tex_space(source, offset)
-        calls.append((command_name, groups, match.start(), None))
+        calls.append(
+            TexDeclarationCall(
+                groups=tuple(groups),
+                source_offset=match.start(),
+                group_offsets=tuple(group_offsets),
+            )
+        )
     return calls
 
 
@@ -898,7 +935,7 @@ def _parse_argument_schema(raw_schema: str, *, location: str) -> tuple[str, ...]
     invalid = [
         argument
         for argument in arguments
-        if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", argument)
+        if not re.fullmatch(r"[a-z][a-z0-9_]*", argument)
     ]
     duplicates = sorted(
         argument for argument in set(arguments) if arguments.count(argument) > 1
@@ -985,9 +1022,11 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
         raise RuntimeError("tn_catalogue.tex contains no \\TNDeclareDiagram records.")
 
     declarations: dict[str, DiagramDeclaration] = {}
-    for _, groups, offset, option in calls:
+    for call in calls:
+        groups = call.groups
+        offset = call.source_offset
         location = _source_line(_TN_CATALOGUE_FILE, offset)
-        if option is not None or len(groups) != 7:
+        if len(groups) != 7:
             raise RuntimeError(
                 "\\TNDeclareDiagram requires exactly seven mandatory groups at "
                 f"{location} (found {len(groups)})."
@@ -996,7 +1035,7 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
         name = raw_name.strip()
         role = raw_role.strip()
         profile = raw_profile.strip()
-        if not re.fullmatch(r"TN[A-Z][A-Za-z0-9]*", name):
+        if not re.fullmatch(r"TN[A-Za-z]+", name):
             raise RuntimeError(f"Invalid diagram name {name!r} at {location}.")
         if name in declarations:
             previous = declarations[name]
@@ -1021,7 +1060,7 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
         _assert_exact_sample_call(
             sample, name=name, arity=len(arguments), location=location
         )
-        referenced = {int(index) for index in re.findall(r"#([1-9])", body)}
+        referenced = _unescaped_parameter_indices(body)
         out_of_range = sorted(index for index in referenced if index > len(arguments))
         ignored = [
             index
@@ -1090,9 +1129,11 @@ def _load_atom_declarations() -> dict[str, AtomDeclaration]:
     if not calls:
         raise RuntimeError("tn_atoms.tex contains no \\TNDeclareAtom records.")
     declarations: dict[str, AtomDeclaration] = {}
-    for _, groups, offset, option in calls:
+    for call in calls:
+        groups = call.groups
+        offset = call.source_offset
         location = _source_line(_TN_ATOMS_FILE, offset)
-        if option is not None or len(groups) != 4:
+        if len(groups) != 4:
             raise RuntimeError(
                 "\\TNDeclareAtom requires exactly four mandatory groups at "
                 f"{location} (found {len(groups)})."
@@ -1156,11 +1197,9 @@ def _tex_macro_definitions(source: str) -> list[tuple[str, str, int]]:
         if body_end <= offset:
             raise AssertionError("balanced TeX group did not advance")
     definitions.extend(
-        (groups[0].strip(), groups[6], offset)
-        for _, groups, offset, option in _tex_declaration_calls(
-            source, "TNDeclareDiagram"
-        )
-        if option is None and len(groups) == 7
+        (call.groups[0].strip(), call.groups[6], call.group_offsets[6])
+        for call in _tex_declaration_calls(source, "TNDeclareDiagram")
+        if len(call.groups) == 7
     )
     return definitions
 
@@ -1204,10 +1243,7 @@ def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object
                     }
                 )
 
-    return {
-        "inexact_path_endpoints": [],
-        "bare_node_point_connectors": bare_node_connectors,
-    }
+    return {"bare_node_point_connectors": bare_node_connectors}
 
 
 def _source_semantic_debt(path: Path, source: str) -> dict[str, object]:
@@ -1237,16 +1273,19 @@ def _source_semantic_debt(path: Path, source: str) -> dict[str, object]:
 def _ignored_diagram_arguments() -> dict[str, list[int]]:
     """Return declared arguments which do not occur in their diagram bodies."""
 
-    ignored = {
-        declaration.name: [
+    ignored: dict[str, list[int]] = {}
+    for declaration in diagram_declarations():
+        if not declaration.arguments or declaration.name == "TNTikZDiagram":
+            continue
+        referenced = _unescaped_parameter_indices(declaration.body)
+        missing = [
             index
             for index in range(1, len(declaration.arguments) + 1)
-            if f"#{index}" not in declaration.body
+            if index not in referenced
         ]
-        for declaration in diagram_declarations()
-        if declaration.arguments and declaration.name != "TNTikZDiagram"
-    }
-    return {name: indices for name, indices in ignored.items() if indices}
+        if missing:
+            ignored[declaration.name] = missing
+    return ignored
 
 
 def _assert_diagram_arguments_used() -> None:
@@ -1528,7 +1567,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
         if named_port_total:
             port_locations = _debt_locations(
                 audited_sources,
-                ("inexact_path_endpoints", "bare_node_point_connectors"),
+                ("bare_node_point_connectors",),
             )
             failures.append(
                 "semantic contractions bypass the atomic named-port vocabulary "
