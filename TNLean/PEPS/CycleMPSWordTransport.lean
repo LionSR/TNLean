@@ -1,4 +1,5 @@
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 
 /-!
 # Word-span extension and word transport for block-injective matrix tensors
