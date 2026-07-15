@@ -8,6 +8,7 @@ diagram.  No second diagram registry is maintained here.
 
 from __future__ import annotations
 
+import fcntl
 import importlib.util
 import json
 import os
@@ -21,6 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "blueprint/src"
 BUILD = ROOT / "tmp/tn-gallery"
+LOCK = ROOT / "tmp/tn-gallery.lock"
 OUTPUT = ROOT / "output/pdf/tn_diagram_audit_gallery.pdf"
 SEMANTIC_OUTPUT = ROOT / "output/tn_diagram_semantic_graphs.json"
 RENDERER = SRC / "Packages/tn_diagrams.py"
@@ -135,6 +137,8 @@ def compile_tex(stem: str, source: str) -> Path:
     BUILD.mkdir(parents=True, exist_ok=True)
     tex = BUILD / f"{stem}.tex"
     tex.write_text(source, encoding="utf-8")
+    (BUILD / f"{stem}.pdf").unlink(missing_ok=True)
+    (BUILD / f"{stem}.tnlog").unlink(missing_ok=True)
     environment = os.environ.copy()
     shared_tex = str(ROOT / "tex/tn") + "//:"
     environment["TEXINPUTS"] = shared_tex + environment.get("TEXINPUTS", "")
@@ -344,7 +348,7 @@ def assert_repeated_topologies_are_motifs(graphs: list[dict[str, object]]) -> No
         )
 
 
-def main() -> int:
+def _build_gallery() -> int:
     renderer = load_renderer()
     light = compile_tex("tn_gallery_light", light_source(renderer))
     dark = compile_tex("tn_gallery_dark", dark_source(renderer))
@@ -363,6 +367,15 @@ def main() -> int:
     subprocess.run([pdfunite, str(light), str(dark), str(OUTPUT)], check=True)
     print(OUTPUT)
     return 0
+
+
+def main() -> int:
+    """Build one gallery at a time so concurrent reviewers cannot corrupt PDFs."""
+
+    LOCK.parent.mkdir(parents=True, exist_ok=True)
+    with LOCK.open("w", encoding="utf-8") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        return _build_gallery()
 
 
 if __name__ == "__main__":
