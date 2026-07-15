@@ -119,16 +119,19 @@ noncomputable def liftB (M : Matrix B B ℂ) :
   Matrix.rightKroneckerEmbed (m := A)
     (Matrix.rightKroneckerEmbed (m := X) M)
 
-private theorem liftAX_mul (M N : Matrix (A × X) (A × X) ℂ) :
+/-- Lifting from \(AX\) preserves matrix multiplication. -/
+theorem liftAX_mul (M N : Matrix (A × X) (A × X) ℂ) :
     liftAX (B := B) (M * N) = liftAX (B := B) M * liftAX (B := B) N := by
   rw [liftAX, liftAX, liftAX, ← ungroupAX_mul, map_mul]
 
-private theorem liftXB_mul (M N : Matrix (X × B) (X × B) ℂ) :
+/-- Lifting from \(XB\) preserves matrix multiplication. -/
+theorem liftXB_mul (M N : Matrix (X × B) (X × B) ℂ) :
     liftXB (A := A) (M * N) = liftXB (A := A) M * liftXB (A := A) N := by
   exact map_mul (Matrix.rightKroneckerEmbed (m := A) (n := X × B)) M N
 
+/-- The adjoint of an \(AX\) lift is the lift of the adjoint. -/
 @[simp]
-private theorem conjTranspose_liftAX (M : Matrix (A × X) (A × X) ℂ) :
+theorem conjTranspose_liftAX (M : Matrix (A × X) (A × X) ℂ) :
     (liftAX (B := B) M)ᴴ = liftAX (B := B) Mᴴ := by
   ext ⟨a, x, b⟩ ⟨a', x', b'⟩
   by_cases hbb : b = b'
@@ -139,8 +142,9 @@ private theorem conjTranspose_liftAX (M : Matrix (A × X) (A × X) ℂ) :
     simp [liftAX, ungroupAX, Matrix.conjTranspose_apply,
       Matrix.leftKroneckerEmbed_apply, Matrix.kroneckerMap_apply, hbb, hb'b]
 
+/-- The adjoint of an \(XB\) lift is the lift of the adjoint. -/
 @[simp]
-private theorem conjTranspose_liftXB (M : Matrix (X × B) (X × B) ℂ) :
+theorem conjTranspose_liftXB (M : Matrix (X × B) (X × B) ℂ) :
     (liftXB (A := A) M)ᴴ = liftXB (A := A) Mᴴ := by
   change (Matrix.rightKroneckerEmbed (m := A) M)ᴴ =
     Matrix.rightKroneckerEmbed (m := A) Mᴴ
@@ -161,15 +165,17 @@ private theorem liftB_comm_liftAX (OB : Matrix B B ℂ) (M : Matrix (A × X) (A 
     Matrix.kroneckerMap_apply, Matrix.one_apply, Fintype.sum_prod_type,
     mul_comm]
 
+/-- The adjoint of an \(A\) lift is the lift of the adjoint. -/
 @[simp]
-private theorem conjTranspose_liftA (M : Matrix A A ℂ) :
+theorem conjTranspose_liftA (M : Matrix A A ℂ) :
     (liftA (X := X) (B := B) M)ᴴ = liftA (X := X) (B := B) Mᴴ := by
   change (Matrix.leftKroneckerEmbed (n := X × B) M)ᴴ =
     Matrix.leftKroneckerEmbed (n := X × B) Mᴴ
   rw [← star_eq_conjTranspose, ← map_star, star_eq_conjTranspose]
 
+/-- The adjoint of a \(B\) lift is the lift of the adjoint. -/
 @[simp]
-private theorem conjTranspose_liftB (M : Matrix B B ℂ) :
+theorem conjTranspose_liftB (M : Matrix B B ℂ) :
     (liftB (A := A) (X := X) M)ᴴ = liftB (A := A) (X := X) Mᴴ := by
   change (Matrix.rightKroneckerEmbed (m := A)
       (Matrix.rightKroneckerEmbed (m := X) M))ᴴ =
@@ -450,8 +456,8 @@ theorem IsDecorrelated.reverse_marginals_mul_complement_mul_eq_zero
       rw [hdec.reverse hPherm (Matrix.single l b 1) (Matrix.single a k 1),
         Matrix.mul_zero, Matrix.zero_mul]
 
-/-- The support projector of a Hermitian matrix also factors through the
-matrix on the left. -/
+/-- The support projector of a Hermitian matrix \(M\) factors as \(M g(M)\), where
+\(g(0)=0\) and \(g(x)=x^{-1}\) for \(x\ne0\). -/
 private theorem supportProj_eq_mul_cfc_recip
     {ι : Type*} [Fintype ι] [DecidableEq ι] {M : Matrix ι ι ℂ}
     (hM : M.IsHermitian) :
