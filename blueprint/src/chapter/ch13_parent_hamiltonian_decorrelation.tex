@@ -219,6 +219,36 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     space by tensoring with identities on their complementary factors.
 \end{definition}
 
+\begin{lemma}[Products and adjoints of tripartite lifts]
+    \label{lem:tripartite_local_lift_algebra}
+    \lean{TripartiteDecorrelation.liftAX_mul,
+      TripartiteDecorrelation.liftXB_mul,
+      TripartiteDecorrelation.conjTranspose_liftAX,
+      TripartiteDecorrelation.conjTranspose_liftXB,
+      TripartiteDecorrelation.conjTranspose_liftA,
+      TripartiteDecorrelation.conjTranspose_liftB}
+    \leanok
+    \uses{def:tripartite_local_lifts}
+    The lifts from $AX$ and $XB$ preserve multiplication,
+    \[
+        \widehat{MN}_{AX}=\widehat M_{AX}\widehat N_{AX},
+        \qquad
+        \widehat{MN}_{XB}=\widehat M_{XB}\widehat N_{XB},
+    \]
+    and each of the four lifts from $AX$, $XB$, $A$, and $B$ preserves
+    adjoints:
+    \[
+        (\widehat M_R)^\dagger=\widehat{M^\dagger}_R,
+        \qquad R\in\{AX,XB,A,B\}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Each lift tensors the given operator with identities on the complementary
+    factors. Tensoring with identities preserves products and adjoints.
+\end{proof}
+
 \begin{definition}[Tripartite observable decorrelation]
     \label{def:tripartite_observable_decorrelation}
     \lean{TripartiteDecorrelation.IsObservableDecorrelated}
