@@ -20,7 +20,7 @@
 \newcommand{\SlideTNGaugeConjugation}[3]{%
   \begin{TNEquationRow}[normal]
     \TNTerm[normal]{%
-      \TNMPSSite{sltnB}{(0,0)}{#1}
+      \TNMPSSite{sltnB}{at=origin}{#1}
       \TNOpenVirtualWest{sltnBWest}
       \TNOpenVirtualEast{sltnBEast}
       \TNOpenPhysicalNorth{sltnBKet}
@@ -28,7 +28,7 @@
     }%
     \TNRelation{=}%
     \TNTerm[normal]{%
-      \TNGaugeConjugatedMPSSite{sltnGauge}{(0,0)}
+      \TNGaugeConjugatedMPSSite{sltnGauge}{at=origin}
         {#2}{#3}{#3^{-1}}%
       \TNLabelAbove{sltnGaugeSiteKet}{i}%
     }%
@@ -38,7 +38,7 @@
 \newcommand{\SlideTNBlockingIdentity}[3]{%
   \begin{TNEquationRow}[compact]
     \TNTerm{%
-      \TNMPSSite{sltnC}{(0,0)}{#1}
+      \TNMPSSite{sltnC}{at=origin}{#1}
       \TNOpenVirtualWest{sltnCWest}
       \TNOpenVirtualEast{sltnCEast}
       \TNOpenPhysicalNorth{sltnCKet}
@@ -46,29 +46,34 @@
     }%
     \TNRelation{=}%
     \TNTerm{%
-      \foreach \name/\x/\i in {One/0/i_1,Two/1.15/i_2,Last/3.05/i_{#3}} {
-        \TNMPSSite{sltnB\name}{(\x,0)}{#2}
-        \TNOpenPhysicalNorth{sltnB\name Ket}
-        \TNLabelAbove{sltnB\name Ket}{\i}
+      \TNMPSSite{sltnBOne}{at=origin}{#2}
+      \TNMPSSite{sltnBTwo}{right=of sltnBOne}{#2}
+      \TNOmission{sltnOmitted}{right=of sltnBTwo}
+      \TNMPSSite{sltnBLast}{right=of sltnOmitted}{#2}
+      \foreach \name/\i in {One/i_1,Two/i_2,Last/i_{#3}} {
+          \TNOpenPhysicalNorth{sltnB\name Ket}
+          \TNLabelAbove{sltnB\name Ket}{\i}
       }
       \TNOpenVirtualWest{sltnBOneWest}
       \TNConnectVirtual{sltnBOneEast}{sltnBTwoWest}
       \TNOpenVirtualEast{sltnBTwoEast}
       \TNOpenVirtualWest{sltnBLastWest}
       \TNOpenVirtualEast{sltnBLastEast}
-      \TNPoint{sltnOmitted}{(2.10,0)}
-      \TNPoint{sltnMultiplicity}{(1.54,-0.68)}
-      \TNLabel{sltnOmitted}{(0,0)}{\cdots}
-      \TNLabel{sltnMultiplicity}{(0,0)}{\text{#3 copies}}%
+      \TNLabelBelow{sltnOmitted}{\text{#3 copies}}%
     }%
   \end{TNEquationRow}%
 }
 
 \newcommand{\SlideTNMixedTransfer}[4]{%
   \begin{TNDiagram}[compact]
-    \foreach \name/\x in {One/0,Two/1.30,Pen/3.25,Last/4.55} {
-      \TNStackedMPOProduct{sltn\name}{(\x,0)}{#1}{#2^\dagger}{}
-    }
+    \TNStackedMPOProduct{sltnOne}{at=origin}{#1}{#2^\dagger}{}
+    \TNStackedMPOProduct{sltnTwo}{right=of sltnOneUpper}
+      {#1}{#2^\dagger}{}
+    \TNStackedOmission{sltnOmitted}{right=of sltnTwoUpper}
+    \TNStackedMPOProduct{sltnPen}{right=of sltnOmittedUpper}
+      {#1}{#2^\dagger}{}
+    \TNStackedMPOProduct{sltnLast}{right=of sltnPenUpper}
+      {#1}{#2^\dagger}{}
     \TNOpenVirtualWest{sltnOneUpperWest}
     \TNOpenVirtualWest{sltnOneLowerWest}
     \TNConnectVirtual{sltnOneUpperEast}{sltnTwoUpperWest}
@@ -81,40 +86,34 @@
     \TNConnectVirtual{sltnPenLowerEast}{sltnLastLowerWest}
     \TNOpenVirtualEast{sltnLastUpperEast}
     \TNOpenVirtualEast{sltnLastLowerEast}
-    \TNPoint{sltnInput}{(-0.62,0)}
-    \TNPoint{sltnUpperOmitted}{(2.28,0.72)}
-    \TNPoint{sltnLowerOmitted}{(2.28,-0.72)}
-    \TNPoint{sltnOutput}{(5.20,0)}
-    \TNLabelLeft{sltnInput}{#3}
-    \TNLabel{sltnUpperOmitted}{(0,0)}{\cdots}
-    \TNLabel{sltnLowerOmitted}{(0,0)}{\cdots}
-    \TNLabelRight{sltnOutput}{\mathcal F^{#4}_{#1,#2}(#3)}
+    \TNLabelLeft{sltnOneCentre}{#3}
+    \TNLabelRight{sltnLastCentre}{\mathcal F^{#4}_{#1,#2}(#3)}
   \end{TNDiagram}%
 }
 
 \newcommand{\SlideTNTransferMap}[2]{%
   \begin{TNDiagram}[normal]
-    \TNStackedMPOProduct{sltn}{(0,0)}{#1}{\overline{#1}}{}
+    \TNStackedMPOProduct{sltn}{at=origin}{#1}{\overline{#1}}{}
     \TNOpenVirtualWest{sltnUpperWest}
     \TNOpenVirtualWest{sltnLowerWest}
     \TNOpenVirtualEast{sltnUpperEast}
     \TNOpenVirtualEast{sltnLowerEast}
-    \TNPoint{sltnInput}{(-0.62,0)}
-    \TNPoint{sltnSum}{(0.32,0)}
-    \TNPoint{sltnOutput}{(0.95,0)}
-    \TNLabelLeft{sltnInput}{#2}
-    \TNLabel{sltnSum}{(0,0)}{\sum_i}
-    \TNLabelRight{sltnOutput}{\mathcal E_{#1}(#2)}
+    \TNLabelLeft{sltnCentre}{#2}
+    \TNLabelRight{sltnUpperBra}{\sum_i}
+    \TNLabelRight{sltnCentre}{\mathcal E_{#1}(#2)}
   \end{TNDiagram}%
 }
 
 \newcommand{\SlideTNBlockingComparison}[2]{%
   \begin{TNDiagram}[compact]
-    \TNPoint{sltnChainLabel}{(-0.55,0.75)}
-    \TNLabelLeft{sltnChainLabel}{\text{chain of }N\text{:}}
-    \foreach \x/\name in {0/One,0.85/Two,1.70/Three,4.05/Pen,4.90/Last} {
-      \TNMPSSite{sltnP\name}{(\x,0.75)}{#1}
-      \TNOpenPhysicalNorth{sltnP\name Ket}
+    \TNMPSSite{sltnPOne}{at=origin}{#1}
+    \TNMPSSite{sltnPTwo}{right=of sltnPOne}{#1}
+    \TNMPSSite{sltnPThree}{right=of sltnPTwo}{#1}
+    \TNOmission{sltnOmitted}{right=of sltnPThree}
+    \TNMPSSite{sltnPPen}{right=of sltnOmitted}{#1}
+    \TNMPSSite{sltnPLast}{right=of sltnPPen}{#1}
+    \foreach \name in {One,Two,Three,Pen,Last} {
+        \TNOpenPhysicalNorth{sltnP\name Ket}
     }
     \TNConnectVirtual{sltnPOneEast}{sltnPTwoWest}
     \TNConnectVirtual{sltnPTwoEast}{sltnPThreeWest}
@@ -123,13 +122,11 @@
     \TNConnectVirtual{sltnPPenEast}{sltnPLastWest}
     \TNOpenVirtualWest{sltnPOneWest}
     \TNOpenVirtualEast{sltnPLastEast}
-    \TNPoint{sltnOmitted}{(2.88,0.75)}
-    \TNPoint{sltnBlockedLabel}{(-0.55,-0.85)}
-    \TNLabel{sltnOmitted}{(0,0)}{\cdots}
-    \TNLabelLeft{sltnBlockedLabel}{\text{after blocking }#2\text{:}}
-    \TNMPSSite{sltnBlockOne}{(0.65,-0.85)}{#1^{(#2)}}
-    \TNMPSSite{sltnBlockTwo}{(2.45,-0.85)}{#1^{(#2)}}
-    \TNMPSSite{sltnBlockLast}{(4.25,-0.85)}{#1^{(#2)}}
+    \TNLabelLeft{sltnPOne}{\text{chain of }N\text{:}}
+    \TNMPSSite{sltnBlockOne}{below=of sltnPOne}{#1^{(#2)}}
+    \TNMPSSite{sltnBlockTwo}{right=of sltnBlockOne}{#1^{(#2)}}
+    \TNMPSSite{sltnBlockLast}{right=of sltnBlockTwo}{#1^{(#2)}}
+    \TNLabelLeft{sltnBlockOne}{\text{after blocking }#2\text{:}}
     \foreach \name in {One,Two,Last} {
       \TNOpenPhysicalNorth{sltnBlock\name Ket}
     }
