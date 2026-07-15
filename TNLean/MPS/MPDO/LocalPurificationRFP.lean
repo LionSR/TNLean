@@ -68,7 +68,8 @@ pure-state RFP.
   tensor-level purification form, pure-state RFP is equivalent to normalized
   physical-trace idempotence.
 * `MPOTensor.isNondegeneratePRFP_iff`: this predicate is equivalent to
-  the local purification form together with nonzero normalized source ZCL.
+  the local purification form together with a nonzero idempotent physical-trace
+  transfer.
 * `MPOTensor.exists_isPRFP_not_isSourceZCL`: the zero purifier shows why the
   bare global predicate needs a nondegeneracy condition.
 
