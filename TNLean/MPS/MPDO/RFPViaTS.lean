@@ -98,6 +98,15 @@ noncomputable def physCloseN (M : MPOTensor d D) (N : ℕ) :
       Matrix.trace (evalWord M (List.ofFn σ) (List.ofFn τ) * X) :=
   rfl
 
+/-- Closing the virtual boundary by the identity matrix gives the periodic MPO
+operator.
+
+Source: arXiv:1606.00608, lines 638--654 and Definition 4.1. -/
+theorem physCloseN_identity_eq_mpo (M : MPOTensor d D) (N : ℕ) :
+    physCloseN M N (1 : Matrix (Fin D) (Fin D) ℂ) = mpo M N := by
+  ext σ τ
+  simp [mpoMatrixEntry]
+
 /-- The length-one physical closure has the source coefficient formula from
 arXiv:1606.00608, Definition 4.1, line 657 and figure MPDO_XM. -/
 lemma physCloseN_one_apply (M : MPOTensor d D)

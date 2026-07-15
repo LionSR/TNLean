@@ -443,8 +443,9 @@
 
 \begin{definition}[Physical closure maps]
     \label{def:phys_close}
-    \lean{MPOTensor.physCloseN, MPOTensor.physClose1, MPOTensor.physClose2,
-      MPOTensor.physClose3}
+    \lean{MPOTensor.physCloseN, MPOTensor.physCloseN_apply,
+      MPOTensor.physClose1,
+      MPOTensor.physClose2, MPOTensor.physClose3}
     \leanok
     \uses{def:mpo_eval_word}
     For an MPO tensor $M$, a length $N$, and a virtual operator $X$, define the
@@ -464,6 +465,29 @@
     $N=2,3$ occur in
     \cite[Proposition~C.7, lines~1510--1516]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{lemma}[Periodic closure]
+    \label{lem:phys_close_identity}
+    \lean{MPOTensor.physCloseN_identity_eq_mpo}
+    \leanok
+    \uses{def:phys_close, def:mpo_family}
+    Closing the virtual legs with the identity gives the periodic MPO
+    operator:
+    \[
+        M_N(1)=\rho^{(N)}(M).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For every pair of physical words $\sigma,\tau$,
+    \[
+        M_N(1)_{\sigma,\tau}
+          = \tr\!\left(M^{\sigma,\tau}\cdot 1\right)
+          = \tr\!\left(M^{\sigma,\tau}\right)
+          = \rho^{(N)}(M)_{\sigma,\tau}. \qedhere
+    \]
+\end{proof}
 
 \begin{theorem}[One- and two-site physical closures]
     \label{thm:phys_close_one_two}
@@ -527,6 +551,144 @@
     The two maps act as follows on every virtual closure $X$:
     \TNMPORenormalizationTS
 \end{definition}
+
+\begin{definition}[Initial-coordinate regroupings]
+    \label{def:finite_tuple_regroupings}
+    \lean{finSuccArrowEquiv,
+      finAddTwoArrowEquiv}
+    \leanok
+    Let $R_1$ identify an $(N+1)$-tuple with its first coordinate and the
+    remaining $N$-tuple.  Let $R_2$ identify an $(N+2)$-tuple with its first
+    two coordinates and the remaining $N$-tuple.
+\end{definition}
+
+\begin{definition}[Renormalization maps on a longer ring]
+    \label{def:mpdo_global_renormalization_maps}
+    \lean{MPOTensor.refineFirstSite,
+      MPOTensor.coarsenFirstTwoSites}
+    \leanok
+    \uses{def:finite_tuple_regroupings}
+    Let $N$ count the sites that are left unchanged.  For physical maps
+    $\mathcal T:M_d\to M_{d^2}$ and $\mathcal S:M_{d^2}\to M_d$, define
+    \[
+       \widehat{\mathcal T}_N
+       =\mathcal T\otimes\id_{d^N},
+       \qquad
+       \widehat{\mathcal S}_N
+       =\mathcal S\otimes\id_{d^N},
+    \]
+    using $R_1$ and $R_2$.  Thus $N=0$ leaves no spectator site, but the
+    maps still act on a one-site or two-site operator; no empty ring occurs.
+\end{definition}
+
+\begin{lemma}[Regrouping the first physical sites]
+    \label{lem:mpdo_global_renormalization_regrouping}
+    \lean{finSuccArrowEquiv_apply,
+      finSuccArrowEquiv_symm_apply,
+      finAddTwoArrowEquiv_apply,
+      finAddTwoArrowEquiv_symm_apply}
+    \leanok
+    \uses{def:finite_tuple_regroupings}
+    For a physical word $\sigma$ of length $N+1$,
+    \[
+      R_1(\sigma)=\bigl(\sigma_0,(\sigma_1,\ldots,\sigma_N)\bigr),
+      \qquad
+      R_1^{-1}\bigl(i,(a_1,\ldots,a_N)\bigr)=(i,a_1,\ldots,a_N).
+    \]
+    For a physical word $\sigma$ of length $N+2$,
+    \[
+      R_2(\sigma)
+        =\bigl((\sigma_0,\sigma_1),(\sigma_2,\ldots,\sigma_{N+1})\bigr),
+    \]
+    and
+    \[
+      R_2^{-1}\bigl((i,j),(a_1,\ldots,a_N)\bigr)
+        =(i,j,a_1,\ldots,a_N).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    All four identities hold by definition of the product-index equivalences.
+\end{proof}
+
+\begin{lemma}[Localized renormalization maps are channels]
+    \label{lem:mpdo_global_renormalization_maps_cptp}
+    \lean{MPOTensor.refineFirstSite_isKrausCPTP,
+      MPOTensor.coarsenFirstTwoSites_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_global_renormalization_maps, def:is_kraus_cptp}
+    If $\mathcal S$ and $\mathcal T$ are trace-preserving completely positive,
+    then so are $\widehat{\mathcal S}_N$ and
+    $\widehat{\mathcal T}_N$ for every $N$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $(K_j)_j$ are Kraus operators for $\mathcal T$ with
+    $\sum_j K_j^\dagger K_j=I_d$, then the localized map has Kraus operators
+    $K_j\otimes I_{d^N}$, and
+    \[
+      \sum_j (K_j\otimes I_{d^N})^\dagger(K_j\otimes I_{d^N})
+        =\left(\sum_j K_j^\dagger K_j\right)\otimes I_{d^N}
+        =I_d\otimes I_{d^N}.
+    \]
+    The two regroupings are unitary conjugations and preserve complete
+    positivity and the trace.  The argument for $\mathcal S$ is identical.
+\end{proof}
+
+\begin{theorem}[Global action of the renormalization maps]
+    \label{thm:mpdo_global_renormalization_maps}
+    \lean{MPOTensor.refineFirstSite_physCloseN,
+      MPOTensor.coarsenFirstTwoSites_physCloseN,
+      MPOTensor.refineFirstSite_mpo,
+      MPOTensor.coarsenFirstTwoSites_mpo,
+      MPOTensor.exists_global_renormalization_maps}
+    \leanok
+    \uses{def:phys_close, def:is_rfp_via_ts,
+      def:mpdo_global_renormalization_maps}
+    Suppose that $\mathcal S[M_2(X)]=M_1(X)$ and
+    $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator $X$.  Then, for
+    every $N$ and $X$,
+    \[
+      \widehat{\mathcal S}_N[M_{N+2}(X)]=M_{N+1}(X),
+      \qquad
+      \widehat{\mathcal T}_N[M_{N+1}(X)]=M_{N+2}(X).
+    \]
+    In particular, these identities hold for every periodic MPO operator.
+    Hence the two maps supplied by a renormalization fixed point act on rings
+    of every length as required in the proof of
+    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_global_renormalization_regrouping,
+      lem:phys_close_identity}
+    For words $u,v$ on the $N$ spectator sites, write $M^{u,v}$ for their
+    virtual word evaluation and write $[Y]^{(r)}_{u,v}$ for the block of an
+    operator $Y$ on the first $r$ sites.  Regrouping the first site gives
+    \[
+      [M_{N+1}(X)]^{(1)}_{u,v}=M_1(M^{u,v}X).
+    \]
+    Therefore
+    \[
+      \mathcal T\bigl([M_{N+1}(X)]^{(1)}_{u,v}\bigr)
+        =M_2(M^{u,v}X)
+        =[M_{N+2}(X)]^{(2)}_{u,v}.
+    \]
+    Equality of all blocks proves the refinement identity.  Interchanging
+    $M_1$, $M_2$ and using $\mathcal S[M_2(Y)]=M_1(Y)$ proves the coarsening
+    identity.  Setting $X=1$ and using
+    $M_N(1)=\rho^{(N)}(M)$
+    (Lemma~\ref{lem:phys_close_identity}) gives the periodic-ring identities
+    \[
+      \widehat{\mathcal T}_N[\rho^{(N+1)}(M)]
+        =\rho^{(N+2)}(M),\qquad
+      \widehat{\mathcal S}_N[\rho^{(N+2)}(M)]
+        =\rho^{(N+1)}(M).
+    \]
+\end{proof}
 
 \begin{definition}[Diagonal pure-state embedding as an MPO]\label{def:to_mpo_tensor}
     \lean{MPSTensor.toMPOTensor}

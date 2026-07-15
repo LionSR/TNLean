@@ -79,6 +79,12 @@ For MPDO renormalization fixed points:
   relation `AA=A` and its unrestricted equivalence with transfer-map
   idempotence are formalized; the physical-space meaning of the repeated-copy
   index remains open.
+- `cpsv16_rfp_sal_data_processing.tex` records the source proof that a mixed-state
+  renormalization fixed point satisfies saturation of the area law. The
+  localized trace-preserving completely positive maps and their tensor-ring
+  identities are formalized. Mutual-information data processing for the two
+  local maps and nonzero normalization from the source's simple-biCF convention
+  remain open.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 
