@@ -473,6 +473,7 @@ import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.BNTCoefficients
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
 import TNLean.MPS.MPDO.BNTTheoremData
+import TNLean.MPS.MPDO.BNTMultiplicityNormalization
 import TNLean.MPS.MPDO.BNTTheoremWitness
 import TNLean.MPS.MPDO.BNTTheoremWitnessConsequences
 import TNLean.MPS.MPDO.BNTFusionIsometries

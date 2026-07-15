@@ -35,6 +35,65 @@
     blocked basis.
 \end{definition}
 
+\begin{definition}[BNT multiplicity-spectrum comparison]%
+    \label{def:mpdo_bnt_multiplicity_spectrum_comparison}
+    \lean{MPOTensor.BNTProductMultiplicityIndex}
+    \lean{MPOTensor.BNTMultiplicitySpectrumComparison}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_clause}
+    Fix the one-site diagonal multiplicity matrices $\mu_\alpha$ and the
+    two-site diagonal multiplicity matrices $\nu_\gamma$ in the respective
+    vertical canonical decompositions.  A multiplicity-spectrum comparison
+    records
+    \[
+        \operatorname{tr}(\mu_\alpha)=m_\alpha
+    \]
+    and, for every $\gamma$, equality with multiplicity between the entries
+    of $\nu_\gamma$ and the products
+    \[
+        \mu_{\alpha,i}\mu_{\beta,j}
+        \chi_{\alpha,\beta,\gamma,k}.
+    \]
+    This is the conclusion of the vertical BNT comparison and positive
+    power-sum argument in
+    \cite[Appendix~C.4, lines~2048--2058]{Cirac2016MPDO_arXiv}.  The
+    definition does not assert that arbitrary support-algebra data supply
+    such a comparison.
+\end{definition}
+
+\begin{theorem}[Multiplicity trace normalization from the BNT algebra clause]%
+    \label{thm:mpdo_bnt_multiplicity_trace_normalization}
+    \lean{MPOTensor.BNTMultiplicitySpectrumComparison.sum_twoEntry_eq_sum_products}
+    \lean{MPOTensor.BNTMultiplicitySpectrumComparison.sum_products_eq}
+    \lean{MPOTensor.BNTMultiplicitySpectrumComparison.twoTrace_eq_traceScalar}
+    \lean{MPOTensor.BNTAlgebraClause.idempotent_coefficient_form_ofChi}
+    \lean{MPOTensor.BNTAlgebraClause.twoMultiplicityTrace_eq_traceScalar}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_clause,
+        def:mpdo_bnt_multiplicity_spectrum_comparison}
+    Suppose that the BNT algebra clause holds and that the one-site and
+    two-site vertical multiplicity spectra have been compared as above.
+    Then every two-site multiplicity matrix has the prescribed trace:
+    \[
+        \operatorname{tr}(\nu_\gamma)
+        = \sum_{\alpha,\beta,i,j,k}
+          \mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}
+        = \sum_{\alpha,\beta}
+          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
+        = m_\gamma.
+    \]
+    This is the normalization used for the preparation matrix
+    $\nu_\gamma/m_\gamma$ in the algebra-to-RFP implication of
+    \cite[Appendix~C.4, lines~2058--2071]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Sum the multiset equality of the two spectra.  The resulting product sum
+    factors into the two one-site traces and
+    $\operatorname{tr}(\chi_{\alpha,\beta,\gamma})$.  The length-one
+    idempotent law of the BNT algebra clause gives the final equality.
+\end{proof}
+
 \begin{definition}[BNT-label theorem data]%
     \label{def:mpdo_bnt_label_theorem_data}
     \lean{MPOTensor.BNTLabelTheoremData}
