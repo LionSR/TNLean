@@ -91,9 +91,9 @@ theorem HasSameLengthProductForm.coeff_eq_of_linearIndependentAt
       = 0 := by
     simp_rw [sub_smul]
     rw [Finset.sum_sub_distrib, hsum, sub_self]
-  have hdiff := Fintype.linearIndependent_iff.mp hli
-    (fun δ => c.coeff L α β δ - c'.coeff L α β δ) hzero γ
-  exact sub_eq_zero.mp hdiff
+  exact sub_eq_zero.mp <|
+    Fintype.linearIndependent_iff.mp hli
+      (fun δ => c.coeff L α β δ - c'.coeff L α β δ) hzero γ
 
 /-- **Associativity constraint on the structure coefficients**: expanding
 the two associations of a triple product through the same-length product law
@@ -138,10 +138,10 @@ theorem HasSameLengthProductForm.coeff_assoc_of_linearIndependentAt
       - (∑ δ, c.coeff L β γ δ * c.coeff L α δ ε')) • op.operator L ε' = 0 := by
     simp_rw [sub_smul]
     rw [Finset.sum_sub_distrib, hsum, sub_self]
-  have hdiff := Fintype.linearIndependent_iff.mp hli
-    (fun ε' => (∑ δ, c.coeff L α β δ * c.coeff L δ γ ε')
-      - (∑ δ, c.coeff L β γ δ * c.coeff L α δ ε')) hzero ε
-  exact sub_eq_zero.mp hdiff
+  exact sub_eq_zero.mp <|
+    Fintype.linearIndependent_iff.mp hli
+      (fun ε' => (∑ δ, c.coeff L α β δ * c.coeff L δ γ ε') -
+        ∑ δ, c.coeff L β γ δ * c.coeff L α δ ε') hzero ε
 
 /-- Trace-power form of the associativity constraint: for a coefficient
 system in trace-power form, the restriction of the preceding theorem is a
@@ -168,9 +168,8 @@ theorem HasSameLengthProductForm.tracePowerCoeff_assoc_of_linearIndependentAt
     {L : ℕ} (hL : 0 < L) (hli : op.LinearIndependentAt L) (α β γ ε : Λ) :
     ∑ δ, χ.tracePowerCoeff α β δ L * χ.tracePowerCoeff δ γ ε L
       = ∑ δ, χ.tracePowerCoeff β γ δ L * χ.tracePowerCoeff α δ ε L := by
-  have hassoc := h.coeff_assoc_of_linearIndependentAt hL hli α β γ ε
-  simp_rw [htp L hL] at hassoc
-  exact hassoc
+  simpa only [htp L hL] using
+    h.coeff_assoc_of_linearIndependentAt hL hli α β γ ε
 
 end BNTLabelOperatorFamily
 

@@ -206,9 +206,8 @@ theorem halvedWeightTensor_isBNTCanonicalForm :
 decomposition `halvedDecomp scalarUnitTensor` at every length. -/
 theorem halvedWeightTensor_sameMPV₂_halvedDecomp :
     SameMPV₂ halvedWeightTensor
-      (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor := by
-  intro N σ
-  rfl
+      (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor :=
+  fun _ _ => rfl
 
 private theorem halvedWeightTensor_isCPSVBasisOfNormalTensors :
     IsCPSVBasisOfNormalTensors halvedWeightTensor
@@ -339,8 +338,8 @@ theorem halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp :
       SameMPV₂ halvedWeightTensor
         (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor ∧
       IsPhysicalBNTZCL halvedWeightTensor (fun _ : Fin 1 => scalarUnitTensor) ∧
-      ¬ IsTransferIdempotent halvedWeightTensor := by
-  exact ⟨halvedWeightTensor_isBNTCanonicalForm,
+      ¬ IsTransferIdempotent halvedWeightTensor :=
+  ⟨halvedWeightTensor_isBNTCanonicalForm,
     halvedWeightTensor_eq_halvedDecomp_toTensor,
     halvedWeightTensor_sameMPV₂_halvedDecomp,
     halvedWeightTensor_isPhysicalBNTZCL,
