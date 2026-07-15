@@ -35,6 +35,14 @@ fixes the original operator.  These are the support-projector identities used in
     \]
 \end{lemma}
 
+\begin{proof}
+    \leanok
+    In product-basis coordinates, the diagonal entry contributed by each
+    right basis vector is one, while every off-diagonal entry vanishes.
+    Summing over the right basis therefore gives
+    $(\dim H_R)\mathbf 1_L$.
+\end{proof}
+
 \begin{lemma}[Adjoint identity for the right partial trace]
     \label{lem:trace_lift_left_factor_mul}
     \lean{Matrix.trace_leftKroneckerEmbed_mul}
