@@ -124,6 +124,18 @@ unify during type-class instance synthesis (needed for the literal
 noncomputable def totalDim (P : SectorDecomposition d) : ℕ :=
   ∑ s : Fin P.totalCopies, P.flatDim s
 
+/-- Every representative bond dimension is bounded by the bond dimension of
+the full flattened sector tensor. -/
+theorem basisDim_le_totalDim (P : SectorDecomposition d) (j : Fin P.basisCount) :
+    P.basisDim j ≤ P.totalDim := by
+  let q : Fin (P.copies j) := ⟨0, P.copies_pos j⟩
+  let s : Fin P.totalCopies := P.flatIndexEquiv ⟨j, q⟩
+  have hs : P.flatDim s = P.basisDim j := by
+    simp [flatDim, s]
+  rw [← hs]
+  exact Finset.single_le_sum (fun t _ ↦ Nat.zero_le (P.flatDim t))
+    (Finset.mem_univ s)
+
 /-- The total tensor, obtained by flattening `(j, q)` and applying `toTensorFromBlocks`. -/
 noncomputable def toTensor (P : SectorDecomposition d) : MPSTensor d P.totalDim :=
   toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis

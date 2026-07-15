@@ -121,14 +121,7 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
   have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →
       IsNBlkInjective (P.basis j) n := by
     intro j n hpn
-    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hpn
-    clear hpn
-    induction k with
-    | zero => simpa using hAtP j
-    | succ k ih =>
-        simpa [Nat.add_assoc] using
-          (isNBlkInjective_succ_of_isNBlkInjective
-            (P.basis j) (Nat.add_pos_left hp k) ih)
+    exact isNBlkInjective_of_le hp (hAtP j) hpn
   let L₀ := 2 * p - 1
   have hBlk0 : ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) L₀ := by
     intro j
@@ -219,14 +212,7 @@ theorem eventuallyRepresentativeWordTupleSpan
   have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →
       IsNBlkInjective (P.basis j) n := by
     intro j n hpn
-    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hpn
-    clear hpn
-    induction k with
-    | zero => simpa using hAtP j
-    | succ k ih =>
-        simpa [Nat.add_assoc] using
-          (isNBlkInjective_succ_of_isNBlkInjective
-            (P.basis j) (Nat.add_pos_left hp k) ih)
+    exact isNBlkInjective_of_le hp (hAtP j) hpn
   let L₀ := 2 * p - 1
   have hBlk0 : ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) L₀ := by
     intro j

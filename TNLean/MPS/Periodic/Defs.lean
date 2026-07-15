@@ -5,7 +5,7 @@ import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Chain.Defs
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.CyclicDecomposition
-import Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots
+import Mathlib.RingTheory.RootsOfUnity.Complex
 
 open scoped Matrix BigOperators
 
@@ -62,10 +62,10 @@ def instEquivalenceGaugeEquiv :
 end PeriodicMPSTensor
 
 /-- `IsPeriodic m A` bundles irreducibility, left-canonical normalization,
-peripheral spectrum equal to the `m`-th roots of unity, positivity of `m`,
-and existence of a primitive `m`-th root.
+peripheral spectrum equal to the `m`-th roots of unity, and positivity of `m`.
 
-This is the periodic analogue of primitivity data in arXiv:1708.00029, Section 2.1. -/
+This is the periodic analogue of the primitivity conditions in arXiv:1708.00029,
+Section 2.1. -/
 structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   /-- No nontrivial invariant projection. -/
   irreducible : IsIrreducibleTensor A
@@ -76,8 +76,16 @@ structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   /-- Peripheral eigenvalues are exactly `m`-th roots of unity. -/
   peripheral_eq :
     peripheralEigenvalues (transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
-  /-- Existence of a primitive `m`-th root of unity. -/
-  primitiveRoot : ∃ ω : ℂ, IsPrimitiveRoot ω m
+
+/-- A positive period has a primitive root in `ℂ`; this is a consequence of
+the period, not an additional periodicity hypothesis.
+
+Existence of this root is automatic over `ℂ` and is therefore not part of the
+periodicity hypotheses in arXiv:1708.00029, Section 2.1. -/
+theorem IsPeriodic.primitiveRoot {m : ℕ} {A : MPSTensor d D}
+    (hA : IsPeriodic m A) : ∃ ω : ℂ, IsPrimitiveRoot ω m :=
+  ⟨Complex.exp (2 * Real.pi * Complex.I / m),
+    Complex.isPrimitiveRoot_exp m (Nat.ne_of_gt hA.period_pos)⟩
 
 /-- Repeated blocks: gauge equivalence up to a unit-modulus phase. -/
 def RepeatedBlocks (A B : MPSTensor d D) : Prop :=
@@ -155,15 +163,14 @@ theorem IsPeriodic.one_iff_primitive (A : MPSTensor d D) :
         simp
   · intro h
     rcases h with ⟨hIrr, hLC, hPrim⟩
-    refine ⟨hIrr, hLC, by decide, ?_, ?_⟩
-    · rw [IsPrimitive] at hPrim
-      calc
-        peripheralEigenvalues (transferMap (d := d) (D := D) A)
-            = ({1} : Set ℂ) := hPrim
-        _ = {μ : ℂ | μ ^ 1 = 1} := by
-          ext μ
-          simp
-    · exact ⟨1, IsPrimitiveRoot.one⟩
+    refine ⟨hIrr, hLC, by decide, ?_⟩
+    rw [IsPrimitive] at hPrim
+    calc
+      peripheralEigenvalues (transferMap (d := d) (D := D) A)
+          = ({1} : Set ℂ) := hPrim
+      _ = {μ : ℂ | μ ^ 1 = 1} := by
+        ext μ
+        simp
 
 /-- Every equivalent block pair is a repeated block pair. -/
 theorem EquivalentBlocks.to_repeatedBlocks {A B : MPSTensor d D}

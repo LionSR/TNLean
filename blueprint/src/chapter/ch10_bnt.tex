@@ -889,6 +889,7 @@ here feed the BNT canonical-form predicate below.
 \begin{definition}[Sector weights and sector decomposition]%
     \label{def:sector_weight_data}
     \lean{MPSTensor.SectorWeightData, MPSTensor.SectorDecomposition}
+    \lean{MPSTensor.SectorDecomposition.totalDim}
     \leanok
     A sector-weight tuple over $g$ basis blocks consists of multiplicities
     $r_j > 0$, nonzero weights $\mu_{j,q}$ for
@@ -901,6 +902,26 @@ here feed the BNT canonical-form predicate below.
     A \emph{sector decomposition} consists of the basis blocks
     $(A_j)_{j=1}^g$ together with these multiplicities and weights.
 \end{definition}
+
+\begin{theorem}[Representative dimensions are bounded by the total bond dimension]
+    \label{thm:sector_basis_dimension_le_total_dimension}
+    \lean{MPSTensor.SectorDecomposition.basisDim_le_totalDim}
+    \leanok
+    \uses{def:sector_weight_data}
+    Let the representative $A_j$ have bond dimension $D_j$, and let $D$ be
+    the bond dimension of the flattened sector tensor.  Then
+    \[
+        D_j\leq D.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:sector_weight_data}
+    Since $r_j>0$, choose one copy of $A_j$.  Its contribution $D_j$ is one
+    nonnegative summand in the total dimension of the flattened copy family,
+    so $D_j\leq D$.
+\end{proof}
 
 \begin{definition}[Physical blocking of a sector decomposition]%
     \label{def:sector_decomposition_block_tensor}
@@ -1101,6 +1122,82 @@ single family.
     $C \oplus (1/2) C$, and $C \oplus (-C) \oplus (1/2) C$) and is
     not derivable from the per-block normality hypotheses alone.
 \end{definition}
+
+\begin{theorem}[Self-overlap along peripheral-period multiples]
+    \label{thm:bnt_periodic_self_overlap_tendsto}
+    \lean{MPSTensor.periodicSelfOverlap_tendsto}
+    \leanok
+    \uses{def:mpv_overlap,def:irreducible_tensor,def:left_canonical_tensor,
+      def:peripheral_eigenvalues}
+    Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
+    with bond dimension $D$, and suppose that the peripheral eigenvalues of
+    its transfer map are exactly $\{z\in\mathbb C:z^m=1\}$. Then
+    \[
+        O_{AA}(mn)\longrightarrow m.
+    \]
+\end{theorem}
+
+\begin{theorem}[Normality from normalized self-overlap]
+    \label{thm:bnt_normality_from_self_overlap}
+    \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
+    \leanok
+    \uses{def:irreducible_tensor, def:mpv_overlap, def:normal,
+        thm:bnt_periodic_self_overlap_tendsto, thm:normal_tp_primitive_irred}
+    Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
+    If
+    \[
+        O_{AA}(N)\longrightarrow1,
+    \]
+    then $A$ is normal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:bnt_periodic_self_overlap_tendsto,
+        thm:normal_tp_primitive_irred}
+    Let $m$ be the peripheral period.  Along its multiples,
+    \[
+        O_{AA}(mn)\longrightarrow m.
+    \]
+    The assumed full limit gives $O_{AA}(mn)\to1$, hence $m=1$.  The transfer
+    map is therefore primitive, and irreducibility and left-canonicality give
+    normality.
+\end{proof}
+
+\begin{theorem}[Common exact quantum-Wielandt length for BNT representatives]
+    \label{thm:bnt_representatives_exact_total_dimension_pow_four}
+    \lean{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        thm:sector_basis_dimension_le_total_dimension,
+        thm:bnt_normality_from_self_overlap,
+        thm:exact_pow_four_block_injectivity_normal_left_canonical,
+        thm:wordspan_blk_inj_succ}
+    Let $P$ be a BNT canonical form of total bond dimension $D$, with
+    representatives $A_j$ of bond dimensions $D_j$.  For every
+    $0\leq j<g$, the representative $A_j$ is $D^4$-block injective:
+    \[
+        S_{D^4}(A_j)=\MN{D_j}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        thm:sector_basis_dimension_le_total_dimension,
+        thm:bnt_normality_from_self_overlap,
+        thm:exact_pow_four_block_injectivity_normal_left_canonical,
+        thm:wordspan_blk_inj_succ}
+    The BNT hypotheses make $A_j$ irreducible and left-canonical, with
+    $O_{A_jA_j}(N)\to1$.  The preceding theorem therefore makes $A_j$ normal,
+    and quantum Wielandt gives
+    \[
+        S_{D_j^4}(A_j)=\MN{D_j}.
+    \]
+    By Theorem~\ref{thm:sector_basis_dimension_le_total_dimension},
+    $D_j^4\leq D^4$.  Write $D^4=D_j^4+k$ and apply positive-length
+    propagation $k$ times.
+\end{proof}
 
 The matching arguments below read off three facts from a BNT canonical form: the
 raw coefficient identity, the cross-overlap decay between distinct basis blocks,
