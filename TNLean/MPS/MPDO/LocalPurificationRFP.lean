@@ -46,7 +46,7 @@ pure-state RFP.
 
 * `MPOTensor.IsLocalPurificationRFP`: the local purification condition with a
   pure-state RFP purifying tensor.
-* `MPOTensor.IsNondegeneratePRFP`: the repaired local purification-RFP
+* `MPOTensor.IsNondegeneratePRFP`: the nondegenerate local purification-RFP
   condition with nonzero physical-trace transfer.
 
 ## Main results
@@ -67,7 +67,7 @@ pure-state RFP.
 * `MPOTensor.isLocalPurificationRFP_iff_isLPDO_and_physTraceTransfer_sq`: on the
   tensor-level purification form, pure-state RFP is equivalent to normalized
   physical-trace idempotence.
-* `MPOTensor.isNondegeneratePRFP_iff`: the repaired predicate is equivalent to
+* `MPOTensor.isNondegeneratePRFP_iff`: this predicate is equivalent to
   the local purification form together with nonzero normalized source ZCL.
 * `MPOTensor.exists_isPRFP_not_isSourceZCL`: the zero purifier shows why the
   bare global predicate needs a nondegeneracy condition.
@@ -116,7 +116,7 @@ nonzero.
 
 The last condition records the nondegeneracy implicit when the source speaks of
 density operators and excludes the zero purifier. Together with the local
-purification identity, it is the repaired normalized convention under which
+purification identity, it is the normalized convention under which
 the PRFP-to-ZCL implication at lines 775--786 is valid. It is stronger than the
 bare positive-length global predicate `IsPRFP`; no converse from that global
 predicate is asserted. See
@@ -569,7 +569,7 @@ density operators satisfy the global purification equation, so `IsPRFP` holds;
 its physical-trace transfer is zero, so `IsSourceZCL` fails.
 
 This is the zero-purifier obstruction to applying the equivalence stated in
-arXiv:1606.00608, lines 775--786 to the bare predicate. The repaired predicate
+arXiv:1606.00608, lines 775--786 to the bare predicate. The nondegenerate predicate
 `IsNondegeneratePRFP` excludes this example. See
 `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
 theorem exists_isPRFP_not_isSourceZCL :
