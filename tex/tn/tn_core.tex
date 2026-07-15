@@ -208,19 +208,26 @@
       }
   }
 
-\cs_new_protected:Npn \tn_alias_register:nnn #1#2#3
+\cs_new_protected:Npn \tn_alias_assert_acyclic:nn #1#2
   {
-    \prop_if_in:NeTF \g__tn_alias_source_prop { \tn_port_key:n {#2} }
+    \str_if_eq:eeTF { \tl_to_str:e {#1} } { \tl_to_str:e {#2} }
       {
-        \prop_get:NeN \g__tn_alias_source_prop { \tn_port_key:n {#2} }
-          \l_tmpa_tl
-        \str_if_eq:eeT { \tl_to_str:e {#1} } { \tl_to_str:V \l_tmpa_tl }
+        \PackageError{tnlean-tikz}{Cyclic tensor-network alias `#1'}
+          {Aliases must terminate at an atom port.}
+      }
+      {
+        \prop_if_in:NeT \g__tn_alias_source_prop { \tn_port_key:n {#2} }
           {
-            \PackageError{tnlean-tikz}{Cyclic tensor-network alias `#1'}
-              {Aliases must terminate at an atom port.}
+            \prop_get:NeN \g__tn_alias_source_prop
+              { \tn_port_key:n {#2} } \l_tmpa_tl
+            \exp_args:NnV \tn_alias_assert_acyclic:nn {#1} \l_tmpa_tl
           }
       }
-      { }
+  }
+
+\cs_new_protected:Npn \tn_alias_register:nnn #1#2#3
+  {
+    \tn_alias_assert_acyclic:nn {#1} {#2}
     \tn_port_register:nn {#1} {#3}
     \prop_gput:Nee \g__tn_alias_source_prop
       { \tn_port_key:n {#1} } { \tl_to_str:e {#2} }

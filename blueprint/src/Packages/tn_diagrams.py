@@ -256,10 +256,13 @@ def _assert_no_duplicate_diagram_definitions() -> None:
         r"|(?:def|gdef|edef|xdef|let)\s*"
         r")\\(TN(?!@)\w+)"
     )
-    definition_sources = tuple(
-        path
-        for path in sorted(_TN_SHARED_DIR.glob("*.tex"))
-        if path != _TN_CATALOGUE_FILE
+    definition_sources = (
+        *(
+            path
+            for path in sorted(_TN_SHARED_DIR.glob("*.tex"))
+            if path != _TN_CATALOGUE_FILE
+        ),
+        *_client_source_paths(),
     )
     for path in definition_sources:
         if not path.exists():
