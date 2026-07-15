@@ -24,6 +24,17 @@ support projector of the retained left marginal, lifted to the full space,
 fixes the original operator.  These are the support-projector identities used in
 \cite[Appendix~D.2, lines 2225--2235]{Cirac2016MPDO_arXiv}.
 
+\begin{lemma}[Partial trace of the identity]
+    \label{lem:partial_trace_right_identity}
+    \lean{Matrix.partialTraceRight_one}
+    \leanok
+    For finite-dimensional spaces $H_L$ and $H_R$,
+    \[
+        \operatorname{tr}_R(\mathbf 1_{L\otimes R})
+        =(\dim H_R)\mathbf 1_L.
+    \]
+\end{lemma}
+
 \begin{lemma}[Adjoint identity for the right partial trace]
     \label{lem:trace_lift_left_factor_mul}
     \lean{Matrix.trace_leftKroneckerEmbed_mul}
@@ -159,7 +170,8 @@ fixes the original operator.  These are the support-projector identities used in
     \lean{Matrix.PosSemidef.rightKroneckerEmbed_supportProj_mul_self}
     \leanok
     \uses{thm:partial_trace_left_pos,lem:trace_lift_right_factor_mul}
-    If $P_R$ is the support projector of $\operatorname{tr}_L\rho$, then
+    Let $\rho$ be positive semidefinite.  If $P_R$ is the support projector of
+    $\operatorname{tr}_L\rho$, then
     \[
         (\mathbf 1_L\otimes P_R)\rho=\rho.
     \]
@@ -316,8 +328,13 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Substitute the matrix-unit expansions.  Every summand contains a
-    decorrelation product and is therefore zero.
+    Substitute the matrix-unit expansions.  Every summand has the form
+    \[
+        E^A_{ak}PE^A_{ka}(\mathbf 1-P)E^B_{bl}PE^B_{lb}
+        =E^A_{ak}\bigl[PE^A_{ka}(\mathbf 1-P)E^B_{bl}P\bigr]E^B_{lb}
+        =0,
+    \]
+    where the bracketed factor vanishes by decorrelation.
 \end{proof}
 
 \begin{theorem}[Reverse reduced-operator decorrelation]
@@ -334,8 +351,13 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Substitute the matrix-unit expansions and use reverse-order
-    decorrelation in every summand.
+    Substitute the matrix-unit expansions.  Every summand has the form
+    \[
+        E^B_{bl}PE^B_{lb}(\mathbf 1-P)E^A_{ak}PE^A_{ka}
+        =E^B_{bl}\bigl[PE^B_{lb}(\mathbf 1-P)E^A_{ak}P\bigr]E^A_{ka}
+        =0,
+    \]
+    where the bracketed factor vanishes by reverse-order decorrelation.
 \end{proof}
 
 \begin{definition}[Tripartite marginal support projectors]
