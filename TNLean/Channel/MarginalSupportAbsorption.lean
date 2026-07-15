@@ -13,6 +13,12 @@ This file proves that the support projector of a bipartite marginal, tensored
 with the identity on the discarded factor, fixes the original positive
 semidefinite operator on both sides.
 
+The left-partial-trace counterpart in `TNLean.Analysis.MarginalSupport` lifts a
+matrix as \(\mathbf 1_L\otimes M_R\), whereas the identities here trace the
+right factor and lift a matrix as \(M_L\otimes\mathbf 1_R\).  Exchanging these
+two forms requires conjugating every operator by the tensor-factor swap; neither
+form is a specialization of the other on the product index \(L\times R\).
+
 ## Main results
 
 * `Matrix.trace_leftKroneckerEmbed_mul`: adjoint identity between the right
