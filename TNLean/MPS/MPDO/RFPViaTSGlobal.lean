@@ -13,7 +13,7 @@ The maps in Definition 4.1 of arXiv:1606.00608 act on one or two neighboring
 physical sites. This file tensors those maps with the identity on the remaining
 sites and proves that their local closure identities extend to a chain of any
 length. These are the channel identities used in the strong-area-law argument
-of Proposition `propsimple`, lines 1333--1341.
+of arXiv:1606.00608, Appendix C, lines 1333--1341.
 
 The remaining local-channel data-processing theorem and the source standing
 nonvanishing condition are recorded in
@@ -35,7 +35,7 @@ nonvanishing condition are recorded in
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Definition 4.1 and Proposition `propsimple`, lines 1333--1341
+  Definition 4.1 and Appendix C, lines 1333--1341
 -/
 
 open scoped Matrix BigOperators
@@ -83,7 +83,7 @@ def firstTwoSitesRestEquiv (d N : ℕ) :
 /-- Apply a one-to-two physical map to the first site and leave the remaining
 `N` sites unchanged.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1337--1341. -/
+Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 noncomputable def refineFirstSite
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (N : ℕ) :
@@ -96,7 +96,7 @@ noncomputable def refineFirstSite
 /-- Apply a two-to-one physical map to the first two sites and leave the
 remaining `N` sites unchanged.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1337--1341. -/
+Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 noncomputable def coarsenFirstTwoSites
     (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
@@ -109,7 +109,7 @@ noncomputable def coarsenFirstTwoSites
 /-- Localizing a one-to-two channel at the first site again gives a
 trace-preserving completely positive map.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1337--1341. -/
+Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 theorem refineFirstSite_isKrausCPTP
     {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
@@ -124,7 +124,7 @@ theorem refineFirstSite_isKrausCPTP
 /-- Localizing a two-to-one channel at the first two sites again gives a
 trace-preserving completely positive map.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1337--1341. -/
+Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 theorem coarsenFirstTwoSites_isKrausCPTP
     {S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin d) (Fin d) ℂ}
@@ -171,7 +171,7 @@ in a closure of arbitrary length.
 This is the global channel identity used when `T` is applied to the first spin
 of the first interval in the proof of the strong area law.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1337--1341. -/
+Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 theorem refineFirstSite_physCloseN (M : MPOTensor d D)
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
@@ -196,7 +196,7 @@ tensor from a closure of arbitrary length.
 This is the global channel identity used when `S` is applied to the first two
 spins of the second interval in the proof of the strong area law.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1337--1341. -/
+Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 theorem coarsenFirstTwoSites_physCloseN (M : MPOTensor d D)
     (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin d) (Fin d) ℂ)
@@ -217,7 +217,7 @@ theorem coarsenFirstTwoSites_physCloseN (M : MPOTensor d D)
 /-- The localized refinement map inserts one site in every periodic MPO
 operator whenever the one-to-two closure identity of Definition 4.1 holds.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1337--1341. -/
+Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 theorem refineFirstSite_mpo (M : MPOTensor d D)
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
@@ -230,7 +230,7 @@ theorem refineFirstSite_mpo (M : MPOTensor d D)
 /-- The localized coarse-graining map removes one site from every periodic MPO
 operator whenever the two-to-one closure identity of Definition 4.1 holds.
 
-Source: arXiv:1606.00608, Proposition `propsimple`, lines 1337--1341. -/
+Source: arXiv:1606.00608, Appendix C, lines 1337--1341. -/
 theorem coarsenFirstTwoSites_mpo (M : MPOTensor d D)
     (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin d) (Fin d) ℂ)
@@ -245,11 +245,11 @@ of trace-preserving completely positive maps whose localizations insert and
 remove a tensor in physical closures of every length.
 
 This is the global channel statement used in the proof of the strong area law
-in Proposition `propsimple`. The parameter `N` counts the sites on which the
+in arXiv:1606.00608, Appendix C. The parameter `N` counts the sites on which the
 identity channel acts; even when `N = 0`, the input closure contains one or two
 physical sites, so no empty-chain operator is involved.
 
-Source: arXiv:1606.00608, Definition 4.1 and Proposition `propsimple`,
+Source: arXiv:1606.00608, Definition 4.1 and Appendix C,
 lines 1333--1341. -/
 theorem exists_global_renormalization_maps (M : MPOTensor d D)
     (h : IsRFPViaTS M) :

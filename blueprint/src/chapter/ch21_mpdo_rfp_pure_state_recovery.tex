@@ -443,8 +443,8 @@
 
 \begin{definition}[Physical closure maps]
     \label{def:phys_close}
-    \lean{MPOTensor.physCloseN, MPOTensor.physClose1, MPOTensor.physClose2,
-      MPOTensor.physClose3}
+    \lean{MPOTensor.physCloseN, MPOTensor.physCloseN_apply,
+      MPOTensor.physClose1, MPOTensor.physClose2, MPOTensor.physClose3}
     \leanok
     \uses{def:mpo_eval_word}
     For an MPO tensor $M$, a length $N$, and a virtual operator $X$, define the
@@ -567,8 +567,16 @@
 
 \begin{proof}
     \leanok
-    Tensor each Kraus operator with the identity on the spectator sites and
-    conjugate by the two regrouping equivalences.
+    If $(K_j)_j$ are Kraus operators for $\mathcal T$ with
+    $\sum_j K_j^\dagger K_j=I_d$, then the localized map has Kraus operators
+    $K_j\otimes I_N$, and
+    \[
+      \sum_j (K_j\otimes I_N)^\dagger(K_j\otimes I_N)
+        =\left(\sum_j K_j^\dagger K_j\right)\otimes I_N
+        =I_d\otimes I_N.
+    \]
+    The two regroupings are unitary conjugations and preserve complete
+    positivity and the trace.  The argument for $\mathcal S$ is identical.
 \end{proof}
 
 \begin{theorem}[Global action of the renormalization maps]
@@ -593,16 +601,26 @@
     In particular, these identities hold for every periodic MPO operator.
     Hence the two maps supplied by a renormalization fixed point act on rings
     of every length as required in the proof of
-    \cite[Proposition \texttt{propsimple}, lines~1333--1341]
-    {Cirac2016MPDO_arXiv}.
+    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    After separating the first one or two sites, each matrix block is the
-    corresponding one-site or two-site closure, with the remaining word
-    absorbed into the virtual boundary operator.  Apply the defining local
-    closure identity to every block.
+    For words $u,v$ on the $N$ spectator sites, write $M^{u,v}$ for their
+    virtual word evaluation and write $[Y]^{(r)}_{u,v}$ for the block of an
+    operator $Y$ on the first $r$ sites.  Regrouping the first site gives
+    \[
+      [M_{N+1}(X)]^{(1)}_{u,v}=M_1(M^{u,v}X).
+    \]
+    Therefore
+    \[
+      \mathcal T\bigl([M_{N+1}(X)]^{(1)}_{u,v}\bigr)
+        =M_2(M^{u,v}X)
+        =[M_{N+2}(X)]^{(2)}_{u,v}.
+    \]
+    Equality of all blocks proves the refinement identity.  Interchanging
+    $M_1$, $M_2$ and using $\mathcal S[M_2(Y)]=M_1(Y)$ proves the coarsening
+    identity.
 \end{proof}
 
 \begin{definition}[Diagonal pure-state embedding as an MPO]\label{def:to_mpo_tensor}
