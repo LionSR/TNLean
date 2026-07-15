@@ -161,8 +161,14 @@ fixes the original operator.  These are the support-projector identities used in
 
 \begin{proof}
     \leanok
-    Expand both traces in product bases and sum over the identity entry on
-    $H_L$.
+    Expanding in product bases gives
+    \[
+        \operatorname{tr}((\mathbf 1_L\otimes M)\rho)
+        =\sum_{l,r}\sum_{k,s}\delta_{l,k}M_{rs}
+          \rho_{(k,s),(l,r)}
+        =\sum_{r,s}M_{rs}\sum_l\rho_{(l,s),(l,r)}
+        =\operatorname{tr}(M\operatorname{tr}_L\rho).
+    \]
 \end{proof}
 
 \begin{theorem}[Left absorption by the right marginal support]
@@ -346,9 +352,18 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Evaluate both sides in the product basis.  The two matrix units force the
-    contracted row and column indices to agree, leaving the corresponding
-    partial trace.
+    For the $XB$ marginal, evaluation in the product basis gives
+    \[
+        \bigl(E^A_{ak}P E^A_{ka}\bigr)_{(a_0,r),(a_1,s)}
+        =\delta_{a,a_0}\delta_{a,a_1}P_{(k,r),(k,s)}.
+    \]
+    Hence
+    \[
+        \sum_{a,k}\bigl(E^A_{ak}P E^A_{ka}\bigr)_{(a_0,r),(a_1,s)}
+        =\delta_{a_0,a_1}\sum_kP_{(k,r),(k,s)}
+        =\bigl(\mathbf 1_A\otimes\rho_{XB}\bigr)_{(a_0,r),(a_1,s)}.
+    \]
+    The $AX$ identity follows symmetrically.
 \end{proof}
 
 \begin{theorem}[Decorrelation for the reduced operators]
