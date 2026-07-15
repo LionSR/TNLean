@@ -239,6 +239,37 @@ them.
     the fixed factors accumulate into the matrix power $X_\gamma^L$.
 \end{proof}
 
+\begin{definition}[BNT algebra clause]%
+    \label{def:mpdo_bnt_algebra_clause}
+    \lean{MPOTensor.BNTAlgebraClause}
+    \leanok
+    \uses{def:mpdo_bnt_label_operator_family,
+        def:mpdo_bnt_label_trace_scalar_family,
+        def:mpdo_bnt_label_positive_length_chi_trace_power_form,
+        def:mpdo_bnt_label_same_length_product_form,
+        def:mpdo_bnt_label_idempotent_coefficient_form}
+    Fix BNT-label operators $O_L(M_\alpha)$, trace scalars
+    $m_\alpha=\operatorname{tr}(\mu_\alpha)$, and diagonal matrices
+    $\chi_{\alpha,\beta,\gamma}$. They satisfy the \emph{BNT algebra clause}
+    when the diagonal entries are positive, the coefficients obey
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}),
+    \]
+    the same-length product law holds at every positive length,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        =\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+    \]
+    and the trace scalars satisfy
+    \[
+        m_\gamma=\sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+    \]
+    This is the algebra statement in
+    \cite[Theorem~4.14(ii), lines~972--985]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{definition}[Fusion-isometry family]%
     \label{def:mpdo_bnt_fusion_isometry_family}
     \lean{MPOTensor.BNTFusionIsometryFamily}
@@ -529,6 +560,32 @@ weights in the length-independent case at
     diagonal factors accumulating into $\chi_{\alpha,\beta,\gamma}^{L}$;
     taking the trace block by block and factor by factor yields the
     coefficients $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
+\end{proof}
+
+\begin{theorem}[Fusion isometries imply the BNT algebra clause]%
+    \label{thm:mpdo_bnt_fusion_implies_algebra_clause}
+    \lean{MPOTensor.BNTFusionIsometryFamily.to_bntAlgebraClause}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_clause,
+        def:mpdo_bnt_fusion_isometry_family,
+        def:mpdo_bnt_label_idempotent_coefficient_form}
+    Suppose the fusion-isometry identity holds with positive diagonal matrices
+    $\chi_{\alpha,\beta,\gamma}$, and suppose the trace scalars satisfy the
+    length-one idempotent law for the corresponding trace-power coefficients.
+    Then the concrete operators $O_L(M_\alpha)$ satisfy the BNT algebra clause
+    with the same diagonal matrices and trace scalars. This is implication
+    (iii)$\Rightarrow$(ii) of
+    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}; it does not assert either of the
+    implications involving the renormalization fixed-point condition.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_fusion_same_length_product,
+        thm:mpdo_bnt_label_of_chi_positive_length_trace_power}
+    Positivity is part of the fusion-isometry hypothesis. The trace-power
+    identity follows from the canonical coefficients determined by $\chi$,
+    the same-length product law is the preceding theorem, and the idempotent
+    scalar law is the remaining hypothesis.
 \end{proof}
 
 \begin{figure}[ht]
