@@ -37,6 +37,7 @@ _TN_CORE_FILE = _TN_SHARED_DIR / "tn_core.tex"
 _TN_LIBRARY_FILE = _TN_SHARED_DIR / "tn_library.tex"
 _TN_ATOMS_FILE = _TN_SHARED_DIR / "tn_atoms.tex"
 _TN_CATALOGUE_FILE = _TN_SHARED_DIR / "tn_catalogue.tex"
+_TN_ENTRYPOINT_FILE = _TN_SHARED_DIR / "tikzlibrarytn.code.tex"
 _TN_MOTIF_FILES = tuple(sorted(_TN_SHARED_DIR.glob("tn_motifs_*.tex")))
 _CACHE_DIR = _SRC_DIR / ".tn_svg_cache"
 _SVG_SUBDIR = "tn_svg"
@@ -47,6 +48,7 @@ _RENDER_SOURCE_FILES = (
     _TN_ATOMS_FILE,
     *_TN_MOTIF_FILES,
     _TN_CATALOGUE_FILE,
+    _TN_ENTRYPOINT_FILE,
     _SRC_DIR / "macros/tn_print.tex",
 )
 _TEMPLATE_FILE = _SRC_DIR / "plastex_templates/TensorNetworkDiagrams.jinja2s"
@@ -344,12 +346,19 @@ def _is_escaped(source: str, offset: int) -> bool:
 
 
 def _unescaped_parameter_indices(source: str) -> set[int]:
-    """Return the TeX macro parameters ``#1`` through ``#9`` used in source."""
+    """Return outer TeX parameters ``#1`` through ``#9`` used in source."""
+
+    def is_outer_parameter(offset: int) -> bool:
+        start = offset
+        while start > 0 and source[start - 1] == "#":
+            start -= 1
+        hash_count = offset - start + 1
+        return not _is_escaped(source, start) and hash_count % 2 == 1
 
     return {
         int(match.group(1))
         for match in re.finditer(r"#([1-9])", source)
-        if not _is_escaped(source, match.start())
+        if is_outer_parameter(match.start())
     }
 
 
@@ -747,7 +756,9 @@ def _declared_slide_diagram_arities() -> dict[str, int]:
     """Read slide diagram names and arities from the shared slide catalogue."""
 
     if not _SLIDE_CATALOGUE.is_file():
-        return {}
+        raise RuntimeError(
+            f"Missing shared slide tensor-network catalogue: {_SLIDE_CATALOGUE}."
+        )
     source = _mask_tex_comments(_SLIDE_CATALOGUE.read_text(encoding="utf-8"))
     pattern = re.compile(
         r"^\\newcommand\{\\(SlideTN[A-Z]\w*)\}(?:\[(\d+)\])?",
