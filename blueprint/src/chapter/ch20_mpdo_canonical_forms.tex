@@ -340,6 +340,10 @@ This is the inverse identity in
 
 \begin{proof}
     \leanok
+    \uses{lem:single_block_word_tuple_span,
+        lem:pair_product_span_arbitrary_first_value,
+        lem:bnt_direct_sum_block_separation_word_span,
+        thm:sector_basis_dimension_le_total_dimension}
     Let $g$ be the number of minimal representatives. The common exact
     injective length is $D^4$. If $g=1$, ordinary block injectivity gives the
     simultaneous span at length $D^4$.
@@ -347,10 +351,12 @@ This is the inverse identity in
     Suppose $g\geq2$. Positive-length propagation gives block injectivity at
     lengths $D^4+1$ and $3(D^4+1)$. The pair-separation argument therefore
     gives the full pair span at length $3(D^4+1)$ for every pair of distinct
-    representatives. For each chosen block, realize an arbitrary value on
-    that block and zero on an anchor block, then multiply by identity--zero
-    selectors for the remaining $g-2$ representatives. Summing these
-    block-supported tuples gives the full simultaneous span at length
+    representatives. For each block $k$,
+    Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a tuple $M$
+    with $M_k=X_k$ and $M_j=0$ for a chosen anchor block $j$. Multiplying by
+    identity--zero selectors for the remaining $g-2$ representatives gives a
+    tuple supported only on block $k$. Summing over $k$ gives the full
+    simultaneous span at length
     \[
         N=3(g-1)(D^4+1).
     \]
