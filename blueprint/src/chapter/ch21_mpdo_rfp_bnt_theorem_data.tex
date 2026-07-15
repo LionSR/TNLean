@@ -100,10 +100,10 @@
         thm:bounded_power_sum_multiset}
     Suppose that every entry of the one-site multiplicity matrices, every
     entry of the two-site multiplicity matrices, and every entry of the
-    matrices $\chi_{\alpha,\beta,\gamma}$ is positive.  Suppose also that
+    matrices $\chi_{\alpha,\beta,\gamma}$ is positive.  Suppose also that, for
+    every $\alpha$,
     \[
-        \sum_i \mu_{\alpha,i}=m_\alpha
-        \qquad\text{for every }\alpha.
+        \sum_i \mu_{\alpha,i}=m_\alpha.
     \]
     If, for every $\gamma$ and all sufficiently large $L$,
     \[
@@ -116,19 +116,18 @@
         \bigr)^L,
     \]
     then the entries on the two sides agree as multisets.  Together with the
-    displayed one-site trace identity, these data define a BNT
-    multiplicity-spectrum comparison.
+    displayed one-site trace identity, the one-site and two-site multiplicity
+    entries and their dimensions define a BNT multiplicity-spectrum comparison.
 \end{theorem}
 \begin{proof}\leanok
     Positivity makes all entries nonzero.  Eventual equality of two finite
-    sums of geometric sequences gives
+    sums of geometric sequences gives, for every $L\geq 1$,
     \[
         \sum_r \nu_{\gamma,r}^{L}
         =
         \sum_{\alpha,\beta,i,j,k}
         \bigl(\mu_{\alpha,i}\mu_{\beta,j}
-          \chi_{\alpha,\beta,\gamma,k}\bigr)^L
-        \qquad (L\geq 1).
+          \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
     \]
     The finite power-sum identity determines both the cardinality and the
     multiset of entries.
