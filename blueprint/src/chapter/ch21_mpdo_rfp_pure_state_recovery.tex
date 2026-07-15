@@ -474,14 +474,19 @@
     Closing the virtual legs with the identity gives the periodic MPO
     operator:
     \[
-        M_N(1)=\operatorname{MPO}_N(M).
+        M_N(1)=\rho^{(N)}(M).
     \]
 \end{lemma}
 
 \begin{proof}
     \leanok
-    At every pair of physical words, both sides are the trace of the same
-    virtual word evaluation.
+    For every pair of physical words $\sigma,\tau$,
+    \[
+        M_N(1)_{\sigma,\tau}
+          = \tr\!\left(M^{\sigma,\tau}\cdot 1\right)
+          = \tr\!\left(M^{\sigma,\tau}\right)
+          = \rho^{(N)}(M)_{\sigma,\tau}. \qedhere
+    \]
 \end{proof}
 
 \begin{theorem}[One- and two-site physical closures]
