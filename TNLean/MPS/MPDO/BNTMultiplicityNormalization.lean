@@ -151,17 +151,18 @@ noncomputable def ofEventuallyEqualPowerSums
         (twoDim γ) (Fintype.card I) (twoEntry γ)
         (fun i => productEntry (e i)) hTwoNe (fun i => hProductNe (e i))
         (fun L _ _ => hAll L)).2
+    have hMap :
+        Multiset.map e (Finset.univ : Finset (Fin (Fintype.card I))).val =
+          (Finset.univ : Finset I).val :=
+      Multiset.map_univ_val_equiv e
     rw [show Finset.univ.val.map (fun i => productEntry (e i)) =
         Finset.univ.val.map productEntry by
       calc
         Finset.univ.val.map (fun i => productEntry (e i)) =
-            (Finset.univ.map e.toEmbedding).val.map productEntry := by
-          rw [Finset.map_val, Multiset.map_map]
-          rfl
+            (Finset.univ.val.map e).map productEntry :=
+          (Multiset.map_map productEntry e Finset.univ.val).symm
         _ = Finset.univ.val.map productEntry := by
-          congr 2
-          ext x
-          simp] at hMultiset
+          rw [hMap]] at hMultiset
     exact hMultiset
 
 /-- Summing the sectorwise multiplicity-spectrum comparison gives the
