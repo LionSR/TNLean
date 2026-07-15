@@ -154,14 +154,13 @@ namespace MPSTensor.IsBNTCanonicalForm
 variable {d : ℕ} {P : SectorDecomposition d}
 
 /-- Every representative of a BNT canonical form is block injective at the
-common length `P.totalDim ^ 4`.
+common length $D^4$, where $D$ is the total bond dimension.
 
-For representative `j`, quantum Wielandt gives exact block injectivity at
-`(P.basisDim j) ^ 4`.  The representative occurs in the flattened sector
-tensor, hence `P.basisDim j ≤ P.totalDim`, and positive-length block
-injectivity propagates to the common length.
+For the $j$th representative $A_j$ with bond dimension $D_j$, quantum
+Wielandt gives exact block injectivity at $D_j^4$.  Since $D_j \leq D$,
+positive-length block injectivity propagates to the common length $D^4$.
 
-Source: arXiv:1606.00608, lines 332--344. -/
+Source: arXiv:1606.00608, line 332. -/
 theorem basis_isNBlkInjective_totalDim_pow_four
     (hCF : IsBNTCanonicalForm P) :
     ∀ j : Fin P.basisCount,
@@ -179,14 +178,7 @@ theorem basis_isNBlkInjective_totalDim_pow_four
     Nat.pow_pos (hCF.basis_dim_pos j)
   have hPow : (P.basisDim j) ^ 4 ≤ P.totalDim ^ 4 :=
     Nat.pow_le_pow_left (P.basisDim_le_totalDim j) 4
-  obtain ⟨k, hD⟩ := Nat.exists_eq_add_of_le hPow
-  rw [hD]
-  clear hD
-  induction k with
-  | zero => simpa using hOwn
-  | succ k ih =>
-      rw [Nat.add_succ]
-      exact isNBlkInjective_succ_of_isNBlkInjective (P.basis j) (by omega) ih
+  exact isNBlkInjective_of_le hOwnPos hOwn hPow
 
 /-- The finitely many representatives of a BNT canonical form have one common
 positive block-injectivity length.

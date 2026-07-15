@@ -275,7 +275,7 @@ The bounded Wielandt theorem above produces an injective length at most
 so one may use the same exact length `D ^ 4` for every tensor of bond dimension
 `D`.
 
-Source: arXiv:1606.00608, lines 332--344. -/
+Source: arXiv:1606.00608, line 332. -/
 theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -285,14 +285,7 @@ theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
     exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical A hTP hN
   have hL' : IsNBlkInjective A L :=
     (isNBlkInjective_iff_blockTensor_isInjective A L).2 hL
-  obtain ⟨k, hD⟩ := Nat.exists_eq_add_of_le hLle
-  rw [hD]
-  clear hD
-  induction k with
-  | zero => simpa using hL'
-  | succ k ih =>
-      rw [Nat.add_succ]
-      exact isNBlkInjective_succ_of_isNBlkInjective A (by omega) ih
+  exact isNBlkInjective_of_le hLpos hL' hLle
 
 /-!
 ## IsNormal is preserved by blocking

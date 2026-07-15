@@ -102,6 +102,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \label{thm:wordspan_blk_inj_succ}
     \lean{MPSTensor.wordSpan_succ_eq_mul_left}
     \lean{MPSTensor.isNBlkInjective_succ_of_isNBlkInjective}
+    \lean{MPSTensor.isNBlkInjective_of_le}
     \leanok
     \uses{def:word_span, def:l_blk_injective}
     For every $n$,
@@ -109,7 +110,7 @@ The results follow~\cite{Sanz2010Quantum}.
         S_{n+1}(A)=\spn_{\C}\{A_i\}_i S_n(A).
     \]
     Consequently, if $L>0$ and $A$ is $L$-block injective, then
-    $A$ is $(L+1)$-block injective.
+    $A$ is $m$-block injective for every $m\geq L$.
     This is an auxiliary length-shift statement used to combine the
     block-injectivity discussion in~\cite[lines~318--345]{Cirac2016MPDO_arXiv}
     with Appendix~C.3, Lemma~L, lines~1835--1858; it is not stated there
@@ -127,6 +128,7 @@ The results follow~\cite{Sanz2010Quantum}.
         \le \spn_{\C}\{A_i\}_i S_L(A)
         =S_{L+1}(A).
     \]
+    Iterating this implication gives $S_m(A)=\MN{D}$ for every $m\geq L$.
 \end{proof}
 
 \begin{lemma}[Zero-length word span]
@@ -1024,11 +1026,14 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 
 \begin{lemma}[Blocking transfer]\label{lem:blocking_transfer}
     \lean{MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top}
+    \lean{MPSTensor.isNBlkInjective_iff_blockTensor_isInjective}
     \leanok
     \uses{def:word_span, def:blocked_tensor}
     If the blocked tensor $A^{[L]}$ satisfies
     $S_n(A^{[L]}) = \MN{D}$,
     then $S_{nL}(A) = \MN{D}$.
+    In particular, $A$ is $L$-block injective if and only if $A^{[L]}$ is
+    one-site injective.
 \end{lemma}
 
 \begin{proof}
@@ -1037,6 +1042,8 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     $\{0, \ldots, d^L - 1\}$ decodes to a length-$nL$ word
     in the original alphabet $\{0, \ldots, d-1\}$,
     so $S_n(A^{[L]}) \subseteq S_{nL}(A)$.
+    For $n=1$, the blocked letters are precisely the length-$L$ words of
+    $A$, which proves the stated equivalence.
 \end{proof}
 
 
@@ -1073,6 +1080,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     \lean{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}
     \leanok
     \uses{thm:bounded_injective_blocking_normal_left_canonical,
+        lem:blocking_transfer,
         thm:wordspan_blk_inj_succ}
     Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
     Then
@@ -1085,6 +1093,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 \begin{proof}
     \leanok
     \uses{thm:bounded_injective_blocking_normal_left_canonical,
+        lem:blocking_transfer,
         thm:wordspan_blk_inj_succ}
     Choose $L$ with $0<L\leq D^4$ and $S_L(A)=\MN{D}$, and write
     \[
