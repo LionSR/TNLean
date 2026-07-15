@@ -104,8 +104,8 @@ theorem PosSemidef.leftKroneckerEmbed_supportProj_mul_self
 /-- The lifted support projector of the right partial trace also fixes a
 positive semidefinite bipartite operator on the right.
 
-Together with `PosSemidef.leftKroneckerEmbed_supportProj_mul_self`, this proves
-both support-projector absorption identities of arXiv:1606.00608,
+Together with the left absorption identity above, this proves both
+support-projector absorption identities of arXiv:1606.00608,
 Appendix D.2, lines 2228--2235, for the \(AX|B\) bipartition. -/
 theorem PosSemidef.mul_leftKroneckerEmbed_supportProj_self
     {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef) :
