@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.Defs
 import TNLean.Analysis.MatrixSqrt
+import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.PartialTrace
 import Mathlib.Data.Matrix.PEquiv
 import Mathlib.LinearAlgebra.Matrix.Reindex
@@ -21,6 +22,7 @@ dimensions.
 
 * `IsKrausCPTP`: a trace-preserving completely positive map in rectangular
   Kraus form.
+* `IsKrausCPTP.trace_map`: a map satisfying `IsKrausCPTP` preserves trace.
 * `isKrausCPTP_id`: the identity map is trace-preserving completely positive.
 * `isKrausCPTP_of_singleKraus`: conjugation by an isometry is trace-preserving
   completely positive.
@@ -63,6 +65,19 @@ def IsKrausCPTP {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [Deci
     (S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) : Prop :=
   ∃ (r : ℕ) (A : Fin r → Matrix β α ℂ),
     (∀ X, S X = ∑ i, A i * X * (A i)ᴴ) ∧ (∑ i, (A i)ᴴ * A i = (1 : Matrix α α ℂ))
+
+/-- A rectangular Kraus map whose Kraus operators resolve the identity
+preserves the matrix trace. This is the trace-preservation property used for
+the physical maps in arXiv:1606.00608, Proposition `propsimple`, lines
+1333--1340. -/
+theorem IsKrausCPTP.trace_map
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S)
+    (X : Matrix α α ℂ) :
+    Matrix.trace (S X) = Matrix.trace X := by
+  obtain ⟨r, A, hA, hA_norm⟩ := hS
+  rw [hA]
+  exact kraus_tp_of_sum_conjTranspose_mul A hA_norm X
 
 /-- The identity map is trace-preserving completely positive; the single Kraus
 operator is the identity matrix. -/

@@ -430,10 +430,11 @@ This is *not* the paper's MPDO renormalization-fixed-point Definition 4.1
 (paper label RFPMixedTS, arXiv:1606.00608 line 657: existence of two
 trace-preserving CP maps T and S on the physical indices). Idempotence coincides
 with Definition 4.1 only in the pure (MPS) case. For general MPDO, Definition 4.1
-is strictly stronger:
-it implies idempotence/ZCL (Theorem 4.9, i ⟹ ii, gives ZCL and SAL), but ZCL alone
-does not imply it (line 786). Definition 4.1 is stated as `MPOTensor.IsRFPViaTS`;
-the theorem deriving idempotence from it is future work (#826, #237). -/
+implies the source zero-correlation-length condition on the physical-trace
+transfer and saturation of the mutual-information area law (Theorem 4.9,
+i ⟹ ii), not the doubled-index transfer-map equation stated here. Definition
+4.1 is `MPOTensor.IsRFPViaTS`; its physical-trace consequence is proved in
+`MPOTensor.physTraceTransfer_sq_of_isRFPViaTS`. -/
 def IsRFP (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 
