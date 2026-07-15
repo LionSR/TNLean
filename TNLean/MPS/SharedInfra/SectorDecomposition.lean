@@ -136,6 +136,25 @@ theorem basisDim_le_totalDim (P : SectorDecomposition d) (j : Fin P.basisCount) 
   exact Finset.single_le_sum (fun t _ ↦ Nat.zero_le (P.flatDim t))
     (Finset.mem_univ s)
 
+/-- If every representative has positive bond dimension, then the number of
+representatives is at most the total bond dimension of the flattened sector
+tensor. -/
+theorem basisCount_le_totalDim (P : SectorDecomposition d)
+    (hDim : ∀ j : Fin P.basisCount, 0 < P.basisDim j) :
+    P.basisCount ≤ P.totalDim := by
+  have hFlatDim : ∀ s : Fin P.totalCopies, 0 < P.flatDim s := by
+    intro s
+    simpa [flatDim] using hDim (P.flatIndexEquiv.symm s).1
+  calc
+    P.basisCount = ∑ _j : Fin P.basisCount, 1 := by simp
+    _ ≤ ∑ j : Fin P.basisCount, P.copies j := by
+      exact Finset.sum_le_sum fun j _ ↦ P.copies_pos j
+    _ = P.totalCopies := rfl
+    _ = ∑ _s : Fin P.totalCopies, 1 := by simp
+    _ ≤ ∑ s : Fin P.totalCopies, P.flatDim s := by
+      exact Finset.sum_le_sum fun s _ ↦ hFlatDim s
+    _ = P.totalDim := rfl
+
 /-- The total tensor, obtained by flattening `(j, q)` and applying `toTensorFromBlocks`. -/
 noncomputable def toTensor (P : SectorDecomposition d) : MPSTensor d P.totalDim :=
   toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis

@@ -298,7 +298,7 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
         thm:common_exact_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ,
         thm:peripheral_primitive_irreducible_overlap_one,
-        lem:bnt_direct_sum_block_separation_word_span,
+        lem:bnt_direct_sum_injective_prefix_word_span,
         lem:block_separating_equations_from_pairwise_separation,
         lem:product_word_span_from_bnt_block_separation,
         lem:gauge_invariance_block_injective}
@@ -906,13 +906,16 @@ here feed the BNT canonical-form predicate below.
 \begin{theorem}[Representative dimensions are bounded by the total bond dimension]
     \label{thm:sector_basis_dimension_le_total_dimension}
     \lean{MPSTensor.SectorDecomposition.basisDim_le_totalDim}
+    \lean{MPSTensor.SectorDecomposition.basisCount_le_totalDim}
     \leanok
     \uses{def:sector_weight_data}
     Let the representative $A_j$ have bond dimension $D_j$, and let $D$ be
-    the bond dimension of the flattened sector tensor.  Then
+    the bond dimension of the flattened sector tensor. Then
     \[
         D_j\leq D.
     \]
+    If every $D_j$ is positive and there are $g$ representatives, then also
+    $g\leq D$.
 \end{theorem}
 
 \begin{proof}
@@ -921,6 +924,15 @@ here feed the BNT canonical-form predicate below.
     Since $r_j>0$, choose one copy of $A_j$.  Its contribution $D_j$ is one
     nonnegative summand in the total dimension of the flattened copy family,
     so $D_j\leq D$.
+
+    For the second assertion, every representative has multiplicity
+    $r_j\geq1$, and each copy has positive dimension $D_j>0$. Therefore
+    \[
+        g=\sum_j1
+        \leq\sum_j r_j
+        \leq\sum_j r_jD_j
+        =D.
+    \]
 \end{proof}
 
 \begin{definition}[Physical blocking of a sector decomposition]%
