@@ -407,7 +407,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:purification_tensor_rfp_iff_physical_trace_idempotent}
     \lean{MPOTensor.purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq}
     \leanok
-    \uses{def:lpdo, def:mpdo_purification_tensor,
+    \uses{def:mpdo_purification_tensor,
         def:mpo_physical_trace_transfer, def:mps_transfer_idempotence}
     Suppose that $M$ is the ancillary contraction of a fixed spin--ancilla
     tensor $A$ through a bond identification $e$:
@@ -417,7 +417,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \left(\sum_k A^{(i,k)}\otimes
         \overline{A^{(j,k)}}\right)_{e,e}.
     \]
-    Then $A$ is a pure-state renormalization fixed point if and only if
+    Then the purification tensor $\widehat A$ is a pure-state renormalization
+    fixed point if and only if
     \[
         \mathcal T_M^2=\mathcal T_M.
     \]
@@ -427,10 +428,16 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
-    Let $K'$ be the transfer matrix of $A$. The local contraction identifies
-    $\mathcal T_M$ with $K'$ after two bijective reindexings: interchange of
-    the two Kronecker factors and the bond identification $e$. Since bijective
-    reindexing commutes with matrix multiplication,
+    Let $K'$ be the transfer matrix of $\widehat A$, let $s$ interchange the
+    two Kronecker factors, and let $K$ denote the same Kronecker sum in the
+    physical ordering.  The local contraction gives
+    \[
+        \mathcal T_M=K_e,
+        \qquad
+        K=(K')_s.
+    \]
+    Since both reindexings are bijective and commute with matrix
+    multiplication,
     \[
         (K')^2=K'
         \quad\Longleftrightarrow\quad
