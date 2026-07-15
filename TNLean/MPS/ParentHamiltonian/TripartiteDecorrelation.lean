@@ -87,7 +87,7 @@ private theorem ungroupAX_groupAX (ρ : Matrix (A × (X × B)) (A × (X × B)) �
     ungroupAX (groupAX ρ) = ρ := by
   simp [groupAX, ungroupAX]
 
-/-- Reassociation respects matrix multiplication. -/
+/-- Reassociation preserves matrix multiplication. -/
 private theorem ungroupAX_mul
     (M N : Matrix ((A × X) × B) ((A × X) × B) ℂ) :
     ungroupAX (M * N) = ungroupAX M * ungroupAX N := by
@@ -756,8 +756,8 @@ theorem parentHamiltonian_iff_decorrelated
 
 /-- **Source-facing parent commuting Hamiltonian--decorrelation equivalence.**
 
-For an orthogonal projector (P_{AXB}), there are commuting parent terms on
-(AX) and (XB) with ground projector (P_{AXB}) if and only if the
+For an orthogonal projector \(P_{AXB}\), there are commuting parent terms on
+\(AX\) and \(XB\) with ground projector \(P_{AXB}\) if and only if the
 Hermitian-observable decorrelation condition of arXiv:1606.00608,
 Appendix D.2, Definition D.1, holds.  This is Proposition D.3,
 lines 2221--2289. -/
