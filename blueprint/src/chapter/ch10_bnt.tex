@@ -738,6 +738,55 @@ basis tensors are compared: the coefficient $\sum_q \mu_{j,q}^N$ then equals
 $\sum_q (\nu_{j,q} e^{i\phi_j})^N$, and Newton--Girard recovers the weight
 multiset with multiplicity.
 
+\begin{lemma}[Eventual vanishing of a finite geometric sum]
+    \label{lem:finite_geometric_sum_eventual_vanishing}
+    \lean{MPSTensor.SectorWeightData.geom_sum_eventually_zero}
+    \leanok
+    Let $w_1,\ldots,w_n$ be nonzero complex numbers.  If
+    \[
+        \sum_i c_i w_i^N=0
+    \]
+    for every sufficiently large $N$, then the same equality holds for every
+    nonnegative exponent.
+\end{lemma}
+
+\begin{proof}\leanok
+    Induct on the number of terms.  Subtracting $w_1$ times the equality at
+    exponent $N$ from the equality at exponent $N+1$ gives
+    \[
+        \sum_{i=2}^{n} c_i(w_i-w_1)w_i^N=0.
+    \]
+    The induction hypothesis yields this equality at every exponent, so the
+    original sum $S_N=\sum_i c_iw_i^N$ satisfies $S_{N+1}=w_1S_N$ for every
+    $N$.  Since $S_N$ eventually vanishes and $w_1\ne0$, it follows that
+    $S_0=0$ and hence $S_N=0$ for every $N$.
+\end{proof}
+
+\begin{lemma}[Eventual power-sum equality holds at every exponent]
+    \label{lem:eventual_power_sum_equality_all_exponents}
+    \lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
+    \leanok
+    \uses{lem:finite_geometric_sum_eventual_vanishing}
+    Let $a_1,\ldots,a_m$ and $b_1,\ldots,b_n$ be nonzero complex numbers.  If
+    their power sums agree for every sufficiently large exponent, then
+    \[
+        \sum_i a_i^k=\sum_j b_j^k
+    \]
+    for every nonnegative exponent $k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Set $w_l=a_l$ for $l\leq m$ and $w_{m+l}=b_l$ for $l\leq n$, with
+    coefficients $c_l=1$ for $l\leq m$ and $c_l=-1$ for $l>m$.  Then
+    \[
+        \sum_{l=1}^{m+n}c_lw_l^k
+        =\sum_i a_i^k-\sum_j b_j^k.
+    \]
+    The hypothesis makes this expression zero for every sufficiently large
+    $k$.  Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} makes it zero
+    for every $k$, which is the required power-sum equality.
+\end{proof}
+
 \begin{theorem}[Finite-range equal power sums imply equal multisets]
     \label{thm:bounded_power_sum_multiset}
     \lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
