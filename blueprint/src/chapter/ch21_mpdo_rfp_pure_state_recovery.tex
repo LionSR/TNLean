@@ -482,6 +482,24 @@
     This is the defining matrix entry of the physical closure.
 \end{proof}
 
+\begin{lemma}[Periodic closure]
+    \label{lem:phys_close_identity}
+    \lean{MPOTensor.physCloseN_identity_eq_mpo}
+    \leanok
+    \uses{def:phys_close, def:mpo_tensor}
+    Closing the virtual legs with the identity gives the periodic MPO
+    operator:
+    \[
+        M_N(1)=\operatorname{MPO}_N(M).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    At every pair of physical words, both sides are the trace of the same
+    virtual word evaluation.
+\end{proof}
+
 \begin{theorem}[One- and two-site physical closures]
     \label{thm:phys_close_one_two}
     \lean{MPOTensor.physCloseN_one_eq_physClose1,
@@ -575,15 +593,28 @@
       MPOTensor.firstTwoSitesRestEquiv_symm_apply}
     \leanok
     \uses{def:mpdo_global_renormalization_maps}
-    The regrouping equivalences and their inverses preserve every physical
-    component: they merely separate the first site, or the first two sites,
-    from the remaining word.
+    For a physical word $\sigma$ of length $N+1$,
+    \[
+      R_1(\sigma)=\bigl(\sigma(0),\operatorname{tail}(\sigma)\bigr),
+      \qquad
+      R_1^{-1}(i,\sigma')=\operatorname{cons}(i,\sigma').
+    \]
+    For a physical word $\sigma$ of length $N+2$,
+    \[
+      R_2(\sigma)
+        =\bigl((\sigma(0),\sigma(1)),
+          \operatorname{tail}(\operatorname{tail}(\sigma))\bigr),
+    \]
+    and
+    \[
+      R_2^{-1}((i,j),\sigma')
+        =\operatorname{cons}\bigl(i,\operatorname{cons}(j,\sigma')\bigr).
+    \]
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Both identities follow by evaluating the corresponding product-index
-    equivalence and its inverse.
+    All four identities hold by definition of the product-index equivalences.
 \end{proof}
 
 \begin{lemma}[Localized renormalization maps are channels]
@@ -615,7 +646,6 @@
     \label{thm:mpdo_global_renormalization_maps}
     \lean{MPOTensor.refineFirstSite_physCloseN,
       MPOTensor.coarsenFirstTwoSites_physCloseN,
-      MPOTensor.physCloseN_identity_eq_mpo,
       MPOTensor.refineFirstSite_mpo,
       MPOTensor.coarsenFirstTwoSites_mpo,
       MPOTensor.exists_global_renormalization_maps}
@@ -638,6 +668,7 @@
 
 \begin{proof}
     \leanok
+    \uses{lem:phys_close_identity}
     For words $u,v$ on the $N$ spectator sites, write $M^{u,v}$ for their
     virtual word evaluation and write $[Y]^{(r)}_{u,v}$ for the block of an
     operator $Y$ on the first $r$ sites.  Regrouping the first site gives
