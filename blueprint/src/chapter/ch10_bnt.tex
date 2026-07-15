@@ -776,9 +776,15 @@ multiset with multiplicity.
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} to the joined
-    family $(a_1,\ldots,a_m,b_1,\ldots,b_n)$ with coefficients $+1$ on the
-    first family and $-1$ on the second.
+    Set $w_l=a_l$ for $l\leq m$ and $w_{m+l}=b_l$ for $l\leq n$, with
+    coefficients $c_l=1$ for $l\leq m$ and $c_l=-1$ for $l>m$.  Then
+    \[
+        \sum_{l=1}^{m+n}c_lw_l^k
+        =\sum_i a_i^k-\sum_j b_j^k.
+    \]
+    The hypothesis makes this expression zero for every sufficiently large
+    $k$.  Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} makes it zero
+    for every $k$, which is the required power-sum equality.
 \end{proof}
 
 \begin{theorem}[Finite-range equal power sums imply equal multisets]
