@@ -56,9 +56,11 @@
     \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq}
     \lean{MPOTensor.BNTLabelTheoremWitness.blockedComparison_ofChi}
     \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_ofChi}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_coefficient_comparison}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.%
+        exists_blocked_coefficient_comparison_ofChi}
     \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_chi_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_chi_trace}
-    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_trace_pow}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness}
     A proposition-level BNT-label theorem witness contains the source-side
@@ -87,6 +89,15 @@
     with the canonical coefficient family determined by these
     $\chi$-matrices, so both pairs of equations above hold equally with
     that canonical family in place of $c^{(L)}_{\alpha,\beta,\gamma}$.
+    Moreover, if $\sigma_n$ and $\tau_n$ are the source and target label maps
+    for a positive blocked length $n$, then the blocked-basis coefficients
+    satisfy
+    \[
+        c^{(n)}_{i,j,k}
+        = c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}
+        = \operatorname{tr}\!\left(
+            \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Unpack the existential witness and apply the corresponding witness-level
@@ -130,6 +141,7 @@
 
 \begin{corollary}[Pulled-back blocked coefficient formula]%
     \label{cor:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_positiveBlockedChi_trace_pow}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,

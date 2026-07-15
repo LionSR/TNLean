@@ -399,12 +399,39 @@
     \]
 \end{theorem}
 \begin{proof}\leanok
-    Combine the diagonal fixed-point reduction with the rank-one
-    classification of injective left-canonical RFP tensors. One then writes the
-    resulting rank-one projector in a normalized matrix-unit Kraus form,
-    applies Kraus freedom to identify the pair-index coefficients, and
-    transports the decomposition back through the conjugation. The matrix-unit
-    normalization contributes the factor $D^{-1}$ in the pair-index equation.
+    After the diagonal fixed-point reduction, write the conjugated tensor as
+    $B$ and its positive diagonal fixed point as $\rho$.  The rank-one
+    classification gives
+    \[
+        \E_B(Y)=P_\rho(Y)
+        =\frac{\operatorname{tr}(Y)}{\operatorname{tr}(\rho)}\rho.
+    \]
+    Set
+    \[
+        \Lambda_\alpha
+          =\sqrt{\frac{D\rho_{\alpha,\alpha}}{\operatorname{tr}(\rho)}},
+        \qquad
+        E_{\alpha,\beta}=D^{-1/2}e_{\alpha,\beta},
+        \qquad
+        K_{\alpha,\beta}=\Lambda E_{\alpha,\beta}.
+    \]
+    Direct multiplication of matrix units yields
+    \[
+        \sum_{\alpha,\beta}K_{\alpha,\beta}Y
+        K_{\alpha,\beta}^{\dagger}=P_\rho(Y).
+    \]
+    Kraus freedom therefore gives an isometry $V$ such that
+    $B^i=\sum_{\alpha,\beta}V_{i,(\alpha,\beta)}K_{\alpha,\beta}$.
+    With
+    $U^i=\sum_{\alpha,\beta}V_{i,(\alpha,\beta)}E_{\alpha,\beta}$,
+    one has $B^i=\Lambda U^i$ and
+    \[
+        U^i_{\alpha,\beta}=D^{-1/2}V_{i,(\alpha,\beta)},
+        \qquad
+        \sum_i\overline{U^i_{\alpha,\beta}}U^i_{\alpha',\beta'}
+        =D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Conjugating back gives $A^i=X\Lambda U^iX^{-1}$.
 \end{proof}
 
 \begin{theorem}[Structural form with diagonal square-sum identity]%
