@@ -61,9 +61,10 @@ theorem kraus_sum_conjTranspose_mul_of_tp
 /-- **Theorem 2.1 item 1 (normalization ⟹ TP, Eq. (2.8))**:
 If `∑ᵢ Kᵢ†Kᵢ = 𝟙`, then `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is trace-preserving. -/
 theorem kraus_tp_of_sum_conjTranspose_mul
-    {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
-    (hK_norm : ∑ i : Fin r, (K i)ᴴ * K i = 1) :
-    ∀ X : Matrix (Fin D) (Fin D) ℂ,
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β]
+    {r : ℕ} (K : Fin r → Matrix β α ℂ)
+    (hK_norm : ∑ i : Fin r, (K i)ᴴ * K i = (1 : Matrix α α ℂ)) :
+    ∀ X : Matrix α α ℂ,
       trace (∑ i : Fin r, K i * X * (K i)ᴴ) = trace X := by
   intro X
   rw [Matrix.trace_sum]
