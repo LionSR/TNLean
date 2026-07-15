@@ -41,6 +41,24 @@ namespace MPOTensor.BNTFusionIsometryFamily
 variable {g p : ℕ}
 variable (Fam : BNTFusionIsometryFamily (Fin g) p)
 
+private theorem isStarProjection_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
+    {m n : ℕ} (U : Matrix (Fin m) (Fin n) ℂ) (Q : Matrix (Fin m) (Fin m) ℂ)
+    (hQ : IsStarProjection Q) (hU : U * Uᴴ = 1) :
+    IsStarProjection (Uᴴ * Q * U) := by
+  rw [isStarProjection_iff']
+  constructor
+  · calc
+      (Uᴴ * Q * U) * (Uᴴ * Q * U) = Uᴴ * (Q * ((U * Uᴴ) * (Q * U))) := by
+        simp only [Matrix.mul_assoc]
+      _ = Uᴴ * (Q * (Q * U)) := by rw [hU, Matrix.one_mul]
+      _ = Uᴴ * ((Q * Q) * U) := by simp only [Matrix.mul_assoc]
+      _ = Uᴴ * Q * U := by rw [hQ.isIdempotentElem.eq, Matrix.mul_assoc]
+  · rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+      Matrix.conjTranspose_conjTranspose]
+    have hQadj : Qᴴ = Q := by
+      simpa [Matrix.star_eq_conjTranspose] using hQ.isSelfAdjoint.star_eq
+    rw [hQadj, Matrix.mul_assoc]
+
 /-- The single fusion layer of the operator $Q$ at source lines 999--1010,
 with terminal matrices $P_\gamma$.
 
@@ -138,41 +156,11 @@ theorem conjugatedProjectorQBlock_isOrthogonalProjection
       Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
     (hP : ∀ γ : Fin g, IsStarProjection (P γ))
     (α β : Fin g) :
-    IsOrthogonalProjection (Fam.conjugatedProjectorQBlock P α β) := by
-  refine IsStarProjection.isOrthogonalProjection ?_
-  have hQ := Fam.projectorQBlock_isStarProjection c hχ hLI P hP α β
-  have hU := Fam.fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent
-    hBNT c hχ hLI α β
-  rw [isStarProjection_iff']
-  constructor
-  · unfold conjugatedProjectorQBlock
-    calc
-      (Fam.fusionIsometry α β)ᴴ * Fam.projectorQBlock P α β *
-          Fam.fusionIsometry α β *
-          ((Fam.fusionIsometry α β)ᴴ * Fam.projectorQBlock P α β *
-            Fam.fusionIsometry α β) =
-        (Fam.fusionIsometry α β)ᴴ *
-          (Fam.projectorQBlock P α β *
-            ((Fam.fusionIsometry α β * (Fam.fusionIsometry α β)ᴴ) *
-              (Fam.projectorQBlock P α β * Fam.fusionIsometry α β))) := by
-            simp only [Matrix.mul_assoc]
-      _ = (Fam.fusionIsometry α β)ᴴ *
-          (Fam.projectorQBlock P α β *
-            (Fam.projectorQBlock P α β * Fam.fusionIsometry α β)) := by
-            rw [hU, Matrix.one_mul]
-      _ = (Fam.fusionIsometry α β)ᴴ *
-          ((Fam.projectorQBlock P α β * Fam.projectorQBlock P α β) *
-            Fam.fusionIsometry α β) := by
-            simp only [Matrix.mul_assoc]
-      _ = (Fam.fusionIsometry α β)ᴴ * Fam.projectorQBlock P α β *
-          Fam.fusionIsometry α β := by
-            rw [hQ.isIdempotentElem.eq, Matrix.mul_assoc]
-  · rw [Matrix.star_eq_conjTranspose]
-    unfold conjugatedProjectorQBlock
-    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-      Matrix.conjTranspose_conjTranspose]
-    have hQadj : (Fam.projectorQBlock P α β)ᴴ = Fam.projectorQBlock P α β := by
-      simpa [Matrix.star_eq_conjTranspose] using hQ.isSelfAdjoint.star_eq
-    rw [hQadj, Matrix.mul_assoc]
+    IsOrthogonalProjection (Fam.conjugatedProjectorQBlock P α β) :=
+  (isStarProjection_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
+    (Fam.fusionIsometry α β) (Fam.projectorQBlock P α β)
+    (Fam.projectorQBlock_isStarProjection c hχ hLI P hP α β)
+    (Fam.fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent
+      hBNT c hχ hLI α β)).isOrthogonalProjection
 
 end MPOTensor.BNTFusionIsometryFamily

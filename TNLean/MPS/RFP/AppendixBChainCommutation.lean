@@ -53,8 +53,8 @@ theorem AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian
       right_idempotent := hStruct.appendixBQXBOnCoeffSpace_idempotent
       commute_lifts := hStruct.hasOverlappingTwoSiteCommutation.commute_lifts
       kernel_intersection := ?_ }
-  rw [hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction]
-  rw [hStruct.appendixBQXBOnCoeffSpace_eq_parentInteraction]
+  rw [hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction,
+    hStruct.appendixBQXBOnCoeffSpace_eq_parentInteraction]
   exact groundSpace_three_eq_adjacent_twoSite_parent_kernels hA
 
 /-- A normal left-canonical RFP tensor supplies the three-site coefficient-space

@@ -111,11 +111,8 @@ private theorem phaseFlipTensor_transferMap_pow_fixed
     {X : Matrix (Fin 2) (Fin 2) ℂ}
     (hX : MPSTensor.transferMap phaseFlipTensor X = X) (n : ℕ) :
     (MPSTensor.transferMap phaseFlipTensor ^ n) X = X := by
-  induction n with
-  | zero =>
-      simp [Module.End.one_eq_id]
-  | succ n ih =>
-      rw [pow_succ, Module.End.mul_eq_comp, LinearMap.comp_apply, hX, ih]
+  rw [Module.End.pow_apply]
+  exact Function.IsFixedPt.iterate hX n
 
 private theorem phaseFlipTensor_transferMap_pow_fixed_iff
     {n : ℕ} (hn : 0 < n) (X : Matrix (Fin 2) (Fin 2) ℂ) :

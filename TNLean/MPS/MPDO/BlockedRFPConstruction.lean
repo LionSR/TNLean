@@ -75,6 +75,31 @@ structure SimpleMPDOLocalStructureData where
 
 namespace SimpleMPDOLocalStructureData
 
+private def ofData
+    {dA dB dC n : ℕ}
+    (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
+    (hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1)
+    (hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian)
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hTrace : Matrix.trace T = 1)
+    (hTraceConst : Matrix.TracePowersConstant T)
+    (rankOne : ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1) :
+    SimpleMPDOLocalStructureData where
+  dA := dA
+  dB := dB
+  dC := dC
+  rhoABC := rhoABC
+  hRhoDM := hRhoDM
+  hSSA := hSSA
+  eta := sal_implies_eta_structure rhoABC hRhoDM hSSA
+  Tdim := n
+  T := T
+  hPrimitive := hPrimitive
+  hTrace := hTrace
+  hTraceConst := hTraceConst
+  rankOne := rankOne
+
 /-- Construct the local simple-MPDO structure from the Lemma C.2 and C.4
 hypotheses and the PSD-corrected Lemma C.5 rank-one criterion.
 
@@ -95,21 +120,9 @@ def ofSALZCLOfPosSemidef
     (hPSD : T.PosSemidef)
     (hTrace : Matrix.trace T = 1)
     (hTraceConst : Matrix.TracePowersConstant T) :
-    SimpleMPDOLocalStructureData where
-  dA := dA
-  dB := dB
-  dC := dC
-  rhoABC := rhoABC
-  hRhoDM := hRhoDM
-  hSSA := hSSA
-  eta := sal_implies_eta_structure rhoABC hRhoDM hSSA
-  Tdim := n
-  T := T
-  hPrimitive := hPrimitive
-  hTrace := hTrace
-  hTraceConst := hTraceConst
-  rankOne :=
-    sal_zcl_implies_rank_one_T_of_posSemidef T hPrimitive hPSD hTrace hTraceConst
+    SimpleMPDOLocalStructureData :=
+  ofData rhoABC hRhoDM hSSA T hPrimitive hTrace hTraceConst
+    (sal_zcl_implies_rank_one_T_of_posSemidef T hPrimitive hPSD hTrace hTraceConst)
 
 /-- Construct the local simple-MPDO structure from the Lemma C.2 and C.4
 hypotheses and the pairing-idempotence Lemma C.5 rank-one criterion: the
@@ -136,21 +149,9 @@ def ofSALZCLOfPairingIdempotent
     (hPrimitive : Matrix.IsPrimitive T)
     (hl : LinearIndependent ℝ data.l)
     (hTrace : Matrix.trace T = 1) :
-    SimpleMPDOLocalStructureData where
-  dA := dA
-  dB := dB
-  dC := dC
-  rhoABC := rhoABC
-  hRhoDM := hRhoDM
-  hSSA := hSSA
-  eta := sal_implies_eta_structure rhoABC hRhoDM hSSA
-  Tdim := n
-  T := T
-  hPrimitive := hPrimitive
-  hTrace := hTrace
-  hTraceConst := data.tracePowersConstant
-  rankOne :=
-    sal_zcl_implies_rank_one_T_of_pairing_idempotent T data hl hTrace
+    SimpleMPDOLocalStructureData :=
+  ofData rhoABC hRhoDM hSSA T hPrimitive hTrace data.tracePowersConstant
+    (sal_zcl_implies_rank_one_T_of_pairing_idempotent T data hl hTrace)
 
 end SimpleMPDOLocalStructureData
 end MPOTensor

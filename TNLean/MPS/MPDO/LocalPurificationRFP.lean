@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.TransferMatrix
 import TNLean.MPS.Core.CyclicTrace
@@ -297,6 +298,13 @@ global equation. When the purifying tensor A is a pure-state renormalization
 fixed point, the transfer matrix of its transfer map is idempotent, and closing
 the physical legs of M transports that idempotence to 𝒯_M. -/
 
+private theorem submatrix_equiv_injective {α β R : Type*} (e : α ≃ β) :
+    Function.Injective (fun A : Matrix β β R => A.submatrix e e) := by
+  intro A B h
+  ext i j
+  simpa only [Matrix.submatrix_apply, Equiv.apply_symm_apply] using
+    congrFun (congrFun h (e.symm i)) (e.symm j)
+
 /-- **Pure-state RFP is equivalent to normalized physical-trace idempotence for
 a fixed local purification.** Suppose `M` is the ancilla contraction of `A`
 through the bond identification `e`, as in the purification tensor and global
@@ -380,15 +388,9 @@ theorem purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq
     rw [hPT, Matrix.submatrix_mul_equiv K K (⇑e) e (⇑e), hidemK]
   · intro hPTidem
     rw [hPT, Matrix.submatrix_mul_equiv K K (⇑e) e (⇑e)] at hPTidem
-    have hidemK : K * K = K := by
-      ext x y
-      have h := congrFun (congrFun hPTidem (e.symm x)) (e.symm y)
-      simpa using h
+    have hidemK : K * K = K := submatrix_equiv_injective e hPTidem
     rw [hKK', Matrix.submatrix_mul_equiv K' K' (⇑s) s (⇑s)] at hidemK
-    have hidemK' : K' * K' = K' := by
-      ext x y
-      have h := congrFun (congrFun hidemK (s.symm x)) (s.symm y)
-      simpa using h
+    have hidemK' : K' * K' = K' := submatrix_equiv_injective s hidemK
     apply transferMatrix_injective
     rw [transferMatrix_comp, ← hK']
     exact hidemK'

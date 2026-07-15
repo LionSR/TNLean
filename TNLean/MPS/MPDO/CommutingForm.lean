@@ -408,6 +408,7 @@ noncomputable def bondAt (data : CommutingFormData d N) (i : Fin N) :
       else 0 :=
   rfl
 
+/-- Any two translated copies of the local bond commute. -/
 theorem bondAt_comm (data : CommutingFormData d N) (i j : Fin N) :
     data.bondAt i * data.bondAt j = data.bondAt j * data.bondAt i :=
   data.bond_comm i j
@@ -508,6 +509,7 @@ theorem isGSNNCHAt_of_realizes (data : CommutingFormData d N)
 
 end CommutingFormData
 
+/-- A chain operator is GSNNCH exactly when it has a commuting-form realization. -/
 theorem isGSNNCHAt_iff_exists_commutingForm {d N : ℕ} (ρ : ChainOperator d N) :
     IsGSNNCHAt ρ ↔ ∃ data : CommutingFormData d N, data.Realizes ρ := by
   constructor
@@ -516,12 +518,14 @@ theorem isGSNNCHAt_iff_exists_commutingForm {d N : ℕ} (ρ : ChainOperator d N)
   · rintro ⟨data, hρ⟩
     exact data.isGSNNCHAt_of_realizes hρ
 
+/-- A global commuting form gives a GSNNCH witness at every chain length. -/
 theorem isGSNNCH_of_hasCommutingForm {M : MPOTensor d D}
     (hM : HasCommutingForm M) : IsGSNNCH M := by
   intro N hN
   obtain ⟨data, hdata⟩ := hM N hN
   exact data.isGSNNCHAt_of_realizes hdata
 
+/-- GSNNCH data at every chain length gives a global commuting form. -/
 theorem hasCommutingForm_of_isGSNNCH {M : MPOTensor d D}
     (hM : IsGSNNCH M) : HasCommutingForm M := fun N hN =>
   (isGSNNCHAt_iff_exists_commutingForm (mpo M N)).mp (hM N hN)
@@ -544,6 +548,7 @@ docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 def IsGSNNCHWithZCL (M : MPOTensor d D) : Prop :=
   IsGSNNCH M ∧ IsZCL M
 
+/-- The GSNNCH-with-ZCL condition is a global commuting form together with ZCL. -/
 theorem isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL (M : MPOTensor d D) :
     IsGSNNCHWithZCL M ↔ HasCommutingForm M ∧ IsZCL M := by
   rw [IsGSNNCHWithZCL, isGSNNCH_iff_hasCommutingForm]

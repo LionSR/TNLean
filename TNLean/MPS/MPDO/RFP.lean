@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.ZCL
 
@@ -45,7 +46,7 @@ theorem isRFP_iff_isZCL (M : MPOTensor d D) : IsRFP M ↔ IsZCL M :=
 /-- `IsRFP M` is equivalent to the pure-state RFP condition for the
 doubled-index MPS tensor. -/
 theorem isRFP_iff_toMPSTensor_isTransferIdempotent (M : MPOTensor d D) :
-    IsRFP M ↔ MPSTensor.IsTransferIdempotent (M.toMPSTensor) := by
-  simpa [IsRFP, MPOTensor.IsZCL] using isZCL_iff_toMPSTensor_isTransferIdempotent M
+    IsRFP M ↔ MPSTensor.IsTransferIdempotent (M.toMPSTensor) :=
+  (isRFP_iff_isZCL M).trans (isZCL_iff_toMPSTensor_isTransferIdempotent M)
 
 end MPOTensor

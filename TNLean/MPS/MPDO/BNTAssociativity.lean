@@ -70,6 +70,11 @@ def EventuallyLinearIndependent (op : BNTLabelOperatorFamily Λ O)
 
 variable [Fintype Λ]
 
+private theorem coeff_eq_of_sum_smul_eq {V : Type*} [AddCommMonoid V] [Module ℂ V]
+    {v : Λ → V} (hv : LinearIndependent ℂ v) {a b : Λ → ℂ}
+    (h : ∑ i, a i • v i = ∑ i, b i • v i) (i : Λ) : a i = b i :=
+  congrFun (linearIndependent_iff_injective_fintypeLinearCombination.mp hv h) i
+
 /-- **Uniqueness of the structure coefficients** at a linearly independent
 length: two coefficient systems satisfying the same-length product law for
 the same operator family agree wherever the operators are linearly
@@ -87,13 +92,7 @@ theorem HasSameLengthProductForm.coeff_eq_of_linearIndependentAt
   have hsum : ∑ δ, c.coeff L α β δ • op.operator L δ
       = ∑ δ, c'.coeff L α β δ • op.operator L δ := by
     rw [← h L hL α β, ← h' L hL α β]
-  have hzero : ∑ δ, (c.coeff L α β δ - c'.coeff L α β δ) • op.operator L δ
-      = 0 := by
-    simp_rw [sub_smul]
-    rw [Finset.sum_sub_distrib, hsum, sub_self]
-  exact sub_eq_zero.mp <|
-    Fintype.linearIndependent_iff.mp hli
-      (fun δ => c.coeff L α β δ - c'.coeff L α β δ) hzero γ
+  exact coeff_eq_of_sum_smul_eq hli hsum γ
 
 /-- **Associativity constraint on the structure coefficients**: expanding
 the two associations of a triple product through the same-length product law
@@ -134,14 +133,7 @@ theorem HasSameLengthProductForm.coeff_assoc_of_linearIndependentAt
         = ∑ ε', (∑ δ, c.coeff L β γ δ * c.coeff L α δ ε') •
             op.operator L ε' := by
     rw [← hexp1, ← hexp2, mul_assoc]
-  have hzero : ∑ ε', ((∑ δ, c.coeff L α β δ * c.coeff L δ γ ε')
-      - (∑ δ, c.coeff L β γ δ * c.coeff L α δ ε')) • op.operator L ε' = 0 := by
-    simp_rw [sub_smul]
-    rw [Finset.sum_sub_distrib, hsum, sub_self]
-  exact sub_eq_zero.mp <|
-    Fintype.linearIndependent_iff.mp hli
-      (fun ε' => (∑ δ, c.coeff L α β δ * c.coeff L δ γ ε') -
-        ∑ δ, c.coeff L β γ δ * c.coeff L α δ ε') hzero ε
+  exact coeff_eq_of_sum_smul_eq hli hsum ε
 
 /-- Trace-power form of the associativity constraint: for a coefficient
 system in trace-power form, the restriction of the preceding theorem is a

@@ -305,13 +305,7 @@ theorem rightFusion_apply (α β γ : Λ) (i k : Fin p) :
   let r := (Fam.rightTripleFlattenEquiv α β γ).symm
   let X := (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k
   change A.submatrix r id * X * (A.submatrix r id)ᴴ = _
-  have step1 : A.submatrix r id * X = (A * X).submatrix r id :=
-    (Matrix.submatrix_mul A X r id id Function.bijective_id).symm
-  have step2 : (A * X).submatrix r id * (A.submatrix r id)ᴴ =
-      (A * X * Aᴴ).submatrix r r := by
-    rw [Matrix.conjTranspose_submatrix]
-    exact (Matrix.submatrix_mul (A * X) Aᴴ r id r Function.bijective_id).symm
-  rw [step1, step2]
+  rw [Matrix.submatrix_left_conj_equiv]
   dsimp only [A, r, X]
   have hreassoc :
       Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ) * Fam.fuseLastTwoStep α β γ *
@@ -325,11 +319,8 @@ theorem rightFusion_apply (α β γ : Λ) (i k : Fin p) :
           (Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ))ᴴ := by
     rw [Matrix.conjTranspose_mul]
     simp only [Matrix.mul_assoc]
-  rw [hreassoc]
-  rw [Fam.fuseLastTwoStep_apply]
-  rw [Fam.lastPair_sum_blockDiagonal]
-  rw [Matrix.blockDiagonal'_conjTranspose, ← Matrix.blockDiagonal'_mul,
-    ← Matrix.blockDiagonal'_mul]
+  rw [hreassoc, Fam.fuseLastTwoStep_apply, Fam.lastPair_sum_blockDiagonal,
+    Matrix.blockDiagonal'_conj]
   simp_rw [Fam.rightBlockPiece_apply]
   rw [rightTripleFlatten_blockDiagonal']
 

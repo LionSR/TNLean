@@ -75,13 +75,8 @@ theorem idempotent_coefficient_form_ofChi :
     m.HasIdempotentCoefficientForm
       (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
   intro γ
-  rw [H.idempotent γ]
-  apply Finset.sum_congr rfl
-  intro α _
-  apply Finset.sum_congr rfl
-  intro β _
-  rw [BNTLabelCoefficientFamily.ofChi_coeff,
-    ← H.positiveChi.tracePower 1 Nat.zero_lt_one α β γ]
+  simpa only [BNTLabelCoefficientFamily.ofChi_coeff,
+    ← H.positiveChi.tracePower 1 Nat.zero_lt_one] using H.idempotent γ
 
 end BNTAlgebraClause
 
@@ -268,11 +263,8 @@ theorem same_length_product_form_ofChi :
     H.operators.HasSameLengthProductForm
       (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
   intro L hL α β
-  rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum
-    (op := H.operators) H.same_length_product_form L hL α β]
-  refine Finset.sum_congr rfl ?_
-  intro γ _hγ
-  rw [H.coeff_eq_ofChi_coeff L hL α β γ]
+  simpa only [H.coeff_eq_ofChi_coeff L hL] using
+    H.same_length_product_form L hL α β
 
 /-- The same-length product equation carried by theorem data, written with the
 canonical coefficient family determined by the same

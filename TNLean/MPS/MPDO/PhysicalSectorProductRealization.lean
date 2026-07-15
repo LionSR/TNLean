@@ -69,14 +69,6 @@ private theorem reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal
   rw [F.mpo_sectorCoordinateTensor_eq_reindex_conjugatePhysical N]
   simpa [sectorCoordinateChainEquiv, Matrix.reindex_apply] using h
 
-private def piProdEquiv
-    {ι : Type*} {A B : ι → Type*} :
-    ((i : ι) → A i × B i) ≃ ((i : ι) → A i) × ((i : ι) → B i) where
-  toFun x := (fun i ↦ (x i).1, fun i ↦ (x i).2)
-  invFun x i := (x.1 i, x.2 i)
-  left_inv _ := rfl
-  right_inv _ := rfl
-
 /-- Regroup a fixed sector configuration from site factors
 `(L_n,R_n)` to cyclic edge factors `(R_n,L_(n+1))`.
 
@@ -86,12 +78,12 @@ private def cyclicEdgeEquiv (F : PhysicalSectorFactorization K) {N : ℕ} [NeZer
     (k : Fin N → Fin F.sectorCount) :
     ((n : Fin N) → SectorIndex F (k n)) ≃
       ((n : Fin N) → NeighborIndex F (k n) (k (n + 1))) :=
-  piProdEquiv.trans <|
+  (Equiv.arrowProdEquivProdArrow _ _ _).trans <|
     (Equiv.prodComm _ _).trans <|
       (Equiv.prodCongr (Equiv.refl _)
         (Equiv.piCongrLeft
           (fun n : Fin N ↦ Fin (F.leftDim (k n))) (finRotate N)).symm).trans <|
-        piProdEquiv.symm |>.trans <|
+        (Equiv.arrowProdEquivProdArrow _ _ _).symm |>.trans <|
           Equiv.piCongrRight fun n ↦
             Equiv.prodCongr (Equiv.refl _)
               (finCongr (congrArg F.leftDim
@@ -225,13 +217,9 @@ private noncomputable def edgePartialProduct
   ext x y
   simp only [edgePartialProduct, Finset.notMem_empty, ↓reduceIte,
     Matrix.one_apply]
-  by_cases hxy : x = y
-  · subst y
-    simp
-  · obtain ⟨n, hn⟩ := Function.ne_iff.mp hxy
-    rw [Finset.prod_eq_zero (Finset.mem_univ n)]
-    · simp [hxy]
-    · simp [hn]
+  rw [Fintype.prod_boole]
+  congr 1
+  exact funext_iff
 
 @[simp] private theorem edgePartialProduct_univ
     (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
@@ -241,40 +229,6 @@ private noncomputable def edgePartialProduct
         F.neighboringOperator (k n) (k (n + 1)) (x n) (y n) := by
   ext x y
   simp [edgePartialProduct]
-
-/-- Multiplying by a new single-edge factor adjoins that edge to the partial
-tensor product. -/
-private theorem edgePartialProduct_mul_singleton
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (k : Fin N → Fin F.sectorCount) (s : Finset (Fin N))
-    (i : Fin N) (hi : i ∉ s) :
-    F.edgePartialProduct k s * F.edgePartialProduct k {i} =
-      F.edgePartialProduct k (insert i s) := by
-  classical
-  ext x y
-  simp only [Matrix.mul_apply, edgePartialProduct]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun n : Fin N ↦
-      (Finset.univ : Finset (NeighborIndex F (k n) (k (n + 1)))))
-    (fun n z ↦
-      (if n ∈ s then
-        F.neighboringOperator (k n) (k (n + 1)) (x n) z
-      else if x n = z then 1 else 0) *
-      (if n ∈ ({i} : Finset (Fin N)) then
-        F.neighboringOperator (k n) (k (n + 1)) z (y n)
-      else if z = y n then 1 else 0))]
-  apply Finset.prod_congr rfl
-  intro n _
-  by_cases hni : n = i
-  · subst n
-    simp [hi]
-  · by_cases hns : n ∈ s
-    · simp [hni, hns]
-    · by_cases hxy : x n = y n
-      · simp [hni, hns, hxy]
-      · simp [hni, hns, hxy]
 
 /-- Multiplying a partial tensor product on the left by a new single-edge
 factor adjoins that edge. -/
@@ -392,38 +346,6 @@ private theorem mem_cyclicWindowSupport_two {N : ℕ} (i q : Fin N) :
   · rintro (rfl | rfl)
     · exact ⟨0, by simp, by simp⟩
     · exact ⟨1, by simp, rfl⟩
-
-/-- Within a fixed pair of sectors, the sector bond carries the neighboring
-operator and the two outer factors contribute Kronecker deltas. -/
-private theorem sectorBond_fixedSector_apply
-    (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount)
-    (x x' : SectorIndex F k) (y y' : SectorIndex F h) :
-    F.sectorBond
-        ![F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩]
-        ![F.sectorFinEquiv.symm ⟨k, x'⟩, F.sectorFinEquiv.symm ⟨h, y'⟩] =
-      (if x.1 = x'.1 then 1 else 0) *
-        (if y.2 = y'.2 then 1 else 0) *
-          F.neighboringOperator k h (x.2, y.1) (x'.2, y'.1) := by
-  simp only [sectorBond, Matrix.reindex_apply, Matrix.submatrix_apply,
-    finTwoArrowEquiv]
-  change F.sectorCoordinateBond
-      (F.twoSiteSectorEmbedding k h (x, y))
-      (F.twoSiteSectorEmbedding k h (x', y')) = _
-  simp only [sectorCoordinateBond, Matrix.reindex_apply,
-    Matrix.submatrix_apply, Equiv.symm_symm,
-    twoSiteGlobalRegroupEquiv_twoSiteSectorEmbedding]
-  change Matrix.blockDiagonal' (fun kh :
-      Fin F.sectorCount × Fin F.sectorCount ↦
-        (1 : Matrix (BoundaryIndex F kh.1 kh.2)
-          (BoundaryIndex F kh.1 kh.2) ℂ) ⊗ₖ
-            F.neighboringOperator kh.1 kh.2)
-      ⟨(k, h), ((x.1, y.2), (x.2, y.1))⟩
-      ⟨(k, h), ((x'.1, y'.2), (x'.2, y'.1))⟩ = _
-  rw [Matrix.blockDiagonal'_apply_eq]
-  simp only [Matrix.kroneckerMap_apply, Matrix.one_apply,
-    Prod.ext_iff, neighboringOperator_apply]
-  by_cases hx : x.1 = x'.1 <;> by_cases hy : y.2 = y'.2 <;>
-    simp [hx, hy]
 
 /-- In complete cyclic-edge coordinates, a translated two-site sector bond
 is block diagonal in the sector configuration and acts only on the

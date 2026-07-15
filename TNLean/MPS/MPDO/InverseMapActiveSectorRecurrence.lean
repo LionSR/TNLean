@@ -70,12 +70,9 @@ theorem conjugated_middle_threeSiteClosure
 private theorem exists_diagonal_ne_zero_of_trace_eq_one
     {n : Type*} [Fintype n] (A : Matrix n n ℂ)
     (htrace : A.trace = 1) : ∃ i, A i i ≠ 0 := by
-  classical
-  by_contra hall
-  push Not at hall
-  have hz : A.trace = 0 := by
-    simp [Matrix.trace, hall]
-  exact one_ne_zero (htrace.symm.trans hz)
+  apply Finset.exists_ne_zero_of_sum_ne_zero
+  rw [← Matrix.trace, htrace]
+  exact one_ne_zero
 
 /-- Both endpoints of a nonzero neighboring operator in the zero-weight
 reparameterized inverse-map factorization have positive Hayashi weight.

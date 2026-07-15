@@ -233,14 +233,7 @@ theorem leftFinalFusion_apply (α β γ ε : Λ) (i k : Fin p) :
   let r := Fam.leftFinalRow α β γ ε
   let X := (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k
   change U.submatrix r id * X * (U.submatrix r id)ᴴ = _
-  have step1 : U.submatrix r id * X = (U * X).submatrix r id :=
-    (Matrix.submatrix_mul U X r id id Function.bijective_id).symm
-  rw [step1]
-  have step2 : (U * X).submatrix r id * (U.submatrix r id)ᴴ =
-      (U * X * Uᴴ).submatrix r r := by
-    rw [Matrix.conjTranspose_submatrix]
-    exact (Matrix.submatrix_mul (U * X) Uᴴ r id r Function.bijective_id).symm
-  rw [step2]
+  rw [Matrix.submatrix_left_conj_equiv]
   dsimp only [U, X]
   rw [Fam.leftFusion_apply]
   ext ⟨δ, μ, ν, b⟩ ⟨δ', μ', ν', b'⟩
@@ -270,14 +263,7 @@ theorem rightFinalFusion_apply (α β γ ε : Λ) (i k : Fin p) :
   let r := Fam.rightFinalRow α β γ ε
   let X := (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k
   change U.submatrix r id * X * (U.submatrix r id)ᴴ = _
-  have step1 : U.submatrix r id * X = (U * X).submatrix r id :=
-    (Matrix.submatrix_mul U X r id id Function.bijective_id).symm
-  rw [step1]
-  have step2 : (U * X).submatrix r id * (U.submatrix r id)ᴴ =
-      (U * X * Uᴴ).submatrix r r := by
-    rw [Matrix.conjTranspose_submatrix]
-    exact (Matrix.submatrix_mul (U * X) Uᴴ r id r Function.bijective_id).symm
-  rw [step2]
+  rw [Matrix.submatrix_left_conj_equiv]
   dsimp only [U, X]
   rw [Fam.rightFusion_apply]
   ext ⟨δ, μ, ν, b⟩ ⟨δ', μ', ν', b'⟩

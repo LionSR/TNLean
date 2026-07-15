@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.RFP.ZeroCorrelationLength
@@ -51,7 +52,8 @@ theorem toMPOTensor_isRFP_iff_isTransferIdempotent (A : MPSTensor d D) :
 to the pure-state zero-correlation-length condition via
 `MPSTensor.zcl_iff_idempotent_transfer`. -/
 theorem toMPOTensor_isRFP_iff_isZCL (A : MPSTensor d D) :
-    MPOTensor.IsRFP A.toMPOTensor ↔ IsZCL A := by
-  simpa [toMPOTensor_isRFP_iff_isTransferIdempotent] using (zcl_iff_idempotent_transfer A).symm
+    MPOTensor.IsRFP A.toMPOTensor ↔ IsZCL A :=
+  (toMPOTensor_isRFP_iff_isTransferIdempotent A).trans
+    (zcl_iff_idempotent_transfer A).symm
 
 end MPSTensor

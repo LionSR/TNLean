@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.MutualInfoMonotone
 
@@ -66,7 +67,8 @@ theorem mpo_doubledTensor (A : MPSTensor d D) (N : ℕ) :
     mpo (doubledTensor A) N = MPSTensor.pureState A N := by
   ext σ τ
   rw [mpo_apply, MPOTensor.mpoMatrixEntry, evalWord_doubledTensor,
-    Matrix.trace_submatrix_equiv, Matrix.trace_kronecker, ← AddMonoidHom.map_trace (starRingEnd ℂ)]
+    Matrix.trace_submatrix_equiv, Matrix.trace_kronecker,
+    ← AddMonoidHom.map_trace (starRingEnd ℂ)]
   simp only [MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply, MPSTensor.mpv,
     MPSTensor.coeff, Complex.star_def]
 
@@ -225,7 +227,8 @@ theorem pureBlockEntropy_complement (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ 
   set W := schmidtMat A N L hL with hWdef
   have hc : starRingEnd ℂ c = c := by rw [hcdef, map_inv₀, trace_pureState_conj]
   have hsa : IsSelfAdjoint c := by rw [isSelfAdjoint_iff, ← starRingEnd_apply]; exact hc
-  have hHWW : (c • (Wᴴ * W)).IsHermitian := (Matrix.isHermitian_conjTranspose_mul_self W).smul hsa
+  have hHWW : (c • (Wᴴ * W)).IsHermitian :=
+    (Matrix.isHermitian_conjTranspose_mul_self W).smul hsa
   have hcWW : ((c • W) * Wᴴ).IsHermitian := by
     rw [Matrix.smul_mul]; exact (Matrix.isHermitian_mul_conjTranspose_self W).smul hsa
   have hWcW : (Wᴴ * (c • W)).IsHermitian := by rw [Matrix.mul_smul]; exact hHWW
@@ -234,7 +237,9 @@ theorem pureBlockEntropy_complement (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ 
   have e1 : MPSTensor.reducedPureBlockState A N L hL = (c • W) * Wᴴ :=
     (reducedPureBlockState_eq_gram A N L hL).trans (Matrix.smul_mul c W Wᴴ).symm
   have e2 : Wᴴ * (c • W) = c • (Wᴴ * W) := Matrix.mul_smul Wᴴ c W
-  have hmapsmul : (c • (Wᴴ * W)).map (starRingEnd ℂ) = c • ((Wᴴ * W).map (starRingEnd ℂ)) := by
+  have hmapsmul :
+      (c • (Wᴴ * W)).map (starRingEnd ℂ) =
+        c • ((Wᴴ * W).map (starRingEnd ℂ)) := by
     ext i j
     simp only [Matrix.map_apply, Matrix.smul_apply, smul_eq_mul, map_mul]
     rw [hc]
@@ -288,7 +293,8 @@ theorem append_zero_eq {α : Type*} {L : ℕ} (u : Fin L → α) (g : Fin 0 → 
 
 /-- With an empty right block, the block-reduced state is the input matrix
 reindexed along the trivial length identity L + 0 = L. -/
-theorem blockReducedState_zero {L : ℕ} (Z : Matrix (Fin (L + 0) → Fin d) (Fin (L + 0) → Fin d) ℂ) :
+theorem blockReducedState_zero {L : ℕ}
+    (Z : Matrix (Fin (L + 0) → Fin d) (Fin (L + 0) → Fin d) ℂ) :
     blockReducedState d L 0 Z
       = Z.submatrix (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d)))
           (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d))) := by
@@ -403,15 +409,8 @@ theorem pureBlockEntropy_le (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) (hD :
   have hTr : (reducedPureBlockState A N L hL).trace = 1 :=
     reducedPureBlockState_trace A N L hL htr
   -- its rank is positive (trace 1 ≠ 0) and at most `D²`
-  have hrk_pos : 0 < (reducedPureBlockState A N L hL).rank := by
-    rw [hPSD.isHermitian.rank_eq_card_non_zero_eigs, Fintype.card_pos_iff]
-    by_contra h
-    simp only [not_nonempty_iff] at h
-    have hall : ∀ i, hPSD.isHermitian.eigenvalues i = 0 := fun i => by
-      by_contra hi; exact h.false ⟨i, hi⟩
-    have hsum := posSemidef_trace_one_eigenvalues_sum_one hPSD hTr
-    rw [Finset.sum_eq_zero (fun i _ => hall i)] at hsum
-    exact one_ne_zero hsum.symm
+  have hrk_pos : 0 < (reducedPureBlockState A N L hL).rank :=
+    hPSD.rank_pos_of_trace_one hTr
   have hrk_le : (reducedPureBlockState A N L hL).rank ≤ D * D :=
     rank_reducedPureBlockState_le A N L hL
   -- chain the entropy bound through the rank
@@ -452,23 +451,9 @@ theorem pureBlockEntropy_eq_of_isSAL (A : MPSTensor d D) (hSAL : IsSAL A)
     {N L L' : ℕ} (hL1 : 1 ≤ L) (hLN : L ≤ N / 2) (hL'1 : 1 ≤ L') (hL'N : L' ≤ N / 2) :
     pureBlockEntropy A N L (hLN.trans (Nat.div_le_self N 2)) =
       pureBlockEntropy A N L' (hL'N.trans (Nat.div_le_self N 2)) := by
-  -- Climbing `k` steps from a block size `m` stays an equality while `m + k ≤ ⌊N/2⌋`.
-  have climb : ∀ k m : ℕ, 1 ≤ m → ∀ h : m + k ≤ N / 2,
-      pureBlockEntropy A N m
-          ((Nat.le_add_right m k).trans (h.trans (Nat.div_le_self N 2)))
-        = pureBlockEntropy A N (m + k) (h.trans (Nat.div_le_self N 2)) := by
-    intro k
-    induction k with
-    | zero => intro m _ _; rfl
-    | succ k ih =>
-      intro m hm1 h
-      have hmk : m + k < N / 2 := by omega
-      exact (ih m hm1 (le_of_lt hmk)).trans (hSAL N (m + k) (by omega) hmk)
-  rcases le_total L L' with hle | hle
-  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hle
-    exact climb k L hL1 hL'N
-  · obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hle
-    exact (climb k L' hL'1 hLN).symm
+  apply eq_of_forall_succ_eq_of_mem_Icc
+    (fun m hm => pureBlockEntropy A N m (hm.trans (Nat.div_le_self N 2)))
+    (fun m hm hmn => hSAL N m hm hmn) hL1 hLN hL'1 hL'N
 
 end MPSTensor
 

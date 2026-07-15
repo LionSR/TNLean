@@ -59,13 +59,9 @@ private theorem physicalCoordinateMatrixN_isometry
       Matrix.one_apply] using
       congrFun (congrFun F.physicalCoordinateMatrix_isometry (x n)) (y n)
   simp_rw [hentry]
-  by_cases hxy : x = y
-  · subst y
-    simp
-  · obtain ⟨n, hn⟩ := Function.ne_iff.mp hxy
-    rw [Finset.prod_eq_zero (Finset.mem_univ n)]
-    · simp [hxy]
-    · simp [hn]
+  rw [Fintype.prod_boole]
+  congr 1
+  exact funext_iff
 
 /-- The sitewise physical coordinate matrix is a coisometry. -/
 private theorem physicalCoordinateMatrixN_coisometry
@@ -90,13 +86,9 @@ private theorem physicalCoordinateMatrixN_coisometry
       Matrix.one_apply] using
       congrFun (congrFun F.physicalCoordinateMatrix_coisometry (x n)) (y n)
   simp_rw [hentry]
-  by_cases hxy : x = y
-  · subst y
-    simp
-  · obtain ⟨n, hn⟩ := Function.ne_iff.mp hxy
-    rw [Finset.prod_eq_zero (Finset.mem_univ n)]
-    · simp [hxy]
-    · simp [hn]
+  rw [Fintype.prod_boole]
+  congr 1
+  exact funext_iff
 
 private theorem list_prod_sum_ofFn {a n : Type*} [Fintype a]
     [Fintype n] [DecidableEq n] {N : ℕ}
@@ -134,11 +126,8 @@ private theorem list_prod_smul_ofFn {n : Type*} [Fintype n]
       rw [mul_comm (c 0)]
 
 private def braKetFunctionsEquiv {i a b : Type*} :
-    ((i → b) × (i → a)) ≃ (i → a × b) where
-  toFun x j := (x.2 j, x.1 j)
-  invFun x := (fun j ↦ (x j).2, fun j ↦ (x j).1)
-  left_inv _ := rfl
-  right_inv _ := rfl
+    ((i → b) × (i → a)) ≃ (i → a × b) :=
+  (Equiv.prodComm _ _).trans (Equiv.arrowProdEquivProdArrow i (fun _ ↦ a) (fun _ ↦ b)).symm
 
 private theorem evalWord_changePhysicalBasis_ofFn {e : ℕ}
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) {N : ℕ}
