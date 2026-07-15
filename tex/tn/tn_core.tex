@@ -5,11 +5,12 @@
 % semantic `tn ...` styles and the atomic commands remain common to every
 % document.
 %
-% Every index contraction is solid.  Virtual and physical contractions have
-% different widths.  Morphism arrows, comparison arrows, annotations, and
-% region boundaries are separate semantic marks and do not represent indices.
-% Dashed curves indicate grouping, a basis change, or an identified periodic
-% boundary.  Tensor labels do not change the glyph used for the tensor.
+% Every index contraction is solid.  Virtual and physical contractions share
+% one baseline stroke width; their named ports and semantic styles retain the
+% index type.  Morphism arrows, comparison arrows, annotations, and region
+% boundaries are separate semantic marks and do not represent indices.  Dashed
+% curves delimit grouping regions and never represent periodic contraction.
+% Tensor labels do not change the glyph used for the tensor.
 \usetikzlibrary{backgrounds,calc,decorations.pathreplacing,fit,matrix,positioning}
 
 % The calculus uses a restrained semantic palette.  A theme changes these
@@ -106,14 +107,11 @@
     tn physical wire/.style={tn theme physical wire},
     tn virtual trace/.style={tn virtual wire, tn theme trace},
     tn physical trace/.style={tn physical wire, tn theme trace},
-    tn bent wire/.style={tn virtual wire, tn theme trace},
     % Regions and non-contraction marks.  A factor boundary is not an index.
     tn factor region/.style={tn theme factor region},
     tn grouping region/.style={tn theme grouping region},
     tn annotation/.style={tn theme annotation},
     tn label/.style={tn theme label},
-    tn basis change mark/.style={densely dashed, line width=0.40pt},
-    tn periodic mark/.style={tn virtual wire, densely dashed, ->},
     tn morphism arrow/.style={draw=tnInk, ->, line width=0.55pt},
     tn comparison arrow/.style={draw=tnInk, <->, line width=0.55pt},
     tn selected path/.style={draw=tnAccent, line width=0.80pt},
@@ -271,6 +269,7 @@
     \def\TN@virtualleglen{0.60}%
     \def\TN@physicalleglen{0.42}%
     \def\TN@traceclearance{0.42}%
+    \def\TN@periodictraceheight{0.92}%
     \def\TN@busoffset{1.10}%
     \def\TN@buspitch{0.40}%
     \def\TN@branchfirstfraction{0.28}%
@@ -294,6 +293,7 @@
     \def\TN@virtualleglen{0.48}%
     \def\TN@physicalleglen{0.34}%
     \def\TN@traceclearance{0.34}%
+    \def\TN@periodictraceheight{0.74}%
     \def\TN@busoffset{0.88}%
     \def\TN@buspitch{0.32}%
     \def\TN@branchfirstfraction{0.30}%

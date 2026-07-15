@@ -288,20 +288,25 @@
     \node at (\TN@chainellipsisx,-1.02) {$#6$};%
 }
 
-% Trace-closed MPO word with open ket and bra indices.
+% Trace-closed MPO word with open ket and bra indices.  The two shown sites and
+% the omitted middle lie on the common cell pitch; the trace height belongs to
+% the selected layout profile.
 \newcommand{\TN@closedMPOword}[2]{%
     \TN@declareMPOWordTensor{#1L}{(0,0)}
-    \TN@mposite{#1M}{(1.15,0)}{#2}%
+    \TN@mposite{#1M}{(\TN@cellpitch,0)}{#2}%
     \coordinate (#1MC) at (#1M.center);%
-    \TN@declareMPOWordTensor{#1R}{(3.05,0)}
+    \TN@declareMPOWordTensor{#1R}{({3*\TN@cellpitch},0)}
     \TN@openpverticalports{#1L}
     \TN@openpverticalports{#1M}
     \TN@openpverticalports{#1R}
     \TN@vconnectports{#1LE}{#1MW}
-    \TN@vopenport{#1ME}{0.50,0}
-    \TN@vopenport{#1RW}{-0.50,0}
-    \node at (2.10,0) {$\cdots$};
-    \TN@vtraceportsbelow{#1LW}{#1RE}{0.42}{0.92}%
+    \TN@vopenport{#1ME}{\TN@virtualleglen,0}
+    \TN@vopenport{#1RW}{-\TN@virtualleglen,0}
+    \TN@annotationterminal{#1Omitted}
+        {({2*\TN@cellpitch},0)}%
+    \TN@label{#1Omitted}{(0,0)}{\cdots}% chktex 11
+    \TN@vtraceportsbelow{#1LW}{#1RE}
+        {\TN@traceclearance}{\TN@periodictraceheight}%
 }
 
 % ---------- Sector buses ----------
@@ -1109,7 +1114,8 @@
     \TN@label{#1LS}{(0,-\TN@physlabeloff)}{#3}%
     \TN@label{#1RN}{(0,\TN@physlabeloff)}{#4}%
     \TN@label{#1RS}{(0,-\TN@physlabeloff)}{#5}%
-    \TN@annotationterminal{#1Length}{(2.10,-0.62)}%
+    \TN@annotationterminal{#1Length}
+        {($(#1Omitted)+(0,-\TN@traceclearance-\TN@labelclearance)$)}%
     \TN@label{#1Length}{(0,0)}{#6}%
 }
 \newcommand{\TNVerticalWord}[4]{%
