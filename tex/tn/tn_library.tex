@@ -1023,6 +1023,14 @@
         \TN@label{#1LabelTop}{(0,0.22)}{#6}%
     \fi
 }
+\newcommand{\TNTrivalentMapRight}[5]{%
+    \TNTrivalentMap{#1}{#2}{#3}{right}{#4}{#5}}
+\newcommand{\TNTrivalentMapLeft}[5]{%
+    \TNTrivalentMap{#1}{#2}{#3}{left}{#4}{#5}}
+\newcommand{\TNTrivalentMapDown}[5]{%
+    \TNTrivalentMap{#1}{#2}{#3}{down}{#4}{#5}}
+\newcommand{\TNTrivalentMapUp}[5]{%
+    \TNTrivalentMap{#1}{#2}{#3}{up}{#4}{#5}}
 \newcommand{\TNSplitMap}[3]{\TN@splitmap{#1}{#2}{#3}}
 \newcommand{\TNMergeMap}[3]{\TN@mergemap{#1}{#2}{#3}}
 \newcommand{\TNFusionMap}[3]{\TN@fusionmap{#1}{#2}{#3}}
