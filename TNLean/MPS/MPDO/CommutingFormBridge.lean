@@ -23,9 +23,9 @@ gives a coherently positive physical-sector factorization satisfying
 Consequently, `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` constructs
 the eta-local structure from injectivity and SAL alone. Zero correlation length
 is not used in Proposition C.8; it enters only in the later
-single-bond commuting-form-with-ZCL and RFP consequences. The full source
-GSNNCH definition also contains an orthogonal sector sum and natural
-multiplicities; see
+single-bond commuting-form-with-ZCL and RFP consequences. The source GSNNCH
+definition is recorded in `GSNNCHData`; constructing its outer sectors and
+natural multiplicities from the BNT decomposition remains open. See
 docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 
 ## Main declarations
@@ -33,6 +33,7 @@ docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 * `MPOTensor.TranslationInvariantBondData`
 * `MPOTensor.EtaLocalStructureData`
 * `MPOTensor.hasCommutingForm_of_etaLocalStructure`
+* `MPOTensor.hasGSNNCHForm_of_etaLocalStructure`
 * `MPOTensor.hasCommutingBondProductWithZCL_of_etaLocalStructure`
 
 ## References
