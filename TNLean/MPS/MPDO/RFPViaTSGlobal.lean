@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPDO.LocalizedKrausCPTP
 import TNLean.MPS.MPDO.RFPViaTS
 
@@ -43,40 +44,6 @@ open scoped Matrix
 namespace MPOTensor
 
 variable {d D : ℕ}
-
-/-! ### Regrouping the first physical sites -/
-
-/-- Separate the first physical index from the remaining `N` indices. -/
-def firstSiteRestEquiv (d N : ℕ) :
-    (Fin (N + 1) → Fin d) ≃ Fin d × (Fin N → Fin d) :=
-  (Fin.consEquiv fun _ : Fin (N + 1) ↦ Fin d).symm
-
-@[simp] theorem firstSiteRestEquiv_apply (d N : ℕ)
-    (σ : Fin (N + 1) → Fin d) :
-    firstSiteRestEquiv d N σ = (σ 0, Fin.tail σ) :=
-  rfl
-
-@[simp] theorem firstSiteRestEquiv_symm_apply (d N : ℕ)
-    (p : Fin d × (Fin N → Fin d)) :
-    (firstSiteRestEquiv d N).symm p = Fin.cons p.1 p.2 :=
-  rfl
-
-/-- Separate the first two physical indices from the remaining `N` indices. -/
-def firstTwoSitesRestEquiv (d N : ℕ) :
-    (Fin (N + 2) → Fin d) ≃ (Fin d × Fin d) × (Fin N → Fin d) :=
-  (firstSiteRestEquiv d (N + 1)).trans
-    ((Equiv.prodCongr (Equiv.refl (Fin d)) (firstSiteRestEquiv d N)).trans
-      (Equiv.prodAssoc (Fin d) (Fin d) (Fin N → Fin d)).symm)
-
-@[simp] theorem firstTwoSitesRestEquiv_apply (d N : ℕ)
-    (σ : Fin (N + 2) → Fin d) :
-    firstTwoSitesRestEquiv d N σ = ((σ 0, σ 1), Fin.tail (Fin.tail σ)) :=
-  rfl
-
-@[simp] theorem firstTwoSitesRestEquiv_symm_apply (d N : ℕ)
-    (p : (Fin d × Fin d) × (Fin N → Fin d)) :
-    (firstTwoSitesRestEquiv d N).symm p = Fin.cons p.1.1 (Fin.cons p.1.2 p.2) :=
-  rfl
 
 /-! ### Localized renormalization maps -/
 
