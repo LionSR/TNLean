@@ -291,12 +291,14 @@ theorem hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
   revert htargets
   refine Finset.induction_on targets ?base ?step
   · intro _
-    have hEmpty : HasBlockSelectorOn A k 0 ∅ := by
+    -- This is the base of induction over the target blocks, not a physical
+    -- chain of length zero.
+    have hEmptyTargets : HasBlockSelectorOn A k 0 ∅ := by
       refine ⟨wordTuple A 0 (fun i ↦ Fin.elim0 i), ?_, ?_, ?_⟩
       · exact Submodule.subset_span ⟨fun i ↦ Fin.elim0 i, rfl⟩
       · simp [wordTuple]
       · simp
-    simpa using hEmpty
+    simpa using hEmptyTargets
   · intro j targets hj_not_mem ih htargets_insert
     have htargets_tail : ∀ l : Fin r, l ∈ targets → l ≠ k := by
       intro l hl
