@@ -4,7 +4,7 @@ name: TNTikZDiagram
 name: TNMPSLocal TNMPSWord TNMPV TNBlocking TNMPVOverlap TNTransferMap TNMPOCell TNMPOChain
 {{ obj.tn_svg_html }}
 
-name: TNMPOLocalPurification TNMPORenormalizationTS TNEtaSectorDecomposition TNMPDOCyclicEtaContraction TNMPDOSectorAdaptedDecomposition
+name: TNMPOLocalPurification TNMPORenormalizationTS TNEtaSectorDecomposition TNMPDOCyclicEtaContraction
 {{ obj.tn_svg_html }}
 
 name: TNMPDOTwoSiteTraceAndShift TNMPDOThreeSiteTraceAndShift TNMPDORefinementConstruction TNMPDORefinementDirection TNMPDOBlockedRFPChannels TNMPDOPhysicalIsometryTransport
@@ -25,7 +25,7 @@ name: TNMPDOHorizontalOperator TNMPDOFirstSiteContractions TNMPDOVerticalDirectS
 name: TNMPDOVerticalReducingSectors TNMPDOVerticalGaugeGramComparison
 {{ obj.tn_svg_html }}
 
-name: TNMPDOInverseContraction TNMPDOSectorPairing TNMPDOSectorZCLIdentity
+name: TNMPDOInverseContraction
 {{ obj.tn_svg_html }}
 
 name: TNMPSInverseContraction TNBNTDecomposition TNMPDOZCLIdempotence TNMPDOFixedFinalFusionBracketings
