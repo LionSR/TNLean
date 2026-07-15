@@ -170,4 +170,37 @@ theorem isTransferIdempotent_iff_hasPhysicalBlockingIsometry (A : MPSTensor d D)
     IsTransferIdempotent A ↔ HasPhysicalBlockingIsometry A := by
   simpa only [HasPhysicalBlockingIsometry] using isTransferIdempotent_iff_kraus_isometry A
 
+/-- A virtual gauge change preserves the physical blocking-isometry relation.
+
+This is the gauge covariance of equation \(AA=A\) and the RFP definition in
+arXiv:1606.00608, lines 398--424. -/
+theorem GaugeEquiv.hasPhysicalBlockingIsometry {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) :
+    HasPhysicalBlockingIsometry A → HasPhysicalBlockingIsometry B := by
+  rintro ⟨U, hU, hprod⟩
+  rcases h with ⟨X, hX⟩
+  refine ⟨U, hU, fun i₁ i₂ ↦ ?_⟩
+  rw [hX i₁, hX i₂]
+  calc
+    (X * A i₁ * X⁻¹) * (X * A i₂ * X⁻¹) =
+        X * (A i₁ * A i₂) * X⁻¹ := by simp [Matrix.mul_assoc]
+    _ = X * (∑ j : Fin d, U (i₁, i₂) j • A j) * X⁻¹ := by rw [hprod]
+    _ = ∑ j : Fin d, U (i₁, i₂) j • (X * A j * X⁻¹) := by
+      simp [Finset.mul_sum, Finset.sum_mul]
+    _ = ∑ j : Fin d, U (i₁, i₂) j • B j := by simp_rw [hX]
+
+/-- Gauge-equivalent tensors satisfy the physical RFP relation simultaneously. -/
+theorem GaugeEquiv.hasPhysicalBlockingIsometry_iff {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) :
+    HasPhysicalBlockingIsometry A ↔ HasPhysicalBlockingIsometry B :=
+  ⟨h.hasPhysicalBlockingIsometry, h.symm.hasPhysicalBlockingIsometry⟩
+
+/-- Transfer-map idempotence is invariant under a virtual gauge change. -/
+theorem GaugeEquiv.isTransferIdempotent_iff {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) :
+    IsTransferIdempotent A ↔ IsTransferIdempotent B := by
+  rw [isTransferIdempotent_iff_hasPhysicalBlockingIsometry,
+    isTransferIdempotent_iff_hasPhysicalBlockingIsometry]
+  exact h.hasPhysicalBlockingIsometry_iff
+
 end MPSTensor
