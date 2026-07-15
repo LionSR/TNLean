@@ -1,12 +1,9 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.Basic
-import Mathlib.Analysis.CStarAlgebra.CStarMatrix
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
-import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
-import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 
 /-!
@@ -16,18 +13,10 @@ This file begins the explicit retraction route toward Brouwer fixed points on
 `densityMatrices D` by constructing the Hermitian trace-one recentering map.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open Matrix
 
 variable {D : ℕ}
-
-noncomputable local instance :
-    ContinuousFunctionalCalculus ℝ (CStarMatrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  IsSelfAdjoint.instContinuousFunctionalCalculus
-
-noncomputable local instance :
-    IsometricContinuousFunctionalCalculus ℝ (CStarMatrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  IsSelfAdjoint.instIsometricContinuousFunctionalCalculus
 
 /-- The Hermitian part of a matrix. -/
 noncomputable def hermitianPart (A : Matrix (Fin D) (Fin D) ℂ) :
@@ -74,71 +63,6 @@ theorem trace_hermitianPart_eq_re (A : Matrix (Fin D) (Fin D) ℂ) :
     exact htrace_ct.symm
   symm
   exact Complex.conj_eq_iff_re.mp htr
-
-/-- Matrix absolute value, transported through `CStarMatrix`. -/
-noncomputable def matrixAbs (A : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
-  CFC.abs A
-
-theorem continuous_matrixAbs : Continuous (matrixAbs (D := D)) := by
-  let g : CStarMatrix (Fin D) (Fin D) ℂ → CStarMatrix (Fin D) (Fin D) ℂ :=
-    fun A ↦ star A * A
-  have hg : Continuous g := continuous_star.mul continuous_id
-  have hsqrtC : Continuous fun A : CStarMatrix (Fin D) (Fin D) ℂ ↦ cfc Real.sqrt (g A) :=
-    (Continuous.cfc_of_mem_nhdsSet (A := CStarMatrix (Fin D) (Fin D) ℂ) (p := IsSelfAdjoint)
-      (f := Real.sqrt) (s := Set.univ) Filter.univ_mem hg
-      (ha' := by
-        intro A
-        exact IsSelfAdjoint.star_mul_self A)
-      (hf := by
-        simpa using Real.continuous_sqrt))
-  let F : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ :=
-    fun A ↦ CStarMatrix.ofMatrixL.symm (cfc Real.sqrt (g (CStarMatrix.ofMatrixL A)))
-  have hF : Continuous F :=
-    CStarMatrix.ofMatrixL.symm.continuous.comp (hsqrtC.comp CStarMatrix.ofMatrixL.continuous)
-  have hEq :
-      F = matrixAbs (D := D) := by
-    funext A
-    let φ : Matrix (Fin D) (Fin D) ℂ ≃⋆ₐ[ℂ] CStarMatrix (Fin D) (Fin D) ℂ :=
-      CStarMatrix.ofMatrixStarAlgEquiv
-    have hφcont : Continuous (φ : Matrix (Fin D) (Fin D) ℂ → CStarMatrix (Fin D) (Fin D) ℂ) := by
-      change Continuous (CStarMatrix.ofMatrixL : Matrix (Fin D) (Fin D) ℂ →
-        CStarMatrix (Fin D) (Fin D) ℂ)
-      exact CStarMatrix.ofMatrixL.continuous
-    have hφa : IsSelfAdjoint (φ (star A * A)) := by
-      rw [map_mul, map_star]
-      exact IsSelfAdjoint.star_mul_self (φ A)
-    have hmap :
-        φ (cfc Real.sqrt (star A * A)) = cfc Real.sqrt (φ (star A * A)) :=
-      StarAlgHomClass.map_cfc φ Real.sqrt (star A * A)
-        (hφ := hφcont) (ha := IsSelfAdjoint.star_mul_self A) (hφa := hφa)
-    have harg : φ (star A * A) = star (φ A) * φ A := by
-      rw [map_mul, map_star]
-    calc
-      F A = φ.symm (cfc Real.sqrt (star (φ A) * φ A)) := by
-        rfl
-      _ = φ.symm (cfc Real.sqrt (φ (star A * A))) := by
-        rw [harg]
-      _ = cfc Real.sqrt (star A * A) := by
-        simpa using congrArg φ.symm hmap.symm
-      _ = matrixAbs A := by
-        rw [matrixAbs, CFC.abs, CFC.sqrt_eq_real_sqrt (a := star A * A)]
-        exact (cfcₙ_eq_cfc (a := star A * A) (f := Real.sqrt)).symm
-  rw [← hEq]
-  exact hF
-
-@[simp]
-theorem matrixAbs_eq_self_of_posSemidef
-    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef) :
-    matrixAbs A = A := by
-  simpa [matrixAbs] using (CFC.abs_of_nonneg (a := A) hA.nonneg)
-
-@[simp]
-theorem matrixAbs_posSemidef
-    (A : Matrix (Fin D) (Fin D) ℂ) :
-    (matrixAbs A).PosSemidef := by
-  exact Matrix.nonneg_iff_posSemidef.mp (by
-    change 0 ≤ CFC.abs A
-    simp)
 
 theorem matrixAbs_add_self_posSemidef_of_isHermitian
     {B : Matrix (Fin D) (Fin D) ℂ} (hB : B.IsHermitian) :

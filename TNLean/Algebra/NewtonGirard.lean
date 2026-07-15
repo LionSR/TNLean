@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
 import Mathlib.LinearAlgebra.Matrix.Adjugate
@@ -137,14 +138,14 @@ private lemma jacobi_formula_charpolyRev (M : Matrix n n R) :
   simp only [derivative_entry_F]
   simp_rw [det_updateCol_eq_adjugate_mulVec]
   simp only [mul_neg, Finset.sum_neg_distrib]
-  congr 1
+  apply congrArg Neg.neg
   simp only [trace, diag_apply, mul_apply, map_apply]
   rw [Finset.sum_comm (s := Finset.univ) (t := Finset.univ)]
   apply Finset.sum_congr rfl
   intro j _
   apply Finset.sum_congr rfl
   intro k _
-  ring
+  exact mul_comm _ _
 
 private lemma map_C_pow (M : Matrix n n R) (l : ℕ) :
     (M.map C) ^ l = (M ^ l).map (C : R → R[X]) := by
@@ -190,10 +191,15 @@ private lemma T_trace_recursion (M : Matrix n n R) (l : ℕ) :
       Matrix.trace ((M.map C) ^ l * Adj) -
       X * Matrix.trace ((M.map C) ^ (l + 1) * Adj) := by
     rw [hf, Matrix.trace_sub, Matrix.trace_smul, smul_eq_mul]
-    congr 1
-    rw [trace_mul_comm ((M.map C) ^ l * Adj) (M.map C)]
-    congr 1
-    rw [← Matrix.mul_assoc, ← pow_succ']
+    apply congrArg (fun z : R[X] => Matrix.trace ((M.map C) ^ l * Adj) - X * z)
+    calc
+      Matrix.trace ((M.map C) ^ l * Adj * M.map C) =
+          Matrix.trace (M.map C * ((M.map C) ^ l * Adj)) :=
+        trace_mul_comm ((M.map C) ^ l * Adj) (M.map C)
+      _ = Matrix.trace ((M.map C * (M.map C) ^ l) * Adj) := by
+        rw [Matrix.mul_assoc]
+      _ = Matrix.trace ((M.map C) ^ (l + 1) * Adj) := by
+        rw [← pow_succ']
   have h4 := congr_arg Matrix.trace h_mul
   rw [h_lhs, h_rhs] at h4
   exact h4
