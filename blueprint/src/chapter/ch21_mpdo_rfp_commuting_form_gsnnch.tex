@@ -26,8 +26,7 @@
     \[
         \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
     \]
-    The bond acts on the full two-site space. No identification with the
-    explicit sector data of Definition~\ref{def:mpdo_source_gsnnch} is made.
+    The bond acts on the full two-site space.
 \end{definition}
 
 \begin{definition}[Finite-chain bond form]
@@ -64,10 +63,7 @@
         \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
     \]
     This is the one-bond product conclusion used in
-    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}. Its relation to the explicit
-    source sector decomposition is not asserted here.
-    % Scope restriction (single-bond presentation): see
-    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}.
     % Gap documented in docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 \end{theorem}
 
@@ -76,31 +72,29 @@
     provided by the $\eta$-local structure.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure gives the restricted GSNNCH predicate]
-    \label{thm:mpdo_eta_local_structure_is_gsnnch}
-    \lean{MPOTensor.EtaLocalStructureData.isGSNNCH}
-    \lean{MPOTensor.isGSNNCH_of_etaLocalStructure}
+\begin{theorem}[$\eta$-local structure gives a single-bond product]
+    \label{thm:mpdo_eta_local_structure_has_commuting_bond_product}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProductAt}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProduct}
+    \lean{MPOTensor.hasCommutingBondProduct_of_etaLocalStructure}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_is_gsnnch}
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_has_commuting_bond_product}
     The same $\eta$-local structure gives a single-bond product witness
     on every finite periodic chain.
-    The statement does not identify this witness with the explicit sector
-    decomposition of Definition~\ref{def:mpdo_source_gsnnch}.
-    % Scope restriction (single-bond presentation): see
-    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 \end{theorem}
 
 \begin{proof}\leanok
     Evaluate the local structure at each chain length $N \ge 2$.
 \end{proof}
 
-\begin{theorem}[Restricted commuting form with doubled-index idempotence]
-    \label{thm:mpdo_eta_local_structure_is_gsnnch_zcl}
-    \lean{MPOTensor.EtaLocalStructureData.isGSNNCHWithZCL}
-    \lean{MPOTensor.isGSNNCHWithZCL_of_etaLocalStructure}
+\begin{theorem}[Single-bond product with doubled-index idempotence]
+    \label{thm:mpdo_eta_local_structure_has_commuting_bond_product_zcl}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProductWithZCL}
+    \lean{MPOTensor.hasCommutingBondProductWithZCL_of_etaLocalStructure}
     \leanok
     \uses{thm:mpdo_eta_local_structure_has_commuting_form,
-        thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
+        thm:mpdo_has_commuting_bond_product_zcl_iff_has_commuting_form_and_is_zcl}
     An $\eta$-local structure together with the doubled-index transfer
     condition gives the corresponding single-bond branch.
     % Scope restriction (single-bond presentation): see
@@ -110,6 +104,22 @@
 \begin{proof}\leanok
     Use the commuting-form witness carried by the $\eta$-local structure and
     combine it with the doubled-index transfer hypothesis.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure gives the one-sector GSNNCH form]
+    \label{thm:mpdo_eta_local_structure_has_gsnnch_form}
+    \lean{MPOTensor.EtaLocalStructureData.hasGSNNCHForm}
+    \lean{MPOTensor.hasGSNNCHForm_of_etaLocalStructure}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_has_commuting_bond_product,
+        thm:mpdo_commuting_bond_product_has_gsnnch_form}
+    The single positive bond determined by the $\eta$-local structure gives
+    the one-sector instance of the explicit GSNNCH decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the one-sector construction to the single-bond product at every
+    chain length.
 \end{proof}
 
 \begin{remark}[Positive physical-sector factorization]
