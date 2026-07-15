@@ -477,20 +477,56 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{definition}[Parent commuting Hamiltonian on the tripartite space]
     \label{def:tripartite_parent_commuting_hamiltonian}
-    \lean{TripartiteDecorrelation.CommutingParentHamiltonian,
+    \lean{TripartiteDecorrelation.HasGroundSpaceIntersection,
+      TripartiteDecorrelation.CommutingParentHamiltonian,
       TripartiteDecorrelation.HasCommutingParentHamiltonian}
     \leanok
     \uses{def:tripartite_local_lifts}
     There are orthogonal projectors $P_{AX}$ and $P_{XB}$ on the two local
-    factors whose lifts commute and satisfy
+    factors whose lifts commute and whose ranges satisfy the source
+    ground-space intersection condition
     \[
+        \operatorname{ran}P
+        =\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}.
+    \]
+    Thus $Q_{AX}=\mathbf 1-P_{AX}$ and
+    $Q_{XB}=\mathbf 1-P_{XB}$ are exactly the commuting parent terms of
+    \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Ground-space intersection and projector product]
+    \label{thm:tripartite_ground_space_intersection_iff_product}
+    \lean{TripartiteDecorrelation.range_mul_eq_inter,
+      TripartiteDecorrelation.hermitian_idempotent_eq_of_range_eq,
+      TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq,
+      TripartiteDecorrelation.CommutingParentHamiltonian.hproduct}
+    \leanok
+    \uses{def:tripartite_parent_commuting_hamiltonian}
+    Let $P$, $P_{AX}$, and $P_{XB}$ be orthogonal projectors, and suppose that
+    $P_{AX}$ and $P_{XB}$ commute.  Then
+    \[
+        \operatorname{ran}P
+        =\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}
+        \quad\Longleftrightarrow\quad
         P_{AX}P_{XB}=P.
     \]
-    Equivalently, $Q_{AX}=\mathbf 1-P_{AX}$ and
-    $Q_{XB}=\mathbf 1-P_{XB}$ are the commuting parent terms of
-    \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv}, and the
-    ground space of their sum is the range of $P$.
-\end{definition}
+    This is the passage from
+    \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv} to the
+    projector identity used at lines 2259--2277.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A vector lies in the range of $P_{AX}P_{XB}$ precisely when it is fixed by
+    both commuting idempotents.  Hence
+    \[
+        \operatorname{ran}(P_{AX}P_{XB})
+        =\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}.
+    \]
+    The product is again an orthogonal projector.  Orthogonal projectors with
+    equal ranges are equal, giving the forward implication; the reverse
+    implication follows by substituting the product identity.
+\end{proof}
 
 \begin{theorem}[Parent commuting Hamiltonian--complex-linear decorrelation equivalence]
     \label{thm:tripartite_parent_iff_complex_linear_decorrelated}
@@ -500,7 +536,8 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \leanok
     \uses{def:tripartite_decorrelation,
       def:tripartite_parent_commuting_hamiltonian,
-      thm:tripartite_support_products}
+      thm:tripartite_support_products,
+      thm:tripartite_ground_space_intersection_iff_product}
     Let $P=P^\dagger=P^2$.  Then $P$ is the ground-space projector of a
     parent commuting Hamiltonian on $AX$ and $XB$ if and only if regions
     $A$ and $B$ satisfy complex-linear decorrelation.
@@ -512,7 +549,8 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     $\rho_{AX}$ and $\rho_{XB}$.  The preceding product theorem proves their
     commutation and identifies their product with $P$.
 
-    Starting from commuting parent projectors, write
+    Starting from commuting parent projectors, first use the ground-space
+    intersection theorem to write
     $P=P_{AX}P_{XB}=P_{XB}P_{AX}$.  Locality gives
     $[O_A,P_{XB}]=[O_B,P_{AX}]=0$, while
     \[

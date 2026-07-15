@@ -22,6 +22,8 @@ explicit tensor product \(H_A\otimes H_X\otimes H_B\).
 * `TripartiteDecorrelation.supportXB`: support projector of the \(XB\) marginal.
 * `TripartiteDecorrelation.HasCommutingParentHamiltonian`: existence of local
   commuting parent projectors on \(AX\) and \(XB\).
+* `TripartiteDecorrelation.HasGroundSpaceIntersection`: the literal
+  ground-space intersection condition of Definition D.2.
 * `TripartiteDecorrelation.liftAX` and `TripartiteDecorrelation.liftXB`: their
   local lifts to the tripartite space.
 
@@ -35,6 +37,8 @@ explicit tensor product \(H_A\otimes H_X\otimes H_B\).
   the finite matrix-unit calculation from decorrelation.
 * `TripartiteDecorrelation.supportProducts_eq`: the two support-product
   identities obtained from decorrelation.
+* `TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq`: the
+  equivalence between the source intersection and projector-product forms.
 * `TripartiteDecorrelation.parentHamiltonian_iff_decorrelated`: Proposition
   D.3 in complex-linear form on the explicit tripartite space.
 * `TripartiteDecorrelation.parentHamiltonian_iff_observableDecorrelated`:
@@ -121,6 +125,25 @@ private theorem liftAX_mul (M N : Matrix (A × X) (A × X) ℂ) :
 private theorem liftXB_mul (M N : Matrix (X × B) (X × B) ℂ) :
     liftXB (A := A) (M * N) = liftXB (A := A) M * liftXB (A := A) N := by
   exact map_mul (Matrix.rightKroneckerEmbed (m := A) (n := X × B)) M N
+
+@[simp]
+private theorem conjTranspose_liftAX (M : Matrix (A × X) (A × X) ℂ) :
+    (liftAX (B := B) M)ᴴ = liftAX (B := B) Mᴴ := by
+  ext ⟨a, x, b⟩ ⟨a', x', b'⟩
+  by_cases hbb : b = b'
+  · subst b'
+    simp [liftAX, ungroupAX, Matrix.conjTranspose_apply,
+      Matrix.leftKroneckerEmbed_apply, Matrix.kroneckerMap_apply]
+  · have hb'b : b' ≠ b := Ne.symm hbb
+    simp [liftAX, ungroupAX, Matrix.conjTranspose_apply,
+      Matrix.leftKroneckerEmbed_apply, Matrix.kroneckerMap_apply, hbb, hb'b]
+
+@[simp]
+private theorem conjTranspose_liftXB (M : Matrix (X × B) (X × B) ℂ) :
+    (liftXB (A := A) M)ᴴ = liftXB (A := A) Mᴴ := by
+  change (Matrix.rightKroneckerEmbed (m := A) M)ᴴ =
+    Matrix.rightKroneckerEmbed (m := A) Mᴴ
+  rw [← star_eq_conjTranspose, ← map_star, star_eq_conjTranspose]
 
 private theorem liftA_comm_liftXB (OA : Matrix A A ℂ) (M : Matrix (X × B) (X × B) ℂ) :
     liftA OA * liftXB M = liftXB M * liftA OA := by
@@ -634,13 +657,132 @@ theorem supportProducts_eq
         rw [hdec.reverse_supports_mul_complement_mul_eq_zero hPherm, add_zero]
       _ = P := by rw [liftSupportAX_mul_self hPpos, mul_liftSupportXB_self hPpos]
 
+/-- The range of a product of commuting idempotent matrices is the
+intersection of their ranges.
+
+This is the finite-dimensional projector fact used to pass from the
+ground-space intersection in arXiv:1606.00608, Appendix D.2, Definition D.2,
+lines 2205--2218, to the product of the two ground-space projectors. -/
+theorem range_mul_eq_inter
+    {I : Type*} [Fintype I] [DecidableEq I]
+    (S T : Matrix I I ℂ)
+    (hSidem : S * S = S) (hTidem : T * T = T)
+    (hcomm : S * T = T * S) :
+    LinearMap.range (Matrix.toLin' (S * T)) =
+      LinearMap.range (Matrix.toLin' S) ⊓
+        LinearMap.range (Matrix.toLin' T) := by
+  have hS : IsIdempotentElem (Matrix.toLin' S) := by
+    rw [IsIdempotentElem, Module.End.mul_eq_comp, ← Matrix.toLin'_mul, hSidem]
+  have hT : IsIdempotentElem (Matrix.toLin' T) := by
+    rw [IsIdempotentElem, Module.End.mul_eq_comp, ← Matrix.toLin'_mul, hTidem]
+  ext v
+  constructor
+  · rintro ⟨w, rfl⟩
+    rw [Matrix.toLin'_mul, LinearMap.comp_apply]
+    refine Submodule.mem_inf.mpr ⟨⟨_, rfl⟩, ?_⟩
+    refine ⟨Matrix.toLin' S w, ?_⟩
+    simpa only [Matrix.toLin'_mul, LinearMap.comp_apply] using
+      congrArg (fun M : Matrix I I ℂ ↦ Matrix.toLin' M w) hcomm.symm
+  · intro hv
+    rw [Submodule.mem_inf] at hv
+    refine ⟨v, ?_⟩
+    rw [Matrix.toLin'_mul, LinearMap.comp_apply,
+      (LinearMap.IsIdempotentElem.mem_range_iff hT).mp hv.2,
+      (LinearMap.IsIdempotentElem.mem_range_iff hS).mp hv.1]
+
+/-- Hermitian idempotent matrices with the same range are equal.
+
+This is the uniqueness fact used between arXiv:1606.00608, Appendix D.2,
+Definition D.2, lines 2205--2218, and equation `arrggg`, lines 2259--2277. -/
+theorem hermitian_idempotent_eq_of_range_eq
+    {I : Type*} [Fintype I] [DecidableEq I]
+    (S T : Matrix I I ℂ)
+    (hSherm : S.IsHermitian) (hSidem : S * S = S)
+    (hTherm : T.IsHermitian) (hTidem : T * T = T)
+    (hrange : LinearMap.range (Matrix.toLin' S) =
+      LinearMap.range (Matrix.toLin' T)) :
+    S = T := by
+  have hS : IsIdempotentElem (Matrix.toLin' S) := by
+    rw [IsIdempotentElem, Module.End.mul_eq_comp, ← Matrix.toLin'_mul, hSidem]
+  have hT : IsIdempotentElem (Matrix.toLin' T) := by
+    rw [IsIdempotentElem, Module.End.mul_eq_comp, ← Matrix.toLin'_mul, hTidem]
+  have hST : S * T = T := by
+    apply Matrix.toLin'.injective
+    rw [Matrix.toLin'_mul]
+    exact (LinearMap.IsIdempotentElem.comp_eq_right_iff hS _).2 hrange.symm.le
+  have hTS : T * S = S := by
+    apply Matrix.toLin'.injective
+    rw [Matrix.toLin'_mul]
+    exact (LinearMap.IsIdempotentElem.comp_eq_right_iff hT _).2 hrange.le
+  have hTS' : T * S = T := by
+    have h := congrArg Matrix.conjTranspose hST
+    simpa only [Matrix.conjTranspose_mul, hSherm.eq, hTherm.eq] using h
+  exact hTS.symm.trans hTS'
+
+/-- The literal ground-space intersection condition of arXiv:1606.00608,
+Appendix D.2, Definition D.2, lines 2205--2218, written for the orthogonal
+ground-space projectors. -/
+def HasGroundSpaceIntersection
+    (P : Matrix (A × (X × B)) (A × (X × B)) ℂ)
+    (PAX : Matrix (A × X) (A × X) ℂ)
+    (PXB : Matrix (X × B) (X × B) ℂ) : Prop :=
+  LinearMap.range (Matrix.toLin' P) =
+    LinearMap.range (Matrix.toLin' (liftAX PAX)) ⊓
+      LinearMap.range (Matrix.toLin' (liftXB PXB))
+
+/-- For commuting orthogonal projectors, the source ground-space intersection
+condition is equivalent to the corresponding projector-product identity.
+
+This proves the bridge from arXiv:1606.00608, Appendix D.2, Definition D.2,
+lines 2205--2218, to equation `arrggg`, lines 2259--2277. -/
+theorem hasGroundSpaceIntersection_iff_product_eq
+    {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
+    {PAX : Matrix (A × X) (A × X) ℂ}
+    {PXB : Matrix (X × B) (X × B) ℂ}
+    (hPherm : P.IsHermitian) (hPidem : P * P = P)
+    (hAXherm : PAX.IsHermitian) (hAXidem : PAX * PAX = PAX)
+    (hXBherm : PXB.IsHermitian) (hXBidem : PXB * PXB = PXB)
+    (hcomm : liftAX PAX * liftXB PXB = liftXB PXB * liftAX PAX) :
+    HasGroundSpaceIntersection P PAX PXB ↔ liftAX PAX * liftXB PXB = P := by
+  let SAX := liftAX (B := B) PAX
+  let SXB := liftXB (A := A) PXB
+  have hSAXherm : SAX.IsHermitian := by
+    change (liftAX (B := B) PAX)ᴴ = liftAX (B := B) PAX
+    rw [conjTranspose_liftAX, hAXherm.eq]
+  have hSXBherm : SXB.IsHermitian := by
+    change (liftXB (A := A) PXB)ᴴ = liftXB (A := A) PXB
+    rw [conjTranspose_liftXB, hXBherm.eq]
+  have hSAXidem : SAX * SAX = SAX := by
+    rw [← liftAX_mul, hAXidem]
+  have hSXBidem : SXB * SXB = SXB := by
+    rw [← liftXB_mul, hXBidem]
+  have hproductHerm : (SAX * SXB).IsHermitian := by
+    rw [Matrix.IsHermitian, Matrix.conjTranspose_mul, hSAXherm.eq,
+      hSXBherm.eq, ← hcomm]
+  have hproductIdem : (SAX * SXB) * (SAX * SXB) = SAX * SXB := by
+    calc
+      (SAX * SXB) * (SAX * SXB) = SAX * (SXB * SAX) * SXB := by
+        noncomm_ring
+      _ = SAX * (SAX * SXB) * SXB := by rw [← hcomm]
+      _ = (SAX * SAX) * (SXB * SXB) := by noncomm_ring
+      _ = SAX * SXB := by rw [hSAXidem, hSXBidem]
+  have hrange := range_mul_eq_inter SAX SXB hSAXidem hSXBidem hcomm
+  constructor
+  · intro hintersection
+    exact hermitian_idempotent_eq_of_range_eq (SAX * SXB) P
+      hproductHerm hproductIdem hPherm hPidem (hrange.trans hintersection.symm)
+  · intro hproduct
+    change LinearMap.range (Matrix.toLin' P) =
+      LinearMap.range (Matrix.toLin' SAX) ⊓ LinearMap.range (Matrix.toLin' SXB)
+    rw [← hproduct]
+    exact hrange
+
 /-- The parent commuting Hamiltonian condition on the explicit tripartite
 space, written in terms of the local ground-space projectors.
 
 The Hamiltonian terms of arXiv:1606.00608, Appendix D.2, Definition D.2,
-lines 2205--2218, are \(Q_{AX}=1-P_{AX}\) and \(Q_{XB}=1-P_{XB}\).  For
-commuting orthogonal projectors, the product identity below says exactly that
-their lifted ranges intersect in the range of \(P\). -/
+lines 2205--2218, are \(Q_{AX}=1-P_{AX}\) and \(Q_{XB}=1-P_{XB}\).  The final
+field is the literal ground-space intersection condition in that definition. -/
 structure CommutingParentHamiltonian
     (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) where
   /-- The orthogonal projector onto \(K_{AX}\), as in arXiv:1606.00608,
@@ -664,10 +806,22 @@ structure CommutingParentHamiltonian
   /-- The two lifted ground-space projectors commute, equivalent to equation
   `QAXQXB` in arXiv:1606.00608, Appendix D.2, lines 2207--2214. -/
   hcomm : liftAX PAX * liftXB PXB = liftXB PXB * liftAX PAX
-  /-- Their product is the projector onto \(K_{AXB}\), which is the
-  ground-space intersection in arXiv:1606.00608, Appendix D.2,
-  lines 2212--2218. -/
-  hproduct : liftAX PAX * liftXB PXB = P
+  /-- The range of \(P\) is the intersection of the two lifted local
+  ground spaces, as in arXiv:1606.00608, Appendix D.2, lines 2212--2218. -/
+  hintersection : HasGroundSpaceIntersection P PAX PXB
+
+/-- The literal ground-space intersection condition of Definition D.2 gives
+the projector-product identity used in the proof of Proposition D.3.
+
+Source: arXiv:1606.00608, Appendix D.2, lines 2205--2218 and 2259--2277. -/
+theorem CommutingParentHamiltonian.hproduct
+    {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
+    (hparent : CommutingParentHamiltonian P)
+    (hPherm : P.IsHermitian) (hPidem : P * P = P) :
+    liftAX hparent.PAX * liftXB hparent.PXB = P :=
+  (hasGroundSpaceIntersection_iff_product_eq hPherm hPidem
+    hparent.hAXherm hparent.hAXidem hparent.hXBherm hparent.hXBidem
+    hparent.hcomm).mp hparent.hintersection
 
 /-- Existence of local commuting parent projectors for \(P\), in the sense of
 arXiv:1606.00608, Appendix D.2, Definition D.2, lines 2205--2218. -/
@@ -682,16 +836,18 @@ This is the only-if direction of arXiv:1606.00608, Appendix D.2,
 Proposition D.3, lines 2279--2289. -/
 theorem CommutingParentHamiltonian.isDecorrelated
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
-    (hparent : CommutingParentHamiltonian P) (hPidem : P * P = P) :
+    (hparent : CommutingParentHamiltonian P)
+    (hPherm : P.IsHermitian) (hPidem : P * P = P) :
     IsDecorrelated P := by
   let SAX := liftAX (B := B) hparent.PAX
   let SXB := liftXB (A := A) hparent.PXB
+  have hproduct : SAX * SXB = P := hparent.hproduct hPherm hPidem
   have hrev : SXB * SAX = P := by
     rw [← hparent.hcomm]
-    exact hparent.hproduct
+    exact hproduct
   have hquad : SXB * P * SAX = P * P := by
     calc
-      SXB * P * SAX = SXB * (SAX * SXB) * SAX := by rw [hparent.hproduct]
+      SXB * P * SAX = SXB * (SAX * SXB) * SAX := by rw [hproduct]
       _ = (SXB * SAX) * (SXB * SAX) := by noncomm_ring
       _ = P * P := by rw [hrev]
   have hmiddle : SXB * (1 - P) * SAX = 0 := by
@@ -707,7 +863,7 @@ theorem CommutingParentHamiltonian.isDecorrelated
   calc
     P * liftA OA * (1 - P) * liftB OB * P =
         (SAX * SXB) * liftA OA * (1 - P) * liftB OB * (SAX * SXB) := by
-          rw [hparent.hproduct]
+          rw [hproduct]
     _ = SAX * liftA OA * (SXB * (1 - P) * SAX) * liftB OB * SXB := by
       calc
         (SAX * SXB) * liftA OA * (1 - P) * liftB OB * (SAX * SXB) =
@@ -729,17 +885,24 @@ theorem IsDecorrelated.hasCommutingParentHamiltonian
     (hPherm : P.IsHermitian) (hPidem : P * P = P) (hdec : IsDecorrelated P) :
     HasCommutingParentHamiltonian P := by
   have hproducts := supportProducts_eq hPherm hPidem hdec
+  have hAXherm := (Matrix.partialTraceRight_isHermitian
+    (groupAX_isHermitian hPherm)).supportProj_isHermitian
+  have hAXidem := (Matrix.partialTraceRight_isHermitian
+    (groupAX_isHermitian hPherm)).supportProj_idem
+  have hXBherm := (Matrix.partialTraceLeft_isHermitian hPherm).supportProj_isHermitian
+  have hXBidem := (Matrix.partialTraceLeft_isHermitian hPherm).supportProj_idem
   exact ⟨
     { PAX := supportAX hPherm
       PXB := supportXB hPherm
-      hAXherm := (Matrix.partialTraceRight_isHermitian
-        (groupAX_isHermitian hPherm)).supportProj_isHermitian
-      hAXidem := (Matrix.partialTraceRight_isHermitian
-        (groupAX_isHermitian hPherm)).supportProj_idem
-      hXBherm := (Matrix.partialTraceLeft_isHermitian hPherm).supportProj_isHermitian
-      hXBidem := (Matrix.partialTraceLeft_isHermitian hPherm).supportProj_idem
+      hAXherm := hAXherm
+      hAXidem := hAXidem
+      hXBherm := hXBherm
+      hXBidem := hXBidem
       hcomm := hproducts.2.trans hproducts.1.symm
-      hproduct := hproducts.2 }⟩
+      hintersection :=
+        (hasGroundSpaceIntersection_iff_product_eq hPherm hPidem
+          hAXherm hAXidem hXBherm hXBidem
+          (hproducts.2.trans hproducts.1.symm)).mpr hproducts.2 }⟩
 
 /-- **Parent commuting Hamiltonian--decorrelation equivalence.**
 
@@ -751,7 +914,7 @@ theorem parentHamiltonian_iff_decorrelated
     {P : Matrix (A × (X × B)) (A × (X × B)) ℂ}
     (hPherm : P.IsHermitian) (hPidem : P * P = P) :
     HasCommutingParentHamiltonian P ↔ IsDecorrelated P :=
-  ⟨fun hparent => hparent.elim fun parent => parent.isDecorrelated hPidem,
+  ⟨fun hparent => hparent.elim fun parent => parent.isDecorrelated hPherm hPidem,
     fun hdec => hdec.hasCommutingParentHamiltonian hPherm hPidem⟩
 
 /-- **Source-facing parent commuting Hamiltonian--decorrelation equivalence.**

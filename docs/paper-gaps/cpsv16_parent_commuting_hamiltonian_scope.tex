@@ -43,6 +43,20 @@ This is the identity obtained from commuting orthogonal projectors onto the two
 local kernels \(K_{AX}\) and \(K_{XB}\).\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}:2259--2289, in particular labels
 \path{PAXQAX}, \path{PXBQXB}, and \path{arrggg}.}
+The explicit tripartite declaration
+\leanid{TripartiteDecorrelation.CommutingParentHamiltonian} now records the
+range-intersection equality itself.  The equivalence
+\[
+  \operatorname{ran}P_{AXB}
+    =\operatorname{ran}P_{AX}\cap\operatorname{ran}P_{XB}
+  \quad\Longleftrightarrow\quad
+  P_{AX}P_{XB}=P_{AXB}
+\]
+for commuting orthogonal projectors is proved by
+\leanid{TripartiteDecorrelation.}
+\hspace{0pt}\leanid{hasGroundSpaceIntersection_iff_product_eq}; the forward
+implication is exposed as
+\leanid{TripartiteDecorrelation.CommutingParentHamiltonian.hproduct}.
 
 \section{Current boundary}
 
@@ -187,11 +201,14 @@ it is not an additional assumption.
 The general finite-dimensional tripartite equivalence is now recorded by
 \leanid{TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}.  Its
 parent condition uses orthogonal projectors on the explicit factors
-\(AX\) and \(XB\); their lifted product is \(P_{AXB}\), equivalently their
-lifted ranges have the source intersection.  The forward direction constructs
-these projectors as the supports of the two marginals, and the reverse
-direction uses their locality and product identity.  The local correction to
-the marginal-support expansion at source lines 2236--2252 is documented in
+\(AX\) and \(XB\), and records literally that their lifted ranges have the
+source intersection.  The theorem
+\leanid{TripartiteDecorrelation.}
+\hspace{0pt}\leanid{hasGroundSpaceIntersection_iff_product_eq} proves that this
+is equivalent to their lifted product being \(P_{AXB}\).  The forward direction
+constructs these projectors as the supports of the two marginals, and the
+reverse direction derives and uses the product identity.  The local correction
+to the marginal-support expansion at source lines 2236--2252 is documented in
 \path{docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex}.
 
 The coefficient-space analogue of the algebraic and kernel-intersection clauses
