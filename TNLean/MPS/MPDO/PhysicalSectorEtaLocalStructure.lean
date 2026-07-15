@@ -46,8 +46,8 @@ noncomputable def etaLocalStructureData
   bondData := F.translationInvariantBondData hη
   realizes_mpo := by
     intro N hN
-    refine ⟨1, zero_lt_one, ?_⟩
-    rw [one_smul]
+    refine ⟨1, by norm_num, ?_⟩
+    norm_num
     change mpo K N =
       (List.ofFn fun i : Fin N ↦
         embedLocalOperator (d := d) 2 N hN i F.physicalBond).prod

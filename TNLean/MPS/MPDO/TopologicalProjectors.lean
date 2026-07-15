@@ -42,7 +42,8 @@ variable {g p : ℕ}
 variable (Fam : BNTFusionIsometryFamily (Fin g) p)
 
 private theorem isStarProjection_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
-    {m n : ℕ} (U : Matrix (Fin m) (Fin n) ℂ) (Q : Matrix (Fin m) (Fin m) ℂ)
+    {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n]
+    (U : Matrix m n ℂ) (Q : Matrix m m ℂ)
     (hQ : IsStarProjection Q) (hU : U * Uᴴ = 1) :
     IsStarProjection (Uᴴ * Q * U) := by
   rw [isStarProjection_iff']
