@@ -143,7 +143,7 @@ physical indices, as in
     \lean{MPOTensor.IsMPDO.blockTensor}
     \leanok
     \uses{def:mpdo_positive_physical_blocking, def:mpo_family, def:mpdo}
-    Let $L>0$, and let
+    Let $L\in\N$, and let
     \[
         \Phi_{N,L}:
         \{0,\ldots,d^L-1\}^N
@@ -155,19 +155,36 @@ physical indices, as in
         \rho^{(N)}\bigl(M^{[L]}\bigr)_{\sigma,\tau}
         =\rho^{(NL)}(M)_{\Phi_{N,L}(\sigma),\Phi_{N,L}(\tau)}.
     \]
-    Consequently, if $M$ generates an MPDO, then $M^{[L]}$ generates an
-    MPDO.  This is the closed-chain identification implicit when the one-site
-    tensor and its two-site blocking are placed in vertical canonical form in
+    This algebraic identity and the preservation of positive semidefiniteness
+    hold for every $L\in\N$.  For $L>0$, they state that blocking $L$
+    adjacent physical sites of an MPDO again gives an MPDO.  The value $L=0$
+    is only the base value of the algebraic definitions and is not a physical
+    blocking operation.  This is the closed-chain identification implicit
+    when the one-site tensor and its two-site blocking are placed in vertical
+    canonical form in
     \cite[Appendix~C.4, lines~1952--2017]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:mpo_eval_word_append}
-    Concatenating the $N$ pairs of length-$L$ words turns the product of the
-    blocked matrices into the product of the original $NL$ matrices.  Taking
-    the virtual trace gives the displayed equality.  The map $\Phi_{N,L}$ is
-    a bijection, and conjugating a positive semidefinite matrix by its
-    permutation matrix preserves positive semidefiniteness.
+    Write
+    $\sigma_k=(\sigma_{k,0},\ldots,\sigma_{k,L-1})$ and
+    $\tau_k=(\tau_{k,0},\ldots,\tau_{k,L-1})$.  For each $k$,
+    \[
+        \bigl(M^{[L]}\bigr)^{\sigma_k,\tau_k}
+        =\prod_{j=0}^{L-1}M^{\sigma_{k,j},\tau_{k,j}}.
+    \]
+    Taking both products in increasing index order gives
+    \[
+        \prod_{k=0}^{N-1}\bigl(M^{[L]}\bigr)^{\sigma_k,\tau_k}
+        =\prod_{k=0}^{N-1}\prod_{j=0}^{L-1}
+            M^{\sigma_{k,j},\tau_{k,j}}
+        =\prod_{r=0}^{NL-1}
+            M^{(\Phi_{N,L}(\sigma))_r,(\Phi_{N,L}(\tau))_r}.
+    \]
+    Taking the virtual trace gives the equality in the theorem.  The map
+    $\Phi_{N,L}$ is a bijection, and simultaneous reindexing of the rows and
+    columns preserves positive semidefiniteness.
 \end{proof}
 
 \begin{definition}[Two-site blocking of an MPO tensor]
