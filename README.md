@@ -227,7 +227,7 @@ leanblueprint checkdecls
 leanblueprint web   # or: leanblueprint pdf / leanblueprint all
 ```
 
-The chapters 1-12 release volume is built by
+The FT-MPS release volume is built by
 `scripts/build_blueprint_ch01_12.sh` and published automatically with the
 rest of the site.
 
