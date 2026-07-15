@@ -41,7 +41,7 @@ variable {L R : Type*} [Fintype L] [DecidableEq L] [Fintype R] [DecidableEq R]
 adjoint for the trace pairing:
 \(\operatorname{tr}((M\otimes\mathbf 1)\rho)
 =\operatorname{tr}(M\operatorname{tr}_R\rho)\). -/
-theorem trace_leftKroneckerEmbed_mul (M : Matrix L L ℂ)
+lemma trace_leftKroneckerEmbed_mul (M : Matrix L L ℂ)
     (ρ : Matrix (L × R) (L × R) ℂ) :
     (leftKroneckerEmbed (n := R) M * ρ).trace = (M * partialTraceRight ρ).trace := by
   simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type,
