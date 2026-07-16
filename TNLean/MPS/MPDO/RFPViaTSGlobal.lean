@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Channel.LocalizedKrausCPTP
+import TNLean.MPS.MPDO.RetainedClass
 import TNLean.MPS.MPDO.RFPViaTS
+import TNLean.MPS.MPDO.SectorTrace
 
 /-!
 # Global action of the MPDO renormalization maps
@@ -38,6 +40,9 @@ source argument are recorded in
   the localized maps respectively insert and remove one tensor in every periodic MPO.
 * `MPOTensor.exists_global_renormalization_maps`: a renormalization fixed point
   supplies localized channels with the global physical-closure identities.
+* `MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS`: a
+  horizontally canonical MPDO satisfying Definition 4.1 has nonzero trace at
+  every positive chain length.
 
 ## References
 
@@ -238,5 +243,42 @@ theorem exists_global_renormalization_maps (M : MPOTensor d D)
   obtain ⟨S, T, hS, hT, hSclose, hTclose⟩ := h
   exact ⟨S, T, hS, hT, coarsenFirstTwoSites_physCloseN M S hSclose,
     refineFirstSite_physCloseN M T hTclose⟩
+
+/-- A horizontally canonical MPDO satisfying Definition 4.1 has nonzero trace
+at every positive chain length.
+
+The BNT representation supplies one sufficiently long nonzero density
+operator. Positivity makes its trace nonzero. Definition 4.1 makes the
+physical-trace transfer idempotent, so the trace is the same at every positive
+length.
+
+Source: arXiv:1606.00608, canonical-form standing assumptions at lines
+623--628 and 849--850, Definition 4.1 at lines 657--660, and Proposition
+`propsimple` at lines 1333--1340. -/
+theorem trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hMPDO : IsMPDO M)
+    (hRFP : IsRFPViaTS M) :
+    ∀ N, 0 < N → Matrix.trace (mpo M N) ≠ 0 := by
+  have hCorner : ∃ v, (1 : Matrix (Fin d) (Fin d) ℂ) * verticalTensor M v * 1 ≠ 0 := by
+    by_contra h
+    push Not at h
+    apply hHorizontal.verticalTensor_ne_zero M
+    funext v
+    simpa using h v
+  obtain ⟨L, hCompression⟩ :=
+    hHorizontal.exists_sectorCompression_ne_zero_of_corner M 1 hCorner
+  have hMpo : mpo M (L + 1) ≠ 0 := by
+    simpa [sectorCompression_def] using hCompression
+  have hSeedTrace : Matrix.trace (mpo M (L + 1)) ≠ 0 := by
+    intro hTrace
+    exact hMpo ((Matrix.PosSemidef.trace_eq_zero_iff (hMPDO (L + 1))).mp hTrace)
+  have hLoopIdempotent : IsIdempotentElem (verticalLoop M) := by
+    rw [isIdempotentElem_iff, verticalLoop_eq_physTraceTransfer]
+    exact physTraceTransfer_sq_of_isRFPViaTS M hRFP
+  intro N hN
+  rw [trace_mpo_eq_trace_verticalLoop_pow, hLoopIdempotent.pow_eq hN.ne']
+  rw [trace_mpo_eq_trace_verticalLoop_pow,
+    hLoopIdempotent.pow_eq (Nat.succ_ne_zero L)] at hSeedTrace
+  exact hSeedTrace
 
 end MPOTensor

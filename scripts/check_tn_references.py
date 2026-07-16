@@ -26,6 +26,7 @@ REFERENCE_CALLS = {
         r"\TNOpenPhysicalNorth{pKet}\TNOpenPhysicalSouth{pBra}"
         r"\end{TNDiagram}"
     ),
+    "horizontal_periodic_mpo_word": r"\TNMPOChain{A}{i_1}{j_1}{i_N}{j_N}{N}",
     "stacked_mpo_zipper": r"\TNMPDOUnweightedZipperReconstruction",
     "compact_trace_cell": (
         r"\begin{TNDiagram}[compact]"
@@ -45,6 +46,15 @@ REFERENCE_CALLS = {
         r"\end{TNDiagram}"
     ),
     "peps_three_site": r"\TNPEPSEdgeBlockingReduction",
+}
+
+EXPECTED_CONNECTIONS = {
+    "straight_purification": {
+        ("physical", "straight", "pKetAncilla", "pBraAncilla"),
+    },
+    "horizontal_periodic_mpo_word": {
+        ("virtual", "trace-below", "tnLW", "tnRE"),
+    },
 }
 
 
@@ -89,6 +99,34 @@ def assert_margin(image: Image.Image, name: str) -> None:
         raise RuntimeError(
             f"{name}: clear raster margin is {clear_margin}px, below 3pt"
         )
+
+
+def connection_events(event_log: Path) -> set[tuple[str, str, str, str]]:
+    """Read typed connection events emitted by the tensor-network calculus."""
+
+    events = set()
+    for line in event_log.read_text(encoding="utf-8").splitlines():
+        parts = line.split("|")
+        if not parts or parts[0] != "connection":
+            continue
+        fields = dict(part.split("=", 1) for part in parts[1:] if "=" in part)
+        events.add(
+            (fields["type"], fields["route"], fields["from"], fields["to"])
+        )
+    return events
+
+
+def assert_connections(renderer, stem: str, name: str) -> None:
+    """Require the approved reference to retain its canonical typed connection."""
+
+    expected = EXPECTED_CONNECTIONS.get(name)
+    if expected is None:
+        return
+    event_log = renderer._CACHE_DIR / f"{stem}.tnlog"
+    actual = connection_events(event_log)
+    missing = expected - actual
+    if missing:
+        raise RuntimeError(f"{name}: missing canonical connections {sorted(missing)}")
 
 
 def difference_score(actual: Image.Image, expected: Image.Image) -> float:
@@ -155,8 +193,10 @@ def main() -> int:
         temporary = Path(directory)
         for name, call in REFERENCE_CALLS.items():
             svg = temporary / f"{name}.svg"
-            if renderer._compile_svg(call, f"tn-reference-{name}", svg) is None:
+            stem = f"tn-reference-{name}"
+            if renderer._compile_svg(call, stem, svg) is None:
                 raise RuntimeError("LaTeX and dvisvgm are required")
+            assert_connections(renderer, stem, name)
             actual_path = temporary / f"{name}.png"
             rasterize(svg, actual_path)
             actual = Image.open(actual_path)

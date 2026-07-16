@@ -1334,6 +1334,45 @@ def _tex_macro_definitions(source: str) -> list[tuple[str, str, int]]:
     return definitions
 
 
+def _assert_canonical_connection_constructors() -> None:
+    """Freeze the semantic constructors for the canonical PBC and purification lines."""
+
+    definitions = {
+        name: body
+        for name, body, _ in _tex_macro_definitions(
+            _read_required_text(_TN_LIBRARY_FILE)
+        )
+    }
+    expected_calls = {
+        "TN@closedMPOword": (
+            "TN@vtraceportsbelow",
+            ("#1LW", "#1RE", "\\TN@traceclearance", "\\TN@periodictraceheight"),
+        ),
+        "TNPurificationSite": (
+            "TNConnectPhysical",
+            ("#1KetAncilla", "#1BraAncilla"),
+        ),
+    }
+    failures = []
+    for macro_name, (connection_name, expected_arguments) in expected_calls.items():
+        body = definitions.get(macro_name)
+        if body is None:
+            failures.append(f"missing \\{macro_name}")
+            continue
+        calls = _tex_command_calls(body, frozenset({connection_name}))
+        arguments = [tuple(argument.strip() for argument in call[1]) for call in calls]
+        if arguments != [expected_arguments]:
+            failures.append(
+                f"\\{macro_name} must call \\{connection_name}"
+                f"{expected_arguments}, found {arguments}"
+            )
+    if failures:
+        raise RuntimeError(
+            "Canonical tensor-network connection constructors changed: "
+            + "; ".join(failures)
+        )
+
+
 def _semantic_node_names(body: str) -> set[str]:
     names = set()
     for _, arguments, _, _ in _tex_command_calls(body, _SEMANTIC_GLYPH_COMMANDS):
@@ -1616,6 +1655,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
     _assert_typed_port_syntax()
     _assert_no_raw_glyph_nodes()
     _assert_documented_public_vocabulary()
+    _assert_canonical_connection_constructors()
 
     counts = _semantic_audit_counts()
     raw_glyph_counts = counts["raw_glyph_counts"]
@@ -2178,6 +2218,7 @@ def _main(argv: list[str] | None = None) -> int:
         _assert_diagram_arguments_used()
         _assert_audit_commands_defined()
         _assert_no_unused_private_commands()
+        _assert_canonical_connection_constructors()
         print(
             f"checked {len(diagram_declarations())} tensor-network diagram "
             "declarations"

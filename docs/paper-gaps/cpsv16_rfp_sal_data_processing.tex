@@ -7,8 +7,8 @@
 
 \input{command}
 
-\title{The remaining steps in deriving saturation of the area law from MPDO
-renormalization fixed points}
+\title{Deriving saturation of the area law from MPDO renormalization fixed
+points}
 \author{}
 \date{2026-07-15}
 
@@ -52,6 +52,19 @@ The source theorem therefore uses, as standing data,
 that the tensor generates nonzero density operators at the lengths under
 consideration; it does not add an independent nonvanishing hypothesis to the
 Appendix~C proposition.
+
+The formal predicate \leanid{MPOTensor.IsHorizontalCF} used below is the
+representative-grouped BNT decomposition: gauge-equivalent copies are grouped
+over one minimal normal representative and retain their nonzero weights.  It
+formalizes the source assumption that $K$ is in biCF at lines 849--850.  It is
+not the restricted per-copy predicate
+\leanid{MPOTensor.HorizontalCFData}, which demands
+separation of every copy individually and is strictly stronger than the
+source's grouped canonical form.
+
+Definition~4.6 concerns positive-length spin chains.  The formal predicate now
+asks for nonzero trace only when $N\geq1$.  The bipartition argument below never
+invokes an empty-chain operator, since its interval lengths force $N\geq3$.
 
 \section{The established global identities}
 
@@ -101,49 +114,54 @@ entropy under that isometry, and then invokes monotonicity under discarding
 the environment.  Exchanging the two tensor factors and applying the
 one-sided inequality twice gives the two-channel form used by the source.
 
-\section{Exact remaining steps}
+The two local maps have now also been assembled on a consecutive bipartition.
+After flattening each interval to a finite matrix index, applying the localized
+one-to-two map on the first interval and the localized two-to-one map on the
+second gives exactly the normalized state with one site transferred across the
+cut.  Applying the reverse pair recovers the original split state.  Data
+processing in the two directions therefore proves equality of the two
+bipartite mutual informations, conditional only on positivity and the
+nonzero trace needed for normalization.\footnote{Formal declarations:
+\leanid{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO},
+\leanid{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO_reverse}, and
+\leanid{MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS} in
+\doclink{TNLean/MPS/MPDO/RFPViaTSSAL}.}
 
-Two source-faithful steps remain before the implication to saturation of the
-area law is established.
+\section{Completion of the implication}
 
-\begin{enumerate}
-  \item \textbf{The source standing nonvanishing condition.}
-  The present formal condition for a matrix product density operator asserts
-  positivity at every length but permits the zero operator.\footnote{Formal
-  declaration: \leanid{MPOTensor.IsMPDO}.}
-  The available per-copy horizontal canonical form is stronger than the
-  source's grouped biCF and still admits degenerate empty data.  It therefore
-  does not yet imply, from the source condition ``simple in biCF generating
-  density operators'', that
-  $\tr(\operatorname{mpo}(\mathcal K,N))\ne0$ for every relevant
-  $N$.  This must be repaired by formalizing the source simple-biCF standing
-  data, including generation of normalized density operators, and deriving the
-  nonvanishing used by the normalization in Definition~4.6.
+The consecutive-cut correspondence is now proved.  The first marginal of the
+flattened bipartite state is the prefix reduced state on $L$ sites.  Translation
+invariance moves the second interval to the beginning of the periodic chain,
+so its marginal has the same entropy as the prefix reduced state on $N-L$
+sites.  Retaining all $N$ sites leaves the normalized state unchanged.  Hence
+the bipartite mutual information is exactly
+$S_L+S_{N-L}-S_N=I_L$.\footnote{Formal declarations:
+\leanid{MPOTensor.bipartitionedNormalizedMPO_traceRight},
+\leanid{MPOTensor.bipartitionedNormalizedMPO_traceLeft}, and
+\leanid{MPOTensor.mutualInfoChain_eq_mutualInformation} in
+\doclink{TNLean/MPS/MPDO/MutualInfoBridge}.}
 
-  \item \textbf{Application to the source bipartition.}
-  The global closure identities and the abstract data-processing inequality
-  have not yet been assembled into the inequality $I_{L+1}\leq I_L$ used in
-  Appendix~C. One must reindex the periodic operator according to the
-  consecutive intervals $A$ and $B$, localize $\mathcal T$ on the first spin
-  of $A$ and $\mathcal S$ on the first two spins of $B$, and identify the two
-  channel outputs with the normalized states defining $I_{L+1}$ and $I_L$.
-  This is the formal counterpart of lines 1333--1341; it is not supplied by
-  the channel theorem alone.
-\end{enumerate}
+Nonvanishing is not an additional source assumption in this implication.
+Horizontal canonical form gives one nonzero positive-length ring, positivity
+makes its trace nonzero, and the renormalization equations make the
+physical-trace transfer idempotent.  The trace is therefore nonzero at every
+positive length.\footnote{Formal declaration:
+\leanid{MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS} in
+\doclink{TNLean/MPS/MPDO/RFPViaTSGlobal}.}
 
-The first point is not resolved by adding
-$\forall N,\tr(\operatorname{mpo}(\mathcal K,N))\ne0$ as a new
-hypothesis to the source-labelled theorem, since that condition is absent from
-the printed statement. Once both remaining steps are established, the source
-proof applies the two localized channels, invokes data processing to obtain
-$I_{L+1}\leq I_L$, and combines this with the already formalized inequality
-$I_L\leq I_{L+1}$.
+Combining the consecutive-cut correspondence, the two exact local-channel
+identities, data processing in both directions, and positive-length
+nonvanishing proves the source implication.\footnote{Formal declaration:
+\leanid{MPOTensor.isSAL_of_isRFPViaTS} in
+\doclink{TNLean/MPS/MPDO/RFPViaTSSAL}.}
 
 \paragraph{Classification.}
-This is an open gap.  The global tensor-ring identities and the required
-mutual-information data-processing theorem are proved. The derivation of
-nonzero normalization from the source's simple-biCF convention and the
-application to the source bipartition remain necessary for a faithful proof
-of saturation of the area law.
+This gap is resolved.  The formal SAL predicate is restricted to positive
+chain lengths, the normalized consecutive-cut state is identified with the
+existing prefix-entropy expression for $I_L$, and the RFP hypotheses imply
+both normalization and the equality $I_L=I_{L+1}$.  No simplicity hypothesis
+is used in this forward implication, in agreement with the source proof.  The
+horizontal hypothesis is the representative-grouped formalization of the
+source biCF assumption, not the stronger per-copy separation predicate.
 
 \end{document}
