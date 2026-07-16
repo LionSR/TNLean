@@ -437,6 +437,27 @@
     the normalization at every positive chain length.
 \end{proof}
 
+\begin{theorem}[Renormalization fixed points have ZCL and SAL]
+    \label{thm:mpdo_rfp_implies_zcl_and_sal}
+    \lean{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS}
+    \leanok
+    \uses{thm:rfp_via_ts_source_zcl,
+      lem:mpdo_rfp_positive_length_trace_nonzero,
+      thm:mpdo_rfp_implies_sal}
+    Let $M$ be a horizontally canonical matrix product density operator which
+    satisfies the local renormalization fixed-point equations of
+    Definition~4.1.  Then $M$ has source zero correlation length and saturates
+    the area law.  This is Proposition~\texttt{propsimple} in Appendix~C of
+    \cite{Cirac2016MPDO_arXiv}, lines~1333--1341.
+\end{theorem}
+
+\begin{proof}\leanok
+    The preceding nonvanishing lemma at length one rules out a zero
+    physical-trace transfer.  Trace preservation of the refinement map then
+    gives source zero correlation length, while
+    Theorem~\ref{thm:mpdo_rfp_implies_sal} gives saturation of the area law.
+\end{proof}
+
 \begin{lemma}[Nonnegativity of block entropies]
     \label{lem:block_entropy_nonneg}
     \lean{blockEntropy_nonneg}
