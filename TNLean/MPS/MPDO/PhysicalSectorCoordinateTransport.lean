@@ -158,13 +158,13 @@ theorem changePhysicalBasis_apply_eq_sum {e : ℕ}
 matrix. -/
 theorem physicalCoordinateMatrixTwo_physClose2
     (F : PhysicalSectorFactorization K) (X : Matrix (Fin D) (Fin D) ℂ) :
-    sandwichMap F.physicalCoordinateMatrixTwo (physClose2 K X) =
+    singleKrausMap F.physicalCoordinateMatrixTwo (physClose2 K X) =
       physClose2 F.sectorCoordinateTensor X := by
   rw [F.sectorCoordinateTensor_eq_changePhysicalBasis]
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   simp only [physClose2_apply]
   simp_rw [changePhysicalBasis_apply_eq_sum]
-  simp only [sandwichMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+  simp only [singleKrausMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
     physicalCoordinateMatrixTwo, Matrix.kroneckerMap_apply, physClose2_apply,
     Matrix.sum_mul, Matrix.mul_sum, Matrix.smul_mul, Matrix.mul_smul,
     Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul, star_mul']
@@ -201,13 +201,13 @@ theorem physicalCoordinateMatrixTwo_physClose2
 matrix. -/
 theorem physicalCoordinateMatrixFour_physClose4
     (F : PhysicalSectorFactorization K) (X : Matrix (Fin D) (Fin D) ℂ) :
-    sandwichMap F.physicalCoordinateMatrixFour (physClose4 K X) =
+    singleKrausMap F.physicalCoordinateMatrixFour (physClose4 K X) =
       physClose4 F.sectorCoordinateTensor X := by
   rw [F.sectorCoordinateTensor_eq_changePhysicalBasis]
   ext ⟨i₁, i₂, i₃, i₄⟩ ⟨j₁, j₂, j₃, j₄⟩
   simp only [physClose4_apply]
   simp_rw [changePhysicalBasis_apply_eq_sum]
-  simp only [sandwichMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+  simp only [singleKrausMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
     physicalCoordinateMatrixFour, Matrix.kroneckerMap_apply, physClose4_apply,
     Matrix.sum_mul, Matrix.mul_sum, Matrix.smul_mul, Matrix.mul_smul,
     Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul, star_mul']
@@ -261,22 +261,22 @@ theorem physicalCoordinateMatrixFour_physClose4
 
 theorem physicalCoordinateMatrixTwo_conjTranspose_physClose2
     (F : PhysicalSectorFactorization K) (X : Matrix (Fin D) (Fin D) ℂ) :
-    sandwichMap F.physicalCoordinateMatrixTwoᴴ
+    singleKrausMap F.physicalCoordinateMatrixTwoᴴ
         (physClose2 F.sectorCoordinateTensor X) =
       physClose2 K X := by
   rw [← F.physicalCoordinateMatrixTwo_physClose2]
-  simp only [sandwichMap_apply, Matrix.conjTranspose_conjTranspose]
+  simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
   simp only [← Matrix.mul_assoc, F.physicalCoordinateMatrixTwo_isometry,
     Matrix.one_mul]
   rw [Matrix.mul_assoc, F.physicalCoordinateMatrixTwo_isometry, Matrix.mul_one]
 
 theorem physicalCoordinateMatrixFour_conjTranspose_physClose4
     (F : PhysicalSectorFactorization K) (X : Matrix (Fin D) (Fin D) ℂ) :
-    sandwichMap F.physicalCoordinateMatrixFourᴴ
+    singleKrausMap F.physicalCoordinateMatrixFourᴴ
         (physClose4 F.sectorCoordinateTensor X) =
       physClose4 K X := by
   rw [← F.physicalCoordinateMatrixFour_physClose4]
-  simp only [sandwichMap_apply, Matrix.conjTranspose_conjTranspose]
+  simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
   simp only [← Matrix.mul_assoc, F.physicalCoordinateMatrixFour_isometry,
     Matrix.one_mul]
   rw [Matrix.mul_assoc, F.physicalCoordinateMatrixFour_isometry, Matrix.mul_one]

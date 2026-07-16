@@ -151,11 +151,11 @@ matrix.
 Source: arXiv:1606.00608, Appendix C.2, lines 1581--1583. -/
 private theorem physicalCoordinateMatrixN_mpo
     (F : PhysicalSectorFactorization K) (N : ℕ) :
-    sandwichMap (F.physicalCoordinateMatrixN N) (mpo K N) =
+    singleKrausMap (F.physicalCoordinateMatrixN N) (mpo K N) =
       mpo F.sectorCoordinateTensor N := by
   rw [F.sectorCoordinateTensor_eq_changePhysicalBasis]
   ext s t
-  simp only [sandwichMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+  simp only [singleKrausMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
     physicalCoordinateMatrixN, mpo_apply, mpoMatrixEntry,
     evalWord_changePhysicalBasis_ofFn, Matrix.trace_sum, Matrix.trace_smul,
     smul_eq_mul, star_prod]
@@ -317,14 +317,14 @@ private theorem physicalCoordinateMatrixN_two
   simp [physicalCoordinateMatrixN, physicalCoordinateMatrixTwo,
     Matrix.reindex_apply, Matrix.kroneckerMap_apply, finTwoArrowEquiv]
 
-private theorem sandwichMap_physicalCoordinateMatrixN_two_physicalBond
+private theorem singleKrausMap_physicalCoordinateMatrixN_two_physicalBond
     (F : PhysicalSectorFactorization K) :
-    sandwichMap (F.physicalCoordinateMatrixN 2) F.physicalBond =
+    singleKrausMap (F.physicalCoordinateMatrixN 2) F.physicalBond =
       F.sectorBond := by
   apply (Matrix.reindex
     (finTwoArrowEquiv (Fin (Fintype.card (SectorSiteIndex F))))
     (finTwoArrowEquiv (Fin (Fintype.card (SectorSiteIndex F))))).injective
-  simp only [sandwichMap_apply]
+  simp only [singleKrausMap_apply]
   change Matrix.reindexLinearEquiv ℂ ℂ
       (finTwoArrowEquiv (Fin (Fintype.card (SectorSiteIndex F))))
       (finTwoArrowEquiv (Fin (Fintype.card (SectorSiteIndex F))))
@@ -361,7 +361,7 @@ private theorem sandwichMap_physicalCoordinateMatrixN_two_physicalBond
     ext x y
     simp [sectorBond, Matrix.reindex_apply]
   rw [hV, hB, hVH, hSector]
-  simp only [physicalPairBond, sandwichMap_apply,
+  simp only [physicalPairBond, singleKrausMap_apply,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc F.physicalCoordinateMatrixTwo
     F.physicalCoordinateMatrixTwoᴴ,
@@ -375,7 +375,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 1581--1593. -/
 private theorem physicalCoordinateMatrixN_embedLocalOperator_physicalBond
     (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
-    sandwichMap (F.physicalCoordinateMatrixN N)
+    singleKrausMap (F.physicalCoordinateMatrixN N)
         (embedLocalOperator (d := d) 2 N hN i F.physicalBond) =
       embedLocalOperator
         (d := Fintype.card (SectorSiteIndex F)) 2 N hN i F.sectorBond := by
@@ -383,7 +383,7 @@ private theorem physicalCoordinateMatrixN_embedLocalOperator_physicalBond
     (d := Fintype.card (SectorSiteIndex F)) 2 N hN i
   let ep := windowComplementEquiv (d := d) 2 N hN i
   apply (Matrix.reindex es es).injective
-  simp only [sandwichMap_apply]
+  simp only [singleKrausMap_apply]
   change Matrix.reindexLinearEquiv ℂ ℂ es es
       (F.physicalCoordinateMatrixN N *
         embedLocalOperator (d := d) 2 N hN i F.physicalBond *
@@ -402,35 +402,35 @@ private theorem physicalCoordinateMatrixN_embedLocalOperator_physicalBond
   rw [hVH, reindex_embedLocalOperator_windowComplement]
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
   simp only [Matrix.mul_one]
-  rw [← sandwichMap_apply,
-    F.sandwichMap_physicalCoordinateMatrixN_two_physicalBond,
+  rw [← singleKrausMap_apply,
+    F.singleKrausMap_physicalCoordinateMatrixN_two_physicalBond,
     F.physicalCoordinateMatrixN_coisometry]
 
-private theorem sandwichMap_list_prod
+private theorem singleKrausMap_list_prod
     {a b : Type*} [Fintype a] [DecidableEq a]
     [Fintype b] [DecidableEq b] (V : Matrix a b ℂ)
     (hiso : Vᴴ * V = 1) (hcoiso : V * Vᴴ = 1)
     (l : List (Matrix b b ℂ)) :
-    sandwichMap V l.prod = (l.map (sandwichMap V)).prod := by
+    singleKrausMap V l.prod = (l.map (singleKrausMap V)).prod := by
   induction l with
   | nil =>
-      simp only [List.prod_nil, List.map_nil, sandwichMap_apply]
+      simp only [List.prod_nil, List.map_nil, singleKrausMap_apply]
       simpa only [Matrix.mul_one] using hcoiso
   | cons A l ih =>
-      simp only [List.prod_cons, List.map_cons, sandwichMap_apply]
+      simp only [List.prod_cons, List.map_cons, singleKrausMap_apply]
       rw [← ih]
-      simp only [sandwichMap_apply, Matrix.mul_assoc]
+      simp only [singleKrausMap_apply, Matrix.mul_assoc]
       rw [← Matrix.mul_assoc Vᴴ V, hiso, Matrix.one_mul]
 
 private theorem physicalCoordinateMatrixN_product_physicalBond
     (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) :
-    sandwichMap (F.physicalCoordinateMatrixN N)
+    singleKrausMap (F.physicalCoordinateMatrixN N)
         (List.ofFn fun i : Fin N ↦
           embedLocalOperator (d := d) 2 N hN i F.physicalBond).prod =
       (List.ofFn fun i : Fin N ↦
         embedLocalOperator
           (d := Fintype.card (SectorSiteIndex F)) 2 N hN i F.sectorBond).prod := by
-  rw [sandwichMap_list_prod _ (F.physicalCoordinateMatrixN_isometry N)
+  rw [singleKrausMap_list_prod _ (F.physicalCoordinateMatrixN_isometry N)
     (F.physicalCoordinateMatrixN_coisometry N)]
   congr 1
   rw [List.map_ofFn]
@@ -455,8 +455,8 @@ private theorem mpo_eq_product_physicalBond_of_three_le
       (List.ofFn fun i : Fin N ↦
         embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond).prod := by
   let V := F.physicalCoordinateMatrixN N
-  have htransport : sandwichMap V (mpo K N) =
-      sandwichMap V
+  have htransport : singleKrausMap V (mpo K N) =
+      singleKrausMap V
         (List.ofFn fun i : Fin N ↦
           embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond).prod := by
     rw [F.physicalCoordinateMatrixN_mpo,
@@ -464,17 +464,17 @@ private theorem mpo_eq_product_physicalBond_of_three_le
       F.physicalCoordinateMatrixN_product_physicalBond (by omega)]
   have hiso : Vᴴ * V = 1 := F.physicalCoordinateMatrixN_isometry N
   calc
-    mpo K N = sandwichMap Vᴴ (sandwichMap V (mpo K N)) := by
-      simp only [sandwichMap_apply, Matrix.conjTranspose_conjTranspose,
+    mpo K N = singleKrausMap Vᴴ (singleKrausMap V (mpo K N)) := by
+      simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose,
         Matrix.mul_assoc]
       rw [hiso, Matrix.mul_one, ← Matrix.mul_assoc, hiso, Matrix.one_mul]
-    _ = sandwichMap Vᴴ (sandwichMap V
+    _ = singleKrausMap Vᴴ (singleKrausMap V
         (List.ofFn fun i : Fin N ↦
           embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond).prod) := by
       rw [htransport]
     _ = (List.ofFn fun i : Fin N ↦
         embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond).prod := by
-      simp only [sandwichMap_apply, Matrix.conjTranspose_conjTranspose,
+      simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose,
         Matrix.mul_assoc]
       rw [hiso, Matrix.mul_one, ← Matrix.mul_assoc, hiso, Matrix.one_mul]
 
@@ -544,13 +544,13 @@ private theorem physClose2_one_eq_physicalPairBond_mul_crossed
   rw [← F.physicalCoordinateMatrixTwo_conjTranspose_physClose2 1]
   rw [F.physClose2_sectorCoordinateTensor_one_eq_bond_mul_crossed]
   have hswap : swapPairMatrix F.physicalPairBond =
-      sandwichMap F.physicalCoordinateMatrixTwoᴴ
+      singleKrausMap F.physicalCoordinateMatrixTwoᴴ
         (swapPairMatrix F.sectorCoordinateBond) := by
     simpa only [physicalPairBond, physicalCoordinateMatrixTwo] using
-      swapPairMatrix_sandwich_kronecker_self
+      swapPairMatrix_singleKraus_kronecker_self
         F.physicalCoordinateMatrix F.sectorCoordinateBond
   rw [hswap]
-  simp only [physicalPairBond, sandwichMap_apply,
+  simp only [physicalPairBond, singleKrausMap_apply,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc F.physicalCoordinateMatrixTwo
     F.physicalCoordinateMatrixTwoᴴ]
