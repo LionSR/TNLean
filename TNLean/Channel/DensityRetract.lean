@@ -66,24 +66,25 @@ theorem trace_hermitianPart_eq_re (A : Matrix (Fin D) (Fin D) ℂ) :
 
 theorem matrixAbs_add_self_posSemidef_of_isHermitian
     {B : Matrix (Fin D) (Fin D) ℂ} (hB : B.IsHermitian) :
-    (matrixAbs B + B).PosSemidef := by
+    (CFC.abs B + B).PosSemidef := by
   apply Matrix.nonneg_iff_posSemidef.mp
-  rw [matrixAbs, CFC.abs_add_self (a := B) (isSelfAdjoint_iff.mpr hB)]
+  rw [CFC.abs_add_self (a := B) (isSelfAdjoint_iff.mpr hB)]
   exact smul_nonneg (by positivity) (CFC.posPart_nonneg _)
 
 theorem trace_matrixAbs_add_self_ne_zero_of_trace_one
     {B : Matrix (Fin D) (Fin D) ℂ} (htr : Matrix.trace B = 1) :
-    Matrix.trace (matrixAbs B + B) ≠ 0 := by
-  have habs_psd : (matrixAbs B).PosSemidef := matrixAbs_posSemidef B
+    Matrix.trace (CFC.abs B + B) ≠ 0 := by
+  have habs_psd : (CFC.abs B).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp (CFC.abs_nonneg B)
   intro h0
-  have habs_nonneg : 0 ≤ Matrix.trace (matrixAbs B) := habs_psd.trace_nonneg
-  have hre : (Matrix.trace (matrixAbs B)).re + 1 = 0 := by
-    have hsum : Matrix.trace (matrixAbs B) + 1 = 0 := by
+  have habs_nonneg : 0 ≤ Matrix.trace (CFC.abs B) := habs_psd.trace_nonneg
+  have hre : (Matrix.trace (CFC.abs B)).re + 1 = 0 := by
+    have hsum : Matrix.trace (CFC.abs B) + 1 = 0 := by
       simpa [Matrix.trace_add, htr] using h0
     have := congrArg Complex.re hsum
     simpa [Complex.add_re] using this
-  have : ¬ ((Matrix.trace (matrixAbs B)).re + 1 = 0) := by
-    have hre_nonneg : 0 ≤ (Matrix.trace (matrixAbs B)).re :=
+  have : ¬ ((Matrix.trace (CFC.abs B)).re + 1 = 0) := by
+    have hre_nonneg : 0 ≤ (Matrix.trace (CFC.abs B)).re :=
       (RCLike.nonneg_iff.mp habs_nonneg).1
     linarith
   exact this hre
@@ -117,7 +118,7 @@ then normalized positive part. -/
 noncomputable def densityRetract [NeZero D]
     (A : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   let B := hermitianTraceOnePart A
-  let P := matrixAbs B + B
+  let P := CFC.abs B + B
   (Matrix.trace P)⁻¹ • P
 
 @[simp]
@@ -150,7 +151,7 @@ theorem hermitianTraceOnePart_eq_self_of_mem_densityMatrices [NeZero D]
 
 theorem densityRetract_den_ne_zero [NeZero D]
     (A : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.trace (matrixAbs (hermitianTraceOnePart A) + hermitianTraceOnePart A) ≠ 0 := by
+    Matrix.trace (CFC.abs (hermitianTraceOnePart A) + hermitianTraceOnePart A) ≠ 0 := by
   exact trace_matrixAbs_add_self_ne_zero_of_trace_one
     (trace_hermitianTraceOnePart (D := D) A)
 
@@ -180,10 +181,10 @@ theorem continuous_hermitianTraceOnePart [NeZero D] :
 theorem continuous_densityRetract [NeZero D] :
     Continuous (densityRetract (D := D)) := by
   let P : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ :=
-    fun A => matrixAbs (hermitianTraceOnePart A) + hermitianTraceOnePart A
+    fun A => CFC.abs (hermitianTraceOnePart A) + hermitianTraceOnePart A
   have hP : Continuous P := by
     unfold P
-    exact (continuous_matrixAbs.comp (continuous_hermitianTraceOnePart (D := D))).add
+    exact (CFC.continuous_abs.comp (continuous_hermitianTraceOnePart (D := D))).add
       (continuous_hermitianTraceOnePart (D := D))
   have htr_ne : ∀ A, Matrix.trace (P A) ≠ 0 := by
     intro A
@@ -198,7 +199,7 @@ theorem densityRetract_mem_densityMatrices [NeZero D]
     densityRetract A ∈ densityMatrices D := by
   dsimp [densityRetract]
   let B := hermitianTraceOnePart A
-  let P := matrixAbs B + B
+  let P := CFC.abs B + B
   have hB_h : B.IsHermitian := by
     simp [B]
   have hB_tr : Matrix.trace B = 1 := by
@@ -222,8 +223,10 @@ theorem densityRetract_eq_self_of_mem_densityMatrices [NeZero D]
   rcases hρ with ⟨hρ_psd, hρ_tr⟩
   have hρ' : ρ ∈ densityMatrices D := ⟨hρ_psd, hρ_tr⟩
   dsimp [densityRetract]
-  rw [hermitianTraceOnePart_eq_self_of_mem_densityMatrices hρ',
-      matrixAbs_eq_self_of_posSemidef hρ_psd]
+  rw [hermitianTraceOnePart_eq_self_of_mem_densityMatrices hρ']
+  have habs : CFC.abs ρ = ρ := by
+    simpa using CFC.abs_of_nonneg (a := ρ) hρ_psd.nonneg
+  rw [habs]
   have htrace_two : Matrix.trace (ρ + ρ) = 2 := by
     rw [Matrix.trace_add, hρ_tr]
     norm_num
