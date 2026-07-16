@@ -109,7 +109,8 @@ theorem nonempty_physicalSectorFactorization_of_isSAL
     Nonempty (PhysicalSectorFactorization K) := by
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
   obtain ⟨β₃, α₁, hm⟩ :=
-    exists_normalizedFourSiteTail_entry_ne_zero K ((Classical.choose_spec hSAL).1 4)
+    exists_normalizedFourSiteTail_entry_ne_zero K
+      ((Classical.choose_spec hSAL).1 4 (by omega))
   exact ⟨inverseMapPhysicalSectorFactorization K hK (normalizedFourSiteTail K)
     (isThreeSiteClosure_reducedBlockState K) hη α₁ β₃ hm⟩
 
