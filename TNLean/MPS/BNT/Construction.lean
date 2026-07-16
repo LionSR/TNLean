@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-
 import TNLean.PiAlgebra.CanonicalFormSepAux
 import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.Spectral.TransferOperatorGapNT
@@ -11,7 +10,6 @@ import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.BNT.Separation
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.CastDecay
-
 
 /-!
 # Basis of normal tensors from separated block hypotheses
