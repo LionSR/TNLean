@@ -13,7 +13,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Issue Automation](#issue-automation-issue-automationyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
-  - [Oversized Lean File Guard](#oversized-lean-file-guard-oversized-lean-filesyml)
+  - [Oversized Lean File Guard](#oversized-lean-file-guard-pr-ciyml-file-length-job)
   - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
@@ -77,9 +77,9 @@ When you push to a PR branch, several things happen in parallel:
   │  └──────────────────────────────────────────────────────────────┘
   │
   │  ┌──────────────────────────────────────────────────────────────┐
-  │  │ Runs on every PR push                                        │
+  │  │ Runs on every PR push touching Lean files                    │
   ├──┤                                                              │
-  │  │  Lean Action CI                                              │
+  │  │  PR CI — build job                                           │
   │  │  Runs `lake build` to check that the code compiles.          │
   │  │                                                              │
   │  └───────────┬──────────────────────────────────────────────────┘
@@ -93,9 +93,9 @@ When you push to a PR branch, several things happen in parallel:
   │  └──────────────────────────────────────────────────────────────┘
   │
   │  ┌──────────────────────────────────────────────────────────────┐
-  │  │ Runs on every PR push                                        │
+  │  │ Runs on every PR push touching blueprint or Lean files       │
   ├──┤                                                              │
-  │  │  Lint Blueprint                                              │
+  │  │  PR CI — blueprint job                                       │
   │  │  Runs `leanblueprint web` to check blueprint compilation.    │
   │  │                                                              │
   │  └───────────┬──────────────────────────────────────────────────┘
@@ -210,7 +210,7 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **What it does**: When the Lean CI build fails on a PR, this workflow reads the error logs and asks Claude to fix the code.
 
-**When it runs**: Automatically after the "Lean Action CI" workflow completes with a failure status. Runs on any PR from the same repository (not forks).
+**When it runs**: Automatically after a "PR CI" run completes with the `build` job failed. Runs on any PR from the same repository (not forks).
 
 **What Claude does**:
 - Reads the last 10,000 characters of each failed job's logs
@@ -228,7 +228,7 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **What it does**: When the blueprint linter fails on a PR, this workflow reads the error logs and asks Claude to fix the LaTeX.
 
-**When it runs**: Automatically after the "Lint blueprint" workflow completes with a failure status. Runs on any PR from the same repository (not forks).
+**When it runs**: Automatically after a "PR CI" run completes with the blueprint job failed. Runs on any PR from the same repository (not forks).
 
 **What Claude does**:
 - Reads the blueprint compilation error logs
@@ -239,7 +239,7 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **No label required** — this runs on all PRs automatically.
 
-The "Lint blueprint" and "Blueprint" workflows also run
+The "PR CI" blueprint job and the "Blueprint" workflow also run
 `Packages/tn_diagrams.py --check --check-peps-usage --smoke-render` after the
 blueprint dependencies are installed. This checks that public tensor-network
 diagram declarations in `tex/tn/tn_catalogue.tex` agree with their chapter and
@@ -249,7 +249,7 @@ diagrams render to SVG.
 
 ---
 
-### Oversized Lean File Guard (`oversized-lean-files.yml`)
+### Oversized Lean File Guard (`pr-ci.yml`, `file-length` job)
 
 **What it does**: Reports `.lean` files above the 1000-line style limit.
 
