@@ -400,8 +400,8 @@ an injective tensor.
 through the inactive-sector repair; see
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines 1569--1594,
-and Definition 4.8, lines 829--850. -/
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (source label 3to4),
+lines 1569--1594, and Definition 4.8, lines 829--850. -/
 theorem isGSNNCH_of_isInjective_of_isSAL (K : MPOTensor d D)
     (hK : K.IsInjective) (hSAL : IsSAL K) : IsGSNNCH K := by
   obtain ⟨data⟩ := nonempty_etaLocalStructureData_of_isSAL K hK hSAL
