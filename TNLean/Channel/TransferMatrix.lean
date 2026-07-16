@@ -43,8 +43,6 @@ with composition. We also relate it to the Kraus representation.
   trace-normalization criterion for conjugated-input maps ρ ↦ T(XρX†)
 * `IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one`: the same
   normalization with X = T*(1)^{-1/2} when T*(1) is positive definite
-* `Matrix.traceAdjointMap₂`: the trace-pairing adjoint of a linear map between
-  matrix algebras of possibly different dimensions
 * `exists_isUnit_det_comp_unitaryConjLM_positive_tracePreserving`: Wolf's
   Chapter 3 lemma "Making positive maps trace preserving" — a positive map
   `T : M_D(ℂ) → M_{D'}(ℂ)` with `T*(1)` positive definite becomes trace
@@ -519,7 +517,7 @@ If T is positive and T*(1) is positive definite, then choosing
 X = T*(1)^{-1/2} makes ρ ↦ T(XρX†) positive and trace-preserving.
 
 This is the equal-dimension instance of
-`comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap₂_one` below; the source lemma
+`comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one` below; the source lemma
 (Wolf Ch. 3, Making positive maps trace preserving) allows different input and
 output dimensions. -/
 theorem IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one
@@ -544,53 +542,10 @@ algebra `M_D(ℂ)`, so the statements below relax only the output dimension of
 the square-case results above; those results are the `D' = D` instances.
 Positivity and trace preservation of the normalized map are spelled out
 because `IsPositiveMap` and `IsTracePreservingMap` require equal input and
-output dimensions; the trace-pairing adjoint of a dimension-changing map is
-`Matrix.traceAdjointMap₂`. -/
+output dimensions; the trace-pairing adjoint `Matrix.traceAdjointMap` already
+allows different input and output dimensions. -/
 
 variable {D' : ℕ}
-
-/-- The trace-pairing adjoint of a linear map between matrix algebras of
-possibly different dimensions, characterized by the identity
-`tr(T*(ρ) X) = tr(ρ T(X))` (`Matrix.trace_traceAdjointMap₂_mul`). It agrees
-with `Matrix.traceAdjointMap` when the two dimensions coincide
-(`Matrix.traceAdjointMap₂_eq_traceAdjointMap`). -/
-noncomputable def Matrix.traceAdjointMap₂ {n m : Type*} [Fintype m]
-    (T : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ) :
-    Matrix m m ℂ →ₗ[ℂ] Matrix n n ℂ := by
-  classical
-  exact
-    { toFun := fun ρ => Matrix.of fun i j => Matrix.trace (ρ * T (Matrix.single j i 1))
-      map_add' := by
-        intro ρ σ
-        ext i j
-        simp [Matrix.add_mul]
-      map_smul' := by
-        intro c ρ
-        ext i j
-        simp }
-
-/-- The trace-pairing adjoint of a dimension-changing linear map satisfies the
-bilinear trace identity `tr(T*(ρ) X) = tr(ρ T(X))`. -/
-theorem Matrix.trace_traceAdjointMap₂_mul {n m : Type*} [Fintype n] [Fintype m]
-    (T : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ) (ρ : Matrix m m ℂ) (X : Matrix n n ℂ) :
-    Matrix.trace (Matrix.traceAdjointMap₂ T ρ * X) = Matrix.trace (ρ * T X) := by
-  classical
-  refine Matrix.induction_on' X ?_ ?_ ?_
-  · simp [Matrix.traceAdjointMap₂]
-  · intro X Y hX hY
-    simp [Matrix.mul_add, map_add, hX, hY]
-  · intro i j c
-    have hsingle : Matrix.single i j c = c • Matrix.single i j (1 : ℂ) := by
-      ext a b
-      simp [Matrix.single, smul_eq_mul]
-    rw [hsingle, map_smul, Matrix.mul_smul, Matrix.trace_smul]
-    simp [Matrix.traceAdjointMap₂, Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
-
-/-- When the input and output dimensions coincide, the dimension-changing
-trace-pairing adjoint is the trace-pairing adjoint `Matrix.traceAdjointMap`. -/
-theorem Matrix.traceAdjointMap₂_eq_traceAdjointMap {n : Type*} [Fintype n]
-    (T : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
-    Matrix.traceAdjointMap₂ T = Matrix.traceAdjointMap T := rfl
 
 /-- Trace-normalization criterion for a dimension-changing map with conjugated
 input: if `Xᴴ T*(𝟙) X = 𝟙`, where `T*` is the trace-pairing adjoint, then
@@ -599,30 +554,30 @@ of Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive maps
 trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
 lines 723-737. Dimension-changing version of
 `IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one`. -/
-theorem trace_comp_unitaryConjLM_of_conj_traceAdjointMap₂_one
+theorem trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ)
-    (hX : Xᴴ * Matrix.traceAdjointMap₂ T 1 * X = 1)
+    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace ((T.comp (unitaryConjLM X)) ρ) = Matrix.trace ρ := by
   change Matrix.trace (T (X * ρ * Xᴴ)) = Matrix.trace ρ
   have hcycle :
-      Matrix.trace (Matrix.traceAdjointMap₂ T 1 * (X * ρ * Xᴴ)) =
-        Matrix.trace ((Xᴴ * Matrix.traceAdjointMap₂ T 1 * X) * ρ) := by
+      Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ)) =
+        Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := by
     calc
-      Matrix.trace (Matrix.traceAdjointMap₂ T 1 * (X * ρ * Xᴴ))
-          = Matrix.trace ((Matrix.traceAdjointMap₂ T 1 * X) * ρ * Xᴴ) := by
+      Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ))
+          = Matrix.trace ((Matrix.traceAdjointMap T 1 * X) * ρ * Xᴴ) := by
               simp [Matrix.mul_assoc]
-      _ = Matrix.trace (Xᴴ * (Matrix.traceAdjointMap₂ T 1 * X) * ρ) := by
+      _ = Matrix.trace (Xᴴ * (Matrix.traceAdjointMap T 1 * X) * ρ) := by
               rw [Matrix.trace_mul_cycle]
-      _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap₂ T 1 * X) * ρ) := by
+      _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := by
               simp [Matrix.mul_assoc]
   calc
     Matrix.trace (T (X * ρ * Xᴴ))
         = Matrix.trace ((1 : Matrix (Fin D') (Fin D') ℂ) * T (X * ρ * Xᴴ)) := by simp
-    _ = Matrix.trace (Matrix.traceAdjointMap₂ T 1 * (X * ρ * Xᴴ)) := by
-          rw [Matrix.trace_traceAdjointMap₂_mul]
-    _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap₂ T 1 * X) * ρ) := hcycle
+    _ = Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ)) := by
+          rw [Matrix.trace_traceAdjointMap_mul]
+    _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := hcycle
     _ = Matrix.trace ρ := by rw [hX, Matrix.one_mul]
 
 /-- Filtered trace-normalization criterion for a dimension-changing positive
@@ -632,17 +587,17 @@ in Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive maps
 trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
 lines 723-737. Dimension-changing version of
 `IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving`. -/
-theorem comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap₂_one
+theorem comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hT : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
     (X : Matrix (Fin D) (Fin D) ℂ)
-    (hX : Xᴴ * Matrix.traceAdjointMap₂ T 1 * X = 1) :
+    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
     (∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef →
         ((T.comp (unitaryConjLM X)) ρ).PosSemidef) ∧
       ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
         Matrix.trace ((T.comp (unitaryConjLM X)) ρ) = Matrix.trace ρ :=
   ⟨fun ρ hρ => hT (unitaryConjLM X ρ) (unitaryConjLM_isPositiveMap X ρ hρ),
-    trace_comp_unitaryConjLM_of_conj_traceAdjointMap₂_one T X hX⟩
+    trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX⟩
 
 /-- The inverse square root of a positive definite matrix is invertible. -/
 theorem Matrix.PosDef.isUnit_det_inv_sqrt {A : Matrix (Fin D) (Fin D) ℂ}
@@ -659,20 +614,20 @@ trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
 lines 723-737. If `T : M_D(ℂ) → M_{D'}(ℂ)` is positive and `T*(𝟙)` is
 positive definite, then with `X = (T*(𝟙))^{-1/2}` the map `ρ ↦ T(X ρ Xᴴ)` is
 positive and trace preserving. -/
-theorem comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap₂_one
+theorem comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hT : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
-    (hTstar : (Matrix.traceAdjointMap₂ T 1).PosDef) :
+    (hTstar : (Matrix.traceAdjointMap T 1).PosDef) :
     (∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef →
         ((T.comp
-          (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap₂ T 1))⁻¹))) ρ).PosSemidef) ∧
+          (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) ρ).PosSemidef) ∧
       ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
         Matrix.trace
-            ((T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap₂ T 1))⁻¹))) ρ) =
+            ((T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) ρ) =
           Matrix.trace ρ :=
-  comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap₂_one hT _
+  comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one hT _
     (Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
-      (Matrix.traceAdjointMap₂ T 1) hTstar)
+      (Matrix.traceAdjointMap T 1) hTstar)
 
 /-- **Making positive maps trace preserving.**
 
@@ -685,15 +640,15 @@ trace-preserving positive map. The witness is `X = (T*(𝟙))^{-1/2}`. -/
 theorem exists_isUnit_det_comp_unitaryConjLM_positive_tracePreserving
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hT : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
-    (hTstar : (Matrix.traceAdjointMap₂ T 1).PosDef) :
+    (hTstar : (Matrix.traceAdjointMap T 1).PosDef) :
     ∃ X : Matrix (Fin D) (Fin D) ℂ, IsUnit X.det ∧
       (∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef →
         ((T.comp (unitaryConjLM X)) ρ).PosSemidef) ∧
       ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
         Matrix.trace ((T.comp (unitaryConjLM X)) ρ) = Matrix.trace ρ :=
-  ⟨(CFC.sqrt (Matrix.traceAdjointMap₂ T 1))⁻¹, hTstar.isUnit_det_inv_sqrt,
-    (comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap₂_one hT hTstar).1,
-    (comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap₂_one hT hTstar).2⟩
+  ⟨(CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹, hTstar.isUnit_det_inv_sqrt,
+    (comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one hT hTstar).1,
+    (comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one hT hTstar).2⟩
 
 end UnitaryConjugation
 

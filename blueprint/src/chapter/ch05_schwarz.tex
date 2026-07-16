@@ -1159,7 +1159,7 @@ maps.
 \end{proof}
 
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
-    \lean{Matrix.traceAdjointMap, Matrix.traceAdjointMap₂}
+    \lean{Matrix.traceAdjointMap}
     \leanok
     The trace-pairing adjoint $E^* : \MN{D'} \to \MN{D}$ of a linear map
     $E : \MN{D} \to \MN{D'}$ between matrix algebras of possibly different
@@ -1168,7 +1168,7 @@ maps.
 \end{definition}
 
 \begin{theorem}[Trace-pairing adjoint identity]\label{thm:trace_pairing_adjoint_identity}
-    \lean{Matrix.trace_traceAdjointMap_mul, Matrix.trace_traceAdjointMap₂_mul}
+    \lean{Matrix.trace_traceAdjointMap_mul}
     \leanok
     \uses{def:trace_pairing_adjoint}
     For every linear map $E : \MN{D} \to \MN{D'}$ and all matrices $\rho$
@@ -1191,7 +1191,7 @@ maps.
     \lean{Matrix.traceAdjointMap_traceAdjointMap}
     \leanok
     \uses{def:trace_pairing_adjoint, thm:trace_nondeg}
-    For every linear map $E : \MN{D} \to \MN{D}$, the trace-pairing adjoint
+    For every linear map $E : \MN{D} \to \MN{D'}$, the trace-pairing adjoint
     of $E^*$ is $E$.
 \end{theorem}
 
