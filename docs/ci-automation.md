@@ -10,7 +10,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [The Fixed-Point Loop](#the-fixed-point-loop)
 - [Workflow Reference](#workflow-reference)
   - [Claude Code Review](#claude-code-review-claude-code-reviewyml)
-  - [Issue Classification](#issue-classification-issue-classificationyml)
+  - [Issue Automation](#issue-automation-issue-automationyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
   - [Oversized Lean File Guard](#oversized-lean-file-guard-oversized-lean-filesyml)
@@ -166,36 +166,43 @@ Here is exactly what happens:
 
 ---
 
-### Issue Classification (`issue-classification.yml`)
+### Issue Automation (`issue-automation.yml`)
 
-**What it does**: When a human-authored issue is opened, this workflow applies
+One workflow owns the issue lifecycle, with four jobs.
+
+**classify** — When a human-authored issue is opened, applies
 the project label taxonomy and posts a concise initial classification comment.
 Issues from repository members receive the full classifier. Outside reports
 receive an inexpensive preliminary classification for clear labels, followed by
-a maintainer review.
+a maintainer review. The model-backed classifier runs only for issues opened by
+an `OWNER`, `MEMBER`, or `COLLABORATOR`; it checks which area, paper, topic,
+workflow, or standard labels apply, whether a formalization issue includes a
+source reference and target Lean declaration, and whether a tracking issue
+should use GitHub Sub-issues. It must not apply `auto-fix-claude` to issues —
+that label is a pull-request workflow control.
 
-**When it runs**: On `issues: opened`, excluding senders whose GitHub event type
-is `Bot`. The model-backed classifier runs only for issues opened by an
-`OWNER`, `MEMBER`, or `COLLABORATOR`.
+**scout** — Posts a Mathlib scouting report on formalization issues. It runs
+after `classify` in the same workflow run, so the labels it reads are settled
+(previously the classification labels arrived as separate `labeled` events
+that cancelled the in-flight scout run). It scouts member-opened issues that
+carry `formalization` or read like formalization tasks; outside reports are
+scouted only after a maintainer has checked the mathematical source and added
+the `scout` label. Adding `scout` (anyone) or `formalization` (member-authored
+issues) by hand also triggers it.
 
-**What it checks**:
-- Which area, paper, topic, workflow, or standard labels apply
-- Whether a formalization issue includes a source reference, blueprint or LaTeX
-  anchor, dependencies, and a target Lean declaration
-- Whether a tracking issue should use GitHub Sub-issues
-- Whether a bug report identifies affected files, error messages, and expected
-  behavior
+**track** — Deterministic tracking-issue bookkeeping, no model involved. On
+sub-issue close/reopen it updates the tracking parent: posts the progress
+comment with the `[X/Y sub-issues closed]` count and toggles the
+`all-resolved` label. On PR open/merge it finds linked issues (`Addresses`,
+`Partially addresses`, `Closes`, `Fixes`, or an `issue-N` branch name) and
+posts progress comments on the kept-open issues and their tracking parents.
+Issues auto-closed by `Closes`/`Fixes` are skipped — the close event itself
+triggers the tracking update.
 
-**Interaction with Mathlib Scout**: If the issue is a theorem, definition,
-lemma, proof, or other mathematical formalization task, the workflow adds the
-`formalization` label. For issues opened by an `OWNER`, `MEMBER`, or
-`COLLABORATOR`, Mathlib Scout decides from the opened issue content and the
-`formalization` label. Outside reports keep `formalization`, but Mathlib Scout
-runs only after a maintainer has checked the mathematical source and added
-`scout`. Issue Classification does not duplicate that scouting report.
-
-**Label rule**: The workflow must not apply `auto-fix-claude` to issues. That
-label is a pull-request workflow control.
+**followups** — After a PR merges, a model scans the diff, review threads, and
+PR discussion for genuine follow-up work (deferred reviewer feedback, new
+`sorry` markers, missing blueprint tags) and files conservative follow-up
+issues, attaching them to the relevant tracking issue as native sub-issues.
 
 ---
 
@@ -363,7 +370,7 @@ blueprint, review, and prompt failures are not enough to trip the guard.
 
 - On failed completed runs of `auto-fix.yml`, `claude-code-review.yml`,
   `lean-linter-warning-autofix.yml`, `blueprint-prose-review.yml`, and
-  `tracking-issue-sync.yml`, only when the failed run's
+  `issue-automation.yml`, only when the failed run's
   head repository is the TNLean repository itself.
 - Hourly by schedule, to re-enable switches whose cooldown has elapsed.
 - Manually through `workflow_dispatch`, which runs the same re-enable check.
@@ -423,7 +430,7 @@ provider or mention handler.
 | Variable | Disabled workflows |
 |----------|--------------------|
 | `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml`; write-mode linter auto-fix skips before Lean setup/build |
-| `CLAUDE_REVIEW_ENABLED=false` | `claude-code-review.yml`, `blueprint-prose-review.yml`, and `tracking-issue-sync.yml` |
+| `CLAUDE_REVIEW_ENABLED=false` | `claude-code-review.yml`, `blueprint-prose-review.yml`, and the model-backed jobs of `issue-automation.yml` |
 | `DEEPSEEK_MENTION_ENABLED=false` | the `@deepseek` handle of `agent-mention.yml` |
 
 Set them with:
