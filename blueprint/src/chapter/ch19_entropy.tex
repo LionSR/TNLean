@@ -39,7 +39,8 @@ properties for finite-dimensional quantum systems.
 
 Wolf records the equivalent formula
 $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
-\cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+\cite[Chapter~8, Section~8.1]{Wolf2012Quantum}; this is
+Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{lemma}[Finite singular-value expansions]\label{lem:trace_norm_singular_values}
     \lean{Matrix.schattenOneNorm_eq_sum_support}
@@ -86,6 +87,102 @@ $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
         \iff \forall i,\; s_i(A)=0
         \iff A=0.
     \]
+\end{proof}
+
+\begin{theorem}[Trace norm as trace of the absolute value]
+    \label{thm:trace_norm_abs}
+    \lean{Matrix.traceNorm_eq_re_trace_abs}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$, with
+    $\lvert A\rvert=\sqrt{A^\dagger A}$ the positive-semidefinite square root
+    of $A^\dagger A$,
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        =\operatorname{Re}\bigl(\operatorname{tr}\lvert A\rvert\bigr).
+    \]
+    This is the formula $\lVert A\rVert_1=\operatorname{tr}[\lvert A\rvert]$
+    of \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}; the trace of the
+    positive-semidefinite matrix $\lvert A\rvert$ is real.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_elementary}
+    The map $T^\dagger T$, for $T$ the linear map on $\C^D$ represented by
+    $A$, is represented by $A^\dagger A$, so the singular values of $A$ are
+    $s_i(A)=\sqrt{\lambda_i}$ with $\lambda_0,\ldots,\lambda_{D-1}$ the
+    eigenvalues of $A^\dagger A$. Diagonalizing
+    $A^\dagger A=U\operatorname{diag}(\lambda_i)U^\dagger$ gives
+    $\lvert A\rvert=U\operatorname{diag}(\sqrt{\lambda_i})U^\dagger$, hence
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        =\sum_{i=0}^{D-1}s_i(A)
+        =\sum_{i=0}^{D-1}\sqrt{\lambda_i}
+        =\operatorname{tr}\lvert A\rvert.
+    \]
+\end{proof}
+
+\begin{theorem}[Trace-norm homogeneity]
+    \label{thm:trace_norm_homogeneous}
+    \lean{Matrix.traceNorm_smul}
+    \leanok
+    \uses{def:trace_norm}
+    For every $c\in\C$ and $A\in\MN{D}$,
+    \[
+        \lVert cA\rVert_{\mathrm{tr}}
+        =\lvert c\rvert\,\lVert A\rVert_{\mathrm{tr}}.
+    \]
+    This is the homogeneity axiom for matrix norms
+    \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_abs}
+    From $(cA)^\dagger(cA)=\lvert c\rvert^2\,A^\dagger A$ and uniqueness of
+    the positive-semidefinite square root,
+    $\lvert cA\rvert=\lvert c\rvert\,\lvert A\rvert$. Linearity of the trace
+    gives
+    $\operatorname{tr}\lvert cA\rvert
+    =\lvert c\rvert\,\operatorname{tr}\lvert A\rvert$, and the claim follows
+    from Theorem~\ref{thm:trace_norm_abs}.
+\end{proof}
+
+\begin{theorem}[Trace-norm unitary invariance]
+    \label{thm:trace_norm_unitary_invariance}
+    \lean{Matrix.traceNorm_unitary_mul}
+    \lean{Matrix.traceNorm_mul_unitary}
+    \lean{Matrix.traceNorm_unitary_mul_unitary}
+    \leanok
+    \uses{def:trace_norm}
+    For all unitaries $U,V\in\MN{D}$ and every $A\in\MN{D}$,
+    \[
+        \lVert UA\rVert_{\mathrm{tr}}
+        =\lVert AV\rVert_{\mathrm{tr}}
+        =\lVert UAV\rVert_{\mathrm{tr}}
+        =\lVert A\rVert_{\mathrm{tr}}.
+    \]
+    The trace norm is thus unitarily invariant
+    \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_abs}
+    From $(UA)^\dagger(UA)=A^\dagger U^\dagger UA=A^\dagger A$ the absolute
+    values agree: $\lvert UA\rvert=\lvert A\rvert$. For the right factor,
+    $(AV)^\dagger(AV)=V^\dagger(A^\dagger A)V$, and since
+    $V^\dagger\lvert A\rvert V$ is positive semidefinite with
+    \[
+        \bigl(V^\dagger\lvert A\rvert V\bigr)^2
+        =V^\dagger\lvert A\rvert\,VV^\dagger\,\lvert A\rvert V
+        =V^\dagger(A^\dagger A)V,
+    \]
+    uniqueness of the positive-semidefinite square root gives
+    $\lvert AV\rvert=V^\dagger\lvert A\rvert V$. Cyclicity of the trace then
+    yields
+    $\operatorname{tr}\lvert AV\rvert
+    =\operatorname{tr}(\lvert A\rvert\,VV^\dagger)
+    =\operatorname{tr}\lvert A\rvert$. The two-sided case combines the two
+    one-sided cases.
 \end{proof}
 
 \section{Von Neumann entropy}
