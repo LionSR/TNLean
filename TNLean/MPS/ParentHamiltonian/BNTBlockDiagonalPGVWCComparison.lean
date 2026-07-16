@@ -371,6 +371,92 @@ theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary
       μ A hμ hBlk hUnital hN hLN hNlarge hCrossingSpan hψ hBoundary
 
+/-- The boundary-crossing comparison derived from the local constraint gives the
+periodic-boundary upgrade at all long crossing tails; only the short-tail span
+remains an explicit hypothesis.
+
+Under the normalized BNT hypotheses, every vector in the block-diagonal
+periodic-boundary ground space has a block-diagonal boundary representation
+\(X_j\). For a boundary-crossing interval beginning at \(i\), the local
+constraint and the simultaneous tail-word span at length \(N-i\) produce the
+opened-boundary \(C^j,D^j\) comparison
+\[
+  A^j_\beta C^j_{i,\rho}
+  =
+  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho ,
+\]
+and the normalized \(E^j\)-calculation then places each single-block vector
+\(\Gamma_N^{A_j}(\mu_j^NX_j)\) in \(\mathcal G_{N,L}(A_j)\). For crossing tails
+of length at least \((L_0+1)+3(r-1)(L_0+1)\), the normalized BNT
+block-separation theorem derives the tail-word span from the hypotheses already
+present, so the comparison is derived, not assumed, at those tails. Relative to
+`exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1`,
+the explicit hypothesis `hComparison` is removed; relative to
+`exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1`,
+the span hypothesis is restricted to the crossing tails shorter than the BNT
+block-separation bound.
+
+The comparison derived here is the boundary-condition comparison of
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, specialized to the
+block-diagonal boundary conditions of arXiv:2011.12127, Section IV.C, lines
+2126--2128.
+
+**Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated
+in the current BNT range derived from length-\(L_0\) block injectivity,
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+
+**Scope restriction (short crossing tails):** The hypothesis `hShortSpan`
+assumes the simultaneous tail-word span at the crossing tails of length
+\(N-i<(L_0+1)+3(r-1)(L_0+1)\). For the interval beginning at \(i=N-1\) the tail
+length is \(1\), so the finite BNT range does not supply this span. Replacing
+it by the source \(C^j,D^j\) comparison in the source range is the residual
+recorded in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+theorem exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bnt_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    (hShortSpan :
+      ∀ i : Fin N, N < i.val + L →
+        N - i.val < (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) →
+        WordTupleSpanTop A (N - i.val))
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  have hCrossingSpan :
+      ∀ i : Fin N, N < i.val + L → WordTupleSpanTop A (N - i.val) := by
+    intro i hi
+    rcases Nat.lt_or_ge (N - i.val)
+        ((L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) with hlt | hge
+    · exact hShortSpan i hi hlt
+    · exact
+        wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
+          A hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hge
+  refine
+    exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hNlarge hψ ?_
+  intro X hψX
+  exact
+    blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace
+      μ A hμ hN hLN hCrossingSpan hψ X hψX
+
 /-- Boundary-crossing local constraints give the block-diagonal periodic-boundary
 equality in the finite BNT range.
 
