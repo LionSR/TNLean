@@ -10,15 +10,15 @@ import TNLean.MPS.MPDO.RFPViaTSGlobal
 /-!
 # Saturation of the area law for MPDO renormalization fixed points
 
-This file proves the forward implication of Proposition `propsimple`: a
-horizontally canonical matrix product density operator satisfying the local
-renormalization fixed-point equations saturates the area law.  The proof first
-establishes the two exact finite-chain identities obtained by transferring one
-site across a bipartition, applies mutual-information data processing in both
-directions, and then identifies bipartite mutual information with the chain
-quantity `I_L`.  Horizontal canonical form, positivity, and the fixed-point
-equations supply nonzero trace at every positive length; simplicity is not used
-in this implication.
+This file proves Proposition `propsimple`: a horizontally canonical matrix
+product density operator satisfying the local renormalization fixed-point
+equations has source zero correlation length and saturates the area law.  The
+SAL proof first establishes the two exact finite-chain identities obtained by
+transferring one site across a bipartition, applies mutual-information data
+processing in both directions, and then identifies bipartite mutual information
+with the chain quantity `I_L`.  Horizontal canonical form, positivity, and the
+fixed-point equations supply nonzero trace at every positive length; simplicity
+is not used in this implication.
 
 Source: arXiv:1606.00608, Appendix C, lines 1333--1341.  See
 `docs/paper-gaps/cpsv16_rfp_sal_data_processing.tex`.
@@ -441,5 +441,30 @@ theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
         (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀) :=
       (mutualInfoChain_eq_mutualInformation M N₀ (a + 2)
         (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀)).symm
+
+/-- A horizontally canonical matrix product density operator satisfying the
+local renormalization fixed-point equations has zero correlation length and
+saturates the area law.
+
+This is Proposition `propsimple` of arXiv:1606.00608.  The nonzero
+physical-trace transfer required by source ZCL is derived from the nonzero
+one-site ring; it is not an additional hypothesis.
+
+Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
+lines 1333--1341, under the canonical-form and density-operator standing
+assumptions at lines 623--628 and 849--850. -/
+theorem isSourceZCL_and_isSAL_of_isRFPViaTS (M : MPOTensor d D)
+    (hHorizontal : MPOTensor.IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) : IsSourceZCL M ∧ IsSAL M := by
+  have hTrace :=
+    trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
+      M hHorizontal hM hRFP 1 Nat.zero_lt_one
+  have hTransfer : physTraceTransfer M ≠ 0 := by
+    intro hZero
+    apply hTrace
+    rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer, hZero]
+    simp
+  exact ⟨isSourceZCL_of_isRFPViaTS M hRFP hTransfer,
+    isSAL_of_isRFPViaTS M hHorizontal hM hRFP⟩
 
 end MPOTensor

@@ -108,9 +108,12 @@ Option~1 is now in place. The predicate \texttt{IsZCL} remains documented as a
 doubled-index CP-transfer idempotence condition, while
 \texttt{IsSourceZCL} records Definition~4.2. For the renormalization condition
 of Definition~4.1, the forward implication to source ZCL is now proved under
-the explicit nonzero-transfer hypothesis above. The PRFP implication, the
-reverse implication in Theorem~4.9, and the full strong-area-law assembly
-remain open.
+the explicit nonzero-transfer hypothesis above.  Under horizontal canonical
+form and the MPDO condition, this nonzero clause is now derived from the
+positive-length ring operators, and Proposition \texttt{propsimple} is proved
+with its full ZCL and SAL conclusion by
+\texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS}.  The PRFP
+equivalence and the reverse implications in Theorem~4.9 remain open.
 
 \section{The faithful definition and its consequences}
 
@@ -150,8 +153,10 @@ The theorem
 \texttt{MPOTensor.physTraceTransfer\_sq\_of\_isRFPViaTS} formalizes the
 zero-correlation-length calculation in Appendix~C, Proposition
 \texttt{propsimple}, source lines 1333--1340. This proposition proves the first
-implication of Theorem~4.9 by establishing both ZCL and SAL; the present Lean
-theorem formalizes only its ZCL calculation. For every virtual matrix $X$,
+implication of Theorem~4.9 by establishing both ZCL and SAL.  The physical-trace
+theorem formalizes its ZCL calculation; the source-shaped capstone cited above
+combines it with positive-length nonvanishing and the SAL theorem.  For every
+virtual matrix $X$,
 trace preservation of the one-to-two map gives
 \[
   \operatorname{tr}(\mathcal T_M^2X)
@@ -199,7 +204,7 @@ fixed-point property.
 
 Second, the proposed bridge to doubled-index idempotence is false. The witness
 above generates the maximally mixed product state $\rho^{(N)}\propto I$, which
-has vanishing mutual information at every length ($I_1=I_2=\dots=0$), hence
+has vanishing mutual information at every length ($I_1=I_2=\cdots=0$), hence
 satisfies the strong area law (Definition~\texttt{def:area-law},
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:812}) as well as zero correlation
 length, yet $\mathcal E_M\circ\mathcal E_M=\tfrac14\,\mathrm{id}\neq\mathcal E_M$.
