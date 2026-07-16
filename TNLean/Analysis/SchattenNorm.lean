@@ -36,7 +36,7 @@ quantity is not identified with the ambient matrix operator norm.
 * `Matrix.traceNorm_eq_sum_fin` — Wolf's finite-dimensional formula summing
   over all `Fin D` indices.
 * `Matrix.traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self` — the trace norm
-  as the sum of the square roots of the eigenvalues of `A†A`.
+  as the sum of the square roots of the eigenvalues of $A^\dagger A$.
 
 ## References
 
@@ -110,8 +110,8 @@ theorem traceNorm_eq_sum_fin (A : Matrix (Fin D) (Fin D) ℂ) :
       exact Fin.sum_univ_eq_sum_range _ D
 
 /-- The trace norm is the sum of the square roots of the eigenvalues of the
-positive operator `A†A`. -/
-theorem traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self
+positive operator $A^\dagger A$. -/
+lemma traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self
     (A : Matrix (Fin D) (Fin D) ℂ) :
     traceNorm A = ∑ i : Fin D,
       Real.sqrt ((Matrix.toEuclideanLin A).isSymmetric_adjoint_comp_self.eigenvalues

@@ -107,7 +107,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:trace_norm_elementary}
+    \uses{lem:trace_norm_sqrt_eigenvalues}
     The map $T^\dagger T$, for $T$ the linear map on $\C^D$ represented by
     $A$, is represented by $A^\dagger A$, so the singular values of $A$ are
     $s_i(A)=\sqrt{\lambda_i}$ with $\lambda_0,\ldots,\lambda_{D-1}$ the
@@ -189,8 +189,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     by applying the right and left cases in turn.
 \end{proof}
 
-\begin{theorem}[Trace norm from the spectrum of $A^\dagger A$]
-    \label{thm:trace_norm_sqrt_eigenvalues}
+\begin{lemma}[Trace norm from the spectrum of $A^\dagger A$]
+    \label{lem:trace_norm_sqrt_eigenvalues}
     \lean{Matrix.traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self}
     \leanok
     \uses{def:trace_norm}
@@ -200,7 +200,7 @@ Theorem~\ref{thm:trace_norm_abs}.
         \lVert A\rVert_{\mathrm{tr}}
         = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^\dagger A)}.
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:trace_norm_elementary}
