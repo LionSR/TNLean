@@ -30,6 +30,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
+      - 'docs/paper-gaps/**/*.tex'
+      - 'docs/paper-gaps/**/*.bib'
       - '**.lean'
       - 'lakefile.*'
       - 'lean-toolchain'
