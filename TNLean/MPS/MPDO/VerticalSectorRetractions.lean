@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.PartialTrace
-import TNLean.MPS.MPDO.VerticalCF
+import TNLean.MPS.MPDO.Defs
 
 /-!
 # Normalized vertical-sector embeddings and partial-trace retractions
@@ -18,6 +18,9 @@ For a vertical canonical decomposition with multiplicity matrices
 and their inverse maps on the displayed weighted sectors.  Partial trace over
 the multiplicity factor gives a canonical extension of the inverse map to the
 full block matrix space.  The maps below satisfy the exact retraction identity.
+The construction depends only on the sector dimensions, multiplicities, and
+positive weights, and therefore applies to either vertical canonical
+decomposition in Appendix C.4.
 
 ## References
 
@@ -61,14 +64,14 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1901--1921, and
 Appendix C.4, lines 1955--1971. -/
 theorem verticalMultiplicityTrace_ne_zero {g : ℕ} {mult : Fin g → ℕ}
     {weight : (α : Fin g) → Fin (mult α) → ℂ}
-    (hMult : ∀ α, 0 < mult α) (hWeight : ∀ α q, (0 : ℂ) < weight α q)
-    (α : Fin g) : verticalMultiplicityTrace weight α ≠ 0 := by
+    (α : Fin g) (hMult : 0 < mult α) (hWeight : ∀ q, (0 : ℂ) < weight α q) :
+    verticalMultiplicityTrace weight α ≠ 0 := by
   apply ne_of_gt
   apply Finset.sum_pos'
   · intro q _
-    exact (hWeight α q).le
-  · let q : Fin (mult α) := ⟨0, hMult α⟩
-    exact ⟨q, Finset.mem_univ q, hWeight α q⟩
+    exact (hWeight q).le
+  · let q : Fin (mult α) := ⟨0, hMult⟩
+    exact ⟨q, Finset.mem_univ q, hWeight q⟩
 
 /-- The normalized embedding of the vertical sector algebra into the weighted
 sector blocks:
@@ -137,6 +140,6 @@ theorem verticalSectorPartialTrace_comp_normalizedVerticalSectorEmbedding
     Matrix.traceLeft_kronecker, Matrix.trace_diagonal, Matrix.smul_apply]
   rw [show ∑ x, weight α x = verticalMultiplicityTrace weight α by rfl]
   simp only [smul_eq_mul, LinearMap.id_apply]
-  field_simp [verticalMultiplicityTrace_ne_zero hMult hWeight α]
+  field_simp [verticalMultiplicityTrace_ne_zero α (hMult α) (hWeight α)]
 
 end MPOTensor
