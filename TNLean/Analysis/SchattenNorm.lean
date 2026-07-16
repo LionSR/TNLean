@@ -44,8 +44,6 @@ Chapter 8, Section 8.1, printed pp. 131–132: Schatten `p`-norm definition and
 `LinearMap.singularValues` from Mathlib.
 -/
 
-open scoped Matrix
-
 noncomputable section
 
 namespace Matrix
@@ -56,14 +54,14 @@ variable {D : ℕ}
 singular values.
 
 This is Wolf's Schatten `p`-norm at `p = 1`. -/
-noncomputable def schattenOneNorm (A : Matrix (Fin D) (Fin D) ℂ) : ℝ :=
+def schattenOneNorm (A : Matrix (Fin D) (Fin D) ℂ) : ℝ :=
   (Matrix.toEuclideanLin A).singularValues.sum fun _ s ↦ s
 
 /-- The trace norm is the Schatten one-norm.
 
 The name records the standard identity `‖A‖₁ = tr |A|`; that identity is
 established separately. -/
-noncomputable def traceNorm (A : Matrix (Fin D) (Fin D) ℂ) : ℝ :=
+def traceNorm (A : Matrix (Fin D) (Fin D) ℂ) : ℝ :=
   schattenOneNorm A
 
 /-- Expansion of the Schatten one-norm over the finite support of the singular
