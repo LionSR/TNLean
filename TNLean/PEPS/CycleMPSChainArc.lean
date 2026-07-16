@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.MPS.Chain.Defs
 import TNLean.Algebra.TracePairing
 
@@ -312,7 +317,6 @@ private theorem arcEval_ofFn_eq_prod [NeZero n] (A : MPSChainTensor d D n) :
       · rw [← hg 0]
         norm_num
       · exact ih (fun k => g k.succ) (fun k => τ k.succ) (s + 1) fun k => by
-          change ((s + 1 + k.val : ℕ) : Fin n) = g k.succ
           rw [← hg k.succ]
           congr 1
           rw [Fin.val_succ]

@@ -47,13 +47,18 @@ matrix on \(\C^{D} \otimes \C^{D}\), and the minimisation runs over
 \(\mathrm{SL}(D,\C) \times \mathrm{SL}(D,\C)\) filterings of a single dimension.
 The compactness lemma \leanid{Wolf.infimum\_is\_attained} and the
 trace--determinant AM--GM equality
-\leanid{Wolf.posSemidef\_pow\_det\_eq\_trace\_pow\_iff} that drive the proof are
-likewise written for a square Choi matrix on \(\C^{D} \otimes \C^{D}\).
+\leanid{Matrix.PosSemidef.pow\_card\_mul\_det\_re\_eq\_trace\_re\_pow\_iff}
+that drive the proof are likewise written for a square Choi matrix on
+\(\C^{D} \otimes \C^{D}\).
 
-The square case is the one needed downstream: the qubit Lorentz normal form
-(\leanid{Wolf.exists\_lorentz\_normal\_form\_qubit}) is the \(D = 2\)
-specialisation, and there \(d_1 = d_2 = 2\).  The general rectangular statement
-of the source is therefore not yet formalised; the equal-dimension instance is.
+For \(D=2\), the square theorem supplies the full-Kraus-rank minimisation result
+used in the diagonal case of the qubit Lorentz normal form.  The existence theorem
+covering the diagonal, non-diagonal, and singular cases is not yet formalized; in
+particular, it is not a specialization of a current declaration.  Its additional
+scalar-normalization and Lorentz-orbit gap is described in
+\path{docs/paper-gaps/wolf_prop2_11_lorentz_scalar_filtering_gap.tex}.  The general
+rectangular statement of Proposition~2.9 is also not yet formalized; only its
+equal-dimension instance is.
 
 \section{The restricted statement}
 

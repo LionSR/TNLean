@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.WeightedCornerFixedPoints
 import TNLean.MPS.Core.CPPrimitive
@@ -160,12 +161,12 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
   set H₂ : Fin m → Mat := fun j => Complex.I • ((b j : Mat) - (b j : Mat)ᴴ)
   have hH₁herm : ∀ j, (H₁ j).IsHermitian := by
     intro j
-    show ((b j : Mat) + (b j : Mat)ᴴ)ᴴ = (b j : Mat) + (b j : Mat)ᴴ
+    change ((b j : Mat) + (b j : Mat)ᴴ)ᴴ = (b j : Mat) + (b j : Mat)ᴴ
     rw [Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose]
     exact add_comm _ _
   have hH₂herm : ∀ j, (H₂ j).IsHermitian := by
     intro j
-    show (Complex.I • ((b j : Mat) - (b j : Mat)ᴴ))ᴴ =
+    change (Complex.I • ((b j : Mat) - (b j : Mat)ᴴ))ᴴ =
       Complex.I • ((b j : Mat) - (b j : Mat)ᴴ)
     rw [Matrix.conjTranspose_smul, Matrix.conjTranspose_sub,
       Matrix.conjTranspose_conjTranspose]
@@ -173,17 +174,17 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
     rw [neg_smul, ← smul_neg, neg_sub]
   have hH₁fix : ∀ j, map K (H₁ j) = H₁ j := by
     intro j
-    show map K ((b j : Mat) + (b j : Mat)ᴴ) = (b j : Mat) + (b j : Mat)ᴴ
+    change map K ((b j : Mat) + (b j : Mat)ᴴ) = (b j : Mat) + (b j : Mat)ᴴ
     rw [← hEK, E.map_add, hEK, hEK, hbfix j, hbHfix j]
   have hH₂fix : ∀ j, map K (H₂ j) = H₂ j := by
     intro j
-    show map K (Complex.I • ((b j : Mat) - (b j : Mat)ᴴ)) =
+    change map K (Complex.I • ((b j : Mat) - (b j : Mat)ᴴ)) =
       Complex.I • ((b j : Mat) - (b j : Mat)ᴴ)
     rw [← hEK, E.map_smul, E.map_sub, hEK, hEK, hbfix j, hbHfix j]
   -- Each basis vector is a combination of its Hermitian and anti-Hermitian components.
   have hXj : ∀ j, (b j : Mat) = (2⁻¹ : ℂ) • H₁ j - ((2⁻¹ : ℂ) * Complex.I) • H₂ j := by
     intro j
-    show (b j : Mat) = (2⁻¹ : ℂ) • ((b j : Mat) + (b j : Mat)ᴴ) -
+    change (b j : Mat) = (2⁻¹ : ℂ) • ((b j : Mat) + (b j : Mat)ᴴ) -
       ((2⁻¹ : ℂ) * Complex.I) • (Complex.I • ((b j : Mat) - (b j : Mat)ᴴ))
     rw [smul_smul,
       show ((2⁻¹ : ℂ) * Complex.I) * Complex.I = -(2⁻¹ : ℂ) by
@@ -196,7 +197,7 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
   set g : Fin m → Mat := fun j => P₁p j + P₁m j + P₂p j + P₂m j
   have hg_nonneg : ∀ j, (0 : Mat) ≤ g j := by
     intro j
-    show (0 : Mat) ≤ P₁p j + P₁m j + P₂p j + P₂m j
+    change (0 : Mat) ≤ P₁p j + P₁m j + P₂p j + P₂m j
     exact add_nonneg (add_nonneg (add_nonneg (hP₁p j).nonneg (hP₁m j).nonneg)
       (hP₂p j).nonneg) (hP₂m j).nonneg
   set ρ₀ : Mat := ∑ j : Fin m, g j with hρ₀def
@@ -205,7 +206,7 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
   have hρ₀fix : map K ρ₀ = ρ₀ := by
     rw [hρ₀def, ← hEK, _root_.map_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
-    show E (P₁p j + P₁m j + P₂p j + P₂m j) = g j
+    change E (P₁p j + P₁m j + P₂p j + P₂m j) = g j
     rw [E.map_add, E.map_add, E.map_add, hEK, hEK, hEK, hEK,
       hf₁p j, hf₁m j, hf₂p j, hf₂m j]
   refine ⟨ρ₀, hρ₀psd, hρ₀fix, ?_⟩

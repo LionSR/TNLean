@@ -250,7 +250,7 @@ theorem rel_entropy_eval [NeZero dA]
   ring
 
 /-- **The cross trace term against a positive definite ancilla on the retained
-factor.** For a Hermitian unit-trace $\rho$ on $A \otimes R$ with partial trace
+factor.** For a unit-trace $\rho$ on $A \otimes R$ with partial trace
 $\rho_R = \operatorname{tr}_A \rho$ and any positive definite $\tau$ on $R$,
 $$\operatorname{Re}\operatorname{tr}\bigl(\rho\,
   \log((\mathbf 1_A / d_A) \otimes \tau)\bigr)
@@ -262,7 +262,7 @@ contributes $\operatorname{Re}\operatorname{tr}(\rho_R\log\tau)$ through the
 partial-trace adjoint identity `traceLeftA_lift_trace`. -/
 theorem cross_term_eval [NeZero dA]
     {ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ}
-    (hρ : ρ.IsHermitian) (hρtr : ρ.trace = 1)
+    (hρtr : ρ.trace = 1)
     {τ : Matrix R R ℂ} (hτ : τ.PosDef) :
     (Matrix.trace (ρ * CFC.log (((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ τ))).re
       = -Real.log dA + (Matrix.trace (traceLeftA ρ * CFC.log τ)).re := by
@@ -351,8 +351,8 @@ theorem rel_entropy_eval_support [NeZero dA] [Nonempty R]
       Matrix.add_apply, Matrix.one_apply, smul_eq_mul, Complex.real_smul, Complex.ofReal_mul,
       Complex.ofReal_inv, Complex.ofReal_natCast, Prod.ext_iff]
     by_cases h1 : p.1 = q.1 <;> by_cases h2 : p.2 = q.2 <;>
-      simp only [h1, h2, if_true, if_false, and_true, and_false, true_and, false_and,
-        mul_one, mul_zero, zero_mul, add_zero, zero_add] <;> push_cast <;> ring
+      simp only [h1, h2, if_true, if_false, and_true, and_false, mul_one, mul_zero,
+        zero_mul, add_zero] <;> push_cast <;> ring
   -- cross-term limit on σ: the one-sided affine limit
   have hlim_lhs : Filter.Tendsto
       (fun ε : ℝ => (Matrix.trace (ρ * CFC.log (regPerturbAffine dR ((dA : ℝ)⁻¹) ε σ))).re)
@@ -365,7 +365,7 @@ theorem rel_entropy_eval_support [NeZero dA] [Nonempty R]
         = -Real.log dA + (Matrix.trace (ρR * CFC.log (ρRε ε))).re := by
     intro ε hε
     rw [← haffine ε]
-    have := cross_term_eval (dA := dA) (R := R) (ρ := ρ) hρ.isHermitian hρtr (hρRε_pd ε hε)
+    have := cross_term_eval (dA := dA) (R := R) (ρ := ρ) hρtr (hρRε_pd ε hε)
     rw [← hρRdef] at this
     exact this
   -- marginal cross-term limit: Re tr(ρR log ρR,ε) → Re tr(ρR log ρR)
@@ -570,6 +570,7 @@ theorem supportProj_eq_cfc_recip_mul {ρR : Matrix R R ℂ} (hρR : ρR.IsHermit
       norm_num
   · simp [hij]
 
+omit [DecidableEq R] in
 /-- **The maximally mixed reference places the joint state in the support
 domain.** For a positive semidefinite $\rho$ on $A \otimes R$ with partial trace
 $\rho_R = \operatorname{tr}_A \rho$ and $d_A \neq 0$, the singular reference

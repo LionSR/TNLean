@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.Channel.PerronFrobenius.Existence
@@ -8,9 +9,6 @@ import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 import TNLean.MPS.Tactic.Basic
-
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Filter
 
 /-!
 # Canonical form existence reductions from the source proofs
@@ -123,6 +121,8 @@ completely positive maps (Wolf Chapter 6), formalized in
 The complementary transfer-map gap connection to peripheral primitivity is supplied by
 `TNLean.MPS.Overlap.PeripheralToTransferMapGap` (Wolf Proposition 6.8).
 -/
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
 
 namespace MPSTensor
 

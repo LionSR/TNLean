@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.OrderedCP
 import TNLean.Channel.KrausFreedom
@@ -94,13 +95,6 @@ theorem Matrix.blockDiagBotProj_posSemidef (r s : ℕ) :
   have := Matrix.blockTopRows_conjTranspose_mul_le_one r s
   rw [Matrix.le_iff] at this
   exact this
-
-/-! ### Entrywise formula for the top-block projector -/
-
-theorem Matrix.blockDiagTopProj_apply (r s : ℕ) (j j' : Fin (r + s)) :
-    Matrix.blockDiagTopProj r s j j' =
-      if j = j' ∧ (j : ℕ) < r then 1 else 0 :=
-  Matrix.blockTopRows_conjTranspose_mul_apply r s j j'
 
 /-! ### The key Kronecker identity: `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙)(𝟙 ⊗ C)` -/
 

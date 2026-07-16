@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.PositiveMapProperties
@@ -222,7 +223,7 @@ private lemma nwExtendLinearMap_isPositiveMap (T : Mat →ₗ[ℂ] Mat)
     IsPositiveMap (nwExtendLinearMap (D := D) T E) := by
   intro M hM
   refine Matrix.PosSemidef.fromBlocks_diag ?_ Matrix.PosSemidef.zero
-  exact hPos _ (by change M.toBlocks₁₁.PosSemidef; exact hM.submatrix Sum.inl)
+  exact hPos _ (hM.submatrix Sum.inl)
 
 private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
     (hSub : T 1 ≤ (1 : Mat)) (E : ℕ) :
@@ -293,13 +294,13 @@ private theorem topLeft_schwarz_of_normal_extension
     calc
       (ρ N)ᴴ * ρ N = ρ Nᴴ * ρ N := by
         rw [show (ρ N)ᴴ = ρ Nᴴ by
-          simpa [ρ, Matrix.coe_reindexLinearEquiv] using Matrix.conjTranspose_reindex e e N]
+          simp [ρ, Matrix.coe_reindexLinearEquiv]]
       _ = ρ (Nᴴ * N) := by rw [Matrix.reindexLinearEquiv_mul]
       _ = ρ (N * Nᴴ) := by rw [hNormal]
       _ = ρ N * ρ Nᴴ := by rw [Matrix.reindexLinearEquiv_mul]
       _ = ρ N * (ρ N)ᴴ := by
         rw [show (ρ N)ᴴ = ρ Nᴴ by
-          simpa [ρ, Matrix.coe_reindexLinearEquiv] using Matrix.conjTranspose_reindex e e N]
+          simp [ρ, Matrix.coe_reindexLinearEquiv]]
   have hLeftf : (Sf (Nfᴴ * Nf) - Sf Nfᴴ * Sf Nf).PosSemidef :=
     schwarz_inequality_normal_operator (D := D + E) Sf hPosSf hSubSf Nf hNormalf
   have hLeftSum : (S (Nᴴ * N) - S Nᴴ * S N).PosSemidef := by
@@ -440,8 +441,6 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
     (K : Fin d → Mat)
     (h_tp : IsTPKraus K)
     (A Dom : Mat)
-    (_hDomPos : Dom.PosSemidef)
-    (_hComm : Commute Dom A)
     (hDomLeft : Aᴴ * A ≤ Dom)
     (hDomRight : A * Aᴴ ≤ Dom) :
     krausAdjointMap K (Aᴴ) * krausAdjointMap K A ≤ krausAdjointMap K Dom ∧
@@ -489,7 +488,7 @@ theorem kadison_schwarz_commuting_dominant_cp
     commuting_dominant_right_bound (A := A) (Dom := Dom) hDomPos hComm hDom
   simpa using
     kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
-      (K := K) h_tp A Dom hDomPos hComm hDom hDomRight
+      (K := K) h_tp A Dom hDom hDomRight
 
 private lemma intertwine_sqrt_of_mul_eq
     (P Q A : Mat)

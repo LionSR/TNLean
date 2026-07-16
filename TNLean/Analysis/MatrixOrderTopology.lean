@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.PosDef
@@ -68,8 +69,7 @@ theorem matrix_isClosed_le {m : Type*} [Finite m] :
   exact matrix_isClosed_posSemidef.preimage (continuous_snd.sub continuous_fst)
 
 /-- The Loewner order on finite complex matrices has closed order topology. -/
-@[reducible]
-def matrixOrderClosedTopology {m : Type*} [Finite m] :
+theorem matrixOrderClosedTopology {m : Type*} [Finite m] :
     OrderClosedTopology (Matrix m m ℂ) where
   isClosed_le' := matrix_isClosed_le
 

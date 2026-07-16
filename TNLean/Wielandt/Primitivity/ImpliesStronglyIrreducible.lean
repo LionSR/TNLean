@@ -1,8 +1,8 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
-
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.MPS.CanonicalForm.Reduction
@@ -184,13 +184,6 @@ definite.
 5. All other summands `E^q(|vᵢ⟩⟨vᵢ|)` are PSD (outer products are always PSD).
 6. PosDef + PSD = PosDef, so `ρ` is PosDef. -/
 
-/-- If `f(x) = x` (a fixed point of a linear map), then `f^n(x) = x`. -/
-theorem linearMap_pow_fixed {R M : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M]
-    (f : M →ₗ[R] M) (x : M) (hfix : f x = x) (n : ℕ) :
-    (f ^ n) x = x := by
-  rw [Module.End.pow_apply]
-  exact Function.IsFixedPt.iterate hfix n
-
 /-- Transfer map on rank-one matrices is always PSD (even without primitivity). -/
 private theorem transferMap_pow_rankOne_posSemidef
     (A : MPSTensor d D) (q : ℕ) (φ : Fin D → ℂ) :
@@ -228,8 +221,9 @@ theorem posDef_fixedPoint_of_isPrimitivePaper
     simp [hall i]
   obtain ⟨j, hj⟩ := hv_ne
   -- Step 3: ρ = E^q(ρ) by fixed-point iteration
-  have hfix_pow : ((transferMap (d := d) (D := D) A) ^ q) ρ = ρ :=
-    linearMap_pow_fixed _ ρ hfix q
+  have hfix_pow : ((transferMap (d := d) (D := D) A) ^ q) ρ = ρ := by
+    rw [Module.End.pow_apply]
+    exact Function.IsFixedPt.iterate hfix q
   -- Step 4: Rewrite using linearity: E^q(Σ |v_i⟩⟨v_i|) = Σ E^q(|v_i⟩⟨v_i|)
   rw [hρ_eq] at hfix_pow ⊢
   rw [map_sum] at hfix_pow
@@ -353,7 +347,8 @@ theorem posDef_fixedPoint_of_pow_of_isPrimitivePaper
     ρ.PosDef := by
   -- Step 1: ρ = E^{pq}(ρ) by iterating the fixed-point equation q times
   have hfixq : ((transferMap (d := d) (D := D) A) ^ (p * q)) ρ = ρ := by
-    rw [pow_mul]; exact linearMap_pow_fixed _ ρ hfix q
+    rw [pow_mul, Module.End.pow_apply]
+    exact Function.IsFixedPt.iterate hfix q
   -- Step 2: Decompose E^{pq} = E^q ∘ E^{(p-1)·q} using p·q = q + (p-1)·q
   have hpq_split : p * q = q + (p - 1) * q := by
     have h1 : p - 1 + 1 = p := Nat.sub_add_cancel hp

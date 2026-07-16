@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.Basic
 import TNLean.Channel.Schwarz.PositiveMapProperties
@@ -198,8 +199,9 @@ private lemma familyMain_term_eq
       = z i • (familyMainKraus C (i, p) * (familyMainKraus C (i, p))ᴴ) := by
   ext r s
   simp only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
-    Matrix.smul_apply, Matrix.mul_apply, familyMainKraus, diagonal_apply, mul_ite, ite_mul, zero_mul,
-    mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, conjTranspose_apply, RCLike.star_def,
+    Matrix.smul_apply, Matrix.mul_apply, familyMainKraus, diagonal_apply, mul_ite, ite_mul,
+    zero_mul, mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, conjTranspose_apply,
+    RCLike.star_def,
     Option.elim_some, one_smul]
   ring_nf
 

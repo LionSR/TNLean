@@ -1,17 +1,12 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Transfer
 import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.KadisonSchwarz
-
-open scoped Matrix ComplexOrder BigOperators
-
-namespace MPSTensor
-
-variable {d D : ℕ}
 
 /-! ## MPS injectivity implies irreducibility of the transfer map
 
@@ -27,6 +22,11 @@ Key results:
 - `injective_implies_irreducibleCP`: injectivity of an MPS tensor implies
   irreducibility of its transfer map.
 -/
+open scoped Matrix ComplexOrder BigOperators
+
+namespace MPSTensor
+
+variable {d D : ℕ}
 
 /-! ### Connection to MPS injectivity -/
 
