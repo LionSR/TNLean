@@ -299,8 +299,10 @@ jobs:
     steps:
       - name: Update tracking issues
         uses: actions/github-script@v8
+        # Deliberately uses the default GITHUB_TOKEN: BOT_PAT fails the
+        # sub-issues GraphQL lookups with "Bad credentials", and tracking
+        # comments do not need to retrigger other workflows.
         with:
-          github-token: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
 
