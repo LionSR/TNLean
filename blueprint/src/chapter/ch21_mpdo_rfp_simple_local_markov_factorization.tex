@@ -184,6 +184,35 @@ strong subadditivity for a normalized three-site reduced state.
     Conjugating this matrix by $U_B$ gives the right side.
 \end{proof}
 
+\begin{theorem}[Off-diagonal Markov blocks of a BNT sector]
+    \label{thm:mpdo_bnt_markov_offdiagonal}
+    \lean{MPOTensor.isMPOBlockLeftInverse_bnt_markov_offdiagonal}
+    \leanok
+    \uses{thm:mpdo_bnt_markov_key_formula}
+    Fix a normal sector $s$ and virtual indices $\alpha_1,\beta_3$ for which
+    ${(R_s)}_{\beta_3,\alpha_1}\ne0$.  Then, for every $\beta_1,\alpha_3$
+    and every pair of distinct Markov sectors $k\ne k'$, one has
+    \[
+      \bigl[U_B\kappa^{(s)}_{\beta_1,\alpha_3}U_B^\dagger\bigr]
+        _{(k,l,r),(k',l',r')}=0.
+    \]
+    Thus each physical slice of the $s$-th normal tensor is block diagonal in
+    the Markov decomposition.  This is equation~\textup{Qks}
+    in~\cite[Appendix~C.2, lines~1682--1688 and 1730--1735]
+      {Cirac2016MPDO_arXiv}.
+
+    The nonzero closing entry uses the corrected orientation
+    ${(R_s)}_{\beta_3,\alpha_1}$ recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the entrywise BNT--Markov identity, take equal normal-sector labels and
+    distinct Markov-sector labels.  The left side vanishes, while the right
+    side is the selected closing entry times the displayed block.  Cancel the
+    nonzero closing entry.
+\end{proof}
+
 \begin{theorem}[Saturation gives equality in strong subadditivity]
     \label{thm:mpdo_sal_ssa_equality}
     \lean{MPOTensor.isSSAEquality_tripartite_of_isSAL}
