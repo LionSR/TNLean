@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Structure.InvariantSubspaceDecomp.Basic
 
@@ -75,7 +76,9 @@ private lemma mpv_twoBlockTensor_eq {n m N : ℕ}
         ∑ k : Fin 2,
           (1 : ℂ) ^ N •
             mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ k) σ := by
-    convert h using 1 <;> (simp [mpv, twoBlockTensor] <;> rfl)
+    convert h using 1
+    all_goals simp [mpv, twoBlockTensor]
+    all_goals rfl
   calc
     mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ
         = ∑ k : Fin 2,

@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.LocalGauge
@@ -411,33 +416,13 @@ theorem productKernel_invert {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι 
         rw [hcollapse ξ]
     _ = g η := by simp
 
-/-- The scalar matrix as an element of `GL (Fin n) ℂ`. -/
-noncomputable def scalarGL {n : ℕ} (s : ℂˣ) : GL (Fin n) ℂ :=
-  Matrix.GeneralLinearGroup.scalar (Fin n) s
-
-theorem scalarGL_coe {n : ℕ} (s : ℂˣ) :
-    (↑(scalarGL (n := n) s) : Matrix (Fin n) (Fin n) ℂ) = Matrix.scalar (Fin n) (s : ℂ) :=
-  rfl
-
-/-- The nonsingular inverse of a unit scalar multiple of an invertible matrix. -/
-theorem smul_matrix_inv {n : ℕ} (s : ℂˣ) (M : Matrix (Fin n) (Fin n) ℂ) (h : IsUnit M.det) :
-    ((s : ℂ) • M)⁻¹ = (s : ℂ)⁻¹ • M⁻¹ := by
-  apply Matrix.inv_eq_left_inv
-  rw [smul_mul_smul_comm, inv_mul_cancel₀ s.ne_zero, Matrix.nonsing_inv_mul _ h, one_smul]
-
-/-- The scalar matrix is central, so it commutes with every invertible matrix. -/
-theorem scalarGL_comm {n : ℕ} (s : ℂˣ) (W : GL (Fin n) ℂ) :
-    W * scalarGL s = scalarGL s * W := by
-  apply Units.ext
-  rw [Units.val_mul, Units.val_mul, scalarGL_coe]
-  exact ((Matrix.scalar_commute _ (fun r' => Commute.all _ r') _).eq).symm
-
 /-- The global gauge family built from edge scalars `s` and the absorbed edge
 gauges `Z`: on each edge, the transported inverse `Z_e⁻¹` scaled by `s_e`. -/
 noncomputable def globalGauge (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
     (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (s : Edge G → ℂˣ) :
     (e : Edge G) → GL (Fin (A.bondDim e)) ℂ :=
-  fun e => scalarGL (s e) * glReindex (congr_fun hbd e).symm ((Z e)⁻¹)
+  fun e => Matrix.GeneralLinearGroup.scalar (Fin (A.bondDim e)) (s e) *
+    glReindex (congr_fun hbd e).symm ((Z e)⁻¹)
 
 omit [Fintype V] in
 /-- The oriented endpoint action of the global gauge at an incident edge equals
@@ -453,7 +438,7 @@ theorem edgeGaugeAt_globalGauge (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
   unfold edgeGaugeAt edgeGaugeAtInv globalGauge edgeScalarUnit
   by_cases h : ie.1.1.1 = v
   · simp only [if_pos h]
-    rw [Units.val_mul, scalarGL_coe, glReindex_coe,
+    rw [Units.val_mul, Matrix.GeneralLinearGroup.coe_scalar, glReindex_coe,
       Matrix.scalar_apply, ← Matrix.smul_eq_diagonal_mul]
   · simp only [if_neg h]
     have hdet : IsUnit (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
@@ -461,15 +446,27 @@ theorem edgeGaugeAt_globalGauge (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
       rw [← glReindex_coe]
       exact (Matrix.isUnit_iff_isUnit_det _).mp
         (glReindex (congr_fun hbd ie.1).symm ((Z ie.1)⁻¹)).isUnit
-    have hXinv : ((scalarGL (n := A.bondDim ie.1) (s ie.1)
-          * glReindex (congr_fun hbd ie.1).symm ((Z ie.1)⁻¹))⁻¹
-        : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
-        = (↑(s ie.1) : ℂ)⁻¹ •
-          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
-            (↑(Z ie.1) : Matrix _ _ ℂ)) := by
-      rw [scalarGL_coe, glReindex_coe,
-        Matrix.scalar_apply, ← Matrix.smul_eq_diagonal_mul,
-        smul_matrix_inv (s ie.1) _ hdet]
+    have hXinv :
+        ((Matrix.GeneralLinearGroup.scalar (Fin (A.bondDim ie.1)) (s ie.1) *
+            glReindex (congr_fun hbd ie.1).symm ((Z ie.1)⁻¹))⁻¹ :
+          Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) =
+          (↑(s ie.1) : ℂ)⁻¹ •
+            Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+              (↑(Z ie.1) : Matrix _ _ ℂ) := by
+      rw [Matrix.GeneralLinearGroup.coe_scalar, glReindex_coe,
+        Matrix.scalar_apply, ← Matrix.smul_eq_diagonal_mul]
+      have hinv :
+          ((↑(s ie.1) : ℂ) • Matrix.reindexAlgEquiv ℂ ℂ
+            (finCongr (congr_fun hbd ie.1).symm)
+              (↑((Z ie.1)⁻¹) : Matrix _ _ ℂ))⁻¹ =
+            (↑(s ie.1) : ℂ)⁻¹ •
+              (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+                (↑((Z ie.1)⁻¹) : Matrix _ _ ℂ))⁻¹ := by
+        simpa only [Units.smul_def, Units.val_inv_eq_inv_val] using
+          Matrix.inv_smul'
+            (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+              (↑((Z ie.1)⁻¹) : Matrix _ _ ℂ)) (s ie.1) hdet
+      rw [hinv]
       congr 1
       rw [← glReindex_coe, ← glReindex_coe, ← Matrix.GeneralLinearGroup.coe_inv,
         ← map_inv, inv_inv]

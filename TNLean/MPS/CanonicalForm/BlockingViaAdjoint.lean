@@ -1,8 +1,8 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
-
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.Channel.Peripheral.ClosureFixedPoint
@@ -10,12 +10,6 @@ import TNLean.Channel.Peripheral.PeriodicityRemoval
 
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.LinearAlgebra.Eigenspace.Charpoly
-
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
-
-namespace MPSTensor
-
-open Matrix Finset Complex
 
 /-!
 ## Auxiliary lemmas: adjoint eigenvalues and primitivity
@@ -27,6 +21,11 @@ conjugates of eigenvalues of `E`.
 We then specialize this to `Matrix (Fin D) (Fin D) ℂ` equipped with the Frobenius inner product
 (induced by the identity matrix).
 -/
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
+
+namespace MPSTensor
+
+open Matrix Finset Complex
 
 section AdjointEigenvalues
 

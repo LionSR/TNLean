@@ -38,7 +38,7 @@ instance : ToExpr LinterSets := inferInstanceAs <| ToExpr (NameMap _)
 
 /-- Return the linter sets defined when this executable is elaborated. -/
 elab "linter_sets%" : term => do
-  return toExpr <| linterSetsExt.getState (← getEnv)
+  return toExpr <| (linterSetsExt.getState (← getEnv)).merged
 
 end LinterSetsElab
 

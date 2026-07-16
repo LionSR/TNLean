@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.Semigroup.LindbladForm
 import TNLean.Channel.Semigroup.Kernel
@@ -106,10 +107,8 @@ theorem toAdjointLinearMap_apply (F : LindbladForm D) (A : Mat) :
     rw [Matrix.conjTranspose_add, Matrix.conjTranspose_smul, Matrix.conjTranspose_smul,
       F.H_hermitian, hS_herm]
     congr 1
-    · change star Complex.I • F.H = (-Complex.I) • F.H
-      rw [Complex.star_def, Complex.conj_I, neg_smul]
-    · change star (1 / 2 : ℂ) • S = (1 / 2 : ℂ) • S
-      simp only [one_div, star_inv₀, star_ofNat]
+    · rw [Complex.star_def, Complex.conj_I, neg_smul]
+    · simp only [one_div, star_inv₀, star_ofNat]
   have hsum :
       (∑ j : Fin F.r, adjointDissipator (F.L j) A) =
         (∑ j : Fin F.r, (F.L j)ᴴ * A * F.L j) -

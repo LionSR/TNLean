@@ -1,9 +1,8 @@
 /-
-Copyright (c) 2026. All rights reserved.
+Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: [Authors]
+Authors: TNLean contributors
 -/
-
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import Mathlib.LinearAlgebra.Matrix.Trace
 

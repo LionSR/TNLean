@@ -159,7 +159,13 @@ private theorem choiType_cyclic_reciprocal_three_one_amgm
   let f : Fin 3 → ℝ := ![x ^ 2 * y, y ^ 2 * z, z ^ 2 * x]
   have hf : ∀ i, 0 ≤ f i := by
     intro i
-    fin_cases i <;> simp [f] <;> positivity
+    fin_cases i
+    · change 0 ≤ x ^ 2 * y
+      positivity
+    · change 0 ≤ y ^ 2 * z
+      positivity
+    · change 0 ≤ z ^ 2 * x
+      positivity
   have h := pow_card_mul_prod_le_sum_pow (D := 3) f hf
   have hcube : (3 * x * y * z) ^ 3 ≤
       (x ^ 2 * y + y ^ 2 * z + z ^ 2 * x) ^ 3 := by
@@ -185,7 +191,7 @@ theorem choiType_cyclic_reciprocal_three_one_of_nonneg
     have hz0 : z = 0 := by nlinarith
     subst x
     subst z
-    simp
+    simp only [mul_zero, add_zero, div_zero, zero_add, zero_div, ge_iff_le]
     by_cases hy0 : y = 0
     · subst y
       norm_num
@@ -198,7 +204,7 @@ theorem choiType_cyclic_reciprocal_three_one_of_nonneg
     have hx0 : x = 0 := by nlinarith
     subst y
     subst x
-    simp
+    simp only [mul_zero, zero_add, zero_div, add_zero, div_zero, ge_iff_le]
     by_cases hz0 : z = 0
     · subst z
       norm_num
@@ -211,7 +217,7 @@ theorem choiType_cyclic_reciprocal_three_one_of_nonneg
     have hy0 : y = 0 := by nlinarith
     subst z
     subst y
-    simp
+    simp only [add_zero, mul_zero, zero_add, zero_div, div_zero, ge_iff_le]
     by_cases hx0 : x = 0
     · subst x
       norm_num
@@ -326,21 +332,15 @@ theorem choiTypeMap_vecMulVec_posSemidef_three_one (v : ZMod 3 → ℂ) :
   rw [choiTypeRankOneWeight_reciprocal_sum_three_one]
   exact choiType_cyclic_reciprocal_three_one_of_nonneg hnonneg0 hnonneg1 hnonneg2
 
-/-- Strict-coordinate rank-one positivity for the first Choi map, kept as an
-immediate consequence of the all-coordinate rank-one result. -/
-theorem choiTypeMap_vecMulVec_posSemidef_three_one_of_forall_ne_zero
-    (v : ZMod 3 → ℂ) (_h0 : v 0 ≠ 0) (_h1 : v 1 ≠ 0) (_h2 : v 2 ≠ 0) :
-    (choiTypeMap 3 1 (vecMulVec v (star v))).PosSemidef :=
-  choiTypeMap_vecMulVec_posSemidef_three_one v
-
 /-- A linear map on matrices is positive once its values on all rank-one
 projectors are positive semidefinite: a positive semidefinite matrix is the
 sum of the rank-one projectors of its spectral decomposition. -/
 theorem isPositiveMap_of_forall_vecMulVec_posSemidef
-    {m : Type*} [Fintype m] [DecidableEq m]
-    (Φ : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ)
+    {m : Type*} [Finite m] (Φ : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ)
     (h : ∀ w : m → ℂ, (Φ (vecMulVec w (star w))).PosSemidef) :
     IsPositiveMap Φ := by
+  classical
+  letI := Fintype.ofFinite m
   intro X hX
   rw [hX.eq_sum_vecMulVec_nonzero_eigs]
   rw [map_sum]

@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.CanonicalForm.BNTGrouping
@@ -12,9 +13,6 @@ import TNLean.MPS.SharedInfra.SectorDecomposition
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Spectral.TransferOperatorGapNT
 
-open scoped Matrix BigOperators
-open Filter
-
 /-!
 # Phase-class BNT sector data
 
@@ -23,6 +21,8 @@ irreducible blocks by MPV phase equivalence.  It proves the representative
 overlap data and transports finite-length MPV span identities through the chosen
 phase classes.
 -/
+open scoped Matrix BigOperators
+open Filter
 
 namespace MPSTensor
 
