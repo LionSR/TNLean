@@ -144,11 +144,29 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
 \end{proof}
 
+\begin{definition}[Positive map between matrix algebras]
+    \label{def:positive_map_rectangular}
+    A linear map $T : \MN{D} \to \MN{D'}$ between matrix algebras of
+    possibly different dimensions is \emph{positive} if $T(X) \ge 0$
+    whenever $X \ge 0$, where $X \ge 0$ means that $X$ is positive
+    semidefinite.  For $D' = D$ this is the notion of
+    Definition~\ref{def:positive_map}.
+\end{definition}
+
+\begin{definition}[Trace-preserving map between matrix algebras]
+    \label{def:trace_preserving_rectangular}
+    A linear map $T : \MN{D} \to \MN{D'}$ between matrix algebras of
+    possibly different dimensions is \emph{trace-preserving} if
+    $\tr(T(X)) = \tr(X)$ for all $X$.  For $D' = D$ this is the notion of
+    Definition~\ref{def:trace_preserving}.
+\end{definition}
+
 \begin{theorem}[Filtered trace-normalization criterion]
     \label{thm:filtered_trace_normalization_criterion}
     \lean{comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one}
     \leanok
-    \uses{def:positive_map, def:trace_preserving, def:trace_pairing_adjoint,
+    \uses{def:positive_map_rectangular, def:trace_preserving_rectangular,
+        def:trace_pairing_adjoint,
         thm:conjugation_filters_preserve_positivity}
     Let $T:\MN{D}\to\MN{D'}$ be a positive map between matrix algebras of
     possibly different dimensions, and let $X\in\MN{D}$ satisfy
@@ -206,7 +224,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \label{thm:trace_normalization_inverse_square_root}
     \lean{comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one}
     \leanok
-    \uses{def:positive_map, def:trace_preserving, def:trace_pairing_adjoint,
+    \uses{def:positive_map_rectangular, def:trace_preserving_rectangular,
+        def:trace_pairing_adjoint,
         thm:filtered_trace_normalization_criterion, lem:conj_inv_sqrt_normalizes}
     Let $T:\MN{D}\to\MN{D'}$ be a positive map such that $T^*(\Id)$ is positive
     definite.  Put
@@ -237,7 +256,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \label{lem:making_positive_maps_trace_preserving}
     \lean{exists_isUnit_det_comp_unitaryConjLM_positive_tracePreserving}
     \leanok
-    \uses{def:positive_map, def:trace_preserving, def:trace_pairing_adjoint,
+    \uses{def:positive_map_rectangular, def:trace_preserving_rectangular,
+        def:trace_pairing_adjoint,
         thm:trace_normalization_inverse_square_root}
     Let $T:\MN{D}\to\MN{D'}$ be a positive map for which $T^*(\Id)$ is
     positive definite.  Then there exists an invertible $X\in\MN{D}$ such
