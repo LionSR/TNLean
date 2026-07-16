@@ -429,6 +429,7 @@ import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.CommonWeightAbsorption
+import TNLean.MPS.MPDO.BNTThreeSiteCollapse
 import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalSectorRetractions
