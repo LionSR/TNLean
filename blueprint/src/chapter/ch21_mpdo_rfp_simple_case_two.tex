@@ -128,3 +128,102 @@
     Theorem~\ref{thm:mpdo_common_weight_coefficient}, and absorb
     $\mu_j^N$ into the length-$N$ matrix product vector of $A_j$.
 \end{proof}
+
+\begin{definition}[Three-site family closure and outer inverse contraction]
+    \label{def:mpdo_three_site_family_closure}
+    \lean{MPOTensor.IsThreeSiteFamilyClosure}
+    \lean{MPOTensor.outerInverseContraction}
+    \leanok
+    Let $(\mathcal K_s)_s$ be a finite family of MPO tensors, with
+    $\mathcal K_s^{ij}\in M_{D_s}(\C)$, and let $R_s\in M_{D_s}(\C)$.
+    A three-site operator is a family closure when
+    \[
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        =\sum_s\tr\!\left(
+          \mathcal K_s^{i_1j_1}\mathcal K_s^{i_2j_2}
+          \mathcal K_s^{i_3j_3}R_s\right).
+    \]
+    Given a simultaneous left inverse $C$ as in
+    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse}, contracting $C$
+    against the first and third physical sites of $\rho$ defines the outer
+    inverse contraction
+    \[
+        (\Gamma_{x,y})_{i_2j_2}
+        =\sum_{i_1,j_1,i_3,j_3}
+          C_{x,(i_1,j_1)}C_{y,(i_3,j_3)}
+          \rho_{(i_1,i_2,i_3),(j_1,j_2,j_3)}.
+    \]
+    The closure is the sector-sum form of the displayed equation for
+    $\sigma_3^{(N)}$ in
+    \cite[Appendix~C.2, lines~1343--1348]{Cirac2016MPDO_arXiv}, used with the
+    block-canonical tensor in the Case II calculation at
+    \cite[Appendix~C.2, lines~1726--1732]{Cirac2016MPDO_arXiv}.  The outer
+    contraction is the sector-family form of the Case I contraction in
+    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}; the same
+    construction is used with sector projectors at lines~1719--1725.
+\end{definition}
+
+\begin{theorem}[Collapse of the outer inverse contraction]
+    \label{thm:mpdo_bnt_three_site_outer_inverse_collapse}
+    \lean{MPOTensor.%
+      isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
+    \leanok
+    \uses{def:mpdo_three_site_family_closure,
+      def:mpdo_block_left_inverse}
+    Let $x=(s,\alpha_1,\beta_1)$ and
+    $y=(t,\alpha_3,\beta_3)$.  For a three-site family closure and a
+    simultaneous left inverse, the outer inverse contraction vanishes when
+    $s\ne t$.  When $s=t$, it is
+    \[
+        (\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
+        (R_s)_{\beta_3,\alpha_1}.
+    \]
+    In particular, the contraction retains precisely one entry of the middle
+    physical slice and one entry of the closing matrix, with the orientation
+    shown above.  This is the sector-family form of the Case I contraction in
+    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.  The
+    basis-of-normal-tensors inverse is constructed at lines~1666--1676 and the
+    resulting contraction is used in the Case II calculation at
+    lines~1719--1732 of the same appendix.
+    The closing entry $R_s(\beta_3,\alpha_1)$ is the corrected tail-index
+    orientation of the display at lines~1422--1438, recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the family closure and interchange the finite sector and physical
+    sums.  For $x=(x_s,x_\alpha,x_\beta)$, the inverse identity is
+    \[
+        \sum_{i,j} C_{x,(i,j)}\mathcal K_s^{ij}
+        =\begin{cases}
+          E_{x_\alpha,x_\beta},&x_s=s,\\
+          0,&x_s\ne s.
+        \end{cases}
+    \]
+    Hence distinct labels give zero.  For equal labels, the remaining trace is
+    \[
+        \tr\!\left(E_{\alpha_1,\beta_1}\mathcal K_s^{i_2j_2}
+          E_{\alpha_3,\beta_3}R_s\right)
+        =(\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
+          (R_s)_{\beta_3,\alpha_1}.
+    \]
+\end{proof}
+
+\begin{corollary}[Three-site collapse from the one-letter span]
+    \label{cor:mpdo_bnt_three_site_outer_inverse_collapse}
+    \lean{MPOTensor.%
+      exists_isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
+    \leanok
+    \uses{thm:mpdo_one_letter_simultaneous_inverse,
+      thm:mpdo_bnt_three_site_outer_inverse_collapse}
+    Under the one-letter product-algebra spanning hypothesis, there is a
+    simultaneous left inverse for which every three-site family closure has
+    the preceding diagonal-sector contraction and vanishing off-diagonal
+    contractions.
+\end{corollary}
+
+\begin{proof}\leanok
+    Choose the simultaneous left inverse from
+    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse} and apply
+    Theorem~\ref{thm:mpdo_bnt_three_site_outer_inverse_collapse}.
+\end{proof}
