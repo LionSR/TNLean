@@ -103,11 +103,13 @@ the nilpotency index of a nilpotent $D \times D$ matrix is at most $D$.  The
 definition at line 822 then reads: "A tensor generating MPDO's is simple if
 none of the elements in a BNT is nilpotent."
 
-This predicate is the form used for the already-blocked tensor $K$ in
-Appendix C.2, line 1628. It retains the assumption that `M` generates MPDOs;
-its canonical-form witness has the shape of `MPOTensor.IsHorizontalCF`, with
-the additional requirement that no basis element have nilpotent
-physical-trace transfer. -/
+This predicate records the simple horizontal-canonical-form data of the
+already-blocked tensor $K$ in Appendix C.2, line 1628. It does not include
+the separate biCF hypothesis imposed there, since the copy-independence
+argument at lines 1646--1658 does not use the inverse tensor. It retains the
+assumption that `M` generates MPDOs; its canonical-form witness has the shape
+of `MPOTensor.IsHorizontalCF`, with the additional requirement that no basis
+element have nilpotent physical-trace transfer. -/
 def IsSimpleCanonicalForm (M : MPOTensor d D) : Prop :=
   IsMPDO M ∧
     ∃ S : MPSTensor.SectorDecomposition (d * d),
