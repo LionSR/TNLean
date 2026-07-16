@@ -539,7 +539,8 @@ theorem exists_etaStructure_reducedBlockState_of_isSAL
   have hρflatTrace : ρflat.trace = 1 := by
     dsimp only [ρflat]
     rw [Matrix.trace_submatrix_equiv]
-    exact reducedBlockState_trace K 4 3 (by omega) ((Classical.choose_spec hSAL).1 4)
+    exact reducedBlockState_trace K 4 3 (by omega)
+      ((Classical.choose_spec hSAL).1 4 (by omega))
   have hEqFlat : IsSSAEquality ρflat hρflatPos.isHermitian := by
     simpa [ρflat, hM] using isSSAEquality_threeSite_of_isSAL K hSAL
   have hEqSite :

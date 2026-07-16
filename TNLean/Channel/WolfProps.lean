@@ -16,7 +16,7 @@ This file formalises the remaining Chapter 2 representation corollaries from
 Wolf's *Quantum Channels & Operations: Guided Tour*:
 
 * **Proposition 2.2** — every sesquilinear sandwich `A * X * Bᴴ` decomposes as a
-  signed complex combination of four CP-sandwich terms (polarization
+  signed complex combination of four single-Kraus terms (polarization
   identity). Any linear map expressible as `∑ᵢ Aᵢ * X * Bᵢᴴ` is therefore
   a complex linear combination of CP maps.
 * **Proposition 2.3** — no information without disturbance: any linear map fixing
@@ -58,7 +58,7 @@ abstract Kraus-freedom sufficient-direction lemma
 `kraus_rectangular_freedom'` by embedding each state vector as the `0`-th
 column of a `D × D` matrix (with zeros elsewhere). The density equality
 `ρ_ψ = ρ_φ` then forces the embedded Kraus families to define the same
-CP sandwich `X ↦ X_{0 0} · ρ`, and reading column `0` of the resulting
+completely positive map `X ↦ X_{0 0} · ρ`, and reading column `0` of the resulting
 rectangular isometry recovers the vector relation `ψᵢ = ∑ⱼ Vᵢⱼ · φⱼ`.
 
 ## References
@@ -97,14 +97,14 @@ private theorem scalar_polarization (α β γ δ : ℂ) :
 
 /-- **Proposition 2.2 (Wolf), polarization form**. The sesquilinear sandwich
 `A * X * Bᴴ` decomposes as a signed ℂ-linear combination of four
-CP-sandwich terms `K X Kᴴ`:
+single-Kraus terms `K X Kᴴ`:
 
   `4 • (A X Bᴴ) = (A+B) X (A+B)ᴴ - (A-B) X (A-B)ᴴ
       + I • (A + I•B) X (A + I•B)ᴴ - I • (A - I•B) X (A - I•B)ᴴ`.
 
 Each summand `K X Kᴴ` on the right is manifestly completely positive (it has
 `K` as a one-element Kraus family), so this identity expresses every
-sesquilinear sandwich as a complex linear combination of CP-sandwich maps. -/
+sesquilinear sandwich as a complex linear combination of single-Kraus maps. -/
 theorem polarization_sandwich (A B X : Matrix (Fin D) (Fin D) ℂ) :
     (4 : ℂ) • (A * X * Bᴴ) =
       ((A + B) * X * (A + B)ᴴ) - ((A - B) * X * (A - B)ᴴ) +
@@ -349,7 +349,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
       ∀ i, ψ i = fun a => ∑ j, V i j * φ j a := by
   -- Any inhabitant of `Fin D` yields the canonical column-`0` index. Factored
   -- out once since the same `⟨0, _⟩` witness is needed both when forming the
-  -- CP-sandwich equality and when reading off column `0` of the resulting
+  -- Kraus-map equality and when reading off column `0` of the resulting
   -- rectangular isometry; bundling the `0 < D` derivation into a single `Fin D`
   -- auxiliary lemma avoids rebuilding `Nat.pos_of_ne_zero` at each call site.
   let c₀_of : Fin D → Fin D :=
@@ -401,7 +401,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
       | zero => exact absurd rfl hdne
       | succ _ => simp
     · intro h; exact absurd (Finset.mem_univ _) h
-  -- The two embedded Kraus families define the same CP sandwich map.
+  -- The two embedded Kraus families define the same completely positive map.
   have hKraus : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       ∑ i, K i * X * (K i)ᴴ = ∑ j, L j * X * (L j)ᴴ := by
     intro X

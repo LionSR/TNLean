@@ -19,7 +19,7 @@
 \end{definition}
 
 \begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
-    \lean{MPOTensor.mutualInfoChain}
+    \lean{MPOTensor.mutualInfoChain, MPOTensor.mutualInfoChain_eq}
     \leanok
     \uses{def:block_entropy}
     For the same fixed system size $N$, block length $L\le N$, and positive
@@ -32,8 +32,8 @@
     \lean{MPOTensor.IsSAL}
     \leanok
     \uses{def:mutual_info_chain}
-    An MPO tensor $M$ that generates an MPDO and whose finite-chain operators
-    $\rho^{(N)}(M)$ all have nonzero trace (so the normalized states are
+    An MPO tensor $M$ that generates an MPDO and whose positive-length
+    finite-chain operators $\rho^{(N)}(M)$ all have nonzero trace (so the normalized states are
     well-defined) \emph{saturates the area law} if
     $I_L = I_{L+1}$ for all $1 \le L < \lfloor N/2 \rfloor$ and all $N$; that is,
     the mutual information is constant, $I_1 = I_2 = \cdots = I_{\lfloor N/2 \rfloor}$.
@@ -283,6 +283,157 @@
       thm:mpdo_mutual_information_data_processing_left,
       thm:mpdo_mutual_information_data_processing_right}
     Apply the two one-sided inequalities successively.
+\end{proof}
+
+\begin{definition}[Normalized state across a consecutive bipartition]
+    \label{def:mpdo_split_normalized_mpo}
+    \lean{MPOTensor.chainBipartitionEquiv,
+      MPOTensor.bipartitionedNormalizedMPO,
+      MPOTensor.bipartitionedNormalizedMPO_posSemidef,
+      MPOTensor.bipartitionedNormalizedMPO_trace,
+      MPOTensor.refineFirstBlock,
+      MPOTensor.coarsenFirstBlock,
+      MPOTensor.refineFirstBlock_isKrausCPTP,
+      MPOTensor.coarsenFirstBlock_isKrausCPTP}
+    \leanok
+    For $N=L+K$, split a physical configuration into consecutive intervals of
+    lengths $L$ and $K$, flatten each interval to a finite index, and denote the
+    resulting bipartite form of the normalized periodic MPO by
+    $\sigma^{(N)}_{L:K}$.  The flattened local maps on the two factors are
+    denoted by $\widehat{\mathcal T}_L$ and
+    $\widehat{\mathcal S}_K$.
+\end{definition}
+
+\begin{lemma}[Chain mutual information across a consecutive cut]
+    \label{lem:mpdo_chain_mutual_information_bipartition}
+    \lean{MPOTensor.reducedBlockState_full,
+      MPOTensor.bipartitionedNormalizedMPO_traceRight,
+      MPOTensor.bipartitionedNormalizedMPO_traceLeft,
+      MPOTensor.mutualInfoChain_eq_mutualInformation}
+    \leanok
+    \uses{def:mpdo_split_normalized_mpo}
+    Across the consecutive cut after the first $L$ sites, the two marginals
+    of $\sigma^{(N)}_{L:N-L}$ are the reduced states on $L$ and $N-L$ sites,
+    up to the standard finite-index identifications.  Consequently,
+    $I_L(M)$ is the ordinary bipartite mutual information of
+    $\sigma^{(N)}_{L:N-L}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first marginal is the defining partial trace over the last $N-L$
+    sites.  Periodic translation invariance identifies the second marginal
+    with the reduced state on the first $N-L$ sites.  Entropy is invariant
+    under the finite-index identifications, and retaining the full chain
+    leaves the normalized state unchanged.
+\end{proof}
+
+\begin{lemma}[Renormalization maps transfer one site across a cut]
+    \label{lem:mpdo_rfp_transfer_across_cut}
+    \lean{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO,
+      MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO_reverse}
+    \leanok
+    \uses{def:mpdo_split_normalized_mpo,
+      thm:mpdo_global_renormalization_maps}
+    Suppose that $N=(a+1)+(b+2)=(a+2)+(b+1)$.  The local closure equations
+    imply
+    \[
+      (\widehat{\mathcal T}_a\otimes\widehat{\mathcal S}_b)
+        \bigl(\sigma^{(N)}_{a+1:b+2}\bigr)
+        =\sigma^{(N)}_{a+2:b+1},
+    \]
+    while the reverse pair satisfies
+    \[
+      (\widehat{\mathcal S}_a\otimes\widehat{\mathcal T}_b)
+        \bigl(\sigma^{(N)}_{a+2:b+1}\bigr)
+        =\sigma^{(N)}_{a+1:b+2}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Fixing the word on the second interval leaves a physical closure on the
+    first interval, whose virtual boundary is the fixed word evaluation.
+    Apply the appropriate global closure identity to this slice.  Fixing the
+    resulting word on the first interval gives the closure on the second
+    interval.  Cyclicity of the virtual trace identifies the two cuts of the
+    periodic contraction.  The reverse identity is the same argument with
+    $\mathcal S$ and $\mathcal T$ interchanged.
+\end{proof}
+
+\begin{theorem}[Conditional RFP mutual-information equality]
+    \label{thm:mpdo_rfp_split_mutual_information_eq}
+    \lean{MPOTensor.mutualInformation_bipartition_eq_of_local_transfers,
+      MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS}
+    \leanok
+    \uses{lem:mpdo_rfp_transfer_across_cut,
+      thm:mpdo_mutual_information_data_processing}
+    Let $M$ be a renormalization fixed point.  If its $N$-site operator is
+    positive semidefinite and has nonzero trace, then
+    \[
+       I\bigl(\sigma^{(N)}_{a+1:b+2}\bigr)
+       =I\bigl(\sigma^{(N)}_{a+2:b+1}\bigr).
+    \]
+    This is the channel calculation in
+    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.  For the forward
+    implication of the source proposition, the required nonzero trace follows
+    from horizontal canonical form, the MPDO condition, and the renormalization
+    maps; simplicity is not used.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply mutual-information data processing to the forward pair of local
+    channels and to the reverse pair.  The two transfer identities turn the
+    resulting inequalities into opposite inequalities between the displayed
+    mutual informations.
+\end{proof}
+
+\begin{lemma}[Nonvanishing of positive-length RFP rings]
+    \label{lem:mpdo_rfp_positive_length_trace_nonzero}
+    \lean{MPOTensor.firstSiteMatrix_one,
+      MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS}
+    \leanok
+    \uses{def:is_rfp_via_ts}
+    Let $M$ be horizontally canonical, generate positive semidefinite ring
+    operators, and satisfy the local renormalization fixed-point equations.
+    Then
+    \[
+      \operatorname{tr}\rho^{(N)}(M)\neq0
+      \qquad (N\geq1).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Horizontal canonical form gives a nonzero sector compression for one
+    positive length.  Positivity makes its trace nonzero.  The fixed-point
+    equations make the physical-trace transfer idempotent, so the trace of its
+    positive powers is independent of the positive exponent.
+\end{proof}
+
+\begin{theorem}[Renormalization fixed points saturate the area law]
+    \label{thm:mpdo_rfp_implies_sal}
+    \lean{MPOTensor.isSAL_of_isRFPViaTS}
+    \leanok
+    \uses{lem:mpdo_chain_mutual_information_bipartition,
+      lem:mpdo_rfp_transfer_across_cut,
+      thm:mpdo_rfp_split_mutual_information_eq,
+      lem:mpdo_rfp_positive_length_trace_nonzero}
+    Let $M$ be a horizontally canonical matrix product density operator which
+    satisfies the local renormalization fixed-point equations of
+    Definition~4.1.  Then $M$ saturates the area law:
+    \[
+      I_L(M)=I_{L+1}(M),
+      \qquad 1\leq L<\lfloor N/2\rfloor.
+    \]
+    This is the forward implication of Proposition~\texttt{propsimple} in
+    Appendix~C of \cite{Cirac2016MPDO_arXiv}.  Simplicity is among the ambient
+    hypotheses of Theorem~4.9 but is not used in this implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the cut as $(a+1):(b+2)$.  The local channels transfer one site to
+    obtain $(a+2):(b+1)$, and data processing in both directions gives equality
+    of the two bipartite mutual informations.  The consecutive-cut
+    identification turns this into $I_L=I_{L+1}$.  The preceding lemma supplies
+    the normalization at every positive chain length.
 \end{proof}
 
 \begin{lemma}[Nonnegativity of block entropies]

@@ -243,7 +243,7 @@ theorem exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
   obtain ⟨beta, alpha, hm⟩ :=
     exists_normalizedFourSiteTail_entry_ne_zero
-      K ((Classical.choose_spec hSAL).1 4)
+      K ((Classical.choose_spec hSAL).1 4 (by omega))
   let F₀ := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
     K hK (normalizedFourSiteTail K)
       (isThreeSiteClosure_reducedBlockState K) hη alpha beta hm

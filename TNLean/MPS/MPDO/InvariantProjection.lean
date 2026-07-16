@@ -126,6 +126,25 @@ noncomputable def firstSiteMatrix (P : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     Matrix (Fin (N + 1) → Fin d) (Fin (N + 1) → Fin d) ℂ :=
   fun σ τ => P (σ 0) (τ 0) * (if σ ∘ Fin.succ = τ ∘ Fin.succ then 1 else 0)
 
+/-- Acting by the identity on the first site gives the identity on the full
+chain. -/
+@[simp] theorem firstSiteMatrix_one (N : ℕ) :
+    firstSiteMatrix (1 : Matrix (Fin d) (Fin d) ℂ) N = 1 := by
+  ext σ τ
+  by_cases hστ : σ = τ
+  · subst τ
+    simp [firstSiteMatrix]
+  · have hne : σ 0 ≠ τ 0 ∨ σ ∘ Fin.succ ≠ τ ∘ Fin.succ := by
+      by_contra h
+      push Not at h
+      apply hστ
+      funext i
+      refine Fin.cases h.1 (fun j ↦ ?_) i
+      exact congrFun h.2 j
+    rcases hne with hhead | htail
+    · simp [firstSiteMatrix, hστ, hhead]
+    · simp [firstSiteMatrix, Matrix.one_apply, hστ, htail]
+
 /-- The first-spin action of a Hermitian matrix is Hermitian. -/
 theorem firstSiteMatrix_isHermitian {P : Matrix (Fin d) (Fin d) ℂ}
     (hP : P.IsHermitian) (N : ℕ) : (firstSiteMatrix P N).IsHermitian := by
