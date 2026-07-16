@@ -161,8 +161,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     sites. Reindexing both chain configurations by $r$ carries the embedded
     operator to its translate at the shifted base site:
     \[
-        \tau_i(B)[\sigma\circ r,\,\tau\circ r]
-        = \tau_{r(i)}(B)[\sigma,\tau].
+        \tau_i(B)[\sigma\circ r,\,\eta\circ r]
+        = \tau_{r(i)}(B)[\sigma,\eta].
     \]
 \end{lemma}
 
@@ -240,8 +240,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{proof}\leanok
     A product of pairwise commuting positive semidefinite matrices is
     positive semidefinite: for two commuting factors $A$ and $B$, the square
-    root of $A$ commutes with $B$, so $AB=\sqrt A\,B\,\sqrt A$ is a conjugate
-    of $B$; iterate along the product. Each sector product is such a product
+    root of $A$ commutes with $B$, so $AB=\sqrt A\,B\,\sqrt A\geq 0$, as
+    congruence by $\sqrt A$ preserves positive semidefiniteness; iterate
+    along the product. Each sector product is such a product
     by Lemmas~\ref{lem:mpdo_gsnnch_translate_pos}
     and~\ref{lem:mpdo_gsnnch_bond_translates_comm}, and the sum with natural
     coefficients preserves positivity.
