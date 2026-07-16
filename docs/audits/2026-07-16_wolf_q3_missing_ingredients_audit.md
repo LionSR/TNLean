@@ -47,6 +47,15 @@ The local Chapter 8 transcription is
 transcription is partial and reaches the heading of Section 8.8, so the full
 2012 PDF was also checked when determining absence claims.
 
+Theorem, proposition, and lemma numbers cited in this audit follow the printed
+numbering of the July 5, 2012 PDF, not the transcription's LaTeX
+auto-numbering. Because the transcription is partial and numbers all
+theorem-like environments from one per-section counter, it assigns different
+numbers to the same results (for example, the result cited here as
+Theorem 8.16 carries a different automatic number in the transcription).
+Locate results in the transcription by the quoted line ranges, not by
+searching for printed theorem numbers.
+
 ## Coverage table
 
 | Q3 ingredient | Wolf location | Source status | Current TNLean status | Sufficient for Q3? |

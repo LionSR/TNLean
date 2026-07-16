@@ -30,13 +30,13 @@ properties for finite-dimensional quantum systems.
 \begin{definition}[Trace norm]\label{def:trace_norm}
     \lean{Matrix.traceNorm}
     \leanok
+    \uses{def:schatten_one_norm}
     The trace norm of $A\in\MN{D}$ is its Schatten one-norm:
     \[
         \lVert A\rVert_{\mathrm{tr}}=\lVert A\rVert_1.
     \]
-    Wolf also records the equivalent formula
-    $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$; the present
-    formalization starts from the singular-value sum
+    Wolf records the equivalent formula
+    $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
     \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
 \end{definition}
 
@@ -65,7 +65,7 @@ properties for finite-dimensional quantum systems.
     \lean{Matrix.traceNorm_zero}
     \lean{Matrix.traceNorm_pos_iff}
     \leanok
-    \uses{def:trace_norm, lem:trace_norm_singular_values}
+    \uses{def:trace_norm, def:schatten_one_norm, lem:trace_norm_singular_values}
     For every $A\in\MN{D}$,
     \[
         \lVert A\rVert_{\mathrm{tr}}
