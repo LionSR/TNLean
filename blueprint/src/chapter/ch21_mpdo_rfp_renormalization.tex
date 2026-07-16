@@ -1,4 +1,9 @@
-\section{Renormalization fixed points and pure-state recovery}
+\section{Preliminaries for physical renormalization}
+
+We first collect the transfer-map, channel, and physical-closure notions used
+to state the mixed-state renormalization condition.  The renormalization fixed
+point of \cite[Definition~4.1]{Cirac2016MPDO_arXiv} is stated in the next
+section.
 
 \begin{definition}[MPO transfer-map idempotence]\label{def:is_rfp_mpdo}
     \lean{MPOTensor.IsRFP}
@@ -587,6 +592,13 @@
     $M^{i_0j_0}M^{i_1j_1}M^{i_2j_2}$.
 \end{proof}
 
+\section{Renormalization fixed points}
+
+The following is the mixed-state fixed-point condition of
+\cite[Definition~4.1]{Cirac2016MPDO_arXiv}.  Its two local channels extend to
+every longer periodic chain by acting on the first one or two sites and leaving
+the remaining sites unchanged.
+
 \begin{definition}[Renormalization fixed point via trace-preserving maps]
     \label{def:is_rfp_via_ts}
     \lean{MPOTensor.IsRFPViaTS}
@@ -744,6 +756,8 @@
         =\rho^{(N+1)}(M).
     \]
 \end{proof}
+
+\section{Pure-state recovery inside the MPO formalism}
 
 \begin{definition}[Diagonal pure-state embedding as an MPO]\label{def:to_mpo_tensor}
     \lean{MPSTensor.toMPOTensor}
