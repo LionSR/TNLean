@@ -1,4 +1,11 @@
-name: Lint blueprint
+name: PR CI
+
+# The pull-request pipeline: Lean build + style lint, blueprint lint and
+# Lean-blueprint sync, and the oversized-file guard, formerly
+# lean_action_ci.yml, lint-blueprint.yml, and oversized-lean-files.yml.
+# One workflow means one completion event for the auto-fix dispatcher and
+# per-job change gating: Lean-only changes skip the TeX pipeline, and
+# blueprint-only changes skip the Lean build.
 
 on:
   push:
@@ -9,7 +16,9 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
-      - '.github/workflows/lint-blueprint.yml'
+      - 'scripts/LintStyle.lean'
+      - 'scripts/nolints-style.txt'
+      - '.github/workflows/pr-ci.yml'
       - 'blueprint/src/**'
       - 'tex/tn/**'
       - 'docs/slides/**'
@@ -25,7 +34,9 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
-      - '.github/workflows/lint-blueprint.yml'
+      - 'scripts/LintStyle.lean'
+      - 'scripts/nolints-style.txt'
+      - '.github/workflows/pr-ci.yml'
       - 'blueprint/src/**'
       - 'tex/tn/**'
       - 'docs/slides/**'
@@ -34,15 +45,132 @@ on:
       - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/check_reader_facing_prose.py'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Build-cache policy: the cache is saved only from main and restored
+# everywhere. lean-action's built-in GitHub cache is disabled because it
+# saved a ~2.4 GB entry per PR run; those entries cycled through the 10 GB
+# repository cache budget within minutes, evicting main's entry, so no run
+# ever restored usable TNLean oleans and every run rebuilt all modules.
+# Mathlib and its dependencies are intentionally excluded from the cache:
+# `lake exe cache get` (run inside lean-action) restores them faster than
+# a GitHub cache of that size could.
+env:
+  BUILD_CACHE_PATHS: |
+    .lake/build
+    .lake/packages/Gametheory/.lake/build
+    .lake/packages/checkdecls/.lake/build
+
 jobs:
-  lint-blueprint:
+  # Per-job change gating. Push and dispatch runs skip this and run
+  # every job.
+  changes:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      lean: ${{ steps.filter.outputs.lean }}
+      blueprint: ${{ steps.filter.outputs.blueprint }}
+      workflow: ${{ steps.filter.outputs.workflow }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            lean:
+              - '**.lean'
+              - 'lakefile.*'
+              - 'lean-toolchain'
+              - 'lake-manifest.json'
+              - 'scripts/LintStyle.lean'
+              - 'scripts/nolints-style.txt'
+            blueprint:
+              - 'blueprint/src/**'
+              - 'tex/tn/**'
+              - 'docs/slides/**'
+              - 'blueprint/.chktexrc'
+              - 'blueprint/latexindent.yaml'
+              - 'scripts/blueprint_bibtex.py'
+              - 'scripts/check_reader_facing_prose.py'
+            workflow:
+              - '.github/workflows/pr-ci.yml'
+
+  build:
+    needs: changes
+    if: |
+      !cancelled() && (
+        github.event_name != 'pull_request' ||
+        needs.changes.outputs.lean == 'true' ||
+        needs.changes.outputs.workflow == 'true'
+      )
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Restore Lean build cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.BUILD_CACHE_PATHS }}
+          key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
+          restore-keys: |
+            tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
+
+      - uses: leanprover/lean-action@v1
+        with:
+          use-github-cache: false
+
+      - name: Run text-based style linter
+        run: lake exe lint_style --github
+
+      # Save even when the build failed: a partial cache still spares the
+      # next run the modules that did compile.
+      - name: Save Lean build cache (main only)
+        if: always() && github.ref == 'refs/heads/main'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.BUILD_CACHE_PATHS }}
+          key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
+
+  file-length:
+    name: Check Lean file lengths
+    needs: changes
+    if: |
+      !cancelled() && github.event_name == 'pull_request' &&
+      (needs.changes.outputs.lean == 'true' || needs.changes.outputs.workflow == 'true')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # New oversized files (any Lean file over 1000 lines) fail the check.
+      - name: Run oversized-file guard
+        run: >
+          python3 scripts/check_oversized_lean_files.py
+          --root .
+
+  blueprint:
     name: Check blueprint compiles without errors
+    needs: changes
+    if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.result == 'success')"
+    runs-on: ubuntu-latest
+    env:
+      # TeX-facing steps run only when blueprint sources changed (always on
+      # push/dispatch); the Lean-blueprint sync checks run on Lean-only
+      # changes too.
+      TEX_CHANGED: ${{ github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true' }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -93,12 +221,15 @@ jobs:
         uses: texra-ai/lean-env-action@v1
 
       - name: Install blueprint system dependencies
+        if: env.TEX_CHANGED == 'true'
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
 
       - name: Install blueprint Python dependencies
+        if: env.TEX_CHANGED == 'true'
         uses: texra-ai/lean-env-action/leanblueprint@v1
 
       - name: Check tensor-network diagram macros
+        if: env.TEX_CHANGED == 'true'
         run: |
           cd blueprint/src
           PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
@@ -110,6 +241,7 @@ jobs:
             --smoke-render
 
       - name: Lint LaTeX (chktex)
+        if: env.TEX_CHANGED == 'true'
         run: |
           find blueprint/src tex/tn -name '*.tex' -not -path '*/Packages/*' -print0 \
             | xargs -0 -r chktex -q -l blueprint/.chktexrc
@@ -117,6 +249,7 @@ jobs:
       # TODO: drop continue-on-error after a separate mechanical PR has run
       # `latexindent -l blueprint/latexindent.yaml -w -s` over blueprint/src.
       - name: Check LaTeX formatting (latexindent)
+        if: env.TEX_CHANGED == 'true'
         continue-on-error: true
         timeout-minutes: 5
         run: |
@@ -131,9 +264,11 @@ jobs:
           exit $status
 
       - name: Build blueprint bibliography
+        if: env.TEX_CHANGED == 'true'
         run: python3 scripts/blueprint_bibtex.py
 
       - name: Run leanblueprint web and check for errors
+        if: env.TEX_CHANGED == 'true'
         working-directory: blueprint
         run: |
           set -o pipefail
