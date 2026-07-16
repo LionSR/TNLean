@@ -1,18 +1,7 @@
 #!/usr/bin/env bash
-# Deploy blueprint to gh-pages (preserves /docs/).
-# Usage: ./scripts/deploy-blueprint.sh
+# Trigger a blueprint build + Pages deployment.
+# The site now deploys through GitHub Actions artifacts (see
+# .github/workflows/deploy-pages.yml); there is no gh-pages branch to push,
+# so local builds cannot publish directly.
 set -euo pipefail
-
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-
-echo "==> Building blueprint..."
-cd "$REPO_ROOT"
-python3 scripts/blueprint_bibtex.py
-
-cd "$REPO_ROOT/blueprint"
-leanblueprint pdf
-leanblueprint web
-
-"$REPO_ROOT/scripts/build_blueprint_ch01_12.sh"
-
-exec "$REPO_ROOT/scripts/deploy-to-gh-pages.sh"
+exec gh workflow run blueprint.yml --ref main

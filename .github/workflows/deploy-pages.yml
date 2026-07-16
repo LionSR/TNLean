@@ -1,0 +1,77 @@
+name: Deploy Pages
+
+# Reusable deployment workflow: assembles the site from the newest component
+# artifacts (site-blueprint, site-docs, site-badges) and publishes it with the
+# artifact-based GitHub Pages flow. Build output never enters git history —
+# this replaces the old gh-pages branch, whose per-deploy commits of PDFs and
+# generated HTML had grown the repository pack to ~950 MB.
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Assemble and deploy Pages site
+    # Serialize deployments. Queued duplicates are harmless: every deploy
+    # re-assembles from the newest component artifacts.
+    concurrency:
+      group: gh-pages-deploy
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout scripts
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: scripts
+
+      - name: Fetch latest site components
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ./scripts/fetch-latest-artifact.sh site-blueprint components/site-blueprint
+          ./scripts/fetch-latest-artifact.sh site-docs components/site-docs
+          ./scripts/fetch-latest-artifact.sh site-badges components/site-badges
+
+      # Transitional: until the first docgen run has uploaded a site-docs
+      # artifact, reuse the API docs last published on the legacy gh-pages
+      # branch. This step becomes a no-op (and can be removed) once the
+      # gh-pages branch is deleted.
+      - name: Seed API docs from legacy gh-pages branch
+        run: |
+          if [ -d components/site-docs ]; then
+            exit 0
+          fi
+          if ! git ls-remote --exit-code --heads \
+              "https://github.com/${GITHUB_REPOSITORY}.git" gh-pages >/dev/null; then
+            echo "No gh-pages branch and no site-docs artifact; deploying without API docs"
+            exit 0
+          fi
+          echo "==> Seeding API docs from legacy gh-pages branch..."
+          git clone --branch gh-pages --single-branch --depth 1 \
+            "https://github.com/${GITHUB_REPOSITORY}.git" legacy-site
+          mkdir -p components/site-docs
+          if [ -d legacy-site/docs ]; then
+            mv legacy-site/docs components/site-docs/docs
+          fi
+          if [ -d legacy-site/paper-gaps ]; then
+            mv legacy-site/paper-gaps components/site-docs/paper-gaps
+          fi
+          rm -rf legacy-site
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Assemble site
+        run: ./scripts/assemble-pages-site.sh components _site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
