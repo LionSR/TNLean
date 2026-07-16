@@ -8,13 +8,14 @@ import Mathlib.Analysis.InnerProductSpace.SingularValues
 /-!
 # Schatten one-norm of a finite complex matrix
 
-This file introduces the finite-dimensional Schatten one-norm (trace norm)
+The finite-dimensional Schatten one-norm (trace norm)
 
 `‖A‖₁ = ∑ᵢ sᵢ(A)`
 
-as the sum of the singular values of the Euclidean linear map represented by
-`A`.  Mathlib's singular-value sequence is a finitely supported function on
-`ℕ`, so the definition does not require a separately chosen enumeration bound.
+of a complex matrix `A` is the sum of the singular values of the Euclidean
+linear map represented by `A`.  Mathlib's singular-value sequence is a finitely
+supported function on `ℕ`, so the definition does not require a separately
+chosen enumeration bound.
 
 The foundational order and definiteness properties are established here. This
 quantity is not identified with the ambient matrix operator norm.
@@ -41,8 +42,7 @@ Chapter 8, Section 8.1, printed pp. 131–132: Schatten `p`-norm definition and
 `LinearMap.singularValues` from Mathlib.
 -/
 
-open scoped BigOperators Matrix
-open Finset
+open scoped Matrix
 
 noncomputable section
 
