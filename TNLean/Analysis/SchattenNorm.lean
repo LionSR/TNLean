@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Analysis.InnerProductSpace.SingularValues
-import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
 # Schatten one-norm of a finite complex matrix
@@ -17,9 +16,9 @@ as the sum of the singular values of the Euclidean linear map represented by
 `A`.  Mathlib's singular-value sequence is a finitely supported function on
 `ℕ`, so the definition does not require a separately chosen enumeration bound.
 
-The present module establishes the foundational order and definiteness API.  In
-particular, it does not identify this quantity with the ambient matrix operator
-norm.
+The present file establishes the foundational order and definiteness
+properties. In particular, it does not identify this quantity with the ambient
+matrix operator norm.
 
 ## Main definitions
 
@@ -35,11 +34,11 @@ norm.
 * `Matrix.traceNorm_eq_sum_range_finrank_range` — expansion over the positive
   singular-value range.
 
-## Source
+## References
 
 Michael M. Wolf, *Quantum Channels & Operations: Guided Tour* (July 5, 2012),
 Chapter 8, Section 8.1, printed pp. 131–132: Schatten `p`-norm definition and
-`‖A‖₁ = tr |A|` terminology.  The implementation uses
+`‖A‖₁ = tr |A|` terminology. The implementation uses
 `LinearMap.singularValues` from Mathlib.
 -/
 
@@ -61,8 +60,8 @@ noncomputable def schattenOneNorm (A : Matrix (Fin D) (Fin D) ℂ) : ℝ :=
 
 /-- The trace norm is the Schatten one-norm.
 
-The name records the standard identity `‖A‖₁ = tr |A|`; that identity is a
-later API layer. -/
+The name records the standard identity `‖A‖₁ = tr |A|`; that identity is
+established separately. -/
 noncomputable def traceNorm (A : Matrix (Fin D) (Fin D) ℂ) : ℝ :=
   schattenOneNorm A
 
@@ -121,6 +120,7 @@ theorem traceNorm_nonneg (A : Matrix (Fin D) (Fin D) ℂ) :
   simpa only [traceNorm] using schattenOneNorm_nonneg A
 
 /-- The Schatten one-norm vanishes exactly at the zero matrix. -/
+@[simp]
 theorem schattenOneNorm_eq_zero_iff (A : Matrix (Fin D) (Fin D) ℂ) :
     schattenOneNorm A = 0 ↔ A = 0 := by
   rw [schattenOneNorm, Finsupp.sum]
