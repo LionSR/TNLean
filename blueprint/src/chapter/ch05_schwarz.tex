@@ -1161,16 +1161,18 @@ maps.
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
     \leanok
-    The trace-pairing adjoint $E^*$ of a linear map on matrices is the
-    adjoint for the bilinear pairing $(A,B)\mapsto \operatorname{tr}(AB)$.
+    The trace-pairing adjoint $E^* : \MN{D'} \to \MN{D}$ of a linear map
+    $E : \MN{D} \to \MN{D'}$ between matrix algebras of possibly different
+    dimensions is the adjoint for the bilinear pairing
+    $(A,B)\mapsto \operatorname{tr}(AB)$.
 \end{definition}
 
 \begin{theorem}[Trace-pairing adjoint identity]\label{thm:trace_pairing_adjoint_identity}
     \lean{Matrix.trace_traceAdjointMap_mul}
     \leanok
     \uses{def:trace_pairing_adjoint}
-    For every linear map $E : \MN{D} \to \MN{D}$ and all matrices $\rho$
-    and $X$, one has
+    For every linear map $E : \MN{D} \to \MN{D'}$, every $\rho \in \MN{D'}$,
+    and every $X \in \MN{D}$, one has
     \[
         \operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X)).
     \]
@@ -1189,15 +1191,16 @@ maps.
     \lean{Matrix.traceAdjointMap_traceAdjointMap}
     \leanok
     \uses{def:trace_pairing_adjoint, thm:trace_nondeg}
-    For every linear map $E : \MN{D} \to \MN{D}$, the trace-pairing adjoint
+    For every linear map $E : \MN{D} \to \MN{D'}$, the trace-pairing adjoint
     of $E^*$ is $E$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Fix an arbitrary matrix $N\in\MN{D}$.  The adjoint identity
+    Fix $X\in\MN{D}$ and an arbitrary matrix $N\in\MN{D'}$.  The adjoint
+    identity
     $\operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X))$, applied first
-    to $E^*$ and then to $E$, gives
+    to $E^* : \MN{D'} \to \MN{D}$ and then to $E$, gives
     \[
         \operatorname{tr}((E^*)^*(X)N)
         = \operatorname{tr}(X E^*(N))
@@ -1205,8 +1208,9 @@ maps.
         = \operatorname{tr}(N E(X))
         = \operatorname{tr}(E(X)N).
     \]
-    Since this holds for every $N$ and the trace pairing is nondegenerate,
-    $(E^*)^*=E$.
+    Both $(E^*)^*(X)$ and $E(X)$ lie in $\MN{D'}$, so, since this holds for
+    every $N\in\MN{D'}$, nondegeneracy of the trace pairing on $\MN{D'}$
+    gives $(E^*)^*=E$.
 \end{proof}
 
 \begin{theorem}[Self-duality of the positive semidefinite cone]

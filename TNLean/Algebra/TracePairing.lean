@@ -126,13 +126,18 @@ theorem trace_mul_right_eq_zero_iff {n : Type*} [Fintype n]
       simpa using h N)
   · intro h N; simp [h]
 
-/-- The trace-pairing adjoint of a linear map on matrices.
+/-- The trace-pairing adjoint of a linear map between matrix algebras of
+possibly different dimensions: for `E : M_n(ℂ) → M_m(ℂ)` it is the map
+`E* : M_m(ℂ) → M_n(ℂ)` characterized by the identity
+tr(E^*(ρ) X) = tr(ρ E(X)) for the bilinear trace pairing.
 
-It is characterized by the identity
-tr(E^*(ρ) X) = tr(ρ E(X)) for the bilinear trace pairing. -/
-noncomputable def traceAdjointMap {n : Type*} [Fintype n]
-    (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
-    Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ := by
+The dimension-changing form is the adjoint `T*` of Wolf, *Quantum Channels &
+Operations*, Ch. 3, Lemma (Making positive maps trace preserving);
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex` lines 723-737,
+whose hypothesis and normalization matrix are built from `T*(𝟙)`. -/
+noncomputable def traceAdjointMap {n m : Type*} [Fintype m]
+    (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ) :
+    Matrix m m ℂ →ₗ[ℂ] Matrix n n ℂ := by
   classical
   exact
     { toFun := fun ρ => Matrix.of fun i j => Matrix.trace (ρ * E (Matrix.single j i 1))
@@ -145,10 +150,14 @@ noncomputable def traceAdjointMap {n : Type*} [Fintype n]
         ext i j
         simp }
 
-/-- The trace-pairing adjoint satisfies the expected bilinear trace identity. -/
-theorem trace_traceAdjointMap_mul {n : Type*} [Fintype n]
-    (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
-    (ρ X : Matrix n n ℂ) :
+/-- The trace-pairing adjoint satisfies the expected bilinear trace identity.
+
+Source: Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive
+maps trace preserving), where the adjoint enters through the trace pairing;
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex` lines 723--737. -/
+theorem trace_traceAdjointMap_mul {n m : Type*} [Fintype n] [Fintype m]
+    (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ)
+    (ρ : Matrix m m ℂ) (X : Matrix n n ℂ) :
     Matrix.trace (traceAdjointMap E ρ * X) = Matrix.trace (ρ * E X) := by
   classical
   refine Matrix.induction_on' X ?_ ?_ ?_
@@ -162,9 +171,14 @@ theorem trace_traceAdjointMap_mul {n : Type*} [Fintype n]
     rw [hsingle, map_smul, Matrix.mul_smul, Matrix.trace_smul]
     simp [traceAdjointMap, Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
 
-/-- The trace-pairing adjoint is involutive. -/
-theorem traceAdjointMap_traceAdjointMap {n : Type*} [Fintype n]
-    (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+/-- The trace-pairing adjoint is involutive.
+
+Source: Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive
+maps trace preserving); the double adjoint recovers the map through the same
+trace pairing, `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723--737. -/
+theorem traceAdjointMap_traceAdjointMap {n m : Type*} [Fintype n] [Fintype m]
+    (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ) :
     traceAdjointMap (traceAdjointMap E) = E := by
   classical
   apply LinearMap.ext
