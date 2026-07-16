@@ -38,6 +38,12 @@ unless they are cited by one of the current blueprint chapters above.
 
 For MPDO renormalization fixed points:
 
+- `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
+  elements with nilpotent physical-trace transfer matrices and records the
+  positive physical blocking and chosen-BNT interpretation of the
+  simple-tensor predicate. The source copy-weight lemma is formalized on the
+  chosen blocked canonical form; independence of the choices is not presently
+  needed.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
   `MPOTensor.GSNNCHData` now retains the source orthogonal sectors and natural
   multiplicities. The separate single-bond presentation gives its one-sector
