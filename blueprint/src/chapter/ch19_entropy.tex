@@ -189,6 +189,29 @@ Theorem~\ref{thm:trace_norm_abs}.
     by applying the right and left cases in turn.
 \end{proof}
 
+\begin{theorem}[Trace norm from the spectrum of $A^*A$]
+    \label{thm:trace_norm_sqrt_eigenvalues}
+    \lean{Matrix.traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$, the trace norm is the sum of the square roots of
+    the eigenvalues of the positive operator $A^*A$:
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^*A)}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $s_i(A)=\sqrt{\lambda_i(A^*A)}$ by the definition of singular value,
+    the finite singular-value expansion gives
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        = \sum_{i=0}^{D-1}s_i(A)
+        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^*A)}.
+    \]
+\end{proof}
+
 \section{Von Neumann entropy}
 
 \begin{definition}[Von Neumann entropy]\label{def:von_neumann_entropy}
