@@ -304,7 +304,7 @@ theorem exists_positive_physicalSectorFactorization_of_isSAL
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
   obtain ⟨beta, alpha, hm⟩ :=
     exists_normalizedFourSiteTail_entry_ne_zero
-      K ((Classical.choose_spec hSAL).1 4)
+      K ((Classical.choose_spec hSAL).1 4 (by omega))
   exact exists_positive_inverseMapPhysicalSectorFactorization K hK
     (normalizedFourSiteTail K) (isThreeSiteClosure_reducedBlockState K)
     hη alpha beta hm (Classical.choose hSAL)

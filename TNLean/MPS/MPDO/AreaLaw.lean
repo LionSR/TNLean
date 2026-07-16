@@ -471,15 +471,19 @@ theorem mutualInfoChain_eq (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
   rfl
 
 /-- A tensor `M` **verifies saturation of the area law** (SAL) if it generates
-MPDO, every system-size density operator has nonzero trace (so the normalized
+MPDO, every positive-length density operator has nonzero trace (so the normalized
 state is well defined), and the mutual information is constant in the block size:
 `I_L = I_{L+1}` for all `L` with `1 ≤ L < ⌊N/2⌋`, for all `N` (i.e. the chain
 `I_1 = I_2 = ⋯ = I_{⌊N/2⌋}`).
 
+The normalization condition is restricted to `0 < N`: Definition 4.6 concerns
+physical chains, and neither its mutual informations nor its proof uses an
+empty-chain operator.
+
 Source: arXiv:1606.00608, Definition 4.6 (line 811), with the equivalent
 form `I_L = I_{L+1}` for `L < ⌊N/2⌋` (line 815); the chain starts at `I_1`. -/
 def IsSAL (M : MPOTensor d D) : Prop :=
-  ∃ hMpdo : IsMPDO M, (∀ N, (mpo M N).trace ≠ 0) ∧
+  ∃ hMpdo : IsMPDO M, (∀ N, 0 < N → (mpo M N).trace ≠ 0) ∧
     ∀ N L : ℕ, 1 ≤ L → (hL : L < N / 2) →
       mutualInfoChain M N L (Nat.le_of_lt (hL.trans_le (Nat.div_le_self N 2))) (hMpdo N)
         = mutualInfoChain M N (L + 1) (hL.trans_le (Nat.div_le_self N 2)) (hMpdo N)
