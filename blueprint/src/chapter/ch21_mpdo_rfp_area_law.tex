@@ -285,6 +285,84 @@
     Apply the two one-sided inequalities successively.
 \end{proof}
 
+\begin{definition}[Normalized state across a consecutive bipartition]
+    \label{def:mpdo_split_normalized_mpo}
+    \lean{MPOTensor.chainBiSplitEquiv,
+      MPOTensor.splitNormalizedMPO,
+      MPOTensor.splitNormalizedMPO_posSemidef,
+      MPOTensor.splitNormalizedMPO_trace,
+      MPOTensor.refineFirstBlock,
+      MPOTensor.coarsenFirstBlock,
+      MPOTensor.refineFirstBlock_isKrausCPTP,
+      MPOTensor.coarsenFirstBlock_isKrausCPTP}
+    \leanok
+    For $N=L+K$, split a physical configuration into consecutive intervals of
+    lengths $L$ and $K$, flatten each interval to a finite index, and denote the
+    resulting bipartite form of the normalized periodic MPO by
+    $\sigma^{(N)}_{L:K}$.  The flattened local maps on the two factors are
+    denoted by $\widehat{\mathcal T}_L$ and
+    $\widehat{\mathcal S}_K$.
+\end{definition}
+
+\begin{lemma}[Renormalization maps transfer one site across a cut]
+    \label{lem:mpdo_rfp_transfer_across_cut}
+    \lean{MPOTensor.tensorMapBoth_splitNormalizedMPO,
+      MPOTensor.tensorMapBoth_splitNormalizedMPO_reverse}
+    \leanok
+    \uses{def:mpdo_split_normalized_mpo,
+      thm:mpdo_global_renormalization_maps}
+    Suppose that $N=(a+1)+(b+2)=(a+2)+(b+1)$.  The local closure equations
+    imply
+    \[
+      (\widehat{\mathcal T}_a\otimes\widehat{\mathcal S}_b)
+        \bigl(\sigma^{(N)}_{a+1:b+2}\bigr)
+        =\sigma^{(N)}_{a+2:b+1},
+    \]
+    while the reverse pair satisfies
+    \[
+      (\widehat{\mathcal S}_a\otimes\widehat{\mathcal T}_b)
+        \bigl(\sigma^{(N)}_{a+2:b+1}\bigr)
+        =\sigma^{(N)}_{a+1:b+2}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Fixing the word on the second interval leaves a physical closure on the
+    first interval, whose virtual boundary is the fixed word evaluation.
+    Apply the appropriate global closure identity to this slice.  Fixing the
+    resulting word on the first interval gives the closure on the second
+    interval.  Cyclicity of the virtual trace identifies the two cuts of the
+    periodic contraction.  The reverse identity is the same argument with
+    $\mathcal S$ and $\mathcal T$ interchanged.
+\end{proof}
+
+\begin{theorem}[Conditional RFP mutual-information equality]
+    \label{thm:mpdo_rfp_split_mutual_information_eq}
+    \lean{MPOTensor.mutualInformation_split_eq_of_local_transfers,
+      MPOTensor.mutualInformation_split_eq_of_isRFPViaTS}
+    \leanok
+    \uses{lem:mpdo_rfp_transfer_across_cut,
+      thm:mpdo_mutual_information_data_processing}
+    Let $M$ be a renormalization fixed point.  If its $N$-site operator is
+    positive semidefinite and has nonzero trace, then
+    \[
+       I\bigl(\sigma^{(N)}_{a+1:b+2}\bigr)
+       =I\bigl(\sigma^{(N)}_{a+2:b+1}\bigr).
+    \]
+    This is the channel calculation in
+    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.  For the forward
+    implication of the source proposition, the required nonzero trace follows
+    from horizontal canonical form, the MPDO condition, and the renormalization
+    maps; simplicity is not used.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply mutual-information data processing to the forward pair of local
+    channels and to the reverse pair.  The two transfer identities turn the
+    resulting inequalities into opposite inequalities between the displayed
+    mutual informations.
+\end{proof}
+
 \begin{lemma}[Nonnegativity of block entropies]
     \label{lem:block_entropy_nonneg}
     \lean{blockEntropy_nonneg}
