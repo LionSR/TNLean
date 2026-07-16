@@ -635,6 +635,50 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
 \end{proof}
 
+\begin{theorem}[Coisometric transport of a star projection]
+    \label{thm:star_projection_coisometric_transport}
+    \lean{IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one}
+    \leanok
+    Let $Q$ be a self-adjoint idempotent on a finite-dimensional space, and
+    let $U$ be a coisometry onto that space, so that $UU^\dagger=\Id$.  Then
+    $U^\dagger Q U$ is self-adjoint and idempotent.
+\end{theorem}
+
+\begin{proof}\leanok
+    Self-adjointness follows from
+    $(U^\dagger Q U)^\dagger=U^\dagger Q^\dagger U=U^\dagger Q U$.  Moreover,
+    \[
+        (U^\dagger Q U)^2
+        =U^\dagger Q(UU^\dagger)QU
+        =U^\dagger Q^2U
+        =U^\dagger Q U.
+    \]
+\end{proof}
+
+\begin{lemma}[Pairwise orthogonality from a projection resolution]
+    \label{lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one}
+    \lean{orthogonalProjection_mul_eq_zero_of_sum_eq_one}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    Let $(Q_k)_k$ be a finite family of orthogonal projections satisfying
+    $\sum_k Q_k=\Id$.  If $k\ne\ell$, then $Q_kQ_\ell=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Multiplying the resolution of the identity on both sides by $Q_k$ gives
+    \[
+        \sum_j Q_kQ_jQ_k=Q_k.
+    \]
+    Each summand is positive semidefinite because
+    $Q_kQ_jQ_k=(Q_jQ_k)^*(Q_jQ_k)$, while the $j=k$ summand is already $Q_k$.
+    Subtracting that term and taking traces gives
+    \[
+        0=\sum_{j\ne k}\tr\bigl((Q_jQ_k)^*(Q_jQ_k)\bigr)
+         =\sum_{j\ne k}\lVert Q_jQ_k\rVert_{\mathrm F}^{2}.
+    \]
+    Hence $Q_jQ_k=0$ for $j\ne k$, and taking adjoints gives $Q_kQ_j=0$.
+\end{proof}
+
 \begin{theorem}[Complement of an orthogonal projection]
     \label{thm:orthogonal_projection_complement_channel}
     \lean{IsOrthogonalProjection.one_sub}
