@@ -352,7 +352,9 @@ theorem HasGSNNCHFormAt.submatrix_rotateConfig {ρ : ChainOperator d N}
   simpa [Matrix.submatrix_apply] using h
 
 /-- The sector form passes from the chain operator to its trace
-normalization. -/
+normalization.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 theorem hasGSNNCHFormAt_normalizedMPO {M : MPOTensor d D} {N : ℕ}
     (h : HasGSNNCHFormAt (mpo M N)) (htr : (mpo M N).trace ≠ 0) :
     HasGSNNCHFormAt (normalizedMPO M N) := by
@@ -393,6 +395,10 @@ Proposition C.8; positivity and normalization then give the density-operator
 form of Definition 4.8, realized through one sector. The one-sector form is
 the commuting product form in which Proposition C.8 states its conclusion for
 an injective tensor.
+
+**Local fix (inactive sectors):** the local structure data is constructed
+through the inactive-sector repair; see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines 1569--1594,
 and Definition 4.8, lines 829--850. -/
