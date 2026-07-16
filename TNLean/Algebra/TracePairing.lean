@@ -127,10 +127,14 @@ theorem trace_mul_right_eq_zero_iff {n : Type*} [Fintype n]
   · intro h N; simp [h]
 
 /-- The trace-pairing adjoint of a linear map between matrix algebras of
-possibly different dimensions.
+possibly different dimensions: for `E : M_n(ℂ) → M_m(ℂ)` it is the map
+`E* : M_m(ℂ) → M_n(ℂ)` characterized by the identity
+tr(E^*(ρ) X) = tr(ρ E(X)) for the bilinear trace pairing.
 
-It is characterized by the identity
-tr(E^*(ρ) X) = tr(ρ E(X)) for the bilinear trace pairing. -/
+The dimension-changing form is the adjoint `T*` of Wolf, *Quantum Channels &
+Operations*, Ch. 3, Lemma (Making positive maps trace preserving);
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex` lines 723-737,
+whose hypothesis and normalization matrix are built from `T*(𝟙)`. -/
 noncomputable def traceAdjointMap {n m : Type*} [Fintype m]
     (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ) :
     Matrix m m ℂ →ₗ[ℂ] Matrix n n ℂ := by

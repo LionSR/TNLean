@@ -1197,9 +1197,10 @@ maps.
 
 \begin{proof}
     \leanok
-    Fix an arbitrary matrix $N\in\MN{D}$.  The adjoint identity
+    Fix $X\in\MN{D}$ and an arbitrary matrix $N\in\MN{D'}$.  The adjoint
+    identity
     $\operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X))$, applied first
-    to $E^*$ and then to $E$, gives
+    to $E^* : \MN{D'} \to \MN{D}$ and then to $E$, gives
     \[
         \operatorname{tr}((E^*)^*(X)N)
         = \operatorname{tr}(X E^*(N))
@@ -1207,8 +1208,9 @@ maps.
         = \operatorname{tr}(N E(X))
         = \operatorname{tr}(E(X)N).
     \]
-    Since this holds for every $N$ and the trace pairing is nondegenerate,
-    $(E^*)^*=E$.
+    Both $(E^*)^*(X)$ and $E(X)$ lie in $\MN{D'}$, so, since this holds for
+    every $N\in\MN{D'}$, nondegeneracy of the trace pairing on $\MN{D'}$
+    gives $(E^*)^*=E$.
 \end{proof}
 
 \begin{theorem}[Self-duality of the positive semidefinite cone]

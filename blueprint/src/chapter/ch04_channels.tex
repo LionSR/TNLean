@@ -220,6 +220,20 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
 \end{proof}
 
+\begin{lemma}[Inverse square root of a positive definite matrix is invertible]
+    \label{lem:pos_def_inv_sqrt_invertible}
+    \lean{Matrix.PosDef.isUnit_det_inv_sqrt}
+    \leanok
+    \uses{}
+    If $A\in\MN{D}$ is positive definite, then $(A^{1/2})^{-1}$ is
+    invertible.
+\end{lemma}
+
+\begin{proof}\leanok
+    A positive definite matrix is invertible, hence so is its square root
+    $A^{1/2}$, and the inverse of an invertible matrix is invertible.
+\end{proof}
+
 \begin{theorem}[Trace normalization by inverse square root]
     \label{thm:trace_normalization_inverse_square_root}
     \lean{comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one}
@@ -258,7 +272,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     \uses{def:positive_map_rectangular, def:trace_preserving_rectangular,
         def:trace_pairing_adjoint,
-        thm:trace_normalization_inverse_square_root}
+        thm:trace_normalization_inverse_square_root,
+        lem:pos_def_inv_sqrt_invertible}
     Let $T:\MN{D}\to\MN{D'}$ be a positive map for which $T^*(\Id)$ is
     positive definite.  Then there exists an invertible $X\in\MN{D}$ such
     that
@@ -271,7 +286,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Take $X=(T^*(\Id))^{-1/2}$, which is invertible because $T^*(\Id)$ is
+    Take $X=(T^*(\Id))^{-1/2}$, which is invertible by
+    Lemma~\ref{lem:pos_def_inv_sqrt_invertible} because $T^*(\Id)$ is
     positive definite.  By the preceding theorem,
     $\rho\mapsto T(X\rho X^\dagger)$ is positive and trace-preserving.
 \end{proof}
