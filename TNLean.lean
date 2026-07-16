@@ -25,6 +25,7 @@ import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixAux
+import TNLean.Algebra.OrthogonalProjection
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.DirectedWalkCoboundary
