@@ -363,22 +363,18 @@ noncomputable def cornerFixedPointsStarSubalgebra
   have hQherm : Qᴴ = Q := hQproj.1.eq
   { carrier := {Y : hQ.Corner | Q * adjointMap K Y.1 * Q = Y.1}
     zero_mem' := by
-      show Q * adjointMap K (0 : hQ.Corner).1 * Q = (0 : hQ.Corner).1
-      show Q * adjointMap K (0 : Mat) * Q = (0 : Mat)
+      change Q * adjointMap K (0 : Mat) * Q = (0 : Mat)
       simp [adjointMap]
     add_mem' := by
       intro X Y hX hY
-      show Q * adjointMap K (X + Y).1 * Q = (X + Y).1
-      show Q * adjointMap K (X.1 + Y.1) * Q = X.1 + Y.1
+      change Q * adjointMap K (X.1 + Y.1) * Q = X.1 + Y.1
       rw [adjointMap_add, Matrix.mul_add, Matrix.add_mul, hX, hY]
     one_mem' := by
-      show Q * adjointMap K (1 : hQ.Corner).1 * Q = (1 : hQ.Corner).1
-      show Q * adjointMap K Q * Q = Q
+      change Q * adjointMap K Q * Q = Q
       exact cornerFixed_one K h_tp hρ_psd hρ_fix
     mul_mem' := by
       intro X Y hX hY
-      show Q * adjointMap K (X * Y).1 * Q = (X * Y).1
-      show Q * adjointMap K (X.1 * Y.1) * Q = X.1 * Y.1
+      change Q * adjointMap K (X.1 * Y.1) * Q = X.1 * Y.1
       have hXmem : Q * X.1 * Q = X.1 := by
         obtain ⟨hL, hR⟩ := (Subsemigroup.mem_corner_iff hQ).mp X.2
         rw [Matrix.mul_assoc, hR, hL]
@@ -388,14 +384,12 @@ noncomputable def cornerFixedPointsStarSubalgebra
       exact cornerFixed_mul K h_tp hρ_psd hρ_fix hXmem hYmem hX hY
     algebraMap_mem' := by
       intro c
-      show Q * adjointMap K (algebraMap ℂ hQ.Corner c).1 * Q = (algebraMap ℂ hQ.Corner c).1
-      show Q * adjointMap K (c • Q) * Q = c • Q
+      change Q * adjointMap K (c • Q) * Q = c • Q
       rw [adjointMap_smul, Matrix.mul_smul, Matrix.smul_mul,
         cornerFixed_one K h_tp hρ_psd hρ_fix]
     star_mem' := by
       intro X hX
-      show Q * adjointMap K (star X).1 * Q = (star X).1
-      show Q * adjointMap K X.1ᴴ * Q = X.1ᴴ
+      change Q * adjointMap K X.1ᴴ * Q = X.1ᴴ
       rw [adjointMap_conjTranspose]
       have h := congrArg Matrix.conjTranspose hX
       simpa [Matrix.conjTranspose_mul, hQherm, Matrix.mul_assoc] using h }

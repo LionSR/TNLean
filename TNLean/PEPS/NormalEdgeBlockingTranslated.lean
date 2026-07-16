@@ -1,5 +1,9 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.PEPS.NormalEdgeBlockingCoordinate
-
 /-!
 # Translated edge blockings in the normal PEPS proof
 
@@ -13,8 +17,7 @@ edge-blocking pictures used after the normalized one-edge constructions.
   Section 3, Theorem 3]
 -/
 
-namespace TNLean
-namespace PEPS
+namespace TNLean.PEPS
 
 /-! ### Translated horizontal edge blockings -/
 
@@ -993,5 +996,4 @@ theorem normalSquareEdgeBlockingHypotheses_endpoint_disjoint_cover_of_marginCove
   let H := normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data
   H.endpoint_disjoint_cover_at_edge e
 
-end PEPS
-end TNLean
+end TNLean.PEPS

@@ -1,11 +1,10 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.SharedInfra.SectorDecomposition
-
-open scoped Matrix BigOperators
 
 /-!
 # Granular sector decomposition from a weighted block family
@@ -36,6 +35,7 @@ paper's minimal BNT representative construction.
   BNT minimal representative condition.
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.A]: Existence of canonical form.
 -/
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 

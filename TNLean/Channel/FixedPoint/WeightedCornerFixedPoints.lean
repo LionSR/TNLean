@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.CornerFixedPoints
 import TNLean.Channel.FixedPoint.Corollaries
@@ -26,8 +27,9 @@ For a fixed point of maximal support the corner restriction $Q X Q = X$ is vacuo
 is a positive semidefinite fixed point whose support projection absorbs every fixed point
 (`Kraus.exists_maximalSupport_fixedPoint` in `TNLean.Channel.FixedPoint.MaximalSupport`),
 and at such a fixed point the conjugation below reaches the full fixed-point set
-(`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`). The statements below take an arbitrary positive semidefinite fixed point, so for a
-non-maximal choice of $\rho$ they conjugate the fixed points supported on the support of
+(`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`). The statements below take an
+arbitrary positive semidefinite fixed point, so for a non-maximal choice of $\rho$ they
+conjugate the fixed points supported on the support of
 $\rho$. The resolution of the former restriction is recorded in
 `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`.
 
@@ -398,22 +400,21 @@ noncomputable def weightedCornerFixedPointsStarSubalgebra
   { carrier := {Y : hQ.Corner |
       map K (CFC.sqrt ρ * Y.1 * CFC.sqrt ρ) = CFC.sqrt ρ * Y.1 * CFC.sqrt ρ}
     zero_mem' := by
-      show map K (CFC.sqrt ρ * (0 : hQ.Corner).1 * CFC.sqrt ρ) = _
-      show map K (CFC.sqrt ρ * (0 : Mat) * CFC.sqrt ρ) = CFC.sqrt ρ * (0 : Mat) * CFC.sqrt ρ
+      change map K (CFC.sqrt ρ * (0 : Mat) * CFC.sqrt ρ) =
+        CFC.sqrt ρ * (0 : Mat) * CFC.sqrt ρ
       simp [map]
     add_mem' := by
       intro X Y hX hY
-      show map K (CFC.sqrt ρ * (X.1 + Y.1) * CFC.sqrt ρ) =
+      change map K (CFC.sqrt ρ * (X.1 + Y.1) * CFC.sqrt ρ) =
         CFC.sqrt ρ * (X.1 + Y.1) * CFC.sqrt ρ
       rw [Matrix.mul_add, Matrix.add_mul, map_add, hX, hY]
     one_mem' := by
-      show map K (CFC.sqrt ρ * (1 : hQ.Corner).1 * CFC.sqrt ρ) = _
-      show map K (CFC.sqrt ρ * Q * CFC.sqrt ρ) = CFC.sqrt ρ * Q * CFC.sqrt ρ
+      change map K (CFC.sqrt ρ * Q * CFC.sqrt ρ) = CFC.sqrt ρ * Q * CFC.sqrt ρ
       rw [hSρS]
       exact hρ_fix
     mul_mem' := by
       intro X Y hX hY
-      show map K (CFC.sqrt ρ * (X.1 * Y.1) * CFC.sqrt ρ) =
+      change map K (CFC.sqrt ρ * (X.1 * Y.1) * CFC.sqrt ρ) =
         CFC.sqrt ρ * (X.1 * Y.1) * CFC.sqrt ρ
       have hXmem : Q * X.1 * Q = X.1 := by
         obtain ⟨hL, hR⟩ := (Subsemigroup.mem_corner_iff hQ).mp X.2
@@ -424,15 +425,14 @@ noncomputable def weightedCornerFixedPointsStarSubalgebra
       exact weightedCornerFixed_mul K h_tp hρ_psd hρ_fix hXmem hYmem hX hY
     algebraMap_mem' := by
       intro c
-      show map K (CFC.sqrt ρ * (algebraMap ℂ hQ.Corner c).1 * CFC.sqrt ρ) = _
-      show map K (CFC.sqrt ρ * (c • Q) * CFC.sqrt ρ) = CFC.sqrt ρ * (c • Q) * CFC.sqrt ρ
+      change map K (CFC.sqrt ρ * (c • Q) * CFC.sqrt ρ) =
+        CFC.sqrt ρ * (c • Q) * CFC.sqrt ρ
       have hsmul : CFC.sqrt ρ * (c • Q) * CFC.sqrt ρ = c • ρ := by
         rw [Matrix.mul_smul, Matrix.smul_mul, hSρS]
       rw [hsmul, map_smul, hρ_fix]
     star_mem' := by
       intro X hX
-      show map K (CFC.sqrt ρ * (star X).1 * CFC.sqrt ρ) = _
-      show map K (CFC.sqrt ρ * X.1ᴴ * CFC.sqrt ρ) = CFC.sqrt ρ * X.1ᴴ * CFC.sqrt ρ
+      change map K (CFC.sqrt ρ * X.1ᴴ * CFC.sqrt ρ) = CFC.sqrt ρ * X.1ᴴ * CFC.sqrt ρ
       have hconj : CFC.sqrt ρ * X.1ᴴ * CFC.sqrt ρ = (CFC.sqrt ρ * X.1 * CFC.sqrt ρ)ᴴ := by
         rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, hS_herm, Matrix.mul_assoc]
       rw [hconj]

@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
 import TNLean.Spectral.MixedTransfer
@@ -11,10 +12,6 @@ import Mathlib.LinearAlgebra.StdBasis
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Matrix.StdBasis
 import Mathlib.LinearAlgebra.Matrix.Trace
-
-namespace MPSTensor
-
-open scoped Matrix BigOperators
 
 /-!
 # MPV overlaps as traces of mixed transfer operators
@@ -37,6 +34,9 @@ mixed transfer map acts on `Matrix (Fin D₁) (Fin D₂) ℂ`.
 
 The same trace-expansion helpers apply to this rectangular matrix space.
 -/
+namespace MPSTensor
+
+open scoped Matrix BigOperators
 
 section Main
 
