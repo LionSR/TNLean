@@ -276,6 +276,7 @@ import TNLean.MPS.ParentHamiltonian.BoundaryBlockMatEq
 import TNLean.Axioms.Beigi
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Decorrelation
+import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
 import TNLean.MPS.ParentHamiltonian.Martingale
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 -- The finite-chain uniqueness capstone is not part of this foundational layer.

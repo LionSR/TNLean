@@ -1,0 +1,111 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The marginal-support expansion in CPSV16 Appendix D.2}
+\author{}
+\date{2026-07-15}
+
+\begin{document}
+\maketitle
+
+Let \(\mathcal H_A\), \(\mathcal H_X\), and \(\mathcal H_B\) be
+finite-dimensional Hilbert spaces, let
+\(K_{AXB}\subseteq\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\),
+and let \(P_{AXB}\) be the orthogonal projector onto \(K_{AXB}\).  Define
+\[
+  \rho_{AX}=\operatorname{tr}_B P_{AXB},
+  \qquad
+  \rho_{XB}=\operatorname{tr}_A P_{AXB}.
+\]
+The two marginal supports are \(\operatorname{ran}\rho_{AX}\) and
+\(\operatorname{ran}\rho_{XB}\), with orthogonal projectors \(P_{AX}\) and
+\(P_{XB}\), respectively.  For an operator on \(AX\) or \(XB\), a hat
+denotes its lift to the full tripartite space; in particular,
+\[
+  \widehat P_{AX}=P_{AX}\otimes I_B,
+  \qquad
+  \widehat P_{XB}=I_A\otimes P_{XB},
+\]
+and likewise for \(\widehat\rho_{AX}\) and \(\widehat\rho_{XB}\).
+
+\section{The source step}
+
+In the proof of Proposition~D.3, the source chooses orthonormal bases
+\(\{\alpha_i\}\) and \(\{\beta_i\}\) of the two marginal supports and
+asserts that every basis vector is a single partial contraction,
+\begin{align}
+  \alpha_i=\langle\widetilde b_i\mid\varphi_{b,i}\rangle,
+  \qquad
+  \beta_i=\langle\widetilde a_i\mid\varphi_{a,i}\rangle,
+\end{align}
+with \(\varphi_{a,i},\varphi_{b,i}\in K_{AXB}\).
+This is the passage at source lines 2236--2242.
+
+The support of a reduced operator is spanned by partial contractions, but an
+arbitrary vector in that span need not itself be one partial contraction.
+Thus the displayed single-contraction choice does not follow from the
+definition of marginal support.
+
+\section{Local correction}
+
+The subsequent matrix-unit argument only needs a factorization of each
+marginal support projector through the corresponding reduced operator.  For
+the elementary matrix units on the outer factors, write
+\(E^A_{ak}=\lvert a\rangle\langle k\rvert\) and
+\(E^B_{bk}=\lvert b\rangle\langle k\rvert\).  The reduced operators have the
+exact expansions
+\begin{align}
+  \widehat\rho_{AX}
+    &=\sum_{b,k} E^B_{bk}P_{AXB}E^B_{kb},\\
+  \widehat\rho_{XB}
+    &=\sum_{a,k} E^A_{ak}P_{AXB}E^A_{ka}.
+\end{align}
+If \(g(0)=0\) and \(g(x)=x^{-1}\) for \(x\ne0\), functional calculus gives
+\begin{align}
+  P_{AX}=g(\rho_{AX})\rho_{AX}=\rho_{AX}g(\rho_{AX}),\\
+  P_{XB}=g(\rho_{XB})\rho_{XB}=\rho_{XB}g(\rho_{XB}).
+\end{align}
+Consequently the decorrelation identity first annihilates
+\begin{align}
+  \widehat\rho_{XB}(I-P_{AXB})\widehat\rho_{AX}
+  \quad\text{and}\quad
+  \widehat\rho_{AX}(I-P_{AXB})\widehat\rho_{XB},
+\end{align}
+and multiplication by the two reciprocal-on-support factors gives the same
+equalities for \(\widehat P_{XB}\) and \(\widehat P_{AX}\).  The absorption
+identities then yield
+\begin{align}
+  \widehat P_{XB}\widehat P_{AX}
+    =P_{AXB}
+    =\widehat P_{AX}\widehat P_{XB}.
+\end{align}
+
+This correction uses the source's matrix-unit and marginal-support argument,
+but replaces the unsupported single-contraction assertion by a valid
+factorization.  No hypothesis is added to Proposition~D.3.
+
+\paragraph{Verdict: local correction.}
+The conclusion and hypotheses of Proposition~D.3 are unchanged; only the
+unsupported intermediate representation is replaced.
+
+\section{Formal statement}
+
+The reduced-operator expansions are
+\leanid{TripartiteDecorrelation.lift_marginalAX_eq_sum} and
+\leanid{TripartiteDecorrelation.lift_marginalXB_eq_sum}.  The complementary
+support products are
+\leanid{TripartiteDecorrelation.IsDecorrelated.}
+\hspace{0pt}\leanid{supports_mul_complement_mul_eq_zero} and its reverse-order
+counterpart.  The two product identities are assembled by
+\leanid{TripartiteDecorrelation.supportProducts_eq}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
