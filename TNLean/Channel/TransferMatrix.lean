@@ -477,7 +477,7 @@ dimensions. The normalization matrix `X = (T*(𝟙))^{-1/2}` lives on the input
 algebra `M_D(ℂ)`. Positivity and trace preservation of the normalized map are
 spelled out because `IsPositiveMap` and `IsTracePreservingMap` require equal
 input and output dimensions; the equal-dimension statements phrased with those
-predicates follow at the end of this section as the `D' = D` instances. -/
+predicates follow at the end of this section as equal-dimension specializations. -/
 
 variable {D' : ℕ}
 
@@ -488,7 +488,7 @@ of Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive maps
 trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
 lines 723-737. The equal-dimension form
 `IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one` below is
-the `D' = D` instance. -/
+the equal-dimension case. -/
 theorem trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ)
@@ -522,7 +522,7 @@ in Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive maps
 trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
 lines 723-737. The equal-dimension form
 `IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving` below is the
-`D' = D` instance. -/
+equal-dimension case. -/
 theorem comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hT : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
@@ -535,7 +535,12 @@ theorem comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one
   ⟨fun ρ hρ => hT (unitaryConjLM X ρ) (unitaryConjLM_isPositiveMap X ρ hρ),
     trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX⟩
 
-/-- The inverse square root of a positive definite matrix is invertible. -/
+/-- The inverse square root of a positive definite matrix is invertible.
+
+Auxiliary fact with no separate source statement: Wolf's Ch. 3 lemma (Making
+positive maps trace preserving; `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723--737) chooses $X=(T^*(\mathbb 1))^{-1/2}$ and uses its invertibility
+implicitly; this lemma discharges that step. -/
 theorem Matrix.PosDef.isUnit_det_inv_sqrt {A : Matrix (Fin D) (Fin D) ℂ}
     (hA : A.PosDef) : IsUnit ((CFC.sqrt A)⁻¹).det := by
   have hA_nonneg : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ A := hA.posSemidef.nonneg
@@ -589,7 +594,7 @@ theorem exists_isUnit_det_comp_unitaryConjLM_positive_tracePreserving
 /-! #### Equal-dimension instances
 
 The `IsPositiveMap`/`IsTracePreservingMap` forms of the trace-normalization
-results are the `D' = D` instances of the theorems above; each proof is the
+results are equal-dimension specializations of the theorems above; each proof is the
 direct application of the corresponding dimension-changing theorem. -/
 
 /-- Trace-normalization criterion for a map with conjugated input.
