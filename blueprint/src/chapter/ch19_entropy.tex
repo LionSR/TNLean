@@ -35,10 +35,11 @@ properties for finite-dimensional quantum systems.
     \[
         \lVert A\rVert_{\mathrm{tr}}=\lVert A\rVert_1.
     \]
-    Wolf records the equivalent formula
-    $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
-    \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
 \end{definition}
+
+Wolf records the equivalent formula
+$\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
+\cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
 
 \begin{lemma}[Finite singular-value expansions]\label{lem:trace_norm_singular_values}
     \lean{Matrix.schattenOneNorm_eq_sum_support}
@@ -52,7 +53,9 @@ properties for finite-dimensional quantum systems.
 \end{lemma}
 
 \begin{proof}\leanok
-    Singular values outside the rank of the represented linear map vanish.
+    The singular-value sequence satisfies $s_i(A) = 0$ for all
+    $i \geq \operatorname{rank}(A)$, so summing over the support and summing
+    over $\{0,\ldots,\operatorname{rank}(A)-1\}$ give the same value.
 \end{proof}
 
 \begin{theorem}[Elementary trace-norm properties]
@@ -77,8 +80,12 @@ properties for finite-dimensional quantum systems.
 \end{theorem}
 
 \begin{proof}\leanok
-    The singular values are nonnegative. Their sum therefore vanishes exactly
-    when every singular value vanishes, which is equivalent to $A=0$.
+    The singular values satisfy $s_i(A) \geq 0$, so
+    \[
+        \lVert A\rVert_{\mathrm{tr}}=0
+        \iff s_i(A)=0 \text{ for all } i
+        \iff A=0.
+    \]
 \end{proof}
 
 \section{Von Neumann entropy}
