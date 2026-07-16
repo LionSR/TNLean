@@ -1159,17 +1159,19 @@ maps.
 \end{proof}
 
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
-    \lean{Matrix.traceAdjointMap}
+    \lean{Matrix.traceAdjointMap, Matrix.traceAdjointMap₂}
     \leanok
-    The trace-pairing adjoint $E^*$ of a linear map on matrices is the
-    adjoint for the bilinear pairing $(A,B)\mapsto \operatorname{tr}(AB)$.
+    The trace-pairing adjoint $E^* : \MN{D'} \to \MN{D}$ of a linear map
+    $E : \MN{D} \to \MN{D'}$ between matrix algebras of possibly different
+    dimensions is the adjoint for the bilinear pairing
+    $(A,B)\mapsto \operatorname{tr}(AB)$.
 \end{definition}
 
 \begin{theorem}[Trace-pairing adjoint identity]\label{thm:trace_pairing_adjoint_identity}
-    \lean{Matrix.trace_traceAdjointMap_mul}
+    \lean{Matrix.trace_traceAdjointMap_mul, Matrix.trace_traceAdjointMap₂_mul}
     \leanok
     \uses{def:trace_pairing_adjoint}
-    For every linear map $E : \MN{D} \to \MN{D}$ and all matrices $\rho$
+    For every linear map $E : \MN{D} \to \MN{D'}$ and all matrices $\rho$
     and $X$, one has
     \[
         \operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X)).
