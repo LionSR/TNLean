@@ -214,17 +214,17 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{proof}
 
-\begin{theorem}[Trace norm from the eigenvalues of $A^\dagger A$]
-    \label{thm:trace_norm_sqrt_eigenvalues}
+\begin{lemma}[Trace norm from the matrix eigenvalues of $A^\dagger A$]
+    \label{lem:trace_norm_sqrt_matrix_eigenvalues}
     \lean{Matrix.traceNorm_eq_sum_sqrt_eigenvalues}
     \leanok
     \uses{def:trace_norm}
     For every $A\in\MN{D}$, with $\lambda_0,\ldots,\lambda_{D-1}$ the
-    eigenvalues of $A^\dagger A$,
+    eigenvalues of the matrix $A^\dagger A$,
     \[
         \lVert A\rVert_{\mathrm{tr}}=\sum_{i=0}^{D-1}\sqrt{\lambda_i}.
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:trace_norm_abs}
@@ -252,11 +252,11 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
     and the maximum is attained: some unitary $U$ satisfies
     $\operatorname{tr}[A^\dagger U]=\lVert A\rVert_{\mathrm{tr}}$.
-    This is Eq.~(8.11) of \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+    See \cite[Chapter~8, Eq.~(8.11)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:trace_norm_sqrt_eigenvalues}
+    \uses{lem:trace_norm_sqrt_matrix_eigenvalues}
     For the upper bound, let $v_0,\ldots,v_{D-1}$ be an orthonormal
     eigenbasis of $A^\dagger A$ with eigenvalues $\lambda_i$, and let $U$ be
     unitary. Expanding the trace in this basis and applying the

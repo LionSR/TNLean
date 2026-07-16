@@ -13,7 +13,7 @@ Wolf characterizes the trace norm variationally as
 $\|A\|_1 = \sup\{\lvert\operatorname{tr}[A^\dagger U]\rvert : UU^\dagger = 1\}$,
 Eq. (8.11) of Chapter 8.  This file proves both halves of that
 characterization for square complex matrices and derives the triangle
-inequality $\|A+B\|_1 \le \|A\|_1 + \|B\|_1$, the remaining norm axiom of
+inequality $\|A+B\|_1 \le \|A\|_1 + \|B\|_1$, the remaining norm property of
 Wolf's Section 8.1 for the trace norm.
 
 The upper bound expands the trace in an orthonormal eigenbasis of
@@ -41,7 +41,7 @@ Wolf's proof sketch, which is not available in Mathlib.
 ## References
 
 Michael M. Wolf, *Quantum Channels & Operations: Guided Tour* (July 5, 2012),
-Chapter 8, Section 8.1: norm axioms
+Chapter 8, Section 8.1: norm properties
 (Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 44–49) and the
 variational characterization Eq. (8.11)
 (Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 170–202).
@@ -59,15 +59,18 @@ variable {D : ℕ}
 $A^\dagger A$.
 
 Wolf §8.1; Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 86–95. -/
-theorem traceNorm_eq_sum_sqrt_eigenvalues (A : Matrix (Fin D) (Fin D) ℂ) :
+lemma traceNorm_eq_sum_sqrt_eigenvalues (A : Matrix (Fin D) (Fin D) ℂ) :
     traceNorm A =
       ∑ i, Real.sqrt ((posSemidef_conjTranspose_mul_self A).isHermitian.eigenvalues i) := by
   rw [traceNorm_eq_re_trace_abs, abs_eq_cfc_real_sqrt]
   exact (posSemidef_conjTranspose_mul_self A).isHermitian.trace_cfc_eq_sum_re Real.sqrt
 
 /-- The diagonal entry $(P^\dagger Q)_{ii}$ is the Euclidean inner product of
-the `i`-th columns of `P` and `Q`. -/
-theorem conjTranspose_mul_apply_self_eq_inner (P Q : Matrix (Fin D) (Fin D) ℂ) (i : Fin D) :
+the `i`-th columns of `P` and `Q`.
+
+Local auxiliary identity for the variational formula below; it has no direct
+counterpart in Wolf. -/
+lemma conjTranspose_mul_apply_self_eq_inner (P Q : Matrix (Fin D) (Fin D) ℂ) (i : Fin D) :
     (Pᴴ * Q) i i = ⟪(WithLp.toLp 2 fun k ↦ P k i : EuclideanSpace ℂ (Fin D)),
       (WithLp.toLp 2 fun k ↦ Q k i : EuclideanSpace ℂ (Fin D))⟫_ℂ := by
   rw [EuclideanSpace.inner_toLp_toLp, Matrix.mul_apply]
@@ -76,8 +79,11 @@ theorem conjTranspose_mul_apply_self_eq_inner (P Q : Matrix (Fin D) (Fin D) ℂ)
 
 /-- Cauchy--Schwarz bound for the trace of $P^\dagger Q$, column by column:
 $\lvert\operatorname{tr}[P^\dagger Q]\rvert \le
-\sum_i \lVert Pe_i\rVert\,\lVert Qe_i\rVert$. -/
-theorem norm_trace_conjTranspose_mul_le (P Q : Matrix (Fin D) (Fin D) ℂ) :
+\sum_i \lVert Pe_i\rVert\,\lVert Qe_i\rVert$.
+
+Local auxiliary estimate for the variational formula below; it has no direct
+counterpart in Wolf. -/
+lemma norm_trace_conjTranspose_mul_le (P Q : Matrix (Fin D) (Fin D) ℂ) :
     ‖(Pᴴ * Q).trace‖ ≤
       ∑ i, Real.sqrt ((Pᴴ * P) i i).re * Real.sqrt ((Qᴴ * Q) i i).re := by
   have hnorm : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (i : Fin D),
@@ -94,8 +100,11 @@ theorem norm_trace_conjTranspose_mul_le (P Q : Matrix (Fin D) (Fin D) ℂ) :
         exact norm_inner_le_norm _ _
 
 /-- The conjugation of $A^\dagger A$ by its eigenvector unitary is the diagonal
-matrix of eigenvalues. -/
-theorem star_eigenvectorUnitary_conjTranspose_mul_self_mul (A : Matrix (Fin D) (Fin D) ℂ) :
+matrix of eigenvalues.
+
+Local auxiliary restatement of the spectral theorem for $A^\dagger A$; it has
+no direct counterpart in Wolf. -/
+lemma star_eigenvectorUnitary_conjTranspose_mul_self_mul (A : Matrix (Fin D) (Fin D) ℂ) :
     star ((posSemidef_conjTranspose_mul_self A).isHermitian.eigenvectorUnitary :
         Matrix (Fin D) (Fin D) ℂ) * (Aᴴ * A) *
       ((posSemidef_conjTranspose_mul_self A).isHermitian.eigenvectorUnitary :
@@ -244,9 +253,12 @@ theorem exists_mem_unitaryGroup_trace_conjTranspose_mul_eq (A : Matrix (Fin D) (
         refine Finset.sum_congr rfl fun i _ ↦ ?_
         have hAV : ∀ k, (A * V) k i = (g i).ofLp k := by
           intro k
-          rw [Matrix.mul_apply]
-          rfl
-        have hWb : ∀ k, W k i = (b i).ofLp k := fun k ↦ rfl
+          simp only [hg, WithLp.ofLp_toLp, Matrix.mulVec, dotProduct, Matrix.mul_apply,
+            hVdef, hv, IsHermitian.eigenvectorUnitary_apply]
+        have hWb : ∀ k, W k i = (b i).ofLp k := by
+          intro k
+          rw [hW, Module.Basis.toMatrix_apply, OrthonormalBasis.coe_toBasis,
+            OrthonormalBasis.coe_toBasis_repr_apply, EuclideanSpace.basisFun_repr]
         rw [EuclideanSpace.inner_eq_star_dotProduct, Matrix.diag_apply, Matrix.mul_apply]
         simp only [conjTranspose_apply, dotProduct, Pi.star_apply, hAV, hWb]
         exact Finset.sum_congr rfl fun k _ ↦ mul_comm _ _
@@ -279,7 +291,7 @@ theorem traceNorm_eq_sSup_norm_trace_conjTranspose_mul_unitary (A : Matrix (Fin 
   ((isGreatest_norm_trace_conjTranspose_mul_unitary A).csSup_eq).symm
 
 /-- **Triangle inequality for the trace norm**:
-$\|A + B\|_1 \le \|A\|_1 + \|B\|_1$, the remaining norm axiom of Wolf's
+$\|A + B\|_1 \le \|A\|_1 + \|B\|_1$, the remaining norm property of Wolf's
 Section 8.1.  Choosing a unitary $U$ with
 $\operatorname{tr}[(A+B)^\dagger U] = \|A+B\|_1$ and splitting the trace,
 $\|A+B\|_1 \le \lvert\operatorname{tr}[A^\dagger U]\rvert +
