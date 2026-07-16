@@ -500,3 +500,14 @@ The five §8 questions are resolved as follows (maintainer delegated to the reco
 - **Coverage matrix**: the manual ships a table mapping every figure genre of arXiv:2011.12127
   (RMP) and arXiv:2203.12563 to its tenkz spelling (or names the planned extension), so coverage
   is checkable rather than aspirational.
+
+## 11. Tensor-style modes (added 2026-07-16, maintainer request)
+
+The glyph policy is declarative: `\tnset{tensor style=dot|box}` (document-wide) or the same key
+per picture. `dot` (default) renders unadorned `\tn{A}` as a CPSV-school bead with the label
+placed outside by the auto-quadrant algorithm; `box` renders it as a box with the label (or
+`\overline{label}` for `\tn*`) typeset inside, suppresses external auto labels, and tightens
+brace clearances (the clearance keys off whether external dot labels actually exist in the
+spanned columns). Explicit per-cell skins always override the policy; the event stream records
+the resolved skin. All inscribed glyphs carry a uniform-height strut so boxes labelled `A`,
+`T_g`, `A^{(2)}` sit at one height (small multiples must be uniform).
