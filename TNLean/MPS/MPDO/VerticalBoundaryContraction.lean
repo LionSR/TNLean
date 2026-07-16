@@ -62,21 +62,11 @@ theorem contractBondMatrix_apply (A : MPSTensor (D * D) d)
       ∑ ab : Fin (D * D), X ab.modNat ab.divNat • A ab :=
   rfl
 
-/-- Contracting a bond matrix commutes with a fixed change of matrix
-coordinates.
+/-- Contraction commutes with multiplying every tensor letter on the left and
+right by fixed matrices.
 
 This is the linear contraction of the letterwise vertical canonical-form
 identity in arXiv:1606.00608, Appendix C.4, lines 1955--1976. -/
-theorem mul_contractBondMatrix_mul_conjTranspose
-    (A : MPSTensor (D * D) d) (U : Matrix (Fin R) (Fin d) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    U * contractBondMatrix A X * Uᴴ =
-      contractBondMatrix (fun ab ↦ U * A ab * Uᴴ) X := by
-  simp only [contractBondMatrix_apply, Matrix.mul_sum, Matrix.sum_mul,
-    Matrix.mul_smul, Matrix.smul_mul]
-
-/-- Contraction commutes with multiplying every tensor letter on the left and
-right by fixed matrices. -/
 theorem contractBondMatrix_mul_mul
     (A : MPSTensor (D * D) d) (L : Matrix (Fin R) (Fin d) ℂ)
     (K : Matrix (Fin d) (Fin R) ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -152,7 +142,7 @@ theorem mul_physClose1_mul_conjTranspose_of_vertical_forward
     (X : Matrix (Fin D) (Fin D) ℂ) :
     U * physClose1 M X * Uᴴ = MPSTensor.contractBondMatrix B X := by
   rw [← contractBondMatrix_verticalTensor_eq_physClose1]
-  rw [MPSTensor.mul_contractBondMatrix_mul_conjTranspose]
+  rw [← MPSTensor.contractBondMatrix_mul_mul]
   apply congrArg (fun C : MPSTensor (D * D) R ↦
     MPSTensor.contractBondMatrix C X)
   funext ab

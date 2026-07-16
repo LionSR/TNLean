@@ -308,7 +308,6 @@ physical indices, as in
 
 \begin{lemma}[Contraction of the one-site vertical canonical form]
     \label{lem:mpdo_vertical_bond_matrix_contraction}
-    \lean{MPSTensor.mul_contractBondMatrix_mul_conjTranspose}
     \lean{MPSTensor.contractBondMatrix_mul_mul}
     \lean{MPSTensor.contractBondMatrix_toTensorFromBlocks}
     \lean{MPOTensor.contractBondMatrix_verticalTensor_eq_physClose1}
@@ -343,8 +342,13 @@ physical indices, as in
 \begin{proof}\leanok
     The coefficient of $A_{ab}$ in the trace
     $\operatorname{tr}(M^{ij}X)$ is $X_{ba}$, which proves the first
-    identification.  Multiplication by $U$ and $U^\dagger$ commutes with the
-    finite sum over $(a,b)$.  Finally, contraction commutes with the
+    identification.  Moreover,
+    \[
+        U\left(\sum_{a,b}X_{ba}A_{ab}\right)U^\dagger
+          =\sum_{a,b}X_{ba}\left(UA_{ab}U^\dagger\right).
+    \]
+    Combining this equality with the forward hypothesis gives the contracted
+    canonical-form identity.  Finally, contraction commutes with the
     block-diagonal assembly, leaving its weights unchanged and replacing each
     vertical block $M_\alpha$ by $M_\alpha(X)$.
 \end{proof}
