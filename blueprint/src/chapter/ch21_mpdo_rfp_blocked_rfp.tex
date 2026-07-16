@@ -291,6 +291,64 @@ physical indices, as in
     \]
 \end{proof}
 
+\begin{definition}[Bond-matrix contraction of a vertical tensor]
+    \label{def:mpdo_vertical_bond_matrix_contraction}
+    \lean{MPSTensor.contractBondMatrix}
+    \lean{MPSTensor.contractBondMatrix_apply}
+    \leanok
+    Let $A$ be a tensor whose physical label is a pair $(a,b)$ of horizontal
+    bond indices.  For a bond matrix $X$, define
+    \[
+        A(X)=\sum_{a,b}X_{ba}A_{ab}.
+    \]
+    The order of the entries of $X$ is chosen so that
+    $A(X)_{ij}=\operatorname{tr}(M^{ij}X)$ when
+    $A_{ab,ij}=M^{ij}_{ab}$.
+\end{definition}
+
+\begin{lemma}[Contraction of the one-site vertical canonical form]
+    \label{lem:mpdo_vertical_bond_matrix_contraction}
+    \lean{MPSTensor.mul_contractBondMatrix_mul_conjTranspose}
+    \lean{MPSTensor.contractBondMatrix_mul_mul}
+    \lean{MPSTensor.contractBondMatrix_toTensorFromBlocks}
+    \lean{MPOTensor.contractBondMatrix_verticalTensor_eq_physClose1}
+    \lean{MPOTensor.contractBondMatrix_verticalAssembledTensor}
+    \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_vertical_forward}
+    \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_verticalAssembledTensor}
+    \lean{MPOTensor.physClose1_eq_of_vertical_reconstruction}
+    \lean{MPOTensor.physClose1_eq_of_verticalAssembledTensor_reconstruction}
+    \leanok
+    \uses{def:vertical_cf_mpdo, def:phys_close,
+      def:mpdo_vertical_bond_matrix_contraction}
+    Suppose that
+    \[
+        U\widetilde M_{ab}U^\dagger
+          =\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
+    \]
+    is a one-site vertical canonical-form identity.  Contracting against an
+    arbitrary bond matrix $X$ gives
+    \[
+        U M(X)U^\dagger
+          =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+    \]
+    If the reverse letterwise identity is also given, then
+    \[
+        M(X)=U^\dagger
+          \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
+    \]
+    These are the contracted canonical-form identities used in
+    \cite[Appendix~C.4, lines~1955--1976]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The coefficient of $A_{ab}$ in the trace
+    $\operatorname{tr}(M^{ij}X)$ is $X_{ba}$, which proves the first
+    identification.  Multiplication by $U$ and $U^\dagger$ commutes with the
+    finite sum over $(a,b)$.  Finally, contraction commutes with the
+    block-diagonal assembly, leaving its weights unchanged and replacing each
+    vertical block $M_\alpha$ by $M_\alpha(X)$.
+\end{proof}
+
 \begin{definition}[Four-site physical closure]
     \label{def:mpdo_four_site_physical_closure}
     \lean{finFourArrowEquiv, MPOTensor.physClose4}
