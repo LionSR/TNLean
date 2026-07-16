@@ -122,6 +122,31 @@
     chain length.
 \end{proof}
 
+\begin{theorem}[Injective SAL tensors generate GSNNCH states]
+    \label{thm:mpdo_injective_sal_is_gsnnch}
+    \lean{MPOTensor.isGSNNCH_of_isInjective_of_isSAL}
+    \leanok
+    \uses{def:is_sal, cor:mpdo_eta_local_structure_of_is_sal,
+        thm:mpdo_eta_local_structure_has_gsnnch_form,
+        thm:mpdo_gsnnch_of_sector_form}
+    Every injective MPO tensor satisfying SAL generates Gibbs states of a
+    nearest-neighbor commuting Hamiltonian: the normalized finite-chain
+    states are density operators with the explicit sector form of
+    Definition~\ref{def:mpdo_source_gsnnch}, realized through one sector.
+    The one-sector form is the commuting product form in which
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} states its conclusion for an
+    injective tensor, combined here with the density normalization of
+    \cite[Definition~4.8]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Corollary~\ref{cor:mpdo_eta_local_structure_of_is_sal} gives the
+    $\eta$-local structure, whose single positive bond gives the one-sector
+    form by Theorem~\ref{thm:mpdo_eta_local_structure_has_gsnnch_form}. SAL
+    includes the nonvanishing of every positive-length trace, so
+    Theorem~\ref{thm:mpdo_gsnnch_of_sector_form} applies.
+\end{proof}
+
 \begin{remark}[Positive physical-sector factorization]
     Suppose that $K$ satisfies $\mathrm{SAL}(K)$ and admits a physical-sector
     factorization whose neighboring operators $\eta_{k,h}$ are simultaneously

@@ -150,3 +150,160 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Take one sector, its one-site projection to be the identity, its
     multiplicity to be one, and its bond to be the given bond.
 \end{proof}
+
+\begin{lemma}[Cyclic-shift transport of an embedded local operator]
+    \label{lem:mpdo_gsnnch_shift_transport}
+    \lean{MPOTensor.embedLocalOperator_submatrix_rotateConfig}
+    \leanok
+    \uses{def:mpdo_commuting_form_data}
+    Let $B$ act on $L$ consecutive spins of the periodic $N$-site chain,
+    embedded at base site $i$, and let $r$ denote the cyclic shift of
+    sites. Reindexing both chain configurations by $r$ carries the embedded
+    operator to its translate at the shifted base site:
+    \[
+        \tau_i(B)[\sigma\circ r,\,\eta\circ r]
+        = \tau_{r(i)}(B)[\sigma,\eta].
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Entrywise from the definitions: the shift carries the window at $i$ to
+    the window at $r(i)$, preserves agreement of two configurations outside
+    the window, and preserves the extracted window values.
+\end{proof}
+
+\begin{lemma}[Translates of a sector bond commute pairwise]
+    \label{lem:mpdo_gsnnch_bond_translates_comm}
+    \lean{MPOTensor.GSNNCHData.bondAt_comm}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_shift_transport}
+    For every sector $x$ of an explicit GSNNCH decomposition and every finite
+    chain length $N\geq2$, all cyclic translates of the sector bond commute:
+    \[
+        [\tau_i(B^{(x)}),\tau_j(B^{(x)})]=0 .
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Translates with disjoint windows commute because they act on disjoint
+    sites, and two length-two windows overlap only when their starting sites
+    coincide or are cyclic neighbors. For the neighboring pairs, applying the
+    transport identity of Lemma~\ref{lem:mpdo_gsnnch_shift_transport} $p$
+    times to the neighboring commutation
+    $[\tau_0(B^{(x)}),\tau_1(B^{(x)})]=0$ of
+    Definition~\ref{def:mpdo_source_gsnnch} gives
+    \[
+        [\tau_p(B^{(x)}),\tau_{p+1}(B^{(x)})]=0
+    \]
+    for every $p$, which covers all overlapping pairs.
+\end{proof}
+
+\begin{lemma}[Positivity of the sector-bond translates]
+    \label{lem:mpdo_gsnnch_translate_pos}
+    \lean{MPOTensor.embedLocalOperator_posSemidef}
+    \lean{MPOTensor.GSNNCHData.bondAt_posSemidef}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, def:mpdo_commuting_form_data}
+    An operator embedded into the periodic chain from a positive
+    semidefinite local factor is positive semidefinite; in particular every
+    translate $\tau_i(B^{(x)})$ of a sector bond is positive semidefinite.
+\end{lemma}
+
+\begin{proof}\leanok
+    In the coordinates given by the window-plus-complement splitting of the
+    chain, the embedded operator decomposes as
+    \[
+        \tau_i(B)\;\cong\;B\otimes\operatorname{Id}_{\mathrm{comp}},
+    \]
+    where the identity acts on the cyclic complement of the window. A tensor
+    product of positive semidefinite operators is positive semidefinite, and
+    $B^{(x)}\geq0$ by Definition~\ref{def:mpdo_source_gsnnch}.
+\end{proof}
+
+\begin{lemma}[Positivity of the sector sum]
+    \label{lem:mpdo_gsnnch_sector_sum_pos}
+    \lean{MPOTensor.GSNNCHData.sectorProduct_posSemidef}
+    \lean{MPOTensor.GSNNCHData.unnormalizedState_posSemidef}
+    \lean{MPOTensor.HasGSNNCHFormAt.posSemidef}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_bond_translates_comm,
+        lem:mpdo_gsnnch_translate_pos}
+    Each sector product $\prod_{j=1}^N\tau_j(B^{(x)})$ of an explicit GSNNCH
+    decomposition is positive semidefinite; hence so are the represented
+    operator
+    \[
+        \bigoplus_x n_x \prod_{j=1}^N\tau_j(B^{(x)})
+    \]
+    and every chain operator equal to a positive multiple of it.
+\end{lemma}
+
+\begin{proof}\leanok
+    A product of pairwise commuting positive semidefinite matrices is
+    positive semidefinite: for two commuting factors $A$ and $B$, the square
+    root of $A$ commutes with $B$, so $AB=\sqrt A\,B\,\sqrt A\geq 0$, as
+    congruence by $\sqrt A$ preserves positive semidefiniteness; iterate
+    along the product. Each sector product is such a product
+    by Lemmas~\ref{lem:mpdo_gsnnch_translate_pos}
+    and~\ref{lem:mpdo_gsnnch_bond_translates_comm}, and the sum with natural
+    coefficients preserves positivity.
+\end{proof}
+
+\begin{lemma}[Translation invariance of the sector sum]
+    \label{lem:mpdo_gsnnch_sector_sum_translation_invariant}
+    \lean{MPOTensor.GSNNCHData.sectorProduct_submatrix_rotateConfig}
+    \lean{MPOTensor.GSNNCHData.unnormalizedState_submatrix_rotateConfig}
+    \lean{MPOTensor.HasGSNNCHFormAt.submatrix_rotateConfig}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_bond_translates_comm,
+        lem:mpdo_gsnnch_shift_transport}
+    Each sector product of an explicit GSNNCH decomposition is invariant
+    under the cyclic shift of the periodic chain, where spin $N+1$ is
+    identified with the first; hence so are the represented operator and
+    every chain operator equal to a positive multiple of it
+    \cite[lines~838--842]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By the transport identity of Lemma~\ref{lem:mpdo_gsnnch_shift_transport},
+    the cyclic shift carries each translate $\tau_j(B^{(x)})$ to
+    $\tau_{j+1}(B^{(x)})$, so it permutes the factors of each sector product
+    cyclically. All factors commute by
+    Lemma~\ref{lem:mpdo_gsnnch_bond_translates_comm}, so the product is
+    unchanged, and so is the sum over sectors.
+\end{proof}
+
+\begin{lemma}[The sector form passes to the trace normalization]
+    \label{lem:mpdo_gsnnch_form_normalized}
+    \lean{MPOTensor.hasGSNNCHFormAt_normalizedMPO}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_sector_sum_pos}
+    If a finite-chain operator of an MPO tensor has the explicit sector form
+    of Definition~\ref{def:mpdo_source_gsnnch} and nonzero trace, then its
+    trace normalization has the sector form as well.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:mpdo_gsnnch_sector_sum_pos} the operator is positive
+    semidefinite, so its nonzero trace is positive and the normalization
+    multiplies the sector sum by a positive constant.
+\end{proof}
+
+\begin{theorem}[Sector form with nonvanishing traces gives GSNNCH]
+    \label{thm:mpdo_gsnnch_of_sector_form}
+    \lean{MPOTensor.isGSNNCH_of_hasGSNNCHForm}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_sector_sum_pos,
+        lem:mpdo_gsnnch_form_normalized}
+    If every finite-chain operator of an MPO tensor has the explicit sector
+    form of Definition~\ref{def:mpdo_source_gsnnch} and a nonzero trace, then
+    the normalized finite-chain states are density operators with that sector
+    form, so the tensor generates Gibbs states of a nearest-neighbor
+    commuting Hamiltonian.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity of each chain operator follows from
+    Lemma~\ref{lem:mpdo_gsnnch_sector_sum_pos}, and the normalized state has
+    unit trace and keeps the sector form by
+    Lemma~\ref{lem:mpdo_gsnnch_form_normalized}.
+\end{proof}
