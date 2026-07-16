@@ -9,7 +9,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Architecture Diagram](#architecture-diagram)
   - [The Fixed-Point Loop](#the-fixed-point-loop)
 - [Workflow Reference](#workflow-reference)
-  - [Claude Code Review](#claude-code-review-claude-code-reviewyml)
+  - [PR Review](#pr-review-pr-reviewyml)
   - [Issue Automation](#issue-automation-issue-automationyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
@@ -59,10 +59,11 @@ When you push to a PR branch, several things happen in parallel:
   You push to a PR branch
   │
   │  ┌──────────────────────────────────────────────────────────────┐
-  │  │ Runs on every PR push to Lean/blueprint files                │
+  │  │ Runs after PR CI completes successfully                      │
   ├──┤                                                              │
-  │  │  Claude Code Review (claude-code-review.yml)                 │
-  │  │  Reviews code for correctness, style, and completeness.      │
+  │  │  PR Review (pr-review.yml)                                   │
+  │  │  Reviews code for correctness, style, and completeness       │
+  │  │  (one job per provider), and blueprint/prose quality.        │
   │  │  Posts inline comments and a summary on the PR.              │
   │  │                                                              │
   │  └───────────┬──────────────────────────────────────────────────┘
@@ -129,7 +130,7 @@ Review ──► Fix ──► Review ──► Fix ──► ... ──► No c
 Here is exactly what happens:
 
 1. You push code to a PR branch.
-2. **Claude Code Review** runs and posts inline comments (e.g., "this proof uses `sorry`", "naming doesn't follow Mathlib conventions").
+2. **PR Review** runs once PR CI is green and posts inline comments (e.g., "this proof uses `sorry`", "naming doesn't follow Mathlib conventions").
 3. If the PR has the `auto-fix-claude` label, the review-fix job in
    **auto-fix.yml** triggers. It:
    - Reads all unresolved, non-outdated review threads on the PR
@@ -145,11 +146,11 @@ Here is exactly what happens:
 
 ## Workflow Reference
 
-### Claude Code Review (`claude-code-review.yml`)
+### PR Review (`pr-review.yml`)
 
-**What it does**: Automatically reviews PR changes for proof correctness, Mathlib style, type safety, performance, mathematical exposition, and documentation.
+**What it does**: Automatically reviews PR changes for proof correctness, Mathlib style, type safety, performance, mathematical exposition, and documentation (`code-review` jobs, one per configured provider), and reviews blueprint sync and reader-facing prose (`prose-review` job).
 
-**When it runs**: On every `pull_request` event (`opened`, `synchronize`, `ready_for_review`, `reopened`) that touches Lean source files (`TNLean/**/*.lean`, `TNLean.lean`, `lakefile.toml`, `lean-toolchain`), blueprint files (`blueprint/src/**/*.tex`), or paper-gap notes and bibliographies (`docs/paper-gaps/**/*.tex`, `docs/paper-gaps/**/*.bib`).
+**When it runs**: After a "PR CI" run for a same-repository pull request completes **successfully**. Reviewing after CI spends review effort on code that compiles, and an auto-fix no longer rewrites code while it is being reviewed. Head commits authored by the auto-fix bot are skipped (the fixed-point loop's convergence check covers them). Note that marking a draft ready for review does not by itself start a review — push a commit or re-run PR CI.
 
 **What it checks**:
 - Are there any `sorry`s introduced?
@@ -162,7 +163,7 @@ Here is exactly what happens:
 
 **Thread management**: When triggered by a new push (`synchronize`), the review checks its own previous comments. If a previous bot comment has been addressed by the new commits, it resolves that thread automatically. It never resolves threads authored by humans.
 
-**Concurrency**: Only one review runs per PR at a time. If a new push arrives while a review is in progress, the old review is cancelled.
+**Concurrency**: One review pipeline per PR at a time; later completions queue rather than cancel a review in progress.
 
 ---
 
@@ -290,9 +291,9 @@ file list during validation, or adds proof-integrity tokens such as `sorry`,
 
 ### Review Comment Auto-Fix (`auto-fix.yml`)
 
-**What it does**: After a Claude Code Review completes, this workflow reads the review comments and asks Claude to fix each issue. This creates the fixed-point loop described above.
+**What it does**: After a PR review completes, this workflow reads the review comments and asks Claude to fix each issue. This creates the fixed-point loop described above.
 
-**When it runs**: After the "Claude Code Review (Lean)" workflow completes successfully, **only if** the PR has the `auto-fix-claude` label.
+**When it runs**: After the "PR Review" workflow completes successfully, **only if** the PR has the `auto-fix-claude` label.
 
 **What Claude does**:
 - Reads inline review comments and the review summary from the latest cycle
@@ -368,8 +369,8 @@ blueprint, review, and prompt failures are not enough to trip the guard.
 
 **When it runs**:
 
-- On failed completed runs of `auto-fix.yml`, `claude-code-review.yml`,
-  `lean-linter-warning-autofix.yml`, `blueprint-prose-review.yml`, and
+- On failed completed runs of `auto-fix.yml`, `pr-review.yml`,
+  `lean-linter-warning-autofix.yml`, and
   `issue-automation.yml`, only when the failed run's
   head repository is the TNLean repository itself.
 - Hourly by schedule, to re-enable switches whose cooldown has elapsed.
@@ -430,7 +431,7 @@ provider or mention handler.
 | Variable | Disabled workflows |
 |----------|--------------------|
 | `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml`; write-mode linter auto-fix skips before Lean setup/build |
-| `CLAUDE_REVIEW_ENABLED=false` | `claude-code-review.yml`, `blueprint-prose-review.yml`, and the model-backed jobs of `issue-automation.yml` |
+| `CLAUDE_REVIEW_ENABLED=false` | `pr-review.yml` and the model-backed jobs of `issue-automation.yml` |
 | `DEEPSEEK_MENTION_ENABLED=false` | the `@deepseek` handle of `agent-mention.yml` |
 
 Set them with:
@@ -531,7 +532,7 @@ manual repair.
 
 1. Add the `auto-fix-claude` label to your PR
 2. Push your code
-3. Claude Code Review will run, then the review-fix job in `auto-fix.yml` will
+3. PR Review will run once PR CI is green, then the review-fix job in `auto-fix.yml` will
    read the comments and push fixes
 4. The cycle repeats until the review finds no issues or 5 iterations are reached
 5. Remove the label at any time to stop the loop
@@ -650,7 +651,7 @@ To run one or both review engines, set this repository variable:
 
 | Variable | Value | Meaning |
 |---|---|---|
-| `CLAUDE_CODE_REVIEW_PROVIDERS` | JSON array string, for example `["anthropic","deepseek"]` | Selects which review jobs run in parallel for `claude-code-review.yml`. If unset, the workflow uses `CLAUDE_CODE_PROVIDER` as a single default. |
+| `CLAUDE_CODE_REVIEW_PROVIDERS` | JSON array string, for example `["anthropic","deepseek"]` | Selects which code-review jobs run in parallel for `pr-review.yml`. If unset, the workflow uses `CLAUDE_CODE_PROVIDER` as a single default. |
 | `CLAUDE_CODE_PROVIDER` | `anthropic` or `deepseek` | Legacy fallback provider when no multi-provider list is set. |
 | `DEEPSEEK_MENTION_ENABLED` | `false` disables; unset or any other value enables | Controls only the `@deepseek` handle of `agent-mention.yml`. |
 

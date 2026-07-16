@@ -141,7 +141,8 @@ stale `\leanok`, 4 prose issues").
 feedback via `mcp__github__get_review_comments` (inline) and
 `mcp__github__get_comments` (conversation). Skip issues already raised.
 
-**Resolving previous review comments.** On `synchronize`:
+**Resolving previous review comments.** When the PR already carries
+review threads from an earlier review cycle:
 1. Fetch review-thread IDs via `gh api graphql` (MCP does not return
    thread IDs).
 2. For each unresolved thread authored by `claude`,
