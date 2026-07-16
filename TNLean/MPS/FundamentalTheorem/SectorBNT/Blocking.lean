@@ -30,8 +30,7 @@ Positive blocking preserves the full predicate `IsBNTCanonicalForm`.
 * `SectorDecomposition.sameMPV₂_blockTensor_toTensor` proves that assembling
   the blocked decomposition gives the same MPV family as blocking the assembled
   tensor.
-* `IsBNTCanonicalForm.blockTensor` proves preservation of BNT canonical form
-  under positive blocking.
+* Positive physical blocking preserves BNT canonical form.
 -/
 
 open scoped Matrix BigOperators

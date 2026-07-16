@@ -1176,6 +1176,37 @@ single family.
     normality.
 \end{proof}
 
+\begin{theorem}[Positive blocking preserves BNT canonical form]
+    \label{thm:sector_bnt_cf_block_tensor}
+    \lean{MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor}
+    \leanok
+    \uses{def:sector_decomposition_block_tensor, def:sector_bnt_cf,
+        thm:bnt_normality_from_self_overlap}
+    Let $P$ be a BNT canonical form and let $p\geq1$. Then the blocked
+    sector decomposition $P^{[p]}$ is again a BNT canonical form.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:sector_decomposition_block_tensor_mpv,
+        thm:bnt_normality_from_self_overlap}
+    For each representative $A_j$, normalized self-overlap gives peripheral
+    period one, hence a primitive transfer map. Positive blocking therefore
+    preserves irreducibility and left-canonical normalization. Moreover,
+    \[
+        O_{A_j^{[p]}A_j^{[p]}}(N)
+        =O_{A_jA_j}(Np)\longrightarrow1.
+    \]
+    Concatenation gives a bijection between blocked words of length $N$ and
+    original words of length $Np$. It carries the family of blocked MPV states
+    to the original family at length $Np$, so eventual linear independence is
+    preserved. If two distinct blocked representatives were gauge-phase
+    equivalent, their MPV states would be proportional at every length,
+    contradicting this linear independence. Finally,
+    $|\mu_{j,q}^p|=|\mu_{j,q}|^p\leq1$, and a unit-modulus weight remains of
+    unit modulus after taking its $p$-th power.
+\end{proof}
+
 \begin{theorem}[Common exact quantum-Wielandt length for BNT representatives]
     \label{thm:bnt_representatives_exact_total_dimension_pow_four}
     \lean{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}
