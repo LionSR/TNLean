@@ -1,14 +1,14 @@
 name: Auto Fix (Lean)
 
 # Unified auto-fix workflow. Triggers on:
-# 1. CI failure (Lean Action CI)        → fix build errors
-# 2. Blueprint failure (Lint blueprint) → fix blueprint compilation
+# 1. PR CI failure, build job          → fix build errors
+# 2. PR CI failure, blueprint job      → fix blueprint compilation
 # 3. Review completion (Claude Code Review) with "auto-fix-claude" label → fix review comments
 # 4. Label addition ("auto-fix-claude") → retroactively fix any of the above
 
 on:
   workflow_run:
-    workflows: ["Lean Action CI", "Lint blueprint", "Claude Code Review (Lean)"]
+    workflows: ["PR CI", "Claude Code Review (Lean)"]
     types:
       - completed
   # GitHub Actions cannot filter pull_request:labeled by label name here.
@@ -74,6 +74,21 @@ jobs:
             core.setOutput('ci_run_id', '0');
             core.setOutput('blueprint_run_id', '0');
 
+            async function failedJobNames(runId) {
+              try {
+                const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: runId,
+                  per_page: 100
+                });
+                return jobs.filter((j) => j.conclusion === 'failure').map((j) => j.name);
+              } catch (e) {
+                core.warning(`Could not list jobs for run ${runId}: ${e.message}`);
+                return [];
+              }
+            }
+
             if (context.eventName === 'workflow_run') {
               const wr = context.payload.workflow_run;
               const prNumber = wr.pull_requests[0].number;
@@ -81,12 +96,18 @@ jobs:
               core.setOutput('head_branch', wr.head_branch);
               core.setOutput('pr_number', String(prNumber));
 
-              if (wr.name === 'Lean Action CI' && wr.conclusion === 'failure') {
-                core.setOutput('run_ci_fix', 'true');
-                core.setOutput('ci_run_id', String(wr.id));
-              } else if (wr.name === 'Lint blueprint' && wr.conclusion === 'failure') {
-                core.setOutput('run_blueprint_fix', 'true');
-                core.setOutput('blueprint_run_id', String(wr.id));
+              if (wr.name === 'PR CI' && wr.conclusion === 'failure') {
+                // Both CI halves live in one workflow; decide which fix to
+                // run from the failed jobs of the run.
+                const failedJobs = await failedJobNames(wr.id);
+                if (failedJobs.some((n) => n === 'build')) {
+                  core.setOutput('run_ci_fix', 'true');
+                  core.setOutput('ci_run_id', String(wr.id));
+                }
+                if (failedJobs.some((n) => n.includes('blueprint'))) {
+                  core.setOutput('run_blueprint_fix', 'true');
+                  core.setOutput('blueprint_run_id', String(wr.id));
+                }
               } else if (wr.name === 'Claude Code Review (Lean)' && wr.conclusion === 'success') {
                 // Review fix requires the "auto-fix-claude" label
                 const { data: pr } = await github.rest.pulls.get({
@@ -136,16 +157,17 @@ jobs:
                 return null;
               }
 
-              const ciRunId = await findFailedRun('lean_action_ci.yml');
-              if (ciRunId) {
-                core.setOutput('run_ci_fix', 'true');
-                core.setOutput('ci_run_id', String(ciRunId));
-              }
-
-              const blueprintRunId = await findFailedRun('lint-blueprint.yml');
-              if (blueprintRunId) {
-                core.setOutput('run_blueprint_fix', 'true');
-                core.setOutput('blueprint_run_id', String(blueprintRunId));
+              const prCiRunId = await findFailedRun('pr-ci.yml');
+              if (prCiRunId) {
+                const failedJobs = await failedJobNames(prCiRunId);
+                if (failedJobs.some((n) => n === 'build')) {
+                  core.setOutput('run_ci_fix', 'true');
+                  core.setOutput('ci_run_id', String(prCiRunId));
+                }
+                if (failedJobs.some((n) => n.includes('blueprint'))) {
+                  core.setOutput('run_blueprint_fix', 'true');
+                  core.setOutput('blueprint_run_id', String(prCiRunId));
+                }
               }
 
               // Check for unresolved review threads. We intentionally cap this at
