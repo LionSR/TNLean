@@ -81,9 +81,9 @@ For MPDO renormalization fixed points:
 - `cpsv16_rfp_sal_data_processing.tex` records the source proof that a mixed-state
   renormalization fixed point satisfies saturation of the area law. The
   localized trace-preserving completely positive maps and their tensor-ring
-  identities are formalized. Mutual-information data processing for the two
-  local maps and nonzero normalization from the source's simple-biCF convention
-  remain open.
+  identities, mutual-information data processing, positive-length
+  nonvanishing, and the source-shaped ZCL-and-SAL conclusion are formalized.
+  This note is now a closure record.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 
