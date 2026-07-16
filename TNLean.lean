@@ -79,6 +79,7 @@ import TNLean.Analysis.KyFanNorm
 import TNLean.Analysis.SchattenNorm
 import TNLean.Analysis.TraceNormAbs
 import TNLean.Analysis.TraceNormVariational
+import TNLean.Analysis.TraceNormContractivity
 import TNLean.Analysis.ConvexHullCompact
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.LiebScalarIntegral
