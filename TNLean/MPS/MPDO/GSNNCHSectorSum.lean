@@ -308,9 +308,9 @@ theorem sectorProduct_submatrix_rotateConfig (data : GSNNCHData d N)
 configurations by the cyclic shift leaves
 $\bigoplus_x n_x \prod_j \tau_j(B^{(x)})$ unchanged.
 
-Source: arXiv:1606.00608, lines 838--842: the density operator of equation
-`rhoNComm` is translationally invariant, where spin `N+1` is identified with
-the first. -/
+Source: arXiv:1606.00608, lines 838--842: the density operator is
+translationally invariant on the periodic chain, where spin $N+1$ is
+identified with the first. -/
 theorem unnormalizedState_submatrix_rotateConfig (data : GSNNCHData d N) :
     data.unnormalizedState.submatrix (rotateConfig N d) (rotateConfig N d)
       = data.unnormalizedState := by

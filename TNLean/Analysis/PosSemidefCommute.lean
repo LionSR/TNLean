@@ -27,23 +27,13 @@ namespace Matrix
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- The product of two commuting positive-semidefinite matrices is positive
-semidefinite: writing $A = \sqrt{A}\,\sqrt{A}$, the square root commutes with
-$B$ as well, so $A B = \sqrt{A}^{\dagger}\,B\,\sqrt{A}$ is a conjugate of
-$B$. -/
+semidefinite: the matrix form of the fact that the product of commuting
+nonnegative elements of a C⋆-algebra is nonnegative. -/
 theorem PosSemidef.mul_of_commute {A B : Matrix n n ℂ} (hA : A.PosSemidef)
-    (hB : B.PosSemidef) (hAB : A * B = B * A) : (A * B).PosSemidef := by
-  have hcomm : Commute (CFC.sqrt A) B :=
-    Commute.cfcₙ_nnreal ((commute_iff_eq A B).mpr hAB) NNReal.sqrt
-  have hpsd : (CFC.sqrt A).PosSemidef := nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg A)
-  have key : (CFC.sqrt A)ᴴ * B * CFC.sqrt A = A * B :=
-    calc (CFC.sqrt A)ᴴ * B * CFC.sqrt A
-        = CFC.sqrt A * B * CFC.sqrt A := by rw [hpsd.isHermitian.eq]
-      _ = B * CFC.sqrt A * CFC.sqrt A := by rw [hcomm.eq]
-      _ = B * (CFC.sqrt A * CFC.sqrt A) := by rw [mul_assoc]
-      _ = B * A := by rw [CFC.sqrt_mul_sqrt_self A hA.nonneg]
-      _ = A * B := hAB.symm
-  rw [← key]
-  exact hB.conjTranspose_mul_mul_same (CFC.sqrt A)
+    (hB : B.PosSemidef) (hAB : A * B = B * A) : (A * B).PosSemidef :=
+  nonneg_iff_posSemidef.mp
+    (Commute.mul_nonneg (nonneg_iff_posSemidef.mpr hA) (nonneg_iff_posSemidef.mpr hB)
+      ((commute_iff_eq A B).mpr hAB))
 
 /-- The product of a list of pairwise commuting positive-semidefinite matrices
 is positive semidefinite. -/
