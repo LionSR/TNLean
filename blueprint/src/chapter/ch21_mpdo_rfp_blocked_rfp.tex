@@ -306,15 +306,68 @@ physical indices, as in
     $A_{ab,ij}=M^{ij}_{ab}$.
 \end{definition}
 
+\begin{lemma}[Contraction of a letterwise forward identity]
+    \label{lem:mpdo_vertical_bond_contraction_forward}
+    \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_vertical_forward}
+    \leanok
+    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction}
+    Let $B_{ab}$ be an arbitrary vertical tensor.  If
+    \[
+        U\widetilde M_{ab}U^\dagger=B_{ab}
+    \]
+    for every pair $(a,b)$, then, for every bond matrix $X$,
+    \[
+        U M(X)U^\dagger=B(X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    By the definition of bond-matrix contraction,
+    \[
+        U M(X)U^\dagger
+          =U\left(\sum_{a,b}X_{ba}\widetilde M_{ab}\right)U^\dagger
+          =\sum_{a,b}X_{ba}
+            \left(U\widetilde M_{ab}U^\dagger\right)
+          =\sum_{a,b}X_{ba}B_{ab}
+          =B(X).
+    \]
+\end{proof}
+
+\begin{lemma}[Contraction of a letterwise reconstruction identity]
+    \label{lem:mpdo_vertical_bond_contraction_reconstruction}
+    \lean{MPOTensor.physClose1_eq_of_vertical_reconstruction}
+    \leanok
+    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction}
+    Let $B_{ab}$ be an arbitrary vertical tensor.  If
+    \[
+        \widetilde M_{ab}=U^\dagger B_{ab}U
+    \]
+    for every pair $(a,b)$, then, for every bond matrix $X$,
+    \[
+        M(X)=U^\dagger B(X)U.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Contracting the letterwise identity gives
+    \[
+        M(X)
+          =\sum_{a,b}X_{ba}\widetilde M_{ab}
+          =\sum_{a,b}X_{ba}\left(U^\dagger B_{ab}U\right)
+          =U^\dagger\left(\sum_{a,b}X_{ba}B_{ab}\right)U
+          =U^\dagger B(X)U.
+    \]
+\end{proof}
+
 \begin{lemma}[Contraction of the one-site vertical canonical form]
     \label{lem:mpdo_vertical_bond_matrix_contraction}
-    \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_vertical_forward}
     \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_verticalAssembledTensor}
-    \lean{MPOTensor.physClose1_eq_of_vertical_reconstruction}
     \lean{MPOTensor.physClose1_eq_of_verticalAssembledTensor_reconstruction}
     \leanok
     \uses{def:vertical_cf_mpdo, def:phys_close,
-      def:mpdo_vertical_bond_matrix_contraction}
+      def:mpdo_vertical_bond_matrix_contraction,
+      lem:mpdo_vertical_bond_contraction_forward,
+      lem:mpdo_vertical_bond_contraction_reconstruction}
     Suppose that
     \[
         U\widetilde M_{ab}U^\dagger
@@ -336,9 +389,12 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    The coefficient of $A_{ab}$ in the trace
-    $\operatorname{tr}(M^{ij}X)$ is $X_{ba}$, which proves the first
-    identification.  Moreover,
+    Since $A(X)_{ij}=\sum_{a,b}X_{ba}A_{ab,ij}$ and
+    $\widetilde M_{ab,ij}=M^{ij}_{ab}$, one has
+    \[
+        M(X)=\sum_{a,b}X_{ba}\widetilde M_{ab}.
+    \]
+    Moreover,
     \[
         U\left(\sum_{a,b}X_{ba}A_{ab}\right)U^\dagger
           =\sum_{a,b}X_{ba}\left(UA_{ab}U^\dagger\right).
