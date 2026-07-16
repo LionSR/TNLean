@@ -142,7 +142,7 @@ gh api "repos/$REPO/pulls/$PR/reviews" --jq '.[] | "REVIEW [\(.user.login)] stat
 ### Auto-fix labels control review repair
 
 The active review-repair loop is label-gated. A pull request with
-`auto-fix-claude` or `auto-fix-codex` is already assigned to the corresponding
+`auto-fix-claude` is already assigned to the corresponding
 auto-fix workflow. Do not add `@claude auto fix`, `@chatgpt auto fix`, or
 `@deepseek auto fix` trigger comments to a PR that already has one of these
 labels.
@@ -157,7 +157,7 @@ Use the labels this way:
 
 | Situation | Action |
 |---|---|
-| PR has `auto-fix-claude` or `auto-fix-codex` | Leave the PR to the labeled workflow; monitor checks and review threads. |
+| PR has `auto-fix-claude` | Leave the PR to the labeled workflow; monitor checks and review threads. |
 | PR has unresolved, non-outdated line-level review threads and needs mechanical repair | Add the appropriate PR label, then wait for the workflow. |
 | PR only has PR-level comments or review-summary comments | Fix locally, or open a separate issue/mention task if a new branch is intended; the auto-fix label has no review thread to consume. |
 | Labeled workflow reaches its iteration cap, fails, or stalls | Remove or keep the label deliberately, then fix locally or open a narrow follow-up issue. |

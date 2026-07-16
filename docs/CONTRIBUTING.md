@@ -404,8 +404,6 @@ The following workflows run automatically:
 | **Lean Linter-Warning Sweep** (`lean-linter-warning-sweep.yml`) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
 | **Lean Linter-Warning Auto-Fix** (`lean-linter-warning-autofix.yml`) | Manual dispatch | Runs the warning sweep and can open a guarded Lean-only PR when explicitly requested |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
-| **Lean Audit** (`lean-audit.yml`) | On demand | Audits Lean code for style and correctness |
-| **PR Cleanup** (`pr-cleanup.yml`) | Bot-generated PR opened (`claude/*` or `codex/*` branches) | Normalizes title to `type(scope): desc`, restructures body to PR template, copies labels from linked issue, adds `Addresses #N` reference, comments on the issue |
 
 ### What CI checks before merge
 
