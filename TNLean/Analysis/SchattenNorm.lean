@@ -115,10 +115,10 @@ theorem traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self
     (A : Matrix (Fin D) (Fin D) ℂ) :
     traceNorm A = ∑ i : Fin D,
       Real.sqrt ((Matrix.toEuclideanLin A).isSymmetric_adjoint_comp_self.eigenvalues
-        (by simp) i) := by
+        finrank_euclideanSpace_fin i) := by
   rw [traceNorm_eq_sum_fin]
   exact Finset.sum_congr rfl fun i _ ↦
-    (Matrix.toEuclideanLin A).singularValues_fin (by simp) i
+    (Matrix.toEuclideanLin A).singularValues_fin finrank_euclideanSpace_fin i
 
 /-- The Schatten one-norm is nonnegative. -/
 theorem schattenOneNorm_nonneg (A : Matrix (Fin D) (Fin D) ℂ) :
