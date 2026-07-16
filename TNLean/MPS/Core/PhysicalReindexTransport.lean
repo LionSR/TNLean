@@ -23,6 +23,11 @@ basic tensor properties used by blocking and canonical-form arguments.
   one-site injectivity are preserved.
 * `gaugePhaseEquiv_reindexPhysical_equiv` — gauge-phase equivalence is preserved
   when both tensors are reindexed by the same physical alphabet bijection.
+* `linearIndependent_mpvState_of_configEquiv` transports linear independence
+  through an arbitrary equivalence of configuration spaces.
+* `mpvOverlap_reindexPhysical_equiv` and
+  `linearIndependent_mpvState_reindexPhysical_equiv` — closed overlaps and
+  linear independence of MPV states are preserved.
 -/
 
 open scoped Matrix BigOperators
@@ -122,5 +127,78 @@ theorem gaugePhaseEquiv_reindexPhysical_equiv {d₁ d₂ D : ℕ}
     refine ⟨X, ζ, hζ, ?_⟩
     intro i
     simpa [reindexPhysical] using hXB (e i)
+
+/-- Reindexing both tensors by a physical-index equivalence preserves their
+closed MPV overlap.
+
+Source context: arXiv:1606.00608, the physical-basis identifications used in
+canonical-form blocking at lines 317--345. -/
+theorem mpvOverlap_reindexPhysical_equiv {d₁ d₂ D₁ D₂ N : ℕ}
+    (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D₁) (B : MPSTensor d₂ D₂) :
+    mpvOverlap (reindexPhysical e A) (reindexPhysical e B) N =
+      mpvOverlap A B N := by
+  classical
+  let E : Cfg d₁ N ≃ Cfg d₂ N :=
+    Equiv.arrowCongr (Equiv.refl (Fin N)) e
+  simp only [mpvOverlap, mpv_reindexPhysical]
+  exact Fintype.sum_equiv E
+    (fun σ : Cfg d₁ N ↦
+      mpv A (fun n ↦ e (σ n)) * star (mpv B (fun n ↦ e (σ n))))
+    (fun σ : Cfg d₂ N ↦ mpv A σ * star (mpv B σ))
+    (fun σ ↦ by
+      have hσ : (fun n ↦ e (σ n)) = E σ := by
+        funext n
+        rfl
+      rw [hσ])
+
+/-- An equivalence of finite configuration spaces transports linear
+independence between MPV families whose coefficients correspond under that
+equivalence.
+
+Source context: arXiv:1606.00608, the blocking and physical-basis
+identifications used at lines 317--345 and in Appendix C.4, lines 1951--1956. -/
+theorem linearIndependent_mpvState_of_configEquiv
+    {d₁ d₂ r N₁ N₂ : ℕ} {dim : Fin r → ℕ}
+    (e : Cfg d₁ N₁ ≃ Cfg d₂ N₂)
+    (A : (j : Fin r) → MPSTensor d₁ (dim j))
+    (B : (j : Fin r) → MPSTensor d₂ (dim j))
+    (hAB : ∀ (j : Fin r) (σ : Cfg d₂ N₂),
+      mpv (A j) (e.symm σ) = mpv (B j) σ)
+    (hLI : LinearIndependent ℂ (fun j ↦ mpvState (B j) N₂)) :
+    LinearIndependent ℂ (fun j ↦ mpvState (A j) N₁) := by
+  let F : MPVSpace d₁ N₁ ≃ₗ[ℂ] MPVSpace d₂ N₂ :=
+    (EuclideanSpace.equiv (Cfg d₁ N₁) ℂ).toLinearEquiv |>.trans
+      (LinearEquiv.piCongrLeft' ℂ (fun _ : Cfg d₁ N₁ ↦ ℂ) e) |>.trans
+      (EuclideanSpace.equiv (Cfg d₂ N₂) ℂ).symm.toLinearEquiv
+  have hF : ∀ j : Fin r, F (mpvState (A j) N₁) = mpvState (B j) N₂ := by
+    intro j
+    ext σ
+    exact hAB j σ
+  have hMapped : LinearIndependent ℂ
+      (fun j ↦ F (mpvState (A j) N₁)) := by
+    simpa only [hF] using hLI
+  exact LinearIndependent.of_comp F.toLinearMap hMapped
+
+/-- A physical-index equivalence preserves linear independence of a family
+of MPV states at a fixed chain length.
+
+Source context: arXiv:1606.00608, the physical-basis identifications used in
+canonical-form blocking at lines 317--345. -/
+theorem linearIndependent_mpvState_reindexPhysical_equiv
+    {d₁ d₂ r N : ℕ} {dim : Fin r → ℕ}
+    (e : Fin d₁ ≃ Fin d₂) (A : (j : Fin r) → MPSTensor d₂ (dim j))
+    (hLI : LinearIndependent ℂ (fun j ↦ mpvState (A j) N)) :
+    LinearIndependent ℂ
+      (fun j ↦ mpvState (reindexPhysical e (A j)) N) := by
+  let E : Cfg d₁ N ≃ Cfg d₂ N :=
+    Equiv.arrowCongr (Equiv.refl (Fin N)) e
+  apply linearIndependent_mpvState_of_configEquiv E
+    (fun j ↦ reindexPhysical e (A j)) A
+  · intro j σ
+    rw [mpv_reindexPhysical]
+    congr 1
+    funext n
+    simp [E, Equiv.arrowCongr]
+  · exact hLI
 
 end MPSTensor

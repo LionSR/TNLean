@@ -1149,9 +1149,9 @@ single family.
     \]
 \end{theorem}
 
-\begin{theorem}[Normality from normalized self-overlap]
-    \label{thm:bnt_normality_from_self_overlap}
-    \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
+\begin{theorem}[Primitivity and normality from normalized self-overlap]
+    \label{thm:bnt_primitivity_normality_from_self_overlap}
+    \lean{MPSTensor.isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
     \leanok
     \uses{def:irreducible_tensor, def:mpv_overlap, def:normal,
         thm:bnt_periodic_self_overlap_tendsto, thm:normal_tp_primitive_irred}
@@ -1160,7 +1160,7 @@ single family.
     \[
         O_{AA}(N)\longrightarrow1,
     \]
-    then $A$ is normal.
+    then the transfer map of $A$ is primitive and $A$ is normal.
 \end{theorem}
 
 \begin{proof}
@@ -1174,6 +1174,63 @@ single family.
     The assumed full limit gives $O_{AA}(mn)\to1$, hence $m=1$.  The transfer
     map is therefore primitive, and irreducibility and left-canonicality give
     normality.
+\end{proof}
+
+\begin{corollary}[Normality from normalized self-overlap]
+    \label{thm:bnt_normality_from_self_overlap}
+    \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
+    \leanok
+    \uses{thm:bnt_primitivity_normality_from_self_overlap}
+    Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
+    If $O_{AA}(N)\to1$, then $A$ is normal.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    This is the normality conclusion of
+    Theorem~\ref{thm:bnt_primitivity_normality_from_self_overlap}.
+\end{proof}
+
+\begin{theorem}[Positive blocking preserves BNT canonical form]
+    \label{thm:sector_bnt_cf_block_tensor}
+    \lean{MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor}
+    \leanok
+    \uses{def:sector_decomposition_block_tensor, def:sector_bnt_cf,
+        thm:bnt_primitivity_normality_from_self_overlap}
+    Let $P$ be a BNT canonical form and let $p\geq1$. Then the blocked
+    sector decomposition $P^{[p]}$ is again a BNT canonical form.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:sector_decomposition_block_tensor_mpv,
+        thm:bnt_primitivity_normality_from_self_overlap}
+    For each representative $A_j$, normalized self-overlap gives peripheral
+    period one, hence a primitive transfer map. Positive blocking therefore
+    preserves irreducibility and left-canonical normalization. Moreover,
+    \[
+        O_{A_j^{[p]}A_j^{[p]}}(N)
+        =O_{A_jA_j}(Np)\longrightarrow1.
+    \]
+    Let $F_N$ be the linear isomorphism induced by concatenating blocked words,
+    from the blocked configuration space at length $N$ to the original one at
+    length $Np$. For every representative,
+    \[
+        F_N\ket{V^{(N)}(A_j^{[p]})}
+        =\ket{V^{(Np)}(A_j)}.
+    \]
+    Hence eventual linear independence is preserved. If two blocked
+    representatives were gauge-phase equivalent, then for some nonzero
+    $\zeta$ and every $N$,
+    \[
+        \ket{V^{(N)}(A_k^{[p]})}
+        =\zeta^N\ket{V^{(N)}(A_j^{[p]})}.
+    \]
+    Writing these two vectors as $f_k$ and $f_j$ gives
+    $1\cdot f_k=\zeta^N\cdot f_j$ in an eventually linearly independent
+    family, and therefore $k=j$. Finally,
+    $|\mu_{j,q}^p|=|\mu_{j,q}|^p\leq1$, and a unit-modulus weight remains of
+    unit modulus after taking its $p$-th power.
 \end{proof}
 
 \begin{theorem}[Common exact quantum-Wielandt length for BNT representatives]
