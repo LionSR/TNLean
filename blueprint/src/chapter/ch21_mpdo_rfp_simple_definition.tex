@@ -30,9 +30,9 @@
     $(M^{\mathrm{dbl}})^{(i,j)}=M^{ij}$, and hence
     \[
         \mathcal T_{M^{\mathrm{dbl}}}
-          =\sum_i(M^{\mathrm{dbl}})^{ii}
-          =\sum_i M^{ii}
-          =\mathcal T_M.
+        =\sum_i(M^{\mathrm{dbl}})^{ii}
+        =\sum_i M^{ii}
+        =\mathcal T_M.
     \]
 \end{proof}
 
@@ -53,13 +53,13 @@
 \begin{proof}\leanok
     The diagonal physical sum distributes over the block direct sum:
     \[
-    \begin{aligned}
-        \mathcal T
-          &=\sum_i S^{ii}
-           =\sum_i\bigoplus_{j,q}\mu_{j,q}A_j^{ii} \\
-          &=\bigoplus_{j,q}\mu_{j,q}\sum_i A_j^{ii}
-           =\bigoplus_{j,q}\mu_{j,q}\mathcal T_{A_j}.
-    \end{aligned}
+        \begin{aligned}
+            \mathcal T
+             & =\sum_i S^{ii}
+            =\sum_i\bigoplus_{j,q}\mu_{j,q}A_j^{ii}     \\
+             & =\bigoplus_{j,q}\mu_{j,q}\sum_i A_j^{ii}
+            =\bigoplus_{j,q}\mu_{j,q}\mathcal T_{A_j}.
+        \end{aligned}
     \]
 \end{proof}
 
@@ -87,10 +87,14 @@
         def:mpdo_doubled_phys_trace_transfer}
     A tensor generating MPDOs is in \emph{simple canonical form} if it has a
     basis-of-normal-tensors decomposition whose basis elements all have
-    non-nilpotent physical-trace transfer.  This is the already-blocked form
-    of the simple tensor $K$ fixed at the start of Case II in
+    non-nilpotent physical-trace transfer.  This records the simple
+    horizontal-canonical-form data of the already-blocked tensor $K$ fixed in
     \cite[Appendix~C.2, line~1628]{Cirac2016MPDO_arXiv}.
 \end{definition}
+% Note for maintainers: this predicate does not include the biCF
+% (bidirectional canonical form) hypothesis imposed on K at line 1628.  That
+% condition is not used by the copy-independence argument and is introduced
+% separately when the inverse tensor is needed.
 
 \begin{lemma}[Simple canonical-form tensors are horizontal canonical]
     \label{lem:mpdo_simple_tensor_horizontal_cf}
