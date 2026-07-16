@@ -547,7 +547,7 @@ private theorem physClose2_one_eq_physicalPairBond_mul_crossed
       singleKrausMap F.physicalCoordinateMatrixTwoᴴ
         (swapPairMatrix F.sectorCoordinateBond) := by
     simpa only [physicalPairBond, physicalCoordinateMatrixTwo] using
-      swapPairMatrix_sandwich_kronecker_self
+      swapPairMatrix_singleKraus_kronecker_self
         F.physicalCoordinateMatrix F.sectorCoordinateBond
   rw [hswap]
   simp only [physicalPairBond, singleKrausMap_apply,

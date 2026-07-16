@@ -47,7 +47,7 @@ private theorem reindex_prodComm_kronecker_self
 
 /-- Exchanging both physical sites commutes with a change of coordinates
 which is the tensor square of one single-site coordinate matrix. -/
-theorem swapPairMatrix_sandwich_kronecker_self
+theorem swapPairMatrix_singleKraus_kronecker_self
     {m n : Type*} [Fintype m] [Fintype n]
     (A : Matrix m n ℂ) (B : Matrix (m × m) (m × m) ℂ) :
     swapPairMatrix (singleKrausMap (A ⊗ₖ A)ᴴ B) =
@@ -69,6 +69,10 @@ theorem swapPairMatrix_sandwich_kronecker_self
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ en em em,
     Matrix.coe_reindexLinearEquiv, Matrix.coe_reindexLinearEquiv,
     Matrix.coe_reindexLinearEquiv, hA, hAH]
+
+@[deprecated swapPairMatrix_singleKraus_kronecker_self (since := "2026-07-16")]
+alias swapPairMatrix_sandwich_kronecker_self :=
+  swapPairMatrix_singleKraus_kronecker_self
 
 /-- Swapping the two sector sites exchanges their sector labels and exchanges
 the outer and neighboring pairs in the regrouped coordinates. -/
@@ -193,7 +197,7 @@ private theorem physicalPairBond_swap_comm
         singleKrausMap F.physicalCoordinateMatrixTwoᴴ
           (swapPairMatrix F.sectorCoordinateBond) := by
     simpa only [physicalCoordinateMatrixTwo] using
-      swapPairMatrix_sandwich_kronecker_self
+      swapPairMatrix_singleKraus_kronecker_self
         F.physicalCoordinateMatrix F.sectorCoordinateBond
   rw [physicalPairBond, hswap]
   simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
