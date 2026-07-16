@@ -308,10 +308,6 @@ physical indices, as in
 
 \begin{lemma}[Contraction of the one-site vertical canonical form]
     \label{lem:mpdo_vertical_bond_matrix_contraction}
-    \lean{MPSTensor.contractBondMatrix_mul_mul}
-    \lean{MPSTensor.contractBondMatrix_toTensorFromBlocks}
-    \lean{MPOTensor.contractBondMatrix_verticalTensor_eq_physClose1}
-    \lean{MPOTensor.contractBondMatrix_verticalAssembledTensor}
     \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_vertical_forward}
     \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_verticalAssembledTensor}
     \lean{MPOTensor.physClose1_eq_of_vertical_reconstruction}
@@ -336,7 +332,7 @@ physical indices, as in
           \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
     \]
     These are the contracted canonical-form identities used in
-    \cite[Appendix~C.4, lines~1955--1976]{Cirac2016MPDO_arXiv}.
+    \cite[Appendix~C.4, lines~1955--1979]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -347,8 +343,14 @@ physical indices, as in
         U\left(\sum_{a,b}X_{ba}A_{ab}\right)U^\dagger
           =\sum_{a,b}X_{ba}\left(UA_{ab}U^\dagger\right).
     \]
-    Combining this equality with the forward hypothesis gives the contracted
-    canonical-form identity.  Applied blockwise, the same calculation gives
+    Substituting the forward hypothesis into this equality gives
+    \[
+        U M(X)U^\dagger
+          =\sum_{a,b}X_{ba}
+            \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
+          =\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X).
+    \]
+    Applied blockwise, the same calculation gives
     \[
         \left(\bigoplus_\alpha \mu_\alpha\otimes M_\alpha\right)(X)
           =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha(X).

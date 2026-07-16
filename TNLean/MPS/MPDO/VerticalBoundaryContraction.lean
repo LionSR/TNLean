@@ -27,7 +27,7 @@ form.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  Appendix C.4, lines 1955--1976.
+  Appendix C.4, lines 1955--1979.
 -/
 
 open scoped BigOperators Matrix
@@ -44,7 +44,7 @@ $X_{ba} A_{ab}$ agrees with the trace convention
 $\operatorname{tr}(A_{ab}X)$.
 
 For a vertical BNT block $M_\alpha$, this is the operator denoted
-$M_\alpha(X)$ in arXiv:1606.00608, Appendix C.4, lines 1955--1976. -/
+$M_\alpha(X)$ in arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 def contractBondMatrix (A : MPSTensor (D * D) d) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ where
   toFun X := ∑ ab : Fin (D * D), X ab.modNat ab.divNat • A ab
@@ -66,7 +66,7 @@ theorem contractBondMatrix_apply (A : MPSTensor (D * D) d)
 right by fixed matrices.
 
 This is the linear contraction of the letterwise vertical canonical-form
-identity in arXiv:1606.00608, Appendix C.4, lines 1955--1976. -/
+identity in arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem contractBondMatrix_mul_mul
     (A : MPSTensor (D * D) d) (L : Matrix (Fin R) (Fin d) ℂ)
     (K : Matrix (Fin d) (Fin R) ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -80,7 +80,7 @@ the contractions into its blocks, with the same weights.
 
 This is the explicit weighted direct sum
 $\bigoplus_\alpha \mu_\alpha\otimes M_\alpha(X)$ in
-arXiv:1606.00608, Appendix C.4, lines 1955--1976, with the diagonal entries of
+arXiv:1606.00608, Appendix C.4, lines 1955--1979, with the diagonal entries of
 each $\mu_\alpha$ written as repeated blocks. -/
 theorem contractBondMatrix_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor (D * D) (dim k))
@@ -103,7 +103,7 @@ variable {d D R : ℕ}
 one-site physical closure.
 
 Source: arXiv:1606.00608, Definition 4.1, line 657, and Appendix C.4,
-lines 1955--1976. -/
+lines 1955--1979. -/
 theorem contractBondMatrix_verticalTensor_eq_physClose1 (M : MPOTensor d D) :
     MPSTensor.contractBondMatrix (verticalTensor M) = physClose1 M := by
   apply LinearMap.ext
@@ -116,7 +116,7 @@ theorem contractBondMatrix_verticalTensor_eq_physClose1 (M : MPOTensor d D) :
 /-- The bond-matrix contraction of an assembled vertical tensor is the
 weighted block diagonal of the contractions into its repeated BNT blocks.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1955--1976. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem contractBondMatrix_verticalAssembledTensor {g : ℕ}
     (dim mult : Fin g → ℕ) (weight : (α : Fin g) → Fin (mult α) → ℂ)
     (A : (α : Fin g) → MPSTensor (D * D) (dim α))
@@ -129,12 +129,12 @@ theorem contractBondMatrix_verticalAssembledTensor {g : ℕ}
   exact MPSTensor.contractBondMatrix_toTensorFromBlocks
     (verticalCopyWeights mult weight) (verticalCopyBlocks dim mult A) X
 
-/-- A letterwise vertical canonical-form identity remains valid after
-contracting an arbitrary horizontal bond matrix $X$.  On the left, the
-contraction is the one-site physical closure $M(X)$; on the right, it is the
-weighted direct sum of the sector operators $M_\alpha(X)$.
+/-- A letterwise identity between two vertical tensors remains valid after
+contracting an arbitrary horizontal bond matrix $X$.  For the vertically
+viewed MPO tensor, the contraction on the left is the one-site physical
+closure $M(X)$; the contraction on the right is $B(X)$.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1955--1976. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem mul_physClose1_mul_conjTranspose_of_vertical_forward
     (M : MPOTensor d D) (B : MPSTensor (D * D) R)
     (U : Matrix (Fin R) (Fin d) ℂ)
@@ -152,7 +152,7 @@ theorem mul_physClose1_mul_conjTranspose_of_vertical_forward
 written as the explicit weighted direct sum of the sector operators
 $M_\alpha(X)$.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1955--1976. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem mul_physClose1_mul_conjTranspose_of_verticalAssembledTensor
     (M : MPOTensor d D) {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
@@ -172,10 +172,10 @@ theorem mul_physClose1_mul_conjTranspose_of_verticalAssembledTensor
     (verticalAssembledTensor dim mult weight A) U hForward X]
   exact contractBondMatrix_verticalAssembledTensor dim mult weight A X
 
-/-- The contracted reverse identity reconstructs the one-site physical
-closure from the weighted vertical sectors.
+/-- A reverse letterwise identity reconstructs the one-site physical closure
+as $U^\dagger B(X)U$ after bond-matrix contraction.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1955--1976. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem physClose1_eq_of_vertical_reconstruction
     (M : MPOTensor d D) (B : MPSTensor (D * D) R)
     (U : Matrix (Fin R) (Fin d) ℂ)
@@ -196,7 +196,7 @@ theorem physClose1_eq_of_vertical_reconstruction
 /-- The one-site physical closure reconstructed from an assembled vertical
 canonical form, with its weighted sector direct sum written explicitly.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1955--1976. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem physClose1_eq_of_verticalAssembledTensor_reconstruction
     (M : MPOTensor d D) {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
