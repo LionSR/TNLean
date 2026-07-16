@@ -41,16 +41,17 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1957--1961. -/
 abbrev VerticalSectorAlgebra {g : ℕ} (dim : Fin g → ℕ) :=
   (α : Fin g) → Matrix (Fin (dim α)) (Fin (dim α)) ℂ
 
-/-- The ambient block space containing
-`span {μ_α} ⊗ M_{dim α}` for every vertical BNT label.
+/-- The ambient block space whose \(\alpha\)-component contains
+\(\operatorname{span}\{\mu_\alpha\}\otimes M_{d_\alpha}\).
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1957--1961. -/
 abbrev VerticalWeightedSectorSpace {g : ℕ} (dim mult : Fin g → ℕ) :=
   (α : Fin g) → Matrix (Fin (mult α) × Fin (dim α))
     (Fin (mult α) × Fin (dim α)) ℂ
 
-/-- The trace of the diagonal multiplicity matrix
-`diag (weight α)`, namely `m_α = ∑_q weight α q`.
+/-- The sum \(m_\alpha=\sum_q\mu_{\alpha,q}\) of the diagonal entries of
+the multiplicity matrix \(\mu_\alpha\), equal to
+\(\operatorname{tr}(\mu_\alpha)\).
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
 def verticalMultiplicityTrace {g : ℕ} {mult : Fin g → ℕ}
@@ -74,8 +75,8 @@ theorem verticalMultiplicityTrace_ne_zero {g : ℕ} {mult : Fin g → ℕ}
     exact ⟨q, Finset.mem_univ q, hWeight q⟩
 
 /-- The normalized embedding of the vertical sector algebra into the weighted
-sector blocks:
-`X_α ↦ (diag (weight α) / m_α) ⊗ X_α`.
+sector blocks, mapping
+\(X_\alpha\mapsto m_\alpha^{-1}\mu_\alpha\otimes X_\alpha\) on each sector.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1962--1971. -/
 def normalizedVerticalSectorEmbedding {g : ℕ} (dim mult : Fin g → ℕ)
@@ -100,9 +101,11 @@ theorem normalizedVerticalSectorEmbedding_apply {g : ℕ} (dim mult : Fin g → 
         Matrix.kroneckerMap (· * ·) (Matrix.diagonal (weight α)) (X α) :=
   rfl
 
-/-- Partial trace over each multiplicity factor, extending the inverse map
-`λ_α μ_α ⊗ X_α ↦ λ_α m_α X_α` from the weighted sectors to
-their ambient block spaces.
+/-- Partial trace over each multiplicity factor, extending the inverse map from
+the weighted sectors to their ambient block spaces. On a weighted sector it
+satisfies
+\(\widetilde R_\mu(\lambda_\alpha\mu_\alpha\otimes X_\alpha)
+=\lambda_\alpha m_\alpha X_\alpha\).
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1962--1971. -/
 def verticalSectorPartialTrace {g : ℕ} (dim mult : Fin g → ℕ) :
