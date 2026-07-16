@@ -7,8 +7,8 @@
 
 \input{command}
 
-\title{The remaining steps in deriving saturation of the area law from MPDO
-renormalization fixed points}
+\title{Deriving saturation of the area law from MPDO renormalization fixed
+points}
 \author{}
 \date{2026-07-15}
 
@@ -53,10 +53,9 @@ that the tensor generates nonzero density operators at the lengths under
 consideration; it does not add an independent nonvanishing hypothesis to the
 Appendix~C proposition.
 
-Definition~4.6 concerns positive-length spin chains.  The current formal
-predicate asks for nonzero trace also at length zero.  This should be corrected
-to a positive-length condition.  The bipartition argument below never invokes
-an empty-chain operator, since its interval lengths force $N\geq3$.
+Definition~4.6 concerns positive-length spin chains.  The formal predicate now
+asks for nonzero trace only when $N\geq1$.  The bipartition argument below never
+invokes an empty-chain operator, since its interval lengths force $N\geq3$.
 
 \section{The established global identities}
 
@@ -119,39 +118,39 @@ nonzero trace needed for normalization.\footnote{Formal declarations:
 \leanid{MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS} in
 \doclink{TNLean/MPS/MPDO/RFPViaTSSAL}.}
 
-\section{Exact remaining step}
+\section{Completion of the implication}
 
-One source-faithful step remains before the implication to saturation of the
-area law is established.
-
-\begin{enumerate}
-  \item \textbf{Identification with the area-law interface.}
-  The channel calculation is stated for the bipartite mutual information of
-  the normalized operator after the two consecutive intervals have been
-  flattened to finite indices.  The present area-law interface instead
-  defines $I_L$ as $S_L+S_{N-L}-S_N$ using prefix reduced states.  A final
-  correspondence lemma must identify these two expressions, using translation
-  invariance for the complementary interval.  This lemma will turn the
-  established bipartite equality into the declaration
-  $\operatorname{mutualInfoChain}(L)=
-    \operatorname{mutualInfoChain}(L+1)$ required by SAL.
-\end{enumerate}
+The consecutive-cut correspondence is now proved.  The first marginal of the
+flattened bipartite state is the prefix reduced state on $L$ sites.  Translation
+invariance moves the second interval to the beginning of the periodic chain,
+so its marginal has the same entropy as the prefix reduced state on $N-L$
+sites.  Retaining all $N$ sites leaves the normalized state unchanged.  Hence
+the bipartite mutual information is exactly
+$S_L+S_{N-L}-S_N=I_L$.\footnote{Formal declarations:
+\leanid{MPOTensor.traceRight_bipartitionedNormalizedMPO},
+\leanid{MPOTensor.traceLeft_bipartitionedNormalizedMPO}, and
+\leanid{MPOTensor.mutualInfoChain_eq_mutualInformation} in
+\doclink{TNLean/MPS/MPDO/MutualInfoBridge}.}
 
 Nonvanishing is not an additional source assumption in this implication.
-Horizontal canonical form, the MPDO condition, and the renormalization maps
-give positive trace at every positive chain length under consideration;
-simplicity is not used.  Once the remaining correspondence is established,
-the source proof applies the two localized channels, invokes data processing to obtain
-$I_{L+1}\leq I_L$, and combines this with the already formalized inequality
-$I_L\leq I_{L+1}$.
+Horizontal canonical form gives one nonzero positive-length ring, positivity
+makes its trace nonzero, and the renormalization equations make the
+physical-trace transfer idempotent.  The trace is therefore nonzero at every
+positive length.\footnote{Formal declaration:
+\leanid{MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS} in
+\doclink{TNLean/MPS/MPDO/RFPViaTSGlobal}.}
+
+Combining the consecutive-cut correspondence, the two exact local-channel
+identities, data processing in both directions, and positive-length
+nonvanishing proves the source implication.\footnote{Formal declaration:
+\leanid{MPOTensor.isSAL_of_isRFPViaTS} in
+\doclink{TNLean/MPS/MPDO/RFPViaTSSAL}.}
 
 \paragraph{Classification.}
-This is an open gap.  The global tensor-ring identities, the required
-mutual-information data-processing theorem, and their application to the
-source bipartition are proved.  Positive trace for the relevant nonempty chains
-follows without simplicity.  The correspondence with the existing
-prefix-entropy definition of $I_L$ and the positive-length correction to the
-formal SAL predicate remain necessary for a faithful proof of saturation of
-the area law.
+This gap is resolved.  The formal SAL predicate is restricted to positive
+chain lengths, the normalized consecutive-cut state is identified with the
+existing prefix-entropy expression for $I_L$, and the RFP hypotheses imply
+both normalization and the equality $I_L=I_{L+1}$.  No simplicity hypothesis
+is used in this forward implication, in agreement with the source proof.
 
 \end{document}

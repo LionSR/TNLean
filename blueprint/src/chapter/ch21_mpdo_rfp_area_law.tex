@@ -19,7 +19,7 @@
 \end{definition}
 
 \begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
-    \lean{MPOTensor.mutualInfoChain}
+    \lean{MPOTensor.mutualInfoChain, MPOTensor.mutualInfoChain_eq}
     \leanok
     \uses{def:block_entropy}
     For the same fixed system size $N$, block length $L\le N$, and positive
@@ -384,6 +384,56 @@
     channels and to the reverse pair.  The two transfer identities turn the
     resulting inequalities into opposite inequalities between the displayed
     mutual informations.
+\end{proof}
+
+\begin{lemma}[Nonvanishing of positive-length RFP rings]
+    \label{lem:mpdo_rfp_positive_length_trace_nonzero}
+    \lean{MPOTensor.firstSiteMatrix_one,
+      MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS}
+    \leanok
+    \uses{def:is_rfp_via_ts}
+    Let $M$ be horizontally canonical, generate positive semidefinite ring
+    operators, and satisfy the local renormalization fixed-point equations.
+    Then
+    \[
+      \operatorname{tr}\rho^{(N)}(M)\neq0
+      \qquad (N\geq1).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Horizontal canonical form gives a nonzero sector compression for one
+    positive length.  Positivity makes its trace nonzero.  The fixed-point
+    equations make the physical-trace transfer idempotent, so the trace of its
+    positive powers is independent of the positive exponent.
+\end{proof}
+
+\begin{theorem}[Renormalization fixed points saturate the area law]
+    \label{thm:mpdo_rfp_implies_sal}
+    \lean{MPOTensor.isSAL_of_isRFPViaTS}
+    \leanok
+    \uses{lem:mpdo_chain_mutual_information_bipartition,
+      lem:mpdo_rfp_transfer_across_cut,
+      thm:mpdo_rfp_split_mutual_information_eq,
+      lem:mpdo_rfp_positive_length_trace_nonzero}
+    Let $M$ be a horizontally canonical matrix product density operator which
+    satisfies the local renormalization fixed-point equations of
+    Definition~4.1.  Then $M$ saturates the area law:
+    \[
+      I_L(M)=I_{L+1}(M),
+      \qquad 1\leq L<\lfloor N/2\rfloor.
+    \]
+    This is the forward implication of Proposition~\texttt{propsimple} in
+    Appendix~C of \cite{Cirac2016MPDO_arXiv}.  Simplicity is among the ambient
+    hypotheses of Theorem~4.9 but is not used in this implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the cut as $(a+1):(b+2)$.  The local channels transfer one site to
+    obtain $(a+2):(b+1)$, and data processing in both directions gives equality
+    of the two bipartite mutual informations.  The consecutive-cut
+    identification turns this into $I_L=I_{L+1}$.  The preceding lemma supplies
+    the normalization at every positive chain length.
 \end{proof}
 
 \begin{lemma}[Nonnegativity of block entropies]

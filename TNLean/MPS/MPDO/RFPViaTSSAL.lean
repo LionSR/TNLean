@@ -8,16 +8,17 @@ import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.RFPViaTSGlobal
 
 /-!
-# The conditional mutual-information step for MPDO renormalization fixed points
+# Saturation of the area law for MPDO renormalization fixed points
 
-This file isolates the entropic part of the proof that a mixed-state
-renormalization fixed point saturates the area law.  The result below is a
-conditional helper, not a formalization of Proposition `propsimple`.  It proves
-the two exact finite-chain identifications obtained by transferring one site
-across a bipartition and derives the resulting mutual-information equality.
-The separate normalization argument uses horizontal canonical form, the MPDO
-condition, and the renormalization maps; simplicity is not needed for the
-forward implication of the source proposition.
+This file proves the forward implication of Proposition `propsimple`: a
+horizontally canonical matrix product density operator satisfying the local
+renormalization fixed-point equations saturates the area law.  The proof first
+establishes the two exact finite-chain identities obtained by transferring one
+site across a bipartition, applies mutual-information data processing in both
+directions, and then identifies bipartite mutual information with the chain
+quantity `I_L`.  Horizontal canonical form, positivity, and the fixed-point
+equations supply nonzero trace at every positive length; simplicity is not used
+in this implication.
 
 Source: arXiv:1606.00608, Appendix C, lines 1333--1341.  See
 `docs/paper-gaps/cpsv16_rfp_sal_data_processing.tex`.
@@ -363,5 +364,82 @@ theorem mutualInformation_bipartition_eq_of_isRFPViaTS
   obtain ⟨S, T, hS, hT, hSclose, hTclose⟩ := hRFP
   exact mutualInformation_bipartition_eq_of_local_transfers M N a b hIn hOut hM htr
     S T hS hT hSclose hTclose
+
+private theorem mutualInformation_bipartition_eq_of_isRFPViaTS_of_right_eq
+    (M : MPOTensor d D) (hRFP : IsRFPViaTS M)
+    (N a b KIn KOut : ℕ) (hKIn : KIn = b + 2) (hKOut : KOut = b + 1)
+    (hIn : N = (a + 1) + KIn) (hOut : N = (a + 2) + KOut)
+    (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
+    Entropy.mutualInformation
+        (bipartitionedNormalizedMPO M N (a + 1) KIn hIn)
+        (bipartitionedNormalizedMPO_posSemidef M N (a + 1) KIn hIn hM).isHermitian =
+      Entropy.mutualInformation
+        (bipartitionedNormalizedMPO M N (a + 2) KOut hOut)
+        (bipartitionedNormalizedMPO_posSemidef M N (a + 2) KOut hOut hM).isHermitian := by
+  subst KIn
+  subst KOut
+  exact mutualInformation_bipartition_eq_of_isRFPViaTS
+    M hRFP N a b hIn hOut hM htr
+
+/-- A horizontally canonical matrix product density operator satisfying the
+local renormalization fixed-point equations saturates the area law.
+
+The two local channels transfer one site across a consecutive bipartition.
+Data processing in both directions gives equality of the bipartite mutual
+informations, and `mutualInfoChain_eq_mutualInformation` identifies these with
+the chain quantities `I_L` and `I_{L+1}`.  Horizontal canonical form,
+positivity, and the fixed-point equations give the nonzero trace required to
+normalize every positive-length ring.  No empty-chain condition is used.
+
+Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
+lines 1333--1341, under the canonical-form and density-operator standing
+assumptions at lines 623--628 and 849--850. -/
+theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
+    (hHorizontal : MPOTensor.IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) : IsSAL M := by
+  refine ⟨hM, MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
+    M hHorizontal hM hRFP, ?_⟩
+  intro N L hL hHalf
+  obtain ⟨a, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : L ≠ 0)
+  let b := N - (a + 1) - 2
+  let N₀ := (a + 1) + (b + 2)
+  have hN : N = N₀ := by
+    dsimp [N₀, b]
+    omega
+  clear_value b
+  subst N
+  have hNpos : 0 < N₀ := by omega
+  have htr := MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
+    M hHorizontal hM hRFP N₀ hNpos
+  have hKIn : N₀ - (a + 1) = b + 2 := by
+    dsimp [N₀]
+    omega
+  have hKOut : N₀ - (a + 2) = b + 1 := by
+    dsimp [N₀]
+    omega
+  have hIn : N₀ = (a + 1) + (N₀ - (a + 1)) := by omega
+  have hOut : N₀ = (a + 2) + (N₀ - (a + 2)) := by omega
+  have hBipartition :=
+    mutualInformation_bipartition_eq_of_isRFPViaTS_of_right_eq
+      M hRFP N₀ a b (N₀ - (a + 1)) (N₀ - (a + 2))
+      hKIn hKOut hIn hOut (hM N₀) htr
+  calc
+    mutualInfoChain M N₀ (a + 1)
+        (Nat.le_of_lt (hHalf.trans_le (Nat.div_le_self N₀ 2))) (hM N₀) =
+      Entropy.mutualInformation
+        (bipartitionedNormalizedMPO M N₀ (a + 1) (N₀ - (a + 1)) (by omega))
+        ((normalizedMPO_isHermitian M N₀ (hM N₀)).submatrix
+          (chainBipartitionEquiv d N₀ (a + 1) (N₀ - (a + 1)) (by omega)).symm) :=
+      mutualInfoChain_eq_mutualInformation M N₀ (a + 1)
+        (Nat.le_of_lt (hHalf.trans_le (Nat.div_le_self N₀ 2))) (hM N₀)
+    _ = Entropy.mutualInformation
+        (bipartitionedNormalizedMPO M N₀ (a + 2) (N₀ - (a + 2)) (by omega))
+        ((normalizedMPO_isHermitian M N₀ (hM N₀)).submatrix
+          (chainBipartitionEquiv d N₀ (a + 2) (N₀ - (a + 2)) (by omega)).symm) := by
+      exact hBipartition
+    _ = mutualInfoChain M N₀ (a + 2)
+        (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀) :=
+      (mutualInfoChain_eq_mutualInformation M N₀ (a + 2)
+        (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀)).symm
 
 end MPOTensor
