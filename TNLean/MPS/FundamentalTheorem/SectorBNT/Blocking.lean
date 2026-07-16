@@ -277,28 +277,17 @@ theorem IsBNTCanonicalForm.blockTensor
     change LinearIndependent ℂ (fun j : Fin P.basisCount ↦
       mpvState (MPSTensor.blockTensor (P.basis j) p) N)
     let e := blockedConfigEquiv d N p
-    let F : MPVSpace (blockPhysDim d p) N ≃ₗ[ℂ] MPVSpace d (N * p) :=
-      (EuclideanSpace.equiv (Cfg (blockPhysDim d p) N) ℂ).toLinearEquiv |>.trans
-        (LinearEquiv.piCongrLeft' ℂ
-          (fun _ : Cfg (blockPhysDim d p) N ↦ ℂ) e) |>.trans
-        (EuclideanSpace.equiv (Cfg d (N * p)) ℂ).symm.toLinearEquiv
-    have hF : ∀ j : Fin P.basisCount,
-        F (mpvState (MPSTensor.blockTensor (P.basis j) p) N) =
-          mpvState (P.basis j) (N * p) := by
-      intro j
-      ext σ
+    apply linearIndependent_mpvState_of_configEquiv e
+      (fun j ↦ MPSTensor.blockTensor (P.basis j) p) P.basis
+    · intro j σ
       change mpv (MPSTensor.blockTensor (P.basis j) p) (e.symm σ) =
         mpv (P.basis j) σ
       simp only [mpv, MPSTensor.coeff, evalWord_blockTensor]
       rw [← ofFn_blockedConfigEquiv d N p (e.symm σ)]
       simp [e]
-    have hNp : N₀ < N * p := by
-      exact lt_of_lt_of_le hN (Nat.le_mul_of_pos_right N hp)
-    have hMapped : LinearIndependent ℂ
-        (fun j : Fin P.basisCount ↦
-          F (mpvState (MPSTensor.blockTensor (P.basis j) p) N)) := by
-      simpa only [hF] using hLI (N * p) hNp
-    exact LinearIndependent.of_comp F.toLinearMap hMapped
+    · have hNp : N₀ < N * p := by
+        exact lt_of_lt_of_le hN (Nat.le_mul_of_pos_right N hp)
+      exact hLI (N * p) hNp
   refine
     { basis_dim_pos := hCF.basis_dim_pos
       basis_irreducible := ?_
