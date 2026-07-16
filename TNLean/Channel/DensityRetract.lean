@@ -64,14 +64,14 @@ theorem trace_hermitianPart_eq_re (A : Matrix (Fin D) (Fin D) ℂ) :
   symm
   exact Complex.conj_eq_iff_re.mp htr
 
-theorem matrixAbs_add_self_posSemidef_of_isHermitian
+theorem cfcAbs_add_self_posSemidef_of_isHermitian
     {B : Matrix (Fin D) (Fin D) ℂ} (hB : B.IsHermitian) :
     (CFC.abs B + B).PosSemidef := by
   apply Matrix.nonneg_iff_posSemidef.mp
   rw [CFC.abs_add_self (a := B) (isSelfAdjoint_iff.mpr hB)]
   exact smul_nonneg (by positivity) (CFC.posPart_nonneg _)
 
-theorem trace_matrixAbs_add_self_ne_zero_of_trace_one
+theorem trace_cfcAbs_add_self_ne_zero_of_trace_one
     {B : Matrix (Fin D) (Fin D) ℂ} (htr : Matrix.trace B = 1) :
     Matrix.trace (CFC.abs B + B) ≠ 0 := by
   have habs_psd : (CFC.abs B).PosSemidef :=
@@ -152,7 +152,7 @@ theorem hermitianTraceOnePart_eq_self_of_mem_densityMatrices [NeZero D]
 theorem densityRetract_den_ne_zero [NeZero D]
     (A : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (CFC.abs (hermitianTraceOnePart A) + hermitianTraceOnePart A) ≠ 0 := by
-  exact trace_matrixAbs_add_self_ne_zero_of_trace_one
+  exact trace_cfcAbs_add_self_ne_zero_of_trace_one
     (trace_hermitianTraceOnePart (D := D) A)
 
 theorem continuous_hermitianPart :
@@ -205,9 +205,9 @@ theorem densityRetract_mem_densityMatrices [NeZero D]
   have hB_tr : Matrix.trace B = 1 := by
     simp [B]
   have hP_psd : P.PosSemidef := by
-    simpa [P, B] using matrixAbs_add_self_posSemidef_of_isHermitian (D := D) hB_h
+    simpa [P, B] using cfcAbs_add_self_posSemidef_of_isHermitian (D := D) hB_h
   have hP_tr_ne : Matrix.trace P ≠ 0 := by
-    simpa [P, B] using trace_matrixAbs_add_self_ne_zero_of_trace_one (D := D) hB_tr
+    simpa [P, B] using trace_cfcAbs_add_self_ne_zero_of_trace_one (D := D) hB_tr
   refine ⟨?_, ?_⟩
   · have hscalar_nonneg : 0 ≤ (Matrix.trace P)⁻¹ :=
       inv_nonneg_of_nonneg hP_psd.trace_nonneg
