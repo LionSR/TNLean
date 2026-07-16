@@ -330,6 +330,29 @@ theorem physClose1_blockTwo_eq_physClose2 (M : MPOTensor d D) :
   ext X i j
   simp [Matrix.coe_reindexLinearEquiv, blockedIndexEquiv, blockTwo]
 
+/-- Evaluating the one-site closure of the two-site blocking at a virtual
+matrix gives the two-site closure after decoding the blocked physical index.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
+theorem physClose1_blockTwo_eq_physClose2_apply
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.equivReindexMap (blockedIndexEquiv d)
+        (physClose1 (blockTwo M) X) = physClose2 M X := by
+  simpa [Matrix.equivReindexMap] using
+    LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X
+
+/-- Relabelling the two-site closure by one blocked physical index gives the
+one-site closure of the two-site blocking.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
+theorem physClose2_eq_physClose1_blockTwo_apply
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.equivReindexMap (blockedIndexEquiv d).symm (physClose2 M X) =
+      physClose1 (blockTwo M) X := by
+  have h := congrArg (Matrix.equivReindexMap (blockedIndexEquiv d).symm)
+    (physClose1_blockTwo_eq_physClose2_apply M X)
+  simpa [Matrix.equivReindexMap] using h.symm
+
 /-- After decoding both blocked physical indices, the two-site closure of the
 two-site blocked tensor is the right-associated four-site closure of the
 original tensor. -/

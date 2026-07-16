@@ -23,7 +23,7 @@ unitary block-identification conclusion is assumed here.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  Appendix C.4, lines 1974--1979.
+  Appendix C.4, lines 1955--1979.
 -/
 
 open scoped Matrix
@@ -38,9 +38,9 @@ variable {d D R₁ R₂ : ℕ}
 physical coordinates to the corresponding retained vertical coordinates.
 
 The two-site output is first relabelled from a pair of one-site indices to the
-physical index of `blockTwo M`.
+physical index of the two-site blocking of \(M\).
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1974--1979. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 def transportTToVerticalCoordinates
     (U₁ : Matrix (Fin R₁) (Fin d) ℂ)
     (U₂ : Matrix (Fin R₂) (Fin (d * d)) ℂ)
@@ -55,7 +55,7 @@ def transportTToVerticalCoordinates
 one-site physical coordinates to the corresponding retained vertical
 coordinates.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1974--1979. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 def transportSToVerticalCoordinates
     (U₁ : Matrix (Fin R₁) (Fin d) ℂ)
     (U₂ : Matrix (Fin R₂) (Fin (d * d)) ℂ)
@@ -74,7 +74,7 @@ trace, this is the physical-coordinate identity used to obtain the displayed
 formula for \(\widetilde T\).  Those sector maps have not yet been composed
 with the transported physical map here.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1974--1979. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem transportTToVerticalCoordinates_contractBondMatrix
     (M : MPOTensor d D)
     (B₁ : MPSTensor (D * D) R₁) (B₂ : MPSTensor (D * D) R₂)
@@ -84,20 +84,16 @@ theorem transportTToVerticalCoordinates_contractBondMatrix
       Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
     (hReconstruct₁ : ∀ ab, verticalTensor M ab = U₁ᴴ * B₁ ab * U₁)
     (hForward₂ : ∀ ab, U₂ * verticalTensor (blockTwo M) ab * U₂ᴴ = B₂ ab)
-    (hT : ∀ X, T (physClose1 M X) = physClose2 M X)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (hT : T (physClose1 M X) = physClose2 M X) :
     transportTToVerticalCoordinates U₁ U₂ T
         (MPSTensor.contractBondMatrix B₁ X) =
       MPSTensor.contractBondMatrix B₂ X := by
   simp only [transportTToVerticalCoordinates, LinearMap.comp_apply,
     singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
   rw [← physClose1_eq_of_vertical_reconstruction M B₁ U₁ hReconstruct₁ X]
-  rw [hT X]
-  rw [show Matrix.equivReindexMap (blockedIndexEquiv d).symm
-      (physClose2 M X) = physClose1 (blockTwo M) X by
-    have h := LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X
-    simpa [Matrix.equivReindexMap] using
-      (congrArg (Matrix.equivReindexMap (blockedIndexEquiv d).symm) h).symm]
+  rw [hT]
+  rw [physClose2_eq_physClose1_blockTwo_apply]
   exact mul_physClose1_mul_conjTranspose_of_vertical_forward
     (blockTwo M) B₂ U₂ hForward₂ X
 
@@ -110,7 +106,7 @@ trace, this is the physical-coordinate identity used to obtain the displayed
 formula for \(\widetilde S\).  Those sector maps have not yet been composed
 with the transported physical map here.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1974--1979. -/
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem transportSToVerticalCoordinates_contractBondMatrix
     (M : MPOTensor d D)
     (B₁ : MPSTensor (D * D) R₁) (B₂ : MPSTensor (D * D) R₂)
@@ -121,8 +117,8 @@ theorem transportSToVerticalCoordinates_contractBondMatrix
     (hForward₁ : ∀ ab, U₁ * verticalTensor M ab * U₁ᴴ = B₁ ab)
     (hReconstruct₂ : ∀ ab,
       verticalTensor (blockTwo M) ab = U₂ᴴ * B₂ ab * U₂)
-    (hS : ∀ X, S (physClose2 M X) = physClose1 M X)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (hS : S (physClose2 M X) = physClose1 M X) :
     transportSToVerticalCoordinates U₁ U₂ S
         (MPSTensor.contractBondMatrix B₂ X) =
       MPSTensor.contractBondMatrix B₁ X := by
@@ -130,11 +126,8 @@ theorem transportSToVerticalCoordinates_contractBondMatrix
     singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
   rw [← physClose1_eq_of_vertical_reconstruction
     (blockTwo M) B₂ U₂ hReconstruct₂ X]
-  rw [show Matrix.equivReindexMap (blockedIndexEquiv d)
-      (physClose1 (blockTwo M) X) = physClose2 M X by
-    simpa [Matrix.equivReindexMap] using
-      LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X]
-  rw [hS X]
+  rw [physClose1_blockTwo_eq_physClose2_apply]
+  rw [hS]
   exact mul_physClose1_mul_conjTranspose_of_vertical_forward
     M B₁ U₁ hForward₁ X
 
