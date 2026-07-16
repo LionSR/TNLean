@@ -161,12 +161,30 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Definition~\ref{def:trace_preserving}.
 \end{definition}
 
+\begin{lemma}[Trace-normalization criterion, trace-preservation component]
+    \label{lem:trace_normalization_criterion_trace}
+    \lean{trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one}
+    \leanok
+    \uses{def:trace_preserving_rectangular, def:trace_pairing_adjoint}
+    Let $T:\MN{D}\to\MN{D'}$ be a linear map and let $X\in\MN{D}$ satisfy
+    $X^\dagger T^*(\Id)X=\Id$.  Then for every $\rho\in\MN{D}$,
+    \[
+        \tr\!\bigl(T(X\rho X^\dagger)\bigr) = \tr(\rho).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Expanding with the trace-pairing adjoint,
+    $\tr(T(X\rho X^\dagger))=\tr(X\rho X^\dagger\,T^*(\Id))
+    =\tr(\rho\,X^\dagger T^*(\Id)X)=\tr(\rho)$.
+\end{proof}
+
 \begin{theorem}[Filtered trace-normalization criterion]
     \label{thm:filtered_trace_normalization_criterion}
     \lean{comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one}
     \leanok
     \uses{def:positive_map_rectangular, def:trace_preserving_rectangular,
-        def:trace_pairing_adjoint,
+        def:trace_pairing_adjoint, lem:trace_normalization_criterion_trace,
         thm:conjugation_filters_preserve_positivity}
     Let $T:\MN{D}\to\MN{D'}$ be a positive map between matrix algebras of
     possibly different dimensions, and let $X\in\MN{D}$ satisfy
