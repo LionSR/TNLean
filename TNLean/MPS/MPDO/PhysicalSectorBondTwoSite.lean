@@ -50,8 +50,8 @@ which is the tensor square of one single-site coordinate matrix. -/
 theorem swapPairMatrix_sandwich_kronecker_self
     {m n : Type*} [Fintype m] [Fintype n]
     (A : Matrix m n ℂ) (B : Matrix (m × m) (m × m) ℂ) :
-    swapPairMatrix (sandwichMap (A ⊗ₖ A)ᴴ B) =
-      sandwichMap (A ⊗ₖ A)ᴴ (swapPairMatrix B) := by
+    swapPairMatrix (singleKrausMap (A ⊗ₖ A)ᴴ B) =
+      singleKrausMap (A ⊗ₖ A)ᴴ (swapPairMatrix B) := by
   let em := Equiv.prodComm m m
   let en := Equiv.prodComm n n
   have hA : Matrix.reindex em en (A ⊗ₖ A) = A ⊗ₖ A :=
@@ -60,7 +60,7 @@ theorem swapPairMatrix_sandwich_kronecker_self
     ext x y
     have h := congrArg star (congrFun (congrFun hA y) x)
     simpa [Matrix.reindex_apply, star_mul', mul_comm] using h
-  simp only [swapPairMatrix, sandwichMap_apply,
+  simp only [swapPairMatrix, singleKrausMap_apply,
     Matrix.conjTranspose_conjTranspose]
   change (Matrix.reindexLinearEquiv ℂ ℂ en en)
       ((A ⊗ₖ A)ᴴ * B * (A ⊗ₖ A)) =
@@ -189,14 +189,14 @@ private theorem physicalPairBond_swap_comm
       swapPairMatrix F.physicalPairBond * F.physicalPairBond := by
   have hswap :
       swapPairMatrix
-          (sandwichMap F.physicalCoordinateMatrixTwoᴴ F.sectorCoordinateBond) =
-        sandwichMap F.physicalCoordinateMatrixTwoᴴ
+          (singleKrausMap F.physicalCoordinateMatrixTwoᴴ F.sectorCoordinateBond) =
+        singleKrausMap F.physicalCoordinateMatrixTwoᴴ
           (swapPairMatrix F.sectorCoordinateBond) := by
     simpa only [physicalCoordinateMatrixTwo] using
       swapPairMatrix_sandwich_kronecker_self
         F.physicalCoordinateMatrix F.sectorCoordinateBond
   rw [physicalPairBond, hswap]
-  simp only [sandwichMap_apply, Matrix.conjTranspose_conjTranspose]
+  simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
   calc
     _ = F.physicalCoordinateMatrixTwoᴴ * F.sectorCoordinateBond *
         (F.physicalCoordinateMatrixTwo * F.physicalCoordinateMatrixTwoᴴ) *

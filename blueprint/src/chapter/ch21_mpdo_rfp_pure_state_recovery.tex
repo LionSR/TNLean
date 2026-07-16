@@ -92,7 +92,7 @@
 
 \begin{definition}[Single-Kraus map]
     \label{def:mpdo_single_kraus_map}
-    \lean{sandwichMap}
+    \lean{singleKrausMap}
     \leanok
     For a rectangular matrix $V:H\to K$, define the linear map
     \[
@@ -102,7 +102,7 @@
 
 \begin{lemma}[Evaluation of the single-Kraus map]
     \label{lem:mpdo_single_kraus_map_apply}
-    \lean{sandwichMap_apply}
+    \lean{singleKrausMap_apply}
     \leanok
     \uses{def:mpdo_single_kraus_map}
     For every matrix $X$, one has $\Phi_V(X)=VXV^\dagger$.
@@ -110,7 +110,7 @@
 
 \begin{theorem}[The single-Kraus map of an isometry is a channel]
     \label{thm:mpdo_single_kraus_map_cptp}
-    \lean{sandwichMap_isKrausCPTP}
+    \lean{singleKrausMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_single_kraus_map, thm:mpdo_single_kraus_isometry_cptp}
     If $V^\dagger V=I_H$, then $\Phi_V$ is trace-preserving and completely

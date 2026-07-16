@@ -466,9 +466,9 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 private theorem rightPairMatrix_physicalPairBond
     (F : PhysicalSectorFactorization K) :
     rightPairMatrix F.physicalPairBond =
-      sandwichMap F.physicalCoordinateMatrixThreeᴴ
+      singleKrausMap F.physicalCoordinateMatrixThreeᴴ
         (rightPairMatrix F.sectorCoordinateBond) := by
-  simp [rightPairMatrix, physicalPairBond, sandwichMap_apply,
+  simp [rightPairMatrix, physicalPairBond, singleKrausMap_apply,
     physicalCoordinateMatrixTwo, physicalCoordinateMatrixThree,
     Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
     F.physicalCoordinateMatrix_isometry, Matrix.mul_assoc]
@@ -481,15 +481,15 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 private theorem leftPairMatrix_physicalPairBond
     (F : PhysicalSectorFactorization K) :
     leftPairMatrix F.physicalPairBond =
-      sandwichMap F.physicalCoordinateMatrixThreeᴴ
+      singleKrausMap F.physicalCoordinateMatrixThreeᴴ
         (leftPairMatrix F.sectorCoordinateBond) := by
   ext x y
-  simp only [sandwichMap_apply, Matrix.conjTranspose_conjTranspose]
+  simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
   simp only [leftPairMatrix, physicalPairBond, physicalCoordinateMatrixTwo,
     physicalCoordinateMatrixThree, Matrix.conjTranspose_kronecker,
     Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.prodAssoc_symm_apply,
     Matrix.mul_apply, Matrix.kroneckerMap_apply, Fintype.sum_prod_type]
-  simp only [sandwichMap_apply, Matrix.conjTranspose_kronecker,
+  simp only [singleKrausMap_apply, Matrix.conjTranspose_kronecker,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_apply,
     Matrix.kroneckerMap_apply, Fintype.sum_prod_type]
   simp only [Matrix.one_apply]
@@ -554,7 +554,7 @@ private theorem physicalPairBonds_comm (F : PhysicalSectorFactorization K) :
     leftPairMatrix F.physicalPairBond * rightPairMatrix F.physicalPairBond =
       rightPairMatrix F.physicalPairBond * leftPairMatrix F.physicalPairBond := by
   rw [F.leftPairMatrix_physicalPairBond, F.rightPairMatrix_physicalPairBond]
-  simp only [sandwichMap_apply, Matrix.conjTranspose_conjTranspose]
+  simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
   calc
     _ = F.physicalCoordinateMatrixThreeᴴ *
         leftPairMatrix F.sectorCoordinateBond *
