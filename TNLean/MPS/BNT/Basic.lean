@@ -9,7 +9,6 @@ import TNLean.Algebra.GramMatrixLI
 import Mathlib.Analysis.InnerProductSpace.l2Space
 import Mathlib.Topology.Algebra.Star
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
 # Basis of normal tensors (BNT) and matching theory
