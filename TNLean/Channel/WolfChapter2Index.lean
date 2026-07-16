@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled
@@ -205,10 +206,10 @@ project import.
   every CP map with full Kraus rank admits SL-filterings making it
   doubly-stochastic ✓ (proved via the AGM/first-order optimality argument at the
   minimiser, using the trace-determinant AM-GM equality characterisation)
-* `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Proposition 2.11 (Lorentz
-  normal form for qubit channels)**: conclusion is a three-way disjunction
-  `IsLorentzDiagonal ∨ IsLorentzNonDiagonal ∨ IsLorentzSingular` ⚠
-  (depends on the generic normal form and Lorentz group classification)
+* **Wolf Proposition 2.11 (Lorentz normal form for qubit channels)** remains
+  pending. Wolf requires general invertible Kraus-rank-one CP filters, including
+  scalar freedom. The former determinant-one `SLFiltering` formulation was false
+  and has been removed; there is currently no Lean declaration for the theorem.
 
 ### Formalization
 
@@ -237,16 +238,15 @@ project import.
 | Diagonal Lorentz form | `LorentzNormalForm.lean` | `IsLorentzDiagonal` |
 | Non-diagonal Lorentz form | `LorentzNormalForm.lean` | `IsLorentzNonDiagonal` |
 | Singular Lorentz form | `LorentzNormalForm.lean` | `IsLorentzSingular` |
-| Lorentz normal form | `LorentzNormalForm.lean` | `Wolf.exists_lorentz_normal_form_qubit` |
 
 ### Not yet formalized
 
 | Result | Notes |
 |--------|-------|
-| Section 2.3 Lorentz normal form (full proof) | Statement formalised
-  (`exists_lorentz_normal_form_qubit`);
-  compactness/minimisation is proved; proof still needs the generic optimality
-  step and the SL(2, ℂ) Lorentz-orbit classification |
+| Section 2.3 Lorentz normal form (Proposition 2.11) | Correctly formulated
+  statement and proof remain pending. Wolf uses general invertible Kraus-rank-one
+  CP filters with scalar freedom; the former determinant-one formulation was
+  false and was removed. The proof also needs the Lorentz-orbit classification. |
 | Section 2.3 Generic normal form (full proof) | Statement formalised
   (`exists_normal_form_generic`);
   compactness/minimisation is proved; proof still needs the AGM/first-order

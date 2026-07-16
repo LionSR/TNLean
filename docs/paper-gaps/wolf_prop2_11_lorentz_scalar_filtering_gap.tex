@@ -1,0 +1,117 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Scalar Normalization in Wolf's Lorentz Normal Form}
+\author{}
+\date{2026-07-16}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Wolf's Proposition~2.11 states that every qubit channel
+$T:\MN{2}\to\MN{2}$ admits invertible completely positive maps
+$\Phi_1,\Phi_2$, each of Kraus rank one, such that
+\begin{align}
+  T' = \Phi_2\circ T\circ\Phi_1
+\end{align}
+is again a qubit channel and belongs to one of three Lorentz normal forms:
+diagonal, non-diagonal, or singular.\footnote{\cite[Proposition~2.11]{Wolf2012Quantum};
+local source \path{Notes/WolfNoteTexSource/ch02_representations.tex},
+lines 1021--1035.}  Each filtering has the form
+\begin{align}
+  \Phi_X(A)=XAX^\dagger,
+  \qquad X\in\mathrm{GL}(2,\C).
+\end{align}
+Thus the proposition allows every invertible Kraus-rank-one completely positive
+filter, not only those represented by determinant-one matrices.
+
+\section{Determinant-one action and scalar freedom}
+
+Choose a square root $c^2=\det X$ and write $X=cS$, where
+$S\in\mathrm{SL}(2,\C)$. Then
+\begin{align}
+  \Phi_X(A)
+    &= |c|^2\Phi_S(A),\\
+  |c|^2
+    &= |\det X|.
+\end{align}
+Consequently, if $X_i=c_iS_i$ for the two filters, then
+\begin{align}
+  \Phi_{X_2}\circ T\circ\Phi_{X_1}
+  = |c_1c_2|^2
+    (\Phi_{S_2}\circ T\circ\Phi_{S_1}).
+  \label{eq:scalar-factor}
+\end{align}
+The matrices $S_1,S_2$ determine the determinant-one Lorentz action. The
+positive factor $|c_1c_2|^2$ selects the normalization on the resulting ray of
+completely positive maps.
+
+This distinction is immaterial when only the Lorentz orbit up to positive scale
+is considered. It is essential when the representative is required to be a
+channel. If the determinant-one representative satisfies
+\begin{align}
+  \tr\!\left(\Phi_{S_2}\circ T\circ\Phi_{S_1}(A)\right)
+  = \alpha\,\tr(A),
+\end{align}
+then it is trace preserving only when $\alpha=1$. General invertible filters
+can multiply the map by $\alpha^{-1}$ through the scalar in
+\eqref{eq:scalar-factor}; determinant-one filters have no such freedom. The
+minimisation in Propositions~2.8 and~2.9 produces partial traces proportional to
+the identity, but the proportionality scalar must still be chosen so that the
+qubit representative is trace preserving.
+
+\section{The point at issue}
+
+A former local statement required both filters to be determinant-one while also
+requiring the filtered map to be a qubit channel in one of the three canonical
+forms.\footnote{The removed declaration was
+\leanid{Wolf.exists_lorentz_normal_form_qubit} in
+\doclink{TNLean/Channel/LorentzNormalForm}.}  Equation~\eqref{eq:scalar-factor}
+shows why the determinant-one restriction does not justify the normalization in
+Wolf's proposition. The source theorem permits general invertible filters, and
+its channel conclusion uses their scalar freedom. The restricted local
+statement was therefore removed rather than treated as a formalization of
+Proposition~2.11.
+
+The three canonical-form predicates and the square full-Kraus-rank minimisation
+theorem are formalized.\footnote{Formal declarations
+\leanid{Wolf.IsLorentzDiagonal}, \leanid{Wolf.IsLorentzNonDiagonal},
+\leanid{Wolf.IsLorentzSingular}, and
+\leanid{Wolf.exists_normal_form_generic} in
+\doclink{TNLean/Channel/LorentzNormalForm}.}  The theorem asserting existence of
+a canonical representative for every qubit channel remains open.
+
+\section{Elimination plan}
+
+A source-faithful proof requires the following steps.
+\begin{enumerate}
+  \item Define general invertible Kraus-rank-one completely positive filters and
+    separate each filter into a determinant-one factor and a nonzero scalar.
+  \item Use the minimisation argument of Propositions~2.8 and~2.9 for the
+    full-Kraus-rank case, retaining the proportionality constants of the two
+    marginals.
+  \item Formalize the Lorentz action of $\mathrm{SL}(2,\C)$ on the Pauli
+    transfer matrix and classify its diagonal, non-diagonal, and singular orbits.
+  \item Choose the scalar factors so that the canonical representative is trace
+    preserving, and verify complete positivity and the stated parameter bounds.
+  \item Prove the three-case existence theorem using the general filters and link
+    it to the existing canonical-form predicates.
+\end{enumerate}
+
+The discrepancy is an open gap: the canonical forms are defined, and the generic
+minimisation theorem is available in square dimension, but the scalar-normalized
+Lorentz-orbit classification required by Proposition~2.11 has not yet been
+formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

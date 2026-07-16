@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Analysis.KleinInequality
 import TNLean.Channel.Schwarz.AndoLieb
@@ -545,7 +546,7 @@ theorem mulVec_eq_zero_of_smul_add {a b : ℝ} (ha : 0 < a) (hb : 0 < b)
     (hσ₂.dotProduct_mulVec_zero_iff v).mp hzero₂⟩
 
 open TNLean.Klein in
-/-- **Both-arguments trace-log limit.** For positive semidefinite \(\rho, \sigma\)
+/-- **Both-arguments trace-log limit.** For positive semidefinite \(\sigma\)
 with \(\ker\sigma \subseteq \ker\rho\), the cross term
 \(\operatorname{Re}\operatorname{tr}(\rho_\varepsilon\log\sigma_\varepsilon)\) of
 the trace-one regularizations
@@ -570,7 +571,7 @@ self term \(\operatorname{Re}\operatorname{tr}(\rho_\varepsilon\log\rho_\varepsi
 \to \operatorname{Re}\operatorname{tr}(\rho\log\rho)\); the two combine into the
 both-arguments relative-entropy limit `tendsto_relativeEntropyPerturb`. -/
 theorem tendsto_re_trace_perturb_mul_log_perturb {ρ σ : Mat}
-    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hσ : σ.PosSemidef)
     (hsupp : ∀ v : Fin D → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
     Tendsto (fun ε : ℝ => (Matrix.trace (regPerturb ε ρ * CFC.log (regPerturb ε σ))).re)
       (𝓝[>] 0) (𝓝 (Matrix.trace (ρ * CFC.log σ)).re) := by
@@ -600,8 +601,8 @@ theorem tendsto_re_trace_perturb_mul_log_perturb {ρ σ : Mat}
         Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_one, Matrix.mul_assoc,
         hUσ_unit]
     rw [hsplit]
-    simp only [Matrix.smul_apply, Matrix.add_apply, Matrix.one_apply_eq, smul_eq_mul,
-      mul_one, Complex.real_smul, Complex.mul_re, Complex.add_re, Complex.ofReal_re,
+    simp only [Matrix.smul_apply, Matrix.add_apply, Matrix.one_apply_eq, mul_one,
+      Complex.real_smul, Complex.mul_re, Complex.add_re, Complex.ofReal_re,
       Complex.ofReal_im, Complex.add_im, hw]
     ring
   -- the function at ε is the diagonal sum against the shifted-scaled `log`,
@@ -693,8 +694,8 @@ theorem tendsto_relativeEntropyPerturb {ρ σ : Mat}
     Tendsto (fun ε : ℝ => quantumRelativeEntropy (regPerturb ε ρ) (regPerturb ε σ))
       (𝓝[>] 0) (𝓝 (quantumRelativeEntropy ρ σ)) := by
   simp only [quantumRelativeEntropy_eq_trace_mul_log_sub]
-  refine Tendsto.sub ?_ (tendsto_re_trace_perturb_mul_log_perturb hρ hσ hsupp)
-  exact tendsto_re_trace_perturb_mul_log_perturb hρ hρ (fun v hv => hv)
+  refine Tendsto.sub ?_ (tendsto_re_trace_perturb_mul_log_perturb hσ hsupp)
+  exact tendsto_re_trace_perturb_mul_log_perturb hρ (fun v hv => hv)
 
 /-! ## The affine trace-one regularization and its both-arguments limit
 
@@ -740,7 +741,7 @@ theorem regPerturbAffine_posDef {a b ε : ℝ} (ha : 0 < a) (hb : 0 < b) (hε : 
 
 open Filter Topology TNLean.Klein in
 /-- **Both-arguments trace-log limit for the affine regularization.** For positive
-semidefinite \(\rho, \sigma\) with \(\ker\sigma \subseteq \ker\rho\) and constants
+semidefinite \(\sigma\) with \(\ker\sigma \subseteq \ker\rho\) and constants
 \(a, b > 0\), the cross term
 \(\operatorname{Re}\operatorname{tr}(\rho_\varepsilon\log\sigma_\varepsilon)\) of the
 affine regularizations
@@ -761,7 +762,7 @@ of the regularized eigenvalue \((1 + a\varepsilon)^{-1}(q_j + b\varepsilon)\). F
 \(a = N, b = 1\) generalization of `tendsto_re_trace_perturb_mul_log_perturb`. -/
 theorem tendsto_re_trace_perturbAffine_mul_log_perturbAffine {a b : ℝ}
     (ha : 0 < a) (hb : 0 < b) {ρ σ : Matrix n n ℂ}
-    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hσ : σ.PosSemidef)
     (hsupp : ∀ v : n → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
     Tendsto (fun ε : ℝ =>
         (Matrix.trace (regPerturbAffine a b ε ρ * CFC.log (regPerturbAffine a b ε σ))).re)
@@ -790,8 +791,8 @@ theorem tendsto_re_trace_perturbAffine_mul_log_perturbAffine {a b : ℝ}
       rw [regPerturbAffine, Matrix.mul_smul, Matrix.smul_mul, mul_add, add_mul,
         Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_one, Matrix.mul_assoc, hUσ_unit]
     rw [hsplit]
-    simp only [Matrix.smul_apply, Matrix.add_apply, Matrix.one_apply_eq, smul_eq_mul,
-      mul_one, Complex.real_smul, Complex.mul_re, Complex.add_re, Complex.ofReal_re,
+    simp only [Matrix.smul_apply, Matrix.add_apply, Matrix.one_apply_eq, mul_one,
+      Complex.real_smul, Complex.mul_re, Complex.add_re, Complex.ofReal_re,
       Complex.ofReal_im, Complex.add_im, hw]
     ring
   -- the function at ε is the diagonal sum against the shifted-scaled `log`,
@@ -889,8 +890,8 @@ theorem tendsto_relativeEntropyPerturbAffine {a b : ℝ} (ha : 0 < a) (hb : 0 < 
       (𝓝[>] 0) (𝓝 (quantumRelativeEntropy ρ σ)) := by
   simp only [quantumRelativeEntropy_eq_trace_mul_log_sub]
   refine Tendsto.sub ?_
-    (tendsto_re_trace_perturbAffine_mul_log_perturbAffine ha hb hρ hσ hsupp)
-  exact tendsto_re_trace_perturbAffine_mul_log_perturbAffine ha hb hρ hρ (fun v hv => hv)
+    (tendsto_re_trace_perturbAffine_mul_log_perturbAffine ha hb hσ hsupp)
+  exact tendsto_re_trace_perturbAffine_mul_log_perturbAffine ha hb hρ (fun v hv => hv)
 
 end AffinePerturb
 

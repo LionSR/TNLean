@@ -1,10 +1,14 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.MPS.Overlap.Basic
 import TNLean.Algebra.GramMatrixLI
 
 import Mathlib.Analysis.InnerProductSpace.l2Space
 import Mathlib.Topology.Algebra.Star
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
 # Basis of normal tensors (BNT) and matching theory
@@ -321,8 +325,7 @@ lemma exists_invertible_changeBasis
   have hU : ∀ j, w j = ∑ i : Fin g, U i j • v i := by
     intro j
     exact (hc j).symm
-  -- It remains to show `U.det ≠ 0`.
-  -- Strategy: show `U.mulVec` is injective, hence `U` is a unit, hence `det U ≠ 0`.
+  -- It remains to show `U.det ≠ 0` from the triviality of the kernel of `U.mulVec`.
   have hmulVec_zero : ∀ a : Fin g → ℂ, U.mulVec a = 0 → a = 0 := by
     intro a ha
     -- It suffices to show ∑ j, a j • w j = 0 (then LI of w gives a = 0).
@@ -336,19 +339,13 @@ lemma exists_invertible_changeBasis
       _ = ∑ i, (∑ j, a j * U i j) • v i := by simp_rw [← Finset.sum_smul]
       _ = ∑ i, (U.mulVec a) i • v i := by
             congr 1; ext i; congr 1
-            simp only [Matrix.mulVec, dotProduct]
+            rw [Matrix.mulVec_apply_eq_sum]
             exact Finset.sum_congr rfl fun j _ => mul_comm (a j) (U i j)
       _ = 0 := by simp [ha]
-  -- Deduce injectivity of U.mulVec.
-  have hinj : Function.Injective U.mulVec := by
-    intro a b hab
-    have h0 : U.mulVec (a - b) = 0 := by
-      rw [Matrix.mulVec_sub, hab, sub_self]
-    exact eq_of_sub_eq_zero (hmulVec_zero _ h0)
-  -- Injectivity of mulVec implies U is a unit.
-  have hunit : IsUnit U := Matrix.mulVec_injective_iff_isUnit.mp hinj
-  -- A unit matrix has nonzero determinant.
-  have hdet : U.det ≠ 0 := ((Matrix.isUnit_iff_isUnit_det U).mp hunit).ne_zero
+  have hdet : U.det ≠ 0 := by
+    intro hdet
+    obtain ⟨a, ha, hUa⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr hdet
+    exact ha (hmulVec_zero a hUa)
   exact ⟨U, hdet, hU⟩
 
 end LinearAlgebra

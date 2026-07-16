@@ -144,14 +144,13 @@ $A^i=e^{i\xi}UB^iU^\dagger$.
 
 \textbf{\Lean{} status.}\footnote{Formal declarations:
 \leanid{sectorMatch_propagation},
-\leanid{sectorTensor_proportional_of_blockedMatch},
-\leanid{repeatedBlocks_of_blockedSectorGaugePhase}, and
+\leanid{sectorTensor_proportional_of_blockedMatch}, and
 \leanid{periodicOverlap_gaugeEquiv_of_sector_match} in \leanid{Case3.lean}.}
 The statements track this two-stage structure: the $T^l$ + Theorem~2.10
 staircase, followed by the $\Omega_u$ contraction and the
 $\kappa/\theta/\phi$ phase construction. The top-level theorem now invokes these
 component lemmas and is proved modulo the single remaining leaf
-\leanid{repeatedBlocks_of_blockedSectorGaugePhase}. The
+\leanid{sectorTensor_proportional_of_blockedMatch}. The
 docstrings have been realigned to cite the source equation labels and line
 ranges (replacing earlier published-version labels such as ``A.8'' and
 ``A.14--A.18'' that do not occur in the local source), and the
@@ -217,7 +216,7 @@ Case-3 leaf is the contraction and gauge construction:
 \end{itemize}
 This is the remaining obligation for the repeated-blocks
 theorem.\footnote{Formal declaration:
-\leanid{repeatedBlocks_of_blockedSectorGaugePhase}.} The tensor-product scalar
+\leanid{sectorTensor_proportional_of_blockedMatch}.} The tensor-product scalar
 extraction and product-one normalization have already been isolated in
 \leanid{PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul} and
 \leanid{PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul};

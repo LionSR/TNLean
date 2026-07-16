@@ -1,13 +1,12 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
 
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Algebra.Star.BigOperators
-
-open scoped BigOperators InnerProductSpace
 
 /-!
 # MPV overlaps
@@ -26,6 +25,7 @@ In the physics literature one often uses the bilinear overlap without complex co
 on the first factor, `∑ σ, mpv A σ * star (mpv B σ)`. We define this as `mpvOverlap A B N`;
 it differs from Lean's inner product by a complex conjugation.
 -/
+open scoped BigOperators InnerProductSpace
 
 namespace MPSTensor
 

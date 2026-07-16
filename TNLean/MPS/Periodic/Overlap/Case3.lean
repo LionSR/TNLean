@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Overlap.Case3Transport
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
@@ -565,6 +566,13 @@ Appendix A lines 1023--1117:
   ξ = η/m and a single global unitary U = Σ_u e^{iφ_{u+q}} P_u U_{u+q} Q_{u+q}
   (eq:result and lines 1110--1117), giving A^i = e^{iξ} U B^i U†.
 
+The cyclic offset `q` records the fixed displacement between matched sector orbits:
+`hBlockMatch` pairs sector `u` of `A` with sector `u + q` of `B`. The hypothesis
+`hNondeg` rules out zero-dimensional sectors, for which the sector match and its
+contraction data would be vacuous. Finally, `hA_lc` and `hB_lc` normalize the original
+tensors; comparing the resulting norm identities is what forces the gauge phases
+produced by the contraction to have unit modulus.
+
 The available chain inputs are `blockDecompositionMap` /
 `IsNBlkInjective.exists_rightInverse` in `MPS/Chain/OneSidedInverse.lean`
 (realizing Ω_u for a chosen injective word length) and the two-site
@@ -580,7 +588,7 @@ that produces the uniform product-tensor identity and the unit-modulus
 normalization of the resulting sector phases; after that, the algebraic scalar
 extraction and the phase-coboundary lemma perform the κ/θ/φ telescoping. See
 docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
-private lemma repeatedBlocks_of_blockedSectorGaugePhase
+lemma sectorTensor_proportional_of_blockedMatch
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
@@ -636,92 +644,6 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
   -- per-sector blocked gauge-phase equivalences in `hBlockMatch` to one global
   -- phase and one global gauge. The available two-site theorem is `tensor_proportional`.
   sorry
-
-/-- **Per-site proportionality** (eq:thetaACprop, arXiv:1708.00029 lines
-1073--1076):
-After injectivity contraction, the sector-restricted tensors satisfy
-A_u^i = κ_v · e^{iη/m} · B_v^i with ∏ κ_v = 1 and |κ_v| = 1.
-The product-one scalar extraction from the uniform product identity is supplied
-by
-`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`,
-which formalizes arXiv:1708.00029, Appendix A lines 1072--1080 after a common
-root \(e^{i\eta/m}\) has been chosen.
-
-The offset `q` accounts for the cyclic shift between sector labelings of
-`A` and `B`: propagation from a match at `(u₀, v₀)` yields pairs
-`(u, u + q)` where `q = v₀ - u₀`.
-
-The `hBlockMatch` hypothesis says that for every sector `u`, the
-compressed blocks `blocksA u` and `blocksB (u + q)` are gauge-phase
-equivalent (after dimension cast). The injectivity contraction argument
-shows these per-sector gauges combine into a single global gauge for
-`RepeatedBlocks`.
-
-The specified projectors \(P_u\), \(Q_v\) and corner identifications
-\(\varphi_u\), \(\psi_v\) record the blocked sector tensors
-\[
-  C_u^\alpha = P_u (A^{[m]})^\alpha P_u,\qquad
-  D_v^\alpha = Q_v (B^{[m]})^\alpha Q_v.
-\]
-These are the projective pieces in arXiv:1708.00029, Lemma bdcf,
-lines 395--407, before Appendix A introduces the one-site maps
-\(A_u^i = P_u A^i P_{u+1}\).
-
-The nondegeneracy hypothesis `hNondeg` ensures every sector has
-positive bond dimension. Without this, zero-dimensional sectors
-satisfy `IsNormal`, `GaugePhaseEquiv`, and `hBlockMatch` vacuously,
-which would make the conclusion `RepeatedBlocks A B` too strong.
-
-The left-canonical hypotheses (`hA_lc`, `hB_lc`) are essential: they
-force the gauge-proportionality phases to have unit modulus, which is
-required by `RepeatedBlocks`. -/
-lemma sectorTensor_proportional_of_blockedMatch
-    [NeZero D] (A B : MPSTensor d D)
-    {m : ℕ} [NeZero m]
-    (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
-    {dimA dimB : Fin m → ℕ}
-    (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
-    (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
-    (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
-        (blocksA k i)ᴴ * blocksA k i = 1)
-    (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
-        (blocksB k i)ᴴ * blocksB k i = 1)
-    (hA_mpv :
-      SameMPV₂ (blockTensor A m)
-        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
-    (hB_mpv :
-      SameMPV₂ (blockTensor B m)
-        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
-    {PA PB : Fin m → MatrixAlg D}
-    {φA : (k : Fin m) →
-      Matrix (Fin (dimA k)) (Fin (dimA k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PA k)}
-    {φB : (k : Fin m) →
-      Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PB k)}
-    (hA_cyclic : IsCyclicSectorDecompWith A blocksA PA φA)
-    (hB_cyclic : IsCyclicSectorDecompWith B blocksB PB φB)
-    (hA_letter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φA k (blocksA k i)).1 = PA k * (blockTensor A m) i * PA k)
-    (hB_letter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φB k (blocksB k i)).1 = PB k * (blockTensor B m) i * PB k)
-    (q : Fin m)
-    (hBlockMatch : ∀ u : Fin m,
-      ∃ (hdim : dimA u = dimB (u + q)),
-        GaugePhaseEquiv
-          (cast (congr_arg
-            (MPSTensor (blockPhysDim d m)) hdim)
-            (blocksA u))
-          (blocksB (u + q)))
-    (hNondeg : ∀ u, dimA u ≠ 0)
-    (hNormal : ∀ u, IsNormal (blocksA u)) :
-    RepeatedBlocks A B := by
-  exact repeatedBlocks_of_blockedSectorGaugePhase
-    A B hA_lc hB_lc blocksA blocksB hA_blocks_lc hB_blocks_lc
-    hA_mpv hB_mpv hA_cyclic hB_cyclic hA_letter hB_letter q hBlockMatch hNondeg
-    hNormal
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
 the same period and a compressed sector match exists, then they are related by a gauge
@@ -794,7 +716,7 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
   --      to a global gauge with the κ/θ/φ phase assembly (lines 1023--1117).
   -- Stage 1 (`sectorGaugePhaseEquiv_succ_of_cyclicTransport`) is closed via the
   -- one-site rotation covariance of the cross sector overlap; the remaining
-  -- obligation is the stage-3 contraction `repeatedBlocks_of_blockedSectorGaugePhase`.
+  -- obligation is the stage-3 contraction `sectorTensor_proportional_of_blockedMatch`.
   classical
   obtain ⟨u₀, v₀, hdim₀, hMatch⟩ := hSomeMatch
   have hA_lc := hA.leftCanonical

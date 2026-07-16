@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.Data.Matrix.Block
@@ -237,8 +238,9 @@ form. -/
 theorem vonNeumannEntropy_smul {ω : Matrix n n ℂ} (hω : ω.PosSemidef)
     (hω_tr : ω.trace = 1) (c : ℝ) :
     vonNeumannEntropy ((c : ℂ) • ω)
-        (hω.isHermitian.smul (k := (c : ℂ)) (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal])))
-      = c * vonNeumannEntropy ω hω.isHermitian + negMulLog c := by
+        (hω.isHermitian.smul (k := (c : ℂ))
+          (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))) =
+      c * vonNeumannEntropy ω hω.isHermitian + negMulLog c := by
   set ev := hω.isHermitian.eigenvalues with hev
   set U : Matrix n n ℂ := (hω.isHermitian.eigenvectorUnitary : Matrix n n ℂ) with hU
   have hUstar : star U = star (hω.isHermitian.eigenvectorUnitary : Matrix n n ℂ) := rfl
@@ -268,10 +270,12 @@ theorem vonNeumannEntropy_smul {ω : Matrix n n ℂ} (hω : ω.PosSemidef)
     rw [hdiag, Matrix.mul_smul, Matrix.smul_mul]
   have hconj_herm : (Uu.val * D * Uu.val⁻¹).IsHermitian := by
     rw [← hconj_eq]
-    exact hω.isHermitian.smul (k := (c : ℂ)) (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))
+    exact hω.isHermitian.smul (k := (c : ℂ))
+      (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))
   have step1 : vonNeumannEntropy ((c : ℂ) • ω)
-      (hω.isHermitian.smul (k := (c : ℂ)) (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal])))
-      = vonNeumannEntropy D hDherm := by
+      (hω.isHermitian.smul (k := (c : ℂ))
+        (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))) =
+      vonNeumannEntropy D hDherm := by
     rw [vonNeumannEntropy_congr hconj_eq _ hconj_herm,
       vonNeumannEntropy_units_conj Uu hDherm]
   have heigsum : ∑ i, ev i = 1 := by

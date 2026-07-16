@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.Basic
 import TNLean.Channel.TransferMatrix
@@ -19,14 +20,16 @@ import TNLean.Analysis.MarginalSupport
 /-!
 # Lorentz normal form for quantum channels (Wolf Section 2.3, Propositions 2.8–2.11)
 
-This file formalises the existence results for normal forms of quantum channels
-under filtering operations, as described in Wolf Section 2.3 (Eqs. (2.35)-(2.43)).
+This file formalises part of the existence theory for normal forms of quantum
+channels under filtering operations, as described in Wolf Section 2.3
+(Eqs. (2.35)-(2.43)).
 The central idea is that every CP map with full Kraus rank can be brought to a
 doubly-stochastic normal form by pre- and post-composition with invertible
-Kraus-rank-1 CP maps (filtering operations).  For qubit channels (D = 2) the
-equivalence class under
-SL(2, ℂ)-filterings admits a particularly explicit classification — the *Lorentz
-normal form* — with three canonical representatives.
+Kraus-rank-1 CP maps (filtering operations). For qubit channels (`D = 2`),
+general invertible Kraus-rank-one CP filters lead to a particularly explicit
+classification—the *Lorentz normal form*—with three canonical representatives.
+The determinant-one part gives the Lorentz action, while scalar freedom is needed
+to normalize the filtered map as a channel.
 
 ## Structure
 
@@ -42,10 +45,10 @@ normal form* — with three canonical representatives.
    (equivalently, a positive-definite Choi matrix), there exist SL-filterings
    Φ₁, Φ₂ such that Φ₂ ∘ T ∘ Φ₁ is doubly-stochastic.
 
-4. **Lorentz normal form for qubit channels (Wolf Proposition 2.11).**
-   For every qubit channel (D = 2), after suitable SL(2, ℂ)-filterings, the
-   Pauli-basis transfer matrix takes one of three canonical forms: diagonal,
-   non-diagonal, or singular.
+4. **Lorentz normal form for qubit channels (Wolf Proposition 2.11; pending).**
+   Wolf uses general invertible Kraus-rank-one CP filters, including scalar
+   freedom, to obtain one of three canonical forms: diagonal, non-diagonal, or
+   singular. The corresponding correctly normalized theorem is not yet formalized.
 
 ## Compactness / minimisation argument
 
@@ -621,7 +624,7 @@ theorem exists_normal_form_generic
   -- The Choi matrix of the filtered channel is the minimised matrix.
   have hC : choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)
       = (S₂ ⊗ₖ S₁) * choiMatrix T * (S₂ ⊗ₖ S₁)ᴴ := by
-    show choiMatrix (unitaryConjLM S₂ ∘ₗ (T ∘ₗ unitaryConjLM S₁ᵀ)) = _
+    change choiMatrix (unitaryConjLM S₂ ∘ₗ (T ∘ₗ unitaryConjLM S₁ᵀ)) = _
     rw [choiMatrix_unitaryConj_comp, choiMatrix_comp_unitaryConj, Matrix.transpose_transpose,
       show (S₂ ⊗ₖ S₁) = (S₂ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
           ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ S₁) by
@@ -812,27 +815,25 @@ def IsLorentzSingular
     pauliTransferEntry T' 3 0 = 1 ∧
     ∀ (i j : Fin 4), (i, j) ≠ (0, 0) ∧ (i, j) ≠ (3, 0) → pauliTransferEntry T' i j = 0
 
-/-- **Lorentz normal form for qubit channels (Wolf Proposition 2.11).**
+/- **Pending: Lorentz normal form for qubit channels (Wolf Proposition 2.11).**
 
-For every qubit channel `T : M₂(ℂ) → M₂(ℂ)`, there exist SL(2, ℂ)-filterings
-Φ₁, Φ₂ such that the filtered channel `T' = Φ₂ ∘ T ∘ Φ₁` is in one of the
-three Lorentz normal forms: diagonal, non-diagonal, or singular.
+Wolf's theorem says that every qubit channel can be brought to one of the three
+Lorentz normal forms above by invertible completely positive maps of Kraus rank
+one. These filtering maps come from general invertible matrices and therefore
+include scalar freedom; they are not, in general, `SLFiltering`s with determinant
+one.
 
-The proof is not yet formalised; it depends on:
-- The compactness lemma `infimum_is_attained` (above);
-- The Lorentz group classification of SL(2, ℂ) orbits (spinor map
-  SL(2, ℂ) → SO⁺(1, 3));
+A former declaration in this file incorrectly restricted both filters to
+`SLFiltering 2` while also requiring the filtered map to remain a normalized
+channel. That statement is false: determinant-one filters cannot supply the
+scalar normalization required for all channels, so the declaration was removed.
+The correctly formulated theorem remains to be formalized. Its proof will need:
+- A type for general invertible Kraus-rank-one CP filters, including scalar freedom;
+- The compactness and minimization results above, with the required normalization;
+- The Lorentz group classification of the filtering orbits;
 - The complete-positivity condition `λ₁ + λ₂ ≤ 1 + λ₃`.
 
 See Wolf Section 2.3 for the complete proof. -/
-theorem exists_lorentz_normal_form_qubit
-    (T : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ)
-    (_hCh : IsChannel T) :
-    ∃ (Φ₁ Φ₂ : SLFiltering 2),
-      IsLorentzDiagonal (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) ∨
-      IsLorentzNonDiagonal (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) ∨
-      IsLorentzSingular (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) := by
-  sorry
 
 end LorentzNormalFormQubit
 

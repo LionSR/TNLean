@@ -1,8 +1,8 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
-
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 
 /-!
@@ -473,8 +473,8 @@ theorem hermitian_pow_fixedPoint_eq_zero_of_trace_eq_zero_of_isPrimitivePaper [N
     hCh_E.exists_posSemidef_fixedPoint (E := transferMap (d := d) (D := D) A) hDpos
   -- ρ₀ is E-fixed, hence E^p-fixed
   have hρ₀_pow_fix : Ep ρ₀ = ρ₀ := by
-    simp only [Ep]
-    exact linearMap_pow_fixed _ ρ₀ hρ₀_fix p
+    simp only [Ep, Module.End.pow_apply]
+    exact Function.IsFixedPt.iterate hρ₀_fix p
   -- ρ₀ is PosDef by upgrade
   have hρ₀_pd :=
     posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hρ₀_psd hρ₀_ne hp hρ₀_pow_fix

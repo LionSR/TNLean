@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Spectral.MPVOverlapTrace
 import TNLean.Spectral.TransferOperatorGap
@@ -9,17 +10,6 @@ import Mathlib.Topology.Algebra.Star
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.Dimension.StrongRankCondition
-
-namespace MPSTensor
-
-open scoped Matrix BigOperators ComplexOrder NNReal ENNReal Matrix.Norms.Operator
-open Matrix Filter
-
-attribute [local instance]
-  ContinuousLinearMap.toNormedAddCommGroup
-  ContinuousLinearMap.toNormedRing
-  ContinuousLinearMap.toSeminormedRing
-  ContinuousLinearMap.toNormedAlgebra
 
 /-!
 # MPV overlap decay
@@ -53,6 +43,16 @@ equivalent, then the MPV overlaps decay to `0` as `N → ∞`.
 *assuming* a spectral-radius gap `spectralRadius < 1` for the rectangular mixed transfer
 operator.
 -/
+namespace MPSTensor
+
+open scoped Matrix BigOperators ComplexOrder NNReal ENNReal Matrix.Norms.Operator
+open Matrix Filter
+
+attribute [local instance]
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toSeminormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 section
 

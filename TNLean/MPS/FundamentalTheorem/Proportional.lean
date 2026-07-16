@@ -1,12 +1,9 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.SharedInfra.GaugePhase
-
-open scoped Matrix BigOperators
-
-namespace MPSTensor
 
 /-!
 # Proportional single-block Fundamental Theorem (primitive case)
@@ -25,6 +22,9 @@ Theorem 4.4 (arXiv:2011.12127).
 The key input for the converse is the overlap decay lemma
 `MPSTensor.mpvOverlap_tendsto_zero` from `TNLean.Spectral.MPVOverlapDecay`.
 -/
+open scoped Matrix BigOperators
+
+namespace MPSTensor
 
 variable {d D : ℕ}
 

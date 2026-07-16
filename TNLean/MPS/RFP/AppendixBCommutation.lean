@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.RFP.AppendixBSupport
@@ -632,8 +633,17 @@ private theorem AppendixBStructuralData.twoSiteBondInsertion_adjoint_inner
         w (hStruct.twoSiteVirtualBondConfig a c b) *
           (hStruct.Λ b : ℂ) * star (v (a, c)) := by
       simp_rw [hstar]
-      simp [Fintype.sum_prod_type, mul_assoc]
-      simp_rw [hconfig]
+      suffices
+          (∑ p₀ : Fin D × Fin D, ∑ p₁ : Fin D × Fin D,
+              if p₀.2 = p₁.1 then
+                w ![p₀, p₁] *
+                  ((hStruct.Λ p₀.2 : ℂ) * star (v (p₀.1, p₁.2)))
+              else 0) =
+            ∑ a : Fin D, ∑ b : Fin D, ∑ c : Fin D,
+              w (hStruct.twoSiteVirtualBondConfig a c b) *
+                (hStruct.Λ b : ℂ) * star (v (a, c)) by
+        simpa only [finTwoArrowEquiv_symm_apply, RCLike.star_def, mul_ite, mul_zero]
+      simp [Fintype.sum_prod_type, mul_assoc, hconfig]
     _ = hStruct.virtualBondNormSq * ∑ ac : Fin D × Fin D,
         hStruct.twoSiteVirtualBoundaryContraction w ac * star (v ac) := by
       simp only [AppendixBStructuralData.twoSiteVirtualBoundaryContraction,

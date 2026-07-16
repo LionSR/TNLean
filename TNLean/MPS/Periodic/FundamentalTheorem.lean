@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Defs
 import TNLean.Algebra.ScalarPowerSumIdentity
@@ -8,8 +9,6 @@ import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.SharedInfra.Scaling
-
-open scoped Matrix BigOperators
 
 /-!
 # Periodic Fundamental Theorem of MPS (arXiv:1708.00029, Section 3)
@@ -45,7 +44,7 @@ The proportional theorem `thm:bd` is stated in two forms:
   **Caveat**: `periodicOverlapDichotomy` is stated and callable, but its proof still
   depends on the remaining Case-3 contraction with \(F_u\), \(\Omega_u\), and the
   phases \(\kappa_v\) from arXiv:1708.00029, Appendix A, lines 1023--1117,
-  formalized as `repeatedBlocks_of_blockedSectorGaugePhase` in
+  formalized as `sectorTensor_proportional_of_blockedMatch` in
   `TNLean.MPS.Periodic.Overlap.Case3`. Subsequent results using the `_of_isPeriodic`
   variant therefore inherit that obligation and should not be treated as unconditional.
 
@@ -58,6 +57,7 @@ The Z-gauge construction (the scalar-entry part of `thm:bdequal`) is fully prove
   sector-decomposition matching template for the non-periodic theorem
 * Z-gauge construction lemmas in `ZGauge.lean`
 -/
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
@@ -118,7 +118,7 @@ The `hetRepeatedBlocks_of_nondecaying` field can be filled via `periodicOverlapD
 (see `PeriodicOverlapHypothesis.ofIsPeriodic`), though that dichotomy still relies on
 the remaining Case-3 contraction with \(F_u\), \(\Omega_u\), and the phases
 \(\kappa_v\) from arXiv:1708.00029, Appendix A, lines 1023--1117, formalized as
-`repeatedBlocks_of_blockedSectorGaugePhase`. The fields capture the essential results:
+`sectorTensor_proportional_of_blockedMatch`. The fields capture the essential results:
 1. For each block in one family, a non-decaying overlap partner exists in the other.
 2. Non-decaying overlap forces `HetRepeatedBlocks`.
 
@@ -159,7 +159,7 @@ its proof transitively depends on admitted lemmas in the split overlap developme
 linear-independence statement. Subsequent users of this constructor therefore inherit
 those obligations and
 should not treat the resulting `PeriodicOverlapHypothesis` as unconditionally proven. -/
-def PeriodicOverlapHypothesis.ofIsPeriodic
+theorem PeriodicOverlapHypothesis.ofIsPeriodic
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [hneA : ∀ j, NeZero (dimA j)] [hneB : ∀ k, NeZero (dimB k)]
@@ -307,7 +307,7 @@ to fill the `hetRepeatedBlocks_of_nondecaying` field; see
 `periodicOverlapDichotomy` still relies on the remaining Case-3 contraction with
 \(F_u\), \(\Omega_u\), and the phases \(\kappa_v\) from arXiv:1708.00029,
 Appendix A, lines 1023--1117, formalized as
-`repeatedBlocks_of_blockedSectorGaugePhase`; callers going through that route inherit
+`sectorTensor_proportional_of_blockedMatch`; callers going through that route inherit
 that obligation. -/
 theorem fundamentalTheorem_periodic_proportional
     (A : (j : Fin rA) → MPSTensor d (dimA j))
@@ -384,7 +384,7 @@ equivalence.
 **Remaining proof obligation.** `periodicOverlapDichotomy` is stated and callable, but
 its proof still uses the remaining Case-3 contraction with \(F_u\), \(\Omega_u\), and
 the phases \(\kappa_v\) from arXiv:1708.00029, Appendix A, lines 1023--1117,
-formalized as `repeatedBlocks_of_blockedSectorGaugePhase` in
+formalized as `sectorTensor_proportional_of_blockedMatch` in
 `TNLean.MPS.Periodic.Overlap.Case3`. Subsequent users of this theorem inherit that
 obligation: this variant is a convenience reformulation, not an unconditional
 strengthening. -/

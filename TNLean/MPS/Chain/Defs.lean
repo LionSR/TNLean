@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.MPS.Defs
 
 import Batteries.Data.Fin
@@ -102,7 +107,7 @@ theorem SameState.trans {A B C : MPSChainTensor d D n}
   fun σ => (hAB σ).trans (hBC σ)
 
 /-- `SameState` is an equivalence relation. -/
-def instEquivalenceSameState : Equivalence (SameState (d := d) (D := D) (n := n)) where
+theorem instEquivalenceSameState : Equivalence (SameState (d := d) (D := D) (n := n)) where
   refl := SameState.refl
   symm := SameState.symm
   trans := SameState.trans
@@ -131,7 +136,7 @@ theorem GaugeEquiv.trans {A B C : MPSChainTensor d D n}
   simp [Matrix.mul_assoc, mul_inv_rev]
 
 /-- `GaugeEquiv` is an equivalence relation. -/
-def instEquivalenceGaugeEquiv : Equivalence (GaugeEquiv (d := d) (D := D) (n := n)) where
+theorem instEquivalenceGaugeEquiv : Equivalence (GaugeEquiv (d := d) (D := D) (n := n)) where
   refl := GaugeEquiv.refl
   symm := GaugeEquiv.symm
   trans := GaugeEquiv.trans

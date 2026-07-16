@@ -1529,10 +1529,11 @@ matrix through $\sigma_i$:
 \cite[Section~2.3]{Wolf2012Quantum} discusses two families of normal forms for
 the transfer-matrix representation of a quantum channel: the \emph{singular
     value decomposition} (SVD) and, for qubit channels, the \emph{Lorentz normal
-    form} obtained by $\SL(2, \C)$ filtering operations. The SVD
-normal form is proved below. The Lorentz normal form theorem
-(Theorem~\ref{thm:lorentz_normal_form_qubit}) requires the compactness and
-minimisation argument for $\SL(2, \C)$ filterings in
+    form} obtained by general invertible Kraus-rank-one CP filtering operations.
+The SVD normal form is proved below. The Lorentz normal form theorem
+(Theorem~\ref{thm:lorentz_normal_form_qubit}) uses general invertible
+Kraus-rank-one completely positive filterings. Its proof requires the minimisation
+argument and Lorentz-orbit analysis in
 \cite[Propositions~2.9 and~2.11]{Wolf2012Quantum}; see
 Section~\ref{sec:lorentz_normal_form}.
 
@@ -1610,22 +1611,20 @@ Section~\ref{sec:lorentz_normal_form}.
 
 This section states the existence theorems from
 \cite[Section~2.3]{Wolf2012Quantum}.
-% The Wolf.* declarations referenced in this section live in
-% TNLean/Channel/LorentzNormalForm.lean.  Only the compactness/minimisation
-% lemma is proved at present; declaration tags for the remaining existence
-% theorems are omitted until their proofs are complete.  The Lean names are
-% listed in the per-entry comments below.
+% The existing Wolf.* declarations referenced in this section live in
+% TNLean/Channel/LorentzNormalForm.lean. The correctly formulated Proposition 2.11
+% has no Lean declaration yet; declaration tags are omitted for pending results.
 
-% Lean: Wolf.SLFiltering
 \begin{definition}[SL-filtering operation]\label{def:sl_filtering}
+    \lean{Wolf.SLFiltering}\leanok
     An \emph{SL-filtering} for $D \times D$ matrices is a completely
     positive map of the form $\Phi(X) = S X S^{\dagger}$ where
     $S \in \MN{D}$ satisfies $\det S = 1$. Such maps are
     invertible and have Kraus rank~1.
 \end{definition}
 
-% Lean: Wolf.DoublyStochastic
 \begin{definition}[Doubly-stochastic map]\label{def:doubly_stochastic}
+    \lean{Wolf.DoublyStochastic}\leanok
     A linear map $T : \MN{D} \to \MN{D}$ is \emph{doubly-stochastic}
     if $T(\Id) \propto \Id$ and the reduced density matrix
     $\tr_{1}[\tau]$ of its Choi matrix $\tau = (T \otimes \id)(\ketbra{\Omega}{\Omega})$
@@ -1816,8 +1815,8 @@ This section states the existence theorems from
     the doubly-stochastic condition.
 \end{proof}
 
-% Lean: Wolf.IsLorentzDiagonal
 \begin{definition}[Diagonal Lorentz normal form]\label{def:lorentz_diagonal}
+    \lean{Wolf.IsLorentzDiagonal}\leanok
     For a completely positive, trace-preserving qubit channel
     $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ for its matrix
     in the normalized Pauli basis
@@ -1827,8 +1826,8 @@ This section states the existence theorems from
     off-diagonal entry of $\widehat{T'}$ is zero.
 \end{definition}
 
-% Lean: Wolf.IsLorentzNonDiagonal
 \begin{definition}[Non-diagonal Lorentz normal form]\label{def:lorentz_non_diagonal}
+    \lean{Wolf.IsLorentzNonDiagonal}\leanok
     For a completely positive, trace-preserving qubit channel
     $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ in the normalized
     Pauli basis. The channel is in \emph{non-diagonal Lorentz normal form}
@@ -1845,8 +1844,8 @@ This section states the existence theorems from
     Trace preservation supplies the first row of the displayed matrix.
 \end{definition}
 
-% Lean: Wolf.IsLorentzSingular
 \begin{definition}[Singular Lorentz normal form]\label{def:lorentz_singular}
+    \lean{Wolf.IsLorentzSingular}\leanok
     For a completely positive, trace-preserving qubit channel
     $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ in the normalized
     Pauli basis. The channel is in \emph{singular Lorentz normal form} when
@@ -1863,16 +1862,17 @@ This section states the existence theorems from
     Trace preservation supplies the first row of the displayed matrix.
 \end{definition}
 
-% Lean: Wolf.exists_lorentz_normal_form_qubit
+% Pending Lean formalization: there is currently no declaration for this theorem.
 \begin{theorem}[Lorentz normal form for qubit channels]\label{thm:lorentz_normal_form_qubit}
-    \uses{def:sl_filtering, thm:exists_normal_form_generic,
+    \uses{thm:exists_normal_form_generic,
         def:lorentz_diagonal, def:lorentz_non_diagonal, def:lorentz_singular}
-    For every qubit channel $T : \MN{2} \to \MN{2}$,
-    there exist $\SL(2, \C)$-filterings $\Phi_{1}, \Phi_{2}$ such that
-    the filtered channel $T' = \Phi_{2} \circ T \circ \Phi_{1}$ is in one of
-    the three Lorentz normal forms: diagonal, non-diagonal, or singular.
-    \textbf{Not yet proved}---proof still needs the generic normal form and
-    the Lorentz group classification of $\SL(2, \C)$ orbits.
+    For every qubit channel $T : \MN{2} \to \MN{2}$, there exist invertible
+    completely positive maps $\Phi_{1}, \Phi_{2}$, both of Kraus rank one, such
+    that the filtered channel $T' = \Phi_{2} \circ T \circ \Phi_{1}$ is in one
+    of the three Lorentz normal forms: diagonal, non-diagonal, or singular.
+    These general filters include scalar freedom and are not restricted to
+    determinant-one $\SL(2, \C)$ filterings. A proof requires the corresponding
+    scalar normalization and the classification of Lorentz orbits.
 \end{theorem}
 
 %% The following sections will not be needed for the fundamental theorem of the matrix product states.

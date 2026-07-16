@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixOrderTopology
 import Mathlib.Analysis.Matrix.PosDef
@@ -204,7 +205,7 @@ theorem IsPositiveMap.map_isHermitian
   classical
   letI := Fintype.ofFinite n
   exact IsSelfAdjoint.isHermitian
-    (map_isSelfAdjoint hE.toPositiveLinearMap X hX.isSelfAdjoint)
+    (hX.isSelfAdjoint.map' hE.toPositiveLinearMap)
 
 end PositiveMapHermitian
 

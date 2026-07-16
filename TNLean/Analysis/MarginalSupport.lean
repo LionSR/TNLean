@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.Entropy
@@ -124,8 +125,8 @@ section SupportTransport
 \ker\rho$ then the same inclusion holds after reindexing rows and columns by
 $e^{-1}$. The reindexed kernel vectors are the images of the original kernel
 vectors under the bijection. -/
-theorem mulVec_submatrix_support {S T : Type*} [Fintype S] [DecidableEq S]
-    [Fintype T] [DecidableEq T] {ρ σ : Matrix S S ℂ} (e : S ≃ T)
+theorem mulVec_submatrix_support {S T : Type*} [Fintype S] [Fintype T]
+    {ρ σ : Matrix S S ℂ} (e : S ≃ T)
     (hsupp : ∀ v : S → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
     ∀ v : T → ℂ, (σ.submatrix e.symm e.symm).mulVec v = 0
       → (ρ.submatrix e.symm e.symm).mulVec v = 0 := by
@@ -179,7 +180,7 @@ theorem traceLeftA_posDef [NeZero dA] {ρ : Matrix (Fin dA × R) (Fin dA × R) �
   rw [heq]
   exact Matrix.posDef_sum Finset.univ_nonempty fun a _ => hblock a
 
-omit [DecidableEq R] in
+omit [Fintype R] [DecidableEq R] in
 /-- The partial trace over the first factor of a positive semidefinite matrix is
 positive semidefinite, being a sum of positive semidefinite principal
 submatrices. -/
