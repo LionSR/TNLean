@@ -14,7 +14,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
   - [Oversized Lean File Guard](#oversized-lean-file-guard-oversized-lean-filesyml)
-  - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-lean-linter-warning-sweepyml)
+  - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Agent Mention Handler](#agent-mention-handler-agent-mentionyml)
@@ -259,7 +259,7 @@ contains existing files above the limit; once those files are split, remove the
 
 ---
 
-### Lean Linter-Warning Sweep (`lean-linter-warning-sweep.yml`)
+### Lean Linter-Warning Sweep (`housekeeping.yml`, `linter-sweep` job)
 
 **What it does**: Runs `lake exe cache get && lake build -q --log-level=info`,
 parses Lean compiler/linter warnings with
