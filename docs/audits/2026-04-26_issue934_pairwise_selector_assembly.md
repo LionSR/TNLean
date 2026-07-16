@@ -31,14 +31,13 @@ File: `TNLean/MPS/MPDO/BiCFDerivation.lean`
   - The span of simultaneous word tuples is closed under pointwise matrix multiplication, with
     word lengths adding by concatenation.
 
-- `MPSTensor.hasBlockSelectorOn_empty`
-  - The empty word gives the identity tuple, hence a selector on the empty target set.
-
 - `MPSTensor.HasBlockSelectorOn.mul`
   - Multiplying partial selectors for the same block unions their target sets.
 
 - `MPSTensor.hasBlockSelectorOn_finset_of_pairBlockSeparatingWords`
   - Inducts over a finite target set and multiplies the relevant pairwise separators.
+  - Its empty-target base uses the empty word to give the identity tuple.  This is induction over
+    target blocks and does not represent a physical chain of length zero.
 
 - `MPSTensor.hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase`
   - Converts tuple-span selectors on `Finset.univ.erase k` into the existing coefficient-based
