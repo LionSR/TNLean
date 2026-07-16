@@ -23,13 +23,14 @@ inverse-map contraction proved in
 `MPOTensor.inverseMap_threeSite_closure_collapse`.  The present statements
 retain a finite family of basis-of-normal-tensors sectors and use one inverse
 which selects the sector together with the two virtual indices.
+They use `MPSTensor.IsMPOBlockLeftInverse`, defined in
+`BiCFDerivation.Core`, to characterize a coefficient matrix that simultaneously
+inverts every sector of the family.
 
 ## Main definitions
 
 * `MPOTensor.IsThreeSiteFamilyClosure`: a sum of three-site closures over a
   family of sectors.
-* `MPSTensor.IsMPOBlockLeftInverse`: a physical tensor selecting a sector and
-  a virtual matrix unit.
 
 ## Main statements
 
@@ -43,7 +44,7 @@ which selects the sector together with the two virtual indices.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  Appendix C.2, lines 1666--1676 and 1719--1732.
+  Appendix C.2, lines 1415--1438, 1666--1676, and 1719--1732.
 -/
 
 open scoped Matrix BigOperators
@@ -95,10 +96,17 @@ entry has indices $(\beta_3,\alpha_1)$.
 
 **Local fix (tail index):** the closing entry is
 $R_s(\beta_3,\alpha_1)$, as forced by the matrix-unit trace identity.  This is
-the corrected orientation of the analogous source display, recorded in
+the corrected orientation of the single-sector display at lines 1422--1438,
+recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1666--1676 and 1719--1732. -/
+This is the sector-family form of the Case I contraction at lines 1415--1438,
+used with the basis-of-normal-tensors inverse from lines 1666--1676 in the
+Case II calculation at lines 1719--1732.  Compare the single-sector identity
+`MPOTensor.inverseMapThreeSiteContraction_eq`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1415--1438, 1666--1676,
+and 1719--1732. -/
 theorem isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
     {K : (s : Fin g) → MPOTensor d (dim s)}
     {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
@@ -217,7 +225,12 @@ middle slice and closing entry.
 $R_s(\beta_3,\alpha_1)$ documented in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1666--1676 and 1719--1732. -/
+The corrected orientation comes from the Case I display at lines 1422--1438;
+the family inverse is constructed at lines 1666--1676 and used in Case II at
+lines 1719--1732.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1422--1438, 1666--1676,
+and 1719--1732. -/
 theorem exists_isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
     (K : (s : Fin g) → MPOTensor d (dim s))
     (hSpan : MPSTensor.WordTupleSpanTop (fun s ↦ (K s).toMPSTensor) 1) :
