@@ -236,18 +236,17 @@ Theorem with the unequal-cardinality power-sum identity, and therefore proves
 the power-sum step used at lines~2053--2058.
 
 What remains before this constructor can be applied is the tensor-level BNT
-comparison at lines~2048--2058.  The current
-\leanid{MPOTensor.BNTAlgebraClause} does not identify its abstract operator
-family with the concrete operators $O_L(M_\alpha)$ of a chosen one-site
-vertical canonical form, and it does not identify its trace scalars with the
-entries of the corresponding matrices $\mu_\alpha$.  Moreover, the current
-vertical canonical-form theorem supplies a decomposition of $M$, but no
-single object simultaneously records that decomposition, a vertical
-canonical decomposition of the two-site blocked tensor, and the relabelling
-and unitary identifications of their BNT sectors.  Such an object must yield
-the displayed eventual power-sum equality from the same-length algebra law;
-the constructor above then supplies the spectrum comparison without any
-further mathematical hypothesis.
+comparison at lines~2048--2058.  The predicate
+\leanid{MPOTensor.BNTAlgebraTensorClause} now chooses the one-site vertical
+canonical decomposition and identifies the operators and trace scalars in the
+abstract BNT algebra clause with
+$O_L(M_\alpha)$ and $m_\alpha=\sum_q\omega_{\alpha,q}$, respectively.  It does
+not choose a vertical canonical decomposition of the two-site blocked tensor,
+nor does it assert the relabelling and unitary identifications of the one-site
+products with the two-site BNT sectors.  These identifications must yield the
+displayed eventual power-sum equality from the same-length algebra law; the
+constructor above then supplies the spectrum comparison without any further
+mathematical hypothesis.
 
 \section{BNT-label coefficient objects and remaining elimination plan}
 
@@ -810,13 +809,14 @@ two matrix equalities and the entrywise theorem above.
 
 To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}
-    \item define a separate, source-faithful predicate for
-        Theorem~4.14(ii), bundling the vertical canonical-form decomposition
-        from Proposition~4.13, the BNT operators $O_L(M_\alpha)$, the weights
-        $m_\alpha=\tr(\mu_\alpha)$, the positive matrices
-        $\chi_{\alpha,\beta,\gamma}$, the same-length product law, and the
-        length-one idempotent identity;
-    \item relate that predicate to the one-site and two-site vertical
+    \item use the source-faithful predicate
+        \leanid{MPOTensor.BNTAlgebraTensorClause} for Theorem~4.14(ii), which
+        chooses the vertical canonical-form decomposition from
+        Proposition~4.13 and fixes the BNT operators
+        $O_L(M_\alpha)$ and weights $m_\alpha=\tr(\mu_\alpha)$ appearing in the
+        positive chi trace-power law, same-length product law, and length-one
+        idempotent identity;
+    \item relate this predicate to the one-site and two-site vertical
         decompositions used in Appendix~C.4, lines~2048--2058, and prove the
         unitary relabelling and the positive multiset identity for the
         $\nu_{\gamma,k}$;
