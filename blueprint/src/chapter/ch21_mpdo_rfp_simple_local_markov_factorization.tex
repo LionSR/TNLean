@@ -22,6 +22,77 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{definition}
 
+\begin{definition}[Canonical projections of a Hayashi decomposition]
+    \label{def:mpdo_hayashi_sector_projection}
+    \lean{MPOTensor.EtaStructure.coordinateSectorProjection}
+    \lean{MPOTensor.EtaStructure.sectorProjection}
+    \leanok
+    \uses{def:mpdo_eta_structure}
+    Let
+    \[
+        B=\bigoplus_k\bigl(b_1^{(k)}\otimes b_2^{(k)}\bigr)
+    \]
+    be the middle-site decomposition, and let $E_k$ be the coordinate
+    projection onto its $k$-th summand.  In the original physical basis, define
+    \[
+        Q_k=U_B^*E_kU_B.
+    \]
+    These are the projectors introduced in
+    \cite[Appendix~C.2, lines~1364--1368]{Cirac2016MPDO_arXiv}; the unitary
+    implements the basis change described in
+    \cite[Appendix~C.2, lines~1437--1440]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Resolution of the identity by Hayashi-sector projections]
+    \label{thm:mpdo_hayashi_sector_projection_resolution}
+    \lean{MPOTensor.EtaStructure.sectorProjection_isOrthogonal}
+    \lean{MPOTensor.EtaStructure.sum_sectorProjection}
+    \lean{MPOTensor.EtaStructure.sectorProjection_mul_eq_zero}
+    \leanok
+    \uses{def:orthogonal_projection_channel,
+        def:mpdo_hayashi_sector_projection}
+    Each $Q_k$ is an orthogonal projection, distinct summands are mutually
+    orthogonal, and the family resolves the identity:
+    \[
+        Q_kQ_\ell=0\quad(k\ne\ell),
+        \qquad \sum_k Q_k=\Id.
+    \]
+    The first two assertions follow from the orthogonal direct-sum
+    decomposition in
+    \cite[Appendix~C.2, lines~1364--1368]{Cirac2016MPDO_arXiv}; the resolution
+    of the identity is stated in
+    \cite[Appendix~C.2, lines~1693--1697]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_hayashi_sector_projection,
+        lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one,
+        thm:star_projection_coisometric_transport,
+        thm:orthogonal_projection_star_projection_channel}
+    The coordinate projections satisfy
+    \[
+        E_k^*=E_k,
+        \qquad E_k^2=E_k,
+        \qquad \sum_k E_k=\Id.
+    \]
+    Reindexing the direct sum and conjugating by $U_B$ preserve these
+    identities.  Hence each $Q_k=U_B^*E_kU_B$ is a star projection and
+    therefore an orthogonal projection, while
+    \[
+        \sum_k Q_k=U_B^*\Bigl(\sum_kE_k\Bigr)U_B=\Id.
+    \]
+    Finally, multiplying the resolution on both sides by $Q_k$ gives
+    \[
+        \sum_\ell Q_kQ_\ell Q_k=Q_k,
+        \qquad
+        Q_kQ_\ell Q_k=(Q_\ell Q_k)^*(Q_\ell Q_k)\geq0.
+    \]
+    The $\ell=k$ term already equals $Q_k$, so every term with $\ell\ne k$
+    vanishes.  Thus $(Q_\ell Q_k)^*(Q_\ell Q_k)=0$, hence
+    $Q_\ell Q_k=0$.  Taking adjoints gives $Q_kQ_\ell=0$ for $\ell\ne k$.
+\end{proof}
+
 \begin{theorem}[Saturation gives equality in strong subadditivity]
     \label{thm:mpdo_sal_ssa_equality}
     \lean{MPOTensor.isSSAEquality_tripartite_of_isSAL}
