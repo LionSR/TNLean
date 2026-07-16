@@ -1,8 +1,9 @@
 name: Update Dependencies
 
+# Mathlib bumps are run manually: an automated update PR triggers a full
+# library rebuild and possibly an auto-fix cascade, so the maintainers pick
+# the moment instead of a schedule.
 on:
-  # schedule:             # Sets a schedule to trigger the workflow
-  #   - cron: "0 8 * * *" # Every day at 08:00 AM UTC (see https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule)
   workflow_dispatch:    # Allows the workflow to be triggered manually via the GitHub interface
 
 jobs:

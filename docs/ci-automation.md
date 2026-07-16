@@ -16,17 +16,14 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Oversized Lean File Guard](#oversized-lean-file-guard-oversized-lean-filesyml)
   - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-lean-linter-warning-sweepyml)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
-  - [Codex Auto-Fix (CI/Blueprint/Review)](#codex-auto-fix-ciblueprintreview-auto-fix-codexyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Agent Mention Handler](#agent-mention-handler-agent-mentionyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
-  - [Shared CI Auto-Fix Template (Codex)](#shared-ci-auto-fix-template-codex-_codex-auto-fix-sharedyml)
   - [Claude Provider Limit Guard](#claude-provider-limit-guard-claude-provider-limit-guardyml)
 - [Safety Mechanisms](#safety-mechanisms)
 - [How to Use](#how-to-use)
   - [For any PR (automatic)](#for-any-pr-automatic)
   - [Auto-fix labels are PR-only](#auto-fix-labels-are-pr-only)
-  - [To enable Codex auto-fix](#to-enable-codex-auto-fix)
   - [To enable the review-fix loop](#to-enable-the-review-fix-loop)
   - [Human intervention while auto-fix is active](#human-intervention-while-auto-fix-is-active)
   - [To ask Claude for help directly](#to-ask-claude-for-help-directly)
@@ -197,8 +194,8 @@ lemma, proof, or other mathematical formalization task, the workflow adds the
 runs only after a maintainer has checked the mathematical source and added
 `scout`. Issue Classification does not duplicate that scouting report.
 
-**Label rule**: The workflow must not apply `auto-fix-claude` or
-`auto-fix-codex` to issues. Those labels are pull-request workflow controls.
+**Label rule**: The workflow must not apply `auto-fix-claude` to issues. That
+label is a pull-request workflow control.
 
 ---
 
@@ -284,28 +281,6 @@ file list during validation, or adds proof-integrity tokens such as `sorry`,
 
 ---
 
-### Codex Auto-Fix (CI/Blueprint/Review) (`auto-fix-codex.yml`)
-
-**What it does**: Provides a Codex-based auto-fix path for CI failures, blueprint failures, and review
-comment fixes.
-
-**When it runs**:
-- On failed "Lean Action CI" runs for PRs
-- On failed "Lint blueprint" runs for PRs
-- On successful "Claude Code Review (Lean)" runs for PRs (to process unresolved review threads)
-- When the `auto-fix-codex` label is added to a PR (retroactive trigger)
-
-**Label gate**: Unlike the Claude CI/blueprint auto-fix flows, **all Codex fix paths are opt-in** and
-require the `auto-fix-codex` label.
-
-**Auth and iteration behavior**:
-- Requires `OPENAI_API_KEY` secret
-- Optionally uses `BOT_PAT` (preferred) for checkout/push so bot-authored commits retrigger workflows
-- Uses `sandbox: danger-full-access` plus `allow-bots: true` in `openai/codex-action`
-- Shares the same `bot-fix-<branch>` concurrency group and combined 5-iteration budget with Claude
-
----
-
 ### Review Comment Auto-Fix (`auto-fix.yml`)
 
 **What it does**: After a Claude Code Review completes, this workflow reads the review comments and asks Claude to fix each issue. This creates the fixed-point loop described above.
@@ -377,16 +352,6 @@ This is not triggered directly — it is called via `workflow_call` by the two C
 
 ---
 
-### Shared CI Auto-Fix Template (Codex) (`_codex-auto-fix-shared.yml`)
-
-**What it does**: Reusable Codex template used by the Codex CI and blueprint fix jobs in
-`auto-fix-codex.yml`.
-
-This is not triggered directly — it is called via `workflow_call` and encapsulates checkout, branch
-attach, shared iteration guarding, failed-job log collection, and `openai/codex-action` execution.
-
----
-
 ### Claude Provider Limit Guard (`claude-provider-limit-guard.yml`)
 
 **What it does**: Watches selected Claude-backed workflows after they fail,
@@ -397,8 +362,8 @@ blueprint, review, and prompt failures are not enough to trip the guard.
 **When it runs**:
 
 - On failed completed runs of `auto-fix.yml`, `claude-code-review.yml`,
-  `lean-linter-warning-autofix.yml`, `blueprint-prose-review.yml`,
-  `pr-cleanup.yml`, and `tracking-issue-sync.yml`, only when the failed run's
+  `lean-linter-warning-autofix.yml`, `blueprint-prose-review.yml`, and
+  `tracking-issue-sync.yml`, only when the failed run's
   head repository is the TNLean repository itself.
 - Hourly by schedule, to re-enable switches whose cooldown has elapsed.
 - Manually through `workflow_dispatch`, which runs the same re-enable check.
@@ -407,10 +372,8 @@ blueprint, review, and prompt failures are not enough to trip the guard.
 
 - Provider-limit failures in auto-fix workflows set
   `CLAUDE_AUTO_FIX_ENABLED=false`.
-- Provider-limit failures in review, prose-review, cleanup, or tracking
+- Provider-limit failures in review, prose-review, or tracking
   workflows set `CLAUDE_REVIEW_ENABLED=false`.
-- Codex workflows are not touched by this guard. They are controlled by their
-  own `CODEX_*` variables.
 
 **Cooldown path**: The guard also writes a matching
 `CLAUDE_AUTO_FIX_DISABLED_UNTIL` or `CLAUDE_REVIEW_DISABLED_UNTIL` repository
@@ -435,16 +398,17 @@ These workflows have several safeguards to prevent runaway automation:
 ### Iteration Cap (Max 5 Consecutive Bot Commits)
 
 Before making a fix, each workflow counts the most recent consecutive commits with bot-fix prefixes
-(`claude` or `codex`, `auto` or `review`). If 5 or more consecutive bot-fix commits exist, the
+(`claude` or `codex`, `auto` or `review`; the `codex` prefixes remain counted
+for historical commits even though the Codex workflows are retired). If 5 or
+more consecutive bot-fix commits exist, the
 workflow stops. This prevents infinite loops where automation keeps pushing broken fixes.
 
-CI-fix and review-fix commits from both bots count toward **the same shared budget of 5**. This means
-a sequence like `[claude-auto-fix]`, `[codex-review-fix]`, `[claude-auto-fix]` counts as 3, not 1.
+CI-fix and review-fix commits count toward **the same shared budget of 5**.
 A human commit resets the counter.
 
 ### Concurrency Groups
 
-All auto-fix jobs in `auto-fix.yml` and `auto-fix-codex.yml` share the same
+All auto-fix jobs in `auto-fix.yml` share the same
 concurrency group: `bot-fix-<branch-name>`. This means:
 - Only one auto-fix workflow runs per branch at a time
 - If a new fix triggers while one is running, the old one is cancelled
@@ -459,8 +423,7 @@ provider or mention handler.
 | Variable | Disabled workflows |
 |----------|--------------------|
 | `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml`; write-mode linter auto-fix skips before Lean setup/build |
-| `CLAUDE_REVIEW_ENABLED=false` | `claude-code-review.yml`, `blueprint-prose-review.yml`, `pr-cleanup.yml`, and `tracking-issue-sync.yml` |
-| `CODEX_AUTO_FIX_ENABLED=false` | `auto-fix-codex.yml` |
+| `CLAUDE_REVIEW_ENABLED=false` | `claude-code-review.yml`, `blueprint-prose-review.yml`, and `tracking-issue-sync.yml` |
 | `DEEPSEEK_MENTION_ENABLED=false` | the `@deepseek` handle of `agent-mention.yml` |
 
 Set them with:
@@ -468,7 +431,6 @@ Set them with:
 ```bash
 gh variable set CLAUDE_AUTO_FIX_ENABLED --body false
 gh variable set CLAUDE_REVIEW_ENABLED --body false
-gh variable set CODEX_AUTO_FIX_ENABLED --body false
 gh variable set DEEPSEEK_MENTION_ENABLED --body false
 ```
 
@@ -530,13 +492,11 @@ area, source paper, or topic. If work starts from an issue, request automation
 from the issue body or a comment, then label the resulting pull request if the
 pull-request workflow needs opt-in.
 
-**TNLean configuration.** In this repository, use `auto-fix-claude` and
-`auto-fix-codex` only on pull requests.
+**TNLean configuration.** In this repository, use `auto-fix-claude` only on
+pull requests.
 
 - `auto-fix-claude` on a pull request enables the review-comment fix loop.
-- `auto-fix-codex` on a pull request opts that pull request into fix workflows
-  for CI, blueprint, and review events.
-- Adding either label directly to an issue does not trigger TNLean's auto-fix
+- Adding the label directly to an issue does not trigger TNLean's auto-fix
   workflows.
 
 **General issue-started workflow behavior.** The mention responder starts from
@@ -550,29 +510,15 @@ assigned; for comments, it applies when the comment is created.
 request from issue work, the follow-up action scans the same triggering text for
 the magic phrase `auto[_ -]?fix`, matching `auto-fix`, `auto fix`, or `autofix`.
 If it finds one of those forms, it adds `auto-fix-claude` to the created pull
-request. The Codex responder analogously adds `auto-fix-codex`. The DeepSeek
-responder intentionally adds no auto-fix label.
+request. The DeepSeek path intentionally adds no auto-fix label.
 
 **Pull-request comments are different.** The `auto fix` phrase in a
 pull-request comment does not enable the label-gated auto-fix loop. A comment
 such as `@claude auto fix ...` starts the ordinary mention-handler lane, not the
 review-fix workflow, and can duplicate or race the labeled auto-fix job. On an
-existing pull request, use the `auto-fix-claude` or `auto-fix-codex` label to
+existing pull request, use the `auto-fix-claude` label to
 opt into automatic fixes, then let that workflow reach a terminal state before
 manual repair.
-
-### To enable Codex auto-fix
-
-1. Add repository secret `OPENAI_API_KEY` (required)
-2. (Recommended) Add repository secret `BOT_PAT` so bot pushes can retrigger follow-up workflows
-3. Add the `auto-fix-codex` label to your PR
-4. Push code (or add the label to an already-failing PR to trigger retroactive checks)
-5. Codex will run only for labeled PRs and only on failure/review events described above
-6. Remove the label at any time to stop Codex auto-fix on that PR
-
-To disable Codex auto-fix globally, set repository variable
-`CODEX_AUTO_FIX_ENABLED=false`. Unset it, or set another value, to restore the
-default enabled behavior.
 
 ### To enable the review-fix loop
 
@@ -594,7 +540,7 @@ pull request's branch while CI, blueprint, review, or auto-fix jobs are still
 running. Let the automated cycle reach a terminal state first. During the loop,
 human maintainers may still do workflow-control actions:
 
-- add or remove `auto-fix-claude` / `auto-fix-codex`
+- add or remove `auto-fix-claude`
 - refresh status and inspect review threads
 - merge only after all required checks are complete and every current review
   thread is resolved or outdated, and no auto-fix job is still running for the
@@ -637,10 +583,10 @@ Auto-fix workflows prefix their commit messages so you can identify them:
 |---|---|---|
 | `[claude-auto-fix]` | CI failure fix or blueprint fix | Claude fixed a build/compilation error |
 | `[claude-review-fix]` | Review comment fix | Claude addressed code review comments |
-| `[codex-auto-fix]` | Codex CI failure or blueprint fix | Codex fixed a build/compilation error |
-| `[codex-review-fix]` | Codex review comment fix | Codex addressed review comments |
 
-All four prefixes count toward the shared 5-iteration cap. If you see 5 consecutive commits with these
+Both prefixes (and the `[codex-*-fix]` prefixes of the retired Codex
+workflows, on historical commits) count toward the shared 5-iteration cap. If
+you see 5 consecutive commits with these
 prefixes, the automation has stopped and needs human intervention.
 
 ---
@@ -684,8 +630,6 @@ Anthropic Claude workflows use `claude-opus-4-8`, configured via `--model` in
 the `claude_args` parameter of the relevant workflow file. DeepSeek mention and
 review runs use the same wrapper in `deepseek` provider mode and select
 `deepseek-v4-pro[1m]` by default unless the repository variables override it.
-Codex-based workflows run via `openai/codex-action` and use their own
-model/configuration mechanism rather than Claude `--model` flags.
 
 Every workflow that calls `.github/actions/claude-code-with-provider` writes a
 GitHub Actions notice and job summary section named `Claude Code provider`. It
