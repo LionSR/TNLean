@@ -221,6 +221,8 @@ jobs:
       workflow_run_id: ${{ fromJSON(needs.setup.outputs.ci_run_id) }}
       pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
       setup_lean: true
+      # See pr-ci.yml: per-run lake caches evict the main build cache.
+      use_github_cache: false
       plugin_marketplaces: 'https://github.com/leanprover/skills.git'
       plugins: 'lean@leanprover'
       claude-prompt-file: .github/prompts/auto-fix-ci-prompt.md
