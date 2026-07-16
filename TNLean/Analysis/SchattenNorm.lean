@@ -33,6 +33,8 @@ quantity is not identified with the ambient matrix operator norm.
 * `Matrix.traceNorm_eq_sum_support` — expansion over the finite support.
 * `Matrix.traceNorm_eq_sum_range_finrank_range` — expansion over the positive
   singular-value range.
+* `Matrix.traceNorm_eq_sum_fin` — Wolf's finite-dimensional formula summing
+  over all `Fin D` indices.
 
 ## References
 
