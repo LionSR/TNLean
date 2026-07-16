@@ -307,6 +307,21 @@ the memo and the source in a single direction, by introducing a
 convergence-to-nonzero-limits hypothesis that has no counterpart in either
 record.
 
+\paragraph{Supplier-side normalization (2026-07-16).}
+The arbitrary-input supplier no longer leaves the line-246 weight choice to
+the caller.
+\leanid{MPSTensor.exists\_isBNTCanonicalForm\_afterBlocking\_pos\_normalized}
+rescales the prepared weights by their maximal modulus
+$m=\max_k\lVert\mu_k\rVert$
+(\leanid{MPSTensor.exists\_weight\_normalization}), which satisfies both
+conditional premises of the earlier supplier, and tracks the cost as the
+per-site scalar $m^{N}$ in the positive-length matrix-product identity.  The
+positive-length statement is the canonical source formulation; the
+length-zero total-dimension identity remains a separate refinement.  The
+nonvanishing hypothesis of the normalized supplier excludes only the
+identically zero matrix-product family, for which the source normalization
+is unsatisfiable.
+
 \paragraph{Status as of the paper-realignment PR.}
 The structural realignment has been done. The canonical-form definition now
 carries the source convention $|\mu_1|=1$ as a field
