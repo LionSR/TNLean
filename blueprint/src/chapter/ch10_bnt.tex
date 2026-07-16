@@ -282,8 +282,8 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     evaluations of the blocked tensors span the full product algebra:
     \[
         \spn_{\C}\left\{
-            \bigl((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i\bigr)
-            : 0\leq i<d^L
+        \bigl((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i\bigr)
+        : 0\leq i<d^L
         \right\}
         = \prod_{j=1}^g \MN{D_j}.
     \]
@@ -1140,7 +1140,7 @@ single family.
     \lean{MPSTensor.periodicSelfOverlap_tendsto}
     \leanok
     \uses{def:mpv_overlap,def:irreducible_tensor,def:left_canonical_tensor,
-      def:peripheral_eigenvalues}
+        def:peripheral_eigenvalues}
     Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
     with bond dimension $D$, and suppose that the peripheral eigenvalues of
     its transfer map are exactly $\{z\in\mathbb C:z^m=1\}$. Then
@@ -1662,7 +1662,90 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     % docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex; the
     % length-zero trace identity and the unblocked canonical form remain part of
     % the reduction in Section~\ref{sec:reduction_to_normal_form}.
+    The weight rescaling is carried out in
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking_normalized} below, which
+    discharges both hypotheses at the price of one positive scalar per site.
 \end{remark}
+
+\begin{lemma}[Projective weight normalization]%
+    \label{lem:paperbnt_weight_normalization}
+    \lean{MPSTensor.exists_weight_normalization}
+    \leanok
+    For nonzero weights $\mu_1,\dots,\mu_r$ with $r\geq1$ there is a positive
+    real $m$ with
+    \[
+        \Bigl\lVert\frac{\mu_k}{m}\Bigr\rVert\leq1
+        \quad\text{for every }k,
+        \qquad
+        \Bigl\lVert\frac{\mu_k}{m}\Bigr\rVert=1
+        \quad\text{for at least one }k,
+        \qquad
+        \frac{\mu_k}{m}\neq0
+        \quad\text{for every }k.
+    \]
+    This is the normalization that
+    \cite[line~246]{Cirac2016MPDO_arXiv} chooses for the canonical-form
+    weights.
+\end{lemma}
+
+\begin{proof}\leanok
+    Take $m=\max_k\lVert\mu_k\rVert$; the maximum over a nonempty finite
+    family is attained, positive because every weight is nonzero, an upper
+    bound for every modulus, and equal to the modulus of the attaining
+    weight.
+\end{proof}
+
+\begin{lemma}[Weight scaling of the block direct sum]%
+    \label{lem:paperbnt_block_weight_scaling}
+    \lean{MPSTensor.toTensorFromBlocks_weight_mul_left}
+    \leanok
+    \uses{thm:prepared_bnt_blocks_after_blocking}
+    Multiplying every weight of a block direct sum by one scalar $c$
+    multiplies the assembled tensor by $c$:
+    \[
+        \bigoplus_k (c\,\mu_k)\,B_k
+        = c\,\Bigl(\bigoplus_k \mu_k\,B_k\Bigr).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Both sides scale each diagonal block of the assembled matrix by $c$.
+\end{proof}
+
+\begin{theorem}[Normalized BNT form after blocking for an arbitrary tensor]%
+    \label{thm:paperbnt_supplier_after_blocking_normalized}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized}
+    \leanok
+    \uses{thm:paperbnt_supplier_after_blocking,
+        lem:paperbnt_weight_normalization,
+        lem:paperbnt_block_weight_scaling}
+    Let $A$ be an MPS tensor whose blocked tensors $A^{[p]}$ generate, for
+    every blocking length $p\geq1$, a matrix-product family that is not
+    identically zero at positive lengths. Then there exist a blocking length
+    $p\geq1$, a positive real $m$, and a sector decomposition $P$ over the
+    blocked alphabet in the BNT canonical form of
+    Definition~\ref{def:sector_bnt_cf}, such that for every positive length
+    $N$,
+    \[
+        V^{(N)}\bigl(A^{[p]}\bigr)=m^{N}\,V^{(N)}(P).
+    \]
+    The scalar $m^{N}$ is the per-site normalization cost of the line-246
+    weight choice; the hypotheses of
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking} are discharged rather
+    than assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    The zero family admits no unit-modulus weight, so the nonvanishing
+    hypothesis produces at least one prepared block. Normalize the prepared
+    weights by their maximal modulus $m$
+    (Lemma~\ref{lem:paperbnt_weight_normalization}); the scaled direct sum
+    differs from the prepared one by the factor $1/m$ per site
+    (Lemma~\ref{lem:paperbnt_block_weight_scaling}), whose matrix-product
+    family therefore carries the factor $m^{-N}$. The conditional supplier
+    of Theorem~\ref{thm:paperbnt_supplier_after_blocking} applies to the
+    normalized weights and gives the BNT canonical form.
+\end{proof}
 
 \section{Coefficient comparison and copy-weight recovery}
 \label{sec:sector_bnt_coeff_comparison}
