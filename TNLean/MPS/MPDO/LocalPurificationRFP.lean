@@ -74,8 +74,11 @@ pure-state RFP.
 * `MPOTensor.isNondegeneratePRFP_iff`: this predicate is equivalent to
   a local purification density operator (`IsLPDO`) together with a nonzero
   idempotent physical-trace transfer.
-* `MPOTensor.exists_isPRFP_not_isSourceZCL`: the zero purifier shows why the
-  bare global predicate needs a nondegeneracy condition.
+* `MPOTensor.exists_isPRFP_not_isSourceZCL`: the zero purifier obstructs the
+  source ZCL conclusion for the bare global predicate.
+* `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL`:
+  even MPDO positivity and a nonzero physical-trace transfer do not remove a
+  nilpotent sector invisible to the positive-length global density operators.
 
 ## References
 
@@ -119,12 +122,11 @@ local purification form of arXiv:1606.00608, line 747, whose
 purifying tensor is a pure-state RFP and whose physical-trace transfer is
 nonzero.
 
-The last condition records the nondegeneracy implicit when the source speaks of
-density operators and excludes the zero purifier. Together with the local
-purification identity, it is the normalized convention under which
-the PRFP-to-ZCL implication at lines 775--786 is valid. It is stronger than the
-bare positive-length global predicate `IsPRFP`; no converse from that global
-predicate is asserted. See
+The last condition excludes the zero purifier. Together with the local
+purification identity, it is sufficient for the corresponding ZCL conclusion.
+It is stronger than the bare positive-length global predicate `IsPRFP` and does
+not repair that global predicate: MPDO positivity and nonzero physical-trace
+transfer still leave trace-invisible nilpotent sectors. See
 `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
 def IsNondegeneratePRFP (M : MPOTensor d D) : Prop :=
   IsLocalPurificationRFP M ∧ physTraceTransfer M ≠ 0
@@ -593,5 +595,152 @@ theorem exists_isPRFP_not_isSourceZCL :
   refine ⟨0, isPRFP_of_isLocalPurificationRFP hLocal, ?_⟩
   intro hZCL
   exact hZCL.1 (by simp [physTraceTransfer])
+
+/-! ## A nonzero global PRFP tensor that is not source ZCL -/
+
+private def nilpotentTransfer : Matrix (Fin 3) (Fin 3) ℂ :=
+  !![(1 : ℂ), 0, 0; 0, 0, 1; 0, 0, 0]
+
+private def supportProjection : Matrix (Fin 3) (Fin 3) ℂ :=
+  !![(1 : ℂ), 0, 0; 0, 0, 0; 0, 0, 0]
+
+private def nilpotentGlobalPRFP : MPOTensor 1 3 :=
+  fun _ _ => nilpotentTransfer
+
+private def scalarPurifier : Fin 1 → Fin 1 → Matrix (Fin 1) (Fin 1) ℂ :=
+  fun _ _ => 1
+
+private lemma nilpotentGlobalPRFP_not_isSourceZCL :
+    ¬ IsSourceZCL nilpotentGlobalPRFP := by
+  intro hZCL
+  obtain ⟨_, lam, hlam, hsq⟩ := hZCL
+  have h12 := congrFun (congrFun hsq (1 : Fin 3)) (2 : Fin 3)
+  norm_num [physTraceTransfer, nilpotentGlobalPRFP, nilpotentTransfer,
+    Matrix.mul_apply, Fin.sum_univ_three] at h12
+  simp at h12
+  exact (Complex.ofReal_ne_zero.mpr (ne_of_gt hlam)) h12.symm
+
+private lemma physTraceTransfer_nilpotentGlobalPRFP_ne_zero :
+    physTraceTransfer nilpotentGlobalPRFP ≠ 0 := by
+  intro h
+  have h00 := congrFun (congrFun h (0 : Fin 3)) (0 : Fin 3)
+  norm_num [physTraceTransfer, nilpotentGlobalPRFP, nilpotentTransfer] at h00
+
+private lemma evalWord_nilpotentGlobalPRFP {N : ℕ} (σ τ : Fin N → Fin 1) :
+    evalWord nilpotentGlobalPRFP (List.ofFn σ) (List.ofFn τ) = nilpotentTransfer ^ N := by
+  rw [evalWord_ofFn]
+  simp [nilpotentGlobalPRFP]
+
+private lemma nilpotentTransfer_sq :
+    nilpotentTransfer * nilpotentTransfer = supportProjection := by
+  ext i j
+  fin_cases i <;> fin_cases j
+  all_goals simp [nilpotentTransfer, supportProjection, Matrix.mul_apply,
+    Fin.sum_univ_three]
+
+private lemma supportProjection_mul_nilpotentTransfer :
+    supportProjection * nilpotentTransfer = supportProjection := by
+  ext i j
+  fin_cases i <;> fin_cases j
+  all_goals simp [nilpotentTransfer, supportProjection, Matrix.mul_apply,
+    Fin.sum_univ_three]
+
+private lemma nilpotentTransfer_pow_add_two (n : ℕ) :
+    nilpotentTransfer ^ (n + 2) = supportProjection := by
+  induction n with
+  | zero =>
+      simpa [pow_two] using nilpotentTransfer_sq
+  | succ n ih =>
+      rw [Nat.succ_add, pow_succ, ih, supportProjection_mul_nilpotentTransfer]
+
+private lemma trace_nilpotentTransfer_pow {N : ℕ} (hN : 0 < N) :
+    Matrix.trace (nilpotentTransfer ^ N) = 1 := by
+  obtain rfl | ⟨n, rfl⟩ : N = 1 ∨ ∃ n, N = n + 2 := by
+    by_cases h : N = 1
+    · exact Or.inl h
+    · right
+      obtain ⟨n, hn⟩ := Nat.exists_eq_add_of_le (show 2 ≤ N by omega)
+      exact ⟨n, by omega⟩
+  · simp [nilpotentTransfer, Matrix.trace, Fin.sum_univ_three]
+  · rw [nilpotentTransfer_pow_add_two]
+    simp [supportProjection, Matrix.trace, Fin.sum_univ_three]
+
+private lemma scalarPurifier_evalWord (w : List (Fin (1 * 1))) :
+    MPSTensor.evalWord (purificationTensor scalarPurifier) w = 1 := by
+  induction w with
+  | nil => rfl
+  | cons i w ih =>
+      rw [MPSTensor.evalWord_cons, ih]
+      simp [purificationTensor, scalarPurifier]
+
+private lemma scalarPurifier_mpv {N : ℕ} (σ : Fin N → Fin (1 * 1)) :
+    MPSTensor.mpv (purificationTensor scalarPurifier) σ = 1 := by
+  simp [MPSTensor.mpv, MPSTensor.coeff, scalarPurifier_evalWord, Matrix.trace]
+
+private lemma purificationDensity_scalarPurifier (N : ℕ) :
+    purificationDensity scalarPurifier N = 1 := by
+  ext σ τ
+  simp only [purificationDensity, Matrix.of_apply]
+  rw [Fintype.sum_unique]
+  rw [scalarPurifier_mpv, scalarPurifier_mpv]
+  have hστ : σ = τ := Subsingleton.elim _ _
+  subst τ
+  rw [Matrix.one_apply_eq]
+  simp
+
+private lemma mpo_nilpotentGlobalPRFP (N : ℕ) (hN : 0 < N) :
+    mpo nilpotentGlobalPRFP N = 1 := by
+  ext σ τ
+  rw [mpo_apply]
+  rw [mpoMatrixEntry, evalWord_nilpotentGlobalPRFP,
+    trace_nilpotentTransfer_pow hN]
+  have hστ : σ = τ := Subsingleton.elim _ _
+  subst τ
+  rw [Matrix.one_apply_eq]
+
+private lemma scalarPurifier_isTransferIdempotent :
+    MPSTensor.IsTransferIdempotent (purificationTensor scalarPurifier) := by
+  rw [MPSTensor.IsTransferIdempotent]
+  apply LinearMap.ext
+  intro X
+  ext a b
+  fin_cases a
+  fin_cases b
+  simp [LinearMap.comp_apply, MPSTensor.transferMap_apply, purificationTensor,
+    scalarPurifier]
+
+private lemma nilpotentGlobalPRFP_isPRFP : IsPRFP nilpotentGlobalPRFP := by
+  refine ⟨1, 1, scalarPurifier, ?_, scalarPurifier_isTransferIdempotent⟩
+  intro N hN
+  rw [mpo_nilpotentGlobalPRFP N hN, purificationDensity_scalarPurifier]
+
+private lemma mpo_nilpotentGlobalPRFP_zero :
+    mpo nilpotentGlobalPRFP 0 = (3 : ℂ) • 1 := by
+  ext σ τ
+  have hστ : σ = τ := Subsingleton.elim _ _
+  subst τ
+  simp [mpo_apply, mpoMatrixEntry, Matrix.trace, Matrix.smul_apply]
+
+open scoped ComplexOrder in
+private lemma nilpotentGlobalPRFP_isMPDO : IsMPDO nilpotentGlobalPRFP := by
+  intro N
+  by_cases hN : N = 0
+  · subst N
+    rw [mpo_nilpotentGlobalPRFP_zero]
+    exact Matrix.PosSemidef.one.smul (by positivity)
+  · rw [mpo_nilpotentGlobalPRFP N (Nat.pos_of_ne_zero hN)]
+    exact Matrix.PosSemidef.one
+
+/-- The global purification equation, MPDO positivity, and a nonzero physical
+trace transfer do not imply source zero correlation length. This is the
+nilpotent-sector obstruction in arXiv:1606.00608, Definition 4.3 and Theorem
+4.4, lines 744--784; see
+`docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
+theorem exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL :
+    ∃ M : MPOTensor 1 3,
+      IsPRFP M ∧ IsMPDO M ∧ physTraceTransfer M ≠ 0 ∧ ¬ IsSourceZCL M := by
+  exact ⟨nilpotentGlobalPRFP, nilpotentGlobalPRFP_isPRFP,
+    nilpotentGlobalPRFP_isMPDO, physTraceTransfer_nilpotentGlobalPRFP_ne_zero,
+    nilpotentGlobalPRFP_not_isSourceZCL⟩
 
 end MPOTensor

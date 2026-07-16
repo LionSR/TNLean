@@ -29,12 +29,12 @@ ancilla gives a trace-preserving completely positive map on the spin degrees of
 freedom. This structure is proved separately for the ancillary trace map.
 
 The predicate `IsPRFP` below records the displayed positive-length equation and
-pure-state transfer idempotence literally. It is a bare global predicate: the
-zero purifying tensor satisfies it, although the source theorem at lines
-775--786 concerns nondegenerate density operators. The nondegenerate tensor-level
-predicate `IsNondegeneratePRFP`, its structural characterization, and its
-forward implication to source zero correlation length are in
-`TNLean.MPS.MPDO.LocalPurificationRFP`.
+pure-state transfer idempotence literally. It is a bare global predicate. Even
+MPDO positivity and a nonzero physical-trace transfer do not make its printed
+PRFP-to-ZCL implication valid, because positive-length traces can miss a
+nilpotent bond sector. The counterexample, the stronger local tensor predicate
+`IsNondegeneratePRFP`, and that local predicate's forward implication to source
+zero correlation length are in `TNLean.MPS.MPDO.LocalPurificationRFP`.
 
 ## Main definitions
 
