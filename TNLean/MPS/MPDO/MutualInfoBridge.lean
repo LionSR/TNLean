@@ -26,22 +26,37 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The identification of the two factors at the contiguous cut after `L` sites
-with configurations of the full `N`-site chain. -/
-noncomputable def chainBipartitionEquiv (d N L : ℕ) (hL : L ≤ N) :
-    Fin (d ^ L) × Fin (d ^ (N - L)) ≃ (Fin N → Fin d) :=
-  (biSplitEquiv d L (N - L)).symm.trans (blockReindexEquiv d N L hL).symm
+/-- Split a length-`N` configuration into consecutive blocks of lengths `L`
+and `K`, and flatten each block to a finite index. -/
+noncomputable def chainBipartitionEquiv (d N L K : ℕ) (h : N = L + K) :
+    (Fin N → Fin d) ≃ Fin (d ^ L) × Fin (d ^ K) :=
+  (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d))).trans
+    (biSplitEquiv d L K)
 
 /-- The normalized `N`-site MPO, viewed as a bipartite matrix across the
 contiguous cut after `L` sites.
 
 Source: arXiv:1606.00608, lines 792--797. -/
-noncomputable def bipartitionedNormalizedMPO (M : MPOTensor d D) (N L : ℕ)
-    (hL : L ≤ N) :
-    Matrix (Fin (d ^ L) × Fin (d ^ (N - L)))
-      (Fin (d ^ L) × Fin (d ^ (N - L))) ℂ :=
-  (normalizedMPO M N).submatrix (chainBipartitionEquiv d N L hL)
-    (chainBipartitionEquiv d N L hL)
+noncomputable def bipartitionedNormalizedMPO (M : MPOTensor d D)
+    (N L K : ℕ) (h : N = L + K) :
+    Matrix (Fin (d ^ L) × Fin (d ^ K)) (Fin (d ^ L) × Fin (d ^ K)) ℂ :=
+  (normalizedMPO M N).submatrix (chainBipartitionEquiv d N L K h).symm
+    (chainBipartitionEquiv d N L K h).symm
+
+/-- Positivity of the normalized state is preserved by the bipartition
+reindexing. -/
+theorem bipartitionedNormalizedMPO_posSemidef (M : MPOTensor d D)
+    (N L K : ℕ) (h : N = L + K) (hM : (mpo M N).PosSemidef) :
+    (bipartitionedNormalizedMPO M N L K h).PosSemidef := by
+  exact (normalizedMPO_posSemidef M N hM).submatrix _
+
+/-- A normalized periodic MPO has unit trace whenever its unnormalized trace
+is nonzero. -/
+theorem bipartitionedNormalizedMPO_trace (M : MPOTensor d D)
+    (N L K : ℕ) (h : N = L + K) (htr : (mpo M N).trace ≠ 0) :
+    (bipartitionedNormalizedMPO M N L K h).trace = 1 := by
+  rw [bipartitionedNormalizedMPO, Matrix.trace_submatrix_equiv,
+    normalizedMPO_trace M N htr]
 
 private theorem append_empty {K : ℕ} {n : Type*} (u : Fin K → n) (g : Fin 0 → n) :
     Fin.append u g = fun i ↦ u (Fin.cast (Nat.add_zero K) i) := by
@@ -86,14 +101,15 @@ up to the standard flattening of configurations.
 Source: arXiv:1606.00608, lines 792--797 and Appendix C, lines 1338--1340. -/
 theorem traceRight_bipartitionedNormalizedMPO (M : MPOTensor d D) (N L : ℕ)
     (hL : L ≤ N) :
-    Matrix.traceRight (bipartitionedNormalizedMPO M N L hL) =
+    Matrix.traceRight
+        (bipartitionedNormalizedMPO M N L (N - L) (by omega)) =
       (reducedBlockState M N L hL).submatrix finFunctionFinEquiv.symm
         finFunctionFinEquiv.symm := by
   ext i j
   simp only [Matrix.traceRight_apply, bipartitionedNormalizedMPO, Matrix.submatrix_apply,
-    chainBipartitionEquiv, Equiv.trans_apply, biSplitEquiv, Equiv.symm_trans_apply,
+    chainBipartitionEquiv, biSplitEquiv, Equiv.symm_trans_apply,
     Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map, blockSplitEquiv_symm_apply,
-    blockReindexEquiv, Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
+    Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
   rw [reducedBlockState_eq_sum]
   let f : (Fin (N - L) → Fin d) → ℂ := fun w ↦
     M.normalizedMPO N
@@ -111,14 +127,15 @@ moves the final `N-L` sites to the beginning of the periodic chain.
 Source: arXiv:1606.00608, lines 792--797 and Appendix C, lines 1338--1340. -/
 theorem traceLeft_bipartitionedNormalizedMPO (M : MPOTensor d D) (N L : ℕ)
     (hL : L ≤ N) :
-    Matrix.traceLeft (bipartitionedNormalizedMPO M N L hL) =
+    Matrix.traceLeft
+        (bipartitionedNormalizedMPO M N L (N - L) (by omega)) =
       (reducedBlockState M N (N - L) (Nat.sub_le N L)).submatrix
         finFunctionFinEquiv.symm finFunctionFinEquiv.symm := by
   ext i j
   simp only [Matrix.traceLeft_apply, bipartitionedNormalizedMPO, Matrix.submatrix_apply,
-    chainBipartitionEquiv, Equiv.trans_apply, biSplitEquiv, Equiv.symm_trans_apply,
+    chainBipartitionEquiv, biSplitEquiv, Equiv.symm_trans_apply,
     Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map, blockSplitEquiv_symm_apply,
-    blockReindexEquiv, Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
+    Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
   let f : (Fin L → Fin d) → ℂ := fun x ↦
     M.normalizedMPO N
       ((Fin.append x (finFunctionFinEquiv.symm i)) ∘
@@ -148,26 +165,31 @@ assumption is needed for this entropy identity. -/
 theorem mutualInfoChain_eq_mutualInformation (M : MPOTensor d D) (N L : ℕ)
     (hL : L ≤ N) (hM : (mpo M N).PosSemidef) :
     mutualInfoChain M N L hL hM =
-      Entropy.mutualInformation (bipartitionedNormalizedMPO M N L hL)
+      Entropy.mutualInformation
+        (bipartitionedNormalizedMPO M N L (N - L) (by omega))
         ((normalizedMPO_isHermitian M N hM).submatrix
-          (chainBipartitionEquiv d N L hL)) := by
+          (chainBipartitionEquiv d N L (N - L) (by omega)).symm) := by
   simp only [mutualInfoChain, blockEntropy, Entropy.mutualInformation,
     _root_.mutualInformation]
   have hright :
-      vonNeumannEntropy (Matrix.traceRight (bipartitionedNormalizedMPO M N L hL))
+      vonNeumannEntropy
+          (Matrix.traceRight
+            (bipartitionedNormalizedMPO M N L (N - L) (by omega)))
           (Matrix.traceRight_isHermitian
             ((normalizedMPO_isHermitian M N hM).submatrix
-              (chainBipartitionEquiv d N L hL))) =
+              (chainBipartitionEquiv d N L (N - L) (by omega)).symm)) =
         vonNeumannEntropy (reducedBlockState M N L hL)
           (reducedBlockState_isHermitian M N L hL hM) := by
     rw [vonNeumannEntropy_congr (traceRight_bipartitionedNormalizedMPO M N L hL) _
       ((reducedBlockState_isHermitian M N L hL hM).submatrix _),
       vonNeumannEntropy_submatrix_equiv]
   have hleft :
-      vonNeumannEntropy (Matrix.traceLeft (bipartitionedNormalizedMPO M N L hL))
+      vonNeumannEntropy
+          (Matrix.traceLeft
+            (bipartitionedNormalizedMPO M N L (N - L) (by omega)))
           (Matrix.traceLeft_isHermitian
             ((normalizedMPO_isHermitian M N hM).submatrix
-              (chainBipartitionEquiv d N L hL))) =
+              (chainBipartitionEquiv d N L (N - L) (by omega)).symm)) =
         vonNeumannEntropy (reducedBlockState M N (N - L) (Nat.sub_le N L))
           (reducedBlockState_isHermitian M N (N - L) (Nat.sub_le N L) hM) := by
     rw [vonNeumannEntropy_congr (traceLeft_bipartitionedNormalizedMPO M N L hL) _
@@ -179,11 +201,13 @@ theorem mutualInfoChain_eq_mutualInformation (M : MPOTensor d D) (N L : ℕ)
         vonNeumannEntropy (normalizedMPO M N) (normalizedMPO_isHermitian M N hM) := by
     exact vonNeumannEntropy_congr (reducedBlockState_full M N) _ _
   have hjoint :
-      vonNeumannEntropy (bipartitionedNormalizedMPO M N L hL)
+      vonNeumannEntropy
+          (bipartitionedNormalizedMPO M N L (N - L) (by omega))
           ((normalizedMPO_isHermitian M N hM).submatrix
-            (chainBipartitionEquiv d N L hL)) =
+            (chainBipartitionEquiv d N L (N - L) (by omega)).symm) =
         vonNeumannEntropy (normalizedMPO M N) (normalizedMPO_isHermitian M N hM) := by
-    exact vonNeumannEntropy_submatrix_equiv (chainBipartitionEquiv d N L hL)
+    exact vonNeumannEntropy_submatrix_equiv
+      (chainBipartitionEquiv d N L (N - L) (by omega)).symm
       (normalizedMPO M N) (normalizedMPO_isHermitian M N hM)
   rw [hright, hleft, hfull, hjoint]
 
