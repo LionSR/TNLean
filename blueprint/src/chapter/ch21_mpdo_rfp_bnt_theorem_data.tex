@@ -35,6 +35,39 @@
     blocked basis.
 \end{definition}
 
+\begin{definition}[BNT algebra clause of a vertical canonical decomposition]%
+    \label{def:mpdo_bnt_algebra_tensor_clause}
+    \lean{MPOTensor.verticalBNTMPO}
+    \lean{MPOTensor.verticalBNTOperatorFamily}
+    \lean{MPOTensor.verticalBNTTraceScalarFamily}
+    \lean{MPOTensor.BNTAlgebraTensorClause}
+    \lean{MPOTensor.HasBNTAlgebraTensorClause}
+    \leanok
+    \uses{def:vertical_cf_mpdo, def:mpdo_bnt_algebra_clause}
+    Choose a vertical canonical decomposition
+    \[
+        U\widetilde M U^\dagger
+        =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
+        \qquad
+        \mu_\alpha=\operatorname{diag}
+        (\omega_{\alpha,0},\ldots,\omega_{\alpha,r_\alpha-1}).
+    \]
+    Separating the two factors of the doubled physical index of
+    $M_\alpha$ gives an MPO tensor $\widehat M_\alpha$.  Define
+    \[
+        O_L(M_\alpha)=\operatorname{mpo}(\widehat M_\alpha,L),
+        \qquad
+        m_\alpha=\sum_q\omega_{\alpha,q}
+        =\operatorname{tr}(\mu_\alpha).
+    \]
+    The chosen decomposition satisfies the tensor-attached BNT algebra clause
+    when the BNT algebra clause holds for precisely these operators and these
+    trace scalars.  This is the data in
+    \cite[Theorem~4.14(ii), lines~972--993, and Appendix~C.4,
+        lines~2046--2064]{Cirac2016MPDO_arXiv}; it does not include a comparison
+    with a two-site vertical canonical decomposition.
+\end{definition}
+
 \begin{definition}[BNT multiplicity-spectrum comparison]%
     \label{def:mpdo_bnt_multiplicity_spectrum_comparison}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison}
