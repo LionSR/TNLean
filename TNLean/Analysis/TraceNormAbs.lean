@@ -68,8 +68,8 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n] {D : ℕ}
 
-/-- The symmetric map `T† ∘ T` attached to `T = Matrix.toEuclideanLin A` is
-represented by the positive-semidefinite matrix $A^\dagger A$. -/
+/-- The symmetric map $T^\dagger \circ T$, where $T$ is `Matrix.toEuclideanLin A`,
+is represented by the positive-semidefinite matrix $A^\dagger A$. -/
 theorem adjoint_toEuclideanLin_comp_self (A : Matrix n n ℂ) :
     LinearMap.adjoint (toEuclideanLin A) ∘ₗ toEuclideanLin A = toEuclideanLin (Aᴴ * A) := by
   rw [toLpLin_mul_same, toEuclideanLin_conjTranspose_eq_adjoint]
