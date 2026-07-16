@@ -379,6 +379,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.MutualInfoMonotone
+import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.PureRFPSAL
 import TNLean.MPS.MPDO.VerticalCF
@@ -413,6 +414,7 @@ import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.MPDO.RFP
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.RFPViaTSGlobal
+import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
