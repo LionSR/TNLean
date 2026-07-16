@@ -17,8 +17,7 @@ For a vertical canonical decomposition with multiplicity matrices
 \]
 and their inverse maps on the displayed weighted sectors.  Partial trace over
 the multiplicity factor gives a canonical extension of the inverse map to the
-full block matrix space.  This file defines these maps and proves the exact
-retraction identity.
+full block matrix space.  The maps below satisfy the exact retraction identity.
 
 ## References
 
