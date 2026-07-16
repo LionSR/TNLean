@@ -3189,7 +3189,6 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
 \begin{lemma}[Cyclic shift of the Kraus operators]
     \label{lem:kraus_cyclic_shift}
     \lean{MPSTensor.one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj}
-    \lean{orthogonalProjection_mul_eq_zero_of_sum_eq_one}
     \lean{MPSTensor.kraus_mul_cyclicProj}
     \lean{MPSTensor.evalWord_mul_cyclicProj}
     \lean{MPSTensor.cyclicProj_ne_zero}
@@ -3209,6 +3208,7 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
 
 \begin{proof}
     \leanok
+    \uses{lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one}
     Compressing $\sum_vK_vP_{k+1}K_v^\dagger=P_k$ by $\Id-P_k$ exhibits a
     vanishing sum of positive semidefinite matrices, so each summand
     vanishes: $(\Id-P_k)K_vP_{k+1}=0$.  Mutual orthogonality follows by
