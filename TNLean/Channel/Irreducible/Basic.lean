@@ -14,11 +14,11 @@ import TNLean.Algebra.OrthogonalProjection
 # Irreducible Completely Positive Maps
 
 General (non-MPS-specific) definitions and lemmas for irreducible CP maps
-on matrix algebras `M_D(ℂ)`.
+on matrix algebras `M_D(ℂ)`. Orthogonal projections and their elementary
+properties are imported from `TNLean.Algebra.OrthogonalProjection`.
 
 ## Main definitions
 
-* `IsOrthogonalProjection`: a matrix that is Hermitian and idempotent
 * `IsIrreducibleMap`: a CP map with no non-trivial invariant projection
 * `HasUniqueFixedPoint`: unique PSD fixed point (up to scalar), which is positive definite
 

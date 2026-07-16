@@ -37,6 +37,7 @@ This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
 * `MPOTensor.CommutingBondProductData`
 * `MPOTensor.HasCommutingBondProductAt`
 * `MPOTensor.HasCommutingBondProduct`
+* `MPOTensor.HasCommutingBondProductWithZCL`
 * `MPOTensor.GSNNCHData`
 * `MPOTensor.HasGSNNCHFormAt`
 * `MPOTensor.HasGSNNCHForm`
