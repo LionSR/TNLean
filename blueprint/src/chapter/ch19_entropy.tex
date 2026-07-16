@@ -107,7 +107,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:trace_norm_elementary}
+    \uses{lem:trace_norm_sqrt_eigenvalues}
     The map $T^\dagger T$, for $T$ the linear map on $\C^D$ represented by
     $A$, is represented by $A^\dagger A$, so the singular values of $A$ are
     $s_i(A)=\sqrt{\lambda_i}$ with $\lambda_0,\ldots,\lambda_{D-1}$ the
@@ -187,6 +187,31 @@ Theorem~\ref{thm:trace_norm_abs}.
     =\operatorname{tr}\lvert A\rvert$. For the two-sided case,
     $\lVert UAV\rVert_{\mathrm{tr}}=\lVert UA\rVert_{\mathrm{tr}}=\lVert A\rVert_{\mathrm{tr}}$
     by applying the right and left cases in turn.
+\end{proof}
+
+\begin{lemma}[Trace norm from the spectrum of $A^\dagger A$]
+    \label{lem:trace_norm_sqrt_eigenvalues}
+    \lean{Matrix.traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$, the trace norm is the sum of the square roots of
+    the eigenvalues of the positive operator $A^\dagger A$:
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^\dagger A)}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_elementary}
+    Since $s_i(A)=\sqrt{\lambda_i(A^\dagger A)}$ by the definition of singular
+    value, the finite singular-value expansion of
+    Theorem~\ref{thm:trace_norm_elementary} gives
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        = \sum_{i=0}^{D-1}s_i(A)
+        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^\dagger A)}.
+    \]
 \end{proof}
 
 \section{Von Neumann entropy}

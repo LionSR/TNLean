@@ -35,6 +35,8 @@ quantity is not identified with the ambient matrix operator norm.
   singular-value range.
 * `Matrix.traceNorm_eq_sum_fin` — Wolf's finite-dimensional formula summing
   over all `Fin D` indices.
+* `Matrix.traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self` — the trace norm
+  as the sum of the square roots of the eigenvalues of $A^\dagger A$.
 
 ## References
 
@@ -106,6 +108,17 @@ theorem traceNorm_eq_sum_fin (A : Matrix (Fin D) (Fin D) ℂ) :
     _ = ∑ i : Fin D, (Matrix.toEuclideanLin A).singularValues i := by
       symm
       exact Fin.sum_univ_eq_sum_range _ D
+
+/-- The trace norm is the sum of the square roots of the eigenvalues of the
+positive operator $A^\dagger A$. -/
+lemma traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self
+    (A : Matrix (Fin D) (Fin D) ℂ) :
+    traceNorm A = ∑ i : Fin D,
+      Real.sqrt ((Matrix.toEuclideanLin A).isSymmetric_adjoint_comp_self.eigenvalues
+        finrank_euclideanSpace_fin i) := by
+  rw [traceNorm_eq_sum_fin]
+  exact Finset.sum_congr rfl fun i _ ↦
+    (Matrix.toEuclideanLin A).singularValues_fin finrank_euclideanSpace_fin i
 
 /-- The Schatten one-norm is nonnegative. -/
 theorem schattenOneNorm_nonneg (A : Matrix (Fin D) (Fin D) ℂ) :

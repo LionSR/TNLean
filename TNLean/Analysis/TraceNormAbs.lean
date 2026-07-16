@@ -96,12 +96,10 @@ theorem traceNorm_eq_re_trace_abs (A : Matrix (Fin D) (Fin D) ℂ) :
     traceNorm A = (Matrix.trace (CFC.abs A)).re := by
   have hH : (Aᴴ * A).PosSemidef := posSemidef_conjTranspose_mul_self A
   calc traceNorm A
-      = ∑ i : Fin D, (toEuclideanLin A).singularValues i := traceNorm_eq_sum_fin A
-    _ = ∑ i : Fin D,
+      = ∑ i : Fin D,
           Real.sqrt ((toEuclideanLin A).isSymmetric_adjoint_comp_self.eigenvalues
             finrank_euclideanSpace_fin i) :=
-        Finset.sum_congr rfl fun i _ ↦
-          (toEuclideanLin A).singularValues_fin finrank_euclideanSpace_fin i
+        traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self A
     _ = ∑ j : Fin (Fintype.card (Fin D)),
           Real.sqrt ((isSymmetric_toEuclideanLin_iff.mpr hH.isHermitian).eigenvalues
             finrank_euclideanSpace j) :=
