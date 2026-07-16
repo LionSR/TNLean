@@ -45,6 +45,20 @@
     \TNCompactTraceCell{#1}{(0,0)}{#2}{#3}{#4}%
 }
 
+% A periodic MPS closure may carry a virtual insertion on the return bond.
+% The insertion is placed by the surrounding diagram; this motif supplies its
+% two typed ports and the canonical rounded routing from the outer site ports.
+\newcommand{\TNMPSExternalTraceInsertionMotif}[5]{%
+    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=external-trace-insertion}%
+    \TNVirtualPort{#1InsertionWest}{#4}{west}%
+    \TNVirtualPort{#1InsertionEast}{#4}{east}%
+    \TNConnectVirtualVH{#2}{#1InsertionWest}%
+    \TNConnectVirtualHV{#1InsertionEast}{#3}%
+    \if\relax\detokenize{#5}\relax\else
+        \TNLabelBelow{#4.south}{#5}%
+    \fi
+}
+
 \newcommand{\TNSymmetryVerticalWord}[3]{%
     \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=vertical-word}%
     \TNVerticalWord{#1}{(0,0)}{#2}{#3}%
