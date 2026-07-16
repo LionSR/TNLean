@@ -1667,8 +1667,8 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     discharges both hypotheses at the price of one positive scalar per site.
 \end{remark}
 
-\begin{lemma}[Projective weight normalization]%
-    \label{lem:paperbnt_weight_normalization}
+\begin{theorem}[Projective weight normalization]%
+    \label{thm:paperbnt_weight_normalization}
     \lean{MPSTensor.exists_weight_normalization}
     \leanok
     For nonzero weights $\mu_1,\dots,\mu_r$ with $r\geq1$ there is a positive
@@ -1683,7 +1683,7 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     This is the normalization that
     \cite[line~246]{Cirac2016MPDO_arXiv} chooses for the canonical-form
     weights.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Take $m=\max_k|\mu_k|$; the maximum over a nonempty finite
@@ -1698,7 +1698,7 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     \leanok
     \uses{thm:prepared_bnt_blocks_after_blocking,
         thm:paperbnt_supplier_prepared,
-        lem:paperbnt_weight_normalization,
+        thm:paperbnt_weight_normalization,
         lem:mpv_to_tensor_from_blocks_weight_mul_left,
         thm:mpv_decomposition}
     Let $A$ be an MPS tensor whose blocked tensors $A^{[p]}$ generate, for
@@ -1721,7 +1721,7 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     The zero family admits no unit-modulus weight, so the nonvanishing
     hypothesis produces at least one prepared block. Normalize the prepared
     weights by their maximal modulus $m$
-    (Lemma~\ref{lem:paperbnt_weight_normalization}). By the weight-scaling
+    (Theorem~\ref{thm:paperbnt_weight_normalization}). By the weight-scaling
     identity of
     Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left},
     \[

@@ -39,7 +39,6 @@ matrix product coefficients.
   definition and the characterization prop:char-BNT.
 -/
 
-open scoped Matrix BigOperators
 
 namespace MPSTensor
 
@@ -94,7 +93,7 @@ decomposition carries the normalized weights and the factor $m^N$ records the or
 
 The nonvanishing hypothesis: for every blocking length $p > 0$ some positive-length matrix
 product coefficient of the $p$-blocked tensor is nonzero.  The prepared block family can be
-empty ($r = 0$) exactly when every positive-length coefficient of the blocked tensor
+empty ($r = 0$) only when every positive-length coefficient of the blocked tensor
 vanishes (for example the zero tensor): the empty direct sum has all positive-length
 coefficients zero, and the positive-length agreement transfers this to the blocked tensor.
 For an empty weight family the line-246 choice "at least one weight of unit modulus" is
