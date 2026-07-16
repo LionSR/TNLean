@@ -15,8 +15,8 @@ import TNLean.Channel.Determinant.UnitaryCharacterization
 Thin module assembling the determinant development for quantum channels from
 five focused sub-modules.
 
-The split follows the same review-oriented pattern as the earlier `Full/` and
-`Growth/` refactors:
+The division follows the same organization as the earlier `Full/` and
+`Growth/` developments:
 
 * `TNLean.Channel.Determinant.Basic` — determinant definitions and unitary
   channels.

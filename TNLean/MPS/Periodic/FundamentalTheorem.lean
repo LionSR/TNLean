@@ -44,7 +44,7 @@ The proportional theorem `thm:bd` is stated in two forms:
   **Caveat**: `periodicOverlapDichotomy` is stated and callable, but its proof still
   depends on the remaining Case-3 contraction with \(F_u\), \(\Omega_u\), and the
   phases \(\kappa_v\) from arXiv:1708.00029, Appendix A, lines 1023--1117,
-  formalized as `repeatedBlocks_of_blockedSectorGaugePhase` in
+  formalized as `sectorTensor_proportional_of_blockedMatch` in
   `TNLean.MPS.Periodic.Overlap.Case3`. Subsequent results using the `_of_isPeriodic`
   variant therefore inherit that obligation and should not be treated as unconditional.
 
@@ -118,7 +118,7 @@ The `hetRepeatedBlocks_of_nondecaying` field can be filled via `periodicOverlapD
 (see `PeriodicOverlapHypothesis.ofIsPeriodic`), though that dichotomy still relies on
 the remaining Case-3 contraction with \(F_u\), \(\Omega_u\), and the phases
 \(\kappa_v\) from arXiv:1708.00029, Appendix A, lines 1023--1117, formalized as
-`repeatedBlocks_of_blockedSectorGaugePhase`. The fields capture the essential results:
+`sectorTensor_proportional_of_blockedMatch`. The fields capture the essential results:
 1. For each block in one family, a non-decaying overlap partner exists in the other.
 2. Non-decaying overlap forces `HetRepeatedBlocks`.
 
@@ -307,7 +307,7 @@ to fill the `hetRepeatedBlocks_of_nondecaying` field; see
 `periodicOverlapDichotomy` still relies on the remaining Case-3 contraction with
 \(F_u\), \(\Omega_u\), and the phases \(\kappa_v\) from arXiv:1708.00029,
 Appendix A, lines 1023--1117, formalized as
-`repeatedBlocks_of_blockedSectorGaugePhase`; callers going through that route inherit
+`sectorTensor_proportional_of_blockedMatch`; callers going through that route inherit
 that obligation. -/
 theorem fundamentalTheorem_periodic_proportional
     (A : (j : Fin rA) → MPSTensor d (dimA j))
@@ -384,7 +384,7 @@ equivalence.
 **Remaining proof obligation.** `periodicOverlapDichotomy` is stated and callable, but
 its proof still uses the remaining Case-3 contraction with \(F_u\), \(\Omega_u\), and
 the phases \(\kappa_v\) from arXiv:1708.00029, Appendix A, lines 1023--1117,
-formalized as `repeatedBlocks_of_blockedSectorGaugePhase` in
+formalized as `sectorTensor_proportional_of_blockedMatch` in
 `TNLean.MPS.Periodic.Overlap.Case3`. Subsequent users of this theorem inherit that
 obligation: this variant is a convenience reformulation, not an unconditional
 strengthening. -/

@@ -566,6 +566,13 @@ Appendix A lines 1023--1117:
   ξ = η/m and a single global unitary U = Σ_u e^{iφ_{u+q}} P_u U_{u+q} Q_{u+q}
   (eq:result and lines 1110--1117), giving A^i = e^{iξ} U B^i U†.
 
+The cyclic offset `q` records the fixed displacement between matched sector orbits:
+`hBlockMatch` pairs sector `u` of `A` with sector `u + q` of `B`. The hypothesis
+`hNondeg` rules out zero-dimensional sectors, for which the sector match and its
+contraction data would be vacuous. Finally, `hA_lc` and `hB_lc` normalize the original
+tensors; comparing the resulting norm identities is what forces the gauge phases
+produced by the contraction to have unit modulus.
+
 The available chain inputs are `blockDecompositionMap` /
 `IsNBlkInjective.exists_rightInverse` in `MPS/Chain/OneSidedInverse.lean`
 (realizing Ω_u for a chosen injective word length) and the two-site
@@ -709,7 +716,7 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
   --      to a global gauge with the κ/θ/φ phase assembly (lines 1023--1117).
   -- Stage 1 (`sectorGaugePhaseEquiv_succ_of_cyclicTransport`) is closed via the
   -- one-site rotation covariance of the cross sector overlap; the remaining
-  -- obligation is the stage-3 contraction `repeatedBlocks_of_blockedSectorGaugePhase`.
+  -- obligation is the stage-3 contraction `sectorTensor_proportional_of_blockedMatch`.
   classical
   obtain ⟨u₀, v₀, hdim₀, hMatch⟩ := hSomeMatch
   have hA_lc := hA.leftCanonical
