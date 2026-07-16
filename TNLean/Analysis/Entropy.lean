@@ -617,10 +617,7 @@ variable {dA dB : ℕ}
 theorem Matrix.traceLeft_isHermitian
     {ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
     (hρ : ρ.IsHermitian) : (Matrix.traceLeft ρ).IsHermitian := by
-  apply Matrix.IsHermitian.ext
-  intro b₁ b₂
-  simp only [Matrix.traceLeft, star_sum]
-  exact Finset.sum_congr rfl fun a _ => hρ.apply (a, b₁) (a, b₂)
+  simpa [Matrix.traceLeft] using Matrix.partialTraceLeft_isHermitian hρ
 
 /-- `Matrix.traceRight` (partial trace over B) preserves Hermiticity. -/
 theorem Matrix.traceRight_isHermitian

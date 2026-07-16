@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MarginalSupport
 import TNLean.Channel.MaximalOverlap
+import TNLean.Channel.PartialTrace
 
 /-!
 # Support projectors of bipartite marginals
@@ -137,5 +138,108 @@ theorem PosSemidef.mul_leftKroneckerEmbed_supportProj_self
   rwa [Matrix.conjTranspose_mul, hρ.isHermitian.eq, hliftHerm.eq] at h
 
 end Bipartite
+
+/-! ### Support projector of the left partial trace -/
+
+section LeftMarginal
+
+variable {L R : Type*} [Fintype L] [DecidableEq L] [Fintype R] [DecidableEq R]
+
+/-- Partial trace over the left factor and the right tensor embedding are
+adjoint for the trace pairing:
+\(\operatorname{tr}((\mathbf 1\otimes M)\rho)
+=\operatorname{tr}(M\operatorname{tr}_L\rho)\). -/
+lemma trace_rightKroneckerEmbed_mul (M : Matrix R R ℂ)
+    (ρ : Matrix (L × R) (L × R) ℂ) :
+    (rightKroneckerEmbed (m := L) M * ρ).trace = (M * partialTraceLeft ρ).trace := by
+  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type,
+    rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
+    partialTraceLeft_apply, Finset.mul_sum]
+  calc
+    ∑ l, ∑ r, ∑ k, ∑ s,
+        (if l = k then (1 : ℂ) else 0) * M r s * ρ (k, s) (l, r) =
+        ∑ l, ∑ r, ∑ s, M r s * ρ (l, s) (l, r) := by
+      refine Finset.sum_congr rfl fun l _ => ?_
+      refine Finset.sum_congr rfl fun r _ => ?_
+      rw [Finset.sum_eq_single l]
+      · simp
+      · intro k _ hkl
+        simp [Ne.symm hkl]
+      · simp
+    _ = ∑ r, ∑ s, ∑ l, M r s * ρ (l, s) (l, r) := by
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl fun r _ => ?_
+      rw [Finset.sum_comm]
+
+/-- The lifted support projector of the left partial trace fixes a positive
+semidefinite bipartite operator on the left.
+
+This is the \(A|XB\) counterpart of the support-projector identity in
+arXiv:1606.00608, Appendix D.2, lines 2225--2235. -/
+theorem PosSemidef.rightKroneckerEmbed_supportProj_mul_self
+    {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef) :
+    rightKroneckerEmbed (m := L)
+        (Matrix.PosSemidef.partialTraceLeft hρ).isHermitian.supportProj * ρ = ρ := by
+  classical
+  set σ := Matrix.partialTraceLeft ρ with hσ
+  have hσpos : σ.PosSemidef := Matrix.PosSemidef.partialTraceLeft hρ
+  set P := hσpos.isHermitian.supportProj with hP
+  set Q : Matrix R R ℂ := 1 - P with hQ
+  have hQherm : Q.IsHermitian := by
+    rw [hQ]
+    exact hσpos.isHermitian.one_sub_supportProj_isHermitian
+  have hQidem : Q * Q = Q := by
+    rw [hQ, hP]
+    exact hσpos.isHermitian.one_sub_supportProj_idem
+  have hQσ : Q * σ = 0 := by
+    rw [hQ, hP]
+    exact hσpos.isHermitian.one_sub_supportProj_mul_self
+  have hliftQherm : (rightKroneckerEmbed (m := L) Q).IsHermitian := by
+    change (rightKroneckerEmbed (m := L) Q)ᴴ = rightKroneckerEmbed (m := L) Q
+    rw [← star_eq_conjTranspose, ← map_star, star_eq_conjTranspose, hQherm.eq]
+  have hliftQidem :
+      rightKroneckerEmbed (m := L) Q * rightKroneckerEmbed (m := L) Q =
+        rightKroneckerEmbed (m := L) Q := by
+    rw [← map_mul, hQidem]
+  have hliftQρ : rightKroneckerEmbed (m := L) Q * ρ = 0 := by
+    refine hρ.proj_mul_eq_zero_of_trace_eq_zero hliftQherm hliftQidem ?_
+    rw [trace_rightKroneckerEmbed_mul, ← hσ, hQσ, Matrix.trace_zero]
+  have hsplit :
+      (1 : Matrix (L × R) (L × R) ℂ) - rightKroneckerEmbed (m := L) Q =
+        rightKroneckerEmbed (m := L) P := by
+    have hQP : (1 : Matrix R R ℂ) - Q = P := by
+      rw [hQ]
+      abel
+    calc
+      (1 : Matrix (L × R) (L × R) ℂ) - rightKroneckerEmbed (m := L) Q =
+          rightKroneckerEmbed (m := L) 1 - rightKroneckerEmbed (m := L) Q := by
+            rw [map_one]
+      _ = rightKroneckerEmbed (m := L) (1 - Q) :=
+        (map_sub (rightKroneckerEmbed (m := L) (n := R)) 1 Q).symm
+      _ = rightKroneckerEmbed (m := L) P := by rw [hQP]
+  rw [← hsplit, Matrix.sub_mul, Matrix.one_mul, hliftQρ, sub_zero]
+
+/-- The lifted support projector of the left partial trace also fixes a
+positive semidefinite bipartite operator on the right.
+
+Together with the preceding theorem, this proves both support-projector
+identities of arXiv:1606.00608, Appendix D.2, lines 2228--2235, for the
+\(A|XB\) bipartition. -/
+theorem PosSemidef.mul_rightKroneckerEmbed_supportProj_self
+    {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef) :
+    ρ * rightKroneckerEmbed (m := L)
+        (Matrix.PosSemidef.partialTraceLeft hρ).isHermitian.supportProj = ρ := by
+  have hleft := hρ.rightKroneckerEmbed_supportProj_mul_self
+  have hliftHerm :
+      (rightKroneckerEmbed (m := L)
+        (Matrix.PosSemidef.partialTraceLeft hρ).isHermitian.supportProj).IsHermitian := by
+    change (rightKroneckerEmbed (m := L)
+      (Matrix.PosSemidef.partialTraceLeft hρ).isHermitian.supportProj)ᴴ = _
+    rw [← star_eq_conjTranspose, ← map_star, star_eq_conjTranspose,
+      (Matrix.PosSemidef.partialTraceLeft hρ).isHermitian.supportProj_isHermitian.eq]
+  have h := congrArg Matrix.conjTranspose hleft
+  rwa [Matrix.conjTranspose_mul, hρ.isHermitian.eq, hliftHerm.eq] at h
+
+end LeftMarginal
 
 end Matrix
