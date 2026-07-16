@@ -168,7 +168,7 @@ theorem outerInverseContraction_markov_block
   simp_rw [hsector]
   by_cases hkk : k = k'
   · subst k'
-    simp
+    simp only [reduceDIte]
     simp only [bntMarkovLeftFactor, bntMarkovRightFactor]
     rw [show (hη.p k : ℂ) *
         (∑ i, ∑ j, C x (i, j) * hη.ρ_left k (i, l) (j, l')) *
@@ -239,5 +239,39 @@ theorem isMPOBlockLeftInverse_bnt_markov_key_formula
   by_cases hxy : x.1 = y.1
   · simp [hxy, smul_eq_mul]
   · simp [hxy]
+
+/-- Distinct Markov sectors give a zero block of every physical slice in a
+fixed basis-of-normal-tensors sector, once the nonzero closing entry selected
+in the source is fixed.
+
+**Local fix (tail index):** the nonzero closing entry is
+$R_s(\beta_3,\alpha_1)$, as forced by the matrix-unit trace identity.  This is
+the corrected orientation of the single-sector display at lines 1422--1438,
+recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Qks`, lines 1730--1735. -/
+theorem isMPOBlockLeftInverse_bnt_markov_offdiagonal
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (s : Fin g) {α₁ β₃ : Fin (dim s)} (hm : R s β₃ α₁ ≠ 0)
+    (β₁ α₃ : Fin (dim s)) {k k' : Fin hη.m} (hkk' : k ≠ k')
+    (l : Fin (hη.dL k)) (r : Fin (hη.dR k))
+    (l' : Fin (hη.dL k')) (r' : Fin (hη.dR k')) :
+    Matrix.reindex hη.decompB hη.decompB
+        ((hη.U_B : Matrix (Fin d) (Fin d) ℂ) *
+          physicalSlice (K s) β₁ α₃ *
+          (hη.U_B : Matrix (Fin d) (Fin d) ℂ)ᴴ)
+        ⟨k, (l, r)⟩ ⟨k', (l', r')⟩ = 0 := by
+  classical
+  have hkey := isMPOBlockLeftInverse_bnt_markov_key_formula hC hρ hη
+    (⟨s, α₁, β₁⟩) (⟨s, α₃, β₃⟩) k k' l r l' r'
+  simp [hkk'] at hkey
+  simpa [Matrix.reindex_apply, Matrix.submatrix_apply] using
+    hkey.resolve_left hm
 
 end MPOTensor
