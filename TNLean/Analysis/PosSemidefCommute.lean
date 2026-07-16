@@ -27,8 +27,9 @@ namespace Matrix
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- The product of two commuting positive-semidefinite matrices is positive
-semidefinite: writing `A = √A * √A`, the square root commutes with `B` as
-well, so `A * B = (√A)ᴴ * B * √A` is a conjugate of `B`. -/
+semidefinite: writing $A = \sqrt{A}\,\sqrt{A}$, the square root commutes with
+$B$ as well, so $A B = \sqrt{A}^{\dagger}\,B\,\sqrt{A}$ is a conjugate of
+$B$. -/
 theorem PosSemidef.mul_of_commute {A B : Matrix n n ℂ} (hA : A.PosSemidef)
     (hB : B.PosSemidef) (hAB : A * B = B * A) : (A * B).PosSemidef := by
   have hcomm : Commute (CFC.sqrt A) B :=

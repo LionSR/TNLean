@@ -28,9 +28,9 @@ finite-chain operator $\bigoplus_x n_x \prod_j \tau_j(B^{(x)})$ of equation
 Consequently, an injective tensor satisfying the saturated area law generates
 Gibbs states of a nearest-neighbor commuting Hamiltonian: the commuting
 product form of Proposition C.8 (arXiv:1606.00608, Appendix C.2, lines
-1569--1594) together with the density normalization of Definition 4.8. For an
-injective tensor the basis of normal tensors has a single element, so the
-one-sector form is the full source conclusion in this case.
+1569--1594) together with the density normalization of Definition 4.8. The
+one-sector form is the commuting product form in which Proposition C.8 states
+its conclusion for an injective tensor.
 
 This completes the first step of the elimination plan in
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. Constructing the
@@ -41,12 +41,15 @@ basis of normal tensors remains open; see the same note.
 
 * `MPOTensor.embedLocalOperator_submatrix_rotateConfig`
 * `MPOTensor.embedLocalOperator_posSemidef`
+* `MPOTensor.GSNNCHData.bondAt_posSemidef`
 * `MPOTensor.GSNNCHData.bondAt_comm`
 * `MPOTensor.GSNNCHData.sectorProduct_posSemidef`
 * `MPOTensor.GSNNCHData.unnormalizedState_posSemidef`
+* `MPOTensor.GSNNCHData.sectorProduct_submatrix_rotateConfig`
 * `MPOTensor.GSNNCHData.unnormalizedState_submatrix_rotateConfig`
 * `MPOTensor.HasGSNNCHFormAt.posSemidef`
 * `MPOTensor.HasGSNNCHFormAt.submatrix_rotateConfig`
+* `MPOTensor.hasGSNNCHFormAt_normalizedMPO`
 * `MPOTensor.isGSNNCH_of_hasGSNNCHForm`
 * `MPOTensor.isGSNNCH_of_isInjective_of_isSAL`
 
@@ -386,8 +389,9 @@ theorem isGSNNCH_of_hasGSNNCHForm {M : MPOTensor d D}
 /-- **An injective tensor with the saturated area law generates Gibbs states
 of a nearest-neighbor commuting Hamiltonian.** The commuting product form is
 Proposition C.8; positivity and normalization then give the density-operator
-form of Definition 4.8. For an injective tensor the basis of normal tensors
-has one element, so the one-sector form is the full source conclusion.
+form of Definition 4.8, realized through one sector. The one-sector form is
+the commuting product form in which Proposition C.8 states its conclusion for
+an injective tensor.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines 1569--1594,
 and Definition 4.8, lines 829--850. -/
