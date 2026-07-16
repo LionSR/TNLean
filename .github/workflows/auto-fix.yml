@@ -332,6 +332,11 @@ jobs:
           steps.guard.outputs.skip != 'true' &&
           steps.review_payload.outputs.skip != 'true'
         uses: texra-ai/lean-env-action@v1
+        with:
+          # Do not save a GitHub cache of .lake: per-run ~2.4 GB entries
+          # evict the main-branch build cache from the 10 GB repository
+          # budget within minutes. Mathlib comes from `lake exe cache get`.
+          use-github-cache: false
 
       - name: Fix review comments with Claude
         if: |
