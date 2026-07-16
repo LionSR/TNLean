@@ -1348,13 +1348,53 @@ in both cases.
     \]
 \end{proof}
 
-\begin{lemma}[Short crossing-tail spans give periodic single-block states]
+\begin{theorem}[Crossing-tail spans give periodic single-block states]
+    \label{thm:block_diagonal_boundary_periodic_components_from_crossing_span}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
+    addition that $L+L_0\le N$ and that every boundary-crossing interval
+    beginning at $i$ has the simultaneous tail-word spanning property: the
+    products
+    \[
+        w\longmapsto (A^1_w,\ldots,A^g_w),
+        \qquad |w|=N-i,
+    \]
+    span the product algebra $\prod_j\MN{D_j}$. Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} supplies
+    block-diagonal boundary conditions $X_j$, and
+    Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    applied with the assumed tail-word spans places each
+    $\Gamma_N^{A_j}(\mu_j^NX_j)$ in $\mathcal G_{N,L}(A_j)$.
+\end{proof}
+
+\begin{theorem}[Short crossing-tail spans give periodic single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_short_crossing_span}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bnt_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:unital_block_separating_product_span,
-        lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    \uses{thm:block_diagonal_boundary_periodic_components_from_crossing_span,
+        lem:unital_block_separating_product_span}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
     addition that $L+L_0\le N$. Assume also that, for every boundary-crossing
@@ -1383,16 +1423,15 @@ in both cases.
     \]
     This derives the boundary-condition comparison of
     \cite[Theorem~12, proof lines~1446--1456]{PerezGarcia2007Matrix} at every
-    crossing tail whose length reaches the displayed block-separation bound;
-    the remaining input is the span at the shorter crossing tails, recorded in
-    \path{docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex}.
-\end{lemma}
+    crossing tail whose length reaches the displayed block-separation bound.
+    % The remaining input is the span at the shorter crossing tails, recorded
+    % in docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex.
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:unital_block_separating_product_span,
-        lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    \uses{thm:block_diagonal_boundary_periodic_components_from_crossing_span,
+        lem:unital_block_separating_product_span}
     For a boundary-crossing interval beginning at $i$, either
     \[
         N-i<(L_0+1)+(g-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr)
@@ -1404,15 +1443,9 @@ in both cases.
     In the first case the assumed short-tail span applies; in the second case
     Lemma~\ref{lem:unital_block_separating_product_span} gives the
     simultaneous product span at length $N-i$. Hence every boundary-crossing
-    interval has the tail-word spanning property.
-    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} supplies
-    block-diagonal boundary conditions $X_j$ with
-    \[
-        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
-    \]
-    and
-    Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
-    applied with these tail-word spans gives, for every $j$,
+    interval has the tail-word spanning property, and
+    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_crossing_span}
+    gives the block-diagonal boundary conditions and, for every $j$,
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
     \]
