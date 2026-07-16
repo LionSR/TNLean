@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import Mathlib.Data.Prod.Lex
 import Mathlib.Data.ZMod.Basic
 
@@ -107,12 +113,12 @@ instance instLinearOrderTorusVertex (width height : ℕ) [NeZero width] [NeZero 
       (torusVertexValLex_injective width height)
       (le := Iff.rfl) (lt := Iff.rfl)
       (min := fun x y => by
-        show (fun v : TorusVertex width height => toLex (v.1.val, v.2.val)) (src.min x y) = _
+        change (fun v : TorusVertex width height => toLex (v.1.val, v.2.val)) (src.min x y) = _
         rw [src.min_def]; split
         · rw [min_eq_left ‹_›]
         · rw [min_eq_right (not_le.mp ‹_›).le])
       (max := fun x y => by
-        show (fun v : TorusVertex width height => toLex (v.1.val, v.2.val)) (src.max x y) = _
+        change (fun v : TorusVertex width height => toLex (v.1.val, v.2.val)) (src.max x y) = _
         rw [src.max_def]; split
         · rw [max_eq_right ‹_›]
         · rw [max_eq_left (not_le.mp ‹_›).le])

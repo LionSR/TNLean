@@ -1,12 +1,14 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.MPS.SharedInfra.BlockGauge
 import TNLean.MPS.FundamentalTheorem.Basic
 
 import Mathlib.Algebra.BigOperators.Fin
-
-open scoped Matrix BigOperators
-
-namespace MPSTensor
 
 /-!
 # Gauge equivalence for direct sums of block tensors
@@ -30,6 +32,9 @@ intermediate constructions and have been moved to `TNLean.MPS.SharedInfra.BlockG
 canonical-form modules can use them without inverting the layer order.  They
 are re-stated here transitively through the import above.
 -/
+open scoped Matrix BigOperators
+
+namespace MPSTensor
 
 variable {d : ℕ}
 

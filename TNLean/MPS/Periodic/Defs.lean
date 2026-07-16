@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.PeriodicBlocking
 import TNLean.MPS.Core.Blocking
@@ -7,14 +13,13 @@ import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import Mathlib.RingTheory.RootsOfUnity.Complex
 
-open scoped Matrix BigOperators
-
 /-!
 # Periodic MPS definitions
 
 This file introduces the basic periodic MPS predicates and equivalence relations
 used by the periodic form theory (arXiv:1708.00029, Section 2.1).
 -/
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
@@ -43,7 +48,7 @@ abbrev SameState (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
 abbrev GaugeEquiv (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
   MPSChainTensor.GaugeEquiv A B
 
-def instEquivalenceSameState :
+theorem instEquivalenceSameState :
     Equivalence (SameState (d := d) (D := D) (m := m)) where
   -- `Equivalence` is a structure (not a class): this is a convenience bundle,
   -- not intended to be found via typeclass search.
@@ -51,7 +56,7 @@ def instEquivalenceSameState :
   symm := MPSChainTensor.SameState.symm
   trans := MPSChainTensor.SameState.trans
 
-def instEquivalenceGaugeEquiv :
+theorem instEquivalenceGaugeEquiv :
     Equivalence (GaugeEquiv (d := d) (D := D) (m := m)) where
   -- `Equivalence` is a structure (not a class): this is a convenience bundle,
   -- not intended to be found via typeclass search.

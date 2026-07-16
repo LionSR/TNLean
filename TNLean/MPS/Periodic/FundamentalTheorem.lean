@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Defs
 import TNLean.Algebra.ScalarPowerSumIdentity
@@ -8,8 +9,6 @@ import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.SharedInfra.Scaling
-
-open scoped Matrix BigOperators
 
 /-!
 # Periodic Fundamental Theorem of MPS (arXiv:1708.00029, Section 3)
@@ -58,6 +57,7 @@ The Z-gauge construction (the scalar-entry part of `thm:bdequal`) is fully prove
   sector-decomposition matching template for the non-periodic theorem
 * Z-gauge construction lemmas in `ZGauge.lean`
 -/
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
@@ -159,7 +159,7 @@ its proof transitively depends on admitted lemmas in the split overlap developme
 linear-independence statement. Subsequent users of this constructor therefore inherit
 those obligations and
 should not treat the resulting `PeriodicOverlapHypothesis` as unconditionally proven. -/
-def PeriodicOverlapHypothesis.ofIsPeriodic
+theorem PeriodicOverlapHypothesis.ofIsPeriodic
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [hneA : ∀ j, NeZero (dimA j)] [hneB : ∀ k, NeZero (dimB k)]

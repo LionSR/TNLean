@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Analysis.EntropyDecomposition
 import TNLean.Analysis.HayashiMarkovStructure
@@ -520,7 +521,7 @@ end HayashiMarkov
 /-! ## Entropy of weighted Kronecker blocks -/
 
 /-- A Kronecker product of two density matrices is a density matrix. -/
-theorem kronecker_density {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
+theorem kronecker_density {m n : Type*} [Fintype m] [Fintype n]
     {L : Matrix m m ℂ} {R : Matrix n n ℂ}
     (hL : L.PosSemidef) (hR : R.PosSemidef) (hLt : L.trace = 1) (hRt : R.trace = 1) :
     (L ⊗ₖ R).PosSemidef ∧ (L ⊗ₖ R).trace = 1 := by
@@ -726,7 +727,7 @@ theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
   set WfullM : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ :=
     (Wfull : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) with hWfullM
   have hConjFull : (WfullM * ρ_ABC * WfullMᴴ).IsHermitian := by
-    show (L * ρ_ABC * Lᴴ).IsHermitian
+    change (L * ρ_ABC * Lᴴ).IsHermitian
     rw [← hM, hM_eq]; exact hHermBD0
   have hABC : vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian
       = ∑ j, (negMulLog (H.p j)
@@ -736,7 +737,7 @@ theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
     have hWconj : WfullM * ρ_ABC * WfullMᴴ
         = (Matrix.blockDiagonal' (fun j : Fin H.m =>
           (H.p j : ℂ) • ((H.ρ_left j) ⊗ₖ (H.ρ_right j)))).submatrix φ0 φ0 := by
-      show L * ρ_ABC * Lᴴ = _
+      change L * ρ_ABC * Lᴴ = _
       rw [← hM, hM_eq]
     rw [vonNeumannEntropy_congr hWconj hConjFull hHermBD0]
     rw [entropy_submatrix_blockDiagonal_smul_kronecker φ0 H.p H.ρ_left H.ρ_right
@@ -773,7 +774,7 @@ theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
         (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))))
   have hConjC : ((WC : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ) * Matrix.traceC_ABC ρ_ABC
       * (WC : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)ᴴ).IsHermitian := by
-    show (Matrix.kroneckerMap (· * ·) (1 : Matrix (Fin dA) (Fin dA) ℂ)
+    change (Matrix.kroneckerMap (· * ·) (1 : Matrix (Fin dA) (Fin dA) ℂ)
       (H.U_B : Matrix (Fin dB) (Fin dB) ℂ) * _ * _).IsHermitian
     rw [hC_eq]; exact hHermBD_C
   have hC : vonNeumannEntropy (Matrix.traceC_ABC ρ_ABC) hHermC
@@ -819,7 +820,7 @@ theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
         (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))))
   have hConjA : ((WA : Matrix (Fin dB × Fin dC) (Fin dB × Fin dC) ℂ) * Matrix.traceA_ABC ρ_ABC
       * (WA : Matrix (Fin dB × Fin dC) (Fin dB × Fin dC) ℂ)ᴴ).IsHermitian := by
-    show (Matrix.kroneckerMap (· * ·) (H.U_B : Matrix (Fin dB) (Fin dB) ℂ)
+    change (Matrix.kroneckerMap (· * ·) (H.U_B : Matrix (Fin dB) (Fin dB) ℂ)
       (1 : Matrix (Fin dC) (Fin dC) ℂ) * _ * _).IsHermitian
     rw [hA_eq]; exact hHermBD_A
   have hA : vonNeumannEntropy (Matrix.traceA_ABC ρ_ABC) hHermA

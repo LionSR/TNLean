@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.RFP.CommutingBridge
 
@@ -417,8 +418,22 @@ theorem AppendixBStructuralData.leftVirtualBondProjection_comp_right
   funext p
   by_cases h01 : (p 0).2 = (p 1).1
   · by_cases h12 : (p 1).2 = (p 2).1
-    · simp [LinearMap.comp_apply, AppendixBStructuralData.leftVirtualBondProjection,
-        AppendixBStructuralData.rightVirtualBondProjection, h01, h12]
+    · suffices
+          (hStruct.Λ (p 1).1 : ℂ) / hStruct.virtualBondNormSq *
+              ∑ x, (hStruct.Λ x : ℂ) *
+                ((hStruct.Λ (p 2).1 : ℂ) / hStruct.virtualBondNormSq *
+                  ∑ k, (hStruct.Λ k : ℂ) *
+                    v (hStruct.replaceVirtualBond12
+                      (hStruct.replaceVirtualBond01 p x) k)) =
+            (hStruct.Λ (p 2).1 : ℂ) / hStruct.virtualBondNormSq *
+              ∑ x, (hStruct.Λ x : ℂ) *
+                ((hStruct.Λ (p 1).1 : ℂ) / hStruct.virtualBondNormSq *
+                  ∑ k, (hStruct.Λ k : ℂ) *
+                    v (hStruct.replaceVirtualBond01
+                      (hStruct.replaceVirtualBond12 p x) k)) by
+        simpa [LinearMap.comp_apply,
+          AppendixBStructuralData.leftVirtualBondProjection,
+          AppendixBStructuralData.rightVirtualBondProjection, h01, h12]
       simp_rw [← hStruct.replaceVirtualBonds_commute]
       simp only [Finset.mul_sum]
       rw [Finset.sum_comm]
@@ -567,9 +582,16 @@ theorem AppendixBStructuralData.twoSiteVirtualBondProjection_eq_comp
   intro v
   funext p
   by_cases hp : (p 0).2 = (p 1).1
-  · simp [AppendixBStructuralData.twoSiteVirtualBondProjection,
-      AppendixBStructuralData.twoSiteBondInsertion,
-      AppendixBStructuralData.twoSiteVirtualBoundaryContraction, hp]
+  · suffices
+        (hStruct.Λ (p 1).1 : ℂ) / hStruct.virtualBondNormSq *
+            ∑ k, (hStruct.Λ k : ℂ) * v (hStruct.replaceTwoSiteVirtualBond p k) =
+          (hStruct.Λ (p 1).1 : ℂ) *
+            (hStruct.virtualBondNormSq⁻¹ *
+              ∑ k, (hStruct.Λ k : ℂ) *
+                v (hStruct.twoSiteVirtualBondConfig (p 0).1 (p 1).2 k)) by
+      simpa [AppendixBStructuralData.twoSiteVirtualBondProjection,
+        AppendixBStructuralData.twoSiteBondInsertion,
+        AppendixBStructuralData.twoSiteVirtualBoundaryContraction, hp]
     simp_rw [hStruct.replaceTwoSiteVirtualBond_eq_config]
     ring_nf
   · simp [AppendixBStructuralData.twoSiteVirtualBondProjection,

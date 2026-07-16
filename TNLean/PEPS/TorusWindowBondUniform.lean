@@ -1,8 +1,12 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.RegionTransport
-
-open scoped Matrix
 
 /-!
 # The uniform interior-bond product of the staircase windows under translation invariance
@@ -42,6 +46,7 @@ chain and the per-step transports glue into a single common-state family.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964); the filled-in derivation
   in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1.
 -/
+open scoped Matrix
 
 open scoped BigOperators
 

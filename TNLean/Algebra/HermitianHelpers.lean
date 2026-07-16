@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Matrix.PosDef
@@ -400,6 +401,7 @@ theorem trace_smul_one_sub_self_posSemidef [Nonempty n]
   rw [hdecomp]
   exact hextra.add hshift
 
+omit [DecidableEq n] in
 /-- A nonzero positive semidefinite matrix has positive trace, in the complex
 star order: the trace is a positive real.  This is the trace positivity used
 for the nonzero sector compressions

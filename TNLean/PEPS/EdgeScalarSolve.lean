@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import TNLean.PEPS.Defs
 import Mathlib.Combinatorics.SimpleGraph.Acyclic
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
@@ -223,6 +229,7 @@ theorem v0Inc_pair (v₀ w : V) (hw : w ≠ v₀) (e : Edge G)
     rw [Prod.ext_iff]; exact ⟨by rw [hv1, min_eq_left hvw.le], by rw [hw2, max_eq_right hvw.le]⟩
   · exact absurd (hw2.symm.trans hv2) hw
 
+omit [Fintype V] [DecidableRel G.Adj] in
 /-- The edges of `G` incident to both `w` and `v₀` (with `w ≠ v₀`) form a
 subsingleton. -/
 theorem v0Inc_subsingleton (v₀ w : V) (hw : w ≠ v₀) :

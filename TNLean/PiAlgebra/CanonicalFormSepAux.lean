@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.PiAlgebra.FundamentalTheoremComplete
@@ -72,7 +73,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasInjectiveBlocks` from pointwise injectivity. -/
-def ofForall (hA : ∀ k, IsInjective (A k)) : HasInjectiveBlocks (d := d) A where
+theorem ofForall (hA : ∀ k, IsInjective (A k)) : HasInjectiveBlocks (d := d) A where
   block_injective := hA
 
 end HasInjectiveBlocks
@@ -89,7 +90,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasIrreducibleBlocks` from pointwise irreducibility. -/
-def ofForall (hA : ∀ k, IsIrreducibleTensor (A k)) : HasIrreducibleBlocks (d := d) A where
+theorem ofForall (hA : ∀ k, IsIrreducibleTensor (A k)) : HasIrreducibleBlocks (d := d) A where
   block_irreducible := hA
 
 end HasIrreducibleBlocks
@@ -112,7 +113,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasPrimitiveBlocks` from pointwise peripheral primitivity. -/
-def ofForall (hA : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
+theorem ofForall (hA : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
     HasPrimitiveBlocks (d := d) A where
   block_primitive := hA
 
@@ -132,7 +133,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `IsLeftCanonicalBlockFamily` from pointwise left-canonical identities. -/
-def ofForall (hA : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
+theorem ofForall (hA : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
     IsLeftCanonicalBlockFamily (d := d) A where
   leftCanonical := hA
 
@@ -167,7 +168,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasNormalizedSelfOverlap` from pointwise self-overlap convergence. -/
-def ofForall
+theorem ofForall
     (hA : ∀ k,
       Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
         Filter.atTop (nhds (1 : ℂ))) :
@@ -233,16 +234,16 @@ theorem of_peripheral_primitive
       (A := A k) (hInj k) (hLeft k) (hPrim k)
 
 /-- The canonical-form conditions imply blockwise injectivity data. -/
-def toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A :=
+theorem toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A :=
   HasInjectiveBlocks.ofForall hCF.block_injective
 
 /-- The canonical-form conditions imply left-canonical block-family normalization. -/
-def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
+theorem toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hCF.leftCanonical
 
 /-- The canonical-form conditions imply self-overlap normalization data. -/
-def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
+theorem toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   HasNormalizedSelfOverlap.ofForall hCF.overlap_tendsto_one
 
@@ -287,22 +288,22 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- The normal-canonical-form conditions imply blockwise irreducibility data. -/
-def toHasIrreducibleBlocks (hNCF : IsNormalCanonicalForm μ A) :
+theorem toHasIrreducibleBlocks (hNCF : IsNormalCanonicalForm μ A) :
     HasIrreducibleBlocks (d := d) A :=
   HasIrreducibleBlocks.ofForall hNCF.block_irreducible
 
 /-- The normal-canonical-form conditions imply left-canonical block-family normalization. -/
-def toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalForm μ A) :
+theorem toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hNCF.leftCanonical
 
 /-- The normal-canonical-form conditions imply blockwise peripheral primitivity data. -/
-def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalForm μ A) :
+theorem toHasPrimitiveBlocks (hNCF : IsNormalCanonicalForm μ A) :
     HasPrimitiveBlocks (d := d) A :=
   HasPrimitiveBlocks.ofForall hNCF.block_primitive
 
 /-- The additive split conditions imply `IsNormalCanonicalForm` with non-strict ordering. -/
-def ofSeparatedData
+theorem ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hPrim : HasPrimitiveBlocks (d := d) A)
@@ -334,7 +335,7 @@ theorem overlap_tendsto_one
 
 /-- Project normal-canonical-form data to the overlap-normalization interface used by the
 existing separated FT statements. -/
-def toHasNormalizedSelfOverlap
+theorem toHasNormalizedSelfOverlap
     (hNCF : IsNormalCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   HasNormalizedSelfOverlap.ofForall hNCF.overlap_tendsto_one

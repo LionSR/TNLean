@@ -1,14 +1,13 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.Algebra.MatrixAux
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
-
-open scoped Matrix BigOperators ComplexOrder
 
 /-!
 # Irreducible Form II: diagonal positive-definite fixed point
@@ -47,6 +46,7 @@ to channel / QPF normalization, following:
 * [De las Cuevas et al., arXiv:1708.00029, Section 2.1][DeLasCuevas2017Irreducible]
 * [Pérez-García et al., quant-ph/0608197, Theorem 3][PerezGarcia2007]
 -/
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 

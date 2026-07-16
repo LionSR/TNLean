@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
 import Mathlib.RingTheory.Idempotents
@@ -144,7 +145,7 @@ variable (hP : IsIdempotentElem P) (hPstar : Pᴴ = P)
     star_add := StarAddMonoid.star_add }
 
 /-- `StarModule ℂ` on `hP.Corner` given self-adjointness of `P`. -/
-@[reducible] noncomputable def cornerStarModuleComplex :
+theorem cornerStarModuleComplex :
     letI : Star hP.Corner := cornerStar hP hPstar
     StarModule ℂ hP.Corner :=
   letI : Star hP.Corner := cornerStar hP hPstar

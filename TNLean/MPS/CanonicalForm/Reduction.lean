@@ -1,10 +1,9 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
-
-open scoped Matrix BigOperators
 
 /-!
 # Iterated invariant-projection splitting: irreducible block decomposition
@@ -54,6 +53,7 @@ These are separate steps in the canonical-form construction.
 * Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
   proof lines 765–833.
 -/
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 

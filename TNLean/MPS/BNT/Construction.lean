@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import TNLean.PiAlgebra.CanonicalFormSepAux
 import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.Spectral.TransferOperatorGapNT
@@ -92,29 +98,29 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Project normal-CF-BNT hypotheses to blockwise irreducibility. -/
-def toHasIrreducibleBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
+theorem toHasIrreducibleBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasIrreducibleBlocks (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasIrreducibleBlocks
 
 /-- Project normal-CF-BNT hypotheses to left-canonical block-family normalization. -/
-def toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalFormBNT μ A) :
+theorem toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalFormBNT μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toIsLeftCanonicalBlockFamily
 
 /-- Project normal-CF-BNT hypotheses to blockwise primitive transfer maps. -/
-def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
+theorem toHasPrimitiveBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasPrimitiveBlocks (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasPrimitiveBlocks
 
 /-- Project normal-CF-BNT hypotheses to self-overlap normalization. -/
-def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
+theorem toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus
 the BNT separation assumption. -/
-def ofSeparatedData
+theorem ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hPrim : HasPrimitiveBlocks (d := d) A)

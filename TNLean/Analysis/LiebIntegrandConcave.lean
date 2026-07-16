@@ -199,7 +199,7 @@ theorem superop_resolvent_integrand_concave {t : ℝ} (ht : 0 < t)
     with hBhat
   set integ := fun A B : Matrix (Fin D) (Fin D) ℂ =>
     Ahat A * (Ahat A + t • Bhat B)⁻¹ * Bhat B with hintegdef
-  show θ • integ A₁ B₁ + (1 - θ) • integ A₂ B₂ ≤
+  change θ • integ A₁ B₁ + (1 - θ) • integ A₂ B₂ ≤
     integ (θ • A₁ + (1 - θ) • A₂) (θ • B₁ + (1 - θ) • B₂)
   set I := (1 : Matrix (Fin D) (Fin D) ℂ) with hI
   -- Positive definiteness of the Kronecker models `Â = A ⊗ₖ I` and `t • B̂ = t • (I ⊗ₖ Bᵀ)`.
@@ -212,15 +212,15 @@ theorem superop_resolvent_integrand_concave {t : ℝ} (ht : 0 < t)
   have hinteg : ∀ {A B : Matrix (Fin D) (Fin D) ℂ},
       integ A B = (t⁻¹ : ℝ) • (Ahat A * (Ahat A + t • Bhat B)⁻¹ * (t • Bhat B)) := by
     intro A B
-    show Ahat A * (Ahat A + t • Bhat B)⁻¹ * Bhat B = _
+    change Ahat A * (Ahat A + t • Bhat B)⁻¹ * Bhat B = _
     rw [Matrix.mul_smul, smul_smul, inv_mul_cancel₀ ht.ne', one_smul]
   -- Linearity of `Ahat` and `t • Bhat` in the convex combination.
   have hAhatlin : Ahat (θ • A₁ + (1 - θ) • A₂) = θ • Ahat A₁ + (1 - θ) • Ahat A₂ := by
-    show (θ • A₁ + (1 - θ) • A₂) ⊗ₖ I = _
+    change (θ • A₁ + (1 - θ) • A₂) ⊗ₖ I = _
     rw [Matrix.add_kronecker, Matrix.smul_kronecker, Matrix.smul_kronecker]
   have hBhatlin :
       t • Bhat (θ • B₁ + (1 - θ) • B₂) = θ • (t • Bhat B₁) + (1 - θ) • (t • Bhat B₂) := by
-    show t • (I ⊗ₖ (θ • B₁ + (1 - θ) • B₂)ᵀ) = _
+    change t • (I ⊗ₖ (θ • B₁ + (1 - θ) • B₂)ᵀ) = _
     rw [Matrix.transpose_add, Matrix.transpose_smul, Matrix.transpose_smul,
       Matrix.kronecker_add, Matrix.kronecker_smul, Matrix.kronecker_smul, smul_add,
       smul_comm t θ, smul_comm t (1 - θ)]

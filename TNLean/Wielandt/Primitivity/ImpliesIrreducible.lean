@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Wielandt.Primitivity.ToNormal
 
@@ -76,7 +77,6 @@ private theorem one_sub_mul_transferMap_pow_eq_zero
       _ = 0 := by rw [h1P]; simp
   | succ n ih =>
     -- E^(n+1) = E * E^n, so E^(n+1)(σ) = E(E^n(σ))
-    change (1 - P) * (E ^ (n + 1)) (P * X * P) = 0
     rw [show (E ^ (n + 1)) (P * X * P) = E ((E ^ n) (P * X * P)) from by
       rw [pow_succ']; rfl]
     exact one_sub_mul_transferMap_eq_zero A hP_inv ih
