@@ -397,10 +397,9 @@ and these boundary identities place each single-block vector
 of length at least \((L_0+1)+3(r-1)(L_0+1)\), the normalized BNT
 block-separation theorem derives the tail-word span from the hypotheses already
 present, so the comparison is derived, not assumed, at those tails. Relative to
-`exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1`,
-the explicit hypothesis `hComparison` is removed; relative to
-`exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1`,
-the span hypothesis is restricted to the crossing tails shorter than the BNT
+the conditional comparison theorem, the opened-boundary $C^j, D^j$ comparison
+hypothesis is removed; relative to the full crossing-span theorem, the span
+hypothesis is restricted to the crossing tails shorter than the BNT
 block-separation bound.
 
 The comparison derived here is the boundary-condition comparison of
