@@ -420,6 +420,7 @@ import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
+import TNLean.MPS.MPDO.VerticalSectorRetractions
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure

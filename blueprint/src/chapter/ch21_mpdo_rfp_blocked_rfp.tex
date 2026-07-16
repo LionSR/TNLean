@@ -230,6 +230,67 @@ physical indices, as in
     $K^{[2]}$.
 \end{proof}
 
+\begin{definition}[Normalized vertical-sector maps]
+    \label{def:mpdo_normalized_vertical_sector_maps}
+    \lean{MPOTensor.VerticalSectorAlgebra}
+    \lean{MPOTensor.VerticalWeightedSectorSpace}
+    \lean{MPOTensor.verticalMultiplicityTrace}
+    \lean{MPOTensor.normalizedVerticalSectorEmbedding}
+    \lean{MPOTensor.verticalSectorPartialTrace}
+    \leanok
+    Let the vertical sectors be labelled by $\alpha$, with simple matrix
+    algebra $M_{d_\alpha}$ and positive diagonal multiplicity matrix
+    $
+        \mu_\alpha=\operatorname{diag}
+        (\mu_{\alpha,0},\ldots,\mu_{\alpha,r_\alpha-1})
+    $.
+    Write $m_\alpha=\operatorname{tr}(\mu_\alpha)$.  The normalized
+    embedding and the left partial trace are
+    \[
+        R_\mu\!\left(\bigoplus_\alpha X_\alpha\right)
+          =\bigoplus_\alpha
+            \frac{\mu_\alpha}{m_\alpha}\otimes X_\alpha,
+        \qquad
+        \widetilde R_\mu\!\left(\bigoplus_\alpha Y_\alpha\right)
+          =\bigoplus_\alpha \operatorname{tr}_{\mathrm{mult}}(Y_\alpha).
+    \]
+    On a weighted sector,
+    $\widetilde R_\mu(\lambda_\alpha\mu_\alpha\otimes X_\alpha)
+      =\lambda_\alpha m_\alpha X_\alpha$.
+    Thus the partial trace is the canonical extension to the full block
+    matrix space of the inverse map displayed in
+    \cite[Appendix~C.4, lines~1957--1971]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[Retraction of the normalized vertical-sector embedding]
+    \label{lem:mpdo_vertical_sector_retraction}
+    \lean{MPOTensor.verticalMultiplicityTrace_ne_zero}
+    \lean{MPOTensor.normalizedVerticalSectorEmbedding_apply}
+    \lean{MPOTensor.verticalSectorPartialTrace_apply}
+    \lean{MPOTensor.verticalSectorPartialTrace_comp_normalizedVerticalSectorEmbedding}
+    \leanok
+    \uses{def:mpdo_normalized_vertical_sector_maps}
+    Suppose that every multiplicity space is nonzero and every diagonal
+    entry of $\mu_\alpha$ is positive.  Then $m_\alpha\ne0$ for every
+    $\alpha$, and
+    \[
+        \widetilde R_\mu\circ R_\mu=\operatorname{id}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Positivity of the diagonal entries and nonemptiness of the multiplicity
+    space give
+    $m_\alpha=\sum_q\mu_{\alpha,q}>0$.  The Kronecker-product identity for
+    the left partial trace then gives
+    \[
+      \operatorname{tr}_{\mathrm{mult}}
+        \left(m_\alpha^{-1}\mu_\alpha\otimes X_\alpha\right)
+      =m_\alpha^{-1}\operatorname{tr}(\mu_\alpha)X_\alpha
+      =X_\alpha.
+    \]
+\end{proof}
+
 \begin{definition}[Four-site physical closure]
     \label{def:mpdo_four_site_physical_closure}
     \lean{finFourArrowEquiv, MPOTensor.physClose4}
