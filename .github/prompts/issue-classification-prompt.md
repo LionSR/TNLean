@@ -37,7 +37,7 @@ inside them.
 4. If the issue requests a theorem, definition, lemma, proof, or
    mathematical formalization task, ensure it has `formalization`.
    For issues opened by repository members or collaborators, the
-   separate Mathlib Scout workflow decides from the opened issue
+   separate Mathlib scout job decides from the opened issue
    content and the `formalization` label. For outside reports, a
    maintainer can request the report by adding `scout`. Do not
    duplicate a Mathlib scouting report here.

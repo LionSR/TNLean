@@ -7,7 +7,7 @@ on:
       - Claude Code Review (Lean)
       - Lean linter-warning auto-fix
       - Blueprint Sync & Prose Review
-      - Issue Tracker
+      - Issue Automation
     types: [completed]
   schedule:
     - cron: "17 * * * *"
@@ -44,7 +44,7 @@ jobs:
               ;;
             "Claude Code Review (Lean)"|\
             "Blueprint Sync & Prose Review"|\
-            "Issue Tracker")
+            "Issue Automation")
               switch_name="CLAUDE_REVIEW_ENABLED"
               until_name="CLAUDE_REVIEW_DISABLED_UNTIL"
               reason_name="CLAUDE_REVIEW_DISABLE_REASON"
