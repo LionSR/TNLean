@@ -25,8 +25,8 @@ background**, but not the remaining analytic inputs in the Q3 proof.
    fixed generator. They do not prove a nonautonomous relative-entropy chain
    rule for a measurable or locally integrable Hamiltonian `H(t)`.
 
-Consequently, Wolf is a suitable source for a trace-norm API but is not a
-self-contained source for the Q3 proof. Quantum Pinsker, CMLSI tensorization,
+Consequently, Wolf is a suitable source for trace-norm foundations but is not
+a self-contained source for the Q3 proof. Quantum Pinsker, CMLSI tensorization,
 and the nonautonomous entropy argument require later sources or direct proofs.
 
 ## Exact source and version
@@ -52,7 +52,7 @@ transcription is partial and reaches the heading of Section 8.8, so the full
 | Q3 ingredient | Wolf location | Source status | Current TNLean status | Sufficient for Q3? |
 |---|---|---|---|---|
 | Schatten/trace one-norm definition | Chapter 8, Section 8.1, printed pp. 131-132; local lines 63-95 | Defined | Foundational singular-value sum in PR #4031 | Only as the distance foundation |
-| Basic trace-norm facts | Chapter 8, Section 8.1; Theorems 8.2 and 8.3; Chapter 8, Sections 8.5 and 8.7 | Mixture of statements, proof sketches, and proofs | Mostly not yet formalized | No, Pinsker is still absent |
+| Basic trace-norm facts | Chapter 8, Section 8.1; Theorems 8.2 and 8.3; Chapter 8, Sections 8.5 and 8.7 | Mixture of statements, proof sketches, and proofs | Mostly not yet formalized | Only partial distance background; norm structure, duality, and contractivity remain |
 | Quantum Pinsker | No location | Absent | Absent | No |
 | CMLSI and tensorization | No location | Absent | Absent | No |
 | Fixed-generator GKSL dynamics | Chapter 7, Section 7.1.2, Theorem 7.1 | Proved | Substantially formalized | Only the autonomous algebraic background |
@@ -125,7 +125,7 @@ This first increment uses Mathlib's `LinearMap.singularValues` and proves Wolf's
 finite-dimensional singular-value sum with trailing zeros. It deliberately does
 not substitute the ambient matrix operator norm.
 
-Still missing from the Wolf trace-norm API are:
+Still missing from the Wolf trace-norm development are:
 
 - the triangle inequality and a bundled norm structure;
 - the equality `Matrix.traceNorm A = Re tr |A|`;
