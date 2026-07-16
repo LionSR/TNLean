@@ -63,8 +63,8 @@ tensors when each sector is closed against its own virtual matrix:
     (K_s^{i_1j_1}K_s^{i_2j_2}K_s^{i_3j_3}R_s).
 \]
 
-Source: arXiv:1606.00608, Appendix C.2, equation `sigma3bka`, lines
-1343--1348, and its Case II use at lines 1726--1732. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1343--1348, and its Case II use
+at lines 1726--1732. -/
 def IsThreeSiteFamilyClosure
     (K : (s : Fin g) → MPOTensor d (dim s))
     (R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ)
@@ -78,7 +78,7 @@ sites, leaving a matrix on the middle physical space.
 
 This is the sector-family form of the outer-site contraction in the Case I
 calculation at lines 1415--1438.  The same construction is used with sector
-projectors in equation `Qketc2`, lines 1719--1725.
+projectors at lines 1719--1725.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1415--1438 and 1719--1725. -/
 def outerInverseContraction
