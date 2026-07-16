@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: gh-pages-deploy
+  group: badges-build
   cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   badges:
@@ -29,10 +29,27 @@ jobs:
           python-version: '3.12'
 
       - name: Generate badge JSON
-        run: python3 scripts/generate_badges.py --output-dir badge-output
+        run: |
+          python3 scripts/generate_badges.py --output-dir badge-output
+          json_count=$(find badge-output -maxdepth 1 -name '*.json' | wc -l)
+          if [ "$json_count" -eq 0 ]; then
+            echo "::error::No badge JSON generated — refusing to publish empty badges"
+            exit 1
+          fi
 
-      - name: Deploy badges
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: ./scripts/deploy-to-gh-pages.sh --badges-dir badge-output --badges-only --ci
+      - name: Upload badges component
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-badges
+          path: badge-output
+          retention-days: 30
+
+  deploy:
+    name: Deploy Pages site
+    needs: badges
+    uses: ./.github/workflows/deploy-pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      actions: read

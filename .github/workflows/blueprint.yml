@@ -13,27 +13,28 @@ on:
       - 'tex/tn/**'
       - 'docs/slides/**'
       - '.github/workflows/blueprint.yml'
+      - '.github/workflows/deploy-pages.yml'
       - 'home_page/**'
       - 'scripts/blueprint_bibtex.py'
       - 'scripts/build_blueprint_ch01_12.sh'
-      - 'scripts/deploy-blueprint.sh'
-      - 'scripts/deploy-docs.sh'
-      - 'scripts/deploy-to-gh-pages.sh'
+      - 'scripts/assemble-pages-site.sh'
+      - 'scripts/fetch-latest-artifact.sh'
       - 'scripts/write_badges.py'
   workflow_dispatch:
 
-# Cancel previous runs if a new commit is pushed
+# Rapid pushes to main only need the newest build; actual Pages deployments
+# are serialized by the deploy job in deploy-pages.yml.
 concurrency:
-  group: gh-pages-deploy
-  cancel-in-progress: false
+  group: blueprint-build
+  cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   blueprint:
     runs-on: ubuntu-latest
-    name: Build and deploy blueprint
+    name: Build blueprint site components
     steps:
       - name: Checkout project
         uses: actions/checkout@v6
@@ -54,9 +55,6 @@ jobs:
             --audit \
             --audit-strict \
             --smoke-render
-
-      - name: Write status badges
-        run: python3 scripts/write_badges.py
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
@@ -91,8 +89,42 @@ jobs:
       - name: Build FT-MPS blueprint volume
         run: ./scripts/build_blueprint_ch01_12.sh
 
-      - name: Deploy to gh-pages
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: ./scripts/deploy-to-gh-pages.sh --ci
+      - name: Package site components
+        run: |
+          mkdir -p site-blueprint site-badges
+          cp -r blueprint/web site-blueprint/blueprint
+          cp blueprint/print/print.pdf site-blueprint/blueprint.pdf
+          cp blueprint/print/print12.pdf site-blueprint/blueprint-ch01-12.pdf
+          python3 scripts/write_badges.py site-badges
+
+      # Runs in Docker and produces root-owned output; keep it after the
+      # packaging step so it only writes into the pre-created directory.
+      - name: Build homepage
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: home_page
+          destination: site-blueprint/homepage
+
+      - name: Upload blueprint component
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-blueprint
+          path: site-blueprint
+          retention-days: 30
+
+      - name: Upload badges component
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-badges
+          path: site-badges
+          retention-days: 30
+
+  deploy:
+    name: Deploy Pages site
+    needs: blueprint
+    uses: ./.github/workflows/deploy-pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      actions: read
