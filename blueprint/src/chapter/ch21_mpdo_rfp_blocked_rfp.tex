@@ -294,7 +294,6 @@ physical indices, as in
 \begin{definition}[Bond-matrix contraction of a vertical tensor]
     \label{def:mpdo_vertical_bond_matrix_contraction}
     \lean{MPSTensor.contractBondMatrix}
-    \lean{MPSTensor.contractBondMatrix_apply}
     \leanok
     Let $A$ be a tensor whose physical label is a pair $(a,b)$ of horizontal
     bond indices.  For a bond matrix $X$, define
@@ -306,11 +305,91 @@ physical indices, as in
     $A_{ab,ij}=M^{ij}_{ab}$.
 \end{definition}
 
+\begin{lemma}[Contraction under fixed left and right multiplication]
+    \label{lem:mpdo_bond_contraction_composition}
+    \lean{MPSTensor.contractBondMatrix_mul_mul}
+    \leanok
+    \uses{def:mpdo_vertical_bond_matrix_contraction}
+    Let $L$ and $K$ be fixed matrices of compatible sizes.  Then
+    \[
+        \left((a,b)\mapsto L A_{ab}K\right)(X)=L A(X)K.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Distributivity of matrix multiplication over finite sums gives
+    \[
+        \sum_{a,b}X_{ba}\left(LA_{ab}K\right)
+          =L\left(\sum_{a,b}X_{ba}A_{ab}\right)K.
+    \]
+\end{proof}
+
+\begin{lemma}[Contraction of a weighted block sum]
+    \label{lem:mpdo_bond_contraction_block_sum}
+    \lean{MPSTensor.contractBondMatrix_toTensorFromBlocks}
+    \leanok
+    \uses{def:mpdo_vertical_bond_matrix_contraction}
+    For a weighted block-diagonal tensor
+    $A=\bigoplus_\alpha\mu_\alpha A_\alpha$, one has
+    \[
+        A(X)=\bigoplus_\alpha\mu_\alpha A_\alpha(X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Each matrix coefficient on the left is a finite sum of coefficients from
+    a single diagonal block.  Interchanging this sum with the bond-index sum
+    gives the stated block-diagonal matrix.
+\end{proof}
+
+\begin{lemma}[Vertical contraction and physical closure]
+    \label{lem:mpdo_vertical_bond_contraction_phys_close}
+    \lean{MPOTensor.contractBondMatrix_verticalTensor_eq_physClose1}
+    \leanok
+    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction}
+    For the vertically viewed tensor
+    $\widetilde M_{ab,ij}=M^{ij}_{ab}$, bond-matrix contraction is the
+    one-site physical closure:
+    \[
+        \widetilde M(X)=M(X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    For every pair of physical indices,
+    \[
+        \widetilde M(X)_{ij}
+          =\sum_{a,b}X_{ba}M^{ij}_{ab}
+          =\operatorname{tr}(M^{ij}X)
+          =M(X)_{ij}.
+    \]
+\end{proof}
+
+\begin{lemma}[Contraction of the assembled vertical tensor]
+    \label{lem:mpdo_vertical_bond_contraction_assembled}
+    \lean{MPOTensor.contractBondMatrix_verticalAssembledTensor}
+    \leanok
+    \uses{lem:mpdo_bond_contraction_block_sum}
+    The contraction of the assembled vertical tensor is the weighted block
+    diagonal of the contractions into its repeated sectors:
+    \[
+        \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
+          =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply bond-matrix contraction to the repeated-block expression for the
+    assembled tensor and use the preceding weighted-block identity.
+\end{proof}
+
 \begin{lemma}[Contraction of a letterwise forward identity]
     \label{lem:mpdo_vertical_bond_contraction_forward}
     \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_vertical_forward}
     \leanok
-    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction}
+    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction,
+      lem:mpdo_bond_contraction_composition,
+      lem:mpdo_vertical_bond_contraction_phys_close}
     Let $B_{ab}$ be an arbitrary vertical tensor.  If
     \[
         U\widetilde M_{ab}U^\dagger=B_{ab}
@@ -337,7 +416,9 @@ physical indices, as in
     \label{lem:mpdo_vertical_bond_contraction_reconstruction}
     \lean{MPOTensor.physClose1_eq_of_vertical_reconstruction}
     \leanok
-    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction}
+    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction,
+      lem:mpdo_bond_contraction_composition,
+      lem:mpdo_vertical_bond_contraction_phys_close}
     Let $B_{ab}$ be an arbitrary vertical tensor.  If
     \[
         \widetilde M_{ab}=U^\dagger B_{ab}U
@@ -367,7 +448,8 @@ physical indices, as in
     \uses{def:vertical_cf_mpdo, def:phys_close,
       def:mpdo_vertical_bond_matrix_contraction,
       lem:mpdo_vertical_bond_contraction_forward,
-      lem:mpdo_vertical_bond_contraction_reconstruction}
+      lem:mpdo_vertical_bond_contraction_reconstruction,
+      lem:mpdo_vertical_bond_contraction_assembled}
     Suppose that
     \[
         U\widetilde M_{ab}U^\dagger
@@ -394,7 +476,8 @@ physical indices, as in
     \[
         M(X)=\sum_{a,b}X_{ba}\widetilde M_{ab}.
     \]
-    Moreover,
+    Distributivity of fixed left and right multiplication over finite sums
+    gives
     \[
         U\left(\sum_{a,b}X_{ba}A_{ab}\right)U^\dagger
           =\sum_{a,b}X_{ba}\left(UA_{ab}U^\dagger\right).

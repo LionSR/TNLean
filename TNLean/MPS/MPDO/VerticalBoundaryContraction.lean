@@ -65,8 +65,7 @@ theorem contractBondMatrix_apply (A : MPSTensor (D * D) d)
 /-- Contraction commutes with multiplying every tensor letter on the left and
 right by fixed matrices.
 
-This is the linear contraction of the letterwise vertical canonical-form
-identity in arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
+Equivalently, if $B_{ab}=L A_{ab}K$, then $B(X)=L A(X)K$. -/
 theorem contractBondMatrix_mul_mul
     (A : MPSTensor (D * D) d) (L : Matrix (Fin R) (Fin d) ℂ)
     (K : Matrix (Fin d) (Fin R) ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
