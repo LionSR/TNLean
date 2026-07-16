@@ -88,27 +88,27 @@ $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
     \]
 \end{proof}
 
-\begin{theorem}[Trace norm from the spectrum of $A^*A$]
+\begin{theorem}[Trace norm from the spectrum of $A^\dagger A$]
     \label{thm:trace_norm_sqrt_eigenvalues}
     \lean{Matrix.traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self}
     \leanok
     \uses{def:trace_norm}
     For every $A\in\MN{D}$, the trace norm is the sum of the square roots of
-    the eigenvalues of the positive operator $A^*A$:
+    the eigenvalues of the positive operator $A^\dagger A$:
     \[
         \lVert A\rVert_{\mathrm{tr}}
-        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^*A)}.
+        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^\dagger A)}.
     \]
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:trace_norm_elementary}
-    Since $s_i(A)=\sqrt{\lambda_i(A^*A)}$ by the definition of singular value,
+    Since $s_i(A)=\sqrt{\lambda_i(A^\dagger A)}$ by the definition of singular value,
     the finite singular-value expansion gives
     \[
         \lVert A\rVert_{\mathrm{tr}}
         = \sum_{i=0}^{D-1}s_i(A)
-        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^*A)}.
+        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^\dagger A)}.
     \]
 \end{proof}
 
