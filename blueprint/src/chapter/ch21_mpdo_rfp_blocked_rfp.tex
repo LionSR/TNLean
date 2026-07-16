@@ -137,6 +137,34 @@ physical indices, as in
     \cite[Theorem~4.9, lines~851--856]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Concrete two-site blocking as length-two blocking]
+    \label{thm:mpdo_block_two_as_positive_blocking}
+    \lean{MPOTensor.blockTwo_eq_blockTensor_reindex}
+    \lean{MPOTensor.mpo_blockTwo_eq_reindex_blockTensor}
+    \lean{MPOTensor.IsMPDO.blockTwo}
+    \leanok
+    \uses{def:mpdo_positive_physical_blocking,
+        def:mpdo_two_site_blocking, def:mpdo}
+    Let $\varphi:\{0,\ldots,d^2-1\}\to
+    \{0,\ldots,d-1\}^2$ be the canonical bijection.  Then
+    \[
+        \bigl(K^{[2]}\bigr)^{i,j}
+          =\bigl(K^{[L]}\bigr)^{\varphi(i),\varphi(j)}\bigm|_{L=2}.
+    \]
+    Consequently, for every chain length $N$, the closed MPO of $K^{[2]}$
+    is obtained from the closed MPO of the general length-two block by
+    applying $\varphi$ independently at every ket and bra site.  In
+    particular, if $K$ generates matrix product density operators, then so
+    does $K^{[2]}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Decode a blocked index as an ordered pair.  The two local tensors are
+    then the same product $K^{i_0j_0}K^{i_1j_1}$.  Applying this equality at
+    every site gives the closed-chain reindexing, and simultaneous row and
+    column reindexing preserves positive semidefiniteness.
+\end{proof}
+
 \begin{lemma}[Two-site blocking preserves horizontal canonical form]
     \label{lem:mpdo_horizontal_cf_block_two}
     \lean{MPOTensor.IsHorizontalCF.blockTwo}
@@ -173,6 +201,33 @@ physical indices, as in
     \]
     Therefore this blocked decomposition and the same copy gauges witness
     horizontal canonical form for $K^{[2]}$.
+\end{proof}
+
+\begin{theorem}[One-site and two-site vertical canonical forms]
+    \label{thm:mpdo_vertical_cf_before_after_block_two}
+    \lean{MPOTensor.verticalCF_and_blockTwo_of_horizontalCF}
+    \leanok
+    \uses{thm:vertical_cf_of_horizontal_cf,
+        thm:mpdo_block_two_as_positive_blocking,
+        lem:mpdo_horizontal_cf_block_two}
+    Let $K$ be a horizontally canonical MPO tensor that generates matrix
+    product density operators.  Then both
+    \[
+        K
+        \qquad\text{and}\qquad
+        K^{[2]}
+    \]
+    satisfy the vertical canonical-form conditions of
+    Definition~\ref{def:vertical_cf_mpdo}.
+    This is the initial canonical-form step in
+    \cite[Appendix~C.4, lines~1951--1956]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The preceding blocking results show that $K^{[2]}$ is horizontally
+    canonical and generates matrix product density operators.  Apply
+    Theorem~\ref{thm:vertical_cf_of_horizontal_cf} first to $K$ and then to
+    $K^{[2]}$.
 \end{proof}
 
 \begin{definition}[Four-site physical closure]
