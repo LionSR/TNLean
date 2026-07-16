@@ -3,12 +3,12 @@ name: Auto Fix (Lean)
 # Unified auto-fix workflow. Triggers on:
 # 1. PR CI failure, build job          → fix build errors
 # 2. PR CI failure, blueprint job      → fix blueprint compilation
-# 3. Review completion (Claude Code Review) with "auto-fix-claude" label → fix review comments
+# 3. Review completion (PR Review) with "auto-fix-claude" label → fix review comments
 # 4. Label addition ("auto-fix-claude") → retroactively fix any of the above
 
 on:
   workflow_run:
-    workflows: ["PR CI", "Claude Code Review (Lean)"]
+    workflows: ["PR CI", "PR Review"]
     types:
       - completed
   # GitHub Actions cannot filter pull_request:labeled by label name here.
@@ -108,7 +108,7 @@ jobs:
                   core.setOutput('run_blueprint_fix', 'true');
                   core.setOutput('blueprint_run_id', String(wr.id));
                 }
-              } else if (wr.name === 'Claude Code Review (Lean)' && wr.conclusion === 'success') {
+              } else if (wr.name === 'PR Review' && wr.conclusion === 'success') {
                 // Review fix requires the "auto-fix-claude" label
                 const { data: pr } = await github.rest.pulls.get({
                   owner: context.repo.owner,

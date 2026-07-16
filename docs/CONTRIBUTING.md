@@ -397,7 +397,7 @@ The following workflows run automatically:
 | Workflow | Trigger | What it does |
 |----------|---------|-------------|
 | **Lean CI** (`pr-ci.yml`, `build` job) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
-| **Claude Code Review** (`claude-code-review.yml`) | PR opened/synced/reopened touching `.lean`, `.tex`, `lakefile.toml`, `lean-toolchain` | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation |
+| **PR Review** (`pr-review.yml`) | After a successful PR CI run | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation, plus blueprint/prose review |
 | **Issue Automation** (`issue-automation.yml`) | Issue opened/labeled/closed/reopened; PR opened/merged | Classifies new issues, posts Mathlib scouting reports, keeps tracking issues current (progress comments, sub-issue counts, `all-resolved` label — deterministic, no model), and scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), filing them with the `follow-up` label |
 | **Blueprint Lint** (`pr-ci.yml`, `blueprint` job) | PRs touching blueprint or Lean files | Validates LaTeX blueprint for broken labels and references |
 | **Oversized Lean File Guard** (`pr-ci.yml`, `file-length` job) | PRs touching Lean files | Reports `.lean` files above the 1000-line style limit; advisory while main still has existing oversized files |
