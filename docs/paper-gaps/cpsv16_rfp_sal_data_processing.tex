@@ -151,17 +151,22 @@ positive length.\footnote{Formal declaration:
 
 Combining the consecutive-cut correspondence, the two exact local-channel
 identities, data processing in both directions, and positive-length
-nonvanishing proves the source implication.\footnote{Formal declaration:
-\leanid{MPOTensor.isSAL_of_isRFPViaTS} in
+nonvanishing proves the SAL conclusion.  At length one, the same nonvanishing
+rules out a zero physical-trace transfer.  Combining its idempotence with the
+SAL conclusion proves the full source proposition, namely ZCL and
+SAL.\footnote{Formal declarations:
+\leanid{MPOTensor.isSAL_of_isRFPViaTS} and
+\leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS} in
 \doclink{TNLean/MPS/MPDO/RFPViaTSSAL}.}
 
 \paragraph{Classification.}
 This gap is resolved.  The formal SAL predicate is restricted to positive
 chain lengths, the normalized consecutive-cut state is identified with the
 existing prefix-entropy expression for $I_L$, and the RFP hypotheses imply
-both normalization and the equality $I_L=I_{L+1}$.  No simplicity hypothesis
-is used in this forward implication, in agreement with the source proof.  The
-horizontal hypothesis is the representative-grouped formalization of the
-source biCF assumption, not the stronger per-copy separation predicate.
+normalization, source ZCL, and the equality $I_L=I_{L+1}$.  Thus Proposition
+\texttt{propsimple} is present with its full conclusion.  No simplicity
+hypothesis is used in this forward implication, in agreement with the source
+proof.  The horizontal hypothesis is the representative-grouped formalization
+of the source biCF assumption, not the stronger per-copy separation predicate.
 
 \end{document}
