@@ -1,0 +1,109 @@
+\section{Simple tensors}
+
+\begin{definition}[Physical-trace transfer of a doubled-index tensor]
+    \label{def:mpdo_doubled_phys_trace_transfer}
+    \lean{MPOTensor.doubledPhysTraceTransfer}
+    \leanok
+    \uses{def:mpo_tensor}
+    For a doubled-index tensor $B$ with physical dimension $d^{2}$, the
+    physical-trace transfer is the bond matrix obtained by closing the ket
+    leg against the bra leg of one tensor:
+    \[
+        \mathcal T_{B}=\sum_{i} B^{\,ii}.
+    \]
+    This is the transfer object of the zero-correlation-length condition of
+    \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}, applied to
+    one element of a basis of normal tensors.
+\end{definition}
+
+\begin{lemma}[Identification with the tensor-level transfer]
+    \label{lem:mpdo_doubled_phys_trace_transfer_to_mps}
+    \lean{MPOTensor.doubledPhysTraceTransfer_toMPSTensor}
+    \leanok
+    \uses{def:mpdo_doubled_phys_trace_transfer}
+    The physical-trace transfer of the doubled-index view of an MPO tensor
+    is the physical-trace transfer of the tensor itself.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $M^{\mathrm{dbl}}$ is the doubled-index view of $M$, then
+    $(M^{\mathrm{dbl}})^{(i,j)}=M^{ij}$, and hence
+    \[
+        \mathcal T_{M^{\mathrm{dbl}}}
+          =\sum_i(M^{\mathrm{dbl}})^{ii}
+          =\sum_i M^{ii}
+          =\mathcal T_M.
+    \]
+\end{proof}
+
+\begin{lemma}[Blockwise form of the physical-trace transfer]
+    \label{lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    \lean{MPOTensor.doubledPhysTraceTransfer_toTensor}
+    \leanok
+    \uses{def:mpdo_doubled_phys_trace_transfer}
+    For a sector decomposition with basis elements $A_{j}$ and weights
+    $\mu_{j,q}$, the physical-trace transfer of the assembled tensor is the
+    block direct sum of the weighted transfers of the copies:
+    \[
+        \mathcal T
+        =\bigoplus_{j}\bigoplus_{q}\mu_{j,q}\,\mathcal T_{A_{j}}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The diagonal physical sum distributes over the block direct sum:
+    \[
+    \begin{aligned}
+        \mathcal T
+          &=\sum_i S^{ii}
+           =\sum_i\bigoplus_{j,q}\mu_{j,q}A_j^{ii} \\
+          &=\bigoplus_{j,q}\mu_{j,q}\sum_i A_j^{ii}
+           =\bigoplus_{j,q}\mu_{j,q}\mathcal T_{A_j}.
+    \end{aligned}
+    \]
+\end{proof}
+
+\begin{definition}[Simple tensor]
+    \label{def:mpdo_simple_tensor}
+    \lean{MPOTensor.IsSimple}
+    \leanok
+    \uses{def:mpdo, def:mpdo_positive_physical_blocking,
+        def:mpdo_simple_cf_tensor}
+    First block a positive number of physical sites and write the blocked
+    doubled-index tensor in canonical form over a basis of normal tensors, as
+    prescribed at line~815 of \cite{Cirac2016MPDO_arXiv}. A tensor generating
+    MPDOs is \emph{simple} if one such canonical form has no nilpotent basis
+    element \cite[line~822]{Cirac2016MPDO_arXiv}. A basis element is
+    nilpotent when tracing $R\le D$ sites annihilates its density operators
+    for all large chain lengths \cite[line~819]{Cirac2016MPDO_arXiv}; this is
+    nilpotency of its physical-trace transfer matrix.
+\end{definition}
+
+\begin{definition}[Simple tensor in blocked canonical form]
+    \label{def:mpdo_simple_cf_tensor}
+    \lean{MPOTensor.IsSimpleCanonicalForm}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo,
+        def:mpdo_doubled_phys_trace_transfer}
+    A tensor generating MPDOs is in \emph{simple canonical form} if it has a
+    basis-of-normal-tensors decomposition whose basis elements all have
+    non-nilpotent physical-trace transfer.  This is the already-blocked form
+    of the simple tensor $K$ fixed at the start of Case II in
+    \cite[Appendix~C.2, line~1628]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[Simple canonical-form tensors are horizontal canonical]
+    \label{lem:mpdo_simple_tensor_horizontal_cf}
+    \lean{MPOTensor.IsSimpleCanonicalForm.isHorizontalCF}
+    \leanok
+    \uses{def:mpdo_simple_cf_tensor, def:horizontal_cf_mpdo}
+    A simple tensor already in the chosen blocked canonical-form setting is
+    in horizontal canonical form.
+\end{lemma}
+
+\begin{proof}\leanok
+    The canonical-form data in the simplicity hypothesis---the sector
+    decomposition, its basis-of-normal-tensors property, and the
+    block-diagonal gauge---give a horizontal canonical form.  Positivity and
+    non-nilpotency are not needed for this conclusion.
+\end{proof}

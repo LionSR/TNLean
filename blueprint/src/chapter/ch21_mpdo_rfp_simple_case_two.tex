@@ -1,0 +1,58 @@
+\subsection{Simple canonical-form weights}
+
+\begin{theorem}[Copy independence for a non-nilpotent sector decomposition]
+    \label{thm:mpdo_simple_weight_copy_independent}
+    \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer,
+        lem:mpdo_doubled_phys_trace_transfer_to_mps,
+        lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    Let a tensor with zero correlation length be gauge-equivalent, through
+    block-diagonal copy gauges, to an assembled sector decomposition whose
+    basis elements all have non-nilpotent physical-trace transfer. Then the
+    weights do not depend on the copy index: $\mu_{j,q}=\mu_{j}$
+    \cite[Appendix~C.2, lines~1646--1661]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Zero correlation length states
+    $\mathcal T_M^{2}=\lambda\,\mathcal T_M$ with $\lambda>0$.  If
+    $\mathcal T_M=X\mathcal T_SX^{-1}$ is the block-diagonal gauge to the
+    transfer of the assembled sector decomposition, then cancellation of
+    $X$ and $X^{-1}$ gives
+    \[
+        \mathcal T_S^{2}=\lambda\,\mathcal T_S.
+    \]
+    By
+    Lemmas~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}
+    and~\ref{lem:mpdo_doubled_phys_trace_transfer_blockwise} the identity
+    descends to every copy:
+    \[
+        \mu_{j,q}^{2}\,\mathcal T_{A_{j}}^{2}
+        =\lambda\,\mu_{j,q}\,\mathcal T_{A_{j}},
+        \qquad\text{hence}\qquad
+        \mathcal T_{A_{j}}^{2}
+        =\frac{\lambda}{\mu_{j,q}}\,\mathcal T_{A_{j}}.
+    \]
+    The left side does not depend on $q$, and
+    $\mathcal T_{A_{j}}\ne0$ because it is not nilpotent, so
+    $\lambda/\mu_{j,q}$ is independent of $q$, which gives
+    $\mu_{j,q}=\mu_{j,q'}$.
+\end{proof}
+
+\begin{corollary}[Simple canonical-form tensors with zero correlation length]
+    \label{cor:mpdo_simple_zcl_weight_copy_independent}
+    \lean{MPOTensor.IsSimpleCanonicalForm.exists_weight_copy_independent_of_isSourceZCL}
+    \leanok
+    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl,
+        thm:mpdo_simple_weight_copy_independent}
+    A simple canonical-form tensor
+    (Definition~\ref{def:mpdo_simple_cf_tensor}) with zero correlation length
+    has non-nilpotent basis transfers and weights independent of the copy
+    index.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
+    witness supplied by the simple canonical-form predicate.
+\end{proof}
