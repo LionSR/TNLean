@@ -35,8 +35,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- An irreducible left-canonical tensor whose self-overlap converges to one is
-normal.
+/-- An irreducible left-canonical tensor whose self-overlap converges to one has
+primitive transfer map and is normal.
 
 Quantum Perron--Frobenius theory gives a positive period `m` whose peripheral
 spectrum consists of all `m`-th roots of unity.  The periodic self-overlap
@@ -47,12 +47,12 @@ applies.
 
 Source context: arXiv:2011.12127, lines 1815--1837; arXiv:1708.00029,
 Appendix A; Wolf Theorem 6.6. -/
-theorem isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
+theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleTensor A)
     (hLeft : IsLeftCanonical A)
     (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (d := d) A A N) atTop (nhds 1)) :
-    IsNormal A := by
+    _root_.IsPrimitive (transferMap (d := d) (D := D) A) ∧ IsNormal A := by
   classical
   obtain ⟨K, hUnital, hIrrK, ρ, hρpd, hρfix, rfl⟩ :=
     conjTranspose_kraus_setup A hLeft hIrr
@@ -145,7 +145,21 @@ theorem isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
   rw [hmOne] at hPeriodic
   have hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A) :=
     ((IsPeriodic.one_iff_primitive A).1 hPeriodic).2.2
-  exact isNormal_of_tp_primitive_irreducible A hLeft hPrim hIrr
+  exact ⟨hPrim, isNormal_of_tp_primitive_irreducible A hLeft hPrim hIrr⟩
+
+/-- An irreducible left-canonical tensor whose self-overlap converges to one is
+normal.
+
+Source context: arXiv:2011.12127, lines 1815--1837; arXiv:1708.00029,
+Appendix A; Wolf Theorem 6.6. -/
+theorem isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
+    [NeZero D] (A : MPSTensor d D)
+    (hIrr : IsIrreducibleTensor A)
+    (hLeft : IsLeftCanonical A)
+    (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (d := d) A A N) atTop (nhds 1)) :
+    IsNormal A :=
+  (isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
+    A hIrr hLeft hSelf).2
 
 end MPSTensor
 

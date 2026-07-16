@@ -418,6 +418,7 @@ import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.RFPViaTSGlobal
 import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.PhysicalBlocking
+import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure

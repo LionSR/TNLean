@@ -193,6 +193,39 @@ noncomputable def blockTwo (M : MPOTensor d D) : MPOTensor (d * d) D :=
     M (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm j).1 *
       M (finProdFinEquiv.symm i).2 (finProdFinEquiv.symm j).2
 
+/-- Identify the standard two-site index `Fin (d * d)` with the general
+length-two blocked alphabet.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
+noncomputable def twoSiteBlockEquiv (d : ℕ) :
+    Fin (d * d) ≃ Fin (MPSTensor.blockPhysDim d 2) :=
+  finProdFinEquiv.symm |>.trans
+    (finTwoArrowEquiv (Fin d)).symm |>.trans
+    (MPSTensor.decodeBlockEquiv d 2).symm
+
+/-- Identify the doubled physical index of `blockTwo` with the general
+length-two block of the doubled MPS alphabet. -/
+noncomputable def twoSiteDoubledIndexEquiv (d : ℕ) :
+    Fin ((d * d) * (d * d)) ≃
+      Fin (MPSTensor.blockPhysDim (d * d) 2) :=
+  finProdFinEquiv.symm |>.trans
+    (Equiv.prodCongr (twoSiteBlockEquiv d) (twoSiteBlockEquiv d)) |>.trans
+    finProdFinEquiv |>.trans
+    (blockedDoubledIndexEquiv d 2)
+
+/-- Passing `blockTwo` to its doubled-index MPS tensor is general two-site
+blocking followed by the canonical ket--bra reindexing.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
+theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
+    (blockTwo M).toMPSTensor =
+      MPSTensor.reindexPhysical (twoSiteDoubledIndexEquiv d)
+        (MPSTensor.blockTensor M.toMPSTensor 2) := by
+  funext ij
+  simp [toMPSTensor, blockTwo, MPSTensor.reindexPhysical,
+    MPSTensor.blockTensor, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
+    blockedDoubledIndexEquiv, MPSTensor.wordOfBlock, Equiv.arrowCongr]
+
 @[simp] lemma blockTwo_apply (M : MPOTensor d D) (i j : Fin (d * d)) :
     blockTwo M i j =
       M (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm j).1 *
