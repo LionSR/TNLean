@@ -84,7 +84,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1581--1593. -/
 noncomputable def physicalPairBond (F : PhysicalSectorFactorization K) :
     Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
-  sandwichMap F.physicalCoordinateMatrixTwoᴴ F.sectorCoordinateBond
+  singleKrausMap F.physicalCoordinateMatrixTwoᴴ F.sectorCoordinateBond
 
 /-- The transported bond on the original pair of physical indices is positive
 semidefinite whenever each neighboring operator is positive semidefinite.
