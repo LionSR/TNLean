@@ -26,8 +26,6 @@ matrix product coefficients.
   $\mu_1, \dots, \mu_r$ there is $m > 0$ with $|\mu_k / m| \le 1$ for every $k$, equality for
   some $k$, and $\mu_k / m \ne 0$ for every $k$ (the choice at line 246 of the source, with
   $m = \max_k |\mu_k|$).
-* `MPSTensor.toTensorFromBlocks_weight_mul_left` — multiplying every weight of a direct-sum
-  tensor $\oplus_k \mu_k A_k^i$ by the same scalar $c$ multiplies the assembled tensor by $c$.
 * `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized` — for a tensor whose
   blocked matrix product coefficients do not vanish identically at positive lengths, some
   blocking length $p$ admits a basis-of-normal-tensors canonical form $P$ and a scale $m > 0$
@@ -79,27 +77,6 @@ theorem exists_weight_normalization {r : ℕ} (hr : 0 < r)
     exact (div_le_one hm_pos).mpr (hle k)
   · rw [norm_div, hm_norm, ← hk₀]
     exact div_self hm_pos.ne'
-
-/-- **Weight scaling of the direct-sum tensor.**
-
-Multiplying every weight of the direct sum $\oplus_k \mu_k A_k^i$ (eq:II_CF1,
-arXiv:1606.00608, `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 237-243) by the same scalar
-$c$ multiplies each matrix of the assembled tensor by $c$.  Together with `mpv_smul` this
-gives the factor $c^N$ on every length-$N$ matrix product coefficient. -/
-theorem toTensorFromBlocks_weight_mul_left {r : ℕ} {dim : Fin r → ℕ}
-    (c : ℂ) (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k)) :
-    toTensorFromBlocks (d := d) (μ := fun k => c * μ k) blocks =
-      fun i => c • toTensorFromBlocks (d := d) (μ := μ) blocks i := by
-  funext i
-  change (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
-      (Matrix.blockDiagonal' fun k => (c * μ k) • blocks k i) =
-    c • (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
-      (Matrix.blockDiagonal' fun k => μ k • blocks k i)
-  have hfam : (fun k => (c * μ k) • blocks k i) = c • fun k => μ k • blocks k i := by
-    funext k
-    rw [Pi.smul_apply, smul_smul]
-  rw [hfam, Matrix.blockDiagonal'_smul]
-  rfl
 
 /-- **Normalized arbitrary-input basis-of-normal-tensors supplier (positive length).**
 
@@ -165,12 +142,6 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
     funext k
     rw [mul_comm]
     exact div_mul_cancel₀ (μ k) hm0
-  have htens :
-      toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := fun k => (m : ℂ) * (μ k / (m : ℂ))) blocks =
-        fun i => (m : ℂ) • toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := fun k => μ k / (m : ℂ)) blocks i :=
-    toTensorFromBlocks_weight_mul_left (m : ℂ) (fun k => μ k / (m : ℂ)) blocks
   calc
     mpv (blockTensor (d := d) (D := D) A p) σ
         = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) σ :=
@@ -179,9 +150,8 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
           (μ := fun k => (m : ℂ) * (μ k / (m : ℂ))) blocks) σ := by
       rw [hμeq]
     _ = (m : ℂ) ^ N * mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := fun k => μ k / (m : ℂ)) blocks) σ := by
-      rw [htens]
-      exact mpv_smul (m : ℂ) _ σ
+          (μ := fun k => μ k / (m : ℂ)) blocks) σ :=
+      mpv_toTensorFromBlocks_weight_mul_left (m : ℂ) _ blocks σ
     _ = (m : ℂ) ^ N * mpv P.toTensor σ := by
       rw [hSame N σ]
 
