@@ -210,10 +210,14 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{lemma}
 
 \begin{proof}\leanok
-    In the coordinates splitting the chain into the window and its cyclic
-    complement, the embedded operator is the tensor product of the local
-    factor with the identity, and $B^{(x)}\geq0$ by
-    Definition~\ref{def:mpdo_source_gsnnch}.
+    In the coordinates given by the window-plus-complement splitting of the
+    chain, the embedded operator decomposes as
+    \[
+        \tau_i(B)\;\cong\;B\otimes\operatorname{Id}_{\mathrm{comp}},
+    \]
+    where the identity acts on the cyclic complement of the window. A tensor
+    product of positive semidefinite operators is positive semidefinite, and
+    $B^{(x)}\geq0$ by Definition~\ref{def:mpdo_source_gsnnch}.
 \end{proof}
 
 \begin{lemma}[Positivity of the sector sum]

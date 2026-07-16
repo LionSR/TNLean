@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence
 
 For the sector data of Definition 4.8 of arXiv:1606.00608 (`GSNNCHData`),
 this file proves the properties the source asserts of the represented
-finite-chain operator $\bigoplus_x n_x \prod_j \tau_j(B^{(x)})$ of equation
-`rhoNCommv2`:
+finite-chain operator $\bigoplus_x n_x \prod_j \tau_j(B^{(x)})$
+(arXiv:1606.00608, lines 843--850):
 
 * all cyclic translates of one sector bond commute pairwise, extending the
   neighboring commutation $[B^{(x)}, \tau_1(B^{(x)})] = 0$ required by the
@@ -180,8 +180,8 @@ variable {N : ℕ}
 
 /-- Every translate of a sector bond is positive semidefinite.
 
-Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850: each
-$B^{(x)}$ is positive semidefinite. -/
+Source: arXiv:1606.00608, lines 843--850: each $B^{(x)}$ is positive
+semidefinite. -/
 theorem bondAt_posSemidef (data : GSNNCHData d N) (x : Fin data.sectorCount)
     (i : Fin N) : (data.bondAt x i).PosSemidef :=
   embedLocalOperator_posSemidef 2 data.hN i (data.bond_pos x)
@@ -241,8 +241,8 @@ pairwise commuting positive-semidefinite translates of one sector bond.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 843--850: each summand
 $\prod_j \tau_j(B^{(x)})$ with $B^{(x)} \ge 0$ and commuting translates
-represents the positive operator $e^{-\sum_j \tau_j(h^{(x)})}$ of equation
-`rhoNComm`. -/
+represents the positive operator $e^{-\sum_j \tau_j(h^{(x)})}$ of the
+defining equation at lines 829--842. -/
 theorem sectorProduct_posSemidef (data : GSNNCHData d N)
     (x : Fin data.sectorCount) : (data.sectorProduct x).PosSemidef := by
   refine Matrix.posSemidef_list_prod (fun A hA => ?_) ?_
