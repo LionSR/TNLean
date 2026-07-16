@@ -74,8 +74,11 @@ def IsThreeSiteFamilyClosure
 /-- Contract a tripartite operator with inverse tensors at its first and third
 sites, leaving a matrix on the middle physical space.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `Qketc2`, lines
-1719--1725. -/
+This is the sector-family form of the outer-site contraction in the Case I
+calculation at lines 1415--1438.  The same construction is used with sector
+projectors in equation `Qketc2`, lines 1719--1725.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1415--1438 and 1719--1725. -/
 def outerInverseContraction
     (C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
