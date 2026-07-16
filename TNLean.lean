@@ -76,6 +76,7 @@ import TNLean.Analysis.CfcLogAdditive
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Analysis.KyFanNorm
+import TNLean.Analysis.SchattenNorm
 import TNLean.Analysis.ConvexHullCompact
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.LiebScalarIntegral
@@ -429,6 +430,7 @@ import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalSectorRetractions
 import TNLean.MPS.MPDO.VerticalBoundaryContraction
+import TNLean.MPS.MPDO.VerticalMapTransport
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
