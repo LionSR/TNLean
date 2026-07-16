@@ -53,6 +53,14 @@ that the tensor generates nonzero density operators at the lengths under
 consideration; it does not add an independent nonvanishing hypothesis to the
 Appendix~C proposition.
 
+The formal predicate leanid{MPOTensor.IsHorizontalCF} used below is the
+representative-grouped BNT decomposition: gauge-equivalent copies are grouped
+over one minimal normal representative and retain their nonzero weights.  It
+formalizes the source assumption that $K$ is in biCF at lines 849--850.  It is
+not the restricted per-copy predicate leanid{HorizontalCFData}, which demands
+separation of every copy individually and is strictly stronger than the
+source's grouped canonical form.
+
 Definition~4.6 concerns positive-length spin chains.  The formal predicate now
 asks for nonzero trace only when $N\geq1$.  The bipartition argument below never
 invokes an empty-chain operator, since its interval lengths force $N\geq3$.
@@ -127,8 +135,8 @@ so its marginal has the same entropy as the prefix reduced state on $N-L$
 sites.  Retaining all $N$ sites leaves the normalized state unchanged.  Hence
 the bipartite mutual information is exactly
 $S_L+S_{N-L}-S_N=I_L$.\footnote{Formal declarations:
-\leanid{MPOTensor.traceRight_bipartitionedNormalizedMPO},
-\leanid{MPOTensor.traceLeft_bipartitionedNormalizedMPO}, and
+\leanid{MPOTensor.bipartitionedNormalizedMPO_traceRight},
+\leanid{MPOTensor.bipartitionedNormalizedMPO_traceLeft}, and
 \leanid{MPOTensor.mutualInfoChain_eq_mutualInformation} in
 \doclink{TNLean/MPS/MPDO/MutualInfoBridge}.}
 
@@ -151,6 +159,8 @@ This gap is resolved.  The formal SAL predicate is restricted to positive
 chain lengths, the normalized consecutive-cut state is identified with the
 existing prefix-entropy expression for $I_L$, and the RFP hypotheses imply
 both normalization and the equality $I_L=I_{L+1}$.  No simplicity hypothesis
-is used in this forward implication, in agreement with the source proof.
+is used in this forward implication, in agreement with the source proof.  The
+horizontal hypothesis is the representative-grouped formalization of the
+source biCF assumption, not the stronger per-copy separation predicate.
 
 \end{document}
