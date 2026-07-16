@@ -137,6 +137,30 @@ physical indices, as in
     \cite[Theorem~4.9, lines~851--856]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{lemma}[Two-site blocking preserves horizontal canonical form]
+    \label{lem:mpdo_horizontal_cf_block_two}
+    \lean{MPOTensor.IsHorizontalCF.blockTwo}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo_two_site_blocking}
+    If an MPO tensor $K$ is in horizontal canonical form, then its two-site
+    blocking $K^{[2]}$ is again in horizontal canonical form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Block every normal representative in the horizontal sector decomposition
+    by two sites and square each copy weight.  Positive blocking preserves
+    irreducibility, left-canonical normalization, normalized self-overlap,
+    eventual linear independence of the representative states, and
+    inequivalence of distinct representatives.  Hence the blocked sector
+    decomposition is again a BNT canonical form.  The canonical bijection
+    between a pair of ket--bra indices and a length-two word in the doubled
+    alphabet only relabels the physical basis.  Finally, word evaluation
+    shows that the original block-diagonal virtual gauge conjugates each
+    blocked representative as well.  Thus this blocked decomposition and the
+    same copy gauges witness horizontal canonical form for $K^{[2]}$.
+\end{proof}
+
 \begin{definition}[Four-site physical closure]
     \label{def:mpdo_four_site_physical_closure}
     \lean{finFourArrowEquiv, MPOTensor.physClose4}
