@@ -53,11 +53,12 @@ that the tensor generates nonzero density operators at the lengths under
 consideration; it does not add an independent nonvanishing hypothesis to the
 Appendix~C proposition.
 
-The formal predicate leanid{MPOTensor.IsHorizontalCF} used below is the
+The formal predicate \leanid{MPOTensor.IsHorizontalCF} used below is the
 representative-grouped BNT decomposition: gauge-equivalent copies are grouped
 over one minimal normal representative and retain their nonzero weights.  It
 formalizes the source assumption that $K$ is in biCF at lines 849--850.  It is
-not the restricted per-copy predicate leanid{HorizontalCFData}, which demands
+not the restricted per-copy predicate
+\leanid{MPOTensor.HorizontalCFData}, which demands
 separation of every copy individually and is strictly stronger than the
 source's grouped canonical form.
 
