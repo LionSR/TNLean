@@ -75,6 +75,7 @@ import TNLean.Analysis.CfcLogAdditive
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Analysis.KyFanNorm
+import TNLean.Analysis.SchattenNorm
 import TNLean.Analysis.ConvexHullCompact
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.LiebScalarIntegral
