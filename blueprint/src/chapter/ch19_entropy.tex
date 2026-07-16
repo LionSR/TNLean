@@ -325,6 +325,184 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{proof}
 
+\begin{lemma}[Jordan trace-norm formula]
+    \label{lem:trace_norm_jordan}
+    \lean{Matrix.IsHermitian.traceNorm_eq_re_trace_posPart_add_negPart}
+    \leanok
+    \uses{def:trace_norm}
+    Let $H\in\MN{D}$ be Hermitian with Jordan decomposition $H=H^+-H^-$
+    into orthogonal positive parts, $H^\pm\ge0$ and $H^+H^-=0$. Then
+    \[
+        \lVert H\rVert_{\mathrm{tr}}
+        =\operatorname{tr}[H^+]+\operatorname{tr}[H^-].
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_abs}
+    The sum $H^++H^-$ is positive semidefinite, and by orthogonality its
+    square is
+    \[
+        (H^++H^-)^2=(H^+)^2+(H^-)^2=(H^+-H^-)^2=H^\dagger H,
+    \]
+    so $H^++H^-=\sqrt{H^\dagger H}=|H|$. Hence
+    \[
+        \lVert H\rVert_{\mathrm{tr}}
+        =\operatorname{tr}|H|
+        =\operatorname{tr}[H^+]+\operatorname{tr}[H^-]
+    \]
+    by Theorem~\ref{thm:trace_norm_abs}.
+\end{proof}
+
+\begin{lemma}[Support projection of the positive part]
+    \label{lem:positive_part_support_projection}
+    \lean{Matrix.IsHermitian.posPartSupportProj}
+    \lean{Matrix.IsHermitian.posPartSupportProj_posSemidef}
+    \lean{Matrix.IsHermitian.posPartSupportProj_le_one}
+    \lean{Matrix.IsHermitian.posPartSupportProj_mul_posPartSupportProj}
+    \lean{Matrix.IsHermitian.posPartSupportProj_mul_self}
+    \leanok
+    Let $A\in\MN{D}$ be Hermitian with positive part $A^+$. There is a
+    matrix $\Pi$ with $0\le\Pi\le\Id$, $\Pi^2=\Pi$, and $\Pi A=A^+$, namely
+    the orthogonal projection onto the support space of $A^+$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Diagonalize
+    $A=U\operatorname{diag}(\lambda_1,\dots,\lambda_D)\,U^\dagger$ and set
+    \[
+        \Pi=U\operatorname{diag}
+        \bigl(\chi(\lambda_1),\dots,\chi(\lambda_D)\bigr)\,U^\dagger,
+    \]
+    where $\chi$ is the indicator function of $(0,\infty)$. Each claim is
+    read off eigenvalue-wise: $0\le\chi\le1$ gives $0\le\Pi\le\Id$,
+    $\chi^2=\chi$ gives $\Pi^2=\Pi$, and
+    $\chi(\lambda)\,\lambda=\max(\lambda,0)$ gives $\Pi A=A^+$.
+\end{proof}
+
+\begin{lemma}[Positive-semidefinite trace pairing bounds]
+    \label{lem:psd_trace_pairing_bounds}
+    \lean{Matrix.PosSemidef.re_trace_mul_nonneg}
+    \lean{Matrix.PosSemidef.re_trace_mul_le_of_le_one}
+    \leanok
+    Let $X,C\in\MN{D}$ with $X\ge0$. If $C\ge0$, then
+    $\operatorname{tr}[CX]\ge0$; if $C\le\Id$, then
+    $\operatorname{tr}[CX]\le\operatorname{tr}[X]$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:psd_trace_product_nonneg}
+    The first bound is Lemma~\ref{lem:psd_trace_product_nonneg}. For the
+    second,
+    \[
+        \operatorname{tr}[X]-\operatorname{tr}[CX]
+        =\operatorname{tr}[(\Id-C)X]\ge0
+    \]
+    by the same lemma, since $\Id-C\ge0$.
+\end{proof}
+
+\begin{lemma}[Positive maps preserve hermiticity]
+    \label{lem:positive_map_hermitian}
+    \lean{Matrix.isHermitian_map_of_positive}
+    \leanok
+    \uses{def:positive_map_rectangular}
+    If $T:\MN{D}\to\MN{D'}$ is a positive linear map and $H\in\MN{D}$ is
+    Hermitian, then $T(H)$ is Hermitian.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:positive_map_rectangular}
+    Write $H=H^+-H^-$ with $H^\pm\ge0$. Then $T(H)=T(H^+)-T(H^-)$ is a
+    difference of positive semidefinite matrices, hence Hermitian.
+\end{proof}
+
+\begin{lemma}[Positive-part trace estimate]
+    \label{lem:positive_part_trace_estimate}
+    \lean{Matrix.re_trace_posPart_map_le}
+    \leanok
+    \uses{def:positive_map_rectangular, def:trace_preserving_rectangular}
+    Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving positive linear map and
+    let $H\in\MN{D}$ be Hermitian, with Jordan decompositions $H=P_+-P_-$
+    and $T(H)=Q_+-Q_-$. Then
+    \[
+        \operatorname{tr}[Q_+]\le\operatorname{tr}[P_+].
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive_part_support_projection,
+      lem:psd_trace_pairing_bounds, lem:positive_map_hermitian,
+      def:trace_preserving_rectangular}
+    The matrix $T(H)$ is Hermitian by
+    Lemma~\ref{lem:positive_map_hermitian}. Let $\Pi_+$ be the support
+    projection of $Q_+$ from
+    Lemma~\ref{lem:positive_part_support_projection}, so that
+    $\Pi_+T(H)=Q_+$ and $0\le\Pi_+\le\Id$. Then
+    \[
+        \operatorname{tr}[Q_+]
+        =\operatorname{tr}[\Pi_+T(P_+)]-\operatorname{tr}[\Pi_+T(P_-)]
+        \le\operatorname{tr}[\Pi_+T(P_+)]
+        \le\operatorname{tr}[T(P_+)]
+        =\operatorname{tr}[P_+],
+    \]
+    where the first inequality uses $\operatorname{tr}[\Pi_+T(P_-)]\ge0$
+    and the second uses $\Pi_+\le\Id$ together with $T(P_+)\ge0$
+    (Lemma~\ref{lem:psd_trace_pairing_bounds}); the final step is trace
+    preservation.
+\end{proof}
+
+\begin{theorem}[Trace-norm contractivity]
+    \label{thm:trace_norm_contractivity}
+    \lean{Matrix.traceNorm_map_le_of_positive_of_tracePreserving}
+    \leanok
+    \uses{def:trace_norm, def:positive_map_rectangular,
+      def:trace_preserving_rectangular}
+    Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving positive linear map.
+    Then for all Hermitian $H\in\MN{D}$,
+    \[
+        \lVert T(H)\rVert_{\mathrm{tr}}\le\lVert H\rVert_{\mathrm{tr}}.
+    \]
+    See \cite[Chapter~8, Theorem~8.16]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:trace_norm_jordan, lem:positive_part_trace_estimate,
+      lem:positive_map_hermitian}
+    Write $H=P_+-P_-$ and $T(H)=Q_+-Q_-$ for the Jordan decompositions.
+    Applying Lemma~\ref{lem:positive_part_trace_estimate} to $H$ and to
+    $-H$ gives $\operatorname{tr}[Q_+]\le\operatorname{tr}[P_+]$ and
+    $\operatorname{tr}[Q_-]\le\operatorname{tr}[P_-]$, so by the Jordan
+    trace-norm formula (Lemma~\ref{lem:trace_norm_jordan}),
+    \[
+        \lVert T(H)\rVert_{\mathrm{tr}}
+        =\operatorname{tr}[Q_+]+\operatorname{tr}[Q_-]
+        \le\operatorname{tr}[P_+]+\operatorname{tr}[P_-]
+        =\lVert H\rVert_{\mathrm{tr}}.
+    \]
+\end{proof}
+
+\begin{corollary}[Trace-norm contractivity on states]
+    \label{cor:trace_norm_contractivity_states}
+    \lean{Matrix.traceNorm_map_sub_map_le_of_positive_of_tracePreserving}
+    \leanok
+    \uses{def:trace_norm, def:positive_map_rectangular,
+      def:trace_preserving_rectangular, def:density_matrices}
+    Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving positive linear map.
+    Then for all density matrices $\rho_1,\rho_2\in\MN{D}$,
+    \[
+        \lVert T(\rho_1)-T(\rho_2)\rVert_{\mathrm{tr}}
+        \le\lVert\rho_1-\rho_2\rVert_{\mathrm{tr}}.
+    \]
+    See \cite[Chapter~8, Eq.~(8.80)]{Wolf2012Quantum}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_contractivity}
+    By linearity $T(\rho_1)-T(\rho_2)=T(\rho_1-\rho_2)$, and
+    $\rho_1-\rho_2$ is Hermitian as a difference of positive semidefinite
+    matrices, so Theorem~\ref{thm:trace_norm_contractivity} applies.
+\end{proof}
+
 \section{Von Neumann entropy}
 
 \begin{definition}[Von Neumann entropy]\label{def:von_neumann_entropy}
