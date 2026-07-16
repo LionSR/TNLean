@@ -775,3 +775,30 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     equation holds. Its physical-trace transfer is zero, which is excluded by
     source zero correlation length.
 \end{proof}
+
+\begin{theorem}[A nonzero global PRFP need not have source ZCL]
+    \label{thm:nonzero_global_prfp_not_source_zcl}
+    \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
+    \leanok
+    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer,
+        def:mpo_source_zcl}
+    There is an MPO tensor which is an MPDO, satisfies the positive-length
+    global purification RFP predicate, and has nonzero physical-trace transfer,
+    but does not have source zero correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take one physical state and bond dimension three, with the only tensor entry
+    \[
+        Q=\begin{pmatrix}1&0&0\\0&0&1\\0&0&0\end{pmatrix}.
+    \]
+    Since $\operatorname{tr}(Q^N)=1$ for every $N>0$, all positive-length MPOs
+    equal the scalar density operator $1$ and are purified by the scalar
+    pure-state RFP tensor $A=1$. At length zero the MPO is the positive scalar
+    $3$, so the tensor is an MPDO at every length. Its physical-trace transfer
+    is the nonzero matrix $Q$. However,
+    $Q^2=\operatorname{diag}(1,0,0)$ is not a positive scalar multiple of $Q$,
+    because the $(2,3)$ entry is lost on squaring. Thus source ZCL fails. The
+    global equation cannot detect this nilpotent bond sector.
+\end{proof}

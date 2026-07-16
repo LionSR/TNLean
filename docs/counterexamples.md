@@ -26,6 +26,22 @@ mathematical obstruction.
 - Witness: two scalar blocks over one physical letter with weights `1` and `2`;
   the trace-pairing cancellation cannot isolate the two blocks.
 
+### Positive-length global PRFP data do not imply tensor-level ZCL
+
+- Location: `TNLean/MPS/MPDO/LocalPurificationRFP.lean`
+- Main declaration:
+  `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL`
+- Statement refuted: the global PRFP equation, MPDO positivity, and a nonzero
+  physical-trace transfer imply source zero correlation length.
+- Witness: the one-letter tensor with sole entry
+  $Q=\left(\begin{smallmatrix}1&0&0\\0&0&1\\0&0&0\end{smallmatrix}\right)$.
+  Every positive power has trace one, but $Q^2$ is not a positive scalar
+  multiple of $Q$.
+- Relevance: positive-length density operators do not detect a nilpotent bond
+  sector. A local purification identity or a source-specified minimality or
+  canonical-representative condition is therefore necessary for a
+  global-to-local implication.
+
 ## Block Separation and Canonical Form
 
 ### Weighted MPV cancellation does not imply per-block SameMPV
