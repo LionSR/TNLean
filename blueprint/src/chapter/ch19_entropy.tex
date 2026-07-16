@@ -42,7 +42,7 @@ $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
 \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}; this is
 Theorem~\ref{thm:trace_norm_abs}.
 
-\begin{lemma}[Finite singular-value expansions]\label{lem:trace_norm_singular_values}
+\begin{theorem}[Finite singular-value expansions]\label{thm:trace_norm_singular_values}
     \lean{Matrix.schattenOneNorm_eq_sum_support}
     \lean{Matrix.traceNorm_eq_sum_support}
     \lean{Matrix.traceNorm_eq_sum_range_finrank_range}
@@ -51,7 +51,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     The Schatten one-norm and trace norm are the sums over the finite support of
     the singular-value sequence. Equivalently, the trace norm is the sum over
     the indices below the rank of the represented linear map.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The singular-value sequence satisfies $s_i(A) = 0$ for all
@@ -69,7 +69,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.traceNorm_zero}
     \lean{Matrix.traceNorm_pos_iff}
     \leanok
-    \uses{def:trace_norm, def:schatten_one_norm, lem:trace_norm_singular_values}
+    \uses{def:trace_norm, def:schatten_one_norm, thm:trace_norm_singular_values}
     For every $A\in\MN{D}$,
     \[
         \lVert A\rVert_{\mathrm{tr}}
