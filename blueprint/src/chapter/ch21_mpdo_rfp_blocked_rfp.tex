@@ -337,9 +337,14 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    Each matrix coefficient on the left is a finite sum of coefficients from
-    a single diagonal block.  Interchanging this sum with the bond-index sum
-    gives the stated block-diagonal matrix.
+    Since each tensor letter is block diagonal,
+    \[
+        \sum_{a,b}X_{ba}
+          \left(\bigoplus_\alpha\mu_\alpha A_\alpha\right)_{ab}
+          =\bigoplus_\alpha\mu_\alpha
+            \sum_{a,b}X_{ba}(A_\alpha)_{ab}
+          =\bigoplus_\alpha\mu_\alpha A_\alpha(X).
+    \]
 \end{proof}
 
 \begin{lemma}[Vertical contraction and physical closure]
@@ -379,8 +384,12 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply bond-matrix contraction to the repeated-block expression for the
-    assembled tensor and use the preceding weighted-block identity.
+    The assembled vertical tensor is the weighted block sum of its repeated
+    sector tensors.  The preceding lemma gives
+    \[
+        \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
+          =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+    \]
 \end{proof}
 
 \begin{lemma}[Contraction of a letterwise forward identity]
