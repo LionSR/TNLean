@@ -118,8 +118,11 @@ Theorem~\ref{thm:trace_norm_abs}.
         \lVert A\rVert_{\mathrm{tr}}
         =\sum_{i=0}^{D-1}s_i(A)
         =\sum_{i=0}^{D-1}\sqrt{\lambda_i}
-        =\operatorname{tr}\lvert A\rvert.
+        =\operatorname{tr}\lvert A\rvert
+        =\operatorname{Re}\bigl(\operatorname{tr}\lvert A\rvert\bigr),
     \]
+    where the last step uses that $\lvert A\rvert$ is positive semidefinite,
+    so $\operatorname{tr}\lvert A\rvert\geq 0$ is real.
 \end{proof}
 
 \begin{theorem}[Trace-norm homogeneity]
@@ -181,8 +184,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     yields
     $\operatorname{tr}\lvert AV\rvert
     =\operatorname{tr}(\lvert A\rvert\,VV^\dagger)
-    =\operatorname{tr}\lvert A\rvert$. The two-sided case combines the two
-    one-sided cases.
+    =\operatorname{tr}\lvert A\rvert$. For the two-sided case,
+    $\lVert UAV\rVert_{\mathrm{tr}}=\lVert UA\rVert_{\mathrm{tr}}=\lVert A\rVert_{\mathrm{tr}}$
+    by applying the right and left cases in turn.
 \end{proof}
 
 \section{Von Neumann entropy}
