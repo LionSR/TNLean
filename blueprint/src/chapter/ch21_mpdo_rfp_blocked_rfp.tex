@@ -376,7 +376,7 @@ physical indices, as in
     \leanok
     \uses{lem:mpdo_bond_contraction_block_sum}
     The contraction of the assembled vertical tensor is the weighted block
-    diagonal of the contractions into its repeated sectors:
+    diagonal of the sector contractions:
     \[
         \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
           =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
@@ -488,8 +488,9 @@ physical indices, as in
     Distributivity of fixed left and right multiplication over finite sums
     gives
     \[
-        U\left(\sum_{a,b}X_{ba}A_{ab}\right)U^\dagger
-          =\sum_{a,b}X_{ba}\left(UA_{ab}U^\dagger\right).
+        U\left(\sum_{a,b}X_{ba}\widetilde M_{ab}\right)U^\dagger
+          =\sum_{a,b}X_{ba}
+            \left(U\widetilde M_{ab}U^\dagger\right).
     \]
     Substituting the forward hypothesis into this equality gives
     \[
@@ -502,6 +503,20 @@ physical indices, as in
     \[
         \left(\bigoplus_\alpha \mu_\alpha\otimes M_\alpha\right)(X)
           =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha(X).
+    \]
+    If the reverse letterwise identity is given, the same calculation yields
+    \[
+    \begin{aligned}
+        M(X)
+          &=\sum_{a,b}X_{ba}\widetilde M_{ab} \\
+          &=U^\dagger\left(
+              \sum_{a,b}X_{ba}
+              \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
+            \right)U \\
+          &=U^\dagger\left(
+              \bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)
+            \right)U.
+    \end{aligned}
     \]
 \end{proof}
 
