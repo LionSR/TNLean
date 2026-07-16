@@ -401,7 +401,7 @@ The following workflows run automatically:
 | **Issue Automation** (`issue-automation.yml`) | Issue opened/labeled/closed/reopened; PR opened/merged | Classifies new issues, posts Mathlib scouting reports, keeps tracking issues current (progress comments, sub-issue counts, `all-resolved` label — deterministic, no model), and scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), filing them with the `follow-up` label |
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
 | **Oversized Lean File Guard** (`oversized-lean-files.yml`) | PRs | Reports `.lean` files above the 1000-line style limit; advisory while main still has existing oversized files |
-| **Lean Linter-Warning Sweep** (`lean-linter-warning-sweep.yml`) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
+| **Lean Linter-Warning Sweep** (`housekeeping.yml`, `linter-sweep` job) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
 | **Lean Linter-Warning Auto-Fix** (`lean-linter-warning-autofix.yml`) | Manual dispatch | Runs the warning sweep and can open a guarded Lean-only PR when explicitly requested |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
 
