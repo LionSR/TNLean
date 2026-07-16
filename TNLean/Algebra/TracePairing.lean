@@ -150,7 +150,11 @@ noncomputable def traceAdjointMap {n m : Type*} [Fintype m]
         ext i j
         simp }
 
-/-- The trace-pairing adjoint satisfies the expected bilinear trace identity. -/
+/-- The trace-pairing adjoint satisfies the expected bilinear trace identity.
+
+Source: Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive
+maps trace preserving), where the adjoint enters through the trace pairing;
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex` lines 723--737. -/
 theorem trace_traceAdjointMap_mul {n m : Type*} [Fintype n] [Fintype m]
     (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ)
     (ρ : Matrix m m ℂ) (X : Matrix n n ℂ) :
@@ -167,7 +171,12 @@ theorem trace_traceAdjointMap_mul {n m : Type*} [Fintype n] [Fintype m]
     rw [hsingle, map_smul, Matrix.mul_smul, Matrix.trace_smul]
     simp [traceAdjointMap, Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
 
-/-- The trace-pairing adjoint is involutive. -/
+/-- The trace-pairing adjoint is involutive.
+
+Source: Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive
+maps trace preserving); the double adjoint recovers the map through the same
+trace pairing, `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723--737. -/
 theorem traceAdjointMap_traceAdjointMap {n m : Type*} [Fintype n] [Fintype m]
     (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ) :
     traceAdjointMap (traceAdjointMap E) = E := by
