@@ -65,13 +65,28 @@ without explicit outer sectors.  A theorem embeds this presentation as the
 one-sector case of the source definition.  No converse theorem extracting a
 single bond from arbitrary source sector data is claimed.
 
+The represented finite-chain sector sum now carries its asserted analytic
+properties: all cyclic translates of one sector bond commute pairwise
+(\leanid{MPOTensor.GSNNCHData.bondAt\_comm}), the represented operator is
+positive semidefinite
+(\leanid{MPOTensor.GSNNCHData.unnormalizedState\_posSemidef}) and invariant
+under the cyclic shift
+(\leanid{MPOTensor.GSNNCHData.unnormalizedState\_submatrix\_rotateConfig}),
+and a tensor whose finite-chain operators have the sector form with nonzero
+traces satisfies the full density-operator predicate
+(\leanid{MPOTensor.isGSNNCH\_of\_hasGSNNCHForm}).  In particular every
+injective tensor satisfying the saturated area law is now proved GSNNCH
+(\leanid{MPOTensor.isGSNNCH\_of\_isInjective\_of\_isSAL}); for an injective
+tensor the basis of normal tensors has one element, so the one-sector form is
+the full source conclusion in that case.
+
 \section{Elimination plan}
 
-The remaining comparison and assembly work has three parts:
+The first part of the original plan---positivity and translation invariance
+of the represented finite-chain sector sum from the stored sector data---is
+complete.  The remaining comparison and assembly work has two parts:
 
 \begin{enumerate}
-  \item prove positivity and translation invariance of the represented
-        finite-chain sector sum from the stored sector data;
   \item construct the outer GSNNCH sectors from the BNT decomposition and the
         physical-sector factorization in Appendix C.2, retaining all sector
         multiplicities;
@@ -85,10 +100,13 @@ be substituted for those outer sectors.
 
 \section{Classification}
 
-Verdict: the source GSNNCH data and predicate are formalized, and the
-single-bond presentation is proved to give their one-sector case.  The open
-gap is the construction of the outer sectors and multiplicities in the
-simple-MPDO implication, together with any reverse comparison actually needed
-by that argument.
+Verdict: the source GSNNCH data and predicate are formalized, the represented
+sector sum is proved positive semidefinite and translation invariant with
+pairwise commuting translates, and the single-bond presentation is proved to
+give the one-sector case; the injective saturated-area-law case of the GSNNCH
+conclusion is complete.  The open gap is the construction of the outer
+sectors and multiplicities of a general simple tensor in the simple-MPDO
+implication, together with any reverse comparison actually needed by that
+argument.
 
 \end{document}

@@ -150,3 +150,93 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Take one sector, its one-site projection to be the identity, its
     multiplicity to be one, and its bond to be the given bond.
 \end{proof}
+
+\begin{lemma}[Translates of a sector bond commute pairwise]
+    \label{lem:mpdo_gsnnch_bond_translates_comm}
+    \lean{MPOTensor.embedLocalOperator_submatrix_rotateConfig}
+    \lean{MPOTensor.GSNNCHData.bondAt_comm}
+    \leanok
+    \uses{def:mpdo_source_gsnnch}
+    For every sector $x$ of an explicit GSNNCH decomposition and every finite
+    chain length $N\geq2$, all cyclic translates of the sector bond commute:
+    \[
+        [\tau_i(B^{(x)}),\tau_j(B^{(x)})]=0 .
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Translates with disjoint windows commute because they act on disjoint
+    sites. For the overlapping pairs the two starting sites coincide or are
+    cyclic neighbors, and conjugating the neighboring commutation
+    $[B^{(x)},\tau_1(B^{(x)})]=0$ of Definition~\ref{def:mpdo_source_gsnnch}
+    by powers of the cyclic shift covers these cases.
+\end{proof}
+
+\begin{lemma}[Positivity of the sector sum]
+    \label{lem:mpdo_gsnnch_sector_sum_pos}
+    \lean{MPOTensor.embedLocalOperator_posSemidef}
+    \lean{MPOTensor.GSNNCHData.bondAt_posSemidef}
+    \lean{MPOTensor.GSNNCHData.sectorProduct_posSemidef}
+    \lean{MPOTensor.GSNNCHData.unnormalizedState_posSemidef}
+    \lean{MPOTensor.HasGSNNCHFormAt.posSemidef}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_bond_translates_comm}
+    The represented operator
+    \[
+        \bigoplus_x n_x \prod_{j=1}^N\tau_j(B^{(x)})
+    \]
+    of an explicit GSNNCH decomposition is positive semidefinite, and so is
+    every chain operator equal to a positive multiple of it.
+\end{lemma}
+
+\begin{proof}\leanok
+    A product of pairwise commuting positive semidefinite matrices is
+    positive semidefinite: for two commuting factors $A$ and $B$, the square
+    root of $A$ commutes with $B$, so $AB=\sqrt A\,B\,\sqrt A$ is a conjugate
+    of $B$; iterate along the product. Each sector product is such a product
+    by Lemma~\ref{lem:mpdo_gsnnch_bond_translates_comm}, each translate is
+    positive because the sector bond is, and the sum with natural
+    coefficients preserves positivity.
+\end{proof}
+
+\begin{lemma}[Translation invariance of the sector sum]
+    \label{lem:mpdo_gsnnch_sector_sum_translation_invariant}
+    \lean{MPOTensor.GSNNCHData.sectorProduct_submatrix_rotateConfig}
+    \lean{MPOTensor.GSNNCHData.unnormalizedState_submatrix_rotateConfig}
+    \lean{MPOTensor.HasGSNNCHFormAt.submatrix_rotateConfig}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_bond_translates_comm}
+    The represented operator of an explicit GSNNCH decomposition is invariant
+    under the cyclic shift of the periodic chain, where spin $N+1$ is
+    identified with the first
+    \cite[lines~838--842]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The cyclic shift carries each translate $\tau_j(B^{(x)})$ to
+    $\tau_{j+1}(B^{(x)})$, so it permutes the factors of each sector product
+    cyclically. All factors commute by
+    Lemma~\ref{lem:mpdo_gsnnch_bond_translates_comm}, so the product is
+    unchanged, and so is the sum over sectors.
+\end{proof}
+
+\begin{theorem}[Sector form with nonvanishing traces gives GSNNCH]
+    \label{thm:mpdo_gsnnch_of_sector_form}
+    \lean{MPOTensor.hasGSNNCHFormAt_normalizedMPO}
+    \lean{MPOTensor.isGSNNCH_of_hasGSNNCHForm}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_sector_sum_pos}
+    If every finite-chain operator of an MPO tensor has the explicit sector
+    form of Definition~\ref{def:mpdo_source_gsnnch} and a nonzero trace, then
+    the normalized finite-chain states are density operators with that sector
+    form, so the tensor generates Gibbs states of a nearest-neighbor
+    commuting Hamiltonian.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity of each chain operator follows from
+    Lemma~\ref{lem:mpdo_gsnnch_sector_sum_pos}. A positive semidefinite
+    operator with nonzero trace has positive trace, so the normalization is
+    by a positive constant, which preserves the sector form and yields unit
+    trace.
+\end{proof}

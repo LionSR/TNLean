@@ -69,6 +69,7 @@ import TNLean.Analysis.ProjectionGeometry
 -- Layer 0b: Hermitian functional calculus for finite-dimensional matrices
 import TNLean.Analysis.TraceCFC
 import TNLean.Analysis.MatrixSqrt
+import TNLean.Analysis.PosSemidefCommute
 import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Analysis.CfcLogAdditive
@@ -509,6 +510,7 @@ import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingFormBridge
+import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.BlockedRFPConstruction
 
 -- MPS examples
