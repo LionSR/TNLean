@@ -65,18 +65,6 @@ def transportSToVerticalCoordinates
   singleKrausMap U₁ ∘ₗ S ∘ₗ
     Matrix.equivReindexMap (blockedIndexEquiv d) ∘ₗ singleKrausMap U₂ᴴ
 
-/-- Relabelling the two-site physical closure as one blocked physical index
-gives the one-site closure of `blockTwo M`.
-
-Source: arXiv:1606.00608, Appendix C.4, lines 1951--1979. -/
-theorem reindex_physClose2_eq_physClose1_blockTwo
-    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.equivReindexMap (blockedIndexEquiv d).symm (physClose2 M X) =
-      physClose1 (blockTwo M) X := by
-  ext i j
-  simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
-    blockedIndexEquiv, blockTwo, Matrix.mul_assoc]
-
 /-- After the vertical coordinate changes have been absorbed into `T`, the
 refinement identity sends the contracted one-site vertical canonical form to
 the contracted two-site vertical canonical form.
@@ -105,7 +93,11 @@ theorem transportTToVerticalCoordinates_contractBondMatrix
     singleKrausMap_apply, Matrix.conjTranspose_conjTranspose]
   rw [← physClose1_eq_of_vertical_reconstruction M B₁ U₁ hReconstruct₁ X]
   rw [hT X]
-  rw [reindex_physClose2_eq_physClose1_blockTwo]
+  rw [show Matrix.equivReindexMap (blockedIndexEquiv d).symm
+      (physClose2 M X) = physClose1 (blockTwo M) X by
+    have h := LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X
+    simpa [Matrix.equivReindexMap] using
+      (congrArg (Matrix.equivReindexMap (blockedIndexEquiv d).symm) h).symm]
   exact mul_physClose1_mul_conjTranspose_of_vertical_forward
     (blockTwo M) B₂ U₂ hForward₂ X
 
