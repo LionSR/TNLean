@@ -33,7 +33,7 @@ private noncomputable def physicalBlockOneMap
           Fintype.card (SectorSiteIndex F))) ℂ :=
   Matrix.equivReindexMap
       (blockedIndexEquiv (Fintype.card (SectorSiteIndex F))).symm ∘ₗ
-    sandwichMap F.physicalCoordinateMatrixTwo ∘ₗ
+    singleKrausMap F.physicalCoordinateMatrixTwo ∘ₗ
     Matrix.equivReindexMap (blockedIndexEquiv d)
 
 private noncomputable def physicalBlockOneInverseMap
@@ -44,7 +44,7 @@ private noncomputable def physicalBlockOneInverseMap
         Fintype.card (SectorSiteIndex F))) ℂ →ₗ[ℂ]
       Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   Matrix.equivReindexMap (blockedIndexEquiv d).symm ∘ₗ
-    sandwichMap F.physicalCoordinateMatrixTwoᴴ ∘ₗ
+    singleKrausMap F.physicalCoordinateMatrixTwoᴴ ∘ₗ
     Matrix.equivReindexMap
       (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
 
@@ -62,7 +62,7 @@ private noncomputable def physicalBlockTwoMap
             Fintype.card (SectorSiteIndex F))) ℂ :=
   Matrix.equivReindexMap
       (blockedPairEquiv (Fintype.card (SectorSiteIndex F))).symm ∘ₗ
-    sandwichMap F.physicalCoordinateMatrixFour ∘ₗ
+    singleKrausMap F.physicalCoordinateMatrixFour ∘ₗ
     Matrix.equivReindexMap (blockedPairEquiv d)
 
 private noncomputable def physicalBlockTwoInverseMap
@@ -78,7 +78,7 @@ private noncomputable def physicalBlockTwoInverseMap
             Fintype.card (SectorSiteIndex F))) ℂ →ₗ[ℂ]
       Matrix (Fin (d * d) × Fin (d * d)) (Fin (d * d) × Fin (d * d)) ℂ :=
   Matrix.equivReindexMap (blockedPairEquiv d).symm ∘ₗ
-    sandwichMap F.physicalCoordinateMatrixFourᴴ ∘ₗ
+    singleKrausMap F.physicalCoordinateMatrixFourᴴ ∘ₗ
     Matrix.equivReindexMap
       (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
 
@@ -88,7 +88,7 @@ private theorem physicalBlockOneMap_isKrausCPTP
   exact isKrausCPTP_comp
     (isKrausCPTP_comp
       (Matrix.equivReindexMap_isKrausCPTP (blockedIndexEquiv d))
-      (sandwichMap_isKrausCPTP F.physicalCoordinateMatrixTwo
+      (singleKrausMap_isKrausCPTP F.physicalCoordinateMatrixTwo
         F.physicalCoordinateMatrixTwo_isometry))
     (Matrix.equivReindexMap_isKrausCPTP
       (blockedIndexEquiv (Fintype.card (SectorSiteIndex F))).symm)
@@ -100,7 +100,7 @@ private theorem physicalBlockOneInverseMap_isKrausCPTP
     (isKrausCPTP_comp
       (Matrix.equivReindexMap_isKrausCPTP
         (blockedIndexEquiv (Fintype.card (SectorSiteIndex F))))
-      (sandwichMap_isKrausCPTP F.physicalCoordinateMatrixTwoᴴ (by
+      (singleKrausMap_isKrausCPTP F.physicalCoordinateMatrixTwoᴴ (by
         simpa using F.physicalCoordinateMatrixTwo_coisometry)))
     (Matrix.equivReindexMap_isKrausCPTP (blockedIndexEquiv d).symm)
 
@@ -110,7 +110,7 @@ private theorem physicalBlockTwoMap_isKrausCPTP
   exact isKrausCPTP_comp
     (isKrausCPTP_comp
       (Matrix.equivReindexMap_isKrausCPTP (blockedPairEquiv d))
-      (sandwichMap_isKrausCPTP F.physicalCoordinateMatrixFour
+      (singleKrausMap_isKrausCPTP F.physicalCoordinateMatrixFour
         F.physicalCoordinateMatrixFour_isometry))
     (Matrix.equivReindexMap_isKrausCPTP
       (blockedPairEquiv (Fintype.card (SectorSiteIndex F))).symm)
@@ -122,7 +122,7 @@ private theorem physicalBlockTwoInverseMap_isKrausCPTP
     (isKrausCPTP_comp
       (Matrix.equivReindexMap_isKrausCPTP
         (blockedPairEquiv (Fintype.card (SectorSiteIndex F))))
-      (sandwichMap_isKrausCPTP F.physicalCoordinateMatrixFourᴴ (by
+      (singleKrausMap_isKrausCPTP F.physicalCoordinateMatrixFourᴴ (by
         simpa using F.physicalCoordinateMatrixFour_coisometry)))
     (Matrix.equivReindexMap_isKrausCPTP (blockedPairEquiv d).symm)
 
@@ -133,7 +133,7 @@ private theorem physicalBlockOneMap_closure
   change Matrix.reindex
       (blockedIndexEquiv (Fintype.card (SectorSiteIndex F))).symm
       (blockedIndexEquiv (Fintype.card (SectorSiteIndex F))).symm
-      (sandwichMap F.physicalCoordinateMatrixTwo
+      (singleKrausMap F.physicalCoordinateMatrixTwo
         (Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
           (physClose1 (blockTwo K) X))) = _
   rw [show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
@@ -155,7 +155,7 @@ private theorem physicalBlockOneInverseMap_closure
         (physClose1 (blockTwo F.sectorCoordinateTensor) X) =
       physClose1 (blockTwo K) X := by
   change Matrix.reindex (blockedIndexEquiv d).symm (blockedIndexEquiv d).symm
-      (sandwichMap F.physicalCoordinateMatrixTwoᴴ
+      (singleKrausMap F.physicalCoordinateMatrixTwoᴴ
         (Matrix.reindex
           (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
           (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
@@ -180,7 +180,7 @@ private theorem physicalBlockTwoMap_closure
   change Matrix.reindex
       (blockedPairEquiv (Fintype.card (SectorSiteIndex F))).symm
       (blockedPairEquiv (Fintype.card (SectorSiteIndex F))).symm
-      (sandwichMap F.physicalCoordinateMatrixFour
+      (singleKrausMap F.physicalCoordinateMatrixFour
         (Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
           (physClose2 (blockTwo K) X))) = _
   rw [show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
@@ -202,7 +202,7 @@ private theorem physicalBlockTwoInverseMap_closure
         (physClose2 (blockTwo F.sectorCoordinateTensor) X) =
       physClose2 (blockTwo K) X := by
   change Matrix.reindex (blockedPairEquiv d).symm (blockedPairEquiv d).symm
-      (sandwichMap F.physicalCoordinateMatrixFourᴴ
+      (singleKrausMap F.physicalCoordinateMatrixFourᴴ
         (Matrix.reindex
           (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
           (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
