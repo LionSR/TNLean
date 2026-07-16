@@ -49,8 +49,8 @@ jobs:
       - name: Install TeX and graphviz
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
-          cache-suffix: docgen-v1
-          extra-packages: latexmk texlive-science texlive-xetex
+          cache-suffix: docgen-v2
+          extra-packages: latexmk texlive-science texlive-xetex texlive-fonts-extra
 
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
