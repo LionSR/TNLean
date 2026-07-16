@@ -23,7 +23,7 @@ the singular values of the represented Euclidean linear map, while the
 absolute value `CFC.abs A` is a matrix.  The two quantities are identified
 through the observation that the singular values of `Matrix.toEuclideanLin A`
 are the square roots of the eigenvalues of the symmetric map represented by
-`Aᴴ * A`, which are in turn the matrix eigenvalues appearing in the Hermitian
+$A^\dagger A$, which are in turn the matrix eigenvalues appearing in the Hermitian
 functional calculus.
 
 ## Main results
@@ -69,7 +69,7 @@ namespace Matrix
 variable {D : ℕ}
 
 /-- The symmetric map `T† ∘ T` attached to `T = Matrix.toEuclideanLin A` is
-represented by the positive-semidefinite matrix `Aᴴ * A`. -/
+represented by the positive-semidefinite matrix $A^\dagger A$. -/
 theorem adjoint_toEuclideanLin_comp_self (A : Matrix (Fin D) (Fin D) ℂ) :
     LinearMap.adjoint (toEuclideanLin A) ∘ₗ toEuclideanLin A = toEuclideanLin (Aᴴ * A) := by
   rw [toLpLin_mul_same, toEuclideanLin_conjTranspose_eq_adjoint]
@@ -81,7 +81,7 @@ theorem PosSemidef.sqrt_eq_cfc_real_sqrt {H : Matrix (Fin D) (Fin D) ℂ} (hH : 
   rw [CFC.sqrt_eq_real_sqrt H hH.nonneg, cfcₙ_eq_cfc, hH.isHermitian.cfc_eq]
 
 /-- The absolute value $\lvert A\rvert = \sqrt{A^\dagger A}$ expressed through
-the Hermitian functional calculus of `Aᴴ * A`. -/
+the Hermitian functional calculus of $A^\dagger A$. -/
 theorem abs_eq_cfc_real_sqrt (A : Matrix (Fin D) (Fin D) ℂ) :
     CFC.abs A = (posSemidef_conjTranspose_mul_self A).isHermitian.cfc Real.sqrt := by
   rw [← (posSemidef_conjTranspose_mul_self A).sqrt_eq_cfc_real_sqrt]
