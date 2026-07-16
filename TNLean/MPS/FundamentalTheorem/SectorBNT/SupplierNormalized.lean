@@ -29,7 +29,7 @@ matrix product coefficients.
 * `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized` — for a tensor whose
   blocked matrix product coefficients do not vanish identically at positive lengths, some
   blocking length $p$ admits a basis-of-normal-tensors canonical form $P$ and a scale $m > 0$
-  with $V^{(N)}(A^{(p)}) = m^N V^{(N)}(P)$ at every positive length $N$.
+  with $V^{(N)}(A^{[p]}) = m^N V^{(N)}(P)$ at every positive length $N$.
 
 ## References
 
@@ -87,23 +87,27 @@ basis-of-normal-tensors definition and prop:char-BNT.
 For a tensor $A$ satisfying the nonvanishing hypothesis below, there are a positive blocking
 length $p$, a scale $m > 0$, and a sector decomposition $P$ in basis-of-normal-tensors
 canonical form such that at every positive length $N$ the matrix product coefficients satisfy
-$V^{(N)}(A^{(p)}) = m^N \, V^{(N)}(P)$, where $A^{(p)}$ denotes the $p$-blocked tensor.  The
+$V^{(N)}(A^{[p]}) = m^N \, V^{(N)}(P)$, where $A^{[p]}$ denotes the $p$-blocked tensor.  The
 scale $m$ is the largest weight modulus of the prepared block family; dividing the weights by
 $m$ realizes the line-246 choice $|\mu_k| \le 1$ with some $|\mu_k| = 1$, so the sector
 decomposition carries the normalized weights and the factor $m^N$ records the original ones.
 
 The nonvanishing hypothesis: for every blocking length $p > 0$ some positive-length matrix
-product coefficient of the $p$-blocked tensor is nonzero.  The prepared block family of
-`exists_prepared_BNT_blocks_afterBlocking_pos` can be empty ($r = 0$) exactly when every
-positive-length coefficient of the blocked tensor vanishes (for example the zero tensor):
-the empty direct sum has all positive-length coefficients zero, and the positive-length
-agreement transfers this to the blocked tensor.  For an empty weight family the line-246
-choice "at least one weight of unit modulus" is impossible, so the source's normalization
-implicitly assumes a nonvanishing matrix product vector; the hypothesis states exactly that
-assumption.  It is quantified over all $p$ because the blocking length is produced by the
-construction; since the length-$N$ coefficients of the $p$-blocked tensor are the
-length-$pN$ coefficients of $A$, it asks that the coefficients of $A$ not vanish on all
-positive multiples of any blocking length. -/
+product coefficient of the $p$-blocked tensor is nonzero.  The prepared block family can be
+empty ($r = 0$) exactly when every positive-length coefficient of the blocked tensor
+vanishes (for example the zero tensor): the empty direct sum has all positive-length
+coefficients zero, and the positive-length agreement transfers this to the blocked tensor.
+For an empty weight family the line-246 choice "at least one weight of unit modulus" is
+impossible.  Since the length-$N$ coefficients of the $p$-blocked tensor are the
+length-$pN$ coefficients of $A$, the hypothesis asks that for every $p > 0$ the
+coefficients of $A$ not vanish on all positive multiples of $p$.  This is stronger than
+nonvanishing of a single coefficient of $A$; it is quantified over every $p$ because the
+blocking length is produced by the construction.
+
+**Scope restriction (blocked nonvanishing):** the source states the line-246 choice for
+any tensor and does not carry this hypothesis; it enters only to exclude blocked families
+that vanish identically at positive lengths, where the choice is unsatisfiable.  Recorded
+in docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex. -/
 theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
     {d D : ℕ} (A : MPSTensor d D)
     (hNZ : ∀ p : ℕ, 0 < p →
