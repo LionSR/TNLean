@@ -121,10 +121,16 @@ noncomputable def singleKrausMap {α β : Type*} [Fintype α] [Fintype β]
   map_add' X Y := by simp [Matrix.mul_add, Matrix.add_mul]
   map_smul' c X := by simp [Matrix.mul_smul, Matrix.smul_mul]
 
+@[deprecated singleKrausMap (since := "2026-07-16")]
+noncomputable alias sandwichMap := singleKrausMap
+
 @[simp] theorem singleKrausMap_apply {α β : Type*} [Fintype α] [Fintype β]
     (V : Matrix β α ℂ) (X : Matrix α α ℂ) :
     singleKrausMap V X = V * X * Vᴴ :=
   rfl
+
+@[deprecated singleKrausMap_apply (since := "2026-07-16")]
+alias sandwichMap_apply := singleKrausMap_apply
 
 /-- The single-Kraus map associated with an isometry is trace-preserving and
 completely positive. -/
@@ -133,6 +139,9 @@ theorem singleKrausMap_isKrausCPTP {α β : Type*}
     (V : Matrix β α ℂ) (hV : Vᴴ * V = 1) :
     IsKrausCPTP (singleKrausMap V) :=
   isKrausCPTP_of_singleKraus V (fun _ ↦ rfl) hV
+
+@[deprecated singleKrausMap_isKrausCPTP (since := "2026-07-16")]
+alias sandwichMap_isKrausCPTP := singleKrausMap_isKrausCPTP
 
 /-- Composition of trace-preserving completely positive maps is again
 trace-preserving completely positive. If `T` has Kraus operators `Bⱼ` and `S`
