@@ -14,7 +14,7 @@ The canonical form of arXiv:1606.00608 (eq:II_CF1,
 $A^i = \oplus_{k=1}^r \mu_k A_k^i$ with each $A_k$ a normal tensor, and line 246 fixes the
 weight normalization: since the states are not normalized, one can always choose
 $|\mu_k| \le 1$ with at least one weight of unit modulus, "something which we will assume from
-now on."  The supplier `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos` leaves that
+now on."  The arbitrary-input supplier of the basis of normal tensors leaves that
 normalization choice as a hypothesis on the produced weights.  This file discharges it:
 dividing every weight by the largest modulus $m = \max_k |\mu_k|$ realizes the line-246
 choice, and the discarded factor reappears as the scalar $m^N$ multiplying the length-$N$
