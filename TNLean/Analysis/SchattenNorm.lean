@@ -16,9 +16,8 @@ as the sum of the singular values of the Euclidean linear map represented by
 `A`.  Mathlib's singular-value sequence is a finitely supported function on
 `ℕ`, so the definition does not require a separately chosen enumeration bound.
 
-The present file establishes the foundational order and definiteness
-properties. In particular, it does not identify this quantity with the ambient
-matrix operator norm.
+The foundational order and definiteness properties are established here. This
+quantity is not identified with the ambient matrix operator norm.
 
 ## Main definitions
 

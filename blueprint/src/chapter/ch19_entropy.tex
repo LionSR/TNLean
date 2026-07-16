@@ -13,13 +13,18 @@ properties for finite-dimensional quantum systems.
 \begin{definition}[Schatten one-norm]\label{def:schatten_one_norm}
     \lean{Matrix.schattenOneNorm}
     \leanok
-    For a matrix $A\in\MN{D}$ with singular values
-    $s_0(A),\ldots,s_{D-1}(A)$, its Schatten one-norm is
+    For a matrix $A\in\MN{D}$, the singular values $s_0(A),s_1(A),\ldots$ form
+    a finitely supported family: only finitely many are nonzero. The Schatten
+    one-norm of $A$ is their sum, that is, the sum of the finitely many nonzero
+    singular values:
     \[
-        \lVert A\rVert_1=\sum_{i=0}^{D-1}s_i(A).
+        \lVert A\rVert_1=\sum_{i\,:\,s_i(A)\neq 0}s_i(A).
     \]
     This is the $p=1$ case of the Schatten $p$-norm
-    \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+    \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}. The equivalent closed
+    formula $\lVert A\rVert_1=\sum_{i=0}^{D-1}s_i(A)$, summing over all $D$
+    singular values including trailing zeros, is part of
+    Theorem~\ref{thm:trace_norm_elementary}.
 \end{definition}
 
 \begin{definition}[Trace norm]\label{def:trace_norm}
@@ -60,7 +65,7 @@ properties for finite-dimensional quantum systems.
     \lean{Matrix.traceNorm_zero}
     \lean{Matrix.traceNorm_pos_iff}
     \leanok
-    \uses{def:trace_norm}
+    \uses{def:trace_norm, lem:trace_norm_singular_values}
     For every $A\in\MN{D}$,
     \[
         \lVert A\rVert_{\mathrm{tr}}
