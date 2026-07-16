@@ -226,6 +226,41 @@ theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
     MPSTensor.blockTensor, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
     blockedDoubledIndexEquiv, MPSTensor.wordOfBlock, Equiv.arrowCongr]
 
+/-- The concrete two-site blocking is the general length-two blocking after
+the canonical relabeling of each physical index.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
+theorem blockTwo_eq_blockTensor_reindex (M : MPOTensor d D) :
+    blockTwo M = fun i j ↦
+      blockTensor M 2 (twoSiteBlockEquiv d i) (twoSiteBlockEquiv d j) := by
+  funext i j
+  simp [blockTwo, blockTensor, twoSiteBlockEquiv, MPSTensor.wordOfBlock]
+
+/-- Closing a chain of concrete two-site blocks is the same as closing a
+chain of general length-two blocks, after relabeling every physical index.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
+theorem mpo_blockTwo_eq_reindex_blockTensor (M : MPOTensor d D) (N : ℕ) :
+    mpo (blockTwo M) N =
+      Matrix.reindex
+        (Equiv.arrowCongr (Equiv.refl (Fin N)) (twoSiteBlockEquiv d)).symm
+        (Equiv.arrowCongr (Equiv.refl (Fin N)) (twoSiteBlockEquiv d)).symm
+        (mpo (blockTensor M 2) N) := by
+  ext σ τ
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, mpo_apply,
+    mpoMatrixEntry, evalWord_ofFn]
+  rw [blockTwo_eq_blockTensor_reindex]
+  rfl
+
+/-- Concrete two-site blocking preserves positivity of every closed MPO.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
+theorem IsMPDO.blockTwo {M : MPOTensor d D} (hM : IsMPDO M) :
+    IsMPDO (blockTwo M) := by
+  intro N
+  rw [mpo_blockTwo_eq_reindex_blockTensor, Matrix.reindex_apply]
+  exact (hM.blockTensor 2 N).submatrix _
+
 @[simp] lemma blockTwo_apply (M : MPOTensor d D) (i j : Fin (d * d)) :
     blockTwo M i j =
       M (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm j).1 *
