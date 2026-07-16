@@ -99,7 +99,7 @@ theorem reducedBlockState_full (M : MPOTensor d D) (N : ℕ) :
 up to the standard flattening of configurations.
 
 Source: arXiv:1606.00608, lines 792--797 and Appendix C, lines 1338--1340. -/
-theorem traceRight_bipartitionedNormalizedMPO (M : MPOTensor d D) (N L : ℕ)
+theorem bipartitionedNormalizedMPO_traceRight (M : MPOTensor d D) (N L : ℕ)
     (hL : L ≤ N) :
     Matrix.traceRight
         (bipartitionedNormalizedMPO M N L (N - L) (by omega)) =
@@ -125,7 +125,7 @@ sites, up to the standard flattening of configurations. Translation invariance
 moves the final `N-L` sites to the beginning of the periodic chain.
 
 Source: arXiv:1606.00608, lines 792--797 and Appendix C, lines 1338--1340. -/
-theorem traceLeft_bipartitionedNormalizedMPO (M : MPOTensor d D) (N L : ℕ)
+theorem bipartitionedNormalizedMPO_traceLeft (M : MPOTensor d D) (N L : ℕ)
     (hL : L ≤ N) :
     Matrix.traceLeft
         (bipartitionedNormalizedMPO M N L (N - L) (by omega)) =
@@ -180,7 +180,7 @@ theorem mutualInfoChain_eq_mutualInformation (M : MPOTensor d D) (N L : ℕ)
               (chainBipartitionEquiv d N L (N - L) (by omega)).symm)) =
         vonNeumannEntropy (reducedBlockState M N L hL)
           (reducedBlockState_isHermitian M N L hL hM) := by
-    rw [vonNeumannEntropy_congr (traceRight_bipartitionedNormalizedMPO M N L hL) _
+    rw [vonNeumannEntropy_congr (bipartitionedNormalizedMPO_traceRight M N L hL) _
       ((reducedBlockState_isHermitian M N L hL hM).submatrix _),
       vonNeumannEntropy_submatrix_equiv]
   have hleft :
@@ -192,7 +192,7 @@ theorem mutualInfoChain_eq_mutualInformation (M : MPOTensor d D) (N L : ℕ)
               (chainBipartitionEquiv d N L (N - L) (by omega)).symm)) =
         vonNeumannEntropy (reducedBlockState M N (N - L) (Nat.sub_le N L))
           (reducedBlockState_isHermitian M N (N - L) (Nat.sub_le N L) hM) := by
-    rw [vonNeumannEntropy_congr (traceLeft_bipartitionedNormalizedMPO M N L hL) _
+    rw [vonNeumannEntropy_congr (bipartitionedNormalizedMPO_traceLeft M N L hL) _
       ((reducedBlockState_isHermitian M N (N - L) (Nat.sub_le N L) hM).submatrix _),
       vonNeumannEntropy_submatrix_equiv]
   have hfull :
