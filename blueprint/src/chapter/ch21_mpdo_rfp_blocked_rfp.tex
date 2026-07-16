@@ -572,6 +572,8 @@ physical indices, as in
 \begin{theorem}[One-site closure of the two-site blocking]
     \label{thm:mpdo_one_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose1_blockTwo_eq_physClose2}
+    \lean{MPOTensor.physClose1_blockTwo_eq_physClose2_apply}
+    \lean{MPOTensor.physClose2_eq_physClose1_blockTwo_apply}
     \leanok
     \uses{def:phys_close, def:mpdo_two_site_blocking}
     After identifying one blocked physical index with two original indices,
@@ -582,6 +584,96 @@ physical indices, as in
 
 \begin{proof}\leanok
     Expand one blocked tensor matrix and decode its two physical indices.
+\end{proof}
+
+\begin{definition}[Physical maps in vertical canonical coordinates]
+    \label{def:mpdo_vertical_coordinate_map_transport}
+    \lean{MPOTensor.transportTToVerticalCoordinates}
+    \lean{MPOTensor.transportSToVerticalCoordinates}
+    \leanok
+    \uses{def:mpdo_two_site_blocking}
+    Let $U_1$ and $U_2$ be the physical coordinate changes in vertical
+    canonical forms of $M$ and its two-site blocking, respectively.  Let
+    $J$ be the canonical relabelling from matrices indexed by pairs of
+    one-site physical indices to matrices indexed by one blocked physical
+    index.  For the refinement and coarse-graining maps $T$ and $S$, define
+
+    \[
+        T_{\mathrm v}(Z)
+          =U_2 J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger,
+        \qquad
+        S_{\mathrm v}(W)
+          =U_1 S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger.
+    \]
+    These are the physical maps after absorbing the two vertical coordinate
+    changes, as in
+    \cite[Appendix~C.4, lines~1955--1979]{Cirac2016MPDO_arXiv}.  They are
+    intermediate maps on the retained physical coordinate spaces; the
+    normalized sector maps $R_1,R_2,\widetilde R_1,\widetilde R_2$ have not
+    yet been composed with them.
+\end{definition}
+
+\begin{theorem}[Action of the transported physical maps]
+    \label{thm:mpdo_vertical_coordinate_map_transport}
+    \lean{MPOTensor.transportTToVerticalCoordinates_contractBondMatrix}
+    \lean{MPOTensor.transportSToVerticalCoordinates_contractBondMatrix}
+    \leanok
+    \uses{def:mpdo_vertical_coordinate_map_transport,
+      lem:mpdo_vertical_bond_contraction_forward,
+      lem:mpdo_vertical_bond_contraction_reconstruction,
+      thm:mpdo_one_site_closure_two_site_blocking}
+    For a bond matrix $X$, write $\mathcal M^{(1)}(X)$ and
+    $\mathcal M^{(2)}(X)$ for the one-site and two-site physical closures,
+    respectively, and write
+    \[
+        B_1(X)=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X),
+        \qquad
+        B_2(X)=\bigoplus_\beta\nu_\beta\otimes A_\beta(X)
+    \]
+    for the contracted one-site and two-site vertical canonical forms.  If
+
+    \[
+        T(\mathcal M^{(1)}(X))=\mathcal M^{(2)}(X),
+        \qquad
+        S(\mathcal M^{(2)}(X))=\mathcal M^{(1)}(X),
+    \]
+    then
+    \[
+        T_{\mathrm v}(B_1(X))=B_2(X),
+        \qquad
+        S_{\mathrm v}(B_2(X))=B_1(X).
+    \]
+    These are the physical-coordinate identities which, after composition
+    with $R_1,R_2,\widetilde R_1,\widetilde R_2$, give the two displayed
+    identities for $\widetilde T$ and $\widetilde S$ in
+    \cite[Appendix~C.4, lines~1955--1979]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The reverse one-site canonical-form identity gives
+    \[
+        U_1^\dagger B_1(X)U_1=\mathcal M^{(1)}(X).
+    \]
+    Applying $T$, relabelling its two-site output by $J$, and using the
+    forward blocked canonical-form identity gives
+    \[
+    \begin{aligned}
+        T_{\mathrm v}(B_1(X))
+          &=U_2J(T(\mathcal M^{(1)}(X)))U_2^\dagger \\
+          &=U_2J(\mathcal M^{(2)}(X))U_2^\dagger
+           =B_2(X).
+    \end{aligned}
+    \]
+    The reverse blocked canonical-form identity and the equation for $S$
+    give, in the other direction,
+    \[
+    \begin{aligned}
+        S_{\mathrm v}(B_2(X))
+          &=U_1S(\mathcal M^{(2)}(X))U_1^\dagger \\
+          &=U_1\mathcal M^{(1)}(X)U_1^\dagger
+           =B_1(X).
+    \end{aligned}
+    \]
 \end{proof}
 
 \begin{theorem}[Two-site closure of the two-site blocking]
