@@ -66,23 +66,23 @@ end LinearMap
 
 namespace Matrix
 
-variable {D : ℕ}
+variable {n : Type*} [Fintype n] [DecidableEq n] {D : ℕ}
 
 /-- The symmetric map `T† ∘ T` attached to `T = Matrix.toEuclideanLin A` is
 represented by the positive-semidefinite matrix $A^\dagger A$. -/
-theorem adjoint_toEuclideanLin_comp_self (A : Matrix (Fin D) (Fin D) ℂ) :
+theorem adjoint_toEuclideanLin_comp_self (A : Matrix n n ℂ) :
     LinearMap.adjoint (toEuclideanLin A) ∘ₗ toEuclideanLin A = toEuclideanLin (Aᴴ * A) := by
   rw [toLpLin_mul_same, toEuclideanLin_conjTranspose_eq_adjoint]
 
 /-- The continuous-functional-calculus square root of a positive-semidefinite
 matrix agrees with the Hermitian functional calculus applied to `Real.sqrt`. -/
-theorem PosSemidef.sqrt_eq_cfc_real_sqrt {H : Matrix (Fin D) (Fin D) ℂ} (hH : H.PosSemidef) :
+theorem PosSemidef.sqrt_eq_cfc_real_sqrt {H : Matrix n n ℂ} (hH : H.PosSemidef) :
     CFC.sqrt H = hH.isHermitian.cfc Real.sqrt := by
   rw [CFC.sqrt_eq_real_sqrt H hH.nonneg, cfcₙ_eq_cfc, hH.isHermitian.cfc_eq]
 
 /-- The absolute value $\lvert A\rvert = \sqrt{A^\dagger A}$ expressed through
 the Hermitian functional calculus of $A^\dagger A$. -/
-theorem abs_eq_cfc_real_sqrt (A : Matrix (Fin D) (Fin D) ℂ) :
+theorem abs_eq_cfc_real_sqrt (A : Matrix n n ℂ) :
     CFC.abs A = (posSemidef_conjTranspose_mul_self A).isHermitian.cfc Real.sqrt := by
   rw [← (posSemidef_conjTranspose_mul_self A).sqrt_eq_cfc_real_sqrt]
   rfl
@@ -124,8 +124,8 @@ theorem traceNorm_smul (c : ℂ) (A : Matrix (Fin D) (Fin D) ℂ) :
   simp [Complex.real_smul]
 
 /-- Left multiplication by a unitary does not change the absolute value. -/
-theorem abs_unitary_mul {U : Matrix (Fin D) (Fin D) ℂ} (hU : U ∈ unitaryGroup (Fin D) ℂ)
-    (A : Matrix (Fin D) (Fin D) ℂ) :
+theorem abs_unitary_mul {U : Matrix n n ℂ} (hU : U ∈ unitaryGroup n ℂ)
+    (A : Matrix n n ℂ) :
     CFC.abs (U * A) = CFC.abs A := by
   have hUU : star U * U = 1 := mem_unitaryGroup_iff'.mp hU
   have hsq : CFC.abs A * CFC.abs A = star (U * A) * (U * A) := by
@@ -134,12 +134,12 @@ theorem abs_unitary_mul {U : Matrix (Fin D) (Fin D) ℂ} (hU : U ∈ unitaryGrou
 
 /-- Right multiplication by a unitary conjugates the absolute value:
 $\lvert AV\rvert = V^\dagger\lvert A\rvert V$. -/
-theorem abs_mul_unitary {V : Matrix (Fin D) (Fin D) ℂ} (hV : V ∈ unitaryGroup (Fin D) ℂ)
-    (A : Matrix (Fin D) (Fin D) ℂ) :
+theorem abs_mul_unitary {V : Matrix n n ℂ} (hV : V ∈ unitaryGroup n ℂ)
+    (A : Matrix n n ℂ) :
     CFC.abs (A * V) = Vᴴ * CFC.abs A * V := by
   rw [← star_eq_conjTranspose]
   have hVV : V * star V = 1 := mem_unitaryGroup_iff.mp hV
-  have hb : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ star V * CFC.abs A * V := by
+  have hb : (0 : Matrix n n ℂ) ≤ star V * CFC.abs A * V := by
     have := (nonneg_iff_posSemidef.mp (CFC.abs_nonneg A)).conjTranspose_mul_mul_same V
     rw [star_eq_conjTranspose]
     exact this.nonneg
