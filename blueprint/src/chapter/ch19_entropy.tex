@@ -214,6 +214,117 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{proof}
 
+\begin{theorem}[Trace norm from the eigenvalues of $A^\dagger A$]
+    \label{thm:trace_norm_sqrt_eigenvalues}
+    \lean{Matrix.traceNorm_eq_sum_sqrt_eigenvalues}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$, with $\lambda_0,\ldots,\lambda_{D-1}$ the
+    eigenvalues of $A^\dagger A$,
+    \[
+        \lVert A\rVert_{\mathrm{tr}}=\sum_{i=0}^{D-1}\sqrt{\lambda_i}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_abs}
+    Diagonalizing $A^\dagger A=V\operatorname{diag}(\lambda_i)V^\dagger$ gives
+    $\lvert A\rvert=V\operatorname{diag}(\sqrt{\lambda_i})V^\dagger$, so
+    \[
+        \operatorname{tr}\lvert A\rvert=\sum_{i=0}^{D-1}\sqrt{\lambda_i},
+    \]
+    and the claim follows from Theorem~\ref{thm:trace_norm_abs}.
+\end{proof}
+
+\begin{theorem}[Variational unitary formula for the trace norm]
+    \label{thm:trace_norm_variational}
+    \lean{Matrix.norm_trace_conjTranspose_mul_unitary_le}
+    \lean{Matrix.exists_mem_unitaryGroup_trace_conjTranspose_mul_eq}
+    \lean{Matrix.isGreatest_norm_trace_conjTranspose_mul_unitary}
+    \lean{Matrix.traceNorm_eq_sSup_norm_trace_conjTranspose_mul_unitary}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$,
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        =\max\left\{\bigl|\operatorname{tr}[A^\dagger U]\bigr|
+        \;\middle|\; UU^\dagger=\Id\right\},
+    \]
+    and the maximum is attained: some unitary $U$ satisfies
+    $\operatorname{tr}[A^\dagger U]=\lVert A\rVert_{\mathrm{tr}}$.
+    This is Eq.~(8.11) of \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_sqrt_eigenvalues}
+    For the upper bound, let $v_0,\ldots,v_{D-1}$ be an orthonormal
+    eigenbasis of $A^\dagger A$ with eigenvalues $\lambda_i$, and let $U$ be
+    unitary. Expanding the trace in this basis and applying the
+    Cauchy--Schwarz inequality,
+    \[
+        \bigl|\operatorname{tr}[A^\dagger U]\bigr|
+        =\Bigl|\sum_{i}\langle Av_i,\,Uv_i\rangle\Bigr|
+        \le\sum_{i}\lVert Av_i\rVert\,\lVert Uv_i\rVert
+        =\sum_{i}\sqrt{\lambda_i}
+        =\lVert A\rVert_{\mathrm{tr}},
+    \]
+    since $\lVert Av_i\rVert^2=\langle v_i,\,A^\dagger A\,v_i\rangle
+    =\lambda_i$ and $\lVert Uv_i\rVert=1$.
+
+    For attainment, the vectors $w_i=Av_i/\sqrt{\lambda_i}$, taken over the
+    indices with $\lambda_i\neq0$, satisfy
+    \[
+        \langle w_i,w_j\rangle
+        =\frac{\langle v_i,\,A^\dagger A\,v_j\rangle}
+              {\sqrt{\lambda_i}\sqrt{\lambda_j}}
+        =\delta_{ij},
+    \]
+    so they form an orthonormal family. Extend it to an orthonormal basis
+    $(w_i)_{i}$ of $\C^D$ and let $U$ be the unitary with $Uv_i=w_i$ for all
+    $i$. Then
+    \[
+        \operatorname{tr}[A^\dagger U]
+        =\sum_{i}\langle Av_i,\,w_i\rangle
+        =\sum_{\lambda_i\neq0}\frac{\lVert Av_i\rVert^2}{\sqrt{\lambda_i}}
+        =\sum_{i}\sqrt{\lambda_i}
+        =\lVert A\rVert_{\mathrm{tr}},
+    \]
+    where the indices with $\lambda_i=0$ contribute $0$ to both sides because
+    $\lVert Av_i\rVert^2=\lambda_i=0$ forces $Av_i=0$.
+\end{proof}
+
+\begin{theorem}[Trace-norm triangle inequality]
+    \label{thm:trace_norm_triangle}
+    \lean{Matrix.traceNorm_add_le}
+    \leanok
+    \uses{def:trace_norm}
+    For all $A,B\in\MN{D}$,
+    \[
+        \lVert A+B\rVert_{\mathrm{tr}}
+        \le\lVert A\rVert_{\mathrm{tr}}+\lVert B\rVert_{\mathrm{tr}}.
+    \]
+    Together with homogeneity (Theorem~\ref{thm:trace_norm_homogeneous}) and
+    definiteness (Theorem~\ref{thm:trace_norm_elementary}), this completes
+    the norm axioms of \cite[Chapter~8, Section~8.1]{Wolf2012Quantum} for the
+    trace norm.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_variational}
+    Choose by Theorem~\ref{thm:trace_norm_variational} a unitary $U$ with
+    $\operatorname{tr}[(A+B)^\dagger U]=\lVert A+B\rVert_{\mathrm{tr}}$.
+    Splitting the trace and applying the upper-bound half of the same
+    theorem to $A$ and to $B$ separately,
+    \[
+        \lVert A+B\rVert_{\mathrm{tr}}
+        =\bigl|\operatorname{tr}[A^\dagger U]
+              +\operatorname{tr}[B^\dagger U]\bigr|
+        \le\bigl|\operatorname{tr}[A^\dagger U]\bigr|
+          +\bigl|\operatorname{tr}[B^\dagger U]\bigr|
+        \le\lVert A\rVert_{\mathrm{tr}}+\lVert B\rVert_{\mathrm{tr}}.
+    \]
+\end{proof}
+
 \section{Von Neumann entropy}
 
 \begin{definition}[Von Neumann entropy]\label{def:von_neumann_entropy}
