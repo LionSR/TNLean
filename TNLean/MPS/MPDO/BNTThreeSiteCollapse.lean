@@ -31,6 +31,8 @@ inverts every sector of the family.
 
 * `MPOTensor.IsThreeSiteFamilyClosure`: a sum of three-site closures over a
   family of sectors.
+* `MPOTensor.outerInverseContraction`: contraction of the two outer physical
+  sites against simultaneous inverse coefficients.
 
 ## Main statements
 
