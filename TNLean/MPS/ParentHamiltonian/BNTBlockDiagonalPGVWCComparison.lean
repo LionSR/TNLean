@@ -383,9 +383,16 @@ opened-boundary \(C^j,D^j\) comparison
 \[
   A^j_\beta C^j_{i,\rho}
   =
-  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho ,
+  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
 \]
-and the normalized \(E^j\)-calculation then places each single-block vector
+Since \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) over the outside words \(\rho\),
+this comparison yields, for each outside word \(\rho\), a matrix
+\(E_{j,i,\rho}=\bigl(\sum_\gamma C^j_{i,\gamma}A^{j\dagger}_\gamma\bigr)A^j_\rho\)
+with
+\[
+  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho=A^j_\beta E_{j,i,\rho},
+\]
+and these boundary identities place each single-block vector
 \(\Gamma_N^{A_j}(\mu_j^NX_j)\) in \(\mathcal G_{N,L}(A_j)\). For crossing tails
 of length at least \((L_0+1)+3(r-1)(L_0+1)\), the normalized BNT
 block-separation theorem derives the tail-word span from the hypotheses already
@@ -440,22 +447,20 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bn
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  let m : ℕ :=
+    (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
   have hCrossingSpan :
       ∀ i : Fin N, N < i.val + L → WordTupleSpanTop A (N - i.val) := by
     intro i hi
-    rcases Nat.lt_or_ge (N - i.val)
-        ((L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) with hlt | hge
+    rcases Nat.lt_or_ge (N - i.val) m with hlt | hge
     · exact hShortSpan i hi hlt
     · exact
         wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
           A hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hge
-  refine
-    exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
-      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hNlarge hψ ?_
-  intro X hψX
   exact
-    blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace
-      μ A hμ hN hLN hCrossingSpan hψ X hψX
+    exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hNlarge
+      hCrossingSpan hψ
 
 /-- Boundary-crossing local constraints give the block-diagonal periodic-boundary
 equality in the finite BNT range.
