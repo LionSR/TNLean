@@ -1623,13 +1623,25 @@ separate step.
 
 \begin{definition}[One-letter final-block selector]
     \label{def:mpdo_complete_zipper_final_block_selector}
-    \lean{MPOTensor.CompleteZipperFusionFamily.finalBlockSelector,
-        MPOTensor.CompleteZipperFusionFamily.finalBlockSelector_apply,
-        MPOTensor.CompleteZipperFusionFamily.finalBlockSelector_sum}
+    \lean{MPOTensor.CompleteZipperFusionFamily.finalBlockSelector}
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family}
     Fix a final label $d$. Summing the diagonal matrix-unit coefficients of
-    the simultaneous block inverse defines scalars $s_d(i,j)$ satisfying
+    the simultaneous block inverse defines
+    \[
+        s_d(i,j)=\sum_{x=1}^{D_d}C_{(d,x,x),(i,j)}.
+    \]
+    Here $C_{(d,x,y),(i,j)}$ denotes the coefficient of the simultaneous
+    block inverse corresponding to the matrix unit $E_{xy}$ in block $d$.
+\end{definition}
+
+\begin{lemma}[Final-block selection identity]
+    \label{lem:mpdo_complete_zipper_final_block_selector}
+    \lean{MPOTensor.CompleteZipperFusionFamily.finalBlockSelector_apply,
+        MPOTensor.CompleteZipperFusionFamily.finalBlockSelector_sum}
+    \leanok
+    \uses{def:mpdo_complete_zipper_final_block_selector}
+    The one-letter selector satisfies
     \[
         \sum_{i,j}s_d(i,j)B_e^{ij}
         =\begin{cases}
@@ -1639,7 +1651,12 @@ separate step.
     \]
     Thus one physical letter selects the identity on the chosen final block
     and annihilates every other final block.
-\end{definition}
+\end{lemma}
+\begin{proof}\leanok
+    Apply the simultaneous block inverse entrywise and sum over the diagonal
+    matrix units of block $d$. If $e=d$, their sum is $I_{D_d}$; if
+    $e\ne d$, every term vanishes.
+\end{proof}
 
 \begin{theorem}[Printed F-move and inverse]%
     \label{thm:mpdo_complete_zipper_printed_fmove}
@@ -1651,7 +1668,7 @@ separate step.
         inversePrintedFMatrix_mul_printedFMatrix}
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family,
-        def:mpdo_complete_zipper_final_block_selector,
+        lem:mpdo_complete_zipper_final_block_selector,
         lem:matrix_kronecker_identity_cancellation}
     Fix $a,b,c,d\in\Lambda$.  There is an invertible matrix
     \[
