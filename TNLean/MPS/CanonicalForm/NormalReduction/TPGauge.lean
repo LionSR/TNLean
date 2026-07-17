@@ -611,11 +611,13 @@ structural bond-dimension bound passes through unchanged.
 /-- **Arbitrary-input PGVWC07 unital dual-diagonal form.**
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
-lines 761--770 and 816--832.  At every positive length, an arbitrary tensor is
+lines 761--832.  At every positive length, an arbitrary tensor is
 represented by positive real weights multiplying nonzero blocks in the unital
 orientation.  Each block has only scalar transfer-map fixed points and admits a
 diagonal positive-definite fixed point of the adjoint transfer map.  The total
-bond dimension of the retained blocks is at most the original bond dimension. -/
+bond dimension of the retained blocks is at most the original bond dimension.
+The positive-length form and structural dimension bound are recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_unital_dualDiag_from_arbitrary
     (A : MPSTensor d D) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
