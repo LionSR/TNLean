@@ -38,14 +38,20 @@ private theorem mul_eq_self_of_isHermitian_of_mul_eq_self
   have hstar := congrArg Matrix.conjTranspose hleft
   simpa only [Matrix.conjTranspose_mul, hA.eq, hP.eq] using hstar
 
-/-- The probability of the absorbed BNT sector in the normalized length-
-`N` periodic state.  The copy number is part of the weight.
+/-- The probability of the absorbed BNT sector in the normalized positive-
+length periodic state.  The copy number is part of the weight.  Positive
+normalizations are part of the definition, so there is neither an empty-chain
+value nor a value obtained by dividing by a zero trace.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1753--1770. -/
 noncomputable def bntSectorProbability
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
-      S.weight j q = S.weight j q') (N : ℕ) (s : Fin S.basisCount) : ℝ :=
+      S.weight j q = S.weight j q') (N : ℕ) (_hN : 0 < N)
+    (_hMtrace : 0 < Matrix.trace (mpo M N))
+    (_hSectorTrace : ∀ s, 0 < Matrix.trace
+      (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N))
+    (s : Fin S.basisCount) : ℝ :=
   (S.copies s : ℝ) *
     (Matrix.trace (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N)).re /
       (Matrix.trace (mpo M N)).re
@@ -56,11 +62,12 @@ theorem bntSectorProbability_pos
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') {N : ℕ}
+    (hN : 0 < N)
     (hMtrace : 0 < Matrix.trace (mpo M N))
     (hSectorTrace : ∀ s, 0 < Matrix.trace
       (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N))
     (s : Fin S.basisCount) :
-    0 < bntSectorProbability M S hWeight N s := by
+    0 < bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s := by
   rw [bntSectorProbability]
   have hMre : 0 < (Matrix.trace (mpo M N)).re :=
     (RCLike.pos_iff.mp hMtrace).1
@@ -82,7 +89,7 @@ theorem normalizedMPO_eq_sum_bntSectorProbability_smul
     (hSectorTrace : ∀ s, 0 < Matrix.trace
       (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N)) :
     normalizedMPO M N = ∑ s : Fin S.basisCount,
-      (bntSectorProbability M S hWeight N s : ℂ) •
+      (bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s : ℂ) •
         normalizedMPO (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
   classical
   have hMtraceEq : Matrix.trace (mpo M N) =
@@ -99,7 +106,7 @@ theorem normalizedMPO_eq_sum_bntSectorProbability_smul
       · rfl
       · simpa using (RCLike.pos_iff.mp (hSectorTrace s)).2
   have hpComplex (s : Fin S.basisCount) :
-      (bntSectorProbability M S hWeight N s : ℂ) =
+      (bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s : ℂ) =
         (S.copies s : ℂ) *
           Matrix.trace (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) /
             Matrix.trace (mpo M N) := by
@@ -267,11 +274,12 @@ theorem reducedBlockState_eq_sum_bntSectorProbability_smul
     (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') {N L : ℕ} (hN : 0 < N)
-    (hL : L ≤ N) (hMtrace : 0 < Matrix.trace (mpo M N))
+    (_hLpos : 0 < L) (hL : L ≤ N)
+    (hMtrace : 0 < Matrix.trace (mpo M N))
     (hSectorTrace : ∀ s, 0 < Matrix.trace
       (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N)) :
     reducedBlockState M N L hL = ∑ s : Fin S.basisCount,
-      (bntSectorProbability M S hWeight N s : ℂ) •
+      (bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s : ℂ) •
         reducedBlockState (commonWeightAbsorbedBasisMPOTensor S hWeight s) N L hL := by
   classical
   have hfull := normalizedMPO_eq_sum_bntSectorProbability_smul
@@ -314,8 +322,9 @@ theorem blockEntropy_eq_sum_bntSectorProbability
       (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N)) :
     blockEntropy M N L hL (hMpdo N hN) =
       ∑ s : Fin S.basisCount,
-        (Real.negMulLog (bntSectorProbability M S hWeight N s) +
-          bntSectorProbability M S hWeight N s *
+        (Real.negMulLog (bntSectorProbability M S hWeight N hN
+            hMtrace hSectorTrace s) +
+          bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s *
             blockEntropy (commonWeightAbsorbedBasisMPOTensor S hWeight s)
               N L hL (hSectorMpdo s N hN)) := by
   classical
@@ -323,7 +332,7 @@ theorem blockEntropy_eq_sum_bntSectorProbability
   let K : (s : Fin S.basisCount) → MPOTensor d (S.basisDim s) :=
     fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s
   let p : Fin S.basisCount → ℝ := fun s ↦
-    bntSectorProbability M S hWeight N s
+    bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s
   let ρ : (s : Fin S.basisCount) →
       Matrix (Fin (L + 1) → Fin d) (Fin (L + 1) → Fin d) ℂ :=
     fun s ↦ reducedBlockState (K s) N (L + 1) hL
@@ -331,7 +340,7 @@ theorem blockEntropy_eq_sum_bntSectorProbability
       Matrix (Fin (L + 1) → Fin d) (Fin (L + 1) → Fin d) ℂ :=
     fun s ↦ firstSiteMatrix (bntSectorProjection hC hρ₃ hη hR s) L
   have hp : ∀ s, 0 < p s := fun s ↦
-    bntSectorProbability_pos M S hWeight hMtrace hSectorTrace s
+    bntSectorProbability_pos M S hWeight hN hMtrace hSectorTrace s
   have hρpos : ∀ s, (ρ s).PosSemidef := fun s ↦
     reducedBlockState_posSemidef (K s) N (L + 1) hL (hSectorMpdo s N hN)
   have hρtrace : ∀ s, Matrix.trace (ρ s) = 1 := fun s ↦
@@ -358,8 +367,8 @@ theorem blockEntropy_eq_sum_bntSectorProbability
   have hsum : reducedBlockState M N (L + 1) hL =
       ∑ s, (p s : ℂ) • ρ s := by
     exact reducedBlockState_eq_sum_bntSectorProbability_smul
-      M S hM hWeight hN hL hMtrace hSectorTrace
-  have hadd := vonNeumannEntropy_eq_sum_of_orthogonal_support
+      M S hM hWeight hN (by omega) hL hMtrace hSectorTrace
+  have hadd := vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports
     (reducedBlockState M N (L + 1) hL)
     (reducedBlockState_isHermitian M N (L + 1) hL (hMpdo N hN))
     (fun s ↦ (p s : ℂ) • ρ s) Q
@@ -396,7 +405,7 @@ theorem blockEntropy_add_blockEntropy_eq_bntSector
       (fun j ↦ S.basisMPOTensor j) C)
     (hρ₃ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ₃)
     (hη : EtaStructure ρ₃) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
-    (hSAL : IsSAL M) (hZCL : IsSourceZCL M)
+    (hSAL : IsSAL M)
     (hSectorMpdo : ∀ s, IsMPDO
       (commonWeightAbsorbedBasisMPOTensor S hWeight s))
     (hSectorTrace : ∀ (N : ℕ), 0 < N → ∀ s, 0 < Matrix.trace
@@ -412,8 +421,11 @@ theorem blockEntropy_add_blockEntropy_eq_bntSector
   dsimp only
   let hMpdo : IsMPDO M := Classical.choose hSAL
   have hN : 0 < N := by omega
-  have hMtrace : 0 < Matrix.trace (mpo M N) :=
-    trace_mpo_pos_of_isMPDO_isSourceZCL M hMpdo hZCL hN
+  have hMtrace : 0 < Matrix.trace (mpo M N) := by
+    apply Matrix.PosSemidef.trace_pos_of_ne_zero (hMpdo N hN)
+    intro hzero
+    exact (Classical.choose_spec hSAL).1 N hN (by
+      rw [hzero, Matrix.trace_zero])
   have hGlobal := mutualInfoChain_eq_of_isSAL M hSAL
     (N := N) (L := 1) (L' := m) (by omega) (by omega) hm1 hmN
   simp only [mutualInfoChain] at hGlobal
@@ -431,7 +443,7 @@ theorem blockEntropy_add_blockEntropy_eq_bntSector
       (Nat.sub_le N m) hMtrace (hSectorTrace N hN)
   rw [hEABC, hEB, hEAB, hEBC] at hGlobal
   let p : Fin S.basisCount → ℝ := fun t ↦
-    bntSectorProbability M S hWeight N t
+    bntSectorProbability M S hWeight N hN hMtrace (hSectorTrace N hN) t
   let L : Fin S.basisCount → ℝ := fun t ↦
     blockEntropy (commonWeightAbsorbedBasisMPOTensor S hWeight t)
         N (N - 1) (Nat.sub_le N 1) (hSectorMpdo t N hN) +
@@ -462,7 +474,7 @@ theorem blockEntropy_add_blockEntropy_eq_bntSector
       (by omega) (Nat.sub_le N m) (hSectorMpdo t N hN)] at hineq
     exact hineq
   exact eq_of_weighted_sum_eq_of_pos_of_le p L U
-    (fun t ↦ bntSectorProbability_pos M S hWeight hMtrace
+    (fun t ↦ bntSectorProbability_pos M S hWeight hN hMtrace
       (hSectorTrace N hN) t) hle hsum s
 
 /-- Every absorbed BNT representative satisfies the saturated area law once
@@ -483,7 +495,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
       (fun j ↦ S.basisMPOTensor j) C)
     (hρ₃ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ₃)
     (hη : EtaStructure ρ₃) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
-    (hSAL : IsSAL M) (hZCL : IsSourceZCL M)
+    (hSAL : IsSAL M)
     (hSectorMpdo : ∀ s, IsMPDO
       (commonWeightAbsorbedBasisMPOTensor S hWeight s))
     (hSectorTrace : ∀ (N : ℕ), 0 < N → ∀ s, 0 < Matrix.trace
@@ -494,10 +506,10 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
   refine ⟨hSectorMpdo s, fun N hN ↦ ne_of_gt (hSectorTrace N hN s), ?_⟩
   intro N L hL hLN
   have hEqL := blockEntropy_add_blockEntropy_eq_bntSector
-    M S hM hWeight hC hρ₃ hη hR hSAL hZCL hSectorMpdo hSectorTrace
+    M S hM hWeight hC hρ₃ hη hR hSAL hSectorMpdo hSectorTrace
       (N := N) (m := L) hL (Nat.le_of_lt hLN) s
   have hEqSucc := blockEntropy_add_blockEntropy_eq_bntSector
-    M S hM hWeight hC hρ₃ hη hR hSAL hZCL hSectorMpdo hSectorTrace
+    M S hM hWeight hC hρ₃ hη hR hSAL hSectorMpdo hSectorTrace
       (N := N) (m := L + 1) (by omega) (by omega) s
   simp only [mutualInfoChain]
   dsimp only at hEqL hEqSucc
@@ -548,7 +560,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos
     reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
       M S hM hWeight hnonNil hSAL
   apply commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
-    M S hM hWeight hC hClosure.1 hη hClosure.2 hSAL hZCL
+    M S hM hWeight hC hClosure.1 hη hClosure.2 hSAL
   · intro t
     exact commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL t

@@ -40,6 +40,9 @@ in strong subadditivity.
   The weights are nonnegative.
   When the weights form a probability distribution, the first terms sum to
   the Shannon entropy \(H(p)\).
+* `vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports` — entropy is
+  additive for Hermitian summands carried by mutually annihilating support
+  operators, without an ambient resolution of the identity.
 * `eq_of_weighted_sum_eq_of_pos_of_le` — equality of two positively weighted
   sums, together with termwise inequalities, forces equality term by term.
 
@@ -422,7 +425,7 @@ theorem eq_of_weighted_sum_eq_of_pos_of_le {ι : Type*} [Fintype ι]
 
 end BlockDiagonal
 
-section OrthogonalSupports
+section PairwiseAnnihilatingSupports
 
 variable {o : Type*} [Fintype o]
 
@@ -435,13 +438,13 @@ The proof writes the sum as a rectangular product.  Reversing the factors
 gives the dependent block diagonal of the summands, with only additional zero
 eigenvalues.  This is the support form of the direct-sum entropy argument in
 arXiv:1606.00608, Appendix C.2, lines 1760--1770. -/
-theorem vonNeumannEntropy_eq_sum_of_orthogonal_support
+theorem vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports
     {n : Type*} [Fintype n]
     (A : Matrix n n ℂ) (hA : A.IsHermitian)
     (M P : o → Matrix n n ℂ) (hM : ∀ s, (M s).IsHermitian)
     (hsum : A = ∑ s, M s)
     (hsupport : ∀ s, P s * M s = M s ∧ M s * P s = M s)
-    (horth : ∀ s t, s ≠ t → P s * P t = 0) :
+    (hannihilate : ∀ s t, s ≠ t → P s * P t = 0) :
     open scoped Classical in
     vonNeumannEntropy A hA = ∑ s, vonNeumannEntropy (M s) (hM s) := by
   classical
@@ -464,7 +467,7 @@ theorem vonNeumannEntropy_eq_sum_of_orthogonal_support
         calc
           P s * M t = P s * (P t * M t) := by rw [(hsupport t).1]
           _ = (P s * P t) * M t := by rw [Matrix.mul_assoc]
-          _ = 0 := by rw [horth s t hst, Matrix.zero_mul]
+          _ = 0 := by rw [hannihilate s t hst, Matrix.zero_mul]
       rw [hzero, Matrix.zero_apply,
         Matrix.blockDiagonal'_apply_ne M i j hst]
   have hBlock : (Matrix.blockDiagonal' M).IsHermitian := by
@@ -486,4 +489,4 @@ theorem vonNeumannEntropy_eq_sum_of_orthogonal_support
     _ = ∑ s, vonNeumannEntropy (M s) (hM s) :=
       vonNeumannEntropy_blockDiagonal' M hM hBlock
 
-end OrthogonalSupports
+end PairwiseAnnihilatingSupports
