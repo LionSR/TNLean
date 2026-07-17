@@ -92,18 +92,13 @@ proportional and equal MPV fundamental theorems in the same form
 
 \section{The formal argument}
 
-The formal equality relation \leanid{SameMPV}\textsubscript{2} compares matrix product
-vector coefficients for all finite words, including the empty word.
-This convention is stronger than the positive-length family in the source
-definition. An all-zero block of bond dimension $D_0$ contributes nothing at
-positive length, but it contributes $D_0$ at length zero, because the empty product
-has trace $D_0$. Consequently the formal proof separates the zero-tail
-contribution from the nonzero part, proves positive-length equality for the
-nonzero parts, and records the exact $N=0$ identity separately.\footnote{See
-the zero-block separation section of the canonical-form chapter and the
-corresponding zero-tail formalization in
-\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean} and
-\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
+The canonical-form reduction uses the positive-length relation
+\leanid{SameMPV₂Pos}, matching the family in the source definition. All-zero
+blocks contribute nothing at positive length and are discarded. The total bond
+dimension of the retained family is bounded directly by the structural
+direct-sum identity, without an empty-word comparison.\footnote{See
+\leanid{exists_irreducible_blockDecomp_nonzeroBlocks} and
+\leanid{exists_tp_gauge_from_arbitrary}.}
 
 The common blocking step is also more explicit. For a single family of blocks,
 the source phrase ``block by the least common multiple of the periods'' hides no
@@ -118,9 +113,7 @@ part of the statement.\footnote{The common-sector data and the relabeling result
 are recorded in \path{blueprint/src/chapter/ch09_canonical.tex:1645--1824} and
 \path{blueprint/src/chapter/ch09_canonical.tex:3230--3284}. The main formal
 statement is
-\texttt{MPSTensor.fundamentalTheorem\_after\_blocking\_commonLength\_commonSector},
-with the one-sided relabeling-compatible zero-tail statement
-\texttt{MPSTensor.zeroTail\_commonFlat\_of\_reindexed}; see
+\texttt{MPSTensor.fundamentalTheorem\_after\_blocking\_commonLength\_commonSector}; see
 \path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean} and
 \path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
 This is why the canonical-form theorem supplies relabeled common-sector
@@ -169,8 +162,7 @@ for the phases supplied by the sector matching theorem.
 
 These distinctions are coupled in the single conversion from an arbitrary equality
 of MPV families to the hypotheses of the BNT sector-comparison theorem. The
-zero-tail convention determines what is known at length zero after each blocking.
-The common blocking construction determines the physical alphabet and the relabeled
+common blocking construction determines the physical alphabet and the relabeled
 sector families to which the coefficient comparison applies. Any later injectivity
 refinement is reserved for separate arguments, such as overlap-rigidity
 statements that require one-site injective blocks; it is not a hypothesis of the
@@ -179,8 +171,8 @@ copy-weight data are constructed for the relabeled nonzero-sector families, not
 for an earlier family before the common-alphabet relabeling.
 
 For this reason common blocking and coefficient comparison should be kept in one
-account. The formal proof needs the whole chain: remove the zero tail, choose one
-common physical blocking length, account for the word-relabeling, keep later
+account. The formal proof needs the whole chain: discard all-zero blocks at
+positive lengths, choose one common physical blocking length, account for the word-relabeling, keep later
 overlap-rigidity requirements separate, and turn BNT matching data into the
 sector coefficient identities and copy-weight equations used by the final gauge
 comparison.
@@ -209,17 +201,17 @@ invisible to positive-length MPVs, periods are removed by blocking, injectivity 
 obtained by a later Wielandt-type blocking, BNT bases are matched by phase and
 gauge, and coefficient multiplicities are recovered from power sums. The formal
 development exposes these operations as separate statements because the formal MPV
-relation includes the empty word, the two sides must be placed over one explicitly
-relabeled alphabet after blocking, and the downstream comparison theorem constructs
+relation is transported through explicit positive blocking, the two sides must be
+placed over one explicitly relabeled alphabet after blocking, and the downstream comparison theorem constructs
 matched-sector coefficient identities and copy-weight equations after this
 relabeling.
 
 Thus the comparison gives neither a counterexample nor a theorem-level source
 error. It explains why the formal proof cannot compress the argument into a
 single invocation of the BNT uniqueness theorem. The relevant comparison points are
-zero-tail cancellation, common primitive block construction, common blocking,
-zero-tail transport, matched-sector coefficient identities, copy-weight matching,
-and iterated-blocking relabeling.\footnote{For traceability, these are recorded in
+removal of all-zero blocks, common primitive block construction, common blocking,
+matched-sector coefficient identities, copy-weight matching, and iterated-blocking
+relabeling.\footnote{For traceability, these are recorded in
 \href{https://github.com/LionSR/TNLean/issues/652}{issue \#652},
 \href{https://github.com/LionSR/TNLean/issues/942}{issue \#942},
 \href{https://github.com/LionSR/TNLean/issues/969}{issue \#969},

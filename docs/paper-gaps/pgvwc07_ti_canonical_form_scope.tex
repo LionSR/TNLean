@@ -246,43 +246,18 @@ The earlier existence path now has the following formal pieces.
           family.  This closes the blockwise assembly step after the
           irreducible summands have already been obtained.  It is still not
           the full source theorem, because the statement assumes the prepared
-          nonzero irreducible decomposition and does not yet incorporate the
-          arbitrary-input zero-block separation or the final total
-          bond-dimension bound.
+          nonzero irreducible decomposition.
 
     \item
-          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail|
-          composes the zero-block separation with the preceding blockwise
-          PGVWC07 theorem.  Starting from an arbitrary tensor, it retains the
-          all-zero summands as one zero block and puts the nonzero part into
-          the unital orientation, with positive spectral-radius weights,
-          scalar transfer-map fixed points, and diagonal positive-definite dual
-          fixed points.  This removes the prepared-family hypothesis from the
-          blockwise statement while still keeping the zero-block contribution
-          explicit in the finite-ring MPV identity.  It is still not the full
-          source theorem; this theorem itself does not include the final
-          total bond-dimension bound.
-
-    \item
-          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|
-          adds the length-zero trace calculation to the preceding arbitrary
-          tensor theorem.  It proves
-          \(D_0+\sum_k D_k=D\), where \(D_0\) is the retained zero-block bond
-          dimension and the \(D_k\) are the nonzero block dimensions.  Hence
-          \(\sum_k D_k\leq D\), matching the total bond-dimension estimate in
-          Theorem~\texttt{Th:TIcanonical}, lines 761--762, while still keeping
-          the zero block explicit.
-
-    \item
-          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound|
-          removes the explicit zero-block summand from the displayed MPV
-          identity by restricting the equality to positive chain lengths.
-          The zero block has no positive-length coefficients, so the nonzero
-          weighted direct sum has the same positive-length MPV family as the
-          original tensor, and the estimate \(\sum_k D_k\leq D\) is retained.
-          This matches the source theorem on nonempty rings.  A statement that
-          also quantifies over the empty word must either keep the zero block or
-          separately account for its bond dimension.
+          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary|
+          composes the positive-length nonzero-block decomposition with the
+          preceding blockwise PGVWC07 theorem. Starting from an arbitrary
+          tensor, it discards all-zero blocks, which vanish on nonempty rings,
+          and puts the retained blocks into the unital orientation, with
+          positive spectral-radius weights, scalar transfer-map fixed points,
+          and diagonal positive-definite dual fixed points. The structural
+          dimension identity for the original direct sum gives
+          \(\sum_k D_k\leq D\); no empty-word trace calculation is used.
 
     \item
           \path|MPSTensor.PGVWC07PositiveLengthWitness| and
@@ -334,9 +309,8 @@ The earlier existence path now has the following formal pieces.
           records the arbitrary-input zero/nonzero dichotomy for the exact
           rescaled formulation.  Either all positive-length MPV coefficients of
           the original tensor vanish, or the preceding exact rescaled normalized
-          PGVWC07 form exists.  This still keeps the zero positive-length branch
-          explicit and therefore does not by itself settle the final length-zero
-          convention for Theorem~\texttt{Th:TIcanonical}.
+          PGVWC07 form exists. The next theorem absorbs the zero branch into an
+          empty retained block family.
 
     \item
           \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty|
@@ -351,36 +325,29 @@ The earlier existence path now has the following formal pieces.
           normalized weighted block tensor has the same coefficients on every
           nonempty ring, and \(\sum_k D_k\leq D\).
 
-    \item
-          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|
-          records the complementary explicit all-zero direct-summand convention before the
-          final finite-family weight normalization.  It keeps the all-zero summand
-          dimension from the arbitrary-input decomposition, proves
-          positive-length agreement with the weighted nonzero blocks, and
-          records the length-zero dimension identity
-          \(D_0+\sum_kD_k=D\), together with the bond-dimension bound.
-
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
           arbitrary tensor and gives a finite direct sum of irreducible blocks
-          with the same matrix-product-vector coefficients. This is a faithful
-          partial proof step. It is not the full source theorem, because it does
+          with the same matrix-product-vector coefficients and the structural
+          identity \(\sum_kD_k=D\). This is a faithful partial proof step. It is
+          not the full source theorem, because it does
           not construct the weights $\lambda_j$, the unital block orientation,
           the diagonal full-rank matrices $\Lambda^j$, the uniqueness of the
           identity fixed point, or the final bond-dimension bound.
 
     \item \path|MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks|
-          separates the all-zero blocks from the irreducible summands and keeps
-          the length-zero trace contribution. This matches the paper's statement
-          that zero blocks may occur, but it is still only an intermediate
-          decomposition before Perron--Frobenius normalization.
+          discards the all-zero irreducible summands at positive lengths and
+          retains only blocks with a nonzero Kraus operator. It proves
+          positive-length MPV equality, positive block dimensions, and
+          \(\sum_kD_k\leq D\) directly from the preceding structural identity.
 
-    \item \path|MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail|
+    \item \path|MPSTensor.exists_tp_gauge_from_arbitrary|
           applies Perron--Frobenius normalization block by block after the
-          all-zero summands have been separated. It produces nonzero
+          all-zero summands have been discarded. It produces nonzero
           irreducible blocks in the local left-canonical orientation
-          $\sum_i (B_k^i)^\dagger B_k^i = \mathbf{1}$. This is the dual
+          $\sum_i (B_k^i)^\dagger B_k^i = \mathbf{1}$ and preserves the
+          bond-dimension bound. This is the dual
           orientation of the unital condition in
           Theorem~\texttt{Th:TIcanonical}; the conversion is a convention issue
           only when the adjoint transfer map is carried along explicitly.
@@ -427,13 +394,10 @@ points, and the bond-dimension bound.  The nonzero-block family is allowed to
 be empty exactly in the case where every positive-length MPV coefficient
 vanishes.
 
-The explicit zero-block/length-zero bookkeeping is recorded earlier by
-\path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|.
-It keeps the all-zero summand dimension, gives positive-length agreement with the
-weighted nonzero blocks, and proves \(D_0+\sum_kD_k=D\), together with the
-bond-dimension bound.  This is the companion length-zero convention before the
-final finite-family weight normalization, while the blueprint cites the
-positive-length theorem as the primary statement.
+The preceding theorem
+\path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary| supplies the
+unnormalized positive-length block family and its bond-dimension bound directly,
+without a separate empty-word convention.
 
 The remaining conditional primitive, peripheral-primitive, and
 normal-canonical-form reductions are later consequences used only after their

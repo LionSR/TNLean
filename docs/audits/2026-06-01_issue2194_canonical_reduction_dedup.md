@@ -1,5 +1,10 @@
 # Issue 2194 canonical-form reduction deduplication audit
 
+> **Status update (2026-07-17).** This audit records the declaration surface at
+> its stated commit. The later positive-length cleanup replaced
+> `exists_tp_gauge_from_arbitrary_with_zeroTail` by
+> `MPSTensor.exists_tp_gauge_from_arbitrary` and removed the zero-tail data.
+
 Date: 2026-06-01.
 
 This note records the final audit for issue #2194, whose subject is the
@@ -145,4 +150,3 @@ common_blocked_cyclic_sector_flat_weight_ne_zero
 Historical audit notes still mention some of these names as archaeology. Those
 mentions are not live theorem references and do not affect Chapter 8 or Chapter
 11b.
-
