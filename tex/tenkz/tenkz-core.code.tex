@@ -1,0 +1,311 @@
+% tenkz-core — L0: semantic hues, theme slots, styles, the metric system,
+% the label-placement constants, and the event stream.
+%
+% Metric doctrine: ONE base pitch; every repeated distance is a named ratio
+% of it.  Profiles (compact, inline) are a scale factor applied at the base,
+% so no literal can bypass them.  Each ratio's motivation is printed in the
+% manual's geometry appendix; the source states it once here.
+%
+% Label doctrine: labels never overlap ink by construction.  Every label
+% site (in-glyph, leg tip, bond midpoint, free quadrant of a bead) is a
+% reserved band derived from the metric system; automatic placement picks a
+% free quadrant, and every label accepts `label pos` / `label shift` for
+% manual override.
+%
+% Tensor-style doctrine: ONE glyph policy per scope decides how an
+% unadorned tensor (\tn{A}, \tnput{...}) renders.
+%   tensor style=dot   (default) filled bead, label placed OUTSIDE in a
+%                      free quadrant by the auto-quadrant algorithm
+%                      (the CPSV school);
+%   tensor style=box   square/rectangular box, label typeset INSIDE
+%                      (the Bultinck/Ghent school); \tn*{A} inscribes
+%                      \overline{A}, and no external auto label exists,
+%                      so brace clearances tighten accordingly.
+% The policy is a document-wide \tnset key and a per-picture key of the
+% tenkz environment, \tnpic, and tenkzfree (the environments group, so a
+% picture-local assignment scopes itself; tenkzcd cells inherit it through
+% the \tnpic objects they contain).  Explicit per-cell skins (dot, box, pill,
+% mpo) always override the policy; the event stream always records the
+% RESOLVED skin.
+
+% Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape.
+\usetikzlibrary{shapes.geometric}
+
+% ---------- semantic hues (a theme may rebind colours, nothing else) ----------
+\colorlet{tenkzInk}{black!92}
+\colorlet{tenkzPaper}{white}
+\colorlet{tenkzPassive}{black!55}
+\colorlet{tenkzAction}{red!65!black}
+\colorlet{tenkzMarked}{blue!65!black}
+\colorlet{tenkzExtra}{violet!65!black}
+\colorlet{tenkzOperator}{red!80!black}% wire hue of an operator (MPO) layer
+
+% ---------- metric system ----------
+\newdimen\tenkz@pitch          \tenkz@pitch=11mm
+\newdimen\tenkz@basepitch      \tenkz@basepitch=11mm
+% ratios (of pitch unless stated)
+\def\tenkz@r@layersep{0.80}    % layers read as layers, not as two chains
+\def\tenkz@r@physleg{0.38}     % a labelled leg clears the bond-label band
+\def\tenkz@r@stub{0.45}        % open index: longer than a leg, shorter than a bond;
+                               % also the reach of an inter-layer cup: the bend
+                               % protrudes exactly as far as the stubs it replaces,
+                               % so open and cup-closed ends share one silhouette
+\def\tenkz@r@traceclear{0.62}  % trace racetrack clears leg labels on the outer row
+\def\tenkz@r@labelclear{0.12}  % ONE clearance for every label band
+\def\tenkz@r@dotlabelband{0.30}% depth of a script-size dot label: clearance + text
+\def\tenkz@r@inlinephysleg{0.26}   % inline: legs shrink faster than the pitch
+\def\tenkz@r@inlinelabelclear{0.05}% inline: labels hug the ink to spare line height
+\def\tenkz@r@dotdia{0.16}      % bead diameter
+\def\tenkz@r@tallover{0.34}    % vertical overshoot of a wires=k glyph beyond its
+                               % outer wire rows: the gate box must visibly COVER
+                               % the wires it terminates (quantikz \gate[k])
+\def\tenkz@r@phtracereach{0.24}% physical-trace clearance: how far east of the
+                               % glyph edge the per-site Tr_phys loop swings; it
+                               % must clear the glyph yet stay inside the bond
+                               % span to the next site
+\def\tenkz@r@pairtracereach{0.40}% pair-trace reach (traced columns): how far east
+                               % of the leg axis the per-column Tr_s racetrack
+                               % swings; < 1/2 so the east straight clears the
+                               % neighbouring column's glyph and label bands at
+                               % the default pitch, and wide enough that the
+                               % stadium caps (radius = reach/2) read as smooth
+                               % turnarounds rather than kinks
+\def\tenkz@r@regionmargin{0.36}% < pitch/2 so notches read; > glyph radius
+\def\tenkz@r@corner{0.14}      % rounded-corner radius of traces and hulls
+% absolute floors and ink hierarchy
+\def\tenkz@wirewidth{0.55pt}
+\def\tenkz@annwidth{0.40pt}
+\def\tenkz@emphwidth{0.80pt}
+\def\tenkz@junctionfloor{0.9mm}% below ~3x wire width a junction reads as dirt
+
+\def\tenkz@dim#1{\dimexpr#1\tenkz@pitch\relax}
+
+% ---------- glyph policy (see the tensor-style doctrine above) ----------
+% \tenkz@tensorstyle holds the resolved mode, `dot` or `box`; grid cells
+% and \tnput read it as their default skin at option-parse time.
+\def\tenkz@tensorstyle{dot}
+
+% ---------- pgfkeys front door ----------
+\def\tnset#1{\pgfqkeys{/tenkz}{#1}}
+\pgfkeys{
+  /tenkz/.is family,
+  /tenkz/pitch/.code={\tenkz@pitch=#1\relax},
+  /tenkz/compact/.code={\tenkz@pitch=0.8\tenkz@basepitch},
+  /tenkz/inline/.code={\tenkz@pitch=0.62\tenkz@basepitch
+                       \let\tenkz@labelsize\scriptscriptstyle
+                       \let\tenkz@r@physleg\tenkz@r@inlinephysleg
+                       \let\tenkz@r@labelclear\tenkz@r@inlinelabelclear},
+  /tenkz/tensor style/.is choice,
+  /tenkz/tensor style/dot/.code={\def\tenkz@tensorstyle{dot}},
+  /tenkz/tensor style/box/.code={\def\tenkz@tensorstyle{box}},
+}
+
+% Label mathematics is script-size by default: glyphs are compact marks, not
+% text boxes, and the surrounding equation stays visually dominant.
+\let\tenkz@labelsize\scriptstyle
+
+% Every inscribed glyph label carries this strut, so boxes in one row have
+% one height whether their labels are A, T_g, or A^{(2)} (Tufte: small
+% multiples must be uniform; a descender is not information).
+\def\tenkz@glyphstrut{\vphantom{A^{X}_{g}}}
+
+% ---------- style table (complete Phase-0 subset of the spec table) ----------
+\tikzset{
+  tenkz every picture/.style={line cap=round, line join=round},
+  % glyph skins
+  tensor/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
+      minimum size=\tenkz@dim{\tenkz@r@dotdia}, line width=\tenkz@wirewidth},
+  conjugate tensor/.style={tensor},
+  box tensor/.style={draw=tenkzInk, fill=tenkzPaper, rectangle,
+      inner sep=1.6pt, minimum size=\tenkz@dim{0.22},
+      line width=\tenkz@wirewidth, text=tenkzInk},
+  mpo tensor/.style={box tensor},
+  pill tensor/.style={draw=tenkzInk, fill=tenkzPaper, rectangle,
+      rounded corners=2.2pt, inner xsep=3.2pt, inner ysep=2.2pt,
+      minimum height=\tenkz@dim{0.22}, line width=\tenkz@wirewidth,
+      text=tenkzInk},
+  % capsule, not circle: the height is pinned by `minimum size`, and a wide
+  % label (an inverse, a product) grows the glyph only sideways, so every
+  % on-wire matrix on a chain reads at the same height
+  on-wire matrix/.style={draw=tenkzAction, fill=tenkzPaper, rectangle,
+      rounded corners=\tenkz@dim{0.15}, inner xsep=1.8pt, inner ysep=1.4pt,
+      minimum size=\tenkz@dim{0.30},
+      line width=\tenkz@wirewidth, text=tenkzInk},
+  % the style's public 0.6 name; \tnX is the documented alias
+  ring tensor/.style={on-wire matrix},
+  % canonical-form isometries (tri=l / tri=r): an isoceles triangle whose FLAT
+  % side receives the isometry's domain and whose APEX emits its codomain --
+  % the A_L / A_R glyphs of canonical-form MPS (sum_s A_L^s{}^dagger A_L^s = 1).
+  % Wires meet the flat side's midpoint and the apex, both on the wire axis.
+  % inner sep is tight (0.6pt): a triangle must CIRCUMSCRIBE its text box,
+  % so every point of padding costs ~triple in glyph height; the inscribed
+  % label also drops the glyph strut (see \tenkz_tri_node:nnn) or two
+  % triangle rows would collide across the default layer gap
+  % apex angle 55: the flat-side height grows like 2 tan(apex/2) * text
+  % width, so a narrower apex trades a slightly longer glyph for the
+  % vertical clearance the sandwich genre needs across the layer gap
+  canonical tensor/.style={draw=tenkzInk, fill=tenkzPaper,
+      isosceles triangle, isosceles triangle apex angle=55,
+      isosceles triangle stretches, inner sep=0.6pt,
+      minimum width=\tenkz@dim{0.34}, minimum height=\tenkz@dim{0.30},
+      line width=\tenkz@wirewidth, text=tenkzInk},
+  left canonical tensor/.style={canonical tensor, shape border rotate=0},
+  right canonical tensor/.style={canonical tensor, shape border rotate=180},
+  fusion map/.style={draw=tenkzInk, fill=tenkzInk, line cap=round,
+      line width=1.4pt},
+  tree junction/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
+      minimum size=\tenkz@junctionfloor},
+  % wires
+  bond/.style={draw=tenkzInk, line width=\tenkz@wirewidth},
+  fused bond/.style={bond, double=tenkzPaper, double distance=1.1pt},
+  physical leg/.style={bond},
+  operator bond/.style={bond, draw=tenkzOperator},
+  trace/.style={bond, rounded corners=\tenkz@dim{\tenkz@r@corner}},
+  % ---------- semantic roles (the 0.6 hue contract) ----------
+  % Resolution is pure style indirection: role words map to ONE derived
+  % style per role x glyph family — bond (wires, joins), tensor (filled
+  % beads), outline (inscribed-label glyphs: box, pill, mpo, tri, ring),
+  % edge and site (the lattice families) — all bound to the core hue
+  % slots, so a theme that rebinds tenkzOperator etc. recolours every
+  % role-hued atom, wire and join at one point.  No raw colour is ever
+  % accepted at a call site, in any tier.
+  marked bond/.style={bond, draw=tenkzMarked},
+  extra bond/.style={bond, draw=tenkzExtra},
+  passive bond/.style={bond, draw=tenkzPassive},
+  operator tensor/.style={draw=tenkzOperator, fill=tenkzOperator},
+  marked tensor/.style={draw=tenkzMarked, fill=tenkzMarked},
+  extra tensor/.style={draw=tenkzExtra, fill=tenkzExtra},
+  passive tensor/.style={draw=tenkzPassive, fill=tenkzPassive},
+  operator outline/.style={draw=tenkzOperator, text=tenkzOperator},
+  marked outline/.style={draw=tenkzMarked, text=tenkzMarked},
+  extra outline/.style={draw=tenkzExtra, text=tenkzExtra},
+  passive outline/.style={draw=tenkzPassive, text=tenkzPassive},
+  operator edge/.style={distinguished edge, draw=tenkzOperator},
+  marked edge/.style={distinguished edge, draw=tenkzMarked},
+  extra edge/.style={distinguished edge, draw=tenkzExtra},
+  passive edge/.style={distinguished edge, draw=tenkzPassive},
+  operator site/.style={draw=tenkzOperator, fill=tenkzOperator},
+  marked site/.style={draw=tenkzMarked, fill=tenkzMarked},
+  extra site/.style={draw=tenkzExtra, fill=tenkzExtra},
+  passive site/.style={draw=tenkzPassive, fill=tenkzPassive},
+  % directionality marks (design brief): an OUTGOING arrow is the vector space
+  % V, an INCOMING one its dual V*; contraction joins out-to-in, and REVERSING
+  % a barb is the dual/inverse representation -- so `reversed` variants flip
+  % the barb, never the wire.  The barb rides mid-wire and inherits the wire's
+  % colour; the `fused` variants size the barb to span the doubled wire.
+  dir marks/.style={decoration={markings, mark=at position 0.55 with
+      {\arrow{Straight Barb[length=2.6pt]}}}, postaction=decorate},
+  dir marks reversed/.style={decoration={markings, mark=at position 0.55 with
+      {\arrow{Straight Barb[length=2.6pt, reversed]}}}, postaction=decorate},
+  fused dir marks/.style={decoration={markings, mark=at position 0.55 with
+      {\arrow{Straight Barb[length=3.8pt]}}}, postaction=decorate},
+  fused dir marks reversed/.style={decoration={markings,
+      mark=at position 0.55 with
+      {\arrow{Straight Barb[length=3.8pt, reversed]}}}, postaction=decorate},
+  bond arrow/.style={bond, dir marks},
+  fused bond arrow/.style={fused bond, fused dir marks},
+  % annotation ink (never confusable with 0.55pt wires)
+  cut/.style={draw=tenkzPassive, dashed, line width=\tenkz@annwidth},
+  brace/.style={draw=tenkzInk, line width=\tenkz@annwidth,
+      decoration={brace, amplitude=2.6pt}, decorate},
+  label/.style={text=tenkzInk, inner sep=1pt, font=\scriptsize},
+  cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
+      -{Straight Barb[length=3.4pt]},
+      shorten <=3.5pt, shorten >=3.5pt},
+  % regions
+  region selected/.style={draw=tenkzAction, fill=tenkzAction!12!tenkzPaper,
+      line width=\tenkz@emphwidth},
+  region secondary/.style={draw=tenkzMarked, fill=tenkzMarked!10!tenkzPaper,
+      line width=\tenkz@emphwidth},
+  region complement/.style={draw=tenkzPassive,
+      fill=tenkzPassive!8!tenkzPaper, densely dashed,
+      line width=\tenkz@emphwidth},
+  region collar/.style={draw=tenkzExtra, fill=tenkzExtra!10!tenkzPaper,
+      line width=\tenkz@emphwidth},
+  region outline/.style={fill=none},
+  distinguished edge/.style={draw=tenkzAction, line width=\tenkz@emphwidth},
+  removed site/.style={draw=tenkzPassive, fill=tenkzPaper,
+      line width=\tenkz@wirewidth},
+}
+
+% ---------- event stream (v2, minimal Phase-0 writer) ----------
+\newwrite\tenkz@log
+\newif\iftenkz@logopen
+% Two registers, two jobs.  \tenkz@pictureuid is the GLOBAL uniqueness
+% counter: it only ever grows, so every picture's id is fresh.
+% \tenkz@pictureid is the EMITTING context: it is assigned LOCALLY at each
+% picture's begin (every begin site sits inside its picture's group), so
+% closing the group RESTORES the enclosing picture's id -- a nested \tnpic
+% inside a tenkzcd cell must not steal the parent's later events (cdcell
+% etc.), and back in running prose the register reverts to 0, which is how
+% a bare \tntree logs picture=0.
+\newcount\tenkz@pictureid
+\newcount\tenkz@pictureuid
+\AtBeginDocument{\immediate\openout\tenkz@log=\jobname.tnlog\tenkz@logopentrue}
+\AtEndDocument{\iftenkz@logopen\immediate\closeout\tenkz@log\fi}
+\def\tenkz@event#1{\iftenkz@logopen
+  \immediate\write\tenkz@log{#1}\fi}
+\def\tenkz@beginpicture#1{\global\advance\tenkz@pictureuid by 1\relax
+  \tenkz@pictureid=\tenkz@pictureuid
+  \tenkz@event{picture|id=\the\tenkz@pictureid|lang=#1}}
+
+% ---------- species (the 0.6 hue contract, clause 2) ----------
+% Species declare NAMES, never colors: `species={right,left}' (document
+% preamble via \tnset, or picture scope) assigns each new name the next
+% hue of the theme's semantic cycle and derives one style per glyph
+% family — `species <name> bond', `species <name> tensor', `species
+% <name> outline' — through the same indirection as the role styles, so
+% a theme rebinding the core hue slots recolours every species at one
+% point.  A name keeps its index (hence its hue) across redeclarations,
+% so a document-global declaration holds one hue per species over every
+% figure of a paper.  An undeclared species at a call site is an error.
+\ExplSyntaxOn
+\prop_new:N \g__tenkz_species_prop     % name -> 1-based declaration index
+\int_new:N  \g__tenkz_species_int
+% the semantic cycle: hue slots, in assignment order
+\clist_const:Nn \c__tenkz_speccycle_clist
+  { tenkzMarked , tenkzAction , tenkzExtra , tenkzOperator }
+\msg_new:nnn { tenkz } { unknown-species }
+  {
+    Undeclared~species~'#1'.~Declare~names~first~--~
+    \token_to_str:N \tnset{species={...}}~in~the~preamble~(recommended:~
+    a~species~keeps~one~hue~across~every~figure)~or~in~the~picture's~
+    option~list.
+  }
+\cs_new_protected:Npn \tenkz_species_check:n #1
+  {
+    \prop_if_in:NnF \g__tenkz_species_prop {#1}
+      { \msg_error:nnn { tenkz } { unknown-species } {#1} }
+  }
+\cs_generate_variant:Nn \tenkz_species_check:n { e, V }
+\cs_new_protected:Npn \tenkz_species_declare:n #1
+  { \clist_map_inline:nn {#1} { \tenkz_species_one:n {##1} } }
+\cs_new_protected:Npn \tenkz_species_one:n #1
+  {
+    % first declaration fixes the index; a redeclaration re-derives the
+    % styles (idempotent) without moving any later species' hue
+    \prop_if_in:NnF \g__tenkz_species_prop {#1}
+      {
+        \int_gincr:N \g__tenkz_species_int
+        \prop_gput:Nne \g__tenkz_species_prop {#1}
+          { \int_use:N \g__tenkz_species_int }
+      }
+    \prop_get:NnN \g__tenkz_species_prop {#1} \l_tmpa_tl
+    \tl_set:Ne \l_tmpb_tl
+      { \clist_item:Nn \c__tenkz_speccycle_clist
+          { 1 + \int_mod:nn { \l_tmpa_tl - 1 }
+              { \clist_count:N \c__tenkz_speccycle_clist } } }
+    \tl_set:Ne \l_tmpa_tl
+      {
+        species~#1~bond/.style={bond, draw=\l_tmpb_tl},
+        species~#1~tensor/.style={draw=\l_tmpb_tl, fill=\l_tmpb_tl},
+        species~#1~outline/.style={draw=\l_tmpb_tl, text=\l_tmpb_tl}
+      }
+    \exp_args:NV \tikzset \l_tmpa_tl
+  }
+\pgfkeys{
+  /tenkz/species/.code={\tenkz_species_declare:n{#1}},
+}
+\ExplSyntaxOff
+
+\endinput
