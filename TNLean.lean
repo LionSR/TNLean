@@ -431,6 +431,7 @@ import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.CommonWeightAbsorption
+import TNLean.MPS.MPDO.BNTClosingSelection
 import TNLean.MPS.MPDO.BNTThreeSiteCollapse
 import TNLean.MPS.MPDO.BNTMarkovKeyFormula
 import TNLean.MPS.MPDO.BNTMarkovSectorProjectors
