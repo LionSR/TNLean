@@ -279,7 +279,8 @@ theorem firstSiteMatrix_mul_mpo_comm
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) (N : ℕ) :
     firstSiteMatrix P N * mpo M (N + 1) = mpo M (N + 1) * firstSiteMatrix P N := by
   have hInv := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
-  have hcorner := mpo_opposite_corner_eq_zero M hMpdo (N + 1) (firstSiteMatrix P N)
+  have hcorner := mpo_opposite_corner_eq_zero M hMpdo (N + 1) (by omega)
+    (firstSiteMatrix P N)
     (firstSiteMatrix_isHermitian hP N) hInv
   rw [Matrix.sub_mul, Matrix.one_mul, Matrix.sub_mul] at hcorner
   rw [hInv]
@@ -467,8 +468,9 @@ combined in `TNLean/MPS/MPDO/CyclicProjector.lean`, where one noncommuting
 length gives the contradiction for a tensor in literal horizontal canonical
 form. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
-    {p : ℕ} (hp : p ≠ 0) {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    (hN : 0 < N) {p : ℕ} (hp : p ≠ 0)
+    {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hQ : Commute Q (mpo M N ^ p)) : Commute Q (mpo M N) :=
-  Matrix.PosSemidef.commute_of_commute_pow (hM N) hp hQ
+  Matrix.PosSemidef.commute_of_commute_pow (hM N hN) hp hQ
 
 end MPOTensor

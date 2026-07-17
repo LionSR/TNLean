@@ -57,6 +57,6 @@ theorem
   intro N _ k
   rw [← F.mpo_submatrix_sector_eq_cyclicNeighboringProduct k]
   exact (mpo_conjugatePhysical_posSemidef K F.physicalIsometry
-    (Classical.choose hSAL N)).submatrix _
+    (Classical.choose hSAL N (NeZero.pos N))).submatrix _
 
 end MPOTensor

@@ -493,10 +493,11 @@ this operator equality back to the tensor blocks. Positivity supplies the
 Hermiticity of the density operator; the algebraic corner argument then uses
 only that Hermiticity, one-sided invariance, and Hermiticity of `P`. -/
 theorem mpo_opposite_corner_eq_zero (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
+    (hN : 0 < N)
     (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
     (hInv : P * mpo M N = P * mpo M N * P) :
     (1 - P) * mpo M N * P = 0 :=
-  Matrix.IsHermitian.opposite_corner_eq_zero (hM N).isHermitian hP hInv
+  Matrix.IsHermitian.opposite_corner_eq_zero (hM N hN).isHermitian hP hInv
 
 /-- Compressions of an MPDO density operator by a Hermitian matrix are
 positive semidefinite.  Applied to the sector projectors $P_{\alpha,k}$ of the
@@ -504,9 +505,10 @@ vertical decomposition, this is the operator inequality
 $P_{\alpha,k}H^{(N)}P_{\alpha,k} \ge 0$ in the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1899--1903. -/
 theorem mpo_compress_posSemidef (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
-    (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian) :
+    (hN : 0 < N) (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (hP : P.IsHermitian) :
     (P * mpo M N * P).PosSemidef := by
-  have h := Matrix.PosSemidef.mul_mul_conjTranspose_same (hM N) P
+  have h := Matrix.PosSemidef.mul_mul_conjTranspose_same (hM N hN) P
   rwa [hP.eq] at h
 
 /-- A nonzero Hermitian compression of an MPDO density operator has positive
@@ -517,10 +519,12 @@ $\mu_{\alpha,k}d_\alpha > 0$; the identification of the trace with
 $\mu_{\alpha,k}d_\alpha$ uses the vertical decomposition and is a separate
 step. -/
 theorem mpo_compress_trace_pos (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
-    (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
+    (hN : 0 < N) (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (hP : P.IsHermitian)
     (hne : P * mpo M N * P ≠ 0) :
     0 < Matrix.trace (P * mpo M N * P) :=
-  Matrix.PosSemidef.trace_pos_of_ne_zero (mpo_compress_posSemidef M hM N P hP) hne
+  Matrix.PosSemidef.trace_pos_of_ne_zero
+    (mpo_compress_posSemidef M hM N hN P hP) hne
 
 /-- The transfer map of the diagonal tensor of an MPO:
 $E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.  It acts on the horizontal bond space;

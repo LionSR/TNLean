@@ -2,7 +2,7 @@
 
 A \emph{basis of normal tensors} (BNT) for an MPS tensor $A$ is a finite family
 of normal blocks $\{A_j\}$ whose MPV states $\{\ket{V^{(N)}(A_j)}\}$ span
-$\ket{V^{(N)}(A)}$ at every length and are eventually linearly independent. Two
+$\ket{V^{(N)}(A)}$ at every positive length and are eventually linearly independent. Two
 payoffs follow. First, equal MPV families force a bijective gauge-phase matching
 of the basis sectors $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$. Second, the sector
 coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^N$ recover the per-copy weight
@@ -18,7 +18,7 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     A \emph{basis of normal tensors} (BNT) for a total tensor $A_{\mathrm{tot}}$
     consists of $g$ block tensors $(A_1, \ldots, A_g)$ with bond dimensions
     $(D_1, \ldots, D_g)$ such that each $A_j$ is normal
-    (Definition~\ref{def:normal}); at each system size~$N$ the MPV of
+    (Definition~\ref{def:normal}); at each system size~$N\geq1$ the MPV of
     $A_{\mathrm{tot}}$ lies in the span of the block MPVs
     $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$; and for sufficiently large~$N$ those block
     MPVs are linearly independent. This is \cite[Definition~IV.2]{Cirac2021Matrix}.
@@ -35,7 +35,7 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     % Source: Cirac2017MPDO_AnnPhys \S~II.C, lines 271--274.
     The coefficient form of a basis of normal tensors: each block $A_j$ is a
     CPSV normal tensor (Definition~\ref{def:nt_cpsv}), the MPV of $A$ is given at
-    every length by explicit coefficients $c_j^{(N)} \in \C$ with
+    every positive length by explicit coefficients $c_j^{(N)} \in \C$ with
     $\ket{V^{(N)}(A)} = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)}$, and the
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
 \end{definition}

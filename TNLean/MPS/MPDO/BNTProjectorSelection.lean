@@ -434,9 +434,7 @@ theorem changePhysicalBasis_bntSectorProjection_basis
       hC hρ hη hR i s s (Or.inr fun his ↦ hsi his.symm) β α
     exact Matrix.ext_iff.mpr hzero a b
 
-/-- The MPO of the zero local tensor vanishes at every positive chain
-length.  The positive-length condition is essential: the empty virtual word
-is the identity matrix and retains the bond dimension under the trace. -/
+/-- The MPO of the zero local tensor vanishes at every physical chain length. -/
 theorem mpo_zero_of_pos {D : ℕ} {N : ℕ} (hN : 0 < N) :
     mpo (0 : MPOTensor d D) N = 0 := by
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
@@ -450,9 +448,6 @@ theorem mpo_zero_of_pos {D : ℕ} {N : ℕ} (hN : 0 < N) :
 
 /-- Sitewise compression of a BNT representative by `P_s` retains precisely
 the matching representative.
-
-The condition `0 < N` excludes the empty word, which is not a physical chain
-in the source and whose closed virtual trace records the bond dimension.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -/
 theorem singleKrausMap_sitewise_bntSectorProjection_mpo_basis
@@ -525,15 +520,11 @@ This is the generic form with the closing matrices and simultaneous inverse
 displayed explicitly.  The source specialization below derives these data
 from common blocking and SAL.
 
-The condition `0 < N` is the physical-chain convention of the source.  At
-`N = 0`, a closed empty virtual word records the bond dimension, so the
-displayed sector-selection identity is not asserted.
-
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -/
 theorem singleKrausMap_sitewise_bntSectorProjection_mpo
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -556,7 +547,7 @@ theorem singleKrausMap_sitewise_bntSectorProjection_mpo
     ext u v
     rw [Matrix.sum_apply]
     simp only [Matrix.smul_apply, smul_eq_mul]
-    exact S.mpo_eq_sum_coeff_basisMPOTensor M hM u v
+    exact S.mpo_eq_sum_coeff_basisMPOTensor M hM hN u v
   rw [hmpo, map_sum]
   simp_rw [map_smul]
   simp_rw [singleKrausMap_sitewise_bntSectorProjection_mpo_basis
@@ -585,7 +576,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -
 theorem sitewise_bntSectorProjection_mul_mpo_mul_self
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -636,16 +627,12 @@ the source's common blocking, expressed here by the one-letter simultaneous
 span.  The passage to this blocked form is recorded in
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
-The tensor-power conclusion assumes `0 < N`.  This is the physical-chain
-convention in the source; an empty virtual word instead records the bond
-dimension.
-
 Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj`, `generateMPDO`,
 and `sigmaNKj`, lines 1680--1759. -/
-theorem exists_bntProjectorSelection_positiveLength_of_sameMPV₂_isSAL
+theorem exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -682,7 +669,7 @@ theorem exists_bntProjectorSelection_positiveLength_of_sameMPV₂_isSAL
                   mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) := by
   dsimp only
   obtain ⟨C, hC, hη, _hunique, _hproj, _horth, _hsum⟩ :=
-    exists_bntSectorProjectors_four_of_sameMPV₂_isSAL
+    exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL
   let hClosure :=
     reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing

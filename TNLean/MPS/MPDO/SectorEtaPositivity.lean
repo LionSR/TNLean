@@ -264,7 +264,7 @@ theorem sectorEta_self_posSemidef
   rw [sectorEta_eq_etaOfSectorTensors]
   exact etaOfSectorTensors_self_posSemidef K hη _ _
     (fun β α => physicalSlice_sector_factorization K hK R ρ hρ hη hm β α)
-    (hM 1) k
+    (hM 1 (by omega)) k
 
 /-- **Positivity of the mixed neighboring pairs.** For an MPDO, the chain of
 length two projected to the sectors `(k, h)` realizes
@@ -284,7 +284,7 @@ theorem sectorEta_kronecker_posSemidef
     sectorEta_eq_etaOfSectorTensors K hK hη R α₁ β₃ h k]
   exact etaOfSectorTensors_kronecker_posSemidef K hη _ _
     (fun β α => physicalSlice_sector_factorization K hK R ρ hρ hη hm β α)
-    (hM 2) k h
+    (hM 2 (by omega)) k h
 
 /-- **The pairwise positivity choice.** If the neighboring operators of a
 pair of sectors are both nonzero, positivity of `η_{k,h} ⊗ η_{h,k}` yields a

@@ -23,7 +23,7 @@ virtual tail.
 This is the reduced-state expansion used in the Case II calculation of
 arXiv:1606.00608, Appendix C.2.  The result below includes the normalization
 of the density operator and transports the formula through equality of the
-complete matrix-product-vector families.
+positive-length matrix-product-vector families.
 
 ## References
 
@@ -73,19 +73,19 @@ closing construction at lines 1714--1718. -/
   simp [MPOTensor.verticalLoop, MPOTensor.physTraceTransfer,
     MPOTensor.doubledPhysTraceTransfer, basisMPOTensor]
 
-/-- Equality of the complete doubled-index matrix-product-vector families
-gives the representative expansion of every MPO matrix entry.
+/-- Equality of the positive-length doubled-index matrix-product-vector
+families gives the representative expansion of every physical MPO matrix entry.
 
 Source: arXiv:1606.00608, equations `decBSV` and `CFK`, lines 298--301 and
 1660--1665. -/
 theorem mpo_eq_sum_coeff_basisMPOTensor
     {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (d * d))
-    (hM : SameMPV₂ M.toMPSTensor S.toTensor) {N : ℕ}
+    (hM : SameMPV₂Pos M.toMPSTensor S.toTensor) {N : ℕ} (hN : 0 < N)
     (u v : Fin N → Fin d) :
     MPOTensor.mpo M N u v =
       ∑ j : Fin S.basisCount,
         S.coeff N j * MPOTensor.mpo (S.basisMPOTensor j) N u v := by
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig, hM,
+  rw [← MPSTensor.mpv_toMPSTensor_pairConfig, hM N hN,
     S.mpv_toTensor_eq_sum_coeff]
   apply Finset.sum_congr rfl
   intro j _
@@ -189,10 +189,10 @@ only to match `IsThreeSiteFamilyClosure`.
 
 Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, equations `CFK`,
 `sigma3bka`, and `keyformula`, lines 1660--1665 and 1714--1732. -/
-theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂
+theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor) (L : ℕ) :
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor) (L : ℕ) :
     IsThreeSiteFamilyClosure
       (fun j ↦ S.basisMPOTensor j)
       (S.normalizedThreeSiteClosingMatrix M L)
@@ -231,7 +231,11 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂
   rw [Matrix.reindex_apply]
   change M.reducedBlockState (L + 3) 3 (by omega) u v = _
   rw [hReduced]
-  simp_rw [S.mpo_eq_sum_coeff_basisMPOTensor M hM]
+  have hMpoExpand (u' v' : Fin (3 + L) → Fin d) :
+      mpo M (3 + L) u' v' = ∑ j : Fin S.basisCount,
+        S.coeff (3 + L) j * mpo (S.basisMPOTensor j) (3 + L) u' v' :=
+    S.mpo_eq_sum_coeff_basisMPOTensor M hM (by omega) u' v'
+  simp_rw [hMpoExpand]
   rw [Finset.mul_sum]
   simp_rw [Finset.mul_sum]
   rw [Finset.sum_comm]
@@ -275,7 +279,7 @@ family closure with every closing matrix nonzero.
 
 The SAL hypothesis supplies the nonzero normalization trace.  Simplicity is
 used through the nonnilpotence of every physical-trace transfer, and the
-horizontal canonical form is used through equality of the complete
+horizontal canonical form is used through equality of the positive-length
 matrix-product-vector families.
 
 Source: arXiv:1606.00608, simplicity and SAL at lines 815--822, and Appendix
@@ -283,7 +287,7 @@ C.2, lines 1646--1665 and 1714--1732. -/
 theorem exists_reducedBlockState_threeSiteFamilyClosure_nonzero_closing
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -303,7 +307,7 @@ theorem exists_reducedBlockState_threeSiteFamilyClosure_nonzero_closing
     S.exists_common_threeSiteClosingMatrix_ne_zero hWeight hnonNil
   refine ⟨L, hL, ?_, ?_⟩
   · simpa [Nat.add_comm] using
-      reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂ M S hM L
+      reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos M S hM L
   · intro j
     exact S.normalizedThreeSiteClosingMatrix_ne_zero M L j
       (htrace (L + 3) (by omega)) (hR j)
@@ -321,7 +325,7 @@ C.2, lines 1646--1665 and 1714--1732. -/
 theorem reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -338,7 +342,7 @@ theorem reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
   obtain ⟨_hMPDO, htrace, _hSAL⟩ := hSAL
   constructor
   · simpa using
-      reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂ M S hM 1
+      reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos M S hM 1
   · intro j
     exact S.normalizedThreeSiteClosingMatrix_ne_zero M 1 j
       (htrace 4 (by omega))
