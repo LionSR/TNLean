@@ -227,24 +227,32 @@ for every chain length $N$.
 \footnote{The relevant declarations are
 \path{MPSTensor.SectorDecomposition.commonWeight_ne_zero} and
 \path{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}.}
-Eventual linear independence of the BNT gives one positive tail length $L$
-at which every representative has a nonzero word entry
-$\widetilde m_j$.  Taking the coefficient at total chain length $L+3$ gives
-$m_j=q_j\widetilde m_j\ne0$, as in Appendix~C.2, lines 1714--1718.
+Simplicity says that the physical-trace transfer
+$\mathcal B_j=\sum_iA_j^{ii}$ is not nilpotent.  Hence one positive tail
+length $L$ has, for every representative, a nonzero entry
+$\widetilde m_j=(\mathcal B_j^L)_{\alpha_j,\beta_j}$.  Taking the coefficient
+at total chain length $L+3$ gives the closing matrix
+\[
+  R_j=q_j\mathcal B_j^L
+\]
+with nonzero entry
+$(R_j)_{\alpha_j,\beta_j}=q_j\widetilde m_j\ne0$, as in Appendix~C.2,
+lines 1714--1718.
 \footnote{The relevant declarations are
-\path{MPSTensor.IsCPSVBasisOfNormalTensors.exists_common_nonzero_word_entry}
+\path{MPSTensor.SectorDecomposition.exists_common_nonzero_physicalTraceTail_entry}
 and
-\path{MPSTensor.SectorDecomposition.exists_common_nonzero_weighted_tail_entry}.}
-The remaining source-faithfulness gap is the identification of these selected
-scalars with entries of the matrices $R_s$ in the concrete three-site family
-closure.  The present family-closure structure does not yet carry that
-construction from the absorbed common-weight normal sectors.  Until this
-identification is proved, the unrestricted uniqueness assertion of equation
+\path{MPSTensor.SectorDecomposition.exists_common_nonzero_threeSiteClosingMatrix_entry};
+the matrix form is
+\path{MPSTensor.SectorDecomposition.exists_common_threeSiteClosingMatrix_ne_zero}.}
+The remaining source-faithfulness gap is to prove that the normalized
+three-site reduced state of the original tensor is the family closure with
+these matrices $R_j$, including the common normalization and the transport
+through the horizontal canonical-form gauge.  Until this identification is
+proved, the unrestricted uniqueness assertion of equation
 \texttt{QkKjs} is not identified with the conditional theorem above; the
 blueprint states and marks only the explicitly restricted version.  The
-elimination plan is to construct the concrete family closure with the selected
-tails as its closing matrices and then specialize the conditional uniqueness
-and projector statements.
+elimination plan is to prove this reduced-state expansion and then specialize
+the conditional uniqueness and projector statements.
 
 The neighboring operators are now assembled from these sector tensors.  The
 operator

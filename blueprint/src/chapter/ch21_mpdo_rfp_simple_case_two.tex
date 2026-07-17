@@ -130,40 +130,42 @@
 
 \begin{theorem}[Common nonzero BNT tail selection]
     \label{thm:mpdo_common_nonzero_bnt_tail_selection}
-    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.exists_common_nonzero_word_entry}
-    \lean{MPSTensor.SectorDecomposition.exists_common_nonzero_weighted_tail_entry}
+    \lean{MPSTensor.SectorDecomposition.%
+      exists_common_nonzero_physicalTraceTail_entry}
+    \lean{MPSTensor.SectorDecomposition.%
+      exists_common_nonzero_threeSiteClosingMatrix_entry}
+    \lean{MPSTensor.SectorDecomposition.%
+      exists_common_threeSiteClosingMatrix_ne_zero}
     \leanok
-    \uses{def:bnt_cpsv,
+    \uses{def:mpdo_simple_tensor,
       thm:mpdo_common_weight_coefficient_ne_zero}
     Suppose the weights over each representative are independent of the copy
-    index: $\mu_{j,q}=\mu_{j,q'}$ for all $j,q,q'$.
-    There is one positive tail length $L$ such that, for every normal
-    representative $A_j$, some physical word $\sigma$ and virtual indices
+    index, and none of the physical-trace transfers
+    $\mathcal B_j=\sum_i A_j^{ii}$ is nilpotent.  There is one positive tail
+    length $L$ such that, for every representative $A_j$, some virtual indices
     $\alpha,\beta$ satisfy
     \[
         \widetilde m_j
-        =\bigl[A_j^{\sigma_1}\cdots A_j^{\sigma_L}\bigr]_{\alpha,\beta}
+        =\bigl[\mathcal B_j^L\bigr]_{\alpha,\beta}
         \ne0.
     \]
     At total chain length $L+3$, the corresponding copy coefficient is
-    $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$, and hence
-    $m_j=q_j\widetilde m_j\ne0$.
-    This is the simultaneous selection made in
+    $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$.  Thus the three-site closing matrix
+    \[
+        R_j=q_j\mathcal B_j^L
+    \]
+    has the nonzero entry
+    $(R_j)_{\alpha,\beta}=q_j\widetilde m_j\ne0$.
+    This is the traced-tail selection made in
     \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
-    Identifying these scalars with entries of the closing matrices in the
-    three-site family expansion is a separate step.
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose a length beyond the eventual linear-independence threshold of the
-    BNT.  Each representative MPV is then nonzero, so for some word $\sigma$,
-    \[
-        \operatorname{tr}
-        \bigl(A_j^{\sigma_1}\cdots A_j^{\sigma_L}\bigr)\ne0.
-    \]
-    Consequently the word matrix is nonzero and has a nonzero entry.
-    The preceding theorem supplies the nonzero coefficient at length $L+3$;
-    their product is nonzero.
+    Since $\mathcal B_j$ is not nilpotent, every positive power of
+    $\mathcal B_j$ is nonzero; in particular, one common positive power has a
+    nonzero entry for every $j$.  The preceding theorem supplies the nonzero
+    coefficient at length $L+3$.  Therefore its product with the selected
+    entry of $\mathcal B_j^L$ is nonzero.
 \end{proof}
 
 \begin{theorem}[Canonical form with natural multiplicities]
