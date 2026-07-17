@@ -78,10 +78,13 @@ sheeted picture lives on the ket sheet.
 
 ## Examples
 
-The acceptance tests compile with `TEXINPUTS=tex/tenkz//: xelatex`:
-`boundary_test.tex`, `cups_test.tex`, `atoms_test.tex`, `plane_test.tex`, and
-the RMP reproductions `hard01…hard12_v3.tex` beside their `ref_*.png`
-originals. Every source states its formula in `%` comments.
+The acceptance corpus ships in `tex/tenkz/examples/` under descriptive
+names — `boundary-doctrine.tex`, `cups-channels.tex`, `atoms-keys.tex`,
+`oblique-planes.tex` and the rest — and compiles with
+`TEXINPUTS=tex/tenkz//: xelatex`. Every source states its formula in `%`
+comments. The RMP hard-figure reproductions (`hard01…hard12_v3.tex`
+beside their `ref_*.png` originals) live in the session test corpus, not
+in the repository.
 
 ## Gaps
 

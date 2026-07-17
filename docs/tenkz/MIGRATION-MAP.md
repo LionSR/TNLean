@@ -6,6 +6,12 @@ Generated 2026-07-17. READ-ONLY analysis of:
 - Call sites: `grep -rn '\\TN[A-Z]' blueprint/src/chapter/` (140 macro occurrences on 140 lines).
 - tenkz surface: `docs/tenkz/USAGE.md` (Phase-0, from the tenkz/06-manual stack worktree) + `docs/tenkz/WHATS-NEW-0.5.md` (0.5 additions + §Gaps = the 0.6 list).
 
+Spelling note: the tenkz bodies sketched below were written against the
+0.5 surface and predate the 0.6 rename sweep — read `close west/east` as
+`west=cup` / `east={cup=$m$}`, `plane=` as `frame=`, and so on
+(CHANGES-0.6.md has the full table). The sketches are Phase-1 input, not
+user documentation; the shim PRs will spell them 0.6.
+
 Chapter names below are relative to `blueprint/src/chapter/`, `.tex` dropped. Classes:
 
 | class | migration action |
@@ -28,6 +34,12 @@ Chapter names below are relative to `blueprint/src/chapter/`, `.tex` dropped. Cl
 | region genre → tenkzlattice | **10** | 10 |
 | channel/free genre → sandwich-cups / tenkzfree | **16** | 16 |
 | **total** | **114** | **140** |
+
+Recount note: the review report (and DESIGN §5/§6) first quoted **34**
+empty-equation entries; the measured recount over the catalogue — an
+entry is empty iff its body calls no drawing macro at all — finds
+exactly **33**, and the review-side counts have been corrected to match.
+This table is the authoritative census.
 
 The 12 multi-use entries account for 38 occurrences (10+5+3+3+3+2×7); every other entry is single-use. Two multi-use entries (`TNPEPSNormalRegionsRS`, `TNPEPSNormalRegionT`) have region-genre bodies; three (`TNPEPSEdgeGaugeOrientation`, `TNPEPSGaugeVertexAction`, `TNPEPSVertexInjectivityMap`) have free-genre bodies — they are counted once, under multi-use.
 

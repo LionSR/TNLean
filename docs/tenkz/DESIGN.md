@@ -1,6 +1,6 @@
 # TNLean Tensor-Network TikZ Library — Consolidated Final Specification
 
-**Package name: `tenkz`, v1.0.** Winning architecture: **Design 1 (tenkz)** — 2 of 3 judges (judge-tufte, judge-maintainer), cross-design tally 179 vs 176 (Quartet). Quartet's signature assets are grafted in wholesale; tenkz's judge-flagged defects are fixed in this document. This spec is the implementation contract.
+**Package name: `tenkz`; this specification targets v1.0** (the shipped package stands at v0.6 — see `CHANGES-0.6.md` for the grammar as implemented). Winning architecture: **Design 1 (tenkz)** — 2 of 3 judges (judge-tufte, judge-maintainer), cross-design tally 179 vs 176 (Quartet). Quartet's signature assets are grafted in wholesale; tenkz's judge-flagged defects are fixed in this document. This spec is the implementation contract.
 
 ---
 
@@ -153,7 +153,7 @@ Cell commands (expandable; legal only inside `tenkz`/`\tnpic`):
 `\begin{tenkzcd}[⟨keys⟩] … \end{tenkzcd}`
 
 - **Grid mode** (default): *is* tikz-cd — all its keys and the full `\arrow` grammar pass through — plus house arrow/label styles (`cd arrow`: 0.40pt, open head, boundary-clipped with named standoff) and TN objects via `\tnpic`/`\tntree`.
-- **Polygon mode** (`polygon=⟨n⟩, radius=⟨dim⟩`): n `&`-separated cells placed as named nodes on a regular n-gon (vertex 1 on top, clockwise); `\arrow[from=⟨i⟩, to=⟨j⟩, "⟨label⟩"]` between vertex names. **Honesty clause (fixes the judge-author flag):** polygon mode implements node *placement* only; arrow drawing, shortening, and label sides reuse tikz-cd's arrow-style vocabulary — it does not reimplement an arrow engine. **Documented first-class fallback (G25):** a raw `tikzcd` grid with `\tnpic`/`\tntree` objects is sanctioned whenever a layout exceeds polygon mode; the manual shows the pentagon both ways.
+- **Polygon mode** (`polygon=⟨n⟩, radius=⟨dim⟩`): n `&`-separated cells placed as named nodes on a regular n-gon (vertex 1 on top, clockwise); `\tnarrow[from=⟨i⟩, to=⟨j⟩]{⟨label⟩}` between vertex names (`\tnarrow*` puts the label on the other side; the spec first wrote this in tikz-cd's `\arrow` grammar — the shipped grammar is `\tnarrow`). **Honesty clause (fixes the judge-author flag):** polygon mode implements node *placement* only; arrow drawing, shortening, and label sides reuse tikz-cd's arrow-style vocabulary — it does not reimplement an arrow engine. **Documented first-class fallback (G25):** a raw `tikzcd` grid with `\tnpic`/`\tntree` objects is sanctioned whenever a layout exceeds polygon mode; the manual shows the pentagon both ways.
 
 ### 2.3 Math / CD objects
 
@@ -249,11 +249,11 @@ A command exists **iff** it introduces a new grammatical class: atom (`\tn`), on
   \tntree{(a\,((b\,c)_u\,d)_w)_e} &
   \tntree{(a\,(b\,(c\,d)_v)_w)_e} &
   \tntree{((a\,b)_x\,(c\,d)_v)_e}
-  \arrow[from=1, to=2, "F^{abc}_y"]
-  \arrow[from=2, to=3, "F^{a,bc,d}_e"]
-  \arrow[from=3, to=4, "F^{bcd}_w"]
-  \arrow[from=1, to=5, "F^{ab,c,d}_e"']
-  \arrow[from=5, to=4, "F^{a,b,cd}_e"']
+  \tnarrow[from=1, to=2]{F^{abc}_y}
+  \tnarrow[from=2, to=3]{F^{a,bc,d}_e}
+  \tnarrow[from=3, to=4]{F^{bcd}_w}
+  \tnarrow*[from=1, to=5]{F^{ab,c,d}_e}
+  \tnarrow*[from=5, to=4]{F^{a,b,cd}_e}
 \end{tenkzcd}
 ```
 
@@ -372,7 +372,7 @@ Structural in the grid: bonds are virtual–virtual and pairings physical–phys
 
 *Hard errors (compile time):* leg-parity violations in paired rows; unequal column counts (cell-coordinate error message); lattice cell sets outside grid bounds; unresolved named sets; polygon arrows to nonexistent vertices; duplicate `\tndefine`; port-type mismatch in `\tnjoin`.
 
-*Hard errors (audit time):* empty picture — any `lang=grid|lattice|free` picture with zero atom/region events (would have caught all 34 fake diagrams); a `figure`-wrapped picture whose body emitted no events (caption-mismatch class).
+*Hard errors (audit time):* empty picture — any `lang=grid|lattice|free` picture with zero atom/region events (would have caught all 33 fake diagrams); a `figure`-wrapped picture whose body emitted no events (caption-mismatch class).
 
 *Advisories (never build failures):*
 - **Ellipsis policy:** a `periodic` chain of ≥ 4 columns without `\tndots`.
@@ -411,7 +411,7 @@ Contexts/role/profile hand-entered metadata and their assert-equal churn (now de
 
 Generate `tenkz-compat.tex`; triage by the review's numbers, one PR per stream:
 
-- **PR 1a — the 34 empty-equation entries** → the shim emits the same math un-pictured (plain display math); a checklist issue lists the ~6 caption/content mismatches (ch26, ch20, ch02) for prose repair. No diff gate — there was never a drawing. The empty-picture audit check turns on.
+- **PR 1a — the 33 empty-equation entries** → the shim emits the same math un-pictured (plain display math); a checklist issue lists the ~6 caption/content mismatches (ch26, ch20, ch02) for prose repair. No diff gate — there was never a drawing. The empty-picture audit check turns on.
 - **PR 1b — ~68 single-use drawn entries** → mechanical tenkz bodies (topology kept, geometry discarded), plus the **≥ 11 cd call sites** (pentagons, F-moves, storyboards, region-union proof) → `tenkzcd` bodies and the **10 `TNPEPSNormal*` region call sites** → `tenkzlattice` bodies.
 - **PR 1c — the ~12 genuinely multi-use entries** (`\TNGaugeConjugation` ×10, `\TNPEPSEdgeGaugeOrientation` ×5 — parameterized so each theorem shows its own scalars, `\TNGroundSpaceMap`, `\TNCondCOne/Two`, …) → `\tndefine` with arguments.
 
@@ -437,7 +437,7 @@ Replace each `\TNFoo` call with its compat body at the call site (a script print
 | `tex/tn/tn_slide_catalogue.tex` + the parallel Slide* interface (dark theme replaces it) | 139 |
 | `tenkz-compat.tex` itself | — |
 | Python: `scripts/check_tn_references.py`; per-macro plasTeX class manufacture; role/profile/contexts assert-equal checks; `_assert_no_chapter_local_tikz`; `assert_repeated_topologies_are_motifs` (hash/cache/jinja core survives inside `tenkz_pic.py`) | — |
-| The 5 frozen fusion-tree macros; the 34 equation-only "diagrams"; `morphism` as a port type; the three-engine split (web pinned to xelatex/xdv) | — |
+| The 5 frozen fusion-tree macros; the 33 equation-only "diagrams"; `morphism` as a port type; the three-engine split (web pinned to xelatex/xdv) | — |
 
 Nothing on this list survives in any form.
 
@@ -515,6 +515,15 @@ the resolved skin. All inscribed glyphs carry a uniform-height strut so boxes la
 ---
 
 # Phase 0.5 — the mathematical-soundness overhaul (recorded 2026-07-17)
+
+> **Pre-0.6 record.** Sections 12–17 record the Phase-0.5 design in its
+> 0.5 spellings, written before the 0.6 rename sweep. The shipped grammar
+> renames: `close west`/`close east` → `west=cup`/`east={cup=$m$}` (§13);
+> `pair=trace` and `trace={physical at=…}` → the one cell-set grammar
+> `trace={(interface, cols)}` (§14); `plane=` → `frame=` (§15.2);
+> `orientation=vertical` → `frame=vertical`, and `periodic style=` →
+> `periodic, trace style=` with the policy side effect removed (§15.5).
+> See `CHANGES-0.6.md` for the surviving surface.
 
 A five-lane mathematical audit of the Phase-0 package — every manual diagram, the school's
 drawing conventions, twelve hard figures from the CPSV RMP (arXiv:2011.12127), eight hard
@@ -601,6 +610,10 @@ row" becomes true by construction, for every glyph skin.
 
 ## 13. Cups and the canonical channel spellings
 
+(0.5 spelled the cups `close west` / `close east`; 0.6 renamed them to
+`west=cup` / `east={cup=$m$}`, see CHANGES-0.6.md. The record below
+keeps the 0.5 spellings.)
+
 `close west` / `close east` are picture keys: on that side, adjacent open wire rows are tied
 to each other in pairs, top-down (rows 1–2, 3–4, …), each pair by one smooth 180-degree bend.
 A cup contracts two *different* rows' indices; `periodic` contracts a row with itself — the
@@ -625,6 +638,10 @@ X ↦ A^i X A^{i†} is drawn as `rows={wire,wire}` with *no* vertical wire — 
 by the outer sum, and drawing the physical contraction would count it twice.
 
 ## 14. The marginal contraction policy
+
+(0.6 replaced `pair=trace` and `trace=physical at={…}` by the one
+cell-set grammar `trace={(physical, c-c)}` / `open={(i,c)}`, see
+CHANGES-0.6.md. The record below keeps the 0.5 spellings.)
 
 Between two physically-facing layers, each column takes exactly one of three values: **pair**
 (the straight contracted leg — the default), **open** (both legs dangle — the indices you
@@ -663,6 +680,8 @@ linear L (intersect-then-map = map-then-intersect, proved in the mirror probe), 
 margins, fills, and corner labels survive every frame without special cases.
 
 ### 15.2 Plane presets
+
+(0.6 renamed `plane=` to `frame=`, see CHANGES-0.6.md.)
 
 Three values of `plane=`, each a documented read, plus two guarded escape hatches:
 
@@ -717,6 +736,12 @@ tangent to the next row's bond — and the size ceilings: 3×3 is the workhorse,
 for any figure read cell-by-cell, 5×5 the absolute maximum for impression-only panels.
 
 ### 15.5 Vertical chains
+
+(0.6 deleted `orientation=` in favour of `frame=vertical`, and split
+`periodic style=` into `periodic` — the whether — plus `trace style=` —
+the how, with the selection side effect removed; see CHANGES-0.6.md.
+The record below keeps the 0.5 spellings and the side-effect-as-design
+reading that 0.6 reversed.)
 
 `orientation=vertical` (alias `chain axis=south`) rotates the whole grid grammar 90 degrees
 through the frame map (x, y) → (−y, −x): columns descend the page, bonds run vertically,
