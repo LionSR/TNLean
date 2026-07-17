@@ -108,9 +108,15 @@ The retained blocks have total bond dimension at most the original bond
 dimension.  This bound comes from the invariant-subspace decomposition and is
 independent of any empty-word comparison.
 
-**Note on the original blocks**: The pre-blocking blocks (from step 2) ARE
-`IsIrreducibleTensor`, but blocking does not in general preserve tensor
-irreducibility. See the module documentation for the gap analysis. -/
+Source: Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`,
+proof lines 761--832, for the nonzero irreducible blocks and their canonical
+gauge; arXiv:1606.00608, equation `eq:II_Aiplusk1`, Section II.C, and Appendix A,
+for removal of zero blocks and blocking to primitive cyclic sectors.  The
+positive-length statement and structural dimension bound are recorded in
+`docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`.
+
+**Original blocks:** The pre-blocking blocks are `IsIrreducibleTensor`, but blocking does not in
+general preserve tensor irreducibility. See the module documentation for the gap analysis. -/
 theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
     ∃ (p : ℕ) (_ : 0 < p)
       (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
