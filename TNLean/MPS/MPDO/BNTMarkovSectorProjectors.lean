@@ -209,11 +209,12 @@ factor; a mixed normal-sector instance forces the right factor of the second
 sector to vanish; a final same-sector instance contradicts its nonzero
 block.
 
-**Scope restriction (closing matrices):** this statement assumes explicitly
-that every closing matrix $R_s$ is nonzero.  The source obtains suitable
-nonzero closing entries from the simplicity and common-weight construction at
-lines 1714--1718.  Connecting that construction to
-`IsThreeSiteFamilyClosure` remains recorded in
+**Scope restriction (closing matrices):** this generic algebraic statement
+assumes explicitly that every closing matrix $R_s$ is nonzero.  For the
+normalized three-site reduced state used by the source, this condition follows
+from simplicity, SAL, and the common-weight construction by
+`MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing`.
+The generic scope restriction is documented in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `QkKjs`, lines 1733--1737. -/
@@ -285,9 +286,10 @@ positive-weight quantum-Markov sector has a unique normal-sector label with a
 nonzero diagonal block.
 
 **Scope restriction (closing matrices):** see
-`bntMarkovBlockNonzero_eq_of_probability_ne_zero`.  The missing derivation of
-this hypothesis from the paper's simplicity and common-weight construction is
-recorded in
+`bntMarkovBlockNonzero_eq_of_probability_ne_zero`.  The source construction
+discharges this hypothesis through
+`MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing`.
+The generic scope restriction is documented in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `QkKjs`, lines 1733--1737. -/
