@@ -1,2 +1,2961 @@
-%% tenkz-grid -- placeholder; the real module lands later in this PR stack.
+% tenkz-grid — L2a: the contraction grid.
+%
+%   \begin{tenkz}[keys]  cell & cell & ... \\ ...  \end{tenkz}
+%   \tnpic[keys]{cells}
+%
+% Rows are layers, columns are sites.  Bonds between horizontally adjacent
+% cells are implicit; physical legs follow the typed row declarations
+% (rows={ket|bra|op|wire}); adjacent facing legs pair automatically.  The
+% picture is a math atom: its wire axis sits on the math axis.
+%
+% Boundary doctrine (0.6): open virtual indices are DEFAULT and are
+% drawn as protruding stubs — a matrix product must look like a matrix.
+% A picture side has exactly ONE policy word from the side-policy
+% alphabet, `west=`/`east=` taking open | none | trace | cup | cup={m}:
+% `none` seals the side, `trace` on both sides closes each row back to
+% itself (alias: `periodic`), and `cup[={m}]` ties ADJACENT open rows to
+% EACH OTHER in pairs by a smooth bend, optionally carrying a
+% fixed-point matrix on the bend — see the cup section below.
+% `boundary=` is the all-sides shorthand; rows override per side via
+% rows= suffixes (`open`, `none`, `west none`, `east open`, ...).
+% Every picture emits its boundary signature (open-index counts) to the
+% event stream: equation sides must have equal signatures.
+%
+% Phase-0 scope: everything needed by benchmarks B1-B8 plus MPO/PEPS stress
+% cases; `\tnfuse` supports rows=2; `periodic` closes the top row above and
+% the bottom row below (single row: below).
+
+\ExplSyntaxOn
+
+% ---------- argument variants used below ----------
+\cs_generate_variant:Nn \prop_put:Nnn { Nen, Nne, Nee }
+\cs_generate_variant:Nn \prop_get:NnN { NeN }
+\prg_generate_conditional_variant:Nnn \prop_get:NnN { NeN } { T, F, TF }
+\prg_generate_conditional_variant:Nnn \prop_if_in:Nn { Ne } { p, T, F, TF }
+\prg_generate_conditional_variant:Nnn \tl_if_blank:n { V } { T, F, TF }
+\prg_generate_conditional_variant:Nnn \tl_if_in:nn { Vn } { T, F, TF }
+
+% ---------- picture state ----------
+\int_new:N \l__tenkz_nrows_int
+\int_new:N \l__tenkz_ncols_int
+\int_new:N \l__tenkz_row_int
+\int_new:N \l__tenkz_col_int
+\prop_new:N \l__tenkz_kind_prop      % "r-c" -> tn|tnc|tnx|dots|ghost|fuse|fusec
+\prop_new:N \l__tenkz_label_prop     % "r-c" -> label tokens
+\prop_new:N \l__tenkz_opts_prop      % "r-c" -> cell option tokens
+\prop_new:N \l__tenkz_owner_prop     % "r-c" -> owning column (wide glyphs)
+\prop_new:N \l__tenkz_name_prop      % "r-c" -> tikz node name
+\seq_new:N \l__tenkz_rowtypes_seq    % per row: wire|ket|bra|op
+\seq_new:N \l__tenkz_rowmods_seq     % per row: comma list of fused/operator
+\seq_new:N \l__tenkz_spans_seq       % {r}{c}{k}{variant}{label}
+\seq_new:N \l__tenkz_cuts_seq        % {r}{c}{label}
+\seq_new:N \l__tenkz_bondlabels_seq  % {math}{c}{c'}
+% Boundary model.  An open virtual index is data: a matrix product with
+% sealed ends depicts a scalar or vector, not a matrix.  The picture-level
+% policy is `open' (protruding stubs at each wire row's ends), `none'
+% (sealed, for genuinely closed objects), or `periodic' (trace closure).
+% Rows opt out/in via the rows= suffix grammar (rows={op:open, ket:none}).
+\tl_new:N \l__tenkz_boundary_tl
+\tl_new:N \l__tenkz_wlabel_tl    % boundary index label at the west stub tip
+\tl_new:N \l__tenkz_elabel_tl    % boundary index label at the east stub tip
+\int_new:N \l__tenkz_bvw_int     % open-index counts for the event signature
+\int_new:N \l__tenkz_bve_int
+\int_new:N \l__tenkz_bpu_int
+\int_new:N \l__tenkz_bpd_int
+\tl_new:N \l__tenkz_align_tl
+% Inter-layer cups (`close west` / `close east`).  A cup bends row r's end
+% into row r+1's end on one side: the ket-to-bra virtual contraction of a
+% sandwich object.  This is NOT the periodic trace — `periodic` closes a
+% row to ITSELF, while a cup contracts two DIFFERENT rows' indices.
+\bool_new:N \l__tenkz_closew_bool
+\bool_new:N \l__tenkz_closee_bool
+\tl_new:N \l__tenkz_closewmat_tl % on-bend matrix of the west cups (may be empty)
+\tl_new:N \l__tenkz_closeemat_tl % on-bend matrix of the east cups (may be empty)
+\seq_new:N \l__tenkz_cupw_seq    % west cup pairs {top row}{bottom row}
+\seq_new:N \l__tenkz_cupe_seq    % east cup pairs
+\prop_new:N \l__tenkz_cuprow_prop% "west-r"/"east-r" -> row r is cup-closed there
+\prop_new:N \l__tenkz_nopair_prop% rows carrying the `nopair` rows= modifier
+% wires=k glyphs (one atom spanning k wire rows, quantikz \gate[k]).  Each
+% spanned (row, owner-col) cell is keyed here to the glyph's node name, so
+% the anchor resolver can terminate that row's wire ON the glyph's edge at
+% the row's own height (the node's west/east anchors sit at the glyph's
+% vertical CENTRE, which is between the wires).
+\prop_new:N \l__tenkz_tall_prop
+\dim_new:N \l__tenkz_tallx_dim
+% physical trace (trace=physical): Tr_phys closes each site's up leg into
+% its own down leg, so those legs leave the boundary signature
+\bool_new:N \l__tenkz_ptrace_bool
+\bool_new:N \l__tenkz_ptraceon_bool
+% pair trace (trace={(physical, cols)}): the per-column partial
+% trace of a ket-bra interface.  Per traced column the wrap loop IS Tr over
+% that site's physical space -- it contracts the ket's physical index with
+% the bra's below it -- so the column contributes NO open physical index.
+% The traced ket cells are recorded "r-c" at render time (mirroring the
+% nopair rows) so the expandable leg predicates can read the table.
+\prop_new:N \l__tenkz_trcell_prop
+\clist_new:N \l__tenkz_ptcols_clist
+% bond direction (design brief): picture default, per-row resolution, and
+% the resolved mid-wire mark style of the current row
+\tl_new:N \l__tenkz_bonddir_tl
+\tl_new:N \l__tenkz_dir_tl
+\tl_new:N \l__tenkz_dirmarks_tl
+% \tnskip holes: pending-west-stub flag of the bond scan, and a scratch tl
+% for partner-cell kinds at pairing interfaces
+\bool_new:N \l__tenkz_hole_bool
+\tl_new:N \l__tenkz_pkind_tl
+% The FRAME (frame=).  ONE linear map routes every drawn coordinate
+% from the logical frame (columns run east, rows descend) to the paper
+% frame.  frame=flat is the identity; frame=vertical is
+% (x, y) -> (-y, -x): columns DESCEND the page and rows read west-to-east,
+% so virtual bonds run vertically and physical legs point west (logical
+% up) / east (logical down) -- the rotated-chain genre (RMP 2011.12127
+% Fig:MPDO-O_L, the vertical O_L word; sec2fig8's rotated transfer-matrix
+% column).  The map is orthogonal and an involution, so it also converts
+% paper-frame compass words back to logical ones (see \tenkz_compass:n).
+\bool_new:N \l__tenkz_vertical_bool
+\dim_new:N \l__tenkz_mx_dim          % frame-map output: paper-frame point
+\dim_new:N \l__tenkz_my_dim
+\dim_new:N \l__tenkz_qx_dim          % saved mapped point (segment tails)
+\dim_new:N \l__tenkz_qy_dim
+% periodic closure style: `racetrack` (the explicit return wire) or
+% `hooks` (the truncated half-hook closure of the RMP O_L figure)
+\tl_new:N \l__tenkz_perstyle_tl
+% per-side boundary policy (west= / east=), layered over boundary=.
+% Empty = inherit the picture policy.  Prepared/discarded indices are
+% SIDES of the word, not rows: a circuit fragment discards its west
+% (input) indices while keeping its east (output) indices open, so the
+% policy must be addressable per side (hard11).
+\tl_new:N \l__tenkz_westpol_tl
+\tl_new:N \l__tenkz_eastpol_tl
+
+% ---------- environment keys ----------
+\pgfkeys{
+  /tenkz/grid/.is~family,
+  /tenkz/grid/rows/.code={\tenkz_set_rows:n{#1}},
+  /tenkz/grid/physical/.is~choice,
+  /tenkz/grid/physical/up/.code={\tenkz_set_rows:n{ket}},
+  /tenkz/grid/physical/down/.code={\tenkz_set_rows:n{bra}},
+  /tenkz/grid/physical/updown/.code={\tenkz_set_rows:n{op}},
+  /tenkz/grid/physical/none/.code={\tenkz_set_rows:n{wire}},
+  /tenkz/grid/sandwich/.code={\tenkz_set_rows:n{ket,bra}},
+  /tenkz/grid/boundary/.is~choice,
+  /tenkz/grid/boundary/open/.code={\tl_set:Nn \l__tenkz_boundary_tl {open}},
+  /tenkz/grid/boundary/none/.code={\tl_set:Nn \l__tenkz_boundary_tl {none}},
+  % boundary=periodic / bare `periodic`: aliases for `west=trace,
+  % east=trace` — the side-policy alphabet is the one boundary language,
+  % and a trace on both sides IS the periodic closure
+  /tenkz/grid/boundary/periodic/.code=
+      {\tl_set:Nn \l__tenkz_westpol_tl {trace}
+       \tl_set:Nn \l__tenkz_eastpol_tl {trace}},
+  /tenkz/grid/periodic/.code=
+      {\tl_set:Nn \l__tenkz_westpol_tl {trace}
+       \tl_set:Nn \l__tenkz_eastpol_tl {trace}},
+  % frame = flat|vertical: the picture's frame (see the frame note at the
+  % picture state).  Vertical rotates the WHOLE grammar 90 degrees:
+  % columns descend, bonds run vertically, physical legs point west/east
+  % per row type, \tndots renders \vdots, the trace closure becomes a
+  % side racetrack, and the label auto-quadrant rotates with the frame.
+  % Flat stays the default identity.
+  /tenkz/grid/frame/.is~choice,
+  /tenkz/grid/frame/flat/.code=
+      {\bool_set_false:N \l__tenkz_vertical_bool},
+  /tenkz/grid/frame/vertical/.code=
+      {\bool_set_true:N \l__tenkz_vertical_bool},
+  % chain axis = east|south: alias of frame= naming the direction the
+  % chain RUNS instead of the frame (east = flat, south = vertical) --
+  % the spelling hard05_v2 anticipated.
+  /tenkz/grid/chain~axis/.is~choice,
+  /tenkz/grid/chain~axis/east/.code=
+      {\bool_set_false:N \l__tenkz_vertical_bool},
+  /tenkz/grid/chain~axis/south/.code=
+      {\bool_set_true:N \l__tenkz_vertical_bool},
+  % trace style = racetrack|hooks: HOW the trace closure is drawn, and
+  % nothing else — a how-key never sets the whether (that is `west=trace,
+  % east=trace`, or its alias `periodic`).  `racetrack` (flat default) is
+  % the explicit return wire around the word.  `hooks` (vertical default)
+  % is the RMP O_L closure (arXiv:2011.12127 Fig:MPDO-O_L): at each end
+  % of the traced row the wire runs one half stub out, turns a
+  % near-semicircle toward the return side (radius = stub/2, so the
+  % hook's reach IS the stub ratio), and truncates just short of the
+  % anchor line -- the ring seen edge-on, return wire implied.  Each hook
+  % is ONE path (arc, not elbows), so its rounding is uniform by
+  % construction (the plane_sweep3 1a/1b defects: to[]-curves render too
+  % flat, multi-join racetracks mix sharp and rounded corners).
+  /tenkz/grid/trace~style/.is~choice,
+  /tenkz/grid/trace~style/racetrack/.code=
+      {\tl_set:Nn \l__tenkz_perstyle_tl {racetrack}},
+  /tenkz/grid/trace~style/hooks/.code=
+      {\tl_set:Nn \l__tenkz_perstyle_tl {hooks}},
+  % west = / east = <policy>: ONE side, ONE policy word from the 0.6
+  % alphabet — open | none | trace | cup | cup={m}.  `open` draws the
+  % side's protruding stubs, `none` seals it, `trace` closes each traced
+  % row back to ITSELF (both sides trace = the periodic closure),
+  % `cup[={m}]` ties ADJACENT open rows to EACH OTHER in pairs by a
+  % smooth bend, optionally carrying a fixed-point matrix on the bend
+  % (the 0.6 spelling of `close west` / `close east`).  Resolution per
+  % row and side: the rows= suffix wins (`west none`, `east open`,
+  % `open`, `none`), then the side policy, then the picture policy
+  % (boundary=).  A row whose west is `none` draws no west stub but
+  % keeps its east stub, and the boundary signature counts only the
+  % stubs actually drawn -- prepared/discarded indices are sides, not
+  % rows (hard11: the brick-circuit fragment seals its west inputs and
+  % leaves its east outputs open).
+  /tenkz/grid/west/.code={\tenkz_side_policy:nn {west} {#1}},
+  /tenkz/grid/east/.code={\tenkz_side_policy:nn {east} {#1}},
+  % The cup, in full (west=cup / east=cup={matrix}): inter-layer
+  % closure.  On that side adjacent open wire rows are tied to EACH
+  % OTHER in pairs, top-down (rows 1-2, 3-4, ...), each pair by one
+  % smooth 180-degree bend (a cup): the ket-to-bra virtual contraction
+  % of sandwich objects — orthogonality conditions (sum_s A_L^s{}^dagger
+  % A_L^s = 1, RMP orthoL/orthoR), reduced density matrices (RMP
+  % sec2fig8), tangent-space brackets (RMP PTA).
+  % Topology note: this is DIFFERENT from periodic — a trace closes a row
+  % back to ITSELF, while a cup contracts two DIFFERENT rows' indices.  An
+  % odd row out keeps its stub; a cupped row draws no stub and contributes
+  % no open index to the boundary signature on that side.  The optional
+  % cup= value places a fixed-point matrix (filled dot) ON the bend apex,
+  % label outside the bend — the rho^L / rho^R capping convention (RMP
+  % sec2fig8, fig9-1); a bare `west=cup` / `east=cup` is a plain cup
+  % (identity).
+  % layer sep = <factor> multiplies the layer pitch \tenkz@r@layersep for
+  % this picture only.  Motivation: a rail pair whose open legs point INTO
+  % the inter-layer gap (both-rails-down reduced density matrices, RMP
+  % sec2fig8 genre) needs roughly double the default gap so the upper
+  % rail's leg-tip labels keep their clearance band.
+  /tenkz/grid/layer~sep/.code={\cs_set:Npe \tenkz@r@layersep
+      { \fp_eval:n { \tenkz@r@layersep * (#1) } }},
+  % trace = {<cellset>} / open = {<cellset>}: the contraction policy of
+  % interface SEGMENTS, addressed by the one cell-set algebra every tier
+  % shares (terms (i, c) | (i1-i2, c1-c2) combined with +/-, top-level
+  % commas as unions, resolved by the lattice resolver).  The first slot
+  % names an INTERFACE: pairing interfaces are numbered top-down per
+  % adjacent facing pair, and the word `physical' names the word's
+  % physical self-interface, its topology resolved from row-type data,
+  % not spelling — in a ket-over-bra sandwich `trace={(physical, 4-5)}`
+  % closes columns 4-5 by the wrap loop (per column the per-site partial
+  % trace Tr_s, so the picture depicts the marginal rho_kept =
+  % Tr_traced |psi><psi|, RMP 2011.12127 fig. 2), while the bare word
+  % `trace=physical` closes EVERY op-row site's up leg into its own down
+  % leg (Tr_phys(M) = sum_s M^{ss}, the ZCL-MPDO genre; single-row
+  % pictures only for now -- see \tenkz_draw_phtrace:).  `open={(i,c)}`
+  % is the per-segment `nopair': the segment's pairing is suppressed and
+  % both faces keep open stubs that count in the boundary signature.
+  % Traced legs are CLOSED indices: they leave the signature.  Values
+  % contain literal commas, so they MUST be braced.
+  /tenkz/grid/trace/.code={\tenkz_trace_key:n{#1}},
+  /tenkz/grid/open/.code={\tenkz_open_key:n{#1}},
+  % bond dir = right|left: default direction of every wire row's bonds.  An
+  % outgoing arrow is the vector space V, an incoming one its dual V*, and
+  % contraction joins out-to-in (the mpo.tex school); a barb rides each bond
+  % mid-wire.  Row-level override: the rows= modifiers `dir right`/`dir left`.
+  % Directed boundary signatures (splitting virtual-west into in/out so that
+  % oppositely-directed open legs compare UNEQUAL) are deferred to the next
+  % audit revision.
+  /tenkz/grid/bond~dir/.is~choice,
+  /tenkz/grid/bond~dir/right/.code={\tl_set:Nn \l__tenkz_bonddir_tl {right}},
+  /tenkz/grid/bond~dir/left/.code={\tl_set:Nn \l__tenkz_bonddir_tl {left}},
+  /tenkz/grid/west~label/.store~in=\l__tenkz_wlabel_tl,
+  /tenkz/grid/east~label/.store~in=\l__tenkz_elabel_tl,
+  /tenkz/grid/bond~label/.code={\tenkz_bond_label:n{#1}},
+  /tenkz/grid/align/.store~in=\l__tenkz_align_tl,
+  /tenkz/grid/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
+  /tenkz/grid/compact/.code={\pgfkeys{/tenkz/compact}},
+  /tenkz/grid/inline/.code={\pgfkeys{/tenkz/inline}},
+  /tenkz/grid/tensor~style/.code={\pgfqkeys{/tenkz}{tensor~style=#1}},
+  % species={...}: picture-scope species declaration (see tenkz-core)
+  /tenkz/grid/species/.code={\pgfqkeys{/tenkz}{species={#1}}},
+}
+
+% ---------- the side-policy alphabet (west= / east=) ----------
+% One enum, applied per picture side: open | none | trace | cup |
+% cup={m}.  `trace` records the side policy word (both sides trace = the
+% periodic closure; one side alone is an error in waiting and warns at
+% draw time); `cup[={m}]` routes to the inter-layer cup machinery.
+\msg_new:nnn { tenkz } { side-policy }
+  {
+    Unknown~side~policy~'#2'~at~#1=.~A~picture~side~takes~exactly~one~
+    word~of~the~policy~alphabet:~open,~none,~trace,~cup~or~cup={m}.
+  }
+\cs_new_protected:Npn \tenkz_side_word:nn #1#2
+  {
+    \str_if_eq:nnTF {#1} {west}
+      { \tl_set:Nn \l__tenkz_westpol_tl {#2} }
+      { \tl_set:Nn \l__tenkz_eastpol_tl {#2} }
+  }
+\cs_new_protected:Npn \tenkz_side_cup:nn #1#2
+  {
+    \str_if_eq:nnTF {#1} {west}
+      { \bool_set_true:N \l__tenkz_closew_bool
+        \tl_set:Nn \l__tenkz_closewmat_tl {#2} }
+      { \bool_set_true:N \l__tenkz_closee_bool
+        \tl_set:Nn \l__tenkz_closeemat_tl {#2} }
+  }
+% split a `cup=$m$' value at its (catcode-12) equals sign
+\cs_new_protected:Npn \tenkz_side_cupval:nw #1 cup=#2 \q_stop
+  { \tenkz_side_cup:nn {#1} {#2} }
+\cs_new_protected:Npn \tenkz_side_policy:nn #1#2
+  {
+    \str_case:nnF {#2}
+      {
+        {open}  { \tenkz_side_word:nn {#1} {open}  }
+        {none}  { \tenkz_side_word:nn {#1} {none}  }
+        {trace} { \tenkz_side_word:nn {#1} {trace} }
+        {cup}   { \tenkz_side_cup:nn  {#1} {}      }
+      }
+      {
+        \tl_if_in:nnTF {#2} {cup=}
+          { \tenkz_side_cupval:nw {#1} #2 \q_stop }
+          { \msg_error:nnne {tenkz}{side-policy} {#1} { \tl_to_str:n {#2} } }
+      }
+  }
+\cs_generate_variant:Nn \msg_error:nnnn { nnne }
+
+% ---------- contraction cell-sets (open= / trace=) ----------
+% Shared-resolver plumbing: the value is str-normalized, the word
+% `physical' maps to the sentinel interface 0 (so the resolver sees
+% pure integer tuples), top-level commas rewrite to unions through the
+% lattice scanner, and the lattice resolver produces "i-c" membership
+% keys.  Keys at interface 0 feed the physical-word column lists; keys
+% at interface i >= 1 feed the interface-segment specs, mapped to rows
+% at render time (interface numbering needs the row-type table).
+\prop_new:N \l__tenkz_trspec_prop     % "i-c" -> traced interface segment
+\prop_new:N \l__tenkz_openspec_prop   % "i-c" -> opened interface segment
+\clist_new:N \l__tenkz_opencols_clist % `physical'-word opened columns
+\prop_new:N \l__tenkz_opencell_prop   % render-time: "r-c" (r = the
+                                      % interface's upper row) -> open
+\int_new:N \l__tenkz_iface_int
+\tl_new:N \l__tenkz_csexpr_tl
+\prop_new:N \l__tenkz_csres_prop
+\msg_new:nnn { tenkz } { contraction-set }
+  {
+    #1=~takes~a~braced~cell-set~of~(interface,~columns)~terms~--~
+    interfaces~numbered~top-down~per~adjacent~facing~pair,~or~the~word~
+    `physical'~--~e.g.~trace={(physical,~4-5)}~or~open={(1,2)}.~
+    trace=~also~takes~the~bare~word~`physical'~(the~op~row's~
+    self-trace).~Got~'#2'.
+  }
+\cs_new_protected:Npn \tenkz_cellset:nNN #1#2#3
+  {
+    \tl_set:Ne \l__tenkz_csexpr_tl { \tl_to_str:n {#1} }
+    \use:e
+      {
+        \tl_replace_all:Nnn \exp_not:N \l__tenkz_csexpr_tl
+          { \tl_to_str:n {physical} } { 0 }
+      }
+    \tl_clear:N \l__tenkzl_tmp_tl
+    \int_zero:N \l__tenkzl_depth_int
+    \tl_map_inline:Nn \l__tenkz_csexpr_tl { \tenkzl_openscan:n {##1} }
+    \tenkzl_resolve:VN \l__tenkzl_tmp_tl \l__tenkz_csres_prop
+    \prop_map_inline:Nn \l__tenkz_csres_prop
+      { \tenkz_cellset_one:wNN ##1 \q_stop #2 #3 }
+  }
+\cs_new_protected:Npn \tenkz_cellset_one:wNN #1 - #2 \q_stop #3#4
+  {
+    \int_compare:nNnTF {#1} = {0}
+      { \clist_put_right:Nn #4 {#2} }
+      { \prop_put:Nnn #3 {#1-#2} {} }
+  }
+\cs_new_protected:Npn \tenkz_trace_key:n #1
+  {
+    \tl_if_in:nnTF {#1} {(}
+      { \tenkz_cellset:nNN {#1} \l__tenkz_trspec_prop
+          \l__tenkz_ptcols_clist }
+      {
+        \str_if_eq:nnTF {#1} {physical}
+          { \bool_set_true:N \l__tenkz_ptrace_bool }
+          { \msg_error:nnne {tenkz}{contraction-set} {trace}
+              { \tl_to_str:n {#1} } }
+      }
+  }
+\cs_new_protected:Npn \tenkz_open_key:n #1
+  {
+    \tl_if_in:nnTF {#1} {(}
+      { \tenkz_cellset:nNN {#1} \l__tenkz_openspec_prop
+          \l__tenkz_opencols_clist }
+      { \msg_error:nnne {tenkz}{contraction-set} {open}
+          { \tl_to_str:n {#1} } }
+  }
+
+\cs_new_protected:Npn \tenkz_set_rows:n #1
+  {
+    \seq_clear:N \l__tenkz_rowtypes_seq
+    \seq_clear:N \l__tenkz_rowmods_seq
+    \clist_map_inline:nn {#1}
+      {
+        % str-normalize so the document's catcode-12 colon matches
+        \exp_args:Ne \tenkz_row_entry:n { \tl_to_str:n {##1} }
+      }
+  }
+% split an entry  type[:mod[:mod]]  at the first (catcode-12) colon
+\use:e
+  {
+    \cs_new_protected:Npn \exp_not:N \tenkz_row_entry_aux:w
+      #1 \c_colon_str #2 \exp_not:N \q_stop
+      {
+        \seq_put_right:Nn \exp_not:N \l__tenkz_rowtypes_seq {#1}
+        \seq_put_right:Nn \exp_not:N \l__tenkz_rowmods_seq {#2}
+      }
+  }
+\cs_new_protected:Npn \tenkz_row_entry:n #1
+  { \use:e { \exp_not:N \tenkz_row_entry_aux:w #1 \c_colon_str } \q_stop }
+
+% `bond label = {$D$ at 1-2}` or `bond label = {$D$}` (defaults to bond 1-2)
+\cs_new_protected:Npn \tenkz_bond_label:n #1
+  { \tl_if_in:nnTF {#1} { at } { \tenkz_bond_label:w #1 \q_stop }
+      { \seq_put_right:Nn \l__tenkz_bondlabels_seq { {#1}{1}{2} } } }
+\cs_new_protected:Npn \tenkz_bond_label:w #1 at #2 - #3 \q_stop
+  { \seq_put_right:Nn \l__tenkz_bondlabels_seq { {#1}{#2}{#3} } }
+
+% ---------- cell commands (record; draw later) ----------
+\cs_new:Npn \tenkz_cell_key:
+  { \int_use:N \l__tenkz_row_int - \int_use:N \l__tenkz_col_int }
+\cs_new_protected:Npn \tenkz_record:nnn #1#2#3
+  {
+    \prop_put:Nen \l__tenkz_kind_prop  { \tenkz_cell_key: } {#1}
+    \prop_put:Nen \l__tenkz_opts_prop  { \tenkz_cell_key: } {#2}
+    \prop_put:Nen \l__tenkz_label_prop { \tenkz_cell_key: } {#3}
+  }
+
+\NewDocumentCommand \tn { s O{} m }
+  { \IfBooleanTF {#1} { \tenkz_record:nnn {tnc}{#2}{#3} }
+                      { \tenkz_record:nnn {tn}{#2}{#3} } }
+\NewDocumentCommand \tnX { O{} m }
+  { \tenkz_record:nnn {tnx}{#1}{#2} }
+\NewDocumentCommand \tnfuse { O{} m }
+  { \tenkz_record:nnn {fuse}{#1}{#2} }
+\NewDocumentCommand \tndots { O{} }
+  { \tenkz_record:nnn {dots}{#1}{} }
+\NewDocumentCommand \tnghost { m }
+  { \tenkz_record:nnn {ghost}{}{#1} }
+% \tnskip -- a HOLE: the site is absent, its indices are not.  A hole is an
+% uncontracted site, not invisible ink: the column's virtual wires stay OPEN
+% on both sides of the gap (no bond bridges it), and a physically paired
+% partner's leg stays open too -- the tangent-space summand with the
+% identity at site i (hard10) deletes the TENSOR, never the indices.
+% Contrast \tnghost, which routes the bond straight through and silently
+% swallows a paired partner's leg (that pairing now warns).
+\NewDocumentCommand \tnskip { }
+  { \tenkz_record:nnn {skip}{}{} }
+\NewDocumentCommand \tnspan { O{brace~above} m m }
+  {
+    \seq_put_right:Ne \l__tenkz_spans_seq
+      { { \int_use:N \l__tenkz_row_int }{ \int_use:N \l__tenkz_col_int }
+        { #2 }{ \exp_not:n{#1} }{ \exp_not:n{#3} } }
+  }
+\NewDocumentCommand \tncut { O{} m }
+  {
+    \seq_put_right:Ne \l__tenkz_cuts_seq
+      { { \int_use:N \l__tenkz_row_int }{ \int_use:N \l__tenkz_col_int }
+        { \exp_not:n{#2} } }
+  }
+
+% ---------- per-cell option keys ----------
+\tl_new:N \l__tenkz_cshape_tl
+\tl_new:N \l__tenkz_cup_tl
+\tl_new:N \l__tenkz_cdown_tl
+\tl_new:N \l__tenkz_clpos_tl
+\tl_new:N \l__tenkz_clshift_tl
+\int_new:N \l__tenkz_cwide_int
+\int_new:N \l__tenkz_cwires_int
+\tl_new:N \l__tenkz_clegsat_tl
+\bool_new:N \l__tenkz_cnolegs_bool
+\tl_new:N \l__tenkz_crole_tl    % cell role word (empty = none)
+\tl_new:N \l__tenkz_cspec_tl    % cell species name (empty = none)
+% \tnfuse options
+\int_new:N \l__tenkz_frows_int
+\tl_new:N \l__tenkz_fcombined_tl
+
+\pgfkeys{
+  /tenkz/cell/.is~family,
+  /tenkz/cell/dot/.code={\tl_set:Nn \l__tenkz_cshape_tl {dot}},
+  /tenkz/cell/box/.code={\tl_set:Nn \l__tenkz_cshape_tl {box}},
+  /tenkz/cell/pill/.code={\tl_set:Nn \l__tenkz_cshape_tl {pill}},
+  /tenkz/cell/mpo/.code={\tl_set:Nn \l__tenkz_cshape_tl {mpo}},
+  /tenkz/cell/wide/.code={\int_set:Nn \l__tenkz_cwide_int {#1}},
+  % wires = <k>: the glyph spans k ADJACENT wire rows as ONE atom (quantikz
+  % \gate[k]) and TERMINATES each spanned row's wire at its west and east
+  % edges -- a two-site gate U acts on C^d (x) C^d, so both wires end ON the
+  % gate and none passes through.  The skin grows to cover the rows; the
+  % label stays centred.  \tnX takes the same key (a gauge capsule spanning
+  % k rows of a doubled wire).
+  /tenkz/cell/wires/.code={\int_set:Nn \l__tenkz_cwires_int {#1}},
+  % legs at = {c1,c2,...}: a wide glyph's physical legs sit at the named
+  % SPANNED columns (1-based within the span) instead of one centred leg --
+  % the RFP isometry U_{(i_1 i_2), j} keeps one output leg PER BLOCKED SITE
+  % (hard08), so the boundary signature counts one open physical index per
+  % named column.  The up=/down= label is read as a comma list matched
+  % leg-by-leg.
+  /tenkz/cell/legs~at/.store~in=\l__tenkz_clegsat_tl,
+  % tri = l|r: canonical-form isometry skins.  tri=l is the left-canonical
+  % A_L (flat side west = domain, apex east = codomain, and the isometry
+  % condition sum_s A_L^s{}^dagger A_L^s = 1 reads left-to-right); tri=r
+  % mirrors it for A_R.  Label: inside under the box policy (if it fits),
+  % beside in a free quadrant under the dot policy.
+  /tenkz/cell/tri/.is~choice,
+  /tenkz/cell/tri/l/.code={\tl_set:Nn \l__tenkz_cshape_tl {tril}},
+  /tenkz/cell/tri/r/.code={\tl_set:Nn \l__tenkz_cshape_tl {trir}},
+  /tenkz/cell/up/.store~in=\l__tenkz_cup_tl,
+  /tenkz/cell/down/.store~in=\l__tenkz_cdown_tl,
+  /tenkz/cell/label~pos/.store~in=\l__tenkz_clpos_tl,
+  /tenkz/cell/label~shift/.store~in=\l__tenkz_clshift_tl,
+  /tenkz/cell/no~legs/.code={\bool_set_true:N \l__tenkz_cnolegs_bool},
+  % role= / species=: the semantic hue interface (see tenkz-core).  A
+  % role or species resolves through pure style indirection — one
+  % derived style per role x glyph family, `<role> tensor` for beads,
+  % `<role> outline` for inscribed-label skins — so a theme rebinds
+  % every hue at one point; the atom's event carries both words.  A
+  % species must be declared (\tnset{species={...}}); role wins when
+  % both are given.
+  /tenkz/cell/role/.is~choice,
+  /tenkz/cell/role/operator/.code={\tl_set:Nn \l__tenkz_crole_tl {operator}},
+  /tenkz/cell/role/marked/.code={\tl_set:Nn \l__tenkz_crole_tl {marked}},
+  /tenkz/cell/role/extra/.code={\tl_set:Nn \l__tenkz_crole_tl {extra}},
+  /tenkz/cell/role/passive/.code={\tl_set:Nn \l__tenkz_crole_tl {passive}},
+  /tenkz/cell/species/.code={\tenkz_species_check:n{#1}
+      \tl_set:Nn \l__tenkz_cspec_tl {#1}},
+  % \tnfuse: span=k is the 0.6 spelling (rows= already means row typing
+  % at picture scope and would be its third meaning here); rows= stays
+  % as the documented alias
+  /tenkz/cell/span/.code={\int_set:Nn \l__tenkz_frows_int {#1}},
+  /tenkz/cell/rows/.code={\int_set:Nn \l__tenkz_frows_int {#1}},
+  /tenkz/cell/combined/.store~in=\l__tenkz_fcombined_tl,
+}
+
+\cs_new_protected:Npn \tenkz_cell_opts:n #1
+  {
+    % the default skin is the glyph policy (tensor style=dot|box), resolved
+    % here at option-parse time; explicit per-cell skins override it below
+    \tl_set:Ne \l__tenkz_cshape_tl { \tenkz@tensorstyle }
+    \tl_clear:N \l__tenkz_cup_tl   \tl_clear:N \l__tenkz_cdown_tl
+    \tl_clear:N \l__tenkz_clpos_tl \tl_clear:N \l__tenkz_clshift_tl
+    \int_set:Nn \l__tenkz_cwide_int {1}
+    \int_set:Nn \l__tenkz_cwires_int {1}
+    \tl_clear:N \l__tenkz_clegsat_tl
+    \bool_set_false:N \l__tenkz_cnolegs_bool
+    \tl_clear:N \l__tenkz_crole_tl
+    \tl_clear:N \l__tenkz_cspec_tl
+    \int_set:Nn \l__tenkz_frows_int {2}
+    \tl_set:Nn \l__tenkz_fcombined_tl {west}
+    \tl_set:Nn \l__tenkz_gstrut_tl { \tenkz@glyphstrut }
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/cell}{#1} }
+  }
+
+% ---------- geometry ----------
+\dim_new:N \l__tenkz_x_dim
+\dim_new:N \l__tenkz_y_dim
+% NB: eTeX dimen expressions want the integer factor on the RIGHT of `*`.
+\cs_new:Npn \tenkz_colx:n #1
+  { \dim_eval:n { \tenkz@pitch * (#1) } }
+\cs_new:Npn \tenkz_rowy:n #1
+  { \dim_eval:n { -\tenkz@r@layersep\tenkz@pitch * (#1-1) } }
+
+% ---------- the frame map (frame=) ----------
+% logical (x, y) -> paper (\l__tenkz_mx_dim, \l__tenkz_my_dim).
+% horizontal: identity.  vertical: (x, y) -> (-y, -x), i.e. row 1's wire
+% is the westmost column of the page and column 1 is the topmost site.
+% The map is linear, orthogonal, and an involution (its own inverse), so
+% straight bonds stay straight, circular arcs stay circular (only their
+% start/end angles transform, see \tenkz_arcangle:n), and one function
+% converts compass words in BOTH directions.
+\cs_new_protected:Npn \tenkz_map:nn #1#2
+  {
+    \bool_if:NTF \l__tenkz_vertical_bool
+      {
+        % 0pt anchors the subtraction: eTeX rejects a unary minus
+        % directly before a parenthesized subexpression
+        \dim_set:Nn \l__tenkz_mx_dim { 0pt - ( #2 ) }
+        \dim_set:Nn \l__tenkz_my_dim { 0pt - ( #1 ) }
+      }
+      {
+        \dim_set:Nn \l__tenkz_mx_dim { #1 }
+        \dim_set:Nn \l__tenkz_my_dim { #2 }
+      }
+  }
+% the mapped point as a tikz coordinate (uses the LAST \tenkz_map:nn call)
+\cs_new:Npn \tenkz_mpt: { ( \dim_use:N \l__tenkz_mx_dim , \dim_use:N \l__tenkz_my_dim ) }
+% same, saved to (qx, qy) so a second map call can place a segment's far end
+\cs_new_protected:Npn \tenkz_map_save:nn #1#2
+  {
+    \tenkz_map:nn {#1} {#2}
+    \dim_set_eq:NN \l__tenkz_qx_dim \l__tenkz_mx_dim
+    \dim_set_eq:NN \l__tenkz_qy_dim \l__tenkz_my_dim
+  }
+\cs_new:Npn \tenkz_qpt: { ( \dim_use:N \l__tenkz_qx_dim , \dim_use:N \l__tenkz_qy_dim ) }
+% one logical-frame segment in style #5, both endpoints frame-mapped
+\cs_new_protected:Npn \tenkz_seg:nnnnn #1#2#3#4#5
+  {
+    \tenkz_map_save:nn {#1} {#2}
+    \tenkz_map:nn {#3} {#4}
+    \draw[#5] \tenkz_qpt: -- \tenkz_mpt: ;
+  }
+% compass words under the frame map: the vertical map reflects across the
+% north-west/south-east diagonal, so north<->west, south<->east, and the
+% NW/SE diagonals are fixed.  Expandable (used inside anchor names); an
+% involution, so it also converts a PAPER compass word back to a logical
+% one (needed when a user-given `label pos` meets a logical-frame test).
+\cs_new:Npn \tenkz_compass:n #1
+  {
+    \bool_if:NTF \l__tenkz_vertical_bool
+      {
+        \str_case:nn {#1}
+          {
+            {north}      {west}
+            {south}      {east}
+            {west}       {north}
+            {east}       {south}
+            {north~west} {north~west}
+            {south~east} {south~east}
+            {north~east} {south~west}
+            {south~west} {north~east}
+          }
+      }
+      {#1}
+  }
+\cs_generate_variant:Nn \tenkz_compass:n { V }
+% arc angles under the frame map: a direction angle t maps to 270 - t
+% (the reflection (x,y) -> (-y,-x) in angle form); sweep direction flips
+% with it automatically because start and end both transform.
+\cs_new:Npn \tenkz_arcangle:n #1
+  {
+    \bool_if:NTF \l__tenkz_vertical_bool
+      { \int_eval:n { 270 - ( #1 ) } }
+      { \int_eval:n {#1} }
+  }
+% the (dx,dy) paper offset of a logical west|east displacement of length
+% #2 (a dimension expression): logical west maps to north (up the page),
+% logical east to south -- (x, y) -> (-y, -x) sends (1, 0) to (0, -1).
+% Expandable, so it can sit inside a tikz path (after ++) or a shift= key.
+\cs_new:Npn \tenkz_side_vec:nn #1#2
+  {
+    \bool_if:NTF \l__tenkz_vertical_bool
+      {
+        \str_if_eq:nnTF {#1} {east}
+          { (0pt,\dim_eval:n{0pt-(#2)}) }
+          { (0pt,\dim_eval:n{#2}) }
+      }
+      {
+        \str_if_eq:nnTF {#1} {east}
+          { (\dim_eval:n{#2},0pt) }
+          { (\dim_eval:n{0pt-(#2)},0pt) }
+      }
+  }
+% the ++(dx,dy) offset of a west|east stub in the paper frame
+\cs_new:Npn \tenkz_stub_vec:n #1
+  { \tenkz_side_vec:nn {#1} { \tenkz@dim{\tenkz@r@stub} } }
+% the (dx,dy) paper offset of a logical up|down physical displacement:
+% outward sign #1 (1 = logical up, -1 = logical down), length #2 (a
+% dimension expression).  Logical up maps to paper north (horizontal
+% frame) or west (vertical frame: (x, y) -> (-y, -x) sends (0, 1) to
+% (-1, 0)); the integer sign sits RIGHT of the `*` for eTeX.
+\cs_new:Npn \tenkz_leg_vec:nn #1#2
+  {
+    \bool_if:NTF \l__tenkz_vertical_bool
+      { (\dim_eval:n{ ( #2 ) * ( 0 - (#1) ) },0pt) }
+      { (0pt,\dim_eval:n{ ( #2 ) * (#1) }) }
+  }
+% the paper direction of a logical up|down physical leg
+\cs_new:Npn \tenkz_legdir:n #1
+  {
+    \bool_if:NTF \l__tenkz_vertical_bool
+      { \str_if_eq:nnTF {#1} {up} {west} {east} }
+      { \str_if_eq:nnTF {#1} {up} {north} {south} }
+  }
+
+% row-type queries (1-indexed); empty when out of range
+\cs_new:Npn \tenkz_rowtype:n #1
+  { \seq_item:Nn \l__tenkz_rowtypes_seq {#1} }
+\cs_new:Npn \tenkz_rowmod:n #1
+  { \seq_item:Nn \l__tenkz_rowmods_seq {#1} }
+
+% get-or-clear: read a prop entry into a tl, emptying the tl on a miss so a
+% failed lookup can never leak \q_no_value downstream (see the pitfall note
+% on the anchor helper below).  The NeN variant takes a computed key.
+\cs_new_protected:Npn \tenkz_get:NnN #1#2#3
+  { \prop_get:NnNF #1 {#2} #3 { \tl_clear:N #3 } }
+\cs_generate_variant:Nn \tenkz_get:NnN { NeN }
+
+% nopair rows.  The rows= modifier `nopair` (rows={ket:nopair, bra})
+% suppresses the automatic physical pairing across the interface at the
+% modified row, so BOTH layers' legs stay open — the all-legs-open
+% ket-over-bra window of the tangent-space projector (RMP PTA).  The
+% pairing predicates are expandable and cannot run \str_if_in, so the
+% renderer records the nopair rows in a prop at parse time (see
+% \tenkz_render:nn) and the predicate reads that table.
+\cs_new:Npn \tenkz_nopair_p:n #1
+  { \prop_if_in_p:Ne \l__tenkz_nopair_prop { \int_eval:n {#1} } }
+
+% traced cells (the trace= physical cell-set): expandable
+% membership tests over the render-time table, mirroring the nopair
+% mechanism.  \tenkz_traced_p:nn asks "does the ket cell (r,c) close by a
+% wrap loop?"; \tenkz_traced_above_p:nn asks the bra-side question "is the
+% cell just above (r,c) traced?" -- the loop consumes BOTH sites' legs.
+\cs_new:Npn \tenkz_traced_p:nn #1#2
+  { \prop_if_in_p:Ne \l__tenkz_trcell_prop
+      { \int_eval:n {#1} - \int_eval:n {#2} } }
+\cs_new:Npn \tenkz_traced_above_p:nn #1#2
+  {
+    \bool_lazy_and_p:nn
+      { \int_compare_p:nNn {#1} > {1} }
+      { \tenkz_traced_p:nn { #1 - 1 } {#2} }
+  }
+
+% pair[r] : row r's downward legs join row r+1's upward legs.
+% An op row pairs onto anything below; a ket row pairs onto an op or bra
+% below (the state's physical index feeds the operator or closes the
+% sandwich).  Bra rows never provide downward legs.  A `nopair` modifier
+% on either row of the interface suppresses the pairing (both legs open).
+\cs_new:Npn \tenkz_pair_p:n #1
+  {
+    \bool_lazy_all_p:n
+      {
+        { ! \tenkz_nopair_p:n {#1} }
+        { ! \tenkz_nopair_p:n {#1+1} }
+        { \bool_lazy_or_p:nn
+            { \bool_lazy_and_p:nn
+                { \str_if_eq_p:ee { \tenkz_rowtype:n {#1} } {op} }
+                { \bool_lazy_any_p:n
+                    { { \str_if_eq_p:ee { \tenkz_rowtype:n {#1+1} } {op}  }
+                      { \str_if_eq_p:ee { \tenkz_rowtype:n {#1+1} } {bra} }
+                      { \str_if_eq_p:ee { \tenkz_rowtype:n {#1+1} } {ket} } } } }
+            { \bool_lazy_and_p:nn
+                { \str_if_eq_p:ee { \tenkz_rowtype:n {#1} } {ket} }
+                { \bool_lazy_or_p:nn
+                    { \str_if_eq_p:ee { \tenkz_rowtype:n {#1+1} } {bra} }
+                    { \str_if_eq_p:ee { \tenkz_rowtype:n {#1+1} } {op} } } } }
+      }
+  }
+
+% open legs of row r after pairing:  up / down -> true|false
+% "up-paired" means row r-1 pairs down onto row r.
+\cs_new:Npn \tenkz_uppaired_p:n #1
+  {
+    \bool_lazy_and_p:nn
+      { \int_compare_p:nNn {#1} > {1} }
+      { \tenkz_pair_p:n { #1 - 1 } }
+  }
+\cs_new:Npn \tenkz_openup_p:n #1
+  {
+    \bool_lazy_and_p:nn
+      { ! \tenkz_uppaired_p:n {#1} }
+      { \bool_lazy_or_p:nn
+          { \str_if_eq_p:ee { \tenkz_rowtype:n {#1} } {op} }
+          { \bool_lazy_and_p:nn
+              { \str_if_eq_p:ee { \tenkz_rowtype:n {#1} } {ket} }
+              { ! \tenkz_pair_p:n {#1} } } }
+  }
+\cs_new:Npn \tenkz_opendown_p:n #1
+  {
+    \bool_lazy_or_p:nn
+      { \bool_lazy_and_p:nn
+          { \str_if_eq_p:ee { \tenkz_rowtype:n {#1} } {op} }
+          { ! \tenkz_pair_p:n {#1} } }
+      { \bool_lazy_and_p:nn
+          { \str_if_eq_p:ee { \tenkz_rowtype:n {#1} } {bra} }
+          { ! \tenkz_uppaired_p:n {#1} } }
+  }
+
+% ---------- pair-trace recording ----------
+% Populate the traced-cell table: a cell is traced when
+% the trace= cell-set (interface-addressed, or the `physical' word)
+% names its column in a ket row.  Eligibility is a ket-row tensor cell with
+% a bra-row tensor cell directly below -- the per-site partial trace Tr_s
+% contracts the ket's physical index with the bra's, so it needs both
+% sites; anything else warns and stays untraced (its legs render as if no
+% trace were asked).
+\msg_new:nnn { tenkz } { pair-trace-cell }
+  {
+    the~traced~physical~column~at~row~#1,~column~#2~needs~a~tensor~cell~
+    (\token_to_str:N \tn)~in~a~ket~row~with~a~tensor~cell~in~the~bra~row~
+    directly~below:~the~per-site~partial~trace~contracts~the~ket's~
+    physical~index~with~the~bra's.~The~cell~is~left~untraced.
+  }
+\cs_new_protected:Npn \tenkz_record_traces:
+  {
+    \prop_clear:N \l__tenkz_trcell_prop
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \bool_set_false:N \l_tmpa_bool
+            % the physical cell-set: named columns of ket rows
+            \str_if_eq:eeT { \tenkz_rowtype:n {##1} } {ket}
+              {
+                \clist_if_in:NnT \l__tenkz_ptcols_clist {####1}
+                  { \bool_set_true:N \l_tmpa_bool }
+              }
+            \bool_if:NT \l_tmpa_bool
+              { \tenkz_record_trace:nn {##1}{####1} }
+          }
+      }
+  }
+% eligibility check + record of one candidate (row #1, column #2)
+\cs_new_protected:Npn \tenkz_record_trace:nn #1#2
+  {
+    \bool_set_false:N \l_tmpb_bool
+    \str_if_eq:eeT { \tenkz_rowtype:n {#1} } {ket}
+      {
+        \str_if_eq:eeT { \tenkz_rowtype:n {#1+1} } {bra}
+          {
+            \tenkz_get:NeN \l__tenkz_kind_prop {#1-#2} \l__tenkz_pkind_tl
+            \bool_lazy_or:nnT
+              { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
+              { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+              {
+                \tenkz_get:NeN \l__tenkz_kind_prop
+                  { \int_eval:n {#1+1} - #2 } \l__tenkz_pkind_tl
+                \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
+                  { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+                  { \bool_set_true:N \l_tmpb_bool }
+              }
+          }
+      }
+    \bool_if:NTF \l_tmpb_bool
+      { \prop_put:Nen \l__tenkz_trcell_prop {#1-#2} {} }
+      { \msg_warning:nnee {tenkz}{pair-trace-cell}
+          { \int_eval:n {#1} }{ \int_eval:n {#2} } }
+  }
+
+% ---------- interface-addressed segment recording ----------
+% Map the open=/trace= specs to rows: pairing interfaces are numbered
+% top-down per adjacent facing pair (rows r with pair[r], in order), so
+% interface i's segments live at (r_i, c) with r_i the i-th such row.
+% Traced segments route through the pair-trace eligibility check (a
+% non-ket-bra interface warns, as the per-cell key does); opened
+% segments record directly — the draw pass guards with the leg
+% candidacy.  The `physical' word's opened columns act on the pairing
+% interface of a ket row, mirroring the traced-column sugar.
+\msg_new:nnn { tenkz } { grid-interface-range }
+  {
+    open=/trace=~addresses~pairing~interface~#1,~but~this~picture~has~
+    #2~pairing~interface(s),~numbered~top-down~per~adjacent~facing~
+    pair:~no~segment~matches.
+  }
+\cs_new_protected:Npn \tenkz_record_interfaces:
+  {
+    \prop_clear:N \l__tenkz_opencell_prop
+    \int_zero:N \l__tenkz_iface_int
+    \int_compare:nNnT { \l__tenkz_nrows_int } > {1}
+      {
+        \int_step_inline:nn { \l__tenkz_nrows_int - 1 }
+          {
+            \bool_if:nT { \tenkz_pair_p:n {##1} }
+              {
+                \int_incr:N \l__tenkz_iface_int
+                \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+                  {
+                    \prop_if_in:NeT \l__tenkz_trspec_prop
+                      { \int_use:N \l__tenkz_iface_int - ####1 }
+                      { \tenkz_record_trace:nn {##1}{####1} }
+                    \prop_if_in:NeT \l__tenkz_openspec_prop
+                      { \int_use:N \l__tenkz_iface_int - ####1 }
+                      { \prop_put:Nen \l__tenkz_opencell_prop
+                          {##1-####1} {} }
+                    \str_if_eq:eeT { \tenkz_rowtype:n {##1} } {ket}
+                      {
+                        \clist_if_in:NnT \l__tenkz_opencols_clist {####1}
+                          { \prop_put:Nen \l__tenkz_opencell_prop
+                              {##1-####1} {} }
+                      }
+                  }
+              }
+          }
+      }
+    \prop_map_inline:Nn \l__tenkz_trspec_prop
+      { \tenkz_iface_guard:w ##1 \q_stop }
+    \prop_map_inline:Nn \l__tenkz_openspec_prop
+      { \tenkz_iface_guard:w ##1 \q_stop }
+  }
+\cs_new_protected:Npn \tenkz_iface_guard:w #1 - #2 \q_stop
+  {
+    \int_compare:nNnT {#1} > { \l__tenkz_iface_int }
+      { \msg_warning:nnee {tenkz}{grid-interface-range} {#1}
+          { \int_use:N \l__tenkz_iface_int } }
+  }
+
+% ---------- the renderer ----------
+\cs_new_protected:Npn \tenkz_render:nn #1#2
+  {
+    \group_begin:
+    \prop_clear:N \l__tenkz_kind_prop
+    \prop_clear:N \l__tenkz_label_prop
+    \prop_clear:N \l__tenkz_opts_prop
+    \prop_clear:N \l__tenkz_owner_prop
+    \prop_clear:N \l__tenkz_name_prop
+    \prop_clear:N \l__tenkz_tall_prop
+    \bool_set_false:N \l__tenkz_ptrace_bool
+    \clist_clear:N \l__tenkz_ptcols_clist
+    \prop_clear:N \l__tenkz_trspec_prop
+    \prop_clear:N \l__tenkz_openspec_prop
+    \clist_clear:N \l__tenkz_opencols_clist
+    \tl_clear:N \l__tenkz_bonddir_tl
+    \seq_clear:N \l__tenkz_spans_seq
+    \seq_clear:N \l__tenkz_cuts_seq
+    \seq_clear:N \l__tenkz_bondlabels_seq
+    \tl_set:Nn \l__tenkz_boundary_tl {open}
+    \tl_clear:N \l__tenkz_wlabel_tl
+    \tl_clear:N \l__tenkz_elabel_tl
+    \tl_clear:N \l__tenkz_align_tl
+    \bool_set_false:N \l__tenkz_closew_bool
+    \bool_set_false:N \l__tenkz_closee_bool
+    \tl_clear:N \l__tenkz_closewmat_tl
+    \tl_clear:N \l__tenkz_closeemat_tl
+    \seq_clear:N \l__tenkz_rowtypes_seq
+    \seq_clear:N \l__tenkz_rowmods_seq
+    \bool_set_false:N \l__tenkz_vertical_bool
+    % empty = frame-dependent default, resolved at draw time (racetrack
+    % for the horizontal frame, hooks for the vertical one)
+    \tl_clear:N \l__tenkz_perstyle_tl
+    \tl_clear:N \l__tenkz_westpol_tl
+    \tl_clear:N \l__tenkz_eastpol_tl
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/grid}{#1} }
+    % default row policy: bare wire rows
+    \tenkz_parse_body:n {#2}
+    % pad the row-type table with `wire`
+    \int_while_do:nn
+      { \seq_count:N \l__tenkz_rowtypes_seq < \l__tenkz_nrows_int }
+      {
+        \seq_put_right:Nn \l__tenkz_rowtypes_seq {wire}
+        \seq_put_right:Nn \l__tenkz_rowmods_seq {}
+      }
+    % record the nopair rows for the expandable pairing predicates
+    \prop_clear:N \l__tenkz_nopair_prop
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \tl_set:Ne \l_tmpb_tl { \tenkz_rowmod:n {##1} }
+        \str_if_in:NnT \l_tmpb_tl {nopair}
+          { \prop_put:Nen \l__tenkz_nopair_prop {##1} {} }
+      }
+    % record the row-scope side policies (rows={op:west none} etc.)
+    \tenkz_record_rowsides:
+    % record the traced ket cells for the pair-trace passes
+    \tenkz_record_traces:
+    % map the interface-addressed open=/trace= segments to rows
+    \tenkz_record_interfaces:
+    \tenkz@beginpicture{grid}
+    \tenkz_draw:
+    \group_end:
+  }
+
+\seq_new:N \l__tenkz_rows_seq
+\seq_new:N \l__tenkz_cells_seq
+\tl_new:N \l__tenkz_cell_tl
+
+\cs_new_protected:Npn \tenkz_parse_body:n #1
+  {
+    \seq_set_split:Nnn \l__tenkz_rows_seq { \\ } {#1}
+    % drop a trailing empty row produced by a final \\
+    \seq_if_empty:NF \l__tenkz_rows_seq
+      {
+        \tl_set:Ne \l__tenkz_cell_tl { \seq_item:Nn \l__tenkz_rows_seq {-1} }
+        \tl_if_blank:VT \l__tenkz_cell_tl
+          { \seq_pop_right:NN \l__tenkz_rows_seq \l_tmpa_tl }
+      }
+    \int_set:Nn \l__tenkz_nrows_int { \seq_count:N \l__tenkz_rows_seq }
+    \int_zero:N \l__tenkz_ncols_int
+    \int_zero:N \l__tenkz_row_int
+    \seq_map_inline:Nn \l__tenkz_rows_seq
+      {
+        \int_incr:N \l__tenkz_row_int
+        \seq_set_split:Nnn \l__tenkz_cells_seq { & } {##1}
+        \int_zero:N \l__tenkz_col_int
+        \seq_map_inline:Nn \l__tenkz_cells_seq
+          {
+            \int_incr:N \l__tenkz_col_int
+            \tl_set:Nn \l__tenkz_cell_tl {####1}
+            \tl_if_blank:VF \l__tenkz_cell_tl { ####1 }
+          }
+        \int_set:Nn \l__tenkz_ncols_int
+          { \int_max:nn { \l__tenkz_ncols_int } { \l__tenkz_col_int } }
+      }
+  }
+
+% ---------- drawing ----------
+\dim_new:N \l__tenkz_axis_dim
+\dim_new:N \l__tenkz_tmp_dim
+
+% frame=vertical covers the rotated-chain genre (plain chains and
+% sandwiches: tensors, dots, bonds, stubs, legs, periodic closures, dot
+% and boundary labels).  The remaining constructs still assume the
+% horizontal frame; drawing them rotated would be silently wrong ink, so
+% a vertical picture WARNS and skips them until the frame refactor
+% reaches their passes.
+\msg_new:nnn { tenkz } { vertical-unsupported }
+  {
+    frame=vertical~does~not~yet~transform~#1;~the~construct~is~
+    skipped~in~this~picture.~Rotate~the~figure's~grammar~(plain~chains,~
+    sandwiches,~periodic~closures~and~labels~are~covered)~or~keep~the~
+    picture~horizontal.
+  }
+% a trace policy on ONE side only: a row closed back to itself needs
+% both ends, so the closure cannot draw; the side stays sealed
+\msg_new:nnn { tenkz } { trace-one-sided }
+  {
+    #1=trace~names~a~trace~closure~on~one~side~only;~a~row~closes~back~
+    to~itself~through~BOTH~ends,~so~no~closure~is~drawn~(the~side~stays~
+    sealed).~State~`west=trace,~east=trace'~--~or~its~alias~`periodic'.
+  }
+
+% drop the vertically-unsupported records, one warning each
+\cs_new_protected:Npn \tenkz_vertical_prune:
+  {
+    \bool_lazy_or:nnT { \l__tenkz_closew_bool } { \l__tenkz_closee_bool }
+      {
+        \msg_warning:nnn {tenkz}{vertical-unsupported} {west=cup~/~east=cup}
+        \bool_set_false:N \l__tenkz_closew_bool
+        \bool_set_false:N \l__tenkz_closee_bool
+      }
+    \bool_if:NT \l__tenkz_ptrace_bool
+      {
+        \msg_warning:nnn {tenkz}{vertical-unsupported} {trace=physical}
+        \bool_set_false:N \l__tenkz_ptrace_bool
+      }
+    \prop_if_empty:NF \l__tenkz_trcell_prop
+      {
+        \msg_warning:nnn {tenkz}{vertical-unsupported} {traced-column~wrap~loops}
+        \prop_clear:N \l__tenkz_trcell_prop
+      }
+    \seq_if_empty:NF \l__tenkz_spans_seq
+      {
+        \msg_warning:nnn {tenkz}{vertical-unsupported} {\token_to_str:N \tnspan~braces}
+        \seq_clear:N \l__tenkz_spans_seq
+      }
+    \seq_if_empty:NF \l__tenkz_cuts_seq
+      {
+        \msg_warning:nnn {tenkz}{vertical-unsupported} {\token_to_str:N \tncut~markers}
+        \seq_clear:N \l__tenkz_cuts_seq
+      }
+    \seq_if_empty:NF \l__tenkz_bondlabels_seq
+      {
+        \msg_warning:nnn {tenkz}{vertical-unsupported} {bond~labels}
+        \seq_clear:N \l__tenkz_bondlabels_seq
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_draw:
+  {
+    \bool_if:NT \l__tenkz_vertical_bool { \tenkz_vertical_prune: }
+    % axis: chosen row, else the midline of the wire rows; a vertical
+    % picture centres on the midline of its (descending) columns instead,
+    % and align= (a ROW) has no vertical ordinate to name, so it is
+    % ignored there
+    \bool_if:NTF \l__tenkz_vertical_bool
+      { \dim_set:Nn \l__tenkz_axis_dim
+          { 0pt
+            - ( \tenkz_colx:n {1} + \tenkz_colx:n {\l__tenkz_ncols_int} ) / 2 } }
+      {
+        \tl_if_empty:NTF \l__tenkz_align_tl
+          { \dim_set:Nn \l__tenkz_axis_dim
+              { ( \tenkz_rowy:n {1} + \tenkz_rowy:n {\l__tenkz_nrows_int} ) / 2 } }
+          { \dim_set:Nn \l__tenkz_axis_dim
+              { \tenkz_rowy:n {\l__tenkz_align_tl} } }
+      }
+    % NFSS sets math fonts up lazily; force them before reading the axis
+    \check@mathfonts
+    \dim_sub:Nn \l__tenkz_axis_dim { \fontdimen22\textfont2 }
+    \begin{tikzpicture}
+      [ tenkz~every~picture,
+        baseline={(0pt,\dim_use:N \l__tenkz_axis_dim)} ]
+      \tenkz_place_nodes:
+      \tenkz_draw_bonds:
+      \tenkz_compute_cups:
+      \tenkz_draw_boundaries:
+      \tenkz_draw_cups:
+      \tenkz_draw_legs:
+      \tenkz_draw_phtrace:
+      \tenkz_draw_pairtrace:
+      \tenkz_draw_dot_labels:
+      \tenkz_draw_decorations:
+      % the trace closure runs when BOTH side policies say trace (the
+      % periodic alias sets exactly that); a one-sided trace has no
+      % defined geometry — a row cannot close back to itself through one
+      % end — so it warns and draws nothing
+      \str_if_eq:VnTF \l__tenkz_westpol_tl {trace}
+        {
+          \str_if_eq:VnTF \l__tenkz_eastpol_tl {trace}
+            {
+              % closure-style default follows the frame: flat words keep
+              % the explicit racetrack, vertical words default to hooks --
+              % a vertical racetrack spends the very width the rotation
+              % saves, so vertical trace closure must be compact by default
+              \tl_if_empty:NT \l__tenkz_perstyle_tl
+                {
+                  \bool_if:NTF \l__tenkz_vertical_bool
+                    { \tl_set:Nn \l__tenkz_perstyle_tl {hooks} }
+                    { \tl_set:Nn \l__tenkz_perstyle_tl {racetrack} }
+                }
+              \str_if_eq:VnTF \l__tenkz_perstyle_tl {hooks}
+                { \tenkz_draw_hooks: }
+                { \tenkz_draw_trace: }
+            }
+            { \msg_warning:nnn {tenkz}{trace-one-sided} {west} }
+        }
+        {
+          \str_if_eq:VnT \l__tenkz_eastpol_tl {trace}
+            { \msg_warning:nnn {tenkz}{trace-one-sided} {east} }
+        }
+      \tenkz_emit_signature:
+    \end{tikzpicture}
+  }
+
+% -- nodes ------------------------------------------------------------
+\cs_new_protected:Npn \tenkz_place_nodes:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          { \tenkz_place_node:nn {##1} {####1} }
+      }
+  }
+
+% the resolved role/species style of the current cell for glyph family
+% #1 (tensor for beads, outline for inscribed-label skins), into
+% \l__tenkz_rolesty_tl: species first, role wins — pure style
+% indirection, no colour word ever appears at a call site.  The
+% expandable event words report the resolved role/species (or `none').
+\tl_new:N \l__tenkz_rolesty_tl
+\cs_new_protected:Npn \tenkz_role_style:n #1
+  {
+    \tl_clear:N \l__tenkz_rolesty_tl
+    % \c_space_tl, not ~: a space character after a control word is
+    % swallowed at tokenization, so the style-name gap must be a token
+    \tl_if_empty:NF \l__tenkz_cspec_tl
+      { \tl_set:Ne \l__tenkz_rolesty_tl
+          { species~ \tl_use:N \l__tenkz_cspec_tl \c_space_tl #1 } }
+    \tl_if_empty:NF \l__tenkz_crole_tl
+      { \tl_set:Ne \l__tenkz_rolesty_tl
+          { \tl_use:N \l__tenkz_crole_tl \c_space_tl #1 } }
+  }
+% the resolved role style of the current SKIN: beads take the tensor
+% family, every inscribed-label skin the outline family
+\cs_new_protected:Npn \tenkz_role_style_skin:
+  {
+    \str_if_eq:VnTF \l__tenkz_cshape_tl {dot}
+      { \tenkz_role_style:n {tensor} }
+      { \tenkz_role_style:n {outline} }
+  }
+\cs_new:Npn \tenkz_role_word:
+  { \tl_if_empty:NTF \l__tenkz_crole_tl {none}
+      { \tl_use:N \l__tenkz_crole_tl } }
+\cs_new:Npn \tenkz_spec_word:
+  { \tl_if_empty:NTF \l__tenkz_cspec_tl {none}
+      { \tl_use:N \l__tenkz_cspec_tl } }
+
+% the current cell's kind, kept in a named local so it survives the
+% \tenkz_cell_opts:n call and the label lookup below without a \l_tmpa_tl clash
+\tl_new:N \l__tenkz_kind_tl
+\cs_new_protected:Npn \tenkz_place_node:nn #1#2
+  {
+    \prop_get:NnNT \l__tenkz_kind_prop {#1-#2} \l__tenkz_kind_tl
+      {
+        \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+        \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
+        \str_case:Vn \l__tenkz_kind_tl
+          {
+            {tn}   { \tenkz_node_tensor:nnV {#1}{#2} \l_tmpb_tl }
+            {tnc}  { \tenkz_node_tensor:nnV {#1}{#2} \l_tmpb_tl }
+            {tnx}  { \tenkz_node_simple:nnnV {#1}{#2}{on-wire~matrix} \l_tmpb_tl }
+            {dots} { \tenkz_node_dots:nn {#1}{#2} }
+            {ghost}{ \tenkz_node_ghost:nn {#1}{#2} }
+            {fuse} { \tenkz_node_fuse:nn {#1}{#2} }
+          }
+      }
+  }
+
+\cs_new:Npn \tenkz_node_name:nn #1#2
+  { tz \int_use:N \tenkz@pictureid - #1 - #2 }
+
+% a tensor: dot (label outside) or box/pill/mpo (label inside)
+\cs_new_protected:Npn \tenkz_node_tensor:nnn #1#2#3
+  {
+    % conjugate skin: overline the label
+    \tenkz_get:NnN \l__tenkz_kind_prop {#1-#2} \l_tmpa_tl
+    \str_if_eq:VnTF \l_tmpa_tl {tnc}
+      { \tl_set:Nn \l__tenkz_cell_tl { \overline{#3} } }
+      { \tl_set:Nn \l__tenkz_cell_tl { #3 } }
+    % wide glyphs sit at the midpoint of their span and own every column
+    \dim_set:Nn \l__tenkz_x_dim
+      { \tenkz_colx:n {#2} + \tenkz@pitch * (\l__tenkz_cwide_int - 1) / 2 }
+    \dim_set:Nn \l__tenkz_y_dim { \tenkz_rowy:n {#1} }
+    \int_step_inline:nnn {#2} { #2 + \l__tenkz_cwide_int - 1 }
+      { \prop_put:Nnn \l__tenkz_owner_prop {#1-##1} {#2} }
+    % wires=k (quantikz \gate[k]): ONE atom centred between its outer wire
+    % rows, TERMINATING each spanned row's wire at its edges.  Every spanned
+    % cell is owned; continuation rows are marked `tnv` so nothing else
+    % renders there; the tall table redirects each row's bonds and stubs to
+    % the glyph's edge at that row's own height.  A bead cannot span wires:
+    % the gate genre is a box, so a dot skin upgrades.
+    \tenkz_tall_claim:nn {#1}{#2}
+    \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
+      { \str_if_eq:VnT \l__tenkz_cshape_tl {dot}
+          { \tl_set:Nn \l__tenkz_cshape_tl {box} } }
+    % semantic hue: the resolved role/species style rides the xstyle
+    % splice (labelled skins) or its own literal option slot (beads);
+    % an empty slot is an inert trailing option
+    \tenkz_role_style_skin:
+    \tl_if_empty:NF \l__tenkz_rolesty_tl
+      { \tl_put_right:Ne \l__tenkz_xstyle_tl
+          { , \exp_not:V \l__tenkz_rolesty_tl } }
+    % dot is the only skin without an inscribed label; box/mpo/pill share one
+    % labelled-node path and differ only by their tikz style (pill also pins a
+    % minimum width so a wide label grows the capsule sideways, not taller)
+    \str_case:Vn \l__tenkz_cshape_tl
+      {
+        {dot}
+          {
+            \tenkz_map:nn { \l__tenkz_x_dim } { \l__tenkz_y_dim }
+            \node[tensor, \l__tenkz_rolesty_tl]
+              (\tenkz_node_name:nn{#1}{#2})
+              at \tenkz_mpt: {};
+          }
+        {box}  { \tenkz_glyph_node:nnn {#1}{#2}{box~tensor} }
+        {mpo}  { \tenkz_glyph_node:nnn {#1}{#2}{mpo~tensor} }
+        {pill}
+          { \tenkz_glyph_node:nnn {#1}{#2}
+              { pill~tensor, minimum~width=\dim_eval:n
+                  { \tenkz@pitch * (\l__tenkz_cwide_int - 1)
+                    + 0.5\tenkz@pitch } } }
+        % triangle skins inscribe the label only under the box policy; the
+        % dot policy keeps the glyph empty and the dot-label pass places the
+        % label beside it, in a free quadrant, like a bead's
+        {tril} { \tenkz_tri_node:nnn {#1}{#2}{left~canonical~tensor} }
+        {trir} { \tenkz_tri_node:nnn {#1}{#2}{right~canonical~tensor} }
+      }
+    \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=\tl_use:N \l__tenkz_cshape_tl|role=\tenkz_role_word:|species=\tenkz_spec_word:}
+  }
+\cs_generate_variant:Nn \tenkz_node_tensor:nnn { nnV }
+
+% the ownership/geometry bookkeeping of a wires=k glyph at (#1,#2):
+% recentre \l__tenkz_y_dim between the outer spanned rows, extend the extra
+% node style by the covering minimum height (the glyph must overshoot its
+% outer wires by \tenkz@r@tallover to read as terminating them), and claim
+% every spanned cell.  No-op for k = 1.
+\tl_new:N \l__tenkz_xstyle_tl
+\cs_new_protected:Npn \tenkz_tall_claim:nn #1#2
+  {
+    \tl_clear:N \l__tenkz_xstyle_tl
+    \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
+      {
+        \dim_set:Nn \l__tenkz_y_dim
+          { ( \tenkz_rowy:n {#1}
+              + \tenkz_rowy:n { #1 + \l__tenkz_cwires_int - 1 } ) / 2 }
+        % NB integer factor RIGHT of *; the layer pitch carries `layer sep`.
+        % The covering dimension follows the frame: spanned rows stack
+        % vertically in the horizontal frame (minimum height) and run
+        % west-to-east in the vertical frame (minimum width).
+        \tl_set:Ne \l__tenkz_xstyle_tl
+          { , minimum~\bool_if:NTF \l__tenkz_vertical_bool {width}{height}
+              =\dim_eval:n
+              { \tenkz@r@layersep\tenkz@pitch * (\l__tenkz_cwires_int - 1)
+                + \tenkz@dim{\tenkz@r@tallover} } }
+        \int_step_inline:nnn { #1 } { #1 + \l__tenkz_cwires_int - 1 }
+          {
+            \prop_put:Nee \l__tenkz_tall_prop {##1-#2}
+              { \tenkz_node_name:nn{#1}{#2} }
+            \int_compare:nNnT {##1} > {#1}
+              {
+                \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {tnv}
+                \prop_put:Nee \l__tenkz_name_prop {##1-#2}
+                  { \tenkz_node_name:nn{#1}{#2} }
+                \int_step_inline:nnn {#2} { #2 + \l__tenkz_cwide_int - 1 }
+                  { \prop_put:Nen \l__tenkz_owner_prop {##1-####1} {#2} }
+              }
+          }
+      }
+  }
+
+% triangle node: inscribe the label only when the glyph policy inscribes
+% (box); under the dot policy the label is external and the node is empty.
+% Inscribed triangle labels drop the glyph strut: the strut equalizes BOX
+% heights across a row, but a triangle must circumscribe its text box, so
+% the strut's phantom super/subscripts would balloon the glyph until two
+% triangle rows collide across the default layer gap.
+\cs_new_protected:Npn \tenkz_tri_node:nnn #1#2#3
+  {
+    \str_if_eq:eeF { \tenkz@tensorstyle } {box}
+      { \tl_clear:N \l__tenkz_cell_tl }
+    \tl_clear:N \l__tenkz_gstrut_tl
+    \tenkz_glyph_node:nnn {#1}{#2}{#3}
+  }
+
+% one labelled bead node: cell (#1,#2), tikz style list #3, drawn at the
+% already-computed (\l__tenkz_x_dim,\l__tenkz_y_dim) with \l__tenkz_cell_tl;
+% \l__tenkz_xstyle_tl carries the wires=k covering height (leading comma).
+% The xstyle must be SPLICED into the option list before pgfkeys sees it:
+% pgfkeys splits on top-level commas without expanding, so a comma hiding
+% inside \tl_use:N would glue the height key onto the previous key's value.
+\cs_new_protected:Npn \tenkz_glyph_node:nnn #1#2#3
+  {
+    \tl_set:Ne \l_tmpa_tl { \exp_not:n {#3} \exp_not:V \l__tenkz_xstyle_tl }
+    \tenkz_glyph_node_aux:nnV {#1}{#2} \l_tmpa_tl
+  }
+\cs_new_protected:Npn \tenkz_glyph_node_aux:nnn #1#2#3
+  {
+    % (x, y) is the glyph centre in the LOGICAL frame; the frame map
+    % places it (glyph shapes never rotate -- text stays upright)
+    \tenkz_map:nn { \l__tenkz_x_dim } { \l__tenkz_y_dim }
+    \node[#3]
+      (\tenkz_node_name:nn{#1}{#2})
+      at \tenkz_mpt:
+      { $\tenkz@labelsize \tl_use:N \l__tenkz_gstrut_tl
+        \tl_use:N \l__tenkz_cell_tl$ };
+  }
+\cs_generate_variant:Nn \tenkz_glyph_node_aux:nnn { nnV }
+% the per-skin glyph strut: rectangular skins keep \tenkz@glyphstrut (boxes
+% in one row share one height), triangle skins clear it (see above)
+\tl_new:N \l__tenkz_gstrut_tl
+
+% \tnX[wires=k] spans k rows of a doubled/stacked wire (a gauge transform
+% acting on the fused index space, hard06/hard09 genre): same tall claim,
+% the capsule's height grows to cover the rows
+\cs_new_protected:Npn \tenkz_node_simple:nnnn #1#2#3#4
+  {
+    \dim_set:Nn \l__tenkz_x_dim { \tenkz_colx:n {#2} }
+    \dim_set:Nn \l__tenkz_y_dim { \tenkz_rowy:n {#1} }
+    \tenkz_tall_claim:nn {#1}{#2}
+    % semantic hue: an on-wire matrix is an inscribed-label glyph, so a
+    % role/species resolves through the outline family
+    \tenkz_role_style:n {outline}
+    \tl_if_empty:NF \l__tenkz_rolesty_tl
+      { \tl_put_right:Ne \l__tenkz_xstyle_tl
+          { , \exp_not:V \l__tenkz_rolesty_tl } }
+    % splice the xstyle (see \tenkz_glyph_node:nnn on why it must be spliced)
+    \tl_set:Nn \l__tenkz_cell_tl {#4}
+    \tl_set:Ne \l_tmpa_tl { \exp_not:n {#3} \exp_not:V \l__tenkz_xstyle_tl }
+    \tenkz_glyph_node_aux:nnV {#1}{#2} \l_tmpa_tl
+    \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+    \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
+    % an on-wire matrix is content ink: it must enter the audit's topology
+    % hashes, or a gauge insertion X X^{-1} hashes equal to the bare chain
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=onwire|role=\tenkz_role_word:|species=\tenkz_spec_word:}
+  }
+\cs_generate_variant:Nn \tenkz_node_simple:nnnn { nnnV }
+
+% the ellipsis follows the chain axis: \cdots along a horizontal word,
+% \vdots down a vertical one (the O_L word's middle sites); the padding
+% axis follows it, so the bond gaps around the dots stay symmetric
+\cs_new_protected:Npn \tenkz_node_dots:nn #1#2
+  {
+    \tenkz_map:nn { \tenkz_colx:n {#2} } { \tenkz_rowy:n {#1} }
+    \bool_if:NTF \l__tenkz_vertical_bool
+      {
+        \node[label, inner~ysep=0.30em]
+          (\tenkz_node_name:nn{#1}{#2})
+          at \tenkz_mpt: { $\vdots$ };
+      }
+      {
+        \node[label, inner~xsep=0.30em]
+          (\tenkz_node_name:nn{#1}{#2})
+          at \tenkz_mpt: { $\cdots$ };
+      }
+    \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+    \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
+  }
+
+\cs_new_protected:Npn \tenkz_node_ghost:nn #1#2
+  {
+    \tenkz_map:nn { \tenkz_colx:n {#2} } { \tenkz_rowy:n {#1} }
+    \node[inner~sep=0pt, minimum~size=0pt]
+      (\tenkz_node_name:nn{#1}{#2})
+      at \tenkz_mpt: {};
+    \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+    \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
+  }
+
+% the fusion bar spans this row and the next (rows=2); its combined leg
+% leaves west or east as a fused (doubled) stub
+\cs_new_protected:Npn \tenkz_node_fuse:nn #1#2
+  {
+    \dim_set:Nn \l__tenkz_x_dim { \tenkz_colx:n {#2} }
+    \dim_set:Nn \l__tenkz_y_dim { \tenkz_rowy:n {#1} }
+    \dim_set:Nn \l__tenkz_tmp_dim
+      { \tenkz_rowy:n { #1 + \l__tenkz_frows_int - 1 } }
+    % the bar, with a small overhang beyond the outer wires (a logical
+    % vertical stroke: the frame map turns it sideways with the rows)
+    \tenkz_seg:nnnnn
+      { \l__tenkz_x_dim } { \l__tenkz_y_dim + \tenkz@dim{0.10} }
+      { \l__tenkz_x_dim } { \l__tenkz_tmp_dim - \tenkz@dim{0.10} }
+      { fusion~map, line~width=\tenkz@dim{0.075} }
+    % combined fused stub at the vertical midpoint
+    \dim_set:Nn \l__tenkz_tmp_dim
+      { ( \l__tenkz_y_dim + \l__tenkz_tmp_dim ) / 2 }
+    % The combined leg is ONE index: V maps the pair of bond spaces into a
+    % single fused bond space (V : C^{D_1} x C^{D_2} -> C^{D_12}), so it is
+    % drawn as a single stroke.  A doubled stroke would misread as two
+    % parallel indices.
+    \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
+      {
+        \tenkz_seg:nnnnn
+          { \l__tenkz_x_dim + \tenkz@dim{0.04} } { \l__tenkz_tmp_dim }
+          { \l__tenkz_x_dim + \tenkz@dim{0.50} } { \l__tenkz_tmp_dim }
+          { bond }
+      }
+      {
+        \tenkz_seg:nnnnn
+          { \l__tenkz_x_dim - \tenkz@dim{0.04} } { \l__tenkz_tmp_dim }
+          { \l__tenkz_x_dim - \tenkz@dim{0.50} } { \l__tenkz_tmp_dim }
+          { bond }
+      }
+    % the bar owns its column in every spanned row; continuation rows are
+    % marked `fusec` so the node pass does not draw the bar twice
+    \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+    \int_step_inline:nnn { #1 + 1 } { #1 + \l__tenkz_frows_int - 1 }
+      {
+        \prop_put:Nen \l__tenkz_kind_prop  {##1-#2} {fusec}
+        \prop_put:Nen \l__tenkz_owner_prop {##1-#2} {#2}
+      }
+    % the bar label sits above the combined stub, clear of both wires
+    \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
+    \tl_if_blank:VF \l_tmpb_tl
+      {
+        \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
+          { \dim_add:Nn \l__tenkz_x_dim { \tenkz@dim{0.30} } }
+          { \dim_sub:Nn \l__tenkz_x_dim { \tenkz@dim{0.30} } }
+        \tenkz_map:nn { \l__tenkz_x_dim }
+          { \l__tenkz_tmp_dim + \tenkz@dim{\tenkz@r@labelclear} }
+        \node[label, anchor=\tenkz_compass:n{south}] at \tenkz_mpt:
+          { $\tenkz@labelsize \tl_use:N \l_tmpb_tl$ };
+      }
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=fuse}
+  }
+
+% -- bonds ------------------------------------------------------------
+% wire anchors of the item occupying (r,c):  west / east side
+% (#1/#2 may be arbitrary integer expressions, e.g. an int register;
+% \int_eval:n normalizes them before they become prop keys, and every
+% \prop_get uses a T/F form so a miss can never leak \q_no_value)
+\cs_new_protected:Npn \tenkz_anchor:nnnN #1#2#3#4
+  {
+    \prop_get:NeNF \l__tenkz_owner_prop
+      {\int_eval:n{#1}-\int_eval:n{#2}} \l_tmpa_tl
+      { \tl_set:Ne \l_tmpa_tl { \int_eval:n{#2} } }
+    \tenkz_get:NeN \l__tenkz_kind_prop {\int_eval:n{#1}-\l_tmpa_tl} \l_tmpb_tl
+    \bool_lazy_or:nnTF
+      { \str_if_eq_p:Vn \l_tmpb_tl {fuse} }
+      { \str_if_eq_p:Vn \l_tmpb_tl {fusec} }
+      {
+        % logical-frame point at the bar's edge, then frame-mapped
+        \str_if_eq:nnTF {#3} {east}
+          { \tenkz_map:nn
+              { \tenkz_colx:n{\l_tmpa_tl} + \tenkz@dim{0.04} }
+              { \tenkz_rowy:n {#1} } }
+          { \tenkz_map:nn
+              { \tenkz_colx:n{\l_tmpa_tl} - \tenkz@dim{0.04} }
+              { \tenkz_rowy:n {#1} } }
+        \tl_set:Ne #4 { \tenkz_mpt: }
+      }
+      {
+        % a wires=k glyph: the node's west/east anchors sit at the glyph's
+        % vertical CENTRE (between the wires), so each spanned row's wire
+        % must instead end on the glyph's edge AT THE ROW'S OWN HEIGHT --
+        % edge abscissa from the pgf shape anchor, ordinate from the row.
+        % In the vertical frame the row's wire is a COLUMN of the page:
+        % the edge ORDINATE comes from the (compass-mapped) shape anchor
+        % and the abscissa is the row's mapped position.
+        \prop_get:NeNTF \l__tenkz_tall_prop
+          {\int_eval:n{#1}-\l_tmpa_tl} \l_tmpb_tl
+          {
+            \bool_if:NTF \l__tenkz_vertical_bool
+              {
+                \pgfextracty \l__tenkz_tallx_dim
+                  { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl }
+                      { \tenkz_compass:n {#3} } }
+                \tl_set:Ne #4
+                  { ( \dim_eval:n { - \tenkz_rowy:n {#1} } ,
+                      \dim_use:N \l__tenkz_tallx_dim ) }
+              }
+              {
+                \pgfextractx \l__tenkz_tallx_dim
+                  { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl } {#3} }
+                \tl_set:Ne #4
+                  { ( \dim_use:N \l__tenkz_tallx_dim , \tenkz_rowy:n {#1} ) }
+              }
+          }
+          {
+            \tenkz_get:NeN \l__tenkz_name_prop
+              {\int_eval:n{#1}-\l_tmpa_tl} \l_tmpb_tl
+            \tl_set:Ne #4 { (\l_tmpb_tl. \tenkz_compass:n {#3}) }
+          }
+      }
+  }
+
+\tl_new:N \l__tenkz_pa_tl
+\tl_new:N \l__tenkz_pb_tl
+
+% extract a `species=<name>' row mod from the str-normalized mods #1
+% (catcode-12 tokens, so both delimiters are built by \use:e): the name
+% runs to the next colon; the appended sentinel provides both
+% delimiters, so a species-free mods string yields an empty name.
+\tl_new:N \l__tenkz_rowrole_tl
+\tl_new:N \l__tenkz_rowspec_tl
+\use:e
+  {
+    \cs_new_protected:Npn \exp_not:N \tenkz_row_species_aux:w
+      #1 \tl_to_str:n {species=} #2 \c_colon_str #3 \exp_not:N \q_stop
+      { \exp_not:N \tl_set:Nn \exp_not:N \l__tenkz_rowspec_tl {#2} }
+  }
+\cs_new_protected:Npn \tenkz_row_species:n #1
+  {
+    \use:e
+      {
+        \exp_not:N \tenkz_row_species_aux:w #1
+        \c_colon_str \tl_to_str:n {species=} \c_colon_str
+      } \q_stop
+    \tl_remove_all:Nn \l__tenkz_rowspec_tl { ~ }
+  }
+
+% wire style of row #1 into #2.  Row mods were str-normalized at parse
+% time (catcode-12 letters), so the membership tests must be string
+% tests, not token tests.  The role words (`operator', `marked',
+% `extra', `passive') and the `species=<name>' mod are the row-scope
+% spellings of the semantic hue interface: each resolves to its derived
+% bond style (style indirection, tenkz-core), the resolved words ride
+% the row's bond events, and the closure passes (racetrack, hooks,
+% cups) inherit the resolved style — an operator-hued traced row draws
+% an operator-hued ring.
+\cs_new_protected:Npn \tenkz_row_wirestyle:nN #1#2
+  {
+    \tl_set:Ne \l_tmpb_tl { \tenkz_rowmod:n {#1} }
+    \tl_set:Nn #2 {bond}
+    \tl_clear:N \l__tenkz_rowrole_tl
+    \tl_clear:N \l__tenkz_rowspec_tl
+    \str_if_in:NnT \l_tmpb_tl {fused}
+      { \tl_set:Nn #2 {fused~bond} }
+    \str_if_in:NnT \l_tmpb_tl {operator}
+      { \tl_set:Nn #2 {operator~bond}
+        \tl_set:Nn \l__tenkz_rowrole_tl {operator} }
+    \str_if_in:NnT \l_tmpb_tl {marked}
+      { \tl_set:Nn #2 {marked~bond}
+        \tl_set:Nn \l__tenkz_rowrole_tl {marked} }
+    \str_if_in:NnT \l_tmpb_tl {extra}
+      { \tl_set:Nn #2 {extra~bond}
+        \tl_set:Nn \l__tenkz_rowrole_tl {extra} }
+    \str_if_in:NnT \l_tmpb_tl {passive}
+      { \tl_set:Nn #2 {passive~bond}
+        \tl_set:Nn \l__tenkz_rowrole_tl {passive} }
+    \exp_args:NV \tenkz_row_species:n \l_tmpb_tl
+    \tl_if_empty:NF \l__tenkz_rowspec_tl
+      {
+        \tenkz_species_check:V \l__tenkz_rowspec_tl
+        \tl_set:Ne #2
+          { species~ \tl_use:N \l__tenkz_rowspec_tl \c_space_tl bond }
+      }
+  }
+% the row's resolved role/species event words (`none' when unhued)
+\cs_new:Npn \tenkz_rowrole_word:
+  { \tl_if_empty:NTF \l__tenkz_rowrole_tl {none}
+      { \tl_use:N \l__tenkz_rowrole_tl } }
+\cs_new:Npn \tenkz_rowspec_word:
+  { \tl_if_empty:NTF \l__tenkz_rowspec_tl {none}
+      { \tl_use:N \l__tenkz_rowspec_tl } }
+
+% three-valued row direction (none|right|left): the rows= modifiers
+% `dir right` / `dir left` override the picture-level `bond dir` default.
+% Reversal is per-row mathematics -- the dual/inverse representation --
+% so it flips the BARB (see the mark styles), never the wire.
+\cs_new_protected:Npn \tenkz_row_dir:nN #1#2
+  {
+    \tl_set_eq:NN #2 \l__tenkz_bonddir_tl
+    \tl_set:Ne \l_tmpb_tl { \tenkz_rowmod:n {#1} }
+    \str_if_in:NnT \l_tmpb_tl {dir~right} { \tl_set:Nn #2 {right} }
+    \str_if_in:NnT \l_tmpb_tl {dir~left}  { \tl_set:Nn #2 {left} }
+  }
+% the mid-wire mark style of the current row: barb forward for `right`
+% (bonds are stroked west-to-east), reversed for `left`; the fused variant
+% sizes the barb to span the doubled wire.  Empty when the row is
+% undirected -- a trailing empty tikz option is inert.
+\cs_new_protected:Npn \tenkz_dir_marks:NN #1#2
+  {
+    \tl_clear:N #2
+    \tl_if_empty:NF \l__tenkz_dir_tl
+      {
+        \str_if_in:NnTF #1 {fused}
+          { \tl_set:Nn #2 {fused~dir~marks} }
+          { \tl_set:Nn #2 {dir~marks} }
+        \str_if_eq:VnT \l__tenkz_dir_tl {left}
+          { \tl_put_right:Nn #2 {~reversed} }
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_bonds:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \tenkz_row_wirestyle:nN {##1} \l__tenkz_cell_tl
+        \tenkz_row_dir:nN {##1} \l__tenkz_dir_tl
+        \tenkz_dir_marks:NN \l__tenkz_cell_tl \l__tenkz_dirmarks_tl
+        \bool_set_false:N \l__tenkz_hole_bool
+        % connect consecutive occupied columns
+        \int_zero:N \l_tmpa_int
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \tenkz_get:NeN \l__tenkz_kind_prop {##1-####1} \l__tenkz_pkind_tl
+            \str_if_eq:VnTF \l__tenkz_pkind_tl {skip}
+              {
+                % a hole is an uncontracted site, not invisible ink: no bond
+                % bridges the column, and the neighbours' virtual indices
+                % facing the gap stay OPEN (protruding stubs) -- the
+                % tangent-space summand with the identity at site i (hard10)
+                % deletes the tensor, never the indices
+                \int_compare:nNnT { \l_tmpa_int } > {0}
+                  {
+                    \tenkz_anchor:nnnN {##1}{\int_use:N\l_tmpa_int}
+                      {east} \l__tenkz_pa_tl
+                    \draw[\tl_use:N \l__tenkz_cell_tl]
+                      \l__tenkz_pa_tl -- ++\tenkz_stub_vec:n{east};
+                  }
+                \int_zero:N \l_tmpa_int
+                \bool_set_true:N \l__tenkz_hole_bool
+                \tenkz@event{hole|picture=\the\tenkz@pictureid|row=##1|col=####1}
+              }
+              {
+                \prop_if_in:NnT \l__tenkz_owner_prop {##1-####1}
+                  {
+                    \int_compare:nNnT { \l_tmpa_int } > {0}
+                      {
+                        \int_compare:nNnF { \l_tmpa_int } = { ####1 }
+                          {
+                            % same owner (a wide glyph) needs no bond
+                            \tenkz_get:NeN \l__tenkz_owner_prop
+                              {##1-\int_use:N\l_tmpa_int} \l_tmpa_tl
+                            \tenkz_get:NeN \l__tenkz_owner_prop
+                              {##1-####1} \l_tmpb_tl
+                            \tl_if_eq:NNF \l_tmpa_tl \l_tmpb_tl
+                              {
+                                \tenkz_anchor:nnnN {##1}{\int_use:N\l_tmpa_int}
+                                  {east} \l__tenkz_pa_tl
+                                \tenkz_anchor:nnnN {##1}{####1}
+                                  {west} \l__tenkz_pb_tl
+                                \draw[\tl_use:N \l__tenkz_cell_tl,
+                                      \tl_use:N \l__tenkz_dirmarks_tl]
+                                  \l__tenkz_pa_tl -- \l__tenkz_pb_tl;
+                                \tenkz@event{bond|picture=\the\tenkz@pictureid|row=##1|from=\int_use:N\l_tmpa_int|to=####1|dir=\tenkz_dir_word:|role=\tenkz_rowrole_word:|species=\tenkz_rowspec_word:}
+                              }
+                          }
+                      }
+                    % first tensor after a hole: its west index faces the
+                    % gap and stays open
+                    \bool_lazy_and:nnT
+                      { \l__tenkz_hole_bool }
+                      { \int_compare_p:nNn { \l_tmpa_int } = {0} }
+                      {
+                        \tenkz_anchor:nnnN {##1}{####1}{west} \l__tenkz_pb_tl
+                        \draw[\tl_use:N \l__tenkz_cell_tl]
+                          \l__tenkz_pb_tl -- ++\tenkz_stub_vec:n{west};
+                        \bool_set_false:N \l__tenkz_hole_bool
+                      }
+                    \int_set:Nn \l_tmpa_int { ####1 }
+                  }
+              }
+          }
+      }
+  }
+
+% the event-stream word of the resolved row direction; from=/to= stay
+% geometric, so `left` is recorded as `reverse`, not by swapping them
+\cs_new:Npn \tenkz_dir_word:
+  {
+    \tl_if_empty:NTF \l__tenkz_dir_tl {none}
+      { \str_if_eq:VnTF \l__tenkz_dir_tl {right} {forward} {reverse} }
+  }
+
+% -- physical legs ------------------------------------------------------
+% Legs attach only to tensor glyphs (kind tn / tnc), never to on-wire
+% matrices, dots, ghosts, or fusion bars.
+\cs_new_protected:Npn \tenkz_leg_candidate:nnT #1#2#3
+  {
+    \prop_get:NeNT \l__tenkz_kind_prop {#1-#2} \l_tmpa_tl
+      {
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
+          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+          {
+            % respect `no legs`
+            \tenkz_get:NeN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
+            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+            \bool_if:NF \l__tenkz_cnolegs_bool {#3}
+          }
+      }
+  }
+
+% pairing onto a \tnghost cell silently swallows the live partner's leg --
+% invisible ink is a trap when the reader expects a contraction or an open
+% index.  The warning names the fix: a hole is \tnskip, not \tnghost.
+\msg_new:nnn { tenkz } { ghost-pair }
+  {
+    A~physical~pairing~meets~a~\token_to_str:N \tnghost \c_space_tl
+    cell~at~row~#1,~column~#2:~the~partner's~leg~is~dropped.~A~ghost~is~
+    invisible~ink,~not~a~hole~--~use~\token_to_str:N \tnskip \c_space_tl
+    if~the~site~is~an~uncontracted~hole~(the~partner's~leg~then~stays~open).
+  }
+% message arguments are not expanded by l3msg, so row/column expressions
+% must be e-expanded at the call site or the log prints \int_eval:n {...}
+\cs_generate_variant:Nn \msg_warning:nnnn { nnee }
+
+\cs_new_protected:Npn \tenkz_draw_legs:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \prop_get:NnNT \l__tenkz_name_prop {##1-####1} \l__tenkz_pa_tl
+              {
+                \tenkz_leg_candidate:nnT {##1}{####1}
+                  {
+                    % a traced cell's legs belong to its wrap loop (the
+                    % per-site Tr_s draws them), so the open-stub passes
+                    % skip it -- and skip the bra partner just below it
+                    \bool_lazy_and:nnT
+                      { \tenkz_openup_p:n {##1} }
+                      { ! \tenkz_traced_p:nn {##1}{####1} }
+                      { \tenkz_leg_open:nnn {##1}{####1}{up} }
+                    \bool_lazy_and:nnT
+                      { \tenkz_opendown_p:n {##1} }
+                      { ! \tenkz_traced_above_p:nn {##1}{####1} }
+                      { \tenkz_leg_open:nnn {##1}{####1}{down} }
+                  }
+                % paired leg to the row below
+                \bool_if:nT { \tenkz_pair_p:n {##1} }
+                  {
+                    \tenkz_leg_candidate:nnT {##1}{####1}
+                      {
+                        \tenkz_get:NeN \l__tenkz_kind_prop
+                          { \int_eval:n{##1+1} - ####1 } \l__tenkz_pkind_tl
+                        \str_case:VnF \l__tenkz_pkind_tl
+                          {
+                            % a hole below the interface: the pairing has no
+                            % partner, so THIS tensor's down leg stays open
+                            % (an uncontracted physical index)
+                            {skip}
+                              { \tenkz_leg_open:nnn {##1}{####1}{down} }
+                            {ghost}
+                              { \msg_warning:nnee {tenkz}{ghost-pair}
+                                  { \int_eval:n{##1+1} }{####1} }
+                          }
+                          {
+                            \prop_get:NeNT \l__tenkz_name_prop
+                              { \int_eval:n{##1+1} - ####1 } \l__tenkz_pb_tl
+                              {
+                                \tenkz_leg_candidate:nnT
+                                  { \int_eval:n{##1+1} }{####1}
+                                  {
+                                    % a traced segment's wrap loop is
+                                    % drawn by the pair-trace pass; an
+                                    % OPENED segment (open={(i,c)}, the
+                                    % per-segment nopair) keeps both
+                                    % faces' stubs instead of a wire
+                                    \bool_if:nF
+                                      { \tenkz_traced_p:nn {##1}{####1} }
+                                      {
+                                        \prop_if_in:NeTF
+                                          \l__tenkz_opencell_prop
+                                          {##1-####1}
+                                          {
+                                            \tenkz_leg_open:nnn
+                                              {##1}{####1}{down}
+                                            \tenkz_leg_open:enn
+                                              { \int_eval:n{##1+1} }
+                                              {####1}{up}
+                                          }
+                                          {
+                                            % logical south/north faces of
+                                            % the interface; the compass
+                                            % map turns them east/west in
+                                            % a vertical frame
+                                            \draw[physical~leg]
+                                              (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
+                                              (\l__tenkz_pb_tl.\tenkz_compass:n{north});
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+            % a hole (or ghost) ABOVE a paired interface: the live partner
+            % below keeps its up leg open (hole), or loses it audibly (ghost)
+            \int_compare:nNnT {##1} < { \l__tenkz_nrows_int }
+              {
+                \bool_if:nT { \tenkz_pair_p:n {##1} }
+                  {
+                    \tenkz_get:NeN \l__tenkz_kind_prop
+                      {##1-####1} \l__tenkz_pkind_tl
+                    \str_case:Vn \l__tenkz_pkind_tl
+                      {
+                        {skip}
+                          { \tenkz_leg_candidate:nnT
+                              { \int_eval:n{##1+1} }{####1}
+                              { \tenkz_leg_open:enn
+                                  { \int_eval:n{##1+1} }{####1}{up} } }
+                        {ghost}
+                          { \tenkz_leg_candidate:nnT
+                              { \int_eval:n{##1+1} }{####1}
+                              { \msg_warning:nnnn {tenkz}{ghost-pair}
+                                  {##1}{####1} } }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+% an open leg plus its tip label, placed clear of the leg by construction.
+% Direction is data: `up` draws from the north anchor outward (sign +1) with
+% the label below-anchored above the tip; `down` mirrors it from the south
+% anchor (sign -1).  Only the anchors, the label slot, and the sign differ.
+\cs_new_protected:Npn \tenkz_leg_open:nnn #1#2#3
+  {
+    \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pa_tl
+    \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
+    \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+    \tl_if_empty:NTF \l__tenkz_clegsat_tl
+      {
+        \str_if_eq:nnTF {#3} {up}
+          { \tenkz_leg_stub:nnNn {north}{south} \l__tenkz_cup_tl   { 1} }
+          { \tenkz_leg_stub:nnNn {south}{north} \l__tenkz_cdown_tl {-1} }
+      }
+      {
+        % legs at={c1,...}: one leg PER NAMED SPANNED COLUMN of the wide
+        % glyph -- each an independent open physical index (U_{(i1 i2),j}
+        % keeps one output per blocked site, hard08)
+        \str_if_eq:nnTF {#3} {up}
+          { \tenkz_leg_multi:nnnnNn {#1}{#2}{north}{south}
+              \l__tenkz_cup_tl   { 1} }
+          { \tenkz_leg_multi:nnnnNn {#1}{#2}{south}{north}
+              \l__tenkz_cdown_tl {-1} }
+      }
+  }
+\cs_generate_variant:Nn \tenkz_leg_open:nnn { enn }
+
+% the multi-leg form: row #1, base column #2, glyph-edge anchor #3, label
+% anchor #4, label-list var #5 (a comma list matched leg-by-leg, popped
+% without expansion so math tokens survive), outward sign #6.  The edge
+% ordinate comes from the node's shape anchor (one rectangle edge, so it
+% is the same at every spanned column); each leg's abscissa is its named
+% column's -- the leg sits over the blocked site it indexes.
+\seq_new:N \l__tenkz_leglab_seq
+\tl_new:N \l__tenkz_legbase_tl
+\cs_generate_variant:Nn \seq_set_from_clist:Nn { NV }
+\cs_new_protected:Npn \tenkz_leg_multi:nnnnNn #1#2#3#4#5#6
+  {
+    % the glyph-edge coordinate is one rectangle edge, so ONE paper
+    % ordinate serves every spanned column: the edge's y in the
+    % horizontal frame, its x in the vertical one (where the edge anchor
+    % word itself passes through the compass map)
+    \bool_if:NTF \l__tenkz_vertical_bool
+      {
+        \pgfextractx \l__tenkz_tmp_dim
+          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl }
+              { \tenkz_compass:n {#3} } }
+      }
+      {
+        \pgfextracty \l__tenkz_tmp_dim
+          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {#3} }
+      }
+    \seq_set_from_clist:NV \l__tenkz_leglab_seq #5
+    \exp_args:NV \clist_map_inline:nn \l__tenkz_clegsat_tl
+      {
+        % leg base = (column abscissa, edge ordinate) in the logical
+        % frame; the vertical frame maps the column abscissa x to paper
+        % y = -x and keeps the extracted edge coordinate as paper x
+        \dim_set:Nn \l__tenkz_x_dim { \tenkz_colx:n { #2 + ##1 - 1 } }
+        \bool_if:NTF \l__tenkz_vertical_bool
+          { \tl_set:Ne \l__tenkz_legbase_tl
+              { ( \dim_use:N \l__tenkz_tmp_dim ,
+                  \dim_eval:n { -\l__tenkz_x_dim } ) } }
+          { \tl_set:Ne \l__tenkz_legbase_tl
+              { ( \dim_use:N \l__tenkz_x_dim ,
+                  \dim_use:N \l__tenkz_tmp_dim ) } }
+        % offsets as ++/shift vectors, never inside calc (see leg_stub)
+        \draw[physical~leg]
+          \l__tenkz_legbase_tl --
+          ++\tenkz_leg_vec:nn{#6}{\tenkz@dim{\tenkz@r@physleg}};
+        \seq_pop_left:NNT \l__tenkz_leglab_seq \l_tmpb_tl
+          {
+            \tl_if_blank:VF \l_tmpb_tl
+              {
+                \node[label, anchor=\tenkz_compass:n{#4},
+                      shift={\tenkz_leg_vec:nn{#6}
+                        { \tenkz@dim{\tenkz@r@physleg}
+                          + \tenkz@dim{\tenkz@r@labelclear} }}]
+                  at \l__tenkz_legbase_tl
+                  { \tl_use:N \l_tmpb_tl };
+              }
+          }
+      }
+  }
+% #1 LOGICAL node anchor, #2 logical label anchor, #3 label var, #4
+% outward sign (1|-1).  Both anchors and the outward offset pass through
+% the frame map: in a vertical picture an `up` leg leaves the glyph's
+% paper-west edge pointing west, its label one clearance band beyond the
+% tip, anchored on the paper-east side (the compass involution).
+\cs_new_protected:Npn \tenkz_leg_stub:nnNn #1#2#3#4
+  {
+    % the offsets ride as ++/shift vectors, never inside a calc ($...$):
+    % the calc factor parser does not expand a macro-valued coordinate
+    \draw[physical~leg] (\l__tenkz_pa_tl.\tenkz_compass:n{#1}) --
+      ++\tenkz_leg_vec:nn{#4}{\tenkz@dim{\tenkz@r@physleg}};
+    \tl_if_empty:NF #3
+      {
+        \node[label, anchor=\tenkz_compass:n{#2},
+              shift={\tenkz_leg_vec:nn{#4}{ \tenkz@dim{\tenkz@r@physleg}
+                       + \tenkz@dim{\tenkz@r@labelclear} }}]
+          at (\l__tenkz_pa_tl.\tenkz_compass:n{#1})
+          { \tl_use:N #3 };
+      }
+  }
+
+% -- external labels of bead tensors -----------------------------------
+% pos=auto: pick the first free compass direction, in reading order
+% south, north, then the diagonals; a direction is occupied when a bond,
+% leg, or trace uses it.  `label pos` overrides; `label shift` nudges.
+\cs_new_protected:Npn \tenkz_draw_dot_labels:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          { \tenkz_dot_label:nn {##1}{####1} }
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_dot_label:nn #1#2
+  {
+    \prop_get:NnNT \l__tenkz_kind_prop {#1-#2} \l_tmpa_tl
+      {
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
+          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+          {
+            \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
+            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+            \bool_if:nT { \tenkz_label_outside_p: }
+              {
+                \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
+                \tl_if_blank:VF \l_tmpb_tl
+                  {
+                    \tenkz_get:NnN \l__tenkz_kind_prop {#1-#2} \l_tmpa_tl
+                    \str_if_eq:VnT \l_tmpa_tl {tnc}
+                      { \tl_set:Ne \l_tmpb_tl { \overline{\exp_not:V \l_tmpb_tl} } }
+                    \tenkz_dot_label_place:nnV {#1}{#2} \l_tmpb_tl
+                  }
+              }
+          }
+      }
+  }
+
+% is the resolved skin's label EXTERNAL?  Beads always place their label
+% outside; triangle skins do so under the dot policy only (the box policy
+% inscribes the label in the triangle when it fits).
+\cs_new:Npn \tenkz_label_outside_p:
+  {
+    \bool_lazy_or_p:nn
+      { \str_if_eq_p:Vn \l__tenkz_cshape_tl {dot} }
+      { \bool_lazy_and_p:nn
+          { \str_if_eq_p:ee { \tenkz@tensorstyle } {dot} }
+          { \bool_lazy_or_p:nn
+              { \str_if_eq_p:Vn \l__tenkz_cshape_tl {tril} }
+              { \str_if_eq_p:Vn \l__tenkz_cshape_tl {trir} } } }
+  }
+
+% the auto-quadrant algorithm: the free compass direction of a bead in row
+% #1, into tl #2.  Row-level data decides: south when the underside is free,
+% north when only the underside is busy, south west when both sides are.
+% Interface contention (the nopair genre): when this row would take south
+% while the row below would face it with a north label across an unpaired
+% interface, both label bands would land in the ONE inter-layer gap — two
+% labels may not share a band (label doctrine).  The upper row yields the
+% gap and takes its free north west quadrant instead: the diagonal clears
+% the up leg and the bond by construction.
+\cs_new_protected:Npn \tenkz_auto_quadrant:nN #1#2
+  {
+    \bool_if:nTF { \tenkz_opendown_p:n {#1} || \tenkz_pair_p:n {#1} }
+      {
+        \bool_if:nTF { \tenkz_openup_p:n {#1} ||
+                       \tenkz_uppaired_p:n {#1} }
+          { \tl_set:Nn #2 {south~west} }
+          { \tl_set:Nn #2 {north} }
+      }
+      {
+        \bool_if:nTF
+          { \int_compare_p:nNn {#1} < { \l__tenkz_nrows_int } &&
+            ( \tenkz_opendown_p:n {#1+1} || \tenkz_pair_p:n {#1+1} ) &&
+            ! ( \tenkz_openup_p:n {#1+1} || \tenkz_uppaired_p:n {#1+1} ) }
+          { \tl_set:Nn #2 {north~west} }
+          { \tl_set:Nn #2 {south} }
+      }
+  }
+
+\tl_new:N \l__tenkz_dot_label_tl
+\cs_new_protected:Npn \tenkz_dot_label_place:nnn #1#2#3
+  {
+    % choose direction.  The auto quadrant reasons in the LOGICAL frame
+    % (row occupancy is logical data), so its answer passes through the
+    % compass map before the paper-frame placement table below; a
+    % user-given `label pos` is already a PAPER word (the reader names
+    % what they see) and is used as is.
+    \tl_if_empty:NTF \l__tenkz_clpos_tl
+      {
+        \tenkz_auto_quadrant:nN {#1} \l_tmpa_tl
+        \tl_set:Ne \l_tmpa_tl { \tenkz_compass:V \l_tmpa_tl }
+      }
+      { \tl_set_eq:NN \l_tmpa_tl \l__tenkz_clpos_tl }
+    \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pa_tl
+    \tl_if_empty:NT \l__tenkz_clshift_tl
+      { \tl_set:Nn \l__tenkz_clshift_tl {0pt,0pt} }
+    \tl_set:Nn \l__tenkz_dot_label_tl {#3}
+    % compass table: node point, opposite label anchor, and the outward
+    % (dx,dy); a cardinal nudges one clearance band along its axis, a
+    % diagonal 0.7 of a band on each axis
+    \str_case:Vn \l_tmpa_tl
+      {
+        {south}      { \tenkz_dot_label_at:nnnn {south}      {north}
+                         {0}{-\tenkz@dim{\tenkz@r@labelclear}} }
+        {north}      { \tenkz_dot_label_at:nnnn {north}      {south}
+                         {0}{\tenkz@dim{\tenkz@r@labelclear}} }
+        {south~west} { \tenkz_dot_label_at:nnnn {south~west} {north~east}
+                         {-0.7\tenkz@dim{\tenkz@r@labelclear}}
+                         {-0.7\tenkz@dim{\tenkz@r@labelclear}} }
+        {south~east} { \tenkz_dot_label_at:nnnn {south~east} {north~west}
+                         {0.7\tenkz@dim{\tenkz@r@labelclear}}
+                         {-0.7\tenkz@dim{\tenkz@r@labelclear}} }
+        {north~west} { \tenkz_dot_label_at:nnnn {north~west} {south~east}
+                         {-0.7\tenkz@dim{\tenkz@r@labelclear}}
+                         {0.7\tenkz@dim{\tenkz@r@labelclear}} }
+        {north~east} { \tenkz_dot_label_at:nnnn {north~east} {south~west}
+                         {0.7\tenkz@dim{\tenkz@r@labelclear}}
+                         {0.7\tenkz@dim{\tenkz@r@labelclear}} }
+      }
+  }
+\cs_generate_variant:Nn \tenkz_dot_label_place:nnn { nnV }
+% place a bead's external label: node compass point #1, opposite label anchor
+% #2, outward offset (#3,#4); the text is \l__tenkz_dot_label_tl
+\cs_new_protected:Npn \tenkz_dot_label_at:nnnn #1#2#3#4
+  {
+    \node[label, anchor=#2, shift={(\l__tenkz_clshift_tl)}] at
+      ($(\l__tenkz_pa_tl.#1)+(#3,#4)$)
+      { $\tenkz@labelsize \tl_use:N \l__tenkz_dot_label_tl$ };
+  }
+
+% -- decorations: spans, cuts, bond labels ------------------------------
+\cs_new_protected:Npn \tenkz_draw_decorations:
+  {
+    \seq_map_inline:Nn \l__tenkz_spans_seq
+      { \tenkz_draw_span:nnnnn ##1 }
+    \seq_map_inline:Nn \l__tenkz_cuts_seq
+      { \tenkz_draw_cut:nnn ##1 }
+    \seq_map_inline:Nn \l__tenkz_bondlabels_seq
+      { \tenkz_draw_bondlabel:nnn ##1 }
+  }
+
+% do columns #2..#3 of row #1 place any ACTUAL external dot label on side
+% #4 (south|north)?  True only for a dot-skinned tn/tnc cell with a
+% non-blank label whose direction (`label pos` override, else the auto
+% quadrant) has a #4 component.  Box-skinned cells inscribe their labels,
+% so a box-mode span reports false and the brace clearance tightens: no
+% phantom band.  The scan is span-local so a brace over unlabeled cells is
+% not pushed out by labels elsewhere in the row.
+\cs_new_protected:Npn \tenkz_span_dot_labels:nnnnN #1#2#3#4#5
+  {
+    \bool_set_false:N #5
+    \int_step_inline:nnn {#2} {#3}
+      {
+        \tenkz_get:NeN \l__tenkz_kind_prop {#1-##1} \l_tmpa_tl
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
+          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+          {
+            \tenkz_get:NeN \l__tenkz_label_prop {#1-##1} \l_tmpb_tl
+            \tl_if_blank:VF \l_tmpb_tl
+              {
+                \tenkz_get:NeN \l__tenkz_opts_prop {#1-##1} \l_tmpb_tl
+                \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+                \bool_if:nT { \tenkz_label_outside_p: }
+                  {
+                    % the side test #4 is a LOGICAL word; a user-given
+                    % `label pos` is a PAPER word, so the compass
+                    % involution converts it back before comparing
+                    \tl_if_empty:NTF \l__tenkz_clpos_tl
+                      { \tenkz_auto_quadrant:nN {#1} \l_tmpa_tl }
+                      { \tl_set:Ne \l_tmpa_tl
+                          { \tenkz_compass:V \l__tenkz_clpos_tl } }
+                    \str_if_in:NnT \l_tmpa_tl {#4}
+                      { \bool_set_true:N #5 }
+                  }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_span:nnnnn #1#2#3#4#5
+  {
+    \dim_set:Nn \l__tenkz_x_dim
+      { \tenkz_colx:n {#2} - \tenkz@dim{0.22} }
+    \dim_set:Nn \l__tenkz_tmp_dim
+      { \tenkz_colx:n { #2 + #3 - 1 } + \tenkz@dim{0.22} }
+    \str_if_eq:nnTF {#4} {brace~below}
+      {
+        % clear open down legs, or the south dot-label band when the row
+        % actually places external dot labels below (dot skins only, so a
+        % box-mode brace sits closer)
+        \tenkz_span_dot_labels:nnnnN {#1} {#2} { #2 + #3 - 1 } {south} \l_tmpa_bool
+        \dim_set:Nn \l__tenkz_y_dim
+          { \tenkz_rowy:n {#1} - \tenkz@dim{0.20}
+            - \bool_if:nTF { \tenkz_opendown_p:n {#1} }
+                { \tenkz@dim{\tenkz@r@physleg} }
+                { \bool_if:NTF \l_tmpa_bool
+                    { \tenkz@dim{\tenkz@r@dotlabelband} } { 0pt } } }
+        % brace bulges downward: trace right-to-left, label below
+        \tenkz_span_brace:NNnnn \l__tenkz_tmp_dim \l__tenkz_x_dim {north} {-1} {#5}
+      }
+      {
+        % clear open up legs, or the north dot-label band when the row
+        % actually places external dot labels above
+        \tenkz_span_dot_labels:nnnnN {#1} {#2} { #2 + #3 - 1 } {north} \l_tmpa_bool
+        \dim_set:Nn \l__tenkz_y_dim
+          { \tenkz_rowy:n {#1} + \tenkz@dim{0.20}
+            + \bool_if:nTF { \tenkz_openup_p:n {#1} }
+                { \tenkz@dim{\tenkz@r@physleg} }
+                { \bool_if:NTF \l_tmpa_bool
+                    { \tenkz@dim{\tenkz@r@dotlabelband} } { 0pt } } }
+        % brace bulges upward: trace left-to-right, label above
+        \tenkz_span_brace:NNnnn \l__tenkz_x_dim \l__tenkz_tmp_dim {south} {1} {#5}
+      }
+  }
+
+% the shared brace+label of a span, given the two endpoints (their order sets
+% which way the brace bulges), the label anchor, the label-offset sign, and
+% the label text.  The label sits centred on the span, one text height plus
+% one clearance band beyond the brace.
+\cs_new_protected:Npn \tenkz_span_brace:NNnnn #1#2#3#4#5
+  {
+    \draw[brace]
+      (\dim_use:N #1, \dim_use:N \l__tenkz_y_dim) --
+      (\dim_use:N #2, \dim_use:N \l__tenkz_y_dim);
+    \node[label, anchor=#3] at
+      (\dim_eval:n{ (\l__tenkz_x_dim + \l__tenkz_tmp_dim)/2 },
+       \dim_eval:n{ \l__tenkz_y_dim
+                    + ( 3.4pt + \tenkz@dim{\tenkz@r@labelclear} ) * #4 })
+      { $\tenkz@labelsize #5$ };
+  }
+
+\cs_new_protected:Npn \tenkz_draw_cut:nnn #1#2#3
+  {
+    \dim_set:Nn \l__tenkz_x_dim
+      { \tenkz_colx:n {#2} + 0.5\tenkz@pitch }
+    \draw[cut]
+      (\dim_use:N \l__tenkz_x_dim,
+       \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{0.55} }) --
+      (\dim_use:N \l__tenkz_x_dim,
+       \dim_eval:n{ \tenkz_rowy:n {\l__tenkz_nrows_int} - \tenkz@dim{0.55} });
+    \tl_if_blank:nF {#3}
+      {
+        \node[label, anchor=south] at
+          (\dim_use:N \l__tenkz_x_dim,
+           \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{0.55}
+                        + \tenkz@dim{\tenkz@r@labelclear} })
+          { $\tenkz@labelsize #3$ };
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_bondlabel:nnn #1#2#3
+  {
+    \node[label, anchor=south] at
+      (\dim_eval:n{ ( \tenkz_colx:n {#2} + \tenkz_colx:n {#3} ) / 2 },
+       \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{\tenkz@r@labelclear} })
+      { #1 };
+  }
+
+% -- open boundaries ----------------------------------------------------
+% An open virtual index is drawn as a protruding stub (\tenkz@r@stub): the
+% ink states that the object is matrix-valued on that side.  Row-level
+% resolution: rows= mod `open`/`none` overrides the picture policy.
+\int_new:N \l__tenkz_first_int
+\int_new:N \l__tenkz_last_int
+\bool_new:N \l__tenkz_bopen_bool
+\bool_new:N \l__tenkz_wopen_bool
+\bool_new:N \l__tenkz_eopen_bool
+\bool_new:N \l__tenkz_wdone_bool
+\bool_new:N \l__tenkz_edone_bool
+
+\cs_new_protected:Npn \tenkz_row_extent:n #1
+  {
+    \int_zero:N \l__tenkz_first_int
+    \int_zero:N \l__tenkz_last_int
+    \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+      {
+        \prop_if_in:NeT \l__tenkz_owner_prop {\int_eval:n{#1}-##1}
+          {
+            \int_compare:nNnT { \l__tenkz_first_int } = {0}
+              { \int_set:Nn \l__tenkz_first_int {##1} }
+            \int_set:Nn \l__tenkz_last_int {##1}
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_row_open:nN #1#2
+  {
+    \bool_set_false:N #2
+    \tl_set:Ne \l_tmpb_tl { \tenkz_rowmod:n {#1} }
+    \str_if_in:NnTF \l_tmpb_tl {open}
+      { \bool_set_true:N #2 }
+      {
+        \str_if_in:NnF \l_tmpb_tl {none}
+          { \str_if_eq:VnT \l__tenkz_boundary_tl {open}
+              { \bool_set_true:N #2 } }
+      }
+  }
+
+% per-row, per-side openness: is row #1 open on side #2 (west|east)?
+% Resolution order: the rows= suffix wins — the side-scoped `west open`
+% / `west none` / `east open` / `east none` first, then the both-sides
+% `open` / `none` — then the side policy (west=/east=), then the
+% picture policy (boundary=).  Prepared and discarded indices are SIDES
+% of the word, not rows -- a circuit fragment seals its west (input)
+% indices and keeps its east (output) indices open (hard11) -- so a row
+% whose west resolves to `none` draws no west stub yet keeps its east
+% stub, and the boundary signature counts only the stubs actually
+% drawn.  The row-scope words live in \l__tenkz_rowside_prop ("side-r"
+% -> open|none), built once per picture by \tenkz_record_rowsides: from
+% the exact colon-split mod segments (a substring test would let `west
+% open` open BOTH sides through its `open` letters).
+\cs_new_protected:Npn \tenkz_row_open_side:nnN #1#2#3
+  {
+    \bool_set_false:N #3
+    \prop_get:NeNTF \l__tenkz_rowside_prop { #2 - \int_eval:n {#1} }
+      \l_tmpb_tl
+      { \str_if_eq:VnT \l_tmpb_tl {open} { \bool_set_true:N #3 } }
+      {
+        \str_if_eq:nnTF {#2} {west}
+          { \tl_set_eq:NN \l_tmpb_tl \l__tenkz_westpol_tl }
+          { \tl_set_eq:NN \l_tmpb_tl \l__tenkz_eastpol_tl }
+        \tl_if_empty:NTF \l_tmpb_tl
+          { \str_if_eq:VnT \l__tenkz_boundary_tl {open}
+              { \bool_set_true:N #3 } }
+          { \str_if_eq:VnT \l_tmpb_tl {open}
+              { \bool_set_true:N #3 } }
+      }
+  }
+
+% build the row-scope side-policy table: one pass over every row's mod
+% segments (split at the catcode-12 colons of the str-normalized mods),
+% spaces stripped, exact words only — `open`/`none` write both sides,
+% `west open` etc. one side (`rows={op:west none}`: the op row seals its
+% west end and keeps its east stub).  Later segments override earlier
+% ones, matching the option-list read.
+\prop_new:N \l__tenkz_rowside_prop
+\seq_new:N \l__tenkz_mods_seq
+\cs_new_protected:Npn \tenkz_record_rowsides:
+  {
+    \prop_clear:N \l__tenkz_rowside_prop
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \tl_set:Ne \l_tmpb_tl { \tenkz_rowmod:n {##1} }
+        \use:e
+          {
+            \seq_set_split:Nnn \exp_not:N \l__tenkz_mods_seq
+              { \c_colon_str } { \exp_not:V \l_tmpb_tl }
+          }
+        \seq_map_inline:Nn \l__tenkz_mods_seq
+          { \tenkz_rowside_mod:nn {##1} {####1} }
+      }
+  }
+\cs_new_protected:Npn \tenkz_rowside_mod:nn #1#2
+  {
+    \tl_set:Nn \l_tmpb_tl {#2}
+    \tl_remove_all:Nn \l_tmpb_tl { ~ }
+    \str_case:VnF \l_tmpb_tl
+      {
+        {open}     { \prop_put:Nen \l__tenkz_rowside_prop {west-#1} {open}
+                     \prop_put:Nen \l__tenkz_rowside_prop {east-#1} {open} }
+        {none}     { \prop_put:Nen \l__tenkz_rowside_prop {west-#1} {none}
+                     \prop_put:Nen \l__tenkz_rowside_prop {east-#1} {none} }
+        {westopen} { \prop_put:Nen \l__tenkz_rowside_prop {west-#1} {open} }
+        {westnone} { \prop_put:Nen \l__tenkz_rowside_prop {west-#1} {none} }
+        {eastopen} { \prop_put:Nen \l__tenkz_rowside_prop {east-#1} {open} }
+        {eastnone} { \prop_put:Nen \l__tenkz_rowside_prop {east-#1} {none} }
+      }
+      { }
+  }
+
+% is the cell at (row, col) part of a fusion bar?  A bar consumes the
+% boundary on its side: its combined leg IS the open index of the fused
+% object, so no stub is drawn behind it.
+\cs_new_protected:Npn \tenkz_cell_is_fuse:nnN #1#2#3
+  {
+    \bool_set_false:N #3
+    \tenkz_get:NeN \l__tenkz_kind_prop {\int_eval:n{#1}-\int_eval:n{#2}} \l_tmpa_tl
+    \bool_lazy_or:nnT
+      { \str_if_eq_p:Vn \l_tmpa_tl {fuse} }
+      { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
+      { \bool_set_true:N #3 }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_boundaries:
+  {
+    \int_zero:N \l__tenkz_bvw_int
+    \int_zero:N \l__tenkz_bve_int
+    \bool_set_false:N \l__tenkz_wdone_bool
+    \bool_set_false:N \l__tenkz_edone_bool
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        % each side resolves its own openness (rows= mod, then west=/
+        % east=, then boundary=): a west=none row keeps its east stub
+        \tenkz_row_open_side:nnN {##1}{west} \l__tenkz_wopen_bool
+        \tenkz_row_open_side:nnN {##1}{east} \l__tenkz_eopen_bool
+        \bool_lazy_or:nnT { \l__tenkz_wopen_bool } { \l__tenkz_eopen_bool }
+          {
+            \tenkz_row_extent:n {##1}
+            \int_compare:nNnF { \l__tenkz_first_int } = {0}
+              {
+                \tenkz_row_wirestyle:nN {##1} \l__tenkz_cell_tl
+                % west stub, unless the side is closed, a fusion bar owns
+                % this end, or a cup closes it (a cupped end is
+                % contracted, not open)
+                \bool_if:NT \l__tenkz_wopen_bool
+                  {
+                \tenkz_cell_is_fuse:nnN {##1} {\l__tenkz_first_int}
+                  \l_tmpa_bool
+                \bool_if:NF \l_tmpa_bool
+                  {
+                  \prop_if_in:NeF \l__tenkz_cuprow_prop { west - ##1 }
+                  {
+                    \tenkz_anchor:nnnN {##1}{\int_use:N \l__tenkz_first_int}
+                      {west} \l__tenkz_pa_tl
+                    \draw[\tl_use:N \l__tenkz_cell_tl]
+                      \l__tenkz_pa_tl --
+                      ++\tenkz_stub_vec:n{west}
+                      coordinate (tzbw\the\tenkz@pictureid);
+                    \int_incr:N \l__tenkz_bvw_int
+                    % the west boundary label attaches to the first row
+                    % that draws a west stub, one clearance band beyond
+                    % the tip along the stub's own (frame-mapped) axis
+                    \bool_if:NF \l__tenkz_wdone_bool
+                      {
+                        \bool_set_true:N \l__tenkz_wdone_bool
+                        \tl_if_empty:NF \l__tenkz_wlabel_tl
+                          {
+                            \node[label, anchor=\tenkz_compass:n{east},
+                                  shift={\tenkz_side_vec:nn{west}
+                                    {\tenkz@dim{\tenkz@r@labelclear}}}]
+                              at (tzbw\the\tenkz@pictureid)
+                              { \tl_use:N \l__tenkz_wlabel_tl };
+                          }
+                      }
+                  }
+                  }
+                  }
+                % east stub, same rules
+                \bool_if:NT \l__tenkz_eopen_bool
+                  {
+                \tenkz_cell_is_fuse:nnN {##1} {\l__tenkz_last_int}
+                  \l_tmpa_bool
+                \bool_if:NF \l_tmpa_bool
+                  {
+                  \prop_if_in:NeF \l__tenkz_cuprow_prop { east - ##1 }
+                  {
+                    \tenkz_anchor:nnnN {##1}{\int_use:N \l__tenkz_last_int}
+                      {east} \l__tenkz_pa_tl
+                    \draw[\tl_use:N \l__tenkz_cell_tl]
+                      \l__tenkz_pa_tl --
+                      ++\tenkz_stub_vec:n{east}
+                      coordinate (tzbe\the\tenkz@pictureid);
+                    \int_incr:N \l__tenkz_bve_int
+                    \bool_if:NF \l__tenkz_edone_bool
+                      {
+                        \bool_set_true:N \l__tenkz_edone_bool
+                        \tl_if_empty:NF \l__tenkz_elabel_tl
+                          {
+                            \node[label, anchor=\tenkz_compass:n{west},
+                                  shift={\tenkz_side_vec:nn{east}
+                                    {\tenkz@dim{\tenkz@r@labelclear}}}]
+                              at (tzbe\the\tenkz@pictureid)
+                              { \tl_use:N \l__tenkz_elabel_tl };
+                          }
+                      }
+                  }
+                  }
+                  }
+              }
+          }
+      }
+    % a \tnfuse combined stub is ONE open virtual index on its side: the
+    % fusion map V : C^{D_1} x C^{D_2} -> C^{D_12} leaves exactly the fused
+    % index open, and the combined leg IS that index.  Without this count a
+    % fused equation reads unbalanced -- hard06's O = X^{-1}[A (x) conj A]X
+    % needs virtual-west = virtual-east = 1 on BOTH sides.
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \tenkz_get:NeN \l__tenkz_kind_prop {##1-####1} \l__tenkz_pkind_tl
+            \str_if_eq:VnT \l__tenkz_pkind_tl {fuse}
+              {
+                \tenkz_get:NeN \l__tenkz_opts_prop {##1-####1} \l_tmpb_tl
+                \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+                \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
+                  { \int_incr:N \l__tenkz_bve_int }
+                  { \int_incr:N \l__tenkz_bvw_int }
+              }
+          }
+      }
+  }
+
+% -- inter-layer cups -----------------------------------------------------
+% A cup closes two DIFFERENT rows into each other on one side — the
+% ket-to-bra virtual tie of sandwich objects.  Contrast periodic: a trace
+% closes one row back to ITSELF; the two closures have different topology
+% and the event stream records them as different events (trace vs cup).
+%
+% Pair selection.  Eligible rows on a side are the rows that would draw a
+% stub there: open under the row/picture boundary policy, non-empty, and
+% not ending in a fusion bar (the bar consumes its side's boundary).
+% Eligible rows are cupped in ADJACENT PAIRS, top-down (first with second,
+% third with fourth, ...); an odd row out keeps its stub.  A cupped row
+% draws no stub and contributes no open virtual index to the signature.
+\cs_new_protected:Npn \tenkz_compute_cups:
+  {
+    \seq_clear:N \l__tenkz_cupw_seq
+    \seq_clear:N \l__tenkz_cupe_seq
+    \prop_clear:N \l__tenkz_cuprow_prop
+    \bool_if:NT \l__tenkz_closew_bool
+      { \tenkz_compute_cups_side:nnN {west}{first} \l__tenkz_cupw_seq }
+    \bool_if:NT \l__tenkz_closee_bool
+      { \tenkz_compute_cups_side:nnN {east}{last} \l__tenkz_cupe_seq }
+  }
+% side #1 (west|east), row-extent end #2 (first|last), pair seq #3
+\cs_new_protected:Npn \tenkz_compute_cups_side:nnN #1#2#3
+  {
+    \seq_clear:N \l_tmpa_seq
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        % cup eligibility respects the per-side policy: a side sealed by
+        % west=none/east=none has no open ends to cup there
+        \tenkz_row_open_side:nnN {##1}{#1} \l__tenkz_bopen_bool
+        \bool_if:NT \l__tenkz_bopen_bool
+          {
+            \tenkz_row_extent:n {##1}
+            \int_compare:nNnF { \l__tenkz_first_int } = {0}
+              {
+                \tenkz_cell_is_fuse:nnN {##1}
+                  { \int_use:c { l__tenkz_#2_int } } \l_tmpa_bool
+                \bool_if:NF \l_tmpa_bool
+                  { \seq_put_right:Nn \l_tmpa_seq {##1} }
+              }
+          }
+      }
+    \bool_while_do:nn
+      { \int_compare_p:nNn { \seq_count:N \l_tmpa_seq } > {1} }
+      {
+        \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
+        \seq_pop_left:NN \l_tmpa_seq \l_tmpb_tl
+        \seq_put_right:Ne #3 { { \l_tmpa_tl } { \l_tmpb_tl } }
+        \prop_put:Nen \l__tenkz_cuprow_prop { #1 - \l_tmpa_tl } {}
+        \prop_put:Nen \l__tenkz_cuprow_prop { #1 - \l_tmpb_tl } {}
+      }
+  }
+
+% Geometry.  One cup = two quarter-arcs (a rounded 180-degree turn) from
+% the upper row's end to the lower row's end, drawn in the pair's wire
+% style (the upper row's — a sandwich pair shares one style).  Horizontal
+% reach = \tenkz@r@stub: the bend protrudes exactly as far as the stubs it
+% replaces, so open and cup-closed pictures share one silhouette; being
+% purely outboard of the last column it also clears every leg-tip and dot
+% label band by construction (labels live at column abscissae).
+\dim_new:N \l__tenkz_cupx_dim   % common abscissa where the turn starts
+\dim_new:N \l__tenkz_cupry_dim  % vertical radius: half the pair's row gap
+\tl_new:N \l__tenkz_cupmat_tl   % this cup's on-bend matrix (may be empty)
+
+\cs_new_protected:Npn \tenkz_draw_cups:
+  {
+    \seq_map_inline:Nn \l__tenkz_cupw_seq
+      { \tenkz_draw_cup:nnn {west} ##1 }
+    \seq_map_inline:Nn \l__tenkz_cupe_seq
+      { \tenkz_draw_cup:nnn {east} ##1 }
+  }
+
+% the cup end of row #2 on side #1: the anchor coordinate (into tl #3) and
+% its abscissa (into dim #4).  Cup ends are always glyph nodes — a fuse-
+% consumed end is never cup-eligible — so the abscissa comes straight from
+% the pgf shape anchor.
+\cs_new_protected:Npn \tenkz_cup_anchor:nnNN #1#2#3#4
+  {
+    \tenkz_row_extent:n {#2}
+    \str_if_eq:nnTF {#1}{west}
+      { \int_set:Nn \l_tmpb_int { \l__tenkz_first_int } }
+      { \int_set:Nn \l_tmpb_int { \l__tenkz_last_int } }
+    \tenkz_anchor:nnnN {#2}{ \int_use:N \l_tmpb_int }{#1} #3
+    \prop_get:NeNF \l__tenkz_owner_prop
+      {#2-\int_use:N \l_tmpb_int} \l_tmpa_tl
+      { \tl_set:Ne \l_tmpa_tl { \int_use:N \l_tmpb_int } }
+    \tenkz_get:NeN \l__tenkz_name_prop {#2-\l_tmpa_tl} \l_tmpb_tl
+    \pgfextractx #4 { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl } {#1} }
+  }
+
+% draw one cup: side #1 (west|east), upper row #2, lower row #3
+\cs_new_protected:Npn \tenkz_draw_cup:nnn #1#2#3
+  {
+    \tenkz_row_wirestyle:nN {#2} \l__tenkz_cell_tl
+    \str_if_eq:nnTF {#1}{east}
+      { \tl_set_eq:NN \l__tenkz_cupmat_tl \l__tenkz_closeemat_tl }
+      { \tl_set_eq:NN \l__tenkz_cupmat_tl \l__tenkz_closewmat_tl }
+    \tenkz_cup_anchor:nnNN {#1}{#2} \l__tenkz_pa_tl \l__tenkz_x_dim
+    \tenkz_cup_anchor:nnNN {#1}{#3} \l__tenkz_pb_tl \l__tenkz_tmp_dim
+    % common abscissa: the OUTERMOST of the two ends; a shorter row gets a
+    % horizontal lead-in so the turn itself stays one smooth half-ellipse
+    \str_if_eq:nnTF {#1}{east}
+      { \dim_set:Nn \l__tenkz_cupx_dim
+          { \dim_max:nn { \l__tenkz_x_dim } { \l__tenkz_tmp_dim } } }
+      { \dim_set:Nn \l__tenkz_cupx_dim
+          { \dim_min:nn { \l__tenkz_x_dim } { \l__tenkz_tmp_dim } } }
+    \dim_set:Nn \l__tenkz_cupry_dim
+      { ( \tenkz_rowy:n {#2} - \tenkz_rowy:n {#3} ) / 2 }
+    \dim_set:Nn \l__tenkz_y_dim
+      { ( \tenkz_rowy:n {#2} + \tenkz_rowy:n {#3} ) / 2 }
+    \str_if_eq:nnTF {#1}{east}
+      {
+        \draw[\tl_use:N \l__tenkz_cell_tl]
+          \l__tenkz_pa_tl --
+          (\dim_use:N \l__tenkz_cupx_dim, \tenkz_rowy:n {#2})
+          arc[start~angle=90, end~angle=0,
+              x~radius=\tenkz@dim{\tenkz@r@stub},
+              y~radius=\dim_use:N \l__tenkz_cupry_dim]
+          arc[start~angle=0, end~angle=-90,
+              x~radius=\tenkz@dim{\tenkz@r@stub},
+              y~radius=\dim_use:N \l__tenkz_cupry_dim]
+          -- \l__tenkz_pb_tl;
+        \tenkz_cup_matrix:nnn {#1}{#2}{ 1 }
+      }
+      {
+        \draw[\tl_use:N \l__tenkz_cell_tl]
+          \l__tenkz_pa_tl --
+          (\dim_use:N \l__tenkz_cupx_dim, \tenkz_rowy:n {#2})
+          arc[start~angle=90, end~angle=180,
+              x~radius=\tenkz@dim{\tenkz@r@stub},
+              y~radius=\dim_use:N \l__tenkz_cupry_dim]
+          arc[start~angle=180, end~angle=270,
+              x~radius=\tenkz@dim{\tenkz@r@stub},
+              y~radius=\dim_use:N \l__tenkz_cupry_dim]
+          -- \l__tenkz_pb_tl;
+        \tenkz_cup_matrix:nnn {#1}{#2}{ -1 }
+      }
+    \tenkz@event{cup|picture=\the\tenkz@pictureid|side=#1|top=#2|bottom=#3|matrix=\tl_if_empty:NTF \l__tenkz_cupmat_tl {0}{1}}
+  }
+
+% the on-bend fixed-point matrix: a filled dot ON the bend apex, its label
+% OUTSIDE the bend, one clearance band beyond the dot on the side the bend
+% points to — the rho^L / rho^R capping convention (RMP sec2fig8, fig9-1).
+% #1 side, #2 upper row (they name the node), #3 outward sign (1|-1)
+\cs_new_protected:Npn \tenkz_cup_matrix:nnn #1#2#3
+  {
+    \tl_if_blank:VF \l__tenkz_cupmat_tl
+      {
+        \node[tensor]
+          (tzcup\the\tenkz@pictureid-#1-#2)
+          at (\dim_eval:n{ \l__tenkz_cupx_dim
+                           + \tenkz@dim{\tenkz@r@stub} * (#3) },
+              \dim_use:N \l__tenkz_y_dim) {};
+        \str_if_eq:nnTF {#1}{east}
+          {
+            \node[label, anchor=west] at
+              ($(tzcup\the\tenkz@pictureid-#1-#2.east)
+                +(\tenkz@dim{\tenkz@r@labelclear},0)$)
+              { \tl_use:N \l__tenkz_cupmat_tl };
+          }
+          {
+            \node[label, anchor=east] at
+              ($(tzcup\the\tenkz@pictureid-#1-#2.west)
+                +(-\tenkz@dim{\tenkz@r@labelclear},0)$)
+              { \tl_use:N \l__tenkz_cupmat_tl };
+          }
+      }
+  }
+
+% The boundary signature counts the picture's open indices.  Two sides of
+% a diagrammatic equation are equal objects only if their signatures
+% match; the audit layer reads these events to lint that.
+% the number of open legs a leg-candidate cell contributes: 1, or the
+% number of `legs at` columns (each named column is its own physical index)
+\cs_generate_variant:Nn \clist_count:n { V }
+\cs_new:Npn \tenkz_leg_count:
+  {
+    \tl_if_empty:NTF \l__tenkz_clegsat_tl {1}
+      { \clist_count:V \l__tenkz_clegsat_tl }
+  }
+
+\cs_new_protected:Npn \tenkz_emit_signature:
+  {
+    \int_zero:N \l__tenkz_bpu_int
+    \int_zero:N \l__tenkz_bpd_int
+    % trace=physical closes each traced site's up+down pair per site, so
+    % those legs leave the signature (single-row form only; the deferred
+    % multi-row form keeps its counts until it draws)
+    \bool_lazy_and:nnTF { \l__tenkz_ptrace_bool }
+      { \int_compare_p:nNn { \l__tenkz_nrows_int } = {1} }
+      { \bool_set_true:N  \l__tenkz_ptraceon_bool }
+      { \bool_set_false:N \l__tenkz_ptraceon_bool }
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \bool_if:NF \l__tenkz_ptraceon_bool
+              {
+                % a traced column contributes NO open physical index: the
+                % wrap loop closes ket against bra (Tr_s), so both the ket
+                % cell and the bra cell below it leave the signature
+                \bool_lazy_and:nnT
+                  { \tenkz_openup_p:n {##1} }
+                  { ! \tenkz_traced_p:nn {##1}{####1} }
+                  { \tenkz_leg_candidate:nnT {##1}{####1}
+                      { \int_add:Nn \l__tenkz_bpu_int { \tenkz_leg_count: } } }
+                \bool_lazy_and:nnT
+                  { \tenkz_opendown_p:n {##1} }
+                  { ! \tenkz_traced_above_p:nn {##1}{####1} }
+                  { \tenkz_leg_candidate:nnT {##1}{####1}
+                      { \int_add:Nn \l__tenkz_bpd_int { \tenkz_leg_count: } } }
+              }
+            % a \tnskip hole at a paired interface leaves the live partner's
+            % leg OPEN: that leg is an open physical index and must count
+            \int_compare:nNnT {##1} < { \l__tenkz_nrows_int }
+              {
+                \bool_if:nT { \tenkz_pair_p:n {##1} }
+                  {
+                    \tenkz_get:NeN \l__tenkz_kind_prop
+                      { \int_eval:n{##1+1} - ####1 } \l__tenkz_pkind_tl
+                    \str_if_eq:VnT \l__tenkz_pkind_tl {skip}
+                      { \tenkz_leg_candidate:nnT {##1}{####1}
+                          { \int_add:Nn \l__tenkz_bpd_int
+                              { \tenkz_leg_count: } } }
+                    \tenkz_get:NeN \l__tenkz_kind_prop
+                      {##1-####1} \l__tenkz_pkind_tl
+                    \str_if_eq:VnT \l__tenkz_pkind_tl {skip}
+                      { \tenkz_leg_candidate:nnT
+                          { \int_eval:n{##1+1} }{####1}
+                          { \int_add:Nn \l__tenkz_bpu_int
+                              { \tenkz_leg_count: } } }
+                    % an OPENED interface segment (open={(i,c)}) keeps
+                    % both faces' stubs: two open physical indices
+                    \prop_if_in:NeT \l__tenkz_opencell_prop {##1-####1}
+                      {
+                        \tenkz_leg_candidate:nnT {##1}{####1}
+                          { \int_add:Nn \l__tenkz_bpd_int
+                              { \tenkz_leg_count: } }
+                        \tenkz_leg_candidate:nnT
+                          { \int_eval:n{##1+1} }{####1}
+                          { \int_add:Nn \l__tenkz_bpu_int
+                              { \tenkz_leg_count: } }
+                      }
+                  }
+              }
+          }
+      }
+    \tenkz@event{boundary|picture=\the\tenkz@pictureid|virtual-west=\int_use:N\l__tenkz_bvw_int|virtual-east=\int_use:N\l__tenkz_bve_int|physical-up=\int_use:N\l__tenkz_bpu_int|physical-down=\int_use:N\l__tenkz_bpd_int}
+  }
+
+% -- physical trace (trace=physical) --------------------------------------
+% Per site, Tr_phys(M) = sum_s M^{ss}: the site's up leg turns east at its
+% tip, swings around the glyph's east side at \tenkz@r@phtracereach beyond
+% the glyph edge (crossing the virtual wire -- distinct ink, no junction),
+% and comes back into the site's own down-leg tip.  The legs themselves are
+% drawn by the leg pass; this pass adds only the connecting loop, in the
+% `trace` style (solid, rounded corners -- dotted-free).  The multi-row form
+% (outermost up leg to outermost down leg around the east end of the WHOLE
+% word) is deferred: it warns and draws nothing.
+\msg_new:nnn { tenkz } { phtrace-multirow }
+  {
+    trace=physical~currently~closes~single-row~pictures~only;~the~
+    multi-row~form~(outermost~up~leg~to~outermost~down~leg~around~the~
+    east~end~of~the~word)~is~deferred.~No~trace~ink~was~drawn.
+  }
+
+\cs_new_protected:Npn \tenkz_draw_phtrace:
+  {
+    \bool_if:NT \l__tenkz_ptrace_bool
+      {
+        \int_compare:nNnTF { \l__tenkz_nrows_int } = {1}
+          {
+            \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+              {
+                \bool_lazy_and:nnT
+                  { \tenkz_openup_p:n {1} }
+                  { \tenkz_opendown_p:n {1} }
+                  { \tenkz_leg_candidate:nnT {1}{##1}
+                      { \tenkz_phtrace_site:n {##1} } }
+              }
+          }
+          { \msg_warning:nn {tenkz}{phtrace-multirow} }
+      }
+  }
+
+% one site's trace loop: up-leg tip -> around the east side -> down-leg tip
+\cs_new_protected:Npn \tenkz_phtrace_site:n #1
+  {
+    \tenkz_get:NnN \l__tenkz_name_prop {1-#1} \l__tenkz_pa_tl
+    % up-leg tip (edge ordinate + leg), down-leg tip, and the loop abscissa
+    \pgfextracty \l__tenkz_tmp_dim
+      { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {north} }
+    \dim_add:Nn \l__tenkz_tmp_dim { \tenkz@dim{\tenkz@r@physleg} }
+    \pgfextracty \l__tenkz_y_dim
+      { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {south} }
+    \dim_sub:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} }
+    \pgfextractx \l__tenkz_x_dim
+      { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {east} }
+    \dim_add:Nn \l__tenkz_x_dim { \tenkz@dim{\tenkz@r@phtracereach} }
+    % legs live on the glyph's vertical centre line
+    \pgfextractx \l__tenkz_tallx_dim
+      { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {north} }
+    \draw[trace]
+      (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_tmp_dim) --
+      (\dim_use:N \l__tenkz_x_dim,     \dim_use:N \l__tenkz_tmp_dim) --
+      (\dim_use:N \l__tenkz_x_dim,     \dim_use:N \l__tenkz_y_dim) --
+      (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_y_dim);
+    \tenkz@event{phtrace|picture=\the\tenkz@pictureid|row=1|col=#1}
+  }
+
+% -- pair trace (the trace= physical cell-set) ----------------------------
+% Per traced column, the wrap loop IS the partial trace over that site's
+% physical space: Tr_s contracts the ket's physical index with the bra's,
+% and the ink shows the contraction as ONE wire -- up out of the ket, a
+% stadium cap around the column's east side, down past both rows, and into
+% the bra's down leg from below -- so the traced column leaves no open
+% physical index and the picture depicts rho_kept = Tr_traced |psi><psi|
+% (RMP 2011.12127 fig. 2 marginals).  The east straight swings
+% \tenkz@r@pairtracereach beyond the leg axis, clear of the neighbouring
+% column at the default pitch, crossing the virtual wires as distinct ink
+% (no junction); the caps are circular (radius = reach/2), so every join
+% is tangent-continuous.
+\cs_new_protected:Npn \tenkz_draw_pairtrace:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \prop_if_in:NeT \l__tenkz_trcell_prop {##1-####1}
+              {
+                \tenkz_leg_candidate:nnT {##1}{####1}
+                  {
+                    \tenkz_leg_candidate:nnT { \int_eval:n{##1+1} }{####1}
+                      { \tenkz_pairtrace_site:nn {##1}{####1} }
+                  }
+              }
+          }
+      }
+  }
+
+% one column's wrap loop: ket up-leg tip -> stadium cap east -> down past
+% both rows -> stadium cap west -> bra down-leg tip.  Both legs are drawn
+% here as part of the loop (a traced cell's stub/pairing passes stand
+% down), so the whole trace is one stroke of the `trace` style.
+\cs_new_protected:Npn \tenkz_pairtrace_site:nn #1#2
+  {
+    \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pa_tl
+    \tenkz_get:NeN \l__tenkz_name_prop { \int_eval:n {#1+1} - #2 }
+      \l__tenkz_pb_tl
+    % ket up-leg tip ordinate (edge + leg) and bra down-leg tip ordinate
+    \pgfextracty \l__tenkz_tmp_dim
+      { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {north} }
+    \dim_add:Nn \l__tenkz_tmp_dim { \tenkz@dim{\tenkz@r@physleg} }
+    \pgfextracty \l__tenkz_y_dim
+      { \exp_args:Ne \pgfpointanchor { \l__tenkz_pb_tl } {south} }
+    \dim_sub:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} }
+    % the leg axis (the glyphs' vertical centre line) and the east straight
+    \pgfextractx \l__tenkz_tallx_dim
+      { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {north} }
+    \dim_set:Nn \l__tenkz_x_dim
+      { \l__tenkz_tallx_dim + \tenkz@dim{\tenkz@r@pairtracereach} }
+    \draw[trace]
+      (\l__tenkz_pa_tl.north) --
+      (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_tmp_dim)
+      arc[start~angle=180, end~angle=0,
+          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@pairtracereach} / 2 }]
+      --
+      (\dim_use:N \l__tenkz_x_dim, \dim_use:N \l__tenkz_y_dim)
+      arc[start~angle=360, end~angle=180,
+          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@pairtracereach} / 2 }]
+      -- (\l__tenkz_pb_tl.south);
+    \tenkz@event{pairtrace|picture=\the\tenkz@pictureid|row=\int_eval:n{#1}|col=#2}
+  }
+
+% -- periodic closure ---------------------------------------------------
+\cs_new_protected:Npn \tenkz_draw_trace:
+  {
+    \int_compare:nNnTF { \l__tenkz_nrows_int } = {1}
+      { \tenkz_trace_row:nn {1}{below} }
+      {
+        \tenkz_trace_row:nn {1}{above}
+        \tenkz_trace_row:nn {\l__tenkz_nrows_int}{below}
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_trace_row:nn #1#2
+  {
+    % closures inherit (hue contract, clause 4): the racetrack draws in
+    % the traced row's resolved wire style over the trace geometry, so
+    % an operator-hued row closes with an operator-hued ring
+    \tenkz_row_wirestyle:nN {#1} \l__tenkz_cell_tl
+    % periodic + dir: the barb rides the racetrack's RETURN wire (the MPO
+    % ring convention).  The path is stroked from the east end around to the
+    % west end, so its long straight already runs with the circulation of
+    % right-directed bonds; `left` reverses the barb, not the path.
+    \tenkz_row_dir:nN {#1} \l__tenkz_dir_tl
+    \tl_clear:N \l__tenkz_dirmarks_tl
+    \tl_if_empty:NF \l__tenkz_dir_tl
+      {
+        \tl_set:Nn \l__tenkz_dirmarks_tl {dir~marks}
+        \str_if_eq:VnT \l__tenkz_dir_tl {left}
+          { \tl_put_right:Nn \l__tenkz_dirmarks_tl {~reversed} }
+      }
+    % find first and last occupied columns of the row
+    \int_zero:N \l_tmpa_int  \int_zero:N \l_tmpb_int
+    \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+      {
+        \prop_if_in:NeT \l__tenkz_owner_prop {\int_eval:n{#1}-##1}
+          {
+            \int_compare:nNnT { \l_tmpa_int } = {0}
+              { \int_set:Nn \l_tmpa_int {##1} }
+            \int_set:Nn \l_tmpb_int {##1}
+          }
+      }
+    \int_compare:nNnF { \l_tmpa_int } = {0}
+      {
+        \tenkz_anchor:nnnN {#1}{\int_use:N\l_tmpb_int}{east} \l__tenkz_pa_tl
+        \tenkz_anchor:nnnN {#1}{\int_use:N\l_tmpa_int}{west} \l__tenkz_pb_tl
+        \dim_set:Nn \l__tenkz_x_dim
+          { \tenkz_colx:n {\l_tmpb_int} + \tenkz@dim{0.45} }
+        \dim_set:Nn \l__tenkz_tmp_dim
+          { \tenkz_colx:n {\l_tmpa_int} - \tenkz@dim{0.45} }
+        % The racetrack must CLEAR any ink on its side of the traced row:
+        % open physical legs add their length, and leg-tip/dot labels add
+        % the label band (a virtual trace crossing physical ink would draw
+        % a false contraction).
+        \dim_set:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@traceclear} }
+        \str_if_eq:nnTF {#2} {below}
+          {
+            \bool_if:nT { \tenkz_opendown_p:n {#1} }
+              { \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} } }
+            \tenkz_span_dot_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
+              {south} \l_tmpa_bool
+            \bool_if:NT \l_tmpa_bool
+              { \dim_add:Nn \l__tenkz_y_dim
+                  { \tenkz@dim{\tenkz@r@dotlabelband} } }
+            \dim_set:Nn \l__tenkz_y_dim
+              { \tenkz_rowy:n {#1} - \l__tenkz_y_dim }
+          }
+          {
+            \bool_if:nT { \tenkz_openup_p:n {#1} }
+              { \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} } }
+            \tenkz_span_dot_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
+              {north} \l_tmpa_bool
+            \bool_if:NT \l_tmpa_bool
+              { \dim_add:Nn \l__tenkz_y_dim
+                  { \tenkz@dim{\tenkz@r@dotlabelband} } }
+            \dim_set:Nn \l__tenkz_y_dim
+              { \tenkz_rowy:n {#1} + \l__tenkz_y_dim }
+          }
+        % the four racetrack corners are logical-frame points; each one
+        % passes through the frame map, so a vertical picture gets the
+        % side racetrack (the return wire runs down the page's east or
+        % west margin) from the same clearance arithmetic
+        \tl_set:Ne \l_tmpa_tl { \exp_not:V \l__tenkz_pa_tl }
+        \tenkz_map:nn { \l__tenkz_x_dim } { \tenkz_rowy:n {#1} }
+        \tl_put_right:Ne \l_tmpa_tl { -- \tenkz_mpt: }
+        \tenkz_map:nn { \l__tenkz_x_dim } { \l__tenkz_y_dim }
+        \tl_put_right:Ne \l_tmpa_tl { -- \tenkz_mpt: }
+        \tenkz_map:nn { \l__tenkz_tmp_dim } { \l__tenkz_y_dim }
+        \tl_put_right:Ne \l_tmpa_tl { -- \tenkz_mpt: }
+        \tenkz_map:nn { \l__tenkz_tmp_dim } { \tenkz_rowy:n {#1} }
+        \tl_put_right:Ne \l_tmpa_tl { -- \tenkz_mpt: }
+        \draw[trace, \tl_use:N \l__tenkz_cell_tl,
+              \tl_use:N \l__tenkz_dirmarks_tl]
+          \l_tmpa_tl -- \l__tenkz_pb_tl;
+        % row=... must write a NUMBER: #1 may be the nrows register, and
+        % an unexpandable register token would land verbatim in the log
+        \tenkz@event{trace|picture=\the\tenkz@pictureid|row=\int_eval:n{#1}|side=#2}
+      }
+  }
+
+% -- periodic closure, hooks style --------------------------------------
+% The truncated half-hook closure of the RMP O_L figure (arXiv:2011.12127
+% Fig:MPDO-O_L): the ring seen edge-on, its return wire implied.  At each
+% end of the traced row the wire runs half a stub out along the wire
+% axis, turns through a 250-degree arc of radius stub/2 toward the return
+% side, and truncates just short of the anchor line -- at 250 degrees the
+% free tip sits cos(70) x r ~ 0.94 r past the arc's turning point, i.e.
+% 0.03 x stub short of the line through the anchor, curling back toward
+% the wire the way the paper's hooks do.  Reach bookkeeping: the hook
+% protrudes stub/2 + r = one stub beyond the anchor, exactly the open-
+% stub silhouette, and swings 2r = one stub toward the return side.
+% Each hook is ONE path whose bend is ONE arc, so its rounding is uniform
+% by construction (the plane_sweep3 defects: to[]-curves render too flat,
+% multi-join racetracks mix sharp and rounded corners).  Both hooks bend
+% toward the SAME return side -- where the racetrack's return wire would
+% run -- and the arc angles pass through \tenkz_arcangle:n, so a vertical
+% word's hooks wrap over the top and under the bottom toward the page's
+% east margin, as in the reference figure.
+\cs_new_protected:Npn \tenkz_draw_hooks:
+  {
+    \int_compare:nNnTF { \l__tenkz_nrows_int } = {1}
+      { \tenkz_hook_row:nn {1}{below} }
+      {
+        \tenkz_hook_row:nn {1}{above}
+        \tenkz_hook_row:nn {\l__tenkz_nrows_int}{below}
+      }
+  }
+
+% hooks of row #1, bending toward side #2 (below|above, logical frame).
+% Angle table (logical frame; the arc starts at the tip of the straight
+% lead-out, whose position angle on the arc's circle is 90 for a bend
+% below, 270 for a bend above; the sweep runs toward the anchor line,
+% counter-clockwise exactly when the outward side sign and the bend sign
+% agree):
+%   below/west: 90 -> 340    below/east: 90 -> -160
+%   above/west: 270 -> 20    above/east: 270 -> 520
+\cs_new_protected:Npn \tenkz_hook_row:nn #1#2
+  {
+    % closures inherit (hue contract, clause 4): both hooks draw in the
+    % traced row's resolved wire style
+    \tenkz_row_wirestyle:nN {#1} \l__tenkz_cell_tl
+    \tenkz_row_extent:n {#1}
+    \int_compare:nNnF { \l__tenkz_first_int } = {0}
+      {
+        \tenkz_anchor:nnnN {#1}{\int_use:N \l__tenkz_first_int}
+          {west} \l__tenkz_pb_tl
+        \tenkz_anchor:nnnN {#1}{\int_use:N \l__tenkz_last_int}
+          {east} \l__tenkz_pa_tl
+        \str_if_eq:nnTF {#2} {below}
+          {
+            \tenkz_hook_end:Nnnn \l__tenkz_pb_tl {west} {90} {340}
+            \tenkz_hook_end:Nnnn \l__tenkz_pa_tl {east} {90} {-160}
+          }
+          {
+            \tenkz_hook_end:Nnnn \l__tenkz_pb_tl {west} {270} {20}
+            \tenkz_hook_end:Nnnn \l__tenkz_pa_tl {east} {270} {520}
+          }
+        \tenkz@event{hooks|picture=\the\tenkz@pictureid|row=\int_eval:n{#1}|side=#2}
+      }
+  }
+
+% one hook: anchor tl #1, outward side #2 (west|east, logical), logical
+% start angle #3 and end angle #4.  The straight lead-out and the arc
+% angles are frame-mapped; the arc's centre is implicit (tikz places it
+% radius-away from the current point at the start angle), so the whole
+% hook needs no absolute coordinates beyond the anchor.
+\cs_new_protected:Npn \tenkz_hook_end:Nnnn #1#2#3#4
+  {
+    \draw[trace, \tl_use:N \l__tenkz_cell_tl]
+      #1 -- ++\tenkz_side_vec:nn {#2} { \tenkz@dim{\tenkz@r@stub} / 2 }
+      arc[start~angle=\tenkz_arcangle:n{#3},
+          end~angle=\tenkz_arcangle:n{#4},
+          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@stub} / 2 }];
+  }
+
+% ---------- public entry points ----------
+\NewDocumentEnvironment { tenkz } { O{} +b }
+  { \tenkz_render:nn {#1}{#2} } { }
+\NewDocumentCommand \tnpic { O{} m }
+  { \tenkz_render:nn {#1}{#2} }
+
+\ExplSyntaxOff
 \endinput
