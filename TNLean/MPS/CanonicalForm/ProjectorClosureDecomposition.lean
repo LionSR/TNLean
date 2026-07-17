@@ -30,7 +30,7 @@ The remaining steps towards the full sufficient condition for canonical form —
 rescaling each block to spectral radius one and converting the absence of
 nontrivial periodic vectors into primitivity of every rescaled block — are
 carried out in `TNLean.MPS.CanonicalForm.ProjectorClosureSpectral`; the
-length-zero convention for zero blocks is recorded in
+positive-length treatment of zero blocks is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`.
 -/
 

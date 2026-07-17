@@ -580,8 +580,8 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     This is the sufficient condition for canonical form
     of~\cite[Section~2]{Cirac2016MPDO_arXiv}, with that paper's convention
     $\sum_k D_k \le D$ allowing zero blocks: a corner of $A$ carrying the
-    zero tensor cannot be rescaled to spectral radius one, and contributes
-    its bond dimension only to the length-zero coefficient.
+    zero tensor cannot be rescaled to spectral radius one and is omitted
+    because it vanishes at every positive length.
 \end{theorem}
 
 \begin{proof}
@@ -610,37 +610,6 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     and summing over $k$ identifies the positive-length coefficients of
     $\bigoplus_k \mu_k A_k$ with those of $A$. The kept dimensions satisfy
     $\sum_k D_k \le \sum_k \tr(V_k V_k^\dagger) = \tr(\Id) = D$.
-\end{proof}
-
-\begin{theorem}[Canonical form at every length without zero corners]
-    \label{thm:projector_closure_canonical_form_all_lengths}
-    \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosure}
-    \leanok
-    \uses{def:invariant_projector_closure, def:no_periodic_vectors,
-        def:nt_cpsv, def:same_mpv2, def:block_diagonal_tensor}
-    Suppose $A$ has invariant-projector closure, has no nontrivial
-    $p$-periodic vectors, and every restriction of $A$ to a minimal
-    invariant subspace of positive dimension has a nonzero matrix. Then
-    there are normal tensors
-    $A_1, \ldots, A_r$ and nonzero weights $\mu_1, \ldots, \mu_r$ with
-    \[
-        \mc{V}(A) = \mc{V}\Bigl(\bigoplus_{k=1}^r \mu_k A_k\Bigr).
-    \]
-    The no-zero-corner hypothesis is not part of the source statement; it
-    excludes exactly the zero blocks
-    of~\cite[Section~2]{Cirac2016MPDO_arXiv}, which change only the
-    length-zero coefficient.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:projector_closure_irreducible_corners,
-        lem:irreducible_transfer_perron_pair,
-        lem:irreducible_block_spectral_normalization}
-    As for Theorem~\ref{thm:projector_closure_canonical_form}, with no
-    corner dropped: every corner is nonzero by hypothesis, so
-    $\bigoplus_k \mu_k A_k$ has the same coefficients as the unit-weight
-    direct sum of the corners at every length, including zero.
 \end{proof}
 
 \begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
@@ -1808,11 +1777,12 @@ direct sum of primitive irreducible blocks.
 
 \begin{theorem}[Cyclic sectors after removing zero blocks]%
     \label{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}
-    \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂}
+    \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂Pos}
     \leanok
-    \uses{thm:tp_gauge_arbitrary, def:primitive_irreducible_cyclic_sectors,
+    \uses{thm:tp_gauge_arbitrary, def:same_mpv2_pos,
+        def:primitive_irreducible_cyclic_sectors,
         thm:cyclic_sector_decomp_irr_tp_prim_irr}
-    If $A$ and $B$ generate the same MPV family, then after removing the
+    If $A$ and $B$ generate the same MPV family at every positive length, then after removing the
     all-zero blocks and applying the trace-preserving gauge there are weighted nonzero-block tensors
     $\bigoplus_j \mu^A_j A_j$ and $\bigoplus_k \mu^B_k B_k$ with, for every
     $N\ge 1$ and $\sigma$,
@@ -1850,21 +1820,21 @@ direct sum of primitive irreducible blocks.
         =
         V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma.
     \]
-    Chaining these through $V(A)=V(B)$ identifies the two nonzero parts. Finally
+    Chaining these through $V^+(A)=V^+(B)$ identifies the two nonzero parts. Finally
     apply Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} to
     every trace-preserving irreducible nonzero-weight block.
 \end{proof}
 
 \begin{theorem}[Common blocking length for cyclic sectors]%
     \label{thm:ft_after_blocking_common_length_common_sector_theorem}
-    \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂}
+    \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos}
     \leanok
-    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks,
+    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks, def:same_mpv2_pos,
         thm:exists_common_blocked_cyclic_sector_family_common_multiple,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
         thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
         thm:common_blocked_cyclic_sector_derived_properties}
-    If two tensors generate the same MPV family, then the cyclic-sector
+    If two tensors generate the same MPV family at every positive length, then the cyclic-sector
     decompositions on the two sides can be expressed at one common positive
     blocking length $p$. For every $N\ge 1$ and every blocked $\sigma$, each
     blocked tensor equals its powered nonzero part,
@@ -1917,7 +1887,7 @@ direct sum of primitive irreducible blocks.
     \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
         thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
         def:same_mpv2_pos}
-    Let $A$ and $B$ have the same MPV family. Then there is a positive blocking
+    Let $A$ and $B$ have the same MPV family at every positive length. Then there is a positive blocking
     length at which both blocked tensors have the same positive-length MPV
     family as weighted direct sums of trace-preserving, primitive,
     tensor-irreducible blocks with positive bond dimensions and nonzero weights.

@@ -192,34 +192,39 @@ section ProportionalCase
 variable {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
 
-/-- **Peripheral proportional case from exact MPV equality.**
+/-- **Peripheral proportional case from positive-length MPV equality.**
 
-If two periodic tensors generate the same MPV family, then their bond dimensions
-agree and they are repeated blocks after identifying those bond spaces. This is
-the single-block uniqueness direction behind the source theorem `thm:bd` once the
-proportionality scalar has been absorbed into one side.
+If two periodic tensors generate the same MPV family at every positive length, then their bond
+dimensions agree and they are repeated blocks after identifying those bond spaces. This is the
+single-block uniqueness direction behind the source theorem `thm:bd` once the proportionality
+scalar has been absorbed into one side.
 
 The proof combines `periodicOverlapDichotomy` with `periodicSelfOverlap_tendsto`:
 the decay branch would force the self-overlap of `A` to tend to `0`, contradicting
 its periodic self-overlap limit `m_a` along the subsequence `m_a * ℕ`.
 
-As with `periodicOverlapDichotomy`, this theorem currently inherits the admitted
-sub-lemmas in `Periodic/Overlap`. -/
-theorem peripheralProportionalCase_periodicFT_of_sameMPV
+Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623, with the periodic overlap
+dichotomy from Appendix A, lines 1023--1117. The positive-length formulation is recorded in
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+
+As with `periodicOverlapDichotomy`, this theorem currently inherits the admitted sub-lemmas in
+`Periodic/Overlap`. -/
+theorem peripheralProportionalCase_periodicFT_of_sameMPV₂Pos
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
-    (hSame : SameMPV₂ A B) :
+    (hSame : SameMPV₂Pos A B) :
     HetRepeatedBlocks A B := by
   rcases periodicOverlapDichotomy A B hA hB with hDecay | ⟨hdim, hRep⟩
-  · have hSameOverlap : ∀ N : ℕ, mpvOverlap (d := d) A B N = mpvOverlap A A N := by
-      intro N
+  · have hSameOverlap : ∀ᶠ N : ℕ in Filter.atTop,
+        mpvOverlap (d := d) A B N = mpvOverlap A A N := by
+      filter_upwards [Filter.eventually_gt_atTop 0] with N hN
       unfold mpvOverlap
       refine Finset.sum_congr rfl ?_
       intro σ _
-      rw [hSame N σ]
+      rw [hSame N hN σ]
     have hSelfZero : Filter.Tendsto (fun N => mpvOverlap A A N) Filter.atTop (nhds 0) :=
-      Filter.Tendsto.congr' (Filter.Eventually.of_forall hSameOverlap) hDecay
+      Filter.Tendsto.congr' hSameOverlap hDecay
     have hMulAtTop : Filter.Tendsto (fun k : ℕ => m_a * k) Filter.atTop Filter.atTop := by
       rw [Filter.tendsto_atTop]
       intro n
@@ -238,22 +243,30 @@ theorem peripheralProportionalCase_periodicFT_of_sameMPV
 /-- **Phase-rescaling reduction for the peripheral proportional case.**
 
 This Prop isolates the remaining scalar-absorption step behind
-`peripheralProportionalCase_periodicFT_of_sameMPV`: whenever a periodic tensor
+`peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`: whenever a periodic tensor
 has an MPV family proportional to that of another tensor, one can rescale the
-periodic side by a unit-modulus phase so that the MPV families agree exactly. -/
+periodic side by a unit-modulus phase so that the MPV families agree at every positive length.
+
+Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623. This definition isolates the
+phase-rescaling step discussed in
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 def PeripheralProportionalCaseRootFromRescaling (d D₁ D₂ : ℕ) : Prop :=
   ∀ {A : MPSTensor d D₁} {B : MPSTensor d D₂} {m_a : ℕ},
     IsPeriodic m_a A →
     ProportionalMPV₂ A B →
-      ∃ ξ : ℂ, ‖ξ‖ = 1 ∧ SameMPV₂ (fun i => ξ • A i) B
+      ∃ ξ : ℂ, ‖ξ‖ = 1 ∧ SameMPV₂Pos (fun i => ξ • A i) B
 
 /-- **Peripheral proportional case from phase rescaling.**
 
-Assuming `PeripheralProportionalCaseRootFromRescaling`, the exact-equality theorem
-`peripheralProportionalCase_periodicFT_of_sameMPV` upgrades proportional periodic
+Assuming `PeripheralProportionalCaseRootFromRescaling`, the positive-length equality theorem
+`peripheralProportionalCase_periodicFT_of_sameMPV₂Pos` upgrades proportional periodic
 MPVs to `HetRepeatedBlocks`. Thus the remaining single-block proportional gap in
 the source theorem `thm:bd` is exactly the phase-rescaling step provided by that
-hypothesis. -/
+hypothesis.
+
+Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623. The missing phase-rescaling
+argument is recorded in `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. This proof
+inherits the admitted Case-3 sector contraction through the positive-length equality theorem. -/
 theorem peripheralProportionalCase_periodicFT_of_rootFromRescaling
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (hRescale : PeripheralProportionalCaseRootFromRescaling d D₁ D₂)
@@ -272,7 +285,7 @@ theorem peripheralProportionalCase_periodicFT_of_rootFromRescaling
       simp [A']
     exact (HetRepeatedBlocks.of_repeatedBlocks hRep).symm
   have hRepeated : HetRepeatedBlocks A' B :=
-    peripheralProportionalCase_periodicFT_of_sameMPV A' B hA' hB hSame
+    peripheralProportionalCase_periodicFT_of_sameMPV₂Pos A' B hA' hB hSame
   exact hScale.trans hRepeated
 
 /-- **Proportional theorem `thm:bd` (arXiv:1708.00029, lines 613--623).**
@@ -295,7 +308,7 @@ The single-block proportional-to-equal reduction is now split explicitly.
 `PeripheralProportionalCaseRootFromRescaling` provides the missing phase-rescaling
 step, and `peripheralProportionalCase_periodicFT_of_rootFromRescaling` shows that,
 once this step is available, the exact-MPV theorem
-`peripheralProportionalCase_periodicFT_of_sameMPV` yields the repeated-block
+`peripheralProportionalCase_periodicFT_of_sameMPV₂Pos` yields the repeated-block
 conclusion for different bond dimensions. Thus the remaining mathematical gap is the multi-block
 existence step that turns proportionality of the assembled tensors into the
 non-decaying cross-overlap hypotheses `exists_nondecaying_A/B`.
