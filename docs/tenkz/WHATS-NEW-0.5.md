@@ -26,14 +26,16 @@ Two sides of an equation denote the same object only if their signatures match.
 
 ## Cups
 
-`close west` / `close east` join adjacent row pairs by a bend — the ket-to-bra
+`west=cup` / `east=cup` join adjacent row pairs by a bend — the ket-to-bra
 tie of sandwich objects. `periodic` closes a row to itself; a cup contracts two
-rows. `close east={$\rho^R$}` puts a fixed-point dot on the apex.
+rows. `east={cup=$\rho^R$}` puts a fixed-point dot on the apex.
+(0.5 spelled these `close west` / `close east`; 0.6 renamed them, see
+CHANGES-0.6.md.)
 
 ```latex
 % rho_n = Tr_{env} |psi><psi|: cups tie the virtual indices,
 % rho^R / rho^L cap the bends, physical legs stay open.
-\begin{tenkz}[rows={ket:nopair, bra}, close west={$\rho^R$}, close east={$\rho^L$}]
+\begin{tenkz}[rows={ket:nopair, bra}, west={cup=$\rho^R$}, east={cup=$\rho^L$}]
   \tn{A} & \tndots & \tn{A} \\
   \tn*{A} & \tndots & \tn*{A}
 \end{tenkz}
@@ -45,7 +47,7 @@ The canonical channel spellings:
 
 ```latex
 \begin{tenkz}[sandwich]                    % E_A: four open legs, a map
-\begin{tenkz}[sandwich, close west={$X$}]  % E_A(X): two open legs, a matrix
+\begin{tenkz}[sandwich, west={cup=$X$}]    % E_A(X): two open legs, a matrix
 ```
 
 ## Atoms
@@ -69,7 +71,7 @@ sheeted picture lives on the ket sheet.
 |---|---|
 | `\tnregion[slot=, outline, inset=, label=, label at=, name=]{cells}` | region from cell-set algebra; `inset=1` draws a nested boundary one unit tighter |
 | `\tnedge{(r,c,h)-(r',c',h')}` | distinguished edge, any sheet |
-| `plane=flat\|oblique\|slab`, `plane slant=`, `plane rise=`, `plane lean=` | the projected frame; bonds shear, glyphs and labels stay upright |
+| `frame=flat\|oblique\|slab`, `plane slant=`, `plane rise=`, `plane lean=` | the projected frame; bonds shear, glyphs and labels stay upright |
 | `col vector=`, `row vector=`, `sheet vector=` | expert frame: arbitrary projected basis vectors |
 | `sheets=2, pairing` on tenkzlattice | the double layer as one lattice |
 | `\begin{tenkzplanes}[rows=, cols=, open={(1,2)}, trace={(1-4,4)}]` | ket-over-bra double layer; `open` cells keep stubs; `trace` cells close by the wrap loop — the marginal `Tr_traced` |
@@ -83,6 +85,9 @@ originals. Every source states its formula in `%` comments.
 
 ## Gaps
 
-Per-side boundary control, a bare identity-wire atom, `combined=` on `wires=k`
-glyphs, inter-sheet closures, directed signatures, mirrored `tri=` closures.
-Tracked for 0.6.
+At 0.5 close: per-side boundary control, a bare identity-wire atom,
+`combined=` on `wires=k` glyphs, inter-sheet closures, directed signatures,
+mirrored `tri=` closures. 0.6 landed per-side control (`west=`/`east=`, all
+four sides on the lattice) and accepts the inter-sheet closure grammar
+(`east=cup` at the lattice tier; closure ink follows). The rest stays
+tracked.
