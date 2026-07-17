@@ -245,7 +245,7 @@ projector acting on one site. -/
 theorem sectorCompression_posSemidef (M : MPOTensor d D) (hM : IsMPDO M)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian) (N : ℕ) :
     (sectorCompression M P N).PosSemidef :=
-  mpo_compress_posSemidef M hM (N + 1) (firstSiteMatrix P N)
+  mpo_compress_posSemidef M hM (N + 1) (by omega) (firstSiteMatrix P N)
     (firstSiteMatrix_isHermitian hP N)
 
 /-- A nonzero first-site compression of an MPDO by a Hermitian matrix has
@@ -256,7 +256,7 @@ theorem sectorCompression_trace_pos (M : MPOTensor d D) (hM : IsMPDO M)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian) (N : ℕ)
     (hne : sectorCompression M P N ≠ 0) :
     0 < Matrix.trace (sectorCompression M P N) :=
-  mpo_compress_trace_pos M hM (N + 1) (firstSiteMatrix P N)
+  mpo_compress_trace_pos M hM (N + 1) (by omega) (firstSiteMatrix P N)
     (firstSiteMatrix_isHermitian hP N) hne
 
 /-- Move a doubly indexed scalar-weighted sum inside a trace pairing. -/

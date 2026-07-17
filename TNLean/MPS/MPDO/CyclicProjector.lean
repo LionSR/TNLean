@@ -719,7 +719,7 @@ theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
       (stackedTensor_ketLeftMul_invariant M hword) 1
     rwa [mpo_stackedTensor] at h
   exact ketLeftMul_eq_braRightMul_of_commute_of_isInjective M hInj hQidem
-    (mpo_commute_of_commute_pow M hM 2 hp hCommPow)
+    (mpo_commute_of_commute_pow M hM 2 (by omega) hp hCommPow)
 
 /-- **The periodic-sector step for a horizontally canonical matrix product
 density operator.**
@@ -756,6 +756,6 @@ theorem hasNoPeriodicVectors_verticalTensor_of_horizontalCF
     have h := firstSiteMatrix_mul_mpo_comm (stackedTensor M p)
       (hM.stackedTensor p) hQherm (stackedTensor_ketLeftMul_invariant M hword) N
     rwa [mpo_stackedTensor] at h
-  exact mpo_commute_of_commute_pow M hM (N + 1) hp hCommPow
+  exact mpo_commute_of_commute_pow M hM (N + 1) (by omega) hp hCommPow
 
 end MPOTensor
