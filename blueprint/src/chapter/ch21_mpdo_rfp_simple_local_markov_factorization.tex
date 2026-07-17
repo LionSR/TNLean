@@ -442,6 +442,92 @@ strong subadditivity for a normalized three-site reduced state.
     orthogonality, mutual disjointness, and resolution of the active support.
 \end{proof}
 
+\begin{definition}[Sitewise physical action and absorbed BNT representatives]
+    \label{def:mpdo_sitewise_physical_matrix}
+    \lean{MPOTensor.sitewisePhysicalMatrix}
+    \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor}
+    \leanok
+    For a one-site matrix $V$, write $V^{\otimes N}$ in the configuration
+    basis as
+    \[
+      (V^{\otimes N})_{s,t}=\prod_{n=1}^{N}V_{s_n,t_n}.
+    \]
+    If the copies of the $j$-th normal tensor have common coefficient
+    $\mu_j$, let $\mathcal K_j=\mu_j A_j$ denote the representative with this
+    coefficient absorbed into its local tensor.
+\end{definition}
+
+\begin{theorem}[Local selection by the BNT projectors]
+    \label{thm:mpdo_bnt_projector_local_selection}
+    \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero}
+    \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_self}
+    \lean{MPOTensor.changePhysicalBasis_bntSectorProjection_basis}
+    \lean{MPOTensor.%
+      exists_bntProjectorSelection_positiveLength_of_sameMPV₂_isSAL}
+    \leanok
+    \uses{thm:mpdo_four_site_sal_bnt_sector_projectors}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_four_site_sal_bnt_sector_projectors}, the resulting
+    projectors satisfy $P_sA_iP_t=0$ whenever $s\ne t$ or $i\ne s$.
+    For the matching label, they satisfy
+    \[
+      P_iA_iP_i=A_i.
+    \]
+    Equivalently, compressing the physical legs of $A_i$ by $P_s$ retains
+    $A_i$ for $s=i$ and gives the zero local tensor otherwise.  This is
+    equations~\textup{PjKiPj} and~\textup{generateMPDO} in
+    \cite[Appendix~C.2, lines~1680--1755]{Cirac2016MPDO_arXiv}.
+
+    The Markov summands of zero Hayashi weight are retained in the ambient
+    decomposition.  They annihilate every normal-sector physical slice, so
+    the displayed local identities do not require the stronger assertion
+    $\sum_sP_s=\Id$ outside the active support.
+\end{theorem}
+
+\begin{proof}\leanok
+    Distinct Hayashi sectors give zero off-diagonal corners.  On an active
+    diagonal sector, uniqueness of the BNT label kills every normal tensor
+    except the matching one.  A zero-weight diagonal sector also kills every
+    physical slice: otherwise the nonzero closing matrix would make the
+    corresponding three-site Markov block nonzero.  Summing these statements
+    over the Hayashi sectors gives the asserted $P_sA_iP_t$ identities.
+\end{proof}
+
+\begin{theorem}[Positive-length BNT-sector compression]
+    \label{thm:mpdo_bnt_projector_positive_length_compression}
+    \lean{MPOTensor.singleKrausMap_sitewise_bntSectorProjection_mpo}
+    \lean{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}
+    \lean{MPOTensor.%
+      exists_bntProjectorSelection_positiveLength_of_sameMPV₂_isSAL}
+    \leanok
+    \uses{def:mpdo_sitewise_physical_matrix,
+      thm:mpdo_bnt_projector_local_selection}
+    For every nonempty periodic chain and every normal-sector label $s$,
+    \[
+      P_s^{\otimes N}\,\sigma^{(N)}(K)\,P_s^{\otimes N}
+      =n_s\,\sigma^{(N)}(\mathcal K_s),
+      \qquad N\geq1,
+    \]
+    where $n_s$ is the number of BNT copies with label $s$.  This is
+    equation~\textup{sigmaNKj} in
+    \cite[Appendix~C.2, lines~1756--1759]{Cirac2016MPDO_arXiv}.
+
+    The restriction $N\geq1$ is intrinsic to this local selection statement.
+    At $N=0$, the empty virtual word is the identity and its closed trace
+    records the bond dimension; it is not a physical spin chain and need not
+    obey the displayed sector-selection identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    Sitewise multiplication by $P_s$ is the periodic MPO obtained by changing
+    every local physical matrix by $P_s$.  The preceding theorem replaces
+    each normal representative by itself when its label is $s$ and by the
+    zero tensor otherwise.  For $N\geq1$, the latter has zero periodic MPO.
+    The surviving coefficient is
+    $n_s\mu_s^N$, which is precisely $n_s$ times the MPO of the representative
+    with $\mu_s$ absorbed locally.
+\end{proof}
+
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.IsInjective}
