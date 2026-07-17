@@ -125,7 +125,7 @@ theorem exists_blocked_chi_pullback {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
       ∀ (n : ℕ) (hn : 0 < n),
-        W.positiveBlockedChi.toDiagonal n =
+        W.positiveBlockedChi.toDiagonal n hn =
           W.positiveChi.chi.comap (W.blockedComparison.blockedLabel n hn) := by
   obtain ⟨W⟩ := h
   exact ⟨W, W.positiveBlockedChi_toDiagonal_of_pos⟩

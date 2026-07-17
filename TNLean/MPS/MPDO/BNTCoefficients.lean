@@ -586,17 +586,13 @@ lemma blocked_coeff_eq_ofChi_trace_pow
 along a blocked-basis comparison.
 
 The comparison maps are defined only for positive lengths.  The value at
-`n = 0` is therefore the empty diagonal family; this component is not used by
-the positive-length blocked trace-power identity. -/
+each positive length is the BNT-label family pulled back along the comparison
+map at that length. -/
 def pulledBlockedChiFamily
     (cmp : BNTBlockedBasisCoefficientComparison data c)
     (hχ : PositiveBNTLabelChiTracePowerForm c) :
     AlgebraStructureData.BlockedStructureChiFamily data where
-  toDiagonal n :=
-    if hn : 0 < n then
-      hχ.chi.comap (cmp.blockedLabel n hn)
-    else
-      DiagonalChiFamily.empty _
+  toDiagonal n hn := hχ.chi.comap (cmp.blockedLabel n hn)
 
 /-- At positive blocked length, the pulled-back blocked chi family is exactly
 the BNT-label chi family composed with the source and target comparison maps.
@@ -608,28 +604,21 @@ theorem pulledBlockedChiFamily_toDiagonal_of_pos
     (cmp : BNTBlockedBasisCoefficientComparison data c)
     (hχ : PositiveBNTLabelChiTracePowerForm c)
     (n : ℕ) (hn : 0 < n) :
-    (cmp.pulledBlockedChiFamily hχ).toDiagonal n =
+    (cmp.pulledBlockedChiFamily hχ).toDiagonal n hn =
       hχ.chi.comap (cmp.blockedLabel n hn) := by
-  simp [pulledBlockedChiFamily, hn]
+  rfl
 
 /-- The pulled-back blocked chi family has positive diagonal entries at every
-blocked length: at positive length the entries come from the positive BNT-label
-witness, and at length zero the family is empty.
+positive blocked length, inherited from the positive BNT-label witness.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem pulledBlockedChiFamily_toDiagonal_posEntries
     (cmp : BNTBlockedBasisCoefficientComparison data c)
-    (hχ : PositiveBNTLabelChiTracePowerForm c) (n : ℕ) :
-    ((cmp.pulledBlockedChiFamily hχ).toDiagonal n).PosEntries := by
-  by_cases hn : 0 < n
-  · simpa only [pulledBlockedChiFamily, dif_pos hn] using
-      hχ.posEntries.comap (cmp.blockedLabel n hn)
-  · simpa only [pulledBlockedChiFamily, dif_neg hn] using
-      DiagonalChiFamily.PosEntries.empty
-        (AlgebraStructureData.BlockedIndex data n ⊕
-          AlgebraStructureData.BlockedIndex data (2 * n))
+    (hχ : PositiveBNTLabelChiTracePowerForm c) (n : ℕ) (hn : 0 < n) :
+    ((cmp.pulledBlockedChiFamily hχ).toDiagonal n hn).PosEntries :=
+  hχ.posEntries.comap (cmp.blockedLabel n hn)
 
 /-- At positive blocked length, the finite-sum trace-power coefficient of the
 pulled-back blocked chi family is the corresponding BNT-label trace-power
@@ -645,7 +634,7 @@ theorem pulledBlockedChi_tracePowerCoeff_of_pos
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
     (L : ℕ) :
-    (cmp.pulledBlockedChiFamily hχ).tracePowerCoeff n i j k L =
+    (cmp.pulledBlockedChiFamily hχ).tracePowerCoeff n hn i j k L =
       hχ.chi.tracePowerCoeff
         (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k) L := by
   rw [AlgebraStructureData.BlockedStructureChiFamily.tracePowerCoeff]
@@ -664,7 +653,7 @@ theorem pulledBlockedChi_dim_of_pos
     (n : ℕ) (hn : 0 < n)
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
-    (cmp.pulledBlockedChiFamily hχ).dim n i j k =
+    (cmp.pulledBlockedChiFamily hχ).dim n hn i j k =
       hχ.chi.dim
         (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k) := by
   rw [AlgebraStructureData.BlockedStructureChiFamily.dim]
@@ -685,7 +674,7 @@ theorem pulledBlockedChi_trace_matrix_pow_of_pos
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
     (L : ℕ) :
-    ((cmp.pulledBlockedChiFamily hχ).matrix n i j k ^ L).trace =
+    ((cmp.pulledBlockedChiFamily hχ).matrix n hn i j k ^ L).trace =
       (hχ.chi.matrix
         (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k) ^
           L).trace := by
@@ -708,7 +697,7 @@ lemma blocked_coeff_eq_pulledBlockedChi_trace_pow
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
     data.blockedStructureCoefficients n i j k =
-      ((cmp.pulledBlockedChiFamily hχ).matrix n i j k ^ n).trace := by
+      ((cmp.pulledBlockedChiFamily hχ).matrix n hn i j k ^ n).trace := by
   rw [cmp.blocked_coeff_eq_trace_pow hχ n hn i j k]
   rw [cmp.pulledBlockedChi_trace_matrix_pow_of_pos hχ n hn i j k n]
 
@@ -718,8 +707,7 @@ positive blocked chi trace-power witness.
 This is a derived blocked-basis statement.  It does not construct the BNT-label
 coefficient family or comparison maps from an MPDO tensor; it only transports an
 already given uniform BNT-label witness along an already given comparison.  The
-unused zero-length component of the blocked chi family is filled by empty
-diagonal matrices.
+blocked family is indexed only at positive lengths.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.3--C.4,
 lines 1830--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def toPositiveBlockedStructureChiTracePowerForm
@@ -727,8 +715,8 @@ def toPositiveBlockedStructureChiTracePowerForm
     (hχ : PositiveBNTLabelChiTracePowerForm c) :
     AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data where
   chi := cmp.pulledBlockedChiFamily hχ
-  posEntries := fun n i j k r =>
-    cmp.pulledBlockedChiFamily_toDiagonal_posEntries hχ n
+  posEntries := fun n hn i j k r =>
+    cmp.pulledBlockedChiFamily_toDiagonal_posEntries hχ n hn
       (Sum.inl i) (Sum.inl j) (Sum.inr k) r
   tracePower := by
     intro n hn i j k
