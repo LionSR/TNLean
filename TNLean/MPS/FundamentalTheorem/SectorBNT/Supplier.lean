@@ -76,13 +76,13 @@ phase scalar `h.choose` has unit norm.
 Proof sketch (scout memo §2.4):
 1. The phase equivalence supplies the scaling relation
    `mpv Y σ = h.choose ^ N * mpv X σ`.
-2. `mpvOverlap_self_scale_of_mpv_eq_pow_mul`
+2. `mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos`
    (`SharedInfra/GaugePhase.lean`) converts this into a scaling
    `mpvOverlap Y Y N = (ζ · conj ζ)^N · mpvOverlap X X N`.
 3. Both self-overlaps tend to `1` by
    `overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`
    (`Overlap/PeripheralToTransferMapGap.lean`).
-4. `norm_eq_one_of_selfOverlap_scale` (`SharedInfra/GaugePhase.lean`)
+4. `norm_eq_one_of_selfOverlap_scale_pos` (`SharedInfra/GaugePhase.lean`)
    concludes `‖ζ‖ = 1`.
 -/
 lemma norm_choose_MPVBlockPhaseEquiv_eq_one

@@ -165,8 +165,6 @@ lemma MPVPhaseEquiv.exists_mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
       mpvState (d := d) (blocks k) N = ζ ^ N • mpvState (d := d) (blocks j) N :=
   MPVBlockPhaseEquiv.exists_mpvState_eq_smul h N hN
 
-
-
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) : Setoid (Fin r) where
