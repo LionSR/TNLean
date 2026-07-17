@@ -1735,6 +1735,38 @@
       }
   }
 
+% -- per-column faces of wide `legs at=` glyphs -------------------------
+% A wide glyph with legs at={j1,...} carries one physical index PER NAMED
+% SPANNED COLUMN, so at a paired interface each named column pairs with
+% the cell below/above it AT THAT COLUMN -- one vertical wire per index
+% (t2_hamil_gate: the two-site gate h contracts both partners,
+% arXiv:2011.12127 fig3-pepe_hamilcommu).  Pre-0.6 only the base column
+% paired (a single centre-south diagonal) and every other named column's
+% partner leg was silently dropped.
+%
+% the paper point where glyph #1 (a node-name tl) presents its
+% north|south face #2 at the ABSOLUTE column #3 (an int expression):
+% edge ordinate from the shape anchor (one rectangle edge, exactly as in
+% \tenkz_leg_multi:nnnnNn), abscissa from the column -- both routed
+% through the frame map
+\cs_new_protected:Npn \tenkz_edgept:NnnN #1#2#3#4
+  {
+    \bool_if:NTF \l__tenkz_vertical_bool
+      {
+        \pgfextractx \l__tenkz_tmp_dim
+          { \exp_args:Ne \pgfpointanchor { #1 } { \tenkz_compass:n {#2} } }
+        \tl_set:Ne #4 { ( \dim_use:N \l__tenkz_tmp_dim ,
+            \dim_eval:n { 0pt - \tenkz_colx:n {#3} } ) }
+      }
+      {
+        \pgfextracty \l__tenkz_tmp_dim
+          { \exp_args:Ne \pgfpointanchor { #1 } {#2} }
+        \tl_set:Ne #4 { ( \tenkz_colx:n {#3} ,
+            \dim_use:N \l__tenkz_tmp_dim ) }
+      }
+  }
+\prg_generate_conditional_variant:Nnn \clist_if_in:Nn { Ne } { T, F, TF }
+
 % pairing onto a \tnghost cell silently swallows the live partner's leg --
 % invisible ink is a trap when the reader expects a contraction or an open
 % index.  The warning names the fix: a hole is \tnskip, not \tnghost.
@@ -1748,6 +1780,204 @@
 % message arguments are not expanded by l3msg, so row/column expressions
 % must be e-expanded at the call site or the log prints \int_eval:n {...}
 \cs_generate_variant:Nn \msg_warning:nnnn { nnee }
+
+% the UPPER wide glyph's paired interface, one named column at a time.
+% The caller (the pair branch below) has just parsed the upper cell's
+% options; partner parsing clobbers that state, so the column list, the
+% down-label list and the node name are saved first.  Per named column:
+% a live partner contracts by a vertical wire from the glyph's south
+% face at the column to the partner's north face (a wide partner also
+% presents its face AT the column); a hole partner keeps that column's
+% leg open (label popped from the down= list, as in the open-leg pass);
+% a ghost partner warns; `open={(r,c)}` keeps both faces' stubs.
+\tl_new:N \l__tenkz_pwcols_tl
+\tl_new:N \l__tenkz_pwname_tl
+\tl_new:N \l__tenkz_pwbase_tl
+\tl_new:N \l__tenkz_pwpt_tl
+\tl_new:N \l__tenkz_pwlow_tl
+\seq_new:N \l__tenkz_pwlab_seq
+\cs_new_protected:Npn \tenkz_pair_wide:nn #1#2
+  {
+    \tl_set_eq:NN \l__tenkz_pwcols_tl \l__tenkz_clegsat_tl
+    \seq_set_from_clist:NV \l__tenkz_pwlab_seq \l__tenkz_cdown_tl
+    \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pwname_tl
+    \exp_args:NV \clist_map_inline:nn \l__tenkz_pwcols_tl
+      { \tenkz_pair_wide_col:nnn {#1}{#2}{##1} }
+  }
+% one named column: row #1, base column #2, span-local index #3 (the
+% absolute column is #2 + #3 - 1)
+\cs_new_protected:Npn \tenkz_pair_wide_col:nnn #1#2#3
+  {
+    % owner-resolve the cell below: it may be a wide glyph's
+    % continuation column
+    \prop_get:NeNF \l__tenkz_owner_prop
+      { \int_eval:n{#1+1} - \int_eval:n{#2+#3-1} } \l__tenkz_pwbase_tl
+      { \tl_set:Ne \l__tenkz_pwbase_tl { \int_eval:n{#2+#3-1} } }
+    \tenkz_get:NeN \l__tenkz_kind_prop
+      { \int_eval:n{#1+1} - \l__tenkz_pwbase_tl } \l__tenkz_pkind_tl
+    \str_case:VnF \l__tenkz_pkind_tl
+      {
+        {skip}
+          {
+            % a hole below this column: the glyph's index here stays open
+            \tenkz_pair_wide_leg:nn {#2}{#3}
+          }
+        {ghost}
+          { \msg_warning:nnee {tenkz}{ghost-pair}
+              { \int_eval:n{#1+1} }{ \int_eval:n{#2+#3-1} } }
+      }
+      {
+        \prop_get:NeNT \l__tenkz_name_prop
+          { \int_eval:n{#1+1} - \l__tenkz_pwbase_tl } \l__tenkz_pb_tl
+          {
+            \tenkz_leg_candidate:nnT
+              { \int_eval:n{#1+1} }{ \l__tenkz_pwbase_tl }
+              {
+                \bool_if:nF { \tenkz_traced_p:nn {#1}{#2} }
+                  {
+                    \prop_if_in:NeTF \l__tenkz_opencell_prop {#1-#2}
+                      {
+                        % opened segment: both faces keep their stubs
+                        \tenkz_pair_wide_leg:nn {#2}{#3}
+                        \tenkz_pair_lowpt:nN { \int_eval:n{#2+#3-1} }
+                          \l__tenkz_pwlow_tl
+                        \draw[physical~leg] \l__tenkz_pwlow_tl --
+                          ++\tenkz_leg_vec:nn{1}{\tenkz@dim{\tenkz@r@physleg}};
+                      }
+                      {
+                        % contracted: one vertical wire, face to face
+                        \tenkz_edgept:NnnN \l__tenkz_pwname_tl {south}
+                          { \int_eval:n{#2+#3-1} } \l__tenkz_pwpt_tl
+                        \tenkz_pair_lowpt:nN { \int_eval:n{#2+#3-1} }
+                          \l__tenkz_pwlow_tl
+                        \draw[physical~leg]
+                          \l__tenkz_pwpt_tl -- \l__tenkz_pwlow_tl;
+                      }
+                  }
+              }
+          }
+      }
+  }
+% the glyph's open down leg at span-local column #2 of base column #1,
+% label popped from the saved down= list
+\cs_new_protected:Npn \tenkz_pair_wide_leg:nn #1#2
+  {
+    \tenkz_edgept:NnnN \l__tenkz_pwname_tl {south}
+      { \int_eval:n{#1+#2-1} } \l__tenkz_pwpt_tl
+    \draw[physical~leg] \l__tenkz_pwpt_tl --
+      ++\tenkz_leg_vec:nn{-1}{\tenkz@dim{\tenkz@r@physleg}};
+    \seq_pop_left:NNT \l__tenkz_pwlab_seq \l_tmpb_tl
+      {
+        \tl_if_blank:VF \l_tmpb_tl
+          {
+            \node[label, anchor=\tenkz_compass:n{north},
+                  shift={\tenkz_leg_vec:nn{-1}
+                    { \tenkz@dim{\tenkz@r@physleg}
+                      + \tenkz@dim{\tenkz@r@labelclear} }}]
+              at \l__tenkz_pwpt_tl { \tl_use:N \l_tmpb_tl };
+          }
+      }
+  }
+% the partner's north-face point at absolute column #1: a wide `legs at=`
+% partner presents its face AT the column, a plain partner its north
+% anchor (the partner's options are ambient -- \tenkz_leg_candidate:nnT
+% has just parsed them)
+\cs_new_protected:Npn \tenkz_pair_lowpt:nN #1#2
+  {
+    \tl_if_empty:NTF \l__tenkz_clegsat_tl
+      { \tl_set:Ne #2 { (\l__tenkz_pb_tl.\tenkz_compass:n{north}) } }
+      { \tenkz_edgept:NnnN \l__tenkz_pb_tl {north} {#1} #2 }
+  }
+
+% the PLAIN upper cell's paired interface at (#1,#2).  The partner below
+% is owner-resolved, so a wide `legs at=` glyph is met both at its base
+% column and at its continuation columns: a NAMED column contracts by a
+% vertical wire onto the glyph's north face at this column, an unnamed
+% spanned column terminates no index here and the upper leg stays open.
+% Plain partners keep the pre-0.6 anchor-to-anchor wire, holes keep the
+% upper leg open, ghosts warn.
+\cs_new_protected:Npn \tenkz_pair_below:nn #1#2
+  {
+    \tenkz_get:NeN \l__tenkz_kind_prop
+      { \int_eval:n{#1+1} - #2 } \l__tenkz_pkind_tl
+    \str_case:VnF \l__tenkz_pkind_tl
+      {
+        % a hole below the interface: the pairing has no partner, so
+        % THIS tensor's down leg stays open (an uncontracted physical
+        % index)
+        {skip}
+          { \tenkz_leg_open:nnn {#1}{#2}{down} }
+        {ghost}
+          { \msg_warning:nnee {tenkz}{ghost-pair}
+              { \int_eval:n{#1+1} }{#2} }
+      }
+      {
+        % owner-resolve the partner: the cell below may be a wide
+        % glyph's continuation column (empty kind, owned base)
+        \prop_get:NeNF \l__tenkz_owner_prop
+          { \int_eval:n{#1+1} - #2 } \l__tenkz_pwbase_tl
+          { \tl_set:Nn \l__tenkz_pwbase_tl {#2} }
+        \prop_get:NeNT \l__tenkz_name_prop
+          { \int_eval:n{#1+1} - \l__tenkz_pwbase_tl } \l__tenkz_pb_tl
+          {
+            \tenkz_leg_candidate:nnT
+              { \int_eval:n{#1+1} }{ \l__tenkz_pwbase_tl }
+              {
+                % a traced segment's wrap loop is drawn by the
+                % pair-trace pass; an OPENED segment (open={(i,c)}, the
+                % per-segment nopair) keeps both faces' stubs instead
+                % of a wire
+                \bool_if:nF { \tenkz_traced_p:nn {#1}{#2} }
+                  {
+                    \prop_if_in:NeTF \l__tenkz_opencell_prop {#1-#2}
+                      { \tenkz_pair_below_open:nn {#1}{#2} }
+                      { \tenkz_pair_below_wire:nn {#1}{#2} }
+                  }
+              }
+          }
+      }
+  }
+% opened segment at (#1,#2): both faces keep their stubs.  The partner's
+% options are ambient; a wide partner's stub rises from its face at this
+% column (computed BEFORE the upper leg re-parses the cell options).
+\cs_new_protected:Npn \tenkz_pair_below_open:nn #1#2
+  {
+    \tl_if_empty:NTF \l__tenkz_clegsat_tl
+      {
+        \tenkz_leg_open:nnn {#1}{#2}{down}
+        \tenkz_leg_open:enn { \int_eval:n{#1+1} } {#2}{up}
+      }
+      {
+        \tenkz_edgept:NnnN \l__tenkz_pb_tl {north} {#2} \l__tenkz_pwlow_tl
+        \draw[physical~leg] \l__tenkz_pwlow_tl --
+          ++\tenkz_leg_vec:nn{1}{\tenkz@dim{\tenkz@r@physleg}};
+        \tenkz_leg_open:nnn {#1}{#2}{down}
+      }
+  }
+% contracted segment at (#1,#2): one wire, upper south anchor down to
+% the partner's face (logical south/north faces of the interface; the
+% compass map turns them east/west in a vertical frame)
+\cs_new_protected:Npn \tenkz_pair_below_wire:nn #1#2
+  {
+    \tl_if_empty:NTF \l__tenkz_clegsat_tl
+      {
+        \draw[physical~leg]
+          (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
+          (\l__tenkz_pb_tl.\tenkz_compass:n{north});
+      }
+      {
+        \clist_if_in:NeTF \l__tenkz_clegsat_tl
+          { \int_eval:n { #2 - \l__tenkz_pwbase_tl + 1 } }
+          {
+            \tenkz_edgept:NnnN \l__tenkz_pb_tl {north} {#2}
+              \l__tenkz_pwlow_tl
+            \draw[physical~leg]
+              (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
+              \l__tenkz_pwlow_tl;
+          }
+          { \tenkz_leg_open:nnn {#1}{#2}{down} }
+      }
+  }
 
 \cs_new_protected:Npn \tenkz_draw_legs:
   {
@@ -1771,62 +2001,17 @@
                       { ! \tenkz_traced_above_p:nn {##1}{####1} }
                       { \tenkz_leg_open:nnn {##1}{####1}{down} }
                   }
-                % paired leg to the row below
+                % paired leg to the row below.  A wide `legs at=` glyph
+                % pairs PER NAMED SPANNED COLUMN (\tenkz_pair_wide:nn);
+                % the candidate call has just parsed this cell's options,
+                % so the list is the upper cell's.
                 \bool_if:nT { \tenkz_pair_p:n {##1} }
                   {
                     \tenkz_leg_candidate:nnT {##1}{####1}
                       {
-                        \tenkz_get:NeN \l__tenkz_kind_prop
-                          { \int_eval:n{##1+1} - ####1 } \l__tenkz_pkind_tl
-                        \str_case:VnF \l__tenkz_pkind_tl
-                          {
-                            % a hole below the interface: the pairing has no
-                            % partner, so THIS tensor's down leg stays open
-                            % (an uncontracted physical index)
-                            {skip}
-                              { \tenkz_leg_open:nnn {##1}{####1}{down} }
-                            {ghost}
-                              { \msg_warning:nnee {tenkz}{ghost-pair}
-                                  { \int_eval:n{##1+1} }{####1} }
-                          }
-                          {
-                            \prop_get:NeNT \l__tenkz_name_prop
-                              { \int_eval:n{##1+1} - ####1 } \l__tenkz_pb_tl
-                              {
-                                \tenkz_leg_candidate:nnT
-                                  { \int_eval:n{##1+1} }{####1}
-                                  {
-                                    % a traced segment's wrap loop is
-                                    % drawn by the pair-trace pass; an
-                                    % OPENED segment (open={(i,c)}, the
-                                    % per-segment nopair) keeps both
-                                    % faces' stubs instead of a wire
-                                    \bool_if:nF
-                                      { \tenkz_traced_p:nn {##1}{####1} }
-                                      {
-                                        \prop_if_in:NeTF
-                                          \l__tenkz_opencell_prop
-                                          {##1-####1}
-                                          {
-                                            \tenkz_leg_open:nnn
-                                              {##1}{####1}{down}
-                                            \tenkz_leg_open:enn
-                                              { \int_eval:n{##1+1} }
-                                              {####1}{up}
-                                          }
-                                          {
-                                            % logical south/north faces of
-                                            % the interface; the compass
-                                            % map turns them east/west in
-                                            % a vertical frame
-                                            \draw[physical~leg]
-                                              (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
-                                              (\l__tenkz_pb_tl.\tenkz_compass:n{north});
-                                          }
-                                      }
-                                  }
-                              }
-                          }
+                        \tl_if_empty:NTF \l__tenkz_clegsat_tl
+                          { \tenkz_pair_below:nn {##1}{####1} }
+                          { \tenkz_pair_wide:nn {##1}{####1} }
                       }
                   }
               }
