@@ -1,12 +1,44 @@
 \subsection{Simple canonical-form weights}
 
+\begin{lemma}[Blockwise zero-correlation-length equation]
+    \label{lem:mpdo_simple_blockwise_zcl_equation}
+    \lean{MPOTensor.%
+      exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer,
+        lem:mpdo_doubled_phys_trace_transfer_to_mps,
+        lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    Suppose a tensor with zero correlation length is gauge-equivalent, through
+    block-diagonal copy gauges, to an assembled sector decomposition.  There
+    is a scalar $\lambda>0$ such that every copy satisfies
+    \[
+      (\mu_{j,q}\mathcal T_{A_j})^2
+        =\lambda\mu_{j,q}\mathcal T_{A_j}.
+    \]
+    This is the block equation in
+    \cite[Appendix~C.2, lines~1652--1657]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $\mathcal T_M=G\mathcal T_SG^{-1}$, where $G$ is the induced
+    block-diagonal gauge.  The equation
+    $\mathcal T_M^2=\lambda\mathcal T_M$ therefore becomes
+    $\mathcal T_S^2=\lambda\mathcal T_S$ after conjugation by $G^{-1}$.
+    Restriction to the $(j,q)$-th diagonal block gives
+    \[
+      (\mu_{j,q}\mathcal T_{A_j})^2
+        =\lambda\mu_{j,q}\mathcal T_{A_j}.
+    \]
+\end{proof}
+
 \begin{theorem}[Copy independence for a non-nilpotent sector decomposition]
     \label{thm:mpdo_simple_weight_copy_independent}
     \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer,
         lem:mpdo_doubled_phys_trace_transfer_to_mps,
-        lem:mpdo_doubled_phys_trace_transfer_blockwise}
+        lem:mpdo_doubled_phys_trace_transfer_blockwise,
+        lem:mpdo_simple_blockwise_zcl_equation}
     Let a tensor with zero correlation length be gauge-equivalent, through
     block-diagonal copy gauges, to an assembled sector decomposition whose
     basis elements all have non-nilpotent physical-trace transfer. Then the
