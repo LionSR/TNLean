@@ -18,7 +18,7 @@ blocks with nonzero weights satisfying the CPSV16 §II.C line-246 normalization
 (`|μ_k| ≤ 1` and at least one `|μ_k| = 1`), this file produces a
 `SectorDecomposition` `P` together with a proof that
 
-* `P.toTensor` has the same MPV at every length as the original
+* `P.toTensor` has the same MPV at every positive length as the original
   `toTensorFromBlocks μ blocks`, and
 * `P` satisfies `IsBNTCanonicalForm`.
 
@@ -44,8 +44,7 @@ phase-equivalent TP/primitive/irreducible blocks.
 ## Gap record
 
 * `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex` —
-  records the remaining canonical-form weight-normalization and length-zero
-  dimension gaps for the arbitrary-input supplier path.
+  records the canonical-form normalization and proportional-comparison analysis.
 
 ## Layering
 
@@ -77,13 +76,13 @@ phase scalar `h.choose` has unit norm.
 Proof sketch (scout memo §2.4):
 1. The phase equivalence supplies the scaling relation
    `mpv Y σ = h.choose ^ N * mpv X σ`.
-2. `mpvOverlap_self_scale_of_mpv_eq_pow_mul`
+2. `mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos`
    (`SharedInfra/GaugePhase.lean`) converts this into a scaling
    `mpvOverlap Y Y N = (ζ · conj ζ)^N · mpvOverlap X X N`.
 3. Both self-overlaps tend to `1` by
    `overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`
    (`Overlap/PeripheralToTransferMapGap.lean`).
-4. `norm_eq_one_of_selfOverlap_scale` (`SharedInfra/GaugePhase.lean`)
+4. `norm_eq_one_of_selfOverlap_scale_pos` (`SharedInfra/GaugePhase.lean`)
    concludes `‖ζ‖ = 1`.
 -/
 lemma norm_choose_MPVBlockPhaseEquiv_eq_one
@@ -98,9 +97,9 @@ lemma norm_choose_MPVBlockPhaseEquiv_eq_one
     (h : MPVBlockPhaseEquiv X Y) :
     ‖h.choose‖ = 1 := by
   classical
-  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
+  have hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv Y σ = h.choose ^ N * mpv X σ := h.choose_spec.2
-  exact norm_eq_one_of_selfOverlap_scale
+  exact norm_eq_one_of_selfOverlap_scale_pos
     (by
       simpa using
         (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
@@ -109,7 +108,7 @@ lemma norm_choose_MPVBlockPhaseEquiv_eq_one
       simpa using
         (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
           (d := d) (D := DY) Y hIrrY hTPY hPrimY).norm)
-    (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+    (mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos
       (A := X) (B := Y) (ζ := h.choose) hmpv)
 
 /-!
@@ -153,25 +152,27 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
   have hζ_norm : ‖h.choose‖ = 1 :=
     norm_choose_MPVBlockPhaseEquiv_eq_one
       (X := X) (Y := Y) hTPX hTPY hPrimX hPrimY hIrrX hIrrY h
-  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
+  have hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv Y σ = h.choose ^ N * mpv X σ := h.choose_spec.2
   have hXX_c : Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (𝓝 (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       (d := d) (D := DX) X hIrrX hTPX hPrimX
   have hXX : Tendsto (fun N => ‖mpvOverlap (d := d) X X N‖) atTop (𝓝 (1 : ℝ)) := by
     simpa using hXX_c.norm
-  have hYX_eq : ∀ N : ℕ,
+  have hYX_eq : ∀ N : ℕ, 0 < N →
       mpvOverlap (d := d) Y X N =
         h.choose ^ N * mpvOverlap (d := d) X X N := by
-    intro N
+    intro N hN
     exact mpvOverlap_eq_mul_of_mpv_eq_mul
-      (d := d) (A := Y) (B := X) (N := N) (c := h.choose ^ N) (hmpv N) X
-  have hYX_norm_eq : ∀ N : ℕ,
+      (d := d) (A := Y) (B := X) (N := N) (c := h.choose ^ N) (hmpv N hN) X
+  have hYX_norm_eq : ∀ N : ℕ, 0 < N →
       ‖mpvOverlap (d := d) Y X N‖ = ‖mpvOverlap (d := d) X X N‖ := by
-    intro N
-    rw [hYX_eq N, norm_mul, norm_pow, hζ_norm, one_pow, one_mul]
+    intro N hN
+    rw [hYX_eq N hN, norm_mul, norm_pow, hζ_norm, one_pow, one_mul]
   have hYX : Tendsto (fun N => ‖mpvOverlap (d := d) Y X N‖) atTop (𝓝 (1 : ℝ)) :=
-    hXX.congr fun N => (hYX_norm_eq N).symm
+    hXX.congr' (by
+      filter_upwards [eventually_ge_atTop 1] with N hN
+      exact (hYX_norm_eq N hN).symm)
   exact (dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
     Y X hIrrY hIrrX hTPY hTPX hYX).symm
 
@@ -214,14 +215,14 @@ theorem gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       (d := d) (D := DX) Y hIrrY hTPY hPrimY
   by_contra hNot
-  obtain ⟨N, _, hN⟩ :=
+  obtain ⟨N, hNpos, hN⟩ :=
     exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
-      X Y hIrrX hIrrY hTPX hTPY hX_self hY_self hNot 0
+      X Y hIrrX hIrrY hTPX hTPY hX_self hY_self hNot 1
   have hSymm : MPVBlockPhaseEquiv Y X := MPVBlockPhaseEquiv.symm h
   apply hN
   refine ⟨hSymm.choose ^ N, ?_⟩
   intro σ
-  exact hSymm.choose_spec.2 N σ
+  exact hSymm.choose_spec.2 N hNpos σ
 
 /--
 **Prepared phase classes preserve the original bond dimensions.**
@@ -309,7 +310,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
     ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       IsBNTCanonicalForm P := by
   classical
   -- Promote `0 < dim k` to a `NeZero (dim k)` typeclass instance.
@@ -337,8 +338,8 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
         (hIrr (classes.repr j)) (hIrr (classes.enum j q))
         hPE
   -- Same-MPV with the original direct-sum tensor.
-  have hSame : SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) :=
-    collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
+  have hSame : SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) :=
+    collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne
   -- HasBNTSectorData.
   have hBNT : HasBNTSectorData (d := d) P :=
     collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
@@ -690,51 +691,8 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos
   refine ⟨P, ?_, hBNT⟩
   -- Chain the positive-length MPV identity with the prepared-block agreement.
   -- `hSamePos`: `mpv (blockTensor A p) σ = mpv (toTensorFromBlocks μ blocks) σ` for `N > 0`.
-  -- `hSame`:    `mpv P.toTensor σ = mpv (toTensorFromBlocks μ blocks) σ` for all `N`.
+  -- `hSame`:    `mpv P.toTensor σ = mpv (toTensorFromBlocks μ blocks) σ` for `N > 0`.
   intro N hN σ
-  exact (hSamePos N hN σ).trans (hSame N σ).symm
-
-/-- **Arbitrary-input BNT block preparation with explicit length-zero discharge.**
-
-This theorem refines `exists_isBNTCanonicalForm_afterBlocking_pos` by adding the
-length-zero condition. It keeps the same prepared-block output and the same
-CPSV16 §II.C line-246 normalization hypotheses. In addition, after a normalized
-BNT sector decomposition is chosen, it records that the positive-length MPV
-identity upgrades to full `SameMPV₂` as soon as the zero-length trace identity is
-supplied in the concrete form `D = P.totalDim`.
-
-It does not prove the missing normalization or the total-dimension equality;
-those are precisely the remaining arbitrary-input bridge obligations recorded
-in `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. -/
-theorem exists_isBNTCanonicalForm_afterBlocking_of_totalDim
-    {d D : ℕ} (A : MPSTensor d D) :
-    ∃ p : ℕ, 0 < p ∧
-    ∃ r : ℕ, ∃ dim : Fin r → ℕ, ∃ μ : Fin r → ℂ,
-    ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
-      (∀ k, 0 < dim k) ∧
-      (∀ k, IsLeftCanonical (blocks k)) ∧
-      (∀ k, _root_.IsPrimitive (transferMap (blocks k))) ∧
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
-      (∀ k, IsInjective (blocks k)) ∧
-      (∀ k, μ k ≠ 0) ∧
-      SameMPV₂Pos (blockTensor (d := d) (D := D) A p)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
-      (∀ (_hμLe : ∀ k, ‖μ k‖ ≤ 1) (_hμUnit : ∃ k, ‖μ k‖ = 1),
-        ∃ P : SectorDecomposition (blockPhysDim d p),
-          SameMPV₂Pos (blockTensor (d := d) (D := D) A p) P.toTensor ∧
-          (D = P.totalDim →
-            SameMPV₂ (blockTensor (d := d) (D := D) A p) P.toTensor) ∧
-          IsBNTCanonicalForm P) := by
-  classical
-  obtain ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, hInj, hμne,
-      hSamePos, hMake⟩ :=
-    exists_isBNTCanonicalForm_afterBlocking_pos (d := d) (D := D) A
-  refine ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, hInj, hμne,
-    hSamePos, ?_⟩
-  intro hμLe hμUnit
-  obtain ⟨P, hPPos, hBNT⟩ := hMake hμLe hμUnit
-  refine ⟨P, hPPos, ?_, hBNT⟩
-  intro hDimEq
-  exact hPPos.toSameMPV₂_of_bondDim_eq hDimEq
+  exact (hSamePos N hN σ).trans (hSame N hN σ).symm
 
 end MPSTensor

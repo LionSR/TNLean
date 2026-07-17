@@ -420,7 +420,8 @@ theorem ft_sector_bnt_equal_matched_copy_weight_witnessesPos
     intro k hzero
     have hnorm := hζ_norm k
     simp [hzero] at hnorm
-  have hCoeff := coeff_identity_via_matched_mpv_phasePos hP hEqual β ζ hMpv
+  have hCoeff := coeff_identity_via_matched_mpv_phasePos hP hEqual β ζ
+    (fun k N _hN σ => hMpv k N σ)
   let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
     SectorBNTCopyWeightMatching.of_coeff_identity
       (P := P) (Q := Q) β ζ hζ_ne hCoeff
