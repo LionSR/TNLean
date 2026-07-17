@@ -226,6 +226,52 @@
     construction is used with sector projectors at lines~1719--1725.
 \end{definition}
 
+\begin{theorem}[Normalized three-site BNT family closure]
+    \label{thm:mpdo_normalized_three_site_bnt_family_closure}
+    \lean{MPSTensor.SectorDecomposition.basisMPOTensor}
+    \lean{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix}
+    \lean{MPOTensor.%
+      reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂}
+    \lean{MPOTensor.%
+      reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}
+    \leanok
+    \uses{def:mpdo_three_site_family_closure,
+      thm:mpdo_common_nonzero_bnt_tail_selection}
+    Suppose that the doubled-index tensor has the horizontal BNT
+    representation $S$, the copy weights over each representative agree, the
+    physical-trace transfers
+    $\mathcal B_j=\sum_iA_j^{ii}$ are not nilpotent, and the original tensor
+    satisfies SAL.  After identifying length-three configurations with
+    ordered triples, the normalized three-site marginal of the four-site
+    state is the family closure
+    \[
+      (\sigma^{(4)}_3)_{i_1i_2i_3,j_1j_2j_3}
+      =\sum_j\tr\!\left(
+        A_j^{i_1j_1}A_j^{i_2j_2}A_j^{i_3j_3}\widehat R_j\right),
+    \]
+    where
+    \[
+      \widehat R_j
+      =\tr(\rho^{(4)})^{-1}q_j\mathcal B_j,
+      \qquad q_j=\sum_q\mu_{j,q}^{4}.
+    \]
+    Every $\widehat R_j$ is nonzero.  More generally, a tail of length $L$
+    gives
+    $\widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L$.
+    This is the normalized traced-tail expansion used in
+    \cite[Appendix~C.2, lines~1714--1732]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Equality of the complete matrix-product-vector families expands every
+    matrix entry of the original operator as the sum of the BNT entries with
+    coefficients $q_j$.  Summing the diagonal physical configurations of the
+    tail gives $\mathcal B_j^L$.  The global normalization multiplies every
+    closing matrix by $\tr(\rho^{(L+3)})^{-1}$.  At $L=1$, SAL makes this
+    scalar nonzero, copy independence makes $q_j$ nonzero, and
+    nonnilpotence makes $\mathcal B_j$ nonzero.
+\end{proof}
+
 \begin{theorem}[Collapse of the outer inverse contraction]
     \label{thm:mpdo_bnt_three_site_outer_inverse_collapse}
     \lean{MPOTensor.%
