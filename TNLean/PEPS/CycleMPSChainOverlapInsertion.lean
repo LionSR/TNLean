@@ -559,20 +559,13 @@ while here all sites share one physical dimension `d` and all bonds one
 bond dimension `D`.  Documented in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
 theorem exists_conjugation_of_sameState [NeZero n] {L : ℕ} (hL : 0 < L)
-    (hn : 2 * L + 1 ≤ n) (A B : MPSChainTensor d D n)
+    (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSChainTensor d D n)
     (hA : IsWindowInjective A L) (hB : IsWindowInjective B L)
     (hAB : SameState A B) (p : ℕ) :
     ∃ Z : GL (Fin D) ℂ, ∀ w : List (Fin d), w.length = n →
       arcEval B p w = (Z : Matrix (Fin D) (Fin D) ℂ) * arcEval A p w *
         ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
   classical
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · -- All `0 × 0` matrices are equal.
-    subst hD0
-    refine ⟨1, fun w hw => ?_⟩
-    apply Matrix.ext
-    intro a b
-    exact a.elim0
   -- The insertion correspondence at the bond `(p - 1, p)`, reading the
   -- chain from the window start `p + (n - L)`.
   obtain ⟨Φ, hΦone, hΦmul, hpair⟩ :=

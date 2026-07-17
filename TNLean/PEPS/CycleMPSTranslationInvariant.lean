@@ -236,12 +236,12 @@ Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
 1624--1661 of `Papers/1804.04964/paper_normal.tex`, strengthened to
 `n ≥ 2L + 1` per line 1623 and Section `normal_alt`. -/
 theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZero n]
-    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (A B : MPSTensor d D)
+    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
     (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) :=
-  fundamentalTheorem_normalMPS_translationInvariant_of_overlap hL hn A B hA hB hAB
+  fundamentalTheorem_normalMPS_translationInvariant_of_overlap hL hn hD A B hA hB hAB
 
 /-- **Uniqueness clause of the Fundamental Theorem for translation-invariant
 normal MPS, single-gauge form** (arXiv:1804.04964, Section 3, the corollary
@@ -259,7 +259,8 @@ needed.
 Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
 1624--1661 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_translationInvariant_gauge_unique {L d D : ℕ}
-    (hL : 0 < L) (A B : MPSTensor d D) (hA : MPSTensor.IsNBlkInjective A L)
+    (hL : 0 < L) (hD : 0 < D) (A B : MPSTensor d D)
+    (hA : MPSTensor.IsNBlkInjective A L)
     (hB : MPSTensor.IsNBlkInjective B L) (Z Z' : GL (Fin D) ℂ) (lam lam' : ℂ)
     (hZ : ∀ i : Fin d,
       B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
@@ -267,12 +268,6 @@ theorem fundamentalTheorem_normalMPS_translationInvariant_gauge_unique {L d D : 
       B i = lam' • ((Z'⁻¹ : GL (Fin D) ℂ) * A i * (Z' : GL (Fin D) ℂ))) :
     ∃ c : ℂˣ, (Z' : Matrix (Fin D) (Fin D) ℂ) =
       (c : ℂ) • (Z : Matrix (Fin D) (Fin D) ℂ) := by
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · subst hD0
-    refine ⟨1, ?_⟩
-    apply Matrix.ext
-    intro a b
-    exact a.elim0
   obtain ⟨i₀, hi₀⟩ := exists_ne_zero_of_isNBlkInjective hL hD hB
   have hlam : lam ≠ 0 := by
     intro h0
