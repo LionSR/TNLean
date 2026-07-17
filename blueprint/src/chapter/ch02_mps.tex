@@ -247,7 +247,9 @@ boundary conditions (PBC).
     For tensors $A$ and $B$ of possibly different bond
     dimensions $D_1$ and $D_2$,
     we write $\mc{V}(A) = \mc{V}(B)$ if
-    $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N$.
+    $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every word length $N$,
+    including the empty word. This algebraic relation is used for exact
+    direct-sum identities.
 \end{definition}
 
 \begin{definition}[Positive-length same MPV - different bond dimensions]%
@@ -259,23 +261,6 @@ boundary conditions (PBC).
     we write $\mc{V}^+(A) = \mc{V}^+(B)$ if
     $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N > 0$.
 \end{definition}
-
-\begin{lemma}[Length-zero MPV coefficient]\label{lem:mpv_zero_length}
-    \lean{MPSTensor.mpv_zero_length}
-    \leanok
-    \uses{def:mpv}
-    For any MPS tensor $A$ with bond dimension $D$, the length-zero MPV
-    coefficient is $D$, the trace of the identity on the bond space.
-\end{lemma}
-
-\begin{lemma}[Positive-length equality with equal bond dimensions]%
-    \label{lem:samempv2pos_to_samempv2_of_bonddim_eq}
-    \lean{MPSTensor.SameMPV₂Pos.toSameMPV₂_of_bondDim_eq}
-    \leanok
-    \uses{def:same_mpv2_pos, def:same_mpv2, lem:mpv_zero_length}
-    If two tensors have the same positive-length MPV family and the same bond
-    dimension, then they have the same MPV family at every length.
-\end{lemma}
 
 \begin{remark}\leanok
     Definition~\ref{def:same_mpv} is the same-bond-dimension
@@ -289,7 +274,7 @@ boundary conditions (PBC).
     \leanok
     \uses{def:mpv}
     Two tensors $A$ and $B$ (of possibly different bond dimensions)
-    generate weakly proportional MPV families if for every~$N$ there
+    generate weakly proportional MPV families if for every~$N>0$ there
     exists $c_N \in \C$ such that
     $\ket{V^{(N)}(A)} = c_N \ket{V^{(N)}(B)}$.
 \end{definition}
@@ -299,7 +284,7 @@ boundary conditions (PBC).
     \leanok
     \uses{def:mpv}
     Two tensors $A$ and $B$ (of possibly different bond dimensions)
-    generate nonzero proportional MPV families if for every~$N$ there is a
+    generate nonzero proportional MPV families if for every~$N>0$ there is a
     nonzero scalar $c_N \in \C$ such that
     $\ket{V^{(N)}(A)} = c_N \ket{V^{(N)}(B)}$.
     This is the projective reading of the proportionality hypothesis in
@@ -325,13 +310,13 @@ boundary conditions (PBC).
     \lean{MPSTensor.NonzeroProportionalMPV₂.toProportionalMPV₂,
         MPSTensor.NonzeroProportionalMPV₂.eventually,
         MPSTensor.NonzeroProportionalMPV₂.symm,
-        MPSTensor.SameMPV₂.toNonzeroProportionalMPV₂}
+        MPSTensor.SameMPV₂Pos.toNonzeroProportionalMPV₂}
     \leanok
     \uses{def:proportional_mpv, def:nonzero_proportional_mpv,
-        def:eventually_nonzero_proportional_mpv, def:same_mpv2}
+        def:eventually_nonzero_proportional_mpv, def:same_mpv2_pos}
     Nonzero proportionality implies weak proportionality and eventual nonzero
     proportionality, is symmetric, and equality of MPV families is the special
-    case with scalar $1$.
+    case with scalar $1$, at every positive length.
 \end{lemma}
 
 \begin{proof}

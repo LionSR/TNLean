@@ -2069,13 +2069,14 @@ unconditional result.
     Fundamental Theorem.  The periodic extension treats periodic blocks directly.
 \end{remark}
 
-\begin{theorem}[Peripheral proportional case from exact MPV equality]
+\begin{theorem}[Peripheral proportional case from positive-length MPV equality]
     \label{thm:peripheral_periodic_ft_proportional_same}
-    \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV}
+    \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos}
     \notready
-    \uses{def:periodic_tensor, thm:periodic_overlap_dichotomy,
+    \uses{def:periodic_tensor, def:same_mpv2_pos, thm:periodic_overlap_dichotomy,
         thm:periodic_self_overlap_tendsto}
-    Let $A$ and $B$ be periodic tensors with the same matrix product vectors.
+    Let $A$ and $B$ be periodic tensors with the same matrix product vectors
+    at every positive length.
     Then their bond dimensions agree, and after identifying the bond spaces,
     $A$ and $B$ are repeated blocks.
 \end{theorem}
@@ -2083,7 +2084,7 @@ unconditional result.
     By Theorem~\ref{thm:periodic_overlap_dichotomy}, either the overlap
     $\braket{V^{(N)}(A)}{V^{(N)}(B)}$ tends to $0$ or the bond dimensions agree
     and $A$ and $B$ are repeated blocks. In the decay case,
-    equality of the MPV families gives, for every $N$,
+    equality of the MPV families gives, for every $N>0$,
     \begin{equation}\label{eq:pft_decay_mpv_equality}
         \braket{V^{(N)}(A)}{V^{(N)}(B)}
         =
@@ -2112,12 +2113,13 @@ unconditional result.
     \uses{def:periodic_tensor, thm:peripheral_periodic_ft_proportional_same}
     Assume that whenever two periodic tensors have proportional MPV families,
     one can rescale one tensor by a unit-modulus phase so that the MPV families
-    agree exactly. Then proportional periodic MPV families already force the
+    agree at every positive length. Then proportional periodic MPV families already force the
     tensors to be repeated blocks.
 \end{theorem}
 \begin{proof}\notready
     Apply the phase-rescaling hypothesis to replace $A$ by a periodic tensor
-    $A'$ with the same MPV family as $B$. Theorem~\ref{thm:peripheral_periodic_ft_proportional_same}
+    $A'$ with the same positive-length MPV family as $B$.
+    Theorem~\ref{thm:peripheral_periodic_ft_proportional_same}
     then yields repeated-block equivalence between $A'$ and $B$. Since $A'$
     differs from $A$ only by a unit-modulus phase, $A$ and $A'$ are themselves
     repeated blocks, and transitivity gives the claim.

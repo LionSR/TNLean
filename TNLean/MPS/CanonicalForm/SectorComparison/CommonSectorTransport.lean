@@ -34,7 +34,8 @@ matrix product states, canonical form, common sectors
 
 /-- **Unconditional common primitive irreducible block decompositions.**
 
-Two tensors with the same MPV family have one common positive blocking length
+Two tensors with the same MPV family at every positive length have one common positive blocking
+length
 whose nonzero parts are weighted families of trace-preserving, primitive,
 tensor-irreducible blocks with positive bond dimensions and nonzero weights. At
 every positive length each blocked tensor equals its nonzero part, and the two
@@ -50,7 +51,7 @@ multi-block comparison. -/
 theorem unconditional_commonPrimitiveIrreducibleBlocks
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :
+    (hSame : SameMPV₂Pos A B) :
     ∃ p : ℕ, 0 < p ∧
     ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
       (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)),
@@ -79,7 +80,7 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       rB₀, dimB₀, μB₀, blocksB₀, familyA, familyB,
       hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hPosCanon,
       hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB⟩ :=
-    afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
+    afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos A B hSame
   have hFlatA_raw := familyA.reindexed_nonzero_part μA₀
   have hFlatB_raw := familyB.reindexed_nonzero_part μB₀
   let flatBlocksA : (x : Fin (∑ k : Fin rA₀, familyA.period k)) →

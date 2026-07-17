@@ -305,19 +305,6 @@ theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_i
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective
     hInj (hAct.of_sameMPVPos hAP)
 
-/-- Full-MPV specialization of
-`insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_injective`. -/
-theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective
-    {D : ℕ} (A : MPSTensor d D)
-    (hCF : IsBNTCanonicalForm P)
-    (hInj : ∀ j, IsInjective (P.basis j))
-    (hAP : SameMPV₂ A P.toTensor)
-    {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAct : FirstSiteActionAgree A Y Z) :
-    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
-  exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_injective
-    A hInj hAP.toSameMPV₂Pos hAct
-
 /-- Representative-grouped Lemma L before physical blocking.
 
 Suppose that every representative has full word span at one common positive
@@ -381,18 +368,6 @@ theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     L hL hInj (hAct.of_sameMPVPos hAP)
 
-/-- Full-MPV specialization of
-`insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_blockInjective`. -/
-theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective
-    {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
-    (L : ℕ) (hL : 0 < L) (hInj : ∀ j, IsNBlkInjective (P.basis j) L)
-    (hAP : SameMPV₂ A P.toTensor)
-    {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAct : FirstSiteActionAgree A Y Z) :
-    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
-  exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_blockInjective
-    A L hL hInj hAP.toSameMPV₂Pos hAct
-
 /-- Representative-grouped Lemma L for an unblocked BNT canonical form.
 
 Irreducibility, left-canonicality, and normalized self-overlap force each basis
@@ -424,16 +399,5 @@ theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
     (hAct : FirstSiteActionAgree A Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree (hAct.of_sameMPVPos hAP)
-
-/-- Full-MPV specialization of
-`insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree`. -/
-theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree
-    {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
-    (hAP : SameMPV₂ A P.toTensor)
-    {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAct : FirstSiteActionAgree A Y Z) :
-    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
-  exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
-    A hAP.toSameMPV₂Pos hAct
 
 end MPSTensor.IsBNTCanonicalForm
