@@ -45,16 +45,22 @@ section FundamentalTheoremAfterBlocking
 
 This is the faithful predecessor to the common nonzero-sector statement. From
 `SameMPV₂ A B`, it discards the all-zero blocks at positive lengths and then
-applies the TP gauge to obtain irreducible nonzero-weight blocks on both sides. It then
-removes the period of each block separately, producing primitive irreducible cyclic sectors for
-every nonzero-weight block. The tensor on each side agrees with its nonzero part
-at every positive length, and the two nonzero parts agree at every positive length.
+applies the TP gauge to obtain irreducible nonzero-weight blocks on both sides. It then removes the
+period of each block separately, producing primitive irreducible cyclic sectors for every
+nonzero-weight block. The tensor on each side agrees with its nonzero part at every positive
+length, and the two nonzero parts agree at every positive length.
 
 The theorem intentionally keeps the per-block period-removal lengths inside
 `HasPrimitiveIrreducibleCyclicSectors`. It does not conflate those lengths with a
 later common-refinement or Wielandt/injectivity blocking length; assembling the
 per-block cyclic sectors at one physical blocking level is the next formal
-statement in the reduction chain. -/
+statement in the reduction chain.
+
+Source: Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof lines
+761--832, for the nonzero irreducible canonical blocks; arXiv:1606.00608, equation
+`eq:II_Aiplusk1`, Section II.C, and Appendix A, for removing zero blocks and resolving periodic
+blocks into cyclic sectors. The positive-length convention is recorded in
+`docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`. -/
 theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
