@@ -233,6 +233,6 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
           (μ := fun k => μ k / (m : ℂ)) blocks) σ :=
       mpv_toTensorFromBlocks_weight_mul_left (m : ℂ) _ blocks σ
     _ = (m : ℂ) ^ N * mpv P.toTensor σ := by
-      rw [hSame N σ]
+      rw [hSame N hN σ]
 
 end MPSTensor
