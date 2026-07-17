@@ -184,4 +184,41 @@ theorem sectorProjection_mul_eq_zero (hη : EtaStructure rho)
     hη.sectorProjection hη.sectorProjection_isOrthogonal
     hη.sum_sectorProjection hkl
 
+/-- If the block of an operator from Hayashi sector `k` to sector `l`
+vanishes in the decomposition coordinates, then its compression by the
+corresponding physical projections is zero.
+
+This is the projection-algebra passage used for equations `Qks` and
+`PjKiPj` in arXiv:1606.00608, Appendix C.2, lines 1698--1742. -/
+theorem sectorProjection_mul_mul_sectorProjection_eq_zero_of_block
+    (hη : EtaStructure rho) (X : Matrix (Fin d) (Fin d) ℂ)
+    (k l : Fin hη.m)
+    (hblock : ∀ (a : Fin (hη.dL k) × Fin (hη.dR k))
+        (b : Fin (hη.dL l) × Fin (hη.dR l)),
+      Matrix.reindex hη.decompB hη.decompB
+          ((hη.U_B : Matrix (Fin d) (Fin d) ℂ) * X *
+            (hη.U_B : Matrix (Fin d) (Fin d) ℂ)ᴴ)
+          ⟨k, a⟩ ⟨l, b⟩ = 0) :
+    hη.sectorProjection k * X * hη.sectorProjection l = 0 := by
+  classical
+  let U : Matrix (Fin d) (Fin d) ℂ := hη.U_B
+  let E (q : Fin hη.m) := basisSectorProjection hη q
+  have hcoord : E k * (U * X * Uᴴ) * E l = 0 := by
+    apply (Matrix.reindexLinearEquiv (R := ℂ) (A := ℂ)
+      hη.decompB hη.decompB).injective
+    rw [map_zero, ← Matrix.reindexLinearEquiv_mul ℂ ℂ
+      hη.decompB hη.decompB hη.decompB,
+      ← Matrix.reindexLinearEquiv_mul ℂ ℂ
+        hη.decompB hη.decompB hη.decompB]
+    simpa [E, basisSectorProjection, coordinateSectorProjection,
+      Matrix.reindex_apply] using
+      (Matrix.blockProjection_mul_mul_blockProjection_eq_zero
+        (Matrix.reindex hη.decompB hη.decompB (U * X * Uᴴ)) k l hblock)
+  change (Uᴴ * E k * U) * X * (Uᴴ * E l * U) = 0
+  calc
+    (Uᴴ * E k * U) * X * (Uᴴ * E l * U) =
+        Uᴴ * (E k * (U * X * Uᴴ) * E l) * U := by
+      simp only [Matrix.mul_assoc]
+    _ = 0 := by rw [hcoord, Matrix.mul_zero, Matrix.zero_mul]
+
 end MPOTensor.EtaStructure
