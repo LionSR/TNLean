@@ -62,12 +62,22 @@ UNITS: dict[str, tuple[str, float]] = {
     ),
 }
 
-_WIDTH_PATTERN = re.compile(r"""<svg[^>]*\swidth=["']([0-9.]+)pt["']""")
+# Both converters serialize the root extent in points, but spell it
+# differently: dvisvgm writes ``width="95.1pt"`` while pdftocairo's cairo
+# SVG surface may drop the explicit ``pt`` unit (a bare user-unit number,
+# which for a PDF-sourced surface is still points).  Accept either spelling,
+# and fall back to the viewBox width (always in user units = points) so the
+# smoke test tracks the rendered extent rather than one toolchain's unit
+# string.
+_WIDTH_PATTERN = re.compile(r"""<svg[^>]*\swidth=["']([0-9.]+)(?:pt)?["']""")
+_VIEWBOX_PATTERN = re.compile(
+    r"""<svg[^>]*?\sviewBox=["']\s*[-0-9.eE+]+\s+[-0-9.eE+]+\s+([0-9.]+)"""
+)
 
 
 def _svg_width_pt(svg_text: str) -> float:
-    match = _WIDTH_PATTERN.search(svg_text)
-    assert match, "SVG root carries no pt width"
+    match = _WIDTH_PATTERN.search(svg_text) or _VIEWBOX_PATTERN.search(svg_text)
+    assert match, "SVG root carries neither a pt width nor a viewBox width"
     return float(match.group(1))
 
 
