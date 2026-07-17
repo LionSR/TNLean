@@ -70,11 +70,13 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
 
 /-- **Fundamental Theorem for blocked chains**.
 
-If `A` is `L`-block injective and the constant blocked chains built from
+If the bond dimension and chain length are positive, `A` is `L`-block injective, and the
+constant blocked chains built from
 `A^{[L]}` and `B^{[L]}` satisfy `SameMPV` on their combined tensors, then
 the blocked chains are gauge equivalent. -/
 theorem fundamentalTheorem_blockedChain
     (A B : MPSTensor d D) (L n : ℕ)
+    (hn : 0 < n) (hD : 0 < D)
     (hA_block : MPSTensor.IsNBlkInjective A L)
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (blockedChain A L n))
@@ -83,6 +85,7 @@ theorem fundamentalTheorem_blockedChain
   fundamentalTheorem_injective_chain
     (blockedChain A L n)
     (blockedChain B L n)
+    hn hD
     (blockedChain_isInjective A L n hA_block)
     hMPV
 

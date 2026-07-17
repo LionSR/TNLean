@@ -48,16 +48,18 @@ theorem sameMPV_chainCombined_of_sameState
       (MPSTensor.chainCombinedTensor B) :=
   hBridge.sameMPV_of_sameState A B hA hn hState
 
-/-- Chain Fundamental Theorem: assuming the blocking hypothesis `hBridge`,
-fixed-length `SameState` at `n ≥ 3` implies cyclic gauge equivalence for injective `A`. -/
+/-- Chain Fundamental Theorem: at positive bond dimension, assuming the blocking hypothesis
+`hBridge`, fixed-length `SameState` at `n ≥ 3` implies cyclic gauge equivalence for
+injective `A`. -/
 theorem fundamentalTheorem_injective_chain_of_sameState
     (hBridge : SameStateBridgeHyp d D)
     (A B : MPSChainTensor d D n)
+    (hD : 0 < D)
     (hA : IsInjective A)
     (hn : 3 ≤ n)
     (hState : SameState A B) :
     GaugeEquiv A B :=
-  fundamentalTheorem_injective_chain A B hA
+  fundamentalTheorem_injective_chain A B (by omega) hD hA
     (sameMPV_chainCombined_of_sameState hBridge A B hA hn hState)
 
 end MPSChainTensor

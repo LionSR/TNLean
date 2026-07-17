@@ -51,14 +51,16 @@ variable {d D n : ℕ}
 
 /-- **Injective-chain Fundamental Theorem up to a nonzero scalar.**
 
-If `GaugePhaseEquiv (chainCombinedTensor A) (chainCombinedTensor B)` and
-`A` is injective, there exist `Z_k ∈ GL(D, ℂ)` and `ζ ≠ 0` such that
+For nonempty chains of positive bond dimension, if
+`GaugePhaseEquiv (chainCombinedTensor A) (chainCombinedTensor B)` and `A` is
+injective, there exist `Z_k ∈ GL(D, ℂ)` and `ζ ≠ 0` such that
 $$
   B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}
 $$
 for all sites `k` and physical indices `i`. -/
 theorem fundamentalTheorem_injective_chain_gaugePhase
     (A B : MPSChainTensor d D n)
+    (hn : 0 < n) (hD : 0 < D)
     (hA : IsInjective A)
     (hGauge : MPSTensor.GaugePhaseEquiv
       (MPSTensor.chainCombinedTensor A)
@@ -96,7 +98,7 @@ theorem fundamentalTheorem_injective_chain_gaugePhase
         (MPSTensor.chainCombinedTensor A)
         (MPSTensor.chainCombinedTensor B') :=
     MPSTensor.GaugeEquiv.sameMPV hCombinedGauge
-  obtain ⟨Z, hZ⟩ := fundamentalTheorem_injective_chain A B' hA hSame
+  obtain ⟨Z, hZ⟩ := fundamentalTheorem_injective_chain A B' hn hD hA hSame
   refine ⟨Z, ζ, hζ, ?_⟩
   intro k i
   calc
