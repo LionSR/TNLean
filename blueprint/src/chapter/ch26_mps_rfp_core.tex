@@ -113,9 +113,13 @@
 
 \begin{figure}[ht]
     \centering
-    \TNRFPKrausIsometry
+    \[
+        A^{i_1}A^{i_2}=\sum_jV^{i_1i_2}_jA^j
+    \]
     \medskip
-    \TNRFPKrausIsometryReverse
+    \[
+        \sum_{i_1,i_2}(V^\dagger)^j_{i_1i_2}A^{i_1}A^{i_2}=A^j
+    \]
     \caption{The fusion identity of the renormalization fixed-point
         characterization: two contracted copies of $A$ equal a single copy of
         $A$ with the isometry $V$ merging the summed index $j$ into the
@@ -654,10 +658,12 @@
 
 \begin{figure}[ht]
     \centering
-    \TNRFPIsometryCanonicalForm
+    \[
+        A=X\sqrt\Lambda\,U\,X^{-1}
+    \]
     \caption{The isometry canonical form of a normal renormalization fixed
         point: $A^i = X\sqrt\Lambda\,U^i X^{-1}$, with the diagonal weight
-        $\sqrt\Lambda$ on the virtual chain and the isometry $U$ emitting the
+        $\sqrt\Lambda$ and the isometry $U$ carrying the
         physical index
         \cite[Appendix~B, lines~1275--1289]{Cirac2016MPDO_arXiv}.}
     \label{fig:rfp_isometry_canonical_form}
@@ -733,12 +739,14 @@
 
 \begin{figure}[ht]
     \centering
-    \TNRFPIsometryCanonicalFormBlocks
+    \[
+        A=X\left(\bigoplus_j\mu_j\otimes\sqrt{\Lambda_j}U_j\right)X^{-1}
+    \]
     \caption{The per-block canonical form
         $A^i=\bigoplus_{j,q}\mu_{j,q}\,X_{j,q}\sqrt{\Lambda_j}\,U_j^i
-            X_{j,q}^{-1}$: the block-index lines $j$ and $q$ thread the gauge,
+            X_{j,q}^{-1}$: the block indices $j$ and $q$ label the gauge,
         the diagonal weight, the isometry, and the coefficient tensor $\mu$.
-        The picture is per-block, matching the entry above; the cross-block
+        The display is per-block, matching the entry above; the cross-block
         physical orthogonality of
         \cite[Section~3.4, lines~543--561]{Cirac2016MPDO_arXiv} is not
         displayed.}
