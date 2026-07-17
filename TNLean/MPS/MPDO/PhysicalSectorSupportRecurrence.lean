@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.TracePairing
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
 
@@ -36,14 +37,6 @@ open scoped Matrix BigOperators
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
-
-private theorem exists_matrix_entry_ne_zero {m n : Type*}
-    (A : Matrix m n ℂ) (hA : A ≠ 0) : ∃ i j, A i j ≠ 0 := by
-  by_contra h
-  push Not at h
-  apply hA
-  ext i j
-  exact h i j
 
 /-- The virtual matrix obtained from a matrix entry within physical sector
 `k`. Its `(beta, alpha)` entry is the product of the corresponding left and
@@ -109,12 +102,14 @@ theorem exists_two_edge_return_of_neighboringOperator_ne_zero
     ∃ j : Fin F.sectorCount,
       F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0 := by
   classical
-  obtain ⟨ex, ey, heta⟩ := exists_matrix_entry_ne_zero _ hkh
+  obtain ⟨ex, ey, heta⟩ := Matrix.exists_entry_ne_zero_of_ne_zero _ hkh
   obtain ⟨⟨kx, ky, hkxy⟩, ⟨hx, hy, hhxy⟩⟩ := hnonzero hkh
-  obtain ⟨beta, alpha, hkentry⟩ := exists_matrix_entry_ne_zero _ hkxy
+  obtain ⟨beta, alpha, hkentry⟩ :=
+    Matrix.exists_entry_ne_zero_of_ne_zero _ hkxy
   have hkleft : F.leftTensor k beta kx.1 ky.1 ≠ 0 :=
     left_ne_zero_of_mul hkentry
-  obtain ⟨delta, gamma, hhentry⟩ := exists_matrix_entry_ne_zero _ hhxy
+  obtain ⟨delta, gamma, hhentry⟩ :=
+    Matrix.exists_entry_ne_zero_of_ne_zero _ hhxy
   have hhright : F.rightTensor h gamma hx.2 hy.2 ≠ 0 :=
     right_ne_zero_of_mul hhentry
   let x : F.SectorIndex k := (kx.1, ex.1)

@@ -43,6 +43,9 @@ Extracted from various files for reusability.
   finite index space
 - `Matrix.nonempty_of_trace_eq_one`: an index space carrying a trace-one matrix
   is nonempty
+- `Matrix.exists_entry_ne_zero_of_ne_zero`: a nonzero matrix has a nonzero entry
+- `Matrix.exists_diagonal_ne_zero_of_trace_eq_one`: a trace-one matrix has a
+  nonzero diagonal entry
 - `Continuous.matrix_kronecker`: joint continuity of the Kronecker product in both factors
 -/
 
@@ -83,6 +86,25 @@ lemma nonempty_of_trace_eq_one {α : Type*} [Fintype α]
     simp
   rw [hzero] at hρ
   norm_num at hρ
+
+/-- A matrix of trace one has a nonzero diagonal entry. -/
+lemma exists_diagonal_ne_zero_of_trace_eq_one {α : Type*} [Fintype α]
+    (ρ : Matrix α α ℂ) (hρ : ρ.trace = 1) : ∃ i : α, ρ i i ≠ 0 := by
+  have hsum : (∑ i : α, ρ i i) ≠ 0 := by
+    change ρ.trace ≠ 0
+    rw [hρ]
+    exact one_ne_zero
+  obtain ⟨i, _, hi⟩ := Finset.exists_ne_zero_of_sum_ne_zero hsum
+  exact ⟨i, hi⟩
+
+/-- A nonzero matrix has a nonzero entry. -/
+lemma exists_entry_ne_zero_of_ne_zero {m n R : Type*} [Zero R]
+    (A : Matrix m n R) (hA : A ≠ 0) : ∃ i j, A i j ≠ 0 := by
+  by_contra h
+  push Not at h
+  apply hA
+  ext i j
+  exact h i j
 
 section RankOneQuadratic
 
