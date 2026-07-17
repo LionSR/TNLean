@@ -400,6 +400,38 @@ theorem bntSectorProjection_mul_physicalSlice_mul_eq_zero
     · simp [hlt]
   · simp [hks]
 
+/-- Summing the diagonal BNT-sector corners recovers every physical slice of
+a normal representative:
+\[
+  \sum_s P_s\,\mathcal K_i^{\beta,\alpha}\,P_s
+    =\mathcal K_i^{\beta,\alpha}.
+\]
+This is the one-site algebraic content of the orthogonal direct-sum
+decomposition of the sector states.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1733--1770. -/
+theorem sum_bntSectorProjection_mul_physicalSlice_mul_self
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (i : Fin g)
+    (β α : Fin (dim i)) :
+    (∑ s : Fin g,
+      bntSectorProjection hC hρ hη hR s * physicalSlice (K i) β α *
+        bntSectorProjection hC hρ hη hR s) =
+      physicalSlice (K i) β α := by
+  classical
+  rw [Finset.sum_eq_single i]
+  · exact bntSectorProjection_mul_physicalSlice_mul_self
+      hC hρ hη hR i β α
+  · intro s _ hsi
+    exact bntSectorProjection_mul_physicalSlice_mul_eq_zero
+      hC hρ hη hR i s s (Or.inr (Ne.symm hsi)) β α
+  · simp
+
 /-- Changing the physical basis of representative `i` by the BNT projector
 `P_s` retains that representative exactly when `s = i` and otherwise gives
 the zero tensor.

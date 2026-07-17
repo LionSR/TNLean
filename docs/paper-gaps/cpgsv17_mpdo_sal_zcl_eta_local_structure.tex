@@ -289,6 +289,7 @@ sitewise on every nonempty periodic chain then gives
 with the common copy weight absorbed into $\mathcal K_s$.
 \footnote{The relevant declarations are
 \path{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero},
+\path{MPOTensor.sum_bntSectorProjection_mul_physicalSlice_mul_self},
 \path{MPOTensor.changePhysicalBasis_bntSectorProjection_basis},
 \path{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}, and
 \path{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}.}
@@ -320,6 +321,12 @@ lines~1760--1770, is also formalized as
 sector-compression identity is SAL for each sector.  It must follow from the
 direct-sum entropy identity and strong subadditivity as in
 \cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
+There is a local endpoint typo in this passage.  Line~1771 writes
+$m<\lfloor N/2\rfloor$, but Definition~4.6 gives the equality chain through
+$I_{\lfloor N/2\rfloor}$, and the conclusion at lines~1781--1783 compares
+$m=L$ with $m=L+1$.  When $L+1=\lfloor N/2\rfloor$, that comparison requires
+the endpoint $m=\lfloor N/2\rfloor$.  The formal entropy equivalence therefore
+uses $1\leq m\leq\lfloor N/2\rfloor$.
 
 The neighboring operators are now assembled from these sector tensors.  The
 operator
