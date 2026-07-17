@@ -1,5 +1,6 @@
 \documentclass{article}
 
+\usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
@@ -46,17 +47,19 @@ them.
 
 \section{Present formal boundary}
 
-The structure \leanid{MPOTensor.GSNNCHData} now records the finite outer
-sector type, its orthogonal one-site sector projections, the natural
-multiplicities, and one positive commuting bond in every sector.  The
-predicates \leanid{MPOTensor.IsGSNNCHAt} and
-\leanid{MPOTensor.IsGSNNCH} therefore retain the data in Definition~4.8.
-The chain-level predicate requires positivity and unit trace, while the
-tensor-level predicate applies it to the normalized operator
-\leanid{MPOTensor.normalizedMPO} at each length $N\geq2$.
+The formalized sector decomposition now records the finite outer sector type,
+its orthogonal one-site sector projections, the natural multiplicities, and
+one positive commuting bond in every sector.  The finite-chain and
+tensor-level predicates therefore retain the direct sum and multiplicities of
+Definition~4.8.  The finite-chain predicate requires positivity and unit
+trace, while the tensor-level predicate applies it to the normalized operator at each length
+$N\geq2$.\footnote{\raggedright Formal structure: \leanid{MPOTensor.GSNNCHData}.
+Formal declarations: \leanid{MPOTensor.IsGSNNCHAt},
+\leanid{MPOTensor.IsGSNNCH}, and \leanid{MPOTensor.normalizedMPO}.}
 
-The separate structure \leanid{MPOTensor.CommutingBondProductData} records
-the auxiliary single-bond presentation
+The auxiliary single-bond presentation is recorded separately:
+\footnote{\raggedright Formal structure:
+\leanid{MPOTensor.CommutingBondProductData}.}
 \[
   \rho^{(N)}=c_N\prod_{j=1}^N\tau_j(B_N),
   \qquad c_N>0,
@@ -66,19 +69,19 @@ one-sector case of the source definition.  No converse theorem extracting a
 single bond from arbitrary source sector data is claimed.
 
 The represented finite-chain sector sum now carries its asserted analytic
-properties: all cyclic translates of one sector bond commute pairwise
-(\leanid{MPOTensor.GSNNCHData.bondAt\_comm}), the represented operator is
-positive semidefinite
-(\leanid{MPOTensor.GSNNCHData.unnormalizedState\_posSemidef}) and invariant
-under the cyclic shift
-(\leanid{MPOTensor.GSNNCHData.unnormalizedState\_submatrix\_rotateConfig}),
-and a tensor whose finite-chain operators have the sector form with nonzero
-traces satisfies the full density-operator predicate
-(\leanid{MPOTensor.isGSNNCH\_of\_hasGSNNCHForm}).  In particular every
-injective tensor satisfying the saturated area law is now proved GSNNCH
-(\leanid{MPOTensor.isGSNNCH\_of\_isInjective\_of\_isSAL}), through a
-one-sector witness; the one-sector form is the commuting product form in
-which Proposition~C.8 states its conclusion for an injective tensor.
+properties: all cyclic translates of one sector bond commute pairwise, the
+represented operator is positive semidefinite and invariant under the
+cyclic shift, and a tensor whose finite-chain operators have the sector form
+with nonzero traces satisfies the full density-operator predicate.  In particular,
+every injective tensor satisfying the saturated area law is now proved GSNNCH
+through a one-sector witness.\footnote{\raggedright Formal declarations:
+{\scriptsize\leanid{MPOTensor.GSNNCHData.bondAt_comm}},
+{\scriptsize\leanid{MPOTensor.GSNNCHData.unnormalizedState_posSemidef}},
+{\scriptsize\leanid{MPOTensor.GSNNCHData.unnormalizedState_submatrix_rotateConfig}},
+{\scriptsize\leanid{MPOTensor.isGSNNCH_of_hasGSNNCHForm}}, and
+{\scriptsize\leanid{MPOTensor.isGSNNCH_of_isInjective_of_isSAL}}.}  The
+one-sector form is the commuting product form in which Proposition~C.8 states
+its conclusion for an injective tensor.
 
 \section{Elimination plan}
 
