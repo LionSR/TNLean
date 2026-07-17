@@ -14,6 +14,8 @@
   {
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz}{#1} }
     \tenkz@beginpicture{free}
+    % NFSS sets math fonts up lazily; force them before reading the axis
+    \check@mathfonts
     \begin{tikzpicture}[tenkz~every~picture,
       baseline={(0pt,\dim_eval:n{-\fontdimen22\textfont2})}]
   }
@@ -22,6 +24,8 @@
 % \tnput[<glyph keys>]{<name>}{<coordinate>}{<label>}
 %   glyph keys: dot|box|pill|mpo (skin), ports={e:virtual, ph:physical, ...},
 %   label pos=north|south|east|west (dot skin only)
+\tl_new:N \l__tenkz_fshape_tl    % \tnput skin word (free-owned: the tiers
+                                 % share only L0/L1, never each other's locals)
 \tl_new:N \l__tenkz_fports_tl
 \tl_new:N \l__tenkz_flpos_tl
 \tl_new:N \l__tenkz_frole_tl     % \tnput role word (empty = none)
@@ -29,11 +33,11 @@
 \tl_new:N \l__tenkz_frolesty_tl  % resolved role/species style (or empty)
 \pgfkeys{
   /tenkz/put/.is~family,
-  /tenkz/put/dot/.code={\tl_set:Nn \l__tenkz_cshape_tl {dot}},
-  /tenkz/put/box/.code={\tl_set:Nn \l__tenkz_cshape_tl {box}},
-  /tenkz/put/pill/.code={\tl_set:Nn \l__tenkz_cshape_tl {pill}},
-  /tenkz/put/mpo/.code={\tl_set:Nn \l__tenkz_cshape_tl {mpo}},
-  /tenkz/put/ring/.code={\tl_set:Nn \l__tenkz_cshape_tl {ring}},
+  /tenkz/put/dot/.code={\tl_set:Nn \l__tenkz_fshape_tl {dot}},
+  /tenkz/put/box/.code={\tl_set:Nn \l__tenkz_fshape_tl {box}},
+  /tenkz/put/pill/.code={\tl_set:Nn \l__tenkz_fshape_tl {pill}},
+  /tenkz/put/mpo/.code={\tl_set:Nn \l__tenkz_fshape_tl {mpo}},
+  /tenkz/put/ring/.code={\tl_set:Nn \l__tenkz_fshape_tl {ring}},
   /tenkz/put/ports/.store~in=\l__tenkz_fports_tl,
   % role= / species=: the semantic hue interface (see tenkz-core) —
   % the language's invariants cross the free-tier border.  Resolution
@@ -85,33 +89,31 @@
       }
   }
 
-% the resolved role/species style for glyph family #1 (tensor|outline):
-% species first, role wins — mirroring the grid's resolver
-\cs_new_protected:Npn \tenkz_free_role_style:n #1
+% the resolved role/species style: species first, role wins — the same
+% resolution as the grid's, but parameterized so ONE resolver serves
+% atoms (tensor/outline families) and joins (bond).  #1 role tl,
+% #2 species tl, #3 output tl, #4 glyph family word.
+\cs_new_protected:Npn \tenkz_free_role_style:NNNn #1#2#3#4
   {
-    \tl_clear:N \l__tenkz_frolesty_tl
+    \tl_clear:N #3
     % \c_space_tl, not ~: a space character after a control word is
     % swallowed at tokenization, so the style-name gap must be a token
-    \tl_if_empty:NF \l__tenkz_fspec_tl
-      { \tl_set:Ne \l__tenkz_frolesty_tl
-          { species~ \tl_use:N \l__tenkz_fspec_tl \c_space_tl #1 } }
-    \tl_if_empty:NF \l__tenkz_frole_tl
-      { \tl_set:Ne \l__tenkz_frolesty_tl
-          { \tl_use:N \l__tenkz_frole_tl \c_space_tl #1 } }
+    \tl_if_empty:NF #2
+      { \tl_set:Ne #3 { species~ \tl_use:N #2 \c_space_tl #4 } }
+    \tl_if_empty:NF #1
+      { \tl_set:Ne #3 { \tl_use:N #1 \c_space_tl #4 } }
   }
-\cs_new:Npn \tenkz_free_role_word:
-  { \tl_if_empty:NTF \l__tenkz_frole_tl {none}
-      { \tl_use:N \l__tenkz_frole_tl } }
-\cs_new:Npn \tenkz_free_spec_word:
-  { \tl_if_empty:NTF \l__tenkz_fspec_tl {none}
-      { \tl_use:N \l__tenkz_fspec_tl } }
+% the event word of a semantic tl: `none' when empty.  Expandable, so
+% the audit write resolves it in place.
+\cs_new:Npn \tenkz_free_word:N #1
+  { \tl_if_empty:NTF #1 {none} { \tl_use:N #1 } }
 
 \NewDocumentCommand \tnput { O{} m m m }
   {
     \group_begin:
     % the default skin is the glyph policy (tensor style=dot|box); an
     % explicit skin key overrides it below
-    \tl_set:Ne \l__tenkz_cshape_tl { \tenkz@tensorstyle }
+    \tl_set:Ne \l__tenkz_fshape_tl { \tenkz@tensorstyle }
     \tl_clear:N \l__tenkz_fports_tl
     \tl_clear:N \l__tenkz_frole_tl
     \tl_clear:N \l__tenkz_fspec_tl
@@ -120,23 +122,28 @@
     % the role/species style rides its own literal option slot (an
     % empty slot is an inert trailing option); beads resolve through
     % the tensor family, inscribed-label skins through outline
-    \str_if_eq:VnTF \l__tenkz_cshape_tl {dot}
-      { \tenkz_free_role_style:n {tensor} }
-      { \tenkz_free_role_style:n {outline} }
-    \str_case:Vn \l__tenkz_cshape_tl
+    \str_if_eq:VnTF \l__tenkz_fshape_tl {dot}
+      { \tenkz_free_role_style:NNNn \l__tenkz_frole_tl
+          \l__tenkz_fspec_tl \l__tenkz_frolesty_tl {tensor} }
+      { \tenkz_free_role_style:NNNn \l__tenkz_frole_tl
+          \l__tenkz_fspec_tl \l__tenkz_frolesty_tl {outline} }
+    % every inscribed label carries \tenkz@glyphstrut: mixed labels
+    % (descenders, superscripts) must share one glyph height (the core
+    % strut contract; free has no strut-clearing skins)
+    \str_case:Vn \l__tenkz_fshape_tl
       {
         {dot}  { \node[tensor, \l__tenkz_frolesty_tl] (#2) at #3 {};
                  \tl_if_blank:nF {#4}
                    { \exp_args:NV \tenkz_free_dot_label:nnn
                        \l__tenkz_flpos_tl {#2} {#4} } }
         {box}  { \node[box~tensor, \l__tenkz_frolesty_tl] (#2) at #3
-                   { $\tenkz@labelsize #4$ }; }
+                   { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
         {pill} { \node[pill~tensor, \l__tenkz_frolesty_tl] (#2) at #3
-                   { $\tenkz@labelsize #4$ }; }
+                   { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
         {mpo}  { \node[mpo~tensor, \l__tenkz_frolesty_tl] (#2) at #3
-                   { $\tenkz@labelsize #4$ }; }
+                   { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
         {ring} { \node[on-wire~matrix, \l__tenkz_frolesty_tl] (#2) at #3
-                   { $\tenkz@labelsize #4$ }; }
+                   { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
       }
     % register declared port types:  ports={east:virtual, north:physical}
     % (str-normalized so the document's catcode-12 colon parses)
@@ -145,7 +152,7 @@
         \exp_args:NV \clist_map_inline:nn \l__tenkz_fports_tl
           { \exp_args:Ne \tenkz_free_port:n { \tl_to_str:n { #2 . ##1 } } }
       }
-    \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|kind=\tl_use:N \l__tenkz_cshape_tl|role=\tenkz_free_role_word:|species=\tenkz_free_spec_word:}
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|kind=\tl_use:N \l__tenkz_fshape_tl|role=\tenkz_free_word:N \l__tenkz_frole_tl|species=\tenkz_free_word:N \l__tenkz_fspec_tl}
     \group_end:
   }
 \use:e
@@ -161,8 +168,11 @@
   { \use:e { \exp_not:N \tenkz_free_port_aux:w #1 } \q_stop }
 
 % \tnjoin[<keys>]{<name.anchor>}{<name.anchor>}
+%   keys: route=straight|hv|vh|arc (curve = 0.5 alias), label=,
+%   out=/in= (arc only), dir, fused, role=, species=
 \tl_new:N \l__tenkz_jroute_tl
 \tl_new:N \l__tenkz_jlabel_tl
+\tl_new:N \l__tenkz_jlabelnode_tl % on-path label node tokens (or empty)
 \tl_new:N \l__tenkz_jout_tl
 \tl_new:N \l__tenkz_jin_tl
 \tl_new:N \l__tenkz_jstyle_tl   % resolved wire style (bond / fused bond)
@@ -240,43 +250,92 @@
           { \tl_set:Nn \l__tenkz_jmarks_tl {dir~marks} }
           { \tl_clear:N \l__tenkz_jmarks_tl }
       }
-    \tl_clear:N \l__tenkz_jrolesty_tl
-    % \c_space_tl, not ~: a space character after a control word is
-    % swallowed at tokenization, so the style-name gap must be a token
-    \tl_if_empty:NF \l__tenkz_jspec_tl
-      { \tl_set:Ne \l__tenkz_jrolesty_tl
-          { species~ \tl_use:N \l__tenkz_jspec_tl \c_space_tl bond } }
-    \tl_if_empty:NF \l__tenkz_jrole_tl
-      { \tl_set:Ne \l__tenkz_jrolesty_tl
-          { \tl_use:N \l__tenkz_jrole_tl \c_space_tl bond } }
-    \str_case:Vn \l__tenkz_jroute_tl
+    \tenkz_free_role_style:NNNn \l__tenkz_jrole_tl
+      \l__tenkz_jspec_tl \l__tenkz_jrolesty_tl {bond}
+    % the label rides the PATH, one clearance band above the ink -- the
+    % chord midpoint is off-wire for every non-straight route, and a
+    % literal offset would not scale with the compact/inline profiles.
+    % Each route names the pos where its wire runs horizontally: the
+    % chord midpoint (straight), the mid-arc apex, or the middle of the
+    % elbow's horizontal segment (pos 0.5 of -|/|- is the corner, so
+    % 0.25/0.75 is the first/second segment's midpoint).
+    \tl_clear:N \l__tenkz_jlabelnode_tl
+    % unknown routes fail CLOSED: silence here would drop the wire but
+    % keep the join event, and the audit stream would certify ink that
+    % was never drawn
+    \str_case:VnF \l__tenkz_jroute_tl
       {
-        {straight} { \draw[\tl_use:N \l__tenkz_jstyle_tl,
-                           \tl_use:N \l__tenkz_jmarks_tl,
-                           \tl_use:N \l__tenkz_jrolesty_tl] (#2) -- (#3); }
-        {hv} { \draw[\tl_use:N \l__tenkz_jstyle_tl,
-                     \tl_use:N \l__tenkz_jmarks_tl,
-                     \tl_use:N \l__tenkz_jrolesty_tl,
-                     rounded~corners=\tenkz@dim{\tenkz@r@corner}]
-                 (#2) -| (#3); }
-        {vh} { \draw[\tl_use:N \l__tenkz_jstyle_tl,
-                     \tl_use:N \l__tenkz_jmarks_tl,
-                     \tl_use:N \l__tenkz_jrolesty_tl,
-                     rounded~corners=\tenkz@dim{\tenkz@r@corner}]
-                 (#2) |- (#3); }
-        {curve} { \draw[\tl_use:N \l__tenkz_jstyle_tl,
-                        \tl_use:N \l__tenkz_jmarks_tl,
-                        \tl_use:N \l__tenkz_jrolesty_tl]
-                    (#2) to[out=\tl_use:N\l__tenkz_jout_tl,
-                            in=\tl_use:N\l__tenkz_jin_tl] (#3); }
+        {straight} { \tenkz_free_label_node:n {0.5}
+                     \tenkz_free_join_draw:nnnn {} {#2} { -- } {#3} }
+        {hv} { \tenkz_free_label_node:n {0.25}
+               \tenkz_free_join_draw:nnnn
+                 { rounded~corners=\tenkz@dim{\tenkz@r@corner} }
+                 {#2} { -| } {#3} }
+        {vh} { \tenkz_free_label_node:n {0.75}
+               \tenkz_free_join_draw:nnnn
+                 { rounded~corners=\tenkz@dim{\tenkz@r@corner} }
+                 {#2} { |- } {#3} }
+        {arc}   { \tenkz_free_arc_join:nn {#2} {#3} }
+        {curve} { \tenkz_free_arc_join:nn {#2} {#3} }
       }
-    \tl_if_empty:NF \l__tenkz_jlabel_tl
       {
-        \node[label, anchor=south] at ($(#2)!0.5!(#3)+(0,2pt)$)
-          { $\tenkz@labelsize \tl_use:N \l__tenkz_jlabel_tl$ };
+        \PackageError{tenkz}
+          {Unknown~route~'\tl_use:N \l__tenkz_jroute_tl'}
+          {Routes:~straight,~hv,~vh,~arc~(alias:~curve).}
       }
-    \tenkz@event{join|picture=\the\tenkz@pictureid|from=#2|to=#3|dir=\bool_if:NTF \l__tenkz_jdir_bool {forward}{none}|role=\tl_if_empty:NTF \l__tenkz_jrole_tl {none}{\tl_use:N \l__tenkz_jrole_tl}|species=\tl_if_empty:NTF \l__tenkz_jspec_tl {none}{\tl_use:N \l__tenkz_jspec_tl}}
+    \tenkz@event{join|picture=\the\tenkz@pictureid|from=#2|to=#3|dir=\bool_if:NTF \l__tenkz_jdir_bool {forward}{none}|role=\tenkz_free_word:N \l__tenkz_jrole_tl|species=\tenkz_free_word:N \l__tenkz_jspec_tl}
     \group_end:
+  }
+
+% the on-path label node at pos #1 (empty when the join is unlabeled)
+\cs_new_protected:Npn \tenkz_free_label_node:n #1
+  {
+    \tl_if_empty:NF \l__tenkz_jlabel_tl
+      { \tl_set:Nn \l__tenkz_jlabelnode_tl
+          { node[label, pos=#1, above=\tenkz@dim{\tenkz@r@labelclear}]
+              { $\tenkz@labelsize \tl_use:N \l__tenkz_jlabel_tl$ } } }
+  }
+
+% the join wire: #1 extra path options, #2 from, #3 path operator
+% tokens, #4 to.  The label node tokens are spliced into the path
+% BEFORE TikZ scans it: the lineto/to scanners futurelet-check for a
+% literal `node' and never expand a macro in that position.  Only the
+% \exp_not:V splice expands; every other token passes through inert.
+\cs_new_protected:Npn \tenkz_free_join_draw:nnnn #1#2#3#4
+  {
+    \use:e
+      {
+        \exp_not:n
+          { \draw [ \tl_use:N \l__tenkz_jstyle_tl,
+                    \tl_use:N \l__tenkz_jmarks_tl,
+                    \tl_use:N \l__tenkz_jrolesty_tl, #1 ]
+              (#2) #3 }
+        \exp_not:V \l__tenkz_jlabelnode_tl
+        \exp_not:n { (#4) ; }
+      }
+  }
+
+% the arc route (DESIGN spells it `arc'; `curve' survives as the 0.5
+% alias): an out=/in= curve.  The angles have no sensible default, so
+% an empty out= or in= is a hard error; the wire falls back to the
+% straight chord so a draft still shows the connection being flagged.
+\cs_new_protected:Npn \tenkz_free_arc_join:nn #1#2
+  {
+    \tenkz_free_label_node:n {0.5}
+    \bool_lazy_or:nnTF
+      { \tl_if_empty_p:N \l__tenkz_jout_tl }
+      { \tl_if_empty_p:N \l__tenkz_jin_tl }
+      {
+        \PackageError{tenkz}
+          {route=arc~needs~both~out=~and~in=~angles}
+          {Give~departure/arrival~angles,~e.g.~out=90,~in=90.}
+        \tenkz_free_join_draw:nnnn {} {#1} { -- } {#2}
+      }
+      {
+        \tenkz_free_join_draw:nnnn {} {#1}
+          { to[out=\tl_use:N\l__tenkz_jout_tl,
+               in=\tl_use:N\l__tenkz_jin_tl] } {#2}
+      }
   }
 
 \ExplSyntaxOff
