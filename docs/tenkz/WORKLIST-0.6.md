@@ -13,7 +13,7 @@ gaps (WHATS-NEW-0.5.md §Gaps) folded in with code-verified status.
 | Per-side boundary control | **LANDED** | `west=`/`east=` choice keys, tex/tenkz/tenkz-grid.code.tex lines 120–196; t2_lassodef_v2 re-audit: "the west=/east= per-side policy … is now consulted by the renderer", .tnlog signatures balance. Successor gap: per-row-per-side (item 8). |
 | Bare identity-wire atom | open | t2_mpucond: all-empty wire row emits no ink and a scalar signature (item 11). |
 | `combined=` on `wires=k` | open | t2_sptgh_box, t2_purifyO (item 10). |
-| Inter-sheet closures | open | t2_wrap9a: `/tenkz/planes/close east` missing; only inter-sheet tie is `trace={cells}` (item 5). |
+| Inter-sheet closures | open | t2_wrap9a: no `east=cup` closure ink at the lattice tier (0.5 spelled the want `/tenkz/planes/close east`, twice dead in 0.6: B1 renamed the cups, B7 killed the planes family); only inter-sheet tie is `trace={cells}` (item 5). |
 | Directed signatures | open, zero tranche-2 demand | tenkz-grid.code.tex lines 248–250: "deferred to the next audit revision" (tail item). |
 | Mirrored `tri=` closures | open, zero tranche-2 demand | `tri=l\|r` skins only, tenkz-grid.code.tex lines 373–380; no closure key (tail item). |
 
@@ -61,7 +61,7 @@ Co-blocker for 2 still-blocked, upgrades 5 — the hue system beyond `\tnjoin`.
   should inherit the traced row's `operator bond` hue instead of neutral
   `trace` black).
 
-### 5. Inter-sheet closures: `/tenkz/planes/close east`
+### 5. Inter-sheet closures: `east=cup` at the lattice tier
 0.5 carry-over; with item 2 clears t2_wrap9a (stacked sheets, east wrap).
 - Evidence: tenkzplanes' only inter-sheet tie is `trace={cells}`, a
   per-site PHYSICAL pairing trace; needed tie is pairwise virtual

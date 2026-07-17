@@ -95,7 +95,8 @@ outside by the auto-quadrant rule; `box` inscribes the label:
 
 Explicit per-cell skins always override the policy. All inscribed glyphs
 share one strut, so boxes labelled `A`, `T_g`, `A^{(2)}` have one height.
-See `examples/modes-demo.tex` for the same suite rendered both ways.
+See the manual's tensor-styles chapter (`docs/tenkz/manual2.tex`,
+chapters2/ch-modes.tex) for the same suite rendered both ways.
 
 ## Labels never overlap ink
 

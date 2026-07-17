@@ -2,14 +2,18 @@
 
 Chief-architect synthesis of the three principled reviews of the 0.5 surface
 (torvalds: interface forks; tufte: ink economy and honesty; knuth: grammar and
-naming), reconciled with the maintainer's abstraction-ladder brief
-(`brief_abstractions.md`) and the ranked 0.6 worklist (`tenkz_06_worklist.md`).
+naming), reconciled with the maintainer's abstraction-ladder brief (a
+session working note, not in the repository) and the ranked 0.6 worklist
+(`WORKLIST-0.6.md`, this directory).
 Corpus counts below are measured over the 230 `.tex` files in
 `scratchpad/tenkz_test/` (grep, sources only, logs excluded).
 
-This document is the 0.6 interface contract. Everything in section 2 lands
-inside the unmerged-stack window; everything in section 5 phase B lands on top
-of the unified grammar, never beside it.
+This document is the 0.6 interface contract as PROPOSED. Most of section
+2 landed inside the unmerged-stack window; the rows the window did not
+reach are marked in the status block after the table and move to 0.7.
+`CHANGES-0.6.md` is the accurate record of the grammar as implemented.
+Everything in section 5 phase B lands on top of the unified grammar,
+never beside it.
 
 The reviews agree on the diagnosis: the drawing engine has one language, the
 key surface has three dialects. The brief's three unifications (frame, side
@@ -159,6 +163,26 @@ Also in the window: `conjugate tensor` style wired to `\tn*` nodes (or the
 dead slot deleted); `tenkz.sty` version string updated from "v0.1 Phase 0";
 WHATS-NEW gap table refreshed (per-side control landed).
 
+### Status of the section-2 rows (0.6 as shipped)
+
+Landed in the window: B1–B9, B11, B13, B16, B17 (verified against the
+shipped tiers; CHANGES-0.6.md records each surviving spelling and
+alias). B12 landed in substance — the grid dot-label table now carries
+the east/west rows and warns instead of dropping unknown words — though
+the table lives in the grid tier, not yet lifted to core.
+
+Deferred to 0.7, not shipped in the window:
+
+- **B10** — `bond label=` keeps the `at` micro-DSL; no keyval form.
+- **B14** — free-tier bare coordinates remain raw tikz units.
+- **B15** — `\tnghost` still takes its mandatory dead argument.
+- **B18** — lattice `physical=` still stops at `up|none`
+  (worklist item 2 stays open).
+- **B19** — no format-version event; the rest of the event unification
+  shipped.
+- **B20** — no defect badge, no `\tnset{strict}`; pruned records warn in
+  the log only.
+
 ---
 
 ## 3. THE ALIAS TABLE (survives as documented sugar — one manual row each)
@@ -240,9 +264,10 @@ predict.
   lattice `plane=`->`frame=` rename (B3, B4); `chain axis=` alias; delete
   `orientation=`.
 - **A4. Planes preset-ification.** Kill the `/tenkz/planes/` family (B7);
-  role-list `sheets=` everywhere (B18's lattice `physical=` alignment rides
-  along — worklist item 2 done); default-sheet convention per Q2; header
-  event restored.
+  role-list `sheets=` everywhere (B18's lattice `physical=` alignment was
+  planned to ride along but did NOT ship — worklist item 2 remains open,
+  the shipped choice set stops at `up|none`); default-sheet convention
+  per Q2; header event restored.
 - **A5. Strictness everywhere.** `/tenkz/site` and `/tenkz/edge` families
   (B8, B9 — prerequisite for worklist 6 and 7); token-parsed `rows=` mods and
   validated row types (B11); compass validation + east/west fix (B12);

@@ -17,7 +17,8 @@ the bottom layer is ahead of the community. But the interface inverts its own de
 
 ### The catalogue is a museum, not an interface
 - 114 declared diagrams: **102 called exactly once, 92 zero-argument, theorem-named.**
-- **34 contain no drawing at all** — bare `\ensuremath` formulas routed through the SVG renderer,
+- **33 contain no drawing at all** — bare `\ensuremath` formulas routed through the SVG renderer
+  (count corrected from 34 by MIGRATION-MAP.md's measured recount),
   several inside `\begin{figure}` with captions describing drawings that do not exist.
 - The plasTeX web renderer can *only* render catalogue macros — chapter-local composition is
   structurally impossible. Every new figure costs 2–6 file touches (motif + catalogue entry
@@ -115,7 +116,7 @@ economics. The synthesis takes tenkz and grafts Quartet's five distinguishing as
 contract, typed rows, event-graph iso migration gate, role-stability audit, genre-ownership
 table) plus one-off wins from tncalc and tnplain — 26 grafts total, all recorded in the spec.
 
-## 5. The consolidated spec (see `tenkz_final_spec.md`)
+## 5. The consolidated spec (see `DESIGN.md`, this directory)
 
 Headline decisions:
 
@@ -137,11 +138,11 @@ Headline decisions:
   renders the four environments generically with per-body content-hash SVG caching (one edited
   figure invalidates one SVG, not 114).
 - **Audit v2**: identity from `file:line`, not a registry; type-safety by construction in the
-  grids; hard error on *empty pictures* (would have caught all 34 fake diagrams); advisories for
+  grids; hard error on *empty pictures* (would have caught all 33 fake diagrams); advisories for
   repeated topology (suggests `\tndefine`), region-role stability, transfer-map canonicality;
   cross-engine drift checked by comparing canonical graph-hash multisets.
 - **Migration in 4 phases, every call site compiling at every commit**: land beside old library →
-  compat shim in 3 scripted PRs (34 empty entries become plain math; ~68 single-use entries get
+  compat shim in 3 scripted PRs (33 empty entries become plain math; ~68 single-use entries get
   mechanical tenkz bodies; ~12 genuinely-reused entries become parameterized `\tndefine`s) →
   35 chapter-by-chapter inlining PRs → demolition of all of `tex/tn/` (~5,920 lines) plus the
   registry Python. Gates: pixel diff (with whitelisted intentional fixes) + event-graph
