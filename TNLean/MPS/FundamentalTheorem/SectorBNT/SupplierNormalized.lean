@@ -27,9 +27,9 @@ matrix product coefficients.
   some $k$, and $\mu_k / m \ne 0$ for every $k$ (the choice at line 246 of the source, with
   $m = \max_k |\mu_k|$).
 * `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized` — for a tensor whose
-  blocked matrix product coefficients do not vanish identically at positive lengths, some
-  blocking length $p$ admits a basis-of-normal-tensors canonical form $P$ and a scale $m > 0$
-  with $V^{(N)}(A^{[p]}) = m^N V^{(N)}(P)$ at every positive length $N$.
+  matrix product family has a nonzero positive-length coefficient, some blocking length $p$
+  admits a basis-of-normal-tensors canonical form $P$ and a scale $m > 0$ with
+  $V^{(N)}(A^{[p]}) = m^N V^{(N)}(P)$ at every positive length $N$.
 
 ## References
 
@@ -39,10 +39,88 @@ matrix product coefficients.
   definition and the characterization prop:char-BNT.
 -/
 
-
 namespace MPSTensor
 
 variable {d : ℕ}
+
+/-- If a matrix has nonzero trace, then for every positive-step subsequence of its powers,
+some trace in that subsequence is nonzero. -/
+private lemma exists_trace_pow_mul_ne_zero {D : ℕ}
+    (M : Matrix (Fin D) (Fin D) ℂ) (hM : Matrix.trace M ≠ 0)
+    (p : ℕ) (_hp : 0 < p) :
+    ∃ q : ℕ, 0 < q ∧ Matrix.trace (M ^ (p * q)) ≠ 0 := by
+  classical
+  by_contra h
+  push Not at h
+  have htrace : ∀ q : ℕ, 0 < q →
+      Matrix.trace ((M ^ p) ^ q) = Matrix.trace ((0 : Matrix (Fin D) (Fin D) ℂ) ^ q) := by
+    intro q hq
+    rw [← pow_mul]
+    simp [h q hq, hq.ne']
+  have hchar := Matrix.charpoly_eq_of_forall_trace_pow_eq
+    (M ^ p) (0 : Matrix (Fin D) (Fin D) ℂ) htrace
+  have hnilLin : IsNilpotent (Matrix.toLin' (M ^ p)) := by
+    rw [LinearMap.isNilpotent_iff_charpoly, Matrix.charpoly_toLin', hchar,
+      Matrix.charpoly_zero]
+    simp
+  have hnilPow : IsNilpotent (M ^ p) :=
+    (Matrix.isNilpotent_toLin'_iff (M ^ p)).mp hnilLin
+  have hnilM : IsNilpotent M := IsNilpotent.of_pow hnilPow
+  exact hM (Matrix.isNilpotent_trace_of_isNilpotent hnilM).eq_zero
+
+/-- A nonzero positive-length matrix product coefficient remains nonzero at some positive
+length after every physical blocking. -/
+private lemma exists_mpv_blockTensor_ne_zero {D : ℕ} (A : MPSTensor d D)
+    (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0)
+    (p : ℕ) (hp : 0 < p) :
+    ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin (blockPhysDim d p),
+      mpv (blockTensor (d := d) (D := D) A p) σ ≠ 0 := by
+  classical
+  obtain ⟨N₀, hN₀, σ₀, hσ₀⟩ := hNZ
+  let w := List.ofFn σ₀
+  let M := evalWord A w
+  have hM : Matrix.trace M ≠ 0 := by
+    simpa [mpv, coeff, M, w] using hσ₀
+  obtain ⟨q, hq, htrace⟩ := exists_trace_pow_mul_ne_zero M hM p hp
+  have heval : ∀ r : ℕ, evalWord A (List.replicate r w).flatten = M ^ r := by
+    intro r
+    induction r with
+    | zero => simp [M]
+    | succ r ih =>
+      rw [List.replicate_succ, List.flatten_cons, evalWord_append, ih, pow_succ']
+  have hlenPow : ∀ r : ℕ, (List.replicate r w).flatten.length = r * N₀ := by
+    intro r
+    induction r with
+    | zero => simp
+    | succ r ih =>
+      rw [List.replicate_succ, List.flatten_cons, List.length_append, ih]
+      simp [w, Nat.succ_mul, Nat.add_comm]
+  let flatWord := (List.replicate (p * q) w).flatten
+  have hlen : flatWord.length = (N₀ * q) * p := by
+    calc
+      flatWord.length = (p * q) * N₀ := hlenPow (p * q)
+      _ = (N₀ * q) * p := by ac_rfl
+  let flatConfig : Fin ((N₀ * q) * p) → Fin d :=
+    fun i => flatWord.get (Fin.cast hlen.symm i)
+  have hofFn : List.ofFn flatConfig = flatWord := by
+    simp only [flatConfig]
+    conv_rhs => rw [← List.ofFn_get flatWord]
+    have hcongr :=
+      List.ofFn_congr hlen.symm
+        (fun i : Fin ((N₀ * q) * p) => flatWord.get (Fin.cast hlen.symm i))
+    simpa [Function.comp, Fin.cast_cast] using hcongr
+  let σ : Fin (N₀ * q) → Fin (blockPhysDim d p) :=
+    (blockedConfigEquiv d (N₀ * q) p).symm flatConfig
+  refine ⟨N₀ * q, Nat.mul_pos hN₀ hq, σ, ?_⟩
+  have hflat : flattenBlockedWord d p (List.ofFn σ) = flatWord := by
+    calc
+      flattenBlockedWord d p (List.ofFn σ) =
+          List.ofFn (blockedConfigEquiv d (N₀ * q) p σ) :=
+        (ofFn_blockedConfigEquiv d (N₀ * q) p σ).symm
+      _ = List.ofFn flatConfig := by
+        simp [σ]
+      _ = flatWord := hofFn
+  simpa [mpv, coeff, evalWord_blockTensor, hflat, flatWord, heval] using htrace
 
 /-- **The weight normalization at line 246 of the source.**
 
@@ -53,7 +131,8 @@ largest modulus $m = \max_k |\mu_k| > 0$ produces weights $\mu_k / m$ that are s
 have modulus at most one, and include one of modulus exactly one. -/
 theorem exists_weight_normalization {r : ℕ} (hr : 0 < r)
     (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) :
-    ∃ m : ℝ, 0 < m ∧ (∀ k, ‖μ k / (m : ℂ)‖ ≤ 1) ∧ (∃ k, ‖μ k / (m : ℂ)‖ = 1) ∧
+    ∃ m : ℝ, 0 < m ∧
+      (∀ k, ‖μ k / (m : ℂ)‖ ≤ 1) ∧ (∃ k, ‖μ k / (m : ℂ)‖ = 1) ∧
       ∀ k, μ k / (m : ℂ) ≠ 0 := by
   classical
   have hne : (Finset.univ : Finset (Fin r)).Nonempty := ⟨⟨0, hr⟩, Finset.mem_univ _⟩
@@ -77,7 +156,7 @@ theorem exists_weight_normalization {r : ℕ} (hr : 0 < r)
   · rw [norm_div, hm_norm, ← hk₀]
     exact div_self hm_pos.ne'
 
-/-- **Normalized arbitrary-input basis-of-normal-tensors supplier (positive length).**
+/-- **Normalized basis-of-normal-tensors supplier for a nonzero MPV family.**
 
 Source: arXiv:1606.00608, `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 237-246 for the
 canonical form eq:II_CF1 with the line-246 weight normalization, and lines 271-279 for the
@@ -91,27 +170,25 @@ scale $m$ is the largest weight modulus of the prepared block family; dividing t
 $m$ realizes the line-246 choice $|\mu_k| \le 1$ with some $|\mu_k| = 1$, so the sector
 decomposition carries the normalized weights and the factor $m^N$ records the original ones.
 
-The nonvanishing hypothesis: for every blocking length $p > 0$ some positive-length matrix
-product coefficient of the $p$-blocked tensor is nonzero.  The prepared block family can be
-empty ($r = 0$) only when every positive-length coefficient of the blocked tensor
-vanishes (for example the zero tensor): the empty direct sum has all positive-length
-coefficients zero, and the positive-length agreement transfers this to the blocked tensor.
-For an empty weight family the line-246 choice "at least one weight of unit modulus" is
-impossible.  Since the length-$N$ coefficients of the $p$-blocked tensor are the
-length-$pN$ coefficients of $A$, the hypothesis asks that for every $p > 0$ the
-coefficients of $A$ not vanish on all positive multiples of $p$.  This is stronger than
-nonvanishing of a single coefficient of $A$; it is quantified over every $p$ because the
-blocking length is produced by the construction.
+The hypothesis says exactly that the positive-length matrix product family is not the zero
+family.  It also suffices after every blocking.  Indeed, choose a word with evaluated matrix
+$M$ and $\operatorname{tr}(M) \ne 0$.  For each blocking length $p$, some $q > 0$ satisfies
+$\operatorname{tr}(M^{pq}) \ne 0$: otherwise Newton--Girard gives the characteristic polynomial of
+$M^p$ equal to that of the zero matrix, so $M^p$, and hence $M$, is nilpotent, contradicting
+$\operatorname{tr}(M) \ne 0$.  Repeating the word $pq$ times therefore gives a nonzero
+coefficient at a length divisible by $p$, which is a coefficient of the $p$-blocked tensor.
 
-**Scope restriction (blocked nonvanishing):** the source states the line-246 choice for
-any tensor and does not carry this hypothesis; it enters only to exclude blocked families
-that vanish identically at positive lengths, where the choice is unsatisfiable.  Recorded
-in docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex. -/
+The nonzero-family condition is the precise boundary for the line-246 unit-modulus choice:
+an empty weight family cannot contain a unit-modulus weight.
+
+**Scope restriction (nonzero MPV family):** the source proposition says "for any tensor,"
+but the zero MPV family cannot satisfy the global unit-modulus condition imposed immediately
+before that proposition.  The hypothesis below is the weakest exclusion of this degenerate
+case.  This boundary and its possible resolution by a separate zero-family clause are
+recorded in `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. -/
 theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
     {d D : ℕ} (A : MPSTensor d D)
-    (hNZ : ∀ p : ℕ, 0 < p →
-      ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin (blockPhysDim d p),
-        mpv (blockTensor (d := d) (D := D) A p) σ ≠ 0) :
+    (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
     ∃ p : ℕ, 0 < p ∧ ∃ m : ℝ, 0 < m ∧
       ∃ P : SectorDecomposition (blockPhysDim d p),
         IsBNTCanonicalForm P ∧
@@ -124,7 +201,7 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
   have hr : 0 < r := by
     rcases Nat.eq_zero_or_pos r with hr0 | hpos
     · exfalso
-      obtain ⟨N, hN, σ, hσ⟩ := hNZ p hp
+      obtain ⟨N, hN, σ, hσ⟩ := exists_mpv_blockTensor_ne_zero A hNZ p hp
       apply hσ
       rw [hSamePos N hN σ, mpv_toTensorFromBlocks_eq_sum]
       subst hr0

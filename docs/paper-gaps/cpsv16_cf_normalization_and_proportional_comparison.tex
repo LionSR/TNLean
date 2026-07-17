@@ -316,15 +316,23 @@ $m=\max_k|\mu_k|$
 (\leanid{MPSTensor.exists\_weight\_normalization}), which satisfies both
 conditional premises of the earlier supplier, and tracks the cost as the
 per-site scalar $m^{N}$ in the positive-length matrix-product identity.  The
-positive-length statement is the canonical source formulation; the
-length-zero total-dimension identity remains a separate refinement.  The
-normalized supplier assumes that for every blocking length $p$ the
-$p$-blocked matrix-product family does not vanish identically at positive
-lengths --- equivalently, that the coefficients of $A$ do not vanish on all
-positive multiples of any $p$.  This is stronger than nonvanishing of a
-single coefficient; it is the exact condition under which every blocking
-admits the unit-modulus weight of the line-246 choice, and it is absent
-from the source, which states the choice for any tensor.
+positive-length statement is the canonical source formulation; no
+length-zero coefficient is part of this statement.  The normalized supplier
+assumes exactly that the positive-length matrix-product
+family is nonzero: there are $N\geq1$ and a word $w$ of length $N$ for which
+$\tr(A^w)\neq0$.  This condition persists under every blocking.  For each
+$p\geq1$, some $q\geq1$ satisfies $\tr((A^w)^{pq})\neq0$; otherwise the
+Newton--Girard trace identities would make $(A^w)^p$, and hence $A^w$,
+nilpotent, contrary to its nonzero trace.  The repeated word of length $pqN$
+therefore gives a nonzero coefficient after blocking by $p$.  Thus this
+hypothesis excludes precisely the zero positive-length family, for which the
+unit-modulus weight required at line~246 is impossible.  The subsequent
+proposition nevertheless says ``for any tensor.''  Taken literally, its zero
+case is incompatible with the preceding global unit-modulus convention and
+with the formal canonical-form predicate.  The present theorem therefore
+formalizes the nonzero-family case.  Eliminating the restriction requires a
+separate zero-family clause or a canonical-form predicate whose normalization
+condition is conditional on the presence of a sector.
 
 \paragraph{Status: structural realignment.}
 The structural realignment has been done. The canonical-form definition now
