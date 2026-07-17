@@ -585,6 +585,46 @@ strong subadditivity for a normalized three-site reduced state.
     nonzero.
 \end{proof}
 
+\begin{theorem}[Strict normalization at positive length]
+    \label{thm:mpdo_source_zcl_strict_positive_length_normalization}
+    \lean{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL}
+    \lean{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}
+    \lean{MPOTensor.%
+      trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}
+    \leanok
+    \uses{def:mpdo, def:mpo_source_zcl, lem:mpdo_trace_loop_chain,
+      cor:mpdo_absorbed_bnt_sector_is_mpdo,
+      thm:mpdo_absorbed_bnt_sector_zcl}
+    Let $M$ generate matrix product density operators and have source zero
+    correlation length.  Then
+    \[
+        \tr\bigl(\sigma^{(N)}(M)\bigr)>0
+        \qquad (N\geq1).
+    \]
+    In particular, after a common blocking has made the simultaneous BNT
+    word span full at one letter, the absorbed BNT elements selected in
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl} have a well-defined
+    normalized state at every physical chain length.  This common-blocking
+    restriction is recorded in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+    This supplies the strict form of the sector normalization used in
+    \cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the physical-trace transfer as $\mathcal T_M=\lambda E$, where
+    $\lambda>0$ and $E$ is a nonzero idempotent.  A nonzero idempotent on a
+    finite-dimensional complex vector space has nonzero trace, while
+    $E^N=E$ for $N\geq1$.  Hence
+    \[
+        \tr\bigl(\sigma^{(N)}(M)\bigr)
+        =\tr(\mathcal T_M^N)
+        =\lambda^N\tr(E)\ne0.
+    \]
+    Positivity of the density operator then makes this trace strictly
+    positive.
+\end{proof}
+
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.IsInjective}
