@@ -1,0 +1,315 @@
+% chapters2/ch-house.tex — the house style: the closed glyph dictionary,
+% live over one source; the hue table in the package's own ink; the
+% label and ellipsis doctrines; the canonical spellings; and the
+% geometry appendix transcribed from the constants of
+% tenkz-core.code.tex.
+%
+% Sources: the corrected atoms corpus (atoms_test.tex) for the skins,
+% channel_test.tex for the canonical channel spelling, and the ratio
+% comments of tenkz-core.code.tex for the geometry table.
+
+% live hue chips for the table in \S(house-hues): each chip is filled
+% from the package's colour register, so a \colorlet theme re-inks the
+% table together with every picture in the manual
+\providecommand{\huechip}[1]{{\setlength{\fboxsep}{0pt}%
+  \fcolorbox{black!25}{#1}{\rule{0pt}{1.4ex}\rule{2.0em}{0pt}}}}
+
+\section{The house style}\label{ch:house}
+
+Every diagram in a document should read as the work of one hand, and
+this chapter states the hand: a closed dictionary of glyphs, a closed
+table of hues, a reserved band for every label, one spelling for every
+recurring object, and a geometry in which every constant is a named,
+motivated ratio of the one pitch.  Little of this is enforceable ink
+by ink --- the package cannot know that a document has drawn the same
+channel two different ways --- so the doctrine is stated here once,
+and the rest of the manual obeys it.
+
+% ---------------------------------------------------------------------
+\subsection{The glyph dictionary}\label{sec:house-glyphs}
+
+A glyph asserts what its tensor is.  A filled bead or an outlined box
+is a \emph{site tensor} --- which of the two is the document's glyph
+policy, one school per document (\S\ref{sec:modes-glyph}); a
+\tnval{pill} is a blocked or wide tensor, growing sideways to hold
+its label and never taller; a chirality triangle (\tnkey{tri=l},
+\tnkey{tri=r}) is a canonical-form isometry; a capsule on the wire
+(\tncmd{tnX}) is a matrix with no physical index; a wedge
+(\tncmd{tnfuse}) changes arity.  The dictionary is closed: braces,
+cuts, and region outlines are annotation ink
+(Example~\ref{ex:ref-annot}), and annotation never carries an index.
+
+\begin{tnmultiples}[
+    caption  = {one tensor, five skins},
+    formula  = {(A^{i})_{\alpha\beta}},
+    index    = {Every panel is the same one-site tensor: one west
+                stub, one east stub, one up leg, five identical
+                signature lines.  The skin is an assertion about the
+                tensor --- a \tnval{pill} claims a blocking, a
+                triangle claims an isometry --- and the event stream
+                records the resolved skin, \tnlogline{kind=dot}
+                through \tnlogline{kind=trir}.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=1|physical-down=0},
+    variants = {{dot}{}, {box}{box}, {pill}{pill},
+                {tri=l}{tri=l}, {tri=r}{tri=r}},
+    label    = {ex:house-skins},
+  ]
+% one tensor, five skins: the ink changes, the indices do
+% not -- all five panels log one identical boundary line
+\begin{tenkz}[physical=up]
+  \tn[variant, up=$i$]{A}
+\end{tenkz}
+\end{tnmultiples}
+
+Two glyphs are missing from Example~\ref{ex:house-skins} because they
+are commands, not skins: no key may change how many open indices a
+picture has, and the capsule and the wedge do.  \tncmd{tnX} rides the
+wire without adding a leg (the gauge of Example~\ref{ex:gauge-eq},
+tall across a sandwich in Example~\ref{ex:ref-tallx});
+\tncmd{tnfuse} consumes its side's boundary pair and leaves one
+combined stub (Example~\ref{ex:tut-fuse}).  The sixth skin,
+\tnval{mpo}, is the box skin under another name: an operator site
+shows as an inscribed box even on a dot-school page
+(Example~\ref{ex:modes-schools}), and the event stream records
+\tnlogline{kind=mpo}, so operator sites stay distinguishable from
+state sites wherever the ink alone could not tell them apart.
+
+One school per document.  The package default, and this manual's, is
+the dot school: beads keep pictures light where diagrams stand inside
+running mathematics, and the review literature that \S\ref{ch:rmp}
+reproduces is drawn in it.  Choose the box school when a document's
+sites carry long or scripted names --- $T_g$, $A^{(2)}$,
+$\overline{B}$ --- because an inscribed label owns its glyph, while a
+bead's outside label must fit a quadrant band.  The choice is one
+\tncmd{tnset} line in the preamble, not an edit to any picture
+(\S\ref{sec:ref-policy}); switch per picture only to reproduce a
+source figure drawn in the other school, as \S\ref{ch:rmp} does.
+
+% ---------------------------------------------------------------------
+\subsection{The hues}\label{sec:house-hues}
+
+Hue is semantics, never decoration.  Structural ink --- tensors,
+bonds, legs, cups --- is \tnval{tenkzInk}; everything that departs
+from it makes a claim, and the claims are few enough for one table.
+The chips below are filled from the package's own colour registers,
+so the table is live: rebind a name with \verb|\colorlet| and it
+re-inks itself along with every picture in the manual.
+
+\medskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}lll>{\raggedright\arraybackslash}X@{}}
+\toprule
+ & Hue & Binding & Claim \\
+\midrule
+\huechip{tenkzInk} & \texttt{tenkzInk} & \texttt{black!92} &
+  structural ink: tensors, bonds, legs, cups (every example) \\
+\huechip{tenkzPaper} & \texttt{tenkzPaper} & \texttt{white} &
+  the page's stand-in: the fill of outlined glyphs, the gap of the
+  doubled (fused) wire \\
+\huechip{tenkzPassive} & \texttt{tenkzPassive} & \texttt{black!55} &
+  de-emphasis: cuts, removed sites, complement regions
+  (Example~\ref{ex:ref-annot}) \\
+\huechip{tenkzAction} & \texttt{tenkzAction} & \texttt{red!65!black} &
+  the act: a matrix riding the wire (Example~\ref{ex:gauge-eq}), the
+  selected region, the distinguished edge \\
+\huechip{tenkzMarked} & \texttt{tenkzMarked} & \texttt{blue!65!black} &
+  secondary emphasis and regions; this manual's command ink \\
+\huechip{tenkzExtra} & \texttt{tenkzExtra} & \texttt{violet!65!black} &
+  tertiary structure, the collar region; this manual's key ink \\
+\huechip{tenkzOperator} & \texttt{tenkzOperator} & \texttt{red!80!black} &
+  the wire of an operator layer (the \tnval{:operator} row modifier,
+  Example~\ref{ex:worked-mpoprod}) \\
+\bottomrule
+\end{tabularx}\par}
+\medskip
+
+Two rules police the table.  A hue never distinguishes two objects of
+the same kind: two different tensors differ by label, never by
+colour.  And structural ink stays \tnval{tenkzInk}: a picture whose
+bonds come out red has claimed its bonds are operator wires, not
+decorated them.  A theme may rebind the colours and nothing
+else.\sidenote{The binding site is
+\tnfile{tenkz-core.code.tex}: ``semantic hues (a theme may rebind
+colours, nothing else)''.  One line,
+\texttt{\textbackslash colorlet\{tenkzAction\}}%
+\allowbreak\texttt{\{orange!70!black\}}, restyles every acting
+matrix in a document at once.}
+
+% ---------------------------------------------------------------------
+\subsection{Label bands and the ellipsis}\label{sec:house-labels}
+
+Labels never overlap ink, by construction.  Every label site is a
+reserved band derived from the metric of
+\S\ref{sec:house-geometry}: a leg-tip label sits one clearance
+($0.12$ pitch) beyond its leg; a bead's name takes a free quadrant of
+the $0.30$-pitch dot band, chosen by the auto-quadrant algorithm; a
+boundary label sits one clearance beyond the stub tip; a bond label
+sits in the band the legs were sized to clear --- legs $0.38$ against
+stubs $0.45$.  Two labels may not share a band, and no label may
+touch structural ink.  When geometry defeats the default bands ---
+facing legs in one inter-layer gap --- the fix is the band-restoring
+key, \tnkey{layer sep=} (Example~\ref{ex:layer-sep}), never a
+hand-nudged coordinate; \tnkey{label pos=} and \tnkey{label shift=}
+exist for the residue and should be rare.
+
+The ellipsis has one spelling: \tncmd{tndots} elides sites, its wires
+pass through without closing, and the drawn leg count under an
+ellipsis is schematic --- the caption or margin states the true arity
+(Example~\ref{ex:tut-block}).  Its look-alikes are not elisions.
+\tncmd{tnskip} is a hole: the tensor deleted, its indices
+deliberately open (Example~\ref{ex:hole}).  An unnamed bead
+\tncmd{tn}\tnval{\{\}} is an anonymous tensor --- legitimate where
+the margin names the row once for all, as in
+Example~\ref{ex:layer-sep}, and wrong as a counterfeit ellipsis,
+because an anonymous tensor is still a tensor.
+
+% ---------------------------------------------------------------------
+\subsection{The canonical spellings}\label{sec:house-spellings}
+
+The strongest uniformity device is the fixed spelling: one recurring
+object, one option list, learned once and recognised by silhouette
+ever after.  Four spellings are canon; each row of the table is the
+exact source of its cited example.
+
+\medskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{31mm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{19mm}@{}}
+\toprule
+Object & Spelling & Lives at \\
+\midrule
+transfer map, unapplied\newline
+  $\mathcal{E}_A=\sum_i A^{i}\otimes\overline{A^{i}}$ &
+  \tnval{[sandwich]} over \tncmd{tn}\tnval{\{A\}},
+  \tncmd{tn*}\tnval{\{A\}}: a map on the doubled space, so all four
+  stubs stay open &
+  Example~\ref{ex:transfer-open} \\
+\addlinespace
+channel, applied\newline
+  $\mathcal{E}_A(X)=\sum_i A^{i}XA^{i\dagger}$ &
+  \tnval{[sandwich, east=\{cup=$X$\}]}: the east cup consumes the
+  input slot; the west pair stays open --- the output is a matrix &
+  Example~\ref{ex:channel-x} \\
+\addlinespace
+gauge equation\newline
+  $B^{i}=XA^{i}X^{-1}$ &
+  \tncmd{tnX}\tnval{\{X\}} and \tncmd{tnX}\tnval{\{$X^{-1}$\}}
+  riding the wire around the site; \tnval{physical=up} on both
+  sides, so the signatures agree &
+  Example~\ref{ex:gauge-eq} \\
+\addlinespace
+blocking\newline
+  $\bigl(A^{(L)}\bigr)^{i_1\cdots i_L}=A^{i_1}\!\cdots A^{i_L}$ &
+  \tncmd{tnspan}\tnval{[brace below]} and \tncmd{tndots} across the
+  word; one \tnval{[pill, wide=2]} glyph carrying the blocked index
+  on the right &
+  Example~\ref{ex:tut-block} \\
+\bottomrule
+\end{tabularx}\par}
+\medskip
+
+Two lesser canons ride along: the trace is spelled \tnkey{periodic}
+--- a hand-drawn return wire is not a trace --- and a genuinely
+closed object is sealed by \tnkey{boundary=none}, an assertion about
+the object, not a tidier drawing (\S\ref{sec:stubs}).  Never seal the
+west pair of an applied channel: that spells
+$\operatorname{Tr}\mathcal{E}_A(X)$, a different object.
+
+% ---------------------------------------------------------------------
+\subsection{The geometry appendix}\label{sec:house-geometry}
+
+One base pitch, $11$\,mm by default; every repeated distance is a
+named ratio of it, and the two profiles are scale factors applied at
+the base, so no literal can bypass them.\sidenote{The doctrine
+comment of \tnfile{tenkz-core.code.tex}: ``ONE base pitch; every
+repeated distance is a named ratio of it.  Profiles (compact,
+inline) are a scale factor applied at the base, so no literal can
+bypass them.''  \S\ref{sec:modes-metric} varies and measures the
+system.}  The package states each ratio's motivation once, in a
+comment beside its definition; this table transcribes those
+comments, so the design argument is on the record where a reader can
+dispute it.
+
+% the table is set as three group-tables so a page may break between
+% the groups; each repeats the head row
+\medskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{10mm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Constant & Value & Motivation \\
+\midrule
+\multicolumn{3}{@{}l}{\emph{the base and its profiles}} \\
+base pitch & $11$\,mm & the one length; every ratio below
+  multiplies it \\
+\texttt{compact} & $\times0.8$ & the one sanctioned tighter metric
+  --- prefer it to hand-tuned pitches \\
+\texttt{inline} & $\times0.62$ & buys back the line height a picture
+  needs inside a sentence; also rebinds the two inline ratios below
+  and drops labels one script size \\
+\bottomrule
+\end{tabularx}\par}
+\smallskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{10mm}>{\raggedright\arraybackslash}X@{}}
+\multicolumn{3}{@{}l}{\emph{ratios of the pitch}} \\
+\midrule
+layer gap & $0.80$ & layers read as layers, not as two chains \\
+physical leg & $0.38$ & a labelled leg clears the bond-label band \\
+stub & $0.45$ & an open index: longer than a leg, shorter than a
+  bond; also the reach of an inter-layer cup, so open and cup-closed
+  ends share one silhouette \\
+trace clearance & $0.62$ & the trace racetrack clears the leg labels
+  on the outer row \\
+label clearance & $0.12$ & the one clearance of every label band \\
+dot-label band & $0.30$ & the depth of a script-size dot label:
+  clearance plus text \\
+bead diameter & $0.16$ & the dot school's tensor mark \\
+\end{tabularx}\par}
+% ruleless seam: the group continues; a page may break here
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{10mm}>{\raggedright\arraybackslash}X@{}}
+gate overshoot & $0.34$ & a \tnval{wires=$k$} glyph overshoots its
+  outer wire rows: the gate must visibly cover the wires it
+  terminates \\
+physical-trace reach & $0.24$ & how far east of the glyph edge the
+  per-site physical trace swings: past the glyph, yet inside the
+  bond span to the next site \\
+pair-trace reach & $0.40$ & the per-column racetrack's reach east of
+  the leg axis: under one half, so its straight clears the
+  neighbouring column's bands; wide enough that the racetrack caps
+  read as turnarounds, not kinks \\
+region margin & $0.36$ & under half a pitch, so notches read; over
+  the glyph radius \\
+corner radius & $0.14$ & the rounding of traces and hulls \\
+inline leg & $0.26$ & the inline profile shrinks legs faster than
+  the pitch \\
+inline clearance & $0.05$ & inline labels hug the ink to spare line
+  height \\
+\bottomrule
+\end{tabularx}\par}
+\smallskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{10mm}>{\raggedright\arraybackslash}X@{}}
+\multicolumn{3}{@{}l}{\emph{absolute floors and the ink hierarchy}} \\
+\midrule
+annotation width & $0.40$\,pt & annotation strokes sit under wires:
+  a cut is never confusable with a bond \\
+wire width & $0.55$\,pt & the bond stroke, the reference width of
+  the hierarchy \\
+emphasis width & $0.80$\,pt & region outlines and distinguished
+  edges sit over wires \\
+junction floor & $0.9$\,mm & below about three wire widths a
+  junction reads as dirt \\
+\bottomrule
+\end{tabularx}\par}
+\medskip
+
+The house style ends where it began, with one hand.  Everything
+semantic goes through the key space ---
+\tncmd{tnset}\tnval{\{tensor style=box, pitch=10mm\}} in a preamble
+retunes a whole paper --- and everything cosmetic through
+\verb|\colorlet| on the hue names and \verb|\tikzset| on the named
+styles: \tnval{tensor}, \tnval{box tensor}, \tnval{on-wire matrix},
+\tnval{bond}, \tnval{operator bond}, \tnval{cut}, \tnval{brace}.
+A document that respects the two channels can be re-skinned without
+touching one picture body; a document that restyles by editing
+picture bodies has left the house.
