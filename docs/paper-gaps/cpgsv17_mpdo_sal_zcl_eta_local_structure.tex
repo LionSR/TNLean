@@ -190,6 +190,46 @@ lines 1434--1438.
 \leanid{MPOTensor.physicalSlice_sector_factorization}, and
 \leanid{MPOTensor.exists_physicalSlice_sector_factorization}.}
 
+For a finite family of normal sectors, the diagonal blocks used in equation
+\texttt{QkKjs} are now defined by
+\[
+  O_s^{(k)}(\beta,\alpha)
+  =\bigl[U_B\kappa^{(s)}_{\beta,\alpha}U_B^\dagger\bigr]_{k,k}.
+\]
+Every sector of nonzero Hayashi weight occurs in at least one normal sector.
+Indeed, nonzero diagonal entries of the two trace-one Hayashi states give a
+nonzero diagonal entry of the three-site state, and the normal-sector family
+closure then has a nonzero summand.  This existence argument requires no
+closing-matrix assumption.
+
+The uniqueness cancellation is also formalized with its load-bearing
+hypothesis stated explicitly.  If every closing matrix $R_s$ is nonzero, the
+principal BNT--Markov identity shows that two distinct normal sectors cannot
+both have nonzero $k$-blocks.  It therefore gives the label $j_k$ and the
+projections
+\[
+  P_s=\sum_{\substack{k:p_k\ne0\\j_k=s}}Q_k,
+  \qquad \sum_s P_s=\sum_{k:p_k\ne0}Q_k.
+\]
+These projections are mutually orthogonal.\footnote{The relevant declarations
+are
+\path{MPOTensor.exists_bntMarkovBlockNonzero_of_probability_ne_zero},
+\path{MPOTensor.existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero},
+\path{MPOTensor.bntSectorProjection}, and
+\path{MPOTensor.sum_bntSectorProjection}.}
+
+The remaining source-faithfulness gap is the derivation of $R_s\ne0$ from the
+preceding simplicity and common-weight construction.  Appendix~C.2 chooses a
+nonzero closing scalar for every normal sector at lines 1714--1718.  The
+present three-site family-closure structure does not yet carry the theorem
+which identifies its matrices $R_s$ with those common-weight closing
+contractions.  Until that bridge is proved, the unrestricted uniqueness
+assertion of equation \texttt{QkKjs} is not identified with the conditional
+theorem above; the blueprint states and marks only the explicitly restricted
+version.  The elimination plan is to derive the family closure from the
+absorbed common-weight normal sectors, prove every resulting $R_s$ nonzero,
+and then specialize the conditional uniqueness and projector statements.
+
 The neighboring operators are now assembled from these sector tensors.  The
 operator
 \[
