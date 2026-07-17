@@ -101,7 +101,9 @@ A7 canonical triangles with stage-1 cups (RMP orthoL/orthoR):
 A8 bond directionality (design brief):
 % (a) row-mod `dir right` on an operator row; (b) picture key bond
 % dir=left; (c) periodic ring: the barb rides the return wire; (d) a
-% fused directed row; (e) \tnjoin[dir] (argument order = direction)
+% fused directed row.  (The free-tier face of the same brief,
+% \tnjoin[dir], lives in the free-tier example file: this file is
+% grid-only so it compiles at the grid tier of the stack.)
 \[
   \begin{tenkz}[rows={op:operator:dir right}]
     \tn[mpo]{T} & \tn[mpo]{T} & \tn[mpo]{T}
@@ -119,12 +121,6 @@ A8 bond directionality (design brief):
   \begin{tenkz}[rows={wire:fused:dir right}]
     \tn[box]{B_1} & \tn[box]{B_2}
   \end{tenkz}
-  \quad
-  \begin{tenkzfree}
-    \tnput[box]{a}{(0,0)}{A}
-    \tnput[box]{b}{(1.4,0)}{B}
-    \tnjoin[dir]{a.east}{b.west}
-  \end{tenkzfree}
 \]
 
 A9 fused-equation balance (hard06 verdict):

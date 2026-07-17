@@ -33,7 +33,6 @@
 \prg_generate_conditional_variant:Nnn \prop_get:NnN { NeN } { T, F, TF }
 \prg_generate_conditional_variant:Nnn \prop_if_in:Nn { Ne } { p, T, F, TF }
 \prg_generate_conditional_variant:Nnn \tl_if_blank:n { V } { T, F, TF }
-\prg_generate_conditional_variant:Nnn \tl_if_in:nn { Vn } { T, F, TF }
 
 % ---------- picture state ----------
 \int_new:N \l__tenkz_nrows_int
@@ -86,6 +85,7 @@
 % its own down leg, so those legs leave the boundary signature
 \bool_new:N \l__tenkz_ptrace_bool
 \bool_new:N \l__tenkz_ptraceon_bool
+\bool_new:N \l__tenkz_ptcell_bool % signature scan: THIS cell is phys-traced
 % pair trace (trace={(physical, cols)}): the per-column partial
 % trace of a ket-bra interface.  Per traced column the wrap loop IS Tr over
 % that site's physical space -- it contracts the ket's physical index with
@@ -99,9 +99,13 @@
 \tl_new:N \l__tenkz_bonddir_tl
 \tl_new:N \l__tenkz_dir_tl
 \tl_new:N \l__tenkz_dirmarks_tl
-% \tnskip holes: pending-west-stub flag of the bond scan, and a scratch tl
-% for partner-cell kinds at pairing interfaces
+% \tnskip holes: pending-west-stub flag of the bond scan, the deferred
+% east-stub column (a gap frees the indices facing it only once a later
+% tensor proves it INTERIOR -- a run reaching the row end belongs to the
+% side policy), and a scratch tl for partner-cell kinds at pairing
+% interfaces
 \bool_new:N \l__tenkz_hole_bool
+\int_new:N \l__tenkz_pendeast_int
 \tl_new:N \l__tenkz_pkind_tl
 % The FRAME (frame=).  ONE linear map routes every drawn coordinate
 % from the logical frame (columns run east, rows descend) to the paper
@@ -144,12 +148,14 @@
   % boundary=periodic / bare `periodic`: aliases for `west=trace,
   % east=trace` — the side-policy alphabet is the one boundary language,
   % and a trace on both sides IS the periodic closure
+  % (routed through \tenkz_side_word:nn so the one-word-per-side rule
+  % holds: `west=cup, periodic` retracts the cup like `west=trace` would)
   /tenkz/grid/boundary/periodic/.code=
-      {\tl_set:Nn \l__tenkz_westpol_tl {trace}
-       \tl_set:Nn \l__tenkz_eastpol_tl {trace}},
+      {\tenkz_side_word:nn {west} {trace}
+       \tenkz_side_word:nn {east} {trace}},
   /tenkz/grid/periodic/.code=
-      {\tl_set:Nn \l__tenkz_westpol_tl {trace}
-       \tl_set:Nn \l__tenkz_eastpol_tl {trace}},
+      {\tenkz_side_word:nn {west} {trace}
+       \tenkz_side_word:nn {east} {trace}},
   % frame = flat|vertical: the picture's frame (see the frame note at the
   % picture state).  Vertical rotates the WHOLE grammar 90 degrees:
   % columns descend, bonds run vertically, physical legs point west/east
@@ -276,19 +282,30 @@
     Unknown~side~policy~'#2'~at~#1=.~A~picture~side~takes~exactly~one~
     word~of~the~policy~alphabet:~open,~none,~trace,~cup~or~cup={m}.
   }
+% ONE word per side, LAST wins: a policy word retracts an earlier cup on
+% the same side and a cup retracts an earlier policy word, so
+% `west=cup, west=open` reads as `west=open` -- the doctrine above, made
+% mechanical (without the mutual clearing the cup bools would survive a
+% later word and the cup would draw anyway).
 \cs_new_protected:Npn \tenkz_side_word:nn #1#2
   {
     \str_if_eq:nnTF {#1} {west}
-      { \tl_set:Nn \l__tenkz_westpol_tl {#2} }
-      { \tl_set:Nn \l__tenkz_eastpol_tl {#2} }
+      { \tl_set:Nn \l__tenkz_westpol_tl {#2}
+        \bool_set_false:N \l__tenkz_closew_bool
+        \tl_clear:N \l__tenkz_closewmat_tl }
+      { \tl_set:Nn \l__tenkz_eastpol_tl {#2}
+        \bool_set_false:N \l__tenkz_closee_bool
+        \tl_clear:N \l__tenkz_closeemat_tl }
   }
 \cs_new_protected:Npn \tenkz_side_cup:nn #1#2
   {
     \str_if_eq:nnTF {#1} {west}
       { \bool_set_true:N \l__tenkz_closew_bool
-        \tl_set:Nn \l__tenkz_closewmat_tl {#2} }
+        \tl_set:Nn \l__tenkz_closewmat_tl {#2}
+        \tl_clear:N \l__tenkz_westpol_tl }
       { \bool_set_true:N \l__tenkz_closee_bool
-        \tl_set:Nn \l__tenkz_closeemat_tl {#2} }
+        \tl_set:Nn \l__tenkz_closeemat_tl {#2}
+        \tl_clear:N \l__tenkz_eastpol_tl }
   }
 % split a `cup=$m$' value at its (catcode-12) equals sign
 \cs_new_protected:Npn \tenkz_side_cupval:nw #1 cup=#2 \q_stop
@@ -342,10 +359,19 @@
         \tl_replace_all:Nnn \exp_not:N \l__tenkz_csexpr_tl
           { \tl_to_str:n {physical} } { 0 }
       }
-    \tl_clear:N \l__tenkzl_tmp_tl
-    \int_zero:N \l__tenkzl_depth_int
-    \tl_map_inline:Nn \l__tenkz_csexpr_tl { \tenkzl_openscan:n {##1} }
-    \tenkzl_resolve:VN \l__tenkzl_tmp_tl \l__tenkz_csres_prop
+    % the shared cell-set machinery lives in tenkz-core (this tier loads
+    % before the lattice and may not reach into its private state).  Grid
+    % terms are (interface, columns) pairs with no third coordinate, so
+    % the default third coordinate is pinned to 0 (the `physical'
+    % sentinel) and the sheet guard -- whose alphabet is not this tier's
+    % -- is switched off around the resolve.
+    \tl_clear:N \l_tenkz_cs_scan_tl
+    \int_zero:N \l_tenkz_cs_depth_int
+    \tl_map_inline:Nn \l__tenkz_csexpr_tl { \tenkz_cs_openscan:n {##1} }
+    \int_zero:N \l_tenkz_cs_defsheet_int
+    \bool_set_false:N \l_tenkz_cs_guard_bool
+    \tenkz_cs_resolve:VN \l_tenkz_cs_scan_tl \l__tenkz_csres_prop
+    \bool_set_true:N \l_tenkz_cs_guard_bool
     \prop_map_inline:Nn \l__tenkz_csres_prop
       { \tenkz_cellset_one:wNN ##1 \q_stop #2 #3 }
   }
@@ -987,6 +1013,14 @@
     sandwiches,~periodic~closures~and~labels~are~covered)~or~keep~the~
     picture~horizontal.
   }
+% a dot label whose direction word the placement table does not know
+% would otherwise vanish silently
+\msg_new:nnn { tenkz } { label-pos }
+  {
+    label~pos=#1~is~not~a~compass~word~the~dot-label~placement~table~
+    knows~(south,~north,~east,~west~and~the~four~diagonals);~the~label~
+    was~not~placed.
+  }
 % a trace policy on ONE side only: a row closed back to itself needs
 % both ends, so the closure cannot draw; the side stays sealed
 \msg_new:nnn { tenkz } { trace-one-sided }
@@ -1341,12 +1375,12 @@
     \tenkz_map:nn { \tenkz_colx:n {#2} } { \tenkz_rowy:n {#1} }
     \bool_if:NTF \l__tenkz_vertical_bool
       {
-        \node[label, inner~ysep=0.30em]
+        \node[tn~label, inner~ysep=0.30em]
           (\tenkz_node_name:nn{#1}{#2})
           at \tenkz_mpt: { $\vdots$ };
       }
       {
-        \node[label, inner~xsep=0.30em]
+        \node[tn~label, inner~xsep=0.30em]
           (\tenkz_node_name:nn{#1}{#2})
           at \tenkz_mpt: { $\cdots$ };
       }
@@ -1377,7 +1411,7 @@
     \tenkz_seg:nnnnn
       { \l__tenkz_x_dim } { \l__tenkz_y_dim + \tenkz@dim{0.10} }
       { \l__tenkz_x_dim } { \l__tenkz_tmp_dim - \tenkz@dim{0.10} }
-      { fusion~map, line~width=\tenkz@dim{0.075} }
+      { fusion~map }
     % combined fused stub at the vertical midpoint
     \dim_set:Nn \l__tenkz_tmp_dim
       { ( \l__tenkz_y_dim + \l__tenkz_tmp_dim ) / 2 }
@@ -1415,10 +1449,13 @@
           { \dim_sub:Nn \l__tenkz_x_dim { \tenkz@dim{0.30} } }
         \tenkz_map:nn { \l__tenkz_x_dim }
           { \l__tenkz_tmp_dim + \tenkz@dim{\tenkz@r@labelclear} }
-        \node[label, anchor=\tenkz_compass:n{south}] at \tenkz_mpt:
+        \node[tn~label, anchor=\tenkz_compass:n{south}] at \tenkz_mpt:
           { $\tenkz@labelsize \tl_use:N \l_tmpb_tl$ };
       }
-    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=fuse}
+    % role=/species= ride the event for schema uniformity with the other
+    % atom emitters (uniform fields keep the audit's parsers total); the
+    % bar's INK stays structural -- a fusion wedge is not a hued glyph
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=fuse|role=\tenkz_role_word:|species=\tenkz_spec_word:}
   }
 
 % -- bonds ------------------------------------------------------------
@@ -1587,6 +1624,7 @@
         \tenkz_row_dir:nN {##1} \l__tenkz_dir_tl
         \tenkz_dir_marks:NN \l__tenkz_cell_tl \l__tenkz_dirmarks_tl
         \bool_set_false:N \l__tenkz_hole_bool
+        \int_zero:N \l__tenkz_pendeast_int
         % connect consecutive occupied columns
         \int_zero:N \l_tmpa_int
         \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
@@ -1598,16 +1636,22 @@
                 % bridges the column, and the neighbours' virtual indices
                 % facing the gap stay OPEN (protruding stubs) -- the
                 % tangent-space summand with the identity at site i (hard10)
-                % deletes the tensor, never the indices
+                % deletes the tensor, never the indices.  Only an INTERIOR
+                % gap frees indices this way: a hole run reaching the row's
+                % END has no tensor beyond it, so the facing index there is
+                % the row's BOUNDARY index and the side policy (west=/east=/
+                % rows= suffixes) already owns it -- an unconditional stub
+                % would duplicate an open side's boundary stroke and sprout
+                % a spurious index on a sealed side (t2_hamil_gate's gate
+                % row).  The east stub is therefore DEFERRED until a later
+                % tensor proves the gap interior, and the west stub draws
+                % only when ink preceded the run.
                 \int_compare:nNnT { \l_tmpa_int } > {0}
                   {
-                    \tenkz_anchor:nnnN {##1}{\int_use:N\l_tmpa_int}
-                      {east} \l__tenkz_pa_tl
-                    \draw[\tl_use:N \l__tenkz_cell_tl]
-                      \l__tenkz_pa_tl -- ++\tenkz_stub_vec:n{east};
+                    \int_set_eq:NN \l__tenkz_pendeast_int \l_tmpa_int
+                    \bool_set_true:N \l__tenkz_hole_bool
                   }
                 \int_zero:N \l_tmpa_int
-                \bool_set_true:N \l__tenkz_hole_bool
                 \tenkz@event{hole|picture=\the\tenkz@pictureid|row=##1|col=####1}
               }
               {
@@ -1635,12 +1679,23 @@
                               }
                           }
                       }
-                    % first tensor after a hole: its west index faces the
-                    % gap and stays open
+                    % first tensor after an interior hole: flush the
+                    % deferred east stub of the tensor before the gap,
+                    % then this tensor's west index faces the gap and
+                    % stays open
                     \bool_lazy_and:nnT
                       { \l__tenkz_hole_bool }
                       { \int_compare_p:nNn { \l_tmpa_int } = {0} }
                       {
+                        \int_compare:nNnT { \l__tenkz_pendeast_int } > {0}
+                          {
+                            \tenkz_anchor:nnnN
+                              {##1}{\int_use:N\l__tenkz_pendeast_int}
+                              {east} \l__tenkz_pa_tl
+                            \draw[\tl_use:N \l__tenkz_cell_tl]
+                              \l__tenkz_pa_tl -- ++\tenkz_stub_vec:n{east};
+                            \int_zero:N \l__tenkz_pendeast_int
+                          }
                         \tenkz_anchor:nnnN {##1}{####1}{west} \l__tenkz_pb_tl
                         \draw[\tl_use:N \l__tenkz_cell_tl]
                           \l__tenkz_pb_tl -- ++\tenkz_stub_vec:n{west};
@@ -1877,7 +1932,7 @@
           {
             \tl_if_blank:VF \l_tmpb_tl
               {
-                \node[label, anchor=\tenkz_compass:n{#4},
+                \node[tn~label, anchor=\tenkz_compass:n{#4},
                       shift={\tenkz_leg_vec:nn{#6}
                         { \tenkz@dim{\tenkz@r@physleg}
                           + \tenkz@dim{\tenkz@r@labelclear} }}]
@@ -1900,7 +1955,7 @@
       ++\tenkz_leg_vec:nn{#4}{\tenkz@dim{\tenkz@r@physleg}};
     \tl_if_empty:NF #3
       {
-        \node[label, anchor=\tenkz_compass:n{#2},
+        \node[tn~label, anchor=\tenkz_compass:n{#2},
               shift={\tenkz_leg_vec:nn{#4}{ \tenkz@dim{\tenkz@r@physleg}
                        + \tenkz@dim{\tenkz@r@labelclear} }}]
           at (\l__tenkz_pa_tl.\tenkz_compass:n{#1})
@@ -2008,13 +2063,21 @@
     \tl_set:Nn \l__tenkz_dot_label_tl {#3}
     % compass table: node point, opposite label anchor, and the outward
     % (dx,dy); a cardinal nudges one clearance band along its axis, a
-    % diagonal 0.7 of a band on each axis
-    \str_case:Vn \l_tmpa_tl
+    % diagonal 0.7 of a band on each axis.  The east/west rows serve the
+    % vertical frame (whose compass maps south/north to east/west) and a
+    % user-given `label pos=east|west` in any frame; the F branch warns
+    % instead of dropping the label -- vanishing ink is the one
+    % forbidden outcome.
+    \str_case:VnF \l_tmpa_tl
       {
         {south}      { \tenkz_dot_label_at:nnnn {south}      {north}
                          {0}{-\tenkz@dim{\tenkz@r@labelclear}} }
         {north}      { \tenkz_dot_label_at:nnnn {north}      {south}
                          {0}{\tenkz@dim{\tenkz@r@labelclear}} }
+        {east}       { \tenkz_dot_label_at:nnnn {east}       {west}
+                         {\tenkz@dim{\tenkz@r@labelclear}}{0} }
+        {west}       { \tenkz_dot_label_at:nnnn {west}       {east}
+                         {-\tenkz@dim{\tenkz@r@labelclear}}{0} }
         {south~west} { \tenkz_dot_label_at:nnnn {south~west} {north~east}
                          {-0.7\tenkz@dim{\tenkz@r@labelclear}}
                          {-0.7\tenkz@dim{\tenkz@r@labelclear}} }
@@ -2028,13 +2091,18 @@
                          {0.7\tenkz@dim{\tenkz@r@labelclear}}
                          {0.7\tenkz@dim{\tenkz@r@labelclear}} }
       }
+      {
+        \msg_warning:nne { tenkz } { label-pos }
+          { \tl_to_str:N \l_tmpa_tl }
+        \tenkz@event{warning|code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
+      }
   }
 \cs_generate_variant:Nn \tenkz_dot_label_place:nnn { nnV }
 % place a bead's external label: node compass point #1, opposite label anchor
 % #2, outward offset (#3,#4); the text is \l__tenkz_dot_label_tl
 \cs_new_protected:Npn \tenkz_dot_label_at:nnnn #1#2#3#4
   {
-    \node[label, anchor=#2, shift={(\l__tenkz_clshift_tl)}] at
+    \node[tn~label, anchor=#2, shift={(\l__tenkz_clshift_tl)}] at
       ($(\l__tenkz_pa_tl.#1)+(#3,#4)$)
       { $\tenkz@labelsize \tl_use:N \l__tenkz_dot_label_tl$ };
   }
@@ -2092,9 +2160,9 @@
 \cs_new_protected:Npn \tenkz_draw_span:nnnnn #1#2#3#4#5
   {
     \dim_set:Nn \l__tenkz_x_dim
-      { \tenkz_colx:n {#2} - \tenkz@dim{0.22} }
+      { \tenkz_colx:n {#2} - \tenkz@dim{\tenkz@r@glyphbox} }
     \dim_set:Nn \l__tenkz_tmp_dim
-      { \tenkz_colx:n { #2 + #3 - 1 } + \tenkz@dim{0.22} }
+      { \tenkz_colx:n { #2 + #3 - 1 } + \tenkz@dim{\tenkz@r@glyphbox} }
     \str_if_eq:nnTF {#4} {brace~below}
       {
         % clear open down legs, or the south dot-label band when the row
@@ -2134,7 +2202,7 @@
     \draw[brace]
       (\dim_use:N #1, \dim_use:N \l__tenkz_y_dim) --
       (\dim_use:N #2, \dim_use:N \l__tenkz_y_dim);
-    \node[label, anchor=#3] at
+    \node[tn~label, anchor=#3] at
       (\dim_eval:n{ (\l__tenkz_x_dim + \l__tenkz_tmp_dim)/2 },
        \dim_eval:n{ \l__tenkz_y_dim
                     + ( 3.4pt + \tenkz@dim{\tenkz@r@labelclear} ) * #4 })
@@ -2152,7 +2220,7 @@
        \dim_eval:n{ \tenkz_rowy:n {\l__tenkz_nrows_int} - \tenkz@dim{0.55} });
     \tl_if_blank:nF {#3}
       {
-        \node[label, anchor=south] at
+        \node[tn~label, anchor=south] at
           (\dim_use:N \l__tenkz_x_dim,
            \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{0.55}
                         + \tenkz@dim{\tenkz@r@labelclear} })
@@ -2162,7 +2230,7 @@
 
 \cs_new_protected:Npn \tenkz_draw_bondlabel:nnn #1#2#3
   {
-    \node[label, anchor=south] at
+    \node[tn~label, anchor=south] at
       (\dim_eval:n{ ( \tenkz_colx:n {#2} + \tenkz_colx:n {#3} ) / 2 },
        \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{\tenkz@r@labelclear} })
       { #1 };
@@ -2192,19 +2260,6 @@
               { \int_set:Nn \l__tenkz_first_int {##1} }
             \int_set:Nn \l__tenkz_last_int {##1}
           }
-      }
-  }
-
-\cs_new_protected:Npn \tenkz_row_open:nN #1#2
-  {
-    \bool_set_false:N #2
-    \tl_set:Ne \l_tmpb_tl { \tenkz_rowmod:n {#1} }
-    \str_if_in:NnTF \l_tmpb_tl {open}
-      { \bool_set_true:N #2 }
-      {
-        \str_if_in:NnF \l_tmpb_tl {none}
-          { \str_if_eq:VnT \l__tenkz_boundary_tl {open}
-              { \bool_set_true:N #2 } }
       }
   }
 
@@ -2337,7 +2392,7 @@
                         \bool_set_true:N \l__tenkz_wdone_bool
                         \tl_if_empty:NF \l__tenkz_wlabel_tl
                           {
-                            \node[label, anchor=\tenkz_compass:n{east},
+                            \node[tn~label, anchor=\tenkz_compass:n{east},
                                   shift={\tenkz_side_vec:nn{west}
                                     {\tenkz@dim{\tenkz@r@labelclear}}}]
                               at (tzbw\the\tenkz@pictureid)
@@ -2368,7 +2423,7 @@
                         \bool_set_true:N \l__tenkz_edone_bool
                         \tl_if_empty:NF \l__tenkz_elabel_tl
                           {
-                            \node[label, anchor=\tenkz_compass:n{west},
+                            \node[tn~label, anchor=\tenkz_compass:n{west},
                                   shift={\tenkz_side_vec:nn{east}
                                     {\tenkz@dim{\tenkz@r@labelclear}}}]
                               at (tzbe\the\tenkz@pictureid)
@@ -2559,13 +2614,13 @@
               \dim_use:N \l__tenkz_y_dim) {};
         \str_if_eq:nnTF {#1}{east}
           {
-            \node[label, anchor=west] at
+            \node[tn~label, anchor=west] at
               ($(tzcup\the\tenkz@pictureid-#1-#2.east)
                 +(\tenkz@dim{\tenkz@r@labelclear},0)$)
               { \tl_use:N \l__tenkz_cupmat_tl };
           }
           {
-            \node[label, anchor=east] at
+            \node[tn~label, anchor=east] at
               ($(tzcup\the\tenkz@pictureid-#1-#2.west)
                 +(-\tenkz@dim{\tenkz@r@labelclear},0)$)
               { \tl_use:N \l__tenkz_cupmat_tl };
@@ -2600,7 +2655,22 @@
       {
         \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
           {
-            \bool_if:NF \l__tenkz_ptraceon_bool
+            % trace=physical closes ONLY the sites its draw pass actually
+            % loops -- both faces open AND a leg candidate, the same
+            % predicate \tenkz_draw_phtrace: uses.  Any other cell keeps
+            % its counts: the signature counts the stubs actually drawn,
+            % so a trace=physical on a row that cannot close must not
+            % zero the counts of legs still inked.
+            \bool_set_false:N \l__tenkz_ptcell_bool
+            \bool_if:NT \l__tenkz_ptraceon_bool
+              {
+                \bool_lazy_and:nnT
+                  { \tenkz_openup_p:n {##1} }
+                  { \tenkz_opendown_p:n {##1} }
+                  { \tenkz_leg_candidate:nnT {##1}{####1}
+                      { \bool_set_true:N \l__tenkz_ptcell_bool } }
+              }
+            \bool_if:NF \l__tenkz_ptcell_bool
               {
                 % a traced column contributes NO open physical index: the
                 % wrap loop closes ket against bra (Tr_s), so both the ket
