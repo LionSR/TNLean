@@ -95,7 +95,7 @@ global gauge in matched flattened coordinates.
 
 Source: arXiv:1606.00608, Corollary C.5 and Appendix MPV proof,
 lines 1182--1199. -/
-theorem ft_sector_bnt_equal_unitary_global_gauge_witnessesPos
+theorem ft_sector_bnt_equal_unitary_global_gauge_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -129,7 +129,7 @@ theorem ft_sector_bnt_equal_unitary_global_gauge_witnessesPos
                 (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
   classical
   obtain ⟨β, hDim, ζ, Xblock, hζ, hConj, ⟨W⟩⟩ :=
-    ft_sector_bnt_equal_matched_copy_weight_witnessesPos hP hQ hEqual
+    ft_sector_bnt_equal_matched_copy_weight_witnesses hP hQ hEqual
   have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
     intro k hzero
     simpa [hzero] using hζ k
