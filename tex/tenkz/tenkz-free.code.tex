@@ -1,2 +1,283 @@
-%% tenkz-free -- placeholder; the real module lands later in this PR stack.
+% tenkz-free — L2d: sanctioned free placement for genuinely non-grid
+% diagrams (MERA, lassos, star tensors).  The only tier with runtime
+% port-type assertions: the grid languages are type-safe by construction.
+%
+% Phase-0 scope: \tnput places any L1 glyph with typed anchors recorded in
+% the port registry; \tnjoin draws a typed connection (straight, orthogonal,
+% or curved) and asserts endpoint types match.
+
+\ExplSyntaxOn
+
+\prop_new:N \g__tenkz_ports_prop   % "pictureid/name.anchor" -> type
+
+\NewDocumentEnvironment { tenkzfree } { O{} }
+  {
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz}{#1} }
+    \tenkz@beginpicture{free}
+    \begin{tikzpicture}[tenkz~every~picture,
+      baseline={(0pt,\dim_eval:n{-\fontdimen22\textfont2})}]
+  }
+  { \end{tikzpicture} }
+
+% \tnput[<glyph keys>]{<name>}{<coordinate>}{<label>}
+%   glyph keys: dot|box|pill|mpo (skin), ports={e:virtual, ph:physical, ...},
+%   label pos=north|south|east|west (dot skin only)
+\tl_new:N \l__tenkz_fports_tl
+\tl_new:N \l__tenkz_flpos_tl
+\tl_new:N \l__tenkz_frole_tl     % \tnput role word (empty = none)
+\tl_new:N \l__tenkz_fspec_tl     % \tnput species name (empty = none)
+\tl_new:N \l__tenkz_frolesty_tl  % resolved role/species style (or empty)
+\pgfkeys{
+  /tenkz/put/.is~family,
+  /tenkz/put/dot/.code={\tl_set:Nn \l__tenkz_cshape_tl {dot}},
+  /tenkz/put/box/.code={\tl_set:Nn \l__tenkz_cshape_tl {box}},
+  /tenkz/put/pill/.code={\tl_set:Nn \l__tenkz_cshape_tl {pill}},
+  /tenkz/put/mpo/.code={\tl_set:Nn \l__tenkz_cshape_tl {mpo}},
+  /tenkz/put/ring/.code={\tl_set:Nn \l__tenkz_cshape_tl {ring}},
+  /tenkz/put/ports/.store~in=\l__tenkz_fports_tl,
+  % role= / species=: the semantic hue interface (see tenkz-core) —
+  % the language's invariants cross the free-tier border.  Resolution
+  % is pure style indirection (`<role> tensor` for the bead, `<role>
+  % outline` for the inscribed-label skins); role wins when both are
+  % given, and the atom's event carries both words.
+  /tenkz/put/role/.is~choice,
+  /tenkz/put/role/operator/.code={\tl_set:Nn \l__tenkz_frole_tl {operator}},
+  /tenkz/put/role/marked/.code={\tl_set:Nn \l__tenkz_frole_tl {marked}},
+  /tenkz/put/role/extra/.code={\tl_set:Nn \l__tenkz_frole_tl {extra}},
+  /tenkz/put/role/passive/.code={\tl_set:Nn \l__tenkz_frole_tl {passive}},
+  /tenkz/put/species/.code={\tenkz_species_check:n{#1}
+      \tl_set:Nn \l__tenkz_fspec_tl {#1}},
+  % label pos = north|south|east|west: which side of a BEAD carries its
+  % external label (default south, the historical band).  A vertical or
+  % rotated chain sends a wire through the south band at every dot
+  % (plane_sweep3 panel 2a: the rotated transfer matrix E), so the free
+  % tier must let the label yield the busy side -- one clearance band
+  % (\tenkz@r@labelclear) beyond the named compass point, label anchored
+  % opposite.  Box/pill/mpo/ring skins inscribe their labels and ignore it.
+  /tenkz/put/label~pos/.is~choice,
+  /tenkz/put/label~pos/north/.code={\tl_set:Nn \l__tenkz_flpos_tl {north}},
+  /tenkz/put/label~pos/south/.code={\tl_set:Nn \l__tenkz_flpos_tl {south}},
+  /tenkz/put/label~pos/east/.code ={\tl_set:Nn \l__tenkz_flpos_tl {east}},
+  /tenkz/put/label~pos/west/.code ={\tl_set:Nn \l__tenkz_flpos_tl {west}},
+}
+
+% the dot label at compass side #1: label node one clearance band beyond
+% the bead's #1 anchor, anchored on the opposite side so the text extends
+% outward; #2 the bead's node name, #3 the label tokens.  `south` emits
+% exactly the historical band (the pre-key path), so default renders are
+% unchanged.
+\cs_new_protected:Npn \tenkz_free_dot_label:nnn #1#2#3
+  {
+    \str_case:nn {#1}
+      {
+        {south} { \node[label, anchor=north] at
+                    ($(#2.south)-(0,\tenkz@dim{\tenkz@r@labelclear})$)
+                    { $\tenkz@labelsize #3$ }; }
+        {north} { \node[label, anchor=south] at
+                    ($(#2.north)+(0,\tenkz@dim{\tenkz@r@labelclear})$)
+                    { $\tenkz@labelsize #3$ }; }
+        {east}  { \node[label, anchor=west] at
+                    ($(#2.east)+(\tenkz@dim{\tenkz@r@labelclear},0)$)
+                    { $\tenkz@labelsize #3$ }; }
+        {west}  { \node[label, anchor=east] at
+                    ($(#2.west)-(\tenkz@dim{\tenkz@r@labelclear},0)$)
+                    { $\tenkz@labelsize #3$ }; }
+      }
+  }
+
+% the resolved role/species style for glyph family #1 (tensor|outline):
+% species first, role wins — mirroring the grid's resolver
+\cs_new_protected:Npn \tenkz_free_role_style:n #1
+  {
+    \tl_clear:N \l__tenkz_frolesty_tl
+    % \c_space_tl, not ~: a space character after a control word is
+    % swallowed at tokenization, so the style-name gap must be a token
+    \tl_if_empty:NF \l__tenkz_fspec_tl
+      { \tl_set:Ne \l__tenkz_frolesty_tl
+          { species~ \tl_use:N \l__tenkz_fspec_tl \c_space_tl #1 } }
+    \tl_if_empty:NF \l__tenkz_frole_tl
+      { \tl_set:Ne \l__tenkz_frolesty_tl
+          { \tl_use:N \l__tenkz_frole_tl \c_space_tl #1 } }
+  }
+\cs_new:Npn \tenkz_free_role_word:
+  { \tl_if_empty:NTF \l__tenkz_frole_tl {none}
+      { \tl_use:N \l__tenkz_frole_tl } }
+\cs_new:Npn \tenkz_free_spec_word:
+  { \tl_if_empty:NTF \l__tenkz_fspec_tl {none}
+      { \tl_use:N \l__tenkz_fspec_tl } }
+
+\NewDocumentCommand \tnput { O{} m m m }
+  {
+    \group_begin:
+    % the default skin is the glyph policy (tensor style=dot|box); an
+    % explicit skin key overrides it below
+    \tl_set:Ne \l__tenkz_cshape_tl { \tenkz@tensorstyle }
+    \tl_clear:N \l__tenkz_fports_tl
+    \tl_clear:N \l__tenkz_frole_tl
+    \tl_clear:N \l__tenkz_fspec_tl
+    \tl_set:Nn \l__tenkz_flpos_tl {south}
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/put}{#1} }
+    % the role/species style rides its own literal option slot (an
+    % empty slot is an inert trailing option); beads resolve through
+    % the tensor family, inscribed-label skins through outline
+    \str_if_eq:VnTF \l__tenkz_cshape_tl {dot}
+      { \tenkz_free_role_style:n {tensor} }
+      { \tenkz_free_role_style:n {outline} }
+    \str_case:Vn \l__tenkz_cshape_tl
+      {
+        {dot}  { \node[tensor, \l__tenkz_frolesty_tl] (#2) at #3 {};
+                 \tl_if_blank:nF {#4}
+                   { \exp_args:NV \tenkz_free_dot_label:nnn
+                       \l__tenkz_flpos_tl {#2} {#4} } }
+        {box}  { \node[box~tensor, \l__tenkz_frolesty_tl] (#2) at #3
+                   { $\tenkz@labelsize #4$ }; }
+        {pill} { \node[pill~tensor, \l__tenkz_frolesty_tl] (#2) at #3
+                   { $\tenkz@labelsize #4$ }; }
+        {mpo}  { \node[mpo~tensor, \l__tenkz_frolesty_tl] (#2) at #3
+                   { $\tenkz@labelsize #4$ }; }
+        {ring} { \node[on-wire~matrix, \l__tenkz_frolesty_tl] (#2) at #3
+                   { $\tenkz@labelsize #4$ }; }
+      }
+    % register declared port types:  ports={east:virtual, north:physical}
+    % (str-normalized so the document's catcode-12 colon parses)
+    \tl_if_empty:NF \l__tenkz_fports_tl
+      {
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_fports_tl
+          { \exp_args:Ne \tenkz_free_port:n { \tl_to_str:n { #2 . ##1 } } }
+      }
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|kind=\tl_use:N \l__tenkz_cshape_tl|role=\tenkz_free_role_word:|species=\tenkz_free_spec_word:}
+    \group_end:
+  }
+\use:e
+  {
+    \cs_new_protected:Npn \exp_not:N \tenkz_free_port_aux:w
+      #1 \c_colon_str #2 \exp_not:N \q_stop
+      {
+        \prop_gput:Nen \exp_not:N \g__tenkz_ports_prop
+          { \exp_not:N \the \exp_not:N \tenkz@pictureid / #1 } {#2}
+      }
+  }
+\cs_new_protected:Npn \tenkz_free_port:n #1
+  { \use:e { \exp_not:N \tenkz_free_port_aux:w #1 } \q_stop }
+
+% \tnjoin[<keys>]{<name.anchor>}{<name.anchor>}
+\tl_new:N \l__tenkz_jroute_tl
+\tl_new:N \l__tenkz_jlabel_tl
+\tl_new:N \l__tenkz_jout_tl
+\tl_new:N \l__tenkz_jin_tl
+\tl_new:N \l__tenkz_jstyle_tl   % resolved wire style (bond / fused bond)
+\tl_new:N \l__tenkz_jmarks_tl   % resolved direction-mark style (may be empty)
+\tl_new:N \l__tenkz_jrole_tl    % join role word (empty = none)
+\tl_new:N \l__tenkz_jspec_tl    % join species name (empty = none)
+\tl_new:N \l__tenkz_jrolesty_tl % resolved role/species bond style (or empty)
+\bool_new:N \l__tenkz_jfused_bool
+\bool_new:N \l__tenkz_jdir_bool
+\pgfkeys{
+  /tenkz/join/.is~family,
+  /tenkz/join/route/.store~in=\l__tenkz_jroute_tl,
+  /tenkz/join/label/.store~in=\l__tenkz_jlabel_tl,
+  /tenkz/join/fused/.code={\bool_set_true:N \l__tenkz_jfused_bool},
+  % dir: a DIRECTED join, from the first endpoint to the second (argument
+  % order = direction).  An outgoing arrow is the vector space V, an
+  % incoming one its dual V*; the barb rides mid-wire and, with `fused`,
+  % grows to span the doubled wire.
+  /tenkz/join/dir/.code={\bool_set_true:N \l__tenkz_jdir_bool},
+  /tenkz/join/out/.store~in=\l__tenkz_jout_tl,
+  /tenkz/join/in/.store~in=\l__tenkz_jin_tl,
+  % role= / species=: the semantic hue of the WIRE (worklist item 1,
+  % the operator-hued \tnjoin, as a grammar instance).  Resolution is
+  % pure style indirection through the derived bond styles of
+  % tenkz-core; the join's event carries both words.
+  /tenkz/join/role/.is~choice,
+  /tenkz/join/role/operator/.code={\tl_set:Nn \l__tenkz_jrole_tl {operator}},
+  /tenkz/join/role/marked/.code={\tl_set:Nn \l__tenkz_jrole_tl {marked}},
+  /tenkz/join/role/extra/.code={\tl_set:Nn \l__tenkz_jrole_tl {extra}},
+  /tenkz/join/role/passive/.code={\tl_set:Nn \l__tenkz_jrole_tl {passive}},
+  /tenkz/join/species/.code={\tenkz_species_check:n{#1}
+      \tl_set:Nn \l__tenkz_jspec_tl {#1}},
+}
+
+\NewDocumentCommand \tnjoin { O{} m m }
+  {
+    \group_begin:
+    \tl_set:Nn \l__tenkz_jroute_tl {straight}
+    \tl_clear:N \l__tenkz_jlabel_tl
+    \tl_clear:N \l__tenkz_jout_tl \tl_clear:N \l__tenkz_jin_tl
+    \tl_clear:N \l__tenkz_jrole_tl
+    \tl_clear:N \l__tenkz_jspec_tl
+    \bool_set_false:N \l__tenkz_jfused_bool
+    \bool_set_false:N \l__tenkz_jdir_bool
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/join}{#1} }
+    % type assertion when both endpoints declared types
+    \prop_get:NeNT \g__tenkz_ports_prop {\the\tenkz@pictureid/#2} \l_tmpa_tl
+      {
+        \prop_get:NeNT \g__tenkz_ports_prop {\the\tenkz@pictureid/#3} \l_tmpb_tl
+          {
+            \tl_if_eq:NNF \l_tmpa_tl \l_tmpb_tl
+              {
+                \PackageError{tenkz}
+                  {Port~type~mismatch:~#2~is~\l_tmpa_tl,~#3~is~\l_tmpb_tl}
+                  {Only~equal~port~types~may~be~joined.}
+              }
+          }
+      }
+    % wire style, mark style and role style stay SEPARATE option slots:
+    % pgfkeys splits the option list on literal commas before expanding,
+    % so a comma packed inside one tl would fuse both names into one
+    % unknown key.  An empty slot is an inert trailing option.  The role
+    % slot rides LAST, so its draw= wins over the base style's while the
+    % base's geometry (doubling, width) survives.
+    \bool_if:NTF \l__tenkz_jfused_bool
+      {
+        \tl_set:Nn \l__tenkz_jstyle_tl {fused~bond}
+        \bool_if:NTF \l__tenkz_jdir_bool
+          { \tl_set:Nn \l__tenkz_jmarks_tl {fused~dir~marks} }
+          { \tl_clear:N \l__tenkz_jmarks_tl }
+      }
+      {
+        \tl_set:Nn \l__tenkz_jstyle_tl {bond}
+        \bool_if:NTF \l__tenkz_jdir_bool
+          { \tl_set:Nn \l__tenkz_jmarks_tl {dir~marks} }
+          { \tl_clear:N \l__tenkz_jmarks_tl }
+      }
+    \tl_clear:N \l__tenkz_jrolesty_tl
+    % \c_space_tl, not ~: a space character after a control word is
+    % swallowed at tokenization, so the style-name gap must be a token
+    \tl_if_empty:NF \l__tenkz_jspec_tl
+      { \tl_set:Ne \l__tenkz_jrolesty_tl
+          { species~ \tl_use:N \l__tenkz_jspec_tl \c_space_tl bond } }
+    \tl_if_empty:NF \l__tenkz_jrole_tl
+      { \tl_set:Ne \l__tenkz_jrolesty_tl
+          { \tl_use:N \l__tenkz_jrole_tl \c_space_tl bond } }
+    \str_case:Vn \l__tenkz_jroute_tl
+      {
+        {straight} { \draw[\tl_use:N \l__tenkz_jstyle_tl,
+                           \tl_use:N \l__tenkz_jmarks_tl,
+                           \tl_use:N \l__tenkz_jrolesty_tl] (#2) -- (#3); }
+        {hv} { \draw[\tl_use:N \l__tenkz_jstyle_tl,
+                     \tl_use:N \l__tenkz_jmarks_tl,
+                     \tl_use:N \l__tenkz_jrolesty_tl,
+                     rounded~corners=\tenkz@dim{\tenkz@r@corner}]
+                 (#2) -| (#3); }
+        {vh} { \draw[\tl_use:N \l__tenkz_jstyle_tl,
+                     \tl_use:N \l__tenkz_jmarks_tl,
+                     \tl_use:N \l__tenkz_jrolesty_tl,
+                     rounded~corners=\tenkz@dim{\tenkz@r@corner}]
+                 (#2) |- (#3); }
+        {curve} { \draw[\tl_use:N \l__tenkz_jstyle_tl,
+                        \tl_use:N \l__tenkz_jmarks_tl,
+                        \tl_use:N \l__tenkz_jrolesty_tl]
+                    (#2) to[out=\tl_use:N\l__tenkz_jout_tl,
+                            in=\tl_use:N\l__tenkz_jin_tl] (#3); }
+      }
+    \tl_if_empty:NF \l__tenkz_jlabel_tl
+      {
+        \node[label, anchor=south] at ($(#2)!0.5!(#3)+(0,2pt)$)
+          { $\tenkz@labelsize \tl_use:N \l__tenkz_jlabel_tl$ };
+      }
+    \tenkz@event{join|picture=\the\tenkz@pictureid|from=#2|to=#3|dir=\bool_if:NTF \l__tenkz_jdir_bool {forward}{none}|role=\tl_if_empty:NTF \l__tenkz_jrole_tl {none}{\tl_use:N \l__tenkz_jrole_tl}|species=\tl_if_empty:NTF \l__tenkz_jspec_tl {none}{\tl_use:N \l__tenkz_jspec_tl}}
+    \group_end:
+  }
+
+\ExplSyntaxOff
 \endinput
