@@ -522,7 +522,8 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \leanok
     \uses{def:l_blk_injective, def:mpv}
     Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$
-    be tensors of $D \times D$ matrices over physical dimension $d$, each
+    be tensors of $D \times D$ matrices with $D>0$, over physical dimension
+    $d$, each
     $L$-block injective, whose matrix product vectors agree at system size
     $n$: $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
     $\sigma$.  Then there are invertible matrices $Z_v$, one per bond of the
@@ -540,9 +541,8 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     proof''), rather than the $n \ge 3L$ of the blocking route.  The source's
     translation-invariant corollary (a single gauge $Z$ and a constant
     $\lambda$ with $\lambda^n = 1$) refines this conclusion and is not part
-    of this statement.  Positivity of the physical and bond dimensions is not
-    assumed: a vanishing bond dimension makes the conclusion trivial, and a
-    vanishing physical dimension contradicts block injectivity.
+    of this statement.  A vanishing physical dimension is already excluded
+    by block injectivity.
 \end{corollary}
 \begin{proof}\leanok
     \uses{cor:fundamentalTheorem_normalMPS_of_overlap}
@@ -559,7 +559,8 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \leanok
     \uses{def:l_blk_injective}
     Let $n$ be positive, let $0 < L$ with $3L \le n$, and let $A$ and $B$ be
-    tensors of $D \times D$ matrices, each $L$-block injective.  If two
+    tensors of $D \times D$ matrices with $D>0$, each $L$-block injective.
+    If two
     families $Z$ and $Z'$ of invertible matrices on the bonds of the closed
     chain both satisfy $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site, then they
     are proportional by a single constant: there is a nonzero scalar $c$
@@ -618,7 +619,8 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \leanok
     \uses{def:l_blk_injective, def:mpv}
     Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$
-    be tensors of $D \times D$ matrices over physical dimension $d$, each
+    be tensors of $D \times D$ matrices with $D>0$, over physical dimension
+    $d$, each
     $L$-block injective, whose matrix product vectors agree at system size
     $n$: $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
     $\sigma$.  Then there are an invertible matrix $Z$ and a constant
@@ -630,8 +632,7 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \cite[Section~4]{Molnar2018NormalPEPS}, the statement for TI MPS
     following the first corollary after the general normal-PEPS theorem.  The
     system size is the optimal $n \ge 2L + 1$ of the source's alternative
-    proof.  Positivity of the bond dimension is not assumed: a vanishing bond
-    dimension makes the conclusion trivial.
+    proof.
 \end{corollary}
 \begin{proof}\leanok
     \uses{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
@@ -646,7 +647,7 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}
     \leanok
     \uses{def:l_blk_injective}
-    Let $0 < L$ and let $A$ and $B$ be tensors of $D \times D$ matrices,
+    Let $0 < L$ and $0<D$, and let $A$ and $B$ be tensors of $D \times D$ matrices,
     each $L$-block injective.  If invertible matrices $Z$, $Z'$ and
     constants $\lambda$, $\lambda'$ satisfy
     $B^i = \lambda\, Z^{-1} A^i Z$ and $B^i = \lambda'\, Z'^{-1} A^i Z'$ for
@@ -659,8 +660,7 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
 \begin{proof}\leanok
     \uses{def:eval_word}
     The scalar $\lambda$ is nonzero because $B$ is $L$-block injective with
-    positive bond dimension (a vanishing bond dimension makes the
-    conclusion trivial), so some $B^{i_0} \neq 0$.  Iterating each relation
+    positive bond dimension, so some $B^{i_0} \neq 0$.  Iterating each relation
     along a word $x$ of length $L$ gives
     $B^{x_1} \cdots B^{x_L} = \lambda^L\, Z^{-1} A^{x_1} \cdots A^{x_L} Z$
     and the primed analogue; the word products span the full matrix algebra
@@ -810,7 +810,7 @@ to $n \ge 2L + 1$.
     \lean{MPSTensor.exists_conjugation_of_mpv_eq}
     \leanok
     \uses{def:l_blk_injective, def:mpv, def:eval_word}
-    Let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$ be tensors of
+    Let $0 < L$ with $2L + 1 \le n$ and $0<D$, and let $A$ and $B$ be tensors of
     $D \times D$ matrices over physical dimension $d$, each $L$-block
     injective, whose matrix product vectors agree at system size $n$.
     Then there is an invertible matrix $Z$ with
@@ -881,7 +881,7 @@ to $n \ge 2L + 1$.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
     \leanok
     \uses{def:l_blk_injective, def:mpv}
-    Let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$ be tensors of
+    Let $0 < L$ with $2L + 1 \le n$ and $0<D$, and let $A$ and $B$ be tensors of
     $D \times D$ matrices over physical dimension $d$, each $L$-block
     injective, whose matrix product vectors agree at system size $n$:
     $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
@@ -900,8 +900,6 @@ to $n \ge 2L + 1$.
     corollary — the gauge $Z$ is unique up to a multiplicative constant —
     needs no system size and is
     Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}.
-    Positivity of the bond dimension is not assumed: a vanishing bond
-    dimension makes the conclusion trivial.
 \end{corollary}
 \begin{proof}\leanok
     \uses{lem:exists_conjugation_of_mpv_eq, lem:proportional_of_evalWord_eq}
@@ -920,8 +918,8 @@ to $n \ge 2L + 1$.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_of_overlap}
     \leanok
     \uses{def:l_blk_injective, def:mpv}
-    Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$ and
-    $B$ be tensors of $D \times D$ matrices over physical dimension $d$,
+    Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$ and $0<D$, and let
+    $A$ and $B$ be tensors of $D \times D$ matrices over physical dimension $d$,
     each $L$-block injective, whose matrix product vectors agree at system
     size $n$.  Then there are invertible matrices $Z_v$, one per bond of
     the closed chain ($v = 1, \ldots, n$, $n + 1 \equiv 1$), with
@@ -1154,7 +1152,8 @@ recorded in the route note
     \leanok
     \uses{def:chain_arc_window_injective, def:non_ti_chain}
     Let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$ be
-    site-dependent chains on $n$ sites, each window injective at length
+    site-dependent chains on $n$ sites with a common positive bond dimension,
+    each window injective at length
     $L$, generating the same closed-chain state.  Then for every site $p$
     there is an invertible matrix $Z$ with
     \[
@@ -1181,7 +1180,8 @@ recorded in the route note
     \leanok
     \uses{def:chain_arc_window_injective, def:non_ti_chain}
     Let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$ be
-    site-dependent chains on $n$ sites, each window injective at length
+    site-dependent chains on $n$ sites with a common positive bond dimension,
+    each window injective at length
     $L$, generating the same closed-chain state.  Then the chains are
     gauge equivalent: there are invertible matrices $Z_v$, one per bond
     of the closed chain, with
@@ -1200,8 +1200,7 @@ recorded in the route note
     \uses{lem:chain_exists_conjugation_of_sameState,
         lem:chain_overlapWindow_exists_bondOperator,
         lem:isWindowInjective_arc_span}
-    For a vanishing bond dimension the conclusion is trivial.  Otherwise
-    the per-bond conjugations
+    The per-bond conjugations
     (Lemma~\ref{lem:chain_exists_conjugation_of_sameState}) give window
     covariance with nonzero scalars: on every arc of $m$ sites with
     $L \le m$ and $m + L \le n$, the conjugation at the near end
@@ -1254,7 +1253,7 @@ recorded in the route note
         lem:isWindowInjective_one_of_isInjective}
     Let \(A_0,\ldots,A_{n-1}\) and \(B_0,\ldots,B_{n-1}\) be two
     site-dependent closed chains on \(n \ge 3\) sites, with common physical
-    dimension and common bond dimension.  Suppose every local tensor in
+    dimension and common positive bond dimension.  Suppose every local tensor in
     both chains is injective and the two closed-chain states are equal.
     Then there are invertible matrices \(Z_0,\ldots,Z_{n-1}\), one per
     bond of the closed chain, such that
@@ -1294,7 +1293,8 @@ recorded in the route note
     \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,
         def:mps_chain_cyclic_shift}
     Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain
-    on \(n\ge 3\) sites.  If its generated state is invariant under the
+    with positive bond dimension on \(n\ge 3\) sites.  If its generated state
+    is invariant under the
     cyclic shift \(A_v\mapsto A_{v+1}\), then there are invertible matrices
     \(Z_0,\ldots,Z_{n-1}\), one per bond, such that
     \[
@@ -1340,7 +1340,8 @@ recorded in the route note
     \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
         cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
     Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain
-    on \(n\ge 3\) sites.  If its generated state is invariant under the
+    with positive bond dimension on \(n\ge 3\) sites.  If its generated state
+    is invariant under the
     cyclic translation of the sites, then for every site \(v\) there are
     invertible matrices \(L_v\) and \(R_v\) such that
     \[
@@ -1363,8 +1364,8 @@ recorded in the route note
     \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
         def:mps_chain_cyclic_shift}
     Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain on
-    \(n\ge 3\) sites, with one physical dimension \(d\) and one bond dimension
-    \(D\).  If the closed-chain state is invariant under the cyclic shift
+    \(n\ge 3\) sites, with one physical dimension \(d\) and one positive bond
+    dimension \(D\).  If the closed-chain state is invariant under the cyclic shift
     \(A_v\mapsto A_{v+1}\), then there is an injective tensor \(B\), with bond
     dimension \(D\), such that for every physical configuration \(\sigma\),
     \[
@@ -1508,7 +1509,7 @@ recorded in the route note
     \leanok
     \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,
         def:chain_arc_window_injective}
-    Under the hypotheses of
+    Under the positive-bond-dimension hypotheses of
     Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState},
     suppose \(Z_v\) and \(Z'_v\) are two families of invertible matrices
     satisfying

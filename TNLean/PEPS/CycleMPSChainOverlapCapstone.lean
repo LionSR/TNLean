@@ -481,17 +481,11 @@ while here all sites share one physical dimension `d` and all bonds one
 bond dimension `D`.  Documented in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
 theorem fundamentalTheorem_normalMPSChain_of_overlap {n L d D : ℕ} [NeZero n]
-    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (A B : MPSChainTensor d D n)
+    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
+    (A B : MPSChainTensor d D n)
     (hA : IsWindowInjective A L) (hB : IsWindowInjective B L)
     (hAB : SameState A B) : GaugeEquiv A B := by
   classical
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · -- All `0 × 0` matrices are equal.
-    subst hD0
-    exact ⟨fun _ => 1, fun k i => by
-      apply Matrix.ext
-      intro a b
-      exact a.elim0⟩
   obtain ⟨m', rfl⟩ : ∃ m', n = m' + 1 := ⟨n - 1, by omega⟩
   -- The per-bond conjugations, chosen once per site of the chain and read
   -- at arbitrary starting sites through the residue of the chain length.
@@ -499,7 +493,7 @@ theorem fundamentalTheorem_normalMPSChain_of_overlap {n L d D : ℕ} [NeZero n]
       ∀ w : List (Fin d), w.length = m' + 1 →
       arcEval B v.val w = (Zv : Matrix (Fin D) (Fin D) ℂ) * arcEval A v.val w *
         ((Zv⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-    fun v => exists_conjugation_of_sameState hL hn A B hA hB hAB v.val
+    fun v => exists_conjugation_of_sameState hL hn hD A B hA hB hAB v.val
   choose Z₀ hZ₀ using hZc
   set Z : ℕ → GL (Fin D) ℂ := fun p => Z₀ ((p : ℕ) : Fin (m' + 1)) with hZdef
   have hZ : ∀ (p : ℕ) (w : List (Fin d)), w.length = m' + 1 →
@@ -696,10 +690,10 @@ same closed-chain state are cyclically gauge equivalent.  This is the
 `TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap`; at length one,
 window injectivity is exactly sitewise algebraic injectivity. -/
 theorem fundamentalTheorem_injectiveMPSChain_of_sameState {n d D : ℕ} [NeZero n]
-    (hn : 3 ≤ n) (A B : MPSChainTensor d D n) (hA : IsInjective A)
+    (hn : 3 ≤ n) (hD : 0 < D) (A B : MPSChainTensor d D n) (hA : IsInjective A)
     (hB : IsInjective B) (hAB : SameState A B) : GaugeEquiv A B :=
   fundamentalTheorem_normalMPSChain_of_overlap (hL := Nat.zero_lt_one)
-    (hn := by simpa using hn) A B
+    (hn := by simpa using hn) hD A B
     (isWindowInjective_one_of_isInjective hA)
     (isWindowInjective_one_of_isInjective hB) hAB
 
@@ -715,9 +709,9 @@ This is the first step in the source proof of the translation-invariant
 description corollary at line 1804.  The subsequent telescoping step, which
 constructs a single repeated tensor, is not part of this theorem. -/
 theorem fundamentalTheorem_injectiveMPSChain_cyclicShift {n d D : ℕ} [NeZero n]
-    (hn : 3 ≤ n) (A : MPSChainTensor d D n) (hA : IsInjective A)
+    (hn : 3 ≤ n) (hD : 0 < D) (A : MPSChainTensor d D n) (hA : IsInjective A)
     (hTI : IsCyclicShiftInvariantState A) : GaugeEquiv A (cyclicShift A) :=
-  fundamentalTheorem_injectiveMPSChain_of_sameState hn A (cyclicShift A) hA
+  fundamentalTheorem_injectiveMPSChain_of_sameState hn hD A (cyclicShift A) hA
     (IsInjective.cyclicShift hA) hTI
 
 /-- **Gauge-to-first-tensor form of an injective closed-chain MPS**
@@ -731,13 +725,13 @@ source's displayed \(L_i,R_i\) step before the final repeated-tensor
 collapse. -/
 theorem exists_gauge_to_first_of_cyclicShiftInvariantState
     {n d D : ℕ} [NeZero n]
-    (hn : 3 ≤ n) (A : MPSChainTensor d D n) (hA : IsInjective A)
+    (hn : 3 ≤ n) (hD : 0 < D) (A : MPSChainTensor d D n) (hA : IsInjective A)
     (hTI : IsCyclicShiftInvariantState A) :
     ∀ k : Fin n, ∃ L R : GL (Fin D) ℂ, ∀ i : Fin d,
       A k i = (L : Matrix (Fin D) (Fin D) ℂ) * A 0 i *
         (((R⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :=
   MPSChainTensor.exists_gauge_to_first_of_cyclicShift_gaugeEquiv
-    (fundamentalTheorem_injectiveMPSChain_cyclicShift hn A hA hTI)
+    (fundamentalTheorem_injectiveMPSChain_cyclicShift hn hD A hA hTI)
 
 /-- **Uniqueness of the injective closed-chain gauge**, the uniqueness clause
 of arXiv:1804.04964, Theorem `thm:inj_MPS`, line 724.
@@ -745,7 +739,7 @@ of arXiv:1804.04964, Theorem `thm:inj_MPS`, line 724.
 If two cyclic gauge families relate the same injective chain `A` to `B`, then
 they differ by one nonzero scalar, independent of the bond. -/
 theorem fundamentalTheorem_injectiveMPSChain_gauge_unique {n d D : ℕ} [NeZero n]
-    (A B : MPSChainTensor d D n) (hA : IsInjective A)
+    (hD : 0 < D) (A B : MPSChainTensor d D n) (hA : IsInjective A)
     (Z Z' : Fin n → GL (Fin D) ℂ)
     (hZ : ∀ (k : Fin n) (i : Fin d),
       B k i = (Z k : Matrix (Fin D) (Fin D) ℂ) * A k i *
@@ -758,112 +752,108 @@ theorem fundamentalTheorem_injectiveMPSChain_gauge_unique {n d D : ℕ} [NeZero 
     ∃ c : ℂˣ, ∀ k : Fin n, (Z' k : Matrix (Fin D) (Fin D) ℂ) =
       (c : ℂ) • (Z k : Matrix (Fin D) (Fin D) ℂ) := by
   classical
-  cases D with
-  | zero =>
-      refine ⟨1, fun k => ?_⟩
-      exact Subsingleton.elim _ _
-  | succ D' =>
-      let C : Fin n → GL (Fin (Nat.succ D')) ℂ := fun k => (Z k)⁻¹ * Z' k
-      have hinter : ∀ (k : Fin n) (i : Fin d),
-          (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A k i =
-            A k i * (C (k + 1) :
-              Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-        intro k i
-        have hEq :
-            (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A k i *
-                (((Z (cyclicSucc k))⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
-                  Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
-              =
-            (Z' k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A k i *
-                (((Z' (cyclicSucc k))⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
-                  Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-          rw [← hZ k i, hZ' k i]
-        have hcong := congrArg
-          (fun M : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ =>
-            (((Z k)⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
-                Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * M *
-              (Z' (k + 1) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) hEq
-        simpa [C, Matrix.mul_assoc] using hcong.symm
-      have hmul_all : ∀ (k : Fin n) (M : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ),
-          M ∈ Submodule.span ℂ (Set.range (A k)) →
-            (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * M =
-              M * (C (k + 1) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-        intro k M hM
-        induction hM using Submodule.span_induction with
-        | mem M hM =>
-            rcases hM with ⟨i, rfl⟩
-            exact hinter k i
-        | zero => simp
-        | add X Y _ _ hX hY =>
-            rw [Matrix.mul_add, Matrix.add_mul, hX, hY]
-        | smul a X _ hX =>
-            rw [Matrix.mul_smul, Matrix.smul_mul, hX]
-      have hCstep : ∀ k : Fin n,
-          (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) =
-            (C (k + 1) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-        intro k
-        have hmem : (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) ∈
-            Submodule.span ℂ (Set.range (A k)) := by
-          rw [hA k]
-          exact Submodule.mem_top
-        simpa using hmul_all k 1 hmem
-      have hC_eq_zero : ∀ k : Fin n,
-          (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) =
-            (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) :=
-        fin_cyclic_induction rfl (fun k hk => by
-          calc
-            (C (k + 1) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
-                = (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) :=
-                  (hCstep k).symm
-            _ = (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := hk)
-      have hcommA0 : ∀ i : Fin d,
-          (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A 0 i =
-            A 0 i * (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-        intro i
-        have h := hinter 0 i
-        rw [hC_eq_zero (0 + 1)] at h
-        exact h
-      have hscalar := Matrix.isScalar_of_commute_span_eq_top
-        (Z := (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ))
-        (MPSTensor.IsInjective.span_eq_top (hA 0)) (fun M hM => by
-          rcases hM with ⟨i, rfl⟩
-          exact hcommA0 i)
-      rcases hscalar with ⟨c, hc⟩
-      have hc_ne : c ≠ 0 := by
-        intro hc0
-        have hC0 : (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
-          rw [hc]
-          ext i j
-          simp [hc0]
-        have hmul :
-            (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
-                (((C 0)⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
-                  Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 1 := by
-          simp
-        rw [hC0, Matrix.zero_mul] at hmul
-        exact
-          (one_ne_zero :
-            (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) ≠ 0) hmul.symm
-      refine ⟨Units.mk0 c hc_ne, fun k => ?_⟩
+  letI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  let C : Fin n → GL (Fin D) ℂ := fun k => (Z k)⁻¹ * Z' k
+  have hinter : ∀ (k : Fin n) (i : Fin d),
+      (C k : Matrix (Fin D) (Fin D) ℂ) * A k i =
+        A k i * (C (k + 1) :
+          Matrix (Fin D) (Fin D) ℂ) := by
+    intro k i
+    have hEq :
+        (Z k : Matrix (Fin D) (Fin D) ℂ) * A k i *
+            (((Z (cyclicSucc k))⁻¹ : GL (Fin D) ℂ) :
+              Matrix (Fin D) (Fin D) ℂ)
+          =
+        (Z' k : Matrix (Fin D) (Fin D) ℂ) * A k i *
+            (((Z' (cyclicSucc k))⁻¹ : GL (Fin D) ℂ) :
+              Matrix (Fin D) (Fin D) ℂ) := by
+      rw [← hZ k i, hZ' k i]
+    have hcong := congrArg
+      (fun M : Matrix (Fin D) (Fin D) ℂ =>
+        (((Z k)⁻¹ : GL (Fin D) ℂ) :
+            Matrix (Fin D) (Fin D) ℂ) * M *
+          (Z' (k + 1) : Matrix (Fin D) (Fin D) ℂ)) hEq
+    simpa [C, Matrix.mul_assoc] using hcong.symm
+  have hmul_all : ∀ (k : Fin n) (M : Matrix (Fin D) (Fin D) ℂ),
+      M ∈ Submodule.span ℂ (Set.range (A k)) →
+        (C k : Matrix (Fin D) (Fin D) ℂ) * M =
+          M * (C (k + 1) : Matrix (Fin D) (Fin D) ℂ) := by
+    intro k M hM
+    induction hM using Submodule.span_induction with
+    | mem M hM =>
+        rcases hM with ⟨i, rfl⟩
+        exact hinter k i
+    | zero => simp
+    | add X Y _ _ hX hY =>
+        rw [Matrix.mul_add, Matrix.add_mul, hX, hY]
+    | smul a X _ hX =>
+        rw [Matrix.mul_smul, Matrix.smul_mul, hX]
+  have hCstep : ∀ k : Fin n,
+      (C k : Matrix (Fin D) (Fin D) ℂ) =
+        (C (k + 1) : Matrix (Fin D) (Fin D) ℂ) := by
+    intro k
+    have hmem : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+        Submodule.span ℂ (Set.range (A k)) := by
+      rw [hA k]
+      exact Submodule.mem_top
+    simpa using hmul_all k 1 hmem
+  have hC_eq_zero : ∀ k : Fin n,
+      (C k : Matrix (Fin D) (Fin D) ℂ) =
+        (C 0 : Matrix (Fin D) (Fin D) ℂ) :=
+    fin_cyclic_induction rfl (fun k hk => by
       calc
-        (Z' k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
-            = (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
-                (C k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-              simp [C]
-        _ = (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
-              (C 0 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-              rw [hC_eq_zero k]
-        _ = (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
-              Matrix.scalar (Fin (Nat.succ D')) c := by
-              rw [hc]
-        _ = (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
-              (c • (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) := by
-              rw [Matrix.smul_one_eq_diagonal, Matrix.scalar_apply]
-        _ = c • (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-              rw [Matrix.mul_smul, Matrix.mul_one]
-        _ = ((Units.mk0 c hc_ne : ℂˣ) : ℂ) •
-              (Z k : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
-              simp
+        (C (k + 1) : Matrix (Fin D) (Fin D) ℂ)
+            = (C k : Matrix (Fin D) (Fin D) ℂ) :=
+              (hCstep k).symm
+        _ = (C 0 : Matrix (Fin D) (Fin D) ℂ) := hk)
+  have hcommA0 : ∀ i : Fin d,
+      (C 0 : Matrix (Fin D) (Fin D) ℂ) * A 0 i =
+        A 0 i * (C 0 : Matrix (Fin D) (Fin D) ℂ) := by
+    intro i
+    have h := hinter 0 i
+    rw [hC_eq_zero (0 + 1)] at h
+    exact h
+  have hscalar := Matrix.isScalar_of_commute_span_eq_top
+    (Z := (C 0 : Matrix (Fin D) (Fin D) ℂ))
+    (MPSTensor.IsInjective.span_eq_top (hA 0)) (fun M hM => by
+      rcases hM with ⟨i, rfl⟩
+      exact hcommA0 i)
+  rcases hscalar with ⟨c, hc⟩
+  have hc_ne : c ≠ 0 := by
+    intro hc0
+    have hC0 : (C 0 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
+      rw [hc]
+      ext i j
+      simp [hc0]
+    have hmul :
+        (C 0 : Matrix (Fin D) (Fin D) ℂ) *
+            (((C 0)⁻¹ : GL (Fin D) ℂ) :
+              Matrix (Fin D) (Fin D) ℂ) = 1 := by
+      simp
+    rw [hC0, Matrix.zero_mul] at hmul
+    exact
+      (one_ne_zero :
+        (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0) hmul.symm
+  refine ⟨Units.mk0 c hc_ne, fun k => ?_⟩
+  calc
+    (Z' k : Matrix (Fin D) (Fin D) ℂ)
+        = (Z k : Matrix (Fin D) (Fin D) ℂ) *
+            (C k : Matrix (Fin D) (Fin D) ℂ) := by
+          simp [C]
+    _ = (Z k : Matrix (Fin D) (Fin D) ℂ) *
+          (C 0 : Matrix (Fin D) (Fin D) ℂ) := by
+          rw [hC_eq_zero k]
+    _ = (Z k : Matrix (Fin D) (Fin D) ℂ) *
+          Matrix.scalar (Fin D) c := by
+          rw [hc]
+    _ = (Z k : Matrix (Fin D) (Fin D) ℂ) *
+          (c • (1 : Matrix (Fin D) (Fin D) ℂ)) := by
+          rw [Matrix.smul_one_eq_diagonal, Matrix.scalar_apply]
+    _ = c • (Z k : Matrix (Fin D) (Fin D) ℂ) := by
+          rw [Matrix.mul_smul, Matrix.mul_one]
+    _ = ((Units.mk0 c hc_ne : ℂˣ) : ℂ) •
+          (Z k : Matrix (Fin D) (Fin D) ℂ) := by
+          simp
 
 end PEPS
 end TNLean

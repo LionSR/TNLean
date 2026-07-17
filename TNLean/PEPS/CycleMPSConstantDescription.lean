@@ -81,23 +81,14 @@ every tensor through the first; the seam relation `A_{n+1} ≡ A_0` pins the loo
 product to a scalar; and an `n`-th root absorbs that scalar into the repeated
 tensor. -/
 theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
-    {n d D : ℕ} [NeZero n] (hn : 3 ≤ n) (A : MPSChainTensor d D n)
+    {n d D : ℕ} [NeZero n] (hn : 3 ≤ n) (hD : 0 < D)
+    (A : MPSChainTensor d D n)
     (hA : IsInjective A) (hTI : IsCyclicShiftInvariantState A) :
     ∃ B : MPSTensor d D, MPSTensor.IsInjective B ∧ SameState A (fun _ : Fin n => B) := by
   have hn0 : 0 < n := by omega
-  -- A vanishing bond dimension makes every matrix the unique `0 × 0` matrix.
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · subst hD0
-    refine ⟨fun _ => 0, ?_, ?_⟩
-    · refine eq_top_iff.mpr fun x _ => ?_
-      rw [Subsingleton.elim x 0]
-      exact Submodule.zero_mem _
-    · intro σ
-      simp only [MPSChainTensor.coeff_eq, Matrix.trace, Matrix.diag,
-        Finset.univ_eq_empty, Finset.sum_empty]
   haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   -- The cyclic-shift comparison: one invertible gauge per bond.
-  obtain ⟨Z, hZ0⟩ := fundamentalTheorem_injectiveMPSChain_cyclicShift hn A hA hTI
+  obtain ⟨Z, hZ0⟩ := fundamentalTheorem_injectiveMPSChain_cyclicShift hn hD A hA hTI
   have hZ : ∀ (k : Fin n) (i : Fin d), A (cyclicSucc k) i =
       (Z k : Matrix (Fin D) (Fin D) ℂ) * A k i *
         (((Z (cyclicSucc k))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=

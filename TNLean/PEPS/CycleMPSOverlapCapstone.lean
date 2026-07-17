@@ -353,19 +353,14 @@ the source corollary needs no system size and is
 Source: arXiv:1804.04964, Section `normal_alt`, the corollary after Lemma 5,
 lines 2256--2295 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_translationInvariant_of_overlap
-    {n L d D : ℕ} (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (A B : MPSTensor d D)
+    {n L d D : ℕ} (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
+    (A B : MPSTensor d D)
     (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) := by
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · subst hD0
-    refine ⟨1, 1, one_pow n, fun i => ?_⟩
-    apply Matrix.ext
-    intro a b
-    exact a.elim0
   -- The conjugation at length `n` from the insertion correspondence.
-  obtain ⟨P, hP⟩ := MPSTensor.exists_conjugation_of_mpv_eq hL hn A B hA hB hAB
+  obtain ⟨P, hP⟩ := MPSTensor.exists_conjugation_of_mpv_eq hL hn hD A B hA hB hAB
   -- Absorb the gauge: the conjugated `B` has equal word products with `A`.
   set Q : GL (Fin D) ℂ := P⁻¹ with hQdef
   set C : MPSTensor d D := fun i => (Q : Matrix (Fin D) (Fin D) ℂ) * B i *
@@ -413,13 +408,13 @@ gauge from any such family, so the two forms agree.
 Source: arXiv:1804.04964, Section `normal_alt`, the corollary after Lemma 5,
 lines 2256--2295 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_of_overlap {n L d D : ℕ} [NeZero n]
-    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (A B : MPSTensor d D)
+    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
     (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ Z : Fin n → GL (Fin D) ℂ, ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) := by
   obtain ⟨Z₀, lam, hlamn, hZ₀⟩ :=
-    fundamentalTheorem_normalMPS_translationInvariant_of_overlap hL hn A B hA hB hAB
+    fundamentalTheorem_normalMPS_translationInvariant_of_overlap hL hn hD A B hA hB hAB
   have hlam0 : lam ≠ 0 := by
     intro h0
     rw [h0, zero_pow (by omega : n ≠ 0)] at hlamn
