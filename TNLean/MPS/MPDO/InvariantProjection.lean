@@ -286,8 +286,8 @@ theorem firstSiteMatrix_mul_mpo_comm
   rw [hInv]
   exact (sub_eq_zero.mp hcorner).symm
 
-/-- Let the doubled-index tensor of an MPDO have the same complete MPV family
-as a BNT sector decomposition, and let \(P\) be Hermitian with
+/-- Let the doubled-index tensor of an MPDO have the same positive-length MPV
+family as a BNT sector decomposition, and let \(P\) be Hermitian with
 \(P\widetilde M=P\widetilde M P\).  On every minimal BNT representative, the
 insertions of \(\widetilde M P\) and
 \(P\widetilde M P\) agree.  Equivalently, \((\Id-P)MP=0\) on every
@@ -305,7 +305,7 @@ theorem basis_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (S : MPSTensor.SectorDecomposition (d * d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (S.basis k) =
@@ -350,7 +350,7 @@ theorem blockwise_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k))
     (hCF : HorizontalCFData (d := d * d) μ A)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor
       (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
