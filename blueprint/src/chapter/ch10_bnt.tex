@@ -100,26 +100,6 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     gauge invariance transports this conclusion back to the original tensor.
 \end{proof}
 
-\begin{lemma}[Exact MPV phase equivalence determines the bond dimension]
-    \label{lem:mpv_block_phase_equiv_dim_eq}
-    \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq}
-    \leanok
-    \uses{def:mpv_block_phase_equiv}
-    Suppose that, for two tensors $A$ and $B$ and some nonzero
-    $\zeta\in\C$,
-    \[
-        \ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}
-    \]
-    at every nonnegative length $N$. Then $A$ and $B$ have the same bond
-    dimension.
-\end{lemma}
-
-\begin{proof}\leanok
-    At length zero the two coefficients are the traces of the corresponding
-    identity matrices, while $\zeta^0=1$. Their equality is therefore equality
-    of the two bond dimensions.
-\end{proof}
-
 \begin{theorem}[Non-decaying rectangular overlap determines the bond dimension]
     \label{thm:rect_overlap_norm_one_dim_eq}
     \lean{MPSTensor.dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP}
@@ -548,7 +528,7 @@ transfer map), the BNT definition algebraically (eventual block injectivity).
 
 \section{Permutation rigidity for bases of normal tensors}
 
-When two bases of normal tensors generate the same MPV subspace at every length,
+When two bases of normal tensors generate the same MPV subspace at every positive length,
 the blocks must agree up to a permutation and per-block gauge phases. The
 argument turns the equality of spans into an invertible change-of-basis matrix,
 then analyses its asymptotics through the overlaps.
@@ -1024,7 +1004,8 @@ single family.
     \leanok
     \uses{def:mpv}
     Two blocks $A$ and $B$ are MPV-phase equivalent if there is a nonzero
-    scalar $\zeta$ such that, for every system size~$N$ and every physical word,
+    scalar $\zeta$ such that, for every positive system size~$N$ and every
+    physical word,
     \[
         V^{(N)}(B)_\sigma
         =
@@ -1060,7 +1041,8 @@ single family.
         =
         \zeta^N\ket{V^{(N)}(B_j)}
     \]
-    for every length~$N$. The associated tuple enumerates the finite quotient,
+    for every positive length~$N$. The associated tuple enumerates the finite
+    quotient,
     chooses one representative per class, enumerates that representative first
     in its class, records the scalar relating the representative to each member,
     and proves that distinct representatives are not MPV-phase equivalent. The
@@ -1438,7 +1420,8 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
         \item \textbf{global unit witness:} $|\mu_k| = 1$ for some $k$.
     \end{enumerate}
     Then there exists a sector decomposition $P$ such that $P$ and
-    $\bigoplus_{k=1}^{r} \mu_k B_k$ generate the same MPV family at every length,
+    $\bigoplus_{k=1}^{r} \mu_k B_k$ generate the same MPV family at every
+    positive length,
     and $P$ satisfies the basis-of-normal-tensors conditions
     (Definition~\ref{def:bnt_cpsv}) together with the multiplicity, span, and
     weight-bound conditions of Definition~\ref{def:sector_bnt_cf}.
@@ -1523,7 +1506,8 @@ a contradiction.
 \begin{proof}\leanok
     \uses{thm:rect_overlap_norm_one_dim_eq}
     Choose $\zeta\neq0$ with
-    $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every length~$N$. The
+    $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every positive length~$N$.
+    The
     normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation
     gives
     \[
@@ -1565,8 +1549,8 @@ a contradiction.
     Lemma~\ref{lem:prepared_phase_equiv_dim_eq} identifies the bond dimensions.
     If no gauge-phase relation existed after this identification,
     Theorem~\ref{thm:not_gauge_phase_eventually_not_proportional} would give a
-    length $N$ at which the two MPV states are not proportional. This contradicts
-    the assumed scalar-power identity at every length.
+    positive length $N$ at which the two MPV states are not proportional. This
+    contradicts the assumed scalar-power identity at every positive length.
 \end{proof}
 
 \begin{lemma}[Prepared BNT representative classes preserve bond dimension]%

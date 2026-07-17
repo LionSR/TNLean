@@ -16,8 +16,6 @@ canonical-form equal-norm and sector comparisons.
 
 ## Main statements
 
-* `MPVBlockPhaseEquiv.dim_eq`: exact phase equivalence at every nonnegative
-  length forces equality of bond dimensions.
 * `MPVPhaseClassData.enumEquiv`: the dependent family of class copies is
   equivalent to the original block-index set.
 * `MPVPhaseClassData.regroup_matrix`: a matrix-valued sum can be regrouped by
@@ -36,25 +34,27 @@ variable {d : ℕ}
 /-- MPV phase equivalence between two individual blocks with possibly different bond dimensions.
 
 `MPVBlockPhaseEquiv A B` means that the finite-chain MPV of `B` is a nonzero
-scalar power times the finite-chain MPV of `A`, uniformly in the chain length and
-physical word.  The bond dimensions of `A` and `B` may differ. -/
+scalar power times the finite-chain MPV of `A`, uniformly in every positive
+chain length and physical word.  The bond dimensions of `A` and `B` may differ.
+
+Source: CPSV16, Proposition `prop:char-BNT`, lines 1135–1148. -/
 def MPVBlockPhaseEquiv {d DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB) : Prop :=
-  ∃ ζ : ℂ, ζ ≠ 0 ∧ ∀ (N : ℕ) (σ : Fin N → Fin d),
+  ∃ ζ : ℂ, ζ ≠ 0 ∧ ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
     mpv B σ = ζ ^ N * mpv A σ
 
 namespace MPVBlockPhaseEquiv
 
 /-- Reflexivity of MPV phase equivalence for different bond dimensions. -/
 lemma refl {D : ℕ} (A : MPSTensor d D) : MPVBlockPhaseEquiv A A :=
-  ⟨1, one_ne_zero, fun N σ => by simp⟩
+  ⟨1, one_ne_zero, fun N _hN σ => by simp⟩
 
 /-- Symmetry of MPV phase equivalence for different bond dimensions. -/
 lemma symm {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
     (h : MPVBlockPhaseEquiv A B) : MPVBlockPhaseEquiv B A := by
   rcases h with ⟨ζ, hζ, hmpv⟩
   refine ⟨ζ⁻¹, inv_ne_zero hζ, ?_⟩
-  intro N σ
-  rw [hmpv N σ]
+  intro N hN σ
+  rw [hmpv N hN σ]
   rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero N hζ), one_mul]
 
 /-- Transitivity of MPV phase equivalence for different bond dimensions. -/
@@ -64,22 +64,9 @@ lemma trans {DA DB DC : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
   rcases hAB with ⟨ζ, hζ, hζmpv⟩
   rcases hBC with ⟨η, hη, hηmpv⟩
   refine ⟨η * ζ, mul_ne_zero hη hζ, ?_⟩
-  intro N σ
-  rw [hηmpv N σ, hζmpv N σ, mul_pow]
+  intro N hN σ
+  rw [hηmpv N hN σ, hζmpv N hN σ, mul_pow]
   ring
-
-/-- MPV phase equivalence at all lengths forces equality of bond dimensions.
-
-At length zero both MPV coefficients are traces of identity matrices, while
-the phase contributes the zeroth power `1`.  Thus the equality is simply
-`DB = DA`.  This observation uses the length-zero clause and does not hold for
-positive-length or merely eventual proportionality. -/
-lemma dim_eq {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
-    (h : MPVBlockPhaseEquiv A B) : DA = DB := by
-  obtain ⟨ζ, _hζ, hmpv⟩ := h
-  have hzero := hmpv 0 (fun i => Fin.elim0 i)
-  simp [mpv, coeff] at hzero
-  exact_mod_cast hzero.symm
 
 /-- Gauge-phase equivalence after a dimension cast gives rectangular MPV phase equivalence. -/
 lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB)
@@ -89,20 +76,20 @@ lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor 
     MPVBlockPhaseEquiv A B := by
   rcases hGPE with ⟨X, ζ, hζ, hX⟩
   refine ⟨ζ, hζ, ?_⟩
-  intro N σ
+  intro N _hN σ
   rw [mpv_eq_pow_mul_of_gaugePhase
     (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hX N σ,
     mpv_cast_dim hdim A N σ]
 
 /-- MPV phase equivalence gives a scalar-power equality of MPV state vectors. -/
 lemma exists_mpvState_eq_smul {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
-    (h : MPVBlockPhaseEquiv A B) (N : ℕ) :
+    (h : MPVBlockPhaseEquiv A B) (N : ℕ) (hN : 0 < N) :
     ∃ ζ : ℂ, ζ ≠ 0 ∧ mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
   rcases h with ⟨ζ, hζ, hmpv⟩
   refine ⟨ζ, hζ, ?_⟩
   ext σ
   simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
-  exact hmpv N σ
+  exact hmpv N hN σ
 
 end MPVBlockPhaseEquiv
 
@@ -131,8 +118,8 @@ structure MPVCommonPhaseCover {d rA rB : ℕ}
 
 `MPVPhaseEquiv blocks j k` means that block `k` has the same MPV family as
 block `j` after multiplying length-`N` vectors by a nonzero scalar power
-`ζ ^ N`.  Gauge-phase equivalence implies this relation, and quotienting a
-finite family by this relation is enough to absorb all repeated scalar-power
+`ζ ^ N` for positive `N`. Gauge-phase equivalence implies this relation, and
+quotienting a finite family by this relation is enough to absorb all repeated scalar-power
 copies into sector weights.
 
 This is the family-indexed specialization of `MPVBlockPhaseEquiv`, so the
@@ -173,10 +160,10 @@ lemma MPVPhaseEquiv.of_gaugePhaseEquiv_cast {r : ℕ} {dim : Fin r → ℕ}
 /-- MPV phase equivalence gives a scalar-power equality of finite-length MPV state vectors. -/
 lemma MPVPhaseEquiv.exists_mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
     {blocks : (k : Fin r) → MPSTensor d (dim k)} {j k : Fin r}
-    (h : MPVPhaseEquiv blocks j k) (N : ℕ) :
+    (h : MPVPhaseEquiv blocks j k) (N : ℕ) (hN : 0 < N) :
     ∃ ζ : ℂ, ζ ≠ 0 ∧
       mpvState (d := d) (blocks k) N = ζ ^ N • mpvState (d := d) (blocks j) N :=
-  MPVBlockPhaseEquiv.exists_mpvState_eq_smul h N
+  MPVBlockPhaseEquiv.exists_mpvState_eq_smul h N hN
 
 
 
@@ -294,8 +281,9 @@ subspace as the original block family.
 
 Each representative is one of the original blocks, giving one inclusion. Conversely, every
 original block occurs in a phase class and is a nonzero scalar-power multiple of that class's
-representative at each length, hence lies in the representative span. -/
-theorem representative_mpv_span_eq (classes : MPVPhaseClassData blocks) (N : ℕ) :
+representative at each positive length, hence lies in the representative span. -/
+theorem representative_mpv_span_eq (classes : MPVPhaseClassData blocks) (N : ℕ)
+    (hN : 0 < N) :
     Submodule.span ℂ (Set.range (fun j : Fin classes.g =>
       mpvState (d := d) (blocks (classes.repr j)) N)) =
     Submodule.span ℂ (Set.range (fun k : Fin r =>
@@ -315,7 +303,7 @@ theorem representative_mpv_span_eq (classes : MPVPhaseClassData blocks) (N : ℕ
     change mpvState (d := d) (blocks k) N ∈
       Submodule.span ℂ (Set.range (fun j : Fin classes.g =>
         mpvState (d := d) (blocks (classes.repr j)) N))
-    obtain ⟨ζ, _hζ, hstate⟩ := hphase.exists_mpvState_eq_smul N
+    obtain ⟨ζ, _hζ, hstate⟩ := hphase.exists_mpvState_eq_smul N hN
     rw [hstate]
     exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨j, rfl⟩)
 

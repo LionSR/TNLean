@@ -384,7 +384,7 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
               MPSTensor.mpv (blocks (classes.repr j)) w := by
               refine Finset.sum_congr rfl fun j _ =>
                 Finset.sum_congr rfl fun q _ => ?_
-              rw [(classes.enum_phase j q).choose_spec.2 N w, mul_pow]
+              rw [(classes.enum_phase j q).choose_spec.2 N _hN w, mul_pow]
               ring
         _ = ∑ j : Fin classes.g,
             (∑ q : Fin (classes.copies j),
