@@ -400,7 +400,9 @@ through the weighted direct sum.
 
 This is still a prepared-block statement.  It does not start from an arbitrary
 translation-invariant representation, does not separate all-zero blocks, and
-does not prove the total bond-dimension bound of the full source theorem. -/
+does not prove the total bond-dimension bound of the full source theorem. The
+prepared-block boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_unital_dualDiag_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
@@ -519,7 +521,11 @@ by itself give an unconditional arbitrary-input theorem under the current
 nonzero Kraus operator, excluding the all-zero scalar counterexample and
 matching the hypotheses of the corresponding irreducible-to-TP result from
 `Existence.lean`. It remains separate from the later normal-canonical-form theorem
-in `NormalReduction/Main.lean`. -/
+in `NormalReduction/Main.lean`.
+
+Source: arXiv:1606.00608, lines 1058--1077, applied independently to each nonzero irreducible
+block. The relation to the PGVWC07 unital orientation is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_tp_gauge_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
