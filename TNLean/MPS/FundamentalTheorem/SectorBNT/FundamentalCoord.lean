@@ -16,7 +16,8 @@ global-gauge construction is at lines 1189–1192 of the Appendix MPV proof.
 
 The bundled-witness theorem `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses`
 exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
-`IsBNTCanonicalForm` and generating the same MPV family:
+`IsBNTCanonicalForm` and generating the same MPV family at every positive
+length:
 
 * the basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$ between
   corresponding BNT sectors;
@@ -67,7 +68,7 @@ variable {d : ℕ}
 /-- **BNT equal-MPV global-gauge witness.**
 
 If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
-same MPV family, then there exist:
+same MPV family at every positive length, then there exist:
 
 * a basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$,
 * per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$,
@@ -429,8 +430,8 @@ private lemma permMatrix_conj_eq_submatrix {n : Type*}
 /-- **BNT equal-MPV literal global-gauge form.**
 
 If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
-same MPV family, then their total bond dimensions agree, and there exists an
-explicit
+same MPV family at every positive length, then their total bond dimensions
+agree, and there exists an explicit
 $Y \in \mathrm{GL}(Q.\mathrm{totalDim},\mathbb{C})$ realizing the global gauge
 equation
 $$V_Q^i \;=\; Y \,\bigl(\mathrm{cast}\;V_P^i\bigr)\, Y^{-1}$$
@@ -553,10 +554,10 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
 
 /-- **Canonical Form II equal-case unitary global gauge.**
 
-If two BNT canonical forms generate the same MPV family, their literal total
-tensors are related by a unitary gauge.  The gauge is the product of the
-block-diagonal direct sum of the matched sector unitaries and the unitary
-permutation that restores the original sector coordinates.
+If two BNT canonical forms generate the same MPV family at every positive
+length, their literal total tensors are related by a unitary gauge.  The gauge
+is the product of the block-diagonal direct sum of the matched sector unitaries
+and the unitary permutation that restores the original sector coordinates.
 
 Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197--1199. -/
 private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal

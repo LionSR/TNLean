@@ -71,9 +71,10 @@ variable {d : ℕ}
 
 /-- **CPSV16 Appendix MPV proof, line 1182, Step 1 (full-basis form).**
 
-For every sector `k` of `Q`, there exists a sector `j` of `P` of equal bond
-dimension, gauge-phase equivalent to `Q.basis k` after the dimension cast, and
-with non-decaying cross-overlap.
+Suppose that the total tensors of `P` and `Q` generate the same MPV family at
+every positive length.  For every sector `k` of `Q`, there exists a sector `j`
+of `P` of equal bond dimension, gauge-phase equivalent to `Q.basis k` after the
+dimension cast, and with non-decaying cross-overlap.
 
 The proof applies `exists_block_match_exact` to the swapped pair `(Q, P)` and
 then flips the gauge-phase equivalence and overlap order back to the displayed

@@ -377,9 +377,10 @@ theorem coeff_identity_via_matched_mpv_phase_proportional
 Assume a full matched-basis equivalence `β : Fin Q.basisCount ≃
 Fin P.basisCount`, with every `Q`-block gauge-phase equivalent to the
 corresponding `P`-block.  Substituting the MPV phase relation for each
-matched pair into `SameMPV₂ P.toTensor Q.toTensor`, reindexing the `Q`-sum
+matched pair into `SameMPV₂Pos P.toTensor Q.toTensor`, reindexing the `Q`-sum
 by `β`, and applying A-only BNT linear independence (`hP.bnt_data`) gives
-an eventual exact coefficient identity
+an eventual exact coefficient identity.  Equality of the total MPV families
+is required at every positive length.
 
 `P.coeff N (β k) = ζ_k^N * Q.coeff N k`.
 
