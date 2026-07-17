@@ -1891,12 +1891,13 @@ projection.
     \label{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
     \leanok
-    \uses{def:sector_bnt_cf,
+    \uses{def:sector_bnt_cf, def:same_mpv2_pos,
         thm:sector_bnt_exact_block_match}
-    Let $P, Q$ be two BNT canonical forms with the same MPV family. Then for
-    every sector $k$ of $Q$ there exist a sector $j$ of $P$ with matched bond
-    dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase equivalence after
-    identifying the matched bond dimensions, and a non-decaying cross-overlap.
+    Let $P, Q$ be two BNT canonical forms with the same MPV family at every
+    positive length. Then for every sector $k$ of $Q$ there exist a sector $j$
+    of $P$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
+    equivalence after identifying the matched bond dimensions, and a
+    non-decaying cross-overlap.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1919,9 +1920,9 @@ holds on the full basis \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \lean{MPSTensor.bijective_match_of_sameMPV}
     \leanok
     \uses{thm:sector_bnt_exact_block_match,
-        def:sector_bnt_cf}
-    Let $P, Q$ be two BNT canonical forms with the same MPV family. Then there
-    is a bijection
+        def:sector_bnt_cf, def:same_mpv2_pos}
+    Let $P, Q$ be two BNT canonical forms with the same MPV family at every
+    positive length. Then there is a bijection
     \[
         \beta : J(Q) \simeq J(P)
     \]
