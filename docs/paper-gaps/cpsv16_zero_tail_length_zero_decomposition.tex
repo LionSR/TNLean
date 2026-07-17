@@ -9,7 +9,7 @@
 
 \newcommand{\MPV}[2]{V^{(#1)}\!\left(#2\right)}
 
-\title{The Length-Zero (``Zero-Tail'') Bookkeeping in the\\
+\title{Removing Length-Zero Bookkeeping from the\\
   Blocked Canonical-Form Decomposition}
 \author{}
 \date{2026-05-30}
@@ -20,12 +20,11 @@
 \noindent
 This note explains why carrying the blocked canonical-form decomposition as an
 \emph{all-length} matrix-product-vector identity is the wrong formal shape, and
-records the clean replacement together with the one place where the formal
-development still keeps the awkward form.\footnote{%
+records its removal from the physical canonical-form statements.\footnote{%
   Context: PRs \ghpr{2153}, \ghpr{2156}, and \ghpr{2167} removed roughly a
   thousand lines of ``zero-tail'' plumbing built on the all-length form
   discussed here. This note records why that form is a non-source-faithful
-  overcomplication and what remains.}
+  overcomplication and why it has now been removed.}
 
 \section{The assertion}
 
@@ -102,20 +101,16 @@ Separate the two facts. The positive-length comparison
   = \MPV{N}{\textstyle\bigoplus_k \mu_k B_k}_\sigma
   \qquad (N\ge 1)\label{eq:pos}
 \end{align}
-carries all of the mathematics, and the length-zero coefficient is recovered
-\emph{once}, where an all-length statement is genuinely needed, from the single
-dimension identity~\eqref{eq:dim}: if two tensors agree at all positive lengths
-and have equal bond dimension, they agree at length zero as well, because the
-empty-word coefficient is the bond dimension.\footnote{%
-  Formally, positive-length equality is \leanid{SameMPV₂Pos} and the one-step
-  upgrade is
-  \leanid{SameMPV₂Pos.toSameMPV₂_of_bondDim_eq} in
-  \doclink{TNLean/MPS/Defs}. The canonical-form predicate now stores
-  \leanid{SameMPV₂Pos} together with a single bond-dimension field rather than
-  the all-length decomposition; see \ghpr{2153}.}
-This is the source-faithful shape: the nonzero normal blocks are compared at
-positive length, and the zero block appears only as the scalar~$z$
-in~\eqref{eq:dim}.
+carries all of the physical mathematics. The direct-sum induction independently
+gives the structural identity for the unfiltered irreducible blocks. After the
+all-zero blocks are discarded, this implies only the bound needed downstream,
+\begin{align}
+  \sum_kD_k\leq D.\label{eq:bound}
+\end{align}
+Thus no physical theorem needs an empty-word coefficient or a scalar recording
+the discarded bond-space dimension. Formally, positive-length equality is
+\leanid{SameMPV₂Pos}; the canonical-form reduction carries
+\eqref{eq:pos} and~\eqref{eq:bound}.
 
 \section{Formal status}
 
@@ -123,19 +118,20 @@ in~\eqref{eq:dim}.
 \path{thm:tp_primitive_blockdecomp} in
 \path{blueprint/src/chapter/ch09_canonical.tex}, now uses the
 source-faithful shape: its MPV clause is the positive-length comparison
-in~\eqref{eq:pos}, and the empty-word contribution is the separate identity
-\(z+\sum_k D_k=D\).  The former support lemma
-\leanid{zeroTail_toTensorFromBlocks_blockPower} has therefore been removed.
+in~\eqref{eq:pos}, and its dimension clause is the bound~\eqref{eq:bound}.
+The intermediate declarations carrying \texttt{zeroTailDim}, as well as the
+former support lemma
+\leanid{zeroTail_toTensorFromBlocks_blockPower}, have therefore been removed.
 
 \section{Conclusion}
 
-The blocked canonical form~\eqref{eq:zero-block} is correct, and the dimension
-count~\eqref{eq:dim} is part of it. The former formal defect was one of shape:
+The block decomposition~\eqref{eq:zero-block} is correct as an intermediate
+linear-algebra statement. The former formal defect was one of shape:
 stating the reduction as the all-length matrix-product-vector
 identity~\eqref{eq:all-length} fused a trivial empty-word dimension count with
-the substantive positive-length comparison. The faithful statement is the
-positive-length comparison~\eqref{eq:pos} with the length-zero coefficient
-restored once from~\eqref{eq:dim}. The development now uses this shape in the
+the substantive positive-length comparison. The physical statement is the
+positive-length comparison~\eqref{eq:pos} together with the structural
+bound~\eqref{eq:bound}. The development now uses this shape throughout the
 after-blocking primitive decomposition and its downstream consumers.
 
 \bibliographystyle{alpha}

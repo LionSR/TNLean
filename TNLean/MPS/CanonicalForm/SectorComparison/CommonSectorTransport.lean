@@ -38,9 +38,8 @@ Two tensors with the same MPV family have one common positive blocking length
 whose nonzero parts are weighted families of trace-preserving, primitive,
 tensor-irreducible blocks with positive bond dimensions and nonzero weights. At
 every positive length each blocked tensor equals its nonzero part, and the two
-nonzero parts equal each other. The all-zero leftover block contributes only at
-length zero, so it is omitted; the length-zero coefficient is restored once, at
-the end, from equality of the bond dimensions.
+nonzero parts equal each other. All-zero blocks are omitted because they vanish
+at every positive length.
 
 The proof uses the family-level common-alphabet nonzero-part identity directly,
 rather than passing through a separate relabeling hypothesis.

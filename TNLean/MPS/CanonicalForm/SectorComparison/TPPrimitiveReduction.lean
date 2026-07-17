@@ -24,20 +24,16 @@ open Filter
 /-!
 # TP-primitive reduction after blocking
 
-This file begins the canonical-form reduction for arbitrary MPS
-families. It combines the zero-block separation, TP gauge, and
-common blocking steps into a blocked decomposition whose nontrivial blocks are
-left-canonical and have primitive transfer maps.
-
-The "zero tail" in the produced decomposition is the total bond dimension of
-the separated all-zero leftover blocks.  It is the dimension gap allowed by
-`∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
+This file begins the canonical-form reduction for arbitrary MPS families. It
+combines removal of all-zero blocks at positive lengths, the TP gauge, and
+common blocking into a blocked decomposition whose blocks are left-canonical
+and have primitive transfer maps.
 
 ## Main statements
 
 * `exists_tp_primitive_blockDecomp_after_blocking` — arbitrary tensors admit a
-  positive-length blocked decomposition into TP-primitive blocks, together with
-  the separate zero-block bond-dimension count.
+  positive-length blocked decomposition into TP-primitive blocks whose total
+  bond dimension is at most the original bond dimension.
 
 ## References
 
@@ -97,8 +93,6 @@ an arbitrary `A : MPSTensor d D` and produces blocked TP-primitive data.
 For any `A : MPSTensor d D`, there exists a blocking period `p > 0` and
 a decomposition:
 
-* a **trivial block** of dimension `zeroTailDim` (accumulating all-zero irreducible
-  blocks from the original decomposition);
 * a family of **weighted blocked blocks** `blocks k` indexed by `Fin r`, each with:
   - left-canonical (TP) normalization `∑ᵢ (blocks k i)ᴴ * (blocks k i) = I`;
   - primitive transfer map `_root_.IsPrimitive (transferMap (blocks k))`;
@@ -110,16 +104,15 @@ The MPV relationship holds at every positive blocked length:
   mpv (blockTensor A p) σ = mpv (toTensorFromBlocks μ blocks) σ
 ```
 
-The zero block appears only through the length-zero bond-dimension identity
-`zeroTailDim + ∑ dim = D`. This separates the source's positive-length
-comparison from the empty-word dimension count, as described in
-`docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`.
+The retained blocks have total bond dimension at most the original bond
+dimension.  This bound comes from the invariant-subspace decomposition and is
+independent of any empty-word comparison.
 
 **Note on the original blocks**: The pre-blocking blocks (from step 2) ARE
 `IsIrreducibleTensor`, but blocking does not in general preserve tensor
 irreducibility. See the module documentation for the gap analysis. -/
 theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
-    ∃ (zeroTailDim : ℕ) (p : ℕ) (_ : 0 < p)
+    ∃ (p : ℕ) (_ : 0 < p)
       (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
       (blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k)),
       -- (a) Blocks are left-canonical (TP)
@@ -136,13 +129,13 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
       SameMPV₂Pos
         (blockTensor (d := d) (D := D) A p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
-      -- (f) Length-zero bond-dimension count
-      zeroTailDim + ∑ k : Fin r, dim k = D := by
+      -- (f) Bond-dimension bound
+      ∑ k : Fin r, dim k ≤ D := by
   classical
   -- Step A: Get TP-gauged irreducible blocks from an arbitrary tensor.
-  obtain ⟨zeroTailDim, r₀, dim₀, μ₀, blocks₀,
-      hIrr₀, hTP₀, hμNe₀, hDim₀, hPos₀, hDimId₀⟩ :=
-    exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D) A
+  obtain ⟨r₀, dim₀, μ₀, blocks₀,
+      hIrr₀, hTP₀, hμNe₀, hDim₀, hPos₀, hDimBound₀⟩ :=
+    exists_tp_gauge_from_arbitrary (d := d) (D := D) A
   -- Step B: Find a common blocking period making all transfer maps primitive.
   obtain ⟨P, hP, hPrim⟩ :=
     exists_common_blocking_all_primitive_of_TP_irr blocks₀ hTP₀ hIrr₀ hDim₀
@@ -151,7 +144,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
     fun k => blockTensor (d := d) (D := dim₀ k) (blocks₀ k) P with blocks₁_def
   set μ₁ : Fin r₀ → ℂ := fun k => (μ₀ k) ^ P with μ₁_def
   -- Step D: Verify all properties.
-  refine ⟨zeroTailDim, P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_, ?_⟩
   -- (a) TP under blocking.
   · intro k
     exact leftCanonical_blockTensor (d := d) (D := dim₀ k) (A := blocks₀ k) (L := P) (hTP₀ k)
@@ -166,7 +159,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
       sameMPV₂Pos_blockTensor_toTensorFromBlocks
         (d := d) (D := D) (r := r₀) (dim := dim₀)
         A μ₀ blocks₀ hPos₀ P hP
-  -- (f) Length-zero bond-dimension count.
-  · exact hDimId₀.symm
+  -- (f) Bond dimensions are unchanged by blocking.
+  · exact hDimBound₀
 
 end MPSTensor

@@ -1,5 +1,11 @@
 # Canonical-form chapters: read-only audit
 
+> **Status update (2026-07-17).** This audit is historical. The zero-tail
+> intermediate declarations discussed below were subsequently removed. The
+> current arbitrary-input results are
+> `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary` and
+> `MPSTensor.exists_tp_gauge_from_arbitrary`.
+
 Scope: blueprint chapters `ch08_canonical.tex`, `ch09_block_perm.tex`,
 `ch11b_after_blocking.tex` and their Lean files. No files modified.
 
