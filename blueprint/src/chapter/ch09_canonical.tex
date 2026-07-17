@@ -1280,7 +1280,7 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
 \end{remark}
 
 \section{Nonzero blocks and the trace-preserving gauge}%
-\label{sec:zero_block_separation}
+\label{sec:nonzero_blocks_tp_gauge}
 
 In an irreducible block decomposition some blocks may have all-zero Kraus
 operators. Such a block contributes nothing to a matrix product vector at any
@@ -1290,7 +1290,7 @@ using an empty-word coefficient. Each retained block is then placed in the
 trace-preserving gauge.
 
 \begin{theorem}[Nonzero irreducible block decomposition]%
-    \label{thm:zero_block_separation}
+    \label{thm:nonzero_irreducible_block_decomposition}
     \lean{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks}
     \leanok
     \uses{def:irreducible_tensor, def:same_mpv2_pos}
@@ -1366,8 +1366,8 @@ trace-preserving gauge.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:zero_block_separation, thm:tp_data_irreducible}
-    Theorem~\ref{thm:zero_block_separation} supplies the nonzero
+    \uses{thm:nonzero_irreducible_block_decomposition, thm:tp_data_irreducible}
+    Theorem~\ref{thm:nonzero_irreducible_block_decomposition} supplies the nonzero
     irreducible blocks $(C_k)_{k=1}^r$. For every $N \ge 1$ and every $\sigma$,
     \[
         V^{(N)}(A)_\sigma
@@ -1807,7 +1807,7 @@ direct sum of primitive irreducible blocks.
 \end{proof}
 
 \begin{theorem}[Cyclic sectors after removing zero blocks]%
-    \label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
+    \label{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}
     \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂}
     \leanok
     \uses{thm:tp_gauge_arbitrary, def:primitive_irreducible_cyclic_sectors,
@@ -1859,7 +1859,7 @@ direct sum of primitive irreducible blocks.
     \label{thm:ft_after_blocking_common_length_common_sector_theorem}
     \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂}
     \leanok
-    \uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
+    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks,
         thm:exists_common_blocked_cyclic_sector_family_common_multiple,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
         thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
@@ -1888,13 +1888,13 @@ direct sum of primitive irreducible blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
+    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks,
         thm:exists_common_blocked_cyclic_sector_family_common_multiple,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
         thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
         thm:common_blocked_cyclic_sector_derived_properties}
     Start from
-    Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}. With
+    Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}. With
     $p_A,p_B$ the least common multiples of the period-removal lengths on the two
     sides, use $p=\operatorname{lcm}(p_A,p_B)$. The prescribed-common-multiple
     lemma constructs both one-sided sector families at this length, and the
