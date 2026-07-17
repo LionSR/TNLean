@@ -244,15 +244,27 @@ and
 \path{MPSTensor.SectorDecomposition.exists_common_nonzero_threeSiteClosingMatrix_entry};
 the matrix form is
 \path{MPSTensor.SectorDecomposition.exists_common_threeSiteClosingMatrix_ne_zero}.}
-The remaining source-faithfulness gap is to prove that the normalized
-three-site reduced state of the original tensor is the family closure with
-these matrices $R_j$, including the common normalization and the transport
-through the horizontal canonical-form gauge.  Until this identification is
-proved, the unrestricted uniqueness assertion of equation
-\texttt{QkKjs} is not identified with the conditional theorem above; the
-blueprint states and marks only the explicitly restricted version.  The
-elimination plan is to prove this reduced-state expansion and then specialize
-the conditional uniqueness and projector statements.
+This closing-matrix bridge is now formalized with the normalization included.
+Equality of the complete matrix-product-vector families transports the
+original tensor to its horizontal BNT representation, and the normalized
+three-site reduced state has closing matrices
+\[
+  \widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L.
+\]
+At the four-site length used by the formal SAL-to-Markov theorem, one takes
+$L=1$.  SAL makes the normalization scalar nonzero, so every
+$\widehat R_j$ is nonzero.
+\footnote{The relevant declarations are
+\path{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix},
+\path{MPOTensor.reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂},
+and
+\path{MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}.}
+Thus the explicit nonzero-closing hypothesis of the generic cancellation
+theorem is derived for the family closure used by the source.  The remaining
+formal composition is to specialize the generic uniqueness and projector
+statements simultaneously to this closure, the four-site Hayashi
+decomposition supplied by SAL, and the simultaneous inverse supplied by
+biCF.  No further closing-matrix assumption is needed for that specialization.
 
 The neighboring operators are now assembled from these sector tensors.  The
 operator
