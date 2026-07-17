@@ -128,6 +128,38 @@
     $r_j>0$, both factors in $r_j\mu_j^N$ are nonzero.
 \end{proof}
 
+\begin{theorem}[Common nonzero BNT tail selection]
+    \label{thm:mpdo_common_nonzero_bnt_tail_selection}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.exists_common_nonzero_word_entry}
+    \lean{MPSTensor.SectorDecomposition.exists_common_nonzero_weighted_tail_entry}
+    \leanok
+    \uses{def:bnt_cpsv,
+      thm:mpdo_common_weight_coefficient_ne_zero}
+    There is one positive tail length $L$ such that, for every normal
+    representative $A_j$, some physical word $\sigma$ and virtual indices
+    $\alpha,\beta$ satisfy
+    \[
+        \widetilde m_j
+        =\bigl[A_j^{\sigma_1}\cdots A_j^{\sigma_L}\bigr]_{\alpha,\beta}
+        \ne0.
+    \]
+    At total chain length $L+3$, the corresponding copy coefficient is
+    $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$, and hence
+    $m_j=q_j\widetilde m_j\ne0$.
+    This is the simultaneous selection made in
+    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
+    Identifying these scalars with entries of the closing matrices in the
+    three-site family expansion is a separate step.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a length beyond the eventual linear-independence threshold of the
+    BNT.  Each representative MPV is then nonzero, so one of its word
+    coefficients, and therefore one entry of that word matrix, is nonzero.
+    The preceding theorem supplies the nonzero coefficient at length $L+3$;
+    their product is nonzero.
+\end{proof}
+
 \begin{theorem}[Canonical form with natural multiplicities]
     \label{thm:mpdo_common_weight_absorbed_mpv}
     \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis}
