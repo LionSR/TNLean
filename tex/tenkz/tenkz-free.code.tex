@@ -74,16 +74,16 @@
   {
     \str_case:nn {#1}
       {
-        {south} { \node[label, anchor=north] at
+        {south} { \node[tn~label, anchor=north] at
                     ($(#2.south)-(0,\tenkz@dim{\tenkz@r@labelclear})$)
                     { $\tenkz@labelsize #3$ }; }
-        {north} { \node[label, anchor=south] at
+        {north} { \node[tn~label, anchor=south] at
                     ($(#2.north)+(0,\tenkz@dim{\tenkz@r@labelclear})$)
                     { $\tenkz@labelsize #3$ }; }
-        {east}  { \node[label, anchor=west] at
+        {east}  { \node[tn~label, anchor=west] at
                     ($(#2.east)+(\tenkz@dim{\tenkz@r@labelclear},0)$)
                     { $\tenkz@labelsize #3$ }; }
-        {west}  { \node[label, anchor=east] at
+        {west}  { \node[tn~label, anchor=east] at
                     ($(#2.west)-(\tenkz@dim{\tenkz@r@labelclear},0)$)
                     { $\tenkz@labelsize #3$ }; }
       }
@@ -292,7 +292,7 @@
   {
     \tl_if_empty:NF \l__tenkz_jlabel_tl
       { \tl_set:Nn \l__tenkz_jlabelnode_tl
-          { node[label, pos=#1, above=\tenkz@dim{\tenkz@r@labelclear}]
+          { node[tn~label, pos=#1, above=\tenkz@dim{\tenkz@r@labelclear}]
               { $\tenkz@labelsize \tl_use:N \l__tenkz_jlabel_tl$ } } }
   }
 
