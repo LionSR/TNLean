@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.Data.Matrix.Block
 import TNLean.Analysis.Entropy
+import TNLean.Analysis.MatrixSqrt
 
 /-!
 # Decomposition lemmas for the von Neumann entropy
@@ -36,6 +37,7 @@ in strong subadditivity.
 * `vonNeumannEntropy_blockDiagonal_smul` — the weighted direct-sum identity
   \(S\!\left(\bigoplus_j p_j\,\omega_j\right)
     = \sum_j(-p_j\log p_j+p_jS(\omega_j))\) for density matrices \(\omega_j\).
+  The weights are nonnegative.
   When the weights form a probability distribution, the first terms sum to
   the Shannon entropy \(H(p)\).
 * `eq_of_weighted_sum_eq_of_pos_of_le` — equality of two positively weighted
@@ -371,7 +373,7 @@ theorem vonNeumannEntropy_blockDiagonal' (M : ∀ j, Matrix (dm j) (dm j) ℂ)
     rw [vonNeumannEntropy, hev]
 
 /-- **Entropy of a weighted finite orthogonal direct sum.** If every
-\(\omega_j\) is a density matrix, then
+\(\omega_j\) is a density matrix and every weight is nonnegative, then
 \[
   S\!\left(\bigoplus_j p_j\omega_j\right)
     =\sum_j\bigl(-p_j\log p_j+p_jS(\omega_j)\bigr).
@@ -381,11 +383,11 @@ This is the direct-sum entropy identity used in arXiv:1606.00608,
 Appendix C.2, lines 1760--1770. -/
 theorem vonNeumannEntropy_blockDiagonal_smul
     (p : o → ℝ) (ω : ∀ j, Matrix (dm j) (dm j) ℂ)
+    (hp : ∀ j, 0 ≤ p j)
     (hω : ∀ j, (ω j).PosSemidef) (hωt : ∀ j, (ω j).trace = 1) :
     vonNeumannEntropy (Matrix.blockDiagonal' (fun j => (p j : ℂ) • ω j)) (by
-      rw [Matrix.isHermitian_blockDiagonal'_iff]
-      exact fun j => (hω j).isHermitian.smul (k := (p j : ℂ))
-        (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))) =
+      exact (Matrix.PosSemidef.blockDiagonal' _ fun j =>
+        (hω j).smul (a := (p j : ℂ)) (by exact_mod_cast hp j)).isHermitian) =
       ∑ j, (negMulLog (p j) + p j * vonNeumannEntropy (ω j) (hω j).isHermitian) := by
   classical
   have hBlockHerm : ∀ j, ((p j : ℂ) • ω j).IsHermitian := fun j =>
