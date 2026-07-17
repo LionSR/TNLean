@@ -427,6 +427,7 @@ section GlobalToLocalSAL
 
 variable {d D : ℕ}
 
+
 /-- Saturation of the area law gives equality in strong subadditivity for the
 three-region marginal used in the proof of Lemma C.2.
 

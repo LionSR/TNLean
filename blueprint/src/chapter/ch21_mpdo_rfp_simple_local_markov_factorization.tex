@@ -313,31 +313,49 @@ strong subadditivity for a normalized three-site reduced state.
     positive-weight Markov sector exactly once.
 \end{proof}
 
-\begin{theorem}[Saturation gives equality in strong subadditivity]
+\begin{theorem}[SAL and arbitrary-cut equality in strong subadditivity]
     \label{thm:mpdo_sal_ssa_equality}
+    \lean{MPOTensor.isSSAEquality_tripartite_m_of_isSAL}
     \lean{MPOTensor.isSSAEquality_tripartite_of_isSAL}
     \lean{MPOTensor.isSSAEquality_threeSite_of_isSAL}
+    \lean{MPOTensor.%
+      mutualInfoChain_one_eq_of_isSSAEquality_tripartite_m}
+    \lean{MPOTensor.isSAL_of_isSSAEquality_tripartite_m}
     \leanok
     \uses{def:is_sal, def:ssa_equality}
-    Let $N\geq 4$, and divide the first $N-1$ sites of the normalized periodic
-    state into consecutive regions $A,B,C$ of lengths $1,1,N-3$. If the tensor
-    saturates the area law, then
+    Let $1\leq m\leq\lfloor N/2\rfloor$, and divide the chain into four
+    consecutive regions $A,B,C,D$ of lengths $m-1,1,N-m-1,1$.  If the tensor
+    saturates the area law, then its marginal on $ABC$ satisfies
     \[
         S(ABC)+S(B)=S(AB)+S(BC).
     \]
-    In particular, the three-site reduced state of the four-site chain satisfies
-    equality in strong subadditivity.
+    Indeed, this is the entropy form of $I_1=I_m$.  Taking $m=2$ gives the
+    regions of lengths $1,1,N-3$, and then taking $N=4$ shows that the
+    three-site reduced state of the four-site chain satisfies equality in
+    strong subadditivity.  This is the choice of regions used in
+    \cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
+    Conversely, suppose that the periodic operators are positive semidefinite
+    and have nonzero trace at every positive length.  If the displayed
+    equality holds for every $1\leq m\leq\lfloor N/2\rfloor$, then the tensor
+    saturates the area law.
+    The endpoint corrects the strict inequality printed at source line~1771:
+    Definition~4.6 and the concluding comparison both require
+    $m=\lfloor N/2\rfloor$.  This local correction is recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_tripartite_block_entropy_identifications}
-    By saturation, $I_1=I_2$. Expanding the two mutual informations and cancelling
+    By saturation, $I_1=I_m$. Expanding the two mutual informations and cancelling
     the entropy of the full chain gives
     \[
-        S_{N-1}+S_1=S_2+S_{N-2},
+        S_{N-1}+S_1=S_m+S_{N-m},
     \]
     which is the stated equality for the regions $A,B,C$.
+    Conversely, this equality gives $I_1=I_m$.  If it holds for every
+    admissible $m$, comparing the cases $m=L$ and $m=L+1$ gives
+    $I_L=I_{L+1}$ and hence saturation of the area law.
 \end{proof}
 \begin{theorem}[SAL implies local $\eta$-structure]
     \label{thm:sal_implies_eta_structure}
@@ -461,6 +479,8 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_bnt_projector_local_selection}
     \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero}
     \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_self}
+    \lean{MPOTensor.%
+      sum_bntSectorProjection_mul_physicalSlice_mul_self}
     \lean{MPOTensor.changePhysicalBasis_bntSectorProjection_basis}
     \lean{MPOTensor.%
       exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}
@@ -473,9 +493,15 @@ strong subadditivity for a normalized three-site reduced state.
     \[
       P_iA_iP_i=A_i.
     \]
+    Consequently,
+    \[
+      \sum_sP_sA_iP_s=A_i,
+    \]
+    which is the local diagonal decomposition required for the sector entropy
+    argument.
     Equivalently, compressing the physical legs of $A_i$ by $P_s$ retains
-    $A_i$ for $s=i$ and gives the zero local tensor otherwise.  This is
-    equations~\textup{PjKiPj} and~\textup{generateMPDO} in
+    $A_i$ for $s=i$ and gives the zero local tensor otherwise.  This is the
+    local projection relation in
     \cite[Appendix~C.2, lines~1680--1755]{Cirac2016MPDO_arXiv}.
 
     The Markov summands of zero Hayashi weight are retained in the ambient
