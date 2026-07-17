@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.SourceBNTBlocking
 
 /-!
-# Nonzero closing data for a basis of normal tensors
+# Nonzero closing scalars for a basis of normal tensors
 
 Eventual linear independence of a basis of normal tensors supplies one common
 positive word length at which every representative has a nonzero matrix

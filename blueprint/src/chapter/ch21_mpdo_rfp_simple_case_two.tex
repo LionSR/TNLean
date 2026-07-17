@@ -156,8 +156,12 @@
 
 \begin{proof}\leanok
     Choose a length beyond the eventual linear-independence threshold of the
-    BNT.  Each representative MPV is then nonzero, so one of its word
-    coefficients, and therefore one entry of that word matrix, is nonzero.
+    BNT.  Each representative MPV is then nonzero, so for some word $\sigma$,
+    \[
+        \operatorname{tr}
+        \bigl(A_j^{\sigma_1}\cdots A_j^{\sigma_L}\bigr)\ne0.
+    \]
+    Consequently the word matrix is nonzero and has a nonzero entry.
     The preceding theorem supplies the nonzero coefficient at length $L+3$;
     their product is nonzero.
 \end{proof}
