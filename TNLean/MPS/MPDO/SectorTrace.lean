@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.LinearAlgebra.Trace
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.ZCL
 
@@ -52,6 +53,11 @@ the sector projector acting on one site, as in the diagrams of that proof.
 
 * `trace_mpo_eq_trace_verticalLoop_pow`:
   $\tr H^{(N)} = \tr(E^N)$ with `E = verticalLoop M`.
+* `trace_mpo_ne_zero_of_isSourceZCL`:
+  source zero correlation length forces the trace of every positive-length
+  density operator to be nonzero.
+* `trace_mpo_pos_of_isMPDO_isSourceZCL`:
+  if the tensor also generates an MPDO, these traces are strictly positive.
 * `trace_firstSiteMatrix_mul_mpo` / `trace_sectorCompression_of_idempotent`:
   the general trace computation
   $\tr(P_1H^{(N+1)}P_1) = \tr(E_P\,E^N)$ for idempotent `P`.
@@ -218,6 +224,55 @@ theorem trace_mpo_eq_trace_verticalLoop_pow (M : MPOTensor d D) (N : ℕ) :
     Matrix.trace (mpo M N) = Matrix.trace (verticalLoop M ^ N) := by
   rw [← sum_evalWord_diag_eq_verticalLoop_pow M N, Matrix.trace_sum]
   simp only [Matrix.trace, Matrix.diag, mpo_apply, mpoMatrixEntry]
+
+/-- Source zero correlation length forces the trace of every nonempty-chain
+density operator to be nonzero.  Indeed, after dividing the physical-trace
+transfer by its positive eigenvalue, one obtains a nonzero idempotent.  Its
+trace is nonzero, and all its positive powers are equal to itself.
+
+This supplies the strict normalization needed in the sector entropy identity;
+it does not use the empty-chain convention.
+
+Source: arXiv:1606.00608, Definition 4.2, lines 735--739, and Appendix C.2,
+lines 1760--1780. -/
+theorem trace_mpo_ne_zero_of_isSourceZCL (M : MPOTensor d D)
+    (hZCL : IsSourceZCL M) {N : ℕ} (hN : 0 < N) :
+    Matrix.trace (mpo M N) ≠ 0 := by
+  obtain ⟨lam, hlam, hidem⟩ := hZCL.normalized_idempotent
+  let E := ((lam : ℂ)⁻¹) • physTraceTransfer M
+  have hlamC : (lam : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hlam
+  have hEne : E ≠ 0 := by
+    dsimp only [E]
+    exact smul_ne_zero (inv_ne_zero hlamC) hZCL.1
+  have hEtrace : Matrix.trace E ≠ 0 := by
+    intro htrace
+    have hLinIdem : IsIdempotentElem (Matrix.toLinAlgEquiv' E) :=
+      hidem.map
+        (Matrix.toLinAlgEquiv' : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ]
+          Module.End ℂ (Fin D → ℂ)).toMonoidHom
+    have hLinZero : E.toLin' = 0 :=
+      LinearMap.IsIdempotentElem.eq_zero_of_trace_eq_zero hLinIdem
+        (by simpa using htrace)
+    exact hEne (Matrix.toLinAlgEquiv'.injective (by simpa using hLinZero))
+  have hscale : physTraceTransfer M = (lam : ℂ) • E := by
+    dsimp only [E]
+    rw [smul_smul, mul_inv_cancel₀ hlamC, one_smul]
+  rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer,
+    hscale, smul_pow, hidem.pow_eq hN.ne', Matrix.trace_smul, smul_eq_mul]
+  exact mul_ne_zero (pow_ne_zero N hlamC) hEtrace
+
+/-- An MPDO tensor with source zero correlation length has strictly positive
+normalization on every nonempty chain.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780.  This is the strict
+form of the displayed inequality \(p_j\geq0\)
+needed to divide each sector by its trace. -/
+theorem trace_mpo_pos_of_isMPDO_isSourceZCL (M : MPOTensor d D)
+    (hM : IsMPDO M) (hZCL : IsSourceZCL M) {N : ℕ} (hN : 0 < N) :
+    0 < Matrix.trace (mpo M N) := by
+  apply Matrix.PosSemidef.trace_pos_of_ne_zero (hM N hN)
+  intro hzero
+  exact trace_mpo_ne_zero_of_isSourceZCL M hZCL hN (by rw [hzero, Matrix.trace_zero])
 
 /-! ### The first-site compression and its trace -/
 

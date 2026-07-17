@@ -32,9 +32,14 @@ in strong subadditivity.
   \(\mathrm{tr}\,\omega = 1\).
 * `vonNeumannEntropy_blockDiagonal'` — additivity over a finite orthogonal
   direct sum of Hermitian blocks: \(S\!\left(\bigoplus_j M_j\right) =
-  \sum_j S(M_j)\). The weighted Shannon form
-  \(S\!\left(\bigoplus_j p_j\,\omega_j\right) = H(\{p_j\}) + \sum_j p_j\,S(\omega_j)\)
-  is assembled downstream from this together with the scaling lemma.
+  \sum_j S(M_j)\).
+* `vonNeumannEntropy_blockDiagonal_smul` — the weighted direct-sum identity
+  \(S\!\left(\bigoplus_j p_j\,\omega_j\right)
+    = \sum_j(-p_j\log p_j+p_jS(\omega_j))\) for density matrices \(\omega_j\).
+  When the weights form a probability distribution, the first terms sum to
+  the Shannon entropy \(H(p)\).
+* `eq_of_weighted_sum_eq_of_pos_of_le` — equality of two positively weighted
+  sums, together with termwise inequalities, forces equality term by term.
 
 ## Implementation notes
 
@@ -364,5 +369,53 @@ theorem vonNeumannEntropy_blockDiagonal' (M : ∀ j, Matrix (dm j) (dm j) ℂ)
   rw [Fintype.sum_sigma]
   exact Finset.sum_congr rfl fun j _ => by
     rw [vonNeumannEntropy, hev]
+
+/-- **Entropy of a weighted finite orthogonal direct sum.** If every
+\(\omega_j\) is a density matrix, then
+\[
+  S\!\left(\bigoplus_j p_j\omega_j\right)
+    =\sum_j\bigl(-p_j\log p_j+p_jS(\omega_j)\bigr).
+\]
+
+This is the direct-sum entropy identity used in arXiv:1606.00608,
+Appendix C.2, lines 1760--1770. -/
+theorem vonNeumannEntropy_blockDiagonal_smul
+    (p : o → ℝ) (ω : ∀ j, Matrix (dm j) (dm j) ℂ)
+    (hω : ∀ j, (ω j).PosSemidef) (hωt : ∀ j, (ω j).trace = 1) :
+    vonNeumannEntropy (Matrix.blockDiagonal' (fun j => (p j : ℂ) • ω j)) (by
+      rw [Matrix.isHermitian_blockDiagonal'_iff]
+      exact fun j => (hω j).isHermitian.smul (k := (p j : ℂ))
+        (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))) =
+      ∑ j, (negMulLog (p j) + p j * vonNeumannEntropy (ω j) (hω j).isHermitian) := by
+  classical
+  have hBlockHerm : ∀ j, ((p j : ℂ) • ω j).IsHermitian := fun j =>
+    (hω j).isHermitian.smul (k := (p j : ℂ))
+      (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))
+  rw [vonNeumannEntropy_blockDiagonal' _ hBlockHerm]
+  apply Finset.sum_congr rfl
+  intro j _
+  simpa [add_comm] using vonNeumannEntropy_smul (hω j) (hωt j) (p j)
+
+/-- If two finite weighted sums agree, every weight is strictly positive, and
+the summands on the left are bounded above by the corresponding summands on
+the right, then every one of these inequalities is an equality.
+
+This is the finite positivity argument used after strong subadditivity in
+arXiv:1606.00608, Appendix C.2, lines 1770--1780. -/
+theorem eq_of_weighted_sum_eq_of_pos_of_le {ι : Type*} [Fintype ι]
+    (p L R : ι → ℝ) (hp : ∀ j, 0 < p j) (hle : ∀ j, L j ≤ R j)
+    (hsum : ∑ j, p j * L j = ∑ j, p j * R j) (j : ι) :
+    L j = R j := by
+  classical
+  have hnonneg : ∀ i, 0 ≤ p i * (R i - L i) := fun i =>
+    mul_nonneg (hp i).le (sub_nonneg.mpr (hle i))
+  have hzero : ∑ i, p i * (R i - L i) = 0 := by
+    simp_rw [mul_sub, Finset.sum_sub_distrib, hsum, sub_self]
+  have hterm : p j * (R j - L j) = 0 :=
+    (Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hnonneg i)).mp hzero j
+      (Finset.mem_univ j)
+  have hdiff : R j - L j = 0 :=
+    (mul_eq_zero.mp hterm).resolve_left (ne_of_gt (hp j))
+  exact (sub_eq_zero.mp hdiff).symm
 
 end BlockDiagonal

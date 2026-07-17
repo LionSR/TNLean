@@ -558,12 +558,18 @@ theorem entropy_blockDiagonal_smul_kronecker {o : Type*} [Fintype o] [DecidableE
       = ∑ j, (negMulLog (p j)
           + p j * (vonNeumannEntropy (L j) (hL j).isHermitian
               + vonNeumannEntropy (R j) (hR j).isHermitian)) := by
-  have hBlockHerm : ∀ j, ((p j : ℂ) • ((L j) ⊗ₖ (R j))).IsHermitian := fun j =>
-    ((hL j).kronecker (hR j)).isHermitian.smul (k := (p j : ℂ))
-      (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))
-  rw [vonNeumannEntropy_blockDiagonal' _ hBlockHerm hHerm]
+  have hKron : ∀ j, ((L j) ⊗ₖ (R j)).PosSemidef := fun j =>
+    (hL j).kronecker (hR j)
+  have hKronTrace : ∀ j, ((L j) ⊗ₖ (R j)).trace = 1 := fun j => by
+    rw [Matrix.trace_kronecker, hLt j, hRt j, mul_one]
+  rw [vonNeumannEntropy_congr rfl hHerm (by
+    rw [Matrix.isHermitian_blockDiagonal'_iff]
+    exact fun j => (hKron j).isHermitian.smul (k := (p j : ℂ))
+      (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal])))]
+  rw [vonNeumannEntropy_blockDiagonal_smul p
+    (fun j => (L j) ⊗ₖ (R j)) hKron hKronTrace]
   refine Finset.sum_congr rfl fun j _ => ?_
-  rw [entropy_smul_kronecker (hL j) (hR j) (hLt j) (hRt j) (p j) (hBlockHerm j)]
+  rw [vonNeumannEntropy_kronecker (hL j) (hR j) (hLt j) (hRt j)]
 
 /-! ## Entropy invariance under conjugation by a unitary-group element -/
 

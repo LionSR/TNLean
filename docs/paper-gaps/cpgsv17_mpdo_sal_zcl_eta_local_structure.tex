@@ -303,11 +303,22 @@ $s$-th canonical block and using nonnilpotence to exclude the zero transfer.
 \path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
 and
 \path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
-The remaining source step after the sector-compression identity is SAL for
-each sector.  It must follow from the direct-sum entropy identity and strong
-subadditivity, including a proof that every sector normalization used there is
-nonzero; this normalization may not be silently inferred from the weaker
-displayed inequality $p_j\geq0$ in
+The strict normalization needed in the sector entropy identity is now
+formalized: an MPDO tensor with source ZCL has positive trace at every
+nonempty chain length, since its normalized physical-trace transfer is a
+nonzero idempotent.  Applied to the absorbed BNT sectors above, this proves
+$p_j^{(N)}>0$ rather than silently inferring it from the weaker displayed
+inequality $p_j\geq0$.
+\footnote{The general declarations are
+\path{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL} and
+\path{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}; their specialization to
+the absorbed BNT representative is
+\path{MPOTensor.trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}.}
+The weighted orthogonal-direct-sum entropy formula used in Appendix~C.2,
+lines~1760--1770, is also formalized as
+\path{vonNeumannEntropy_blockDiagonal_smul}.  The remaining source step after the
+sector-compression identity is SAL for each sector.  It must follow from the
+direct-sum entropy identity and strong subadditivity as in
 \cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
 
 The neighboring operators are now assembled from these sector tensors.  The
