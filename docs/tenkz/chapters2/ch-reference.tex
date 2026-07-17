@@ -4,7 +4,7 @@
 % bodies are adapted from the verified acceptance corpus
 % (boundary_test, cups_test, atoms_test, adv_brace, adv_conj, cd_test,
 % lattice_test, plane_stress, free_test) — none are invented here.
-% manual2.tex reaches this file through chapters2/ch6-reference.tex.
+% manual2.tex inputs this file directly.
 \section{Reference}\label{ch:reference}
 
 Each entry of this chapter is one object of the language: its usage
@@ -73,7 +73,7 @@ padded with bare wire.
 \noindent\begin{tabularx}{\linewidth}{@{}p{29mm}p{23mm}p{11mm}>{\raggedright\arraybackslash}X@{}}
 \texttt{trace=} & \texttt{physical} & --- &
   per-site up-into-down trace (one-row pictures) \\
-\texttt{trace=} & \texttt{\{physical} \texttt{at=\{c,\ldots\}\}} & --- &
+\texttt{trace=} & \texttt{\{(physical, c-c)\}} & --- &
   per-column ket-into-bra trace \\
 \texttt{bond dir=} & \texttt{right|left} & --- &
   arrows on every bond: out $=V$, in $=V^{*}$ \\
@@ -82,7 +82,7 @@ padded with bare wire.
 \texttt{align=} & \meta{row} & midline &
   the row set on the math axis \\
 \texttt{pitch=} & \meta{length} & \texttt{11mm} &
-  the metric unit \\
+  the metric unit (profiles scale it) \\
 \texttt{compact}, \texttt{inline} & --- & --- &
   $0.8$ and $0.62$ pitch profiles \\
 \texttt{tensor style=} & \texttt{dot|box} & \texttt{dot} &
