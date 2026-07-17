@@ -213,6 +213,106 @@ strong subadditivity for a normalized three-site reduced state.
     nonzero closing entry.
 \end{proof}
 
+\begin{definition}[Diagonal BNT block in a Markov sector]
+    \label{def:mpdo_bnt_markov_block}
+    \lean{MPOTensor.bntMarkovBlock}
+    \lean{MPOTensor.BNTMarkovBlockNonzero}
+    \leanok
+    For a normal sector $s$ and a Markov sector $k$, let
+    \[
+      O_s^{(k)}(\beta,\alpha)
+      =\bigl[U_B\kappa^{(s)}_{\beta,\alpha}U_B^\dagger\bigr]_{k,k}.
+    \]
+    The assertion $O_s^{(k)}\ne0$ means that this block is nonzero for at
+    least one pair of virtual indices $\beta,\alpha$.
+\end{definition}
+
+\begin{theorem}[Existence of a normal-sector label]
+    \label{thm:mpdo_bnt_markov_label_exists}
+    \lean{MPOTensor.exists_bntMarkovBlockNonzero_of_probability_ne_zero}
+    \leanok
+    \uses{def:mpdo_bnt_markov_block}
+    If $p_k\ne0$, then there is a normal sector $s$ for which
+    $O_s^{(k)}\ne0$.
+
+    This is the existence part of equation~\textup{QkKjs} in
+    \cite[Appendix~C.2, lines~1733--1737]{Cirac2016MPDO_arXiv}.  Restricting
+    to $p_k\ne0$ is the literal version of the source's preceding removal of
+    summands for which $Q_k\sigma_3^{(N)}Q_k=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose nonzero diagonal entries of the trace-one left and right states in
+    sector $k$.  The corresponding diagonal entry of the Hayashi
+    decomposition is nonzero because $p_k\ne0$.  Expanding the same entry by
+    the three-site normal-sector family therefore leaves at least one nonzero
+    summand, whose middle tensor has $O_s^{(k)}\ne0$.
+\end{proof}
+
+\begin{theorem}[Uniqueness from nonzero closing matrices]
+    \label{thm:mpdo_bnt_markov_label_unique_nonzero_closing}
+    \lean{MPOTensor.bntMarkovBlockNonzero_eq_of_probability_ne_zero}
+    \lean{MPOTensor.existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero}
+    \leanok
+    \uses{thm:mpdo_bnt_markov_key_formula,
+      thm:mpdo_bnt_markov_label_exists,def:mpdo_bnt_markov_block}
+    Suppose, in addition, that every closing matrix $R_s$ is nonzero.  If
+    $p_k\ne0$, there is a unique normal sector $j_k$ for which
+    $O_{j_k}^{(k)}\ne0$.
+
+    This is the cancellation argument in equation~\textup{QkKjs}.  The
+    stated nonzero-closing-matrix condition isolates the step obtained in the
+    source from simplicity and the common-weight choice at
+    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.  Its derivation
+    from those preceding hypotheses remains separate; see
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Assume that sectors $s\ne t$ both have nonzero $k$-blocks.  A diagonal
+    instance of the BNT--Markov identity for $s$ gives a nonzero left factor.
+    A mixed instance with normal-sector labels $s,t$ forces the right factor
+    selected from $t$ to vanish.  A diagonal instance for $t$ then has zero
+    left-hand side and a nonzero right-hand side, a contradiction.
+\end{proof}
+
+\begin{definition}[Normal-sector projections on the active support]
+    \label{def:mpdo_bnt_sector_projection}
+    \lean{MPOTensor.bntSectorLabel}
+    \lean{MPOTensor.bntSectorProjection}
+    \lean{MPOTensor.activeMarkovProjection}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_bnt_markov_label_unique_nonzero_closing}, define
+    \[
+      P_s=\sum_{\substack{k:p_k\ne0\\j_k=s}}Q_k,
+      \qquad
+      P_{\mathrm{act}}=\sum_{k:p_k\ne0}Q_k.
+    \]
+    This is equation~\textup{Pis}, restricted to the positive-weight Markov
+    support retained here.
+\end{definition}
+
+\begin{theorem}[Orthogonality and resolution on the active support]
+    \label{thm:mpdo_bnt_sector_projection_resolution}
+    \lean{MPOTensor.bntSectorProjection_isOrthogonal}
+    \lean{MPOTensor.bntSectorProjection_mul_eq_zero}
+    \lean{MPOTensor.sum_bntSectorProjection}
+    \leanok
+    \uses{def:mpdo_bnt_sector_projection}
+    Every $P_s$ is an orthogonal projection, distinct $P_s$ are mutually
+    orthogonal, and
+    \[
+      \sum_s P_s=P_{\mathrm{act}}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Each $P_s$ is a sum of mutually orthogonal Markov-sector projections.
+    Distinct labels have disjoint sums.  Finally, summing over $s$ counts each
+    positive-weight Markov sector exactly once.
+\end{proof}
+
 \begin{theorem}[Saturation gives equality in strong subadditivity]
     \label{thm:mpdo_sal_ssa_equality}
     \lean{MPOTensor.isSSAEquality_tripartite_of_isSAL}

@@ -84,6 +84,26 @@ noncomputable def conjugatePhysical (K : MPOTensor d D)
       (U * physicalSlice K β α * Uᴴ) i j :=
   rfl
 
+/-- The matrix obtained by changing the physical basis is the corresponding
+linear combination of the original physical matrices.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1421--1438. -/
+theorem conjugatePhysical_eq_sum (K : MPOTensor d D)
+    (U : Matrix (Fin d) (Fin d) ℂ) (i j : Fin d) :
+    conjugatePhysical K U i j =
+      ∑ p : Fin d, ∑ q : Fin d,
+        (U i p * star (U j q)) • K p q := by
+  classical
+  ext β α
+  simp only [conjugatePhysical, Matrix.mul_apply, Matrix.conjTranspose_apply,
+    Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun p _ ↦ ?_
+  refine Finset.sum_congr rfl fun q _ ↦ ?_
+  simp only [physicalSlice]
+  ring
+
 /-- Within one sector, the basis-conjugated local MPO matrix is the product of
 the corresponding entries of the left and right sector tensors.
 
