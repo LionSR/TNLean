@@ -102,7 +102,7 @@
 \int_new:N \l__tenkzl_nrows_int
 \int_new:N \l__tenkzl_ncols_int
 \tl_new:N  \l__tenkzl_sitemode_tl     % dot | none
-\tl_new:N  \l__tenkzl_physical_tl     % up  | none
+\tl_new:N  \l__tenkzl_physical_tl     % up | updown | none
 \bool_new:N \l__tenkzl_legs_bool
 % per-side boundary policy (west=/east=/north=/south=), layered over
 % boundary= exactly as in the grid tier; empty = inherit the picture
@@ -111,7 +111,8 @@
 \tl_new:N  \l__tenkzl_epol_tl
 \tl_new:N  \l__tenkzl_npol_tl
 \tl_new:N  \l__tenkzl_spol_tl
-\prop_new:N \l__tenkzl_names_prop     % name -> comma list of "r-c"
+% (registered region names live in \l_tenkz_cs_names_prop, the shared
+% cell-set state of tenkz-core)
 \prop_new:N \l__tenkzl_removed_prop   % "r-c" -> 1
 \seq_new:N  \l__tenkzl_regions_seq    % {slot}{outline}{label}{labelat}{cells}{inset}
 \seq_new:N  \l__tenkzl_edges_seq      % {r}{c}{h}{r'}{c'}{h'}{style}{label}
@@ -179,7 +180,6 @@
                                       % empty until the render-time default
 \tl_new:N   \l__tenkzl_skin_tl        % ambient sheet's site skin (node style)
 \bool_new:N \l__tenkzl_opsheet_bool   % ambient sheet is an op sheet
-\int_new:N  \l__tenkzl_savedef_int    % scratch: saved default sheet
 % boundary-event counters (the stack's signature, see \tenkzl_emit_boundary:)
 \int_new:N  \l__tenkzl_bot_int        % outer legs, top face
 \int_new:N  \l__tenkzl_bob_int        % outer legs, bottom face
@@ -204,20 +204,16 @@
 \int_new:N \l__tenkzl_gdr_int         % argmin row/col offsets
 \int_new:N \l__tenkzl_gdc_int
 
-% scratch
+% scratch (the expression resolver's own scratch lives with it in
+% tenkz-core; what remains here serves \tenkzl_cell:nNNN and the draw
+% passes)
 \int_new:N \l__tenkzl_depth_int
-\tl_new:N  \l__tenkzl_acc_tl
-\tl_new:N  \l__tenkzl_op_tl
-\tl_new:N  \l__tenkzl_expr_tl
 \tl_new:N  \l__tenkzl_body_tl
 \tl_new:N  \l__tenkzl_tmp_tl
-\clist_new:N \l__tenkzl_tmp_clist
 \clist_new:N \l__tenkzl_cells_clist  % \tnregion's serialized member cells
-\prop_new:N \l__tenkzl_result_prop
-\prop_new:N \l__tenkzl_term_prop
 \prop_new:N \l__tenkzl_member_prop
 \seq_new:N  \l__tenkzl_parts_seq
-\int_new:N \l__tenkzl_rlo_int
+\int_new:N \l__tenkzl_rlo_int        % \tnedge/\tnsite endpoint registers
 \int_new:N \l__tenkzl_rhi_int
 \int_new:N \l__tenkzl_clo_int
 \int_new:N \l__tenkzl_chi_int
@@ -279,8 +275,17 @@
   /tenkz/lattice/east/.code ={\tenkzl_side:nn {east} {#1}},
   /tenkz/lattice/north/.code={\tenkzl_side:nn {north}{#1}},
   /tenkz/lattice/south/.code={\tenkzl_side:nn {south}{#1}},
+  % physical = up|updown|none: the per-site physical legs of a BARE
+  % sheet.  `up` is the state sheet (one leg rising per site, RMP
+  % sec2fig4b top); `updown` is the operator sheet (the PEPO window of
+  % RMP sec2fig5PEPO: the operator's row index rises and its column
+  % index falls at every site).  Role-list stacks ignore the word --
+  % their faces belong to the pairing/outer-leg machinery (see the
+  % on-site leg pass).
   /tenkz/lattice/physical/.is~choice,
   /tenkz/lattice/physical/up/.code  ={\tl_set:Nn \l__tenkzl_physical_tl {up}},
+  /tenkz/lattice/physical/updown/.code=
+      {\tl_set:Nn \l__tenkzl_physical_tl {updown}},
   /tenkz/lattice/physical/none/.code={\tl_set:Nn \l__tenkzl_physical_tl {none}},
   /tenkz/lattice/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
   /tenkz/lattice/compact/.code={\pgfkeys{/tenkz/compact}},
@@ -512,11 +517,11 @@
     receding~rows~at~about~4~at~stock~slant,~or~drop~plane~slant~toward~
     0.30~for~5~or~more~receding~rows. }
 \msg_new:nnn { tenkz } { planes-interleave }
-  { sheet~sep=#1~x~lattice~pitch~is~below~(rows-1)~x~plane~rise~=~#2:~
-    the~ket~and~bra~sheets~interleave,~and~at~an~integer~multiple~of~the~
-    rise~ket~row~r~lands~exactly~at~a~bra~row's~height~(side-by-side~
-    doubled~dots,~plane_sweep2~z_X2).~Use~sep~>~#2,~or~omit~sheet~sep~
-    for~the~derived~default. }
+  { sheet~sep=#1~x~lattice~pitch~is~below~(rows-1)~x~the~frame's~row~
+    drop~=~#2:~the~sheets~interleave,~and~at~an~integer~multiple~of~the~
+    drop~a~sheet's~row~r~lands~exactly~at~the~next~sheet's~row~height~
+    (side-by-side~doubled~dots,~plane_sweep2~z_X2).~Use~sep~>~#2,~or~
+    omit~sheet~sep~for~the~derived~default. }
 \msg_new:nnn { tenkz } { sheet-coincide }
   { sheet~vector:~adjacent~sheets~nearly~coincide.~Sheet~h+1's~site~
     (r,c)~lands~#1mm~from~sheet~h's~site~(r+#2,~c+#3),~below~the~#4mm~
@@ -614,7 +619,7 @@
     \bool_set_false:N \l__tenkzl_opsheet_bool
     \prop_clear:N \l__tenkzl_open_prop
     \prop_clear:N \l__tenkzl_trace_prop
-    \prop_clear:N \l__tenkzl_names_prop
+    \prop_clear:N \l_tenkz_cs_names_prop
     \prop_clear:N \l__tenkzl_removed_prop
     \seq_clear:N \l__tenkzl_regions_seq
     \seq_clear:N \l__tenkzl_edges_seq
@@ -821,17 +826,18 @@
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
   }
 
-% ---------- sheet-vector near-coincidence guard ----------
-% The expert sheet~vector= path used to bypass every stacking guard: the
-% planes-interleave check prices only the preset S = (0, sep) against the
-% depth drift, so a custom S could silently land sheet h+1's sites on (or
-% within a bead diameter of) sheet h's -- the fig21d_cubic bead-blob
-% failure at 3x3x3.  The honest check is geometric: adjacent sheets
-% nearly coincide iff S is close to SOME lattice translation dc C + dr R
-% (then sheet h+1's site (r,c) stacks onto sheet h's site (r+dr, c+dc)).
-% We scan all |dr| <= rows-1, |dc| <= cols-1 -- (0,0) included, the
+% ---------- sheet near-coincidence guard (every sheets>1 picture) ----------
+% The honest stacking check is geometric: adjacent sheets nearly
+% coincide iff S is close to SOME lattice translation dc C + dr R (then
+% sheet h+1's site (r,c) stacks onto sheet h's site (r+dr, c+dc)).  We
+% scan all |dr| <= rows-1, |dc| <= cols-1 -- (0,0) included, the
 % |S|-too-small case -- and warn when the closest pair falls below the
-% sheetcoincide floor.  Guarded, not clamped, like every frame guard.
+% sheetcoincide floor.  The scan runs for EVERY sheets>1 picture, not
+% only the expert sheet~vector= path: a preset stack can coincide too (a
+% flat frame with a tight explicit sheet sep, a degenerate expert C/R
+% frame), and the coefficient form below prices arbitrary frames -- the
+% expert-path-only gating was the fig21d_cubic bead-blob hole's twin.
+% Guarded, not clamped, like every frame guard.
 \cs_new_protected:Npn \tenkzl_guard_sheetvec:
   {
     \fp_set:Nn \l__tenkzl_mind_fp { inf }
@@ -928,44 +934,48 @@
       { \bool_set:Nn \l__tenkzl_oblique_bool
           { ! \fp_compare_p:nNn { \l__tenkzl_axy_tl } = { 0 } } }
     % sheet vector S: preset (0, sep), sep = explicit sheet-sep ratio x lp
-    % or the derived default (rows-1) x rise + gap x lp (the upper sheet
-    % clears the lower sheet's full depth drift plus one air gap, so the
-    % default scales with the window; see the tenkzplanes ratio comments)
+    % or the derived default (rows-1) x |row drop| + gap x lp (the upper
+    % sheet clears the lower sheet's full depth drift plus one air gap,
+    % so the default scales with the window AND the frame; see the
+    % tenkzplanes ratio comments)
     \bool_if:NTF \l__tenkzl_custsheet_bool
       {
         \dim_set_eq:NN \l__tenkzl_svx_dim \l__tenkzl_svecx_dim
         \dim_set_eq:NN \l__tenkzl_svy_dim \l__tenkzl_svecy_dim
-        % the expert path takes the near-coincidence guard the preset
-        % path takes as planes-interleave (a stack must exist to collide)
-        \int_compare:nNnT { \l__tenkzl_sheets_int } > {1}
-          { \tenkzl_guard_sheetvec: }
       }
       {
         \dim_zero:N \l__tenkzl_svx_dim
         \tl_if_empty:NTF \l__tenkzl_sheetsep_tl
           {
+            % derived default: priced in the frame's ACTUAL per-row drop
+            % |ayy| (flat drops a full lp per row, oblique the rise, an
+            % expert R whatever it states), so every frame's upper sheet
+            % clears the lower sheet's full depth drift plus one air gap
+            % -- the flat-frame default used to assume the oblique rise
+            % and stacked the plainest sheets={ket,bra} into bead blobs
             \dim_set:Nn \l__tenkzl_svy_dim
-              { \tenkz@r@planerise \l__tenkzl_lp_dim
-                  * ( \l__tenkzl_nrows_int - 1 )
-                + \tenkz@r@planegap \l__tenkzl_lp_dim }
+              { \fp_to_dim:n
+                  { abs( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
+                      * ( \l__tenkzl_nrows_int - 1 )
+                    + \tenkz@r@planegap * \l__tenkzl_lp_dim } }
           }
           {
             \dim_set:Nn \l__tenkzl_svy_dim
               { \l__tenkzl_sheetsep_tl \l__tenkzl_lp_dim }
-            % interleave guard: below (rows-1) x rise the sheets overlap
-            % (only a stacked oblique frame has depth drift to clear)
-            \bool_lazy_and:nnT
-              { \int_compare_p:nNn { \l__tenkzl_sheets_int } > {1} }
-              { \l__tenkzl_oblique_bool }
+            % interleave guard: below (rows-1) x the row drop the sheets
+            % overlap; priced in |ayy| like the default, so flat and
+            % expert stacks are guarded, not only oblique ones
+            \int_compare:nNnT { \l__tenkzl_sheets_int } > {1}
               {
                 \dim_compare:nNnT { \l__tenkzl_svy_dim } <
-                  { \tenkz@r@planerise \l__tenkzl_lp_dim
-                      * ( \l__tenkzl_nrows_int - 1 ) }
+                  { \fp_to_dim:n
+                      { abs( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
+                          * ( \l__tenkzl_nrows_int - 1 ) } }
                   {
                     \msg_warning:nnee { tenkz } { planes-interleave }
                       { \tl_use:N \l__tenkzl_sheetsep_tl }
                       { \fp_eval:n
-                          { \tenkz@r@planerise
+                          { abs( \l__tenkzl_ayy_tl )
                             * ( \l__tenkzl_nrows_int - 1 ) } }
                     \tenkz@event{warning|code=planes-interleave|sep=\tl_use:N
                       \l__tenkzl_sheetsep_tl}
@@ -973,147 +983,26 @@
               }
           }
       }
+    % near-coincidence guard, every stacking path (see its header)
+    \int_compare:nNnT { \l__tenkzl_sheets_int } > {1}
+      { \tenkzl_guard_sheetvec: }
   }
 
 % =====================================================================
-% cell-set expression resolver
-%   terms combined with + (union) / - (difference), left to right;
-%   a term is (r,c) | (r1-r2,c1-c2) | a registered name.
+% cell-set expressions
+%   The expression machinery (openscan, resolver, rect/range parsing,
+%   the normalized cell key and the sheet-range guard) is the SHARED
+%   cell-set algebra of tenkz-core (\tenkz_cs_...): the grid tier
+%   consumes it too, so it lives below both tiers instead of in this
+%   module's private namespace.  This tier feeds the shared state --
+%   sheet count, default sheet, registered names -- through the sync
+%   below, called once per picture after the option list has landed.
 % =====================================================================
-\cs_new_protected:Npn \tenkzl_resolve:nN #1#2
+\cs_new_protected:Npn \tenkzl_sync_cs:
   {
-    \prop_clear:N \l__tenkzl_result_prop
-    \tl_set:Nn \l__tenkzl_expr_tl {#1}
-    \tl_remove_all:Nn \l__tenkzl_expr_tl { ~ }
-    \int_zero:N \l__tenkzl_depth_int
-    \tl_clear:N \l__tenkzl_acc_tl
-    \tl_set:Nn \l__tenkzl_op_tl {+}
-    \tl_map_inline:Nn \l__tenkzl_expr_tl { \tenkzl_scan:n {##1} }
-    \tenkzl_flush:
-    \prop_set_eq:NN #2 \l__tenkzl_result_prop
+    \int_set_eq:NN \l_tenkz_cs_sheets_int \l__tenkzl_sheets_int
+    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
   }
-
-\cs_new_protected:Npn \tenkzl_scan:n #1
-  {
-    \str_case:nnF {#1}
-      {
-        {(} { \int_incr:N \l__tenkzl_depth_int
-              \tl_put_right:Nn \l__tenkzl_acc_tl {(} }
-        {)} { \int_decr:N \l__tenkzl_depth_int
-              \tl_put_right:Nn \l__tenkzl_acc_tl {)} }
-      }
-      {
-        \bool_lazy_and:nnTF
-          { \int_compare_p:nNn { \l__tenkzl_depth_int } = {0} }
-          { \bool_lazy_or_p:nn
-              { \str_if_eq_p:nn {#1} {+} }
-              { \str_if_eq_p:nn {#1} {-} } }
-          { \tenkzl_flush: \tl_set:Nn \l__tenkzl_op_tl {#1} }
-          { \tl_put_right:Nn \l__tenkzl_acc_tl {#1} }
-      }
-  }
-
-% resolve the pending term (in \l__tenkzl_acc_tl) and combine into result
-\cs_new_protected:Npn \tenkzl_flush:
-  {
-    \tl_if_empty:NF \l__tenkzl_acc_tl
-      {
-        \tenkzl_term:VN \l__tenkzl_acc_tl \l__tenkzl_term_prop
-        \str_if_eq:VnTF \l__tenkzl_op_tl {-}
-          { \prop_map_inline:Nn \l__tenkzl_term_prop
-              { \prop_remove:Nn \l__tenkzl_result_prop {##1} } }
-          { \prop_map_inline:Nn \l__tenkzl_term_prop
-              { \prop_put:Nnn \l__tenkzl_result_prop {##1} {1} } }
-      }
-    \tl_clear:N \l__tenkzl_acc_tl
-  }
-
-% a term -> membership prop
-\cs_new_protected:Npn \tenkzl_term:nN #1#2
-  {
-    \prop_clear:N #2
-    \tl_if_in:nnTF {#1} {(}
-      { \tenkzl_rect:nN {#1} #2 }
-      {
-        \prop_get:NnNTF \l__tenkzl_names_prop {#1} \l__tenkzl_tmp_tl
-          {
-            \clist_set:NV \l__tenkzl_tmp_clist \l__tenkzl_tmp_tl
-            \clist_map_inline:Nn \l__tenkzl_tmp_clist
-              { \prop_put:Nnn #2 {##1} {1} }
-          }
-          {
-            \msg_error:nnn { tenkz } { unknown-name } {#1}
-          }
-      }
-  }
-\cs_generate_variant:Nn \tenkzl_term:nN { VN }
-
-% normalized cell key: "r-c" on the DEFAULT sheet (the sheetless Phase-1
-% format, so single-sheet pictures and their event stream are untouched),
-% "r-c-h" on any other sheet; expandable
-\cs_new:Npn \tenkzl_cellkey:nnn #1#2#3
-  {
-    \int_compare:nNnTF {#3} = { \l__tenkzl_defsheet_int }
-      { #1 - #2 }
-      { #1 - #2 - #3 }
-  }
-
-% warn when a sheet coordinate falls outside 0 .. sheets-1 (the cell
-% would render on no sheet); guarded, not clamped
-\cs_new_protected:Npn \tenkzl_guard_sheet:n #1
-  {
-    \bool_lazy_and:nnF
-      { \int_compare_p:nNn {#1} > {-1} }
-      { \int_compare_p:nNn {#1} < { \l__tenkzl_sheets_int } }
-      {
-        \msg_warning:nnee { tenkz } { sheet-range }
-          { \int_eval:n {#1} }
-          { \int_eval:n { \l__tenkzl_sheets_int - 1 } }
-        \tenkz@event{warning|code=sheet-range|sheet=\int_eval:n {#1}}
-      }
-  }
-
-% (rlo-rhi,clo-chi) or (r,c), optionally with a trailing sheet coordinate
-% (r,c,h) / (r1-r2,c1-c2,h) -> membership prop; a sheetless term lives on
-% the default sheet
-\cs_new_protected:Npn \tenkzl_rect:nN #1#2
-  {
-    \tl_set:Nn \l__tenkzl_body_tl {#1}
-    \tl_remove_once:Nn \l__tenkzl_body_tl {(}
-    \tl_remove_once:Nn \l__tenkzl_body_tl {)}
-    \seq_set_split:NnV \l__tenkzl_parts_seq {,} \l__tenkzl_body_tl
-    \tenkzl_range:eNN { \seq_item:Nn \l__tenkzl_parts_seq {1} }
-      \l__tenkzl_rlo_int \l__tenkzl_rhi_int
-    \tenkzl_range:eNN { \seq_item:Nn \l__tenkzl_parts_seq {2} }
-      \l__tenkzl_clo_int \l__tenkzl_chi_int
-    \int_compare:nNnTF { \seq_count:N \l__tenkzl_parts_seq } > {2}
-      {
-        \int_set:Nn \l__tenkzl_hsel_int
-          { \seq_item:Nn \l__tenkzl_parts_seq {3} }
-        \tenkzl_guard_sheet:n { \l__tenkzl_hsel_int }
-      }
-      { \int_set_eq:NN \l__tenkzl_hsel_int \l__tenkzl_defsheet_int }
-    \int_step_inline:nnn { \l__tenkzl_rlo_int } { \l__tenkzl_rhi_int }
-      {
-        \int_step_inline:nnn { \l__tenkzl_clo_int } { \l__tenkzl_chi_int }
-          {
-            \prop_put:Nen #2
-              { \tenkzl_cellkey:nnn {##1} {####1}
-                  { \int_use:N \l__tenkzl_hsel_int } } {1}
-          }
-      }
-  }
-
-% "a" or "a-b" -> lo, hi
-\cs_new_protected:Npn \tenkzl_range:nNN #1#2#3
-  {
-    \tl_if_in:nnTF {#1} {-}
-      { \tenkzl_range:w #1 \q_stop #2 #3 }
-      { \int_set:Nn #2 {#1} \int_set:Nn #3 {#1} }
-  }
-\cs_new_protected:Npn \tenkzl_range:w #1 - #2 \q_stop #3#4
-  { \int_set:Nn #3 {#1} \int_set:Nn #4 {#2} }
-\cs_generate_variant:Nn \tenkzl_range:nNN { eNN }
 
 % (r,c) or (r,c,h) -> r, c, sheet;  #1 is expanded first so callers may
 % pass a parser macro.  A sheetless cell returns sheet = -1 (a sentinel):
@@ -1131,7 +1020,7 @@
     \int_compare:nNnTF { \seq_count:N \l__tenkzl_parts_seq } > {2}
       {
         \int_set:Nn #4 { \seq_item:Nn \l__tenkzl_parts_seq {3} }
-        \tenkzl_guard_sheet:n {#4}
+        \tenkz_cs_guard_sheet:n {#4}
       }
       { \int_set:Nn #4 {-1} }
   }
@@ -1154,7 +1043,19 @@
 \tl_new:N \l__tenkzl_rinset_tl
 \pgfkeys{
   /tenkz/region/.is~family,
-  /tenkz/region/slot/.store~in=\l__tenkzl_rslot_tl,
+  % slot= is a CHOICE, not free text: a typo'd slot used to expand to no
+  % style at all and stroke a plain black outline -- the picture lost
+  % its set-membership semantics silently.  Now it errors at the
+  % \tnregion call site.
+  /tenkz/region/slot/.is~choice,
+  /tenkz/region/slot/selected/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {selected}},
+  /tenkz/region/slot/secondary/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {secondary}},
+  /tenkz/region/slot/complement/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {complement}},
+  /tenkz/region/slot/collar/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {collar}},
   /tenkz/region/outline/.code={\bool_set_true:N \l__tenkzl_routline_bool},
   /tenkz/region/label/.store~in=\l__tenkzl_rlabel_tl,
   % label pos= is the 0.6 placement spelling (one vocabulary across
@@ -1178,11 +1079,11 @@
     \tl_clear:N \l__tenkzl_rname_tl
     \tl_set:Nn \l__tenkzl_rinset_tl {0}
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/region}{#1} }
-    \tenkzl_resolve:nN {#2} \l__tenkzl_member_prop
+    \tenkz_cs_resolve:nN {#2} \l__tenkzl_member_prop
     \tenkzl_serialize:NN \l__tenkzl_member_prop \l__tenkzl_cells_clist
     % register name -> cells for later expressions
     \tl_if_empty:NF \l__tenkzl_rname_tl
-      { \prop_put:NVV \l__tenkzl_names_prop \l__tenkzl_rname_tl
+      { \prop_put:NVV \l_tenkz_cs_names_prop \l__tenkzl_rname_tl
           \l__tenkzl_cells_clist }
     \seq_put_right:Ne \l__tenkzl_regions_seq
       {
@@ -1391,6 +1292,10 @@
     \tenkzl_reset:
     #1
     \tl_if_empty:nF {#2} { \pgfqkeys{/tenkz/lattice}{#2} }
+    % the option list has landed: sheets= and the default-sheet
+    % convention are final, so feed the shared cell-set state before the
+    % body's recording commands and the draw passes consume it
+    \tenkzl_sync_cs:
     #3
     \tenkz@beginpicture{lattice}
     % header first: rows/cols bound the cell universe that the payload
@@ -1856,7 +1761,7 @@
         % itself never shears)
         \tl_if_blank:nF {#8}
           {
-            \node[label, anchor=south~west] at
+            \node[tn~label, anchor=south~west] at
               ( \dim_eval:n
                   { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
                     + \tenkz@dim{\tenkz@r@labelclear} } ,
@@ -1867,8 +1772,8 @@
           }
         % the audit rebuilds region set-algebra from these events (a
         % distinguished edge names two cells of the header's universe)
-        \tenkz@event{edge|picture=\the\tenkz@pictureid|from=\tenkzl_cellkey:nnn
-          {#1}{#2}{#3}|to=\tenkzl_cellkey:nnn {#4}{#5}{#6}|role=#9}
+        \tenkz@event{edge|picture=\the\tenkz@pictureid|from=\tenkz_cs_cellkey:nnn
+          {#1}{#2}{#3}|to=\tenkz_cs_cellkey:nnn {#4}{#5}{#6}|role=#9}
       }
   }
 
@@ -1929,10 +1834,23 @@
       }
   }
 
-% -- (d') on-site physical legs (physical=up) -------------------------
+% -- (d') on-site physical legs (physical=up|updown) ------------------
+% physical=up draws one leg rising from every site (the PEPS sheet);
+% physical=updown adds the mirrored falling leg (the PEPO sheet, RMP
+% sec2fig5PEPO: the site tensor carries the operator's row index up
+% AND its column index down).  The resolution rides the sheet-role
+% machinery: in a ROLE-LIST stack every sheet face is already owned --
+% interior faces by the pairing interfaces, outer faces by the
+% outer legs= policy -- so this pass draws nothing there, and an op
+% sheet receives its up and down physical faces automatically from
+% the pairing/outer ink with no duplicate strokes.  physical= thus
+% speaks only for bare sheets (the single sheet and numeric
+% wire-sheet stacks), where no other pass owns the faces.
 \cs_new_protected:Npn \tenkzl_draw_physical:
   {
-    \str_if_eq:VnT \l__tenkzl_physical_tl {up}
+    \bool_lazy_and:nnT
+      { ! \l__tenkzl_roles_bool }
+      { ! \str_if_eq_p:Vn \l__tenkzl_physical_tl {none} }
       {
         \int_step_inline:nn { \l__tenkzl_nrows_int }
           {
@@ -1950,6 +1868,15 @@
                       ( \dim_use:N \l__tenkzl_px_dim ,
                         \dim_eval:n { \l__tenkzl_py_dim
                                       + \tenkz@dim{\tenkz@r@physleg} } );
+                    \str_if_eq:VnT \l__tenkzl_physical_tl {updown}
+                      {
+                        \draw[physical~leg]
+                          ( \dim_use:N \l__tenkzl_px_dim ,
+                            \dim_use:N \l__tenkzl_py_dim ) --
+                          ( \dim_use:N \l__tenkzl_px_dim ,
+                            \dim_eval:n { \l__tenkzl_py_dim
+                                          - \tenkz@dim{\tenkz@r@physleg} } );
+                      }
                   }
               }
           }
@@ -2046,7 +1973,7 @@
     \int_compare:nNnT {#3} = { \l__tenkzl_sheet_int }
       {
         \tenkzl_site:nn {#1}{#2}
-        \node[label, anchor=south~west] at
+        \node[tn~label, anchor=south~west] at
           ( \dim_eval:n { \l__tenkzl_px_dim
                           + \tenkz@dim{\tenkz@r@dotdia} / 2
                           + \tenkz@dim{\tenkz@r@labelclear} } ,
@@ -2101,7 +2028,7 @@
     \tl_set:Ne \l__tenkzl_tmp_tl
       { \bool_if:NTF \l__tenkzl_oblique_bool
           { \tenkzl_flipanchor:n {#1} } {#1} }
-    \node[label, anchor=\l__tenkzl_tmp_tl] at
+    \node[tn~label, anchor=\l__tenkzl_tmp_tl] at
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
       { $#6$ };
   }
@@ -2130,7 +2057,7 @@
                  + \tenkzl_cx:n{\l__tenkzl_cmax_int} ) / 2 }
               { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
                  + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
-            \node[label, anchor=center] at
+            \node[tn~label, anchor=center] at
               ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
               { $#2$ }; }
       }
@@ -2160,57 +2087,45 @@
 % These option values contain literal commas, so they MUST be braced:
 % pgfkeys splits the option list only at commas outside braces.
 % =====================================================================
-\cs_generate_variant:Nn \tenkzl_resolve:nN { VN }
 
-% rewrite the open list's top-level commas as unions, then resolve through
-% the ordinary cell-set machinery: the commas INSIDE a (r,c) or
-% (r1-r2,c1-c2) term must not split terms, so parenthesis depth decides
-% which commas separate cells.
+% rewrite the open list's top-level commas as unions through the shared
+% pre-scan, then resolve through the shared cell-set machinery: the
+% commas INSIDE a (r,c) or (r1-r2,c1-c2) term must not split terms, so
+% parenthesis depth decides which commas separate cells.
 % open=/trace= cells address pairing SEGMENTS, not sheets: the key "r-c"
 % acts on every interface of the column, "r-c-i" on interface i alone
 % (i = the lower sheet's index, 0 .. k-2 bottom-up).  The resolver runs
 % with the default sheet MASKED to -1 so an explicit third coordinate
 % never collapses to the bare column key the way a default-sheet cell
-% would ((r,c,0) must mean interface 0, not the whole column).
+% would ((r,c,0) must mean interface 0, not the whole column) -- and
+% with the SHEET guard suppressed: the third coordinate here is an
+% INTERFACE, range-checked in its own alphabet by \tenkzl_guard_iface:n
+% at render time, so the sheet-range warning would misstate both the
+% coordinate's meaning and its bound.
 \cs_new_protected:Npn \tenkzl_openset:n #1
   {
-    \tl_clear:N \l__tenkzl_tmp_tl
-    \int_zero:N \l__tenkzl_depth_int
-    \tl_map_inline:nn {#1} { \tenkzl_openscan:n {##1} }
-    \int_set_eq:NN \l__tenkzl_savedef_int \l__tenkzl_defsheet_int
-    \int_set:Nn \l__tenkzl_defsheet_int {-1}
-    \tenkzl_resolve:VN \l__tenkzl_tmp_tl \l__tenkzl_open_prop
-    \int_set_eq:NN \l__tenkzl_defsheet_int \l__tenkzl_savedef_int
-  }
-\cs_new_protected:Npn \tenkzl_openscan:n #1
-  {
-    \str_case:nnF {#1}
-      {
-        {(} { \int_incr:N \l__tenkzl_depth_int
-              \tl_put_right:Nn \l__tenkzl_tmp_tl {(} }
-        {)} { \int_decr:N \l__tenkzl_depth_int
-              \tl_put_right:Nn \l__tenkzl_tmp_tl {)} }
-      }
-      {
-        \bool_lazy_and:nnTF
-          { \int_compare_p:nNn { \l__tenkzl_depth_int } = {0} }
-          { \str_if_eq_p:nn {#1} {,} }
-          { \tl_put_right:Nn \l__tenkzl_tmp_tl {+} }
-          { \tl_put_right:Nn \l__tenkzl_tmp_tl {#1} }
-      }
+    \tl_clear:N \l_tenkz_cs_scan_tl
+    \int_zero:N \l_tenkz_cs_depth_int
+    \tl_map_inline:nn {#1} { \tenkz_cs_openscan:n {##1} }
+    \int_set:Nn \l_tenkz_cs_defsheet_int {-1}
+    \bool_set_false:N \l_tenkz_cs_guard_bool
+    \tenkz_cs_resolve:VN \l_tenkz_cs_scan_tl \l__tenkzl_open_prop
+    \bool_set_true:N \l_tenkz_cs_guard_bool
+    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
   }
 
-% the trace= cell set, through the same comma-to-union rewrite and
-% default-sheet masking as open=
+% the trace= cell set, through the same comma-to-union rewrite,
+% default-sheet masking and guard suppression as open=
 \cs_new_protected:Npn \tenkzl_traceset:n #1
   {
-    \tl_clear:N \l__tenkzl_tmp_tl
-    \int_zero:N \l__tenkzl_depth_int
-    \tl_map_inline:nn {#1} { \tenkzl_openscan:n {##1} }
-    \int_set_eq:NN \l__tenkzl_savedef_int \l__tenkzl_defsheet_int
-    \int_set:Nn \l__tenkzl_defsheet_int {-1}
-    \tenkzl_resolve:VN \l__tenkzl_tmp_tl \l__tenkzl_trace_prop
-    \int_set_eq:NN \l__tenkzl_defsheet_int \l__tenkzl_savedef_int
+    \tl_clear:N \l_tenkz_cs_scan_tl
+    \int_zero:N \l_tenkz_cs_depth_int
+    \tl_map_inline:nn {#1} { \tenkz_cs_openscan:n {##1} }
+    \int_set:Nn \l_tenkz_cs_defsheet_int {-1}
+    \bool_set_false:N \l_tenkz_cs_guard_bool
+    \tenkz_cs_resolve:VN \l_tenkz_cs_scan_tl \l__tenkzl_trace_prop
+    \bool_set_true:N \l_tenkz_cs_guard_bool
+    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
   }
 
 % tenkzplanes IS a lattice picture: a literal preset over the one render
@@ -2525,11 +2440,8 @@
   }
 
 % ---------- messages ----------
-\msg_new:nnn { tenkz } { unknown-name }
-  { Unknown~cell-set~name~'#1'~in~a~\token_to_str:N \tnregion \ expression. }
-\msg_new:nnn { tenkz } { sheet-range }
-  { A~cell~addresses~sheet~#1,~but~this~picture~stacks~sheets~0..#2:~
-    the~cell~renders~on~no~sheet. }
+% (unknown-name and sheet-range live with the shared cell-set algebra
+% in tenkz-core)
 \msg_new:nnn { tenkz } { sheet-role }
   { Unknown~sheet~role~'#1'~in~sheets=:~the~roles~are~ket,~op~and~bra;~
     the~sheet~draws~with~dot~sites. }
