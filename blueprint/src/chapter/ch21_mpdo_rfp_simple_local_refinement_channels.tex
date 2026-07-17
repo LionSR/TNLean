@@ -147,10 +147,16 @@ the sitewise sector coordinates $\mathfrak R_2$ and $\mathfrak R_3$
 
 \begin{figure}[ht]
     \centering
-    \TNMPDORefinementConstruction
+    \[
+        \mathfrak R_2\xrightarrow{\mathcal T_0}L_k\otimes R_h
+        \xrightarrow{\mathcal T_1}(L_k\otimes R_h)\otimes\Omega_{k,h}
+        \xrightarrow{\mathcal T_2}\mathfrak R_3
+    \]
 
     \medskip
-    \TNMPDORefinementDirection
+    \[
+        \mathfrak R_2({\cal K}_2(X))\xrightarrow{\mathcal T}\mathfrak R_3({\cal K}_3(X))
+    \]
     \caption{The refinement channel
     $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$ in physical-sector
     coordinates.}
@@ -963,11 +969,13 @@ $\widehat{\cal K}$.
 
 \begin{figure}[htbp]
     \centering
-    \TNMPDOPhysicalIsometryTransport
-    \caption{Physical-isometry transport of the blocked channels. The
-    downward arrows conjugate the ket and bra indices by $U^{\otimes n}$ and
-    $(U^\dagger)^{\otimes n}$; the upward arrows give the inverse
-    conjugations. Hence the lower sector-coordinate channels induce the upper
+    \[
+        U^{\otimes4}\widehat{\mathcal T}^{\,2}(U^\dagger)^{\otimes2}=\mathcal T,\qquad
+        U^{\otimes2}\widehat{\mathcal S}^{\,2}(U^\dagger)^{\otimes4}=\mathcal S
+    \]
+    \caption{Physical-isometry transport of the blocked channels. Conjugating
+    the ket and bra indices by the tensor powers $U^{\otimes n}$ and
+    $(U^\dagger)^{\otimes n}$ carries the sector-coordinate channels to the
     ordinary-coordinate channels. This combines Proposition~C.7 with
     \cite[Appendix~C.2, lines~1510--1563 and 1821--1825]
     {Cirac2016MPDO_arXiv}.}

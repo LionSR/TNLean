@@ -577,17 +577,22 @@
     \centering
     \begin{minipage}{0.41\textwidth}
       \centering
-      \TNMPDOTwoSiteClosureFactorization
+      \[
+          \mathfrak R_2({\cal K}_2(X))_{k,h}=a_kb_hB_{k,h}(X)
+      \]
     \end{minipage}\hfill
     \begin{minipage}{0.56\textwidth}
       \centering
-      \TNMPDOThreeSiteClosureFactorization
+      \[
+          \mathfrak R_3({\cal K}_3(X))_{k,l,h}
+          =B_{k,h}(X)\otimes\eta_{k,l}\otimes\eta_{l,h}
+      \]
     \end{minipage}
     \caption{First each slice is conjugated by $U$ and expressed in the
     corresponding sector coordinates. After restriction to fixed sectors and
     the displayed regroupings, the arbitrary-$X$ two- and three-site closures
     separate into the boundary factor and respectively one or two neighboring
-    contractions. The diagrams do not assert positivity,
+    contractions. The displayed identities do not assert positivity,
     preparation, recovery, or the full conclusion of Proposition~C.7. They
     follow the contractions in
     \cite[lines~638--655 and Appendix~C.2, lines~1435--1448]
@@ -892,9 +897,9 @@
 On the sector triple $(k,l,h)$, the two operators act on distinct neighboring
 factors, while the outer factors $B_k^L$ and $B_h^R$ remain unchanged.  Their
 commutativity is therefore the local identity
-\begin{center}
-    \TNMPDOFixedSectorAdjacentCommutativity
-\end{center}
+\[
+    \eta_{k,l}^{(12)}\eta_{l,h}^{(23)}=\eta_{l,h}^{(23)}\eta_{k,l}^{(12)}
+\]
 
 \begin{proof}
     \leanok

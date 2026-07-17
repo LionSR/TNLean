@@ -282,9 +282,9 @@
 
 Neighboring right and left sector tensors meet in the bond operator
 $\eta_{k,h}=r_k l_h$:
-\begin{center}
-    \TNEtaSectorDecomposition
-\end{center}
+\[
+    \eta_{k,h}=r_k l_h
+\]
 This is the contraction in
 \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
 
@@ -347,7 +347,10 @@ This is the contraction in
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOCyclicEtaContraction
+    \[
+        \tr(M_{k_0}\cdots M_{k_{N-1}})
+        =\tr(\eta_{k_0,k_1}\otimes\cdots\otimes\eta_{k_{N-1},k_0})
+    \]
     \caption{Closing the horizontal indices of the factorized sector tensors
     pairs each right factor with the left factor at the next site. The cycle
     therefore becomes the product of the neighboring operators
