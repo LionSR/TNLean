@@ -451,7 +451,7 @@ blocks here to feed the `IsBNTCanonicalForm` constructor
 
 Construction steps:
 
-1. `unconditional_commonPrimitiveIrreducibleBlocks A A (fun _ _ => rfl)` —
+1. `unconditional_commonPrimitiveIrreducibleBlocks A A (fun _ _ _ => rfl)` —
    apply the two-sided arbitrary-input reduction at `B = A` to obtain a
    positive blocking length `p₀`, a left-canonical / primitive / irreducible
    nonzero-weight block family `blocksA`, and the positive-length identity
@@ -488,7 +488,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
       hμA, _hμB, hTPA, _hTPB, hPrimA, _hPrimB,
       hIrrA, _hIrrB, hDimA, _hDimB⟩ :=
     unconditional_commonPrimitiveIrreducibleBlocks
-      (d := d) (D₁ := D) (D₂ := D) A A (fun _ _ => rfl)
+      (d := d) (D₁ := D) (D₂ := D) A A (fun _ _ _ => rfl)
   -- Step 2: common positive extra blocking that makes each block injective and
   -- preserves trace-preservation, transfer-map primitivity, and tensor
   -- irreducibility.

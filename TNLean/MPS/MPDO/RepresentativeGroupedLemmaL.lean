@@ -218,16 +218,4 @@ theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
   exact P.insertedTensor_basis_eq_of_firstSiteActionAgree hSpan
     (hAct.of_sameMPVPos hAP)
 
-/-- Full-MPV specialization of
-`insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree`. -/
-theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree
-    {D : ℕ} (A : MPSTensor d D) (P : SectorDecomposition d)
-    {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAP : SameMPV₂ A P.toTensor)
-    (hSpan : P.EventuallyRepresentativeWordTupleSpan)
-    (hAct : FirstSiteActionAgree A Y Z) :
-    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
-  exact P.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
-    A hAP.toSameMPV₂Pos hSpan hAct
-
 end MPSTensor.SectorDecomposition

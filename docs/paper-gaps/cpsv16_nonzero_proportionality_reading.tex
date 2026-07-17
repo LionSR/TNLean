@@ -33,13 +33,15 @@ The scalar multiple with coefficient $0$ gives no projective point.
 \section{Formal reading}
 
 The formal predicate \leanid{NonzeroProportionalMPV}\textsubscript{2} requires, at each
-length $N$, a scalar $c_N \neq 0$ such that
+positive length $N\geq 1$, a scalar $c_N \neq 0$ such that
 \begin{align}
     V^{(N)}(A) = c_N V^{(N)}(B).
 \end{align}
 This is the projective reading of proportionality: the two vectors determine
 the same point in projective space. It is the reading used by the proof of
-Theorem~\texttt{thm1}. In the block-selection step, the paper assumes that all
+Theorem~\texttt{thm1}. The empty word is excluded because it is not a physical
+chain and its coefficient records only the bond-space dimension. In the
+block-selection step, the paper assumes that all
 overlaps of a fixed block on one side with the blocks on the other side tend
 to zero, expands the two BNT decompositions, and invokes Corollary~\texttt{Lem1}
 to contradict proportionality. If $c_N$ were allowed to be zero at a
@@ -80,8 +82,9 @@ The nonzero condition does not change the intended conclusion of the source
 theorem. It records the conventional mathematical meaning of proportional
 nonzero vectors in the source argument. The weaker scalar-multiple predicate
 \leanid{ProportionalMPV}\textsubscript{2}, where $c_N$ may vanish, remains available for
-older auxiliary lemmas, but it is not used as the paper-faithful hypothesis
-for the proportional Fundamental Theorem.
+older auxiliary lemmas and is likewise indexed only by positive lengths. It is
+not used as the paper-faithful hypothesis for the proportional Fundamental
+Theorem.
 
 \section{Elimination plan}
 

@@ -1,5 +1,11 @@
 # Audit: feasibility of arbitrary-input SectorBNT supplier path via `SameMPV₂Pos`
 
+> **Historical audit (superseded 2026-07-17).** The positive-length variants
+> recommended here are now the canonical SectorBNT interface, the zero-tail
+> bookkeeping has been removed, and the common-sector reduction itself takes
+> `SameMPV₂Pos`. This document is retained as a record of the earlier state;
+> issue #4098 tracks the comparison-surface cleanup.
+
 **Date:** 2026-05-16  
 **Scope:** scout only; no Lean source edits.  
 **Target stack:** `TNLean/MPS/FundamentalTheorem/SectorBNT/`, plus the arbitrary-input reduction chain under `TNLean/MPS/CanonicalForm/Reduction.lean`, `TNLean/MPS/CanonicalForm/Existence.lean`, and `TNLean/MPS/CanonicalForm/SectorComparison/*.lean`.

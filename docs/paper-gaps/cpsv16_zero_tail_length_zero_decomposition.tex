@@ -122,6 +122,13 @@ in~\eqref{eq:pos}, and its dimension clause is the bound~\eqref{eq:bound}.
 The intermediate declarations carrying \texttt{zeroTailDim}, as well as the
 former support lemma
 \leanid{zeroTail_toTensorFromBlocks_blockPower}, have therefore been removed.
+The subsequent common-sector theorems now also take
+\leanid{SameMPV₂Pos} directly; no all-length hypothesis is converted back to
+positive length inside their proofs.  The former bridge from positive-length
+equality plus equal bond dimensions to an all-length statement has been
+removed from the public comparison surface.  The empty-word coefficient lemma
+remains only as an algebraic identity in the Lean source and is not presented
+as a physical chain statement in the blueprint.
 
 \section{Conclusion}
 

@@ -97,15 +97,12 @@ decomposition (arXiv:1606.00608, line 219).  Dropping a zero block changes
 exactly one datum of the generated family: the length-zero coefficient,
 which is the bond dimension.  The formalized sufficient condition therefore
 concludes equality of the generated matrix product vectors at every positive
-length, together with the source's dimension bound $\sum_k D_k \le D$.  A
-separate variant concludes equality at every length, including zero, under
-the explicit additional hypothesis that no restriction of $A$ to a minimal
-invariant subspace is the zero tensor; that hypothesis is not part of the
-source statement, and the variant is marked as
-scope-restricted.\footnote{Formal declaration:
-\leanid{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosure}
-in \doclink{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral}.}
-The positive-length formulation is the source-faithful shape of the
+length, together with the source's dimension bound $\sum_k D_k \le D$.  The
+former all-length variant added the hypothesis that no restriction of $A$ to
+a minimal invariant subspace is the zero tensor.  Since that hypothesis is not
+part of the source and served only to recover the empty-word coefficient, the
+variant has been removed.  The positive-length formulation is the
+source-faithful shape of the
 length-zero bookkeeping analyzed in
 \path{docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex}.
 
@@ -115,9 +112,8 @@ The sufficient condition for canonical form at arXiv:1606.00608,
 lines 253--254, is formalized: projector closure and the absence of
 nontrivial $p$-periodic vectors yield a decomposition of the generated
 matrix product vectors into normal-tensor blocks with nonzero weights, at
-every positive length and with $\sum_k D_k \le D$.  The remaining deliberate
-deviation is the treatment of the length-zero coefficient in the presence of
-zero blocks, recorded in the previous section.
+every positive length and with $\sum_k D_k \le D$.  No separate physical
+statement is retained for the length-zero coefficient.
 
 \bibliographystyle{alpha}
 \bibliography{references}

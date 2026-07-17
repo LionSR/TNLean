@@ -20,9 +20,9 @@ to compare the resulting sector families.
 
 ## Main statements
 
-* `afterBlocking_perBlockCyclicData_of_sameMPV₂` — per-block weights, blocks,
+* `afterBlocking_perBlockCyclicData_of_sameMPV₂Pos` — per-block weights, blocks,
   cyclic-sector decompositions, and positive-length nonzero-sector identities.
-* `afterBlocking_commonLengthCommonSectorData_of_sameMPV₂` — a two-sided
+* `afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos` — a two-sided
   common blocking length with common-sector families.
 
 ## References
@@ -44,7 +44,7 @@ section FundamentalTheoremAfterBlocking
 /-- **Per-block cyclic-sector decomposition after removing zero blocks.**
 
 This is the faithful predecessor to the common nonzero-sector statement. From
-`SameMPV₂ A B`, it discards the all-zero blocks at positive lengths and then
+`SameMPV₂Pos A B`, it discards the all-zero blocks at positive lengths and then
 applies the TP gauge to obtain irreducible nonzero-weight blocks on both sides. It then removes the
 period of each block separately, producing primitive irreducible cyclic sectors for every
 nonzero-weight block. The tensor on each side agrees with its nonzero part at every positive
@@ -61,10 +61,10 @@ Source: Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, p
 `eq:II_Aiplusk1`, Section II.C, and Appendix A, for removing zero blocks and resolving periodic
 blocks into cyclic sectors. The positive-length convention is recorded in
 `docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`. -/
-theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
+theorem afterBlocking_perBlockCyclicData_of_sameMPV₂Pos
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :
+    (hSame : SameMPV₂Pos A B) :
     ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
       (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
     ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
@@ -94,7 +94,7 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
   have hBook : SameMPV₂Pos
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
       (toTensorFromBlocks (d := d) (μ := μB) blocksB) :=
-    (hAPos.symm.trans hSame.toSameMPV₂Pos).trans hBPos
+    (hAPos.symm.trans hSame).trans hBPos
   refine ⟨rA, dimA, μA, blocksA, rB, dimB, μB, blocksB,
     hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB, hAPos, hBPos,
     hBook, ?_, ?_⟩
@@ -111,16 +111,16 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
 
 /-- **Two-sided common-length relabeled cyclic-sector theorem.**
 
-Starting from `SameMPV₂ A B`, this theorem chooses one positive physical blocking
+Starting from `SameMPV₂Pos A B`, this theorem chooses one positive physical blocking
 length for both sides.  At that common length it gives, for each side, the
 positive-length equality between the blocked tensor and its weighted nonzero part,
 the positive-length equality of the two nonzero parts, the relabeled
 cyclic-sector families produced by `CommonBlockedCyclicSectorFamily`, and the
 structural hypotheses for their flattened sector blocks. -/
-theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
+theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :
+    (hSame : SameMPV₂Pos A B) :
     ∃ (p : ℕ), 0 < p ∧
     ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
       (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
@@ -167,7 +167,7 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
       rB, dimB, μB, blocksB,
       _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
       hAPos, hBPos, hPos, hCycA, hCycB⟩ :=
-    afterBlocking_perBlockCyclicData_of_sameMPV₂ A B hSame
+    afterBlocking_perBlockCyclicData_of_sameMPV₂Pos A B hSame
   let periodA : Fin rA → ℕ := fun k => (hCycA k).choose
   let periodB : Fin rB → ℕ := fun k => (hCycB k).choose
   have periodA_pos : ∀ k, 0 < periodA k := fun k => (hCycA k).choose_spec.1
@@ -255,7 +255,7 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem
 
-The complete fundamental theorem should take two tensors `A, B` with `SameMPV₂ A B`
+The complete fundamental theorem should take two tensors `A, B` with `SameMPV₂Pos A B`
 and pass from the blocked reduction witnesses to the CPSV basis-of-normal-tensors
 sector comparison. The one-sided phase-class BNT construction is available as
 `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`; the remaining overlap/span

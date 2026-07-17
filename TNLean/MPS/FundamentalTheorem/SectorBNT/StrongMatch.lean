@@ -49,7 +49,7 @@ Given a sector `k` of `Q`, apply the exact matcher
 
 * feed `hQ`, `hP` (in that order);
 * supply the selected sector `k`; and
-* supply `SameMPV₂ Q.toTensor P.toTensor` via the symmetric flip of `hEqual`
+* supply `SameMPV₂Pos Q.toTensor P.toTensor` via the symmetric flip of `hEqual`
   (pointwise `.symm`).
 
 The result is a `j₀ : Fin P.basisCount` with `Q.basisDim k = P.basisDim j₀`,
