@@ -400,6 +400,48 @@ strong subadditivity for a normalized three-site reduced state.
     Markov decomposition.
 \end{proof}
 
+\begin{theorem}[BNT sector projectors for the four-site SAL marginal]
+    \label{thm:mpdo_four_site_sal_bnt_sector_projectors}
+    \lean{MPOTensor.reducedBlockState_four_reindex_eq_submatrix}
+    \lean{MPOTensor.%
+      exists_etaStructure_reducedBlockState_four_reindex_of_isSAL}
+    \lean{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂_isSAL}
+    \leanok
+    \uses{thm:mpdo_normalized_three_site_bnt_family_closure,
+      thm:mpdo_bnt_sector_projection_resolution,
+      thm:mpdo_four_site_sal_eta_structure}
+    Suppose that the common blocking has been performed, so that the BNT
+    representatives have a simultaneous one-letter span.  For the normalized
+    three-site marginal $\sigma_3^{(4)}$, there are a simultaneous inverse
+    $C$ and a Hayashi decomposition such that every Markov sector $k$ with
+    $p_k\ne0$ has a unique BNT label $j_k$.  Consequently,
+    \[
+      P_s=\sum_{\substack{k:p_k\ne0\\j_k=s}}Q_k
+    \]
+    is an orthogonal projection, $P_sP_t=0$ for $s\ne t$, and
+    \[
+      \sum_sP_s=P_{\mathrm{act}}.
+    \]
+    No independent nonzero-closing-matrix hypothesis is required.  This is
+    the four-site specialization of equations~\textup{QkKjs} and
+    \textup{Pis} in
+    \cite[Appendix~C.2, lines~1714--1737]{Cirac2016MPDO_arXiv}.
+    The Hayashi decomposition uses the forward equality characterization of
+    strong subadditivity recorded in
+    Theorem~\ref{thm:hayashi_ssa_equality_characterization}; no additional
+    analytic assumption is introduced here.
+\end{theorem}
+
+\begin{proof}\leanok
+    The canonical ordered-triple reindexing is the submatrix convention of
+    the SAL-to-Hayashi theorem.  Choose the simultaneous inverse from the
+    one-letter span and the Hayashi decomposition from SAL.  By
+    Theorem~\ref{thm:mpdo_normalized_three_site_bnt_family_closure}, the same
+    marginal is a BNT family closure whose closing matrices are all nonzero.
+    The generic uniqueness and projector theorems now give the unique labels,
+    orthogonality, mutual disjointness, and resolution of the active support.
+\end{proof}
+
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.IsInjective}
