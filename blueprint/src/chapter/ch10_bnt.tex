@@ -282,8 +282,8 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     evaluations of the blocked tensors span the full product algebra:
     \[
         \spn_{\C}\left\{
-            \bigl((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i\bigr)
-            : 0\leq i<d^L
+        \bigl((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i\bigr)
+        : 0\leq i<d^L
         \right\}
         = \prod_{j=1}^g \MN{D_j}.
     \]
@@ -1140,7 +1140,7 @@ single family.
     \lean{MPSTensor.periodicSelfOverlap_tendsto}
     \leanok
     \uses{def:mpv_overlap,def:irreducible_tensor,def:left_canonical_tensor,
-      def:peripheral_eigenvalues}
+        def:peripheral_eigenvalues}
     Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
     with bond dimension $D$, and suppose that the peripheral eigenvalues of
     its transfer map are exactly $\{z\in\mathbb C:z^m=1\}$. Then
@@ -1611,14 +1611,11 @@ gives the arbitrary-input statement, conditional on the weight normalization.
 
 \begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%
     \label{thm:paperbnt_supplier_after_blocking}
-    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos,
-        MPSTensor.exists_isBNTCanonicalForm_afterBlocking_of_totalDim}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos}
     \leanok
     \uses{thm:prepared_bnt_blocks_after_blocking,
         thm:paperbnt_supplier_prepared,
-        def:same_mpv2,
-        def:same_mpv2_pos,
-        lem:samempv2pos_to_samempv2_of_bonddim_eq}
+        def:same_mpv2_pos}
     Let $A$ be an MPS tensor. Then there exists a blocking length $p \ge 1$,
     nonzero weights $\mu_k$, and blocks $B_k$ over the blocked alphabet, such
     that:
@@ -1632,9 +1629,7 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     Moreover, under $|\mu_k| \le 1$ for every $k$ and $|\mu_k|=1$ for at least
     one $k$, there exists a sector decomposition $P$ over the blocked alphabet in
     the BNT canonical form of Definition~\ref{def:sector_bnt_cf} such that
-    $A^{[p]}$ and $P$ generate the same MPV family at every positive length; the
-    identity upgrades to all lengths once the total bond dimension of $P$ equals
-    that of $A^{[p]}$.
+    $A^{[p]}$ and $P$ generate the same MPV family at every positive length.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1644,10 +1639,8 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     \cite[Section~2.3]{Cirac2016MPDO_arXiv} makes;
     Theorem~\ref{thm:paperbnt_supplier_prepared} then produces the sector
     decomposition, following the BNT selection of
-    \cite[Appendix~A]{Cirac2016MPDO_arXiv}. At length zero the MPV coefficient
-    is the bond dimension, so equal total bond dimensions supply the missing
-    length-zero coefficient. The remaining rescaling step is recorded in
-    Remark~\ref{rem:arbitrary_input_reduction_gap}.
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}. The remaining rescaling step is
+    recorded in Remark~\ref{rem:arbitrary_input_reduction_gap}.
 \end{proof}
 
 \begin{remark}[Arbitrary-input reduction]%
@@ -1656,13 +1649,97 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     Theorem~\ref{thm:paperbnt_supplier_after_blocking}.
     % Local fix (cpsv16_cf_normalization_and_proportional_comparison): the
     % preparatory blocks (thm:prepared_bnt_blocks_after_blocking) carry no weight
-    % normalization; the all-zero summand contributes only at length zero, so the
-    % nonzero blocks identify the MPV family for N >= 1. The remaining step rescales
+    % normalization. The remaining step rescales
     % the weights to |\mu_k| <= 1 with a unit witness, recorded in
-    % docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex; the
-    % length-zero trace identity and the unblocked canonical form remain part of
-    % the reduction in Section~\ref{sec:reduction_to_normal_form}.
+    % docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex.
+    The weight rescaling is carried out in
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking_normalized} below, which
+    discharges both hypotheses at the price of one positive scalar per site.
 \end{remark}
+
+\begin{theorem}[Projective weight normalization]%
+    \label{thm:paperbnt_weight_normalization}
+    \lean{MPSTensor.exists_weight_normalization}
+    \leanok
+    For nonzero weights $\mu_1,\dots,\mu_r$ with $r\geq1$ there is a positive
+    real $m$ such that every normalized weight satisfies
+    \[
+        \Bigl|\frac{\mu_k}{m}\Bigr|\leq1,
+        \qquad
+        \frac{\mu_k}{m}\neq0,
+    \]
+    and at least one normalized weight has unit modulus,
+    $|\mu_{k_0}/m|=1$.
+    This is the normalization that
+    \cite[line~246]{Cirac2016MPDO_arXiv} chooses for the canonical-form
+    weights.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $m=\max_k|\mu_k|$; the maximum over a nonempty finite
+    family is attained, positive because every weight is nonzero, an upper
+    bound for every modulus, and equal to the modulus of the attaining
+    weight.
+\end{proof}
+
+\begin{theorem}[Normalized BNT form after blocking for a nonzero MPV family]%
+    \label{thm:paperbnt_supplier_after_blocking_normalized}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized}
+    \leanok
+    \uses{thm:prepared_bnt_blocks_after_blocking,
+        thm:paperbnt_supplier_prepared,
+        thm:paperbnt_weight_normalization,
+        lem:mpv_to_tensor_from_blocks_weight_mul_left,
+        thm:mpv_decomposition,
+        thm:newton_girard,
+        lem:eval_word_append,
+        lem:eval_word_block}
+    Let $A$ be an MPS tensor whose matrix-product family has a nonzero
+    coefficient at some positive length. Then there exist a blocking length
+    $p\geq1$, a positive real $m$, and a sector decomposition $P$ over the
+    blocked alphabet in the BNT canonical form of
+    Definition~\ref{def:sector_bnt_cf}, such that for every positive length
+    $N$,
+    \[
+        V^{(N)}\bigl(A^{[p]}\bigr)=m^{N}\,V^{(N)}(P).
+    \]
+    The scalar $m^{N}$ is the per-site normalization cost of the line-246
+    weight choice; the hypotheses of
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking} are discharged rather
+    than assumed.
+
+    \textbf{Scope restriction (nonzero MPV family).} The source proposition
+    says ``for any tensor,'' but the zero MPV family cannot supply the global
+    unit-modulus weight imposed immediately before it. The hypothesis above
+    is exactly the exclusion of this degenerate case. This boundary is
+    recorded in
+    \path{docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a word $w$ with $\tr(A^w)\neq0$. For every $p\geq1$, there is a
+    $q\geq1$ such that $\tr((A^w)^{pq})\neq0$. Otherwise Newton--Girard applied
+    to $(A^w)^p$ and the zero matrix would show that $(A^w)^p$, and hence
+    $A^w$, is nilpotent, contradicting $\tr(A^w)\neq0$. Repeating $w$ exactly
+    $pq$ times gives a nonzero coefficient of the $p$-blocked tensor. Thus the
+    prepared family at the blocking length supplied by
+    Theorem~\ref{thm:prepared_bnt_blocks_after_blocking} is nonempty.
+
+    Normalize its weights by their maximal modulus $m$
+    (Theorem~\ref{thm:paperbnt_weight_normalization}). By the weight-scaling
+    identity of
+    Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left},
+    \[
+        V^{(N)}\bigl(A^{[p]}\bigr)
+        = V^{(N)}\Bigl(\bigoplus_k \mu_k\,B_k\Bigr)
+        = V^{(N)}\Bigl(\bigoplus_k m\,\frac{\mu_k}{m}\,B_k\Bigr)
+        = m^{N}\,V^{(N)}\Bigl(\bigoplus_k \frac{\mu_k}{m}\,B_k\Bigr)
+        = m^{N}\,V^{(N)}(P),
+    \]
+    where the last identity is the prepared supplier of
+    Theorem~\ref{thm:paperbnt_supplier_prepared} applied to the normalized
+    weights, which gives the BNT canonical form $P$.
+\end{proof}
 
 \section{Coefficient comparison and copy-weight recovery}
 \label{sec:sector_bnt_coeff_comparison}
