@@ -444,6 +444,7 @@ import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.BNTThreeSiteReducedClosure
+import TNLean.MPS.MPDO.BNTSourceSectorProjectors
 import TNLean.MPS.MPDO.HayashiSectorProjector
 import TNLean.MPS.MPDO.EtaPreparation
 import TNLean.MPS.MPDO.RFPSubspinMaps

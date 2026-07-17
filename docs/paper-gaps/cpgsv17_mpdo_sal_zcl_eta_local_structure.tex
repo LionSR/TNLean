@@ -260,11 +260,18 @@ $\widehat R_j$ is nonzero.
 and
 \path{MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}.}
 Thus the explicit nonzero-closing hypothesis of the generic cancellation
-theorem is derived for the family closure used by the source.  The remaining
-formal composition is to specialize the generic uniqueness and projector
-statements simultaneously to this closure, the four-site Hayashi
-decomposition supplied by SAL, and the simultaneous inverse supplied by
-biCF.  No further closing-matrix assumption is needed for that specialization.
+theorem is derived for the family closure used by the source.  The simultaneous
+specialization is now formalized as well.  After the common blocking has made
+the BNT representatives simultaneously one-letter spanning, biCF supplies the
+inverse and SAL supplies the four-site Hayashi decomposition.  Every active
+Markov sector then has a unique BNT label, and the resulting BNT-labelled sums
+of Hayashi projections are orthogonal, mutually disjoint, and resolve the
+active Markov support.
+\footnote{The relevant declaration is
+\path{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂_isSAL}.}
+No further closing-matrix assumption is needed for this specialization.  The
+remaining step for the source projector passage is the all-length
+$P_j$-compressed density-operator formula with the natural multiplicities.
 
 The neighboring operators are now assembled from these sector tensors.  The
 operator
