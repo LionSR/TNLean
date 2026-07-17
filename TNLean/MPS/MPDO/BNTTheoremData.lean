@@ -461,7 +461,7 @@ Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_toDiagonal_of_pos
     (n : ℕ) (hn : 0 < n) :
-    H.positiveBlockedChi.toDiagonal n =
+    H.positiveBlockedChi.toDiagonal n hn =
       H.positiveChi.chi.comap (H.blockedComparison.blockedLabel n hn) :=
   H.blockedComparison.pulledBlockedChiFamily_toDiagonal_of_pos H.positiveChi n hn
 
@@ -477,7 +477,7 @@ theorem positiveBlockedChi_tracePowerCoeff_of_pos
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
     (L : ℕ) :
-    H.positiveBlockedChi.tracePowerCoeff n i j k L =
+    H.positiveBlockedChi.tracePowerCoeff n hn i j k L =
       H.positiveChi.chi.tracePowerCoeff
         (H.sourceLabel n hn i) (H.sourceLabel n hn j) (H.targetLabel n hn k) L :=
   H.blockedComparison.pulledBlockedChi_tracePowerCoeff_of_pos
@@ -493,7 +493,7 @@ theorem positiveBlockedChi_dim_of_pos
     (n : ℕ) (hn : 0 < n)
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
-    H.positiveBlockedChi.dim n i j k =
+    H.positiveBlockedChi.dim n hn i j k =
       H.positiveChi.chi.dim
         (H.sourceLabel n hn i) (H.sourceLabel n hn j) (H.targetLabel n hn k) :=
   H.blockedComparison.pulledBlockedChi_dim_of_pos H.positiveChi n hn i j k
@@ -510,7 +510,7 @@ theorem positiveBlockedChi_trace_matrix_pow_of_pos
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
     (L : ℕ) :
-    (H.positiveBlockedChi.matrix n i j k ^ L).trace =
+    (H.positiveBlockedChi.matrix n hn i j k ^ L).trace =
       (H.positiveChi.chi.matrix
         (H.sourceLabel n hn i) (H.sourceLabel n hn j) (H.targetLabel n hn k) ^
           L).trace :=
@@ -544,11 +544,11 @@ Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 lemma positiveBlockedChi_entry_pos
-    (n : ℕ) (i j : AlgebraStructureData.BlockedIndex data n)
+    (n : ℕ) (hn : 0 < n) (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
-    (r : Fin (H.positiveBlockedChi.dim n i j k)) :
-    0 < H.positiveBlockedChi.entry n i j k r :=
-  H.toPositiveBlockedStructureChiTracePowerForm.posEntries n i j k r
+    (r : Fin (H.positiveBlockedChi.dim n hn i j k)) :
+    0 < H.positiveBlockedChi.entry n hn i j k r :=
+  H.toPositiveBlockedStructureChiTracePowerForm.posEntries n hn i j k r
 
 /-- The blocked-basis coefficients obtained from BNT-label theorem data are
 traces of powers of the pulled-back blocked-basis chi matrices.
@@ -561,7 +561,7 @@ lemma blocked_coeff_eq_positiveBlockedChi_trace_pow
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
     data.blockedStructureCoefficients n i j k =
-      (H.positiveBlockedChi.matrix n i j k ^ n).trace :=
+      (H.positiveBlockedChi.matrix n hn i j k ^ n).trace :=
   H.toPositiveBlockedStructureChiTracePowerForm.eq_trace_pow n hn i j k
 
 end BNTLabelTheoremData

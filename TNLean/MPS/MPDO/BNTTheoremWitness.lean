@@ -150,11 +150,11 @@ theorem exists_blocked_coeff_eq_trace_pow {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ χ : AlgebraStructureData.BlockedStructureChiFamily data,
       χ.PosEntries ∧
-        ∀ (n : ℕ), 0 < n →
+        ∀ (n : ℕ) (hn : 0 < n),
           ∀ (i j : AlgebraStructureData.BlockedIndex data n)
             (k : AlgebraStructureData.BlockedIndex data (2 * n)),
           data.blockedStructureCoefficients n i j k =
-            (χ.matrix n i j k ^ n).trace := by
+            (χ.matrix n hn i j k ^ n).trace := by
   rcases h.exists_blocked_chi_trace_power_form with ⟨χ, hpos, htrace⟩
   refine ⟨χ, hpos, ?_⟩
   intro n hn i j k
@@ -572,7 +572,7 @@ Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem positiveBlockedChi_toDiagonal_of_pos
     (n : ℕ) (hn : 0 < n) :
-    W.positiveBlockedChi.toDiagonal n =
+    W.positiveBlockedChi.toDiagonal n hn =
       W.positiveChi.chi.comap (W.blockedComparison.blockedLabel n hn) :=
   W.toTheoremData.positiveBlockedChi_toDiagonal_of_pos n hn
 
@@ -588,7 +588,7 @@ theorem positiveBlockedChi_tracePowerCoeff_of_pos
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
     (L : ℕ) :
-    W.positiveBlockedChi.tracePowerCoeff n i j k L =
+    W.positiveBlockedChi.tracePowerCoeff n hn i j k L =
       W.positiveChi.chi.tracePowerCoeff
         (W.sourceLabel n hn i) (W.sourceLabel n hn j) (W.targetLabel n hn k) L :=
   W.toTheoremData.positiveBlockedChi_tracePowerCoeff_of_pos n hn i j k L
@@ -604,7 +604,7 @@ theorem positiveBlockedChi_dim_of_pos
     (n : ℕ) (hn : 0 < n)
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
-    W.positiveBlockedChi.dim n i j k =
+    W.positiveBlockedChi.dim n hn i j k =
       W.positiveChi.chi.dim
         (W.sourceLabel n hn i) (W.sourceLabel n hn j) (W.targetLabel n hn k) :=
   W.toTheoremData.positiveBlockedChi_dim_of_pos n hn i j k
@@ -621,7 +621,7 @@ theorem positiveBlockedChi_trace_matrix_pow_of_pos
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
     (L : ℕ) :
-    (W.positiveBlockedChi.matrix n i j k ^ L).trace =
+    (W.positiveBlockedChi.matrix n hn i j k ^ L).trace =
       (W.positiveChi.chi.matrix
         (W.sourceLabel n hn i) (W.sourceLabel n hn j) (W.targetLabel n hn k) ^
           L).trace :=
@@ -654,11 +654,11 @@ Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 lemma positiveBlockedChi_entry_pos
-    (n : ℕ) (i j : AlgebraStructureData.BlockedIndex data n)
+    (n : ℕ) (hn : 0 < n) (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n))
-    (r : Fin (W.positiveBlockedChi.dim n i j k)) :
-    0 < W.positiveBlockedChi.entry n i j k r :=
-  W.toPositiveBlockedStructureChiTracePowerForm.posEntries n i j k r
+    (r : Fin (W.positiveBlockedChi.dim n hn i j k)) :
+    0 < W.positiveBlockedChi.entry n hn i j k r :=
+  W.toPositiveBlockedStructureChiTracePowerForm.posEntries n hn i j k r
 
 /-- For an existential BNT-label theorem witness, the blocked-basis
 coefficients are traces of powers of the pulled-back blocked-basis chi
@@ -672,7 +672,7 @@ lemma blocked_coeff_eq_positiveBlockedChi_trace_pow
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
     data.blockedStructureCoefficients n i j k =
-      (W.positiveBlockedChi.matrix n i j k ^ n).trace :=
+      (W.positiveBlockedChi.matrix n hn i j k ^ n).trace :=
   W.toPositiveBlockedStructureChiTracePowerForm.eq_trace_pow n hn i j k
 
 end BNTLabelTheoremWitness
