@@ -145,6 +145,99 @@ theorem IsSimpleCanonicalForm.isHorizontalCF {M : MPOTensor d D}
   obtain ⟨-, S, hCF, -, hTotal, X, hEq⟩ := hM
   exact ⟨S, hCF, hTotal, X, hEq⟩
 
+/-- The zero-correlation-length equation restricts to every copy of every
+normal representative in the horizontal canonical form:
+\[
+  (\mu_{j,q}\mathcal B_j)^2
+    =\lambda\,\mu_{j,q}\mathcal B_j,
+  \qquad \lambda>0.
+\]
+
+This is the block equation used before the source compares two copy indices.
+
+Source: arXiv:1606.00608, Appendix C.2, equation in lines 1652--1657. -/
+theorem exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL
+    {M : MPOTensor d D}
+    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hZCL : IsSourceZCL M) :
+    ∃ lam : ℝ, 0 < lam ∧ ∀ (j : Fin S.basisCount) (q : Fin (S.copies j)),
+      (S.weight j q • doubledPhysTraceTransfer d (S.basis j)) *
+          (S.weight j q • doubledPhysTraceTransfer d (S.basis j)) =
+        (lam : ℂ) • (S.weight j q • doubledPhysTraceTransfer d (S.basis j)) := by
+  classical
+  subst hTotal
+  obtain ⟨-, lam, hlam, hsq⟩ := hZCL
+  have hX' : ∀ i : Fin (d * d), M.toMPSTensor i =
+      (MPSTensor.globalGaugeOfBlocks X :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+        S.toTensor i *
+        (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := fun i ↦ by
+    simpa using hEq i
+  have hT : physTraceTransfer M =
+      (MPSTensor.globalGaugeOfBlocks X :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+        doubledPhysTraceTransfer d S.toTensor *
+        (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
+    rw [← doubledPhysTraceTransfer_toMPSTensor M]
+    simp only [doubledPhysTraceTransfer]
+    rw [Matrix.mul_sum, Matrix.sum_mul]
+    exact Finset.sum_congr rfl fun i _ ↦ hX' (finProdFinEquiv (i, i))
+  rw [hT] at hsq
+  have hRR :
+      doubledPhysTraceTransfer d S.toTensor * doubledPhysTraceTransfer d S.toTensor =
+        (lam : ℂ) • doubledPhysTraceTransfer d S.toTensor := by
+    have h2 := congrArg (fun Z ↦
+      (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * Z *
+        (MPSTensor.globalGaugeOfBlocks X :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)) hsq
+    simpa only [Matrix.mul_smul, Matrix.smul_mul, mul_assoc,
+      Units.inv_mul_cancel_left, Units.inv_mul, mul_one] using h2
+  rw [doubledPhysTraceTransfer_toTensor] at hRR
+  have hfun :
+      (fun s ↦ (S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s)) *
+          (S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s))) =
+        (lam : ℂ) • fun s ↦
+          S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s) := by
+    apply Matrix.blockDiagonal'_injective
+    apply (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv).injective
+    simpa only [Matrix.reindex_apply, Matrix.blockDiagonal'_mul,
+      Matrix.blockDiagonal'_smul, Matrix.submatrix_mul_equiv,
+      Matrix.submatrix_smul, Pi.smul_apply] using hRR
+  refine ⟨lam, hlam, ?_⟩
+  intro j q
+  have h :
+      (S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1
+            (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).2 •
+          doubledPhysTraceTransfer d
+            (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1)) *
+        (S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1
+            (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).2 •
+          doubledPhysTraceTransfer d
+            (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1)) =
+      (lam : ℂ) •
+        (S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1
+            (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).2 •
+          doubledPhysTraceTransfer d
+            (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1)) :=
+    congrFun hfun (S.flatIndexEquiv ⟨j, q⟩)
+  rw [Equiv.symm_apply_apply] at h
+  simpa [Pi.smul_apply] using h
+
 /-- **Zero correlation length makes the sector weights copy independent**
 (arXiv:1606.00608, Appendix C.2, lines 1646--1661).  Let the doubled-index
 view of $M$ be in canonical form over a basis of normal tensors with per-copy
@@ -179,66 +272,9 @@ theorem weight_copy_independent_of_isSourceZCL {M : MPOTensor d D}
     (j : Fin S.basisCount) (q q' : Fin (S.copies j)) :
     S.weight j q = S.weight j q' := by
   classical
-  subst hTotal
-  obtain ⟨-, lam, hlam, hsq⟩ := hZCL
-  have hX' : ∀ i : Fin (d * d), M.toMPSTensor i =
-      (MPSTensor.globalGaugeOfBlocks X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
-        S.toTensor i *
-        (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
-          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := fun i => by simpa using hEq i
-  -- Contract the ket leg against the bra leg in the canonical form.
-  have hT : physTraceTransfer M =
-      (MPSTensor.globalGaugeOfBlocks X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
-        doubledPhysTraceTransfer d S.toTensor *
-        (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
-          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
-    rw [← doubledPhysTraceTransfer_toMPSTensor M]
-    simp only [doubledPhysTraceTransfer]
-    rw [Matrix.mul_sum, Matrix.sum_mul]
-    exact Finset.sum_congr rfl fun i _ => hX' (finProdFinEquiv (i, i))
-  rw [hT] at hsq
-  -- Cancel the global gauge in the zero-correlation-length equation.
-  have hRR : doubledPhysTraceTransfer d S.toTensor * doubledPhysTraceTransfer d S.toTensor =
-      (lam : ℂ) • doubledPhysTraceTransfer d S.toTensor := by
-    have h2 := congrArg (fun Z =>
-      (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
-        Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * Z *
-        (MPSTensor.globalGaugeOfBlocks X :
-          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)) hsq
-    simpa only [Matrix.mul_smul, Matrix.smul_mul, mul_assoc, Units.inv_mul_cancel_left,
-      Units.inv_mul, mul_one] using h2
-  rw [doubledPhysTraceTransfer_toTensor] at hRR
-  -- Blockwise form of the zero-correlation-length equation.
-  have hfun : (fun s => (S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s)) *
-        (S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s))) =
-      (lam : ℂ) • fun s => S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s) := by
-    apply Matrix.blockDiagonal'_injective
-    apply (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv).injective
-    simpa only [Matrix.reindex_apply, Matrix.blockDiagonal'_mul, Matrix.blockDiagonal'_smul,
-      Matrix.submatrix_mul_equiv, Matrix.submatrix_smul, Pi.smul_apply] using hRR
-  -- Restrict to the copies of the representative `j`.
-  have key : ∀ r : Fin (S.copies j),
-      (S.weight j r • doubledPhysTraceTransfer d (S.basis j)) *
-          (S.weight j r • doubledPhysTraceTransfer d (S.basis j)) =
-        (lam : ℂ) • (S.weight j r • doubledPhysTraceTransfer d (S.basis j)) := by
-    intro r
-    have h :
-        (S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).1
-              (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).2 •
-            doubledPhysTraceTransfer d
-              (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).1)) *
-          (S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).1
-              (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).2 •
-            doubledPhysTraceTransfer d
-              (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).1)) =
-        (lam : ℂ) •
-          (S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).1
-              (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).2 •
-            doubledPhysTraceTransfer d
-              (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, r⟩)).1)) :=
-      congrFun hfun (S.flatIndexEquiv ⟨j, r⟩)
-    rw [Equiv.symm_apply_apply] at h
-    exact h
+  obtain ⟨lam, hlam, key⟩ :=
+    exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL
+      S hTotal X hEq hZCL
   -- The basis transfer is nonzero, so the scalars can be compared.
   have hTj0 : doubledPhysTraceTransfer d (S.basis j) ≠ 0 := by
     intro h0
@@ -248,7 +284,7 @@ theorem weight_copy_independent_of_isSourceZCL {M : MPOTensor d D}
         ((lam : ℂ) / S.weight j r) • doubledPhysTraceTransfer d (S.basis j) := by
     intro r
     have hμ : S.weight j r ≠ 0 := S.weight_ne_zero j r
-    have hk := key r
+    have hk := key j r
     rw [smul_mul_smul_comm, smul_smul] at hk
     have h3 := congrArg (fun Z => (S.weight j r * S.weight j r)⁻¹ • Z) hk
     simp only [smul_smul] at h3

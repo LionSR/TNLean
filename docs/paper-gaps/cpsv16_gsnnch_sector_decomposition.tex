@@ -87,15 +87,27 @@ its conclusion for an injective tensor.
 
 The first part of the original plan---positivity and translation invariance
 of the represented finite-chain sector sum from the stored sector data---is
-complete.  The remaining comparison and assembly work has two parts:
+complete.  Appendix C.2 has also been followed through the BNT projector
+selection formula: the natural multiplicities are retained, positive-length
+compression proves that each absorbed BNT representative generates MPDOs,
+and the canonical block equation proves ZCL for each representative.
+\footnote{\raggedright Formal declarations:
+{\scriptsize\leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}},
+{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL}},
+and
+{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}}.}
+The remaining comparison and assembly work has two parts:
 
 \begin{enumerate}
-  \item construct the outer GSNNCH sectors from the BNT decomposition and the
-        physical-sector factorization in Appendix C.2, retaining all sector
-        multiplicities;
+  \item prove SAL for every absorbed BNT representative from the direct-sum
+        entropy identity and strong subadditivity, then
+        apply the injective one-sector theorem to those representatives and
+        assemble the outer GSNNCH sectors with their natural multiplicities;
   \item determine whether the reverse comparison with a single bond is needed
         in the simple-MPDO equivalence, and prove it only in that form.
 \end{enumerate}
+\footnote{The direct-sum entropy identity is labelled
+\texttt{entropiesj} in the source.}
 
 The local Markov labels in Appendix C.2 belong inside one injective BNT
 component.  They are not the outer labels $x$ of Definition~4.8 and must not
@@ -107,9 +119,11 @@ Verdict: the source GSNNCH data and predicate are formalized, the represented
 sector sum is proved positive semidefinite and translation invariant with
 pairwise commuting translates, and the single-bond presentation is proved to
 give the one-sector case; every injective tensor satisfying the saturated
-area law is proved GSNNCH through a one-sector witness.  The open gap is the
-construction of the outer sectors and multiplicities of a general simple
-tensor in the simple-MPDO implication, together with any reverse comparison
-actually needed by that argument.
+area law is proved GSNNCH through a one-sector witness.  For a general simple
+tensor, the BNT projectors, their positive-length compression formula, and the
+sectorwise MPDO and ZCL conclusions are formalized.  The open gap is the
+sectorwise SAL argument and the ensuing assembly of the outer sectors and
+multiplicities, together with any reverse comparison actually needed by that
+argument.
 
 \end{document}
