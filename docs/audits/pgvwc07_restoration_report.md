@@ -1,5 +1,11 @@
 # PGVWC07 intermediate-step restoration report
 
+> **Status update (2026-07-17).** This is a historical restoration record. The
+> three zero-tail declarations listed below were subsequently replaced by the
+> single positive-length theorem
+> `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary`, whose
+> bond-dimension bound is derived structurally, without an empty-word argument.
+
 > **PR split note.** This report describes the *combined* restoration across
 > two stacked pull requests:
 >

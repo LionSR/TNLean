@@ -13,7 +13,7 @@ open Filter
 
 This file collects the common-sector continuation of the structural
 canonical-form reduction following arXiv:1606.00608. Starting from the
-all-zero leftover block and TP-gauge decomposition, it records the per-block
+nonzero irreducible decomposition and its trace-preserving gauge, it records the per-block
 weights, blocks, and positive-length agreements of the nonzero part, chooses
 common blocking lengths, and states the relabeled common-sector families needed
 to compare the resulting sector families.
@@ -41,22 +41,26 @@ variable {d D : ℕ}
 
 section FundamentalTheoremAfterBlocking
 
-/-- **Per-block cyclic-sector decomposition after the zero-block split.**
+/-- **Per-block cyclic-sector decomposition after removing zero blocks.**
 
 This is the faithful predecessor to the common nonzero-sector statement. From
-`SameMPV₂ A B`, it first separates the all-zero leftover block and then applies
-the TP gauge to obtain irreducible nonzero-weight blocks on both sides. It then
-removes the period of each block separately, producing primitive irreducible cyclic sectors for
-every nonzero-weight block. The tensor on each side agrees with its nonzero part
-at every positive length, and the two nonzero parts agree at every positive length.
-The length-zero coefficient is recovered separately, at the end, from equality of
-the bond dimensions.
+`SameMPV₂ A B`, it discards the all-zero blocks at positive lengths and then
+applies the TP gauge to obtain irreducible nonzero-weight blocks on both sides. It then removes the
+period of each block separately, producing primitive irreducible cyclic sectors for every
+nonzero-weight block. The tensor on each side agrees with its nonzero part at every positive
+length, and the two nonzero parts agree at every positive length.
 
 The theorem intentionally keeps the per-block period-removal lengths inside
 `HasPrimitiveIrreducibleCyclicSectors`. It does not conflate those lengths with a
 later common-refinement or Wielandt/injectivity blocking length; assembling the
 per-block cyclic sectors at one physical blocking level is the next formal
-statement in the reduction chain. -/
+statement in the reduction chain.
+
+Source: Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof lines
+761--832, for the nonzero irreducible canonical blocks; arXiv:1606.00608, equation
+`eq:II_Aiplusk1`, Section II.C, and Appendix A, for removing zero blocks and resolving periodic
+blocks into cyclic sectors. The positive-length convention is recorded in
+`docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`. -/
 theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -80,12 +84,12 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
         (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksA k)) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksB k)) := by
-  obtain ⟨_zeroTailA, rA, dimA, μA, blocksA,
-      hIrrA, hTPA, hμA, hDimA, hAPos, _hDimIdA⟩ :=
-    exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₁) A
-  obtain ⟨_zeroTailB, rB, dimB, μB, blocksB,
-      hIrrB, hTPB, hμB, hDimB, hBPos, _hDimIdB⟩ :=
-    exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₂) B
+  obtain ⟨rA, dimA, μA, blocksA,
+      hIrrA, hTPA, hμA, hDimA, hAPos, _hDimBoundA⟩ :=
+    exists_tp_gauge_from_arbitrary (d := d) (D := D₁) A
+  obtain ⟨rB, dimB, μB, blocksB,
+      hIrrB, hTPB, hμB, hDimB, hBPos, _hDimBoundB⟩ :=
+    exists_tp_gauge_from_arbitrary (d := d) (D := D₂) B
   -- The two nonzero parts agree at positive length: chain through the common MPV family.
   have hBook : SameMPV₂Pos
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
@@ -268,17 +272,16 @@ decompositions are now part of this file's structural reduction. The remaining
 formal work for the completely unconditional
 `fundamentalTheorem_after_blocking_sector` is therefore narrower:
 
-1. the `N = 0` identity for the zero-tail contribution;
-2. one-site injectivity of the nonzero-weight blocks, or a blocked replacement of the
+1. one-site injectivity of the nonzero-weight blocks, or a blocked replacement of the
    rigidity hypothesis; and
-3. equality of the finite-length MPV spans for the original nonzero-weight block families
+2. equality of the finite-length MPV spans for the original nonzero-weight block families
    (or directly for the two BNT bases), equivalently a common phase/BNT comparison,
    followed by the final global gauge construction of the equal-case FT.
 
 Thus the common-period arithmetic, the blocked-word relabeling, the common
 primitive irreducible nonzero-sector families, and the abstract sector-matching
 witness have already been supplied. What remains is the CPSV derivation of the
-listed zero-tail, injectivity, and span/comparison facts for the actual sector
+listed injectivity and span/comparison facts for the actual sector
 tensors produced by the after-blocking reduction.
 -/
 

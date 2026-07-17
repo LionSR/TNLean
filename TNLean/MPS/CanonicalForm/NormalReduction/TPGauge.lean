@@ -28,17 +28,12 @@ Its public outputs are:
   construction applied blockwise to a prepared nonzero irreducible decomposition.
 * `MPSTensor.exists_tp_gauge_blockwise` — blockwise Perron--Frobenius / TP-gauge
   normalization for an irreducible block decomposition.
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` —
-  the arbitrary-input version recording the positive-length nonzero-block equality
-  together with the length-zero dimension identity `D = zeroTailDim + ∑ dim`.
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` —
-  the preceding theorem together with the total bond-dimension bound.
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound` —
-  the positive-length version recording only the bond-dimension bound.
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary` — the
+  arbitrary-input positive-length form with the total bond-dimension bound.
 * `MPSTensor.exists_pgvwc07_positiveLengthWitness` — the same positive-length
   theorem recorded as a single structured witness.
-* `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
-  arbitrary-input result obtained after zero-block separation.
+* `MPSTensor.exists_tp_gauge_from_arbitrary` — the corresponding arbitrary-input
+  trace-preserving gauge reduction.
 
 The auxiliary declarations stay file-local because they are elementary lemmas for
 rescaling and gauge transport.
@@ -405,7 +400,9 @@ through the weighted direct sum.
 
 This is still a prepared-block statement.  It does not start from an arbitrary
 translation-invariant representation, does not separate all-zero blocks, and
-does not prove the total bond-dimension bound of the full source theorem. -/
+does not prove the total bond-dimension bound of the full source theorem. The
+prepared-block boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_unital_dualDiag_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
@@ -415,25 +412,23 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
       SameMPV₂ A
         (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
     (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
-    ∃ r1 : ℕ,
-      ∃ dim1 : Fin r1 → ℕ,
-      ∃ μ1 : Fin r1 → ℂ,
-      ∃ blocks1 : (k : Fin r1) → MPSTensor d (dim1 k),
+    ∃ μ1 : Fin r0 → ℂ,
+      ∃ blocks1 : (k : Fin r0) → MPSTensor d (dim0 k),
         SameMPV₂ A
           (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
         (∀ k,
-          ∃ Λ : Matrix (Fin (dim1 k)) (Fin (dim1 k)) ℂ,
+          ∃ Λ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
             Λ.PosDef ∧
             Λ.IsDiag ∧
             (∑ i : Fin d, blocks1 k i * (blocks1 k i)ᴴ = 1) ∧
-            transferMap (d := d) (D := dim1 k) (fun i => (blocks1 k i)ᴴ) Λ = Λ) ∧
+            transferMap (d := d) (D := dim0 k) (fun i => (blocks1 k i)ᴴ) Λ = Λ) ∧
         (∀ k,
-          ∀ X : Matrix (Fin (dim1 k)) (Fin (dim1 k)) ℂ,
-            transferMap (d := d) (D := dim1 k) (blocks1 k) X = X →
-              ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim1 k)) (Fin (dim1 k)) ℂ)) ∧
+          ∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+            transferMap (d := d) (D := dim0 k) (blocks1 k) X = X →
+              ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)) ∧
         (∀ k, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ)) ∧
         (∀ k, μ1 k ≠ 0) ∧
-        (∀ k, 0 < dim1 k) := by
+        (∀ k, 0 < dim0 k) := by
   classical
   have hcanon :
       ∀ k : Fin r0,
@@ -513,12 +508,12 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
   have hμpos1 : ∀ k : Fin r0, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ) := by
     intro k
     exact ⟨Real.sqrt (r1 k), Real.sqrt_pos.2 (hrpos1 k), rfl⟩
-  exact ⟨r0, dim0, μ1, blocks1, hSame1, hΛData, hScalarC, hμpos1, hμne1, hDim1⟩
+  exact ⟨μ1, blocks1, hSame1, hΛData, hScalarC, hμpos1, hμne1, hDim1⟩
 
 /-- Blockwise Perron--Frobenius / TP-gauge stage for an irreducible block decomposition.
 
 This theorem is the blockwise TP-normalization step used by
-`exists_tp_gauge_from_arbitrary_with_zeroTail`, and it also gives the earlier
+`exists_tp_gauge_from_arbitrary`, and it also gives the earlier
 TP-normalization route on a fixed irreducible decomposition. Its extra
 nonzero-block hypothesis lives on a chosen decomposition, so it still does not
 by itself give an unconditional arbitrary-input theorem under the current
@@ -526,7 +521,11 @@ by itself give an unconditional arbitrary-input theorem under the current
 nonzero Kraus operator, excluding the all-zero scalar counterexample and
 matching the hypotheses of the corresponding irreducible-to-TP result from
 `Existence.lean`. It remains separate from the later normal-canonical-form theorem
-in `NormalReduction/Main.lean`. -/
+in `NormalReduction/Main.lean`.
+
+Source: arXiv:1606.00608, lines 1058--1077, applied independently to each nonzero irreducible
+block. The relation to the PGVWC07 unital orientation is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_tp_gauge_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
@@ -536,16 +535,14 @@ theorem exists_tp_gauge_blockwise
       SameMPV₂ A
         (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
     (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
-    ∃ r1 : ℕ,
-      ∃ dim1 : Fin r1 → ℕ,
-      ∃ μ1 : Fin r1 → ℂ,
-      ∃ blocks1 : (k : Fin r1) → MPSTensor d (dim1 k),
+    ∃ μ1 : Fin r0 → ℂ,
+      ∃ blocks1 : (k : Fin r0) → MPSTensor d (dim0 k),
         SameMPV₂ A
           (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
         (∀ k, IsIrreducibleTensor (blocks1 k)) ∧
         (∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1) ∧
         (∀ k, μ1 k ≠ 0) ∧
-        (∀ k, 0 < dim1 k) := by
+        (∀ k, 0 < dim0 k) := by
   classical
   have htp :
       ∀ k : Fin r0,
@@ -600,145 +597,28 @@ theorem exists_tp_gauge_blockwise
       funext i
       simpa [tpGauge, c] using hform1 k i
     simpa [hEq] using hIrr_gauge
-  exact ⟨r0, dim0, μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
+  exact ⟨μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
 /-!
-## Zero-block separation and blockwise gauge threading
+## Arbitrary-input blockwise gauge reductions
 
-This section composes the zero-block separation from `Existence.lean` with the
-blockwise Perron--Frobenius gauge theorems above, producing arbitrary-input
-results: from any `A : MPSTensor d D`, we obtain:
-
-* a zero-block dimension `zeroTailDim`, equal to the total bond dimension of the
-  all-zero irreducible blocks, and
-* a weighted family of nonzero blocks in either the PGVWC07 unital orientation
-  with dual-diagonal fixed points or the older TP-gauge orientation.
-
-The decomposition is recorded by two facts that carry all the content without
-constructing a separate zero tensor:
-
-* the positive-length equality
-  `SameMPV₂Pos A (toTensorFromBlocks μ blocks)`, and
-* the length-zero dimension identity `D = zeroTailDim + ∑ k, dim k`.
-
-The PGVWC07 unital statement below is the strongest unconditional arbitrary-input
-step available here before the final total bond-dimension bound is threaded
-through the construction.
+The nonzero irreducible decomposition from `Existence.lean` is placed blockwise
+in either the PGVWC07 unital orientation or the trace-preserving orientation.
+The blockwise gauges preserve the index set and every bond dimension, so the
+structural bond-dimension bound passes through unchanged.
 -/
 
-/-- **Arbitrary-input PGVWC07 unital dual-diagonal form with zero blocks.**
+/-- **Arbitrary-input PGVWC07 unital dual-diagonal form.**
 
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
-lines 765--770 and 816--832, after the recursive invariant-subspace splitting
-and all-zero-block separation have been carried out.  From any tensor `A`, the
-theorem separates a zero-block contribution and applies
-`exists_pgvwc07_unital_dualDiag_blockwise` to the remaining nonzero irreducible
-blocks.
-
-Every nonzero output block is in the source's unital orientation
-`∑ i, C i * (C i)ᴴ = 1`, has only scalar fixed points for its transfer map, and
-has a diagonal positive-definite fixed point for the adjoint transfer map.  The
-weights are positive real spectral-radius weights, and the MPV family of `A`
-is the sum of the zero-block contribution and the weighted nonzero-block
-direct sum.
-
-**Scope restriction:** This is still not the full Th:TIcanonical statement:
-the zero block is kept explicitly, and the final total bond-dimension bound is
-not included.  The boundary is recorded in
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+lines 761--832.  At every positive length, an arbitrary tensor is
+represented by positive real weights multiplying nonzero blocks in the unital
+orientation.  Each block has only scalar transfer-map fixed points and admits a
+diagonal positive-definite fixed point of the adjoint transfer map.  The total
+bond dimension of the retained blocks is at most the original bond dimension.
+The positive-length form and structural dimension bound are recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
-theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail
-    (A : MPSTensor d D) :
-    ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
-      (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      (∀ k,
-        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Λ.PosDef ∧
-          Λ.IsDiag ∧
-          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
-      (∀ k,
-        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          transferMap (d := d) (D := dim k) (blocks k) X = X →
-            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
-      (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
-      (∀ k, μ k ≠ 0) ∧
-      (∀ k, 0 < dim k) ∧
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      D = zeroTailDim + ∑ k : Fin r, dim k := by
-  classical
-  obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hDimId₀⟩ :=
-    exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
-  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀
-  have hSame_refl : SameMPV₂ A_nonzero
-      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀) :=
-    fun _ _ => rfl
-  obtain ⟨r₁, dim₁, μ₁, blocks₁, hSame₁, hΛData₁, hScalar₁, hμPos₁, hμNe₁,
-    hDim₁⟩ :=
-    exists_pgvwc07_unital_dualDiag_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl
-      hNonzero₀
-  refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hΛData₁, hScalar₁,
-    hμPos₁, hμNe₁, hDim₁, ?_, ?_⟩
-  · exact hPos₀.trans hSame₁.toSameMPV₂Pos
-  · have hsum : (∑ k : Fin r₀, dim₀ k) = ∑ k : Fin r₁, dim₁ k := by
-      have h0 := hSame₁ 0 (Fin.elim0 : Fin 0 → Fin d)
-      rw [mpv_zero_length, mpv_zero_length] at h0
-      exact_mod_cast h0
-    rw [hDimId₀, hsum]
-
-/-- **Bond-dimension identity for the arbitrary-input PGVWC07 zero-block form.**
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-761--762, after the zero-block contribution has been retained explicitly.
-The length-zero coefficient of the MPV identity gives
-$D_0 + \sum_k D_k = D$; therefore the total bond dimension of the nonzero
-blocks is at most the original bond dimension.
-
-**Scope restriction:** This theorem still keeps the zero block as an explicit
-summand.  Removing the explicit zero-block summand from the existential
-conclusion is the remaining statement-level step, recorded in
-`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
-theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
-    (A : MPSTensor d D) :
-    ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
-      (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      (∀ k,
-        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Λ.PosDef ∧
-          Λ.IsDiag ∧
-          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
-      (∀ k,
-        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          transferMap (d := d) (D := dim k) (blocks k) X = X →
-            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
-      (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
-      (∀ k, μ k ≠ 0) ∧
-      (∀ k, 0 < dim k) ∧
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      D = zeroTailDim + ∑ k : Fin r, dim k ∧
-      ∑ k : Fin r, dim k ≤ D := by
-  classical
-  obtain ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hPos, hDimId⟩ :=
-    exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail (d := d) (D := D) A
-  have hBound : ∑ k : Fin r, dim k ≤ D := by omega
-  exact ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hPos,
-    hDimId, hBound⟩
-
-/-- **Positive-length PGVWC07 unital dual-diagonal form.**
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-761--762 and 816--832.  This is the zero-block theorem above after omitting the
-explicit zero summand from the displayed MPV identity.  The omission is valid for
-nonempty rings because the all-zero summand has zero MPV coefficient in positive
-length.
-
-The theorem keeps the mathematically relevant bond-dimension estimate
-\(\sum_k D_k\leq D\).  The canonical-form existence theorem is stated with this
-positive-length convention; the explicit zero-block theorem records the
-length-zero bookkeeping separately. -/
-theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
+theorem exists_pgvwc07_unital_dualDiag_from_arbitrary
     (A : MPSTensor d D) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
       (μ : Fin r → ℂ)
@@ -758,18 +638,23 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
       SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
-  obtain ⟨_zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, _hμNe, hDim, hPos,
-    _hDimId, hBound⟩ :=
-    exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
-      (d := d) (D := D) A
-  exact ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim, hPos, hBound⟩
+  obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
+    exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
+  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
+  have hSame_refl : SameMPV₂ A_nonzero
+      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
+    fun _ _ => rfl
+  obtain ⟨μ, blocks, hSame, hΛ, hScalar, hμPos, _hμNe, hDim⟩ :=
+    exists_pgvwc07_unital_dualDiag_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl
+      hNonzero₀
+  exact ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim,
+    hPos₀.trans hSame.toSameMPV₂Pos, hBound₀⟩
 
 /-- **Structured positive-length PGVWC07 canonical-form witness.**
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
-lines 742--763, after omitting the explicit zero block from positive-length
-MPV coefficients.  This theorem is the corresponding structured form of
-`exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`.
+lines 742--763.  This theorem is the structured form of
+`exists_pgvwc07_unital_dualDiag_from_arbitrary`.
 
 This is the unnormalized positive-length witness.  The source theorem's
 normalization `1 ≥ λ_j > 0` is supplied later by the finite-family
@@ -782,8 +667,7 @@ theorem exists_pgvwc07_positiveLengthWitness
     Nonempty (PGVWC07PositiveLengthWitness (d := d) (D := D) A) := by
   classical
   obtain ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim, hSame, hBound⟩ :=
-    exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
-      (d := d) (D := D) A
+    exists_pgvwc07_unital_dualDiag_from_arbitrary (d := d) (D := D) A
   exact ⟨
     { r := r
       dim := dim
@@ -799,13 +683,11 @@ theorem exists_pgvwc07_positiveLengthWitness
 /-- **Arbitrary-input trace-preserving gauge reduction.**
 
 This combines the invariant-subspace splitting of arXiv:1606.00608,
-lines 201-219, with zero-block separation and the canonical-form-II gauge
-passage at lines 1058-1077 for the nonzero irreducible blocks.
+lines 201--219, with the canonical-form-II gauge passage at lines 1058--1077
+for the nonzero irreducible blocks.
 
-From any `A : MPSTensor d D`, produce:
-* a zero block of dimension `zeroTailDim`, equal to the total bond dimension of
-  the all-zero irreducible blocks;
-* TP-gauged irreducible blocks `blocks k` with nonzero weights `μ k`.
+From any `A : MPSTensor d D`, it produces TP-gauged irreducible blocks
+`blocks k` with nonzero weights `μ k`.
 
 Every nonzero block satisfies:
 * `IsIrreducibleTensor`;
@@ -813,22 +695,21 @@ Every nonzero block satisfies:
 * positive bond dimension;
 * nonzero weight.
 
-At positive length, `A` has the same MPV as the weighted nonzero-block sum, and the
-zero-block contribution is recorded only through the length-zero dimension identity
-`D = zeroTailDim + ∑ k, dim k`.
+At every positive length, `A` has the same MPV as the weighted nonzero-block
+sum, whose total bond dimension is at most `D`.
 
 **Scope restriction (translation-invariant canonical-form proof step):**
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
 lines 765--770 use a full-rank positive fixed point to gauge a block into the
 unital orientation `∑ i, B i * (B i)ᴴ = 1`. This theorem supplies the dual
-left-canonical trace-preserving orientation after the all-zero-block separation.
+left-canonical trace-preserving orientation after discarding the all-zero blocks.
 The PGVWC07 unital-orientation analogue is
-`exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` above.  This
+`exists_pgvwc07_unital_dualDiag_from_arbitrary` above.  This
 theorem remains useful as a TP-gauge reduction, but it is not the canonical-form
 statement matching PGVWC07 Theorem Th:TIcanonical.  The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
-theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
-    ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
+theorem exists_tp_gauge_from_arbitrary (A : MPSTensor d D) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ)
       (μ : Fin r → ℂ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
       (∀ k, IsIrreducibleTensor (blocks k)) ∧
@@ -836,28 +717,18 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
       (∀ k, μ k ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      D = zeroTailDim + ∑ k : Fin r, dim k := by
+      ∑ k : Fin r, dim k ≤ D := by
   classical
-  -- Step 1: Obtain the zero-block-separated irreducible decomposition.
-  obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hDimId₀⟩ :=
+  obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
     exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
-  -- Step 2: Apply blockwise TP gauge to the nonzero blocks.
-  -- We feed `A_nonzero := toTensorFromBlocks μ=1 blocks₀` as the input tensor.
-  -- The SameMPV₂ hypothesis for `exists_tp_gauge_blockwise` holds by reflexivity.
-  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀
+  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
   have hSame_refl : SameMPV₂ A_nonzero
-      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀) :=
+      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
     fun _ _ => rfl
-  obtain ⟨r₁, dim₁, μ₁, blocks₁, hSame₁, hIrr₁, hLeft₁, hμNe₁, hDim₁⟩ :=
+  obtain ⟨μ, blocks, hSame, hIrr, hLeft, hμNe, hDim⟩ :=
     exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
-  -- Step 3: Assemble the result.
-  refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hIrr₁, hLeft₁, hμNe₁, hDim₁, ?_, ?_⟩
-  · exact hPos₀.trans hSame₁.toSameMPV₂Pos
-  · have hsum : (∑ k : Fin r₀, dim₀ k) = ∑ k : Fin r₁, dim₁ k := by
-      have h0 := hSame₁ 0 (Fin.elim0 : Fin 0 → Fin d)
-      rw [mpv_zero_length, mpv_zero_length] at h0
-      exact_mod_cast h0
-    rw [hDimId₀, hsum]
+  exact ⟨r, dim, μ, blocks, hIrr, hLeft, hμNe, hDim,
+    hPos₀.trans hSame.toSameMPV₂Pos, hBound₀⟩
 
 
 end MPSTensor
