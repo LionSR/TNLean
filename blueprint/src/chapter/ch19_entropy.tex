@@ -1422,6 +1422,39 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{proof}
 
+\begin{theorem}[Entropy of summands on pairwise-annihilating supports]
+    \label{thm:entropy_pairwise_annihilating_support}
+    \lean{vonNeumannEntropy_eq_sum_of_orthogonal_support}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    Let $A=\sum_j M_j$ be a finite sum of Hermitian matrices.  Suppose there
+    are operators $P_j$ such that
+    \[
+        P_jM_j=M_jP_j=M_j,
+        \qquad
+        P_jP_k=0 \quad (j\ne k).
+    \]
+    Then
+    \[
+        S(A)=\sum_j S(M_j).
+    \]
+    The operators $P_j$ need only resolve the support of $A$; their sum need
+    not be the identity on the ambient space.  This is the support form of
+    the direct-sum entropy identity used in
+    \cite[Appendix~C.2, lines~1760--1770]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_mul_comm, thm:entropy_block_diagonal}
+    Write $A=XY$, where $X$ maps the direct sum of the labelled ambient
+    spaces to the original space by the matrices $M_j$, and $Y$ maps back by
+    the operators $P_j$.  The support and annihilation identities give
+    $YX=\bigoplus_jM_j$.  Reversing the two rectangular factors preserves the
+    nonzero eigenvalues, while any additional eigenvalues are zero.  Entropy
+    is therefore unchanged, and additivity on the block diagonal gives the
+    result.
+\end{proof}
+
 \begin{theorem}[Entropy of a weighted orthogonal direct sum]
     \label{thm:entropy_weighted_block_diagonal}
     \lean{vonNeumannEntropy_blockDiagonal_smul}

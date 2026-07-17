@@ -317,10 +317,21 @@ the absorbed BNT representative is
 \path{MPOTensor.trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}.}
 The weighted orthogonal-direct-sum entropy formula used in Appendix~C.2,
 lines~1760--1770, is also formalized as
-\path{vonNeumannEntropy_blockDiagonal_smul}.  The remaining source step after the
-sector-compression identity is SAL for each sector.  It must follow from the
-direct-sum entropy identity and strong subadditivity as in
-\cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
+\path{vonNeumannEntropy_blockDiagonal_smul}, together with the form for
+pairwise-annihilating support operators
+\path{vonNeumannEntropy_eq_sum_of_orthogonal_support}.  The remaining source
+step after the sector-compression identity is now formalized: the same sector
+probabilities occur in all four marginals, the Shannon terms cancel, and
+strict positivity together with strong subadditivity forces equality in every
+sector.  Thus every absorbed BNT representative satisfies SAL under the
+explicit common-blocking restriction above.
+\footnote{The principal declarations are
+\path{MPOTensor.blockEntropy_eq_sum_bntSectorProbability},
+\path{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}, and
+\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}.}
+This completes the entropy argument of
+\cite[Appendix~C.2, lines~1748--1781]{Cirac2016MPDO_arXiv} within that stated
+scope.
 There is a local endpoint typo in this passage.  Line~1771 writes
 $m<\lfloor N/2\rfloor$, but Definition~4.6 gives the equality chain through
 $I_{\lfloor N/2\rfloor}$, and the conclusion at lines~1781--1783 compares

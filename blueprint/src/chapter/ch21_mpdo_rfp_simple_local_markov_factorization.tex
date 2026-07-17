@@ -650,6 +650,72 @@ strong subadditivity for a normalized three-site reduced state.
     positive.
 \end{proof}
 
+\begin{theorem}[Saturated area law for the absorbed BNT elements]
+    \label{thm:mpdo_absorbed_bnt_sector_sal}
+    \lean{MPOTensor.bntSectorProbability}
+    \lean{MPOTensor.bntSectorProbability_pos}
+    \lean{MPOTensor.normalizedMPO_eq_sum_bntSectorProbability_smul}
+    \lean{MPOTensor.reducedBlockState_eq_sum_bntSectorProbability_smul}
+    \lean{MPOTensor.blockEntropy_eq_sum_bntSectorProbability}
+    \lean{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}
+    \leanok
+    \uses{def:is_sal, def:mpo_source_zcl,
+      def:mpdo_common_sector_weight_absorption}
+    Let $K$ saturate the area law and have zero correlation length, and let
+    its horizontal BNT canonical form, up to block-diagonal gauge, have normal
+    representatives $A_s$, common copy weights $\mu_s$, and copy numbers
+    $n_s$.  Assume that the physical-trace transfer of every $A_s$ is
+    nonnilpotent.  After a common blocking, assume explicitly that the
+    simultaneous one-letter word tuples of the $A_s$ span the direct sum of
+    their full matrix algebras.  Put $\mathcal K_s=\mu_sA_s$.
+
+    For every nonempty chain, define
+    \[
+      p_s^{(N)}=
+      \frac{n_s\,\tr\!\left(\sigma^{(N)}(\mathcal K_s)\right)}
+           {\tr\!\left(\sigma^{(N)}(K)\right)}.
+    \]
+    Then $p_s^{(N)}>0$, and every nonempty prefix marginal has the same sector
+    decomposition with these probabilities.  Translation invariance
+    identifies the other contiguous blocks of the same length.
+    Consequently, every absorbed representative $\mathcal K_s$ saturates the
+    area law.
+
+    The common-blocking assumption is a scope restriction relative to the
+    unrestricted source statement; it is recorded in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.  The entropy
+    conclusion is the argument of
+    \cite[Appendix~C.2, lines~1748--1781]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_pairwise_annihilating_support,
+      thm:positive_weighted_sum_termwise_equality,
+      lem:sal_const, thm:entropy_strong_subadditivity,
+      thm:mpdo_tripartite_block_entropy_identifications,
+      thm:mpdo_bnt_projector_local_selection,
+      cor:mpdo_absorbed_bnt_sector_is_mpdo,
+      thm:mpdo_source_zcl_strict_positive_length_normalization}
+    The BNT projections carry every normalized marginal on mutually
+    annihilating supports, so the preceding support form of entropy
+    additivity gives
+    \[
+      S_L(K)=H\!\left(p^{(N)}\right)
+        +\sum_s p_s^{(N)}S_L(\mathcal K_s)
+        \qquad (1\leq L\leq N).
+    \]
+    The four marginals entering strong subadditivity have the same
+    probabilities.  Substitution in the equality for $K$ cancels all four
+    Shannon terms.  Strong subadditivity gives the corresponding inequality
+    in each sector, and strict positivity of every $p_s^{(N)}$ forces every
+    such inequality to be an equality.  Comparing the equalities for block
+    lengths $L$ and $L+1$ proves saturation for $\mathcal K_s$.
+\end{proof}
+
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.IsInjective}

@@ -357,6 +357,44 @@ theorem bntSectorProjection_mul_physicalSlice_mul_self
   rw [bntSectorProjection_mul_physicalSlice_self hC hρ hη hR,
     physicalSlice_mul_bntSectorProjection_self hC hρ hη hR]
 
+/-- The matching BNT projection fixes the ket index of its normal
+representative.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1733--1770. -/
+theorem ketLeftMul_bntSectorProjection_basis
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (s : Fin g) :
+    (K s).ketLeftMul (bntSectorProjection hC hρ hη hR s) = K s := by
+  ext a b β α
+  simp only [ketLeftMul, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  have h := congrFun (congrFun
+    (bntSectorProjection_mul_physicalSlice_self hC hρ hη hR s β α) a) b
+  simpa only [Matrix.mul_apply, physicalSlice] using h
+
+/-- The matching BNT projection fixes the bra index of its normal
+representative.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1733--1770. -/
+theorem braRightMul_bntSectorProjection_basis
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (s : Fin g) :
+    (K s).braRightMul (bntSectorProjection hC hρ hη hR s) = K s := by
+  ext a b β α
+  simp only [braRightMul, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  have h := congrFun (congrFun
+    (physicalSlice_mul_bntSectorProjection_self hC hρ hη hR s β α) a) b
+  simpa only [Matrix.mul_apply, physicalSlice, mul_comm] using h
+
 /-- The BNT-labelled physical projectors select the matching normal sector:
 the corner `P_s K_i P_t` vanishes if `s ≠ t` or `i ≠ s`.
 
@@ -512,6 +550,43 @@ noncomputable def commonWeightAbsorbedBasisMPOTensor
     MPOTensor d (S.basisDim j) :=
   fun a b => S.commonWeight hWeight j • S.basisMPOTensor j a b
 
+/-- The matching BNT projection fixes the ket index after the common copy
+weight has been absorbed into the normal representative.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1733--1770. -/
+theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
+    (S : MPSTensor.SectorDecomposition (d * d))
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    {R : (s : Fin S.basisCount) →
+      Matrix (Fin (S.basisDim s)) (Fin (S.basisDim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse
+      (fun j ↦ S.basisMPOTensor j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+    (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
+    (s : Fin S.basisCount) :
+    (commonWeightAbsorbedBasisMPOTensor S hWeight s).ketLeftMul
+        (bntSectorProjection hC hρ hη hR s) =
+      commonWeightAbsorbedBasisMPOTensor S hWeight s := by
+  ext a b β α
+  have h := congrFun (congrFun (congrFun (congrFun
+    (ketLeftMul_bntSectorProjection_basis hC hρ hη hR s) a) b) β) α
+  simp only [ketLeftMul, commonWeightAbsorbedBasisMPOTensor,
+    Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] at h ⊢
+  calc
+    ∑ x, bntSectorProjection hC hρ hη hR s a x *
+        (S.commonWeight hWeight s * S.basisMPOTensor s x b β α) =
+        S.commonWeight hWeight s *
+          ∑ x, bntSectorProjection hC hρ hη hR s a x *
+            S.basisMPOTensor s x b β α := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro x _
+      ring
+    _ = _ := by rw [h]
+
 /-- Returning the absorbed-weight MPO representative to doubled-index MPS
 coordinates gives the absorbed representative defined in
 `CommonWeightAbsorption.lean`. -/
@@ -544,6 +619,29 @@ theorem mpo_commonWeightAbsorbedBasisMPOTensor
       (fun n => finProdFinEquiv (u n, v n)) = _
   rw [MPSTensor.mpv_smul, ← MPSTensor.mpv_toMPSTensor_pairConfig,
     S.basisMPOTensor_toMPSTensor]
+
+/-- The positive-length MPO is the sum of the absorbed normal
+representatives, each multiplied by its copy number.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1753--1770. -/
+theorem mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+    {D : ℕ} (M : MPOTensor d D)
+    (S : MPSTensor.SectorDecomposition (d * d))
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    {N : ℕ} (hN : 0 < N) :
+    mpo M N = ∑ s : Fin S.basisCount,
+      (S.copies s : ℂ) • mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
+  ext u v
+  rw [Matrix.sum_apply]
+  simp only [Matrix.smul_apply, smul_eq_mul]
+  rw [S.mpo_eq_sum_coeff_basisMPOTensor M hM hN u v]
+  apply Finset.sum_congr rfl
+  intro s _
+  rw [S.coeff_eq_copies_mul_commonWeight_pow hWeight,
+    mpo_commonWeightAbsorbedBasisMPOTensor]
+  ring
 
 /-- Compressing the full MPO by the sitewise BNT projection selects the
 matching absorbed-weight representative with its natural copy multiplicity.
