@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTProjectorSelection
+import TNLean.MPS.MPDO.SectorTrace
 
 /-!
 # Positivity and zero correlation length of the BNT sectors
@@ -33,6 +34,8 @@ copy index.
   the source projector construction supplies the required compression.
 * `commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
   source zero correlation length restricts to every absorbed representative.
+* `trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos`:
+  every nonempty-chain sector normalization is strictly positive.
 
 ## References
 
@@ -178,5 +181,50 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSAL
   exact commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
     M S hM hWeight hC hClosure.1 hη hClosure.2 (Classical.choose hSAL) s
+
+/-- Every absorbed normal representative has strictly positive trace on each
+nonempty chain.  Positivity comes from the projector compression, while
+nonvanishing comes from the zero-correlation-length equation already
+restricted to the representative.
+
+This supplies the strict inequality required before normalizing the sector in
+the direct-sum entropy identity.  It is not inferred from the weaker displayed
+inequality \(p_s\geq 0\).
+
+**Scope restriction (common blocking):** the one-letter simultaneous span is
+the blocked form used for the simultaneous inverse.  Its derivation from biCF
+is recorded in `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780. -/
+theorem trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos
+    {D : ℕ} (M : MPOTensor d D)
+    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hZCL : IsSourceZCL M)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    (hnonNil : ∀ j,
+      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
+    (hSAL : IsSAL M) (s : Fin S.basisCount)
+    {N : ℕ} (hN : 0 < N) :
+    0 < Matrix.trace (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) := by
+  exact trace_mpo_pos_of_isMPDO_isSourceZCL _
+    (commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
+      M S hM hWeight hnonNil hSpan hSAL s)
+    (commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+      M S hTotal X hEq hZCL hWeight s (hnonNil s)) hN
 
 end MPOTensor

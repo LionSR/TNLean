@@ -1422,6 +1422,51 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{proof}
 
+\begin{theorem}[Entropy of a weighted orthogonal direct sum]
+    \label{thm:entropy_weighted_block_diagonal}
+    \lean{vonNeumannEntropy_blockDiagonal_smul}
+    \leanok
+    \uses{thm:entropy_smul, thm:entropy_block_diagonal}
+    Let $\omega_j$ be density matrices and let $p_j\geq0$.  Then
+    \[
+        S\!\left(\bigoplus_j p_j\omega_j\right)
+          = \sum_j\bigl(-p_j\log p_j+p_jS(\omega_j)\bigr).
+    \]
+    In particular, when the $p_j$ form a probability distribution, this is
+    \[
+        S\!\left(\bigoplus_j p_j\omega_j\right)
+          = H(p)+\sum_j p_jS(\omega_j).
+    \]
+    This is the entropy identity used in
+    \cite[Appendix~C.2, lines~1760--1770]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Entropy is additive over the orthogonal blocks.  Applying the scaled-state
+    formula to each block gives
+    $S(p_j\omega_j)=-p_j\log p_j+p_jS(\omega_j)$, and summing over $j$ gives
+    the result.
+\end{proof}
+
+\begin{theorem}[Equality in a positively weighted sum]
+    \label{thm:positive_weighted_sum_termwise_equality}
+    \lean{eq_of_weighted_sum_eq_of_pos_of_le}
+    \leanok
+    Suppose $p_j>0$ and $L_j\leq R_j$ for every $j$.  If
+    \[
+        \sum_j p_jL_j=\sum_j p_jR_j,
+    \]
+    then $L_j=R_j$ for every $j$.  This is the positivity argument applied to
+    strong subadditivity in
+    \cite[Appendix~C.2, lines~1770--1780]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each number $p_j(R_j-L_j)$ is nonnegative, and their sum vanishes.
+    Therefore every one vanishes.  Since $p_j>0$, it follows that
+    $R_j-L_j=0$.
+\end{proof}
+
 \section{Tripartite partial traces}
 
 \begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
