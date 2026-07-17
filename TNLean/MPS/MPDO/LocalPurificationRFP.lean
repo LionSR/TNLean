@@ -141,7 +141,7 @@ theorem IsLocalPurificationRFP.isLPDO {M : MPOTensor d D}
 
 /-- The local purification-RFP condition generates matrix product density
 operators: tracing the ancilla of the purification yields a positive
-semidefinite operator at every system size (via `IsLPDO.isMPDO`). -/
+semidefinite operator on every nonempty chain (via `IsLPDO.isMPDO`). -/
 theorem IsLocalPurificationRFP.isMPDO {M : MPOTensor d D}
     (h : IsLocalPurificationRFP M) : IsMPDO M :=
   h.isLPDO.isMPDO
@@ -714,22 +714,11 @@ private lemma nilpotentGlobalPRFP_isPRFP : IsPRFP nilpotentGlobalPRFP := by
   intro N hN
   rw [mpo_nilpotentGlobalPRFP N hN, purificationDensity_scalarPurifier]
 
-private lemma mpo_nilpotentGlobalPRFP_zero :
-    mpo nilpotentGlobalPRFP 0 = (3 : ℂ) • 1 := by
-  ext σ τ
-  have hστ : σ = τ := Subsingleton.elim _ _
-  subst τ
-  simp [mpo_apply, mpoMatrixEntry, Matrix.trace, Matrix.smul_apply]
-
 open scoped ComplexOrder in
 private lemma nilpotentGlobalPRFP_isMPDO : IsMPDO nilpotentGlobalPRFP := by
-  intro N
-  by_cases hN : N = 0
-  · subst N
-    rw [mpo_nilpotentGlobalPRFP_zero]
-    exact Matrix.PosSemidef.one.smul (by positivity)
-  · rw [mpo_nilpotentGlobalPRFP N (Nat.pos_of_ne_zero hN)]
-    exact Matrix.PosSemidef.one
+  intro N hN
+  rw [mpo_nilpotentGlobalPRFP N hN]
+  exact Matrix.PosSemidef.one
 
 /-- The global purification equation, MPDO positivity, and a nonzero physical
 trace transfer do not imply source zero correlation length. This is the

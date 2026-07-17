@@ -107,7 +107,8 @@ lines 1892--1893. -/
 theorem isEmpty_periodicSectorProjector (M : MPOTensor d D) (hM : IsMPDO M)
     {p : ℕ} : IsEmpty (PeriodicSectorProjector M p) :=
   ⟨fun QP => QP.not_commute 0
-    (mpo_commute_of_commute_pow M hM 1 QP.p_ne_zero (QP.commute_pow 0))⟩
+    (mpo_commute_of_commute_pow M hM 1 (by omega) QP.p_ne_zero
+      (QP.commute_pow 0))⟩
 
 /-- **Hypothesis** (arXiv:1606.00608, lines 1889--1891): every nontrivial
 $p$-periodic vector of the vertically viewed tensor supplies a

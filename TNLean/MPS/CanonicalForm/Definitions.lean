@@ -40,8 +40,8 @@ The predicates in this file are the CPSV formulations.
   eigenvalue of the associated CPM equal to its spectral radius equal to one).
 * `MPSTensor.IsCPSVBasisOfNormalTensors`: `Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`
   (Definition: BNT `{A_j}` of `A` is `A_j` all normal, MPV family of `A`
-  spanned by MPV families of the `A_j` at every length, and eventually linearly
-  independent).
+  spanned by MPV families of the `A_j` at every positive length, and
+  eventually linearly independent).
 
 ## Relation to the existing primitive-channel predicate
 
@@ -117,7 +117,7 @@ structure IsNormalTensor (A : MPSTensor d D) : Prop where
 from arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`):
 
 * (i) each `blocks j` is a CPSV16 normal tensor,
-* (ii) for each system length `N`, the MPV family of `A` is in the linear span of
+* (ii) for each positive system length `N`, the MPV family of `A` is in the linear span of
       the MPV families `{V^{(N)}(blocks j)}_j`, and
 * (iii) there is some `N₀` such that for all `N > N₀`, the MPV states
       `mpvState (blocks j) N` are linearly independent.
@@ -129,9 +129,9 @@ structure IsCPSVBasisOfNormalTensors {g : ℕ} (A : MPSTensor d D)
     (blocks : (j : Fin g) → Σ Dj : ℕ, MPSTensor d Dj) : Prop where
   /-- (i) each basis tensor `A_j` is a CPSV16 normal tensor. -/
   blocks_normal : ∀ j, IsNormalTensor (blocks j).2
-  /-- (ii) at every length `N`, the MPV family of `A` is a linear combination of
+  /-- (ii) at every positive length `N`, the MPV family of `A` is a linear combination of
   the per-block MPV families. -/
-  spans_mpv : ∀ N : ℕ, ∃ c : Fin g → ℂ,
+  spans_mpv : ∀ N : ℕ, 0 < N → ∃ c : Fin g → ℂ,
     ∀ σ : Fin N → Fin d, mpv A σ = ∑ j : Fin g, c j * mpv (blocks j).2 σ
   /-- (iii) eventually, the MPV states of the basis are linearly independent. -/
   eventually_li : ∃ N₀ : ℕ, ∀ N > N₀,

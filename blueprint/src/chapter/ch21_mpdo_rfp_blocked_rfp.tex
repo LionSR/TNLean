@@ -91,11 +91,10 @@ physical indices, as in
         \rho^{(N)}\bigl(M^{[L]}\bigr)_{\sigma,\tau}
         =\rho^{(NL)}(M)_{\Phi_{N,L}(\sigma),\Phi_{N,L}(\tau)}.
     \]
-    This algebraic identity and the preservation of positive semidefiniteness
-    hold for every $L\in\N$.  For $L>0$, they state that blocking $L$
-    adjacent physical sites of an MPDO again gives an MPDO.  The value $L=0$
-    is only the base value of the algebraic definitions and is not a physical
-    blocking operation.  This is the closed-chain identification implicit
+    The algebraic identity holds for every $L\in\N$.  For $L\geq1$, positivity
+    of the original nonempty chain of length $NL$ shows that blocking $L$
+    adjacent physical sites of an MPDO again gives an MPDO.  This is the
+    closed-chain identification implicit
     when the one-site tensor and its two-site blocking are placed in vertical
     canonical form in
     \cite[Appendix~C.4, lines~1952--2017]{Cirac2016MPDO_arXiv}.
@@ -151,8 +150,8 @@ physical indices, as in
         \bigl(K^{[2]}\bigr)^{i,j}
           =\bigl(K^{[L]}\bigr)^{\varphi(i),\varphi(j)}\bigm|_{L=2}.
     \]
-    Consequently, for every chain length $N$, the closed MPO of $K^{[2]}$
-    is obtained from the closed MPO of the general length-two block by
+    Consequently, for every nonempty chain length $N$, the closed MPO of
+    $K^{[2]}$ is obtained from the closed MPO of the general length-two block by
     applying $\varphi$ independently at every ket and bra site.  In
     particular, if $K$ generates matrix product density operators, then so
     does $K^{[2]}$.

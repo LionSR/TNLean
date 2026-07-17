@@ -87,10 +87,10 @@ span.  The passage to this blocked form is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1666--1676 and equations
 `QkKjs` and `Pis`, lines 1714--1737. -/
-theorem exists_bntSectorProjectors_four_of_sameMPV₂_isSAL
+theorem exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
     (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,

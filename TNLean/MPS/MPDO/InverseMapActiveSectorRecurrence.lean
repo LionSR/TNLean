@@ -238,7 +238,7 @@ theorem exists_rephase_zeroWeightInverseMap_posSemidef
       (cyclicEtaTensorProduct hη eta q).PosSemidef := by
     intro N _ q
     exact cyclicEtaTensorProduct_posSemidef K hη F.leftTensor F.rightTensor
-      F.factorization (hM N) q
+      F.factorization (hM N (NeZero.pos N)) q
   have hrec : IsRecurrentSupport eta :=
     zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport
       K hK R hρ hη alpha beta hm

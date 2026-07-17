@@ -259,7 +259,7 @@ theorem exists_pi_smul_posSemidef_of_sectorEta_cycle
   have hpos := cyclicEtaTensorProduct_posSemidef K hη
     (fun q => sectorTensorL K hK hη R α₁ β₃ q) (fun q => sectorTensorR K hK hη β₃ q)
     (fun β α => physicalSlice_sector_factorization K hK R ρ hρ hη hm β α)
-    (hM N) k
+    (hM N (NeZero.pos N)) k
   have hne' : ∀ n : Fin N, etaOfSectorTensors hη
       (fun q => sectorTensorL K hK hη R α₁ β₃ q) (fun q => sectorTensorR K hK hη β₃ q)
       (k n) (k (n + 1)) ≠ 0 := by

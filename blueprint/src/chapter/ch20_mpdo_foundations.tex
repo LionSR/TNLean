@@ -196,7 +196,7 @@ legs cyclically and taking the resulting trace.
         = \overline{\rho^{(N)}(M)_{\tau\circ\mathrm{rev},\,
           \sigma\circ\mathrm{rev}}},
     \]
-    where $\mathrm{rev}$ reverses the site order.  For an MPDO the
+    where $\mathrm{rev}$ reverses the site order.  For an MPDO and $N\geq1$ the
     conjugation disappears, $\rho^{(N)}(M^\dagger)_{\sigma\tau}
     = \rho^{(N)}(M)_{\sigma\circ\mathrm{rev},\,\tau\circ\mathrm{rev}}$,
     and the adjoint tensor is again an MPDO.
@@ -282,7 +282,7 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.IsMPDO}
     \leanok
     \uses{def:mpo_family}
-    An MPO tensor is an \emph{MPDO} if, for every $N \in \N$,
+    An MPO tensor is an \emph{MPDO} if, for every $N\geq1$,
     \[
         \rho^{(N)}(M) \ge 0
     \]

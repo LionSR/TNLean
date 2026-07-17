@@ -18,7 +18,7 @@ Verstraete):
 * **MPO** (Matrix Product Operator): a 4-index tensor `MPOTensor d D` with
   physical ket/bra indices and virtual left/right indices.
 * **MPDO** (Matrix Product Density Operator): an MPO whose operator family
-  `mpo M N` is positive semidefinite for every system size `N`.
+  `mpo M N` is positive semidefinite for every nonempty chain.
 * **LPDO** (Locally Purifiable Density Operator): an MPO that admits a
   local purification tensor with Kronecker structure,
   `M^{ij} = (∑_k A^{(i,k)} ⊗ₖ conj(A^{(j,k)})).submatrix ↑e ↑e`,
@@ -295,34 +295,34 @@ theorem transferMap_pos (M : MPOTensor d D)
 /-! ### MPDO: global positivity -/
 
 /-- An MPO tensor `M` is an **MPDO** (Matrix Product Density Operator) if
-it generates positive semidefinite operators for all system sizes:
-`ρ^{(N)}(M) ≥ 0` for all `N`.
+it generates a positive semidefinite operator on every nonempty chain:
+`ρ^{(N)}(M) ≥ 0` for all `N > 0`.
 
-See arXiv:1606.00608, Section 4. -/
+Source: arXiv:1606.00608, Section 4, equation `eq:III_MPDOform`, lines 623--630. -/
 def IsMPDO (M : MPOTensor d D) : Prop :=
-  ∀ N : ℕ, (mpo M N).PosSemidef
+  ∀ N : ℕ, 0 < N → (mpo M N).PosSemidef
 
 /-- For an MPDO, Hermiticity of the density operators removes the conjugation:
 the adjoint tensor generates the spatially reflected density operators. -/
 theorem IsMPDO.mpo_adjointTensor_eq {M : MPOTensor d D} (hM : IsMPDO M)
-    {N : ℕ} (σ τ : Fin N → Fin d) :
+    {N : ℕ} (hN : 0 < N) (σ τ : Fin N → Fin d) :
     mpo (adjointTensor M) N σ τ =
       mpo M N (fun k => σ (Fin.rev k)) (fun k => τ (Fin.rev k)) := by
   rw [mpo_adjointTensor]
-  exact (hM N).isHermitian.apply _ _
+  exact (hM N hN).isHermitian.apply _ _
 
 /-- The adjoint tensor of an MPDO is again an MPDO: its density operators are
 spatial reflections of positive semidefinite operators. -/
 theorem IsMPDO.adjointTensor {M : MPOTensor d D} (hM : IsMPDO M) :
     IsMPDO (MPOTensor.adjointTensor M) := by
-  intro N
+  intro N hN
   have href : mpo (MPOTensor.adjointTensor M) N =
       (mpo M N).submatrix (fun σ k => σ (Fin.rev k)) (fun τ k => τ (Fin.rev k)) := by
     ext σ τ
-    rw [hM.mpo_adjointTensor_eq]
+    rw [hM.mpo_adjointTensor_eq hN]
     rfl
   rw [href]
-  exact (hM N).submatrix _
+  exact (hM N hN).submatrix _
 
 /-! ### LPDO: local purification -/
 
@@ -396,7 +396,7 @@ lemma lpdo_prod_decomp {dK D' : ℕ}
     simp only [Fin.cons_zero, Fin.cons_succ]
 
 /-- **LPDO implies MPDO**: every LPDO tensor generates positive semidefinite
-density operators for all system sizes.
+density operators on all nonempty chains.
 
 The proof uses the Kronecker product structure: the N-site density matrix
 decomposes as `ρ^{(N)} = ∑_κ |ψ_κ⟩⟨ψ_κ|` where each `ψ_κ` is an MPS
@@ -406,7 +406,7 @@ rank-1 positive semidefinite matrices.
 See arXiv:1606.00608, Section 4.3. -/
 theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
   obtain ⟨dK, D', A, e, hM⟩ := h
-  intro N
+  intro N _hN
   -- Define the MPS coefficient vectors from the purifying tensor
   set ψ : (Fin N → Fin dK) → (Fin N → Fin d) → ℂ :=
     fun κ σ => Matrix.trace ((List.ofFn fun l => A (σ l) (κ l)).prod) with hψ

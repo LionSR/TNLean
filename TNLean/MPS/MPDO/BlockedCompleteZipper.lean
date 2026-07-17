@@ -18,7 +18,7 @@ complete zipper family.  The blocked zipper identities, reconstruction,
 injectivity, and simultaneous block-letter inverse have already been derived
 from the source BNT assumptions.
 
-The empty chain is not used: the common block length is strictly positive.
+The common block length is strictly positive.
 
 ## References
 

@@ -182,7 +182,7 @@ theorem exists_rephased_inverseMapPhysicalSectorFactorization
       (fun q ↦ sectorTensorL K hK hη R α₁ β₃ q)
       (fun q ↦ sectorTensorR K hK hη β₃ q)
       (fun β α ↦ physicalSlice_sector_factorization K hK R ρ hρ hη hm β α)
-      (hM N) k
+      (hM N (NeZero.pos N)) k
     have heta : sectorEta K hK hη R α₁ β₃ =
         etaOfSectorTensors hη
           (fun q ↦ sectorTensorL K hK hη R α₁ β₃ q)

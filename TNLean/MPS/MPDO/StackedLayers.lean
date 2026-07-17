@@ -212,9 +212,9 @@ matrix product density operator: powers of positive semidefinite matrices
 are positive semidefinite. -/
 protected theorem IsMPDO.stackedTensor {M : MPOTensor d D} (hM : IsMPDO M)
     (p : ℕ) : IsMPDO (stackedTensor M p) := by
-  intro N
+  intro N hN
   rw [mpo_stackedTensor]
-  exact (hM N).pow p
+  exact (hM N hN).pow p
 
 /-! ### Vertical letters of the stacked tensor -/
 

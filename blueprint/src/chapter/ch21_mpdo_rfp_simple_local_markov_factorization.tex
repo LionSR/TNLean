@@ -405,7 +405,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.reducedBlockState_four_reindex_eq_submatrix}
     \lean{MPOTensor.%
       exists_etaStructure_reducedBlockState_four_reindex_of_isSAL}
-    \lean{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂_isSAL}
+    \lean{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}
     \leanok
     \uses{thm:mpdo_normalized_three_site_bnt_family_closure,
       thm:mpdo_bnt_sector_projection_resolution,
@@ -463,7 +463,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_self}
     \lean{MPOTensor.changePhysicalBasis_bntSectorProjection_basis}
     \lean{MPOTensor.%
-      exists_bntProjectorSelection_positiveLength_of_sameMPV₂_isSAL}
+      exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}
     \leanok
     \uses{thm:mpdo_four_site_sal_bnt_sector_projectors}
     Under the hypotheses of
@@ -498,7 +498,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.singleKrausMap_sitewise_bntSectorProjection_mpo}
     \lean{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}
     \lean{MPOTensor.%
-      exists_bntProjectorSelection_positiveLength_of_sameMPV₂_isSAL}
+      exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}
     \leanok
     \uses{def:mpdo_sitewise_physical_matrix,
       thm:mpdo_bnt_projector_local_selection}
@@ -512,10 +512,8 @@ strong subadditivity for a normalized three-site reduced state.
     equation~\textup{sigmaNKj} in
     \cite[Appendix~C.2, lines~1756--1759]{Cirac2016MPDO_arXiv}.
 
-    The restriction $N\geq1$ is intrinsic to this local selection statement.
-    At $N=0$, the empty virtual word is the identity and its closed trace
-    records the bond dimension; it is not a physical spin chain and need not
-    obey the displayed sector-selection identity.
+    Here and throughout the MPDO discussion, a periodic chain has positive
+    length.
 \end{theorem}
 
 \begin{proof}\leanok
