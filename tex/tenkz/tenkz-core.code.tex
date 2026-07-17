@@ -72,11 +72,26 @@
                                % turnarounds rather than kinks
 \def\tenkz@r@regionmargin{0.36}% < pitch/2 so notches read; > glyph radius
 \def\tenkz@r@corner{0.14}      % rounded-corner radius of traces and hulls
+\def\tenkz@r@glyphbox{0.22}    % inscribed-glyph minimum: box side, pill
+                               % height; also the span decorations' lateral
+                               % overhang beyond their first and last column
+\def\tenkz@r@wireglyph{0.30}   % on-wire glyph minimum: on-wire matrix size,
+                               % canonical-tensor height -- taller than the
+                               % box floor because these glyphs sit ON a
+                               % wire and must read over it
+\def\tenkz@r@fusionwidth{0.075}% fusion-bar stroke: a wedge, not a wire, so
+                               % it scales with the pitch like a glyph
 % absolute floors and ink hierarchy
 \def\tenkz@wirewidth{0.55pt}
 \def\tenkz@annwidth{0.40pt}
 \def\tenkz@emphwidth{0.80pt}
 \def\tenkz@junctionfloor{0.9mm}% below ~3x wire width a junction reads as dirt
+\def\tenkz@barblen{2.6pt}      % directionality barb; a print-size floor, not
+                               % a ratio: below this the barb reads as dirt
+\def\tenkz@fusedbarblen{3.8pt} % barb spanning a doubled (fused) wire
+\def\tenkz@braceamp{2.6pt}     % brace amplitude; numerically the barb floor
+                               % (both are the smallest mark that reads at
+                               % print size), semantically independent
 
 \def\tenkz@dim#1{\dimexpr#1\tenkz@pitch\relax}
 
@@ -89,7 +104,11 @@
 \def\tnset#1{\pgfqkeys{/tenkz}{#1}}
 \pgfkeys{
   /tenkz/.is family,
-  /tenkz/pitch/.code={\tenkz@pitch=#1\relax},
+  % pitch= rebases the metric: it writes the BASE pitch and rederives the
+  % working pitch from it, so a later profile scales the configured value
+  % (\tnset{pitch=20mm, compact} = 16mm) instead of silently discarding it
+  /tenkz/pitch/.code={\tenkz@basepitch=#1\relax
+                      \tenkz@pitch=\tenkz@basepitch},
   /tenkz/compact/.code={\tenkz@pitch=0.8\tenkz@basepitch},
   /tenkz/inline/.code={\tenkz@pitch=0.62\tenkz@basepitch
                        \let\tenkz@labelsize\scriptscriptstyle
@@ -117,19 +136,23 @@
       minimum size=\tenkz@dim{\tenkz@r@dotdia}, line width=\tenkz@wirewidth},
   conjugate tensor/.style={tensor},
   box tensor/.style={draw=tenkzInk, fill=tenkzPaper, rectangle,
-      inner sep=1.6pt, minimum size=\tenkz@dim{0.22},
+      inner sep=1.6pt, minimum size=\tenkz@dim{\tenkz@r@glyphbox},
       line width=\tenkz@wirewidth, text=tenkzInk},
   mpo tensor/.style={box tensor},
   pill tensor/.style={draw=tenkzInk, fill=tenkzPaper, rectangle,
       rounded corners=2.2pt, inner xsep=3.2pt, inner ysep=2.2pt,
-      minimum height=\tenkz@dim{0.22}, line width=\tenkz@wirewidth,
-      text=tenkzInk},
+      minimum height=\tenkz@dim{\tenkz@r@glyphbox},
+      line width=\tenkz@wirewidth, text=tenkzInk},
   % capsule, not circle: the height is pinned by `minimum size`, and a wide
   % label (an inverse, a product) grows the glyph only sideways, so every
-  % on-wire matrix on a chain reads at the same height
+  % on-wire matrix on a chain reads at the same height.  The corner radius
+  % is HALF the minimum size -- exactly the radius that closes the minimal
+  % rectangle into a stadium -- which is why it is not \tenkz@r@corner (the
+  % trace/hull radius, a different object).
   on-wire matrix/.style={draw=tenkzAction, fill=tenkzPaper, rectangle,
-      rounded corners=\tenkz@dim{0.15}, inner xsep=1.8pt, inner ysep=1.4pt,
-      minimum size=\tenkz@dim{0.30},
+      rounded corners=0.5\tenkz@dim{\tenkz@r@wireglyph},
+      inner xsep=1.8pt, inner ysep=1.4pt,
+      minimum size=\tenkz@dim{\tenkz@r@wireglyph},
       line width=\tenkz@wirewidth, text=tenkzInk},
   % the style's public 0.6 name; \tnX is the documented alias
   ring tensor/.style={on-wire matrix},
@@ -147,12 +170,13 @@
   canonical tensor/.style={draw=tenkzInk, fill=tenkzPaper,
       isosceles triangle, isosceles triangle apex angle=55,
       isosceles triangle stretches, inner sep=0.6pt,
-      minimum width=\tenkz@dim{0.34}, minimum height=\tenkz@dim{0.30},
+      minimum width=\tenkz@dim{0.34},
+      minimum height=\tenkz@dim{\tenkz@r@wireglyph},
       line width=\tenkz@wirewidth, text=tenkzInk},
   left canonical tensor/.style={canonical tensor, shape border rotate=0},
   right canonical tensor/.style={canonical tensor, shape border rotate=180},
   fusion map/.style={draw=tenkzInk, fill=tenkzInk, line cap=round,
-      line width=1.4pt},
+      line width=\tenkz@dim{\tenkz@r@fusionwidth}},
   tree junction/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
       minimum size=\tenkz@junctionfloor},
   % wires
@@ -194,21 +218,28 @@
   % the barb, never the wire.  The barb rides mid-wire and inherits the wire's
   % colour; the `fused` variants size the barb to span the doubled wire.
   dir marks/.style={decoration={markings, mark=at position 0.55 with
-      {\arrow{Straight Barb[length=2.6pt]}}}, postaction=decorate},
+      {\arrow{Straight Barb[length=\tenkz@barblen]}}}, postaction=decorate},
   dir marks reversed/.style={decoration={markings, mark=at position 0.55 with
-      {\arrow{Straight Barb[length=2.6pt, reversed]}}}, postaction=decorate},
+      {\arrow{Straight Barb[length=\tenkz@barblen, reversed]}}},
+      postaction=decorate},
   fused dir marks/.style={decoration={markings, mark=at position 0.55 with
-      {\arrow{Straight Barb[length=3.8pt]}}}, postaction=decorate},
+      {\arrow{Straight Barb[length=\tenkz@fusedbarblen]}}},
+      postaction=decorate},
   fused dir marks reversed/.style={decoration={markings,
       mark=at position 0.55 with
-      {\arrow{Straight Barb[length=3.8pt, reversed]}}}, postaction=decorate},
+      {\arrow{Straight Barb[length=\tenkz@fusedbarblen, reversed]}}},
+      postaction=decorate},
   bond arrow/.style={bond, dir marks},
   fused bond arrow/.style={fused bond, fused dir marks},
   % annotation ink (never confusable with 0.55pt wires)
   cut/.style={draw=tenkzPassive, dashed, line width=\tenkz@annwidth},
   brace/.style={draw=tenkzInk, line width=\tenkz@annwidth,
-      decoration={brace, amplitude=2.6pt}, decorate},
-  label/.style={text=tenkzInk, inner sep=1pt, font=\scriptsize},
+      decoration={brace, amplitude=\tenkz@braceamp}, decorate},
+  % the package's label skin.  Named `tn label`, NOT `label`: a bare
+  % `label/.style` would clobber TikZ's built-in /tikz/label key
+  % document-wide, silently swallowing `label=above:$x$` on every node of
+  % every picture that merely loads tenkz.
+  tn label/.style={text=tenkzInk, inner sep=1pt, font=\scriptsize},
   cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
       -{Straight Barb[length=3.4pt]},
       shorten <=3.5pt, shorten >=3.5pt},
@@ -259,6 +290,13 @@
 % point.  A name keeps its index (hence its hue) across redeclarations,
 % so a document-global declaration holds one hue per species over every
 % figure of a paper.  An undeclared species at a call site is an error.
+% Scope: the index registry is global (a hue, once assigned, is never
+% reassigned), but the derived styles are ordinary tikz styles, LOCAL to
+% the declaring group -- a picture-scope declaration ends with its
+% picture.  The call-site check therefore tests the derived style, not
+% the registry, so an out-of-scope species is reported by the curated
+% message instead of a raw pgfkeys error; re-declaring the name
+% re-derives the styles with the same hue.
 \ExplSyntaxOn
 \prop_new:N \g__tenkz_species_prop     % name -> 1-based declaration index
 \int_new:N  \g__tenkz_species_int
@@ -270,11 +308,13 @@
     Undeclared~species~'#1'.~Declare~names~first~--~
     \token_to_str:N \tnset{species={...}}~in~the~preamble~(recommended:~
     a~species~keeps~one~hue~across~every~figure)~or~in~the~picture's~
-    option~list.
+    option~list.~A~declaration~inside~a~group~or~picture~ends~with~
+    that~group.
   }
 \cs_new_protected:Npn \tenkz_species_check:n #1
   {
-    \prop_if_in:NnF \g__tenkz_species_prop {#1}
+    \pgfkeysifdefined { /tikz/species~#1~bond/.@cmd }
+      { }
       { \msg_error:nnn { tenkz } { unknown-species } {#1} }
   }
 \cs_generate_variant:Nn \tenkz_species_check:n { e, V }
@@ -306,6 +346,216 @@
 \pgfkeys{
   /tenkz/species/.code={\tenkz_species_declare:n{#1}},
 }
+
+% ---------- the cell-set algebra (shared by every tier) ----------
+% One addressing algebra serves every tier: terms `(r,c)` |
+% `(r1-r2,c1-c2)`, optionally with a trailing third coordinate, or a
+% registered name; terms combine with `+` (union) / `-` (difference),
+% left to right.  \tenkz_cs_openscan:n pre-scans a braced option value
+% and rewrites its TOP-LEVEL commas to unions (parenthesis depth decides
+% which commas separate terms); \tenkz_cs_resolve:nN turns the rewritten
+% expression into a membership prop whose keys read "r-c" on the default
+% third coordinate and "r-c-h" otherwise.  The third slot means SHEET in
+% the lattice's geometric records and INTERFACE in the contraction keys
+% (grid and lattice open=/trace=); each caller sets the state below
+% around its resolve.
+%
+% The machinery lives HERE, in core, under shared single-underscore
+% names: the grid tier (loaded before the lattice) and the lattice tier
+% both consume it, and neither may reach into the other's private
+% namespace.  Caller-set state:
+%   \l_tenkz_cs_defsheet_int  default third coordinate of a 2-slot term
+%                             (mask to -1 so an explicit third
+%                             coordinate never collapses to a bare key)
+%   \l_tenkz_cs_sheets_int    stack height priced by the range guard
+%   \l_tenkz_cs_guard_bool    range-guard switch; callers whose third
+%                             slot is NOT a sheet turn it off and guard
+%                             in their own alphabet
+%   \l_tenkz_cs_names_prop    registered name -> comma list of keys
+\prop_new:N \l_tenkz_cs_result_prop
+\prop_new:N \l_tenkz_cs_term_prop
+\prop_new:N \l_tenkz_cs_names_prop
+\tl_new:N \l_tenkz_cs_expr_tl
+\tl_new:N \l_tenkz_cs_acc_tl
+\tl_new:N \l_tenkz_cs_op_tl
+\tl_new:N \l_tenkz_cs_scan_tl
+\tl_new:N \l_tenkz_cs_body_tl
+\seq_new:N \l_tenkz_cs_parts_seq
+\int_new:N \l_tenkz_cs_depth_int
+\int_new:N \l_tenkz_cs_rlo_int
+\int_new:N \l_tenkz_cs_rhi_int
+\int_new:N \l_tenkz_cs_clo_int
+\int_new:N \l_tenkz_cs_chi_int
+\int_new:N \l_tenkz_cs_hsel_int
+\int_new:N \l_tenkz_cs_defsheet_int
+\int_new:N \l_tenkz_cs_sheets_int
+\bool_new:N \l_tenkz_cs_guard_bool
+\bool_set_true:N \l_tenkz_cs_guard_bool
+\msg_new:nnn { tenkz } { unknown-name }
+  { Unknown~cell-set~name~'#1'~in~a~\token_to_str:N \tnregion \ expression. }
+\msg_new:nnn { tenkz } { sheet-range }
+  { A~cell~addresses~sheet~#1,~but~this~picture~stacks~sheets~0..#2:~
+    the~cell~renders~on~no~sheet. }
+
+% option-value pre-scan: top-level commas become unions
+\cs_new_protected:Npn \tenkz_cs_openscan:n #1
+  {
+    \str_case:nnF {#1}
+      {
+        {(} { \int_incr:N \l_tenkz_cs_depth_int
+              \tl_put_right:Nn \l_tenkz_cs_scan_tl {(} }
+        {)} { \int_decr:N \l_tenkz_cs_depth_int
+              \tl_put_right:Nn \l_tenkz_cs_scan_tl {)} }
+      }
+      {
+        \bool_lazy_and:nnTF
+          { \int_compare_p:nNn { \l_tenkz_cs_depth_int } = {0} }
+          { \str_if_eq_p:nn {#1} {,} }
+          { \tl_put_right:Nn \l_tenkz_cs_scan_tl {+} }
+          { \tl_put_right:Nn \l_tenkz_cs_scan_tl {#1} }
+      }
+  }
+
+% expression -> membership prop
+\cs_new_protected:Npn \tenkz_cs_resolve:nN #1#2
+  {
+    \prop_clear:N \l_tenkz_cs_result_prop
+    \tl_set:Nn \l_tenkz_cs_expr_tl {#1}
+    \tl_remove_all:Nn \l_tenkz_cs_expr_tl { ~ }
+    \int_zero:N \l_tenkz_cs_depth_int
+    \tl_clear:N \l_tenkz_cs_acc_tl
+    \tl_set:Nn \l_tenkz_cs_op_tl {+}
+    \tl_map_inline:Nn \l_tenkz_cs_expr_tl { \tenkz_cs_scan:n {##1} }
+    \tenkz_cs_flush:
+    \prop_set_eq:NN #2 \l_tenkz_cs_result_prop
+  }
+\cs_generate_variant:Nn \tenkz_cs_resolve:nN { VN }
+
+\cs_new_protected:Npn \tenkz_cs_scan:n #1
+  {
+    \str_case:nnF {#1}
+      {
+        {(} { \int_incr:N \l_tenkz_cs_depth_int
+              \tl_put_right:Nn \l_tenkz_cs_acc_tl {(} }
+        {)} { \int_decr:N \l_tenkz_cs_depth_int
+              \tl_put_right:Nn \l_tenkz_cs_acc_tl {)} }
+      }
+      {
+        \bool_lazy_and:nnTF
+          { \int_compare_p:nNn { \l_tenkz_cs_depth_int } = {0} }
+          { \bool_lazy_or_p:nn
+              { \str_if_eq_p:nn {#1} {+} }
+              { \str_if_eq_p:nn {#1} {-} } }
+          { \tenkz_cs_flush: \tl_set:Nn \l_tenkz_cs_op_tl {#1} }
+          { \tl_put_right:Nn \l_tenkz_cs_acc_tl {#1} }
+      }
+  }
+
+% resolve the pending term (in \l_tenkz_cs_acc_tl) and combine into result
+\cs_new_protected:Npn \tenkz_cs_flush:
+  {
+    \tl_if_empty:NF \l_tenkz_cs_acc_tl
+      {
+        \tenkz_cs_term:VN \l_tenkz_cs_acc_tl \l_tenkz_cs_term_prop
+        \str_if_eq:VnTF \l_tenkz_cs_op_tl {-}
+          { \prop_map_inline:Nn \l_tenkz_cs_term_prop
+              { \prop_remove:Nn \l_tenkz_cs_result_prop {##1} } }
+          { \prop_map_inline:Nn \l_tenkz_cs_term_prop
+              { \prop_put:Nnn \l_tenkz_cs_result_prop {##1} {1} } }
+      }
+    \tl_clear:N \l_tenkz_cs_acc_tl
+  }
+
+% a term -> membership prop
+\cs_new_protected:Npn \tenkz_cs_term:nN #1#2
+  {
+    \prop_clear:N #2
+    \tl_if_in:nnTF {#1} {(}
+      { \tenkz_cs_rect:nN {#1} #2 }
+      {
+        \prop_get:NnNTF \l_tenkz_cs_names_prop {#1} \l_tenkz_cs_body_tl
+          {
+            \clist_map_inline:Vn \l_tenkz_cs_body_tl
+              { \prop_put:Nnn #2 {##1} {1} }
+          }
+          {
+            \msg_error:nnn { tenkz } { unknown-name } {#1}
+          }
+      }
+  }
+\cs_generate_variant:Nn \tenkz_cs_term:nN { VN }
+\cs_generate_variant:Nn \clist_map_inline:nn { Vn }
+
+% normalized cell key: "r-c" on the DEFAULT third coordinate (the
+% sheetless format, so single-sheet pictures and their event stream are
+% untouched), "r-c-h" otherwise; expandable
+\cs_new:Npn \tenkz_cs_cellkey:nnn #1#2#3
+  {
+    \int_compare:nNnTF {#3} = { \l_tenkz_cs_defsheet_int }
+      { #1 - #2 }
+      { #1 - #2 - #3 }
+  }
+
+% warn when a sheet coordinate falls outside 0 .. sheets-1 (the cell
+% would render on no sheet); guarded, not clamped
+\cs_new_protected:Npn \tenkz_cs_guard_sheet:n #1
+  {
+    \bool_if:NT \l_tenkz_cs_guard_bool
+      {
+        \bool_lazy_and:nnF
+          { \int_compare_p:nNn {#1} > {-1} }
+          { \int_compare_p:nNn {#1} < { \l_tenkz_cs_sheets_int } }
+          {
+            \msg_warning:nnee { tenkz } { sheet-range }
+              { \int_eval:n {#1} }
+              { \int_eval:n { \l_tenkz_cs_sheets_int - 1 } }
+            \tenkz@event{warning|code=sheet-range|sheet=\int_eval:n {#1}}
+          }
+      }
+  }
+
+% (rlo-rhi,clo-chi) or (r,c), optionally with a trailing third
+% coordinate -> membership prop; a two-slot term lives on the default
+\cs_new_protected:Npn \tenkz_cs_rect:nN #1#2
+  {
+    \tl_set:Nn \l_tenkz_cs_body_tl {#1}
+    \tl_remove_once:Nn \l_tenkz_cs_body_tl {(}
+    \tl_remove_once:Nn \l_tenkz_cs_body_tl {)}
+    \seq_set_split:NnV \l_tenkz_cs_parts_seq {,} \l_tenkz_cs_body_tl
+    \tenkz_cs_range:eNN { \seq_item:Nn \l_tenkz_cs_parts_seq {1} }
+      \l_tenkz_cs_rlo_int \l_tenkz_cs_rhi_int
+    \tenkz_cs_range:eNN { \seq_item:Nn \l_tenkz_cs_parts_seq {2} }
+      \l_tenkz_cs_clo_int \l_tenkz_cs_chi_int
+    \int_compare:nNnTF { \seq_count:N \l_tenkz_cs_parts_seq } > {2}
+      {
+        \int_set:Nn \l_tenkz_cs_hsel_int
+          { \seq_item:Nn \l_tenkz_cs_parts_seq {3} }
+        \tenkz_cs_guard_sheet:n { \l_tenkz_cs_hsel_int }
+      }
+      { \int_set_eq:NN \l_tenkz_cs_hsel_int \l_tenkz_cs_defsheet_int }
+    \int_step_inline:nnn { \l_tenkz_cs_rlo_int } { \l_tenkz_cs_rhi_int }
+      {
+        \int_step_inline:nnn { \l_tenkz_cs_clo_int } { \l_tenkz_cs_chi_int }
+          {
+            \prop_put:Nen #2
+              { \tenkz_cs_cellkey:nnn {##1} {####1}
+                  { \int_use:N \l_tenkz_cs_hsel_int } } {1}
+          }
+      }
+  }
+\cs_generate_variant:Nn \prop_put:Nnn { Nen }
+\cs_generate_variant:Nn \seq_set_split:Nnn { NnV }
+
+% "a" or "a-b" -> lo, hi
+\cs_new_protected:Npn \tenkz_cs_range:nNN #1#2#3
+  {
+    \tl_if_in:nnTF {#1} {-}
+      { \tenkz_cs_range:w #1 \q_stop #2 #3 }
+      { \int_set:Nn #2 {#1} \int_set:Nn #3 {#1} }
+  }
+\cs_new_protected:Npn \tenkz_cs_range:w #1 - #2 \q_stop #3#4
+  { \int_set:Nn #3 {#1} \int_set:Nn #4 {#2} }
+\cs_generate_variant:Nn \tenkz_cs_range:nNN { eNN }
 \ExplSyntaxOff
 
 \endinput
