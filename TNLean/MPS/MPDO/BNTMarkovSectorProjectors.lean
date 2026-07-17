@@ -214,6 +214,8 @@ assumes explicitly that every closing matrix $R_s$ is nonzero.  For the
 normalized three-site reduced state used by the source, this condition follows
 from simplicity, SAL, and the common-weight construction by
 `MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing`.
+The generic scope restriction is documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `QkKjs`, lines 1733--1737. -/
 theorem bntMarkovBlockNonzero_eq_of_probability_ne_zero
@@ -287,6 +289,8 @@ nonzero diagonal block.
 `bntMarkovBlockNonzero_eq_of_probability_ne_zero`.  The source construction
 discharges this hypothesis through
 `MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing`.
+The generic scope restriction is documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `QkKjs`, lines 1733--1737. -/
 theorem existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero
