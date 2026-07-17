@@ -20,6 +20,7 @@ channels and irreducibility.
 * `IsOrthogonalProjection.one_sub`
 * `IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one`
 * `isOrthogonalProjection_posSemidef`
+* `isOrthogonalProjection_sum_of_pairwise_mul_eq_zero`
 * `orthogonalProjection_mul_eq_zero_of_sum_eq_one`
 -/
 
@@ -77,6 +78,30 @@ theorem isOrthogonalProjection_posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) :
     P.PosSemidef :=
   Matrix.nonneg_iff_posSemidef.mp hP.isStarProjection.nonneg
+
+/-- A finite sum of pairwise orthogonal projections is an orthogonal
+projection. -/
+theorem isOrthogonalProjection_sum_of_pairwise_mul_eq_zero
+    {ι : Type*} [Fintype ι] (P : ι → Matrix (Fin D) (Fin D) ℂ)
+    (hproj : ∀ i, IsOrthogonalProjection (P i))
+    (horth : ∀ {i j}, i ≠ j → P i * P j = 0) :
+    IsOrthogonalProjection (∑ i, P i) := by
+  classical
+  constructor
+  · change (∑ i, P i)ᴴ = ∑ i, P i
+    rw [Matrix.conjTranspose_sum]
+    exact Finset.sum_congr rfl fun i _ ↦ (hproj i).1.eq
+  · calc
+      (∑ i, P i) * (∑ j, P j) = ∑ i, ∑ j, P i * P j := by
+        rw [Finset.sum_mul]
+        refine Finset.sum_congr rfl fun i _ ↦ ?_
+        rw [Finset.mul_sum]
+      _ = ∑ i, P i := by
+        refine Finset.sum_congr rfl fun i _ ↦ ?_
+        rw [Finset.sum_eq_single i]
+        · exact (hproj i).2
+        · exact fun j _ hji ↦ horth (Ne.symm hji)
+        · simp
 
 /-- **Orthogonal projections summing to the identity are mutually
 orthogonal**: `P k * P l = 0` for `k ≠ l`.  Compressing the resolution of the

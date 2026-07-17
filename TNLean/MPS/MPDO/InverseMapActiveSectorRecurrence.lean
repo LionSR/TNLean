@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.MPDO.PhysicalSectorPruning
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 import TNLean.MPS.MPDO.SectorEtaOperator
@@ -67,16 +68,6 @@ theorem conjugated_middle_threeSiteClosure
   rw [hρ i₁ i₂ i₃ j₁ j₂ j₃]
   ring
 
-private theorem exists_diagonal_ne_zero_of_trace_eq_one
-    {n : Type*} [Fintype n] (A : Matrix n n ℂ)
-    (htrace : A.trace = 1) : ∃ i, A i i ≠ 0 := by
-  have hsum : (∑ i : n, A i i) ≠ 0 := by
-    change A.trace ≠ 0
-    rw [htrace]
-    exact one_ne_zero
-  obtain ⟨i, _, hi⟩ := Finset.exists_ne_zero_of_sum_ne_zero hsum
-  exact ⟨i, hi⟩
-
 /-- Both endpoints of a nonzero neighboring operator in the zero-weight
 reparameterized inverse-map factorization have positive Hayashi weight.
 
@@ -140,10 +131,10 @@ theorem exists_active_sectorVirtualMatrix_ne_zero
   by_contra hall
   push Not at hall
   obtain ⟨⟨i₁, l⟩, hleft⟩ :=
-    exists_diagonal_ne_zero_of_trace_eq_one
+    Matrix.exists_diagonal_ne_zero_of_trace_eq_one
       (hη.ρ_left k) (hη.hρ_left_dm k).2
   obtain ⟨⟨r, i₃⟩, hright⟩ :=
-    exists_diagonal_ne_zero_of_trace_eq_one
+    Matrix.exists_diagonal_ne_zero_of_trace_eq_one
       (hη.ρ_right k) (hη.hρ_right_dm k).2
   let x : F.SectorIndex k := (l, r)
   let b : Fin d := hη.decompB.symm ⟨k, (l, r)⟩
