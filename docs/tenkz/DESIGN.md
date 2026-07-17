@@ -511,3 +511,280 @@ brace clearances (the clearance keys off whether external dot labels actually ex
 spanned columns). Explicit per-cell skins always override the policy; the event stream records
 the resolved skin. All inscribed glyphs carry a uniform-height strut so boxes labelled `A`,
 `T_g`, `A^{(2)}` sit at one height (small multiples must be uniform).
+
+---
+
+# Phase 0.5 — the mathematical-soundness overhaul (recorded 2026-07-17)
+
+A five-lane mathematical audit of the Phase-0 package — every manual diagram, the school's
+drawing conventions, twelve hard figures from the CPSV RMP (arXiv:2011.12127), eight hard
+constructions from arXiv:2203.12563, and the pentagon — found one systemic defect and a ranked
+list of missing primitives. Phase 0.5 is the correction. The sections below record what was
+decided and why; each decision was accepted only after a declarative reproduction of the
+published figure it serves.
+
+The yardstick for every addition is a standing maintainer directive: a new feature must
+collapse existing special cases into one concept, never add another case. Three unifications
+carry the phase — the frame (§15), the side policy (§12.3), and the column contraction policy
+(§14). Where an old spelling survives, it survives as a documented one-line alias of the
+unified grammar, not as a parallel mechanism.
+
+## 12. The boundary doctrine
+
+### 12.1 Open is the default; no open legs means a scalar
+
+An open virtual index is data. A row's virtual wire that reaches the row's extremal occupied
+cell and is not closed by a trace, a cup, or a fusion bar protrudes as a stub of length
+`virtual stub` = 0.45·pitch, drawn in the row's wire style. The ink states "matrix-valued on
+this side"; sealed ends state "boundary-contracted on this side"; a picture with no open legs
+of any kind denotes a number.
+
+**Default: `boundary=open`.** `\begin{tenkz} \tn{A} & \tn{B} \end{tenkz}` denotes the matrix
+product AB — one open virtual index west, one east. The grounds, in order of force: (a) under
+the sealed Phase-0 default, 9 of the 14 benchmark/stress figures and nine manual diagrams were
+mathematically false — every matrix- or operator-valued object rendered as a vector or scalar,
+the transfer map worst of all (a superoperator drawn with zero of its four legs); (b) the
+school draws protruding ends everywhere and closes them only with explicit ink — a loop, a
+cap, or a boundary tensor; "sealed" is never a default in the literature; (c) sealing is the
+rarer intent, so it is the one that must be spelled: `boundary=none` is the author's assertion
+that boundary vectors are absorbed. A default that silently misstates rank fails the package's
+own type discipline.
+
+### 12.2 Boundary signatures and equation well-formedness
+
+Every picture emits a boundary-signature event:
+`boundary|picture|virtual-west|virtual-east|fused-west|fused-east|physical-up|physical-down`.
+Closures — traces, cups, boundary-vector glyphs — count zero; a fusion bar's combined leg
+counts one fused open index on its side. A diagrammatic equation is well-formed iff both sides
+expose identical signatures. This is the doctrine that caught B8's double-counted physical sum
+and hard11's spurious input stubs; the audit layer lints it: pictures sharing an `eq=<tag>`
+must match exactly (hard error), pictures emitted from the same source line are compared as an
+advisory (display math legitimately mixes pictures with scalars).
+
+### 12.3 The side policy
+
+A picture side (west or east) has exactly one policy: **open** (stubs) | **none** (sealed) |
+**trace** (row to itself — `periodic`) | **cup** (row to row — §13) | **consumed** (a glyph
+owns it: a fusion bar, a source bead). The grammar presents this as one choice per side rather
+than as interacting keys; `boundary=` is the both-sides shorthand and `periodic` the
+row-to-self form. Resolution is local-wins: cell > row > side > picture.
+
+- Picture: `boundary=open|none|periodic`; per-side `west=open|none`, `east=open|none`.
+  Prepared or discarded indices are properties of a *side* of the word, not of a row — a
+  circuit fragment seals its west inputs while its east outputs stay open (the hard11
+  brick-circuit blocker, closed by exactly this key).
+- Row: the colon-mod grammar `rows={op:open, ket:none, wire:fused, …}`; mods combine in any
+  order.
+- Cell: `left=<math>` / `right=<math>` label the stub tip and imply the stub; `no left` /
+  `no right` seal one end of one row. Tip labels are legal only on the row's extremal occupied
+  cell; elsewhere they are a compile error with cell coordinates.
+- `\tndots` at a row's end draws no stub and counts zero: the ellipsis states continuation,
+  not openness. Terminal `\tnghost` cells are excluded from row extent, and the ghost-padding
+  workaround idiom draws a lint advisory — the boundary model is the spelling.
+
+### 12.4 The trace-clearance correction
+
+The §4.4 table fixed `trace clearance` at 0.55·pitch; the shipped source used 0.62, and the
+manual's fact-check ruled that the source wins. The audit then proved every constant wrong:
+with open legs facing the racetrack, leg (0.38) + label clearance (0.12) + script-size text
+exceeds 0.62, and the rendered trace loop collided with physical ink. The decided fix computes
+the racetrack ordinate additively from the outer row's occupied band —
+
+    trace y = row y ± ( glyph half-extent
+                        + physical leg + label band   (only when open legs face the loop)
+                        + trace margin )
+
+with one new named ratio `trace margin` = 0.24·pitch and no user-facing key. The §4.4
+trace-clearance row is superseded; the claim "the racetrack clears leg labels on the outer
+row" becomes true by construction, for every glyph skin.
+<!-- The 0.62 constant still guards the drawing site until the band rule lands in source. -->
+
+## 13. Cups and the canonical channel spellings
+
+`close west` / `close east` are picture keys: on that side, adjacent open wire rows are tied
+to each other in pairs, top-down (rows 1–2, 3–4, …), each pair by one smooth 180-degree bend.
+A cup contracts two *different* rows' indices; `periodic` contracts a row with itself — the
+two closures are distinct topologies and distinct ink. A bare value gives the plain cup (an
+isometry contraction); `close west={$\rho^R$}` seats a boundary glyph on the bend — a
+tensor-style dot on the arc apex, label placed outward. Cupped sides draw no stubs and count
+zero in the signature.
+
+The channel spellings are canonical and the manual states them as law:
+
+| Object | Spelling | Signature (vw, ve, up, down) |
+|---|---|---|
+| the map E_A | `[sandwich]`, all four virtual stubs open | (2, 2, 0, 0) |
+| the value E_A(X) | `[sandwich, close west={$X$}]`, east pair open | (0, 2, 0, 0) |
+| the n-site density matrix | `rows={ket:nopair, bra}, close west={$\rho^R$}, close east={$\rho^L$}` | (0, 0, n, n) |
+
+Naming the map draws it fully open; applying it closes the input side with the argument
+riding the cup; closing everything denotes the scalar. The density-matrix racetrack composes
+under `\left(…\right)` on the wire axis, so eigenvalue equations wrap it with no glue. One
+corollary of the signature doctrine, fixed in B8: inside `\sum_i`, the summand
+X ↦ A^i X A^{i†} is drawn as `rows={wire,wire}` with *no* vertical wire — the index i is fixed
+by the outer sum, and drawing the physical contraction would count it twice.
+
+## 14. The marginal contraction policy
+
+Between two physically-facing layers, each column takes exactly one of three values: **pair**
+(the straight contracted leg — the default), **open** (both legs dangle — the indices you
+keep), or **trace** (a wrap loop around the column's east side, from the ket's up leg past
+both rows into the bra's down leg — Tr over that site's physical space). This is the whole
+grammar of marginals: rho_kept = Tr_traced |psi⟩⟨psi| is drawn as `rows={ket:nopair, bra}`
+with `trace` at the discarded columns — open pairs on the kept sites, loops on the traced
+ones. A traced column contributes nothing to the signature; a kept column contributes up+down.
+
+Spellings: the per-cell key `pair=trace` and the picture sugar `trace=physical at={4,5}` in
+the grid; the cell-set keys `open={(r,c),…}` and `trace={(r,c),…}` in `tenkzplanes`, where the
+loop is drawn in the paper frame, east-routed around the site column. The acceptance figure is
+RMP Fig. 2 in both panels: (a) the MPS marginal — three open pairs, two loops; (b) the PEPS
+double layer with the rightmost column traced sheet-to-sheet.
+
+The ladder rule applies: one vocabulary — `contract=pair|open|trace` at cell, column, row, and
+picture scope with uniform cell-set addressing — serves grid and planes identically. The
+spellings above are its aliases, one table row each.
+
+## 15. The frame
+
+### 15.1 One linear map
+
+Every geometry request of the phase — oblique PEPS sheets, mirror lean, the depth axis,
+vertical chains — is one linear map L from logical (col, row) to paper (x, y):
+
+| Frame | L |
+|---|---|
+| flat | [[lp, 0], [0, −lp]] |
+| oblique | [[lp, −slant·lp], [0, −rise·lp]] |
+| lean=west | negate the slant column |
+| vertical | [[0, −lp], [lp, 0]] |
+
+Presets are the interface; the matrix is the mechanism. The region tracer commutes with any
+linear L (intersect-then-map = map-then-intersect, proved in the mirror probe), so hulls,
+margins, fills, and corner labels survive every frame without special cases.
+
+### 15.2 Plane presets
+
+Three values of `plane=`, each a documented read, plus two guarded escape hatches:
+
+- `plane=flat` — the Phase-0 rectilinear grid. Unchanged.
+- `plane=oblique` — the default, slant 0.45 / rise 0.60. Rise must exceed
+  physleg/latticepitch = 0.38/0.75 ≈ 0.507 or physical legs collide with the behind-row bond;
+  the old 0.55 left leg tips 0.043·lp short of that bond — a near-touch that merges at compact
+  pitch. 0.60 clears the threshold by 0.093·lp and keeps the flat-sheet foreshortening that
+  higher rises lose.
+- `plane=slab` — slant 0.60 / rise 0.55, the full-pitch RMP showcase geometry (47-degree
+  leg/bond separation, best lateral clearance). Named for the read, not the numbers; it costs
+  1.8·lp of drift over four rows, which is why it is a preset and not the default.
+- `plane slant=` / `plane rise=` — explicit per-picture ratio overrides. Guarded, not clamped:
+  the log warns when rise ≤ physleg/latticepitch (the leg-crossing regime) and when slant
+  leaves (0.30, 0.65) (below, depth bonds become confusable with vertical legs; the 0.30/0.70
+  cell is the proven worst case).
+
+A rise-0.70 "steep" preset was rejected: its one advantage is substantially captured by the
+0.60 default, and a third oblique preset is option soup — `plane rise=0.70` is one key away.
+
+### 15.3 Lean; the depth axis
+
+`plane lean=east|west` (default east, the "/" lean) mirrors the sheet by a sign flip on the
+slant register; the frame map is linear, so the tracer, fills, margins, and labels survive
+unchanged. Compass naming matches the library's west/east vocabulary; `lean=mirror` was
+rejected for naming the mechanism instead of the result.
+
+Swapping the depth axis (columns receding) is not supported. The 5×3 probe is decisive: the
+window silhouette collapses toward a rhombus staircase (drift/width ≈ 0.9) and the depth reads
+as a rotated lattice. The manual states the stance; a tall-window guard warns when
+(rows−1)·slant > 0.5·(cols−1), with the documented remedies (cap receding rows near four at
+stock slant, or drop slant toward 0.30 beyond that).
+
+### 15.4 Sheets
+
+The static sheet separation is dead. `tenkzplanes` derives its default:
+
+    sheet sep = (rows − 1) · planerise + planegap,        planegap = 0.70
+
+`planegap` is a named ratio: the air between fully disjoint sheets, matched to the RMP
+double-layer panel. No static number survives a row-count change — the old 1.4 crowded the
+3×3 workhorse and interleaved outright at four rows. `sheet sep=` remains as a total-offset
+override, with a warning when a user-set value re-interleaves the sheets.
+
+The double layer carries its own local slant/rise, 0.40 / 0.45: 0.40 is the unique slant
+maximizing pairing-leg-to-dot clearance (0.2·lp for every leg climbing up to four row-levels;
+the single-sheet 0.45 puts two-row legs inside the dot radius — a rim clip), and 0.45 gives
+the squat RMP-like stack. Only the double layer has multi-row pairing legs, which is why the
+two objects legitimately differ; the ratio comments record the reason per the metric doctrine.
+The manual states the avoid band — never rise 0.48–0.52, where a stub tip sits ambiguously
+tangent to the next row's bond — and the size ceilings: 3×3 is the workhorse, 4×4 the maximum
+for any figure read cell-by-cell, 5×5 the absolute maximum for impression-only panels.
+
+### 15.5 Vertical chains
+
+`orientation=vertical` (alias `chain axis=south`) rotates the whole grid grammar 90 degrees
+through the frame map (x, y) → (−y, −x): columns descend the page, bonds run vertically,
+physical legs point west/east by row type, `\tndots` renders `\vdots`, and the label
+auto-quadrant rotates with the frame. The corpus contains exactly two rotated genres — the
+vertical O_L MPO word with side-hook closure and the transfer-matrix column — and both are
+pure 90-degree rotations of existing grid semantics; the free tier cannot carry them (its
+label band is struck through by any south-going wire). Constructs the frame does not yet
+transform warn and are skipped: silently wrong ink is the one forbidden outcome.
+
+`periodic style=racetrack|hooks` selects the closure ink; setting it also selects periodic, so
+the O_L word is one option list. `hooks` is the RMP O_L closure — at each end the wire runs
+half a stub out and turns a near-semicircle toward the return side, each hook one path with
+reach set by the stub ratio, so the rounding is uniform by construction. A vertical periodic
+word closes with hooks by default; horizontal words keep the racetrack.
+<!-- The per-frame default flip ships with the vertical polish; an explicit periodic style=
+always wins. -->
+
+Rejected: a general `rotate=` angle on `\tnpic` (only 90 degrees appears anywhere in the
+corpus, and arbitrary angles rotate label baselines against the horizontal-text doctrine); a
+`chain path` key for L-shaped chains (two `\tnjoin` calls already produce publication-grade
+corners — the manual documents the idiom). The free tier gains the stopgap
+`label pos=north|south|east|west` on `\tnput`.
+
+Net grammar growth for the whole frame family: six keys, one named ratio (`planegap`), three
+log warnings, zero removals.
+
+## 16. Directionality
+
+Arrow semantics follow the source study: an outgoing arrow is the vector space V, an incoming
+arrow its dual V*; contraction joins out to in only; arrow reversal is the dual — the inverse
+representation. Arrows survive rotation where positional reading order dies, which is why they
+are bond data, not decoration.
+
+Keys only, no new commands: row tokens `dir right` / `dir left` in the `rows=` suffix grammar
+(three-valued — absent, right, left); the picture key `bond dir=right|left` as the default for
+all wire rows, with the per-bond override `bond dir={right, left at 2/3-4}` — per-leg reversal
+is mathematics (the inverse representation) and must be per-bond expressible. The mark is the
+existing `bond arrow` style — a mid-wire barb at 0.55, inheriting the wire color — with a
+`fused bond arrow` variant sized to span the doubled wire. In a periodic picture the barb
+rides the racetrack return wire, the MPO ring convention. The free tier takes a `dir` key on
+`\tnjoin`, argument order giving the direction.
+
+The event stream carries it: bond events gain `dir=none|forward|reverse`, and the boundary
+signature splits directed open legs (virtual-west-in/out) — oppositely-directed open legs are
+unequal in equation comparison. Not dir's job: fusion chirality (that is `\tnfuse combined=`),
+conjugation (that is `\tn*`), and reading order (a manual note, no ink). Physical-leg arrows
+are roadmap; only the weak-Hopf paper needs them.
+
+## 17. The gate process
+
+Phase 0.5 ran under three standing gates, and the phase's own history is the argument for
+them.
+
+1. **The simplifier between phases.** A code-simplifier pass runs over every grown module
+   between phases, under a pixel-identity regression gate: baseline renders first, byte-equal
+   event streams and unchanged pages after. Two passes cleaned Phase 0; a third cleaned the
+   grid, lattice, and cd modules after the Phase-0.5 growth.
+2. **The mathematical referee.** Every figure is refereed against its formula: the formula is
+   stated; the ink matches it exactly — open legs counted (no open legs = scalar), signatures
+   balanced across `=`, the channel spelling canonical, conjugation on the bra layer, trace
+   and cup topologically distinct; inline `%` comments must be mathematically true. The
+   Phase-0.5 audit was the first full referee pass — five parallel lanes feeding one architect
+   spec — and it is what found the sealed-boundary defect that Phase 0's visual gates missed:
+   a diagram can be beautiful and false. Acceptance thereafter was reproduction: every missing
+   primitive was named by a failed declarative reproduction of a published figure, and closed
+   only when the re-attempt rendered faithfully with balanced signatures, verdicts recorded as
+   clean, clean-with-noted-gap, or still-blocked.
+3. **The prose gate.** Manual and documentation prose follows the Elements of Style: every
+   sentence asserts. Hedges, caveats, and self-commentary go in `%` comments — sanctioned
+   murmuring, visible in printed source blocks — never in the running text.
