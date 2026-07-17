@@ -86,7 +86,7 @@ def IsPerCopyHorizontalCF (M : MPOTensor d D) : Prop :=
   ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k)),
     HorizontalCFData (d := d * d) μ A ∧
-      MPSTensor.SameMPV₂ M.toMPSTensor
+      MPSTensor.SameMPV₂Pos M.toMPSTensor
         (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A)
 
 /-- **Lemma L** (arXiv:1606.00608, appendix): if two operators act identically
@@ -278,7 +278,7 @@ theorem blockwise_opposite_insert_eq_of_rotated_mpo_entries
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (M : MPOTensor d D) (A : (k : Fin r) → MPSTensor (d * d) (dim k))
     (hCF : HorizontalCFData (d := d * d) μ A)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor
       (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
@@ -299,9 +299,9 @@ theorem blockwise_opposite_insert_eq_of_rotated_mpo_entries
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (A k) =
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (A k) := by
   apply blockwise_opposite_insert_eq_of_mpv_agree A hCF
-  · exact MPSTensor.FirstSiteActionAgree.of_sameMPV hM
+  · exact MPSTensor.FirstSiteActionAgree.of_sameMPVPos hM
       (MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M P hInv)
-  · exact MPSTensor.FirstSiteActionAgree.of_sameMPV hM
+  · exact MPSTensor.FirstSiteActionAgree.of_sameMPVPos hM
       (MPSTensor.firstSiteActionAgree_ketLeft_braRight M P hComm)
 
 end MPOTensor

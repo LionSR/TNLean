@@ -16,7 +16,7 @@ weighted sector sum.
 
 ## Main result
 
-* `IsHorizontalCF.isBNT_verticalTensor_of_grouping`: the grouped sector
+* `isBNT_verticalTensor_of_grouping`: the grouped sector
   decomposition furnishes an `IsBNT` witness for the vertical tensor.
 
 ## References
@@ -104,13 +104,12 @@ form an algebraic BNT for the vertical tensor.
 
 The hypotheses are precisely the dimension, isometry, intertwining,
 reconstruction, and spectral-BNT clauses returned by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.  The proof uses
-those same witnesses to establish nonemptiness; it does not choose a second
-vertical grouping.
+`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.  The proof does not
+choose a second vertical grouping.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
-theorem IsHorizontalCF.isBNT_verticalTensor_of_grouping
-    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
+theorem isBNT_verticalTensor_of_grouping
+    (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
     (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
@@ -129,14 +128,6 @@ theorem IsHorizontalCF.isBNT_verticalTensor_of_grouping
       (fun j => dim (C.repr j)) (fun j => blocks (C.repr j)) := by
   classical
   let C := MPSTensor.mpvPhaseClassData blocks
-  have hr : 0 < r := by
-    by_contra hr
-    have hrzero : r = 0 := Nat.eq_zero_of_not_pos hr
-    apply hHorizontal.verticalTensor_ne_zero M
-    funext v
-    rw [hreconstruct v]
-    subst r
-    simp
   have hPositive : MPSTensor.SameMPV₂Pos (verticalTensor M)
       (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks) :=
     sameMPV₂Pos_toTensorFromBlocks_of_reconstruction

@@ -76,8 +76,8 @@ operators, there are isometries `V k` with pairwise orthogonal ranges summing
 to the physical identity. Every vertical letter intertwines each `V k` with
 the corresponding irreducible corner, and the adjoint intertwining and exact
 compression formula hold as well. The unit-weight direct sum of these corners
-has the same full matrix product vector family as the vertically viewed
-tensor.
+has the same positive-length matrix product vector family as the vertically
+viewed tensor.
 
 This specializes the canonical-form construction of arXiv:1606.00608,
 lines 200--225 and 253--255, after the invariant-projection argument of
@@ -95,13 +95,16 @@ theorem IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry
       (∀ k v, (V k)ᴴ * verticalTensor M v = blocks k v * (V k)ᴴ) ∧
       (∀ k v, blocks k v = (V k)ᴴ * verticalTensor M v * V k) ∧
       (∀ k, MPSTensor.IsIrreducibleTensor (blocks k)) ∧
-      MPSTensor.SameMPV₂ (verticalTensor M)
+      MPSTensor.SameMPV₂Pos (verticalTensor M)
         (MPSTensor.toTensorFromBlocks
           (d := D * D) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
-  exact
+  obtain ⟨r, dim, blocks, V, hdim, hIso, hSum, hOrth, hIntertwine,
+      hIntertwineStar, hCompress, hIrred, hSame⟩ :=
     MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
       (verticalTensor M)
       (hHorizontal.hasInvariantProjectorClosure_verticalTensor M hM)
+  exact ⟨r, dim, blocks, V, hdim, hIso, hSum, hOrth, hIntertwine,
+    hIntertwineStar, hCompress, hIrred, hSame.toSameMPV₂Pos⟩
 
 /-- The ranges of the vertical corner isometries form complete pairwise
 orthogonal reducing projections.

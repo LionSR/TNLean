@@ -38,9 +38,9 @@
     \label{def:horizontal_cf_mpv_representation}
     \lean{MPOTensor.HasHorizontalCFMPVRepresentation}
     \leanok
-    \uses{def:mpo_tensor, def:sector_bnt_cf, def:same_mpv2}
+    \uses{def:mpo_tensor, def:sector_bnt_cf, def:same_mpv2_pos}
     An MPO tensor has a \emph{horizontal-canonical-form MPV representation} if
-    its doubled-index MPS tensor generates the same complete MPV family as a
+    its doubled-index MPS tensor generates the same positive-length MPV family as a
     BNT canonical form
     \[
         \bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j.
@@ -60,15 +60,14 @@
     \leanok
     \uses{def:horizontal_cf_mpdo,
         def:horizontal_cf_mpv_representation}
-    Every MPO tensor in horizontal canonical form has the associated complete
+    Every MPO tensor in horizontal canonical form has the associated positive-length
     BNT matrix-product-vector representation.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Each copy similarity cancels inside its closed matrix-product trace.
-    Since the two bond dimensions agree, this also identifies the coefficient
-    at length zero.
+    Each copy similarity cancels inside every positive-length closed
+    matrix-product trace.
 \end{proof}
 
 \begin{figure}[ht]
@@ -411,7 +410,7 @@ This is the inverse identity in
     \label{thm:representative_grouped_insert_eq}
     \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero}
     \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree}
-    \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree}
     \leanok
     \uses{def:representative_word_tuple_span,
       def:sector_weight_data, cor:nonvanishing_finite_power_sum}
@@ -430,7 +429,7 @@ This is the inverse identity in
     Consequently, under eventual representative word-tuple separation,
     $YA_j=ZA_j$ for every representative $j$.  The same conclusion holds if
     the first-site equality is initially given for any tensor with the same
-    complete MPV family as $A_{\mathrm{tot}}$.
+    positive-length MPV family as $A_{\mathrm{tot}}$.
 
     The representative grouping is the argument of
     \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
@@ -467,7 +466,7 @@ This is the inverse identity in
         c_j^{(Mr)}=\sum_q(\mu_{j,q}^{M})^r\neq0.
     \]
     Since $Mr-1\geq L_0$, the fixed-length argument applies with
-    $L=Mr-1$.  Finally, equality of complete MPV families transports the
+    $L=Mr-1$.  Finally, equality of positive-length MPV families transports the
     first-site hypothesis to the sector-decomposition tensor.
 \end{proof}
 
@@ -651,12 +650,12 @@ This is the inverse identity in
     \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan}
     \lean{MPSTensor.pairTraceSeparatingAt_blockTensor}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective}
-    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_injective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective}
-    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_blockInjective}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_common_basis_isNBlkInjective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree}
-    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree}
     \leanok
     \uses{def:sector_bnt_cf, def:sector_decomposition_block_tensor,
       def:representative_word_tuple_span, thm:representative_grouped_insert_eq}
@@ -668,13 +667,13 @@ This is the inverse identity in
         L\geq 6(g-1)+1.
     \]
     Consequently, if the first-site actions of $Y,Z\in M_d(\C)$ agree on the
-    complete MPV family of the tensor represented by $P$, then
+    positive-length MPV family of the tensor represented by $P$, then
     \[
         YA_j=ZA_j
         \quad (0\leq j<g).
     \]
     The same conclusion holds when the first-site equality is given for any
-    tensor with the same complete MPV family as the tensor represented by
+    tensor with the same positive-length MPV family as the tensor represented by
     $P$.
 
     More generally, let $P$ be a BNT canonical form before physical blocking,
@@ -702,7 +701,7 @@ This is the inverse identity in
         \quad (0\leq j<g).
     \]
     The same conclusion holds when the first-site equality is given for any
-    tensor with the same complete MPV family.  This composes the blocking
+    tensor with the same positive-length MPV family.  This composes the blocking
     conclusion of \cite[lines~318--345]{Cirac2016MPDO_arXiv} with
     Appendix~C.3, Lemma~L
     \cite[lines~1835--1858]{Cirac2016MPDO_arXiv}.
@@ -862,7 +861,7 @@ This is the inverse identity in
 
 \begin{theorem}[Representative and literal reduction from first-site contractions]
     \label{thm:representative_one_sub_mp_zero}
-    \lean{MPSTensor.FirstSiteActionAgree.of_sameMPV}
+    \lean{MPSTensor.FirstSiteActionAgree.of_sameMPVPos}
     \lean{MPSTensor.insertedTensor_toTensorFromBlocks}
     \lean{MPSTensor.SectorDecomposition.insertedTensor_toTensor_eq_of_basis}
     \lean{MPSTensor.insertedTensor_eq_of_gauge}
@@ -917,7 +916,7 @@ This is the inverse identity in
     \uses{thm:representative_grouped_insert_eq,
         thm:postblocked_representative_grouped_insert_eq,
         thm:mpdo_first_site_invariant_comm}
-    For the general assertion, complete MPV equality transports the first-site
+    For the general assertion, positive-length MPV equality transports the first-site
     identity to the BNT sector decomposition.  The representative-grouped
     Lemma~L gives $YA_j=ZA_j$ for every representative.  First-site insertion
     commutes with the weighted direct sum, and conjugating each copy by its
@@ -1171,7 +1170,7 @@ tensor.  This is the contraction in
     \uses{def:mpdo_three_first_site_contractions,
         lem:mpdo_three_first_site_contraction_coefficients,
         thm:blockwise_opposite_insert_eq}
-    Let the doubled-index tensor $\widehat M$ generate the same complete MPV
+    Let the doubled-index tensor $\widehat M$ generate the same positive-length MPV
     family as a BNT canonical form $\bigoplus_{j,q}\mu_{j,q}A_j$.  If,
     entrywise at every positive length,
     \[
@@ -1269,7 +1268,7 @@ tensor.  This is the contraction in
         thm:mpdo_first_site_invariant_comm,
         thm:blockwise_opposite_insert_rotated_mpo}
     Let $M$ generate an MPDO whose doubled-index tensor $\widehat M$ generates
-    the same complete MPV family as a BNT canonical form
+    the same positive-length MPV family as a BNT canonical form
     $\bigoplus_{j,q}\mu_{j,q}A_j$, and let $P=P^\dagger$ satisfy $PM=PMP$ on
     the vertically viewed tensor.  Then on every minimal representative
     $A_j$ the insertions of $MP$ and $PMP$ agree; equivalently,
@@ -2448,16 +2447,19 @@ tensor.  This is the contraction in
     \lean{MPOTensor.mpv_diagonalTensor_eq_blocks}
     \leanok
     \uses{lem:mpv_diagonal_tensor, def:horizontal_cf_mpdo}
-    Suppose the doubled-index tensor $\widehat{M}$ shares its matrix product vector
-    family with a block-diagonal assembly $\bigoplus_k \mu_k\, A_k$ of blocks $A_k$ on
+    Suppose the doubled-index tensor $\widehat{M}$ shares its positive-length matrix
+    product vector family with a block-diagonal assembly
+    $\bigoplus_k \mu_k\, A_k$ of blocks $A_k$ on
     the doubled index, as in a horizontal canonical form. Then the diagonal tensor of
-    $M$ generates the same matrix product vector family as the block-diagonal assembly
+    $M$ generates the same positive-length matrix product vector family as the
+    block-diagonal assembly
     $\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}$ on the single-spin index, where
     $A_k^{\mathrm{diag}}(i) = A_k(i,i)$ is the diagonal restriction of each block:
     \[
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
         = V^{(N)}\Bigl(\textstyle\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}\Bigr)(\sigma).
     \]
+    for every $N\geq 1$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:mpv_diagonal_tensor}
@@ -2601,7 +2603,7 @@ tensor.  This is the contraction in
 
 \begin{lemma}[Regrouping a block family by repeated representatives]
     \label{lem:vertical_grouping_equiv}
-    \lean{MPOTensor.sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv}
+    \lean{MPOTensor.sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv}
     \leanok
     \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
     Let $(B_k)_{k\in I}$ be a finite family of blocks with weights $\nu_k$,
@@ -2610,8 +2612,8 @@ tensor.  This is the contraction in
     \[
         e:I\simeq\{(\alpha,j):\alpha\in J, 0\le j<m_\alpha\}
     \]
-    such that, writing $e(k)=(\alpha,j)$, the paired blocks have equal bond
-    dimensions, $\nu_k=\omega_{\alpha j}$, and for every positive length $N$,
+    such that, writing $e(k)=(\alpha,j)$, one has
+    $\nu_k=\omega_{\alpha j}$ and, for every positive length $N$,
     \[
         V^{(N)}(B_k)=V^{(N)}(A_\alpha)
     \]
@@ -2624,7 +2626,7 @@ tensor.  This is the contraction in
           \omega_{\alpha j}A_\alpha
         \Bigr)
     \]
-    for every length $N$, including $N=0$.  This is the finite-sum
+    for every positive length $N$.  This is the finite-sum
     reindexing after the vertical sectors have been grouped in
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 \end{lemma}
@@ -3035,7 +3037,7 @@ tensor.  This is the contraction in
 
 \begin{theorem}[Algebraic BNT from a grouped vertical decomposition]
     \label{thm:mpdo_vertical_grouped_is_bnt}
-    \lean{MPOTensor.IsHorizontalCF.isBNT_verticalTensor_of_grouping}
+    \lean{MPOTensor.isBNT_verticalTensor_of_grouping}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, def:bnt,
         def:bnt_cpsv, def:mpv_phase_class_data}
@@ -3065,15 +3067,7 @@ tensor.  This is the contraction in
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_vertical_tensor_nonzero,
-        thm:cpsv_normal_eventually_injective,
-        thm:mpv_decomposition, lem:mpv_phase_class_nonempty,
-        lem:mpv_zero_length}
-    The reconstruction and
-    Theorem~\ref{thm:mpdo_vertical_tensor_nonzero} imply $r>0$, so the phase
-    partition has a representative $A_{\alpha_0}$ of positive bond dimension
-    $d_{\alpha_0}$.
-
+    \uses{thm:cpsv_normal_eventually_injective, thm:mpv_decomposition}
     Put $C_k^v=\mu_kB_k^v$.  Induction on a word $w$ gives
     \[
         V_k^\dagger T^w=C_k^wV_k^\dagger.
@@ -3088,13 +3082,8 @@ tensor.  This is the contraction in
           =V^{(|w|)}(A_{\mathrm{ret}})_w.
     \end{align*}
     Hence the spectral BNT spanning identity for $A_{\mathrm{ret}}$ gives the
-    algebraic spanning identity for $T$ at every positive length.  At length
-    zero, assign coefficient $d/d_{\alpha_0}$ to $A_{\alpha_0}$ and zero to
-    the other representatives; then
-    \[
-        d=\frac{d}{d_{\alpha_0}}d_{\alpha_0}.
-    \]
-    Spectral normality implies algebraic normality for every representative,
+    algebraic spanning identity for $T$ at every positive length.  Spectral
+    normality implies algebraic normality for every representative,
     and the eventual linear independence assertion is unchanged.  These are
     the three algebraic BNT conditions.
 \end{proof}
