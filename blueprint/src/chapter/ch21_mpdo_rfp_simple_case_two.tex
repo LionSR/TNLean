@@ -105,6 +105,29 @@
     Every term in the copy sum equals $\mu_j^N$, and there are $r_j$ terms.
 \end{proof}
 
+\begin{theorem}[Nonvanishing of the common-weight coefficient]
+    \label{thm:mpdo_common_weight_coefficient_ne_zero}
+    \lean{MPSTensor.SectorDecomposition.commonWeight_ne_zero}
+    \lean{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}
+    \leanok
+    \uses{def:sector_weight_data,
+      thm:mpdo_common_weight_coefficient}
+    The common weight is nonzero, and hence for every chain length $N$,
+    \[
+        q_j=\sum_q\mu_{j,q}^{N}=r_j\mu_j^{N}\ne0.
+    \]
+    This is the coefficient nonvanishing used in the choice
+    $m_j=q_j\widetilde m_j$ in
+    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
+    It does not assert nonvanishing of the independent virtual tail
+    contraction $\widetilde m_j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The distinguished copy weight is nonzero by the sector data.  Since
+    $r_j>0$, both factors in $r_j\mu_j^N$ are nonzero.
+\end{proof}
+
 \begin{theorem}[Canonical form with natural multiplicities]
     \label{thm:mpdo_common_weight_absorbed_mpv}
     \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis}

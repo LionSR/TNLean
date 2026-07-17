@@ -63,6 +63,18 @@ theorem weight_eq_commonWeight (S : SectorDecomposition d)
     S.weight j q = S.commonWeight hWeight j :=
   hWeight j q ⟨0, S.copies_pos j⟩
 
+/-- The common copy weight is nonzero.
+
+This is the coefficient nonvanishing used when the source forms
+\(m_j=q_j\widetilde m_j\) in the proof of the Markov-sector assignment.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1714--1718. -/
+theorem commonWeight_ne_zero (S : SectorDecomposition d)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q') (j : Fin S.basisCount) :
+    S.commonWeight hWeight j ≠ 0 :=
+  S.weight_ne_zero j ⟨0, S.copies_pos j⟩
+
 /-- Once the copy weights over sector $j$ agree, its length-$N$ coefficient is
 the natural copy multiplicity $r_j$ times $\mu_j^N$:
 \[
@@ -79,6 +91,26 @@ theorem coeff_eq_copies_mul_commonWeight_pow (S : SectorDecomposition d)
   simp only [SectorDecomposition.coeff, SectorWeightData.coeff]
   simp_rw [S.weight_eq_commonWeight hWeight j]
   simp
+
+/-- When the copy weights agree, their length-\(N\) sum is nonzero for every
+chain length:
+\[
+  q_j=\sum_q \mu_{j,q}^N=r_j\mu_j^N\ne0.
+\]
+
+This discharges the coefficient part of the choice of \(m_j\) in the source.
+The independent choice of a nonzero virtual tail contraction remains a
+separate step.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1714--1718. -/
+theorem coeff_ne_zero_of_weight_copy_independent (S : SectorDecomposition d)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q') (N : ℕ) (j : Fin S.basisCount) :
+    S.coeff N j ≠ 0 := by
+  rw [S.coeff_eq_copies_mul_commonWeight_pow hWeight N j]
+  apply mul_ne_zero
+  · exact_mod_cast (Nat.ne_of_gt (S.copies_pos j))
+  · exact pow_ne_zero N (S.commonWeight_ne_zero hWeight j)
 
 /-- Absorbing the common weight into each representative leaves precisely its
 natural horizontal copy count as the coefficient of its matrix product
