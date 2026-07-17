@@ -240,7 +240,7 @@ lemma isBNT_of_separated_bnt_data [∀ k, NeZero (dim k)]
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsBNT (toTensorFromBlocks μ A) r dim A where
   normal := fun j => (hInj.block_injective j).isNormal
-  spans_mpv := spans_mpv_toTensorFromBlocks μ A
+  spans_mpv := fun N _ => spans_mpv_toTensorFromBlocks μ A N
   eventually_li :=
     exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
       hOverlap.overlap_tendsto_one
@@ -319,7 +319,7 @@ theorem isBNT_of_separated_normal_bnt_data [∀ k, NeZero (dim k)]
     IsBNT (toTensorFromBlocks μ A) r dim A := by
   obtain ⟨hSpans, hLI⟩ :=
     spans_mpv_and_eventually_li_of_separated_normal_bnt_data μ A hNCF hBlocks
-  exact ⟨hNormal, hSpans, hLI⟩
+  exact ⟨hNormal, fun N _ => hSpans N, hLI⟩
 
 end SeparatedNormalBNT
 

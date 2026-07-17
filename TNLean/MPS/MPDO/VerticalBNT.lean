@@ -362,7 +362,7 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
       (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks)
       (fun j => ⟨dim (classes.repr j), blocks (classes.repr j)⟩) := by
     refine ⟨fun j => hNormal (classes.repr j), ?_, ?_⟩
-    · intro N
+    · intro N _hN
       let phase : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
         fun j q => (classes.enum_phase j q).choose
       refine ⟨fun j => ∑ q : Fin (classes.copies j),

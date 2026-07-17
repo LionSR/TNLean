@@ -422,25 +422,25 @@ theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
   have hBipartition :=
     mutualInformation_bipartition_eq_of_isRFPViaTS_of_right_eq
       M hRFP N₀ a b (N₀ - (a + 1)) (N₀ - (a + 2))
-      hKIn hKOut hIn hOut (hM N₀) htr
+      hKIn hKOut hIn hOut (hM N₀ hNpos) htr
   calc
     mutualInfoChain M N₀ (a + 1)
-        (Nat.le_of_lt (hHalf.trans_le (Nat.div_le_self N₀ 2))) (hM N₀) =
+        (Nat.le_of_lt (hHalf.trans_le (Nat.div_le_self N₀ 2))) (hM N₀ hNpos) =
       Entropy.mutualInformation
         (bipartitionedNormalizedMPO M N₀ (a + 1) (N₀ - (a + 1)) (by omega))
-        ((normalizedMPO_isHermitian M N₀ (hM N₀)).submatrix
+        ((normalizedMPO_isHermitian M N₀ (hM N₀ hNpos)).submatrix
           (chainBipartitionEquiv d N₀ (a + 1) (N₀ - (a + 1)) (by omega)).symm) :=
       mutualInfoChain_eq_mutualInformation M N₀ (a + 1)
-        (Nat.le_of_lt (hHalf.trans_le (Nat.div_le_self N₀ 2))) (hM N₀)
+        (Nat.le_of_lt (hHalf.trans_le (Nat.div_le_self N₀ 2))) (hM N₀ hNpos)
     _ = Entropy.mutualInformation
         (bipartitionedNormalizedMPO M N₀ (a + 2) (N₀ - (a + 2)) (by omega))
-        ((normalizedMPO_isHermitian M N₀ (hM N₀)).submatrix
+        ((normalizedMPO_isHermitian M N₀ (hM N₀ hNpos)).submatrix
           (chainBipartitionEquiv d N₀ (a + 2) (N₀ - (a + 2)) (by omega)).symm) := by
       exact hBipartition
     _ = mutualInfoChain M N₀ (a + 2)
-        (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀) :=
+        (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀ hNpos) :=
       (mutualInfoChain_eq_mutualInformation M N₀ (a + 2)
-        (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀)).symm
+        (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀ hNpos)).symm
 
 /-- A horizontally canonical matrix product density operator satisfying the
 local renormalization fixed-point equations has zero correlation length and

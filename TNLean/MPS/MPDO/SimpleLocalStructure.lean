@@ -437,7 +437,7 @@ cancelling the full-chain entropy \(S_N\).
 Source: arXiv:1606.00608, Appendix C.2, Lemma Lsigma3. -/
 theorem isSSAEquality_tripartite_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
     {N : ℕ} (hN : 4 ≤ N) :
-    let hM : (mpo M N).PosSemidef := (Classical.choose hSAL) N
+    let hM : (mpo M N).PosSemidef := (Classical.choose hSAL) N (by omega)
     let h3 : 1 + 1 + (N - 3) ≤ N := by omega
     let ρ_ABC := (M.reducedBlockState N (1 + 1 + (N - 3)) h3).submatrix
       (tripartiteSplitEquiv d 1 1 (N - 3)).symm
@@ -448,22 +448,23 @@ theorem isSSAEquality_tripartite_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
   dsimp only
   rw [IsSSAEquality]
   let hMpdo : IsMPDO M := Classical.choose hSAL
+  have hNpos : 0 < N := by omega
   rcases Classical.choose_spec hSAL with ⟨_, hstep⟩
   have hEq := hstep N 1 (by omega) (by omega)
   simp only [mutualInfoChain] at hEq
   have hEABC := vonNeumannEntropy_tripartiteSplit_eq_blockEntropy M
-    (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N)
+    (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N hNpos)
   have hEC := vonNeumannEntropy_traceC_eq_blockEntropy M
-    (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N)
+    (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N hNpos)
   have hEAC := vonNeumannEntropy_traceAC_eq_blockEntropy M
-    (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N)
+    (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N hNpos)
   have hEA := vonNeumannEntropy_traceA_eq_blockEntropy M
-    (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N)
+    (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N hNpos)
   rw [hEABC, hEAC, hEC, hEA]
   rw [blockEntropy_congr M N (show 1 + 1 + (N - 3) = N - 1 by omega)
-      (by omega) (Nat.sub_le N 1) (hMpdo N),
+      (by omega) (Nat.sub_le N 1) (hMpdo N hNpos),
     blockEntropy_congr M N (show 1 + (N - 3) = N - (1 + 1) by omega)
-      (by omega) (Nat.sub_le N (1 + 1)) (hMpdo N)]
+      (by omega) (Nat.sub_le N (1 + 1)) (hMpdo N hNpos)]
   linarith [hEq]
 
 /-- Saturation of the area law gives equality in strong subadditivity for the
@@ -471,7 +472,7 @@ three-site reduced state of the four-site periodic chain.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma Lsigma3. -/
 theorem isSSAEquality_threeSite_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M) :
-    let hM : (mpo M 4).PosSemidef := (Classical.choose hSAL) 4
+    let hM : (mpo M 4).PosSemidef := (Classical.choose hSAL) 4 (by omega)
     let h3 : 1 + 1 + (4 - 3) ≤ 4 := by omega
     let ρ_ABC := (M.reducedBlockState 4 (1 + 1 + (4 - 3)) h3).submatrix
       (tripartiteSplitEquiv d 1 1 (4 - 3)).symm
@@ -527,7 +528,7 @@ theorem exists_etaStructure_reducedBlockState_of_isSAL
         ((K.reducedBlockState 4 3 (by omega)).submatrix
           (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2])
           (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2]))) := by
-  let hM : (mpo K 4).PosSemidef := (Classical.choose hSAL) 4
+  let hM : (mpo K 4).PosSemidef := (Classical.choose hSAL) 4 (by omega)
   let ρflat :=
     (K.reducedBlockState 4 3 (by omega)).submatrix
       (tripartiteSplitEquiv d 1 1 1).symm
