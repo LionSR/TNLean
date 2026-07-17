@@ -35,32 +35,6 @@ jobs:
           ./scripts/fetch-latest-artifact.sh site-docs components/site-docs
           ./scripts/fetch-latest-artifact.sh site-badges components/site-badges
 
-      # Transitional: until the first docgen run has uploaded a site-docs
-      # artifact, reuse the API docs last published on the legacy gh-pages
-      # branch. This step becomes a no-op (and can be removed) once the
-      # gh-pages branch is deleted.
-      - name: Seed API docs from legacy gh-pages branch
-        run: |
-          if [ -d components/site-docs ]; then
-            exit 0
-          fi
-          if ! git ls-remote --exit-code --heads \
-              "https://github.com/${GITHUB_REPOSITORY}.git" gh-pages >/dev/null; then
-            echo "No gh-pages branch and no site-docs artifact; deploying without API docs"
-            exit 0
-          fi
-          echo "==> Seeding API docs from legacy gh-pages branch..."
-          git clone --branch gh-pages --single-branch --depth 1 \
-            "https://github.com/${GITHUB_REPOSITORY}.git" legacy-site
-          mkdir -p components/site-docs
-          if [ -d legacy-site/docs ]; then
-            mv legacy-site/docs components/site-docs/docs
-          fi
-          if [ -d legacy-site/paper-gaps ]; then
-            mv legacy-site/paper-gaps components/site-docs/paper-gaps
-          fi
-          rm -rf legacy-site
-
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
