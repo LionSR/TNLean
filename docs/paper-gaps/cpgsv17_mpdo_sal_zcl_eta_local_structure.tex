@@ -268,7 +268,7 @@ Markov sector then has a unique BNT label, and the resulting BNT-labelled sums
 of Hayashi projections are orthogonal, mutually disjoint, and resolve the
 active Markov support.
 \footnote{The relevant declaration is
-\path{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂_isSAL}.}
+\path{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}.}
 No further closing-matrix assumption is needed for this specialization.
 
 The remaining projector passage is now formalized as well.  For every physical
@@ -291,12 +291,24 @@ with the common copy weight absorbed into $\mathcal K_s$.
 \path{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero},
 \path{MPOTensor.changePhysicalBasis_bntSectorProjection_basis},
 \path{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}, and
-\path{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂_isSAL}.}
+\path{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}.}
 The empty-word value $N=0$ is excluded because its closed virtual trace records
-the bond dimension and is not a physical chain.  The next source step is to
-deduce positivity, SAL, and ZCL for each selected absorbed BNT representative,
-as required in the proof of Proposition~\texttt{prop2to3} after equation
-\texttt{sigmaNKj}.
+the bond dimension and is not a physical chain.  Positivity and ZCL of every
+selected absorbed BNT representative are now formalized.  Positivity follows
+by compressing the positive full-chain operator and dividing by the positive
+integer $n_s$.  ZCL follows by restricting the full transfer equation to the
+$s$-th canonical block and using nonnilpotence to exclude the zero transfer.
+\footnote{The relevant declarations are
+\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection},
+\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
+and
+\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
+The remaining source step after the sector-compression identity is SAL for
+each sector.  It must follow from the direct-sum entropy identity and strong
+subadditivity, including a proof that every sector normalization used there is
+nonzero; this normalization may not be silently inferred from the weaker
+displayed inequality $p_j\geq0$ in
+\cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
 
 The neighboring operators are now assembled from these sector tensors.  The
 operator

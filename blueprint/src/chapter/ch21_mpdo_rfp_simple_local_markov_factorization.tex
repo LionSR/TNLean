@@ -526,6 +526,65 @@ strong subadditivity for a normalized three-site reduced state.
     with $\mu_s$ absorbed locally.
 \end{proof}
 
+\begin{corollary}[Each absorbed BNT element generates MPDOs]
+    \label{cor:mpdo_absorbed_bnt_sector_is_mpdo}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL}
+    \leanok
+    \uses{thm:mpdo_bnt_projector_positive_length_compression}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_bnt_projector_positive_length_compression}, every
+    absorbed BNT element $\mathcal K_s$ generates positive semidefinite
+    operators on all nonempty periodic chains.  Indeed,
+    $P_s^{\otimes N}\sigma^{(N)}(K)P_s^{\otimes N}\geq0$ and $n_s>0$, so
+    \[
+      P_s^{\otimes N}\sigma^{(N)}(K)P_s^{\otimes N}
+        =n_s\sigma^{(N)}(\mathcal K_s)
+    \]
+    gives $\sigma^{(N)}(\mathcal K_s)\geq0$.  This is the first positivity
+    conclusion in
+    \cite[Appendix~C.2, lines~1753--1759]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}\leanok
+    Congruence by the Hermitian projection $P_s^{\otimes N}$ preserves
+    positive semidefiniteness.  Multiplication by the inverse of the positive
+    integer $n_s$ then gives positivity of the sector operator.
+\end{proof}
+
+\begin{theorem}[Zero correlation length of the absorbed BNT elements]
+    \label{thm:mpdo_absorbed_bnt_sector_zcl}
+    \lean{MPOTensor.%
+      physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
+    \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
+    \leanok
+    \uses{lem:mpdo_simple_blockwise_zcl_equation,
+      def:mpdo_common_sector_weight_absorption}
+    Let $K$ have zero correlation length and let
+    $\mathcal K_s=\mu_sA_s$ be an absorbed BNT element of its horizontal
+    canonical form.  If the physical-trace transfer $\mathcal B_s$ is not
+    nilpotent, then $\mathcal K_s$ has zero correlation length.  More
+    precisely,
+    \[
+      \mathcal T_{\mathcal K_s}=\mu_s\mathcal B_s\ne0,
+      \qquad
+      \mathcal T_{\mathcal K_s}^{2}
+        =\lambda\mathcal T_{\mathcal K_s},
+      \qquad \lambda>0.
+    \]
+    This is the final zero-correlation-length conclusion in
+    \cite[Appendix~C.2, line~1781]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation} gives the displayed
+    quadratic identity.  The common weight is nonzero, and nonnilpotence of
+    $\mathcal B_s$ implies $\mathcal B_s\ne0$, so the absorbed transfer is
+    nonzero.
+\end{proof}
+
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.IsInjective}
