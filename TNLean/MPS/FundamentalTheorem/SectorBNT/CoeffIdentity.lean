@@ -96,7 +96,7 @@ specific phases `ζ k` satisfying
 
 `mpv (Q.basis k) σ = (ζ k)^N * mpv (P.basis (β k)) σ`,
 
-then `SameMPV₂ P.toTensor Q.toTensor` and the BNT linear independence of the
+then positive-length equality of the two total MPV families and BNT linear independence of the
 `P`-basis force the eventual exact coefficient identities
 
 `P.coeff N (β k) = (ζ k)^N * Q.coeff N k`.
@@ -106,7 +106,7 @@ function explicit.  The coefficient/weight comparison is the CPSV16 Appendix
 MPV proof, lines 1187--1188, part of the equal-MPV corollary; the per-block
 gauge matrices are combined afterwards into `X = ⊕_k (𝟙_{r_k} ⊗ X_k)` in
 lines 1189--1192. -/
-theorem coeff_identity_via_matched_mpv_phasePos
+theorem coeff_identity_via_matched_mpv_phase
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor)
@@ -217,24 +217,9 @@ theorem coeff_identity_via_matched_mpv_phasePos
   have h := hN₀ N (le_of_lt hN) (β k)
   simpa [a, b] using h
 
-/-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem coeff_identity_via_matched_mpv_phase
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor)
-    (β : Fin Q.basisCount ≃ Fin P.basisCount)
-    (ζ : Fin Q.basisCount → ℂ)
-    (hζ_mpv : ∀ (k : Fin Q.basisCount) (N : ℕ) (σ : Fin N → Fin d),
-      mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ) :
-    ∀ k : Fin Q.basisCount, ∃ N₀, ∀ N > N₀,
-      P.coeff N (β k) = (ζ k) ^ N * Q.coeff N k :=
-  coeff_identity_via_matched_mpv_phasePos
-    (P := P) (Q := Q) hP hEqual.toSameMPV₂Pos β ζ
-      (fun k N _hN σ => hζ_mpv k N σ)
-
 /-- **Proportional matched-phase coefficient identity (scalar-threaded).**
 
-This is the proportional analogue of `coeff_identity_via_matched_mpv_phasePos`.
+This is the proportional analogue of `coeff_identity_via_matched_mpv_phase`.
 Assume a full matched-basis bijection `β` equipped with phases `ζ k` satisfying
 
 `mpv (Q.basis k) σ = (ζ k)^N * mpv (P.basis (β k)) σ`,
@@ -402,7 +387,7 @@ This is the formal counterpart of CPSV16 Appendix MPV proof, line 1188's exact
 power-sum comparison.  The finite power-sum recovery of copy weights is a
 separate algebraic step, applied after these eventual coefficient identities
 have been obtained. -/
-theorem coeff_identity_via_global_gaugePos
+theorem coeff_identity_via_global_gauge
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor)
@@ -433,24 +418,10 @@ theorem coeff_identity_via_global_gaugePos
       mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ := fun k =>
     (phaseData k).property.2
   -- Feed the matched MPV phases into the fixed-phase identity.
-  have hCoeff := coeff_identity_via_matched_mpv_phasePos
+  have hCoeff := coeff_identity_via_matched_mpv_phase
     (P := P) (Q := Q) hP hEqual β ζ hζ_mpv
   intro k
   obtain ⟨N₀, hN₀⟩ := hCoeff k
   exact ⟨ζ k, hζ_norm k, N₀, hN₀⟩
-
-/-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem coeff_identity_via_global_gauge
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor)
-    (β : Fin Q.basisCount ≃ Fin P.basisCount)
-    (hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
-      GaugePhaseEquiv
-        (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k)) :
-    ∀ k : Fin Q.basisCount, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∃ N₀, ∀ N > N₀,
-      P.coeff N (β k) = ζ ^ N * Q.coeff N k :=
-  coeff_identity_via_global_gaugePos
-    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos β hMatch
 
 end MPSTensor

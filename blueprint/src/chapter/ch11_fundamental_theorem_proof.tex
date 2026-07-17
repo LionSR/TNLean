@@ -44,8 +44,8 @@ step uses a per-sector unit-modulus hypothesis.
     \lean{MPSTensor.IsBNTCanonicalForm.norm_phase_of_matched_mpv}
     \leanok
     \uses{def:sector_bnt_cf}
-    Let $P$ and $Q$ be BNT canonical forms. If, for every length $N$ and word
-    $\sigma$, a sector $P_j$ and a sector $Q_k$ have MPV families related by
+    Let $P$ and $Q$ be BNT canonical forms. If, for every positive length $N$
+    and word $\sigma$, a sector $P_j$ and a sector $Q_k$ have MPV families related by
     \begin{equation}\label{eq:ft_matched_mpv_phase_norm}
         V^{(N)}(Q_k)_\sigma=\zeta^N V^{(N)}(P_j)_\sigma
     \end{equation}
@@ -54,7 +54,8 @@ step uses a per-sector unit-modulus hypothesis.
 
 \begin{proof}\leanok
     The BNT normalization gives self-overlap limits of modulus $1$ for both
-    sectors. The MPV identity~(\ref{eq:ft_matched_mpv_phase_norm}) gives, for every $N$,
+    sectors. The MPV identity~(\ref{eq:ft_matched_mpv_phase_norm}) gives, for
+    every positive $N$,
     \[
         O_{Q_kQ_k}(N)=|\zeta|^{2N}\,O_{P_jP_j}(N).
     \]
@@ -79,7 +80,7 @@ step uses a per-sector unit-modulus hypothesis.
     \begin{equation}\label{eq:ft_gauge_relation}
         Q_k^i=\zeta_k X_k P_{\beta(k)}^i X_k^{-1}
     \end{equation}
-    Equivalently, for every length $N$ and word $\sigma$,
+    Equivalently, for every positive length $N$ and word $\sigma$,
     \[
         V^{(N)}(Q_k)_\sigma
         =
@@ -662,7 +663,7 @@ In the equal-MPV case all ingredients are unconditional.
 
 \begin{lemma}[Unitary gauge in matched sector coordinates]
     \label{lem:sector_bnt_equal_unitary_matched_gauge}
-    \lean{MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnessesPos}
+    \lean{MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnesses}
     \leanok
     \uses{thm:sector_bnt_equal_global_gauge,
         lem:left_canonical_irreducible_same_phase_unitary_gauge,
@@ -706,7 +707,7 @@ In the equal-MPV case all ingredients are unconditional.
 
 \begin{corollary}[Canonical Form II unitary refinement in the equal case]%
     \label{cor:sector_bnt_equal_unitary_global_gauge}
-    \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm_unitaryPos}
+    \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary}
     \leanok
     \uses{lem:sector_bnt_equal_unitary_matched_gauge}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate the
