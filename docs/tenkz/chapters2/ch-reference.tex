@@ -337,16 +337,27 @@ window under both policies; \S\ref{ch:house} states which school a
 document should pick, and why.
 
 % =====================================================================
-\subsection{Trees and arrows: \tnenv{tenkzcd}}
+\subsection{Maps, trees, and arrows: \tnenv{tenkzcd}}
 
 \thumbtag{\tnenv{tenkzcd}}%
 \cmdsig{\textbackslash begin\{tenkzcd\}[\meta{keys}]\ \meta{slots}\
 \textbackslash end\{tenkzcd\}}
 
+The environment has three mathematical readings.  With \tnkey{maps},
+its cells are objects and its edges are maps.  Composition runs from
+left to right, so a map joins $(r,c)$ only to $(r,c+1)$ and needs no
+arrowhead.  This is not a tensor-network contraction: the cells denote
+spaces or other mathematical objects, the joining line denotes a
+morphism, and no tensor index is contracted.  Every edge carries either
+\tnkey{role=} or \tnkey{species=}; that line style states its type, while
+the argument of \tncmd{tnarrow} states only the map's name.  A family
+is written as explicit rows, one member per row, with no selected
+examples standing for the rest.
+
 With \tnkey{polygon=}$n$ the \texttt{\&}-separated slots sit on an
 $n$-gon, first slot at the top, and \tncmd{tnarrow} joins them by
 slot number; each slot holds a fusion tree, a \tncmd{tnpic}, or plain
-mathematics.  Without \tnkey{polygon=} the body is a
+mathematics.  Without \tnkey{maps} or \tnkey{polygon=}, the body is a
 commutative-diagram matrix in rows and columns, with the standard
 arrow syntax of such matrices.
 
@@ -355,6 +366,8 @@ arrow syntax of such matrices.
 \noindent\begin{tabularx}{\linewidth}{@{}p{29mm}p{23mm}p{11mm}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \keyhead
+\texttt{maps} & --- & --- &
+  typed-map rows on the fixed left-to-right composition axis \\
 \texttt{polygon=} & \meta{n} & --- &
   slots on an $n$-gon; unset = matrix mode \\
 \texttt{radius=} & \meta{length} & \texttt{30mm} &
@@ -364,6 +377,21 @@ arrow syntax of such matrices.
 \bottomrule
 \end{tabularx}\par}
 \medskip
+
+\thumbtag{\tnkey{maps}}%
+\cmdsig{\textbackslash tnarrow[\\
+\quad from=\{(r,c)\}, to=\{(r,c+1)\},\\
+\quad \meta{line type}]\{\meta{map}\}}
+
+\noindent The line type is either \tnkey{role=} or \tnkey{species=}.
+The semantic roles are \tnval{operator}, \tnval{marked}, \tnval{extra},
+and \tnval{passive}; a species is a name declared by \tncmd{tnset}.
+Exactly one of these keys supplies the edge type.  The line is headless
+because its position on the composition axis already fixes the direction.
+The starred form puts the map's name below the line; it does not reverse the
+map.  The whole environment is a mathematical atom, so the same spelling
+belongs directly in running mathematics or in a displayed equation.  No
+floating or numbered figure is part of the grammar.
 
 \thumbtag{\tncmd{tntree}}%
 \cmdsig{\textbackslash tntree\{\meta{bracketed word}\}\\

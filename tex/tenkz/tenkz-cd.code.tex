@@ -30,6 +30,12 @@
 % rooted, not as one more leaf.
 \def\tenkz@r@treestep{0.55}
 \def\tenkz@r@treeleg{0.35}
+% Typed-map rows are mathematical objects joined by named maps.  One
+% third-pitch column air keeps adjacent object names distinct without
+% turning a short composition into a display-width commutative diagram;
+% half a pitch separates family members as small multiples.
+\def\tenkz@r@mapgap{0.34}
+\def\tenkz@r@maprowsep{0.50}
 
 % ---------- state ----------
 \seq_new:N \l__tenkzcd_items_seq     % parenthesization word, one item each
@@ -62,19 +68,39 @@
 \fp_new:N  \l__tenkzcd_angle_fp
 \seq_new:N \l__tenkzcd_cells_seq
 \seq_new:N \g__tenkzcd_arrows_seq    % {from}{to}{side keys}{label}
+\seq_new:N \g__tenkzcd_maps_seq      % {from}{to}{side}{fused}{role}{species}{label}
 \bool_new:N \g__tenkzcd_inpoly_bool  % a polygon body is being typeset
+\bool_new:N \g__tenkzcd_inmaps_bool  % a typed-map matrix is being typeset
 \tl_new:N  \l__tenkzcd_afrom_tl
 \tl_new:N  \l__tenkzcd_ato_tl
+\tl_new:N  \l__tenkzcd_arole_tl
+\tl_new:N  \l__tenkzcd_aspecies_tl
 \tl_new:N  \l__tenkzcd_body_tl
+\tl_new:N  \l__tenkzcd_mapstyle_tl
+\bool_new:N \l__tenkzcd_afused_bool
+\bool_new:N \l__tenkzcd_maps_bool
+\bool_new:N \l__tenkzcd_mapvalid_bool
+\bool_new:N \l__tenkzcd_mapmatrixvalid_bool
+\seq_new:N \l__tenkzcd_maprows_seq
+\seq_new:N \l__tenkzcd_mapcells_seq
+\int_new:N \l__tenkzcd_maprows_int
+\int_new:N \l__tenkzcd_mapcols_int
+\int_new:N \l__tenkzcd_fromrow_int
+\int_new:N \l__tenkzcd_fromcol_int
+\int_new:N \l__tenkzcd_torow_int
+\int_new:N \l__tenkzcd_tocol_int
+\seq_new:N \l__tenkzcd_addr_seq
 
 % ---------- keys ----------
 \pgfkeys{
   /tenkz/cd/.is~family,
   /tenkz/cd/polygon/.code={\int_set:Nn \l__tenkzcd_ngon_int {#1}},
+  /tenkz/cd/maps/.code={\bool_set_true:N \l__tenkzcd_maps_bool},
   /tenkz/cd/radius/.store~in=\l__tenkzcd_radius_tl,
   /tenkz/cd/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
   /tenkz/cd/compact/.code={\pgfkeys{/tenkz/compact}},
   /tenkz/cd/inline/.code={\pgfkeys{/tenkz/inline}},
+  /tenkz/cd/species/.code={\pgfqkeys{/tenkz}{species={#1}}},
   % the shared forward-to-core plumbing: the glyph policy reads the same
   % in every family, so \tnpic cells inside a cd picture obey it
   /tenkz/cd/tensor~style/.code={\pgfqkeys{/tenkz}{tensor~style=#1}},
@@ -92,6 +118,16 @@
   /tenkz/arrow/.is~family,
   /tenkz/arrow/from/.store~in=\l__tenkzcd_afrom_tl,
   /tenkz/arrow/to/.store~in=\l__tenkzcd_ato_tl,
+  /tenkz/arrow/fused/.code={\bool_set_true:N \l__tenkzcd_afused_bool},
+  /tenkz/arrow/role/.is~choice,
+  /tenkz/arrow/role/operator/.code={\tl_set:Nn \l__tenkzcd_arole_tl {operator}},
+  /tenkz/arrow/role/marked/.code={\tl_set:Nn \l__tenkzcd_arole_tl {marked}},
+  /tenkz/arrow/role/extra/.code={\tl_set:Nn \l__tenkzcd_arole_tl {extra}},
+  /tenkz/arrow/role/passive/.code={\tl_set:Nn \l__tenkzcd_arole_tl {passive}},
+  /tenkz/arrow/species/.code={
+    \tenkz_species_check:n {#1}
+    \tl_set:Nn \l__tenkzcd_aspecies_tl {#1}
+  },
 }
 
 % ---------- the fusion tree ----------
@@ -326,25 +362,66 @@
 \NewDocumentCommand \tnarrow { s O{} m }
   {
     \unskip
-    % polygon-body syntax only: in grid mode the natural mixed-dialect
-    % mistake (tikz-cd's \arrow vs polygon's \tnarrow) used to record an
-    % arrow nothing ever drained -- a silent no-op -- and in running
-    % prose there are no vertices at all.  Both now stop here.
+    % One addressed edge command serves the two declarative cd modes.
+    % Polygon mode draws annotation arrows.  Maps mode admits only the
+    % fixed left-to-right composition edge and draws it as a headless
+    % typed wire.  Raw grid mode keeps tikz-cd's own arrow grammar.
     \bool_if:NTF \g__tenkzcd_inpoly_bool
       {
         \group_begin:
         \tl_clear:N \l__tenkzcd_afrom_tl
         \tl_clear:N \l__tenkzcd_ato_tl
+        \tl_clear:N \l__tenkzcd_arole_tl
+        \tl_clear:N \l__tenkzcd_aspecies_tl
+        \bool_set_false:N \l__tenkzcd_afused_bool
+        \bool_set_true:N \l__tenkzcd_mapvalid_bool
         \tl_if_empty:nF {#2} { \pgfqkeys{/tenkz/arrow}{#2} }
-        \seq_gput_right:Ne \g__tenkzcd_arrows_seq
-          { { \tl_use:N \l__tenkzcd_afrom_tl }{ \tl_use:N \l__tenkzcd_ato_tl }
-            { auto \IfBooleanT {#1} { , swap } }{ \exp_not:n {#3} } }
+        \bool_lazy_or:nnT
+          { ! \tl_if_blank_p:V \l__tenkzcd_arole_tl }
+          {
+            \bool_lazy_or_p:nn
+              { ! \tl_if_blank_p:V \l__tenkzcd_aspecies_tl }
+              { \bool_if_p:N \l__tenkzcd_afused_bool }
+          }
+          {
+            \PackageError{tenkz}{Typed-line~keys~are~not~polygon~arrow~keys}
+              {Use~role,~species,~and~fused~only~in~tenkzcd[maps].}
+            \bool_set_false:N \l__tenkzcd_mapvalid_bool
+          }
+        \bool_if:NT \l__tenkzcd_mapvalid_bool
+          {
+            \seq_gput_right:Ne \g__tenkzcd_arrows_seq
+              { { \tl_use:N \l__tenkzcd_afrom_tl }{ \tl_use:N \l__tenkzcd_ato_tl }
+                { auto \IfBooleanT {#1} { , swap } }{ \exp_not:n {#3} } }
+          }
         \group_end:
       }
       {
-        \PackageError{tenkz}{\string\tnarrow\space outside~a~polygon~
-          body:~it~draws~between~polygon~vertices.~Grid~mode~takes~
-          tikz-cd's~\string\arrow;~prose~has~no~vertices}{}
+        \bool_if:NTF \g__tenkzcd_inmaps_bool
+          {
+            \group_begin:
+            \tl_clear:N \l__tenkzcd_afrom_tl
+            \tl_clear:N \l__tenkzcd_ato_tl
+            \tl_clear:N \l__tenkzcd_arole_tl
+            \tl_clear:N \l__tenkzcd_aspecies_tl
+            \bool_set_false:N \l__tenkzcd_afused_bool
+            \tl_if_empty:nF {#2} { \pgfqkeys{/tenkz/arrow}{#2} }
+            \seq_gput_right:Ne \g__tenkzcd_maps_seq
+              { { \tl_use:N \l__tenkzcd_afrom_tl }
+                { \tl_use:N \l__tenkzcd_ato_tl }
+                { auto \IfBooleanT {#1} { , swap } }
+                { \bool_if:NTF \l__tenkzcd_afused_bool {1}{0} }
+                { \tl_use:N \l__tenkzcd_arole_tl }
+                { \tl_use:N \l__tenkzcd_aspecies_tl }
+                { \exp_not:n {#3} } }
+            \group_end:
+          }
+          {
+            \PackageError{tenkz}{\string\tnarrow\space outside~a~
+              polygon~or~maps~body}{Polygon~mode~addresses~vertices;~
+              maps~mode~addresses~adjacent~matrix~cells;~raw~grid~mode~
+              takes~tikz-cd's~\string\arrow.}
+          }
       }
     \ignorespaces
   }
@@ -384,6 +461,186 @@
       }
   }
 
+% ---------- typed-map rows ----------
+% The matrix supplies object placement.  \tnarrow records maps while the
+% cells are typeset; the deferred pass then joins adjacent objects with
+% the existing wire styles, never an arrow tip.  Requiring (r,c)->(r,c+1)
+% makes composition left-to-right by grammar, not by a decorative head.
+
+\cs_new_protected:Npn \tenkz_cd_map_address:nnNN #1#2#3#4
+  {
+    \tl_set:Ne \l_tmpa_tl { \tl_to_str:n {#2} }
+    \tl_remove_all:Nn \l_tmpa_tl { ~ }
+    \regex_extract_once:nVNTF
+      { \A \( ([0-9]+) , ([0-9]+) \) \Z }
+      \l_tmpa_tl \l__tenkzcd_addr_seq
+      {
+        \int_set:Nn #3 { \seq_item:Nn \l__tenkzcd_addr_seq {2} }
+        \int_set:Nn #4 { \seq_item:Nn \l__tenkzcd_addr_seq {3} }
+      }
+      {
+        \PackageError{tenkz}{Typed-map~#1~address~'#2'~is~not~(row,col)}
+          {Use~from={(1,1)}~and~to={(1,2)}.}
+        \bool_set_false:N \l__tenkzcd_mapvalid_bool
+        \int_zero:N #3
+        \int_zero:N #4
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_cd_map_style:nnnN #1#2#3#4
+  {
+    \str_if_eq:nnTF {#1} {1}
+      { \tl_set:Nn #4 {fused~bond} }
+      { \tl_set:Nn #4 {bond} }
+    \tl_if_blank:nTF {#2}
+      {
+        \tl_if_blank:nF {#3}
+          { \tl_put_right:Nn #4 {, species~#3~bond} }
+      }
+      { \tl_put_right:Nn #4 {, #2~bond} }
+  }
+
+\cs_new_protected:Npn \tenkz_cd_map_path:nnn #1#2#3
+  {
+    \draw[#1]
+      (tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+        \int_use:N\l__tenkzcd_fromcol_int.base~east) --
+      node[tn~label, fill=tenkzPaper, #2]
+        {$\tenkz@labelsize #3$}
+      (tenkzmap-\int_use:N\l__tenkzcd_torow_int-
+        \int_use:N\l__tenkzcd_tocol_int.base~west);
+  }
+
+\cs_new_protected:Npn \tenkz_cd_draw_map:nnnnnnn #1#2#3#4#5#6#7
+  {
+    \bool_set_true:N \l__tenkzcd_mapvalid_bool
+    \tenkz_cd_map_address:nnNN {from}{#1}
+      \l__tenkzcd_fromrow_int \l__tenkzcd_fromcol_int
+    \tenkz_cd_map_address:nnNN {to}{#2}
+      \l__tenkzcd_torow_int \l__tenkzcd_tocol_int
+    \bool_if:NT \l__tenkzcd_mapvalid_bool
+      {
+        \bool_lazy_or:nnT
+          { \int_compare_p:nNn {\l__tenkzcd_fromrow_int} < {1} }
+          { \int_compare_p:nNn {\l__tenkzcd_fromrow_int} > {\l__tenkzcd_maprows_int} }
+          { \PackageError{tenkz}{Typed-map~from=#1~is~outside~the~matrix}{}
+            \bool_set_false:N \l__tenkzcd_mapvalid_bool }
+        \bool_lazy_or:nnT
+          { \int_compare_p:nNn {\l__tenkzcd_torow_int} < {1} }
+          { \int_compare_p:nNn {\l__tenkzcd_torow_int} > {\l__tenkzcd_maprows_int} }
+          { \PackageError{tenkz}{Typed-map~to=#2~is~outside~the~matrix}{}
+            \bool_set_false:N \l__tenkzcd_mapvalid_bool }
+        \bool_lazy_or:nnT
+          { \int_compare_p:nNn {\l__tenkzcd_fromcol_int} < {1} }
+          { \int_compare_p:nNn {\l__tenkzcd_fromcol_int} > {\l__tenkzcd_mapcols_int} }
+          { \PackageError{tenkz}{Typed-map~from=#1~is~outside~the~matrix}{}
+            \bool_set_false:N \l__tenkzcd_mapvalid_bool }
+        \bool_lazy_or:nnT
+          { \int_compare_p:nNn {\l__tenkzcd_tocol_int} < {1} }
+          { \int_compare_p:nNn {\l__tenkzcd_tocol_int} > {\l__tenkzcd_mapcols_int} }
+          { \PackageError{tenkz}{Typed-map~to=#2~is~outside~the~matrix}{}
+            \bool_set_false:N \l__tenkzcd_mapvalid_bool }
+      }
+    \bool_if:NT \l__tenkzcd_mapvalid_bool
+      {
+        \bool_lazy_or:nnT
+          { ! \int_compare_p:nNn {\l__tenkzcd_fromrow_int} = {\l__tenkzcd_torow_int} }
+          { ! \int_compare_p:nNn {\l__tenkzcd_tocol_int} =
+              {\l__tenkzcd_fromcol_int + 1} }
+          {
+            \PackageError{tenkz}{Typed-map~#1~to~#2~does~not~follow~the~
+              composition~axis}{A~map~must~run~from~(r,c)~to~(r,c+1).~
+              Use~another~row~for~another~map.}
+            \bool_set_false:N \l__tenkzcd_mapvalid_bool
+          }
+        \bool_lazy_and:nnT
+          { \tl_if_blank_p:n {#5} }
+          { \tl_if_blank_p:n {#6} }
+          {
+            \PackageError{tenkz}{Typed-map~#1~to~#2~has~no~line~type}
+              {Give~the~map~a~role=...~or~a~declared~species=....}
+            \bool_set_false:N \l__tenkzcd_mapvalid_bool
+          }
+        \bool_lazy_and:nnT
+          { ! \tl_if_blank_p:n {#5} }
+          { ! \tl_if_blank_p:n {#6} }
+          {
+            \PackageError{tenkz}{Typed-map~#1~to~#2~has~two~line~types}
+              {Choose~exactly~one~of~role=...~and~species=....}
+            \bool_set_false:N \l__tenkzcd_mapvalid_bool
+          }
+      }
+    \bool_if:NT \l__tenkzcd_mapvalid_bool
+      {
+        \tenkz_cd_map_style:nnnN {#4}{#5}{#6} \l__tenkzcd_mapstyle_tl
+        \exp_args:NV \tenkz_cd_map_path:nnn
+          \l__tenkzcd_mapstyle_tl {#3}{#7}
+        \tenkz@event{cdmap|picture=\the\tenkz@pictureid|
+          from=\int_use:N\l__tenkzcd_fromrow_int-
+               \int_use:N\l__tenkzcd_fromcol_int|
+          to=\int_use:N\l__tenkzcd_torow_int-
+             \int_use:N\l__tenkzcd_tocol_int|
+          fused=#4|
+          role=\tl_if_blank:nTF {#5}{none}{#5}|
+          species=\tl_if_blank:nTF {#6}{none}{#6}}
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_cd_measure_map:n #1
+  {
+    \bool_set_true:N \l__tenkzcd_mapmatrixvalid_bool
+    \seq_set_split:Nnn \l__tenkzcd_maprows_seq { \\ } {#1}
+    \seq_get_right:NNT \l__tenkzcd_maprows_seq \l_tmpa_tl
+      { \tl_if_blank:VT \l_tmpa_tl
+          { \seq_pop_right:NN \l__tenkzcd_maprows_seq \l_tmpa_tl } }
+    \int_set:Nn \l__tenkzcd_maprows_int
+      { \seq_count:N \l__tenkzcd_maprows_seq }
+    \int_zero:N \l__tenkzcd_mapcols_int
+    \seq_map_indexed_inline:Nn \l__tenkzcd_maprows_seq
+      {
+        \seq_set_split:Nnn \l__tenkzcd_mapcells_seq { & } {##2}
+        \seq_map_indexed_inline:Nn \l__tenkzcd_mapcells_seq
+          { \tenkz@event{cdobject|picture=\the\tenkz@pictureid|
+              cell=##1-####1} }
+        \int_compare:nNnTF {##1} = {1}
+          { \int_set:Nn \l__tenkzcd_mapcols_int
+              { \seq_count:N \l__tenkzcd_mapcells_seq } }
+          {
+            \int_compare:nNnF { \seq_count:N \l__tenkzcd_mapcells_seq }
+              = { \l__tenkzcd_mapcols_int }
+              {
+                \PackageError{tenkz}{Typed-map~rows~have~unequal~object~
+                  counts}{Every~small~multiple~uses~the~same~object~columns.}
+                \bool_set_false:N \l__tenkzcd_mapmatrixvalid_bool
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_cd_maps:nn #1#2
+  {
+    \tenkz_cd_measure_map:n {#2}
+    \seq_gclear:N \g__tenkzcd_maps_seq
+    \bool_if:NT \l__tenkzcd_mapmatrixvalid_bool
+      {
+        \tl_set:Nn \l__tenkzcd_body_tl {#2}
+        \tl_replace_all:Nnn \l__tenkzcd_body_tl { & } { \pgfmatrixnextcell }
+        \tl_put_right:Nn \l__tenkzcd_body_tl { \\ }
+        \bool_gset_true:N \g__tenkzcd_inmaps_bool
+        \begin{tikzpicture}[tenkz~every~picture, tenkz~cd~baseline]
+          \matrix (tenkzmap)
+            [matrix~of~math~nodes,
+             column~sep=\tenkz@dim{\tenkz@r@mapgap},
+             row~sep=\tenkz@dim{\tenkz@r@maprowsep},
+             nodes={inner~sep=1pt}, #1]
+            { \tl_use:N \l__tenkzcd_body_tl };
+          \seq_map_inline:Nn \g__tenkzcd_maps_seq
+            { \tenkz_cd_draw_map:nnnnnnn ##1 }
+        \end{tikzpicture}
+        \bool_gset_false:N \g__tenkzcd_inmaps_bool
+      }
+  }
+
 % ---------- the environment ----------
 \NewDocumentEnvironment { tenkzcd } { O{} +b }
   { \tenkz_cd_render:nn {#1} {#2} } { }
@@ -392,15 +649,28 @@
   {
     \group_begin:
     \int_zero:N \l__tenkzcd_ngon_int
+    \bool_set_false:N \l__tenkzcd_maps_bool
     \tl_set:Nn \l__tenkzcd_radius_tl {30mm}
     \tl_clear:N \l__tenkzcd_pass_tl
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/cd}{#1} }
     \seq_gclear:N \g__tenkzcd_arrows_seq
     \tenkz@beginpicture{cd}
     \tenkz_cd_read_axis:
-    \int_compare:nNnTF { \l__tenkzcd_ngon_int } > {0}
-      { \exp_args:NV \tenkz_cd_polygon:nn \l__tenkzcd_pass_tl {#2} }
-      { \exp_args:NV \tenkz_cd_grid:nn    \l__tenkzcd_pass_tl {#2} }
+    \bool_if:NTF \l__tenkzcd_maps_bool
+      {
+        \int_compare:nNnTF { \l__tenkzcd_ngon_int } > {0}
+          {
+            \PackageError{tenkz}{tenkzcd~cannot~be~both~maps~and~polygon}
+              {Maps~have~one~fixed~composition~axis;~polygon~edges~are~
+               annotation~arrows.}
+          }
+          { \exp_args:NV \tenkz_cd_maps:nn \l__tenkzcd_pass_tl {#2} }
+      }
+      {
+        \int_compare:nNnTF { \l__tenkzcd_ngon_int } > {0}
+          { \exp_args:NV \tenkz_cd_polygon:nn \l__tenkzcd_pass_tl {#2} }
+          { \exp_args:NV \tenkz_cd_grid:nn    \l__tenkzcd_pass_tl {#2} }
+      }
     \group_end:
   }
 

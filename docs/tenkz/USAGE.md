@@ -105,6 +105,38 @@ the metric system; bead labels pick a free compass quadrant automatically.
 When you disagree with a choice: `label pos=south west`,
 `label shift={2pt,0pt}`.
 
+## Typed maps: `tenkzcd[maps]`
+
+A typed map joins two mathematical objects along the fixed left-to-right
+composition axis. Its line style gives the map type, and its label gives the
+map's name. For example, the MPDO refinement and coarsening channels act
+between the open two-site and three-site tensor networks:
+
+```latex
+\begin{tenkzcd}[maps, species={channel}, column sep=10mm, row sep=8mm]
+  \tnpic[inline, physical=updown]{
+    \tn[box]{\mathcal K} & \tn[box]{\mathcal K}
+  } &
+  \tnpic[inline, physical=updown]{
+    \tn[box]{\mathcal K} & \tn[box]{\mathcal K} & \tn[box]{\mathcal K}
+  } \\
+  \tnpic[inline, physical=updown]{
+    \tn[box]{\mathcal K} & \tn[box]{\mathcal K} & \tn[box]{\mathcal K}
+  } &
+  \tnpic[inline, physical=updown]{
+    \tn[box]{\mathcal K} & \tn[box]{\mathcal K}
+  }
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T}
+  \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]{\mathcal S}
+\end{tenkzcd}
+```
+
+The channel strokes are headless because their direction is the composition
+axis: the second row reverses the objects rather than reversing the stroke.
+Each stroke lies between two complete tensor-network objects and is not an
+additional contraction. A finite family is written with one complete
+domain--codomain row per member.
+
 ## Commutative diagrams: `tenkzcd` and `\tntree`
 
 Pentagon equations are commutative diagrams, not contractions:

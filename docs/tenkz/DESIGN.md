@@ -154,6 +154,50 @@ Cell commands (expandable; legal only inside `tenkz`/`\tnpic`):
 
 - **Grid mode** (default): *is* tikz-cd — all its keys and the full `\arrow` grammar pass through — plus house arrow/label styles (`cd arrow`: 0.40pt, open head, boundary-clipped with named standoff) and TN objects via `\tnpic`/`\tntree`.
 - **Polygon mode** (`polygon=⟨n⟩, radius=⟨dim⟩`): n `&`-separated cells placed as named nodes on a regular n-gon (vertex 1 on top, clockwise); `\tnarrow[from=⟨i⟩, to=⟨j⟩]{⟨label⟩}` between vertex names (`\tnarrow*` puts the label on the other side; the spec first wrote this in tikz-cd's `\arrow` grammar — the shipped grammar is `\tnarrow`). **Honesty clause (fixes the judge-author flag):** polygon mode implements node *placement* only; arrow drawing, shortening, and label sides reuse tikz-cd's arrow-style vocabulary — it does not reimplement an arrow engine. **Documented first-class fallback (G25):** a raw `tikzcd` grid with `\tnpic`/`\tntree` objects is sanctioned whenever a layout exceeds polygon mode; the manual shows the pentagon both ways.
+- **Typed-map mode** (`maps`): a matrix of objects joined along the fixed left-to-right composition axis. A map has the form
+  `\tnarrow[from={(r,c)}, to={(r,c+1)}, role=⟨role⟩]{⟨name⟩}` or
+  `\tnarrow[from={(r,c)}, to={(r,c+1)}, species=⟨species⟩]{⟨name⟩}`;
+  `fused` selects the fused line type, and `\tnarrow*` places the name on the opposite side. Every map must have either a role or a declared species. The line style records the map's type; the label records only the map itself. There are no arrowheads: the order of the objects determines the order of composition. Vertical maps, reverse maps, and maps that skip an object column lie outside this grammar.
+
+Typed-map rows belong to the categorical diagram language, not to the tensor-network language. Their vertices are mathematical objects and their joining strokes are maps, not contracted indices. A `\tnpic` occurring in an object cell remains an opaque mathematical object; the adjacent typed-map stroke does not acquire tensor ports or enter its contraction graph. The modes `maps` and `polygon` are disjoint, while ordinary grid mode retains the complete tikz-cd arrow grammar.
+
+A family is written as small multiples: one complete domain--codomain row for each member, with the same number of object columns in every row. A finite family is displayed in full, rather than by selected representatives. Parameters may remain symbolic when the displayed row asserts a formula uniformly over all their values. The matrix is a math object and may occur directly in displayed or running mathematics; it requires neither a figure wrapper nor a separate sizing mode.
+
+For the CPSV refinement, let
+
+\[
+  \widehat\Omega_{k,h}
+  = \frac{1}{a_k b_h}
+    \bigoplus_l \bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
+\]
+
+The fiberwise refinement is the composition
+
+\[
+  \mathfrak R_2
+  \xrightarrow{\mathcal T_0}
+  L_k\otimes R_h
+  \xrightarrow{\mathcal T_1}
+  (L_k\otimes R_h)\otimes\widehat\Omega_{k,h}
+  \xrightarrow{\mathcal T_2}
+  \mathfrak R_3.
+\]
+
+On an active $(k,h)$-summand, $\mathcal T_0$ traces out the factors $R_k\otimes L_h$, $\mathcal T_1$ sends $X$ to $X\otimes\widehat\Omega_{k,h}$, and $\mathcal T_2$ reorders the subspin factors into the three output sites. Consequently $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. In `tenkzcd` this is written as follows.
+
+```latex
+\[
+\begin{tenkzcd}[maps, species={channel}]
+  \mathfrak R_2 &
+  L_k\otimes R_h &
+  (L_k\otimes R_h)\otimes\widehat\Omega_{k,h} &
+  \mathfrak R_3
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
+  \tnarrow[from={(1,2)}, to={(1,3)}, species=channel]{\mathcal T_1}
+  \tnarrow[from={(1,3)}, to={(1,4)}, species=channel]{\mathcal T_2}
+\end{tenkzcd}
+\]
+```
 
 ### 2.3 Math / CD objects
 
@@ -331,6 +375,7 @@ Two-layer split: **semantic styles** (what a mark means) bind to **theme slots**
 | `region collar` | `slot=collar` | 0.80pt | |
 | `distinguished edge` | `\tnedge` | 0.80pt accent | own layer |
 | `distinguished vertex` | `\tnsite` | accent | |
+| `typed map` | `tenkzcd[maps]` edges | role/species bond style, headless | the label names the map; order is the fixed axis |
 | `cd arrow` | tenkzcd arrows | 0.40pt, open head | never confusable with 0.55pt wires |
 
 ### 4.3 Semantic hue table (document-wide meanings)
@@ -351,6 +396,8 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 | `junction diameter` | 3.2 × wire width (≥ 0.9mm) | below 3×, a junction is indistinguishable from a wire crossing at 600 dpi |
 | `region margin` | 0.36·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
 | `compact` / `inline` | 0.8 scale / em-based scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
+| `map column gap` | 0.34·pitch | a short composition remains a mathematical atom rather than expanding to display width; wider labels override it with `column sep=` |
+| `map row gap` | 0.50·pitch | adjacent small multiples remain distinct without figure-scale leading; `row sep=` overrides it |
 
 ---
 
@@ -358,7 +405,7 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 
 ### 5.1 Event stream v2 (`.tnlog`)
 
-Every environment emits `picture|id|lang=grid|cd|lattice|free|src=⟨file:line⟩` (via currfile — identity without a registry), then dialect events: grid → `atom`, `bond` (with `fused`/`dir` attributes), `leg`, `pairleg`, `trace`, `fuse`, `span`; cd → `object`, `arrow`; lattice → `lattice`, `region|slot|cellset-normal-form`, `edge`, `site`; free → `put`, `join`. `\tndefine`/use emit `def|name|hash` / `use|name`. plasTeX compiles bodies standalone, so identical events flow in web builds.
+Every environment emits `picture|id|lang=grid|cd|lattice|free|src=⟨file:line⟩` (via currfile — identity without a registry), then dialect events: grid → `atom`, `bond` (with `fused`/`dir` attributes), `leg`, `pairleg`, `trace`, `fuse`, `span`; cd → `cdcell`, `cdobject`, `cdarrow`, `cdmap`, `tree`; lattice → `lattice`, `region|slot|cellset-normal-form`, `edge`, `site`; free → `put`, `join`. `\tndefine`/use emit `def|name|hash` / `use|name`. plasTeX compiles bodies standalone, so identical events flow in web builds.
 
 ### 5.2 The sugar contract (G21)
 
@@ -366,7 +413,7 @@ Every environment emits `picture|id|lang=grid|cd|lattice|free|src=⟨file:line�
 
 ### 5.3 Type checks
 
-Structural in the grid: bonds are virtual–virtual and pairings physical–physical **by construction** — mismatches are inexpressible, so checks move from runtime to parser. Runtime assertions fire exactly where free composition exists: `\tnjoin` in `tenkzfree`. The `morphism` port type is deleted; cd arrows are their own event species and never enter the contraction graph.
+Structural in the grid: bonds are virtual–virtual and pairings physical–physical **by construction** — mismatches are inexpressible, so checks move from runtime to parser. Runtime assertions fire exactly where free composition exists: `\tnjoin` in `tenkzfree`. The `morphism` port type is deleted; `cdmap` and `cdarrow` are their own event species and never enter the contraction graph.
 
 ### 5.4 Invariants
 

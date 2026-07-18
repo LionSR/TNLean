@@ -227,6 +227,44 @@ selected region'' looks the same in every figure.
 \end{tnexample}
 
 % ---------------------------------------------------------------------
+\subsection{Typed maps compose along one axis}\label{sec:tut-maps}
+
+A typed-map diagram records morphisms between mathematical objects.  It
+does not contract tensor indices.  In \tnenv{tenkzcd} with
+\tnkey{maps}, objects occupy matrix cells and every map runs from a cell
+to its eastern neighbour.  The fixed left-to-right order carries the
+direction, so the edge has no arrowhead.  Its line style gives the map's
+type; its label gives the map's name.
+
+Declare paper-specific edge types once, then enumerate a finite family
+as aligned rows.  Here the two channels are the two members of the
+family, not representatives chosen from a larger collection:
+
+\begin{tnexample}[
+    formula   = {\Phi_a:V_a\longrightarrow W_a},
+    caption   = {an enumerated family of typed maps},
+    index     = {Each row is one map $\Phi_a:V_a\to W_a$.  The common
+                 line style states that both maps are channels; the
+                 labels $\Phi_0$ and $\Phi_1$ distinguish them.},
+    label     = {ex:tut-typed-maps},
+  ]
+% Phi_a : V_a -> W_a for a=0,1; every family member is a row.
+% The channel species is line data; Phi_0 and Phi_1 name the two maps.
+\begin{tenkzcd}[maps, species={channel}, column sep=12mm]
+  V_0 & W_0 \\
+  V_1 & W_1
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\Phi_0}
+  \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]{\Phi_1}
+\end{tenkzcd}
+\end{tnexample}
+
+Longer compositions use further columns on the same axis.  Reverse the
+order of the objects when the domain changes; never reverse an edge or
+add a head.  Since \tnenv{tenkzcd} is already a mathematical atom, this
+construction sits wherever the corresponding expression belongs,
+whether in a sentence or between the delimiters of a displayed equation.
+
+% ---------------------------------------------------------------------
 \subsection{Fusion trees and the pentagon}\label{sec:tut-cd}
 
 Commutative diagrams are not contractions, so they live in their own
