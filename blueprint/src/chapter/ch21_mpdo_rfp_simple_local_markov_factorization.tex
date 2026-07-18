@@ -621,6 +621,49 @@ $\sum_p(K^{-1})^{\alpha,\beta}_pK^p=E_{\alpha,\beta}$:
 \[
     {\cal K}^{-1}{\cal K}=\Id
 \]
+    \begin{center}
+        % sum_p (K^{-1})^{alpha,beta}_p K^p = delta_{alpha,alpha'} delta_{beta,beta'}
+        % i.e. {\cal K}^{-1}{\cal K} = Id: the inverse tensor K^{-1} (top)
+        % contracted with the injective K (bottom) through the shared
+        % doubled (ket-and-bra) physical index.  Per the paper's convention
+        % for this subsection (MPDO-22-12-17-2.tex lines 1318-1322,
+        % illustrated by MPDO_NotationK.png) a doubled physical/environment
+        % index drawn on one side is a SOLID line (ket copy) paired with a
+        % DASHED line (bra copy); both lines carry the single summed index
+        % p, so no physical leg survives the contraction.  Open stubs, top
+        % row then bottom row: west = alpha', alpha; east = beta', beta.
+        % On the right the east-cupped bend ties the west pair
+        % (delta_{alpha,alpha'}) and the west-cupped bend ties the east
+        % pair (delta_{beta,beta'}): the matrix-unit identity on the bond
+        % space, drawn as two disjoint bends.  Both sides carry the same
+        % boundary signature
+        % (virtual-west=2 | virtual-east=2 | physical-up=0 | physical-down=0),
+        % the right-hand side as the two factors (2|0) and (0|2).
+        \begin{tenkzfree}
+            \tnput[ports={west:virtual, east:virtual}, label pos=north]
+                {Kinv}{(0,4.4mm)}{{\cal K}^{-1}}
+            \tnput[ports={west:virtual, east:virtual}, label pos=south]
+                {K}{(0,-4.4mm)}{{\cal K}}
+            % doubled physical/environment index p: solid = ket copy,
+            % dashed = bra copy (MPDO_NotationK.png convention)
+            \draw[bond] ($(Kinv.south)+(-0.35mm,0)$) -- ($(K.north)+(-0.35mm,0)$);
+            \draw[bond, dashed] ($(Kinv.south)+(0.35mm,0)$) -- ($(K.north)+(0.35mm,0)$);
+            \draw[bond] (Kinv.west) -- ++(-4.95mm,0);
+            \draw[bond] (Kinv.east) -- ++(4.95mm,0);
+            \draw[bond] (K.west) -- ++(-4.95mm,0);
+            \draw[bond] (K.east) -- ++(4.95mm,0);
+        \end{tenkzfree}
+        $\;=\;$
+        \begin{tenkz}[rows={wire, wire}, east=cup]
+            \tnghost{} \\
+            \tnghost{}
+        \end{tenkz}
+        $\;$
+        \begin{tenkz}[rows={wire, wire}, west=cup]
+            \tnghost{} \\
+            \tnghost{}
+        \end{tenkz}
+    \end{center}
 This is the identity in
 \cite[Appendix~C.2, lines~1376--1380]{Cirac2016MPDO_arXiv}.
 
@@ -629,6 +672,49 @@ virtual legs against a further copy of $K$ recovers $K$:
 \[
     K\,K^{-1}K=K
 \]
+    \begin{center}
+        % \mathcal K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity, lines
+        % 1671-1676): the top tensor is \mathcal K, the script-letter BNT
+        % element the source reserves for elements of a basis of normal
+        % tensors -- NOT a second copy of K (two equations earlier the same
+        % source writes K = X \circ \mathcal K \circ X^{-1}, so K and
+        % \mathcal K are related but distinct tensors).  K^{-1} (middle row)
+        % undoes \mathcal K on their shared virtual (bond) legs -- closed
+        % here by two disjoint bends, west ties \mathcal K's west stub to
+        % K^{-1}'s west stub, east ties their east stubs.  The doubled
+        % (ket-and-bra) physical index is drawn in the fused-bond
+        % double-stroke skin at the picture's one open boundary (above
+        % \mathcal K) and at the K^{-1}/K junction; the internal
+        % \mathcal K/K^{-1} junction is a single stroke, matching the
+        % source's own line weight there (the source does not double every
+        % physical wire, only the ones facing an open boundary or a
+        % cross-tensor contraction).  The bottom tensor K keeps its own
+        % bond legs open: those, plus the one surviving physical leg, are
+        % the only stubs on either side of the equation.  Both sides carry
+        % the same boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=0).
+        \begin{tenkzfree}
+            \tnput{Kc}{(0,9mm)}{}
+            \tnput{Kinv}{(0,0)}{}
+            \tnput[label pos=south]{Kbot}{(0,-9mm)}{K}
+            \draw[bond] (Kc.west) to[out=180, in=180, looseness=1.6] (Kinv.west);
+            \draw[bond] (Kc.east) to[out=0, in=0, looseness=1.6] (Kinv.east);
+            \draw[fused bond] (Kc.north) -- ++(0,4.2mm);
+            \draw[bond] (Kc.south) -- (Kinv.north);
+            \draw[fused bond] (Kinv.south) -- (Kbot.north);
+            \draw[bond] (Kbot.west) -- ++(-5mm,0);
+            \draw[bond] (Kbot.east) -- ++(5mm,0);
+            \node[tn label, anchor=east] at ($(Kc.west)-(3mm,0)$) {$\scriptstyle\mathcal K$};
+            \node[tn label, anchor=east] at ($(Kinv.west)-(3mm,0)$) {$\scriptstyle K^{-1}$};
+        \end{tenkzfree}
+        $\;=\;$
+        \begin{tenkzfree}
+            \tnput[label pos=south]{K}{(0,0)}{K}
+            \draw[fused bond] (K.north) -- ++(0,4.2mm);
+            \draw[bond] (K.west) -- ++(-5mm,0);
+            \draw[bond] (K.east) -- ++(5mm,0);
+        \end{tenkzfree}
+    \end{center}
 This
 is the single-block identity of
 \cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.
@@ -673,6 +759,44 @@ is the single-block identity of
     \[
         \tr_4({\cal K}_4)=\sum_\alpha L_\alpha\otimes B_\alpha\otimes R_\alpha
     \]
+    \begin{center}
+        % tr_4(K_4) = sum_alpha L_alpha (x) B_alpha (x) R_alpha: tracing
+        % the physical index of the fourth site of the periodic four-site
+        % MPO word folds that site into the virtual closing operator R_4 =
+        % Z_4^{-1} sum_{i_4} K^{i_4 i_4}, leaving sites 1,2,3 open (ket leg
+        % up = i_1,i_2,i_3, bra leg down = j_1,j_2,j_3, the paper's
+        % un-split K convention of MPDO_NotationK.png).  LHS: a periodic
+        % ring of three K cells and the virtual-only cell R_4 (no physical
+        % legs, a matrix on the wire); the return wire closes R_4's east
+        % end back to site 1's west end, so no virtual index survives
+        % (virtual-west=0 | virtual-east=0 | physical-up=3 |
+        % physical-down=3).  RHS: writing the ring's trace as a sum over
+        % the bond value alpha at the R_4-site-1 cut gives the chain
+        % L_alpha - B_alpha - R_alpha (L_alpha absorbs K's left virtual
+        % index fixed to alpha, R_alpha absorbs K's right virtual index
+        % together with R_4's remaining leg fixed to the same alpha,
+        % B_alpha is the untouched middle K); each RHS picture is one
+        % alpha-term, its own outer virtual legs sealed by boundary=none
+        % (matching the boundary=none convention of the sibling
+        % TNMPDOTwoSiteClosureFactorization figure in this chapter) since
+        % the sum_alpha outside is what reglues the two matched ends back
+        % into the closed trace -- so the RHS carries the same signature
+        % (virtual-west=0 | virtual-east=0 | physical-up=3 |
+        % physical-down=3) once the outer sum is read together with the
+        % picture.
+        \begin{tenkz}[physical=updown, periodic]
+            \tn[up=$i_1$, down=$j_1$]{{\cal K}} &
+            \tn[up=$i_2$, down=$j_2$]{{\cal K}} &
+            \tn[up=$i_3$, down=$j_3$]{{\cal K}} &
+            \tnX{R_4}
+        \end{tenkz}
+        $\;=\;\displaystyle\sum_\alpha\;$
+        \begin{tenkz}[physical=updown, boundary=none]
+            \tn[up=$i_1$, down=$j_1$]{L_\alpha} &
+            \tn[up=$i_2$, down=$j_2$]{B_\alpha} &
+            \tn[up=$i_3$, down=$j_3$]{R_\alpha}
+        \end{tenkz}
+    \end{center}
     \caption{Tracing the fourth site of the normalized four-site periodic MPO
     leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
     by the virtual closing operator
@@ -1164,6 +1288,28 @@ displayed as
 \[
     U_B\mathcal K U_B^\dagger=\bigoplus_k l_k\otimes r_k
 \]
+    \begin{center}
+        % U_B K U_B^dagger = bigoplus_k l_k (x) r_k: the middle-site isometry
+        % U_B splits the single physical wire of K into the left sector
+        % factor l_k (keeps the west virtual leg beta_1) tensored with the
+        % right sector factor r_k (keeps the east virtual leg alpha_3); l_k,
+        % r_k are themselves operators (their own physical bra/ket pair), so
+        % each carries one up and one down leg once split.  Both sides carry
+        % virtual-west=1 | virtual-east=1 | physical-up=2 | physical-down=2.
+        \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
+            \tn[pill, wide=2, legs at={1,2}]{U_B^\dagger} & \\
+            \tn{\mathcal K} & \\
+            \tn[pill, wide=2, legs at={1,2}]{U_B} &
+        \end{tenkz}
+        $\;=\;\bigoplus_k$
+        \begin{tenkz}[physical=updown, east=none, tensor style=box]
+            \tn{l_k}
+        \end{tenkz}
+        $\;\otimes\;$
+        \begin{tenkz}[physical=updown, west=none, tensor style=box]
+            \tn{r_k}
+        \end{tenkz}
+    \end{center}
 
 \begin{proof}
     \leanok
