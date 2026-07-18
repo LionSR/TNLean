@@ -163,13 +163,27 @@ Typed-map rows belong to the categorical diagram language, not to the tensor-net
 
 A family is written as small multiples: one complete domain--codomain row for each member, with the same number of object columns in every row. A finite family is displayed in full, rather than by selected representatives. Parameters may remain symbolic when the displayed row asserts a formula uniformly over all their values. The matrix is a math object and may occur directly in displayed or running mathematics; it requires neither a figure wrapper nor a separate sizing mode.
 
-For the CPSV refinement, let
+For the CPSV refinement, the middle-subspin Hilbert space is
+
+\[
+  \mathcal H^{\Omega}_{k,h}
+  =\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h).
+\]
+
+The notation distinguishes the normalized active density from its total
+completion on this space. On an active pair,
 
 \[
   \widehat\Omega_{k,h}
-  = \frac{1}{a_k b_h}
-    \bigoplus_l \bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
+  =\frac{1}{a_kb_h}\bigoplus_l
+    (\eta_{k,l}\otimes\eta_{l,h}),
+  \qquad
+  \overline\Omega_{k,h}=\widehat\Omega_{k,h}.
 \]
+
+On an inactive pair, $\overline\Omega_{k,h}$ denotes the chosen positive
+trace-one completion on $\mathcal H^{\Omega}_{k,h}$. A typed-map vertex records
+the carrier Hilbert space, not the density acting on it.
 
 The fiberwise refinement is the composition
 
@@ -178,19 +192,23 @@ The fiberwise refinement is the composition
   \xrightarrow{\mathcal T_0}
   L_k\otimes R_h
   \xrightarrow{\mathcal T_1}
-  (L_k\otimes R_h)\otimes\widehat\Omega_{k,h}
+  (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h}
   \xrightarrow{\mathcal T_2}
   \mathfrak R_3.
 \]
 
-On an active $(k,h)$-summand, $\mathcal T_0$ traces out the factors $R_k\otimes L_h$, $\mathcal T_1$ sends $X$ to $X\otimes\widehat\Omega_{k,h}$, and $\mathcal T_2$ reorders the subspin factors into the three output sites. Consequently $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. In `tenkzcd` this is written as follows.
+On a $(k,h)$-summand, $\mathcal T_0$ traces out the factors $R_k\otimes L_h$,
+$\mathcal T_1$ sends $X$ to $X\otimes\overline\Omega_{k,h}$, and
+$\mathcal T_2$ reorders the subspin factors into the three output sites.
+Consequently $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. In `tenkzcd`
+this is written as follows.
 
 ```latex
 \[
 \begin{tenkzcd}[maps, species={channel}]
   \mathfrak R_2 &
   L_k\otimes R_h &
-  (L_k\otimes R_h)\otimes\widehat\Omega_{k,h} &
+  (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h} &
   \mathfrak R_3
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
   \tnarrow[from={(1,2)}, to={(1,3)}, species=channel]{\mathcal T_1}
