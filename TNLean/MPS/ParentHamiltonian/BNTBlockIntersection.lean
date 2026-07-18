@@ -214,7 +214,8 @@ source range of PGVWC07, Theorem 12.
 For at least two blocks, the sharp direct-sum argument gives the full tuple
 span at length \(3(r-1)(L_0+1)\). Right-canonical normalization then propagates
 that span to every larger length. Thus no additional injective prefix is
-needed. This is arXiv:quant-ph/0608197, lines 1346--1421. -/
+needed. The base span is arXiv:quant-ph/0608197, lines 1346--1421; the unital
+propagation is lines 893--898. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))

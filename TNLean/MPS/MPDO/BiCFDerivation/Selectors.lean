@@ -228,8 +228,8 @@ $$
 $$
 then recovers the arbitrary target tuple $M$ at length $L+1$.
 
-This is the homogeneous form of the padding used after the direct-sum lemma in
-arXiv:quant-ph/0608197, lines 1346--1421. -/
+This is the simultaneous-tuple form of the unital propagation in
+arXiv:quant-ph/0608197, lines 893--898. -/
 theorem wordTupleSpanTop_succ_of_unital
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L : ℕ} (hSpan : WordTupleSpanTop A L)
@@ -270,7 +270,7 @@ theorem wordTupleSpanTop_succ_of_unital
 
 /-- Right-canonical normalization propagates a full simultaneous word-tuple
 span to every larger length. This is the induction-based extension of the one-step
-propagation used in arXiv:quant-ph/0608197, lines 1346--1421. -/
+propagation in arXiv:quant-ph/0608197, lines 893--898. -/
 theorem wordTupleSpanTop_of_ge_of_unital
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L n : ℕ} (hSpan : WordTupleSpanTop A L)
