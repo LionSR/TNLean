@@ -18,7 +18,7 @@ from simultaneous word-tuple span of the vertical BNT representatives.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  Appendix C.4, lines 1980--1990.
+  Appendix C.4, lines 1980--1993.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
