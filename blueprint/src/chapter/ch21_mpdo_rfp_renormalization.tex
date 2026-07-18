@@ -50,6 +50,20 @@ section.
     Kraus map is a completely positive Kraus map.
 \end{lemma}
 
+\begin{lemma}[Sum of rectangular Kraus maps]
+    \label{lem:is_kraus_cp_add}
+    \lean{IsKrausCP.add}
+    \leanok
+    \uses{def:is_kraus_cp}
+    The sum of two completely positive maps in rectangular Kraus form is
+    completely positive in rectangular Kraus form.
+\end{lemma}
+
+\begin{proof}\leanok
+    Concatenating Kraus families for the two summands gives a Kraus family for
+    their sum.
+\end{proof}
+
 \begin{definition}[Trace-preserving completely positive map]
     \label{def:is_kraus_cptp}
     \lean{IsKrausCPTP}
@@ -60,6 +74,25 @@ section.
     The Kraus operators may be rectangular, so the input and output dimensions
     need not agree.
 \end{definition}
+
+\begin{theorem}[Trace preservation completes a Kraus channel]
+    \label{thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving}
+    \lean{isKrausCPTP_of_isKrausCP_trace_preserving}
+    \leanok
+    \uses{def:is_kraus_cp, def:is_kraus_cptp}
+    A completely positive map in rectangular Kraus form that preserves the
+    matrix trace is trace-preserving completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $(A_i)_i$ is a Kraus family, trace preservation and cyclicity give
+    \[
+        \operatorname{tr}\left(\left(\sum_i A_i^\dagger A_i\right)X\right)
+        =\operatorname{tr}(X)
+    \]
+    for every $X$.  Nondegeneracy of the trace pairing implies
+    $\sum_i A_i^\dagger A_i=\mathbf 1$.
+\end{proof}
 
 \begin{theorem}[Trace preservation from a Kraus resolution]
     \label{thm:is_kraus_cptp_trace_map}

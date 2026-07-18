@@ -1378,6 +1378,150 @@ Theorem~\ref{thm:trace_norm_abs}.
     Thus the support Petz map has a rectangular Kraus representation.
 \end{proof}
 
+\begin{lemma}[Trace of the support Petz map]
+    \label{lem:partial_trace_support_petz_map_trace}
+    \lean{Matrix.partialTraceRightPetzMap_trace}
+    \leanok
+    \uses{def:partial_trace_support_petz_map,
+        lem:support_inverse_square_root_sandwich}
+    Let $P_\tau$ be the orthogonal projector onto the support of
+    $\tau=\operatorname{tr}_R\sigma$.  Then, for every matrix $X$,
+    \[
+        \operatorname{tr}(\mathcal R_\sigma(X))
+        =\operatorname{tr}(P_\tau X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_sandwich}
+    Cyclicity of the trace and the defining property of the partial trace give
+    \[
+        \operatorname{tr}(\mathcal R_\sigma(X))
+        =\operatorname{tr}(\tau^{-1/2}_{\mathrm{supp}}
+          X\tau^{-1/2}_{\mathrm{supp}}\tau)
+        =\operatorname{tr}((\tau^{-1/2}_{\mathrm{supp}}
+          \tau\tau^{-1/2}_{\mathrm{supp}})X).
+    \]
+    The factor in parentheses is $P_\tau$.
+\end{proof}
+
+\begin{definition}[Complementary preparation term]
+    \label{def:partial_trace_petz_complement}
+    \lean{Matrix.partialTraceRightPetzComplementMap}
+    \leanok
+    \uses{def:support_proj, def:partial_trace_left,
+        def:mpdo_state_preparation_map}
+    Put $Q_\tau=\mathbf 1_L-P_\tau$ and
+    $\omega_R=\operatorname{tr}_L\sigma$.  The complementary term is
+    \[
+        \mathcal C_\sigma(X)=Q_\tau XQ_\tau\otimes\omega_R.
+    \]
+    % Source-faithfulness note: equation (8) supplies the support formula;
+    % this complementary extension is the local completion chosen here.
+\end{definition}
+
+\begin{theorem}[Complete positivity of the complementary term]
+    \label{thm:partial_trace_petz_complement_cp}
+    \lean{Matrix.partialTraceRightPetzComplementMap_isKrausCP}
+    \leanok
+    \uses{def:partial_trace_petz_complement, def:is_kraus_cp}
+    The complementary preparation term $\mathcal C_\sigma$ is completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:is_kraus_cp_comp, lem:mpdo_single_kraus_map_cp,
+        lem:mpdo_state_preparation_cp}
+    The map $X\mapsto Q_\tau XQ_\tau$ has the single Kraus operator $Q_\tau$.
+    Adjoining the positive semidefinite matrix $\omega_R$ is completely
+    positive, and the composition of these two maps is completely positive.
+\end{proof}
+
+\begin{lemma}[Trace of the complementary term]
+    \label{lem:partial_trace_petz_complement_trace}
+    \lean{Matrix.partialTraceRightPetzComplementMap_trace}
+    \leanok
+    \uses{def:partial_trace_petz_complement}
+    If $\sigma$ has trace one, then
+    \[
+        \operatorname{tr}(\mathcal C_\sigma(X))
+        =\operatorname{tr}(Q_\tau X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:partial_trace_petz_complement}
+    Since $\operatorname{tr}(\omega_R)=\operatorname{tr}(\sigma)=1$ and
+    $Q_\tau^2=Q_\tau$, factorization and cyclicity of the trace give
+    \[
+        \operatorname{tr}(\mathcal C_\sigma(X))
+        =\operatorname{tr}(Q_\tau XQ_\tau)
+        =\operatorname{tr}(Q_\tau^2X)
+        =\operatorname{tr}(Q_\tau X).
+    \]
+\end{proof}
+
+\begin{definition}[Trace-preserving Petz channel for a partial trace]
+    \label{def:partial_trace_petz_channel}
+    \lean{Matrix.partialTraceRightPetzChannel}
+    \leanok
+    \uses{def:partial_trace_support_petz_map,
+        def:partial_trace_petz_complement}
+    The completed Petz map is
+    \[
+        \widehat{\mathcal R}_\sigma
+        =\mathcal R_\sigma+\mathcal C_\sigma.
+    \]
+\end{definition}
+
+\begin{theorem}[The completed Petz map is a channel]
+    \label{thm:partial_trace_petz_channel_cptp}
+    \lean{Matrix.partialTraceRightPetzChannel_isKrausCPTP}
+    \leanok
+    \uses{def:partial_trace_petz_channel,
+        thm:partial_trace_support_petz_map_cp,
+        lem:partial_trace_support_petz_map_trace,
+        thm:partial_trace_petz_complement_cp,
+        lem:partial_trace_petz_complement_trace, def:is_kraus_cptp}
+    If $\sigma$ is positive semidefinite with trace one, then
+    $\widehat{\mathcal R}_\sigma$ is completely positive and trace preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:is_kraus_cp_add,
+        thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving,
+        lem:partial_trace_support_petz_map_trace,
+        lem:partial_trace_petz_complement_trace}
+    The two summands are completely positive.  Since
+    $\operatorname{tr}(\omega_R)=1$, the complementary term satisfies
+    \[
+        \operatorname{tr}(\mathcal C_\sigma(X))
+        =\operatorname{tr}(Q_\tau X).
+    \]
+    Adding this identity to
+    $\operatorname{tr}(\mathcal R_\sigma(X))
+      =\operatorname{tr}(P_\tau X)$ gives trace preservation.
+\end{proof}
+
+\begin{theorem}[Agreement on the marginal support]
+    \label{thm:partial_trace_petz_channel_supported_agreement}
+    \lean{Matrix.partialTraceRightPetzChannel_apply_of_supported}
+    \leanok
+    \uses{def:partial_trace_petz_channel}
+    If $P_\tau XP_\tau=X$, then
+    \[
+        \widehat{\mathcal R}_\sigma(X)=\mathcal R_\sigma(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:partial_trace_petz_channel,
+        def:partial_trace_petz_complement}
+    The assumption implies $Q_\tau XQ_\tau=0$.  Hence
+    $\mathcal C_\sigma(X)=0$, and adding the complementary term to
+    $\mathcal R_\sigma(X)$ does not change its value.
+\end{proof}
+
 \begin{theorem}[The support Petz map recovers its reference]
     \label{thm:partial_trace_support_petz_map_reference_recovery}
     \lean{Matrix.partialTraceRightPetzMap_partialTraceRight}
@@ -1401,6 +1545,27 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
     because that matrix is positive semidefinite of trace zero.  Therefore
     $\sqrt\sigma(P_\tau\otimes\mathbf 1_R)\sqrt\sigma=\sigma$.
+\end{proof}
+
+\begin{theorem}[The completed Petz channel recovers its reference]
+    \label{thm:partial_trace_petz_channel_reference_recovery}
+    \lean{Matrix.partialTraceRightPetzChannel_partialTraceRight}
+    \leanok
+    \uses{thm:partial_trace_support_petz_map_reference_recovery,
+        thm:partial_trace_petz_channel_supported_agreement}
+    For every positive semidefinite $\sigma$,
+    \[
+        \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\sigma)=\sigma.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_support_petz_map_reference_recovery,
+        thm:partial_trace_petz_channel_supported_agreement}
+    The marginal satisfies
+    $P_\tau\tau P_\tau=\tau$.  Therefore the completed channel agrees with
+    the support Petz map at $\tau$, and the preceding recovery theorem gives
+    $\widehat{\mathcal R}_\sigma(\tau)=\sigma$.
 \end{proof}
 
 \begin{theorem}[Entropy is invariant under reindexing]
