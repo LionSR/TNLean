@@ -23,7 +23,7 @@ adjoint projection is a positive unital retraction.
   `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1488--1492.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.Frobenius
+open scoped Matrix Matrix.Norms.Frobenius
 
 variable {D : ℕ}
 
