@@ -763,8 +763,8 @@ Its two Kronecker factors are the two bare cups:
     % physical index p.  Their four virtual legs remain open and are
     % identified pairwise by the tensor product of the two cups on the right.
     \begin{tenkz}[rows={bra, ket}, tensor style=box]
-        \tn{\mathcal K^{-1}} \\
-        \tn{\mathcal K}
+        \tn{K^{-1}} \\
+        \tn{K}
     \end{tenkz}
     $\;=\;$
     \begin{tenkz}[rows={wire, wire}, east=cup]
@@ -783,7 +783,7 @@ This is the identity in
 Applying this inverse map to the doubled physical index and closing its
 virtual legs against a further copy of $K$ recovers $K$:
 \begin{center}
-    % \mathcal K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the top
+    % K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the top
     % tensor closes both virtual legs against K^{-1}; the bottom K retains
     % its virtual legs.  The vertical strand is the doubled physical index.
     % Both sides have boundary signature (virtual-west=1 | virtual-east=1 |
@@ -793,8 +793,8 @@ virtual legs against a further copy of $K$ recovers $K$:
             west=cup,
             east=cup,
             tensor style=box]
-        \tn[up=p]{\mathcal K} \\
-        \tn{\mathcal K^{-1}} \\
+        \tn[up=p]{K} \\
+        \tn{K^{-1}} \\
         \tn{K}
     \end{tenkz}
     $\;=\;$
@@ -810,12 +810,12 @@ This is the single-block identity in
     \lean{MPOTensor.normalizedFourSiteTail}
     \leanok
     \uses{def:mpo_family, def:mpo_physical_trace_transfer}
-    Let ${\cal K}$ be an MPO tensor and set
-    $Z_4=\tr[\rho^{(4)}({\cal K})]$. Its normalized fourth-site virtual tail is
+    Let $\mathcal K$ be an MPO tensor and set
+    $Z_4=\tr[\rho^{(4)}(\mathcal K)]$. Its normalized fourth-site virtual tail is
     \[
-        R_4:=Z_4^{-1}\mathcal T_{\cal K}
-        =\tr[\rho^{(4)}({\cal K})]^{-1}
-          \sum_{i_4=0}^{d-1}{\cal K}^{i_4i_4}.
+        R_4:=Z_4^{-1}\mathcal T_{\mathcal K}
+        =\tr[\rho^{(4)}(\mathcal K)]^{-1}
+          \sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}.
     \]
     Thus the contraction of the fourth ket and bra indices is incorporated into
     the virtual closing matrix. This is the $N=4$ specialization of the
@@ -832,10 +832,10 @@ This is the single-block identity in
     three. The corresponding entry of the first-three-site marginal of the
     normalized four-site periodic operator is
     \[
-        \sigma_3^{(4)}({\cal K})_{u,v}
-        =\tr\!\left({\cal K}^{u,v}R_4\right)
+        \sigma_3^{(4)}(\mathcal K)_{u,v}
+        =\tr\!\left(\mathcal K^{u,v}R_4\right)
         =\tr\!\left(
-          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R_4
+          \mathcal K^{i_1j_1}\mathcal K^{i_2j_2}\mathcal K^{i_3j_3}R_4
         \right).
     \]
 \end{theorem}
@@ -856,8 +856,8 @@ This is the single-block identity in
     \caption{Tracing the fourth site of the normalized four-site periodic MPO
     leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
     by the virtual closing operator
-    $R_4=\tr[\rho^{(4)}({\cal K})]^{-1}
-    \sum_{i_4}{\cal K}^{i_4 i_4}$; compare the normalization convention and
+    $R_4=\tr[\rho^{(4)}(\mathcal K)]^{-1}
+    \sum_{i_4}\mathcal K^{i_4 i_4}$; compare the normalization convention and
     three-site marginal in
     \cite[lines~792--793 and 1343--1348]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_normalized_four_site_tail}
@@ -870,19 +870,19 @@ This is the single-block identity in
     Expanding the partial trace over the fourth site and factoring each
     length-four word at its last letter gives
     \[
-        \sigma_3^{(4)}({\cal K})_{u,v}
+        \sigma_3^{(4)}(\mathcal K)_{u,v}
         =Z_4^{-1}\sum_{i_4=0}^{d-1}
-          \tr\!\left({\cal K}^{u,v}{\cal K}^{i_4i_4}\right).
+          \tr\!\left(\mathcal K^{u,v}\mathcal K^{i_4i_4}\right).
     \]
     Linearity of the trace now yields
     \[
         Z_4^{-1}\sum_{i_4=0}^{d-1}
-          \tr\!\left({\cal K}^{u,v}{\cal K}^{i_4i_4}\right)
+          \tr\!\left(\mathcal K^{u,v}\mathcal K^{i_4i_4}\right)
         =\tr\!\left(
-          {\cal K}^{u,v}
-          \left(Z_4^{-1}\sum_{i_4=0}^{d-1}{\cal K}^{i_4i_4}\right)
+          \mathcal K^{u,v}
+          \left(Z_4^{-1}\sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}\right)
         \right)
-        =\tr\!\left({\cal K}^{u,v}R_4\right).
+        =\tr\!\left(\mathcal K^{u,v}R_4\right).
     \]
 \end{proof}
 
@@ -891,20 +891,20 @@ This is the single-block identity in
     \lean{MPOTensor.normalizedFourSiteTail_ne_zero}
     \leanok
     \uses{def:mpdo_normalized_four_site_tail}
-    If $Z_4=\tr[\rho^{(4)}({\cal K})]\ne0$, then $R_4\ne0$.
+    If $Z_4=\tr[\rho^{(4)}(\mathcal K)]\ne0$, then $R_4\ne0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_reduced_four_three_tail}
     If $R_4=0$, then the tail formula makes every entry of
-    $\sigma_3^{(4)}({\cal K})$ vanish, so
+    $\sigma_3^{(4)}(\mathcal K)$ vanish, so
     \[
-        \tr[\sigma_3^{(4)}({\cal K})]=0.
+        \tr[\sigma_3^{(4)}(\mathcal K)]=0.
     \]
     On the other hand, $Z_4\ne0$ implies
     \[
-        \tr[\sigma_3^{(4)}({\cal K})]=1,
+        \tr[\sigma_3^{(4)}(\mathcal K)]=1,
     \]
     a contradiction.
 \end{proof}
@@ -934,17 +934,17 @@ This is the single-block identity in
     \lean{MPOTensor.inverseMapThreeSiteContraction}
     \leanok
     \uses{def:mpdo_injective_inverse_layer}
-    Let ${\cal K}$ be an injective simple MPO tensor, and let $R\in\MN{D}$ be
+    Let $\mathcal K$ be an injective simple MPO tensor, and let $R\in\MN{D}$ be
     the virtual contraction of the sites following a three-site word. For
     virtual indices
     $\alpha_1,\beta_1,\alpha_3,\beta_3$, define
     \[
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
         =\sum_{p_1,p_3}
-        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{p_1}
-        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{p_3}
-        \tr\bigl({\cal K}^{p_1}{\cal K}^{p_2}
-        {\cal K}^{p_3}R\bigr).
+        (\mathcal K^{-1})^{\alpha_1,\beta_1}_{p_1}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{p_3}
+        \tr\bigl(\mathcal K^{p_1}\mathcal K^{p_2}
+        \mathcal K^{p_3}R\bigr).
     \]
     This is the contraction used in the proof of
     \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.
@@ -960,7 +960,7 @@ This is the single-block identity in
     For every middle physical index $p_2$,
     \[
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
-        = {\cal K}^{p_2}_{\beta_1,\alpha_3}
+        = \mathcal K^{p_2}_{\beta_1,\alpha_3}
         R_{\beta_3,\alpha_1}.
     \]
     % Local fix (tail index): the source display repeats the third-site left
@@ -971,15 +971,15 @@ This is the single-block identity in
 
 \begin{figure}[ht]
     \centering
-        % (K^{-1} (x) Id (x) K^{-1}) K_3
-        %   = K^{p_2}_{beta_1,alpha_3} R_{beta_3,alpha_1}
+        % (\mathcal K^{-1} (x) Id (x) \mathcal K^{-1}) \mathcal K_3
+        %   = \mathcal K^{p_2}_{beta_1,alpha_3} R_{beta_3,alpha_1}
         % (arXiv:1606.00608, Appendix C.2, lines 1415--1438; paper
         % figures MPDO_Xab.png, MPDO_kappaab.png, and MPDO_mba.png).
         %
-        % LHS: the two K^{-1} boxes expose virtual pairs
+        % LHS: the two \mathcal K^{-1} boxes expose virtual pairs
         % (alpha_1,beta_1) and (alpha_3,beta_3).  Their physical indices
         % p_1,p_3 match the first and third legs of the three-site chain
-        % closed against R; p_2 remains open.  RHS: K carries beta_1 west,
+        % closed against R; p_2 remains open.  RHS: \mathcal K carries beta_1 west,
         % p_2 up, and alpha_3 east, while R carries beta_3 west and
         % alpha_1 east.  There is no surviving sum: the identity is
         % pointwise in all four virtual indices.  Both sides have aggregate
@@ -989,12 +989,12 @@ This is the single-block identity in
             \Bigl(
             \begin{tenkz}[compact, physical=down,
                           west label=$\alpha_1$, east label=$\beta_1$]
-                \tn[down=$p_1$]{{\cal K}^{-1}}
+                \tn[down=$p_1$]{\mathcal K^{-1}}
             \end{tenkz}
             \otimes\Id\otimes
             \begin{tenkz}[compact, physical=down,
                           west label=$\alpha_3$, east label=$\beta_3$]
-                \tn[down=$p_3$]{{\cal K}^{-1}}
+                \tn[down=$p_3$]{\mathcal K^{-1}}
             \end{tenkz}
             \Bigr)
             \begin{tenkz}[compact, physical=up, periodic]
@@ -1014,9 +1014,9 @@ This is the single-block identity in
                 \tnX{R}
             \end{tenkz}
         \]
-    \caption{Applying ${\cal K}^{-1}$ at the first and third sites collapses
+    \caption{Applying $\mathcal K^{-1}$ at the first and third sites collapses
     the three-site contraction to
-    ${\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}$, where
+    $\mathcal K^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}$, where
     $p_2=(i_2,j_2)$ is the doubled physical index; compare
     \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_inverse_map_three_site_contraction}
@@ -1026,14 +1026,14 @@ This is the single-block identity in
     \uses{thm:mpdo_injective_inverse_layer_spec}
     Move the two finite sums through the trace.  By the inverse-map identity
     \[
-        \sum_p({\cal K}^{-1})^{\alpha,\beta}_p\,{\cal K}^p
+        \sum_p(\mathcal K^{-1})^{\alpha,\beta}_p\,\mathcal K^p
         =E_{\alpha,\beta},
     \]
     the double sum collapses to
     \[
-        \tr\bigl(E_{\alpha_1,\beta_1}{\cal K}^{p_2}
+        \tr\bigl(E_{\alpha_1,\beta_1}\mathcal K^{p_2}
           E_{\alpha_3,\beta_3}R\bigr)
-        = {\cal K}^{p_2}_{\beta_1,\alpha_3}
+        = \mathcal K^{p_2}_{\beta_1,\alpha_3}
           R_{\beta_3,\alpha_1}.
     \]
 \end{proof}
@@ -1043,12 +1043,12 @@ This is the single-block identity in
     \lean{MPOTensor.IsThreeSiteClosure}
     \leanok
     \uses{def:mpo_tensor}
-    Let ${\cal K}$ be an MPO tensor and let $R\in\MN{D}$. A tripartite
-    operator $\rho$ is the three-site closure of ${\cal K}$ against $R$ if
+    Let $\mathcal K$ be an MPO tensor and let $R\in\MN{D}$. A tripartite
+    operator $\rho$ is the three-site closure of $\mathcal K$ against $R$ if
     \[
         \rho_{i_1i_2i_3,j_1j_2j_3}
         =\tr\!\left(
-          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R
+          \mathcal K^{i_1j_1}\mathcal K^{i_2j_2}\mathcal K^{i_3j_3}R
         \right).
     \]
     This is the algebraic form of the three-site reduced operator in
@@ -1064,17 +1064,17 @@ This is the single-block identity in
     \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure}
     Fix virtual indices $\beta,\alpha$ and set
     \[
-        \kappa_{\beta,\alpha}(i,j)={\cal K}^{ij}_{\beta,\alpha}.
+        \kappa_{\beta,\alpha}(i,j)=\mathcal K^{ij}_{\beta,\alpha}.
     \]
     For a Hayashi sector $k$, define the two inverse factors
     \begin{align*}
         A^{(k)}_{\alpha_1,\beta_1}(l,l')
         &:=\sum_{i_1,j_1}
-        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')},\\
         B^{(k)}_{\alpha_3,\beta_3}(r,r')
         &:=\sum_{i_3,j_3}
-        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
     \end{align*}
     These are the two factors in the sectorwise inverse-map calculation of
@@ -1087,16 +1087,16 @@ This is the single-block identity in
     \lean{MPOTensor.inverseMap_conj_physicalSlice_expansion}
     \leanok
     \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
-    Let ${\cal K}$ be injective and let $\rho$ be its three-site closure
+    Let $\mathcal K$ be injective and let $\rho$ be its three-site closure
     against $R$. Applying the inverse tensor at the two outer sites collapses
     the closure to one entry of the middle physical slice and one entry of the
     tail:
     \[
         \sum_{i_1,j_1,i_3,j_3}
-        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}\,
+        =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}\,
         R_{\beta_3,\alpha_1}.
     \]
     Consequently, for any matrix $U$ on the middle site,
@@ -1104,8 +1104,8 @@ This is the single-block identity in
         R_{\beta_3,\alpha_1}
         \bigl(U\kappa_{\beta_1,\alpha_3}U^\dagger\bigr)_{b,b'}
         =\sum_{i_1,j_1,i_3,j_3}
-        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \sum_{i_2,j_2}
         U_{b,i_2}\,\rho_{i_1i_2i_3,j_1j_2j_3}\,
         \overline{U_{b',j_2}}.
@@ -1119,7 +1119,7 @@ This is the single-block identity in
     \[
         \rho_{i_1i_2i_3,j_1j_2j_3}
         =\tr\!\left(
-          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R
+          \mathcal K^{i_1j_1}\mathcal K^{i_2j_2}\mathcal K^{i_3j_3}R
         \right)
     \]
     converts the left-hand side of the first identity to
@@ -1127,7 +1127,7 @@ This is the single-block identity in
     Theorem~\ref{thm:mpdo_inverse_map_three_site_contraction} then gives
     \[
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}((i_2,j_2);R)
-        ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
+        =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
         R_{\beta_3,\alpha_1},
     \]
     which is the first identity. The second identity follows by expanding the
@@ -1144,8 +1144,8 @@ This is the single-block identity in
         R_{\beta_3,\alpha_1}\,
         \kappa_{\beta_1,\alpha_3}(i_2,j_2)
         =\sum_{i_1,j_1,i_3,j_3}
-        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3},
     \]
     and reordering the finite sums.
@@ -1157,7 +1157,7 @@ This is the single-block identity in
     \leanok
     \uses{def:mpdo_three_site_closure,
         def:mpdo_hayashi_inverse_factors}
-    Suppose that ${\cal K}$ is injective, $\rho$ is its three-site closure
+    Suppose that $\mathcal K$ is injective, $\rho$ is its three-site closure
     against $R$, and a Hayashi decomposition of $\rho$ has been chosen. Write
     \[
         \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
@@ -1202,29 +1202,29 @@ in the basis adapted to sector $k$; compare
     For each $i_2,j_2$, the preceding theorem gives
     \[
         \sum_{i_1,j_1,i_3,j_3}
-        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
+        =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
           R_{\beta_3,\alpha_1}.
     \]
     Apply
     $\sum_{i_1,j_1,i_3,j_3}
-      ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-      ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\,(-)$
+      (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+      (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\,(-)$
     to the Hayashi block equality. Substituting the preceding display and
     interchanging the finite sums gives
     \begin{align*}
         &\sum_{i_1,j_1,i_3,j_3}
-          ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-          ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\\
+          (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+          (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\\
         &\quad{}\times\left(\sum_{i_2,j_2}
           [U_B]_{(k,l,r),i_2}\,
           \rho_{i_1i_2i_3,j_1j_2j_3}\,
           \overline{[U_B]_{(k,l',r'),j_2}}\right)\\
         &={}\sum_{i_2,j_2}
           [U_B]_{(k,l,r),i_2}\,
-          {\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
+          \mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
           R_{\beta_3,\alpha_1}\,
           \overline{[U_B]_{(k,l',r'),j_2}}.
     \end{align*}
@@ -1260,19 +1260,19 @@ in the basis adapted to sector $k$; compare
     \leanok
     \uses{def:mpdo_three_site_closure, def:mpdo_normalized_four_site_tail}
     Carried onto the tripartite site index, the three-site marginal of the
-    normalized four-site chain is the three-site closure of ${\cal K}$
+    normalized four-site chain is the three-site closure of $\mathcal K$
     against the normalized fourth-site tail $R_4$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_reduced_four_three_tail}
-    The entry formula for $\sigma_3^{(4)}({\cal K})$, carried onto the
+    The entry formula for $\sigma_3^{(4)}(\mathcal K)$, carried onto the
     tripartite site index $(i_1,i_2,i_3)$, gives
     \[
         \rho_{i_1i_2i_3,j_1j_2j_3}
         =\tr\!\left(
-          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R_4
+          \mathcal K^{i_1j_1}\mathcal K^{i_2j_2}\mathcal K^{i_3j_3}R_4
         \right),
     \]
     which is the three-site closure condition of
@@ -1365,7 +1365,7 @@ in the basis adapted to sector $k$; compare
     \lean{MPOTensor.physicalSlice_sector_factorization}
     \leanok
     \uses{def:mpdo_sector_tensors}
-    Suppose that ${\cal K}$ is injective, $\rho$ is its three-site closure
+    Suppose that $\mathcal K$ is injective, $\rho$ is its three-site closure
     against $R$, a Hayashi decomposition of $\rho$ has been chosen, and the
     outer indices satisfy $R_{\beta_3,\alpha_1}\ne0$. Then for all virtual
     indices $\beta_1,\alpha_3$,
@@ -1381,7 +1381,8 @@ in the basis adapted to sector $k$; compare
 In the middle-site basis selected by $U_B$, the same factorization is
 displayed as
 \begin{center}
-    % U_B K U_B^dagger = bigoplus_k l_k (x) r_k: U_B splits K's
+    % U_B kappa U_B^dagger = bigoplus_k l_k (x) r_k: U_B splits the
+    % physical slice kappa_{beta_1,alpha_3}'s
     % physical space into the left sector factor l_k and right sector
     % factor r_k.  Each factor is an operator with one ket and one bra
     % leg.  Both sides have boundary signature
@@ -1389,7 +1390,7 @@ displayed as
     % physical-down=2).
     \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
         \tn[pill, wide=2, legs at={1,2}]{U_B} & \\
-        \tn{\mathcal K} & \\
+        \tn{\kappa_{\beta_1,\alpha_3}} & \\
         \tn[pill, wide=2, legs at={1,2}]{U_B^\dagger} &
     \end{tenkz}
     $\;=\;\bigoplus_k$
@@ -1420,8 +1421,8 @@ displayed as
     \lean{MPOTensor.exists_physicalSlice_sector_factorization}
     \leanok
     \uses{def:mpdo_sector_tensors, def:mpdo_normalized_four_site_tail}
-    Let ${\cal K}$ be injective with nonzero four-site trace, let $\rho$ be a
-    three-site closure of ${\cal K}$ against the normalized fourth-site tail
+    Let $\mathcal K$ be injective with nonzero four-site trace, let $\rho$ be a
+    three-site closure of $\mathcal K$ against the normalized fourth-site tail
     $R_4$, and choose a Hayashi decomposition of $\rho$. Then there exist
     sector tensors $l_k$ and $r_k$ such that, for all virtual indices
     $\beta_1,\alpha_3$,

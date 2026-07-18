@@ -335,20 +335,19 @@ label $j$:
     % whereas K touches only the upper wire and the lower wire bypasses its
     % column.  Panel 3 removes the resolved K^{-1}-K pair and leaves the
     % gauge legs and block-index wires.  Every panel has boundary signature
-    % (virtual-west=2 | virtual-east=2 | physical-up=1 |
+    % (virtual-west=2 | virtual-east=2 | physical-up=0 |
     % physical-down=0); the lower bookkeeping wire in panel 2 is sealed at
     % X and X^{-1}, so it is not an extra boundary index.
-    \begin{tenkz}[rows={op, bra}, compact]
-        \tn[up]{K^{-1}} \\
+    \begin{tenkz}[rows={bra, ket}, compact]
+        \tn{K^{-1}} \\
         \tn{K}
     \end{tenkz}
     $\;=\;$
-    \begin{tenkz}[rows={op, op, bra:none}, compact]
-        & \tn[up]{K^{-1}} & \\
-        \tnX[wires=2]{X} & \tn{{\cal K}} & \tnX[wires=2]{X^{-1}} \\
-        % The ghost is intentional: it carries the lower wire through the
-        % column without a junction and consumes \mathcal K's spurious
-        % downward pairing.
+    \begin{tenkz}[rows={bra, ket, wire}, compact]
+        & \tn{K^{-1}} & \\
+        \tnX[wires=2]{X} & \tn{K} & \tnX[wires=2]{X^{-1}} \\
+        % The ghost carries the lower wire through the K column without a
+        % junction.
         & \tnghost{} &
     \end{tenkz}
     $\;=\;$

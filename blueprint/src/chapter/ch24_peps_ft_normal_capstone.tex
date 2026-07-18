@@ -180,10 +180,18 @@ product states, and the square lattice.
     matrices, one on each edge, whose endpoint actions transform $A_v$ into
     $B_v$ at every vertex, with no leftover scalar.
     The shared blocking gives a common tripartition for the two tensors, with
-    all three regions injective for both.  The three-site isomorphism lemma
-    therefore applies to the two blocked chains.  For an edge $e$, the
-    single-crossing hypothesis says that $e$ is the entire bond between the
-    first two regions, so the resulting gauge acts on the original edge.
+    all three regions injective for both.  For an edge $e$ between the first
+    two regions, the coefficient transfer $T_e$ supplied by the three-site
+    isomorphism argument satisfies
+    \[
+        C_A(R_1,e,X;\sigma,\tau)
+        =C_B(R_1,e,T_e(X);\sigma,\tau),
+        \qquad
+        T_e(X)=Z_e\,\iota_e(X)\,Z_e^{-1}
+    \]
+    for an invertible $Z_e$ and every virtual insertion $X$ on $e$.
+    The single-crossing hypothesis identifies $e$ with the entire bond between
+    $R_1$ and $R_2$, so $Z_e$ acts on the original edge.
     The equality of the bond dimensions is not assumed; it follows from the
     blocking hypotheses by
     Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}.  Positive bond
