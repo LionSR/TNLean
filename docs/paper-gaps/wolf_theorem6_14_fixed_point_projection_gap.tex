@@ -86,20 +86,37 @@ in
 This is the conditional-expectation step in the proof of Theorem~6.14,
 local source lines~1483--1492.
 
-Three arguments remain to obtain the fixed-point statement above.  First, the
-trace adjoint of the weighted partial-trace formula must be calculated and its
-range identified with the Schr\"odinger-picture density blocks.  Second, the
+The trace-adjoint calculation is also formalized.  In the convention used by
+the formalization, each summand is ordered as
+$\mathbb C^{m_k}\otimes\mathbb C^{d_k}$ and the adjoint fixed-point algebra is
+$\Id_{m_k}\otimes M_{d_k}(\mathbb C)$.  Consequently, the partial trace is
+over the first, multiplicity factor and
+\begin{align}
+  P_T(B)
+    =U\left(\bigoplus_k \sigma_k\otimes
+      \operatorname{tr}_{m_k}((U^*BU)_{kk})\right)U^*.
+\end{align}
+Writing $\operatorname{tr}_{d_k}$ here would reverse the factor convention
+and would be dimensionally inconsistent.  The range of this projection is
+$U(\bigoplus_k\sigma_k\otimes M_{d_k}(\mathbb C))U^*$, hence this is also
+$\operatorname{Fix}(T)$ under the full-support hypothesis.
+\footnote{Formal declaration:
+\leanid{IsPositiveMap.exists_block_densities_of_meanErgodicProjection}
+in
+\doclink{TNLean/Channel/FixedPoint/TraceAdjointDensityBlocks}.}
+
+Two arguments remain to obtain the general fixed-point statement above.  First, the
 positive semidefinite density matrices supplied by Proposition~1.5 must be
 restricted to their supports; this produces the positive definite matrices
-in Theorem~6.14.  Third, the discarded kernels must be assembled with the
+in Theorem~6.14.  Second, the discarded kernels must be combined with the
 subspace on which every fixed point vanishes, thereby recovering the zero
 summand $\mathcal H_0$.
 
-Thus Proposition~1.5 and its application to the full-support adjoint
-mean-ergodic projection are formalized, while Theorem~6.14 remains an open
-gap.  The missing work is the trace-adjoint density-block calculation, the
-positive-definite support reduction, and the recovery of the zero block from
-the kernels.
+Thus Proposition~1.5, its application to the full-support adjoint
+mean-ergodic projection, and the full-support Schr\"odinger-picture fixed-point
+formula are formalized, while Theorem~6.14 remains open.  The missing work is
+the positive-definite support reduction and the recovery of the zero block
+from the kernels.
 
 \bibliographystyle{alpha}
 \bibliography{references}

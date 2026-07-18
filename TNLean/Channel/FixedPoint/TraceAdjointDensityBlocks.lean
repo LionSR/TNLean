@@ -1,0 +1,369 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.Channel.FixedPoint.FullSupportBlockRetraction
+
+/-!
+# Density-block form of the full-support fixed points
+
+Suppose that a positive trace-preserving map has a positive-definite fixed
+point and that its trace adjoint satisfies the Schwarz inequality.  The
+adjoint Cesàro projection has the weighted partial-trace form proved in
+`FullSupportBlockRetraction`.  Taking its adjoint with respect to the trace
+pairing gives the density-block formula for the original Cesàro projection
+and identifies its range with the fixed points of the original map.
+
+TNLean indexes a summand by the product of the multiplicity index and the
+matrix-factor index.  Thus the left partial trace is over the multiplicity
+factor, and the Schrödinger-picture summand has the form
+$\sigma_k\otimes M_{d_k}(\mathbb C)$.
+
+## Main result
+
+* `IsPositiveMap.exists_block_densities_of_meanErgodicProjection`: the
+  full-support density-block form of the Cesàro projection and of the fixed
+  points.
+
+## References
+
+* M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 1.5,
+  Equation (1.40), Theorem 6.14, and Equation (6.63); local sources
+  `Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 536--570,
+  and `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1483--1494.
+-/
+
+open scoped Matrix Matrix.Norms.Frobenius ComplexOrder MatrixOrder Kronecker
+open Matrix Finset BigOperators
+
+noncomputable section
+
+namespace Matrix
+
+private theorem trace_reindex_equiv
+    {m n : Type*} [Fintype m] [Fintype n]
+    (e : m ≃ n) (M : Matrix m m ℂ) :
+    Matrix.trace (Matrix.reindex e e M) = Matrix.trace M := by
+  classical
+  simpa [Matrix.trace, Matrix.reindex_apply] using
+    Fintype.sum_equiv e.symm _ _ (by intro; simp)
+
+private theorem trace_partialTraceLeft_mul
+    {α β : Type*} [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
+    (X : Matrix β β ℂ) (Y : Matrix (α × β) (α × β) ℂ) :
+    Matrix.trace (Matrix.partialTraceLeft Y * X) =
+      Matrix.trace (Y * ((1 : Matrix α α ℂ) ⊗ₖ X)) := by
+  classical
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply,
+    Matrix.partialTraceLeft_apply, Matrix.kroneckerMap_apply, Matrix.one_apply]
+  simp only [Finset.sum_mul]
+  simp_rw [Fintype.sum_prod_type]
+  simp
+  calc
+    (∑ x : β, ∑ y : β, ∑ i : α, Y (i, x) (i, y) * X y x) =
+        ∑ x : β, ∑ i : α, ∑ y : β, Y (i, x) (i, y) * X y x := by
+      apply Finset.sum_congr rfl
+      intro x _
+      rw [Finset.sum_comm]
+    _ = ∑ i : α, ∑ x : β, ∑ y : β, Y (i, x) (i, y) * X y x := by
+      rw [Finset.sum_comm]
+
+private theorem partialTraceLeft_kronecker
+    {α β : Type*} [Fintype α]
+    (A : Matrix α α ℂ) (B : Matrix β β ℂ) :
+    Matrix.partialTraceLeft (A ⊗ₖ B) = Matrix.trace A • B := by
+  classical
+  ext i j
+  simp only [Matrix.partialTraceLeft_apply, Matrix.kroneckerMap_apply,
+    Matrix.smul_apply, Matrix.trace, Matrix.diag]
+  rw [← Finset.sum_mul]
+  rfl
+
+private theorem trace_kronecker_partialTraceLeft_mul_eq
+    {α β : Type*} [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
+    (σ : Matrix α α ℂ) (A B : Matrix (α × β) (α × β) ℂ) :
+    Matrix.trace ((σ ⊗ₖ Matrix.partialTraceLeft B) * A) =
+      Matrix.trace
+        (B * ((1 : Matrix α α ℂ) ⊗ₖ
+          Matrix.partialTraceLeft (((σ ⊗ₖ (1 : Matrix β β ℂ)) * A)))) := by
+  classical
+  let X := Matrix.partialTraceLeft B
+  let Y := (σ ⊗ₖ (1 : Matrix β β ℂ)) * A
+  calc
+    Matrix.trace ((σ ⊗ₖ X) * A) =
+        Matrix.trace (((σ ⊗ₖ (1 : Matrix β β ℂ)) *
+          ((1 : Matrix α α ℂ) ⊗ₖ X)) * A) := by
+      rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
+    _ = Matrix.trace (((1 : Matrix α α ℂ) ⊗ₖ X) * Y) := by
+      simp only [Y, ← Matrix.mul_assoc]
+      rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+        Matrix.mul_one, Matrix.one_mul]
+      simp
+    _ = Matrix.trace (Y * ((1 : Matrix α α ℂ) ⊗ₖ X)) :=
+      Matrix.trace_mul_comm _ _
+    _ = Matrix.trace (Matrix.partialTraceLeft Y * X) := by
+      rw [trace_partialTraceLeft_mul]
+    _ = Matrix.trace (X * Matrix.partialTraceLeft Y) :=
+      Matrix.trace_mul_comm _ _
+    _ = Matrix.trace
+        (B * ((1 : Matrix α α ℂ) ⊗ₖ Matrix.partialTraceLeft Y)) := by
+      rw [← trace_partialTraceLeft_mul]
+
+private theorem trace_blockDiagonal'_mul
+    {K : ℕ} {m d : Fin K → ℕ}
+    (M : (k : Fin K) →
+      Matrix (Fin (m k) × Fin (d k)) (Fin (m k) × Fin (d k)) ℂ)
+    (X : Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
+      ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ) :
+    Matrix.trace (Matrix.blockDiagonal' M * X) =
+      ∑ k : Fin K, Matrix.trace
+        (M k * Matrix.directSumBlockCompression (m := m) (d := d) k X) := by
+  classical
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply,
+    Matrix.directSumBlockCompression]
+  rw [Fintype.sum_sigma]
+  refine Finset.sum_congr rfl ?_
+  intro k _
+  refine Finset.sum_congr rfl ?_
+  intro a _
+  rw [Fintype.sum_sigma]
+  rw [Finset.sum_eq_single k]
+  · simp
+  · intro j _ hjk
+    apply Finset.sum_eq_zero
+    intro b _
+    have hkj : k ≠ j := fun h ↦ hjk h.symm
+    rw [Matrix.blockDiagonal'_apply_ne M a b hkj]
+    simp
+  · intro hk
+    exact (hk (Finset.mem_univ _)).elim
+
+private theorem trace_density_blockMap_mul_eq
+    {K : ℕ} {m d : Fin K → ℕ}
+    (σ : ∀ k, Matrix (Fin (m k)) (Fin (m k)) ℂ)
+    (A B : Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
+      ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ) :
+    Matrix.trace
+        ((Matrix.blockDiagonal' fun k ↦
+          σ k ⊗ₖ Matrix.partialTraceLeft
+            (Matrix.directSumBlockCompression (m := m) (d := d) k B)) * A) =
+      Matrix.trace
+        (B * (Matrix.blockDiagonal' fun k ↦
+          (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ
+            Matrix.partialTraceLeft
+              (((σ k) ⊗ₖ (1 : Matrix (Fin (d k)) (Fin (d k)) ℂ)) *
+                Matrix.directSumBlockCompression (m := m) (d := d) k A))) := by
+  classical
+  rw [trace_blockDiagonal'_mul]
+  rw [Matrix.trace_mul_comm, trace_blockDiagonal'_mul]
+  apply Finset.sum_congr rfl
+  intro k _
+  calc
+    _ = Matrix.trace
+        (Matrix.directSumBlockCompression (m := m) (d := d) k B *
+          ((1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ
+            Matrix.partialTraceLeft
+              (((σ k) ⊗ₖ (1 : Matrix (Fin (d k)) (Fin (d k)) ℂ)) *
+                Matrix.directSumBlockCompression (m := m) (d := d) k A))) :=
+      trace_kronecker_partialTraceLeft_mul_eq (σ k)
+        (Matrix.directSumBlockCompression (m := m) (d := d) k A)
+        (Matrix.directSumBlockCompression (m := m) (d := d) k B)
+    _ = _ := Matrix.trace_mul_comm _ _
+
+private theorem trace_unitaryReindexLinearEquiv_symm_mul
+    {n H : Type*} [Fintype n] [DecidableEq n] [Fintype H] [DecidableEq H]
+    (e : H ≃ n) (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ)
+    (X : Matrix H H ℂ) (A : Matrix n n ℂ) :
+    Matrix.trace ((Matrix.unitaryReindexLinearEquiv e U hU).symm X * A) =
+      Matrix.trace (X * Matrix.unitaryReindexLinearEquiv e U hU A) := by
+  classical
+  rw [Matrix.unitaryReindexLinearEquiv_symm_apply,
+    Matrix.unitaryReindexLinearEquiv_apply]
+  let Ahat := Matrix.reindex e.symm e.symm (star U * A * U)
+  have hreindex : Matrix.reindex e e Ahat = star U * A * U := by
+    ext i j
+    simp [Ahat]
+  calc
+    Matrix.trace ((U * Matrix.reindex e e X * star U) * A) =
+        Matrix.trace (U * (Matrix.reindex e e X * star U * A)) := by
+      simp only [Matrix.mul_assoc]
+    _ = Matrix.trace ((Matrix.reindex e e X * star U * A) * U) :=
+      Matrix.trace_mul_comm _ _
+    _ = Matrix.trace (Matrix.reindex e e X * (star U * A * U)) := by
+      simp only [Matrix.mul_assoc]
+    _ = Matrix.trace
+        (Matrix.reindex e e X * Matrix.reindex e e Ahat) := by rw [hreindex]
+    _ = Matrix.trace (Matrix.reindex e e (X * Ahat)) := by
+      exact congrArg Matrix.trace
+        (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e X Ahat)
+    _ = Matrix.trace (X * Ahat) := trace_reindex_equiv e (X * Ahat)
+
+end Matrix
+
+variable {D : ℕ}
+
+/-- **Density-block form of the Cesàro projection on full support.**
+
+Let $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be positive and trace preserving,
+suppose that $T^*$ satisfies the Schwarz inequality, and let $\rho>0$ satisfy
+$T(\rho)=\rho$.  Then the mean-ergodic projection has the block form
+\[
+  P_T(B)=U\left(\bigoplus_k
+    \sigma_k\otimes\operatorname{tr}_{m_k}((U^*BU)_{kk})\right)U^*,
+\]
+and its range, which equals $\operatorname{Fix}(T)$, is
+$U(\bigoplus_k \sigma_k\otimes M_{d_k}(\mathbb C))U^*$.
+
+This is the trace-adjoint calculation in Wolf, Equation (1.40), used in the
+proof of Theorem 6.14 and Equation (6.63); local sources
+`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 536--570,
+and `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1483--1494.
+
+**Scope restriction (full support):** The fixed point is positive definite on
+the ambient space.  The positive-definite reduction of the block densities
+and the complementary zero summand required for the general theorem remain
+open in `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
+
+**Convention (factor order):** Wolf writes the algebra and density factors in
+the opposite order.  TNLean indexes each summand by
+`Fin (m k) × Fin (d k)`, so `Matrix.partialTraceLeft` traces the multiplicity
+factor and the density block is $\sigma_k\otimes M_{d_k}(\mathbb C)$. -/
+theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (hSchwarz : IsSchwarzMap (Matrix.traceAdjointMap T))
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (hρfix : T ρ = ρ) :
+    let P := LinearMap.meanErgodicProjection (𝕜 := ℂ)
+      (E := Matrix (Fin D) (Fin D) ℂ) T
+      (hT.hasBoundedOrbits_of_tracePreserving hTP)
+    ∃ (K : ℕ) (d m : Fin K → ℕ)
+      (e : ((k : Fin K) × (Fin (m k) × Fin (d k))) ≃ Fin D)
+      (U : Matrix (Fin D) (Fin D) ℂ)
+      (σ : ∀ k, Matrix (Fin (m k)) (Fin (m k)) ℂ),
+      U ∈ Matrix.unitaryGroup (Fin D) ℂ ∧
+        (∀ k, 0 < d k) ∧ (∀ k, 0 < m k) ∧
+        (∀ k, (σ k).PosSemidef) ∧ (∀ k, (σ k).trace = 1) ∧
+        (∀ B, P B = U * Matrix.reindex e e
+          (Matrix.blockDiagonal' fun k ↦
+            σ k ⊗ₖ Matrix.partialTraceLeft
+              (Matrix.directSumBlockCompression (m := m) (d := d) k
+                (Matrix.reindex e.symm e.symm (star U * B * U)))) * star U) ∧
+        ∀ B, T B = B ↔
+          ∃ X : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ,
+            star U * B * U = Matrix.reindex e e
+              (Matrix.blockDiagonal' fun k ↦ σ k ⊗ₖ X k) := by
+  dsimp only
+  let P := LinearMap.meanErgodicProjection (𝕜 := ℂ)
+    (E := Matrix (Fin D) (Fin D) ℂ) T
+    (hT.hasBoundedOrbits_of_tracePreserving hTP)
+  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, _, hσpos, hσtrace, hFormula⟩ :=
+    hT.exists_block_densities_of_adjoint_meanErgodicProjection hTP hSchwarz hρ hρfix
+  have hPFormula : ∀ B, P B = U * Matrix.reindex e e
+      (Matrix.blockDiagonal' fun k ↦
+        σ k ⊗ₖ Matrix.partialTraceLeft
+          (Matrix.directSumBlockCompression (m := m) (d := d) k
+            (Matrix.reindex e.symm e.symm (star U * B * U)))) * star U := by
+    intro B
+    let Φ := Matrix.unitaryReindexLinearEquiv e U hU
+    let F : Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
+          ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ →
+        Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
+          ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ :=
+      fun A ↦ Matrix.blockDiagonal' fun k ↦
+        (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ
+          Matrix.partialTraceLeft
+            (((σ k) ⊗ₖ (1 : Matrix (Fin (d k)) (Fin (d k)) ℂ)) *
+              Matrix.directSumBlockCompression (m := m) (d := d) k A)
+    let G : Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
+          ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ →
+        Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
+          ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ :=
+      fun B ↦ Matrix.blockDiagonal' fun k ↦
+        σ k ⊗ₖ Matrix.partialTraceLeft
+          (Matrix.directSumBlockCompression (m := m) (d := d) k B)
+    change P B = _
+    rw [show U * Matrix.reindex e e
+          (Matrix.blockDiagonal' fun k ↦
+            σ k ⊗ₖ Matrix.partialTraceLeft
+              (Matrix.directSumBlockCompression (m := m) (d := d) k
+                (Matrix.reindex e.symm e.symm (star U * B * U)))) * star U =
+        Φ.symm (G (Φ B)) by
+      simp only [Φ, G, Matrix.unitaryReindexLinearEquiv_apply,
+        Matrix.unitaryReindexLinearEquiv_symm_apply]]
+    refine sub_eq_zero.mp ((Matrix.trace_mul_right_eq_zero_iff
+      (M := P B - Φ.symm (G (Φ B)))).1 ?_)
+    intro A
+    rw [Matrix.sub_mul, Matrix.trace_sub]
+    apply sub_eq_zero.mpr
+    have hPdouble : Matrix.traceAdjointMap (Matrix.traceAdjointMap P) B = P B :=
+      LinearMap.congr_fun (Matrix.traceAdjointMap_traceAdjointMap P) B
+    calc
+      Matrix.trace (P B * A) =
+          Matrix.trace (Matrix.traceAdjointMap (Matrix.traceAdjointMap P) B * A) := by
+        rw [hPdouble]
+      _ = Matrix.trace (B * Matrix.traceAdjointMap P A) :=
+        Matrix.trace_traceAdjointMap_mul (Matrix.traceAdjointMap P) B A
+      _ = Matrix.trace (B * Φ.symm (F (Φ A))) := by
+        rw [hFormula A]
+        simp only [Φ, F, Matrix.unitaryReindexLinearEquiv_apply,
+          Matrix.unitaryReindexLinearEquiv_symm_apply]
+      _ = Matrix.trace (Φ.symm (F (Φ A)) * B) :=
+        Matrix.trace_mul_comm _ _
+      _ = Matrix.trace (F (Φ A) * Φ B) :=
+        Matrix.trace_unitaryReindexLinearEquiv_symm_mul e U hU _ _
+      _ = Matrix.trace (Φ B * F (Φ A)) := Matrix.trace_mul_comm _ _
+      _ = Matrix.trace (G (Φ B) * Φ A) := by
+        exact (Matrix.trace_density_blockMap_mul_eq σ (Φ A) (Φ B)).symm
+      _ = Matrix.trace (Φ.symm (G (Φ B)) * A) :=
+        (Matrix.trace_unitaryReindexLinearEquiv_symm_mul e U hU _ _).symm
+  refine ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, hPFormula, ?_⟩
+  intro B
+  let Φ := Matrix.unitaryReindexLinearEquiv e U hU
+  let G : Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
+        ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ →
+      Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
+        ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ :=
+    fun B ↦ Matrix.blockDiagonal' fun k ↦
+      σ k ⊗ₖ Matrix.partialTraceLeft
+        (Matrix.directSumBlockCompression (m := m) (d := d) k B)
+  rw [← hT.meanErgodicProjection_apply_eq_self_iff_of_tracePreserving hTP B]
+  constructor
+  · intro hPB
+    refine ⟨fun k ↦ Matrix.partialTraceLeft
+      (Matrix.directSumBlockCompression (m := m) (d := d) k (Φ B)), ?_⟩
+    have hpcoord : P B = Φ.symm (G (Φ B)) := by
+      simpa only [Φ, G, Matrix.unitaryReindexLinearEquiv_apply,
+        Matrix.unitaryReindexLinearEquiv_symm_apply] using hPFormula B
+    have hcoord : Φ B = G (Φ B) := by
+      apply Φ.symm.injective
+      rw [LinearEquiv.symm_apply_apply]
+      exact hPB.symm.trans hpcoord
+    calc
+      star U * B * U = Matrix.reindex e e (Φ B) := by
+        ext i j
+        simp [Φ]
+      _ = Matrix.reindex e e (G (Φ B)) := congrArg (Matrix.reindex e e) hcoord
+      _ = _ := by rfl
+  · rintro ⟨X, hX⟩
+    have hcoord : Φ B = Matrix.blockDiagonal' (fun k ↦ σ k ⊗ₖ X k) := by
+      rw [Matrix.unitaryReindexLinearEquiv_apply, hX]
+      ext i j
+      simp
+    have hG : G (Φ B) = Φ B := by
+      rw [hcoord]
+      simp only [G]
+      congr 1
+      funext k
+      have hcomp : Matrix.directSumBlockCompression (m := m) (d := d) k
+            (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ X j) = σ k ⊗ₖ X k := by
+        ext i j
+        simp [Matrix.directSumBlockCompression, Matrix.blockDiagonal'_apply_eq]
+      rw [hcomp, Matrix.partialTraceLeft_kronecker, hσtrace]
+      simp
+    calc
+      P B = Φ.symm (G (Φ B)) := by
+        simpa only [Φ, G, Matrix.unitaryReindexLinearEquiv_apply,
+          Matrix.unitaryReindexLinearEquiv_symm_apply] using hPFormula B
+      _ = Φ.symm (Φ B) := by rw [hG]
+      _ = B := Φ.symm_apply_apply B
