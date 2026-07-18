@@ -1102,8 +1102,14 @@ physical indices, as in
 \begin{proof}\leanok
     The preceding theorem gives
     $\widetilde T(V_1(X))=V_2(X)$ and
-    $\widetilde S(V_2(X))=V_1(X)$.  Substitution gives both fixed-point
-    identities.
+    $\widetilde S(V_2(X))=V_1(X)$.  Hence
+    \[
+        (\widetilde S\circ\widetilde T)(V_1(X))
+        =\widetilde S(V_2(X))=V_1(X),
+        \qquad
+        (\widetilde T\circ\widetilde S)(V_2(X))
+        =\widetilde T(V_1(X))=V_2(X).
+    \]
 \end{proof}
 
 \begin{theorem}[Two-site closure of the two-site blocking]
