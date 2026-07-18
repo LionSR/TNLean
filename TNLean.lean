@@ -565,6 +565,7 @@ import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingBondEtaDecomposition
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicTransport
+import TNLean.MPS.MPDO.CommutingBondEtaFiniteChain
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.BNTSectorCommutingFamily

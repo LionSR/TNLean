@@ -316,6 +316,59 @@
     direct sum of tensor products.
 \end{proof}
 
+\begin{theorem}[Finite-chain neighboring-operator decomposition]
+    \label{thm:mpdo_finite_chain_eta_decomposition}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_finite_chain_eta_decomposition}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        thm:mpdo_eta_local_structure_has_commuting_form,
+        thm:mpdo_commuting_bond_positive_eta_decomposition,
+        thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    Let $\mathcal K$ carry an $\eta$-local structure.  There are positive
+    integers $d_{q,l},d_{q,r}$, a unitary $U$, and positive semidefinite
+    operators
+    \[
+        \eta_{q,h}\colon
+        H_{q,r}\otimes H_{h,l}\longrightarrow
+        H_{q,r}\otimes H_{h,l},
+    \]
+    all independent of the chain length, with the following property.  For
+    every $N\geq2$, let
+    \[
+        E_N\colon H^{\otimes N}\longrightarrow
+        \bigoplus_{k_0,\ldots,k_{N-1}}
+          \bigotimes_{n=0}^{N-1}
+            (H_{k_n,r}\otimes H_{k_{n+1},l}),
+        \qquad k_N=k_0,
+    \]
+    denote the coordinate bijection obtained by first applying the fixed
+    one-site sector coordinates and then regrouping right--left neighboring
+    factors.  For a matrix $A$, define the reindexed matrix by
+    \[
+        \mathcal R_{E_N}(A)_{s,t}
+          =A_{E_N^{-1}(s),E_N^{-1}(t)}.
+    \]
+    Then there is a scalar $c_N>0$ such that
+    \[
+        \mathcal R_{E_N}\!\left(
+          U^{*\otimes N}\sigma^{(N)}(\mathcal K)U^{\otimes N}\right)
+        =c_N\bigoplus_{k_0,\ldots,k_{N-1}}
+          \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}.
+    \]
+    Only $c_N$ may depend on $N$.  This is equation \emph{sigmaNK2} of
+    \cite[Appendix~C.2, lines~1581--1605]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The commuting-bond realization gives a positive scalar multiple of the
+    cyclic product of translates of one fixed positive bond.  Conjugation by
+    the tensor power of the one-site unitary carries each translate to the
+    corresponding translate of the locally decomposed bond.  The cyclic
+    regrouping theorem then identifies their product with the displayed
+    direct sum of tensor products of neighboring operators.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready

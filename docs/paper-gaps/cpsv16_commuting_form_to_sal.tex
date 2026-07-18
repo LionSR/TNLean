@@ -170,12 +170,21 @@ and proves that the product of the translated, locally decomposed bond is
 \), with $k_N=k_0$.  The length-two specialization is included: its two
 windows have the opposite cyclic orders $(0,1)$ and $(1,0)$.
 
-This theorem begins with the locally transformed bond.  It does not yet
-identify the product with the conjugation of the original chain product by
-the tensor power of the one-site unitary, nor combine that identity with the
-positive realization scalar.  Those two transport statements are the
-remaining algebraic steps before the full finite-chain equation
-\emph{sigmaNK2} may be claimed.
+The full finite-chain equation \emph{sigmaNK2} is now formalized.  The theorem
+\leanid{MPOTensor.EtaLocalStructureData.%
+exists_finite_chain_eta_decomposition}
+combines the positive realization scalar with tensor-power conjugation by the
+same one-site unitary.  Thus one unitary, one sector decomposition, and one
+positive neighboring family work for every $N\geq2$; only the scalar $c_N>0$
+may depend on $N$.  If $E_N$ sends a site configuration to its sector-labelled
+cyclic edge configuration, and
+$\mathcal R_{E_N}(A)_{s,t}=A_{E_N^{-1}(s),E_N^{-1}(t)}$, then the conclusion is
+\[
+  \mathcal R_{E_N}\!\left(
+    U^{*\otimes N}\sigma^{(N)}(\mathcal K)U^{\otimes N}\right)
+  =c_N\bigoplus_k\bigotimes_n\eta_{k_n,k_{n+1}}.
+\]
+This conclusion uses neither ZCL nor a rank-one trace factorization.
 
 There is a separate obstruction at source line~1613.  The phrase ``arguing as
 in Lemmas \emph{propSN} and \emph{SALZCL}'' does not show that source ZCL alone
@@ -218,11 +227,6 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Complete the tensor-power conjugation of the original cyclic bond
-product and combine it with the positive realization scalar.  The intervening
-bond-local cyclic direct-sum product is proved for every $N\geq2$; only after
-these two remaining identities may the full finite-chain equation
-\emph{sigmaNK2} be claimed.
 \item Resolve \ghissue{3593} by finding a source-faithful property of the
 actual neighboring family which excludes the nilpotent zero-eigenspace, or
 replace the printed line-1613 argument by a direct Markov decomposition which
