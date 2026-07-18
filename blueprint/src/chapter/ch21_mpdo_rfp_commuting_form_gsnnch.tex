@@ -182,6 +182,55 @@
     combine it with the doubled-index transfer hypothesis.
 \end{proof}
 
+\begin{theorem}[$\eta$-local bond admits unitary block actions]
+    \label{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
+    \lean{MPOTensor.EtaLocalStructureData.exists_unitary_blockActions_of_pairBond}
+    \leanok
+    \uses{def:mpdo_three_site_overlapping_coordinates,
+        thm:mpdo_eta_bond_overlapping_lifts,
+        thm:commuting_overlapping_unitary_block_actions}
+    Let $\widehat B$ be the pair-indexed positive two-site bond of an
+    $\eta$-local structure.  There are positive dimensions
+    $d_{l,q}=\dim H_{q,l}$ and $d_{r,q}=\dim H_{q,r}$, a unitary decomposition
+    \[
+        H\cong\bigoplus_{q=0}^{K-1}H_{q,l}\otimes H_{q,r},
+    \]
+    and Hermitian operators $R_q$ on $H\otimes H_{q,l}$ and $S_q$ on
+    $H_{q,r}\otimes H$ such that
+    \[
+        (\Id_H\otimes U^*)\widehat B(\Id_H\otimes U)
+        =\bigoplus_{q=0}^{K-1}(R_q\otimes\Id_{H_{q,r}}),
+    \]
+    \[
+        (U^*\otimes\Id_H)\widehat B(U\otimes\Id_H)
+        =\bigoplus_{q=0}^{K-1}(\Id_{H_{q,l}}\otimes S_q).
+    \]
+    The basis bijection for each sector enumerates the numerical indices in
+    right--left order,
+    \[
+        \bigsqcup_q\bigl(\{0,\ldots,d_{r,q}-1\}
+            \times\{0,\ldots,d_{l,q}-1\}\bigr)
+        \cong\{0,\ldots,d-1\}.
+    \]
+    Writing $e(q,(r,s))$ for this basis bijection, the left and right spatial
+    coordinates are respectively
+    \[
+        (q,((i,s),r))\longmapsto(i,e(q,(r,s))),
+        \qquad
+        (q,(s,(r,k)))\longmapsto(e(q,(r,s)),k).
+    \]
+    Hence the tensor factors in the displayed block actions occur in
+    left--right order.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_eta_bond_overlapping_lifts,
+        thm:commuting_overlapping_unitary_block_actions}
+    The pair-indexed bond is Hermitian by positivity, and its two overlapping
+    lifts commute by the common three-site identification.  Apply
+    Theorem~\ref{thm:commuting_overlapping_unitary_block_actions}.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready
