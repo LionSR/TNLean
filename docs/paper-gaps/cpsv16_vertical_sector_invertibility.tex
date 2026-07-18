@@ -1,0 +1,167 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{CPSV16 Vertical-Sector Invertibility and Sector Relabelling}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{The source argument}
+
+In the proof of the general mixed-state renormalization fixed-point theorem,
+CPSV16 introduces the finite-dimensional $C^*$-algebras
+\[
+    \mathcal A_1=\bigoplus_\alpha M_{d^1_\alpha}(\mathbb C),
+    \qquad
+    \mathcal A_2=\bigoplus_\beta M_{d^2_\beta}(\mathbb C)
+\]
+and the transported maps
+\[
+    \widetilde T=\widetilde R_2TR_1,
+    \qquad
+    \widetilde S=\widetilde R_1SR_2.
+\]
+For every horizontal bond matrix $X$, the source proves
+\[
+    \widetilde T\!\left(\bigoplus_\alpha
+      m_\alpha M_\alpha(X)\right)
+      =\bigoplus_\beta n_\beta A_\beta(X),
+    \qquad
+    \widetilde S\!\left(\bigoplus_\beta
+      n_\beta A_\beta(X)\right)
+      =\bigoplus_\alpha m_\alpha M_\alpha(X).
+\]
+Thus the one-site contraction family belongs to
+$\operatorname{Fix}(\widetilde S\widetilde T)$, and the two-site family
+belongs to $\operatorname{Fix}(\widetilde T\widetilde S)$
+\cite[Appendix~C.4, lines~1972--1980]{Cirac2016MPDO_arXiv}.
+
+The next step is not a linear-spanning argument.  CPSV16 invokes the
+density-weighted fixed-point form of Wolf's Theorem~6.14 and writes
+\[
+    \mathcal F
+      =U\left(0_r\oplus\bigoplus_k
+        \rho_k\otimes M_{h_k}(\mathbb C)\right)U^*.
+\]
+If $C_L(V)$ denotes the span of length-$L$ products of the contraction
+family, then the basis-of-normal-tensors hypothesis gives
+$C_L(V)=\mathcal A_1$ for some $L>0$.  On the other hand,
+\[
+    C_L(\mathcal F)
+      =U\left(0_r\oplus\bigoplus_k
+        \rho_k^L\otimes M_{h_k}(\mathbb C)\right)U^*.
+\]
+Every $\rho_k$ is positive definite, so
+$\dim C_L(\mathcal F)=\dim\mathcal F$.  The inclusions
+\[
+    \mathcal A_1=C_L(V)\subseteq C_L(\mathcal F)\subseteq\mathcal A_1
+\]
+therefore force $\mathcal F=\mathcal A_1$.  This proves
+$\widetilde S\widetilde T=\operatorname{id}_{\mathcal A_1}$; the other
+composition is treated symmetrically
+\cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}.
+
+\section{The present formal boundary}
+
+Three ingredients preceding the fixed-point classification are proved:
+\begin{enumerate}
+    \item the two transported composites fix their respective weighted bond
+          contraction families;
+    \item for a basis of normal tensors with nonzero weights, length-$L$
+          products of these contractions span the full sector algebra for
+          some $L>0$;
+    \item on the source-generated contraction families, the final compression
+          preserves the active image and hence preserves total trace.
+\end{enumerate}
+The third item does not establish trace preservation on the whole sector
+algebra.  The contraction family itself need not span the algebra linearly;
+only its length-$L$ products are known to span.  Since a linear map fixing
+$V(X)$ need not fix products $V(X_1)\cdots V(X_L)$, neither trace preservation
+nor the identity conclusion extends from the generators by linearity.
+
+The valid final implication is formalized: if a linear endomorphism fixes
+every length-$L$ contraction product and these products span, then it is the
+identity.\footnote{Formal declaration:
+\leanid{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}.}
+Its fixed-product hypothesis is not a hypothesis of CPSV16.  The source
+instead obtains the identity from the density-weighted structure of the
+fixed-point space.
+
+The general density-weighted form of Wolf's Theorem~6.14 in the
+Schr\"odinger picture is not yet formalized.  Its precise boundary is recorded in
+\path{docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex}.  For
+the transported sector maps one must also prove the channel hypotheses on the
+full direct sums, rather than only on the contraction families.  In the
+retained-coordinate construction, compression by the target coisometry is
+trace preserving precisely when the precompression output lies in its active
+image.  The established image identity is restricted to the source-generated
+contractions.
+
+\section{Sector relabelling uses positivity, not linear isomorphism}
+
+After proving mutual invertibility, CPSV16 cites the argument of
+Wolf--P\'erez-Garc\'ia, Theorem~8
+\cite[Appendix~C.4, lines~1995--2003]{Cirac2016MPDO_arXiv}.  The cited theorem
+concerns a trace-preserving Schwarz map.  Its proof constructs a positive,
+trace-preserving inverse on the peripheral space and uses the extreme points
+of the density-operator sections
+\[
+    \bigoplus_k M_{d_k}(\mathbb C)\otimes\rho_k.
+\]
+The map and its positive inverse send extreme density operators to extreme
+density operators.  Continuity and bijectivity then give a permutation of the
+simple summands and equality of the corresponding matrix dimensions.  On each
+matched summand, positivity of both directions gives either unitary
+conjugation or transposed unitary conjugation; the Schwarz condition excludes
+the transpose alternative
+\cite[Theorem~8 and its proof]{WolfPerezGarcia2010Inverse}.
+
+A linear equivalence between two finite products of matrix spaces does not
+determine their simple summands.  Likewise, the existing theorem that ring
+automorphisms permute simple block ideals cannot be applied until
+multiplicativity has been derived.  The sector relabelling therefore requires
+one of the following source-faithful routes:
+\begin{enumerate}
+    \item formalize the positive order-isomorphism argument on the normalized
+          density-operator sections and then exclude transposition by the
+          Schwarz inequality; or
+    \item prove that mutually inverse completely positive maps between the
+          direct sums are $*$-isomorphisms, and apply uniqueness of the simple
+          summands.
+\end{enumerate}
+
+\section{Elimination plan}
+
+The unrestricted CPSV16 conclusion should be completed in the following
+order:
+\begin{enumerate}
+    \item prove complete positivity and trace preservation of the transported
+          maps on the full sector algebras, including the required active-image
+          statement for every input;
+    \item formalize the density-weighted fixed-point theorem needed for
+          $\widetilde S\widetilde T$ and $\widetilde T\widetilde S$;
+    \item combine the fixed-point form with the already proved product
+          generation theorem to obtain both identity compositions;
+    \item derive the permutation and matching dimensions from the resulting
+          positive, trace-preserving inverse pair, retaining the Schwarz
+          hypothesis for the unitary-conjugation conclusion.
+\end{enumerate}
+
+\section{Classification}
+
+\textbf{Verdict: open gap.}  Until these steps are proved, neither
+transported-map invertibility nor sector relabelling should carry a completion
+marker in the blueprint.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

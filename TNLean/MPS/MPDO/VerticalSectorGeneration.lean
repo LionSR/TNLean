@@ -191,6 +191,34 @@ theorem weightedVerticalBondContractionProductSpanTop_of_wordTupleSpanTop
   refine ⟨fun t => Matrix.single (w t).modNat (w t).divNat 1, ?_⟩
   exact weightedVerticalBondContractionProduct_single m A w
 
+/-- If the length-`L` products of weighted vertical bond contractions span the
+sector algebra, then a linear endomorphism fixing every such product is the
+identity.
+
+This isolates the final linear-spanning implication in the inverse-map argument.
+It does not prove that fixed weighted contractions have fixed products.
+
+**Scope restriction (fixed products):** Appendix C.4 does not assume that the
+products are fixed.  It obtains the stronger identity conclusion from Wolf's
+density-weighted fixed-point theorem.  Here fixedness of the products is an
+explicit hypothesis.  The missing fixed-point argument is recorded in
+`docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
+theorem eq_id_of_weightedVerticalBondContractionProducts_fixed
+    {g D L : ℕ} {dim : Fin g → ℕ}
+    (m : Fin g → ℂ)
+    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim)
+    (hSpan : WeightedVerticalBondContractionProductSpanTop m A L)
+    (hFixed : ∀ X : Fin L → Matrix (Fin D) (Fin D) ℂ,
+      F (weightedVerticalBondContractionProduct m A X) =
+        weightedVerticalBondContractionProduct m A X) :
+    F = LinearMap.id := by
+  apply LinearMap.ext_on_range hSpan
+  intro X
+  simpa using hFixed X
+
 /-- A CPSV basis of normal tensors, with nonzero sector weights, admits one
 positive length at which the weighted vertical bond contractions generate the
 full direct product of its matrix algebras.
