@@ -367,6 +367,28 @@
     positive scalar $c_N$.
 \end{proof}
 
+\begin{remark}[The finite-chain scalar requires a normal-block argument]
+    The proportional commuting-bond form alone does not permit one common
+    local normalization.  Indeed, take physical dimension $d=1$ and bond
+    dimension $D=2$, with sole matrix-product letter $M^{00}=I_2$, and take
+    the two-site bond to be the scalar $B=1$.  Then
+    \[
+        \sigma^{(N)}=\operatorname{tr}(I_2^N)=2
+        =c_N\prod_{n=0}^{N-1}B_{n,n+1},
+        \qquad c_N=2.
+    \]
+    Any positive neighboring decomposition of the one-dimensional physical
+    space has one sector and one scalar $a\geq0$.  A coefficient-free identity
+    at lengths two and four would give $a^2=2$ and $a^4=2$, a contradiction.
+    This example is not a normal injective block.  In the normal single-block
+    setting, the missing assertion is the geometric law $c_N=a^N$ for one
+    $a>0$; it is precisely this law that permits one fixed rescaling.  This
+    distinguishes the proportionality at
+    \cite[Appendix~C.2, lines~1571--1576]{Cirac2016MPDO_arXiv} from the
+    coefficient-free invocation at
+    \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv}.
+\end{remark}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready

@@ -80,6 +80,15 @@ mathematically correct scope restriction, but it is not part of the literal
 hypotheses at lines 271--280 or 1135--1148. Accordingly, the unrestricted
 line-1148 sentence is not marked as formalized.
 
+The converse-coverage restriction has been formalized: two such bases have
+equivalent index types, and the matched tensors have equal bond dimension and
+are related by an invertible gauge and a scalar of modulus one.\footnote{The
+declaration is
+\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage} in
+\doclink{TNLean/MPS/CanonicalForm/BNTUniqueness.lean}.} This restricted result
+does not alter the counterexample above or validate the unrestricted source
+sentence.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 

@@ -192,8 +192,31 @@ $\sigma^{(N)}(\mathcal K)\propto\prod_n B_{n,n+1}$ but invokes the
 coefficient-free equation \emph{sigmaNK2} without retaining the corresponding
 constant.  The formal theorem proves the proportionality-preserving identity
 displayed above.  It does not prove the coefficient-free equation printed at
-source lines~1581--1588.  Removing or absorbing $c_N$ into one neighboring
-family independent of $N$ requires a further normalization argument.
+source lines~1581--1588.
+
+This omission cannot be repaired from the proportional commuting-bond form
+alone.  Take physical dimension $d=1$ and bond dimension $D=2$, with sole
+matrix-product letter $M^{00}=I_2$.  Then
+\[
+  \sigma^{(N)}=\operatorname{tr}(I_2^N)=2.
+\]
+The scalar two-site bond $B=1$ realizes this family with $c_N=2$ for every
+$N$.  Since the physical space is one-dimensional, any positive neighboring
+decomposition has a single one-dimensional sector and a single scalar
+$a\geq0$.  A coefficient-free identity for all $N\geq2$ would therefore give
+$a^2=2$ and $a^4=2$, which is impossible.  Thus a fixed local rescaling does
+not follow from the displayed proportionality data.
+
+The example is not a normal injective block.  It therefore does not contradict
+the source setting, but shows exactly which source hypothesis the missing
+argument must use.  For a normal injective single block, one must compare the
+matrix-product family with the fixed bond-product family and prove that its
+proportionality constants have the form
+\[
+  c_N=a^N
+\]
+for one $a>0$.  Only then can $a$ be absorbed once into the bond, or
+equivalently into the neighboring operators, independently of $N$.
 
 The scaled identity uses only the fixed commuting bond and its positive
 realization scalar.  It does not assert zero correlation length, rank-one trace
@@ -242,14 +265,18 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Determine whether the source normalization removes $c_N$ or permits its
-absorption into one neighboring family independent of $N$.  Until this is
-proved, the coefficient-free equation \emph{sigmaNK2} remains open.
-\item Replace the obstructed line-1613 argument by a direct Markov
-decomposition which does not require the rank-one trace matrix, or prove from
-the stated hypotheses a new identity excluding the nilpotent zero-eigenspace.
-Source ZCL alone must not be presented as giving the factorization; the
-inverse-map and finite-chain audits in \ghissue{3593} do not supply it.
+\item Restore the normal injective single-block hypothesis in the comparison
+between the matrix-product family and the fixed bond-product family.  Prove the
+proportional fundamental-theorem scalar law $c_N=a^N$ for one $a>0$, and absorb
+$a$ into the bond or neighboring operators.  The counterexample above shows
+that the generic proportional commuting-bond data cannot supply this law; this
+normalization problem is tracked in \ghissue{4253}.
+\item Find a source-faithful property of the actual inverse-map neighboring
+family which excludes the nilpotent zero-eigenspace, or
+replace the printed line-1613 argument by a direct Markov decomposition which
+does not require the rank-one trace matrix.  Source ZCL alone must not be
+presented as giving the factorization; the inverse-map and finite-chain audits
+in \ghissue{3593} do not supply it.
 \item Trace the fourth region, construct the quantum Markov decomposition at
 each admissible cut, and apply the all-cut Markov theorem.  Only then may the
 source proposition receive a formal declaration and a
