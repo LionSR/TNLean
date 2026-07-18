@@ -497,6 +497,8 @@ import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.MPDO.PhysicalSectorBondTransport
+import TNLean.MPS.MPDO.IsometricAdjacentBondTransport
+import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
 import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
 import TNLean.MPS.MPDO.PhysicalSectorBondPairwise
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition

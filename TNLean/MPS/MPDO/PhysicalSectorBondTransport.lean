@@ -111,7 +111,9 @@ private theorem offset_from_finRotate {N : ℕ} (hN : 2 ≤ N) (i k : Fin N) :
         _ = ((finRotate N i).val + (r - 1)) % N := by rw [hrot]
     rw [hk, MPSTensor.offset_mod_eq (finRotate N i).isLt (by omega : r - 1 < N)]
 
-private theorem embedLocalOperator_two_zero_nested {N : ℕ} (hN : 3 ≤ N)
+/-- Embedding the first bond of a three-site window agrees with embedding that
+bond directly in the ambient periodic chain. -/
+theorem embedLocalOperator_two_zero_nested {N : ℕ} (hN : 3 ≤ N)
     (i : Fin N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     embedLocalOperator (d := d) 3 N (by omega) i
         (embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) B) =
@@ -154,7 +156,9 @@ private theorem embedLocalOperator_two_zero_nested {N : ℕ} (hN : 3 ≤ N)
     · rw [if_neg h2, if_neg (fun h ↦ h2 (hAgree.mpr h).2)]
   · rw [if_neg h3, if_neg (fun h ↦ h3 (hAgree.mpr h).1)]
 
-private theorem embedLocalOperator_two_one_nested {N : ℕ} (hN : 3 ≤ N)
+/-- Embedding the second bond of a three-site window agrees with embedding the
+translated bond directly in the ambient periodic chain. -/
+theorem embedLocalOperator_two_one_nested {N : ℕ} (hN : 3 ≤ N)
     (i : Fin N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     embedLocalOperator (d := d) 3 N (by omega) i
         (embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) B) =
