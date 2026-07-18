@@ -381,21 +381,28 @@ physical indices, as in
     \]
 \end{lemma}
 
-\begin{lemma}[Nonzero-weight vertical bond contractions generate the sector algebra]
-    \label{lem:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+\begin{theorem}[Nonzero-weight vertical bond contractions generate the sector algebra]
+    \label{thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
     \lean{MPOTensor.%
         exists_positive_weightedVerticalBondContractionProductSpanTop_of_bnt}
     \leanok
-    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products,
-        lem:mpdo_weighted_contraction_span_transfer,
-        thm:cpsv_bnt_blocked_simultaneous_span}
+    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products}
     Suppose that $(M_\alpha)_\alpha$ is a basis of normal tensors and that
     $(c_\alpha)_\alpha$ is any family of nonzero complex scalars.  Then there
     is a positive integer $L$ such that
     \[
         C_L(V_c)=\prod_\alpha M_{d_\alpha}.
     \]
-\end{lemma}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_weighted_contraction_span_transfer,
+        thm:cpsv_bnt_blocked_simultaneous_span}
+    Choose $L>0$ for which the simultaneous word tuples
+    $(M_\alpha^w)_\alpha$ span $\prod_\alpha M_{d_\alpha}$.  Since every
+    $c_\alpha$ is nonzero, so is $c_\alpha^L$.  Apply
+    Lemma~\ref{lem:mpdo_weighted_contraction_span_transfer}.
+\end{proof}
 
 \begin{theorem}[Vertical bond contractions generate the sector algebra]
     \label{thm:mpdo_vertical_bond_contractions_generate_sector_algebra}
@@ -415,14 +422,14 @@ physical indices, as in
 
 \begin{proof}\leanok
     \uses{lem:mpdo_vertical_sector_retraction,
-        lem:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+        thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
     Since every multiplicity space is nonzero and every diagonal entry is
     positive,
     \[
         m_\alpha
         =\sum_{q=0}^{\operatorname{mult}(\alpha)-1}\mu_{\alpha,q}>0.
     \]
-    Apply the preceding lemma to the nonzero family
+    Apply the preceding theorem to the nonzero family
     $c_\alpha=m_\alpha=\operatorname{tr}(\mu_\alpha)$.
 \end{proof}
 
