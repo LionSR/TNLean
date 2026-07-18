@@ -306,7 +306,7 @@
         thm:mpdo_eta_coherent_positive_choice,
         thm:mpdo_sector_eta_data_trace_matrix}
     Let ${\cal K}$ be an injective tensor that generates MPDOs and
-    satisfies SAL, and choose the positive neighboring operators of
+    satisfies SAL, and choose the positive semidefinite neighboring operators of
     Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Restrict the sector
     index to the positive-weight summands of the Hayashi decomposition. Then
     positive semidefiniteness makes every neighboring trace real and
@@ -404,6 +404,82 @@
     \]
     for every $N\geq1$. Injectivity of the real-to-complex inclusion gives
     the two real matrix identities.
+\end{proof}
+
+\begin{theorem}[Virtual spanning does not force active-sector idempotence]
+    \label{thm:mpdo_virtual_spanning_active_trace_counterexample}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      virtual_spanning_does_not_force_rectangular_remainder_zero}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      physTraceTransfer_tensor}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      reindex_activeSectorTraceMatrix}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_active_sector_trace_matrix}
+    There is an injective tensor of bond dimension two with four one-dimensional
+    physical sectors, carrying equal positive weights $p_k=1/4$ summing to one,
+    such that the following statements hold simultaneously: it has source zero
+    correlation length; its sector virtual matrices span $\MN{2}$; its
+    physical-trace transfer is idempotent; every neighboring operator is
+    positive semidefinite; and its active trace matrix is primitive and has
+    trace one.  Nevertheless, if
+    $S=LQ$ is the physical-trace transfer and $T=QL$ is the active trace matrix,
+    then
+    \[
+        Q(1-S)L=T-T^2\ne0.
+    \]
+    In particular, full virtual-matrix spanning does not by itself imply that
+    the active trace matrix is idempotent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take
+    \[
+      L=\begin{pmatrix}
+        \frac14&\frac14&\frac14&\frac14\\
+        1&-1&1&-1
+      \end{pmatrix},
+      \qquad
+      Q=\begin{pmatrix}
+        1&\frac18\\
+        1&\frac18\\
+        1&-\frac18\\
+        1&-\frac18
+      \end{pmatrix}.
+    \]
+    For each $k$, the $k$th sector virtual matrix is the outer product of the
+    $k$th column of $L$ with the $k$th row of $Q$.  Their four coordinate
+    functions are proportional to the Walsh functions $1,x,y,xy$ on four
+    points.  More explicitly, the matrix whose columns are their coordinates
+    in the order $(00,01,10,11)$ has determinant $-1/64$.  Hence they form a
+    basis of $\MN{2}$.  Placing them on the
+    diagonal physical entries gives an injective tensor and a physical-sector factorization with
+    scalar sectors.
+
+    Direct multiplication gives
+    \[
+      LQ=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+      \qquad
+      QL=\begin{pmatrix}
+        \frac38&\frac18&\frac38&\frac18\\
+        \frac38&\frac18&\frac38&\frac18\\
+        \frac18&\frac38&\frac18&\frac38\\
+        \frac18&\frac38&\frac18&\frac38
+      \end{pmatrix}.
+    \]
+    Thus $LQ$ is idempotent, whereas every entry of $QL$ is strictly positive,
+    so $QL$ is primitive.  Its trace is one.  Since each sector is
+    one-dimensional, the neighboring operators are the scalar matrices
+
+    \[
+        \eta_{k,h}=\begin{pmatrix}(QL)_{k,h}\end{pmatrix}\succeq0.
+    \]
+
+    The $(0,1)$ entry of $(QL)^2$ is $1/4$, while the corresponding entry of
+    $QL$ is $1/8$.  Hence $QL$ is not idempotent, and associativity gives
+    $Q(1-LQ)L=QL-(QL)^2\ne0$.
 \end{proof}
 
 \begin{theorem}[Positivity of bipartite partial traces]

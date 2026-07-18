@@ -22,12 +22,18 @@ mathematical obstruction.
 
 - Location:
   `TNLean/Archive/PerronFrobeniusVirtualSpanningCounterexample.lean`
+- Active physical-sector realization:
+  `TNLean/MPS/MPDO/ActiveSectorSpanningCounterexample.lean`
 - Main declaration:
   `TNLean.Archive.PerronFrobeniusVirtualSpanningCounterexample.injective_sourceZCL_tensor_with_nilpotent_sector_pairing`
-- Statement refuted: source ZCL, injectivity, primitivity, trace
-  normalization, rectangular pairing idempotence, constant positive-power
-  traces, and full spanning of the virtual matrix algebra imply that the
-  opposite rectangular product has rank one.
+- Strengthened declaration with scalar positive semidefinite neighboring operators:
+  `MPOTensor.ActiveSectorSpanningCounterexample.virtual_spanning_does_not_force_rectangular_remainder_zero`
+- Statement refuted by the strengthened active-sector realization: source ZCL,
+  injectivity, exact idempotence of the physical-trace rectangular product,
+  primitivity and trace normalization of the active trace matrix, full spanning
+  of the virtual matrix algebra, and positive semidefiniteness of every neighboring operator
+  imply that the active trace matrix is idempotent, or equivalently that the
+  rectangular remainder vanishes.
 - Witness: four rational pairs $l_k,r_k$ with $LQ$ idempotent and $T=QL$
   primitive, but $Q(1-LQ)L=T-T^2\ne0$. The matrices $l_k r_k$ span
   $M_2(\mathbb R)$ and occur as the diagonal slices of an injective

@@ -514,6 +514,7 @@ import TNLean.MPS.MPDO.PhysicalSectorEtaLocalStructure
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalTransport
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.InverseMapActiveSectorZCL
+import TNLean.MPS.MPDO.ActiveSectorSpanningCounterexample
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.SectorEtaPositivity
