@@ -60,6 +60,8 @@
 
 % numbered sidenotes, numbers restart with each section
 \newcounter{sidenote}[section]
+% Older LaTeX releases do not synthesize the hyperref anchor form here.
+\providecommand*{\theHsidenote}{}
 \renewcommand*{\theHsidenote}{\arabic{section}.\arabic{sidenote}}
 \newcommand*{\msidemark}{\textsuperscript{\textcolor{mkey}{\arabic{sidenote}}}}
 % margin text opened by its sidenote number (shared by \sidenote and the
@@ -342,6 +344,7 @@
 % example numbering restarts with each section
 \newcounter{tnexample}[section]
 \renewcommand{\thetnexample}{\arabic{section}.\arabic{tnexample}}
+\providecommand*{\theHtnexample}{}
 \renewcommand*{\theHtnexample}{\thetnexample}
 
 % ----- tnexample -----------------------------------------------------------

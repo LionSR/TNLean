@@ -389,6 +389,108 @@
     \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv}.
 \end{remark}
 
+\begin{definition}[Rank-one trace factorization for neighboring operators]
+    \label{def:mpdo_generic_eta_rank_one_trace_factorization}
+    \lean{Matrix.EtaRankOneTraceFactorization}
+    \leanok
+    A rank-one trace factorization of neighboring matrices $\eta_{q,h}$
+    consists of real numbers $a_q,b_h$ such that
+    \[
+        \tr(\eta_{q,h})=a_qb_h,
+        \qquad
+        \sum_q a_qb_q=1.
+    \]
+    The factorization is an explicit assumption; it is not deduced from zero
+    correlation length.  It is the factorization invoked at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.
+    % Scope restriction documented in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{definition}
+
+\begin{lemma}[Separation of the two-boundary edge contraction]
+    \label{lem:mpdo_eta_two_boundary_contraction_separated}
+    \lean{Matrix.etaTwoBoundaryContraction_eq_separated}
+    \leanok
+    \uses{def:mpdo_generic_eta_rank_one_trace_factorization,
+        def:mpdo_right_partial_trace_map, def:partial_trace_left}
+    Suppose $\eta_{q,h}$ has a rank-one trace factorization.  For fixed
+    boundary sectors $u,v$, set
+    \[
+        R_{u,q}=\tr_{H_{q,l}}(\eta_{u,q}),
+        \qquad
+        L_{h,v}=\tr_{H_{h,r}}(\eta_{h,v}).
+    \]
+    Then
+    \[
+        \sum_{q,h}\tr(\eta_{q,h})(R_{u,q}\otimes L_{h,v})
+        =\left(\sum_q a_qR_{u,q}\right)\otimes
+          \left(\sum_h b_hL_{h,v}\right).
+    \]
+    This is the corrected edge contraction at
+    \cite[Appendix~C.2, lines~1613--1617]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_generic_eta_rank_one_trace_factorization}
+    Substitute $\tr(\eta_{q,h})=a_qb_h$ and distribute the two finite sums.
+\end{proof}
+
+% **Scope restriction (rank-one trace factorization):** the theorem below
+% assumes tr(eta_{q,h}) = a_q b_h.  It does not derive that identity from zero
+% correlation length and does not prove Proposition 4to2, a Markov
+% decomposition, or saturation of the area law.  Source line 1616 suppresses
+% the partial traces on the two surviving boundary operators.  Documented in
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Conditional fourth-region boundary trace]
+    \label{thm:mpdo_eta_fourth_region_trace_formula}
+    \lean{Matrix.eta_fourth_region_trace_formula}
+    \leanok
+    \uses{def:mpdo_generic_eta_rank_one_trace_factorization,
+        def:mpdo_right_partial_trace_map, def:partial_trace_left}
+    Let $\eta_{q,h}$ be arbitrary matrices on
+    $H_{q,r}\otimes H_{h,l}$ with a rank-one trace factorization.  For a
+    nonempty retained sector word $k=(k_0,\ldots,k_{L-1})$, write
+    \[
+        P_k=\bigotimes_{n=0}^{L-2}\eta_{k_n,k_{n+1}},
+        \qquad
+        R_{u,q}=\tr_{H_{q,l}}(\eta_{u,q}),
+        \qquad
+        L_{h,v}=\tr_{H_{h,r}}(\eta_{h,v}).
+    \]
+    The edge contraction corresponding to tracing the two boundary sites of
+    the longer cyclic chain is
+    \[
+    \begin{aligned}
+        &\bigoplus_k P_k\otimes
+          \sum_{q,h}\tr(\eta_{q,h})
+            \bigl(R_{k_{L-1},q}\otimes L_{h,k_0}\bigr)\\
+        &\quad=
+          \bigoplus_k P_k\otimes
+          \left(\sum_q a_qR_{k_{L-1},q}\right)\otimes
+          \left(\sum_h b_hL_{h,k_0}\right).
+    \end{aligned}
+    \]
+    This is the edge-coordinate interpretation of the displayed
+    fourth-region trace in
+    \cite[Appendix~C.2, lines~1606 and 1613--1617]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_eta_two_boundary_contraction_separated}
+    Apply Lemma~\ref{lem:mpdo_eta_two_boundary_contraction_separated} for
+    each retained sector word.  Tensor with the unchanged product $P_k$ and
+    take the direct sum over $k$.
+\end{proof}
+
+\begin{remark}
+    The theorem applies, in particular, to the positive chain-independent
+    neighboring family supplied by
+    Theorem~\ref{thm:mpdo_eta_local_sigma_nk2}, once the rank-one trace
+    factorization is given.  It does not derive that factorization, identify
+    this two-boundary contraction with a one-site marginal, or prove a Markov
+    decomposition or saturation of the area law.
+\end{remark}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready
