@@ -34,6 +34,8 @@ Wolf's *Quantum Channels & Operations: Guided Tour*:
   `∑ᵢ Aᵢ * X * Bᵢᴴ` is a signed ℂ-linear combination of CP maps.
 * `WolfProps.vecMulVec_star_eq_polarization` — polarization of rank-one
   outer products into rank-one self-outer-products.
+* `WolfProps.exists_eq_smul_id_of_maps_rankOne_to_span` — a linear map preserving
+  every rank-one self-outer-product ray is a scalar multiple of the identity.
 * `WolfProps.linearMap_eq_id_of_fixes_rankOne` — Proposition 2.3 (linear-algebra
   form): a linear map fixing every `vecMulVec v (star v)` is the identity.
 * `WolfProps.channel_eq_id_of_fixes_pureStates` — Proposition 2.3 (channel form):
@@ -181,6 +183,132 @@ theorem vecMulVec_star_eq_polarization (u v : Fin D → ℂ) :
   simp only [star_add, star_sub, StarMul.star_mul,
     (show (star Complex.I : ℂ) = -Complex.I from Complex.conj_I)]
   linear_combination h
+
+/-- A complex-linear endomorphism of matrices which preserves every ray spanned
+by a rank-one self-outer-product is a scalar multiple of the identity.
+
+The proof compares the four projectors associated with the standard basis
+vectors `e_i + e_j`, `e_i - e_j`, `e_i + I e_j`, and `e_i - I e_j`. Their
+diagonal and off-diagonal entries force all ray eigenvalues to agree. The
+rank-one polarization identity then extends the conclusion to all matrix
+units. -/
+theorem exists_eq_smul_id_of_maps_rankOne_to_span
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hT : ∀ v : Fin D → ℂ, ∃ c : ℂ,
+      T (Matrix.vecMulVec v (star v)) = c • Matrix.vecMulVec v (star v)) :
+    ∃ c : ℂ, T = c • LinearMap.id := by
+  classical
+  by_cases hD : D = 0
+  · subst D
+    exact ⟨0, Subsingleton.elim _ _⟩
+  choose c hc using hT
+  let e : Fin D → Fin D → ℂ := fun i ↦ Pi.single i 1
+  let P : (Fin D → ℂ) → Matrix (Fin D) (Fin D) ℂ :=
+    fun v ↦ Matrix.vecMulVec v (star v)
+  have hreal (i j : Fin D) (hij : i ≠ j) :
+      c (e i + e j) = c (e i) ∧ c (e i - e j) = c (e i) ∧
+        c (e j) = c (e i) := by
+    have hpar : P (e i + e j) + P (e i - e j) =
+        (2 : ℂ) • P (e i) + (2 : ℂ) • P (e j) := by
+      ext a b
+      simp [P, Matrix.vecMulVec_apply, Pi.star_apply, star_add, star_sub]
+      ring
+    have hmap := congrArg T hpar
+    simp only [map_add, map_smul, P, hc] at hmap
+    have hii := congrFun (congrFun hmap i) i
+    have hjj := congrFun (congrFun hmap j) j
+    have hij' := congrFun (congrFun hmap i) j
+    simp only [star_add, Pi.star_single, star_one, star_sub, Matrix.add_apply,
+      Matrix.smul_apply, Matrix.vecMulVec_apply, Pi.add_apply, Pi.single_eq_same,
+      ne_eq, hij, not_false_eq_true, Pi.single_eq_of_ne, add_zero, mul_one,
+      smul_eq_mul, Pi.sub_apply, sub_zero, mul_zero, Pi.single_eq_of_ne', zero_add,
+      zero_sub, mul_neg, neg_neg, e] at hii hjj hij'
+    dsimp [e] at hii hjj hij' ⊢
+    constructor
+    · linear_combination (1 / (2 : ℂ)) * hii + (1 / (2 : ℂ)) * hij'
+    constructor
+    · linear_combination (1 / (2 : ℂ)) * hii - (1 / (2 : ℂ)) * hij'
+    · linear_combination (1 / (2 : ℂ)) * hii - (1 / (2 : ℂ)) * hjj
+  have himag (i j : Fin D) (hij : i ≠ j) :
+      c (e i + Complex.I • e j) = c (e i) ∧
+        c (e i - Complex.I • e j) = c (e i) := by
+    have hpar : P (e i + Complex.I • e j) + P (e i - Complex.I • e j) =
+        (2 : ℂ) • P (e i) + (2 : ℂ) • P (e j) := by
+      ext a b
+      simp [P, Matrix.vecMulVec_apply, Pi.star_apply, star_add, star_sub]
+      ring_nf
+      rw [Complex.I_sq]
+      ring
+    have hmap := congrArg T hpar
+    simp only [map_add, map_smul, P, hc] at hmap
+    have hii := congrFun (congrFun hmap i) i
+    have hij' := congrFun (congrFun hmap i) j
+    simp only [star_add, Pi.star_single, star_one, star_smul, RCLike.star_def,
+      Complex.conj_I, neg_smul, star_sub, sub_neg_eq_add, Matrix.add_apply,
+      Matrix.smul_apply, Matrix.vecMulVec_apply, Pi.add_apply, Pi.single_eq_same,
+      Pi.smul_apply, ne_eq, hij, not_false_eq_true, Pi.single_eq_of_ne, smul_eq_mul,
+      mul_zero, add_zero, Pi.neg_apply, neg_zero, mul_one, Pi.sub_apply, sub_zero,
+      Pi.single_eq_of_ne', zero_add, mul_neg, one_mul, e] at hii hij'
+    dsimp [e] at hii hij' ⊢
+    have heq : c (e i + Complex.I • e j) =
+        c (e i - Complex.I • e j) := by
+      dsimp [e]
+      have hI := Complex.I_mul_I
+      linear_combination Complex.I * hij' -
+        (c (Pi.single i 1 - Complex.I • Pi.single j 1) -
+          c (Pi.single i 1 + Complex.I • Pi.single j 1)) * hI
+    constructor
+    · linear_combination (1 / (2 : ℂ)) * hii + (1 / (2 : ℂ)) * heq
+    · linear_combination (1 / (2 : ℂ)) * hii - (1 / (2 : ℂ)) * heq
+  let i₀ : Fin D := ⟨0, Nat.pos_of_ne_zero hD⟩
+  have hbasis (i : Fin D) : c (e i) = c (e i₀) := by
+    by_cases hi : i = i₀
+    · subst i
+      rfl
+    · exact (hreal i i₀ hi).2.2.symm
+  have hunit (i j : Fin D) :
+      T (Matrix.vecMulVec (e i) (star (e j))) =
+        c (e i₀) • Matrix.vecMulVec (e i) (star (e j)) := by
+    by_cases hij : i = j
+    · subst j
+      rw [hc, hbasis]
+    · have hpol := congrArg T (vecMulVec_star_eq_polarization (e i) (e j))
+      simp only [map_smul, map_sub, map_add, hc] at hpol
+      rw [(hreal i j hij).1, (hreal i j hij).2.1,
+        (himag i j hij).1, (himag i j hij).2] at hpol
+      have hmul : (4 : ℂ) • T (Matrix.vecMulVec (e i) (star (e j))) =
+          (4 : ℂ) • (c (e i) • Matrix.vecMulVec (e i) (star (e j))) := by
+        rw [hpol]
+        ext a b
+        simp [Matrix.vecMulVec_apply, Pi.star_apply, star_add, star_sub]
+        ring_nf
+        rw [Complex.I_sq]
+        ring
+      have h4 : (4 : ℂ) ≠ 0 := by norm_num
+      rw [← hbasis i]
+      exact smul_right_injective _ h4 hmul
+  refine ⟨c (e i₀), ?_⟩
+  refine LinearMap.ext fun M ↦ ?_
+  change T M = c (e i₀) • M
+  refine Matrix.induction_on' M ?_ ?_ ?_
+  · simp
+  · intro p q hp hq
+    rw [map_add, hp, hq, smul_add]
+  · intro i j a
+    have hsingle : (Matrix.single i j a : Matrix (Fin D) (Fin D) ℂ) =
+        a • Matrix.vecMulVec (e i) (star (e j)) := by
+      have hstar : (star (e j) : Fin D → ℂ) = e j := by
+        ext k
+        simp [e, Pi.single_apply, Pi.star_apply]
+      rw [hstar]
+      change Matrix.single i j a =
+        a • Matrix.vecMulVec (Pi.single i 1) (Pi.single j 1)
+      rw [← Matrix.single_eq_single_vecMulVec_single (i := i) (j := j)]
+      ext p q
+      simp [Matrix.single_apply]
+    rw [hsingle, map_smul, hunit]
+    simp only [smul_smul]
+    rw [mul_comm a]
 
 /-- Linear maps fixing rank-one self-outer-products also fix generic rank-one
 outer products (after polarizing via `vecMulVec_star_eq_polarization`). -/
