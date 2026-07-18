@@ -755,7 +755,13 @@ physical index identifies the corresponding virtual legs.  In components,
 this is the matrix-unit identity
 $\sum_p(K^{-1})^{\alpha,\beta}_pK^p=E_{\alpha,\beta}$:
 \begin{center}
-    $\displaystyle\sum_p (K^{-1})^{\alpha,\beta}_p\,K^p$
+    % The upper inverse tensor and lower tensor contract through the doubled
+    % physical index p.  Their four virtual legs remain open and are
+    % identified pairwise by the two cups on the right.
+    \begin{tenkz}[rows={bra, ket}, tensor style=box]
+        \tn{{\cal K}^{-1}} \\
+        \tn{{\cal K}}
+    \end{tenkz}
     $\;=\;$
     \begin{tenkz}[rows={wire, wire}, east=cup]
         \tnghost{} \\
@@ -773,15 +779,26 @@ This is the identity in
 Applying this inverse map to the doubled physical index and closing its
 virtual legs against a further copy of $K$ recovers $K$:
 \begin{center}
-    % \mathcal K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the
-    % script-letter BNT basis element \mathcal K closes its two virtual legs
-    % against K^{-1}, while the bottom K retains its virtual legs and the
-    % doubled physical index survives at the open boundary.
-    \[
-        {\cal K}\,{\cal K}^{-1}K = K
-    \]
+    % \mathcal K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the top
+    % tensor closes both virtual legs against K^{-1}; the bottom K retains
+    % its virtual legs.  The vertical strand is the doubled physical index.
+    % Both sides have boundary signature (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0).
+    \begin{tenkz}[
+            rows={op, op, ket:open},
+            west=cup,
+            east=cup,
+            tensor style=box]
+        \tn[up=p]{{\cal K}} \\
+        \tn{{\cal K}^{-1}} \\
+        \tn{K}
+    \end{tenkz}
+    $\;=\;$
+    \begin{tenkz}[physical=up, tensor style=box]
+        \tn[up=p]{K}
+    \end{tenkz}
 \end{center}
-This is the single-block identity of
+This is the single-block identity in
 \cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.
 
 \begin{definition}[Normalized fourth-site virtual tail]

@@ -207,7 +207,23 @@
             \tn{\widetilde M} & & \\
             \tn[pill, wide=3, legs at={1,2,3}]{U} & &
         \end{tenkz}
-        $\;=\;\displaystyle\bigoplus_\alpha \mu_\alpha\otimes M_\alpha$
+        $\;=\;$
+        \begin{tenkzfree}
+            \tnput[box]{mu}{(10mm,7mm)}{\mu}
+            \tnput[box]{M}{(34mm,0mm)}{M}
+            \tnput[dot]{d1}{(0mm,7mm)}{}
+            \tnput[dot]{d2}{(20mm,7mm)}{}
+            \tnput[dot]{d3}{(20mm,2mm)}{}
+            \tnjoin{$(d1)+(0mm,5mm)$}{$(d1)+(0mm,-19mm)$}
+            \tnjoin{$(d2)+(0mm,5mm)$}{$(d2)+(0mm,-19mm)$}
+            \tnjoin{$(M.west)+(-10mm,0mm)$}{M.west}
+            \tnjoin{M.east}{$(M.east)+(10mm,0mm)$}
+            \tnjoin{M.north}{$(M.north)+(0mm,7mm)$}
+            \tnjoin{M.south}{$(M.south)+(0mm,-7mm)$}
+            \tnjoin{d1}{mu.west}
+            \tnjoin{d2}{mu.east}
+            \tnjoin{d3}{M.west}
+        \end{tenkzfree}
     \end{center}
     \caption{Vertical direct-sum form of the tensor: after the physical
     isometry $U$, each block factorizes as the positive diagonal weight
