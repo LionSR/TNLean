@@ -187,7 +187,7 @@ whole language.
   \qrsection{Environments}
   \qritem{tenkz}{the contraction grid: rows are layers, columns are
     sites; bonds implicit}
-  \qritem{tenkzcd}{commutative diagrams and fusion trees}
+  \qritem{tenkzcd}{typed maps, commutative diagrams, and fusion trees}
   \qritem{tenkzlattice}{lattice windows and regions}
   \qritem{tenkzplanes}{ket-over-bra double layer}
   \qritem{tenkzfree}{typed free placement}
@@ -270,7 +270,12 @@ whole language.
   \qritem{open=\{(1-4, 2)\}}{cells keeping dangling stubs}
   \qritem{sheet sep=, trace=}{the gap; traced cells}
 
-  \qrsection{Trees and arrows (tenkzcd)}
+  \qrsection{Maps, trees, and arrows (tenkzcd)}
+  \qritem{maps}{headless typed maps composed from left to right;
+    one family member per row}
+  \qritem{\textbackslash tnarrow[from=\{(r,c)\},
+    to=\{(r,c+1)\}, species=s]\{T\}}{map $T$ of species $s$;
+    use \texttt{role=} instead for a semantic role}
   \qritem{\textbackslash tntree\{(((a\,b)\_x\,c)\_y\,d)\_e\}}{fusion
     tree from a bracketed word}
   \qritem{\textbackslash tnarrow[from=1, to=2]\{F\}}{arrow between

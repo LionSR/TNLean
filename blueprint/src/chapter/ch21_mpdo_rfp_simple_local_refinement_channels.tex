@@ -140,64 +140,35 @@ and $\mathcal T_2$ orders the result as
 \[
   (L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h).
 \]
-The two rows in Figure~\ref{fig:mpdo_physical_sector_refinement_channel} use
-the sitewise sector coordinates $\mathfrak R_2$ and $\mathfrak R_3$
+The refinement uses the sitewise sector coordinates $\mathfrak R_2$ and
+$\mathfrak R_3$
 \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
   {Cirac2016MPDO_arXiv}.
 
-\begin{figure}[ht]
-    \centering
-    \[
-        \mathfrak R_2\xrightarrow{\mathcal T_0}L_k\otimes R_h
-        \xrightarrow{\mathcal T_1}(L_k\otimes R_h)\otimes\Omega_{k,h}
-        \xrightarrow{\mathcal T_2}\mathfrak R_3
-    \]
-    \begin{center}
-        % R_2 --T_0--> L_k tensor R_h --T_1--> (L_k tensor R_h) tensor
-        % Omega_{k,h} --T_2--> R_3.  Objects are the typed sector spaces of
-        % Appendix C.2 (arXiv:1606.00608, lines 1510-1516 and 1522-1545),
-        % not tensor legs, so this is a commutative-diagram (cd) picture,
-        % not a tensor-network contraction -- matching the abstract
-        % composite T = T_2 T_1 T_0 of MPDO_TMatrix.png, not the tensor
-        % rows it also draws.  T_0 traces the neighbouring subspins R_k
-        % tensor L_h from the two-site sector space, landing on the
-        % retained outer factors L_k tensor R_h.  T_1 adjoins the
-        % completed three-site neighbouring density Omega_{k,h} on the
-        % active/zero-weight sector.  T_2 reorders the six subspins into
-        % the three-site sector space R_3.
-        \begin{tenkzcd}[column sep=large]
-            \mathfrak R_2 \arrow[r, "\mathcal T_0"] &
-            L_k\otimes R_h \arrow[r, "\mathcal T_1"] &
-            (L_k\otimes R_h)\otimes\Omega_{k,h} \arrow[r, "\mathcal T_2"] &
-            \mathfrak R_3
-        \end{tenkzcd}
-    \end{center}
-
-    \medskip
-    \[
-        \mathfrak R_2({\cal K}_2(X))\xrightarrow{\mathcal T}\mathfrak R_3({\cal K}_3(X))
-    \]
-    \begin{center}
-        % R_2(K_2(X)) --T--> R_3(K_3(X)): the refinement half of
-        % MPDO_TSKKK.png (arXiv:1606.00608 / CPSV16, Appendix C.2, eq.
-        % (3to5tcpm), lines~1510--1516, and Prop. C.7). Genre: cd -- both
-        % R_2(K_2(X)) and R_3(K_3(X)) are already-closed matrices (no
-        % open legs survive the sector-coordinate embedding), so the
-        % identity is a labelled arrow between two objects, not a tensor
-        % contraction. The arrow label T is the refinement channel
-        % T = T_2 T_1 T_0 of Definition~\ref{def:mpdo_physical_sector_t_map};
-        % the closure identity itself (T applied equals the closure) is
-        % Theorem~\ref{thm:mpdo_physical_sector_t_closure_identity}.
-        \begin{tenkzcd}
-            \mathfrak R_2({\cal K}_2(X)) \arrow[r, "\mathcal T"] &
-            \mathfrak R_3({\cal K}_3(X))
-        \end{tenkzcd}
-    \end{center}
-    \caption{The refinement channel
-    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$ in physical-sector
-    coordinates.}
-    \label{fig:mpdo_physical_sector_refinement_channel}
-\end{figure}
+% T = T_2 T_1 T_0 maps R_2 through the retained outer factors and the
+% completed neighboring density to R_3.  Each blue stroke has channel
+% species; the labels T_0, T_1, T_2 name the constituent maps.  The fixed
+% left-to-right axis records composition without arrowheads.
+\[
+  \begin{tenkzcd}[maps, species={channel}]
+    \mathfrak R_2 &
+    L_k\otimes R_h &
+    (L_k\otimes R_h)\otimes\overline\Omega_{k,h} &
+    \mathfrak R_3
+    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
+    \tnarrow[from={(1,2)}, to={(1,3)}, species=channel]{\mathcal T_1}
+    \tnarrow[from={(1,3)}, to={(1,4)}, species=channel]{\mathcal T_2}
+  \end{tenkzcd}
+\]
+The closure identity is
+% T(R_2(K_2(X))) = R_3(K_3(X)).  Both endpoints are closed sector-coordinate
+% matrices; the blue line is the channel T, not a contracted tensor index.
+\[
+  \begin{tenkzcd}[maps, species={channel}]
+    \mathfrak R_2(\mathcal K_2(X)) & \mathfrak R_3(\mathcal K_3(X))
+    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T}
+  \end{tenkzcd}
+\]
 
 \begin{definition}[The neighboring-state preparation $\mathcal S_1$]
     \label{def:mpdo_physical_sector_s1_map}

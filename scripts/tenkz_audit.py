@@ -72,7 +72,7 @@ EMPTY_CHECK_LANGS = {"grid", "lattice", "free"}
 DIALECT_KINDS = {
     "grid": {"atom", "bond", "trace", "pairtrace", "phtrace", "cup", "hole", "boundary"},
     "free": {"atom", "join", "boundary"},
-    "cd": {"cdcell", "cdarrow", "tree"},
+    "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
 }
 
 
@@ -112,7 +112,12 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "boundary": {"picture": _is_int, "virtual-west": _is_int, "virtual-east": _is_int,
                  "physical-up": _is_int, "physical-down": _is_int},
     "cdcell": {"picture": _is_int, "index": _is_int},
+    "cdobject": {"picture": _is_int, "cell": _is_cell},
     "cdarrow": {"picture": _is_int, "from": _any, "to": _any},
+    "cdmap": {"picture": _is_int, "from": _is_cell, "to": _is_cell,
+              "fused": _enum("0", "1"),
+              "role": _enum("none", "operator", "marked", "extra", "passive"),
+              "species": _any},
     "tree": {"picture": _is_int, "leaves": _is_int},
     "join": {"picture": _is_int, "from": _any, "to": _any},
 }
@@ -294,6 +299,28 @@ class Audit:
         for (lang, digest), pics in sorted(groups.items(),
                                            key=lambda kv: kv[1][0].ident):
             if len(pics) < 2:
+                continue
+            # A cd parent emits its final addressed edges after all object
+            # cells have been typeset.  Grid pictures declared inside that
+            # line interval are therefore nested object cells.  Repeating an
+            # object in several rows of one map family is the point of a
+            # small-multiple diagram, not a candidate for a global named
+            # figure definition.
+            parents = []
+            for pic in pics:
+                containing = [
+                    parent for parent in self.pictures
+                    if parent.lang == "cd"
+                    and parent.line < pic.line
+                    and parent.content()
+                    and pic.line < max(e.line for e in parent.content())
+                ]
+                parents.append(max(containing, key=lambda p: p.line,
+                                   default=None))
+            if parents[0] is not None and all(
+                    parent is not None
+                    and parent.ident == parents[0].ident
+                    for parent in parents):
                 continue
             ids = ", ".join(str(p.ident) for p in pics)
             self.adv("repeated-topology", self.log_path.name,
