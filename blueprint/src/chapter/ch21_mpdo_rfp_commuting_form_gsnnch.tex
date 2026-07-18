@@ -274,6 +274,48 @@
     $B'$, and is therefore positive semidefinite.
 \end{proof}
 
+\begin{theorem}[Cyclic product of a locally decomposed bond]
+    \label{thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    \lean{MPOTensor.%
+      reindex_product_embedLocalOperator_of_etaPair_decomposition}
+    \leanok
+    Suppose that, in one fixed coordinate decomposition
+    \[
+        H\cong\bigoplus_q H_{q,r}\otimes H_{q,l},
+    \]
+    after regrouping the two-site coordinates according to this decomposition,
+    a two-site operator has the form
+    \[
+        B=\bigoplus_{q,h}
+          \Id_{H_{q,l}}\otimes\eta_{q,h}\otimes\Id_{H_{h,r}}.
+    \]
+    For every $N\geq2$, regroup the cyclic chain as
+    \[
+        H^{\otimes N}\cong
+        \bigoplus_{k:\mathbb Z/N\mathbb Z\to\{0,\ldots,K-1\}}
+        \bigotimes_{n\in\mathbb Z/N\mathbb Z}
+          \left(H_{k_n,r}\otimes H_{k_{n+1},l}\right).
+    \]
+    Then, in these coordinates,
+    \[
+        \prod_{n=0}^{N-1}B_{n,n+1}
+        =\bigoplus_k\bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}},
+        \qquad k_N=k_0.
+    \]
+    At $N=2$, the two translated windows have the opposite orders $(0,1)$
+    and $(1,0)$ and give the two oriented factors
+    $\eta_{k_0,k_1}$ and $\eta_{k_1,k_0}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    In a fixed sector configuration, the cyclic regrouping sends the factors
+    $(r_n,l_n)$ to the edge factors $(r_n,l_{n+1})$.  The translate beginning
+    at $n$ acts by $\eta_{k_n,k_{n+1}}$ on the $n$th edge factor and by the
+    identity on every other edge factor.  Different sector configurations do
+    not mix.  Multiplying the translated operators therefore gives the stated
+    direct sum of tensor products.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready
