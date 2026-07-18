@@ -1368,11 +1368,14 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{proof}\leanok
     \uses{lem:is_kraus_cp_comp, lem:mpdo_single_kraus_map_cp,
         lem:mpdo_state_preparation_cp}
-    The map is the composition of conjugation by
-    $\tau^{-1/2}_{\mathrm{supp}}$, adjoining the identity on $H_R$, and
-    conjugation by $\sqrt\sigma$.  Each operation has a rectangular Kraus
-    representation, and compositions of such representations remain in
-    Kraus form.
+    For an orthonormal basis $(e_r)_r$ of $H_R$, let
+    $J_r:H_L\to H_L\otimes H_R$ be given by $J_r(v)=v\otimes e_r$.  Then
+    \[
+        \mathcal R_\sigma(X)=\sum_r K_rXK_r^\dagger,
+        \qquad
+        K_r=\sqrt\sigma\,J_r\tau^{-1/2}_{\mathrm{supp}}.
+    \]
+    Thus the support Petz map has a rectangular Kraus representation.
 \end{proof}
 
 \begin{theorem}[The support Petz map recovers its reference]
@@ -1392,9 +1395,11 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{proof}\leanok
     The support inverse-square-root identity reduces the middle factor to
     $P_\tau\otimes\mathbf 1_R$.  Marginal-support absorption gives
-    $(1-P_\tau\otimes\mathbf 1_R)\sigma=0$.  Sandwiching that complementary
-    projection by $\sqrt\sigma$ gives a positive semidefinite matrix of trace
-    zero, hence zero.  Therefore
+    $(\mathbf 1_{LR}-P_\tau\otimes\mathbf 1_R)\sigma=0$, so
+    \[
+        \sqrt\sigma(\mathbf 1_{LR}-P_\tau\otimes\mathbf 1_R)\sqrt\sigma=0
+    \]
+    because that matrix is positive semidefinite of trace zero.  Therefore
     $\sqrt\sigma(P_\tau\otimes\mathbf 1_R)\sqrt\sigma=\sigma$.
 \end{proof}
 
