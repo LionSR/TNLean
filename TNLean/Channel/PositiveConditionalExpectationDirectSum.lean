@@ -100,7 +100,7 @@ partial trace.
 This is the finite-dimensional cyclicity used to pass between the two orders in Wolf,
 Equation (1.40): the displayed equation uses $A_{kk}(\rho_k\otimes 1)$, while the
 one-factor functional representation naturally gives $(\rho_k\otimes 1)A_{kk}$. -/
-theorem partialTraceLeft_kronecker_one_mul_eq_mul_kronecker_one
+private theorem partialTraceLeft_kronecker_one_mul_eq_mul_kronecker_one
     {α β : Type*} [Fintype α] [Fintype β] [DecidableEq β]
     (ρ : Matrix α α ℂ) (A : Matrix (α × β) (α × β) ℂ) :
     Matrix.partialTraceLeft ((ρ ⊗ₖ (1 : Matrix β β ℂ)) * A) =
@@ -466,10 +466,15 @@ theorem exists_density_of_positive_retraction_onto_direct_sum_right_factors
             directSumDiagonalBlockMap E k A =
               (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ
                 Matrix.partialTraceLeft
-                  ((ρ ⊗ₖ (1 : Matrix (Fin (d k)) (Fin (d k)) ℂ)) * A) :=
-    Matrix.exists_density_of_positive_retraction_onto_right_factor
+                  (A * (ρ ⊗ₖ (1 : Matrix (Fin (d k)) (Fin (d k)) ℂ))) := by
+    obtain ⟨ρ, hρpos, hρtrace, hρformula⟩ :=
+      Matrix.exists_density_of_positive_retraction_onto_right_factor
       (directSumDiagonalBlockMap E k)
       (directSumDiagonalBlockMap_isPositiveMap E hE k) (hLocalRange k) (hLocalFix k)
+    refine ⟨ρ, hρpos, hρtrace, fun A ↦ ?_⟩
+    rw [hρformula]
+    congr 1
+    exact partialTraceLeft_kronecker_one_mul_eq_mul_kronecker_one ρ A
   choose ρ hρpos hρtrace hρformula using hLocal
   refine ⟨ρ, hρpos, hρtrace, fun A ↦ ?_⟩
   obtain ⟨B, hB⟩ := hRange A
@@ -485,7 +490,14 @@ theorem exists_density_of_positive_retraction_onto_direct_sum_right_factors
     _ = directSumDiagonalBlockMap E k
           (directSumBlockCompression (m := m) (d := d) k A) :=
       directSumOutputBlockMap_eq_diagonalBlockMap_compression E hE hFix A k
-    _ = _ := hρformula k _
+    _ = (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ
+          Matrix.partialTraceLeft
+            (directSumBlockCompression (m := m) (d := d) k A *
+              ((ρ k) ⊗ₖ (1 : Matrix (Fin (d k)) (Fin (d k)) ℂ))) := hρformula k _
+    _ = _ := by
+      congr 1
+      exact (partialTraceLeft_kronecker_one_mul_eq_mul_kronecker_one
+        (ρ k) (directSumBlockCompression (m := m) (d := d) k A)).symm
 
 end Matrix
 
