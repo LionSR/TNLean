@@ -22,12 +22,17 @@ on:
       - 'blueprint/src/**'
       - 'tex/tn/**'
       - 'tex/tenkz/**'
+      - 'docs/tenkz/manual2.tex'
+      - 'docs/tenkz/tenkzmanual2.sty'
+      - 'docs/tenkz/chapters2/**'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/check_reader_facing_prose.py'
+      - 'scripts/tenkz_audit.py'
+      - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -44,12 +49,17 @@ on:
       - 'blueprint/src/**'
       - 'tex/tn/**'
       - 'tex/tenkz/**'
+      - 'docs/tenkz/manual2.tex'
+      - 'docs/tenkz/tenkzmanual2.sty'
+      - 'docs/tenkz/chapters2/**'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/check_reader_facing_prose.py'
+      - 'scripts/tenkz_audit.py'
+      - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
   workflow_dispatch:
 
@@ -98,11 +108,18 @@ jobs:
             blueprint:
               - 'blueprint/src/**'
               - 'tex/tn/**'
+              - 'tex/tenkz/**'
+              - 'docs/tenkz/manual2.tex'
+              - 'docs/tenkz/tenkzmanual2.sty'
+              - 'docs/tenkz/chapters2/**'
               - 'docs/slides/**'
               - 'blueprint/.chktexrc'
               - 'blueprint/latexindent.yaml'
               - 'scripts/blueprint_bibtex.py'
               - 'scripts/check_reader_facing_prose.py'
+              - 'scripts/tenkz_audit.py'
+              - 'scripts/tenkz_lint.py'
+              - 'scripts/test_tenkz_pic.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
 
@@ -251,6 +268,42 @@ jobs:
             --audit-strict \
             --smoke-render
 
+      - name: Lint tenkz picture sources
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          python3 scripts/tenkz_lint.py \
+            'blueprint/src/chapter/*.tex' \
+            'docs/tenkz/manual2.tex' \
+            'docs/tenkz/chapters2/*.tex' \
+            'tex/tenkz/examples/*.tex'
+
+      # Build the root manual as well as its input chapters.  This is the
+      # syntax gate for manual2.tex, tenkzmanual2.sty, and the expl3 package
+      # sources; generic chktex is unsuitable for their deliberate notation.
+      - name: Compile tenkz manual
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          cd docs/tenkz
+          timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
+            xelatex -interaction=nonstopmode -halt-on-error manual2.tex
+          timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
+            xelatex -interaction=nonstopmode -halt-on-error manual2.tex
+          python3 ../../scripts/tenkz_audit.py manual2.tnlog
+
+      - name: Compile tenkz acceptance examples
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          for source in "$GITHUB_WORKSPACE"/tex/tenkz/examples/*.tex; do
+            source_dir="$(dirname "$source")"
+            source_file="$(basename "$source")"
+            (
+              cd "$source_dir"
+              timeout 120 env TEXINPUTS="$GITHUB_WORKSPACE/tex/tenkz//:" \
+                xelatex -interaction=nonstopmode -halt-on-error "$source_file"
+            )
+            python3 scripts/tenkz_audit.py "${source%.tex}.tnlog"
+          done
+
       # Compile-and-cache smoke test of the tenkz picture pipeline
       # (blueprint/src/Packages/tenkz_pic.py): renders the spec benchmark
       # units standalone and checks ink, caching, and per-figure
@@ -262,7 +315,7 @@ jobs:
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
         run: |
-          find blueprint/src tex/tn -name '*.tex' -not -path '*/Packages/*' -print0 \
+          find blueprint/src tex/tn tex/tenkz/examples -name '*.tex' -not -path '*/Packages/*' -print0 \
             | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
       # TODO: drop continue-on-error after a separate mechanical PR has run
@@ -279,7 +332,7 @@ jobs:
               echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
               status=1
             fi
-          done < <(find blueprint/src tex/tn -name '*.tex' -not -path '*/Packages/*')
+          done < <(find blueprint/src tex/tn tex/tenkz/examples -name '*.tex' -not -path '*/Packages/*')
           exit $status
 
       - name: Build blueprint bibliography
