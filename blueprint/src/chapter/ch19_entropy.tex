@@ -1404,6 +1404,27 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{definition}
 
+\begin{theorem}[Complete positivity of the complementary term]
+    \label{thm:partial_trace_petz_complement_cp}
+    \lean{Matrix.partialTraceRightPetzComplementMap_isKrausCP}
+    \leanok
+    \uses{def:partial_trace_petz_complement, def:is_kraus_cp}
+    The complementary preparation term $\mathcal C_\sigma$ is completely
+    positive.
+\end{theorem}
+
+\begin{lemma}[Trace of the complementary term]
+    \label{lem:partial_trace_petz_complement_trace}
+    \lean{Matrix.partialTraceRightPetzComplementMap_trace}
+    \leanok
+    \uses{def:partial_trace_petz_complement}
+    If $\sigma$ has trace one, then
+    \[
+        \operatorname{tr}(\mathcal C_\sigma(X))
+        =\operatorname{tr}(Q_\tau X).
+    \]
+\end{lemma}
+
 \begin{definition}[Trace-preserving Petz channel for a partial trace]
     \label{def:partial_trace_petz_channel}
     \lean{Matrix.partialTraceRightPetzChannel}
@@ -1422,7 +1443,10 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.partialTraceRightPetzChannel_isKrausCPTP}
     \leanok
     \uses{def:partial_trace_petz_channel,
-        lem:partial_trace_support_petz_map_trace, def:is_kraus_cptp}
+        thm:partial_trace_support_petz_map_cp,
+        lem:partial_trace_support_petz_map_trace,
+        thm:partial_trace_petz_complement_cp,
+        lem:partial_trace_petz_complement_trace, def:is_kraus_cptp}
     If $\sigma$ is positive semidefinite with trace one, then
     $\widehat{\mathcal R}_\sigma$ is completely positive and trace preserving.
 \end{theorem}

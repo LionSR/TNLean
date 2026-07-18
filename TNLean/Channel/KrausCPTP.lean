@@ -29,8 +29,11 @@ dimensions.
 * `IsKrausCP.map_posSemidef`: a Kraus CP map preserves positive
   semidefiniteness.
 * `IsKrausCPTP.trace_map`: a map satisfying `IsKrausCPTP` preserves trace.
+* `isKrausCPTP_of_isKrausCP_trace_preserving`: a Kraus CP map that preserves
+  trace is Kraus CPTP.
 * `IsKrausCPTP.map_posSemidef`: a map satisfying `IsKrausCPTP` preserves
   positive semidefiniteness.
+* `isKrausCP_add`: sums of rectangular Kraus CP maps are Kraus CP.
 * `isKrausCPTP_id`: the identity map is trace-preserving completely positive.
 * `isKrausCPTP_of_singleKraus`: conjugation by an isometry is trace-preserving
   completely positive.
@@ -163,7 +166,9 @@ theorem isKrausCPTP_of_isKrausCP_trace_preserving
     _ = Matrix.trace X := htrace X
 
 /-- The sum of two completely positive maps in rectangular Kraus form is
-completely positive. -/
+completely positive.  This is the dimension-changing counterpart of
+`IsCPMap.add`; concatenating the two rectangular Kraus families makes the
+codomain dimensions explicit. -/
 theorem isKrausCP_add
     {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
     {S T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ}
