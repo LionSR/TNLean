@@ -718,16 +718,14 @@
     \uses{def:lpdo, thm:lpdo_block_channel_image}
     Let $M$ be an LPDO.  For every decomposition $N=L+K$, there exist an
     ancillary dimension $d_K$, a purifying bond dimension $D'$, and a
-    purifying tensor $A$ such that
+    local-purification family $A$.  Let $\widetilde A$ be its associated
+    purifying MPS tensor.  Then
     \[
       \sigma^{(N)}_{L:K}(M)
       =\left(\operatorname{Tr}_{\mathrm{anc},L}\otimes
         \operatorname{Tr}_{\mathrm{anc},K}\right)
         \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right).
     \]
-    This is restricted to LPDOs and exposes the purifying bond dimension
-    $D'$.  It does not assert a bound in terms of the MPO bond dimension for
-    every positive MPDO.
 \end{theorem}
 
 \begin{proof}\leanok
