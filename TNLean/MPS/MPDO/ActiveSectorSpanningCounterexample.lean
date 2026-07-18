@@ -23,10 +23,10 @@ while
 \]
 
 Thus spanning by the full virtual matrix algebra does not, by itself, prove
-the missing vanishing in the proof of Lemma C.5.  This does not disprove the
-strong-area-law statement: the example isolates the concrete algebraic inputs
-used after the physical-sector factorization, but no strong-area-law witness
-is asserted.
+the missing vanishing in the proof of Lemma C.5.  The induced classical cyclic
+family satisfies the strong area law mathematically, but the factorization
+below is chosen directly and has not been identified with the particular
+inverse-map factorization selected from the source Hayashi decomposition.
 
 ## Main result
 
@@ -330,11 +330,14 @@ positive semidefinite neighboring operators, an injective tensor with source zer
 correlation length, and a primitive trace-one active trace matrix, while that
 matrix is non-idempotent and the rectangular remainder is nonzero.
 
-This is a counterexample only to the proposed intermediate implication.  No
-strong-area-law hypothesis is asserted, so it does not refute Lemma C.5 of
-arXiv:1606.00608; it shows that a proof of that lemma must use information
-beyond the concrete spanning and rectangular identities presently extracted
-from Appendix C.2, lines 1406--1499. -/
+This is a counterexample only to the proposed intermediate implication.  The
+formal statement does not assert the strong area law, although the induced
+classical cyclic family satisfies it by a direct entropy calculation.  What
+prevents this theorem from refuting Lemma C.5 of arXiv:1606.00608 is instead
+the unproved identification of the chosen direct-sum decomposition with the
+source-selected inverse-map factorization.  A proof of that lemma must use
+information beyond the concrete spanning and rectangular identities presently extracted from
+Appendix C.2, lines 1406--1499. -/
 theorem virtual_spanning_does_not_force_rectangular_remainder_zero :
     tensor.IsInjective ∧ tensor.IsSourceZCL ∧
       physTraceTransfer tensor * physTraceTransfer tensor = physTraceTransfer tensor ∧
