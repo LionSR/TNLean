@@ -96,9 +96,11 @@ development.
 
 \section{What the rank-three separation establishes}
 
-De las Cuevas--Drescher--Netzer state that bond-three MPDOs can contain an
-unbounded amount of classical correlations \cite{DeLasCuevas2019Separability}.
-Their precise rank-three examples are diagonal states
+De las Cuevas--Schuch--P\'erez-Garc\'ia--Cirac give a rank-three separation in
+\cite[Result~1 and equations~(10)--(14)]{DeLasCuevas2013Purifications}; it is
+also summarized in
+\cite[Section~4.3, equation~(13), and Table~2]{DeLasCuevas2019Separability}.
+The examples are diagonal states
 \[
   \rho_t=\sum_{i,j}(M_t)_{ij}\lvert i,j\rangle\langle i,j\rvert,
 \]
@@ -117,11 +119,17 @@ the rank-three family.
 
 Indeed, after normalizing $M_t$ to a joint probability distribution, the
 quantum mutual information of the diagonal state is exactly the classical
-mutual information of that distribution.  The classical rank bound
-\cite{Riazanov2017PSDRank} gives
+mutual information of that distribution.  The ordinary-rank bound
+\cite[Theorem~4.1]{Riazanov2017PSDRank} gives
 \[
   I(X:Y)\leq\log\operatorname{rank}(M_t)=\log 3.
 \]
+This theorem concerns ordinary matrix rank, rather than nonnegative rank.  Its
+proof repeatedly eliminates a linearly dependent row while preserving
+nonnegativity and the column marginals, choosing the endpoint for which mutual
+information does not decrease.  The final joint distribution has at most
+$\operatorname{rank}(M_t)$ nonzero rows, and hence its mutual information is at
+most the entropy of a random variable with that many values.
 Thus the rank-three examples have uniformly bounded mutual information.  They
 show that a small MPO bond does not control the bond dimension of an exact local
 purification; they neither prove nor disprove the unrestricted
