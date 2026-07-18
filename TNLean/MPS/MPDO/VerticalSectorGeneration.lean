@@ -64,8 +64,8 @@ end MPSTensor
 
 namespace MPOTensor
 
-/-- The direct-product sector operator
-`α ↦ m α • M_α(X)` obtained by contracting the common horizontal bond
+/-- The direct-product sector operator whose `α`-th sector is the scalar
+multiple $m_α M_α(X)$ obtained by contracting the common horizontal bond
 matrix `X` into every vertical BNT representative.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1975--1984. -/
@@ -125,7 +125,7 @@ def verticalSectorScaleEquiv
     rw [smul_smul, smul_smul, mul_comm]
 
 /-- Products of weighted contractions against matrix units are the
-corresponding simultaneous word tuples, scaled in sector `α` by `(m α)^L`.
+corresponding simultaneous word tuples, scaled in sector $α$ by $m_α^L$.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1980--1990. -/
 theorem weightedVerticalBondContractionProduct_single
