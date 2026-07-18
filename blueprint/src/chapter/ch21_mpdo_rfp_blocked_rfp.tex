@@ -290,6 +290,130 @@ physical indices, as in
     \]
 \end{proof}
 
+\begin{definition}[Retained coordinates for the vertical-sector algebra]
+    \label{def:mpdo_retained_vertical_sector_coordinates}
+    \lean{MPOTensor.verticalSectorFinEquiv}
+    \lean{MPOTensor.verticalSectorBlockDiagonal}
+    \lean{MPOTensor.verticalSectorBlocks}
+    \lean{MPOTensor.verticalSectorBlockProjection}
+    \lean{MPOTensor.normalizedRetainedVerticalSectorEmbedding}
+    \lean{MPOTensor.retainedVerticalSectorPartialTrace}
+    \leanok
+    \uses{def:mpdo_normalized_vertical_sector_maps}
+    Retain the coordinates $(\alpha,a,i)$, where $\alpha$ labels a simple
+    sector, $a$ labels a diagonal entry of $\mu_\alpha$, and
+    $0\leq i<d_\alpha$.  The family $(Y_\alpha)_\alpha$ is represented on
+    this space by
+    \[
+        \bigoplus_\alpha Y_\alpha.
+    \]
+    Write $\iota$ for this inclusion, $\pi$ for extraction of the diagonal
+    summands, and $P=\iota\pi$.  Composing $\iota$ and $\pi$ with $R_\mu$ and
+    $\widetilde R_\mu$ defines their retained-coordinate forms.
+\end{definition}
+
+\begin{lemma}[Extraction after vertical-sector inclusion]
+    \label{lem:mpdo_retained_vertical_sector_extraction}
+    \lean{MPOTensor.verticalSectorBlocks_comp_verticalSectorBlockDiagonal}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    The diagonal-summand extraction is a left inverse of the inclusion:
+    \[
+        \pi\iota=\operatorname{id}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Restricting $\bigoplus_\beta Y_\beta$ to the rows and columns with sector
+    label $\alpha$ gives $Y_\alpha$.
+\end{proof}
+
+\begin{lemma}[Entries retained by the vertical-sector projection]
+    \label{lem:mpdo_retained_vertical_sector_projection_same}
+    \lean{MPOTensor.verticalSectorBlockProjection_apply_same}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    For every retained-coordinate matrix $Z$,
+    \[
+        P(Z)_{(\alpha,a,i),(\alpha,b,j)}
+          =Z_{(\alpha,a,i),(\alpha,b,j)}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Both indices lie in the same extracted diagonal summand.
+\end{proof}
+
+\begin{lemma}[Entries removed by the vertical-sector projection]
+    \label{lem:mpdo_retained_vertical_sector_projection_distinct}
+    \lean{MPOTensor.verticalSectorBlockProjection_apply_ne}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    If $\alpha\ne\beta$, then
+    \[
+        P(Z)_{(\alpha,a,i),(\beta,b,j)}=0.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The two indices belong to distinct diagonal summands.
+\end{proof}
+
+\begin{lemma}[Idempotence of the vertical-sector projection]
+    \label{lem:mpdo_retained_vertical_sector_projection_idempotent}
+    \lean{MPOTensor.verticalSectorBlockProjection_comp_self}
+    \leanok
+    \uses{lem:mpdo_retained_vertical_sector_extraction}
+    The projection onto the vertical-sector diagonal summands is idempotent:
+    \[
+        P^2=P.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The identity $\pi\iota=\operatorname{id}$ gives
+    $P^2=\iota\pi\iota\pi=\iota\pi$.
+\end{proof}
+
+\begin{lemma}[Retraction in retained vertical-sector coordinates]
+    \label{lem:mpdo_retained_vertical_sector_retraction}
+    \lean{MPOTensor.retainedVerticalSectorPartialTrace_comp_normalizedEmbedding}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates,
+      lem:mpdo_retained_vertical_sector_extraction,
+      lem:mpdo_vertical_sector_retraction}
+    Suppose that every multiplicity space is nonzero and every diagonal entry
+    of $\mu_\alpha$ is positive.  Then the retained-coordinate partial trace
+    is a left inverse of the normalized retained-coordinate embedding.
+\end{lemma}
+
+\begin{proof}\leanok
+    First extract the diagonal summands, then apply
+    $\widetilde R_\mu R_\mu=\operatorname{id}$.
+\end{proof}
+
+\begin{lemma}[Weighted vertical contraction in retained coordinates]
+    \label{lem:mpdo_retained_vertical_weighted_contraction}
+    \lean{MPOTensor.contractBondMatrix_verticalAssembledTensor_eq_sectorBlockDiagonal}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates,
+      def:mpdo_vertical_bond_matrix_contraction}
+    For every horizontal bond matrix $X$, contraction of
+    $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ gives
+    \[
+        \bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Flattening the index triple $(\alpha,a,i)$ gives the entry formula
+    \[
+        B(X)_{(\alpha,a,i),(\beta,b,j)}
+          =\delta_{\alpha\beta}\delta_{ab}\,
+            \mu_{\alpha,a}M_\alpha(X)_{ij}.
+    \]
+\end{proof}
+
 \begin{definition}[Bond-matrix contraction of a vertical tensor]
     \label{def:mpdo_vertical_bond_matrix_contraction}
     \lean{MPSTensor.contractBondMatrix}
@@ -671,6 +795,139 @@ physical indices, as in
           &=U_1S(\mathcal M^{(2)}(X))U_1^\dagger \\
           &=U_1\mathcal M^{(1)}(X)U_1^\dagger
            =B_1(X).
+    \end{aligned}
+    \]
+\end{proof}
+
+\begin{definition}[Refinement and coarse-graining on vertical sectors]
+    \label{def:mpdo_transported_vertical_sector_maps}
+    \lean{MPOTensor.transportedVerticalSectorT}
+    \lean{MPOTensor.transportedVerticalSectorS}
+    \leanok
+    \uses{def:mpdo_normalized_vertical_sector_maps,
+      def:mpdo_retained_vertical_sector_coordinates,
+      def:mpdo_vertical_coordinate_map_transport}
+    Define maps between the one-site and two-site simple-sector algebras by
+    \[
+        \widetilde T=\widetilde R_2T_{\mathrm v}R_1,
+        \qquad
+        \widetilde S=\widetilde R_1S_{\mathrm v}R_2.
+    \]
+    The partial trace and diagonal-summand extraction define these maps on the
+    full matrix algebras.  Their agreement with the normalized maps in
+    \cite[Appendix~C.4, lines~1972--1979]{Cirac2016MPDO_arXiv} is asserted on
+    the weighted block-diagonal image.  At this stage there is no assertion
+    that the image is preserved, that the two maps are inverse, completely
+    positive, or trace preserving, or that the sector labels have been
+    matched.  The final renormalization fixed-point conclusion is separate.
+\end{definition}
+
+\begin{lemma}[Normalized embedding of multiplicity-trace-scaled sectors]
+    \label{lem:mpdo_normalized_retained_vertical_sector_embedding}
+    \lean{MPOTensor.normalizedRetainedVerticalSectorEmbedding_trace_smul}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    Suppose that every multiplicity space is nonzero and every diagonal entry
+    of $\mu_\alpha$ is positive.  For
+    $m_\alpha=\operatorname{tr}(\mu_\alpha)$,
+    \[
+        R_\mu\!\left(\bigoplus_\alpha m_\alpha X_\alpha\right)
+          =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    In each sector,
+    \[
+        R_\mu(m_\alpha X_\alpha)
+        =m_\alpha^{-1}m_\alpha(\mu_\alpha\otimes X_\alpha)
+        =\mu_\alpha\otimes X_\alpha.
+    \]
+\end{proof}
+
+\begin{lemma}[Partial trace of weighted vertical sectors]
+    \label{lem:mpdo_retained_vertical_sector_partial_trace}
+    \lean{MPOTensor.retainedVerticalSectorPartialTrace_weightedBlockDiagonal}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    For $m_\alpha=\operatorname{tr}(\mu_\alpha)$,
+    \[
+        \widetilde R_\mu\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+          =\bigoplus_\alpha m_\alpha X_\alpha.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Taking the partial trace over the multiplicity factor gives
+    \[
+        \widetilde R_\mu(\mu_\alpha\otimes X_\alpha)
+        =\operatorname{tr}(\mu_\alpha)X_\alpha
+        =m_\alpha X_\alpha.
+    \]
+\end{proof}
+
+\begin{theorem}[Action of the normalized vertical-sector maps]
+    \label{thm:mpdo_transported_vertical_sector_maps}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorT_contractBondMatrix_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorS_contractBondMatrix_trace_smul}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_sector_partial_trace,
+      thm:mpdo_vertical_coordinate_map_transport}
+    Suppose that every multiplicity space for $\mu_\alpha$ and $\nu_\beta$
+    is nonzero, every diagonal entry of these two matrices is positive, and
+    \[
+        T_{\mathrm v}\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+        =\bigoplus_\beta\nu_\beta\otimes Y_\beta,
+        \qquad
+        S_{\mathrm v}\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)
+        =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
+    \]
+    Writing $m_\alpha=\operatorname{tr}(\mu_\alpha)$ and
+    $n_\beta=\operatorname{tr}(\nu_\beta)$, one has
+    \[
+        \widetilde T\!\left(
+          \bigoplus_\alpha m_\alpha X_\alpha\right)
+        =\bigoplus_\beta n_\beta Y_\beta,
+        \qquad
+        \widetilde S\!\left(
+          \bigoplus_\beta n_\beta Y_\beta\right)
+        =\bigoplus_\alpha m_\alpha X_\alpha.
+    \]
+    In particular, take $X_\alpha=M_\alpha(X)$ and
+    $Y_\beta=A_\beta(X)$ from the contractions of the one-site and two-site
+    vertical canonical forms.  The physical closure identities for $T$ and
+    $S$ then imply the two hypotheses above, so the same conclusions hold for
+    these source-generated sector operators.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\widetilde T=\widetilde R_2T_{\mathrm v}R_1$, one has
+    \[
+    \begin{aligned}
+        \widetilde T\!\left(\bigoplus_\alpha m_\alpha X_\alpha\right)
+        &=\widetilde R_2\!\left(T_{\mathrm v}\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)\right) \\
+        &=\widetilde R_2\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)
+        =\bigoplus_\beta n_\beta Y_\beta.
+    \end{aligned}
+    \]
+    Likewise, $\widetilde S=\widetilde R_1S_{\mathrm v}R_2$ gives
+    \[
+    \begin{aligned}
+        \widetilde S\!\left(\bigoplus_\beta n_\beta Y_\beta\right)
+        &=\widetilde R_1\!\left(S_{\mathrm v}\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)\right) \\
+        &=\widetilde R_1\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+        =\bigoplus_\alpha m_\alpha X_\alpha.
     \end{aligned}
     \]
 \end{proof}
