@@ -2631,6 +2631,30 @@
       }
   }
 
+% do columns #2..#3 of row #1 hang a label off a leg TIP on side #4
+% (up|down)?  A tip label extends past the leg by the label band, and the
+% racetrack must clear the TEXT, not just the leg (a return wire through
+% an index name reads as a contraction with it).  Kind-restricted like
+% the dot-label scan: only tn/tnc cells draw legs.
+\cs_new_protected:Npn \tenkz_span_leg_labels:nnnnN #1#2#3#4#5
+  {
+    \bool_set_false:N #5
+    \int_step_inline:nnn {#2} {#3}
+      {
+        \tenkz_get:NeN \l__tenkz_kind_prop {#1-##1} \l_tmpa_tl
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
+          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+          {
+            \tenkz_get:NeN \l__tenkz_opts_prop {#1-##1} \l_tmpb_tl
+            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+            \str_if_eq:nnTF {#4} {up}
+              { \tl_if_blank:VF \l__tenkz_cup_tl   { \bool_set_true:N #5 } }
+              { \tl_if_blank:VF \l__tenkz_cdown_tl { \bool_set_true:N #5 } }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_draw_span:nnnnn #1#2#3#4#5
   {
     \dim_set:Nn \l__tenkz_x_dim
@@ -3405,15 +3429,24 @@
           { \tenkz_colx:n {\l_tmpb_int} + \tenkz@dim{0.45} }
         \dim_set:Nn \l__tenkz_tmp_dim
           { \tenkz_colx:n {\l_tmpa_int} - \tenkz@dim{0.45} }
-        % The racetrack must CLEAR any ink on its side of the traced row:
-        % open physical legs add their length, and leg-tip/dot labels add
-        % the label band (a virtual trace crossing physical ink would draw
-        % a false contraction).
+        % The racetrack must CLEAR any ink on its side of the traced row (a
+        % virtual trace crossing physical ink would draw a false
+        % contraction), and only ink that is THERE: the base drop clears
+        % the glyph silhouette, then each obstruction pays its own way --
+        % open legs add the leg length, a labelled leg tip and a dot label
+        % each add the label band.  A bare ring hugs its row.
         \dim_set:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@traceclear} }
         \str_if_eq:nnTF {#2} {below}
           {
             \bool_if:nT { \tenkz_opendown_p:n {#1} }
-              { \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} } }
+              {
+                \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} }
+                \tenkz_span_leg_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
+                  {down} \l_tmpa_bool
+                \bool_if:NT \l_tmpa_bool
+                  { \dim_add:Nn \l__tenkz_y_dim
+                      { \tenkz@dim{\tenkz@r@dotlabelband} } }
+              }
             \tenkz_span_dot_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
               {south} \l_tmpa_bool
             \bool_if:NT \l_tmpa_bool
@@ -3424,7 +3457,14 @@
           }
           {
             \bool_if:nT { \tenkz_openup_p:n {#1} }
-              { \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} } }
+              {
+                \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} }
+                \tenkz_span_leg_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
+                  {up} \l_tmpa_bool
+                \bool_if:NT \l_tmpa_bool
+                  { \dim_add:Nn \l__tenkz_y_dim
+                      { \tenkz@dim{\tenkz@r@dotlabelband} } }
+              }
             \tenkz_span_dot_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
               {north} \l_tmpa_bool
             \bool_if:NT \l_tmpa_bool
