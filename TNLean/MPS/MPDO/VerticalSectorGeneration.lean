@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.MPDO.VerticalSectorCoordinates
+import Mathlib.LinearAlgebra.FixedSubmodule
 
 /-!
 # Generation of vertical BNT sector algebras
@@ -17,7 +18,7 @@ from simultaneous word-tuple span of the vertical BNT representatives.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  Appendix C.4, lines 1980--1990.
+  Appendix C.4, lines 1980--1993.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -101,6 +102,20 @@ def WeightedVerticalBondContractionProductSpanTop
     (L : ℕ) : Prop :=
   Submodule.span ℂ
     (Set.range (weightedVerticalBondContractionProduct (L := L) m A)) = ⊤
+
+/-- The span of all $L$-fold products of fixed points of a linear
+endomorphism of the vertical-sector algebra.
+
+This is the space denoted by $C_L(\mathcal F)$ in the dimension argument of the
+general MPDO renormalization fixed-point theorem.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
+def fixedPointProductSpan
+    {g : ℕ} {dim : Fin g → ℕ} (L : ℕ)
+    (F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim) :
+    Submodule ℂ (VerticalSectorAlgebra dim) :=
+  Submodule.span ℂ (Set.range fun X : Fin L → F.fixedSubmodule =>
+    fun α => (List.ofFn fun t => (X t : VerticalSectorAlgebra dim) α).prod)
 
 /-- Sectorwise multiplication by nonzero scalars is a linear equivalence of
 the direct product of the BNT matrix algebras. -/
@@ -218,6 +233,59 @@ theorem eq_id_of_weightedVerticalBondContractionProducts_fixed
   apply LinearMap.ext_on_range hSpan
   intro X
   simpa using hFixed X
+
+/-- Fixed weighted contractions determine an endomorphism once the products
+of arbitrary fixed points have no larger dimension than the fixed-point
+space.
+
+This is the finite-dimensional step in the inverse-map argument of Appendix
+C.4.  Unlike `eq_id_of_weightedVerticalBondContractionProducts_fixed`, it
+does not assume that products of the distinguished contractions are fixed.
+The contractions themselves lie in the fixed-point space, so their spanning
+products force $C_L(\mathcal F)$ to be the whole sector algebra.
+The dimension bound then forces the fixed-point space itself to be the whole
+sector algebra.
+
+**Scope restriction (fixed-point dimension):** The source obtains the
+dimension bound from Wolf's density-weighted description of the fixed-point
+space.  Its derivation from positivity and trace preservation remains recorded
+in `docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`; the bound is
+therefore an explicit hypothesis here.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
+theorem eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le
+    {g D L : ℕ} {dim : Fin g → ℕ}
+    (m : Fin g → ℂ)
+    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim)
+    (hSpan : WeightedVerticalBondContractionProductSpanTop m A L)
+    (hFixed : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      F (weightedVerticalBondContraction m A X) =
+        weightedVerticalBondContraction m A X)
+    (hFinrank : Module.finrank ℂ (fixedPointProductSpan L F) ≤
+      Module.finrank ℂ F.fixedSubmodule) :
+    F = LinearMap.id := by
+  have hProductMem (X : Fin L → Matrix (Fin D) (Fin D) ℂ) :
+      weightedVerticalBondContractionProduct m A X ∈
+        fixedPointProductSpan L F := by
+    apply Submodule.subset_span
+    refine ⟨fun t => ⟨weightedVerticalBondContraction m A (X t), ?_⟩, rfl⟩
+    exact LinearMap.mem_fixedSubmodule_iff.mpr (hFixed (X t))
+  have hProductSpanTop : fixedPointProductSpan L F = ⊤ := by
+    apply top_unique
+    rw [← hSpan]
+    apply Submodule.span_le.mpr
+    rintro _ ⟨X, rfl⟩
+    exact hProductMem X
+  have hAmbientFinrankLe :
+      Module.finrank ℂ (VerticalSectorAlgebra dim) ≤
+        Module.finrank ℂ F.fixedSubmodule := by
+    rw [hProductSpanTop] at hFinrank
+    simpa using hFinrank
+  have hFixedTop : F.fixedSubmodule = ⊤ :=
+    Submodule.eq_top_of_finrank_eq
+      ((Submodule.finrank_le F.fixedSubmodule).antisymm hAmbientFinrankLe)
+  exact LinearMap.fixedSubmodule_eq_top_iff.mp hFixedTop
 
 /-- A CPSV basis of normal tensors, with nonzero sector weights, admits one
 positive length at which the weighted vertical bond contractions generate the
