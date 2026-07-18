@@ -135,10 +135,19 @@ transports their length-three commutation to the abstract lifts.  Hence the
 formal hypotheses of Beigi's lemma are obtained without an additional
 assumption.
 
-What remains is to use the resulting unitary block actions to construct the
-translation-invariant neighboring operators $\eta_{k,h}$ and the global form
-\emph{sigmaNK2}, and then to perform the source-ZCL trace factorization and
-Markov decomposition at an arbitrary cut.
+The application of the finite-matrix theorem to this pair-indexed bond is
+\leanid{MPOTensor.EtaLocalStructureData.exists_unitary_blockActions_of_pairBond}.
+It supplies one unitary middle-space identification and the two Hermitian
+block actions required by Beigi's lemma.\footnote{The application theorem is
+in \doclink{TNLean/MPS/MPDO/CommutingFormSpatialBridge}; its coordinate and
+commutation hypotheses are supplied by
+\doclink{TNLean/MPS/MPDO/CommutingOverlappingCoordinates}.}
+
+What remains is to transport the resulting direct-sum decomposition through
+the translation-invariant family and derive the neighboring operators
+$\eta_{k,h}$ without assuming a Hayashi decomposition.  The source ZCL
+hypothesis must then yield the rank-one trace factorization
+$\operatorname{tr}(\eta_{k,h})=a_kb_h$ at source lines~1610--1616.
 
 Consequently the source implication
 \[
@@ -163,15 +172,10 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Apply
-\leanid{Matrix.exists_unitary_blockActions_of_overlappingLifts_commute} to the
-pair-indexed bond through the proved three-site coordinate identification, and
-transport its
-single-site direct-sum decomposition through the translation-invariant bond
-family.  This must produce the neighboring operators $\eta_{k,h}$ and the
-global form \emph{sigmaNK2} without assuming a Hayashi decomposition.
-\item Use \leanid{MPOTensor.IsSourceZCL} to prove the rank-one trace
-factorization
+\item Transport the Beigi block actions through the translation-invariant bond
+family, obtaining the neighboring operators $\eta_{k,h}$ without assuming a
+Hayashi decomposition.  Use \leanid{MPOTensor.IsSourceZCL} to prove the
+rank-one trace factorization
 $\operatorname{tr}(\eta_{k,h})=a_kb_h$ appearing at source lines~1610--1616.
 Then trace the fourth region and construct the quantum Markov decomposition at
 each admissible cut, and apply the all-cut Markov theorem above.
