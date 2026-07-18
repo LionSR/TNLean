@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.MutualInfoMonotone
+import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.SectorTrace
+import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Topology.MetricSpace.Pseudo.Defs
 
 /-!
@@ -44,7 +45,7 @@ even lengths it is the mixture with weights \(1/3\) and \(2/3\).
 -/
 
 open scoped Matrix BigOperators ComplexOrder
-open Matrix Finset
+open Matrix Finset Filter
 
 namespace MPOTensor.ThermodynamicLimitCounterexample
 
@@ -91,34 +92,6 @@ private lemma mpo_off_diagonal {N : ℕ} {σ τ : Fin N → Fin 2} (hστ : σ �
   intro a _
   apply Finset.prod_eq_zero (Finset.mem_univ k)
   simp [virtualWeight, hk]
-
-private lemma diagonalWeight_nonneg {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin 2) :
-    0 ≤ ∑ a : Fin 3, ∏ k, virtualWeight a (σ k) (σ k) := by
-  by_cases hzero : ∀ k, σ k = 0
-  · simp [Fin.sum_univ_three, virtualWeight, hzero, hN.ne']
-  · by_cases hone : ∀ k, σ k = 1
-    · rcases Nat.even_or_odd N with hEven | hOdd
-      · simp [Fin.sum_univ_three, virtualWeight, hone, hN.ne', hEven.neg_one_pow,
-          Complex.nonneg_iff]
-      · simp [Fin.sum_univ_three, virtualWeight, hone, hN.ne', hOdd.neg_one_pow]
-    · push Not at hzero hone
-      obtain ⟨kzero, hkzero⟩ := hzero
-      obtain ⟨kone, hkone⟩ := hone
-      have hσkzero : σ kzero = 1 := Fin.eq_one_of_ne_zero _ hkzero
-      have hσkone : σ kone = 0 := by
-        by_contra hne
-        exact hkone (Fin.eq_one_of_ne_zero _ hne)
-      have h0 : ∏ k, virtualWeight 0 (σ k) (σ k) = 0 := by
-        apply Finset.prod_eq_zero (Finset.mem_univ kzero)
-        simp [virtualWeight, hσkzero]
-      have h1 : ∏ k, virtualWeight 1 (σ k) (σ k) = 0 := by
-        apply Finset.prod_eq_zero (Finset.mem_univ kone)
-        simp [virtualWeight, hσkone]
-      have h2 : ∏ k, virtualWeight 2 (σ k) (σ k) = 0 := by
-        apply Finset.prod_eq_zero (Finset.mem_univ kone)
-        simp [virtualWeight, hσkone]
-      rw [Fin.sum_univ_three, h0, h1, h2]
-      simp
 
 private lemma diagonalWeight_eq {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin 2) :
     (∑ a : Fin 3, ∏ k, virtualWeight a (σ k) (σ k)) =
@@ -170,17 +143,17 @@ This gives a positive translationally invariant MPDO satisfying exactly the
 hypotheses of arXiv:1606.00608, Proposition 4.5, lines 801--806. -/
 theorem parityTensor_isMPDO : IsMPDO parityTensor := by
   intro N hN
-  rw [show mpo parityTensor N = Matrix.diagonal fun σ => mpo parityTensor N σ σ by
-    ext σ τ
-    by_cases hστ : σ = τ
-    · subst τ
-      simp
-    · rw [Matrix.diagonal_apply_ne _ hστ, mpo_off_diagonal hστ]]
+  rw [mpo_parityTensor_eq_diagonal N hN]
   apply Matrix.PosSemidef.diagonal
-  exact fun σ => by
-    change 0 ≤ (mpo parityTensor N) σ σ
-    rw [mpo_apply, mpoMatrixEntry_eq_sum_prod]
-    exact diagonalWeight_nonneg hN σ
+  intro σ
+  change 0 ≤ (if (∀ k, σ k = 0) then 1 else if (∀ k, σ k = 1) then
+    1 + (-1 : ℂ) ^ N else 0)
+  split_ifs with hzero hone
+  · norm_num
+  · rcases Nat.even_or_odd N with hEven | hOdd
+    · simp [hEven.neg_one_pow, Complex.nonneg_iff]
+    · simp [hOdd.neg_one_pow]
+  · norm_num
 
 private lemma verticalLoop_parityTensor :
     verticalLoop parityTensor = Matrix.diagonal ![(1 : ℂ), 1, -1] := by
@@ -231,12 +204,53 @@ private def zeroSite : Fin 1 → Fin 2 := fun _ => 0
 private theorem reducedBlockState_one_zero_zero (K : ℕ) :
     reducedBlockState parityTensor (K + 1) 1 (by omega) zeroSite zeroSite =
       normalizedMPO parityTensor (K + 1) (fun _ => 0) (fun _ => 0) := by
+  classical
+  let e := (blockReindexEquiv 2 (K + 1) 1 (by omega)).symm
+  have e_const (j : Fin 2) : e (fun _ => j) = fun _ => j := by
+    funext k
+    simp only [e, blockReindexEquiv, Equiv.arrowCongr_symm, Equiv.refl_symm,
+      Equiv.arrowCongr_apply, Equiv.coe_refl, id_eq, Function.comp_apply]
+  have append_zero : Fin.append zeroSite (fun _ : Fin (K + 1 - 1) => (0 : Fin 2)) =
+      (fun _ : Fin (1 + (K + 1 - 1)) => (0 : Fin 2)) := by
+    funext k
+    refine Fin.addCases (fun i => ?_) (fun i => ?_) k <;> simp [zeroSite]
+  have reindexed_zero :
+      e (Fin.append zeroSite (fun _ : Fin (K + 1 - 1) => (0 : Fin 2))) = fun _ => 0 := by
+    rw [append_zero, e_const]
   simp only [reducedBlockState, blockReducedState, Matrix.partialTraceRight_apply,
-    Matrix.submatrix_apply, blockSplitEquiv_symm_apply, blockReindexEquiv,
-    Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
+    Matrix.submatrix_apply, blockSplitEquiv_symm_apply]
   simp_rw [normalizedMPO, Matrix.smul_apply, smul_eq_mul,
     mpo_parityTensor_eq_diagonal (K + 1) (by omega), Matrix.diagonal_apply_eq]
-  simp [zeroSite]
+  rw [Fintype.sum_eq_single (fun _ => 0)]
+  · rw [show (blockReindexEquiv 2 (K + 1) 1 (by omega)).symm
+        (Fin.append zeroSite (fun _ => 0)) = (fun _ => 0) from reindexed_zero]
+    simp
+  · intro x hx
+    have append_ne_zero : Fin.append zeroSite x ≠ (fun _ => 0) := by
+      intro h
+      apply hx
+      funext i
+      have hi := congrFun h (Fin.natAdd 1 i)
+      simpa using hi
+    have append_ne_one : Fin.append zeroSite x ≠ (fun _ => 1) := by
+      intro h
+      have hi := congrFun h (Fin.castAdd (K + 1 - 1) (0 : Fin 1))
+      norm_num [zeroSite] at hi
+    have reindexed_ne_zero : e (Fin.append zeroSite x) ≠ (fun _ => 0) := by
+      intro h
+      apply append_ne_zero
+      exact e.injective (h.trans (e_const 0).symm)
+    have reindexed_ne_one : e (Fin.append zeroSite x) ≠ (fun _ => 1) := by
+      intro h
+      apply append_ne_one
+      exact e.injective (h.trans (e_const 1).symm)
+    have hnotzero : ¬∀ k, e (Fin.append zeroSite x) k = 0 := fun h =>
+      reindexed_ne_zero (funext h)
+    have hnotone : ¬∀ k, e (Fin.append zeroSite x) k = 1 := fun h =>
+      reindexed_ne_one (funext h)
+    rw [show (blockReindexEquiv 2 (K + 1) 1 (by omega)).symm
+        (Fin.append zeroSite x) = e (Fin.append zeroSite x) from rfl]
+    simp only [if_neg hnotzero, if_neg hnotone, mul_zero]
 
 /-- The all-zero entry of the one-site reduced state is one at odd total
 lengths.
@@ -272,13 +286,14 @@ theorem not_exists_tendsto_reducedBlockState_one_zero_zero :
         zeroSite zeroSite).re) atTop (nhds x) := by
   rintro ⟨x, hx⟩
   obtain ⟨K, hK⟩ := (Metric.tendsto_atTop.1 hx) (1 / 4) (by norm_num)
-  have hEvenIndex := hK (2 * K) (by omega)
-  have hOddIndex := hK (2 * K + 1) (by omega)
+  have hOddLengthIndex := hK (2 * K) (by omega)
+  have hEvenLengthIndex := hK (2 * K + 1) (by omega)
   rw [reducedBlockState_one_zero_zero_of_odd (show Odd (2 * K + 1) from ⟨K, by omega⟩)]
-    at hEvenIndex
+    at hOddLengthIndex
   rw [reducedBlockState_one_zero_zero_of_even
-      (show Even (2 * K + 1 + 1) from ⟨K + 1, by omega⟩) (by omega)] at hOddIndex
-  norm_num [Real.dist_eq] at hEvenIndex hOddIndex
+      (show Even (2 * K + 1 + 1) from ⟨K + 1, by omega⟩) (by omega)] at hEvenLengthIndex
+  norm_num [Real.dist_eq] at hOddLengthIndex hEvenLengthIndex
+  rw [abs_lt] at hOddLengthIndex hEvenLengthIndex
   linarith
 
 end MPOTensor.ThermodynamicLimitCounterexample
