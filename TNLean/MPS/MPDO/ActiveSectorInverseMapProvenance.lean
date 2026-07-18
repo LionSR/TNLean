@@ -91,8 +91,7 @@ private noncomputable def dualCoefficient (i : Fin 4) : Matrix (Fin 2) (Fin 2) �
 /-- The inverse tensor on a diagonal physical slice is the dual basis to the
 four sector matrices.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `Qketc` and `formK`, lines
-1415--1439. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1415--1439. -/
 lemma inverseTensor_diagonal_eq_dualCoefficient (i : Fin 4) :
     inverseTensor tensor tensor_isInjective (finProdFinEquiv (i, i)) =
       dualCoefficient i := by
@@ -165,16 +164,14 @@ lemma normalizedFourSiteTail_tensor :
 
 /-- The left density matrix in the four one-dimensional Hayashi sectors.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.3 (`Lsigma3`), lines
-1351--1363. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.3, lines 1351--1363. -/
 noncomputable def hayashiLeftDensity (k : Fin 4) :
     Matrix (Fin 4 × Fin 1) (Fin 4 × Fin 1) ℂ :=
   Matrix.diagonal fun x => (rightPairing * leftPairing) x.1 k
 
 /-- The right density matrix in the four one-dimensional Hayashi sectors.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.3 (`Lsigma3`), lines
-1351--1363. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.3, lines 1351--1363. -/
 noncomputable def hayashiRightDensity (k : Fin 4) :
     Matrix (Fin 1 × Fin 4) (Fin 1 × Fin 4) ℂ :=
   Matrix.diagonal fun x => (rightPairing * leftPairing) k x.2
@@ -216,8 +213,7 @@ private lemma trace_hayashiRightDensity (k : Fin 4) :
 /-- The explicit classical three-site state used in the refined Hayashi
 decomposition.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.3 (`Lsigma3`), lines
-1351--1363. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.3, lines 1351--1363. -/
 noncomputable def threeSiteState :
     Matrix (Fin 4 × Fin 4 × Fin 4) (Fin 4 × Fin 4 × Fin 4) ℂ :=
   fun x y => if x = y then
@@ -296,8 +292,8 @@ lemma isThreeSiteClosure_threeSiteState :
 state. Each middle-site classical label is retained as a one-dimensional
 direct-sum sector.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.3 (`Lsigma3`), lines
-1351--1363, used in Lemma C.4 at lines 1413--1455. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.3, lines 1351--1363,
+used in Lemma C.4 at lines 1413--1455. -/
 noncomputable def hayashiData : EtaStructure threeSiteState where
   m := 4
   dL := fun _ => 1
@@ -356,8 +352,7 @@ private lemma sum_mul_hayashiRightDensity (f : Fin 4 → Fin 4 → ℂ) (k : Fin
 the chosen left sector tensor exactly. The factor `p_k = 1/4` cancels the
 factor four in the left inverse contraction.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `Qketc` and `formK`,
-lines 1415--1439. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1415--1439. -/
 lemma sectorTensorL_hayashiData (k : Fin 4) (beta : Fin 2) :
     sectorTensorL tensor tensor_isInjective hayashiData
         (normalizedFourSiteTail tensor) 0 0 k beta =
@@ -381,8 +376,7 @@ lemma sectorTensorL_hayashiData (k : Fin 4) (beta : Fin 2) :
 /-- For the refined Hayashi decomposition, the source inverse map recovers
 the chosen right sector tensor exactly.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `Qketc` and `formK`,
-lines 1415--1439. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1415--1439. -/
 lemma sectorTensorR_hayashiData (k : Fin 4) (alpha : Fin 2) :
     sectorTensorR tensor tensor_isInjective hayashiData 0 k alpha =
       factorization.rightTensor k alpha := by
@@ -418,8 +412,7 @@ noncomputable def inverseMapFactorization : PhysicalSectorFactorization tensor :
 /-- The neighboring operators selected by the explicit inverse-map provenance
 are exactly those of the directly written factorization.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines
-1441--1455. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455. -/
 lemma inverseMapFactorization_neighboringOperator (k h : Fin 4) :
     inverseMapFactorization.neighboringOperator k h =
       factorization.neighboringOperator k h := by
@@ -445,8 +438,7 @@ provenance. Thus the arbitrary-factorization boundary isolated previously is
 removed for this witness; the separate formalization of SAL is not asserted
 here.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (`SALZCL`), lines
-1484--1499. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1484--1499. -/
 theorem inverseMap_provenance_preserves_rectangular_remainder :
     (∀ k h, inverseMapFactorization.neighboringOperator k h =
       factorization.neighboringOperator k h) ∧
