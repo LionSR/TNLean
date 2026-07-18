@@ -65,6 +65,7 @@ import TNLean.Algebra.StarSubalgebraSpatial
 import TNLean.Algebra.StarSubalgebraUnitaryIntertwiner
 
 -- Layer 0b: General analysis
+import TNLean.Analysis.MeanErgodic
 import TNLean.Analysis.ProjectionGeometry
 -- Layer 0b: Hermitian functional calculus for finite-dimensional matrices
 import TNLean.Analysis.TraceCFC
