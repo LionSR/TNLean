@@ -1010,6 +1010,8 @@
     centred~up~port.~The~declared~faces~are~left~untraced.
   }
 \bool_new:N \l__tenkz_tracefaces_bool
+\bool_new:N \l__tenkz_phtracedownvalid_bool
+\bool_new:N \l__tenkz_phtraceupvalid_bool
 \prop_new:N \l__tenkz_tracefacewarning_prop
 \cs_new_protected:Npn \tenkz_record_traces:
   {
@@ -1058,17 +1060,26 @@
       {
         \tenkz_get:NeN \l__tenkz_opts_prop {#1-#2} \l_tmpa_tl
         \exp_args:NV \tenkz_cell_opts:n \l_tmpa_tl
+        \bool_set:Nn \l__tenkz_phtracedownvalid_bool
+          { ! \l__tenkz_cnolegs_bool }
         \tenkz_face_ports:nN {down} \l__tenkz_phtracedown_tl
         \tenkz_get:NeN \l__tenkz_opts_prop
           {\int_eval:n{#1+1}-#2} \l_tmpa_tl
         \exp_args:NV \tenkz_cell_opts:n \l_tmpa_tl
+        \bool_set:Nn \l__tenkz_phtraceupvalid_bool
+          { ! \l__tenkz_cnolegs_bool }
         \tenkz_face_ports:nN {up} \l__tenkz_phtraceup_tl
-        \bool_lazy_and:nnF
-          { \str_if_eq_p:Vn \l__tenkz_phtracedown_tl {center} }
-          { \str_if_eq_p:Vn \l__tenkz_phtraceup_tl {center} }
+        \bool_if:NF \l__tenkz_phtracedownvalid_bool
+          { \bool_set_false:N \l__tenkz_tracefaces_bool }
+        \bool_if:NF \l__tenkz_phtraceupvalid_bool
+          { \bool_set_false:N \l__tenkz_tracefaces_bool }
+        \str_if_eq:VnF \l__tenkz_phtracedown_tl {center}
+          { \bool_set_false:N \l__tenkz_tracefaces_bool }
+        \str_if_eq:VnF \l__tenkz_phtraceup_tl {center}
+          { \bool_set_false:N \l__tenkz_tracefaces_bool }
+        \bool_if:NF \l__tenkz_tracefaces_bool
           {
             \bool_set_false:N \l_tmpb_bool
-            \bool_set_false:N \l__tenkz_tracefaces_bool
             \msg_warning:nnee {tenkz}{pair-trace-face-ports}
               {\int_eval:n{#1}}{\int_eval:n{#2}}
             \prop_put:Nen \l__tenkz_tracefacewarning_prop {#1-#2} {}
@@ -2457,18 +2468,21 @@
                       { \bool_set_true:N \l__tenkz_pwlowerport_bool } }
                 \bool_lazy_and:nnT
                   { ! \tenkz_traced_p:nn {#1}{#2} }
-                  { ! \prop_if_in_p:Ne \l__tenkz_opencell_prop {#1-#2} }
+                  { ! \prop_if_in_p:Ne \l__tenkz_opencell_prop
+                      {#1-\int_eval:n{#2+#3-1}} }
                   { \tenkz_draw_lower_surplus:nn {#1}{\l__tenkz_pwbase_tl} }
                 \bool_lazy_and:nnT
                   { ! \tenkz_traced_p:nn {#1}{#2} }
-                  { \prop_if_in_p:Ne \l__tenkz_opencell_prop {#1-#2} }
+                  { \prop_if_in_p:Ne \l__tenkz_opencell_prop
+                      {#1-\int_eval:n{#2+#3-1}} }
                   { \tenkz_draw_lower_surplus:nnn
                       {#1}{\l__tenkz_pwbase_tl}{0} }
                 \bool_if:NTF \l__tenkz_pwlowerport_bool
                   {
                     \bool_if:nF { \tenkz_traced_p:nn {#1}{#2} }
                       {
-                        \prop_if_in:NeTF \l__tenkz_opencell_prop {#1-#2}
+                        \prop_if_in:NeTF \l__tenkz_opencell_prop
+                          {#1-\int_eval:n{#2+#3-1}}
                           {
                             % opened segment: both faces keep their stubs
                             \tenkz_pair_wide_leg:nn {#2}{#3}
@@ -2671,19 +2685,20 @@
           {
             \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
             \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-            \tl_if_empty:NF \l__tenkz_cphys_tl
-              {
-                \bool_lazy_or:nnT
-                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
-                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
-                  { \tenkz_brick_face:nnnNn {#1}{#2}{north}
-                      \l__tenkz_cup_tl { 1} }
-                \bool_lazy_or:nnT
-                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
-                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
-                  { \tenkz_brick_face:nnnNn {#1}{#2}{south}
-                      \l__tenkz_cdown_tl {-1} }
-              }
+            \bool_if:NF \l__tenkz_cnolegs_bool
+              { \tl_if_empty:NF \l__tenkz_cphys_tl
+                  {
+                    \bool_lazy_or:nnT
+                      { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
+                      { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                      { \tenkz_brick_face:nnnNn {#1}{#2}{north}
+                          \l__tenkz_cup_tl { 1} }
+                    \bool_lazy_or:nnT
+                      { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
+                      { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                      { \tenkz_brick_face:nnnNn {#1}{#2}{south}
+                          \l__tenkz_cdown_tl {-1} }
+                  } }
           }
       }
   }
@@ -2778,35 +2793,39 @@
           {
             \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
             \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-            \tl_if_empty:NF \l__tenkz_cphys_tl
-              {
-                \bool_lazy_or:nnT
-                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
-                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
-                  { \tl_if_empty:NTF \l__tenkz_cupat_tl
-                      { \tl_if_empty:NTF \l__tenkz_clegsat_tl
-                          { \int_add:Nn \l__tenkz_bpu_int
-                              { \l__tenkz_cwires_int } }
+            \bool_if:NF \l__tenkz_cnolegs_bool
+              { \tl_if_empty:NF \l__tenkz_cphys_tl
+                  {
+                    \bool_lazy_or:nnT
+                      { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
+                      { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                      { \tl_if_empty:NTF \l__tenkz_cupat_tl
+                          { \tl_if_empty:NTF \l__tenkz_clegsat_tl
+                              { \int_add:Nn \l__tenkz_bpu_int
+                                  { \l__tenkz_cwires_int } }
+                              { \tenkz_leg_count:nN
+                                  {up} \l__tenkz_facearity_int
+                                \int_add:Nn \l__tenkz_bpu_int
+                                  { \l__tenkz_facearity_int } } }
                           { \tenkz_leg_count:nN {up} \l__tenkz_facearity_int
                             \int_add:Nn \l__tenkz_bpu_int
                               { \l__tenkz_facearity_int } } }
-                      { \tenkz_leg_count:nN {up} \l__tenkz_facearity_int
-                        \int_add:Nn \l__tenkz_bpu_int
-                          { \l__tenkz_facearity_int } } }
-                \bool_lazy_or:nnT
-                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
-                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
-                  { \tl_if_empty:NTF \l__tenkz_cdownat_tl
-                      { \tl_if_empty:NTF \l__tenkz_clegsat_tl
-                          { \int_add:Nn \l__tenkz_bpd_int
-                              { \l__tenkz_cwires_int } }
-                          { \tenkz_leg_count:nN {down} \l__tenkz_facearity_int
+                    \bool_lazy_or:nnT
+                      { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
+                      { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                      { \tl_if_empty:NTF \l__tenkz_cdownat_tl
+                          { \tl_if_empty:NTF \l__tenkz_clegsat_tl
+                              { \int_add:Nn \l__tenkz_bpd_int
+                                  { \l__tenkz_cwires_int } }
+                              { \tenkz_leg_count:nN
+                                  {down} \l__tenkz_facearity_int
+                                \int_add:Nn \l__tenkz_bpd_int
+                                  { \l__tenkz_facearity_int } } }
+                          { \tenkz_leg_count:nN
+                              {down} \l__tenkz_facearity_int
                             \int_add:Nn \l__tenkz_bpd_int
                               { \l__tenkz_facearity_int } } }
-                      { \tenkz_leg_count:nN {down} \l__tenkz_facearity_int
-                        \int_add:Nn \l__tenkz_bpd_int
-                          { \l__tenkz_facearity_int } } }
-              }
+                  } }
           }
       }
   }
@@ -4131,6 +4150,7 @@
       { \tenkz_face_arity:nN {\l__tenkz_cwires_int} \l__tenkz_faceports_tl }
   }
 \int_new:N \l__tenkz_facearity_int
+\prop_new:N \l__tenkz_sigopenlower_prop
 
 % Does the physical face of the glyph owning (row, column) contain the
 % particular column?  This is the per-slot counterpart of
@@ -4164,10 +4184,44 @@
       }
   }
 
+% Count the lower face exposed by open={(#1,#2)}.  A centred face is one
+% index owned by the whole glyph; a split face contributes only its addressed
+% slot.  This is the signature counterpart of the pairing pass.
+\cs_new_protected:Npn \tenkz_count_open_lower:nn #1#2
+  {
+    \prop_get:NeNF \l__tenkz_owner_prop
+      {\int_eval:n{#1+1}-#2} \l__tenkz_pwbase_tl
+      { \tl_set:Nn \l__tenkz_pwbase_tl {#2} }
+    \tenkz_get:NeN \l__tenkz_kind_prop
+      {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l__tenkz_pkind_tl
+    \bool_lazy_or:nnT
+      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
+      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+      {
+        \tenkz_get:NeN \l__tenkz_opts_prop
+          {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l_tmpb_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+        \bool_if:NF \l__tenkz_cnolegs_bool
+          {
+            \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
+            \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
+              { \prop_if_in:NeF \l__tenkz_sigopenlower_prop
+                  {#1-\tl_use:N\l__tenkz_pwbase_tl}
+                  { \prop_put:Nen \l__tenkz_sigopenlower_prop
+                      {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
+                    \int_incr:N \l__tenkz_bpu_int } }
+              { \clist_if_in:NeT \l__tenkz_faceports_tl
+                  {\int_eval:n{#2-\l__tenkz_pwbase_tl+1}}
+                  { \int_incr:N \l__tenkz_bpu_int } }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_emit_signature:
   {
     \int_set_eq:NN \l__tenkz_bpu_int \l__tenkz_internalpu_int
     \int_set_eq:NN \l__tenkz_bpd_int \l__tenkz_internalpd_int
+    \prop_clear:N \l__tenkz_sigopenlower_prop
     % trace=physical closes each traced site's up+down pair per site, so
     % those legs leave the signature (single-row form only; the deferred
     % multi-row form keeps its counts until it draws)
@@ -4243,15 +4297,11 @@
                     % both faces' stubs: two open physical indices
                     \prop_if_in:NeT \l__tenkz_opencell_prop {##1-####1}
                       {
-                        \tenkz_leg_candidate:nnT {##1}{####1}
-                          { \tenkz_leg_count:nN {down} \l__tenkz_facearity_int
-                            \int_add:Nn \l__tenkz_bpd_int
-                              { \l__tenkz_facearity_int } }
-                        \tenkz_leg_candidate:nnT
-                          { \int_eval:n{##1+1} }{####1}
-                          { \tenkz_leg_count:nN {up} \l__tenkz_facearity_int
-                            \int_add:Nn \l__tenkz_bpu_int
-                              { \l__tenkz_facearity_int } }
+                        \tenkz_cell_physical_port:nnnN
+                          {##1}{####1}{down} \l_tmpa_bool
+                        \bool_if:NT \l_tmpa_bool
+                          { \int_incr:N \l__tenkz_bpd_int }
+                        \tenkz_count_open_lower:nn {##1}{####1}
                       }
                   }
               }

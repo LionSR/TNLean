@@ -17,6 +17,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from tenkz_audit import Audit, canonical_hash
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -177,6 +179,38 @@ SOURCE = r"""
   \tn[wires=2, west at={1,1}, east at={2,2}]{X}\\
   &
 \end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, physical=up, no legs]{B}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2]{X}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, west at={2,1}, east at={2,1}]{X}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1),(1,2)}, tensor style=box]
+  \tn{U_1} & \tn{U_2}\\
+  \tn[pill, wide=2, up at=center]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1),(1,2)}, tensor style=box]
+  \tn{U_1} & \tn{U_2}\\
+  \tn[pill, wide=2, up at={1,2}]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={ket, bra}, trace={(physical,1)}, tensor style=box]
+  \tn[no legs]{K}\\
+  \tn{B}
+\end{tenkz}
+\begin{tenkz}[rows={ket, bra}, trace={(physical,1)}, tensor style=box]
+  \tn{K}\\
+  \tn[no legs]{B}
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
+  \tn[pill, wide=2, down at={1,2}]{U} & \\
+  \tn{L_1} & \tn{L_2}
+\end{tenkz}
 \end{document}
 """
 
@@ -239,6 +273,11 @@ def main() -> int:
         pictures = events_by_picture(
             (work / "face-ports.tnlog").read_text(encoding="utf-8").splitlines()
         )
+        audit = Audit(work / "face-ports.tnlog", None)
+        audit.parse_log()
+        topology_hashes = {
+            picture.ident: canonical_hash(picture) for picture in audit.pictures
+        }
 
     inverse = pictures[1]
     require(
@@ -421,14 +460,14 @@ def main() -> int:
     opened_wide = pictures[22]
     require(
         opened_wide,
-        "boundary|picture=22|virtual-west=2|virtual-east=2|physical-up=3|physical-down=1",
-        "opened wide interface omitted a surplus lower-face port",
+        "boundary|picture=22|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
+        "opened wide interface double-counted its lower-face ports",
     )
     opened_plain = pictures[23]
     require(
         opened_plain,
-        "boundary|picture=23|virtual-west=2|virtual-east=2|physical-up=3|physical-down=1",
-        "opened centred interface omitted a surplus lower-face port",
+        "boundary|picture=23|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
+        "opened centred interface double-counted its lower-face ports",
     )
     single_wire = pictures[24]
     require(single_wire,
@@ -587,6 +626,51 @@ def main() -> int:
         duplicate_slots,
         "boundary|picture=38|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
         "duplicate virtual slots inflated the boundary signature",
+    )
+    nolegs_brick = pictures[39]
+    forbid(
+        nolegs_brick,
+        "faceports|picture=39|cell=1-1|face=up|arity=2|at=rows",
+        "no-legs brick emitted a physical face",
+    )
+    require(
+        nolegs_brick,
+        "boundary|picture=39|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0",
+        "no-legs brick retained physical ink in its signature",
+    )
+    if topology_hashes[40] != topology_hashes[41]:
+        raise AssertionError("equivalent default and explicit face slots hashed differently")
+    opened_center_twice = pictures[42]
+    require(
+        opened_center_twice,
+        "boundary|picture=42|virtual-west=2|virtual-east=2|physical-up=3|physical-down=2",
+        "opened centred lower face was counted once per upper column",
+    )
+    opened_split_twice = pictures[43]
+    require(
+        opened_split_twice,
+        "boundary|picture=43|virtual-west=2|virtual-east=2|physical-up=4|physical-down=2",
+        "opened split lower face was counted in full per upper column",
+    )
+    for picture_id in (44, 45):
+        suppressed_trace = pictures[picture_id]
+        require(
+            suppressed_trace,
+            f"warning|code=pair-trace-face-ports|cell=1-1",
+            "pair trace did not reject a suppressed physical face",
+        )
+        forbid(
+            suppressed_trace,
+            f"pairtrace|picture={picture_id}|row=1|col=1|site=1-1",
+            "pair trace contracted a suppressed physical face",
+        )
+    partial_wide_open = pictures[46]
+    if paired_ports(partial_wide_open) != [("2", "2")]:
+        raise AssertionError("wide open= affected a physical slot in another column")
+    require(
+        partial_wide_open,
+        "boundary|picture=46|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
+        "wide open= did not retain exactly the addressed upper and lower slots",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0

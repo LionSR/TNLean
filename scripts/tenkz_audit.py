@@ -449,6 +449,17 @@ def canonical_hash(pic: Picture) -> str:
         attrs = {k: v for k, v in e.attrs.items() if k != "picture"}
         if e.kind == "bond" and attrs.get("dir") == "none":
             del attrs["dir"]
+        if e.kind == "faceports":
+            at = attrs.get("at", "")
+            try:
+                if at == "rows":
+                    slots = range(1, int(attrs["arity"]) + 1)
+                    attrs["at"] = ",".join(str(slot) for slot in slots)
+                elif at not in {"center", "none"}:
+                    slots = sorted({int(slot) for slot in at.split(",")})
+                    attrs["at"] = ",".join(str(slot) for slot in slots)
+            except (KeyError, ValueError):
+                pass  # malformed fields are reported by the parser
         lines.append(e.kind + "|" + "|".join(
             f"{k}={v}" for k, v in sorted(attrs.items())))
     payload = "\n".join(sorted(lines)).encode("utf-8")
