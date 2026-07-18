@@ -128,6 +128,7 @@ import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.KleinInequality
 import TNLean.Analysis.MarginalSupport
+import TNLean.Analysis.CoisometricCompression
 import TNLean.Channel.MarginalSupportAbsorption
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
@@ -443,6 +444,7 @@ import TNLean.MPS.MPDO.VerticalBoundaryContraction
 import TNLean.MPS.MPDO.VerticalMapTransport
 import TNLean.MPS.MPDO.VerticalSectorCoordinates
 import TNLean.MPS.MPDO.VerticalSectorFixedGenerators
+import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorGeneration
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP

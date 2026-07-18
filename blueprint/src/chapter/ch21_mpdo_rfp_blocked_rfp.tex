@@ -963,6 +963,60 @@ physical indices, as in
     matched.  The final renormalization fixed-point conclusion is separate.
 \end{definition}
 
+\begin{definition}[Positive vertical-sector families and total trace]
+    \label{def:mpdo_positive_vertical_sector_family}
+    \lean{MPOTensor.IsVerticalSectorPosSemidef}
+    \lean{MPOTensor.verticalSectorTrace}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    A vertical-sector family $X=(X_\alpha)_\alpha$ is positive when every
+    $X_\alpha$ is positive semidefinite.  Its total sector trace is
+    \[
+        \operatorname{Tr}_{\mathrm{sec}}(X)
+          =\sum_\alpha\operatorname{tr}(X_\alpha).
+    \]
+\end{definition}
+
+\begin{lemma}[Positivity and trace in normalized sector coordinates]
+    \label{lem:mpdo_normalized_vertical_sector_positive_trace}
+    \lean{MPOTensor.verticalMultiplicityTrace_pos}
+    \lean{MPOTensor.normalizedVerticalSectorEmbedding_posSemidef}
+    \lean{MPOTensor.normalizedRetainedVerticalSectorEmbedding_posSemidef}
+    \lean{MPOTensor.verticalSectorPartialTrace_posSemidef}
+    \lean{MPOTensor.retainedVerticalSectorPartialTrace_posSemidef}
+    \lean{MPOTensor.trace_verticalSectorBlockDiagonal}
+    \lean{MPOTensor.trace_verticalSectorBlockProjection}
+    \lean{MPOTensor.verticalSectorTrace_retainedVerticalSectorPartialTrace}
+    \lean{MPOTensor.trace_normalizedRetainedVerticalSectorEmbedding}
+    \leanok
+    \uses{def:mpdo_positive_vertical_sector_family,
+      def:mpdo_retained_vertical_sector_coordinates}
+    Suppose that every multiplicity space is nonzero and every diagonal entry
+    of $\mu_\alpha$ is positive.  The normalized embedding $R_\mu$ sends a
+    positive sector family to a positive retained matrix and satisfies
+    \[
+        \operatorname{tr}(R_\mu(X))
+          =\operatorname{Tr}_{\mathrm{sec}}(X).
+    \]
+    Conversely, the sectorwise partial trace sends a positive retained matrix
+    to a positive sector family and satisfies
+    \[
+        \operatorname{Tr}_{\mathrm{sec}}(\widetilde R_\mu(Z))
+          =\operatorname{tr}(Z).
+    \]
+    These trace identities follow by summing the traces of the diagonal
+    sectors; deleting the off-diagonal sector entries does not change the
+    trace.
+\end{lemma}
+
+\begin{proof}\leanok
+    A positive diagonal weight matrix has positive trace, and its Kronecker
+    product with each positive $X_\alpha$ is positive.  Partial trace preserves
+    positivity.  The two trace formulas follow from
+    $\operatorname{tr}(A\otimes B)=\operatorname{tr}(A)\operatorname{tr}(B)$
+    and the normalization by $\operatorname{tr}(\mu_\alpha)$.
+\end{proof}
+
 \begin{lemma}[Normalized embedding of multiplicity-trace-scaled sectors]
     \label{lem:mpdo_normalized_retained_vertical_sector_embedding}
     \lean{MPOTensor.normalizedRetainedVerticalSectorEmbedding_trace_smul}
@@ -1006,6 +1060,151 @@ physical indices, as in
         =\operatorname{tr}(\mu_\alpha)X_\alpha
         =m_\alpha X_\alpha.
     \]
+\end{proof}
+
+\begin{lemma}[Trace under coisometric compression]
+    \label{lem:mpdo_coisometric_compression_trace}
+    \lean{Matrix.isOrthogonalProjection_conjTranspose_mul_of_mul_conjTranspose_eq_one}
+    \lean{Matrix.PosSemidef.trace_mul_mul_conjTranspose_le_of_mul_conjTranspose_eq_one}
+    \lean{Matrix.PosSemidef.trace_mul_mul_conjTranspose_eq_iff_of_mul_conjTranspose_eq_one}
+    \lean{Matrix.trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one}
+    \leanok
+    Let $U:\mathbb C^n\to\mathbb C^r$ satisfy $UU^\dagger=1$.  If $Z\geq0$,
+    then
+    \[
+        \operatorname{tr}(UZU^\dagger)\leq\operatorname{tr}(Z),
+        \qquad
+        \operatorname{tr}(UZU^\dagger)=\operatorname{tr}(Z)
+        \Longleftrightarrow U^\dagger UZ=Z.
+    \]
+    For every $W\in\mathbb C^{r\times r}$, one also has
+    $\operatorname{tr}(U^\dagger WU)=\operatorname{tr}(W)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Put $P=U^\dagger U$.  The matrices $P$ and $1-P$ are orthogonal
+    projections, and
+    \[
+        \operatorname{tr}(UZU^\dagger)=\operatorname{tr}(PZ),
+        \qquad
+        \operatorname{tr}(Z)-\operatorname{tr}(PZ)
+          =\operatorname{tr}((1-P)Z)\geq0.
+    \]
+    The last trace vanishes precisely when $(1-P)Z=0$.  The formula for $W$
+    follows by cyclicity of trace and $UU^\dagger=1$.
+\end{proof}
+
+\begin{definition}[Matrices before active-sector compression]
+    \label{def:mpdo_vertical_sector_precompression}
+    \lean{MPOTensor.precompressionVerticalSectorT}
+    \lean{MPOTensor.precompressionVerticalSectorS}
+    \leanok
+    Let $Z_T(X)$ be the matrix obtained by applying the normalized one-site
+    embedding, expanding by $U_1^\dagger$, applying $T$, and relabelling the
+    two-site indices, before compression by $U_2$.  Define $Z_S(Y)$ in the
+    reverse direction, before compression by $U_1$.
+\end{definition}
+
+\begin{lemma}[Positivity and trace before active-sector compression]
+    \label{lem:mpdo_vertical_sector_precompression_positive_trace}
+    \lean{MPOTensor.precompressionVerticalSectorT_posSemidef}
+    \lean{MPOTensor.precompressionVerticalSectorS_posSemidef}
+    \lean{MPOTensor.trace_precompressionVerticalSectorT}
+    \lean{MPOTensor.trace_precompressionVerticalSectorS}
+    \lean{MPOTensor.verticalSectorTrace_transportedVerticalSectorT}
+    \lean{MPOTensor.verticalSectorTrace_transportedVerticalSectorS}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      def:mpdo_positive_vertical_sector_family,
+      def:mpdo_vertical_sector_precompression,
+      lem:mpdo_normalized_vertical_sector_positive_trace}
+    Suppose that the physical maps are completely positive and trace
+    preserving and $U_iU_i^\dagger=1$.  For positive sector families
+    $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, the matrices $Z_T(X)$ and
+    $Z_S(Y)$ are positive and
+    \[
+        \operatorname{tr}(Z_T(X))
+          =\operatorname{Tr}_{\mathrm{sec}}(X),
+        \qquad
+        \operatorname{tr}(Z_S(Y))
+          =\operatorname{Tr}_{\mathrm{sec}}(Y).
+    \]
+    After the final compression and sectorwise partial trace,
+    \[
+        \operatorname{Tr}_{\mathrm{sec}}(\widetilde T(X))
+          =\operatorname{tr}(U_2Z_T(X)U_2^\dagger),
+        \qquad
+        \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(Y))
+          =\operatorname{tr}(U_1Z_S(Y)U_1^\dagger).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Positivity follows successively from the normalized embedding, expansion
+    by an adjoint, the physical map, relabelling, and partial trace.  The trace
+    identities follow from the preceding two lemmas and trace preservation of
+    the physical maps.
+\end{proof}
+
+% Local fix (zero-sector complement): the transported maps come from
+% arXiv:1606.00608, Appendix C.4, lines 1955--1980, but the corrective trace-loss
+% statement is recorded in docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
+\begin{theorem}[Positivity and trace loss of the transported sector maps]
+    \label{thm:mpdo_transported_vertical_sector_trace_loss}
+    \lean{MPOTensor.transportedVerticalSectorT_posSemidef}
+    \lean{MPOTensor.transportedVerticalSectorS_posSemidef}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_le}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_le}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_eq_iff}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_eq_iff}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      def:mpdo_positive_vertical_sector_family,
+      def:mpdo_vertical_sector_precompression,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_sector_partial_trace,
+      lem:mpdo_coisometric_compression_trace,
+      lem:mpdo_vertical_sector_precompression_positive_trace}
+    Suppose that the multiplicity spaces are nonzero, their diagonal weights
+    are positive, the physical maps $T$ and $S$ are completely positive and
+    trace preserving, and the vertical coordinate maps satisfy
+    $U_iU_i^\dagger=1$.  Then $\widetilde T$ and $\widetilde S$ preserve
+    pointwise positive semidefiniteness.  For pointwise positive families
+    $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, their total sector traces obey
+    \[
+       \operatorname{Tr}_{\mathrm{sec}}(\widetilde T(X))
+          \leq \operatorname{Tr}_{\mathrm{sec}}(X),
+       \qquad
+       \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(Y))
+          \leq \operatorname{Tr}_{\mathrm{sec}}(Y).
+    \]
+    The trace loss vanishes precisely when
+    \[
+       U_2^\dagger U_2 Z_T(X)=Z_T(X),
+       \qquad
+       U_1^\dagger U_1 Z_S(Y)=Z_S(Y),
+    \]
+    respectively.
+
+    This result concerns positivity and trace on positive elements.  It does
+    not assert a complete-positivity structure for the finite products, a
+    trace-preserving extension to their full ambient matrix spaces, or an
+    inverse relation between the two transported maps.
+\end{theorem}
+
+\begin{proof}\leanok
+    The normalized diagonal embedding and the sectorwise partial trace
+    preserve positivity.  Before the final compression, trace preservation of
+    the physical map and $U_iU_i^\dagger=1$ give the original sector trace.
+    For a positive matrix $Z$ and a coisometry $U$, put
+    $P=U^\dagger U$.  Then
+    \[
+       \operatorname{tr}(UZU^\dagger)
+        =\operatorname{tr}(PZ)
+        \leq\operatorname{tr}(Z).
+    \]
+    Since $1-P$ is an orthogonal projection, equality is equivalent to
+    $\operatorname{tr}((1-P)Z)=0$, hence to $(1-P)Z=0$.
 \end{proof}
 
 \begin{theorem}[Action of the normalized vertical-sector maps]
