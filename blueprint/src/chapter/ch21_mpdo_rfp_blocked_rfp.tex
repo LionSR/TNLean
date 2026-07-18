@@ -1207,6 +1207,116 @@ physical indices, as in
     $\operatorname{tr}((1-P)Z)=0$, hence to $(1-P)Z=0$.
 \end{proof}
 
+\begin{theorem}[Active-sector support on vertical bond contractions]
+    \label{thm:mpdo_vertical_sector_source_image_preservation}
+    \lean{MPOTensor.precompressionVerticalSectorT_image_preservation}
+    \lean{MPOTensor.precompressionVerticalSectorS_image_preservation}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_of_source_generated}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_of_source_generated}
+    \leanok
+    \uses{lem:mpdo_normalized_retained_vertical_sector_embedding,
+        lem:mpdo_retained_vertical_weighted_contraction,
+        lem:mpdo_vertical_bond_contraction_reconstruction,
+        thm:mpdo_one_site_closure_two_site_blocking,
+        lem:mpdo_vertical_sector_precompression_positive_trace}
+    Suppose that the one-site and two-site vertical canonical forms have
+    diagonal multiplicity matrices $\mu_\alpha$ and $\nu_\beta$, with every
+    multiplicity space nonzero and every diagonal entry strictly positive,
+    and coordinate coisometries $U_1,U_2$.  Write
+    $m_\alpha=\operatorname{tr}(\mu_\alpha)$ and
+    $n_\beta=\operatorname{tr}(\nu_\beta)$.  For a bond matrix $X$, write
+    $\mathcal M^{(1)}(X)$ and $\mathcal M^{(2)}(X)$ for the one-site and
+    two-site physical closures, and set
+    \[
+        x(X)=\bigoplus_\alpha m_\alpha M_\alpha(X),
+        \qquad
+        y(X)=\bigoplus_\beta n_\beta A_\beta(X).
+    \]
+    If the physical refinement and coarse-graining maps satisfy
+    \[
+        T(\mathcal M^{(1)}(X))=\mathcal M^{(2)}(X),
+        \qquad
+        S(\mathcal M^{(2)}(X))=\mathcal M^{(1)}(X),
+    \]
+    then the corresponding matrices before the final compression obey
+    \[
+        U_2^\dagger U_2 Z_T(x(X))=Z_T(x(X)),
+        \qquad
+        U_1^\dagger U_1 Z_S(y(X))=Z_S(y(X)).
+    \]
+    If $T$ and $S$ are completely positive and trace preserving, then
+    \[
+        \Trsec(\widetilde T(x(X)))=\Trsec(x(X)),
+        \qquad
+        \Trsec(\widetilde S(y(X)))=\Trsec(y(X)).
+    \]
+    These assertions concern the vertical bond-contraction families in
+    \cite[Appendix~C.4, lines~1955--1980]{Cirac2016MPDO_arXiv}; they make no
+    assertion for arbitrary positive elements of the sector algebras.
+\end{theorem}
+
+\begin{proof}\leanok
+    Put
+    \[
+        B_1(X)=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X),
+        \qquad
+        B_2(X)=\bigoplus_\beta\nu_\beta\otimes A_\beta(X).
+    \]
+    Since $m_\alpha=\operatorname{tr}(\mu_\alpha)$ and
+    $n_\beta=\operatorname{tr}(\nu_\beta)$, the normalized embeddings satisfy
+    \[
+        R_\mu(x(X))=B_1(X),
+        \qquad
+        R_\nu(y(X))=B_2(X).
+    \]
+    The two reconstruction identities are
+    \[
+        \mathcal M^{(1)}(X)=U_1^\dagger B_1(X)U_1,
+        \qquad
+        \mathcal M^{(2)}(X)=U_2^\dagger B_2(X)U_2.
+    \]
+    Applying $T$, the physical refinement identity, and the second
+    reconstruction identity gives
+    \[
+        Z_T(x(X))
+          =U_2^\dagger B_2(X)U_2.
+    \]
+    Hence
+    \[
+    \begin{aligned}
+        U_2^\dagger U_2 Z_T(x(X))
+          &=U_2^\dagger(U_2U_2^\dagger)B_2(X)U_2 \\
+          &=U_2^\dagger B_2(X)U_2
+           =Z_T(x(X)).
+    \end{aligned}
+    \]
+    Here the second equality uses $U_2U_2^\dagger=1$.  Interchanging the two
+    canonical forms gives
+    \[
+    \begin{aligned}
+        U_1^\dagger U_1 Z_S(y(X))
+          &=U_1^\dagger(U_1U_1^\dagger)B_1(X)U_1 \\
+          &=U_1^\dagger B_1(X)U_1
+           =Z_S(y(X)).
+    \end{aligned}
+    \]
+    Finally, the precompression trace identities and cyclicity give
+    \[
+    \begin{aligned}
+      \Trsec(\widetilde T(x(X)))
+        &=\operatorname{tr}(U_2 Z_T(x(X))U_2^\dagger)
+         =\operatorname{tr}(U_2^\dagger U_2 Z_T(x(X))) \\
+        &=\operatorname{tr}(Z_T(x(X)))
+         =\Trsec(x(X)), \\
+      \Trsec(\widetilde S(y(X)))
+        &=\operatorname{tr}(U_1 Z_S(y(X))U_1^\dagger)
+         =\operatorname{tr}(U_1^\dagger U_1 Z_S(y(X))) \\
+        &=\operatorname{tr}(Z_S(y(X)))
+         =\Trsec(y(X)).
+    \end{aligned}
+    \]
+\end{proof}
+
 \begin{theorem}[Action of the normalized vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_maps}
     \lean{MPOTensor.transportedVerticalSectorT_trace_smul}

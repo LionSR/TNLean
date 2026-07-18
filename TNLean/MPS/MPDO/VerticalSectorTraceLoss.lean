@@ -467,12 +467,9 @@ theorem transportedVerticalSectorT_trace_le
 exactly when its precompression output is supported on `U₂ᴴ * U₂`.
 
 Appendix C.4, lines 1955--1980 of arXiv:1606.00608 supplies the transported
-map used here.
-
-**Local fix (zero-sector complement):** Rectangular vertical coordinates may
-discard a zero-sector complement.  The support criterion below identifies
-exactly when no trace is lost.  This obstruction and the image-preservation
-condition that eliminates it are recorded in
+map used here.  On the bond contractions of the vertical canonical forms, the
+source-generated image-preservation result proves that the precompression
+output is supported on the active sector.  Its scope is documented in
 `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 theorem transportedVerticalSectorT_trace_eq_iff
     {g₁ g₂ d : ℕ}
@@ -554,12 +551,9 @@ theorem transportedVerticalSectorS_trace_le
 family exactly when its precompression output is supported on `U₁ᴴ * U₁`.
 
 Appendix C.4, lines 1955--1980 of arXiv:1606.00608 supplies the transported
-map used here.
-
-**Local fix (zero-sector complement):** Rectangular vertical coordinates may
-discard a zero-sector complement.  The support criterion below identifies
-exactly when no trace is lost.  This obstruction and the image-preservation
-condition that eliminates it are recorded in
+map used here.  On the bond contractions of the vertical canonical forms, the
+source-generated image-preservation result proves that the precompression
+output is supported on the active sector.  Its scope is documented in
 `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 theorem transportedVerticalSectorS_trace_eq_iff
     {g₁ g₂ d : ℕ}

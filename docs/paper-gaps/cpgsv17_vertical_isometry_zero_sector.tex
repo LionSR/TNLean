@@ -151,12 +151,46 @@ image-preservation statements
 The displayed identities of Appendix~C.4 establish the required action on
 the weighted sector operators arising from the canonical forms; they do not,
 by themselves, establish \eqref{eq:transported-image-preservation} for every
-element of the finite products.  The elimination plan is therefore to prove
-\eqref{eq:transported-image-preservation} for each source-generated family
-where trace preservation is used.  The support criterion above then yields
-trace equality on precisely that family.  No global trace-preserving
-extension, complete-positivity assertion for the finite products, or inverse
-relation is needed for this step.
+element of the finite products.  The calculation below proves
+\eqref{eq:transported-image-preservation} on precisely the vertical
+bond-contraction families used in the source.  The support criterion then
+yields trace equality on those families.  This argument requires no global
+trace-preserving extension, complete-positivity assertion for the finite
+products, or inverse relation.
+
+For a horizontal bond matrix $X$, set
+\begin{equation}
+  x(X)=\bigoplus_\alpha m_\alpha M_\alpha(X),
+  \qquad
+  y(X)=\bigoplus_\beta n_\beta A_\beta(X).
+  \label{eq:source-contraction-families}
+\end{equation}
+The physical refinement identity and the two vertical reconstruction
+identities give
+\begin{equation}
+  Z_T(x(X))
+   =U_2^\dagger\left(
+      \bigoplus_\beta\nu_\beta\otimes A_\beta(X)
+    \right)U_2.
+  \label{eq:refinement-precompression-reconstruction}
+\end{equation}
+Since $U_2U_2^\dagger=1$, equation
+\eqref{eq:refinement-precompression-reconstruction} implies
+$P_2Z_T(x(X))=Z_T(x(X))$.  The coarse-graining identity gives symmetrically
+$P_1Z_S(y(X))=Z_S(y(X))$.  Hence the trace criteria
+\eqref{eq:refinement-trace-loss} and \eqref{eq:coarse-trace-loss} yield
+\begin{equation}
+  \operatorname{Tr}_{\mathrm{sec}}(\widetilde T(x(X)))
+    =\operatorname{Tr}_{\mathrm{sec}}(x(X)),
+  \qquad
+  \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(y(X)))
+    =\operatorname{Tr}_{\mathrm{sec}}(y(X)).
+  \label{eq:source-contraction-trace-preservation}
+\end{equation}
+This proves the image-preservation step used at source lines~1955--1980.
+It does not extend \eqref{eq:transported-image-preservation} to arbitrary
+positive elements, nor does it assert that the transported maps are inverse
+on the full sector algebras.
 
 \section{Formal correction}
 
