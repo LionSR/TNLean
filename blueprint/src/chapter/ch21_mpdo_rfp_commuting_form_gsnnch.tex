@@ -238,12 +238,17 @@
     \leanok
     \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
     Let $B$ be the pair-indexed positive bond of an $\eta$-local structure.
-    There are a unitary decomposition
+    There are a unitary coordinate decomposition
     \[
-        H\cong\bigoplus_q H_{q,l}\otimes H_{q,r}
+        H\cong\bigoplus_q H_{q,r}\otimes H_{q,l}
     \]
     and positive semidefinite operators
-    $\eta_{q,h}$ on $H_{q,r}\otimes H_{h,l}$ such that
+    $\eta_{q,h}$ on $H_{q,r}\otimes H_{h,l}$.  After regrouping the
+    two-site coordinates, the $(q,h)$-sector is
+    \[
+        H_{q,l}\otimes(H_{q,r}\otimes H_{h,l})\otimes H_{h,r},
+    \]
+    and in these regrouped coordinates
     \[
         (U^*\otimes U^*)B(U\otimes U)
         =\bigoplus_{q,h}
