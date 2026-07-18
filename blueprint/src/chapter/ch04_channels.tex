@@ -951,9 +951,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
         P_f^2=P_f,\qquad fP_f=P_f=P_f f,
     \]
     and $P_f x=x$ if and only if $f x=x$.
-    The complex matrix specialization gives the convergence step underlying
-    \cite[Equation~(6.14)]{Wolf2012Quantum}; positivity and unitality of the
-    limiting projection are separate assertions.
+    The complex matrix specialization underlying
+    \cite[Equation~(6.14)]{Wolf2012Quantum} is given below.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -979,6 +978,50 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
     so $P_f(fx)=P_f x$ and hence $P_f f=P_f$. The range and idempotence
     identities follow directly from the projection construction.
+\end{proof}
+
+\begin{theorem}[Positive trace-preserving mean-ergodic projection]
+    \label{thm:positive_trace_preserving_mean_ergodic_projection}
+    \lean{IsPositiveMap.isBounded_orbit_of_posSemidef_of_tracePreserving,
+        IsPositiveMap.isBounded_orbit_of_isHermitian_of_tracePreserving,
+        IsPositiveMap.hasBoundedOrbits_of_tracePreserving,
+        IsPositiveMap.meanErgodicProjection_isPositiveMap,
+        IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap,
+        LinearMap.HasBoundedOrbits.meanErgodicProjection_one,
+        IsPositiveMap.range_meanErgodicProjection_of_tracePreserving,
+        IsPositiveMap.meanErgodicProjection_apply_eq_self_iff_of_tracePreserving}
+    \leanok
+    \uses{def:positive_map, def:trace_preserving,
+        def:mean_ergodic_projection}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving. Then $T$ has
+    bounded orbits, and its mean-ergodic projection $P_T$ is positive and
+    trace-preserving. Its range is precisely the fixed-point space of $T$:
+    \[
+        \operatorname{range}(P_T)=\ker(T-\Id),
+        \qquad
+        P_T(X)=X \iff T(X)=X.
+    \]
+    If $T(\Id)=\Id$, then $P_T(\Id)=\Id$.
+    This is the Ces\`aro projection $T_\infty$ of
+    \cite[Proposition~6.3 and Equation~(6.14)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mean_ergodic_bounded_orbits}
+    If $X\ge 0$, then $T^n(X)\ge 0$ and
+    $\tr(T^n(X))=\tr(X)$. Hence the orbit of $X$ lies in a bounded trace
+    section of the positive cone. For Hermitian $X$, write
+    $X=X_+-X_-$, and for arbitrary $X$ use the two Hermitian matrices
+    \[
+        H_1=X+X^*,\qquad H_2=i(X-X^*),\qquad
+        X=\frac12(H_1-iH_2).
+    \]
+    Thus every orbit is bounded. Theorem~\ref{thm:mean_ergodic_bounded_orbits}
+    gives the projection and its fixed-point characterization. Every Ces\`aro
+    average is positive, so closedness of the positive cone makes $P_T$
+    positive. Trace preservation passes to the limit by continuity of the
+    trace. Finally, if $T(\Id)=\Id$, the fixed-point characterization gives
+    $P_T(\Id)=\Id$.
 \end{proof}
 
 \begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
