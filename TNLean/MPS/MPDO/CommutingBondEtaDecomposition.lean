@@ -15,7 +15,7 @@ finite chain.
 
 ## Main declarations
 
-* `MPOTensor.etaPairSpatialBlockEquiv`
+* `Matrix.etaPairSpatialBlockEquiv`
 * `MPOTensor.EtaLocalStructureData.exists_positive_eta_pairBond_decomposition`
 
 ## References
@@ -26,9 +26,9 @@ finite chain.
 
 open scoped ComplexOrder Kronecker Matrix
 
-namespace MPOTensor
+namespace Matrix
 
-variable {d D : ℕ}
+variable {d : ℕ}
 
 /-- The index equivalence which orders a pair of spatially decomposed sites as
 \[
@@ -58,9 +58,11 @@ def etaPairSpatialBlockEquiv {K : ℕ} {dl dr : Fin K → ℕ}
     simp only
     rw [e.apply_symm_apply, e.apply_symm_apply]
 
-namespace EtaLocalStructureData
+end Matrix
 
-variable {M : MPOTensor d D}
+namespace MPOTensor.EtaLocalStructureData
+
+variable {d D : ℕ} {M : MPOTensor d D}
 
 /-- A positive translation-invariant commuting bond has one spatial decomposition and a
 positive neighboring operator \(\eta_{q,h}\) for each ordered pair of sectors such that
@@ -88,8 +90,8 @@ theorem exists_positive_eta_pairBond_decomposition
       U ∈ Matrix.unitaryGroup (Fin d) ℂ ∧
         (∀ q, 0 < dl q) ∧ (∀ q, 0 < dr q) ∧
         (∀ q h, (η q h).PosSemidef) ∧
-        Matrix.reindex (etaPairSpatialBlockEquiv e).symm
-            (etaPairSpatialBlockEquiv e).symm
+        Matrix.reindex (Matrix.etaPairSpatialBlockEquiv e).symm
+            (Matrix.etaPairSpatialBlockEquiv e).symm
             (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)) =
           Matrix.blockDiagonal' fun qh : Fin K × Fin K ↦
             ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
@@ -263,8 +265,8 @@ theorem exists_positive_eta_pairBond_decomposition
     have hsub := hBpos.submatrix f
     change (B'.submatrix f f).PosSemidef
     exact hsub
-  · change Matrix.reindex (etaPairSpatialBlockEquiv e).symm
-        (etaPairSpatialBlockEquiv e).symm B' = _
+  · change Matrix.reindex (Matrix.etaPairSpatialBlockEquiv e).symm
+        (Matrix.etaPairSpatialBlockEquiv e).symm B' = _
     ext ⟨⟨q, h⟩, ⟨⟨lq, ⟨rq, lh⟩⟩, rh⟩⟩
       ⟨⟨q', h'⟩, ⟨⟨lq', ⟨rq', lh'⟩⟩, rh'⟩⟩
     change B' (e ⟨q, (rq, lq)⟩, e ⟨h, (rh, lh)⟩)
@@ -281,6 +283,4 @@ theorem exists_positive_eta_pairBond_decomposition
     · rw [Matrix.blockDiagonal'_apply_ne _ _ _ (fun hp ↦ hq (Prod.mk.inj hp).1)]
       exact hB'_left_sector_ne q q' h h' hq lq lq' rq rq' lh lh' rh rh'
 
-end EtaLocalStructureData
-
-end MPOTensor
+end MPOTensor.EtaLocalStructureData
