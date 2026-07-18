@@ -179,14 +179,19 @@ The neighboring operator and the normalized active density on this space are
   \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h}.
 \]
 
-On an active pair, the total completion agrees with the normalized density:
+The total completed density is
 
 \[
-  \overline\Omega_{k,h}=\widehat\Omega_{k,h}.
+  \overline\Omega_{k,h}
+  =\begin{cases}
+      \widehat\Omega_{k,h},&a_kb_h\ne0,\\
+      \tau_{\mathcal H^{\Omega}_{k,h}},&a_kb_h=0.
+    \end{cases}
 \]
 
-On an inactive pair, $\overline\Omega_{k,h}$ denotes the chosen positive
-trace-one completion on $\mathcal H^{\Omega}_{k,h}$. A typed-map vertex records
+Thus
+$\overline\Omega_{k,h}\in\operatorname{End}(\mathcal H^{\Omega}_{k,h})$
+and $\operatorname{tr}(\overline\Omega_{k,h})=1$. A typed-map vertex records
 an operator space in the refinement displays below, not a coordinate
 expression, a carrier Hilbert space, or a density acting on that space.
 Introduce the five matrix algebras
