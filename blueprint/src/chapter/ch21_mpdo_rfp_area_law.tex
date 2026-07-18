@@ -589,6 +589,13 @@
     completely positive.
 \end{lemma}
 
+\begin{proof}\leanok
+    \uses{def:block_ancillary_trace}
+    The reindexing equivalence is a channel, as is the partial trace over the
+    ancillary factor. Their composition is therefore trace-preserving and
+    completely positive.
+\end{proof}
+
 \begin{theorem}[Coefficients of the ancillary traces]
     \label{thm:block_ancillary_trace_coefficients}
     \lean{MPOTensor.blockAncillaryTraceMap_apply,
@@ -610,6 +617,14 @@
         X_{((i,\kappa),(x,\lambda)),((j,\kappa),(y,\lambda))}.
     \]
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:block_ancillary_trace}
+    After regrouping the spin and ancillary factors, the definition of the
+    partial trace gives the first coefficient identity. Applying this identity
+    to both tensor factors gives the displayed iterated sum; the two finite
+    sums may be interchanged.
+\end{proof}
 
 \begin{theorem}[Mutual-information bound for a local-channel image]
     \label{thm:local_channel_image_mutual_info_bound}
