@@ -53,19 +53,9 @@ noncomputable def PosSemidef.supportInvSqrt {ρ : Matrix n n ℂ}
 /-- The support inverse square root is Hermitian. -/
 theorem PosSemidef.supportInvSqrt_isHermitian {ρ : Matrix n n ℂ}
     (hρ : ρ.PosSemidef) : hρ.supportInvSqrt.IsHermitian := by
-  rw [PosSemidef.supportInvSqrt, hρ.isHermitian.cfc_form,
-    Matrix.star_eq_conjTranspose]
-  have hD : (Matrix.diagonal (fun i ↦
-      (((if hρ.isHermitian.eigenvalues i ≠ 0 then
-        (Real.sqrt (hρ.isHermitian.eigenvalues i))⁻¹ else 0) : ℝ) : ℂ))).IsHermitian := by
-    apply Matrix.IsHermitian.ext
-    intro i j
-    by_cases hij : i = j
-    · subst hij
-      simp
-    · simp [Matrix.diagonal_apply_ne _ hij,
-        Matrix.diagonal_apply_ne _ (Ne.symm hij)]
-  exact Matrix.isHermitian_mul_mul_conjTranspose _ hD
+  rw [PosSemidef.supportInvSqrt, ← hρ.isHermitian.cfc_eq]
+  exact Matrix.isHermitian_iff_isSelfAdjoint.mpr
+    (cfc_predicate (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ)
 
 /-- Sandwiching a positive-semidefinite matrix by its support inverse square
 root gives its support projection.  This is the spectral support identity
