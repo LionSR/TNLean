@@ -110,18 +110,20 @@ range of its matching projector, the restricted tensor is injective, SAL
 passes from the ambient representative to this restriction through the
 sitewise support isometry, and the positive Proposition~C.8 bond lifts to a
 positive two-site operator supported on the tensor square of that projector.
+The cyclic translates of this lifted bond commute pairwise on every periodic
+chain of length at least two.
 \footnote{\raggedright Formal declarations:
 {\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData}},
 {\scriptsize\leanid{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis}},
 {\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}},
 and
-{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_liftedBond_supported}}.}
+{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_liftedTranslationInvariantBondData}}.}
 The remaining comparison has two parts:
 
 \begin{enumerate}
-  \item transport commutativity and the exact finite-chain product identity
-        of the restricted bond through the support isometry; its positive
-        ambient lift and the identity
+  \item transport the exact finite-chain product identity of the restricted
+        bond through the support isometry; positivity, pairwise commutativity
+        for every chain length at least two, and the identity
         $(P_j\otimes P_j)B^{(j)}(P_j\otimes P_j)=B^{(j)}$ are formalized;
   \item determine whether the reverse comparison with a single bond is needed
         in the simple-MPDO equivalence, and prove it only in that form.
@@ -144,7 +146,8 @@ construction of the outer sector sum with its natural multiplicities is
 formalized, as is the injective restriction of every representative to its
 projector range.  SAL is invariant under the support isometry, and the
 resulting positive bond has a positive ambient lift supported on the matching
-two-site sector.  The open gap is the transport of commutativity and the exact
+two-site sector, and all cyclic translates of that lift commute pairwise on
+every periodic chain of length at least two.  The open gap is the exact
 finite-chain product identity, together with any reverse comparison actually
 needed by the simple-MPDO equivalence.
 
