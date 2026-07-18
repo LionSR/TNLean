@@ -111,14 +111,18 @@ decomposition on which all $X_{aa'}$ and $Y_{cc'}$ act on complementary
 factors.  This is
 \leanid{Matrix.exists_middle_spatial_decomposition_of_overlappingLifts_commute}.
 
-The unitary assembly in Beigi's Lemma~2.1 is now available as well.  The
-theorem
-\leanid{Matrix.exists_unitary_blockActions_of_overlappingLifts_commute}
-constructs one unitary identification of the middle space, combines the
+The conjugated coordinate form of Beigi's Lemma~2.1 is
+\leanid{Matrix.exists_unitary_blockActions_of_overlappingLifts_commute}.
+It constructs one unitary identification of the middle space and combines the
 coefficient matrices into Hermitian operators $R_{A\beta_l}$ and
-$S_{\beta_rC}$, and proves the two direct-sum block identities printed in the
-source.  Its hypotheses are exactly the source hypotheses: Hermiticity of both
-overlapping operators and commutation of their natural three-factor lifts.
+$S_{\beta_rC}$.  Applying the inverse coordinate identifications and cancelling
+the unitary factors gives the two equalities for the original operators in
+Beigi's statement.  This is
+\leanid{Matrix.exists_unitary_blockSum_equalities_of_overlappingLifts_commute}.
+Its hypotheses are exactly the source hypotheses: Hermiticity of both
+overlapping operators and commutation of their natural three-factor lifts.  The
+block operators are Hermitian, as in the source; no unitarity property is
+asserted for them.
 
 The cyclic three-site coordinate identification is now available.  The
 equivalence
