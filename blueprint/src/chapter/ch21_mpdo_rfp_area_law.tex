@@ -634,7 +634,8 @@
     \label{thm:lpdo_block_channel_image}
     \lean{MPOTensor.blockAncillaryTraceMap_pureState_purificationTensor,
       MPOTensor.trace_purificationDensity_eq_pureState,
-      MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap}
+      MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap,
+      MPOTensor.IsLPDO.exists_bipartitionedNormalizedMPO_eq_blockAncillaryTrace}
     \leanok
     \uses{def:block_ancillary_trace,
       def:mpdo_purification_tensor, def:mpdo_purification_density,
@@ -681,6 +682,10 @@
 
     This identity also holds when the common trace vanishes, in which case both
     normalized-form operators are zero.
+
+    In particular, the local-purification representation of an LPDO supplies
+    an ancillary dimension, a purifying bond dimension, and a purifying tensor
+    for which the same identity holds.
 
     This is the finite-chain channel identity from the purification preceding
     equation~(4) of \cite{Wolf2008AreaLaws}, under the explicit local

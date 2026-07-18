@@ -34,9 +34,10 @@ from the cited argument and is false without further hypotheses.
 * `MPOTensor.blockAncillaryTraceMap_apply` and
   `MPOTensor.tensorMapBoth_blockAncillaryTraceMap_apply`: coefficient formulas
   for one block and for the two sides of a cut.
-* `MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap`:
-  an explicit local purification gives the normalized block-channel image
-  across every cut.
+* `MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap`
+  and `MPOTensor.IsLPDO.exists_bipartitionedNormalizedMPO_eq_blockAncillaryTrace`:
+  an explicit local purification, or an LPDO witness, gives the normalized
+  block-channel image across every cut.
 * `MPOTensor.mutualInfoChain_le_of_bipartitioned_channel_image`: a matrix product
   density operator obtained by local channels from a pure matrix product state
   satisfies the bound determined by the purifying bond dimension.
@@ -271,6 +272,33 @@ theorem bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
       congr 1
   refine Finset.sum_congr rfl (fun κ _ ↦ ?_)
   rw [hjoin i x κ, hjoin j y κ]
+
+/-- The existential `IsLPDO` form of
+`bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap`.
+It chooses the ancillary dimension, purifying bond dimension, and purifying
+tensor, then identifies the normalized finite-chain state with the two
+blockwise ancillary traces. This is the identity used by the mixed-PEPS
+channel argument preceding equation (4) of arXiv:0704.3906.
+
+**Scope restriction:** the hypothesis is a local purification in the sense of
+arXiv:1606.00608, Section 4.3. A general positive matrix product operator need
+not have one, so this theorem is not the unrestricted boundedness clause of
+Proposition 4.5, lines 801--806 and 1316--1320. See
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+theorem IsLPDO.exists_bipartitionedNormalizedMPO_eq_blockAncillaryTrace
+    {M : MPOTensor d D} (hLPDO : IsLPDO M)
+    (N L K : ℕ) (h : N = L + K) :
+    ∃ (dK D' : ℕ)
+      (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
+      bipartitionedNormalizedMPO M N L K h =
+        Matrix.tensorMapBoth (blockAncillaryTraceMap d dK L)
+          (blockAncillaryTraceMap d dK K)
+          (bipartitionedNormalizedMPO
+            (doubledTensor (purificationTensor A)) N L K h) := by
+  obtain ⟨dK, D', A, e, hM⟩ := hLPDO
+  exact ⟨dK, D', A,
+    bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
+      M A e hM N L K h⟩
 
 /-- **Mutual-information bound for a local-channel image of a pure matrix
 product state.** Let the normalized density operator across the cut
