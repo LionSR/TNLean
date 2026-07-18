@@ -190,7 +190,8 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     \label{thm:cpsv_bnt_uniqueness_counterexample}
     \lean{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card}
     \leanok
-    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos}
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos,
+        def:block_diagonal_tensor}
     There is a normal tensor with a one-block canonical-form expansion which
     admits two bases of normal tensors of different cardinalities. Hence the
     unrestricted uniqueness sentence of
@@ -199,6 +200,7 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
     Take physical dimension two and bond dimension one. Let $A_0$ be supported
     on physical symbol zero and let $A_1$ be supported on physical symbol one:
     \[
@@ -206,15 +208,22 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
         \qquad
         A_1^0=0,\quad A_1^1=1.
     \]
-    Both transfer maps are the identity on the one-dimensional matrix algebra,
-    so both tensors are normal. At every positive length,
+    Both transfer maps are the identity on the one-dimensional matrix algebra:
+    \[
+        \mathcal E_{A_j}(X)=X \qquad (j=0,1).
+    \]
+    Hence both tensors are normal. At every positive length,
     \[
         \ket{V^{(N)}(A_0)}=\ket{0\cdots0},
         \qquad
         \ket{V^{(N)}(A_1)}=\ket{1\cdots1}.
     \]
-    Thus $(A_0)$ and $(A_0,A_1)$ are both bases of normal tensors for $A_0$:
-    in the second expansion the coefficient of $A_1$ is identically zero.
+    Thus $(A_0)$ and $(A_0,A_1)$ are both bases of normal tensors for $A_0$.
+    Indeed, for every $N\geq 1$, the second expansion is
+    \[
+        \ket{V^{(N)}(A_0)}
+        =1\cdot\ket{V^{(N)}(A_0)}+0\cdot\ket{V^{(N)}(A_1)}.
+    \]
     Their index sets have cardinalities one and two, so they cannot be related
     by a bijection.
     % The missing converse-coverage condition is documented in
