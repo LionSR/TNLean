@@ -160,8 +160,7 @@ With the matrix algebras introduced above, the refinement stages have type
 % Formula: T_0 : A_2 -> A_partial, T_1 : A_partial -> A_Omega, and
 % T_2 : A_Omega -> A_3. Ink: each blue stroke denotes a channel, its label
 % names the stage, and the fixed left-to-right axis records composition.
-\begin{figure}[htbp]
-  \centering
+\par\noindent\hfil
   \begin{tenkzcd}[maps, species={channel}]
     \mathcal A_2 &
     \mathcal A_{\partial} &
@@ -171,18 +170,17 @@ With the matrix algebras introduced above, the refinement stages have type
     \tnarrow[from={(1,2)}, to={(1,3)}, species=channel]{\mathcal T_1}
     \tnarrow[from={(1,3)}, to={(1,4)}, species=channel]{\mathcal T_2}
   \end{tenkzcd}
-\end{figure}
+\hfil\par
 Here $\mathcal T_1$ adjoins $\overline\Omega_{k,h}$ on each diagonal
 outer-sector summand. The composite channel has type
 % Formula: T = T_2 T_1 T_0 : A_2 -> A_3. Ink: the blue stroke denotes the
 % composite channel T; its endpoints are matrix algebras, not matrices.
-\begin{figure}[htbp]
-  \centering
+\par\noindent\hfil
   \begin{tenkzcd}[maps, species={channel}]
     \mathcal A_2 & \mathcal A_3
     \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T}
   \end{tenkzcd}
-\end{figure}
+\hfil\par
 
 \begin{definition}[The neighboring-state preparation $\mathcal S_1$]
     \label{def:mpdo_physical_sector_s1_map}
