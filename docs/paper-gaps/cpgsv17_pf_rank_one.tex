@@ -34,7 +34,7 @@ route described below --- is tracked in
 source passage is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1394--1499}.}
 
-The paper constructs positive neighboring operators $\eta_{k,h}$ and defines
+The paper constructs positive semidefinite neighboring operators $\eta_{k,h}$ and defines
 \[
   T_{k,h}=\operatorname{tr}(\eta_{k,h}).
 \]
@@ -380,7 +380,7 @@ $T\ne T^2$.  Equivalently, the exact missing expression is nonzero:
  Q(1-LQ)L=T-T^2\ne0.
 \]
 Moreover, the four matrices $l_k r_k$ span $M_2(\mathbb R)$.  For example,
-after vectorizing them in the order $(11,12,21,22)$, the determinant of the
+after vectorizing them in the order $(00,01,10,11)$, the determinant of the
 resulting four-by-four matrix is $1/108$.  Consequently full virtual spanning
 does not exclude the generalized zero-eigenspace.
 
@@ -423,6 +423,69 @@ tensors.  In the notation above, the needed assertion is precisely
 \]
 or any equivalent statement excluding the nilpotent generalized
 zero-eigenspace of $QL$.
+
+\subsection{Positive semidefinite neighboring operators do not force the rectangular
+vanishing}
+
+The preceding obstruction can also be realized inside the physical-sector
+factorization with every neighboring operator positive semidefinite.  This can
+be seen from a second, independent witness with bond dimension two and four
+one-dimensional physical sectors.  Let
+\[
+  L=\begin{pmatrix}
+    \frac14&\frac14&\frac14&\frac14\\
+    1&-1&1&-1
+  \end{pmatrix},
+  \qquad
+  Q=\begin{pmatrix}
+    1&\frac18\\
+    1&\frac18\\
+    1&-\frac18\\
+    1&-\frac18
+  \end{pmatrix}.
+\]
+For each sector $k$, take the virtual matrix to be the outer product of the
+$k$th column of $L$ with the $k$th row of $Q$.  These four matrices span
+$\MN{2}$: in the coordinate order $(00,01,10,11)$, the matrix having these
+four outer products as columns has determinant $-1/64$.  Placing them on the
+four diagonal physical entries therefore gives an injective tensor with a
+scalar physical-sector factorization.
+
+The two rectangular products are
+\[
+  LQ=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+  \qquad
+  QL=\begin{pmatrix}
+    \frac38&\frac18&\frac38&\frac18\\
+    \frac38&\frac18&\frac38&\frac18\\
+    \frac18&\frac38&\frac18&\frac38\\
+    \frac18&\frac38&\frac18&\frac38
+  \end{pmatrix}.
+\]
+Hence $LQ$ is a nonzero idempotent physical-trace transfer, while $QL$ is
+strictly positive, primitive, and trace one.  Its entries are the scalar
+neighboring operators and are therefore positive semidefinite.  Nevertheless
+$(QL)^2\ne QL$; for example, the $(0,1)$ entry changes from $1/8$ to $1/4$.
+Equivalently,
+\[
+  Q(1-LQ)L=QL-(QL)^2\ne0.
+\]
+Thus injectivity, full virtual-matrix spanning, positive semidefinite neighboring
+operators, primitivity, trace normalization, and the source
+zero-correlation-length rectangular identity can all hold without the missing
+vanishing.
+\footnote{The formal tensor and the combined counterexample theorem are in
+\doclink{TNLean/MPS/MPDO/ActiveSectorSpanningCounterexample}; see
+{\scriptsize\leanid{MPOTensor.ActiveSectorSpanningCounterexample.virtual_spanning_does_not_force_rectangular_remainder_zero}}.}
+
+This example does not assert the strong area law, and therefore does not
+disprove the statement of Lemma~C.5.  It instead closes the narrower question
+left after the active-sector construction: no argument using only the concrete
+spanning and rectangular identities presently extracted in the formal
+development can prove $Q(1-LQ)L=0$.  Any source-faithful completion must use an
+additional consequence of the strong area law or of the inverse-map
+construction that is not among those identities.  Such a consequence must be
+derived, rather than added as a new hypothesis to Lemma~C.5.
 
 \section{A positive-semidefinite route}
 
