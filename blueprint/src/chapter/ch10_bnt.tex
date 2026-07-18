@@ -159,6 +159,41 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     completing the converse.
 \end{proof}
 
+\begin{theorem}[Failure of literal BNT uniqueness]
+    \label{thm:cpsv_bnt_uniqueness_counterexample}
+    \lean{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos}
+    There is a normal tensor with a one-block canonical-form expansion which
+    admits two bases of normal tensors of different cardinalities. Hence the
+    unrestricted uniqueness sentence of
+    \cite[Appendix~A, line~1148]{Cirac2016MPDO_arXiv} does not follow from the
+    literal definition of a basis of normal tensors.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take physical dimension two and bond dimension one. Let $A_0$ be supported
+    on physical symbol zero and let $A_1$ be supported on physical symbol one:
+    \[
+        A_0^0=1,\quad A_0^1=0,
+        \qquad
+        A_1^0=0,\quad A_1^1=1.
+    \]
+    Both transfer maps are the identity on the one-dimensional matrix algebra,
+    so both tensors are normal. At every positive length,
+    \[
+        \ket{V^{(N)}(A_0)}=\ket{0\cdots0},
+        \qquad
+        \ket{V^{(N)}(A_1)}=\ket{1\cdots1}.
+    \]
+    Thus $(A_0)$ and $(A_0,A_1)$ are both bases of normal tensors for $A_0$:
+    in the second expansion the coefficient of $A_1$ is identically zero.
+    Their index sets have cardinalities one and two, so they cannot be related
+    by a bijection. This gap and the missing converse-coverage condition are
+    recorded in
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+\end{proof}
+
 \begin{lemma}[Perron gauges preserve primitivity]
     \label{lem:perron_gauge_primitive_iff}
     \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}

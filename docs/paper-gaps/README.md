@@ -109,6 +109,12 @@ For the non-periodic MPS Fundamental Theorem background:
   to the BNT characterization: coverage concerns precisely the nonzero-weight
   canonical-form blocks, while candidate normality from Definition 2.4 appears
   explicitly on the characterized side of the equivalence.
+- `cpsv16_bnt_uniqueness_zero_coefficient.tex` records that the uniqueness
+  sentence at CPSV16 line 1148 is false under the literal BNT definition: an
+  unrelated normal tensor may be adjoined with coefficient identically zero.
+  It gives a bond-dimension-one, two-symbol counterexample and identifies
+  converse coverage of candidates by active canonical-form blocks as the
+  missing condition for a restricted uniqueness theorem.
 - `canonical_bnt_ft_theorem_surface.tex` separates paper-level theorem
   statements from auxiliary formal declarations.
 - `nonperiodic_mps_bnt_comparison_inputs.tex` compares the current
