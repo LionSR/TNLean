@@ -373,10 +373,14 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \label{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
     \lean{MPOTensor.hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor}
     \leanok
-    \uses{thm:mpdo_orthogonal_commuting_sectors_gsnnch}
-    Suppose that the common weight has been absorbed into each BNT
-    representative $\mathcal K_x$, and that these representatives have
-    orthogonally supported commuting sector products.  Then
+    \uses{def:same_mpv2_pos,
+        thm:mpdo_orthogonal_commuting_sectors_gsnnch}
+    Let $M$ be an MPO tensor and let its BNT canonical form have normal
+    representatives $A_x$, copy numbers $n_x$, and copy-independent weights
+    $\mu_x$.  Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
+    generates the same matrix product vectors as $M$ at every positive length.
+    If the representatives $\mathcal K_x$ have orthogonally supported
+    commuting sector products, then
     \[
         \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(\mathcal K_x)
     \]
@@ -395,12 +399,20 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \label{cor:mpdo_bnt_sector_sal_gsnnch}
     \lean{MPOTensor.hasGSNNCHForm_of_bntSectorSAL}
     \leanok
-    \uses{thm:mpdo_bnt_sector_sal_commuting_family,
+    \uses{def:same_mpv2_pos,
+        thm:mpdo_bnt_sector_sal_commuting_family,
         cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
-    Under the BNT projector-selection hypotheses, if every absorbed BNT
-    representative satisfies SAL, then the original tensor has the source
-    GSNNCH form.  Its outer sectors are the BNT sectors and its natural
-    multiplicities are the BNT copy numbers.
+    Let $M$ be an MPO tensor and let its BNT canonical form have normal
+    representatives $A_x$, copy numbers $n_x$, and copy-independent weights
+    $\mu_x$.  Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
+    generates the same matrix product vectors as $M$ at every positive length.
+    Equivalently, for every $N>0$,
+    \[
+        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(\mathcal K_x).
+    \]
+    Under the BNT projector-selection hypotheses, if every $\mathcal K_x$
+    satisfies SAL, then $M$ has the source GSNNCH form.  Its outer sectors are
+    the BNT sectors and its natural multiplicities are the copy numbers $n_x$.
 \end{corollary}
 
 \begin{proof}\leanok
