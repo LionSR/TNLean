@@ -1416,6 +1416,14 @@ Theorem~\ref{thm:trace_norm_abs}.
     positive.
 \end{theorem}
 
+\begin{proof}\leanok
+    \uses{lem:is_kraus_cp_comp, lem:mpdo_single_kraus_map_cp,
+        lem:mpdo_state_preparation_cp}
+    The map $X\mapsto Q_\tau XQ_\tau$ has the single Kraus operator $Q_\tau$.
+    Adjoining the positive semidefinite matrix $\omega_R$ is completely
+    positive, and the composition of these two maps is completely positive.
+\end{proof}
+
 \begin{lemma}[Trace of the complementary term]
     \label{lem:partial_trace_petz_complement_trace}
     \lean{Matrix.partialTraceRightPetzComplementMap_trace}
