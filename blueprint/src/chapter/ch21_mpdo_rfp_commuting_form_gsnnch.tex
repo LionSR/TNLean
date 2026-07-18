@@ -260,11 +260,18 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
-    Apply the same unitary block decomposition at both ends of $B$.  One
-    block identity gives the identity action on $H_{q,l}$ and the other gives
-    the identity action on $H_{h,r}$.  Their common matrix coefficients define
-    $\eta_{q,h}$.  It is a principal compression of the positive doubly
-    conjugated bond, and is therefore positive semidefinite.
+    The same unitary block decomposition at both ends of $B$ gives identity
+    action on $H_{q,l}$ through one block identity and on $H_{h,r}$ through
+    the other.  For fixed basis indices
+    $l_q^0\in H_{q,l}$ and $r_h^0\in H_{h,r}$, let
+    $B'=(U^*\otimes U^*)B(U\otimes U)$.  The neighboring operator has entries
+    \[
+        (\eta_{q,h})_{(r,l),(r',l')}
+        =(B'_{q,h})_{(l_q^0,(r,l),r_h^0),
+          (l_q^0,(r',l'),r_h^0)}.
+    \]
+    Thus $\eta_{q,h}$ is a principal compression of the positive operator
+    $B'$, and is therefore positive semidefinite.
 \end{proof}
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]

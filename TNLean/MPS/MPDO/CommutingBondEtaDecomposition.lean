@@ -21,7 +21,7 @@ finite chain.
 ## References
 
 * S. Beigi, arXiv:1105.1019v2, Lemma 2.1.
-* arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1605.
+* arXiv:1606.00608, Appendix C.2, equation sigmaNK2, lines 1581--1605.
 -/
 
 open scoped ComplexOrder Kronecker Matrix
@@ -36,7 +36,7 @@ variable {d D : ℕ}
 \]
 
 This is the order in which a neighboring operator acts between sectors \(q\) and \(h\) in
-arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1589. -/
+arXiv:1606.00608, Appendix C.2, equation sigmaNK2, lines 1581--1589. -/
 def etaPairSpatialBlockEquiv {K : ℕ} {dl dr : Fin K → ℕ}
     (e : ((q : Fin K) × (Fin (dr q) × Fin (dl q))) ≃ Fin d) :
     ((qh : Fin K × Fin K) ×
@@ -71,12 +71,12 @@ positive neighboring operator \(\eta_{q,h}\) for each ordered pair of sectors su
 
 The unitary and the family \(\eta\) depend only on the fixed two-site bond, not on a chain
 length or a bond position.  Thus this is the local transport from Beigi's block actions to
-the neighboring operators in equation `sigmaNK2`.
+the neighboring operators in equation sigmaNK2.
 
 No zero-correlation-length or area-law hypothesis is used.  In particular, this theorem
-does not assert the rank-one trace factorization invoked later in Proposition `4to2`.
+does not assert the rank-one trace factorization invoked later in Proposition 4to2.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition `4to2`,
+Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
 lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
 theorem exists_positive_eta_pairBond_decomposition
     (data : EtaLocalStructureData M) :
