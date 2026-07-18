@@ -39,6 +39,8 @@ Extracted from various files for reusability.
 - `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
   variant
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
+- `Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec`: a positive
+  semidefinite matrix below a rank-one matrix belongs to the same nonnegative ray
 - `Matrix.faithfulDensity`: the faithful uniform density matrix on a nonempty
   finite index space
 - `Matrix.nonempty_of_trace_eq_one`: an index space carrying a trace-one matrix
@@ -49,7 +51,7 @@ Extracted from various files for reusability.
 - `Continuous.matrix_kronecker`: joint continuity of the Kronecker product in both factors
 -/
 
-open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius
+open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius MatrixOrder
 
 namespace Matrix
 
@@ -643,6 +645,87 @@ theorem mulVec_eq_zero_right
     (v : Fin D → ℂ) (hv : (A + B) *ᵥ v = 0) :
     B *ᵥ v = 0 := by
   exact mulVec_eq_zero_left hB hA v (by simpa [add_comm] using hv)
+
+/-- A positive semidefinite matrix dominated by a scalar multiple of `ψψ†` is itself a
+nonnegative scalar multiple of `ψψ†`. -/
+theorem eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec
+    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef)
+    {c : ℂ} (ψ : Fin D → ℂ)
+    (hdom : A ≤ c • Matrix.vecMulVec ψ (star ψ)) :
+    ∃ a : ℂ, 0 ≤ a ∧ A = a • Matrix.vecMulVec ψ (star ψ) := by
+  classical
+  rcases eq_or_ne ψ 0 with hψ | hψ
+  · subst ψ
+    have hA0 : A = 0 := le_antisymm (by simpa using hdom) hA.nonneg
+    refine ⟨0, le_rfl, ?_⟩
+    simp [hA0]
+  · let s : ℂ := star ψ ⬝ᵥ ψ
+    let P : Matrix (Fin D) (Fin D) ℂ := Matrix.vecMulVec ψ (star ψ)
+    let Q : Matrix (Fin D) (Fin D) ℂ := s⁻¹ • P
+    have hspos : 0 < s := Matrix.dotProduct_star_self_pos_iff.mpr hψ
+    have hs0 : s ≠ 0 := ne_of_gt hspos
+    have hP : P.PosSemidef := by
+      exact Matrix.posSemidef_vecMulVec_self_star ψ
+    have hQ : Q.PosSemidef := by
+      exact hP.smul (le_of_lt (inv_pos.mpr hspos))
+    have hQid : Q * Q = Q := by
+      have hdot0 : star ψ ⬝ᵥ ψ ≠ 0 := by simpa [s] using hs0
+      simp only [Q, P, Matrix.smul_mul, Matrix.mul_smul,
+        Matrix.vecMulVec_mul_vecMulVec]
+      ext i j
+      simp [Matrix.vecMulVec_apply, s]
+      field_simp [hdot0]
+      simp
+    let B : Matrix (Fin D) (Fin D) ℂ := c • P - A
+    have hB : B.PosSemidef := by
+      simpa only [B, P] using Matrix.le_iff.mp hdom
+    have hsum : A + B = c • P := by
+      simp [B]
+    have hQcomp : Q * (1 - Q) = 0 := by
+      rw [Matrix.mul_sub, Matrix.mul_one, hQid, sub_self]
+    have hP_eq_smul_Q : P = s • Q := by
+      simp only [Q, smul_smul]
+      field_simp [hs0]
+      simp
+    have hPcomp : P * (1 - Q) = 0 := by
+      rw [hP_eq_smul_Q, Matrix.smul_mul, hQcomp, smul_zero]
+    have hArcomp : A * (1 - Q) = 0 := by
+      rw [Matrix.ext_iff_mulVec]
+      intro v
+      rw [Matrix.zero_mulVec, ← Matrix.mulVec_mulVec]
+      apply hA.mulVec_eq_zero_left hB
+      rw [Matrix.mulVec_mulVec, hsum, Matrix.smul_mul, hPcomp, smul_zero,
+        Matrix.zero_mulVec]
+    have hAright : A = A * Q := by
+      rw [Matrix.mul_sub, Matrix.mul_one, sub_eq_zero] at hArcomp
+      exact hArcomp
+    have hAlcomp : (1 - Q) * A = 0 := by
+      simpa [Matrix.conjTranspose_mul, hA.isHermitian.eq, hQ.isHermitian.eq] using
+        congrArg Matrix.conjTranspose hArcomp
+    have hAleft : A = Q * A := by
+      rw [Matrix.sub_mul, Matrix.one_mul, sub_eq_zero] at hAlcomp
+      exact hAlcomp
+    let t : ℂ := star ψ ⬝ᵥ (A *ᵥ ψ)
+    have hPAP : P * A * P = t • P := by
+      dsimp only [P]
+      rw [Matrix.vecMulVec_mul, Matrix.vecMulVec_mul_vecMulVec]
+      rw [← Matrix.dotProduct_mulVec]
+      ext i j
+      simp [Matrix.vecMulVec_apply, t, mul_comm, mul_assoc]
+    let a : ℂ := s⁻¹ * s⁻¹ * t
+    have ht : 0 ≤ t := hA.dotProduct_mulVec_nonneg ψ
+    have ha : 0 ≤ a := by
+      exact mul_nonneg (mul_nonneg (le_of_lt (inv_pos.mpr hspos))
+        (le_of_lt (inv_pos.mpr hspos))) ht
+    refine ⟨a, ha, ?_⟩
+    calc
+      A = Q * A := hAleft
+      _ = Q * (A * Q) := by rw [← hAright]
+      _ = Q * A * Q := (Matrix.mul_assoc Q A Q).symm
+      _ = a • P := by
+        simp only [Q, Matrix.smul_mul, Matrix.mul_smul, hPAP, smul_smul]
+        simp [a, mul_assoc]
+      _ = a • Matrix.vecMulVec ψ (star ψ) := rfl
 
 end Matrix.PosSemidef
 
