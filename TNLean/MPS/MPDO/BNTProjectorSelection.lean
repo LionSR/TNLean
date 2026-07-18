@@ -752,9 +752,10 @@ Hayashi--Ruskai--Hayden--Jozsa--Petz--Winter characterization of equality in
 strong subadditivity, isolated as
 `hayashi_ssa_equality_characterization_forward`.  No further axiom is used.
 
-**Scope restriction (blocked tensor):** the simultaneous inverse is used after
-the source's common blocking, expressed here by the one-letter simultaneous
-span.  The passage to this blocked form is recorded in
+**Source hypothesis (biCF):** the one-letter simultaneous span is precisely
+the block-injective canonical-form assumption imposed at the start of Case II
+in arXiv:1606.00608, line 1628.  It supplies the simultaneous inverse used in
+the source proof.  Its relation with finite physical blocking is recorded in
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj`, `generateMPDO`,
