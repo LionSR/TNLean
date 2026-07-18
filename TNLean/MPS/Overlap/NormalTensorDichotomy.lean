@@ -19,8 +19,8 @@ matrix product vectors differ by the corresponding power of the phase at every l
   to zero or has modulus tending to one with gauge-phase equivalence by a unit phase.
 * `IsNormalTensor.mpv_phase_alternative`: the overlap tends to zero, or the matrix product vectors
   differ by a unit phase raised to each chain length.
-* `NonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor`: proportional normal
-  matrix product vectors differ by the powers of one unit phase.
+* `EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor`: eventually
+  proportional normal matrix product vectors differ by the powers of one unit phase.
 
 ## References
 
@@ -130,23 +130,29 @@ theorem IsNormalTensor.mpv_phase_alternative
 
 /-- **Geometric proportionality scalar for two normal blocks.**
 
-If two CPSV16 normal tensors generate nonzero proportional matrix product
-vectors at every positive length, then the proportionality may be chosen as
-the powers of one fixed unit phase.  The bond dimensions may differ.
+If two CPSV16 normal tensors generate matrix product vectors that are
+eventually proportional by a nonzero scalar, then at every positive length
+their proportionality may be chosen as the power of one fixed unit phase. The
+bond dimensions may differ.
+
+This theorem concerns the unit-phase part of the proportionality between
+normalized normal blocks. It does not construct the positive geometric
+rescaling needed to remove a length-dependent positive coefficient in
+CPSV16 equation `sigmaNK2`; that separate construction is tracked in #4253.
 
 Source: CPSV16, Corollary `eqV`, lines 1121--1128, combined with the one-block
 case of the proportionality hypothesis in Theorem `thm1`, lines 1167--1182;
 see also arXiv:2011.12127, Theorem 4.4. -/
-theorem NonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
+theorem EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
     [NeZero D₁] [NeZero D₂]
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hProp : NonzeroProportionalMPV₂ A B)
+    (hProp : EventuallyNonzeroProportionalMPV₂ A B)
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
     ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin d,
       mpv A σ = a ^ N * mpv B σ := by
   have hEvent : ∀ᶠ N in atTop, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
       mpv A σ = c * mpv B σ := by
-    exact hProp.eventually.mono fun _ hN ↦ ⟨hN.choose, hN.choose_spec.2⟩
+    exact hProp.mono fun _ hN ↦ ⟨hN.choose, hN.choose_spec.2⟩
   have hCrossNorm : Tendsto (fun N ↦ ‖mpvOverlap (d := d) A B N‖)
       atTop (nhds (1 : ℝ)) :=
     mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
@@ -166,5 +172,19 @@ theorem NonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
       have hComponent := congrArg (fun v : MPVSpace d N ↦ v σ) (hState N)
       simp only [mpvState_apply, PiLp.smul_apply, smul_eq_mul] at hComponent
       rw [hComponent, ← mul_assoc, ← mul_pow, inv_mul_cancel₀ hζ0, one_pow, one_mul]
+
+/-- Positive-length nonzero proportionality is a sufficient special case of
+the eventual geometric-phase theorem for normal tensors.
+
+Source: CPSV16, Corollary `eqV`, lines 1121--1128, combined with the one-block
+case of the proportionality hypothesis in Theorem `thm1`, lines 1167--1182. -/
+theorem NonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
+    [NeZero D₁] [NeZero D₂]
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hProp : NonzeroProportionalMPV₂ A B)
+    (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
+    ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin d,
+      mpv A σ = a ^ N * mpv B σ :=
+  hProp.eventually.exists_unit_phase_power_of_isNormalTensor hA hB
 
 end MPSTensor

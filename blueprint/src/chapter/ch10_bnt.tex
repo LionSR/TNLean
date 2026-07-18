@@ -523,19 +523,23 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 
 \begin{theorem}[Geometric proportionality phase for normal tensors]
     \label{thm:normal_proportional_mpv_geometric_phase}
-    \lean{MPSTensor.NonzeroProportionalMPV₂.%
+    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
         exists_unit_phase_power_of_isNormalTensor}
     \leanok
-    \uses{def:nt_cpsv, def:mpv_state}
+    \uses{def:nt_cpsv, def:mpv_state,
+        def:eventually_nonzero_proportional_mpv}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
-    dimensions. Suppose that for every positive $N$ their matrix product
-    vectors are nonzero and proportional. Then there is $a\in\C$, with
-    $|a|=1$, such that, for every positive $N$,
+    dimensions. Suppose that, for all sufficiently large $N$, their matrix
+    product vectors are proportional by a nonzero scalar. Then there is
+    $a\in\C$, with $|a|=1$, such that, for every positive $N$,
     \[
         \ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}.
     \]
     This is the one-normal-block consequence of
     \cite[Corollary~A.3 and the proof of Theorem~2.10]{Cirac2016MPDO_arXiv}.
+    It determines the unit-phase part for normalized normal blocks; it does
+    not supply the positive geometric rescaling needed to eliminate the
+    positive finite-chain coefficient in equation \texttt{sigmaNK2}.
 \end{theorem}
 
 \begin{proof}\leanok
