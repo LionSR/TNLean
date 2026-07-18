@@ -267,19 +267,13 @@ matrix algebra, and by Skolem--Noether (the source's argument at lines
 closed-chain words of length `n` transfers the conjugation to the word
 products. -/
 theorem exists_conjugation_of_mpv_eq {n L : ℕ} (hL : 0 < L) (hn : 2 * L + 1 ≤ n)
+    (hD : 0 < D)
     (A B : MPSTensor d D) (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, mpv A σ = mpv B σ) :
     ∃ Z : GL (Fin D) ℂ, ∀ w : List (Fin d), w.length = n →
       evalWord B w = (Z : Matrix (Fin D) (Fin D) ℂ) * evalWord A w *
         ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
   classical
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · -- All `0 × 0` matrices are equal.
-    subst hD0
-    refine ⟨1, fun w hw => ?_⟩
-    apply Matrix.ext
-    intro a b
-    exact a.elim0
   -- The word transport from the same-state hypothesis.
   obtain ⟨Λ, hΛ⟩ := exists_mpvTransport (k := L) (q := n - L) (by omega) hA
     (isNBlkInjective_of_le hL hA (by omega)) hAB

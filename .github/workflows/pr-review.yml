@@ -1,0 +1,202 @@
+name: PR Review
+
+# Model-backed pull-request review, chained after CI instead of racing it.
+# The former claude-code-review.yml and blueprint-prose-review.yml fired on
+# every push, so a PR whose build was about to fail still received two full
+# reviews per push (and the auto-fix loop then rewrote the code under
+# review). Reviewing on PR CI completion spends review effort on code that
+# at least compiles; the code-review and prose-review jobs share the run.
+#
+# Note: marking a draft PR ready for review does not by itself start a
+# review — push a commit or re-run PR CI to request one.
+
+on:
+  workflow_run:
+    workflows: ["PR CI"]
+    types: [completed]
+
+concurrency:
+  group: pr-review-${{ github.event.workflow_run.pull_requests[0].number || github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  # Shared gate: review only successful pull-request CI runs from this
+  # repository, and skip bot auto-fix commits to avoid the
+  # review → fix → review ping-pong cascade.
+  gate:
+    if: |
+      vars.CLAUDE_REVIEW_ENABLED != 'false' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.pull_requests[0] &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.bot-check.outputs.skip }}
+      pr_number: ${{ github.event.workflow_run.pull_requests[0].number }}
+      head_sha: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - name: Check if head commit is a bot auto-fix
+        id: bot-check
+        uses: actions/github-script@v8
+        with:
+          script: |
+            // Skip review for auto-fix bot commits: the auto-fix workflow
+            // re-triggers review after its fixes, but we only want to review
+            // human-authored pushes and the final bot-fix result (detected
+            // by iteration cap).
+            const { data: commit } = await github.rest.repos.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.workflow_run.head_sha
+            });
+            const msg = commit.commit.message;
+            const isBot = /^\[(claude|codex)-(auto|review)-fix\]/.test(msg);
+            core.setOutput('skip', isBot ? 'true' : 'false');
+            if (isBot) core.notice(`Skipping review for bot-fix commit: ${msg.split('\n')[0]}`);
+
+  code-review:
+    name: code-review-${{ matrix.provider }}
+    needs: gate
+    strategy:
+      fail-fast: false
+      matrix:
+        provider: ${{ fromJson(vars.CLAUDE_CODE_REVIEW_PROVIDERS || format('["{0}"]', vars.CLAUDE_CODE_PROVIDER || 'anthropic')) }}
+    if: "!cancelled() && needs.gate.result == 'success' && needs.gate.outputs.skip != 'true'"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+      issues: write
+      id-token: write
+
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
+      CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
+      DEEPSEEK_BASE_URL: https://api.deepseek.com/anthropic
+      CLAUDE_ALLOWED_TOOLS: >
+        Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*
+
+    steps:
+      - name: Check review provider token
+        id: provider-token
+        env:
+          REVIEW_PROVIDER: ${{ matrix.provider }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          set -euo pipefail
+          case "$REVIEW_PROVIDER" in
+            anthropic) provider_token="$CLAUDE_CODE_OAUTH_TOKEN" ;;
+            deepseek) provider_token="$DEEPSEEK_API_KEY" ;;
+            *)
+              echo "::error::Unsupported review provider: $REVIEW_PROVIDER"
+              exit 1
+              ;;
+          esac
+          if [ -n "$provider_token" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "reason=$REVIEW_PROVIDER token is not configured" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout repository under review
+        if: steps.provider-token.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.gate.outputs.head_sha }}
+          fetch-depth: 1
+
+      - name: Checkout trusted automation
+        if: steps.provider-token.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: .trusted-actions
+          fetch-depth: 1
+
+      - name: Set up Lean toolchain and cache
+        if: steps.provider-token.outputs.skip != 'true'
+        uses: texra-ai/lean-env-action@v1
+        with:
+          use-github-cache: false
+
+      - name: Run Claude Code Review
+        if: steps.provider-token.outputs.skip != 'true'
+        id: claude-review
+        uses: LionSR/agent-ci-actions@v1
+        with:
+          provider: ${{ matrix.provider }}
+          model-tier: sonnet
+          claude-sonnet-model: claude-sonnet-5
+          allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+          plugin_marketplaces: |
+            https://github.com/anthropics/claude-code.git
+            https://github.com/leanprover/skills.git
+          plugins: |
+            code-review@claude-code-plugins
+            lean@leanprover
+          claude-prompt-file: .trusted-actions/.github/prompts/claude-code-review-prompt.md
+          claude-prompt-context: |
+            PR number: ${{ needs.gate.outputs.pr_number }}
+            Repository: ${{ github.repository }}
+            Repository owner: ${{ github.repository_owner }}
+            Repository name: ${{ github.event.repository.name }}
+            Review this Lean 4 pull request: ${{ github.repository }}/pull/${{ needs.gate.outputs.pr_number }}
+            Review provider: ${{ matrix.provider }}
+            Trigger event: PR CI completed (${{ github.event.workflow_run.conclusion }})
+          system-prompt-file: .trusted-actions/.github/prompts/claude-code-review-system-prompt.md
+
+  prose-review:
+    needs: gate
+    if: "!cancelled() && needs.gate.result == 'success' && needs.gate.outputs.skip != 'true'"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+      issues: write
+      id-token: write
+    env:
+      CLAUDE_CODE_PROVIDER: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
+      CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.gate.outputs.head_sha }}
+          fetch-depth: 1
+
+      - name: Checkout trusted automation
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: .trusted-actions
+          fetch-depth: 1
+
+      - name: Run Blueprint Sync & Prose Review
+        id: blueprint-prose-review
+        uses: LionSR/agent-ci-actions@v1
+        with:
+          provider: ${{ env.CLAUDE_CODE_PROVIDER }}
+          model-tier: sonnet
+          system-prompt-file: .trusted-actions/.github/prompts/blueprint-prose-review-system-prompt.md
+          allowed_tools_preset: blueprint-prose-review
+          allowed_tools_preset_map_file: .trusted-actions/.github/allowed-tools.json
+          allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+          claude-prompt-file: .trusted-actions/.github/prompts/blueprint-prose-review-prompt.md
+          claude-prompt-context: |
+            PR number: ${{ needs.gate.outputs.pr_number }}
+            Repository: ${{ github.repository }}
+            Repository owner: ${{ github.repository_owner }}
+            Repository name: ${{ github.event.repository.name }}
+            Event: PR CI completed (${{ github.event.workflow_run.conclusion }})

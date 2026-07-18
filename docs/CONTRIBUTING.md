@@ -157,7 +157,7 @@ Each sub-issue should carry its own source citation and precise statement.
 ### Tracking issues
 
 Use the **Tracking Issue** template (`.github/ISSUE_TEMPLATE/tracking-issue.yml`).
-Label with `tracking`. The `tracking-issue-sync` workflow reads the native
+Label with `tracking`. The `issue-automation` workflow reads the native
 Sub-issues relation and will automatically:
 
 - Post progress comments when sub-issues are closed or reopened.
@@ -396,16 +396,14 @@ The following workflows run automatically:
 
 | Workflow | Trigger | What it does |
 |----------|---------|-------------|
-| **Lean CI** (`lean_action_ci.yml`) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
-| **Claude Code Review** (`claude-code-review.yml`) | PR opened/synced/reopened touching `.lean`, `.tex`, `lakefile.toml`, `lean-toolchain` | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation |
-| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Reads native Sub-issues, posts progress comments on tracking and linked issues, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all native sub-issues complete |
-| **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
-| **Oversized Lean File Guard** (`oversized-lean-files.yml`) | PRs | Reports `.lean` files above the 1000-line style limit; advisory while main still has existing oversized files |
-| **Lean Linter-Warning Sweep** (`lean-linter-warning-sweep.yml`) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
+| **Lean CI** (`pr-ci.yml`, `build` job) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
+| **PR Review** (`pr-review.yml`) | After a successful PR CI run | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation, plus blueprint/prose review |
+| **Issue Automation** (`issue-automation.yml`) | Issue opened/labeled/closed/reopened; PR opened/merged | Classifies new issues, posts Mathlib scouting reports, keeps tracking issues current (progress comments, sub-issue counts, `all-resolved` label — deterministic, no model), and scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), filing them with the `follow-up` label |
+| **Blueprint Lint** (`pr-ci.yml`, `blueprint` job) | PRs touching blueprint or Lean files | Validates LaTeX blueprint for broken labels and references |
+| **Oversized Lean File Guard** (`pr-ci.yml`, `file-length` job) | PRs touching Lean files | Reports `.lean` files above the 1000-line style limit; advisory while main still has existing oversized files |
+| **Lean Linter-Warning Sweep** (`housekeeping.yml`, `linter-sweep` job) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
 | **Lean Linter-Warning Auto-Fix** (`lean-linter-warning-autofix.yml`) | Manual dispatch | Runs the warning sweep and can open a guarded Lean-only PR when explicitly requested |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
-| **Lean Audit** (`lean-audit.yml`) | On demand | Audits Lean code for style and correctness |
-| **PR Cleanup** (`pr-cleanup.yml`) | Bot-generated PR opened (`claude/*` or `codex/*` branches) | Normalizes title to `type(scope): desc`, restructures body to PR template, copies labels from linked issue, adds `Addresses #N` reference, comments on the issue |
 
 ### What CI checks before merge
 

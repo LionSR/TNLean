@@ -12,12 +12,11 @@ The representatives selected by the vertical grouping theorem form an
 algebraic basis of normal tensors for the vertically viewed
 tensor itself.  At positive chain length, the intertwining and literal
 reconstruction identities identify its matrix product vector with that of the
-weighted sector sum.  The empty chain is treated separately, using a retained
-representative of positive bond dimension.
+weighted sector sum.
 
 ## Main result
 
-* `IsHorizontalCF.isBNT_verticalTensor_of_grouping`: the grouped sector
+* `isBNT_verticalTensor_of_grouping`: the grouped sector
   decomposition furnishes an `IsBNT` witness for the vertical tensor.
 
 ## References
@@ -105,13 +104,12 @@ form an algebraic BNT for the vertical tensor.
 
 The hypotheses are precisely the dimension, isometry, intertwining,
 reconstruction, and spectral-BNT clauses returned by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.  The proof uses
-those same witnesses to establish nonemptiness; it does not choose a second
-vertical grouping.
+`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.  The proof does not
+choose a second vertical grouping.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
-theorem IsHorizontalCF.isBNT_verticalTensor_of_grouping
-    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
+theorem isBNT_verticalTensor_of_grouping
+    (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
     (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
@@ -130,15 +128,6 @@ theorem IsHorizontalCF.isBNT_verticalTensor_of_grouping
       (fun j => dim (C.repr j)) (fun j => blocks (C.repr j)) := by
   classical
   let C := MPSTensor.mpvPhaseClassData blocks
-  have hr : 0 < r := by
-    by_contra hr
-    have hrzero : r = 0 := Nat.eq_zero_of_not_pos hr
-    apply hHorizontal.verticalTensor_ne_zero M
-    funext v
-    rw [hreconstruct v]
-    subst r
-    simp
-  have hg : 0 < C.g := C.g_pos_of_r_pos hr
   have hPositive : MPSTensor.SameMPV₂Pos (verticalTensor M)
       (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks) :=
     sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
@@ -149,28 +138,10 @@ theorem IsHorizontalCF.isBNT_verticalTensor_of_grouping
   · intro j
     letI : NeZero (dim (C.repr j)) := ⟨(hdimPos (C.repr j)).ne'⟩
     exact (hBNT.blocks_normal j).isNormal
-  · intro N
-    by_cases hN : N = 0
-    · subst N
-      let j₀ : Fin C.g := ⟨0, hg⟩
-      refine ⟨fun j => if j = j₀ then
-        (d : ℂ) / (dim (C.repr j₀) : ℂ) else 0, ?_⟩
-      intro σ
-      rw [MPSTensor.mpv_zero_length]
-      simp only [MPSTensor.mpv_zero_length]
-      rw [Finset.sum_eq_single j₀]
-      · simp only [if_pos, j₀]
-        have hdimne : (dim (C.repr j₀) : ℂ) ≠ 0 := by
-          exact_mod_cast (hdimPos (C.repr j₀)).ne'
-        change (d : ℂ) = (d : ℂ) / (dim (C.repr j₀) : ℂ) *
-          (dim (C.repr j₀) : ℂ)
-        rw [div_eq_mul_inv, mul_assoc, inv_mul_cancel₀ hdimne, mul_one]
-      · intro j _ hj
-        simp [hj]
-      · simp
-    · obtain ⟨c, hc⟩ := hBNT.spans_mpv N
-      refine ⟨c, fun σ => ?_⟩
-      rw [hPositive N (Nat.pos_of_ne_zero hN) σ]
-      exact hc σ
+  · intro N hN
+    obtain ⟨c, hc⟩ := hBNT.spans_mpv N hN
+    refine ⟨c, fun σ => ?_⟩
+    rw [hPositive N hN σ]
+    exact hc σ
 
 end MPOTensor

@@ -279,14 +279,15 @@ theorem firstSiteMatrix_mul_mpo_comm
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) (N : ℕ) :
     firstSiteMatrix P N * mpo M (N + 1) = mpo M (N + 1) * firstSiteMatrix P N := by
   have hInv := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
-  have hcorner := mpo_opposite_corner_eq_zero M hMpdo (N + 1) (firstSiteMatrix P N)
+  have hcorner := mpo_opposite_corner_eq_zero M hMpdo (N + 1) (by omega)
+    (firstSiteMatrix P N)
     (firstSiteMatrix_isHermitian hP N) hInv
   rw [Matrix.sub_mul, Matrix.one_mul, Matrix.sub_mul] at hcorner
   rw [hInv]
   exact (sub_eq_zero.mp hcorner).symm
 
-/-- Let the doubled-index tensor of an MPDO have the same complete MPV family
-as a BNT sector decomposition, and let \(P\) be Hermitian with
+/-- Let the doubled-index tensor of an MPDO have the same positive-length MPV
+family as a BNT sector decomposition, and let \(P\) be Hermitian with
 \(P\widetilde M=P\widetilde M P\).  On every minimal BNT representative, the
 insertions of \(\widetilde M P\) and
 \(P\widetilde M P\) agree.  Equivalently, \((\Id-P)MP=0\) on every
@@ -304,7 +305,7 @@ theorem basis_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (S : MPSTensor.SectorDecomposition (d * d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (S.basis k) =
@@ -349,7 +350,7 @@ theorem blockwise_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k))
     (hCF : HorizontalCFData (d := d * d) μ A)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor
       (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
@@ -467,8 +468,9 @@ combined in `TNLean/MPS/MPDO/CyclicProjector.lean`, where one noncommuting
 length gives the contradiction for a tensor in literal horizontal canonical
 form. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
-    {p : ℕ} (hp : p ≠ 0) {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    (hN : 0 < N) {p : ℕ} (hp : p ≠ 0)
+    {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hQ : Commute Q (mpo M N ^ p)) : Commute Q (mpo M N) :=
-  Matrix.PosSemidef.commute_of_commute_pow (hM N) hp hQ
+  Matrix.PosSemidef.commute_of_commute_pow (hM N hN) hp hQ
 
 end MPOTensor

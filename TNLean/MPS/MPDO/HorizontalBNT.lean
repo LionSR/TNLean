@@ -149,13 +149,11 @@ def IsHorizontalCF (M : MPOTensor d D) : Prop :=
                     GL (Fin S.totalDim) ℂ) :
                   Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
 
-/-- A literal horizontal canonical form gives its complete BNT MPV
+/-- A literal horizontal canonical form gives its positive-length BNT MPV
 representation.
 
 The block direct sum of the copy similarities leaves every closed
-matrix-product trace invariant.  The equality of bond dimensions also
-identifies the empty-chain coefficient, so the conclusion is full MPV
-equality rather than only positive-length equality.
+matrix-product trace invariant.
 
 Source: arXiv:1606.00608, `eq:II_ABasicTensors` and `decBSV`, lines
 281--301. -/
@@ -169,7 +167,7 @@ theorem IsHorizontalCF.hasHorizontalCFMPVRepresentation
     refine ⟨MPSTensor.globalGaugeOfBlocks Xcopy, ?_⟩
     intro i
     simpa using hX i
-  intro N σ
+  intro N _hN σ
   exact (hGauge.sameMPV N σ).symm
 
 /-- Inserting the doubled-index left action gives the doubled-index tensor of
@@ -248,7 +246,7 @@ theorem insertedTensor_ketLeftBraRightAction_toMPSTensor
 /-- The two first-site identities in Proposition 4.13 imply equality of the
 opposite-corner insertions on every BNT representative.
 
-Complete MPV equality transports the first-site identities from the
+Positive-length MPV equality transports the first-site identities from the
 doubled-index tensor of `M` to the representative-indexed sector
 decomposition.  The representative-grouped Lemma L then separates the BNT
 representatives while grouping all repeated copies of each representative.
@@ -258,7 +256,7 @@ the contractions in Proposition 4.13, lines 1873--1887. -/
 theorem representative_opposite_insert_eq_of_rotated_mpo_entries
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (Q : Matrix (Fin d) (Fin d) ℂ)
     (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
       (∑ i : Fin d, Q (ρ 0).divNat i *
@@ -282,12 +280,12 @@ theorem representative_opposite_insert_eq_of_rotated_mpo_entries
     MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
         MPSTensor.insertedTensor (MPSTensor.ketLeftAction Q) (S.basis j) :=
       (hCF.insertedTensor_basis_eq_of_firstSiteActionAgree
-        ((MPSTensor.firstSiteActionAgree_ketLeft_braRight M Q hComm).of_sameMPV hM)
+        ((MPSTensor.firstSiteActionAgree_ketLeft_braRight M Q hComm).of_sameMPVPos hM)
         j).symm
     _ = MPSTensor.insertedTensor
         (MPSTensor.ketLeftBraRightAction Q) (S.basis j) :=
       hCF.insertedTensor_basis_eq_of_firstSiteActionAgree
-        ((MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M Q hInv).of_sameMPV hM)
+        ((MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M Q hInv).of_sameMPVPos hM)
         j
 
 /-- A one-sided invariant Hermitian matrix reduces every horizontal BNT
@@ -304,7 +302,7 @@ theorem representative_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (S : MPSTensor.SectorDecomposition (d * d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQ : Q.IsHermitian)
     (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
     ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
@@ -361,12 +359,11 @@ theorem IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree
     intro i
     simpa using hX i
   have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := ⟨X, hX'⟩
-  have hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor := by
-    intro N σ
+  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
+    intro N _hN σ
     exact (hGauge.sameMPV N σ).symm
   have hBasis :=
-    hCF.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree
-      M.toMPSTensor hM hAct
+    hCF.insertedTensor_basis_eq_of_firstSiteActionAgree (hAct.of_sameMPVPos hM)
   have hSector : MPSTensor.insertedTensor Y S.toTensor =
       MPSTensor.insertedTensor Z S.toTensor :=
     S.insertedTensor_toTensor_eq_of_basis Y Z hBasis
@@ -447,7 +444,7 @@ theorem IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight
     (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
     ∃ S : MPSTensor.SectorDecomposition (d * d),
       MPSTensor.IsBNTCanonicalForm S ∧
-      MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor ∧
+      MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor ∧
       ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
         MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) (S.basis j) := by
   obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
@@ -456,8 +453,8 @@ theorem IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight
     refine ⟨MPSTensor.globalGaugeOfBlocks Xcopy, ?_⟩
     intro i
     simpa using hX i
-  have hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor := by
-    intro N σ
+  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
+    intro N _hN σ
     exact (hGauge.sameMPV N σ).symm
   exact ⟨S, hCF, hM,
     representative_braRight_eq_ketLeftBraRight_of_invariant
@@ -492,8 +489,8 @@ theorem IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant
     intro i
     simpa using hX i
   have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := ⟨X, hX'⟩
-  have hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor := by
-    intro N σ
+  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
+    intro N _hN σ
     exact (hGauge.sameMPV N σ).symm
   have hBasis := representative_braRight_eq_ketLeftBraRight_of_invariant
     M hMpdo S hCF hM hQ hQM

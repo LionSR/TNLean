@@ -149,11 +149,16 @@ def FirstSiteActionAgree (A : MPSTensor d D)
     ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
       ∑ i : Fin d, Z (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
 
-/-- Equality of all matrix product vectors transports a first-site action
-identity between tensors of possibly different bond dimensions. -/
-theorem FirstSiteActionAgree.of_sameMPV {D' : ℕ} {A : MPSTensor d D}
+/-- Equality of all positive-length matrix product vectors transports a
+first-site action identity between tensors of possibly different bond dimensions.
+
+Every coefficient in `FirstSiteActionAgree` has length `N + 1`, so no
+length-zero coefficient is involved.
+
+Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
+theorem FirstSiteActionAgree.of_sameMPVPos {D' : ℕ} {A : MPSTensor d D}
     {B : MPSTensor d D'} {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAB : MPSTensor.SameMPV₂ A B) (h : FirstSiteActionAgree A Y Z) :
+    (hAB : MPSTensor.SameMPV₂Pos A B) (h : FirstSiteActionAgree A Y Z) :
     FirstSiteActionAgree B Y Z := by
   intro N σ
   calc
@@ -161,14 +166,21 @@ theorem FirstSiteActionAgree.of_sameMPV {D' : ℕ} {A : MPSTensor d D}
         ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := by
       apply Finset.sum_congr rfl
       intro i _
-      rw [hAB (N + 1) (Fin.cons i (σ ∘ Fin.succ))]
+      rw [hAB (N + 1) (by omega) (Fin.cons i (σ ∘ Fin.succ))]
     _ = ∑ i : Fin d, Z (σ 0) i *
         MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := h N σ
     _ = ∑ i : Fin d, Z (σ 0) i *
         MPSTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) := by
       apply Finset.sum_congr rfl
       intro i _
-      rw [hAB (N + 1) (Fin.cons i (σ ∘ Fin.succ))]
+      rw [hAB (N + 1) (by omega) (Fin.cons i (σ ∘ Fin.succ))]
+
+/-- Full MPV equality transports a first-site action identity. -/
+theorem FirstSiteActionAgree.of_sameMPV {D' : ℕ} {A : MPSTensor d D}
+    {B : MPSTensor d D'} {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (hAB : MPSTensor.SameMPV₂ A B) (h : FirstSiteActionAgree A Y Z) :
+    FirstSiteActionAgree B Y Z :=
+  h.of_sameMPVPos hAB.toSameMPV₂Pos
 
 /-! ### Doubled-index form of the three contractions in Proposition 4.13 -/
 
@@ -448,13 +460,13 @@ the horizontal weights need not be positive. -/
 theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k))
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor
       (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
-    {N : ℕ} (σ : Fin N → Fin d) :
+    {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) :
     MPSTensor.mpv (diagonalTensor M) σ
       = MPSTensor.mpv (MPSTensor.toTensorFromBlocks (d := d) (μ := μ)
           (fun k => MPSTensor.diagBlock (A k))) σ := by
-  rw [mpv_diagonalTensor, hM, MPSTensor.mpv_toTensorFromBlocks_diag]
+  rw [mpv_diagonalTensor, hM N hN, MPSTensor.mpv_toTensorFromBlocks_diag]
 
 /-- Word evaluation of the diagonal MPS tensor equals the MPO word evaluation with equal
 ket and bra words. -/
@@ -493,10 +505,11 @@ this operator equality back to the tensor blocks. Positivity supplies the
 Hermiticity of the density operator; the algebraic corner argument then uses
 only that Hermiticity, one-sided invariance, and Hermiticity of `P`. -/
 theorem mpo_opposite_corner_eq_zero (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
+    (hN : 0 < N)
     (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
     (hInv : P * mpo M N = P * mpo M N * P) :
     (1 - P) * mpo M N * P = 0 :=
-  Matrix.IsHermitian.opposite_corner_eq_zero (hM N).isHermitian hP hInv
+  Matrix.IsHermitian.opposite_corner_eq_zero (hM N hN).isHermitian hP hInv
 
 /-- Compressions of an MPDO density operator by a Hermitian matrix are
 positive semidefinite.  Applied to the sector projectors $P_{\alpha,k}$ of the
@@ -504,9 +517,10 @@ vertical decomposition, this is the operator inequality
 $P_{\alpha,k}H^{(N)}P_{\alpha,k} \ge 0$ in the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1899--1903. -/
 theorem mpo_compress_posSemidef (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
-    (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian) :
+    (hN : 0 < N) (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (hP : P.IsHermitian) :
     (P * mpo M N * P).PosSemidef := by
-  have h := Matrix.PosSemidef.mul_mul_conjTranspose_same (hM N) P
+  have h := Matrix.PosSemidef.mul_mul_conjTranspose_same (hM N hN) P
   rwa [hP.eq] at h
 
 /-- A nonzero Hermitian compression of an MPDO density operator has positive
@@ -517,10 +531,12 @@ $\mu_{\alpha,k}d_\alpha > 0$; the identification of the trace with
 $\mu_{\alpha,k}d_\alpha$ uses the vertical decomposition and is a separate
 step. -/
 theorem mpo_compress_trace_pos (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
-    (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
+    (hN : 0 < N) (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (hP : P.IsHermitian)
     (hne : P * mpo M N * P ≠ 0) :
     0 < Matrix.trace (P * mpo M N * P) :=
-  Matrix.PosSemidef.trace_pos_of_ne_zero (mpo_compress_posSemidef M hM N P hP) hne
+  Matrix.PosSemidef.trace_pos_of_ne_zero
+    (mpo_compress_posSemidef M hM N hN P hP) hne
 
 /-- The transfer map of the diagonal tensor of an MPO:
 $E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.  It acts on the horizontal bond space;
@@ -632,43 +648,33 @@ theorem mpv_verticalAssembledTensor_eq_sum {g : ℕ} (dim : Fin g → ℕ) (mult
     (fun s : (α : Fin g) × Fin (mult α) => (ω s.1 s.2) ^ N • MPSTensor.mpv (A s.1) σ)
 
 /-- Regrouping an indexed block assembly into repeated copies of a family of
-representative blocks preserves its full matrix product vector family.  The
-equivalence records which representative and which copy correspond to each
-original block; the pointwise hypotheses identify the bond dimensions and
-weights and give equality of the positive-length matrix product vector
-families.
+representative blocks preserves its positive-length matrix product vector
+family.  The equivalence records which representative and which copy correspond to each
+original block; the pointwise hypotheses identify the weights and the
+positive-length matrix product vector families.
 
 This is the finite-sum reindexing used after the vertical canonical
 decomposition in arXiv:1606.00608, Proposition 4.13, lines 1895--1921. Those
 lines first produce the vertical sectors and only then group gauge-equivalent
 sectors into the repeated copies of each basis tensor. -/
-theorem sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv
+theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv
     {r g : ℕ} {dim₀ : Fin r → ℕ} {dim : Fin g → ℕ}
     (μ : Fin r → ℂ) (B : (k : Fin r) → MPSTensor d (dim₀ k))
     (mult : Fin g → ℕ) (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (A : (α : Fin g) → MPSTensor d (dim α))
     (e : Fin r ≃ (α : Fin g) × Fin (mult α))
-    (hDim : ∀ k, dim₀ k = dim (e k).1)
     (hWeight : ∀ k, μ k = ω (e k).1 (e k).2)
     (hBlock : ∀ k, MPSTensor.SameMPV₂Pos (B k) (A (e k).1)) :
-    MPSTensor.SameMPV₂
+    MPSTensor.SameMPV₂Pos
       (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) B)
       (verticalAssembledTensor dim mult ω A) := by
-  refine MPSTensor.SameMPV₂Pos.toSameMPV₂_of_bondDim_eq ?_ ?_
-  · intro N hN σ
-    rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum, mpv_verticalAssembledTensor_eq_sum]
-    trans ∑ k : Fin r, (ω (e k).1 (e k).2) ^ N • MPSTensor.mpv (A (e k).1) σ
-    · refine Finset.sum_congr rfl fun k _ ↦ ?_
-      rw [hWeight k, hBlock k N hN σ]
-    · exact Equiv.sum_comp e
-        (fun p : (α : Fin g) × Fin (mult α) ↦ (ω p.1 p.2) ^ N • MPSTensor.mpv (A p.1) σ)
-  · trans ∑ k : Fin r, dim (e k).1
-    · exact Finset.sum_congr rfl fun k _ ↦ hDim k
-    · trans ∑ p : (α : Fin g) × Fin (mult α), dim p.1
-      · exact Equiv.sum_comp e fun p ↦ dim p.1
-      · change (∑ p : (α : Fin g) × Fin (mult α), dim p.1) =
-          ∑ q : Fin (∑ α : Fin g, mult α), dim ((finSigmaFinEquiv.symm q).1)
-        exact (Equiv.sum_comp finSigmaFinEquiv.symm (fun p ↦ dim p.1)).symm
+  intro N hN σ
+  rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum, mpv_verticalAssembledTensor_eq_sum]
+  trans ∑ k : Fin r, (ω (e k).1 (e k).2) ^ N • MPSTensor.mpv (A (e k).1) σ
+  · refine Finset.sum_congr rfl fun k _ ↦ ?_
+    rw [hWeight k, hBlock k N hN σ]
+  · exact Equiv.sum_comp e
+      (fun p : (α : Fin g) × Fin (mult α) ↦ (ω p.1 p.2) ^ N • MPSTensor.mpv (A p.1) σ)
 
 -- The implication `verticalCF_of_horizontalCF` from arXiv:1606.00608,
 -- Proposition 4.13, is proved in `VerticalCanonicalForm.lean`.

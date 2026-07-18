@@ -285,22 +285,25 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective
   exact P.insertedTensor_basis_eq_of_firstSiteActionAgree
     (hCF.eventuallyRepresentativeWordTupleSpan_of_basis_injective hInj) hAct
 
-/-- Same-MPV transport of representative-grouped Lemma L for an already
-injectively blocked BNT canonical form.
+/-- Transport of representative-grouped Lemma L from an equal positive-length
+MPV family for an already injectively blocked BNT canonical form.
 
-The original tensor and the sector-decomposition tensor have the same complete
-MPV family; the finite representative separation is supplied by the
-post-blocking canonical-form hypotheses above. -/
-theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective
+The original tensor and the sector-decomposition tensor have the same
+positive-length MPV family; the finite representative separation is supplied
+by the post-blocking canonical-form hypotheses above.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
+lines 1835--1858. -/
+theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_injective
     {D : ℕ} (A : MPSTensor d D)
     (hCF : IsBNTCanonicalForm P)
     (hInj : ∀ j, IsInjective (P.basis j))
-    (hAP : SameMPV₂ A P.toTensor)
+    (hAP : SameMPV₂Pos A P.toTensor)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective
-    hInj (hAct.of_sameMPV hAP)
+    hInj (hAct.of_sameMPVPos hAP)
 
 /-- Representative-grouped Lemma L before physical blocking.
 
@@ -351,16 +354,19 @@ conclusion is Appendix C.3, Lemma L, lines 1835--1858.
 
 The common positive length is explicit in this auxiliary transport theorem and
 is eliminated in
-`insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree` below. -/
-theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective
+`insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree` below.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
+lines 1835--1858. -/
+theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_blockInjective
     {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
     (L : ℕ) (hL : 0 < L) (hInj : ∀ j, IsNBlkInjective (P.basis j) L)
-    (hAP : SameMPV₂ A P.toTensor)
+    (hAP : SameMPV₂Pos A P.toTensor)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
-    L hL hInj (hAct.of_sameMPV hAP)
+    L hL hInj (hAct.of_sameMPVPos hAP)
 
 /-- Representative-grouped Lemma L for an unblocked BNT canonical form.
 
@@ -386,12 +392,12 @@ canonical form.
 
 Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
 lines 1835--1858. -/
-theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree
+theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
     {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
-    (hAP : SameMPV₂ A P.toTensor)
+    (hAP : SameMPV₂Pos A P.toTensor)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
-  exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree (hAct.of_sameMPV hAP)
+  exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree (hAct.of_sameMPVPos hAP)
 
 end MPSTensor.IsBNTCanonicalForm

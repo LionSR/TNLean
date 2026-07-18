@@ -1,0 +1,77 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Nilpotent Basis Elements in the Simple-Tensor Definition of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete}
+\author{}
+\date{2026-07-16}
+
+\begin{document}
+\maketitle
+
+\section{Source definition}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete define, at arXiv:1606.00608,
+line~822: ``A tensor generating MPDO's is simple if none of the elements in
+a BNT is nilpotent.''  The meaning of nilpotency is fixed at line~819: an
+element $\mathcal B_k$ of the basis of normal tensors is nilpotent when
+$\operatorname{tr}_R \rho^{(N)}(M_k)=0$ after tracing $R\le D$ sites, for
+all sufficiently large $N$.
+
+\section{Formal reading}
+
+Let $A=\mathcal B_k$ be a normal BNT representative and put
+$\mathcal T_A=\sum_i A^{ii}$. Here
+$\operatorname{tr}_R\rho^{(N)}(A)=0$ means that the reduced density
+\emph{operator} is zero after tracing $R$ consecutive sites. Its matrix
+entries are
+\begin{align}
+  \bigl(\operatorname{tr}_R\rho^{(N)}(A)\bigr)_{\mathbf i,\mathbf j}
+    &=\operatorname{tr}\!\left(
+        A^{i_1j_1}\cdots A^{i_{N-R}j_{N-R}}\mathcal T_A^R
+      \right).                                           \label{eq:nilpotent-reduced-entry}
+\end{align}
+Choose a sufficiently large $N$ for which the length-$(N-R)$ products of the
+normal representative span the full virtual matrix algebra. The trace pairing
+on that algebra is nondegenerate. Consequently,
+\begin{align}
+  \operatorname{tr}_R\rho^{(N)}(A)=0
+  \text{ for every sufficiently large }N
+  \quad\Longleftrightarrow\quad
+  \mathcal T_A^R=0.                                      \label{eq:nilpotent-equivalence}
+\end{align}
+Since the nilpotency index of a nilpotent $D\times D$ matrix is at most $D$,
+the line-819 condition is precisely nilpotency of $\mathcal T_A$. The formal
+predicate for a chosen blocked canonical form is
+\leanid{MPOTensor.IsSimpleCanonicalForm}; it records this condition for every
+basis element. The source predicate is \leanid{MPOTensor.IsSimple}; it
+existentially quantifies over the positive physical blocking required at
+line~815.
+
+The toric-code boundary tensor discussed after Theorem~4.9 of the source
+confirms the reading: its second basis element carries the one-by-one
+transfer $\mathcal T = 0$, so the tensor is not simple, matching the
+source's use of that example outside the simple case.
+
+The source states the predicate for ``a BNT'' of the blocked tensor. The basis of
+normal tensors is unique up to gauge, phase, and permutation, so the choice
+of witness is immaterial mathematically; the formal predicate quantifies
+existentially over a positive blocking and horizontal canonical-form witness,
+and records non-nilpotency for that witness. No theorem currently transports
+non-nilpotency between witnesses; a proof of witness independence can be
+added when an argument needs it.
+
+\section{Classification}
+
+Verdict: notational clarification. The formal definition is faithful to
+lines~819--822 under the identification of the line-819 partial-trace
+criterion with matrix nilpotency of the physical-trace transfer; no
+hypothesis is added or dropped.
+
+\end{document}

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.MeanErgodic
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.ConditionalExpectation
@@ -267,6 +268,13 @@ Wolf Theorem 6.12 there (`Kraus.adjointFixedPointsStarSubalgebra`), and transpor
 the `*`-algebra structure back along the compression isomorphism.
 
 ### Wolf Theorem 6.14 (Wedderburn decomposition of fixed-point algebra) — PARTIALLY FORMALIZED
+
+The general finite-dimensional convergence argument is provided by
+`LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection` in
+`TNLean.Analysis.MeanErgodic`. It constructs the Cesàro projection onto the
+fixed-point space for an endomorphism with bounded orbits. The proof that this
+projection is positive and unital for matrix maps remains open here, as does its
+application to the full statement of Theorem 6.14.
 
 In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 

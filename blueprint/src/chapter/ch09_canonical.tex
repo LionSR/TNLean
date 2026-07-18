@@ -580,8 +580,8 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     This is the sufficient condition for canonical form
     of~\cite[Section~2]{Cirac2016MPDO_arXiv}, with that paper's convention
     $\sum_k D_k \le D$ allowing zero blocks: a corner of $A$ carrying the
-    zero tensor cannot be rescaled to spectral radius one, and contributes
-    its bond dimension only to the length-zero coefficient.
+    zero tensor cannot be rescaled to spectral radius one and is omitted
+    because it vanishes at every positive length.
 \end{theorem}
 
 \begin{proof}
@@ -610,37 +610,6 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     and summing over $k$ identifies the positive-length coefficients of
     $\bigoplus_k \mu_k A_k$ with those of $A$. The kept dimensions satisfy
     $\sum_k D_k \le \sum_k \tr(V_k V_k^\dagger) = \tr(\Id) = D$.
-\end{proof}
-
-\begin{theorem}[Canonical form at every length without zero corners]
-    \label{thm:projector_closure_canonical_form_all_lengths}
-    \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosure}
-    \leanok
-    \uses{def:invariant_projector_closure, def:no_periodic_vectors,
-        def:nt_cpsv, def:same_mpv2, def:block_diagonal_tensor}
-    Suppose $A$ has invariant-projector closure, has no nontrivial
-    $p$-periodic vectors, and every restriction of $A$ to a minimal
-    invariant subspace of positive dimension has a nonzero matrix. Then
-    there are normal tensors
-    $A_1, \ldots, A_r$ and nonzero weights $\mu_1, \ldots, \mu_r$ with
-    \[
-        \mc{V}(A) = \mc{V}\Bigl(\bigoplus_{k=1}^r \mu_k A_k\Bigr).
-    \]
-    The no-zero-corner hypothesis is not part of the source statement; it
-    excludes exactly the zero blocks
-    of~\cite[Section~2]{Cirac2016MPDO_arXiv}, which change only the
-    length-zero coefficient.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:projector_closure_irreducible_corners,
-        lem:irreducible_transfer_perron_pair,
-        lem:irreducible_block_spectral_normalization}
-    As for Theorem~\ref{thm:projector_closure_canonical_form}, with no
-    corner dropped: every corner is nonzero by hypothesis, so
-    $\bigoplus_k \mu_k A_k$ has the same coefficients as the unit-weight
-    direct sum of the corners at every length, including zero.
 \end{proof}
 
 \begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
@@ -738,7 +707,9 @@ irreducible unital blocks and the algebra-spanning input used later.
     \leanok
     \uses{def:irreducible_tensor}
     Every MPS tensor $A$ admits a block-diagonal tensor $\bigoplus_{k=1}^r A_k$
-    with each $A_k$ irreducible and $\mc{V}(A) = \mc{V}(\bigoplus_k A_k)$.
+    with each $A_k$ irreducible,
+    $\mc{V}(A) = \mc{V}(\bigoplus_k A_k)$, and
+    $\sum_{k=1}^rD_k=D$.
 \end{theorem}
 
 \begin{proof}
@@ -1272,59 +1243,47 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     hypotheses in advance and produces the normal canonical form by reordering.
     It is not the arbitrary-input existence theorem
     of~\cite[Section~2.3]{Cirac2016MPDO_arXiv}; that primitive-block reduction,
-    including the zero-tail count, is
+    including its structural bond-dimension bound, is
     Theorem~\ref{thm:tp_primitive_blockdecomp} in
     Section~\ref{sec:reduction_to_normal_form}.
 \end{remark}
 
-\section{Zero-block separation and the trace-preserving gauge}%
-\label{sec:zero_block_separation}
+\section{Nonzero blocks and the trace-preserving gauge}%
+\label{sec:nonzero_blocks_tp_gauge}
 
 In an irreducible block decomposition some blocks may have all-zero Kraus
-operators. An all-zero block contributes $V^{(N)}=0$ for every $N\ge 1$, so it
-adds nothing to the positive-length MPV family; at $N=0$ the MPV coefficient is
-the bond dimension. The all-zero summand therefore enters the output not as a
-tensor but as a single count $D_0$ in the length-zero identity
-$D = D_0 + \sum_k D_k$, and all positive-length content is an equality of MPV
-families. This is the positive-length convention used throughout the reduction:
-comparisons of weighted block sums are stated for $N\ge 1$, with the zero block
-carried only by $D_0$. After separating the zero summand, each nonzero block is
-placed in the trace-preserving gauge, the furthest unconditional reduction
-available before periodicity removal.
+operators. Such a block contributes nothing to a matrix product vector at any
+positive length and is therefore discarded. The structural direct-sum identity
+implies that the retained block dimensions satisfy $\sum_k D_k\le D$ without
+using an empty-word coefficient. Each retained block is then placed in the
+trace-preserving gauge.
 
-\begin{theorem}[Zero-block separation]%
-    \label{thm:zero_block_separation}
+\begin{theorem}[Nonzero irreducible block decomposition]%
+    \label{thm:nonzero_irreducible_block_decomposition}
     \lean{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks}
     \leanok
     \uses{def:irreducible_tensor, def:same_mpv2_pos}
-    Every MPS tensor $A$ admits a block decomposition into a zero-block bond
-    dimension $D_0$ and a finite family of nonzero blocks $(B_k)_{k=1}^r$, each
-    irreducible, with at least one nonzero Kraus operator, and of positive bond
-    dimension, recorded by two facts. The positive-length equality of MPV
-    families: for every $N \ge 1$ and every $\sigma$,
+    Every MPS tensor $A$ admits a finite family of nonzero irreducible blocks
+    $(B_k)_{k=1}^r$, each with at least one nonzero Kraus operator and positive
+    bond dimension. For every $N \ge 1$ and every $\sigma$,
     \[
         V^{(N)}(A)_\sigma
         = V^{(N)}\!(\textstyle\bigoplus_{k=1}^r B_k)_\sigma.
     \]
-    The length-zero dimension identity
-    \[
-        D = D_0 + \sum_{k=1}^r D_k,
-    \]
-    where $D_0$ is the total bond dimension of the all-zero blocks.
+    Moreover, $\sum_{k=1}^r D_k\le D$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:irred_decomp}
     Apply the irreducible block decomposition (Theorem~\ref{thm:irred_decomp})
-    and partition the blocks by whether each has a nonzero Kraus operator; $D_0$
-    accumulates the bond dimensions of the all-zero blocks. For every all-zero
+    and retain the blocks having a nonzero Kraus operator. For every all-zero
     irreducible block $C_j$ and every $N \ge 1$, $V^{(N)}(C_j)_\sigma = 0$, so
     \[
         V^{(N)}(A)_\sigma
         = V^{(N)}\!(\textstyle\bigoplus_{k=1}^r B_k)_\sigma.
     \]
-    At $N = 0$ the MPV coefficient is the bond dimension, giving
-    $D = D_0 + \sum_{k=1}^r D_k$.
+    The dimension inequality follows by restricting the structural identity
+    $\sum_j D_j=D$ to the retained subset.
 \end{proof}
 
 \begin{theorem}[Blockwise TP-gauge normalization of irreducible blocks]%
@@ -1358,13 +1317,13 @@ available before periodicity removal.
 \subsection{Trace-preserving gauge for arbitrary tensors}%
 \label{sec:tp_gauge_arbitrary}
 
-\begin{theorem}[TP-gauge reduction for arbitrary tensors with zero-block separation]%
+\begin{theorem}[TP-gauge reduction for arbitrary tensors]%
     \label{thm:tp_gauge_arbitrary}
-    \lean{MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail}
+    \lean{MPSTensor.exists_tp_gauge_from_arbitrary}
     \leanok
     \uses{def:irreducible_tensor, def:same_mpv2_pos}
-    For any MPS tensor $A$, there exist a zero-block bond dimension $D_0$ and
-    nontrivial blocks $(B_k)_{k=1}^r$ with nonzero weights $(\mu_k)_{k=1}^r$,
+    For any MPS tensor $A$, there exist nontrivial blocks $(B_k)_{k=1}^r$ with
+    nonzero weights $(\mu_k)_{k=1}^r$,
     each block irreducible, left-canonical
     ($\sum_i (B_k^i)^\dagger B_k^i = \Id$), and of positive bond dimension, such
     that for every $N \ge 1$ and every $\sigma$,
@@ -1372,15 +1331,12 @@ available before periodicity removal.
         V^{(N)}(A)_\sigma
         = V^{(N)}\!(\textstyle\bigoplus_{k=1}^r \mu_k B_k)_\sigma,
     \]
-    and the zero-block contribution is recorded by the length-zero identity
-    \[
-        D = D_0 + \sum_{k=1}^r D_k.
-    \]
+    and $\sum_{k=1}^r D_k\le D$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:zero_block_separation, thm:tp_data_irreducible}
-    Theorem~\ref{thm:zero_block_separation} supplies $D_0$ and the nonzero
+    \uses{thm:nonzero_irreducible_block_decomposition, thm:tp_data_irreducible}
+    Theorem~\ref{thm:nonzero_irreducible_block_decomposition} supplies the nonzero
     irreducible blocks $(C_k)_{k=1}^r$. For every $N \ge 1$ and every $\sigma$,
     \[
         V^{(N)}(A)_\sigma
@@ -1394,7 +1350,8 @@ available before periodicity removal.
         =
         V^{(N)}\!(\textstyle\bigoplus_{k=1}^r \mu_k B_k)_\sigma.
     \]
-    The length-zero identity $D = D_0 + \sum_{k=1}^r D_k$ is preserved.
+    The gauge preserves every block dimension, so the structural bound
+    $\sum_kD_k\le D$ is unchanged.
 \end{proof}
 
 \section{Blocking, period removal, and primitive blocks}%
@@ -1760,9 +1717,9 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
 This subsection completes the reduction after period removal. A
 TP-primitive-irreducible block is normal, and an arbitrary tensor becomes, after a
 positive blocking length, a weighted family of left-canonical primitive blocks
-with the zero-block dimension recorded separately. For two tensors with the same
-MPV family, the cyclic sectors can be expressed over one common blocked alphabet,
-which is the form used by the Fundamental Theorem.
+whose total bond dimension is bounded by the original bond dimension. For two
+tensors with the same MPV family, the cyclic sectors can be expressed over one
+common blocked alphabet, which is the form used by the Fundamental Theorem.
 
 \begin{theorem}[TP-primitive irreducible tensor is normal]%
     \label{thm:normal_tp_primitive_irred}
@@ -1788,16 +1745,15 @@ direct sum of primitive irreducible blocks.
     \lean{MPSTensor.exists_tp_primitive_blockDecomp_after_blocking}
     \leanok
     \uses{def:blocked_tensor, def:same_mpv2_pos}
-    For any MPS tensor $A$, there exist $p\ge 1$, a zero-tail bond dimension
-    $D_0$, nonzero weights $(\mu_k)_{k=1}^r$, and blocks $(B_k)_{k=1}^r$ such
+    For any MPS tensor $A$, there exist $p\ge 1$, nonzero weights
+    $(\mu_k)_{k=1}^r$, and blocks $(B_k)_{k=1}^r$ such
     that, for every blocked $\sigma$ of positive length $N$,
     \[
         V^{(N)}\!(A^{[p]})_\sigma
         = V^{(N)}\!(\textstyle\bigoplus_{k=1}^{r} \mu_k B_k)_\sigma.
     \]
-    The zero-block contribution is recorded separately by the length-zero
-    identity $D_0 + \sum_{k=1}^{r} D_k = D$. Each block is left-canonical and
-    primitive,
+    The retained block dimensions satisfy $\sum_{k=1}^{r}D_k\le D$. Each block
+    is left-canonical and primitive,
     \[
         \sum_i (B_k^i)^\dagger B_k^i = \Id,
         \qquad
@@ -1810,9 +1766,8 @@ direct sum of primitive irreducible blocks.
     \uses{thm:tp_gauge_arbitrary, thm:common_blocking_period,
         lem:block_weights_ne_zero,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
-    Theorem~\ref{thm:tp_gauge_arbitrary} supplies the zero-block dimension, the
-    left-canonical nontrivial blocks, the positive-length equality, and the
-    identity $D = D_0 + \sum_k D_k$.
+    Theorem~\ref{thm:tp_gauge_arbitrary} supplies the left-canonical nontrivial
+    blocks, the positive-length equality, and the bound $\sum_kD_k\le D$.
     Theorem~\ref{thm:common_blocking_period} provides a common blocking period
     $p$ making all transfer maps primitive,
     Lemma~\ref{lem:block_weights_ne_zero} keeps the blocked weights nonzero, and
@@ -1820,14 +1775,15 @@ direct sum of primitive irreducible blocks.
     the positive-length equality through blocking.
 \end{proof}
 
-\begin{theorem}[Cyclic sectors after the zero-block split]%
-    \label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
-    \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂}
+\begin{theorem}[Cyclic sectors after removing zero blocks]%
+    \label{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}
+    \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂Pos}
     \leanok
-    \uses{thm:tp_gauge_arbitrary, def:primitive_irreducible_cyclic_sectors,
+    \uses{thm:tp_gauge_arbitrary, def:same_mpv2_pos,
+        def:primitive_irreducible_cyclic_sectors,
         thm:cyclic_sector_decomp_irr_tp_prim_irr}
-    If $A$ and $B$ generate the same MPV family, then after the zero-block split
-    and the trace-preserving gauge there are weighted nonzero-block tensors
+    If $A$ and $B$ generate the same MPV family at every positive length, then after removing the
+    all-zero blocks and applying the trace-preserving gauge there are weighted nonzero-block tensors
     $\bigoplus_j \mu^A_j A_j$ and $\bigoplus_k \mu^B_k B_k$ with, for every
     $N\ge 1$ and $\sigma$,
     \[
@@ -1864,21 +1820,21 @@ direct sum of primitive irreducible blocks.
         =
         V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma.
     \]
-    Chaining these through $V(A)=V(B)$ identifies the two nonzero parts. Finally
+    Chaining these through $V^+(A)=V^+(B)$ identifies the two nonzero parts. Finally
     apply Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} to
     every trace-preserving irreducible nonzero-weight block.
 \end{proof}
 
 \begin{theorem}[Common blocking length for cyclic sectors]%
     \label{thm:ft_after_blocking_common_length_common_sector_theorem}
-    \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂}
+    \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos}
     \leanok
-    \uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
+    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks, def:same_mpv2_pos,
         thm:exists_common_blocked_cyclic_sector_family_common_multiple,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
         thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
         thm:common_blocked_cyclic_sector_derived_properties}
-    If two tensors generate the same MPV family, then the cyclic-sector
+    If two tensors generate the same MPV family at every positive length, then the cyclic-sector
     decompositions on the two sides can be expressed at one common positive
     blocking length $p$. For every $N\ge 1$ and every blocked $\sigma$, each
     blocked tensor equals its powered nonzero part,
@@ -1902,13 +1858,13 @@ direct sum of primitive irreducible blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
+    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks,
         thm:exists_common_blocked_cyclic_sector_family_common_multiple,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
         thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
         thm:common_blocked_cyclic_sector_derived_properties}
     Start from
-    Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}. With
+    Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}. With
     $p_A,p_B$ the least common multiples of the period-removal lengths on the two
     sides, use $p=\operatorname{lcm}(p_A,p_B)$. The prescribed-common-multiple
     lemma constructs both one-sided sector families at this length, and the
@@ -1931,7 +1887,7 @@ direct sum of primitive irreducible blocks.
     \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
         thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
         def:same_mpv2_pos}
-    Let $A$ and $B$ have the same MPV family. Then there is a positive blocking
+    Let $A$ and $B$ have the same MPV family at every positive length. Then there is a positive blocking
     length at which both blocked tensors have the same positive-length MPV
     family as weighted direct sums of trace-preserving, primitive,
     tensor-irreducible blocks with positive bond dimensions and nonzero weights.

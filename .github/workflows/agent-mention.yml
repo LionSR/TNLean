@@ -1,0 +1,169 @@
+name: Agent Mention (Lean)
+
+# Unified mention-driven responder. `@claude` routes to the default Claude
+# provider, `@deepseek` to DeepSeek. This replaces the former claude.yml /
+# deepseek.yml pair: both fired on every comment event and shared one
+# concurrency group, so each event's two runs cancelled each other while
+# queued and a genuine mention could be lost before its job filter ran.
+# When both handles appear in one trigger, `@claude` wins.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+concurrency:
+  group: agent-mention-${{ github.event.issue.number || github.event.pull_request.number || github.event.comment.id }}
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
+
+jobs:
+  respond:
+    # Skip when:
+    #   - sender is a bot (e.g. Copilot reposting a review that contains a
+    #     mention) — the agent action rejects non-collaborator actors anyway.
+    #   - the triggering author lacks write access (author_association not in
+    #     OWNER/MEMBER/COLLABORATOR). Defense-in-depth: this workflow runs with
+    #     write permissions and repo secrets, so prompt-injection from
+    #     untrusted commenters must not start the runner.
+    #   - repository variable DEEPSEEK_MENTION_ENABLED is exactly "false"
+    #     (DeepSeek branch only).
+    if: |
+      github.event.sender.type != 'Bot' && (
+        (
+          (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+          (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+          (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+          (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
+        ) || (
+          vars.DEEPSEEK_MENTION_ENABLED != 'false' && (
+            (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@deepseek') && !contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+            (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@deepseek') && !contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+            (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@deepseek') && !contains(github.event.review.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+            (github.event_name == 'issues' && (contains(github.event.issue.body, '@deepseek') || contains(github.event.issue.title, '@deepseek')) && !(contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
+          )
+        )
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
+      CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
+      DEEPSEEK_BASE_URL: ${{ vars.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/anthropic' }}
+      DEEPSEEK_OPUS_MODEL: ${{ vars.DEEPSEEK_OPUS_MODEL }}
+      DEEPSEEK_SONNET_MODEL: ${{ vars.DEEPSEEK_SONNET_MODEL }}
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read # Required for the agent to read CI results on PRs
+
+    steps:
+      - name: Resolve provider from mention
+        id: mention
+        env:
+          # First non-empty of: comment body (issue_comment,
+          # pull_request_review_comment), review body (pull_request_review),
+          # issue title+body (issues). Kept in an env var so untrusted text
+          # never reaches shell syntax.
+          TRIGGER_TEXT: ${{ github.event.comment.body || github.event.review.body || format('{0} {1}', github.event.issue.title, github.event.issue.body) }}
+          # @claude routes to the configured default provider so the global
+          # provider switch keeps working.
+          CLAUDE_CODE_PROVIDER: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+        run: |
+          set -euo pipefail
+          # The job-level filter guarantees exactly one branch matches; @claude
+          # takes precedence when both handles appear.
+          if [[ "$TRIGGER_TEXT" == *"@claude"* ]]; then
+            {
+              echo "provider=${CLAUDE_CODE_PROVIDER}"
+              echo "branch_template={{prefix}}{{entityType}}-{{entityNumber}}-{{description}}"
+              echo "branch_prefix=claude/issue-"
+              echo "creator_name=Claude Code action"
+              echo "autofix_label=auto-fix-claude"
+            } >> "$GITHUB_OUTPUT"
+          else
+            {
+              echo "provider=deepseek"
+              echo "branch_template=deepseek/{{entityType}}-{{entityNumber}}-{{description}}"
+              echo "branch_prefix=deepseek/issue-"
+              echo "creator_name=DeepSeek Code action"
+              echo "autofix_label="
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          token: ${{ env.GH_TOKEN }}
+
+      - name: Set up Lean toolchain and cache
+        uses: texra-ai/lean-env-action@v1
+        with:
+          # Do not save a GitHub cache of .lake: per-run ~2.4 GB entries
+          # evict the main-branch build cache from the 10 GB repository
+          # budget within minutes. Mathlib comes from `lake exe cache get`.
+          use-github-cache: false
+
+      - name: Install blueprint TeX stack
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      - name: Install leanblueprint
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+
+      - name: Run mentioned agent
+        id: agent
+        uses: LionSR/agent-ci-actions@v1
+        with:
+          provider: ${{ steps.mention.outputs.provider }}
+          model-tier: opus
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          deepseek-base-url: ${{ env.DEEPSEEK_BASE_URL }}
+          deepseek-opus-model: ${{ env.DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ env.DEEPSEEK_SONNET_MODEL }}
+          allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+          branch-name-template: ${{ steps.mention.outputs.branch_template }}
+          allowed_tools_preset: claude-interactive
+          allowed_tools_preset_map_file: .github/allowed-tools.json
+
+          # This is an optional setting that allows the agent to read CI
+          # results on PRs
+          additional-permissions: |
+            actions: read
+
+          # Load Lean skills from the official leanprover skills repository
+          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
+          plugins: 'lean@leanprover'
+          system-prompt-file: .github/prompts/claude-code-system-prompt.md
+
+      - name: Auto-create PR for completed issue work
+        if: |
+          !cancelled() &&
+          steps.agent.outcome == 'success' &&
+          (github.event_name == 'issues' ||
+           (github.event_name == 'issue_comment' && !github.event.issue.pull_request))
+        uses: LionSR/agent-ci-actions/auto-create-issue-pr@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          repo: ${{ github.repository }}
+          branch-prefix: ${{ steps.mention.outputs.branch_prefix }}
+          creator-name: ${{ steps.mention.outputs.creator_name }}
+          autofix-label: ${{ steps.mention.outputs.autofix_label }}
+          event-name: ${{ github.event_name }}
+          comment-body: ${{ github.event.comment.body || '' }}
+          issue-body: ${{ github.event.issue.body || '' }}
+          issue-title: ${{ github.event.issue.title || '' }}
+          gh-token: ${{ env.GH_TOKEN }}

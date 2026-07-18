@@ -14,9 +14,10 @@ the main-text statement is at lines 354–361, the appendix restatement is at
 lines 1172–1179, the copy-weight comparison is at line 1188, and the
 global-gauge construction is at lines 1189–1192 of the Appendix MPV proof.
 
-The bundled-witness theorem `ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos`
+The bundled-witness theorem `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses`
 exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
-`IsBNTCanonicalForm` and generating the same MPV family:
+`IsBNTCanonicalForm` and generating the same MPV family at every positive
+length:
 
 * the basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$ between
   corresponding BNT sectors;
@@ -67,7 +68,7 @@ variable {d : ℕ}
 /-- **BNT equal-MPV global-gauge witness.**
 
 If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
-same MPV family, then there exist:
+same MPV family at every positive length, then there exist:
 
 * a basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$,
 * per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$,
@@ -94,7 +95,7 @@ through the matched bijections gives the
 CPSV16 §II.C lines 354–361 and Appendix MPV proof lines 1172–1179 state the
 equal-MPV corollary; Appendix MPV proof lines 1182–1192 supply the block
 matching, copy-weight comparison, and global-gauge construction used here. -/
-theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos
+theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -127,7 +128,7 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos
                      (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ)) := by
   classical
   obtain ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, hWeight, X, _hXdef, hGauge⟩ :=
-    ft_sector_bnt_equal_global_gaugePos hP hQ hEqual
+    ft_sector_bnt_equal_global_gauge hP hQ hEqual
   -- `P.totalDim = Q.totalDim` follows from `sectorFlatEquiv` plus matched dims
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
@@ -143,8 +144,8 @@ differ only by a $\Sigma$-level permutation of flattened sector indices
 along `sectorFlatSigmaEquiv`; equivalently a permutation of
 `Fin Q.totalDim` (after the bond-dimension equality) by
 `sectorFlatDimEquiv`.  This lets us upgrade the matched-coordinate gauge
-equation of `ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos` into the literal
-form `ft_sector_bnt_equal_mps_gaugeEquiv_literalPos`, the equal-MPV corollary
+equation of `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` into the literal
+form `ft_sector_bnt_equal_mps_gaugeEquiv_literal`, the equal-MPV corollary
 form (CPSV16 §II.C lines 354–361). -/
 
 /-- Cast of an `MPSTensor` along a bond-dimension equality, evaluated at one
@@ -429,8 +430,8 @@ private lemma permMatrix_conj_eq_submatrix {n : Type*}
 /-- **BNT equal-MPV literal global-gauge form.**
 
 If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
-same MPV family, then their total bond dimensions agree, and there exists an
-explicit
+same MPV family at every positive length, then their total bond dimensions
+agree, and there exists an explicit
 $Y \in \mathrm{GL}(Q.\mathrm{totalDim},\mathbb{C})$ realizing the global gauge
 equation
 $$V_Q^i \;=\; Y \,\bigl(\mathrm{cast}\;V_P^i\bigr)\, Y^{-1}$$
@@ -438,13 +439,13 @@ at every physical site $i$, where the inner factor is the bond-dim cast of the
 literal $P$-tensor along the total-dimension equality.
 
 This reformulates the matched-coordinate gauge equation
-`ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos` (CPSV16 Appendix MPV proof,
+`ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` (CPSV16 Appendix MPV proof,
 lines 1189–1192) into the equal-MPV corollary labelled II_cor2 in CPSV16
 §II.C lines 354–361 by composing the matched-coordinate global gauge with the
 sector permutation.
 
 CPSV16 §II.C lines 354–361. -/
-theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
+theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -460,7 +461,7 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := by
   classical
   obtain ⟨β, hDim, _hCopies, τ, _ζ, _Xblock, _hTotal, X, _, _, _, hGauge⟩ :=
-    ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos hP hQ hEqual
+    ft_sector_bnt_equal_mps_gaugeEquiv_witnesses hP hQ hEqual
   -- Total bond dimensions agree.
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
@@ -553,13 +554,13 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
 
 /-- **Canonical Form II equal-case unitary global gauge.**
 
-If two BNT canonical forms generate the same MPV family, their literal total
-tensors are related by a unitary gauge.  The gauge is the product of the
-block-diagonal direct sum of the matched sector unitaries and the unitary
-permutation that restores the original sector coordinates.
+If two BNT canonical forms generate the same MPV family at every positive
+length, their literal total tensors are related by a unitary gauge.  The gauge
+is the product of the block-diagonal direct sum of the matched sector unitaries
+and the unitary permutation that restores the original sector coordinates.
 
 Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197--1199. -/
-private theorem ft_sector_bnt_equal_mps_unitaryGauge_literalPos
+private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -578,7 +579,7 @@ private theorem ft_sector_bnt_equal_mps_unitaryGauge_literalPos
   classical
   obtain ⟨β, hDim, _hCopies, τ, _ζ, _U, X, _hζ, _hConj,
       _hWeight, hXunitary, hGauge⟩ :=
-    ft_sector_bnt_equal_unitary_global_gauge_witnessesPos hP hQ hEqual
+    ft_sector_bnt_equal_unitary_global_gauge_witnesses hP hQ hEqual
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
   refine ⟨hTotal, ?_⟩
@@ -658,27 +659,9 @@ private theorem ft_sector_bnt_equal_mps_unitaryGauge_literalPos
           Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
   simp only [Matrix.mul_assoc]
 
-/-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
-      ∀ i : Fin d,
-        Q.toTensor i =
-          (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
-            cast (by rw [hTotal] :
-                Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
-                Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)
-              (P.toTensor i) *
-            (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
-              Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
-  ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
-    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
-
 /-- **Fundamental Theorem of MPS, equal case (CPSV16 Corollary II.2).**
 
-Two BNT canonical forms generating the same MPV family at every length are
+Two BNT canonical forms generating the same MPV family at every positive length are
 globally conjugate: their total bond dimensions agree, and a single invertible
 gauge `Y` carries one total tensor to the other.  This is the literal
 equal-case source statement on the basis-of-normal-tensors canonical-form
@@ -688,7 +671,7 @@ lines 1189–1192). -/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
       ∀ i : Fin d,
         Q.toTensor i =
@@ -708,7 +691,7 @@ length are related by one unitary global gauge after identifying their equal
 total bond dimensions.
 
 Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197--1199. -/
-theorem fundamentalTheorem_equal_canonicalForm_unitaryPos
+theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -724,7 +707,7 @@ theorem fundamentalTheorem_equal_canonicalForm_unitaryPos
               (P.toTensor i) *
             (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
-  ft_sector_bnt_equal_mps_unitaryGauge_literalPos hP hQ hEqual
+  ft_sector_bnt_equal_mps_unitaryGauge_literal hP hQ hEqual
 
 /-- **Fundamental Theorem of MPS, proportional multi-block case (CPSV16
 Theorem II.1) on the BNT canonical-form surface.**

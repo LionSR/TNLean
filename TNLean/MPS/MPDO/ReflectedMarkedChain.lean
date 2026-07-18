@@ -184,7 +184,7 @@ theorem IsMPDO.coordinateCompression_star
   intro i _
   apply Finset.sum_congr rfl
   intro j _
-  rw [(hM (N + 1)).isHermitian.apply]
+  rw [(hM (N + 1) (by omega)).isHermitian.apply]
 
 /-- **The reflected marked-chain identity of Figure 7.**
 

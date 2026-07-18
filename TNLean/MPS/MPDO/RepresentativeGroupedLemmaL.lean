@@ -201,20 +201,21 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree
   rwa [hLadd]
 
 /-- Transported representative-grouped Lemma L for an original tensor with
-the same complete MPV family as the sector decomposition.
+the same positive-length MPV family as the sector decomposition.
 
-This is the form used when canonical-form data have first been obtained only
-up to `SameMPV₂`.  The finite representative-span restriction is unchanged.
+The finite representative-span restriction is unchanged.  Since a first-site
+identity concerns chains of length `N + 1`, no length-zero coefficient is
+needed.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
-theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree
+theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
     {D : ℕ} (A : MPSTensor d D) (P : SectorDecomposition d)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAP : SameMPV₂ A P.toTensor)
+    (hAP : SameMPV₂Pos A P.toTensor)
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
     (hAct : FirstSiteActionAgree A Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
   exact P.insertedTensor_basis_eq_of_firstSiteActionAgree hSpan
-    (hAct.of_sameMPV hAP)
+    (hAct.of_sameMPVPos hAP)
 
 end MPSTensor.SectorDecomposition

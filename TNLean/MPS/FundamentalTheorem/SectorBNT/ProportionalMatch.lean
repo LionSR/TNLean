@@ -261,7 +261,7 @@ theorem ft_sector_bnt_proportional_sector_match_witnesses
       mpv_cast_dim (hDim k) (P.basis (β k)) N σ]
   have hζ_norm : ∀ k : Fin Q.basisCount, ‖ζ k‖ = 1 := by
     intro k
-    exact hP.norm_phase_of_matched_mpv hQ (hMpv k)
+    exact hP.norm_phase_of_matched_mpv hQ (fun N _hN σ => hMpv k N σ)
   exact ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, hMpv⟩
 
 end MPSTensor

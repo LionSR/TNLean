@@ -452,8 +452,10 @@ form `I_L = I_{L+1}` for `L < ⌊N/2⌋` (line 815); the chain starts at `I_1`. 
 def IsSAL (M : MPOTensor d D) : Prop :=
   ∃ hMpdo : IsMPDO M, (∀ N, 0 < N → (mpo M N).trace ≠ 0) ∧
     ∀ N L : ℕ, 1 ≤ L → (hL : L < N / 2) →
-      mutualInfoChain M N L (Nat.le_of_lt (hL.trans_le (Nat.div_le_self N 2))) (hMpdo N)
-        = mutualInfoChain M N (L + 1) (hL.trans_le (Nat.div_le_self N 2)) (hMpdo N)
+      mutualInfoChain M N L (Nat.le_of_lt (hL.trans_le (Nat.div_le_self N 2)))
+          (hMpdo N (by omega))
+        = mutualInfoChain M N (L + 1) (hL.trans_le (Nat.div_le_self N 2))
+          (hMpdo N (by omega))
 
 /-- **Saturation telescopes.** If `M` verifies saturation of the area law then all
 mutual informations in the range `1 ≤ L ≤ ⌊N/2⌋` coincide: the consecutive
@@ -465,15 +467,16 @@ written as the equality chain `I_1 = I_2 = ⋯ = I_{⌊N/2⌋}`. -/
 theorem mutualInfoChain_eq_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
     {N L L' : ℕ} (hL1 : 1 ≤ L) (hLN : L ≤ N / 2) (hL'1 : 1 ≤ L')
     (hL'N : L' ≤ N / 2) :
-    let hM : (mpo M N).PosSemidef := (Classical.choose hSAL) N
+    let hM : (mpo M N).PosSemidef := (Classical.choose hSAL) N (by omega)
     mutualInfoChain M N L (hLN.trans (Nat.div_le_self N 2)) hM
       = mutualInfoChain M N L' (hL'N.trans (Nat.div_le_self N 2)) hM := by
   classical
   dsimp only
   let hMpdo : IsMPDO M := Classical.choose hSAL
+  have hN : 0 < N := by omega
   rcases Classical.choose_spec hSAL with ⟨_, hstep⟩
   apply eq_of_forall_succ_eq_of_mem_Icc
-    (fun m hm => mutualInfoChain M N m (hm.trans (Nat.div_le_self N 2)) (hMpdo N))
+    (fun m hm => mutualInfoChain M N m (hm.trans (Nat.div_le_self N 2)) (hMpdo N hN))
     (fun m hm hmn => hstep N m hm hmn) hL1 hLN hL'1 hL'N
 
 end MPOTensor

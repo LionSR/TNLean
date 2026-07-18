@@ -39,9 +39,10 @@ properties for finite-dimensional quantum systems.
 
 Wolf records the equivalent formula
 $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
-\cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+\cite[Chapter~8, Section~8.1]{Wolf2012Quantum}; this is
+Theorem~\ref{thm:trace_norm_abs}.
 
-\begin{lemma}[Finite singular-value expansions]\label{lem:trace_norm_singular_values}
+\begin{theorem}[Finite singular-value expansions]\label{thm:trace_norm_singular_values}
     \lean{Matrix.schattenOneNorm_eq_sum_support}
     \lean{Matrix.traceNorm_eq_sum_support}
     \lean{Matrix.traceNorm_eq_sum_range_finrank_range}
@@ -50,7 +51,7 @@ $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
     The Schatten one-norm and trace norm are the sums over the finite support of
     the singular-value sequence. Equivalently, the trace norm is the sum over
     the indices below the rank of the represented linear map.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The singular-value sequence satisfies $s_i(A) = 0$ for all
@@ -68,7 +69,7 @@ $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
     \lean{Matrix.traceNorm_zero}
     \lean{Matrix.traceNorm_pos_iff}
     \leanok
-    \uses{def:trace_norm, def:schatten_one_norm, lem:trace_norm_singular_values}
+    \uses{def:trace_norm, def:schatten_one_norm, thm:trace_norm_singular_values}
     For every $A\in\MN{D}$,
     \[
         \lVert A\rVert_{\mathrm{tr}}
@@ -86,6 +87,420 @@ $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
         \iff \forall i,\; s_i(A)=0
         \iff A=0.
     \]
+\end{proof}
+
+\begin{theorem}[Trace norm as trace of the absolute value]
+    \label{thm:trace_norm_abs}
+    \lean{Matrix.traceNorm_eq_re_trace_abs}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$, with
+    $\lvert A\rvert=\sqrt{A^\dagger A}$ the positive-semidefinite square root
+    of $A^\dagger A$,
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        =\operatorname{Re}\bigl(\operatorname{tr}\lvert A\rvert\bigr).
+    \]
+    This is the formula $\lVert A\rVert_1=\operatorname{tr}[\lvert A\rvert]$
+    of \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}; the trace of the
+    positive-semidefinite matrix $\lvert A\rvert$ is real.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:trace_norm_sqrt_eigenvalues}
+    The map $T^\dagger T$, for $T$ the linear map on $\C^D$ represented by
+    $A$, is represented by $A^\dagger A$, so the singular values of $A$ are
+    $s_i(A)=\sqrt{\lambda_i}$ with $\lambda_0,\ldots,\lambda_{D-1}$ the
+    eigenvalues of $A^\dagger A$. Diagonalizing
+    $A^\dagger A=U\operatorname{diag}(\lambda_i)U^\dagger$ gives
+    $\lvert A\rvert=U\operatorname{diag}(\sqrt{\lambda_i})U^\dagger$, hence
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        =\sum_{i=0}^{D-1}s_i(A)
+        =\sum_{i=0}^{D-1}\sqrt{\lambda_i}
+        =\operatorname{tr}\lvert A\rvert
+        =\operatorname{Re}\bigl(\operatorname{tr}\lvert A\rvert\bigr),
+    \]
+    where the last step uses that $\lvert A\rvert$ is positive semidefinite,
+    so $\operatorname{tr}\lvert A\rvert\geq 0$ is real.
+\end{proof}
+
+\begin{theorem}[Trace-norm homogeneity]
+    \label{thm:trace_norm_homogeneous}
+    \lean{Matrix.traceNorm_smul}
+    \leanok
+    \uses{def:trace_norm}
+    For every $c\in\C$ and $A\in\MN{D}$,
+    \[
+        \lVert cA\rVert_{\mathrm{tr}}
+        =\lvert c\rvert\,\lVert A\rVert_{\mathrm{tr}}.
+    \]
+    This is the homogeneity axiom for matrix norms
+    \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_abs}
+    From $(cA)^\dagger(cA)=\lvert c\rvert^2\,A^\dagger A$ and uniqueness of
+    the positive-semidefinite square root,
+    $\lvert cA\rvert=\lvert c\rvert\,\lvert A\rvert$. Linearity of the trace
+    gives
+    $\operatorname{tr}\lvert cA\rvert
+    =\lvert c\rvert\,\operatorname{tr}\lvert A\rvert$, and the claim follows
+    from Theorem~\ref{thm:trace_norm_abs}.
+\end{proof}
+
+\begin{theorem}[Trace-norm unitary invariance]
+    \label{thm:trace_norm_unitary_invariance}
+    \lean{Matrix.traceNorm_unitary_mul}
+    \lean{Matrix.traceNorm_mul_unitary}
+    \lean{Matrix.traceNorm_unitary_mul_unitary}
+    \leanok
+    \uses{def:trace_norm}
+    For all unitaries $U,V\in\MN{D}$ and every $A\in\MN{D}$,
+    \[
+        \lVert UA\rVert_{\mathrm{tr}}
+        =\lVert AV\rVert_{\mathrm{tr}}
+        =\lVert UAV\rVert_{\mathrm{tr}}
+        =\lVert A\rVert_{\mathrm{tr}}.
+    \]
+    The trace norm is thus unitarily invariant
+    \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_abs}
+    From $(UA)^\dagger(UA)=A^\dagger U^\dagger UA=A^\dagger A$ the absolute
+    values agree: $\lvert UA\rvert=\lvert A\rvert$. For the right factor,
+    $(AV)^\dagger(AV)=V^\dagger(A^\dagger A)V$, and since
+    $V^\dagger\lvert A\rvert V$ is positive semidefinite with
+    \[
+        \bigl(V^\dagger\lvert A\rvert V\bigr)^2
+        =V^\dagger\lvert A\rvert\,VV^\dagger\,\lvert A\rvert V
+        =V^\dagger(A^\dagger A)V,
+    \]
+    uniqueness of the positive-semidefinite square root gives
+    $\lvert AV\rvert=V^\dagger\lvert A\rvert V$. Cyclicity of the trace then
+    yields
+    $\operatorname{tr}\lvert AV\rvert
+    =\operatorname{tr}(\lvert A\rvert\,VV^\dagger)
+    =\operatorname{tr}\lvert A\rvert$. For the two-sided case,
+    $\lVert UAV\rVert_{\mathrm{tr}}=\lVert UA\rVert_{\mathrm{tr}}=\lVert A\rVert_{\mathrm{tr}}$
+    by applying the right and left cases in turn.
+\end{proof}
+
+\begin{lemma}[Trace norm from the spectrum of $A^\dagger A$]
+    \label{lem:trace_norm_sqrt_eigenvalues}
+    \lean{Matrix.traceNorm_eq_sum_sqrt_eigenvalues_adjoint_comp_self}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$, the trace norm is the sum of the square roots of
+    the eigenvalues of the positive operator $A^\dagger A$:
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^\dagger A)}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_elementary}
+    Since $s_i(A)=\sqrt{\lambda_i(A^\dagger A)}$ by the definition of singular
+    value, the finite singular-value expansion of
+    Theorem~\ref{thm:trace_norm_elementary} gives
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        = \sum_{i=0}^{D-1}s_i(A)
+        = \sum_{i=0}^{D-1}\sqrt{\lambda_i(A^\dagger A)}.
+    \]
+\end{proof}
+
+\begin{lemma}[Trace norm from the matrix eigenvalues of $A^\dagger A$]
+    \label{lem:trace_norm_sqrt_matrix_eigenvalues}
+    \lean{Matrix.traceNorm_eq_sum_sqrt_eigenvalues}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$, with $\lambda_0,\ldots,\lambda_{D-1}$ the
+    eigenvalues of the matrix $A^\dagger A$,
+    \[
+        \lVert A\rVert_{\mathrm{tr}}=\sum_{i=0}^{D-1}\sqrt{\lambda_i}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_abs}
+    Diagonalizing $A^\dagger A=V\operatorname{diag}(\lambda_i)V^\dagger$ gives
+    $\lvert A\rvert=V\operatorname{diag}(\sqrt{\lambda_i})V^\dagger$, so
+    \[
+        \operatorname{tr}\lvert A\rvert=\sum_{i=0}^{D-1}\sqrt{\lambda_i},
+    \]
+    and the claim follows from Theorem~\ref{thm:trace_norm_abs}.
+\end{proof}
+
+\begin{theorem}[Variational unitary formula for the trace norm]
+    \label{thm:trace_norm_variational}
+    \lean{Matrix.norm_trace_conjTranspose_mul_unitary_le}
+    \lean{Matrix.exists_mem_unitaryGroup_trace_conjTranspose_mul_eq}
+    \lean{Matrix.isGreatest_norm_trace_conjTranspose_mul_unitary}
+    \lean{Matrix.traceNorm_eq_sSup_norm_trace_conjTranspose_mul_unitary}
+    \leanok
+    \uses{def:trace_norm}
+    For every $A\in\MN{D}$,
+    \[
+        \lVert A\rVert_{\mathrm{tr}}
+        =\max\left\{\bigl|\operatorname{tr}[A^\dagger U]\bigr|
+        \;\middle|\; UU^\dagger=\Id\right\},
+    \]
+    and the maximum is attained: some unitary $U$ satisfies
+    $\operatorname{tr}[A^\dagger U]=\lVert A\rVert_{\mathrm{tr}}$.
+    See \cite[Chapter~8, Eq.~(8.11)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:trace_norm_sqrt_matrix_eigenvalues}
+    For the upper bound, let $v_0,\ldots,v_{D-1}$ be an orthonormal
+    eigenbasis of $A^\dagger A$ with eigenvalues $\lambda_i$, and let $U$ be
+    unitary. Expanding the trace in this basis and applying the
+    Cauchy--Schwarz inequality,
+    \[
+        \bigl|\operatorname{tr}[A^\dagger U]\bigr|
+        =\Bigl|\sum_{i}\langle Av_i,\,Uv_i\rangle\Bigr|
+        \le\sum_{i}\lVert Av_i\rVert\,\lVert Uv_i\rVert
+        =\sum_{i}\sqrt{\lambda_i}
+        =\lVert A\rVert_{\mathrm{tr}},
+    \]
+    since $\lVert Av_i\rVert^2=\langle v_i,\,A^\dagger A\,v_i\rangle
+    =\lambda_i$ and $\lVert Uv_i\rVert=1$.
+
+    For attainment, the vectors $w_i=Av_i/\sqrt{\lambda_i}$, taken over the
+    indices with $\lambda_i\neq0$, satisfy
+    \[
+        \langle w_i,w_j\rangle
+        =\frac{\langle v_i,\,A^\dagger A\,v_j\rangle}
+              {\sqrt{\lambda_i}\sqrt{\lambda_j}}
+        =\delta_{ij},
+    \]
+    so they form an orthonormal family. Extend it to an orthonormal basis
+    $(w_i)_{i}$ of $\C^D$ and let $U$ be the unitary with $Uv_i=w_i$ for all
+    $i$. Then
+    \[
+        \operatorname{tr}[A^\dagger U]
+        =\sum_{i}\langle Av_i,\,w_i\rangle
+        =\sum_{\lambda_i\neq0}\frac{\lVert Av_i\rVert^2}{\sqrt{\lambda_i}}
+        =\sum_{i}\sqrt{\lambda_i}
+        =\lVert A\rVert_{\mathrm{tr}},
+    \]
+    where the indices with $\lambda_i=0$ contribute $0$ to both sides because
+    $\lVert Av_i\rVert^2=\lambda_i=0$ forces $Av_i=0$.
+\end{proof}
+
+\begin{theorem}[Trace-norm triangle inequality]
+    \label{thm:trace_norm_triangle}
+    \lean{Matrix.traceNorm_add_le}
+    \leanok
+    \uses{def:trace_norm}
+    For all $A,B\in\MN{D}$,
+    \[
+        \lVert A+B\rVert_{\mathrm{tr}}
+        \le\lVert A\rVert_{\mathrm{tr}}+\lVert B\rVert_{\mathrm{tr}}.
+    \]
+    Together with homogeneity (Theorem~\ref{thm:trace_norm_homogeneous}) and
+    definiteness (Theorem~\ref{thm:trace_norm_elementary}), this completes
+    the norm axioms of \cite[Chapter~8, Section~8.1]{Wolf2012Quantum} for the
+    trace norm.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_variational}
+    Choose by Theorem~\ref{thm:trace_norm_variational} a unitary $U$ with
+    $\operatorname{tr}[(A+B)^\dagger U]=\lVert A+B\rVert_{\mathrm{tr}}$.
+    Splitting the trace and applying the upper-bound half of the same
+    theorem to $A$ and to $B$ separately,
+    \[
+        \lVert A+B\rVert_{\mathrm{tr}}
+        =\bigl|\operatorname{tr}[A^\dagger U]
+              +\operatorname{tr}[B^\dagger U]\bigr|
+        \le\bigl|\operatorname{tr}[A^\dagger U]\bigr|
+          +\bigl|\operatorname{tr}[B^\dagger U]\bigr|
+        \le\lVert A\rVert_{\mathrm{tr}}+\lVert B\rVert_{\mathrm{tr}}.
+    \]
+\end{proof}
+
+\begin{lemma}[Jordan trace-norm formula]
+    \label{lem:trace_norm_jordan}
+    \lean{Matrix.IsHermitian.traceNorm_eq_re_trace_posPart_add_negPart}
+    \leanok
+    \uses{def:trace_norm}
+    Let $H\in\MN{D}$ be Hermitian with Jordan decomposition $H=H^+-H^-$
+    into orthogonal positive parts, $H^\pm\ge0$ and $H^+H^-=0$. Then
+    \[
+        \lVert H\rVert_{\mathrm{tr}}
+        =\operatorname{tr}[H^+]+\operatorname{tr}[H^-].
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_abs}
+    The sum $H^++H^-$ is positive semidefinite, and by orthogonality its
+    square is
+    \[
+        (H^++H^-)^2=(H^+)^2+(H^-)^2=(H^+-H^-)^2=H^\dagger H,
+    \]
+    so $H^++H^-=\sqrt{H^\dagger H}=|H|$. Hence
+    \[
+        \lVert H\rVert_{\mathrm{tr}}
+        =\operatorname{tr}|H|
+        =\operatorname{tr}[H^+]+\operatorname{tr}[H^-]
+    \]
+    by Theorem~\ref{thm:trace_norm_abs}.
+\end{proof}
+
+\begin{lemma}[Support projection of the positive part]
+    \label{lem:positive_part_support_projection}
+    \lean{Matrix.IsHermitian.posPartSupportProj}
+    \lean{Matrix.IsHermitian.posPartSupportProj_posSemidef}
+    \lean{Matrix.IsHermitian.posPartSupportProj_le_one}
+    \lean{Matrix.IsHermitian.posPartSupportProj_mul_posPartSupportProj}
+    \lean{Matrix.IsHermitian.posPartSupportProj_mul_self}
+    \leanok
+    Let $A\in\MN{D}$ be Hermitian with positive part $A^+$. There is a
+    matrix $\Pi$ with $0\le\Pi\le\Id$, $\Pi^2=\Pi$, and $\Pi A=A^+$, namely
+    the orthogonal projection onto the support space of $A^+$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Diagonalize
+    $A=U\operatorname{diag}(\lambda_1,\dots,\lambda_D)\,U^\dagger$ and set
+    \[
+        \Pi=U\operatorname{diag}
+        \bigl(\chi(\lambda_1),\dots,\chi(\lambda_D)\bigr)\,U^\dagger,
+    \]
+    where $\chi$ is the indicator function of $(0,\infty)$. Each claim is
+    read off eigenvalue-wise: $0\le\chi\le1$ gives $0\le\Pi\le\Id$,
+    $\chi^2=\chi$ gives $\Pi^2=\Pi$, and
+    $\chi(\lambda)\,\lambda=\max(\lambda,0)$ gives $\Pi A=A^+$.
+\end{proof}
+
+\begin{lemma}[Positive-semidefinite trace pairing bounds]
+    \label{lem:psd_trace_pairing_bounds}
+    \lean{Matrix.PosSemidef.re_trace_mul_nonneg}
+    \lean{Matrix.PosSemidef.re_trace_mul_le_of_le_one}
+    \leanok
+    Let $X,C\in\MN{D}$ with $X\ge0$. If $C\ge0$, then
+    $\operatorname{tr}[CX]\ge0$; if $C\le\Id$, then
+    $\operatorname{tr}[CX]\le\operatorname{tr}[X]$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:psd_trace_product_nonneg}
+    The first bound is Lemma~\ref{lem:psd_trace_product_nonneg}. For the
+    second,
+    \[
+        \operatorname{tr}[X]-\operatorname{tr}[CX]
+        =\operatorname{tr}[(\Id-C)X]\ge0
+    \]
+    by the same lemma, since $\Id-C\ge0$.
+\end{proof}
+
+\begin{lemma}[Positive maps preserve hermiticity]
+    \label{lem:positive_map_hermitian}
+    \lean{Matrix.isHermitian_map_of_positive}
+    \leanok
+    \uses{def:positive_map_rectangular}
+    If $T:\MN{D}\to\MN{D'}$ is a positive linear map and $H\in\MN{D}$ is
+    Hermitian, then $T(H)$ is Hermitian.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:positive_map_rectangular}
+    Write $H=H^+-H^-$ with $H^\pm\ge0$. Then $T(H)=T(H^+)-T(H^-)$ is a
+    difference of positive semidefinite matrices, hence Hermitian.
+\end{proof}
+
+\begin{lemma}[Positive-part trace estimate]
+    \label{lem:positive_part_trace_estimate}
+    \lean{Matrix.re_trace_posPart_map_le}
+    \leanok
+    \uses{def:positive_map_rectangular, def:trace_preserving_rectangular}
+    Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving positive linear map and
+    let $H\in\MN{D}$ be Hermitian, with Jordan decompositions $H=P_+-P_-$
+    and $T(H)=Q_+-Q_-$. Then
+    \[
+        \operatorname{tr}[Q_+]\le\operatorname{tr}[P_+].
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive_part_support_projection,
+      lem:psd_trace_pairing_bounds, lem:positive_map_hermitian,
+      def:trace_preserving_rectangular}
+    The matrix $T(H)$ is Hermitian by
+    Lemma~\ref{lem:positive_map_hermitian}. Let $\Pi_+$ be the support
+    projection of $Q_+$ from
+    Lemma~\ref{lem:positive_part_support_projection}, so that
+    $\Pi_+T(H)=Q_+$ and $0\le\Pi_+\le\Id$. Then
+    \[
+        \operatorname{tr}[Q_+]
+        =\operatorname{tr}[\Pi_+T(P_+)]-\operatorname{tr}[\Pi_+T(P_-)]
+        \le\operatorname{tr}[\Pi_+T(P_+)]
+        \le\operatorname{tr}[T(P_+)]
+        =\operatorname{tr}[P_+],
+    \]
+    where the first inequality uses $\operatorname{tr}[\Pi_+T(P_-)]\ge0$
+    and the second uses $\Pi_+\le\Id$ together with $T(P_+)\ge0$
+    (Lemma~\ref{lem:psd_trace_pairing_bounds}); the final step is trace
+    preservation.
+\end{proof}
+
+\begin{theorem}[Trace-norm contractivity]
+    \label{thm:trace_norm_contractivity}
+    \lean{Matrix.traceNorm_map_le_of_positive_of_tracePreserving}
+    \leanok
+    \uses{def:trace_norm, def:positive_map_rectangular,
+      def:trace_preserving_rectangular}
+    Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving positive linear map.
+    Then for all Hermitian $H\in\MN{D}$,
+    \[
+        \lVert T(H)\rVert_{\mathrm{tr}}\le\lVert H\rVert_{\mathrm{tr}}.
+    \]
+    See \cite[Chapter~8, Theorem~8.16]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:trace_norm_jordan, lem:positive_part_trace_estimate,
+      lem:positive_map_hermitian}
+    Write $H=P_+-P_-$ and $T(H)=Q_+-Q_-$ for the Jordan decompositions.
+    Applying Lemma~\ref{lem:positive_part_trace_estimate} to $H$ and to
+    $-H$ gives $\operatorname{tr}[Q_+]\le\operatorname{tr}[P_+]$ and
+    $\operatorname{tr}[Q_-]\le\operatorname{tr}[P_-]$, so by the Jordan
+    trace-norm formula (Lemma~\ref{lem:trace_norm_jordan}),
+    \[
+        \lVert T(H)\rVert_{\mathrm{tr}}
+        =\operatorname{tr}[Q_+]+\operatorname{tr}[Q_-]
+        \le\operatorname{tr}[P_+]+\operatorname{tr}[P_-]
+        =\lVert H\rVert_{\mathrm{tr}}.
+    \]
+\end{proof}
+
+\begin{corollary}[Trace-norm contractivity on states]
+    \label{cor:trace_norm_contractivity_states}
+    \lean{Matrix.traceNorm_map_sub_map_le_of_positive_of_tracePreserving}
+    \leanok
+    \uses{def:trace_norm, def:positive_map_rectangular,
+      def:trace_preserving_rectangular, def:density_matrices}
+    Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving positive linear map.
+    Then for all density matrices $\rho_1,\rho_2\in\MN{D}$,
+    \[
+        \lVert T(\rho_1)-T(\rho_2)\rVert_{\mathrm{tr}}
+        \le\lVert\rho_1-\rho_2\rVert_{\mathrm{tr}}.
+    \]
+    See \cite[Chapter~8, Eq.~(8.80)]{Wolf2012Quantum}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:trace_norm_contractivity}
+    By linearity $T(\rho_1)-T(\rho_2)=T(\rho_1-\rho_2)$, and
+    $\rho_1-\rho_2$ is Hermitian as a difference of positive semidefinite
+    matrices, so Theorem~\ref{thm:trace_norm_contractivity} applies.
 \end{proof}
 
 \section{Von Neumann entropy}
@@ -1005,6 +1420,84 @@ $\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
             = \sum_j \sum_{\lambda \in \mathrm{spec}(M_j)} -\lambda\log\lambda
             = \sum_j S(M_j).
     \]
+\end{proof}
+
+\begin{theorem}[Entropy of summands on pairwise-annihilating supports]
+    \label{thm:entropy_pairwise_annihilating_support}
+  \lean{vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    Let $A=\sum_j M_j$ be a finite sum of Hermitian matrices.  Suppose there
+    are operators $P_j$ such that
+    \[
+        P_jM_j=M_jP_j=M_j,
+        \qquad
+        P_jP_k=0 \quad (j\ne k).
+    \]
+    Then
+    \[
+        S(A)=\sum_j S(M_j).
+    \]
+    The operators $P_j$ need only resolve the support of $A$; their sum need
+    not be the identity on the ambient space.  This is the support form of
+    the direct-sum entropy identity used in
+    \cite[Appendix~C.2, lines~1760--1770]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_mul_comm, thm:entropy_block_diagonal}
+    Write $A=XY$, where $X$ maps the direct sum of the labelled ambient
+    spaces to the original space by the matrices $M_j$, and $Y$ maps back by
+    the operators $P_j$.  The support and annihilation identities give
+    $YX=\bigoplus_jM_j$.  Reversing the two rectangular factors preserves the
+    nonzero eigenvalues, while any additional eigenvalues are zero.  Entropy
+    is therefore unchanged, and additivity on the block diagonal gives the
+    result.
+\end{proof}
+
+\begin{theorem}[Entropy of a weighted orthogonal direct sum]
+    \label{thm:entropy_weighted_block_diagonal}
+    \lean{vonNeumannEntropy_blockDiagonal_smul}
+    \leanok
+    \uses{thm:entropy_smul, thm:entropy_block_diagonal}
+    Let $\omega_j$ be density matrices and let $p_j\geq0$.  Then
+    \[
+        S\!\left(\bigoplus_j p_j\omega_j\right)
+          = \sum_j\bigl(-p_j\log p_j+p_jS(\omega_j)\bigr).
+    \]
+    In particular, when the $p_j$ form a probability distribution, this is
+    \[
+        S\!\left(\bigoplus_j p_j\omega_j\right)
+          = H(p)+\sum_j p_jS(\omega_j).
+    \]
+    This is the entropy identity used in
+    \cite[Appendix~C.2, lines~1760--1770]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Entropy is additive over the orthogonal blocks.  Applying the scaled-state
+    formula to each block gives
+    $S(p_j\omega_j)=-p_j\log p_j+p_jS(\omega_j)$, and summing over $j$ gives
+    the result.
+\end{proof}
+
+\begin{theorem}[Equality in a positively weighted sum]
+    \label{thm:positive_weighted_sum_termwise_equality}
+    \lean{eq_of_weighted_sum_eq_of_pos_of_le}
+    \leanok
+    Suppose $p_j>0$ and $L_j\leq R_j$ for every $j$.  If
+    \[
+        \sum_j p_jL_j=\sum_j p_jR_j,
+    \]
+    then $L_j=R_j$ for every $j$.  This is the positivity argument applied to
+    strong subadditivity in
+    \cite[Appendix~C.2, lines~1770--1780]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each number $p_j(R_j-L_j)$ is nonnegative, and their sum vanishes.
+    Therefore every one vanishes.  Since $p_j>0$, it follows that
+    $R_j-L_j=0$.
 \end{proof}
 
 \section{Tripartite partial traces}

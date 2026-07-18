@@ -11,8 +11,8 @@ import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 The literal horizontal canonical form of an MPO includes a bond-space gauge
 which identifies its doubled-index letters with repeated weighted copies of a
 minimal basis of normal tensors.  This file records only the resulting equality
-of complete MPV families.  Thus it does not include the literal gauge data of
-arXiv:1606.00608, equation `eq:II_ABasicTensors`, lines 283--297.
+of positive-length MPV families.  Thus it does not include the literal gauge
+data of arXiv:1606.00608, equation `eq:II_ABasicTensors`, lines 283--297.
 
 The MPV representation has the form
 \[
@@ -32,8 +32,8 @@ trace-separation argument; no per-copy separation hypothesis is imposed.
 
 ## Main definitions
 
-* `MPOTensor.HasHorizontalCFMPVRepresentation`: equality of the complete MPV
-  family with that of a BNT sector decomposition.
+* `MPOTensor.HasHorizontalCFMPVRepresentation`: equality of the positive-length
+  MPV family with that of a BNT sector decomposition.
 
 ## Main results
 
@@ -57,11 +57,12 @@ with nonzero weighted copies.  Copies over the same representative are grouped
 by the coefficients \(\sum_q\mu_{j,q}^N\), as in arXiv:1606.00608,
 equation `decBSV`, lines 298--301.
 
-This predicate asserts equality of complete MPV families.  It does not include
-the literal bond-space gauge of equation `eq:II_ABasicTensors`, lines 283--297. -/
+This predicate asserts equality of positive-length MPV families.  It does not
+include the literal bond-space gauge of equation `eq:II_ABasicTensors`,
+lines 283--297. -/
 def HasHorizontalCFMPVRepresentation (M : MPOTensor d D) : Prop :=
   ∃ P : MPSTensor.SectorDecomposition (d * d),
-    MPSTensor.IsBNTCanonicalForm P ∧ MPSTensor.SameMPV₂ M.toMPSTensor P.toTensor
+    MPSTensor.IsBNTCanonicalForm P ∧ MPSTensor.SameMPV₂Pos M.toMPSTensor P.toTensor
 
 end MPOTensor
 
@@ -105,7 +106,7 @@ representative-grouped Lemma L at Appendix C.3, lines 1835--1858. -/
 theorem basis_opposite_insert_eq_of_rotated_mpo_entries
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
       (∑ i : Fin d, P (ρ 0).divNat i *
@@ -125,9 +126,9 @@ theorem basis_opposite_insert_eq_of_rotated_mpo_entries
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (S.basis k) =
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (S.basis k) := by
   exact hCF.insertedTensor_basis_eq_of_two_firstSiteActionAgree
-    (MPSTensor.FirstSiteActionAgree.of_sameMPV hM
+    (MPSTensor.FirstSiteActionAgree.of_sameMPVPos hM
       (MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M P hInv))
-    (MPSTensor.FirstSiteActionAgree.of_sameMPV hM
+    (MPSTensor.FirstSiteActionAgree.of_sameMPVPos hM
       (MPSTensor.firstSiteActionAgree_ketLeft_braRight M P hComm))
 
 end MPOTensor

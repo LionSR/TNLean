@@ -189,6 +189,21 @@ theorem WordTupleSpanTop.exists_one_letter_simultaneous_left_inverse
   simpa [wordTuple, target, Fintype.linearCombination_apply,
     Matrix.sum_apply, Matrix.smul_apply, List.ofFn_succ] using hentry
 
+/-- A simultaneous left inverse in the ket--bra coordinates of an MPO tensor
+family.  It selects the block label and both virtual matrix indices.
+
+This is the inverse identity used in arXiv:1606.00608, Appendix C.2, lines
+1666--1676, and in the complete zipper fusion data of arXiv:1511.08090,
+lines 269--277. -/
+def IsMPOBlockLeftInverse
+    {p : ℕ} (M : (k : Fin r) → MPOTensor p (dim k))
+    (C : Matrix (BlockEntryIndex dim) (Fin p × Fin p) ℂ) : Prop :=
+  ∀ (k j : Fin r) (x y : Fin (dim k)) (x' y' : Fin (dim j)),
+    (∑ i : Fin p, ∑ l : Fin p, C ⟨k, x, y⟩ (i, l) * M j i l x' y') =
+      if h : k = j then
+        if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
+      else 0
+
 /-- The simultaneous one-letter inverse in the ket--bra coordinates of an MPO
 tensor family.  Its orientation is the one used by the complete zipper fusion
 data.
@@ -199,13 +214,7 @@ theorem WordTupleSpanTop.exists_mpo_block_left_inverse
     {p : ℕ} {M : (k : Fin r) → MPOTensor p (dim k)}
     (hSpan : WordTupleSpanTop (fun k ↦ (M k).toMPSTensor) 1) :
     ∃ C : Matrix (BlockEntryIndex dim) (Fin p × Fin p) ℂ,
-      ∀ (k j : Fin r) (x y : Fin (dim k))
-        (x' y' : Fin (dim j)),
-        (∑ i : Fin p, ∑ l : Fin p,
-          C ⟨k, x, y⟩ (i, l) * M j i l x' y') =
-            if h : k = j then
-              if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
-            else 0 := by
+      IsMPOBlockLeftInverse M C := by
   obtain ⟨C, hC⟩ := hSpan.exists_one_letter_simultaneous_left_inverse
   refine ⟨fun z il ↦ C z (finProdFinEquiv il), ?_⟩
   intro k j x y x' y'

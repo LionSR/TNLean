@@ -360,8 +360,10 @@ The matched coefficient identities give the sectorwise power-sum comparison
   \sum_q \mu_{\beta(k),q}^N = \sum_q (\zeta_k \nu_{k,q})^N
 \]
 for all sufficiently large \(N\).  Finite power-sum comparison then gives the
-copy permutations and weight identities. -/
-theorem ft_sector_bnt_equal_matched_copy_weight_witnessesPos
+copy permutations and weight identities.
+
+Source: CPSV16, Appendix MPV proof, lines 1187–1192. -/
+theorem ft_sector_bnt_equal_matched_copy_weight_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -378,7 +380,7 @@ theorem ft_sector_bnt_equal_matched_copy_weight_witnessesPos
               Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
       Nonempty (SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ) := by
   classical
-  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPVPos hP hQ hEqual
+  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPV hP hQ hEqual
   let hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k :=
     fun k => (hβMatchFull k).choose
   let hGPE : ∀ k : Fin Q.basisCount,
@@ -420,31 +422,12 @@ theorem ft_sector_bnt_equal_matched_copy_weight_witnessesPos
     intro k hzero
     have hnorm := hζ_norm k
     simp [hzero] at hnorm
-  have hCoeff := coeff_identity_via_matched_mpv_phasePos hP hEqual β ζ hMpv
+  have hCoeff := coeff_identity_via_matched_mpv_phase hP hEqual β ζ
+    (fun k N _hN σ => hMpv k N σ)
   let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
     SectorBNTCopyWeightMatching.of_coeff_identity
       (P := P) (Q := Q) β ζ hζ_ne hCoeff
   exact ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ⟨W⟩⟩
-
-/-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem ft_sector_bnt_equal_matched_copy_weight_witnesses
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
-      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
-      (ζ : Fin Q.basisCount → ℂ)
-      (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
-      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
-      (∀ (k : Fin Q.basisCount) (i : Fin d),
-        Q.basis k i =
-          ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
-            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
-            (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
-              Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
-      Nonempty (SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ) :=
-  ft_sector_bnt_equal_matched_copy_weight_witnessesPos
-    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
 
 /-- **BNT equal-MPV sector-witness theorem.**
 
@@ -452,8 +435,10 @@ If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
 same MPV family, then their BNT basis sectors are bijectively matched by
 gauge-phase equivalence.  For each matched sector, the copy multiplicities
 agree and the raw copy weights agree after multiplying by the inverse of the
-gauge phase and permuting the copies. -/
-theorem ft_sector_bnt_equal_sector_dataPos
+gauge phase and permuting the copies.
+
+Source: CPSV16, §II.C lines 354–361 and Appendix MPV proof, lines 1182–1188. -/
+theorem ft_sector_bnt_equal_sector_data
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -466,7 +451,7 @@ theorem ft_sector_bnt_equal_sector_dataPos
           ∀ q : Fin (Q.copies k), Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ q) := by
   classical
   obtain ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ⟨W⟩⟩ :=
-    ft_sector_bnt_equal_matched_copy_weight_witnessesPos
+    ft_sector_bnt_equal_matched_copy_weight_witnesses
       (P := P) (Q := Q) hP hQ hEqual
   let hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k) :=
@@ -482,21 +467,6 @@ theorem ft_sector_bnt_equal_sector_dataPos
   refine ⟨β, hMatch, hCopies, ζ, hζ_norm, ?_⟩
   intro k
   exact ⟨W.copy_equiv k, W.weight_eq k⟩
-
-/-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem ft_sector_bnt_equal_sector_data
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount),
-      (∀ k, ∃ h : P.basisDim (β k) = Q.basisDim k,
-        GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k)) ∧
-      (∀ k, P.copies (β k) = Q.copies k) ∧
-      ∃ ζ : Fin Q.basisCount → ℂ, (∀ k, ‖ζ k‖ = 1) ∧
-        ∀ k, ∃ τ : Fin (Q.copies k) ≃ Fin (P.copies (β k)),
-          ∀ q : Fin (Q.copies k), Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ q) :=
-  ft_sector_bnt_equal_sector_dataPos
-    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
 
 /-- **Global gauge in matched flattened coordinates.**
 
@@ -516,8 +486,10 @@ matrix `⊕_k (𝟙_{r_k} ⊗ X_k)`.  The remaining conversion from this
 matched-coordinate presentation to a literal `GaugeEquiv P.toTensor Q.toTensor`
 is only a coordinate permutation/cast of the flattened direct sum and is
 intentionally not hidden here; the theorem exposes the explicit CPSV16
-Appendix MPV proof witness rather than an opaque existential. -/
-theorem ft_sector_bnt_equal_global_gaugePos
+Appendix MPV proof witness rather than an opaque existential.
+
+Source: CPSV16, Appendix MPV proof, lines 1189–1192. -/
+theorem ft_sector_bnt_equal_global_gauge
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -550,7 +522,7 @@ theorem ft_sector_bnt_equal_global_gaugePos
                   (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
   classical
   obtain ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ⟨W⟩⟩ :=
-    ft_sector_bnt_equal_matched_copy_weight_witnessesPos
+    ft_sector_bnt_equal_matched_copy_weight_witnesses
       (P := P) (Q := Q) hP hQ hEqual
   have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
     intro k hzero
@@ -567,48 +539,5 @@ theorem ft_sector_bnt_equal_global_gaugePos
       (P := P) (Q := Q) β hDim ζ Xblock hζ_ne hConj W
   exact ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, W.weight_eq, X, hXdef,
     hGauge⟩
-
-/-- Reformulation for the all-length `SameMPV₂` form (the CPSV16 Corollary II.2
-convention).
-
-The hypothesis is the source's all-length MPV equality, but the proof consumes only its
-positive-length restriction (`hEqual.toSameMPV₂Pos`): the empty-word (`N = 0`) component
-of `SameMPV₂` carries only the bond-dimension count, which the BNT construction already
-fixes, so it never enters the gauge-matching argument. The all-length form is kept in the
-signature to match the source statement; see
-`docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`. -/
-theorem ft_sector_bnt_equal_global_gauge
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
-      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
-      (_hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k)
-      (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
-      (ζ : Fin Q.basisCount → ℂ)
-      (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
-      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
-      (∀ (k : Fin Q.basisCount) (i : Fin d),
-        Q.basis k i =
-          ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
-            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
-            (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
-              Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
-      (∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
-        Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q)) ∧
-      ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
-        X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
-        ∀ i : Fin d,
-          toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
-            (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
-              (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-              toTensorFromBlocks (d := d)
-                (μ := matched_p_weight (P := P) (Q := Q) β τ)
-                (matched_p_basis (P := P) (Q := Q) β hDim) i *
-              (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
-                Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
-                  (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :=
-  ft_sector_bnt_equal_global_gaugePos
-    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
 
 end MPSTensor

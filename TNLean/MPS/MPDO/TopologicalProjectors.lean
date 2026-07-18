@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.OrthogonalProjection
 import TNLean.Channel.Irreducible.Basic
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 
@@ -40,25 +41,6 @@ namespace MPOTensor.BNTFusionIsometryFamily
 
 variable {g p : ℕ}
 variable (Fam : BNTFusionIsometryFamily (Fin g) p)
-
-private theorem isStarProjection_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
-    {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n]
-    (U : Matrix m n ℂ) (Q : Matrix m m ℂ)
-    (hQ : IsStarProjection Q) (hU : U * Uᴴ = 1) :
-    IsStarProjection (Uᴴ * Q * U) := by
-  rw [isStarProjection_iff']
-  constructor
-  · calc
-      (Uᴴ * Q * U) * (Uᴴ * Q * U) = Uᴴ * (Q * ((U * Uᴴ) * (Q * U))) := by
-        simp only [Matrix.mul_assoc]
-      _ = Uᴴ * (Q * (Q * U)) := by rw [hU, Matrix.one_mul]
-      _ = Uᴴ * ((Q * Q) * U) := by simp only [Matrix.mul_assoc]
-      _ = Uᴴ * Q * U := by rw [hQ.isIdempotentElem.eq, Matrix.mul_assoc]
-  · rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-      Matrix.conjTranspose_conjTranspose]
-    have hQadj : Qᴴ = Q := by
-      simpa [Matrix.star_eq_conjTranspose] using hQ.isSelfAdjoint.star_eq
-    rw [hQadj, Matrix.mul_assoc]
 
 /-- The single fusion layer of the operator $Q$ at source lines 999--1010,
 with terminal matrices $P_\gamma$.
@@ -158,9 +140,9 @@ theorem conjugatedProjectorQBlock_isOrthogonalProjection
     (hP : ∀ γ : Fin g, IsStarProjection (P γ))
     (α β : Fin g) :
     IsOrthogonalProjection (Fam.conjugatedProjectorQBlock P α β) :=
-  (isStarProjection_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
-    (Fam.fusionIsometry α β) (Fam.projectorQBlock P α β)
+  (IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
     (Fam.projectorQBlock_isStarProjection c hχ hLI P hP α β)
+    (Fam.fusionIsometry α β)
     (Fam.fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent
       hBNT c hχ hLI α β)).isOrthogonalProjection
 

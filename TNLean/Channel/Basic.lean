@@ -54,11 +54,11 @@ open Matrix Finset
 
 section PositiveMap
 
-variable {n : Type*} [Fintype n] [DecidableEq n]
+variable {m n : Type*} [Fintype n] [DecidableEq n]
 
-/-- A linear map `E : M_n(ℂ) →ₗ[ℂ] M_n(ℂ)` is **positive** if it maps
+/-- A linear map `E : M_n(ℂ) →ₗ[ℂ] M_m(ℂ)` is **positive** if it maps
 positive semidefinite matrices to positive semidefinite matrices. -/
-def IsPositiveMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
+def IsPositiveMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ) : Prop :=
   ∀ X : Matrix n n ℂ, X.PosSemidef → (E X).PosSemidef
 
 /-- A linear map is **trace-preserving** if `Tr(E(X)) = Tr(X)` for all `X`. -/
@@ -182,13 +182,14 @@ end PositiveMap
 
 section PositiveMapHermitian
 
-variable {n : Type*} [Finite n]
+variable {m n : Type*} [Finite m] [Finite n]
 
 /-- A positive matrix map is a positive linear map: if `A ≤ B`, then `E A ≤ E B`. -/
 def IsPositiveMap.toPositiveLinearMap
-    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} (hE : IsPositiveMap E) :
-    Matrix n n ℂ →ₚ[ℂ] Matrix n n ℂ := by
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ} (hE : IsPositiveMap E) :
+    Matrix n n ℂ →ₚ[ℂ] Matrix m m ℂ := by
   classical
+  letI := Fintype.ofFinite m
   letI := Fintype.ofFinite n
   exact
     { toLinearMap := E
@@ -199,10 +200,11 @@ def IsPositiveMap.toPositiveLinearMap
 
 /-- Positive maps preserve Hermiticity. -/
 theorem IsPositiveMap.map_isHermitian
-    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ}
     (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :
     (E X).IsHermitian := by
   classical
+  letI := Fintype.ofFinite m
   letI := Fintype.ofFinite n
   exact IsSelfAdjoint.isHermitian
     (hX.isSelfAdjoint.map' hE.toPositiveLinearMap)

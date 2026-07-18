@@ -148,7 +148,8 @@ private lemma mpv_twoBlockTensor_eq {n m : ℕ} (A₁ : MPSTensor d n) (A₂ : M
 
 Every MPS tensor `A : MPSTensor d D` is `SameMPV₂`-equivalent to a block-diagonal tensor
 `toTensorFromBlocks (μ ≡ 1) blocks` whose every block is irreducible (has no nontrivial invariant
-orthogonal projection).
+orthogonal projection).  The direct-sum construction also gives the structural
+dimension identity `∑ k, dim k = D`.
 
 The proof proceeds by strong induction on `D`: in the inductive step, `HasInvariantProj A` gives a
 nontrivial invariant projection `P`, which we use via
@@ -169,13 +170,15 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
     ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
       (∀ k, IsIrreducibleTensor (blocks k)) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+      ∑ k : Fin r, dim k = D := by
   -- Formulate the statement for all tensors of a given bond dimension (for strong induction).
   suffices h : ∀ (D : ℕ) (A : MPSTensor d D),
       ∃ r : ℕ, ∃ dim : Fin r → ℕ,
       ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
         (∀ k, IsIrreducibleTensor (blocks k)) ∧
-        SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks)
+        SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+        ∑ k : Fin r, dim k = D
     from h D A
   intro D
   induction D using Nat.strong_induction_on with
@@ -184,18 +187,19 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
   -- ── Case split: is `A` already irreducible? ──────────────────────────────────────────────────
   by_cases hirr : IsIrreducibleTensor A
   · -- A is already irreducible: take a single block.
-    refine ⟨1, fun _ => D, fun _ => A, fun _ => hirr, fun N σ => ?_⟩
+    refine ⟨1, fun _ => D, fun _ => A, fun _ => hirr, ?_, by simp⟩
+    intro N σ
     rw [mpv_toTensorFromBlocks_eq_sum]
     simp
   · -- A has a nontrivial invariant projection; split into two strictly-smaller blocks.
     rw [IsIrreducibleTensor, not_not] at hirr
     obtain ⟨P, hP_proj, hP0, hP1, hLower⟩ := hirr
     -- Apply the strict two-block decomposition.
-    obtain ⟨n, m, _hnm, hn_lt, hm_lt, A₁, A₂, hSame_two⟩ :=
+    obtain ⟨n, m, hnm, hn_lt, hm_lt, A₁, A₂, hSame_two⟩ :=
       exists_twoBlock_decomp_of_lowerZero_strict A P hP_proj hLower hP0 hP1
     -- Apply the induction hypothesis to each block.
-    obtain ⟨r₁, dim₁, blocks₁, hirr₁, hIH₁⟩ := ih n hn_lt A₁
-    obtain ⟨r₂, dim₂, blocks₂, hirr₂, hIH₂⟩ := ih m hm_lt A₂
+    obtain ⟨r₁, dim₁, blocks₁, hirr₁, hIH₁, hDim₁⟩ := ih n hn_lt A₁
+    obtain ⟨r₂, dim₂, blocks₂, hirr₂, hIH₂, hDim₂⟩ := ih m hm_lt A₂
     -- ── Combine the two block decompositions ─────────────────────────────────────────────────
     -- Combined number of blocks and dimension function.
     let combinedDim : Fin (r₁ + r₂) → ℕ := Fin.addCases dim₁ dim₂
@@ -214,7 +218,7 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
           cast (congr_arg (MPSTensor d) (h_left k).symm) (blocks₁ k))
         (fun (k : Fin r₂) =>
           cast (congr_arg (MPSTensor d) (h_right k).symm) (blocks₂ k))
-    refine ⟨r₁ + r₂, combinedDim, combinedBlocks, ?_, ?_⟩
+    refine ⟨r₁ + r₂, combinedDim, combinedBlocks, ?_, ?_, ?_⟩
     -- ── Irreducibility of the combined blocks ─────────────────────────────────────────────────
     · intro k
       -- Split on whether k is in the left or right half.
@@ -291,5 +295,8 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
         _ = ∑ k : Fin (r₁ + r₂), (1 : ℂ) ^ N • mpv (combinedBlocks k) σ := hsplit.symm
         _ = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin (r₁ + r₂) => (1 : ℂ))
               combinedBlocks) σ := hexpand_combined.symm
+    -- The dimension identity is inherited directly from the two summands.
+    · rw [Fin.sum_univ_add]
+      simpa [combinedDim, hDim₁, hDim₂] using hnm
 
 end MPSTensor

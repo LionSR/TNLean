@@ -1161,16 +1161,18 @@ maps.
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
     \leanok
-    The trace-pairing adjoint $E^*$ of a linear map on matrices is the
-    adjoint for the bilinear pairing $(A,B)\mapsto \operatorname{tr}(AB)$.
+    The trace-pairing adjoint $E^* : \MN{D'} \to \MN{D}$ of a linear map
+    $E : \MN{D} \to \MN{D'}$ between matrix algebras of possibly different
+    dimensions is the adjoint for the bilinear pairing
+    $(A,B)\mapsto \operatorname{tr}(AB)$.
 \end{definition}
 
 \begin{theorem}[Trace-pairing adjoint identity]\label{thm:trace_pairing_adjoint_identity}
     \lean{Matrix.trace_traceAdjointMap_mul}
     \leanok
     \uses{def:trace_pairing_adjoint}
-    For every linear map $E : \MN{D} \to \MN{D}$ and all matrices $\rho$
-    and $X$, one has
+    For every linear map $E : \MN{D} \to \MN{D'}$, every $\rho \in \MN{D'}$,
+    and every $X \in \MN{D}$, one has
     \[
         \operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X)).
     \]
@@ -1189,15 +1191,16 @@ maps.
     \lean{Matrix.traceAdjointMap_traceAdjointMap}
     \leanok
     \uses{def:trace_pairing_adjoint, thm:trace_nondeg}
-    For every linear map $E : \MN{D} \to \MN{D}$, the trace-pairing adjoint
+    For every linear map $E : \MN{D} \to \MN{D'}$, the trace-pairing adjoint
     of $E^*$ is $E$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Fix an arbitrary matrix $N\in\MN{D}$.  The adjoint identity
+    Fix $X\in\MN{D}$ and an arbitrary matrix $N\in\MN{D'}$.  The adjoint
+    identity
     $\operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X))$, applied first
-    to $E^*$ and then to $E$, gives
+    to $E^* : \MN{D'} \to \MN{D}$ and then to $E$, gives
     \[
         \operatorname{tr}((E^*)^*(X)N)
         = \operatorname{tr}(X E^*(N))
@@ -1205,8 +1208,9 @@ maps.
         = \operatorname{tr}(N E(X))
         = \operatorname{tr}(E(X)N).
     \]
-    Since this holds for every $N$ and the trace pairing is nondegenerate,
-    $(E^*)^*=E$.
+    Both $(E^*)^*(X)$ and $E(X)$ lie in $\MN{D'}$, so, since this holds for
+    every $N\in\MN{D'}$, nondegeneracy of the trace pairing on $\MN{D'}$
+    gives $(E^*)^*=E$.
 \end{proof}
 
 \begin{theorem}[Self-duality of the positive semidefinite cone]
@@ -1252,6 +1256,182 @@ maps.
     Since $E(B)\geq 0$, the right side is nonnegative by positivity of the
     trace product of two positive semidefinite matrices.  Self-duality of the
     positive semidefinite cone therefore gives $E^*(\rho)\geq 0$.
+\end{proof}
+
+\begin{theorem}[Density representation of positive matrix functionals]
+    \label{thm:positive_functional_density_representation}
+    \lean{Matrix.exists_density_of_positive_functional}
+    \leanok
+    Let $f : \MN{D} \to \C$ be a complex-linear functional, where $D>0$.  If
+    $f(X) \geq 0$ for every $X \geq 0$ and $f(\Id)=1$, then there is a density
+    matrix $\rho \in \MN{D}$ such that, for every $X \in \MN{D}$,
+    \[
+        f(X) = \tr(\rho X).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_pairing_adjoint_identity, thm:trace_pairing_adjoint_positive,
+      def:mpdo_faithful_uniform_density, thm:mpdo_faithful_uniform_density}
+    Define $F : \MN{D} \to \MN{D}$ by $F(X) = f(X)\Id$; for $X \geq 0$ one has
+    $f(X) \geq 0$, so $F(X) = f(X)\Id \geq 0$ and $F$ is positive.
+    Set $\sigma = D^{-1}\Id$ and $\rho = F^*(\sigma)$.  Positivity of the
+    trace-pairing adjoint gives $\rho \geq 0$, while the adjoint identity gives
+    \[
+        \tr(\rho X) = \tr(\sigma F(X)) = f(X).
+    \]
+    Taking $X = \Id$ yields $\tr(\rho) = 1$.
+\end{proof}
+
+\begin{lemma}[Rank-one domination]
+    \label{lem:posSemidef_rankone_domination}
+    \lean{Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec}
+    \leanok
+    Let $A\in\MN{D}$ be positive semidefinite, let $c\in\C$, and let
+    $\psi\in\C^D$.  If
+    \[
+        A\leq c\ketbra{\psi}{\psi},
+    \]
+    then there is a nonnegative scalar $a$ such that
+    \[
+        A=a\ketbra{\psi}{\psi}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The assertion is immediate when $\psi=0$.  Otherwise set
+    \[
+        s=\langle\psi,\psi\rangle,
+        \qquad P=\ketbra{\psi}{\psi},
+        \qquad Q=s^{-1}P.
+    \]
+    Then $Q$ is the orthogonal projection onto $\C\psi$.  Write
+    $B=cP-A\geq0$.  Since $A+B=cP$ vanishes on the kernel of $Q$, positivity
+    implies
+    \[
+        A(\Id-Q)=0.
+    \]
+    Taking adjoints gives $(\Id-Q)A=0$, and therefore $A=QAQ$.  Finally,
+    \[
+        PAP=\langle\psi,A\psi\rangle P,
+        \qquad
+        A=s^{-2}\langle\psi,A\psi\rangle P.
+    \]
+    The coefficient is nonnegative because $A\geq0$ and $s>0$.
+\end{proof}
+
+% Scope restriction documented in
+% docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex.
+\begin{theorem}[Positive retractions onto one matrix factor]
+    \label{thm:positive_retraction_one_matrix_factor}
+    \lean{Matrix.exists_density_of_positive_retraction_onto_right_factor}
+    \leanok
+    Let $m,d>0$, and let
+    $E:\MN{md}\to\MN{md}$ be a positive complex-linear map.  Suppose that the
+    image of $E$ is contained in $\Id_m\otimes\MN{d}$ and that
+    \[
+        E(\Id_m\otimes X)=\Id_m\otimes X
+    \]
+    for every $X\in\MN{d}$.  Then there is a density matrix
+    $\rho\in\MN{m}$ such that, for every $A\in\MN{md}$,
+    \[
+        E(A)=\Id_m\otimes
+        \operatorname{tr}_m\!\left((\rho\otimes\Id_d)A\right).
+    \]
+    This is the one-factor case of
+    \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:posSemidef_rankone_domination,
+      thm:positive_functional_density_representation,
+      thm:rankone_ray_scalar_rigidity}
+    Let $R(A)$ be the right tensor factor of $E(A)$, so that
+    $E(A)=\Id_m\otimes R(A)$.  For $Y\geq0$ and
+    $P_\psi=\ketbra{\psi}{\psi}$, the inequality
+    $Y\leq\tr(Y)\Id_m$ and positivity give
+    \[
+        0\leq R(Y\otimes P_\psi)\leq\tr(Y)P_\psi.
+    \]
+    Hence, for each $v\in\C^d$, there is a scalar $c_v$ such that
+    \[
+        R(Y\otimes P_v)=c_vP_v.
+    \]
+    By rank-one ray scalar rigidity, applied to the map
+    $X\mapsto R(Y\otimes X)$, there is a scalar $c_Y$ such that
+    \[
+        R(Y\otimes X)=c_YX
+    \]
+    for every $X\in\MN{d}$.
+
+    Fix a coordinate projection $P_0$ and define
+    $f(Y)=R(Y\otimes P_0)_{00}$.  Rank-one polarization gives
+    \[
+        R(Y\otimes X)=f(Y)X
+    \]
+    for all $Y\in\MN{m}$ and $X\in\MN{d}$.  Positivity of $R$ gives
+    $f(Y)\geq0$ when $Y\geq0$, and the retraction property gives
+    $f(\Id_m)=1$.  The density representation of positive matrix functionals
+    therefore supplies a density matrix $\rho$ satisfying
+    $f(Y)=\tr(\rho Y)$.
+
+    Finally, on simple tensors,
+    \[
+        \operatorname{tr}_m\!\left((\rho\otimes\Id_d)(Y\otimes X)\right)
+        =\tr(\rho Y)X=R(Y\otimes X).
+    \]
+    Since matrix units are simple tensors, linearity proves the formula for
+    every $A\in\MN{md}$.
+\end{proof}
+
+% The remaining fixed-point-projection application is documented in
+% docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
+\begin{theorem}[Positive retractions onto finite-dimensional star-algebras]
+    \label{thm:positive_retraction_finite_star_algebra}
+    \lean{StarSubalgebra.exists_block_densities_of_positive_retraction}
+    \leanok
+    Let $S\subseteq\MN{D}$ be a unital $*$-subalgebra, and let
+    $E:\MN{D}\to\MN{D}$ be a positive complex-linear map whose image lies in
+    $S$ and whose restriction to $S$ is the identity.  There are positive
+    integers $d_k,m_k$, a unitary $U$, and density matrices
+    $\rho_k\in\MN{m_k}$ such that
+    \[
+        U^*SU=\bigoplus_k \Id_{m_k}\otimes\MN{d_k}
+    \]
+    and, for every $A\in\MN{D}$,
+    \[
+        E(A)=U\left(\bigoplus_k \Id_{m_k}\otimes
+        \operatorname{tr}_{m_k}\!\left(
+          (\rho_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*.
+    \]
+    Equivalently, cyclicity of the partial trace permits the factor
+    $\rho_k\otimes\Id_{d_k}$ to be placed on the right of $(U^*AU)_{kk}$.
+    This is \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:positive_retraction_one_matrix_factor,
+      thm:starSubalgebra_unitary_block_diagonal_iff}
+    Conjugate by $U$ and identify the ambient space with
+    $\bigoplus_k\C^{m_k}\otimes\C^{d_k}$.  Let $P_k$ be the central projection
+    onto the $k$-th summand and let $T_k$ be the $k$-th diagonal block of the
+    conjugated map.  Since $T_k(\Id-P_k)=0$, positivity implies
+    \[
+        T_k((\Id-P_k)A)=T_k(A(\Id-P_k))=0.
+    \]
+    Hence $T_k(A)=T_k(P_kAP_k)$.  The restriction to the $k$-th diagonal
+    summand is a positive retraction onto
+    $\Id_{m_k}\otimes\MN{d_k}$, so the one-factor theorem gives the density
+    matrix $\rho_k$.  Taking the direct sum and conjugating back proves the
+    formula.  Entrywise expansion of the partial trace gives
+    \[
+      \operatorname{tr}_{m_k}((\rho_k\otimes\Id)A_{kk})
+      =\operatorname{tr}_{m_k}(A_{kk}(\rho_k\otimes\Id)).
+    \]
 \end{proof}
 
 \begin{theorem}[Trace-pairing adjoints preserve positivity exactly]\label{thm:trace_pairing_adjoint_positive_iff}
@@ -2024,8 +2204,8 @@ adjacent cones.
     \lean{IsPositiveMap.map_le_map}
     \leanok
     \uses{def:positive_map}
-    If $T : \MN{D} \to \MN{D}$ is positive and $A \le B$, then
-    $T(A) \le T(B)$.
+    If $T : \MN{n} \to \MN{m}$ is positive and
+    $A,B\in\MN{n}$ satisfy $A \le B$, then $T(A) \le T(B)$ in $\MN{m}$.
 \end{theorem}
 
 \begin{proof}
@@ -2038,8 +2218,8 @@ adjacent cones.
     \lean{IsPositiveMap.map_conjTranspose}
     \leanok
     \uses{def:positive_map_is_positive_linear_map}
-    If $T : \MN{D} \to \MN{D}$ is positive, then
-    $T(A^\dagger) = T(A)^\dagger$ for all $A \in \MN{D}$.
+    If $T : \MN{n} \to \MN{m}$ is positive, then
+    $T(A^\dagger) = T(A)^\dagger$ for all $A \in \MN{n}$.
 \end{theorem}
 
 \begin{proof}
@@ -2047,7 +2227,7 @@ adjacent cones.
     Regard $T$ as the associated positive linear map
     (Definition~\ref{def:positive_map_is_positive_linear_map}). For positive
     linear maps between matrix $C^*$-algebras, $T(A^\ast)=T(A)^\ast$.
-    Since the star on $\MN{D}$ is the conjugate transpose,
+    Since the star on each matrix algebra is the conjugate transpose,
     $T(A^\dagger)=T(A^\ast)=T(A)^\ast=T(A)^\dagger$.
 \end{proof}
 

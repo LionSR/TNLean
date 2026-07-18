@@ -78,6 +78,36 @@ noncomputable def changePhysicalBasis {e : ℕ}
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) : MPOTensor e D :=
   fun i j beta alpha ↦ (V * physicalSlice M beta alpha * Vᴴ) i j
 
+/-- Successive changes of physical coordinates multiply their coordinate
+matrices. -/
+theorem changePhysicalBasis_changePhysicalBasis
+    {a b : ℕ} (U : Matrix (Fin a) (Fin b) ℂ)
+    (V : Matrix (Fin b) (Fin d) ℂ) (M : MPOTensor d D) :
+    changePhysicalBasis U (changePhysicalBasis V M) =
+      changePhysicalBasis (U * V) M := by
+  ext i j beta alpha
+  change (U * (V * physicalSlice M beta alpha * Vᴴ) * Uᴴ) i j =
+    ((U * V) * physicalSlice M beta alpha * (U * V)ᴴ) i j
+  rw [Matrix.conjTranspose_mul]
+  simp only [Matrix.mul_assoc]
+
+/-- A physical coordinate change commutes with a scalar multiplying every
+local MPO matrix. -/
+theorem changePhysicalBasis_smul
+    {e : ℕ} (V : Matrix (Fin e) (Fin d) ℂ) (c : ℂ) (M : MPOTensor d D) :
+    changePhysicalBasis V (c • M) = c • changePhysicalBasis V M := by
+  ext i j beta alpha
+  simp only [changePhysicalBasis, physicalSlice, Pi.smul_apply,
+    Matrix.smul_apply, smul_eq_mul, Matrix.mul_apply,
+    Matrix.conjTranspose_apply]
+  simp_rw [Finset.mul_sum, Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro x _
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro y _
+  ring
+
 theorem sectorCoordinateTensor_eq_changePhysicalBasis
     (F : PhysicalSectorFactorization K) :
     F.sectorCoordinateTensor = changePhysicalBasis F.physicalCoordinateMatrix K := by

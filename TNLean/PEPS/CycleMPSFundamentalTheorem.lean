@@ -51,11 +51,10 @@ per edge, and merges the constants into one because the relation
 nonzero tensor `B`.
 
 The matrix-level hypotheses match the source corollary: `0 < L` (implicit in
-blocking `L` consecutive sites), `L`-block injectivity of both tensors, and
-equality of the closed-chain coefficients at the single size `n`.  The
-positivity side conditions of the graph-level corollary are discharged here,
-not assumed: a vanishing bond dimension makes the conclusion trivial, and a
-vanishing physical dimension contradicts block injectivity.
+blocking `L` consecutive sites), positive bond dimension, `L`-block
+injectivity of both tensors, and equality of the closed-chain coefficients at
+the single size `n`.  A vanishing physical dimension is already excluded by
+block injectivity.
 
 ## References
 
@@ -446,13 +445,13 @@ Source: arXiv:1804.04964, Section 3, first corollary after the theorem
 labelled `normal`, lines 1585--1631 of `Papers/1804.04964/paper_normal.tex`,
 strengthened to `n ≥ 2L + 1` per line 1623 and Section `normal_alt`. -/
 theorem fundamentalTheorem_normalMPS {n L d D : ℕ} [NeZero n] (hL : 0 < L)
-    (hn : 2 * L + 1 ≤ n)
+    (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
     (A B : MPSTensor d D) (hA : MPSTensor.IsNBlkInjective A L)
     (hB : MPSTensor.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ Z : Fin n → GL (Fin D) ℂ, ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) :=
-  fundamentalTheorem_normalMPS_of_overlap hL hn A B hA hB hAB
+  fundamentalTheorem_normalMPS_of_overlap hL hn hD A B hA hB hAB
 
 /-- **Uniqueness clause of the Fundamental Theorem for translation-invariant
 normal MPS on a closed chain** (arXiv:1804.04964, Section 3, first corollary
@@ -477,7 +476,8 @@ Source: arXiv:1804.04964, Section 3, first corollary after the theorem
 labelled `normal`, lines 1585--1631 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL : 0 < L)
-    (hn : 3 * L ≤ n) (A B : MPSTensor d D) (hA : MPSTensor.IsNBlkInjective A L)
+    (hn : 3 * L ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
+    (hA : MPSTensor.IsNBlkInjective A L)
     (hB : MPSTensor.IsNBlkInjective B L) (Z Z' : Fin n → GL (Fin D) ℂ)
     (hZ : ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ))
@@ -485,12 +485,6 @@ theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL
       B i = ((Z' v)⁻¹ : GL (Fin D) ℂ) * A i * (Z' (v + 1) : GL (Fin D) ℂ)) :
     ∃ c : ℂˣ, ∀ v : Fin n, (Z' v : Matrix (Fin D) (Fin D) ℂ) =
       (c : ℂ) • (Z v : Matrix (Fin D) (Fin D) ℂ) := by
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · subst hD0
-    refine ⟨1, fun v => ?_⟩
-    apply Matrix.ext
-    intro a b
-    exact a.elim0
   have hn3 : 3 ≤ n := by omega
   have hLn : L < n := by omega
   -- Convert each per-bond family back into a per-edge family.

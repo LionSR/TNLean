@@ -91,9 +91,9 @@ private lemma overlap_norm_tendsto_one_of_gaugePhase_cast
 
 /-- Nonzero sector dimensions propagate one step around a cyclic sector decomposition.
 
-The proof uses only the projection-shift and trace identities in a cyclic sector decomposition:
-if `dim u ≠ 0` then the projection `P u` is nonzero by the `N = 0` trace identity. If
-`P (u + 1)` were zero, the cyclic relation `E†(P (u + 1)) = P u` would force `P u = 0`,
+The corner equivalences identify a positive-dimensional matrix algebra with the corner of
+`P u`, so `P u` is nonzero. If `dim (u + 1) = 0`, the corner of `P (u + 1)` is trivial and
+therefore `P (u + 1) = 0`; the cyclic relation `E†(P (u + 1)) = P u` then gives a
 contradiction. -/
 private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
     [NeZero D] (A : MPSTensor d D)
@@ -104,30 +104,39 @@ private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
     {u : Fin m} (hNondeg : dim u ≠ 0) :
     dim (u + 1) ≠ 0 := by
   classical
-  obtain ⟨P, _φ, hPproj, _hPsum, hShift, _hComm, hTrace, _hIntertwine, _hMul, _hStar⟩ :=
+  obtain ⟨P, φ, hPproj, _hPsum, hShift, _hComm, _hTrace, _hIntertwine, _hMul, _hStar⟩ :=
     hCyclic
+  have hPu_ne : P u ≠ 0 := by
+    intro hPu
+    have hφ_one_zero :
+        φ u (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ) = 0 := by
+      apply Subtype.ext
+      have hmem := (φ u (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ)).property
+      calc
+        (φ u (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ)).1 =
+            P u * (φ u (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ)).1 * P u := hmem.symm
+        _ = 0 := by simp only [hPu, zero_mul, mul_zero]
+    have hone_zero : (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ) = 0 := by
+      apply (φ u).injective
+      simpa only [map_zero] using hφ_one_zero
+    haveI : NeZero (dim u) := ⟨hNondeg⟩
+    exact one_ne_zero hone_zero
   intro hzero
-  have htrace_succ :
-      Matrix.trace (P (u + 1)) = 0 := by
-    have h0 := hTrace (u + 1) 0 Fin.elim0
-    simp only [mpv, coeff, List.ofFn_zero, evalWord_nil, Matrix.mul_one] at h0
-    rw [← h0, Matrix.trace_one, Fintype.card_fin, hzero, Nat.cast_zero]
-  have hPsucc_zero : P (u + 1) = 0 :=
-    (isOrthogonalProjection_posSemidef (hPproj (u + 1))).trace_eq_zero_iff.mp htrace_succ
+  have hPsucc_zero : P (u + 1) = 0 := by
+    let Q : cornerSubmodule (P (u + 1)) :=
+      ⟨P (u + 1), by
+        change P (u + 1) * P (u + 1) * P (u + 1) = P (u + 1)
+        rw [(hPproj (u + 1)).2, (hPproj (u + 1)).2]⟩
+    obtain ⟨X, hX⟩ := (φ (u + 1)).surjective Q
+    have hXzero : X = 0 := by
+      ext i j
+      exact Fin.elim0 (Fin.cast hzero i)
+    have hQzero : Q = 0 := by
+      rw [← hX, hXzero, map_zero]
+    exact congrArg Subtype.val hQzero
   have hPu_zero : P u = 0 := by
     rw [← hShift u, hPsucc_zero, map_zero]
-  have htrace_u : Matrix.trace (P u) = 0 := by
-    rw [hPu_zero, Matrix.trace_zero]
-  have hdim_zero : dim u = 0 := by
-    have h0 := hTrace u 0 Fin.elim0
-    simp only [mpv, coeff, List.ofFn_zero, evalWord_nil, Matrix.mul_one] at h0
-    have hcast : (dim u : ℂ) = 0 := by
-      have htrace_one_zero :
-          Matrix.trace (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ) = 0 := by
-        exact h0.trans htrace_u
-      simpa [Matrix.trace_one, Fintype.card_fin] using htrace_one_zero
-    exact Nat.cast_eq_zero.mp hcast
-  exact hNondeg hdim_zero
+  exact hPu_ne hPu_zero
 
 /-- One-step cyclic gauge-transport of a sector match.
 

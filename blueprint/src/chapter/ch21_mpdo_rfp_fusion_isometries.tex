@@ -989,7 +989,9 @@ separate step.
     \leanok
     \uses{def:mpdo_topological_projector_one_fusion,
         thm:mpdo_pair_fusion_bnt_completeness,
-        thm:mpdo_bnt_length_independent_zipper}
+        thm:mpdo_bnt_length_independent_zipper,
+        thm:star_projection_coisometric_transport,
+        thm:orthogonal_projection_star_projection_channel}
     Let $P_\gamma$ be self-adjoint idempotents on the terminal bond spaces.
     Suppose that the matrices $\chi_{\alpha,\beta,\gamma}$ have the
     positive-length trace-power form of the label-coefficient family and that
@@ -1483,13 +1485,30 @@ separate step.
     removes the identity factor and gives the two asserted identities.
 \end{proof}
 
+\begin{definition}[Simultaneous MPO block left inverse]
+    \label{def:mpdo_block_left_inverse}
+    \lean{MPSTensor.IsMPOBlockLeftInverse}
+    \leanok
+    Let $M_c^{il}\in M_{D_c}(\mathbb C)$ be a finite labelled MPO tensor
+    family.  A simultaneous block left inverse consists of coefficients
+    $C_{(c,x,y),(i,l)}$ such that
+    \[
+        \sum_{i,l}C_{(c,x,y),(i,l)}(M_d^{il})_{x'y'}
+        =\delta_{cd}\delta_{xx'}\delta_{yy'}.
+    \]
+    This is the common block inverse used in
+    \cite[Appendix~C.2, lines~1666--1676]{Cirac2016MPDO_arXiv} and
+    \cite[lines~269--277]{Bultinck2017Anyons}.
+\end{definition}
+
 \begin{theorem}[Simultaneous inverse from a one-letter product-algebra span]%
     \label{thm:mpdo_one_letter_simultaneous_inverse}
     \lean{MPSTensor.WordTupleSpanTop.%
         exists_one_letter_simultaneous_left_inverse}
     \lean{MPSTensor.WordTupleSpanTop.exists_mpo_block_left_inverse}
     \leanok
-    \uses{thm:cpsv_bnt_blocked_simultaneous_span}
+    \uses{def:mpdo_block_left_inverse,
+      thm:cpsv_bnt_blocked_simultaneous_span}
     Let $A_c^q\in M_{D_c}(\mathbb C)$ be a finite labelled tensor family.  If
     the one-letter tuples
     \[

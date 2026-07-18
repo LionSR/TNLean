@@ -54,7 +54,7 @@ theorem verticalCF_of_horizontalCF (M : MPOTensor d D)
   let C := MPSTensor.mpvPhaseClassData blocks
   have hBNT : MPSTensor.IsBNT (verticalTensor M) C.g
       (fun j ↦ dim (C.repr j)) (fun j ↦ blocks (C.repr j)) :=
-    hHorizontal.isBNT_verticalTensor_of_grouping M mu blocks V hDimPos hIso
+    isBNT_verticalTensor_of_grouping M mu blocks V hDimPos hIso
       hInterStar hReconstruct hSpectralBNT
   obtain ⟨_, W, _, hWIso, hWOrth, hWInter, hWReconstruct⟩ :=
     hM.exists_normalized_grouped_sector_maps blocks hHorizontal mu V hDimPos

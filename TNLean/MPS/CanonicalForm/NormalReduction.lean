@@ -19,7 +19,7 @@ The supporting modules are:
 * `TNLean.MPS.CanonicalForm.NormalReduction.Main` — the reduction from a
   primitive weighted block decomposition to blocked normal canonical-form data.
 * `TNLean.MPS.CanonicalForm.NormalReduction.TPGauge` — the blockwise TP-gauge
-  normalization results, including the arbitrary-input zero-tail statement.
+  normalization results and arbitrary-input positive-length reductions.
 * `TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization` — the
   finite-family positive-weight normalization for the positive-length witness.
 
@@ -29,9 +29,7 @@ The imported modules provide the original public declarations:
 
 * `MPSTensor.exists_tp_gauge_blockwise`
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise`
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail`
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary`
 * `MPSTensor.exists_pgvwc07_positiveLengthWitness`
 * `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization`
 * `MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv`
@@ -39,5 +37,5 @@ The imported modules provide the original public declarations:
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero`
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty`
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`
-* `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail`
+* `MPSTensor.exists_tp_gauge_from_arbitrary`
 -/

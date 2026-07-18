@@ -75,6 +75,7 @@ variable {d D : ℕ}
 agree under all virtual insertions on both bonds are proportional. -/
 theorem tensor_proportional
     (A₁ A₂ B₁ B₂ : MPSTensor d D)
+    (hD : 0 < D)
     (hA₁ : IsInjective A₁) (hA₂ : IsInjective A₂)
     (hB₁ : IsInjective B₁) (hB₂ : IsInjective B₂)
     (hInt : ∀ (X : Matrix (Fin D) (Fin D) ℂ) (i j : Fin d),
@@ -83,11 +84,6 @@ theorem tensor_proportional
       Matrix.trace (A₂ j * Y * A₁ i) = Matrix.trace (B₂ j * Y * B₁ i)) :
     ∃ (lambda_ : ℂ), lambda_ ≠ 0 ∧
       (∀ i, A₁ i = lambda_ • B₁ i) ∧ (∀ j, A₂ j = lambda_⁻¹ • B₂ j) := by
-  -- Handle D = 0: the matrix ring is trivial, all matrices are equal.
-  by_cases hD : D = 0
-  · subst hD
-    exact ⟨1, one_ne_zero, fun i => Subsingleton.elim _ _, fun j => by
-      simp [Subsingleton.elim (A₂ j) (B₂ j)]⟩
   -- Step 1: From trace conditions, derive matrix product equalities.
   have hProdL : ∀ i j, A₂ j * A₁ i = B₂ j * B₁ i :=
     internal_products_eq A₁ A₂ B₁ B₂ hInt
@@ -162,7 +158,7 @@ theorem tensor_proportional
     intro h; rw [h, zero_smul] at hZ_eq; rw [hZ_eq, zero_mul] at hZW
     -- hZW : 0 = 1 in Matrix (Fin D) (Fin D) ℂ; D ≥ 1 so 1 ≠ 0
     have : (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
-      have : NeZero D := ⟨hD⟩
+      have : NeZero D := ⟨Nat.ne_of_gt hD⟩
       exact one_ne_zero
     exact this hZW.symm
   -- Step 9: Derive A₁ i = lambda_ • B₁ i.
