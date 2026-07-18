@@ -10,7 +10,7 @@ import TNLean.MPS.SharedInfra.GaugePhase
 
 This file contains a lightweight “proportional” variant of the single-block Fundamental Theorem,
 aligned with the **primitive/aperiodic** branch of Cirac et al., Rev. Mod. Phys. 93 (2021),
-Theorem 4.4 (arXiv:2011.12127).
+Theorem IV.4 (arXiv:2011.12127).
 
 * If `A` and `B` are related by a gauge transform up to a scalar `ζ` (`GaugePhaseEquiv A B`), then
   their Matrix Product Vectors are proportional for each system size `N`.
@@ -34,19 +34,23 @@ section Main
 
 variable [NeZero D]
 
-omit [NeZero D] in
-private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_decay
-    (A B : MPSTensor d D)
+/-- Eventual proportionality and normalized self-overlaps force the rectangular
+cross-overlap to have asymptotic norm one.
+
+This is the scalar-control argument used in the primitive single-block branch
+of Cirac et al., arXiv:2011.12127, Theorem IV.4. No common bond dimension is
+required. -/
+theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
+    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA_self :
       Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
     (hB_self :
       Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
     (hProp :
       ∀ᶠ N in Filter.atTop, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
-        mpv A σ = c * mpv B σ)
-    (hZero : ¬ GaugePhaseEquiv A B →
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0)) :
-    GaugePhaseEquiv A B := by
+        mpv A σ = c * mpv B σ) :
+    Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+      (nhds (1 : ℝ)) := by
   classical
   let proportionalAt : ℕ → Prop := fun N =>
     ∃ c : ℂ, ∀ σ : Fin N → Fin d,
@@ -145,11 +149,7 @@ private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_deca
       filter_upwards [hOverlapAB] with N hAB
       simp [hAB]
     exact Filter.Tendsto.congr' hCross_eq.symm hmul
-  by_contra hNot
-  have hto0 :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) :=
-    hZero hNot
-  exact one_ne_zero (tendsto_nhds_unique hCrossNorm (by simpa using hto0.norm))
+  exact hCrossNorm
 
 
 /-! ## Gauge-phase equivalence from unit-modulus overlap -/
@@ -299,12 +299,12 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
     exact Filter.eventually_atTop.2 ⟨Nmin, fun N hN => by
       by_contra hNprop
       exact hNo ⟨N, hN, hNprop⟩⟩
-  exact hNot
-    (gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_decay
+  have hCrossNorm :=
+    mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
       A B hA_self hB_self hProp
-      (fun hNot' =>
-        mpvOverlap_tendsto_zero_of_irreducible_TP
-          (A := A) (B := B) hA_irr hB_irr hA_norm hB_norm hNot'))
+  have hto0 := mpvOverlap_tendsto_zero_of_irreducible_TP
+    (A := A) (B := B) hA_irr hB_irr hA_norm hB_norm hNot
+  exact one_ne_zero (tendsto_nhds_unique hCrossNorm (by simpa using hto0.norm))
 
 end Main
 

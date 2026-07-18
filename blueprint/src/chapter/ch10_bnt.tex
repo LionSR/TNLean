@@ -497,6 +497,91 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     $\sigma$, and hence the asserted equality of vectors.
 \end{proof}
 
+\begin{theorem}[Unit overlap from eventual proportionality]
+    \label{thm:eventual_proportional_normalized_overlap_norm_one}
+    \lean{MPSTensor.mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂}
+    \leanok
+    \uses{def:mpv_overlap}
+    Let $A$ and $B$ be tensors, possibly with different bond dimensions, whose
+    self-overlaps tend to one. Suppose that, for all sufficiently large $N$,
+    there is $c_N\in\C$ such that
+    \[
+        \ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}.
+    \]
+    Then $|O_{AB}(N)|\to1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The proportionality relation gives
+    \[
+        O_{AB}(N)=c_NO_{BB}(N),
+        \qquad O_{AA}(N)=|c_N|^2O_{BB}(N).
+    \]
+    Hence $|c_N|^2\to1$ and therefore $|c_N|\to1$.  The first identity now
+    gives $|O_{AB}(N)|\to1$.
+\end{proof}
+
+\begin{theorem}[Geometric proportionality phase for normal tensors]
+    \label{thm:normal_proportional_mpv_geometric_phase}
+    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
+        exists_unit_phase_power_of_isNormalTensor}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_state,
+        def:eventually_nonzero_proportional_mpv}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Suppose that, for all sufficiently large $N$, their matrix
+    product vectors are proportional by a nonzero scalar. Then there is
+    $a\in\C$, with $|a|=1$, such that, for every positive $N$,
+    \[
+        \ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}.
+    \]
+    This is the one-normal-block consequence of
+    \cite[Corollary~A.3 and the proof of Theorem~2.10]{Cirac2016MPDO_arXiv}.
+    % Maintainer note: this determines only the unit-phase part for normalized
+    % normal blocks. The distinct positive-rescaling problem is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:eventual_proportional_normalized_overlap_norm_one,
+        thm:cpsv_normal_mpv_phase_alternative,
+        thm:cpsv_normal_mpv_phase_gauge}
+    Normality gives $O_{AA}(N)\to1$ and $O_{BB}(N)\to1$, so
+    Theorem~\ref{thm:eventual_proportional_normalized_overlap_norm_one} gives
+    $|O_{AB}(N)|\to1$. The first alternative in
+    Theorem~\ref{thm:cpsv_normal_mpv_phase_alternative} gives
+    $O_{AB}(N)\to0$, hence $|O_{AB}(N)|\to0$, a contradiction. In the
+    remaining alternative,
+    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ with $|\zeta|=1$; take
+    $a=\zeta^{-1}$.
+\end{proof}
+
+\begin{corollary}[Positive-length geometric proportionality phase]
+    \label{cor:normal_positive_proportional_mpv_geometric_phase}
+    \lean{MPSTensor.NonzeroProportionalMPV₂.%
+        exists_unit_phase_power_of_isNormalTensor}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_state,
+        def:nonzero_proportional_mpv}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Suppose that, for every positive $N$, their matrix product
+    vectors are proportional by a nonzero scalar. Then there is $a\in\C$,
+    with $|a|=1$, such that, for every positive $N$,
+    \[
+        \ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}.
+    \]
+    This is the positive-length one-normal-block consequence of
+    \cite[Corollary~A.3 and Theorem~2.10]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{lem:nonzero_proportional_mpv_basic,
+        thm:normal_proportional_mpv_geometric_phase}
+    Positive-length nonzero proportionality implies eventual nonzero
+    proportionality. Apply
+    Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}.
+\end{proof}
+
 \begin{theorem}[Separated normal tensors are eventually independent]
     \label{thm:cpsv_normal_separated_eventually_li}
     \lean{MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv}
