@@ -457,7 +457,9 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc_direct_sum_intersection_source_length}
+    \uses{thm:pgvwc_direct_sum_intersection_source_length,
+        lem:block_diagonal_periodic_constraints_propagated_sum,
+        lem:block_diagonal_boundary_condition_sum}
     Put $S_M=\sum_jG_M(A_j)$. For every $M$ with $L\le M<N$,
     Theorem~\ref{thm:pgvwc_direct_sum_intersection_source_length} gives
     \[
