@@ -106,10 +106,11 @@ hypotheses and the PSD-corrected Lemma C.5 rank-one criterion.
 Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4 and C.5 and the corollary
 after them, lines 1406--1505.
 
-**Local fix (PSD rank-one criterion):** the source's primitive
-nonnegative-matrix inference at lines 1490--1498 is not valid as stated. This
+**Scope restriction (positive-semidefinite trace matrix):** the source neither
+assumes nor derives positive semidefiniteness of the trace matrix. This
 constructor uses the positive-semidefinite sufficient condition documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`; it is not the corollary from the
+source hypotheses of SAL and ZCL alone. -/
 def ofSALZCLOfPosSemidef
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
