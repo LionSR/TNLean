@@ -152,9 +152,11 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
 /-- Under the source hypotheses used to construct the BNT projectors, every
 absorbed normal representative generates an MPDO.
 
-**Scope restriction (common blocking):** the one-letter simultaneous span is
-the blocked form used for the simultaneous inverse.  Its derivation from biCF
-is recorded in `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
+**Source hypothesis (biCF):** the one-letter simultaneous span is precisely
+the block-injective canonical-form assumption imposed at the start of Case II
+in arXiv:1606.00608, line 1628.  It supplies the simultaneous inverse used in
+the source proof.  Its relation with finite physical blocking is recorded in
+`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
 **Axiom boundary:** the projector construction uses the existing forward
 Hayashi--Ruskai--Hayden--Jozsa--Petz--Winter characterization of equality in
@@ -191,9 +193,11 @@ This supplies the strict inequality required before normalizing the sector in
 the direct-sum entropy identity.  It is not inferred from the weaker displayed
 inequality \(p_s\geq 0\).
 
-**Scope restriction (common blocking):** the one-letter simultaneous span is
-the blocked form used for the simultaneous inverse.  Its derivation from biCF
-is recorded in `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
+**Source hypothesis (biCF):** the one-letter simultaneous span is precisely
+the block-injective canonical-form assumption imposed at the start of Case II
+in arXiv:1606.00608, line 1628.  It supplies the simultaneous inverse used in
+the source proof.  Its relation with finite physical blocking is recorded in
+`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780. -/
 theorem trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos
