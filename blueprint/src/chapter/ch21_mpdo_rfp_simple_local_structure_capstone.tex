@@ -20,10 +20,11 @@
     \]
 \end{definition}
 
-% **Obstruction (rank-one trace matrix):** SAL and ZCL presently give only
-% \widehat T^2=\widehat T^3 and constant positive-power traces.  The missing
-% condition Q(1-LQ)L=0 is not obtained from the inverse-map construction.
-% Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+% **Obstruction (strong area law for the explicit witness):** the source-selected
+% inverse-map construction does not force Q(1-LQ)L=0, as shown by
+% thm:mpdo_inverse_map_nonzero_rectangular_remainder below.  The same explicit
+% tensor has not yet been proved to satisfy SAL.  Documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{lemma}[SAL and ZCL give a rank-one sector trace matrix]
     \label{lem:mpdo_sal_zcl_rank_one_trace_matrix}
     \notready
@@ -45,6 +46,37 @@
     This is Lemma~C.5 at
     \cite[Appendix~C.2, lines~1473--1499]{Cirac2016MPDO_arXiv}.
 \end{lemma}
+
+\begin{theorem}[Inverse-map factorization with a nonzero rectangular remainder]
+    \label{thm:mpdo_inverse_map_nonzero_rectangular_remainder}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.sectorTensorL_hayashiData}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.sectorTensorR_hayashiData}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      inverseMap_provenance_preserves_rectangular_remainder}
+    \leanok
+    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+        thm:mpdo_inverse_map_hayashi_sector_comparison}
+    There is a four-sector, bond-dimension-two tensor with a refined Hayashi
+    decomposition whose four sectors are one-dimensional and have weight
+    $1/4$.  For the normalized four-site tail $LQ$, the inverse-map
+    construction recovers the closed sector tensors $L$ and $Q$ exactly.  Its
+    neighboring operators therefore coincide with those obtained directly
+    from $L$ and $Q$, while
+    \[
+        Q(1-LQ)L\ne0.
+    \]
+    The inverse-map construction is the one in
+    \cite[Appendix~C.2, lines~1413--1455]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The four physical slices form a basis of the $2\times2$ matrices.  Computing
+    their dual basis and applying it to the two outer density matrices gives the
+    left and right inverse-map factors.  The factor four in the left contraction
+    is cancelled by the sector weight $1/4$.  Direct multiplication then gives
+    $Q(1-LQ)L\ne0$.
+\end{proof}
 
 % **Obstruction (dependence on Lemma C.5):** the source corollary includes the
 % unavailable rank-one trace factorization.  Documented in
