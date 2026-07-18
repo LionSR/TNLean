@@ -8,7 +8,7 @@ import TNLean.Channel.KrausCPTP
 import TNLean.Channel.MarginalSupportAbsorption
 
 /-!
-# The support Petz transpose map for a partial trace
+# A trace-preserving Petz transpose channel for a partial trace
 
 This file constructs the Petz transpose map associated with a positive
 semidefinite reference matrix and the partial trace over a right tensor factor.
@@ -24,8 +24,19 @@ reference matrix.
 * `Matrix.partialTraceRightPetzMap`: the raw Petz transpose map for the right
   partial trace.
 * `Matrix.partialTraceRightPetzMap_isKrausCP`: complete positivity.
+* `Matrix.partialTraceRightPetzMap_trace`: the support trace identity.
+* `Matrix.partialTraceRightPetzComplementMap`: the complementary
+  measure-and-prepare term.
+* `Matrix.partialTraceRightPetzComplementMap_isKrausCP`: complete positivity
+  of the complementary term.
+* `Matrix.partialTraceRightPetzComplementMap_trace`: the complementary trace
+  identity.
 * `Matrix.partialTraceRightPetzChannel`: a trace-preserving completely positive
   extension of the support formula.
+* `Matrix.partialTraceRightPetzChannel_isKrausCPTP`: the completed map is a
+  channel for a normalized reference.
+* `Matrix.partialTraceRightPetzChannel_apply_of_supported`: agreement with the
+  support formula on supported inputs.
 * `Matrix.partialTraceRightPetzMap_partialTraceRight`: recovery of the
   reference matrix.
 * `Matrix.partialTraceRightPetzChannel_partialTraceRight`: recovery by the
