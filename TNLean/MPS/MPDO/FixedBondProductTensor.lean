@@ -47,8 +47,9 @@ exactly the product of all translates of one fixed commuting bond.
 
 The positive bond dimension is part of the datum.  No normality is assumed.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
-1570--1593. -/
+Local interface motivated by arXiv:1606.00608, Appendix C.2, Proposition C.8
+(`3to4`), lines 1570--1593.  The cited proposition gives proportionality to a
+fixed commuting-bond product; it does not construct this exact tensor datum. -/
 structure FixedProductTensorData (data : TranslationInvariantBondData d) where
   /-- Bond dimension of the representing tensor. -/
   bondDim : ℕ
