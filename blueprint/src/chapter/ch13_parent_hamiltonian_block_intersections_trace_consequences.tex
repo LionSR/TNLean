@@ -1307,8 +1307,20 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
         lem:bnt_direct_sum_block_separation_word_span}
     The block-separation argument gives the full simultaneous span at
     $q=3(r-1)(L_0+1)$. Lemma~\ref{lem:unital_simultaneous_product_span_propagation}
-    propagates this equality to every $n\ge q$. Nondegeneracy of the trace
-    pairing then separates the spaces $G_n(A^j)$.
+    propagates this equality to every $n\ge q$. To prove independence, write
+    $\phi_j=\Gamma_n^{A^j}(X_j)$ and suppose that $\sum_j\phi_j=0$.
+    Comparison of the coefficient of each word, followed by the simultaneous
+    spanning equality, gives
+    \[
+        \sum_j \Gamma_n^{A^j}(X_j)=0
+        \quad\Longrightarrow\quad
+        \left(\forall (M_j)_j,\ \sum_j\tr(X_jM_j)=0\right)
+        \quad\Longrightarrow\quad
+        X_j=0 \text{ for every }j.
+    \]
+    Indeed, in the last implication one takes a tuple supported in one block
+    and uses nondegeneracy of the trace pairing. Hence every $\phi_j$ vanishes,
+    so the spaces $G_n(A^j)$ form an internal sum.
 \end{proof}
 
 \begin{theorem}[Direct-sum restriction intersection at the source length]
@@ -1333,10 +1345,27 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
 \begin{proof}
     \leanok
     \uses{lem:pgvwc_product_span_source_length}
-    The simultaneous product span at length $m-1$ separates the blockwise trace
-    identities. The resulting boundary-matrix equations give membership in
-    $G_{m+1}(A^j)$ for each block. The reverse inclusion follows by splitting
-    a word of length $m+1$ at either endpoint.
+    Let a vector belong to both restricted spaces. The two endpoint
+    decompositions give boundary matrices $C_a^j$ and $D_b^j$. For every pair
+    of physical indices $a,b$ and every middle word $w$ of length $m-1$, their
+    coefficients obey
+    \[
+        \sum_j\tr\!\left((A_b^jC_a^j)A_w^j\right)
+        =
+        \sum_j\tr\!\left((D_b^jA_a^j)A_w^j\right).
+    \]
+    The simultaneous product span at length $m-1$ and nondegeneracy of the
+    trace pairing therefore give, block by block,
+    \[
+        A_b^jC_a^j=D_b^jA_a^j.
+    \]
+    Set $E^j=\sum_a C_a^jA_a^{j\,\dagger}$. The preceding identities and the
+    right-unital normalization imply
+    \[
+        A_b^jC_a^j=A_b^jE^jA_a^j.
+    \]
+    Thus the component in block $j$ lies in $G_{m+1}(A^j)$. The reverse
+    inclusion follows by splitting a word of length $m+1$ at either endpoint.
 \end{proof}
 
 \begin{lemma}[Product span makes the sum of local spaces direct]

@@ -143,6 +143,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
+
 /-- In the PGVWC07 source range, every block-diagonal periodic vector belongs
 to the sum of the open-boundary block spaces.
 For $r\ge2$, injectivity at the common length $L_0>0$, and

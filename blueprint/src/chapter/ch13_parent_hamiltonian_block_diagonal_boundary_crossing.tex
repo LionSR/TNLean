@@ -1656,7 +1656,8 @@ in both cases.
     \label{thm:block_diagonal_chain_space_global_cut_independent}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07}
     \leanok
-    \uses{thm:block_diagonal_chain_space_global_cut}
+    \uses{thm:block_diagonal_chain_space_global_cut,
+        lem:pgvwc_product_span_source_length}
     Under the same hypotheses,
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
@@ -1667,9 +1668,22 @@ in both cases.
 
 \begin{proof}
     \leanok
+    \uses{thm:block_diagonal_chain_space_global_cut,
+        lem:pgvwc_product_span_source_length}
     The equality is Theorem~\ref{thm:block_diagonal_chain_space_global_cut}.
-    The simultaneous product span at length $N$ separates the blockwise trace
-    representations and gives independence.
+    For independence, write $\phi_j=\Gamma_N^{A^j}(X_j)$ and suppose that
+    $\sum_j\phi_j=0$. Lemma~\ref{lem:pgvwc_product_span_source_length} and
+    nondegeneracy of the trace pairing give
+    \[
+        \sum_j \Gamma_N^{A^j}(X_j)=0
+        \quad\Longrightarrow\quad
+        \left(\forall (M_j)_j,\ \sum_j\tr(X_jM_j)=0\right)
+        \quad\Longrightarrow\quad
+        X_j=0 \text{ for every }j.
+    \]
+    The last implication follows by choosing a tuple supported in one block.
+    Thus every $\phi_j$ vanishes, and the open-boundary spaces form an internal
+    sum.
 \end{proof}
 
 \begin{corollary}[Kernel containment from the global cut]
