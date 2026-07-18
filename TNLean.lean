@@ -410,6 +410,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.MutualInfoMonotone
+import TNLean.MPS.MPDO.ThermodynamicLimitCounterexample
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.LocalPurificationAreaLaw
@@ -435,7 +436,6 @@ import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.RetainedClass
 import TNLean.MPS.MPDO.VerticalBNTConstruction
 import TNLean.MPS.MPDO.SectorTrace
-import TNLean.MPS.MPDO.ThermodynamicLimitCounterexample
 import TNLean.MPS.MPDO.ReflectedMarkedChain
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.MPDO.GroupedFigure8
