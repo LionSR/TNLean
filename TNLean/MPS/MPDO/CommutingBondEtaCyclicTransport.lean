@@ -17,6 +17,7 @@ trace factorization, a Markov decomposition, nor saturation of the area law.
 
 * `Matrix.etaCyclicEdgeEquiv`
 * `MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition`
+* `MPOTensor.EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition`
 
 ## References
 
