@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
+import TNLean.Channel.Schwarz.AbstractMultiplicativeDomain
 import Mathlib.Algebra.Star.Subalgebra
 
 /-!
@@ -370,5 +371,55 @@ theorem krausMap_star_of_mem_multiplicativeDomain (K : Fin d → Mat) {X : Mat}
   krausMap_conjTranspose K X
 
 end StarHomomorphism
+
+section AbstractSpecialization
+
+/-- A unital Kraus map satisfies Wolf's abstract Schwarz inequality.
+
+The result records that the Kraus theory in this file is a specialization of
+the source-faithful abstract theory in `AbstractMultiplicativeDomain`.
+
+Source: Wolf, Equation (5.2), local source
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 156--164. -/
+theorem krausMap_isSchwarzMap
+    (K : Fin d → Mat) (h_unital : IsUnitalKraus K) :
+    IsSchwarzMap (Kraus.mapLM K) := by
+  intro X
+  change (Kraus.map K (Xᴴ * X) - Kraus.map K Xᴴ * Kraus.map K X).PosSemidef
+  rw [← Kraus.map_conjTranspose K X]
+  have h := kadison_schwarz K h_unital X
+  simpa [Kraus.map, krausMap] using h
+
+/-- Wolf's abstract right multiplicative domain is the existing Kraus left
+multiplicative domain.  The names differ because the two formulations record
+opposite multiplication conventions. -/
+theorem mem_abstractRightMultiplicativeDomain_iff
+    (K : Fin d → Mat) (X : Mat) :
+    X ∈ SchwarzMap.rightMultiplicativeDomain (Kraus.mapLM K) ↔
+      X ∈ leftMultiplicativeDomain K := by
+  simp [SchwarzMap.rightMultiplicativeDomain, leftMultiplicativeDomain,
+    Kraus.mapLM_apply, Kraus.map, krausMap]
+
+/-- Wolf's abstract left multiplicative domain is the existing Kraus right
+multiplicative domain.  The names differ because the two formulations record
+opposite multiplication conventions. -/
+theorem mem_abstractLeftMultiplicativeDomain_iff
+    (K : Fin d → Mat) (X : Mat) :
+    X ∈ SchwarzMap.leftMultiplicativeDomain (Kraus.mapLM K) ↔
+      X ∈ rightMultiplicativeDomain K := by
+  simp [SchwarzMap.leftMultiplicativeDomain, rightMultiplicativeDomain,
+    Kraus.mapLM_apply, Kraus.map, krausMap]
+
+/-- The abstract and Kraus full multiplicative domains agree. -/
+theorem mem_abstractMultiplicativeDomain_iff
+    (K : Fin d → Mat) (X : Mat) :
+    X ∈ SchwarzMap.multiplicativeDomain (Kraus.mapLM K) ↔
+      X ∈ multiplicativeDomain K := by
+  rw [SchwarzMap.multiplicativeDomain, multiplicativeDomain,
+    Set.mem_inter_iff, mem_abstractRightMultiplicativeDomain_iff,
+    mem_abstractLeftMultiplicativeDomain_iff]
+  exact and_comm
+
+end AbstractSpecialization
 
 end KadisonSchwarz
