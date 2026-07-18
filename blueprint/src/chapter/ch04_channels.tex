@@ -1778,6 +1778,35 @@ matching the weighted-trace argument in
     $\mathrm{Fix}(E) = \{X \in \MN{D} : E(X) = X\}$.
 \end{definition}
 
+\begin{definition}[Fixed points of a linear map]\label{def:abstract_fixed_points}
+    \lean{SchwarzMap.fixedPoints}\leanok
+    The fixed-point set of a complex-linear map
+    $E:\MN{D}\to\MN{D}$ is
+    \[
+        \operatorname{Fix}(E)=\{X\in\MN{D}:E(X)=X\}.
+    \]
+\end{definition}
+
+\begin{lemma}[Faithfulness of a positive-definite weighted trace]
+    \label{lem:posDef_weighted_trace_faithful}
+    \lean{Matrix.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}\leanok
+    If $M\succeq0$, $\rho>0$, and
+    \[
+        \tr(\rho M)=0,
+    \]
+    then $M=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $\rho=S^\dagger S$ with $S$ invertible.  The matrix
+    $SMS^\dagger$ is positive semidefinite and
+    \[
+        \tr(SMS^\dagger)=\tr(S^\dagger SM)=\tr(\rho M)=0.
+    \]
+    A positive semidefinite matrix of trace zero vanishes.  Cancelling $S$
+    and $S^\dagger$ gives $M=0$.
+\end{proof}
+
 \begin{theorem}[Fixed points lie in the multiplicative domain]
     \label{thm:fixedPoints_in_multiplicativeDomain}
     \lean{Kraus.fixedPoints_in_multiplicativeDomain}
@@ -1796,29 +1825,62 @@ matching the weighted-trace argument in
     multiplicative domain.
 \end{proof}
 
-\begin{theorem}[Fixed points form a $*$-subalgebra]
+\begin{theorem}[Fixed-point algebra after choosing a faithful invariant weight]
     \label{thm:fixedPointsStarSubalgebra}
-    \lean{Kraus.fixedPointsStarSubalgebra}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
-    Let $E$ be a unital Kraus map whose adjoint map $E^*$ has a positive
-    definite fixed point $\rho > 0$.
-    Then $\mathrm{Fix}(E)$ is a $*$-subalgebra of $\MN{D}$.
-    This is \cite[Theorem~6.12]{Wolf2012Quantum}.
+    \lean{SchwarzMap.fixedPointsStarSubalgebra}\leanok
+    \uses{def:abstract_fixed_points, def:abstract_schwarz_inequality,
+        lem:posDef_weighted_trace_faithful}
+    Let $E:\MN{D}\to\MN{D}$ be positive and unital, and suppose that
+    it satisfies the Schwarz inequality
+    \[
+        E(A^\dagger A)-E(A^\dagger)E(A)\succeq0
+        \qquad(A\in\MN{D}).
+    \]
+    If the trace-pairing adjoint $E^*$ has a positive definite fixed point
+    $\rho>0$, then $\operatorname{Fix}(E)$ is a $*$-subalgebra of $\MN{D}$.
+
+    In the terminology introduced immediately before
+    \cite[Example~5.3]{Wolf2012Quantum}, a \emph{Schwarz map} is precisely a
+    positive unital map satisfying the displayed inequality.  Thus the three
+    displayed assumptions reproduce the source's Schwarz-map convention.
+    In \cite[Theorem~6.12]{Wolf2012Quantum}, the trace adjoint is initially
+    assumed to have an arbitrary full-rank fixed point.  The proposition on
+    positive fixed points then produces a positive definite fixed point
+    $\rho$, to which the theorem above applies.  Equation~(1.39) gives the
+    resulting explicit block form of the algebra.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kadison_schwarz_channels, thm:left_multiplicative_identity_channels}
-    Closure under addition and scalar multiplication follows from
-    linearity.
-    Closure under $\dagger$: if $E(X) = X$ then $E(X^\dagger) = X^\dagger$
-    because fixed points are stable under adjoint.
-    Closure under multiplication: if $E(X) = X$ and $E(Y) = Y$, the weighted
-    Kadison--Schwarz argument gives
-    $E(X^\dagger X) = E(X)^\dagger E(X)$ and, applied to $X^\dagger$,
-    also $E(X X^\dagger) = E(X) E(X)^\dagger$. Thus $X$ lies in the
-    multiplicative domain, and Theorem~\ref{thm:left_multiplicative_identity_channels}
-    yields $E(XY) = E(X) E(Y) = XY$.
+    \uses{thm:abstract_md_characterization}
+    Positivity gives $E(X^\dagger)=E(X)^\dagger$, so fixed points are closed
+    under adjoints.  For a fixed point $X$, set
+    \[
+        \Delta_X=E(X^\dagger X)-E(X^\dagger)E(X)\succeq0.
+    \]
+    The trace-pairing identity, $E^*(\rho)=\rho$, and $E(X)=X$ give
+    \begin{align*}
+        \tr(\rho\Delta_X)
+          &=\tr\!\left(E^*(\rho)X^\dagger X\right)
+            -\tr\!\left(\rho X^\dagger X\right)\\
+          &=0.
+    \end{align*}
+    Since $\rho>0$, faithfulness of the weighted trace forces
+    $\Delta_X=0$.  Applying the same argument to $X^\dagger$ gives equality
+    in the other one-sided Schwarz inequality.  Hence
+    Theorem~\ref{thm:abstract_md_characterization} places $X$ in the full
+    multiplicative domain.  Consequently, for fixed points $X,Y$,
+    \[
+        E(XY)=E(X)E(Y)=XY.
+    \]
+    Linearity and unitality supply the remaining subalgebra axioms.
 \end{proof}
+
+\begin{remark}[Kraus specialization]
+    \lean{Kraus.fixedPointsStarSubalgebra}\leanok
+    Every unital Kraus map is a positive Schwarz map.  Hence, if its adjoint
+    has a positive definite fixed point, its fixed points form a
+    $*$-subalgebra by the preceding theorem.
+\end{remark}
 
 \begin{remark}\leanok
     Theorem~\ref{thm:fixedPoints_in_multiplicativeDomain} is the

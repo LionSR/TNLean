@@ -193,41 +193,12 @@ theorem trace_mul_map_eq_trace_adjointMap_mul
             simp [Matrix.mul_assoc]
 
 omit [DecidableEq n] in
-/-- If `M` is PSD, `ρ` is PD, and `tr(ρ·M)=0`, then `M=0`.
-
-This is the standard “faithfulness of the weighted trace”. -/
+/-- Equivalent Kraus-namespace formulation of faithfulness of the
+positive-definite weighted trace. -/
 theorem posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
     {ρ M : Matrix n n ℂ} (hM : M.PosSemidef) (hρ : ρ.PosDef)
-    (htr : Matrix.trace (ρ * M) = 0) : M = 0 := by
-  classical
-  -- Factor `ρ = S†S` with `S` a unit.
-  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.mp
-      (Matrix.isStrictlyPositive_iff_posDef.mpr hρ) with ⟨S, hS_unit, hρ_eq⟩
-  -- Consider `S M S†`, which is PSD.
-  have hSMS_psd : (S * M * Sᴴ).PosSemidef :=
-    hM.mul_mul_conjTranspose_same (B := S)
-  -- Its trace is `tr(ρ M)` by cyclicity.
-  have htr' : Matrix.trace (S * M * Sᴴ) = 0 := by
-    -- `tr(S M S†) = tr(S† S M)` by cyclicity, and `S†S = ρ`.
-    have hcycle : Matrix.trace (S * M * Sᴴ) = Matrix.trace (Sᴴ * S * M) :=
-      Matrix.trace_mul_cycle S M Sᴴ
-    have htr'' : Matrix.trace (Sᴴ * S * M) = 0 := by
-      -- Rewrite `tr(ρ M)=0` using `ρ = S†S`.
-      simpa [hρ_eq, Matrix.mul_assoc, ← Matrix.star_eq_conjTranspose] using htr
-    exact hcycle.trans htr''
-  -- PSD + trace 0 ⇒ zero.
-  have hSMS_zero : S * M * Sᴴ = 0 := (hSMS_psd.trace_eq_zero_iff.mp htr')
-  -- Cancel the unit factors.
-  have hMS_zero : M * Sᴴ = 0 := by
-    have : S * (M * Sᴴ) = S * 0 := by
-      simpa [Matrix.mul_assoc] using hSMS_zero
-    exact IsUnit.mul_left_cancel hS_unit this
-  have hSstar_unit : IsUnit (Sᴴ) := by
-    -- `Sᴴ = star S`.
-    simpa [Matrix.star_eq_conjTranspose] using (IsUnit.star hS_unit)
-  have : M * Sᴴ = 0 * Sᴴ := by
-    simpa [zero_mul] using hMS_zero
-  exact IsUnit.mul_right_cancel hSstar_unit this
+    (htr : Matrix.trace (ρ * M) = 0) : M = 0 :=
+  Matrix.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hM hρ htr
 
 /-- **Weighted KS equality for peripheral eigenvectors**.
 

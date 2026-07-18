@@ -194,6 +194,7 @@ import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.AbstractMultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
+import TNLean.Channel.FixedPoint.AbstractAlgebra
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.BlockForm
 import TNLean.Channel.FixedPoint.ChoiEffros

@@ -206,14 +206,28 @@ In `TNLean.Channel.FixedPoint.StationarySupport`:
   (`irreducible_iff_support_full`, `stationary_support_minimal`) remain to be
   reinstated.
 
-### Wolf Theorem 6.12 (Fixed points form a *-algebra) — FORMALIZED
+### Wolf Theorem 6.12 (Fixed points form a *-algebra) — PARTIALLY FORMALIZED
+
+In `TNLean.Channel.FixedPoint.AbstractAlgebra`:
+
+* `SchwarzMap.fixedPointsStarSubalgebra` — for a positive unital Schwarz map
+  whose trace adjoint has an explicitly chosen positive definite fixed point,
+  the fixed points form a `StarSubalgebra`.
+
+This is the algebra step after the faithful invariant weight has been chosen.
+The source theorem begins with an arbitrary full-rank fixed point and invokes
+its proposition on positive fixed points to obtain that weight.  The
+full-rank-to-positive-definite reduction theorem and the explicit block
+realization from Equation (1.39) remain open.
 
 In `TNLean.Channel.FixedPoint.Algebra`:
 
-* `Kraus.fixedPointsStarSubalgebra` — Schrödinger-picture form:
+* `Kraus.fixedPointsStarSubalgebra` — Kraus specialization in the
+  Schrödinger picture:
   if `map K` is unital and `adjointMap K` has a positive definite fixed point,
   the fixed points of `map K` form a `StarSubalgebra`.
-* `Kraus.adjointFixedPointsStarSubalgebra` — Heisenberg-picture form:
+* `Kraus.adjointFixedPointsStarSubalgebra` — Kraus specialization in the
+  Heisenberg picture:
   if `adjointMap K` is unital (`IsTP K`) and `map K` has a positive definite
   fixed point, the fixed points of `adjointMap K` form a `StarSubalgebra`.
 * `Kraus.fixedPoints_in_multiplicativeDomain` — the key intermediate step:
