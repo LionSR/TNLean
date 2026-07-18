@@ -877,42 +877,33 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{thm:nonzero_trace_word_sharp_pos, thm:eigenvector_from_trace,
         thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator,
         cor:wielandt_case3_generator}
+    By Theorem~\ref{thm:nonzero_trace_word_sharp_pos}, there exists a
+    \emph{positive-length} word~$w$ with
+    $|w| \le D^2 - d' + 1$ and $\tr(A^w) \neq 0$, where
+    $d' = \krausrk(A)$.  The matrix $A^w$ has nonzero trace, hence a
+    nonzero eigenvalue $\mu$ and eigenvector $\varphi$
+    (Theorem~\ref{thm:eigenvector_from_trace}).  Set $n = |w|$ and let
+    $B = A^{[n]}$ be the blocked tensor.  Then $B$ is normal
+    (Theorem~\ref{thm:isNormal_blockTensor}), and the encoding of $w$ as a
+    single block index gives $B^{i_0} = A^w$.
     \begin{enumerate}
-        \item \emph{$D = 1$:} In this case $\iota(A) = 0$, so the bound
-              holds trivially.
-        \item \emph{$D \ge 2$:}
-              By Theorem~\ref{thm:nonzero_trace_word_sharp_pos},
-              there exists a \emph{positive-length} word~$w$ with
-              $|w| \le D^2 - d' + 1$ and $\tr(A^w) \neq 0$,
-              where $d' = \krausrk(A)$.
-              The matrix $A^w$ has nonzero trace,
-              hence a nonzero eigenvalue $\mu$ and eigenvector $\varphi$
-              (Theorem~\ref{thm:eigenvector_from_trace}).
-              Set $n = |w|$ and let $B = A^{[n]}$ be the blocked tensor.
-              Then $B$ is normal (Theorem~\ref{thm:isNormal_blockTensor}),
-              and the encoding of $w$ as a single block index gives
-              $B^{i_0} = A^w$.
-              \begin{enumerate}
-                  \item If $A^w$ is invertible (invertible case),
-                        $S_{D^2}(B) = \MN{D}$, whence
-                        $S_{D^2 \cdot n}(A) = \MN{D}$.
-                  \item If $A^w$ is non-invertible (non-invertible case),
-                        the eigenvector $\varphi$ spans a proper subspace,
-                        and the rank-one extraction argument gives
-                        $S_{D^2}(B) = \MN{D}$, whence
-                        $S_{D^2 \cdot n}(A) = \MN{D}$.
-              \end{enumerate}
-              In the invertible case, the invertible Kraus operator $B^{i_0}$ allows
-              direct dimension growth, giving
-              $S_{D^2 - k_B + 1}(B) = \MN{D}$ where
-              $k_B = \krausrk(B)$.
-              In the non-invertible case, the bound $S_{D^2}(B) = \MN{D}$ follows
-              from tracking indices through the rank-one extraction argument of
-              \cite[Lemma~2(b)]{Sanz2010Quantum}; the separate qualitative
-              fixed-length conclusion stated below does not supply this
-              explicit bound.
-              In both cases $\iota(A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)$.
+        \item If $A^w$ is invertible (invertible case),
+              $S_{D^2}(B) = \MN{D}$, whence
+              $S_{D^2 \cdot n}(A) = \MN{D}$.
+        \item If $A^w$ is non-invertible (non-invertible case),
+              the eigenvector $\varphi$ spans a proper subspace,
+              and the rank-one extraction argument gives
+              $S_{D^2}(B) = \MN{D}$, whence
+              $S_{D^2 \cdot n}(A) = \MN{D}$.
     \end{enumerate}
+    In the invertible case, the invertible Kraus operator $B^{i_0}$ allows
+    direct dimension growth, giving $S_{D^2 - k_B + 1}(B) = \MN{D}$ where
+    $k_B = \krausrk(B)$.  In the non-invertible case, the bound
+    $S_{D^2}(B) = \MN{D}$ follows from tracking indices through the rank-one
+    extraction argument of \cite[Lemma~2(b)]{Sanz2010Quantum}; the separate
+    qualitative fixed-length conclusion stated below does not supply this
+    explicit bound.  In both cases
+    $\iota(A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)$.
 \end{proof}
 
 \begin{remark}[Quantitative and qualitative Wielandt bounds]%
