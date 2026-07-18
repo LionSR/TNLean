@@ -324,15 +324,17 @@ The inverse tensor of a block-injective canonical form satisfies
     (K^{-1,p}_{j'})_{\alpha',\beta'}
     =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
 \]
-Contracting $K^{-1}$ with the doubled physical index passes the virtual legs
-of $X$ and $X^{-1}$ to $K^{-1}$ and identifies its block index with the block
-label $j$:
+Writing $K=X(\bigoplus_j\mathcal K_j)X^{-1}$ in this contraction places the
+gauges on the virtual legs of $K$ and identifies the block index of
+$\mathcal K_j$ with the label $j$:
 \[
     % K^{-1}K in block-injective canonical form (arXiv:1606.00608,
     % eq. biCFK, Appendix C.2 lines 1666--1670; paper figure
     % MPDO_biCF.png).  Panel 1 contracts K^{-1} with K through their
     % doubled physical index.  Panel 2 substitutes
-    % K=X(bigoplus_j K_j)X^{-1}: X and X^{-1} touch both virtual rails.
+    % K=X(bigoplus_j K_j)X^{-1}: K^{-1} remains on the upper rail, while
+    % X and X^{-1} flank K_j on the lower rail and extend to the internal
+    % block-index rail beneath it.
     % Panel 3 removes the resolved K^{-1}-K pair and leaves the gauge legs
     % and block-index wires.  Every panel has boundary signature
     % (virtual-west=2 | virtual-east=2 | physical-up=0 |
@@ -342,9 +344,10 @@ label $j$:
         \tn{K}
     \end{tenkz}
     \;=\;
-    \begin{tenkz}[rows={ket, bra}, compact]
-        \tnX[wires=2]{X} & \tn{K^{-1}} & \tnX[wires=2]{X^{-1}} \\
-        & \tn{K} &
+    \begin{tenkz}[rows={ket, bra, wire:none}, compact]
+        & \tn{K^{-1}} & \\
+        \tnX[wires=2]{X} & \tn{\mathcal K} & \tnX[wires=2]{X^{-1}} \\
+        & \tnghost{} &
     \end{tenkz}
     \;=\;
     \begin{tenkz}[rows={wire, wire}, compact]
