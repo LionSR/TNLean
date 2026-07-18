@@ -174,7 +174,7 @@ private theorem pairSymbolFamily_isCPSVBasisOfNormalTensors :
     exact symbolTensor_pair_linearIndependent N (by omega)
 
 /-- Two bases of normal tensors for one fixed canonical-form family need not
-have equivalent index types under the literal CPSV16 definition.
+have equivalent index types under the literal definition of arXiv:1606.00608.
 
 This is a counterexample to the unrestricted uniqueness sentence in
 arXiv:1606.00608, Appendix A, line 1148. Take the bond-dimension-one tensor
