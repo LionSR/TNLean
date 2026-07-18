@@ -140,6 +140,68 @@
     $I_L \le I_{L+1}$ after subtracting $S_N$.
 \end{proof}
 
+\begin{definition}[Parity-sensitive classical MPDO]
+    \label{def:parity_mpdo_counterexample}
+    \lean{MPOTensor.ThermodynamicLimitCounterexample.parityTensor}
+    \leanok
+    \uses{def:mpo_tensor}
+    Let $M$ have physical dimension two and bond dimension three, with
+    \[
+        M^{00}=\operatorname{diag}(1,0,0),\qquad
+        M^{11}=\operatorname{diag}(0,1,-1),\qquad
+        M^{01}=M^{10}=0.
+    \]
+\end{definition}
+
+\begin{theorem}[A periodic MPDO without a thermodynamic limit]
+    \label{thm:parity_mpdo_no_thermodynamic_limit}
+    \lean{MPOTensor.ThermodynamicLimitCounterexample.mpo_parityTensor_eq_diagonal,
+      MPOTensor.ThermodynamicLimitCounterexample.parityTensor_isMPDO,
+      MPOTensor.ThermodynamicLimitCounterexample.trace_mpo_parityTensor,
+      MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_zeroConfig_of_odd,
+      MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_zeroConfig_of_even,
+      MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_odd,
+      MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_even,
+      MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_reducedBlockState_one_zero_zero}
+    \leanok
+    \uses{def:mpdo, def:parity_mpdo_counterexample}
+    The tensor in Definition~\ref{def:parity_mpdo_counterexample} generates the
+    positive operators
+    \[
+        \rho^{(N)}
+        =\lvert 0^N\rangle\!\langle 0^N\rvert
+        +\bigl(1+(-1)^N\bigr)
+          \lvert 1^N\rangle\!\langle 1^N\rvert.
+    \]
+    Their traces are $2+(-1)^N$.  The all-zero diagonal entry of the normalized
+    one-site reduced state is therefore one for odd $N$ and $1/3$ for positive
+    even $N$.  In particular, the normalized periodic one-site reduced states
+    do not converge as $N\to\infty$.
+
+    Thus normalized periodic marginals need not converge under the hypotheses
+    of \cite[Proposition~4.5, lines~801--806]{Cirac2016MPDO_arXiv}.  The mutual
+    information of this same family is computed in
+    \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A contraction around the virtual loop vanishes unless the bra and ket
+    configurations agree and are both constant.  The all-zero configuration
+    receives weight one.  The all-one configuration receives the sum of the
+    two virtual-sector weights, namely $1+(-1)^N$.  This gives the displayed
+    diagonal form.  Its coefficients are nonnegative: the second coefficient
+    is zero for odd $N$ and two for even $N$.  Hence every positive-length
+    operator is positive semidefinite, and summing its two possible diagonal
+    entries gives the trace $2+(-1)^N$.
+
+    After normalization, the all-zero weight is consequently one at odd
+    lengths and $1/3$ at positive even lengths.  Tracing out all but the first
+    site does not change this entry, since among the configurations beginning
+    with zero only the all-zero configuration has nonzero weight.  The two
+    subsequences of one-site marginals therefore have distinct all-zero
+    entries, so the sequence cannot converge.
+\end{proof}
+
 \begin{definition}[Map on the second tensor factor]
     \label{def:mpdo_id_tensor_map}
     \lean{Matrix.idTensorMap}
@@ -870,8 +932,9 @@
     one-site density matrix $q$. Thus its $L$-site marginal has rank
     $\operatorname{rank}(q)^L$, although its mutual information vanishes. The
     unrestricted estimate therefore requires a direct operator-Schmidt
-    argument not supplied by the cited proof. The bound and the iterated
-    thermodynamic limit remain open; see
+    argument not supplied by the cited proof. The bound remains open. The
+    same example as Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} also
+    makes the iterated mutual-information limit false; see
     \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}. The
     channel-image implication is
     Theorem~\ref{thm:local_channel_image_mutual_info_bound}, and the pure-state
