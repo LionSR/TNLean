@@ -1127,8 +1127,21 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
     Nondegeneracy of the trace pairing gives $P_T^*(Y)=Y$.  Conversely,
     $P_TT=P_T$ implies $T^*P_T^*=P_T^*$, so every fixed point of $P_T^*$ is a
-    fixed point of $T^*$.  The fixed-point equivalence and idempotence give the
-    range identity.
+    fixed point of $T^*$:
+    \[
+        P_T^*(Y)=Y
+        \quad\Longrightarrow\quad
+        T^*(Y)=T^*(P_T^*(Y))=P_T^*(Y)=Y.
+    \]
+    Hence
+    \[
+        Y\in\operatorname{range}(P_T^*)
+        \quad\Longleftrightarrow\quad P_T^*(Y)=Y
+        \quad\Longleftrightarrow\quad T^*(Y)=Y
+        \quad\Longleftrightarrow\quad Y\in\ker(T^*-\Id).
+    \]
+    The first equivalence uses idempotence, and the second is the fixed-point
+    equivalence proved above.
 \end{proof}
 
 \begin{theorem}[Positive unital adjoint Ces\`aro retraction]
