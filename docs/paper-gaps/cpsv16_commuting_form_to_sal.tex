@@ -111,12 +111,20 @@ decomposition on which all $X_{aa'}$ and $Y_{cc'}$ act on complementary
 factors.  This is
 \leanid{Matrix.exists_middle_spatial_decomposition_of_overlappingLifts_commute}.
 
-The remaining part of the exact statement of Beigi's Lemma~2.1 is the final
-assembly: construct the unitary from this orthonormal basis, combine the
-coefficient matrices into the operators $R_{A\beta_l}$ and
-$S_{\beta_rC}$, and prove the two block-sum equalities printed in the source.
-No additional mathematical hypothesis is needed for this assembly, but those
-operator equalities have not yet been stated in the formal development.
+The unitary assembly in Beigi's Lemma~2.1 is now available as well.  The
+theorem
+\leanid{Matrix.exists_unitary_blockActions_of_overlappingLifts_commute}
+constructs one unitary identification of the middle space, combines the
+coefficient matrices into Hermitian operators $R_{A\beta_l}$ and
+$S_{\beta_rC}$, and proves the two direct-sum block identities printed in the
+source.  Its hypotheses are exactly the source hypotheses: Hermiticity of both
+overlapping operators and commutation of their natural three-factor lifts.
+
+What remains is the application of this finite-matrix lemma to the cyclic bond
+formalism.  One must identify the two adjacent translates supplied by
+\leanid{MPOTensor.EtaLocalStructureData} with the two abstract overlapping
+lifts under a common three-site reindexing, and then transport the resulting
+direct-sum decomposition through the translation-invariant family.
 
 Consequently the source implication
 \[
@@ -141,9 +149,8 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Assemble the completed coefficient decomposition into the unitary
-block-sum equalities for $X_{AB}$ and $Y_{BC}$ printed in Beigi's Lemma~2.1.
-\item Apply that lemma to the two overlapping translates of the single bond in
+\item Prove the three-site reindexing bridge for the two overlapping translates
+of the single bond in
 \leanid{MPOTensor.EtaLocalStructureData}, obtaining the translation-invariant
 neighboring operators $\eta_{k,h}$ without assuming a Hayashi decomposition.
 Use \leanid{MPOTensor.IsSourceZCL} to prove the rank-one trace factorization

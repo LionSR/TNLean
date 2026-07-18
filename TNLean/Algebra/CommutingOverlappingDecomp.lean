@@ -21,12 +21,79 @@ indices.
 * `Matrix.exists_middle_spatial_decomposition_of_overlappingLifts_commute` -- one
   orthonormal decomposition of the middle space puts the coefficient families of the two
   overlapping operators on complementary tensor factors.
+* `Matrix.exists_unitary_blockActions_of_overlappingLifts_commute` -- the corresponding
+  explicit unitary direct-sum representation, with Hermitian operators on the two
+  complementary factors and the two block identities of Beigi's lemma.
 
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting Hamiltonians*,
   arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`) and its proof on pages 2--3.
 -/
+
+open scoped InnerProductSpace Kronecker
+
+namespace OrthonormalBasis
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+private theorem exists_unitary_conj_toMatrix {K : ℕ} {d m : Fin K → ℕ}
+    (b : OrthonormalBasis ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ
+      (EuclideanSpace ℂ n)) :
+    ∃ (e : ((k : Fin K) × (Fin (m k) × Fin (d k))) ≃ n) (U : Matrix n n ℂ),
+      U ∈ Matrix.unitaryGroup n ℂ ∧
+        ∀ A : Matrix n n ℂ,
+          star U * A * U = Matrix.reindex e e
+            (LinearMap.toMatrix b.toBasis b.toBasis (Matrix.toEuclideanLin A)) := by
+  classical
+  set s : OrthonormalBasis n ℂ (EuclideanSpace ℂ n) :=
+    EuclideanSpace.basisFun n ℂ with hs
+  set e : ((k : Fin K) × (Fin (m k) × Fin (d k))) ≃ n :=
+    b.toBasis.indexEquiv s.toBasis with he
+  set b' : OrthonormalBasis n ℂ (EuclideanSpace ℂ n) := b.reindex e with hb'
+  refine ⟨e, s.toBasis.toMatrix ⇑b'.toBasis,
+    s.toMatrix_orthonormalBasis_mem_unitary b', fun A ↦ ?_⟩
+  have hstar : star (s.toBasis.toMatrix ⇑b'.toBasis) =
+      b'.toBasis.toMatrix ⇑s.toBasis := by
+    have h1 : star (s.toBasis.toMatrix ⇑b'.toBasis) *
+        s.toBasis.toMatrix ⇑b'.toBasis = 1 :=
+      Matrix.mem_unitaryGroup_iff'.mp (s.toMatrix_orthonormalBasis_mem_unitary b')
+    have h2 : s.toBasis.toMatrix ⇑b'.toBasis *
+        b'.toBasis.toMatrix ⇑s.toBasis = 1 :=
+      Module.Basis.toMatrix_mul_toMatrix_flip _ _
+    calc
+      star (s.toBasis.toMatrix ⇑b'.toBasis) =
+          star (s.toBasis.toMatrix ⇑b'.toBasis) *
+            (s.toBasis.toMatrix ⇑b'.toBasis *
+              b'.toBasis.toMatrix ⇑s.toBasis) := by rw [h2, mul_one]
+      _ = star (s.toBasis.toMatrix ⇑b'.toBasis) *
+            s.toBasis.toMatrix ⇑b'.toBasis *
+              b'.toBasis.toMatrix ⇑s.toBasis := by rw [mul_assoc]
+      _ = b'.toBasis.toMatrix ⇑s.toBasis := by rw [h1, one_mul]
+  have hA' : LinearMap.toMatrix s.toBasis s.toBasis (Matrix.toEuclideanLin A) = A := by
+    rw [hs, Matrix.toEuclideanLin_eq_toLin_orthonormal, LinearMap.toMatrix_toLin]
+  have hchange : b'.toBasis.toMatrix ⇑s.toBasis * A *
+      s.toBasis.toMatrix ⇑b'.toBasis =
+        LinearMap.toMatrix b'.toBasis b'.toBasis (Matrix.toEuclideanLin A) := by
+    conv_lhs => rw [← hA']
+    exact basis_toMatrix_mul_linearMap_toMatrix_mul_basis_toMatrix
+      b'.toBasis s.toBasis b'.toBasis s.toBasis (Matrix.toEuclideanLin A)
+  have hreindex : LinearMap.toMatrix b'.toBasis b'.toBasis (Matrix.toEuclideanLin A) =
+      Matrix.reindex e e
+        (LinearMap.toMatrix b.toBasis b.toBasis (Matrix.toEuclideanLin A)) := by
+    ext x y
+    simp [hb', Matrix.reindex_apply, LinearMap.toMatrix_apply,
+      OrthonormalBasis.coe_toBasis_repr_apply, OrthonormalBasis.coe_toBasis]
+  calc
+    star (s.toBasis.toMatrix ⇑b'.toBasis) * A *
+        s.toBasis.toMatrix ⇑b'.toBasis =
+      b'.toBasis.toMatrix ⇑s.toBasis * A *
+        s.toBasis.toMatrix ⇑b'.toBasis := by rw [hstar]
+    _ = LinearMap.toMatrix b'.toBasis b'.toBasis (Matrix.toEuclideanLin A) := hchange
+    _ = Matrix.reindex e e
+        (LinearMap.toMatrix b.toBasis b.toBasis (Matrix.toEuclideanLin A)) := hreindex
+
+end OrthonormalBasis
 
 namespace Matrix
 
@@ -63,6 +130,72 @@ the two last-factor indices fixed.
 Source: Beigi, arXiv:1105.1019v2, proof of Lemma 2.1 (`lem:comm`). -/
 def rightMiddleSlice (Y : Matrix (b × c) (b × c) ℂ) (k k' : c) : Matrix b b ℂ :=
   fun j j' ↦ Y (j, k) (j', k')
+
+/-- The index equivalence which orders each middle-space summand as left factor followed by
+right factor when adjoining the first outer space. It sends
+`(q, ((i, s), r))` to `(i, e (q, (r, s)))`.
+
+Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), decomposition and first block
+identity on pages 2--3. -/
+def leftSpatialBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
+    (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b) :
+    ((q : Fin K) × ((a × Fin (d q)) × Fin (m q))) ≃ (a × b) where
+  toFun x := (x.2.1.1, e ⟨x.1, (x.2.2, x.2.1.2)⟩)
+  invFun y :=
+    let z := e.symm y.2
+    ⟨z.1, ((y.1, z.2.2), z.2.1)⟩
+  left_inv x := by
+    obtain ⟨q, ⟨⟨i, s⟩, r⟩⟩ := x
+    dsimp
+    rw [e.symm_apply_apply]
+  right_inv y := by
+    obtain ⟨i, j⟩ := y
+    dsimp
+    rw [e.apply_symm_apply]
+
+/-- The index equivalence which orders each middle-space summand as left factor followed by
+right factor when adjoining the last outer space. It sends
+`(q, (s, (r, k)))` to `(e (q, (r, s)), k)`.
+
+Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), decomposition and second block
+identity on pages 2--3. -/
+def rightSpatialBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
+    (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b) :
+    ((q : Fin K) × (Fin (d q) × (Fin (m q) × c))) ≃ (b × c) where
+  toFun x := (e ⟨x.1, (x.2.2.1, x.2.1)⟩, x.2.2.2)
+  invFun y :=
+    let z := e.symm y.1
+    ⟨z.1, (z.2.2, (z.2.1, y.2))⟩
+  left_inv x := by
+    obtain ⟨q, ⟨s, r, k⟩⟩ := x
+    dsimp
+    rw [e.symm_apply_apply]
+  right_inv y := by
+    obtain ⟨j, k⟩ := y
+    dsimp
+    rw [e.apply_symm_apply]
+
+omit [DecidableEq b] in
+private theorem conj_left_tensor_apply (X : Matrix (a × b) (a × b) ℂ)
+    (U : Matrix b b ℂ) (i i' : a) (j j' : b) :
+    (star ((1 : Matrix a a ℂ) ⊗ₖ U) * X * ((1 : Matrix a a ℂ) ⊗ₖ U))
+        (i, j) (i', j') =
+      (star U * leftMiddleSlice X i i' * U) j j' := by
+  simp only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_kronecker,
+    Matrix.conjTranspose_one, Matrix.mul_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, Fintype.sum_prod_type, leftMiddleSlice]
+  simp
+
+omit [DecidableEq b] in
+private theorem conj_right_tensor_apply (Y : Matrix (b × c) (b × c) ℂ)
+    (U : Matrix b b ℂ) (j j' : b) (k k' : c) :
+    (star (U ⊗ₖ (1 : Matrix c c ℂ)) * Y * (U ⊗ₖ (1 : Matrix c c ℂ)))
+        (j, k) (j', k') =
+      (star U * rightMiddleSlice Y k k' * U) j j' := by
+  simp only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_kronecker,
+    Matrix.conjTranspose_one, Matrix.mul_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, Fintype.sum_prod_type, rightMiddleSlice]
+  simp
 
 omit [Fintype b] [Fintype c] [DecidableEq b] [DecidableEq c] in
 /-- Hermiticity exchanges the two outer indices of a middle-factor coefficient matrix.
@@ -154,5 +287,178 @@ theorem exists_middle_spatial_decomposition_of_overlappingLifts_commute
     change A ∈ StarSubalgebra.centralizer ℂ
       (Set.range fun p : c × c ↦ rightMiddleSlice Y p.1 p.2) at hA
     exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp hA _ ⟨(k, k'), rfl⟩).1
+
+private theorem toMatrix_eq_leftBlockDiagonal_of_action {K : ℕ} {d m : Fin K → ℕ}
+    (e : OrthonormalBasis ((q : Fin K) × (Fin (m q) × Fin (d q))) ℂ
+      (EuclideanSpace ℂ b)) (A : Matrix b b ℂ)
+    (B : ∀ q, Matrix (Fin (d q)) (Fin (d q)) ℂ)
+    (hA : ∀ (q : Fin K) (r : Fin (m q)) (s : Fin (d q)),
+      Matrix.toEuclideanLin A (e ⟨q, (r, s)⟩) =
+        ∑ s', B q s' s • e ⟨q, (r, s')⟩) :
+    LinearMap.toMatrix e.toBasis e.toBasis (Matrix.toEuclideanLin A) =
+      Matrix.blockDiagonal' fun q =>
+        (1 : Matrix (Fin (m q)) (Fin (m q)) ℂ) ⊗ₖ B q := by
+  ext ⟨q', r', s'⟩ ⟨q, r, s⟩
+  rw [LinearMap.toMatrix_apply, OrthonormalBasis.coe_toBasis,
+    OrthonormalBasis.coe_toBasis_repr_apply, OrthonormalBasis.repr_apply_apply,
+    hA q r s, inner_sum]
+  simp only [inner_smul_right, orthonormal_iff_ite.mp e.orthonormal]
+  rcases eq_or_ne q' q with rfl | hqq
+  · rw [Matrix.blockDiagonal'_apply_eq]
+    simp only [Matrix.kroneckerMap_apply, Matrix.one_apply, Sigma.mk.inj_iff,
+      heq_eq_eq, Prod.mk.injEq, true_and]
+    rcases eq_or_ne r' r with rfl | hrr
+    · simp [Finset.sum_ite_eq]
+    · simp [hrr]
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hqq]
+    simp [hqq]
+
+private theorem toMatrix_eq_rightBlockDiagonal_of_action {K : ℕ} {d m : Fin K → ℕ}
+    (e : OrthonormalBasis ((q : Fin K) × (Fin (m q) × Fin (d q))) ℂ
+      (EuclideanSpace ℂ b)) (A : Matrix b b ℂ)
+    (C : ∀ q, Matrix (Fin (m q)) (Fin (m q)) ℂ)
+    (hA : ∀ (q : Fin K) (r : Fin (m q)) (s : Fin (d q)),
+      Matrix.toEuclideanLin A (e ⟨q, (r, s)⟩) =
+        ∑ r', C q r' r • e ⟨q, (r', s)⟩) :
+    LinearMap.toMatrix e.toBasis e.toBasis (Matrix.toEuclideanLin A) =
+      Matrix.blockDiagonal' fun q =>
+        C q ⊗ₖ (1 : Matrix (Fin (d q)) (Fin (d q)) ℂ) := by
+  ext ⟨q', r', s'⟩ ⟨q, r, s⟩
+  rw [LinearMap.toMatrix_apply, OrthonormalBasis.coe_toBasis,
+    OrthonormalBasis.coe_toBasis_repr_apply, OrthonormalBasis.repr_apply_apply,
+    hA q r s, inner_sum]
+  simp only [inner_smul_right, orthonormal_iff_ite.mp e.orthonormal]
+  rcases eq_or_ne q' q with rfl | hqq
+  · rw [Matrix.blockDiagonal'_apply_eq]
+    simp only [Matrix.kroneckerMap_apply, Matrix.one_apply, Sigma.mk.inj_iff,
+      heq_eq_eq, Prod.mk.injEq, true_and]
+    rcases eq_or_ne s' s with rfl | hss
+    · simp [Finset.sum_ite_eq]
+    · simp [hss]
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hqq]
+    simp [hqq]
+
+/-- **Explicit unitary Bravyi--Vyalyi block actions.** Let $X_{AB}$ and $Y_{BC}$ be
+Hermitian operators whose natural three-factor lifts commute. There are positive dimensions
+$d_q,m_q$, a unitary $U$ identifying
+$$
+  H_B \cong \bigoplus_q H_{q,l}\otimes H_{q,r},
+$$
+and Hermitian operators $R_q$ on $H_A\otimes H_{q,l}$ and $S_q$ on
+$H_{q,r}\otimes H_C$ such that
+$$
+ (\mathbf 1_A\otimes U^*)X_{AB}(\mathbf 1_A\otimes U)
+   = \bigoplus_q (R_q\otimes\mathbf 1_{q,r}),
+ \qquad
+ (U^*\otimes\mathbf 1_C)Y_{BC}(U\otimes\mathbf 1_C)
+   = \bigoplus_q (\mathbf 1_{q,l}\otimes S_q).
+$$
+The two equivalences in the formal statement order the dependent direct-sum indices as
+$A\otimes(H_{q,l}\otimes H_{q,r})$ and
+$(H_{q,l}\otimes H_{q,r})\otimes C$, respectively.
+
+This is the explicit coordinate form of the two block-action identities in S. Beigi,
+arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. Its hypotheses agree with the
+source: both overlapping operators are Hermitian and their natural lifts commute. -/
+theorem exists_unitary_blockActions_of_overlappingLifts_commute
+    (X : Matrix (a × b) (a × b) ℂ) (Y : Matrix (b × c) (b × c) ℂ)
+    (hX : X.IsHermitian) (hY : Y.IsHermitian)
+    (hComm : leftOverlappingLift X * rightOverlappingLift Y =
+      rightOverlappingLift Y * leftOverlappingLift X) :
+    ∃ (K : ℕ) (d m : Fin K → ℕ)
+      (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b)
+      (U : Matrix b b ℂ)
+      (R : ∀ q, Matrix (a × Fin (d q)) (a × Fin (d q)) ℂ)
+      (S : ∀ q, Matrix (Fin (m q) × c) (Fin (m q) × c) ℂ),
+      U ∈ Matrix.unitaryGroup b ℂ ∧
+        (∀ q, 0 < d q) ∧ (∀ q, 0 < m q) ∧
+        (∀ q, (R q).IsHermitian) ∧ (∀ q, (S q).IsHermitian) ∧
+        Matrix.reindex (leftSpatialBlockEquiv e).symm
+            (leftSpatialBlockEquiv e).symm
+            (star ((1 : Matrix a a ℂ) ⊗ₖ U) * X *
+              ((1 : Matrix a a ℂ) ⊗ₖ U)) =
+          (Matrix.blockDiagonal' fun q =>
+            R q ⊗ₖ (1 : Matrix (Fin (m q)) (Fin (m q)) ℂ)) ∧
+        Matrix.reindex (rightSpatialBlockEquiv e).symm
+            (rightSpatialBlockEquiv e).symm
+            (star (U ⊗ₖ (1 : Matrix c c ℂ)) * Y *
+              (U ⊗ₖ (1 : Matrix c c ℂ))) =
+          (Matrix.blockDiagonal' fun q =>
+            (1 : Matrix (Fin (d q)) (Fin (d q)) ℂ) ⊗ₖ S q) := by
+  classical
+  obtain ⟨K, d, m, basis, hd, hm, hleft, hright⟩ :=
+    exists_middle_spatial_decomposition_of_overlappingLifts_commute X Y hY hComm
+  choose B hB using hleft
+  choose C hC using hright
+  obtain ⟨e, U, hU, hcoord⟩ := basis.exists_unitary_conj_toMatrix
+  let R : ∀ q, Matrix (a × Fin (d q)) (a × Fin (d q)) ℂ :=
+    fun q x y => B x.1 y.1 q x.2 y.2
+  let S : ∀ q, Matrix (Fin (m q) × c) (Fin (m q) × c) ℂ :=
+    fun q x y => C x.2 y.2 q x.1 y.1
+  have hXblock : Matrix.reindex (leftSpatialBlockEquiv e).symm
+          (leftSpatialBlockEquiv e).symm
+          (star ((1 : Matrix a a ℂ) ⊗ₖ U) * X *
+            ((1 : Matrix a a ℂ) ⊗ₖ U)) =
+        Matrix.blockDiagonal' fun q =>
+          R q ⊗ₖ (1 : Matrix (Fin (m q)) (Fin (m q)) ℂ) := by
+    ext ⟨q, ⟨⟨i, s⟩, r⟩⟩ ⟨q', ⟨⟨i', s'⟩, r'⟩⟩
+    change (star ((1 : Matrix a a ℂ) ⊗ₖ U) * X *
+        ((1 : Matrix a a ℂ) ⊗ₖ U))
+          (i, e ⟨q, (r, s)⟩) (i', e ⟨q', (r', s')⟩) = _
+    rw [conj_left_tensor_apply, hcoord,
+      toMatrix_eq_leftBlockDiagonal_of_action basis _ (B i i') (hB i i')]
+    simp only [Matrix.reindex_apply]
+    rcases eq_or_ne q q' with rfl | hqq
+    · simp [R, Matrix.blockDiagonal'_apply_eq,
+        Matrix.kroneckerMap_apply, Matrix.one_apply]
+    · simp [R, Matrix.blockDiagonal'_apply_ne _ _ _ hqq]
+  have hYblock : Matrix.reindex (rightSpatialBlockEquiv e).symm
+          (rightSpatialBlockEquiv e).symm
+          (star (U ⊗ₖ (1 : Matrix c c ℂ)) * Y *
+            (U ⊗ₖ (1 : Matrix c c ℂ))) =
+        Matrix.blockDiagonal' fun q =>
+          (1 : Matrix (Fin (d q)) (Fin (d q)) ℂ) ⊗ₖ S q := by
+    ext ⟨q, ⟨s, r, k⟩⟩ ⟨q', ⟨s', r', k'⟩⟩
+    change (star (U ⊗ₖ (1 : Matrix c c ℂ)) * Y *
+        (U ⊗ₖ (1 : Matrix c c ℂ)))
+          (e ⟨q, (r, s)⟩, k) (e ⟨q', (r', s')⟩, k') = _
+    rw [conj_right_tensor_apply, hcoord,
+      toMatrix_eq_rightBlockDiagonal_of_action basis _ (C k k') (hC k k')]
+    simp only [Matrix.reindex_apply]
+    rcases eq_or_ne q q' with rfl | hqq
+    · simp [S, Matrix.blockDiagonal'_apply_eq,
+        Matrix.kroneckerMap_apply, Matrix.one_apply]
+    · simp [S, Matrix.blockDiagonal'_apply_ne _ _ _ hqq]
+  refine ⟨K, d, m, e, U, R, S, hU, hd, hm, ?_, ?_, hXblock, hYblock⟩
+  · intro q
+    apply Matrix.IsHermitian.ext
+    rintro ⟨i', s'⟩ ⟨i, s⟩
+    let r : Fin (m q) := ⟨0, hm q⟩
+    have hConj := Matrix.isHermitian_conjTranspose_mul_mul
+      ((1 : Matrix a a ℂ) ⊗ₖ U) hX
+    have hConj' : (star ((1 : Matrix a a ℂ) ⊗ₖ U) * X *
+        ((1 : Matrix a a ℂ) ⊗ₖ U)).IsHermitian := by
+      simpa only [Matrix.star_eq_conjTranspose] using hConj
+    have hPulled := hConj'.reindex (leftSpatialBlockEquiv e).symm
+    have hEntry := hPulled.apply ⟨q, ((i', s'), r)⟩ ⟨q, ((i, s), r)⟩
+    rw [hXblock] at hEntry
+    simpa [R,
+      Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply,
+      Matrix.one_apply] using hEntry
+  · intro q
+    apply Matrix.IsHermitian.ext
+    rintro ⟨r', k'⟩ ⟨r, k⟩
+    let s : Fin (d q) := ⟨0, hd q⟩
+    have hConj := Matrix.isHermitian_conjTranspose_mul_mul
+      (U ⊗ₖ (1 : Matrix c c ℂ)) hY
+    have hConj' : (star (U ⊗ₖ (1 : Matrix c c ℂ)) * Y *
+        (U ⊗ₖ (1 : Matrix c c ℂ))).IsHermitian := by
+      simpa only [Matrix.star_eq_conjTranspose] using hConj
+    have hPulled := hConj'.reindex (rightSpatialBlockEquiv e).symm
+    have hEntry := hPulled.apply ⟨q, (s, (r', k'))⟩ ⟨q, (s, (r, k))⟩
+    rw [hYblock] at hEntry
+    simpa [S,
+      Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply,
+      Matrix.one_apply] using hEntry
 
 end Matrix
