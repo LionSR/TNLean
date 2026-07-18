@@ -874,13 +874,34 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     is bounded.
 \end{definition}
 
-\begin{lemma}[Complementarity of the fixed-point space]
-    \label{lem:mean_ergodic_complementarity}
-    \lean{LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_of_mem_range_sub_one,
-        LinearMap.HasBoundedOrbits.disjoint_ker_sub_one_range_sub_one,
-        LinearMap.HasBoundedOrbits.isCompl_ker_sub_one_range_sub_one}
+\begin{lemma}[Ces\`aro averages of range elements]
+    \label{lem:mean_ergodic_range_limit}
+    \lean{LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_of_mem_range_sub_one}
     \leanok
     \uses{def:has_bounded_orbits}
+    Let $f:V\to V$ have bounded orbits. If
+    $x\in\operatorname{range}(f-\Id_V)$, then
+    \[
+        A_N(x)\longrightarrow 0.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:has_bounded_orbits}
+    Write $x=(f-\Id_V)y$. Telescoping gives
+    \[
+        A_N(x)=\frac{f^N y-y}{N}.
+    \]
+    Boundedness of the orbit of $y$ makes the numerator bounded, so the
+    right-hand side tends to zero.
+\end{proof}
+
+\begin{lemma}[Complementarity of the fixed-point space]
+    \label{lem:mean_ergodic_complementarity}
+    \lean{LinearMap.HasBoundedOrbits.disjoint_ker_sub_one_range_sub_one,
+        LinearMap.HasBoundedOrbits.isCompl_ker_sub_one_range_sub_one}
+    \leanok
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit}
     Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
     Then
     \[
@@ -889,14 +910,11 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:has_bounded_orbits}
-    If $y\in V$, telescoping and boundedness of its orbit give
-    \[
-        A_N\bigl((f-\Id_V)y\bigr)
-        =\frac{f^N y-y}{N}\longrightarrow 0.
-    \]
-    Since $A_N(z)=z$ for $z\in\ker(f-\Id_V)$, the two summands have zero
-    intersection. Rank--nullity then gives the asserted complementarity.
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit}
+    If $z$ belongs to both summands, then $A_N(z)=z$ because
+    $z\in\ker(f-\Id_V)$, while Lemma~\ref{lem:mean_ergodic_range_limit} gives
+    $A_N(z)\to 0$. Hence $z=0$. Rank--nullity then gives the asserted
+    complementarity.
 \end{proof}
 
 \begin{definition}[Mean-ergodic projection]
@@ -937,8 +955,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:has_bounded_orbits, lem:mean_ergodic_complementarity,
-        def:mean_ergodic_projection}
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit,
+        lem:mean_ergodic_complementarity, def:mean_ergodic_projection}
     By Lemma~\ref{lem:mean_ergodic_complementarity}, decompose
     \[
         x=P_f x+(x-P_f x),\qquad
@@ -946,8 +964,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
         x-P_f x\in\operatorname{range}(f-\Id_V).
     \]
     The fixed component has constant Ces\`aro averages, whereas the averages of
-    the second component tend to zero by the telescoping calculation in the
-    lemma. Thus $A_N(x)\to P_f x$. Since
+    the second component tend to zero by
+    Lemma~\ref{lem:mean_ergodic_range_limit}. Thus $A_N(x)\to P_f x$. Since
     \[
         P_f x\in\ker(f-\Id_V),
         \qquad f(P_f x)=P_f x,
