@@ -52,7 +52,7 @@ result does not by itself establish the fixed-point structure in Wolf's Theorem 
 mean ergodic theorem, Cesàro average, fixed point, bounded orbit
 -/
 
-open Filter Function Set
+open Filter Function
 open scoped Topology
 
 namespace LinearMap
