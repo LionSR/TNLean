@@ -4,8 +4,9 @@
 The test compiles small pictures and reads their `.tnlog` contraction
 records.  It guards the two failures from issue 4249: inventing a second open
 port on the centred face, and dropping the second contraction on the declared
-two-port face.  It also fixes the compatibility meaning of `legs at=` and the
-virtual arity of default and sparse splitting endpoints.
+two-port face.  It also fixes the compatibility meaning of `legs at=`, the
+virtual arity of default and sparse splitting endpoints, and exact-slot
+resolution for ordinary tall glyphs and physical contractions.
 """
 
 from __future__ import annotations
@@ -60,6 +61,18 @@ SOURCE = r"""
   \tnfuse[span=3, west at=center, east at={1,3}]{V} & \tn{A}\\
   & \tn{A}\\
   & \tn{A}
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, box, west at=center, east at={1,2}]{X}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, box, west at=center, east at={1,2}]{X} & \tn{A}\\
+  & \tn{A}
+\end{tenkz}
+\begin{tenkz}[rows={op:none, ket}, tensor style=box]
+  \tn[pill, wide=2, up at=center, down at={1,2}]{U} & \\
+  \tn[pill, wide=2, up at={1}, down at=center]{L} &
 \end{tenkz}
 \end{document}
 """
@@ -192,6 +205,26 @@ def main() -> int:
     forbid(sparse_pairing,
            "bond|picture=9|row=2|from=1|to=2|dir=none|role=none|species=none",
            "sparse face contracted undeclared row slot 2")
+    tall = pictures[10]
+    require(tall, "faceports|picture=10|cell=1-1|face=west|arity=1|at=center",
+            "tall glyph lost its centred west face")
+    require(tall, "faceports|picture=10|cell=1-1|face=east|arity=2|at=1,2",
+            "tall glyph lost its separate east face")
+    require(
+        tall,
+        "boundary|picture=10|virtual-west=1|virtual-east=2|physical-up=0|physical-down=0",
+        "tall glyph boundary disagrees with its declared faces",
+    )
+    tall_pairing = pictures[11]
+    require(tall_pairing,
+            "bond|picture=11|row=1|from=1|to=2|dir=none|role=none|species=none",
+            "tall glyph did not contract east slot 1")
+    require(tall_pairing,
+            "bond|picture=11|row=2|from=1|to=2|dir=none|role=none|species=none",
+            "tall glyph did not contract east slot 2")
+    lower_sparse = pictures[12]
+    if paired_ports(lower_sparse) != [("1", "1")]:
+        raise AssertionError("wide contraction ignored the lower face's exact slots")
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 
