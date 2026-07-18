@@ -24,6 +24,8 @@ indices.
 * `Matrix.exists_unitary_blockActions_of_overlappingLifts_commute` -- the corresponding
   explicit unitary direct-sum representation, with Hermitian operators on the two
   complementary factors and the two block identities of Beigi's lemma.
+* `Matrix.exists_unitary_blockSum_equalities_of_overlappingLifts_commute` -- the same
+  identities solved for the original two overlapping operators.
 
 ## References
 
@@ -460,5 +462,103 @@ theorem exists_unitary_blockActions_of_overlappingLifts_commute
     simpa [S,
       Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply,
       Matrix.one_apply] using hEntry
+
+/-- **Beigi's block-sum equalities for the original overlapping operators.** Let
+$X_{AB}$ and $Y_{BC}$ be Hermitian, and suppose that their natural three-factor lifts
+commute. There are positive dimensions $d_q,m_q$, a unitary $U$ on the middle space,
+and Hermitian operators $R_q$ on $H_A\otimes H_{q,l}$ and $S_q$ on
+$H_{q,r}\otimes H_C$ such that
+$$
+ X_{AB}=(\mathbf 1_A\otimes U)
+   \left(\bigoplus_q R_q\otimes\mathbf 1_{q,r}\right)
+   (\mathbf 1_A\otimes U^*),
+ \qquad
+ Y_{BC}=(U\otimes\mathbf 1_C)
+   \left(\bigoplus_q \mathbf 1_{q,l}\otimes S_q\right)
+   (U^*\otimes\mathbf 1_C).
+$$
+The reindexings in the formal statement express the two dependent direct sums in the
+original product coordinates. The block operators are Hermitian; no unitarity assertion
+is made about them.
+
+Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), TeX lines 398--422,
+especially the two displayed equalities on page 3. -/
+theorem exists_unitary_blockSum_equalities_of_overlappingLifts_commute
+    (X : Matrix (a × b) (a × b) ℂ) (Y : Matrix (b × c) (b × c) ℂ)
+    (hX : X.IsHermitian) (hY : Y.IsHermitian)
+    (hComm : leftOverlappingLift X * rightOverlappingLift Y =
+      rightOverlappingLift Y * leftOverlappingLift X) :
+    ∃ (K : ℕ) (d m : Fin K → ℕ)
+      (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b)
+      (U : Matrix b b ℂ)
+      (R : ∀ q, Matrix (a × Fin (d q)) (a × Fin (d q)) ℂ)
+      (S : ∀ q, Matrix (Fin (m q) × c) (Fin (m q) × c) ℂ),
+      U ∈ Matrix.unitaryGroup b ℂ ∧
+        (∀ q, 0 < d q) ∧ (∀ q, 0 < m q) ∧
+        (∀ q, (R q).IsHermitian) ∧ (∀ q, (S q).IsHermitian) ∧
+        X = ((1 : Matrix a a ℂ) ⊗ₖ U) *
+          Matrix.reindex (leftSpatialBlockEquiv e) (leftSpatialBlockEquiv e)
+            (Matrix.blockDiagonal' fun q =>
+              R q ⊗ₖ (1 : Matrix (Fin (m q)) (Fin (m q)) ℂ)) *
+          star ((1 : Matrix a a ℂ) ⊗ₖ U) ∧
+        Y = (U ⊗ₖ (1 : Matrix c c ℂ)) *
+          Matrix.reindex (rightSpatialBlockEquiv e) (rightSpatialBlockEquiv e)
+            (Matrix.blockDiagonal' fun q =>
+              (1 : Matrix (Fin (d q)) (Fin (d q)) ℂ) ⊗ₖ S q) *
+          star (U ⊗ₖ (1 : Matrix c c ℂ)) := by
+  classical
+  obtain ⟨K, d, m, e, U, R, S, hU, hd, hm, hR, hS, hXblock, hYblock⟩ :=
+    exists_unitary_blockActions_of_overlappingLifts_commute X Y hX hY hComm
+  have hXcoord : star ((1 : Matrix a a ℂ) ⊗ₖ U) * X *
+        ((1 : Matrix a a ℂ) ⊗ₖ U) =
+      Matrix.reindex (leftSpatialBlockEquiv e) (leftSpatialBlockEquiv e)
+        (Matrix.blockDiagonal' fun q =>
+          R q ⊗ₖ (1 : Matrix (Fin (m q)) (Fin (m q)) ℂ)) := by
+    have h := congrArg
+      (Matrix.reindex (leftSpatialBlockEquiv e) (leftSpatialBlockEquiv e)) hXblock
+    simpa using h
+  have hYcoord : star (U ⊗ₖ (1 : Matrix c c ℂ)) * Y *
+        (U ⊗ₖ (1 : Matrix c c ℂ)) =
+      Matrix.reindex (rightSpatialBlockEquiv e) (rightSpatialBlockEquiv e)
+        (Matrix.blockDiagonal' fun q =>
+          (1 : Matrix (Fin (d q)) (Fin (d q)) ℂ) ⊗ₖ S q) := by
+    have h := congrArg
+      (Matrix.reindex (rightSpatialBlockEquiv e) (rightSpatialBlockEquiv e)) hYblock
+    simpa using h
+  have hUleft : ((1 : Matrix a a ℂ) ⊗ₖ U) ∈ Matrix.unitaryGroup (a × b) ℂ :=
+    Matrix.kronecker_mem_unitary (one_mem _) hU
+  have hUright : (U ⊗ₖ (1 : Matrix c c ℂ)) ∈ Matrix.unitaryGroup (b × c) ℂ :=
+    Matrix.kronecker_mem_unitary hU (one_mem _)
+  have hUleft_mul : ((1 : Matrix a a ℂ) ⊗ₖ U) *
+      star ((1 : Matrix a a ℂ) ⊗ₖ U) = 1 :=
+    Matrix.mem_unitaryGroup_iff.mp hUleft
+  have hUright_mul : (U ⊗ₖ (1 : Matrix c c ℂ)) *
+      star (U ⊗ₖ (1 : Matrix c c ℂ)) = 1 :=
+    Matrix.mem_unitaryGroup_iff.mp hUright
+  have hXeq : X = ((1 : Matrix a a ℂ) ⊗ₖ U) *
+        Matrix.reindex (leftSpatialBlockEquiv e) (leftSpatialBlockEquiv e)
+          (Matrix.blockDiagonal' fun q =>
+            R q ⊗ₖ (1 : Matrix (Fin (m q)) (Fin (m q)) ℂ)) *
+        star ((1 : Matrix a a ℂ) ⊗ₖ U) := by
+    rw [← hXcoord,
+      ← mul_assoc ((1 : Matrix a a ℂ) ⊗ₖ U)
+        (star ((1 : Matrix a a ℂ) ⊗ₖ U) * X)
+        ((1 : Matrix a a ℂ) ⊗ₖ U),
+      ← mul_assoc ((1 : Matrix a a ℂ) ⊗ₖ U)
+        (star ((1 : Matrix a a ℂ) ⊗ₖ U)) X,
+      hUleft_mul, one_mul, mul_assoc, hUleft_mul, mul_one]
+  have hYeq : Y = (U ⊗ₖ (1 : Matrix c c ℂ)) *
+        Matrix.reindex (rightSpatialBlockEquiv e) (rightSpatialBlockEquiv e)
+          (Matrix.blockDiagonal' fun q =>
+            (1 : Matrix (Fin (d q)) (Fin (d q)) ℂ) ⊗ₖ S q) *
+        star (U ⊗ₖ (1 : Matrix c c ℂ)) := by
+    rw [← hYcoord,
+      ← mul_assoc (U ⊗ₖ (1 : Matrix c c ℂ))
+        (star (U ⊗ₖ (1 : Matrix c c ℂ)) * Y)
+        (U ⊗ₖ (1 : Matrix c c ℂ)),
+      ← mul_assoc (U ⊗ₖ (1 : Matrix c c ℂ))
+        (star (U ⊗ₖ (1 : Matrix c c ℂ))) Y,
+      hUright_mul, one_mul, mul_assoc, hUright_mul, mul_one]
+  exact ⟨K, d, m, e, U, R, S, hU, hd, hm, hR, hS, hXeq, hYeq⟩
 
 end Matrix

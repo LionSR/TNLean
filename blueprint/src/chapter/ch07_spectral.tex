@@ -2177,6 +2177,62 @@ module over the subalgebra.
     complementary factor, shows that every $R_q$ and every $S_q$ is Hermitian.
 \end{proof}
 
+\begin{theorem}[Block-sum equalities for commuting overlapping operators]%
+    \label{thm:commuting_overlapping_block_sum_equalities}
+    \lean{Matrix.exists_unitary_blockSum_equalities_of_overlappingLifts_commute}
+    \leanok
+    \uses{thm:commuting_overlapping_unitary_block_actions}
+    Let $X_{AB}\in\mathbf L(H_A\otimes H_B)$ and
+    $Y_{BC}\in\mathbf L(H_B\otimes H_C)$ be Hermitian, and suppose
+    \[
+        [X_{AB}\otimes\Id_C,\Id_A\otimes Y_{BC}]=0.
+    \]
+    There are positive integers $d_q,m_q$, an identification
+    \[
+        H_B\cong\bigoplus_{q=0}^{K-1}H_{q,l}\otimes H_{q,r},
+    \]
+    a unitary $U\in\mathbf L(H_B)$, and Hermitian operators
+    $R_q\in\mathbf L(H_A\otimes H_{q,l})$ and
+    $S_q\in\mathbf L(H_{q,r}\otimes H_C)$ such that
+    \[
+        X_{AB}=(\Id_A\otimes U)
+        \left(\bigoplus_{q=0}^{K-1}R_q\otimes\Id_{H_{q,r}}\right)
+        (\Id_A\otimes U^*),
+    \]
+    and
+    \[
+        Y_{BC}=(U\otimes\Id_C)
+        \left(\bigoplus_{q=0}^{K-1}\Id_{H_{q,l}}\otimes S_q\right)
+        (U^*\otimes\Id_C).
+    \]
+    In these formulas the two direct sums are transported to the original
+    product coordinates through the displayed identification.
+    These are the two equalities in
+    \cite[Lemma~2.1]{Beigi2012Classification}. The operators $R_q$ and $S_q$
+    are Hermitian; they are not asserted to be unitary.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $V_A=\Id_A\otimes U$ and $V_C=U\otimes\Id_C$. The preceding theorem
+    gives the two conjugated operators in the direct-sum coordinates. Applying
+    the inverse coordinate identifications yields
+    \[
+        V_A^*X_{AB}V_A
+        =\bigoplus_q R_q\otimes\Id_{H_{q,r}},
+        \qquad
+        V_C^*Y_{BC}V_C
+        =\bigoplus_q\Id_{H_{q,l}}\otimes S_q.
+    \]
+    Since $V_AV_A^*=\Id$ and $V_CV_C^*=\Id$,
+    \[
+        X_{AB}=V_A(V_A^*X_{AB}V_A)V_A^*,
+        \qquad
+        Y_{BC}=V_C(V_C^*Y_{BC}V_C)V_C^*,
+    \]
+    which are the stated equalities.
+\end{proof}
+
 Combining the containment direction with the double-commutant criterion yields the full
 block representation of a finite-dimensional $*$-subalgebra, the unital case of
 Eq.~(1.39) of~\cite{Wolf2012Quantum} invoked by~\cite[Theorem~6.14]{Wolf2012Quantum}: up
