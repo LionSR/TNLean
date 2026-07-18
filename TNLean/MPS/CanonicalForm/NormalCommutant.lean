@@ -220,7 +220,7 @@ line 1921. -/
 theorem IsNormal.eq_smul_one_of_commute {A : MPSTensor d D} (hA : IsNormal A)
     {S : Matrix (Fin D) (Fin D) ℂ} (hS : ∀ i, S * A i = A i * S) :
     ∃ c : ℂ, S = c • 1 := by
-  obtain ⟨N, hN⟩ := hA
+  obtain ⟨N, _hNpos, hN⟩ := hA
   have hwords : ∀ M ∈ Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ),
       S * M = M * S := by
     rintro _ ⟨σ, rfl⟩

@@ -341,7 +341,7 @@ theorem majumdarGhosh_not_isNBlkInjective_two :
 two-dimer-covering structure: the bond carries a two-periodic grading that no
 amount of blocking removes. -/
 theorem majumdarGhosh_not_isNormal : ¬ IsNormal majumdarGhoshTensor := by
-  rintro ⟨N, hN⟩
+  rintro ⟨N, _hNpos, hN⟩
   rcases Nat.even_or_odd N with he | ho
   · exact majumdarGhosh_not_isNBlkInjective_of_even he hN
   · exact majumdarGhosh_not_isNBlkInjective_of_odd ho hN

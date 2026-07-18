@@ -224,7 +224,7 @@ theorem exists_rectSpan_eq_range_of_isNormal
     (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
     (hN : IsNormal A) :
     ∃ n, rectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
-  obtain ⟨N₀, hN₀⟩ := hN
+  obtain ⟨N₀, _hN₀pos, hN₀⟩ := hN
   exact ⟨N₀, rectSpan_eq_range_of_wordSpan_eq_top P A
     ((wordSpan_eq_top_iff_isNBlkInjective A N₀).mpr hN₀)⟩
 

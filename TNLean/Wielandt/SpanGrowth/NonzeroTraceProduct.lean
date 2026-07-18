@@ -100,7 +100,7 @@ theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
     -- By stabilization, T_m = T_j for all m ≥ j
     have hstable := cumulativeSpan_stable A hstab
     -- Use IsNormal: ∃ N, wordSpan A N = ⊤
-    obtain ⟨N, hNblk⟩ := hN
+    obtain ⟨N, _hNpos, hNblk⟩ := hN
     -- wordSpan A N ≤ cumulativeSpan A (max N j) = T_j
     have hN_le : wordSpan A N ≤ cumulativeSpan A j := by
       calc wordSpan A N
@@ -301,7 +301,7 @@ theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
       ⟨j, hj1, hjk, hstab⟩ | hgrow
     · -- Stabilization case: T_j = T_{j+1} for some 1 ≤ j < n
       have hstable := cumulativeSpan_stable A hstab
-      obtain ⟨N, hNblk⟩ := hN
+      obtain ⟨N, _hNpos, hNblk⟩ := hN
       have hN_le : wordSpan A N ≤ cumulativeSpan A j := by
         calc wordSpan A N
             ≤ cumulativeSpan A (N ⊔ j) :=
@@ -377,29 +377,23 @@ theorem exists_nonzero_trace_word_sharp [NeZero D]
 
 /-! ### Positive-length nonzero trace word
 
-For D ≥ 2, the positive-length word products alone span M_D(ℂ) within the
+For positive `D`, the positive-length word products alone span M_D(ℂ) within the
 sharp bound. This gives a positive-length word with nonzero trace, which is
 needed for the blocking argument in Theorem 1 case (1).
 
 The key insight is that the positive-level cumulative span
 `V_n = span{evalWord A w : 1 ≤ |w| ≤ n}` satisfies the same growth and
 stabilization properties as the full cumulative span `T_n`, so
-`V_{D²−d'+1} = M_D(ℂ)` for `D ≥ 2`. -/
+`V_{D²−d'+1} = M_D(ℂ)` for positive `D`. -/
 
-/-- For `D ≥ 2` and `IsNormal A`, the index `N` with `wordSpan A N = ⊤` is ≥ 1. -/
-private theorem isNormal_index_pos [NeZero D] (hD : 2 ≤ D)
-    (A : MPSTensor d D) (hN : IsNormal A) :
+/-- Normality is witnessed by a positive index `N` with `wordSpan A N = ⊤`. -/
+private theorem isNormal_index_pos (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ N, 1 ≤ N ∧ wordSpan A N = ⊤ := by
-  obtain ⟨N, hNblk⟩ := hN
-  have hNtop := (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk
-  refine ⟨N, ?_, hNtop⟩
-  by_contra hN0
-  push Not at hN0
-  interval_cases N
-  exact wordSpan_zero_ne_top_of_two_le A hD hNtop
+  obtain ⟨N, hNpos, hNblk⟩ := hN
+  exact ⟨N, hNpos, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
 
 /-- **Lemma 1, sharp positive-length version** (arXiv:0909.5347):
-For D ≥ 2, under `IsNormal`, there exists a **positive-length** word `w` with
+For positive `D`, under `IsNormal`, there exists a **positive-length** word `w` with
 `|w| ≤ D² − dim(S₁(A)) + 1` such that `tr(evalWord A w) ≠ 0`.
 
 This strengthens `exists_nonzero_trace_word_sharp` by additionally requiring
@@ -409,7 +403,7 @@ The proof shows that the positive-level cumulative span
 `V_{D²−d'+1} = span{evalWord A w : 1 ≤ |w| ≤ D²−d'+1}`
 equals `M_D(ℂ)`, so it cannot be contained in `ker(trace)`. -/
 theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
-    (hD : 2 ≤ D) (A : MPSTensor d D) (hN : IsNormal A) :
+    (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ (w : List (Fin d)),
       1 ≤ w.length ∧
       w.length ≤ D ^ 2 - Module.finrank ℂ (wordSpan A 1) + 1 ∧
@@ -520,7 +514,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       rintro M ⟨σ, rfl⟩
       exact hword_all (List.ofFn σ) (by simpa only [List.length_ofFn] using hm)
     -- But IsNormal gives N ≥ 1 with wordSpan A N = ⊤
-    obtain ⟨N, hN1, hNtop⟩ := isNormal_index_pos hD A hN
+    obtain ⟨N, hN1, hNtop⟩ := isNormal_index_pos A hN
     have := hws_all N hN1
     rw [hNtop] at this
     exact hne (eq_top_iff.mpr this)
@@ -545,7 +539,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
             rw [Module.finrank_matrix, Fintype.card_fin,
               Module.finrank_self, mul_one]; ring
     -- We need to show the dimension grows to D²
-    -- If bound ≥ 1 (which it is when D ≥ 2 and r ≤ D²):
+    -- The bound is positive because `D` is positive and `r ≤ D²`:
     have hbound_pos : 1 ≤ bound := by omega
     -- Growth: either V reaches ⊤ (dim D²) or grows step by step
     suffices h : ∀ k, k ≤ D ^ 2 - r →
