@@ -73,6 +73,13 @@ def IsKrausCP {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [Decida
   ∃ (r : ℕ) (A : Fin r → Matrix β α ℂ),
     ∀ X, S X = ∑ i, A i * X * (A i)ᴴ
 
+/-- For maps between the same matrix algebra, rectangular Kraus complete
+positivity is exactly the existing square-map predicate `IsCPMap`. -/
+theorem isKrausCP_iff_isCPMap
+    {α : Type*} [Fintype α] [DecidableEq α]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ} : IsKrausCP S ↔ IsCPMap S :=
+  Iff.rfl
+
 /-- A **trace-preserving completely positive map** in Kraus form
 `S(X) = ∑ᵢ Aᵢ X Aᵢ†` with `∑ᵢ Aᵢ† Aᵢ = I`; rectangular Kraus operators
 `Aᵢ : β × α` allow different in/out dimensions. The Kraus form itself gives

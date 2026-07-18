@@ -31,6 +31,15 @@ section.
     No trace-preservation normalization is imposed.
 \end{definition}
 
+\begin{lemma}[Agreement with square-map complete positivity]
+    \label{lem:is_kraus_cp_iff_is_cp_map}
+    \lean{isKrausCP_iff_isCPMap}
+    \leanok
+    \uses{def:is_kraus_cp, def:cp_map}
+    When the input and output matrix algebras agree, rectangular Kraus complete
+    positivity is equivalent to the square-map notion of complete positivity.
+\end{lemma}
+
 \begin{lemma}[Basic properties of rectangular Kraus complete positivity]
     \label{lem:is_kraus_cp_basic}
     \lean{IsKrausCP.map_posSemidef, IsKrausCPTP.isKrausCP}
