@@ -38,6 +38,8 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
   right partial trace
 * `Matrix.partialTraceRight_kronecker`: the right partial trace of a Kronecker
   product
+* `Matrix.partialTraceRightAlong`: the partial trace after choosing a product
+  decomposition of the right factor
 * `Matrix.trace_eq_trace_traceLeft`: `tr(X) = tr(tr_A(X))`
 * `Matrix.traceLeft_kronecker`: `tr_A(A ⊗ B) = tr(A) • B`
 * `Matrix.traceRight_kronecker`: `tr_B(A ⊗ B) = A • tr(B)`
@@ -114,6 +116,44 @@ theorem partialTraceRight_kronecker (A : Matrix α α ℂ) (B : Matrix β β ℂ
   simp only [partialTraceRight_apply, kroneckerMap_apply, Matrix.smul_apply, Matrix.trace,
     Matrix.diag, smul_eq_mul, ← Finset.mul_sum]
   ring
+
+/-- Reindex the right tensor factor as `β' × γ`, keeping the left factor fixed. -/
+def rightSplitEquiv {α β β' γ : Type*} (e : β ≃ β' × γ) :
+    α × β ≃ (α × β') × γ :=
+  (Equiv.prodCongr (Equiv.refl α) e).trans (Equiv.prodAssoc α β' γ).symm
+
+/-- Trace the second component of a chosen product decomposition of the right
+tensor factor. -/
+noncomputable def partialTraceRightAlong {α β β' γ : Type*}
+    [Fintype γ] (e : β ≃ β' × γ) (X : Matrix (α × β) (α × β) ℂ) :
+    Matrix (α × β') (α × β') ℂ :=
+  partialTraceRight
+    (X.submatrix (rightSplitEquiv e).symm (rightSplitEquiv e).symm)
+
+@[simp]
+theorem partialTraceRightAlong_apply {α β β' γ : Type*}
+    [Fintype γ] (e : β ≃ β' × γ) (X : Matrix (α × β) (α × β) ℂ)
+    (a a' : α) (b b' : β') :
+    partialTraceRightAlong e X (a, b) (a', b') =
+      ∑ c : γ, X (a, e.symm (b, c)) (a', e.symm (b', c)) := by
+  rfl
+
+/-- The partial trace along a product decomposition preserves positive
+semidefiniteness. -/
+theorem PosSemidef.partialTraceRightAlong {α β β' γ : Type*}
+    [Finite α] [Finite β'] [Fintype γ] {X : Matrix (α × β) (α × β) ℂ}
+    (hX : X.PosSemidef) (e : β ≃ β' × γ) :
+    (partialTraceRightAlong e X).PosSemidef := by
+  exact (hX.submatrix (rightSplitEquiv e).symm).partialTraceRight
+
+/-- The partial trace along a product decomposition preserves the full trace. -/
+theorem trace_partialTraceRightAlong {α β β' γ : Type*}
+    [Fintype α] [Fintype β] [Fintype β'] [Fintype γ] (e : β ≃ β' × γ)
+    (X : Matrix (α × β) (α × β) ℂ) :
+    (partialTraceRightAlong e X).trace = X.trace := by
+  rw [partialTraceRightAlong, trace_partialTraceRight]
+  simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
+  exact (rightSplitEquiv e).symm.sum_comp fun x ↦ X x x
 
 /-- The partial trace over the second factor is additive. -/
 theorem partialTraceRight_add (X Y : Matrix (α × β) (α × β) ℂ) :

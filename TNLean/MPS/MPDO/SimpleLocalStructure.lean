@@ -47,8 +47,11 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   its three-site specialization.
 - `MPOTensor.sal_implies_eta_structure`: equality in strong subadditivity gives
   the local structure by the Hayashi equality characterization.
-- `MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL`: the three-site
-  marginal of the normalized four-site periodic state has this local structure.
+- `MPOTensor.exists_etaStructure_reducedBlockState_three_of_isSAL`: the
+  first-three-site marginal of every chain of length at least four has this
+  local structure.
+- `MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL`: the four-site
+  specialization retained for subsequent arguments.
 - `MPOTensor.etaOperators`: the dependent type of explicit neighboring operator
   families over a fixed Hayashi decomposition.
 - `MPOTensor.ExplicitEtaOperators`: the explicit neighboring operators
@@ -511,6 +514,109 @@ theorem sal_implies_eta_structure
     Nonempty (EtaStructure ρ_ABC) :=
   Entropy.exists_quantumMarkovDecomposition_of_ssaEquality ρ_ABC hρ_dm hSAL
 
+/-- **Lemma Lsigma3.** If `K` satisfies the strong area law, then the first-three-site
+marginal of every periodic chain of length at least four admits a quantum Markov
+decomposition on the middle site.
+
+The decomposition is obtained first for the marginal on the first (N-1) sites,
+with consecutive regions of lengths (1), (1), and (N-3), and is then
+preserved while the last (N-4) sites of the third region are traced out.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma Lsigma3, lines 1351--1371. -/
+theorem exists_etaStructure_reducedBlockState_three_of_isSAL
+    {d D : ℕ} (K : MPOTensor d D) (hSAL : IsSAL K) {N : ℕ} (hN : 4 ≤ N) :
+    Nonempty
+      (EtaStructure
+        ((K.reducedBlockState N 3 (by omega)).submatrix
+          (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2])
+          (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2]))) := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le hN
+  let N := 4 + n
+  let hM : (mpo K N).PosSemidef := (Classical.choose hSAL) N (by omega)
+  let hNm1 : 1 + 1 + (N - 3) ≤ N := by omega
+  let ρflat :=
+    (K.reducedBlockState N (1 + 1 + (N - 3)) hNm1).submatrix
+      (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+      (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+  let eSite : Fin d ≃ Fin (d ^ 1) :=
+    (Equiv.funUnique (Fin 1) (Fin d)).symm.trans finFunctionFinEquiv
+  let E := eSite.prodCongr (eSite.prodCongr (Equiv.refl (Fin (d ^ (N - 3)))))
+  have hρflatPos : ρflat.PosSemidef := by
+    exact (reducedBlockState_posSemidef K N (1 + 1 + (N - 3)) hNm1 hM).submatrix _
+  have hρflatTrace : ρflat.trace = 1 := by
+    dsimp only [ρflat]
+    rw [Matrix.trace_submatrix_equiv]
+    exact reducedBlockState_trace K N (1 + 1 + (N - 3)) hNm1
+      ((Classical.choose_spec hSAL).1 N (by omega))
+  have hEqFlat : IsSSAEquality ρflat hρflatPos.isHermitian := by
+    simpa [ρflat, hM] using isSSAEquality_tripartite_of_isSAL K hSAL hN
+  have hEqSite :
+      IsSSAEquality (ρflat.submatrix E E) (hρflatPos.isHermitian.submatrix E) :=
+    isSSAEquality_submatrix_prodEquiv ρflat hρflatPos.isHermitian
+      eSite eSite (Equiv.refl _) hEqFlat
+  have hρsiteTrace : (ρflat.submatrix E E).trace = 1 := by
+    rw [Matrix.trace_submatrix_equiv]
+    exact hρflatTrace
+  have hηLarge : Nonempty (EtaStructure (ρflat.submatrix E E)) :=
+    sal_implies_eta_structure (ρflat.submatrix E E)
+      ⟨hρflatPos.submatrix E, hρsiteTrace⟩ hEqSite
+  let eC : Fin (d ^ (N - 3)) ≃ Fin d × (Fin (N - 4) → Fin d) :=
+    finFunctionFinEquiv.symm |>.trans
+      (Equiv.arrowCongr (finCongr (show N - 3 = 1 + (N - 4) by omega)) (Equiv.refl _)) |>.trans
+      (blockSplitEquiv d 1 (N - 4)) |>.trans
+      (finFunctionFinEquiv.prodCongr (Equiv.refl _)) |>.trans
+      (eSite.symm.prodCongr (Equiv.refl _))
+  have hηSmall := Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong
+    eC (ρflat.submatrix E E) hηLarge
+  have hstate : Entropy.rightMarginalAlong eC (ρflat.submatrix E E) =
+      (K.reducedBlockState N 3 (by omega)).submatrix
+        (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2])
+        (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2]) := by
+    ext p q
+    simp only [Entropy.rightMarginalAlong, Matrix.submatrix_apply]
+    simp only [ρflat, Matrix.submatrix_apply]
+    have hconfig (r : Fin d × Fin d × Fin d) (x : Fin (N - 4) → Fin d) :
+        (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+              (E (r.1, r.2.1, eC.symm (r.2.2, x))) ∘
+            Fin.cast (show 3 + (N - 4) = 1 + 1 + (N - 3) by omega) =
+          Fin.append ![r.1, r.2.1, r.2.2] x := by
+      dsimp only [tripartiteSplitEquiv, E, eC, eSite, N]
+      simp only [Equiv.symm_trans, Equiv.prodCongr_symm, Equiv.refl_symm,
+        Equiv.prodCongr_apply, Equiv.coe_trans, Equiv.funUnique_symm_apply,
+        Equiv.trans_apply, Equiv.prodAssoc_symm_apply, Function.comp_apply,
+        Equiv.symm_apply_apply, Equiv.symm_symm, Equiv.coe_refl, Prod.map_apply,
+        id_eq, Nat.succ_eq_add_one]
+      rw [blockSplitEquiv_symm_apply, blockSplitEquiv_symm_apply,
+        blockSplitEquiv_symm_apply]
+      funext i
+      refine Fin.addCases (fun j : Fin 3 ↦ ?_) (fun j : Fin (N - 4) ↦ ?_) i
+      · fin_cases j <;>
+          simp [Fin.append, Fin.addCases, Equiv.arrowCongr, Function.comp_def]
+      · simp only [Nat.reduceAdd, Fin.append, Equiv.arrowCongr, Equiv.coe_refl,
+          finCongr_symm, Function.comp_def, finCongr_apply,
+          Equiv.refl_symm, Equiv.symm_mk, Equiv.coe_fn_mk, Fin.addCases,
+          Fin.val_cast, Order.lt_one_iff, uniqueElim_const, Fin.cast_cast,
+          eq_rec_constant, Function.comp_apply, Fin.val_natAdd, Order.lt_two_iff,
+          Fin.val_castLT, Nat.add_eq_zero_iff, OfNat.ofNat_ne_zero, false_and,
+          ↓reduceDIte, Fin.cast_eq_self, Fin.val_subNat, add_lt_iff_neg_left,
+          not_lt_zero, Fin.cast_natAdd, Fin.subNat_addNat]
+        split
+        · omega
+        · split
+          · omega
+          · apply congrArg x
+            apply Fin.ext
+            simp only [Fin.val_subNat, Fin.val_cast, Fin.val_natAdd]
+            omega
+    simp_rw [reducedBlockState_cast K
+      (show 3 + (N - 4) = 1 + 1 + (N - 3) by omega) hNm1]
+    simp_rw [hconfig]
+    simpa only [Nat.add_zero] using
+      (collapse_last K (N := N) (a := 3) (b := 0) (c := N - 4)
+        (show 3 + 0 + (N - 4) ≤ N by omega)
+        ![p.1, p.2.1, p.2.2] ![q.1, q.2.1, q.2.2])
+  rwa [hstate] at hηSmall
+
 /-- **Four-site specialization of Lemma Lsigma3.** If `K` satisfies the strong
 area law, then the three-site marginal of its normalized four-site periodic
 state admits a quantum Markov decomposition on the middle site.
@@ -518,10 +624,8 @@ state admits a quantum Markov decomposition on the middle site.
 Source: arXiv:1606.00608, Appendix C.2, Lemma Lsigma3, lines 1351--1363;
 normalization convention at lines 792--793.
 
-**Scope restriction (four-site chain):** Lemma Lsigma3 treats the three-site
-marginal of every chain to which its four-region argument applies. This theorem
-is its $N=4$ specialization. The remaining all-length construction is recorded
-in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
+This is the (N=4) specialization of
+`exists_etaStructure_reducedBlockState_three_of_isSAL`. -/
 theorem exists_etaStructure_reducedBlockState_of_isSAL
     {d D : ℕ} (K : MPOTensor d D) (hSAL : IsSAL K) :
     Nonempty
@@ -529,53 +633,7 @@ theorem exists_etaStructure_reducedBlockState_of_isSAL
         ((K.reducedBlockState 4 3 (by omega)).submatrix
           (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2])
           (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2]))) := by
-  let hM : (mpo K 4).PosSemidef := (Classical.choose hSAL) 4 (by omega)
-  let ρflat :=
-    (K.reducedBlockState 4 3 (by omega)).submatrix
-      (tripartiteSplitEquiv d 1 1 1).symm
-      (tripartiteSplitEquiv d 1 1 1).symm
-  let eSite : Fin d ≃ Fin (d ^ 1) :=
-    (Equiv.funUnique (Fin 1) (Fin d)).symm.trans finFunctionFinEquiv
-  let E := eSite.prodCongr (eSite.prodCongr eSite)
-  have hρflatPos : ρflat.PosSemidef := by
-    exact (reducedBlockState_posSemidef K 4 3 (by omega) hM).submatrix _
-  have hρflatTrace : ρflat.trace = 1 := by
-    dsimp only [ρflat]
-    rw [Matrix.trace_submatrix_equiv]
-    exact reducedBlockState_trace K 4 3 (by omega)
-      ((Classical.choose_spec hSAL).1 4 (by omega))
-  have hEqFlat : IsSSAEquality ρflat hρflatPos.isHermitian := by
-    simpa [ρflat, hM] using isSSAEquality_threeSite_of_isSAL K hSAL
-  have hEqSite :
-      IsSSAEquality (ρflat.submatrix E E) (hρflatPos.isHermitian.submatrix E) :=
-    isSSAEquality_submatrix_prodEquiv ρflat hρflatPos.isHermitian
-      eSite eSite eSite hEqFlat
-  have hρsiteTrace : (ρflat.submatrix E E).trace = 1 := by
-    rw [Matrix.trace_submatrix_equiv]
-    exact hρflatTrace
-  have hη : Nonempty (EtaStructure (ρflat.submatrix E E)) :=
-    sal_implies_eta_structure (ρflat.submatrix E E)
-      ⟨hρflatPos.submatrix E, hρsiteTrace⟩ hEqSite
-  have hsplit (p : Fin d × Fin d × Fin d) :
-      (tripartiteSplitEquiv d 1 1 1).symm (E p) = ![p.1, p.2.1, p.2.2] := by
-    dsimp only [tripartiteSplitEquiv, E, eSite]
-    simp only [Nat.reduceAdd, Equiv.symm_trans, Equiv.prodCongr_symm,
-      Equiv.refl_symm, Equiv.prodCongr_apply, Equiv.coe_trans,
-      Equiv.funUnique_symm_apply, Equiv.trans_apply, Equiv.prodAssoc_symm_apply,
-      Prod.map_fst, Function.comp_apply, Equiv.symm_apply_apply, Prod.map_snd,
-      Equiv.coe_refl, Prod.map_apply, id_eq, Nat.succ_eq_add_one]
-    rw [blockSplitEquiv_symm_apply, blockSplitEquiv_symm_apply]
-    funext i
-    fin_cases i <;> rfl
-  have hstate :
-      ρflat.submatrix E E =
-        (K.reducedBlockState 4 3 (by omega)).submatrix
-          (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2])
-          (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2]) := by
-    ext p q
-    simp only [ρflat, Matrix.submatrix_apply]
-    rw [hsplit p, hsplit q]
-  rwa [hstate] at hη
+  exact exists_etaStructure_reducedBlockState_three_of_isSAL K hSAL (N := 4) (by omega)
 
 /-- The type of explicit neighboring operator families `η_{k,h}` over a fixed
 Hayashi decomposition.

@@ -5,7 +5,7 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 
 \title{The SAL to Eta-Local Structure Step in
 Cirac--Perez-Garcia--Schuch--Verstraete 2017 Appendix C.2}
@@ -63,10 +63,17 @@ $N\geq 4$, saturation gives $I_1=I_2$, and hence
 \]
 This is equality in strong subadditivity for the normalized $(N-1)$-site
 marginal divided into three consecutive regions of lengths $1$, $1$, and
-$N-3$.  The literal three-site statement is obtained by taking $N=4$.
+$N-3$.  The Hayashi characterization gives a direct-sum tensor-product
+decomposition on the middle site.  Splitting the third region into its first
+site and its remaining $N-4$ sites and tracing the latter preserves this
+decomposition.  Consequently the first-three-site marginal has the form
+asserted in Lemma~\texttt{Lsigma3} for every $N\geq4$; the decomposition is
+chosen separately for each $N$.
 \footnote{The formal statements are
 \leanid{MPOTensor.isSSAEquality_tripartite_of_isSAL} and
-\leanid{MPOTensor.isSSAEquality_threeSite_of_isSAL}.}
+\leanid{MPOTensor.exists_etaStructure_reducedBlockState_three_of_isSAL};
+the partial-trace preservation result is
+\leanid{Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong}.}
 
 The desired commuting product form is currently recorded as an eta-local
 structure for $K$.\footnote{The formal structure is
@@ -213,10 +220,10 @@ projections
 \]
 These projections are mutually orthogonal.\footnote{The relevant declarations
 are
-\path{MPOTensor.exists_bntMarkovBlockNonzero_of_probability_ne_zero},
-\path{MPOTensor.existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero},
-\path{MPOTensor.bntSectorProjection}, and
-\path{MPOTensor.sum_bntSectorProjection}.}
+\leanid{MPOTensor.exists_bntMarkovBlockNonzero_of_probability_ne_zero},
+\leanid{MPOTensor.existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero},
+\leanid{MPOTensor.bntSectorProjection}, and
+\leanid{MPOTensor.sum_bntSectorProjection}.}
 
 Both factors in the closing-scalar choice are now selected.  Once the copy
 weights agree, the distinguished common weight is nonzero and
@@ -225,8 +232,8 @@ weights agree, the distinguished common weight is nonzero and
 \]
 for every chain length $N$.
 \footnote{The relevant declarations are
-\path{MPSTensor.SectorDecomposition.commonWeight_ne_zero} and
-\path{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}.}
+\leanid{MPSTensor.SectorDecomposition.commonWeight_ne_zero} and
+\leanid{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}.}
 Simplicity says that the physical-trace transfer
 $\mathcal B_j=\sum_iA_j^{ii}$ is not nilpotent.  Hence one positive tail
 length $L$ has, for every representative, a nonzero entry
@@ -239,11 +246,11 @@ with nonzero entry
 $(R_j)_{\alpha_j,\beta_j}=q_j\widetilde m_j\ne0$, as in Appendix~C.2,
 lines 1714--1718.
 \footnote{The relevant declarations are
-\path{MPSTensor.SectorDecomposition.exists_common_nonzero_physicalTraceTail_entry}
+\leanid{MPSTensor.SectorDecomposition.exists_common_nonzero_physicalTraceTail_entry}
 and
-\path{MPSTensor.SectorDecomposition.exists_common_nonzero_threeSiteClosingMatrix_entry};
+\leanid{MPSTensor.SectorDecomposition.exists_common_nonzero_threeSiteClosingMatrix_entry};
 the matrix form is
-\path{MPSTensor.SectorDecomposition.exists_common_threeSiteClosingMatrix_ne_zero}.}
+\leanid{MPSTensor.SectorDecomposition.exists_common_threeSiteClosingMatrix_ne_zero}.}
 This closing-matrix bridge is now formalized with the normalization included.
 Equality of the complete matrix-product-vector families transports the
 original tensor to its horizontal BNT representation, and the normalized
@@ -251,14 +258,14 @@ three-site reduced state has closing matrices
 \[
   \widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L.
 \]
-At the four-site length used by the formal SAL-to-Markov theorem, one takes
-$L=1$.  SAL makes the normalization scalar nonzero, so every
+At the four-site specialization used by the subsequent closing-matrix
+argument, one takes $L=1$.  SAL makes the normalization scalar nonzero, so every
 $\widehat R_j$ is nonzero.
 \footnote{The relevant declarations are
-\path{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix},
-\path{MPOTensor.reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂},
+\leanid{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix},
+\leanid{MPOTensor.reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂},
 and
-\path{MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}.}
+\leanid{MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}.}
 Thus the explicit nonzero-closing hypothesis of the generic cancellation
 theorem is derived for the family closure used by the source.  The simultaneous
 specialization is now formalized as well.  After the common blocking has made
@@ -268,7 +275,7 @@ Markov sector then has a unique BNT label, and the resulting BNT-labelled sums
 of Hayashi projections are orthogonal, mutually disjoint, and resolve the
 active Markov support.
 \footnote{The relevant declaration is
-\path{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}.}
+\leanid{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}.}
 No further closing-matrix assumption is needed for this specialization.
 
 The remaining projector passage is now formalized as well.  For every physical
@@ -288,11 +295,11 @@ sitewise on every nonempty periodic chain then gives
 \]
 with the common copy weight absorbed into $\mathcal K_s$.
 \footnote{The relevant declarations are
-\path{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero},
-\path{MPOTensor.sum_bntSectorProjection_mul_physicalSlice_mul_self},
-\path{MPOTensor.changePhysicalBasis_bntSectorProjection_basis},
-\path{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}, and
-\path{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}.}
+\leanid{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero},
+\leanid{MPOTensor.sum_bntSectorProjection_mul_physicalSlice_mul_self},
+\leanid{MPOTensor.changePhysicalBasis_bntSectorProjection_basis},
+\leanid{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}, and
+\leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}.}
 The empty-word value $N=0$ is excluded because its closed virtual trace records
 the bond dimension and is not a physical chain.  Positivity and ZCL of every
 selected absorbed BNT representative are now formalized.  Positivity follows
@@ -300,10 +307,10 @@ by compressing the positive full-chain operator and dividing by the positive
 integer $n_s$.  ZCL follows by restricting the full transfer equation to the
 $s$-th canonical block and using nonnilpotence to exclude the zero transfer.
 \footnote{The relevant declarations are
-\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection},
-\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection},
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
 and
-\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
 The strict normalization needed in the sector entropy identity is now
 formalized: an MPDO tensor with source ZCL has positive trace at every
 nonempty chain length, since its normalized physical-trace transfer is a
@@ -311,24 +318,24 @@ nonzero idempotent.  Applied to the absorbed BNT sectors above, this proves
 $p_j^{(N)}>0$ rather than silently inferring it from the weaker displayed
 inequality $p_j\geq0$.
 \footnote{The general declarations are
-\path{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL} and
-\path{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}; their specialization to
+\leanid{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL} and
+\leanid{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}; their specialization to
 the absorbed BNT representative is
-\path{MPOTensor.trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}.}
+\leanid{MPOTensor.trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}.}
 The weighted orthogonal-direct-sum entropy formula used in Appendix~C.2,
 lines~1760--1770, is also formalized as
-\path{vonNeumannEntropy_blockDiagonal_smul}, together with the form for
+\leanid{vonNeumannEntropy_blockDiagonal_smul}, together with the form for
 pairwise-annihilating support operators
-\path{vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports}.  The remaining source
+\leanid{vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports}.  The remaining source
 step after the sector-compression identity is now formalized: the same sector
 probabilities occur in all four marginals, the Shannon terms cancel, and
 strict positivity together with strong subadditivity forces equality in every
 sector.  Thus every absorbed BNT representative satisfies SAL under the biCF
 hypothesis imposed at the start of Case II in the source.
 \footnote{The principal declarations are
-\path{MPOTensor.blockEntropy_eq_sum_bntSectorProbability},
-\path{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}, and
-\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}.}
+\leanid{MPOTensor.blockEntropy_eq_sum_bntSectorProbability},
+\leanid{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}, and
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}.}
 This completes the entropy argument of
 \cite[Appendix~C.2, lines~1748--1781]{Cirac2016MPDO_arXiv} with the source's
 stated biCF hypothesis.
@@ -368,23 +375,25 @@ $\eta_{k,l}\otimes\eta_{l,h}$ in Proposition \texttt{3to5} consistently fix
 the intended convention as $\eta_{k,h}=r_k l_h$.  The formalization follows
 this later consistent convention; the earlier figure is an index-swap typo.
 
-The Hayashi decomposition of the concrete closure state is now formalized for
-the four-site chain.  Independent bijections on the three tensor factors
-preserve equality in strong subadditivity: each marginal is carried to the
-corresponding reindexed marginal, and the four entropies are unchanged.  The
-canonical bijection between a singleton block and one physical-site index
+The Hayashi decomposition of the concrete three-site marginal is now
+formalized for every $N\geq4$.  Independent bijections on the first two tensor
+factors preserve equality in strong subadditivity: each marginal is carried to
+the corresponding reindexed marginal, and the four entropies are unchanged.
+The canonical bijection between a singleton block and one physical-site index
 therefore carries the SAL equality from flattened block coordinates to the
-tripartite site coordinates of the closure state.  Applying the forward
-Hayashi characterization gives a decomposition of the literal three-site
-marginal
+tripartite coordinates of the $(N-1)$-site state.  Applying the forward Hayashi
+characterization gives a decomposition before the last $N-4$ sites of the
+third region are traced out.  Partial trace preserves the same middle-site
+direct sum, and the contiguous-block reduction identity gives
 \[
-  \sigma_3^{(4)}({\cal K})=\tr_4\sigma^{(4)}({\cal K}).
+  \sigma_3^{(N)}({\cal K})
+  =\tr_{4,\ldots,N}\!\left[\sigma_{N-1}^{(N)}({\cal K})\right].
 \]
-This is the $N=4$ specialization of Lemma \texttt{Lsigma3}; it does not assert
-the source statement simultaneously for arbitrary chain length.
+This proves Lemma~\texttt{Lsigma3} at every admissible chain length, with no
+claim that the decomposition is common to different values of $N$.
 \footnote{The formal declarations are
 \leanid{isSSAEquality_submatrix_prodEquiv} and
-\leanid{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}.}
+\leanid{MPOTensor.exists_etaStructure_reducedBlockState_three_of_isSAL}.}
 
 The neighboring operators and their all-length algebraic identity are now
 formalized.  The inverse-map tensors also determine a source-minimal
@@ -397,20 +406,20 @@ For one such factorization, every complete nonempty cyclic neighboring
 product is positive semidefinite as a diagonal sector compression of the
 corresponding finite-chain operator.
 \footnote{The formal declarations are
-\path{MPOTensor.inverseMapPhysicalSectorFactorization},
-\path{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta},
-\path{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL},
-\path{MPOTensor.exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL},
-\path{MPOTensor.etaOfSectorTensors},
-\path{MPOTensor.sum_cyclic_sectorTensor_eq_prod_etaOfSectorTensors},
-\path{MPOTensor.trace_sector_word_eq_prod_etaOfSectorTensors},
-\path{MPOTensor.mpo_submatrix_sector_eq_cyclicEtaTensorProduct}, and
-\path{MPOTensor.mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta}.
+\leanid{MPOTensor.inverseMapPhysicalSectorFactorization},
+\leanid{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta},
+\leanid{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL},
+\leanid{MPOTensor.exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL},
+\leanid{MPOTensor.etaOfSectorTensors},
+\leanid{MPOTensor.sum_cyclic_sectorTensor_eq_prod_etaOfSectorTensors},
+\leanid{MPOTensor.trace_sector_word_eq_prod_etaOfSectorTensors},
+\leanid{MPOTensor.mpo_submatrix_sector_eq_cyclicEtaTensorProduct}, and
+\leanid{MPOTensor.mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta}.
 For the source-minimal physical-sector factorization, the corresponding direct
 statements are
-\path{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct}
+\leanid{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct}
 and
-\path{MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}.}
+\leanid{MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}.}
 The positive choice of the individual $\eta_{k,h}$ and primitivity of the
 active sector trace matrix are now obtained from this factorization.
 Positivity of a complete cyclic product alone would not supply coherent
@@ -437,13 +446,13 @@ $\eta_{h,k}=0$), choosing one scalar per unordered pair produces a positive
 semidefinite family which agrees with the raw family on the diagonal and
 preserves every two-site block
 $\eta_{k,h}\otimes\eta_{h,k}$.\footnote{The formal declarations are
-\path{Matrix.exists_smul_posSemidef_of_kronecker_posSemidef},
-\path{MPOTensor.mpo_conjugatePhysical_eq},
-\path{MPOTensor.cyclicEtaTensorProduct_posSemidef},
-\path{MPOTensor.sectorEta_self_posSemidef},
-\path{MPOTensor.sectorEta_kronecker_posSemidef},
-\path{MPOTensor.exists_smul_posSemidef_sectorEta}, and
-\path{MPOTensor.exists_explicitEtaOperators_sectorEta}.}
+\leanid{Matrix.exists_smul_posSemidef_of_kronecker_posSemidef},
+\leanid{MPOTensor.mpo_conjugatePhysical_eq},
+\leanid{MPOTensor.cyclicEtaTensorProduct_posSemidef},
+\leanid{MPOTensor.sectorEta_self_posSemidef},
+\leanid{MPOTensor.sectorEta_kronecker_posSemidef},
+\leanid{MPOTensor.exists_smul_posSemidef_sectorEta}, and
+\leanid{MPOTensor.exists_explicitEtaOperators_sectorEta}.}
 
 The pairwise construction has two limitations.  Its symmetric-support
 hypothesis is not stated in the source, and it preserves only the chain blocks
@@ -692,7 +701,7 @@ The graph-theoretic coboundary step is now formalized: for a recurrent
 directed relation, any group-valued edge assignment with trivial
 product around every closed directed walk is a vertex coboundary.
 \footnote{The formal declaration is
-\path{TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}.}
+\leanid{TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}.}
 The proof chooses one representative of each reachability component and
 defines the vertex weight by multiplication along a path from that
 representative; a common return path proves independence of the chosen path.
