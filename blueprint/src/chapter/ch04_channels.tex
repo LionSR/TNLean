@@ -874,11 +874,11 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     is bounded.
 \end{definition}
 
-\begin{definition}[Mean-ergodic projection]
-    \label{def:mean_ergodic_projection}
-    \lean{LinearMap.HasBoundedOrbits.disjoint_ker_sub_one_range_sub_one,
-        LinearMap.HasBoundedOrbits.isCompl_ker_sub_one_range_sub_one,
-        LinearMap.meanErgodicProjection}
+\begin{lemma}[Complementarity of the fixed-point space]
+    \label{lem:mean_ergodic_complementarity}
+    \lean{LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_of_mem_range_sub_one,
+        LinearMap.HasBoundedOrbits.disjoint_ker_sub_one_range_sub_one,
+        LinearMap.HasBoundedOrbits.isCompl_ker_sub_one_range_sub_one}
     \leanok
     \uses{def:has_bounded_orbits}
     Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
@@ -886,14 +886,32 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \[
         V=\ker(f-\Id_V)\oplus\operatorname{range}(f-\Id_V).
     \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:has_bounded_orbits}
+    If $y\in V$, telescoping and boundedness of its orbit give
+    \[
+        A_N\bigl((f-\Id_V)y\bigr)
+        =\frac{f^N y-y}{N}\longrightarrow 0.
+    \]
+    Since $A_N(z)=z$ for $z\in\ker(f-\Id_V)$, the two summands have zero
+    intersection. Rank--nullity then gives the asserted complementarity.
+\end{proof}
+
+\begin{definition}[Mean-ergodic projection]
+    \label{def:mean_ergodic_projection}
+    \lean{LinearMap.meanErgodicProjection}
+    \leanok
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_complementarity}
+    Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
     The \emph{mean-ergodic projection} $P_f:V\to V$ is the projection onto
     $\ker(f-\Id_V)$ along $\operatorname{range}(f-\Id_V)$.
 \end{definition}
 
 \begin{theorem}[Finite-dimensional mean-ergodic theorem]
     \label{thm:mean_ergodic_bounded_orbits}
-    \lean{LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_of_mem_range_sub_one,
-        LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection,
+    \lean{LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection,
         LinearMap.HasBoundedOrbits.range_meanErgodicProjection,
         LinearMap.HasBoundedOrbits.meanErgodicProjection_apply_eq_self_iff,
         LinearMap.HasBoundedOrbits.isIdempotentElem_meanErgodicProjection,
@@ -919,22 +937,28 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:has_bounded_orbits, def:mean_ergodic_projection}
-    If $y\in V$, telescoping and boundedness of its orbit give
-    \[
-        A_N\bigl((f-\Id_V)y\bigr)
-        =\frac{f^N y-y}{N}\longrightarrow 0.
-    \]
-    On the other hand, $A_N(z)=z$ whenever $z\in\ker(f-\Id_V)$.
-    Hence the kernel and range in Definition~\ref{def:mean_ergodic_projection}
-    have zero intersection; rank--nullity makes them complementary. Decompose
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_complementarity,
+        def:mean_ergodic_projection}
+    By Lemma~\ref{lem:mean_ergodic_complementarity}, decompose
     \[
         x=P_f x+(x-P_f x),\qquad
         P_f x\in\ker(f-\Id_V),\qquad
         x-P_f x\in\operatorname{range}(f-\Id_V).
     \]
-    The two preceding limits give $A_N(x)\to P_f x$. The remaining identities
-    follow from the kernel, range, and idempotence of this projection.
+    The fixed component has constant Ces\`aro averages, whereas the averages of
+    the second component tend to zero by the telescoping calculation in the
+    lemma. Thus $A_N(x)\to P_f x$. Since
+    \[
+        P_f x\in\ker(f-\Id_V),
+        \qquad f(P_f x)=P_f x,
+    \]
+    we have $fP_f=P_f$. Moreover,
+    \[
+        (f-\Id_V)x\in\operatorname{range}(f-\Id_V),
+        \qquad P_f\bigl((f-\Id_V)x\bigr)=0,
+    \]
+    so $P_f(fx)=P_f x$ and hence $P_f f=P_f$. The range and idempotence
+    identities follow directly from the projection construction.
 \end{proof}
 
 \begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
