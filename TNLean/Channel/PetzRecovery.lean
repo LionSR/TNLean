@@ -29,8 +29,8 @@ is made.
 ## References
 
 * Hayden, Jozsa, Petz, and Winter, arXiv:quant-ph/0304007v2,
-  Theorem `thm:petz`, equation `eq:transpose:channel` and the specialization
-  following equation `eq:RE:mono`.
+  Theorem 3, equation (8), and the specialization following their
+  relative-entropy monotonicity equation.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
@@ -45,7 +45,7 @@ to `(sqrt x)⁻¹`.
 
 This is the singular inverse square root in the support formula of
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
-equation `eq:transpose:channel`. -/
+equation (8). -/
 noncomputable def PosSemidef.supportInvSqrt {ρ : Matrix n n ℂ}
     (hρ : ρ.PosSemidef) : Matrix n n ℂ :=
   hρ.isHermitian.cfc fun x ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0
@@ -70,7 +70,7 @@ theorem PosSemidef.supportInvSqrt_isHermitian {ρ : Matrix n n ℂ}
 /-- Sandwiching a positive-semidefinite matrix by its support inverse square
 root gives its support projection.  This is the spectral support identity
 underlying the singular Petz formula in arXiv:quant-ph/0304007v2,
-equation `eq:transpose:channel`. -/
+equation (8). -/
 theorem PosSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt
     {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
     hρ.supportInvSqrt * ρ * hρ.supportInvSqrt =
@@ -121,7 +121,7 @@ variable {L R : Type*} [Fintype L] [DecidableEq L]
 `σ`.  It is the support formula
 `X ↦ sqrt(σ) ((tr_R σ)⁻¹/² X (tr_R σ)⁻¹/² ⊗ 1_R) sqrt(σ)` from
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
-Theorem `thm:petz`, equation `eq:transpose:channel`.
+Theorem 3, equation (8).
 
 The source states this formula on the support of `tr_R σ`; this definition does
 not extend it to a trace-preserving map on the complementary subspace. -/
@@ -134,7 +134,7 @@ noncomputable def partialTraceRightPetzMap
         (PosSemidef.partialTraceRight hσ))
 
 /-- The raw partial-trace Petz map has the displayed support formula from
-arXiv:quant-ph/0304007v2, equation `eq:transpose:channel`. -/
+arXiv:quant-ph/0304007v2, equation (8). -/
 theorem partialTraceRightPetzMap_apply
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
     (X : Matrix L L ℂ) :
@@ -153,7 +153,7 @@ theorem partialTraceRightPetzMap_apply
 /-- The raw partial-trace Petz map is completely positive in rectangular Kraus
 form.  This is the complete-positivity part of the support formula in
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
-Theorem `thm:petz`.  No global trace-preservation claim is made. -/
+Theorem 3.  No global trace-preservation claim is made. -/
 theorem partialTraceRightPetzMap_isKrausCP
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
     IsKrausCP (partialTraceRightPetzMap σ hσ) := by
@@ -169,7 +169,7 @@ matrix:
 
 This is the automatic reference-recovery identity following
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
-equation `eq:transpose:channel`.  It uses only the source's support formula and
+equation (8).  It uses only the source's support formula and
 does not assert trace preservation away from that support. -/
 theorem partialTraceRightPetzMap_partialTraceRight
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :

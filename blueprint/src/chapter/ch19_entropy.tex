@@ -1380,6 +1380,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.partialTraceRightPetzMap_partialTraceRight}
     \leanok
     \uses{def:partial_trace_support_petz_map,
+        lem:partial_trace_support_petz_map_apply,
         lem:support_inverse_square_root_sandwich,
         thm:marginal_support_left_absorption}
     For every positive semidefinite $\sigma$,
@@ -1390,8 +1391,8 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     The support inverse-square-root identity reduces the middle factor to
-    $P_\tau\otimes\mathbf 1_R$.  Marginal-support absorption shows that its
-    complement annihilates $\sigma$.  Sandwiching that complementary
+    $P_\tau\otimes\mathbf 1_R$.  Marginal-support absorption gives
+    $(1-P_\tau\otimes\mathbf 1_R)\sigma=0$.  Sandwiching that complementary
     projection by $\sqrt\sigma$ gives a positive semidefinite matrix of trace
     zero, hence zero.  Therefore
     $\sqrt\sigma(P_\tau\otimes\mathbf 1_R)\sqrt\sigma=\sigma$.
