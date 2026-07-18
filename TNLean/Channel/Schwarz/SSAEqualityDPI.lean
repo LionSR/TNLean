@@ -22,7 +22,7 @@ $\rho_A\otimes\rho_{BC}$ and $\rho_A\otimes\rho_B$ in their equations (5)--(7).
 The maximally mixed reference used here gives the same strong-subadditivity
 deficit and is covered by the existing singular-support evaluation of relative
 entropy. The remaining product-marginal evaluation is recorded in
-`docs/paper-gaps/hjpw04_ssa_product_marginal_reference.tex`.
+docs/paper-gaps/hjpw04_ssa_product_marginal_reference.tex.
 
 ## Main results
 
@@ -67,7 +67,7 @@ supplies this singular-reference evaluation without any additional hypothesis.
 **Reference substitution:** This is the hypothesis-free maximally mixed-reference
 formulation, not the exact product-marginal formulation of HJPW. The missing
 product-marginal logarithm evaluation is recorded in
-`docs/paper-gaps/hjpw04_ssa_product_marginal_reference.tex`.
+docs/paper-gaps/hjpw04_ssa_product_marginal_reference.tex.
 
 Source: Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, p. 3,
 equations (5)--(7) and the paragraph following equation (7). -/
