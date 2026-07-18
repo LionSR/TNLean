@@ -214,7 +214,7 @@ theorem cluster_isNBlkInjective_two : IsNBlkInjective clusterTensor 2 := by
 
 /-- The cluster tensor is normal (eventually block-injective). -/
 theorem cluster_isNormal : IsNormal clusterTensor :=
-  ⟨2, by omega, cluster_isNBlkInjective_two⟩
+  ⟨2, by decide, cluster_isNBlkInjective_two⟩
 
 /-! ### The length-2 blocked tensor
 

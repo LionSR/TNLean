@@ -236,7 +236,7 @@ theorem aklt_isNBlkInjective_two : IsNBlkInjective akltTensor 2 := by
 
 /-- The AKLT tensor is normal (eventually block-injective). -/
 theorem aklt_isNormal : IsNormal akltTensor :=
-  ⟨2, by omega, aklt_isNBlkInjective_two⟩
+  ⟨2, by decide, aklt_isNBlkInjective_two⟩
 
 /-! ### Z₂ on-site symmetry -/
 
