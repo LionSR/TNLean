@@ -38,15 +38,6 @@ namespace Matrix
 
 variable {K : ℕ} {m d : Fin K → ℕ}
 
-/-- A unitary matrix, regarded as a unit whose inverse is its adjoint. -/
-noncomputable def unitaryMatrixUnit {n : Type*} [Fintype n] [DecidableEq n]
-    (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
-    (Matrix n n ℂ)ˣ where
-  val := U
-  inv := star U
-  val_inv := Matrix.mem_unitaryGroup_iff.mp hU
-  inv_val := Matrix.mem_unitaryGroup_iff'.mp hU
-
 /-- Change from an original matrix basis to unitary block coordinates.
 
 For an equivalence `e : H ≃ n`, this sends $A$ to
@@ -57,8 +48,9 @@ noncomputable def unitaryReindexLinearEquiv
     {n H : Type*} [Fintype n] [DecidableEq n] [Fintype H] [DecidableEq H]
     (e : H ≃ n) (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
     Matrix n n ℂ ≃ₗ[ℂ] Matrix H H ℂ :=
-  (((unitaryMatrixUnit U hU)⁻¹).mulLeftLinearEquiv ℂ (Matrix n n ℂ)).trans
-    ((unitaryMatrixUnit U hU).mulRightLinearEquiv ℂ) |>.trans
+  ((((Unitary.toUnits (⟨U, hU⟩ : unitary (Matrix n n ℂ)))⁻¹).mulLeftLinearEquiv
+    ℂ (Matrix n n ℂ)).trans
+    ((Unitary.toUnits (⟨U, hU⟩ : unitary (Matrix n n ℂ))).mulRightLinearEquiv ℂ)) |>.trans
       (Matrix.reindexLinearEquiv ℂ ℂ e.symm e.symm)
 
 @[simp]
@@ -77,7 +69,7 @@ theorem unitaryReindexLinearEquiv_symm_apply
     (A : Matrix H H ℂ) :
     (unitaryReindexLinearEquiv e U hU).symm A =
       U * Matrix.reindex e e A * star U := by
-  simp [unitaryReindexLinearEquiv, unitaryMatrixUnit,
+  simp [unitaryReindexLinearEquiv, Unitary.toUnits,
     Matrix.symm_reindexLinearEquiv, Matrix.coe_reindexLinearEquiv, Matrix.mul_assoc]
 
 /-- Unitary change of basis and reindexing preserve positive semidefiniteness. -/

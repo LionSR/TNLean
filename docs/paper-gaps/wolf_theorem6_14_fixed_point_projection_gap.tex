@@ -30,18 +30,44 @@ representation, removes off-diagonal inputs by positivity, and gives a
 positive semidefinite trace-one matrix for each summand.  No assumption of
 complete positivity, trace preservation, or a Schwarz inequality is added.
 
-\section{The remaining application to fixed points}
+\section{The remaining fixed-point theorem}
 
-The application surrounding \cite[Theorem~6.14]{Wolf2012Quantum} requires a
-positive retraction onto the relevant fixed-point space.  This retraction must
-first be constructed, for example as an appropriate Ces\`aro limit, and its
-range must be identified with the fixed-point space to which Proposition~1.5
-is applied.
+Let $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be positive and trace preserving,
+and suppose that its trace-pairing adjoint satisfies the Schwarz inequality.
+Wolf's Theorem~6.14 asserts that there are a unitary $U$, a decomposition
+\begin{align}
+    \mathbb C^D
+      &= \mathcal H_0\oplus
+        \bigoplus_{k=1}^K\mathbb C^{d_k}\otimes\mathbb C^{m_k},
+\end{align}
+and positive definite density matrices $\rho_k\in M_{m_k}(\mathbb C)$ such
+that
+\begin{align}
+    \operatorname{Fix}(T)
+      &= U\left(0\oplus\bigoplus_{k=1}^K
+          M_{d_k}(\mathbb C)\otimes\rho_k\right)U^*.
+    \tag{Wolf, Theorem 6.14 and Equation (6.63)}
+\end{align}
+Here $\mathcal H_0$ is a genuine zero summand: every fixed point vanishes on
+this subspace.  This is the statement in
+\cite[Theorem~6.14]{Wolf2012Quantum}; the local source is
+\path{Notes/WolfNotePDF/wolf_ch6_sections.txt}, lines~896--905.
 
-Thus Proposition~1.5 is fully formalized.  The remaining work toward
-Theorem~6.14 is the construction and identification of this fixed-point
-projection in the intended channel-theoretic setting, together with the
-additional hypotheses and zero-block conclusions of that theorem.
+The completed formal theorem classifies a given positive retraction onto a
+unital $*$-subalgebra.  Three further arguments are needed to obtain the
+fixed-point statement above.  First, the hypotheses on $T$ must be used to
+construct a positive retraction onto $\operatorname{Fix}(T)$, for example by
+Ces\`aro means, and to identify the full-support part of this fixed-point
+space with a unital $*$-algebra.  Second, the positive semidefinite density
+matrices supplied by Proposition~1.5 must be restricted to their supports;
+this produces the positive definite matrices in Theorem~6.14.  Third, the
+discarded kernels must be assembled with the subspace on which every fixed
+point vanishes, thereby recovering the zero summand $\mathcal H_0$.
+
+Thus Proposition~1.5 is fully formalized, while Theorem~6.14 remains an open
+gap.  The missing work is not another classification of a given retraction:
+it is the construction of the fixed-point retraction, the full-support
+reduction, and the recovery of the zero block from the kernels.
 
 \bibliographystyle{alpha}
 \bibliography{references}
