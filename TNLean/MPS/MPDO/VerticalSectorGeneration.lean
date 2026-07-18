@@ -103,10 +103,10 @@ def WeightedVerticalBondContractionProductSpanTop
   Submodule.span ℂ
     (Set.range (weightedVerticalBondContractionProduct (L := L) m A)) = ⊤
 
-/-- The span of all \(L\)-fold products of fixed points of a linear
+/-- The span of all $L$-fold products of fixed points of a linear
 endomorphism of the vertical-sector algebra.
 
-This is the space denoted by \(C_L(\mathcal F)\) in the dimension argument of the
+This is the space denoted by $C_L(\mathcal F)$ in the dimension argument of the
 general MPDO renormalization fixed-point theorem.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
@@ -242,7 +242,7 @@ This is the finite-dimensional step in the inverse-map argument of Appendix
 C.4.  Unlike `eq_id_of_weightedVerticalBondContractionProducts_fixed`, it
 does not assume that products of the distinguished contractions are fixed.
 The contractions themselves lie in the fixed-point space, so their spanning
-products force \(C_L(\mathcal F)\) to be the whole sector algebra.
+products force $C_L(\mathcal F)$ to be the whole sector algebra.
 The dimension bound then forces the fixed-point space itself to be the whole
 sector algebra.
 
