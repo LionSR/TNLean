@@ -134,10 +134,10 @@ jobs:
       - name: Run text-based style linter
         run: lake exe lint_style --github
 
-      # Save even when the build failed: a partial cache still spares the
-      # next run the modules that did compile.
+      # A cancelled or failed build can leave partially written `.olean` files.
+      # Restore only caches saved after the complete build and style checks pass.
       - name: Save Lean build cache (main only)
-        if: always() && github.ref == 'refs/heads/main'
+        if: success() && github.ref == 'refs/heads/main'
         uses: actions/cache/save@v4
         with:
           path: ${{ env.BUILD_CACHE_PATHS }}
