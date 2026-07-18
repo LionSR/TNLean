@@ -1607,6 +1607,23 @@ Theorem~\ref{thm:trace_norm_abs}.
     of $P$. Hence $\rho v = 0$.
 \end{proof}
 
+\begin{lemma}[Partial trace of the maximally mixed reference]
+    \label{lem:traceC_maximally_mixed_reference}
+    \lean{SSAPosDef.traceC_ABC_kronecker_traceA_ABC}
+    \leanok
+    \uses{def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For every tripartite matrix $\rho_{ABC}$,
+    \[
+        \tr_C\!\left(\frac{\mathbf 1_A}{d_A}\otimes\rho_{BC}\right)
+        =\frac{\mathbf 1_A}{d_A}\otimes\rho_B.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand both partial traces entry by entry. The two sides differ only in the
+    order of the finite sums over the $A$ and $C$ indices.
+\end{proof}
+
 \begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
     \lean{strong_subadditivity_general}
     \leanok
@@ -1712,6 +1729,50 @@ Theorem~\ref{thm:trace_norm_abs}.
         S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC}).
     \]
 \end{definition}
+
+\begin{theorem}[SSA equality as saturation for a maximally mixed reference]
+    \label{thm:ssa_equality_maximally_mixed_reference_dpi}
+    \lean{isSSAEquality_iff_maximally_mixed_reference_data_processing_eq}
+    \leanok
+    \uses{def:ssa_equality, def:quantum_relative_entropy,
+        def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC,
+        lem:traceC_maximally_mixed_reference}
+    Let $\rho_{ABC}$ be a tripartite density matrix and set
+    \[
+        \sigma_{ABC}=\frac{\mathbf 1_A}{d_A}\otimes\rho_{BC}.
+    \]
+    Then equality holds in strong subadditivity if and only if relative-entropy
+    data processing under the partial trace over $C$ is saturated for this pair:
+    \[
+        D(\rho_{ABC}\,\|\,\sigma_{ABC})
+        =D(\tr_C\rho_{ABC}\,\|\,\tr_C\sigma_{ABC}).
+    \]
+    By Lemma~\ref{lem:traceC_maximally_mixed_reference}, the reference on the
+    right is $(\mathbf 1_A/d_A)\otimes\rho_B$.
+
+    This gives the same hypothesis-free equality criterion as the
+    product-marginal formulation in equations~(6) and~(7) of
+    \cite{Hayden2004Structure}. It is not their exact reference pair: they use
+    $\rho_A\otimes\rho_{BC}$ and $\rho_A\otimes\rho_B$. The exact
+    product-marginal identity is not asserted by this theorem.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:rel_entropy_eval_support, lem:kron_marginal_support,
+        lem:traceC_maximally_mixed_reference}
+    The two relative entropies are
+    \[
+        \log d_A+S(\rho_{BC})-S(\rho_{ABC})
+        \quad\text{and}\quad
+        \log d_A+S(\rho_B)-S(\rho_{AB}),
+    \]
+    respectively. The marginal support lemma places both singular references
+    in the relative-entropy domain. Cancelling the common $\log d_A$ shows that
+    equality of the two relative entropies is precisely
+    \[
+        S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC}).
+    \]
+\end{proof}
 
 \begin{theorem}[SSA equality under factor relabeling]
     \label{thm:ssa_equality_reindex_factors}

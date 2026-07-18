@@ -43,6 +43,9 @@ maximally mixed reference state can fail to be invertible.
 * `SSAPosDef.kron_marginal_support` — the marginal support condition placing the
   singular reference state $(\mathbf 1_A / d_A) \otimes \rho_{BC}$ in the domain
   of the relative entropy.
+* `SSAPosDef.traceC_ABC_kronecker_traceA_ABC` — the partial trace over $C$
+  sends the maximally mixed reference on $A \otimes BC$ to its counterpart on
+  $A \otimes B$.
 * `strong_subadditivity_posDef` — strong subadditivity for a positive definite
   tripartite density matrix.
 * `strong_subadditivity_general` — strong subadditivity for an arbitrary
@@ -79,6 +82,9 @@ on the full density-matrix domain. The development is recorded in
 
 * Lieb, Ruskai, "Proof of the strong subadditivity of quantum-mechanical
   entropy", JMP 14, 1938 (1973) — source of strong subadditivity.
+* Hayden, Jozsa, Petz, Winter, "Structure of states which satisfy strong
+  subadditivity of quantum entropy with equality", CMP 246, 359–374 (2004),
+  arXiv:quant-ph/0304007v2, p. 3, equations (5)–(7).
 * Layer 6 (instantiation) of the relative-entropy elimination route for strong
   subadditivity, `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 8
@@ -504,6 +510,24 @@ theorem traceC_ABC_posSemidef
   rw [heq]
   exact Matrix.posSemidef_sum _ fun c _ => hblock c
 
+/-- **Partial trace of the maximally mixed reference.** For every tripartite
+matrix $\rho_{ABC}$, tracing out $C$ from
+$(\mathbf 1_A/d_A)\otimes\rho_{BC}$ gives
+$(\mathbf 1_A/d_A)\otimes\rho_B$.
+
+Source: Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, p. 3,
+equations (6) and (7) and the paragraph following equation (7), where the
+data-processing map is $T=\operatorname{tr}_C$. -/
+theorem traceC_ABC_kronecker_traceA_ABC
+    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) :
+    traceC_ABC
+        (((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceA_ABC ρ_ABC)
+      = ((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceAC_ABC ρ_ABC := by
+  ext ab₁ ab₂
+  simp only [traceC_ABC, kroneckerMap_apply, Matrix.smul_apply, Matrix.one_apply,
+    traceA_ABC, traceAC_ABC, Finset.mul_sum]
+  conv_lhs => rw [Finset.sum_comm]
+
 /-- **Data processing for the partial trace over the third factor, support
 domain.** For positive semidefinite matrices on the tripartite index with
 $\ker\sigma \subseteq \ker\rho$, the relative entropy of the partial traces over
@@ -742,17 +766,8 @@ theorem strong_subadditivity_posDef
   -- The reference state of the image pair is the partial trace of the full one.
   have hσtrace : traceC_ABC (((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρ_ABC)
       = ((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρAB := by
-    have hkron : traceC_ABC
-        (((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρ_ABC)
-        = ((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ))
-          ⊗ₖ partialTraceRight (traceLeftA ρ_ABC) := by
-      ext ab₁ ab₂
-      simp only [traceC_ABC, kroneckerMap_apply, partialTraceRight_apply, Finset.mul_sum]
-    rw [hkron]
-    congr 1
-    ext b₁ b₂
-    simp only [partialTraceRight_apply, traceLeftA, hρAB, traceC_ABC]
-    rw [Finset.sum_comm]
+    rw [← hρB_eq]
+    exact traceC_ABC_kronecker_traceA_ABC ρ_ABC
   set σfull : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ :=
     ((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρ_ABC with hσfull
   have hσfull_pd : σfull.PosDef := by
@@ -844,16 +859,8 @@ theorem strong_subadditivity_general
   -- The reference state of the image pair is the partial trace of the full one.
   have hσtrace : traceC_ABC (((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρ_ABC)
       = ((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρAB := by
-    have hkron : traceC_ABC
-        (((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρ_ABC)
-        = ((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ))
-          ⊗ₖ partialTraceRight (traceLeftA ρ_ABC) := by
-      ext ab₁ ab₂
-      simp only [traceC_ABC, kroneckerMap_apply, partialTraceRight_apply, Finset.mul_sum]
-    rw [hkron]; congr 1
-    ext b₁ b₂
-    simp only [partialTraceRight_apply, traceLeftA, hρAB, traceC_ABC]
-    rw [Finset.sum_comm]
+    rw [← hρB_eq]
+    exact traceC_ABC_kronecker_traceA_ABC ρ_ABC
   set σfull : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ :=
     ((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρ_ABC with hσfull
   have hσA_pd : ((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)).PosDef := by
