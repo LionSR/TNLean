@@ -192,7 +192,6 @@
 
 \begin{figure}[ht]
     \centering
-    \begin{center}
         % U \widetilde M U^dagger = bigoplus_alpha mu_alpha (x) M_alpha
         % (arXiv:1606.00608, Proposition 4.13, eq. UMU and figure
         % MPDO_UMU.png).  The physical isometry does not represent a plain
@@ -207,10 +206,10 @@
             \tn{\widetilde M} & & \\
             \tn[pill, wide=3, legs at={1,2,3}]{U} & &
         \end{tenkz}
-        $\;=\;$
+        $\;=\;\displaystyle\bigoplus_\alpha\;$
         \begin{tenkzfree}
-            \tnput[box]{mu}{(10mm,7mm)}{\mu}
-            \tnput[box]{M}{(34mm,0mm)}{M}
+            \tnput[box]{mu}{(10mm,7mm)}{\mu_\alpha}
+            \tnput[box]{M}{(34mm,0mm)}{M_\alpha}
             \tnput[dot]{d1}{(0mm,7mm)}{}
             \tnput[dot]{d2}{(20mm,7mm)}{}
             \tnput[dot]{d3}{(20mm,2mm)}{}
@@ -222,9 +221,8 @@
             \tnjoin{M.south}{$(M.south)+(0mm,-7mm)$}
             \tnjoin{d1}{mu.west}
             \tnjoin{d2}{mu.east}
-            \tnjoin{d3}{M.west}
+            \tnjoin{d3}{$(M.west)+(0mm,1.2mm)$}
         \end{tenkzfree}
-    \end{center}
     \caption{Vertical direct-sum form of the tensor: after the physical
     isometry $U$, each block factorizes as the positive diagonal weight
     $\mu_\alpha$ on the multiplicity factor times the basis tensor $M_\alpha$,
@@ -347,16 +345,16 @@ label $j$:
     $\;=\;$
     \begin{tenkz}[rows={op, op, bra:none}, compact]
         & \tn[up]{K^{-1}} & \\
-        \tn{X} & \tn{{\cal K}} & \tn{X^{-1}} \\
+        \tnX[wires=2]{X} & \tn{{\cal K}} & \tnX[wires=2]{X^{-1}} \\
         % The ghost is intentional: it carries the lower wire through the
         % column without a junction and consumes \mathcal K's spurious
         % downward pairing.
-        \tn{} & \tnghost{} & \tn{}
+        & \tnghost{} &
     \end{tenkz}
     $\;=\;$
     \begin{tenkz}[rows={ket, bra}, compact]
-        \tn{X} & \tnskip & \tn{X^{-1}} \\
-        \tn{} & \tn{} & \tn{}
+        \tnX[wires=2]{X} & \tnskip & \tnX[wires=2]{X^{-1}} \\
+        & \tnghost{} &
     \end{tenkz}
 \end{center}
 This is the inverse identity in
@@ -1328,7 +1326,6 @@ tensor.  This is the contraction in
 
 \begin{figure}[ht]
     \centering
-    \begin{center}
         % PH^{(N+1)} = PH^{(N+1)}P = H^{(N+1)}P for a projector P with
         % P\widetilde M=P\widetilde MP (arXiv:1606.00608, proof of
         % Proposition 4.13, eq. eq1:proof.IV.12, lines 1881--1887;
@@ -1354,7 +1351,6 @@ tensor.  This is the contraction in
             \tn[mpo]{\widetilde M} & \tn[mpo]{\widetilde M} & \tndots &
                 \tn[mpo]{\widetilde M}
         \end{tenkz}
-    \end{center}
     \caption{The periodic contraction representing $PH^{(N+1)}$. The
     analogous contractions with $Y_R$ and $Y_C$ place $P$ on the bra leg or
     on both legs and represent $H^{(N+1)}P$ and $PH^{(N+1)}P$. These are the

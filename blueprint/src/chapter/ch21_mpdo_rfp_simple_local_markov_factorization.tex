@@ -838,24 +838,16 @@ This is the single-block identity in
 
 \begin{figure}[ht]
     \centering
-    % tr_4(K_4) = sum_alpha L_alpha (x) B_alpha (x) R_alpha: tracing
-    % the fourth physical index folds that site into R_4 and leaves the
-    % first three ket and bra legs open.  On the left, periodic closes the
-    % virtual ring through the virtual-only R_4 cell.  On the right, the
-    % outer sum over alpha reglues the sealed chain ends.  Both sides have
-    % aggregate signature (virtual-west=0 | virtual-east=0 |
+    % Tracing the fourth physical index folds that site into R_4 and leaves
+    % the first three ket and bra legs open.  The periodic wire closes the
+    % virtual ring through the virtual-only R_4 cell.  The boundary signature
+    % is (virtual-west=0 | virtual-east=0 |
     % physical-up=3 | physical-down=3).
     \begin{tenkz}[physical=updown, periodic]
         \tn[up=$i_1$, down=$j_1$]{{\cal K}} &
         \tn[up=$i_2$, down=$j_2$]{{\cal K}} &
         \tn[up=$i_3$, down=$j_3$]{{\cal K}} &
         \tnX{R_4}
-    \end{tenkz}
-    $\;=\;\displaystyle\sum_\alpha\;$
-    \begin{tenkz}[physical=updown, boundary=none]
-        \tn[up=$i_1$, down=$j_1$]{L_\alpha} &
-        \tn[up=$i_2$, down=$j_2$]{B_\alpha} &
-        \tn[up=$i_3$, down=$j_3$]{R_\alpha}
     \end{tenkz}
     \caption{Tracing the fourth site of the normalized four-site periodic MPO
     leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
@@ -975,7 +967,6 @@ This is the single-block identity in
 
 \begin{figure}[ht]
     \centering
-    \begin{center}
         % (K^{-1} (x) Id (x) K^{-1}) K_3
         %   = K^{p_2}_{beta_1,alpha_3} R_{beta_3,alpha_1}
         % (arXiv:1606.00608, Appendix C.2, lines 1415--1438; paper
@@ -983,8 +974,8 @@ This is the single-block identity in
         %
         % LHS: the two K^{-1} boxes expose virtual pairs
         % (alpha_1,beta_1) and (alpha_3,beta_3).  Their physical indices
-        % p_1,p_3 match the first and third legs of the closed K_3
-        % contraction; p_2 remains open.  RHS: K carries beta_1 west,
+        % p_1,p_3 match the first and third legs of the three-site chain
+        % closed against R; p_2 remains open.  RHS: K carries beta_1 west,
         % p_2 up, and alpha_3 east, while R carries beta_3 west and
         % alpha_1 east.  There is no surviving sum: the identity is
         % pointwise in all four virtual indices.  Both sides have aggregate
@@ -1002,9 +993,11 @@ This is the single-block identity in
                 \tn[down=$p_3$]{{\cal K}^{-1}}
             \end{tenkz}
             \Bigr)
-            \begin{tenkz}[compact, physical=up, boundary=none]
-                \tn[pill, wide=3, legs at={1,2,3},
-                    up={$p_1$,$p_2$,$p_3$}]{{\cal K}_3}
+            \begin{tenkz}[compact, physical=up, periodic]
+                \tn[up=$p_1$]{{\cal K}} &
+                \tn[up=$p_2$]{{\cal K}} &
+                \tn[up=$p_3$]{{\cal K}} &
+                \tnX{R}
             \end{tenkz}
             \;=\;
             \begin{tenkz}[compact, physical=up,
@@ -1017,7 +1010,6 @@ This is the single-block identity in
                 \tnX{R}
             \end{tenkz}
         \]
-    \end{center}
     \caption{Applying ${\cal K}^{-1}$ at the first and third sites collapses
     the three-site contraction to
     ${\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}$, where
