@@ -43,10 +43,12 @@ to be positive semidefinite and to have trace one.  Thus the theorem is a
 faithful scope-restricted case, but it is not the full direct-sum
 classification of Proposition~1.5.
 
-\section{Missing direct-sum argument}
+\section{Resolution of the direct-sum argument}
 
-The remaining result must combine the one-factor theorem with the existing
-finite-dimensional block description.  More precisely, it must:
+The theorem
+\leanid{StarSubalgebra.exists_block_densities_of_positive_retraction} combines
+the one-factor theorem with the finite-dimensional block description.  Its
+proof:
 \begin{enumerate}
     \item conjugate and reindex the ambient matrices by the unitary block data;
     \item prove that the positive retraction annihilates inputs between
@@ -58,9 +60,11 @@ finite-dimensional block description.  More precisely, it must:
           the original subalgebra.
 \end{enumerate}
 The second and third items are the off-diagonal positivity arguments in Wolf's
-proof preceding Equation~(1.42).  Once these are formalized, the present
-one-factor theorem supplies the remaining factorwise classification without
-additional assumptions.
+proof preceding Equation~(1.42).  They are now proved using the complementary
+central projection of each summand.  The remaining distinction between the
+classification of a given retraction and the later construction of a
+fixed-point projection is recorded in
+\path{docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

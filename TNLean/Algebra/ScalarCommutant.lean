@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Data.Matrix.Block
+import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
@@ -136,6 +137,30 @@ theorem isBlockDiagonal'_iff_offBlock_zero {R : Type*} [Zero R]
 section Semiring
 
 variable {R : Type*} [Semiring R]
+
+/-- A block projection is idempotent. -/
+theorem blockProjection_isIdempotentElem
+    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
+    (k : ι) : IsIdempotentElem (blockProjection (n := n) (R := R) k) := by
+  rw [IsIdempotentElem, blockProjection, ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext i
+  by_cases hik : i = k
+  · simp [hik]
+  · simp [hik]
+
+/-- A complex block projection is Hermitian. -/
+theorem blockProjection_isHermitian
+    [(i : ι) → DecidableEq (n i)]
+    (k : ι) :
+    (blockProjection (n := n) (R := ℂ) k).IsHermitian := by
+  simp only [Matrix.IsHermitian, blockProjection,
+    Matrix.blockDiagonal'_conjTranspose]
+  congr 1
+  funext i
+  by_cases hik : i = k
+  · simp [hik]
+  · simp [hik]
 
 /-- Left multiplication by a block projection fixes entries whose row belongs
 to the selected block. -/

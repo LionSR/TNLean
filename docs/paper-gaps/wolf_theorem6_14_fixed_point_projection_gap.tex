@@ -1,0 +1,49 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Wolf Theorem~6.14: Fixed-Point Projection Gap}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{The completed classification theorem}
+
+Wolf's Proposition~1.5 assumes a positive linear retraction onto a unital
+finite-dimensional $*$-subalgebra and classifies that retraction
+\cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.  The local source
+is \path{Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex},
+lines~536--570.
+
+The theorem
+\leanid{StarSubalgebra.exists_block_densities_of_positive_retraction} proves
+the full proposition.  It assumes exactly that the given linear map is
+positive, that its image is contained in the subalgebra, and that it fixes
+every member of the subalgebra.  It obtains the unitary direct-sum
+representation, removes off-diagonal inputs by positivity, and gives a
+positive semidefinite trace-one matrix for each summand.  No assumption of
+complete positivity, trace preservation, or a Schwarz inequality is added.
+
+\section{The remaining application to fixed points}
+
+The application surrounding \cite[Theorem~6.14]{Wolf2012Quantum} requires a
+positive retraction onto the relevant fixed-point space.  This retraction must
+first be constructed, for example as an appropriate Ces\`aro limit, and its
+range must be identified with the fixed-point space to which Proposition~1.5
+is applied.
+
+Thus Proposition~1.5 is fully formalized.  The remaining work toward
+Theorem~6.14 is the construction and identification of this fixed-point
+projection in the intended channel-theoretic setting, together with the
+additional hypotheses and zero-block conclusions of that theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
