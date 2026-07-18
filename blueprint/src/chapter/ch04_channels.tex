@@ -1068,6 +1068,99 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     preceding theorems.
 \end{proof}
 
+\begin{theorem}[Trace preservation and the trace adjoint]
+    \label{thm:trace_preserving_iff_trace_adjoint_unital}
+    \lean{isTracePreservingMap_iff_traceAdjointMap_one}
+    \leanok
+    \uses{def:trace_preserving}
+    A linear map $S:\MN{D}\to\MN{D}$ is trace-preserving if and only if its
+    trace-pairing adjoint fixes the identity:
+    \[
+        \tr(S(X))=\tr(X)\quad\text{for every }X
+        \quad\Longleftrightarrow\quad
+        S^*(\Id)=\Id.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_pairing_adjoint_identity}
+    The trace-pairing identity gives
+    \[
+        \tr(S^*(\Id)X)=\tr(S(X)).
+    \]
+    The equivalence follows from nondegeneracy of the trace pairing.
+\end{proof}
+
+\begin{theorem}[Adjoint mean-ergodic projection]
+    \label{thm:adjoint_mean_ergodic_projection}
+    \lean{LinearMap.HasBoundedOrbits.traceAdjointMap_meanErgodicProjection_apply_eq_self_iff,
+        LinearMap.HasBoundedOrbits.traceAdjointMap_meanErgodicProjection_apply_self,
+        LinearMap.HasBoundedOrbits.range_traceAdjointMap_meanErgodicProjection}
+    \leanok
+    \uses{def:mean_ergodic_projection, thm:mean_ergodic_bounded_orbits}
+    Let $T:\MN{D}\to\MN{D}$ have bounded orbits, let $P_T$ be its
+    mean-ergodic projection, and let $P_T^*$ be the trace-pairing adjoint of
+    $P_T$. Then
+    \[
+        (P_T^*)^2=P_T^*,
+        \qquad
+        \operatorname{range}(P_T^*)=\ker(T^*-\Id),
+    \]
+    and
+    \[
+        P_T^*(Y)=Y\quad\Longleftrightarrow\quad T^*(Y)=Y.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:trace_pairing_adjoint_identity,
+        thm:mean_ergodic_bounded_orbits}
+    Since $P_T^2=P_T$, the trace-pairing identity gives
+    $(P_T^*)^2=P_T^*$.  If $T^*(Y)=Y$, decompose
+    \[
+        X-P_T(X)=(T-\Id)(Z).
+    \]
+    Then
+    \[
+        \tr\bigl(Y(X-P_T(X))\bigr)
+        =\tr\bigl((T^*(Y)-Y)Z\bigr)=0.
+    \]
+    Nondegeneracy of the trace pairing gives $P_T^*(Y)=Y$.  Conversely,
+    $P_TT=P_T$ implies $T^*P_T^*=P_T^*$, so every fixed point of $P_T^*$ is a
+    fixed point of $T^*$.  The fixed-point equivalence and idempotence give the
+    range identity.
+\end{proof}
+
+\begin{theorem}[Positive unital adjoint Ces\`aro retraction]
+    \label{thm:positive_unital_adjoint_mean_ergodic_retraction}
+    \lean{IsPositiveMap.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction}
+    \leanok
+    \uses{thm:positive_trace_preserving_mean_ergodic_projection,
+        thm:trace_preserving_iff_trace_adjoint_unital,
+        thm:adjoint_mean_ergodic_projection,
+        thm:trace_pairing_adjoint_positive}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving.  The trace
+    adjoint $P_T^*$ of its mean-ergodic projection is positive, unital, and
+    idempotent.  It is a retraction onto the adjoint fixed-point space:
+    \[
+        P_T^*(\Id)=\Id,
+        \qquad (P_T^*)^2=P_T^*,
+        \qquad \operatorname{range}(P_T^*)=\ker(T^*-\Id),
+    \]
+    and $P_T^*(Y)=Y$ if and only if $T^*(Y)=Y$.
+    This is the adjoint projection used in the proof of
+    \cite[Theorem~6.14]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection} makes
+    $P_T$ positive and trace-preserving.  Positivity passes to its trace
+    adjoint, while
+    Theorem~\ref{thm:trace_preserving_iff_trace_adjoint_unital} gives
+    $P_T^*(\Id)=\Id$.  The remaining assertions are
+    Theorem~\ref{thm:adjoint_mean_ergodic_projection}.
+\end{proof}
+
 \begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
     \lean{IsChannel.posSemidef_parts_of_hermitian_fixedPoint}
     \leanok
