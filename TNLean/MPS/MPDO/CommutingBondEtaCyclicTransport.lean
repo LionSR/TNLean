@@ -598,7 +598,10 @@ theorem reindex_product_embedLocalOperator_of_etaPair_decomposition
 
 /-- The length-two specialization of cyclic transport.  The two translated windows are
 \((0,1)\) and \((1,0)\), and hence contribute the two oriented edge factors
-\(\eta_{k_0,k_1}\) and \(\eta_{k_1,k_0}\). -/
+\(\eta_{k_0,k_1}\) and \(\eta_{k_1,k_0}\).
+
+Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2, lines 1581--1605.
+Documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem reindex_product_embedLocalOperator_two_of_etaPair_decomposition
     {K : ℕ} (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
