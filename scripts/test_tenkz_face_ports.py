@@ -93,6 +93,42 @@ SOURCE = r"""
   \tn[wires=2, physical=up]{B}\\
   &
 \end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, box]{X}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, box, east at=center]{X} & \tn{A}\\
+  & \tn{A}
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire, wire}]
+  \tnfuse[span=3, west at=center, east at={1,3}]{V} & & \tn{A}\\
+  & & \tn{A}\\
+  & & \tn{A}
+\end{tenkz}
+\begin{tenkz}[rows={ket, bra}, trace={(1,1)}, tensor style=box]
+  \tn[pill, wide=2, down at={1,2}]{K} & \\
+  \tn[pill, wide=2, up at={1,2}]{B} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
+  \tn[pill, wide=2, down at={1}, down={$i$}]{U} & \\
+  \tn[pill, wide=2, up at={1,2}, up={$j$,$k$}]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
+  \tn[down at=center, down={$i$}]{U} & \\
+  \tn[pill, wide=2, up at={1,2}, up={$j$,$k$}]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={wire}, tensor style=box]
+  \tn[west at=center, east at=center]{X}
+\end{tenkz}
+\begin{tenkz}[rows={ket, bra}, trace={(physical,1)}, tensor style=box]
+  \tn[pill, wide=2, down at={1,2}]{K} & \\
+  \tn[pill, wide=2, up at={1,2}]{B} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,2)}, tensor style=box]
+  \tn{U_1} & \tn{U_2}\\
+  \tn[pill, wide=2, up at={1}]{L} &
+\end{tenkz}
 \end{document}
 """
 
@@ -306,6 +342,72 @@ def main() -> int:
         default_brick,
         "boundary|picture=17|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
         "face-port support changed the default tall-brick arity",
+    )
+    default_virtual = pictures[18]
+    require(default_virtual,
+            "faceports|picture=18|cell=1-1|face=west|arity=2|at=rows",
+            "default tall glyph did not record its west split face")
+    require(default_virtual,
+            "faceports|picture=18|cell=1-1|face=east|arity=2|at=rows",
+            "default tall glyph did not record its east split face")
+    centred_virtual = pictures[19]
+    require(centred_virtual,
+            "bond|picture=19|row=1|from=1|to=2|dir=none|role=none|species=none",
+            "centred virtual face did not meet row 1")
+    require(centred_virtual,
+            "bond|picture=19|row=2|from=1|to=2|dir=none|role=none|species=none",
+            "centred virtual face did not meet every row of its span")
+    hole = pictures[20]
+    forbid(hole,
+           "bond|picture=20|row=2|from=1|to=2|dir=none|role=none|species=none",
+           "sparse virtual face acquired a port in its omitted row")
+    pair_trace = pictures[21]
+    require(pair_trace,
+            "warning|code=pair-trace-face-ports|cell=1-1",
+            "multi-port pair trace was not rejected")
+    forbid(pair_trace,
+           "pair-trace|picture=21|upper-row=1|lower-row=2|column=1",
+           "multi-port pair trace emitted a misleading centre loop")
+    if paired_ports(pair_trace) != [("1", "1"), ("2", "2")]:
+        raise AssertionError("rejected pair trace did not retain both ordinary contractions")
+    opened_wide = pictures[22]
+    require(
+        opened_wide,
+        "boundary|picture=22|virtual-west=2|virtual-east=2|physical-up=3|physical-down=1",
+        "opened wide interface omitted a surplus lower-face port",
+    )
+    opened_plain = pictures[23]
+    require(
+        opened_plain,
+        "boundary|picture=23|virtual-west=2|virtual-east=2|physical-up=3|physical-down=1",
+        "opened centred interface omitted a surplus lower-face port",
+    )
+    single_wire = pictures[24]
+    require(single_wire,
+            "faceports|picture=24|cell=1-1|face=west|arity=1|at=center",
+            "single-wire centred west face was not recorded")
+    require(single_wire,
+            "faceports|picture=24|cell=1-1|face=east|arity=1|at=center",
+            "single-wire centred east face was not recorded")
+    forbid(single_wire,
+           "warning|code=combined-wires|cell=1-1",
+           "single-wire centred face was mistaken for combined=")
+    physical_pair_trace = pictures[25]
+    require(physical_pair_trace,
+            "warning|code=pair-trace-face-ports|cell=1-1",
+            "multi-port physical-column trace was not rejected")
+    forbid(physical_pair_trace,
+           "pair-trace|picture=25|upper-row=1|lower-row=2|column=1",
+           "multi-port physical-column trace emitted a centre loop")
+    if paired_ports(physical_pair_trace) != [("1", "1"), ("2", "2")]:
+        raise AssertionError(
+            "rejected physical-column trace did not retain ordinary contractions"
+        )
+    sparse_open = pictures[26]
+    require(
+        sparse_open,
+        "boundary|picture=26|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
+        "opened sparse lower face changed its exact-slot signature",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
