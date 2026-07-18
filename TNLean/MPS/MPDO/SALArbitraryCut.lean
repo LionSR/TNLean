@@ -22,6 +22,8 @@ first three regions.  The converse is stated for all admissible cuts.
   equality gives \(I_1=I_m\).
 - `MPOTensor.isSAL_of_isSSAEquality_tripartite_m`: the equalities at all
   admissible cuts recover SAL.
+- `MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m`: quantum
+  Markov decompositions at all admissible cuts recover SAL.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -155,5 +157,46 @@ theorem isSAL_of_isSSAEquality_tripartite_m (M : MPOTensor d D)
     M hMpdo (m := L + 1) (by omega) (by omega)
       (hSSA N (L + 1) (by omega) (by omega))
   exact hEqL.symm.trans hEqSucc
+
+/-- Quantum-Markov decompositions for every admissible three-region marginal
+imply saturation of the area law, provided the periodic operators are positive
+and have nonzero trace.
+
+This isolates the entropy-theoretic conclusion used in the proof of the
+proposition labelled `4to2`: the direct-sum tensor-factor decomposition on the
+middle site implies equality in strong subadditivity, and the latter equalities
+give SAL.
+
+**Scope restriction (Markov decomposition assumed):** Proposition `4to2` of
+arXiv:1606.00608 assumes instead a single translation-invariant commuting bond
+and ZCL. Deriving the decompositions below from those hypotheses requires the
+Bravyi--Vyalyi spatial decomposition (Beigi, arXiv:1105.1019v2, Lemma 2.1),
+and the subsequent ZCL trace factorization. This missing implication is documented in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1597--1619. -/
+theorem isSAL_of_quantumMarkovDecomposition_tripartite_m
+    (M : MPOTensor d D) (hMpdo : IsMPDO M)
+    (htrace : ∀ N, 0 < N → (mpo M N).trace ≠ 0)
+    (hMarkov : ∀ (N m : ℕ) (hm1 : 1 ≤ m) (hmN : m ≤ N / 2),
+      let h3 : (m - 1) + 1 + (N - m - 1) ≤ N := by omega
+      let ρ_ABC :=
+        (M.reducedBlockState N ((m - 1) + 1 + (N - m - 1)) h3).submatrix
+          (tripartiteSplitEquiv d (m - 1) 1 (N - m - 1)).symm
+          (tripartiteSplitEquiv d (m - 1) 1 (N - m - 1)).symm
+      Nonempty (Entropy.QuantumMarkovDecomposition ρ_ABC)) :
+    IsSAL M := by
+  apply isSAL_of_isSSAEquality_tripartite_m M hMpdo htrace
+  intro N m hm1 hmN
+  dsimp only
+  apply Entropy.isSSAEquality_of_quantumMarkovDecomposition
+  · constructor
+    · exact (reducedBlockState_posSemidef M N
+        ((m - 1) + 1 + (N - m - 1)) (by omega) (hMpdo N (by omega))).submatrix _
+    · rw [Matrix.trace_submatrix_equiv]
+      exact reducedBlockState_trace M N ((m - 1) + 1 + (N - m - 1))
+        (by omega) (htrace N (by omega))
+  · exact hMarkov N m hm1 hmN
 
 end MPOTensor

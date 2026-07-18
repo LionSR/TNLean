@@ -44,6 +44,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{definition}[Single-bond commuting-form data for an MPDO]
     \label{def:mpdo_commuting_form_data}
     \lean{MPOTensor.CommutingFormData}
+    \lean{MPOTensor.CommutingFormData.Realizes}
     \leanok
     \uses{def:mpo_tensor}
     For a fixed chain length $N \ge 2$, this consists of one positive
@@ -66,6 +67,11 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \[
         \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
     \]
+    The bond in this chainwise condition may depend on $N$.  It is therefore
+    weaker than the single translation-invariant bond family used in the
+    proposition at
+    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
+    % See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{definition}
 
 \begin{definition}[Single-bond product predicate]

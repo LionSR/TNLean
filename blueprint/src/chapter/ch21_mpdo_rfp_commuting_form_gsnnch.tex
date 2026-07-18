@@ -106,6 +106,27 @@
     combine it with the doubled-index transfer hypothesis.
 \end{proof}
 
+\begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
+    \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
+    \notready
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl,
+        def:is_sal, def:mpdo, def:mpdo_injective_inverse_layer}
+    Let $\mathcal K$ be a normal MPDO block.  Suppose that there is one
+    positive two-site bond $B$ whose translates commute and, for every
+    $N\geq2$, a constant $c_N>0$ such that
+    \[
+        \rho^{(N)}(\mathcal K)=c_N\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
+    If the physical-trace transfer of $\mathcal K$ has zero correlation
+    length, then $\mathcal K$ saturates the area law.
+
+    This is the proposition at
+    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
+    % The Bravyi--Vyalyi spatial decomposition and the subsequent source-ZCL
+    % trace factorization remain open. Gap documented in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
 \begin{theorem}[$\eta$-local structure gives the one-sector GSNNCH form]
     \label{thm:mpdo_eta_local_structure_has_gsnnch_form}
     \lean{MPOTensor.EtaLocalStructureData.hasGSNNCHForm}

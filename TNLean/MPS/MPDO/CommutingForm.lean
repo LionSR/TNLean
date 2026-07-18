@@ -431,9 +431,16 @@ def Realizes (data : CommutingFormData d N) (ρ : ChainOperator d N) : Prop :=
 
 end CommutingFormData
 
-/-- Global commuting-form property for an MPO tensor: each finite chain of
+/-- Chainwise commuting-form property for an MPO tensor: each finite chain of
 length at least `2` admits a commuting-form witness for the corresponding MPO
-operator. -/
+operator. The bond may depend on the chain length.
+
+This is weaker than the hypothesis of Proposition `4to2` in
+arXiv:1606.00608, lines 1597--1619, which refers back to the single
+translation-invariant bond family in equation `expression`. That source
+hypothesis is represented by `EtaLocalStructureData`: one bond realizes every
+finite chain. The distinction and the missing Bravyi--Vyalyi decomposition are
+recorded in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def HasCommutingForm (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N →
     ∃ data : CommutingFormData d N, data.Realizes (mpo M N)
