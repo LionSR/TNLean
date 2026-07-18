@@ -677,8 +677,10 @@
                     \bool_lazy_and:nnT
                       { \int_compare_p:nNn {##1} > {0} }
                       { \int_compare_p:nNn {##1} < {#2+1} }
-                      { \clist_put_right:Nn
-                          \l__tenkz_validfaceports_clist {##1} }
+                      { \clist_if_in:NnF
+                          \l__tenkz_validfaceports_clist {##1}
+                          { \clist_put_right:Nn
+                              \l__tenkz_validfaceports_clist {##1} } }
                   }
                 \clist_if_empty:NTF \l__tenkz_validfaceports_clist
                   { \tl_set:Nn #1 {none} }
@@ -2045,6 +2047,7 @@
 % orientation for the boundary signature emitted after the boundary pass.
 \int_new:N \l__tenkz_internalvw_int
 \int_new:N \l__tenkz_internalve_int
+\prop_new:N \l__tenkz_virtualpaired_prop
 \cs_new_protected:Npn \tenkz_draw_unmatched_virtual:nnn #1#2#3
   {
     \tenkz_anchor:nnnN {#1}{#2}{#3} \l__tenkz_pa_tl
@@ -2059,6 +2062,7 @@
   {
     \int_zero:N \l__tenkz_internalvw_int
     \int_zero:N \l__tenkz_internalve_int
+    \prop_clear:N \l__tenkz_virtualpaired_prop
     \int_step_inline:nn { \l__tenkz_nrows_int }
       {
         \tenkz_row_wirestyle:nN {##1} \l__tenkz_cell_tl
@@ -2143,6 +2147,13 @@
                                 \draw[\tl_use:N \l__tenkz_cell_tl,
                                       \tl_use:N \l__tenkz_dirmarks_tl]
                                   \l__tenkz_pa_tl -- \l__tenkz_pb_tl;
+                                % Boundary accounting consumes these exact
+                                % bond facts rather than repeating the
+                                % consecutive-owner scan.
+                                \prop_put:Nen \l__tenkz_virtualpaired_prop
+                                  {##1-\int_use:N\l_tmpa_int-east} {}
+                                \prop_put:Nen \l__tenkz_virtualpaired_prop
+                                  {##1-####1-west} {}
                                 \tenkz@event{bond|picture=\the\tenkz@pictureid|row=##1|from=\int_use:N\l_tmpa_int|to=####1|dir=\tenkz_dir_word:|role=\tenkz_rowrole_word:|species=\tenkz_rowspec_word:}
                                   }
                                   { \tenkz_draw_unmatched_virtual:nnn {##1}
@@ -2581,7 +2592,7 @@
           {
             \prop_put:Nen \l__tenkz_pwcenterused_prop
               {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
-            \tenkz_leg_open:enn { \int_eval:n{#1+1} }
+            \tenkz_leg_open:een { \int_eval:n{#1+1} }
               {\l__tenkz_pwbase_tl}{up}
           }
       }
@@ -2917,7 +2928,7 @@
               \l__tenkz_cdown_tl {-1} }
       }
   }
-\cs_generate_variant:Nn \tenkz_leg_open:nnn { enn }
+\cs_generate_variant:Nn \tenkz_leg_open:nnn { enn, een }
 
 % the multi-leg form: row #1, base column #2, glyph-edge anchor #3, label
 % anchor #4, label-list var #5 (a comma list matched leg-by-leg, popped
@@ -3761,60 +3772,13 @@
 % anchor, so one live facing neighbour closes that one index even when the
 % base row itself has no neighbour.
 \int_new:N \l__tenkz_centerlast_int
-\int_new:N \l__tenkz_centerneighbor_int
-% Column of the neighbour actually joined to (row, column) by the bond
-% scan.  Empty grid columns are transparent, whereas a `skip' cell breaks
-% the chain.  This is the same consecutive-owner rule as \tenkz_draw_bonds:.
-\cs_new_protected:Npn \tenkz_center_neighbor_on_row:nnnN #1#2#3#4
-  {
-    \int_zero:N #4
-    \str_if_eq:nnTF {#3}{west}
-      {
-        \int_step_inline:nnn {1}{#2-1}
-          {
-            \tenkz_get:NeN \l__tenkz_kind_prop {#1-##1} \l__tenkz_pkind_tl
-            \str_if_eq:VnTF \l__tenkz_pkind_tl {skip}
-              { \int_zero:N #4 }
-              { \prop_if_in:NeT \l__tenkz_owner_prop {#1-##1}
-                  { \int_set:Nn #4 {##1} } }
-          }
-      }
-      {
-        \int_step_inline:nnn {#2+1}{\l__tenkz_ncols_int}
-          {
-            \int_compare:nNnT {#4} = {0}
-              {
-                \tenkz_get:NeN \l__tenkz_kind_prop
-                  {#1-##1} \l__tenkz_pkind_tl
-                \str_if_eq:VnTF \l__tenkz_pkind_tl {skip}
-                  { \int_set:Nn #4 {-1} }
-                  { \prop_if_in:NeT \l__tenkz_owner_prop {#1-##1}
-                      { \int_set:Nn #4 {##1} } }
-              }
-          }
-      }
-  }
 \cs_new_protected:Npn \tenkz_center_face_contracted:nnnN #1#2#3#4
   {
     \bool_set_false:N #4
     \int_set:Nn \l__tenkz_centerlast_int {#1+\l__tenkz_frows_int-1}
     \int_step_inline:nnn {#1}{\l__tenkz_centerlast_int}
-      {
-        \tenkz_center_neighbor_on_row:nnnN {##1}{#2}{#3}
-          \l__tenkz_centerneighbor_int
-        \int_compare:nNnT {\l__tenkz_centerneighbor_int} > {0}
-          {
-            \str_if_eq:nnTF {#3}{west}
-              { \tenkz_cell_virtual_row_port:nnnN {##1}
-                  {\l__tenkz_centerneighbor_int}{east} \l_tmpa_bool }
-              { \tenkz_cell_virtual_row_port:nnnN {##1}
-                  {\l__tenkz_centerneighbor_int}{west} \l_tmpa_bool }
-            \bool_if:NT \l_tmpa_bool
-              {
-                \bool_set_true:N #4
-              }
-          }
-      }
+      { \prop_if_in:NeT \l__tenkz_virtualpaired_prop {##1-#2-#3}
+          { \bool_set_true:N #4 } }
   }
 
 \cs_new_protected:Npn \tenkz_draw_boundaries:

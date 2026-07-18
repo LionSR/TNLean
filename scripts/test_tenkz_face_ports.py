@@ -169,6 +169,14 @@ SOURCE = r"""
   \tn[no legs, up at=center, down at=center]{A}\\
   \tnX[up at=center, down at=center]{X}
 \end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
+  \tn{U_1} & \tn{U_2}\\
+  \tn[pill, wide=2, up at=center]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, west at={1,1}, east at={2,2}]{X}\\
+  &
+\end{tenkz}
 \end{document}
 """
 
@@ -557,6 +565,28 @@ def main() -> int:
         suppressed_physical,
         "boundary|picture=36|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0",
         "suppressed physical faces survived in the boundary signature",
+    )
+    opened_center = pictures[37]
+    require(
+        opened_center,
+        "boundary|picture=37|virtual-west=2|virtual-east=2|physical-up=3|physical-down=2",
+        "an opened centred lower face did not retain both interface stubs",
+    )
+    duplicate_slots = pictures[38]
+    require(
+        duplicate_slots,
+        "faceports|picture=38|cell=1-1|face=west|arity=1|at=1",
+        "duplicate west slots survived canonicalization",
+    )
+    require(
+        duplicate_slots,
+        "faceports|picture=38|cell=1-1|face=east|arity=1|at=2",
+        "duplicate east slots survived canonicalization",
+    )
+    require(
+        duplicate_slots,
+        "boundary|picture=38|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
+        "duplicate virtual slots inflated the boundary signature",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
