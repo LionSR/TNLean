@@ -26,9 +26,11 @@ underlying question was isolated in
 counterexample was added in
 \href{https://github.com/LionSR/TNLean/pull/849}{pull request \#849}; and the
 positive-semidefinite replacement theorem was added in
-\href{https://github.com/LionSR/TNLean/pull/917}{pull request \#917}. The open
-final inverse-map provenance audit and the obstruction verdict are recorded in
-\href{https://github.com/LionSR/TNLean/issues/3593}{issue \#3593}. The
+\href{https://github.com/LionSR/TNLean/pull/917}{pull request \#917}. The
+source audit and obstruction verdict are recorded in
+\href{https://github.com/LionSR/TNLean/issues/3593}{issue \#3593}; the explicit
+inverse-map provenance question is recorded in
+\href{https://github.com/LionSR/TNLean/issues/4270}{issue \#4270}. The
 source passage is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1394--1499}.}
 
@@ -399,21 +401,21 @@ nilpotent remainder, are proved in
 \footnote{\sloppy Combined formal declaration:
 {\scriptsize\leanid{TNLean.Archive.PerronFrobeniusVirtualSpanningCounterexample.injective_sourceZCL_tensor_with_nilpotent_sector_pairing}}.}
 
-The construction does not yet identify $L$ and $Q$ with the particular closed
-tensors selected from a Hayashi decomposition by
-\leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization}.
-This distinction is essential.  The theorem above supplies a directly chosen
-rectangular realization; it does not supply the Hayashi structure, normalized
-tail entry, inverse-map indices, and rephasing data from which the source
-factorization is constructed.  Thus it is not a counterexample to the full
-statement of Lemma~C.5.
+The explicit three-site Hayashi decomposition now identifies $L$ and $Q$ with
+the closed tensors selected by
+\leanid{MPOTensor.inverseMapPhysicalSectorFactorization}.  The Hayashi sectors
+are the four classical symbols, the tail is $LQ$, and both selected outer
+indices are zero.  The theorem
+{\scriptsize\leanid{MPOTensor.ActiveSectorSpanningCounterexample.inverseMap_factorization_recovers_displayed_tensors}}
+proves that the arbitrary inverse-map tensor recovers precisely the directly
+displayed rectangular realization.
 
 The obstruction instead proves that every presently exported algebraic
 consequence---source ZCL, injectivity, primitivity, trace normalization,
 rectangular pairing idempotence, constant positive-power traces, and full
-virtual spanning---is insufficient.  A source-faithful completion must derive
-an additional identity from SAL and from the provenance of the inverse-map
-tensors.  In the notation above, the needed assertion is precisely
+virtual spanning---is insufficient.  The inverse-map provenance supplies no
+additional identity.  In the notation above, the missing assertion is
+precisely
 \[
  Q(1-LQ)L=0,
 \]
@@ -494,22 +496,22 @@ is not yet a theorem about
 the formal counterexample theorem does not contain an \leanid{IsSAL}
 conjunct.
 
-The remaining boundary is solely one of provenance.  The displayed
-\leanid{MPOTensor.ActiveSectorSpanningCounterexample.factorization} satisfies
-the exact fields of \leanid{MPOTensor.PhysicalSectorFactorization}, hence the
-direct-sum factorization conclusion displayed in Lemma~C.4, and it has the
-recorded positivity and primitivity properties.  It is nevertheless built
-directly, rather than as an instance of
-\leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization}.
-The source-minimal structure deliberately forgets the Hayashi decomposition,
-tail choice, inverse-map indices, and rephasing which produced it.  No theorem
-presently identifies the chosen factorization with the source-selected one.
-The example is therefore a counterexample to the printed universal matrix
-inference from the displayed Lemma~C.4 conclusions and ZCL, but is not yet a
-genuine counterexample to Lemma~C.5.  Deciding that last point requires either
-realizing this factorization from explicit source provenance, or proving that
-such provenance forces $Q(1-LQ)L=0$; this focused provenance question is
-tracked in \ghissue{4270}.
+The inverse-map provenance is now explicit.  The normalized three-site state
+has the four-sector Hayashi decomposition with weights $1/4$, left conditional
+densities $\operatorname{diag}((QL)_{i,k})_i$, and right conditional densities
+$\operatorname{diag}((QL)_{k,j})_j$.  Closing three tensor copies against the
+tail $LQ$ gives this state because $(QL)^2$ is the matrix with every entry
+$1/4$.  Applying the arbitrary right inverse through its defining matrix-unit
+contraction then recovers exactly the displayed columns of $L$ and rows of
+$Q$; the selected tail entry is $(LQ)_{0,0}=1$.
+\footnote{The formal construction and comparison theorem are in
+\doclink{TNLean/MPS/MPDO/ActiveSectorInverseMapProvenance}; see
+{\scriptsize\leanid{MPOTensor.ActiveSectorSpanningCounterexample.inverseMap_factorization_recovers_displayed_tensors}}.}
+Thus inverse-map provenance does not force $Q(1-LQ)L=0$ and does not remove
+the example.  The remaining formal step toward a theorem-level counterexample
+to Lemma~C.5 is the entropy proof that the induced cyclic family satisfies
+\leanid{IsSAL}; the calculation above already establishes this mathematical
+fact.
 
 \section{A positive-semidefinite route}
 
@@ -638,14 +640,12 @@ Consequently the strongest source-faithful common-matrix conclusion remains
 together with entrywise nonnegativity and primitivity.  The formal
 counterexample shows that these conclusions, even supplemented by injectivity,
 full virtual spanning, and positivity of every neighboring operator, do not
-imply the missing vanishing.  Its induced classical cyclic family does satisfy
-the strong area law by the entropy calculation above.  However, the directly
-chosen \leanid{PhysicalSectorFactorization} has not been identified with the
-particular inverse-map factorization produced from the Hayashi decomposition.
-The example therefore refutes the printed matrix inference but does not yet
-refute Lemma~C.5 itself.  The source proof remains obstructed because it
-derives no identity from the inverse-map provenance that excludes the
-nilpotent remainder.
+imply the missing vanishing.  Its induced classical cyclic family satisfies
+the strong area law by the entropy calculation above, and the explicit
+Hayashi decomposition together with the inverse-map contraction recovers the
+same displayed factorization.  Hence the inverse-map provenance supplies no
+identity excluding the nilpotent remainder.  A fully formal counterexample to
+Lemma~C.5 now requires only the remaining entropy-to-\leanid{IsSAL} theorem.
 
 This obstruction propagates to every source statement whose proof invokes the
 rank-one factorization from Lemma~C.5.  In particular, the structural
@@ -676,13 +676,16 @@ For the unconditional matrix product density operator argument, it would
 suffice to derive positive semidefiniteness, linear independence, or any
 equivalent exclusion of the generalized zero-eigenspace from the stated SAL
 and ZCL hypotheses.  The source and inverse-map provenance audit provides no
-such derivation.  Lemma~C.5 is therefore classified as obstructed, rather than
-formalized or refuted.  The same status applies to its structural corollary and
+such derivation; in the explicit four-sector family it recovers exactly the
+factorization with nonzero remainder.  Lemma~C.5 is therefore mathematically
+refuted by the four-sector SAL family, while its fully formal counterexample
+awaits the entropy-to-\leanid{IsSAL} theorem.  The same source gap applies to
+its structural corollary and
 to the source implications (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) of
 Theorem~4.9.  Their corrected conditional forms remain available, but the
 additional conditions must not be attributed to the source theorem.  The
-remaining decision whether the four-sector SAL example is realized by the
-source-selected inverse-map factorization is isolated in \ghissue{4270}.
+inverse-map provenance question isolated in \ghissue{4270} is settled by the
+explicit construction above.
 
 \bibliographystyle{alpha}
 \bibliography{references}

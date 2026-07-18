@@ -489,6 +489,45 @@
     $Q(1-LQ)L=QL-(QL)^2\ne0$.
 \end{proof}
 
+\begin{theorem}[Inverse-map provenance of the four-sector example]
+    \label{thm:mpdo_four_sector_inverse_map_provenance}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      inverseMap_factorization_recovers_displayed_tensors}
+    \leanok
+    \uses{thm:mpdo_virtual_spanning_active_trace_counterexample,
+      def:mpdo_inverse_map_physical_sector_factorization}
+    The four-sector classical tensor admits a four-block Hayashi decomposition
+    of its normalized three-site state such that, with virtual tail $LQ$ and
+    outer indices both equal to zero, the inverse-map construction recovers
+    exactly the displayed left factors $L_{\beta,k}$ and right factors
+    $Q_{k,\alpha}$.
+
+    Thus the freedom in choosing a right inverse of the injective tensor map
+    does not remove the non-idempotent active-sector trace matrix $QL$ in this
+    example. This assertion is restricted to the explicit four-sector tensor;
+    it does not assert the general rank-one conclusion printed in Lemma~C.5.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The three-site state is the diagonal classical Markov state
+    \[
+      \rho(i,j,k)=\frac14(QL)_{i,j}(QL)_{j,k}.
+    \]
+    Its middle sector is the symbol $j$, with weight $1/4$, left conditional
+    density $\operatorname{diag}((QL)_{i,j})_i$, and right conditional density
+    $\operatorname{diag}((QL)_{j,k})_k$. The identity
+    $(QL)^2=\frac14\mathbf 1\mathbf 1^{\mathsf T}$ shows that this state is the
+    three-site closure against $LQ$.
+
+    Apply the arbitrary right inverse only through its defining contraction
+    with the four diagonal physical slices. Evaluating the resulting matrix
+    unit identity in the first row gives the left inverse factors, and
+    evaluating it in the first column gives the right inverse factors. Since
+    $(LQ)_{0,0}=1$, the normalization in the left factor cancels the sector
+    weight, leaving precisely $L$ and $Q$.
+\end{proof}
+
 \begin{theorem}[Positivity of bipartite partial traces]
     \label{thm:matrix_possemidef_partial_traces}
     \lean{Matrix.PosSemidef.traceLeft}
