@@ -758,31 +758,31 @@ this is the matrix-unit identity
     =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
 \]
 Its two Kronecker factors are the two bare cups:
-\begin{center}
+\[
     % The upper inverse tensor and lower tensor contract through the doubled
     % physical index p.  Their four virtual legs remain open and are
     % identified pairwise by the tensor product of the two cups on the right.
-    \begin{tenkz}[rows={bra, ket}, tensor style=box]
+    \begin{tenkz}[rows={ket, bra}, tensor style=box]
         \tn{K^{-1}} \\
         \tn{K}
     \end{tenkz}
-    $\;=\;$
+    \;=\;
     \begin{tenkz}[rows={wire, wire}, east=cup]
         \tnghost{} \\
         \tnghost{}
     \end{tenkz}
-    $\;\otimes\;$
+    \;\otimes\;
     \begin{tenkz}[rows={wire, wire}, west=cup]
         \tnghost{} \\
         \tnghost{}
     \end{tenkz}
-\end{center}
+\]
 This is the identity in
 \cite[Appendix~C.2, lines~1376--1380]{Cirac2016MPDO_arXiv}.
 
 Applying this inverse map to the doubled physical index and closing its
 virtual legs against a further copy of $K$ recovers $K$:
-\begin{center}
+\[
     % K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the top
     % tensor closes both virtual legs against K^{-1}; the bottom K retains
     % its virtual legs.  The vertical strand is the doubled physical index.
@@ -797,11 +797,11 @@ virtual legs against a further copy of $K$ recovers $K$:
         \tn{K^{-1}} \\
         \tn{K}
     \end{tenkz}
-    $\;=\;$
+    \;=\;
     \begin{tenkz}[physical=up, tensor style=box]
         \tn[up=p]{K}
     \end{tenkz}
-\end{center}
+\]
 This is the single-block identity in
 \cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.
 
