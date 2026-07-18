@@ -143,14 +143,12 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
-
 /-- In the PGVWC07 source range, every block-diagonal periodic vector belongs
 to the sum of the open-boundary block spaces.
-
 For $r\ge2$, injectivity at the common length $L_0>0$, and
-$L\ge3(r-1)(L_0+1)+1$, the one-step intersection identity propagates the
-local constraints to the full chain. This is arXiv:quant-ph/0608197,
-Theorem 12, proof lines 1424--1452. -/
+$L\ge3(r-1)(L_0+1)+1$, the one-step intersection identity propagates the local
+constraints to the full chain. This is arXiv:quant-ph/0608197, Theorem 12,
+proof lines 1424--1452. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -416,12 +414,11 @@ theorem
 
 /-- In the PGVWC07 source range, a block-diagonal periodic vector has
 block-diagonal open-boundary matrices.
-
 For $r\ge2$ and $L\ge3(r-1)(L_0+1)+1$, every vector in the periodic chain
 space of $\bigoplus_j\mu_jA_j$ is a sum of vectors in the open-boundary spaces
 $G_N(A_j)$. Choosing boundary matrices for these summands gives a single
-block-diagonal boundary matrix. This is the open-boundary part of
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1452. -/
+block-diagonal boundary matrix, as in arXiv:quant-ph/0608197, Theorem 12,
+proof lines 1424--1452. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
