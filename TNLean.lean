@@ -174,6 +174,7 @@ import TNLean.Channel.Schwarz.SchwarzSubnormal
 import TNLean.Channel.Schwarz.SchwarzNotCP
 import TNLean.Channel.Schwarz.TwoPositive
 import TNLean.Channel.PositiveFunctional
+import TNLean.Channel.PositiveConditionalExpectation
 import TNLean.Channel.Schwarz.ChoiCompression
 import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.ReductionCriterion

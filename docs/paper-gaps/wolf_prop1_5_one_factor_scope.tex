@@ -1,0 +1,68 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Wolf Proposition~1.5: One-Factor Scope Restriction}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+Wolf's Proposition~1.5 classifies positive linear retractions onto an arbitrary
+unital finite-dimensional $*$-subalgebra
+\cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.  After unitary
+conjugation, the subalgebra has the form
+\[
+    \bigoplus_{k=1}^{K} M_{d_k}(\mathbb C)\otimes\mathbf 1_{m_k},
+\]
+and the proposition asserts that the retraction is a direct sum of weighted
+partial traces, one for each summand.  The proof first removes inputs between
+distinct summands and outputs in the wrong summand, and then proves the
+weighted-partial-trace formula separately on each factor.  The corresponding
+local source is
+\path{Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex}, lines~536--570.
+
+\section{Formalized component}
+
+The theorem
+\leanid{Matrix.exists_density_of_positive_retraction_onto_right_factor} proves
+the complete factor argument for a positive retraction whose range is
+\[
+    \mathbf 1_m\otimes M_d(\mathbb C).
+\]
+It introduces no hypothesis absent from the one-factor specialization of the
+source proposition.  In particular, the representing matrix is only required
+to be positive semidefinite and to have trace one.  Thus the theorem is a
+faithful scope-restricted case, but it is not the full direct-sum
+classification of Proposition~1.5.
+
+\section{Missing direct-sum argument}
+
+The remaining result must combine the one-factor theorem with the existing
+finite-dimensional block description.  More precisely, it must:
+\begin{enumerate}
+    \item conjugate and reindex the ambient matrices by the unitary block data;
+    \item prove that the positive retraction annihilates inputs between
+          distinct central summands;
+    \item prove that an input supported in one summand has no output in another
+          summand;
+    \item apply the one-factor theorem to each diagonal summand; and
+    \item conjugate the resulting direct sum of weighted partial traces back to
+          the original subalgebra.
+\end{enumerate}
+The second and third items are the off-diagonal positivity arguments in Wolf's
+proof preceding Equation~(1.42).  Once these are formalized, the present
+one-factor theorem supplies the remaining factorwise classification without
+additional assumptions.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
