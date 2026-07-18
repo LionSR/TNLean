@@ -1214,6 +1214,7 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
 
 \begin{proof}
     \leanok
+    \uses{lem:block_separating_equations_from_pairwise_separation}
     Given matrices $M_j$, first represent the tuple
     $((A^j_a)^\dagger M_j)_j$ by words of length $q$. Prefixing the letter $a$
     and summing over $a$ gives
@@ -1316,7 +1317,7 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
         \quad\Longrightarrow\quad
         \left(\forall (M_j)_j,\ \sum_j\tr(X_jM_j)=0\right)
         \quad\Longrightarrow\quad
-        X_j=0 \text{ for every }j.
+        \forall j,\ X_j=0.
     \]
     Indeed, in the last implication one takes a tuple supported in one block
     and uses nondegeneracy of the trace pairing. Hence every $\phi_j$ vanishes,
@@ -1327,7 +1328,8 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
     \label{thm:pgvwc_direct_sum_intersection_source_length}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
     \leanok
-    \uses{lem:pgvwc_product_span_source_length}
+    \uses{lem:pgvwc_product_span_source_length,
+        lem:block_restriction_intersection_subspace}
     Under the hypotheses of
     Lemma~\ref{lem:pgvwc_product_span_source_length}, let
     $m\ge3(r-1)(L_0+1)+1$. Then
@@ -1346,7 +1348,8 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
 
 \begin{proof}
     \leanok
-    \uses{lem:pgvwc_product_span_source_length}
+    \uses{lem:pgvwc_product_span_source_length,
+        lem:block_restriction_intersection_subspace}
     Let a vector belong to both restricted spaces. The two endpoint
     decompositions give boundary matrices $C_a^j$ and $D_b^j$. For every pair
     of physical indices $a,b$ and every middle word $w$ of length $m-1$, their

@@ -1655,6 +1655,8 @@ in both cases.
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
+        lem:block_diagonal_boundary_representation_inclusion,
+        lem:block_diagonal_boundary_closing_equality,
         lem:pgvwc_product_span_source_length}
     Under the same hypotheses,
     \[
@@ -1667,6 +1669,8 @@ in both cases.
 \begin{proof}
     \leanok
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
+        lem:block_diagonal_boundary_representation_inclusion,
+        lem:block_diagonal_boundary_closing_equality,
         lem:pgvwc_product_span_source_length}
     Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_global_cut}
     gives the forward inclusion in the displayed equality. Every periodic
@@ -1680,7 +1684,7 @@ in both cases.
         \quad\Longrightarrow\quad
         \left(\forall (M_j)_j,\ \sum_j\tr(X_jM_j)=0\right)
         \quad\Longrightarrow\quad
-        X_j=0 \text{ for every }j.
+        \forall j,\ X_j=0.
     \]
     The last implication follows by choosing a tuple supported in one block.
     Thus every $\phi_j$ vanishes, and the open-boundary spaces form an internal

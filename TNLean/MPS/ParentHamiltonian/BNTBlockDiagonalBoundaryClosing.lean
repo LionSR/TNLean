@@ -285,9 +285,9 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1
 /-- A global change of cut closes the block-diagonal boundary conditions in
 the sharp PGVWC07 source range.
 
-Let $r\ge2$, let every block be injective at length $L_0>0$, and assume
-$L\ge3(r-1)(L_0+1)+1$ and $N\ge L+L_0$. The source-range simultaneous span
-on the complementary segment $N-L_0$ identifies the boundary matrices before
+Let \(r\ge2\), let every block be injective at length \(L_0>0\), and assume
+\(L\ge3(r-1)(L_0+1)+1\) and \(N\ge L+L_0\). The source-range simultaneous span
+on the complementary segment \(N-L_0\) identifies the boundary matrices before
 and after moving the cut. Each block component therefore satisfies every
 periodic local constraint. This is arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1424--1456. -/
@@ -391,8 +391,8 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvw
   exact hCommWord j (List.ofFn β)
 
 /-- At the length bound of Perez-Garcia, Verstraete, Wolf, and Cirac, the
-periodic chain space of a normalized BNT block sum is the internal sum of the
-periodic chain spaces of its blocks.
+periodic chain space of a normalized BNT block sum is the sum of the periodic
+chain spaces of its blocks, while the open-boundary block spaces are independent.
 
 This is arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456. The required
 interaction length is
