@@ -704,14 +704,20 @@ separate step.
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOFixedFinalFusionBracketings
+    % The parenthesization is the tree: delta and eta label the respective
+    % internal edges, while epsilon labels the common root edge.
+    \[
+        \tntree{((\alpha\,\beta)_\delta\,\gamma)_\varepsilon}
+        \xrightarrow{F_{\varepsilon}^{\alpha\beta\gamma}}
+        \tntree{(\alpha\,(\beta\,\gamma)_\eta)_\varepsilon}
+    \]
     \caption{The two ways of fusing three labels to a fixed final label
         $\varepsilon$, using the printed-$F$ row/column convention of
         \cite[Section~3.4]{Bultinck2017Anyons}.  The solid fusion trees are
-        the left- and right-bracketed maps constructed below.  The dashed
-        line denotes the invertible fixed-final change of multiplicity basis
-        in the source.  The results below first extract its action on the
-        multiplicity space and then prove its two-sided unitarity under the
+        the left- and right-bracketed maps constructed below.  The arrow is
+        the change of basis from left- to right-bracketed multiplicity
+        coordinates.  The results below first construct this map and then
+        prove its two-sided unitarity under the
         simultaneous-selector and positive-bond-dimension hypotheses.}
     \label{fig:mpdo_fixed_final_fusion_bracketings}
 \end{figure}
@@ -1606,7 +1612,40 @@ separate step.
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOFixedFinalComparisonUnitary
+    % The first row is the word-selector identity itself: M^w is already the
+    % matrix obtained by evaluating the entire word, so no local tensor
+    % network is drawn.  In the second row the root labels epsilon and
+    % epsilon' give the final-sector cut, and C and F map right-tree
+    % coordinates to left-tree coordinates.  The last row is the
+    % corresponding diagonal corner.
+    \[
+      \begin{aligned}
+        \textup{selector},\ S>0:\quad &
+        \sum_{|w|=S}c_{\varepsilon}(w)M_{\varepsilon'}^{w}
+        =\delta_{\varepsilon,\varepsilon'}1_{D_\varepsilon}
+        \\[1.5em]
+        \textup{sector cut}:\quad &
+        \underbrace{
+          \tntree{((\alpha\,\beta)\,\gamma)_\varepsilon}
+        }_{U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}}
+        \xleftarrow{
+          C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}}
+        \underbrace{
+          \tntree{(\alpha\,(\beta\,\gamma))_{\varepsilon'}}
+        }_{U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon'}}
+        =0\qquad(\varepsilon\ne\varepsilon')
+        \\[1.5em]
+        \textup{diagonal corner}:\quad &
+        \mathcal H^{\mathrm L}_{\varepsilon}
+          \otimes\C^{D_\varepsilon}
+        \xleftarrow{F_\varepsilon\otimes1_{D_\varepsilon}}
+        \mathcal H^{\mathrm R}_{\varepsilon}
+          \otimes\C^{D_\varepsilon}
+        \quad\Longrightarrow\quad
+        F_\varepsilon F_\varepsilon^\dagger=1,\qquad
+        F_\varepsilon^\dagger F_\varepsilon=1 .
+      \end{aligned}
+    \]
     \caption{The fixed-final comparison in the graphical order of
         \cite[equation~(pentagon3) and lines~269--277]
         {Bultinck2017Anyons}.  At a positive common length, the simultaneous
@@ -1825,7 +1864,15 @@ separate step.
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOPrintedFMove
+    % Each internal-edge label records the intermediate charge together with
+    % its multiplicity coordinate; the root-edge label records the final
+    % charge and the multiplicity coordinate of the second fusion.
+    \[
+        \tntree{((a\,b)_{e,\mu}\,c)_{d,\nu}}
+        =\sum_{f,\lambda,\sigma}
+          (F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}\,
+          \tntree{(a\,(b\,c)_{f,\lambda})_{d,\sigma}}
+    \]
     \caption{The source-oriented $F$-move.  The left-associated fusion tensor
         is expanded in the right-associated fusion basis.  The upper indices
         $(f,\lambda,\sigma)$ label the rows of $F^{abc}_d$, and the lower
@@ -1892,7 +1939,22 @@ separate step.
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOCompleteZipperFusionPentagon
+    % Clockwise slots are M, R, P, L, LI.  The three unstarred arrows are
+    % the upper route L -> LI -> M -> R; the starred arrows are the lower
+    % route L -> P -> R.  Tree subscripts are precisely the intermediate
+    % fusion charges carried by the corresponding internal edges.
+    \begin{tenkzcd}[polygon=5, radius=34mm]
+      \tntree{(a\,((b\,c)_h\,d)_i)_e} &
+      \tntree{(a\,(b\,(c\,d)_j)_i)_e} &
+      \tntree{((a\,b)_f\,(c\,d)_j)_e} &
+      \tntree{(((a\,b)_f\,c)_g\,d)_e} &
+      \tntree{((a\,(b\,c)_h)_g\,d)_e}
+      \tnarrow[from=4, to=5]{F^{abc}_{g}}
+      \tnarrow[from=5, to=1]{F^{ahd}_{e}}
+      \tnarrow[from=1, to=2]{F^{bcd}_{i}}
+      \tnarrow*[from=4, to=3]{F^{fcd}_{e}}
+      \tnarrow*[from=3, to=2]{F^{abj}_{e}}
+    \end{tenkzcd}
     \caption{The five complete zipper fusion trees of
         \cite[Section~3.4, equation~(33)]{Bultinck2017Anyons}.  Each arrow is
         a printed $F$-move, with right-tree coordinates indexing rows and
@@ -1996,7 +2058,21 @@ separate step.
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOFourfoldBondReassociationPentagon
+    % Clockwise slots are M, R, P, L, LI.  Hence r_1,r_2,r_3 trace the
+    % three-edge route L -> LI -> M -> R, while s_1,s_2 trace L -> P -> R.
+    % The vertices are Cartesian parenthesizations, not fusion trees.
+    \begin{tenkzcd}[polygon=5, radius=38mm]
+      \ensuremath{(A\times((B\times C)\times D))} &
+      \ensuremath{(A\times(B\times(C\times D)))} &
+      \ensuremath{((A\times B)\times(C\times D))} &
+      \ensuremath{(((A\times B)\times C)\times D)} &
+      \ensuremath{((A\times(B\times C))\times D)}
+      \tnarrow[from=4, to=5]{r_1}
+      \tnarrow[from=5, to=1]{r_2}
+      \tnarrow[from=1, to=2]{r_3}
+      \tnarrow*[from=4, to=3]{s_1}
+      \tnarrow*[from=3, to=2]{s_2}
+    \end{tenkzcd}
     \caption{The five parenthesizations of four bond-coordinate factors.
         The upper path is the three-edge composite
         $r_3\circ r_2\circ r_1$, and the lower path is the two-edge composite
