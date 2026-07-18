@@ -50,14 +50,24 @@
                                % also the reach of an inter-layer cup: the bend
                                % protrudes exactly as far as the stubs it replaces,
                                % so open and cup-closed ends share one silhouette
-\def\tenkz@r@traceclear{0.30}  % racetrack base drop: clears the tallest glyph
-                               % skin (the wireglyph capsule, half-height 0.15)
-                               % by a like margin.  Legs and label bands on the
-                               % traced side are added PER OBSTRUCTION by the
-                               % trace pass, so a bare ring hugs its row instead
-                               % of budgeting for ink that is not there
+\def\tenkz@r@daylight{0.15}    % PURE daylight: the one gap between a row's
+                               % outermost ink (its silhouette, see the grid's
+                               % resolver) and any closure or annotation ink
+                               % placed beyond it -- racetrack returns, span
+                               % braces.  It separates, never clears: WHAT must
+                               % be cleared is the silhouette's business, and
+                               % is measured, not budgeted.  0.15 pitch is
+                               % ~1.7mm at the default 11mm pitch (~3x the
+                               % wire width, so wire-weight ink never fuses
+                               % with the return at print size) and still
+                               % ~1mm at the inline pitch
 \def\tenkz@r@labelclear{0.12}  % ONE clearance for every label band
-\def\tenkz@r@dotlabelband{0.30}% depth of a script-size dot label: clearance + text
+\def\tenkz@r@dotlabelband{0.30}% ONE label band for every external label:
+                               % clearance + one line of script-size text.
+                               % Bead labels and leg-tip labels are the same
+                               % object (a name hung off ink), so both kinds
+                               % share this metric DELIBERATELY -- the
+                               % silhouette resolver budgets each with it
 \def\tenkz@r@inlinephysleg{0.26}   % inline: legs shrink faster than the pitch
 \def\tenkz@r@inlinelabelclear{0.05}% inline: labels hug the ink to spare line height
 \def\tenkz@r@dotdia{0.16}      % bead diameter
@@ -92,6 +102,12 @@
                                % (lens-shaped, self-intersecting capsules)
 \def\tenkz@r@fusionwidth{0.075}% fusion-bar stroke: a wedge, not a wire, so
                                % it scales with the pitch like a glyph
+\def\tenkz@r@fuseover{0.10}    % the fusion bar's overhang beyond its outer
+                               % wire rows: the wedge must visibly CLASP the
+                               % wires it fuses (as tallover makes a gate
+                               % cover its wires); also the bar's silhouette
+                               % contribution, so drawing and clearance read
+                               % one number
 % absolute floors and ink hierarchy
 \def\tenkz@wirewidth{0.55pt}
 \def\tenkz@annwidth{0.40pt}
