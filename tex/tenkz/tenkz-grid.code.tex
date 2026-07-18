@@ -646,16 +646,22 @@
       }
   }
 
-\cs_new:Npn \tenkz_face_arity:N #1
-  { \str_if_eq:VnTF #1 {center} {1}
-      { \str_if_eq:VnTF #1 {rows} {\int_use:N \l__tenkz_cwires_int}
-          { \clist_count:V #1 } } }
+% The virtual `rows' token needs the span of the atom that owns the face:
+% `wires=k' for an ordinary tall glyph, `span=k' for a fusion bar.  Keep
+% that span an explicit argument rather than consulting either register
+% here, so the canonical resolver cannot silently read the wrong one.
+\cs_new:Npn \tenkz_face_arity:nN #1#2
+  { \str_if_eq:VnTF #2 {center} {1}
+      { \str_if_eq:VnTF #2 {rows} {\int_eval:n {#1}}
+          { \clist_count:V #2 } } }
 
-\cs_new_protected:Npn \tenkz_emit_faceports_one:nnn #1#2#3
+\cs_new_protected:Npn \tenkz_emit_faceports_one:nnnn #1#2#3#4
   {
     \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
-    \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\tenkz_face_arity:N \l__tenkz_faceports_tl|at=\tl_use:N \l__tenkz_faceports_tl}
+    \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\tenkz_face_arity:nN {#4} \l__tenkz_faceports_tl|at=\tl_use:N \l__tenkz_faceports_tl}
   }
+\cs_new_protected:Npn \tenkz_emit_faceports_one:nnn #1#2#3
+  { \tenkz_emit_faceports_one:nnnn {#1}{#2}{#3}{\l__tenkz_cwires_int} }
 
 \cs_new_protected:Npn \tenkz_emit_faceports:nn #1#2
   {
@@ -1599,8 +1605,17 @@
       { \tl_set:Nn \l__tenkz_fcombined_tl {west} }
       { \str_if_eq:VnTF \l__tenkz_ceastat_tl {center}
           { \tl_set:Nn \l__tenkz_fcombined_tl {east} }
-          { \tl_if_empty:NT \l__tenkz_fcombined_tl
-              { \tl_set:Nn \l__tenkz_fcombined_tl {west} } } }
+          {
+            % Naming only the separate face determines the opposite
+            % implicit face as centred.  A bare bar retains west centre.
+            \tl_if_empty:NTF \l__tenkz_fcombined_tl
+              { \tl_if_empty:NTF \l__tenkz_cwestat_tl
+                  { \tl_set:Nn \l__tenkz_fcombined_tl {west} }
+                  { \tl_if_empty:NTF \l__tenkz_ceastat_tl
+                      { \tl_set:Nn \l__tenkz_fcombined_tl {east} }
+                      { \tl_set:Nn \l__tenkz_fcombined_tl {west} } } }
+              { }
+          } }
   }
 \cs_new_protected:Npn \tenkz_node_fuse:nn #1#2
   {
@@ -1665,7 +1680,13 @@
     % atom emitters (uniform fields keep the audit's parsers total); the
     % bar's INK stays structural -- a fusion wedge is not a hued glyph
     \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=fuse|role=\tenkz_role_word:|species=\tenkz_spec_word:}
-    \tenkz_emit_faceports:nn {#1}{#2}
+    % A fusion bar always declares both virtual faces, including the
+    % implicit separate face of a bare compatibility-form \tnfuse.  Its
+    % `rows' arity is the fusion span, not the unrelated wires=k register.
+    \tenkz_emit_faceports_one:nnnn
+      {#1}{#2}{west}{\l__tenkz_frows_int}
+    \tenkz_emit_faceports_one:nnnn
+      {#1}{#2}{east}{\l__tenkz_frows_int}
   }
 
 % -- bonds ------------------------------------------------------------
@@ -1893,6 +1914,17 @@
                               {##1-####1} \l_tmpb_tl
                             \tl_if_eq:NNF \l_tmpa_tl \l_tmpb_tl
                               {
+                                % A fusion face contracts only the row
+                                % slots it declares.  In particular a
+                                % sparse face such as east at={1,3} does
+                                % not acquire a row-2 bond from the scan.
+                                \tenkz_cell_fuse_row_port:nnnN {##1}
+                                  {\int_use:N\l_tmpa_int}{east} \l_tmpa_bool
+                                \tenkz_cell_fuse_row_port:nnnN {##1}
+                                  {####1}{west} \l_tmpb_bool
+                                \bool_lazy_and:nnT
+                                  { \l_tmpa_bool } { \l_tmpb_bool }
+                                  {
                                 % a neighbour facing a combined= side:
                                 % the in-picture fused-wire attachment
                                 % is not yet drawn, so warn and keep the
@@ -1917,6 +1949,7 @@
                                       \tl_use:N \l__tenkz_dirmarks_tl]
                                   \l__tenkz_pa_tl -- \l__tenkz_pb_tl;
                                 \tenkz@event{bond|picture=\the\tenkz@pictureid|row=##1|from=\int_use:N\l_tmpa_int|to=####1|dir=\tenkz_dir_word:|role=\tenkz_rowrole_word:|species=\tenkz_rowspec_word:}
+                                  }
                               }
                           }
                       }
@@ -3220,8 +3253,58 @@
           {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpb_tl
         \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
         \tenkz_fuse_resolve_combined:
-        \str_if_eq:VnT \l__tenkz_fcombined_tl {#3}
+        \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
+        \str_if_eq:VnT \l__tenkz_faceports_tl {center}
           { \bool_set_true:N #4 }
+      }
+  }
+% Does the virtual face of the cell at (row, col) actually present a port
+% in that row?  Non-fusion cells keep their ordinary one-port-per-row
+% behaviour.  For a fusion bar, `center' is its one base-row attachment,
+% `rows' means every row in span=, and an integer list selects exactly
+% those span-local row slots.  Boundary drawing, bond pairing, and their
+% event counts all consult this predicate.
+\int_new:N \l__tenkz_fuseport_int
+\cs_new_protected:Npn \tenkz_cell_fuse_row_port:nnnN #1#2#3#4
+  {
+    \bool_set_true:N #4
+    \int_set:Nn \l__tenkz_fusebase_int {#1}
+    \tenkz_get:NeN \l__tenkz_kind_prop
+      {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpa_tl
+    \bool_lazy_or:nnT
+      { \str_if_eq_p:Vn \l_tmpa_tl {fuse} }
+      { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
+      {
+        \bool_set_false:N #4
+        \bool_while_do:nn
+          { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
+          {
+            \int_decr:N \l__tenkz_fusebase_int
+            \tenkz_get:NeN \l__tenkz_kind_prop
+              {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpa_tl
+          }
+        \tenkz_get:NeN \l__tenkz_opts_prop
+          {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpb_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+        \tenkz_fuse_resolve_combined:
+        \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
+        \int_set:Nn \l__tenkz_fuseport_int
+          { #1 - \l__tenkz_fusebase_int + 1 }
+        \str_case:VnF \l__tenkz_faceports_tl
+          {
+            {center}
+              { \int_compare:nNnT {\l__tenkz_fuseport_int} = {1}
+                  { \bool_set_true:N #4 } }
+            {rows}
+              { \bool_lazy_and:nnT
+                  { \int_compare_p:nNn {\l__tenkz_fuseport_int} > {0} }
+                  { \int_compare_p:nNn
+                      {\l__tenkz_fuseport_int} < {\l__tenkz_frows_int + 1} }
+                  { \bool_set_true:N #4 } }
+          }
+          { \clist_if_in:NeT \l__tenkz_faceports_tl
+              {\int_use:N\l__tenkz_fuseport_int}
+              { \bool_set_true:N #4 } }
       }
   }
 % does the cell at (row, col) present a combined= face on side #3?  The
@@ -3262,10 +3345,15 @@
                 \tenkz_cell_fuse_combined:nnnN {##1}
                   {\l__tenkz_first_int}{west} \l_tmpa_bool
                 \bool_if:NF \l_tmpa_bool
-                  { \tenkz_cell_combined:nnnN {##1}{\l__tenkz_first_int}
-                      {west} \l_tmpa_bool }
-                \bool_if:NF \l_tmpa_bool
                   {
+                  \tenkz_cell_fuse_row_port:nnnN {##1}
+                    {\l__tenkz_first_int}{west} \l_tmpb_bool
+                  \bool_if:NT \l_tmpb_bool
+                    {
+                  \tenkz_cell_combined:nnnN {##1}{\l__tenkz_first_int}
+                    {west} \l_tmpa_bool
+                  \bool_if:NF \l_tmpa_bool
+                    {
                   \prop_if_in:NeF \l__tenkz_cuprow_prop { west - ##1 }
                   {
                     \tenkz_anchor:nnnN {##1}{\int_use:N \l__tenkz_first_int}
@@ -3293,16 +3381,23 @@
                   }
                   }
                   }
+                  }
+                  }
                 % east stub, same rules
                 \bool_if:NT \l__tenkz_eopen_bool
                   {
                 \tenkz_cell_fuse_combined:nnnN {##1}
                   {\l__tenkz_last_int}{east} \l_tmpa_bool
                 \bool_if:NF \l_tmpa_bool
-                  { \tenkz_cell_combined:nnnN {##1}{\l__tenkz_last_int}
-                      {east} \l_tmpa_bool }
-                \bool_if:NF \l_tmpa_bool
                   {
+                  \tenkz_cell_fuse_row_port:nnnN {##1}
+                    {\l__tenkz_last_int}{east} \l_tmpb_bool
+                  \bool_if:NT \l_tmpb_bool
+                    {
+                  \tenkz_cell_combined:nnnN {##1}{\l__tenkz_last_int}
+                    {east} \l_tmpa_bool
+                  \bool_if:NF \l_tmpa_bool
+                    {
                   \prop_if_in:NeF \l__tenkz_cuprow_prop { east - ##1 }
                   {
                     \tenkz_anchor:nnnN {##1}{\int_use:N \l__tenkz_last_int}
@@ -3327,6 +3422,8 @@
                   }
                   }
                   }
+                  }
+                  }
               }
           }
       }
@@ -3348,11 +3445,16 @@
                 \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
                 \tenkz_fuse_resolve_combined:
                 \tenkz_row_extent:n {##1}
-                \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
-                  { \int_compare:nNnT {####1} = {\l__tenkz_last_int}
-                      { \int_incr:N \l__tenkz_bve_int } }
+                \tenkz_face_ports:nN {west} \l__tenkz_faceports_tl
+                \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
                   { \int_compare:nNnT {####1} = {\l__tenkz_first_int}
                       { \int_incr:N \l__tenkz_bvw_int } }
+                  {
+                    \tenkz_face_ports:nN {east} \l__tenkz_faceports_tl
+                    \str_if_eq:VnT \l__tenkz_faceports_tl {center}
+                      { \int_compare:nNnT {####1} = {\l__tenkz_last_int}
+                          { \int_incr:N \l__tenkz_bve_int } }
+                  }
               }
             \bool_lazy_any:nT
               {
@@ -3411,7 +3513,12 @@
                 \tenkz_cell_fuse_combined:nnnN {##1}
                   { \int_use:c { l__tenkz_#2_int } } {#1} \l_tmpa_bool
                 \bool_if:NF \l_tmpa_bool
-                  { \seq_put_right:Nn \l_tmpa_seq {##1} }
+                  {
+                    \tenkz_cell_fuse_row_port:nnnN {##1}
+                      { \int_use:c { l__tenkz_#2_int } } {#1} \l_tmpb_bool
+                    \bool_if:NT \l_tmpb_bool
+                      { \seq_put_right:Nn \l_tmpa_seq {##1} }
+                  }
               }
           }
       }
@@ -3551,7 +3658,8 @@
 \cs_new_protected:Npn \tenkz_leg_count:nN #1#2
   {
     \tenkz_face_ports:nN {#1} \l__tenkz_faceports_tl
-    \int_set:Nn #2 { \tenkz_face_arity:N \l__tenkz_faceports_tl }
+    \int_set:Nn #2
+      { \tenkz_face_arity:nN {\l__tenkz_cwires_int} \l__tenkz_faceports_tl }
   }
 \int_new:N \l__tenkz_facearity_int
 

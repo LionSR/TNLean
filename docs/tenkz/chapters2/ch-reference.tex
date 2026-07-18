@@ -214,6 +214,8 @@ The wide-glyph keys are live in Example~\ref{ex:rmp-blocking}.  There
 \tnval{down at=center} gives the fused input one port.  The older
 \tnval{legs at=\{1,2\}} remains an alias for assigning the same list
 to both physical faces; an explicit face key overrides it on that face.
+On a virtual face, a sparse list such as \tnval{east at=\{1,3\}}
+draws, contracts, and counts only those span-local row slots.
 
 \thumbtag{\tncmd{tnX}}%
 \cmdsig{\textbackslash tnX[\meta{cell keys}]\{\meta{label}\}}

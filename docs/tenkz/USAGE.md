@@ -77,7 +77,7 @@ $\mathcal{E}_A(X)=\sum_{i}\,\tnpic[sandwich, inline]{\tn{A^i} \\ \tn*{A^i}}\,(X)
 |---|---|
 | `\tn[opts]{A}` / `\tn*[opts]{A}` | tensor (`*` = conjugate, overlined label). Opts: `dot`, `box`, `pill`, `mpo` (skin), `wide=k`, `wires=k`, face ports `up at=`, `down at=`, `west at=`, `east at=` (`center` or local slots), `up=<math>`/`down=<math>` (leg-tip labels), `label pos=<compass>`, `label shift={dx,dy}`, `no legs` |
 | `\tnX{X}` | matrix on the wire (gauge insertion; height-pinned capsule) |
-| `\tnfuse[span=2, west at=center, east at={1,2}]{V}` | fusion/splitting bar; the centred face is the fused port and the listed face contains the separate ports (`combined=` remains an alias) |
+| `\tnfuse[span=2, west at=center, east at={1,2}]{V}` | fusion/splitting bar; the centred face is the fused port and the listed face contains exactly those separate row slots (sparse lists omit the other rows; `combined=` remains an alias) |
 | `\tndots` | the canonical ellipsis cell (interrupts the wire) |
 | `\tnghost{}` | invisible spacer; the wire passes through |
 | `\tnspan[brace above\|brace below]{k}{label}` | brace over k columns starting at the current cell; clearance adapts to legs and labels |

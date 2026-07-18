@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Regression checks for asymmetric tenkz face ports.
 
-The test compiles four small pictures and reads their `.tnlog` contraction
+The test compiles small pictures and reads their `.tnlog` contraction
 records.  It guards the two failures from issue 4249: inventing a second open
 port on the centred face, and dropping the second contraction on the declared
 two-port face.  It also fixes the compatibility meaning of `legs at=` and the
-virtual arity of the zipper's splitting endpoint.
+virtual arity of default and sparse splitting endpoints.
 """
 
 from __future__ import annotations
@@ -47,6 +47,20 @@ SOURCE = r"""
 \begin{tenkz}[physical=up, tensor style=box]
   \tn[pill, wide=2, legs at={1,2}, up at=center]{U} &
 \end{tenkz}
+\begin{tenkz}[rows={op, ket}]
+  \tnfuse[span=2]{V}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire, wire}]
+  \tnfuse[span=3, west at=center, east at={1,3}]{V}\\
+  &\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire, wire}]
+  \tnfuse[span=3, west at=center, east at={1,3}]{V} & \tn{A}\\
+  & \tn{A}\\
+  & \tn{A}
+\end{tenkz}
 \end{document}
 """
 
@@ -66,6 +80,11 @@ def events_by_picture(lines: list[str]) -> dict[int, list[str]]:
 def require(lines: list[str], expected: str, message: str) -> None:
     if expected not in lines:
         raise AssertionError(f"{message}: missing {expected!r}")
+
+
+def forbid(lines: list[str], forbidden: str, message: str) -> None:
+    if forbidden in lines:
+        raise AssertionError(f"{message}: found {forbidden!r}")
 
 
 def paired_ports(lines: list[str]) -> list[tuple[str, str]]:
@@ -145,7 +164,35 @@ def main() -> int:
             "explicit face did not override legacy alias")
     require(override, "faceports|picture=6|cell=1-1|face=down|arity=2|at=1,2",
             "legacy alias stopped supplying the other face")
-    print("PASS: asymmetric physical faces, legacy alias, and zipper arity")
+    default_fuse = pictures[7]
+    require(default_fuse, "faceports|picture=7|cell=1-1|face=west|arity=1|at=center",
+            "bare fuse did not emit its centred face")
+    require(default_fuse, "faceports|picture=7|cell=1-1|face=east|arity=2|at=rows",
+            "bare fuse did not emit its separate span face")
+    require(
+        default_fuse,
+        "boundary|picture=7|virtual-west=1|virtual-east=2|physical-up=0|physical-down=0",
+        "bare fuse boundary disagrees with its two face events",
+    )
+    sparse = pictures[8]
+    require(sparse, "faceports|picture=8|cell=1-1|face=east|arity=2|at=1,3",
+            "sparse face event lost its declared slots")
+    require(
+        sparse,
+        "boundary|picture=8|virtual-west=1|virtual-east=2|physical-up=0|physical-down=0",
+        "sparse boundary did not count exactly its declared row slots",
+    )
+    sparse_pairing = pictures[9]
+    require(sparse_pairing,
+            "bond|picture=9|row=1|from=1|to=2|dir=none|role=none|species=none",
+            "sparse face did not contract declared row slot 1")
+    require(sparse_pairing,
+            "bond|picture=9|row=3|from=1|to=2|dir=none|role=none|species=none",
+            "sparse face did not contract declared row slot 3")
+    forbid(sparse_pairing,
+           "bond|picture=9|row=2|from=1|to=2|dir=none|role=none|species=none",
+           "sparse face contracted undeclared row slot 2")
+    print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 
 
