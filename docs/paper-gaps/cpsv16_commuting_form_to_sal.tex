@@ -223,6 +223,24 @@ realization scalar.  It does not assert zero correlation length, rank-one trace
 factorization, a quantum Markov decomposition, saturation of the area law, or
 the proposition labelled \emph{4to2}.
 
+The fourth-region calculation after the cyclic identity requires a coordinate
+clarification.  Tracing one physical site of the length-$N$ cyclic eta product
+leaves a coupled sum of the right partial trace of
+$\eta_{k_{N-1},q}$ and the left partial trace of $\eta_{q,k_1}$; rank-one
+factorization does not separate this sum.  Source line~1613 instead invokes
+ZCL to replace this marginal by a trace of two boundary sites on the
+length-$(N+1)$ chain.  In edge coordinates the middle operator
+$\eta_{q,h}$ is then fully traced, while the two adjacent operators retain
+their right and left partial traces.  The displayed formula at source
+line~1616 suppresses these partial-trace symbols.
+
+The conditional algebraic identity after this replacement is formalized by
+\leanid{Matrix.eta_fourth_region_trace_formula}.  It assumes
+$\operatorname{tr}(\eta_{q,h})=a_qb_h$ and separates the two boundary sums.
+It does not prove the ZCL replacement of the one-site marginal, derive the
+rank-one factorization, construct a quantum Markov decomposition, or prove
+SAL.
+
 There is a separate obstruction at source line~1613.  The phrase ``arguing as
 in Lemmas \emph{propSN} and \emph{SALZCL}'' does not show that source ZCL alone
 gives
