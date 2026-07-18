@@ -56,13 +56,15 @@ $\rho_{ABC}$, equality in strong subadditivity is equivalent to
     (\mathbf 1_A/d_A)\otimes\rho_B\right).
 \]
 The second reference is the image of the first under
-$\operatorname{tr}_C$ by `SSAPosDef.traceC_ABC_kronecker_traceA_ABC`.
+$\operatorname{tr}_C$, since tracing out $C$ sends
+$(\mathbf 1_A/d_A)\otimes\rho_{BC}$ to
+$(\mathbf 1_A/d_A)\otimes\rho_B$.
 
 Hayden--Jozsa--Petz--Winter use instead the exact product-marginal pair
 $\rho_A\otimes\rho_{BC}$ and $\rho_A\otimes\rho_B$. Their equation (6) gives
-the same strong-subadditivity deficit. The present theorem uses
-the maximally mixed state on $A$ because `SSAPosDef.rel_entropy_eval_support`
-supplies this singular-reference evaluation without any additional hypothesis.
+the same strong-subadditivity deficit. The present theorem uses the maximally
+mixed state on $A$ because relative entropy against this singular reference
+evaluates on its support without any additional hypothesis.
 
 **Reference substitution:** This is the hypothesis-free maximally mixed-reference
 formulation, not the exact product-marginal formulation of HJPW. The missing
