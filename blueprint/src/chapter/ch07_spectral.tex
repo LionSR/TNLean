@@ -2013,6 +2013,124 @@ module over the subalgebra.
     action agrees with $T$ on a basis, hence equals $T$.
 \end{proof}
 
+\begin{theorem}[Middle-factor coefficients of commuting overlapping operators]%
+    \label{thm:commuting_overlapping_middle_coefficients}
+    \lean{Matrix.middleSlices_commute_of_overlappingLifts_commute}
+    \lean{Matrix.leftOverlappingLift}
+    \lean{Matrix.rightOverlappingLift}
+    \lean{Matrix.leftMiddleSlice}
+    \lean{Matrix.rightMiddleSlice}
+    \leanok
+    Let $X_{AB}\in\mathbf L(H_A\otimes H_B)$ and
+    $Y_{BC}\in\mathbf L(H_B\otimes H_C)$. For fixed outer indices define their
+    middle-factor coefficient matrices by
+    \[
+        (X_{aa'})_{bb'}=(X_{AB})_{(a,b),(a',b')},\qquad
+        (Y_{cc'})_{bb'}=(Y_{BC})_{(b,c),(b',c')}.
+    \]
+    If
+    \[
+        (X_{AB}\otimes\Id_C)(\Id_A\otimes Y_{BC})
+        =(\Id_A\otimes Y_{BC})(X_{AB}\otimes\Id_C),
+    \]
+    then $X_{aa'}Y_{cc'}=Y_{cc'}X_{aa'}$ for every $a,a',c,c'$. This is the
+    coefficientwise commutation step in the proof of
+    \cite[Lemma~2.1]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Evaluate the commutation identity between the basis vectors
+    $\lvert a,b,c\rangle$ and $\lvert a',b',c'\rangle$. The identity matrices
+    collapse the sums over the first and third intermediate indices, leaving
+    \[
+        \sum_{r}(X_{aa'})_{br}(Y_{cc'})_{rb'}
+        =\sum_{r}(Y_{cc'})_{br}(X_{aa'})_{rb'}.
+    \]
+    This is precisely the $(b,b')$ entry of
+    $X_{aa'}Y_{cc'}=Y_{cc'}X_{aa'}$.
+\end{proof}
+
+\begin{theorem}[Complementary spatial actions of a $*$-subalgebra and its commutant]%
+    \label{thm:starSubalgebra_complementary_spatial_actions}
+    \lean{StarSubalgebra.exists_complementary_action_orthonormalBasis}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. There are positive integers
+    $d_k,m_k$ and an orthonormal basis
+    $(f_{k,i,j})_{k<K,\,i<m_k,\,j<d_k}$ of $\C^D$ such that every $A\in S$ acts by
+    \[
+        A f_{k,i,j}=\sum_{j'=0}^{d_k-1}(B_k)_{j'j}f_{k,i,j'},
+    \]
+    while every $T\in\MN{D}$ commuting with all members of $S$ acts by
+    \[
+        T f_{k,i,j}=\sum_{i'=0}^{m_k-1}(C_k)_{i'i}f_{k,i',j}.
+    \]
+    Thus the same orthonormal identification realizes $S$ on the second tensor factor
+    and its commutant on the complementary first tensor factor. This is the
+    finite-dimensional $C^*$-algebra step used in the proof of
+    \cite[Lemma~2.1]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis}
+    Choose the adapted orthonormal basis $(f_{k,i,j})$ for $S$. The first displayed
+    identity is its defining action property. If $T$ commutes with $S$, the row transport
+    \[
+        \tau_{k,i',i}(v)
+        =\sum_j\langle f_{k,i',j},v\rangle f_{k,i,j}
+    \]
+    also commutes with $S$, and so does $\tau_{k,i',i}T$. Schur's lemma makes this
+    composite scalar on each irreducible row and makes its matrix coefficients vanish
+    between different isotypic components. Expanding $T f_{k,i,j}$ in the orthonormal
+    basis therefore gives the second displayed identity, with coefficients
+    $(C_k)_{i'i}$ independent of $j$.
+\end{proof}
+
+\begin{theorem}[Coefficient form of the commuting-overlap spatial decomposition]%
+    \label{thm:commuting_overlapping_coefficient_spatial_decomposition}
+    \lean{Matrix.exists_middle_spatial_decomposition_of_overlappingLifts_commute}
+    \lean{Matrix.star_rightMiddleSlice}
+    \leanok
+    Let $X_{AB}\in\mathbf L(H_A\otimes H_B)$ and
+    $Y_{BC}\in\mathbf L(H_B\otimes H_C)$, with $Y_{BC}$ Hermitian, and suppose
+    \[
+        [X_{AB}\otimes\Id_C,\Id_A\otimes Y_{BC}]=0.
+    \]
+    There is an orthonormal decomposition
+    \[
+        H_B\cong\bigoplus_{q=0}^{K-1} H_{q,r}\otimes H_{q,l}
+    \]
+    such that all middle-factor coefficients $X_{aa'}$ act only on $H_{q,l}$,
+    while all middle-factor coefficients $Y_{cc'}$ act only on $H_{q,r}$. More
+    precisely, in an orthonormal basis $(e_{q,r,s})$ adapted to this decomposition,
+    \[
+        X_{aa'}e_{q,r,s}
+        =\sum_{s'}(B^{aa'}_q)_{s's}e_{q,r,s'},\qquad
+        Y_{cc'}e_{q,r,s}
+        =\sum_{r'}(C^{cc'}_q)_{r'r}e_{q,r',s}.
+    \]
+    The source lemma assumes that both overlapping operators are Hermitian; the
+    coefficient conclusion requires Hermiticity only for $Y_{BC}$. This is the
+    middle-space coefficient form of
+    \cite[Lemma~2.1]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:commuting_overlapping_middle_coefficients,
+        thm:starSubalgebra_complementary_spatial_actions}
+    Let $S$ be the commutant of the family $(Y_{cc'})_{c,c'}$ together with its
+    adjoints. Hermiticity gives $Y_{cc'}^*=Y_{c'c}$.
+    Theorem~\ref{thm:commuting_overlapping_middle_coefficients} therefore places
+    every $X_{aa'}$ in $S$. Conversely, every $Y_{cc'}$ commutes with all members
+    of $S$. Apply
+    Theorem~\ref{thm:starSubalgebra_complementary_spatial_actions} to $S$: its
+    members act on one tensor factor of each summand, and matrices commuting with
+    $S$ act on the complementary factor. Specializing these two actions to
+    $X_{aa'}$ and $Y_{cc'}$ gives the displayed formulas.
+\end{proof}
+
 Combining the containment direction with the double-commutant criterion yields the full
 block representation of a finite-dimensional $*$-subalgebra, the unital case of
 Eq.~(1.39) of~\cite{Wolf2012Quantum} invoked by~\cite[Theorem~6.14]{Wolf2012Quantum}: up
