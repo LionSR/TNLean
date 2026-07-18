@@ -993,12 +993,12 @@ $\widehat{\cal K}$.
 % with the neighboring trace factorization supplied through prop2to3.  Its
 % derivation from SAL and ZCL is obstructed by the rank-one step in Lemma C.5.
 % Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{proposition}[SAL and ZCL give the two blocking channels]
-    \label{prop:mpdo_sal_zcl_blocking_channels}
+\begin{theorem}[SAL and ZCL give the two blocking channels]
+    \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
     \uses{def:is_sal, def:mpo_source_zcl, def:is_rfp_via_ts,
         def:mpdo_two_site_blocking,
-        prop:mpdo_sal_zcl_bnt_sector_structure}
+        thm:mpdo_sal_zcl_bnt_sector_structure}
     Let $K$ be a simple tensor satisfying the strong area law and zero
     correlation length, and let $M=K^{[2]}$ be its two-site blocking. Then
     there are trace-preserving completely positive maps in both directions
@@ -1007,7 +1007,7 @@ $\widehat{\cal K}$.
     (ii)$\Rightarrow$(v) of
     \cite[Theorem~4.9 and Appendix~C.2, lines~1810--1817]
       {Cirac2016MPDO_arXiv}.
-\end{proposition}
+\end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
 % channel MPDO_TSKKK.png after explicitly suppressing U, but it does not draw
