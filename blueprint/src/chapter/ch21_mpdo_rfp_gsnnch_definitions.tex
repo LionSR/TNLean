@@ -304,6 +304,39 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Definition~\ref{def:mpdo_source_gsnnch}.
 \end{definition}
 
+\begin{theorem}[SAL supplies orthogonally supported BNT sector products]
+    \label{thm:mpdo_bnt_sector_sal_commuting_family}
+    \lean{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL}
+    \leanok
+    \uses{thm:mpdo_physical_support_restriction_bond,
+        def:mpdo_orthogonal_commuting_sector_family}
+    Suppose that the BNT physical projectors $P_x$ have been selected and
+    that every common-weight-absorbed representative $\mathcal K_x$
+    satisfies SAL.  Then there are positive two-site bonds $B^{(x)}$ such
+    that the projections $P_x$ are pairwise orthogonal,
+    \[
+        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)=B^{(x)},
+    \]
+    all cyclic translates of each $B^{(x)}$ commute pairwise, and, for every
+    $N\geq2$,
+    \[
+        \rho^{(N)}(\mathcal K_x)
+          =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+    \]
+    Thus the absorbed BNT representatives have an orthogonally supported
+    family of commuting sector products with normalization scalar one.
+\end{theorem}
+
+\begin{proof}\leanok
+    Restrict $\mathcal K_x$ isometrically to the range of $P_x$.  The
+    restricted tensor is injective and satisfies SAL, so Proposition~C.8
+    gives its positive commuting bond product.  Apply
+    Theorem~\ref{thm:mpdo_physical_support_restriction_bond} in every sector.
+    The lifted bond is supported on $P_x\otimes P_x$ and realizes
+    $\mathcal K_x$ exactly.  The BNT projector construction gives
+    $P_xP_y=0$ for $x\ne y$, which completes the sector family.
+\end{proof}
+
 \begin{theorem}[Orthogonal commuting sector products give the GSNNCH form]
     \label{thm:mpdo_orthogonal_commuting_sectors_gsnnch}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData_sectorProduct}
@@ -354,6 +387,24 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Theorem~\ref{thm:mpdo_orthogonal_commuting_sectors_gsnnch} to the
     positive-length BNT decomposition.  Its coefficients are exactly the
     copy numbers $n_x$ after the common weights have been absorbed.
+\end{proof}
+
+\begin{corollary}[Sectorwise SAL gives the BNT GSNNCH form]
+    \label{cor:mpdo_bnt_sector_sal_gsnnch}
+    \lean{MPOTensor.hasGSNNCHForm_of_bntSectorSAL}
+    \leanok
+    \uses{thm:mpdo_bnt_sector_sal_commuting_family,
+        cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
+    Under the BNT projector-selection hypotheses, if every absorbed BNT
+    representative satisfies SAL, then the original tensor has the source
+    GSNNCH form.  Its outer sectors are the BNT sectors and its natural
+    multiplicities are the BNT copy numbers.
+\end{corollary}
+
+\begin{proof}\leanok
+    Theorem~\ref{thm:mpdo_bnt_sector_sal_commuting_family} supplies the
+    orthogonally supported commuting sector products.  Apply
+    Corollary~\ref{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}.
 \end{proof}
 
 \begin{lemma}[Cyclic-shift transport of an embedded local operator]
