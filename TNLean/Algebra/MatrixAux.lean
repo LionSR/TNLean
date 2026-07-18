@@ -34,6 +34,8 @@ Extracted from various files for reusability.
   semidefinite matrices is nonnegative
 - `Matrix.PosSemidef.of_forall_trace_mul_nonneg`: self-duality of the positive
   semidefinite cone for the trace pairing
+- `Matrix.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero`: faithfulness of a
+  positive-definite weighted trace on the positive semidefinite cone
 - `Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero`: a positive sum of squares
   vanishes only if every summand vanishes
 - `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
@@ -564,6 +566,36 @@ theorem of_forall_trace_mul_nonneg {A : Matrix n n ℂ}
   simpa [Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm] using htrace
 
 end PosSemidef
+
+/-- If `M` is positive semidefinite, `ρ` is positive definite, and
+`tr(ρ * M) = 0`, then `M = 0`.
+
+This is faithfulness of the positive-definite weighted trace. -/
+theorem posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
+    {ρ M : Matrix n n ℂ} (hM : M.PosSemidef) (hρ : ρ.PosDef)
+    (htr : trace (ρ * M) = 0) : M = 0 := by
+  classical
+  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.mp
+      (Matrix.isStrictlyPositive_iff_posDef.mpr hρ) with ⟨S, hS_unit, hρ_eq⟩
+  have hSMS_psd : (S * M * Sᴴ).PosSemidef :=
+    hM.mul_mul_conjTranspose_same (B := S)
+  have htr' : trace (S * M * Sᴴ) = 0 := by
+    have hcycle : trace (S * M * Sᴴ) = trace (Sᴴ * S * M) :=
+      trace_mul_cycle S M Sᴴ
+    have htr'' : trace (Sᴴ * S * M) = 0 := by
+      simpa [hρ_eq, mul_assoc, ← star_eq_conjTranspose] using htr
+    exact hcycle.trans htr''
+  have hSMS_zero : S * M * Sᴴ = 0 :=
+    hSMS_psd.trace_eq_zero_iff.mp htr'
+  have hMS_zero : M * Sᴴ = 0 := by
+    have : S * (M * Sᴴ) = S * 0 := by
+      simpa [mul_assoc] using hSMS_zero
+    exact IsUnit.mul_left_cancel hS_unit this
+  have hSstar_unit : IsUnit (Sᴴ) := by
+    simpa [star_eq_conjTranspose] using hS_unit.star
+  have : M * Sᴴ = 0 * Sᴴ := by
+    simpa [zero_mul] using hMS_zero
+  exact IsUnit.mul_right_cancel hSstar_unit this
 
 end PosSemidefTrace
 

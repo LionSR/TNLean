@@ -11,7 +11,10 @@ import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 /-!
 # Fixed points of unital Schwarz maps form a `*`-algebra
 
-This file formalizes Wolf Theorems 6.12 and 6.13.
+This file gives the Kraus specialization of the full-support algebra step in
+Wolf Theorem 6.12 and formalizes Wolf Theorem 6.13.  The abstract Schwarz-map
+version after choosing a positive-definite invariant weight is in
+`TNLean.Channel.FixedPoint.AbstractAlgebra`.
 
 ## Main results
 
@@ -160,7 +163,7 @@ theorem mul_mem_fixedPoints
   change map K (X * Y) = X * Y
   rw [h_mul_map, hX, hY]
 
-/-- **Wolf Theorem 6.12** for `map K`.
+/-- **Kraus specialization of the algebra conclusion of Wolf Theorem 6.12** for `map K`.
 
 If `map K` is unital and `adjointMap K` has a positive definite fixed point,
 then the fixed points of `map K` form a `StarSubalgebra`. -/
