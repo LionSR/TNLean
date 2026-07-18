@@ -2528,12 +2528,19 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
         thm:fixedPointsStarSubalgebra,
         thm:positive_retraction_finite_star_algebra}
     The map $P_T^*$ is a positive unital idempotent map whose range is
-    $\operatorname{Fix}(T^*)$.  The positive definite fixed point of $T$ is a
-    faithful invariant weight for $T^*$, so the Schwarz equality argument
-    makes $\operatorname{Fix}(T^*)$ a $*$-subalgebra.  Thus $P_T^*$ is a
-    positive retraction onto this subalgebra.  The blockwise classification of
-    positive retractions gives the unitary, the matrix dimensions, the
-    density matrices $\sigma_k$, and the displayed formula.
+    $\operatorname{Fix}(T^*)$.  For $A\in\operatorname{Fix}(T^*)$, the
+    Schwarz inequality gives
+    $T^*(A^*A)\geq T^*(A)^*T^*(A)=A^*A$, while
+    \[
+        \operatorname{tr}\!\left(\rho T^*(A^*A)\right)
+        =\operatorname{tr}\!\left(T(\rho)A^*A\right)
+        =\operatorname{tr}(\rho A^*A).
+    \]
+    Since $\rho$ is positive definite, these relations imply
+    $T^*(A^*A)=A^*A$.  Hence $\operatorname{Fix}(T^*)$ is a $*$-subalgebra,
+    and $P_T^*$ is a positive retraction onto it.  The blockwise
+    classification of positive retractions gives the unitary, the matrix
+    dimensions, the density matrices $\sigma_k$, and the displayed formula.
 \end{proof}
 
 Without a full-rank hypothesis on the fixed point, the corner-restricted fixed-point
