@@ -1,0 +1,382 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
+import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
+import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
+import TNLean.MPS.ParentHamiltonian.BoundaryMatrixBlock
+import TNLean.MPS.ParentHamiltonian.CyclicTranslation
+import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
+
+/-!
+# Boundary closing by comparison across a cyclic cut
+
+This file formalizes the change-of-cut comparison in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456.  Two open-boundary
+decompositions of the same periodic state, with cuts separated by \(S\) sites,
+are compared against the common complementary words of length \(K\). A
+simultaneous spanning family on the complementary segment then identifies the
+boundary matrices block by block.
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+variable {d : ℕ}
+
+/-- A length at which a tensor is block injective identifies the two boundary
+matrices in a word intertwiner and promotes the relation to one-site
+commutation. -/
+private theorem boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
+    {D S : ℕ} {A : MPSTensor d D}
+    (hBlk : IsNBlkInjective A S) (hS : 0 < S)
+    (X Y : Matrix (Fin D) (Fin D) ℂ)
+    (hIntertwine : ∀ α : Fin S → Fin d,
+      X * evalWord A (List.ofFn α) = evalWord A (List.ofFn α) * Y) :
+    X = Y ∧ ∀ a : Fin d, X * A a = A a * X := by
+  have hMaps : LinearMap.mulLeft ℂ X = LinearMap.mulRight ℂ Y := by
+    apply LinearMap.ext_on_range
+      (v := fun α : Fin S → Fin d ↦ evalWord A (List.ofFn α))
+    · simpa [wordSpan] using (wordSpan_eq_top_iff_isNBlkInjective A S).mpr hBlk
+    · intro α
+      simpa only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply] using
+        hIntertwine α
+  have hXY := congrArg (fun f ↦ f 1) hMaps
+  simp only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, mul_one, one_mul] at hXY
+  refine ⟨hXY, ?_⟩
+  apply boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
+    hBlk hS (le_refl S)
+  intro α
+  rw [hIntertwine α, hXY]
+
+/-- Comparing open-boundary decompositions before and after moving the cut
+gives a blockwise boundary intertwiner.
+
+Suppose translating the cut of
+
+\[
+  \sum_j \Gamma_{K+S}^{A_j}(X_j)
+\]
+
+by \(K\) sites gives
+
+\[
+  \sum_j \Gamma_{K+S}^{A_j}(Y_j).
+\]
+
+If the simultaneous block words of length \(K\) span the product matrix
+algebra, then every word \(A^j_\alpha\) of length \(S\) satisfies
+
+\[
+  X_j A^j_\alpha=A^j_\alpha Y_j.
+\]
+
+This is the global-cut form of the boundary comparison used in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456, following the
+single-block change-of-cut argument in proof lines 1276--1289. -/
+theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {K S : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A K)
+    (X Y : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hEq :
+      cyclicTranslateState (⟨K, by omega⟩ : Fin (K + S))
+          (∑ j : Fin r, groundSpaceMap (A j) (K + S) (X j)) =
+        ∑ j : Fin r, groundSpaceMap (A j) (K + S) (Y j)) :
+    ∀ (α : Fin S → Fin d) (j : Fin r),
+      X j * evalWord (A j) (List.ofFn α) =
+        evalWord (A j) (List.ofFn α) * Y j := by
+  classical
+  intro α
+  apply block_matrices_eq_of_wordTupleSpanTop_trace A hSpan
+    (fun j ↦ X j * evalWord (A j) (List.ofFn α))
+    (fun j ↦ evalWord (A j) (List.ofFn α) * Y j)
+  intro β
+  have hcoeff := congrFun hEq (Fin.append β α)
+  change
+    (∑ j : Fin r, groundSpaceMap (A j) (K + S) (X j))
+        (cyclicTranslateCfg (⟨K, by omega⟩ : Fin (K + S)) (Fin.append β α)) =
+      (∑ j : Fin r, groundSpaceMap (A j) (K + S) (Y j)) (Fin.append β α)
+    at hcoeff
+  simp only [Finset.sum_apply, groundSpaceMap_apply] at hcoeff
+  rw [cyclicTranslateCfg_fin_append hS β α] at hcoeff
+  have hswap :
+      List.ofFn ((Fin.append α β) ∘ Fin.cast (Nat.add_comm K S)) =
+        List.ofFn α ++ List.ofFn β := by
+    rw [← List.ofFn_fin_append]
+    exact (List.ofFn_congr (Nat.add_comm S K) (Fin.append α β)).symm
+  rw [hswap, List.ofFn_fin_append] at hcoeff
+  simp_rw [evalWord_append] at hcoeff
+  calc
+    (∑ j : Fin r,
+        Matrix.trace
+          ((X j * evalWord (A j) (List.ofFn α)) *
+            evalWord (A j) (List.ofFn β))) =
+        ∑ j : Fin r,
+          Matrix.trace
+            ((evalWord (A j) (List.ofFn α) *
+                evalWord (A j) (List.ofFn β)) * X j) := by
+      apply Finset.sum_congr rfl
+      intro j _
+      rw [Matrix.mul_assoc]
+      exact Matrix.trace_mul_comm _ _
+    _ =
+        ∑ j : Fin r,
+          Matrix.trace
+            ((evalWord (A j) (List.ofFn β) *
+                evalWord (A j) (List.ofFn α)) * Y j) := hcoeff
+    _ =
+        ∑ j : Fin r,
+          Matrix.trace
+            ((evalWord (A j) (List.ofFn α) * Y j) *
+              evalWord (A j) (List.ofFn β)) := by
+      apply Finset.sum_congr rfl
+      intro j _
+      rw [Matrix.mul_assoc]
+      exact Matrix.trace_mul_comm _ _
+
+/-- Length-indexed form of the global-cut comparison, with the chain length
+kept as a separate variable. -/
+private theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {N K S : ℕ} (hKS : K + S = N) (hS : 0 < S)
+    (hSpan : WordTupleSpanTop A K)
+    (X Y : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hEq :
+      cyclicTranslateState (⟨K, by omega⟩ : Fin N)
+          (∑ j : Fin r, groundSpaceMap (A j) N (X j)) =
+        ∑ j : Fin r, groundSpaceMap (A j) N (Y j)) :
+    ∀ (α : Fin S → Fin d) (j : Fin r),
+      X j * evalWord (A j) (List.ofFn α) =
+        evalWord (A j) (List.ofFn α) * Y j := by
+  subst N
+  exact block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq
+    A hS hSpan X Y hEq
+
+/-- A global comparison of two cuts closes the block-diagonal boundary
+conditions without any short-tail simultaneous spanning hypothesis.
+
+Let \(B=\bigoplus_j\mu_jA_j\). Under the normalized BNT block-separation
+hypotheses, suppose \(N\ge L+L_0\), where every block is injective at length
+\(L_0>0\). Every vector in the periodic chain space of \(B\) has block-diagonal
+open-boundary matrices \(X_j\). Move the cut past the final \(L_0\) sites and
+apply the same open-boundary decomposition to the translated state. Comparing
+the two decompositions against the complementary words of length \(N-L_0\)
+gives
+
+\[
+  (\mu_j^N X_j)A^j_\alpha=A^j_\alpha(\mu_j^N Y_j).
+\]
+
+The simultaneous spanning hypothesis is used only at the long length
+\(N-L_0\), where it follows from the BNT separation bound. Block injectivity at
+length \(L_0\) then identifies the two boundary matrices and gives commutation,
+which closes every boundary-crossing local interval. This is the change-of-cut
+argument of arXiv:quant-ph/0608197, Theorem 12, proof lines 1276--1289 and
+1454--1456, with the block-diagonal boundary restriction of arXiv:2011.12127,
+Section IV.C, lines 2126--2128.
+
+**Scope restriction (finite Condition C1 range):** The moved-cut comparison is
+unconditional within the repository's existing normalized BNT separation range
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source theorem uses the sharper bound
+\(3(r-1)(L_0+1)+1\le L\). Thus the length-\(L_0\) injectivity range remains
+stronger than the source constant. This independent mismatch is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` and tracked by
+issue #4195.
+-/
+theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  classical
+  obtain ⟨X, hψX, _⟩ :=
+    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
+  let s : Fin N := ⟨N - L₀, by omega⟩
+  have hTranslate :
+      cyclicTranslateState s ψ ∈
+        chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N :=
+    cyclicTranslateState_mem_chainGroundSpace
+      (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN s hψ
+  obtain ⟨Y, hψY, _⟩ :=
+    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hTranslate
+  have hXsum :
+      ψ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
+    calc
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
+            (Matrix.blockDiagonal' X)) := hψX
+      _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
+        rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+  have hYsum :
+      cyclicTranslateState s ψ =
+        ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
+    calc
+      cyclicTranslateState s ψ =
+          groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
+              (Matrix.blockDiagonal' Y)) := hψY
+      _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
+        rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+  have hSplit : N - L₀ + L₀ = N := by omega
+  have hSumTranslate :
+      cyclicTranslateState s
+          (∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j)) =
+        ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
+    rw [← hXsum]
+    exact hYsum
+  have hLongSpan : WordTupleSpanTop A (N - L₀) := by
+    apply wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
+      A hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital
+    omega
+  have hIntertwine :
+      ∀ (α : Fin L₀ → Fin d) (j : Fin r),
+        ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn α) =
+          evalWord (A j) (List.ofFn α) * ((μ j) ^ N • Y j) := by
+    apply block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
+      A hSplit hL₀ hLongSpan
+        (fun j ↦ (μ j) ^ N • X j) (fun j ↦ (μ j) ^ N • Y j)
+    simpa only [s] using hSumTranslate
+  have hComm : ∀ j : Fin r, ∀ a : Fin d,
+      ((μ j) ^ N • X j) * A j a = A j a * ((μ j) ^ N • X j) := by
+    intro j
+    exact (boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
+      (hBlk j) hL₀ ((μ j) ^ N • X j) ((μ j) ^ N • Y j)
+      (fun α ↦ hIntertwine α j)).2
+  have hCommWord : ∀ j : Fin r, ∀ w : List (Fin d),
+      ((μ j) ^ N • X j) * evalWord (A j) w =
+        evalWord (A j) w * ((μ j) ^ N • X j) := by
+    intro j w
+    induction w with
+    | nil => simp [evalWord_nil]
+    | cons a w ih =>
+        rw [evalWord_cons, ← Matrix.mul_assoc, hComm j a, Matrix.mul_assoc, ih,
+          ← Matrix.mul_assoc]
+  refine ⟨X, hψX, ?_⟩
+  apply blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
+    μ A hN hLN X
+  intro j i _τ _hi
+  refine ⟨(μ j) ^ N • X j, ?_⟩
+  intro β
+  exact hCommWord j (List.ofFn β)
+
+/-- The normalized BNT block-diagonal periodic chain space is the sum of the
+single-block periodic chain spaces in the finite Condition C1 range, and the
+corresponding open-boundary block spaces are independent.
+
+This is the periodic ground-space conclusion of arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1430--1456, in the finite Condition C1 range. The
+boundary closing is supplied by the global change-of-cut comparison above, so
+there is no short crossing-tail span hypothesis.
+
+**Scope restriction (finite Condition C1 range):** The conclusion is proved in
+the repository's existing normalized BNT separation range derived from
+length-\(L_0\) injectivity. Recovering the sharper length bound of
+arXiv:quant-ph/0608197, Theorem 12, is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` and tracked in
+issue #4195.
+-/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
+      iSupIndep (fun j : Fin r ↦ groundSpace (A j) N) := by
+  apply chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
+    μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+  intro ψ hψ
+  exact exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1
+    μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+      hNlarge hψ
+
+/-- The normalized BNT block-diagonal periodic chain space is the sum of the
+single-block periodic chain spaces in the finite Condition C1 range. -/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  exact (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1
+    μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hNlarge).1
+
+/-- The global change-of-cut comparison gives the fixed-chain kernel
+containment needed for the block-diagonal parent-Hamiltonian spanning clause,
+provided the periodic chain space of each block is contained in its MPS line. -/
+theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    (hBlock : ∀ j : Fin r,
+      chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
+    LinearMap.ker (parentHamiltonian
+      (toTensorFromBlocks (d := d) (μ := μ) A) L N) ≤
+      bntMPSVectorSpan A N := by
+  refine ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan
+    μ A hN hLN ?_ hBlock
+  exact le_of_eq
+    (chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hNlarge)
+
+end MPSTensor
