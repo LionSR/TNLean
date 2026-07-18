@@ -425,10 +425,10 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_right_partial_trace_cptp}
     Reindex $C$ as $C'\otimes E$ and apply the ordinary right partial trace.
-    Its entry formula gives the displayed sum, while complete positivity and
-    trace preservation give the final assertions.
+    Its entry formula gives the displayed sum.  Positivity follows by tracing
+    a positive matrix, and invariance of the full trace under reindexing gives
+    trace preservation.
 \end{proof}
 
 \begin{theorem}[Right marginals preserve a quantum Markov decomposition]
@@ -495,7 +495,7 @@ strong subadditivity for a normalized three-site reduced state.
     $\sigma_3^{(N)}(K)$ is obtained from the normalized $N$-site periodic state
     by tracing out all but its first three sites, then
     $\sigma_3^{(N)}(K)$ admits a quantum Markov decomposition on its middle
-    site.  This is the result proved in
+    site.  This is Lemma~Lsigma3 of
     \cite[Appendix~C.2, lines~1351--1371]{Cirac2016MPDO_arXiv}.  The
     decomposition may depend on $N$.
 \end{theorem}
@@ -526,13 +526,12 @@ strong subadditivity for a normalized three-site reduced state.
     $C\simeq c\otimes E$, where $c$ is its first site and $E$ contains the
     remaining $N-4$ sites.  Theorem~\ref{thm:quantum_markov_right_marginal} gives
     the same middle-site direct sum after tracing out $E$.  The contiguous-block
-    partial-trace identity gives
+    reduction gives
     \[
-      \tr_{4,\ldots,N-1}\!\left(\sigma_{N-1}^{(N)}(K)\right)
-        =\sigma_3^{(N)}(K),
+        \sigma_3^{(N)}(K)
+        =\tr_{4,\ldots,N-1}\!\left[\sigma_{N-1}^{(N)}(K)\right],
     \]
-    which identifies the resulting operator with the required three-site
-    marginal.
+    which identifies the resulting operator with $\sigma_3^{(N)}(K)$.
 \end{proof}
 
 \begin{theorem}[Four-site SAL marginals have Hayashi decompositions]
