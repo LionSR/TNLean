@@ -646,8 +646,8 @@ theorem mulVec_eq_zero_right
     B *ᵥ v = 0 := by
   exact mulVec_eq_zero_left hB hA v (by simpa [add_comm] using hv)
 
-/-- A positive semidefinite matrix dominated by a scalar multiple of `ψψ†` is itself a
-nonnegative scalar multiple of `ψψ†`. -/
+/-- A positive semidefinite matrix dominated by a scalar multiple of the rank-one matrix
+$\psi\psi^*$ is itself a nonnegative scalar multiple of $\psi\psi^*$. -/
 theorem eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef)
     {c : ℂ} (ψ : Fin D → ℂ)

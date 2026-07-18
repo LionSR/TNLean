@@ -290,6 +290,38 @@ representations already developed above. They correspond to
     Apply the polarization identity summand-by-summand.
 \end{proof}
 
+\begin{theorem}[Rank-one ray scalar rigidity]
+    \label{thm:rankone_ray_scalar_rigidity}
+    \lean{WolfProps.exists_eq_smul_id_of_maps_rankOne_to_span}
+    \leanok
+    Let $T:\MN{D}\to\MN{D}$ be complex-linear.  Suppose that for every
+    $v\in\C^D$ there is a scalar $c_v\in\C$ such that
+    \[
+        T(\ketbra{v}{v})=c_v\ketbra{v}{v}.
+    \]
+    Then there is a scalar $c\in\C$ such that $T=c\,\id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $P_v=\ketbra{v}{v}$.  For $i\ne j$, the identities
+    \[
+        P_{e_i+e_j}+P_{e_i-e_j}=2P_{e_i}+2P_{e_j}
+    \]
+    and
+    \[
+        c_{e_i+e_j}P_{e_i+e_j}+c_{e_i-e_j}P_{e_i-e_j}
+        =2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}
+    \]
+    give, from their $(i,i)$, $(j,j)$, and $(i,j)$ entries,
+    \[
+        c_{e_i+e_j}=c_{e_i-e_j}=c_{e_i}=c_{e_j}.
+    \]
+    Replacing $e_j$ by $\mathrm{i}e_j$ gives the same equality for
+    $e_i\pm\mathrm{i}e_j$.  The rank-one polarization identity then gives
+    $T(E_{ij})=cE_{ij}$ for every matrix unit, and hence $T=c\,\id$.
+\end{proof}
+
 \begin{theorem}[No information without disturbance]
     \label{thm:linearMap_eq_id_of_fixes_rankOne}
     \lean{WolfProps.linearMap_eq_id_of_fixes_rankOne}
@@ -302,15 +334,14 @@ representations already developed above. They correspond to
 
 \begin{proof}
     \leanok
-    Rank-one outer products $\ketbra{u}{v}$ polarize into rank-one
-    self-outer-products:
+    \uses{thm:rankone_ray_scalar_rigidity}
+    Rank-one ray scalar rigidity gives $T=c\,\id$ for some $c\in\C$.
+    If $D>0$, evaluating at the first coordinate projector gives
     \[
-        4\,\ketbra{u}{v}
-        = \sum_{k=0}^3 i^k \ketbra{u + i^k v}{u + i^k v},
+        P_{e_0}=T(P_{e_0})=cP_{e_0},
     \]
-    so $T$ preserves every $\ketbra{u}{v}$. Since the matrix units
-    $E_{ij} = \ketbra{e_i}{e_j}$ span $\MN{D}$, $T$ equals the
-    identity on a spanning set, hence everywhere.
+    whose $(0,0)$ entry yields $c=1$.  For $D=0$ the matrix algebra is
+    trivial, so the conclusion also holds.
 \end{proof}
 
 \begin{definition}[Pure-state ensemble density]

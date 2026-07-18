@@ -187,11 +187,11 @@ theorem vecMulVec_star_eq_polarization (u v : Fin D → ℂ) :
 /-- A complex-linear endomorphism of matrices which preserves every ray spanned
 by a rank-one self-outer-product is a scalar multiple of the identity.
 
-The proof compares the four projectors associated with the standard basis
-vectors `e_i + e_j`, `e_i - e_j`, `e_i + I e_j`, and `e_i - I e_j`. Their
-diagonal and off-diagonal entries force all ray eigenvalues to agree. The
-rank-one polarization identity then extends the conclusion to all matrix
-units. -/
+If $P_v=vv^*$ and $T(P_v)=c_vP_v$, then the parallelogram identity
+$P_{e_i+e_j}+P_{e_i-e_j}=2P_{e_i}+2P_{e_j}$ forces
+$c_{e_i}=c_{e_j}$ for all $i\ne j$.  The analogous identity for
+$e_i\pm\mathrm{i}e_j$ controls the imaginary off-diagonal entries.  Rank-one
+polarization then extends the common scalar coefficient to all matrix units. -/
 theorem exists_eq_smul_id_of_maps_rankOne_to_span
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : ∀ v : Fin D → ℂ, ∃ c : ℂ,
