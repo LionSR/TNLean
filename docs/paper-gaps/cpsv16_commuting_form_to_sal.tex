@@ -226,8 +226,15 @@ the proposition labelled \emph{4to2}.
 The fourth-region calculation after the cyclic identity requires a coordinate
 clarification.  Tracing one physical site of the length-$N$ cyclic eta product
 leaves a coupled sum of the right partial trace of
-$\eta_{k_{N-1},q}$ and the left partial trace of $\eta_{q,k_1}$; rank-one
-factorization does not separate this sum.  Source line~1613 instead invokes
+$\eta_{k_{N-1},q}$ and the left partial trace of $\eta_{q,k_1}$:
+\[
+  \sum_q
+    \tr_{H_{q,l}}\!\left(\eta_{k_{N-1},q}\right)
+    \otimes
+    \tr_{H_{q,r}}\!\left(\eta_{q,k_1}\right).
+\]
+The same sector $q$ occurs in both factors, so rank-one factorization does not
+separate this into two independent sums.  Source line~1613 instead invokes
 ZCL to replace this marginal by a trace of two boundary sites on the
 length-$(N+1)$ chain.  In edge coordinates the middle operator
 $\eta_{q,h}$ is then fully traced, while the two adjacent operators retain
