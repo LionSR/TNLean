@@ -1620,8 +1620,16 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand both partial traces entry by entry. The two sides differ only in the
-    order of the finite sums over the $A$ and $C$ indices.
+    For indices $(a_1,b_1)$ and $(a_2,b_2)$, the corresponding matrix entry is
+    \[
+        \left[\tr_C\!\left(\frac{\mathbf 1_A}{d_A}\otimes
+            \rho_{BC}\right)\right]_{(a_1,b_1),(a_2,b_2)}
+        =\frac{\delta_{a_1,a_2}}{d_A}
+            \sum_c (\rho_{BC})_{(b_1,c),(b_2,c)}
+        =\frac{\delta_{a_1,a_2}}{d_A}(\rho_B)_{b_1,b_2}.
+    \]
+    This is the corresponding entry of
+    $(\mathbf 1_A/d_A)\otimes\rho_B$.
 \end{proof}
 
 \begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
