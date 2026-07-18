@@ -645,11 +645,10 @@ weights in the length-independent case at
         def:mpdo_bnt_fusion_tensor_clause}
     Suppose the fusion-isometry clause holds for a chosen vertical canonical
     decomposition.  Then the algebra clause holds for the same decomposition,
-    with coefficients
+    with coefficients, for every positive chain length $L$,
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})
-        \qquad (L>0)
+        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}),
     \]
     determined by the same diagonal matrices.  Thus statement (iii) implies
     statement (ii) of
@@ -657,13 +656,22 @@ weights in the length-independent case at
     concerning the renormalization fixed-point condition is made here.
 \end{theorem}
 \begin{proof}\leanok
-    The fusion isometries for the vertical BNT tensors $M_\alpha$ satisfy the
-    fusion identity by assumption, while the trace scalars
-    $m_\alpha=\operatorname{tr}(\mu_\alpha)$ satisfy the length-one idempotent
-    identity.  These two identities give the algebra clause for the tensors
-    $M_\alpha$.  Retaining the chosen vertical decomposition and the same
-    diagonal matrices $\chi_{\alpha,\beta,\gamma}$ gives the tensor-attached
-    algebra clause.
+    Iterating the fusion identity along $L$ sites and taking the closed trace
+    gives
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        =\sum_\gamma
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+    \]
+    Writing $m_\alpha=\operatorname{tr}(\mu_\alpha)$, the assumed length-one
+    idempotent identity is
+    \[
+        m_\gamma=\sum_{\alpha,\beta}
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
+    \]
+    These are the product and idempotent identities of the algebra clause.
+    Retaining the chosen vertical decomposition and the same diagonal matrices
+    gives the tensor-attached algebra clause.
 \end{proof}
 
 \begin{figure}[ht]
