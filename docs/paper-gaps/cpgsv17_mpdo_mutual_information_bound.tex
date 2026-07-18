@@ -54,6 +54,15 @@ under the local ancillary traces then gives
 For an interval in a periodic one-dimensional chain,
 $\lvert\partial A\rvert=2$, and this gives $I(A:B)\leq4\log D$.
 
+In that argument, $D$ is the dimension of each virtual system on an edge of
+the locally completely positive construction.  It remains the virtual bond
+dimension after the local maps are purified.  It is not the operator bond
+dimension of an arbitrary MPO representation.  If the density operator of a
+locally purified state is written as an MPO by pairing the ket and bra virtual
+indices, its natural operator bond has dimension at most $D^2$.  Thus the two
+uses of the letter $D$ refer to different representations and cannot be
+identified without an additional positive factorization.
+
 Thus the cited proof applies to a locally purified tensor.  It does not prove
 that an arbitrary family of positive periodic matrix product operators admits
 such a purification.  The distinction is explicit in the source paper itself:
@@ -62,6 +71,17 @@ displayed local purification, and after Theorem~4.4 it repeats that the
 purification definition does not apply to every MPDO.
 \footnote{Source locations:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}:744 and 786.}
+
+Positivity of all periodic finite-chain operators does not supply the missing
+factorization.  For finite multipartite states, \cite{DeLasCuevas2013Purifications}
+proves that the bond dimension $D'$ of a matrix product purification cannot be
+bounded in terms of the MPO bond dimension $D$ alone.  More strongly,
+\cite{DeLasCuevas2016Fundamental} constructs translationally invariant MPDOs
+that are positive for every chain length but admit no translationally
+invariant purification valid for every chain length; the construction already
+occurs for classical states.  These results rule out extending the cited proof
+to every MPDO merely by choosing a bond-controlled local purification.  They do
+not, by themselves, disprove the mutual-information estimate.
 
 \section{Why the marginal-rank argument does not repair the proof}
 
@@ -88,11 +108,13 @@ the extensive marginal entropies in
 is therefore essential.  Bounding the two marginal entropies separately by
 $2\log D$ is not a valid argument for mixed MPOs.
 
-An unrestricted proof would require a separate theorem controlling quantum
-mutual information by the operator-Schmidt rank of a positive operator, or
-another argument using only positivity of the periodic MPO family.  Such a
-theorem is neither part of the cited proof nor presently established in the
-development.
+The operator-Schmidt decomposition across the cut therefore supplies no
+entropy bound by itself.  No theorem controlling quantum mutual information
+solely by the operator-Schmidt rank of an arbitrary positive operator is given
+in the cited sources or presently established in the development.  The status
+of the unrestricted estimate is consequently unresolved: the cited argument
+does not prove it, while the observations above do not furnish a
+counterexample.
 
 \section{What the rank-three separation establishes}
 
@@ -152,7 +174,8 @@ MPDOs is only the monotonicity
   I_L^{(N)}\leq I_{L+1}^{(N)}
   \qquad (2L+1\leq N).
 \]
-The bound and the iterated limit remain open at the source hypothesis set.
+The bound and the iterated limit are not established at the source hypothesis
+set by the cited arguments or by the present development.
 
 \section{Resolution}
 
@@ -186,11 +209,16 @@ $D'$, not in the MPO bond dimension $D$.
 
 This result does not supply a local purification for an arbitrary positive
 MPO.  The source itself warns at the purification step that such a
-representation need not exist.  Two tasks therefore remain for the full
-statement of Proposition~4.5.
+representation need not exist, and the no-go results above show that this
+missing representation cannot be recovered uniformly from MPO positivity and
+bond dimension.  Two questions therefore remain for the full statement of
+Proposition~4.5.
 \begin{enumerate}
-  \item Prove the finite-chain bound directly from positivity and the
-    operator-Schmidt decomposition, without a local-purification assumption.
+  \item Determine whether the finite-chain estimate is true for arbitrary
+    positive periodic MPO families of bond dimension $D$.  A proof must use
+    only the hypotheses of Proposition~4.5, and a counterexample must satisfy
+    positivity for every chain length.  No operator-Schmidt-rank implication is
+    assumed here.
   \item Construct the thermodynamic limit required for the inner limit in the
     proposition.
 \end{enumerate}
