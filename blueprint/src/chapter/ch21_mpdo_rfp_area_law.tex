@@ -184,6 +184,24 @@
     \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}.
 \end{theorem}
 
+\begin{proof}\leanok
+    A contraction around the virtual loop vanishes unless the bra and ket
+    configurations agree and are both constant.  The all-zero configuration
+    receives weight one.  The all-one configuration receives the sum of the
+    two virtual-sector weights, namely $1+(-1)^N$.  This gives the displayed
+    diagonal form.  Its coefficients are nonnegative: the second coefficient
+    is zero for odd $N$ and two for even $N$.  Hence every positive-length
+    operator is positive semidefinite, and summing its two possible diagonal
+    entries gives the trace $2+(-1)^N$.
+
+    After normalization, the all-zero weight is consequently one at odd
+    lengths and $1/3$ at positive even lengths.  Tracing out all but the first
+    site does not change this entry, since among the configurations beginning
+    with zero only the all-zero configuration has nonzero weight.  The two
+    subsequences of one-site marginals therefore have distinct all-zero
+    entries, so the sequence cannot converge.
+\end{proof}
+
 \begin{definition}[Map on the second tensor factor]
     \label{def:mpdo_id_tensor_map}
     \lean{Matrix.idTensorMap}
