@@ -34,35 +34,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Eventual linear independence excludes gauge-phase-equivalent duplicate
-members of a basis of normal tensors.
-
-This is condition (ii) in the characterization of arXiv:1606.00608,
-Proposition 2.7 (`prop:char-BNT`, lines 278--280 and 1137--1142). -/
-theorem IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
-    {g : ℕ} {dim : Fin g → ℕ}
-    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
-    (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
-    BlocksNotGaugePhaseEquiv (d := d) B := by
-  intro j k hjk hdim hGPE
-  obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
-  have hN := hLI (N₀ + 1) (by omega)
-  obtain ⟨X, ζ, _hζ, hConj⟩ := hGPE
-  have hState : ζ ^ (N₀ + 1) • mpvState (d := d) (B j) (N₀ + 1) =
-      mpvState (d := d) (B k) (N₀ + 1) := by
-    apply PiLp.ext
-    intro σ
-    simp only [PiLp.smul_apply, mpvState_apply, smul_eq_mul]
-    rw [mpv_eq_pow_mul_of_gaugePhase
-      (A := cast (congr_arg (MPSTensor d) hdim) (B j))
-      (B := B k) X ζ hConj (N₀ + 1) σ,
-      mpv_cast_dim hdim (B j) (N₀ + 1) σ]
-  have hPair : LinearIndepOn ℂ
-      (fun l : Fin g => mpvState (d := d) (B l) (N₀ + 1)) {j, k} :=
-    hN.linearIndepOn {j, k}
-  have hNot := (linearIndepOn_pair_iff _ hjk (hN.ne_zero j)).mp hPair
-  exact hNot (ζ ^ (N₀ + 1)) hState
-
 /-- Normal tensors which are not MPV-phase equivalent have asymptotically
 vanishing overlap.
 
