@@ -565,6 +565,8 @@ import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingBondEtaDecomposition
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicTransport
+import TNLean.MPS.MPDO.CyclicEdgeWeightTensor
+import TNLean.MPS.MPDO.FixedBondProductTensor
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
