@@ -61,11 +61,11 @@ of \cite{Cirac2021Matrix}.\footnote{For
 	\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalPGVWCComparison.lean}).
 		The short crossing-tail span hypothesis is removed by the global change-of-cut
 		comparison in
-		\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1};
+		\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07};
 		this resolves
-		\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} in the
-		finite Condition C1 range. The sharper source length bound is tracked
-		separately by
+		\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} at the
+		length bound of the source. The removal of the former extra $(L_0+1)$ in
+		the separation constant resolves
 		\href{https://github.com/LionSR/TNLean/issues/4195}{issue \#4195} (the earlier
 		tracker \href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}, which
 		tracked proving the boundary-crossing comparison itself, is now closed). Pull
@@ -96,17 +96,19 @@ After blocking, the corresponding word-span statement is
   \prod_{j=1}^g M_{D_j}(\mathbb C).
 \end{align}
 
-The current Lean development separates the product-span input from
+The Lean development separates the product-span input from
 the finite blocking hypothesis.  First, it proves the one-step intersection
 identity from \cite[Theorem~12]{PerezGarcia2007MPSReps} under the displayed
 product-span equation.  Then the
-normalized basis-of-normal-tensors (BNT) theorems derive that product span in
-the finite Condition C1 range from the injectivity of
+normalized basis-of-normal-tensors (BNT) theorems derive that product span from
+the injectivity of
 \begin{align}
   \Gamma_{L_0}^{A_j}:M_{D_j}(\mathbb C)
     \to(\mathbb C^d)^{\otimes L_0},
 \end{align}
-together with the separated normalized block hypotheses. Thus the current
+together with the separated normalized block hypotheses. For $b\ge2$, the
+simultaneous products span the product algebra at every length
+$n\ge3(b-1)(L_0+1)$. Thus the
 Lean statements no longer replace Condition C1 by a length-one span condition
 in the boundary-decomposition path. The boundary conditions are compared after
 a global change of cut, using only the simultaneous product span on the long
@@ -235,24 +237,23 @@ for all sufficiently large $m$ satisfying the product-span hypotheses.\footnote{
 Lean declarations:
 \leanid{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop},
 \leanid{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}, and
-\leanid{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital}.}
-The corresponding finite-Condition-C1 declarations then propagate the cyclic
+\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07}.}
+The corresponding source-range declarations then propagate the cyclic
 local constraints to
 \begin{align}
   \mathcal K_{N,L}(\widehat A)\subseteq
   S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
 \end{align}
 and make the sum defining $S_N$ internal.\footnote{Lean declarations:
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1},
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1},
-\leanid{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07},
+\leanid{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07},
 and
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}.}
+\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07}.}
 The former residual was the source boundary-condition comparison: starting with a
 vector in the periodic-boundary space $\mathcal K_{N,L}(\widehat A)$, produce
 block-diagonal boundary matrices whose block components again belong to the
 blockwise periodic-boundary spaces. The global change-of-cut theorem now proves
-this conclusion in the finite Condition C1 range.
+this conclusion at the source length bound.
 
 Earlier conditional reductions isolated the source comparison in the coordinates
 obtained by opening the periodic boundary for boundary-crossing windows. Suppose
@@ -287,9 +288,9 @@ assuming those identities separately: it translates the whole periodic state
 past the final \(L_0\) sites and compares the two open-boundary decompositions
 against the long complementary segment.\footnote{Formal declarations:
 \leanid{MPSTensor.block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq},
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07},
 and
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1}.
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07}.
 The earlier conditional declarations are
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities},
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective},
@@ -302,8 +303,7 @@ the forward inclusion, the block-diagonal intersection identity from
 \cite[Theorem~12]{PerezGarcia2007MPSReps}, the parent-ground-space
 containment, and the final span statement with explicit citations. It also
 separates these opened-boundary coordinates from the paper's boundary indices,
-and records the unconditional global-cut conclusion in the finite Condition C1
-range. It does not identify this stricter range with the source range.
+and records the unconditional global-cut conclusion at the source length bound.
 % Blueprint labels: def:parent_hamiltonian_ground_space_bnt,
 % lem:isup_chain_ground_space_block_le_assembled,
 % thm:block_diagonal_ground_space_intersection,
@@ -317,8 +317,7 @@ With this notation,
     \psi_j\in\mathcal K_{N,L}(A_j)
   \right\}.
 \end{align}
-The source-range strengthening not yet obtained from the finite Condition C1
-bound is
+The source-range conclusion now proved is
 \begin{align}
   \left[
     b\ge2
@@ -380,11 +379,13 @@ $L\ge 3L_0+4>L_0$; the inequality $L_0<L$ is displayed separately because the
 one-block uniqueness input is used in that range.
 The one-block case is the injective parent-Hamiltonian theorem rather than the
 degenerate block-injective boundary theorem.
-The finite-Condition-C1 propagation theorem currently proved in Lean is stated
-in the more conservative range
-\begin{align}
-  L\ge (L_0+1)+3(b-1)(L_0+1)+1.
-\end{align}
+The former proof required the more conservative range
+$L\ge (L_0+1)+3(b-1)(L_0+1)+1$. This extra $(L_0+1)$ is no longer present.
+Once the simultaneous tuples span at
+$q=3(b-1)(L_0+1)$, the unital normalization propagates the homogeneous tuple
+span from $q$ to every larger length: a target tuple $(M_j)_j$ is obtained at
+length $q+1$ by representing $((A^j_a)^\dagger M_j)_j$ at length $q$, prefixing
+$A^j_a$, and summing over $a$.
 The periodic-boundary comparison reductions now separate into three forms: a
 decomposition into blockwise vectors with periodic boundary conditions, a
 block-diagonal boundary representation whose components already belong to the
@@ -397,8 +398,7 @@ coordinate formulation displayed above.\footnote{Lean declarations:
 and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
 The global change-of-cut theorem discharges the boundary-crossing comparison
-hypothesis in the finite Condition C1 range. The source theorem itself remains
-stronger only through its sharper length constant.
+hypothesis at the source length constant.
 For
 \begin{align}
   X=\bigoplus_j X_j,
@@ -460,10 +460,15 @@ The composition gives
 
 This is not a source-error claim. The formal development proves the
 block-diagonal periodic-boundary comparison without a short-tail span or an
-external boundary-comparison hypothesis in the
-finite-Condition-C1 Lean range
+external boundary-comparison hypothesis in the source range
 \begin{align}
-  L\ge (L_0+1)+3(b-1)(L_0+1)+1.
+  b\ge2,
+  \qquad
+  L_0\ge1,
+  \qquad
+  L\ge3(b-1)(L_0+1)+1,
+  \qquad
+  N\ge L+L_0.
 \end{align}
 For every block $j$ one has
 \begin{align}
@@ -517,10 +522,10 @@ product-spanning length: the fixed cyclic window gives the wrapped tail length
 \(N-i\), whereas the separating trace-decomposition implication is stated at a
 common product-span length \(m\).
 
-In the normalized BNT finite range, this common middle-word span is no longer an
+In the normalized BNT source range, this common middle-word span is no longer an
 external assumption. If
 \begin{align}
-  m=(L_0+1)+(b-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr),
+  m=3(b-1)(L_0+1),
   \qquad
   L\ge m+1,
 \end{align}
@@ -590,26 +595,21 @@ the lower bound on \(L\) alone.
 
 The block-diagonal boundary representation itself is not an instance of the
 boundary-crossing comparison. The Lean theorem
-\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
+\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07}
 derives it from the span-based one-step intersection identity
-\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1};
+\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07};
 its block components lie in the open-boundary ground spaces $\mathcal G_N^{A_j}$,
 and its proof does not use the periodic-boundary comparison at boundary-crossing
 windows. The earlier conditional block-diagonal parent-space statements retain
 the periodic-boundary comparison as an explicit hypothesis, while the global
-change-of-cut theorem discharges it. The residual source-faithfulness gap is the
-normalized BNT product-span range, whose derivation is recorded in
-\path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex} (lines 2078--2079 of
-\path{Papers/2011.12127/TN-Review-main.tex}); that gap is independent of the
-periodic-boundary comparison tracked here.
+change-of-cut theorem discharges it. Homogeneous tuple-span propagation removes
+the former extra $(L_0+1)$ from the normalized BNT product-span range.
 
 The periodic-boundary comparison target of
 \href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} is therefore
-complete in the finite Condition C1 range. The remaining source-range
-strengthening, tracked by
-\href{https://github.com/LionSR/TNLean/issues/4195}{issue \#4195}, is to replace
-the present separation constant by the sharper bound from
-\cite[Theorem~12]{PerezGarcia2007MPSReps}:
+complete at the source range. The length-constant strengthening tracked by
+\href{https://github.com/LionSR/TNLean/issues/4195}{issue \#4195} is also
+complete: the hypotheses are exactly
 \begin{align}
   b\ge2,
   \qquad
@@ -619,7 +619,7 @@ the present separation constant by the sharper bound from
   \qquad
   N\ge L+L_0.
 \end{align}
-The global-cut theorem already gives, in the current finite Condition C1 range,
+The global-cut theorem gives
 \begin{align}
   \mathcal K_{N,L}(\widehat A)
   =
