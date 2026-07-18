@@ -861,6 +861,82 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     and subtracting $\sigma_N$ cancels all but the first and last terms.
 \end{proof}
 
+\begin{definition}[Bounded-orbit endomorphism]
+    \label{def:has_bounded_orbits}
+    \lean{LinearMap.HasBoundedOrbits}
+    \leanok
+    Let $\mathbb K$ denote either $\R$ or $\C$, and let $V$ be a normed
+    vector space over $\mathbb K$. A linear endomorphism $f:V\to V$ has
+    \emph{bounded orbits} if, for every $x\in V$, the set
+    \[
+        \{f^n x:n\in\N\}
+    \]
+    is bounded.
+\end{definition}
+
+\begin{definition}[Mean-ergodic projection]
+    \label{def:mean_ergodic_projection}
+    \lean{LinearMap.HasBoundedOrbits.disjoint_ker_sub_one_range_sub_one,
+        LinearMap.HasBoundedOrbits.isCompl_ker_sub_one_range_sub_one,
+        LinearMap.meanErgodicProjection}
+    \leanok
+    \uses{def:has_bounded_orbits}
+    Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
+    Then
+    \[
+        V=\ker(f-\Id_V)\oplus\operatorname{range}(f-\Id_V).
+    \]
+    The \emph{mean-ergodic projection} $P_f:V\to V$ is the projection onto
+    $\ker(f-\Id_V)$ along $\operatorname{range}(f-\Id_V)$.
+\end{definition}
+
+\begin{theorem}[Finite-dimensional mean-ergodic theorem]
+    \label{thm:mean_ergodic_bounded_orbits}
+    \lean{LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_of_mem_range_sub_one,
+        LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.range_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.meanErgodicProjection_apply_eq_self_iff,
+        LinearMap.HasBoundedOrbits.isIdempotentElem_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.meanErgodicProjection_apply_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.comp_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.meanErgodicProjection_comp}
+    \leanok
+    \uses{def:has_bounded_orbits, def:mean_ergodic_projection}
+    Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
+    For every $x\in V$, the Ces\`aro averages
+    \[
+        A_N(x)=\frac{1}{N}\sum_{n=0}^{N-1}f^n x
+    \]
+    converge to $P_f x$. Moreover,
+    \[
+        \operatorname{range}(P_f)=\ker(f-\Id_V),\qquad
+        P_f^2=P_f,\qquad fP_f=P_f=P_f f,
+    \]
+    and $P_f x=x$ if and only if $f x=x$.
+    The complex matrix specialization gives the convergence step underlying
+    \cite[Equation~(6.14)]{Wolf2012Quantum}; positivity and unitality of the
+    limiting projection are separate assertions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:has_bounded_orbits, def:mean_ergodic_projection}
+    If $y\in V$, telescoping and boundedness of its orbit give
+    \[
+        A_N\bigl((f-\Id_V)y\bigr)
+        =\frac{f^N y-y}{N}\longrightarrow 0.
+    \]
+    On the other hand, $A_N(z)=z$ whenever $z\in\ker(f-\Id_V)$.
+    Hence the kernel and range in Definition~\ref{def:mean_ergodic_projection}
+    have zero intersection; rank--nullity makes them complementary. Decompose
+    \[
+        x=P_f x+(x-P_f x),\qquad
+        P_f x\in\ker(f-\Id_V),\qquad
+        x-P_f x\in\operatorname{range}(f-\Id_V).
+    \]
+    The two preceding limits give $A_N(x)\to P_f x$. The remaining identities
+    follow from the kernel, range, and idempotence of this projection.
+\end{proof}
+
 \begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
     \lean{IsChannel.posSemidef_parts_of_hermitian_fixedPoint}
     \leanok
