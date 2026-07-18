@@ -19,8 +19,20 @@ The theorem does not assert that an arbitrary positive matrix product operator
 has such a local purification. This additional existence assertion is absent
 from the cited argument and is false without further hypotheses.
 
-## Main result
+## Main definitions
 
+* `MPOTensor.blockSpinAncillaEquiv`: regroups the spin and ancillary
+  configurations of a block.
+* `MPOTensor.blockAncillaryTraceMap`: traces the ancillary configuration of a
+  block.
+
+## Main results
+
+* `MPOTensor.blockAncillaryTraceMap_isKrausCPTP`: the block ancillary trace is
+  trace-preserving and completely positive.
+* `MPOTensor.blockAncillaryTraceMap_apply` and
+  `MPOTensor.tensorMapBoth_blockAncillaryTraceMap_apply`: coefficient formulas
+  for one block and for the two sides of a cut.
 * `MPOTensor.mutualInfoChain_le_of_bipartitioned_channel_image`: a matrix product
   density operator obtained by local channels from a pure matrix product state
   satisfies the bound determined by the purifying bond dimension.
