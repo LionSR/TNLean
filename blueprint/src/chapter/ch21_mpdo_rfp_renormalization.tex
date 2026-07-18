@@ -18,6 +18,30 @@ section.
 % The definition above is transfer-map idempotence, distinct from the paper's
 % Definition 4.1 (`RFPMixedTS`); the latter is stated below as def:is_rfp_via_ts.
 
+\begin{definition}[Completely positive map in rectangular Kraus form]
+    \label{def:is_kraus_cp}
+    \lean{IsKrausCP}
+    \leanok
+    A linear map $\mathcal S$ between matrix algebras is \emph{completely
+    positive in rectangular Kraus form} if there are finitely many operators
+    $A_i:H\to K$ such that
+    \[
+        \mathcal S(X)=\sum_i A_iXA_i^\dagger.
+    \]
+    No trace-preservation normalization is imposed.
+\end{definition}
+
+\begin{lemma}[Basic properties of rectangular Kraus complete positivity]
+    \label{lem:is_kraus_cp_basic}
+    \lean{IsKrausCP.map_posSemidef, IsKrausCPTP.isKrausCP}
+    \leanok
+    \uses{def:is_kraus_cp, def:is_kraus_cptp}
+    A map in rectangular Kraus form sends positive semidefinite matrices to
+    positive semidefinite matrices.  Every trace-preserving completely positive
+    map in rectangular Kraus form has this property after its normalization
+    condition is forgotten.
+\end{lemma}
+
 \begin{definition}[Trace-preserving completely positive map]
     \label{def:is_kraus_cptp}
     \lean{IsKrausCPTP}
@@ -122,6 +146,15 @@ section.
     positive.
 \end{theorem}
 
+\begin{lemma}[A single-Kraus map is completely positive]
+    \label{lem:mpdo_single_kraus_map_cp}
+    \lean{singleKrausMap_isKrausCP}
+    \leanok
+    \uses{def:is_kraus_cp, def:mpdo_single_kraus_map}
+    For every rectangular operator $V:H\to K$, the map
+    $X\mapsto VXV^\dagger$ is completely positive.
+\end{lemma}
+
 \begin{definition}[Matrix reindexing along an equivalence]
     \label{def:mpdo_equiv_reindex_map}
     \lean{Matrix.equivReindexMap}
@@ -177,6 +210,16 @@ section.
         = \sum_{j} B_j^\dagger B_j = I.
     \]
 \end{proof}
+
+\begin{lemma}[Composition of completely positive rectangular Kraus maps]
+    \label{lem:is_kraus_cp_comp}
+    \lean{isKrausCP_comp}
+    \leanok
+    \uses{def:is_kraus_cp}
+    The composition of two completely positive rectangular Kraus maps is
+    completely positive.  If the two families are $(A_i)_i$ and $(B_j)_j$,
+    the composite family is $(A_iB_j)_{i,j}$.
+\end{lemma}
 
 \begin{theorem}[Tensor extension preserves trace-preserving complete positivity]
     \label{thm:mpdo_tensor_map_id_cptp}
@@ -238,6 +281,15 @@ section.
     The displayed family is already a Kraus representation, and the assumed
     identity is precisely its trace-preserving normalization.
 \end{proof}
+
+\begin{lemma}[A rectangular Kraus family is completely positive]
+    \label{lem:mpdo_rectangular_kraus_map_cp}
+    \lean{Matrix.rectangularKrausMap_isKrausCP}
+    \leanok
+    \uses{def:is_kraus_cp, def:mpdo_rectangular_kraus_map}
+    Every finite rectangular Kraus family defines a completely positive map,
+    without a resolution-of-identity assumption.
+\end{lemma}
 
 \begin{theorem}[Relabeling a rectangular Kraus family]
     \label{thm:mpdo_rectangular_kraus_map_equiv}
@@ -476,6 +528,16 @@ section.
     \]
     while its off-diagonal entries vanish.
 \end{proof}
+
+\begin{lemma}[Positive state preparation is completely positive]
+    \label{lem:mpdo_state_preparation_cp}
+    \lean{Matrix.preparationMap_isKrausCP}
+    \leanok
+    \uses{def:is_kraus_cp, def:mpdo_state_preparation_map,
+      thm:mpdo_state_preparation_kraus_action}
+    If $\rho\geq0$, then the map $X\mapsto X\otimes\rho$ is completely
+    positive.  No trace normalization is required.
+\end{lemma}
 
 \begin{lemma}[State preparation is trace-preserving completely positive]
     \label{lem:mpdo_state_preparation_cptp}

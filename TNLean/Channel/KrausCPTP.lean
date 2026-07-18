@@ -20,6 +20,7 @@ dimensions.
 
 ## Main declarations
 
+* `IsKrausCP`: a completely positive map in rectangular Kraus form.
 * `IsKrausCPTP`: a trace-preserving completely positive map in rectangular
   Kraus form.
 * `IsKrausCPTP.trace_map`: a map satisfying `IsKrausCPTP` preserves trace.
@@ -59,6 +60,19 @@ dimensions.
 
 open scoped Matrix BigOperators ComplexOrder
 
+/-- A **completely positive map** in rectangular Kraus form
+`S(X) = ∑ᵢ Aᵢ X Aᵢ†`.  Rectangular Kraus operators
+`Aᵢ : Matrix β α ℂ` allow different input and output dimensions.
+
+This is the dimension-changing Kraus notion used for the support formula of
+the Petz transpose map in Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem `thm:petz`, equation
+`eq:transpose:channel`.  No trace-preservation condition is included. -/
+def IsKrausCP {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) : Prop :=
+  ∃ (r : ℕ) (A : Fin r → Matrix β α ℂ),
+    ∀ X, S X = ∑ i, A i * X * (A i)ᴴ
+
 /-- A **trace-preserving completely positive map** in Kraus form
 `S(X) = ∑ᵢ Aᵢ X Aᵢ†` with `∑ᵢ Aᵢ† Aᵢ = I`; rectangular Kraus operators
 `Aᵢ : β × α` allow different in/out dimensions. The Kraus form itself gives
@@ -69,6 +83,24 @@ def IsKrausCPTP {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [Deci
     (S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) : Prop :=
   ∃ (r : ℕ) (A : Fin r → Matrix β α ℂ),
     (∀ X, S X = ∑ i, A i * X * (A i)ᴴ) ∧ (∑ i, (A i)ᴴ * A i = (1 : Matrix α α ℂ))
+
+/-- A trace-preserving completely positive map is completely positive after
+forgetting the resolution-of-identity condition. -/
+theorem IsKrausCPTP.isKrausCP
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S) : IsKrausCP S := by
+  obtain ⟨r, A, hA, _⟩ := hS
+  exact ⟨r, A, hA⟩
+
+/-- A completely positive map in rectangular Kraus form sends positive
+semidefinite matrices to positive semidefinite matrices. -/
+theorem IsKrausCP.map_posSemidef
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCP S)
+    {X : Matrix α α ℂ} (hX : X.PosSemidef) : (S X).PosSemidef := by
+  obtain ⟨r, A, hA⟩ := hS
+  rw [hA]
+  exact Matrix.posSemidef_sum _ fun i _ => hX.mul_mul_conjTranspose_same (A i)
 
 /-- A completely positive map in rectangular Kraus form sends positive
 semidefinite matrices to positive semidefinite matrices. -/
@@ -129,6 +161,14 @@ noncomputable alias sandwichMap := singleKrausMap
     singleKrausMap V X = V * X * Vᴴ :=
   rfl
 
+/-- Conjugation by one rectangular matrix is completely positive. -/
+theorem singleKrausMap_isKrausCP {α β : Type*}
+    [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (V : Matrix β α ℂ) : IsKrausCP (singleKrausMap V) := by
+  refine ⟨1, fun _ ↦ V, ?_⟩
+  intro X
+  simp
+
 @[deprecated singleKrausMap_apply (since := "2026-07-16")]
 alias sandwichMap_apply := singleKrausMap_apply
 
@@ -175,6 +215,25 @@ theorem isKrausCPTP_comp {α β γ : Type*} [Fintype α] [DecidableEq α] [Finty
         = (B j)ᴴ * ((∑ i : Fin r, (A i)ᴴ * A i) * B j) := by
       simp only [Matrix.sum_mul, Matrix.mul_sum, Matrix.mul_assoc]
     rw [step, hA_tp, Matrix.one_mul]
+
+/-- Composition preserves complete positivity for rectangular Kraus maps. -/
+theorem isKrausCP_comp {α β γ : Type*} [Fintype α] [DecidableEq α] [Fintype β]
+    [DecidableEq β] [Fintype γ] [DecidableEq γ]
+    {T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ}
+    {S : Matrix β β ℂ →ₗ[ℂ] Matrix γ γ ℂ}
+    (hT : IsKrausCP T) (hS : IsKrausCP S) : IsKrausCP (S ∘ₗ T) := by
+  obtain ⟨r, A, hA_form⟩ := hS
+  obtain ⟨s, B, hB_form⟩ := hT
+  refine ⟨r * s, fun k ↦ A (finProdFinEquiv.symm k).1 *
+    B (finProdFinEquiv.symm k).2, ?_⟩
+  intro X
+  rw [LinearMap.comp_apply, hB_form X, hA_form,
+    ← finProdFinEquiv.sum_comp (fun k ↦ (A (finProdFinEquiv.symm k).1 *
+      B (finProdFinEquiv.symm k).2) * X *
+      (A (finProdFinEquiv.symm k).1 * B (finProdFinEquiv.symm k).2)ᴴ)]
+  simp only [Equiv.symm_apply_apply, Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl fun i _ ↦ ?_
+  simp only [Matrix.mul_sum, Matrix.sum_mul, Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
 namespace Matrix
 
@@ -270,6 +329,17 @@ theorem rectangularKrausMap_isKrausCPTP
   · intro X
     exact DFunLike.congr_fun (rectangularKrausMap_equiv e A).symm X
   · exact (e.symm.sum_comp fun i => (A i)ᴴ * A i).trans hA
+
+/-- Every finite rectangular Kraus family defines a completely positive map;
+no resolution-of-identity condition is required. -/
+theorem rectangularKrausMap_isKrausCP
+    {κ α β : Type*} [Fintype κ] [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (A : κ → Matrix β α ℂ) :
+    IsKrausCP (rectangularKrausMap A) := by
+  let e := Fintype.equivFin κ
+  refine ⟨Fintype.card κ, fun i ↦ A (e.symm i), ?_⟩
+  intro X
+  exact DFunLike.congr_fun (rectangularKrausMap_equiv e A).symm X
 
 section ControlledDirectSum
 
@@ -708,6 +778,15 @@ theorem rectangularKrausMap_preparationKraus_eq
   rw [hRRentry, Matrix.mul_apply, Finset.mul_sum]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [preparationKraus_mul_conjTranspose_apply, hRherm.apply]
+
+/-- Adjoining a positive-semidefinite matrix is completely positive, without
+any normalization assumption on the matrix being adjoined. -/
+theorem preparationMap_isKrausCP
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef) :
+    IsKrausCP (preparationMap (α := α) ρ) := by
+  rw [← rectangularKrausMap_preparationKraus_eq ρ hρ]
+  exact rectangularKrausMap_isKrausCP _
 
 private theorem preparationKraus_sum_conjTranspose_mul
     {α β : Type*} [Fintype α] [DecidableEq α]
