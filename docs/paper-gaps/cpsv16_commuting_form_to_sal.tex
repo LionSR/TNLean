@@ -120,7 +120,8 @@ $S_{\beta_rC}$, and proves the two direct-sum block identities printed in the
 source.  Its hypotheses are exactly the source hypotheses: Hermiticity of both
 overlapping operators and commutation of their natural three-factor lifts.
 
-The cyclic three-site bridge is now available.  The equivalence
+The cyclic three-site coordinate identification is now available.  The
+equivalence
 \leanid{MPOTensor.threeSiteOverlappingEquiv} sends a three-site configuration
 to the ordered left-associated triple.  Under this one common equivalence,
 \leanid{MPOTensor.EtaLocalStructureData.reindex_bondAt_zero_eq_leftOverlappingLift}
@@ -164,7 +165,8 @@ The gap can be removed in the following stages.
 \begin{enumerate}
 \item Apply
 \leanid{Matrix.exists_unitary_blockActions_of_overlappingLifts_commute} to the
-pair-indexed bond through the proved three-site bridge, and transport its
+pair-indexed bond through the proved three-site coordinate identification, and
+transport its
 single-site direct-sum decomposition through the translation-invariant bond
 family.  This must produce the neighboring operators $\eta_{k,h}$ and the
 global form \emph{sigmaNK2} without assuming a Hayashi decomposition.
