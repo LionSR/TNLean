@@ -162,8 +162,8 @@ theorem isSAL_of_isSSAEquality_tripartite_m (M : MPOTensor d D)
 imply saturation of the area law, provided the periodic operators are positive
 and have nonzero trace.
 
-This isolates the entropy-theoretic conclusion used in the proof of the
-proposition labelled 4to2: the direct-sum tensor-factor decomposition on the
+This isolates the entropy-theoretic conclusion used in the proof of source
+Proposition 4to2: the direct-sum tensor-factor decomposition on the
 middle site implies equality in strong subadditivity, and the latter equalities
 give SAL.
 
@@ -175,7 +175,7 @@ and the subsequent ZCL trace factorization. This missing implication is document
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition 4to2, lines
-1597--1619. -/
+1606--1612. -/
 theorem isSAL_of_quantumMarkovDecomposition_tripartite_m
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (htrace : ∀ N, 0 < N → (mpo M N).trace ≠ 0)

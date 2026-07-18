@@ -435,9 +435,10 @@ end CommutingFormData
 length at least `2` admits a commuting-form witness for the corresponding MPO
 operator. The bond may depend on the chain length.
 
-This is weaker than the hypothesis of Proposition 4to2 in
+This is weaker than the hypothesis of source Proposition 4to2 in
 arXiv:1606.00608, lines 1597--1619, which refers back to the single
-translation-invariant bond family in equation expression. That source
+translation-invariant bond family in the equation carrying the source label
+expression. That source
 hypothesis is represented by `EtaLocalStructureData`: one bond realizes every
 finite chain. The distinction and the missing Bravyi--Vyalyi decomposition are
 recorded in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
