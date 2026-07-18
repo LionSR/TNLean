@@ -60,8 +60,10 @@ finite decomposition, the unitary basis change, the weights $p_j$, the component
 density operators, and the block-diagonal equality.} The forward direction is an
 external stand-in: that implication is a theorem of Ruskai, of
 Hayden--Jozsa--Petz--Winter, and of Hayashi, but its proof rests on
-recovery-map and Petz theory not formalized here. The reverse direction is now
-proved from the entropy-additivity sub-lemmas listed below.
+the full saturation-to-recovery theorem, a trace-preserving extension of the
+support Petz map, and the structural analysis of recovered states, none of
+which is yet formalized here. The reverse direction is now proved from the
+entropy-additivity sub-lemmas listed below.
 
 \section{The point at issue: only the forward direction is consumed}
 
@@ -75,8 +77,10 @@ downstream. Its proof is the deep part of the characterization: it requires
 recovery-map theory and the Petz transpose channel, that is, the analysis of
 when the data-processing inequality for relative entropy is saturated and the
 reconstruction of the discarded subsystem from a recovery map. This recovery-map
-and Petz machinery is absent from the underlying library, which is why the
-forward direction is axiomatized rather than proved.
+argument still lacks the saturation-to-recovery theorem, the complementary
+trace-preserving extension of the support Petz map, and the subsequent
+structural analysis, which is why the forward direction is axiomatized rather
+than proved.
 
 \paragraph{Reverse direction (tractable, currently unused).}
 The implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} --- a state of the
@@ -145,20 +149,51 @@ The reverse half uses the following entropy-additivity sub-lemmas, all proved in
 
 With these five facts the reverse implication is a finite computation, now
 carried out in \path{TNLean/Analysis/EntropyMarkovReverse.lean}; the
-forward implication remains an axiom until recovery-map and Petz theory are
-available.
+forward implication remains an axiom until the full saturation-to-recovery
+theorem, the complementary trace-preserving extension, and the structural
+analysis are available.
+
+\section{Support-level Petz infrastructure now available}
+
+The support formula for the Petz transpose map associated with a right partial
+trace is now formalized for every positive semidefinite reference $\sigma$.
+Writing $\tau=\operatorname{tr}_R\sigma$, the map is
+\begin{align}
+  \mathcal R_\sigma(X)
+  =\sqrt\sigma\,
+    (\tau^{-1/2}_{\mathrm{supp}}X
+      \tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R)\sqrt\sigma.
+\end{align}
+It is proved completely positive in rectangular Kraus form and satisfies
+$\mathcal R_\sigma(\tau)=\sigma$.
+\footnote{Formal declarations:
+\leanid{Matrix.partialTraceRightPetzMap},
+\leanid{Matrix.partialTraceRightPetzMap_isKrausCP}, and
+\leanid{Matrix.partialTraceRightPetzMap_partialTraceRight} in
+\path{TNLean/Channel/PetzRecovery.lean}.}
+This is exactly the formula stated on the support in
+\cite[Theorem~3, equation~(8)]{HaydenJozsaPetzWinter2004}.
+
+This leaf does not yet supply the full recovery theorem needed by the forward
+strong-subadditivity characterization.  In particular, it neither extends the
+singular formula to a trace-preserving channel on the complementary output
+subspace nor proves that saturation of relative-entropy data processing forces
+recovery of the first argument.  Those two steps, followed by the structural
+analysis of the recovered tripartite state, remain necessary before the
+forward axiom can be removed.
 
 \section{Verdict}
 
 The strong-subadditivity equality characterization is now split into a proved
 reverse direction and an axiomatic forward direction. Only the forward
-direction, equality implies quantum-Markov-chain structure, needs recovery-map
-and Petz theory not present in the library, and it alone is axiomatized. The
-reverse direction, a block-diagonal product state attains equality, is proved
-from entropy additivity over weighted direct sums and tensor factors together
-with unitary and reindexing invariance. Until the recovery-map theory is
-formalized, the forward direction remains the irreducible axiomatic content of
-this characterization.
+direction, equality implies quantum-Markov-chain structure, still needs the
+full saturation-to-recovery theorem, the complementary trace-preserving
+extension of the support Petz map, and the structural analysis of recovered
+states, and it alone is axiomatized. The reverse direction, a block-diagonal
+product state attains equality, is proved from entropy additivity over weighted
+direct sums and tensor factors together with unitary and reindexing invariance.
+Until those remaining steps are formalized, the forward direction remains the
+irreducible axiomatic content of this characterization.
 
 \begin{thebibliography}{9}
 
