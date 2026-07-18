@@ -40,6 +40,33 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
 \end{definition}
 
+\begin{lemma}[Bond dimension one implies irreducibility]
+    \label{lem:bond_dimension_one_irreducible}
+    \lean{MPSTensor.isIrreducibleTensor_of_bondDim_one}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Every tensor with a one-dimensional bond space is irreducible.
+\end{lemma}
+
+\begin{proof}\leanok
+    The only orthogonal projections on a one-dimensional complex vector space
+    are zero and the identity.
+\end{proof}
+
+\begin{lemma}[Normality in bond dimension one]
+    \label{lem:bond_dimension_one_identity_transfer_normal}
+    \lean{MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id}
+    \leanok
+    \uses{def:nt_cpsv, lem:bond_dimension_one_irreducible}
+    A tensor with one-dimensional bond space and identity transfer map is a
+    normal tensor.
+\end{lemma}
+
+\begin{proof}\leanok
+    Irreducibility follows from the preceding lemma. The identity transfer map
+    has spectral radius one, and its only eigenvalue is one.
+\end{proof}
+
 \begin{theorem}[Distinct BNT members are not gauge-phase equivalent]
     \label{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv}
@@ -157,6 +184,50 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     which is the required BNT span at every positive length. Pairwise
     gauge-phase distinction and normality give eventual linear independence,
     completing the converse.
+\end{proof}
+
+\begin{theorem}[Failure of literal BNT uniqueness]
+    \label{thm:cpsv_bnt_uniqueness_counterexample}
+    \lean{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos,
+        def:block_diagonal_tensor}
+    There is a normal tensor with a one-block canonical-form expansion which
+    admits two bases of normal tensors of different cardinalities. Hence the
+    unrestricted uniqueness sentence of
+    \cite[Appendix~A, line~1148]{Cirac2016MPDO_arXiv} does not follow from the
+    literal definition of a basis of normal tensors.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    Take physical dimension two and bond dimension one. Let $A_0$ be supported
+    on physical symbol zero and let $A_1$ be supported on physical symbol one:
+    \[
+        A_0^0=1,\quad A_0^1=0,
+        \qquad
+        A_1^0=0,\quad A_1^1=1.
+    \]
+    Both transfer maps are the identity on the one-dimensional matrix algebra:
+    \[
+        \mathcal E_{A_j}(X)=X \qquad (j=0,1).
+    \]
+    Hence both tensors are normal. At every positive length,
+    \[
+        \ket{V^{(N)}(A_0)}=\ket{0\cdots0},
+        \qquad
+        \ket{V^{(N)}(A_1)}=\ket{1\cdots1}.
+    \]
+    Thus $(A_0)$ and $(A_0,A_1)$ are both bases of normal tensors for $A_0$.
+    Indeed, for every $N\geq 1$, the second expansion is
+    \[
+        \ket{V^{(N)}(A_0)}
+        =1\cdot\ket{V^{(N)}(A_0)}+0\cdot\ket{V^{(N)}(A_1)}.
+    \]
+    Their index sets have cardinalities one and two, so they cannot be related
+    by a bijection.
+    % The missing converse-coverage condition is documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{proof}
 
 \begin{lemma}[Perron gauges preserve primitivity]

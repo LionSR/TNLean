@@ -48,26 +48,6 @@ theorem halvedWeightTensor_eq_halvedDecomp_toTensor :
     halvedWeightTensor =
       (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor := rfl
 
-private lemma scalarUnitTensor_isIrreducibleTensor :
-    IsIrreducibleTensor scalarUnitTensor := by
-  rintro ⟨P, ⟨_, hIdem⟩, hP0, hP1, _⟩
-  have h00 := congrFun (congrFun hIdem (0 : Fin 1)) (0 : Fin 1)
-  simp only [Matrix.mul_apply, Finset.univ_unique, Fin.default_eq_zero,
-    Fin.isValue, Finset.sum_singleton] at h00
-  have hfactor : P 0 0 * (P 0 0 - 1) = 0 := by
-    linear_combination h00
-  rcases mul_eq_zero.mp hfactor with hzero | hone
-  · apply hP0
-    ext a b
-    fin_cases a
-    fin_cases b
-    simpa using hzero
-  · apply hP1
-    ext a b
-    fin_cases a
-    fin_cases b
-    simpa using sub_eq_zero.mp hone
-
 private lemma scalarUnitTensor_evalWord (w : List (Fin 1)) :
     evalWord scalarUnitTensor w = 1 := by
   induction w with
@@ -133,32 +113,9 @@ private theorem scalarUnitTensor_transferMap :
   simp [transferMap_apply, scalarUnitTensor]
 
 private theorem scalarUnitTensor_isNormalTensor :
-    IsNormalTensor scalarUnitTensor := by
-  refine ⟨scalarUnitTensor_isIrreducibleTensor, ?_, ?_⟩
-  · rw [scalarUnitTensor_transferMap]
-    change spectralRadius ℂ
-      (1 : Matrix (Fin 1) (Fin 1) ℂ →L[ℂ] Matrix (Fin 1) (Fin 1) ℂ) = 1
-    exact spectrum.spectralRadius_one
-  · rw [scalarUnitTensor_transferMap]
-    apply isPrimitive_of_unique_norm_one LinearMap.id
-      (1 : Matrix (Fin 1) (Fin 1) ℂ)
-    · rfl
-    · exact one_ne_zero
-    · intro μ hμ hμnorm
-      obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
-      have hEq := hX.apply_eq_smul
-      have hX00 : X 0 0 ≠ 0 := by
-        intro hzero
-        apply hX.2
-        ext a b
-        fin_cases a
-        fin_cases b
-        simpa using hzero
-      have hEq00 := congrFun (congrFun hEq (0 : Fin 1)) (0 : Fin 1)
-      simp only [LinearMap.id_apply, Matrix.smul_apply] at hEq00
-      simp only [smul_eq_mul] at hEq00
-      apply mul_right_cancel₀ hX00
-      simpa using hEq00.symm
+    IsNormalTensor scalarUnitTensor :=
+  isNormalTensor_of_bondDim_one_of_transferMap_eq_id
+    scalarUnitTensor scalarUnitTensor_transferMap
 
 /-- The raw-weight decomposition of `halvedWeightTensor` is a BNT canonical
 form in the line-246 normalization of arXiv:1606.00608. -/
@@ -170,7 +127,7 @@ theorem halvedWeightTensor_isBNTCanonicalForm :
       simp
     basis_irreducible := by
       intro j
-      exact scalarUnitTensor_isIrreducibleTensor
+      exact isIrreducibleTensor_of_bondDim_one scalarUnitTensor
     basis_left_canonical := by
       intro j
       simp [IsLeftCanonical, scalarUnitTensor]
