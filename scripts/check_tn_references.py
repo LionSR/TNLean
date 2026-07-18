@@ -38,7 +38,23 @@ REFERENCE_CALLS = {
         r"\TNVerticalWord{w}{(0,0)}{M_\alpha}{closed}"
         r"\end{TNDiagram}"
     ),
-    "dense_fusion_tree": r"\TNMPDOFixedFinalFusionBracketings",
+    "dense_fusion_tree": (
+        r"\begin{TNEquationRow}[normal]"
+        r"\TNTerm[normal]{"
+        r"\TNMPDOLeftCofusionTree{ffLeft}{at=origin}"
+        r"{U_{\alpha,\beta}^{\delta}}"
+        r"{U_{\delta,\gamma}^{\varepsilon}}"
+        r"{\alpha}{\beta}{\gamma}{\varepsilon}"
+        r"{((\alpha\beta)\gamma)}}"
+        r"\TNRelation{\xleftrightarrow{F_{\varepsilon}^{\alpha\beta\gamma}}}"
+        r"\TNTerm[normal]{"
+        r"\TNMPDORightCofusionTree{ffRight}{at=origin}"
+        r"{U_{\beta,\gamma}^{\eta}}"
+        r"{U_{\alpha,\eta}^{\varepsilon}}"
+        r"{\alpha}{\beta}{\gamma}{\varepsilon}"
+        r"{(\alpha(\beta\gamma))}}"
+        r"\end{TNEquationRow}"
+    ),
     "parallel_sector_buses": (
         r"\begin{TNDiagram}[normal]"
         r"\TNSectorBus{a}{(-1.5,0)}{(1.5,0)}{\alpha}"
