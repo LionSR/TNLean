@@ -168,6 +168,7 @@ import TNLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance
 import TNLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity
 import TNLean.Channel.Schwarz.RelativeEntropyDataProcessing
 import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
+import TNLean.Channel.Schwarz.SSAEqualityDPI
 import TNLean.Channel.Schwarz.WeylTwirl
 import TNLean.Channel.Schwarz.PositiveOnAbelian
 import TNLean.Channel.Schwarz.SchwarzNormal
