@@ -157,25 +157,83 @@ show that a small MPO bond does not control the bond dimension of an exact local
 purification; they neither prove nor disprove the unrestricted
 $4\log D$ mutual-information estimate.
 
-\section{The iterated limit}
+\section{The iterated limit is false without an aperiodicity hypothesis}
 
-Even a uniform finite-chain estimate does not by itself define the inner limit
+The normalized periodic states need not converge on local algebras.  Consider
+the physical dimension two, bond dimension three tensor whose only nonzero
+physical slices are
 \[
-  \lim_{N\to\infty} I_L^{(N)}.
+  M^{00}=\operatorname{diag}(1,0,0),\qquad
+  M^{11}=\operatorname{diag}(0,1,-1).
 \]
-For fixed $L$, one must first specify an infinite-chain state or prove
-convergence of the normalized periodic density operators on every local
-algebra.  Monotonicity in $L$ at each fixed finite $N$ does not supply this
-thermodynamic-limit construction.
+For every positive chain length, contraction of the virtual trace gives
+\[
+  \rho^{(N)}(M)
+  =\lvert 0^N\rangle\!\langle 0^N\rvert
+  +\bigl(1+(-1)^N\bigr)
+    \lvert 1^N\rangle\!\langle 1^N\rvert.
+\]
+Thus the operator is positive semidefinite for every $N\geq1$, including odd
+lengths, and
+\[
+  \tr\rho^{(N)}(M)=2+(-1)^N\ne0.
+\]
+This is therefore an MPDO at exactly the hypothesis set of Proposition~4.5.
 
-Accordingly, the precise finite-chain result currently available for arbitrary
-MPDOs is only the monotonicity
+At odd lengths the normalized state is
+\[
+  \widehat\rho^{(N)}(M)
+  =\lvert0^N\rangle\!\langle0^N\rvert,
+\]
+whereas at positive even lengths it is
+\[
+  \widehat\rho^{(N)}(M)
+  =\frac13\lvert0^N\rangle\!\langle0^N\rvert
+   +\frac23\lvert1^N\rangle\!\langle1^N\rvert.
+\]
+In particular, the all-zero entry of the one-site reduced state alternates
+between $1$ and $1/3$, so the normalized local states have no thermodynamic
+limit.
+
+The mutual information itself also oscillates.  For any fixed $L\geq1$ and
+all $N>L$, the odd-length state is a product state and hence
+\[
+  I_L^{(N)}=0.
+\]
+For even $N$, both nonempty marginals and the full state have the two nonzero
+eigenvalues $1/3$ and $2/3$.  Writing
+\[
+  h_2(1/3)
+  =-\frac13\log\frac13-\frac23\log\frac23>0,
+\]
+one obtains
+\[
+  I_L^{(N)}=h_2(1/3)+h_2(1/3)-h_2(1/3)=h_2(1/3).
+\]
+Hence $\lim_{N\to\infty}I_L^{(N)}$ does not exist.  The eigenvalue $-1$ of the
+physical-trace transfer is the peripheral sector responsible for the parity
+oscillation.  Primitivity or another aperiodicity assumption would exclude
+this example, but no such assumption occurs in Proposition~4.5.
+
+The finite-chain form, positivity, trace formula, alternating normalized
+entries, alternating one-site reduced entries, and nonconvergence of the
+one-site entry are formalized.
+\footnote{Formal declarations:
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.mpo_parityTensor_eq_diagonal},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.parityTensor_isMPDO},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.trace_mpo_parityTensor},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_odd},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_even},
+and
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_reducedBlockState_one_zero_zero}
+in \doclink{TNLean/MPS/MPDO/ThermodynamicLimitCounterexample}.}
+
+Accordingly, the precise unconditional result that remains from the cited
+argument is the finite-chain monotonicity
 \[
   I_L^{(N)}\leq I_{L+1}^{(N)}
   \qquad (2L+1\leq N).
 \]
-The bound and the iterated limit are not established at the source hypothesis
-set by the cited arguments or by the present development.
 
 \section{Resolution}
 
@@ -211,20 +269,17 @@ This result does not supply a local purification for an arbitrary positive
 MPO.  The source itself warns at the purification step that such a
 representation need not exist, and the no-go results above show that this
 missing representation cannot be recovered uniformly from MPO positivity and
-bond dimension.  Two questions therefore remain for the full statement of
-Proposition~4.5.
-\begin{enumerate}
-  \item Determine whether the finite-chain estimate is true for arbitrary
-    positive periodic MPO families of bond dimension $D$.  A proof must use
-    only the hypotheses of Proposition~4.5, and a counterexample must satisfy
-    positivity for every chain length.  No operator-Schmidt-rank implication is
-    assumed here.
-  \item Construct the thermodynamic limit required for the inner limit in the
-    proposition.
-\end{enumerate}
+bond dimension.
 
-Until both tasks are completed, the unrestricted bound and limit clauses of
-Proposition~4.5 remain unformalized.  This obstruction is tracked by issue
+The remaining unresolved question is whether the finite-chain estimate is true
+for arbitrary positive periodic MPO families of bond dimension $D$.  A proof
+must use only the hypotheses of Proposition~4.5, and a counterexample must
+satisfy positivity for every chain length.  No operator-Schmidt-rank
+implication is assumed here.
+
+The thermodynamic-limit clause of Proposition~4.5 is false at its stated
+hypothesis set, while the unrestricted finite-chain bound remains
+unformalized.  These two conclusions are tracked by issue
 \href{https://github.com/LionSR/TNLean/issues/4169}{\#4169} under the MPDO
 coverage audit
 \href{https://github.com/LionSR/TNLean/issues/2380}{\#2380}.
