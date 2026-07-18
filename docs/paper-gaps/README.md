@@ -166,6 +166,15 @@ For Wolf Chapter 3 positive maps:
   Wolf Example 3.1.  The general cyclic reciprocal estimate, and hence
   positivity of \(T_C\) for the full range \(1\le n\le d-2\), remain open.
 
+For Wolf Chapter 5 Schwarz maps:
+
+- `wolf_ch5_abstract_multiplicative_domains.tex` distinguishes the
+  source-faithful multiplicative-domain theorem for an arbitrary linear map
+  satisfying the Schwarz inequality from the older unital-Kraus
+  specialization. The abstract one-variable theorem is now proved; the
+  two-variable inverse-on-range inequality and its equality criterion remain
+  open.
+
 For the periodic (irreducible-form) MPS Fundamental Theorem of
 arXiv:1708.00029, the overlap-dichotomy development has one route-alignment
 note.

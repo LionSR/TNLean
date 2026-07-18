@@ -190,6 +190,7 @@ import TNLean.Channel.PositiveMapDetection
 import TNLean.Channel.SchmidtNumberFactors
 import TNLean.Channel.Separable
 import TNLean.Channel.Schwarz.MultiplicativeDomain
+import TNLean.Channel.Schwarz.AbstractMultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.Channel.FixedPoint.Algebra
