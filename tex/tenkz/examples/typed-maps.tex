@@ -28,12 +28,23 @@
   \end{tenkzcd}
 \]
 
-% H^Omega_{k,h} is the middle-subspin Hilbert space.  The completed
-% density overline Omega_{k,h} acts on this space and is adjoined by T_1.
+% H^Omega_{k,h} is the middle-subspin Hilbert space.  The normalized active
+% density and its completed extension act on this space and are adjoined by T_1.
 \[
   \mathcal H^{\Omega}_{k,h}
-  =\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h),
+  =\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h).
+\]
+On an active pair, let
+\[
+  \widehat\Omega_{k,h}
+  =\frac{1}{a_kb_h}\bigoplus_l
+    (\eta_{k,l}\otimes\eta_{l,h}),
   \qquad
+  \overline\Omega_{k,h}=\widehat\Omega_{k,h}.
+\]
+On an inactive pair, $\overline\Omega_{k,h}$ denotes a chosen positive
+trace-one density on $\mathcal H^{\Omega}_{k,h}$.  Thus, in every case,
+\[
   \overline\Omega_{k,h}\in
     \operatorname{End}(\mathcal H^{\Omega}_{k,h}),
   \quad

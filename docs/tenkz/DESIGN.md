@@ -170,8 +170,8 @@ For the CPSV refinement, the middle-subspin Hilbert space is
   =\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h).
 \]
 
-The normalized active density and the completed density are distinct operators
-on this space. On an active pair,
+The notation distinguishes the normalized active density from its total
+completion on this space. On an active pair,
 
 \[
   \widehat\Omega_{k,h}
