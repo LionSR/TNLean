@@ -126,6 +126,15 @@ trace preserving precisely when the precompression output lies in its active
 image.  The established image identity is restricted to the source-generated
 contractions.
 
+There is also a domain bridge between the two results.  The present
+full-support theorem concerns an endomorphism of one full matrix algebra,
+whereas the transported composites act on dependent direct sums of matrix
+algebras.  Applying the theorem therefore requires either a trace-preserving
+Schwarz extension through the block-diagonal embedding and block projection,
+with its fixed-point space identified with that of the direct-sum map, or a
+direct-sum version of the fixed-point theorem.  Neither bridge is currently
+formalized.
+
 \section{Sector relabelling uses positivity, not linear isomorphism}
 
 After proving mutual invertibility, CPSV16 cites the argument of
@@ -167,7 +176,9 @@ order:
     \item prove complete positivity and trace preservation of the transported
           maps on the full sector algebras, including the required active-image
           statement for every input;
-    \item formalize the density-weighted fixed-point theorem needed to prove
+    \item complete the density-weighted fixed-point theorem and transfer it to
+          the sector direct sums, either through a block-diagonal full-matrix
+          extension or through a direct-sum theorem, to prove
           $\dim C_L(\mathcal F)\leq\dim\mathcal F$ for the fixed-point spaces
           of $\widetilde S\widetilde T$ and $\widetilde T\widetilde S$;
     \item combine this dimension bound with the fixed contraction families,
