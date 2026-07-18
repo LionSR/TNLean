@@ -234,9 +234,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $K$ consequently give those for $K_P$.
 \end{proof}
 
-\begin{theorem}[The restricted commuting bond has a supported commuting lift]
+\begin{theorem}[The restricted commuting product has a supported ambient realization]
     \label{thm:mpdo_physical_support_restriction_bond}
-    \lean{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_liftedTranslationInvariantBondData}
+    \lean{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}
     \leanok
     \uses{thm:mpdo_physical_support_restriction_sal}
     Let $K=V K_P V^*$ be a physical support restriction of an MPO tensor
@@ -247,6 +247,10 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     commute pairwise on every such ambient chain, and
     \[
         (P\otimes P)B(P\otimes P)=B.
+    \]
+    Moreover, for every $N\geq2$ one has the exact identity
+    \[
+        \rho^{(N)}(K)=\prod_{i=0}^{N-1}B_{i,i+1}.
     \]
 \end{theorem}
 
@@ -265,6 +269,15 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     the product in the reverse order.  The two-site periodic chain is handled
     by the same argument with the two oppositely oriented bonds.  Locality and
     cyclic translation then give pairwise commutativity for every $N\geq 2$.
+
+    Finally, isometric conjugation preserves every nonempty product of
+    restricted bonds.  The image of each restricted bond is the corresponding
+    lifted bond multiplied by the projection onto the range of
+    $V^{\otimes N}$.  The support projections contributed by the first
+    $N-1$ bonds cover all sites and leave the full commuting product fixed.
+    Hence the range projection disappears, and the restricted finite-chain
+    product identity becomes the asserted ambient identity, still with
+    normalization scalar one.
 \end{proof}
 
 \begin{definition}[Orthogonally supported commuting sector products]
