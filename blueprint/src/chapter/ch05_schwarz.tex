@@ -1264,17 +1264,18 @@ maps.
     \leanok
     Let $f : \MN{D} \to \C$ be a complex-linear functional, where $D>0$.  If
     $f(X) \geq 0$ for every $X \geq 0$ and $f(\Id)=1$, then there is a density
-    matrix $\rho \in \MN{D}$ such that
+    matrix $\rho \in \MN{D}$ such that, for every $X \in \MN{D}$,
     \[
-        f(X) = \tr(\rho X)
+        f(X) = \tr(\rho X).
     \]
-    for every $X \in \MN{D}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_pairing_adjoint_identity, thm:trace_pairing_adjoint_positive}
-    Define $F : \MN{D} \to \MN{D}$ by $F(X) = f(X)\Id$.  This map is positive.
+    \uses{thm:trace_pairing_adjoint_identity, thm:trace_pairing_adjoint_positive,
+      def:mpdo_faithful_uniform_density, thm:mpdo_faithful_uniform_density}
+    Define $F : \MN{D} \to \MN{D}$ by $F(X) = f(X)\Id$; for $X \geq 0$ one has
+    $f(X) \geq 0$, so $F(X) = f(X)\Id \geq 0$ and $F$ is positive.
     Set $\sigma = D^{-1}\Id$ and $\rho = F^*(\sigma)$.  Positivity of the
     trace-pairing adjoint gives $\rho \geq 0$, while the adjoint identity gives
     \[
