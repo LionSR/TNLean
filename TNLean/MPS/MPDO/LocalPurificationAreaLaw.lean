@@ -39,6 +39,8 @@ from the cited argument and is false without further hypotheses.
   across every cut.
 * `MPOTensor.IsLPDO.exists_bipartitionedNormalizedMPO_eq_blockAncillaryTrace`:
   an LPDO admits purifying data realizing this block-channel identity.
+* `MPOTensor.IsLPDO.exists_forall_bipartitionedNormalizedMPO_eq_blockAncillaryTrace`:
+  one choice of purifying data realizes the identity across every cut.
 * `MPOTensor.mutualInfoChain_le_of_bipartitioned_channel_image`: a matrix product
   density operator obtained by local channels from a pure matrix product state
   satisfies the bound determined by the purifying bond dimension.
@@ -275,8 +277,8 @@ theorem bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
   rw [hjoin i x κ, hjoin j y κ]
 
 /-- An LPDO admits a local-purification representation for which the normalized
-finite-chain operator across every cut is obtained from the purifying operator by
-the ancillary trace on each block.
+finite-chain operator across a prescribed cut is obtained from the purifying
+operator by the ancillary trace on each block.
 
 This is the existential form of the finite-chain channel identity in the
 mixed-PEPS purification argument preceding equation (4) of arXiv:0704.3906,
@@ -300,6 +302,34 @@ theorem IsLPDO.exists_bipartitionedNormalizedMPO_eq_blockAncillaryTrace
             (doubledTensor (purificationTensor A)) N L K h) := by
   obtain ⟨dK, D', A, e, hcoeff⟩ := hLPDO
   exact ⟨dK, D', A,
+    bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
+      M A e hcoeff N L K h⟩
+
+/-- An LPDO admits a single local-purification representation whose normalized
+finite-chain operator is obtained by ancillary traces across every cut.
+
+This is the cut-uniform form of the finite-chain channel identity in the
+mixed-PEPS purification argument preceding equation (4) of arXiv:0704.3906,
+using the local purification of arXiv:1606.00608, Section 4.3.
+
+**Scope restriction:** the conclusion remains restricted to LPDOs and exposes
+the purifying bond dimension. It is not the unrestricted finite-chain estimate
+in the MPO bond dimension asserted for every positive MPDO in arXiv:1606.00608,
+Proposition 4.5; see
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+theorem IsLPDO.exists_forall_bipartitionedNormalizedMPO_eq_blockAncillaryTrace
+    {M : MPOTensor d D} (hLPDO : IsLPDO M) :
+    ∃ (dK D' : ℕ)
+      (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
+      ∀ (N L K : ℕ) (h : N = L + K),
+        bipartitionedNormalizedMPO M N L K h =
+          Matrix.tensorMapBoth
+            (blockAncillaryTraceMap d dK L)
+            (blockAncillaryTraceMap d dK K)
+            (bipartitionedNormalizedMPO
+              (doubledTensor (purificationTensor A)) N L K h) := by
+  obtain ⟨dK, D', A, e, hcoeff⟩ := hLPDO
+  exact ⟨dK, D', A, fun N L K h ↦
     bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
       M A e hcoeff N L K h⟩
 

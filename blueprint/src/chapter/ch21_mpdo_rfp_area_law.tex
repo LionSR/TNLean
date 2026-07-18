@@ -734,6 +734,31 @@
     Theorem~\ref{thm:lpdo_block_channel_image} to its purifying tensor.
 \end{proof}
 
+\begin{theorem}[LPDOs admit a cut-uniform block-channel representation]
+    \label{thm:lpdo_exists_cut_uniform_block_channel_image}
+    \lean{MPOTensor.IsLPDO.%
+      exists_forall_bipartitionedNormalizedMPO_eq_blockAncillaryTrace}
+    \leanok
+    \uses{def:lpdo, thm:lpdo_block_channel_image}
+    Let $M$ be an LPDO.  There exist an ancillary dimension $d_K$, a
+    purifying bond dimension $D'$, and a local-purification family $A$, all
+    independent of the cut, such that for every decomposition $N=L+K$,
+    \[
+      \sigma^{(N)}_{L:K}(M)
+      =\left(\operatorname{Tr}_{\mathrm{anc},L}\otimes
+        \operatorname{Tr}_{\mathrm{anc},K}\right)
+        \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right),
+    \]
+    where $\widetilde A$ is the purifying MPS tensor associated with $A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:lpdo, thm:lpdo_block_channel_image}
+    Choose one local-purification representation of $M$.  For an arbitrary
+    decomposition $N=L+K$, apply
+    Theorem~\ref{thm:lpdo_block_channel_image} to the same purifying tensor.
+\end{proof}
+
 \begin{theorem}[Mutual-information bound for a local-channel image]
     \label{thm:local_channel_image_mutual_info_bound}
     \lean{MPOTensor.mutualInfoChain_le_of_bipartitioned_channel_image}
