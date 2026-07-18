@@ -20,6 +20,12 @@
     \]
 \end{definition}
 
+% **Scope restriction (rank-one trace matrix):** the two constructors below
+% require respectively positive semidefiniteness or linear independence, neither
+% of which is supplied by the source hypotheses of SAL and ZCL. Thus this entry
+% does not formalize Lemma SALZCL, its structural corollary, or Proposition
+% prop2to3 from those hypotheses alone. Documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex; tracked in issue #3593.
 \begin{theorem}[Local simple-MPDO structure from corrected rank-one criteria]
     \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPairingIdempotent}
