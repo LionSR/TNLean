@@ -50,7 +50,12 @@
                                % also the reach of an inter-layer cup: the bend
                                % protrudes exactly as far as the stubs it replaces,
                                % so open and cup-closed ends share one silhouette
-\def\tenkz@r@traceclear{0.62}  % trace racetrack clears leg labels on the outer row
+\def\tenkz@r@traceclear{0.30}  % racetrack base drop: clears the tallest glyph
+                               % skin (the wireglyph capsule, half-height 0.15)
+                               % by a like margin.  Legs and label bands on the
+                               % traced side are added PER OBSTRUCTION by the
+                               % trace pass, so a bare ring hugs its row instead
+                               % of budgeting for ink that is not there
 \def\tenkz@r@labelclear{0.12}  % ONE clearance for every label band
 \def\tenkz@r@dotlabelband{0.30}% depth of a script-size dot label: clearance + text
 \def\tenkz@r@inlinephysleg{0.26}   % inline: legs shrink faster than the pitch
@@ -79,6 +84,12 @@
                                % canonical-tensor height -- taller than the
                                % box floor because these glyphs sit ON a
                                % wire and must read over it
+\def\tenkz@r@wireglyphcap{0.15}% = wireglyph/2: the corner radius that closes
+                               % the minimal on-wire rectangle into a stadium.
+                               % A named literal, not 0.5\tenkz@dim{...}: pgf's
+                               % dimension parser detaches a leading factor
+                               % from a \dimexpr and misreads the radius
+                               % (lens-shaped, self-intersecting capsules)
 \def\tenkz@r@fusionwidth{0.075}% fusion-bar stroke: a wedge, not a wire, so
                                % it scales with the pitch like a glyph
 % absolute floors and ink hierarchy
@@ -146,11 +157,11 @@
   % capsule, not circle: the height is pinned by `minimum size`, and a wide
   % label (an inverse, a product) grows the glyph only sideways, so every
   % on-wire matrix on a chain reads at the same height.  The corner radius
-  % is HALF the minimum size -- exactly the radius that closes the minimal
-  % rectangle into a stadium -- which is why it is not \tenkz@r@corner (the
-  % trace/hull radius, a different object).
+  % \tenkz@r@wireglyphcap is HALF the minimum size -- exactly the radius
+  % that closes the minimal rectangle into a stadium -- which is why it is
+  % not \tenkz@r@corner (the trace/hull radius, a different object).
   on-wire matrix/.style={draw=tenkzAction, fill=tenkzPaper, rectangle,
-      rounded corners=0.5\tenkz@dim{\tenkz@r@wireglyph},
+      rounded corners=\tenkz@dim{\tenkz@r@wireglyphcap},
       inner xsep=1.8pt, inner ysep=1.4pt,
       minimum size=\tenkz@dim{\tenkz@r@wireglyph},
       line width=\tenkz@wirewidth, text=tenkzInk},

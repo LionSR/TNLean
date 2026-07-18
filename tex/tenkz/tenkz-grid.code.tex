@@ -484,6 +484,7 @@
 \int_new:N \l__tenkz_cwide_int
 \int_new:N \l__tenkz_cwires_int
 \tl_new:N \l__tenkz_clegsat_tl
+\tl_new:N \l__tenkz_cphys_tl    % cell physical=: up|down|updown (empty = none)
 \bool_new:N \l__tenkz_cnolegs_bool
 \tl_new:N \l__tenkz_crole_tl    % cell role word (empty = none)
 \tl_new:N \l__tenkz_cspec_tl    % cell species name (empty = none)
@@ -512,6 +513,19 @@
   % named column.  The up=/down= label is read as a comma list matched
   % leg-by-leg.
   /tenkz/cell/legs~at/.store~in=\l__tenkz_clegsat_tl,
+  % physical = up|down|updown, the CELL-level counterpart of the picture
+  % word: a wires=k brick draws one physical leg PER SPANNED ROW on each
+  % stated face, spread evenly across the glyph's width and ordered
+  % west-to-east as the rows read top-to-bottom (the two-shift MPU of
+  % RMP sec2fig7c(b): each brick on the two wire rails carries two up
+  % and two down legs).  The up=/down= labels are read as comma lists
+  % matched leg-by-leg, like `legs at='.  Meant for bricks on WIRE rows,
+  % whose row types draw no legs of their own; the boundary signature
+  % counts k open indices per stated face.
+  /tenkz/cell/physical/.is~choice,
+  /tenkz/cell/physical/up/.code    ={\tl_set:Nn \l__tenkz_cphys_tl {up}},
+  /tenkz/cell/physical/down/.code  ={\tl_set:Nn \l__tenkz_cphys_tl {down}},
+  /tenkz/cell/physical/updown/.code={\tl_set:Nn \l__tenkz_cphys_tl {updown}},
   % tri = l|r: canonical-form isometry skins.  tri=l is the left-canonical
   % A_L (flat side west = domain, apex east = codomain, and the isometry
   % condition sum_s A_L^s{}^dagger A_L^s = 1 reads left-to-right); tri=r
@@ -544,6 +558,17 @@
   % as the documented alias
   /tenkz/cell/span/.code={\int_set:Nn \l__tenkz_frows_int {#1}},
   /tenkz/cell/rows/.code={\int_set:Nn \l__tenkz_frows_int {#1}},
+  % combined = west|east.  On \tnfuse: which side the single fused stub
+  % leaves (empty defaults to west).  On a wires=k glyph (\tn or \tnX,
+  % 0.6): the stated side presents ONE fused wire entering the glyph at
+  % its vertical CENTRE instead of k per-row wires -- the tall gauge X
+  % of the local-purification form (RMP sec2fig6) and the SPT
+  % intertwiner X_gh (fig3-pepe_sptintertwin-gh), whose outer index is
+  % the fused virtual space.  The side follows \tnfuse's
+  % consumed-boundary pattern: no row-height boundary stubs draw behind
+  % it and the boundary signature counts exactly ONE virtual index
+  % there.  An in-picture neighbour facing the combined side is not yet
+  % attachable (see the bond-scan warning).
   /tenkz/cell/combined/.store~in=\l__tenkz_fcombined_tl,
 }
 
@@ -557,11 +582,14 @@
     \int_set:Nn \l__tenkz_cwide_int {1}
     \int_set:Nn \l__tenkz_cwires_int {1}
     \tl_clear:N \l__tenkz_clegsat_tl
+    \tl_clear:N \l__tenkz_cphys_tl
     \bool_set_false:N \l__tenkz_cnolegs_bool
     \tl_clear:N \l__tenkz_crole_tl
     \tl_clear:N \l__tenkz_cspec_tl
     \int_set:Nn \l__tenkz_frows_int {2}
-    \tl_set:Nn \l__tenkz_fcombined_tl {west}
+    % empty = no combined side; every \tnfuse reader treats non-east as
+    % west, so the bar's default combined=west is unchanged
+    \tl_clear:N \l__tenkz_fcombined_tl
     \tl_set:Nn \l__tenkz_gstrut_tl { \tenkz@glyphstrut }
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/cell}{#1} }
   }
@@ -909,6 +937,7 @@
     \prop_clear:N \l__tenkz_owner_prop
     \prop_clear:N \l__tenkz_name_prop
     \prop_clear:N \l__tenkz_tall_prop
+    \prop_clear:N \l__tenkz_combside_prop
     \bool_set_false:N \l__tenkz_ptrace_bool
     \clist_clear:N \l__tenkz_ptcols_clist
     \prop_clear:N \l__tenkz_trspec_prop
@@ -1257,19 +1286,86 @@
         {trir} { \tenkz_tri_node:nnn {#1}{#2}{right~canonical~tensor} }
       }
     \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
-    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=\tl_use:N \l__tenkz_cshape_tl|role=\tenkz_role_word:|species=\tenkz_spec_word:}
+    \tenkz_combined_stub:nn {#1}{#2}
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=\tl_use:N \l__tenkz_cshape_tl|role=\tenkz_role_word:|species=\tenkz_spec_word:\tl_if_empty:NF \l__tenkz_fcombined_tl {|combined=\tl_use:N \l__tenkz_fcombined_tl}}
   }
 \cs_generate_variant:Nn \tenkz_node_tensor:nnn { nnV }
+
+% the single fused wire of a combined= wires=k glyph: ONE stroke leaving
+% the stated side at the glyph's vertical CENTRE (the node's west/east
+% anchor), stub-length like any open virtual index.  The fused space is
+% ONE index (V : C^{D_1} x ... -> C^{D_1...k}), so a single stroke --
+% \tnfuse's combined-leg doctrine on the tall-glyph geometry.
+\cs_generate_variant:Nn \tenkz_stub_vec:n { V }
+\cs_new_protected:Npn \tenkz_combined_stub:nn #1#2
+  {
+    \tl_if_empty:NF \l__tenkz_fcombined_tl
+      {
+        \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
+          {
+            \draw[bond]
+              (\tenkz_node_name:nn{#1}{#2}.\tenkz_compass:V
+                 \l__tenkz_fcombined_tl) --
+              ++\tenkz_stub_vec:V \l__tenkz_fcombined_tl;
+          }
+      }
+  }
 
 % the ownership/geometry bookkeeping of a wires=k glyph at (#1,#2):
 % recentre \l__tenkz_y_dim between the outer spanned rows, extend the extra
 % node style by the covering minimum height (the glyph must overshoot its
 % outer wires by \tenkz@r@tallover to read as terminating them), and claim
 % every spanned cell.  No-op for k = 1.
-\tl_new:N \l__tenkz_xstyle_tl
+% A combined= side is recorded per spanned cell ("r-c" -> west|east) so
+% the boundary pass can consume that side (\tnfuse's pattern) and the
+% bond scan can warn on an unsupported in-picture attachment.
+\msg_new:nnn { tenkz } { combined-side }
+  { combined=#1~is~not~a~side:~a~wires=k~glyph's~combined~key~takes~
+    west~or~east;~the~key~is~ignored. }
+\msg_new:nnn { tenkz } { combined-wires }
+  { combined=~on~a~single-wire~glyph:~the~fused-side~key~needs~
+    wires=k~(k~>~1)~or~a~\token_to_str:N \tnfuse \ bar;~the~key~is~
+    ignored. }
+\msg_new:nnn { tenkz } { combined-attach }
+  { A~bond~in~row~#1~meets~the~combined~side~of~a~wires=k~glyph:~
+    attaching~ink~to~the~fused~wire~inside~one~picture~is~not~yet~
+    supported,~so~the~per-row~bonds~are~kept.~Juxtapose~two~pictures~
+    abutting~at~the~fused~stub~instead. }
+\prop_new:N \l__tenkz_combside_prop
 \cs_new_protected:Npn \tenkz_tall_claim:nn #1#2
   {
     \tl_clear:N \l__tenkz_xstyle_tl
+    \tl_if_empty:NF \l__tenkz_fcombined_tl
+      {
+        \int_compare:nNnTF { \l__tenkz_cwires_int } > {1}
+          {
+            \bool_lazy_or:nnTF
+              { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {west} }
+              { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {east} }
+              {
+                \int_step_inline:nnn { #1 } { #1 + \l__tenkz_cwires_int - 1 }
+                  {
+                    \int_step_inline:nnn {#2} { #2 + \l__tenkz_cwide_int - 1 }
+                      {
+                        \prop_put:Nee \l__tenkz_combside_prop
+                          {##1-####1} { \tl_use:N \l__tenkz_fcombined_tl }
+                      }
+                  }
+              }
+              {
+                \msg_warning:nne { tenkz } { combined-side }
+                  { \tl_to_str:N \l__tenkz_fcombined_tl }
+                \tenkz@event{warning|code=combined-side|value=\tl_to_str:N
+                  \l__tenkz_fcombined_tl}
+                \tl_clear:N \l__tenkz_fcombined_tl
+              }
+          }
+          {
+            \msg_warning:nn { tenkz } { combined-wires }
+            \tenkz@event{warning|code=combined-wires|cell=#1-#2}
+            \tl_clear:N \l__tenkz_fcombined_tl
+          }
+      }
     \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
       {
         \dim_set:Nn \l__tenkz_y_dim
@@ -1361,9 +1457,10 @@
     \tenkz_glyph_node_aux:nnV {#1}{#2} \l_tmpa_tl
     \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
     \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
+    \tenkz_combined_stub:nn {#1}{#2}
     % an on-wire matrix is content ink: it must enter the audit's topology
     % hashes, or a gauge insertion X X^{-1} hashes equal to the bare chain
-    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=onwire|role=\tenkz_role_word:|species=\tenkz_spec_word:}
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=onwire|role=\tenkz_role_word:|species=\tenkz_spec_word:\tl_if_empty:NF \l__tenkz_fcombined_tl {|combined=\tl_use:N \l__tenkz_fcombined_tl}}
   }
 \cs_generate_variant:Nn \tenkz_node_simple:nnnn { nnnV }
 
@@ -1668,6 +1765,22 @@
                               {##1-####1} \l_tmpb_tl
                             \tl_if_eq:NNF \l_tmpa_tl \l_tmpb_tl
                               {
+                                % a neighbour facing a combined= side:
+                                % the in-picture fused-wire attachment
+                                % is not yet drawn, so warn and keep the
+                                % per-row bonds (juxtapose two pictures
+                                % abutting at the fused stub instead)
+                                \tenkz_cell_combined:nnnN {##1}
+                                  {\int_use:N\l_tmpa_int}{east} \l_tmpa_bool
+                                \bool_if:NF \l_tmpa_bool
+                                  { \tenkz_cell_combined:nnnN {##1}{####1}
+                                      {west} \l_tmpa_bool }
+                                \bool_if:NT \l_tmpa_bool
+                                  {
+                                    \msg_warning:nne {tenkz}{combined-attach}
+                                      {##1}
+                                    \tenkz@event{warning|code=combined-attach|row=##1}
+                                  }
                                 \tenkz_anchor:nnnN {##1}{\int_use:N\l_tmpa_int}
                                   {east} \l__tenkz_pa_tl
                                 \tenkz_anchor:nnnN {##1}{####1}
@@ -1795,14 +1908,65 @@
 \tl_new:N \l__tenkz_pwbase_tl
 \tl_new:N \l__tenkz_pwpt_tl
 \tl_new:N \l__tenkz_pwlow_tl
+\tl_new:N \l__tenkz_pwfb_tl
+\bool_new:N \l__tenkz_pwsingle_bool
 \seq_new:N \l__tenkz_pwlab_seq
 \cs_new_protected:Npn \tenkz_pair_wide:nn #1#2
   {
     \tl_set_eq:NN \l__tenkz_pwcols_tl \l__tenkz_clegsat_tl
     \seq_set_from_clist:NV \l__tenkz_pwlab_seq \l__tenkz_cdown_tl
     \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pwname_tl
+    % pairing-arity pre-scan: the glyph's down face is per-column only
+    % when its named columns actually meet DISTINCT indices below.  If
+    % every named column owner-resolves to ONE live partner cell whose
+    % own `legs at=` is empty, that partner presents a single centred
+    % index -- the blocked physical index of the hard08 isometry
+    % U_{(i1 i2), j} -- and the interface contracts by the one
+    % anchor-to-anchor wire.  Any other partner structure (distinct
+    % cells, holes, ghosts, or a facing `legs at=` list) pairs per
+    % named column.
+    \bool_set_true:N \l__tenkz_pwsingle_bool
+    \tl_clear:N \l__tenkz_pwfb_tl
     \exp_args:NV \clist_map_inline:nn \l__tenkz_pwcols_tl
-      { \tenkz_pair_wide_col:nnn {#1}{#2}{##1} }
+      { \tenkz_pair_wide_scan:nnn {#1}{#2}{##1} }
+    \bool_if:NT \l__tenkz_pwsingle_bool
+      {
+        \tenkz_get:NeN \l__tenkz_opts_prop
+          { \int_eval:n{#1+1} - \l__tenkz_pwfb_tl } \l_tmpb_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+        \tl_if_empty:NF \l__tenkz_clegsat_tl
+          { \bool_set_false:N \l__tenkz_pwsingle_bool }
+      }
+    \bool_if:NTF \l__tenkz_pwsingle_bool
+      { \tenkz_pair_below:nn {#1}{#2} }
+      {
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_pwcols_tl
+          { \tenkz_pair_wide_col:nnn {#1}{#2}{##1} }
+      }
+  }
+% one pre-scan step: does named column #3 keep the shared-single-partner
+% hypothesis alive?
+\cs_new_protected:Npn \tenkz_pair_wide_scan:nnn #1#2#3
+  {
+    \prop_get:NeNTF \l__tenkz_owner_prop
+      { \int_eval:n{#1+1} - \int_eval:n{#2+#3-1} } \l__tenkz_pwbase_tl
+      {
+        \tenkz_get:NeN \l__tenkz_kind_prop
+          { \int_eval:n{#1+1} - \l__tenkz_pwbase_tl } \l__tenkz_pkind_tl
+        \bool_lazy_or:nnTF
+          { \str_if_eq_p:Vn \l__tenkz_pkind_tl {skip} }
+          { \str_if_eq_p:Vn \l__tenkz_pkind_tl {ghost} }
+          { \bool_set_false:N \l__tenkz_pwsingle_bool }
+          {
+            \tl_if_empty:NTF \l__tenkz_pwfb_tl
+              { \tl_set_eq:NN \l__tenkz_pwfb_tl \l__tenkz_pwbase_tl }
+              {
+                \tl_if_eq:NNF \l__tenkz_pwfb_tl \l__tenkz_pwbase_tl
+                  { \bool_set_false:N \l__tenkz_pwsingle_bool }
+              }
+          }
+      }
+      { \bool_set_false:N \l__tenkz_pwsingle_bool }
   }
 % one named column: row #1, base column #2, span-local index #3 (the
 % absolute column is #2 + #3 - 1)
@@ -1979,6 +2143,128 @@
       }
   }
 
+% -- per-spanned-row legs of a wires=k brick (cell physical=) ----------
+% The brick's k spanned rows each contribute one physical index per
+% stated face: k legs spread evenly across the glyph's width, ordered
+% west-to-east as the rows read top-to-bottom (RMP sec2fig7c(b), the
+% two-shift MPU).  The face ordinate comes from the shape's north/south
+% anchor, the extent from its west/east anchors -- all compass-mapped,
+% so the vertical frame works unchanged.  Labels pop from the up=/down=
+% comma lists, matched leg-by-leg as in the `legs at=` pass.
+\dim_new:N \l__tenkz_bklo_dim
+\dim_new:N \l__tenkz_bkhi_dim
+\dim_new:N \l__tenkz_bkface_dim
+\cs_new_protected:Npn \tenkz_brick_legs:nn #1#2
+  {
+    \prop_get:NnNT \l__tenkz_kind_prop {#1-#2} \l_tmpa_tl
+      {
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
+          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+          {
+            \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
+            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+            \tl_if_empty:NF \l__tenkz_cphys_tl
+              {
+                \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                  { \tenkz_brick_face:nnnNn {#1}{#2}{north}
+                      \l__tenkz_cup_tl { 1} }
+                \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                  { \tenkz_brick_face:nnnNn {#1}{#2}{south}
+                      \l__tenkz_cdown_tl {-1} }
+              }
+          }
+      }
+  }
+% one face: cell (#1,#2), logical face anchor #3 (north|south), label
+% clist var #4, outward sign #5
+\cs_new_protected:Npn \tenkz_brick_face:nnnNn #1#2#3#4#5
+  {
+    \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pa_tl
+    \seq_set_from_clist:NV \l__tenkz_leglab_seq #4
+    \bool_if:NTF \l__tenkz_vertical_bool
+      {
+        \pgfextractx \l__tenkz_bkface_dim
+          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl }
+              { \tenkz_compass:n {#3} } }
+        \pgfextracty \l__tenkz_bklo_dim
+          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl }
+              { \tenkz_compass:n {west} } }
+        \pgfextracty \l__tenkz_bkhi_dim
+          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl }
+              { \tenkz_compass:n {east} } }
+      }
+      {
+        \pgfextracty \l__tenkz_bkface_dim
+          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {#3} }
+        \pgfextractx \l__tenkz_bklo_dim
+          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {west} }
+        \pgfextractx \l__tenkz_bkhi_dim
+          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {east} }
+      }
+    \int_step_inline:nn { \l__tenkz_cwires_int }
+      {
+        % the leg abscissa: fraction ##1/(k+1) of the west-east extent
+        % (integer factors RIGHT of `*` for eTeX)
+        \dim_set:Nn \l__tenkz_x_dim
+          { \l__tenkz_bklo_dim
+            + ( \l__tenkz_bkhi_dim - \l__tenkz_bklo_dim ) * (##1)
+              / ( \l__tenkz_cwires_int + 1 ) }
+        \bool_if:NTF \l__tenkz_vertical_bool
+          { \tl_set:Ne \l__tenkz_legbase_tl
+              { ( \dim_use:N \l__tenkz_bkface_dim ,
+                  \dim_use:N \l__tenkz_x_dim ) } }
+          { \tl_set:Ne \l__tenkz_legbase_tl
+              { ( \dim_use:N \l__tenkz_x_dim ,
+                  \dim_use:N \l__tenkz_bkface_dim ) } }
+        \draw[physical~leg] \l__tenkz_legbase_tl --
+          ++\tenkz_leg_vec:nn{#5}{\tenkz@dim{\tenkz@r@physleg}};
+        \seq_pop_left:NNT \l__tenkz_leglab_seq \l_tmpb_tl
+          {
+            \tl_if_blank:VF \l_tmpb_tl
+              {
+                \node[label,
+                      anchor=\tenkz_compass:n
+                        { \str_if_eq:nnTF {#3} {north} {south} {north} },
+                      shift={\tenkz_leg_vec:nn{#5}
+                        { \tenkz@dim{\tenkz@r@physleg}
+                          + \tenkz@dim{\tenkz@r@labelclear} }}]
+                  at \l__tenkz_legbase_tl { \tl_use:N \l_tmpb_tl };
+              }
+          }
+      }
+  }
+% the signature contribution: k open indices per stated face (the same
+% guards as the drawing pass, so ink and count cannot drift)
+\cs_new_protected:Npn \tenkz_brick_count:nn #1#2
+  {
+    \prop_get:NnNT \l__tenkz_kind_prop {#1-#2} \l_tmpa_tl
+      {
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
+          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+          {
+            \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
+            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+            \tl_if_empty:NF \l__tenkz_cphys_tl
+              {
+                \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                  { \int_add:Nn \l__tenkz_bpu_int { \l__tenkz_cwires_int } }
+                \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                  { \int_add:Nn \l__tenkz_bpd_int { \l__tenkz_cwires_int } }
+              }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_draw_legs:
   {
     \int_step_inline:nn { \l__tenkz_nrows_int }
@@ -1987,6 +2273,9 @@
           {
             \prop_get:NnNT \l__tenkz_name_prop {##1-####1} \l__tenkz_pa_tl
               {
+                % cell-level physical= (wires=k bricks) rides the same
+                % pass; base cells only (continuation rows are `tnv')
+                \tenkz_brick_legs:nn {##1}{####1}
                 \tenkz_leg_candidate:nnT {##1}{####1}
                   {
                     % a traced cell's legs belong to its wrap loop (the
@@ -2342,6 +2631,30 @@
       }
   }
 
+% do columns #2..#3 of row #1 hang a label off a leg TIP on side #4
+% (up|down)?  A tip label extends past the leg by the label band, and the
+% racetrack must clear the TEXT, not just the leg (a return wire through
+% an index name reads as a contraction with it).  Kind-restricted like
+% the dot-label scan: only tn/tnc cells draw legs.
+\cs_new_protected:Npn \tenkz_span_leg_labels:nnnnN #1#2#3#4#5
+  {
+    \bool_set_false:N #5
+    \int_step_inline:nnn {#2} {#3}
+      {
+        \tenkz_get:NeN \l__tenkz_kind_prop {#1-##1} \l_tmpa_tl
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
+          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+          {
+            \tenkz_get:NeN \l__tenkz_opts_prop {#1-##1} \l_tmpb_tl
+            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+            \str_if_eq:nnTF {#4} {up}
+              { \tl_if_blank:VF \l__tenkz_cup_tl   { \bool_set_true:N #5 } }
+              { \tl_if_blank:VF \l__tenkz_cdown_tl { \bool_set_true:N #5 } }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_draw_span:nnnnn #1#2#3#4#5
   {
     \dim_set:Nn \l__tenkz_x_dim
@@ -2532,6 +2845,17 @@
       { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
       { \bool_set_true:N #3 }
   }
+% does the cell at (row, col) present a combined= face on side #3?  The
+% side-aware companion for wires=k glyphs: their combined side consumes
+% the boundary exactly as a fusion bar does, and the prop holds every
+% spanned cell of the glyph.
+\cs_new_protected:Npn \tenkz_cell_combined:nnnN #1#2#3#4
+  {
+    \bool_set_false:N #4
+    \prop_get:NeNT \l__tenkz_combside_prop
+      {\int_eval:n{#1}-\int_eval:n{#2}} \l_tmpa_tl
+      { \str_if_eq:VnT \l_tmpa_tl {#3} { \bool_set_true:N #4 } }
+  }
 
 \cs_new_protected:Npn \tenkz_draw_boundaries:
   {
@@ -2551,13 +2875,16 @@
             \int_compare:nNnF { \l__tenkz_first_int } = {0}
               {
                 \tenkz_row_wirestyle:nN {##1} \l__tenkz_cell_tl
-                % west stub, unless the side is closed, a fusion bar owns
-                % this end, or a cup closes it (a cupped end is
-                % contracted, not open)
+                % west stub, unless the side is closed, a fusion bar or
+                % a combined= wires=k glyph owns this end, or a cup
+                % closes it (a cupped end is contracted, not open)
                 \bool_if:NT \l__tenkz_wopen_bool
                   {
                 \tenkz_cell_is_fuse:nnN {##1} {\l__tenkz_first_int}
                   \l_tmpa_bool
+                \bool_if:NF \l_tmpa_bool
+                  { \tenkz_cell_combined:nnnN {##1}{\l__tenkz_first_int}
+                      {west} \l_tmpa_bool }
                 \bool_if:NF \l_tmpa_bool
                   {
                   \prop_if_in:NeF \l__tenkz_cuprow_prop { west - ##1 }
@@ -2593,6 +2920,9 @@
                 \tenkz_cell_is_fuse:nnN {##1} {\l__tenkz_last_int}
                   \l_tmpa_bool
                 \bool_if:NF \l_tmpa_bool
+                  { \tenkz_cell_combined:nnnN {##1}{\l__tenkz_last_int}
+                      {east} \l_tmpa_bool }
+                \bool_if:NF \l_tmpa_bool
                   {
                   \prop_if_in:NeF \l__tenkz_cuprow_prop { east - ##1 }
                   {
@@ -2621,11 +2951,13 @@
               }
           }
       }
-    % a \tnfuse combined stub is ONE open virtual index on its side: the
-    % fusion map V : C^{D_1} x C^{D_2} -> C^{D_12} leaves exactly the fused
+    % a combined stub is ONE open virtual index on its side: the fusion
+    % map V : C^{D_1} x C^{D_2} -> C^{D_12} leaves exactly the fused
     % index open, and the combined leg IS that index.  Without this count a
     % fused equation reads unbalanced -- hard06's O = X^{-1}[A (x) conj A]X
-    % needs virtual-west = virtual-east = 1 on BOTH sides.
+    % needs virtual-west = virtual-east = 1 on BOTH sides.  A combined=
+    % wires=k glyph counts identically (base cells only: continuation
+    % rows are `tnv', spanned columns carry no kind).
     \int_step_inline:nn { \l__tenkz_nrows_int }
       {
         \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
@@ -2638,6 +2970,20 @@
                 \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
                   { \int_incr:N \l__tenkz_bve_int }
                   { \int_incr:N \l__tenkz_bvw_int }
+              }
+            \bool_lazy_any:nT
+              {
+                { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
+                { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+                { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnx} }
+              }
+              {
+                \prop_get:NeNT \l__tenkz_combside_prop {##1-####1} \l_tmpa_tl
+                  {
+                    \str_if_eq:VnTF \l_tmpa_tl {east}
+                      { \int_incr:N \l__tenkz_bve_int }
+                      { \int_incr:N \l__tenkz_bvw_int }
+                  }
               }
           }
       }
@@ -2904,6 +3250,8 @@
                       }
                   }
               }
+            % cell-level physical= legs (wires=k bricks)
+            \tenkz_brick_count:nn {##1}{####1}
           }
       }
     \tenkz@event{boundary|picture=\the\tenkz@pictureid|virtual-west=\int_use:N\l__tenkz_bvw_int|virtual-east=\int_use:N\l__tenkz_bve_int|physical-up=\int_use:N\l__tenkz_bpu_int|physical-down=\int_use:N\l__tenkz_bpd_int}
@@ -3081,15 +3429,24 @@
           { \tenkz_colx:n {\l_tmpb_int} + \tenkz@dim{0.45} }
         \dim_set:Nn \l__tenkz_tmp_dim
           { \tenkz_colx:n {\l_tmpa_int} - \tenkz@dim{0.45} }
-        % The racetrack must CLEAR any ink on its side of the traced row:
-        % open physical legs add their length, and leg-tip/dot labels add
-        % the label band (a virtual trace crossing physical ink would draw
-        % a false contraction).
+        % The racetrack must CLEAR any ink on its side of the traced row (a
+        % virtual trace crossing physical ink would draw a false
+        % contraction), and only ink that is THERE: the base drop clears
+        % the glyph silhouette, then each obstruction pays its own way --
+        % open legs add the leg length, a labelled leg tip and a dot label
+        % each add the label band.  A bare ring hugs its row.
         \dim_set:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@traceclear} }
         \str_if_eq:nnTF {#2} {below}
           {
             \bool_if:nT { \tenkz_opendown_p:n {#1} }
-              { \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} } }
+              {
+                \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} }
+                \tenkz_span_leg_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
+                  {down} \l_tmpa_bool
+                \bool_if:NT \l_tmpa_bool
+                  { \dim_add:Nn \l__tenkz_y_dim
+                      { \tenkz@dim{\tenkz@r@dotlabelband} } }
+              }
             \tenkz_span_dot_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
               {south} \l_tmpa_bool
             \bool_if:NT \l_tmpa_bool
@@ -3100,7 +3457,14 @@
           }
           {
             \bool_if:nT { \tenkz_openup_p:n {#1} }
-              { \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} } }
+              {
+                \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} }
+                \tenkz_span_leg_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
+                  {up} \l_tmpa_bool
+                \bool_if:NT \l_tmpa_bool
+                  { \dim_add:Nn \l__tenkz_y_dim
+                      { \tenkz@dim{\tenkz@r@dotlabelband} } }
+              }
             \tenkz_span_dot_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
               {north} \l_tmpa_bool
             \bool_if:NT \l_tmpa_bool
