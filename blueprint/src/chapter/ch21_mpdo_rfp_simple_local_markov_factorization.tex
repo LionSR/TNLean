@@ -359,6 +359,35 @@ strong subadditivity for a normalized three-site reduced state.
     admissible $m$, comparing the cases $m=L$ and $m=L+1$ gives
     $I_L=I_{L+1}$ and hence saturation of the area law.
 \end{proof}
+
+\begin{theorem}[All-cut quantum Markov structure implies SAL]
+    \label{thm:mpdo_all_cut_markov_implies_sal}
+    \lean{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}
+    \leanok
+    \uses{def:is_sal, def:mpdo, def:entropy_quantum_markov_decomposition}
+    Suppose that the periodic operators are positive semidefinite and have
+    nonzero trace at every positive chain length.  For every $N$ and every
+    $1\leq m\leq\lfloor N/2\rfloor$, divide the chain into four consecutive
+    regions of lengths $m-1,1,N-m-1,1$.  If the marginal on the first three
+    regions admits a quantum Markov decomposition on its one-site middle
+    system, then the tensor saturates the area law.
+    % This is the final entropy step at source lines 1606--1619. The missing
+    % implication from its commuting-bond and source-ZCL hypotheses is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_sal_ssa_equality,
+        thm:entropy_ssa_equality_quantum_markov}
+    The quantum Markov decomposition gives equality in strong subadditivity
+    at every admissible cut:
+    \[
+        S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC}).
+    \]
+    These equalities at every admissible cut imply saturation of the area law
+    by Theorem~\ref{thm:mpdo_sal_ssa_equality}.
+\end{proof}
+
 \begin{theorem}[SAL implies local $\eta$-structure]
     \label{thm:sal_implies_eta_structure}
     \lean{MPOTensor.sal_implies_eta_structure}

@@ -1,0 +1,139 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{./command}
+
+\title{The Commuting-Form-to-SAL Implication for Simple MPDOs}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+The proposition labelled \emph{4to2} in
+\cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv} considers a normal
+MPDO block $\mathcal K$.  Its finite-chain operators are positive scalar
+multiples of products of translates of one positive two-site bond,
+\[
+  \sigma^{(N)}(\mathcal K)
+  =c_N\prod_{i=0}^{N-1}B_{i,i+1},
+  \qquad c_N>0,
+  \qquad [B_{i,i+1},B_{j,j+1}]=0.
+\]
+Together with zero correlation length, this hypothesis is asserted to imply
+saturation of the area law.
+
+The phrase ``of the form'' refers back to the single bond in equation
+\emph{expression} at source lines~1571--1578.  It is therefore a statement
+about one translation-invariant bond family, not a separate existence
+statement at each chain length.
+
+\section{The theorem cited through Beigi}
+
+The reference denoted by \emph{Beigi} is Salman Beigi,
+\emph{Classification of the phases of 1D spin chains with commuting
+Hamiltonians}, arXiv:1105.1019v2, J. Phys. A \textbf{45} (2012) 025306,
+\href{https://doi.org/10.1088/1751-8113/45/2/025306}
+{doi:10.1088/1751-8113/45/2/025306}.
+
+The relevant assertion is Lemma~2.1, labelled \emph{lem:comm} in the arXiv
+source and credited there to Bravyi and Vyalyi.  If Hermitian operators
+$X_{AB}$ and $Y_{BC}$ commute after their natural embeddings, then
+\[
+  \mathcal H_B
+  \cong \bigoplus_{\beta\in V}
+  \mathcal H_{\beta_l}\otimes\mathcal H_{\beta_r},
+\]
+such that $X_{AB}$ acts trivially on every $\mathcal H_{\beta_r}$ and
+$Y_{BC}$ acts trivially on every $\mathcal H_{\beta_l}$.  Beigi applies this
+lemma to neighboring translates of one local interaction.  Translation
+invariance permits the same one-site decomposition at every site; the local
+decomposition is independent of the system size.
+
+The proof uses the representation theory of finite-dimensional
+$C^*$-algebras.  It first forms the commutant of the operator-Schmidt factors
+of $X_{AB}$ and then identifies that algebra, after a unitary change of basis,
+with
+\[
+  \bigoplus_{\beta\in V}
+  \mathbf 1_{\beta_l}\otimes
+  \mathbf L(\mathcal H_{\beta_r}).
+\]
+The commutant has the complementary action on the left tensor factors.
+
+\section{Present formal distinction}
+
+The predicate
+\leanid{MPOTensor.HasCommutingForm} is chainwise: for every $N\geq2$ it
+allows a new two-site bond $B_N$.  It is weaker than the source hypothesis and
+does not support the comparison of the $N$, $N+1$, and $N+2$ chains used by
+the source trace-factorization argument.
+
+The formal model fixes one bond whose commuting translates realize every
+finite chain.\footnote{The bond family is
+\leanid{MPOTensor.TranslationInvariantBondData}; the realization equalities
+are fields of \leanid{MPOTensor.EtaLocalStructureData}.}
+
+The source ZCL hypothesis is
+\leanid{MPOTensor.IsSourceZCL}, the scale-invariant idempotence condition for
+the physical-trace transfer.  The predicate \leanid{MPOTensor.IsZCL} concerns
+the doubled-index completely positive transfer map and is not a faithful
+substitute for the proposition labelled \emph{4to2}.
+
+\section{Unformalized implication}
+
+The abstract Wedderburn--Artin decomposition already available in
+\leanid{StarSubalgebra.exists_algEquiv_pi_matrix} does not provide the spatial
+unitary tensor-factor decomposition required by the Bravyi--Vyalyi lemma.
+The file \path{TNLean/Algebra/StarSubalgebraSpatial.lean} proves orthogonal
+reducibility, but explicitly records the remaining isotypic tensor
+identification and unitary construction.
+
+Consequently the source implication
+\[
+  \text{one translation-invariant commuting bond}
+  +\text{source ZCL}
+  \Longrightarrow \text{SAL}
+\]
+is not yet formalized and must not carry a \texttt{\string\leanok} marker.
+The formal development proves only the final entropy-theoretic step: quantum
+Markov decompositions at all admissible cuts imply SAL.\footnote{This is
+\leanid{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}.} Its
+direct-sum hypothesis is a marked scope restriction, not an additional
+hypothesis on the source proposition.
+
+\paragraph{Verdict.}
+Proposition~\emph{4to2} is classified as an open gap.  The proved implication
+from quantum Markov decompositions at every admissible cut to SAL is a scope
+restriction that isolates only its final entropy-theoretic step.
+
+\section{Elimination plan}
+
+The gap can be removed in three stages.
+
+\begin{enumerate}
+\item Complete the spatial finite-dimensional $C^*$-algebra theorem: construct
+the unitary decomposition
+$\mathcal H_B\cong\bigoplus_\beta
+\mathcal H_{\beta_l}\otimes\mathcal H_{\beta_r}$ and prove the complementary
+actions of a star-subalgebra and its commutant.
+\item Apply it to the two overlapping translates of the single bond in
+\leanid{MPOTensor.EtaLocalStructureData}, obtaining the translation-invariant
+neighboring operators $\eta_{k,h}$ without assuming a Hayashi decomposition.
+Use \leanid{MPOTensor.IsSourceZCL} to prove the rank-one trace factorization
+$\operatorname{tr}(\eta_{k,h})=a_kb_h$ appearing at source lines~1610--1616.
+\item Trace the fourth region, construct the quantum Markov decomposition at
+each admissible cut, and apply the all-cut Markov theorem above.
+Only then may the source proposition receive a formal declaration and a
+\texttt{\string\leanok} marker.
+\end{enumerate}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
