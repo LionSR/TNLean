@@ -1802,7 +1802,6 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{theorem}[SSA equality as saturation for the product marginals]
     \label{thm:ssa_equality_product_marginal_dpi}
     \lean{isSSAEquality_iff_product_marginal_data_processing_eq}
-    \lean{SSAPosDef.partialTraceRight_traceC_ABC}
     \lean{SSAPosDef.traceC_ABC_product_marginals}
     \leanok
     \uses{def:ssa_equality, def:quantum_relative_entropy,
@@ -1836,8 +1835,13 @@ Theorem~\ref{thm:trace_norm_abs}.
     \[
         S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC}).
     \]
-    The partial-trace identity follows by expanding the matrix entries and
-    interchanging the finite sums over the $A$ and $C$ indices.
+    Entrywise, the partial-trace identity is
+    \[
+        \bigl[\tr_C(\rho_A\otimes\rho_{BC})\bigr]_{(a,b),(a',b')}
+        =\sum_c(\rho_A)_{a,a'}(\rho_{BC})_{(b,c),(b',c)}
+        =(\rho_A)_{a,a'}(\rho_B)_{b,b'}
+        =\bigl[\rho_A\otimes\rho_B\bigr]_{(a,b),(a',b')}.
+    \]
 \end{proof}
 
 \begin{theorem}[SSA equality as saturation for a maximally mixed reference]

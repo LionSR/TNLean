@@ -332,9 +332,8 @@ $\operatorname{tr}_C$, since tracing out $C$ sends
 $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ to
 $(\mathbf 1_A/d_A)\otimes\rho_B$.
 
-This is an equivalent formulation of
-`isSSAEquality_iff_product_marginal_data_processing_eq`: both relative-entropy
-differences equal the strong-subadditivity deficit. The exact
+This is an equivalent criterion with a different reference state: both
+relative-entropy differences equal the strong-subadditivity deficit. The exact
 Hayden--Jozsa--Petz--Winter pair uses $\rho_A$ in place of the maximally mixed
 state on $A$.
 
