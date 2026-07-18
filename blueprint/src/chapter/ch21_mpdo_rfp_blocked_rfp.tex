@@ -1235,12 +1235,16 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    The normalized embedding sends $V_1(X)$ to $B_1(X)$.  The one-site
-    reconstruction, the refinement identity, the blocked-index relabelling,
-    and the two-site reconstruction give
     \[
-        Z_T(V_1(X))=U_2^\dagger B_2(X)U_2.
+        Z_T(V_1(X))
+        =T\!\left(U_1^\dagger B_1(X)U_1\right)
+        =T\!\left(\mathcal M^{(1)}(X)\right)
+        =\mathcal M^{(2)}(X)
+        =U_2^\dagger B_2(X)U_2.
     \]
+    Here the first equality is the normalized embedding, the second and fourth
+    are the two reconstruction identities, and the middle equality is the
+    refinement identity after the blocked-index relabelling.
     Therefore
     \[
         U_2^\dagger U_2Z_T(V_1(X))
@@ -1275,12 +1279,16 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    The normalized embedding sends $V_2(X)$ to $B_2(X)$.  The two-site
-    reconstruction, the blocked-index relabelling, the coarse-graining
-    identity, and the one-site reconstruction give
     \[
-        Z_S(V_2(X))=U_1^\dagger B_1(X)U_1.
+        Z_S(V_2(X))
+        =S\!\left(U_2^\dagger B_2(X)U_2\right)
+        =S\!\left(\mathcal M^{(2)}(X)\right)
+        =\mathcal M^{(1)}(X)
+        =U_1^\dagger B_1(X)U_1.
     \]
+    Here the first equality is the normalized embedding, the second and fourth
+    are the two reconstruction identities, and the middle equality is the
+    coarse-graining identity after the blocked-index relabelling.
     Therefore
     \[
         U_1^\dagger U_1Z_S(V_2(X))
