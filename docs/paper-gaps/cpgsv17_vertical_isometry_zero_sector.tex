@@ -5,7 +5,7 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 
 \title{The Vertical Canonical Form Retains Only the Nonzero Physical Sectors}
 \author{}
@@ -169,16 +169,21 @@ orientation of \eqref{eq:vertical-form}, together with
 with \eqref{eq:dimension-bound}: the retained part is represented
 rectangularly, while the omitted part is required to be zero. No full-support
 assumption is added to Proposition~4.13.  The construction of the canonical
-form from horizontal canonical form is proved by
-\path{MPOTensor.verticalCF_of_horizontalCF} in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  It uses this corrected
-coisometry condition.  The correction itself is tracked in \ghissue{3869}.
+form from horizontal canonical form is proved in
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.\footnote{The corresponding
+declaration is \leanid{MPOTensor.verticalCF_of_horizontalCF}.}  It uses this
+corrected coisometry condition.  The correction itself is tracked in
+\ghissue{3869}.
 
 The source-generated support identities and their trace consequences are
-proved by \path{MPOTensor.precompressionVerticalSectorT_image_preservation},
-\path{MPOTensor.precompressionVerticalSectorS_image_preservation}, and the
-two corresponding trace lemmas in
-\path{TNLean/MPS/MPDO/VerticalSectorImagePreservation.lean}.
+proved in
+\path{TNLean/MPS/MPDO/VerticalSectorImagePreservation.lean}.\footnote{The image
+identities are
+\leanid{MPOTensor.precompressionVerticalSectorT_image_preservation} and
+\leanid{MPOTensor.precompressionVerticalSectorS_image_preservation}; their
+trace consequences are
+\leanid{MPOTensor.transportedVerticalSectorT_trace_of_source_generated} and
+\leanid{MPOTensor.transportedVerticalSectorS_trace_of_source_generated}.}
 
 \paragraph{Verdict.}
 The earlier two-sided-unitary condition was a stronger statement absent from
