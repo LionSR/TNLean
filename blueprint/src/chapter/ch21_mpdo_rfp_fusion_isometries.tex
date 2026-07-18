@@ -605,6 +605,75 @@ weights in the length-independent case at
     implications involving the renormalization fixed-point condition.
 \end{definition}
 
+\begin{definition}[Fusion isometries for a vertical canonical decomposition]%
+    \label{def:mpdo_bnt_fusion_tensor_clause}
+    \lean{MPOTensor.BNTFusionTensorClause}
+    \lean{MPOTensor.HasBNTFusionTensorClause}
+    \leanok
+    \uses{def:vertical_cf_mpdo,
+        def:mpdo_bnt_fusion_isometry_family,
+        def:mpdo_bnt_label_idempotent_coefficient_form}
+    Choose a vertical canonical decomposition
+    \[
+        U\widetilde M U^\dagger
+        =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+    \]
+    The fusion-isometry clause for this decomposition consists of positive
+    diagonal matrices $\chi_{\alpha,\beta,\gamma}$ and isometries
+    $U_{\alpha,\beta}$ satisfying
+    \[
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}^\dagger
+        =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}.
+    \]
+    The trace scalars $m_\alpha=\operatorname{tr}(\mu_\alpha)$ satisfy the
+    length-one idempotent identity for the coefficients determined by these
+    same diagonal matrices.  This is statement (iii) of
+    \cite[Theorem~4.14, lines~986--993]{Cirac2016MPDO_arXiv}, attached to the
+    chosen decomposition of
+    \cite[Proposition~4.13, lines~943--951]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Fusion isometries imply the tensor-attached algebra clause]%
+    \label{thm:mpdo_bnt_fusion_tensor_to_algebra_tensor}
+    \lean{MPOTensor.BNTFusionTensorClause.toBNTAlgebraTensorClause}
+    \lean{MPOTensor.HasBNTFusionTensorClause.to_hasBNTAlgebraTensorClause}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_fusion_algebra_clause,
+        def:mpdo_bnt_fusion_tensor_clause}
+    Suppose the fusion-isometry clause holds for a chosen vertical canonical
+    decomposition.  Then the algebra clause holds for the same decomposition,
+    with coefficients, for every positive chain length $L$,
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}),
+    \]
+    determined by the same diagonal matrices.  Thus statement (iii) implies
+    statement (ii) of
+    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}.  No assertion
+    concerning the renormalization fixed-point condition is made here.
+\end{theorem}
+\begin{proof}\leanok
+    Iterating the fusion identity along $L$ sites and taking the closed trace
+    gives
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        =\sum_\gamma
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+    \]
+    Writing $m_\alpha=\operatorname{tr}(\mu_\alpha)$, the assumed length-one
+    idempotent identity is
+    \[
+        m_\gamma=\sum_{\alpha,\beta}
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
+    \]
+    These are the product and idempotent identities of the algebra clause.
+    Retaining the chosen vertical decomposition and the same diagonal matrices
+    gives the tensor-attached algebra clause.
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     \TNMPDORecursiveStructureOperator
