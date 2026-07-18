@@ -34,19 +34,6 @@ private theorem symbolTensor_isNormalTensor (a : Fin 2) :
   isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     (symbolTensor a) (symbolTensor_transferMap a)
 
-private lemma symbolTensor_evalWord_self (a : Fin 2) (N : ℕ) :
-    evalWord (symbolTensor a) (List.replicate N a) = 1 := by
-  induction N with
-  | zero => rfl
-  | succ N ih =>
-      rw [List.replicate_succ, evalWord_cons, ih]
-      simp [symbolTensor]
-
-private lemma symbolTensor_evalWord_other {a b : Fin 2} (hab : a ≠ b) (N : ℕ) :
-    evalWord (symbolTensor a) (List.replicate (N + 1) b) = 0 := by
-  rw [List.replicate_succ, evalWord_cons]
-  simp [symbolTensor, Ne.symm hab]
-
 private lemma symbolTensor_mpv_self (a : Fin 2) (N : ℕ) :
     mpv (symbolTensor a) (fun _ : Fin N => a) = 1 := by
   rw [mpv_const_eq_trace_pow]
