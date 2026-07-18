@@ -277,8 +277,8 @@ theorem bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
   rw [hjoin i x κ, hjoin j y κ]
 
 /-- An LPDO admits a local-purification representation for which the normalized
-finite-chain operator across every cut is obtained from the purifying operator by
-the ancillary trace on each block.
+finite-chain operator across a prescribed cut is obtained from the purifying
+operator by the ancillary trace on each block.
 
 This is the existential form of the finite-chain channel identity in the
 mixed-PEPS purification argument preceding equation (4) of arXiv:0704.3906,
