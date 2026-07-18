@@ -79,7 +79,9 @@ theorem blockSpinAncillaEquiv_symm_apply (d dK L : ℕ)
   simp [blockSpinAncillaEquiv]
 
 /-- Trace the ancillary indices of every site in a block, after regrouping the
-spin and ancillary configurations. -/
+spin and ancillary configurations. This is the blockwise analogue of
+`ancillaryTraceMap` and is the trace used in the mixed-PEPS purification
+argument preceding equation (4) of arXiv:0704.3906. -/
 noncomputable def blockAncillaryTraceMap (d dK L : ℕ) :
     Matrix (Fin ((d * dK) ^ L)) (Fin ((d * dK) ^ L)) ℂ →ₗ[ℂ]
       Matrix (Fin (d ^ L)) (Fin (d ^ L)) ℂ :=

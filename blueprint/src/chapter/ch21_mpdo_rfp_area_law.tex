@@ -570,6 +570,7 @@
       MPOTensor.blockSpinAncillaEquiv_symm_apply,
       MPOTensor.blockAncillaryTraceMap}
     \leanok
+    \uses{def:mpdo_ancillary_trace_map}
     For a block of $L$ spin--ancilla pairs, regroup
     \[
         (\mathbb C^d\otimes\mathbb C^{d_K})^{\otimes L}
@@ -577,17 +578,19 @@
           \otimes (\mathbb C^{d_K})^{\otimes L}
     \]
     and trace the ancillary factor. Denote this map by
-    $\operatorname{Tr}_{\mathrm{anc},L}$.
+    $\operatorname{Tr}_{\mathrm{anc},L}$. It is the blockwise analogue of the
+    one-site ancillary trace in
+    Definition~\ref{def:mpdo_ancillary_trace_map}.
 \end{definition}
 
-\begin{lemma}[Block ancillary trace is a channel]
-    \label{lem:block_ancillary_trace_channel}
+\begin{theorem}[Block ancillary trace is a channel]
+    \label{thm:block_ancillary_trace_channel}
     \lean{MPOTensor.blockAncillaryTraceMap_isKrausCPTP}
     \leanok
     \uses{def:block_ancillary_trace, def:is_kraus_cptp}
     The map $\operatorname{Tr}_{\mathrm{anc},L}$ is trace-preserving and
     completely positive.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:block_ancillary_trace}
