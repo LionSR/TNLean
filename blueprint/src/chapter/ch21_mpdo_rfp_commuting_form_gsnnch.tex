@@ -41,6 +41,82 @@
     commuting-form data at every length $N \ge 2$.
 \end{definition}
 
+\begin{definition}[Common three-site coordinates for overlapping bonds]
+    \label{def:mpdo_three_site_overlapping_coordinates}
+    \lean{MPOTensor.threeSiteOverlappingEquiv}
+    \lean{MPOTensor.pairBondMatrix}
+    \lean{MPOTensor.EtaLocalStructureData.pairBond}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data}
+    Write the two-site bond on the ordered pair of physical indices, and
+    identify a three-site configuration $(x_0,x_1,x_2)$ with the
+    left-associated triple $((x_0,x_1),x_2)$.  These are common coordinates
+    for the two bonds on sites $(0,1)$ and $(1,2)$.
+\end{definition}
+
+\begin{theorem}[Adjacent translates are the two overlapping lifts]
+    \label{thm:mpdo_eta_bond_overlapping_lifts}
+    \lean{MPOTensor.reindex_embedLocalOperator_zero_eq_leftOverlappingLift}
+    \lean{MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift}
+    \lean{MPOTensor.EtaLocalStructureData.pairBond_isHermitian}
+    \lean{MPOTensor.EtaLocalStructureData.reindex_bondAt_zero_eq_leftOverlappingLift}
+    \lean{MPOTensor.EtaLocalStructureData.reindex_bondAt_one_eq_rightOverlappingLift}
+    \lean{MPOTensor.EtaLocalStructureData.overlappingLifts_pairBond_comm}
+    \leanok
+    \uses{def:mpdo_three_site_overlapping_coordinates,
+        def:mpdo_translation_invariant_bond_data}
+    Let $B$ be the positive two-site bond carried by the eta-local structure,
+    written as an operator $\widehat B$ on an ordered pair of physical spaces.
+    Under the same three-site identification for both translates,
+    \[
+        B_{0,1}=\widehat B\otimes\Id,
+        \qquad
+        B_{1,2}=\Id\otimes\widehat B.
+    \]
+    Thus these two operators are respectively the left and right overlapping
+    lifts of $\widehat B$.  Moreover, $\widehat B$ is Hermitian and the two
+    lifts commute.  These are exactly the local hypotheses needed for the
+    Bravyi--Vyalyi decomposition invoked at
+    \cite[Appendix~C.2, lines~1599--1605]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\Phi$ be the matrix reindexing induced by the common three-site
+    identification, and write $B_{0,1}=\Phi(B_0)$ and
+    $B_{1,2}=\Phi(B_1)$ for the two reindexed translates.  For three-site
+    configurations $x$ and $y$, the two outside-window conditions are
+    \[
+        \bigl(\forall r\notin\{0,1\},\ x_r=y_r\bigr)
+            \Longleftrightarrow x_2=y_2,
+        \qquad
+        \bigl(\forall r\notin\{1,2\},\ x_r=y_r\bigr)
+            \Longleftrightarrow x_0=y_0.
+    \]
+    Hence evaluation at a pair of left-associated triples gives
+    \[
+        \bigl(B_{0,1}\bigr)_{(i,j,k),(i',j',k')}
+          =\widehat B_{(i,j),(i',j')}\,\delta_{k,k'}
+          =\bigl(\widehat B\otimes\Id\bigr)_{(i,j,k),(i',j',k')},
+    \]
+    and
+    \[
+        \bigl(B_{1,2}\bigr)_{(i,j,k),(i',j',k')}
+          =\delta_{i,i'}\,\widehat B_{(j,k),(j',k')}
+          =\bigl(\Id\otimes\widehat B\bigr)_{(i,j,k),(i',j',k')}.
+    \]
+    Positivity of $B$ gives $\widehat B^*=\widehat B$.  Finally, matrix
+    reindexing is multiplicative, so
+    \[
+        \Phi(XY)=\Phi(X)\Phi(Y),
+        \qquad
+        B_0B_1=B_1B_0
+        \quad\Longrightarrow\quad
+        \Phi(B_0)\Phi(B_1)=\Phi(B_1)\Phi(B_0).
+    \]
+    Substituting the two entrywise identities proves that the left and right
+    overlapping lifts commute.
+\end{proof}
+
 \begin{theorem}[$\eta$-local structure carries single-bond commuting form]
     \label{thm:mpdo_eta_local_structure_has_commuting_form}
     \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
