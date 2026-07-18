@@ -182,33 +182,8 @@ positivity of `P.copies j` (i.e. `∑_q 1 = P.copies j ≠ 0`).
 -/
 lemma coeff_not_eventually_zero
     (_h : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
-    ¬ (∀ᶠ N in Filter.atTop, P.coeff N j = 0) := by
-  classical
-  intro hEv
-  -- Extract an explicit threshold `M` past which the power sum vanishes.
-  rw [Filter.eventually_atTop] at hEv
-  obtain ⟨M, hM⟩ := hEv
-  -- Apply `geom_sum_eventually_zero` with weights `P.weight j` (all nonzero)
-  -- and constants `c q = 1`, to conclude vanishing at every exponent.
-  have hwne : ∀ q : Fin (P.copies j), P.weight j q ≠ 0 :=
-    fun q => P.weight_ne_zero j q
-  have hAll : ∀ k, ∑ q : Fin (P.copies j), (1 : ℂ) * (P.weight j q) ^ k = 0 := by
-    refine SectorWeightData.geom_sum_eventually_zero
-      (w := P.weight j) (c := fun _ => 1) hwne (M := M) ?_
-    intro N hN
-    have hzero : P.coeff N j = 0 := hM N hN
-    -- `∑ q, 1 * w^N = ∑ q, w^N = coeff`.
-    simpa [SectorDecomposition.coeff, SectorWeightData.coeff, one_mul] using hzero
-  -- Specialize at `k = 0` to get `(P.copies j : ℂ) = 0`, contradicting positivity.
-  have h0 := hAll 0
-  -- `∑ q, 1 * w^0 = ∑ q, 1 = P.copies j`.
-  have hcard : (∑ _q : Fin (P.copies j), (1 : ℂ) * (P.weight j _q) ^ 0)
-      = (P.copies j : ℂ) := by
-    simp
-  rw [hcard] at h0
-  -- But `0 < P.copies j` rules out `(P.copies j : ℂ) = 0`.
-  have hpos : 0 < P.copies j := P.copies_pos j
-  exact (Nat.cast_ne_zero.mpr hpos.ne') h0
+    ¬ (∀ᶠ N in Filter.atTop, P.coeff N j = 0) :=
+  P.coeff_not_eventually_zero j
 
 end IsBNTCanonicalForm
 

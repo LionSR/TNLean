@@ -24,32 +24,6 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- Re-index a sum over a finite family through a finite map by collecting the
-coefficients in the fibres of the map. -/
-lemma sum_fiber_smul
-    {ι κ V : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
-    [AddCommMonoid V] [Module ℂ V]
-    (φ : ι → κ) (a : ι → ℂ) (v : κ → V) :
-    (∑ i : ι, a i • v (φ i)) =
-      ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
-  classical
-  calc
-    (∑ i : ι, a i • v (φ i))
-        = ∑ i : ι, ∑ k : κ, (if φ i = k then a i else 0) • v k := by
-          refine Finset.sum_congr rfl ?_
-          intro i _
-          have hinner :
-              (∑ k : κ, (if φ i = k then a i else 0) • v k)
-                = a i • v (φ i) := by
-            simp [ite_smul, eq_comm]
-          exact hinner.symm
-    _ = ∑ k : κ, ∑ i : ι, (if φ i = k then a i else 0) • v k := by
-          rw [Finset.sum_comm]
-    _ = ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
-          refine Finset.sum_congr rfl ?_
-          intro k _
-          rw [Finset.sum_smul]
-
 /-- If the overlap of two irreducible normalized BNT blocks does not decay,
 then the left MPV state is an exact scalar multiple of the right MPV state at
 every length. -/
