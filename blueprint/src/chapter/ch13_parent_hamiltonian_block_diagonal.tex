@@ -423,6 +423,60 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \]
 \end{proof}
 
+\begin{lemma}[Block-diagonal boundary conditions at the source length]
+    \label{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07}
+    \leanok
+    \uses{thm:pgvwc_direct_sum_intersection_source_length}
+    Let $g\ge2$. Let $A_j$ be irreducible left-canonical blocks with normalized
+    self-overlap, pairwise inequivalent up to gauge and phase, injective at the
+    common length $L_0>0$, and satisfying
+    \[
+        \sum_aA^j_aA^{j\,\dagger}_a=I.
+    \]
+    Let every weight $\mu_j$ be nonzero. If $0<L\le N$ and
+    \[
+        L\ge3(g-1)(L_0+1)+1,
+    \]
+    then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+        \subseteq\bigoplus_jG_N(A_j).
+    \]
+    In particular, every vector $\psi$ in the left-hand side admits matrices
+    $X_j$ such that
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+        \qquad
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j).
+    \]
+    This is the open-boundary decomposition used in
+    \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pgvwc_direct_sum_intersection_source_length,
+        lem:block_diagonal_periodic_constraints_propagated_sum,
+        lem:block_diagonal_boundary_condition_sum}
+    Put $S_M=\sum_jG_M(A_j)$. For every $M$ with $L\le M<N$,
+    Theorem~\ref{thm:pgvwc_direct_sum_intersection_source_length} gives
+    \[
+        \left(\bigcap_b\operatorname{Res}_{-,b}^{-1}S_M\right)
+        \cap
+        \left(\bigcap_a\operatorname{Res}_{a,-}^{-1}S_M\right)
+        =S_{M+1}.
+    \]
+    Induction through the cyclic local constraints therefore gives
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)\subseteq S_N.
+    \]
+    Decompose the vector into its block components, choose one boundary matrix
+    for each component, and absorb the nonzero factor $\mu_j^N$ into that
+    matrix.
+\end{proof}
+
 The lemma gives
 \[
     \Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j).
