@@ -50,13 +50,14 @@
 \begin{theorem}[Inverse-map factorization with a nonzero rectangular remainder]
     \label{thm:mpdo_inverse_map_nonzero_rectangular_remainder}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.normalizedFourSiteTail_tensor}
-    \lean{MPOTensor.ActiveSectorSpanningCounterexample.isThreeSiteClosure_threeSiteState}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.threeSiteState}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.hayashiData}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.sectorTensorL_hayashiData}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.sectorTensorR_hayashiData}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.inverseMapFactorization}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       inverseMapFactorization_neighboringOperator}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.rectangular_remainder_ne_zero}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       inverseMap_provenance_preserves_rectangular_remainder}
     \leanok
@@ -64,7 +65,13 @@
         thm:mpdo_inverse_map_hayashi_sector_comparison}
     There is a four-sector, bond-dimension-two tensor with a refined Hayashi
     decomposition whose four sectors are one-dimensional and have weight
-    $1/4$.  For the normalized four-site tail $LQ$, the inverse-map
+    $1/4$.  Its three-site state is diagonal, with
+    \[
+        \rho(i,j,k;i',j',k')
+        =\delta_{(i,j,k),(i',j',k')}\,
+          \frac14(QL)_{i,j}(QL)_{j,k}.
+    \]
+    The normalized four-site tail is $LQ$.  For this tail, the inverse-map
     construction recovers the closed sector tensors $L$ and $Q$ exactly.  Its
     neighboring operators therefore coincide with those obtained directly
     from $L$ and $Q$, while

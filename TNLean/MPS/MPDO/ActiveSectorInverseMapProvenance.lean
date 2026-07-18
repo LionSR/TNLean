@@ -27,7 +27,7 @@ namespace MPOTensor.ActiveSectorSpanningCounterexample
 unit from the four nonzero physical slices.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1413--1428. -/
-lemma sum_inverseTensor_diagonal (alpha beta : Fin 2) :
+private lemma sum_inverseTensor_diagonal (alpha beta : Fin 2) :
     (∑ i : Fin 4,
         inverseTensor tensor tensor_isInjective (finProdFinEquiv (i, i)) alpha beta •
           sectorMatrix i) = Matrix.single alpha beta (1 : ℂ) := by
@@ -62,7 +62,7 @@ lemma sum_inverseTensor_diagonal (alpha beta : Fin 2) :
 /-- The four nonzero physical slices form a basis of the virtual matrix
 space, not merely a spanning family.  This is a property of the explicit
 counterexample tensor. -/
-lemma sectorMatrix_linearIndependent : LinearIndependent ℂ sectorMatrix := by
+private lemma sectorMatrix_linearIndependent : LinearIndependent ℂ sectorMatrix := by
   rw [Fintype.linearIndependent_iff]
   intro c hzero k
   have h00 := congrFun (congrFun hzero 0) 0
@@ -92,7 +92,7 @@ private noncomputable def dualCoefficient (i : Fin 4) : Matrix (Fin 2) (Fin 2) �
 four sector matrices.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1415--1439. -/
-lemma inverseTensor_diagonal_eq_dualCoefficient (i : Fin 4) :
+private lemma inverseTensor_diagonal_eq_dualCoefficient (i : Fin 4) :
     inverseTensor tensor tensor_isInjective (finProdFinEquiv (i, i)) =
       dualCoefficient i := by
   ext alpha beta
@@ -165,14 +165,14 @@ lemma normalizedFourSiteTail_tensor :
 /-- The left density matrix in the four one-dimensional Hayashi sectors.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.3, lines 1351--1363. -/
-noncomputable def hayashiLeftDensity (k : Fin 4) :
+private noncomputable def hayashiLeftDensity (k : Fin 4) :
     Matrix (Fin 4 × Fin 1) (Fin 4 × Fin 1) ℂ :=
   Matrix.diagonal fun x => (rightPairing * leftPairing) x.1 k
 
 /-- The right density matrix in the four one-dimensional Hayashi sectors.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.3, lines 1351--1363. -/
-noncomputable def hayashiRightDensity (k : Fin 4) :
+private noncomputable def hayashiRightDensity (k : Fin 4) :
     Matrix (Fin 1 × Fin 4) (Fin 1 × Fin 4) ℂ :=
   Matrix.diagonal fun x => (rightPairing * leftPairing) k x.2
 
@@ -259,7 +259,7 @@ private lemma trace_three_sectorMatrices_mul_transfer (i j k : Fin 4) :
 four-site tail selected in Appendix C.2.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1413--1418. -/
-lemma isThreeSiteClosure_threeSiteState :
+private lemma isThreeSiteClosure_threeSiteState :
     IsThreeSiteClosure tensor (normalizedFourSiteTail tensor) threeSiteState := by
   intro i₁ i₂ i₃ j₁ j₂ j₃
   rw [normalizedFourSiteTail_tensor]
