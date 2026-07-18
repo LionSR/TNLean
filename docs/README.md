@@ -30,6 +30,8 @@ source-faithfulness requirements.
 - `pr_review_management.md`
 - `prose_style.md`
 - `stale_issue_audit.md`
+- `tactic_development.md`
+- `tactic_patterns.md`
 - `tn_diagram_grammar.md`
 - `upgrade_4_29.md`
 
