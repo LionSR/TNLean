@@ -90,7 +90,8 @@ nor the identity conclusion extends from the generators by linearity.
 Two finite-dimensional final implications are formalized.  First, if a linear
 endomorphism fixes every length-$L$ contraction product and these products
 span, then it is the identity.\footnote{Formal declaration:
-\leanid{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}.}
+\leanid{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}
+in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
 Its fixed-product hypothesis is not a hypothesis of CPSV16.
 
 Second, let $\mathcal F$ be the fixed-point space of the endomorphism and let
@@ -102,7 +103,8 @@ sector algebra, and
 \]
 then the endomorphism is the identity.\footnote{Formal declarations:
 \leanid{MPOTensor.fixedPointProductSpan} and
-\leanid{MPOTensor.eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le}.}
+\leanid{MPOTensor.eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le}
+in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
 This second implication does not assume that products of distinguished
 contractions are fixed.  It isolates the source's dimension argument.  The
 remaining fixed-point theorem must supply the displayed inequality from the
