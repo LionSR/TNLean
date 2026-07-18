@@ -231,6 +231,44 @@
     Theorem~\ref{thm:commuting_overlapping_unitary_block_actions}.
 \end{proof}
 
+\begin{theorem}[Neighboring positive blocks of a commuting bond]
+    \label{thm:mpdo_eta_bond_neighboring_positive_blocks}
+    \lean{MPOTensor.CommutingBondSiteIndex}
+    \lean{MPOTensor.CommutingBondNeighborIndex}
+    \lean{MPOTensor.commutingBondTwoSiteRegroupEquiv}
+    \lean{MPOTensor.commutingBondPhysicalPairRegroupEquiv}
+    \lean{MPOTensor.EtaLocalStructureData.CommutingBondBlockData}
+    \lean{MPOTensor.EtaLocalStructureData.exists_commutingBondBlockData}
+    \leanok
+    \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
+    Let $B\geq0$ be the two-site bond of an $\eta$-local structure.  There are
+    finite-dimensional spaces $H_{L}^{q}$ and $H_{R}^{q}$ of positive dimension,
+    an on-site unitary identification
+    \[
+        H\cong\bigoplus_q H_R^q\otimes H_L^q,
+    \]
+    and positive semidefinite operators
+    $\eta_{q,h}\in\mathbf L(H_R^q\otimes H_L^h)$ such that, in these coordinates,
+    \[
+        (U^*\otimes U^*)B(U\otimes U)
+        =\bigoplus_{q,h}
+          \Id_{H_L^q}\otimes\eta_{q,h}\otimes\Id_{H_R^h}.
+    \]
+    This is the local neighboring-sector form used in
+    \cite[Appendix~C.2, lines~1581--1593]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the two unitary block actions from
+    Theorem~\ref{thm:mpdo_eta_local_pair_bond_unitary_block_actions}.  They show
+    separately that the transformed bond is constant on the right outer index
+    of the second site and on the left outer index of the first site; matrix
+    entries between distinct sector labels vanish.  Their intersection therefore
+    has the displayed form for operators $\eta_{q,h}$ on the two neighboring
+    inner factors.  Since $B\geq0$, unitary conjugation and restriction to fixed
+    outer basis vectors show that every $\eta_{q,h}$ is positive semidefinite.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready

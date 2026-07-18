@@ -143,11 +143,19 @@ in \doclink{TNLean/MPS/MPDO/CommutingFormSpatialBridge}; its coordinate and
 commutation hypotheses are supplied by
 \doclink{TNLean/MPS/MPDO/CommutingOverlappingCoordinates}.}
 
-What remains is to transport the resulting direct-sum decomposition through
-the translation-invariant family and derive the neighboring operators
-$\eta_{k,h}$ without assuming a Hayashi decomposition.  The source ZCL
-hypothesis must then yield the rank-one trace factorization
-$\operatorname{tr}(\eta_{k,h})=a_kb_h$ at source lines~1610--1616.
+The intersection of the two unitary block actions has now been carried out for
+the translation-invariant bond.  The theorem
+\leanid{MPOTensor.EtaLocalStructureData.exists_commutingBondBlockData}
+constructs positive operators $\eta_{k,h}$ and proves the two-site identity
+\[
+  (U^*\otimes U^*)B(U\otimes U)
+  =\bigoplus_{k,h}
+    \mathbf 1_{H_L^k}\otimes\eta_{k,h}\otimes\mathbf 1_{H_R^h}.
+\]
+This is the local formula at source lines~1581--1593.  What remains before the
+source-ZCL argument is the cyclic all-length transport of this identity to the
+global form \emph{sigmaNK2}.  The trace factorization and Markov decomposition
+at an arbitrary cut remain subsequent steps.
 
 Consequently the source implication
 \[
@@ -172,10 +180,23 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Transport the Beigi block actions through the translation-invariant bond
-family, obtaining the neighboring operators $\eta_{k,h}$ without assuming a
-Hayashi decomposition.  Use \leanid{MPOTensor.IsSourceZCL} to prove the
-rank-one trace factorization
+\item Transport
+\leanid{MPOTensor.EtaLocalStructureData.exists_commutingBondBlockData}
+around every periodic chain.  More precisely, for each $N\geq2$, let
+$U_N=U^{\otimes N}$ and regroup the sector coordinates cyclically so that the
+right factor of site $n$ is paired with the left factor of site $n+1$.  Prove
+\[
+  E_N^*U_N^*\left(\prod_{n=0}^{N-1}B_{n,n+1}\right)U_NE_N
+  =\bigoplus_{k_0,\ldots,k_{N-1}}
+    \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}},
+  \qquad k_N=k_0.
+\]
+Together with the positive scalar in the eta-local realization, this is exactly
+the global form \emph{sigmaNK2}.  The proof must use only the on-site unitary,
+the local bond identity, and finite cyclic regrouping; it must not assume a
+Hayashi decomposition or the trace factorization from zero correlation length.
+\item Use \leanid{MPOTensor.IsSourceZCL} to prove the rank-one trace
+factorization
 $\operatorname{tr}(\eta_{k,h})=a_kb_h$ appearing at source lines~1610--1616.
 Then trace the fourth region and construct the quantum Markov decomposition at
 each admissible cut, and apply the all-cut Markov theorem above.
