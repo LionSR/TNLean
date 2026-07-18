@@ -245,9 +245,8 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     \label{thm:cpsv_bnt_uniqueness_converse_coverage}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage}
     \leanok
-    \uses{thm:cpsv_bnt_characterization,
-        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
-        thm:cpsv_normal_mpv_phase_gauge}
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos,
+        def:block_diagonal_tensor, def:gauge_phase_equiv}
     Let $A$ have a canonical-form MPV expansion
     \[
         \ket{V^{(N)}(A)}
@@ -270,7 +269,8 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \begin{proof}\leanok
     \uses{thm:cpsv_bnt_characterization,
         thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
-        thm:cpsv_normal_mpv_phase_gauge}
+        thm:cpsv_normal_mpv_phase_gauge,
+        lem:gauge_phase_equiv_cast_compose, def:gauge_phase_equiv}
     For each $A_j$, choose an active canonical-form block
     $\widetilde A_{\ell(j)}$ representing it, and then choose a member
     $B_{f(j)}$ representing that block. If $f(j)=f(j')$, then
