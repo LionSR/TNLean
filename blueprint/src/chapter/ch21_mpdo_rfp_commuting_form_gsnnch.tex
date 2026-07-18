@@ -231,6 +231,37 @@
     Theorem~\ref{thm:commuting_overlapping_unitary_block_actions}.
 \end{proof}
 
+\begin{theorem}[Positive neighboring operators from the commuting bond]
+    \label{thm:mpdo_commuting_bond_positive_eta_decomposition}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_positive_eta_pairBond_decomposition}
+    \leanok
+    \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
+    Let $B$ be the pair-indexed positive bond of an $\eta$-local structure.
+    There are a unitary decomposition
+    \[
+        H\cong\bigoplus_q H_{q,l}\otimes H_{q,r}
+    \]
+    and positive semidefinite operators
+    $\eta_{q,h}$ on $H_{q,r}\otimes H_{h,l}$ such that
+    \[
+        (U^*\otimes U^*)B(U\otimes U)
+        =\bigoplus_{q,h}
+          \Id_{H_{q,l}}\otimes\eta_{q,h}\otimes\Id_{H_{h,r}}.
+    \]
+    The unitary and the neighboring operators depend only on the fixed bond,
+    and hence are independent of a chain length or bond position.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
+    Apply the same unitary block decomposition at both ends of $B$.  One
+    block identity gives the identity action on $H_{q,l}$ and the other gives
+    the identity action on $H_{h,r}$.  Their common matrix coefficients define
+    $\eta_{q,h}$.  It is a principal compression of the positive doubly
+    conjugated bond, and is therefore positive semidefinite.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready
@@ -248,8 +279,9 @@
 
     This is the proposition at
     \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
-    % The Bravyi--Vyalyi spatial decomposition and the subsequent source-ZCL
-    % trace factorization remain open. Gap documented in
+    % The local positive neighboring operators are constructed.  The printed
+    % rank-one inference at source line 1613 remains obstructed by #3593. Gap
+    % documented in
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
