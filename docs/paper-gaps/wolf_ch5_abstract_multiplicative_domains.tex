@@ -1,0 +1,91 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Wolf Chapter~5: Abstract Multiplicative-Domain Hypotheses}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Let $E:M_D(\mathbb C)\to M_D(\mathbb C)$ be a complex-linear map satisfying
+the Schwarz inequality
+\begin{align}
+  E(A^*A)-E(A^*)E(A)\succeq 0
+  \qquad (A\in M_D(\mathbb C)).
+  \tag{Wolf, Equation (5.2)}
+\end{align}
+Wolf defines
+\begin{align}
+  \mathcal A_R
+    &=\{A:E(XA)=E(X)E(A)\text{ for every }X\},\\
+  \mathcal A_L
+    &=\{A:E(AX)=E(A)E(X)\text{ for every }X\},
+\end{align}
+and proves
+\begin{align}
+  A\in\mathcal A_R
+    &\iff E(A^*A)=E(A^*)E(A),\\
+  A\in\mathcal A_L
+    &\iff E(AA^*)=E(A)E(A^*).
+  \tag{Wolf, Equations (5.13)--(5.14)}
+\end{align}
+The local source for Equation~(5.2) is
+\path{Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex},
+lines~156--164; the local source for Equations~(5.11)--(5.14) is
+lines~383--410 of the same file.  No Kraus representation, complete
+positivity, or $2$-positivity occurs in this statement.
+
+\section{Earlier specialization}
+
+The existing one-sided characterizations use a unital Kraus family.
+\footnote{See
+\leanid{KadisonSchwarz.mem_rightMultiplicativeDomain_iff} and
+\leanid{KadisonSchwarz.mem_leftMultiplicativeDomain_iff} in
+\doclink{TNLean/Channel/Schwarz/MultiplicativeDomainFull}.}
+They are mathematically correct specializations, but the
+Kraus representation and unitality are absent from Wolf's abstract
+multiplicative-domain theorem.  Their names also use the convention that the
+subscript records the side on which the varying factor is appended; this
+interchanges the labels ``left'' and ``right'' relative to Wolf's convention,
+where the subscript records the side occupied by the fixed element.
+
+The source-faithful formulation now uses only complex linearity and the
+displayed Schwarz inequality.
+\footnote{Formal declarations:
+\leanid{IsSchwarzMap},
+\leanid{SchwarzMap.rightMultiplicativeDomain},
+\leanid{SchwarzMap.leftMultiplicativeDomain},
+\leanid{SchwarzMap.mem_rightMultiplicativeDomain_iff}, and
+\leanid{SchwarzMap.mem_leftMultiplicativeDomain_iff} in
+\doclink{TNLean/Channel/Schwarz/AbstractMultiplicativeDomain}.}
+The Kraus declarations remain available as specialized results and are no
+longer used as the blueprint witness for the unrestricted source theorem.
+
+\section{Remaining Chapter 5 boundary}
+
+Wolf's preceding two-variable operator Schwarz inequality and its equality
+criterion, involving the inverse of $E(B^*B)$ on its range, remain separate
+work.  The one-variable multiplicative-domain theorem above does not assume
+those results: its polarization proof applies the one-variable Schwarz
+inequality directly to $A+tY$.
+
+\section{Verdict}
+
+The interchange of the one-sided domain names is a notational clarification:
+the two conventions define the same pair of sets with opposite labels, and
+their full intersections agree.  The source-faithful one-variable theorem is
+complete.  The two-variable inverse-on-range inequality and its equality
+criterion remain an open gap.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

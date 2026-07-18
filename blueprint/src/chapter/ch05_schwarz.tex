@@ -1939,10 +1939,124 @@ adjacent cones.
     \end{align*}
 \end{proof}
 
-\subsection{Full multiplicative-domain structure}
+\subsection{Abstract Schwarz maps and their multiplicative domains}
+
+\begin{definition}[Schwarz inequality for a linear map]
+    \label{def:abstract_schwarz_inequality}
+    \lean{IsSchwarzMap}
+    \leanok
+    A complex-linear map $E:\MN{D}\to\MN{D}$ satisfies the Schwarz
+    inequality if
+    \[
+        E(A^\dagger A)-E(A^\dagger)E(A)\succeq 0
+    \]
+    for every $A\in\MN{D}$.  This is
+    \cite[Equation~(5.2)]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{definition}[Abstract one-sided multiplicative domains]
+    \label{def:abstract_one_sided_multiplicative_domains}
+    \lean{SchwarzMap.rightMultiplicativeDomain,
+        SchwarzMap.leftMultiplicativeDomain,
+        SchwarzMap.multiplicativeDomain}
+    \leanok
+    For a complex-linear map $E:\MN{D}\to\MN{D}$, set
+    \[
+        \mc{A}_R(E)
+          = \{A : E(XA)=E(X)E(A)\text{ for every }X\},
+        \qquad
+        \mc{A}_L(E)
+          = \{A : E(AX)=E(A)E(X)\text{ for every }X\},
+    \]
+    and $\mc{A}(E)=\mc{A}_R(E)\cap\mc{A}_L(E)$.
+    These are \cite[Equations~(5.11)--(5.12)]{Wolf2012Quantum}, with the
+    source's convention that the subscript records the side on which $A$
+    multiplies the varying matrix.
+\end{definition}
+
+\begin{theorem}[Abstract multiplicative-domain characterization]
+    \label{thm:abstract_md_characterization}
+    \lean{SchwarzMap.mem_rightMultiplicativeDomain_iff,
+        SchwarzMap.mem_leftMultiplicativeDomain_iff,
+        SchwarzMap.mem_multiplicativeDomain_iff}
+    \leanok
+    \uses{def:abstract_schwarz_inequality,
+        def:abstract_one_sided_multiplicative_domains}
+    If $E$ satisfies the Schwarz inequality, then
+    \[
+        A\in\mc{A}_R(E)
+          \quad\Longleftrightarrow\quad
+        E(A^\dagger A)=E(A^\dagger)E(A),
+    \]
+    and
+    \[
+        A\in\mc{A}_L(E)
+          \quad\Longleftrightarrow\quad
+        E(AA^\dagger)=E(A)E(A^\dagger).
+    \]
+    Consequently, $A\in\mc{A}(E)$ exactly when both equalities hold.
+    This is \cite[Equations~(5.13)--(5.14)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:abstract_schwarz_inequality}
+    Suppose first that equality holds at $A^\dagger A$.  Apply the Schwarz
+    inequality to $A+tY$, first for real $t$ and then for purely imaginary
+    $t$.  Set
+    \[
+        L=E(A^\dagger Y)-E(A^\dagger)E(Y),\qquad
+        R=E(Y^\dagger A)-E(Y^\dagger)E(A),\qquad
+        Q=E(Y^\dagger Y)-E(Y^\dagger)E(Y)\succeq0.
+    \]
+    For every real $t$, expansion and the equality at $A^\dagger A$ give
+    \[
+        t(L+R)+t^2Q\succeq0,
+        \qquad
+        t\,i(L-R)+t^2Q\succeq0.
+    \]
+    Nonnegativity for both signs of every real parameter forces
+    \[
+        L+R=0,\qquad L-R=0.
+    \]
+    Hence $L=R=0$, which is precisely
+    \[
+        E(A^\dagger Y)=E(A^\dagger)E(Y),
+        \qquad
+        E(Y^\dagger A)=E(Y^\dagger)E(A).
+    \]
+    Replacing $Y$ by $X^\dagger$ yields $E(XA)=E(X)E(A)$.
+    The second characterization follows by applying the same argument to
+    $A^\dagger$.  The converse implications follow by evaluating the defining
+    product identities at $A^\dagger$.
+\end{proof}
+
+\begin{theorem}[Kraus maps satisfy the abstract Schwarz inequality]
+    \label{thm:kraus_abstract_schwarz}
+    \lean{KadisonSchwarz.krausMap_isSchwarzMap}
+    \leanok
+    \uses{def:kraus_map, def:unital_kraus,
+        def:abstract_schwarz_inequality}
+    Every unital Kraus map satisfies the abstract Schwarz inequality of
+    Definition~\ref{def:abstract_schwarz_inequality}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    A Kraus map preserves adjoints.  The Kadison--Schwarz inequality therefore
+    gives, for every $A\in\MN{D}$,
+    \[
+        E(A^\dagger A)-E(A^\dagger)E(A)
+        =E(A^\dagger A)-E(A)^\dagger E(A)\succeq0.
+    \]
+\end{proof}
+
+\subsection{Kraus specialization and full algebraic structure}
 
 \begin{definition}[Right and left multiplicative domains]\label{def:one_sided_multiplicative_domains}
-    \lean{KadisonSchwarz.rightMultiplicativeDomain, KadisonSchwarz.leftMultiplicativeDomain}
+    \lean{KadisonSchwarz.rightMultiplicativeDomain,
+        KadisonSchwarz.leftMultiplicativeDomain}
     \leanok
     \uses{def:kraus_map}
     For a Kraus map $E$, define
@@ -1955,8 +2069,10 @@ adjacent cones.
     \]
     We follow the convention that $\mc{A}_R(E)$ controls right multiplication
     and $\mc{A}_L(E)$ controls left multiplication.
-    These are the two one-sided multiplicative domains from
-    \cite[Equations~(5.11)--(5.12)]{Wolf2012Quantum}.
+    These are Kraus-map specializations of the preceding abstract domains,
+    with the names interchanged: here the subscript records the side on which
+    the varying factor is appended, whereas the preceding convention records
+    the side occupied by the fixed element.
 \end{definition}
 
 \begin{definition}[Full multiplicative domain]\label{def:full_multiplicative_domain}
@@ -1968,6 +2084,26 @@ adjacent cones.
         \mc{A}(E) := \mc{A}_R(E) \cap \mc{A}_L(E).
     \]
 \end{definition}
+
+\begin{remark}[Comparison of the two naming conventions]
+    \label{rem:abstract_kraus_multiplicative_domain_names}
+    \lean{KadisonSchwarz.mem_abstractRightMultiplicativeDomain_iff,
+        KadisonSchwarz.mem_abstractLeftMultiplicativeDomain_iff,
+        KadisonSchwarz.mem_abstractMultiplicativeDomain_iff}
+    \leanok
+    \uses{def:abstract_one_sided_multiplicative_domains,
+        def:one_sided_multiplicative_domains,
+        def:full_multiplicative_domain}
+    Write $\mc{A}_R^{\mathrm W},\mc{A}_L^{\mathrm W}$ for Wolf's
+    convention and $\mc{A}_R^{\mathrm K},\mc{A}_L^{\mathrm K}$ for the
+    Kraus convention of this subsection.  For the linear map associated with
+    a Kraus family,
+    \[
+        \mc{A}_R^{\mathrm W}=\mc{A}_L^{\mathrm K},\qquad
+        \mc{A}_L^{\mathrm W}=\mc{A}_R^{\mathrm K},\qquad
+        \mc{A}^{\mathrm W}=\mc{A}^{\mathrm K}.
+    \]
+\end{remark}
 
 \begin{theorem}[Multiplicative-domain characterization]\label{thm:md_characterization}
     \lean{KadisonSchwarz.mem_rightMultiplicativeDomain_iff, KadisonSchwarz.mem_leftMultiplicativeDomain_iff}
@@ -1981,8 +2117,8 @@ adjacent cones.
     \[
         X \in \mc{A}_L(E) \iff E(X^\dagger X) = E(X)^\dagger E(X).
     \]
-    Together these are the two one-sided characterizations from
-    \cite[Theorem~5.7]{Wolf2012Quantum}.
+    Together these are the Kraus-map specialization of
+    Theorem~\ref{thm:abstract_md_characterization}.
 \end{theorem}
 
 \begin{proof}
