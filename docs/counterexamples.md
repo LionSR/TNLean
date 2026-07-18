@@ -18,6 +18,25 @@ mathematical obstruction.
   constant traces but not rank one. An additional condition excluding the
   generalized zero-eigenspace is required.
 
+### Virtual spanning does not eliminate the nilpotent sector pairing
+
+- Location:
+  `TNLean/Archive/PerronFrobeniusVirtualSpanningCounterexample.lean`
+- Main declaration:
+  `TNLean.Archive.PerronFrobeniusVirtualSpanningCounterexample.injective_sourceZCL_tensor_with_nilpotent_sector_pairing`
+- Statement refuted: source ZCL, injectivity, primitivity, trace
+  normalization, rectangular pairing idempotence, constant positive-power
+  traces, and full spanning of the virtual matrix algebra imply that the
+  opposite rectangular product has rank one.
+- Witness: four rational pairs $l_k,r_k$ with $LQ$ idempotent and $T=QL$
+  primitive, but $Q(1-LQ)L=T-T^2\ne0$. The matrices $l_k r_k$ span
+  $M_2(\mathbb R)$ and occur as the diagonal slices of an injective
+  source-ZCL MPO tensor.
+- Boundary: the witness is not identified with the factors selected by the
+  SAL inverse-map construction. It therefore isolates the missing
+  SAL/provenance consequence but does not refute the full statement of
+  Lemma C.5.
+
 ### BiCF does not follow from the other per-copy `HorizontalCFData` fields
 
 - Location: `TNLean/MPS/MPDO/BiCFDerivation.lean`
