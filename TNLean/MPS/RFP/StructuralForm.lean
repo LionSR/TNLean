@@ -96,7 +96,9 @@ The proof uses the RFP span-collapse lemma above: once every nonempty blocked wo
 one-site Kraus span, any positive-length block-injectivity witness immediately upgrades to
 single-site injectivity.
 
-Source: CPSV16, Lemma `lem:charact-NT-pure-RFP`, lines 1274--1300. -/
+Source context: CPSV16, Appendix B, lines 1274--1300, proves a stronger structural
+decomposition for the paper's normal-tensor notion. The present implication is the
+project's span-collapse precursor and is not a formalization of that lemma. -/
 theorem rfp_nt_structural (A : MPSTensor d D)
     (hNT : IsNormal A) (hRFP : IsTransferIdempotent A) :
     IsInjective A := by

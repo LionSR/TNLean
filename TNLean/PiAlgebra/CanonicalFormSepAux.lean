@@ -180,7 +180,7 @@ end HasNormalizedSelfOverlap
 /-! ### Canonical form conditions -/
 
 /-- Canonical-form conditions combining injectivity, positive bond dimensions,
-left-canonical normalization `∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weight data,
+left-canonical normalization `∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weights `μₖ`,
 and overlap normalization.
 
 Source context: arXiv:1606.00608, eq. `II_CF1` and lines 237--246, and
