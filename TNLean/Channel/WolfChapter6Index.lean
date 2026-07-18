@@ -7,6 +7,7 @@ import TNLean.Analysis.MeanErgodic
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
+import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
 import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.CornerFixedPoints
@@ -283,10 +284,11 @@ projection is a positive trace-preserving retraction onto its fixed-point
 space. If the original endomorphism is unital, the projection is unital as
 well.
 
-The remaining mean-ergodic step for Theorem 6.14 is to identify the
-trace-pairing adjoint of this projection with the corresponding retraction on
-the adjoint fixed-point space and to combine it with the full-support
-star-algebra description.
+The trace-pairing adjoint step is now complete.  The adjoint of the
+mean-ergodic projection is a positive unital idempotent retraction onto the
+fixed-point space of the adjoint endomorphism.  The remaining step for
+Theorem 6.14 is to combine this retraction with the full-support star-algebra
+description.
 
 In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 
