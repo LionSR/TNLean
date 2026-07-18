@@ -458,8 +458,18 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 \begin{proof}
     \leanok
     \uses{thm:pgvwc_direct_sum_intersection_source_length}
-    Iterating the direct-sum restriction intersection from length $L$ to
-    length $N$ places every periodic vector in $\bigoplus_jG_N(A_j)$.
+    Put $S_M=\sum_jG_M(A_j)$. For every $M$ with $L\le M<N$,
+    Theorem~\ref{thm:pgvwc_direct_sum_intersection_source_length} gives
+    \[
+        \left(\bigcap_b\operatorname{Res}_{-,b}^{-1}S_M\right)
+        \cap
+        \left(\bigcap_a\operatorname{Res}_{a,-}^{-1}S_M\right)
+        =S_{M+1}.
+    \]
+    Induction through the cyclic local constraints therefore gives
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)\subseteq S_N.
+    \]
     Decompose the vector into its block components, choose one boundary matrix
     for each component, and absorb the nonzero factor $\mu_j^N$ into that
     matrix.

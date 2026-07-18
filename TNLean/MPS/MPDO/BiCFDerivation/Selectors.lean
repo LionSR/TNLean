@@ -269,7 +269,7 @@ theorem wordTupleSpanTop_succ_of_unital
   exact hSum
 
 /-- Right-canonical normalization propagates a full simultaneous word-tuple
-span to every larger length. This is the induction wrapper for the one-step
+span to every larger length. This is the induction-based extension of the one-step
 propagation used in arXiv:quant-ph/0608197, lines 1346--1421. -/
 theorem wordTupleSpanTop_of_ge_of_unital
     (A : (k : Fin r) → MPSTensor d (dim k))
