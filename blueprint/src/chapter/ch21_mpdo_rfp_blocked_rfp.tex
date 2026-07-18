@@ -299,19 +299,21 @@ physical indices, as in
     \uses{def:mpdo_normalized_vertical_sector_maps,
         def:mpdo_vertical_bond_matrix_contraction}
     For vertical BNT tensors $M_\alpha$ with simple matrix algebras
-    $M_{d_\alpha}$, define
+    $M_{d_\alpha}$ and a family of complex scalars $(c_\alpha)_\alpha$, define
     \[
-        V(X)=\bigoplus_\alpha m_\alpha M_\alpha(X),
+        V_c(X)=\bigoplus_\alpha c_\alpha M_\alpha(X),
         \qquad
         M_\alpha(X)=\sum_{a,b}X_{ba}M_{\alpha,ab}.
     \]
     For each $L\geq0$, let
     \[
-        C_L(V)=\spn_{\C}\left\{
-          V(X_1)\cdots V(X_L):X_1,\ldots,X_L\in M_D
+        C_L(V_c)=\spn_{\C}\left\{
+          V_c(X_1)\cdots V_c(X_L):X_1,\ldots,X_L\in M_D
         \right\}
         \subseteq \prod_\alpha M_{d_\alpha}.
     \]
+    Write $V_m$ for the specialization obtained by taking
+    $c_\alpha=m_\alpha=\operatorname{tr}(\mu_\alpha)$.
 \end{definition}
 
 \begin{lemma}[Contraction against a matrix unit]
@@ -359,8 +361,8 @@ physical indices, as in
         lem:mpdo_vertical_bond_contraction_encoded_matrix_unit}
     For a word $w=((a_1,b_1),\ldots,(a_L,b_L))$,
     \[
-        V(E_{b_1a_1})\cdots V(E_{b_La_L})
-        =\bigoplus_\alpha m_\alpha^L M_\alpha^w.
+        V_c(E_{b_1a_1})\cdots V_c(E_{b_La_L})
+        =\bigoplus_\alpha c_\alpha^L M_\alpha^w.
     \]
 \end{lemma}
 
@@ -371,28 +373,48 @@ physical indices, as in
     \leanok
     \uses{def:mpdo_vertical_sector_scaling_equivalence,
         lem:mpdo_weighted_contraction_matrix_unit_words}
-    Fix $L\geq0$ and suppose that every $m_\alpha$ is nonzero.  If the
+    Fix $L\geq0$ and suppose that every $c_\alpha$ is nonzero.  If the
     simultaneous word tuples $(M_\alpha^w)_\alpha$ of length $L$ span
     $\prod_\alpha M_{d_\alpha}$, then
     \[
-        C_L(V)=\prod_\alpha M_{d_\alpha}.
+        C_L(V_c)=\prod_\alpha M_{d_\alpha}.
     \]
 \end{lemma}
+
+\begin{theorem}[Nonzero-weight vertical bond contractions generate the sector algebra]
+    \label{thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+    \lean{MPOTensor.%
+        exists_positive_weightedVerticalBondContractionProductSpanTop_of_bnt}
+    \leanok
+    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products}
+    Suppose that $(M_\alpha)_\alpha$ is a basis of normal tensors and that
+    $(c_\alpha)_\alpha$ is any family of nonzero complex scalars.  Then there
+    is a positive integer $L$ such that
+    \[
+        C_L(V_c)=\prod_\alpha M_{d_\alpha}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_weighted_contraction_span_transfer,
+        thm:cpsv_bnt_blocked_simultaneous_span}
+    Choose $L>0$ for which the simultaneous word tuples
+    $(M_\alpha^w)_\alpha$ span $\prod_\alpha M_{d_\alpha}$.  Since every
+    $c_\alpha$ is nonzero, so is $c_\alpha^L$.  Apply
+    Lemma~\ref{lem:mpdo_weighted_contraction_span_transfer}.
+\end{proof}
 
 \begin{theorem}[Vertical bond contractions generate the sector algebra]
     \label{thm:mpdo_vertical_bond_contractions_generate_sector_algebra}
     \lean{MPOTensor.%
-        exists_positive_weightedVerticalBondContractionProductSpanTop_of_bnt}
-    \lean{MPOTensor.%
         exists_positive_verticalMultiplicityTraceBondContractionProductSpanTop_of_bnt}
     \leanok
-    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products,
-        thm:cpsv_bnt_blocked_simultaneous_span}
+    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products}
     Suppose that $(M_\alpha)_\alpha$ is a basis of normal tensors, every
     multiplicity space is nonzero, and every diagonal entry of $\mu_\alpha$
     is positive.  Then there is a positive integer $L$ such that
     \[
-        C_L(V)=\prod_\alpha M_{d_\alpha}=: \mathcal A_1.
+        C_L(V_m)=\prod_\alpha M_{d_\alpha}=: \mathcal A_1.
     \]
     This is the spanning assertion used in
     \cite[Appendix~C.4, lines~1980--1990]{Cirac2016MPDO_arXiv}.
@@ -400,35 +422,15 @@ physical indices, as in
 
 \begin{proof}\leanok
     \uses{lem:mpdo_vertical_sector_retraction,
-        lem:mpdo_weighted_contraction_matrix_unit_words,
-        lem:mpdo_weighted_contraction_span_transfer,
-        thm:cpsv_bnt_blocked_simultaneous_span}
-    For the matrix unit $E_{ba}\in M_D$, contraction of the horizontal bond
-    gives $M_\alpha(E_{ba})=M_{\alpha,ab}$.  Hence, for a word
-    $w=((a_1,b_1),\ldots,(a_L,b_L))$,
-    \[
-        V(E_{b_1a_1})\cdots V(E_{b_La_L})
-        =\bigoplus_\alpha m_\alpha^L M_\alpha^w.
-    \]
-    Choose $L>0$ for which the simultaneous word tuples
-    $(M_\alpha^w)_\alpha$ span $\prod_\alpha M_{d_\alpha}$.  Since every
-    multiplicity space is nonzero and every diagonal entry is positive,
+        thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+    Since every multiplicity space is nonzero and every diagonal entry is
+    positive,
     \[
         m_\alpha
         =\sum_{q=0}^{\operatorname{mult}(\alpha)-1}\mu_{\alpha,q}>0.
     \]
-    Thus $m_\alpha^L\ne0$.  For the linear equivalence
-    \[
-        \varphi_L((X_\alpha)_\alpha)
-        =(m_\alpha^L X_\alpha)_\alpha,
-    \]
-    the matrix-unit identity and simultaneous word spanning give
-    \[
-      \spn_{\C}\{V(X_1)\cdots V(X_L)\}
-      =\varphi_L\!\left(\spn_{\C}\{(M_\alpha^w)_\alpha:w\}\right)
-      =\varphi_L\!\left(\prod_\alpha M_{d_\alpha}\right)
-      =\prod_\alpha M_{d_\alpha}.
-    \]
+    Apply the preceding theorem to the nonzero family
+    $c_\alpha=m_\alpha=\operatorname{tr}(\mu_\alpha)$.
 \end{proof}
 
 \begin{definition}[Retained coordinates for the vertical-sector algebra]
