@@ -111,7 +111,7 @@ general MPDO renormalization fixed-point theorem.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
 def fixedPointProductSpan
-    {g L : ℕ} {dim : Fin g → ℕ}
+    {g : ℕ} {dim : Fin g → ℕ} (L : ℕ)
     (F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim) :
     Submodule ℂ (VerticalSectorAlgebra dim) :=
   Submodule.span ℂ (Set.range fun X : Fin L → F.fixedSubmodule =>
@@ -246,7 +246,7 @@ products force \(C_L(\mathcal F)\) to be the whole sector algebra.
 The dimension bound then forces the fixed-point space itself to be the whole
 sector algebra.
 
-**Interface to the open fixed-point theorem:** The source obtains the
+**Scope restriction (fixed-point dimension):** The source obtains the
 dimension bound from Wolf's density-weighted description of the fixed-point
 space.  Its derivation from positivity and trace preservation remains recorded
 in `docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`; the bound is
@@ -262,16 +262,16 @@ theorem eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_l
     (hFixed : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       F (weightedVerticalBondContraction m A X) =
         weightedVerticalBondContraction m A X)
-    (hFinrank : Module.finrank ℂ (fixedPointProductSpan (L := L) F) ≤
+    (hFinrank : Module.finrank ℂ (fixedPointProductSpan L F) ≤
       Module.finrank ℂ F.fixedSubmodule) :
     F = LinearMap.id := by
   have hProductMem (X : Fin L → Matrix (Fin D) (Fin D) ℂ) :
       weightedVerticalBondContractionProduct m A X ∈
-        fixedPointProductSpan (L := L) F := by
+        fixedPointProductSpan L F := by
     apply Submodule.subset_span
     refine ⟨fun t => ⟨weightedVerticalBondContraction m A (X t), ?_⟩, rfl⟩
     exact LinearMap.mem_fixedSubmodule_iff.mpr (hFixed (X t))
-  have hProductSpanTop : fixedPointProductSpan (L := L) F = ⊤ := by
+  have hProductSpanTop : fixedPointProductSpan L F = ⊤ := by
     apply top_unique
     rw [← hSpan]
     apply Submodule.span_le.mpr
