@@ -1073,6 +1073,45 @@ physical indices, as in
     \]
 \end{proof}
 
+\begin{lemma}[Fixed contraction families of the transported composites]
+    \label{lem:mpdo_transported_vertical_sector_fixed_generators}
+    \lean{MPOTensor.transportedVerticalSectorS_comp_T_fixed_contractBondMatrix_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorT_comp_S_fixed_contractBondMatrix_trace_smul}
+    \leanok
+    \uses{thm:mpdo_transported_vertical_sector_maps}
+    For every bond matrix $X$, set
+    \[
+        V_1(X)=\bigoplus_\alpha m_\alpha M_\alpha(X),
+        \qquad
+        V_2(X)=\bigoplus_\beta n_\beta A_\beta(X).
+    \]
+    Under the hypotheses of the preceding theorem, the transported
+    composites satisfy
+    \[
+        (\widetilde S\circ\widetilde T)(V_1(X))=V_1(X),
+        \qquad
+        (\widetilde T\circ\widetilde S)(V_2(X))=V_2(X).
+    \]
+    Thus the one-site and two-site contraction families lie in the respective
+    fixed-point spaces, as in Appendix~C.4, lines 1974--1980.  These equations
+    do not assert that either composite is the identity on the whole sector
+    algebra; that conclusion requires the fixed-point structure argument of
+    Appendix~C.4, lines 1980--1993.
+\end{lemma}
+
+\begin{proof}\leanok
+    The preceding theorem gives
+    $\widetilde T(V_1(X))=V_2(X)$ and
+    $\widetilde S(V_2(X))=V_1(X)$.  Hence
+    \[
+        (\widetilde S\circ\widetilde T)(V_1(X))
+        =\widetilde S(V_2(X))=V_1(X),
+        \qquad
+        (\widetilde T\circ\widetilde S)(V_2(X))
+        =\widetilde T(V_1(X))=V_2(X).
+    \]
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
