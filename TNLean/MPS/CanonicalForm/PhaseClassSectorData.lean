@@ -59,25 +59,26 @@ noncomputable def collapsedBntSectorDecomp
     sectors := sectors
   }
 
-/-- The total tensor of `collapsedBntSectorDecomp` has the same MPV at every length
-as the original `toTensorFromBlocks μ blocks`.  Exposed (was previously `private`)
-for the prepared-block SectorBNT constructor. -/
-theorem collapsedBntSectorDecomp_sameMPV₂
+/-- The total tensor of `collapsedBntSectorDecomp` has the same MPV at every positive
+length as the original `toTensorFromBlocks μ blocks`.
+
+Source: CPSV16, Proposition `prop:char-BNT`, lines 1135–1148. -/
+theorem collapsedBntSectorDecomp_sameMPV₂Pos
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hμne : ∀ k, μ k ≠ 0) :
-    SameMPV₂ (collapsedBntSectorDecomp (d := d) μ blocks hμne).toTensor
+    SameMPV₂Pos (collapsedBntSectorDecomp (d := d) μ blocks hμne).toTensor
       (toTensorFromBlocks (d := d) (μ := μ) blocks) := by
   classical
   let classes := mpvPhaseClassData blocks
   let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
     fun j q => (classes.enum_phase j q).choose
-  have hζ_mpv : ∀ j q (N : ℕ) (σ : Fin N → Fin d),
+  have hζ_mpv : ∀ j q (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv (blocks (classes.enum j q)) σ = (ζFn j q) ^ N * mpv (blocks (classes.repr j)) σ :=
-    fun j q N σ => (classes.enum_phase j q).choose_spec.2 N σ
+    fun j q N hN σ => (classes.enum_phase j q).choose_spec.2 N hN σ
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
-  intro N σ
+  intro N hN σ
   calc mpv P.toTensor σ
       = ∑ j : Fin P.basisCount,
           ∑ q : Fin (P.copies j), (P.weight j q) ^ N * mpv (P.basis j) σ :=
@@ -92,7 +93,7 @@ theorem collapsedBntSectorDecomp_sameMPV₂
             (μ (classes.enum j q)) ^ N * mpv (blocks (classes.enum j q)) σ := by
             refine Finset.sum_congr rfl (fun j _ =>
               Finset.sum_congr rfl (fun q _ => ?_))
-            rw [mul_pow, hζ_mpv j q N σ]
+            rw [mul_pow, hζ_mpv j q N hN σ]
             ring
     _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ :=
           classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
@@ -106,11 +107,8 @@ If every block in an MPV phase class has the same bond dimension as the
 chosen representative of that class, then the collapsed BNT sector
 decomposition has the same total bond dimension as the original direct sum.
 
-This is the length-zero dimension statement needed in the arbitrary-input
-supplier: without the displayed same-dimension hypothesis, the quotient is
-allowed to identify MPV-phase-equivalent blocks of differing bond dimensions,
-and the length-zero MPV coefficient need not be preserved by dimension counting
-alone. -/
+This is a finite-sum identity for the multiplicities of the grouped blocks; it
+does not enter the positive-length MPV relation. -/
 theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)

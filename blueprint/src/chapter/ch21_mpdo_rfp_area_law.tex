@@ -565,13 +565,31 @@
 \end{proof}
 
 \begin{remark}[Boundedness of the mutual information]
-    The monotone sequence $I_L$ is bounded by a constant depending only on the
-    bond dimension, $I_L \le 4\log D$, so it converges as $L\to\infty$. For a
-    general mixed MPDO this bound is not proved in
-    \cite{Cirac2016MPDO_arXiv}; that reference attributes it (line~1319) to the
-    mutual-information area law of Wolf et al., used there as an external result.
-    The pure-state instance is Proposition~\ref{prop:pure_mutual_info_bound}
-    below.
+    Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts the uniform estimate
+    $I_L \le 4\log D$ for every MPDO. Its cited proof, however, treats mixed
+    tensor-network states obtained from local completely positive maps
+    \cite{Wolf2008AreaLaws}. After purifying those maps, data processing and
+    the pure-state boundary estimate give
+    \[
+        I(A:B)_{\rho}
+        \le I(A:B)_{\lvert\Psi\rangle\langle\Psi\rvert}
+        =2S(A)_{\lvert\Psi\rangle\langle\Psi\rvert}
+        \le 2\lvert\partial A\rvert\log D.
+    \]
+    A periodic one-dimensional interval has two boundary bonds, and hence the
+    last expression is $4\log D$. A general positive MPO need not admit this
+    local purification.
+
+    The two virtual bonds do give an operator-Schmidt decomposition with at most
+    $D^2$ terms, but they do not bound the ordinary rank of either marginal.
+    For example, a bond-one tensor can generate $q^{\otimes N}$ for a full-rank
+    one-site density matrix $q$. Thus its $L$-site marginal has rank
+    $\operatorname{rank}(q)^L$, although its mutual information vanishes. The
+    unrestricted estimate therefore requires a direct operator-Schmidt
+    argument not supplied by the cited proof. The bound and the iterated
+    thermodynamic limit remain open; see
+    \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}. The
+    pure-state instance is Proposition~\ref{prop:pure_mutual_info_bound} below.
 \end{remark}
 
 \begin{definition}[Block entropy and area-law saturation for pure states]

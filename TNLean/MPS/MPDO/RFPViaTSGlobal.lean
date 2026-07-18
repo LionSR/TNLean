@@ -271,7 +271,8 @@ theorem trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
     simpa [sectorCompression_def] using hCompression
   have hSeedTrace : Matrix.trace (mpo M (L + 1)) ≠ 0 := by
     intro hTrace
-    exact hMpo ((Matrix.PosSemidef.trace_eq_zero_iff (hMPDO (L + 1))).mp hTrace)
+    exact hMpo
+      ((Matrix.PosSemidef.trace_eq_zero_iff (hMPDO (L + 1) (by omega))).mp hTrace)
   have hLoopIdempotent : IsIdempotentElem (verticalLoop M) := by
     rw [isIdempotentElem_iff, verticalLoop_eq_physTraceTransfer]
     exact physTraceTransfer_sq_of_isRFPViaTS M hRFP

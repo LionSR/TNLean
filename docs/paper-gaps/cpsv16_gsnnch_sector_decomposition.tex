@@ -1,5 +1,6 @@
 \documentclass{article}
 
+\usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
@@ -46,17 +47,19 @@ them.
 
 \section{Present formal boundary}
 
-The structure \leanid{MPOTensor.GSNNCHData} now records the finite outer
-sector type, its orthogonal one-site sector projections, the natural
-multiplicities, and one positive commuting bond in every sector.  The
-predicates \leanid{MPOTensor.IsGSNNCHAt} and
-\leanid{MPOTensor.IsGSNNCH} therefore retain the data in Definition~4.8.
-The chain-level predicate requires positivity and unit trace, while the
-tensor-level predicate applies it to the normalized operator
-\leanid{MPOTensor.normalizedMPO} at each length $N\geq2$.
+The formalized sector decomposition now records the finite outer sector type,
+its orthogonal one-site sector projections, the natural multiplicities, and
+one positive commuting bond in every sector.  The finite-chain and
+tensor-level predicates therefore retain the direct sum and multiplicities of
+Definition~4.8.  The finite-chain predicate requires positivity and unit
+trace, while the tensor-level predicate applies it to the normalized operator at each length
+$N\geq2$.\footnote{\raggedright Formal structure: \leanid{MPOTensor.GSNNCHData}.
+Formal declarations: \leanid{MPOTensor.IsGSNNCHAt},
+\leanid{MPOTensor.IsGSNNCH}, and \leanid{MPOTensor.normalizedMPO}.}
 
-The separate structure \leanid{MPOTensor.CommutingBondProductData} records
-the auxiliary single-bond presentation
+The auxiliary single-bond presentation is recorded separately:
+\footnote{\raggedright Formal structure:
+\leanid{MPOTensor.CommutingBondProductData}.}
 \[
   \rho^{(N)}=c_N\prod_{j=1}^N\tau_j(B_N),
   \qquad c_N>0,
@@ -66,33 +69,70 @@ one-sector case of the source definition.  No converse theorem extracting a
 single bond from arbitrary source sector data is claimed.
 
 The represented finite-chain sector sum now carries its asserted analytic
-properties: all cyclic translates of one sector bond commute pairwise
-(\leanid{MPOTensor.GSNNCHData.bondAt\_comm}), the represented operator is
-positive semidefinite
-(\leanid{MPOTensor.GSNNCHData.unnormalizedState\_posSemidef}) and invariant
-under the cyclic shift
-(\leanid{MPOTensor.GSNNCHData.unnormalizedState\_submatrix\_rotateConfig}),
-and a tensor whose finite-chain operators have the sector form with nonzero
-traces satisfies the full density-operator predicate
-(\leanid{MPOTensor.isGSNNCH\_of\_hasGSNNCHForm}).  In particular every
-injective tensor satisfying the saturated area law is now proved GSNNCH
-(\leanid{MPOTensor.isGSNNCH\_of\_isInjective\_of\_isSAL}), through a
-one-sector witness; the one-sector form is the commuting product form in
-which Proposition~C.8 states its conclusion for an injective tensor.
+properties: all cyclic translates of one sector bond commute pairwise, the
+represented operator is positive semidefinite and invariant under the
+cyclic shift, and a tensor whose finite-chain operators have the sector form
+with nonzero traces satisfies the full density-operator predicate.  In particular,
+every injective tensor satisfying the saturated area law is now proved GSNNCH
+through a one-sector witness.\footnote{\raggedright Formal declarations:
+{\scriptsize\leanid{MPOTensor.GSNNCHData.bondAt_comm}},
+{\scriptsize\leanid{MPOTensor.GSNNCHData.unnormalizedState_posSemidef}},
+{\scriptsize\leanid{MPOTensor.GSNNCHData.unnormalizedState_submatrix_rotateConfig}},
+{\scriptsize\leanid{MPOTensor.isGSNNCH_of_hasGSNNCHForm}}, and
+{\scriptsize\leanid{MPOTensor.isGSNNCH_of_isInjective_of_isSAL}}.}  The
+one-sector form is the commuting product form in which Proposition~C.8 states
+its conclusion for an injective tensor.
 
 \section{Elimination plan}
 
 The first part of the original plan---positivity and translation invariance
 of the represented finite-chain sector sum from the stored sector data---is
-complete.  The remaining comparison and assembly work has two parts:
-
-\begin{enumerate}
-  \item construct the outer GSNNCH sectors from the BNT decomposition and the
-        physical-sector factorization in Appendix C.2, retaining all sector
-        multiplicities;
-  \item determine whether the reverse comparison with a single bond is needed
-        in the simple-MPDO equivalence, and prove it only in that form.
-\end{enumerate}
+complete.  Appendix C.2 has also been followed through the BNT projector
+selection formula: the natural multiplicities are retained, positive-length
+compression proves that each absorbed BNT representative generates MPDOs,
+the direct-sum entropy identity proves SAL for each representative, and the
+canonical block equation proves ZCL for each representative.
+\footnote{\raggedright Formal declarations:
+{\scriptsize\leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}},
+{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL}},
+{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}},
+and
+{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}}.}
+The general outer-sector construction is also complete: pairwise orthogonal
+one-site projections, supported positive commuting bonds, and the exact
+sector product identities give the source GSNNCH form with the prescribed
+natural multiplicities.
+\footnote{\raggedright Formal declaration:
+{\scriptsize\leanid{MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily}}.}
+The support-preserving sector argument is also complete.
+Every absorbed BNT representative has an exact isometric restriction to the
+range of its matching projector, the restricted tensor is injective, SAL
+passes from the ambient representative to this restriction through the
+sitewise support isometry, and the positive Proposition~C.8 bond lifts to a
+positive two-site operator supported on the tensor square of that projector.
+The cyclic translates of this lifted bond commute pairwise on every periodic
+chain of length at least two, and their full periodic product gives the
+ambient finite-chain operator exactly, with normalization scalar one as in the
+restricted product.
+\footnote{\raggedright Formal declarations:
+{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData}},
+{\scriptsize\leanid{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis}},
+{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}},
+and
+{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}}.}
+Choosing these supported products over all absorbed BNT representatives gives
+an orthogonal commuting sector family, and the BNT sum with its natural copy
+numbers therefore has the source GSNNCH form.
+\footnote{\raggedright Formal declarations:
+{\scriptsize\leanid{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL}}
+and
+{\scriptsize\leanid{MPOTensor.hasGSNNCHForm_of_bntSectorSAL}}.}
+No reverse comparison with a single-bond predicate is needed for this
+implication.  The construction chooses one supported bond for each absorbed
+BNT representative, assembles these bonds into the orthogonal outer sectors,
+and concludes the source GSNNCH form directly from the positive-length BNT
+sum.  Thus a theorem extracting one bond from arbitrary GSNNCH sector data
+would not enter the proof of the simple-MPDO implication.
 
 The local Markov labels in Appendix C.2 belong inside one injective BNT
 component.  They are not the outer labels $x$ of Definition~4.8 and must not
@@ -104,9 +144,19 @@ Verdict: the source GSNNCH data and predicate are formalized, the represented
 sector sum is proved positive semidefinite and translation invariant with
 pairwise commuting translates, and the single-bond presentation is proved to
 give the one-sector case; every injective tensor satisfying the saturated
-area law is proved GSNNCH through a one-sector witness.  The open gap is the
-construction of the outer sectors and multiplicities of a general simple
-tensor in the simple-MPDO implication, together with any reverse comparison
-actually needed by that argument.
+area law is proved GSNNCH through a one-sector witness.  For a general simple
+tensor, the BNT projectors, their positive-length compression formula, and the
+sectorwise MPDO, SAL, and ZCL conclusions are formalized.  The abstract
+construction of the outer sector sum with its natural multiplicities is
+formalized, as is the injective restriction of every representative to its
+projector range.  SAL is invariant under the support isometry, and the
+resulting positive bond has a positive ambient lift supported on the matching
+two-site sector, and all cyclic translates of that lift commute pairwise on
+every periodic chain of length at least two.  Their product realizes the
+ambient finite-chain operator exactly, with normalization scalar one.  The
+supported products are assembled into the BNT outer sectors with their
+natural multiplicities.  This direct construction proves the GSNNCH
+implication without a reverse comparison with the auxiliary single-bond
+predicate.
 
 \end{document}

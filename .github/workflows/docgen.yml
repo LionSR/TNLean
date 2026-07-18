@@ -45,6 +45,8 @@ jobs:
         uses: leanprover/lean-action@v1
         with:
           build: true
+          # See pr-ci.yml: per-run lake caches evict the main build cache.
+          use-github-cache: false
 
       - name: Install TeX and graphviz
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1

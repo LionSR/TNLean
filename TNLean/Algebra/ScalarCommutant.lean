@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Data.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.Hermitian
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
@@ -137,6 +139,132 @@ section Semiring
 
 variable {R : Type*} [Semiring R]
 
+/-- A block projection is idempotent. -/
+theorem blockProjection_isIdempotentElem
+    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
+    (k : ι) : IsIdempotentElem (blockProjection (n := n) (R := R) k) := by
+  rw [IsIdempotentElem, blockProjection, ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext i
+  by_cases hik : i = k
+  · simp [hik]
+  · simp [hik]
+
+/-- A complex block projection is Hermitian. -/
+theorem blockProjection_isHermitian
+    [(i : ι) → DecidableEq (n i)]
+    (k : ι) :
+    (blockProjection (n := n) (R := ℂ) k).IsHermitian := by
+  simp only [Matrix.IsHermitian, blockProjection,
+    Matrix.blockDiagonal'_conjTranspose]
+  congr 1
+  funext i
+  by_cases hik : i = k
+  · simp [hik]
+  · simp [hik]
+
+/-- Left multiplication by a block projection fixes entries whose row belongs
+to the selected block. -/
+@[simp] theorem blockProjection_mul_apply_same
+    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
+    (X : Matrix ((i : ι) × n i) ((i : ι) × n i) R)
+    (k : ι) (a : n k) (j : (i : ι) × n i) :
+    (blockProjection (n := n) (R := R) k * X) ⟨k, a⟩ j = X ⟨k, a⟩ j := by
+  rw [Matrix.mul_apply, Finset.sum_eq_single ⟨k, a⟩]
+  · simp [blockProjection]
+  · rintro ⟨i, b⟩ _ hib
+    by_cases hik : i = k
+    · subst i
+      have hba : b ≠ a := by
+        intro hba
+        apply hib
+        subst b
+        rfl
+      simp [blockProjection, Ne.symm hba]
+    · rw [show blockProjection (n := n) (R := R) k ⟨k, a⟩ ⟨i, b⟩ = 0 by
+        exact Matrix.blockDiagonal'_apply_ne _ a b (Ne.symm hik)]
+      simp
+  · simp
+
+/-- Left multiplication by a block projection kills entries whose row lies
+outside the selected block. -/
+theorem blockProjection_mul_apply_ne
+    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
+    (X : Matrix ((i : ι) × n i) ((i : ι) × n i) R)
+    (k : ι) {i : ι} (hik : i ≠ k) (a : n i) (j : (i : ι) × n i) :
+    (blockProjection (n := n) (R := R) k * X) ⟨i, a⟩ j = 0 := by
+  rw [Matrix.mul_apply]
+  apply Finset.sum_eq_zero
+  rintro ⟨q, b⟩ _
+  by_cases hiq : i = q
+  · subst q
+    simp [blockProjection, hik]
+  · rw [show blockProjection (n := n) (R := R) k ⟨i, a⟩ ⟨q, b⟩ = 0 by
+      exact Matrix.blockDiagonal'_apply_ne _ a b hiq]
+    simp
+
+/-- Right multiplication by a block projection fixes entries whose column
+belongs to the selected block. -/
+@[simp] theorem mul_blockProjection_apply_same
+    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
+    (X : Matrix ((i : ι) × n i) ((i : ι) × n i) R)
+    (k : ι) (i : (i : ι) × n i) (b : n k) :
+    (X * blockProjection (n := n) (R := R) k) i ⟨k, b⟩ = X i ⟨k, b⟩ := by
+  rw [Matrix.mul_apply, Finset.sum_eq_single ⟨k, b⟩]
+  · simp [blockProjection]
+  · rintro ⟨j, a⟩ _ haj
+    by_cases hjk : j = k
+    · subst j
+      have hab : a ≠ b := by
+        intro hab
+        apply haj
+        subst a
+        rfl
+      simp [blockProjection, hab]
+    · rw [show blockProjection (n := n) (R := R) k ⟨j, a⟩ ⟨k, b⟩ = 0 by
+        exact Matrix.blockDiagonal'_apply_ne _ a b hjk]
+      simp
+  · simp
+
+/-- Right multiplication by a block projection kills entries whose column
+lies outside the selected block. -/
+theorem mul_blockProjection_apply_ne
+    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
+    (X : Matrix ((i : ι) × n i) ((i : ι) × n i) R)
+    (k : ι) {j : ι} (hjk : j ≠ k) (i : (i : ι) × n i) (b : n j) :
+    (X * blockProjection (n := n) (R := R) k) i ⟨j, b⟩ = 0 := by
+  rw [Matrix.mul_apply]
+  apply Finset.sum_eq_zero
+  rintro ⟨q, a⟩ _
+  by_cases hqj : q = j
+  · subst q
+    simp [blockProjection, hjk]
+  · rw [show blockProjection (n := n) (R := R) k ⟨q, a⟩ ⟨j, b⟩ = 0 by
+      exact Matrix.blockDiagonal'_apply_ne _ a b hqj]
+    simp
+
+/-- A left-right block compression vanishes when all entries in the selected
+block vanish. -/
+theorem blockProjection_mul_mul_blockProjection_eq_zero
+    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
+    (X : Matrix ((i : ι) × n i) ((i : ι) × n i) R)
+    (k l : ι) (hblock : ∀ (a : n k) (b : n l), X ⟨k, a⟩ ⟨l, b⟩ = 0) :
+    blockProjection (n := n) (R := R) k * X *
+        blockProjection (n := n) (R := R) l = 0 := by
+  ext ⟨i, a⟩ ⟨j, b⟩
+  by_cases hik : i = k
+  · subst i
+    by_cases hjl : j = l
+    · subst j
+      rw [mul_blockProjection_apply_same,
+        blockProjection_mul_apply_same, hblock]
+      rfl
+    · exact mul_blockProjection_apply_ne _ _ hjl _ _
+  · rw [Matrix.mul_apply]
+    apply Finset.sum_eq_zero
+    intro x _
+    rw [blockProjection_mul_apply_ne _ _ hik, zero_mul]
+
 /-- If a matrix commutes with every block projection, then it is block diagonal.
 
 This is the algebraic off-block-zero step needed in block-decomposition
@@ -152,36 +280,8 @@ theorem isBlockDiagonal'_of_commutes_blockProjection
   rw [isBlockDiagonal'_iff_offBlock_zero]
   intro i j hij a b
   have hentry := congrFun (congrFun (hComm j) ⟨i, a⟩) ⟨j, b⟩
-  have hleft :
-      (X * blockProjection (n := n) (R := R) j) ⟨i, a⟩ ⟨j, b⟩ =
-        X ⟨i, a⟩ ⟨j, b⟩ := by
-    rw [Matrix.mul_apply, Finset.sum_eq_single ⟨j, b⟩]
-    · simp [blockProjection]
-    · rintro ⟨k, c⟩ _ hkc
-      by_cases hkj : k = j
-      · subst k
-        have hcb : c ≠ b := by
-          intro hcb
-          apply hkc
-          subst hcb
-          rfl
-        simp [blockProjection, hcb]
-      · rw [show blockProjection (n := n) (R := R) j ⟨k, c⟩ ⟨j, b⟩ = 0 from by
-          exact Matrix.blockDiagonal'_apply_ne _ c b hkj]
-        simp
-    · intro hmem
-      simp at hmem
-  have hright :
-      (blockProjection (n := n) (R := R) j * X) ⟨i, a⟩ ⟨j, b⟩ = 0 := by
-    rw [Matrix.mul_apply]
-    apply Finset.sum_eq_zero
-    rintro ⟨k, c⟩ _
-    by_cases hik : i = k
-    · subst k
-      simp [blockProjection, hij]
-    · rw [show blockProjection (n := n) (R := R) j ⟨i, a⟩ ⟨k, c⟩ = 0 from by
-        exact Matrix.blockDiagonal'_apply_ne _ a c hik]
-      simp
+  have hleft := mul_blockProjection_apply_same X j ⟨i, a⟩ b
+  have hright := blockProjection_mul_apply_ne X j hij a ⟨j, b⟩
   simpa [hleft, hright] using hentry
 
 end Semiring

@@ -91,11 +91,10 @@ physical indices, as in
         \rho^{(N)}\bigl(M^{[L]}\bigr)_{\sigma,\tau}
         =\rho^{(NL)}(M)_{\Phi_{N,L}(\sigma),\Phi_{N,L}(\tau)}.
     \]
-    This algebraic identity and the preservation of positive semidefiniteness
-    hold for every $L\in\N$.  For $L>0$, they state that blocking $L$
-    adjacent physical sites of an MPDO again gives an MPDO.  The value $L=0$
-    is only the base value of the algebraic definitions and is not a physical
-    blocking operation.  This is the closed-chain identification implicit
+    The algebraic identity holds for every $L\in\N$.  For $L\geq1$, positivity
+    of the original nonempty chain of length $NL$ shows that blocking $L$
+    adjacent physical sites of an MPDO again gives an MPDO.  This is the
+    closed-chain identification implicit
     when the one-site tensor and its two-site blocking are placed in vertical
     canonical form in
     \cite[Appendix~C.4, lines~1952--2017]{Cirac2016MPDO_arXiv}.
@@ -151,8 +150,8 @@ physical indices, as in
         \bigl(K^{[2]}\bigr)^{i,j}
           =\bigl(K^{[L]}\bigr)^{\varphi(i),\varphi(j)}\bigm|_{L=2}.
     \]
-    Consequently, for every chain length $N$, the closed MPO of $K^{[2]}$
-    is obtained from the closed MPO of the general length-two block by
+    Consequently, for every nonempty chain length $N$, the closed MPO of
+    $K^{[2]}$ is obtained from the closed MPO of the general length-two block by
     applying $\varphi$ independently at every ket and bra site.  In
     particular, if $K$ generates matrix product density operators, then so
     does $K^{[2]}$.
@@ -288,6 +287,273 @@ physical indices, as in
         \left(m_\alpha^{-1}\mu_\alpha\otimes X_\alpha\right)
       =m_\alpha^{-1}\operatorname{tr}(\mu_\alpha)X_\alpha
       =X_\alpha.
+    \]
+\end{proof}
+
+\begin{definition}[Products of weighted vertical contractions]
+    \label{def:mpdo_weighted_vertical_contraction_products}
+    \lean{MPOTensor.weightedVerticalBondContraction}
+    \lean{MPOTensor.weightedVerticalBondContractionProduct}
+    \lean{MPOTensor.WeightedVerticalBondContractionProductSpanTop}
+    \leanok
+    \uses{def:mpdo_normalized_vertical_sector_maps,
+        def:mpdo_vertical_bond_matrix_contraction}
+    For vertical BNT tensors $M_\alpha$ with simple matrix algebras
+    $M_{d_\alpha}$ and a family of complex scalars $(c_\alpha)_\alpha$, define
+    \[
+        V_c(X)=\bigoplus_\alpha c_\alpha M_\alpha(X),
+        \qquad
+        M_\alpha(X)=\sum_{a,b}X_{ba}M_{\alpha,ab}.
+    \]
+    For each $L\geq0$, let
+    \[
+        C_L(V_c)=\spn_{\C}\left\{
+          V_c(X_1)\cdots V_c(X_L):X_1,\ldots,X_L\in M_D
+        \right\}
+        \subseteq \prod_\alpha M_{d_\alpha}.
+    \]
+    Write $V_m$ for the specialization obtained by taking
+    $c_\alpha=m_\alpha=\operatorname{tr}(\mu_\alpha)$.
+\end{definition}
+
+\begin{lemma}[Contraction against a matrix unit]
+    \label{lem:mpdo_vertical_bond_contraction_matrix_unit}
+    \lean{MPSTensor.contractBondMatrix_single_transpose}
+    \leanok
+    \uses{def:mpdo_vertical_bond_matrix_contraction}
+    Let $M=(M_{ab})_{a,b=0}^{D-1}$ be a matrix-product tensor whose physical
+    index is identified with the ordered pair $(a,b)$.  Then
+    \[
+        M(E_{ba})=M_{ab}.
+    \]
+\end{lemma}
+
+\begin{lemma}[Contraction in the encoded product coordinate]
+    \label{lem:mpdo_vertical_bond_contraction_encoded_matrix_unit}
+    \lean{MPSTensor.contractBondMatrix_single_mod_div}
+    \leanok
+    \uses{lem:mpdo_vertical_bond_contraction_matrix_unit}
+    If $r\in\{0,\ldots,D^2-1\}$ encodes the ordered pair
+    $(\lfloor r/D\rfloor,r\bmod D)$, then
+    \[
+        M\!\left(E_{(r\bmod D),\lfloor r/D\rfloor}\right)=M_r.
+    \]
+\end{lemma}
+
+\begin{definition}[Sectorwise scaling equivalence]
+    \label{def:mpdo_vertical_sector_scaling_equivalence}
+    \lean{MPOTensor.verticalSectorScaleEquiv}
+    \leanok
+    For scalars $c_\alpha\ne0$, the map
+    \[
+        \varphi_c\colon\prod_\alpha M_{d_\alpha}\longrightarrow
+          \prod_\alpha M_{d_\alpha},\qquad
+        (X_\alpha)_\alpha\longmapsto(c_\alpha X_\alpha)_\alpha
+    \]
+    is a linear equivalence.
+\end{definition}
+
+\begin{lemma}[Weighted contraction of matrix-unit words]
+    \label{lem:mpdo_weighted_contraction_matrix_unit_words}
+    \lean{MPOTensor.weightedVerticalBondContractionProduct_single}
+    \leanok
+    \uses{def:mpdo_weighted_vertical_contraction_products,
+        lem:mpdo_vertical_bond_contraction_encoded_matrix_unit}
+    For a word $w=((a_1,b_1),\ldots,(a_L,b_L))$,
+    \[
+        V_c(E_{b_1a_1})\cdots V_c(E_{b_La_L})
+        =\bigoplus_\alpha c_\alpha^L M_\alpha^w.
+    \]
+\end{lemma}
+
+\begin{lemma}[Transfer of simultaneous word spanning]
+    \label{lem:mpdo_weighted_contraction_span_transfer}
+    \lean{MPOTensor.%
+        weightedVerticalBondContractionProductSpanTop_of_wordTupleSpanTop}
+    \leanok
+    \uses{def:mpdo_vertical_sector_scaling_equivalence,
+        lem:mpdo_weighted_contraction_matrix_unit_words}
+    Fix $L\geq0$ and suppose that every $c_\alpha$ is nonzero.  If the
+    simultaneous word tuples $(M_\alpha^w)_\alpha$ of length $L$ span
+    $\prod_\alpha M_{d_\alpha}$, then
+    \[
+        C_L(V_c)=\prod_\alpha M_{d_\alpha}.
+    \]
+\end{lemma}
+
+\begin{theorem}[Nonzero-weight vertical bond contractions generate the sector algebra]
+    \label{thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+    \lean{MPOTensor.%
+        exists_positive_weightedVerticalBondContractionProductSpanTop_of_bnt}
+    \leanok
+    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products}
+    Suppose that $(M_\alpha)_\alpha$ is a basis of normal tensors and that
+    $(c_\alpha)_\alpha$ is any family of nonzero complex scalars.  Then there
+    is a positive integer $L$ such that
+    \[
+        C_L(V_c)=\prod_\alpha M_{d_\alpha}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_weighted_contraction_span_transfer,
+        thm:cpsv_bnt_blocked_simultaneous_span}
+    Choose $L>0$ for which the simultaneous word tuples
+    $(M_\alpha^w)_\alpha$ span $\prod_\alpha M_{d_\alpha}$.  Since every
+    $c_\alpha$ is nonzero, so is $c_\alpha^L$.  Apply
+    Lemma~\ref{lem:mpdo_weighted_contraction_span_transfer}.
+\end{proof}
+
+\begin{theorem}[Vertical bond contractions generate the sector algebra]
+    \label{thm:mpdo_vertical_bond_contractions_generate_sector_algebra}
+    \lean{MPOTensor.%
+        exists_positive_verticalMultiplicityTraceBondContractionProductSpanTop_of_bnt}
+    \leanok
+    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products}
+    Suppose that $(M_\alpha)_\alpha$ is a basis of normal tensors, every
+    multiplicity space is nonzero, and every diagonal entry of $\mu_\alpha$
+    is positive.  Then there is a positive integer $L$ such that
+    \[
+        C_L(V_m)=\prod_\alpha M_{d_\alpha}=: \mathcal A_1.
+    \]
+    This is the spanning assertion used in
+    \cite[Appendix~C.4, lines~1980--1990]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_vertical_sector_retraction,
+        thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+    Since every multiplicity space is nonzero and every diagonal entry is
+    positive,
+    \[
+        m_\alpha
+        =\sum_{q=0}^{\operatorname{mult}(\alpha)-1}\mu_{\alpha,q}>0.
+    \]
+    Apply the preceding theorem to the nonzero family
+    $c_\alpha=m_\alpha=\operatorname{tr}(\mu_\alpha)$.
+\end{proof}
+
+\begin{definition}[Retained coordinates for the vertical-sector algebra]
+    \label{def:mpdo_retained_vertical_sector_coordinates}
+    \lean{MPOTensor.verticalSectorFinEquiv}
+    \lean{MPOTensor.verticalSectorBlockDiagonal}
+    \lean{MPOTensor.verticalSectorBlocks}
+    \lean{MPOTensor.verticalSectorBlockProjection}
+    \lean{MPOTensor.normalizedRetainedVerticalSectorEmbedding}
+    \lean{MPOTensor.retainedVerticalSectorPartialTrace}
+    \leanok
+    \uses{def:mpdo_normalized_vertical_sector_maps}
+    Retain the coordinates $(\alpha,a,i)$, where $\alpha$ labels a simple
+    sector, $a$ labels a diagonal entry of $\mu_\alpha$, and
+    $0\leq i<d_\alpha$.  The family $(Y_\alpha)_\alpha$ is represented on
+    this space by
+    \[
+        \bigoplus_\alpha Y_\alpha.
+    \]
+    Write $\iota$ for this inclusion, $\pi$ for extraction of the diagonal
+    summands, and $P=\iota\pi$.  Composing $\iota$ and $\pi$ with $R_\mu$ and
+    $\widetilde R_\mu$ defines their retained-coordinate forms.
+\end{definition}
+
+\begin{lemma}[Extraction after vertical-sector inclusion]
+    \label{lem:mpdo_retained_vertical_sector_extraction}
+    \lean{MPOTensor.verticalSectorBlocks_comp_verticalSectorBlockDiagonal}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    The diagonal-summand extraction is a left inverse of the inclusion:
+    \[
+        \pi\iota=\operatorname{id}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Restricting $\bigoplus_\beta Y_\beta$ to the rows and columns with sector
+    label $\alpha$ gives $Y_\alpha$.
+\end{proof}
+
+\begin{lemma}[Entries retained by the vertical-sector projection]
+    \label{lem:mpdo_retained_vertical_sector_projection_same}
+    \lean{MPOTensor.verticalSectorBlockProjection_apply_same}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    For every retained-coordinate matrix $Z$,
+    \[
+        P(Z)_{(\alpha,a,i),(\alpha,b,j)}
+          =Z_{(\alpha,a,i),(\alpha,b,j)}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Both indices lie in the same extracted diagonal summand.
+\end{proof}
+
+\begin{lemma}[Entries removed by the vertical-sector projection]
+    \label{lem:mpdo_retained_vertical_sector_projection_distinct}
+    \lean{MPOTensor.verticalSectorBlockProjection_apply_ne}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    If $\alpha\ne\beta$, then
+    \[
+        P(Z)_{(\alpha,a,i),(\beta,b,j)}=0.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The two indices belong to distinct diagonal summands.
+\end{proof}
+
+\begin{lemma}[Idempotence of the vertical-sector projection]
+    \label{lem:mpdo_retained_vertical_sector_projection_idempotent}
+    \lean{MPOTensor.verticalSectorBlockProjection_comp_self}
+    \leanok
+    \uses{lem:mpdo_retained_vertical_sector_extraction}
+    The projection onto the vertical-sector diagonal summands is idempotent:
+    \[
+        P^2=P.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The identity $\pi\iota=\operatorname{id}$ gives
+    $P^2=\iota\pi\iota\pi=\iota\pi$.
+\end{proof}
+
+\begin{lemma}[Retraction in retained vertical-sector coordinates]
+    \label{lem:mpdo_retained_vertical_sector_retraction}
+    \lean{MPOTensor.retainedVerticalSectorPartialTrace_comp_normalizedEmbedding}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates,
+      lem:mpdo_retained_vertical_sector_extraction,
+      lem:mpdo_vertical_sector_retraction}
+    Suppose that every multiplicity space is nonzero and every diagonal entry
+    of $\mu_\alpha$ is positive.  Then the retained-coordinate partial trace
+    is a left inverse of the normalized retained-coordinate embedding.
+\end{lemma}
+
+\begin{proof}\leanok
+    First extract the diagonal summands, then apply
+    $\widetilde R_\mu R_\mu=\operatorname{id}$.
+\end{proof}
+
+\begin{lemma}[Weighted vertical contraction in retained coordinates]
+    \label{lem:mpdo_retained_vertical_weighted_contraction}
+    \lean{MPOTensor.contractBondMatrix_verticalAssembledTensor_eq_sectorBlockDiagonal}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates,
+      def:mpdo_vertical_bond_matrix_contraction}
+    For every horizontal bond matrix $X$, contraction of
+    $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ gives
+    \[
+        \bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Flattening the index triple $(\alpha,a,i)$ gives the entry formula
+    \[
+        B(X)_{(\alpha,a,i),(\beta,b,j)}
+          =\delta_{\alpha\beta}\delta_{ab}\,
+            \mu_{\alpha,a}M_\alpha(X)_{ij}.
     \]
 \end{proof}
 
@@ -673,6 +939,377 @@ physical indices, as in
           &=U_1\mathcal M^{(1)}(X)U_1^\dagger
            =B_1(X).
     \end{aligned}
+    \]
+\end{proof}
+
+\begin{definition}[Refinement and coarse-graining on vertical sectors]
+    \label{def:mpdo_transported_vertical_sector_maps}
+    \lean{MPOTensor.transportedVerticalSectorT}
+    \lean{MPOTensor.transportedVerticalSectorS}
+    \leanok
+    \uses{def:mpdo_normalized_vertical_sector_maps,
+      def:mpdo_retained_vertical_sector_coordinates,
+      def:mpdo_vertical_coordinate_map_transport}
+    Define maps between the one-site and two-site simple-sector algebras by
+    \[
+        \widetilde T=\widetilde R_2T_{\mathrm v}R_1,
+        \qquad
+        \widetilde S=\widetilde R_1S_{\mathrm v}R_2.
+    \]
+    The partial trace and diagonal-summand extraction define these maps on the
+    full matrix algebras.  Their agreement with the normalized maps in
+    \cite[Appendix~C.4, lines~1972--1979]{Cirac2016MPDO_arXiv} is asserted on
+    the weighted block-diagonal image.  At this stage there is no assertion
+    that the image is preserved, that the two maps are inverse, completely
+    positive, or trace preserving, or that the sector labels have been
+    matched.  The final renormalization fixed-point conclusion is separate.
+\end{definition}
+
+\begin{definition}[Positive vertical-sector families and total trace]
+    \label{def:mpdo_positive_vertical_sector_family}
+    \lean{MPOTensor.IsVerticalSectorPosSemidef}
+    \lean{MPOTensor.verticalSectorTrace}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    A vertical-sector family $X=(X_\alpha)_\alpha$ is positive when every
+    $X_\alpha$ is positive semidefinite.  Its total sector trace is
+    \[
+        \Trsec(X)
+          =\sum_\alpha\operatorname{tr}(X_\alpha).
+    \]
+\end{definition}
+
+\begin{lemma}[Positivity and trace in normalized sector coordinates]
+    \label{lem:mpdo_normalized_vertical_sector_positive_trace}
+    \lean{MPOTensor.verticalMultiplicityTrace_pos}
+    \lean{MPOTensor.normalizedVerticalSectorEmbedding_posSemidef}
+    \lean{MPOTensor.normalizedRetainedVerticalSectorEmbedding_posSemidef}
+    \lean{MPOTensor.verticalSectorPartialTrace_posSemidef}
+    \lean{MPOTensor.retainedVerticalSectorPartialTrace_posSemidef}
+    \lean{MPOTensor.trace_verticalSectorBlockDiagonal}
+    \lean{MPOTensor.trace_verticalSectorBlockProjection}
+    \lean{MPOTensor.verticalSectorTrace_retainedVerticalSectorPartialTrace}
+    \lean{MPOTensor.trace_normalizedRetainedVerticalSectorEmbedding}
+    \leanok
+    \uses{def:mpdo_positive_vertical_sector_family,
+      def:mpdo_retained_vertical_sector_coordinates}
+    Suppose that every multiplicity space is nonzero and every diagonal entry
+    of $\mu_\alpha$ is positive.  The normalized embedding $R_\mu$ sends a
+    positive sector family to a positive retained matrix and satisfies
+    \[
+        \operatorname{tr}(R_\mu(X))
+          =\Trsec(X).
+    \]
+    Conversely, the sectorwise partial trace sends a positive retained matrix
+    to a positive sector family and satisfies
+    \[
+        \Trsec(\widetilde R_\mu(Z))
+          =\operatorname{tr}(Z).
+    \]
+    These trace identities follow by summing the traces of the diagonal
+    sectors; deleting the off-diagonal sector entries does not change the
+    trace.
+\end{lemma}
+
+\begin{proof}\leanok
+    A positive diagonal weight matrix has positive trace, and its Kronecker
+    product with each positive $X_\alpha$ is positive.  Partial trace preserves
+    positivity.  The two trace formulas follow from
+    $\operatorname{tr}(A\otimes B)=\operatorname{tr}(A)\operatorname{tr}(B)$
+    and the normalization by $\operatorname{tr}(\mu_\alpha)$.
+\end{proof}
+
+\begin{lemma}[Normalized embedding of multiplicity-trace-scaled sectors]
+    \label{lem:mpdo_normalized_retained_vertical_sector_embedding}
+    \lean{MPOTensor.normalizedRetainedVerticalSectorEmbedding_trace_smul}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    Suppose that every multiplicity space is nonzero and every diagonal entry
+    of $\mu_\alpha$ is positive.  For
+    $m_\alpha=\operatorname{tr}(\mu_\alpha)$,
+    \[
+        R_\mu\!\left(\bigoplus_\alpha m_\alpha X_\alpha\right)
+          =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    In each sector,
+    \[
+        R_\mu(m_\alpha X_\alpha)
+        =m_\alpha^{-1}m_\alpha(\mu_\alpha\otimes X_\alpha)
+        =\mu_\alpha\otimes X_\alpha.
+    \]
+\end{proof}
+
+\begin{lemma}[Partial trace of weighted vertical sectors]
+    \label{lem:mpdo_retained_vertical_sector_partial_trace}
+    \lean{MPOTensor.retainedVerticalSectorPartialTrace_weightedBlockDiagonal}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    For $m_\alpha=\operatorname{tr}(\mu_\alpha)$,
+    \[
+        \widetilde R_\mu\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+          =\bigoplus_\alpha m_\alpha X_\alpha.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Taking the partial trace over the multiplicity factor gives
+    \[
+        \widetilde R_\mu(\mu_\alpha\otimes X_\alpha)
+        =\operatorname{tr}(\mu_\alpha)X_\alpha
+        =m_\alpha X_\alpha.
+    \]
+\end{proof}
+
+\begin{lemma}[Trace under coisometric compression]
+    \label{lem:mpdo_coisometric_compression_trace}
+    \lean{Matrix.isOrthogonalProjection_conjTranspose_mul_of_mul_conjTranspose_eq_one}
+    \lean{Matrix.PosSemidef.trace_mul_mul_conjTranspose_le_of_mul_conjTranspose_eq_one}
+    \lean{Matrix.PosSemidef.trace_mul_mul_conjTranspose_eq_iff_of_mul_conjTranspose_eq_one}
+    \lean{Matrix.trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one}
+    \leanok
+    Let $U:\mathbb C^n\to\mathbb C^r$ satisfy $UU^\dagger=1$.  If $Z\geq0$,
+    then
+    \[
+        \operatorname{tr}(UZU^\dagger)\leq\operatorname{tr}(Z),
+        \qquad
+        \operatorname{tr}(UZU^\dagger)=\operatorname{tr}(Z)
+        \Longleftrightarrow U^\dagger UZ=Z.
+    \]
+    For every $W\in\mathbb C^{r\times r}$, one also has
+    $\operatorname{tr}(U^\dagger WU)=\operatorname{tr}(W)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Put $P=U^\dagger U$.  The matrices $P$ and $1-P$ are orthogonal
+    projections, and
+    \[
+        \operatorname{tr}(UZU^\dagger)=\operatorname{tr}(PZ),
+        \qquad
+        \operatorname{tr}(Z)-\operatorname{tr}(PZ)
+          =\operatorname{tr}((1-P)Z)\geq0.
+    \]
+    The last trace vanishes precisely when $(1-P)Z=0$.  The formula for $W$
+    follows by cyclicity of trace and $UU^\dagger=1$.
+\end{proof}
+
+\begin{definition}[Matrices before active-sector compression]
+    \label{def:mpdo_vertical_sector_precompression}
+    \lean{MPOTensor.precompressionVerticalSectorT}
+    \lean{MPOTensor.precompressionVerticalSectorS}
+    \leanok
+    Let $Z_T(X)$ be the matrix obtained by applying the normalized one-site
+    embedding, expanding by $U_1^\dagger$, applying $T$, and relabelling the
+    two-site indices, before compression by $U_2$.  Define $Z_S(Y)$ in the
+    reverse direction, before compression by $U_1$.
+\end{definition}
+
+\begin{lemma}[Positivity and trace before active-sector compression]
+    \label{lem:mpdo_vertical_sector_precompression_positive_trace}
+    \lean{MPOTensor.precompressionVerticalSectorT_posSemidef}
+    \lean{MPOTensor.precompressionVerticalSectorS_posSemidef}
+    \lean{MPOTensor.trace_precompressionVerticalSectorT}
+    \lean{MPOTensor.trace_precompressionVerticalSectorS}
+    \lean{MPOTensor.verticalSectorTrace_transportedVerticalSectorT}
+    \lean{MPOTensor.verticalSectorTrace_transportedVerticalSectorS}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      def:mpdo_positive_vertical_sector_family,
+      def:mpdo_vertical_sector_precompression,
+      lem:mpdo_normalized_vertical_sector_positive_trace}
+    Suppose that the physical maps are completely positive and trace
+    preserving and $U_iU_i^\dagger=1$.  For positive sector families
+    $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, the matrices $Z_T(X)$ and
+    $Z_S(Y)$ are positive and
+    \[
+        \operatorname{tr}(Z_T(X))
+          =\Trsec(X),
+        \qquad
+        \operatorname{tr}(Z_S(Y))
+          =\Trsec(Y).
+    \]
+    After the final compression and sectorwise partial trace,
+    \[
+        \Trsec(\widetilde T(X))
+          =\operatorname{tr}(U_2Z_T(X)U_2^\dagger),
+        \qquad
+        \Trsec(\widetilde S(Y))
+          =\operatorname{tr}(U_1Z_S(Y)U_1^\dagger).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Positivity follows successively from the normalized embedding, expansion
+    by an adjoint, the physical map, relabelling, and partial trace.  The trace
+    identities follow from the preceding two lemmas and trace preservation of
+    the physical maps.
+\end{proof}
+
+% Local fix (zero-sector complement): the transported maps come from
+% arXiv:1606.00608, Appendix C.4, lines 1955--1980, but the corrective trace-loss
+% statement is recorded in docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
+\begin{theorem}[Positivity and trace loss of the transported sector maps]
+    \label{thm:mpdo_transported_vertical_sector_trace_loss}
+    \lean{MPOTensor.transportedVerticalSectorT_posSemidef}
+    \lean{MPOTensor.transportedVerticalSectorS_posSemidef}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_le}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_le}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_eq_iff}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_eq_iff}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      def:mpdo_positive_vertical_sector_family,
+      def:mpdo_vertical_sector_precompression,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_sector_partial_trace,
+      lem:mpdo_coisometric_compression_trace,
+      lem:mpdo_vertical_sector_precompression_positive_trace}
+    Suppose that the multiplicity spaces are nonzero, their diagonal weights
+    are positive, the physical maps $T$ and $S$ are completely positive and
+    trace preserving, and the vertical coordinate maps satisfy
+    $U_iU_i^\dagger=1$.  Then $\widetilde T$ and $\widetilde S$ preserve
+    pointwise positive semidefiniteness.  For pointwise positive families
+    $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, their total sector traces obey
+    \[
+       \Trsec(\widetilde T(X))
+          \leq \Trsec(X),
+       \qquad
+       \Trsec(\widetilde S(Y))
+          \leq \Trsec(Y).
+    \]
+    The trace loss vanishes precisely when
+    \[
+       U_2^\dagger U_2 Z_T(X)=Z_T(X),
+       \qquad
+       U_1^\dagger U_1 Z_S(Y)=Z_S(Y),
+    \]
+    respectively.
+
+    This result concerns positivity and trace on positive elements.  It does
+    not assert a complete-positivity structure for the finite products, a
+    trace-preserving extension to their full ambient matrix spaces, or an
+    inverse relation between the two transported maps.
+\end{theorem}
+
+\begin{proof}\leanok
+    The normalized diagonal embedding and the sectorwise partial trace
+    preserve positivity.  Before the final compression, trace preservation of
+    the physical map and $U_iU_i^\dagger=1$ give the original sector trace.
+    For a positive matrix $Z$ and a coisometry $U$, put
+    $P=U^\dagger U$.  Then
+    \[
+       \operatorname{tr}(UZU^\dagger)
+        =\operatorname{tr}(PZ)
+        \leq\operatorname{tr}(Z).
+    \]
+    Since $1-P$ is an orthogonal projection, equality is equivalent to
+    $\operatorname{tr}((1-P)Z)=0$, hence to $(1-P)Z=0$.
+\end{proof}
+
+\begin{theorem}[Action of the normalized vertical-sector maps]
+    \label{thm:mpdo_transported_vertical_sector_maps}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorT_contractBondMatrix_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorS_contractBondMatrix_trace_smul}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_sector_partial_trace,
+      thm:mpdo_vertical_coordinate_map_transport}
+    Suppose that every multiplicity space for $\mu_\alpha$ and $\nu_\beta$
+    is nonzero, every diagonal entry of these two matrices is positive, and
+    \[
+        T_{\mathrm v}\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+        =\bigoplus_\beta\nu_\beta\otimes Y_\beta,
+        \qquad
+        S_{\mathrm v}\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)
+        =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
+    \]
+    Writing $m_\alpha=\operatorname{tr}(\mu_\alpha)$ and
+    $n_\beta=\operatorname{tr}(\nu_\beta)$, one has
+    \[
+        \widetilde T\!\left(
+          \bigoplus_\alpha m_\alpha X_\alpha\right)
+        =\bigoplus_\beta n_\beta Y_\beta,
+        \qquad
+        \widetilde S\!\left(
+          \bigoplus_\beta n_\beta Y_\beta\right)
+        =\bigoplus_\alpha m_\alpha X_\alpha.
+    \]
+    In particular, take $X_\alpha=M_\alpha(X)$ and
+    $Y_\beta=A_\beta(X)$ from the contractions of the one-site and two-site
+    vertical canonical forms.  The physical closure identities for $T$ and
+    $S$ then imply the two hypotheses above, so the same conclusions hold for
+    these source-generated sector operators.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\widetilde T=\widetilde R_2T_{\mathrm v}R_1$, one has
+    \[
+    \begin{aligned}
+        \widetilde T\!\left(\bigoplus_\alpha m_\alpha X_\alpha\right)
+        &=\widetilde R_2\!\left(T_{\mathrm v}\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)\right) \\
+        &=\widetilde R_2\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)
+        =\bigoplus_\beta n_\beta Y_\beta.
+    \end{aligned}
+    \]
+    Likewise, $\widetilde S=\widetilde R_1S_{\mathrm v}R_2$ gives
+    \[
+    \begin{aligned}
+        \widetilde S\!\left(\bigoplus_\beta n_\beta Y_\beta\right)
+        &=\widetilde R_1\!\left(S_{\mathrm v}\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)\right) \\
+        &=\widetilde R_1\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+        =\bigoplus_\alpha m_\alpha X_\alpha.
+    \end{aligned}
+    \]
+\end{proof}
+
+\begin{lemma}[Fixed contraction families of the transported composites]
+    \label{lem:mpdo_transported_vertical_sector_fixed_generators}
+    \lean{MPOTensor.transportedVerticalSectorS_comp_T_fixed_contractBondMatrix_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorT_comp_S_fixed_contractBondMatrix_trace_smul}
+    \leanok
+    \uses{thm:mpdo_transported_vertical_sector_maps}
+    For every bond matrix $X$, set
+    \[
+        V_1(X)=\bigoplus_\alpha m_\alpha M_\alpha(X),
+        \qquad
+        V_2(X)=\bigoplus_\beta n_\beta A_\beta(X).
+    \]
+    Under the hypotheses of the preceding theorem, the transported
+    composites satisfy
+    \[
+        (\widetilde S\circ\widetilde T)(V_1(X))=V_1(X),
+        \qquad
+        (\widetilde T\circ\widetilde S)(V_2(X))=V_2(X).
+    \]
+    Thus the one-site and two-site contraction families lie in the respective
+    fixed-point spaces, as in Appendix~C.4, lines 1974--1980.  These equations
+    do not assert that either composite is the identity on the whole sector
+    algebra; that conclusion requires the fixed-point structure argument of
+    Appendix~C.4, lines 1980--1993.
+\end{lemma}
+
+\begin{proof}\leanok
+    The preceding theorem gives
+    $\widetilde T(V_1(X))=V_2(X)$ and
+    $\widetilde S(V_2(X))=V_1(X)$.  Hence
+    \[
+        (\widetilde S\circ\widetilde T)(V_1(X))
+        =\widetilde S(V_2(X))=V_1(X),
+        \qquad
+        (\widetilde T\circ\widetilde S)(V_2(X))
+        =\widetilde T(V_1(X))=V_2(X).
     \]
 \end{proof}
 

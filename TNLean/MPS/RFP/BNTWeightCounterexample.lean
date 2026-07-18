@@ -215,7 +215,7 @@ private theorem halvedWeightTensor_isCPSVBasisOfNormalTensors :
   refine {
     blocks_normal := fun _ => scalarUnitTensor_isNormalTensor
     spans_mpv := by
-      intro N
+      intro N _hN
       refine ⟨fun _ => 1 + (1 / 2 : ℂ) ^ N, ?_⟩
       intro σ
       rw [halvedWeightTensor_mpv σ]

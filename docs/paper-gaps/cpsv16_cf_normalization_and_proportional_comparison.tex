@@ -307,7 +307,34 @@ the memo and the source in a single direction, by introducing a
 convergence-to-nonzero-limits hypothesis that has no counterpart in either
 record.
 
-\paragraph{Status as of the paper-realignment PR.}
+\paragraph{Status: supplier-side normalization.}
+The arbitrary-input supplier no longer leaves the line-246 weight choice to
+the caller.
+\leanid{MPSTensor.exists\_isBNTCanonicalForm\_afterBlocking\_pos\_normalized}
+rescales the prepared weights by their maximal modulus
+$m=\max_k|\mu_k|$
+(\leanid{MPSTensor.exists\_weight\_normalization}), which satisfies both
+conditional premises of the earlier supplier, and tracks the cost as the
+per-site scalar $m^{N}$ in the positive-length matrix-product identity.  The
+positive-length statement is the canonical source formulation; no
+length-zero coefficient is part of this statement.  The normalized supplier
+assumes exactly that the positive-length matrix-product
+family is nonzero: there are $N\geq1$ and a word $w$ of length $N$ for which
+$\tr(A^w)\neq0$.  This condition persists under every blocking.  For each
+$p\geq1$, some $q\geq1$ satisfies $\tr((A^w)^{pq})\neq0$; otherwise the
+Newton--Girard trace identities would make $(A^w)^p$, and hence $A^w$,
+nilpotent, contrary to its nonzero trace.  The repeated word of length $pqN$
+therefore gives a nonzero coefficient after blocking by $p$.  Thus this
+hypothesis excludes precisely the zero positive-length family, for which the
+unit-modulus weight required at line~246 is impossible.  The subsequent
+proposition nevertheless says ``for any tensor.''  Taken literally, its zero
+case is incompatible with the preceding global unit-modulus convention and
+with the formal canonical-form predicate.  The present theorem therefore
+formalizes the nonzero-family case.  Eliminating the restriction requires a
+separate zero-family clause or a canonical-form predicate whose normalization
+condition is conditional on the presence of a sector.
+
+\paragraph{Status: structural realignment.}
 The structural realignment has been done. The canonical-form definition now
 carries the source convention $|\mu_1|=1$ as a field
 of \leanid{IsNormalCanonicalFormBNT}, propagated through every constructor.

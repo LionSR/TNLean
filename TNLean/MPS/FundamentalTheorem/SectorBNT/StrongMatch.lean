@@ -23,8 +23,8 @@ The coefficient identity of CPSV16 Appendix MPV proof, lines 1187–1188
 CPSV16 (arXiv:1606.00608) Appendix MPV proof, line 1182, gives the matching
 step of the proportional theorem proof. In mathematical terms, this step
 fixes a block $B_k$ and observes that its overlaps with the $A_j$ blocks cannot
-all decay to zero, since then the two MPV families would fail to be
-proportional for all lengths. The equal-vector corollary then gives an index $j_k$ with
+all decay to zero, since then the two MPV families would fail to be eventually
+proportional. The equal-vector corollary then gives an index $j_k$ with
 $|V^{(N)}(B_k)\rangle = e^{i\phi_k N} |V^{(N)}(A_{j_k})\rangle$, and the
 single-block fundamental theorem gives
 $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$.
@@ -35,7 +35,7 @@ The result is a **single `∀ k, ∃ j` existential statement** on the
 original pair. The equal-MPV proof applies `exists_block_match_exact` with
 `P` and `Q` swapped, then flips the cast direction and overlap order.
 
-The bijective matching (`bijective_match_of_sameMPVPos`) now applies the
+The bijective matching (`bijective_match_of_sameMPV`) now applies the
 exact block matcher in both directions — once with `(Q, P)` for a map
 `Fin Q.basisCount → Fin P.basisCount` and once with `(P, Q)` for the
 reverse map — to derive `P.basisCount = Q.basisCount` and the full bijection
@@ -49,7 +49,7 @@ Given a sector `k` of `Q`, apply the exact matcher
 
 * feed `hQ`, `hP` (in that order);
 * supply the selected sector `k`; and
-* supply `SameMPV₂ Q.toTensor P.toTensor` via the symmetric flip of `hEqual`
+* supply `SameMPV₂Pos Q.toTensor P.toTensor` via the symmetric flip of `hEqual`
   (pointwise `.symm`).
 
 The result is a `j₀ : Fin P.basisCount` with `Q.basisDim k = P.basisDim j₀`,
@@ -71,9 +71,10 @@ variable {d : ℕ}
 
 /-- **CPSV16 Appendix MPV proof, line 1182, Step 1 (full-basis form).**
 
-For every sector `k` of `Q`, there exists a sector `j` of `P` of equal bond
-dimension, gauge-phase equivalent to `Q.basis k` after the dimension cast, and
-with non-decaying cross-overlap.
+Suppose that the total tensors of `P` and `Q` generate the same MPV family at
+every positive length.  For every sector `k` of `Q`, there exists a sector `j`
+of `P` of equal bond dimension, gauge-phase equivalent to `Q.basis k` after the
+dimension cast, and with non-decaying cross-overlap.
 
 The proof applies `exists_block_match_exact` to the swapped pair `(Q, P)` and
 then flips the gauge-phase equivalence and overlap order back to the displayed
@@ -81,7 +82,7 @@ then flips the gauge-phase equivalence and overlap order back to the displayed
 
 Paper anchor: CPSV16 Appendix MPV proof, line 1182 (arXiv:1606.00608), CPSV21
 Definition 4.2 lines 1846–1850, and the two-layer display at lines 1864–1884. -/
-theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
+theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -105,21 +106,6 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     apply hNonDecay_swapped
     exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
 
-/-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
-      GaugePhaseEquiv
-          (cast (congr_arg (MPSTensor d) h) (P.basis j))
-          (Q.basis k) ∧
-      ¬ Tendsto (fun N : ℕ =>
-          mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
-        atTop (𝓝 0) :=
-  forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
-    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
-
 /-! ### Bijective sector matching by symmetry -/
 
 /-- **CPSV16 Appendix MPV proof, line 1182, full-basis bijection.**
@@ -137,7 +123,7 @@ and $g_B \geq g_A$".  The proof invokes the exact block matcher once with $(Q,P)
 matcher uses exact coefficient comparison rather than the dominant
 coefficient asymptotic argument, no per-sector unit-modulus copy-weight
 hypotheses are needed in the equal-MPV case. -/
-theorem bijective_match_of_sameMPVPos
+theorem bijective_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -269,22 +255,5 @@ theorem bijective_match_of_sameMPVPos
   refine ⟨β, ?_⟩
   intro k
   simpa [β] using φ₀_spec k
-
-/-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem bijective_match_of_sameMPV
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
-      ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
-        GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) h) (P.basis (β k)))
-            (Q.basis k) ∧
-        ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
-          atTop (𝓝 0) :=
-  bijective_match_of_sameMPVPos
-    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos
-
 
 end MPSTensor

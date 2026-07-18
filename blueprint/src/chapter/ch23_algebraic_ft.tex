@@ -355,7 +355,7 @@ shows that this agreement forces the local tensors to be proportional.
     \leanok
     \uses{def:injective, def:decomposition_map, lem:center_scalar}
     Let $A_1, A_2$ and $B_1, B_2$ be injective MPS tensors with
-    the same bond dimension $D$.
+    the same positive bond dimension $D$.
     Suppose that for all $X \in \MN{D}$ (on the internal bond),
     all $Y \in \MN{D}$ (on the external bond), and all physical indices $i,j$,
     \begin{align}
@@ -436,8 +436,9 @@ separate same-state reduction hypothesis, treated below.
     \leanok
     \uses{def:non_ti_chain, def:same_mpv}
     Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
-    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two $n$-site chains with
-    common bond dimension $D$, and assume that $\mathbf{A}$ is injective.
+    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two chains with $n>0$ sites
+    and common positive bond dimension $D$, and assume that $\mathbf{A}$ is
+    injective.
     Suppose that, after combining the site index and physical index into a
     single MPS tensor, the resulting two tensors generate the same MPV
     family. Then $\mathbf{A}$ and $\mathbf{B}$ are cyclically gauge
@@ -489,8 +490,9 @@ separate same-state reduction hypothesis, treated below.
     \uses{thm:fundamentalTheorem_injective_chain, def:gauge_phase_equiv,
         def:non_ti_chain}
     Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
-    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two $n$-site chains with common
-    bond dimension $D$, and assume that $\mathbf{A}$ is injective.
+    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two chains with $n>0$ sites and
+    common positive bond dimension $D$, and assume that $\mathbf{A}$ is
+    injective.
     Suppose that the combined tensors $\widetilde{\mathbf{A}}$ and
     $\widetilde{\mathbf{B}}$ are gauge-phase equivalent.
     Then there exist invertible matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$
@@ -541,7 +543,7 @@ the virtual bond gauge and proportionality lemmas above.
     \uses{def:same_state_reduction_hyp, def:non_ti_chain, def:same_mpv}
     Assume a same-state reduction hypothesis for $(d,D)$.
     Let $\mathbf{A}$ and $\mathbf{B}$ be $n$-site chains with common bond
-    dimension $D$, with $n \ge 3$, and assume that $\mathbf{A}$ is
+    dimension $D>0$, with $n \ge 3$, and assume that $\mathbf{A}$ is
     injective.
     If $\mathbf{A}$ and $\mathbf{B}$ generate the same chain state, then the
     combined tensors of $\mathbf{A}$ and $\mathbf{B}$ generate the same MPV
@@ -817,8 +819,8 @@ Chapter~\ref{ch:symmetry}.
     \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
     \leanok
     \uses{def:blocked_chain, def:same_mpv}
-    Let $A$ and $B$ be MPS tensors of bond dimension $D$, let $L$ be a
-    blocking length, and let $n$ be a chain length.
+    Let $A$ and $B$ be MPS tensors of positive bond dimension $D$, let $L$ be
+    a blocking length, and let $n>0$ be a chain length.
     Assume that $A$ is $L$-block injective and that the combined tensors of the
     two constant blocked chains built from $A^{[L]}$ and $B^{[L]}$ generate the
     same MPV family.
@@ -1485,17 +1487,18 @@ sector counts and bond dimensions before matching.
     \label{lem:ft_sector_bnt_equal_sector_data_different_dims}
     \lean{MPSTensor.ft_sector_bnt_equal_sector_data}
     \leanok
-    \uses{def:same_mpv2, def:sector_bnt_cf, def:gauge_phase_equiv}
+    \uses{def:same_mpv2_pos, def:sector_bnt_cf, def:gauge_phase_equiv}
     Let $P$ and $Q$ be two BNT canonical forms
     (Definition~\ref{def:sector_bnt_cf}), each admitting a unit-modulus copy
     weight in every basis sector, possibly with different sector counts and
     different bond dimensions before matching.
-    If their block-diagonal tensors generate the same MPV family
-    (Definition~\ref{def:same_mpv2}), then the basis sectors are
-    bijectively matched by a permutation $\beta$, each matched basis pair is
-    gauge-phase equivalent (Definition~\ref{def:gauge_phase_equiv}), the
-    matched copy multiplicities agree, and the copy weights agree up to a
-    unit-modulus phase $\zeta$ and a copy-index reindexing.
+    If their block-diagonal tensors generate the same MPV family at every
+    positive length (Definition~\ref{def:same_mpv2_pos}), then the basis
+    sectors are bijectively matched by a permutation $\beta$, each matched
+    basis pair is gauge-phase equivalent
+    (Definition~\ref{def:gauge_phase_equiv}), the matched copy multiplicities
+    agree, and the copy weights agree up to a unit-modulus phase $\zeta$ and a
+    copy-index reindexing.
     This is the sector-data form of the equal-case theorem
     \cite[Corollary~2.11, lines 354--361 and appendix 1172--1192]{Cirac2016MPDO_arXiv};
     the corresponding global gauge corollary is recorded in

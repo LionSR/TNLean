@@ -57,7 +57,7 @@ and blocked-basis comparison statements for Theorem IV.13(ii) are recorded in
 For the blocked support tower, `AlgebraStructureData.BlockedStructureChiFamily`,
 `AlgebraStructureData.HasBlockedStructureChiTracePowerForm`, and
 `AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm` record the
-length-dependent blocked-basis analogue for
+positive-length, length-dependent blocked-basis analogue for
 `AlgebraStructureData.blockedStructureCoefficients`, including positivity of
 the diagonal entries. The BNT-label coefficient and comparison predicates are
 recorded in `TNLean.MPS.MPDO.BNTCoefficients`; the remaining gap is the
@@ -633,11 +633,6 @@ namespace DiagonalChiFamily
 
 variable {I : Type*} (χ : DiagonalChiFamily I)
 
-/-- The diagonal chi family with empty diagonal matrices for every triple. -/
-def empty (I : Type*) : DiagonalChiFamily I where
-  dim _ _ _ := 0
-  entry _ _ _ k := Fin.elim0 k
-
 /-- Reindex a diagonal chi family along a map of labels. -/
 def comap {J : Type*} (f : J → I) : DiagonalChiFamily J where
   dim α β γ := χ.dim (f α) (f β) (f γ)
@@ -671,11 +666,6 @@ Under the scoped `ComplexOrder` instance (opened at the top of the file), a
 strict inequality `0 < z` on `ℂ` is equivalent to `0 < z.re ∧ z.im = 0`. -/
 def PosEntries : Prop :=
   ∀ α β γ : I, ∀ k : Fin (χ.dim α β γ), 0 < χ.entry α β γ k
-
-/-- The empty diagonal chi family has positive entries vacuously. -/
-theorem PosEntries.empty (I : Type*) : (empty I).PosEntries := by
-  intro α β γ k
-  exact Fin.elim0 k
 
 /-- Reindexing preserves positivity of the diagonal entries. -/
 theorem PosEntries.comap {J : Type*} {χ : DiagonalChiFamily I}
@@ -722,7 +712,7 @@ namespace AlgebraStructureData
 /-- A diagonal chi family indexed by the multiplication coefficients of a
 blocked support-algebra tower.
 
-For each blocking length `n`, the first two indices label basis elements of
+For each positive blocking length `n`, the first two indices label basis elements of
 `A n`, while the third labels a basis element of `A (2 * n)`. Thus this is the
 dependent-index version of the matrices
 `χ_{α,β,γ}` appearing in
@@ -735,10 +725,10 @@ comparison and elimination plan are recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section "BNT-label
 coefficient objects and remaining elimination plan". -/
 structure BlockedStructureChiFamily (data : AlgebraStructureData d D) where
-  /-- For each blocked length `n`, a diagonal family on the disjoint union of
-  domain and codomain basis labels. The intended triples have shape
+  /-- For each positive blocked length `n`, a diagonal family on the disjoint
+  union of domain and codomain basis labels. The intended triples have shape
   `(Sum.inl i, Sum.inl j, Sum.inr k)`. -/
-  toDiagonal : (n : ℕ) →
+  toDiagonal : (n : ℕ) → 0 < n →
     DiagonalChiFamily (BlockedIndex data n ⊕ BlockedIndex data (2 * n))
 
 namespace BlockedStructureChiFamily
@@ -746,44 +736,46 @@ namespace BlockedStructureChiFamily
 variable {data : AlgebraStructureData d D} (χ : BlockedStructureChiFamily data)
 
 /-- Size of the diagonal matrix attached to the triple `(n, i, j, k)`. -/
-def dim (n : ℕ) (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)) : ℕ :=
-  (χ.toDiagonal n).dim (Sum.inl i) (Sum.inl j) (Sum.inr k)
+def dim (n : ℕ) (hn : 0 < n) (i j : BlockedIndex data n)
+    (k : BlockedIndex data (2 * n)) : ℕ :=
+  (χ.toDiagonal n hn).dim (Sum.inl i) (Sum.inl j) (Sum.inr k)
 
 /-- Diagonal entries of the matrix attached to `(n, i, j, k)`. -/
-def entry (n : ℕ) (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n))
-    (r : Fin (χ.dim n i j k)) : ℂ :=
-  (χ.toDiagonal n).entry (Sum.inl i) (Sum.inl j) (Sum.inr k) r
+def entry (n : ℕ) (hn : 0 < n) (i j : BlockedIndex data n)
+    (k : BlockedIndex data (2 * n)) (r : Fin (χ.dim n hn i j k)) : ℂ :=
+  (χ.toDiagonal n hn).entry (Sum.inl i) (Sum.inl j) (Sum.inr k) r
 
 /-- The diagonal matrix attached to one blocked multiplication coefficient. -/
-noncomputable def matrix (n : ℕ) (i j : BlockedIndex data n)
+noncomputable def matrix (n : ℕ) (hn : 0 < n) (i j : BlockedIndex data n)
     (k : BlockedIndex data (2 * n)) :
-    Matrix (Fin (χ.dim n i j k)) (Fin (χ.dim n i j k)) ℂ :=
-  (χ.toDiagonal n).matrix (Sum.inl i) (Sum.inl j) (Sum.inr k)
+    Matrix (Fin (χ.dim n hn i j k)) (Fin (χ.dim n hn i j k)) ℂ :=
+  (χ.toDiagonal n hn).matrix (Sum.inl i) (Sum.inl j) (Sum.inr k)
 
 /-- The trace-power coefficient attached to one blocked multiplication triple. -/
-noncomputable def tracePowerCoeff (n : ℕ) (i j : BlockedIndex data n)
+noncomputable def tracePowerCoeff (n : ℕ) (hn : 0 < n) (i j : BlockedIndex data n)
     (k : BlockedIndex data (2 * n)) (L : ℕ) : ℂ :=
-  (χ.toDiagonal n).tracePowerCoeff (Sum.inl i) (Sum.inl j) (Sum.inr k) L
+  (χ.toDiagonal n hn).tracePowerCoeff (Sum.inl i) (Sum.inl j) (Sum.inr k) L
 
 /-- The `L`-th power of a blocked chi matrix is diagonal with entries raised to
 the `L`-th power. -/
-theorem matrix_pow (n : ℕ) (i j : BlockedIndex data n)
+theorem matrix_pow (n : ℕ) (hn : 0 < n) (i j : BlockedIndex data n)
     (k : BlockedIndex data (2 * n)) (L : ℕ) :
-    χ.matrix n i j k ^ L =
-      Matrix.diagonal fun r => (χ.entry n i j k r) ^ L :=
-  (χ.toDiagonal n).matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
+    χ.matrix n hn i j k ^ L =
+      Matrix.diagonal fun r => (χ.entry n hn i j k r) ^ L :=
+  (χ.toDiagonal n hn).matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
 
 /-- The trace of the `L`-th power of a blocked chi matrix is the corresponding
 finite sum of `L`-th powers of its diagonal entries. -/
-lemma trace_matrix_pow (n : ℕ) (i j : BlockedIndex data n)
+lemma trace_matrix_pow (n : ℕ) (hn : 0 < n) (i j : BlockedIndex data n)
     (k : BlockedIndex data (2 * n)) (L : ℕ) :
-    (χ.matrix n i j k ^ L).trace = χ.tracePowerCoeff n i j k L :=
-  (χ.toDiagonal n).trace_matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
+    (χ.matrix n hn i j k ^ L).trace = χ.tracePowerCoeff n hn i j k L :=
+  (χ.toDiagonal n hn).trace_matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
 
 /-- Positivity of every diagonal entry in the blocked chi family. -/
 def PosEntries : Prop :=
-  ∀ (n : ℕ) (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)),
-    ∀ r : Fin (χ.dim n i j k), 0 < χ.entry n i j k r
+  ∀ (n : ℕ) (hn : 0 < n) (i j : BlockedIndex data n)
+    (k : BlockedIndex data (2 * n)),
+    ∀ r : Fin (χ.dim n hn i j k), 0 < χ.entry n hn i j k r
 
 end BlockedStructureChiFamily
 
@@ -807,10 +799,10 @@ coefficient objects and remaining elimination plan". -/
 def HasBlockedStructureChiTracePowerForm
     (data : AlgebraStructureData d D) (χ : BlockedStructureChiFamily data) :
     Prop :=
-  ∀ (n : ℕ), 0 < n →
+  ∀ (n : ℕ) (hn : 0 < n),
     ∀ (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)),
     data.blockedStructureCoefficients n i j k =
-      χ.tracePowerCoeff n i j k n
+      χ.tracePowerCoeff n hn i j k n
 
 /-- Trace reformulation of `HasBlockedStructureChiTracePowerForm` at a positive
 blocked length. -/
@@ -820,7 +812,7 @@ theorem HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow
     (n : ℕ) (hn : 0 < n)
     (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)) :
     data.blockedStructureCoefficients n i j k =
-      (χ.matrix n i j k ^ n).trace := by
+      (χ.matrix n hn i j k ^ n).trace := by
   rw [h n hn i j k, χ.trace_matrix_pow]
 
 /-- A positive blocked chi witness for the blocked multiplication coefficients.
@@ -855,7 +847,7 @@ lemma eq_trace_pow (h : PositiveBlockedStructureChiTracePowerForm data)
     (n : ℕ) (hn : 0 < n)
     (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)) :
     data.blockedStructureCoefficients n i j k =
-      (h.chi.matrix n i j k ^ n).trace :=
+      (h.chi.matrix n hn i j k ^ n).trace :=
   h.tracePower.eq_trace_matrix_pow n hn i j k
 
 end PositiveBlockedStructureChiTracePowerForm

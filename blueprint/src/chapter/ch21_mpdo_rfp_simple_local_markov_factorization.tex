@@ -67,6 +67,8 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{def:mpdo_hayashi_sector_projection,
+        lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one,
+        thm:star_projection_coisometric_transport,
         thm:orthogonal_projection_star_projection_channel}
     The coordinate projections satisfy
     \[
@@ -96,7 +98,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.bntMarkovLeftFactor}
     \lean{MPOTensor.bntMarkovRightFactor}
     \leanok
-    \uses{def:mpdo_three_site_closure, def:mpdo_eta_structure}
+    \uses{def:mpdo_three_site_family_closure, def:mpdo_eta_structure}
     Let $C_x$ and $C_y$ be two rows of a simultaneous left inverse, and
     choose a Hayashi decomposition of the three-site operator.  In its
     $k$-th Markov sector, set
@@ -142,7 +144,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_bnt_markov_key_formula}
     \lean{MPOTensor.isMPOBlockLeftInverse_bnt_markov_key_formula}
     \leanok
-    \uses{thm:mpdo_inverse_map_three_site_contraction,
+    \uses{thm:mpdo_bnt_three_site_outer_inverse_collapse,
       thm:mpdo_bnt_outer_inverse_markov_block}
     Let $x=(s,\alpha_1,\beta_1)$ and
     $y=(t,\alpha_3,\beta_3)$.  Comparing the two expressions for the same
@@ -311,31 +313,51 @@ strong subadditivity for a normalized three-site reduced state.
     positive-weight Markov sector exactly once.
 \end{proof}
 
-\begin{theorem}[Saturation gives equality in strong subadditivity]
+\begin{theorem}[SAL and arbitrary-cut equality in strong subadditivity]
     \label{thm:mpdo_sal_ssa_equality}
+    \lean{MPOTensor.isSSAEquality_tripartite_m_of_isSAL}
     \lean{MPOTensor.isSSAEquality_tripartite_of_isSAL}
     \lean{MPOTensor.isSSAEquality_threeSite_of_isSAL}
+    \lean{MPOTensor.%
+      mutualInfoChain_one_eq_of_isSSAEquality_tripartite_m}
+    \lean{MPOTensor.isSAL_of_isSSAEquality_tripartite_m}
     \leanok
     \uses{def:is_sal, def:ssa_equality}
-    Let $N\geq 4$, and divide the first $N-1$ sites of the normalized periodic
-    state into consecutive regions $A,B,C$ of lengths $1,1,N-3$. If the tensor
-    saturates the area law, then
+    Let $1\leq m\leq\lfloor N/2\rfloor$, and divide the chain into four
+    consecutive regions $A,B,C,D$ of lengths $m-1,1,N-m-1,1$.  If the tensor
+    saturates the area law, then its marginal on $ABC$ satisfies
     \[
         S(ABC)+S(B)=S(AB)+S(BC).
     \]
-    In particular, the three-site reduced state of the four-site chain satisfies
-    equality in strong subadditivity.
+    Indeed, this is the entropy form of $I_1=I_m$.  Taking $m=2$ gives the
+    regions of lengths $1,1,N-3$, and then taking $N=4$ shows that the
+    three-site reduced state of the four-site chain satisfies equality in
+    strong subadditivity.
+
+    Conversely, suppose the tensor generates positive semidefinite periodic
+    operators and their traces are nonzero at every positive chain length.
+    If the displayed equality holds for every $N$ and every
+    $1\leq m\leq\lfloor N/2\rfloor$, then the tensor saturates the area law.
+    This is the choice of regions used in
+    \cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
+    The endpoint corrects the strict inequality printed at source line~1771:
+    Definition~4.6 and the concluding comparison both require
+    $m=\lfloor N/2\rfloor$.  This local correction is recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_tripartite_block_entropy_identifications}
-    By saturation, $I_1=I_2$. Expanding the two mutual informations and cancelling
+    By saturation, $I_1=I_m$. Expanding the two mutual informations and cancelling
     the entropy of the full chain gives
     \[
-        S_{N-1}+S_1=S_2+S_{N-2},
+        S_{N-1}+S_1=S_m+S_{N-m},
     \]
     which is the stated equality for the regions $A,B,C$.
+    Conversely, this equality gives $I_1=I_m$.  If it holds for every
+    admissible $m$, comparing the cases $m=L$ and $m=L+1$ gives
+    $I_L=I_{L+1}$ and hence saturation of the area law.
 \end{proof}
 \begin{theorem}[SAL implies local $\eta$-structure]
     \label{thm:sal_implies_eta_structure}
@@ -459,6 +481,8 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_bnt_projector_local_selection}
     \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero}
     \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_self}
+    \lean{MPOTensor.%
+      sum_bntSectorProjection_mul_physicalSlice_mul_self}
     \lean{MPOTensor.changePhysicalBasis_bntSectorProjection_basis}
     \lean{MPOTensor.%
       exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}
@@ -471,9 +495,15 @@ strong subadditivity for a normalized three-site reduced state.
     \[
       P_iA_iP_i=A_i.
     \]
+    Consequently,
+    \[
+      \sum_sP_sA_iP_s=A_i,
+    \]
+    which is the local diagonal decomposition required for the sector entropy
+    argument.
     Equivalently, compressing the physical legs of $A_i$ by $P_s$ retains
-    $A_i$ for $s=i$ and gives the zero local tensor otherwise.  This is
-    equations~\textup{PjKiPj} and~\textup{generateMPDO} in
+    $A_i$ for $s=i$ and gives the zero local tensor otherwise.  This is the
+    local projection relation in
     \cite[Appendix~C.2, lines~1680--1755]{Cirac2016MPDO_arXiv}.
 
     The Markov summands of zero Hayashi weight are retained in the ambient
@@ -559,7 +589,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
     \leanok
     \uses{lem:mpdo_simple_blockwise_zcl_equation,
-      def:mpdo_sitewise_physical_matrix}
+      def:mpdo_common_sector_weight_absorption}
     Let $K$ have zero correlation length and let
     $\mathcal K_s=\mu_sA_s$ be an absorbed BNT element of its horizontal
     canonical form.  If the physical-trace transfer $\mathcal B_s$ is not
@@ -581,6 +611,114 @@ strong subadditivity for a normalized three-site reduced state.
     quadratic identity.  The common weight is nonzero, and nonnilpotence of
     $\mathcal B_s$ implies $\mathcal B_s\ne0$, so the absorbed transfer is
     nonzero.
+\end{proof}
+
+\begin{theorem}[Strict normalization at positive length]
+    \label{thm:mpdo_source_zcl_strict_positive_length_normalization}
+    \lean{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL}
+    \lean{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}
+    \lean{MPOTensor.%
+      trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}
+    \leanok
+    \uses{def:mpdo, def:mpo_source_zcl, lem:mpdo_trace_loop_chain,
+      cor:mpdo_absorbed_bnt_sector_is_mpdo,
+      thm:mpdo_absorbed_bnt_sector_zcl}
+    Let $M$ generate matrix product density operators and have source zero
+    correlation length.  Then, for every $N\geq1$,
+    \[
+        \tr\bigl(\sigma^{(N)}(M)\bigr)>0.
+    \]
+    In particular, after a common blocking has made the simultaneous BNT
+    word span full at one letter, the absorbed BNT elements selected in
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl} have a well-defined
+    normalized state at every physical chain length.  This is the biCF
+    hypothesis imposed at the start of Case II in the source; its relation
+    with finite physical blocking is recorded in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+    This supplies the strict form of the sector normalization used in
+    \cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the physical-trace transfer as $\mathcal T_M=\lambda E$, where
+    $\lambda>0$ and $E$ is a nonzero idempotent.  A nonzero idempotent on a
+    finite-dimensional complex vector space has nonzero trace, while
+    $E^N=E$ for $N\geq1$.  Hence
+    \[
+        \tr\bigl(\sigma^{(N)}(M)\bigr)
+        =\tr(\mathcal T_M^N)
+        =\lambda^N\tr(E)\ne0.
+    \]
+    Positivity of the density operator then makes this trace strictly
+    positive.
+\end{proof}
+
+\begin{theorem}[Saturated area law for the absorbed BNT elements]
+    \label{thm:mpdo_absorbed_bnt_sector_sal}
+    \lean{MPOTensor.bntSectorProbability}
+    \lean{MPOTensor.bntSectorProbability_pos}
+    \lean{MPOTensor.normalizedMPO_eq_sum_bntSectorProbability_smul}
+    \lean{MPOTensor.reducedBlockState_eq_sum_bntSectorProbability_smul}
+    \lean{MPOTensor.blockEntropy_eq_sum_bntSectorProbability}
+    \lean{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}
+    \leanok
+    \uses{def:is_sal, def:mpo_source_zcl,
+      def:mpdo_common_sector_weight_absorption}
+    Let $K$ saturate the area law and have zero correlation length, and let
+    its horizontal BNT canonical form, up to block-diagonal gauge, have normal
+    representatives $A_s$, common copy weights $\mu_s$, and copy numbers
+    $n_s$.  Assume that the physical-trace transfer of every $A_s$ is
+    nonnilpotent.  After a common blocking, assume explicitly that the
+    simultaneous one-letter word tuples of the $A_s$ span the direct sum of
+    their full matrix algebras.  Put $\mathcal K_s=\mu_sA_s$.
+
+    For every nonempty chain, define
+    \[
+      p_s^{(N)}=
+      \frac{n_s\,\tr\!\left(\sigma^{(N)}(\mathcal K_s)\right)}
+           {\tr\!\left(\sigma^{(N)}(K)\right)}.
+    \]
+    Then $p_s^{(N)}>0$, and every nonempty prefix marginal has the same sector
+    decomposition with these probabilities.  Translation invariance
+    identifies the other contiguous blocks of the same length.
+    Consequently, every absorbed representative $\mathcal K_s$ saturates the
+    area law.
+
+    The one-letter simultaneous span is the block-injective canonical-form
+    hypothesis imposed at the start of Case II in
+    \cite[line~1628]{Cirac2016MPDO_arXiv}.  Its relation with finite physical
+    blocking is recorded in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.  The entropy
+    conclusion is the argument of
+    \cite[Appendix~C.2, lines~1748--1781]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_pairwise_annihilating_support,
+      thm:positive_weighted_sum_termwise_equality,
+      lem:sal_const, thm:entropy_strong_subadditivity,
+      thm:mpdo_tripartite_block_entropy_identifications,
+      thm:mpdo_bnt_projector_local_selection,
+      cor:mpdo_absorbed_bnt_sector_is_mpdo,
+      thm:mpdo_source_zcl_strict_positive_length_normalization}
+    The BNT projections carry every normalized marginal on mutually
+    annihilating supports, so the preceding support form of entropy
+    additivity gives
+    \[
+      S_L(K)=H\!\left(p^{(N)}\right)
+        +\sum_s p_s^{(N)}S_L(\mathcal K_s)
+        \qquad (1\leq L\leq N).
+    \]
+    The four marginals entering strong subadditivity have the same
+    probabilities.  Substitution in the equality for $K$ cancels all four
+    Shannon terms.  Strong subadditivity gives the corresponding inequality
+    in each sector, and strict positivity of every $p_s^{(N)}$ forces every
+    such inequality to be an equality.  Comparing the equalities for block
+    lengths $L$ and $L+1$ proves saturation for $\mathcal K_s$.
 \end{proof}
 
 \begin{definition}[Injective inverse map for a simple MPO tensor]
@@ -616,104 +754,18 @@ For an injective simple tensor, contracting $K^{-1}$ with $K$ through the
 physical index identifies the corresponding virtual legs.  In components,
 this is the matrix-unit identity
 $\sum_p(K^{-1})^{\alpha,\beta}_pK^p=E_{\alpha,\beta}$:
-\[
-    {\cal K}^{-1}{\cal K}=\Id
-\]
-    \begin{center}
-        % sum_p (K^{-1})^{alpha,beta}_p K^p = delta_{alpha,alpha'} delta_{beta,beta'}
-        % i.e. {\cal K}^{-1}{\cal K} = Id: the inverse tensor K^{-1} (top)
-        % contracted with the injective K (bottom) through the shared
-        % doubled (ket-and-bra) physical index.  Per the paper's convention
-        % for this subsection (MPDO-22-12-17-2.tex lines 1318-1322,
-        % illustrated by MPDO_NotationK.png) a doubled physical/environment
-        % index drawn on one side is a SOLID line (ket copy) paired with a
-        % DASHED line (bra copy); both lines carry the single summed index
-        % p, so no physical leg survives the contraction.  Open stubs, top
-        % row then bottom row: west = alpha', alpha; east = beta', beta.
-        % On the right the east-cupped bend ties the west pair
-        % (delta_{alpha,alpha'}) and the west-cupped bend ties the east
-        % pair (delta_{beta,beta'}): the matrix-unit identity on the bond
-        % space, drawn as two disjoint bends.  Both sides carry the same
-        % boundary signature
-        % (virtual-west=2 | virtual-east=2 | physical-up=0 | physical-down=0),
-        % the right-hand side as the two factors (2|0) and (0|2).
-        \begin{tenkzfree}
-            \tnput[ports={west:virtual, east:virtual}, label pos=north]
-                {Kinv}{(0,4.4mm)}{{\cal K}^{-1}}
-            \tnput[ports={west:virtual, east:virtual}, label pos=south]
-                {K}{(0,-4.4mm)}{{\cal K}}
-            % doubled physical/environment index p: solid = ket copy,
-            % dashed = bra copy (MPDO_NotationK.png convention)
-            \draw[bond] ($(Kinv.south)+(-0.35mm,0)$) -- ($(K.north)+(-0.35mm,0)$);
-            \draw[bond, dashed] ($(Kinv.south)+(0.35mm,0)$) -- ($(K.north)+(0.35mm,0)$);
-            \draw[bond] (Kinv.west) -- ++(-4.95mm,0);
-            \draw[bond] (Kinv.east) -- ++(4.95mm,0);
-            \draw[bond] (K.west) -- ++(-4.95mm,0);
-            \draw[bond] (K.east) -- ++(4.95mm,0);
-        \end{tenkzfree}
-        $\;=\;$
-        \begin{tenkz}[rows={wire, wire}, east=cup]
-            \tnghost{} \\
-            \tnghost{}
-        \end{tenkz}
-        $\;$
-        \begin{tenkz}[rows={wire, wire}, west=cup]
-            \tnghost{} \\
-            \tnghost{}
-        \end{tenkz}
-    \end{center}
+\begin{center}
+    \TNMPDOInverseContraction
+\end{center}
 This is the identity in
 \cite[Appendix~C.2, lines~1376--1380]{Cirac2016MPDO_arXiv}.
 
 Applying this inverse map to the doubled physical index and closing its
 virtual legs against a further copy of $K$ recovers $K$:
-\[
-    K\,K^{-1}K=K
-\]
-    \begin{center}
-        % \mathcal K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity, lines
-        % 1671-1676): the top tensor is \mathcal K, the script-letter BNT
-        % element the source reserves for elements of a basis of normal
-        % tensors -- NOT a second copy of K (two equations earlier the same
-        % source writes K = X \circ \mathcal K \circ X^{-1}, so K and
-        % \mathcal K are related but distinct tensors).  K^{-1} (middle row)
-        % undoes \mathcal K on their shared virtual (bond) legs -- closed
-        % here by two disjoint bends, west ties \mathcal K's west stub to
-        % K^{-1}'s west stub, east ties their east stubs.  The doubled
-        % (ket-and-bra) physical index is drawn in the fused-bond
-        % double-stroke skin at the picture's one open boundary (above
-        % \mathcal K) and at the K^{-1}/K junction; the internal
-        % \mathcal K/K^{-1} junction is a single stroke, matching the
-        % source's own line weight there (the source does not double every
-        % physical wire, only the ones facing an open boundary or a
-        % cross-tensor contraction).  The bottom tensor K keeps its own
-        % bond legs open: those, plus the one surviving physical leg, are
-        % the only stubs on either side of the equation.  Both sides carry
-        % the same boundary signature
-        % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=0).
-        \begin{tenkzfree}
-            \tnput{Kc}{(0,9mm)}{}
-            \tnput{Kinv}{(0,0)}{}
-            \tnput[label pos=south]{Kbot}{(0,-9mm)}{K}
-            \draw[bond] (Kc.west) to[out=180, in=180, looseness=1.6] (Kinv.west);
-            \draw[bond] (Kc.east) to[out=0, in=0, looseness=1.6] (Kinv.east);
-            \draw[fused bond] (Kc.north) -- ++(0,4.2mm);
-            \draw[bond] (Kc.south) -- (Kinv.north);
-            \draw[fused bond] (Kinv.south) -- (Kbot.north);
-            \draw[bond] (Kbot.west) -- ++(-5mm,0);
-            \draw[bond] (Kbot.east) -- ++(5mm,0);
-            \node[tn label, anchor=east] at ($(Kc.west)-(3mm,0)$) {$\scriptstyle\mathcal K$};
-            \node[tn label, anchor=east] at ($(Kinv.west)-(3mm,0)$) {$\scriptstyle K^{-1}$};
-        \end{tenkzfree}
-        $\;=\;$
-        \begin{tenkzfree}
-            \tnput[label pos=south]{K}{(0,0)}{K}
-            \draw[fused bond] (K.north) -- ++(0,4.2mm);
-            \draw[bond] (K.west) -- ++(-5mm,0);
-            \draw[bond] (K.east) -- ++(5mm,0);
-        \end{tenkzfree}
-    \end{center}
-This
+\begin{center}
+    \TNMPDOInverseRecovery
+\end{center}
+The doubled physical index is represented by a single physical line.  This
 is the single-block identity of
 \cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.
 
@@ -754,47 +806,7 @@ is the single-block identity of
 
 \begin{figure}[ht]
     \centering
-    \[
-        \tr_4({\cal K}_4)=\sum_\alpha L_\alpha\otimes B_\alpha\otimes R_\alpha
-    \]
-    \begin{center}
-        % tr_4(K_4) = sum_alpha L_alpha (x) B_alpha (x) R_alpha: tracing
-        % the physical index of the fourth site of the periodic four-site
-        % MPO word folds that site into the virtual closing operator R_4 =
-        % Z_4^{-1} sum_{i_4} K^{i_4 i_4}, leaving sites 1,2,3 open (ket leg
-        % up = i_1,i_2,i_3, bra leg down = j_1,j_2,j_3, the paper's
-        % un-split K convention of MPDO_NotationK.png).  LHS: a periodic
-        % ring of three K cells and the virtual-only cell R_4 (no physical
-        % legs, a matrix on the wire); the return wire closes R_4's east
-        % end back to site 1's west end, so no virtual index survives
-        % (virtual-west=0 | virtual-east=0 | physical-up=3 |
-        % physical-down=3).  RHS: writing the ring's trace as a sum over
-        % the bond value alpha at the R_4-site-1 cut gives the chain
-        % L_alpha - B_alpha - R_alpha (L_alpha absorbs K's left virtual
-        % index fixed to alpha, R_alpha absorbs K's right virtual index
-        % together with R_4's remaining leg fixed to the same alpha,
-        % B_alpha is the untouched middle K); each RHS picture is one
-        % alpha-term, its own outer virtual legs sealed by boundary=none
-        % (matching the boundary=none convention of the sibling
-        % TNMPDOTwoSiteClosureFactorization figure in this chapter) since
-        % the sum_alpha outside is what reglues the two matched ends back
-        % into the closed trace -- so the RHS carries the same signature
-        % (virtual-west=0 | virtual-east=0 | physical-up=3 |
-        % physical-down=3) once the outer sum is read together with the
-        % picture.
-        \begin{tenkz}[physical=updown, periodic]
-            \tn[up=$i_1$, down=$j_1$]{{\cal K}} &
-            \tn[up=$i_2$, down=$j_2$]{{\cal K}} &
-            \tn[up=$i_3$, down=$j_3$]{{\cal K}} &
-            \tnX{R_4}
-        \end{tenkz}
-        $\;=\;\displaystyle\sum_\alpha\;$
-        \begin{tenkz}[physical=updown, boundary=none]
-            \tn[up=$i_1$, down=$j_1$]{L_\alpha} &
-            \tn[up=$i_2$, down=$j_2$]{B_\alpha} &
-            \tn[up=$i_3$, down=$j_3$]{R_\alpha}
-        \end{tenkz}
-    \end{center}
+    \TNMPDONormalizedFourSiteTail
     \caption{Tracing the fourth site of the normalized four-site periodic MPO
     leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
     by the virtual closing operator
@@ -913,10 +925,7 @@ is the single-block identity of
 
 \begin{figure}[ht]
     \centering
-    \[
-        ({\cal K}^{-1}\otimes\Id\otimes{\cal K}^{-1}){\cal K}_3
-        =\sum_{\alpha,\beta}L_\alpha\otimes B_{\alpha,\beta}\otimes R_\beta
-    \]
+    \TNMPDOInverseMapThreeSiteContraction
     \caption{Applying ${\cal K}^{-1}$ at the first and third sites collapses
     the three-site contraction to
     ${\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}$, where
@@ -1283,31 +1292,9 @@ in the basis adapted to sector $k$; compare
 
 In the middle-site basis selected by $U_B$, the same factorization is
 displayed as
-\[
-    U_B\mathcal K U_B^\dagger=\bigoplus_k l_k\otimes r_k
-\]
-    \begin{center}
-        % U_B K U_B^dagger = bigoplus_k l_k (x) r_k: the middle-site isometry
-        % U_B splits the single physical wire of K into the left sector
-        % factor l_k (keeps the west virtual leg beta_1) tensored with the
-        % right sector factor r_k (keeps the east virtual leg alpha_3); l_k,
-        % r_k are themselves operators (their own physical bra/ket pair), so
-        % each carries one up and one down leg once split.  Both sides carry
-        % virtual-west=1 | virtual-east=1 | physical-up=2 | physical-down=2.
-        \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
-            \tn[pill, wide=2, legs at={1,2}]{U_B^\dagger} & \\
-            \tn{\mathcal K} & \\
-            \tn[pill, wide=2, legs at={1,2}]{U_B} &
-        \end{tenkz}
-        $\;=\;\bigoplus_k$
-        \begin{tenkz}[physical=updown, east=none, tensor style=box]
-            \tn{l_k}
-        \end{tenkz}
-        $\;\otimes\;$
-        \begin{tenkz}[physical=updown, west=none, tensor style=box]
-            \tn{r_k}
-        \end{tenkz}
-    \end{center}
+\begin{center}
+    \TNMPDOSectorFactorization
+\end{center}
 
 \begin{proof}
     \leanok

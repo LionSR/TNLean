@@ -4,11 +4,9 @@ on:
   workflow_run:
     workflows:
       - Auto Fix (Lean)
-      - Claude Code Review (Lean)
+      - PR Review
       - Lean linter-warning auto-fix
-      - Blueprint Sync & Prose Review
-      - PR Cleanup (bot-generated)
-      - Issue Tracker
+      - Issue Automation
     types: [completed]
   schedule:
     - cron: "17 * * * *"
@@ -43,10 +41,8 @@ jobs:
               until_name="CLAUDE_AUTO_FIX_DISABLED_UNTIL"
               reason_name="CLAUDE_AUTO_FIX_DISABLE_REASON"
               ;;
-            "Claude Code Review (Lean)"|\
-            "Blueprint Sync & Prose Review"|\
-            "PR Cleanup (bot-generated)"|\
-            "Issue Tracker")
+            "PR Review"|\
+            "Issue Automation")
               switch_name="CLAUDE_REVIEW_ENABLED"
               until_name="CLAUDE_REVIEW_DISABLED_UNTIL"
               reason_name="CLAUDE_REVIEW_DISABLE_REASON"

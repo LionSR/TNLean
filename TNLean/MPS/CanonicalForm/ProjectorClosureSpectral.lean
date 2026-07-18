@@ -33,12 +33,9 @@ are those of arXiv:1606.00608, lines 220--230:
 
 Corners carrying the zero tensor cannot be rescaled to spectral radius one;
 they are the zero blocks of eq:II_Aiplusk1 (line 219, `∑ₖ Dₖ ≤ D`).  They
-contribute their bond dimension only to the length-zero coefficient, so the
-main conclusion states matrix-product-vector equality at every positive length
-together with the dimension bound `∑ₖ Dₖ ≤ D`.  When no corner carries the
-zero tensor the equality holds at every length, including zero; this variant
-is stated separately with the explicit no-zero-corner hypothesis.  The
-length-zero convention is recorded in
+vanish from every positive-length matrix product vector, so the conclusion
+retains only the nonzero corners and the structural dimension bound `∑ₖ Dₖ ≤ D`.
+The positive-length convention is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`.
 -/
 
@@ -244,12 +241,8 @@ matrix product vectors, with the source convention `∑ₖ Dₖ ≤ D` that allo
 zero blocks (eq:II_Aiplusk1, line 219).
 
 Corners of `A` carrying the zero tensor cannot be rescaled to spectral radius
-one and are omitted from the direct sum; each contributes its bond dimension
-only to the length-zero coefficient.  The variant
-`MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosure`
-states equality at every length under the explicit additional hypothesis that
-no irreducible corner of `A` carries the zero tensor.  The length-zero
-convention is recorded in
+one and are omitted from the direct sum because they vanish at every positive
+length. The positive-length convention is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`. -/
 theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure
     (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
@@ -333,63 +326,5 @@ theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorCl
       _ ≤ ∑ k : Fin r₀, dim₀ k :=
           Finset.sum_le_sum_of_subset (Finset.filter_subset _ _)
       _ = D := hDim
-
-/-- All-lengths variant of the sufficient condition for canonical form
-(arXiv:1606.00608, lines 253--255).
-
-**Scope restriction (no zero corners):** in addition to the source hypotheses,
-every irreducible corner of `A` of positive dimension is assumed to carry a
-nonzero letter matrix.  Without this hypothesis a corner may be the zero
-tensor, which cannot be rescaled to spectral radius one; the source drops
-such zero blocks (eq:II_Aiplusk1, line 219, `∑ₖ Dₖ ≤ D`), which changes the
-length-zero coefficient.  The premise `0 < n` excludes only the
-zero-dimensional corner, whose letter matrices all vanish for lack of
-entries; without it no tensor could satisfy the hypothesis.  The
-unrestricted positive-length statement is
-`MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure`.
-The restriction is recorded in
-`docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`. -/
-theorem exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosure
-    (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
-    (hPer : HasNoPeriodicVectors A)
-    (hcorner : ∀ ⦃n : ℕ⦄ (V : Matrix (Fin D) (Fin n) ℂ) (B : MPSTensor d n),
-      0 < n → Vᴴ * V = 1 → (∀ i : Fin d, A i * V = V * B i) → IsIrreducibleTensor B →
-      ∃ i, B i ≠ 0) :
-    ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      (∀ k, IsNormalTensor (blocks k)) ∧
-      (∀ k, μ k ≠ 0) := by
-  classical
-  obtain ⟨r₀, dim₀, blocks₀, V, hpos, hiso, hsum, -, hint, -, -, hirr, hSame⟩ :=
-    exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure A hClosure
-  have hPF : ∀ k : Fin r₀,
-      ∃ (ρ : Matrix (Fin (dim₀ k)) (Fin (dim₀ k)) ℂ) (t : ℝ),
-        ρ.PosDef ∧ 0 < t ∧
-        transferMap (d := d) (D := dim₀ k) (blocks₀ k) ρ = (t : ℂ) • ρ := by
-    intro k
-    haveI : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
-    exact exists_posDef_transferMap_eigenvector_of_irreducible (blocks₀ k) (hirr k)
-      (hcorner (V k) (blocks₀ k) (hpos k) (hiso k) (hint k) (hirr k))
-  choose ρf tf hρf htf hEigf using hPF
-  have hsqrt_ne : ∀ k : Fin r₀, ((Real.sqrt (tf k) : ℝ) : ℂ) ≠ 0 := fun k =>
-    Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr (htf k)).ne'
-  refine ⟨r₀, dim₀, fun k => ((Real.sqrt (tf k) : ℝ) : ℂ),
-    fun k => fun i => (((Real.sqrt (tf k) : ℝ) : ℂ))⁻¹ • blocks₀ k i,
-    ?_, ?_, fun k => hsqrt_ne k⟩
-  · -- Matrix product vector equality at every length.
-    intro N σ
-    rw [hSame N σ, mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
-    refine Finset.sum_congr rfl fun k _ => ?_
-    rw [mpv_smul, one_pow, one_smul, smul_eq_mul, ← mul_assoc, ← mul_pow,
-      mul_inv_cancel₀ (hsqrt_ne k), one_pow, one_mul]
-  · -- Every rescaled corner is a normal tensor.
-    intro k
-    haveI : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
-    refine isNormalTensor_invSqrt_smul_of_unique_peripheral (blocks₀ k) (hirr k)
-      (ρf k) (tf k) (hρf k) (htf k) (hEigf k) ?_
-    intro μ hμ hnorm
-    exact hPer (V k) (blocks₀ k) (ρf k) (tf k) (hiso k) (hint k) (hirr k)
-      (hρf k) (htf k) (hEigf k) μ hμ hnorm
 
 end MPSTensor

@@ -1,0 +1,370 @@
+\subsection{Simple canonical-form weights}
+
+\begin{lemma}[Blockwise zero-correlation-length equation]
+    \label{lem:mpdo_simple_blockwise_zcl_equation}
+    \lean{MPOTensor.%
+      exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer,
+        lem:mpdo_doubled_phys_trace_transfer_to_mps,
+        lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    Suppose a tensor with zero correlation length is gauge-equivalent, through
+    block-diagonal copy gauges, to an assembled sector decomposition.  There
+    is a scalar $\lambda>0$ such that every copy satisfies
+    \[
+      (\mu_{j,q}\mathcal T_{A_j})^2
+        =\lambda\mu_{j,q}\mathcal T_{A_j}.
+    \]
+    This is the block equation in
+    \cite[Appendix~C.2, lines~1652--1657]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $\mathcal T_M=G\mathcal T_SG^{-1}$, where $G$ is the induced
+    block-diagonal gauge.  The equation
+    $\mathcal T_M^2=\lambda\mathcal T_M$ therefore becomes
+    $\mathcal T_S^2=\lambda\mathcal T_S$ after conjugation by $G^{-1}$.
+    Restriction to the $(j,q)$-th diagonal block gives
+    \[
+      (\mu_{j,q}\mathcal T_{A_j})^2
+        =\lambda\mu_{j,q}\mathcal T_{A_j}.
+    \]
+\end{proof}
+
+\begin{theorem}[Copy independence for a non-nilpotent sector decomposition]
+    \label{thm:mpdo_simple_weight_copy_independent}
+    \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer,
+        lem:mpdo_doubled_phys_trace_transfer_to_mps,
+        lem:mpdo_doubled_phys_trace_transfer_blockwise,
+        lem:mpdo_simple_blockwise_zcl_equation}
+    Let a tensor with zero correlation length be gauge-equivalent, through
+    block-diagonal copy gauges, to an assembled sector decomposition whose
+    basis elements all have non-nilpotent physical-trace transfer. Then the
+    weights do not depend on the copy index: $\mu_{j,q}=\mu_{j}$
+    \cite[Appendix~C.2, lines~1646--1661]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Zero correlation length states
+    $\mathcal T_M^{2}=\lambda\,\mathcal T_M$ with $\lambda>0$.  If
+    $\mathcal T_M=X\mathcal T_SX^{-1}$ is the block-diagonal gauge to the
+    transfer of the assembled sector decomposition, then cancellation of
+    $X$ and $X^{-1}$ gives
+    \[
+        \mathcal T_S^{2}=\lambda\,\mathcal T_S.
+    \]
+    By
+    Lemmas~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}
+    and~\ref{lem:mpdo_doubled_phys_trace_transfer_blockwise} the identity
+    descends to every copy:
+    \[
+        \mu_{j,q}^{2}\,\mathcal T_{A_{j}}^{2}
+        =\lambda\,\mu_{j,q}\,\mathcal T_{A_{j}},
+        \qquad\text{hence}\qquad
+        \mathcal T_{A_{j}}^{2}
+        =\frac{\lambda}{\mu_{j,q}}\,\mathcal T_{A_{j}}.
+    \]
+    The left side does not depend on $q$, and
+    $\mathcal T_{A_{j}}\ne0$ because it is not nilpotent, so
+    $\lambda/\mu_{j,q}$ is independent of $q$, which gives
+    $\mu_{j,q}=\mu_{j,q'}$.
+\end{proof}
+
+\begin{corollary}[Simple canonical-form tensors with zero correlation length]
+    \label{cor:mpdo_simple_zcl_weight_copy_independent}
+    \lean{MPOTensor.IsSimpleCanonicalForm.exists_weight_copy_independent_of_isSourceZCL}
+    \leanok
+    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl,
+        thm:mpdo_simple_weight_copy_independent}
+    A simple canonical-form tensor
+    (Definition~\ref{def:mpdo_simple_cf_tensor}) with zero correlation length
+    has non-nilpotent basis transfers and weights independent of the copy
+    index.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
+    witness supplied by the simple canonical-form predicate.
+\end{proof}
+
+\begin{definition}[Common sector weight and absorbed representative]
+    \label{def:mpdo_common_sector_weight_absorption}
+    \lean{MPSTensor.SectorDecomposition.commonWeight}
+    \lean{MPSTensor.SectorDecomposition.commonWeightAbsorbedBasis}
+    \leanok
+    \uses{def:sector_weight_data}
+    Suppose the weights over each representative do not depend on the copy
+    index. Choose the common weight $\mu_j$ from any copy over $j$ and absorb
+    it into the representative:
+    \[
+        \mathcal K_j=\mu_j A_j.
+    \]
+    This is the convention of
+    \cite[Appendix~C.2, equation~CFK, lines~1660--1665]
+      {Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[Every copy has the common weight]
+    \label{lem:mpdo_copy_weight_eq_common_weight}
+    \lean{MPSTensor.SectorDecomposition.weight_eq_commonWeight}
+    \leanok
+    \uses{def:mpdo_common_sector_weight_absorption}
+    For every copy $q$ over $j$, one has $\mu_{j,q}=\mu_j$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Compare the $q$-th copy with the distinguished copy used to define
+    $\mu_j$.
+\end{proof}
+
+\begin{theorem}[Coefficient after common-weight absorption]
+    \label{thm:mpdo_common_weight_coefficient}
+    \lean{MPSTensor.SectorDecomposition.coeff_eq_copies_mul_commonWeight_pow}
+    \leanok
+    \uses{def:mpdo_common_sector_weight_absorption,
+      def:sector_weight_data, lem:mpdo_copy_weight_eq_common_weight}
+    Let $r_j$ be the number of horizontal copies of representative $j$. Then
+    its coefficient on a chain of length $N$ is
+    \[
+        \sum_q\mu_{j,q}^{N}=r_j\mu_j^{N}.
+    \]
+    Thus the natural multiplicity is the horizontal copy count $r_j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every term in the copy sum equals $\mu_j^N$, and there are $r_j$ terms.
+\end{proof}
+
+\begin{theorem}[Nonvanishing of the common-weight coefficient]
+    \label{thm:mpdo_common_weight_coefficient_ne_zero}
+    \lean{MPSTensor.SectorDecomposition.commonWeight_ne_zero}
+    \lean{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}
+    \leanok
+    \uses{def:sector_weight_data,
+      thm:mpdo_common_weight_coefficient}
+    The common weight is nonzero, and hence for every chain length $N$,
+    \[
+        q_j=\sum_q\mu_{j,q}^{N}=r_j\mu_j^{N}\ne0.
+    \]
+    This is the coefficient nonvanishing used in the choice
+    $m_j=q_j\widetilde m_j$ in
+    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
+    It does not assert nonvanishing of the independent virtual tail
+    contraction $\widetilde m_j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The distinguished copy weight is nonzero by the sector data.  Since
+    $r_j>0$, both factors in $r_j\mu_j^N$ are nonzero.
+\end{proof}
+
+\begin{theorem}[Common nonzero BNT tail selection]
+    \label{thm:mpdo_common_nonzero_bnt_tail_selection}
+    \lean{MPSTensor.SectorDecomposition.%
+      exists_common_nonzero_physicalTraceTail_entry}
+    \lean{MPSTensor.SectorDecomposition.%
+      exists_common_nonzero_threeSiteClosingMatrix_entry}
+    \lean{MPSTensor.SectorDecomposition.%
+      exists_common_threeSiteClosingMatrix_ne_zero}
+    \leanok
+    \uses{def:mpdo_simple_tensor,
+      thm:mpdo_common_weight_coefficient_ne_zero}
+    Suppose the weights over each representative are independent of the copy
+    index, and none of the physical-trace transfers
+    $\mathcal B_j=\sum_i A_j^{ii}$ is nilpotent.  There is one positive tail
+    length $L$ such that, for every representative $A_j$, some virtual indices
+    $\alpha,\beta$ satisfy
+    \[
+        \widetilde m_j
+        =\bigl[\mathcal B_j^L\bigr]_{\alpha,\beta}
+        \ne0.
+    \]
+    At total chain length $L+3$, the corresponding copy coefficient is
+    $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$.  Thus the three-site closing matrix
+    \[
+        R_j=q_j\mathcal B_j^L
+    \]
+    has the nonzero entry
+    $(R_j)_{\alpha,\beta}=q_j\widetilde m_j\ne0$.
+    This is the traced-tail selection made in
+    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\mathcal B_j$ is not nilpotent, every positive power of
+    $\mathcal B_j$ is nonzero; in particular, one common positive power has a
+    nonzero entry for every $j$.  The preceding theorem supplies the nonzero
+    coefficient at length $L+3$.  Therefore its product with the selected
+    entry of $\mathcal B_j^L$ is nonzero.
+\end{proof}
+
+\begin{theorem}[Canonical form with natural multiplicities]
+    \label{thm:mpdo_common_weight_absorbed_mpv}
+    \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis}
+    \leanok
+    \uses{def:mpdo_common_sector_weight_absorption,
+      lem:paper_decomp_formula, lem:mpv_smul,
+      thm:mpdo_common_weight_coefficient}
+    After absorbing the common weight, the matrix product vector of the
+    assembled tensor is
+    \[
+        \mathcal V_N(S)=\sum_j r_j\,\mathcal V_N(\mathcal K_j).
+    \]
+    This is equation~CFK of
+    \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}; the same
+    multiplicities occur in equation~sigmaNKj of
+    \cite[Appendix~C.2, lines~1756--1759]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the assembled tensor by representatives, use
+    Theorem~\ref{thm:mpdo_common_weight_coefficient}, and absorb
+    $\mu_j^N$ into the length-$N$ matrix product vector of $A_j$.
+\end{proof}
+
+\begin{definition}[Three-site family closure and outer inverse contraction]
+    \label{def:mpdo_three_site_family_closure}
+    \lean{MPOTensor.IsThreeSiteFamilyClosure}
+    \lean{MPOTensor.outerInverseContraction}
+    \leanok
+    Let $(\mathcal K_s)_s$ be a finite family of MPO tensors, with
+    $\mathcal K_s^{ij}\in M_{D_s}(\C)$, and let $R_s\in M_{D_s}(\C)$.
+    A three-site operator is a family closure when
+    \[
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        =\sum_s\tr\!\left(
+          \mathcal K_s^{i_1j_1}\mathcal K_s^{i_2j_2}
+          \mathcal K_s^{i_3j_3}R_s\right).
+    \]
+    Given a simultaneous left inverse $C$ as in
+    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse}, contracting $C$
+    against the first and third physical sites of $\rho$ defines the outer
+    inverse contraction
+    \[
+        (\Gamma_{x,y})_{i_2j_2}
+        =\sum_{i_1,j_1,i_3,j_3}
+          C_{x,(i_1,j_1)}C_{y,(i_3,j_3)}
+          \rho_{(i_1,i_2,i_3),(j_1,j_2,j_3)}.
+    \]
+    The closure is the sector-sum form of the displayed equation for
+    $\sigma_3^{(N)}$ in
+    \cite[Appendix~C.2, lines~1343--1348]{Cirac2016MPDO_arXiv}, used with the
+    block-canonical tensor in the Case II calculation at
+    \cite[Appendix~C.2, lines~1726--1732]{Cirac2016MPDO_arXiv}.  The outer
+    contraction is the sector-family form of the Case I contraction in
+    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}; the same
+    construction is used with sector projectors at lines~1719--1725.
+\end{definition}
+
+\begin{theorem}[Normalized three-site BNT family closure]
+    \label{thm:mpdo_normalized_three_site_bnt_family_closure}
+    \lean{MPSTensor.SectorDecomposition.basisMPOTensor}
+    \lean{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix}
+    \lean{MPOTensor.%
+      reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos}
+    \lean{MPOTensor.%
+      reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}
+    \leanok
+    \uses{def:mpdo_three_site_family_closure,
+      thm:mpdo_common_nonzero_bnt_tail_selection}
+    Suppose that the doubled-index tensor has the horizontal BNT
+    representation $S$, the copy weights over each representative agree, the
+    physical-trace transfers
+    $\mathcal B_j=\sum_iA_j^{ii}$ are not nilpotent, and the original tensor
+    satisfies SAL.  After identifying length-three configurations with
+    ordered triples, the normalized three-site marginal of the four-site
+    state is the family closure
+    \[
+      (\sigma^{(4)}_3)_{i_1i_2i_3,j_1j_2j_3}
+      =\sum_j\tr\!\left(
+        A_j^{i_1j_1}A_j^{i_2j_2}A_j^{i_3j_3}\widehat R_j\right),
+    \]
+    where
+    \[
+      \widehat R_j
+      =\tr(\rho^{(4)})^{-1}q_j\mathcal B_j,
+      \qquad q_j=\sum_q\mu_{j,q}^{4}.
+    \]
+    Every $\widehat R_j$ is nonzero.  More generally, a tail of length $L$
+    gives
+    $\widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L$.
+    This is the normalized traced-tail expansion used in
+    \cite[Appendix~C.2, lines~1714--1732]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Equality of the positive-length matrix-product-vector families expands every
+    matrix entry of the original operator as the sum of the BNT entries with
+    coefficients $q_j$.  Summing the diagonal physical configurations of the
+    tail gives $\mathcal B_j^L$.  The global normalization multiplies every
+    closing matrix by $\tr(\rho^{(L+3)})^{-1}$.  At $L=1$, SAL makes this
+    scalar nonzero, copy independence makes $q_j$ nonzero, and
+    nonnilpotence makes $\mathcal B_j$ nonzero.
+\end{proof}
+
+\begin{theorem}[Collapse of the outer inverse contraction]
+    \label{thm:mpdo_bnt_three_site_outer_inverse_collapse}
+    \lean{MPOTensor.%
+      isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
+    \leanok
+    \uses{def:mpdo_three_site_family_closure,
+      def:mpdo_block_left_inverse}
+    Let $x=(s,\alpha_1,\beta_1)$ and
+    $y=(t,\alpha_3,\beta_3)$.  For a three-site family closure and a
+    simultaneous left inverse, the outer inverse contraction vanishes when
+    $s\ne t$.  When $s=t$, it is
+    \[
+        (\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
+        (R_s)_{\beta_3,\alpha_1}.
+    \]
+    In particular, the contraction retains precisely one entry of the middle
+    physical slice and one entry of the closing matrix, with the orientation
+    shown above.  This is the sector-family form of the Case I contraction in
+    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.  The
+    basis-of-normal-tensors inverse is constructed at lines~1666--1676 and the
+    resulting contraction is used in the Case II calculation at
+    lines~1719--1732 of the same appendix.
+    The closing entry $R_s(\beta_3,\alpha_1)$ is the corrected tail-index
+    orientation of the display at lines~1422--1438, recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the family closure and interchange the finite sector and physical
+    sums.  For $x=(x_s,x_\alpha,x_\beta)$, the inverse identity is
+    \[
+        \sum_{i,j} C_{x,(i,j)}\mathcal K_s^{ij}
+        =\begin{cases}
+          E_{x_\alpha,x_\beta},&x_s=s,\\
+          0,&x_s\ne s.
+        \end{cases}
+    \]
+    Hence distinct labels give zero.  For equal labels, the remaining trace is
+    \[
+        \tr\!\left(E_{\alpha_1,\beta_1}\mathcal K_s^{i_2j_2}
+          E_{\alpha_3,\beta_3}R_s\right)
+        =(\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
+          (R_s)_{\beta_3,\alpha_1}.
+    \]
+\end{proof}
+
+\begin{corollary}[Three-site collapse from the one-letter span]
+    \label{cor:mpdo_bnt_three_site_outer_inverse_collapse}
+    \lean{MPOTensor.%
+      exists_isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
+    \leanok
+    \uses{thm:mpdo_one_letter_simultaneous_inverse,
+      thm:mpdo_bnt_three_site_outer_inverse_collapse}
+    Under the one-letter product-algebra spanning hypothesis, there is a
+    simultaneous left inverse for which every three-site family closure has
+    the preceding diagonal-sector contraction and vanishing off-diagonal
+    contractions.
+\end{corollary}
+
+\begin{proof}\leanok
+    Choose the simultaneous left inverse from
+    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse} and apply
+    Theorem~\ref{thm:mpdo_bnt_three_site_outer_inverse_collapse}.
+\end{proof}

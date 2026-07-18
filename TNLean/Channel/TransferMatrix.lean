@@ -43,6 +43,10 @@ with composition. We also relate it to the Kraus representation.
   trace-normalization criterion for conjugated-input maps ρ ↦ T(XρX†)
 * `IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one`: the same
   normalization with X = T*(1)^{-1/2} when T*(1) is positive definite
+* `exists_isUnit_det_comp_unitaryConjLM_positive_tracePreserving`: Wolf's
+  Chapter 3 lemma "Making positive maps trace preserving" — a positive map
+  `T : M_D(ℂ) → M_{D'}(ℂ)` with `T*(1)` positive definite becomes trace
+  preserving after conjugating the input by the invertible `X = T*(1)^{-1/2}`
 * `unitaryConjLM_mapsPSDConeOnto` and
   `unitaryConjLM_comp_transpose_mapsPSDConeOnto`: direction (3) ⇒ (1) of Wolf
   Chapter 3, Proposition 3.8 — conjugation `X ↦ Y X Y†` and its transpose
@@ -431,50 +435,6 @@ theorem unitaryConjLM_isChannel_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
     IsChannel (unitaryConjLM U) :=
   ⟨unitaryConjLM_isCPMap U, unitaryConjLM_isTP_of_unitary U hU⟩
 
-/-- Trace-normalization criterion for a map with conjugated input.
-
-If X† T*(1) X = 1, where T* is the trace-pairing adjoint, then
-ρ ↦ T(XρX†) is trace preserving. This is the trace calculation in Wolf
-Chapter 3's construction making a positive map trace preserving by choosing
-X = T*(1)^{-1/2}. -/
-theorem IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one
-    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ)
-    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
-    IsTracePreservingMap (T.comp (unitaryConjLM X)) := by
-  intro ρ
-  change Matrix.trace (T (X * ρ * Xᴴ)) = Matrix.trace ρ
-  have hcycle :
-      Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ)) =
-        Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := by
-    calc
-      Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ))
-          = Matrix.trace ((Matrix.traceAdjointMap T 1 * X) * ρ * Xᴴ) := by
-              simp [Matrix.mul_assoc]
-      _ = Matrix.trace (Xᴴ * (Matrix.traceAdjointMap T 1 * X) * ρ) := by
-              rw [Matrix.trace_mul_cycle]
-      _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := by
-              simp [Matrix.mul_assoc]
-  calc
-    Matrix.trace (T (X * ρ * Xᴴ))
-        = Matrix.trace (1 * T (X * ρ * Xᴴ)) := by simp
-    _ = Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ)) := by
-          rw [Matrix.trace_traceAdjointMap_mul]
-    _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := hcycle
-    _ = Matrix.trace ρ := by rw [hX, Matrix.one_mul]
-
-/-- If T is positive, then ρ ↦ T(XρX†) is positive. If moreover
-X† T*(1) X = 1, where T* is the trace-pairing adjoint, then the same map is
-trace preserving. -/
-theorem IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving
-    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hT : IsPositiveMap T) (X : Matrix (Fin D) (Fin D) ℂ)
-    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
-    IsPositiveMap (T.comp (unitaryConjLM X)) ∧
-      IsTracePreservingMap (T.comp (unitaryConjLM X)) :=
-  ⟨hT.comp_unitaryConjLM X,
-    IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX⟩
-
 /-- If A is positive definite, conjugation by its inverse square root
 normalizes A to the identity. -/
 theorem Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
@@ -507,20 +467,176 @@ theorem Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
   Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef :=
     Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
 
+/-! #### Making positive maps trace preserving (Wolf Chapter 3)
+
+Wolf, *Quantum Channels & Operations*, Chapter 3, Lemma (Making positive maps
+trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723-737. The source lemma concerns a positive map
+`T : M_D(ℂ) → M_{D'}(ℂ)` between matrix algebras of possibly different
+dimensions. The normalization matrix `X = (T*(𝟙))^{-1/2}` lives on the input
+algebra `M_D(ℂ)`. Positivity and trace preservation of the normalized map are
+spelled out because `IsPositiveMap` and `IsTracePreservingMap` require equal
+input and output dimensions; the equal-dimension statements phrased with those
+predicates follow at the end of this section as equal-dimension specializations. -/
+
+variable {D' : ℕ}
+
+/-- Trace-normalization criterion for a dimension-changing map with conjugated
+input: if `Xᴴ T*(𝟙) X = 𝟙`, where `T*` is the trace-pairing adjoint, then
+`ρ ↦ T(X ρ Xᴴ)` preserves traces. This is the trace computation in the proof
+of Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive maps
+trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723-737. The equal-dimension form
+`IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one` below is
+the equal-dimension case. -/
+theorem trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace ((T.comp (unitaryConjLM X)) ρ) = Matrix.trace ρ := by
+  change Matrix.trace (T (X * ρ * Xᴴ)) = Matrix.trace ρ
+  have hcycle :
+      Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ)) =
+        Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := by
+    calc
+      Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ))
+          = Matrix.trace ((Matrix.traceAdjointMap T 1 * X) * ρ * Xᴴ) := by
+              simp [Matrix.mul_assoc]
+      _ = Matrix.trace (Xᴴ * (Matrix.traceAdjointMap T 1 * X) * ρ) := by
+              rw [Matrix.trace_mul_cycle]
+      _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := by
+              simp [Matrix.mul_assoc]
+  calc
+    Matrix.trace (T (X * ρ * Xᴴ))
+        = Matrix.trace ((1 : Matrix (Fin D') (Fin D') ℂ) * T (X * ρ * Xᴴ)) := by simp
+    _ = Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ)) := by
+          rw [Matrix.trace_traceAdjointMap_mul]
+    _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := hcycle
+    _ = Matrix.trace ρ := by rw [hX, Matrix.one_mul]
+
+/-- Filtered trace-normalization criterion for a dimension-changing positive
+map: if `T : M_D(ℂ) → M_{D'}(ℂ)` is positive and `Xᴴ T*(𝟙) X = 𝟙`, then
+`ρ ↦ T(X ρ Xᴴ)` is positive and trace preserving. This is the algebraic step
+in Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive maps
+trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723-737. The equal-dimension form
+`IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving` below is the
+equal-dimension case. -/
+theorem comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
+    (hT : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
+    (∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef →
+        ((T.comp (unitaryConjLM X)) ρ).PosSemidef) ∧
+      ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
+        Matrix.trace ((T.comp (unitaryConjLM X)) ρ) = Matrix.trace ρ :=
+  ⟨fun ρ hρ => hT (unitaryConjLM X ρ) (unitaryConjLM_isPositiveMap X ρ hρ),
+    trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX⟩
+
+/-- The inverse square root of a positive definite matrix is invertible.
+
+Auxiliary fact with no separate source statement: Wolf's Ch. 3 lemma (Making
+positive maps trace preserving; `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723--737) chooses $X=(T^*(\mathbb 1))^{-1/2}$ and uses its invertibility
+implicitly; this lemma discharges that step. -/
+theorem Matrix.PosDef.isUnit_det_inv_sqrt {A : Matrix (Fin D) (Fin D) ℂ}
+    (hA : A.PosDef) : IsUnit ((CFC.sqrt A)⁻¹).det := by
+  have hA_nonneg : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ A := hA.posSemidef.nonneg
+  have hS_unit : IsUnit (CFC.sqrt A) :=
+    (CFC.isUnit_sqrt_iff A hA_nonneg).2 hA.isUnit
+  exact (CFC.sqrt A).isUnit_nonsing_inv_det ((Matrix.isUnit_iff_isUnit_det _).1 hS_unit)
+
+/-- **Making positive maps trace preserving, explicit witness.**
+
+Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive maps
+trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723-737. If `T : M_D(ℂ) → M_{D'}(ℂ)` is positive and `T*(𝟙)` is
+positive definite, then with `X = (T*(𝟙))^{-1/2}` the map `ρ ↦ T(X ρ Xᴴ)` is
+positive and trace preserving. -/
+theorem comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
+    (hT : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
+    (hTstar : (Matrix.traceAdjointMap T 1).PosDef) :
+    (∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef →
+        ((T.comp
+          (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) ρ).PosSemidef) ∧
+      ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
+        Matrix.trace
+            ((T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) ρ) =
+          Matrix.trace ρ :=
+  comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one hT _
+    (Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
+      (Matrix.traceAdjointMap T 1) hTstar)
+
+/-- **Making positive maps trace preserving.**
+
+Wolf, *Quantum Channels & Operations*, Ch. 3, Lemma (Making positive maps
+trace preserving); `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`
+lines 723-737. Let `T : M_D(ℂ) → M_{D'}(ℂ)` be a positive map for which
+`T*(𝟙)` is positive definite, where `T*` is the trace-pairing adjoint. Then
+there is an invertible `X ∈ M_D(ℂ)` such that `ρ ↦ T(X ρ Xᴴ)` is a
+trace-preserving positive map. The witness is `X = (T*(𝟙))^{-1/2}`. -/
+theorem exists_isUnit_det_comp_unitaryConjLM_positive_tracePreserving
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
+    (hT : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
+    (hTstar : (Matrix.traceAdjointMap T 1).PosDef) :
+    ∃ X : Matrix (Fin D) (Fin D) ℂ, IsUnit X.det ∧
+      (∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef →
+        ((T.comp (unitaryConjLM X)) ρ).PosSemidef) ∧
+      ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
+        Matrix.trace ((T.comp (unitaryConjLM X)) ρ) = Matrix.trace ρ :=
+  ⟨(CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹, hTstar.isUnit_det_inv_sqrt,
+    (comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one hT hTstar).1,
+    (comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one hT hTstar).2⟩
+
+/-! #### Equal-dimension instances
+
+The `IsPositiveMap`/`IsTracePreservingMap` forms of the trace-normalization
+results are equal-dimension specializations of the theorems above; each proof is the
+direct application of the corresponding dimension-changing theorem. -/
+
+/-- Trace-normalization criterion for a map with conjugated input.
+
+If X† T*(1) X = 1, where T* is the trace-pairing adjoint, then
+ρ ↦ T(XρX†) is trace preserving. Equal-dimension instance of
+`trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one`. -/
+theorem IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
+    IsTracePreservingMap (T.comp (unitaryConjLM X)) :=
+  trace_comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX
+
+/-- If T is positive, then ρ ↦ T(XρX†) is positive. If moreover
+X† T*(1) X = 1, where T* is the trace-pairing adjoint, then the same map is
+trace preserving. Equal-dimension instance of
+`comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one`. -/
+theorem IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (X : Matrix (Fin D) (Fin D) ℂ)
+    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
+    IsPositiveMap (T.comp (unitaryConjLM X)) ∧
+      IsTracePreservingMap (T.comp (unitaryConjLM X)) :=
+  comp_unitaryConjLM_positive_tracePreserving_of_conj_traceAdjointMap_one hT X hX
+
 /-- **Wolf Chapter 3 trace normalization by inverse square root.**
 
 If T is positive and T*(1) is positive definite, then choosing
-X = T*(1)^{-1/2} makes ρ ↦ T(XρX†) positive and trace-preserving. -/
+X = T*(1)^{-1/2} makes ρ ↦ T(XρX†) positive and trace-preserving.
+Equal-dimension instance of
+`comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one`; the source lemma
+(Wolf Ch. 3, Making positive maps trace preserving) allows different input and
+output dimensions. -/
 theorem IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (hTstar : (Matrix.traceAdjointMap T 1).PosDef) :
     IsPositiveMap
         (T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) ∧
       IsTracePreservingMap
-        (T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) := by
-  exact hT.comp_unitaryConjLM_positive_tracePreserving _
-    (Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
-      (Matrix.traceAdjointMap T 1) hTstar)
+        (T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) :=
+  _root_.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one hT hTstar
 
 end UnitaryConjugation
 

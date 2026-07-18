@@ -1,0 +1,180 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Mutual-Information Bound for Matrix Product Density Operators}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Proposition~4.5 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete states that, for
+any translationally invariant matrix product density operator of bond
+dimension~$D$,
+\[
+  I_L\leq I_{L+1},
+  \qquad
+  \lim_{L\to\infty}\lim_{N\to\infty} I_L=I_\infty<\infty.
+\]
+The Appendix proves monotonicity from strong subadditivity and obtains
+boundedness from
+\[
+  I_L\leq 4\log D,
+\]
+which it attributes to Wolf--Verstraete--Hastings--Cirac.
+\footnote{Source locations:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:795--809 and 1316--1321.}
+
+Here an MPDO means a matrix product operator whose periodic finite-chain
+operators are positive semidefinite.  This does not include a local
+purification among its hypotheses.
+
+\section{The cited argument}
+
+The construction in \cite{Wolf2008AreaLaws} defines a mixed projected
+entangled-pair state
+by applying a completely positive map at each site to virtual entangled pairs.
+They purify every local map, obtaining a pure projected entangled-pair state
+with an additional local physical system.  Monotonicity of mutual information
+under the local ancillary traces then gives
+\[
+  I(A:B)_{\rho}
+  \leq I(A:B)_{\lvert\Psi\rangle\langle\Psi\rvert}
+  =2S(A)_{\lvert\Psi\rangle\langle\Psi\rvert}
+  \leq 2\lvert\partial A\rvert\log D.
+\]
+For an interval in a periodic one-dimensional chain,
+$\lvert\partial A\rvert=2$, and this gives $I(A:B)\leq4\log D$.
+
+Thus the cited proof applies to a locally purified tensor.  It does not prove
+that an arbitrary family of positive periodic matrix product operators admits
+such a purification.  The distinction is explicit in the source paper itself:
+immediately before Definition~4.3 it warns that an MPDO need not possess the
+displayed local purification, and after Theorem~4.4 it repeats that the
+purification definition does not apply to every MPDO.
+\footnote{Source locations:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:744 and 786.}
+
+\section{Why the marginal-rank argument does not repair the proof}
+
+Cutting a periodic MPO at the two boundary bonds gives an operator-Schmidt
+decomposition with at most $D^2$ summands.  This does not imply that either
+reduced density matrix has rank at most $D^2$.
+
+Indeed, let $q$ be a full-rank one-site density matrix and let the bond
+dimension be one, with scalar tensor entries
+\[
+  M^{ij}=q_{ij}.
+\]
+The $N$-site operator is $q^{\otimes N}$, and the reduced state on $L$ sites is
+$q^{\otimes L}$.  Consequently
+\[
+  \operatorname{rank}(q^{\otimes L})
+  =\operatorname{rank}(q)^L>1=D^2
+\]
+for $L>0$.  Its mutual information is nevertheless zero.  The cancellation of
+the extensive marginal entropies in
+\[
+  I_L=S_L+S_{N-L}-S_N
+\]
+is therefore essential.  Bounding the two marginal entropies separately by
+$2\log D$ is not a valid argument for mixed MPOs.
+
+An unrestricted proof would require a separate theorem controlling quantum
+mutual information by the operator-Schmidt rank of a positive operator, or
+another argument using only positivity of the periodic MPO family.  Such a
+theorem is neither part of the cited proof nor presently established in the
+development.
+
+\section{What the rank-three separation establishes}
+
+De las Cuevas--Schuch--P\'erez-Garc\'ia--Cirac give a rank-three separation in
+\cite[Result~1 and equations~(10)--(14)]{DeLasCuevas2013Purifications}; it is
+also summarized in
+\cite[Section~4.3, equation~(13), and Table~2]{DeLasCuevas2019Separability}.
+The examples are diagonal states
+\[
+  \rho_t=\sum_{i,j}(M_t)_{ij}\lvert i,j\rangle\langle i,j\rvert,
+\]
+where the nonnegative matrix $M_t$ has ordinary rank three while its positive
+semidefinite rank diverges.  Under their correspondence, this says that
+$\rho_t$ has operator-Schmidt rank three while its purification rank, and hence
+also its separable rank, diverges.
+
+This is a statement about the size of exact factorizations, not a lower bound
+on quantum mutual information.  In the same paper, the entanglement of
+purification is bounded above by the logarithm of the purification rank.  A
+diverging purification rank makes this upper bound nonuniform, but does not
+imply that the entanglement of purification itself diverges.  No lower bound on
+the entanglement of purification or on quantum mutual information is proved for
+the rank-three family.
+
+Indeed, after normalizing $M_t$ to a joint probability distribution, the
+quantum mutual information of the diagonal state is exactly the classical
+mutual information of that distribution.  The ordinary-rank bound
+\cite[Theorem~4.1]{Riazanov2017PSDRank} gives
+\[
+  I(X:Y)\leq\log\operatorname{rank}(M_t)=\log 3.
+\]
+This theorem concerns ordinary matrix rank, rather than nonnegative rank.  Its
+proof repeatedly eliminates a linearly dependent row while preserving
+nonnegativity and the column marginals, choosing the endpoint for which mutual
+information does not decrease.  The final joint distribution has at most
+$\operatorname{rank}(M_t)$ nonzero rows, and hence its mutual information is at
+most the entropy of a random variable with that many values.
+Thus the rank-three examples have uniformly bounded mutual information.  They
+show that a small MPO bond does not control the bond dimension of an exact local
+purification; they neither prove nor disprove the unrestricted
+$4\log D$ mutual-information estimate.
+
+\section{The iterated limit}
+
+Even a uniform finite-chain estimate does not by itself define the inner limit
+\[
+  \lim_{N\to\infty} I_L^{(N)}.
+\]
+For fixed $L$, one must first specify an infinite-chain state or prove
+convergence of the normalized periodic density operators on every local
+algebra.  Monotonicity in $L$ at each fixed finite $N$ does not supply this
+thermodynamic-limit construction.
+
+Accordingly, the precise finite-chain result currently available for arbitrary
+MPDOs is only the monotonicity
+\[
+  I_L^{(N)}\leq I_{L+1}^{(N)}
+  \qquad (2L+1\leq N).
+\]
+The bound and the iterated limit remain open at the source hypothesis set.
+
+\section{Resolution}
+
+There are two faithful continuations.
+\begin{enumerate}
+  \item Prove the finite-chain bound directly from positivity and the
+    operator-Schmidt decomposition, without a local-purification assumption;
+    then separately construct the thermodynamic limit required for the inner
+    limit.
+  \item Prove the purification argument under an explicit local-purification
+    hypothesis.  This gives a correct scope-restricted theorem, but it is not
+    Proposition~4.5 for arbitrary MPDOs and must not be marked as its
+    formalization.
+\end{enumerate}
+
+Until one of these continuations is completed, the bound and limit clauses of
+Proposition~4.5 remain unformalized.  This obstruction is tracked by issue
+\href{https://github.com/LionSR/TNLean/issues/4169}{\#4169} under the MPDO
+coverage audit
+\href{https://github.com/LionSR/TNLean/issues/2380}{\#2380}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

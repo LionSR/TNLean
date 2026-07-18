@@ -190,6 +190,155 @@ lines 1434--1438.
 \leanid{MPOTensor.physicalSlice_sector_factorization}, and
 \leanid{MPOTensor.exists_physicalSlice_sector_factorization}.}
 
+For a finite family of normal sectors, the diagonal blocks used in equation
+\texttt{QkKjs} are now defined by
+\[
+  O_s^{(k)}(\beta,\alpha)
+  =\bigl[U_B\kappa^{(s)}_{\beta,\alpha}U_B^\dagger\bigr]_{k,k}.
+\]
+Every sector of nonzero Hayashi weight occurs in at least one normal sector.
+Indeed, nonzero diagonal entries of the two trace-one Hayashi states give a
+nonzero diagonal entry of the three-site state, and the normal-sector family
+closure then has a nonzero summand.  This existence argument requires no
+closing-matrix assumption.
+
+The uniqueness cancellation is also formalized with its load-bearing
+hypothesis stated explicitly.  If every closing matrix $R_s$ is nonzero, the
+principal BNT--Markov identity shows that two distinct normal sectors cannot
+both have nonzero $k$-blocks.  It therefore gives the label $j_k$ and the
+projections
+\[
+  P_s=\sum_{\substack{k:p_k\ne0\\j_k=s}}Q_k,
+  \qquad \sum_s P_s=\sum_{k:p_k\ne0}Q_k.
+\]
+These projections are mutually orthogonal.\footnote{The relevant declarations
+are
+\path{MPOTensor.exists_bntMarkovBlockNonzero_of_probability_ne_zero},
+\path{MPOTensor.existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero},
+\path{MPOTensor.bntSectorProjection}, and
+\path{MPOTensor.sum_bntSectorProjection}.}
+
+Both factors in the closing-scalar choice are now selected.  Once the copy
+weights agree, the distinguished common weight is nonzero and
+\[
+  q_j=\sum_q\mu_{j,q}^{N}=r_j\mu_j^N\ne0
+\]
+for every chain length $N$.
+\footnote{The relevant declarations are
+\path{MPSTensor.SectorDecomposition.commonWeight_ne_zero} and
+\path{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}.}
+Simplicity says that the physical-trace transfer
+$\mathcal B_j=\sum_iA_j^{ii}$ is not nilpotent.  Hence one positive tail
+length $L$ has, for every representative, a nonzero entry
+$\widetilde m_j=(\mathcal B_j^L)_{\alpha_j,\beta_j}$.  Taking the coefficient
+at total chain length $L+3$ gives the closing matrix
+\[
+  R_j=q_j\mathcal B_j^L
+\]
+with nonzero entry
+$(R_j)_{\alpha_j,\beta_j}=q_j\widetilde m_j\ne0$, as in Appendix~C.2,
+lines 1714--1718.
+\footnote{The relevant declarations are
+\path{MPSTensor.SectorDecomposition.exists_common_nonzero_physicalTraceTail_entry}
+and
+\path{MPSTensor.SectorDecomposition.exists_common_nonzero_threeSiteClosingMatrix_entry};
+the matrix form is
+\path{MPSTensor.SectorDecomposition.exists_common_threeSiteClosingMatrix_ne_zero}.}
+This closing-matrix bridge is now formalized with the normalization included.
+Equality of the complete matrix-product-vector families transports the
+original tensor to its horizontal BNT representation, and the normalized
+three-site reduced state has closing matrices
+\[
+  \widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L.
+\]
+At the four-site length used by the formal SAL-to-Markov theorem, one takes
+$L=1$.  SAL makes the normalization scalar nonzero, so every
+$\widehat R_j$ is nonzero.
+\footnote{The relevant declarations are
+\path{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix},
+\path{MPOTensor.reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂},
+and
+\path{MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}.}
+Thus the explicit nonzero-closing hypothesis of the generic cancellation
+theorem is derived for the family closure used by the source.  The simultaneous
+specialization is now formalized as well.  After the common blocking has made
+the BNT representatives simultaneously one-letter spanning, biCF supplies the
+inverse and SAL supplies the four-site Hayashi decomposition.  Every active
+Markov sector then has a unique BNT label, and the resulting BNT-labelled sums
+of Hayashi projections are orthogonal, mutually disjoint, and resolve the
+active Markov support.
+\footnote{The relevant declaration is
+\path{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}.}
+No further closing-matrix assumption is needed for this specialization.
+
+The remaining projector passage is now formalized as well.  For every physical
+slice of the $i$-th normal representative, $P_s A_i P_t=0$ unless $s=t=i$.
+For the matching label,
+\[
+  P_iA_iP_i=A_i.
+\]
+The zero-weight Markov summands retained by the formal decomposition annihilate
+all these physical slices, so this conclusion does not require replacing the
+active-support resolution by an ambient resolution of the identity.  Acting
+sitewise on every nonempty periodic chain then gives
+\[
+  P_s^{\otimes N}\sigma^{(N)}(K)P_s^{\otimes N}
+  =n_s\sigma^{(N)}(\mathcal K_s),
+  \qquad N\geq1,
+\]
+with the common copy weight absorbed into $\mathcal K_s$.
+\footnote{The relevant declarations are
+\path{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero},
+\path{MPOTensor.sum_bntSectorProjection_mul_physicalSlice_mul_self},
+\path{MPOTensor.changePhysicalBasis_bntSectorProjection_basis},
+\path{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}, and
+\path{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}.}
+The empty-word value $N=0$ is excluded because its closed virtual trace records
+the bond dimension and is not a physical chain.  Positivity and ZCL of every
+selected absorbed BNT representative are now formalized.  Positivity follows
+by compressing the positive full-chain operator and dividing by the positive
+integer $n_s$.  ZCL follows by restricting the full transfer equation to the
+$s$-th canonical block and using nonnilpotence to exclude the zero transfer.
+\footnote{The relevant declarations are
+\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection},
+\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
+and
+\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
+The strict normalization needed in the sector entropy identity is now
+formalized: an MPDO tensor with source ZCL has positive trace at every
+nonempty chain length, since its normalized physical-trace transfer is a
+nonzero idempotent.  Applied to the absorbed BNT sectors above, this proves
+$p_j^{(N)}>0$ rather than silently inferring it from the weaker displayed
+inequality $p_j\geq0$.
+\footnote{The general declarations are
+\path{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL} and
+\path{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}; their specialization to
+the absorbed BNT representative is
+\path{MPOTensor.trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}.}
+The weighted orthogonal-direct-sum entropy formula used in Appendix~C.2,
+lines~1760--1770, is also formalized as
+\path{vonNeumannEntropy_blockDiagonal_smul}, together with the form for
+pairwise-annihilating support operators
+\path{vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports}.  The remaining source
+step after the sector-compression identity is now formalized: the same sector
+probabilities occur in all four marginals, the Shannon terms cancel, and
+strict positivity together with strong subadditivity forces equality in every
+sector.  Thus every absorbed BNT representative satisfies SAL under the biCF
+hypothesis imposed at the start of Case II in the source.
+\footnote{The principal declarations are
+\path{MPOTensor.blockEntropy_eq_sum_bntSectorProbability},
+\path{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}, and
+\path{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}.}
+This completes the entropy argument of
+\cite[Appendix~C.2, lines~1748--1781]{Cirac2016MPDO_arXiv} with the source's
+stated biCF hypothesis.
+There is a local endpoint typo in this passage.  Line~1771 writes
+$m<\lfloor N/2\rfloor$, but Definition~4.6 gives the equality chain through
+$I_{\lfloor N/2\rfloor}$, and the conclusion at lines~1781--1783 compares
+$m=L$ with $m=L+1$.  When $L+1=\lfloor N/2\rfloor$, that comparison requires
+the endpoint $m=\lfloor N/2\rfloor$.  The formal entropy equivalence therefore
+uses $1\leq m\leq\lfloor N/2\rfloor$.
+
 The neighboring operators are now assembled from these sector tensors.  The
 operator
 \[

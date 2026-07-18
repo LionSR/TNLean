@@ -151,6 +151,276 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     multiplicity to be one, and its bond to be the given bond.
 \end{proof}
 
+\begin{definition}[Restriction to an orthogonal physical sector]
+    \label{def:mpdo_physical_support_restriction}
+    \lean{MPOTensor.PhysicalSupportRestrictionData}
+    \leanok
+    \uses{def:mpdo_source_gsnnch}
+    Let $P$ be an orthogonal one-site projection and let $K$ be an MPO tensor
+    fixed by compression with $P$ on its two physical indices.  A physical
+    support restriction consists of a dimension $e$ and an isometry
+    $V:\C^e\longrightarrow\C^d$ such that
+    \[
+        V^*V=1,
+        \qquad VV^*=P,
+    \]
+    for which the restricted tensor $K_P=V^*KV$ is injective and its
+    inclusion into the ambient physical space recovers $K$ exactly.
+\end{definition}
+
+\begin{theorem}[Injective restriction to a BNT projector range]
+    \label{thm:mpdo_bnt_physical_support_restriction}
+    \lean{MPOTensor.exists_physicalSupportRestrictionData}
+    \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isInjective}
+    \lean{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis}
+    \leanok
+    \uses{def:mpdo_physical_support_restriction}
+    Suppose that the source BNT projectors have been constructed after the
+    common physical blocking, and let $\mathcal K_s$ be the normal
+    representative with its common copy weight absorbed.  Then
+    $\mathcal K_s$ admits a physical support restriction to the range of
+    $P_s$.  In particular, for some isometry $V_s$,
+    \[
+        V_sV_s^*=P_s,
+        \qquad
+        \mathcal K_s=V_s(V_s^*\mathcal K_sV_s)V_s^*,
+    \]
+    and the restricted tensor $V_s^*\mathcal K_sV_s$ is injective.
+\end{theorem}
+
+\begin{proof}\leanok
+    The projector identity $P_s\mathcal K_sP_s=\mathcal K_s$ gives an
+    isometric inclusion of its range.  The simultaneous one-site spanning
+    condition makes each normal representative injective, and multiplication
+    by its nonzero common weight preserves injectivity.  Write
+    $K_{P_s}=V_s^*\mathcal K_sV_s$.  Each ambient matrix slice satisfies
+    \[
+        (\mathcal K_s)_{ij}
+        =\sum_{p,q}(V_s)_{ip}\,\overline{(V_s)_{jq}}\,(K_{P_s})_{pq}.
+    \]
+    Hence
+    \[
+        \operatorname{span}\{(\mathcal K_s)_{ij}\}_{i,j}
+        \subseteq
+        \operatorname{span}\{(K_{P_s})_{pq}\}_{p,q}.
+    \]
+    The left-hand side is the full virtual matrix algebra, so $K_{P_s}$ is
+    injective.  The two isometry identities give the exact reconstruction.
+\end{proof}
+
+\begin{theorem}[SAL passes to the physical support restriction]
+    \label{thm:mpdo_physical_support_restriction_sal}
+    \lean{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}
+    \leanok
+    \uses{def:mpdo_physical_support_restriction}
+    If $K$ satisfies saturation of the area law and
+    $K=V K_P V^*$ is a physical support restriction, then the injective
+    restricted tensor $K_P$ also satisfies saturation of the area law.
+\end{theorem}
+
+\begin{proof}\leanok
+    On a chain of every positive length, the sitewise inclusion
+    $V^{\otimes N}$ is an isometry and
+    \[
+        \rho^{(N)}(K)
+        =V^{\otimes N}\rho^{(N)}(K_P)(V^{\otimes N})^*.
+    \]
+    The trace is therefore unchanged.  After a contiguous marginal is
+    taken, the isometry on the traced-out sites disappears, while the
+    isometry on the retained sites remains.  Thus every block marginal of
+    $K$ is an isometric conjugate of the corresponding marginal of $K_P$.
+    Their nonzero spectra, and hence their entropies and mutual
+    informations, coincide.  The consecutive equalities defining SAL for
+    $K$ consequently give those for $K_P$.
+\end{proof}
+
+\begin{theorem}[The restricted commuting product has a supported ambient realization]
+    \label{thm:mpdo_physical_support_restriction_bond}
+    \lean{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}
+    \leanok
+    \uses{thm:mpdo_physical_support_restriction_sal}
+    Let $K=V K_P V^*$ be a physical support restriction of an MPO tensor
+    satisfying SAL.  Proposition~C.8 applied to the injective tensor $K_P$
+    gives a positive two-site bond $B_P$ whose cyclic translates commute
+    pairwise on every periodic chain of length $N\geq 2$.  Its lift
+    $B=V^{\otimes 2}B_P(V^{\otimes 2})^*$ is positive, its cyclic translates
+    commute pairwise on every such ambient chain, and
+    \[
+        (P\otimes P)B(P\otimes P)=B.
+    \]
+    Moreover, for every $N\geq2$ one has the exact identity
+    \[
+        \rho^{(N)}(K)=\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The preceding theorem gives SAL for the injective restricted tensor, so
+    Proposition~C.8 supplies its positive bond.  Since $V^*V=1$, positivity
+    is preserved under conjugation by $V^{\otimes 2}$.  Moreover,
+    $V^{\otimes 2}(V^{\otimes 2})^*=P\otimes P$; multiplying the lifted bond
+    by this projection on either side therefore leaves it unchanged.
+
+    It remains to prove commutativity after the lift.  On a three-site chain,
+    isometric conjugation carries the product of two adjacent restricted bonds
+    to the product of their lifted bonds.  The restricted product is Hermitian
+    because its positive factors commute.  Its conjugate is therefore
+    Hermitian; since the lifted factors are Hermitian, their product equals
+    the product in the reverse order.  The two-site periodic chain is handled
+    by the same argument with the two oppositely oriented bonds.  Locality and
+    cyclic translation then give pairwise commutativity for every $N\geq 2$.
+
+    Finally, isometric conjugation preserves every nonempty product of
+    restricted bonds.  The image of each restricted bond is the corresponding
+    lifted bond multiplied by the projection onto the range of
+    $V^{\otimes N}$.  The support projections contributed by the first
+    $N-1$ bonds cover all sites and leave the full commuting product fixed.
+    Hence the range projection disappears, and the restricted finite-chain
+    product identity becomes the asserted ambient identity, still with
+    normalization scalar one.
+\end{proof}
+
+\begin{definition}[Orthogonally supported commuting sector products]
+    \label{def:mpdo_orthogonal_commuting_sector_family}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, def:mpdo_commuting_form_data}
+    Let $\{K_x\}_{x=0}^{g-1}$ be MPO tensors on a common one-site space.
+    An orthogonally supported family of commuting sector products consists of
+    pairwise orthogonal one-site projections $P_x$ and positive two-site
+    operators $B^{(x)}$ such that
+    \[
+        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)=B^{(x)},
+        \qquad
+        [\tau_i(B^{(x)}),\tau_j(B^{(x)})]=0,
+    \]
+    and, for every $N\geq2$,
+    \[
+        \rho^{(N)}(K_x)=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+    \]
+    Together with natural multiplicities $n_x$, these objects determine the
+    corresponding finite-chain sector decomposition in
+    Definition~\ref{def:mpdo_source_gsnnch}.
+\end{definition}
+
+\begin{theorem}[SAL supplies orthogonally supported BNT sector products]
+    \label{thm:mpdo_bnt_sector_sal_commuting_family}
+    \lean{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL}
+    \leanok
+    \uses{thm:mpdo_bnt_physical_support_restriction,
+        thm:mpdo_physical_support_restriction_bond,
+        thm:mpdo_bnt_sector_projection_resolution,
+        def:mpdo_orthogonal_commuting_sector_family}
+    Suppose that the BNT physical projectors $P_x$ have been selected and
+    that every common-weight-absorbed representative $\mathcal K_x$
+    satisfies SAL.  Then there are positive two-site bonds $B^{(x)}$ such
+    that the projections $P_x$ are pairwise orthogonal,
+    \[
+        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)=B^{(x)},
+    \]
+    all cyclic translates of each $B^{(x)}$ commute pairwise, and, for every
+    $N\geq2$,
+    \[
+        \rho^{(N)}(\mathcal K_x)
+          =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+    \]
+    Thus the absorbed BNT representatives have an orthogonally supported
+    family of commuting sector products with normalization scalar one.
+\end{theorem}
+
+\begin{proof}\leanok
+    Restrict $\mathcal K_x$ isometrically to the range of $P_x$.  The
+    restricted tensor is injective and satisfies SAL, so Proposition~C.8
+    gives its positive commuting bond product.  Apply
+    Theorem~\ref{thm:mpdo_physical_support_restriction_bond} in every sector.
+    The lifted bond is supported on $P_x\otimes P_x$ and realizes
+    $\mathcal K_x$ exactly.  The BNT projector construction gives
+    $P_xP_y=0$ for $x\ne y$, which completes the sector family.
+\end{proof}
+
+\begin{theorem}[Orthogonal commuting sector products give the GSNNCH form]
+    \label{thm:mpdo_orthogonal_commuting_sectors_gsnnch}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData_sectorProduct}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData_unnormalizedState}
+    \lean{MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily}
+    \leanok
+    \uses{def:mpdo_source_gsnnch,
+        def:mpdo_orthogonal_commuting_sector_family}
+    Suppose that $\{K_x\}_{x=0}^{g-1}$ has an orthogonally supported family
+    of commuting sector products and that, for every $N\geq2$,
+    \[
+        \rho^{(N)}(M)=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x),
+        \qquad n_x\in\N.
+    \]
+    Then $M$ has the explicit GSNNCH sector form with outer sectors $x$ and
+    natural multiplicities $n_x$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each $N\geq2$, the represented unnormalized sector sum is
+    \[
+        \sum_{x=0}^{g-1}n_x
+          \prod_{i=0}^{N-1}\tau_i(B^{(x)})
+        =\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x)
+        =\rho^{(N)}(M).
+    \]
+    Thus the positive proportionality constant in
+    Definition~\ref{def:mpdo_source_gsnnch} is one.
+\end{proof}
+
+\begin{corollary}[Orthogonal BNT sector products give the GSNNCH form]
+    \label{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
+    \lean{MPOTensor.hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor}
+    \leanok
+    \uses{def:same_mpv2_pos,
+        thm:mpdo_orthogonal_commuting_sectors_gsnnch}
+    Let $M$ be an MPO tensor and let its BNT canonical form have normal
+    representatives $A_x$, copy numbers $n_x$, and copy-independent weights
+    $\mu_x$.  Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
+    generates the same matrix product vectors as $M$ at every positive length.
+    If the representatives $\mathcal K_x$ have orthogonally supported
+    commuting sector products, then
+    \[
+        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(\mathcal K_x)
+    \]
+    gives the explicit GSNNCH form with the BNT copy numbers $n_x$ as its
+    natural multiplicities.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply
+    Theorem~\ref{thm:mpdo_orthogonal_commuting_sectors_gsnnch} to the
+    positive-length BNT decomposition.  Its coefficients are exactly the
+    copy numbers $n_x$ after the common weights have been absorbed.
+\end{proof}
+
+\begin{corollary}[Sectorwise SAL gives the BNT GSNNCH form]
+    \label{cor:mpdo_bnt_sector_sal_gsnnch}
+    \lean{MPOTensor.hasGSNNCHForm_of_bntSectorSAL}
+    \leanok
+    \uses{def:same_mpv2_pos,
+        thm:mpdo_bnt_sector_sal_commuting_family,
+        cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
+    Let $M$ be an MPO tensor and let its BNT canonical form have normal
+    representatives $A_x$, copy numbers $n_x$, and copy-independent weights
+    $\mu_x$.  Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
+    generates the same matrix product vectors as $M$ at every positive length.
+    Equivalently, for every $N>0$,
+    \[
+        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(\mathcal K_x).
+    \]
+    Under the BNT projector-selection hypotheses, if every $\mathcal K_x$
+    satisfies SAL, then $M$ has the source GSNNCH form.  Its outer sectors are
+    the BNT sectors and its natural multiplicities are the copy numbers $n_x$.
+\end{corollary}
+
+\begin{proof}\leanok
+    Theorem~\ref{thm:mpdo_bnt_sector_sal_commuting_family} supplies the
+    orthogonally supported commuting sector products.  Apply
+    Corollary~\ref{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}.
+\end{proof}
+
 \begin{lemma}[Cyclic-shift transport of an embedded local operator]
     \label{lem:mpdo_gsnnch_shift_transport}
     \lean{MPOTensor.embedLocalOperator_submatrix_rotateConfig}

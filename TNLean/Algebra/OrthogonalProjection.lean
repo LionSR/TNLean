@@ -18,7 +18,9 @@ channels and irreducibility.
 
 * `IsOrthogonalProjection`
 * `IsOrthogonalProjection.one_sub`
+* `IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one`
 * `isOrthogonalProjection_posSemidef`
+* `isOrthogonalProjection_sum_of_pairwise_mul_eq_zero`
 * `orthogonalProjection_mul_eq_zero_of_sum_eq_one`
 -/
 
@@ -45,6 +47,27 @@ theorem IsStarProjection.isOrthogonalProjection {P : Matrix (Fin D) (Fin D) ℂ}
   change Pᴴ = P
   simpa [Matrix.star_eq_conjTranspose] using hP.2
 
+/-- Let $Q$ be an orthogonal projection on one finite-dimensional space and
+let $U$ be a coisometry onto that space.  Then $U^*QU$ is an orthogonal
+projection on the domain of $U$. -/
+theorem IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
+    {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n]
+    {Q : Matrix m m ℂ} (hQ : IsStarProjection Q) (U : Matrix m n ℂ)
+    (hU : U * Uᴴ = 1) : IsStarProjection (Uᴴ * Q * U) := by
+  rw [isStarProjection_iff']
+  constructor
+  · calc
+      (Uᴴ * Q * U) * (Uᴴ * Q * U) = Uᴴ * (Q * ((U * Uᴴ) * (Q * U))) := by
+        simp only [Matrix.mul_assoc]
+      _ = Uᴴ * (Q * (Q * U)) := by rw [hU, Matrix.one_mul]
+      _ = Uᴴ * ((Q * Q) * U) := by simp only [Matrix.mul_assoc]
+      _ = Uᴴ * Q * U := by rw [hQ.isIdempotentElem.eq, Matrix.mul_assoc]
+  · rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_mul,
+      Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+    have hQadj : Qᴴ = Q := by
+      simpa [Matrix.star_eq_conjTranspose] using hQ.isSelfAdjoint.star_eq
+    rw [hQadj, Matrix.mul_assoc]
+
 /-- The complement of an orthogonal projection is an orthogonal projection. -/
 theorem IsOrthogonalProjection.one_sub {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) : IsOrthogonalProjection (1 - P) :=
@@ -55,6 +78,30 @@ theorem isOrthogonalProjection_posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) :
     P.PosSemidef :=
   Matrix.nonneg_iff_posSemidef.mp hP.isStarProjection.nonneg
+
+/-- A finite sum of pairwise orthogonal projections is an orthogonal
+projection. -/
+theorem isOrthogonalProjection_sum_of_pairwise_mul_eq_zero
+    {ι : Type*} [Fintype ι] (P : ι → Matrix (Fin D) (Fin D) ℂ)
+    (hproj : ∀ i, IsOrthogonalProjection (P i))
+    (horth : ∀ {i j}, i ≠ j → P i * P j = 0) :
+    IsOrthogonalProjection (∑ i, P i) := by
+  classical
+  constructor
+  · change (∑ i, P i)ᴴ = ∑ i, P i
+    rw [Matrix.conjTranspose_sum]
+    exact Finset.sum_congr rfl fun i _ ↦ (hproj i).1.eq
+  · calc
+      (∑ i, P i) * (∑ j, P j) = ∑ i, ∑ j, P i * P j := by
+        rw [Finset.sum_mul]
+        refine Finset.sum_congr rfl fun i _ ↦ ?_
+        rw [Finset.mul_sum]
+      _ = ∑ i, P i := by
+        refine Finset.sum_congr rfl fun i _ ↦ ?_
+        rw [Finset.sum_eq_single i]
+        · exact (hproj i).2
+        · exact fun j _ hji ↦ horth (Ne.symm hji)
+        · simp
 
 /-- **Orthogonal projections summing to the identity are mutually
 orthogonal**: `P k * P l = 0` for `k ≠ l`.  Compressing the resolution of the

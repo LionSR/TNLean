@@ -1,0 +1,167 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
+
+/-!
+# Sitewise physical matrices on periodic MPOs
+
+A one-site matrix `V` acts on a chain by its sitewise tensor power.  Acting on
+both physical legs of a periodic MPO is the same as changing the physical
+basis of every local MPO matrix before closing the virtual trace.
+
+This is finite-dimensional tensor-product algebra.  The construction is used
+below with the BNT physical-sector projections of arXiv:1606.00608,
+Appendix C.2, equations `generateMPDO` and `sigmaNKj`.
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPOTensor
+
+variable {d D e : ℕ}
+
+open PhysicalSectorFactorization
+
+/-- The sitewise tensor power of a one-site physical matrix, indexed by
+physical configurations rather than by nested tensor products. -/
+noncomputable def sitewisePhysicalMatrix
+    (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) :
+    Matrix (Fin N → Fin e) (Fin N → Fin d) ℂ :=
+  fun s t ↦ ∏ n : Fin N, V (s n) (t n)
+
+private theorem list_prod_sum_ofFn {a n : Type*} [Fintype a]
+    [Fintype n] [DecidableEq n] {N : ℕ}
+    (f : (i : Fin N) → a → Matrix n n ℂ) :
+    (List.ofFn fun i : Fin N ↦ ∑ x : a, f i x).prod =
+      ∑ x : Fin N → a, (List.ofFn fun i : Fin N ↦ f i (x i)).prod := by
+  classical
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      rw [List.ofFn_succ, List.prod_cons]
+      simp only [ih]
+      rw [Finset.sum_mul]
+      simp_rw [Finset.mul_sum]
+      have h := Fintype.sum_equiv
+        (Fin.consEquiv fun _ : Fin (N + 1) ↦ a)
+        (fun p : a × (Fin N → a) ↦
+          f 0 p.1 * (List.ofFn fun i : Fin N ↦ f i.succ (p.2 i)).prod)
+        (fun x : Fin (N + 1) → a ↦
+          (List.ofFn fun i : Fin (N + 1) ↦ f i (x i)).prod)
+        (fun p ↦ by simp [List.ofFn_succ])
+      rw [Fintype.sum_prod_type] at h
+      exact h
+
+private theorem list_prod_smul_ofFn {n : Type*} [Fintype n]
+    [DecidableEq n] {N : ℕ} (c : Fin N → ℂ)
+    (A : Fin N → Matrix n n ℂ) :
+    (List.ofFn fun i : Fin N ↦ c i • A i).prod =
+      (∏ i : Fin N, c i) • (List.ofFn A).prod := by
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      simp only [List.ofFn_succ, List.prod_cons, ih, Fin.prod_univ_succ,
+        Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+      rw [mul_comm (c 0)]
+
+private def braKetFunctionsEquiv {i a b : Type*} :
+    ((i → b) × (i → a)) ≃ (i → a × b) :=
+  (Equiv.prodComm _ _).trans
+    (Equiv.arrowProdEquivProdArrow i (fun _ ↦ a) (fun _ ↦ b)).symm
+
+/-- Word evaluation after a physical basis change, expanded over the original
+ket and bra configurations. -/
+theorem evalWord_changePhysicalBasis_ofFn
+    (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) {N : ℕ}
+    (s t : Fin N → Fin e) :
+    evalWord (changePhysicalBasis V M) (List.ofFn s) (List.ofFn t) =
+      ∑ x : Fin N → Fin d × Fin d,
+        (∏ i : Fin N, V (s i) (x i).1 * star (V (t i) (x i).2)) •
+          evalWord M
+            (List.ofFn fun i : Fin N ↦ (x i).1)
+            (List.ofFn fun i : Fin N ↦ (x i).2) := by
+  rw [evalWord_ofFn]
+  simp_rw [changePhysicalBasis_apply_eq_sum]
+  rw [list_prod_sum_ofFn]
+  apply Finset.sum_congr rfl
+  intro x _
+  rw [list_prod_smul_ofFn, evalWord_ofFn]
+
+/-- Acting on every site by `V` sends the MPO of `M` to the MPO obtained by
+changing every local physical matrix by `V`.
+
+This is the configuration-index form of
+\((V^{\otimes N})\rho^{(N)}(M)(V^{\otimes N})^\dagger\).
+-/
+theorem singleKrausMap_sitewisePhysicalMatrix_mpo
+    (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ) :
+    singleKrausMap (sitewisePhysicalMatrix V N) (mpo M N) =
+      mpo (changePhysicalBasis V M) N := by
+  ext s t
+  simp only [singleKrausMap_apply, Matrix.mul_apply,
+    Matrix.conjTranspose_apply, sitewisePhysicalMatrix, mpo_apply,
+    mpoMatrixEntry, evalWord_changePhysicalBasis_ofFn, Matrix.trace_sum,
+    Matrix.trace_smul, smul_eq_mul, star_prod]
+  have hexpand :
+      (∑ q : Fin N → Fin d,
+        (∑ p : Fin N → Fin d,
+          (∏ i : Fin N, V (s i) (p i)) *
+            Matrix.trace (evalWord M (List.ofFn p) (List.ofFn q))) *
+          (∏ i : Fin N, star (V (t i) (q i)))) =
+        ∑ q : Fin N → Fin d, ∑ p : Fin N → Fin d,
+          ((∏ i : Fin N, V (s i) (p i)) *
+            Matrix.trace (evalWord M (List.ofFn p) (List.ofFn q))) *
+          (∏ i : Fin N, star (V (t i) (q i))) := by
+    apply Finset.sum_congr rfl
+    intro q _
+    simpa only using Finset.sum_mul Finset.univ
+      (fun p : Fin N → Fin d ↦
+        (∏ i : Fin N, V (s i) (p i)) *
+          Matrix.trace (evalWord M (List.ofFn p) (List.ofFn q)))
+      (∏ i : Fin N, star (V (t i) (q i)))
+  rw [hexpand]
+  have h := Fintype.sum_equiv
+    (braKetFunctionsEquiv (i := Fin N) (a := Fin d) (b := Fin d))
+    (fun p : (Fin N → Fin d) × (Fin N → Fin d) ↦
+      (∏ i : Fin N, V (s i) (p.2 i)) *
+        Matrix.trace (evalWord M (List.ofFn p.2) (List.ofFn p.1)) *
+        (∏ i : Fin N, star (V (t i) (p.1 i))))
+    (fun x : Fin N → Fin d × Fin d ↦
+      (∏ i : Fin N, V (s i) (x i).1 * star (V (t i) (x i).2)) *
+        Matrix.trace (evalWord M
+          (List.ofFn fun i : Fin N ↦ (x i).1)
+          (List.ofFn fun i : Fin N ↦ (x i).2)))
+    (fun p ↦ by
+      dsimp
+      change
+        (∏ i : Fin N, V (s i) (p.2 i)) *
+              Matrix.trace (evalWord M (List.ofFn p.2) (List.ofFn p.1)) *
+            (∏ i : Fin N, star (V (t i) (p.1 i))) =
+          (∏ i : Fin N,
+            V (s i) (p.2 i) * star (V (t i) (p.1 i))) *
+            Matrix.trace (evalWord M (List.ofFn p.2) (List.ofFn p.1))
+      have hprod :
+          (∏ i : Fin N,
+            V (s i) (p.2 i) * star (V (t i) (p.1 i))) =
+            (∏ i : Fin N, V (s i) (p.2 i)) *
+              (∏ i : Fin N, star (V (t i) (p.1 i))) := by
+        exact Finset.prod_mul_distrib
+      rw [hprod]
+      ring)
+  rw [Fintype.sum_prod_type] at h
+  exact h
+
+/-- The sitewise tensor power of a Hermitian one-site matrix is Hermitian. -/
+theorem sitewisePhysicalMatrix_isHermitian
+    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian) (N : ℕ) :
+    (sitewisePhysicalMatrix P N).IsHermitian := by
+  ext s t
+  simp only [Matrix.conjTranspose_apply, sitewisePhysicalMatrix, star_prod]
+  apply Finset.prod_congr rfl
+  intro n _
+  exact hP.apply (s n) (t n)
+
+end MPOTensor

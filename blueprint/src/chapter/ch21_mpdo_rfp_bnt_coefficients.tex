@@ -316,7 +316,8 @@
     \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily}
     \leanok
     \uses{def:mpdo_blocked_structure_coefficients}
-    For each blocked multiplication triple $(n,i,j,k)$, where $i$ and $j$
+    For each positive blocked size $n$ and multiplication triple $(i,j,k)$,
+    where $i$ and $j$
     label basis elements of $\mathcal{A}_n$ and $k$ labels a basis element of
     $\mathcal{A}_{2n}$, a size $r_{n,i,j,k} \in \N$ and diagonal entries
     $\chi_{n,i,j,k,1}, \ldots, \chi_{n,i,j,k,r_{n,i,j,k}} \in \C$, giving the
@@ -337,8 +338,8 @@
     \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily.trace_matrix_pow}
     \leanok
     \uses{def:mpdo_blocked_structure_chi_family}
-    For each blocked multiplication triple $(n,i,j,k)$ and every exponent
-    $L$,
+    For each positive blocked size $n$, each multiplication triple $(i,j,k)$,
+    and every exponent $L$,
     \[
         \operatorname{tr}(\chi_{n,i,j,k}^{\,L})
         = \sum_r \chi_{n,i,j,k,r}^{\,L}.
@@ -427,9 +428,6 @@
     The construction is obtained by pulling back the BNT-label
     $\chi_{\alpha,\beta,\gamma}$-matrices along the source and target label
     maps.
-    % Formalization note: the zero-length component of the blocked chi family is
-    % filled by empty diagonal matrices; it plays no role in the positive-length
-    % trace-power statement.
 \end{theorem}
 \begin{proof}\leanok
     Reindex the positive BNT-label $\chi$-family along the blocked-basis

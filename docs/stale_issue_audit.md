@@ -91,7 +91,7 @@ Exits 0 if everything works.
 
 ## CI workflow
 
-The `.github/workflows/stale-issue-audit.yml` workflow runs the audit
+The `stale-audit` job of `.github/workflows/housekeeping.yml` runs the audit
 automatically:
 
 - **Schedule:** Every Monday at 08:30 UTC (cron `30 8 * * 1`), aligned with

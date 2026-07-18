@@ -85,7 +85,9 @@ Use this context to:
 - Understand any ongoing conversation or decisions made in earlier threads or PR comments.
 
 **Resolving previous review comments:**
-When this review is triggered by a `synchronize` event (new push to the PR):
+When the PR already carries review threads from an earlier review cycle
+(reviews run after each successful CI run, so any re-review follows a new
+push):
 1. First, fetch all review threads **with their GraphQL node IDs** using `gh api graphql`.
    The `get_review_comments` MCP method does not return thread IDs, so you MUST use GraphQL.
 2. For each unresolved thread where the author login starts with `claude`, `copilot-pull-request-reviewer`, or `chatgpt-codex-connector`

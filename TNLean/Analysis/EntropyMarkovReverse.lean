@@ -544,11 +544,13 @@ theorem entropy_smul_kronecker {m n : Type*} [Fintype m] [DecidableEq m]
   rw [vonNeumannEntropy_kronecker hL hR hLt hRt]
   ring
 
-/-- The entropy of a block-diagonal sum of weighted Kronecker blocks. -/
+/-- The entropy of a block-diagonal sum of nonnegatively weighted Kronecker
+blocks. -/
 theorem entropy_blockDiagonal_smul_kronecker {o : Type*} [Fintype o] [DecidableEq o]
     {mL mR : o → Type*} [∀ j, Fintype (mL j)] [∀ j, DecidableEq (mL j)]
     [∀ j, Fintype (mR j)] [∀ j, DecidableEq (mR j)]
-    (p : o → ℝ) (L : ∀ j, Matrix (mL j) (mL j) ℂ) (R : ∀ j, Matrix (mR j) (mR j) ℂ)
+    (p : o → ℝ) (hp : ∀ j, 0 ≤ p j)
+    (L : ∀ j, Matrix (mL j) (mL j) ℂ) (R : ∀ j, Matrix (mR j) (mR j) ℂ)
     (hL : ∀ j, (L j).PosSemidef) (hR : ∀ j, (R j).PosSemidef)
     (hLt : ∀ j, (L j).trace = 1) (hRt : ∀ j, (R j).trace = 1)
     (hHerm : (Matrix.blockDiagonal'
@@ -558,12 +560,18 @@ theorem entropy_blockDiagonal_smul_kronecker {o : Type*} [Fintype o] [DecidableE
       = ∑ j, (negMulLog (p j)
           + p j * (vonNeumannEntropy (L j) (hL j).isHermitian
               + vonNeumannEntropy (R j) (hR j).isHermitian)) := by
-  have hBlockHerm : ∀ j, ((p j : ℂ) • ((L j) ⊗ₖ (R j))).IsHermitian := fun j =>
-    ((hL j).kronecker (hR j)).isHermitian.smul (k := (p j : ℂ))
-      (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))
-  rw [vonNeumannEntropy_blockDiagonal' _ hBlockHerm hHerm]
+  have hKron : ∀ j, ((L j) ⊗ₖ (R j)).PosSemidef := fun j =>
+    (hL j).kronecker (hR j)
+  have hKronTrace : ∀ j, ((L j) ⊗ₖ (R j)).trace = 1 := fun j => by
+    rw [Matrix.trace_kronecker, hLt j, hRt j, mul_one]
+  rw [vonNeumannEntropy_congr rfl hHerm (by
+    rw [Matrix.isHermitian_blockDiagonal'_iff]
+    exact fun j => (hKron j).isHermitian.smul (k := (p j : ℂ))
+      (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal])))]
+  rw [vonNeumannEntropy_blockDiagonal_smul p (fun j => (L j) ⊗ₖ (R j)) hp
+    hKron hKronTrace]
   refine Finset.sum_congr rfl fun j _ => ?_
-  rw [entropy_smul_kronecker (hL j) (hR j) (hLt j) (hRt j) (p j) (hBlockHerm j)]
+  rw [vonNeumannEntropy_kronecker (hL j) (hR j) (hLt j) (hRt j)]
 
 /-! ## Entropy invariance under conjugation by a unitary-group element -/
 
@@ -607,13 +615,14 @@ theorem traceRight_density {d d' : ℕ} {ρ : Matrix (Fin d × Fin d') (Fin d ×
 This packages the chain `entropy of a submatrix-reindexed block-diagonal = entropy
 of the block-diagonal = block formula`, used by each of the four entropy terms. -/
 
-/-- The entropy of a reindexed block-diagonal of weighted Kronecker blocks of
-density matrices equals the block formula. -/
+/-- The entropy of a reindexed block-diagonal of nonnegatively weighted
+Kronecker blocks of density matrices equals the block formula. -/
 theorem entropy_submatrix_blockDiagonal_smul_kronecker {o : Type*} [Fintype o] [DecidableEq o]
     {mL mR : o → Type*} [∀ j, Fintype (mL j)] [∀ j, DecidableEq (mL j)]
     [∀ j, Fintype (mR j)] [∀ j, DecidableEq (mR j)] {ι : Type*} [Fintype ι] [DecidableEq ι]
     (φ : ι ≃ Σ j, mL j × mR j)
-    (p : o → ℝ) (L : ∀ j, Matrix (mL j) (mL j) ℂ) (R : ∀ j, Matrix (mR j) (mR j) ℂ)
+    (p : o → ℝ) (hp : ∀ j, 0 ≤ p j)
+    (L : ∀ j, Matrix (mL j) (mL j) ℂ) (R : ∀ j, Matrix (mR j) (mR j) ℂ)
     (hL : ∀ j, (L j).PosSemidef) (hR : ∀ j, (R j).PosSemidef)
     (hLt : ∀ j, (L j).trace = 1) (hRt : ∀ j, (R j).trace = 1)
     (hHerm : ((Matrix.blockDiagonal'
@@ -630,7 +639,7 @@ theorem entropy_submatrix_blockDiagonal_smul_kronecker {o : Type*} [Fintype o] [
       (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal]))
   rw [vonNeumannEntropy_congr rfl hHerm ((isHermitian_submatrix_equiv φ).mpr hBlockHerm)]
   rw [vonNeumannEntropy_submatrix_equiv φ _ hBlockHerm]
-  exact entropy_blockDiagonal_smul_kronecker p L R hL hR hLt hRt hBlockHerm
+  exact entropy_blockDiagonal_smul_kronecker p hp L R hL hR hLt hRt hBlockHerm
 
 
 /-! ## Reverse direction of the Hayashi strong-subadditivity equality characterization -/
@@ -702,7 +711,7 @@ theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
               (traceRight_density (hRdm j).1 (hRdm j).2).1.isHermitian)) := by
     rw [← vonNeumannEntropy_unitaryGroup_conj H.U_B hHermAC hConjAC]
     rw [vonNeumannEntropy_congr hAC_eq hConjAC hHermBD_AC]
-    rw [entropy_submatrix_blockDiagonal_smul_kronecker H.decompB H.p
+    rw [entropy_submatrix_blockDiagonal_smul_kronecker H.decompB H.p H.hp_nonneg
       (fun j => Matrix.traceLeft (H.ρ_left j)) (fun j => Matrix.traceRight (H.ρ_right j))
       (fun j => (traceLeft_density (hLdm j).1 (hLdm j).2).1)
       (fun j => (traceRight_density (hRdm j).1 (hRdm j).2).1)
@@ -740,7 +749,8 @@ theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
       change L * ρ_ABC * Lᴴ = _
       rw [← hM, hM_eq]
     rw [vonNeumannEntropy_congr hWconj hConjFull hHermBD0]
-    rw [entropy_submatrix_blockDiagonal_smul_kronecker φ0 H.p H.ρ_left H.ρ_right
+    rw [entropy_submatrix_blockDiagonal_smul_kronecker φ0 H.p H.hp_nonneg
+      H.ρ_left H.ρ_right
       (fun j => (hLdm j).1) (fun j => (hRdm j).1)
       (fun j => (hLdm j).2) (fun j => (hRdm j).2) hHermBD0]
   -- Entropy of `traceC ρ_ABC = ρ_AB`.
@@ -785,7 +795,7 @@ theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
     rw [← vonNeumannEntropy_unitaryGroup_conj WC hHermC hConjC]
     rw [vonNeumannEntropy_congr hC_eq hConjC hHermBD_C]
     rw [entropy_submatrix_blockDiagonal_smul_kronecker
-      (HayashiMarkov.cEquiv (dA := dA) H.decompB) H.p H.ρ_left
+      (HayashiMarkov.cEquiv (dA := dA) H.decompB) H.p H.hp_nonneg H.ρ_left
       (fun j => Matrix.traceRight (H.ρ_right j))
       (fun j => (hLdm j).1) (fun j => (traceRight_density (hRdm j).1 (hRdm j).2).1)
       (fun j => (hLdm j).2) (fun j => (traceRight_density (hRdm j).1 (hRdm j).2).2) hHermBD_C]
@@ -831,7 +841,7 @@ theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
     rw [← vonNeumannEntropy_unitaryGroup_conj WA hHermA hConjA]
     rw [vonNeumannEntropy_congr hA_eq hConjA hHermBD_A]
     rw [entropy_submatrix_blockDiagonal_smul_kronecker
-      (HayashiMarkov.aEquiv (dC := dC) H.decompB) H.p
+      (HayashiMarkov.aEquiv (dC := dC) H.decompB) H.p H.hp_nonneg
       (fun j => Matrix.traceLeft (H.ρ_left j)) H.ρ_right
       (fun j => (traceLeft_density (hLdm j).1 (hLdm j).2).1) (fun j => (hRdm j).1)
       (fun j => (traceLeft_density (hLdm j).1 (hLdm j).2).2) (fun j => (hRdm j).2) hHermBD_A]

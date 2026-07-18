@@ -67,20 +67,14 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
           _ = A i * evalWord A w := by rw [hleft i]
           _ = evalWord A (i :: w) := by rfl
   intro N hN σ
-  cases N with
-  | zero =>
-      cases Nat.not_lt_zero _ hN
-  | succ n' =>
-      have hPw :
-          P * evalWord A (List.ofFn σ) = evalWord A (List.ofFn σ) := by
-        apply hword
-        simpa only [List.ofFn_succ] using
-          (List.cons_ne_nil (σ 0) (List.ofFn fun i => σ i.succ))
-      calc
-        mpv A σ = Matrix.trace (evalWord A (List.ofFn σ)) := by rfl
-        _ = Matrix.trace (P * evalWord A (List.ofFn σ)) :=
-              congrArg Matrix.trace hPw.symm
-        _ = mpv C σ := (hCmpv n'.succ σ).symm
+  have hPw : P * evalWord A (List.ofFn σ) = evalWord A (List.ofFn σ) := by
+    apply hword
+    exact List.ne_nil_of_length_pos (by simpa only [List.length_ofFn] using hN)
+  calc
+    mpv A σ = Matrix.trace (evalWord A (List.ofFn σ)) := by rfl
+    _ = Matrix.trace (P * evalWord A (List.ofFn σ)) :=
+          congrArg Matrix.trace hPw.symm
+    _ = mpv C σ := (hCmpv N σ).symm
 
 end CompressionPositiveMPV
 

@@ -243,10 +243,10 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
   have hPhase : MPVBlockPhaseEquiv X' Y' := by
     obtain ⟨ζ, hζ, hmpv⟩ := h
     refine ⟨ζ, hζ, ?_⟩
-    intro N w
+    intro N hN w
     calc
       mpv Y' w = mpv Y w := (GaugeEquiv.sameMPV hGaugeY N w).symm
-      _ = ζ ^ N * mpv X w := hmpv N w
+      _ = ζ ^ N * mpv X w := hmpv N hN w
       _ = ζ ^ N * mpv X' w := by rw [GaugeEquiv.sameMPV hGaugeX N w]
   have hSelf : Tendsto
       (fun N => mpvOverlap (d := d) X' X' N) atTop (nhds (1 : ℂ)) :=
@@ -263,16 +263,16 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
       (fun N => ‖mpvOverlap (d := d) Y' Y' N‖) atTop (nhds (1 : ℝ)) := by
     simpa using hSelfY.norm
   have hζ : ‖hPhase.choose‖ = 1 :=
-    norm_eq_one_of_selfOverlap_scale hSelfNorm hSelfYNorm
-      (mpvOverlap_self_scale_of_mpv_eq_pow_mul hPhase.choose_spec.2)
-  have hCrossEq : ∀ N,
+    norm_eq_one_of_selfOverlap_scale_pos hSelfNorm hSelfYNorm
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos hPhase.choose_spec.2)
+  have hCrossEq : ∀ N, 0 < N →
       mpvOverlap (d := d) X' Y' N =
         (star hPhase.choose) ^ N * mpvOverlap (d := d) X' X' N :=
-    mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul hPhase.choose_spec.2
-  have hCrossNormEq : ∀ N,
+    mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul_pos hPhase.choose_spec.2
+  have hCrossNormEq : ∀ N, 0 < N →
       ‖mpvOverlap (d := d) X' Y' N‖ = ‖mpvOverlap (d := d) X' X' N‖ := by
-    intro N
-    rw [hCrossEq N, norm_mul, norm_pow]
+    intro N hN
+    rw [hCrossEq N hN, norm_mul, norm_pow]
     calc
       ‖star hPhase.choose‖ ^ N * ‖mpvOverlap (d := d) X' X' N‖ =
           ‖hPhase.choose‖ ^ N * ‖mpvOverlap (d := d) X' X' N‖ := by
@@ -280,7 +280,9 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
       _ = ‖mpvOverlap (d := d) X' X' N‖ := by rw [hζ, one_pow, one_mul]
   have hCrossNorm : Tendsto
       (fun N => ‖mpvOverlap (d := d) X' Y' N‖) atTop (nhds (1 : ℝ)) :=
-    hSelfNorm.congr fun N => (hCrossNormEq N).symm
+    hSelfNorm.congr' (by
+      filter_upwards [eventually_ge_atTop 1] with N hN
+      exact (hCrossNormEq N hN).symm)
   have hdim : DX = DY :=
     dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
       X' Y' hIrrX hIrrY hTPX hTPY hCrossNorm

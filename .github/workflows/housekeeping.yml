@@ -1,0 +1,387 @@
+name: Housekeeping
+
+# Scheduled maintenance reports in one workflow:
+#
+#   standup       weekday activity summary issue (LLM)
+#   linter-sweep  Monday Lean linter-warning report (report-only build)
+#   stale-audit   Monday stale-citation report on open issues (report-only)
+#
+# Each job is bound to its own cron entry; a manual dispatch selects the job
+# to run.
+
+on:
+  schedule:
+    - cron: "0 8 * * 1-5"   # standup: weekdays at 08:00 UTC
+    - cron: "30 8 * * 1"    # stale-audit: Mondays, aligned with the standup window
+    - cron: "0 9 * * 1"     # linter-sweep: Mondays
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "Which housekeeping job to run"
+        type: choice
+        options: [standup, linter-sweep, stale-audit]
+        default: standup
+
+permissions:
+  contents: read
+
+jobs:
+  # ──────────────────────────────────────────────────────────────
+  # Daily standup summary (LLM)
+  # ──────────────────────────────────────────────────────────────
+  standup:
+    if: |
+      github.event.schedule == '0 8 * * 1-5' ||
+      (github.event_name == 'workflow_dispatch' && inputs.job == 'standup')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: daily-standup
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+      id-token: write
+    env:
+      CLAUDE_CODE_PROVIDER: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
+      CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          # Enough history for the 24-72 hour activity window; the full
+          # history is not needed.
+          fetch-depth: 300
+
+      - name: Compute today's date
+        id: date
+        run: echo "today=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: Gather recent activity
+        id: activity
+        uses: actions/github-script@v8
+        with:
+          script: |
+            // On Monday (day 1), look back 72 hours to capture weekend activity.
+            // On other weekdays, look back 24 hours.
+            const now = new Date();
+            const hoursBack = now.getUTCDay() === 1 ? 72 : 24;
+            const since = new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString();
+            const sinceDate = since.split('T')[0];
+
+            // Merged PRs in the lookback window
+            const mergedPRs = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:merged merged:>=${sinceDate}`,
+              per_page: 50
+            });
+
+            // Open PRs with recent activity
+            const activePRs = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:open updated:>=${sinceDate}`,
+              per_page: 50
+            });
+
+            // Recently closed issues (exclude standup issues to avoid self-referential reporting)
+            const closedIssues = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:closed closed:>=${sinceDate} -label:standup`,
+              per_page: 50
+            });
+
+            // Recently opened issues (exclude standup issues)
+            const openedIssues = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open created:>=${sinceDate} -label:standup`,
+              per_page: 50
+            });
+
+            // Recent commits on the default branch
+            let recentCommits = [];
+            try {
+              const commits = await github.rest.repos.listCommits({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: 'main',
+                since: since,
+                per_page: 50
+              });
+              recentCommits = commits.data.map(c => ({
+                sha: c.sha.substring(0, 7),
+                message: c.commit.message.split('\n')[0],
+                author: c.commit.author.name,
+                date: c.commit.author.date
+              }));
+            } catch (e) {
+              core.warning(`Failed to fetch commits: ${e.message}`);
+              recentCommits = [];
+            }
+
+            // PR review comments in the last 24 hours (from both open and merged PRs)
+            let reviewComments = [];
+            const allRecentPRs = [
+              ...activePRs.data.items.slice(0, 10),
+              ...mergedPRs.data.items.slice(0, 10)
+            ];
+            // Deduplicate by PR number
+            const seenPRs = new Set();
+            const uniquePRs = allRecentPRs.filter(pr => {
+              if (seenPRs.has(pr.number)) return false;
+              seenPRs.add(pr.number);
+              return true;
+            });
+            for (const pr of uniquePRs.slice(0, 15)) {
+              try {
+                const comments = await github.rest.pulls.listReviewComments({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  since: since,
+                  per_page: 20
+                });
+                for (const c of comments.data) {
+                  reviewComments.push({
+                    pr: pr.number,
+                    prTitle: pr.title,
+                    body: c.body.substring(0, 300),
+                    author: c.user.login
+                  });
+                }
+              } catch (e) {
+                core.warning(`Failed to fetch review comments for PR #${pr.number}: ${e.message}`);
+              }
+            }
+
+            return {
+              since,
+              hoursBack,
+              mergedPRs: mergedPRs.data.items.map(p => ({
+                number: p.number,
+                title: p.title,
+                user: p.user.login,
+                labels: p.labels.map(l => l.name)
+              })),
+              activePRs: activePRs.data.items.map(p => ({
+                number: p.number,
+                title: p.title,
+                user: p.user.login,
+                labels: p.labels.map(l => l.name),
+                draft: p.pull_request?.draft ?? false
+              })),
+              closedIssues: closedIssues.data.items.map(i => ({
+                number: i.number,
+                title: i.title,
+                labels: i.labels.map(l => l.name)
+              })),
+              openedIssues: openedIssues.data.items.map(i => ({
+                number: i.number,
+                title: i.title,
+                labels: i.labels.map(l => l.name)
+              })),
+              recentCommits,
+              reviewComments: reviewComments.slice(0, 30)
+            };
+
+      - name: Generate standup summary with Claude
+        uses: LionSR/agent-ci-actions@v1
+        with:
+          provider: ${{ env.CLAUDE_CODE_PROVIDER }}
+          model-tier: sonnet
+          claude-prompt-file: .github/prompts/daily-standup-prompt.md
+          claude-prompt-context: |
+            Today's date: ${{ steps.date.outputs.today }}
+            Target issue title: Daily Standup -- ${{ steps.date.outputs.today }}
+            Activity window: last ${{ fromJSON(steps.activity.outputs.result).hoursBack }} hours (since ${{ fromJSON(steps.activity.outputs.result).since }})
+
+            Repository activity data:
+
+            Merged pull requests:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).mergedPRs) }}
+
+            Active pull requests:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).activePRs) }}
+
+            Closed issues:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).closedIssues) }}
+
+            Newly opened issues:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).openedIssues) }}
+
+            Recent commits on main:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).recentCommits) }}
+
+            PR review comments:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).reviewComments) }}
+          allowed_tools_preset: daily-standup
+          allowed_tools_preset_map_file: .github/allowed-tools.json
+
+  # ──────────────────────────────────────────────────────────────
+  # Weekly Lean linter-warning sweep (report-only)
+  # ──────────────────────────────────────────────────────────────
+  linter-sweep:
+    if: |
+      github.event.schedule == '0 9 * * 1' ||
+      (github.event_name == 'workflow_dispatch' && inputs.job == 'linter-sweep')
+    name: Capture Lean linter warnings
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    concurrency:
+      group: lean-linter-warning-sweep
+      cancel-in-progress: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Lean toolchain and cache
+        uses: texra-ai/lean-env-action@v1
+        with:
+          # Do not save a GitHub cache of .lake: per-run ~2.4 GB entries
+          # evict the main-branch build cache from the 10 GB repository
+          # budget within minutes. Mathlib comes from `lake exe cache get`.
+          use-github-cache: false
+
+      - name: Run Lean build and capture warnings
+        run: |
+          set -euo pipefail
+          log_file="$RUNNER_TEMP/lean-linter-warning-sweep.log"
+
+          # Report-only: summarize and upload warnings without editing files or
+          # opening pull requests.
+          {
+            lake exe cache get
+            lake build -q --log-level=info
+          } 2>&1 | tee "$log_file"
+
+      - name: Set up Python for warning summary
+        if: always()
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Summarize linter warnings
+        if: always()
+        env:
+          REPORT_PREFIX: ${{ runner.temp }}/lean-linter-warning-sweep
+        run: |
+          python3 scripts/lean_linter_warning_report.py \
+            --log "$REPORT_PREFIX.log" \
+            --json "$REPORT_PREFIX.json" \
+            --text "$REPORT_PREFIX.txt" \
+            --github-summary "$GITHUB_STEP_SUMMARY"
+
+          {
+            echo
+            echo "A guarded manual auto-fix wrapper is available in"
+            echo "\`.github/workflows/lean-linter-warning-autofix.yml\`."
+            echo "It only creates a PR when explicitly dispatched in write mode,"
+            echo "when warnings are present, and when the automated edit produces a non-empty diff."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload linter-warning report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-linter-warning-sweep-report
+          path: |
+            ${{ runner.temp }}/lean-linter-warning-sweep.log
+            ${{ runner.temp }}/lean-linter-warning-sweep.json
+            ${{ runner.temp }}/lean-linter-warning-sweep.txt
+          if-no-files-found: error
+
+  # ──────────────────────────────────────────────────────────────
+  # Weekly stale-citation audit (report-only)
+  # ──────────────────────────────────────────────────────────────
+  stale-audit:
+    if: |
+      github.event.schedule == '30 8 * * 1' ||
+      (github.event_name == 'workflow_dispatch' && inputs.job == 'stale-audit')
+    name: Run stale-issue audit
+    runs-on: ubuntu-latest
+    concurrency:
+      group: stale-issue-audit
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      issues: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Export open issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh issue list \
+            --repo "$GH_REPO" \
+            --state open \
+            --limit 500 \
+            --json number,title,body,url,labels \
+            > "$RUNNER_TEMP/open-issues.json"
+
+      - name: Run report-only audit
+        run: |
+          # The audit contract is documented in docs/stale_issue_audit.md:
+          # it only reports stale citations and never edits GitHub issues.
+          python3 scripts/audit_stale_issues.py \
+            --issues "$RUNNER_TEMP/open-issues.json" \
+            --format json \
+            --output "$RUNNER_TEMP/stale-issue-audit.json"
+          python3 scripts/audit_stale_issues.py \
+            --issues "$RUNNER_TEMP/open-issues.json" \
+            --output "$RUNNER_TEMP/stale-issue-audit.txt"
+
+      - name: Summarize audit result
+        id: summarize
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import os
+          from pathlib import Path
+
+          report_path = Path(os.environ["RUNNER_TEMP"]) / "stale-issue-audit.json"
+          report = json.loads(report_path.read_text())
+          flagged = [issue for issue in report if issue["flagged"]]
+          with_citations = [
+              issue for issue in report
+              if issue["file_citations"] or issue["decl_citations"]
+          ]
+          print(f"scanned={len(report)}")
+          print(f"with_citations={len(with_citations)}")
+          print(f"flagged={len(flagged)}")
+          PY
+
+      - name: Add flagged-citation summary
+        if: steps.summarize.outputs.flagged != '0'
+        run: |
+          {
+            echo "## Stale-issue audit"
+            echo
+            echo "- Issues scanned: ${{ steps.summarize.outputs.scanned }}"
+            echo "- Issues with citations: ${{ steps.summarize.outputs.with_citations }}"
+            echo "- Issues flagged stale: ${{ steps.summarize.outputs.flagged }}"
+            echo
+            echo "The workflow is report-only; maintainers must review the flags manually."
+            echo "When updating an issue, keep its mathematical source citation precise: paper or blueprint path, line, label, and a short quotation or precise paraphrase."
+            echo "See docs/stale_issue_audit.md for the triage policy."
+            echo
+            echo '```text'
+            cat "$RUNNER_TEMP/stale-issue-audit.txt"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload flagged-citation report
+        if: steps.summarize.outputs.flagged != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: stale-issue-audit-report
+          path: |
+            ${{ runner.temp }}/stale-issue-audit.json
+            ${{ runner.temp }}/stale-issue-audit.txt
+          if-no-files-found: error

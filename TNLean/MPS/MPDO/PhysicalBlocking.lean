@@ -169,18 +169,18 @@ theorem mpo_blockTensor_eq_reindex (M : MPOTensor d D) (L N : ℕ) :
   rw [evalWord_blockTensor_ofFn]
   simp only [Equiv.symm_symm, MPSTensor.ofFn_blockedConfigEquiv]
 
-/-- Physical blocking preserves global positivity of the closed MPO family.
+/-- Positive-length physical blocking preserves positivity of the closed MPO
+family.
 
-For positive `L`, this is the blocking operation used throughout the vertical
-canonical-form comparison of arXiv:1606.00608, Appendix C.4, lines 1952--2017.
-The statement holds for every natural `L`; `L = 0` is only the formal base
-value of the algebraic definitions, not a physical blocking operation. -/
-theorem IsMPDO.blockTensor {M : MPOTensor d D} (hM : IsMPDO M) (L : ℕ) :
+This is the blocking operation used throughout the vertical canonical-form
+comparison of arXiv:1606.00608, Appendix C.4, lines 1952--2017. -/
+theorem IsMPDO.blockTensor {M : MPOTensor d D} (hM : IsMPDO M) (L : ℕ)
+    (hL : 0 < L) :
     IsMPDO (blockTensor M L) := by
-  intro N
+  intro N hN
   rw [mpo_blockTensor_eq_reindex]
   rw [Matrix.reindex_apply]
-  exact (hM (N * L)).submatrix _
+  exact (hM (N * L) (Nat.mul_pos hN hL)).submatrix _
 
 /-! ### Two-site blocking -/
 
@@ -257,9 +257,9 @@ theorem mpo_blockTwo_eq_reindex_blockTensor (M : MPOTensor d D) (N : ℕ) :
 Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
 theorem IsMPDO.blockTwo {M : MPOTensor d D} (hM : IsMPDO M) :
     IsMPDO (blockTwo M) := by
-  intro N
+  intro N hN
   rw [mpo_blockTwo_eq_reindex_blockTensor, Matrix.reindex_apply]
-  exact (hM.blockTensor 2 N).submatrix _
+  exact (hM.blockTensor 2 (by omega) N hN).submatrix _
 
 @[simp] lemma blockTwo_apply (M : MPOTensor d D) (i j : Fin (d * d)) :
     blockTwo M i j =

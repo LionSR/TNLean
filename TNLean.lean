@@ -65,6 +65,7 @@ import TNLean.Algebra.StarSubalgebraSpatial
 import TNLean.Algebra.StarSubalgebraUnitaryIntertwiner
 
 -- Layer 0b: General analysis
+import TNLean.Analysis.MeanErgodic
 import TNLean.Analysis.ProjectionGeometry
 -- Layer 0b: Hermitian functional calculus for finite-dimensional matrices
 import TNLean.Analysis.TraceCFC
@@ -77,6 +78,9 @@ import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Analysis.KyFanNorm
 import TNLean.Analysis.SchattenNorm
+import TNLean.Analysis.TraceNormAbs
+import TNLean.Analysis.TraceNormVariational
+import TNLean.Analysis.TraceNormContractivity
 import TNLean.Analysis.ConvexHullCompact
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.LiebScalarIntegral
@@ -125,6 +129,7 @@ import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.KleinInequality
 import TNLean.Analysis.MarginalSupport
+import TNLean.Analysis.CoisometricCompression
 import TNLean.Channel.MarginalSupportAbsorption
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
@@ -169,6 +174,9 @@ import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.SchwarzSubnormal
 import TNLean.Channel.Schwarz.SchwarzNotCP
 import TNLean.Channel.Schwarz.TwoPositive
+import TNLean.Channel.PositiveFunctional
+import TNLean.Channel.PositiveConditionalExpectation
+import TNLean.Channel.PositiveConditionalExpectationDirectSum
 import TNLean.Channel.Schwarz.ChoiCompression
 import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.ReductionCriterion
@@ -342,6 +350,7 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Examples
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier
+import TNLean.MPS.FundamentalTheorem.SectorBNT.SupplierNormalized
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Unitary
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.NormalizedSelfOverlap
@@ -426,14 +435,35 @@ import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.RFPViaTSGlobal
 import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.PhysicalBlocking
+import TNLean.MPS.MPDO.SimpleTensor
+import TNLean.MPS.MPDO.CommonWeightAbsorption
+import TNLean.MPS.MPDO.BNTClosingSelection
+import TNLean.MPS.MPDO.BNTThreeSiteCollapse
+import TNLean.MPS.MPDO.BNTMarkovKeyFormula
+import TNLean.MPS.MPDO.BNTMarkovSectorProjectors
 import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalSectorRetractions
 import TNLean.MPS.MPDO.VerticalBoundaryContraction
 import TNLean.MPS.MPDO.VerticalMapTransport
+import TNLean.MPS.MPDO.VerticalSectorCoordinates
+import TNLean.MPS.MPDO.VerticalSectorFixedGenerators
+import TNLean.MPS.MPDO.VerticalSectorTraceLoss
+import TNLean.MPS.MPDO.VerticalSectorGeneration
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
+import TNLean.MPS.MPDO.SALArbitraryCut
+import TNLean.MPS.MPDO.BNTThreeSiteReducedClosure
+import TNLean.MPS.MPDO.BNTSourceSectorProjectors
+import TNLean.MPS.MPDO.SitewisePhysicalMatrix
+import TNLean.MPS.MPDO.BNTProjectorSelection
+import TNLean.MPS.MPDO.PhysicalSupportRestriction
+import TNLean.MPS.MPDO.PhysicalSupportSALTransport
+import TNLean.MPS.MPDO.PhysicalSupportBondTransport
+import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
+import TNLean.MPS.MPDO.BNTSectorAreaLaw
+import TNLean.MPS.MPDO.HayashiSectorProjector
 import TNLean.MPS.MPDO.EtaPreparation
 import TNLean.MPS.MPDO.RFPSubspinMaps
 import TNLean.MPS.MPDO.HayashiSectorComparison
@@ -470,6 +500,9 @@ import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.MPDO.PhysicalSectorBondTransport
+import TNLean.MPS.MPDO.IsometricAdjacentBondTransport
+import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
+import TNLean.MPS.MPDO.PhysicalSupportProductTransport
 import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
 import TNLean.MPS.MPDO.PhysicalSectorBondPairwise
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
@@ -514,6 +547,8 @@ import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.GSNNCHSectorSum
+import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
+import TNLean.MPS.MPDO.BNTSectorCommutingFamily
 import TNLean.MPS.MPDO.BlockedRFPConstruction
 
 -- MPS examples
