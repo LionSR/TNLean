@@ -142,10 +142,11 @@ structure BNTFusionTensorClause (M : MPOTensor d D) where
 
 namespace BNTFusionTensorClause
 
-variable {M : MPOTensor d D} (H : BNTFusionTensorClause M)
+variable {M : MPOTensor d D}
 
 /-- The fusion-isometry family carried by a tensor-attached fusion clause. -/
-def toBNTFusionIsometryFamily : BNTFusionIsometryFamily (Fin H.labelCount) D where
+def toBNTFusionIsometryFamily (H : BNTFusionTensorClause M) :
+    BNTFusionIsometryFamily (Fin H.labelCount) D where
   bondDim := H.bondDim
   tensor := fun γ => verticalBNTMPO (H.tensor γ)
   chi := H.chi
@@ -168,7 +169,8 @@ no assertion about the renormalization fixed-point condition.
 Source: arXiv:1606.00608, Theorem 4.14(ii)--(iii), lines 972--993, and
 Appendix C.4, lines 1929--1947 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-noncomputable def toBNTAlgebraTensorClause : BNTAlgebraTensorClause M where
+noncomputable def toBNTAlgebraTensorClause (H : BNTFusionTensorClause M) :
+    BNTAlgebraTensorClause M where
   labelCount := H.labelCount
   bondDim := H.bondDim
   multiplicity := H.multiplicity
@@ -187,8 +189,9 @@ noncomputable def toBNTAlgebraTensorClause : BNTAlgebraTensorClause M where
 
 /-- The chosen decomposition in a tensor-attached fusion clause is a vertical
 canonical form of the underlying MPO tensor. -/
-theorem isVerticalCF : IsVerticalCF M :=
-  BNTAlgebraTensorClause.isVerticalCF H.toBNTAlgebraTensorClause
+theorem isVerticalCF (H : BNTFusionTensorClause M) : IsVerticalCF M :=
+  BNTAlgebraTensorClause.isVerticalCF
+    (BNTFusionTensorClause.toBNTAlgebraTensorClause H)
 
 end BNTFusionTensorClause
 
