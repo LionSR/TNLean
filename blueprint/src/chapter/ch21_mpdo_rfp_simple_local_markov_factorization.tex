@@ -755,33 +755,7 @@ physical index identifies the corresponding virtual legs.  In components,
 this is the matrix-unit identity
 $\sum_p(K^{-1})^{\alpha,\beta}_pK^p=E_{\alpha,\beta}$:
 \begin{center}
-    % sum_p (K^{-1})^{alpha,beta}_p K^p = delta_{alpha,alpha'}
-    % delta_{beta,beta'}: K^{-1} (top) is contracted with K (bottom)
-    % through their shared doubled physical index.  Following
-    % MPDO_NotationK.png, its ket copy is solid and its bra copy dashed.
-    % The four open virtual stubs, top row then bottom row, are
-    % alpha', beta', alpha, beta.  The two bends on the right implement
-    % the corresponding pair of Kronecker deltas.  Both sides have
-    % boundary signature (virtual-west=2 | virtual-east=2 |
-    % physical-up=0 | physical-down=0).
-    \begin{tenkzfree}
-        \tnput[ports={west:virtual, east:virtual}, label pos=north]
-            {Kinv}{(0,4.4mm)}{{\cal K}^{-1}}
-        \tnput[ports={west:virtual, east:virtual}, label pos=south]
-            {K}{(0,-4.4mm)}{{\cal K}}
-        % tenkz-lint: allow raw-ink offset ket strand of doubled contraction
-        \draw[bond] ($(Kinv.south)+(-0.35mm,0)$) -- ($(K.north)+(-0.35mm,0)$);
-        % tenkz-lint: allow raw-ink offset bra strand of doubled contraction
-        \draw[bond, dashed] ($(Kinv.south)+(0.35mm,0)$) -- ($(K.north)+(0.35mm,0)$);
-        % tenkz-lint: allow raw-ink free-tier open virtual leg
-        \draw[bond] (Kinv.west) -- ++(-4.95mm,0);
-        % tenkz-lint: allow raw-ink free-tier open virtual leg
-        \draw[bond] (Kinv.east) -- ++(4.95mm,0);
-        % tenkz-lint: allow raw-ink free-tier open virtual leg
-        \draw[bond] (K.west) -- ++(-4.95mm,0);
-        % tenkz-lint: allow raw-ink free-tier open virtual leg
-        \draw[bond] (K.east) -- ++(4.95mm,0);
-    \end{tenkzfree}
+    $\displaystyle\sum_p (K^{-1})^{\alpha,\beta}_p\,K^p$
     $\;=\;$
     \begin{tenkz}[rows={wire, wire}, east=cup]
         \tnghost{} \\
@@ -799,52 +773,15 @@ This is the identity in
 Applying this inverse map to the doubled physical index and closing its
 virtual legs against a further copy of $K$ recovers $K$:
 \begin{center}
-    % \mathcal K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity):
-    % the top tensor is the script-letter BNT basis element \mathcal K,
-    % not another copy of K.  Its two virtual legs close separately against
-    % K^{-1}, while the bottom K retains its virtual legs.  The fused double
-    % stroke marks the doubled physical index at the open top boundary and
-    % at the K^{-1}/K contraction.  Both sides have boundary signature
-    % (virtual-west=1 | virtual-east=1 | physical-up=1 |
-    % physical-down=0).
-    \begin{tenkzfree}
-        \tnput{Kc}{(0,9mm)}{}
-        \tnput{Kinv}{(0,0)}{}
-        \tnput[label pos=south]{Kbot}{(0,-9mm)}{K}
-        % tenkz-lint: allow raw-ink free-tier west inverse bend
-        \draw[bond] (Kc.west) to[out=180, in=180, looseness=1.6] (Kinv.west);
-        % tenkz-lint: allow raw-ink free-tier east inverse bend
-        \draw[bond] (Kc.east) to[out=0, in=0, looseness=1.6] (Kinv.east);
-        % tenkz-lint: allow raw-ink free-tier open doubled physical leg
-        \draw[fused bond] (Kc.north) -- ++(0,4.2mm);
-        % tenkz-lint: allow raw-ink free-tier internal physical contraction
-        \draw[bond] (Kc.south) -- (Kinv.north);
-        % tenkz-lint: allow raw-ink free-tier doubled physical contraction
-        \draw[fused bond] (Kinv.south) -- (Kbot.north);
-        % tenkz-lint: allow raw-ink free-tier open virtual leg
-        \draw[bond] (Kbot.west) -- ++(-5mm,0);
-        % tenkz-lint: allow raw-ink free-tier open virtual leg
-        \draw[bond] (Kbot.east) -- ++(5mm,0);
-        % tenkz-lint: allow raw-ink source-positioned script K label
-        \node[tn label, anchor=east] at ($(Kc.west)-(3mm,0)$) {$\scriptstyle\mathcal K$};
-        % tenkz-lint: allow raw-ink source-positioned inverse label
-        \node[tn label, anchor=east] at ($(Kinv.west)-(3mm,0)$) {$\scriptstyle K^{-1}$};
-    \end{tenkzfree}
-    $\;=\;$
-    \begin{tenkzfree}
-        \tnput[label pos=south]{K}{(0,0)}{K}
-        % tenkz-lint: allow raw-ink free-tier open doubled physical leg
-        \draw[fused bond] (K.north) -- ++(0,4.2mm);
-        % tenkz-lint: allow raw-ink free-tier open virtual leg
-        \draw[bond] (K.west) -- ++(-5mm,0);
-        % tenkz-lint: allow raw-ink free-tier open virtual leg
-        \draw[bond] (K.east) -- ++(5mm,0);
-    \end{tenkzfree}
+    % \mathcal K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the
+    % script-letter BNT basis element \mathcal K closes its two virtual legs
+    % against K^{-1}, while the bottom K retains its virtual legs and the
+    % doubled physical index survives at the open boundary.
+    \[
+        {\cal K}\,{\cal K}^{-1}K = K
+    \]
 \end{center}
-The doubled physical index is represented by the fused double stroke at the
-open boundary and the lower contraction; the internal
-$\mathcal K$--$K^{-1}$ line remains single.  This is the
-single-block identity of
+This is the single-block identity of
 \cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.
 
 \begin{definition}[Normalized fourth-site virtual tail]
