@@ -471,8 +471,9 @@ map used here.
 
 **Local fix (zero-sector complement):** Rectangular vertical coordinates may
 discard a zero-sector complement.  The support criterion below identifies
-exactly when no trace is lost.  This obstruction and the image-preservation
-condition that eliminates it are recorded in
+exactly when no trace is lost for an arbitrary positive sector family.  The
+obstruction is eliminated for the source-generated family in
+`VerticalSectorImagePreservation.lean` and is documented in
 `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 theorem transportedVerticalSectorT_trace_eq_iff
     {g₁ g₂ d : ℕ}
@@ -558,8 +559,9 @@ map used here.
 
 **Local fix (zero-sector complement):** Rectangular vertical coordinates may
 discard a zero-sector complement.  The support criterion below identifies
-exactly when no trace is lost.  This obstruction and the image-preservation
-condition that eliminates it are recorded in
+exactly when no trace is lost for an arbitrary positive sector family.  The
+obstruction is eliminated for the source-generated family in
+`VerticalSectorImagePreservation.lean` and is documented in
 `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 theorem transportedVerticalSectorS_trace_eq_iff
     {g₁ g₂ d : ℕ}

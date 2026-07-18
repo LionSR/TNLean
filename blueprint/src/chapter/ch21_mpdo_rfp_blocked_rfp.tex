@@ -1209,6 +1209,150 @@ physical indices, as in
     $\operatorname{tr}((1-P)Z)=0$, hence to $(1-P)Z=0$.
 \end{proof}
 
+\begin{lemma}[Two-site support after refinement]
+    \label{lem:mpdo_vertical_sector_t_image_preservation}
+    \lean{MPOTensor.precompressionVerticalSectorT_image_preservation}
+    \leanok
+    \uses{def:mpdo_vertical_sector_precompression,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_weighted_contraction,
+      lem:mpdo_vertical_bond_contraction_reconstruction,
+      thm:mpdo_one_site_closure_two_site_blocking}
+    For a bond matrix $X$, set
+    \[
+        V_1(X)=\bigoplus_\alpha m_\alpha M_\alpha(X).
+    \]
+    Suppose that both vertical canonical forms satisfy their exact
+    reconstruction identities, the one-site multiplicity spaces are nonzero,
+    their diagonal weights are positive,
+    $T(\mathcal M^{(1)}(X))=\mathcal M^{(2)}(X)$, and
+    $U_2U_2^\dagger=1$, then
+    \[
+        U_2^\dagger U_2 Z_T(V_1(X))=Z_T(V_1(X)).
+    \]
+    This is the refinement support identity used in
+    \cite[Appendix~C.4, lines~1955--1980]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $\mathcal R^{-1}$ relabel a matrix indexed by two one-site indices as
+    a matrix indexed by the blocked two-site index.  Then
+    \[
+        Z_T(V_1(X))
+        =\mathcal R^{-1}\!\left[
+          T\!\left(U_1^\dagger B_1(X)U_1\right)\right]
+        =\mathcal R^{-1}\!\left[
+          T\!\left(\mathcal M^{(1)}(X)\right)\right]
+        =\mathcal R^{-1}\!\left[\mathcal M^{(2)}(X)\right]
+        =U_2^\dagger B_2(X)U_2.
+    \]
+    Here the first equality is the normalized embedding, the second and last
+    are the two reconstruction identities, and the middle equality is the
+    refinement identity.  The equality before the last is precisely the
+    blocked-index relabelling theorem.
+    Therefore
+    \[
+        U_2^\dagger U_2Z_T(V_1(X))
+        =U_2^\dagger(U_2U_2^\dagger)B_2(X)U_2
+        =Z_T(V_1(X)).
+    \]
+\end{proof}
+
+\begin{lemma}[One-site support after coarse-graining]
+    \label{lem:mpdo_vertical_sector_s_image_preservation}
+    \lean{MPOTensor.precompressionVerticalSectorS_image_preservation}
+    \leanok
+    \uses{def:mpdo_vertical_sector_precompression,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_weighted_contraction,
+      lem:mpdo_vertical_bond_contraction_reconstruction,
+      thm:mpdo_one_site_closure_two_site_blocking}
+    For a bond matrix $X$, set
+    \[
+        V_2(X)=\bigoplus_\beta n_\beta A_\beta(X).
+    \]
+    Suppose that both vertical canonical forms satisfy their exact
+    reconstruction identities, the two-site multiplicity spaces are nonzero,
+    their diagonal weights are positive,
+    $S(\mathcal M^{(2)}(X))=\mathcal M^{(1)}(X)$, and
+    $U_1U_1^\dagger=1$, then
+    \[
+        U_1^\dagger U_1 Z_S(V_2(X))=Z_S(V_2(X)).
+    \]
+    This is the coarse-graining support identity used in
+    \cite[Appendix~C.4, lines~1955--1980]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $\mathcal R$ decode a matrix indexed by the blocked two-site index as a
+    matrix indexed by two one-site indices.  Then
+    \[
+        Z_S(V_2(X))
+        =S\!\left(\mathcal R\!\left[
+          U_2^\dagger B_2(X)U_2\right]\right)
+        =S\!\left(\mathcal M^{(2)}(X)\right)
+        =\mathcal M^{(1)}(X)
+        =U_1^\dagger B_1(X)U_1.
+    \]
+    Here the first equality is the normalized embedding, the next equality is
+    the blocked-index relabelling theorem, the middle equality is the
+    coarse-graining identity, and the last is the one-site reconstruction.
+    Therefore
+    \[
+        U_1^\dagger U_1Z_S(V_2(X))
+        =U_1^\dagger(U_1U_1^\dagger)B_1(X)U_1
+        =Z_S(V_2(X)).
+    \]
+\end{proof}
+
+\begin{lemma}[Trace preservation on one-site canonical-form contractions]
+    \label{lem:mpdo_vertical_sector_t_source_generated_trace}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_of_source_generated}
+    \leanok
+    \uses{lem:mpdo_vertical_sector_t_image_preservation,
+      lem:mpdo_vertical_sector_precompression_positive_trace}
+    Under the hypotheses of Lemma~\ref{lem:mpdo_vertical_sector_t_image_preservation},
+    suppose in addition that $U_1U_1^\dagger=1$ and that $T$ is completely
+    positive and trace preserving.  Then
+    \[
+        \Trsec(\widetilde T(V_1(X)))=\Trsec(V_1(X)).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Cyclicity of trace and the preceding support identity give
+    \[
+        \Trsec(\widetilde T(V_1(X)))
+        =\operatorname{tr}(U_2^\dagger U_2Z_T(V_1(X)))
+        =\operatorname{tr}(Z_T(V_1(X)))
+        =\Trsec(V_1(X)).
+    \]
+\end{proof}
+
+\begin{lemma}[Trace preservation on two-site canonical-form contractions]
+    \label{lem:mpdo_vertical_sector_s_source_generated_trace}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_of_source_generated}
+    \leanok
+    \uses{lem:mpdo_vertical_sector_s_image_preservation,
+      lem:mpdo_vertical_sector_precompression_positive_trace}
+    Under the hypotheses of Lemma~\ref{lem:mpdo_vertical_sector_s_image_preservation},
+    suppose in addition that $U_2U_2^\dagger=1$ and that $S$ is completely
+    positive and trace preserving.  Then
+    \[
+        \Trsec(\widetilde S(V_2(X)))=\Trsec(V_2(X)).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Cyclicity of trace and the preceding support identity give
+    \[
+        \Trsec(\widetilde S(V_2(X)))
+        =\operatorname{tr}(U_1^\dagger U_1Z_S(V_2(X)))
+        =\operatorname{tr}(Z_S(V_2(X)))
+        =\Trsec(V_2(X)).
+    \]
+\end{proof}
+
 \begin{theorem}[Action of the normalized vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_maps}
     \lean{MPOTensor.transportedVerticalSectorT_trace_smul}
