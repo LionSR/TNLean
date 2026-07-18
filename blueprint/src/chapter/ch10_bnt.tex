@@ -79,8 +79,13 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \begin{proof}\leanok
     At every sufficiently large length the matrix product vectors of the basis
     members are linearly independent. A gauge-phase equivalence between two
-    distinct members would make one of these vectors a nonzero scalar multiple
-    of the other, a contradiction.
+    distinct members would give, for a nonzero scalar $\zeta$,
+    \[
+        \ket{V^{(N)}(A_k)}
+        = \zeta^N\ket{V^{(N)}(A_j)}.
+    \]
+    Thus one vector would be a scalar multiple of the other, contradicting
+    linear independence.
 \end{proof}
 
 \begin{theorem}[Characterization by canonical-form representatives]
@@ -112,8 +117,9 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
               way.
     \end{enumerate}
     This is \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, with the literal
-    canonical-form display restricted to its active blocks as explained in
-    \path{docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex}.
+    canonical-form display restricted to its active blocks.
+    % Local correction documented in
+    % docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -127,8 +133,9 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
         thm:cpsv_normal_separated_eventually_li,
         thm:mpv_decomposition}
     First discard the zero-weight summands; they contribute zero at every
-    positive length. Reindex the remaining summands, group them into MPV phase
-    classes, and choose one representative from each class. By
+    positive length. Reindex the remaining summands, group them into the MPV
+    phase classes of Definition~\ref{def:mpv_phase_class_data}, and choose one
+    representative from each class. By
     Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}, eventual linear
     independence of a BNT excludes gauge-phase equivalence between two
     distinct $A_j$.
@@ -145,12 +152,13 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
         \qquad
         O_{\widetilde A_t A_j}(N)\longrightarrow0.
     \]
-    The Gram-matrix criterion therefore makes the combined family
+    By Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, the combined
+    family
     \[
         \{\ket{V^{(N)}(\widetilde A_t)}:t\in T\}
         \cup \{\ket{V^{(N)}(A_j)}:1\leq j\leq g\}
     \]
-    linearly independent for all sufficiently large $N$. Comparing the
+    is linearly independent for all sufficiently large $N$. Comparing the
     canonical-form expansion with the BNT expansion gives a relation
     \[
         \sum_{t\in T}c_{N,t}\ket{V^{(N)}(\widetilde A_t)}
@@ -159,9 +167,12 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     Linear independence forces every $c_{N,t}$ to vanish. Hence the
     coefficient of every unmatched phase class vanishes for all sufficiently
     large $N$.
-    Such a coefficient has the form
+    For an unmatched class $t$, let $q$ range over its active canonical-form
+    summands, write $\mu_q$ for the corresponding canonical-form weight, and
+    write $\zeta_q$ for the phase relating that summand to the chosen
+    representative. Then
     \[
-        \sum_q (\zeta_q\mu_q)^N.
+        c_{N,t}=\sum_{q\in t}(\zeta_q\mu_q)^N.
     \]
     Every base $\zeta_q\mu_q$ is nonzero because only active summands occur.
     Eventual vanishing of this finite geometric sum would imply vanishing at
@@ -2033,9 +2044,12 @@ projection.
 
 \begin{proof}\leanok
     If the coefficient vanished for every $N\geq M$, the finite geometric-sum
-    extrapolation would make it vanish at every nonnegative exponent. At
-    exponent zero it is the positive number of copies in sector $j$, which is
-    impossible.
+    extrapolation would make it vanish at every nonnegative exponent. However,
+    at exponent zero,
+    \[
+        c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0,
+    \]
+    which is impossible.
 \end{proof}
 
 \begin{lemma}[Sector coefficient is not eventually zero]
