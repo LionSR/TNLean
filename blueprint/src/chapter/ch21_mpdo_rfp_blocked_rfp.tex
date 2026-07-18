@@ -1235,16 +1235,21 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
+    Let $\mathcal R^{-1}$ relabel a matrix indexed by two one-site indices as
+    a matrix indexed by the blocked two-site index.  Then
     \[
         Z_T(V_1(X))
-        =T\!\left(U_1^\dagger B_1(X)U_1\right)
-        =T\!\left(\mathcal M^{(1)}(X)\right)
-        =\mathcal M^{(2)}(X)
+        =\mathcal R^{-1}\!\left[
+          T\!\left(U_1^\dagger B_1(X)U_1\right)\right]
+        =\mathcal R^{-1}\!\left[
+          T\!\left(\mathcal M^{(1)}(X)\right)\right]
+        =\mathcal R^{-1}\!\left[\mathcal M^{(2)}(X)\right]
         =U_2^\dagger B_2(X)U_2.
     \]
-    Here the first equality is the normalized embedding, the second and fourth
+    Here the first equality is the normalized embedding, the second and last
     are the two reconstruction identities, and the middle equality is the
-    refinement identity after the blocked-index relabelling.
+    refinement identity.  The equality before the last is precisely the
+    blocked-index relabelling theorem.
     Therefore
     \[
         U_2^\dagger U_2Z_T(V_1(X))
@@ -1279,16 +1284,19 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
+    Let $\mathcal R$ decode a matrix indexed by the blocked two-site index as a
+    matrix indexed by two one-site indices.  Then
     \[
         Z_S(V_2(X))
-        =S\!\left(U_2^\dagger B_2(X)U_2\right)
+        =S\!\left(\mathcal R\!\left[
+          U_2^\dagger B_2(X)U_2\right]\right)
         =S\!\left(\mathcal M^{(2)}(X)\right)
         =\mathcal M^{(1)}(X)
         =U_1^\dagger B_1(X)U_1.
     \]
-    Here the first equality is the normalized embedding, the second and fourth
-    are the two reconstruction identities, and the middle equality is the
-    coarse-graining identity after the blocked-index relabelling.
+    Here the first equality is the normalized embedding, the next equality is
+    the blocked-index relabelling theorem, the middle equality is the
+    coarse-graining identity, and the last is the one-site reconstruction.
     Therefore
     \[
         U_1^\dagger U_1Z_S(V_2(X))
