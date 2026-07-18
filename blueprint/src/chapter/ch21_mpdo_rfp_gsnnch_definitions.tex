@@ -151,6 +151,82 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     multiplicity to be one, and its bond to be the given bond.
 \end{proof}
 
+\begin{definition}[Orthogonally supported commuting sector products]
+    \label{def:mpdo_orthogonal_commuting_sector_family}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData}
+    \leanok
+    \uses{def:mpdo_source_gsnnch, def:mpdo_commuting_form_data}
+    Let $\{K_x\}_{x=0}^{g-1}$ be MPO tensors on a common one-site space.
+    An orthogonally supported family of commuting sector products consists of
+    pairwise orthogonal one-site projections $P_x$ and positive two-site
+    operators $B^{(x)}$ such that
+    \[
+        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)=B^{(x)},
+        \qquad
+        [\tau_i(B^{(x)}),\tau_j(B^{(x)})]=0,
+    \]
+    and, for every $N\geq2$,
+    \[
+        \rho^{(N)}(K_x)=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+    \]
+    Together with natural multiplicities $n_x$, these objects determine the
+    corresponding finite-chain sector decomposition in
+    Definition~\ref{def:mpdo_source_gsnnch}.
+\end{definition}
+
+\begin{theorem}[Orthogonal commuting sector products give the GSNNCH form]
+    \label{thm:mpdo_orthogonal_commuting_sectors_gsnnch}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData_sectorProduct}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData_unnormalizedState}
+    \lean{MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily}
+    \leanok
+    \uses{def:mpdo_source_gsnnch,
+        def:mpdo_orthogonal_commuting_sector_family}
+    Suppose that $\{K_x\}_{x=0}^{g-1}$ has an orthogonally supported family
+    of commuting sector products and that, for every $N\geq2$,
+    \[
+        \rho^{(N)}(M)=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x),
+        \qquad n_x\in\N.
+    \]
+    Then $M$ has the explicit GSNNCH sector form with outer sectors $x$ and
+    natural multiplicities $n_x$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each $N\geq2$, the represented unnormalized sector sum is
+    \[
+        \sum_{x=0}^{g-1}n_x
+          \prod_{i=0}^{N-1}\tau_i(B^{(x)})
+        =\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x)
+        =\rho^{(N)}(M).
+    \]
+    Thus the positive proportionality constant in
+    Definition~\ref{def:mpdo_source_gsnnch} is one.
+\end{proof}
+
+\begin{corollary}[Orthogonal BNT sector products give the GSNNCH form]
+    \label{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
+    \lean{MPOTensor.hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor}
+    \leanok
+    \uses{thm:mpdo_orthogonal_commuting_sectors_gsnnch}
+    Suppose that the common weight has been absorbed into each BNT
+    representative $\mathcal K_x$, and that these representatives have
+    orthogonally supported commuting sector products.  Then
+    \[
+        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(\mathcal K_x)
+    \]
+    gives the explicit GSNNCH form with the BNT copy numbers $n_x$ as its
+    natural multiplicities.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply
+    Theorem~\ref{thm:mpdo_orthogonal_commuting_sectors_gsnnch} to the
+    positive-length BNT decomposition.  Its coefficients are exactly the
+    copy numbers $n_x$ after the common weights have been absorbed.
+\end{proof}
+
 \begin{lemma}[Cyclic-shift transport of an embedded local operator]
     \label{lem:mpdo_gsnnch_shift_transport}
     \lean{MPOTensor.embedLocalOperator_submatrix_rotateConfig}
