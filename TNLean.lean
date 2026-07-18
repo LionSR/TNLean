@@ -442,6 +442,7 @@ import TNLean.MPS.MPDO.VerticalSectorRetractions
 import TNLean.MPS.MPDO.VerticalBoundaryContraction
 import TNLean.MPS.MPDO.VerticalMapTransport
 import TNLean.MPS.MPDO.VerticalSectorCoordinates
+import TNLean.MPS.MPDO.VerticalSectorGeneration
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
