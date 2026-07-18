@@ -279,6 +279,7 @@ jobs:
             xelatex -interaction=nonstopmode -halt-on-error manual2.tex
           timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
             xelatex -interaction=nonstopmode -halt-on-error manual2.tex
+          python3 ../../scripts/tenkz_audit.py manual2.tnlog
 
       # Compile-and-cache smoke test of the tenkz picture pipeline
       # (blueprint/src/Packages/tenkz_pic.py): renders the spec benchmark
