@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Regression checks for asymmetric tenkz face ports.
+
+The test compiles four small pictures and reads their `.tnlog` contraction
+records.  It guards the two failures from issue 4249: inventing a second open
+port on the centred face, and dropping the second contraction on the declared
+two-port face.  It also fixes the compatibility meaning of `legs at=` and the
+virtual arity of the zipper's splitting endpoint.
+"""
+
+from __future__ import annotations
+
+import os
+import shutil
+import subprocess
+import tempfile
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+SOURCE = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\begin{document}
+\begin{tenkz}[rows={op:none, ket}, tensor style=box]
+  \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
+  \tn{A} & \tn{A}
+\end{tenkz}
+\begin{tenkz}[rows={op:none, ket}, tensor style=box]
+  \tn[pill, wide=2, up at={1,2}, down at=center]{U} & \\
+  \tn[wide=2]{A} &
+\end{tenkz}
+\begin{tenkz}[physical=up, tensor style=box]
+  \tn[pill, wide=2, legs at={1,2}]{U} &
+\end{tenkz}
+\begin{tenkz}[rows={ket:fused:nopair, wire:west none}]
+  \tn[box]{B} & \tndots & \tn[box]{B} &
+  \tnfuse[span=2, west at=center, east at={1,2}]{V}\\
+  & & &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[pill, wide=3, up at=center, down at={1,2,3}]{W} & & \\
+  \tn{A} & \tn{A} & \tn{A}
+\end{tenkz}
+\begin{tenkz}[physical=up, tensor style=box]
+  \tn[pill, wide=2, legs at={1,2}, up at=center]{U} &
+\end{tenkz}
+\end{document}
+"""
+
+
+def events_by_picture(lines: list[str]) -> dict[int, list[str]]:
+    pictures: dict[int, list[str]] = {}
+    current = 0
+    for line in lines:
+        if line.startswith("picture|"):
+            current = int(dict(field.split("=", 1) for field in line.split("|")[1:])["id"])
+            pictures[current] = []
+        elif current:
+            pictures[current].append(line)
+    return pictures
+
+
+def require(lines: list[str], expected: str, message: str) -> None:
+    if expected not in lines:
+        raise AssertionError(f"{message}: missing {expected!r}")
+
+
+def paired_ports(lines: list[str]) -> list[tuple[str, str]]:
+    result: list[tuple[str, str]] = []
+    for line in lines:
+        if not line.startswith("pairleg|"):
+            continue
+        attrs = dict(field.split("=", 1) for field in line.split("|")[1:])
+        result.append((attrs["upper-port"], attrs["column"]))
+    return sorted(result)
+
+
+def main() -> int:
+    engine = shutil.which("xelatex")
+    if engine is None:
+        print("FAIL: xelatex is required")
+        return 1
+    with tempfile.TemporaryDirectory(prefix="tenkz_face_ports_") as tmp:
+        work = Path(tmp)
+        tex = work / "face-ports.tex"
+        tex.write_text(SOURCE, encoding="utf-8")
+        env = os.environ.copy()
+        env["TEXINPUTS"] = f"{ROOT / 'tex/tenkz'}//:" + env.get("TEXINPUTS", "")
+        run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", tex.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if run.returncode:
+            print(run.stdout)
+            print("FAIL: face-port fixture did not compile")
+            return 1
+        pictures = events_by_picture(
+            (work / "face-ports.tnlog").read_text(encoding="utf-8").splitlines()
+        )
+
+    inverse = pictures[1]
+    require(
+        inverse,
+        "boundary|picture=1|virtual-west=1|virtual-east=1|physical-up=1|physical-down=0",
+        "centred upper face acquired a spurious port",
+    )
+    if paired_ports(inverse) != [("1", "1"), ("2", "2")]:
+        raise AssertionError("two-port lower face did not contract ports 1 and 2 distinctly")
+
+    forward = pictures[2]
+    if paired_ports(forward) != [("center", "1")]:
+        raise AssertionError("centred lower face did not emit one contraction")
+
+    legacy = pictures[3]
+    require(legacy, "faceports|picture=3|cell=1-1|face=up|arity=2|at=1,2",
+            "legacy upper-face arity changed")
+    require(legacy, "faceports|picture=3|cell=1-1|face=down|arity=2|at=1,2",
+            "legacy lower-face arity changed")
+
+    zipper = pictures[4]
+    require(zipper, "faceports|picture=4|cell=1-4|face=west|arity=1|at=center",
+            "zipper fused-face arity changed")
+    require(zipper, "faceports|picture=4|cell=1-4|face=east|arity=2|at=1,2",
+            "zipper split-face arity changed")
+    require(
+        zipper,
+        "boundary|picture=4|virtual-west=1|virtual-east=2|physical-up=2|physical-down=0",
+        "zipper boundary signature changed",
+    )
+    arity_three = pictures[5]
+    require(arity_three,
+            "faceports|picture=5|cell=1-1|face=down|arity=3|at=1,2,3",
+            "three-port face arity changed")
+    if paired_ports(arity_three) != [("1", "1"), ("2", "2"), ("3", "3")]:
+        raise AssertionError("three-port face did not contract ports 1, 2, and 3 distinctly")
+    override = pictures[6]
+    require(override, "faceports|picture=6|cell=1-1|face=up|arity=1|at=center",
+            "explicit face did not override legacy alias")
+    require(override, "faceports|picture=6|cell=1-1|face=down|arity=2|at=1,2",
+            "legacy alias stopped supplying the other face")
+    print("PASS: asymmetric physical faces, legacy alias, and zipper arity")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

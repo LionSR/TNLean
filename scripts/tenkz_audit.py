@@ -70,7 +70,8 @@ EMPTY_CHECK_LANGS = {"grid", "lattice", "free"}
 # are left open: lattice currently emits nothing (see audit report) and
 # planes is a post-spec dialect still growing its vocabulary.
 DIALECT_KINDS = {
-    "grid": {"atom", "bond", "trace", "pairtrace", "phtrace", "cup", "hole", "boundary"},
+    "grid": {"atom", "bond", "faceports", "pairleg", "trace", "pairtrace",
+             "phtrace", "cup", "hole", "boundary"},
     "free": {"atom", "join", "boundary"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
 }
@@ -99,6 +100,11 @@ def _any(v: str) -> bool:
 FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "picture": {"id": _is_int, "lang": _any},
     "atom": {"picture": _is_int, "cell": _is_cell, "name": _any, "kind": _any},
+    "faceports": {"picture": _is_int, "cell": _is_cell,
+                  "face": _enum("up", "down", "west", "east"),
+                  "arity": _is_int, "at": _any},
+    "pairleg": {"picture": _is_int, "upper": _is_cell, "lower": _is_cell,
+                "upper-port": _any, "column": _is_int},
     # The emitter normalizes the user-facing `bond dir=left|right` to
     # forward/reverse (direction along the wire); accept both spellings.
     "bond": {"picture": _is_int, "row": _is_int, "from": _is_int, "to": _is_int,

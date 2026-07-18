@@ -30,16 +30,37 @@ A2 tall gauge capsule on a sandwich (hard06/hard09 tall-X genre):
 \]
 
 A3 RFP isometry with per-blocked-site legs (hard08):
-% A A = sum_j U_{(i1 i2), j} A^j : U keeps ONE output leg per blocked
-% site (legs at={1,2}), so both sides read physical-up=2
+% A A = sum_j U_{(i1 i2), j} A^j : U has two upper ports and one lower
+% fused port, so both sides read physical-up=2 and the interface has arity 1
 \[
   \begin{tenkz}[physical=up, tensor style=box]
     \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A}
   \end{tenkz}
   \;=\;
   \begin{tenkz}[rows={op:none, ket}, tensor style=box]
-    \tn[pill, wide=2, legs at={1,2}, up={$i_1$,$i_2$}]{U} & \\
+    \tn[pill, wide=2, up at={1,2}, down at=center,
+        up={$i_1$,$i_2$}]{U} & \\
     \tn[wide=2]{A} &
+  \end{tenkz}
+\]
+
+A3b adjoint isometry with asymmetric faces (issue 4249 regressions):
+% No-spurious-open-port: the boundary event must say physical-up=1.
+% No-dropped-contraction: the log must contain two pairleg events for
+% picture A3b, one at each declared lower-face port.
+\[
+  \begin{tenkz}[rows={op:none, ket}, tensor style=box]
+    \tn[pill, wide=2, up at=center, down at={1,2}, up=$j$]{U^\dagger} & \\
+    \tn{A} & \tn{A}
+  \end{tenkz}
+\]
+
+A3c legacy symmetric spelling:
+% `legs at' remains a compatibility alias for assigning the same list to
+% both physical faces; the two faceports events therefore both have arity 2.
+\[
+  \begin{tenkz}[physical=up, tensor style=box]
+    \tn[pill, wide=2, legs at={1,2}, up={$i_1$,$i_2$}]{U} &
   \end{tenkz}
 \]
 

@@ -4,9 +4,8 @@
 % Sources: the corrected acceptance corpus (part_B1..B8, boundary_test,
 % channel_test, pentagon_corrected).  Every diagram keeps the default
 % open boundary — stubs are matrix indices — and every printed equation
-% has matching boundary signatures on its two sides; the one identity
-% that cannot yet satisfy that rule (the zipper) is shown one-sided and
-% deferred to the roadmap.
+% has matching boundary signatures on its two sides, including the zipper
+% with its face-specific splitting endpoint.
 \section{Tutorial}\label{ch:tutorial}
 
 The tutorial assembles a working vocabulary one declaration at a time:
@@ -184,14 +183,12 @@ a fuse consumes its side's boundary pair.
 \end{tnexample}
 
 \tnkey{combined=east} mirrors the wedge for the other end of a chain.
-What the wedge cannot yet do is stand on both sides of the zipper
-(pulling-through) identity: the identity's right-hand side needs the
-mirror-image \emph{splitting} glyph, one combined bond opening back
-into its pair.  Until that glyph exists, the two mirrored spellings
-log mirrored signatures --- one combined stub west against one
-combined stub east --- and may not face each other across an equals
-sign.  The splitting glyph is on the roadmap
-(\S\ref{ch:trouble}).
+The face spelling makes the arity explicit: \tnkey{west at=center,
+east at=\{1,2\}} is the splitting orientation, with one fused bond on
+the west and two separate bonds on the east.  Reversing the two face
+declarations gives the fusion orientation.  The zipper in
+Example~\ref{ex:worked-zipper} uses the splitting form at the end of a
+word, so its fused face may attach inside the same picture.
 
 % ---------------------------------------------------------------------
 \subsection{The lattice window}\label{sec:tut-lattice}

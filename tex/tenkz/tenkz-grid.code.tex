@@ -484,6 +484,10 @@
 \int_new:N \l__tenkz_cwide_int
 \int_new:N \l__tenkz_cwires_int
 \tl_new:N \l__tenkz_clegsat_tl
+\tl_new:N \l__tenkz_cupat_tl
+\tl_new:N \l__tenkz_cdownat_tl
+\tl_new:N \l__tenkz_cwestat_tl
+\tl_new:N \l__tenkz_ceastat_tl
 \tl_new:N \l__tenkz_cphys_tl    % cell physical=: up|down|updown (empty = none)
 \bool_new:N \l__tenkz_cnolegs_bool
 \tl_new:N \l__tenkz_crole_tl    % cell role word (empty = none)
@@ -513,6 +517,15 @@
   % named column.  The up=/down= label is read as a comma list matched
   % leg-by-leg.
   /tenkz/cell/legs~at/.store~in=\l__tenkz_clegsat_tl,
+  % Face-local port declarations.  `center' is one fused/centred port;
+  % integer lists name span-local columns (up/down) or rows (west/east).
+  % `legs at' remains the compatibility spelling for assigning the same
+  % integer list to both physical faces; an explicit face key wins on that
+  % face.  All consumers resolve through \tenkz_face_ports:nN below.
+  /tenkz/cell/up~at/.store~in=\l__tenkz_cupat_tl,
+  /tenkz/cell/down~at/.store~in=\l__tenkz_cdownat_tl,
+  /tenkz/cell/west~at/.store~in=\l__tenkz_cwestat_tl,
+  /tenkz/cell/east~at/.store~in=\l__tenkz_ceastat_tl,
   % physical = up|down|updown, the CELL-level counterpart of the picture
   % word: a wires=k brick draws one physical leg PER SPANNED ROW on each
   % stated face, spread evenly across the glyph's width and ordered
@@ -582,6 +595,10 @@
     \int_set:Nn \l__tenkz_cwide_int {1}
     \int_set:Nn \l__tenkz_cwires_int {1}
     \tl_clear:N \l__tenkz_clegsat_tl
+    \tl_clear:N \l__tenkz_cupat_tl
+    \tl_clear:N \l__tenkz_cdownat_tl
+    \tl_clear:N \l__tenkz_cwestat_tl
+    \tl_clear:N \l__tenkz_ceastat_tl
     \tl_clear:N \l__tenkz_cphys_tl
     \bool_set_false:N \l__tenkz_cnolegs_bool
     \tl_clear:N \l__tenkz_crole_tl
@@ -592,6 +609,82 @@
     \tl_clear:N \l__tenkz_fcombined_tl
     \tl_set:Nn \l__tenkz_gstrut_tl { \tenkz@glyphstrut }
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/cell}{#1} }
+  }
+
+% Canonical face-port resolver.  This is the single source of truth for
+% face geometry, interface pairing, boundary arity, and audit events.
+% Physical faces default to one centred port.  Virtual faces default to
+% one port per spanned row (`rows'); a legacy combined= side is `center'.
+\tl_new:N \l__tenkz_faceports_tl
+\cs_new_protected:Npn \tenkz_face_ports:nN #1#2
+  {
+    \tl_clear:N #2
+    \str_case:nn {#1}
+      {
+        {up}
+          { \tl_if_empty:NTF \l__tenkz_cupat_tl
+              { \tl_if_empty:NTF \l__tenkz_clegsat_tl
+                  { \tl_set:Nn #2 {center} }
+                  { \tl_set_eq:NN #2 \l__tenkz_clegsat_tl } }
+              { \tl_set_eq:NN #2 \l__tenkz_cupat_tl } }
+        {down}
+          { \tl_if_empty:NTF \l__tenkz_cdownat_tl
+              { \tl_if_empty:NTF \l__tenkz_clegsat_tl
+                  { \tl_set:Nn #2 {center} }
+                  { \tl_set_eq:NN #2 \l__tenkz_clegsat_tl } }
+              { \tl_set_eq:NN #2 \l__tenkz_cdownat_tl } }
+        {west}
+          { \tl_if_empty:NTF \l__tenkz_cwestat_tl
+              { \str_if_eq:VnTF \l__tenkz_fcombined_tl {west}
+                  { \tl_set:Nn #2 {center} } { \tl_set:Nn #2 {rows} } }
+              { \tl_set_eq:NN #2 \l__tenkz_cwestat_tl } }
+        {east}
+          { \tl_if_empty:NTF \l__tenkz_ceastat_tl
+              { \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
+                  { \tl_set:Nn #2 {center} } { \tl_set:Nn #2 {rows} } }
+              { \tl_set_eq:NN #2 \l__tenkz_ceastat_tl } }
+      }
+  }
+
+\cs_new:Npn \tenkz_face_arity:N #1
+  { \str_if_eq:VnTF #1 {center} {1}
+      { \str_if_eq:VnTF #1 {rows} {\int_use:N \l__tenkz_cwires_int}
+          { \clist_count:V #1 } } }
+
+\cs_new_protected:Npn \tenkz_emit_faceports_one:nnn #1#2#3
+  {
+    \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
+    \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\tenkz_face_arity:N \l__tenkz_faceports_tl|at=\tl_use:N \l__tenkz_faceports_tl}
+  }
+
+\cs_new_protected:Npn \tenkz_emit_faceports:nn #1#2
+  {
+    \tl_if_empty:NF \l__tenkz_clegsat_tl
+      {
+        \tl_if_empty:NT \l__tenkz_cupat_tl
+          { \tenkz_emit_faceports_one:nnn {#1}{#2}{up} }
+        \tl_if_empty:NT \l__tenkz_cdownat_tl
+          { \tenkz_emit_faceports_one:nnn {#1}{#2}{down} }
+      }
+    \tl_if_empty:NF \l__tenkz_cupat_tl
+      { \tenkz_emit_faceports_one:nnn {#1}{#2}{up} }
+    \tl_if_empty:NF \l__tenkz_cdownat_tl
+      { \tenkz_emit_faceports_one:nnn {#1}{#2}{down} }
+    \tl_if_empty:NF \l__tenkz_cwestat_tl
+      { \tenkz_emit_faceports_one:nnn {#1}{#2}{west} }
+    \tl_if_empty:NF \l__tenkz_ceastat_tl
+      { \tenkz_emit_faceports_one:nnn {#1}{#2}{east} }
+    % Compatibility `combined=' is itself a declared centred face.  Emit
+    % it through the same schema unless the primary face spelling already
+    % emitted that side.
+    \tl_if_empty:NF \l__tenkz_fcombined_tl
+      {
+        \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
+          { \tl_if_empty:NT \l__tenkz_ceastat_tl
+              { \tenkz_emit_faceports_one:nnn {#1}{#2}{east} } }
+          { \tl_if_empty:NT \l__tenkz_cwestat_tl
+              { \tenkz_emit_faceports_one:nnn {#1}{#2}{west} } }
+      }
   }
 
 % ---------- geometry ----------
@@ -1288,6 +1381,7 @@
     \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
     \tenkz_combined_stub:nn {#1}{#2}
     \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=\tl_use:N \l__tenkz_cshape_tl|role=\tenkz_role_word:|species=\tenkz_spec_word:\tl_if_empty:NF \l__tenkz_fcombined_tl {|combined=\tl_use:N \l__tenkz_fcombined_tl}}
+    \tenkz_emit_faceports:nn {#1}{#2}
   }
 \cs_generate_variant:Nn \tenkz_node_tensor:nnn { nnV }
 
@@ -1461,6 +1555,7 @@
     % an on-wire matrix is content ink: it must enter the audit's topology
     % hashes, or a gauge insertion X X^{-1} hashes equal to the bare chain
     \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=onwire|role=\tenkz_role_word:|species=\tenkz_spec_word:\tl_if_empty:NF \l__tenkz_fcombined_tl {|combined=\tl_use:N \l__tenkz_fcombined_tl}}
+    \tenkz_emit_faceports:nn {#1}{#2}
   }
 \cs_generate_variant:Nn \tenkz_node_simple:nnnn { nnnV }
 
@@ -1497,8 +1592,23 @@
 
 % the fusion bar spans this row and the next (rows=2); its combined leg
 % leaves west or east as a fused (doubled) stub
+\cs_new_protected:Npn \tenkz_fuse_resolve_combined:
+  {
+    % Primary face data override the compatibility key when both occur.
+    \str_if_eq:VnTF \l__tenkz_cwestat_tl {center}
+      { \tl_set:Nn \l__tenkz_fcombined_tl {west} }
+      { \str_if_eq:VnTF \l__tenkz_ceastat_tl {center}
+          { \tl_set:Nn \l__tenkz_fcombined_tl {east} }
+          { \tl_if_empty:NT \l__tenkz_fcombined_tl
+              { \tl_set:Nn \l__tenkz_fcombined_tl {west} } } }
+  }
 \cs_new_protected:Npn \tenkz_node_fuse:nn #1#2
   {
+    % Face notation is primary.  A centred west/east face is the fused
+    % face; the opposite integer-list/rows face carries the separate bonds.
+    % `combined=' is retained as the older spelling, and a bare \tnfuse
+    % keeps its historical centred west face.
+    \tenkz_fuse_resolve_combined:
     \dim_set:Nn \l__tenkz_x_dim { \tenkz_colx:n {#2} }
     \dim_set:Nn \l__tenkz_y_dim { \tenkz_rowy:n {#1} }
     \dim_set:Nn \l__tenkz_tmp_dim
@@ -1555,6 +1665,7 @@
     % atom emitters (uniform fields keep the audit's parsers total); the
     % bar's INK stays structural -- a fusion wedge is not a hued glyph
     \tenkz@event{atom|picture=\the\tenkz@pictureid|cell=#1-#2|kind=fuse|role=\tenkz_role_word:|species=\tenkz_spec_word:}
+    \tenkz_emit_faceports:nn {#1}{#2}
   }
 
 % -- bonds ------------------------------------------------------------
@@ -1572,14 +1683,29 @@
       { \str_if_eq_p:Vn \l_tmpb_tl {fuse} }
       { \str_if_eq_p:Vn \l_tmpb_tl {fusec} }
       {
-        % logical-frame point at the bar's edge, then frame-mapped
-        \str_if_eq:nnTF {#3} {east}
-          { \tenkz_map:nn
-              { \tenkz_colx:n{\l_tmpa_tl} + \tenkz@dim{0.04} }
-              { \tenkz_rowy:n {#1} } }
-          { \tenkz_map:nn
-              { \tenkz_colx:n{\l_tmpa_tl} - \tenkz@dim{0.04} }
-              { \tenkz_rowy:n {#1} } }
+        \tl_set_eq:NN \l__tenkz_pwbase_tl \l_tmpa_tl
+        % On the centred face, all k rows meet the one fused stub tip.
+        % The opposite face keeps one row-height anchor per separate bond.
+        \tenkz_cell_fuse_combined:nnnN {#1}{#2}{#3} \l_tmpa_bool
+        \bool_if:NTF \l_tmpa_bool
+          {
+            \tenkz_map:nn
+              { \tenkz_colx:n{\l__tenkz_pwbase_tl}
+                + \str_if_eq:nnTF {#3}{east}
+                    {\tenkz@dim{0.50}}{-\tenkz@dim{0.50}} }
+              { ( \tenkz_rowy:n {\l__tenkz_fusebase_int}
+                  + \tenkz_rowy:n
+                    {\l__tenkz_fusebase_int + \l__tenkz_frows_int - 1} ) / 2 }
+          }
+          {
+            \str_if_eq:nnTF {#3} {east}
+              { \tenkz_map:nn
+                  { \tenkz_colx:n{\l__tenkz_pwbase_tl} + \tenkz@dim{0.04} }
+                  { \tenkz_rowy:n {#1} } }
+              { \tenkz_map:nn
+                  { \tenkz_colx:n{\l__tenkz_pwbase_tl} - \tenkz@dim{0.04} }
+                  { \tenkz_rowy:n {#1} } }
+          }
         \tl_set:Ne #4 { \tenkz_mpt: }
       }
       {
@@ -1850,8 +1976,8 @@
       }
   }
 
-% -- per-column faces of wide `legs at=` glyphs -------------------------
-% A wide glyph with legs at={j1,...} carries one physical index PER NAMED
+% -- per-column faces of wide face-port glyphs ---------------------------
+% A wide glyph with a face at={j1,...} carries one physical index PER NAMED
 % SPANNED COLUMN, so at a paired interface each named column pairs with
 % the cell below/above it AT THAT COLUMN -- one vertical wire per index
 % (t2_hamil_gate: the two-site gate h contracts both partners,
@@ -1915,17 +2041,17 @@
 \seq_new:N \l__tenkz_pwlab_seq
 \cs_new_protected:Npn \tenkz_pair_wide:nn #1#2
   {
-    \tl_set_eq:NN \l__tenkz_pwcols_tl \l__tenkz_clegsat_tl
+    \tenkz_face_ports:nN {down} \l__tenkz_pwcols_tl
     \seq_set_from_clist:NV \l__tenkz_pwlab_seq \l__tenkz_cdown_tl
     \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pwname_tl
     % pairing-arity pre-scan: the glyph's down face is per-column only
     % when its named columns actually meet DISTINCT indices below.  If
     % every named column owner-resolves to ONE live partner cell whose
-    % own `legs at=` is empty, that partner presents a single centred
+    % own facing declaration is centred, that partner presents one centred
     % index -- the blocked physical index of the hard08 isometry
     % U_{(i1 i2), j} -- and the interface contracts by the one
     % anchor-to-anchor wire.  Any other partner structure (distinct
-    % cells, holes, ghosts, or a facing `legs at=` list) pairs per
+    % cells, holes, ghosts, or a facing multi-port list) pairs per
     % named column.
     \bool_set_true:N \l__tenkz_pwsingle_bool
     \tl_clear:N \l__tenkz_pwfb_tl
@@ -1936,7 +2062,8 @@
         \tenkz_get:NeN \l__tenkz_opts_prop
           { \int_eval:n{#1+1} - \l__tenkz_pwfb_tl } \l_tmpb_tl
         \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-        \tl_if_empty:NF \l__tenkz_clegsat_tl
+        \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
+        \str_if_eq:VnF \l__tenkz_faceports_tl {center}
           { \bool_set_false:N \l__tenkz_pwsingle_bool }
       }
     \bool_if:NTF \l__tenkz_pwsingle_bool
@@ -2018,6 +2145,7 @@
                           \l__tenkz_pwlow_tl
                         \draw[physical~leg]
                           \l__tenkz_pwpt_tl -- \l__tenkz_pwlow_tl;
+                        \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=#3|column=\int_eval:n{#2+#3-1}}
                       }
                   }
               }
@@ -2044,19 +2172,20 @@
           }
       }
   }
-% the partner's north-face point at absolute column #1: a wide `legs at=`
+% the partner's north-face point at absolute column #1: a wide multi-port
 % partner presents its face AT the column, a plain partner its north
 % anchor (the partner's options are ambient -- \tenkz_leg_candidate:nnT
 % has just parsed them)
 \cs_new_protected:Npn \tenkz_pair_lowpt:nN #1#2
   {
-    \tl_if_empty:NTF \l__tenkz_clegsat_tl
+    \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
+    \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
       { \tl_set:Ne #2 { (\l__tenkz_pb_tl.\tenkz_compass:n{north}) } }
       { \tenkz_edgept:NnnN \l__tenkz_pb_tl {north} {#1} #2 }
   }
 
 % the PLAIN upper cell's paired interface at (#1,#2).  The partner below
-% is owner-resolved, so a wide `legs at=` glyph is met both at its base
+% is owner-resolved, so a wide face-port glyph is met both at its base
 % column and at its continuation columns: a NAMED column contracts by a
 % vertical wire onto the glyph's north face at this column, an unnamed
 % spanned column terminates no index here and the upper leg stays open.
@@ -2108,7 +2237,8 @@
 % column (computed BEFORE the upper leg re-parses the cell options).
 \cs_new_protected:Npn \tenkz_pair_below_open:nn #1#2
   {
-    \tl_if_empty:NTF \l__tenkz_clegsat_tl
+    \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
+    \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
       {
         \tenkz_leg_open:nnn {#1}{#2}{down}
         \tenkz_leg_open:enn { \int_eval:n{#1+1} } {#2}{up}
@@ -2125,14 +2255,16 @@
 % compass map turns them east/west in a vertical frame)
 \cs_new_protected:Npn \tenkz_pair_below_wire:nn #1#2
   {
-    \tl_if_empty:NTF \l__tenkz_clegsat_tl
+    \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
+    \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
       {
         \draw[physical~leg]
           (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
           (\l__tenkz_pb_tl.\tenkz_compass:n{north});
+        \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
       }
       {
-        \clist_if_in:NeTF \l__tenkz_clegsat_tl
+        \clist_if_in:NeTF \l__tenkz_faceports_tl
           { \int_eval:n { #2 - \l__tenkz_pwbase_tl + 1 } }
           {
             \tenkz_edgept:NnnN \l__tenkz_pb_tl {north} {#2}
@@ -2140,6 +2272,7 @@
             \draw[physical~leg]
               (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
               \l__tenkz_pwlow_tl;
+            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
           }
           { \tenkz_leg_open:nnn {#1}{#2}{down} }
       }
@@ -2292,7 +2425,7 @@
                       { ! \tenkz_traced_above_p:nn {##1}{####1} }
                       { \tenkz_leg_open:nnn {##1}{####1}{down} }
                   }
-                % paired leg to the row below.  A wide `legs at=` glyph
+                % paired leg to the row below.  A wide multi-port face
                 % pairs PER NAMED SPANNED COLUMN (\tenkz_pair_wide:nn);
                 % the candidate call has just parsed this cell's options,
                 % so the list is the upper cell's.
@@ -2300,7 +2433,8 @@
                   {
                     \tenkz_leg_candidate:nnT {##1}{####1}
                       {
-                        \tl_if_empty:NTF \l__tenkz_clegsat_tl
+                        \tenkz_face_ports:nN {down} \l__tenkz_faceports_tl
+                        \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
                           { \tenkz_pair_below:nn {##1}{####1} }
                           { \tenkz_pair_wide:nn {##1}{####1} }
                       }
@@ -2342,14 +2476,15 @@
     \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pa_tl
     \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
     \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-    \tl_if_empty:NTF \l__tenkz_clegsat_tl
+    \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
+    \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
       {
         \str_if_eq:nnTF {#3} {up}
           { \tenkz_leg_stub:nnNn {north}{south} \l__tenkz_cup_tl   { 1} }
           { \tenkz_leg_stub:nnNn {south}{north} \l__tenkz_cdown_tl {-1} }
       }
       {
-        % legs at={c1,...}: one leg PER NAMED SPANNED COLUMN of the wide
+        % face at={c1,...}: one leg PER NAMED SPANNED COLUMN of the wide
         % glyph -- each an independent open physical index (U_{(i1 i2),j}
         % keeps one output per blocked site, hard08)
         \str_if_eq:nnTF {#3} {up}
@@ -2387,7 +2522,7 @@
           { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {#3} }
       }
     \seq_set_from_clist:NV \l__tenkz_leglab_seq #5
-    \exp_args:NV \clist_map_inline:nn \l__tenkz_clegsat_tl
+    \exp_args:NV \clist_map_inline:nn \l__tenkz_faceports_tl
       {
         % leg base = (column abscissa, edge ordinate) in the logical
         % frame; the vertical frame maps the column abscissa x to paper
@@ -3059,17 +3194,35 @@
       { }
   }
 
-% is the cell at (row, col) part of a fusion bar?  A bar consumes the
-% boundary on its side: its combined leg IS the open index of the fused
-% object, so no stub is drawn behind it.
-\cs_new_protected:Npn \tenkz_cell_is_fuse:nnN #1#2#3
+% Does the fusion bar containing (row, col) present its one centred port
+% on side #3?  Locate the base row, parse that one declaration, and resolve
+% the face exactly as the drawing and event passes do.  The base row remains
+% available for centred-anchor geometry.
+\int_new:N \l__tenkz_fusebase_int
+\cs_new_protected:Npn \tenkz_cell_fuse_combined:nnnN #1#2#3#4
   {
-    \bool_set_false:N #3
-    \tenkz_get:NeN \l__tenkz_kind_prop {\int_eval:n{#1}-\int_eval:n{#2}} \l_tmpa_tl
+    \bool_set_false:N #4
+    \int_set:Nn \l__tenkz_fusebase_int {#1}
+    \tenkz_get:NeN \l__tenkz_kind_prop
+      {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpa_tl
     \bool_lazy_or:nnT
       { \str_if_eq_p:Vn \l_tmpa_tl {fuse} }
       { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
-      { \bool_set_true:N #3 }
+      {
+        \bool_while_do:nn
+          { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
+          {
+            \int_decr:N \l__tenkz_fusebase_int
+            \tenkz_get:NeN \l__tenkz_kind_prop
+              {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpa_tl
+          }
+        \tenkz_get:NeN \l__tenkz_opts_prop
+          {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpb_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+        \tenkz_fuse_resolve_combined:
+        \str_if_eq:VnT \l__tenkz_fcombined_tl {#3}
+          { \bool_set_true:N #4 }
+      }
   }
 % does the cell at (row, col) present a combined= face on side #3?  The
 % side-aware companion for wires=k glyphs: their combined side consumes
@@ -3106,8 +3259,8 @@
                 % closes it (a cupped end is contracted, not open)
                 \bool_if:NT \l__tenkz_wopen_bool
                   {
-                \tenkz_cell_is_fuse:nnN {##1} {\l__tenkz_first_int}
-                  \l_tmpa_bool
+                \tenkz_cell_fuse_combined:nnnN {##1}
+                  {\l__tenkz_first_int}{west} \l_tmpa_bool
                 \bool_if:NF \l_tmpa_bool
                   { \tenkz_cell_combined:nnnN {##1}{\l__tenkz_first_int}
                       {west} \l_tmpa_bool }
@@ -3143,8 +3296,8 @@
                 % east stub, same rules
                 \bool_if:NT \l__tenkz_eopen_bool
                   {
-                \tenkz_cell_is_fuse:nnN {##1} {\l__tenkz_last_int}
-                  \l_tmpa_bool
+                \tenkz_cell_fuse_combined:nnnN {##1}
+                  {\l__tenkz_last_int}{east} \l_tmpa_bool
                 \bool_if:NF \l_tmpa_bool
                   { \tenkz_cell_combined:nnnN {##1}{\l__tenkz_last_int}
                       {east} \l_tmpa_bool }
@@ -3193,9 +3346,13 @@
               {
                 \tenkz_get:NeN \l__tenkz_opts_prop {##1-####1} \l_tmpb_tl
                 \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+                \tenkz_fuse_resolve_combined:
+                \tenkz_row_extent:n {##1}
                 \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
-                  { \int_incr:N \l__tenkz_bve_int }
-                  { \int_incr:N \l__tenkz_bvw_int }
+                  { \int_compare:nNnT {####1} = {\l__tenkz_last_int}
+                      { \int_incr:N \l__tenkz_bve_int } }
+                  { \int_compare:nNnT {####1} = {\l__tenkz_first_int}
+                      { \int_incr:N \l__tenkz_bvw_int } }
               }
             \bool_lazy_any:nT
               {
@@ -3251,8 +3408,8 @@
             \tenkz_row_extent:n {##1}
             \int_compare:nNnF { \l__tenkz_first_int } = {0}
               {
-                \tenkz_cell_is_fuse:nnN {##1}
-                  { \int_use:c { l__tenkz_#2_int } } \l_tmpa_bool
+                \tenkz_cell_fuse_combined:nnnN {##1}
+                  { \int_use:c { l__tenkz_#2_int } } {#1} \l_tmpa_bool
                 \bool_if:NF \l_tmpa_bool
                   { \seq_put_right:Nn \l_tmpa_seq {##1} }
               }
@@ -3388,14 +3545,15 @@
 % The boundary signature counts the picture's open indices.  Two sides of
 % a diagrammatic equation are equal objects only if their signatures
 % match; the audit layer reads these events to lint that.
-% the number of open legs a leg-candidate cell contributes: 1, or the
-% number of `legs at` columns (each named column is its own physical index)
+% Number of ports on physical face #1 of the parsed cell.  Geometry,
+% pairing, and this boundary count all use the same canonical resolver.
 \cs_generate_variant:Nn \clist_count:n { V }
-\cs_new:Npn \tenkz_leg_count:
+\cs_new_protected:Npn \tenkz_leg_count:nN #1#2
   {
-    \tl_if_empty:NTF \l__tenkz_clegsat_tl {1}
-      { \clist_count:V \l__tenkz_clegsat_tl }
+    \tenkz_face_ports:nN {#1} \l__tenkz_faceports_tl
+    \int_set:Nn #2 { \tenkz_face_arity:N \l__tenkz_faceports_tl }
   }
+\int_new:N \l__tenkz_facearity_int
 
 \cs_new_protected:Npn \tenkz_emit_signature:
   {
@@ -3436,12 +3594,16 @@
                   { \tenkz_openup_p:n {##1} }
                   { ! \tenkz_traced_p:nn {##1}{####1} }
                   { \tenkz_leg_candidate:nnT {##1}{####1}
-                      { \int_add:Nn \l__tenkz_bpu_int { \tenkz_leg_count: } } }
+                      { \tenkz_leg_count:nN {up} \l__tenkz_facearity_int
+                        \int_add:Nn \l__tenkz_bpu_int
+                          { \l__tenkz_facearity_int } } }
                 \bool_lazy_and:nnT
                   { \tenkz_opendown_p:n {##1} }
                   { ! \tenkz_traced_above_p:nn {##1}{####1} }
                   { \tenkz_leg_candidate:nnT {##1}{####1}
-                      { \int_add:Nn \l__tenkz_bpd_int { \tenkz_leg_count: } } }
+                      { \tenkz_leg_count:nN {down} \l__tenkz_facearity_int
+                        \int_add:Nn \l__tenkz_bpd_int
+                          { \l__tenkz_facearity_int } } }
               }
             % a \tnskip hole at a paired interface leaves the live partner's
             % leg OPEN: that leg is an open physical index and must count
@@ -3453,26 +3615,30 @@
                       { \int_eval:n{##1+1} - ####1 } \l__tenkz_pkind_tl
                     \str_if_eq:VnT \l__tenkz_pkind_tl {skip}
                       { \tenkz_leg_candidate:nnT {##1}{####1}
-                          { \int_add:Nn \l__tenkz_bpd_int
-                              { \tenkz_leg_count: } } }
+                          { \tenkz_leg_count:nN {down} \l__tenkz_facearity_int
+                            \int_add:Nn \l__tenkz_bpd_int
+                              { \l__tenkz_facearity_int } } }
                     \tenkz_get:NeN \l__tenkz_kind_prop
                       {##1-####1} \l__tenkz_pkind_tl
                     \str_if_eq:VnT \l__tenkz_pkind_tl {skip}
                       { \tenkz_leg_candidate:nnT
                           { \int_eval:n{##1+1} }{####1}
-                          { \int_add:Nn \l__tenkz_bpu_int
-                              { \tenkz_leg_count: } } }
+                          { \tenkz_leg_count:nN {up} \l__tenkz_facearity_int
+                            \int_add:Nn \l__tenkz_bpu_int
+                              { \l__tenkz_facearity_int } } }
                     % an OPENED interface segment (open={(i,c)}) keeps
                     % both faces' stubs: two open physical indices
                     \prop_if_in:NeT \l__tenkz_opencell_prop {##1-####1}
                       {
                         \tenkz_leg_candidate:nnT {##1}{####1}
-                          { \int_add:Nn \l__tenkz_bpd_int
-                              { \tenkz_leg_count: } }
+                          { \tenkz_leg_count:nN {down} \l__tenkz_facearity_int
+                            \int_add:Nn \l__tenkz_bpd_int
+                              { \l__tenkz_facearity_int } }
                         \tenkz_leg_candidate:nnT
                           { \int_eval:n{##1+1} }{####1}
-                          { \int_add:Nn \l__tenkz_bpu_int
-                              { \tenkz_leg_count: } }
+                          { \tenkz_leg_count:nN {up} \l__tenkz_facearity_int
+                            \int_add:Nn \l__tenkz_bpu_int
+                              { \l__tenkz_facearity_int } }
                       }
                   }
               }
