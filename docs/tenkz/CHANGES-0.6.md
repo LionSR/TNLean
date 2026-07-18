@@ -92,3 +92,10 @@ and the `on-wire matrix` style name for `ring tensor`.
   `cup` are accepted grammar there; their closure ink lands with the
   inter-sheet closure engine.
 - The package version string reads v0.6.
+- The periodic racetrack drop is per-obstruction: the base clearance
+  (0.30 pitch) covers only the glyph silhouette, and open legs, labelled
+  leg tips, and dot labels each add their own band. A bare ring hugs its
+  row; the old fixed 0.62 budgeted for labels that were often absent.
+- The on-wire matrix capsule's corner radius is the named ratio
+  `wireglyphcap` (= wireglyph/2). The 0.6-review spelling
+  `0.5\tenkz@dim{...}` misparsed in pgf and drew lens-shaped capsules.
