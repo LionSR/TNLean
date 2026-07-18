@@ -395,8 +395,8 @@
 % decomposition, or saturation of the area law.  The source line 1616
 % suppresses the partial traces on the two surviving boundary operators.
 % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{definition}[Rank-one trace factorization of the neighboring family]
-    \label{def:mpdo_eta_rank_one_trace_factorization}
+\begin{definition}[Rank-one trace factorization of the cyclic neighboring family]
+    \label{def:mpdo_cyclic_eta_rank_one_trace_factorization}
     \lean{Matrix.EtaRankOneTraceFactorization}
     \leanok
     \uses{thm:mpdo_eta_local_sigma_nk2}
@@ -416,11 +416,11 @@
     \lean{Matrix.eta_fourth_region_trace_formula}
     \leanok
     \uses{thm:mpdo_eta_local_sigma_nk2,
-        def:mpdo_eta_rank_one_trace_factorization}
+        def:mpdo_cyclic_eta_rank_one_trace_factorization}
     Let $\eta_{q,h}$ be the positive neighboring family in
     Theorem~\ref{thm:mpdo_eta_local_sigma_nk2}, equipped with a rank-one
     trace factorization as in
-    Definition~\ref{def:mpdo_eta_rank_one_trace_factorization}.
+    Definition~\ref{def:mpdo_cyclic_eta_rank_one_trace_factorization}.
     For a nonempty retained sector word
     $k=(k_0,\ldots,k_{L-1})$, write
     \[
@@ -449,7 +449,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_eta_rank_one_trace_factorization}
+    \uses{def:mpdo_cyclic_eta_rank_one_trace_factorization}
     Substitute $\tr(\eta_{q,h})=a_qb_h$ into the double boundary sum.
     Distributivity separates the sums over $q$ and $h$.  Tensoring with the
     unchanged product $P_k$ and taking the direct sum over $k$ gives the
