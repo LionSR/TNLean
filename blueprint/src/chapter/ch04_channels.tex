@@ -8,7 +8,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \begin{definition}[Positive map]\label{def:positive_map}
     \lean{IsPositiveMap}
     \leanok
-    A linear map $E : \MN{D} \to \MN{D}$ is \emph{positive}
+    A linear map $E : \MN{n} \to \MN{m}$ is \emph{positive}
     if $E(X) \ge 0$ whenever $X \ge 0$, where $X \ge 0$
     means that $X$ is positive semidefinite.
 \end{definition}
@@ -23,9 +23,9 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \lean{IsPositiveMap.toPositiveLinearMap}
     \leanok
     \uses{def:positive_map}
-    A positive matrix map $E : \MN{D} \to \MN{D}$ determines the same
-    linear map regarded as a positive linear map: if $A \le B$, then
-    $E(A) \le E(B)$.
+    A positive matrix map $E : \MN{n} \to \MN{m}$ determines the same
+    linear map regarded as a positive linear map: if
+    $A,B\in\MN{n}$ and $A \le B$, then $E(A) \le E(B)$ in $\MN{m}$.
 \end{definition}
 
 \begin{definition}[Trace-preserving map]\label{def:trace_preserving}
