@@ -179,35 +179,29 @@ product states, and the square lattice.
     defining tensors are related by a local gauge: there are invertible
     matrices, one on each edge, whose endpoint actions transform $A_v$ into
     $B_v$ at every vertex, with no leftover scalar.
-    This is the general normal-PEPS theorem in
-    \cite[Section~4]{Molnar2018NormalPEPS}, following its Theorem~3
-    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS}), with the source's
-    blocking hypothesis stated explicitly as its proof uses it, in two ways,
-    neither of which restricts the source statement.  First, the blockings
-    are shared between the two states, each region injective for both
-    tensors: the source blocks both states by one blocking (``\emph{they}
-    can be blocked''), its isomorphism lemma takes the two blocked chains
-    over the same tripartition with all six blocks injective, and its final
-    comparison contracts both tensors over the same one-site-different
-    regions, whose injectivity for both tensors its comparison lemma
-    requires.  Second, the single-crossing hypothesis is the explicit
-    statement of the source's blocking \emph{around} an edge: the chosen edge
-    is the entire bond between the first two parties of the three-site chain.
-    In the source, blocking around an edge groups all vertices except the two
-    endpoints of the edge, so the edge is the bond between the first two
-    parties; the regions in the proof of
-    \cite[Section~4, proof of Theorem~3]{Molnar2018NormalPEPS} enlarge those
-    parties to injective blocks meeting only along the distinguished edge,
-    and the gauge of the isomorphism lemma lives on that edge of the original
-    network. The equality of the bond dimensions is not assumed; it is derived from the
-    blocking hypotheses
-    (Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}), as in the source's
-    isomorphism lemma. The
-    positive bond dimensions and the connectivity of the graph are the
-    counterexample-backed corrections carried over from the injective
-    Fundamental Theorem (Theorem~\ref{thm:fundamentalTheorem_PEPS}); the
-    absorption of the per-vertex constants into the gauges is exactly the step
-    that requires connectivity.
+    The shared blocking gives a common tripartition for the two tensors, with
+    all three regions injective for both.  For an edge $e$ between the first
+    two regions, the coefficient transfer $T_e$ supplied by the three-site
+    isomorphism argument satisfies
+    \[
+        C_A(R_1,e,X;\sigma,\tau)
+        =C_B(R_1,e,T_e(X);\sigma,\tau),
+        \qquad
+        T_e(X)=Z_e\,\iota_e(X)\,Z_e^{-1}
+    \]
+    for an invertible $Z_e$ and every virtual insertion $X$ on $e$.
+    The single-crossing hypothesis identifies $e$ with the entire bond between
+    $R_1$ and $R_2$, so $Z_e$ acts on the original edge.
+    The equality of the bond dimensions is not assumed; it follows from the
+    blocking hypotheses by
+    Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}.  Positive bond
+    dimensions are required in the injectivity argument, while connectivity
+    permits the per-vertex constants to be absorbed into the edge gauges; see
+    Theorem~\ref{thm:fundamentalTheorem_PEPS}.  This is the blocking argument
+    of \cite[Section~4]{Molnar2018NormalPEPS}.
+    % Source-faithful reading: Section 4 of \cite{Molnar2018NormalPEPS} uses
+    % one common blocking of the two states and enlarges the endpoint regions
+    % so that they meet only along the distinguished edge.
     \begin{proof}
         \leanok
         \uses{thm:peps_bondDim_eq_of_normalBlocking,
