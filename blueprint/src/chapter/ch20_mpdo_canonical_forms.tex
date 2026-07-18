@@ -192,14 +192,43 @@
 
 \begin{figure}[ht]
     \centering
-    \[
-        U\mathcal K U^\dagger=\bigoplus_k\mu_k\otimes A_k
-    \]
+        % U \widetilde M U^dagger = bigoplus_alpha mu_alpha (x) M_alpha
+        % (arXiv:1606.00608, Proposition 4.13, eq. UMU and figure
+        % MPDO_UMU.png).  The physical isometry does not represent a plain
+        % Kronecker product: two copy-tensor junctions thread one shared
+        % multiplicity index through both mu_alpha and M_alpha.  Only
+        % M_alpha carries the open virtual legs.  Both sides have boundary
+        % signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=3 |
+        % physical-down=3).
+        \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
+            \tn[pill, wide=3, legs at={1,2,3}]{U} & & \\
+            \tn[wide=3]{\widetilde M} & & \\
+            \tn[pill, wide=3, legs at={1,2,3}]{U^\dagger} & &
+        \end{tenkz}
+        $\;=\;\displaystyle\bigoplus_\alpha\;$
+        \begin{tenkzfree}
+            \tnput[box]{mu}{(10mm,7mm)}{\mu_\alpha}
+            \tnput[box, ports={west:virtual, east:virtual, north:physical,
+                south:physical, 158:physical}]{M}{(34mm,0mm)}{M_\alpha}
+            \tnput[dot]{d1}{(0mm,7mm)}{}
+            \tnput[dot]{d2}{(20mm,7mm)}{}
+            \tnput[dot, ports={east:physical}]{d3}{(d2 |- M.158)}{}
+            \tnjoin{$(d1)+(0mm,5mm)$}{$(d1)+(0mm,-19mm)$}
+            \tnjoin{$(d2)+(0mm,5mm)$}{$(d2)+(0mm,-19mm)$}
+            \tnjoin{$(M.west)+(-10mm,0mm)$}{M.west}
+            \tnjoin{M.east}{$(M.east)+(10mm,0mm)$}
+            \tnjoin{M.north}{$(M.north)+(0mm,7mm)$}
+            \tnjoin{M.south}{$(M.south)+(0mm,-7mm)$}
+            \tnjoin{d1}{mu.west}
+            \tnjoin{d2}{mu.east}
+            \tnjoin{d3.east}{M.158}
+        \end{tenkzfree}
     \caption{Vertical direct-sum form of the tensor: after the physical
     isometry $U$, each block factorizes as the positive diagonal weight
     $\mu_\alpha$ on the multiplicity factor times the basis tensor $M_\alpha$,
     and only $M_\alpha$ carries the virtual legs. This is the decomposition
-    $U\tilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of
+    $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of
     \cite[Proposition~4.13, lines~1864--1870]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_vertical_direct_sum}
 \end{figure}
@@ -295,11 +324,40 @@ The inverse tensor of a block-injective canonical form satisfies
     (K^{-1,p}_{j'})_{\alpha',\beta'}
     =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
 \]
-Contracting $K^{-1}$ with the doubled physical index passes the virtual legs
-of $X$ and $X^{-1}$ to $K^{-1}$ and identifies its block index with the block
-label $j$:
+Writing $K=X(\bigoplus_j\mathcal K_j)X^{-1}$ in this contraction places the
+gauges on the virtual legs of $K$ and identifies the block index of
+$\mathcal K_j$ with the label $j$:
 \[
-    K^{-1}K=\bigoplus_j\Id_j
+    % K^{-1}K in block-injective canonical form (arXiv:1606.00608,
+    % eq. biCFK, Appendix C.2 lines 1666--1670; paper figure
+    % MPDO_biCF.png).  Panel 1 contracts K^{-1} with K through their
+    % doubled physical index.  Panel 2 substitutes
+    % K=X(bigoplus_j K_j)X^{-1}: K^{-1} remains on the upper rail, while
+    % X and X^{-1} flank K_j on the lower rail and extend to the internal
+    % block-index rail beneath it.
+    % Panel 3 removes the resolved K^{-1}-K pair and leaves the gauge legs
+    % and block-index wires.  Every panel has boundary signature
+    % (virtual-west=2 | virtual-east=2 | physical-up=0 |
+    % physical-down=0).
+    \begin{tenkz}[rows={ket, bra}, compact]
+        \tn{K^{-1}} \\
+        \tn{K}
+    \end{tenkz}
+    \;=\;
+    \begin{tenkz}[rows={ket, bra, wire:none}, compact]
+        & \tn{K^{-1}} & \\
+        \tnX[wires=2]{X} & \tn{\mathcal K} & \tnX[wires=2]{X^{-1}} \\
+        & \tnghost{} &
+    \end{tenkz}
+    \;=\;
+    \begin{tenkz}[rows={wire, wire}, compact]
+        \tnX[wires=2]{X} & \tnghost{} & \tnX[wires=2]{X^{-1}} \\
+        & \tnghost{} &
+    \end{tenkz}
+\]
+Consequently,
+\[
+    K^{-1}K=\bigoplus_j\Id_j.
 \]
 This is the inverse identity in
 \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.
@@ -1270,14 +1328,35 @@ tensor.  This is the contraction in
 
 \begin{figure}[ht]
     \centering
-    \[
-        PH^{(N+1)},\qquad H^{(N+1)}P,\qquad PH^{(N+1)}P
-    \]
-    \caption{The three first-site contractions of the horizontal operator on
-    $N+1$ sites: contracting the first doubled leg with $Y_L$, $Y_R$, or
-    $Y_C$ places $P$ on the ket leg, on the bra leg, or on both legs of the
-    first site, and represents $PH^{(N+1)}$, $H^{(N+1)}P$, and
-    $PH^{(N+1)}P$. Compare the first display in the proof of
+        % PH^{(N+1)} = PH^{(N+1)}P = H^{(N+1)}P for a projector P with
+        % P\widetilde M=P\widetilde MP (arXiv:1606.00608, proof of
+        % Proposition 4.13, eq. eq1:proof.IV.12, lines 1881--1887;
+        % paper figure DAVID_Fig3.png).  The picture reproduces the one
+        % network drawn by the source; the two further equalities remain in
+        % this comment and in the surrounding blueprint statement.
+        %
+        % Each \widetilde M box is one site tensor.  Its up leg is the ket
+        % index, its down leg the bra index, and the horizontal ring is the
+        % traced virtual index.  P is contracted with the ket leg of the
+        % source's rightmost displayed site; its outer leg is the operator's
+        % open ket index.  The ring leaves no virtual stubs.  The schematic
+        % boundary signature is therefore (virtual-west=0 | virtual-east=0 |
+        % physical-up=N+1 | physical-down=N+1).
+        %
+        % The empty first row is structural padding: tenkz closes the first
+        % and last rows of a multi-row periodic picture, so padding keeps P's
+        % row untraced while closing the \widetilde M row exactly once.
+        $PH^{(N+1)}\;=\;$
+        \begin{tenkz}[rows={wire, op:none, op}, compact, periodic, align=3]
+            \tnskip & \tnskip & \tnskip & \tnskip \\
+            \tnskip & \tnskip & \tnskip & \tn{P} \\
+            \tn[mpo]{\widetilde M} & \tn[mpo]{\widetilde M} & \tndots &
+                \tn[mpo]{\widetilde M}
+        \end{tenkz}
+    \caption{The periodic contraction representing $PH^{(N+1)}$. The
+    analogous contractions with $Y_R$ and $Y_C$ place $P$ on the bra leg or
+    on both legs and represent $H^{(N+1)}P$ and $PH^{(N+1)}P$. These are the
+    three first-site contractions in
     \cite[Proposition~4.13, lines~1881--1887]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_first_site_contractions}
 \end{figure}

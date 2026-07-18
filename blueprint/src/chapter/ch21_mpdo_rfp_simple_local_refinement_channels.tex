@@ -1003,26 +1003,25 @@ $\widehat{\cal K}$.
     Transport the refinement and coarse-graining channels for
     $\widehat{\cal K}^{[2]}$ through the two-site and four-site tensor powers
     of the physical isometry, as in
-    Figure~\ref{fig:mpdo_physical_isometry_transport}. These unitary
+    \eqref{eq:mpdo_physical_isometry_transport}. These unitary
     congruences preserve complete positivity and trace, while the
     corresponding closure identities carry the two fixed-point equations back
     to ${\cal K}^{[2]}$.
 \end{proof}
 
-\begin{figure}[htbp]
-    \centering
-    \[
+% Correct equation, not a figure: the cited source draws the two-to-three
+% channel MPDO_TSKKK.png after explicitly suppressing U, but it does not draw
+% this tensor-power transport square.  The transport theorem is recorded in
+% docs/paper-gaps/cpgsv17_mpdo_blocked_rfp_physical_transport.tex.
+\begin{equation}
+    \label{eq:mpdo_physical_isometry_transport}
         U^{\otimes4}\widehat{\mathcal T}^{\,2}(U^\dagger)^{\otimes2}=\mathcal T,\qquad
         U^{\otimes2}\widehat{\mathcal S}^{\,2}(U^\dagger)^{\otimes4}=\mathcal S
-    \]
-    \caption{Physical-isometry transport of the blocked channels. Conjugating
-    the ket and bra indices by the tensor powers $U^{\otimes n}$ and
-    $(U^\dagger)^{\otimes n}$ carries the sector-coordinate channels to the
-    ordinary-coordinate channels. This combines Proposition~C.7 with
-    \cite[Appendix~C.2, lines~1510--1563 and 1821--1825]
-    {Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_physical_isometry_transport}
-\end{figure}
+\end{equation}
+Conjugation by $U^{\otimes n}$ and $(U^\dagger)^{\otimes n}$ carries the
+sector-coordinate channels to the ordinary-coordinate channels. This combines
+Proposition~C.7 with
+\cite[Appendix~C.2, lines~1510--1563 and 1821--1825]{Cirac2016MPDO_arXiv}.
 
 Tracing the ket and bra indices of a sector tensor gives the bond vector
 $|l_k)$ or the bond functional $(r_k|$.  Hence a neighboring pair gives
