@@ -120,6 +120,13 @@ restricted product.
 {\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}},
 and
 {\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}}.}
+Choosing these supported products over all absorbed BNT representatives gives
+an orthogonal commuting sector family, and the BNT sum with its natural copy
+numbers therefore has the source GSNNCH form.
+\footnote{\raggedright Formal declarations:
+{\scriptsize\leanid{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL}}
+and
+{\scriptsize\leanid{MPOTensor.hasGSNNCHForm_of_bntSectorSAL}}.}
 The remaining comparison is to determine whether the reverse comparison with
 a single bond is needed in the simple-MPDO equivalence, and to prove it only
 in that form.
@@ -144,7 +151,8 @@ resulting positive bond has a positive ambient lift supported on the matching
 two-site sector, and all cyclic translates of that lift commute pairwise on
 every periodic chain of length at least two.  Their product realizes the
 ambient finite-chain operator exactly, with normalization scalar one.  The
-remaining question is whether the simple-MPDO equivalence requires a reverse
-comparison with a single bond.
+supported products are assembled into the BNT outer sectors with their
+natural multiplicities.  The remaining question is whether the simple-MPDO
+equivalence requires a reverse comparison with a single bond.
 
 \end{document}
