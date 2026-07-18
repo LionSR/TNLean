@@ -185,8 +185,7 @@ unconditional within the repository's existing normalized BNT separation range
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source theorem uses the sharper bound
 \(3(r-1)(L_0+1)+1\le L\). Thus the length-\(L_0\) injectivity range remains
 stronger than the source constant. This independent mismatch is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` and tracked by
-issue #4195.
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -297,8 +296,7 @@ there is no short crossing-tail span hypothesis.
 the repository's existing normalized BNT separation range derived from
 length-\(L_0\) injectivity. Recovering the sharper length bound of
 arXiv:quant-ph/0608197, Theorem 12, is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` and tracked in
-issue #4195.
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
