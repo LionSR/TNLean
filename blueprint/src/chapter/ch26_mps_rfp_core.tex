@@ -116,6 +116,24 @@
     \[
         A^{i_1}A^{i_2}=\sum_jV^{i_1i_2}_jA^j
     \]
+    \begin{center}
+        % A^{i_1}A^{i_2} = sum_j V^{i_1 i_2}_j A^j (eq:corr_kraus_isometry_decomp,
+        % CPSV16 Thm 3.1, lines 396-412): two copies of A on physical legs
+        % i_1, i_2 fuse through the isometry V into a single copy of A on
+        % physical leg j.  V is a wide pill spanning both blocked columns;
+        % legs at={1,2} keeps one open up leg per column (i_1, i_2); the
+        % vertical V-A bond it seals below is the summed index j.  Both
+        % sides carry the same boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=2).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A}
+        \end{tenkz}
+        $\;=\;\displaystyle\sum_j$
+        \begin{tenkz}[rows={op:none, ket}]
+            \tn[pill, wide=2, legs at={1,2}, up={$i_1$,$i_2$}]{V} & \\
+            \tn[wide=2]{A^j} &
+        \end{tenkz}
+    \end{center}
     \medskip
     \[
         \sum_{i_1,i_2}(V^\dagger)^j_{i_1i_2}A^{i_1}A^{i_2}=A^j
@@ -661,6 +679,24 @@
     \[
         A=X\sqrt\Lambda\,U\,X^{-1}
     \]
+    \begin{center}
+        % A^i = X sqrt(Lambda) U^i X^{-1} (eq_III_NT_RFP, CPSV16 Lemma
+        % lem:charact-NT-pure-RFP, lines 1275-1289; chapter's corrected
+        % sqrt(Lambda) weight, docs/paper-gaps/cpsv16_rfp_isometry_scope.tex):
+        % X and X^{-1} are plain gauge matrices on the wire (no physical
+        % leg); sqrt(Lambda) is the diagonal weight, also a matrix on the
+        % wire; U carries the physical leg i and both bond legs alpha
+        % (west, into sqrt(Lambda)) and beta (east, into X^{-1}).  Both
+        % sides carry the same boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{A}
+        \end{tenkz}
+        $\;=\;$
+        \begin{tenkz}[physical=up]
+            \tnX{X} & \tnX{\sqrt\Lambda} & \tn[up=$i$]{U} & \tnX{X^{-1}}
+        \end{tenkz}
+    \end{center}
     \caption{The isometry canonical form of a normal renormalization fixed
         point: $A^i = X\sqrt\Lambda\,U^i X^{-1}$, with the diagonal weight
         $\sqrt\Lambda$ and the isometry $U$ carrying the
