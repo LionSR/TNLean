@@ -129,8 +129,8 @@
     this property is preserved under composition.
 \end{proof}
 
-On the active $(k,h)$-sector, $\mathcal T_0$ traces $R_k\otimes L_h$, leaving
-$a_kb_h$ times the operator on $L_k\otimes R_h$. The preparation
+On the active $(k,h)$-sector, $\mathcal T_0$ traces $B_k^R\otimes B_h^L$,
+leaving $a_kb_h$ times the operator on $B_k^L\otimes B_h^R$. The preparation
 $\mathcal T_1$ then adjoins
 \[
   \widehat\Omega_{k,h}
@@ -138,7 +138,8 @@ $\mathcal T_1$ then adjoins
 \]
 and $\mathcal T_2$ orders the result as
 \[
-  (L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h).
+  (B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+    \otimes(B_h^L\otimes B_h^R).
 \]
 The refinement uses the sitewise sector coordinates $\mathfrak R_2$ and
 $\mathfrak R_3$
@@ -147,35 +148,33 @@ $\mathfrak R_3$
 For each outer pair, write
 \[
   \mathcal H^{\Omega}_{k,h}
-  =\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h)
+  =\bigoplus_l(B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)
 \]
 for the Hilbert space carrying both $\widehat\Omega_{k,h}$ and its completed
-form $\overline\Omega_{k,h}$. Thus the third object below is the carrier
-space $(L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h}$, while
-$\mathcal T_1$ adjoins the density $\overline\Omega_{k,h}$ on its second
-factor.
+form $\overline\Omega_{k,h}$. With the matrix algebras introduced above, the
+refinement stages have type
 
-% T = T_2 T_1 T_0 maps R_2 through the retained outer factors and the
-% completed neighboring density to R_3.  Each blue stroke has channel
-% species; the labels T_0, T_1, T_2 name the constituent maps.  The fixed
-% left-to-right axis records composition without arrowheads.
+% Formula: T_0 : A_2 -> A_partial, T_1 : A_partial -> A_Omega, and
+% T_2 : A_Omega -> A_3. Ink: each blue stroke denotes a channel, its label
+% names the stage, and the fixed left-to-right axis records composition.
 \[
   \begin{tenkzcd}[maps, species={channel}]
-    \mathfrak R_2 &
-    L_k\otimes R_h &
-    (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h} &
-    \mathfrak R_3
+    \mathcal A_2 &
+    \mathcal A_{\partial} &
+    \mathcal A_{\Omega} &
+    \mathcal A_3
     \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
     \tnarrow[from={(1,2)}, to={(1,3)}, species=channel]{\mathcal T_1}
     \tnarrow[from={(1,3)}, to={(1,4)}, species=channel]{\mathcal T_2}
   \end{tenkzcd}
 \]
-The closure identity is
-% T(R_2(K_2(X))) = R_3(K_3(X)).  Both endpoints are closed sector-coordinate
-% matrices; the blue line is the channel T, not a contracted tensor index.
+Here $\mathcal T_1$ adjoins $\overline\Omega_{k,h}$ on each diagonal
+outer-sector summand. The composite channel has type
+% Formula: T = T_2 T_1 T_0 : A_2 -> A_3. Ink: the blue stroke denotes the
+% composite channel T; its endpoints are matrix algebras, not matrices.
 \[
   \begin{tenkzcd}[maps, species={channel}]
-    \mathfrak R_2(\mathcal K_2(X)) & \mathfrak R_3(\mathcal K_3(X))
+    \mathcal A_2 & \mathcal A_3
     \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T}
   \end{tenkzcd}
 \]

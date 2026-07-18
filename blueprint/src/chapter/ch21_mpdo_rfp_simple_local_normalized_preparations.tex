@@ -980,37 +980,97 @@
 \end{proof}
 \end{samepage}
 
-On each fixed $(k,h)$-summand, the controlled maps $\mathcal T_0$ and
-$\mathcal S_0$ discard coherences between distinct outer summands and take the
-displayed partial trace in each diagonal summand. In particular,
-$\mathcal S_0$ traces the whole space
+To record the domains and codomains, set
 \[
   \mathcal H^{\Omega}_{k,h}
   =\bigoplus_l
-  \bigl[(R_k\otimes L_l)\otimes(R_l\otimes L_h)\bigr].
+    (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)
 \]
-The shifts $\mathcal S_2$ and $\mathcal T_2$ are global reindexings, with all
-displayed tensor factors present at their inputs
+and introduce the matrix algebras
+\[
+\begin{aligned}
+  \mathcal A_2
+  &=\operatorname{End}\!\left(
+      \left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes2}\right),
+  &
+  \mathcal A_{\partial}
+  &=\operatorname{End}\!\left(\bigoplus_{k,h}B_k^L\otimes B_h^R\right),\\
+  \mathcal A_{\eta}
+  &=\operatorname{End}\!\left(
+      \bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+        (B_k^R\otimes B_h^L)\bigr]\right),
+  &
+  \mathcal A_{\Omega}
+  &=\operatorname{End}\!\left(
+      \bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+        \mathcal H^{\Omega}_{k,h}\bigr]\right),\\
+  \mathcal A_3
+  &=\operatorname{End}\!\left(
+      \left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes3}\right).
+\end{aligned}
+\]
+Thus the global maps have types
+\[
+  \mathcal T_0:\mathcal A_2\to\mathcal A_{\partial},
+  \qquad
+  \mathcal S_2:\mathcal A_{\eta}\to\mathcal A_2,
+  \qquad
+  \mathcal S_0:\mathcal A_3\to\mathcal A_{\partial},
+  \qquad
+  \mathcal T_2:\mathcal A_{\Omega}\to\mathcal A_3.
+\]
+The controlled maps $\mathcal T_0$ and $\mathcal S_0$ discard coherences
+between distinct outer-sector pairs. For fixed $(k,h)$, the global map
+$\mathcal S_0$ traces the entire carrier $\mathcal H^{\Omega}_{k,h}$, including
+its direct sum over $l$. The shifts $\mathcal S_2$ and $\mathcal T_2$ are
+global reindexings, with all displayed tensor factors present at their inputs
 \cite[Appendix~C.2, lines~1521--1559]{Cirac2016MPDO_arXiv}.
 
-For every $(k,h)$, the four fiberwise maps are
-% T_0 : R_2 -> L_k tensor R_h traces R_k tensor L_h.
-% S_2 : (L_k tensor R_h) tensor (R_k tensor L_h) -> R_2 is the inverse
-% regrouping.  S_0 : R_3 -> L_k tensor R_h traces the whole middle block
-% H^Omega_{k,h} = bigoplus_l (R_k tensor L_l) tensor (R_l tensor L_h).
-% T_2 : (L_k tensor R_h) tensor H^Omega_{k,h} -> R_3 restores the ordered
-% three-site sector factors.  Blue line ink denotes a channel; labels
-% distinguish the four maps.  The endpoints are sector spaces, so these
-% strokes are maps between objects rather than contracted tensor indices.
+For the fiberwise maps, write
+\[
+\begin{aligned}
+  \mathcal A_2^{k,h}
+  &=\operatorname{End}\!\left(
+      (B_k^L\otimes B_k^R)\otimes(B_h^L\otimes B_h^R)\right),
+  &
+  \mathcal A_{\partial}^{k,h}
+  &=\operatorname{End}(B_k^L\otimes B_h^R),\\
+  \mathcal A_{\eta}^{k,h}
+  &=\operatorname{End}\!\left(
+      (B_k^L\otimes B_h^R)\otimes(B_k^R\otimes B_h^L)\right),
+  &
+  \mathcal A_{\Omega}^{k,h}
+  &=\operatorname{End}\!\left(
+      (B_k^L\otimes B_h^R)\otimes\mathcal H^{\Omega}_{k,h}\right),\\
+  \mathcal A_3^{k,l,h}
+  &=\operatorname{End}\!\left(
+      (B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+        \otimes(B_h^L\otimes B_h^R)\right),&\\
+  \mathcal A_3^{k,\bullet,h}
+  &=\operatorname{End}\!\left(\bigoplus_l
+      \bigl[(B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+        \otimes(B_h^L\otimes B_h^R)\bigr]\right).&
+\end{aligned}
+\]
+The map $\mathcal S_0^{(k,l,h)}$ fixes the middle sector $l$ before taking the
+partial trace; it is therefore distinct from the fixed-$(k,h)$ restriction of
+the global controlled map $\mathcal S_0$. The four fiberwise types are
+% Formula: T_0^(k,h), S_2^(k,h), S_0^(k,l,h), and T_2^(k,h) have the displayed
+% matrix-algebra domains and codomains. Ink: every blue stroke denotes a
+% trace-preserving completely positive map, and its label specifies the map.
 \[
   \begin{tenkzcd}[maps, species={channel}, row sep=6mm]
-    \mathfrak R_2 & L_k\otimes R_h \\
-    (L_k\otimes R_h)\otimes(R_k\otimes L_h) & \mathfrak R_2 \\
-    \mathfrak R_3 & L_k\otimes R_h \\
-    (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h} & \mathfrak R_3
-    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
-    \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]{\mathcal S_2}
-    \tnarrow[from={(3,1)}, to={(3,2)}, species=channel]{\mathcal S_0}
-    \tnarrow[from={(4,1)}, to={(4,2)}, species=channel]{\mathcal T_2}
+    \mathcal A_2^{k,h} & \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\eta}^{k,h} & \mathcal A_2^{k,h} \\
+    \mathcal A_3^{k,l,h} & \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\Omega}^{k,h} & \mathcal A_3^{k,\bullet,h}
+    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
+      {\mathcal T_0^{(k,h)}}
+    \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]
+      {\mathcal S_2^{(k,h)}}
+    \tnarrow[from={(3,1)}, to={(3,2)}, species=channel]
+      {\mathcal S_0^{(k,l,h)}}
+    \tnarrow[from={(4,1)}, to={(4,2)}, species=channel]
+      {\mathcal T_2^{(k,h)}}
   \end{tenkzcd}
 \]

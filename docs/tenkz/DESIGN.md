@@ -167,49 +167,89 @@ For the CPSV refinement, the middle-subspin Hilbert space is
 
 \[
   \mathcal H^{\Omega}_{k,h}
-  =\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h).
+  =\bigoplus_l(B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L).
 \]
 
-The notation distinguishes the normalized active density from its total
-completion on this space. On an active pair,
+The neighboring operator and the normalized active density on this space are
 
 \[
-  \widehat\Omega_{k,h}
-  =\frac{1}{a_kb_h}\bigoplus_l
+  \Omega_{k,h}=\bigoplus_l
     (\eta_{k,l}\otimes\eta_{l,h}),
   \qquad
+  \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h}.
+\]
+
+On an active pair, the total completion agrees with the normalized density:
+
+\[
   \overline\Omega_{k,h}=\widehat\Omega_{k,h}.
 \]
 
 On an inactive pair, $\overline\Omega_{k,h}$ denotes the chosen positive
 trace-one completion on $\mathcal H^{\Omega}_{k,h}$. A typed-map vertex records
-the carrier Hilbert space, not the density acting on it.
-
-The fiberwise refinement is the composition
+an operator space in the refinement displays below, not a coordinate
+expression, a carrier Hilbert space, or a density acting on that space.
+Introduce the five matrix algebras
 
 \[
-  \mathfrak R_2
-  \xrightarrow{\mathcal T_0}
-  L_k\otimes R_h
-  \xrightarrow{\mathcal T_1}
-  (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h}
-  \xrightarrow{\mathcal T_2}
-  \mathfrak R_3.
+\begin{aligned}
+  \mathcal A_2
+  &=\operatorname{End}\!\left(
+      \left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes2}\right),
+  &
+  \mathcal A_{\partial}
+  &=\operatorname{End}\!\left(\bigoplus_{k,h}B_k^L\otimes B_h^R\right),\\
+  \mathcal A_{\eta}
+  &=\operatorname{End}\!\left(
+      \bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+        (B_k^R\otimes B_h^L)\bigr]\right),
+  &
+  \mathcal A_{\Omega}
+  &=\operatorname{End}\!\left(
+      \bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+        \mathcal H^{\Omega}_{k,h}\bigr]\right),\\
+  \mathcal A_3
+  &=\operatorname{End}\!\left(
+      \left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes3}\right).
+\end{aligned}
 \]
 
-On a $(k,h)$-summand, $\mathcal T_0$ traces out the factors $R_k\otimes L_h$,
+The global refinement is the composition
+
+\[
+  \mathcal A_2
+  \xrightarrow{\mathcal T_0}
+  \mathcal A_{\partial}
+  \xrightarrow{\mathcal T_1}
+  \mathcal A_{\Omega}
+  \xrightarrow{\mathcal T_2}
+  \mathcal A_3.
+\]
+
+On a $(k,h)$-summand, $\mathcal T_0$ traces out the factors
+$B_k^R\otimes B_h^L$,
 $\mathcal T_1$ sends $X$ to $X\otimes\overline\Omega_{k,h}$, and
 $\mathcal T_2$ reorders the subspin factors into the three output sites.
 Consequently $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. In `tenkzcd`
 this is written as follows.
 
+The companion global maps have types
+$\mathcal S_0:\mathcal A_3\to\mathcal A_{\partial}$ and
+$\mathcal S_2:\mathcal A_{\eta}\to\mathcal A_2$. On a fixed outer pair,
+$\mathcal S_0$ traces the full direct sum $\mathcal H^{\Omega}_{k,h}$; the
+sectorwise map $\mathcal S_0^{(k,l,h)}$ instead fixes $l$ before taking the
+partial trace.
+
 ```latex
+% Formula: T_0 : A_2 -> A_partial, T_1 : A_partial -> A_Omega, and
+% T_2 : A_Omega -> A_3. Ink: every blue stroke denotes a channel, its label
+% names the stage, and composition runs left-to-right.
 \[
 \begin{tenkzcd}[maps, species={channel}]
-  \mathfrak R_2 &
-  L_k\otimes R_h &
-  (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h} &
-  \mathfrak R_3
+  \mathcal A_2 &
+  \mathcal A_{\partial} &
+  \mathcal A_{\Omega} &
+  \mathcal A_3
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
   \tnarrow[from={(1,2)}, to={(1,3)}, species=channel]{\mathcal T_1}
   \tnarrow[from={(1,3)}, to={(1,4)}, species=channel]{\mathcal T_2}

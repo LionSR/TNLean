@@ -4,11 +4,11 @@
 
 \begin{document}
 
-% T maps the open two-site MPDO tensor network to the open three-site
-% MPDO tensor network, while S maps the three-site network back to the
-% two-site network.  Each K has one virtual index on each horizontal side
-% and one ket/bra pair vertically.  Each blue channel line lies between
-% two complete tensor-network objects; it is not an additional contraction.
+% Formula: T maps the open two-site MPDO network to the open three-site
+% network, while S maps the three-site network back to the two-site network.
+% Ink: each K has one virtual index on each horizontal side and one ket/bra
+% pair vertically; each blue line is a channel between complete networks,
+% not an additional tensor contraction.
 \[
   \begin{tenkzcd}[maps, species={channel}, column sep=10mm, row sep=8mm]
     \tnpic[inline, physical=updown]{
@@ -28,17 +28,17 @@
   \end{tenkzcd}
 \]
 
-% H^Omega_{k,h} is the middle-subspin Hilbert space.  The normalized active
-% density and its completed extension act on this space and are adjoined by T_1.
+% H^Omega_{k,h} is the middle-subspin Hilbert space. Omega_{k,h}, its
+% normalized active density, and its completed density are operators on it.
 \[
   \mathcal H^{\Omega}_{k,h}
-  =\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h).
+  =\bigoplus_l(B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L),
+  \qquad
+  \Omega_{k,h}=\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h}).
 \]
 On an active pair, let
 \[
-  \widehat\Omega_{k,h}
-  =\frac{1}{a_kb_h}\bigoplus_l
-    (\eta_{k,l}\otimes\eta_{l,h}),
+  \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h},
   \qquad
   \overline\Omega_{k,h}=\widehat\Omega_{k,h}.
 \]
@@ -51,45 +51,110 @@ trace-one density on $\mathcal H^{\Omega}_{k,h}$.  Thus, in every case,
   \operatorname{tr}(\overline\Omega_{k,h})=1.
 \]
 
-% T = T_2 T_1 T_0 maps the two-site sector coordinates R_2 to the
-% three-site sector coordinates R_3.  Composition runs left-to-right.
-% Every line has species=channel, so line ink records the common CPTP
-% type; T_0, T_1, and T_2 name the constituent maps.
+Define the matrix algebras
+\[
+\begin{aligned}
+  \mathcal A_2
+  &=\operatorname{End}\!\left(
+      \left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes2}\right),
+  &
+  \mathcal A_{\partial}
+  &=\operatorname{End}\!\left(\bigoplus_{k,h}B_k^L\otimes B_h^R\right),\\
+  \mathcal A_{\eta}
+  &=\operatorname{End}\!\left(
+      \bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+        (B_k^R\otimes B_h^L)\bigr]\right),
+  &
+  \mathcal A_{\Omega}
+  &=\operatorname{End}\!\left(
+      \bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+        \mathcal H^{\Omega}_{k,h}\bigr]\right),\\
+  \mathcal A_3
+  &=\operatorname{End}\!\left(
+      \left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes3}\right).
+\end{aligned}
+\]
+
+% Formula: T_0 : A_2 -> A_partial, T_1 : A_partial -> A_Omega, and
+% T_2 : A_Omega -> A_3. Ink: every blue stroke denotes a CPTP map, its label
+% names the stage, and composition runs left-to-right.
 \[
   \begin{tenkzcd}[maps, species={channel}]
-    \mathfrak R_2 &
-    L_k\otimes R_h &
-    (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h} &
-    \mathfrak R_3
+    \mathcal A_2 &
+    \mathcal A_{\partial} &
+    \mathcal A_{\Omega} &
+    \mathcal A_3
     \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
     \tnarrow[from={(1,2)}, to={(1,3)}, species=channel]{\mathcal T_1}
     \tnarrow[from={(1,3)}, to={(1,4)}, species=channel]{\mathcal T_2}
   \end{tenkzcd}
 \]
 
-% Four fiberwise maps, one map per row.  Each row spells its complete
-% domain and codomain; the parameters k and h remain symbolic.
+For the fiberwise maps, write
+\[
+\begin{aligned}
+  \mathcal A_2^{k,h}
+  &=\operatorname{End}\!\left(
+      (B_k^L\otimes B_k^R)\otimes(B_h^L\otimes B_h^R)\right),
+  &
+  \mathcal A_{\partial}^{k,h}
+  &=\operatorname{End}(B_k^L\otimes B_h^R),\\
+  \mathcal A_{\eta}^{k,h}
+  &=\operatorname{End}\!\left(
+      (B_k^L\otimes B_h^R)\otimes(B_k^R\otimes B_h^L)\right),
+  &
+  \mathcal A_{\Omega}^{k,h}
+  &=\operatorname{End}\!\left(
+      (B_k^L\otimes B_h^R)\otimes\mathcal H^{\Omega}_{k,h}\right),\\
+  \mathcal A_3^{k,l,h}
+  &=\operatorname{End}\!\left(
+      (B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+        \otimes(B_h^L\otimes B_h^R)\right),&\\
+  \mathcal A_3^{k,\bullet,h}
+  &=\operatorname{End}\!\left(\bigoplus_l
+      \bigl[(B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+        \otimes(B_h^L\otimes B_h^R)\bigr]\right).&
+\end{aligned}
+\]
+
+The global controlled map
+$\mathcal S_0:\mathcal A_3\to\mathcal A_{\partial}$ traces the whole direct
+sum $\mathcal H^{\Omega}_{k,h}$ on a fixed outer pair. The sectorwise map
+$\mathcal S_0^{(k,l,h)}$ in the third row below fixes the middle sector $l$.
+
+% Formula: the four rows give the exact types of T_0^(k,h), S_2^(k,h),
+% S_0^(k,l,h), and T_2^(k,h). Ink: every blue stroke denotes a CPTP map,
+% and its label records which fixed sectors define that map.
 \[
   \begin{tenkzcd}[maps, species={channel}]
-    \mathfrak R_2 & L_k\otimes R_h \\
-    (L_k\otimes R_h)\otimes(R_k\otimes L_h) & \mathfrak R_2 \\
-    \mathfrak R_3 & L_k\otimes R_h \\
-    (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h} & \mathfrak R_3
-    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
-    \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]{\mathcal S_2}
-    \tnarrow[from={(3,1)}, to={(3,2)}, species=channel]{\mathcal S_0}
-    \tnarrow[from={(4,1)}, to={(4,2)}, species=channel]{\mathcal T_2}
+    \mathcal A_2^{k,h} & \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\eta}^{k,h} & \mathcal A_2^{k,h} \\
+    \mathcal A_3^{k,l,h} & \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\Omega}^{k,h} & \mathcal A_3^{k,\bullet,h}
+    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
+      {\mathcal T_0^{(k,h)}}
+    \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]
+      {\mathcal S_2^{(k,h)}}
+    \tnarrow[from={(3,1)}, to={(3,2)}, species=channel]
+      {\mathcal S_0^{(k,l,h)}}
+    \tnarrow[from={(4,1)}, to={(4,2)}, species=channel]
+      {\mathcal T_2^{(k,h)}}
   \end{tenkzcd}
 \]
 
-% T(R_2(K_2(X))) = R_3(K_3(X)); the channel line is the map T and the
-% two endpoints are closed sector-coordinate matrices.
-The refinement identity is
-\(
-  \begin{tenkzcd}[maps, inline, species={channel}]
-    \mathfrak R_2({\cal K}_2(X)) & \mathfrak R_3({\cal K}_3(X))
+% Formula: T = T_2 T_1 T_0 : A_2 -> A_3. Ink: the blue stroke denotes the
+% composite channel T, and its endpoints are the two matrix algebras.
+The composite channel has type
+\[
+  \begin{tenkzcd}[maps, species={channel}]
+    \mathcal A_2 & \mathcal A_3
     \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T}
   \end{tenkzcd}
-\).
+\]
+and the refinement identity is the equality
+\[
+  \mathcal T\bigl(\mathfrak R_2({\cal K}_2(X))\bigr)
+  =\mathfrak R_3({\cal K}_3(X)).
+\]
 
 \end{document}
