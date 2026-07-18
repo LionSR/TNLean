@@ -1284,6 +1284,44 @@ maps.
     Taking $X = \Id$ yields $\tr(\rho) = 1$.
 \end{proof}
 
+\begin{lemma}[Rank-one domination]
+    \label{lem:posSemidef_rankone_domination}
+    \lean{Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec}
+    \leanok
+    Let $A\in\MN{D}$ be positive semidefinite, let $c\in\C$, and let
+    $\psi\in\C^D$.  If
+    \[
+        A\leq c\ketbra{\psi}{\psi},
+    \]
+    then there is a nonnegative scalar $a$ such that
+    \[
+        A=a\ketbra{\psi}{\psi}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The assertion is immediate when $\psi=0$.  Otherwise set
+    \[
+        s=\langle\psi,\psi\rangle,
+        \qquad P=\ketbra{\psi}{\psi},
+        \qquad Q=s^{-1}P.
+    \]
+    Then $Q$ is the orthogonal projection onto $\C\psi$.  Write
+    $B=cP-A\geq0$.  Since $A+B=cP$ vanishes on the kernel of $Q$, positivity
+    implies
+    \[
+        A(\Id-Q)=0.
+    \]
+    Taking adjoints gives $(\Id-Q)A=0$, and therefore $A=QAQ$.  Finally,
+    \[
+        PAP=\langle\psi,A\psi\rangle P,
+        \qquad
+        A=s^{-2}\langle\psi,A\psi\rangle P.
+    \]
+    The coefficient is nonnegative because $A\geq0$ and $s>0$.
+\end{proof}
+
 % Scope restriction documented in
 % docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex.
 \begin{theorem}[Positive retractions onto one matrix factor]
@@ -1308,7 +1346,8 @@ maps.
 
 \begin{proof}
     \leanok
-    \uses{thm:positive_functional_density_representation,
+    \uses{lem:posSemidef_rankone_domination,
+      thm:positive_functional_density_representation,
       thm:rankone_ray_scalar_rigidity}
     Let $R(A)$ be the right tensor factor of $E(A)$, so that
     $E(A)=\Id_m\otimes R(A)$.  For $Y\geq0$ and
