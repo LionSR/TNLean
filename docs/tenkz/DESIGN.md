@@ -131,7 +131,7 @@ Environment keys:
 | `physical=up\|down\|updown\|none\|paired` | Single-row sugar and per-row list form; `physical={updown,up}` ≡ `rows={op,ket}`. Retained for one-row chains. |
 | `sandwich` | ≡ `rows={ket,bra}` with paired legs and midline axis. Literal sugar; expands to identical events (G21). |
 | `periodic` | Virtual trace closure arc (deferred pass, racetrack geometry). |
-| `trace=physical` | Close physical legs by trace. |
+| `trace=physical` | Close one centred upper port into one centred lower port at each site; asymmetric or multi-port faces remain open with a diagnostic. |
 | `bond label={⟨math⟩ at ⟨c⟩-⟨c'⟩}` | Addressed bond label (G6); bare `bond label=⟨math⟩` = first bond. |
 | `bond dir=left\|right` or `{⟨dir⟩ at ⟨c⟩-⟨c'⟩,…}` | Directed virtual bonds, MPO orientation (G4); scalar applies to all bonds. |
 | `align=⟨row⟩` | Axis row (non-integers allowed); default = midline of wire rows — the multi-row `=` defect is closed with no per-call key. |

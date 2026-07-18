@@ -74,6 +74,25 @@ SOURCE = r"""
   \tn[pill, wide=2, up at=center, down at={1,2}]{U} & \\
   \tn[pill, wide=2, up at={1}, down at=center]{L} &
 \end{tenkz}
+\begin{tenkz}[physical=updown, trace=physical, tensor style=box]
+  \tn[pill, wide=2, up at={1,2}, down at=center]{T} &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tnfuse[span=2, combined=west, west at={1,2}]{V}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, physical=updown, up at=center, down at={1,2}]{B}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[down at=center]{U} & \\
+  \tn[pill, wide=2, up at={1,2}, down at=center]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, physical=up]{B}\\
+  &
+\end{tenkz}
 \end{document}
 """
 
@@ -205,6 +224,11 @@ def main() -> int:
     forbid(sparse_pairing,
            "bond|picture=9|row=2|from=1|to=2|dir=none|role=none|species=none",
            "sparse face contracted undeclared row slot 2")
+    require(
+        sparse_pairing,
+        "boundary|picture=9|virtual-west=2|virtual-east=3|physical-up=0|physical-down=0",
+        "neighboring port opposite an omitted sparse slot disappeared",
+    )
     tall = pictures[10]
     require(tall, "faceports|picture=10|cell=1-1|face=west|arity=1|at=center",
             "tall glyph lost its centred west face")
@@ -225,6 +249,59 @@ def main() -> int:
     lower_sparse = pictures[12]
     if paired_ports(lower_sparse) != [("1", "1")]:
         raise AssertionError("wide contraction ignored the lower face's exact slots")
+    require(
+        lower_sparse,
+        "boundary|picture=12|virtual-west=1|virtual-east=1|physical-up=1|physical-down=1",
+        "unmatched upper port disappeared from the boundary signature",
+    )
+    asymmetric_trace = pictures[13]
+    require(asymmetric_trace,
+            "warning|code=phtrace-face-ports|cell=1-1",
+            "asymmetric physical trace was not rejected")
+    forbid(asymmetric_trace,
+           "phtrace|picture=13|row=1|col=1",
+           "asymmetric physical trace emitted a centre-only loop")
+    require(
+        asymmetric_trace,
+        "boundary|picture=13|virtual-west=1|virtual-east=1|physical-up=2|physical-down=1",
+        "rejected physical trace did not leave its declared faces open",
+    )
+    compatibility_conflict = pictures[14]
+    require(compatibility_conflict,
+            "faceports|picture=14|cell=1-1|face=west|arity=2|at=1,2",
+            "explicit split face did not override combined=")
+    require(compatibility_conflict,
+            "faceports|picture=14|cell=1-1|face=east|arity=2|at=rows",
+            "opposite implicit split face acquired the wrong arity")
+    require(
+        compatibility_conflict,
+        "boundary|picture=14|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0",
+        "combined= conflict left a hidden centred stub",
+    )
+    brick_faces = pictures[15]
+    require(brick_faces,
+            "faceports|picture=15|cell=1-1|face=up|arity=1|at=center",
+            "tall brick lost its centred physical face")
+    require(brick_faces,
+            "faceports|picture=15|cell=1-1|face=down|arity=2|at=1,2",
+            "tall brick lost its split physical face")
+    require(
+        brick_faces,
+        "boundary|picture=15|virtual-west=2|virtual-east=2|physical-up=1|physical-down=2",
+        "tall brick physical signature disagrees with its declared faces",
+    )
+    lower_surplus = pictures[16]
+    require(
+        lower_surplus,
+        "boundary|picture=16|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
+        "surplus lower-face port disappeared from the boundary signature",
+    )
+    default_brick = pictures[17]
+    require(
+        default_brick,
+        "boundary|picture=17|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
+        "face-port support changed the default tall-brick arity",
+    )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 

@@ -137,7 +137,9 @@ legs point into the inter-layer gap, \tnkey{layer sep=} widens it
 \tnval{trace=physical} closes every site's up leg into its own down
 leg by an arc around the glyph --- per site the partial trace
 $\operatorname{Tr}_{\mathrm{ph}}M=\sum_s M^{ss}$.  Traced legs are
-closed indices and leave the signature.  The per-column form
+closed indices and leave the signature.  This per-site form requires
+one centred port on each physical face; asymmetric or multi-port faces
+remain open and produce a diagnostic.  The per-column form
 \tnval{trace=\{(physical, c)\}} instead closes chosen
 ket sites into the bra row below, one wrap loop per listed column
 --- the marginal of the kept sites; the cell-set value takes ranges
