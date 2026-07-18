@@ -37,7 +37,7 @@ commutation through the common equivalence gives the remaining hypothesis of
 * [Beigi 2012] arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3
 -/
 
-open scoped Matrix ComplexOrder Kronecker
+open scoped Matrix ComplexOrder
 
 namespace MPOTensor
 

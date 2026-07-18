@@ -81,11 +81,40 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    In the first translated bond, agreement outside its two-site window is
-    equality of the third coordinate; in the second it is equality of the
-    first coordinate.  Evaluating matrix entries gives the two tensor-product
-    lifts.  Positivity gives Hermiticity.  Finally, transport the commutation
-    of the two length-three translates through the common identification.
+    Let $\Phi$ be the matrix reindexing induced by the common three-site
+    identification, and write $B_{0,1}=\Phi(B_0)$ and
+    $B_{1,2}=\Phi(B_1)$ for the two reindexed translates.  For three-site
+    configurations $x$ and $y$, the two outside-window conditions are
+    \[
+        \bigl(\forall r\notin\{0,1\},\ x_r=y_r\bigr)
+            \Longleftrightarrow x_2=y_2,
+        \qquad
+        \bigl(\forall r\notin\{1,2\},\ x_r=y_r\bigr)
+            \Longleftrightarrow x_0=y_0.
+    \]
+    Hence evaluation at a pair of left-associated triples gives
+    \[
+        \bigl(B_{0,1}\bigr)_{(i,j,k),(i',j',k')}
+          =\widehat B_{(i,j),(i',j')}\,\delta_{k,k'}
+          =\bigl(\widehat B\otimes\Id\bigr)_{(i,j,k),(i',j',k')},
+    \]
+    and
+    \[
+        \bigl(B_{1,2}\bigr)_{(i,j,k),(i',j',k')}
+          =\delta_{i,i'}\,\widehat B_{(j,k),(j',k')}
+          =\bigl(\Id\otimes\widehat B\bigr)_{(i,j,k),(i',j',k')}.
+    \]
+    Positivity of $B$ gives $\widehat B^*=\widehat B$.  Finally, matrix
+    reindexing is multiplicative, so
+    \[
+        \Phi(XY)=\Phi(X)\Phi(Y),
+        \qquad
+        B_0B_1=B_1B_0
+        \quad\Longrightarrow\quad
+        \Phi(B_0)\Phi(B_1)=\Phi(B_1)\Phi(B_0).
+    \]
+    Substituting the two entrywise identities proves that the left and right
+    overlapping lifts commute.
 \end{proof}
 
 \begin{theorem}[$\eta$-local structure carries single-bond commuting form]
