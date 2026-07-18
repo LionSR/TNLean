@@ -753,21 +753,25 @@ strong subadditivity for a normalized three-site reduced state.
 For an injective simple tensor, contracting $K^{-1}$ with $K$ through the
 physical index identifies the corresponding virtual legs.  In components,
 this is the matrix-unit identity
-$\sum_p(K^{-1})^{\alpha,\beta}_pK^p=E_{\alpha,\beta}$:
+\[
+    \sum_p(K^{-1})^{\alpha,\beta}_p(K^p)_{\alpha',\beta'}
+    =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+\]
+Its two Kronecker factors are the two bare cups:
 \begin{center}
     % The upper inverse tensor and lower tensor contract through the doubled
     % physical index p.  Their four virtual legs remain open and are
-    % identified pairwise by the two cups on the right.
+    % identified pairwise by the tensor product of the two cups on the right.
     \begin{tenkz}[rows={bra, ket}, tensor style=box]
-        \tn{{\cal K}^{-1}} \\
-        \tn{{\cal K}}
+        \tn{\mathcal K^{-1}} \\
+        \tn{\mathcal K}
     \end{tenkz}
     $\;=\;$
     \begin{tenkz}[rows={wire, wire}, east=cup]
         \tnghost{} \\
         \tnghost{}
     \end{tenkz}
-    $\;$
+    $\;\otimes\;$
     \begin{tenkz}[rows={wire, wire}, west=cup]
         \tnghost{} \\
         \tnghost{}
@@ -789,8 +793,8 @@ virtual legs against a further copy of $K$ recovers $K$:
             west=cup,
             east=cup,
             tensor style=box]
-        \tn[up=p]{{\cal K}} \\
-        \tn{{\cal K}^{-1}} \\
+        \tn[up=p]{\mathcal K} \\
+        \tn{\mathcal K^{-1}} \\
         \tn{K}
     \end{tenkz}
     $\;=\;$
@@ -844,9 +848,9 @@ This is the single-block identity in
     % is (virtual-west=0 | virtual-east=0 |
     % physical-up=3 | physical-down=3).
     \begin{tenkz}[physical=updown, periodic]
-        \tn[up=$i_1$, down=$j_1$]{{\cal K}} &
-        \tn[up=$i_2$, down=$j_2$]{{\cal K}} &
-        \tn[up=$i_3$, down=$j_3$]{{\cal K}} &
+        \tn[up=$i_1$, down=$j_1$]{\mathcal K} &
+        \tn[up=$i_2$, down=$j_2$]{\mathcal K} &
+        \tn[up=$i_3$, down=$j_3$]{\mathcal K} &
         \tnX{R_4}
     \end{tenkz}
     \caption{Tracing the fourth site of the normalized four-site periodic MPO
@@ -994,15 +998,15 @@ This is the single-block identity in
             \end{tenkz}
             \Bigr)
             \begin{tenkz}[compact, physical=up, periodic]
-                \tn[up=$p_1$]{{\cal K}} &
-                \tn[up=$p_2$]{{\cal K}} &
-                \tn[up=$p_3$]{{\cal K}} &
+                \tn[up=$p_1$]{\mathcal K} &
+                \tn[up=$p_2$]{\mathcal K} &
+                \tn[up=$p_3$]{\mathcal K} &
                 \tnX{R}
             \end{tenkz}
             \;=\;
             \begin{tenkz}[compact, physical=up,
                           west label=$\beta_1$, east label=$\alpha_3$]
-                \tn[up=$p_2$]{{\cal K}}
+                \tn[up=$p_2$]{\mathcal K}
             \end{tenkz}
             \otimes
             \begin{tenkz}[compact,
