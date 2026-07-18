@@ -380,6 +380,7 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
+import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.Overlap.NormalTensorDichotomy
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII

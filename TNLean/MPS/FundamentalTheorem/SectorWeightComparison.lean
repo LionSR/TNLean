@@ -169,4 +169,36 @@ lemma power_sums_eq_of_eventually_eq_hetero
 
 end SectorWeightData
 
+namespace SectorDecomposition
+
+/-- A sector coefficient with nonzero copy weights cannot vanish at all
+sufficiently large exponents.
+
+This is the coefficient nonvanishing used in the CPSV16 Appendix MPV argument,
+lines 1182--1188. If the coefficient vanished eventually, geometric
+extrapolation would make it vanish at exponent zero, where it equals the
+positive number of copies in the sector. -/
+lemma coeff_not_eventually_zero (P : SectorDecomposition d)
+    (j : Fin P.basisCount) :
+    ¬ (∀ᶠ N in Filter.atTop, P.coeff N j = 0) := by
+  classical
+  intro hEv
+  rw [Filter.eventually_atTop] at hEv
+  obtain ⟨M, hM⟩ := hEv
+  have hAll : ∀ k,
+      ∑ q : Fin (P.copies j), (1 : ℂ) * (P.weight j q) ^ k = 0 := by
+    refine SectorWeightData.geom_sum_eventually_zero
+      (w := P.weight j) (c := fun _ ↦ 1) (P.weight_ne_zero j) (M := M) ?_
+    intro N hN
+    simpa [SectorDecomposition.coeff, SectorWeightData.coeff] using hM N hN
+  have h0 := hAll 0
+  have hcard :
+      (∑ q : Fin (P.copies j), (1 : ℂ) * (P.weight j q) ^ 0) =
+        (P.copies j : ℂ) := by
+    simp
+  rw [hcard] at h0
+  exact (Nat.cast_ne_zero.mpr (P.copies_pos j).ne') h0
+
+end SectorDecomposition
+
 end MPSTensor

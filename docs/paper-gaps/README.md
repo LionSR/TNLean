@@ -105,6 +105,10 @@ For MPDO renormalization fixed points:
 
 For the non-periodic MPS Fundamental Theorem background:
 
+- `cpsv16_bnt_characterization_active_blocks.tex` records the local correction
+  to the BNT characterization: coverage concerns precisely the nonzero-weight
+  canonical-form blocks, while candidate normality from Definition 2.4 appears
+  explicitly on the characterized side of the equivalence.
 - `canonical_bnt_ft_theorem_surface.tex` separates paper-level theorem
   statements from auxiliary formal declarations.
 - `nonperiodic_mps_bnt_comparison_inputs.tex` compares the current

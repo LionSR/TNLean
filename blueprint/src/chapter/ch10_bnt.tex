@@ -40,6 +40,125 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
 \end{definition}
 
+\begin{theorem}[Distinct BNT members are not gauge-phase equivalent]
+    \label{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv}
+    \leanok
+    \uses{def:bnt_cpsv, def:blocks_not_gauge_phase_equiv}
+    Distinct members of a basis of normal tensors are not gauge-phase
+    equivalent after identifying equal bond dimensions.
+\end{theorem}
+
+\begin{proof}\leanok
+    At every sufficiently large length the matrix product vectors of the basis
+    members are linearly independent. A gauge-phase equivalence between two
+    distinct members would make one of these vectors a nonzero scalar multiple
+    of the other, a contradiction.
+\end{proof}
+
+\begin{theorem}[Characterization by canonical-form representatives]
+    \label{thm:cpsv_bnt_characterization}
+    \lean{MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:block_diagonal_tensor,
+        def:same_mpv2_pos, def:blocks_not_gauge_phase_equiv}
+    Let $A$ have a canonical-form MPV expansion
+    \[
+        \ket{V^{(N)}(A)}
+        = \sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
+    \]
+    at every positive length, where the tensors $\widetilde A_k$ are normal
+    tensors of positive bond dimension. Set
+    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Let $(A_j)_{j=1}^{g}$ be tensors of
+    positive bond dimension. Then
+    $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$ if and only if:
+    \begin{enumerate}
+        \item every $A_j$ is normal;
+        \item for every $k\in K_{\mathrm{act}}$ there are an index $j$, an
+              invertible matrix $X_k$, and a phase $e^{i\phi_k}$ such that
+              \[
+                  \widetilde A_k^i
+                  = e^{i\phi_k}X_kA_j^iX_k^{-1}
+              \]
+              for every physical index $i$;
+        \item no two distinct tensors $A_j$ and $A_{j'}$ are related in this
+              way.
+    \end{enumerate}
+    This is \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, with the literal
+    canonical-form display restricted to its active blocks as explained in
+    \path{docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_mpv_phase_gauge,
+        thm:cpsv_normal_mpv_phase_alternative,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        lem:bnt_finite_index_overlap_orthonormal_li,
+        lem:finite_geometric_sum_eventual_vanishing,
+        lem:sector_decomposition_coeff_not_eventually_zero,
+        def:mpv_phase_class_data,
+        thm:cpsv_normal_separated_eventually_li,
+        thm:mpv_decomposition}
+    First discard the zero-weight summands; they contribute zero at every
+    positive length. Reindex the remaining summands, group them into MPV phase
+    classes, and choose one representative from each class. By
+    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}, eventual linear
+    independence of a BNT excludes gauge-phase equivalence between two
+    distinct $A_j$.
+
+    Suppose that some phase-class representative is not gauge-phase equivalent
+    to any $A_j$. Partition all phase classes into the unmatched classes $T$
+    and the remaining classes. Every remaining representative is a nonzero
+    scalar multiple of some $\ket{V^{(N)}(A_j)}$ at each positive length.
+    Distinct unmatched representatives have vanishing mutual overlaps, and
+    their overlaps with every $A_j$ also vanish. Explicitly, for $t\ne t'$ in
+    $T$ and every $j$,
+    \[
+        O_{\widetilde A_t\widetilde A_{t'}}(N)\longrightarrow0,
+        \qquad
+        O_{\widetilde A_t A_j}(N)\longrightarrow0.
+    \]
+    The Gram-matrix criterion therefore makes the combined family
+    \[
+        \{\ket{V^{(N)}(\widetilde A_t)}:t\in T\}
+        \cup \{\ket{V^{(N)}(A_j)}:1\leq j\leq g\}
+    \]
+    linearly independent for all sufficiently large $N$. Comparing the
+    canonical-form expansion with the BNT expansion gives a relation
+    \[
+        \sum_{t\in T}c_{N,t}\ket{V^{(N)}(\widetilde A_t)}
+        +\sum_{j=1}^{g}\alpha_{N,j}\ket{V^{(N)}(A_j)}=0.
+    \]
+    Linear independence forces every $c_{N,t}$ to vanish. Hence the
+    coefficient of every unmatched phase class vanishes for all sufficiently
+    large $N$.
+    Such a coefficient has the form
+    \[
+        \sum_q (\zeta_q\mu_q)^N.
+    \]
+    Every base $\zeta_q\mu_q$ is nonzero because only active summands occur.
+    Eventual vanishing of this finite geometric sum would imply vanishing at
+    $N=0$, where its value is the positive number of summands in the class.
+    This contradiction proves coverage. The normal-tensor phase theorem turns
+    the resulting MPV phase relation into the stated gauge-phase relation.
+
+    Conversely, coverage gives, for each canonical-form summand,
+    \[
+        \ket{V^{(N)}(\widetilde A_k)}
+        = \zeta_k^N\ket{V^{(N)}(A_{j(k)})}.
+    \]
+    Hence
+    \[
+        \ket{V^{(N)}(A)}
+        = \sum_j
+            \left(\sum_{k:j(k)=j}(\mu_k\zeta_k)^N\right)
+            \ket{V^{(N)}(A_j)},
+    \]
+    which is the required BNT span at every positive length. Pairwise
+    gauge-phase distinction and normality give eventual linear independence,
+    completing the converse.
+\end{proof}
+
 \begin{lemma}[Perron gauges preserve primitivity]
     \label{lem:perron_gauge_primitive_iff}
     \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}
@@ -1831,22 +1950,37 @@ with a basis sector of the other. The non-vanishing of the sector coefficients
 isolates the matched sector exactly, with no limit of a single-sector
 projection.
 
+\begin{lemma}[Sector-decomposition coefficient is not eventually zero]
+    \label{lem:sector_decomposition_coeff_not_eventually_zero}
+    \lean{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}
+    \leanok
+    \uses{def:sector_weight_data,
+        lem:finite_geometric_sum_eventual_vanishing}
+    For any sector decomposition $P$ and any sector $j$, the coefficient
+    $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If the coefficient vanished for every $N\geq M$, the finite geometric-sum
+    extrapolation would make it vanish at every nonnegative exponent. At
+    exponent zero it is the positive number of copies in sector $j$, which is
+    impossible.
+\end{proof}
+
 \begin{lemma}[Sector coefficient is not eventually zero]
     \label{lem:sector_bnt_coeff_not_eventually_zero}
     \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
     \leanok
-    \uses{def:sector_bnt_cf}
+    \uses{def:sector_bnt_cf,
+        lem:sector_decomposition_coeff_not_eventually_zero}
     For a BNT canonical form $P$ and any sector $j$, the sector coefficient
     $c_{P,j}^{(N)} = \sum_q \mu_{j,q}^N$ is not eventually zero in $N$. Only
     nonvanishing of the copy weights is used, not any modulus condition.
 \end{lemma}
 
 \begin{proof}\leanok
-    If $c_{P,j}^{(N)} = 0$ for all $N \ge M$, the signed geometric-sequence
-    vanishing lemma forces $\sum_q \mu_{j,q}^k = 0$ at every exponent $k$, in
-    particular $\sum_q 1 = r_j = 0$ at $k=0$, contradicting $r_j > 0$. Repeated
-    ratios are handled by the same extrapolation, so distinct weights are not
-    needed.
+    Apply Lemma~\ref{lem:sector_decomposition_coeff_not_eventually_zero}; its
+    conclusion does not require the canonical-form assumptions.
 \end{proof}
 
 \begin{theorem}[Exact single-sector matching]
