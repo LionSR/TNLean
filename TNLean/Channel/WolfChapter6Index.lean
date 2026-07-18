@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Analysis.MeanErgodic
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.Channel.FixedPoint.MeanErgodicProjection
 import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.CornerFixedPoints
@@ -272,9 +273,20 @@ the `*`-algebra structure back along the compression isomorphism.
 The general finite-dimensional convergence argument is provided by
 `LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection` in
 `TNLean.Analysis.MeanErgodic`. It constructs the Cesàro projection onto the
-fixed-point space for an endomorphism with bounded orbits. The proof that this
-projection is positive and unital for matrix maps remains open here, as does its
-application to the full statement of Theorem 6.14.
+fixed-point space for an endomorphism with bounded orbits. The matrix
+specialization is provided by
+`IsPositiveMap.hasBoundedOrbits_of_tracePreserving`,
+`IsPositiveMap.meanErgodicProjection_isPositiveMap`, and
+`IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap`: a positive
+trace-preserving matrix endomorphism has bounded orbits, and its mean-ergodic
+projection is a positive trace-preserving retraction onto its fixed-point
+space. If the original endomorphism is unital, the projection is unital as
+well.
+
+The remaining mean-ergodic step for Theorem 6.14 is to identify the
+trace-pairing adjoint of this projection with the corresponding retraction on
+the adjoint fixed-point space and to combine it with the full-support
+star-algebra description.
 
 In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 
