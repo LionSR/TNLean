@@ -433,6 +433,36 @@ physical indices, as in
     $c_\alpha=m_\alpha=\operatorname{tr}(\mu_\alpha)$.
 \end{proof}
 
+\begin{theorem}[Fixed spanning contraction products determine an endomorphism]
+    \label{thm:mpdo_fixed_spanning_vertical_contraction_products}
+    \lean{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}
+    \leanok
+    \uses{def:mpdo_weighted_vertical_contraction_products}
+    Let $F$ be a linear endomorphism of
+    $\prod_\alpha M_{d_\alpha}$.  Suppose that $C_L(V_c)$ is the whole
+    sector algebra and, for every choice of bond matrices
+    $X_1,\ldots,X_L$,
+    \[
+        F\bigl(V_c(X_1)\cdots V_c(X_L)\bigr)
+          =V_c(X_1)\cdots V_c(X_L).
+    \]
+    Then $F$ is the identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since the displayed products span the domain, every
+    $Y\in\prod_\alpha M_{d_\alpha}$ has the form
+    $Y=\sum_i\lambda_iV_c(X_1^{(i)})\cdots V_c(X_L^{(i)})$.  Hence
+    \[
+      F(Y)
+        =\sum_i\lambda_i
+          F\!\left(V_c(X_1^{(i)})\cdots V_c(X_L^{(i)})\right)
+        =\sum_i\lambda_i V_c(X_1^{(i)})\cdots V_c(X_L^{(i)})
+        =Y.
+    \]
+    Thus $F$ is the identity.
+\end{proof}
+
 \begin{definition}[Retained coordinates for the vertical-sector algebra]
     \label{def:mpdo_retained_vertical_sector_coordinates}
     \lean{MPOTensor.verticalSectorFinEquiv}
