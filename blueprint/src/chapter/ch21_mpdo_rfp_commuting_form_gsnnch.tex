@@ -389,6 +389,73 @@
     \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv}.
 \end{remark}
 
+% **Scope restriction (#3593):** the theorem below assumes the rank-one
+% factorization tr(eta_{q,h}) = a_q b_h.  It does not derive that identity
+% from zero correlation length and does not prove Proposition 4to2, a Markov
+% decomposition, or saturation of the area law.  The source line 1616
+% suppresses the partial traces on the two surviving boundary operators.
+% Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{definition}[Rank-one trace factorization of the neighboring family]
+    \label{def:mpdo_eta_rank_one_trace_factorization}
+    \lean{Matrix.EtaRankOneTraceFactorization}
+    \leanok
+    \uses{thm:mpdo_eta_local_sigma_nk2}
+    For the positive neighboring family $\eta_{q,h}$ in
+    Theorem~\ref{thm:mpdo_eta_local_sigma_nk2}, a rank-one trace
+    factorization consists of real numbers $a_q,b_h$ satisfying
+    \[
+        \tr(\eta_{q,h})=a_qb_h,
+        \qquad
+        \sum_q a_qb_q=1.
+    \]
+\end{definition}
+
+\begin{theorem}[Conditional fourth-region boundary trace]
+    \label{thm:mpdo_eta_fourth_region_trace_formula}
+    \lean{Matrix.etaTwoBoundaryContraction_eq_separated}
+    \lean{Matrix.eta_fourth_region_trace_formula}
+    \leanok
+    \uses{thm:mpdo_eta_local_sigma_nk2,
+        def:mpdo_eta_rank_one_trace_factorization}
+    Let $\eta_{q,h}$ be the positive neighboring family in
+    Theorem~\ref{thm:mpdo_eta_local_sigma_nk2}, equipped with a rank-one
+    trace factorization as in
+    Definition~\ref{def:mpdo_eta_rank_one_trace_factorization}.
+    For a nonempty retained sector word
+    $k=(k_0,\ldots,k_{L-1})$, write
+    \[
+        P_k=\bigotimes_{n=0}^{L-2}\eta_{k_n,k_{n+1}},
+        \qquad
+        R_{u,q}=\tr_{H_{q,l}}(\eta_{u,q}),
+        \qquad
+        L_{h,v}=\tr_{H_{h,r}}(\eta_{h,v}).
+    \]
+    The edge contraction corresponding to tracing the two boundary sites of
+    the longer cyclic chain is
+    \[
+    \begin{aligned}
+        &\bigoplus_k P_k\otimes
+          \sum_{q,h}\tr(\eta_{q,h})
+            \bigl(R_{k_{L-1},q}\otimes L_{h,k_0}\bigr)\\
+        &\quad=
+          \bigoplus_k P_k\otimes
+          \left(\sum_q a_qR_{k_{L-1},q}\right)\otimes
+          \left(\sum_h b_hL_{h,k_0}\right).
+    \end{aligned}
+    \]
+    This is the edge-coordinate interpretation of the displayed
+    fourth-region trace in
+    \cite[Appendix~C.2, lines~1606 and 1613--1617]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_eta_rank_one_trace_factorization}
+    Substitute $\tr(\eta_{q,h})=a_qb_h$ into the double boundary sum.
+    Distributivity separates the sums over $q$ and $h$.  Tensoring with the
+    unchanged product $P_k$ and taking the direct sum over $k$ gives the
+    stated identity.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready
