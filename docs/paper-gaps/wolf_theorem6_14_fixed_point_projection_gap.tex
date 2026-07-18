@@ -1,0 +1,75 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Wolf Theorem~6.14: Fixed-Point Projection Gap}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{The completed classification theorem}
+
+Wolf's Proposition~1.5 assumes a positive linear retraction onto a unital
+finite-dimensional $*$-subalgebra and classifies that retraction
+\cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.  The local source
+is \path{Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex},
+lines~536--570.
+
+The theorem
+\leanid{StarSubalgebra.exists_block_densities_of_positive_retraction} proves
+the full proposition.  It assumes exactly that the given linear map is
+positive, that its image is contained in the subalgebra, and that it fixes
+every member of the subalgebra.  It obtains the unitary direct-sum
+representation, removes off-diagonal inputs by positivity, and gives a
+positive semidefinite trace-one matrix for each summand.  No assumption of
+complete positivity, trace preservation, or a Schwarz inequality is added.
+
+\section{The remaining fixed-point theorem}
+
+Let $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be positive and trace preserving,
+and suppose that its trace-pairing adjoint satisfies the Schwarz inequality.
+Wolf's Theorem~6.14 asserts that there are a unitary $U$, a decomposition
+\begin{align}
+    \mathbb C^D
+      &= \mathcal H_0\oplus
+        \bigoplus_{k=1}^K\mathbb C^{d_k}\otimes\mathbb C^{m_k},
+\end{align}
+and positive definite density matrices $\rho_k\in M_{m_k}(\mathbb C)$ such
+that
+\begin{align}
+    \operatorname{Fix}(T)
+      &= U\left(0\oplus\bigoplus_{k=1}^K
+          M_{d_k}(\mathbb C)\otimes\rho_k\right)U^*.
+    \tag{Wolf, Theorem 6.14 and Equation (6.63)}
+\end{align}
+Here $\mathcal H_0$ is a genuine zero summand: every fixed point vanishes on
+this subspace.  This is the statement in
+\cite[Theorem~6.14]{Wolf2012Quantum}; the local source is
+\path{Notes/WolfNotePDF/wolf_ch6_sections.txt}, lines~896--905.
+
+The completed formal theorem classifies a given positive retraction onto a
+unital $*$-subalgebra.  Three further arguments are needed to obtain the
+fixed-point statement above.  First, the hypotheses on $T$ must be used to
+construct a positive retraction onto $\operatorname{Fix}(T)$, for example by
+Ces\`aro means, and to identify the full-support part of this fixed-point
+space with a unital $*$-algebra.  Second, the positive semidefinite density
+matrices supplied by Proposition~1.5 must be restricted to their supports;
+this produces the positive definite matrices in Theorem~6.14.  Third, the
+discarded kernels must be assembled with the subspace on which every fixed
+point vanishes, thereby recovering the zero summand $\mathcal H_0$.
+
+Thus Proposition~1.5 is fully formalized, while Theorem~6.14 remains an open
+gap.  The missing work is not another classification of a given retraction:
+it is the construction of the fixed-point retraction, the full-support
+reduction, and the recovery of the zero block from the kernels.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -410,7 +410,8 @@ arbitrary direct sum of matrix factors, whereas this theorem treats one factor
 $1_m\otimes M_d(\mathbb C)$. Documented in
 `docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex`. Elimination: conjugate and reindex
 by the finite-dimensional block decomposition, remove cross-block inputs and outputs by
-positivity, and apply this theorem to each diagonal factor. -/
+positivity, and apply this theorem to each diagonal factor, as carried out in
+`StarSubalgebra.exists_block_densities_of_positive_retraction`. -/
 theorem exists_density_of_positive_retraction_onto_right_factor [NeZero d]
     (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ)
