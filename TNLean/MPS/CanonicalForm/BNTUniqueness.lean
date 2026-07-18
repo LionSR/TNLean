@@ -10,6 +10,9 @@ import TNLean.MPS.CanonicalForm.BNTCharacterization
 
 This module examines the uniqueness sentence following the characterization of
 a basis of normal tensors in arXiv:1606.00608, Appendix A, line 1148.
+
+It also proves the uniqueness statement after adding converse coverage of every
+candidate by an active canonical-form block.
 -/
 
 open scoped Matrix BigOperators
@@ -152,5 +155,142 @@ theorem exists_isCPSVBasisOfNormalTensors_unequal_card :
   · rintro ⟨e⟩
     have hcard := Fintype.card_congr e
     norm_num at hcard
+
+/-- Two bases of normal tensors are equivalent when every member of each basis
+is represented by an active block of the same canonical-form expansion.
+
+This is the restricted uniqueness statement described after the counterexample
+to arXiv:1606.00608, Appendix A, line 1148. Proposition 2.7 (`prop:char-BNT`,
+lines 1135--1146) supplies coverage of every active block by each basis. The
+additional converse hypotheses supply coverage in the other direction.
+
+**Scope restriction (converse coverage):** unlike the literal uniqueness
+sentence at line 1148, this theorem assumes that every candidate tensor in
+both bases is gauge-phase equivalent to a nonzero-weight canonical-form block.
+See `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
+theorem IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage
+    {r g₁ g₂ : ℕ}
+    {dimCF : Fin r → ℕ} {dim₁ : Fin g₁ → ℕ} {dim₂ : Fin g₂ → ℕ}
+    [∀ k, NeZero (dimCF k)] [∀ j, NeZero (dim₁ j)] [∀ j, NeZero (dim₂ j)]
+    {A : MPSTensor d D} {μ : Fin r → ℂ}
+    {blocks : (k : Fin r) → MPSTensor d (dimCF k)}
+    {basis₁ : (j : Fin g₁) → MPSTensor d (dim₁ j)}
+    {basis₂ : (j : Fin g₂) → MPSTensor d (dim₂ j)}
+    (hBlocksNormal : ∀ k, IsNormalTensor (blocks k))
+    (hCF : SameMPV₂Pos A (toTensorFromBlocks (d := d) μ blocks))
+    (hBNT₁ : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim₁ j, basis₁ j⟩))
+    (hBNT₂ : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim₂ j, basis₂ j⟩))
+    (hConverse₁ : ∀ j : Fin g₁,
+      ∃ k : Fin r, μ k ≠ 0 ∧
+        ∃ hdim : dim₁ j = dimCF k,
+        ∃ X : GL (Fin (dimCF k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+          ∀ i, blocks k i = ζ •
+            ((X : Matrix (Fin (dimCF k)) (Fin (dimCF k)) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) (basis₁ j)) i *
+              (↑(X⁻¹) : Matrix (Fin (dimCF k)) (Fin (dimCF k)) ℂ)))
+    (hConverse₂ : ∀ j : Fin g₂,
+      ∃ k : Fin r, μ k ≠ 0 ∧
+        ∃ hdim : dim₂ j = dimCF k,
+        ∃ X : GL (Fin (dimCF k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+          ∀ i, blocks k i = ζ •
+            ((X : Matrix (Fin (dimCF k)) (Fin (dimCF k)) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) (basis₂ j)) i *
+              (↑(X⁻¹) : Matrix (Fin (dimCF k)) (Fin (dimCF k)) ℂ))) :
+    ∃ e : Fin g₁ ≃ Fin g₂, ∀ j : Fin g₁,
+      ∃ hdim : dim₁ j = dim₂ (e j),
+      ∃ X : GL (Fin (dim₂ (e j))) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+        ∀ i, basis₂ (e j) i = ζ •
+          ((X : Matrix (Fin (dim₂ (e j))) (Fin (dim₂ (e j))) ℂ) *
+            (cast (congr_arg (MPSTensor d) hdim) (basis₁ j)) i *
+            (↑(X⁻¹) : Matrix (Fin (dim₂ (e j))) (Fin (dim₂ (e j))) ℂ)) := by
+  classical
+  have hCover₁ :=
+    (isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
+      A μ blocks basis₁ hBlocksNormal hCF).mp hBNT₁ |>.2.1
+  have hCover₂ :=
+    (isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
+      A μ blocks basis₂ hBlocksNormal hCF).mp hBNT₂ |>.2.1
+  have hMatch₁ : ∀ j : Fin g₁,
+      ∃ k : Fin g₂, ∃ hdim : dim₁ j = dim₂ k,
+        GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor d) hdim) (basis₁ j)) (basis₂ k) := by
+    intro j
+    obtain ⟨l, hl, hdim₁, X₁, ζ₁, hζ₁, hrel₁⟩ := hConverse₁ j
+    obtain ⟨k, hdim₂, X₂, ζ₂, hζ₂, hrel₂⟩ := hCover₂ l hl
+    have hGE₁ : GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) hdim₁) (basis₁ j)) (blocks l) :=
+      ⟨X₁, ζ₁, norm_ne_zero_iff.mp (by rw [hζ₁]; exact one_ne_zero), hrel₁⟩
+    have hGE₂ : GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) hdim₂) (basis₂ k)) (blocks l) :=
+      ⟨X₂, ζ₂, norm_ne_zero_iff.mp (by rw [hζ₂]; exact one_ne_zero), hrel₂⟩
+    refine ⟨k, hdim₁.trans hdim₂.symm, ?_⟩
+    simpa using gaugePhaseEquiv_cast_compose_via_centre
+      hdim₁.symm hdim₂.symm
+      (gaugePhaseEquiv_swap_cast hdim₁.symm hGE₁)
+      (gaugePhaseEquiv_swap_cast hdim₂.symm hGE₂)
+  choose f hdimF hGEF using hMatch₁
+  have hf : Function.Injective f := by
+    intro j k hjk
+    by_contra hne
+    have hTransport (l : Fin g₂) (hkl : f k = l) :
+        ∃ hdim : dim₁ k = dim₂ l,
+          GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) hdim) (basis₁ k)) (basis₂ l) := by
+      subst l
+      exact ⟨hdimF k, hGEF k⟩
+    obtain ⟨hdimK, hGEK⟩ := hTransport (f j) hjk.symm
+    apply hBNT₁.blocks_not_gaugePhaseEquiv j k hne
+      ((hdimF j).trans hdimK.symm)
+    simpa using gaugePhaseEquiv_cast_compose_via_centre
+      (hdimF j).symm hdimK.symm
+      (gaugePhaseEquiv_swap_cast (hdimF j).symm (hGEF j))
+      (gaugePhaseEquiv_swap_cast hdimK.symm hGEK)
+  have hMatch₂ : ∀ j : Fin g₂,
+      ∃ k : Fin g₁, ∃ hdim : dim₂ j = dim₁ k,
+        GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor d) hdim) (basis₂ j)) (basis₁ k) := by
+    intro j
+    obtain ⟨l, hl, hdim₂, X₂, ζ₂, hζ₂, hrel₂⟩ := hConverse₂ j
+    obtain ⟨k, hdim₁, X₁, ζ₁, hζ₁, hrel₁⟩ := hCover₁ l hl
+    have hGE₂ : GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) hdim₂) (basis₂ j)) (blocks l) :=
+      ⟨X₂, ζ₂, norm_ne_zero_iff.mp (by rw [hζ₂]; exact one_ne_zero), hrel₂⟩
+    have hGE₁ : GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) hdim₁) (basis₁ k)) (blocks l) :=
+      ⟨X₁, ζ₁, norm_ne_zero_iff.mp (by rw [hζ₁]; exact one_ne_zero), hrel₁⟩
+    refine ⟨k, hdim₂.trans hdim₁.symm, ?_⟩
+    simpa using gaugePhaseEquiv_cast_compose_via_centre
+      hdim₂.symm hdim₁.symm
+      (gaugePhaseEquiv_swap_cast hdim₂.symm hGE₂)
+      (gaugePhaseEquiv_swap_cast hdim₁.symm hGE₁)
+  choose q hdimQ hGEQ using hMatch₂
+  have hq : Function.Injective q := by
+    intro j k hjk
+    by_contra hne
+    have hTransport (l : Fin g₁) (hkl : q k = l) :
+        ∃ hdim : dim₂ k = dim₁ l,
+          GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) hdim) (basis₂ k)) (basis₁ l) := by
+      subst l
+      exact ⟨hdimQ k, hGEQ k⟩
+    obtain ⟨hdimK, hGEK⟩ := hTransport (q j) hjk.symm
+    apply hBNT₂.blocks_not_gaugePhaseEquiv j k hne
+      ((hdimQ j).trans hdimK.symm)
+    simpa using gaugePhaseEquiv_cast_compose_via_centre
+      (hdimQ j).symm hdimK.symm
+      (gaugePhaseEquiv_swap_cast (hdimQ j).symm (hGEQ j))
+      (gaugePhaseEquiv_swap_cast hdimK.symm hGEK)
+  have hcard : Fintype.card (Fin g₁) = Fintype.card (Fin g₂) :=
+    Nat.le_antisymm (Fintype.card_le_of_injective f hf)
+      (Fintype.card_le_of_injective q hq)
+  have hfBij : Function.Bijective f :=
+    (Fintype.bijective_iff_injective_and_card f).2 ⟨hf, hcard⟩
+  let e : Fin g₁ ≃ Fin g₂ := Equiv.ofBijective f hfBij
+  refine ⟨e, fun j => ?_⟩
+  obtain ⟨X, ζ, hζ, hrel⟩ := hGEF j
+  have hζnorm : ‖ζ‖ = 1 :=
+    norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
+      (hBNT₁.blocks_normal j) (hBNT₂.blocks_normal (f j)) (hdimF j) hrel
+  exact ⟨hdimF j, X, ζ, hζnorm, hrel⟩
 
 end MPSTensor

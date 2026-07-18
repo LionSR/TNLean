@@ -241,6 +241,47 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{proof}
 
+\begin{theorem}[Restricted BNT uniqueness under converse coverage]
+    \label{thm:cpsv_bnt_uniqueness_converse_coverage}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage}
+    \leanok
+    \uses{thm:cpsv_bnt_characterization,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
+    Let $A$ have a canonical-form MPV expansion
+    \[
+        \ket{V^{(N)}(A)}
+        =\sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
+    \]
+    at every positive length, where the tensors $\widetilde A_k$ are normal.
+    Let $(A_j)_{j=1}^{g_1}$ and $(B_l)_{l=1}^{g_2}$ be two bases of normal
+    tensors for $A$. Assume that every $A_j$ and every $B_l$ is related by a
+    phase and an invertible gauge to a block $\widetilde A_k$ with
+    $\mu_k\ne0$. Then there is a bijection
+    $e:\{1,\ldots,g_1\}\to\{1,\ldots,g_2\}$ such that the bond dimensions of
+    $A_j$ and $B_{e(j)}$ agree and
+    \[
+        B_{e(j)}^i=\zeta_jX_jA_j^iX_j^{-1},
+        \qquad |\zeta_j|=1,
+    \]
+    for every $j$ and every physical index $i$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_bnt_characterization,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
+    For each $A_j$, choose an active canonical-form block representing it,
+    and then choose a member $B_{f(j)}$ representing that block. If
+    $f(j)=f(j')$, composition through the common tensor $B_{f(j)}$ makes
+    $A_j$ and $A_{j'}$ gauge-phase equivalent. Minimality of the first basis
+    gives $j=j'$, so $f$ is injective. Reversing the roles of the two bases
+    gives an injection in the other direction. Since both index sets are
+    finite, $f$ is bijective. Composition of the two gauges supplies the
+    displayed relation, and normality forces the scalar to have modulus one.
+    % This is the converse-coverage restriction documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex, not the
+    % unrestricted sentence at arXiv:1606.00608, Appendix A, line 1148.
+\end{proof}
+
 \begin{lemma}[Perron gauges preserve primitivity]
     \label{lem:perron_gauge_primitive_iff}
     \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}
