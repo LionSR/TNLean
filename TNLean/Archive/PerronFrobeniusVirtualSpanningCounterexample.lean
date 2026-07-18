@@ -3,16 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Data.Matrix.Basis
 import Mathlib.Data.Matrix.Mul
 import Mathlib.Data.Real.Basic
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.FinCases
-import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
+import TNLean.Algebra.PerronFrobenius.RankOne
 import TNLean.MPS.MPDO.ZCL
 
 /-!
@@ -30,7 +29,11 @@ with the following properties.
 * The closed pairing operator `L R` is idempotent.
 * The opposite product `T = R L` is entrywise nonnegative, primitive, and
   trace-normalized.
-* Nevertheless `T` is not idempotent and has no rank-one factorization.
+* Every positive power of `T` has the same trace, and `T ^ 2 = T ^ 3`.
+* Nevertheless `T` is not idempotent, the remainder
+  `R (1 - L R) L` is nonzero, and `T` has no rank-one factorization.
+* The matrices `l_k r_k` are the diagonal slices of an injective source-ZCL
+  MPO tensor.
 
 Thus the virtual-matrix spanning conclusion obtained from injectivity in the
 formal inverse-map construction does not, by itself, eliminate the nilpotent
@@ -44,6 +47,13 @@ This file is deliberately excluded from the root `TNLean.lean` import list.
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
   Appendix C.2, Lemmas C.4--C.5, lines 1406--1499.
+
+## Main results
+
+* `counterexample_with_virtual_spanning`: the matrix-level obstruction with
+  full virtual spanning.
+* `injective_sourceZCL_tensor_with_nilpotent_sector_pairing`: the same sector
+  data realized as the diagonal slices of an injective source-ZCL MPO tensor.
 -/
 
 namespace TNLean.Archive.PerronFrobeniusVirtualSpanningCounterexample
@@ -120,23 +130,11 @@ lemma traceMatrix_sq : traceMatrix * traceMatrix = perronProjection := by
     simp [traceMatrix, perronProjection, Matrix.mul_apply,
       Fin.sum_univ_four] <;> ring
 
-lemma traceMatrix_mul_perronProjection :
-    traceMatrix * perronProjection = perronProjection := by
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [traceMatrix, perronProjection, Matrix.mul_apply,
-      Fin.sum_univ_four] <;> ring
-
-lemma perronProjection_mul_traceMatrix :
-    perronProjection * traceMatrix = perronProjection := by
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [traceMatrix, perronProjection, Matrix.mul_apply,
-      Fin.sum_univ_four] <;> ring
-
 lemma traceMatrix_nonneg (i j : Fin 4) : 0 ≤ traceMatrix i j := by
-  fin_cases i <;> fin_cases j <;> simp [traceMatrix]
-  norm_num
+  fin_cases i <;> fin_cases j <;>
+    first
+    | (simp [traceMatrix]; norm_num)
+    | simp [traceMatrix]
 
 lemma traceMatrix_pow_two_pos (i j : Fin 4) : 0 < (traceMatrix ^ 2) i j := by
   rw [sq, traceMatrix_sq]
@@ -149,6 +147,21 @@ theorem traceMatrix_isPrimitive : Matrix.IsPrimitive traceMatrix :=
 lemma trace_traceMatrix : Matrix.trace traceMatrix = 1 := by
   simp [Matrix.trace, traceMatrix, Fin.sum_univ_four]
   ring
+
+/-- Every positive power of the sector trace matrix has the same trace. -/
+theorem traceMatrix_tracePowersConstant :
+    ∀ N : ℕ, 0 < N →
+      Matrix.trace (traceMatrix ^ N) = Matrix.trace traceMatrix := by
+  rw [← pairingR_mul_pairingL]
+  exact Matrix.trace_pow_eq_trace_of_rectangular_idempotent
+    pairingL pairingR pairingL_mul_pairingR_isIdempotent
+
+/-- The sector trace matrix satisfies the scale-invariant consequence of the
+rectangular idempotence, although it is not itself idempotent. -/
+theorem traceMatrix_sq_eq_cube : traceMatrix ^ 2 = traceMatrix ^ 3 := by
+  rw [← pairingR_mul_pairingL]
+  exact Matrix.pow_two_eq_pow_three_of_rectangular_idempotent
+    pairingL pairingR pairingL_mul_pairingR_isIdempotent
 
 /-- The sector trace matrix is not idempotent. -/
 theorem traceMatrix_not_idempotent : traceMatrix * traceMatrix ≠ traceMatrix := by
@@ -332,12 +345,16 @@ theorem injective_sourceZCL_tensor_with_nilpotent_sector_pairing :
       traceMatrix = pairingR * pairingL ∧
       Matrix.IsPrimitive traceMatrix ∧
       Matrix.trace traceMatrix = 1 ∧
+      (∀ N : ℕ, 0 < N →
+        Matrix.trace (traceMatrix ^ N) = Matrix.trace traceMatrix) ∧
+      traceMatrix ^ 2 = traceMatrix ^ 3 ∧
       pairingR * (1 - pairingL * pairingR) * pairingL ≠ 0 ∧
       ¬ ∃ a b : Fin 4 → ℝ, traceMatrix = Matrix.vecMulVec a b :=
   ⟨mpoTensor_isInjective, mpoTensor_isSourceZCL, physTraceTransfer_mpoTensor,
     mpoTensor_diagonal_slice, virtualMatrix_span_eq_top,
     pairingL_mul_pairingR_isIdempotent, pairingR_mul_pairingL.symm,
     traceMatrix_isPrimitive, trace_traceMatrix,
+    traceMatrix_tracePowersConstant, traceMatrix_sq_eq_cube,
     pairing_nilpotent_remainder_ne_zero, traceMatrix_not_rankOne⟩
 
 end TNLean.Archive.PerronFrobeniusVirtualSpanningCounterexample
