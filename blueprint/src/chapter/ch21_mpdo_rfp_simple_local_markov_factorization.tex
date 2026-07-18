@@ -67,8 +67,6 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{def:mpdo_hayashi_sector_projection,
-        lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one,
-        thm:star_projection_coisometric_transport,
         thm:orthogonal_projection_star_projection_channel}
     The coordinate projections satisfy
     \[
@@ -98,7 +96,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.bntMarkovLeftFactor}
     \lean{MPOTensor.bntMarkovRightFactor}
     \leanok
-    \uses{def:mpdo_three_site_family_closure, def:mpdo_eta_structure}
+    \uses{def:mpdo_three_site_closure, def:mpdo_eta_structure}
     Let $C_x$ and $C_y$ be two rows of a simultaneous left inverse, and
     choose a Hayashi decomposition of the three-site operator.  In its
     $k$-th Markov sector, set
@@ -144,7 +142,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_bnt_markov_key_formula}
     \lean{MPOTensor.isMPOBlockLeftInverse_bnt_markov_key_formula}
     \leanok
-    \uses{thm:mpdo_bnt_three_site_outer_inverse_collapse,
+    \uses{thm:mpdo_inverse_map_three_site_contraction,
       thm:mpdo_bnt_outer_inverse_markov_block}
     Let $x=(s,\alpha_1,\beta_1)$ and
     $y=(t,\alpha_3,\beta_3)$.  Comparing the two expressions for the same
@@ -561,7 +559,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
     \leanok
     \uses{lem:mpdo_simple_blockwise_zcl_equation,
-      def:mpdo_common_sector_weight_absorption}
+      def:mpdo_sitewise_physical_matrix}
     Let $K$ have zero correlation length and let
     $\mathcal K_s=\mu_sA_s$ be an absorbed BNT element of its horizontal
     canonical form.  If the physical-trace transfer $\mathcal B_s$ is not
