@@ -205,11 +205,11 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
   · have hDpos : 0 < D := NeZero.pos D
     have hD2 : 2 ≤ D := by omega
     let L : ℕ := iIndex A
-    have hNonempty : ({n : ℕ | wordSpan A n = ⊤}).Nonempty := by
-      obtain ⟨N, _hNpos, hNblk⟩ := hN
-      exact ⟨N, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
+    have hNonempty : ({n : ℕ | 0 < n ∧ wordSpan A n = ⊤}).Nonempty := by
+      obtain ⟨N, hNpos, hNblk⟩ := hN
+      exact ⟨N, hNpos, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
     have hTop : wordSpan A L = ⊤ := by
-      simpa [L, iIndex] using Nat.sInf_mem hNonempty
+      simpa [L, iIndex] using (Nat.sInf_mem hNonempty).2
     have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
       simpa [L] using
         iIndex_le_general_of_isPrimitivePaper A hTP (isPrimitivePaper_of_isNormal A hN)
@@ -239,14 +239,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
         _ ≤ D ^ 2 * D ^ 2 := Nat.mul_le_mul_right _ hFactor
         _ = D ^ 4 := by ring
     have hLpos : 0 < L := by
-      by_contra hnot
-      have hL0 : L = 0 := Nat.eq_zero_of_not_pos hnot
-      have hzeroTop : wordSpan A 0 = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
-        simpa [hL0] using hTop
-      have hInj0 : IsNBlkInjective A 0 :=
-        (wordSpan_eq_top_iff_isNBlkInjective A 0).mp hzeroTop
-      have hD_one := bondDim_eq_one_of_isNBlkInjective_zero A hInj0
-      omega
+      simpa [L, iIndex] using (Nat.sInf_mem hNonempty).1
     refine ⟨L, hLpos, hBound, ?_⟩
     exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
       ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)

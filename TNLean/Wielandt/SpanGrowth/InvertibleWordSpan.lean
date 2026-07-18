@@ -563,7 +563,7 @@ theorem iIndex_le_of_isNormal_of_isUnit (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : IsNormal A) :
     iIndex A ≤ D ^ 2 - krausRank A + 1 := by
   rw [iIndex]
-  exact Nat.sInf_le <| by
-    exact wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hU hN
+  exact Nat.sInf_le ⟨by omega,
+    wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hU hN⟩
 
 end MPSTensor

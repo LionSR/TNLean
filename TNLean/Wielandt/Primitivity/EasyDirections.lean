@@ -132,11 +132,11 @@ for all nonzero φ, so `qIndex A ≤ iIndex A`. -/
 theorem qIndex_le_iIndex (A : MPSTensor d D)
     (hA : HasEventuallyFullKrausRank A) :
     qIndex A ≤ iIndex A := by
-  -- iIndex A ∈ {n | wordSpan A n = ⊤} since hA gives the set is nonempty
-  have hne : {n : ℕ | wordSpan A n = ⊤}.Nonempty := by
-    obtain ⟨N, _hNpos, hN⟩ := hA
-    exact ⟨N, hN⟩
-  have hi : wordSpan A (iIndex A) = ⊤ := Nat.sInf_mem hne
+  -- iIndex A lies in the positive full-span set since hA makes it nonempty.
+  have hne : {n : ℕ | 0 < n ∧ wordSpan A n = ⊤}.Nonempty := by
+    obtain ⟨N, hNpos, hN⟩ := hA
+    exact ⟨N, hNpos, hN⟩
+  have hi : wordSpan A (iIndex A) = ⊤ := (Nat.sInf_mem hne).2
   -- iIndex A witnesses that the qIndex-defining set is nonempty
   have hq_mem : iIndex A ∈ {q : ℕ | ∀ φ : Fin D → ℂ, φ ≠ 0 →
       vectorSpreadSpan A φ q = ⊤} := by

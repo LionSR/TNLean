@@ -27,7 +27,8 @@ The definitions are stated in the notation of the theorem: `S_n(A)`, `i(A)`,
   for every nonzero φ, `H_q(A,φ) = ℂ^D`. This is Proposition 3(a) of the paper.
 * `IsStronglyIrreduciblePaper A`: Proposition 3(c) — the transfer map `E_A` has
   unique peripheral eigenvalue 1 with a positive-definite fixed point.
-* `iIndex A`: `sInf {n | S_n(A) = M_D(ℂ)}` — the full-Kraus-rank index `i(A)`.
+* `iIndex A`: `sInf {n | 0 < n ∧ S_n(A) = M_D(ℂ)}` — the positive
+  full-Kraus-rank index `i(A)`.
 * `qIndex A`: `sInf {q | ∀ φ ≠ 0, H_q(A,φ) = ℂ^D}` — the primitivity index `q(E_A)`.
 
 ## Relationship to the other primitivity definitions
@@ -130,15 +131,18 @@ def IsPrimitivePaper (A : MPSTensor d D) : Prop :=
 
 /-! ## Index definitions -/
 
-/-- **Full-Kraus-rank index** `i(A)`: the smallest `i` such that `S_i(A) = M_D(ℂ)`.
+/-- **Full-Kraus-rank index** `i(A)`: the smallest positive `i` such that
+`S_i(A) = M_D(ℂ)`.
 
 Paper: "i(A) := min{n : S_n(A) = M_D(ℂ)}."
 (arXiv:0909.5347, after Proposition 3)
 
-Defined as `sInf {n | wordSpan A n = ⊤}`. Returns 0 if no such `n` exists
-(as per `Nat.sInf ∅ = 0`). -/
+The paper takes its word lengths in `ℕ = {1, 2, …}`.  Accordingly this is
+defined as `sInf {n | 0 < n ∧ wordSpan A n = ⊤}`, matching
+`HasEventuallyFullKrausRank`.  It returns 0 if no such `n` exists (as per
+`Nat.sInf ∅ = 0`). -/
 noncomputable def iIndex (A : MPSTensor d D) : ℕ :=
-  sInf {n : ℕ | wordSpan A n = ⊤}
+  sInf {n : ℕ | 0 < n ∧ wordSpan A n = ⊤}
 
 /-- **Primitivity index** `q(E_A)`: the smallest `q` such that for all nonzero φ,
 `H_q(A,φ) = ℂ^D`.
