@@ -334,9 +334,9 @@ This is a counterexample only to the proposed intermediate implication.  The
 formal statement does not assert the strong area law, although the induced
 classical cyclic family satisfies it by a direct entropy calculation.  What
 prevents this theorem from refuting Lemma C.5 of arXiv:1606.00608 is instead
-the unproved identification of `factorization` with the source-selected
-inverse-map factorization.  A proof of that lemma must use information beyond
-the concrete spanning and rectangular identities presently extracted from
+the unproved identification of the chosen direct-sum decomposition with the
+source-selected inverse-map factorization.  A proof of that lemma must use
+information beyond the concrete spanning and rectangular identities presently extracted from
 Appendix C.2, lines 1406--1499. -/
 theorem virtual_spanning_does_not_force_rectangular_remainder_zero :
     tensor.IsInjective ∧ tensor.IsSourceZCL ∧
