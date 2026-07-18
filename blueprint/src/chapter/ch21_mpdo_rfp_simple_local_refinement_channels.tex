@@ -965,8 +965,7 @@ $\widehat{\cal K}$.
 % trace factorization, including the rank-one identity
 % tr(eta_{k,h}) = a_k b_h. It proves the conditional implication (iv) => (v),
 % not Proposition prop2to5 from SAL and ZCL alone. The missing rank-one step is
-% documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex and tracked in issue
-% #3593.
+% documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Two-site blocking of the original tensor is a renormalization fixed point]
     \label{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
@@ -989,6 +988,26 @@ $\widehat{\cal K}$.
     corresponding closure identities carry the two fixed-point equations back
     to ${\cal K}^{[2]}$.
 \end{proof}
+
+% **Obstruction (dependence on Lemma C.5):** the source construction begins
+% with the neighboring trace factorization supplied through prop2to3.  Its
+% derivation from SAL and ZCL is obstructed by the rank-one step in Lemma C.5.
+% Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+\begin{proposition}[SAL and ZCL give the two blocking channels]
+    \label{prop:mpdo_sal_zcl_blocking_channels}
+    \notready
+    \uses{def:is_sal, def:mpo_source_zcl, def:is_rfp_via_ts,
+        def:mpdo_two_site_blocking,
+        prop:mpdo_sal_zcl_bnt_sector_structure}
+    Let $K$ be a simple tensor satisfying the strong area law and zero
+    correlation length, and let $M=K^{[2]}$ be its two-site blocking. Then
+    there are trace-preserving completely positive maps in both directions
+    between the one-site and two-site closures of $M$. Equivalently, $M$ is a
+    renormalization fixed point via these two maps. This is implication
+    (ii)$\Rightarrow$(v) of
+    \cite[Theorem~4.9 and Appendix~C.2, lines~1810--1817]
+      {Cirac2016MPDO_arXiv}.
+\end{proposition}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
 % channel MPDO_TSKKK.png after explicitly suppressing U, but it does not draw

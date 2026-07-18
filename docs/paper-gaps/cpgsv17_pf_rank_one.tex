@@ -27,9 +27,7 @@ counterexample was added in
 \href{https://github.com/LionSR/TNLean/pull/849}{pull request \#849}; and the
 positive-semidefinite replacement theorem was added in
 \href{https://github.com/LionSR/TNLean/pull/917}{pull request \#917}. The open
-follow-up --- either supplying matrix-level positive semidefiniteness of the
-sector trace matrix, or completing the sector-pairing and linear-independence
-route described below --- is tracked in
+final inverse-map provenance audit and the obstruction verdict are recorded in
 \href{https://github.com/LionSR/TNLean/issues/3593}{issue \#3593}. The
 source passage is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1394--1499}.}
@@ -569,6 +567,65 @@ blueprint entries have labels
 \texttt{\detokenize{thm:psd_trace_powers_rank_one_t}} in
 \path{blueprint/src/chapter/ch21_mpdo_rfp_simple_local_primitivity.tex}.}
 
+\section{Audit of the inverse-map provenance}
+
+The remaining possibility was that the particular inverse-map tensors used in
+Appendix~C.2 might satisfy an additional identity which is not visible in the
+rectangular pairing equation.  An audit of the complete source passage does
+not reveal such an identity.
+
+In the proof of Lemma~C.4, at lines~1406--1471, the strong area law
+is used to obtain the physical-sector factorization, positive neighboring
+operators, and primitivity of the trace matrix.  The last point uses
+injectivity to rule out more than one primitive block.  This argument does not
+prove an adjoint relation between the closed left and right tensors, their
+linear independence, or the vanishing
+\[
+    Q(1-LQ)L=0.
+\]
+The physical direct sum separates the uncontracted physical sector spaces.
+After the physical legs are closed at lines~1473--1482, the vectors $l_h$ and
+functionals $r_k$ lie in common bond spaces, and the source gives only
+$T_{k,h}=(r_k\mid l_h)$.
+
+The proof of Lemma~C.5, at lines~1489--1499, then uses zero
+correlation length to obtain the pairing-operator identity and its trace-power
+consequence.  No further property of the inverse map occurs between this
+identity and the rank-one conclusion.  Thus the printed proof has precisely
+the matrix gap described above.
+
+The cyclic finite-chain form at lines~1581--1593 does not repair this step. It
+is obtained later from the same positive neighboring family and states a
+direct sum of cyclic products.  Its formal, scalar-preserving version is
+\leanid{MPOTensor.EtaLocalStructureData.%
+exists_positive_cyclic_eta_block_decomposition}.  Neither the source formula
+nor this theorem asserts independence, a Gram relation, kernel stabilization,
+or rectangular vanishing for the closed tensors.  Taking traces of cyclic
+products returns the already established positive-power trace identities.
+
+Consequently the strongest source-faithful common-matrix conclusion remains
+\[
+    \widehat T^2=\widehat T^3,
+    \qquad
+    \tr(\widehat T^N)=\tr(\widehat T)\quad(N\geq1),
+\]
+together with entrywise nonnegativity and primitivity.  The formal counterexample
+shows that these conclusions, even supplemented by injectivity, full virtual
+spanning, and positivity of every neighboring operator, do not imply the
+missing vanishing.  The counterexample does not satisfy the strong area law,
+so it does not disprove Lemma~C.5; rather, the source proof is obstructed
+because the printed argument derives no identity from its stated premises that
+excludes the nilpotent remainder.
+
+This obstruction propagates to every source statement whose proof invokes the
+rank-one factorization from Lemma~C.5.  In particular, the structural
+corollary at lines~1501--1505, the proposition proving Theorem~4.9
+(ii)$\Rightarrow$(iv) at lines~1740--1788, and the proposition proving
+Theorem~4.9 (ii)$\Rightarrow$(v) at lines~1810--1817 are not formalized from
+their stated SAL and ZCL hypotheses.  The constructions from an explicitly
+supplied rank-one neighboring trace factorization remain valid restricted
+results, but they do not establish these three source statements.
+
 \section{Conclusion}
 
 The proof in Appendix C.2 contains an unjustified matrix step as written: a
@@ -585,13 +642,15 @@ The local simple-MPDO structure is constructed only through these two corrected
 criteria; the former constructor with an abstract assumption asserting the
 false primitive trace-power implication has been removed.
 
-For the unconditional matrix product density operator argument, it therefore
-suffices either to prove the required positive-semidefinite structure of the
-trace matrix, or to derive the needed linear independence (or an equivalent
-exclusion of the generalized zero-eigenspace) for the concrete source sector
-pairing.  The source proof has a genuine unsupported intermediate assertion,
-while the intended matrix product density operator theorem itself has not been
-disproved.
+For the unconditional matrix product density operator argument, it would
+suffice to derive positive semidefiniteness, linear independence, or any
+equivalent exclusion of the generalized zero-eigenspace from the stated SAL
+and ZCL hypotheses.  The source and inverse-map provenance audit provides no
+such derivation.  Lemma~C.5 is therefore classified as obstructed, rather than
+formalized or refuted.  The same status applies to its structural corollary and
+to the source implications (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) of
+Theorem~4.9.  Their corrected conditional forms remain available, but the
+additional conditions must not be attributed to the source theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
