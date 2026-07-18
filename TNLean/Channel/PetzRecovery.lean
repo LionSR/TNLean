@@ -10,12 +10,13 @@ import TNLean.Channel.MarginalSupportAbsorption
 /-!
 # The support Petz transpose map for a partial trace
 
-This file constructs the raw Petz transpose map associated with a positive
+This file constructs the Petz transpose map associated with a positive
 semidefinite reference matrix and the partial trace over a right tensor factor.
-The source formula is defined on the support of the partial trace of the
-reference.  Accordingly, the map here is proved completely positive and is
-proved to recover its reference matrix, but no global trace-preservation claim
-is made.
+It first proves the source formula on the support of the reference marginal,
+then completes it on the orthogonal complement by a measure-and-prepare term.
+For a normalized reference, the completed map is trace-preserving completely
+positive, agrees with the source formula on supported inputs, and recovers the
+reference matrix.
 
 ## Main declarations
 
@@ -23,8 +24,12 @@ is made.
 * `Matrix.partialTraceRightPetzMap`: the raw Petz transpose map for the right
   partial trace.
 * `Matrix.partialTraceRightPetzMap_isKrausCP`: complete positivity.
+* `Matrix.partialTraceRightPetzChannel`: a trace-preserving completely positive
+  extension of the support formula.
 * `Matrix.partialTraceRightPetzMap_partialTraceRight`: recovery of the
   reference matrix.
+* `Matrix.partialTraceRightPetzChannel_partialTraceRight`: recovery by the
+  completed channel.
 
 ## References
 
@@ -153,6 +158,186 @@ theorem partialTraceRightPetzMap_isKrausCP
     · exact preparationMap_isKrausCP _ Matrix.PosSemidef.one
   · exact singleKrausMap_isKrausCP _
 
+/-- The raw partial-trace Petz map preserves the trace on the support of the
+reference marginal:
+\[
+  \operatorname{tr}(\mathcal R_\sigma(X))
+    =\operatorname{tr}(P_{\operatorname{tr}_R\sigma}X).
+\]
+
+This is the support trace identity for the transpose channel in
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
+Theorem 3 and equation (8).  It does not assert trace preservation on the
+orthogonal complement of the marginal support. -/
+theorem partialTraceRightPetzMap_trace
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
+    (X : Matrix L L ℂ) :
+    Matrix.trace (partialTraceRightPetzMap σ hσ X) =
+      Matrix.trace
+        ((PosSemidef.partialTraceRight hσ).isHermitian.supportProj * X) := by
+  let hτ := PosSemidef.partialTraceRight hσ
+  let I := hτ.supportInvSqrt
+  let S := hσ.isHermitian.cfc Real.sqrt
+  have hS_sq : S * S = σ := hσ.cfc_sqrt_mul_self
+  have hInv : I * partialTraceRight σ * I = hτ.isHermitian.supportProj :=
+    hτ.supportInvSqrt_mul_self_mul_supportInvSqrt
+  rw [partialTraceRightPetzMap_apply]
+  change Matrix.trace (S * leftKroneckerEmbed (n := R) (I * X * I) * S) =
+    Matrix.trace (hτ.isHermitian.supportProj * X)
+  calc
+    Matrix.trace (S * leftKroneckerEmbed (n := R) (I * X * I) * S) =
+        Matrix.trace (leftKroneckerEmbed (n := R) (I * X * I) * (S * S)) := by
+      simpa only [Matrix.mul_assoc] using
+        (Matrix.trace_mul_cycle (leftKroneckerEmbed (n := R) (I * X * I)) S S).symm
+    _ = Matrix.trace
+        (leftKroneckerEmbed (n := R) (I * X * I) * σ) := by rw [hS_sq]
+    _ = Matrix.trace ((I * X * I) * partialTraceRight σ) := by
+      rw [trace_leftKroneckerEmbed_mul]
+    _ = Matrix.trace (hτ.isHermitian.supportProj * X) := by
+      calc
+        Matrix.trace ((I * X * I) * partialTraceRight σ) =
+            Matrix.trace ((I * partialTraceRight σ) * I * X) := by
+          simpa only [Matrix.mul_assoc] using
+            Matrix.trace_mul_cycle I X (I * partialTraceRight σ)
+        _ = Matrix.trace (hτ.isHermitian.supportProj * X) := by rw [← hInv]
+
+/-- The complementary measure-and-prepare term for the partial-trace Petz
+map.  It measures the input on the orthogonal complement of the reference
+marginal support and prepares the other marginal of the reference matrix.
+
+This is the standard trace-preserving completion of the support transpose
+channel from Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3 and equation (8). -/
+noncomputable def partialTraceRightPetzComplementMap
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
+    Matrix L L ℂ →ₗ[ℂ] Matrix (L × R) (L × R) ℂ :=
+  preparationMap (partialTraceLeft σ) ∘ₗ
+    singleKrausMap
+      (1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj)
+
+/-- The complementary term has the expected measure-and-prepare formula for
+the trace-preserving completion of Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3 and equation (8). -/
+theorem partialTraceRightPetzComplementMap_apply
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
+    (X : Matrix L L ℂ) :
+    partialTraceRightPetzComplementMap σ hσ X =
+      ((1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj) * X *
+          (1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj)) ⊗ₖ
+        partialTraceLeft σ := by
+  simp [partialTraceRightPetzComplementMap, preparationMap,
+    (PosSemidef.partialTraceRight hσ).isHermitian.one_sub_supportProj_isHermitian.eq]
+
+/-- The complementary measure-and-prepare term in the trace-preserving
+completion of Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3, is completely positive. -/
+theorem partialTraceRightPetzComplementMap_isKrausCP
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
+    IsKrausCP (partialTraceRightPetzComplementMap σ hσ) := by
+  apply isKrausCP_comp
+  · exact singleKrausMap_isKrausCP _
+  · exact preparationMap_isKrausCP _ hσ.partialTraceLeft
+
+/-- The complementary term contributes the trace on the orthogonal complement
+of the reference marginal support when the reference matrix has trace one.
+
+This is the trace bookkeeping for the trace-preserving completion of the
+support transpose channel in Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3. -/
+theorem partialTraceRightPetzComplementMap_trace
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
+    (hσtrace : Matrix.trace σ = 1) (X : Matrix L L ℂ) :
+    Matrix.trace (partialTraceRightPetzComplementMap σ hσ X) =
+      Matrix.trace
+        ((1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj) * X) := by
+  let Q := 1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj
+  have hQidem : Q * Q = Q :=
+    (PosSemidef.partialTraceRight hσ).isHermitian.one_sub_supportProj_idem
+  rw [partialTraceRightPetzComplementMap_apply, Matrix.trace_kronecker,
+    trace_partialTraceLeft, hσtrace, mul_one]
+  change Matrix.trace (Q * X * Q) = Matrix.trace (Q * X)
+  calc
+    Matrix.trace (Q * X * Q) = Matrix.trace ((Q * Q) * X) := by
+      simpa only [Matrix.mul_assoc] using Matrix.trace_mul_cycle Q X Q
+    _ = Matrix.trace (Q * X) := by rw [hQidem]
+
+/-- A trace-preserving completion of the partial-trace Petz transpose map.
+It agrees with the support formula on inputs supported on the reference
+marginal and sends the complementary weight to a fixed prepared state.
+
+This is the channel extension of the transpose map used in
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
+Theorem 3 and equation (8). -/
+noncomputable def partialTraceRightPetzChannel
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
+    Matrix L L ℂ →ₗ[ℂ] Matrix (L × R) (L × R) ℂ :=
+  partialTraceRightPetzMap σ hσ + partialTraceRightPetzComplementMap σ hσ
+
+/-- The completed partial-trace Petz map is trace-preserving and completely
+positive when the reference matrix has trace one.
+
+This is the channel completion of the support transpose map in
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
+Theorem 3 and equation (8). -/
+theorem partialTraceRightPetzChannel_isKrausCPTP
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
+    (hσtrace : Matrix.trace σ = 1) :
+    IsKrausCPTP (partialTraceRightPetzChannel σ hσ) := by
+  apply isKrausCPTP_of_isKrausCP_trace_preserving
+  · exact isKrausCP_add
+      (partialTraceRightPetzMap_isKrausCP σ hσ)
+      (partialTraceRightPetzComplementMap_isKrausCP σ hσ)
+  · intro X
+    rw [partialTraceRightPetzChannel, LinearMap.add_apply, Matrix.trace_add,
+      partialTraceRightPetzMap_trace,
+      partialTraceRightPetzComplementMap_trace σ hσ hσtrace]
+    let P := (PosSemidef.partialTraceRight hσ).isHermitian.supportProj
+    change Matrix.trace (P * X) + Matrix.trace ((1 - P) * X) = Matrix.trace X
+    calc
+      Matrix.trace (P * X) + Matrix.trace ((1 - P) * X) =
+          Matrix.trace (P * X + (1 - P) * X) := by rw [Matrix.trace_add]
+      _ = Matrix.trace ((P + (1 - P)) * X) := by rw [Matrix.add_mul]
+      _ = Matrix.trace X := by simp
+
+/-- On an input supported on the reference marginal, the completed channel
+agrees with the raw support Petz formula.
+
+This is the support restriction in Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3 and equation (8). -/
+theorem partialTraceRightPetzChannel_apply_of_supported
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
+    (X : Matrix L L ℂ)
+    (hX :
+      (PosSemidef.partialTraceRight hσ).isHermitian.supportProj * X *
+        (PosSemidef.partialTraceRight hσ).isHermitian.supportProj = X) :
+    partialTraceRightPetzChannel σ hσ X = partialTraceRightPetzMap σ hσ X := by
+  let P := (PosSemidef.partialTraceRight hσ).isHermitian.supportProj
+  let Q : Matrix L L ℂ := 1 - P
+  have hPidem : P * P = P :=
+    (PosSemidef.partialTraceRight hσ).isHermitian.supportProj_idem
+  have hPX : P * X = X := by
+    calc
+      P * X = P * (P * X * P) := by rw [hX]
+      _ = (P * P) * X * P := by simp only [Matrix.mul_assoc]
+      _ = P * X * P := by rw [hPidem]
+      _ = X := hX
+  have hXP : X * P = X := by
+    calc
+      X * P = (P * X * P) * P := by rw [hX]
+      _ = P * X * (P * P) := by simp only [Matrix.mul_assoc]
+      _ = P * X * P := by rw [hPidem]
+      _ = X := hX
+  have hQXQ : Q * X * Q = 0 := by
+    rw [show Q = 1 - P from rfl]
+    calc
+      (1 - P) * X * (1 - P) = X - P * X - X * P + P * X * P := by
+        noncomm_ring
+      _ = 0 := by rw [hPX, hXP]; abel
+  rw [partialTraceRightPetzChannel, LinearMap.add_apply,
+    partialTraceRightPetzComplementMap_apply]
+  change partialTraceRightPetzMap σ hσ X + (Q * X * Q) ⊗ₖ partialTraceLeft σ = _
+  rw [hQXQ, zero_kronecker, add_zero]
+
 /-- The raw partial-trace Petz map recovers its positive-semidefinite reference
 matrix:
 `R_σ (tr_R σ) = σ`.
@@ -221,6 +406,25 @@ theorem partialTraceRightPetzMap_partialTraceRight
     S * P * S = S * (1 - Q) * S := by rw [hQ]; congr 2; abel
     _ = S * S - S * Q * S := by noncomm_ring
     _ = σ := by rw [hQSQ, sub_zero, hS_sq]
+
+/-- The completed partial-trace Petz channel recovers its reference matrix
+from the reference marginal.
+
+This is the reference-recovery identity for the transpose channel in
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
+Theorem 3 and equation (8). -/
+theorem partialTraceRightPetzChannel_partialTraceRight
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
+    partialTraceRightPetzChannel σ hσ (partialTraceRight σ) = σ := by
+  rw [partialTraceRightPetzChannel_apply_of_supported]
+  · exact partialTraceRightPetzMap_partialTraceRight σ hσ
+  · let hτ := PosSemidef.partialTraceRight hσ
+    calc
+      hτ.isHermitian.supportProj * partialTraceRight σ *
+          hτ.isHermitian.supportProj =
+          partialTraceRight σ * hτ.isHermitian.supportProj := by
+            rw [hτ.isHermitian.supportProj_mul_self]
+      _ = partialTraceRight σ := hτ.isHermitian.mul_supportProj_self
 
 end PartialTrace
 

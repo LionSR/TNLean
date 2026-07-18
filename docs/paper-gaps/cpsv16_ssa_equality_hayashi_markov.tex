@@ -10,7 +10,7 @@
 \title{The Strong-Subadditivity Equality Characterization as an External
 Stand-In, and Its One-Directional Hygiene Split}
 \author{}
-\date{2026-06-22}
+\date{2026-07-18}
 
 \begin{document}
 \maketitle
@@ -60,10 +60,10 @@ finite decomposition, the unitary basis change, the weights $p_j$, the component
 density operators, and the block-diagonal equality.} The forward direction is an
 external stand-in: that implication is a theorem of Ruskai, of
 Hayden--Jozsa--Petz--Winter, and of Hayashi, but its proof rests on
-the full saturation-to-recovery theorem, a trace-preserving extension of the
-support Petz map, and the structural analysis of recovered states, none of
-which is yet formalized here. The reverse direction is now proved from the
-entropy-additivity sub-lemmas listed below.
+the full saturation-to-recovery theorem and the structural analysis of
+recovered states.  The trace-preserving extension of the support Petz map is
+now available, but those two later steps are not.  The reverse direction is
+proved from the entropy-additivity sub-lemmas listed below.
 
 \section{The point at issue: only the forward direction is consumed}
 
@@ -77,10 +77,10 @@ downstream. Its proof is the deep part of the characterization: it requires
 recovery-map theory and the Petz transpose channel, that is, the analysis of
 when the data-processing inequality for relative entropy is saturated and the
 reconstruction of the discarded subsystem from a recovery map. This recovery-map
-argument still lacks the saturation-to-recovery theorem, the complementary
-trace-preserving extension of the support Petz map, and the subsequent
+argument still lacks the saturation-to-recovery theorem and the subsequent
 structural analysis, which is why the forward direction is axiomatized rather
-than proved.
+than proved.  The complementary trace-preserving extension of the support
+Petz map has now been supplied and is no longer part of this gap.
 
 \paragraph{Reverse direction (tractable, currently unused).}
 The implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} --- a state of the
@@ -150,10 +150,9 @@ The reverse half uses the following entropy-additivity sub-lemmas, all proved in
 With these five facts the reverse implication is a finite computation, now
 carried out in \path{TNLean/Analysis/EntropyMarkovReverse.lean}; the
 forward implication remains an axiom until the full saturation-to-recovery
-theorem, the complementary trace-preserving extension, and the structural
-analysis are available.
+theorem and the structural analysis are available.
 
-\section{Support-level Petz infrastructure now available}
+\section{Trace-preserving Petz channel now available}
 
 The support formula for the Petz transpose map associated with a right partial
 trace is now formalized for every positive semidefinite reference $\sigma$.
@@ -164,32 +163,51 @@ Writing $\tau=\operatorname{tr}_R\sigma$, the map is
     (\tau^{-1/2}_{\mathrm{supp}}X
       \tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R)\sqrt\sigma.
 \end{align}
-It is proved completely positive in rectangular Kraus form and satisfies
-$\mathcal R_\sigma(\tau)=\sigma$.
+It is proved completely positive in rectangular Kraus form, satisfies
+$\mathcal R_\sigma(\tau)=\sigma$, and obeys the support trace identity
+$\operatorname{tr}(\mathcal R_\sigma(X))=\operatorname{tr}(P_\tau X)$.
 \footnote{Formal declarations:
 \leanid{Matrix.partialTraceRightPetzMap},
-\leanid{Matrix.partialTraceRightPetzMap_isKrausCP}, and
+\leanid{Matrix.partialTraceRightPetzMap_isKrausCP},
+\leanid{Matrix.partialTraceRightPetzMap_trace}, and
 \leanid{Matrix.partialTraceRightPetzMap_partialTraceRight} in
 \path{TNLean/Channel/PetzRecovery.lean}.}
 This is exactly the formula stated on the support in
 \cite[Theorem~3, equation~(8)]{HaydenJozsaPetzWinter2004}.
 
-This leaf does not yet supply the full recovery theorem needed by the forward
-strong-subadditivity characterization.  In particular, it neither extends the
-singular formula to a trace-preserving channel on the complementary output
-subspace nor proves that saturation of relative-entropy data processing forces
-recovery of the first argument.  Those two steps, followed by the structural
-analysis of the recovered tripartite state, remain necessary before the
-forward axiom can be removed.
+For a normalized reference, let $Q_\tau=\mathbf 1-P_\tau$ and
+$\omega_R=\operatorname{tr}_L\sigma$.  The complementary term
+\begin{align}
+  \mathcal C_\sigma(X)=Q_\tau XQ_\tau\otimes\omega_R
+\end{align}
+is completely positive and contributes trace
+$\operatorname{tr}(Q_\tau X)$.  Hence
+$\widehat{\mathcal R}_\sigma=\mathcal R_\sigma+\mathcal C_\sigma$ is a
+trace-preserving completely positive map.  It agrees with the support formula
+when $P_\tau XP_\tau=X$ and still recovers the reference matrix from its
+marginal.
+\footnote{Formal declarations:
+\leanid{Matrix.partialTraceRightPetzComplementMap},
+\leanid{Matrix.partialTraceRightPetzChannel},
+\leanid{Matrix.partialTraceRightPetzChannel_isKrausCPTP},
+\leanid{Matrix.partialTraceRightPetzChannel_apply_of_supported}, and
+\leanid{Matrix.partialTraceRightPetzChannel_partialTraceRight} in
+\path{TNLean/Channel/PetzRecovery.lean}.}
+
+This leaf still does not supply the full recovery theorem needed by the
+forward strong-subadditivity characterization.  It does not prove that
+saturation of relative-entropy data processing forces recovery of the first
+argument.  That step, followed by the structural analysis of the recovered
+tripartite state, remains necessary before the forward axiom can be removed.
 
 \section{Verdict}
 
 The strong-subadditivity equality characterization is now split into a proved
 reverse direction and an axiomatic forward direction. Only the forward
 direction, equality implies quantum-Markov-chain structure, still needs the
-full saturation-to-recovery theorem, the complementary trace-preserving
-extension of the support Petz map, and the structural analysis of recovered
-states, and it alone is axiomatized. The reverse direction, a block-diagonal
+full saturation-to-recovery theorem and the structural analysis of recovered
+states; the trace-preserving Petz channel is now available.  The forward
+direction alone is axiomatized. The reverse direction, a block-diagonal
 product state attains equality, is proved from entropy additivity over weighted
 direct sums and tensor factors together with unitary and reindexing invariance.
 Until those remaining steps are formalized, the forward direction remains the

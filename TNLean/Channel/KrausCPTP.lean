@@ -140,6 +140,41 @@ theorem IsKrausCPTP.trace_map
   rw [hA]
   exact kraus_tp_of_sum_conjTranspose_mul A hA_norm X
 
+/-- A completely positive Kraus map that preserves the matrix trace is
+trace-preserving completely positive. -/
+theorem isKrausCPTP_of_isKrausCP_trace_preserving
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCP S)
+    (htrace : ∀ X, Matrix.trace (S X) = Matrix.trace X) : IsKrausCPTP S := by
+  obtain ⟨r, A, hA⟩ := hS
+  refine ⟨r, A, hA, ?_⟩
+  apply (Matrix.ext_iff_trace_mul_right).2
+  intro X
+  rw [Matrix.one_mul]
+  calc
+    Matrix.trace ((∑ i, (A i)ᴴ * A i) * X) =
+        ∑ i, Matrix.trace ((A i)ᴴ * A i * X) := by
+      rw [Matrix.sum_mul, Matrix.trace_sum]
+    _ = ∑ i, Matrix.trace (A i * X * (A i)ᴴ) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      exact (Matrix.trace_mul_cycle (A i) X (A i)ᴴ).symm
+    _ = Matrix.trace (S X) := by rw [hA X, Matrix.trace_sum]
+    _ = Matrix.trace X := htrace X
+
+/-- The sum of two completely positive maps in rectangular Kraus form is
+completely positive. -/
+theorem isKrausCP_add
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ}
+    (hS : IsKrausCP S) (hT : IsKrausCP T) : IsKrausCP (S + T) := by
+  obtain ⟨r, A, hA⟩ := hS
+  obtain ⟨s, B, hB⟩ := hT
+  refine ⟨r + s, Fin.append A B, ?_⟩
+  intro X
+  rw [LinearMap.add_apply, hA X, hB X, Fin.sum_univ_add]
+  simp
+
 /-- The identity map is trace-preserving completely positive; the single Kraus
 operator is the identity matrix. -/
 theorem isKrausCPTP_id {α : Type*} [Fintype α] [DecidableEq α] :
