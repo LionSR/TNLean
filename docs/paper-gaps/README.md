@@ -45,10 +45,13 @@ unless they are cited by one of the current blueprint chapters above.
 For MPDO renormalization fixed points:
 
 - `cpsv16_vertical_sector_invertibility.tex` separates the proved fixed
-  contraction families and product-generation theorem from the missing
-  density-weighted fixed-point argument in Appendix C.4. It also records that
-  sector relabelling follows from mutually inverse positive trace-preserving
-  maps, not from a bare linear equivalence.
+  contraction families and product-generation theorem from the remaining
+  density-weighted fixed-point argument in Appendix C.4. The full-support
+  adjoint Cesàro projection now has Wolf's weighted partial-trace block form;
+  taking its trace adjoint, reducing to support, and proving the transported
+  maps trace preserving on the full sector algebras remain open. The note also
+  records that sector relabelling follows from mutually inverse positive
+  trace-preserving maps, not from a bare linear equivalence.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
   elements with nilpotent physical-trace transfer matrices and records the
   positive physical blocking and chosen-BNT interpretation of the

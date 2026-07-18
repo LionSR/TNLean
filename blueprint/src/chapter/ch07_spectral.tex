@@ -2494,6 +2494,48 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     supplies the unitary and the equivalence.
 \end{proof}
 
+% Scope restriction documented in
+% docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
+\begin{theorem}[Weighted block form of the adjoint Ces\`aro projection on full support]%
+    \label{thm:adjoint_mean_ergodic_projection_weighted_block_form}
+    \lean{IsPositiveMap.exists_block_densities_of_adjoint_meanErgodicProjection}
+    \leanok
+    \uses{thm:positive_unital_adjoint_mean_ergodic_retraction,
+        thm:fixedPointsStarSubalgebra,
+        thm:positive_retraction_finite_star_algebra}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace preserving, suppose that
+    $T^*$ satisfies the Schwarz inequality, and suppose that there is a
+    positive definite matrix $\rho$ satisfying $T(\rho)=\rho$.  Let $P_T$ be
+    the mean-ergodic projection of $T$.  There are positive integers $d_k,m_k$,
+    a unitary $U$, and density matrices $\sigma_k\in\MN{m_k}$ such that
+    \[
+        U^*\operatorname{Fix}(T^*)U
+        =\bigoplus_k\Id_{m_k}\otimes\MN{d_k}
+    \]
+    and, for every $A\in\MN{D}$,
+    \[
+        P_T^*(A)=U\left(\bigoplus_k\Id_{m_k}\otimes
+        \operatorname{tr}_{m_k}\!\left(
+          (\sigma_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*.
+    \]
+    This is the full-support conditional-expectation step in the proof of
+    \cite[Theorem~6.14]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:positive_unital_adjoint_mean_ergodic_retraction,
+        thm:fixedPointsStarSubalgebra,
+        thm:positive_retraction_finite_star_algebra}
+    The map $P_T^*$ is a positive unital idempotent map whose range is
+    $\operatorname{Fix}(T^*)$.  The positive definite fixed point of $T$ is a
+    faithful invariant weight for $T^*$, so the Schwarz equality argument
+    makes $\operatorname{Fix}(T^*)$ a $*$-subalgebra.  Thus $P_T^*$ is a
+    positive retraction onto this subalgebra.  The blockwise classification of
+    positive retractions gives the unitary, the matrix dimensions, the
+    density matrices $\sigma_k$, and the displayed formula.
+\end{proof}
+
 Without a full-rank hypothesis on the fixed point, the corner-restricted fixed-point
 $*$-algebra of Theorem~\ref{thm:cornerFixedPointsStarSubalgebra} still carries the block
 structure through the compression onto the support sector; this is the
