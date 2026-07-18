@@ -74,20 +74,32 @@ The proof uses the complementary decomposition for the original
 mean-ergodic projection and trace-pairing nondegeneracy; it requires no
 bounded-orbit or spectral hypothesis for $T^*$.
 
-Three arguments remain to obtain the fixed-point statement above.  First, the
-Schwarz hypothesis must be used to identify the full-support adjoint
-fixed-point range with a unital $*$-algebra.  Second, the positive
-semidefinite density matrices supplied by Proposition~1.5 must be restricted
-to their supports; this produces the positive definite matrices in
-Theorem~6.14.  Third, the
-discarded kernels must be assembled with the subspace on which every fixed
-point vanishes, thereby recovering the zero summand $\mathcal H_0$.
+The full-support retraction step is also formalized.  If $T$ has a positive
+definite fixed point and $T^*$ satisfies the Schwarz inequality, then the
+Schwarz equality argument makes $\operatorname{Fix}(T^*)$ a unital
+$*$-algebra, and the adjoint mean-ergodic projection is a positive retraction
+onto it.  Applying Proposition~1.5 gives the weighted partial-trace block
+form of this projection.\footnote{Formal declaration:
+\leanid{IsPositiveMap.exists_block_densities_of_adjoint_meanErgodicProjection}
+in
+\doclink{TNLean/Channel/FixedPoint/FullSupportBlockRetraction}.}
+This is the conditional-expectation step in the proof of Theorem~6.14,
+local source lines~1483--1492.
 
-Thus Proposition~1.5 is fully formalized, while Theorem~6.14 remains an open
-gap.  The missing work is not another construction of a fixed-point
-retraction: it is the full-support algebra identification for the completed
-adjoint retraction, the positive-definite support reduction, and the recovery
-of the zero block from the kernels.
+Three arguments remain to obtain the fixed-point statement above.  First, the
+trace adjoint of the weighted partial-trace formula must be calculated and its
+range identified with the Schr\"odinger-picture density blocks.  Second, the
+positive semidefinite density matrices supplied by Proposition~1.5 must be
+restricted to their supports; this produces the positive definite matrices
+in Theorem~6.14.  Third, the discarded kernels must be assembled with the
+subspace on which every fixed point vanishes, thereby recovering the zero
+summand $\mathcal H_0$.
+
+Thus Proposition~1.5 and its application to the full-support adjoint
+mean-ergodic projection are formalized, while Theorem~6.14 remains an open
+gap.  The missing work is the trace-adjoint density-block calculation, the
+positive-definite support reduction, and the recovery of the zero block from
+the kernels.
 
 \bibliographystyle{alpha}
 \bibliography{references}

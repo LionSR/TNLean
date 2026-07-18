@@ -8,6 +8,7 @@ import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
+import TNLean.Channel.FixedPoint.FullSupportBlockRetraction
 import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.CornerFixedPoints
@@ -301,8 +302,17 @@ well.
 The trace-pairing adjoint step is now complete.  The adjoint of the
 mean-ergodic projection is a positive unital idempotent retraction onto the
 fixed-point space of the adjoint endomorphism.  The remaining step for
-Theorem 6.14 is to combine this retraction with the full-support star-algebra
-description.
+Theorem 6.14 begins by combining this retraction with the full-support
+star-algebra description.
+
+In `TNLean.Channel.FixedPoint.FullSupportBlockRetraction`:
+
+* `IsPositiveMap.exists_block_densities_of_adjoint_meanErgodicProjection` —
+  when the positive trace-preserving map has a positive definite fixed point
+  and its trace adjoint satisfies the Schwarz inequality, the adjoint
+  mean-ergodic projection is a positive retraction onto the adjoint
+  fixed-point star-algebra and has the weighted partial-trace block form of
+  Wolf Equation (1.40).
 
 In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 
@@ -339,9 +349,10 @@ positive semidefinite fixed point):
   corner-restricted set only; extending by zero on the complement does not
   produce ambient fixed points in general.
 
-What is still missing for the full Wolf statement is the identification of
-the ambient fixed-point space with the zero-block form and the density-block
-refinement with matrices `ρ_k` for the Schrödinger-picture fixed points.
+What is still missing for the full Wolf statement is to take the trace adjoint
+of the weighted retraction formula, identify the Schrödinger-picture fixed
+points with the resulting density blocks, and transport the support-sector
+formula back to the ambient space with the complementary zero block.
 
 ### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED (Kraus case)
 
