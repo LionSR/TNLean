@@ -151,6 +151,63 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     multiplicity to be one, and its bond to be the given bond.
 \end{proof}
 
+\begin{definition}[Restriction to an orthogonal physical sector]
+    \label{def:mpdo_physical_support_restriction}
+    \lean{MPOTensor.PhysicalSupportRestrictionData}
+    \leanok
+    \uses{def:mpdo_source_gsnnch}
+    Let $P$ be an orthogonal one-site projection and let $K$ be an MPO tensor
+    fixed by compression with $P$ on its two physical indices.  A physical
+    support restriction consists of a dimension $e$ and an isometry
+    $V:\C^e\longrightarrow\C^d$ such that
+    \[
+        V^*V=1,
+        \qquad VV^*=P,
+    \]
+    for which the restricted tensor $K_P=V^*KV$ is injective and its
+    inclusion into the ambient physical space recovers $K$ exactly.
+\end{definition}
+
+\begin{theorem}[Injective restriction to a BNT projector range]
+    \label{thm:mpdo_bnt_physical_support_restriction}
+    \lean{MPOTensor.exists_physicalSupportRestrictionData}
+    \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isInjective}
+    \lean{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis}
+    \leanok
+    \uses{def:mpdo_physical_support_restriction}
+    Suppose that the source BNT projectors have been constructed after the
+    common physical blocking, and let $\mathcal K_s$ be the normal
+    representative with its common copy weight absorbed.  Then
+    $\mathcal K_s$ admits a physical support restriction to the range of
+    $P_s$.  In particular, for some isometry $V_s$,
+    \[
+        V_sV_s^*=P_s,
+        \qquad
+        \mathcal K_s=V_s(V_s^*\mathcal K_sV_s)V_s^*,
+    \]
+    and the restricted tensor $V_s^*\mathcal K_sV_s$ is injective.
+\end{theorem}
+
+\begin{proof}\leanok
+    The projector identity $P_s\mathcal K_sP_s=\mathcal K_s$ gives an
+    isometric inclusion of its range.  The simultaneous one-site spanning
+    condition makes each normal representative injective, and multiplication
+    by its nonzero common weight preserves injectivity.  Write
+    $K_{P_s}=V_s^*\mathcal K_sV_s$.  Each ambient matrix slice satisfies
+    \[
+        (\mathcal K_s)_{ij}
+        =\sum_{p,q}(V_s)_{ip}\,\overline{(V_s)_{jq}}\,(K_{P_s})_{pq}.
+    \]
+    Hence
+    \[
+        \operatorname{span}\{(\mathcal K_s)_{ij}\}_{i,j}
+        \subseteq
+        \operatorname{span}\{(K_{P_s})_{pq}\}_{p,q}.
+    \]
+    The left-hand side is the full virtual matrix algebra, so $K_{P_s}$ is
+    injective.  The two isometry identities give the exact reconstruction.
+\end{proof}
+
 \begin{definition}[Orthogonally supported commuting sector products]
     \label{def:mpdo_orthogonal_commuting_sector_family}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily}

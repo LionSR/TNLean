@@ -452,6 +452,7 @@ import TNLean.MPS.MPDO.BNTThreeSiteReducedClosure
 import TNLean.MPS.MPDO.BNTSourceSectorProjectors
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.BNTProjectorSelection
+import TNLean.MPS.MPDO.PhysicalSupportRestriction
 import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
 import TNLean.MPS.MPDO.BNTSectorAreaLaw
 import TNLean.MPS.MPDO.HayashiSectorProjector
