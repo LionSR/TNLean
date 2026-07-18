@@ -36,6 +36,8 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
 * `Matrix.traceRight_apply`: elementwise formula for `tr_B`
 * `Matrix.trace_partialTraceRight`: the full trace is preserved by the general
   right partial trace
+* `Matrix.trace_partialTraceLeft`: the full trace is preserved by the general
+  left partial trace
 * `Matrix.partialTraceRight_kronecker`: the right partial trace of a Kronecker
   product
 * `Matrix.partialTraceRightAlong`: the partial trace after choosing a product
@@ -217,6 +219,12 @@ noncomputable def partialTraceLeft (X : Matrix (α × β) (α × β) ℂ) :
 @[simp]
 theorem partialTraceLeft_apply (X : Matrix (α × β) (α × β) ℂ) (i j : β) :
     partialTraceLeft X i j = ∑ k : α, X (k, i) (k, j) := rfl
+
+/-- The trace is invariant under the partial trace over the first factor. -/
+theorem trace_partialTraceLeft [Fintype β] (X : Matrix (α × β) (α × β) ℂ) :
+    (partialTraceLeft X).trace = X.trace := by
+  simp only [Matrix.trace, Matrix.diag, partialTraceLeft_apply]
+  rw [Finset.sum_comm, Fintype.sum_prod_type]
 
 /-- The partial trace over the first factor preserves Hermiticity. -/
 theorem partialTraceLeft_isHermitian {X : Matrix (α × β) (α × β) ℂ}
