@@ -106,21 +106,23 @@ natural multiplicities.
 {\scriptsize\leanid{MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily}}.}
 The first part of the support-preserving sector argument is also complete.
 Every absorbed BNT representative has an exact isometric restriction to the
-range of its matching projector, the restricted tensor is injective, and SAL
+range of its matching projector, the restricted tensor is injective, SAL
 passes from the ambient representative to this restriction through the
-sitewise support isometry.
+sitewise support isometry, and the positive Proposition~C.8 bond lifts to a
+positive two-site operator supported on the tensor square of that projector.
 \footnote{\raggedright Formal declarations:
 {\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData}},
 {\scriptsize\leanid{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis}},
+{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}},
 and
-{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}}.}
+{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_liftedBond_supported}}.}
 The remaining comparison has two parts:
 
 \begin{enumerate}
-  \item apply the injective commuting-product theorem to the restricted
-        tensor and transport its positive bond back to the ambient one-site
-        space, proving
-        $(P_j\otimes P_j)B^{(j)}(P_j\otimes P_j)=B^{(j)}$;
+  \item transport commutativity and the exact finite-chain product identity
+        of the restricted bond through the support isometry; its positive
+        ambient lift and the identity
+        $(P_j\otimes P_j)B^{(j)}(P_j\otimes P_j)=B^{(j)}$ are formalized;
   \item determine whether the reverse comparison with a single bond is needed
         in the simple-MPDO equivalence, and prove it only in that form.
 \end{enumerate}
@@ -140,8 +142,10 @@ tensor, the BNT projectors, their positive-length compression formula, and the
 sectorwise MPDO, SAL, and ZCL conclusions are formalized.  The abstract
 construction of the outer sector sum with its natural multiplicities is
 formalized, as is the injective restriction of every representative to its
-projector range.  SAL is invariant under the support isometry.  The open gap
-is the transport of the resulting positive commuting bond, together with any
-reverse comparison actually needed by the simple-MPDO equivalence.
+projector range.  SAL is invariant under the support isometry, and the
+resulting positive bond has a positive ambient lift supported on the matching
+two-site sector.  The open gap is the transport of commutativity and the exact
+finite-chain product identity, together with any reverse comparison actually
+needed by the simple-MPDO equivalence.
 
 \end{document}
