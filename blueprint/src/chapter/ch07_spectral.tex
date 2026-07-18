@@ -2131,6 +2131,52 @@ module over the subalgebra.
     $X_{aa'}$ and $Y_{cc'}$ gives the displayed formulas.
 \end{proof}
 
+\begin{theorem}[Explicit unitary block actions for commuting overlaps]%
+    \label{thm:commuting_overlapping_unitary_block_actions}
+    \lean{Matrix.exists_unitary_blockActions_of_overlappingLifts_commute}
+    \lean{Matrix.leftSpatialBlockEquiv}
+    \lean{Matrix.rightSpatialBlockEquiv}
+    \leanok
+    Let $X_{AB}\in\mathbf L(H_A\otimes H_B)$ and
+    $Y_{BC}\in\mathbf L(H_B\otimes H_C)$ be Hermitian, and suppose
+    \[
+        [X_{AB}\otimes\Id_C,\Id_A\otimes Y_{BC}]=0.
+    \]
+    There are positive integers $d_q,m_q$, a unitary identification
+    \[
+        H_B\cong\bigoplus_{q=0}^{K-1}H_{q,l}\otimes H_{q,r},
+    \]
+    and Hermitian operators
+    $R_q\in\mathbf L(H_A\otimes H_{q,l})$ and
+    $S_q\in\mathbf L(H_{q,r}\otimes H_C)$ such that
+    \[
+        (\Id_A\otimes U^*)X_{AB}(\Id_A\otimes U)
+        =\bigoplus_{q=0}^{K-1}(R_q\otimes\Id_{H_{q,r}}),
+    \]
+    and
+    \[
+        (U^*\otimes\Id_C)Y_{BC}(U\otimes\Id_C)
+        =\bigoplus_{q=0}^{K-1}(\Id_{H_{q,l}}\otimes S_q).
+    \]
+    This is the explicit coordinate form of the two block-action identities in
+    \cite[Lemma~2.1]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:commuting_overlapping_coefficient_spatial_decomposition}
+    Use the orthonormal decomposition from
+    Theorem~\ref{thm:commuting_overlapping_coefficient_spatial_decomposition}.
+    Let $U$ be the unitary whose columns are the adapted basis vectors.  Assemble the
+    coefficient matrices $(B_q^{aa'})_{a,a'}$ into a matrix $R_q$ on
+    $H_A\otimes H_{q,l}$, and similarly assemble $(C_q^{cc'})_{c,c'}$ into a matrix
+    $S_q$ on $H_{q,r}\otimes H_C$.  Taking matrix entries in the adapted basis turns
+    the coefficient-action formulas into the two displayed direct sums.  Finally,
+    unitary conjugation preserves Hermiticity.  Restricting the two conjugated
+    Hermitian operators to a summand, and fixing one basis vector in the nonempty
+    complementary factor, shows that every $R_q$ and every $S_q$ is Hermitian.
+\end{proof}
+
 Combining the containment direction with the double-commutant criterion yields the full
 block representation of a finite-dimensional $*$-subalgebra, the unital case of
 Eq.~(1.39) of~\cite{Wolf2012Quantum} invoked by~\cite[Theorem~6.14]{Wolf2012Quantum}: up
