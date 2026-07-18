@@ -1,0 +1,86 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{BNT Uniqueness and Zero Coefficients in CPSV16}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{The source claim}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete define a basis of normal tensors
+for a tensor $A$ to be a finite family of normal tensors $(A_j)_{j=1}^g$ such
+that, at each positive length, $V^{(N)}(A)$ is a linear combination of the
+$V^{(N)}(A_j)$, and these vectors are linearly independent for all sufficiently
+large $N$ \cite[lines 271--274]{Cirac2016MPDO_arXiv}. Proposition~2.7
+characterizes such a family by coverage of the normal blocks of a canonical
+form and pairwise distinction up to a phase and an invertible gauge
+\cite[lines 278--280 and 1135--1146]{Cirac2016MPDO_arXiv}.
+
+Immediately afterwards, the source asserts that any two bases of normal
+tensors corresponding to the same canonical form coincide up to phases and
+gauge transformations \cite[line 1148]{Cirac2016MPDO_arXiv}. Read literally,
+this would in particular imply equality of the two cardinalities.
+
+\section{A two-symbol counterexample}
+
+Let the physical alphabet be $\{0,1\}$ and let the bond dimension be one.
+Define two tensors by
+\begin{align}
+    A_0^0=1,\qquad A_0^1=0,
+    \qquad
+    A_1^0=0,\qquad A_1^1=1.
+\end{align}
+Both tensors are normal. Their transfer maps are the identity on the
+one-dimensional matrix algebra. Moreover,
+\begin{align}
+    V^{(N)}(A_0)&=|0\cdots0\rangle,
+    &V^{(N)}(A_1)&=|1\cdots1\rangle
+\end{align}
+for every $N\geq1$. These two vectors are orthogonal and hence linearly
+independent.
+
+The singleton family $(A_0)$ is therefore a basis of normal tensors for
+$A_0$. The two-element family $(A_0,A_1)$ is also a basis of normal tensors
+for $A_0$: take the coefficient of $A_0$ to be one and the coefficient of
+$A_1$ to be zero at every length. Both families correspond to the same
+one-block canonical-form display
+\begin{align}
+    V^{(N)}(A_0)=1^N V^{(N)}(A_0).
+\end{align}
+Their index sets have cardinalities one and two, so no bijection, and hence no
+bijective gauge-phase matching, can exist.
+
+The formal counterexample records both bases of normal tensors and the
+cardinality obstruction explicitly.\footnote{The declaration is
+\leanid{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card} in
+\doclink{TNLean/MPS/CanonicalForm/BNTUniqueness.lean}.}
+
+\section{The missing condition}
+
+The obstruction is the identically zero coefficient. Coverage of the active
+canonical-form blocks gives a map from their gauge-phase classes into the
+candidate family. Pairwise distinction makes this map injective, but neither
+the definition nor Proposition~2.7 says that every candidate represents an
+active canonical-form block. Thus the map need not be surjective.
+
+A valid uniqueness theorem may be obtained by adding the converse coverage
+condition: every candidate must be gauge-phase equivalent to an active block
+of the displayed canonical form. Under this condition, the coverage maps are
+bijections and their composition gives the desired matching. This is a
+mathematically correct scope restriction, but it is not part of the literal
+hypotheses at lines 271--280 or 1135--1148. Accordingly, the unrestricted
+line-1148 sentence is not marked as formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -110,6 +110,58 @@ structure IsNormalTensor (A : MPSTensor d D) : Prop where
   /-- (ii-b) the associated CPM has no unit-modulus eigenvalue other than one. -/
   primitive_transfer : _root_.IsPrimitive (transferMap (d := d) (D := D) A)
 
+/-- Every tensor of bond dimension one is irreducible: the only orthogonal
+projections on its one-dimensional bond space are zero and the identity. -/
+theorem isIrreducibleTensor_of_bondDim_one (A : MPSTensor d 1) :
+    IsIrreducibleTensor A := by
+  rintro ⟨P, ⟨_, hIdem⟩, hP0, hP1, _⟩
+  have h00 := congrFun (congrFun hIdem (0 : Fin 1)) (0 : Fin 1)
+  simp only [Matrix.mul_apply, Finset.univ_unique, Fin.default_eq_zero,
+    Fin.isValue, Finset.sum_singleton] at h00
+  have hfactor : P 0 0 * (P 0 0 - 1) = 0 := by
+    linear_combination h00
+  rcases mul_eq_zero.mp hfactor with hzero | hone
+  · apply hP0
+    ext x y
+    fin_cases x
+    fin_cases y
+    simpa using hzero
+  · apply hP1
+    ext x y
+    fin_cases x
+    fin_cases y
+    simpa using sub_eq_zero.mp hone
+
+/-- A bond-dimension-one tensor whose transfer map is the identity is a normal
+tensor. -/
+theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
+    (A : MPSTensor d 1) (hA : transferMap A = LinearMap.id) :
+    IsNormalTensor A := by
+  refine ⟨isIrreducibleTensor_of_bondDim_one A, ?_, ?_⟩
+  · rw [hA]
+    change spectralRadius ℂ
+      (1 : Matrix (Fin 1) (Fin 1) ℂ →L[ℂ] Matrix (Fin 1) (Fin 1) ℂ) = 1
+    exact spectrum.spectralRadius_one
+  · rw [hA]
+    apply isPrimitive_of_unique_norm_one LinearMap.id
+      (1 : Matrix (Fin 1) (Fin 1) ℂ)
+    · rfl
+    · exact one_ne_zero
+    · intro μ hμ _hμnorm
+      obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
+      have hEq := hX.apply_eq_smul
+      have hX00 : X 0 0 ≠ 0 := by
+        intro hzero
+        apply hX.2
+        ext x y
+        fin_cases x
+        fin_cases y
+        simpa using hzero
+      have hEq00 := congrFun (congrFun hEq (0 : Fin 1)) (0 : Fin 1)
+      simp only [LinearMap.id_apply, Matrix.smul_apply, smul_eq_mul] at hEq00
+      apply mul_right_cancel₀ hX00
+      simpa using hEq00.symm
+
 /-! ## Basis of normal tensors (BNT) -/
 
 /--
