@@ -269,32 +269,42 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \begin{proof}\leanok
     \uses{thm:cpsv_bnt_characterization,
         thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
-    For each $A_j$, choose an active canonical-form block representing it,
-    and then choose a member $B_{f(j)}$ representing that block. If
-    $f(j)=f(j')$, the chosen relations give
+    For each $A_j$, choose an active canonical-form block
+    $\widetilde A_{\ell(j)}$ representing it, and then choose a member
+    $B_{f(j)}$ representing that block. If $f(j)=f(j')$, then
     \[
-        A_j\sim_{\mathrm{gp}}B_{f(j)}
-        =B_{f(j')}\sim_{\mathrm{gp}}A_{j'}.
+        A_j\sim_{\mathrm{gp}}\widetilde A_{\ell(j)}
+        \sim_{\mathrm{gp}}B_{f(j)}
+        =B_{f(j')}\sim_{\mathrm{gp}}\widetilde A_{\ell(j')}
+        \sim_{\mathrm{gp}}A_{j'}.
     \]
-    Hence $A_j\sim_{\mathrm{gp}}A_{j'}$. Minimality of the first basis gives
-    $j=j'$, so $f$ is injective. Reversing the roles of the two bases gives an
-    injection in the other direction. Since both index sets are finite, $f$
-    is bijective. More explicitly, if the common active block satisfies
+    Minimality of the first basis gives $j=j'$, so $f$ is injective.
+    Reversing the roles of the two bases gives an injection in the other
+    direction. Since both index sets are finite, $f$ is bijective; set $e=f$.
+    Write the two relations through the chosen active block as
     \[
-        \widetilde A_k^i=\alpha P A_j^iP^{-1},
+        \widetilde A_{\ell(j)}^i
+        =\zeta_{1,j}X_{1,j}A_j^iX_{1,j}^{-1},
         \qquad
-        \widetilde A_k^i=\beta Q B_{f(j)}^iQ^{-1},
+        \widetilde A_{\ell(j)}^i
+        =\zeta_{2,j}X_{2,j}B_{e(j)}^iX_{2,j}^{-1}.
     \]
-    then
+    Solving the second identity for $B_{e(j)}^i$ and using the first gives
     \[
-        B_{f(j)}^i=(\beta^{-1}\alpha)(Q^{-1}P)
-          A_j^i(P^{-1}Q).
+        B_{e(j)}^i
+        =(\zeta_{2,j}^{-1}\zeta_{1,j})
+        (X_{2,j}^{-1}X_{1,j})A_j^i(X_{1,j}^{-1}X_{2,j}).
     \]
-    Finally, for normal tensors the gauge-phase relation used here satisfies
+    Denote the scalar and gauge in this identity by $\zeta_j$ and $X_j$.
+    The gauge-phase relation gives
     \[
-        B_{f(j)}^i=\zeta X A_j^iX^{-1}\quad\text{for every }i
-        \quad\Longrightarrow\quad |\zeta|=1.
+        O_{B_{e(j)}B_{e(j)}}(N)
+        =(\zeta_j\overline{\zeta_j})^N O_{A_jA_j}(N)
+        =|\zeta_j|^{2N}O_{A_jA_j}(N).
     \]
+    Normality gives
+    $O_{A_jA_j}(N)\to1$ and $O_{B_{e(j)}B_{e(j)}}(N)\to1$; hence the last
+    identity forces $|\zeta_j|=1$.
     % This is the converse-coverage restriction documented in
     % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex, not the
     % unrestricted sentence at arXiv:1606.00608, Appendix A, line 1148.
