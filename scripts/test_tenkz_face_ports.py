@@ -299,6 +299,11 @@ def main() -> int:
     default_brick = pictures[17]
     require(
         default_brick,
+        "faceports|picture=17|cell=1-1|face=up|arity=2|at=rows",
+        "default tall-brick face record disagrees with its two drawn ports",
+    )
+    require(
+        default_brick,
         "boundary|picture=17|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
         "face-port support changed the default tall-brick arity",
     )

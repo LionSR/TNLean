@@ -662,6 +662,8 @@
   }
 \cs_new_protected:Npn \tenkz_emit_faceports_one:nnn #1#2#3
   { \tenkz_emit_faceports_one:nnnn {#1}{#2}{#3}{\l__tenkz_cwires_int} }
+\cs_new_protected:Npn \tenkz_emit_faceports_rows:nnn #1#2#3
+  { \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\int_use:N\l__tenkz_cwires_int|at=rows} }
 
 \cs_new_protected:Npn \tenkz_emit_faceports:nn #1#2
   {
@@ -676,6 +678,25 @@
       { \tenkz_emit_faceports_one:nnn {#1}{#2}{up} }
     \tl_if_empty:NF \l__tenkz_cdownat_tl
       { \tenkz_emit_faceports_one:nnn {#1}{#2}{down} }
+    % A cell-level physical= declaration on a wires=k brick has one port
+    % per spanned row unless a primary or compatibility face key replaces
+    % it.  Record that implicit split face as `rows', matching its ink and
+    % boundary contribution.
+    \tl_if_empty:NF \l__tenkz_cphys_tl
+      {
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
+          { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+          { \tl_if_empty:NT \l__tenkz_cupat_tl
+              { \tl_if_empty:NT \l__tenkz_clegsat_tl
+                  { \tenkz_emit_faceports_rows:nnn {#1}{#2}{up} } } }
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
+          { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+          { \tl_if_empty:NT \l__tenkz_cdownat_tl
+              { \tl_if_empty:NT \l__tenkz_clegsat_tl
+                  { \tenkz_emit_faceports_rows:nnn {#1}{#2}{down} } } }
+      }
     \tl_if_empty:NF \l__tenkz_cwestat_tl
       { \tenkz_emit_faceports_one:nnn {#1}{#2}{west} }
     \tl_if_empty:NF \l__tenkz_ceastat_tl
