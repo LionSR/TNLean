@@ -69,13 +69,59 @@ Prefer the weakest mechanism that removes the duplication, in this order:
    rewrites (`simp only [a, b, c, ...]` repeated verbatim), tag the lemmas
    with a custom attribute and replace the list with the set. Existing sets:
    `mps_block_words`, `mps_transfer`.
-3. **A macro** (`macro "name" : tactic => ...`). Thin sugar over a fixed
+3. **`@[grind]` annotations + `grind`.** When the block *closes* a goal
+   (rather than normalizing it) by combining hypotheses, case-splitting, and
+   arithmetic, try the core `grind` tactic before writing any custom tactic.
+   Like a simp set, its power is declarative and cumulative: tagging project
+   lemmas `@[grind]` / `@[grind =]` / `@[grind →]` teaches it a theory once
+   and every later leaf goal in that theory benefits. See
+   [Using `grind`](#using-grind) below.
+4. **A macro** (`macro "name" : tactic => ...`). Thin sugar over a fixed
    tactic sequence. Cheap to write, transparent to review, easy to inline
    away if it ages badly.
-4. **An elab tactic** (`elab "name" : tactic => ...`). Only when the pattern
+5. **An elab tactic** (`elab "name" : tactic => ...`). Only when the pattern
    needs goal inspection or branching (like `mpv_ext`). These cost the most
    to review and maintain; the ledger entry must say why a macro is not
    enough.
+
+## Using `grind`
+
+The core `grind` tactic (congruence closure, E-matching over annotated
+lemmas, case splitting, linear-arithmetic and commutative-ring solvers) is
+available on this toolchain and already used in the codebase
+(`TNLean/Channel/Schwarz/OperatorJensenAux.lean`,
+`TNLean/Axioms/OperatorConvexity.lean`) — chiefly as a side-condition
+discharger, e.g. `fun_prop (disch := grind)` and spectrum-membership
+arithmetic. It produces ordinary kernel-checked proofs, so none of the
+`docs/PROOF_INTEGRITY.md` blocker concerns apply (it is *not* in the
+`native_decide` class).
+
+Where it fits in this project:
+
+- **Leaf goals, not normalization.** `grind` either closes a goal or fails;
+  it does not leave a usable normal form. Use it as a terminal discharger
+  after the structural steps (`ext`, `mpv_ext`, `block_words`, …) have
+  exposed a first-order goal. The "no search" rule below therefore also
+  means: never wrap `grind` inside a promoted normalization tactic; call it
+  explicitly at the leaf so failures are local and visible.
+- **Annotate theories, not proofs.** The sustainable win is tagging the
+  project's characterizing lemmas (`@[grind =]` for defining equations,
+  `@[grind →]` for implications) in the file that proves them, exactly as
+  simp-set membership is declared. A candidate ledger entry whose block is
+  "combine these three lemmas and split cases" is often better discharged by
+  annotating those lemmas than by a macro.
+- **Known limits.** Binder-heavy goals (`Finset.sum`/`prod` congruence with
+  function arguments), noncommutative-ring identities (matrix algebra — its
+  ring solver is commutative), and instance-synthesis problems are outside
+  its reach; those stay on the lemma/simp-set/macro path.
+- **Budget.** `grind` searches, so it costs elaboration time. If a call
+  needs a `maxHeartbeats` bump (a `docs/PROOF_INTEGRITY.md` warning), write
+  the explicit proof instead. When an explicit 2-3 line proof is stable and
+  fast, prefer it; `grind` earns its keep on goals whose explicit proofs are
+  long, brittle, or repeated.
+- **Record it.** When `grind` closes a ledger candidate outright, resolve
+  the entry as *promoted* with abstraction "`grind` (+ the annotations
+  added)" so the pattern is not re-proposed as a macro later.
 
 ## Design rules for promoted tactics
 

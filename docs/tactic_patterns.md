@@ -69,7 +69,10 @@ current counts and full location lists).
   extensionality plus diagonal/off-diagonal split, leaving the two goals
   named. Check first whether the diagonal-matrix Mathlib API
   (`Matrix.diagonal_apply_ne` etc.) turns specific call sites into lemmas
-  instead.
+  instead. Also try `ext i j <;> grind` at a few call sites (with
+  `Matrix.diagonal_apply`-family lemmas `@[grind =]`-tagged if needed) —
+  the case split and entry arithmetic are squarely in `grind`'s scope;
+  unverified pending a build-capable session.
 
 ### clm_norm_instances — candidate
 - **Pattern:**
@@ -130,7 +133,10 @@ current counts and full location lists).
 - **Abstraction (proposed):** single-file duplication — restructure the
   underlying definition to take a bundled bilinear map, or a local
   `macro`/`have` inside the file. Below cross-file threshold; promote only
-  if the pattern escapes `TwoPositive.lean`.
+  if the pattern escapes `TwoPositive.lean`. Note: `grind` is unlikely to
+  close these directly (matrix multiplication is noncommutative and its
+  ring solver is commutative); the bundled-bilinear-map restructuring is
+  the better bet.
 
 ### region_cover_union_cases — candidate
 - **Pattern:**

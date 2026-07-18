@@ -134,7 +134,8 @@ process is in `docs/tactic_development.md`; the pattern ledger is
 3. **Record** noticed repetition as a candidate entry in the ledger — in the
    same PR; recording is cheap and needs no design decision.
 4. **Promote** when a pattern hits ≥ 3 occurrences across ≥ 2 files (rule of
-   three): prefer a lemma, then a simp set, then a macro, then an elab tactic
+   three): prefer a lemma, then a simp set, then `@[grind]` annotations +
+   `grind` for goal-closing patterns, then a macro, then an elab tactic
    (weakest mechanism that removes the duplication). Refactor the known call
    sites and update the ledger entry.
 

@@ -104,6 +104,7 @@ TACTIC_HEADS = (
     "measurability",
     "continuity",
     "bound",
+    "grind",
     "mpv_ext",
     "block_words",
     "transfer_simp",
