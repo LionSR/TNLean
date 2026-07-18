@@ -972,7 +972,7 @@ physical indices, as in
     A vertical-sector family $X=(X_\alpha)_\alpha$ is positive when every
     $X_\alpha$ is positive semidefinite.  Its total sector trace is
     \[
-        \operatorname{Tr}_{\mathrm{sec}}(X)
+        \Trsec(X)
           =\sum_\alpha\operatorname{tr}(X_\alpha).
     \]
 \end{definition}
@@ -996,12 +996,12 @@ physical indices, as in
     positive sector family to a positive retained matrix and satisfies
     \[
         \operatorname{tr}(R_\mu(X))
-          =\operatorname{Tr}_{\mathrm{sec}}(X).
+          =\Trsec(X).
     \]
     Conversely, the sectorwise partial trace sends a positive retained matrix
     to a positive sector family and satisfies
     \[
-        \operatorname{Tr}_{\mathrm{sec}}(\widetilde R_\mu(Z))
+        \Trsec(\widetilde R_\mu(Z))
           =\operatorname{tr}(Z).
     \]
     These trace identities follow by summing the traces of the diagonal
@@ -1124,17 +1124,17 @@ physical indices, as in
     $Z_S(Y)$ are positive and
     \[
         \operatorname{tr}(Z_T(X))
-          =\operatorname{Tr}_{\mathrm{sec}}(X),
+          =\Trsec(X),
         \qquad
         \operatorname{tr}(Z_S(Y))
-          =\operatorname{Tr}_{\mathrm{sec}}(Y).
+          =\Trsec(Y).
     \]
     After the final compression and sectorwise partial trace,
     \[
-        \operatorname{Tr}_{\mathrm{sec}}(\widetilde T(X))
+        \Trsec(\widetilde T(X))
           =\operatorname{tr}(U_2Z_T(X)U_2^\dagger),
         \qquad
-        \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(Y))
+        \Trsec(\widetilde S(Y))
           =\operatorname{tr}(U_1Z_S(Y)U_1^\dagger).
     \]
 \end{lemma}
@@ -1172,11 +1172,11 @@ physical indices, as in
     pointwise positive semidefiniteness.  For pointwise positive families
     $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, their total sector traces obey
     \[
-       \operatorname{Tr}_{\mathrm{sec}}(\widetilde T(X))
-          \leq \operatorname{Tr}_{\mathrm{sec}}(X),
+       \Trsec(\widetilde T(X))
+          \leq \Trsec(X),
        \qquad
-       \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(Y))
-          \leq \operatorname{Tr}_{\mathrm{sec}}(Y).
+       \Trsec(\widetilde S(Y))
+          \leq \Trsec(Y).
     \]
     The trace loss vanishes precisely when
     \[
