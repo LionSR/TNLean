@@ -203,7 +203,6 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     exact (isNBlkInjective_iff_blockTensor_isInjective A 1).1
       (isNBlkInjective_one_of_isInjective hInj)
   · have hDpos : 0 < D := NeZero.pos D
-    have hD2 : 2 ≤ D := by omega
     let L : ℕ := iIndex A
     have hNonempty : ({n : ℕ | 0 < n ∧ wordSpan A n = ⊤}).Nonempty := by
       obtain ⟨N, hNpos, hNblk⟩ := hN
@@ -371,7 +370,7 @@ theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
 
 /-- **IsNormal is preserved by blocking.**
 
-If `A` is normal (`∃ N, wordSpan A N = ⊤`), then `blockTensor A P` is also normal
+If `A` is normal (`∃ N, 0 < N ∧ wordSpan A N = ⊤`), then `blockTensor A P` is also normal
 for any `P ≥ 1`. The proof uses:
 1. `wordSpan A N = ⊤ → wordSpan A (P * N) = ⊤` (word span at multiples);
 2. `wordSpan A (n * P) ≤ wordSpan (blockTensor A P) n` (blocking containment).
