@@ -322,6 +322,28 @@ def IsInjective (A : MPSTensor d D) : Prop :=
 lemma IsInjective.span_eq_top {A : MPSTensor d D} (hA : IsInjective A) :
     Submodule.span ℂ (Set.range A) = ⊤ := hA
 
+/-- Multiplication of every physical letter by a nonzero scalar preserves
+injectivity. -/
+theorem IsInjective.smul
+    {c : ℂ} {A : MPSTensor d D} (hA : IsInjective A) (hc : c ≠ 0) :
+    IsInjective (fun i ↦ c • A i) := by
+  unfold IsInjective at hA ⊢
+  calc
+    Submodule.span ℂ (Set.range fun i ↦ c • A i) =
+        Submodule.span ℂ (Set.range A) := by
+      apply le_antisymm
+      · apply Submodule.span_le.mpr
+        rintro X ⟨i, rfl⟩
+        exact Submodule.smul_mem _ c (Submodule.subset_span ⟨i, rfl⟩)
+      · apply Submodule.span_le.mpr
+        rintro X ⟨i, rfl⟩
+        have hmem : c • A i ∈
+            Submodule.span ℂ (Set.range fun i ↦ c • A i) :=
+          Submodule.subset_span ⟨i, rfl⟩
+        convert Submodule.smul_mem _ c⁻¹ hmem using 1
+        simp [hc]
+    _ = ⊤ := hA
+
 /-- An injective MPS tensor on `D ≥ 1` bond dimension implies `d ≥ 1`. -/
 theorem neZero_d_of_isInjective {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) : NeZero d := by

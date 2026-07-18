@@ -104,12 +104,19 @@ sector product identities give the source GSNNCH form with the prescribed
 natural multiplicities.
 \footnote{\raggedright Formal declaration:
 {\scriptsize\leanid{MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily}}.}
+The first part of the support-preserving sector argument is also complete.
+Every absorbed BNT representative has an exact isometric restriction to the
+range of its matching projector, and the restricted tensor is injective.
+\footnote{\raggedright Formal declarations:
+{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData}} and
+{\scriptsize\leanid{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis}}.}
 The remaining comparison has two parts:
 
 \begin{enumerate}
-  \item apply the injective commuting-product theorem inside the range of each
-        BNT projector and transport its positive bond back to the ambient
-        one-site space, proving
+  \item transport the sectorwise saturated area law through the support
+        isometry, apply the injective commuting-product theorem to the
+        restricted tensor, and transport its positive bond back to the
+        ambient one-site space, proving
         $(P_j\otimes P_j)B^{(j)}(P_j\otimes P_j)=B^{(j)}$;
   \item determine whether the reverse comparison with a single bond is needed
         in the simple-MPDO equivalence, and prove it only in that form.
@@ -129,8 +136,9 @@ area law is proved GSNNCH through a one-sector witness.  For a general simple
 tensor, the BNT projectors, their positive-length compression formula, and the
 sectorwise MPDO, SAL, and ZCL conclusions are formalized.  The abstract
 construction of the outer sector sum with its natural multiplicities is
-formalized.  The open gap is the support-preserving application of the
-injective commuting-product theorem within each BNT projector range, together
-with any reverse comparison actually needed by the simple-MPDO equivalence.
+formalized, as is the injective restriction of every representative to its
+projector range.  The open gap is the isometric transport of SAL and of the
+resulting positive commuting bond, together with any reverse comparison
+actually needed by the simple-MPDO equivalence.
 
 \end{document}
