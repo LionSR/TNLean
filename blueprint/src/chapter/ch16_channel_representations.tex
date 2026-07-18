@@ -317,9 +317,27 @@ representations already developed above. They correspond to
     \[
         c_{e_i+e_j}=c_{e_i-e_j}=c_{e_i}=c_{e_j}.
     \]
-    Replacing $e_j$ by $\mathrm{i}e_j$ gives the same equality for
-    $e_i\pm\mathrm{i}e_j$.  The rank-one polarization identity then gives
-    $T(E_{ij})=cE_{ij}$ for every matrix unit, and hence $T=c\,\id$.
+    The imaginary parallelogram identity and its image under $T$ are
+    \[
+        P_{e_i+\mathrm{i}e_j}+P_{e_i-\mathrm{i}e_j}
+        =2P_{e_i}+2P_{e_j},
+    \]
+    \[
+        c_{e_i+\mathrm{i}e_j}P_{e_i+\mathrm{i}e_j}
+        +c_{e_i-\mathrm{i}e_j}P_{e_i-\mathrm{i}e_j}
+        =2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}.
+    \]
+    Comparing the same three entries gives
+    \[
+        c_{e_i+\mathrm{i}e_j}=c_{e_i-\mathrm{i}e_j}=c_{e_i}=c_{e_j}.
+    \]
+    Consequently the polarization identity
+    \[
+        4E_{ij}=P_{e_i+e_j}-P_{e_i-e_j}
+        +\mathrm{i}P_{e_i+\mathrm{i}e_j}
+        -\mathrm{i}P_{e_i-\mathrm{i}e_j}
+    \]
+    gives $T(E_{ij})=cE_{ij}$ for every matrix unit, and hence $T=c\,\id$.
 \end{proof}
 
 \begin{theorem}[No information without disturbance]
