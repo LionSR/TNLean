@@ -149,6 +149,26 @@ SOURCE = r"""
   & \tnfuse[span=2, west at=center, east at={1,2}]{V}\\
   \tn{A} &
 \end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tnX[wires=2, west at=center, east at=center]{X}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn{U_1} & \tn{U_2}\\
+  \tn[pill, wide=2, up at=center]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tnfuse[span=2, west at={1,2}, east at=center]{V} & & \tn{A}\\
+  & & \tn{A}
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  \tn[wires=2, west at={1,2}, east at={3}]{X}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={ket, wire}, tensor style=box]
+  \tn[no legs, up at=center, down at=center]{A}\\
+  \tnX[up at=center, down at=center]{X}
+\end{tenkz}
 \end{document}
 """
 
@@ -465,6 +485,78 @@ def main() -> int:
         continuation_center,
         "boundary|picture=31|virtual-west=1|virtual-east=2|physical-up=0|physical-down=0",
         "contracted centred fusion face was still counted as open",
+    )
+    two_centred_faces = pictures[32]
+    require(
+        two_centred_faces,
+        "faceports|picture=32|cell=1-1|face=west|arity=1|at=center",
+        "tall glyph lost its centred west face",
+    )
+    require(
+        two_centred_faces,
+        "faceports|picture=32|cell=1-1|face=east|arity=1|at=center",
+        "tall glyph lost its independent centred east face",
+    )
+    require(
+        two_centred_faces,
+        "boundary|picture=32|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
+        "two centred virtual faces did not contribute independently",
+    )
+    separate_upper_cells = pictures[33]
+    if paired_ports(separate_upper_cells) != [("center", "1")]:
+        raise AssertionError("separate upper glyphs consumed one centred lower index twice")
+    require(
+        separate_upper_cells,
+        "boundary|picture=33|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
+        "the surplus upper index beside a centred lower face disappeared",
+    )
+    distant_center = pictures[34]
+    require(
+        distant_center,
+        "bond|picture=34|row=1|from=1|to=3|dir=none|role=none|species=none",
+        "centred fusion face did not meet its distant row-1 neighbour",
+    )
+    require(
+        distant_center,
+        "boundary|picture=34|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0",
+        "a distant bond left the centred fusion face counted as open",
+    )
+    invalid_slot = pictures[35]
+    require(
+        invalid_slot,
+        "faceports|picture=35|cell=1-1|face=east|arity=0|at=none",
+        "out-of-span virtual slot was not normalized away",
+    )
+    require(
+        invalid_slot,
+        "boundary|picture=35|virtual-west=2|virtual-east=0|physical-up=0|physical-down=0",
+        "out-of-span virtual slot survived in the boundary signature",
+    )
+    suppressed_physical = pictures[36]
+    forbid(
+        suppressed_physical,
+        "faceports|picture=36|cell=1-1|face=up|arity=1|at=center",
+        "no-legs tensor emitted a physical upper face",
+    )
+    forbid(
+        suppressed_physical,
+        "faceports|picture=36|cell=1-1|face=down|arity=1|at=center",
+        "no-legs tensor emitted a physical lower face",
+    )
+    forbid(
+        suppressed_physical,
+        "faceports|picture=36|cell=2-1|face=up|arity=1|at=center",
+        "on-wire matrix emitted a physical upper face",
+    )
+    forbid(
+        suppressed_physical,
+        "faceports|picture=36|cell=2-1|face=down|arity=1|at=center",
+        "on-wire matrix emitted a physical lower face",
+    )
+    require(
+        suppressed_physical,
+        "boundary|picture=36|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0",
+        "suppressed physical faces survived in the boundary signature",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
