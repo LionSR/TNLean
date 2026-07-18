@@ -2214,8 +2214,6 @@
 \tl_new:N \l__tenkz_pwbase_tl
 \tl_new:N \l__tenkz_pwpt_tl
 \tl_new:N \l__tenkz_pwlow_tl
-\tl_new:N \l__tenkz_pwfb_tl
-\bool_new:N \l__tenkz_pwsingle_bool
 \bool_new:N \l__tenkz_pwlowerport_bool
 \bool_new:N \l__tenkz_pwupperport_bool
 \int_new:N \l__tenkz_internalpu_int
@@ -2226,6 +2224,7 @@
 \tl_new:N \l__tenkz_pwlowopts_tl
 \tl_new:N \l__tenkz_pwlowports_tl
 \seq_new:N \l__tenkz_pwlab_seq
+\prop_new:N \l__tenkz_pwcenterused_prop
 \seq_new:N \l__tenkz_pwlowlab_seq
 \tl_new:N \l__tenkz_pwslotlab_tl
 \tl_new:N \l__tenkz_pwlowlabel_tl
@@ -2326,59 +2325,13 @@
   {
     \tenkz_face_ports:nN {down} \l__tenkz_pwcols_tl
     \seq_set_from_clist:NV \l__tenkz_pwlab_seq \l__tenkz_cdown_tl
+    \prop_clear:N \l__tenkz_pwcenterused_prop
     \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pwname_tl
-    % pairing-arity pre-scan: the glyph's down face is per-column only
-    % when its named columns actually meet DISTINCT indices below.  If
-    % every named column owner-resolves to ONE live partner cell whose
-    % own facing declaration is centred, that partner presents one centred
-    % index -- the blocked physical index of the hard08 isometry
-    % U_{(i1 i2), j} -- and the interface contracts by the one
-    % anchor-to-anchor wire.  Any other partner structure (distinct
-    % cells, holes, ghosts, or a facing multi-port list) pairs per
-    % named column.
-    \bool_set_true:N \l__tenkz_pwsingle_bool
-    \tl_clear:N \l__tenkz_pwfb_tl
+    % Every declared port is an independent index.  Even when several
+    % columns owner-resolve to one lower glyph, the pairing pass must retain
+    % every upper port rather than collapse the face to one centre wire.
     \exp_args:NV \clist_map_inline:nn \l__tenkz_pwcols_tl
-      { \tenkz_pair_wide_scan:nnn {#1}{#2}{##1} }
-    \bool_if:NT \l__tenkz_pwsingle_bool
-      {
-        \tenkz_get:NeN \l__tenkz_opts_prop
-          { \int_eval:n{#1+1} - \l__tenkz_pwfb_tl } \l_tmpb_tl
-        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-        \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
-        \str_if_eq:VnF \l__tenkz_faceports_tl {center}
-          { \bool_set_false:N \l__tenkz_pwsingle_bool }
-      }
-    \bool_if:NTF \l__tenkz_pwsingle_bool
-      { \tenkz_pair_below:nn {#1}{#2} }
-      {
-        \exp_args:NV \clist_map_inline:nn \l__tenkz_pwcols_tl
-          { \tenkz_pair_wide_col:nnn {#1}{#2}{##1} }
-      }
-  }
-% one pre-scan step: does named column #3 keep the shared-single-partner
-% hypothesis alive?
-\cs_new_protected:Npn \tenkz_pair_wide_scan:nnn #1#2#3
-  {
-    \prop_get:NeNTF \l__tenkz_owner_prop
-      { \int_eval:n{#1+1} - \int_eval:n{#2+#3-1} } \l__tenkz_pwbase_tl
-      {
-        \tenkz_get:NeN \l__tenkz_kind_prop
-          { \int_eval:n{#1+1} - \l__tenkz_pwbase_tl } \l__tenkz_pkind_tl
-        \bool_lazy_or:nnTF
-          { \str_if_eq_p:Vn \l__tenkz_pkind_tl {skip} }
-          { \str_if_eq_p:Vn \l__tenkz_pkind_tl {ghost} }
-          { \bool_set_false:N \l__tenkz_pwsingle_bool }
-          {
-            \tl_if_empty:NTF \l__tenkz_pwfb_tl
-              { \tl_set_eq:NN \l__tenkz_pwfb_tl \l__tenkz_pwbase_tl }
-              {
-                \tl_if_eq:NNF \l__tenkz_pwfb_tl \l__tenkz_pwbase_tl
-                  { \bool_set_false:N \l__tenkz_pwsingle_bool }
-              }
-          }
-      }
-      { \bool_set_false:N \l__tenkz_pwsingle_bool }
+      { \tenkz_pair_wide_col:nnn {#1}{#2}{##1} }
   }
 % one named column: row #1, base column #2, span-local index #3 (the
 % absolute column is #2 + #3 - 1)
@@ -2416,7 +2369,11 @@
                 \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
                 \bool_set_false:N \l__tenkz_pwlowerport_bool
                 \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
-                  { \bool_set_true:N \l__tenkz_pwlowerport_bool }
+                  { \prop_if_in:NeF \l__tenkz_pwcenterused_prop
+                      {\tl_use:N\l__tenkz_pwbase_tl}
+                      { \bool_set_true:N \l__tenkz_pwlowerport_bool
+                        \prop_put:Nen \l__tenkz_pwcenterused_prop
+                          {\tl_use:N\l__tenkz_pwbase_tl} {} } }
                   { \clist_if_in:NeT \l__tenkz_faceports_tl
                       { \int_eval:n { #2 + #3 - \l__tenkz_pwbase_tl } }
                       { \bool_set_true:N \l__tenkz_pwlowerport_bool } }
@@ -2813,10 +2770,27 @@
                     \str_case:Vn \l__tenkz_pkind_tl
                       {
                         {skip}
-                          { \tenkz_leg_candidate:nnT
-                              { \int_eval:n{##1+1} }{####1}
-                              { \tenkz_leg_open:enn
-                                  { \int_eval:n{##1+1} }{####1}{up} } }
+                          {
+                            \prop_get:NeNF \l__tenkz_owner_prop
+                              {\int_eval:n{##1+1}-####1}
+                              \l__tenkz_pwbase_tl
+                              { \tl_set:Ne \l__tenkz_pwbase_tl {####1} }
+                            \tenkz_get:NeN \l__tenkz_opts_prop
+                              {\int_eval:n{##1+1}-\l__tenkz_pwbase_tl}
+                              \l_tmpb_tl
+                            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+                            \tenkz_face_ports:nN {up}
+                              \l__tenkz_faceports_tl
+                            \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
+                              { \tenkz_cell_physical_port:nnnN
+                                  {\int_eval:n{##1+1}}{####1}{up}
+                                  \l_tmpa_bool
+                                \bool_if:NT \l_tmpa_bool
+                                  { \tenkz_leg_open:enn
+                                      {\int_eval:n{##1+1}}{####1}{up} } }
+                              { \tenkz_draw_lower_surplus:nn
+                                  {##1}{\l__tenkz_pwbase_tl} }
+                          }
                         {ghost}
                           { \tenkz_leg_candidate:nnT
                               { \int_eval:n{##1+1} }{####1}
@@ -3695,6 +3669,48 @@
       { \str_if_eq:VnT \l_tmpa_tl {#3} { \bool_set_true:N #4 } }
   }
 
+% Is the single centred face of the fusion bar based at (row, column)
+% contracted on any row of its span?  Every spanned row meets the same fused
+% anchor, so one live facing neighbour closes that one index even when the
+% base row itself has no neighbour.
+\int_new:N \l__tenkz_centerlast_int
+\int_new:N \l__tenkz_centerneighbor_int
+\cs_new_protected:Npn \tenkz_center_face_contracted:nnnN #1#2#3#4
+  {
+    \bool_set_false:N #4
+    \int_set:Nn \l__tenkz_centerlast_int {#1+\l__tenkz_frows_int-1}
+    \str_if_eq:nnTF {#3}{west}
+      { \int_set:Nn \l__tenkz_centerneighbor_int {#2-1} }
+      { \int_set:Nn \l__tenkz_centerneighbor_int {#2+1} }
+    \bool_lazy_and:nnT
+      { \int_compare_p:nNn {\l__tenkz_centerneighbor_int} > {0} }
+      { \int_compare_p:nNn
+          {\l__tenkz_centerneighbor_int} < {\l__tenkz_ncols_int+1} }
+      {
+        \int_step_inline:nnn {#1}{\l__tenkz_centerlast_int}
+          {
+            \prop_if_in:NeT \l__tenkz_owner_prop
+              {##1-\int_use:N\l__tenkz_centerneighbor_int}
+              {
+                \tenkz_get:NeN \l__tenkz_kind_prop
+                  {##1-\int_use:N\l__tenkz_centerneighbor_int}
+                  \l__tenkz_pkind_tl
+                \str_if_eq:VnF \l__tenkz_pkind_tl {skip}
+                  {
+                    \str_if_eq:nnTF {#3}{west}
+                      { \tenkz_cell_virtual_row_port:nnnN {##1}
+                          {\l__tenkz_centerneighbor_int}{east}
+                          \l_tmpa_bool }
+                      { \tenkz_cell_virtual_row_port:nnnN {##1}
+                          {\l__tenkz_centerneighbor_int}{west}
+                          \l_tmpa_bool }
+                    \bool_if:NT \l_tmpa_bool { \bool_set_true:N #4 }
+                  }
+              }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_draw_boundaries:
   {
     % Include inward-facing ports left open by an adjacent sparse face.
@@ -3821,15 +3837,18 @@
                 \tenkz_get:NeN \l__tenkz_opts_prop {##1-####1} \l_tmpb_tl
                 \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
                 \tenkz_fuse_resolve_combined:
-                \tenkz_row_extent:n {##1}
                 \tenkz_face_ports:nN {west} \l__tenkz_faceports_tl
                 \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
-                  { \int_compare:nNnT {####1} = {\l__tenkz_first_int}
+                  { \tenkz_center_face_contracted:nnnN
+                      {##1}{####1}{west} \l_tmpa_bool
+                    \bool_if:NF \l_tmpa_bool
                       { \int_incr:N \l__tenkz_bvw_int } }
                   {
                     \tenkz_face_ports:nN {east} \l__tenkz_faceports_tl
                     \str_if_eq:VnT \l__tenkz_faceports_tl {center}
-                      { \int_compare:nNnT {####1} = {\l__tenkz_last_int}
+                      { \tenkz_center_face_contracted:nnnN
+                          {##1}{####1}{east} \l_tmpa_bool
+                        \bool_if:NF \l_tmpa_bool
                           { \int_incr:N \l__tenkz_bve_int } }
                   }
               }
@@ -4040,6 +4059,38 @@
   }
 \int_new:N \l__tenkz_facearity_int
 
+% Does the physical face of the glyph owning (row, column) contain the
+% particular column?  This is the per-slot counterpart of
+% \tenkz_leg_count:nN: a neighbouring hole opens only the facing slot, not
+% every port on a wide face.
+\cs_new_protected:Npn \tenkz_cell_physical_port:nnnN #1#2#3#4
+  {
+    \bool_set_false:N #4
+    \prop_get:NeNF \l__tenkz_owner_prop
+      {\int_eval:n{#1}-\int_eval:n{#2}} \l__tenkz_pwbase_tl
+      { \tl_set:Ne \l__tenkz_pwbase_tl {\int_eval:n{#2}} }
+    \tenkz_get:NeN \l__tenkz_kind_prop
+      {\int_eval:n{#1}-\l__tenkz_pwbase_tl} \l__tenkz_pkind_tl
+    \bool_lazy_or:nnT
+      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
+      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+      {
+        \tenkz_get:NeN \l__tenkz_opts_prop
+          {\int_eval:n{#1}-\l__tenkz_pwbase_tl} \l_tmpb_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+        \bool_if:NF \l__tenkz_cnolegs_bool
+          {
+            \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
+            \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
+              { \int_compare:nNnT {#2} = {\l__tenkz_pwbase_tl}
+                  { \bool_set_true:N #4 } }
+              { \clist_if_in:NeT \l__tenkz_faceports_tl
+                  {\int_eval:n{#2-\l__tenkz_pwbase_tl+1}}
+                  { \bool_set_true:N #4 } }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_emit_signature:
   {
     \int_set_eq:NN \l__tenkz_bpu_int \l__tenkz_internalpu_int
@@ -4102,18 +4153,19 @@
                     \tenkz_get:NeN \l__tenkz_kind_prop
                       { \int_eval:n{##1+1} - ####1 } \l__tenkz_pkind_tl
                     \str_if_eq:VnT \l__tenkz_pkind_tl {skip}
-                      { \tenkz_leg_candidate:nnT {##1}{####1}
-                          { \tenkz_leg_count:nN {down} \l__tenkz_facearity_int
-                            \int_add:Nn \l__tenkz_bpd_int
-                              { \l__tenkz_facearity_int } } }
+                      { \tenkz_cell_physical_port:nnnN {##1}{####1}{down}
+                          \l_tmpa_bool
+                        \bool_if:NT \l_tmpa_bool
+                          { \int_incr:N \l__tenkz_bpd_int } }
                     \tenkz_get:NeN \l__tenkz_kind_prop
                       {##1-####1} \l__tenkz_pkind_tl
                     \str_if_eq:VnT \l__tenkz_pkind_tl {skip}
-                      { \tenkz_leg_candidate:nnT
-                          { \int_eval:n{##1+1} }{####1}
-                          { \tenkz_leg_count:nN {up} \l__tenkz_facearity_int
-                            \int_add:Nn \l__tenkz_bpu_int
-                              { \l__tenkz_facearity_int } } }
+                      { \tenkz_cell_physical_port:nnnN
+                          {\int_eval:n{##1+1}}{####1}{up} \l_tmpa_bool
+                        \bool_lazy_and:nnT
+                          { \l_tmpa_bool }
+                          { \str_if_eq_p:Vn \l__tenkz_faceports_tl {center} }
+                          { \int_incr:N \l__tenkz_bpu_int } }
                     % an OPENED interface segment (open={(i,c)}) keeps
                     % both faces' stubs: two open physical indices
                     \prop_if_in:NeT \l__tenkz_opencell_prop {##1-####1}

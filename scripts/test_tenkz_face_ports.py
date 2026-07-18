@@ -129,6 +129,26 @@ SOURCE = r"""
   \tn{U_1} & \tn{U_2}\\
   \tn[pill, wide=2, up at={1}]{L} &
 \end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[pill, wide=2, down at={1,2}]{U} & \\
+  \tnskip & \tn{L}
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[pill, wide=2, down at={2}]{U} & \\
+  \tnskip & \tn{L}
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tnskip & \tn{U}\\
+  \tn[pill, wide=2, up at={1,2}]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[pill, wide=2, down at={1,2}]{U} & \\
+  \tn[pill, wide=2, up at=center]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}]
+  & \tnfuse[span=2, west at=center, east at={1,2}]{V}\\
+  \tn{A} &
+\end{tenkz}
 \end{document}
 """
 
@@ -366,7 +386,7 @@ def main() -> int:
             "warning|code=pair-trace-face-ports|cell=1-1",
             "multi-port pair trace was not rejected")
     forbid(pair_trace,
-           "pair-trace|picture=21|upper-row=1|lower-row=2|column=1",
+           "pairtrace|picture=21|row=1|col=1",
            "multi-port pair trace emitted a misleading centre loop")
     if paired_ports(pair_trace) != [("1", "1"), ("2", "2")]:
         raise AssertionError("rejected pair trace did not retain both ordinary contractions")
@@ -397,7 +417,7 @@ def main() -> int:
             "warning|code=pair-trace-face-ports|cell=1-1",
             "multi-port physical-column trace was not rejected")
     forbid(physical_pair_trace,
-           "pair-trace|picture=25|upper-row=1|lower-row=2|column=1",
+           "pairtrace|picture=25|row=1|col=1",
            "multi-port physical-column trace emitted a centre loop")
     if paired_ports(physical_pair_trace) != [("1", "1"), ("2", "2")]:
         raise AssertionError(
@@ -408,6 +428,43 @@ def main() -> int:
         sparse_open,
         "boundary|picture=26|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
         "opened sparse lower face changed its exact-slot signature",
+    )
+    partial_skip = pictures[27]
+    require(
+        partial_skip,
+        "boundary|picture=27|virtual-west=2|virtual-east=2|physical-up=1|physical-down=1",
+        "one skipped column counted the whole upper face",
+    )
+    sparse_skip = pictures[28]
+    require(
+        sparse_skip,
+        "boundary|picture=28|virtual-west=2|virtual-east=2|physical-up=1|physical-down=0",
+        "a skipped column invented an absent sparse upper port",
+    )
+    lower_partial_skip = pictures[29]
+    require(
+        lower_partial_skip,
+        "boundary|picture=29|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
+        "one skipped column counted the whole lower face",
+    )
+    upper_split_lower_center = pictures[30]
+    if paired_ports(upper_split_lower_center) != [("1", "1")]:
+        raise AssertionError("a centred lower face consumed multiple upper indices")
+    require(
+        upper_split_lower_center,
+        "boundary|picture=30|virtual-west=2|virtual-east=2|physical-up=1|physical-down=1",
+        "an unmatched upper port disappeared beside a centred lower face",
+    )
+    continuation_center = pictures[31]
+    require(
+        continuation_center,
+        "bond|picture=31|row=2|from=1|to=2|dir=none|role=none|species=none",
+        "continuation-row bond did not meet the centred fusion face",
+    )
+    require(
+        continuation_center,
+        "boundary|picture=31|virtual-west=1|virtual-east=2|physical-up=0|physical-down=0",
+        "contracted centred fusion face was still counted as open",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
