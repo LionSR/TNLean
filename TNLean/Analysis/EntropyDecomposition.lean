@@ -40,6 +40,9 @@ in strong subadditivity.
   The weights are nonnegative.
   When the weights form a probability distribution, the first terms sum to
   the Shannon entropy \(H(p)\).
+* `vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports` — entropy is
+  additive for Hermitian summands carried by mutually annihilating support
+  operators, without an ambient resolution of the identity.
 * `eq_of_weighted_sum_eq_of_pos_of_le` — equality of two positively weighted
   sums, together with termwise inequalities, forces equality term by term.
 
@@ -421,3 +424,69 @@ theorem eq_of_weighted_sum_eq_of_pos_of_le {ι : Type*} [Fintype ι]
   exact (sub_eq_zero.mp hdiff).symm
 
 end BlockDiagonal
+
+section PairwiseAnnihilatingSupports
+
+variable {o : Type*} [Fintype o]
+
+/-- Additivity of entropy for finitely many Hermitian summands carried by
+mutually disjoint support operators.  These operators need only resolve the
+support of the displayed matrix; they need not sum to the identity on the
+ambient space.
+
+The proof writes the sum as a rectangular product.  Reversing the factors
+gives the dependent block diagonal of the summands, with only additional zero
+eigenvalues.  This is the support form of the direct-sum entropy argument in
+arXiv:1606.00608, Appendix C.2, lines 1760--1770. -/
+theorem vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports
+    {n : Type*} [Fintype n]
+    (A : Matrix n n ℂ) (hA : A.IsHermitian)
+    (M P : o → Matrix n n ℂ) (hM : ∀ s, (M s).IsHermitian)
+    (hsum : A = ∑ s, M s)
+    (hsupport : ∀ s, P s * M s = M s ∧ M s * P s = M s)
+    (hannihilate : ∀ s t, s ≠ t → P s * P t = 0) :
+    open scoped Classical in
+    vonNeumannEntropy A hA = ∑ s, vonNeumannEntropy (M s) (hM s) := by
+  classical
+  let X : Matrix n (Σ _ : o, n) ℂ := fun i sj ↦ M sj.1 i sj.2
+  let Y : Matrix (Σ _ : o, n) n ℂ := fun si j ↦ P si.1 si.2 j
+  have hXY : X * Y = A := by
+    ext i j
+    rw [Matrix.mul_apply, Fintype.sum_sigma, hsum, Matrix.sum_apply]
+    apply Finset.sum_congr rfl
+    intro s _
+    change ∑ k : n, M s i k * P s k j = M s i j
+    rw [← Matrix.mul_apply, (hsupport s).2]
+  have hYX : Y * X = Matrix.blockDiagonal' M := by
+    ext ⟨s, i⟩ ⟨t, j⟩
+    change (P s * M t) i j = Matrix.blockDiagonal' M ⟨s, i⟩ ⟨t, j⟩
+    by_cases hst : s = t
+    · subst t
+      rw [(hsupport s).1, Matrix.blockDiagonal'_apply_eq]
+    · have hzero : P s * M t = 0 := by
+        calc
+          P s * M t = P s * (P t * M t) := by rw [(hsupport t).1]
+          _ = (P s * P t) * M t := by rw [Matrix.mul_assoc]
+          _ = 0 := by rw [hannihilate s t hst, Matrix.zero_mul]
+      rw [hzero, Matrix.zero_apply,
+        Matrix.blockDiagonal'_apply_ne M i j hst]
+  have hBlock : (Matrix.blockDiagonal' M).IsHermitian := by
+    rw [Matrix.isHermitian_blockDiagonal'_iff]
+    exact hM
+  have hXYHerm : (X * Y).IsHermitian := by
+    rw [hXY]
+    exact hA
+  have hYXHerm : (Y * X).IsHermitian := by
+    rw [hYX]
+    exact hBlock
+  calc
+    vonNeumannEntropy A hA = vonNeumannEntropy (X * Y) hXYHerm := by
+      exact vonNeumannEntropy_congr hXY.symm hA hXYHerm
+    _ = vonNeumannEntropy (Y * X) hYXHerm :=
+      vonNeumannEntropy_mul_comm X Y hXYHerm hYXHerm
+    _ = vonNeumannEntropy (Matrix.blockDiagonal' M) hBlock := by
+      exact vonNeumannEntropy_congr hYX hYXHerm hBlock
+    _ = ∑ s, vonNeumannEntropy (M s) (hM s) :=
+      vonNeumannEntropy_blockDiagonal' M hM hBlock
+
+end PairwiseAnnihilatingSupports
