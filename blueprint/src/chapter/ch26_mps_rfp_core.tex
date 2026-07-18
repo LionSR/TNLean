@@ -773,21 +773,20 @@
     Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} to each block.
 \end{proof}
 
-\begin{figure}[ht]
-    \centering
+% BLOCKED figure (issue #4152): II_RFP.png has one open leg above U and two
+% separately contracted legs below it, the splitting glyph absent from tenkz
+% 0.6.  The source also threads both j and q through X, the coefficient tensor,
+% and X^{-1}.  Keep the faithful formula as an equation until that general
+% primitive lands; do not substitute the coarser global-X picture.
+Across all blocks, the canonical form is
     \[
-        A=X\left(\bigoplus_j\mu_j\otimes\sqrt{\Lambda_j}U_j\right)X^{-1}
+        A^i=\bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
+        \mu_{j,q}X_{j,q}\sqrt{\Lambda_j}\,U_j^iX_{j,q}^{-1}.
     \]
-    \caption{The per-block canonical form
-        $A^i=\bigoplus_{j,q}\mu_{j,q}\,X_{j,q}\sqrt{\Lambda_j}\,U_j^i
-            X_{j,q}^{-1}$: the block indices $j$ and $q$ label the gauge,
-        the diagonal weight, the isometry, and the coefficient tensor $\mu$.
-        The display is per-block, matching the entry above; the cross-block
-        physical orthogonality of
-        \cite[Section~3.4, lines~543--561]{Cirac2016MPDO_arXiv} is not
-        displayed.}
-    \label{fig:rfp_isometry_canonical_form_blocks}
-\end{figure}
+Here $j$ labels the normal-tensor block and $q$ its repeated representation;
+the joint residual-isometry condition includes the cross-block physical
+orthogonality of
+\cite[Section~3.4, lines~543--561]{Cirac2016MPDO_arXiv}.
 % Scope restriction: cross-block orthogonality omitted here; see
 % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 

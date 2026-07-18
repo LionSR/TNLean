@@ -755,7 +755,43 @@ physical index identifies the corresponding virtual legs.  In components,
 this is the matrix-unit identity
 $\sum_p(K^{-1})^{\alpha,\beta}_pK^p=E_{\alpha,\beta}$:
 \begin{center}
-    \TNMPDOInverseContraction
+    % sum_p (K^{-1})^{alpha,beta}_p K^p = delta_{alpha,alpha'}
+    % delta_{beta,beta'}: K^{-1} (top) is contracted with K (bottom)
+    % through their shared doubled physical index.  Following
+    % MPDO_NotationK.png, its ket copy is solid and its bra copy dashed.
+    % The four open virtual stubs, top row then bottom row, are
+    % alpha', beta', alpha, beta.  The two bends on the right implement
+    % the corresponding pair of Kronecker deltas.  Both sides have
+    % boundary signature (virtual-west=2 | virtual-east=2 |
+    % physical-up=0 | physical-down=0).
+    \begin{tenkzfree}
+        \tnput[ports={west:virtual, east:virtual}, label pos=north]
+            {Kinv}{(0,4.4mm)}{{\cal K}^{-1}}
+        \tnput[ports={west:virtual, east:virtual}, label pos=south]
+            {K}{(0,-4.4mm)}{{\cal K}}
+        % tenkz-lint: allow raw-ink offset ket strand of doubled contraction
+        \draw[bond] ($(Kinv.south)+(-0.35mm,0)$) -- ($(K.north)+(-0.35mm,0)$);
+        % tenkz-lint: allow raw-ink offset bra strand of doubled contraction
+        \draw[bond, dashed] ($(Kinv.south)+(0.35mm,0)$) -- ($(K.north)+(0.35mm,0)$);
+        % tenkz-lint: allow raw-ink free-tier open virtual leg
+        \draw[bond] (Kinv.west) -- ++(-4.95mm,0);
+        % tenkz-lint: allow raw-ink free-tier open virtual leg
+        \draw[bond] (Kinv.east) -- ++(4.95mm,0);
+        % tenkz-lint: allow raw-ink free-tier open virtual leg
+        \draw[bond] (K.west) -- ++(-4.95mm,0);
+        % tenkz-lint: allow raw-ink free-tier open virtual leg
+        \draw[bond] (K.east) -- ++(4.95mm,0);
+    \end{tenkzfree}
+    $\;=\;$
+    \begin{tenkz}[rows={wire, wire}, east=cup]
+        \tnghost{} \\
+        \tnghost{}
+    \end{tenkz}
+    $\;$
+    \begin{tenkz}[rows={wire, wire}, west=cup]
+        \tnghost{} \\
+        \tnghost{}
+    \end{tenkz}
 \end{center}
 This is the identity in
 \cite[Appendix~C.2, lines~1376--1380]{Cirac2016MPDO_arXiv}.
@@ -763,10 +799,52 @@ This is the identity in
 Applying this inverse map to the doubled physical index and closing its
 virtual legs against a further copy of $K$ recovers $K$:
 \begin{center}
-    \TNMPDOInverseRecovery
+    % \mathcal K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity):
+    % the top tensor is the script-letter BNT basis element \mathcal K,
+    % not another copy of K.  Its two virtual legs close separately against
+    % K^{-1}, while the bottom K retains its virtual legs.  The fused double
+    % stroke marks the doubled physical index at the open top boundary and
+    % at the K^{-1}/K contraction.  Both sides have boundary signature
+    % (virtual-west=1 | virtual-east=1 | physical-up=1 |
+    % physical-down=0).
+    \begin{tenkzfree}
+        \tnput{Kc}{(0,9mm)}{}
+        \tnput{Kinv}{(0,0)}{}
+        \tnput[label pos=south]{Kbot}{(0,-9mm)}{K}
+        % tenkz-lint: allow raw-ink free-tier west inverse bend
+        \draw[bond] (Kc.west) to[out=180, in=180, looseness=1.6] (Kinv.west);
+        % tenkz-lint: allow raw-ink free-tier east inverse bend
+        \draw[bond] (Kc.east) to[out=0, in=0, looseness=1.6] (Kinv.east);
+        % tenkz-lint: allow raw-ink free-tier open doubled physical leg
+        \draw[fused bond] (Kc.north) -- ++(0,4.2mm);
+        % tenkz-lint: allow raw-ink free-tier internal physical contraction
+        \draw[bond] (Kc.south) -- (Kinv.north);
+        % tenkz-lint: allow raw-ink free-tier doubled physical contraction
+        \draw[fused bond] (Kinv.south) -- (Kbot.north);
+        % tenkz-lint: allow raw-ink free-tier open virtual leg
+        \draw[bond] (Kbot.west) -- ++(-5mm,0);
+        % tenkz-lint: allow raw-ink free-tier open virtual leg
+        \draw[bond] (Kbot.east) -- ++(5mm,0);
+        % tenkz-lint: allow raw-ink source-positioned script K label
+        \node[tn label, anchor=east] at ($(Kc.west)-(3mm,0)$) {$\scriptstyle\mathcal K$};
+        % tenkz-lint: allow raw-ink source-positioned inverse label
+        \node[tn label, anchor=east] at ($(Kinv.west)-(3mm,0)$) {$\scriptstyle K^{-1}$};
+    \end{tenkzfree}
+    $\;=\;$
+    \begin{tenkzfree}
+        \tnput[label pos=south]{K}{(0,0)}{K}
+        % tenkz-lint: allow raw-ink free-tier open doubled physical leg
+        \draw[fused bond] (K.north) -- ++(0,4.2mm);
+        % tenkz-lint: allow raw-ink free-tier open virtual leg
+        \draw[bond] (K.west) -- ++(-5mm,0);
+        % tenkz-lint: allow raw-ink free-tier open virtual leg
+        \draw[bond] (K.east) -- ++(5mm,0);
+    \end{tenkzfree}
 \end{center}
-The doubled physical index is represented by a single physical line.  This
-is the single-block identity of
+The doubled physical index is represented by the fused double stroke at the
+open boundary and the lower contraction; the internal
+$\mathcal K$--$K^{-1}$ line remains single.  This is the
+single-block identity of
 \cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.
 
 \begin{definition}[Normalized fourth-site virtual tail]
@@ -806,7 +884,25 @@ is the single-block identity of
 
 \begin{figure}[ht]
     \centering
-    \TNMPDONormalizedFourSiteTail
+    % tr_4(K_4) = sum_alpha L_alpha (x) B_alpha (x) R_alpha: tracing
+    % the fourth physical index folds that site into R_4 and leaves the
+    % first three ket and bra legs open.  On the left, periodic closes the
+    % virtual ring through the virtual-only R_4 cell.  On the right, the
+    % outer sum over alpha reglues the sealed chain ends.  Both sides have
+    % aggregate signature (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3).
+    \begin{tenkz}[physical=updown, periodic]
+        \tn[up=$i_1$, down=$j_1$]{{\cal K}} &
+        \tn[up=$i_2$, down=$j_2$]{{\cal K}} &
+        \tn[up=$i_3$, down=$j_3$]{{\cal K}} &
+        \tnX{R_4}
+    \end{tenkz}
+    $\;=\;\displaystyle\sum_\alpha\;$
+    \begin{tenkz}[physical=updown, boundary=none]
+        \tn[up=$i_1$, down=$j_1$]{L_\alpha} &
+        \tn[up=$i_2$, down=$j_2$]{B_\alpha} &
+        \tn[up=$i_3$, down=$j_3$]{R_\alpha}
+    \end{tenkz}
     \caption{Tracing the fourth site of the normalized four-site periodic MPO
     leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
     by the virtual closing operator
@@ -925,7 +1021,49 @@ is the single-block identity of
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOInverseMapThreeSiteContraction
+    \begin{center}
+        % (K^{-1} (x) Id (x) K^{-1}) K_3
+        %   = K^{p_2}_{beta_1,alpha_3} R_{beta_3,alpha_1}
+        % (arXiv:1606.00608, Appendix C.2, lines 1415--1438; paper
+        % figures MPDO_Xab.png, MPDO_kappaab.png, and MPDO_mba.png).
+        %
+        % LHS: the two K^{-1} boxes expose virtual pairs
+        % (alpha_1,beta_1) and (alpha_3,beta_3).  Their physical indices
+        % p_1,p_3 match the first and third legs of the closed K_3
+        % contraction; p_2 remains open.  RHS: K carries beta_1 west,
+        % p_2 up, and alpha_3 east, while R carries beta_3 west and
+        % alpha_1 east.  There is no surviving sum: the identity is
+        % pointwise in all four virtual indices.  Both sides have aggregate
+        % boundary signature (virtual-west=2 | physical-up=1 |
+        % virtual-east=2).
+        \[
+            \Bigl(
+            \begin{tenkz}[compact, physical=down,
+                          west label=$\alpha_1$, east label=$\beta_1$]
+                \tn[down=$p_1$]{{\cal K}^{-1}}
+            \end{tenkz}
+            \otimes\Id\otimes
+            \begin{tenkz}[compact, physical=down,
+                          west label=$\alpha_3$, east label=$\beta_3$]
+                \tn[down=$p_3$]{{\cal K}^{-1}}
+            \end{tenkz}
+            \Bigr)
+            \begin{tenkz}[compact, physical=up, boundary=none]
+                \tn[pill, wide=3, legs at={1,2,3},
+                    up={$p_1$,$p_2$,$p_3$}]{{\cal K}_3}
+            \end{tenkz}
+            \;=\;
+            \begin{tenkz}[compact, physical=up,
+                          west label=$\beta_1$, east label=$\alpha_3$]
+                \tn[up=$p_2$]{{\cal K}}
+            \end{tenkz}
+            \otimes
+            \begin{tenkz}[compact,
+                          west label=$\beta_3$, east label=$\alpha_1$]
+                \tnX{R}
+            \end{tenkz}
+        \]
+    \end{center}
     \caption{Applying ${\cal K}^{-1}$ at the first and third sites collapses
     the three-site contraction to
     ${\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}$, where
@@ -1293,7 +1431,25 @@ in the basis adapted to sector $k$; compare
 In the middle-site basis selected by $U_B$, the same factorization is
 displayed as
 \begin{center}
-    \TNMPDOSectorFactorization
+    % U_B K U_B^dagger = bigoplus_k l_k (x) r_k: U_B splits K's
+    % physical space into the left sector factor l_k and right sector
+    % factor r_k.  Each factor is an operator with one ket and one bra
+    % leg.  Both sides have boundary signature
+    % (virtual-west=1 | virtual-east=1 | physical-up=2 |
+    % physical-down=2).
+    \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
+        \tn[pill, wide=2, legs at={1,2}]{U_B^\dagger} & \\
+        \tn{\mathcal K} & \\
+        \tn[pill, wide=2, legs at={1,2}]{U_B} &
+    \end{tenkz}
+    $\;=\;\bigoplus_k$
+    \begin{tenkz}[physical=updown, east=none, tensor style=box]
+        \tn{l_k}
+    \end{tenkz}
+    $\;\otimes\;$
+    \begin{tenkz}[physical=updown, west=none, tensor style=box]
+        \tn{r_k}
+    \end{tenkz}
 \end{center}
 
 \begin{proof}
