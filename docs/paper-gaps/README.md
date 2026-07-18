@@ -5,6 +5,12 @@ than the cited source paper states locally. A note should identify the exact
 source passage, state the mathematical input in paper notation, and then name
 the current formal boundary.
 
+- `wolf_thm6_12_abstract_schwarz_fixed_points.tex` records the former
+  Kraus-only scope restriction in the source-labelled fixed-point algebra
+  theorem, its resolution by an abstract positive unital Schwarz-map lemma,
+  and the remaining reduction from a full-rank fixed point to an explicitly
+  chosen positive-definite invariant weight.
+
 For the present non-periodic MPS Fundamental Theorem work, the repeated-copy and
 equal-modulus comparison has these current reference points.
 

@@ -1,0 +1,106 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Abstract Schwarz-Map Hypotheses in Wolf Theorem 6.12}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Wolf introduces a Schwarz map as a positive unital matrix map satisfying
+\begin{align}
+  E(A^\dagger A)-E(A^\dagger)E(A)&\succeq0
+  \qquad\text{for every }A.
+  \tag{5.2}
+\end{align}
+This terminology is stated in Chapter~5 immediately before Example~5.3
+(local source lines 347--352).  Theorem~6.12 then assumes a unital map satisfying
+this Schwarz inequality and an arbitrary full-rank fixed point of its
+trace-pairing adjoint.  Its algebraic conclusion is
+\begin{align}
+  \operatorname{Fix}(E)&=\{X:E(X)=X\}
+  \quad\text{is a unital $*$-subalgebra.}
+  \tag{6.12}
+\end{align}
+The proof is at local source lines 1395--1417.  It invokes the proposition on
+positive fixed points (local lines 1161--1192, cited there as Proposition~6.9)
+to replace the full-rank witness by a positive-definite fixed point before
+performing the weighted-trace argument.
+The complete theorem also invokes the explicit block realization in
+Equation~(1.39); the present increment concerns only the displayed
+$*$-algebra conclusion.
+
+The word ``positive'' is not repeated in the theorem statement because it is
+part of the Chapter~5 definition of a Schwarz map.  Exposing positivity as a
+separate formal hypothesis therefore does not strengthen the source theorem.
+
+\section{The weighted equality}
+
+Let $\rho>0$ satisfy $E^*(\rho)=\rho$, and let $E(X)=X$.  Positivity implies
+$E(X^\dagger)=X^\dagger$.  For the Schwarz gap
+\begin{align}
+  \Delta_X&=E(X^\dagger X)-E(X^\dagger)E(X)\succeq0,
+\end{align}
+the trace-pairing identity gives Wolf's Equation~(6.60):
+\begin{align}
+  \tr(\rho\Delta_X)
+    &=\tr\!\left(E^*(\rho)X^\dagger X\right)
+      -\tr\!\left(\rho X^\dagger X\right)\\
+    &=0.
+\end{align}
+Faithfulness of the positive-definite weight forces $\Delta_X=0$.  Repeating
+the calculation for $X^\dagger$ gives equality in both one-sided Schwarz
+inequalities.  The abstract multiplicative-domain theorem then yields
+\begin{align}
+  E(XY)&=E(X)E(Y)=XY
+\end{align}
+for fixed points $X$ and $Y$.
+
+This argument is formalized for arbitrary positive unital Schwarz maps once a
+positive-definite invariant weight has been supplied explicitly.
+\footnote{Formal declarations:
+  \leanid{SchwarzMap.schwarz_equality_of_mem_fixedPoints},
+  \leanid{SchwarzMap.mem_multiplicativeDomain_of_mem_fixedPoints}, and
+  \leanid{SchwarzMap.fixedPointsStarSubalgebra} in
+  \doclink{TNLean/Channel/FixedPoint/AbstractAlgebra}.}
+
+\section{Comparison with the Kraus specialization}
+
+The earlier declaration assumed a Kraus representation.
+\footnote{Formal declaration:
+  \leanid{Kraus.fixedPointsStarSubalgebra} in
+  \doclink{TNLean/Channel/FixedPoint/Algebra}.}
+That result is mathematically correct, but complete positivity is stronger than
+the Schwarz-map hypothesis in Theorem~6.12.  It is retained as a useful
+specialization of the post-reduction lemma and is not presented as the literal
+formalization of the theorem.
+
+\section{Verdict}
+
+The earlier Kraus-only attribution was a \emph{scope restriction}, and the
+abstract lemma removes that restriction.  A second scope restriction remains:
+the formal signature assumes a positive-definite fixed point, while Wolf
+Theorem~6.12 assumes only a full-rank fixed point and derives the faithful
+positive witness from its proposition on positive fixed points.  Consequently,
+the present result is the source-faithful post-reduction algebra lemma, not yet
+the literal formalization of Theorem~6.12.
+
+The elimination plan is to formalize the positive-fixed-parts proposition for
+the abstract positive trace-preserving trace adjoint, derive a positive-definite
+fixed point from the full-rank witness, and wrap the present lemma.  The explicit
+Equation~(1.39) block realization, the subsequent support reduction, and the
+zero-block assembly required for Theorem~6.14 also remain open gaps.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
