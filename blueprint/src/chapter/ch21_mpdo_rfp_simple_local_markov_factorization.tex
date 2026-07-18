@@ -784,12 +784,13 @@ Applying this inverse map to the doubled physical index and closing its
 virtual legs against a further copy of $K$ recovers $K$:
 \[
     % K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the top
-    % tensor closes both virtual legs against K^{-1}; the bottom K retains
-    % its virtual legs.  The vertical strand is the doubled physical index.
+    % tensor closes both virtual legs against K^{-1} and keeps its physical
+    % leg p open; K^{-1} contracts through the doubled physical index only
+    % with the bottom K, whose virtual legs remain open.
     % Both sides have boundary signature (virtual-west=1 | virtual-east=1 |
     % physical-up=1 | physical-down=0).
     \begin{tenkz}[
-            rows={op, op, ket:open},
+            rows={ket:nopair, ket, bra},
             west=cup,
             east=cup,
             tensor style=box]
