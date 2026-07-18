@@ -364,7 +364,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_all_cut_markov_implies_sal}
     \lean{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}
     \leanok
-    \uses{def:is_sal, def:entropy_quantum_markov_decomposition}
+    \uses{def:is_sal, def:mpdo, def:entropy_quantum_markov_decomposition}
     Suppose that the periodic operators are positive semidefinite and have
     nonzero trace at every positive chain length.  For every $N$ and every
     $1\leq m\leq\lfloor N/2\rfloor$, divide the chain into four consecutive
@@ -380,7 +380,11 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{thm:mpdo_sal_ssa_equality,
         thm:entropy_ssa_equality_quantum_markov}
     The quantum Markov decomposition gives equality in strong subadditivity
-    at every admissible cut.  Apply the converse direction of
+    at every admissible cut:
+    \[
+        S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC}).
+    \]
+    Apply the converse direction of
     Theorem~\ref{thm:mpdo_sal_ssa_equality}.
 \end{proof}
 

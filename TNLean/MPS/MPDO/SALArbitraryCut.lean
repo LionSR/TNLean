@@ -163,18 +163,18 @@ imply saturation of the area law, provided the periodic operators are positive
 and have nonzero trace.
 
 This isolates the entropy-theoretic conclusion used in the proof of the
-proposition labelled `4to2`: the direct-sum tensor-factor decomposition on the
+proposition labelled 4to2: the direct-sum tensor-factor decomposition on the
 middle site implies equality in strong subadditivity, and the latter equalities
 give SAL.
 
-**Scope restriction (Markov decomposition assumed):** Proposition `4to2` of
+**Scope restriction (Markov decomposition assumed):** Proposition 4to2 of
 arXiv:1606.00608 assumes instead a single translation-invariant commuting bond
 and ZCL. Deriving the decompositions below from those hypotheses requires the
 Bravyi--Vyalyi spatial decomposition (Beigi, arXiv:1105.1019v2, Lemma 2.1),
 and the subsequent ZCL trace factorization. This missing implication is documented in
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+Source: arXiv:1606.00608, Appendix C.2, Proposition 4to2, lines
 1597--1619. -/
 theorem isSAL_of_quantumMarkovDecomposition_tripartite_m
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
