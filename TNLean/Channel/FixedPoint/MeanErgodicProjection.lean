@@ -52,7 +52,7 @@ the orbit lies in a bounded trace section of the positive cone.
 
 Source: Wolf, Proposition 6.3 and Equation (6.14), local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
-theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_tracePreserving
+private theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_tracePreserving
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) :
@@ -84,7 +84,7 @@ bound.
 
 Source: Wolf, Proposition 6.3 and Equation (6.14), local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
-theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_tracePreserving
+private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_tracePreserving
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :

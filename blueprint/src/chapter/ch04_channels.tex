@@ -980,19 +980,62 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     identities follow directly from the projection construction.
 \end{proof}
 
+\begin{theorem}[Positive mean-ergodic projection]
+    \label{thm:positive_mean_ergodic_projection}
+    \lean{IsPositiveMap.meanErgodicProjection_isPositiveMap}
+    \leanok
+    \uses{def:positive_map, def:mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits}
+    Let $T:\MN{D}\to\MN{D}$ be positive and have bounded orbits. Then its
+    mean-ergodic projection $P_T$ is positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every Ces\`aro average is positive. Therefore, for $X\ge 0$, closedness of
+    the positive cone and convergence of the averages give $P_T(X)\ge 0$.
+\end{proof}
+
+\begin{theorem}[Trace-preserving mean-ergodic projection]
+    \label{thm:trace_preserving_mean_ergodic_projection}
+    \lean{IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap}
+    \leanok
+    \uses{def:trace_preserving, def:mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits}
+    Let $T:\MN{D}\to\MN{D}$ be trace-preserving and have bounded orbits.
+    Then its mean-ergodic projection $P_T$ is trace-preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every nonempty Ces\`aro average preserves the trace. Convergence of the
+    averages and continuity of the trace therefore give
+    $\tr(P_T(X))=\tr(X)$.
+\end{proof}
+
+\begin{theorem}[Identity under the mean-ergodic projection]
+    \label{thm:unital_mean_ergodic_projection}
+    \lean{LinearMap.HasBoundedOrbits.meanErgodicProjection_one}
+    \leanok
+    \uses{def:mean_ergodic_projection, thm:mean_ergodic_bounded_orbits}
+    Let $T:\MN{D}\to\MN{D}$ have bounded orbits. If $T(\Id)=\Id$, then
+    $P_T(\Id)=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The identity is a fixed point of $T$, so the fixed-point characterization
+    of the mean-ergodic projection gives the conclusion.
+\end{proof}
+
 \begin{theorem}[Positive trace-preserving mean-ergodic projection]
     \label{thm:positive_trace_preserving_mean_ergodic_projection}
-    \lean{IsPositiveMap.isBounded_orbit_of_posSemidef_of_tracePreserving,
-        IsPositiveMap.isBounded_orbit_of_isHermitian_of_tracePreserving,
-        IsPositiveMap.hasBoundedOrbits_of_tracePreserving,
-        IsPositiveMap.meanErgodicProjection_isPositiveMap,
-        IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap,
-        LinearMap.HasBoundedOrbits.meanErgodicProjection_one,
+    \lean{IsPositiveMap.hasBoundedOrbits_of_tracePreserving,
         IsPositiveMap.range_meanErgodicProjection_of_tracePreserving,
         IsPositiveMap.meanErgodicProjection_apply_eq_self_iff_of_tracePreserving}
     \leanok
     \uses{def:positive_map, def:trace_preserving,
-        def:mean_ergodic_projection}
+        def:mean_ergodic_projection,
+        thm:positive_mean_ergodic_projection,
+        thm:trace_preserving_mean_ergodic_projection,
+        thm:unital_mean_ergodic_projection}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving. Then $T$ has
     bounded orbits, and its mean-ergodic projection $P_T$ is positive and
     trace-preserving. Its range is precisely the fixed-point space of $T$:
@@ -1007,7 +1050,10 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mean_ergodic_bounded_orbits}
+    \uses{thm:mean_ergodic_bounded_orbits,
+        thm:positive_mean_ergodic_projection,
+        thm:trace_preserving_mean_ergodic_projection,
+        thm:unital_mean_ergodic_projection}
     If $X\ge 0$, then $T^n(X)\ge 0$ and
     $\tr(T^n(X))=\tr(X)$. Hence the orbit of $X$ lies in a bounded trace
     section of the positive cone. For Hermitian $X$, write
@@ -1017,11 +1063,9 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
         X=\frac12(H_1-iH_2).
     \]
     Thus every orbit is bounded. Theorem~\ref{thm:mean_ergodic_bounded_orbits}
-    gives the projection and its fixed-point characterization. Every Ces\`aro
-    average is positive, so closedness of the positive cone makes $P_T$
-    positive. Trace preservation passes to the limit by continuity of the
-    trace. Finally, if $T(\Id)=\Id$, the fixed-point characterization gives
-    $P_T(\Id)=\Id$.
+    gives the projection and its fixed-point characterization. Its positivity,
+    trace preservation, and behavior on the identity follow from the three
+    preceding theorems.
 \end{proof}
 
 \begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
