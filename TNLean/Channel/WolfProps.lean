@@ -310,25 +310,6 @@ theorem exists_eq_smul_id_of_maps_rankOne_to_span
     simp only [smul_smul]
     rw [mul_comm a]
 
-/-- Linear maps fixing rank-one self-outer-products also fix generic rank-one
-outer products (after polarizing via `vecMulVec_star_eq_polarization`). -/
-private theorem T_fixes_vecMulVec_star_of_fixes_self
-    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hT : ∀ v : Fin D → ℂ, T (Matrix.vecMulVec v (star v)) =
-                                    Matrix.vecMulVec v (star v))
-    (u v : Fin D → ℂ) :
-    T (Matrix.vecMulVec u (star v)) = Matrix.vecMulVec u (star v) := by
-  -- Apply T to both sides of `vecMulVec_star_eq_polarization` and
-  -- use linearity plus the hypothesis on self-outer-products.
-  have hmul : (4 : ℂ) • T (Matrix.vecMulVec u (star v)) =
-      (4 : ℂ) • Matrix.vecMulVec u (star v) := by
-    have h := congrArg T (vecMulVec_star_eq_polarization u v)
-    simp only [map_smul, map_sub, map_add, hT] at h
-    rw [h, ← vecMulVec_star_eq_polarization]
-  -- Cancel the scalar `4`.
-  have h4 : (4 : ℂ) ≠ 0 := by norm_num
-  exact smul_right_injective _ h4 hmul
-
 section Prop23
 
 variable (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -343,29 +324,18 @@ theorem linearMap_eq_id_of_fixes_rankOne
     (hT : ∀ v : Fin D → ℂ, T (Matrix.vecMulVec v (star v)) =
                                     Matrix.vecMulVec v (star v)) :
     T = LinearMap.id := by
-  -- It suffices to agree on every matrix; use `Matrix.induction_on'`
-  -- (which covers the `D = 0` case via `h_zero`).
-  refine LinearMap.ext fun M => ?_
-  change T M = M
-  refine Matrix.induction_on' M ?_ ?_ ?_
-  · exact map_zero T
-  · intro p q hp hq
-    rw [map_add, hp, hq]
-  · intro i j c
-    -- `Matrix.single i j c = c • vecMulVec (Pi.single i 1) (star (Pi.single j 1))`.
-    have hsingle : (Matrix.single i j c : Matrix (Fin D) (Fin D) ℂ) =
-        c • Matrix.vecMulVec (Pi.single i (1 : ℂ))
-              (star (Pi.single j (1 : ℂ)) : Fin D → ℂ) := by
-      have hstar : (star (Pi.single j (1 : ℂ)) : Fin D → ℂ) =
-          Pi.single j (1 : ℂ) := by
-        ext k; simp [Pi.single_apply, Pi.star_apply]
-      rw [hstar]
-      rw [← Matrix.single_eq_single_vecMulVec_single (i := i) (j := j)]
-      ext a b
-      simp [Matrix.single_apply]
-    rw [hsingle, map_smul,
-        T_fixes_vecMulVec_star_of_fixes_self (D := D) T hT (Pi.single i (1 : ℂ))
-          (Pi.single j (1 : ℂ))]
+  obtain ⟨c, hc⟩ := exists_eq_smul_id_of_maps_rankOne_to_span (D := D) T fun v ↦
+    ⟨1, by simpa using hT v⟩
+  by_cases hD : D = 0
+  · subst D
+    exact Subsingleton.elim _ _
+  let i₀ : Fin D := ⟨0, Nat.pos_of_ne_zero hD⟩
+  have hfix := hT (Pi.single i₀ (1 : ℂ))
+  rw [hc] at hfix
+  have hii := congrFun (congrFun hfix i₀) i₀
+  have hc_one : c = 1 := by
+    simpa [Matrix.vecMulVec_apply, Pi.star_apply, i₀] using hii
+  simpa [hc_one] using hc
 
 /-- **Proposition 2.3 (Wolf), pure-state form**: any linear map (in particular any
 quantum channel) leaving every pure-state projector `vecMulVec v (star v)`
