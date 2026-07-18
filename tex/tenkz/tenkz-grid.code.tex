@@ -1503,11 +1503,13 @@
     \dim_set:Nn \l__tenkz_y_dim { \tenkz_rowy:n {#1} }
     \dim_set:Nn \l__tenkz_tmp_dim
       { \tenkz_rowy:n { #1 + \l__tenkz_frows_int - 1 } }
-    % the bar, with a small overhang beyond the outer wires (a logical
-    % vertical stroke: the frame map turns it sideways with the rows)
+    % the bar, overhanging the outer wires by the named fuseover ratio (a
+    % logical vertical stroke: the frame map turns it sideways with the
+    % rows); the silhouette resolver reads the SAME ratio, so the bar's
+    % drawn reach and its budgeted reach cannot drift apart
     \tenkz_seg:nnnnn
-      { \l__tenkz_x_dim } { \l__tenkz_y_dim + \tenkz@dim{0.10} }
-      { \l__tenkz_x_dim } { \l__tenkz_tmp_dim - \tenkz@dim{0.10} }
+      { \l__tenkz_x_dim } { \l__tenkz_y_dim + \tenkz@dim{\tenkz@r@fuseover} }
+      { \l__tenkz_x_dim } { \l__tenkz_tmp_dim - \tenkz@dim{\tenkz@r@fuseover} }
       { fusion~map }
     % combined fused stub at the vertical midpoint
     \dim_set:Nn \l__tenkz_tmp_dim
@@ -2592,67 +2594,296 @@
       { \tenkz_draw_bondlabel:nnn ##1 }
   }
 
-% do columns #2..#3 of row #1 place any ACTUAL external dot label on side
-% #4 (south|north)?  True only for a dot-skinned tn/tnc cell with a
-% non-blank label whose direction (`label pos` override, else the auto
-% quadrant) has a #4 component.  Box-skinned cells inscribe their labels,
-% so a box-mode span reports false and the brace clearance tightens: no
-% phantom band.  The scan is span-local so a brace over unlabeled cells is
-% not pushed out by labels elsewhere in the row.
-\cs_new_protected:Npn \tenkz_span_dot_labels:nnnnN #1#2#3#4#5
+% -- the silhouette -----------------------------------------------------
+% \tenkz_silhouette:nnnnN {row} {col-from} {col-to} {up|down} \dim
+% THE single source of vertical ink extent: the distance from row #1's
+% axis to the outermost ink edge over columns #2..#3, on side #4, into
+% the dimension register #5.  Closure and annotation ink (racetrack
+% returns, span braces) sits at silhouette + \tenkz@r@daylight; nothing
+% else may budget clearance.  Every contribution is derived from the
+% same stored cell data the drawing passes read (kind/opts/name props,
+% row typing), so a pass that draws new ink teaches the resolver once
+% instead of patching every consumer's conditional stack.
+%
+% Per cell the extent is the max over the ACTUAL contributions:
+%   glyph skin   the placed node's own edge anchor -- the real ink, so
+%                strut-grown boxes, wide pills, wires=k covering heights
+%                and the ellipsis node are exact without a shape table.
+%                (Inscribed labels carry the uniform glyph strut, so the
+%                shape minimums are only floors: at the default pitch a
+%                strut-height box already stands ~0.21 pitch above its
+%                0.11 floor, and a label taller than the strut grows the
+%                node further -- the anchor follows both, so oversized
+%                labels are HANDLED, not merely tolerated.)
+%   open leg     + physleg beyond the glyph edge: legs are drawn FROM
+%                the edge anchor, so edge + leg is exact by construction
+%                (the inline profile swaps the leg ratio at the
+%                pitch-profile level, so this reads the resolved value);
+%   tip label    + the label band beyond the leg tip;
+%   wrap loop    a pair-traced column's stadium cap swings
+%                pairtracereach/2 beyond the leg tip;
+%   bead label   an external label whose resolved quadrant has a
+%                component on the queried side: + the label band beyond
+%                the glyph edge.  The quadrant resolution is the
+%                dot-label pass's own (`label pos' through the compass
+%                involution, else the auto quadrant) -- one algorithm,
+%                shared, not duplicated;
+%   fusion bar   the wedge overhangs its outer wire rows by fuseover.
+% Both label kinds use \tenkz@r@dotlabelband as their band, deliberately:
+% a tip label and a bead label are the same object (one clearance + one
+% line of script-size text), so they share ONE metric.  The band is a
+% budget, not a measurement: a label with nested scripts can exceed it
+% by a fraction of the daylight gap, which the daylight constant absorbs.
+\dim_new:N \l__tenkz_silc_dim   % per-cell candidate extent
+\dim_new:N \l__tenkz_siln_dim   % the cell's node-edge (skin) extent
+\tl_new:N \l__tenkz_silk_tl     % cell kind under scan
+\tl_new:N \l__tenkz_silq_tl     % opts / label / quadrant scratch
+\tl_new:N \l__tenkz_silname_tl  % node name under scan
+\int_new:N \l__tenkz_silr_int   % row cursor of the tall/fuse scans
+
+\cs_new_protected:Npn \tenkz_silhouette:nnnnN #1#2#3#4#5
   {
-    \bool_set_false:N #5
+    \dim_zero:N #5
+    % #1 may be an int register (the trace pass hands the nrows counter);
+    % \int_eval:n normalizes it before it becomes part of a prop key
     \int_step_inline:nnn {#2} {#3}
       {
-        \tenkz_get:NeN \l__tenkz_kind_prop {#1-##1} \l_tmpa_tl
-        \bool_lazy_or:nnT
-          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
-          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+        \tenkz_sil_cell:enn { \int_eval:n {#1} } {##1} {#4}
+        \dim_set:Nn #5 { \dim_max:nn {#5} { \l__tenkz_silc_dim } }
+      }
+  }
+
+% one cell's contribution, into \l__tenkz_silc_dim.  An unoccupied cell
+% (no kind) contributes nothing; a fusion bar has no node, so it takes
+% its own branch; everything else starts from its node's real edge.
+\cs_new_protected:Npn \tenkz_sil_cell:nnn #1#2#3
+  {
+    \dim_zero:N \l__tenkz_silc_dim
+    \tenkz_get:NeN \l__tenkz_kind_prop {#1-#2} \l__tenkz_silk_tl
+    \tl_if_empty:NF \l__tenkz_silk_tl
+      {
+        \bool_lazy_or:nnTF
+          { \str_if_eq_p:Vn \l__tenkz_silk_tl {fuse} }
+          { \str_if_eq_p:Vn \l__tenkz_silk_tl {fusec} }
+          { \tenkz_sil_fuse:nnn {#1}{#2}{#3} }
           {
-            \tenkz_get:NeN \l__tenkz_label_prop {#1-##1} \l_tmpb_tl
-            \tl_if_blank:VF \l_tmpb_tl
-              {
-                \tenkz_get:NeN \l__tenkz_opts_prop {#1-##1} \l_tmpb_tl
-                \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-                \bool_if:nT { \tenkz_label_outside_p: }
-                  {
-                    % the side test #4 is a LOGICAL word; a user-given
-                    % `label pos` is a PAPER word, so the compass
-                    % involution converts it back before comparing
-                    \tl_if_empty:NTF \l__tenkz_clpos_tl
-                      { \tenkz_auto_quadrant:nN {#1} \l_tmpa_tl }
-                      { \tl_set:Ne \l_tmpa_tl
-                          { \tenkz_compass:V \l__tenkz_clpos_tl } }
-                    \str_if_in:NnT \l_tmpa_tl {#4}
-                      { \bool_set_true:N #5 }
-                  }
-              }
+            \tenkz_sil_node:nnn {#1}{#2}{#3}
+            \dim_set_eq:NN \l__tenkz_silc_dim \l__tenkz_siln_dim
+            \bool_lazy_or:nnT
+              { \str_if_eq_p:Vn \l__tenkz_silk_tl {tn} }
+              { \str_if_eq_p:Vn \l__tenkz_silk_tl {tnc} }
+              { \tenkz_sil_tensor:nnn {#1}{#2}{#3} }
+            % a wires=k continuation row: its face legs (cell physical=)
+            % are declared at the base cell, so read them from there
+            \str_if_eq:VnT \l__tenkz_silk_tl {tnv}
+              { \tenkz_sil_tall_legs:nnn {#1}{#2}{#3} }
+          }
+      }
+  }
+\cs_generate_variant:Nn \tenkz_sil_cell:nnn { enn }
+
+% the skin: the logical distance from row #1's axis to the node's edge
+% anchor on side #3, floored at zero (a ghost is a point ON the axis).
+% The anchor is paper-frame data, so the vertical frame extracts the
+% mapped coordinate exactly as the leg and brick passes do.
+\cs_new_protected:Npn \tenkz_sil_node:nnn #1#2#3
+  {
+    \dim_zero:N \l__tenkz_siln_dim
+    \tenkz_get:NeN \l__tenkz_name_prop {#1-#2} \l__tenkz_silname_tl
+    \tl_if_empty:NF \l__tenkz_silname_tl
+      {
+        % the side's LOGICAL anchor word, resolved before the compass map
+        % (\str_case inside the map compares unexpanded tokens)
+        \tl_set:Ne \l__tenkz_silq_tl
+          { \str_if_eq:nnTF {#3} {up} {north} {south} }
+        \bool_if:NTF \l__tenkz_vertical_bool
+          {
+            % logical y = -(paper x) under (x, y) -> (-y, -x)
+            \pgfextractx \l__tenkz_siln_dim
+              { \exp_args:Ne \pgfpointanchor { \l__tenkz_silname_tl }
+                  { \tenkz_compass:V \l__tenkz_silq_tl } }
+            \dim_set:Nn \l__tenkz_siln_dim { 0pt - \l__tenkz_siln_dim }
+          }
+          {
+            \pgfextracty \l__tenkz_siln_dim
+              { \exp_args:Ne \pgfpointanchor { \l__tenkz_silname_tl }
+                  { \tl_use:N \l__tenkz_silq_tl } }
+          }
+        \str_if_eq:nnTF {#3} {up}
+          { \dim_set:Nn \l__tenkz_siln_dim
+              { \l__tenkz_siln_dim - \tenkz_rowy:n {#1} } }
+          { \dim_set:Nn \l__tenkz_siln_dim
+              { \tenkz_rowy:n {#1} - \l__tenkz_siln_dim } }
+        \dim_set:Nn \l__tenkz_siln_dim
+          { \dim_max:nn { \l__tenkz_siln_dim } { 0pt } }
+      }
+  }
+
+% raise the cell candidate to a leg hung off the node edge: + physleg,
+% + the label band when the tip carries a label (#1 is the up=/down=
+% label slot of the parsed options)
+\cs_new_protected:Npn \tenkz_sil_leg:N #1
+  {
+    \dim_set:Nn \l__tenkz_silc_dim
+      { \dim_max:nn { \l__tenkz_silc_dim }
+          { \l__tenkz_siln_dim + \tenkz@dim{\tenkz@r@physleg}
+            + \tl_if_blank:VTF #1 { 0pt }
+                { \tenkz@dim{\tenkz@r@dotlabelband} } } }
+  }
+% raise the cell candidate to a label band hung off the node edge
+\cs_new_protected:Npn \tenkz_sil_band:
+  {
+    \dim_set:Nn \l__tenkz_silc_dim
+      { \dim_max:nn { \l__tenkz_silc_dim }
+          { \l__tenkz_siln_dim + \tenkz@dim{\tenkz@r@dotlabelband} } }
+  }
+% raise the cell candidate to a pair-trace wrap loop: the stadium cap's
+% top rides radius = pairtracereach/2 beyond the leg tip
+\cs_new_protected:Npn \tenkz_sil_wrap:
+  {
+    \dim_set:Nn \l__tenkz_silc_dim
+      { \dim_max:nn { \l__tenkz_silc_dim }
+          { \l__tenkz_siln_dim + \tenkz@dim{\tenkz@r@physleg}
+            + \tenkz@dim{\tenkz@r@pairtracereach} / 2 } }
+  }
+
+% a tensor cell's legs and external label, from its parsed options and
+% the row typing -- the same predicates that gate the leg, pair-trace
+% and dot-label passes, so ink and clearance cannot drift apart
+\cs_new_protected:Npn \tenkz_sil_tensor:nnn #1#2#3
+  {
+    \tenkz_get:NeN \l__tenkz_opts_prop {#1-#2} \l__tenkz_silq_tl
+    \exp_args:NV \tenkz_cell_opts:n \l__tenkz_silq_tl
+    % cell-level physical= faces of a wires=k brick
+    \tenkz_sil_brick:n {#3}
+    % row-typed legs and wrap loops
+    \str_if_eq:nnTF {#3} {up}
+      {
+        \bool_if:nTF { \tenkz_traced_p:nn {#1}{#2} }
+          { \tenkz_sil_wrap: }
+          {
+            \bool_lazy_and:nnT
+              { \tenkz_openup_p:n {#1} }
+              { ! \l__tenkz_cnolegs_bool }
+              { \tenkz_sil_leg:N \l__tenkz_cup_tl }
+          }
+      }
+      {
+        \bool_if:nTF { \tenkz_traced_above_p:nn {#1}{#2} }
+          { \tenkz_sil_wrap: }
+          {
+            \bool_lazy_and:nnT
+              { \tenkz_opendown_p:n {#1} }
+              { ! \l__tenkz_cnolegs_bool }
+              { \tenkz_sil_leg:N \l__tenkz_cdown_tl }
+          }
+      }
+    % external bead label with a component on the queried side.  The
+    % side test speaks LOGICAL compass; a user-given `label pos' is a
+    % PAPER word, so the involution converts it back before comparing.
+    \tenkz_get:NeN \l__tenkz_label_prop {#1-#2} \l__tenkz_silq_tl
+    \tl_if_blank:VF \l__tenkz_silq_tl
+      {
+        \bool_if:nT { \tenkz_label_outside_p: }
+          {
+            \tl_if_empty:NTF \l__tenkz_clpos_tl
+              { \tenkz_auto_quadrant:nN {#1} \l__tenkz_silq_tl }
+              { \tl_set:Ne \l__tenkz_silq_tl
+                  { \tenkz_compass:V \l__tenkz_clpos_tl } }
+            \str_if_eq:nnTF {#3} {up}
+              { \str_if_in:NnT \l__tenkz_silq_tl {north}
+                  { \tenkz_sil_band: } }
+              { \str_if_in:NnT \l__tenkz_silq_tl {south}
+                  { \tenkz_sil_band: } }
           }
       }
   }
 
-% do columns #2..#3 of row #1 hang a label off a leg TIP on side #4
-% (up|down)?  A tip label extends past the leg by the label band, and the
-% racetrack must clear the TEXT, not just the leg (a return wire through
-% an index name reads as a contraction with it).  Kind-restricted like
-% the dot-label scan: only tn/tnc cells draw legs.
-\cs_new_protected:Npn \tenkz_span_leg_labels:nnnnN #1#2#3#4#5
+% the face legs of a wires=k brick (cell physical=), from the already
+% parsed options: one leg row per stated face, hung off the glyph's
+% edge like any other leg
+\cs_new_protected:Npn \tenkz_sil_brick:n #1
   {
-    \bool_set_false:N #5
-    \int_step_inline:nnn {#2} {#3}
+    \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
       {
-        \tenkz_get:NeN \l__tenkz_kind_prop {#1-##1} \l_tmpa_tl
-        \bool_lazy_or:nnT
-          { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
-          { \str_if_eq_p:Vn \l_tmpa_tl {tnc} }
+        \str_if_eq:nnTF {#1} {up}
           {
-            \tenkz_get:NeN \l__tenkz_opts_prop {#1-##1} \l_tmpb_tl
-            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-            \str_if_eq:nnTF {#4} {up}
-              { \tl_if_blank:VF \l__tenkz_cup_tl   { \bool_set_true:N #5 } }
-              { \tl_if_blank:VF \l__tenkz_cdown_tl { \bool_set_true:N #5 } }
+            \bool_lazy_or:nnT
+              { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
+              { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+              { \tenkz_sil_leg:N \l__tenkz_cup_tl }
+          }
+          {
+            \bool_lazy_or:nnT
+              { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
+              { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+              { \tenkz_sil_leg:N \l__tenkz_cdown_tl }
           }
       }
+  }
+
+% a continuation row of a wires=k glyph: walk up the claimed column to
+% the base cell (the first non-`tnv' kind) and price ITS face legs from
+% this row's axis -- the shared node edge already came from sil_node
+\cs_new_protected:Npn \tenkz_sil_tall_legs:nnn #1#2#3
+  {
+    \int_set:Nn \l__tenkz_silr_int { #1 - 1 }
+    \tenkz_get:NeN \l__tenkz_kind_prop
+      { \int_use:N \l__tenkz_silr_int - #2 } \l__tenkz_silk_tl
+    \bool_while_do:nn
+      { \str_if_eq_p:Vn \l__tenkz_silk_tl {tnv} }
+      {
+        \int_decr:N \l__tenkz_silr_int
+        \tenkz_get:NeN \l__tenkz_kind_prop
+          { \int_use:N \l__tenkz_silr_int - #2 } \l__tenkz_silk_tl
+      }
+    % only tensor bases draw face legs (a spanning \tnX capsule has none)
+    \bool_lazy_or:nnT
+      { \str_if_eq_p:Vn \l__tenkz_silk_tl {tn} }
+      { \str_if_eq_p:Vn \l__tenkz_silk_tl {tnc} }
+      {
+        \tenkz_get:NeN \l__tenkz_opts_prop
+          { \int_use:N \l__tenkz_silr_int - #2 } \l__tenkz_silq_tl
+        \exp_args:NV \tenkz_cell_opts:n \l__tenkz_silq_tl
+        \tenkz_sil_brick:n {#3}
+      }
+  }
+
+% a fusion bar's ink: the wedge runs from fuseover beyond its base row
+% to fuseover beyond its last row, so a cell's extent on either side is
+% the rows the bar continues that way plus the overhang.  The bar's
+% rows are read off the kind prop (`fuse' base, `fusec' continuations),
+% the same records the node pass wrote.
+\cs_new_protected:Npn \tenkz_sil_fuse:nnn #1#2#3
+  {
+    \int_set:Nn \l__tenkz_silr_int {#1}
+    \str_if_eq:nnTF {#3} {up}
+      {
+        \bool_while_do:nn
+          { \str_if_eq_p:Vn \l__tenkz_silk_tl {fusec} }
+          {
+            \int_decr:N \l__tenkz_silr_int
+            \tenkz_get:NeN \l__tenkz_kind_prop
+              { \int_use:N \l__tenkz_silr_int - #2 } \l__tenkz_silk_tl
+          }
+      }
+      {
+        \tenkz_get:NeN \l__tenkz_kind_prop
+          { \int_eval:n { \l__tenkz_silr_int + 1 } - #2 } \l__tenkz_silk_tl
+        \bool_while_do:nn
+          { \str_if_eq_p:Vn \l__tenkz_silk_tl {fusec} }
+          {
+            \int_incr:N \l__tenkz_silr_int
+            \tenkz_get:NeN \l__tenkz_kind_prop
+              { \int_eval:n { \l__tenkz_silr_int + 1 } - #2 }
+              \l__tenkz_silk_tl
+          }
+      }
+    % NB integer factor RIGHT of *; the layer pitch carries `layer sep`
+    \dim_set:Nn \l__tenkz_silc_dim
+      { \tenkz@r@layersep\tenkz@pitch *
+          ( \int_abs:n { \l__tenkz_silr_int - #1 } )
+        + \tenkz@dim{\tenkz@r@fuseover} }
   }
 
 \cs_new_protected:Npn \tenkz_draw_span:nnnnn #1#2#3#4#5
@@ -2661,31 +2892,26 @@
       { \tenkz_colx:n {#2} - \tenkz@dim{\tenkz@r@glyphbox} }
     \dim_set:Nn \l__tenkz_tmp_dim
       { \tenkz_colx:n { #2 + #3 - 1 } + \tenkz@dim{\tenkz@r@glyphbox} }
+    % the brace sits one daylight gap beyond the span's silhouette,
+    % measured over ITS columns only -- a brace over unlabeled cells is
+    % not pushed out by labels elsewhere in the row, and a box-mode
+    % brace hugs the (inscribed-label) boxes
     \str_if_eq:nnTF {#4} {brace~below}
       {
-        % clear open down legs, or the south dot-label band when the row
-        % actually places external dot labels below (dot skins only, so a
-        % box-mode brace sits closer)
-        \tenkz_span_dot_labels:nnnnN {#1} {#2} { #2 + #3 - 1 } {south} \l_tmpa_bool
+        \tenkz_silhouette:nnnnN {#1} {#2} { #2 + #3 - 1 } {down}
+          \l__tenkz_y_dim
         \dim_set:Nn \l__tenkz_y_dim
-          { \tenkz_rowy:n {#1} - \tenkz@dim{0.20}
-            - \bool_if:nTF { \tenkz_opendown_p:n {#1} }
-                { \tenkz@dim{\tenkz@r@physleg} }
-                { \bool_if:NTF \l_tmpa_bool
-                    { \tenkz@dim{\tenkz@r@dotlabelband} } { 0pt } } }
+          { \tenkz_rowy:n {#1} - \l__tenkz_y_dim
+            - \tenkz@dim{\tenkz@r@daylight} }
         % brace bulges downward: trace right-to-left, label below
         \tenkz_span_brace:NNnnn \l__tenkz_tmp_dim \l__tenkz_x_dim {north} {-1} {#5}
       }
       {
-        % clear open up legs, or the north dot-label band when the row
-        % actually places external dot labels above
-        \tenkz_span_dot_labels:nnnnN {#1} {#2} { #2 + #3 - 1 } {north} \l_tmpa_bool
+        \tenkz_silhouette:nnnnN {#1} {#2} { #2 + #3 - 1 } {up}
+          \l__tenkz_y_dim
         \dim_set:Nn \l__tenkz_y_dim
-          { \tenkz_rowy:n {#1} + \tenkz@dim{0.20}
-            + \bool_if:nTF { \tenkz_openup_p:n {#1} }
-                { \tenkz@dim{\tenkz@r@physleg} }
-                { \bool_if:NTF \l_tmpa_bool
-                    { \tenkz@dim{\tenkz@r@dotlabelband} } { 0pt } } }
+          { \tenkz_rowy:n {#1} + \l__tenkz_y_dim
+            + \tenkz@dim{\tenkz@r@daylight} }
         % brace bulges upward: trace left-to-right, label above
         \tenkz_span_brace:NNnnn \l__tenkz_x_dim \l__tenkz_tmp_dim {south} {1} {#5}
       }
@@ -3429,49 +3655,25 @@
           { \tenkz_colx:n {\l_tmpb_int} + \tenkz@dim{0.45} }
         \dim_set:Nn \l__tenkz_tmp_dim
           { \tenkz_colx:n {\l_tmpa_int} - \tenkz@dim{0.45} }
-        % The racetrack must CLEAR any ink on its side of the traced row (a
-        % virtual trace crossing physical ink would draw a false
-        % contraction), and only ink that is THERE: the base drop clears
-        % the glyph silhouette, then each obstruction pays its own way --
-        % open legs add the leg length, a labelled leg tip and a dot label
-        % each add the label band.  A bare ring hugs its row.
-        \dim_set:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@traceclear} }
+        % The racetrack must CLEAR any ink on its side of the traced row
+        % (a virtual trace crossing physical ink would draw a false
+        % contraction), and only ink that is THERE: the return wire runs
+        % one daylight gap beyond the row's silhouette over its occupied
+        % span.  A bare ring hugs its row's beads.
         \str_if_eq:nnTF {#2} {below}
           {
-            \bool_if:nT { \tenkz_opendown_p:n {#1} }
-              {
-                \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} }
-                \tenkz_span_leg_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
-                  {down} \l_tmpa_bool
-                \bool_if:NT \l_tmpa_bool
-                  { \dim_add:Nn \l__tenkz_y_dim
-                      { \tenkz@dim{\tenkz@r@dotlabelband} } }
-              }
-            \tenkz_span_dot_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
-              {south} \l_tmpa_bool
-            \bool_if:NT \l_tmpa_bool
-              { \dim_add:Nn \l__tenkz_y_dim
-                  { \tenkz@dim{\tenkz@r@dotlabelband} } }
+            \tenkz_silhouette:nnnnN {#1} {\l_tmpa_int} {\l_tmpb_int}
+              {down} \l__tenkz_y_dim
             \dim_set:Nn \l__tenkz_y_dim
-              { \tenkz_rowy:n {#1} - \l__tenkz_y_dim }
+              { \tenkz_rowy:n {#1} - \l__tenkz_y_dim
+                - \tenkz@dim{\tenkz@r@daylight} }
           }
           {
-            \bool_if:nT { \tenkz_openup_p:n {#1} }
-              {
-                \dim_add:Nn \l__tenkz_y_dim { \tenkz@dim{\tenkz@r@physleg} }
-                \tenkz_span_leg_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
-                  {up} \l_tmpa_bool
-                \bool_if:NT \l_tmpa_bool
-                  { \dim_add:Nn \l__tenkz_y_dim
-                      { \tenkz@dim{\tenkz@r@dotlabelband} } }
-              }
-            \tenkz_span_dot_labels:nnnnN {#1} {1} {\l__tenkz_ncols_int}
-              {north} \l_tmpa_bool
-            \bool_if:NT \l_tmpa_bool
-              { \dim_add:Nn \l__tenkz_y_dim
-                  { \tenkz@dim{\tenkz@r@dotlabelband} } }
+            \tenkz_silhouette:nnnnN {#1} {\l_tmpa_int} {\l_tmpb_int}
+              {up} \l__tenkz_y_dim
             \dim_set:Nn \l__tenkz_y_dim
-              { \tenkz_rowy:n {#1} + \l__tenkz_y_dim }
+              { \tenkz_rowy:n {#1} + \l__tenkz_y_dim
+                + \tenkz@dim{\tenkz@r@daylight} }
           }
         % the four racetrack corners are logical-frame points; each one
         % passes through the frame map, so a vertical picture gets the
