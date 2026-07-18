@@ -1290,6 +1290,119 @@ Theorem~\ref{thm:trace_norm_abs}.
     Passing the inequality through the two limits gives the support-domain bound.
 \end{proof}
 
+\begin{definition}[Inverse square root on the support]
+    \label{def:support_inverse_square_root}
+    \lean{Matrix.PosSemidef.supportInvSqrt}
+    \leanok
+    Let $\tau=\sum_i\lambda_i |i\rangle\!\langle i|$ be positive semidefinite.
+    Its inverse square root on the support is
+    \[
+        \tau^{-1/2}_{\mathrm{supp}}
+        =\sum_{\lambda_i>0}\lambda_i^{-1/2}|i\rangle\!\langle i|.
+    \]
+\end{definition}
+
+\begin{lemma}[Hermiticity of the support inverse square root]
+    \label{lem:support_inverse_square_root_hermitian}
+    \lean{Matrix.PosSemidef.supportInvSqrt_isHermitian}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    The inverse square root of a positive semidefinite matrix on its support is
+    Hermitian.
+\end{lemma}
+
+\begin{lemma}[Support inverse-square-root identity]
+    \label{lem:support_inverse_square_root_sandwich}
+    \lean{Matrix.PosSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    If $P_\tau$ is the orthogonal projector onto the support of a positive
+    semidefinite matrix $\tau$, then
+    \[
+        \tau^{-1/2}_{\mathrm{supp}}\,\tau\,
+        \tau^{-1/2}_{\mathrm{supp}}=P_\tau.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    In an eigenbasis of $\tau$, the left-hand side has eigenvalue zero when
+    $\lambda_i=0$ and eigenvalue
+    $\lambda_i^{-1/2}\lambda_i\lambda_i^{-1/2}=1$ otherwise.
+\end{proof}
+
+\begin{definition}[Support Petz transpose map for a partial trace]
+    \label{def:partial_trace_support_petz_map}
+    \lean{Matrix.partialTraceRightPetzMap}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $\sigma$ be positive semidefinite on $H_L\otimes H_R$, and set
+    $\tau=\operatorname{tr}_R\sigma$.  The Petz transpose formula on the
+    support of $\tau$ is
+    \[
+        \mathcal R_\sigma(X)=\sqrt\sigma\,
+        \bigl(\tau^{-1/2}_{\mathrm{supp}}X
+        \tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R\bigr)\sqrt\sigma.
+    \]
+    This is the support formula of
+    \cite[Theorem~3, equation~(8)]{Hayden2004Structure}.  It is not asserted to
+    be trace preserving on operators outside the support of $\tau$.
+\end{definition}
+
+\begin{lemma}[Support Petz formula]
+    \label{lem:partial_trace_support_petz_map_apply}
+    \lean{Matrix.partialTraceRightPetzMap_apply}
+    \leanok
+    \uses{def:partial_trace_support_petz_map}
+    For every matrix $X$, the support Petz map is given by the displayed
+    support formula.
+\end{lemma}
+
+\begin{theorem}[Complete positivity of the support Petz map]
+    \label{thm:partial_trace_support_petz_map_cp}
+    \lean{Matrix.partialTraceRightPetzMap_isKrausCP}
+    \leanok
+    \uses{def:partial_trace_support_petz_map, def:is_kraus_cp}
+    The support Petz transpose map $\mathcal R_\sigma$ is completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:is_kraus_cp_comp, lem:mpdo_single_kraus_map_cp,
+        lem:mpdo_state_preparation_cp}
+    For an orthonormal basis $(e_r)_r$ of $H_R$, let
+    $J_r:H_L\to H_L\otimes H_R$ be given by $J_r(v)=v\otimes e_r$.  Then
+    \[
+        \mathcal R_\sigma(X)=\sum_r K_rXK_r^\dagger,
+        \qquad
+        K_r=\sqrt\sigma\,J_r\tau^{-1/2}_{\mathrm{supp}}.
+    \]
+    Thus the support Petz map has a rectangular Kraus representation.
+\end{proof}
+
+\begin{theorem}[The support Petz map recovers its reference]
+    \label{thm:partial_trace_support_petz_map_reference_recovery}
+    \lean{Matrix.partialTraceRightPetzMap_partialTraceRight}
+    \leanok
+    \uses{def:partial_trace_support_petz_map,
+        lem:partial_trace_support_petz_map_apply,
+        lem:support_inverse_square_root_sandwich,
+        thm:marginal_support_left_absorption}
+    For every positive semidefinite $\sigma$,
+    \[
+        \mathcal R_\sigma(\operatorname{tr}_R\sigma)=\sigma.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The support inverse-square-root identity reduces the middle factor to
+    $P_\tau\otimes\mathbf 1_R$.  Marginal-support absorption gives
+    $(\mathbf 1_{LR}-P_\tau\otimes\mathbf 1_R)\sigma=0$, so
+    \[
+        \sqrt\sigma(\mathbf 1_{LR}-P_\tau\otimes\mathbf 1_R)\sqrt\sigma=0
+    \]
+    because that matrix is positive semidefinite of trace zero.  Therefore
+    $\sqrt\sigma(P_\tau\otimes\mathbf 1_R)\sqrt\sigma=\sigma$.
+\end{proof}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}

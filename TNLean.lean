@@ -132,6 +132,7 @@ import TNLean.Analysis.KleinInequality
 import TNLean.Analysis.MarginalSupport
 import TNLean.Analysis.CoisometricCompression
 import TNLean.Channel.MarginalSupportAbsorption
+import TNLean.Channel.PetzRecovery
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
