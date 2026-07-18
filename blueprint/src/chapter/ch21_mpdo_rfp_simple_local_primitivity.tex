@@ -417,11 +417,18 @@
     \leanok
     \uses{def:mpdo_physical_sector_factorization,
       def:mpdo_active_sector_trace_matrix}
-    There is an injective tensor of bond dimension two with four one-dimensional
-    physical sectors, carrying equal positive weights $p_k=1/4$ summing to one,
-    such that the following statements hold simultaneously: it has source zero
-    correlation length; its sector virtual matrices span $\MN{2}$; its
-    physical-trace transfer is idempotent; every neighboring operator is
+    There is a tensor of bond dimension two with four one-dimensional physical
+    sectors and weights $p_k$ such that the following statements hold
+    simultaneously: the tensor is injective and has source zero correlation
+    length; its physical-trace transfer is idempotent; the weights satisfy
+    \[
+        \forall k\in\{0,1,2,3\},\quad p_k=\frac14,
+        \qquad
+        \forall k\in\{0,1,2,3\},\quad 0\leq p_k,
+        \qquad
+        \sum_{k=0}^{3}p_k=1;
+    \]
+    its sector virtual matrices span $\MN{2}$; every neighboring operator is
     positive semidefinite; and its active trace matrix is primitive and has
     trace one.  Nevertheless, if
     $S=LQ$ is the physical-trace transfer and $T=QL$ is the active trace matrix,
