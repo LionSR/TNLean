@@ -1284,6 +1284,109 @@ maps.
     Taking $X = \Id$ yields $\tr(\rho) = 1$.
 \end{proof}
 
+\begin{lemma}[Rank-one domination]
+    \label{lem:posSemidef_rankone_domination}
+    \lean{Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec}
+    \leanok
+    Let $A\in\MN{D}$ be positive semidefinite, let $c\in\C$, and let
+    $\psi\in\C^D$.  If
+    \[
+        A\leq c\ketbra{\psi}{\psi},
+    \]
+    then there is a nonnegative scalar $a$ such that
+    \[
+        A=a\ketbra{\psi}{\psi}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The assertion is immediate when $\psi=0$.  Otherwise set
+    \[
+        s=\langle\psi,\psi\rangle,
+        \qquad P=\ketbra{\psi}{\psi},
+        \qquad Q=s^{-1}P.
+    \]
+    Then $Q$ is the orthogonal projection onto $\C\psi$.  Write
+    $B=cP-A\geq0$.  Since $A+B=cP$ vanishes on the kernel of $Q$, positivity
+    implies
+    \[
+        A(\Id-Q)=0.
+    \]
+    Taking adjoints gives $(\Id-Q)A=0$, and therefore $A=QAQ$.  Finally,
+    \[
+        PAP=\langle\psi,A\psi\rangle P,
+        \qquad
+        A=s^{-2}\langle\psi,A\psi\rangle P.
+    \]
+    The coefficient is nonnegative because $A\geq0$ and $s>0$.
+\end{proof}
+
+% Scope restriction documented in
+% docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex.
+\begin{theorem}[Positive retractions onto one matrix factor]
+    \label{thm:positive_retraction_one_matrix_factor}
+    \lean{Matrix.exists_density_of_positive_retraction_onto_right_factor}
+    \leanok
+    Let $m,d>0$, and let
+    $E:\MN{md}\to\MN{md}$ be a positive complex-linear map.  Suppose that the
+    image of $E$ is contained in $\Id_m\otimes\MN{d}$ and that
+    \[
+        E(\Id_m\otimes X)=\Id_m\otimes X
+    \]
+    for every $X\in\MN{d}$.  Then there is a density matrix
+    $\rho\in\MN{m}$ such that, for every $A\in\MN{md}$,
+    \[
+        E(A)=\Id_m\otimes
+        \operatorname{tr}_m\!\left((\rho\otimes\Id_d)A\right).
+    \]
+    This is the one-factor case of
+    \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:posSemidef_rankone_domination,
+      thm:positive_functional_density_representation,
+      thm:rankone_ray_scalar_rigidity}
+    Let $R(A)$ be the right tensor factor of $E(A)$, so that
+    $E(A)=\Id_m\otimes R(A)$.  For $Y\geq0$ and
+    $P_\psi=\ketbra{\psi}{\psi}$, the inequality
+    $Y\leq\tr(Y)\Id_m$ and positivity give
+    \[
+        0\leq R(Y\otimes P_\psi)\leq\tr(Y)P_\psi.
+    \]
+    Hence, for each $v\in\C^d$, there is a scalar $c_v$ such that
+    \[
+        R(Y\otimes P_v)=c_vP_v.
+    \]
+    By rank-one ray scalar rigidity, applied to the map
+    $X\mapsto R(Y\otimes X)$, there is a scalar $c_Y$ such that
+    \[
+        R(Y\otimes X)=c_YX
+    \]
+    for every $X\in\MN{d}$.
+
+    Fix a coordinate projection $P_0$ and define
+    $f(Y)=R(Y\otimes P_0)_{00}$.  Rank-one polarization gives
+    \[
+        R(Y\otimes X)=f(Y)X
+    \]
+    for all $Y\in\MN{m}$ and $X\in\MN{d}$.  Positivity of $R$ gives
+    $f(Y)\geq0$ when $Y\geq0$, and the retraction property gives
+    $f(\Id_m)=1$.  The density representation of positive matrix functionals
+    therefore supplies a density matrix $\rho$ satisfying
+    $f(Y)=\tr(\rho Y)$.
+
+    Finally, on simple tensors,
+    \[
+        \operatorname{tr}_m\!\left((\rho\otimes\Id_d)(Y\otimes X)\right)
+        =\tr(\rho Y)X=R(Y\otimes X).
+    \]
+    Since matrix units are simple tensors, linearity proves the formula for
+    every $A\in\MN{md}$.
+\end{proof}
+
 \begin{theorem}[Trace-pairing adjoints preserve positivity exactly]\label{thm:trace_pairing_adjoint_positive_iff}
     \lean{isPositiveMap_traceAdjointMap_iff}
     \leanok
