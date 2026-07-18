@@ -1,0 +1,260 @@
+% chapters2/ch-worked.tex — worked examples.  Six objects, each carried
+% from formula to finished diagram: the expectation-value window, an
+% MPO--MPO product (operator hue + dir), a periodic operator on a
+% periodic state, the entanglement cut, gauge insertions on a fused
+% chain, and the zipper with its tracked splitting-glyph note.  All
+% sources are adapted from the verified Phase-0.5 corpus (gallery
+% S1--S5 and B7) — none are invented for this chapter; every quoted
+% signature line was checked against the emitter's .tnlog output.
+\section{Worked examples}\label{ch:worked}
+
+The six diagrams of this chapter are the ones a working physicist draws
+between two lines of a calculation: a window of an expectation value, a
+product of two matrix-product operators, an operator acting on a
+periodic state, an entanglement cut, a gauge transformation on a
+blocked chain, and the zipper that pulls an operator through a state.
+Each is carried from formula to finished picture.  The margin records
+which ink is which index, and the quoted \tnfile{.tnlog} line says why
+each boundary comes out open or closed --- the bookkeeping of
+\S\ref{ch:mathematics}, applied.
+
+% ---------------------------------------------------------------------
+\subsection{The expectation-value window}\label{sec:worked-window}
+
+An expectation value $\langle\psi|O_1O_2O_3|\psi\rangle$ in a
+matrix-product state is a three-layer contraction: the ket word above,
+the operator between, the conjugate word below.
+Example~\ref{ex:worked-window} draws three columns of it as a
+\emph{window}: each column contracts its physical indices vertically,
+and every virtual index is left protruding.  A window is a map on the
+tripled bond space --- one column is the dressed transfer matrix
+$\mathbb{E}_O$ of the margin --- so the picture must keep all six
+stubs.  Sealing them with \tnkey{boundary=none} would assert a scalar
+that the mathematics does not contain; capping them with boundary
+vectors or fixed points is the business of cups (\S\ref{ch:rmp}).
+
+\begin{tnexample}[
+    formula   = {\mathbb{E}_O=\sum_{s,s'}A^{s}\otimes O^{ss'}
+                 \otimes\bar A^{s'}},
+    caption   = {a window of $\langle\psi|O|\psi\rangle$},
+    index     = {Top to bottom: ket row $A$, operator row $O$ (an
+                 \tnval{mpo} atom keeps an up and a down leg), bra row
+                 $\bar A$.  Each column contracts its physical indices
+                 vertically; the six stubs, three per side, are the
+                 window's virtual matrix indices.},
+    signature = {boundary|virtual-west=3|virtual-east=3|physical-up=0|physical-down=0},
+    label     = {ex:worked-window},
+  ]
+% a window of <psi|O|psi>: ket over operator over bra; each
+% column contracts its physical indices vertically (ket-op,
+% then op-bra); all six virtual indices protrude -- a window
+% of a larger contraction is a map, never a scalar
+\begin{tenkz}[rows={ket, op, bra}]
+  \tn{A} & \tn{A} & \tn{A} \\
+  \tn[mpo]{O} & \tn[mpo]{O} & \tn[mpo]{O} \\
+  \tn*{A} & \tn*{A} & \tn*{A}
+\end{tenkz}
+\end{tnexample}
+
+% ---------------------------------------------------------------------
+\subsection{A product of matrix-product operators}\label{sec:worked-mpoprod}
+
+Stacking two matrix-product operators multiplies them: each column of
+Example~\ref{ex:worked-mpoprod} contracts the physical index between
+$T_g$ and $T_h$, and the result is again a matrix-product operator
+whose site tensor is the margin's $\sum_r T_g^{sr}\otimes T_h^{rs'}$.
+Two pieces of apparatus earn their keep here.  The row modifier
+\tnval{operator} hues the wire, so that in pictures where state and
+operator bonds coexist the two species stay distinguishable at a
+glance.  And \tnval{dir right} puts a barb on every bond: an arrow
+leaving a glyph is an index in the bond space $V$, an arrow entering
+one is an index in the dual $V^{*}$, and reversing every arrow passes
+to the dual representation.\sidenote{The signature counts indices; it
+does not yet record their orientation.  Directed boundary signatures
+are on the roadmap (\S\ref{ch:trouble}).}  Orientation starts to
+matter exactly in this genre --- when the $T_g$ represent a group and
+$T_gT_h=T_{gh}$ holds only up to isometries on the hued bonds.
+
+\begin{tnexample}[
+    formula   = {(T_gT_h)^{ss'}=\sum_{r}T_g^{sr}\otimes T_h^{rs'}},
+    caption   = {the product $T_gT_h$, hued and directed},
+    index     = {Both rows are operator rows: the wires take the
+                 operator hue, and each bond's barb points east ---
+                 out of one glyph ($V$) and into the next ($V^{*}$).
+                 The four stubs are the two operator bonds' matrix
+                 indices; each column keeps one up and one down
+                 physical leg.},
+    signature = {boundary|virtual-west=2|virtual-east=2|physical-up=2|physical-down=2},
+    label     = {ex:worked-mpoprod},
+  ]
+% T_g over T_h: each column contracts one physical index
+% between the layers; `operator' hues both bonds as MPO
+% bonds and `dir right' orients them, arrow out = V,
+% arrow in = V*
+\begin{tenkz}[rows={op:operator:dir right,
+                    op:operator:dir right}]
+  \tn[mpo]{T_g} & \tndots & \tn[mpo]{T_g} \\
+  \tn[mpo]{T_h} & \tndots & \tn[mpo]{T_h}
+\end{tenkz}
+\end{tnexample}
+
+% ---------------------------------------------------------------------
+\subsection{A periodic operator on a periodic state}\label{sec:worked-opsi}
+
+On a ring both the state and the operator close, and the coefficients
+of $O|\psi\rangle$ are a pair of traces with the physical $j$'s
+contracted between them.  The key \tnval{periodic} closes \emph{each
+wire row to itself} by a return loop around its own layer --- the
+row-to-self closure, the diagrammatic trace --- which is a different
+topology from the cups of \tnval{west=cup}/\tnval{east=cup}, which
+tie adjacent rows to each other (\S\ref{ch:mathematics}).  Here the
+right topology is one return wire per layer, two separate traces; the
+only open ink left is the row of $i$'s above, so the picture \emph{is}
+the tensor $(O|\psi\rangle)^{i_1i_2i_3}$.
+
+\begin{tnexample}[
+    formula   = {\begin{gathered}(O|\psi\rangle)^{i_1i_2i_3}\\
+                 =\textstyle\sum_{\vec\jmath}\operatorname{Tr}
+                 \bigl[M^{i_1j_1}M^{i_2j_2}M^{i_3j_3}\bigr]\\
+                 \quad\times\operatorname{Tr}
+                 \bigl[A^{j_1}A^{j_2}A^{j_3}\bigr]\end{gathered}},
+    caption   = {$O|\psi\rangle$, periodic on periodic},
+    index     = {No stubs anywhere: each row's wire returns to itself,
+                 one trace per layer.  The $j$'s contract between the
+                 rows; the three $i$'s above are the only open ink.},
+    signature = {boundary|virtual-west=0|virtual-east=0|physical-up=3|physical-down=0},
+    label     = {ex:worked-opsi},
+  ]
+% O|psi>, periodic on periodic: `periodic' closes EACH row
+% to itself (one return loop per layer, so one trace per
+% layer); the j's contract between the rows; the i's stay
+% open above
+\begin{tenkz}[periodic, rows={op, ket}]
+  \tn[mpo]{M} & \tn[mpo]{M} & \tn[mpo]{M} \\
+  \tn{A} & \tn{A} & \tn{A}
+\end{tenkz}
+\end{tnexample}
+
+% ---------------------------------------------------------------------
+\subsection{The entanglement cut}\label{sec:worked-cut}
+
+A cut is a statement about a bond, not a change to the network.
+\tncmd{tncut}, attached to a cell, hangs a dashed stroke across the
+bond east of that cell and sets its label beside it.  In
+Example~\ref{ex:worked-cut} it marks the bond severed in the Schmidt
+decomposition of the bipartition $[1,2]\,|\,[3,4]$ --- the virtual
+index whose spectrum gives the entanglement entropy of the margin.
+Because a cut is annotation ink, the signature is exactly that of the
+undecorated word, and an equation between a cut picture and an uncut
+one is well-formed.
+
+\begin{tnexample}[
+    formula   = {S_{[1,2]}=-\operatorname{Tr}\,
+                 \rho_{[1,2]}\log\rho_{[1,2]}},
+    caption   = {an entanglement cut},
+    index     = {The dashed stroke crosses one bond --- the index
+                 summed in the Schmidt decomposition across
+                 $[1,2]\,|\,[3,4]$.  A cut adds no index and removes
+                 none: the signature is the uncut word's.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=4|physical-down=0},
+    label     = {ex:worked-cut},
+  ]
+% a four-site word; the cut is annotation ink crossing the
+% bond between sites 2 and 3 -- the Schmidt index of the
+% bipartition [1,2] | [3,4]; no index changes
+\begin{tenkz}[physical=up]
+  \tn{A} & \tn{A}\tncut{S_{[1,2]}} & \tn{A} & \tn{A}
+\end{tenkz}
+\end{tnexample}
+
+% ---------------------------------------------------------------------
+\subsection{Fused gauge chains}\label{sec:worked-fused}
+
+Blocking sites fuses their bonds, and the row modifier \tnval{fused}
+draws the blocked bond as a doubled strand, so a coarse-grained chain
+never masquerades as a microscopic one.  On the fused wire the gauge
+freedom of a chain becomes visible arithmetic: \tncmd{tnX} capsules
+put $X$ and $X^{-1}$ on the wire between the blocks, and the value of
+Example~\ref{ex:worked-fused} is the matrix product
+$B_1XB_2X^{-1}B_3$, read west to east.  Whether one absorbs the
+capsules outward, $(B_1X)\,B_2\,(X^{-1}B_3)$, or inward,
+$B_1\,(XB_2X^{-1})\,B_3$, is invisible in the ink --- associativity
+has no diagram --- and that invisibility is the gauge freedom: the
+picture fixes the product, never the grouping.
+
+\begin{tnexample}[
+    formula   = {\begin{gathered}(B_1X)\,B_2\,(X^{-1}B_3)\\
+                 =B_1\,(XB_2X^{-1})\,B_3\end{gathered}},
+    caption   = {gauge insertions on a fused wire},
+    index     = {The doubled strand is the fused bond space; $X$ and
+                 $X^{-1}$ ride it as capsules.  Absorbing a capsule
+                 into a neighbouring block moves a block boundary;
+                 the two end stubs are the chain's matrix indices.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0},
+    label     = {ex:worked-fused},
+  ]
+% three blocks on one fused (doubled) wire; X and X^{-1} are
+% matrices ON the wire: regrouping them into the neighbouring
+% blocks moves the block boundaries without changing the
+% product
+\begin{tenkz}[rows={wire:fused}]
+  \tn[box]{B_1} & \tnX{X} & \tn[box]{B_2} & \tnX{X^{-1}} &
+  \tn[box]{B_3}
+\end{tenkz}
+\end{tnexample}
+
+% ---------------------------------------------------------------------
+\subsection{The zipper}\label{sec:worked-zipper}
+
+The zipper pulls an operator through a state
+(arXiv:2203.12563, eq.~(28)): a fusion isometry
+$V:\mathbb{C}^{D_O}\!\otimes\mathbb{C}^{D_A}\to\mathbb{C}^{D_B}$ eats
+the operator and state bonds at one end, and out comes a word of fused
+sites, $B^{i}\,V=\sum_{j}V\,(O^{ij}\otimes A^{j})$, with $V$ waiting
+at the other end.  On the left of Example~\ref{ex:worked-zipper},
+\tncmd{tnfuse} with \tnval{span=2} terminates both layers' wires on
+one glyph whose single west leg is the combined index; the east
+$O$/$A$ pair stays open.  On the right the fused word runs on a single
+wire.  The two sides do not yet balance as
+pictures: the right-hand end should carry a
+bond-\emph{splitting} glyph --- $V$ standing at the east end of a
+one-row word, splitting the fused bond back into the $O$/$A$ pair.
+That glyph is a tracked primitive (\S\ref{ch:trouble}); until it
+lands, $V$ closes the equation as a symbol, and the two signature
+lines in the margin record exactly the index it stands in for.
+
+\begin{tnexample}[
+    formula   = {\begin{gathered}
+                 V\bigl(O^{[1,n]}\otimes A^{[1,n]}\bigr)
+                 =B^{[1,n]}\,V\\
+                 B^{i}\,V=\sum_{j}V\,(O^{ij}\otimes A^{j})
+                 \end{gathered}},
+    caption   = {the zipper},
+    index     = {LHS \tnlogline{virtual-west=1|virtual-east=2}: $V$'s
+                 combined leg west, the open $O$/$A$ pair east.  RHS
+                 \tnlogline{virtual-west=1|virtual-east=1}: the east
+                 index is the fused bond, closed here by the printed
+                 symbol $V$ --- the splitting glyph's stand-in.  Both
+                 sides read \tnlogline{physical-up=2} as drawn.},
+    label     = {ex:worked-zipper},
+  ]
+% zipper (arXiv:2203.12563 eq 28): V fuses the O and A bond
+% spaces, C^{D_O} x C^{D_A} -> C^{D_B}
+\[
+  \begin{tenkz}[rows={op, ket}]
+    \tnfuse[span=2]{V} &
+    \tn[mpo]{O}\tnspan[brace above]{3}{n} &
+    \tndots & \tn[mpo]{O} \\
+    & \tn{A} & \tndots & \tn{A}
+  \end{tenkz}
+  \;=\;
+  % the bond-SPLITTING glyph (V at the east end of a one-row
+  % word) is a tracked primitive: until it lands, V closes
+  % the fused index of the right-hand word as a symbol
+  \begin{tenkz}[physical=up]
+    \tn[box, up=$i_1$]{B}\tnspan[brace above]{3}{n} &
+    \tndots & \tn[box, up=$i_n$]{B}
+  \end{tenkz}
+  \,V
+\]
+\end{tnexample}

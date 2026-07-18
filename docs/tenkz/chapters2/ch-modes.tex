@@ -1,0 +1,154 @@
+% chapters2/ch-modes.tex — tensor styles and small multiples: the glyph
+% policy (dot|box) varied over one source, the metric profiles in one
+% aligned row, and the uniform-height doctrine of the glyph strut.
+%
+% Sources: the corrected modes corpus (modes_test.tex / modes_suite.tex):
+% the ket/op/bra window under both policies, the two-site word under the
+% metric profiles, and the T_g/T_h double MPO row.
+\section{Modes and small multiples}\label{ch:modes}
+
+A mode is a policy, not a drawing decision.  One glyph policy per
+scope decides how every unadorned tensor renders; one base pitch,
+scaled by named profiles, sets every distance on the page.  A mode
+changes ink and nothing else: however a picture is skinned or scaled,
+its atoms contract the same indices, and every gallery in this chapter
+writes one boundary line per panel, all identical.  Because a mode's
+whole content is a visual difference, each is shown as small multiples
+--- a single source compiled once per panel, the varied keys printed
+beneath, the wire axes collinear --- so every difference the eye finds
+is attributable to the printed key.  The axes of variation that
+\emph{are} mathematics, the three boundary closures and the directed
+bonds, had their galleries in Example~\ref{ex:read-closures} and
+\S\ref{sec:directed}; what remains is the ink: the glyph, the metric,
+and the height doctrine that keeps both comparable.
+
+% ---------------------------------------------------------------------
+\subsection{The glyph policy: two schools}\label{sec:modes-glyph}
+
+Tensor-network figures descend from two drawing traditions.  In one, a
+tensor is a filled bead and its name stands beside it, in a free
+quadrant --- the school of the review literature that
+\S\ref{ch:rmp} reproduces.  In the other, a tensor is an outlined box
+and its name is typeset inside --- the Ghent school, the natural
+choice when sites carry long or scripted names.  \tnkey{tensor
+style=dot} (the default) and \tnkey{tensor style=box} select between
+them: per document, \tncmd{tnset}\tnval{\{tensor style=box\}} rebinds
+every following picture in the current group; per picture, the same
+key rides the option list and scopes itself.  The source names its
+tensors; the policy decides how a name becomes ink.
+
+\begin{tnmultiples}[
+    caption  = {one window, two schools},
+    formula  = {\langle\psi|O|\psi\rangle\ \text{(a window)}},
+    index    = {Ket, operator, bra; the vertical wires are the paired
+                physical indices, and the six stubs mark a window of
+                the full contraction, not a scalar.  The policy
+                touches only the unadorned atoms: beads become
+                inscribed boxes, and \tncmd{tn*} reads $\overline{A}$
+                either way --- beside the bead, inside the box.  The
+                \tnval{mpo} cells are identical in both panels.},
+    signature = {boundary|virtual-west=3|virtual-east=3|physical-up=0|physical-down=0},
+    variants = {{tensor style=dot}{tensor style=dot},
+                {tensor style=box}{tensor style=box}},
+    label    = {ex:modes-schools},
+  ]
+% a window of <psi|O|psi>: physical indices contract
+% vertically (ket-op, op-bra); all six virtual stubs open
+\begin{tenkz}[rows={ket, op, bra}, variant]
+  \tn{A} & \tn{A} & \tn{A} \\
+  \tn[mpo]{O} & \tn[mpo]{O} & \tn[mpo]{O} \\
+  \tn*{A} & \tn*{A} & \tn*{A}
+\end{tenkz}
+\end{tnmultiples}
+
+The operator row of Example~\ref{ex:modes-schools} does not move
+because an explicit skin --- \tnval{dot}, \tnval{box}, \tnval{pill},
+\tnval{mpo} on the cell --- always outranks the policy: a cell that
+declares its glyph has opted out of the argument.  The event stream
+records what was drawn, not what was asked
+for.\sidenote{Per unadorned atom, the left panel logs
+\tnlogline{atom|cell=1-1|kind=dot} and the right panel
+\tnlogline{atom|cell=1-1|kind=box}, while the operator row logs
+\tnlogline{kind=mpo} in both: the \emph{resolved} skin.  The two
+boundary lines are identical --- the policy is ink.}  \S\ref{ch:rmp}
+works the policy per picture, switching to \tnval{box} exactly where
+the reproduced figure inscribes its labels;
+\S\ref{sec:ref-policy} tabulates the keys.
+
+% ---------------------------------------------------------------------
+\subsection{The metric: one pitch, three knobs}\label{sec:modes-metric}
+
+Every repeated distance in a picture is a named ratio of one base
+pitch, $11$\,mm by default: a physical leg is $0.38$ pitch, a stub
+$0.45$, the layer gap $0.80$, the clearance of every label band
+$0.12$.\marginformula{\begin{aligned}
+  \text{leg}      &= 0.38\,p\\
+  \text{stub}     &= 0.45\,p\\
+  \text{layer}    &= 0.80\,p\\
+  \text{clearance}&= 0.12\,p
+\end{aligned}}
+\tnkey{pitch=} rebinds the base, and the two profiles rescale it:
+\tnkey{compact} to $0.8$, \tnkey{inline} to $0.62$ --- the latter also
+shrinking legs faster than the pitch ($0.26$) and pulling the label
+bands against the ink, buying back the line height a picture needs to
+sit inside a sentence, as one did in Example~\ref{ex:tut-inline}.
+Because no distance is a literal, no drawing can bypass a profile:
+rescaling moves glyphs, legs, bends, and label bands together, which
+is why a leg-tip label clears the ink at every pitch.
+
+\begin{tnmultiples}[
+    caption  = {one word, three metrics},
+    formula  = {A^{i}A^{j}},
+    index    = {One wire axis, three pitches.  The word, its stubs,
+                its legs, and its label bands rescale together;
+                \tnval{inline} shortens the legs beyond its share and
+                drops the labels one script size.  All three panels
+                log the same boundary line: the metric is ink.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=2|physical-down=0},
+    variants = {{default}{},
+                {compact}{compact},
+                {inline}{inline}},
+    label    = {ex:modes-pitch},
+  ]
+% the same two-site word at three metrics: only the pitch
+% (and with it every named ratio) changes
+\begin{tenkz}[physical=up, variant]
+  \tn[up=$i$]{A} & \tn[up=$j$]{A}
+\end{tenkz}
+\end{tnmultiples}
+
+The knobs nest: \tncmd{tnset}\tnval{\{pitch=10mm\}} in the preamble
+retunes a whole paper, \tnkey{pitch=14mm} in one option list widens
+one picture, and a per-picture \tnkey{compact} tightens one crowded
+figure without touching its neighbours.
+
+% ---------------------------------------------------------------------
+\subsection{One height: the glyph strut}\label{sec:modes-strut}
+
+An inscribed label is the glyph's content, and \TeX{} makes a box
+exactly as tall as its content: left alone, $T_g$ would sink deeper
+than $T_h$, and $A^{(2)}$ would stand taller than $A$ --- a row of
+boxes ragged for no mathematical reason.  Every inscribed label
+therefore carries the glyph strut, \verb|\vphantom{A^{X}_{g}}|, an
+invisible ideal label with a capital, a superscript, and a descending
+subscript, so every box in a picture spans one height whatever its
+label says.  This is the small-multiples rule applied at the scale of
+a single glyph: uniform frames are what make differences legible, and
+a descender is not information.  The proof is already on the page: in
+the MPO product of Example~\ref{ex:worked-mpoprod} the $g$ descends
+and the $h$ does not, yet every box of both rows spans one height,
+because each inscribed label carries the strut.
+
+The same doctrine pins the glyphs met earlier: the \tncmd{tnX} capsule
+has a pinned minimum height, so $X$ and $X^{-1}$ ride the wire at one
+size (Example~\ref{ex:gauge-eq}), and a \tnval{pill} grows only
+sideways to hold its blocked label, never taller
+(Example~\ref{ex:tut-block}).\sidenote{The one deliberate exception:
+inscribed triangle labels (\tnkey{tri=l}, \tnkey{tri=r}) drop the
+strut.  A triangle must circumscribe its text box, so each point of
+phantom height costs about three in glyph height, and two struck
+triangle rows would collide across the default layer gap.}  Dot
+labels stand outside the ink, in a reserved band, so their scripts
+never change a bead's geometry --- which is why the dot school needs
+no strut, and why the two schools stay interchangeable over one
+source.

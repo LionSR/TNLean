@@ -45,12 +45,26 @@
     This is the preceding definition with $\lambda=1$.
 \end{proof}
 
+\[
+    \mathcal T_M=\mathcal T_M^2
+\]
 \begin{center}
-    \TNMPDOZCLIdempotence
+    % T_M = T_M^2: the physical-trace transfer T_M = sum_i M^{ii} is
+    % idempotent.  Each site is one MPDO tensor M whose ket leg is
+    % arced into its own bra leg (trace=physical); the wire between
+    % the two sites on the right is the contracted virtual index of
+    % the product T_M T_M.  Traced physical legs are closed indices,
+    % so both sides carry the same boundary signature
+    % (virtual-west=1 | virtual-east=1 | physical-up=0 | physical-down=0).
+    \begin{tenkz}[physical=updown, trace=physical]
+        \tn[mpo]{M}
+    \end{tenkz}
+    $\;=\;$
+    \begin{tenkz}[physical=updown, trace=physical]
+        \tn[mpo]{M} & \tn[mpo]{M}
+    \end{tenkz}
 \end{center}
-Here closing the ket and bra legs gives $\mathcal T_M$, and juxtaposition is
-virtual multiplication.  Thus the displayed identity is precisely
-$\mathcal T_M=\mathcal T_M^2$.  This is the normalized identity in
+This is the normalized identity in
 \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv};
 Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 

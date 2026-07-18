@@ -72,14 +72,39 @@
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOHorizontalCanonicalForm
+    \[
+        K=X\left(\bigoplus_j\mathcal K_j\right)X^{-1}
+    \]
+    \begin{center}
+        % K = X ( bigoplus_j K_j ) X^{-1}  [CPSV16 eq. (CFK), lines 1660-1665]:
+        % the horizontal canonical form of the doubled tensor K as a gauge
+        % conjugation of the block direct sum of basis tensors.  Ink to
+        % indices: each side exposes one virtual index at each end, an up
+        % ket leg and a down bra leg (the paper draws the bra leg
+        % dashed-up); the gauge capsules X and X^{-1} are matrices riding
+        % the virtual wire and carry no physical leg, and the wires between
+        % the capsules and the middle tensor are the contracted virtual
+        % indices of the paper's chain.  The paper's block-index lines j
+        % and q become the direct sum written in the middle label: the
+        % weights mu_j are absorbed into the basis tensors, which depend on
+        % the block index j only, while the gauge blocks X_{j,q} depend on
+        % both indices.  Both sides carry the same boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1).
+        \begin{tenkz}[physical=updown]
+            \tn{K}
+        \end{tenkz}
+        $\;=\;$
+        \begin{tenkz}[physical=updown]
+            \tnX{X} & \tn{\bigoplus_j\mathcal K_j} & \tnX{X^{-1}}
+        \end{tenkz}
+    \end{center}
     \caption{Horizontal canonical form of the doubled tensor: the gauge $X$,
-    one basis tensor $\mathcal K$ carrying the ket and bra legs, and
-    $X^{-1}$, threaded by the block-index lines $j$ and $q$. In the source
+    the direct sum of basis tensors $\mathcal K_j$ carrying the ket and bra
+    indices, and $X^{-1}$. In the source
     specialized simple-biCF/ZCL display the weights $\mu_j$ are independent
     of the copy index and absorbed into the basis tensors, so the
-    basis tensor taps only the line $j$ while the gauge factors $X_{j,q}$
-    tap both lines. This is
+    basis tensors depend only on the block index $j$ while the gauge factors
+    $X_{j,q}$ depend on both block indices. This is
     \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_horizontal_canonical_form}
 \end{figure}
@@ -167,7 +192,9 @@
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOVerticalDirectSum
+    \[
+        U\mathcal K U^\dagger=\bigoplus_k\mu_k\otimes A_k
+    \]
     \caption{Vertical direct-sum form of the tensor: after the physical
     isometry $U$, each block factorizes as the positive diagonal weight
     $\mu_\alpha$ on the multiplicity factor times the basis tensor $M_\alpha$,
@@ -269,11 +296,11 @@ The inverse tensor of a block-injective canonical form satisfies
     =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
 \]
 Contracting $K^{-1}$ with the doubled physical index passes the virtual legs
-of $X$ and $X^{-1}$ to $K^{-1}$ and identifies its block index with the line
-$j$:
-\begin{center}
-    \TNMPDOBlockInjectiveInverse
-\end{center}
+of $X$ and $X^{-1}$ to $K^{-1}$ and identifies its block index with the block
+label $j$:
+\[
+    K^{-1}K=\bigoplus_j\Id_j
+\]
 This is the inverse identity in
 \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.
 
@@ -967,9 +994,60 @@ This is the inverse identity in
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOFirstSiteInsertionHypothesis
+    \[
+        YH^{(N)}(\widetilde M)=ZH^{(N)}(\widetilde M)
+    \]
+    \begin{center}
+        % Y H^{(N)}(\widetilde M) = Z H^{(N)}(\widetilde M): the first-site
+        % insertions of Y and Z agree against the whole periodic word
+        % (CPSV16 Appendix C.3, Lemma L, hypothesis display, lines
+        % 1835--1840).  Reading each site's ket-bra pair as one doubled
+        % physical index identifies H^{(N)}(\widetilde M) with the matrix
+        % product vector V^{(N)} of that doubled-index tensor
+        % (lem:mpdo_three_first_site_contraction_coefficients), so Lemma
+        % L's one-leg hypothesis picture applies verbatim: Y (resp. Z)
+        % rides the doubled physical leg of site 1 only; sites 2..N keep
+        % that leg open, drawn schematically through the ellipsis.  A
+        % dummy `wire' row keeps the inserted operator off tenkz's traced
+        % first/last row, so only the \widetilde M ring is closed.  Both
+        % sides: periodic ring, same boundary signature (virtual-west=0 |
+        % virtual-east=0 | physical-up=N).
+        \begin{tenkz}[periodic, rows={wire, op:none, ket}, align=3]
+            \tnskip & \tnskip & \tnskip & \tnskip \\
+            \tn{Y} & \tnskip & \tnskip & \tnskip \\
+            \tn{\widetilde M} & \tn{\widetilde M} & \tndots & \tn{\widetilde M}
+        \end{tenkz}
+        $\;=\;$
+        \begin{tenkz}[periodic, rows={wire, op:none, ket}, align=3]
+            \tnskip & \tnskip & \tnskip & \tnskip \\
+            \tn{Z} & \tnskip & \tnskip & \tnskip \\
+            \tn{\widetilde M} & \tn{\widetilde M} & \tndots & \tn{\widetilde M}
+        \end{tenkz}
+    \end{center}
     \medskip
-    \TNMPDOFirstSiteInsertionBlockwise
+    \[
+        YA_k=ZA_k
+    \]
+    \begin{center}
+        % Y A_k = Z A_k: the one-site insertions of Y and Z agree on
+        % each block A_k of the canonical form (CPSV16 Appendix C.3,
+        % Lemma L, conclusion display, lines 1843--1846).  The operator
+        % rides the block's physical leg: its down leg pairs into A_k's
+        % up leg and its top leg is the open physical output index; the
+        % op row is sealed, since Y and Z carry no virtual indices.
+        % Both sides expose one virtual index at each end and one
+        % physical leg, so the two sides carry the same boundary
+        % signature (virtual-west=1 | virtual-east=1 | physical-up=1).
+        \begin{tenkz}[rows={op:none, ket}]
+            \tn{Y} \\
+            \tn{A_k}
+        \end{tenkz}
+        $\;=\;$
+        \begin{tenkz}[rows={op:none, ket}]
+            \tn{Z} \\
+            \tn{A_k}
+        \end{tenkz}
+    \end{center}
     \caption{Blockwise equality from agreement on the MPV family. Top: the
     hypothesis $Y_1V^{(N)}(A)=Z_1V^{(N)}(A)$ for every length $N$, with the
     operator inserted on the physical leg of the first site. Bottom: the
@@ -1000,8 +1078,31 @@ This is the inverse identity in
 \end{proof}
 
 The trace-pairing step used above is the following local identity:
+\[
+    \tr(WYA_k)=\tr(WZA_k)
+\]
 \begin{center}
-    \TNMPDOInsertionTracePairing
+    % tr(W Y A_k) = tr(W Z A_k): trace pairing of a first-site
+    % insertion against a test tensor W.  The virtual bond of the
+    % two-site chain W, A_k closes into a loop (periodic, on the
+    % ket row); the physical leg of A_k feeds up into the inserted
+    % operator Y (resp. Z), whose own leg stays open.  Both sides
+    % carry the same boundary signature
+    % (virtual-west=0 | virtual-east=0 | physical-up=1).
+    % The blank top row is padding: `periodic' closes only the
+    % picture's first and last rows, so the padding keeps the
+    % insertion row untouched while the ket row (last) is traced.
+    \begin{tenkz}[rows={wire, op, ket}, periodic]
+         & \\
+         & \tn{Y} \\
+        \tn[no legs]{W} & \tn{A_k}
+    \end{tenkz}
+    $\;=\;$
+    \begin{tenkz}[rows={wire, op, ket}, periodic]
+         & \\
+         & \tn{Z} \\
+        \tn[no legs]{W} & \tn{A_k}
+    \end{tenkz}
 \end{center}
 For every $W$ in the span of the length-$N$ word evaluations of the
 canonical form, it states $\tr(WA^Y)=\tr(WA^Z)$, where $A^Y$ is obtained by
@@ -1084,8 +1185,24 @@ Lemma~L, \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 The horizontal operator $H^{(N)}(\widetilde M)$ is the cyclic word
+\[
+    H^{(N)}(\widetilde M)=\tr_{\mathrm v}(\widetilde M_1\cdots\widetilde M_N)
+\]
 \begin{center}
-    \TNMPDOHorizontalOperator
+    % H^{(N)}(Mtilde) = tr_v(Mtilde_1 ... Mtilde_N): one operator row of
+    % MPO sites; the periodic wire is the traced virtual index, the up
+    % legs are the ket indices sigma_1..sigma_N and the down legs the
+    % bra indices tau_1..tau_N.  The trace leaves no virtual stub, so
+    % the picture carries the boundary signature of the operator
+    % (virtual-west=0 | virtual-east=0 | physical-up=N | physical-down=N);
+    % the drawn leg count is schematic under the ellipsis.
+    $H^{(N)}(\widetilde M)\;=\;$
+    \begin{tenkz}[physical=updown, periodic]
+        \tn[up=$\sigma_1$, down=$\tau_1$]{\widetilde M_1} &
+        \tn[up=$\sigma_2$, down=$\tau_2$]{\widetilde M_2} &
+        \tndots &
+        \tn[up=$\sigma_N$, down=$\tau_N$]{\widetilde M_N}
+    \end{tenkz}
 \end{center}
 Its virtual indices are contracted around the row, while every ket and bra
 index remains external.  Reading each ket--bra pair as one doubled index
@@ -1153,7 +1270,9 @@ tensor.  This is the contraction in
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOFirstSiteContractions
+    \[
+        PH^{(N+1)},\qquad H^{(N+1)}P,\qquad PH^{(N+1)}P
+    \]
     \caption{The three first-site contractions of the horizontal operator on
     $N+1$ sites: contracting the first doubled leg with $Y_L$, $Y_R$, or
     $Y_C$ places $P$ on the ket leg, on the bra leg, or on both legs of the
@@ -2261,7 +2380,32 @@ tensor.  This is the contraction in
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOVerticalGaugeGramComparison
+    \[
+        X_\alpha^\dagger X_\alpha=Y_\alpha^\dagger Y_\alpha
+    \]
+    \begin{center}
+        % X_alpha^dagger X_alpha M_alpha X_alpha^{-1} X_alpha^{-1 dagger}
+        %   = Y_alpha^dagger Y_alpha M_alpha Y_alpha^{-1} Y_alpha^{-1 dagger},
+        % i.e. the two Gram conjugations of M_alpha agree
+        % (CPSV16 Fig. 8; the four gauge factors keep Fig. 8's order along
+        % the wire, dagger-gauge pair before M_alpha, inverse pair after).
+        % Ink-to-index: the wire is the vertical matrix index of the
+        % vertical-direction reading, open at both ends; the up and down
+        % legs of M_alpha are the paper's two horizontal legs (the letter
+        % index of the vertical normal tensor); the capsules are the gauge
+        % matrices on the wire and carry no legs.  Both sides carry the
+        % same boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1).
+        \begin{tenkz}[physical=updown, compact]
+            \tnX{X_\alpha^{\dagger}} & \tnX{X_\alpha} & \tn{M_\alpha} &
+            \tnX{X_\alpha^{-1}} & \tnX{X_\alpha^{-1\dagger}}
+        \end{tenkz}
+        $\;=\;$
+        \begin{tenkz}[physical=updown, compact]
+            \tnX{Y_\alpha^{\dagger}} & \tnX{Y_\alpha} & \tn{M_\alpha} &
+            \tnX{Y_\alpha^{-1}} & \tnX{Y_\alpha^{-1\dagger}}
+        \end{tenkz}
+    \end{center}
     \caption{Equality of the Gram conjugations for two copies of the same
     vertical normal tensor:
     $(X_{\alpha,k}^{\dagger}X_{\alpha,k})M_\alpha
@@ -2733,11 +2877,13 @@ tensor.  This is the contraction in
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOVerticalReducingSectors
+    \[
+        U\mathcal K U^\dagger=\bigoplus_\alpha M_\alpha
+    \]
     \caption{The vertically viewed tensor decomposes through complete
     orthogonal physical sectors. Each $V_k$ embeds the irreducible tensor
     $B_k$, while $P_k=V_kV_k^\dagger$ is its reducing range projection. The
-    open-leg identity is equivalent, for every vertical letter $v$, to
+    displayed identity is equivalent, for every vertical letter $v$, to
     $\widetilde M_v=\sum_kV_kB_{k,v}V_k^\dagger$.
     This is the iterated invariant-subspace construction in
     \cite[lines~200--219]{Cirac2016MPDO_arXiv}, applied to the reduction in

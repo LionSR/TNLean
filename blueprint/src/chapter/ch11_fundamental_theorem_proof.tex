@@ -80,6 +80,22 @@ step uses a per-sector unit-modulus hypothesis.
     \begin{equation}\label{eq:ft_gauge_relation}
         Q_k^i=\zeta_k X_k P_{\beta(k)}^i X_k^{-1}
     \end{equation}
+    Diagrammatically, the gauge relation~(\ref{eq:ft_gauge_relation}) reads
+    \begin{center}
+        % Q_k^i = zeta_k X_k P_{beta(k)}^i X_k^{-1}: the gauge X_k and its
+        % inverse ride the virtual bond.  Both sides expose one virtual
+        % index at each end and one physical leg, so the two sides carry
+        % the same boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{Q_k}
+        \end{tenkz}
+        $\;=\;\zeta_k$
+        \begin{tenkz}[physical=up]
+            \tnX{X_k} & \tn[up=$i$]{P_{\beta(k)}} & \tnX{X_k^{-1}}
+        \end{tenkz}
+    \end{center}
+    with every open virtual end a matrix index.
     Equivalently, for every positive length $N$ and word $\sigma$,
     \[
         V^{(N)}(Q_k)_\sigma

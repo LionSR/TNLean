@@ -168,6 +168,18 @@ boundary conditions (PBC).
     \begin{center}
         \TNTransferMap{A}
     \end{center}
+    % TODO-tenkz (Phase-1 migration batch): this \TNTransferMap motif
+    % draws the input X at the WEST end of the double layer.  Under the
+    % tenkz 0.6 index conventions (manual2, east-cup ruling) a west-side
+    % input reads as the ADJOINT map E*_A(X); the applied form of E_A
+    % must ride X on the EAST cup, with the west ket/bra pair left open
+    % because the output is a matrix.  Corrected tenkz spelling:
+    %   % E_A(X) = sum_i A^i X (A^i)^dagger : X rides the east cup (the
+    %   % input side); the west pair stays open -- the output is a matrix
+    %   \begin{tenkz}[sandwich, east={cup=$X$}]
+    %     \tn{A} \\
+    %     \tn*{A}
+    %   \end{tenkz}
     in which the upper node denotes $A$, the lower node denotes $A^\dagger$,
     and the physical index is summed over between them.
 \end{definition}
@@ -457,11 +469,11 @@ The inverse-tensor characterization of injectivity says that $A$ is
 injective exactly when there is a tensor $A^{-1}$ such that
 $\sum_i (A^i)_{\alpha,\beta}(A^{-1,i})_{\alpha',\beta'}
 =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$.  Thus contracting $A^{-1}$
-with $A$ through their common physical index leaves two disconnected
-virtual pairings:
-\begin{center}
-    \TNMPSInverseContraction
-\end{center}
+with $A$ through their common physical index identifies the two pairs of
+virtual indices:
+\[
+    A^{-1}A=\Id
+\]
 This is the identity used in
 \cite[Section~2.3, lines~326--331]{Cirac2016MPDO_arXiv}.
 

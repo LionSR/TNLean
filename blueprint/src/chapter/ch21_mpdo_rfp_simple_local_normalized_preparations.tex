@@ -994,17 +994,66 @@ displayed tensor factors present at their inputs
 
 \begin{figure}[ht]
     \centering
-    $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber is drawn
+    $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber is displayed
 
     \smallskip
-    \TNMPDOTwoSiteTraceAndShift
+    \[
+        \mathcal T_0:\mathfrak R_2\to L_k\otimes R_h,\qquad
+        \mathcal S_2:(L_k\otimes R_h)\otimes(R_k\otimes L_h)\to\mathfrak R_2
+    \]
+
+    \begin{center}
+        % T_0 : R_2 -> L_k tensor R_h,  S_2 : (L_k tensor R_h) tensor
+        % (R_k tensor L_h) -> R_2.  One (k,h)-summand of the family
+        % bigoplus_{k,h} is drawn; objects are the typed sector spaces of
+        % Appendix C.2 (arXiv:1606.00608, lines 1521-1522 and 1555-1559),
+        % not tensor legs, so this is a commutative-diagram (cd) picture,
+        % not a tensor-network contraction.  Top row: T_0 is the two-site
+        % regrouping followed by the partial trace over R_k tensor L_h,
+        % landing on the retained outer factors L_k tensor R_h.  Bottom
+        % row: S_2 starts from the outer AND neighbouring factors already
+        % supplied and applies only the inverse regrouping back to R_2 --
+        % no trace, no preparation map.
+        \begin{tenkzcd}[column sep=large, row sep=large]
+            \mathfrak R_2 \arrow[r, "\mathcal T_0"] & L_k\otimes R_h \\
+            (L_k\otimes R_h)\otimes(R_k\otimes L_h)
+              \arrow[r, "\mathcal S_2"] & \mathfrak R_2
+        \end{tenkzcd}
+    \end{center}
 
     \medskip
-    $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber and one $l$-summand are drawn
+    $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber and one $l$-summand are displayed
 
     \smallskip
-    \TNMPDOThreeSiteTraceAndShift
+    \[
+        \mathcal S_0:\mathfrak R_3\to L_k\otimes R_h,\qquad
+        \mathcal T_2:(L_k\otimes R_h)\otimes\Omega_{k,h}\to\mathfrak R_3
+    \]
+
+    \begin{center}
+        % S_0 : R_3 -> L_k tensor R_h,  T_2 : (L_k tensor R_h) tensor
+        % Omega_{k,h} -> R_3.  The three-site analogue of the two-site
+        % T_0/S_2 pair: one (k,h)-fiber and one l-summand of
+        % bigoplus_{k,h} (bigoplus_l ...) is drawn; objects are the typed
+        % sector spaces of Appendix C.2 (arXiv:1606.00608, lines
+        % 1521-1522, 1524-1530, 1535-1540 and 1547), not tensor legs, so
+        % this is a commutative-diagram (cd) picture, not a tensor-network
+        % contraction.  Top row: S_0 is just the partial trace over the
+        % whole middle block Omega_{k,h} = bigoplus_l (R_k tensor L_l)
+        % tensor (R_l tensor L_h) -- already the four contiguous middle
+        % subspins of R_3's fixed ordering -- landing on the retained
+        % outer factors L_k tensor R_h; no permutation of tensor factors
+        % is needed.  Bottom row: T_2 starts from the outer factor AND
+        % the entire traced block Omega_{k,h} already supplied and
+        % applies the inverse regrouping -- the genuine subspin
+        % permutation -- back to R_3; no trace, no preparation map.
+        \begin{tenkzcd}[column sep=large, row sep=large]
+            \mathfrak R_3 \arrow[r, "\mathcal S_0"] & L_k\otimes R_h \\
+            (L_k\otimes R_h)\otimes\Omega_{k,h}
+              \arrow[r, "\mathcal T_2"] & \mathfrak R_3
+        \end{tenkzcd}
+    \end{center}
     \caption{Fiberwise partial traces and regrouping maps on two and three
-    physical sites. One $(k,h)$-summand and one $l$-summand are drawn.}
+    physical sites. One $(k,h)$-summand and one $l$-summand are displayed.}
     \label{fig:mpdo_regrouping_partial_trace_maps}
 \end{figure}

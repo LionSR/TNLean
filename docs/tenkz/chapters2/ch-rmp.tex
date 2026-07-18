@@ -1,0 +1,379 @@
+% chapters2/ch-rmp.tex — the review-article test: figures of the
+% matrix-product-state review arXiv:2011.12127 reproduced as
+% formula-first worked examples.  Every body below is adapted from the
+% verified reproduction corpus (hard01..hard12 v3, plane acceptance);
+% manual2.tex inputs this file directly.
+\section{The review-article test}\label{ch:rmp}
+
+A notation earns its keep by reproducing the figures of a paper it
+was not designed around.  This chapter works through diagrams of the
+matrix-product-state review of Cirac, P\'erez-Garc\'ia, Schuch and
+Verstraete,\sidenote{Rev.\ Mod.\ Phys.\ \textbf{93}, 045003 (2021);
+arXiv:2011.12127.  The examples follow the review's Sec.~II--III:
+canonical forms, fixed points, blocking, matrix product operators, the
+tangent space, and PEPS.} chosen because each one leans on a different
+part of the language: cups and canonical triangles, on-bend fixed-point
+matrices, per-column legs on wide gates, tall gauges spanning two
+layers, per-site physical traces, and the oblique two-dimensional
+sheets.  Wherever an equation is drawn, the margin quotes the
+boundary signature that both sides must share.
+
+\subsection{Canonical forms}
+
+A uniform MPS tensor $A_L$ is \emph{left-canonical} when its matrices
+are jointly isometric from the left.  Contracting the shared left
+virtual index and the physical index of a ket--bra pair must give the
+identity on the right pair --- so both sides of the drawn equation keep
+exactly two east stubs, and nothing else, open.
+
+\begin{tnexample}[
+    formula   = {\sum_s (A_L^s)^\dagger A_L^s = \mathbb{I}},
+    caption   = {left orthonormality of $A_L$},
+    index     = {The triangle is the left-canonical tensor; its apex
+                 points toward the surviving index.  The vertical bond
+                 is the summed physical index $s$; the west cup is the
+                 summed left virtual index $\alpha$.  Both sides keep
+                 the pair $(\beta,\beta')$ open: the equation is
+                 between matrices.},
+    signature = {boundary|virtual-west=0|virtual-east=2|physical-up=0|physical-down=0},
+    label     = {ex:rmp-ortho-left},
+  ]
+% LHS: ket A_L over bra conj(A_L); sandwich pairs the physical
+% index s; west=cup contracts the shared left
+% virtual index alpha
+\[
+  \begin{tenkz}[sandwich, west=cup]
+    \tn[tri=l]{A_L}\\
+    \tn*[tri=l]{A_L}
+  \end{tenkz}
+  \;=\;
+  % RHS: the identity on the open (beta, beta') pair -- a bare
+  % cup; the ghosts are the wire endpoints
+  \begin{tenkz}[rows={wire,wire}, west=cup]
+    \tnghost{}\\
+    \tnghost{}
+  \end{tenkz}
+\]
+\end{tnexample}
+
+The right-canonical condition is the mirror image, and so is its
+source: the triangles flip to \tnval{tri=r}, the cup moves to the east
+side, and the identity keeps the west pair open.
+
+\begin{tnexample}[
+    formula   = {\sum_s A_R^s (A_R^s)^\dagger = \mathbb{I}},
+    caption   = {right orthonormality of $A_R$},
+    index     = {Roles of the sides swap: the east cup is now the
+                 summed right index $\beta$, and the open pair
+                 $(\alpha,\alpha')$ sits west on both sides.  The
+                 review draws both equations in isometry orientation,
+                 apex up, contraction arcs below --- a mirror image
+                 of this chain geometry, same topology.},
+    signature = {boundary|virtual-west=2|virtual-east=0|physical-up=0|physical-down=0},
+    label     = {ex:rmp-ortho-right},
+  ]
+% same sandwich with right-canonical triangles; the cup is the
+% contraction over the shared right index beta
+\[
+  \begin{tenkz}[sandwich, east=cup]
+    \tn[tri=r]{A_R}\\
+    \tn*[tri=r]{A_R}
+  \end{tenkz}
+  \;=\;
+  % RHS: the identity on the open (alpha, alpha') pair
+  \begin{tenkz}[rows={wire,wire}, east=cup]
+    \tnghost{}\\
+    \tnghost{}
+  \end{tenkz}
+\]
+\end{tnexample}
+
+\subsection{The reduced density matrix}
+
+Write $A^{(s)} = A^{s_1}\!\cdots A^{s_n}$ for an $n$-site word, and let
+$\rho^L$, $\rho^R$ be the dominant left and right fixed points of the
+transfer map.  The review's $n$-site reduced density matrix is the
+racetrack: a ket rail with all up legs open, the conjugate rail below
+with all down legs open, and the two rails closed into each other at
+both ends by cups carrying the fixed points.
+
+\begin{tnexample}[
+    formula   = {[\rho_n]_{(s)(s')} =
+                 \mathrm{Tr}\bigl[\rho^L A^{(s)}\rho^R
+                 A^{(s')\dagger}\bigr]},
+    caption   = {the $n$-site reduced density matrix},
+    index     = {\tnval{nopair} keeps every physical leg open ---
+                 $\rho_n$ is a matrix on the $n$-site physical space,
+                 $n=4$ drawn.  The bends are the closure of the two
+                 rails into each other, and the dots riding them are
+                 the fixed points $\rho^L$ (west) and $\rho^R$
+                 (east); the formula reads clockwise around the
+                 racetrack from the west bend.},
+    signature = {boundary|virtual-west=0|virtual-east=0|physical-up=4|physical-down=4},
+    label     = {ex:rmp-rdm},
+  ]
+% ket rail: A^{s_1}..A^{s_4}, up legs open; bra rail: the
+% conjugates, down legs open; the cups + on-bend dots are the
+% trace through rho^L (west, the left fixed point) and rho^R
+% (east, the right fixed point)
+\[
+  \rho_n \;=\;
+  \begin{tenkz}[rows={ket:nopair, bra},
+                west={cup=$\rho^L$}, east={cup=$\rho^R$}]
+    \tn{} & \tn{} & \tn{} & \tn{}\\
+    \tn*{} & \tn*{} & \tn*{} & \tn*{}
+  \end{tenkz}
+\]
+\end{tnexample}
+
+The review then asks for the spectrum of this object.  The picture
+enters the formula like any other math atom: its wire axis sits on the
+math axis, so stretchy delimiters size and centre on the racetrack.
+
+\begin{tnexample}[
+    formula   = {\mathrm{eig}(\rho_n)},
+    caption   = {the spectrum of $\rho_n$},
+    index     = {Same racetrack as Example~\ref{ex:rmp-rdm}; the
+                 \tnval{\char`\\left( ... \char`\\right)} pair centres
+                 on the picture because the wire axis is the math
+                 axis.  eig is algebra around one picture, so there is
+                 no side-to-side signature balance to check.},
+    signature = {boundary|virtual-west=0|virtual-east=0|physical-up=4|physical-down=4},
+    label     = {ex:rmp-eig},
+  ]
+% rho_n racetrack inside stretchy parentheses: the picture's
+% wire axis rides the math axis
+\[
+  \mathrm{eig}\left(
+  \begin{tenkz}[rows={ket:nopair, bra},
+                west={cup=$\rho^L$}, east={cup=$\rho^R$}]
+    \tn{} & \tn{} & \tn{} & \tn{}\\
+    \tn*{} & \tn*{} & \tn*{} & \tn*{}
+  \end{tenkz}
+  \right)
+\]
+\end{tnexample}
+
+\subsection{Blocking to a fixed point}
+
+Under renormalization a fixed-point MPS reproduces itself when two
+sites are blocked into one: the blocked pair equals a single tensor
+followed by an isometry $U$ on the doubled physical index.  Both sides
+must show two up legs --- one per blocked site --- which is exactly
+what \tnkey{legs at=} provides on a wide glyph.
+
+\begin{tnexample}[
+    formula   = {A^{i_1}A^{i_2} = \sum_j U_{(i_1 i_2),j}\,A^j},
+    caption   = {the blocking fixed-point equation},
+    index     = {$U$ is a pill of width two; \tnval{legs
+                 at=\{1,2\}} opens one up leg over each spanned
+                 column, so both sides read physical-up $=2$.  The
+                 vertical $U$--$A$ bond is the summed index $j$;
+                 \tnval{op:none} seals $U$'s virtual boundary ---
+                 the isometry has no horizontal wires.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=2|physical-down=0},
+    label     = {ex:rmp-blocking},
+  ]
+% LHS: A^{i_1} A^{i_2} -- two MPS tensors, one open up leg each
+\[
+  \begin{tenkz}[physical=up, tensor style=box]
+    \tn{A} & \tn{A}
+  \end{tenkz}
+  \;=\;
+  % RHS: U keeps one leg per blocked site (legs at={1,2}); the
+  % vertical U-A bond is the summed physical index j
+  \begin{tenkz}[rows={op:none, ket}, tensor style=box]
+    \tn[pill, wide=2, legs at={1,2}]{U} & \\
+    \tn[wide=2]{A} &
+  \end{tenkz}
+\]
+\end{tnexample}
+
+\subsection{Purification and zero correlation length}
+
+A positive matrix product operator admits a local purification: the
+MPO tensor $O$ factors, up to a gauge $X$ on the virtual index, into a
+purification tensor $A$ glued to its own conjugate.  The review draws
+$X$ as a tall capsule spanning both layers with the label inscribed,
+which is \tncmd{tnX} with \tnkey{wires=2}.
+
+\begin{tnexample}[
+    formula   = {O = X^{-1}\bigl[{\textstyle\sum_k}
+                 A^k\!\otimes\overline{A}^k\bigr]X},
+    caption   = {local purification of a positive MPO},
+    index     = {The $A$--$\overline{A}$ bond is the purification
+                 index $k$ (the automatic pairing of the two
+                 \tnval{op} rows); $s$ (up) and $s'$ (down) stay
+                 open.  Each capsule is one atom spanning both layer
+                 wires; \tnval{op:none} seals the top row, so exactly
+                 one virtual index leaves each capsule --- the
+                 signature matches $O$'s.  One recorded gap: the
+                 review's outer wire enters the capsule at its
+                 vertical centre (the fused index); the grid opens
+                 one row's boundary, so here it sits at the lower
+                 row's height.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=1|physical-down=1},
+    label     = {ex:rmp-purification},
+  ]
+% LHS: the 4-leg MPO tensor O (s up, s' down, virtual a/b)
+\[
+  \begin{tenkz}[physical=updown, tensor style=box]
+    \tn{O}
+  \end{tenkz}
+  \;=\;
+  % RHS: X^{-1} [ A (x) conj(A) ] X -- capsules span both
+  % layers; the A-conj(A) bond is the purification index k;
+  % align=2 puts the open row on the math axis
+  \begin{tenkz}[rows={op:none, op}, align=2, tensor style=box]
+    \tnX[wires=2]{X^{-1}} & \tn{A} & \tnX[wires=2]{X}\\
+                          & \tn*{A} &
+  \end{tenkz}
+\]
+\end{tnexample}
+
+At the opposite extreme sit the zero-correlation-length density
+operators.  With $E = \sum_s M^{ss}$ --- the MPDO tensor with its own
+physical pair closed by a per-site trace --- the condition is that $E$
+be idempotent.  \tnkey{trace=physical} draws that per-site closure.
+
+\begin{tnexample}[
+    formula   = {E\,E = E,\quad E = {\textstyle\sum_s} M^{ss}},
+    caption   = {zero correlation length for an MPDO},
+    index     = {\tnval{trace=physical} arcs each site's up leg
+                 around the glyph into its own down leg: the per-site
+                 physical trace.  Traced legs are closed indices and
+                 leave the signature, so both sides read
+                 $(1,1,0,0)$.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0},
+    label     = {ex:rmp-zcl},
+  ]
+% LHS: E.E -- two physically traced tensors, one virtual bond
+\[
+  \begin{tenkz}[physical=updown, trace=physical,
+                tensor style=box]
+    \tn[mpo]{M} & \tn[mpo]{M}
+  \end{tenkz}
+  \;=\;
+  % RHS: E -- one physically traced tensor
+  \begin{tenkz}[physical=updown, trace=physical,
+                tensor style=box]
+    \tn[mpo]{M}
+  \end{tenkz}
+\]
+\end{tnexample}
+
+\subsection{The tangent space}
+
+In the gauge where the chain is left-canonical up to site $i$ and
+right-canonical after it, the projector onto the tangent space of a
+uniform MPS is
+\[
+  P_{T(A)} \;=\; \sum_{i=1}^{n}
+    P_L^{(i-1)}\otimes\mathbb{I}_i\otimes P_R^{(i+1)}
+  \;-\; \sum_{i=1}^{n} P_L^{(i)}\otimes P_R^{(i+1)},
+\]
+where $P_L^{(k)}$ projects onto the states reached by an $A_L$-chain
+on the sites up to $k$, and $P_R^{(k)}$ mirrors it from the right.
+Each block projector is an all-legs-open window of canonical triangles
+whose edge cup is the bracket
+$\sum_\alpha|\Phi_\alpha\rangle\langle\Phi_\alpha|$; pictures set side
+by side are tensor factors, so a summand is assembled exactly as the
+formula factors it.
+
+\begin{tnexample}[
+    formula   = {P_L^{(i-1)}\otimes\mathbb{I}_i\otimes
+                 P_R^{(i+1)}},
+    caption   = {one summand of the tangent-space projector},
+    index     = {Left block: an $A_L$ window, all physical legs open
+                 (\tnval{nopair}), its east cup the bracket at the
+                 block edge; the right block mirrors it.  The
+                 site-$i$ identity is algebra, not ink: a cup cannot
+                 sit at a hole's edge, so the summand carries
+                 $\mathbb{I}_i$ symbolically.},
+    signature = {boundary|virtual-west=2|virtual-east=0|physical-up=2|physical-down=2},
+    label     = {ex:rmp-tangent},
+  ]
+% P_L^(i-1): all-legs-open A_L window; the east cup is the
+% tangent-space bracket sum_a |Phi_a><Phi_a|
+\[
+  \begin{tenkz}[rows={ket:nopair, bra}, east=cup]
+    \tndots & \tn[tri=l]{} & \tn[tri=l]{}\\
+    \tndots & \tn*[tri=l]{} & \tn*[tri=l]{}
+  \end{tenkz}
+  % 1_i: algebra, not ink -- no bare-wire atom can be bracketed
+  \otimes \mathbb{I}_i \otimes
+  % P_R^(i+1): the mirrored A_R window, bracket at the west
+  \begin{tenkz}[rows={ket:nopair, bra}, west=cup]
+    \tn[tri=r]{} & \tn[tri=r]{} & \tndots\\
+    \tn*[tri=r]{} & \tn*[tri=r]{} & \tndots
+  \end{tenkz}
+\]
+\end{tnexample}
+
+The algebraic $\mathbb{I}_i$ contributes no drawn legs, so the two
+sums balance as drawn: each summand's ink totals
+$(2,2,4,4)$,\sidenote{Per picture: the line quoted beside
+Example~\ref{ex:rmp-tangent} is a left block's; a right block mirrors
+it, \tnlogline{virtual-east=2} in place of
+\tnlogline{virtual-west=2}.} whether or not the brackets meet back to
+back --- the second summand is the same two blocks with $\otimes$
+alone between them.
+
+\subsection{Two dimensions}
+
+A PEPS assigns one five-index tensor to each site of a square lattice:
+four virtual bonds to the lattice neighbours and one physical leg.
+The review draws finite windows obliquely so the physical legs leave
+the lattice plane visibly; \tnval{frame=oblique} shears the bonds
+only, keeping dots, labels, and legs in the paper frame.
+
+\begin{tnexample}[
+    formula   = {|\Psi\rangle = \sum_{\mathbf{s}}
+                 \mathcal{C}\bigl(\{A^{s_{xy}}\}\bigr)\,
+                 |\mathbf{s}\rangle},
+    caption   = {a finite PEPS window, drawn obliquely},
+    index     = {Each dot is a site tensor $A^{s_{xy}}$; the in-sheet
+                 bonds are its four virtual indices, and
+                 \tnval{boundary legs} lets the bonds cut by the
+                 window dangle.  The short vertical stub at each site
+                 is the open physical index, readable against the
+                 sheared lattice.},
+    label     = {ex:rmp-peps},
+  ]
+% a 4x4 PEPS window: sheared bonds, per-site physical legs,
+% cut bonds dangling at the window boundary
+\begin{tenkzlattice}[rows=4, cols=4, frame=oblique,
+                     physical=up, boundary legs]
+\end{tenkzlattice}
+\end{tnexample}
+
+Expectation values double the sheet: a ket layer over its conjugate,
+with a site-wise pairing leg contracting each physical index.  Leaving
+the pairing legs of chosen cells dangling turns the double layer into
+a marginal on those cells.
+
+\begin{tnexample}[
+    formula   = {\rho_C = \operatorname{Tr}_{\overline{C}}\,
+                 |\Psi\rangle\langle\Psi|},
+    caption   = {the double layer with open columns},
+    index     = {Two sheets, ket over bra; each vertical pairing leg
+                 is one contraction $\sum_s A^s\overline{A}^s$.
+                 Cells listed in \tnval{open=} keep their pairing
+                 legs dangling --- here columns 2 and 4, so the
+                 picture is the marginal $\rho_C$ of those columns.},
+    label     = {ex:rmp-doublelayer},
+  ]
+% ket-over-bra double layer; columns 2 and 4 stay open, so the
+% object is the marginal of those columns
+\begin{tenkzplanes}[rows=4, cols=4, sheets={ket, bra},
+                    open={(1-4,2),(1-4,4)}]
+\end{tenkzplanes}
+\end{tnexample}
+
+Ten review figures, and the load was carried by a handful of keys:
+cups with on-bend matrices, \tnval{nopair}, \tnkey{legs at=},
+\tnkey{wires=2}, \tnval{trace=physical}, \tnval{frame=oblique}, and
+the double-layer environment.  What the test could not draw --- the
+bare identity wire inside a bracketed summand, the centred fused wire
+on a tall gauge --- is recorded here beside the figures that need it,
+and again in the roadmap of \S\ref{ch:trouble}.
