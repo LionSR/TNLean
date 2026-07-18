@@ -127,9 +127,12 @@ numbers therefore has the source GSNNCH form.
 {\scriptsize\leanid{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL}}
 and
 {\scriptsize\leanid{MPOTensor.hasGSNNCHForm_of_bntSectorSAL}}.}
-The remaining comparison is to determine whether the reverse comparison with
-a single bond is needed in the simple-MPDO equivalence, and to prove it only
-in that form.
+No reverse comparison with a single-bond predicate is needed for this
+implication.  The construction chooses one supported bond for each absorbed
+BNT representative, assembles these bonds into the orthogonal outer sectors,
+and concludes the source GSNNCH form directly from the positive-length BNT
+sum.  Thus a theorem extracting one bond from arbitrary GSNNCH sector data
+would not enter the proof of the simple-MPDO implication.
 
 The local Markov labels in Appendix C.2 belong inside one injective BNT
 component.  They are not the outer labels $x$ of Definition~4.8 and must not
@@ -152,7 +155,8 @@ two-site sector, and all cyclic translates of that lift commute pairwise on
 every periodic chain of length at least two.  Their product realizes the
 ambient finite-chain operator exactly, with normalization scalar one.  The
 supported products are assembled into the BNT outer sectors with their
-natural multiplicities.  The remaining question is whether the simple-MPDO
-equivalence requires a reverse comparison with a single bond.
+natural multiplicities.  This direct construction proves the GSNNCH
+implication without a reverse comparison with the auxiliary single-bond
+predicate.
 
 \end{document}
