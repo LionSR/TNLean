@@ -523,9 +523,10 @@ subadditivity into the same orthogonal sectors.  Their Shannon contributions
 cancel, and strict positivity of every sector probability forces equality in
 each sector separately.
 
-**Scope restriction (common blocking):** the one-letter simultaneous span is
-the blocked form used to construct the common left inverse.  Its derivation
-from the unrestricted biCF statement is recorded in
+**Source hypothesis (biCF):** the one-letter simultaneous span is precisely
+the block-injective canonical-form assumption imposed at the start of Case II
+in arXiv:1606.00608, line 1628.  It supplies the common left inverse used in
+the source proof.  The relation with finite physical blocking is recorded in
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1748--1781. -/

@@ -277,6 +277,40 @@ to the original MPO tensor.  The older
 per-copy \texttt{HorizontalCFData} theorems remain available only as explicitly
 restricted auxiliary statements.
 
+\section{The Appendix C.2 sector entropy argument}
+
+The one-letter simultaneous-span assumption in the formal sector entropy
+theorem is not an additional hypothesis absent from the cited source.  At the
+start of Case II, the source fixes a simple tensor $K$ in block-injective
+canonical form \cite[line~1628]{Cirac2016MPDO_arXiv}.  By Definition~2.6,
+block-injective canonical form says exactly that the one-letter tuples of the
+minimal normal representatives span
+\[
+    \bigoplus_{j=1}^g M_{D_j}(\mathbb C).
+\]
+The inverse tensor used immediately afterwards, and hence the one-site
+projections in the proof of Proposition~4.13, depend on this hypothesis.  The
+formal assumption \texttt{WordTupleSpanTop S.basis 1} is therefore the direct
+algebraic form of the source's biCF assumption.
+
+It would be a strictly stronger assertion to begin with an unblocked canonical
+form and remove this hypothesis by choosing a finite blocking length.  Although
+SAL passes from a tensor to any positive physical blocking, the converse does
+not follow from the periodic block identity: an $L$-blocked chain records only
+the original chain lengths $NL$ and only cuts whose lengths are multiples of
+$L$.  In particular, SAL of $K^{[L]}$ does not by itself recover the equalities
+$I_m(K)=I_{m+1}(K)$ at arbitrary chain lengths and cuts.  The proposed reverse
+transport in issue~\#4119 is therefore unavailable without a new mathematical
+argument not present in Appendix~C.2, and it is not needed for faithfulness to
+the printed proposition.
+
+Consequently, the sector entropy theorem should retain the simultaneous
+one-letter span and identify it as the source biCF hypothesis.  The finite
+blocking theorem remains the justification that an arbitrary canonical-form
+tensor can be placed in biCF when the surrounding result is itself stated only
+up to physical blocking; it does not turn the Appendix C.2 conclusion into an
+unblocked SAL statement.
+
 This closes the multiplicity and block-separation gap in Lemma L.  It does not
 by itself complete Proposition~4.13: constructing the letterwise vertical
 decomposition from the resulting reducing projections, and proving the
