@@ -1,0 +1,79 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Active Canonical-Form Blocks in the BNT Characterization}
+\author{}
+\date{2026-07-18}
+
+\begin{document}
+\maketitle
+
+\section{The two source formulations}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete construct the canonical form by
+listing the invariant blocks of the completely positive map and normalizing
+each block separately \cite[lines 214--225]{Cirac2016MPDO_arXiv}. Thus the
+blocks produced by the construction are precisely the blocks which occur in
+the tensor. The subsequent displayed definition
+\cite[lines 238--244]{Cirac2016MPDO_arXiv}, however, writes
+\begin{align}
+    A^i=\bigoplus_{k=1}^r \mu_k A_k^i
+    \tag{\path{eq:II_CF1}}
+\end{align}
+without explicitly requiring every $\mu_k$ to be nonzero. Read literally, this
+display also permits a listed block with zero weight. Such a block contributes
+nothing to any positive-length matrix product vector.
+
+The source definition of a basis of normal tensors
+\cite[lines 271--274]{Cirac2016MPDO_arXiv} requires, as its first condition,
+that every candidate representative $A_j$ is normal. Proposition~2.7 then
+characterizes the basis by coverage of the canonical-form blocks and pairwise
+gauge-phase distinction \cite[lines 278--280 and 1135--1146]
+{Cirac2016MPDO_arXiv}. Its displayed right-hand side does not repeat candidate
+normality, because that condition is already part of the term ``basis of
+normal tensors.''
+
+\section{The local correction}
+
+To state an equivalence which is valid under the literal displayed
+canonical-form hypothesis, let
+\begin{align}
+    K_{\mathrm{act}}=\{k:\mu_k\ne0\}.
+\end{align}
+Coverage is required exactly for $k\in K_{\mathrm{act}}$. Removing the other
+indices leaves every positive-length matrix product vector unchanged, since
+$\mu_k^N=0$ whenever $N>0$ and $\mu_k=0$. The active family has nonzero
+weights and therefore satisfies the hypothesis needed by the source
+phase-class argument.
+
+Candidate normality is placed explicitly on the characterized side of the
+equivalence. The resulting statement says that a candidate family is a basis
+of normal tensors if and only if
+\begin{enumerate}
+    \item every candidate representative is normal;
+    \item every active canonical-form block is gauge-phase equivalent to a
+          candidate representative; and
+    \item distinct candidate representatives are not gauge-phase equivalent.
+\end{enumerate}
+The third condition is the source notion of minimality. No converse coverage
+condition is added: Definition~2.4 permits an additional normal representative
+whose coefficient is identically zero, provided the full candidate family is
+eventually linearly independent.
+
+This correction is recorded in the declaration
+\path{MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal}.
+It reconciles the literal canonical-form display with the constructive
+nonzero-block reading and makes the normality condition from Definition~2.4
+visible in the equivalence. It does not strengthen or weaken the mathematical
+characterization of the active canonical-form blocks.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
