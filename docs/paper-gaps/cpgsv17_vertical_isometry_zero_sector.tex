@@ -101,6 +101,63 @@ matrix as one block would not give a normal tensor. Thus the combination of a
 two-sided unitary and the positive-block-only assembly would make
 Proposition~4.13 false even in this elementary case.
 
+\section{Trace loss under transported sector maps}
+
+Appendix~C.4 transports the physical refinement and coarse-graining maps to
+the retained one-site and two-site vertical coordinates (source
+lines~1955--1980).  Let $U_1$ and $U_2$ be the corresponding coisometries and
+write
+\begin{equation}
+  P_1=U_1^\dagger U_1,
+  \qquad
+  P_2=U_2^\dagger U_2.
+  \label{eq:active-projections}
+\end{equation}
+The normalized diagonal embedding and the sectorwise partial trace preserve
+the sum of the sector traces.  The physical maps also preserve trace.  Thus,
+if $Z_T$ is the positive matrix immediately before the final $U_2$
+compression in the transported refinement map, then
+\begin{equation}
+  \operatorname{Tr}_{\mathrm{sec}}(\widetilde T(X))
+   =\operatorname{tr}(U_2Z_TU_2^\dagger)
+   =\operatorname{tr}(P_2Z_T)
+   \leq\operatorname{tr}(Z_T)
+   =\operatorname{Tr}_{\mathrm{sec}}(X).
+  \label{eq:refinement-trace-loss}
+\end{equation}
+For a positive matrix, equality holds if and only if
+$P_2Z_T=Z_T$.  The same argument for the transported coarse-graining map gives
+\begin{equation}
+  \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(Y))
+   \leq\operatorname{Tr}_{\mathrm{sec}}(Y),
+  \qquad
+  \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(Y))
+   =\operatorname{Tr}_{\mathrm{sec}}(Y)
+   \Longleftrightarrow P_1Z_S=Z_S,
+  \label{eq:coarse-trace-loss}
+\end{equation}
+where $Z_S$ is the matrix before the final $U_1$ compression.
+
+Consequently the transported maps need not be trace preserving on arbitrary
+elements of the full finite products merely because the physical maps are
+trace preserving.  Such a conclusion would require the missing
+image-preservation statements
+\begin{equation}
+  P_2Z_T=Z_T,
+  \qquad
+  P_1Z_S=Z_S.
+  \label{eq:transported-image-preservation}
+\end{equation}
+The displayed identities of Appendix~C.4 establish the required action on
+the weighted sector operators arising from the canonical forms; they do not,
+by themselves, establish \eqref{eq:transported-image-preservation} for every
+element of the finite products.  The elimination plan is therefore to prove
+\eqref{eq:transported-image-preservation} for each source-generated family
+where trace preservation is used.  The support criterion above then yields
+trace equality on precisely that family.  No global trace-preserving
+extension, complete-positivity assertion for the finite products, or inverse
+relation is needed for this step.
+
 \section{Formal correction}
 
 The vertical canonical-form predicate now requires $UU^\dagger=I_s$ in the
