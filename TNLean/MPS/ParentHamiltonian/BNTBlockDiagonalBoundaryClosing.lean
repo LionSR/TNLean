@@ -180,12 +180,11 @@ argument of arXiv:quant-ph/0608197, Theorem 12, proof lines 1276--1289 and
 1454--1456, with the block-diagonal boundary restriction of arXiv:2011.12127,
 Section IV.C, lines 2126--2128.
 
-**Scope restriction (finite Condition C1 range):** The moved-cut comparison is
-unconditional within the repository's existing normalized BNT separation range
-\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source theorem uses the sharper bound
-\(3(r-1)(L_0+1)+1\le L\). Thus the length-\(L_0\) injectivity range remains
-stronger than the source constant. This independent mismatch is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+This earlier variant is retained with the sufficient range
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The theorem
+`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
+below proves the same conclusion at the source bound
+\(3(r-1)(L_0+1)+1\le L\).
 -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -283,6 +282,227 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1
   intro β
   exact hCommWord j (List.ofFn β)
 
+/-- A global change of cut closes the block-diagonal boundary conditions in
+the sharp PGVWC07 source range.
+
+Let $r\ge2$, let every block be injective at length $L_0>0$, and assume
+$L\ge3(r-1)(L_0+1)+1$ and $N\ge L+L_0$. The source-range simultaneous span
+on the complementary segment $N-L_0$ identifies the boundary matrices before
+and after moving the cut. Each block component therefore satisfies every
+periodic local constraint. This is arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1424--1456. -/
+theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d]
+    (hRange :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  classical
+  have hN : 0 < N := by omega
+  have hL : 0 < L := by omega
+  have hLN : L ≤ N := by omega
+  obtain ⟨X, hψX, _⟩ :=
+    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07
+      μ A hr hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
+  let s : Fin N := ⟨N - L₀, by omega⟩
+  have hTranslate :
+      cyclicTranslateState s ψ ∈
+        chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N :=
+    cyclicTranslateState_mem_chainGroundSpace
+      (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN s hψ
+  obtain ⟨Y, hψY, _⟩ :=
+    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07
+      μ A hr hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hTranslate
+  have hXsum :
+      ψ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
+    calc
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
+            (Matrix.blockDiagonal' X)) := hψX
+      _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
+        rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+  have hYsum :
+      cyclicTranslateState s ψ =
+        ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
+    calc
+      cyclicTranslateState s ψ =
+          groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
+              (Matrix.blockDiagonal' Y)) := hψY
+      _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
+        rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+  have hSplit : N - L₀ + L₀ = N := by omega
+  have hSumTranslate :
+      cyclicTranslateState s
+          (∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j)) =
+        ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
+    rw [← hXsum]
+    exact hYsum
+  have hLongSpan : WordTupleSpanTop A (N - L₀) := by
+    apply wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
+      A hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital
+    omega
+  have hIntertwine :
+      ∀ (α : Fin L₀ → Fin d) (j : Fin r),
+        ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn α) =
+          evalWord (A j) (List.ofFn α) * ((μ j) ^ N • Y j) := by
+    apply block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
+      A hSplit hL₀ hLongSpan
+        (fun j ↦ (μ j) ^ N • X j) (fun j ↦ (μ j) ^ N • Y j)
+    simpa only [s] using hSumTranslate
+  have hComm : ∀ j : Fin r, ∀ a : Fin d,
+      ((μ j) ^ N • X j) * A j a = A j a * ((μ j) ^ N • X j) := by
+    intro j
+    exact (boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
+      (hBlk j) hL₀ ((μ j) ^ N • X j) ((μ j) ^ N • Y j)
+      (fun α ↦ hIntertwine α j)).2
+  have hCommWord : ∀ j : Fin r, ∀ w : List (Fin d),
+      ((μ j) ^ N • X j) * evalWord (A j) w =
+        evalWord (A j) w * ((μ j) ^ N • X j) := by
+    intro j w
+    induction w with
+    | nil => simp [evalWord_nil]
+    | cons a w ih =>
+        rw [evalWord_cons, ← Matrix.mul_assoc, hComm j a, Matrix.mul_assoc, ih,
+          ← Matrix.mul_assoc]
+  refine ⟨X, hψX, ?_⟩
+  apply blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
+    μ A hN hLN X
+  intro j i _τ _hi
+  refine ⟨(μ j) ^ N • X j, ?_⟩
+  intro β
+  exact hCommWord j (List.ofFn β)
+
+/-- At the length bound of Perez-Garcia, Verstraete, Wolf, and Cirac, the
+periodic chain space of a normalized BNT block sum is the internal sum of the
+periodic chain spaces of its blocks.
+
+This is arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456. The required
+interaction length is
+\[
+  3(r-1)(L_0+1)+1 \leq L,
+\]
+and the chain length satisfies \(L+L_0\leq N\). -/
+theorem
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hr : 2 ≤ r)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d]
+    (hRange :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
+      iSupIndep (fun j : Fin r ↦ groundSpace (A j) N) := by
+  have hN : 0 < N := by omega
+  have hL : 0 < L := by omega
+  have hLN : L ≤ N := by omega
+  have hClose :
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+        ⨆ j : Fin r, chainGroundSpace (A j) L N :=
+    chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
+      μ A (fun ψ hψ ↦
+        exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07
+          μ A hr hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hRange hNlarge hψ)
+  refine ⟨?_, ?_⟩
+  · exact
+      chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing
+        μ A hμ hN hLN hClose
+  · exact
+      groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
+        A hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital (by omega)
+
+/-- At the source length bound, the normalized BNT block-diagonal periodic
+chain space is the sum of the periodic chain spaces of its blocks.
+
+This is the equality in arXiv:quant-ph/0608197, Theorem 12, proof lines
+1424--1456. -/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hr : 2 ≤ r)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d]
+    (hRange :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  exact
+    (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07
+      μ A hμ hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hRange hNlarge).1
+
+/-- At the source length bound, blockwise periodic uniqueness gives containment
+of the block-diagonal parent-Hamiltonian kernel in the span of the BNT matrix
+product vectors.
+
+This is the final conditional step in arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1424--1456. -/
+theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hr : 2 ≤ r)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d]
+    (hRange :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    (hBlock : ∀ j : Fin r,
+      chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
+    LinearMap.ker (parentHamiltonian
+      (toTensorFromBlocks (d := d) (μ := μ) A) L N) ≤
+      bntMPSVectorSpan A N := by
+  have hN : 0 < N := by omega
+  have hLN : L ≤ N := by omega
+  refine ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan
+    μ A hN hLN ?_ hBlock
+  exact le_of_eq
+    (chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
+      μ A hμ hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hRange hNlarge)
+
 /-- The normalized BNT block-diagonal periodic chain space is the sum of the
 single-block periodic chain spaces in the finite Condition C1 range, and the
 corresponding open-boundary block spaces are independent.
@@ -292,11 +512,10 @@ Theorem 12, proof lines 1430--1456, in the finite Condition C1 range. The
 boundary closing is supplied by the global change-of-cut comparison above, so
 there is no short crossing-tail span hypothesis.
 
-**Scope restriction (finite Condition C1 range):** The conclusion is proved in
-the repository's existing normalized BNT separation range derived from
-length-\(L_0\) injectivity. Recovering the sharper length bound of
-arXiv:quant-ph/0608197, Theorem 12, is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+This earlier variant is retained with the sufficient range containing the extra
+summand \(L_0+1\). The theorem
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`
+above proves the source bound from arXiv:quant-ph/0608197, Theorem 12.
 -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

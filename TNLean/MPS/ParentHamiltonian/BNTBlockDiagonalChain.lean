@@ -108,8 +108,8 @@ boundary-crossing windows. The periodic-boundary upgrade — replacing the
 open-boundary span \(\bigvee_jG_N(A_j)\) by
 \(\sum_j\mathcal G_{N,L}(A_j)\) — is the separate comparison of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+arXiv:2011.12127, Section IV.C, lines 2126--2128. It is proved by the global
+change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -139,6 +139,47 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   have hstep :=
     pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
       (d := d) (L₀ := L₀) A hIrr hLeft hOverlap hBlocks hBlk hL₀
+      hUnital (n := M - 1) hbound
+  have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
+  rw [← hM1]
+  simpa [Nat.add_assoc] using hstep
+
+/-- In the PGVWC07 source range, every block-diagonal periodic vector belongs
+to the sum of the open-boundary block spaces.
+
+For $r\ge2$, injectivity at the common length $L_0>0$, and
+$L\ge3(r-1)(L_0+1)+1$, the one-step intersection identity propagates the
+local constraints to the full chain. This is arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1424--1452. -/
+theorem
+    chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+      ⨆ j : Fin r, groundSpace (A j) N := by
+  classical
+  apply chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
+    (μ := μ) (A := A) hμ hN hL hLN
+  intro M hM
+  have hMpos : 0 < M := lt_of_lt_of_le hL hM
+  have hbound :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ M - 1 := by
+    omega
+  have hstep :=
+    pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07
+      (d := d) (L₀ := L₀) A hr hIrr hLeft hOverlap hBlocks hBlk hL₀
       hUnital (n := M - 1) hbound
   have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
   rw [← hM1]
@@ -192,8 +233,8 @@ both independent of the boundary-condition comparison at boundary-crossing
 windows. The periodic-boundary upgrade replacing \(S_N\) by
 \(\sum_j\mathcal G_{N,L}(A_j)\) is the separate comparison of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+arXiv:2011.12127, Section IV.C, lines 2126--2128. It is proved by the global
+change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -242,8 +283,8 @@ The decomposition uses only the span-based open-boundary inclusion and
 block-separation independence, both independent of the boundary-condition
 comparison at boundary-crossing windows. That periodic-boundary comparison
 (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
-arXiv:2011.12127, Section IV.C, lines 2126--2128) is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+arXiv:2011.12127, Section IV.C, lines 2126--2128) is proved by the global
+change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -325,8 +366,8 @@ membership use only the span-based open-boundary inclusion, independently of
 the boundary-condition comparison at boundary-crossing windows. The
 periodic-boundary upgrade to \(\mathcal G_{N,L}(A_j)\) (arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1456; arXiv:2011.12127, Section IV.C, lines
-2126--2128) is the separate step recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+2126--2128) is proved by the global change-of-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -354,6 +395,67 @@ theorem
   obtain ⟨φ, hφ, hψφ, _huniq⟩ :=
     exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
+  have hφRange : ∀ j : Fin r, φ j ∈ (groundSpaceMap (A j) N).range := by
+    intro j
+    simpa [groundSpace] using hφ j
+  choose Y hY using hφRange
+  let X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
+    fun j => ((μ j) ^ N)⁻¹ • Y j
+  refine ⟨X, ?_, ?_⟩
+  · rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+    calc
+      ψ = ∑ j : Fin r, φ j := hψφ
+      _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
+            refine Finset.sum_congr rfl ?_
+            intro j _
+            have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
+            simp [X, hY j, hpow]
+  · intro j
+    have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
+    simpa [X, hY j, hpow] using hφ j
+
+/-- In the PGVWC07 source range, a block-diagonal periodic vector has
+block-diagonal open-boundary matrices.
+
+For $r\ge2$ and $L\ge3(r-1)(L_0+1)+1$, every vector in the periodic chain
+space of $\bigoplus_j\mu_jA_j$ is a sum of vectors in the open-boundary spaces
+$G_N(A_j)$. Choosing boundary matrices for these summands gives a single
+block-diagonal boundary matrix. This is the open-boundary part of
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1452. -/
+theorem
+    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N := by
+  classical
+  have hLe :
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+        ⨆ j : Fin r, groundSpace (A j) N :=
+    chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07
+      μ A hr hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+  obtain ⟨φ, hφ, hφsum⟩ :=
+    (Submodule.mem_iSup_iff_exists_finsupp
+      (fun j : Fin r => groundSpace (A j) N) ψ).mp (hLe hψ)
+  have hψφ : ψ = ∑ j : Fin r, φ j := by
+    simpa [Finsupp.sum_fintype] using hφsum.symm
   have hφRange : ∀ j : Fin r, φ j ∈ (groundSpaceMap (A j) N).range := by
     intro j
     simpa [groundSpace] using hφ j
@@ -442,8 +544,8 @@ span-based open-boundary results, independently of the boundary-condition
 comparison at boundary-crossing windows. The periodic-boundary upgrade
 replacing \(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\)
 (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
-arXiv:2011.12127, Section IV.C, lines 2126--2128) is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+arXiv:2011.12127, Section IV.C, lines 2126--2128) is proved by the global
+change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -850,15 +952,15 @@ inverting-and-re-growing argument in Perez-Garcia, Verstraete, Wolf, and Cirac
 (arXiv:quant-ph/0608197) and Cirac, Perez-Garcia, Schuch, and Verstraete
 (arXiv:2011.12127), with block-diagonal boundary conditions.
 
-**Scope restriction (periodic-boundary comparison):** The block-diagonal boundary
+**Explicit hypothesis (periodic-boundary comparison):** The block-diagonal boundary
 representation whose block components already satisfy the periodic constraints
 \(\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)\) is the explicit hypothesis
 `hBoundary` here. The span-based open-boundary version of this representation is
 proved (its components lie in \(G_N(A_j)\)); the periodic-boundary upgrade is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
-1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
-from the periodic ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128. It is supplied
+by the global change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`; this
+theorem retains it as an explicit hypothesis for reuse. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

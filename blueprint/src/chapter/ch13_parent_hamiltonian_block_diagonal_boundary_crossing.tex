@@ -1542,23 +1542,24 @@ in both cases.
 
 \begin{theorem}[A global change of cut gives periodic single-block states]
     \label{thm:block_diagonal_boundary_periodic_components_from_global_cut}
-    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:unital_block_separating_product_span,
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length,
+        lem:pgvwc_product_span_source_length,
         lem:parent_cyclic_translate_preserves_chain_space,
         lem:block_boundary_intertwiner_from_global_cut,
         lem:block_diagonal_boundary_component_right_boundary_matrices}
     With the hypotheses and notation of
-    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
-    addition that $L+L_0\le N$. Thus this statement is in the currently proved
-    block-separation range
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices_source_length},
+    assume in addition that $L+L_0\le N$. Thus
     \[
-        (L_0+1)+3(g-1)(L_0+1)+1\le L,
+        g\ge2,
+        \qquad
+        L\ge3(g-1)(L_0+1)+1,
+        \qquad
+        N\ge L+L_0.
     \]
-    rather than the sharper length range in the source theorem. Let
-    % Scope restriction documented in
-    % docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex; issue #4195.
+    Let
     \[
         \psi\in
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
@@ -1577,17 +1578,17 @@ in both cases.
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:unital_block_separating_product_span,
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length,
+        lem:pgvwc_product_span_source_length,
         lem:parent_cyclic_translate_preserves_chain_space,
         lem:block_boundary_intertwiner_from_global_cut,
         lem:block_diagonal_boundary_component_right_boundary_matrices}
-    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} gives boundary
-    matrices $X_j$. Translate the periodic state so that the cut moves past
-    the final $L_0$ sites, and apply the same lemma again to obtain boundary
-    matrices $Y_j$ for the translated state. For a word $\alpha$ of length
-    $L_0$, comparison of the two decompositions against every complementary
-    word $w$ of length $N-L_0$ gives
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
+    gives boundary matrices $X_j$. Translate the periodic state so that the
+    cut moves past the final $L_0$ sites, and apply the same lemma again to
+    obtain boundary matrices $Y_j$ for the translated state. For a word
+    $\alpha$ of length $L_0$, comparison of the two decompositions against
+    every complementary word $w$ of length $N-L_0$ gives
     \[
         \sum_j\operatorname{tr}
         \bigl((\mu_j^NX_j)A^j_\alpha A^j_w\bigr)
@@ -1596,7 +1597,7 @@ in both cases.
         \bigl(A^j_\alpha(\mu_j^NY_j)A^j_w\bigr).
     \]
     The length bound and
-    Lemma~\ref{lem:unital_block_separating_product_span} imply that the
+    Lemma~\ref{lem:pgvwc_product_span_source_length} imply that the
     simultaneous products of length $N-L_0$ span the product algebra.
     Hence, block by block,
     \[
@@ -1618,19 +1619,29 @@ in both cases.
 
 \begin{theorem}[Periodic block decomposition from a global cut]
     \label{thm:block_diagonal_chain_space_global_cut}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
         lem:bnt_block_diagonal_boundary_representation_equality}
-    Under the hypotheses of
-    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_global_cut},
+    Let $g\ge2$. Let $A_j$ be irreducible left-canonical blocks with normalized
+    self-overlap, pairwise inequivalent up to gauge and phase, injective at a
+    common length $L_0>0$, and satisfying
+    \[
+        \sum_aA^j_aA^{j\,\dagger}_a=I.
+    \]
+    Let $\mu_j\ne0$ for every $j$, and assume
+    \[
+        L\ge3(g-1)(L_0+1)+1,
+        \qquad
+        N\ge L+L_0.
+    \]
+    Then
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
         =\sum_j\mathcal G_{N,L}(A_j),
     \]
-    and the open-boundary spaces $G_N(A_j)$ form an internal sum.
-    This statement uses the block-separation range displayed in that
-    theorem.
+    as asserted in
+    \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}
@@ -1638,12 +1649,12 @@ in both cases.
     The preceding theorem decomposes every vector on the left into periodic
     single-block components. The reverse inclusion follows because every
     periodic single-block vector is a periodic vector for the block-diagonal
-    tensor. Block separation gives independence of the open-boundary spaces.
+    tensor.
 \end{proof}
 
-\begin{corollary}[Periodic block-diagonal chain-space equality]
-    \label{cor:block_diagonal_chain_space_global_cut}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1}
+\begin{theorem}[Periodic block decomposition and block-space independence]
+    \label{thm:block_diagonal_chain_space_global_cut_independent}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut}
     Under the same hypotheses,
@@ -1651,22 +1662,25 @@ in both cases.
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
         =\sum_j\mathcal G_{N,L}(A_j).
     \]
-\end{corollary}
+    The open-boundary spaces $G_N(A_j)$ also form an internal sum.
+\end{theorem}
 
 \begin{proof}
     \leanok
-    This is the equality part of
-    Theorem~\ref{thm:block_diagonal_chain_space_global_cut}.
+    The equality is Theorem~\ref{thm:block_diagonal_chain_space_global_cut}.
+    The simultaneous product span at length $N$ separates the blockwise trace
+    representations and gives independence.
 \end{proof}
 
 \begin{corollary}[Kernel containment from the global cut]
     \label{cor:block_diagonal_kernel_global_cut}
-    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
-    \uses{cor:block_diagonal_chain_space_global_cut,
+    \uses{thm:block_diagonal_chain_space_global_cut,
         lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     Under the same hypotheses, suppose additionally that every periodic
-    single-block chain space is contained in its matrix-product-vector line.
+    single-block chain space is
+    contained in its matrix-product-vector line.
     Then
     \[
         \ker H_L^{(N)}\!\left(\bigoplus_j\mu_jA_j\right)

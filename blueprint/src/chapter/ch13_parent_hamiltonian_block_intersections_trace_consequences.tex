@@ -1192,6 +1192,37 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
     the displayed equality for all sufficiently large $n$.
 \end{proof}
 
+\begin{lemma}[Unitality propagates simultaneous product spans]
+    \label{lem:unital_simultaneous_product_span_propagation}
+    \lean{MPSTensor.wordTupleSpanTop_succ_of_unital}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_unital}
+    \leanok
+    Suppose that the length-$q$ simultaneous products span the product algebra,
+    \[
+        \spn\{(A^1_w,\ldots,A^r_w):|w|=q\}
+        =\prod_j\MN{D_j},
+    \]
+    and that every block satisfies
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I.
+    \]
+    Then the simultaneous products span the product algebra at every length
+    $n\ge q$. This homogeneous-length propagation is the normalization step
+    used in the direct-sum argument of
+    \cite[Lemma~3]{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Given matrices $M_j$, first represent the tuple
+    $((A^j_a)^\dagger M_j)_j$ by words of length $q$. Prefixing the letter $a$
+    and summing over $a$ gives
+    \[
+        \left(\sum_aA^j_aA^{j\,\dagger}_aM_j\right)_j=(M_j)_j.
+    \]
+    This proves the step from $q$ to $q+1$; induction gives every $n\ge q$.
+\end{proof}
+
 \begin{lemma}[Normalized block-separating equations give all large product spans]
     \label{lem:unital_block_separating_product_span}
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords}
@@ -1242,6 +1273,70 @@ length $n$ also makes the sum of the local spaces $G_n(A^j)$ direct.
     normalization propagates it to the lengths $L_0+1$ and $3(L_0+1)$.
     Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} then supplies the
     block-separating equations with $S=3(L_0+1)$.
+\end{proof}
+
+\begin{lemma}[Simultaneous product span at the source length]
+    \label{lem:pgvwc_product_span_source_length}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \leanok
+    \uses{lem:unital_simultaneous_product_span_propagation,
+        lem:bnt_direct_sum_block_separation_word_span}
+    Let $r\ge2$. Suppose that the normalized BNT blocks are injective at the
+    common length $L_0>0$ and satisfy
+    \[
+        \sum_aA^j_aA^{j\,\dagger}_a=I.
+    \]
+    For every
+    \[
+        n\ge 3(r-1)(L_0+1),
+    \]
+    one has
+    \[
+        \spn\{(A^1_w,\ldots,A^r_w):|w|=n\}
+        =\prod_j\MN{D_j}.
+    \]
+    Consequently the spaces $G_n(A^j)$ form an internal sum. This is the
+    simultaneous spanning estimate used in
+    \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:unital_simultaneous_product_span_propagation,
+        lem:bnt_direct_sum_block_separation_word_span}
+    The block-separation argument gives the full simultaneous span at
+    $q=3(r-1)(L_0+1)$. Lemma~\ref{lem:unital_simultaneous_product_span_propagation}
+    propagates this equality to every $n\ge q$. Nondegeneracy of the trace
+    pairing then separates the spaces $G_n(A^j)$.
+\end{proof}
+
+\begin{theorem}[Direct-sum restriction intersection at the source length]
+    \label{thm:pgvwc_direct_sum_intersection_source_length}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \leanok
+    \uses{lem:pgvwc_product_span_source_length}
+    Under the hypotheses of
+    Lemma~\ref{lem:pgvwc_product_span_source_length}, let
+    $m\ge3(r-1)(L_0+1)+1$. Then
+    \[
+        \C^d\otimes\left(\bigoplus_jG_m(A^j)\right)
+        \cap
+        \left(\bigoplus_jG_m(A^j)\right)\otimes\C^d
+        =
+        \bigoplus_jG_{m+1}(A^j).
+    \]
+    This is the direct-sum lemma in the proof of
+    \cite[Theorem~12, proof lines~1346--1456]{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc_product_span_source_length}
+    The simultaneous product span at length $m-1$ separates the blockwise trace
+    identities. The resulting boundary-matrix equations give membership in
+    $G_{m+1}(A^j)$ for each block. The reverse inclusion follows by splitting
+    a word of length $m+1$ at either endpoint.
 \end{proof}
 
 \begin{lemma}[Product span makes the sum of local spaces direct]

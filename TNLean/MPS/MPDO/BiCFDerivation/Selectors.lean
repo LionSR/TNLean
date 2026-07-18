@@ -217,6 +217,68 @@ theorem wordTupleSpanTop_add_of_wordTupleSpanTop
   rw [hSpanS]
   exact Submodule.mem_top
 
+/-- Right-canonical normalization propagates a full simultaneous word-tuple
+span by one site.
+
+If the length-$L$ word tuples span the full product matrix algebra, represent
+the tuple $j\mapsto (A^j_a)^\dagger M_j$ at that length, prepend $A^j_a$, and
+sum over $a$. The normalization
+$$
+  \sum_a A^j_a(A^j_a)^\dagger=I
+$$
+then recovers the arbitrary target tuple $M$ at length $L+1$.
+
+This is the homogeneous form of the padding used after the direct-sum lemma in
+arXiv:quant-ph/0608197, lines 1346--1421. -/
+theorem wordTupleSpanTop_succ_of_unital
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L : ℕ} (hSpan : WordTupleSpanTop A L)
+    (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1) :
+    WordTupleSpanTop A (L + 1) := by
+  classical
+  unfold WordTupleSpanTop at hSpan ⊢
+  apply top_unique
+  intro M _
+  have hN : ∀ a : Fin d,
+      (fun k : Fin r ↦ (A k a)ᴴ * M k) ∈
+        Submodule.span ℂ (Set.range (wordTuple A L)) := by
+    simp [hSpan]
+  have hLetter : ∀ a : Fin d,
+      wordTuple A 1 (fun _ ↦ a) ∈
+        Submodule.span ℂ (Set.range (wordTuple A 1)) :=
+    fun a ↦ Submodule.subset_span ⟨fun _ ↦ a, rfl⟩
+  have hProduct : ∀ a : Fin d,
+      (fun k : Fin r ↦
+        wordTuple A 1 (fun _ ↦ a) k * ((A k a)ᴴ * M k)) ∈
+          Submodule.span ℂ (Set.range (wordTuple A (1 + L))) :=
+    fun a ↦ pointwise_mul_mem_span_wordTuple_add A (hLetter a) (hN a)
+  have hSum : (∑ a : Fin d, fun k : Fin r ↦
+      wordTuple A 1 (fun _ ↦ a) k * ((A k a)ᴴ * M k)) ∈
+        Submodule.span ℂ (Set.range (wordTuple A (1 + L))) :=
+    Submodule.sum_mem _ fun a _ ↦ hProduct a
+  have hSumEq : (∑ a : Fin d, fun k : Fin r ↦
+      wordTuple A 1 (fun _ ↦ a) k * ((A k a)ᴴ * M k)) = M := by
+    funext k
+    rw [Finset.sum_apply]
+    simp only [wordTuple, List.ofFn_succ, List.ofFn_zero, evalWord_cons,
+      evalWord_nil, mul_one]
+    simp_rw [← Matrix.mul_assoc]
+    rw [← Finset.sum_mul, hUnital k, one_mul]
+  rw [hSumEq] at hSum
+  rw [Nat.add_comm 1 L] at hSum
+  exact hSum
+
+/-- Right-canonical normalization propagates a full simultaneous word-tuple
+span to every larger length. -/
+theorem wordTupleSpanTop_of_ge_of_unital
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L n : ℕ} (hSpan : WordTupleSpanTop A L)
+    (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1)
+    (hLn : L ≤ n) :
+    WordTupleSpanTop A n := by
+  exact Nat.le_induction hSpan
+    (fun m _ h ↦ wordTupleSpanTop_succ_of_unital A h hUnital) n hLn
+
 /-- A full homogeneous word-tuple span at one period extends any full base
 length along the arithmetic progression obtained by adding that period. -/
 theorem wordTupleSpanTop_add_mul_of_wordTupleSpanTop
