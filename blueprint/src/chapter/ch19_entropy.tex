@@ -1392,6 +1392,19 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{lemma}
 
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_sandwich}
+    Cyclicity of the trace and the defining property of the partial trace give
+    \[
+        \operatorname{tr}(\mathcal R_\sigma(X))
+        =\operatorname{tr}(\tau^{-1/2}_{\mathrm{supp}}
+          X\tau^{-1/2}_{\mathrm{supp}}\tau)
+        =\operatorname{tr}((\tau^{-1/2}_{\mathrm{supp}}
+          \tau\tau^{-1/2}_{\mathrm{supp}})X).
+    \]
+    The factor in parentheses is $P_\tau$.
+\end{proof}
+
 \begin{definition}[Complementary preparation term]
     \label{def:partial_trace_petz_complement}
     \lean{Matrix.partialTraceRightPetzComplementMap}
@@ -1435,6 +1448,18 @@ Theorem~\ref{thm:trace_norm_abs}.
         =\operatorname{tr}(Q_\tau X).
     \]
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:partial_trace_petz_complement}
+    Since $\operatorname{tr}(\omega_R)=\operatorname{tr}(\sigma)=1$ and
+    $Q_\tau^2=Q_\tau$, factorization and cyclicity of the trace give
+    \[
+        \operatorname{tr}(\mathcal C_\sigma(X))
+        =\operatorname{tr}(Q_\tau XQ_\tau)
+        =\operatorname{tr}(Q_\tau^2X)
+        =\operatorname{tr}(Q_\tau X).
+    \]
+\end{proof}
 
 \begin{definition}[Trace-preserving Petz channel for a partial trace]
     \label{def:partial_trace_petz_channel}
@@ -1485,6 +1510,14 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{theorem}
 
+\begin{proof}\leanok
+    \uses{def:partial_trace_petz_channel,
+        def:partial_trace_petz_complement}
+    The assumption implies $Q_\tau XQ_\tau=0$.  Hence
+    $\mathcal C_\sigma(X)=0$, and adding the complementary term to
+    $\mathcal R_\sigma(X)$ does not change its value.
+\end{proof}
+
 \begin{theorem}[The support Petz map recovers its reference]
     \label{thm:partial_trace_support_petz_map_reference_recovery}
     \lean{Matrix.partialTraceRightPetzMap_partialTraceRight}
@@ -1521,6 +1554,15 @@ Theorem~\ref{thm:trace_norm_abs}.
         \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\sigma)=\sigma.
     \]
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_support_petz_map_reference_recovery,
+        thm:partial_trace_petz_channel_supported_agreement}
+    The marginal satisfies
+    $P_\tau\tau P_\tau=\tau$.  Therefore the completed channel agrees with
+    the support Petz map at $\tau$, and the preceding recovery theorem gives
+    $\widehat{\mathcal R}_\sigma(\tau)=\sigma$.
+\end{proof}
 
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
