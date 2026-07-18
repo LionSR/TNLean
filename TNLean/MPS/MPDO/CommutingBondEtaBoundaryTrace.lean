@@ -36,7 +36,7 @@ namespace Matrix
 /-- An explicit rank-one trace factorization of a cyclic neighboring family:
 $\operatorname{tr}(\eta_{q,h})=a_qb_h$ and $\sum_q a_qb_q=1$.
 
-**Scope restriction (#3593):** this structure records the factorization as an
+**Scope restriction:** this structure records the factorization as an
 assumption; it does not derive it from zero correlation length.  This
 restriction is documented in
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
@@ -133,7 +133,7 @@ noncomputable def etaSeparatedBoundary {K : ℕ} (dl dr : Fin K → ℕ)
 \left(\sum_h b_h\operatorname{tr}_{R_h}(\eta_{h,l})\right).
 \]
 
-**Scope restriction (#3593):** the rank-one trace factorization is assumed.
+**Scope restriction:** the rank-one trace factorization is assumed.
 This theorem does not derive it from zero correlation length and does not
 assert a Markov decomposition or saturation of the area law.  This restriction
 is documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
@@ -193,7 +193,7 @@ $\eta_{q,h}$ and retains `Matrix.partialTraceRight` and
 `Matrix.partialTraceLeft` on the adjacent operators.  The notation at source
 line 1616 suppresses these two partial-trace symbols.
 
-**Scope restriction (#3593):** the theorem assumes
+**Scope restriction:** the theorem assumes
 $\operatorname{tr}(\eta_{q,h})=a_qb_h$ explicitly.  It neither proves the
 source replacement of a one-site marginal using zero correlation length nor
 formalizes Proposition `4to2`, a Markov decomposition, or saturation of the
