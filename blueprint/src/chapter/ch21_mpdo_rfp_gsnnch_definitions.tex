@@ -208,6 +208,32 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     injective.  The two isometry identities give the exact reconstruction.
 \end{proof}
 
+\begin{theorem}[SAL passes to the physical support restriction]
+    \label{thm:mpdo_physical_support_restriction_sal}
+    \lean{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}
+    \leanok
+    \uses{def:mpdo_physical_support_restriction}
+    If $K$ satisfies saturation of the area law and
+    $K=V K_P V^*$ is a physical support restriction, then the injective
+    restricted tensor $K_P$ also satisfies saturation of the area law.
+\end{theorem}
+
+\begin{proof}\leanok
+    On a chain of every positive length, the sitewise inclusion
+    $V^{\otimes N}$ is an isometry and
+    \[
+        \rho^{(N)}(K)
+        =V^{\otimes N}\rho^{(N)}(K_P)(V^{\otimes N})^*.
+    \]
+    The trace is therefore unchanged.  After a contiguous marginal is
+    taken, the isometry on the traced-out sites disappears, while the
+    isometry on the retained sites remains.  Thus every block marginal of
+    $K$ is an isometric conjugate of the corresponding marginal of $K_P$.
+    Their nonzero spectra, and hence their entropies and mutual
+    informations, coincide.  The consecutive equalities defining SAL for
+    $K$ consequently give those for $K_P$.
+\end{proof}
+
 \begin{definition}[Orthogonally supported commuting sector products]
     \label{def:mpdo_orthogonal_commuting_sector_family}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily}
