@@ -391,13 +391,15 @@ arrow syntax of such matrices.
 \thumbtag{\tnkey{maps}}%
 \cmdsig{\textbackslash tnarrow[\\
 \quad from=\{(r,c)\}, to=\{(r,c+1)\},\\
-\quad \meta{line type}]\{\meta{map}\}}
+\quad \meta{line type}, fused]\{\meta{map}\}}
 
 \noindent The line type is either \tnkey{role=} or \tnkey{species=}.
 The semantic roles are \tnval{operator}, \tnval{marked}, \tnval{extra},
 and \tnval{passive}; a species is a name declared by \tncmd{tnset}.
 Exactly one of these keys supplies the edge type.  The line is headless
 because its position on the composition axis already fixes the direction.
+The independent key \tnkey{fused} uses the doubled-line convention for a
+fused bond and may accompany either line type.
 The starred form puts the map's name below the line; it does not reverse the
 map.  The whole environment is a mathematical atom, so the same spelling
 belongs directly in running mathematics or in a displayed equation.  No
@@ -581,6 +583,12 @@ widths still apply, so a free picture matches its grid neighbours.
   \texttt{ring} & --- & policy & the glyph \\
 \texttt{ports=} & \texttt{\{side:kind,\ldots\}} & --- &
   typed ports, kinds \texttt{virtual} and \texttt{physical} \\
+\texttt{role=} & \meta{role} & --- &
+  \texttt{operator}, \texttt{marked}, \texttt{extra}, or
+  \texttt{passive}; determines the atom's hue \\
+\texttt{species=} & \meta{name} & --- &
+  hue of a species declared by \tncmd{tnset}; \texttt{role=} prevails if
+  both are present \\
 \texttt{label pos=} & \texttt{north|south|} \texttt{east|west} &
   auto & label side of a bead \\
 \bottomrule
@@ -602,6 +610,12 @@ widths still apply, so a free picture matches its grid neighbours.
   tangents of a \texttt{curve} route \\
 \texttt{label=} & \meta{math} & --- &
   label at the wire's midpoint \\
+\texttt{role=} & \meta{role} & --- &
+  \texttt{operator}, \texttt{marked}, \texttt{extra}, or
+  \texttt{passive}; determines the wire's hue \\
+\texttt{species=} & \meta{name} & --- &
+  hue of a species declared by \tncmd{tnset}; \texttt{role=} prevails if
+  both are present \\
 \texttt{fused} & --- & --- &
   doubled strand \\
 \texttt{dir} & --- & --- &

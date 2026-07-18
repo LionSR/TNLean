@@ -173,8 +173,8 @@ and proves that the product of the translated, locally decomposed bond is
 \), with $k_N=k_0$.  The length-two specialization is included: its two
 windows have the opposite cyclic orders $(0,1)$ and $(1,0)$.
 
-The tensor-power conjugation and positive realization scalar are now combined
-with this cyclic product.  The theorem
+The tensor-power conjugation and positive realization scalar are combined with
+this cyclic product.  The theorem
 \leanid{MPOTensor.EtaLocalStructureData.%
 exists_positive_cyclic_eta_block_decomposition}
 chooses the unitary, sector dimensions, and positive neighboring family once,
@@ -185,11 +185,68 @@ independently of the chain length, and proves for every $N\geq2$ that
     \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}},
   \qquad c_N>0,\qquad k_N=k_0.
 \]
-Thus the finite-chain equation \emph{sigmaNK2} is formalized.  This identity
-uses only the fixed commuting bond and its positive realization scalar.  It
-does not assert zero correlation length, rank-one trace factorization, a
-quantum Markov decomposition, saturation of the area law, or the proposition
-labelled \emph{4to2}.
+
+\paragraph{Local fix (proportionality scalar).}
+The converse argument at source lines~1603--1605 starts from the relation
+$\sigma^{(N)}(\mathcal K)\propto\prod_n B_{n,n+1}$ but invokes the
+coefficient-free equation \emph{sigmaNK2} without retaining the corresponding
+constant.  The formal theorem proves the proportionality-preserving identity
+displayed above.  It does not prove the coefficient-free equation printed at
+source lines~1581--1588.
+
+This omission cannot be repaired from the proportional commuting-bond form
+alone.  Take physical dimension $d=1$ and bond dimension $D=2$, with sole
+matrix-product letter $M^{00}=I_2$.  Then
+\[
+  \sigma^{(N)}=\operatorname{tr}(I_2^N)=2.
+\]
+The scalar two-site bond $B=1$ realizes this family with $c_N=2$ for every
+$N$.  Since the physical space is one-dimensional, any positive neighboring
+decomposition has a single one-dimensional sector and a single scalar
+$a\geq0$.  A coefficient-free identity for all $N\geq2$ would therefore give
+$a^2=2$ and $a^4=2$, which is impossible.  Thus a fixed local rescaling does
+not follow from the displayed proportionality data.
+
+The example is not a normal injective block.  It therefore does not contradict
+the source setting, but shows exactly which source hypothesis the missing
+argument must use.  For a normal injective single block, one must compare the
+matrix-product family with the fixed bond-product family and prove that its
+proportionality constants have the form
+\[
+  c_N=a^N
+\]
+for one $a>0$.  Only then can $a$ be absorbed once into the bond, or
+equivalently into the neighboring operators, independently of $N$.
+
+The scaled identity uses only the fixed commuting bond and its positive
+realization scalar.  It does not assert zero correlation length, rank-one trace
+factorization, a quantum Markov decomposition, saturation of the area law, or
+the proposition labelled \emph{4to2}.
+
+The fourth-region calculation after the cyclic identity requires a coordinate
+clarification.  Tracing one physical site of the length-$N$ cyclic eta product
+leaves a coupled sum of the right partial trace of
+$\eta_{k_{N-1},q}$ and the left partial trace of $\eta_{q,k_1}$:
+\[
+  \sum_q
+    \tr_{H_{q,l}}\!\left(\eta_{k_{N-1},q}\right)
+    \otimes
+    \tr_{H_{q,r}}\!\left(\eta_{q,k_1}\right).
+\]
+The same sector $q$ occurs in both factors, so rank-one factorization does not
+separate this into two independent sums.  Source line~1613 instead invokes
+ZCL to replace this marginal by a trace of two boundary sites on the
+length-$(N+1)$ chain.  In edge coordinates the middle operator
+$\eta_{q,h}$ is then fully traced, while the two adjacent operators retain
+their right and left partial traces.  The displayed formula at source
+line~1616 suppresses these partial-trace symbols.
+
+The conditional algebraic identity after this replacement is formalized by
+\leanid{Matrix.eta_fourth_region_trace_formula}.  It assumes
+$\operatorname{tr}(\eta_{q,h})=a_qb_h$ and separates the two boundary sums.
+It does not prove the ZCL replacement of the one-site marginal, derive the
+rank-one factorization, construct a quantum Markov decomposition, or prove
+SAL.
 
 There is a separate obstruction at source line~1613.  The phrase ``arguing as
 in Lemmas \emph{propSN} and \emph{SALZCL}'' does not show that source ZCL alone
@@ -232,6 +289,12 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
+\item Restore the normal injective single-block hypothesis in the comparison
+between the matrix-product family and the fixed bond-product family.  Prove the
+proportional fundamental-theorem scalar law $c_N=a^N$ for one $a>0$, and absorb
+$a$ into the bond or neighboring operators.  The counterexample above shows
+that the generic proportional commuting-bond data cannot supply this law; this
+normalization problem is tracked in \ghissue{4253}.
 \item Resolve \ghissue{3593} by finding a source-faithful property of the
 actual neighboring family which excludes the nilpotent zero-eigenspace, or
 replace the printed line-1613 argument by a direct Markov decomposition which

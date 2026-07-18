@@ -403,6 +403,36 @@ boundary conditions (PBC).
     statements keep the block-scaling factors explicit.
 \end{remark}
 
+\begin{lemma}[Gauge-phase equivalence across equal bond dimensions]
+    \label{lem:gauge_phase_equiv_cast_compose}
+    \lean{MPSTensor.gaugePhaseEquiv_swap_cast,
+        MPSTensor.gaugePhaseEquiv_cast_compose_via_centre}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    Gauge-phase equivalence is symmetric after identifying equal bond
+    dimensions. Moreover, suppose that $A$, $B$, and $C$ have identified bond
+    dimensions, that $X_1$ and $X_2$ are invertible, that
+    $\zeta_1,\zeta_2\ne0$, and that
+    \[
+        B^i=\zeta_1X_1A^iX_1^{-1},
+        \qquad
+        C^i=\zeta_2X_2A^iX_2^{-1}
+    \]
+    for every physical index $i$. Then
+    \[
+        C^i=(\zeta_2\zeta_1^{-1})(X_2X_1^{-1})
+            B^i(X_1X_2^{-1}),
+    \]
+    so $B$ and $C$ are gauge-phase equivalent after the corresponding
+    identification of their bond dimensions.
+\end{lemma}
+
+\begin{proof}\leanok
+    Symmetry follows by replacing $(X,\zeta)$ with
+    $(X^{-1},\zeta^{-1})$. The displayed identity follows by substituting the
+    first gauge formula into the second.
+\end{proof}
+
 \begin{lemma}[Gauge covariance of word evaluation]\label{lem:eval_word_gauge}
     \lean{MPSTensor.evalWord_gauge}
     \leanok

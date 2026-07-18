@@ -487,6 +487,20 @@
       }
   }
 
+% One scalar test serves rows and columns of both endpoints.  The caller
+% retains their source-row, target-row, source-column, target-column order,
+% so even a rejected map reports the same complete diagnostic sequence.
+\cs_new_protected:Npn \tenkz_cd_check_map_coordinate:nnnn #1#2#3#4
+  {
+    \bool_lazy_or:nnT
+      { \int_compare_p:nNn {#3} < {1} }
+      { \int_compare_p:nNn {#3} > {#4} }
+      {
+        \PackageError{tenkz}{Typed-map~#1=#2~is~outside~the~matrix}{}
+        \bool_set_false:N \l__tenkzcd_mapvalid_bool
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_cd_map_style:nnnN #1#2#3#4
   {
     \str_if_eq:nnTF {#1} {1}
@@ -520,26 +534,14 @@
       \l__tenkzcd_torow_int \l__tenkzcd_tocol_int
     \bool_if:NT \l__tenkzcd_mapvalid_bool
       {
-        \bool_lazy_or:nnT
-          { \int_compare_p:nNn {\l__tenkzcd_fromrow_int} < {1} }
-          { \int_compare_p:nNn {\l__tenkzcd_fromrow_int} > {\l__tenkzcd_maprows_int} }
-          { \PackageError{tenkz}{Typed-map~from=#1~is~outside~the~matrix}{}
-            \bool_set_false:N \l__tenkzcd_mapvalid_bool }
-        \bool_lazy_or:nnT
-          { \int_compare_p:nNn {\l__tenkzcd_torow_int} < {1} }
-          { \int_compare_p:nNn {\l__tenkzcd_torow_int} > {\l__tenkzcd_maprows_int} }
-          { \PackageError{tenkz}{Typed-map~to=#2~is~outside~the~matrix}{}
-            \bool_set_false:N \l__tenkzcd_mapvalid_bool }
-        \bool_lazy_or:nnT
-          { \int_compare_p:nNn {\l__tenkzcd_fromcol_int} < {1} }
-          { \int_compare_p:nNn {\l__tenkzcd_fromcol_int} > {\l__tenkzcd_mapcols_int} }
-          { \PackageError{tenkz}{Typed-map~from=#1~is~outside~the~matrix}{}
-            \bool_set_false:N \l__tenkzcd_mapvalid_bool }
-        \bool_lazy_or:nnT
-          { \int_compare_p:nNn {\l__tenkzcd_tocol_int} < {1} }
-          { \int_compare_p:nNn {\l__tenkzcd_tocol_int} > {\l__tenkzcd_mapcols_int} }
-          { \PackageError{tenkz}{Typed-map~to=#2~is~outside~the~matrix}{}
-            \bool_set_false:N \l__tenkzcd_mapvalid_bool }
+        \tenkz_cd_check_map_coordinate:nnnn
+          {from}{#1}{\l__tenkzcd_fromrow_int}{\l__tenkzcd_maprows_int}
+        \tenkz_cd_check_map_coordinate:nnnn
+          {to}{#2}{\l__tenkzcd_torow_int}{\l__tenkzcd_maprows_int}
+        \tenkz_cd_check_map_coordinate:nnnn
+          {from}{#1}{\l__tenkzcd_fromcol_int}{\l__tenkzcd_mapcols_int}
+        \tenkz_cd_check_map_coordinate:nnnn
+          {to}{#2}{\l__tenkzcd_tocol_int}{\l__tenkzcd_mapcols_int}
       }
     \bool_if:NT \l__tenkzcd_mapvalid_bool
       {
