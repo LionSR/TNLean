@@ -209,10 +209,11 @@
         $\;=\;\displaystyle\bigoplus_\alpha\;$
         \begin{tenkzfree}
             \tnput[box]{mu}{(10mm,7mm)}{\mu_\alpha}
-            \tnput[box]{M}{(34mm,0mm)}{M_\alpha}
+            \tnput[box, ports={west:virtual, east:virtual, north:physical,
+                south:physical, 158:physical}]{M}{(34mm,0mm)}{M_\alpha}
             \tnput[dot]{d1}{(0mm,7mm)}{}
             \tnput[dot]{d2}{(20mm,7mm)}{}
-            \tnput[dot]{d3}{(20mm,2mm)}{}
+            \tnput[dot, ports={east:physical}]{d3}{(d2 |- M.158)}{}
             \tnjoin{$(d1)+(0mm,5mm)$}{$(d1)+(0mm,-19mm)$}
             \tnjoin{$(d2)+(0mm,5mm)$}{$(d2)+(0mm,-19mm)$}
             \tnjoin{$(M.west)+(-10mm,0mm)$}{M.west}
@@ -221,7 +222,7 @@
             \tnjoin{M.south}{$(M.south)+(0mm,-7mm)$}
             \tnjoin{d1}{mu.west}
             \tnjoin{d2}{mu.east}
-            \tnjoin{d3}{$(M.west)+(0mm,1.2mm)$}
+            \tnjoin{d3.east}{M.158}
         \end{tenkzfree}
     \caption{Vertical direct-sum form of the tensor: after the physical
     isometry $U$, each block factorizes as the positive diagonal weight
