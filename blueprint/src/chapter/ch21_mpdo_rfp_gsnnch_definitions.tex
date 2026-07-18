@@ -234,6 +234,28 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $K$ consequently give those for $K_P$.
 \end{proof}
 
+\begin{theorem}[The restricted commuting bond has a supported lift]
+    \label{thm:mpdo_physical_support_restriction_bond}
+    \lean{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_liftedBond_supported}
+    \leanok
+    \uses{thm:mpdo_physical_support_restriction_sal}
+    Let $K=V K_P V^*$ be a physical support restriction of an MPO tensor
+    satisfying SAL.  Proposition~C.8 applied to the injective tensor $K_P$
+    gives a positive two-site bond $B_P$.  Its lift
+    $B=V^{\otimes 2}B_P(V^{\otimes 2})^*$ is positive and satisfies
+    \[
+        (P\otimes P)B(P\otimes P)=B.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The preceding theorem gives SAL for the injective restricted tensor, so
+    Proposition~C.8 supplies its positive bond.  Since $V^*V=1$, positivity
+    is preserved under conjugation by $V^{\otimes 2}$.  Moreover,
+    $V^{\otimes 2}(V^{\otimes 2})^*=P\otimes P$; multiplying the lifted bond
+    by this projection on either side therefore leaves it unchanged.
+\end{proof}
+
 \begin{definition}[Orthogonally supported commuting sector products]
     \label{def:mpdo_orthogonal_commuting_sector_family}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily}
