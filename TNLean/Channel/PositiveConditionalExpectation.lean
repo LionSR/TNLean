@@ -104,6 +104,230 @@ theorem extractRightFactorMap_one_kronecker
   ext i j
   simp [hFix]
 
+/-- For a positive matrix in the left factor, positivity and the retraction property force
+the induced action on the right factor to be a scalar multiple of the identity map.
+
+This is the rank-one order argument in the proof of Wolf, Proposition 1.5. -/
+theorem exists_extractRightFactorMap_kronecker_eq_smul_of_posSemidef
+    (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ)
+    (hE : IsPositiveMap E)
+    (hFix : ∀ X : Matrix (Fin d) (Fin d) ℂ,
+      E ((1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X) =
+        (1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X)
+    (Y : Matrix (Fin m) (Fin m) ℂ) (hY : Y.PosSemidef) :
+    ∃ c : ℂ, ∀ X : Matrix (Fin d) (Fin d) ℂ,
+      extractRightFactorMap E (Y ⊗ₖ X) = c • X := by
+  classical
+  let T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ :=
+    { toFun := fun X ↦ extractRightFactorMap E (Y ⊗ₖ X)
+      map_add' := by
+        intro X Z
+        simp [Matrix.kronecker_add]
+      map_smul' := by
+        intro c X
+        simp [Matrix.kronecker_smul] }
+  have hT : ∀ v : Fin d → ℂ, ∃ c : ℂ,
+      T (Matrix.vecMulVec v (star v)) =
+        c • Matrix.vecMulVec v (star v) := by
+    intro v
+    let P : Matrix (Fin d) (Fin d) ℂ := Matrix.vecMulVec v (star v)
+    have hP : P.PosSemidef := Matrix.posSemidef_vecMulVec_self_star v
+    have hYP : (Y ⊗ₖ P).PosSemidef := hY.kronecker hP
+    have hOut : (T P).PosSemidef := by
+      exact extractRightFactorMap_posSemidef E hE (Y ⊗ₖ P) hYP
+    have hBound :
+        (Y.trace • (1 : Matrix (Fin m) (Fin m) ℂ) - Y).PosSemidef :=
+      hY.trace_smul_one_sub_self_posSemidef
+    have hNeg : (-Y) ⊗ₖ P = -(Y ⊗ₖ P) := by
+      rw [show -Y = (-1 : ℂ) • Y by simp, Matrix.smul_kronecker]
+      simp
+    have hInputDiff :
+        ((Y.trace • (1 : Matrix (Fin m) (Fin m) ℂ)) ⊗ₖ P - Y ⊗ₖ P).PosSemidef := by
+      simpa [sub_eq_add_neg, Matrix.add_kronecker, Matrix.smul_kronecker, hNeg] using
+        hBound.kronecker hP
+    have hOutputDiff := extractRightFactorMap_posSemidef E hE _ hInputDiff
+    have hDom : T P ≤ Y.trace • P := by
+      rw [Matrix.le_iff]
+      simpa [T, Matrix.smul_kronecker,
+        extractRightFactorMap_one_kronecker E hFix] using hOutputDiff
+    obtain ⟨c, _, hc⟩ :=
+      Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec hOut v hDom
+    exact ⟨c, hc⟩
+  obtain ⟨c, hc⟩ := WolfProps.exists_eq_smul_id_of_maps_rankOne_to_span T hT
+  refine ⟨c, fun X ↦ ?_⟩
+  have hApply := LinearMap.congr_fun hc X
+  simpa [T] using hApply
+
+/-- If the extracted action has scalar form on every rank-one positive matrix in the
+left factor, then it has scalar form on every left-factor matrix.
+
+The extension uses the rank-one polarization identity from Wolf, Proposition 2.2. -/
+theorem extractRightFactorMap_kronecker_eq_smul_of_rankOne
+    (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ)
+    (f : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] ℂ)
+    (hRankOne : ∀ (v : Fin m → ℂ) (X : Matrix (Fin d) (Fin d) ℂ),
+      extractRightFactorMap E (Matrix.vecMulVec v (star v) ⊗ₖ X) =
+        f (Matrix.vecMulVec v (star v)) • X)
+    (Y : Matrix (Fin m) (Fin m) ℂ) (X : Matrix (Fin d) (Fin d) ℂ) :
+    extractRightFactorMap E (Y ⊗ₖ X) = f Y • X := by
+  classical
+  let L : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ :=
+    { toFun := fun Z ↦ extractRightFactorMap E (Z ⊗ₖ X)
+      map_add' := by
+        intro Z W
+        simp [Matrix.add_kronecker]
+      map_smul' := by
+        intro c Z
+        simp [Matrix.smul_kronecker] }
+  have hOuter (u v : Fin m → ℂ) :
+      L (Matrix.vecMulVec u (star v)) =
+        f (Matrix.vecMulVec u (star v)) • X := by
+    have hPolarization := WolfProps.vecMulVec_star_eq_polarization u v
+    have hL :
+        (4 : ℂ) • L (Matrix.vecMulVec u (star v)) =
+          L (Matrix.vecMulVec (u + v) (star (u + v))) -
+              L (Matrix.vecMulVec (u - v) (star (u - v))) +
+            Complex.I • L (Matrix.vecMulVec (u + Complex.I • v)
+              (star (u + Complex.I • v))) -
+            Complex.I • L (Matrix.vecMulVec (u - Complex.I • v)
+              (star (u - Complex.I • v))) := by
+      simpa only [map_smul, map_sub, map_add] using congrArg L hPolarization
+    have hf :
+        (4 : ℂ) • f (Matrix.vecMulVec u (star v)) =
+          f (Matrix.vecMulVec (u + v) (star (u + v))) -
+              f (Matrix.vecMulVec (u - v) (star (u - v))) +
+            Complex.I • f (Matrix.vecMulVec (u + Complex.I • v)
+              (star (u + Complex.I • v))) -
+            Complex.I • f (Matrix.vecMulVec (u - Complex.I • v)
+              (star (u - Complex.I • v))) := by
+      simpa only [map_smul, map_sub, map_add] using congrArg f hPolarization
+    have hLRankOne (w : Fin m → ℂ) :
+        L (Matrix.vecMulVec w (star w)) =
+          f (Matrix.vecMulVec w (star w)) • X := by
+      exact hRankOne w X
+    rw [hLRankOne (u + v), hLRankOne (u - v),
+      hLRankOne (u + Complex.I • v), hLRankOne (u - Complex.I • v)] at hL
+    have hFour :
+        (4 : ℂ) • L (Matrix.vecMulVec u (star v)) =
+          (4 : ℂ) • (f (Matrix.vecMulVec u (star v)) • X) := by
+      rw [hL]
+      calc
+        _ = ((4 : ℂ) • f (Matrix.vecMulVec u (star v))) • X := by
+          rw [hf]
+          module
+        _ = (4 : ℂ) • (f (Matrix.vecMulVec u (star v)) • X) := by
+          simp [smul_smul, smul_eq_mul]
+    exact smul_right_injective _ (by norm_num : (4 : ℂ) ≠ 0) hFour
+  change L Y = f Y • X
+  refine Matrix.induction_on' Y ?_ ?_ ?_
+  · simp
+  · intro Z W hZ hW
+    rw [map_add, map_add, hZ, hW, add_smul]
+  · intro i j c
+    have hSingle : (Matrix.single i j c : Matrix (Fin m) (Fin m) ℂ) =
+        c • Matrix.vecMulVec (Pi.single i 1) (star (Pi.single j 1)) := by
+      have hStar : (star (Pi.single j (1 : ℂ)) : Fin m → ℂ) = Pi.single j 1 := by
+        ext k
+        simp [Pi.single_apply, Pi.star_apply]
+      rw [hStar]
+      rw [← Matrix.single_eq_single_vecMulVec_single (i := i) (j := j)]
+      ext k l
+      simp [Matrix.single_apply]
+    rw [hSingle, map_smul, map_smul, hOuter, smul_smul]
+    simp [smul_eq_mul]
+
+section NontrivialRightFactor
+
+variable [NeZero d]
+
+/-- The left-factor functional associated with a conditional expectation is obtained by
+testing its right-factor action on one fixed rank-one coordinate projection.
+
+This is the normalized functional appearing in the proof of Wolf, Proposition 1.5. -/
+noncomputable def conditionalExpectationLeftFunctional
+    (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ) :
+    Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] ℂ where
+  toFun Y := extractRightFactorMap E
+    (Y ⊗ₖ Matrix.single (0 : Fin d) 0 1) 0 0
+  map_add' Y Z := by
+    simp [Matrix.add_kronecker]
+  map_smul' c Y := by
+    simp [Matrix.smul_kronecker]
+
+@[simp]
+theorem conditionalExpectationLeftFunctional_apply
+    (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ)
+    (Y : Matrix (Fin m) (Fin m) ℂ) :
+    conditionalExpectationLeftFunctional E Y =
+      extractRightFactorMap E (Y ⊗ₖ Matrix.single (0 : Fin d) 0 1) 0 0 :=
+  rfl
+
+/-- The left-factor functional of a positive conditional expectation is positive. -/
+theorem conditionalExpectationLeftFunctional_nonneg
+    (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ)
+    (hE : IsPositiveMap E) (Y : Matrix (Fin m) (Fin m) ℂ)
+    (hY : Y.PosSemidef) :
+    (0 : ℂ) ≤ conditionalExpectationLeftFunctional E Y := by
+  let P : Matrix (Fin d) (Fin d) ℂ := Matrix.single 0 0 1
+  have hP : P.PosSemidef := by
+    have hSingle : P = Matrix.vecMulVec (Pi.single (0 : Fin d) (1 : ℂ))
+        (star (Pi.single (0 : Fin d) (1 : ℂ))) := by
+      ext i j
+      by_cases hi : i = 0 <;> by_cases hj : j = 0 <;>
+        simp [P, Matrix.vecMulVec_apply, hi, hj, eq_comm]
+    rw [hSingle]
+    exact Matrix.posSemidef_vecMulVec_self_star _
+  have hOut := extractRightFactorMap_posSemidef E hE (Y ⊗ₖ P) (hY.kronecker hP)
+  simpa [conditionalExpectationLeftFunctional, P] using
+    (Matrix.PosSemidef.diag_nonneg hOut (i := (0 : Fin d)))
+
+/-- The left-factor functional of a retraction fixing $1_m\otimes M_d(\mathbb C)$ is
+normalized. -/
+theorem conditionalExpectationLeftFunctional_one
+    (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ)
+    (hFix : ∀ X : Matrix (Fin d) (Fin d) ℂ,
+      E ((1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X) =
+        (1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X) :
+    conditionalExpectationLeftFunctional E 1 = 1 := by
+  have h := extractRightFactorMap_one_kronecker E hFix
+    (Matrix.single (0 : Fin d) 0 1)
+  exact congrFun (congrFun h 0) 0
+
+/-- On every simple tensor, the extracted right factor is multiplication by the
+left-factor functional.
+
+This is the scalar-factor conclusion in the proof of Wolf, Proposition 1.5. -/
+theorem extractRightFactorMap_kronecker_eq_functional_smul
+    (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ)
+    (hE : IsPositiveMap E)
+    (hFix : ∀ X : Matrix (Fin d) (Fin d) ℂ,
+      E ((1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X) =
+        (1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X)
+    (Y : Matrix (Fin m) (Fin m) ℂ) (X : Matrix (Fin d) (Fin d) ℂ) :
+    extractRightFactorMap E (Y ⊗ₖ X) =
+      conditionalExpectationLeftFunctional E Y • X := by
+  apply extractRightFactorMap_kronecker_eq_smul_of_rankOne
+    E (conditionalExpectationLeftFunctional E)
+  intro v Z
+  let P : Matrix (Fin m) (Fin m) ℂ := Matrix.vecMulVec v (star v)
+  have hP : P.PosSemidef := Matrix.posSemidef_vecMulVec_self_star v
+  obtain ⟨c, hc⟩ :=
+    exists_extractRightFactorMap_kronecker_eq_smul_of_posSemidef E hE hFix P hP
+  have hCoefficient : c = conditionalExpectationLeftFunctional E P := by
+    have hEntry := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ ↦ M 0 0)
+      (hc (Matrix.single (0 : Fin d) 0 1))
+    simpa [conditionalExpectationLeftFunctional, Matrix.single_apply] using hEntry.symm
+  rw [hc Z, hCoefficient]
+
+end NontrivialRightFactor
+
 /-- A scalar action on simple tensors determines the extracted map on every matrix as a
 weighted partial trace.
 
@@ -170,5 +394,35 @@ theorem exists_density_of_scalar_action
   refine ⟨ρ, hρ, hρtrace, fun A ↦ ?_⟩
   rw [eq_one_kronecker_extractRightFactorMap E hRange A]
   rw [extractRightFactorMap_eq_weighted_partialTrace E f ρ hRepresentation hScalar A]
+
+/-- A positive linear retraction onto $1_m\otimes M_d(\mathbb C)$ is a weighted partial
+trace on the left factor, followed by the canonical embedding of the right factor.
+
+More precisely, there is a positive semidefinite matrix $\rho$ of trace one such that
+\[
+  E(A)=1_m\otimes
+    \operatorname{tr}_m\bigl((\rho\otimes 1_d)A\bigr).
+\]
+This is the one-factor case of Wolf, Proposition 1.5 and Equation (1.40). -/
+theorem exists_density_of_positive_retraction_onto_right_factor [NeZero d]
+    (E : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ)
+    (hE : IsPositiveMap E)
+    (hRange : ∀ A, ∃ X : Matrix (Fin d) (Fin d) ℂ,
+      E A = (1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X)
+    (hFix : ∀ X : Matrix (Fin d) (Fin d) ℂ,
+      E ((1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X) =
+        (1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ X) :
+    ∃ ρ : Matrix (Fin m) (Fin m) ℂ, ρ.PosSemidef ∧ ρ.trace = 1 ∧
+      ∀ A : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ,
+        E A = (1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ
+          Matrix.partialTraceLeft
+            ((ρ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) * A) := by
+  let f := conditionalExpectationLeftFunctional E
+  apply exists_density_of_scalar_action E hRange f
+  · intro Y hY
+    exact conditionalExpectationLeftFunctional_nonneg E hE Y hY
+  · exact conditionalExpectationLeftFunctional_one E hFix
+  · exact extractRightFactorMap_kronecker_eq_functional_smul E hE hFix
 
 end Matrix
