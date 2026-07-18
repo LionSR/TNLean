@@ -264,7 +264,7 @@ jobs:
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
         run: |
-          find blueprint/src tex/tn -name '*.tex' -not -path '*/Packages/*' -print0 \
+          find blueprint/src tex/tn tex/tenkz/examples -name '*.tex' -not -path '*/Packages/*' -print0 \
             | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
       # TODO: drop continue-on-error after a separate mechanical PR has run
@@ -281,7 +281,7 @@ jobs:
               echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
               status=1
             fi
-          done < <(find blueprint/src tex/tn -name '*.tex' -not -path '*/Packages/*')
+          done < <(find blueprint/src tex/tn tex/tenkz/examples -name '*.tex' -not -path '*/Packages/*')
           exit $status
 
       - name: Build blueprint bibliography
