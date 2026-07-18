@@ -568,9 +568,17 @@
     Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts the uniform estimate
     $I_L \le 4\log D$ for every MPDO. Its cited proof, however, treats mixed
     tensor-network states obtained from local completely positive maps
-    \cite{Wolf2008AreaLaws}: after purifying those maps, data processing bounds
-    their mutual information by that of a pure state across the virtual
-    boundary. A general positive MPO need not admit this local purification.
+    \cite{Wolf2008AreaLaws}. After purifying those maps, data processing and
+    the pure-state boundary estimate give
+    \[
+        I(A:B)_{\rho}
+        \le I(A:B)_{\lvert\Psi\rangle\langle\Psi\rvert}
+        =2S(A)_{\lvert\Psi\rangle\langle\Psi\rvert}
+        \le 2\lvert\partial A\rvert\log D.
+    \]
+    A periodic one-dimensional interval has two boundary bonds, and hence the
+    last expression is $4\log D$. A general positive MPO need not admit this
+    local purification.
 
     The two virtual bonds do give an operator-Schmidt decomposition with at most
     $D^2$ terms, but they do not bound the ordinary rank of either marginal.
