@@ -389,14 +389,14 @@
       def:mpdo_faithful_uniform_density}
     For every sector pair define
     \[
-        \mathcal H_{k,h}^{\Omega}
+        \mathcal H^{\Omega}_{k,h}
         =\bigoplus_l
           (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L),
         \qquad
         \overline\Omega_{k,h}=
         \begin{cases}
           \widehat\Omega_{k,h},&a_kb_h\ne0,\\
-          \tau_{\mathcal H_{k,h}^{\Omega}},&a_kb_h=0,
+          \tau_{\mathcal H^{\Omega}_{k,h}},&a_kb_h=0,
         \end{cases}
         \qquad
         \overline{\mathcal T}_{k,h}(X)
@@ -437,7 +437,7 @@
     while on the inactive branch,
     \[
       a_kb_h=0\Longrightarrow
-      \overline\Omega_{k,h}=\tau_{\mathcal H_{k,h}^{\Omega}}\succ0,
+      \overline\Omega_{k,h}=\tau_{\mathcal H^{\Omega}_{k,h}}\succ0,
       \quad \tr(\overline\Omega_{k,h})=1.
     \]
     The state-preparation result therefore applies to
@@ -985,7 +985,8 @@ $\mathcal S_0$ discard coherences between distinct outer summands and take the
 displayed partial trace in each diagonal summand. In particular,
 $\mathcal S_0$ traces the whole space
 \[
-  \bigoplus_l
+  \mathcal H^{\Omega}_{k,h}
+  =\bigoplus_l
   \bigl[(R_k\otimes L_l)\otimes(R_l\otimes L_h)\bigr].
 \]
 The shifts $\mathcal S_2$ and $\mathcal T_2$ are global reindexings, with all
@@ -996,8 +997,8 @@ For every $(k,h)$, the four fiberwise maps are
 % T_0 : R_2 -> L_k tensor R_h traces R_k tensor L_h.
 % S_2 : (L_k tensor R_h) tensor (R_k tensor L_h) -> R_2 is the inverse
 % regrouping.  S_0 : R_3 -> L_k tensor R_h traces the whole middle block
-% Omega_{k,h} = bigoplus_l (R_k tensor L_l) tensor (R_l tensor L_h).
-% T_2 : (L_k tensor R_h) tensor Omega_{k,h} -> R_3 restores the ordered
+% H^Omega_{k,h} = bigoplus_l (R_k tensor L_l) tensor (R_l tensor L_h).
+% T_2 : (L_k tensor R_h) tensor H^Omega_{k,h} -> R_3 restores the ordered
 % three-site sector factors.  Blue line ink denotes a channel; labels
 % distinguish the four maps.  The endpoints are sector spaces, so these
 % strokes are maps between objects rather than contracted tensor indices.
@@ -1006,7 +1007,7 @@ For every $(k,h)$, the four fiberwise maps are
     \mathfrak R_2 & L_k\otimes R_h \\
     (L_k\otimes R_h)\otimes(R_k\otimes L_h) & \mathfrak R_2 \\
     \mathfrak R_3 & L_k\otimes R_h \\
-    (L_k\otimes R_h)\otimes\Omega_{k,h} & \mathfrak R_3
+    (L_k\otimes R_h)\otimes\mathcal H^{\Omega}_{k,h} & \mathfrak R_3
     \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
     \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]{\mathcal S_2}
     \tnarrow[from={(3,1)}, to={(3,2)}, species=channel]{\mathcal S_0}
