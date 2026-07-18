@@ -229,16 +229,21 @@ theorem IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage
       (gaugePhaseEquiv_swap_cast hdim₁.symm hGE₁)
       (gaugePhaseEquiv_swap_cast hdim₂.symm hGE₂)
   choose f hdimF hGEF using hMatch₁
+  have rebase₂ :
+      ∀ (l l' : Fin g₂) (_hll : l = l') {j : Fin g₁}
+        (hdim : dim₁ j = dim₂ l')
+        (hGE : GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor d) hdim) (basis₁ j)) (basis₂ l')),
+        ∃ hdim' : dim₁ j = dim₂ l,
+          GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) hdim') (basis₁ j)) (basis₂ l) := by
+    rintro _ _ rfl _ hdim hGE
+    exact ⟨hdim, hGE⟩
   have hf : Function.Injective f := by
     intro j k hjk
     by_contra hne
-    have hTransport (l : Fin g₂) (hkl : f k = l) :
-        ∃ hdim : dim₁ k = dim₂ l,
-          GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) hdim) (basis₁ k)) (basis₂ l) := by
-      subst l
-      exact ⟨hdimF k, hGEF k⟩
-    obtain ⟨hdimK, hGEK⟩ := hTransport (f j) hjk.symm
+    obtain ⟨hdimK, hGEK⟩ :=
+      rebase₂ (f j) (f k) hjk (hdimF k) (hGEF k)
     apply hBNT₁.blocks_not_gaugePhaseEquiv j k hne
       ((hdimF j).trans hdimK.symm)
     simpa using gaugePhaseEquiv_cast_compose_via_centre
@@ -264,16 +269,21 @@ theorem IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage
       (gaugePhaseEquiv_swap_cast hdim₂.symm hGE₂)
       (gaugePhaseEquiv_swap_cast hdim₁.symm hGE₁)
   choose q hdimQ hGEQ using hMatch₂
+  have rebase₁ :
+      ∀ (l l' : Fin g₁) (_hll : l = l') {j : Fin g₂}
+        (hdim : dim₂ j = dim₁ l')
+        (hGE : GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor d) hdim) (basis₂ j)) (basis₁ l')),
+        ∃ hdim' : dim₂ j = dim₁ l,
+          GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) hdim') (basis₂ j)) (basis₁ l) := by
+    rintro _ _ rfl _ hdim hGE
+    exact ⟨hdim, hGE⟩
   have hq : Function.Injective q := by
     intro j k hjk
     by_contra hne
-    have hTransport (l : Fin g₁) (hkl : q k = l) :
-        ∃ hdim : dim₂ k = dim₁ l,
-          GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) hdim) (basis₂ k)) (basis₁ l) := by
-      subst l
-      exact ⟨hdimQ k, hGEQ k⟩
-    obtain ⟨hdimK, hGEK⟩ := hTransport (q j) hjk.symm
+    obtain ⟨hdimK, hGEK⟩ :=
+      rebase₁ (q j) (q k) hjk (hdimQ k) (hGEQ k)
     apply hBNT₂.blocks_not_gaugePhaseEquiv j k hne
       ((hdimQ j).trans hdimK.symm)
     simpa using gaugePhaseEquiv_cast_compose_via_centre
