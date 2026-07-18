@@ -188,7 +188,7 @@ noncomputable def toBNTAlgebraTensorClause : BNTAlgebraTensorClause M where
 /-- The chosen decomposition in a tensor-attached fusion clause is a vertical
 canonical form of the underlying MPO tensor. -/
 theorem isVerticalCF : IsVerticalCF M :=
-  H.toBNTAlgebraTensorClause.isVerticalCF
+  BNTAlgebraTensorClause.isVerticalCF H.toBNTAlgebraTensorClause
 
 end BNTFusionTensorClause
 
