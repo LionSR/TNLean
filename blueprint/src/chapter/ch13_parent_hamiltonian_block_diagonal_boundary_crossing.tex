@@ -1451,6 +1451,237 @@ in both cases.
     \]
 \end{proof}
 
+\begin{definition}[Cyclic translation of configurations]
+    \label{def:parent_cyclic_translate_configuration}
+    \lean{MPSTensor.cyclicTranslateCfg}
+    \leanok
+    For a periodic configuration $\sigma$ on $N$ sites and $s\in\mathbb Z/N\mathbb Z$,
+    define
+    \[
+        (T_s\sigma)(k)=\sigma(k+s).
+    \]
+\end{definition}
+
+\begin{definition}[Cyclic translation of states]
+    \label{def:parent_cyclic_translate_state}
+    \lean{MPSTensor.cyclicTranslateState}
+    \leanok
+    For a state $\psi$ on a periodic chain, define
+    \[
+        (T_s\psi)(\sigma)=\psi(T_s\sigma).
+    \]
+\end{definition}
+
+\begin{lemma}[Cyclic translation preserves the periodic chain space]
+    \label{lem:parent_cyclic_translate_preserves_chain_space}
+    \lean{MPSTensor.cyclicTranslateState_mem_chainGroundSpace}
+    \leanok
+    \uses{def:parent_cyclic_translate_configuration,
+        def:parent_cyclic_translate_state}
+    If $\psi\in\mathcal G_{N,L}(A)$, then
+    $T_s\psi\in\mathcal G_{N,L}(A)$ for every cyclic translation $s$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A length-$L$ interval of $T_s\psi$ beginning at $i$ is the corresponding
+    interval of $\psi$ beginning at $i-s$, with the outside configuration
+    translated by $s$.
+\end{proof}
+
+\begin{lemma}[Translation exchanges the two words at a cut]
+    \label{lem:parent_cyclic_translate_append}
+    \lean{MPSTensor.cyclicTranslateCfg_fin_append}
+    \leanok
+    \uses{def:parent_cyclic_translate_configuration}
+    If $\beta$ has length $K$ and $\alpha$ has positive length $S$, then
+    \[
+        T_K(\beta\alpha)=\alpha\beta
+    \]
+    as configurations on the periodic chain of length $K+S$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is addition modulo $K+S$, separated according to whether the site
+    lies before or after the cut.
+\end{proof}
+
+\begin{lemma}[Comparison across a global cut]
+    \label{lem:block_boundary_intertwiner_from_global_cut}
+    \lean{MPSTensor.block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq}
+    \leanok
+    \uses{def:parent_cyclic_translate_state,
+        lem:parent_cyclic_translate_append,
+        lem:block_matrices_equal_from_trace_pairings}
+    Let $X_j,Y_j\in\MN{D_j}$, and suppose
+    \[
+        T_K\!\left(\sum_j\Gamma_{K+S}^{A_j}(X_j)\right)
+        =\sum_j\Gamma_{K+S}^{A_j}(Y_j).
+    \]
+    If the simultaneous block words of length $K$ span
+    $\prod_j\MN{D_j}$, then, for every block $j$ and every word $\alpha$ of
+    length $S$,
+    \[
+        X_jA^j_\alpha=A^j_\alpha Y_j.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Evaluate the translated equality on the word $\beta\alpha$, where
+    $|\beta|=K$. Cyclicity of the trace gives
+    \[
+        \sum_j\operatorname{tr}(X_jA^j_\alpha A^j_\beta)
+        =
+        \sum_j\operatorname{tr}(A^j_\alpha Y_jA^j_\beta).
+    \]
+    The simultaneous spanning hypothesis separates the blocks and gives the
+    asserted matrix identities.
+\end{proof}
+
+\begin{theorem}[A global change of cut gives periodic single-block states]
+    \label{thm:block_diagonal_boundary_periodic_components_from_global_cut}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:unital_block_separating_product_span,
+        lem:parent_cyclic_translate_preserves_chain_space,
+        lem:block_boundary_intertwiner_from_global_cut,
+        lem:block_diagonal_boundary_component_right_boundary_matrices}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
+    addition that $L+L_0\le N$. Thus this statement is in the currently proved
+    block-separation range
+    \[
+        (L_0+1)+3(g-1)(L_0+1)+1\le L,
+    \]
+    rather than the sharper length range in the source theorem. Let
+    % Scope restriction documented in
+    % docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex; issue #4195.
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+    No simultaneous spanning assumption is imposed at the short crossing
+    tails.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:unital_block_separating_product_span,
+        lem:parent_cyclic_translate_preserves_chain_space,
+        lem:block_boundary_intertwiner_from_global_cut,
+        lem:block_diagonal_boundary_component_right_boundary_matrices}
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} gives boundary
+    matrices $X_j$. Translate the periodic state so that the cut moves past
+    the final $L_0$ sites, and apply the same lemma again to obtain boundary
+    matrices $Y_j$ for the translated state. For a word $\alpha$ of length
+    $L_0$, comparison of the two decompositions against every complementary
+    word $w$ of length $N-L_0$ gives
+    \[
+        \sum_j\operatorname{tr}
+        \bigl((\mu_j^NX_j)A^j_\alpha A^j_w\bigr)
+        =
+        \sum_j\operatorname{tr}
+        \bigl(A^j_\alpha(\mu_j^NY_j)A^j_w\bigr).
+    \]
+    The length bound and
+    Lemma~\ref{lem:unital_block_separating_product_span} imply that the
+    simultaneous products of length $N-L_0$ span the product algebra.
+    Hence, block by block,
+    \[
+        (\mu_j^NX_j)A^j_\alpha
+        =A^j_\alpha(\mu_j^NY_j).
+    \]
+    Since the words of length $L_0$ span each block matrix algebra, evaluation
+    at the identity gives
+    \[
+        \mu_j^NX_j=\mu_j^NY_j.
+    \]
+    The preceding relation therefore says that $\mu_j^NX_j$ commutes with every
+    word of length $L_0$, and consequently with every one-site matrix. The boundary
+    condition may then be moved across every interval crossing the cut, which
+    places each block component in its periodic chain space. This is the
+    change-of-cut argument of
+    \cite[Theorem~12, proof lines~1276--1289 and 1454--1456]{PerezGarcia2007Matrix}.
+\end{proof}
+
+\begin{theorem}[Periodic block decomposition from a global cut]
+    \label{thm:block_diagonal_chain_space_global_cut}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1}
+    \leanok
+    \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
+        lem:bnt_block_diagonal_boundary_representation_equality}
+    Under the hypotheses of
+    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_global_cut},
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+        =\sum_j\mathcal G_{N,L}(A_j),
+    \]
+    and the open-boundary spaces $G_N(A_j)$ form an internal sum.
+    This statement uses the block-separation range displayed in that
+    theorem.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The preceding theorem decomposes every vector on the left into periodic
+    single-block components. The reverse inclusion follows because every
+    periodic single-block vector is a periodic vector for the block-diagonal
+    tensor. Block separation gives independence of the open-boundary spaces.
+\end{proof}
+
+\begin{corollary}[Periodic block-diagonal chain-space equality]
+    \label{cor:block_diagonal_chain_space_global_cut}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1}
+    \leanok
+    \uses{thm:block_diagonal_chain_space_global_cut}
+    Under the same hypotheses,
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+        =\sum_j\mathcal G_{N,L}(A_j).
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    This is the equality part of
+    Theorem~\ref{thm:block_diagonal_chain_space_global_cut}.
+\end{proof}
+
+\begin{corollary}[Kernel containment from the global cut]
+    \label{cor:block_diagonal_kernel_global_cut}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1}
+    \leanok
+    \uses{cor:block_diagonal_chain_space_global_cut,
+        lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    Under the same hypotheses, suppose additionally that every periodic
+    single-block chain space is contained in its matrix-product-vector line.
+    Then
+    \[
+        \ker H_L^{(N)}\!\left(\bigoplus_j\mu_jA_j\right)
+        \subseteq
+        \operatorname{span}\{V^{(N)}(A_j):1\le j\le g\}.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    The parent-Hamiltonian kernel is the periodic chain space. Apply the
+    preceding block decomposition and then the assumed single-block
+    containments.
+\end{proof}
+
 \begin{lemma}[Matrix identities give periodic single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}
