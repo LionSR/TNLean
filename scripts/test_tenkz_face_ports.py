@@ -211,6 +211,20 @@ SOURCE = r"""
   \tn[pill, wide=2, down at={1,2}]{U} & \\
   \tn{L_1} & \tn{L_2}
 \end{tenkz}
+\begin{tenkz}[rows={wire}, tensor style=box]
+  \tn[up at=center, down at=center]{A}
+\end{tenkz}
+\begin{tenkz}[rows={op}, tensor style=box]
+  \tn[pill, wide=2, up at={1,1,3}, down at={2,2,0}]{A} &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic, tensor style=box]
+  \tn[wires=2, west at={1,2}, east at={1}]{A}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic, trace style=hooks, tensor style=box]
+  \tn[wires=2, west at={1,2}, east at={1}]{A}\\
+  &
+\end{tenkz}
 \end{document}
 """
 
@@ -295,8 +309,8 @@ def main() -> int:
     legacy = pictures[3]
     require(legacy, "faceports|picture=3|cell=1-1|face=up|arity=2|at=1,2",
             "legacy upper-face arity changed")
-    require(legacy, "faceports|picture=3|cell=1-1|face=down|arity=2|at=1,2",
-            "legacy lower-face arity changed")
+    forbid(legacy, "faceports|picture=3|cell=1-1|face=down|arity=2|at=1,2",
+           "legacy key emitted an inactive lower face")
 
     zipper = pictures[4]
     require(zipper, "faceports|picture=4|cell=1-4|face=west|arity=1|at=center",
@@ -317,8 +331,8 @@ def main() -> int:
     override = pictures[6]
     require(override, "faceports|picture=6|cell=1-1|face=up|arity=1|at=center",
             "explicit face did not override legacy alias")
-    require(override, "faceports|picture=6|cell=1-1|face=down|arity=2|at=1,2",
-            "legacy alias stopped supplying the other face")
+    forbid(override, "faceports|picture=6|cell=1-1|face=down|arity=2|at=1,2",
+           "legacy alias emitted an inactive lower face")
     default_fuse = pictures[7]
     require(default_fuse, "faceports|picture=7|cell=1-1|face=west|arity=1|at=center",
             "bare fuse did not emit its centred face")
@@ -379,7 +393,7 @@ def main() -> int:
     )
     asymmetric_trace = pictures[13]
     require(asymmetric_trace,
-            "warning|code=phtrace-face-ports|cell=1-1",
+            "warning|picture=13|code=phtrace-face-ports|cell=1-1",
             "asymmetric physical trace was not rejected")
     forbid(asymmetric_trace,
            "phtrace|picture=13|row=1|col=1",
@@ -450,7 +464,7 @@ def main() -> int:
            "sparse virtual face acquired a port in its omitted row")
     pair_trace = pictures[21]
     require(pair_trace,
-            "warning|code=pair-trace-face-ports|cell=1-1",
+            "warning|picture=21|code=pair-trace-face-ports|cell=1-1",
             "multi-port pair trace was not rejected")
     forbid(pair_trace,
            "pairtrace|picture=21|row=1|col=1",
@@ -481,7 +495,7 @@ def main() -> int:
            "single-wire centred face was mistaken for combined=")
     physical_pair_trace = pictures[25]
     require(physical_pair_trace,
-            "warning|code=pair-trace-face-ports|cell=1-1",
+            "warning|picture=25|code=pair-trace-face-ports|cell=1-1",
             "multi-port physical-column trace was not rejected")
     forbid(physical_pair_trace,
            "pairtrace|picture=25|row=1|col=1",
@@ -656,7 +670,7 @@ def main() -> int:
         suppressed_trace = pictures[picture_id]
         require(
             suppressed_trace,
-            f"warning|code=pair-trace-face-ports|cell=1-1",
+            f"warning|picture={picture_id}|code=pair-trace-face-ports|cell=1-1",
             "pair trace did not reject a suppressed physical face",
         )
         forbid(
@@ -671,6 +685,80 @@ def main() -> int:
         partial_wide_open,
         "boundary|picture=46|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
         "wide open= did not retain exactly the addressed upper and lower slots",
+    )
+    inactive_physical = pictures[47]
+    forbid(
+        inactive_physical,
+        "faceports|picture=47|cell=1-1|face=up|arity=1|at=center",
+        "wire-row tensor emitted an inactive upper face",
+    )
+    forbid(
+        inactive_physical,
+        "faceports|picture=47|cell=1-1|face=down|arity=1|at=center",
+        "wire-row tensor emitted an inactive lower face",
+    )
+    require(
+        inactive_physical,
+        "boundary|picture=47|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
+        "inactive physical keys changed the boundary signature",
+    )
+    normalized_physical = pictures[48]
+    require(
+        normalized_physical,
+        "faceports|picture=48|cell=1-1|face=up|arity=1|at=1",
+        "duplicate or out-of-span upper slots survived normalization",
+    )
+    require(
+        normalized_physical,
+        "faceports|picture=48|cell=1-1|face=down|arity=1|at=2",
+        "duplicate or out-of-span lower slots survived normalization",
+    )
+    require(
+        normalized_physical,
+        "boundary|picture=48|virtual-west=1|virtual-east=1|physical-up=1|physical-down=1",
+        "normalized physical slots disagree with the boundary signature",
+    )
+    sparse_periodic = pictures[49]
+    require(
+        sparse_periodic,
+        "trace|picture=49|row=1|side=above",
+        "periodic closure omitted the row with two endpoint ports",
+    )
+    forbid(
+        sparse_periodic,
+        "trace|picture=49|row=2|side=below",
+        "periodic closure joined a row with a suppressed endpoint",
+    )
+    require(
+        sparse_periodic,
+        "warning|picture=49|code=periodic-face-ports|row=2",
+        "sparse periodic endpoint was not reported",
+    )
+    require(
+        sparse_periodic,
+        "boundary|picture=49|virtual-west=1|virtual-east=0|physical-up=0|physical-down=0",
+        "unmatched periodic endpoint did not remain open",
+    )
+    sparse_hooks = pictures[50]
+    require(
+        sparse_hooks,
+        "hooks|picture=50|row=1|side=above",
+        "hook closure omitted the row with two endpoint ports",
+    )
+    forbid(
+        sparse_hooks,
+        "hooks|picture=50|row=2|side=below",
+        "hook closure joined a row with a suppressed endpoint",
+    )
+    require(
+        sparse_hooks,
+        "warning|picture=50|code=periodic-face-ports|row=2",
+        "sparse hook endpoint was not reported",
+    )
+    require(
+        sparse_hooks,
+        "boundary|picture=50|virtual-west=1|virtual-east=0|physical-up=0|physical-down=0",
+        "unmatched hook endpoint did not remain open",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
