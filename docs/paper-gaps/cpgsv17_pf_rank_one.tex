@@ -337,6 +337,93 @@ common bond space.  Their membership in corresponding members of an
 independent family of subspaces --- or their independence by another argument
 --- therefore does not follow from the displayed equations alone.
 
+\subsection{Virtual spanning does not eliminate the nilpotent part}
+
+Injectivity gives more than primitivity in the present formal development:
+the sector virtual matrices span the full virtual matrix algebra.  This
+additional conclusion still does not imply the idempotence of the opposite
+product.  Consider
+\[
+ L=\begin{pmatrix}
+  \tfrac16&\tfrac16&\tfrac13&\tfrac13\\
+  0&\tfrac16&\tfrac16&-\tfrac13
+ \end{pmatrix},
+ \qquad
+ Q=\begin{pmatrix}
+  1&1\\ 1&1\\ 1&-1\\ 1&0
+ \end{pmatrix}.
+\]
+Writing $l_k$ for the $k$th column of $L$ and $r_k$ for the $k$th row of
+$Q$, direct multiplication gives
+\[
+ LQ=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+ \qquad
+ T=QL=\begin{pmatrix}
+  \tfrac16&\tfrac13&\tfrac12&0\\
+  \tfrac16&\tfrac13&\tfrac12&0\\
+  \tfrac16&0&\tfrac16&\tfrac23\\
+  \tfrac16&\tfrac16&\tfrac13&\tfrac13
+ \end{pmatrix}.
+\]
+The square of $T$ is
+\[
+ T^2=\begin{pmatrix}
+  \tfrac16&\tfrac16&\tfrac13&\tfrac13\\
+  \tfrac16&\tfrac16&\tfrac13&\tfrac13\\
+  \tfrac16&\tfrac16&\tfrac13&\tfrac13\\
+  \tfrac16&\tfrac16&\tfrac13&\tfrac13
+ \end{pmatrix}.
+\]
+Thus $T$ is primitive, $\operatorname{tr}(T)=1$, $T^2=T^3$, and
+$T\ne T^2$.  Equivalently, the exact missing expression is nonzero:
+\[
+ Q(1-LQ)L=T-T^2\ne0.
+\]
+Moreover, the four matrices $l_k r_k$ span $M_2(\mathbb R)$.  For example,
+after vectorizing them in the order $(11,12,21,22)$, the determinant of the
+resulting four-by-four matrix is $1/108$.  Consequently full virtual spanning
+does not exclude the generalized zero-eigenspace.
+
+This example is realized at the level of physical slices by the diagonal
+matrix product operator tensor
+\[
+ K^{ij}=\delta_{ij}\,l_i r_i.
+\]
+Its doubled-index tensor is injective because the four nonzero slices span
+$M_2(\mathbb C)$, and its physical-trace transfer is
+\(
+ \sum_i K^{ii}=LQ
+\),
+so it satisfies source zero correlation length.  These assertions, together
+with primitivity, trace normalization, the spanning identity, and the nonzero
+nilpotent remainder, are proved in
+\path{TNLean/Archive/PerronFrobeniusVirtualSpanningCounterexample.lean}.
+\footnote{\sloppy Combined formal declaration:
+{\scriptsize\leanid{TNLean.Archive.PerronFrobeniusVirtualSpanningCounterexample.injective_sourceZCL_tensor_with_nilpotent_sector_pairing}}.}
+
+The construction does not yet identify $L$ and $Q$ with the particular closed
+tensors selected from a Hayashi decomposition by
+\leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization}.
+This distinction is essential.  The present entropy interface derives a
+Hayashi decomposition from SAL and proves SAL from explicitly supplied local
+renormalization channels, but it does not provide a converse criterion for a
+classical diagonal tensor of the form above.  Thus neither SAL for this tensor
+nor the required inverse-map provenance is asserted by the formal
+counterexample.  It is not a counterexample to the full statement of
+Lemma~C.5.
+
+The obstruction instead proves that every presently exported algebraic
+consequence---source ZCL, injectivity, primitivity, trace normalization,
+rectangular pairing idempotence, constant positive-power traces, and full
+virtual spanning---is insufficient.  A source-faithful completion must derive
+an additional identity from SAL and from the provenance of the inverse-map
+tensors.  In the notation above, the needed assertion is precisely
+\[
+ Q(1-LQ)L=0,
+\]
+or any equivalent statement excluding the nilpotent generalized
+zero-eigenspace of $QL$.
+
 \section{A positive-semidefinite route}
 
 The formal development proves a corrected sufficient matrix theorem. Let $T$
