@@ -42,7 +42,7 @@ variable {d : ℕ}
 The virtual index is a ket--bra pair.  At a site with physical pair `(i,j)`,
 the incoming virtual pair is forced to be `(i,j)` and the outgoing pair
 records the physical indices at the following site.  Closing the virtual
-trace therefore leaves exactly one virtual configuration.
+trace therefore leaves exactly one potentially nonzero virtual configuration.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1581--1589. -/
