@@ -528,22 +528,6 @@ theorem singleKrausMap_embedLocalOperator_eq_range_mul_lift
     htwo, Matrix.one_mul]
   simp
 
-/-- The product of a sitewise tensor power with its conjugate transpose is the
-sitewise tensor power of the corresponding one-site product. -/
-theorem sitewisePhysicalMatrix_mul_conjTranspose
-    (V : Matrix (Fin d) (Fin e) ℂ) (N : ℕ) :
-    sitewisePhysicalMatrix V N * (sitewisePhysicalMatrix V N)ᴴ =
-      sitewisePhysicalMatrix (V * Vᴴ) N := by
-  classical
-  ext s t
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    sitewisePhysicalMatrix, star_prod]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin e)))
-    (fun n a ↦ V (s n) a * star (V (t n) a))]
-
 /-- Conjugation by a one-site unitary tensor power carries a complete periodic
 bond product to the product of the conjugated two-site bonds.
 
