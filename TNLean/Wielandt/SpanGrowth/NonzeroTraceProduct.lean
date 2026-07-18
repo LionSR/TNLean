@@ -377,7 +377,7 @@ theorem exists_nonzero_trace_word_sharp [NeZero D]
 
 /-! ### Positive-length nonzero trace word
 
-For D ≥ 2, the positive-length word products alone span M_D(ℂ) within the
+For positive `D`, the positive-length word products alone span M_D(ℂ) within the
 sharp bound. This gives a positive-length word with nonzero trace, which is
 needed for the blocking argument in Theorem 1 case (1).
 
@@ -539,7 +539,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
             rw [Module.finrank_matrix, Fintype.card_fin,
               Module.finrank_self, mul_one]; ring
     -- We need to show the dimension grows to D²
-    -- If bound ≥ 1 (which it is when D ≥ 2 and r ≤ D²):
+    -- The bound is positive because `D` is positive and `r ≤ D²`:
     have hbound_pos : 1 ≤ bound := by omega
     -- Growth: either V reaches ⊤ (dim D²) or grows step by step
     suffices h : ∀ k, k ≤ D ^ 2 - r →

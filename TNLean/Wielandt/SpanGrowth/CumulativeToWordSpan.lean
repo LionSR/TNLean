@@ -235,9 +235,10 @@ theorem cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one
 /-- **Main theorem**: if `cumulativeSpan A N = ⊤` and `1 ∈ wordSpan A 1`
 (aperiodicity), then `IsNormal A`.
 
-**Proof**: By monotonicity of word spans (from `1 ∈ wordSpan A 1`),
-`cumulativeSpan A N = wordSpan A N`. So `wordSpan A N = ⊤`, giving
-`IsNBlkInjective A N`, hence `IsNormal A`. -/
+**Proof**: By monotonicity of cumulative spans and the hypothesis at level `N`,
+`cumulativeSpan A (N + 1) = ⊤`. Monotonicity of word spans, which follows from
+`1 ∈ wordSpan A 1`, identifies this with `wordSpan A (N + 1)`. Hence
+`IsNBlkInjective A (N + 1)`, and the positive witness `N + 1` gives `IsNormal A`. -/
 theorem isNormal_of_cumulativeSpan_eq_top_of_aperiodic
     (A : MPSTensor d D) {N : ℕ}
     (hcs : cumulativeSpan A N = ⊤)

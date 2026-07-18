@@ -334,12 +334,12 @@ For any `IsNormal` MPS tensor `A` with `[NeZero D]`, there exists `N` such that
 
 This combines the rank-one extraction with the blocked fixed-length matrix spanning theorem.
 
-- When `N₀ = 0`: `wordSpan A 0 = ⊤` directly.
-- When `N₀ ≥ 1`: writing `B := blockTensor A N₀`, the rank-one extraction gives
+Writing `B := blockTensor A N₀` for the positive normality witness `N₀`, the rank-one
+extraction gives
   `vecMulVec φ ψ ∈ wordSpan B (D + N₀ + D)`, where the middle `N₀` is the
   blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked
-  fixed-length matrix spanning then
-  produces `wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
+fixed-length matrix spanning then produces
+`wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
 
 The bound `N = (4D - 2 + N₀) * N₀` is coarse. -/
 theorem wielandt_lemma2b [NeZero D]

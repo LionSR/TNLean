@@ -111,8 +111,13 @@ theorem rfp_nt_structural (A : MPSTensor d D)
   exact le_antisymm le_top htop_le
 
 /-- Appendix B precursor without a separate nonzero side condition:
-for a left-canonical normal RFP tensor, the one-site Kraus span is already all of `M_D(ℂ)`. -/
-theorem rfp_nt_structural_of_leftCanonical [DecidableEq (Fin D)] [NeZero D]
+for a left-canonical normal RFP tensor, the one-site Kraus span is already all of `M_D(ℂ)`.
+
+The left-canonical hypothesis is retained because this is the specialization stated in
+arXiv:1606.00608, Appendix B. The stronger theorem `rfp_nt_structural` shows that the
+normalization is not needed for this implication. Decidable equality is needed only to state
+the matrix identity in the normalization. -/
+theorem rfp_nt_structural_of_leftCanonical [DecidableEq (Fin D)]
     (A : MPSTensor d D)
     (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
     (_hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :

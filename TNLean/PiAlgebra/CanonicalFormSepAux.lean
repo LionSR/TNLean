@@ -200,7 +200,8 @@ structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   mu_ne_zero : ∀ k, μ k ≠ 0
   /-- Every normal block has positive bond-space dimension.
 
-  Source: CPSV16, definition `eq:II_CF1`, lines 238--243. -/
+  This positivity is implicit in the normal-block decomposition of CPSV16,
+  equation `II_CF1`, lines 238--243. -/
   dim_pos : ∀ k, 0 < dim k
   /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
 

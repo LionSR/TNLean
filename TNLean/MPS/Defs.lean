@@ -365,9 +365,10 @@ def IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop :=
 /-- Normality means eventual block injectivity at a positive length:
 there exists `N ≥ 1` such that the tensor is `N`-block-injective.
 
-The positivity condition excludes the empty word, whose value is the identity
-independently of the tensor.  Source: Sanz--Pérez-García--Wolf--Cirac,
-arXiv:0909.5347, definition following equation (1). -/
+Here the witness is required to be positive in order to exclude the empty word,
+whose value is the identity independently of the tensor. This is consistent with
+the positive word lengths used by Sanz--Pérez-García--Wolf--Cirac,
+arXiv:0909.5347, in the definition following equation (1). -/
 def IsNormal (A : MPSTensor d D) : Prop :=
   ∃ N : ℕ, 0 < N ∧ IsNBlkInjective (d := d) (D := D) A N
 
