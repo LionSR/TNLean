@@ -154,14 +154,6 @@ def toBNTFusionIsometryFamily : BNTFusionIsometryFamily (Fin H.labelCount) D whe
   isometry := H.isometry
   fusion := H.fusion
 
-/-- The chosen decomposition in a tensor-attached fusion clause is a vertical
-canonical form of the underlying MPO tensor. -/
-theorem isVerticalCF {N : MPOTensor d D} (G : BNTFusionTensorClause N) :
-    IsVerticalCF N :=
-  ⟨G.labelCount, G.bondDim, G.multiplicity, G.weight, G.tensor,
-    G.verticalCoisometry, G.multiplicity_pos, G.weight_pos, G.coisometry,
-    G.isBNT, G.forward, G.reconstruction⟩
-
 /-- **Tensor-attached implication (iii) to (ii) of Theorem 4.14.**
 
 The fusion isometries for the BNT tensors in a chosen vertical canonical
@@ -192,6 +184,11 @@ noncomputable def toBNTAlgebraTensorClause : BNTAlgebraTensorClause M where
   coeffs := BNTLabelCoefficientFamily.ofChi H.chi
   algebraClause := H.toBNTFusionIsometryFamily.toBNTAlgebraClause
     (verticalBNTTraceScalarFamily H.weight) H.idempotent
+
+/-- The chosen decomposition in a tensor-attached fusion clause is a vertical
+canonical form of the underlying MPO tensor. -/
+theorem isVerticalCF : IsVerticalCF M :=
+  H.toBNTAlgebraTensorClause.isVerticalCF
 
 end BNTFusionTensorClause
 
