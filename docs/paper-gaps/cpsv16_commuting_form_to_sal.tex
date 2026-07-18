@@ -87,12 +87,36 @@ substitute for the proposition labelled \emph{4to2}.
 
 \section{Unformalized implication}
 
-The abstract Wedderburn--Artin decomposition already available in
-\leanid{StarSubalgebra.exists_algEquiv_pi_matrix} does not provide the spatial
-unitary tensor-factor decomposition required by the Bravyi--Vyalyi lemma.
-The file \path{TNLean/Algebra/StarSubalgebraSpatial.lean} proves orthogonal
-reducibility, but explicitly records the remaining isotypic tensor
-identification and unitary construction.
+The finite-dimensional $C^*$-algebra part of the Bravyi--Vyalyi argument is
+now available.  For a star-subalgebra $S\subseteq\mathbf L(H_B)$, one
+orthonormal identification
+\[
+  H_B\cong\bigoplus_{\beta}
+  H_{\beta_l}\otimes H_{\beta_r}
+\]
+simultaneously puts $S$ in
+$\bigoplus_\beta\mathbf 1_{\beta_l}\otimes
+\mathbf L(H_{\beta_r})$ and its commutant in
+$\bigoplus_\beta\mathbf L(H_{\beta_l})\otimes
+\mathbf 1_{\beta_r}$.
+This complementary action is
+\leanid{StarSubalgebra.exists_complementary_action_orthonormalBasis}.
+
+The coefficient passage in Beigi's proof is now also available.  Fixing the
+outer indices produces middle-site matrices $X_{aa'}$ and $Y_{cc'}$;
+commutation of the two overlapping operators implies
+$[X_{aa'},Y_{cc'}]=0$ for all outer indices.  Applying the complementary-action
+theorem to the star-commutant of the $Y_{cc'}$ gives one orthonormal
+decomposition on which all $X_{aa'}$ and $Y_{cc'}$ act on complementary
+factors.  This is
+\leanid{Matrix.exists_middle_spatial_decomposition_of_overlappingLifts_commute}.
+
+The remaining part of the exact statement of Beigi's Lemma~2.1 is the final
+assembly: construct the unitary from this orthonormal basis, combine the
+coefficient matrices into the operators $R_{A\beta_l}$ and
+$S_{\beta_rC}$, and prove the two block-sum equalities printed in the source.
+No additional mathematical hypothesis is needed for this assembly, but those
+operator equalities have not yet been stated in the formal development.
 
 Consequently the source implication
 \[
@@ -114,15 +138,12 @@ restriction that isolates only its final entropy-theoretic step.
 
 \section{Elimination plan}
 
-The gap can be removed in three stages.
+The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Complete the spatial finite-dimensional $C^*$-algebra theorem: construct
-the unitary decomposition
-$\mathcal H_B\cong\bigoplus_\beta
-\mathcal H_{\beta_l}\otimes\mathcal H_{\beta_r}$ and prove the complementary
-actions of a star-subalgebra and its commutant.
-\item Apply it to the two overlapping translates of the single bond in
+\item Assemble the completed coefficient decomposition into the unitary
+block-sum equalities for $X_{AB}$ and $Y_{BC}$ printed in Beigi's Lemma~2.1.
+\item Apply that lemma to the two overlapping translates of the single bond in
 \leanid{MPOTensor.EtaLocalStructureData}, obtaining the translation-invariant
 neighboring operators $\eta_{k,h}$ without assuming a Hayashi decomposition.
 Use \leanid{MPOTensor.IsSourceZCL} to prove the rank-one trace factorization

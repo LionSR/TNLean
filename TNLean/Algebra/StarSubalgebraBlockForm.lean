@@ -33,6 +33,9 @@ all such operators, hence lies in $S$.
 * `StarSubalgebra.mem_of_forall_comm` -- membership through the double commutant: a matrix
   whose operator commutes with every endomorphism commuting with the subalgebra is a member
   of the subalgebra.
+* `StarSubalgebra.exists_complementary_action_orthonormalBasis` -- one adapted orthonormal
+  basis simultaneously puts a star-subalgebra on the irreducible tensor factors and its
+  commutant on the complementary multiplicity factors.
 * `StarSubalgebra.exists_unitary_conj_blockDiagonal_iff` -- the full block form: a unitary
   $U$ such that membership in $S$ is equivalent to $U^{\dagger} A U$ being block diagonal
   with blocks $\mathbf{1}_{m_k} \otimes B_k$.
@@ -259,6 +262,44 @@ private theorem exists_commutant_coeff
   rw [Finset.sum_eq_single_of_mem k (Finset.mem_univ k) houter]
   refine Finset.sum_congr rfl fun i' _ => ?_
   simp only [hγ, ite_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+
+/-- **Complementary spatial actions of a star-subalgebra and its commutant.** Let `S` be a
+star-subalgebra of complex matrices. There is an orthonormal basis
+`(f_{k,i,j})`, with positive multiplicity dimensions `m k` and irreducible dimensions
+`d k`, such that every member of `S` acts on the `j` index, identically across `i`, while
+every matrix commuting with all members of `S` acts on the `i` index, identically across
+`j`:
+$$
+ A f_{k,i,j} = \sum_{j'} (B_k)_{j'j} f_{k,i,j'}, \qquad
+ T f_{k,i,j} = \sum_{i'} (C_k)_{i'i} f_{k,i',j}.
+$$
+Thus the same orthonormal identification realizes the complementary block algebras
+`\bigoplus_k (\mathbf 1_{m_k} \otimes M_{d_k})` and
+`\bigoplus_k (M_{m_k} \otimes \mathbf 1_{d_k})`.
+
+This is the finite-dimensional star-algebra step in the proof of the Bravyi--Vyalyi
+spatial decomposition; see S. Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), proof on
+pages 2--3. -/
+theorem exists_complementary_action_orthonormalBasis :
+    ∃ (K : ℕ) (d m : Fin K → ℕ)
+      (b : OrthonormalBasis ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ
+        (EuclideanSpace ℂ n)),
+      (∀ k, 0 < d k) ∧ (∀ k, 0 < m k) ∧
+        (∀ A ∈ S, ∃ B : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ,
+          ∀ (k : Fin K) (i : Fin (m k)) (j : Fin (d k)),
+            Matrix.toEuclideanLin A (b ⟨k, (i, j)⟩) =
+              ∑ j', B k j' j • b ⟨k, (i, j')⟩) ∧
+        ∀ T : Matrix n n ℂ, (∀ A ∈ S, T * A = A * T) →
+          ∃ C : ∀ k, Matrix (Fin (m k)) (Fin (m k)) ℂ,
+            ∀ (k : Fin K) (i : Fin (m k)) (j : Fin (d k)),
+              Matrix.toEuclideanLin T (b ⟨k, (i, j)⟩) =
+                ∑ i', C k i' i • b ⟨k, (i', j)⟩ := by
+  classical
+  obtain ⟨K, d, m, b, hd, hm, hirr, hcross, hact⟩ := S.exists_adapted_orthonormalBasis
+  refine ⟨K, d, m, b, hd, hm, hact, fun T hT ↦ ?_⟩
+  apply exists_commutant_coeff S hirr hcross hact
+  intro A hA x
+  simp only [Matrix.toEuclideanLin, Matrix.toLpLin_apply, Matrix.mulVec_mulVec, hT A hA]
 
 end RowTransport
 
