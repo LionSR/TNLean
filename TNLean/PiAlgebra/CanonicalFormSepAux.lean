@@ -179,8 +179,9 @@ end HasNormalizedSelfOverlap
 
 /-! ### Canonical form conditions -/
 
-/-- Canonical-form conditions combining injectivity, left-canonical normalization
-`∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weight data, and overlap normalization.
+/-- Canonical-form conditions combining injectivity, positive bond dimensions,
+left-canonical normalization `∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weights `μₖ`,
+and overlap normalization.
 
 Source context: arXiv:1606.00608, eq. `II_CF1` and lines 237--246, and
 arXiv:2011.12127, lines 1831--1836. The weight ordering is `Antitone`
@@ -197,6 +198,11 @@ structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
+  /-- Every normal block has positive bond-space dimension.
+
+  This positivity is implicit in the normal-block decomposition of CPSV16,
+  equation `II_CF1`, lines 238--243. -/
+  dim_pos : ∀ k, 0 < dim k
   /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
 
   In the normal-canonical-form formulation this conclusion is derived from irreducibility,
@@ -215,9 +221,9 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 /-- **Canonical form from primitive injective blocks.**
 
 Source context: arXiv:1606.00608, Section II.C and eq. II_CF1.
-The first four canonical-form clauses are supplied as hypotheses. The
-self-overlap clause follows from peripheral primitivity of each left-canonical
-injective block via the spectral gap of the complementary transfer map. -/
+The algebraic canonical-form clauses are supplied as hypotheses. The self-overlap
+clause follows from peripheral primitivity of each left-canonical injective block
+via the spectral gap of the complementary transfer map. -/
 theorem of_peripheral_primitive
     (hInj : ∀ k, IsInjective (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
@@ -226,7 +232,7 @@ theorem of_peripheral_primitive
     (hDim : ∀ k, 0 < dim k)
     (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
     IsCanonicalForm μ A := by
-  refine ⟨hInj, hLeft, hμ_antitone, hμ_ne_zero, ?_⟩
+  refine ⟨hInj, hLeft, hμ_antitone, hμ_ne_zero, hDim, ?_⟩
   intro k
   letI : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
   exact

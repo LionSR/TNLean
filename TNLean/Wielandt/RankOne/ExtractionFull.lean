@@ -334,30 +334,28 @@ For any `IsNormal` MPS tensor `A` with `[NeZero D]`, there exists `N` such that
 
 This combines the rank-one extraction with the blocked fixed-length matrix spanning theorem.
 
-- When `N₀ = 0`: `wordSpan A 0 = ⊤` directly.
-- When `N₀ ≥ 1`: writing `B := blockTensor A N₀`, the rank-one extraction gives
+Writing `B := blockTensor A N₀` for the positive normality witness `N₀`, the rank-one
+extraction gives
   `vecMulVec φ ψ ∈ wordSpan B (D + N₀ + D)`, where the middle `N₀` is the
   blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked
-  fixed-length matrix spanning then
-  produces `wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
+fixed-length matrix spanning then produces
+`wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
 
 The bound `N = (4D - 2 + N₀) * N₀` is coarse. -/
 theorem wielandt_lemma2b [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ N : ℕ, wordSpan A N = ⊤ := by
   classical
-  obtain ⟨N₀, hN₀⟩ := hN
+  obtain ⟨N₀, hN₀pos, hN₀⟩ := hN
   have hN₀_top : wordSpan A N₀ = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective A N₀).mpr hN₀
-  by_cases hN₀pos : N₀ = 0
-  · exact ⟨0, by rwa [hN₀pos] at hN₀_top⟩
-  · obtain ⟨σ₀, τ₀, φ, ψ, μ, ν, m_blocked,
+  obtain ⟨σ₀, τ₀, φ, ψ, μ, ν, m_blocked,
       hφ, hψ, hμ, hν, heigφ, heigψ, hRankOne⟩ :=
-      exists_rankOne_mem_wordSpan_blockTensor A hN₀ (by omega)
-    exact ⟨(D - 1 + (m_blocked + (D - 1))) * N₀,
-      wielandt_blocked_assembly A ⟨N₀, hN₀⟩ N₀ (by omega)
-        σ₀ φ hφ μ hμ heigφ
-        τ₀ ψ hψ ν hν heigψ hRankOne⟩
+    exists_rankOne_mem_wordSpan_blockTensor A hN₀ hN₀pos
+  exact ⟨(D - 1 + (m_blocked + (D - 1))) * N₀,
+    wielandt_blocked_assembly A ⟨N₀, hN₀pos, hN₀⟩ N₀ hN₀pos
+      σ₀ φ hφ μ hμ heigφ
+      τ₀ ψ hψ ν hν heigψ hRankOne⟩
 
 end WielandtLemma2b
 
@@ -459,7 +457,7 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
     blockedTensorRangeData A L σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
   have hNormalB : IsNormal data.B := by
     simpa [data.hB] using isNormal_blockTensor A L hL hNormal
-  obtain ⟨N₁, hN₁⟩ := hNormalB
+  obtain ⟨N₁, _hN₁pos, hN₁⟩ := hNormalB
   have hBtop : wordSpan data.B N₁ = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective data.B N₁).mpr hN₁
   exact ⟨D + N₁ + D, by

@@ -342,7 +342,7 @@
     \lean{MPSTensor.rfp_nt_structural}
     \leanok
     \uses{def:mps_transfer_idempotence, def:normal, def:injective}
-    If $A$ is a nonzero normal RFP tensor, then $A$ is injective.
+    If $A$ is a normal RFP tensor, then $A$ is injective.
 \end{theorem}
 \begin{proof}\leanok
     The RFP condition $\E_A^2 = \E_A$ gives coefficients $V_{i_1i_2,j}$
@@ -355,10 +355,9 @@
         A^{i_1}\cdots A^{i_n}\in\spn\{A^j:0\le j<d\}
         \qquad(n\ge 1).
     \]
-    By normality, the words of some length $N$ span $\MN{D}$.  If $N\ge1$,
-    the preceding inclusion shows that the one-site span is already
-    $\MN{D}$.  If $N=0$, then $\spn\{\Id\}=\MN{D}$, and any nonzero $A^j$
-    spans this space.  Thus $A$ is injective in either case.
+    By normality, the words of some positive length $N$ span $\MN{D}$.
+    The preceding inclusion therefore shows that the one-site span is already
+    $\MN{D}$.
 \end{proof}
 
 \begin{theorem}[Left-canonical normal RFP tensor is injective]%
@@ -376,10 +375,10 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_injective}
-    The normalization $\sum_i (A^i)^\dagger A^i = \Id$ forces at least one
-    matrix $A^i$ to be nonzero, since otherwise the left-hand side would
-    vanish. Hence $A$ is a nonzero normal renormalization fixed point, and
-    Theorem~\ref{thm:rfp_nt_injective} applies.
+    The conclusion follows immediately from
+    Theorem~\ref{thm:rfp_nt_injective}. Normality already supplies a positive
+    block-injectivity length, so this implication does not require the
+    additional normalization.
 \end{proof}
 
 \begin{theorem}[Unitary diagonal fixed point for a left-canonical normal RFP]%

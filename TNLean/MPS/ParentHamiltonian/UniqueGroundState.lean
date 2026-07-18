@@ -799,7 +799,7 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) (hNlarge : L₀ + 1 < N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
-  have hNormal : IsNormal A := ⟨L₀, hA⟩
+  have hNormal : IsNormal A := ⟨L₀, hL₀, hA⟩
   have hN' : L₀ + 1 ≤ N := le_of_lt hNlarge
   rw [HasUniqueGroundState,
     chainGroundSpace_eq_mpvSubmodule_normal hNormal hA hL₀ (by omega) (by omega) hN

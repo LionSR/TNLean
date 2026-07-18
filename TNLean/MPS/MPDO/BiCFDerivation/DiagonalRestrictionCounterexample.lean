@@ -113,7 +113,7 @@ private theorem evalWord_diagBlock_diagonalRestrictionUnits_zero_one (w : List (
 algebra and therefore never produces the missing off-diagonal matrix units. -/
 private theorem diagBlock_diagonalRestrictionUnits_not_isNormal :
     ¬ IsNormal (diagBlock diagonalRestrictionUnits) := by
-  rintro ⟨N, hN⟩
+  rintro ⟨N, _hNpos, hN⟩
   have hmem : Matrix.single 0 1 (1 : ℂ) ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
         evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)) :=

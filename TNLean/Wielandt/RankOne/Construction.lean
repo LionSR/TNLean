@@ -158,8 +158,8 @@ theorem IsNormal_transposeTensor
     {d D : ℕ} {A : MPSTensor d D}
     (h : IsNormal (d := d) (D := D) A) :
     IsNormal (d := d) (D := D) (transposeTensor A) := by
-  rcases h with ⟨N, hN⟩
-  exact ⟨N, IsNBlkInjective_transposeTensor (A := A) (N := N) hN⟩
+  rcases h with ⟨N, hNpos, hN⟩
+  exact ⟨N, hNpos, IsNBlkInjective_transposeTensor (A := A) (N := N) hN⟩
 
 /-- The cumulative span of the transposed tensor also reaches top. -/
 theorem cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top

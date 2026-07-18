@@ -215,7 +215,7 @@ theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
 /-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
 theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
     (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
-  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
+  ⟨1, Nat.zero_lt_one, by rw [wordSpan_one_eq_span_range, hA]⟩
 
 /-! ## Convergence rate from a complementary transfer-map gap -/
 

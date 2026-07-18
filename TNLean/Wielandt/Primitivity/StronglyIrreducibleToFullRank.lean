@@ -620,7 +620,8 @@ theorem hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper [NeZero D]
     calc K * ‖Ê ^ (n₀ + 1)‖ < K * ε := mul_lt_mul_of_pos_left hÊ_small hK_pos
       _ = δ := by rw [hε_def, mul_div_cancel₀ _ hK_pos.ne']
   -- Step 6: Prove wordSpan A (n₀+1) = ⊤ via Lemma A
-  refine ⟨n₀ + 1, wordSpan_eq_top_of_tracePairBilin_re_pos A (n₀ + 1) fun B hBne => ?_⟩
+  refine ⟨n₀ + 1, Nat.zero_lt_succ n₀,
+    wordSpan_eq_top_of_tracePairBilin_re_pos A (n₀ + 1) fun B hBne => ?_⟩
   -- Decompose E^(n₀+1) = Pρ + N^(n₀+1)
   have hdecomp : (E ^ (n₀ + 1) : Module.End ℂ _) = Pρ + N ^ (n₀ + 1) :=
     pow_succ_eq_fixedPointProj_add_compl_pow (E := E) (ρ := ρ) (htr := hP.trace_ne_zero)

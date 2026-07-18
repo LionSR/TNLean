@@ -200,7 +200,9 @@ theorem iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector
   have htop : wordSpan A (D ^ 2) = ⊤ :=
     wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector
       A hNorm hPrim hX hNotInv hφ hμ heig
-  exact Nat.sInf_le (show D ^ 2 ∈ {n : ℕ | wordSpan A n = ⊤} from htop)
+  exact Nat.sInf_le
+    (show D ^ 2 ∈ {n : ℕ | 0 < n ∧ wordSpan A n = ⊤} from
+      ⟨pow_pos (NeZero.pos D) 2, htop⟩)
 
 /-- **Theorem 1, case (3)**: generator corollary of the one-step subspace theorem.
 
@@ -301,7 +303,8 @@ theorem iIndex_le_of_mem_wordSpan_one_of_isUnit
     wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
       A hNorm hPrim hX hInv
   exact Nat.sInf_le
-    (show D ^ 2 - krausRank A + 1 ∈ {n : ℕ | wordSpan A n = ⊤} from htop)
+    (show D ^ 2 - krausRank A + 1 ∈
+        {n : ℕ | 0 < n ∧ wordSpan A n = ⊤} from ⟨by omega, htop⟩)
 
 /-- **Theorem 1, case (2)**: generator corollary of the one-step subspace theorem.
 
@@ -373,26 +376,9 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
     iIndex A ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
   have hN : IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
   have hD_pos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  -- Case 1: D = 1 — trivial since iIndex = 0
-  by_cases hD1 : D = 1
-  · subst hD1
-    have htop : wordSpan A 0 = ⊤ := by
-      rw [wordSpan_zero, eq_top_iff]
-      intro M _
-      have hM : M = M 0 0 • (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
-        ext i j
-        fin_cases i
-        fin_cases j
-        simp
-      rw [hM]
-      exact Submodule.smul_mem _ _ (Submodule.subset_span rfl)
-    have hiIndex : iIndex A = 0 :=
-      Nat.eq_zero_of_le_zero (Nat.sInf_le htop)
-    simp [hiIndex]
-  · -- Case 2: D ≥ 2 — use positive-length trace word + blocking argument
-    have hD2 : 2 ≤ D := by omega
+  exact (show iIndex A ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 from by
     -- Get a **positive-length** sharp nonzero-trace word
-    have hexists := exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos hD2 A hNorm hPrim
+    have hexists := exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos A hNorm hPrim
     obtain ⟨w, hw_pos, hw_len, hw_tr⟩ := hexists
     -- Extract eigenvalue and eigenvector from this word
     obtain ⟨μ, φ, hμ, hφ, heig⟩ := exists_eigenvector_of_trace_ne_zero _ hw_tr
@@ -442,7 +428,8 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
       have hAtop : wordSpan A (D ^ 2 * n) = ⊤ :=
         wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A n (D ^ 2) hD2top
       -- iIndex A ≤ D² * n ≤ D² * (D²-d'+1) = (D²-d'+1) * D²
-      calc iIndex A ≤ D ^ 2 * n := Nat.sInf_le hAtop
+      calc iIndex A ≤ D ^ 2 * n :=
+          Nat.sInf_le ⟨Nat.mul_pos (pow_pos hD_pos 2) hn_pos, hAtop⟩
         _ ≤ D ^ 2 * (D ^ 2 - krausRank A + 1) := by
             apply Nat.mul_le_mul_left; exact hw_len
         _ = (D ^ 2 - krausRank A + 1) * D ^ 2 := Nat.mul_comm _ _
@@ -455,9 +442,10 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
       -- Transfer: wordSpan A (D² * n) = ⊤
       have hAtop : wordSpan A (D ^ 2 * n) = ⊤ :=
         wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A n (D ^ 2) hD2top
-      calc iIndex A ≤ D ^ 2 * n := Nat.sInf_le hAtop
+      calc iIndex A ≤ D ^ 2 * n :=
+          Nat.sInf_le ⟨Nat.mul_pos (pow_pos hD_pos 2) hn_pos, hAtop⟩
         _ ≤ D ^ 2 * (D ^ 2 - krausRank A + 1) := by
             apply Nat.mul_le_mul_left; exact hw_len
-        _ = (D ^ 2 - krausRank A + 1) * D ^ 2 := Nat.mul_comm _ _
+        _ = (D ^ 2 - krausRank A + 1) * D ^ 2 := Nat.mul_comm _ _)
 
 end MPSTensor

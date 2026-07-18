@@ -234,8 +234,9 @@ theorem aklt_isNBlkInjective_two : IsNBlkInjective akltTensor 2 := by
     (Submodule.smul_mem _ _ single_10_in_wordSpan))
     (Submodule.smul_mem _ _ single_11_in_wordSpan)
 
-/-- The AKLT tensor is normal (eventually block-injective). -/
-theorem aklt_isNormal : IsNormal akltTensor := ⟨2, aklt_isNBlkInjective_two⟩
+/-- The AKLT tensor is normal: it is `2`-block-injective. -/
+theorem aklt_isNormal : IsNormal akltTensor :=
+  ⟨2, Nat.zero_lt_succ 1, aklt_isNBlkInjective_two⟩
 
 /-! ### Z₂ on-site symmetry -/
 
