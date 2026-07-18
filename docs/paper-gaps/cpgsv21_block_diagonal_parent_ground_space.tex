@@ -59,9 +59,14 @@ of \cite{Cirac2021Matrix}.\footnote{For
 	form on the main branch
 	(\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossingTrace.lean} and
 	\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalPGVWCComparison.lean}).
-		The remaining step is to replace the short crossing-tail span hypothesis by
-		the source \(C^j,D^j,E^j\) boundary-condition comparison; this is tracked by
-		\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} (the earlier
+		The short crossing-tail span hypothesis is removed by the global change-of-cut
+		comparison in
+		\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1};
+		this resolves
+		\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} in the
+		finite Condition C1 range. The sharper source length bound is tracked
+		separately by
+		\href{https://github.com/LionSR/TNLean/issues/4195}{issue \#4195} (the earlier
 		tracker \href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}, which
 		tracked proving the boundary-crossing comparison itself, is now closed). Pull
 	request~\#2724 records the earlier conditional reduction on the main branch,
@@ -101,11 +106,11 @@ the finite Condition C1 range from the injectivity of
   \Gamma_{L_0}^{A_j}:M_{D_j}(\mathbb C)
     \to(\mathbb C^d)^{\otimes L_0},
 \end{align}
-together with the separated normalized block hypotheses.  Thus the current
+together with the separated normalized block hypotheses. Thus the current
 Lean statements no longer replace Condition C1 by a length-one span condition
-in the boundary-decomposition path.  The remaining mathematical boundary lies
-later in the argument: after the cyclic constraints have been propagated into
-the trace-form sum, the boundary conditions themselves must be compared.
+in the boundary-decomposition path. The boundary conditions are compared after
+a global change of cut, using only the simultaneous product span on the long
+complementary segment of length \(N-L_0\).
 
 The resulting parent-Hamiltonian theorem in \cite[Section~IV.C]{Cirac2021Matrix}
 is
@@ -198,7 +203,7 @@ the displayed matrix identity gives
 \end{align}
 which puts the vector in $\bigoplus_j \mathcal G_{m+1}^{A_j}$.
 
-\section{The remaining boundary condition}
+\section{The boundary condition and the global change of cut}
 
 The present Lean statements prove the one-step identity under the product-span
 hypothesis
@@ -243,13 +248,14 @@ and make the sum defining $S_N$ internal.\footnote{Lean declarations:
 \leanid{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1},
 and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}.}
-What remains is the source boundary-condition comparison: starting with a
+The former residual was the source boundary-condition comparison: starting with a
 vector in the periodic-boundary space $\mathcal K_{N,L}(\widehat A)$, produce
 block-diagonal boundary matrices whose block components again belong to the
-blockwise periodic-boundary spaces.
+blockwise periodic-boundary spaces. The global change-of-cut theorem now proves
+this conclusion in the finite Condition C1 range.
 
-The present boundary isolates the remaining source comparison in the coordinates
-obtained by opening the periodic boundary for boundary-crossing windows.  Suppose
+Earlier conditional reductions isolated the source comparison in the coordinates
+obtained by opening the periodic boundary for boundary-crossing windows. Suppose
 \begin{align}
   \psi
   =
@@ -276,10 +282,15 @@ implies
 \end{align}
 Thus the trace representation of \(\psi\) is not the obstruction. The
 periodic component theorem proves the displayed conclusion from these
-boundary-crossing coordinate identities. The remaining source-level work in this note is
-to present the \(C^j,D^j,E^j\) comparison from
-\cite[Theorem~12]{PerezGarcia2007MPSReps}
-as an unconditional hypothesis-free equality theorem in the source range.\footnote{Formal declarations:
+boundary-crossing coordinate identities. The global change-of-cut proof avoids
+assuming those identities separately: it translates the whole periodic state
+past the final \(L_0\) sites and compares the two open-boundary decompositions
+against the long complementary segment.\footnote{Formal declarations:
+\leanid{MPSTensor.block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1},
+and
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1}.
+The earlier conditional declarations are
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities},
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective},
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective},
@@ -291,7 +302,8 @@ the forward inclusion, the block-diagonal intersection identity from
 \cite[Theorem~12]{PerezGarcia2007MPSReps}, the parent-ground-space
 containment, and the final span statement with explicit citations. It also
 separates these opened-boundary coordinates from the paper's boundary indices,
-without claiming that the source statement is proved.
+and records the unconditional global-cut conclusion in the finite Condition C1
+range. It does not identify this stricter range with the source range.
 % Blueprint labels: def:parent_hamiltonian_ground_space_bnt,
 % lem:isup_chain_ground_space_block_le_assembled,
 % thm:block_diagonal_ground_space_intersection,
@@ -305,8 +317,8 @@ With this notation,
     \psi_j\in\mathcal K_{N,L}(A_j)
   \right\}.
 \end{align}
-The source-level boundary-condition statement not yet stated without assuming
-the boundary-crossing coordinate identity is
+The source-range strengthening not yet obtained from the finite Condition C1
+bound is
 \begin{align}
   \left[
     b\ge2
@@ -384,8 +396,9 @@ coordinate formulation displayed above.\footnote{Lean declarations:
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary},
 and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
-These reductions do not yet state the source theorem without assuming the
-boundary-crossing comparison.
+The global change-of-cut theorem discharges the boundary-crossing comparison
+hypothesis in the finite Condition C1 range. The source theorem itself remains
+stronger only through its sharper length constant.
 For
 \begin{align}
   X=\bigoplus_j X_j,
@@ -445,22 +458,22 @@ The composition gives
 
 \section{Conclusion}
 
-This is not a source-error claim. The formal development has proved the
-surrounding block-diagonal reductions and a conditional propagation step. In the
+This is not a source-error claim. The formal development proves the
+block-diagonal periodic-boundary comparison without a short-tail span or an
+external boundary-comparison hypothesis in the
 finite-Condition-C1 Lean range
 \begin{align}
-  L\ge (L_0+1)+3(b-1)(L_0+1)+1,
+  L\ge (L_0+1)+3(b-1)(L_0+1)+1.
 \end{align}
-assume the boundary-crossing coordinate identities displayed above. Then, for
-every block $j$,
+For every block $j$ one has
 \begin{align}
   \psi\in\mathcal K_{N,L}(\widehat A)
   \quad\Longrightarrow\quad
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
 \end{align}
-This is the conditional reduction recorded by pull request~\#2724. There are
-now two proved conditional implications leading to the boundary-condition
-comparison. The boundary-trace implication records the following statement.
+The earlier conditional reduction recorded by pull request~\#2724 and the
+boundary-trace implication remain useful intermediate statements. The latter
+records the following assertion.
 Assume the common
 word-span property for the middle-word length \(m\). If, for every
 boundary-crossing interval, word
@@ -582,19 +595,21 @@ derives it from the span-based one-step intersection identity
 \leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1};
 its block components lie in the open-boundary ground spaces $\mathcal G_N^{A_j}$,
 and its proof does not use the periodic-boundary comparison at boundary-crossing
-windows. The conditional block-diagonal parent-space statements therefore hold the
-periodic-boundary comparison only as an explicit hypothesis---a scope
-restriction---rather than as a smuggled dependency. The residual transitive
-source-faithfulness gap carried by those statements is the normalized BNT
-product-span input, whose derivation is the normal-range reduction recorded in
+windows. The earlier conditional block-diagonal parent-space statements retain
+the periodic-boundary comparison as an explicit hypothesis, while the global
+change-of-cut theorem discharges it. The residual source-faithfulness gap is the
+normalized BNT product-span range, whose derivation is recorded in
 \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex} (lines 2078--2079 of
 \path{Papers/2011.12127/TN-Review-main.tex}); that gap is independent of the
 periodic-boundary comparison tracked here.
 
-The remaining source-comparison target is tracked by
-\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597}: replace the
-span-dependent short-tail statement by the \(C^j,D^j\) comparison input from
-\cite[Theorem~12]{PerezGarcia2007MPSReps} in the source range
+The periodic-boundary comparison target of
+\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} is therefore
+complete in the finite Condition C1 range. The remaining source-range
+strengthening, tracked by
+\href{https://github.com/LionSR/TNLean/issues/4195}{issue \#4195}, is to replace
+the present separation constant by the sharper bound from
+\cite[Theorem~12]{PerezGarcia2007MPSReps}:
 \begin{align}
   b\ge2,
   \qquad
@@ -604,16 +619,14 @@ span-dependent short-tail statement by the \(C^j,D^j\) comparison input from
   \qquad
   N\ge L+L_0.
 \end{align}
-After this boundary-condition comparison is proved, the conditional equality
-formalized in the current finite Condition C1 range gives
+The global-cut theorem already gives, in the current finite Condition C1 range,
 \begin{align}
   \mathcal K_{N,L}(\widehat A)
   =
   \sum_{j=1}^b\mathcal K_{N,L}(A_j).
 \end{align}
-The final degenerate
-parent-Hamiltonian ground-space equality follows by applying the one-block
-uniqueness theorem to each block.
+The final degenerate parent-Hamiltonian ground-space equality follows by
+applying the one-block uniqueness theorem to each block.
 
 \bibliographystyle{alpha}
 \bibliography{references}
