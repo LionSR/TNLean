@@ -134,14 +134,13 @@ If `IsNormal A` and `L > 0`, then `IsNormal (blockTensor A L)`. -/
 theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
     (hN : IsNormal (d := d) (D := D) A) :
     IsNormal (blockTensor (d := d) (D := D) A L) := by
-  obtain ⟨N₀, hN₀⟩ := hN
+  obtain ⟨N₀, hN₀pos, hN₀⟩ := hN
   have hN₀_top : wordSpan A N₀ = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective A N₀).mpr hN₀
   -- wordSpan A (N₀ * L) = ⊤
   have htopNL : wordSpan A (N₀ * L) = ⊤ := by
-    by_cases hN₀zero : N₀ = 0
-    · subst hN₀zero; simp only [zero_mul]; exact hN₀_top
-    · rw [Nat.mul_comm]; exact wordSpan_top_of_mul A hN₀_top L hL
+    rw [Nat.mul_comm]
+    exact wordSpan_top_of_mul A hN₀_top L hL
   -- wordSpan A (N₀ * L) ≤ wordSpan B N₀
   have hle : wordSpan A (N₀ * L) ≤
       wordSpan (blockTensor (d := d) (D := D) A L) N₀ :=
@@ -149,7 +148,7 @@ theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
   -- Conclude: wordSpan B N₀ ≥ ⊤, hence = ⊤
   have hBtop : wordSpan (blockTensor (d := d) (D := D) A L) N₀ = ⊤ :=
     eq_top_iff.mpr (htopNL ▸ hle)
-  exact ⟨N₀, (wordSpan_eq_top_iff_isNBlkInjective _ N₀).mp hBtop⟩
+  exact ⟨N₀, hN₀pos, (wordSpan_eq_top_iff_isNBlkInjective _ N₀).mp hBtop⟩
 
 /-! ## Section 2: Eigenvector for blocked tensor -/
 

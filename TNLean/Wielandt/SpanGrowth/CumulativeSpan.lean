@@ -298,7 +298,7 @@ theorem wordSpan_eq_top_iff_isNBlkInjective (A : MPSTensor d D)
 /-- If `IsNormal A`, then `cumulativeSpan A N = ⊤` for some `N`. -/
 theorem cumulativeSpan_eq_top_of_isNormal (A : MPSTensor d D)
     (hN : IsNormal A) : ∃ N, cumulativeSpan A N = ⊤ := by
-  obtain ⟨N, hN⟩ := hN
+  obtain ⟨N, _hNpos, hN⟩ := hN
   exact ⟨N, eq_top_iff.mpr (le_trans
     (eq_top_iff.mp
       ((wordSpan_eq_top_iff_isNBlkInjective A N).mpr hN))

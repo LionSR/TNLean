@@ -111,7 +111,7 @@ theorem cumulativeSpan_eq_top_of_isPrimitivePaper_sharp [NeZero D]
 
 /-- **Lemma 1, sharp positive-length version**.
 
-For `D ≥ 2`, if `A` is normalized and primitive in the spreading sense, then
+For positive `D`, if `A` is normalized and primitive in the spreading sense, then
 there exists a **positive-length** word `w` with `|w| ≤ D² − krausRank(A) + 1`
 such that `tr(evalWord A w) ≠ 0`.
 
@@ -125,14 +125,14 @@ one of those products has nonzero trace.
 Paper: arXiv:0909.5347, Lemma 1 (positive-length strengthening).
 -/
 theorem exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos [NeZero D]
-    (hD : 2 ≤ D) (A : MPSTensor d D)
+    (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
     ∃ w : List (Fin d),
       1 ≤ w.length ∧
       w.length ≤ D ^ 2 - krausRank A + 1 ∧
       Matrix.trace (evalWord A w) ≠ 0 := by
-  exact exists_nonzero_trace_word_sharp_pos hD A
+  exact exists_nonzero_trace_word_sharp_pos A
     (isNormal_of_isPrimitivePaper A hNorm hPrim)
 
 end MPSTensor

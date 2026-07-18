@@ -104,7 +104,7 @@ Paper: "(b) ⟹ (a)" in Proposition 3, arXiv:0909.5347. -/
 theorem isPrimitivePaper_of_hasEventuallyFullKrausRank
     (A : MPSTensor d D) (hA : HasEventuallyFullKrausRank A) :
     IsPrimitivePaper A := by
-  obtain ⟨N, hN⟩ := hA
+  obtain ⟨N, _hNpos, hN⟩ := hA
   exact ⟨N, fun φ hφ => vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hN φ hφ⟩
 
 /-- **Proposition 3, direction (b)⟹(a)**, stated with `IsNormal`:
@@ -133,7 +133,9 @@ theorem qIndex_le_iIndex (A : MPSTensor d D)
     (hA : HasEventuallyFullKrausRank A) :
     qIndex A ≤ iIndex A := by
   -- iIndex A ∈ {n | wordSpan A n = ⊤} since hA gives the set is nonempty
-  have hne : {n : ℕ | wordSpan A n = ⊤}.Nonempty := hA
+  have hne : {n : ℕ | wordSpan A n = ⊤}.Nonempty := by
+    obtain ⟨N, _hNpos, hN⟩ := hA
+    exact ⟨N, hN⟩
   have hi : wordSpan A (iIndex A) = ⊤ := Nat.sInf_mem hne
   -- iIndex A witnesses that the qIndex-defining set is nonempty
   have hq_mem : iIndex A ∈ {q : ℕ | ∀ φ : Fin D → ℂ, φ ≠ 0 →

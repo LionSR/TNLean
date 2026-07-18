@@ -213,7 +213,8 @@ theorem cluster_isNBlkInjective_two : IsNBlkInjective clusterTensor 2 := by
     (Submodule.smul_mem _ _ cluster_single_11_in_wordSpan)
 
 /-- The cluster tensor is normal (eventually block-injective). -/
-theorem cluster_isNormal : IsNormal clusterTensor := ⟨2, cluster_isNBlkInjective_two⟩
+theorem cluster_isNormal : IsNormal clusterTensor :=
+  ⟨2, by omega, cluster_isNBlkInjective_two⟩
 
 /-! ### The length-2 blocked tensor
 

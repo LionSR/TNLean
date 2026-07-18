@@ -162,33 +162,15 @@ private theorem isInjective_of_dim_one_of_exists_nonzero
 
 /-- **TP + primitive + irreducible → injective after positive blocking**.
 
-The normality witness may be zero in scalar bond dimension, so the positivity
-claim is proved separately: scalar trace-preserving tensors are already
-one-site injective, while dimensions at least two cannot have full
-zero-length word span. -/
+The blocking length is positive by the definition of normality. -/
 theorem exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
     (hIrr : IsIrreducibleTensor A) :
     ∃ L : ℕ, 0 < L ∧ IsInjective (blockTensor A L) := by
-  by_cases hD : D = 1
-  · subst D
-    have hInj : IsInjective A :=
-      isInjective_of_dim_one_of_exists_nonzero A (exists_nonzero_kraus_of_tp A hTP)
-    exact ⟨1, Nat.zero_lt_one,
-      (isNBlkInjective_iff_blockTensor_isInjective A 1).1
-        (isNBlkInjective_one_of_isInjective hInj)⟩
-  · have hD_pos : 0 < D := NeZero.pos D
-    have hD_ge : 2 ≤ D := by omega
-    obtain ⟨L, hL⟩ := isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
-    refine ⟨L, ?_, (isNBlkInjective_iff_blockTensor_isInjective A L).1 hL⟩
-    by_contra hL_nonpos
-    have hL_zero : L = 0 := Nat.eq_zero_of_not_pos hL_nonpos
-    subst L
-    have hInj0 : IsNBlkInjective A 0 := hL
-    have hD_one := bondDim_eq_one_of_isNBlkInjective_zero A hInj0
-    omega
+  obtain ⟨L, hLpos, hL⟩ := isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
+  exact ⟨L, hLpos, (isNBlkInjective_iff_blockTensor_isInjective A L).1 hL⟩
 
 /-!
 ## Combined reduction: arbitrary → IsNormal (per block, for primitive blocks)
@@ -224,7 +206,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     have hD2 : 2 ≤ D := by omega
     let L : ℕ := iIndex A
     have hNonempty : ({n : ℕ | wordSpan A n = ⊤}).Nonempty := by
-      obtain ⟨N, hNblk⟩ := hN
+      obtain ⟨N, _hNpos, hNblk⟩ := hN
       exact ⟨N, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
     have hTop : wordSpan A L = ⊤ := by
       simpa [L, iIndex] using Nat.sInf_mem hNonempty
@@ -406,7 +388,7 @@ Taking `n = N` in (2) and using (1) with `m = P`: `wordSpan A (N * P) = ⊤` and
 theorem isNormal_blockTensor_of_isNormal
     (A : MPSTensor d D) {P : ℕ} (hP : 0 < P) (hN : IsNormal A) :
     IsNormal (d := blockPhysDim d P) (D := D) (blockTensor (d := d) (D := D) A P) := by
-  obtain ⟨N, hNblk⟩ := hN
+  obtain ⟨N, hNpos, hNblk⟩ := hN
   have hwordN : wordSpan A N = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk
   have hwordNP : wordSpan A (P * N) = ⊤ :=
@@ -417,7 +399,7 @@ theorem isNormal_blockTensor_of_isNormal
     wordSpan_le_wordSpan_blockTensor A P N
   have hwordNP' : wordSpan A (N * P) = ⊤ := by rwa [Nat.mul_comm] at hwordNP
   rw [hwordNP'] at hle
-  refine ⟨N, ?_⟩
+  refine ⟨N, hNpos, ?_⟩
   exact (wordSpan_eq_top_iff_isNBlkInjective
     (blockTensor (d := d) (D := D) A P) N).mp (eq_top_iff.mpr hle)
 

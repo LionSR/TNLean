@@ -22,7 +22,7 @@ The definitions are stated in the notation of the theorem: `S_n(A)`, `i(A)`,
 
 * `krausRank A`: the dimension of `S₁(A) = wordSpan A 1`, i.e.
   `dim(span{A₁,…,Aₐ})`.
-* `HasEventuallyFullKrausRank A`: `∃ i, S_i(A) = M_D(ℂ)`, i.e. `IsNormal A`.
+* `HasEventuallyFullKrausRank A`: `∃ i ≥ 1, S_i(A) = M_D(ℂ)`, i.e. `IsNormal A`.
 * `IsPrimitivePaper A`: spreading primitivity — there exists `q` such that
   for every nonzero φ, `H_q(A,φ) = ℂ^D`. This is Proposition 3(a) of the paper.
 * `IsStronglyIrreduciblePaper A`: Proposition 3(c) — the transfer map `E_A` has
@@ -92,8 +92,8 @@ noncomputable def krausRank (A : MPSTensor d D) : ℕ :=
 
 /-! ## Eventually full Kraus rank -/
 
-/-- **Eventually full Kraus rank**: there exists an index `i` such that `S_i(A)` spans
-the full matrix algebra `M_D(ℂ)`.
+/-- **Eventually full Kraus rank**: there exists a positive index `i` such that
+`S_i(A)` spans the full matrix algebra `M_D(ℂ)`.
 
 Paper: "We say that the set `{A₁,…,Aₐ}` has eventually full Kraus rank if
 there exists `i` such that `S_i(A) = M_D(ℂ)`."
@@ -101,16 +101,16 @@ there exists `i` such that `S_i(A) = M_D(ℂ)`."
 
 This is equivalent to `IsNormal A` (see `hasEventuallyFullKrausRank_iff_isNormal`). -/
 def HasEventuallyFullKrausRank (A : MPSTensor d D) : Prop :=
-  ∃ i : ℕ, wordSpan A i = ⊤
+  ∃ i : ℕ, 0 < i ∧ wordSpan A i = ⊤
 
 /-- `HasEventuallyFullKrausRank` is equivalent to `IsNormal`. -/
 theorem hasEventuallyFullKrausRank_iff_isNormal (A : MPSTensor d D) :
     HasEventuallyFullKrausRank A ↔ IsNormal A := by
   constructor
-  · rintro ⟨i, hi⟩
-    exact ⟨i, (wordSpan_eq_top_iff_isNBlkInjective A i).mp hi⟩
-  · rintro ⟨N, hN⟩
-    exact ⟨N, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hN⟩
+  · rintro ⟨i, hi, hspan⟩
+    exact ⟨i, hi, (wordSpan_eq_top_iff_isNBlkInjective A i).mp hspan⟩
+  · rintro ⟨N, hN, hspan⟩
+    exact ⟨N, hN, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hspan⟩
 
 /-! ## Paper-faithful primitivity -/
 

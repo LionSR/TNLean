@@ -362,13 +362,17 @@ def IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop :=
   Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))
     = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
 
-/-- Normality in this project means eventual block injectivity:
-there exists some blocking length `N` such that the tensor is `N`-block-injective. -/
+/-- Normality means eventual block injectivity at a positive length:
+there exists `N ≥ 1` such that the tensor is `N`-block-injective.
+
+The positivity condition excludes the empty word, whose value is the identity
+independently of the tensor.  Source: Sanz--Pérez-García--Wolf--Cirac,
+arXiv:0909.5347, definition following equation (1). -/
 def IsNormal (A : MPSTensor d D) : Prop :=
-  ∃ N : ℕ, IsNBlkInjective (d := d) (D := D) A N
+  ∃ N : ℕ, 0 < N ∧ IsNBlkInjective (d := d) (D := D) A N
 
 @[simp] lemma isNormal_iff (A : MPSTensor d D) :
-    IsNormal A ↔ ∃ N, IsNBlkInjective A N := Iff.rfl
+    IsNormal A ↔ ∃ N, 0 < N ∧ IsNBlkInjective A N := Iff.rfl
 
 /-- Algebraic injectivity gives `1`-block injectivity. -/
 theorem isNBlkInjective_one_of_isInjective {A : MPSTensor d D}
@@ -393,7 +397,7 @@ theorem isNBlkInjective_one_of_isInjective {A : MPSTensor d D}
 /-- Algebraic injectivity (1-block) implies normality (eventual block injectivity).
 This is the trivial direction: injectivity is `IsNBlkInjective 1`. -/
 lemma IsInjective.isNormal {A : MPSTensor d D} (h : IsInjective A) : IsNormal A :=
-  ⟨1, isNBlkInjective_one_of_isInjective h⟩
+  ⟨1, Nat.zero_lt_one, isNBlkInjective_one_of_isInjective h⟩
 
 /-! ### Gauge invariance -/
 
@@ -527,7 +531,7 @@ theorem isNBlkInjective_of_gaugeEquiv {A B : MPSTensor d D} {N : ℕ}
 /-- Gauge equivalence preserves eventual block injectivity. -/
 theorem isNormal_of_gaugeEquiv {A B : MPSTensor d D}
     (hA : IsNormal A) (hGauge : GaugeEquiv A B) : IsNormal B := by
-  obtain ⟨N, hN⟩ := hA
-  exact ⟨N, isNBlkInjective_of_gaugeEquiv hN hGauge⟩
+  obtain ⟨N, hNpos, hN⟩ := hA
+  exact ⟨N, hNpos, isNBlkInjective_of_gaugeEquiv hN hGauge⟩
 
 end MPSTensor

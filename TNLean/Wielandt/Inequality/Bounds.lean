@@ -390,9 +390,8 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
       Nat.eq_zero_of_le_zero (Nat.sInf_le htop)
     simp [hiIndex]
   · -- Case 2: D ≥ 2 — use positive-length trace word + blocking argument
-    have hD2 : 2 ≤ D := by omega
     -- Get a **positive-length** sharp nonzero-trace word
-    have hexists := exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos hD2 A hNorm hPrim
+    have hexists := exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos A hNorm hPrim
     obtain ⟨w, hw_pos, hw_len, hw_tr⟩ := hexists
     -- Extract eigenvalue and eigenvector from this word
     obtain ⟨μ, φ, hμ, hφ, heig⟩ := exists_eigenvector_of_trace_ne_zero _ hw_tr

@@ -243,9 +243,10 @@ theorem isNormal_of_cumulativeSpan_eq_top_of_aperiodic
     (hcs : cumulativeSpan A N = ⊤)
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
     IsNormal A := by
-  refine ⟨N, ?_⟩
+  refine ⟨N + 1, Nat.zero_lt_succ N, ?_⟩
   rw [← wordSpan_eq_top_iff_isNBlkInjective]
-  rwa [← cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one A hone]
+  rw [← cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one A hone]
+  exact eq_top_iff.mpr (hcs.ge.trans (cumulativeSpan_mono A N))
 
 /-- If `algSpan A = ⊤` and `1 ∈ wordSpan A 1` (aperiodicity), then `IsNormal A`.
 
