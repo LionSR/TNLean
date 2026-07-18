@@ -159,8 +159,7 @@ uses the same one-site unitary at both ends of the fixed bond and proves
 Since the bond and unitary are chain-independent, this is one neighboring
 family for every translate.
 
-The bond-local cyclic product is now formalized for every $N\geq2$.  The
-theorem
+The bond-local cyclic product is formalized for every $N\geq2$.  The theorem
 \leanid{MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition}
 constructs the dependent cyclic regrouping
 \[
@@ -174,12 +173,23 @@ and proves that the product of the translated, locally decomposed bond is
 \), with $k_N=k_0$.  The length-two specialization is included: its two
 windows have the opposite cyclic orders $(0,1)$ and $(1,0)$.
 
-This theorem begins with the locally transformed bond.  It does not yet
-identify the product with the conjugation of the original chain product by
-the tensor power of the one-site unitary, nor combine that identity with the
-positive realization scalar.  Those two transport statements are the
-remaining algebraic steps before the full finite-chain equation
-\emph{sigmaNK2} may be claimed.
+The tensor-power conjugation and positive realization scalar are now combined
+with this cyclic product.  The theorem
+\leanid{MPOTensor.EtaLocalStructureData.%
+exists_positive_cyclic_eta_block_decomposition}
+chooses the unitary, sector dimensions, and positive neighboring family once,
+independently of the chain length, and proves for every $N\geq2$ that
+\[
+  E_N^*(U^*)^{\otimes N}\sigma^{(N)}(\mathcal K)U^{\otimes N}E_N
+  =c_N\bigoplus_{k_0,\ldots,k_{N-1}}
+    \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}},
+  \qquad c_N>0,\qquad k_N=k_0.
+\]
+Thus the finite-chain equation \emph{sigmaNK2} is formalized.  This identity
+uses only the fixed commuting bond and its positive realization scalar.  It
+does not assert zero correlation length, rank-one trace factorization, a
+quantum Markov decomposition, saturation of the area law, or the proposition
+labelled \emph{4to2}.
 
 There is a separate obstruction at source line~1613.  The phrase ``arguing as
 in Lemmas \emph{propSN} and \emph{SALZCL}'' does not show that source ZCL alone
@@ -222,11 +232,6 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Complete the tensor-power conjugation of the original cyclic bond
-product and combine it with the positive realization scalar.  The intervening
-bond-local cyclic direct-sum product is proved for every $N\geq2$; only after
-these two remaining identities may the full finite-chain equation
-\emph{sigmaNK2} be claimed.
 \item Resolve \ghissue{3593} by finding a source-faithful property of the
 actual neighboring family which excludes the nilpotent zero-eigenspace, or
 replace the printed line-1613 argument by a direct Markov decomposition which

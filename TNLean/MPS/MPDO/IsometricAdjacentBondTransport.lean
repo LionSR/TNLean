@@ -291,15 +291,6 @@ private theorem pair_product_transport
       rw [leftPair_mul_firstProjection B' P hB',
         lastProjection_mul_rightPair P C' hC']
 
-private theorem reindex_sitewisePhysicalMatrix_two
-    (V : Matrix (Fin d) (Fin e) ℂ) :
-    Matrix.reindex (_root_.finTwoArrowEquiv (Fin d))
-        (_root_.finTwoArrowEquiv (Fin e))
-        (sitewisePhysicalMatrix V 2) = V ⊗ₖ V := by
-  ext ⟨i, j⟩ ⟨a, b⟩
-  simp [Matrix.reindex_apply, sitewisePhysicalMatrix,
-    Matrix.kroneckerMap_apply, _root_.finTwoArrowEquiv]
-
 private theorem reindex_sitewisePhysicalMatrix_three
     (V : Matrix (Fin d) (Fin e) ℂ) :
     Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
