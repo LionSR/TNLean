@@ -257,14 +257,15 @@ primitivity from SAL, which is the conclusion being proved in Proposition
 trace-power-to-rank-one inference recorded in
 \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}.  Formally, source ZCL yields an
 idempotent normalized pairing operator, but for the opposite product it yields
-only $\widehat T^2=\widehat T^3$ and constant positive-power traces.  The
+only a square--cube identity and constant positive-power traces.  The
 four-sector example
 \leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
 virtual_spanning_does_not_force_rectangular_remainder_zero}
 satisfies the recorded
 positivity, primitivity, trace-one, and spanning conditions while its trace
-matrix is not idempotent.  The source-faithful rank-one question remains
-\ghissue{3593}.
+matrix is not idempotent.  The source-faithful audit in \ghissue{3593}
+classifies this rank-one step as obstructed: neither the inverse-map provenance
+nor the finite-chain cyclic form supplies the missing rectangular vanishing.
 
 Consequently the source implication
 \[
@@ -295,11 +296,12 @@ proportional fundamental-theorem scalar law $c_N=a^N$ for one $a>0$, and absorb
 $a$ into the bond or neighboring operators.  The counterexample above shows
 that the generic proportional commuting-bond data cannot supply this law; this
 normalization problem is tracked in \ghissue{4253}.
-\item Resolve \ghissue{3593} by finding a source-faithful property of the
-actual neighboring family which excludes the nilpotent zero-eigenspace, or
+\item Find a source-faithful property of the actual inverse-map neighboring
+family which excludes the nilpotent zero-eigenspace, or
 replace the printed line-1613 argument by a direct Markov decomposition which
 does not require the rank-one trace matrix.  Source ZCL alone must not be
-presented as giving the factorization.
+presented as giving the factorization; the inverse-map and finite-chain audits
+in \ghissue{3593} do not supply it.
 \item Trace the fourth region, construct the quantum Markov decomposition at
 each admissible cut, and apply the all-cut Markov theorem.  Only then may the
 source proposition receive a formal declaration and a
