@@ -195,53 +195,46 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hN : IsNormal A) :
     ∃ L : ℕ, 0 < L ∧ L ≤ D ^ 4 ∧ IsInjective (blockTensor A L) := by
-  by_cases hD1 : D = 1
-  · subst D
-    have hInj : IsInjective A :=
-      isInjective_of_dim_one_of_exists_nonzero A (exists_nonzero_kraus_of_tp A hTP)
-    refine ⟨1, Nat.zero_lt_one, by norm_num, ?_⟩
-    exact (isNBlkInjective_iff_blockTensor_isInjective A 1).1
-      (isNBlkInjective_one_of_isInjective hInj)
-  · have hDpos : 0 < D := NeZero.pos D
-    let L : ℕ := iIndex A
-    have hNonempty : ({n : ℕ | 0 < n ∧ wordSpan A n = ⊤}).Nonempty := by
-      obtain ⟨N, hNpos, hNblk⟩ := hN
-      exact ⟨N, hNpos, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
-    have hTop : wordSpan A L = ⊤ := by
-      simpa [L, iIndex] using (Nat.sInf_mem hNonempty).2
-    have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
-      simpa [L] using
-        iIndex_le_general_of_isPrimitivePaper A hTP (isPrimitivePaper_of_isNormal A hN)
-    have hKraus_pos : 1 ≤ krausRank A := by
-      rw [krausRank, Nat.one_le_iff_ne_zero]
-      intro hzero
-      have hbot : wordSpan A 1 = (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
-        Submodule.finrank_eq_zero.mp hzero
-      obtain ⟨i₀, hi₀⟩ := exists_nonzero_kraus_of_tp A hTP
-      have hmem : A i₀ ∈ wordSpan A 1 := by
-        have := evalWord_mem_wordSpan A ([i₀] : List (Fin d))
-        simpa [evalWord] using this
-      rw [hbot] at hmem
-      exact hi₀ hmem
-    have hDsq_pos : 1 ≤ D ^ 2 := by
-      nlinarith
-    have hFactor : D ^ 2 - krausRank A + 1 ≤ D ^ 2 := by
-      by_cases hKraus_le : krausRank A ≤ D ^ 2
-      · omega
-      · have hsub : D ^ 2 - krausRank A = 0 :=
-          Nat.sub_eq_zero_of_le (le_of_not_ge hKraus_le)
-        rw [hsub]
-        exact hDsq_pos
-    have hBound : L ≤ D ^ 4 := by
-      calc
-        L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := hIndexBound
-        _ ≤ D ^ 2 * D ^ 2 := Nat.mul_le_mul_right _ hFactor
-        _ = D ^ 4 := by ring
-    have hLpos : 0 < L := by
-      simpa [L, iIndex] using (Nat.sInf_mem hNonempty).1
-    refine ⟨L, hLpos, hBound, ?_⟩
-    exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
-      ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
+  have hDpos : 0 < D := NeZero.pos D
+  let L : ℕ := iIndex A
+  have hNonempty : ({n : ℕ | 0 < n ∧ wordSpan A n = ⊤}).Nonempty := by
+    obtain ⟨N, hNpos, hNblk⟩ := hN
+    exact ⟨N, hNpos, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
+  have hTop : wordSpan A L = ⊤ := by
+    simpa [L, iIndex] using (Nat.sInf_mem hNonempty).2
+  have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
+    simpa [L] using
+      iIndex_le_general_of_isPrimitivePaper A hTP (isPrimitivePaper_of_isNormal A hN)
+  have hKraus_pos : 1 ≤ krausRank A := by
+    rw [krausRank, Nat.one_le_iff_ne_zero]
+    intro hzero
+    have hbot : wordSpan A 1 = (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
+      Submodule.finrank_eq_zero.mp hzero
+    obtain ⟨i₀, hi₀⟩ := exists_nonzero_kraus_of_tp A hTP
+    have hmem : A i₀ ∈ wordSpan A 1 := by
+      have := evalWord_mem_wordSpan A ([i₀] : List (Fin d))
+      simpa [evalWord] using this
+    rw [hbot] at hmem
+    exact hi₀ hmem
+  have hDsq_pos : 1 ≤ D ^ 2 := by
+    nlinarith
+  have hFactor : D ^ 2 - krausRank A + 1 ≤ D ^ 2 := by
+    by_cases hKraus_le : krausRank A ≤ D ^ 2
+    · omega
+    · have hsub : D ^ 2 - krausRank A = 0 :=
+        Nat.sub_eq_zero_of_le (le_of_not_ge hKraus_le)
+      rw [hsub]
+      exact hDsq_pos
+  have hBound : L ≤ D ^ 4 := by
+    calc
+      L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := hIndexBound
+      _ ≤ D ^ 2 * D ^ 2 := Nat.mul_le_mul_right _ hFactor
+      _ = D ^ 4 := by ring
+  have hLpos : 0 < L := by
+    simpa [L, iIndex] using (Nat.sInf_mem hNonempty).1
+  refine ⟨L, hLpos, hBound, ?_⟩
+  exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
+    ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
 
 /-- **Left-canonical normal tensor is block injective at length $D^4$.**
 
