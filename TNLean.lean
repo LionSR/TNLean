@@ -406,6 +406,7 @@ import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.PureAreaLaw
+import TNLean.MPS.MPDO.LocalPurificationAreaLaw
 import TNLean.MPS.MPDO.PureRFPSAL
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.VerticalCoisometry
