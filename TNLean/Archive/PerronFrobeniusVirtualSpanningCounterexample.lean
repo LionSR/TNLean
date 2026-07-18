@@ -26,12 +26,12 @@ vectors
 with the following properties.
 
 * The four sector matrices `l_k r_k` span the full algebra `M₂(ℝ)`.
-* The closed pairing operator `L R` is idempotent.
-* The opposite product `T = R L` is entrywise nonnegative, primitive, and
+* The closed pairing operator `L Q` is idempotent.
+* The opposite product `T = Q L` is entrywise nonnegative, primitive, and
   trace-normalized.
 * Every positive power of `T` has the same trace, and `T ^ 2 = T ^ 3`.
 * Nevertheless `T` is not idempotent, the remainder
-  `R (1 - L R) L` is nonzero, and `T` has no rank-one factorization.
+  `Q (1 - L Q) L` is nonzero, and `T` has no rank-one factorization.
 * The matrices `l_k r_k` are the diagonal slices of an injective source-ZCL
   MPO tensor.
 
@@ -66,7 +66,7 @@ noncomputable def pairingL : Matrix (Fin 2) (Fin 4) ℝ :=
      0,     1 / 6, 1 / 6, -1 / 3]
 
 /-- The four closed right-sector functionals, arranged as the rows of a matrix. -/
-noncomputable def pairingR : Matrix (Fin 4) (Fin 2) ℝ :=
+noncomputable def pairingQ : Matrix (Fin 4) (Fin 2) ℝ :=
   !![1,  1;
      1,  1;
      1, -1;
@@ -76,7 +76,7 @@ noncomputable def pairingR : Matrix (Fin 4) (Fin 2) ℝ :=
 noncomputable def pairingProjection : Matrix (Fin 2) (Fin 2) ℝ :=
   !![1, 0; 0, 0]
 
-/-- The four-dimensional sector trace matrix `R L`. -/
+/-- The four-dimensional sector trace matrix `Q L`. -/
 noncomputable def traceMatrix : Matrix (Fin 4) (Fin 4) ℝ :=
   !![1 / 6, 1 / 3, 1 / 2, 0;
      1 / 6, 1 / 3, 1 / 2, 0;
@@ -92,34 +92,34 @@ noncomputable def perronProjection : Matrix (Fin 4) (Fin 4) ℝ :=
 
 /-- The sector virtual matrix `l_k r_k`. -/
 noncomputable def virtualMatrix (k : Fin 4) : Matrix (Fin 2) (Fin 2) ℝ :=
-  Matrix.vecMulVec (fun i => pairingL i k) (fun j => pairingR k j)
+  Matrix.vecMulVec (fun i => pairingL i k) (fun j => pairingQ k j)
 
 /-- Coefficients expressing an arbitrary two-by-two matrix in the four sector
 virtual matrices. -/
 noncomputable def reconstructionCoefficients
-    (X : Matrix (Fin 2) (Fin 2) ℝ) : Fin 4 → ℝ :=
+    {𝕜 : Type*} [Ring 𝕜] (X : Matrix (Fin 2) (Fin 2) 𝕜) : Fin 4 → 𝕜 :=
   ![X 0 0 + 5 * X 0 1 + X 1 0 - 7 * X 1 1,
     X 0 0 - X 0 1 + X 1 0 + 5 * X 1 1,
     X 0 0 - X 0 1 + X 1 0 - X 1 1,
     X 0 0 - X 0 1 - 2 * X 1 0 + 2 * X 1 1]
 
-lemma pairingL_mul_pairingR : pairingL * pairingR = pairingProjection := by
+lemma pairingL_mul_pairingQ : pairingL * pairingQ = pairingProjection := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [pairingL, pairingR, pairingProjection, Matrix.mul_apply,
+    simp [pairingL, pairingQ, pairingProjection, Matrix.mul_apply,
       Fin.sum_univ_four] <;> ring
 
-lemma pairingR_mul_pairingL : pairingR * pairingL = traceMatrix := by
+lemma pairingQ_mul_pairingL : pairingQ * pairingL = traceMatrix := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [pairingL, pairingR, traceMatrix, Matrix.mul_apply,
+    simp [pairingL, pairingQ, traceMatrix, Matrix.mul_apply,
       Fin.sum_univ_two] <;> ring
 
 /-- The product in the closed-tensor space is idempotent, as required by the
 normalized source zero-correlation-length identity at lines 1490--1493. -/
-theorem pairingL_mul_pairingR_isIdempotent :
-    IsIdempotentElem (pairingL * pairingR) := by
-  rw [pairingL_mul_pairingR]
+theorem pairingL_mul_pairingQ_isIdempotent :
+    IsIdempotentElem (pairingL * pairingQ) := by
+  rw [pairingL_mul_pairingQ]
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp [pairingProjection, Matrix.mul_apply, Fin.sum_univ_two]
@@ -152,16 +152,16 @@ lemma trace_traceMatrix : Matrix.trace traceMatrix = 1 := by
 theorem traceMatrix_tracePowersConstant :
     ∀ N : ℕ, 0 < N →
       Matrix.trace (traceMatrix ^ N) = Matrix.trace traceMatrix := by
-  rw [← pairingR_mul_pairingL]
+  rw [← pairingQ_mul_pairingL]
   exact Matrix.trace_pow_eq_trace_of_rectangular_idempotent
-    pairingL pairingR pairingL_mul_pairingR_isIdempotent
+    pairingL pairingQ pairingL_mul_pairingQ_isIdempotent
 
 /-- The sector trace matrix satisfies the scale-invariant consequence of the
 rectangular idempotence, although it is not itself idempotent. -/
 theorem traceMatrix_sq_eq_cube : traceMatrix ^ 2 = traceMatrix ^ 3 := by
-  rw [← pairingR_mul_pairingL]
+  rw [← pairingQ_mul_pairingL]
   exact Matrix.pow_two_eq_pow_three_of_rectangular_idempotent
-    pairingL pairingR pairingL_mul_pairingR_isIdempotent
+    pairingL pairingQ pairingL_mul_pairingQ_isIdempotent
 
 /-- The sector trace matrix is not idempotent. -/
 theorem traceMatrix_not_idempotent : traceMatrix * traceMatrix ≠ traceMatrix := by
@@ -171,19 +171,19 @@ theorem traceMatrix_not_idempotent : traceMatrix * traceMatrix ≠ traceMatrix :
   norm_num [perronProjection, traceMatrix] at hentry
 
 /-- The nilpotent remainder is exactly the failure of the desired identity
-`R (1 - L R) L = 0`. -/
+`Q (1 - L Q) L = 0`. -/
 theorem pairing_nilpotent_remainder_ne_zero :
-    pairingR * (1 - pairingL * pairingR) * pairingL ≠ 0 := by
+    pairingQ * (1 - pairingL * pairingQ) * pairingL ≠ 0 := by
   intro h
   apply traceMatrix_not_idempotent
-  rw [← pairingR_mul_pairingL]
+  rw [← pairingQ_mul_pairingL]
   have hdiff :
-      pairingR * pairingL -
-          (pairingR * pairingL) * (pairingR * pairingL) = 0 := by
+      pairingQ * pairingL -
+          (pairingQ * pairingL) * (pairingQ * pairingL) = 0 := by
     calc
-      pairingR * pairingL -
-          (pairingR * pairingL) * (pairingR * pairingL) =
-        pairingR * (1 - pairingL * pairingR) * pairingL := by
+      pairingQ * pairingL -
+          (pairingQ * pairingL) * (pairingQ * pairingL) =
+        pairingQ * (1 - pairingL * pairingQ) * pairingL := by
           simp only [Matrix.mul_sub, Matrix.mul_one, Matrix.sub_mul,
             Matrix.mul_assoc]
       _ = 0 := h
@@ -194,7 +194,7 @@ theorem virtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℝ) :
     ∑ k, reconstructionCoefficients X k • virtualMatrix k = X := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [reconstructionCoefficients, virtualMatrix, pairingL, pairingR,
+    simp [reconstructionCoefficients, virtualMatrix, pairingL, pairingQ,
       Fin.sum_univ_four] <;> ring
 
 /-- The sector virtual matrices span the full two-by-two matrix algebra. -/
@@ -221,21 +221,12 @@ virtual matrices above. -/
 noncomputable def mpoTensor : MPOTensor 4 2 :=
   fun i j => if i = j then complexVirtualMatrix i else 0
 
-/-- Complex coefficients expressing an arbitrary two-by-two matrix in the
-four complexified sector virtual matrices. -/
-noncomputable def complexReconstructionCoefficients
-    (X : Matrix (Fin 2) (Fin 2) ℂ) : Fin 4 → ℂ :=
-  ![X 0 0 + 5 * X 0 1 + X 1 0 - 7 * X 1 1,
-    X 0 0 - X 0 1 + X 1 0 + 5 * X 1 1,
-    X 0 0 - X 0 1 + X 1 0 - X 1 1,
-    X 0 0 - X 0 1 - 2 * X 1 0 + 2 * X 1 1]
-
 theorem complexVirtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    ∑ k, complexReconstructionCoefficients X k • complexVirtualMatrix k = X := by
+    ∑ k, reconstructionCoefficients X k • complexVirtualMatrix k = X := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [complexReconstructionCoefficients, complexVirtualMatrix, virtualMatrix,
-      pairingL, pairingR, Fin.sum_univ_four] <;> ring
+    simp [reconstructionCoefficients, complexVirtualMatrix, virtualMatrix,
+      pairingL, pairingQ, Fin.sum_univ_four] <;> ring
 
 lemma complexVirtualMatrix_mem_tensor_span (k : Fin 4) :
     complexVirtualMatrix k ∈
@@ -264,11 +255,11 @@ lemma physTraceTransfer_mpoTensor :
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp [MPOTensor.physTraceTransfer, mpoTensor, complexVirtualMatrix,
-      virtualMatrix, pairingL, pairingR, pairingProjection,
+      virtualMatrix, pairingL, pairingQ, pairingProjection,
       Fin.sum_univ_four] <;> ring
 
 /-- The injective diagonal tensor has source zero correlation length because
-its physical-trace transfer is the idempotent `L R`. -/
+its physical-trace transfer is the idempotent `L Q`. -/
 theorem mpoTensor_isSourceZCL : MPOTensor.IsSourceZCL mpoTensor := by
   apply MPOTensor.isSourceZCL_of_physTraceTransfer_sq mpoTensor
   · rw [physTraceTransfer_mpoTensor]
@@ -312,26 +303,26 @@ satisfy the rectangular pairing identity, primitivity, trace normalization,
 and full virtual-matrix spanning, while the trace matrix is neither idempotent
 nor an outer product. -/
 theorem counterexample_with_virtual_spanning :
-    traceMatrix = pairingR * pairingL ∧
-      IsIdempotentElem (pairingL * pairingR) ∧
+    traceMatrix = pairingQ * pairingL ∧
+      IsIdempotentElem (pairingL * pairingQ) ∧
       Matrix.IsPrimitive traceMatrix ∧
       Matrix.trace traceMatrix = 1 ∧
       Submodule.span ℝ (Set.range virtualMatrix) =
         (⊤ : Submodule ℝ (Matrix (Fin 2) (Fin 2) ℝ)) ∧
       traceMatrix * traceMatrix ≠ traceMatrix ∧
       ¬ ∃ a b : Fin 4 → ℝ, traceMatrix = Matrix.vecMulVec a b :=
-  ⟨pairingR_mul_pairingL.symm, pairingL_mul_pairingR_isIdempotent,
+  ⟨pairingQ_mul_pairingL.symm, pairingL_mul_pairingQ_isIdempotent,
     traceMatrix_isPrimitive, trace_traceMatrix, virtualMatrix_span_eq_top,
     traceMatrix_not_idempotent, traceMatrix_not_rankOne⟩
 
 /-- An injective source-ZCL tensor realizes the spanning sector matrices of
 the counterexample as its diagonal physical slices.  Its physical-trace
-transfer is the idempotent product `L R`, while the opposite product `R L`
+transfer is the idempotent product `L Q`, while the opposite product `Q L`
 retains a nonzero nilpotent remainder.
 
 This statement contains every tensor-independent algebraic conclusion used in
 the present formal proof of Lemma C.5.  It does not identify `pairingL` and
-`pairingR` with the particular tensors chosen by the SAL inverse-map
+`pairingQ` with the particular tensors chosen by the SAL inverse-map
 construction. -/
 theorem injective_sourceZCL_tensor_with_nilpotent_sector_pairing :
     MPSTensor.IsInjective mpoTensor.toMPSTensor ∧
@@ -341,18 +332,18 @@ theorem injective_sourceZCL_tensor_with_nilpotent_sector_pairing :
       (∀ k : Fin 4, mpoTensor k k = complexVirtualMatrix k) ∧
       Submodule.span ℝ (Set.range virtualMatrix) =
         (⊤ : Submodule ℝ (Matrix (Fin 2) (Fin 2) ℝ)) ∧
-      IsIdempotentElem (pairingL * pairingR) ∧
-      traceMatrix = pairingR * pairingL ∧
+      IsIdempotentElem (pairingL * pairingQ) ∧
+      traceMatrix = pairingQ * pairingL ∧
       Matrix.IsPrimitive traceMatrix ∧
       Matrix.trace traceMatrix = 1 ∧
       (∀ N : ℕ, 0 < N →
         Matrix.trace (traceMatrix ^ N) = Matrix.trace traceMatrix) ∧
       traceMatrix ^ 2 = traceMatrix ^ 3 ∧
-      pairingR * (1 - pairingL * pairingR) * pairingL ≠ 0 ∧
+      pairingQ * (1 - pairingL * pairingQ) * pairingL ≠ 0 ∧
       ¬ ∃ a b : Fin 4 → ℝ, traceMatrix = Matrix.vecMulVec a b :=
   ⟨mpoTensor_isInjective, mpoTensor_isSourceZCL, physTraceTransfer_mpoTensor,
     mpoTensor_diagonal_slice, virtualMatrix_span_eq_top,
-    pairingL_mul_pairingR_isIdempotent, pairingR_mul_pairingL.symm,
+    pairingL_mul_pairingQ_isIdempotent, pairingQ_mul_pairingL.symm,
     traceMatrix_isPrimitive, trace_traceMatrix,
     traceMatrix_tracePowersConstant, traceMatrix_sq_eq_cube,
     pairing_nilpotent_remainder_ne_zero, traceMatrix_not_rankOne⟩
