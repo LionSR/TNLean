@@ -218,6 +218,28 @@ proportionality constants have the form
 for one $a>0$.  Only then can $a$ be absorbed once into the bond, or
 equivalently into the neighboring operators, independently of $N$.
 
+The finite-state part of this comparison is now isolated.  The tensor
+\leanid{MPOTensor.cyclicEdgeWeightTensor} has virtual dimension $d^2$ and
+generates exactly one prescribed cyclic nearest-neighbor scalar weight at
+every positive length.  The datum
+\leanid{MPOTensor.TranslationInvariantBondData.FixedProductTensorData}
+records one positive-dimensional tensor whose operator family is exactly the
+product of the translates of the fixed bond for every $N\geq2$.  Given such a
+datum, the theorem
+\leanid{MPOTensor.EtaLocalStructureData.%
+eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
+derives eventual nonzero proportionality to the source tensor without adding
+a length-one hypothesis.
+
+This does not yet construct the fixed tensor directly from an arbitrary
+\leanid{MPOTensor.TranslationInvariantBondData}.  The remaining local step is
+to assemble the chain-independent Beigi sector coordinates and neighboring
+operators into the cyclic scalar weight, then transport the resulting tensor
+back through the same one-site unitary.  Even after that construction, a
+normal representative is not automatic: it requires the normal-block
+canonical-form argument that rules out additional canonical summands and
+proves the geometric law for $c_N$.
+
 The scaled identity uses only the fixed commuting bond and its positive
 realization scalar.  It does not assert zero correlation length, rank-one trace
 factorization, a quantum Markov decomposition, saturation of the area law, or
