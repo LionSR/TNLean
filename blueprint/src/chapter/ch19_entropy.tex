@@ -1488,6 +1488,10 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:is_kraus_cp_add,
+        thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving,
+        lem:partial_trace_support_petz_map_trace,
+        lem:partial_trace_petz_complement_trace}
     The two summands are completely positive.  Since
     $\operatorname{tr}(\omega_R)=1$, the complementary term satisfies
     \[
