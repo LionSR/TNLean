@@ -232,10 +232,10 @@ arXiv:quant-ph/0304007v2, Theorem 3 and equation (8). -/
 theorem partialTraceRightPetzComplementMap_apply
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
     (X : Matrix L L ℂ) :
+    let Q := 1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj
     partialTraceRightPetzComplementMap σ hσ X =
-      ((1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj) * X *
-          (1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj)) ⊗ₖ
-        partialTraceLeft σ := by
+      (Q * X * Q) ⊗ₖ partialTraceLeft σ := by
+  dsimp only
   simp [partialTraceRightPetzComplementMap, preparationMap,
     (PosSemidef.partialTraceRight hσ).isHermitian.one_sub_supportProj_isHermitian.eq]
 
@@ -258,9 +258,9 @@ arXiv:quant-ph/0304007v2, Theorem 3. -/
 theorem partialTraceRightPetzComplementMap_trace
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
     (hσtrace : Matrix.trace σ = 1) (X : Matrix L L ℂ) :
+    let Q := 1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj
     Matrix.trace (partialTraceRightPetzComplementMap σ hσ X) =
-      Matrix.trace
-        ((1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj) * X) := by
+      Matrix.trace (Q * X) := by
   let Q := 1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj
   have hQidem : Q * Q = Q :=
     (PosSemidef.partialTraceRight hσ).isHermitian.one_sub_supportProj_idem
@@ -295,8 +295,7 @@ theorem partialTraceRightPetzChannel_isKrausCPTP
     (hσtrace : Matrix.trace σ = 1) :
     IsKrausCPTP (partialTraceRightPetzChannel σ hσ) := by
   apply isKrausCPTP_of_isKrausCP_trace_preserving
-  · exact isKrausCP_add
-      (partialTraceRightPetzMap_isKrausCP σ hσ)
+  · exact (partialTraceRightPetzMap_isKrausCP σ hσ).add
       (partialTraceRightPetzComplementMap_isKrausCP σ hσ)
   · intro X
     rw [partialTraceRightPetzChannel, LinearMap.add_apply, Matrix.trace_add,
@@ -319,11 +318,12 @@ theorem partialTraceRightPetzChannel_apply_of_supported
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
     (X : Matrix L L ℂ)
     (hX :
-      (PosSemidef.partialTraceRight hσ).isHermitian.supportProj * X *
-        (PosSemidef.partialTraceRight hσ).isHermitian.supportProj = X) :
+      let P := (PosSemidef.partialTraceRight hσ).isHermitian.supportProj
+      P * X * P = X) :
     partialTraceRightPetzChannel σ hσ X = partialTraceRightPetzMap σ hσ X := by
   let P := (PosSemidef.partialTraceRight hσ).isHermitian.supportProj
   let Q : Matrix L L ℂ := 1 - P
+  change P * X * P = X at hX
   have hPidem : P * P = P :=
     (PosSemidef.partialTraceRight hσ).isHermitian.supportProj_idem
   have hPX : P * X = X := by

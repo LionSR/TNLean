@@ -1396,7 +1396,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     \label{def:partial_trace_petz_complement}
     \lean{Matrix.partialTraceRightPetzComplementMap}
     \leanok
-    \uses{def:partial_trace_support_petz_map}
+    \uses{def:support_proj, def:partial_trace_left,
+        def:mpdo_state_preparation_map}
     Put $Q_\tau=\mathbf 1_L-P_\tau$ and
     $\omega_R=\operatorname{tr}_L\sigma$.  The complementary term is
     \[
