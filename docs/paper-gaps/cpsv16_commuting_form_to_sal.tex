@@ -4,7 +4,7 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 
-\input{command}
+\input{./command}
 
 \title{The Commuting-Form-to-SAL Implication for Simple MPDOs}
 \author{}
@@ -74,16 +74,10 @@ allows a new two-site bond $B_N$.  It is weaker than the source hypothesis and
 does not support the comparison of the $N$, $N+1$, and $N+2$ chains used by
 the source trace-factorization argument.
 
-The source family is represented by the bond in
-\begin{center}
-\path{MPOTensor.TranslationInvariantBondData}
-\end{center}
-together with the realization equalities in
-\begin{center}
-\path{MPOTensor.EtaLocalStructureData}.
-\end{center}
-These declarations fix one bond whose commuting translates realize every
-finite chain.
+The formal model fixes one bond whose commuting translates realize every
+finite chain.\footnote{The bond family is
+\leanid{MPOTensor.TranslationInvariantBondData}; the realization equalities
+are fields of \leanid{MPOTensor.EtaLocalStructureData}.}
 
 The source ZCL hypothesis is
 \leanid{MPOTensor.IsSourceZCL}, the scale-invariant idempotence condition for
@@ -107,11 +101,11 @@ Consequently the source implication
   \Longrightarrow \text{SAL}
 \]
 is not yet formalized and must not carry a \texttt{\string\leanok} marker.
-The formal development proves only the final entropy-theoretic step:
-\path{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m} shows that
-quantum Markov decompositions at all admissible cuts imply SAL.  Its direct-sum
-hypothesis is a marked scope restriction, not an additional hypothesis on the
-source proposition.
+The formal development proves only the final entropy-theoretic step: quantum
+Markov decompositions at all admissible cuts imply SAL.\footnote{This is
+\leanid{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}.} Its
+direct-sum hypothesis is a marked scope restriction, not an additional
+hypothesis on the source proposition.
 
 \section{Elimination plan}
 
@@ -129,8 +123,7 @@ neighboring operators $\eta_{k,h}$ without assuming a Hayashi decomposition.
 Use \leanid{MPOTensor.IsSourceZCL} to prove the rank-one trace factorization
 $\operatorname{tr}(\eta_{k,h})=a_kb_h$ appearing at source lines~1610--1616.
 \item Trace the fourth region, construct the quantum Markov decomposition at
-each admissible cut, and apply
-\path{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}.
+each admissible cut, and apply the all-cut Markov theorem above.
 Only then may the source proposition receive a formal declaration and a
 \texttt{\string\leanok} marker.
 \end{enumerate}
