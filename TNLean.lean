@@ -410,6 +410,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.MutualInfoMonotone
+import TNLean.MPS.MPDO.ThermodynamicLimitCounterexample
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.LocalPurificationAreaLaw
