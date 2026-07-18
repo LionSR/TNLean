@@ -138,8 +138,8 @@ bond dimensions may differ.
 This theorem concerns the unit-phase part of the proportionality between
 normalized normal blocks. It does not construct the positive geometric
 rescaling needed to remove a length-dependent positive coefficient in
-CPSV16 equation `sigmaNK2`; the missing rescaling argument is documented in
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+the commuting-form decomposition; the missing rescaling argument is
+documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
 Source: CPSV16, Corollary `eqV`, lines 1121--1128, combined with the one-block
 case of the proportionality hypothesis in Theorem `thm1`, lines 1167--1182;
