@@ -143,7 +143,7 @@ CPSV16 equation `sigmaNK2`; the missing rescaling argument is documented in
 
 Source: CPSV16, Corollary `eqV`, lines 1121--1128, combined with the one-block
 case of the proportionality hypothesis in Theorem `thm1`, lines 1167--1182;
-see also arXiv:2011.12127, Theorem 4.4. -/
+see also arXiv:2011.12127, Theorem IV.4. -/
 theorem EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
     [NeZero D₁] [NeZero D₂]
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}

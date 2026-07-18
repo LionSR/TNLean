@@ -10,7 +10,7 @@ import TNLean.MPS.SharedInfra.GaugePhase
 
 This file contains a lightweight “proportional” variant of the single-block Fundamental Theorem,
 aligned with the **primitive/aperiodic** branch of Cirac et al., Rev. Mod. Phys. 93 (2021),
-Theorem 4.4 (arXiv:2011.12127).
+Theorem IV.4 (arXiv:2011.12127).
 
 * If `A` and `B` are related by a gauge transform up to a scalar `ζ` (`GaugePhaseEquiv A B`), then
   their Matrix Product Vectors are proportional for each system size `N`.
@@ -38,7 +38,7 @@ variable [NeZero D]
 cross-overlap to have asymptotic norm one.
 
 This is the scalar-control argument used in the primitive single-block branch
-of Cirac et al., arXiv:2011.12127, Theorem 4.4.  No common bond dimension is
+of Cirac et al., arXiv:2011.12127, Theorem IV.4. No common bond dimension is
 required. -/
 theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
