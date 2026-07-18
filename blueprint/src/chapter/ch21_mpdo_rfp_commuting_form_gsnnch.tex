@@ -316,7 +316,11 @@
     direct sum of tensor products.
 \end{proof}
 
-\begin{theorem}[Finite-chain cyclic neighboring-operator form]
+% **Local fix (proportionality scalar):** The converse at source lines
+% 1603--1605 invokes the coefficient-free equation sigmaNK2 after assuming
+% only proportionality to the commuting-bond product.  The statement below
+% retains that scalar.  See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Scaled finite-chain cyclic neighboring-operator form]
     \label{thm:mpdo_eta_local_sigma_nk2}
     \lean{MPOTensor.sitewisePhysicalMatrix_conjTranspose}
     \lean{MPOTensor.reindex_sitewisePhysicalMatrix_two}
@@ -343,9 +347,12 @@
     \]
     Here $E_N$ is the cyclic regrouping from the edge factors
     $H_{k_n,r}\otimes H_{k_{n+1},l}$ to the site factors
-    $H_{k_n,r}\otimes H_{k_n,l}$.  This is the finite-chain equation
-    \emph{sigmaNK2} in
-    \cite[Appendix~C.2, lines~1581--1593]{Cirac2016MPDO_arXiv}.
+    $H_{k_n,r}\otimes H_{k_n,l}$.  The factor $c_N$ is retained from the
+    proportionality relation in
+    \cite[Appendix~C.2, lines~1571--1576]{Cirac2016MPDO_arXiv}.  The passage at
+    \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv} suppresses this
+    factor when invoking the coefficient-free equation \emph{sigmaNK2}; the
+    coefficient-free assertion is not part of the present theorem.
 \end{theorem}
 
 \begin{proof}\leanok

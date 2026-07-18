@@ -21,7 +21,8 @@ trace factorization, a Markov decomposition, nor saturation of the area law.
 
 ## References
 
-* arXiv:1606.00608, Appendix C.2, equation sigmaNK2, lines 1581--1605.
+* arXiv:1606.00608, Appendix C.2, equation expression, lines 1571--1576,
+  and equation sigmaNK2, lines 1581--1605.
 -/
 
 open scoped BigOperators ComplexOrder Kronecker Matrix
@@ -656,18 +657,26 @@ theorem reindex_product_embedLocalOperator_two_of_etaPair_decomposition
   exact reindex_product_embedLocalOperator_of_etaPair_decomposition
     (N := 2) (by omega) dl dr e η B hB
 
-/-- **Finite-chain cyclic neighboring-operator identity.** A positive
+/-- **Scaled finite-chain cyclic neighboring-operator identity.** A positive
 translation-invariant commuting bond admits one chain-independent unitary,
 one collection of sector dimensions, and one positive neighboring family such
 that, at every length at least two, conjugation by the sitewise tensor power
 and cyclic regrouping give the direct sum of cyclic neighboring products, up
 to the positive realization scalar.
 
-This is precisely the finite-chain equation `sigmaNK2`.  It uses neither zero
-correlation length, rank-one trace factorization, a Markov decomposition, nor
-saturation of the area law, and it does not prove Proposition `4to2`.
+**Local fix (proportionality scalar):** The converse argument in
+arXiv:1606.00608, lines 1603--1605, passes from a matrix proportional to a
+commuting-bond product to the coefficient-free equation sigmaNK2 without
+retaining the proportionality scalar.  The statement below preserves the
+positive scalar at each chain length.  This discrepancy is recorded in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1605.
+This result uses neither zero correlation length, rank-one trace factorization,
+a Markov decomposition, nor saturation of the area law, and it does not prove
+Proposition `4to2`.
+
+Source: arXiv:1606.00608, Appendix C.2, equation expression, lines 1571--1576,
+and equation sigmaNK2 as invoked at lines 1603--1605.
 Documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
     {D : ℕ} {M : MPOTensor d D} (data : EtaLocalStructureData M) :
