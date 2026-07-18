@@ -407,46 +407,150 @@ strong subadditivity for a normalized three-site reduced state.
     decomposition on the middle subsystem.
 \end{proof}
 
-\begin{theorem}[Four-site SAL marginal has a Hayashi decomposition]
-    \label{thm:mpdo_four_site_sal_eta_structure}
-    \lean{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}
+\begin{lemma}[Partial trace along a right tensor factor]
+    \label{lem:partial_trace_right_along}
+    \lean{Matrix.partialTraceRightAlong,
+      Matrix.partialTraceRightAlong_apply,
+      Matrix.PosSemidef.partialTraceRightAlong,
+      Matrix.trace_partialTraceRightAlong}
+    \leanok
+    Suppose that $C\simeq C'\otimes E$.  The partial trace over $E$ is given
+    entrywise by
+    \[
+        \bigl(\tr_E X\bigr)_{(a,c'),(a',d')}
+        =\sum_e X_{(a,c',e),(a',d',e)}.
+    \]
+    It preserves positivity and trace.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_right_partial_trace_cptp}
+    Reindex $C$ as $C'\otimes E$ and apply the ordinary right partial trace.
+    Its entry formula gives the displayed sum, while complete positivity and
+    trace preservation give the final assertions.
+\end{proof}
+
+\begin{theorem}[Right marginals preserve a quantum Markov decomposition]
+    \label{thm:quantum_markov_right_marginal}
+    \lean{Entropy.rightMarginalAlong,
+      Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong}
+    \leanok
+    \uses{def:entropy_quantum_markov_decomposition,
+      lem:partial_trace_right_along}
+    Suppose that $C\simeq C'\otimes E$ and
+    \[
+        \rho_{ABC}
+        =\bigoplus_k p_k\rho_{A b_1}^{(k)}\otimes
+          \rho_{b_2 C}^{(k)}
+    \]
+    is a quantum Markov decomposition on $B$. Then the marginal
+    $\rho_{ABC'}=\tr_E(\rho_{ABC})$ has the decomposition
+    \[
+        \rho_{ABC'}
+        =\bigoplus_k p_k\rho_{A b_1}^{(k)}\otimes
+          \tr_E\!\left(\rho_{b_2 C}^{(k)}\right).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:partial_trace_right_along}
+    The middle-system decomposition, its unitary change of basis, and the
+    probabilities $p_k$ are unchanged.  Partial trace preserves positivity and
+    trace, so each $\tr_E(\rho_{b_2 C}^{(k)})$ is a density operator.  Applying
+    $\tr_E$ to the block-diagonal identity gives the displayed formula.
+\end{proof}
+
+\begin{lemma}[Tracing a terminal block]
+    \label{lem:mpdo_reduced_state_collapse_last}
+    \lean{collapse_last, collapse_last', reducedBlockState_cast}
+    \leanok
+    Let $a,b,c,N\in\mathbb N$ satisfy $a+b+c\leq N$.  For configurations
+    $u,v$ on the first $a+b$ sites,
+    \[
+      \sum_y \sigma_{a+b+c}^{(N)}(K)_{u\mathbin\Vert y,\,
+        v\mathbin\Vert y}
+      =\sigma_{a+b}^{(N)}(K)_{u,v},
+    \]
+    where the sum ranges over configurations on the last $c$ sites.  The same
+    identity holds after replacing an arithmetically equal block length by its
+    canonical identification.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both reduced states as partial traces of the normalized periodic
+    state.  The left-hand side first traces the complement of the
+    $(a+b+c)$-site block and then its last $c$ sites; combining the two sums
+    gives the partial trace onto the first $a+b$ sites.
+\end{proof}
+
+\begin{theorem}[SAL three-site marginals have Hayashi decompositions]
+    \label{thm:mpdo_sal_three_site_eta_structure}
+    \lean{MPOTensor.exists_etaStructure_reducedBlockState_three_of_isSAL}
     \leanok
     \uses{def:is_sal, def:mpdo_eta_structure}
-    Let $K$ satisfy the strong area law, and let
-    $\sigma_3^{(4)}(K)=\tr_4\sigma^{(4)}(K)$ be the three-site marginal of its
-    normalized four-site periodic state. Then $\sigma_3^{(4)}(K)$ admits a
-    quantum-Markov decomposition on its middle site.
-
-    This assertion is restricted to the four-site chain. It is the $N=4$
-    specialization of the three-site decomposition in
-    \cite[Appendix~C.2, lines~1351--1363]{Cirac2016MPDO_arXiv}, which treats all
-    chain lengths in the range of its four-region argument.
+    Let $K$ satisfy the strong area law and let $N\geq4$.  If
+    $\sigma_3^{(N)}(K)$ is obtained from the normalized $N$-site periodic state
+    by tracing out all but its first three sites, then
+    $\sigma_3^{(N)}(K)$ admits a quantum Markov decomposition on its middle
+    site.  This is the result proved in
+    \cite[Appendix~C.2, lines~1351--1371]{Cirac2016MPDO_arXiv}.  The
+    decomposition may depend on $N$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_sal_ssa_equality, thm:ssa_equality_reindex_factors,
-        thm:sal_implies_eta_structure}
-    Let $\rho^{\mathrm{flat}}$ denote the three-site marginal with index set
-    $(\Fin{d^1})^3$.
+        thm:sal_implies_eta_structure,
+        thm:quantum_markov_right_marginal,
+        lem:mpdo_reduced_state_collapse_last}
+    Divide the first $N-1$ sites into consecutive regions of lengths $1$, $1$,
+    and $N-3$.  Let $\rho^{\mathrm{flat}}_{ABC}$ denote this marginal in the
+    corresponding index set
+    $\Fin{d^1}\times\Fin{d^1}\times\Fin{d^{N-3}}$.
     By Theorem~\ref{thm:mpdo_sal_ssa_equality},
     \[
         S(\rho^{\mathrm{flat}}_{ABC})+S(\rho^{\mathrm{flat}}_B)
         =S(\rho^{\mathrm{flat}}_{AB})+S(\rho^{\mathrm{flat}}_{BC}).
     \]
-    Each singleton block has the canonical identification
+    The first two singleton blocks have the canonical identification
     \[
         e_{\mathrm{site}}:\Fin{d}\simeq\Fin{d^1},
-        \qquad
-        E=e_{\mathrm{site}}\times e_{\mathrm{site}}\times e_{\mathrm{site}},
     \]
-    and reindexing $\rho^{\mathrm{flat}}$ along $E$ gives
-    $\sigma_3^{(4)}(K)$. Hence
-    Theorem~\ref{thm:ssa_equality_reindex_factors} preserves the displayed
-    equality. Positivity and unit trace follow from the normalized reduced
-    state, so
-    Theorem~\ref{thm:sal_implies_eta_structure} gives the required quantum
-    Markov decomposition.
+    and reindexing these factors preserves the displayed equality.  Positivity
+    and unit trace follow from the normalized reduced state, so the Hayashi
+    characterization gives a quantum Markov decomposition of the $(N-1)$-site
+    marginal.  Finally split the third region as
+    $C\simeq c\otimes E$, where $c$ is its first site and $E$ contains the
+    remaining $N-4$ sites.  Theorem~\ref{thm:quantum_markov_right_marginal} gives
+    the same middle-site direct sum after tracing out $E$.  The contiguous-block
+    partial-trace identity gives
+    \[
+      \tr_{4,\ldots,N-1}\!\left(\sigma_{N-1}^{(N)}(K)\right)
+        =\sigma_3^{(N)}(K),
+    \]
+    which identifies the resulting operator with the required three-site
+    marginal.
+\end{proof}
+
+\begin{theorem}[Four-site SAL marginals have Hayashi decompositions]
+    \label{thm:mpdo_four_site_sal_eta_structure}
+    \lean{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}
+    \leanok
+    \uses{def:is_sal, def:mpdo_eta_structure}
+    Let $K$ satisfy the strong area law.  If $\sigma_3^{(4)}(K)$ is obtained
+    from its normalized four-site periodic state by tracing out the fourth
+    site, then $\sigma_3^{(4)}(K)$ admits a quantum Markov decomposition on its
+    middle site.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sal_three_site_eta_structure}
+    This is the case $N=4$ of
+    Theorem~\ref{thm:mpdo_sal_three_site_eta_structure}.
 \end{proof}
 
 \begin{theorem}[BNT sector projectors for the four-site SAL marginal]

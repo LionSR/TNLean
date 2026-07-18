@@ -35,6 +35,8 @@ the namespace abbreviation for the quantum-Markov-chain decomposition.
 * `Entropy.exists_quantumMarkovDecomposition_of_ssaEquality` — forward
   direction.
 * `Entropy.isSSAEquality_of_quantumMarkovDecomposition` — reverse direction.
+* `Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong` — tracing
+  part of the right subsystem preserves the decomposition.
 
 ## References
 
@@ -100,6 +102,102 @@ theorem isSSAEquality_of_quantumMarkovDecomposition
     (hMarkov : Nonempty (QuantumMarkovDecomposition ρ_ABC)) :
     IsSSAEquality ρ_ABC hρ_dm.1.isHermitian :=
   (ssaEquality_iff_exists_quantumMarkovDecomposition ρ_ABC hρ_dm).mpr hMarkov
+
+/-- Trace a chosen factor of the right subsystem of a tripartite state.
+
+If `eC` identifies (C) with (C' \otimes E), this is the marginal on
+(A \otimes B \otimes C') obtained by tracing out (E). -/
+noncomputable def rightMarginalAlong {dA dB dC dC' : ℕ} {γ : Type*} [Fintype γ]
+    (eC : Fin dC ≃ Fin dC' × γ)
+    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    Matrix (Fin dA × Fin dB × Fin dC') (Fin dA × Fin dB × Fin dC') ℂ :=
+  fun (a, b, c) (a', b', c') ↦
+    ∑ x : γ, ρ_ABC (a, b, eC.symm (c, x)) (a', b', eC.symm (c', x))
+
+/-- A quantum-Markov decomposition on the middle subsystem is preserved when
+part of the right subsystem is traced out.
+
+This is the partial-trace step in arXiv:1606.00608, Appendix C.2, Lemma
+Lsigma3, lines 1360--1369. -/
+theorem exists_quantumMarkovDecomposition_rightMarginalAlong
+    {dA dB dC dC' : ℕ} {γ : Type*} [Fintype γ]
+    (eC : Fin dC ≃ Fin dC' × γ)
+    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ)
+    (hMarkov : Nonempty (QuantumMarkovDecomposition ρ_ABC)) :
+    Nonempty (QuantumMarkovDecomposition (rightMarginalAlong eC ρ_ABC)) := by
+  obtain ⟨H⟩ := hMarkov
+  refine ⟨{
+    m := H.m
+    dL := H.dL
+    dR := H.dR
+    decompB := H.decompB
+    U_B := H.U_B
+    p := H.p
+    hp_nonneg := H.hp_nonneg
+    hp_sum := H.hp_sum
+    ρ_left := H.ρ_left
+    ρ_right := fun j ↦ Matrix.partialTraceRightAlong eC (H.ρ_right j)
+    hρ_left_dm := H.hρ_left_dm
+    hρ_right_dm := by
+      intro j
+      constructor
+      · exact (H.hρ_right_dm j).1.partialTraceRightAlong eC
+      · rw [Matrix.trace_partialTraceRightAlong]
+        exact (H.hρ_right_dm j).2
+    h_state := ?_ }⟩
+  classical
+  ext x y
+  rcases x with ⟨a, ⟨⟨j, lr⟩, c⟩⟩
+  rcases y with ⟨a', ⟨⟨j', lr'⟩, c'⟩⟩
+  rw [HayashiMarkov.blockState_apply]
+  rw [Matrix.reindex_apply]
+  rw [Matrix.submatrix_apply]
+  change
+    (HayashiMarkov.liftB (dA := dA) (dC := dC')
+        (H.U_B : Matrix (Fin dB) (Fin dB) ℂ) *
+        rightMarginalAlong eC ρ_ABC *
+        (HayashiMarkov.liftB (dA := dA) (dC := dC')
+          (H.U_B : Matrix (Fin dB) (Fin dB) ℂ))ᴴ)
+      (a, H.decompB.symm ⟨j, lr⟩, c) (a', H.decompB.symm ⟨j', lr'⟩, c') = _
+  rw [HayashiMarkov.liftB_conj_apply]
+  simp only [rightMarginalAlong]
+  simp_rw [Finset.mul_sum]
+  simp_rw [Finset.sum_mul]
+  let F (b b' : Fin dB) (x : γ) :=
+    (H.U_B : Matrix (Fin dB) (Fin dB) ℂ) (H.decompB.symm ⟨j, lr⟩) b *
+      ρ_ABC (a, b, eC.symm (c, x)) (a', b', eC.symm (c', x)) *
+      star ((H.U_B : Matrix (Fin dB) (Fin dB) ℂ) (H.decompB.symm ⟨j', lr'⟩) b')
+  change (∑ b : Fin dB, ∑ b' : Fin dB, ∑ x : γ, F b b' x) = _
+  have hsum : (∑ b : Fin dB, ∑ b' : Fin dB, ∑ x : γ, F b b' x) =
+      ∑ x : γ, ∑ b : Fin dB, ∑ b' : Fin dB, F b b' x := by
+    calc
+      _ = ∑ b : Fin dB, ∑ x : γ, ∑ b' : Fin dB, F b b' x :=
+        Finset.sum_congr rfl fun _ _ ↦ Finset.sum_comm
+      _ = _ := Finset.sum_comm
+  rw [hsum]
+  have hstate (x : γ) : (∑ b : Fin dB, ∑ b' : Fin dB, F b b' x) =
+      if h : j = j' then
+        (H.p j : ℂ) * H.ρ_left j (a, lr.1) (a', h ▸ lr'.1) *
+          H.ρ_right j (lr.2, eC.symm (c, x)) (h ▸ lr'.2, eC.symm (c', x))
+      else 0 := by
+    have hx := congrArg
+      (fun M ↦ M (a, ⟨j, lr⟩, eC.symm (c, x))
+        (a', ⟨j', lr'⟩, eC.symm (c', x))) H.h_state
+    rw [Matrix.reindex_apply, Matrix.submatrix_apply] at hx
+    change
+      (HayashiMarkov.liftB (dA := dA) (dC := dC)
+          (H.U_B : Matrix (Fin dB) (Fin dB) ℂ) * ρ_ABC *
+          (HayashiMarkov.liftB (dA := dA) (dC := dC)
+            (H.U_B : Matrix (Fin dB) (Fin dB) ℂ))ᴴ)
+        (a, H.decompB.symm ⟨j, lr⟩, eC.symm (c, x))
+        (a', H.decompB.symm ⟨j', lr'⟩, eC.symm (c', x)) = _ at hx
+    rw [HayashiMarkov.liftB_conj_apply, HayashiMarkov.blockState_apply] at hx
+    simpa [F] using hx
+  simp_rw [hstate]
+  by_cases hj : j = j'
+  all_goals simp [hj, Matrix.partialTraceRightAlong_apply, Finset.mul_sum]
 
 end MarkovChain
 
