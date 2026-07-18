@@ -216,9 +216,10 @@ theorem partialTraceRightPetzMap_trace
 map.  It measures the input on the orthogonal complement of the reference
 marginal support and prepares the other marginal of the reference matrix.
 
-This is the standard trace-preserving completion of the support transpose
-channel from Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2, Theorem 3 and equation (8). -/
+This file chooses this measure-and-prepare term to complete the support
+transpose formula of Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3 and equation (8).  The cited equation gives
+the support formula, not this particular complementary extension. -/
 noncomputable def partialTraceRightPetzComplementMap
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
     Matrix L L ℂ →ₗ[ℂ] Matrix (L × R) (L × R) ℂ :=
@@ -226,9 +227,10 @@ noncomputable def partialTraceRightPetzComplementMap
     singleKrausMap
       (1 - (PosSemidef.partialTraceRight hσ).isHermitian.supportProj)
 
-/-- The complementary term has the expected measure-and-prepare formula for
-the trace-preserving completion of Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2, Theorem 3 and equation (8). -/
+/-- The complementary term has the measure-and-prepare formula chosen here to
+complete the support formula of Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3 and equation (8).  The complementary term
+itself is not part of the cited equation. -/
 theorem partialTraceRightPetzComplementMap_apply
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
     (X : Matrix L L ℂ) :
@@ -239,9 +241,10 @@ theorem partialTraceRightPetzComplementMap_apply
   simp [partialTraceRightPetzComplementMap, preparationMap,
     (PosSemidef.partialTraceRight hσ).isHermitian.one_sub_supportProj_isHermitian.eq]
 
-/-- The complementary measure-and-prepare term in the trace-preserving
-completion of Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2, Theorem 3, is completely positive. -/
+/-- The complementary measure-and-prepare term chosen here to complete the
+support formula of Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3, is completely positive.  The cited theorem
+supplies the support formula rather than this particular completion. -/
 theorem partialTraceRightPetzComplementMap_isKrausCP
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
     IsKrausCP (partialTraceRightPetzComplementMap σ hσ) := by
@@ -252,9 +255,10 @@ theorem partialTraceRightPetzComplementMap_isKrausCP
 /-- The complementary term contributes the trace on the orthogonal complement
 of the reference marginal support when the reference matrix has trace one.
 
-This is the trace bookkeeping for the trace-preserving completion of the
-support transpose channel in Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2, Theorem 3. -/
+This is the trace bookkeeping for the complementary extension chosen here for
+the support transpose formula in Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3.  The cited theorem does not specify this
+particular extension. -/
 theorem partialTraceRightPetzComplementMap_trace
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
     (hσtrace : Matrix.trace σ = 1) (X : Matrix L L ℂ) :
@@ -276,9 +280,10 @@ theorem partialTraceRightPetzComplementMap_trace
 It agrees with the support formula on inputs supported on the reference
 marginal and sends the complementary weight to a fixed prepared state.
 
-This is the channel extension of the transpose map used in
-Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
-Theorem 3 and equation (8). -/
+This definition adds the complementary extension chosen here to the transpose
+map used in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
+Theorem 3 and equation (8).  The cited equation supplies only the support
+formula. -/
 noncomputable def partialTraceRightPetzChannel
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
     Matrix L L ℂ →ₗ[ℂ] Matrix (L × R) (L × R) ℂ :=
@@ -287,9 +292,10 @@ noncomputable def partialTraceRightPetzChannel
 /-- The completed partial-trace Petz map is trace-preserving and completely
 positive when the reference matrix has trace one.
 
-This is the channel completion of the support transpose map in
-Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
-Theorem 3 and equation (8). -/
+This is the trace-preserving property of the completion chosen here for the
+support transpose map in Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3 and equation (8).  The cited source gives
+the support formula rather than this particular completion. -/
 theorem partialTraceRightPetzChannel_isKrausCPTP
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
     (hσtrace : Matrix.trace σ = 1) :
@@ -312,8 +318,9 @@ theorem partialTraceRightPetzChannel_isKrausCPTP
 /-- On an input supported on the reference marginal, the completed channel
 agrees with the raw support Petz formula.
 
-This is the support restriction in Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2, Theorem 3 and equation (8). -/
+This proves that the completion chosen here restricts to the support formula
+of Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
+Theorem 3 and equation (8). -/
 theorem partialTraceRightPetzChannel_apply_of_supported
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
     (X : Matrix L L ℂ)
@@ -421,9 +428,9 @@ theorem partialTraceRightPetzMap_partialTraceRight
 /-- The completed partial-trace Petz channel recovers its reference matrix
 from the reference marginal.
 
-This is the reference-recovery identity for the transpose channel in
+This lifts the reference-recovery identity for the support formula of
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,
-Theorem 3 and equation (8). -/
+Theorem 3 and equation (8), to the completion chosen here. -/
 theorem partialTraceRightPetzChannel_partialTraceRight
     (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef) :
     partialTraceRightPetzChannel σ hσ (partialTraceRight σ) = σ := by
