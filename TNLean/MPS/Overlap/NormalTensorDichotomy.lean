@@ -141,8 +141,8 @@ rescaling needed to remove a length-dependent positive coefficient in
 the commuting-form decomposition; the missing rescaling argument is
 documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
-Source: CPSV16, Corollary `eqV`, lines 1121--1128, combined with the one-block
-case of the proportionality hypothesis in Theorem `thm1`, lines 1167--1182;
+Source: CPSV16, Corollary eqV, lines 1121--1128, combined with the one-block
+case of the proportionality hypothesis in Theorem thm1, lines 1167--1182;
 see also arXiv:2011.12127, Theorem IV.4. -/
 theorem EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
     [NeZero D₁] [NeZero D₂]
@@ -177,8 +177,8 @@ theorem EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalT
 /-- Positive-length nonzero proportionality is a sufficient special case of
 the eventual geometric-phase theorem for normal tensors.
 
-Source: CPSV16, Corollary `eqV`, lines 1121--1128, combined with the one-block
-case of the proportionality hypothesis in Theorem `thm1`, lines 1167--1182. -/
+Source: CPSV16, Corollary eqV, lines 1121--1128, combined with the one-block
+case of the proportionality hypothesis in Theorem thm1, lines 1167--1182. -/
 theorem NonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
     [NeZero D₁] [NeZero D₂]
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
