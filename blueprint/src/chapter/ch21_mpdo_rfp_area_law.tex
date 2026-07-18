@@ -576,7 +576,8 @@
         \cong (\mathbb C^d)^{\otimes L}
           \otimes (\mathbb C^{d_K})^{\otimes L}
     \]
-    and trace the ancillary factor. Denote this map by $\operatorname{Tr}_{K,L}$.
+    and trace the ancillary factor. Denote this map by
+    $\operatorname{Tr}_{\mathrm{anc},L}$.
 \end{definition}
 
 \begin{lemma}[Block ancillary trace is a channel]
@@ -584,7 +585,8 @@
     \lean{MPOTensor.blockAncillaryTraceMap_isKrausCPTP}
     \leanok
     \uses{def:block_ancillary_trace, def:is_kraus_cptp}
-    The map $\operatorname{Tr}_{K,L}$ is trace-preserving and completely positive.
+    The map $\operatorname{Tr}_{\mathrm{anc},L}$ is trace-preserving and
+    completely positive.
 \end{lemma}
 
 \begin{theorem}[Coefficients of the ancillary traces]
@@ -593,13 +595,20 @@
       MPOTensor.tensorMapBoth_blockAncillaryTraceMap_apply}
     \leanok
     \uses{def:block_ancillary_trace}
-    If $X$ is an operator on a spin--ancilla block, then
+    If $X$ is an operator on a spin--ancilla block, then for
+    $i,j\in [d]^L$,
     \[
-      \operatorname{Tr}_{K,L}(X)_{i,j}
-        =\sum_{\kappa}X_{(i,\kappa),(j,\kappa)}.
+      \operatorname{Tr}_{\mathrm{anc},L}(X)_{i,j}
+        =\sum_{\kappa\in[d_K]^L}X_{(i,\kappa),(j,\kappa)}.
     \]
-    Across a cut, applying the ancillary traces to both blocks gives the two
-    independent sums over the left and right ancillary configurations.
+    For $i,j\in[d]^L$ and $x,y\in[d]^K$, applying the ancillary traces to
+    both blocks across the cut $L\mid K$ gives
+    \[
+      \bigl[(\operatorname{Tr}_{\mathrm{anc},L}\otimes
+        \operatorname{Tr}_{\mathrm{anc},K})(X)\bigr]_{(i,x),(j,y)}
+      =\sum_{\kappa\in[d_K]^L}\sum_{\lambda\in[d_K]^K}
+        X_{((i,\kappa),(x,\lambda)),((j,\kappa),(y,\lambda))}.
+    \]
 \end{theorem}
 
 \begin{theorem}[Mutual-information bound for a local-channel image]
@@ -629,9 +638,17 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_mutual_information_data_processing,
       prop:pure_mutual_info_bound}
-    Data processing bounds the mutual information of
-    $\sigma^{(N)}_{L:N-L}(M)$ by that of the purifying pure state. The latter is
-    at most $4\log D'$ because the cut crosses two bonds of the purifying MPS.
+    Write $\sigma_A^{(N)}$ for the normalized pure state of $A$ in the
+    $L\mid(N-L)$ bipartition. Then
+    \[
+      I_L(M)
+      =I\!\left((\Phi_L\otimes\Phi_R)(\sigma_A^{(N)})\right)
+      \leq I(\sigma_A^{(N)})
+      \leq 4\log D'.
+    \]
+    The equality is the channel-image hypothesis, the first inequality is data
+    processing, and the last inequality is
+    Proposition~\ref{prop:pure_mutual_info_bound}.
 \end{proof}
 
 \begin{remark}[Boundedness of the mutual information]
