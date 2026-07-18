@@ -568,6 +568,7 @@
     \label{def:block_ancillary_trace}
     \lean{MPOTensor.blockSpinAncillaEquiv,
       MPOTensor.blockSpinAncillaEquiv_symm_apply,
+      MPOTensor.blockSpinAncillaEquiv_symm_decode,
       MPOTensor.blockAncillaryTraceMap}
     \leanok
     \uses{def:mpdo_ancillary_trace_map}
@@ -629,6 +630,86 @@
     sums may be interchanged.
 \end{proof}
 
+\begin{theorem}[Local purification as a block-channel image]
+    \label{thm:lpdo_block_channel_image}
+    \lean{MPOTensor.blockAncillaryTraceMap_pureState_purificationTensor,
+      MPOTensor.trace_purificationDensity_eq_pureState,
+      MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap}
+    \leanok
+    \uses{def:block_ancillary_trace,
+      def:mpdo_purification_tensor, def:mpdo_purification_density,
+      def:mpdo_split_normalized_mpo}
+    Fix a local-purification representation
+
+    \[
+      M^{ij}=\left(\sum_{k=0}^{d_K-1}
+        A^{(i,k)}\otimes\overline{A^{(j,k)}}\right)_{e,e},
+    \]
+
+    with purifying MPS tensor $\widetilde A$ of physical dimension $d d_K$
+    and bond dimension $D'$. For every $N=L+K$, tracing all ancillary
+    degrees of freedom gives
+
+    \[
+      \rho^{(N)}(M)
+      =\operatorname{Tr}_{\mathrm{anc},N}
+        \left(\lvert V^{(N)}(\widetilde A)\rangle
+          \!\langle V^{(N)}(\widetilde A)\rvert\right),
+      \qquad
+      \tr\rho^{(N)}(M)
+      =\left\lVert V^{(N)}(\widetilde A)\right\rVert^2.
+    \]
+
+    Define the normalized-form purifying operator by
+
+    \[
+      \pi_{\widetilde A}^{(N)}
+      :=\left\lVert V^{(N)}(\widetilde A)\right\rVert^{-2}
+        \lvert V^{(N)}(\widetilde A)\rangle
+        \!\langle V^{(N)}(\widetilde A)\rvert,
+    \]
+
+    where the inverse scalar is taken with the convention $0^{-1}=0$. After
+    reindexing across the cut $L\mid K$,
+
+    \[
+      \sigma^{(N)}_{L:K}(M)
+      =\left(\operatorname{Tr}_{\mathrm{anc},L}\otimes
+        \operatorname{Tr}_{\mathrm{anc},K}\right)
+        \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right).
+    \]
+
+    This identity also holds when the common trace vanishes, in which case both
+    normalized-form operators are zero.
+
+    This is the finite-chain channel identity from the purification preceding
+    equation~(4) of \cite{Wolf2008AreaLaws}, under the explicit local
+    purification of \cite[Section~4.3]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:block_ancillary_trace_coefficients,
+      thm:block_ancillary_trace_channel,
+      thm:mpo_eq_purification_density}
+    The coefficient formula for one block gives
+
+    \[
+      \operatorname{Tr}_{\mathrm{anc},N}
+        \left(\lvert V^{(N)}(\widetilde A)\rangle
+          \!\langle V^{(N)}(\widetilde A)\rvert\right)_{\sigma,\tau}
+      =\sum_{\kappa\in[d_K]^N}
+        V^{(N)}(\widetilde A)_{(\sigma,\kappa)}
+        \overline{V^{(N)}(\widetilde A)_{(\tau,\kappa)}}
+      =\rho^{(N)}(M)_{\sigma,\tau}.
+    \]
+
+    Trace preservation gives equality of the two normalizing traces. Splitting
+    $\kappa$ into its left and right restrictions changes the last sum into
+    the two independent sums in
+    Theorem~\ref{thm:block_ancillary_trace_coefficients}, which proves the
+    normalized identity across $L\mid K$.
+\end{proof}
+
 \begin{theorem}[Mutual-information bound for a local-channel image]
     \label{thm:local_channel_image_mutual_info_bound}
     \lean{MPOTensor.mutualInfoChain_le_of_bipartitioned_channel_image}
@@ -669,6 +750,55 @@
     Proposition~\ref{prop:pure_mutual_info_bound}.
 \end{proof}
 
+\begin{theorem}[Mutual-information bound for a locally purified tensor]
+    \label{thm:lpdo_mutual_info_bound}
+    \lean{MPOTensor.purifyingBondDimension_pos_of_trace_ne_zero,
+      MPOTensor.mutualInfoChain_le_of_lpdoWitness,
+      MPOTensor.IsLPDO.exists_mutualInfoChain_le_purifyingBond}
+    \leanok
+    \uses{def:lpdo, def:mutual_info_chain,
+      thm:lpdo_block_channel_image}
+    Fix a local-purification representation with purifying MPS bond dimension
+    $D'$. If the $N$-site operator is positive semidefinite and its purifying
+    pure state is nonzero, then for every $L\leq N$,
+
+    \[
+      I_L(M)\leq 4\log D'.
+    \]
+
+    Consequently, if $M$ is an LPDO, $N\geq1$, and
+    $\tr\rho^{(N)}(M)\neq0$, then its local-purification representation
+    supplies a bond dimension $D'$ satisfying this estimate. The quantity
+    $D'$ is the bond dimension of the purifying MPS, not the MPO bond
+    dimension $D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:lpdo_block_channel_image,
+      thm:block_ancillary_trace_channel,
+      thm:local_channel_image_mutual_info_bound,
+      thm:lpdo_is_mpdo,
+      thm:mpo_eq_purification_density}
+    By Theorem~\ref{thm:lpdo_block_channel_image},
+
+    \[
+      I_L(M)
+      =I\!\left(
+        (\operatorname{Tr}_{\mathrm{anc},L}\otimes
+          \operatorname{Tr}_{\mathrm{anc},N-L})
+        \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:N-L}\right)\right)
+      \leq I\!\left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:N-L}\right)
+      \leq4\log D'.
+    \]
+
+    The first inequality is data processing and the second is the pure-state
+    boundary estimate. Nonvanishing of the purifying pure state implies
+    $D'>0$. For an LPDO, positivity follows from
+    Theorem~\ref{thm:lpdo_is_mpdo}, while the trace identity in
+    Theorem~\ref{thm:lpdo_block_channel_image} transfers the nonzero-trace
+    hypothesis to the purifying pure state.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts the uniform estimate
     $I_L \le 4\log D$ for every MPDO. Its cited proof, however, treats mixed
@@ -696,7 +826,8 @@
     \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}. The
     channel-image implication is
     Theorem~\ref{thm:local_channel_image_mutual_info_bound}, and the pure-state
-    instance is Proposition~\ref{prop:pure_mutual_info_bound} below.
+    instance is Proposition~\ref{prop:pure_mutual_info_bound} below. The
+    locally purified case is Theorem~\ref{thm:lpdo_mutual_info_bound}.
 \end{remark}
 
 \begin{definition}[Block entropy and area-law saturation for pure states]
