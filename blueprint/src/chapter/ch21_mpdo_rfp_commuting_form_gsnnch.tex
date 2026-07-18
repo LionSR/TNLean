@@ -389,6 +389,78 @@
     \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv}.
 \end{remark}
 
+\begin{definition}[Cyclic edge-weight tensor]
+    \label{def:mpdo_cyclic_edge_weight_tensor}
+    \lean{MPOTensor.cyclicEdgeWeightTensor}
+    \lean{MPOTensor.cyclicEdgeWeightTensor_apply_eq}
+    \leanok
+    A scalar weight
+    \[
+        w(i,j;i',j')
+    \]
+    on two consecutive ket--bra pairs determines a translation-invariant
+    matrix-product tensor with virtual dimension $d^2$.  Its incoming
+    virtual pair is constrained to equal the current physical ket--bra pair,
+    while its outgoing pair records the following physical pair.
+\end{definition}
+
+\begin{theorem}[Closed cyclic edge-weight identity]
+    \label{thm:mpdo_cyclic_edge_weight_tensor}
+    \lean{MPOTensor.mpo_cyclicEdgeWeightTensor}
+    \leanok
+    \uses{def:mpdo_cyclic_edge_weight_tensor}
+    For every positive length $N$, the closed matrix-product operator of the
+    cyclic edge-weight tensor is
+    \[
+        \rho^{(N)}_{\sigma,\tau}
+          =\prod_{n=0}^{N-1}
+            w(\sigma_n,\tau_n;\sigma_{n+1},\tau_{n+1}),
+        \qquad \sigma_N=\sigma_0,\quad \tau_N=\tau_0.
+    \]
+    In the virtual trace there is precisely one potentially nonzero cyclic
+    virtual configuration.
+\end{theorem}
+
+\begin{definition}[Fixed tensor for a bond-product family]
+    \label{def:mpdo_fixed_bond_product_tensor}
+    \lean{MPOTensor.TranslationInvariantBondData.FixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm}
+    \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm.%
+      toFixedProductTensorData}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data,
+        thm:mpdo_cyclic_edge_weight_tensor}
+    A fixed tensor for a bond-product family consists of a positive virtual
+    dimension and one matrix-product tensor $C$, independent of $N$, such
+    that
+    \[
+        \rho^{(N)}(C)=\prod_{n=0}^{N-1}B_{n,n+1}
+        \qquad (N\geq2).
+    \]
+    If $d>0$, a cyclic scalar edge-weight expression for the entries of the
+    product gives such a tensor with positive virtual dimension $d^2$.
+\end{definition}
+
+\begin{theorem}[Eventual proportionality from a fixed product tensor]
+    \label{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor}
+    Suppose one fixed tensor $C$ generates the products of the bond carried
+    by an eta-local structure.  Then the doubled-index tensors of $M$ and
+    $C$ are eventually nonzero proportional.  The proof uses only lengths
+    $N\geq2$ and therefore assumes no relation at length one.
+\end{theorem}
+
+\begin{proof}\leanok
+    At every $N\geq2$, substitute the exact tensor representation into the
+    positive realization
+    $\rho^{(N)}(M)=c_N\prod_n B_{n,n+1}$, where $c_N>0$, and read ket--bra
+    pairs as doubled physical indices.
+\end{proof}
+
 \begin{definition}[Rank-one trace factorization for neighboring operators]
     \label{def:mpdo_generic_eta_rank_one_trace_factorization}
     \lean{Matrix.EtaRankOneTraceFactorization}
