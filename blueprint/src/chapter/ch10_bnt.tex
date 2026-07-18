@@ -271,12 +271,30 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
         thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
     For each $A_j$, choose an active canonical-form block representing it,
     and then choose a member $B_{f(j)}$ representing that block. If
-    $f(j)=f(j')$, composition through the common tensor $B_{f(j)}$ makes
-    $A_j$ and $A_{j'}$ gauge-phase equivalent. Minimality of the first basis
-    gives $j=j'$, so $f$ is injective. Reversing the roles of the two bases
-    gives an injection in the other direction. Since both index sets are
-    finite, $f$ is bijective. Composition of the two gauges supplies the
-    displayed relation, and normality forces the scalar to have modulus one.
+    $f(j)=f(j')$, the chosen relations give
+    \[
+        A_j\sim_{\mathrm{gp}}B_{f(j)}
+        =B_{f(j')}\sim_{\mathrm{gp}}A_{j'}.
+    \]
+    Hence $A_j\sim_{\mathrm{gp}}A_{j'}$. Minimality of the first basis gives
+    $j=j'$, so $f$ is injective. Reversing the roles of the two bases gives an
+    injection in the other direction. Since both index sets are finite, $f$
+    is bijective. More explicitly, if the common active block satisfies
+    \[
+        \widetilde A_k^i=\alpha P A_j^iP^{-1},
+        \qquad
+        \widetilde A_k^i=\beta Q B_{f(j)}^iQ^{-1},
+    \]
+    then
+    \[
+        B_{f(j)}^i=(\beta^{-1}\alpha)(Q^{-1}P)
+          A_j^i(P^{-1}Q).
+    \]
+    Finally, for normal tensors the gauge-phase relation used here satisfies
+    \[
+        B_{f(j)}^i=\zeta X A_j^iX^{-1}\quad\text{for every }i
+        \quad\Longrightarrow\quad |\zeta|=1.
+    \]
     % This is the converse-coverage restriction documented in
     % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex, not the
     % unrestricted sentence at arXiv:1606.00608, Appendix A, line 1148.
