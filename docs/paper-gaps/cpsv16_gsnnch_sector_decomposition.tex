@@ -90,24 +90,30 @@ of the represented finite-chain sector sum from the stored sector data---is
 complete.  Appendix C.2 has also been followed through the BNT projector
 selection formula: the natural multiplicities are retained, positive-length
 compression proves that each absorbed BNT representative generates MPDOs,
-and the canonical block equation proves ZCL for each representative.
+the direct-sum entropy identity proves SAL for each representative, and the
+canonical block equation proves ZCL for each representative.
 \footnote{\raggedright Formal declarations:
 {\scriptsize\leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}},
 {\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL}},
+{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}},
 and
 {\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}}.}
-The remaining comparison and assembly work has two parts:
+The general outer-sector construction is also complete: pairwise orthogonal
+one-site projections, supported positive commuting bonds, and the exact
+sector product identities give the source GSNNCH form with the prescribed
+natural multiplicities.
+\footnote{\raggedright Formal declaration:
+{\scriptsize\leanid{MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily}}.}
+The remaining comparison has two parts:
 
 \begin{enumerate}
-  \item prove SAL for every absorbed BNT representative from the direct-sum
-        entropy identity and strong subadditivity, then
-        apply the injective one-sector theorem to those representatives and
-        assemble the outer GSNNCH sectors with their natural multiplicities;
+  \item apply the injective commuting-product theorem inside the range of each
+        BNT projector and transport its positive bond back to the ambient
+        one-site space, proving
+        $(P_j\otimes P_j)B^{(j)}(P_j\otimes P_j)=B^{(j)}$;
   \item determine whether the reverse comparison with a single bond is needed
         in the simple-MPDO equivalence, and prove it only in that form.
 \end{enumerate}
-\footnote{The direct-sum entropy identity is labelled
-\texttt{entropiesj} in the source.}
 
 The local Markov labels in Appendix C.2 belong inside one injective BNT
 component.  They are not the outer labels $x$ of Definition~4.8 and must not
@@ -121,9 +127,10 @@ pairwise commuting translates, and the single-bond presentation is proved to
 give the one-sector case; every injective tensor satisfying the saturated
 area law is proved GSNNCH through a one-sector witness.  For a general simple
 tensor, the BNT projectors, their positive-length compression formula, and the
-sectorwise MPDO and ZCL conclusions are formalized.  The open gap is the
-sectorwise SAL argument and the ensuing assembly of the outer sectors and
-multiplicities, together with any reverse comparison actually needed by that
-argument.
+sectorwise MPDO, SAL, and ZCL conclusions are formalized.  The abstract
+construction of the outer sector sum with its natural multiplicities is
+formalized.  The open gap is the support-preserving application of the
+injective commuting-product theorem within each BNT projector range, together
+with any reverse comparison actually needed by the simple-MPDO equivalence.
 
 \end{document}
