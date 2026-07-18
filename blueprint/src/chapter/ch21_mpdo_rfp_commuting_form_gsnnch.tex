@@ -41,6 +41,53 @@
     commuting-form data at every length $N \ge 2$.
 \end{definition}
 
+\begin{definition}[Common three-site coordinates for overlapping bonds]
+    \label{def:mpdo_three_site_overlapping_coordinates}
+    \lean{MPOTensor.threeSiteOverlappingEquiv}
+    \lean{MPOTensor.pairBondMatrix}
+    \lean{MPOTensor.EtaLocalStructureData.pairBond}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data}
+    Write the two-site bond on the ordered pair of physical indices, and
+    identify a three-site configuration $(x_0,x_1,x_2)$ with the
+    left-associated triple $((x_0,x_1),x_2)$.  These are common coordinates
+    for the two bonds on sites $(0,1)$ and $(1,2)$.
+\end{definition}
+
+\begin{theorem}[Adjacent translates are the two overlapping lifts]
+    \label{thm:mpdo_eta_bond_overlapping_lifts}
+    \lean{MPOTensor.reindex_embedLocalOperator_zero_eq_leftOverlappingLift}
+    \lean{MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift}
+    \lean{MPOTensor.EtaLocalStructureData.pairBond_isHermitian}
+    \lean{MPOTensor.EtaLocalStructureData.reindex_bondAt_zero_eq_leftOverlappingLift}
+    \lean{MPOTensor.EtaLocalStructureData.reindex_bondAt_one_eq_rightOverlappingLift}
+    \lean{MPOTensor.EtaLocalStructureData.overlappingLifts_pairBond_comm}
+    \leanok
+    \uses{def:mpdo_three_site_overlapping_coordinates,
+        def:mpdo_translation_invariant_bond_data}
+    Let $B$ be the positive two-site bond carried by the eta-local structure,
+    written as an operator $\widehat B$ on an ordered pair of physical spaces.
+    Under the same three-site identification for both translates,
+    \[
+        B_{0,1}=\widehat B\otimes\Id,
+        \qquad
+        B_{1,2}=\Id\otimes\widehat B.
+    \]
+    Thus these two operators are respectively the left and right overlapping
+    lifts of $\widehat B$.  Moreover, $\widehat B$ is Hermitian and the two
+    lifts commute.  These are exactly the local hypotheses needed for the
+    Bravyi--Vyalyi decomposition invoked at
+    \cite[Appendix~C.2, lines~1599--1605]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the first translated bond, agreement outside its two-site window is
+    equality of the third coordinate; in the second it is equality of the
+    first coordinate.  Evaluating matrix entries gives the two tensor-product
+    lifts.  Positivity gives Hermiticity.  Finally, transport the commutation
+    of the two length-three translates through the common identification.
+\end{proof}
+
 \begin{theorem}[$\eta$-local structure carries single-bond commuting form]
     \label{thm:mpdo_eta_local_structure_has_commuting_form}
     \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}

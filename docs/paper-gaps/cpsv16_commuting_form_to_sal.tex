@@ -120,11 +120,24 @@ $S_{\beta_rC}$, and proves the two direct-sum block identities printed in the
 source.  Its hypotheses are exactly the source hypotheses: Hermiticity of both
 overlapping operators and commutation of their natural three-factor lifts.
 
-What remains is the application of this finite-matrix lemma to the cyclic bond
-formalism.  One must identify the two adjacent translates supplied by
-\leanid{MPOTensor.EtaLocalStructureData} with the two abstract overlapping
-lifts under a common three-site reindexing, and then transport the resulting
-direct-sum decomposition through the translation-invariant family.
+The cyclic three-site bridge is now available.  The equivalence
+\leanid{MPOTensor.threeSiteOverlappingEquiv} sends a three-site configuration
+to the ordered left-associated triple.  Under this one common equivalence,
+\leanid{MPOTensor.EtaLocalStructureData.reindex_bondAt_zero_eq_leftOverlappingLift}
+and
+\leanid{MPOTensor.EtaLocalStructureData.reindex_bondAt_one_eq_rightOverlappingLift}
+identify the first two adjacent translates with the left and right
+overlapping lifts of the same pair-indexed bond.  This bond is Hermitian by
+positivity, and
+\leanid{MPOTensor.EtaLocalStructureData.overlappingLifts_pairBond_comm}
+transports their length-three commutation to the abstract lifts.  Hence the
+formal hypotheses of Beigi's lemma are obtained without an additional
+assumption.
+
+What remains is to use the resulting unitary block actions to construct the
+translation-invariant neighboring operators $\eta_{k,h}$ and the global form
+\emph{sigmaNK2}, and then to perform the source-ZCL trace factorization and
+Markov decomposition at an arbitrary cut.
 
 Consequently the source implication
 \[
@@ -149,13 +162,16 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Prove the three-site reindexing bridge for the two overlapping translates
-of the single bond in
-\leanid{MPOTensor.EtaLocalStructureData}, obtaining the translation-invariant
-neighboring operators $\eta_{k,h}$ without assuming a Hayashi decomposition.
-Use \leanid{MPOTensor.IsSourceZCL} to prove the rank-one trace factorization
+\item Apply
+\leanid{Matrix.exists_unitary_blockActions_of_overlappingLifts_commute} to the
+pair-indexed bond through the proved three-site bridge, and transport its
+single-site direct-sum decomposition through the translation-invariant bond
+family.  This must produce the neighboring operators $\eta_{k,h}$ and the
+global form \emph{sigmaNK2} without assuming a Hayashi decomposition.
+\item Use \leanid{MPOTensor.IsSourceZCL} to prove the rank-one trace
+factorization
 $\operatorname{tr}(\eta_{k,h})=a_kb_h$ appearing at source lines~1610--1616.
-\item Trace the fourth region, construct the quantum Markov decomposition at
+Then trace the fourth region and construct the quantum Markov decomposition at
 each admissible cut, and apply the all-cut Markov theorem above.
 Only then may the source proposition receive a formal declaration and a
 \texttt{\string\leanok} marker.

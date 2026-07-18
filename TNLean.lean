@@ -557,6 +557,7 @@ import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingFormBridge
+import TNLean.MPS.MPDO.CommutingOverlappingBridge
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.BNTSectorCommutingFamily
