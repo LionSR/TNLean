@@ -87,13 +87,28 @@ only its length-$L$ products are known to span.  Since a linear map fixing
 $V(X)$ need not fix products $V(X_1)\cdots V(X_L)$, neither trace preservation
 nor the identity conclusion extends from the generators by linearity.
 
-The valid final implication is formalized: if a linear endomorphism fixes
-every length-$L$ contraction product and these products span, then it is the
-identity.\footnote{Formal declaration:
-\leanid{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}.}
-Its fixed-product hypothesis is not a hypothesis of CPSV16.  The source
-instead obtains the identity from the density-weighted structure of the
-fixed-point space.
+Two finite-dimensional final implications are formalized.  First, if a linear
+endomorphism fixes every length-$L$ contraction product and these products
+span, then it is the identity.\footnote{Formal declaration:
+\leanid{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}
+in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
+Its fixed-product hypothesis is not a hypothesis of CPSV16.
+
+Second, let $\mathcal F$ be the fixed-point space of the endomorphism and let
+$C_L(\mathcal F)$ be the span of its length-$L$ products.  If the distinguished
+contractions themselves are fixed, their length-$L$ products span the ambient
+sector algebra, and
+\[
+    \dim C_L(\mathcal F)\leq\dim\mathcal F,
+\]
+then the endomorphism is the identity.\footnote{Formal declarations:
+\leanid{MPOTensor.fixedPointProductSpan} and
+\leanid{MPOTensor.eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le}
+in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
+This second implication does not assume that products of distinguished
+contractions are fixed.  It isolates the source's dimension argument.  The
+remaining fixed-point theorem must supply the displayed inequality from the
+density-weighted form of $\mathcal F$.
 
 The positive trace-preserving mean-ergodic retraction on a full matrix algebra
 and its positive unital trace-adjoint retraction onto the adjoint fixed-point
@@ -150,10 +165,13 @@ order:
     \item prove complete positivity and trace preservation of the transported
           maps on the full sector algebras, including the required active-image
           statement for every input;
-    \item formalize the density-weighted fixed-point theorem needed for
-          $\widetilde S\widetilde T$ and $\widetilde T\widetilde S$;
-    \item combine the fixed-point form with the already proved product
-          generation theorem to obtain both identity compositions;
+    \item formalize the density-weighted fixed-point theorem needed to prove
+          $\dim C_L(\mathcal F)\leq\dim\mathcal F$ for the fixed-point spaces
+          of $\widetilde S\widetilde T$ and $\widetilde T\widetilde S$;
+    \item combine this dimension bound with the fixed contraction families,
+          the already proved product-generation theorem, and the
+          finite-dimensional implication above to obtain both identity
+          compositions;
     \item derive the permutation and matching dimensions from the resulting
           positive, trace-preserving inverse pair, retaining the Schwarz
           hypothesis for the unitary-conjugation conclusion.
