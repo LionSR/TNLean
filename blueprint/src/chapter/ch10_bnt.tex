@@ -525,9 +525,12 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     \label{thm:normal_proportional_mpv_geometric_phase}
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
         exists_unit_phase_power_of_isNormalTensor}
+    \lean{MPSTensor.NonzeroProportionalMPV₂.%
+        exists_unit_phase_power_of_isNormalTensor}
     \leanok
     \uses{def:nt_cpsv, def:mpv_state,
-        def:eventually_nonzero_proportional_mpv}
+        def:eventually_nonzero_proportional_mpv,
+        def:nonzero_proportional_mpv}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for all sufficiently large $N$, their matrix
     product vectors are proportional by a nonzero scalar. Then there is
