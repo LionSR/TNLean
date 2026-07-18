@@ -1738,6 +1738,108 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{definition}
 
+\begin{lemma}[Tensor logarithm on a singular product support]
+    \label{lem:log_kronecker_possemidef}
+    \lean{Matrix.log_kronecker_posSemidef}
+    \leanok
+    Let $A$ and $B$ be positive semidefinite, with $P_A$ and $P_B$ the
+    orthogonal projections onto their respective ranges.  Then
+    \[
+        \log(A\otimes B)
+        =(\log A)\otimes P_B+P_A\otimes(\log B).
+    \]
+    Here the logarithm is extended by zero on the kernel.
+    This identity is the analytic justification for the singular product
+    reference used below; it is not stated verbatim in
+    \cite{Hayden2004Structure}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Diagonalize $A$ and $B$.  On an eigenvector with eigenvalues $a,b\geq0$,
+    the asserted identity becomes
+    \[
+        \log(ab)=\log(a)\mathbf 1_{b\ne0}
+            +\mathbf 1_{a\ne0}\log(b).
+    \]
+    If $a,b>0$, this is the ordinary product identity for the logarithm.  With
+    the kernel convention in the statement, both sides vanish if either
+    eigenvalue is zero.
+\end{proof}
+
+\begin{theorem}[Relative entropy against the product of the marginals]
+    \label{thm:relative_entropy_product_marginals}
+    \lean{quantumRelativeEntropy_product_marginals}
+    \leanok
+    \uses{def:quantum_relative_entropy, def:von_neumann_entropy}
+    For every positive semidefinite operator $\omega_{XY}$,
+    \[
+        D(\omega_{XY}\,\|\,\omega_X\otimes\omega_Y)
+        =S(\omega_X)+S(\omega_Y)-S(\omega_{XY}).
+    \]
+    No invertibility assumption is made on either marginal.
+    This is \cite[Equation~(4)]{Hayden2004Structure}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:log_kronecker_possemidef,
+        thm:marginal_support_left_absorption,
+        thm:right_marginal_support_left_absorption,
+        lem:trace_lift_left_factor_mul, lem:trace_lift_right_factor_mul}
+    The lifted support projections $P_X\otimes\mathbf 1_Y$ and
+    $\mathbf 1_X\otimes P_Y$ both fix $\omega_{XY}$.  Substituting
+    Lemma~\ref{lem:log_kronecker_possemidef} into the cross term of the relative
+    entropy and using the two partial-trace adjoint identities gives
+    \[
+        \operatorname{Re}\operatorname{tr}
+        \bigl(\omega_{XY}\log(\omega_X\otimes\omega_Y)\bigr)
+        =-S(\omega_X)-S(\omega_Y).
+    \]
+    The asserted formula follows from
+    $D(\rho\,\|\,\sigma)=-S(\rho)
+        -\operatorname{Re}\operatorname{tr}(\rho\log\sigma)$.
+\end{proof}
+
+\begin{theorem}[SSA equality as saturation for the product marginals]
+    \label{thm:ssa_equality_product_marginal_dpi}
+    \lean{isSSAEquality_iff_product_marginal_data_processing_eq}
+    \lean{SSAPosDef.partialTraceRight_traceC_ABC}
+    \lean{SSAPosDef.traceC_ABC_product_marginals}
+    \leanok
+    \uses{def:ssa_equality, def:quantum_relative_entropy,
+        def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    Let $\rho_{ABC}$ be a tripartite density matrix.  Then equality holds in
+    strong subadditivity if and only if relative-entropy data processing under
+    the partial trace over $C$ is saturated for the pair
+    $\rho_{ABC}$ and $\rho_A\otimes\rho_{BC}$:
+    \[
+        D(\rho_{ABC}\,\|\,\rho_A\otimes\rho_{BC})
+        =D(\rho_{AB}\,\|\,\rho_A\otimes\rho_B).
+    \]
+    Moreover,
+    \[
+        \tr_C(\rho_A\otimes\rho_{BC})=\rho_A\otimes\rho_B.
+    \]
+    This is the product-marginal formulation in
+    \cite[Equations~(5)--(7)]{Hayden2004Structure}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_product_marginals}
+    The two relative entropies are
+    \[
+        S(\rho_A)+S(\rho_{BC})-S(\rho_{ABC})
+        \quad\text{and}\quad
+        S(\rho_A)+S(\rho_B)-S(\rho_{AB}),
+    \]
+    respectively.  Cancelling the common term $S(\rho_A)$ shows that their
+    equality is precisely
+    \[
+        S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC}).
+    \]
+    The partial-trace identity follows by expanding the matrix entries and
+    interchanging the finite sums over the $A$ and $C$ indices.
+\end{proof}
+
 \begin{theorem}[SSA equality as saturation for a maximally mixed reference]
     \label{thm:ssa_equality_maximally_mixed_reference_dpi}
     \lean{isSSAEquality_iff_maximally_mixed_reference_data_processing_eq}
@@ -1758,11 +1860,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     By Lemma~\ref{lem:traceC_maximally_mixed_reference}, the reference on the
     right is $(\mathbf 1_A/d_A)\otimes\rho_B$.
 
-    This gives the same hypothesis-free equality criterion as the
-    product-marginal formulation in equations~(6) and~(7) of
-    \cite{Hayden2004Structure}. It is not their exact reference pair: they use
-    $\rho_A\otimes\rho_{BC}$ and $\rho_A\otimes\rho_B$. The exact
-    product-marginal identity is not asserted by this theorem.
+    This is an equivalent hypothesis-free criterion with a different reference
+    state.  The exact product-marginal formulation is
+    Theorem~\ref{thm:ssa_equality_product_marginal_dpi}.
 \end{theorem}
 
 \begin{proof}\leanok

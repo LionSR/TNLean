@@ -17,8 +17,15 @@ Strong Subadditivity}
 
 \section{The source identity}
 
-Hayden, Jozsa, Petz, and Winter write the conditional mutual information as
-the difference
+Hayden, Jozsa, Petz, and Winter first give the bipartite identity
+\begin{align}
+  D(\omega_{XY}\,\|\,\omega_X\otimes\omega_Y)
+  =S(\omega_X)+S(\omega_Y)-S(\omega_{XY})
+  \label{eq:hjpw-bipartite}
+\end{align}
+in their equation~(4).  Its specialization to the bipartition $A\,|\,BC$ is
+their equation~(5).  Subtracting the corresponding identity for $A\,|\,B$
+gives their equation~(6), namely
 \begin{align}
   &D(\rho_{ABC}\,\|\,\rho_A\otimes\rho_{BC})
     -D(\rho_{AB}\,\|\,\rho_A\otimes\rho_B) \notag\\
@@ -27,16 +34,16 @@ the difference
 \end{align}
 Here the second pair is the image of the first under
 $T=\operatorname{tr}_C$.  Consequently, equality in strong subadditivity is
-equivalent to equality in relative-entropy data processing for this pair.  This
-is equation~(6) and the paragraph following equation~(7) on page~3 of
-arXiv:quant-ph/0304007v2.
+equivalent to equality in relative-entropy data processing for this pair.  The
+paragraph following equation~(7) identifies precisely this equivalence.  All
+these equations occur on page~3 of arXiv:quant-ph/0304007v2.
 
 The statement has no strict-positivity assumption.  If one of the marginals is
 singular, the relative entropy is interpreted on its support.  The support of a
 bipartite state is contained in the tensor product of the supports of its two
 marginals, so both relative entropies in~\eqref{eq:hjpw-difference} are finite.
 
-\section{The theorem presently proved}
+\section{The equivalent maximally mixed criterion}
 
 The current relative-entropy theory proves the corresponding identity with a
 maximally mixed state on $A$:
@@ -64,11 +71,11 @@ image of the reference on $A\otimes B\otimes C$.
 \leanid{SSAPosDef.traceC_ABC_kronecker_traceA_ABC} in
 \path{TNLean/Channel/Schwarz/StrongSubadditivityPosDef.lean}.}
 
-This theorem is not marked as the exact Hayden--Jozsa--Petz--Winter
-formulation.  It is a hypothesis-free equivalent formulation with a different
-reference state.
+This theorem is a hypothesis-free equivalent formulation with a different
+reference state.  The exact Hayden--Jozsa--Petz--Winter formulation is now also
+proved.
 
-\section{The remaining product-marginal step}
+\section{The singular product-marginal evaluation}
 
 The relative entropy in the development is the total trace-log expression
 \begin{align}
@@ -77,42 +84,59 @@ The relative entropy in the development is the total trace-log expression
     \bigl(\rho(\log\rho-\log\sigma)\bigr).
 \end{align}
 For positive definite tensor factors the logarithm of a tensor product splits.
-For singular tensor factors this split is not presently available.  The
-existing support-domain evaluation
-\leanid{SSAPosDef.rel_entropy_eval_support} treats the special reference
-$(\mathbf 1_A/d_A)\otimes\rho_R$ by a one-sided regularization of
-$\rho_R$.  It does not evaluate the general singular product
-$\rho_A\otimes\rho_R$.
+For singular positive semidefinite factors $A$ and $B$, let $P_A$ and $P_B$ be
+their support projections.  The support form of the tensor logarithm is
+\begin{align}
+  \log(A\otimes B)
+  =(\log A)\otimes P_B+P_A\otimes(\log B).
+  \label{eq:singular-tensor-log}
+\end{align}
+Here the logarithm is extended by zero on the kernel, as in the total
+trace-log expression above.
+Indeed, simultaneous diagonalization of the two tensor factors reduces the
+claim to
+\begin{align}
+  \log(ab)=\log(a)\mathbf 1_{b\ne0}
+    +\mathbf 1_{a\ne0}\log(b),
+\end{align}
+for nonnegative eigenvalues $a,b$.  This is the ordinary logarithm identity
+when both eigenvalues are positive, while both sides vanish when either
+eigenvalue is zero.  This spectral calculation is an analytic justification
+for the singular form of the product-marginal evaluation in equation~(4) of
+Hayden--Jozsa--Petz--Winter; the tensor-logarithm identity is not stated
+verbatim there.  It is formalized by
+\leanid{Matrix.log_kronecker_posSemidef}.
 
-The missing source-facing lemma is the hypothesis-free bipartite identity
+The resulting hypothesis-free bipartite identity is
 \begin{align}
   D(\omega_{XY}\,\|\,\omega_X\otimes\omega_Y)
   =S(\omega_X)+S(\omega_Y)-S(\omega_{XY})
   \label{eq:product-marginal-evaluation}
 \end{align}
-for every positive semidefinite unit-trace $\omega_{XY}$.  Its proof must first
-place $\omega_{XY}$ in the support of $\omega_X\otimes\omega_Y$, and then
-justify the two-factor logarithm evaluation on that singular support.  A
-simultaneous positive-definite regularization of both marginals is one direct
-route.  The existing marginal-support theorem supplies the operator-theoretic
-starting point, but not the logarithm limit for the product.
+for every positive semidefinite $\omega_{XY}$.  The lifted support projections
+$P_X\otimes\mathbf 1_Y$ and $\mathbf 1_X\otimes P_Y$ both fix
+$\omega_{XY}$.  Pairing~\eqref{eq:singular-tensor-log} with $\omega_{XY}$
+therefore removes the support projections, and the two partial-trace adjoint
+identities give~\eqref{eq:product-marginal-evaluation}.  This is formalized by
+\leanid{quantumRelativeEntropy_product_marginals}.  It is precisely
+equation~(4) of Hayden--Jozsa--Petz--Winter.
 
-Once~\eqref{eq:product-marginal-evaluation} is established, apply it to the
-bipartitions $A\,|\,BC$ and $A\,|\,B$.  The resulting two evaluations prove
-\eqref{eq:hjpw-difference}; the biconditional with equality in data processing
-then follows by elementary rearrangement.  No recovery map or Petz equality
-theorem is needed for this step.
+Applying~\eqref{eq:product-marginal-evaluation} to the bipartitions
+$A\,|\,BC$ and $A\,|\,B$ gives equations~(5) and~(6), hence proves
+\eqref{eq:hjpw-difference}.  Elementary
+rearrangement then gives the exact biconditional with equality in data
+processing.  This is formalized by the declaration
+\begin{center}
+  \small\leanid{isSSAEquality_iff_product_marginal_data_processing_eq}.
+\end{center}
+No recovery map or Petz equality theorem is needed for this step.
 
 \section{Verdict}
 
-Equality in strong subadditivity has been identified with saturation of
-partial-trace data processing for a maximally mixed reference, on the full
-density-matrix domain.  The exact product-marginal formulation of
-Hayden--Jozsa--Petz--Winter remains open only at the singular
-product-marginal evaluation~\eqref{eq:product-marginal-evaluation}.  Until that
-lemma is proved, the maximally mixed-reference theorem must remain a separate
-equivalent formulation rather than being presented as the source theorem
-itself.
+The gap is closed.  Equality in strong subadditivity is identified with
+saturation of partial-trace data processing for the exact product-marginal
+pair of Hayden--Jozsa--Petz--Winter on the full density-matrix domain.  The
+maximally mixed-reference theorem remains as a separate equivalent criterion.
 
 \begin{thebibliography}{9}
 
