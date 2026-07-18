@@ -18,7 +18,7 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 
 The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 
-* **(a)** `IsPrimitivePaper A`: there exists `q` such that for all `|φ⟩ ≠ 0`,
+* **(a)** `IsPrimitivePaper A`: there exists `q ≥ 1` such that for all `|φ⟩ ≠ 0`,
   `H_q(A,φ) = ℂ^D`.
 * **(b)** `HasEventuallyFullKrausRank A`: there exists `i ≥ 1` with `S_i(A) = M_D(ℂ)`
   (equivalently, `IsNormal A`).

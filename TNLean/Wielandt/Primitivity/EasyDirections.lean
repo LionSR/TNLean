@@ -104,8 +104,8 @@ Paper: "(b) ⟹ (a)" in Proposition 3, arXiv:0909.5347. -/
 theorem isPrimitivePaper_of_hasEventuallyFullKrausRank
     (A : MPSTensor d D) (hA : HasEventuallyFullKrausRank A) :
     IsPrimitivePaper A := by
-  obtain ⟨N, _hNpos, hN⟩ := hA
-  exact ⟨N, fun φ hφ => vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hN φ hφ⟩
+  obtain ⟨N, hNpos, hN⟩ := hA
+  exact ⟨N, hNpos, fun φ hφ => vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hN φ hφ⟩
 
 /-- **Proposition 3, direction (b)⟹(a)**, stated with `IsNormal`:
 If `A` is normal, then `A` is primitive in the paper's sense.
@@ -138,10 +138,10 @@ theorem qIndex_le_iIndex (A : MPSTensor d D)
     exact ⟨N, hNpos, hN⟩
   have hi : wordSpan A (iIndex A) = ⊤ := (Nat.sInf_mem hne).2
   -- iIndex A witnesses that the qIndex-defining set is nonempty
-  have hq_mem : iIndex A ∈ {q : ℕ | ∀ φ : Fin D → ℂ, φ ≠ 0 →
+  have hq_mem : iIndex A ∈ {q : ℕ | 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 →
       vectorSpreadSpan A φ q = ⊤} := by
-    intro φ hφ
-    exact vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hi φ hφ
+    exact ⟨(Nat.sInf_mem hne).1,
+      fun φ hφ => vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hi φ hφ⟩
   -- qIndex A = sInf of a set containing iIndex A, so qIndex A ≤ iIndex A
   exact Nat.sInf_le hq_mem
 

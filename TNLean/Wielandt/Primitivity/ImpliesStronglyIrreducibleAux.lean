@@ -538,7 +538,7 @@ theorem not_isPrimitivePaper_of_root_of_unity_eigenvector [NeZero D]
     (hX_ne : X ≠ 0) (hμ_ne : μ ≠ 1)
     {p : ℕ} (hp : 0 < p) (hroot : μ ^ p = 1) :
     ¬IsPrimitivePaper A := by
-  intro ⟨q, hq⟩
+  intro ⟨q, _hqpos, hq⟩
   -- From the peripheral eigenvector, extract a Hermitian nonzero trace-zero E^p-fixed point
   obtain ⟨H, hH_herm, hH_ne, hH_tr, hH_fix, _⟩ :=
     exists_hermitian_ne_zero_trace_zero_pow_fixedPoint A hNorm hEig hX_ne hμ_ne hroot
@@ -658,7 +658,7 @@ theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
     (hPrim : IsPrimitivePaper A) :
     IsStronglyIrreduciblePaper A := by
   -- Step 1: Extract the primitivity witness q
-  obtain ⟨q, hq⟩ := hPrim
+  obtain ⟨q, hqpos, hq⟩ := hPrim
   -- Step 2: Get a nonzero PSD fixed point of E_A from channel theory
   set E := transferMap (d := d) (D := D) A with hE_def
   have hCh : IsChannel E := transferMap_isChannel A hNorm
@@ -668,11 +668,11 @@ theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
   have hρ_pd : ρ.PosDef := posDef_fixedPoint_of_isPrimitivePaper A hq hρ_psd hρ_ne hρ_fix
   -- Step 4: Get peripheral primitivity
   have hCPrim : IsPeripherallyPrimitive A :=
-    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm ⟨q, hq⟩
+    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm ⟨q, hqpos, hq⟩
   -- Step 5: Get irreducibility of the transfer map
   have hIrr : IsIrreducibleMap E :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor A
-      (isIrreducibleTensor_of_isPrimitivePaper A ⟨q, hq⟩)
+      (isIrreducibleTensor_of_isPrimitivePaper A ⟨q, hqpos, hq⟩)
   -- Step 6: assemble `IsStronglyIrreduciblePaper`.
   exact isStronglyIrreduciblePaper_of ρ hρ_pd hρ_fix hCPrim hIrr
 

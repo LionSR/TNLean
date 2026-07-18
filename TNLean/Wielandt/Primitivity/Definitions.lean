@@ -23,13 +23,14 @@ The definitions are stated in the notation of the theorem: `S_n(A)`, `i(A)`,
 * `krausRank A`: the dimension of `S₁(A) = wordSpan A 1`, i.e.
   `dim(span{A₁,…,Aₐ})`.
 * `HasEventuallyFullKrausRank A`: `∃ i ≥ 1, S_i(A) = M_D(ℂ)`, i.e. `IsNormal A`.
-* `IsPrimitivePaper A`: spreading primitivity — there exists `q` such that
+* `IsPrimitivePaper A`: spreading primitivity — there exists `q ≥ 1` such that
   for every nonzero φ, `H_q(A,φ) = ℂ^D`. This is Proposition 3(a) of the paper.
 * `IsStronglyIrreduciblePaper A`: Proposition 3(c) — the transfer map `E_A` has
   unique peripheral eigenvalue 1 with a positive-definite fixed point.
 * `iIndex A`: `sInf {n | 0 < n ∧ S_n(A) = M_D(ℂ)}` — the positive
   full-Kraus-rank index `i(A)`.
-* `qIndex A`: `sInf {q | ∀ φ ≠ 0, H_q(A,φ) = ℂ^D}` — the primitivity index `q(E_A)`.
+* `qIndex A`: `sInf {q | 0 < q ∧ ∀ φ ≠ 0, H_q(A,φ) = ℂ^D}` — the positive
+  primitivity index `q(E_A)`.
 
 ## Relationship to the other primitivity definitions
 
@@ -116,7 +117,7 @@ theorem hasEventuallyFullKrausRank_iff_isNormal (A : MPSTensor d D) :
 /-! ## Paper-faithful primitivity -/
 
 /-- **Paper-faithful primitivity** (Proposition 3(a) of arXiv:0909.5347):
-an MPS tensor `A` is primitive (in the paper's sense) if there exists `q` such
+an MPS tensor `A` is primitive (in the paper's sense) if there exists a positive `q` such
 that for every nonzero vector `φ`, `H_q(A,φ) = ℂ^D`, i.e. length-`q` word
 products applied to `φ` span all of `ℂ^D`.
 
@@ -127,7 +128,7 @@ Note: The full equivalence of all three Proposition 3 conditions is assembled
 in `Primitivity/Equivalence.lean`; see `primitivePaper_iff_hasEventuallyFullKrausRank` and
 `primitivePaper_iff_stronglyIrreducible`. -/
 def IsPrimitivePaper (A : MPSTensor d D) : Prop :=
-  ∃ q : ℕ, ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤
+  ∃ q : ℕ, 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤
 
 /-! ## Index definitions -/
 
@@ -144,16 +145,17 @@ defined as `sInf {n | 0 < n ∧ wordSpan A n = ⊤}`, matching
 noncomputable def iIndex (A : MPSTensor d D) : ℕ :=
   sInf {n : ℕ | 0 < n ∧ wordSpan A n = ⊤}
 
-/-- **Primitivity index** `q(E_A)`: the smallest `q` such that for all nonzero φ,
+/-- **Primitivity index** `q(E_A)`: the smallest positive `q` such that for all nonzero φ,
 `H_q(A,φ) = ℂ^D`.
 
 Paper: "q(E_A) := min{q : ∀ |φ⟩ ≠ 0, H_q(A,φ) = ℂ^D}."
 (arXiv:0909.5347, Proposition 3)
 
-Defined as `sInf {q | ∀ φ ≠ 0, vectorSpreadSpan A φ q = ⊤}`. Returns 0
-if no such `q` exists. -/
+The paper uses the same positive word-length convention as for `i(A)`.  Accordingly this
+is `sInf {q | 0 < q ∧ ∀ φ ≠ 0, vectorSpreadSpan A φ q = ⊤}`. It returns 0 if no such
+`q` exists. -/
 noncomputable def qIndex (A : MPSTensor d D) : ℕ :=
-  sInf {q : ℕ | ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤}
+  sInf {q : ℕ | 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤}
 
 /-! ## Peripheral primitivity (transfer-map formulation) -/
 

@@ -322,7 +322,7 @@ theorem not_isPrimitivePaper_of_posSemidef_fixedPoint_not_posDef
     (hfix : transferMap (d := d) (D := D) A ρ = ρ)
     (hnotpd : ¬ρ.PosDef) :
     ¬IsPrimitivePaper A :=
-  fun ⟨_, hq⟩ => hnotpd (posDef_fixedPoint_of_isPrimitivePaper A hq hpsd hne hfix)
+  fun ⟨_, _, hq⟩ => hnotpd (posDef_fixedPoint_of_isPrimitivePaper A hq hpsd hne hfix)
 
 /-- **Under paper-primitivity, every nonzero PSD fixed point of `E^p` is PosDef.**
 
@@ -387,7 +387,7 @@ theorem not_isPrimitivePaper_of_posSemidef_pow_fixedPoint_not_posDef
     (hfix : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
     (hnotpd : ¬ρ.PosDef) :
     ¬IsPrimitivePaper A :=
-  fun ⟨_, hq⟩ =>
+  fun ⟨_, _, hq⟩ =>
     hnotpd (posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hpsd hne hp hfix)
 
 /-! ## Part 7: Paper-primitivity implies irreducibility of the tensor
@@ -534,7 +534,7 @@ theorem isIrreducibleTensor_of_isPrimitivePaper
     IsIrreducibleTensor A := by
   rw [IsIrreducibleTensor]
   intro hInv
-  obtain ⟨q, hq⟩ := hPrim
+  obtain ⟨q, _hqpos, hq⟩ := hPrim
   obtain ⟨φ, hφ_ne, hφ_span⟩ := vectorSpreadSpan_ne_top_of_hasInvariantProj A hInv q
   exact hφ_span (hq φ hφ_ne)
 
@@ -648,9 +648,9 @@ theorem isPrimitivePaper_witness_mul
     (A : MPSTensor d D)
     (hPrim : IsPrimitivePaper A)
     {p : ℕ} (hp : 0 < p) :
-    ∃ q' : ℕ, (∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q' = ⊤) ∧
+    ∃ q' : ℕ, 0 < q' ∧ (∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q' = ⊤) ∧
       ∃ q : ℕ, q' = p * q := by
-  obtain ⟨q, hq⟩ := hPrim
-  exact ⟨p * q, vectorSpreadSpan_mul_eq_top A hq p hp, q, rfl⟩
+  obtain ⟨q, hqpos, hq⟩ := hPrim
+  exact ⟨p * q, Nat.mul_pos hp hqpos, vectorSpreadSpan_mul_eq_top A hq p hp, q, rfl⟩
 
 end MPSTensor
