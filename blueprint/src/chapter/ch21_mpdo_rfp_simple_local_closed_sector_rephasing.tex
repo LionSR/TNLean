@@ -282,8 +282,30 @@
 
 Neighboring right and left sector tensors meet in the bond operator
 $\eta_{k,h}=r_k l_h$:
+\[
+    \eta_{k,h}=r_k l_h
+\]
 \begin{center}
-    \TNEtaSectorDecomposition
+    % eta_{k,h} = r_k l_h: the neighboring bond operator is the
+    % contraction of the right sector tensor r_k with the left sector
+    % tensor l_h over their shared horizontal index a,
+    % eta_{k,h}((x_R,x_L),(y_R,y_L))
+    %   = sum_a (r_k)_a(x_R,y_R) (l_h)_a(x_L,y_L).
+    % Ink: the bond r_k -- l_h is the summed index a; the up legs are
+    % the row indices x_R, x_L and the down legs the column indices
+    % y_R, y_L; the row ends are sealed because r_k and l_h carry no
+    % further horizontal index.  Both sides carry the same boundary
+    % signature
+    % (virtual-west=0 | virtual-east=0 | physical-up=2 | physical-down=2).
+    \begin{tenkz}[physical=updown, boundary=none]
+        \tn[pill, wide=2, legs at={1,2},
+            up={{$x_R$},{$x_L$}}, down={{$y_R$},{$y_L$}}]{\eta_{k,h}}
+    \end{tenkz}
+    $\;=\;$
+    \begin{tenkz}[physical=updown, boundary=none,
+                  bond label={$a$ at 1-2}]
+        \tn[up=$x_R$, down=$y_R$]{r_k} & \tn[up=$x_L$, down=$y_L$]{l_h}
+    \end{tenkz}
 \end{center}
 This is the contraction in
 \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
@@ -347,7 +369,10 @@ This is the contraction in
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOCyclicEtaContraction
+    \[
+        \tr(M_{k_0}\cdots M_{k_{N-1}})
+        =\tr(\eta_{k_0,k_1}\otimes\cdots\otimes\eta_{k_{N-1},k_0})
+    \]
     \caption{Closing the horizontal indices of the factorized sector tensors
     pairs each right factor with the left factor at the next site. The cycle
     therefore becomes the product of the neighboring operators

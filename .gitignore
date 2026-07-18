@@ -84,3 +84,4 @@ scripts/__pycache__/
 Draft/
 Draft_OLD/
 *.bak*
+blueprint/src/.tenkz_svg_cache/

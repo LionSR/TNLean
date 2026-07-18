@@ -32,6 +32,38 @@ div.proof_content {
 	vertical-align: middle;
 }
 
+/* tenkz pictures (Packages/tenkz_pic.py): one <img> per verbatim unit,
+ * centered on its own line; the SVG scales down to the column. */
+.tenkz-pic {
+	display: block;
+	margin: .6rem auto;
+	max-width: 100%;
+	height: auto;
+}
+
+/* Dialect modifiers emitted beside .tenkz-pic — one class per tenkz
+ * sub-language. No per-dialect styling yet; the hooks are reserved for
+ * the Phase-1 migration (e.g. inline sizing for the \tnpic atom). */
+.tenkz-pic-grid,
+.tenkz-pic-cd,
+.tenkz-pic-lattice,
+.tenkz-pic-planes,
+.tenkz-pic-free {
+	/* no-op for now */
+}
+
+.tenkz-svg-missing {
+	display: inline-block;
+	margin: .35rem .2rem;
+	padding: .4rem .55rem;
+	border: 1px solid #d0d7de;
+	border-radius: 4px;
+	background: #f6f8fa;
+	color: #57606a;
+	font-size: .9rem;
+	vertical-align: middle;
+}
+
 .tn-svg-missing {
 	display: inline-block;
 	margin: .35rem .2rem;

@@ -1,0 +1,2460 @@
+% tenkz-lattice — L2c: lattice-region schematics.
+%
+%   \begin{tenkzlattice}[keys]  body  \end{tenkzlattice}
+%
+% A compact site grid (rows x cols) with rectilinear region outlines drawn at
+% a fixed margin from the outermost member sites.  The genre draws clipped
+% windows of a 2D lattice: quiet tint fills carry set membership, 0.80pt
+% outlines carry the region boundary, and dangling boundary legs mark the
+% virtual indices cut by the window.
+%
+% Body commands RECORD; everything is DRAWN at \end in the order
+%   (a) region fills+outlines   (b) lattice bonds   (c) distinguished edges
+%   (d) site dots               (e) boundary legs   (f) region labels
+%
+% Metric doctrine (see tenkz-core): the lattice pitch is 0.75 of the base
+% pitch so windows stay compact; the region boundary runs at margin
+% m = 0.36 x latticepitch = 0.27 x pitch from member site centres, chosen
+% < latticepitch/2 so a single-site notch still reads.
+%
+% The tracer emits one closed loop per boundary component, so notches
+% (a single non-convex loop) and interior holes (an outer loop plus an
+% inner loop, filled as a ring by the even-odd rule) both render.  The
+% one unsupported case is a degenerate corner where two members meet only
+% diagonally (a corner of degree four); Phase-0 regions avoid it.
+%
+% Phase-0 scope: grid <= 12x12.
+%
+% Projected-basis coordinates (the TikZ-xyz model): a lattice frame is
+% three PROJECTED BASIS VECTORS in the paper plane — the column vector C,
+% the row vector R and the sheet vector S — and site (r, c, sheet h) sits
+% at  c C + r R + h S.  The presets are vector triples:
+%   frame=flat      C = (lp, 0)          R = (0, -lp)             lp = lattice pitch
+%   frame=oblique   C = (lp, 0)          R = (-+slant lp, -rise lp)   ("/" or "\" lean)
+%   frame=slab      the same shape at the slab ratios
+%   sheets          S = (0, sep)         sep = sheet sep x lp
+% and the expert keys col vector= / row vector= / sheet vector= set the
+% three vectors directly for arbitrary projections.  This is a basis
+% substitution, NOT a canvas transform: only logical COORDINATES pass
+% through the projection, so node glyphs stay round, labels stay upright
+% and physical legs stay vertical in the paper frame — nodes never shear.
+% Every drawn coordinate routes through the one vector map \tenkzl_xyz:nnnNN
+% (and its continuous companion \tenkzl_map:nn); see the frame-map section.
+%
+% Sheet addressing: every cell accepts an optional sheet coordinate —
+% (r,c) lives on the picture's default sheet and (r,c,h) addresses sheet
+% h explicitly, in \tnregion / \tnedge / \tnsite alike.  ONE default-
+% sheet convention (the 0.6 contract's Q2 decision): a numeric stack
+% homes a bare (r,c) on sheet 0, a ROLE-LIST stack on its top state
+% sheet — the ket sheet of a sandwich, the school convention tenkzplanes
+% always used.  tenkzplanes is a literal preset over ONE two-sheet
+% lattice: ket = sheet 1 ABOVE bra = sheet 0, with site-wise physical
+% pairing legs along S between (r,c,1) and (r,c,0) (the bra-ket double
+% layer of the RMP's fig. 2 panels, arXiv:2011.12127 sec2fig4b); `open`
+% cells keep dangling stubs instead of a contracted pairing leg.
+%
+% Sheet roles (the grid's rows= doctrine, one level up): sheets= also
+% takes a ROLE LIST, sheets={ket,op,bra}, written TOP-TO-BOTTOM — the
+% first role is the top sheet, matching the ket-over-bra read of
+% sheets={ket,bra}, so sheet h carries list item k-h.  The roles:
+%   ket  a state sheet, dot sites (the top of the <psi|O|psi> stack)
+%   op   an operator sheet, mpo/box sites — the PEPO layer; its boxes
+%        paint AFTER the pairing ink, so a box visibly covers the legs
+%        it terminates (the quantikz gate read)
+%   bra  a state sheet, dot sites (the bottom)
+% (a bra sheet may later want conjugate marks on its sites; both state
+% roles draw plain dots for now).  A role list implies pairing: every
+% ADJACENT sheet pair pairs site-wise along S, exactly as adjacent
+% facing grid rows pair.  Numeric sheets=k keeps its meaning: k bare
+% wire-sheets, no roles, pairing only on request.
+%
+% Interface addressing: a k-sheet pairing stack has k-1 INTERFACES,
+% interface i joining sheets i and i+1, i = 0 .. k-2 counted from the
+% bottom.  open= / trace= address pairing SEGMENTS, so their cells take
+% an optional INTERFACE index, not a sheet index: open={(r,c)} opens the
+% column's segment at EVERY interface, open={(r,c,i)} at interface i
+% alone.  With two sheets the forms agree (interface 0 is the pairing),
+% which is why every Phase-1 spelling reads unchanged.
+%
+% Outer faces: outer legs=both|top|bottom|none draws the top sheet's up
+% legs and the bottom sheet's down legs (physical=up lifted to the
+% stack's outer faces).  A role-list stack defaults to BOTH — the open
+% window of the boundary doctrine; the fully contracted <psi|O|psi>
+% object states outer legs=none — while numeric stacks and tenkzplanes
+% default to none, keeping every established silhouette.
+
+\ExplSyntaxOn
+
+% ---------- argument variants ----------
+\cs_generate_variant:Nn \clist_set:Nn { NV }
+\cs_generate_variant:Nn \seq_set_split:Nnn { NnV }
+\prg_generate_conditional_variant:Nnn \str_if_eq:nn { Vn } { p, T, F, TF }
+\prg_generate_conditional_variant:Nnn \regex_match:nn { nV } { TF }
+\cs_generate_variant:Nn \msg_warning:nnnnnn { nneeee }
+
+% ---------- role-derived styles ----------
+% Resolution is pure style indirection (the semantic-hue contract): the
+% role words of \tnedge[role=] / \tnsite[role=] map to ONE derived style
+% per role x glyph family.  The styles live in tenkz-core with the rest
+% of the role table (one per role x glyph family, every tier).
+
+% ---------- picture state ----------
+\int_new:N \l__tenkzl_nrows_int
+\int_new:N \l__tenkzl_ncols_int
+\tl_new:N  \l__tenkzl_sitemode_tl     % dot | none
+\tl_new:N  \l__tenkzl_physical_tl     % up | updown | none
+\bool_new:N \l__tenkzl_legs_bool
+% per-side boundary policy (west=/east=/north=/south=), layered over
+% boundary= exactly as in the grid tier; empty = inherit the picture
+% policy (the legs boolean)
+\tl_new:N  \l__tenkzl_wpol_tl
+\tl_new:N  \l__tenkzl_epol_tl
+\tl_new:N  \l__tenkzl_npol_tl
+\tl_new:N  \l__tenkzl_spol_tl
+% (registered region names live in \l_tenkz_cs_names_prop, the shared
+% cell-set state of tenkz-core)
+\prop_new:N \l__tenkzl_removed_prop   % "r-c" -> 1
+\seq_new:N  \l__tenkzl_regions_seq    % {slot}{outline}{label}{labelat}{cells}{inset}
+\seq_new:N  \l__tenkzl_edges_seq      % {r}{c}{h}{r'}{c'}{h'}{style}{label}
+\prop_new:N \l__tenkzl_nobond_prop    % \tnedge[none]: "r-c-h:r'-c'-h'" -> 1,
+                                      % both endpoint orders (bond suppression)
+\seq_new:N  \l__tenkzl_sitelabels_seq % \tnsite[label=]: {r}{c}{h}{label}
+\prop_new:N \l__tenkzl_siterole_prop  % \tnsite[role=]: "r-c[-h]" -> tint style
+
+% plane state (Phase-1 plane slice)
+\bool_new:N \l__tenkzl_oblique_bool   % frame=oblique: shear in-plane ink
+\tl_new:N   \l__tenkzl_leansign_tl    % plane lean: empty = east (the "/"
+                                      % lean), `-' = west (mirrored slant)
+\dim_new:N  \l__tenkzl_px_dim         % frame-map output: paper-frame point
+\dim_new:N  \l__tenkzl_py_dim
+\dim_new:N  \l__tenkzl_qx_dim         % saved paper-frame point (segment tails)
+\dim_new:N  \l__tenkzl_qy_dim
+\dim_new:N  \l__tenkzl_fx_dim         % frame-map scratch: flat-frame input
+\dim_new:N  \l__tenkzl_fy_dim
+\prop_new:N \l__tenkzl_open_prop      % pairing: "r-c" -> 1, open column
+\prop_new:N \l__tenkzl_trace_prop     % pairing: "r-c" -> 1, traced column
+                                      % (the column's inter-sheet legs close
+                                      % by the east wrap loop: per site Tr_s)
+\tl_new:N   \l__tenkzl_sheetsep_tl    % sheet-sep ratio (of lattice pitch)
+
+% projected-basis frame state (see the frame-map section): the map
+% coefficients are DECIMAL COEFFICIENT token lists (they multiply a dim
+% register on their right), so the preset path scales registers with the
+% very same literal ratios as before the vector rewrite
+\tl_new:N \l__tenkzl_axx_tl           %  C_x / lp
+\tl_new:N \l__tenkzl_ayx_tl           %  C_y / lp
+\tl_new:N \l__tenkzl_axy_tl           % -R_x / lp
+\tl_new:N \l__tenkzl_ayy_tl           % -R_y / lp
+\dim_new:N \l__tenkzl_lp_dim          % lattice pitch = latticepitch x pitch
+\dim_new:N \l__tenkzl_svx_dim         % sheet vector S (paper frame)
+\dim_new:N \l__tenkzl_svy_dim
+\dim_new:N \l__tenkzl_cvecx_dim       % expert col vector={x,y}
+\dim_new:N \l__tenkzl_cvecy_dim
+\dim_new:N \l__tenkzl_rvecx_dim       % expert row vector={x,y}
+\dim_new:N \l__tenkzl_rvecy_dim
+\dim_new:N \l__tenkzl_svecx_dim       % expert sheet vector={x,y}
+\dim_new:N \l__tenkzl_svecy_dim
+\bool_new:N \l__tenkzl_custcol_bool   % expert vectors given?
+\bool_new:N \l__tenkzl_custrow_bool
+\bool_new:N \l__tenkzl_custsheet_bool
+
+% sheet state: h ranges over 0 .. sheets-1, bottom-up; a draw pass renders
+% ONE sheet, whose index and shift h S are the ambient (sheet, shx, shy)
+\int_new:N \l__tenkzl_sheets_int      % sheet count (tenkzlattice sheets=)
+\int_new:N \l__tenkzl_defsheet_int    % default sheet of an unaddressed cell
+\int_new:N \l__tenkzl_sheet_int       % ambient sheet of the current pass
+\dim_new:N \l__tenkzl_shx_dim         % ambient sheet shift = sheet x S
+\dim_new:N \l__tenkzl_shy_dim
+\bool_new:N \l__tenkzl_pairing_bool   % draw inter-sheet pairing legs
+\int_new:N \l__tenkzl_hsel_int        % scratch: a parsed sheet coordinate
+\int_new:N \l__tenkzl_sha_int         % scratch: \tnedge endpoint sheets
+\int_new:N \l__tenkzl_shb_int
+\int_new:N \l__tenkzl_minsheet_int    % scratch: lowest inhabited sheet
+
+% sheet-role state (see the sheet-role header notes)
+\seq_new:N  \l__tenkzl_roles_seq      % per-sheet role, item h+1 = sheet h
+                                      % (bottom-up); empty = bare wire-sheets
+\bool_new:N \l__tenkzl_roles_bool     % sheets= was a role list
+\tl_new:N   \l__tenkzl_rolelist_tl    % the list as written (top-to-bottom)
+\tl_new:N   \l__tenkzl_outer_tl       % outer legs: both|top|bottom|none;
+                                      % empty until the render-time default
+\tl_new:N   \l__tenkzl_skin_tl        % ambient sheet's site skin (node style)
+\bool_new:N \l__tenkzl_opsheet_bool   % ambient sheet is an op sheet
+% boundary-event counters (the stack's signature, see \tenkzl_emit_boundary:)
+\int_new:N  \l__tenkzl_bot_int        % outer legs, top face
+\int_new:N  \l__tenkzl_bob_int        % outer legs, bottom face
+\int_new:N  \l__tenkzl_bpc_int        % one interface: closed pairing legs
+\int_new:N  \l__tenkzl_bpo_int        %   open segments
+\int_new:N  \l__tenkzl_bpt_int        %   traced segments
+\tl_new:N   \l__tenkzl_bnd_tl         % accumulated per-interface fields
+
+% \tnedge / \tnsite option state (reset per command call)
+\tl_new:N   \l__tenkzl_estyle_tl      % resolved edge draw style
+\tl_new:N   \l__tenkzl_exsty_tl       % \tnedge[style=]: extra tikz options
+\tl_new:N   \l__tenkzl_edgelabel_tl   % \tnedge[label=]
+\bool_new:N \l__tenkzl_enone_bool     % \tnedge[none]
+\bool_new:N \l__tenkzl_sremoved_bool  % \tnsite[removed]
+\tl_new:N   \l__tenkzl_sitelabel_tl   % \tnsite[label=]
+\tl_new:N   \l__tenkzl_srole_tl       % \tnsite[role=]: resolved tint style
+\tl_new:N   \l__tenkzl_stint_tl       % draw-pass scratch: a site's tint
+
+% sheet-vector near-coincidence guard scratch
+\fp_new:N  \l__tenkzl_mind_fp         % squared min sheet-to-sheet distance
+\fp_new:N  \l__tenkzl_d_fp
+\int_new:N \l__tenkzl_gdr_int         % argmin row/col offsets
+\int_new:N \l__tenkzl_gdc_int
+
+% scratch (the expression resolver's own scratch lives with it in
+% tenkz-core; what remains here serves \tenkzl_cell:nNNN and the draw
+% passes)
+\int_new:N \l__tenkzl_depth_int
+\tl_new:N  \l__tenkzl_body_tl
+\tl_new:N  \l__tenkzl_tmp_tl
+\clist_new:N \l__tenkzl_cells_clist  % \tnregion's serialized member cells
+\prop_new:N \l__tenkzl_member_prop
+\seq_new:N  \l__tenkzl_parts_seq
+\int_new:N \l__tenkzl_rlo_int        % \tnedge/\tnsite endpoint registers
+\int_new:N \l__tenkzl_rhi_int
+\int_new:N \l__tenkzl_clo_int
+\int_new:N \l__tenkzl_chi_int
+\dim_new:N \l__tenkzl_m_dim
+\dim_new:N \l__tenkzl_x_dim
+\dim_new:N \l__tenkzl_y_dim
+\dim_new:N \l__tenkzl_dx_dim
+\dim_new:N \l__tenkzl_dy_dim
+\int_new:N \l__tenkzl_rmin_int
+\int_new:N \l__tenkzl_rmax_int
+\int_new:N \l__tenkzl_cmin_int
+\int_new:N \l__tenkzl_cmax_int
+% boundary tracer state
+\prop_new:N \l__tenkzl_end_prop       % start corner "i-j" -> end corner
+\prop_new:N \l__tenkzl_orient_prop    % start corner -> H | V
+\prop_new:N \l__tenkzl_val_prop       % start corner -> offset line (a dim)
+\prop_new:N \l__tenkzl_visited_prop   % corner -> 1
+\seq_new:N  \l__tenkzl_starts_seq     % all boundary start corners
+\seq_new:N  \l__tenkzl_loopedge_seq   % one loop, ordered: {orient}{val}
+\tl_new:N   \l__tenkzl_path_tl        % accumulated tikz path (all loops)
+\tl_new:N   \l__tenkzl_cur_tl
+\tl_new:N   \l__tenkzl_next_tl
+\tl_new:N   \l__tenkzl_o_tl
+\tl_new:N   \l__tenkzl_v_tl
+\tl_new:N   \l__tenkzl_po_tl          % previous edge orient
+\tl_new:N   \l__tenkzl_pv_tl          % previous edge offset line
+\tl_new:N   \l__tenkzl_last_tl
+
+% variants for the tracer (Nen/Nne/Nee come from tenkz-grid, loaded first)
+\cs_generate_variant:Nn \prop_put:Nnn { NVn }
+\cs_generate_variant:Nn \prop_get:NnN { NVN }
+\prg_generate_conditional_variant:Nnn \prop_if_in:Nn { Ne, NV } { p, T, F, TF }
+
+% ---------- environment keys ----------
+\pgfkeys{
+  /tenkz/lattice/.is~family,
+  /tenkz/lattice/rows/.code={\int_set:Nn \l__tenkzl_nrows_int {#1}},
+  /tenkz/lattice/cols/.code={\int_set:Nn \l__tenkzl_ncols_int {#1}},
+  /tenkz/lattice/site/.is~choice,
+  /tenkz/lattice/site/dot/.code ={\tl_set:Nn \l__tenkzl_sitemode_tl {dot}},
+  /tenkz/lattice/site/none/.code={\tl_set:Nn \l__tenkzl_sitemode_tl {none}},
+  % boundary = open|none: the all-sides policy for the window's cut
+  % virtual bonds — `open` draws the dangling boundary legs on every
+  % side, `none` seals the window.  `boundary legs` is the pre-0.6
+  % boolean spelling, aliased to boundary=open.  Per-side overrides:
+  % west=/east=/north=/south= below.
+  /tenkz/lattice/boundary/.is~choice,
+  /tenkz/lattice/boundary/open/.code={\bool_set_true:N \l__tenkzl_legs_bool},
+  /tenkz/lattice/boundary/none/.code={\bool_set_false:N \l__tenkzl_legs_bool},
+  /tenkz/lattice/boundary~legs/.code={\bool_set_true:N \l__tenkzl_legs_bool},
+  % west= / east= / north= / south=: one side, one policy word of the
+  % 0.6 alphabet.  `open` and `none` draw or seal that side's boundary
+  % legs (resolution: the side word wins, else boundary=).  `trace` and
+  % `cup[={m}]` are accepted grammar — the side-policy alphabet is one
+  % language across the tiers — but their closure ink lands with the
+  % inter-sheet closure engine (0.6 phase B); until then they warn and
+  % seal the side (a closed side has no open stubs).
+  /tenkz/lattice/west/.code ={\tenkzl_side:nn {west} {#1}},
+  /tenkz/lattice/east/.code ={\tenkzl_side:nn {east} {#1}},
+  /tenkz/lattice/north/.code={\tenkzl_side:nn {north}{#1}},
+  /tenkz/lattice/south/.code={\tenkzl_side:nn {south}{#1}},
+  % physical = up|updown|none: the per-site physical legs of a BARE
+  % sheet.  `up` is the state sheet (one leg rising per site, RMP
+  % sec2fig4b top); `updown` is the operator sheet (the PEPO window of
+  % RMP sec2fig5PEPO: the operator's row index rises and its column
+  % index falls at every site).  Role-list stacks ignore the word --
+  % their faces belong to the pairing/outer-leg machinery (see the
+  % on-site leg pass).
+  /tenkz/lattice/physical/.is~choice,
+  /tenkz/lattice/physical/up/.code  ={\tl_set:Nn \l__tenkzl_physical_tl {up}},
+  /tenkz/lattice/physical/updown/.code=
+      {\tl_set:Nn \l__tenkzl_physical_tl {updown}},
+  /tenkz/lattice/physical/none/.code={\tl_set:Nn \l__tenkzl_physical_tl {none}},
+  /tenkz/lattice/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
+  /tenkz/lattice/compact/.code={\pgfkeys{/tenkz/compact}},
+  % the shared forward-to-core plumbing: the glyph policy reads the same
+  % in every family
+  /tenkz/lattice/tensor~style/.code={\pgfqkeys{/tenkz}{tensor~style=#1}},
+  % species={...}: picture-scope species declaration (see tenkz-core)
+  /tenkz/lattice/species/.code={\pgfqkeys{/tenkz}{species={#1}}},
+  % frame=oblique renders THIS sheet in the named oblique metric frame
+  % (see the frame map below); frame=flat is the rectilinear default.
+  % frame=slab is the full-pitch RMP showcase preset (slant 0.60, rise
+  % 0.55): named for the read -- a thick tilted slab -- not the numbers.
+  % `frame=' is the 0.6 spelling shared with the grid tier.
+  /tenkz/lattice/frame/.is~choice,
+  /tenkz/lattice/frame/flat/.code   ={\bool_set_false:N \l__tenkzl_oblique_bool},
+  /tenkz/lattice/frame/oblique/.code={\bool_set_true:N  \l__tenkzl_oblique_bool},
+  /tenkz/lattice/frame/slab/.code   ={\bool_set_true:N  \l__tenkzl_oblique_bool
+      \cs_set_eq:NN \tenkz@r@planeslant \tenkz@r@slabslant
+      \cs_set_eq:NN \tenkz@r@planerise  \tenkz@r@slabrise},
+  % plane slant= / plane rise=: explicit ratio overrides (of the lattice
+  % pitch), local to this picture.  Guarded, not clamped: values outside
+  % the proven-readable ranges warn (see the guard helpers) but draw.
+  /tenkz/lattice/plane~slant/.code={\tenkzl_set_slant:n{#1}},
+  /tenkz/lattice/plane~rise/.code ={\tenkzl_set_rise:n{#1}},
+  % plane lean = east|west: which way the depth axis leans.  east is the
+  % default "/" lean (a step INTO the sheet runs up-right); west mirrors
+  % it by negating the slant column of the frame map.  The map stays
+  % linear, so the region tracer's intersect-then-map argument holds
+  % under either sign (plane_sweep1 page 2a: fills, rounded tracer
+  % corners, margins and outside-corner labels all survive the mirror).
+  /tenkz/lattice/plane~lean/.is~choice,
+  /tenkz/lattice/plane~lean/east/.code={\tl_clear:N \l__tenkzl_leansign_tl},
+  /tenkz/lattice/plane~lean/west/.code={\tl_set:Nn \l__tenkzl_leansign_tl {-}},
+  % sheets=N stacks N bare wire-sheets along the sheet vector S: site
+  % (r,c,h) sits at c C + r R + h S, h = 0 .. N-1 bottom-up, and a
+  % sheetless cell (r,c) lives on sheet 0.  sheets={ket,op,bra} is the
+  % ROLE-LIST form, written top-to-bottom (see the sheet-role header
+  % notes): it sets the count, assigns each sheet its role skin and
+  % turns pairing on.  A role list contains literal commas, so it MUST
+  % be braced; state sheets= before open=/trace= so their guards know
+  % the stack.
+  /tenkz/lattice/sheets/.code={\tenkzl_sheetspec:n {#1}},
+  % sheet sep: |S| as a ratio of the lattice pitch when S is the vertical
+  % default (0, sep); absent, sep derives as (rows-1) x rise + gap so the
+  % stack scales with the window (see the tenkzplanes ratio comments)
+  /tenkz/lattice/sheet~sep/.code={\tl_set:Nn \l__tenkzl_sheetsep_tl {#1}},
+  % pairing: one physical leg along S between (r,c,h) and (r,c,h+1) at
+  % every ADJACENT sheet pair -- with sheets=2 the bra-ket sandwich
+  % <psi|...|psi>; a role list turns it on itself
+  /tenkz/lattice/pairing/.code={\bool_set_true:N \l__tenkzl_pairing_bool},
+  % open= / trace= address pairing SEGMENTS: a cell (r,c) acts on every
+  % interface of its column, (r,c,i) on interface i alone (= between
+  % sheets i and i+1, counted from the bottom; see the interface header
+  % notes).  Values contain literal commas, so they MUST be braced.
+  /tenkz/lattice/open/.code={\tenkzl_openset:n {#1}},
+  /tenkz/lattice/trace/.code={\tenkzl_traceset:n {#1}},
+  % outer legs = both|top|bottom|none: the top sheet's up legs and the
+  % bottom sheet's down legs (physical=up lifted to the stack's outer
+  % faces).  Unset, it resolves at render time: both for a role list
+  % (the open window), none otherwise.
+  /tenkz/lattice/outer~legs/.is~choice,
+  /tenkz/lattice/outer~legs/both/.code  ={\tl_set:Nn \l__tenkzl_outer_tl {both}},
+  /tenkz/lattice/outer~legs/top/.code   ={\tl_set:Nn \l__tenkzl_outer_tl {top}},
+  /tenkz/lattice/outer~legs/bottom/.code={\tl_set:Nn \l__tenkzl_outer_tl
+      {bottom}},
+  /tenkz/lattice/outer~legs/none/.code  ={\tl_set:Nn \l__tenkzl_outer_tl {none}},
+  % expert projection: col vector={x,y} / row vector={x,y} /
+  % sheet vector={x,y} set the projected basis directly (paper-frame
+  % lengths, e.g. {8mm,-2mm}); site (r,c,h) = c C + r R + h S.  The pair
+  % contains a literal comma, so it MUST be braced.  A custom C/R frame
+  % counts as sheared (outside-corner labels) iff R has a horizontal
+  % component; the slant/rise ratio guards do not apply to it.
+  /tenkz/lattice/col~vector/.code={\bool_set_true:N \l__tenkzl_custcol_bool
+      \tenkzl_vecpair:nNN {#1} \l__tenkzl_cvecx_dim \l__tenkzl_cvecy_dim},
+  /tenkz/lattice/row~vector/.code={\bool_set_true:N \l__tenkzl_custrow_bool
+      \tenkzl_vecpair:nNN {#1} \l__tenkzl_rvecx_dim \l__tenkzl_rvecy_dim},
+  /tenkz/lattice/sheet~vector/.code={\bool_set_true:N \l__tenkzl_custsheet_bool
+      \tenkzl_vecpair:nNN {#1} \l__tenkzl_svecx_dim \l__tenkzl_svecy_dim},
+}
+
+% "{x,y}" -> two dims (an expert basis vector in paper coordinates)
+\cs_new_protected:Npn \tenkzl_vecpair:nNN #1#2#3
+  {
+    \seq_set_split:Nnn \l__tenkzl_parts_seq {,} {#1}
+    \dim_set:Nn #2 { \seq_item:Nn \l__tenkzl_parts_seq {1} }
+    \dim_set:Nn #3 { \seq_item:Nn \l__tenkzl_parts_seq {2} }
+  }
+
+% ---------- the side-policy alphabet (west=/east=/north=/south=) ------
+\msg_new:nnn { tenkz } { lattice-side-policy }
+  {
+    Unknown~side~policy~'#2'~at~#1=.~A~window~side~takes~exactly~one~
+    word~of~the~policy~alphabet:~open,~none,~trace,~cup~or~cup={m}.
+  }
+\msg_new:nnn { tenkz } { lattice-side-deferred }
+  {
+    #1=#2:~the~inter-sheet~closure~ink~of~the~lattice~tier~lands~with~
+    the~0.6~phase-B~closure~engine;~until~then~the~side~is~drawn~
+    SEALED~(a~closed~side~has~no~open~stubs).
+  }
+\cs_new_protected:Npn \tenkzl_side_word:nn #1#2
+  {
+    \str_case:nn {#1}
+      {
+        {west}  { \tl_set:Nn \l__tenkzl_wpol_tl {#2} }
+        {east}  { \tl_set:Nn \l__tenkzl_epol_tl {#2} }
+        {north} { \tl_set:Nn \l__tenkzl_npol_tl {#2} }
+        {south} { \tl_set:Nn \l__tenkzl_spol_tl {#2} }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_side:nn #1#2
+  {
+    \str_case:nnF {#2}
+      {
+        {open}  { \tenkzl_side_word:nn {#1} {open} }
+        {none}  { \tenkzl_side_word:nn {#1} {none} }
+        {trace} { \msg_warning:nnnn {tenkz}{lattice-side-deferred}
+                    {#1} {trace}
+                  \tenkz@event{warning|code=side-deferred|side=#1|policy=trace}
+                  \tenkzl_side_word:nn {#1} {none} }
+        {cup}   { \msg_warning:nnnn {tenkz}{lattice-side-deferred}
+                    {#1} {cup}
+                  \tenkz@event{warning|code=side-deferred|side=#1|policy=cup}
+                  \tenkzl_side_word:nn {#1} {none} }
+      }
+      {
+        \tl_if_in:nnTF {#2} {cup=}
+          {
+            \msg_warning:nnnn {tenkz}{lattice-side-deferred} {#1} {cup}
+            \tenkz@event{warning|code=side-deferred|side=#1|policy=cup}
+            \tenkzl_side_word:nn {#1} {none}
+          }
+          { \msg_error:nnne {tenkz}{lattice-side-policy}
+              {#1} { \tl_to_str:n {#2} } }
+      }
+  }
+% is side #1 open?  The side word wins; empty inherits boundary= (the
+% legs boolean).
+\cs_new_protected:Npn \tenkzl_side_open:nN #1#2
+  {
+    \bool_set_false:N #2
+    \str_case:nn {#1}
+      {
+        {west}  { \tl_set_eq:NN \l__tenkzl_tmp_tl \l__tenkzl_wpol_tl }
+        {east}  { \tl_set_eq:NN \l__tenkzl_tmp_tl \l__tenkzl_epol_tl }
+        {north} { \tl_set_eq:NN \l__tenkzl_tmp_tl \l__tenkzl_npol_tl }
+        {south} { \tl_set_eq:NN \l__tenkzl_tmp_tl \l__tenkzl_spol_tl }
+      }
+    \tl_if_empty:NTF \l__tenkzl_tmp_tl
+      { \bool_if:NT \l__tenkzl_legs_bool { \bool_set_true:N #2 } }
+      { \str_if_eq:VnT \l__tenkzl_tmp_tl {open} { \bool_set_true:N #2 } }
+  }
+
+% ---------- sheet count / role list ----------
+% sheets= takes a bare count (wire-sheets) or a role list; digits decide.
+\cs_new_protected:Npn \tenkzl_sheetspec:n #1
+  {
+    \tl_set:Nn \l__tenkzl_tmp_tl {#1}
+    \tl_remove_all:Nn \l__tenkzl_tmp_tl { ~ }
+    \regex_match:nVTF { \A \d+ \Z } \l__tenkzl_tmp_tl
+      {
+        \seq_clear:N \l__tenkzl_roles_seq
+        \bool_set_false:N \l__tenkzl_roles_bool
+        \tl_clear:N \l__tenkzl_rolelist_tl
+        \int_set:Nn \l__tenkzl_sheets_int { \int_max:nn {1} {#1} }
+        % numeric stacks keep sheet 0 as the home of a bare (r,c)
+        \int_zero:N \l__tenkzl_defsheet_int
+      }
+      { \tenkzl_rolelist:V \l__tenkzl_tmp_tl }
+  }
+% the role list, written top-to-bottom (ket over bra): sheet h carries
+% list item k-h, so the roles seq is stored REVERSED — item h+1 = the
+% role of sheet h, bottom-up.  Unknown roles warn and draw as dot sheets.
+% A role list IS a pairing stack, so pairing turns on here.
+\cs_new_protected:Npn \tenkzl_rolelist:n #1
+  {
+    \tl_set:Nn \l__tenkzl_rolelist_tl {#1}
+    \seq_set_split:Nnn \l__tenkzl_parts_seq {,} {#1}
+    \seq_map_inline:Nn \l__tenkzl_parts_seq
+      {
+        \str_case:nnF {##1} { {ket}{} {op}{} {bra}{} }
+          {
+            \msg_warning:nnn { tenkz } { sheet-role } {##1}
+            \tenkz@event{warning|code=sheet-role|role=##1}
+          }
+      }
+    \seq_set_eq:NN \l__tenkzl_roles_seq \l__tenkzl_parts_seq
+    \seq_reverse:N \l__tenkzl_roles_seq
+    \int_set:Nn \l__tenkzl_sheets_int { \seq_count:N \l__tenkzl_roles_seq }
+    \bool_set_true:N \l__tenkzl_roles_bool
+    \bool_set_true:N \l__tenkzl_pairing_bool
+    % ONE default-sheet convention for every role-list stack (the 0.6
+    % contract's Q2 decision): a bare (r,c) record lives on the TOP
+    % STATE sheet — the school convention tenkzplanes always used (an
+    % unaddressed region of the sandwich is a ket-sheet region).  The
+    % scan keeps the topmost non-op sheet; an all-op stack falls back
+    % to the top sheet.
+    \int_set:Nn \l__tenkzl_defsheet_int { \l__tenkzl_sheets_int - 1 }
+    \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 1 }
+      {
+        \str_if_eq:eeF { \tenkzl_role:n {##1} } {op}
+          { \int_set:Nn \l__tenkzl_defsheet_int {##1} }
+      }
+  }
+\cs_generate_variant:Nn \tenkzl_rolelist:n { V }
+% role of sheet #1 (expandable); empty without a role list
+\cs_new:Npn \tenkzl_role:n #1
+  { \seq_item:Nn \l__tenkzl_roles_seq { #1 + 1 } }
+
+% ---------- plane-ratio guards ----------
+% Warnings, never clamps: the keys draw what they are told, and the log
+% names the regime the value has entered.  Each threshold cites its sweep
+% measurement; the leg threshold is COMPUTED from physleg/latticepitch so
+% a metric retune moves it automatically.
+\msg_new:nnn { tenkz } { plane-rise-low }
+  { plane~rise=#1~is~at~or~below~physleg/latticepitch~=~#2:~vertical~
+    physical~legs~cross~the~behind~row's~in-plane~bond~(false~junctions;~
+    the~worst~sweep~cell~0.30/0.40~produced~false~5-valent~junctions).~
+    Keep~plane~rise~above~#2. }
+\msg_new:nnn { tenkz } { plane-slant-band }
+  { plane~slant=#1~is~outside~the~readable~band~(0.30,~0.65):~at~or~
+    below~0.30~the~depth~bonds~steepen~to~61-67~degrees~and~become~
+    confusable~with~the~vertical~physical~legs;~at~or~above~0.65~a~
+    depth~neighbour~reads~as~a~column~neighbour. }
+\msg_new:nnn { tenkz } { plane-tall-window }
+  { (rows-1)~x~plane~slant~=~#1~exceeds~(cols-1)/2~=~#2:~the~sheared~
+    window~collapses~toward~a~rhombus~staircase~and~the~depth~reads~as~
+    a~rotated~lattice~(plane_sweep1~page~2b,~5x3~drift/width~0.9).~Cap~
+    receding~rows~at~about~4~at~stock~slant,~or~drop~plane~slant~toward~
+    0.30~for~5~or~more~receding~rows. }
+\msg_new:nnn { tenkz } { planes-interleave }
+  { sheet~sep=#1~x~lattice~pitch~is~below~(rows-1)~x~the~frame's~row~
+    drop~=~#2:~the~sheets~interleave,~and~at~an~integer~multiple~of~the~
+    drop~a~sheet's~row~r~lands~exactly~at~the~next~sheet's~row~height~
+    (side-by-side~doubled~dots,~plane_sweep2~z_X2).~Use~sep~>~#2,~or~
+    omit~sheet~sep~for~the~derived~default. }
+\msg_new:nnn { tenkz } { sheet-coincide }
+  { sheet~vector:~adjacent~sheets~nearly~coincide.~Sheet~h+1's~site~
+    (r,c)~lands~#1mm~from~sheet~h's~site~(r+#2,~c+#3),~below~the~#4mm~
+    bead-separation~floor~(\tenkz@r@sheetcoincide~x~the~bead~diameter):~
+    the~stacked~dots~
+    read~as~one~blob~(the~fig21d_cubic~near-coincidence~arithmetic).~
+    Grow~the~sheet~vector,~or~retune~plane~slant/rise~so~no~lattice~
+    translation~of~a~sheet~lands~on~the~sheet~above~it. }
+
+% set the per-picture rise ratio and guard it: legs clear the behind-row
+% bond only while rise > physleg/latticepitch (= 0.38/0.75 ~ 0.507 at the
+% stock metric); the event stream carries the same warning for the audit
+% layer
+\cs_new_protected:Npn \tenkzl_set_rise:n #1
+  {
+    \cs_set:Npn \tenkz@r@planerise {#1}
+    \fp_compare:nNnF {#1} > { \tenkz@r@physleg / \tenkz@r@latticepitch }
+      {
+        \msg_warning:nnee { tenkz } { plane-rise-low } {#1}
+          { \fp_eval:n
+              { round( \tenkz@r@physleg / \tenkz@r@latticepitch , 3 ) } }
+        \tenkz@event{warning|code=plane-rise-low|rise=#1}
+      }
+  }
+% set the per-picture slant ratio and guard the (0.30, 0.65) band
+\cs_new_protected:Npn \tenkzl_set_slant:n #1
+  {
+    \cs_set:Npn \tenkz@r@planeslant {#1}
+    \bool_lazy_and:nnF
+      { \fp_compare_p:nNn {#1} > {0.30} }
+      { \fp_compare_p:nNn {#1} < {0.65} }
+      {
+        \msg_warning:nnn { tenkz } { plane-slant-band } {#1}
+        \tenkz@event{warning|code=plane-slant-band|slant=#1}
+      }
+  }
+% tall-window guard, run at render time by both plane environments: a
+% window whose total depth drift (rows-1) x slant exceeds half its width
+% (cols-1)/2 collapses toward a rhombus staircase
+\cs_new_protected:Npn \tenkzl_guard_window:
+  {
+    % the drift formula prices the slant RATIO, so an expert col/row
+    % vector frame (whose geometry the ratios do not describe) is exempt
+    \bool_lazy_all:nT
+      {
+        { \l__tenkzl_oblique_bool }
+        { ! \l__tenkzl_custcol_bool }
+        { ! \l__tenkzl_custrow_bool }
+      }
+      {
+        \fp_compare:nNnT
+          { ( \l__tenkzl_nrows_int - 1 ) * \tenkz@r@planeslant }
+          > { 0.5 * ( \l__tenkzl_ncols_int - 1 ) }
+          {
+            \msg_warning:nnee { tenkz } { plane-tall-window }
+              { \fp_eval:n
+                  { ( \l__tenkzl_nrows_int - 1 ) * \tenkz@r@planeslant } }
+              { \fp_eval:n { 0.5 * ( \l__tenkzl_ncols_int - 1 ) } }
+            \tenkz@event{warning|code=plane-tall-window|rows=\int_use:N
+              \l__tenkzl_nrows_int|cols=\int_use:N \l__tenkzl_ncols_int}
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_reset:
+  {
+    \int_zero:N \l__tenkzl_nrows_int
+    \int_zero:N \l__tenkzl_ncols_int
+    \tl_set:Nn \l__tenkzl_sitemode_tl {dot}
+    \tl_set:Nn \l__tenkzl_physical_tl {none}
+    \bool_set_false:N \l__tenkzl_legs_bool
+    \tl_clear:N \l__tenkzl_wpol_tl
+    \tl_clear:N \l__tenkzl_epol_tl
+    \tl_clear:N \l__tenkzl_npol_tl
+    \tl_clear:N \l__tenkzl_spol_tl
+    \bool_set_false:N \l__tenkzl_oblique_bool
+    \tl_clear:N \l__tenkzl_leansign_tl
+    % one sheet at index 0, no pairing, preset frame: the flat basis
+    % C = (lp, 0), R = (0, -lp), S = (0, sep)
+    \int_set:Nn \l__tenkzl_sheets_int {1}
+    \int_zero:N \l__tenkzl_defsheet_int
+    \int_zero:N \l__tenkzl_sheet_int
+    \dim_zero:N \l__tenkzl_shx_dim
+    \dim_zero:N \l__tenkzl_shy_dim
+    \bool_set_false:N \l__tenkzl_pairing_bool
+    \bool_set_false:N \l__tenkzl_custcol_bool
+    \bool_set_false:N \l__tenkzl_custrow_bool
+    \bool_set_false:N \l__tenkzl_custsheet_bool
+    \tl_clear:N \l__tenkzl_sheetsep_tl
+    \seq_clear:N \l__tenkzl_roles_seq
+    \bool_set_false:N \l__tenkzl_roles_bool
+    \tl_clear:N \l__tenkzl_rolelist_tl
+    \tl_clear:N \l__tenkzl_outer_tl
+    \tl_set:Nn \l__tenkzl_skin_tl {tensor}
+    \bool_set_false:N \l__tenkzl_opsheet_bool
+    \prop_clear:N \l__tenkzl_open_prop
+    \prop_clear:N \l__tenkzl_trace_prop
+    \prop_clear:N \l_tenkz_cs_names_prop
+    \prop_clear:N \l__tenkzl_removed_prop
+    \seq_clear:N \l__tenkzl_regions_seq
+    \seq_clear:N \l__tenkzl_edges_seq
+    \prop_clear:N \l__tenkzl_nobond_prop
+    \seq_clear:N \l__tenkzl_sitelabels_seq
+    \prop_clear:N \l__tenkzl_siterole_prop
+  }
+
+% ---------- geometry ----------
+% File-local metric ratios (of the base pitch), named per the core doctrine
+% "every repeated distance is a named ratio".  The pitch factor stays LEFT of
+% the `*` in \dim_eval so the integer site index is the RIGHT (integer) factor.
+\def\tenkz@r@latticepitch{0.75} % lattice pitch: keeps windows compact
+\def\tenkz@r@latticemargin{0.27}% region-boundary margin
+                                % = 0.36 (core regionmargin) x 0.75 (pitch)
+\def\tenkz@r@regionnest{0.075}  % per-inset-unit margin shrink: separates
+                                % nested/coincident region boundaries
+\def\tenkz@r@boundaryleg{0.30}  % dangling boundary-leg length
+\def\tenkz@r@planeslant{0.45}   % oblique depth step, x-run (of lattice pitch):
+                                % < 1/2, so a depth neighbour never reads as a
+                                % column neighbour (RMP sec2fig4b shear angle)
+\def\tenkz@r@planerise{0.60}    % oblique depth step, y-drop (of lattice pitch):
+                                % foreshortens depth so the sheet reads as
+                                % tilted, yet rows stay clearly separated.  It
+                                % must exceed physleg/latticepitch = 0.38/0.75
+                                % ~ 0.507 or a site's vertical physical leg
+                                % crosses the behind row's in-plane bond (a
+                                % false junction); at the old 0.55 the tips
+                                % ended 0.043 lp short of that bond -- a
+                                % near-touch that merges at compact pitch --
+                                % while 0.60 clears it by 0.093 lp and keeps
+                                % the foreshortened sheet read that 0.70 loses
+                                % (plane_sweep1 zcpt_55 vs zcpt_70, zsw_4570)
+\def\tenkz@r@slabslant{0.60}    % frame=slab depth step, x-run: the full-pitch
+                                % RMP showcase geometry (sec2fig4b/GS2D read),
+                                % 47-degree leg/bond separation and the best
+                                % lateral leg clearance (plane_sweep1
+                                % zsw_6055), at the cost of 0.6 lp of width
+                                % drift per receding row -- a preset, not the
+                                % default
+\def\tenkz@r@slabrise{0.55}     % frame=slab depth step, y-drop (pairs with
+                                % slabslant; above the 0.507 leg threshold
+                                % only jointly with the steeper slant's
+                                % lateral clearance)
+\def\tenkz@r@planesslant{0.40}  % tenkzplanes (double layer) depth step,
+                                % x-run: 0.40 uniquely maximizes pairing-leg-
+                                % to-dot clearance (0.2 lp = 1.65mm for every
+                                % leg climbing up to 4 row-levels); at the
+                                % single-sheet 0.45 every 2-level pairing leg
+                                % passes 0.1 lp = 0.825mm from a dot centre,
+                                % inside the 0.88mm dot radius -- an actual
+                                % rim clip (plane_sweep2 z_S3/z_S4).  The two
+                                % environments carry different defaults
+                                % because only the double layer has pairing
+                                % legs that climb multiple row-levels.
+\def\tenkz@r@planesrise{0.45}   % tenkzplanes depth step, y-drop: the squat
+                                % RMP-like stack (plane_sweep2 z_R1, best 3x3
+                                % of all 16 panels).  The single-sheet 0.507
+                                % rise threshold does not apply: double-layer
+                                % physical legs are the vertical inter-sheet
+                                % pairings, not up-out-of-the-sheet legs.
+                                % Never 0.48-0.52: an open ket-down stub tip
+                                % lands ambiguously tangent to the next row's
+                                % bond there.
+\def\tenkz@r@planesep{1.4}      % LEGACY fixed tenkzplanes ket-over-bra offset
+                                % (x lattice pitch), superseded by the derived
+                                % default sep = (rows-1) x planerise +
+                                % planegap: no static number survives a
+                                % row-count change (1.4 near-merges dots at
+                                % 3x3 -- 0.85mm of white between 1.76mm dots,
+                                % plane_sweep2 z_S2 -- and interleaves the
+                                % sheets outright at 4x4, z_C1, since
+                                % 1.4 < 3 x rise).  Kept only as a documented
+                                % name; nothing reads it by default.
+\def\tenkz@r@planegap{0.70}     % air between the two disjoint sheets of the
+                                % double layer (x lattice pitch): the derived
+                                % default sheet sep = (rows-1) x planerise +
+                                % planegap stacks the ket sheet fully clear of
+                                % the bra sheet plus this gap.  0.7 is the
+                                % sweet spot of the readable 0.5-0.9 window
+                                % (plane_sweep2 z_S3 winner, z_R1/z_R2 across
+                                % sizes; matches the RMP secfig4bPEPS bottom
+                                % panel: disjoint sheets plus about one
+                                % row-rise of air)
+\def\tenkz@r@sheetcoincide{1.25}% near-coincidence floor of the expert
+                                % sheet~vector= guard, as a MULTIPLE of the
+                                % bead diameter (so a dot-metric retune moves
+                                % it): two stacked-sheet sites closer than
+                                % 1.25 x dotdia read as one blob.  Calibrated
+                                % on the fig21d_cubic equal-axis cube: at
+                                % plane slant 0.45 the closest pair sits at
+                                % 1.05 x dotdia (doubled-dot blobs, verified
+                                % in ink), at slant 0.40 at 1.32 x dotdia and
+                                % every bead separates -- the floor 1.25 flags
+                                % the former and passes the latter.
+\def\tenkz@r@planetracereach{0.20}% trace= wrap-loop reach (of the base pitch,
+                                % paper frame): how far east of the site axis
+                                % the per-site Tr_s racetrack swings.  It must
+                                % stay < planesslant x latticepitch - dot
+                                % radius = 0.40 x 0.75 - 0.08 ~ 0.22, so the
+                                % east straight passes WEST of the depth
+                                % neighbour's dot at the default pitch (it
+                                % crosses in-plane bonds as distinct ink)
+% site (r,c) centre in the LOGICAL flat frame (frame=flat paper frame)
+\cs_new:Npn \tenkzl_cx:n #1
+  { \dim_eval:n { \tenkz@r@latticepitch\tenkz@pitch * (#1) } }
+\cs_new:Npn \tenkzl_cy:n #1
+  { \dim_eval:n { -\tenkz@r@latticepitch\tenkz@pitch * (#1) } }
+
+% ---------- frame map (projected basis vectors) ----------
+% ONE mapping from logical coordinates to the paper frame: every drawn
+% coordinate — bonds, tracer corners, boundary legs, labels, site dots —
+% passes through it, so all in-plane geometry projects consistently.
+% Site (r, c, h) sits at  c C + r R + h S  for the frame's three projected
+% basis vectors; the presets compute the vectors from the named ratios,
+%   frame=flat     C = (lp, 0)   R = (0, -lp)
+%   frame=oblique  C = (lp, 0)   R = (-+planeslant lp, -planerise lp)
+% (lean east is the "-" branch of -+: one step INTO the sheet, row
+% r -> r-1, runs up-right along (+planeslant, +planerise) lp — the "/"
+% lean of RMP 2011.12127 sec2fig4b; lean=west mirrors the sign).
+% A continuous flat-frame point (X, Y) = (lp c, -lp r) maps by the same
+% basis substitution,
+%   x = axx X + axy Y + h S_x      axx = C_x/lp   axy = -R_x/lp
+%   y = ayx X + ayy Y + h S_y      ayx = C_y/lp   ayy = -R_y/lp
+% and \tenkzl_frame_setup: fills the four coefficients — the preset path
+% with the literal ratio macros themselves (flat: 1, 0, 0, 1; oblique:
+% 1, leansign slant, 0, rise), the expert path from the given vectors.
+% This is why the frame is a basis and NOT a canvas transform (cf. TikZ's
+% xyz coordinate system): only COORDINATES project, so site dots stay
+% round, labels stay upright and physical legs stay vertical in the paper
+% frame — nodes never shear (the RMP sec2fig4b school convention), while
+% bonds, region boundaries, distinguished edges and boundary legs follow
+% the projected frame.  The map is linear, so it commutes with
+% intersecting the tracer's offset lines: mapping each traced polygon
+% corner equals intersecting the mapped boundary lines, and region
+% outlines stay sound under any projection (no fill-only restriction).
+%
+% Each coefficient multiplies the register on its RIGHT (a TeX decimal
+% coefficient), never a bare \dim_eval subexpression; the integer sheet
+% factor sits RIGHT of the `*`.
+
+% THE vector map: site (r, c) on sheet #3 -> paper (#4, #5) = c C + r R + h S
+\cs_new_protected:Npn \tenkzl_xyz:nnnNN #1#2#3#4#5
+  {
+    \dim_set:Nn \l__tenkzl_fx_dim { \tenkzl_cx:n {#2} }
+    \dim_set:Nn \l__tenkzl_fy_dim { \tenkzl_cy:n {#1} }
+    \dim_set:Nn #4
+      { \l__tenkzl_axx_tl \l__tenkzl_fx_dim
+        + \l__tenkzl_axy_tl \l__tenkzl_fy_dim
+        + \l__tenkzl_svx_dim * (#3) }
+    \dim_set:Nn #5
+      { \l__tenkzl_ayx_tl \l__tenkzl_fx_dim
+        + \l__tenkzl_ayy_tl \l__tenkzl_fy_dim
+        + \l__tenkzl_svy_dim * (#3) }
+  }
+% the continuous companion: flat-frame point (#1, #2) ON THE CURRENT
+% SHEET -> (px, py); the ambient shift (shx, shy) = sheet x S is set by
+% \tenkzl_select_sheet:n, so tracer corners, label anchors and leg tips
+% land on the pass's sheet
+\cs_new_protected:Npn \tenkzl_map:nn #1#2
+  {
+    \dim_set:Nn \l__tenkzl_fx_dim {#1}
+    \dim_set:Nn \l__tenkzl_fy_dim {#2}
+    \dim_set:Nn \l__tenkzl_px_dim
+      { \l__tenkzl_axx_tl \l__tenkzl_fx_dim
+        + \l__tenkzl_axy_tl \l__tenkzl_fy_dim + \l__tenkzl_shx_dim }
+    \dim_set:Nn \l__tenkzl_py_dim
+      { \l__tenkzl_ayx_tl \l__tenkzl_fx_dim
+        + \l__tenkzl_ayy_tl \l__tenkzl_fy_dim + \l__tenkzl_shy_dim }
+  }
+% select the pass's sheet: ambient index, shift h S, and site skin --
+% op sheets box their sites (the mpo skin); every other role, and the
+% bare wire-sheets, keeps the dot
+\cs_new_protected:Npn \tenkzl_select_sheet:n #1
+  {
+    \int_set:Nn \l__tenkzl_sheet_int {#1}
+    \dim_set:Nn \l__tenkzl_shx_dim { \l__tenkzl_svx_dim * (#1) }
+    \dim_set:Nn \l__tenkzl_shy_dim { \l__tenkzl_svy_dim * (#1) }
+    \bool_set:Nn \l__tenkzl_opsheet_bool
+      { \str_if_eq_p:ee { \tenkzl_role:n {#1} } {op} }
+    \bool_if:NTF \l__tenkzl_opsheet_bool
+      { \tl_set:Nn \l__tenkzl_skin_tl { mpo~tensor } }
+      { \tl_set:Nn \l__tenkzl_skin_tl { tensor } }
+  }
+% paper-frame centre of site (#1,#2) on the current sheet
+% -> (\l__tenkzl_px_dim, \l__tenkzl_py_dim)
+\cs_new_protected:Npn \tenkzl_site:nn #1#2
+  { \tenkzl_xyz:nnnNN {#1}{#2}{ \l__tenkzl_sheet_int }
+      \l__tenkzl_px_dim \l__tenkzl_py_dim }
+% same, saved to (qx, qy) so a second map call can place the far end
+\cs_new_protected:Npn \tenkzl_site_save:nn #1#2
+  {
+    \tenkzl_site:nn {#1}{#2}
+    \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+    \dim_set_eq:NN \l__tenkzl_qy_dim \l__tenkzl_py_dim
+  }
+% one site-to-site segment in style #5, both endpoints frame-mapped
+\cs_new_protected:Npn \tenkzl_seg:nnnnn #1#2#3#4#5
+  {
+    \tenkzl_site_save:nn {#1}{#2}
+    \tenkzl_site:nn {#3}{#4}
+    \draw[#5]
+      ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
+  }
+
+% ---------- sheet near-coincidence guard (every sheets>1 picture) ----------
+% The honest stacking check is geometric: adjacent sheets nearly
+% coincide iff S is close to SOME lattice translation dc C + dr R (then
+% sheet h+1's site (r,c) stacks onto sheet h's site (r+dr, c+dc)).  We
+% scan all |dr| <= rows-1, |dc| <= cols-1 -- (0,0) included, the
+% |S|-too-small case -- and warn when the closest pair falls below the
+% sheetcoincide floor.  The scan runs for EVERY sheets>1 picture, not
+% only the expert sheet~vector= path: a preset stack can coincide too (a
+% flat frame with a tight explicit sheet sep, a degenerate expert C/R
+% frame), and the coefficient form below prices arbitrary frames -- the
+% expert-path-only gating was the fig21d_cubic bead-blob hole's twin.
+% Guarded, not clamped, like every frame guard.
+\cs_new_protected:Npn \tenkzl_guard_sheetvec:
+  {
+    \fp_set:Nn \l__tenkzl_mind_fp { inf }
+    \int_step_inline:nnn { 1 - \l__tenkzl_nrows_int }
+      { \l__tenkzl_nrows_int - 1 }
+      {
+        \int_step_inline:nnn { 1 - \l__tenkzl_ncols_int }
+          { \l__tenkzl_ncols_int - 1 }
+          {
+            % Delta = S - dc C - dr R, from the map coefficients
+            % (C = (axx, ayx) lp, R = (-axy, -ayy) lp), so the check
+            % covers expert col/row frames too
+            \fp_set:Nn \l__tenkzl_d_fp
+              { ( \l__tenkzl_svx_dim
+                  - (####1) * ( \l__tenkzl_axx_tl ) * \l__tenkzl_lp_dim
+                  + (##1)   * ( \l__tenkzl_axy_tl ) * \l__tenkzl_lp_dim
+                ) ^ 2
+                + ( \l__tenkzl_svy_dim
+                  - (####1) * ( \l__tenkzl_ayx_tl ) * \l__tenkzl_lp_dim
+                  + (##1)   * ( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
+                ) ^ 2 }
+            \fp_compare:nNnT { \l__tenkzl_d_fp } < { \l__tenkzl_mind_fp }
+              {
+                \fp_set_eq:NN \l__tenkzl_mind_fp \l__tenkzl_d_fp
+                \int_set:Nn \l__tenkzl_gdr_int {##1}
+                \int_set:Nn \l__tenkzl_gdc_int {####1}
+              }
+          }
+      }
+    \dim_set:Nn \l__tenkzl_x_dim
+      { \fp_to_dim:n { sqrt( \l__tenkzl_mind_fp ) } }
+    \dim_set:Nn \l__tenkzl_y_dim
+      { \fp_to_dim:n
+          { \tenkz@r@sheetcoincide * \tenkz@r@dotdia * \tenkz@pitch } }
+    \dim_compare:nNnT { \l__tenkzl_x_dim } < { \l__tenkzl_y_dim }
+      {
+        \msg_warning:nneeee { tenkz } { sheet-coincide }
+          { \dim_to_decimal_in_unit:nn { \l__tenkzl_x_dim } { 1mm } }
+          { \int_use:N \l__tenkzl_gdr_int }
+          { \int_use:N \l__tenkzl_gdc_int }
+          { \dim_to_decimal_in_unit:nn { \l__tenkzl_y_dim } { 1mm } }
+        \tenkz@event{warning|code=sheet-coincide|dist=%
+          \dim_to_decimal_in_unit:nn { \l__tenkzl_x_dim } { 1mm }mm|dr=%
+          \int_use:N \l__tenkzl_gdr_int|dc=\int_use:N \l__tenkzl_gdc_int}
+      }
+  }
+
+% ---------- frame setup ----------
+% Fill the map coefficients and the sheet vector, once per picture after
+% the keys have landed.  The preset path installs the LITERAL ratio
+% macros as coefficients (so preset geometry is computed with the same
+% register scalings as always); the expert path derives each coefficient
+% from its vector, axx = C_x/lp etc.
+\cs_new_protected:Npn \tenkzl_frame_setup:
+  {
+    \dim_set:Nn \l__tenkzl_lp_dim { \tenkz@r@latticepitch\tenkz@pitch }
+    % column vector C: preset (lp, 0) -> coefficients (1, 0)
+    \bool_if:NTF \l__tenkzl_custcol_bool
+      {
+        \tl_set:Ne \l__tenkzl_axx_tl
+          { \fp_eval:n { \l__tenkzl_cvecx_dim / \l__tenkzl_lp_dim } }
+        \tl_set:Ne \l__tenkzl_ayx_tl
+          { \fp_eval:n { \l__tenkzl_cvecy_dim / \l__tenkzl_lp_dim } }
+      }
+      {
+        \tl_set:Nn \l__tenkzl_axx_tl { 1 }
+        \tl_set:Nn \l__tenkzl_ayx_tl { 0 }
+      }
+    % row vector R: flat (0, -lp) -> (0, 1); oblique
+    % (-+slant lp, -rise lp) -> (leansign slant, rise)
+    \bool_if:NTF \l__tenkzl_custrow_bool
+      {
+        \tl_set:Ne \l__tenkzl_axy_tl
+          { \fp_eval:n { - \l__tenkzl_rvecx_dim / \l__tenkzl_lp_dim } }
+        \tl_set:Ne \l__tenkzl_ayy_tl
+          { \fp_eval:n { - \l__tenkzl_rvecy_dim / \l__tenkzl_lp_dim } }
+      }
+      {
+        \bool_if:NTF \l__tenkzl_oblique_bool
+          {
+            \tl_set:Nn \l__tenkzl_axy_tl
+              { \l__tenkzl_leansign_tl \tenkz@r@planeslant }
+            \tl_set:Nn \l__tenkzl_ayy_tl { \tenkz@r@planerise }
+          }
+          {
+            \tl_set:Nn \l__tenkzl_axy_tl { 0 }
+            \tl_set:Nn \l__tenkzl_ayy_tl { 1 }
+          }
+      }
+    % an expert C/R frame counts as sheared -- outside-corner region
+    % labels, see \tenkzl_flipanchor:n -- iff R leans (axy = -R_x/lp != 0)
+    \bool_lazy_or:nnT
+      { \l__tenkzl_custcol_bool } { \l__tenkzl_custrow_bool }
+      { \bool_set:Nn \l__tenkzl_oblique_bool
+          { ! \fp_compare_p:nNn { \l__tenkzl_axy_tl } = { 0 } } }
+    % sheet vector S: preset (0, sep), sep = explicit sheet-sep ratio x lp
+    % or the derived default (rows-1) x |row drop| + gap x lp (the upper
+    % sheet clears the lower sheet's full depth drift plus one air gap,
+    % so the default scales with the window AND the frame; see the
+    % tenkzplanes ratio comments)
+    \bool_if:NTF \l__tenkzl_custsheet_bool
+      {
+        \dim_set_eq:NN \l__tenkzl_svx_dim \l__tenkzl_svecx_dim
+        \dim_set_eq:NN \l__tenkzl_svy_dim \l__tenkzl_svecy_dim
+      }
+      {
+        \dim_zero:N \l__tenkzl_svx_dim
+        \tl_if_empty:NTF \l__tenkzl_sheetsep_tl
+          {
+            % derived default: priced in the frame's ACTUAL per-row drop
+            % |ayy| (flat drops a full lp per row, oblique the rise, an
+            % expert R whatever it states), so every frame's upper sheet
+            % clears the lower sheet's full depth drift plus one air gap
+            % -- the flat-frame default used to assume the oblique rise
+            % and stacked the plainest sheets={ket,bra} into bead blobs
+            \dim_set:Nn \l__tenkzl_svy_dim
+              { \fp_to_dim:n
+                  { abs( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
+                      * ( \l__tenkzl_nrows_int - 1 )
+                    + \tenkz@r@planegap * \l__tenkzl_lp_dim } }
+          }
+          {
+            \dim_set:Nn \l__tenkzl_svy_dim
+              { \l__tenkzl_sheetsep_tl \l__tenkzl_lp_dim }
+            % interleave guard: below (rows-1) x the row drop the sheets
+            % overlap; priced in |ayy| like the default, so flat and
+            % expert stacks are guarded, not only oblique ones
+            \int_compare:nNnT { \l__tenkzl_sheets_int } > {1}
+              {
+                \dim_compare:nNnT { \l__tenkzl_svy_dim } <
+                  { \fp_to_dim:n
+                      { abs( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
+                          * ( \l__tenkzl_nrows_int - 1 ) } }
+                  {
+                    \msg_warning:nnee { tenkz } { planes-interleave }
+                      { \tl_use:N \l__tenkzl_sheetsep_tl }
+                      { \fp_eval:n
+                          { abs( \l__tenkzl_ayy_tl )
+                            * ( \l__tenkzl_nrows_int - 1 ) } }
+                    \tenkz@event{warning|code=planes-interleave|sep=\tl_use:N
+                      \l__tenkzl_sheetsep_tl}
+                  }
+              }
+          }
+      }
+    % near-coincidence guard, every stacking path (see its header)
+    \int_compare:nNnT { \l__tenkzl_sheets_int } > {1}
+      { \tenkzl_guard_sheetvec: }
+  }
+
+% =====================================================================
+% cell-set expressions
+%   The expression machinery (openscan, resolver, rect/range parsing,
+%   the normalized cell key and the sheet-range guard) is the SHARED
+%   cell-set algebra of tenkz-core (\tenkz_cs_...): the grid tier
+%   consumes it too, so it lives below both tiers instead of in this
+%   module's private namespace.  This tier feeds the shared state --
+%   sheet count, default sheet, registered names -- through the sync
+%   below, called once per picture after the option list has landed.
+% =====================================================================
+\cs_new_protected:Npn \tenkzl_sync_cs:
+  {
+    \int_set_eq:NN \l_tenkz_cs_sheets_int \l__tenkzl_sheets_int
+    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
+  }
+
+% (r,c) or (r,c,h) -> r, c, sheet;  #1 is expanded first so callers may
+% pass a parser macro.  A sheetless cell returns sheet = -1 (a sentinel):
+% the caller resolves it — \tnedge to the default sheet, \tnsite to the
+% whole physical column.
+\cs_new_protected:Npn \tenkzl_cell:nNNN #1#2#3#4
+  {
+    \tl_set:Ne \l__tenkzl_body_tl {#1}
+    \tl_remove_all:Nn \l__tenkzl_body_tl { ~ }
+    \tl_remove_once:Nn \l__tenkzl_body_tl {(}
+    \tl_remove_once:Nn \l__tenkzl_body_tl {)}
+    \seq_set_split:NnV \l__tenkzl_parts_seq {,} \l__tenkzl_body_tl
+    \int_set:Nn #2 { \seq_item:Nn \l__tenkzl_parts_seq {1} }
+    \int_set:Nn #3 { \seq_item:Nn \l__tenkzl_parts_seq {2} }
+    \int_compare:nNnTF { \seq_count:N \l__tenkzl_parts_seq } > {2}
+      {
+        \int_set:Nn #4 { \seq_item:Nn \l__tenkzl_parts_seq {3} }
+        \tenkz_cs_guard_sheet:n {#4}
+      }
+      { \int_set:Nn #4 {-1} }
+  }
+
+% serialize a membership prop to a comma list of "r-c"
+\cs_new_protected:Npn \tenkzl_serialize:NN #1#2
+  {
+    \clist_clear:N #2
+    \prop_map_inline:Nn #1 { \clist_put_right:Nn #2 {##1} }
+  }
+
+% =====================================================================
+% recording commands
+% =====================================================================
+\tl_new:N \l__tenkzl_rslot_tl
+\bool_new:N \l__tenkzl_routline_bool
+\tl_new:N \l__tenkzl_rlabel_tl
+\tl_new:N \l__tenkzl_rlabelat_tl
+\tl_new:N \l__tenkzl_rname_tl
+\tl_new:N \l__tenkzl_rinset_tl
+\pgfkeys{
+  /tenkz/region/.is~family,
+  % slot= is a CHOICE, not free text: a typo'd slot used to expand to no
+  % style at all and stroke a plain black outline -- the picture lost
+  % its set-membership semantics silently.  Now it errors at the
+  % \tnregion call site.
+  /tenkz/region/slot/.is~choice,
+  /tenkz/region/slot/selected/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {selected}},
+  /tenkz/region/slot/secondary/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {secondary}},
+  /tenkz/region/slot/complement/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {complement}},
+  /tenkz/region/slot/collar/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {collar}},
+  /tenkz/region/outline/.code={\bool_set_true:N \l__tenkzl_routline_bool},
+  /tenkz/region/label/.store~in=\l__tenkzl_rlabel_tl,
+  % label pos= is the 0.6 placement spelling (one vocabulary across
+  % every label kind); label at= stays as its alias
+  /tenkz/region/label~pos/.store~in=\l__tenkzl_rlabelat_tl,
+  /tenkz/region/label~at/.store~in=\l__tenkzl_rlabelat_tl,
+  /tenkz/region/name/.store~in=\l__tenkzl_rname_tl,
+  % Nested or coincident boundaries must be visually separated: an inset
+  % states the nesting level; each unit shrinks this region's tracing
+  % margin by \tenkz@r@regionnest so a subset's outline sits visibly
+  % inside its superset's.
+  /tenkz/region/inset/.store~in=\l__tenkzl_rinset_tl,
+}
+
+\NewDocumentCommand \tnregion { O{} m }
+  {
+    \tl_set:Nn \l__tenkzl_rslot_tl {selected}
+    \bool_set_false:N \l__tenkzl_routline_bool
+    \tl_clear:N \l__tenkzl_rlabel_tl
+    \tl_set:Nn \l__tenkzl_rlabelat_tl {north~west}
+    \tl_clear:N \l__tenkzl_rname_tl
+    \tl_set:Nn \l__tenkzl_rinset_tl {0}
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/region}{#1} }
+    \tenkz_cs_resolve:nN {#2} \l__tenkzl_member_prop
+    \tenkzl_serialize:NN \l__tenkzl_member_prop \l__tenkzl_cells_clist
+    % register name -> cells for later expressions
+    \tl_if_empty:NF \l__tenkzl_rname_tl
+      { \prop_put:NVV \l_tenkz_cs_names_prop \l__tenkzl_rname_tl
+          \l__tenkzl_cells_clist }
+    \seq_put_right:Ne \l__tenkzl_regions_seq
+      {
+        { \l__tenkzl_rslot_tl }
+        { \bool_if:NTF \l__tenkzl_routline_bool {1} {0} }
+        { \exp_not:V \l__tenkzl_rlabel_tl }
+        { \l__tenkzl_rlabelat_tl }
+        { \exp_not:V \l__tenkzl_cells_clist }
+        { \l__tenkzl_rinset_tl }
+      }
+  }
+\cs_generate_variant:Nn \prop_put:Nnn { NVV }
+
+% \tnedge options: a real key family (the option slot used to be parsed
+% and discarded — any spelling silently drew the plain distinguished
+% edge; now unknown keys error).
+%   distinguished   the default emphasis stroke, stated explicitly
+%   role=           operator|marked|extra|passive: the semantic hue,
+%                   resolved through the role-derived styles above
+%   style=          extra tikz options appended to the resolved stroke
+%                   (brace a multi-key value: style={dashed, thick})
+%   label=          mathematics typeset at the edge midpoint, offset by
+%                   the label clearance band
+%   none            suppress the LATTICE BOND between the two named
+%                   adjacent sites instead of drawing an edge (per-bond
+%                   suppression); label=/role=/style= are ignored with it
+\tl_new:N \l__tenkzl_erole_tl         % \tnedge role word (empty = none)
+\pgfkeys{
+  /tenkz/edge/.is~family,
+  /tenkz/edge/distinguished/.code={\tl_set:Nn \l__tenkzl_estyle_tl
+      {distinguished~edge}},
+  /tenkz/edge/none/.code={\bool_set_true:N \l__tenkzl_enone_bool},
+  /tenkz/edge/role/.is~choice,
+  /tenkz/edge/role/operator/.code={\tl_set:Nn \l__tenkzl_estyle_tl
+      {operator~edge} \tl_set:Nn \l__tenkzl_erole_tl {operator}},
+  /tenkz/edge/role/marked/.code={\tl_set:Nn \l__tenkzl_estyle_tl
+      {marked~edge} \tl_set:Nn \l__tenkzl_erole_tl {marked}},
+  /tenkz/edge/role/extra/.code={\tl_set:Nn \l__tenkzl_estyle_tl
+      {extra~edge} \tl_set:Nn \l__tenkzl_erole_tl {extra}},
+  /tenkz/edge/role/passive/.code={\tl_set:Nn \l__tenkzl_estyle_tl
+      {passive~edge} \tl_set:Nn \l__tenkzl_erole_tl {passive}},
+  /tenkz/edge/style/.store~in=\l__tenkzl_exsty_tl,
+  /tenkz/edge/label/.store~in=\l__tenkzl_edgelabel_tl,
+}
+
+\NewDocumentCommand \tnedge { O{} m }
+  {
+    \tl_set:Nn \l__tenkzl_estyle_tl {distinguished~edge}
+    \tl_clear:N \l__tenkzl_exsty_tl
+    \tl_clear:N \l__tenkzl_edgelabel_tl
+    \tl_clear:N \l__tenkzl_erole_tl
+    \bool_set_false:N \l__tenkzl_enone_bool
+    \tl_if_blank:nF {#1} { \pgfqkeys{/tenkz/edge}{#1} }
+    \tenkzl_cell:nNNN { \tenkzl_edge_a:n {#2} }
+      \l__tenkzl_rlo_int \l__tenkzl_clo_int \l__tenkzl_sha_int
+    \tenkzl_cell:nNNN { \tenkzl_edge_b:n {#2} }
+      \l__tenkzl_rhi_int \l__tenkzl_chi_int \l__tenkzl_shb_int
+    % an unaddressed endpoint lands on the default sheet; the endpoints
+    % may name DIFFERENT sheets — an inter-sheet tie is a first-class
+    % edge, drawn as the straight segment between the two mapped sites
+    \int_compare:nNnT { \l__tenkzl_sha_int } < {0}
+      { \int_set_eq:NN \l__tenkzl_sha_int \l__tenkzl_defsheet_int }
+    \int_compare:nNnT { \l__tenkzl_shb_int } < {0}
+      { \int_set_eq:NN \l__tenkzl_shb_int \l__tenkzl_defsheet_int }
+    \bool_if:NTF \l__tenkzl_enone_bool
+      {
+        % bond suppression: both endpoint orders keyed, so the bond
+        % pass's single lookup is order-independent
+        \prop_put:Nen \l__tenkzl_nobond_prop
+          { \int_use:N \l__tenkzl_rlo_int - \int_use:N \l__tenkzl_clo_int -
+            \int_use:N \l__tenkzl_sha_int : \int_use:N \l__tenkzl_rhi_int -
+            \int_use:N \l__tenkzl_chi_int - \int_use:N \l__tenkzl_shb_int }
+          {1}
+        \prop_put:Nen \l__tenkzl_nobond_prop
+          { \int_use:N \l__tenkzl_rhi_int - \int_use:N \l__tenkzl_chi_int -
+            \int_use:N \l__tenkzl_shb_int : \int_use:N \l__tenkzl_rlo_int -
+            \int_use:N \l__tenkzl_clo_int - \int_use:N \l__tenkzl_sha_int }
+          {1}
+      }
+      {
+        \tl_if_empty:NF \l__tenkzl_exsty_tl
+          {
+            \tl_put_right:Nn \l__tenkzl_estyle_tl { , }
+            \tl_put_right:NV \l__tenkzl_estyle_tl \l__tenkzl_exsty_tl
+          }
+        \seq_put_right:Ne \l__tenkzl_edges_seq
+          {
+            { \int_use:N \l__tenkzl_rlo_int }{ \int_use:N \l__tenkzl_clo_int }
+            { \int_use:N \l__tenkzl_sha_int }
+            { \int_use:N \l__tenkzl_rhi_int }{ \int_use:N \l__tenkzl_chi_int }
+            { \int_use:N \l__tenkzl_shb_int }
+            { \exp_not:V \l__tenkzl_estyle_tl }
+            { \exp_not:V \l__tenkzl_edgelabel_tl }
+            { \tl_if_empty:NTF \l__tenkzl_erole_tl {none}
+                { \exp_not:V \l__tenkzl_erole_tl } }
+          }
+      }
+  }
+% split "(r,c)-(r',c')" at the top-level dash
+\cs_new:Npn \tenkzl_edge_a:n #1 { \tenkzl_edge_a:w #1 \q_stop }
+\cs_new:Npn \tenkzl_edge_a:w #1 ) - ( #2 \q_stop { #1 ) }
+\cs_new:Npn \tenkzl_edge_b:n #1 { \tenkzl_edge_b:w #1 \q_stop }
+\cs_new:Npn \tenkzl_edge_b:w #1 ) - ( #2 \q_stop { ( #2 }
+
+% \tnsite options: a real key family (the option slot used to be a
+% truthy boolean — ANY non-blank token removed the site, so a typo or a
+% hopeful \tnsite[label=$x$] silently deleted lattice content; now only
+% the named keys act and unknown keys error).
+%   removed   remove the site: sheetless (r,c) removes the whole
+%             physical column, (r,c,h) only sheet h's site
+%   label=    mathematics typeset in the site's free north-east
+%             quadrant (clears vertical legs and in-row bonds)
+%   role=     operator|marked|extra|passive: the semantic hue of the
+%             site glyph, resolved through the role-derived styles;
+%             sheetless it tints the whole column, (r,c,h) one sheet
+\pgfkeys{
+  /tenkz/site/.is~family,
+  /tenkz/site/removed/.code={\bool_set_true:N \l__tenkzl_sremoved_bool},
+  /tenkz/site/label/.store~in=\l__tenkzl_sitelabel_tl,
+  /tenkz/site/role/.is~choice,
+  /tenkz/site/role/operator/.code={\tl_set:Nn \l__tenkzl_srole_tl
+      {operator~site}},
+  /tenkz/site/role/marked/.code={\tl_set:Nn \l__tenkzl_srole_tl
+      {marked~site}},
+  /tenkz/site/role/extra/.code={\tl_set:Nn \l__tenkzl_srole_tl
+      {extra~site}},
+  /tenkz/site/role/passive/.code={\tl_set:Nn \l__tenkzl_srole_tl
+      {passive~site}},
+}
+
+\NewDocumentCommand \tnsite { O{} m }
+  {
+    \bool_set_false:N \l__tenkzl_sremoved_bool
+    \tl_clear:N \l__tenkzl_sitelabel_tl
+    \tl_clear:N \l__tenkzl_srole_tl
+    \tl_if_blank:nF {#1} { \pgfqkeys{/tenkz/site}{#1} }
+    \tenkzl_cell:nNNN {#2}
+      \l__tenkzl_rlo_int \l__tenkzl_clo_int \l__tenkzl_sha_int
+    \bool_if:NT \l__tenkzl_sremoved_bool
+      {
+        \int_compare:nNnTF { \l__tenkzl_sha_int } < {0}
+          {
+            % sheetless (r,c): remove the whole physical COLUMN — every
+            % sheet's dot, its bonds and its pairing leg (the Phase-1
+            % tenkzplanes semantics, kept)
+            \prop_put:Nen \l__tenkzl_removed_prop
+              { \int_use:N \l__tenkzl_rlo_int -
+                \int_use:N \l__tenkzl_clo_int } {1}
+          }
+          {
+            % sheet-addressed (r,c,h): remove sheet h's site only; the
+            % key is ALWAYS suffixed, so "r-c" stays the column form
+            \prop_put:Nen \l__tenkzl_removed_prop
+              { \int_use:N \l__tenkzl_rlo_int -
+                \int_use:N \l__tenkzl_clo_int -
+                \int_use:N \l__tenkzl_sha_int } {1}
+          }
+      }
+    \tl_if_empty:NF \l__tenkzl_srole_tl
+      {
+        % the prop key mirrors the removal keys: "r-c" is the column
+        % form, "r-c-h" one sheet's site
+        \int_compare:nNnTF { \l__tenkzl_sha_int } < {0}
+          {
+            \prop_put:Nee \l__tenkzl_siterole_prop
+              { \int_use:N \l__tenkzl_rlo_int -
+                \int_use:N \l__tenkzl_clo_int }
+              { \exp_not:V \l__tenkzl_srole_tl }
+          }
+          {
+            \prop_put:Nee \l__tenkzl_siterole_prop
+              { \int_use:N \l__tenkzl_rlo_int -
+                \int_use:N \l__tenkzl_clo_int -
+                \int_use:N \l__tenkzl_sha_int }
+              { \exp_not:V \l__tenkzl_srole_tl }
+          }
+      }
+    \tl_if_empty:NF \l__tenkzl_sitelabel_tl
+      {
+        % a sheetless label lands on the default sheet (a label is one
+        % glyph, not a column property)
+        \seq_put_right:Ne \l__tenkzl_sitelabels_seq
+          {
+            { \int_use:N \l__tenkzl_rlo_int }
+            { \int_use:N \l__tenkzl_clo_int }
+            { \int_compare:nNnTF { \l__tenkzl_sha_int } < {0}
+                { \int_use:N \l__tenkzl_defsheet_int }
+                { \int_use:N \l__tenkzl_sha_int } }
+            { \exp_not:V \l__tenkzl_sitelabel_tl }
+          }
+      }
+  }
+
+% =====================================================================
+% rendering
+% =====================================================================
+\cs_new_protected:Npn \tenkzl_render:nn #1#2
+  { \tenkzl_render:nnn { } {#1} {#2} }
+% #1 is a PRESET: code run between the reset and the user keys, so a
+% preset environment (tenkzplanes) states its defaults through the very
+% state the keys then override — one render path, one header event, for
+% every lattice-family picture
+\cs_new_protected:Npn \tenkzl_render:nnn #1#2#3
+  {
+    \group_begin:
+    \tenkzl_reset:
+    #1
+    \tl_if_empty:nF {#2} { \pgfqkeys{/tenkz/lattice}{#2} }
+    % the option list has landed: sheets= and the default-sheet
+    % convention are final, so feed the shared cell-set state before the
+    % body's recording commands and the draw passes consume it
+    \tenkzl_sync_cs:
+    #3
+    \tenkz@beginpicture{lattice}
+    % header first: rows/cols bound the cell universe that the payload
+    % events (region/edge/site below) index into -- the audit rebuilds
+    % region set-algebra from these, so it needs the universe up front
+    % (\int_use:N is load-bearing: \write's expansion cannot expand a
+    % bare int register); the sheets field appears only when a stack is
+    % requested, so single-sheet pictures keep the Phase-1 header, and
+    % the roles field only when sheets= was a role list (top-to-bottom,
+    % as written)
+    \tenkz@event{lattice|picture=\the\tenkz@pictureid|rows=\int_use:N
+      \l__tenkzl_nrows_int|cols=\int_use:N \l__tenkzl_ncols_int\int_compare:nNnT
+      { \l__tenkzl_sheets_int } > {1}
+      {|sheets=\int_use:N \l__tenkzl_sheets_int\bool_if:NT \l__tenkzl_roles_bool
+        {|roles=\tl_use:N \l__tenkzl_rolelist_tl}}}
+    \tenkzl_guard_window:
+    \tenkzl_frame_setup:
+    \dim_set:Nn \l__tenkzl_m_dim { \tenkz@r@latticemargin\tenkz@pitch }
+    \begin{tikzpicture}[tenkz~every~picture]
+      \tenkzl_draw_all:
+    \end{tikzpicture}
+    \group_end:
+  }
+
+% one full genre pass over the CURRENT sheet (selected by
+% \tenkzl_select_sheet:n): regions, edges and labels render only their
+% own sheet's cells, so a pass is the sheet's complete ink
+\cs_new_protected:Npn \tenkzl_sheet_pass:
+  {
+    \tenkzl_draw_regions:      % (a)
+    \tenkzl_draw_bonds:        % (b)
+    \tenkzl_draw_edges:        % (c)
+    \tenkzl_draw_sites:        % (d)
+    \tenkzl_draw_physical:     % (d') on-site physical legs (physical=up)
+    \tenkzl_draw_legs:         % (e)
+    \tenkzl_draw_labels:       % (f)
+  }
+
+% all sheets bottom-up (sheet 0 first, so an upper sheet overlays a
+% lower one exactly as the Phase-1 double layer painted bra before ket),
+% then the once-per-picture passes
+\cs_new_protected:Npn \tenkzl_draw_all:
+  {
+    \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 1 }
+      {
+        \tenkzl_select_sheet:n {##1}
+        \tenkzl_sheet_pass:
+      }
+    \tenkzl_emit_sites:        % (g) event stream only, no ink
+    % the outer-legs default resolves here: a role-list stack is a
+    % WINDOW (outer faces open, boundary doctrine); numeric stacks and
+    % the Phase-1 double layer stay bare
+    \tl_if_empty:NT \l__tenkzl_outer_tl
+      {
+        \bool_if:NTF \l__tenkzl_roles_bool
+          { \tl_set:Nn \l__tenkzl_outer_tl {both} }
+          { \tl_set:Nn \l__tenkzl_outer_tl {none} }
+      }
+    \bool_if:NT \l__tenkzl_pairing_bool
+      { \tenkzl_draw_pairs: }  % (h) inter-sheet physical pairing
+    \str_if_eq:VnF \l__tenkzl_outer_tl {none}
+      { \tenkzl_draw_outer: }  % (i) outer-face physical legs
+    \tenkzl_draw_opsites:      % (j) op-sheet boxes (the cover pass)
+    \tenkzl_emit_boundary:     % (k) event stream only, no ink
+  }
+
+% removed-site events.  The audit rebuilds region set-algebra from these
+% events: a removed site leaves the header's cell universe, so every
+% removal is logged.  Emitted from \tenkzl_draw_all: -- NOT from the
+% site-dot pass -- because the renderer runs \tenkzl_draw_sites: once per
+% sheet but this pass exactly once per picture, and because site=none
+% suppresses the dot pass while the removal stays data.  A column
+% removal logs its Phase-1 key "r-c"; a sheet removal logs "r-c-h".
+\cs_new_protected:Npn \tenkzl_emit_sites:
+  {
+    \prop_map_inline:Nn \l__tenkzl_removed_prop
+      { \tenkz@event{site|picture=\the\tenkz@pictureid|cell=##1|mode=removed} }
+  }
+
+% -- membership helpers -----------------------------------------------
+\cs_new:Npn \tenkzl_key:nn #1#2 { #1 - #2 }
+% removed on ONE named sheet ("r-c-h" -- a sheet-addressed \tnsite)
+\prg_new_conditional:Npnn \tenkzl_removed_on:nnn #1#2#3 { T, F, TF, p }
+  {
+    \prop_if_in:NeTF \l__tenkzl_removed_prop
+      { \tenkzl_key:nn {#1}{#2} - #3 }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+% removed on the CURRENT sheet: a sheetless removal "r-c" deletes the
+% whole physical column (every sheet), a suffixed one only its sheet
+\prg_new_conditional:Npnn \tenkzl_removed:nn #1#2 { T, F, TF, p }
+  {
+    \bool_lazy_or:nnTF
+      { \prop_if_in_p:Ne \l__tenkzl_removed_prop { \tenkzl_key:nn {#1}{#2} } }
+      { \tenkzl_removed_on_p:nnn {#1}{#2}{ \int_use:N \l__tenkzl_sheet_int } }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+
+% -- (a) regions ------------------------------------------------------
+\cs_new_protected:Npn \tenkzl_draw_regions:
+  {
+    \seq_map_inline:Nn \l__tenkzl_regions_seq
+      { \tenkzl_region:nnnnnn ##1 }
+  }
+
+% slot -> style
+\cs_new:Npn \tenkzl_slotstyle:n #1
+  {
+    \str_case:nn {#1}
+      {
+        {selected}   {region~selected}
+        {secondary}  {region~secondary}
+        {complement} {region~complement}
+        {collar}     {region~collar}
+      }
+  }
+
+% filter the serialized cells #1 to the CURRENT sheet's members, rekeyed
+% BARE ("r-c"): sheet addressing is resolved here, so the boundary tracer
+% below stays sheet-agnostic and traces one sheet's cells per pass
+\cs_new_protected:Npn \tenkzl_filter_members:n #1
+  {
+    \prop_clear:N \l__tenkzl_member_prop
+    \clist_map_inline:nn {#1} { \tenkzl_filter_cell:n {##1} }
+  }
+\cs_new_protected:Npn \tenkzl_filter_cell:n #1
+  {
+    \seq_set_split:Nnn \l__tenkzl_parts_seq {-} {#1}
+    \int_compare:nNnTF { \seq_count:N \l__tenkzl_parts_seq } > {2}
+      { \int_set:Nn \l__tenkzl_hsel_int
+          { \seq_item:Nn \l__tenkzl_parts_seq {3} } }
+      { \int_set_eq:NN \l__tenkzl_hsel_int \l__tenkzl_defsheet_int }
+    \int_compare:nNnT { \l__tenkzl_hsel_int } = { \l__tenkzl_sheet_int }
+      {
+        \prop_put:Nen \l__tenkzl_member_prop
+          { \seq_item:Nn \l__tenkzl_parts_seq {1} -
+            \seq_item:Nn \l__tenkzl_parts_seq {2} } {1}
+      }
+  }
+
+% lowest sheet holding any of the serialized cells #1
+% -> \l__tenkzl_minsheet_int (used to place a region's label exactly once)
+\cs_new_protected:Npn \tenkzl_minsheet:n #1
+  {
+    \int_set:Nn \l__tenkzl_minsheet_int { \c_max_int }
+    \clist_map_inline:nn {#1} { \tenkzl_minsheet_cell:n {##1} }
+  }
+\cs_new_protected:Npn \tenkzl_minsheet_cell:n #1
+  {
+    \seq_set_split:Nnn \l__tenkzl_parts_seq {-} {#1}
+    \int_compare:nNnTF { \seq_count:N \l__tenkzl_parts_seq } > {2}
+      { \int_set:Nn \l__tenkzl_hsel_int
+          { \seq_item:Nn \l__tenkzl_parts_seq {3} } }
+      { \int_set_eq:NN \l__tenkzl_hsel_int \l__tenkzl_defsheet_int }
+    \int_compare:nNnT { \l__tenkzl_hsel_int } < { \l__tenkzl_minsheet_int }
+      { \int_set_eq:NN \l__tenkzl_minsheet_int \l__tenkzl_hsel_int }
+  }
+
+\cs_new_protected:Npn \tenkzl_region:nnnnnn #1#2#3#4#5#6
+  {
+    % per-region margin: the picture margin shrunk by the nesting inset,
+    % so a subset's boundary sits visibly inside its superset's
+    \dim_set:Nn \l__tenkzl_m_dim
+      { \tenkz@r@latticemargin\tenkz@pitch
+        - \tenkz@r@regionnest\tenkz@pitch * (#6) }
+    % membership on THIS pass's sheet only; a region may span sheets, and
+    % each sheet's slice is traced within that sheet's pass
+    \tenkzl_filter_members:n {#5}
+    \prop_if_empty:NF \l__tenkzl_member_prop
+      {
+        % trace the rectilinear boundary at margin m and emit it.  A
+        % style-carrying macro must expand to ONE pgfkeys key, so the slot
+        % style stays a single token and `region outline` is a literal
+        % sibling key (pgfkeys splits the option list only at literal
+        % commas).
+        \tenkzl_build_edges:
+        \int_compare:nNnTF {#2} = {1}
+          { \tenkzl_emit_loops:n { \tenkzl_slotstyle:n {#1} , region~outline } }
+          { \tenkzl_emit_loops:n { \tenkzl_slotstyle:n {#1} } }
+      }
+    % the audit rebuilds region set-algebra from these events: the cells
+    % field carries the RESOLVED membership (the +/- expression already
+    % normalized to a clist of cell keys), not the source expression; it
+    % fires once per picture, on the sheet-0 pass
+    \int_compare:nNnT { \l__tenkzl_sheet_int } = {0}
+      { \tenkz@event{region|picture=\the\tenkz@pictureid|slot=#1|cells=#5} }
+  }
+
+% =====================================================================
+% rectilinear boundary tracer
+%   The region boundary runs at margin m from member centres: between a
+%   member and an adjacent non-member the boundary sits at m from the
+%   member (not the midline).  We enumerate directed boundary half-edges
+%   with the member on the LEFT (outer loops run counter-clockwise, hole
+%   loops clockwise), chain them into loops on the cell-corner lattice,
+%   and place each polygon corner at the intersection of the two incident
+%   offset lines.  Corner (i,j) is the shared corner of cells (i,j),
+%   (i,j+1), (i+1,j), (i+1,j+1) in 1-indexed terms.
+% =====================================================================
+
+% membership query with an out-of-range guard (0 outside the grid)
+\prg_new_conditional:Npnn \tenkzl_memq:nn #1#2 { p, T, F, TF }
+  {
+    \bool_lazy_all:nTF
+      {
+        { \int_compare_p:n { 1 <= #1 <= \l__tenkzl_nrows_int } }
+        { \int_compare_p:n { 1 <= #2 <= \l__tenkzl_ncols_int } }
+        { \prop_if_in_p:Ne \l__tenkzl_member_prop { \tenkzl_key:nn {#1}{#2} } }
+      }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+
+\cs_new_protected:Npn \tenkzl_build_edges:
+  {
+    \prop_clear:N \l__tenkzl_end_prop
+    \prop_clear:N \l__tenkzl_orient_prop
+    \prop_clear:N \l__tenkzl_val_prop
+    \seq_clear:N  \l__tenkzl_starts_seq
+    % horizontal edges: row-line i in 0..R, column j in 1..C
+    \int_step_inline:nnn {0} { \l__tenkzl_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkzl_ncols_int }
+          { \tenkzl_hedge:nn {##1} {####1} }
+      }
+    % vertical edges: column-line j in 0..C, row i in 1..R
+    \int_step_inline:nnn {1} { \l__tenkzl_nrows_int }
+      {
+        \int_step_inline:nnn {0} { \l__tenkzl_ncols_int }
+          { \tenkzl_vedge:nn {##1} {####1} }
+      }
+  }
+
+% a horizontal cell-edge at row-line i, column j (cells (i,j) above and
+% (i+1,j) below).  Boundary iff exactly one side is a member.
+\cs_new_protected:Npn \tenkzl_hedge:nn #1#2
+  {
+    \bool_lazy_and:nnTF
+      { \tenkzl_memq_p:nn {#1}{#2} }
+      { ! \tenkzl_memq_p:nn { \int_eval:n {#1+1} }{#2} }
+      {
+        % member above: walk rightward (i,j-1) -> (i,j); offset y = cy(i)-m
+        \tenkzl_addedge:nnnn
+          { \tenkzl_key:nn {#1}{ \int_eval:n {#2-1} } }
+          { \tenkzl_key:nn {#1}{#2} } {H}
+          { \dim_eval:n { \tenkzl_cy:n {#1} - \l__tenkzl_m_dim } }
+      }
+      {
+        \bool_lazy_and:nnT
+          { ! \tenkzl_memq_p:nn {#1}{#2} }
+          { \tenkzl_memq_p:nn { \int_eval:n {#1+1} }{#2} }
+          {
+            % member below: walk leftward (i,j) -> (i,j-1); y = cy(i+1)+m
+            \tenkzl_addedge:nnnn
+              { \tenkzl_key:nn {#1}{#2} }
+              { \tenkzl_key:nn {#1}{ \int_eval:n {#2-1} } } {H}
+              { \dim_eval:n
+                  { \tenkzl_cy:n { \int_eval:n {#1+1} } + \l__tenkzl_m_dim } }
+          }
+      }
+  }
+
+% a vertical cell-edge at column-line j, row i (cells (i,j) left and
+% (i,j+1) right).
+\cs_new_protected:Npn \tenkzl_vedge:nn #1#2
+  {
+    \bool_lazy_and:nnTF
+      { \tenkzl_memq_p:nn {#1}{#2} }
+      { ! \tenkzl_memq_p:nn {#1}{ \int_eval:n {#2+1} } }
+      {
+        % member left: walk upward (i,j) -> (i-1,j); offset x = cx(j)+m
+        \tenkzl_addedge:nnnn
+          { \tenkzl_key:nn {#1}{#2} }
+          { \tenkzl_key:nn { \int_eval:n {#1-1} }{#2} } {V}
+          { \dim_eval:n { \tenkzl_cx:n {#2} + \l__tenkzl_m_dim } }
+      }
+      {
+        \bool_lazy_and:nnT
+          { ! \tenkzl_memq_p:nn {#1}{#2} }
+          { \tenkzl_memq_p:nn {#1}{ \int_eval:n {#2+1} } }
+          {
+            % member right: walk downward (i-1,j) -> (i,j); x = cx(j+1)-m
+            \tenkzl_addedge:nnnn
+              { \tenkzl_key:nn { \int_eval:n {#1-1} }{#2} }
+              { \tenkzl_key:nn {#1}{#2} } {V}
+              { \dim_eval:n
+                  { \tenkzl_cx:n { \int_eval:n {#2+1} } - \l__tenkzl_m_dim } }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_addedge:nnnn #1#2#3#4
+  {
+    \prop_put:Nee \l__tenkzl_end_prop    {#1} {#2}
+    \prop_put:Nen \l__tenkzl_orient_prop {#1} {#3}
+    \prop_put:Nee \l__tenkzl_val_prop    {#1} {#4}
+    \seq_put_right:Ne \l__tenkzl_starts_seq {#1}
+  }
+
+% chain the half-edges into loops and draw them all in one path so that
+% the even-odd rule fills a punctured region as a ring.
+\cs_new_protected:Npn \tenkzl_emit_loops:n #1
+  {
+    \prop_clear:N \l__tenkzl_visited_prop
+    \tl_clear:N \l__tenkzl_path_tl
+    \seq_map_inline:Nn \l__tenkzl_starts_seq
+      {
+        \prop_if_in:NnF \l__tenkzl_visited_prop {##1}
+          { \tenkzl_trace_loop:n {##1} }
+      }
+    \tl_if_empty:NF \l__tenkzl_path_tl
+      {
+        \draw[ #1, even~odd~rule,
+               rounded~corners=\tenkz@dim{0.10} ] \l__tenkzl_path_tl ;
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_trace_loop:n #1
+  {
+    \seq_clear:N \l__tenkzl_loopedge_seq
+    \tl_set:Nn \l__tenkzl_cur_tl {#1}
+    \bool_until_do:nn { \prop_if_in_p:NV \l__tenkzl_visited_prop \l__tenkzl_cur_tl }
+      {
+        \prop_put:NVn \l__tenkzl_visited_prop \l__tenkzl_cur_tl {1}
+        \prop_get:NVN \l__tenkzl_orient_prop \l__tenkzl_cur_tl \l__tenkzl_o_tl
+        \prop_get:NVN \l__tenkzl_val_prop    \l__tenkzl_cur_tl \l__tenkzl_v_tl
+        \seq_put_right:Ne \l__tenkzl_loopedge_seq
+          { { \exp_not:V \l__tenkzl_o_tl }{ \exp_not:V \l__tenkzl_v_tl } }
+        \prop_get:NVN \l__tenkzl_end_prop \l__tenkzl_cur_tl \l__tenkzl_next_tl
+        \tl_set_eq:NN \l__tenkzl_cur_tl \l__tenkzl_next_tl
+      }
+    \tenkzl_close_loop:
+  }
+
+% turn one ordered loop of edges into a closed polygon (corners at
+% orientation changes) and append it to the path.
+\cs_new_protected:Npn \tenkzl_close_loop:
+  {
+    \int_compare:nNnT { \seq_count:N \l__tenkzl_loopedge_seq } > {0}
+      {
+        % seed "previous edge" with the last edge (cyclic wrap)
+        \seq_get_right:NN \l__tenkzl_loopedge_seq \l__tenkzl_last_tl
+        \exp_after:wN \tenkzl_setprev:nn \l__tenkzl_last_tl
+        \seq_map_inline:Nn \l__tenkzl_loopedge_seq { \tenkzl_corner:nn ##1 }
+        \tl_put_right:Nn \l__tenkzl_path_tl { cycle~ }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_setprev:nn #1#2
+  { \tl_set:Nn \l__tenkzl_po_tl {#1} \tl_set:Nn \l__tenkzl_pv_tl {#2} }
+
+% at an orientation change emit the corner (x from the V edge, y from the
+% H edge); collinear edges leave the orientation unchanged and are skipped.
+% The corner is intersected in the FLAT frame and then frame-mapped: the
+% map is linear, so this equals intersecting the mapped offset lines, and
+% the whole traced boundary shears consistently with the bonds.
+\cs_new_protected:Npn \tenkzl_corner:nn #1#2
+  {
+    \str_if_eq:VnF \l__tenkzl_po_tl {#1}
+      {
+        \str_if_eq:nnTF {#1} {V}
+          { \tenkzl_map:nn {#2} { \l__tenkzl_pv_tl } }
+          { \tenkzl_map:nn { \l__tenkzl_pv_tl } {#2} }
+        \tl_put_right:Ne \l__tenkzl_path_tl
+          { ( \dim_use:N \l__tenkzl_px_dim ,
+              \dim_use:N \l__tenkzl_py_dim ) -- }
+      }
+    \tl_set:Nn \l__tenkzl_po_tl {#1}
+    \tl_set:Nn \l__tenkzl_pv_tl {#2}
+  }
+
+% bounding box (row/col extremes) of \l__tenkzl_member_prop
+\cs_new_protected:Npn \tenkzl_bbox:
+  {
+    \int_set:Nn \l__tenkzl_rmin_int {99}
+    \int_set:Nn \l__tenkzl_rmax_int {0}
+    \int_set:Nn \l__tenkzl_cmin_int {99}
+    \int_set:Nn \l__tenkzl_cmax_int {0}
+    \prop_map_inline:Nn \l__tenkzl_member_prop
+      { \tenkzl_bbox_cell:w ##1 \q_stop }
+  }
+\cs_new_protected:Npn \tenkzl_bbox_cell:w #1 - #2 \q_stop
+  {
+    \int_set:Nn \l__tenkzl_rmin_int { \int_min:nn {\l__tenkzl_rmin_int} {#1} }
+    \int_set:Nn \l__tenkzl_rmax_int { \int_max:nn {\l__tenkzl_rmax_int} {#1} }
+    \int_set:Nn \l__tenkzl_cmin_int { \int_min:nn {\l__tenkzl_cmin_int} {#2} }
+    \int_set:Nn \l__tenkzl_cmax_int { \int_max:nn {\l__tenkzl_cmax_int} {#2} }
+  }
+
+% -- (b) bonds --------------------------------------------------------
+% a bond of the CURRENT sheet suppressed by \tnedge[none]?  Both
+% endpoint orders were keyed at record time, so one lookup decides.
+\prg_new_conditional:Npnn \tenkzl_nobond:nnnn #1#2#3#4 { p, T, F, TF }
+  {
+    \prop_if_in:NeTF \l__tenkzl_nobond_prop
+      { #1 - #2 - \int_use:N \l__tenkzl_sheet_int :
+        #3 - #4 - \int_use:N \l__tenkzl_sheet_int }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+\cs_new_protected:Npn \tenkzl_draw_bonds:
+  {
+    \int_step_inline:nn { \l__tenkzl_nrows_int }
+      {
+        \int_step_inline:nn { \l__tenkzl_ncols_int }
+          {
+            % horizontal bond to the right neighbour
+            \int_compare:nNnT {####1} < { \l__tenkzl_ncols_int }
+              {
+                \bool_lazy_all:nT
+                  {
+                    { ! \tenkzl_removed_p:nn {##1}{####1} }
+                    { ! \tenkzl_removed_p:nn {##1}{ \int_eval:n{####1+1} } }
+                    { ! \tenkzl_nobond_p:nnnn {##1}{####1}
+                        {##1}{ \int_eval:n{####1+1} } }
+                  }
+                  {
+                    \tenkzl_seg:nnnnn {##1}{####1}
+                      {##1}{ \int_eval:n{####1+1} } {bond}
+                  }
+              }
+            % row-to-row bond to the neighbour below (the depth axis when
+            % frame=oblique)
+            \int_compare:nNnT {##1} < { \l__tenkzl_nrows_int }
+              {
+                \bool_lazy_all:nT
+                  {
+                    { ! \tenkzl_removed_p:nn {##1}{####1} }
+                    { ! \tenkzl_removed_p:nn { \int_eval:n{##1+1} }{####1} }
+                    { ! \tenkzl_nobond_p:nnnn {##1}{####1}
+                        { \int_eval:n{##1+1} }{####1} }
+                  }
+                  {
+                    \tenkzl_seg:nnnnn {##1}{####1}
+                      { \int_eval:n{##1+1} }{####1} {bond}
+                  }
+              }
+          }
+      }
+  }
+
+% -- (c) distinguished edges ------------------------------------------
+\cs_new_protected:Npn \tenkzl_draw_edges:
+  {
+    \seq_map_inline:Nn \l__tenkzl_edges_seq
+      { \tenkzl_edge:nnnnnnnnn ##1 }
+  }
+% one recorded edge (r,c,h)-(r',c',h') in resolved style #7 with label
+% #8 and role word #9 (`none' when unhued), each endpoint mapped with
+% its OWN sheet, so an inter-sheet tie runs along the segment between
+% the two sites.  It draws during the pass of its higher sheet — after
+% both endpoint sheets' bonds are down — and its event carries the
+% normalized cell keys (bare on the default sheet, as before) plus the
+% role word (the hue contract: hue is checkable data).
+\cs_new_protected:Npn \tenkzl_edge:nnnnnnnnn #1#2#3#4#5#6#7#8#9
+  {
+    \int_compare:nNnT { \int_max:nn {#3}{#6} } = { \l__tenkzl_sheet_int }
+      {
+        \tenkzl_xyz:nnnNN {#1}{#2}{#3} \l__tenkzl_qx_dim \l__tenkzl_qy_dim
+        \tenkzl_xyz:nnnNN {#4}{#5}{#6} \l__tenkzl_px_dim \l__tenkzl_py_dim
+        \draw[#7]
+          ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
+          ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
+        % the label rides the midpoint, one clearance band to the
+        % north-east (clears the stroke on every frame; the label node
+        % itself never shears)
+        \tl_if_blank:nF {#8}
+          {
+            \node[tn~label, anchor=south~west] at
+              ( \dim_eval:n
+                  { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
+                    + \tenkz@dim{\tenkz@r@labelclear} } ,
+                \dim_eval:n
+                  { ( \l__tenkzl_qy_dim + \l__tenkzl_py_dim ) / 2
+                    + \tenkz@dim{\tenkz@r@labelclear} } )
+              {#8};
+          }
+        % the audit rebuilds region set-algebra from these events (a
+        % distinguished edge names two cells of the header's universe)
+        \tenkz@event{edge|picture=\the\tenkz@pictureid|from=\tenkz_cs_cellkey:nnn
+          {#1}{#2}{#3}|to=\tenkz_cs_cellkey:nnn {#4}{#5}{#6}|role=#9}
+      }
+  }
+
+% -- (d) site glyphs --------------------------------------------------
+% An op sheet's boxes defer to the cover pass (\tenkzl_draw_opsites:,
+% after the pairing ink), so a box covers the legs it terminates; every
+% other sheet inks its sites here, in its own pass.
+\cs_new_protected:Npn \tenkzl_draw_sites:
+  { \bool_if:NF \l__tenkzl_opsheet_bool { \tenkzl_sites_ink: } }
+% the ambient sheet's site glyphs, in the sheet's skin.  A \tnsite[role=]
+% tint (sheet-addressed first, then the column form) appends its derived
+% style to the skin.
+\cs_new_protected:Npn \tenkzl_site_tint:nn #1#2
+  {
+    \prop_get:NeNF \l__tenkzl_siterole_prop
+      { #1 - #2 - \int_use:N \l__tenkzl_sheet_int } \l__tenkzl_stint_tl
+      {
+        \prop_get:NeNF \l__tenkzl_siterole_prop { #1 - #2 }
+          \l__tenkzl_stint_tl
+          { \tl_clear:N \l__tenkzl_stint_tl }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_sites_ink:
+  {
+    \str_if_eq:VnF \l__tenkzl_sitemode_tl {none}
+      {
+        \int_step_inline:nn { \l__tenkzl_nrows_int }
+          {
+            \int_step_inline:nn { \l__tenkzl_ncols_int }
+              {
+                \tenkzl_removed:nnF {##1}{####1}
+                  {
+                    % glyphs never shear: a site is a point of the sheet,
+                    % so only its POSITION passes through the frame map
+                    \tenkzl_site:nn {##1}{####1}
+                    \tenkzl_site_tint:nn {##1}{####1}
+                    % the comma is LITERAL: pgfkeys splits the option
+                    % list before expanding items, so the tint must be
+                    % its own item (empty when the site carries no role)
+                    \node[\l__tenkzl_skin_tl , \l__tenkzl_stint_tl] at
+                      ( \dim_use:N \l__tenkzl_px_dim ,
+                        \dim_use:N \l__tenkzl_py_dim ) {};
+                  }
+              }
+          }
+      }
+  }
+% the cover pass: every op sheet's boxes, painted once per picture after
+% the pairing and outer-leg ink (quantikz gate read: the box covers the
+% wires it terminates); sane sheet seps keep the sheets disjoint, so the
+% late paint order is invisible to the other sheets' ink
+\cs_new_protected:Npn \tenkzl_draw_opsites:
+  {
+    \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 1 }
+      {
+        \tenkzl_select_sheet:n {##1}
+        \bool_if:NT \l__tenkzl_opsheet_bool { \tenkzl_sites_ink: }
+      }
+  }
+
+% -- (d') on-site physical legs (physical=up|updown) ------------------
+% physical=up draws one leg rising from every site (the PEPS sheet);
+% physical=updown adds the mirrored falling leg (the PEPO sheet, RMP
+% sec2fig5PEPO: the site tensor carries the operator's row index up
+% AND its column index down).  The resolution rides the sheet-role
+% machinery: in a ROLE-LIST stack every sheet face is already owned --
+% interior faces by the pairing interfaces, outer faces by the
+% outer legs= policy -- so this pass draws nothing there, and an op
+% sheet receives its up and down physical faces automatically from
+% the pairing/outer ink with no duplicate strokes.  physical= thus
+% speaks only for bare sheets (the single sheet and numeric
+% wire-sheet stacks), where no other pass owns the faces.
+\cs_new_protected:Npn \tenkzl_draw_physical:
+  {
+    \bool_lazy_and:nnT
+      { ! \l__tenkzl_roles_bool }
+      { ! \str_if_eq_p:Vn \l__tenkzl_physical_tl {none} }
+      {
+        \int_step_inline:nn { \l__tenkzl_nrows_int }
+          {
+            \int_step_inline:nn { \l__tenkzl_ncols_int }
+              {
+                \tenkzl_removed:nnF {##1}{####1}
+                  {
+                    % physical legs rise VERTICALLY in the paper frame: the
+                    % physical index points out of the sheet and never
+                    % shears (RMP sec2fig4b), so only the FOOT is mapped
+                    \tenkzl_site:nn {##1}{####1}
+                    \draw[physical~leg]
+                      ( \dim_use:N \l__tenkzl_px_dim ,
+                        \dim_use:N \l__tenkzl_py_dim ) --
+                      ( \dim_use:N \l__tenkzl_px_dim ,
+                        \dim_eval:n { \l__tenkzl_py_dim
+                                      + \tenkz@dim{\tenkz@r@physleg} } );
+                    \str_if_eq:VnT \l__tenkzl_physical_tl {updown}
+                      {
+                        \draw[physical~leg]
+                          ( \dim_use:N \l__tenkzl_px_dim ,
+                            \dim_use:N \l__tenkzl_py_dim ) --
+                          ( \dim_use:N \l__tenkzl_px_dim ,
+                            \dim_eval:n { \l__tenkzl_py_dim
+                                          - \tenkz@dim{\tenkz@r@physleg} } );
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+% -- (e) boundary legs ------------------------------------------------
+% Per-side resolution (the 0.6 side-policy alphabet): each window side
+% resolves its own openness — the side word (west=/east=/north=/south=)
+% wins, else boundary= — so a window may keep, say, its east outputs
+% open while sealing the other three sides.  north = row 1's up legs,
+% south = row R's down legs, west = column 1, east = column C.
+\bool_new:N \l__tenkzl_nopen_bool
+\bool_new:N \l__tenkzl_sopen_bool
+\bool_new:N \l__tenkzl_wopen_bool
+\bool_new:N \l__tenkzl_eopen_bool
+\cs_new_protected:Npn \tenkzl_draw_legs:
+  {
+    \tenkzl_side_open:nN {north} \l__tenkzl_nopen_bool
+    \tenkzl_side_open:nN {south} \l__tenkzl_sopen_bool
+    \tenkzl_side_open:nN {west}  \l__tenkzl_wopen_bool
+    \tenkzl_side_open:nN {east}  \l__tenkzl_eopen_bool
+    \bool_lazy_any:nT
+      {
+        { \l__tenkzl_nopen_bool } { \l__tenkzl_sopen_bool }
+        { \l__tenkzl_wopen_bool } { \l__tenkzl_eopen_bool }
+      }
+      {
+        \int_step_inline:nn { \l__tenkzl_nrows_int }
+          {
+            \int_step_inline:nn { \l__tenkzl_ncols_int }
+              {
+                \tenkzl_removed:nnF {##1}{####1}
+                  {
+                    \bool_lazy_and:nnT { \l__tenkzl_nopen_bool }
+                      { \int_compare_p:nNn {##1} = {1} }
+                      { \tenkzl_leg:nnn {##1}{####1}{up} }
+                    \bool_lazy_and:nnT { \l__tenkzl_sopen_bool }
+                      { \int_compare_p:nNn {##1} = { \l__tenkzl_nrows_int } }
+                      { \tenkzl_leg:nnn {##1}{####1}{down} }
+                    \bool_lazy_and:nnT { \l__tenkzl_wopen_bool }
+                      { \int_compare_p:nNn {####1} = {1} }
+                      { \tenkzl_leg:nnn {##1}{####1}{left} }
+                    \bool_lazy_and:nnT { \l__tenkzl_eopen_bool }
+                      { \int_compare_p:nNn {####1} = { \l__tenkzl_ncols_int } }
+                      { \tenkzl_leg:nnn {##1}{####1}{right} }
+                  }
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_leg:nnn #1#2#3
+  {
+    \dim_set:Nn \l__tenkzl_x_dim { \tenkzl_cx:n {#2} }
+    \dim_set:Nn \l__tenkzl_y_dim { \tenkzl_cy:n {#1} }
+    % direction -> signed FLAT-frame (dx, dy) of the leg tip: boundary legs
+    % are cut VIRTUAL indices, so they live in the sheet and shear with it —
+    % up/down legs run along the oblique depth axis, left/right along the
+    % rows (both endpoints pass through the frame map)
+    \str_case:nn {#3}
+      {
+        {up}    { \dim_zero:N \l__tenkzl_dx_dim
+                  \dim_set:Nn \l__tenkzl_dy_dim {  \tenkz@dim{\tenkz@r@boundaryleg} } }
+        {down}  { \dim_zero:N \l__tenkzl_dx_dim
+                  \dim_set:Nn \l__tenkzl_dy_dim { -\tenkz@dim{\tenkz@r@boundaryleg} } }
+        {left}  { \dim_set:Nn \l__tenkzl_dx_dim { -\tenkz@dim{\tenkz@r@boundaryleg} }
+                  \dim_zero:N \l__tenkzl_dy_dim }
+        {right} { \dim_set:Nn \l__tenkzl_dx_dim {  \tenkz@dim{\tenkz@r@boundaryleg} }
+                  \dim_zero:N \l__tenkzl_dy_dim }
+      }
+    \tenkzl_map:nn { \l__tenkzl_x_dim } { \l__tenkzl_y_dim }
+    \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+    \dim_set_eq:NN \l__tenkzl_qy_dim \l__tenkzl_py_dim
+    \tenkzl_map:nn { \l__tenkzl_x_dim + \l__tenkzl_dx_dim }
+                   { \l__tenkzl_y_dim + \l__tenkzl_dy_dim }
+    \draw[bond]
+      ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
+  }
+
+% -- (f) region and site labels ---------------------------------------
+\cs_new_protected:Npn \tenkzl_draw_labels:
+  {
+    \seq_map_inline:Nn \l__tenkzl_regions_seq
+      { \tenkzl_label:nnnnnn ##1 }
+    \seq_map_inline:Nn \l__tenkzl_sitelabels_seq
+      { \tenkzl_sitelabel:nnnn ##1 }
+  }
+% one \tnsite[label=] glyph label: it renders during its sheet's pass in
+% the site's free north-east quadrant — half a bead plus one clearance
+% band out, clear of the vertical physical legs and the in-row bonds
+\cs_new_protected:Npn \tenkzl_sitelabel:nnnn #1#2#3#4
+  {
+    \int_compare:nNnT {#3} = { \l__tenkzl_sheet_int }
+      {
+        \tenkzl_site:nn {#1}{#2}
+        \node[tn~label, anchor=south~west] at
+          ( \dim_eval:n { \l__tenkzl_px_dim
+                          + \tenkz@dim{\tenkz@r@dotdia} / 2
+                          + \tenkz@dim{\tenkz@r@labelclear} } ,
+            \dim_eval:n { \l__tenkzl_py_dim
+                          + \tenkz@dim{\tenkz@r@dotdia} / 2
+                          + \tenkz@dim{\tenkz@r@labelclear} } )
+          {#4};
+      }
+  }
+% all six record groups are consumed (the inset #6 is label-irrelevant):
+% a leftover group would be typeset in the picture's nullfont context --
+% one "Missing character" log line per \tnregion call
+\cs_new_protected:Npn \tenkzl_label:nnnnnn #1#2#3#4#5#6
+  {
+    \tl_if_blank:nF {#3}
+      {
+        % one label per region: it renders on the region's LOWEST
+        % inhabited sheet (single-sheet pictures: sheet 0, as always;
+        % a ket-only region labels the ket sheet), anchored to that
+        % sheet's bounding box
+        \tenkzl_minsheet:n {#5}
+        \int_compare:nNnT { \l__tenkzl_minsheet_int } = { \l__tenkzl_sheet_int }
+          {
+            \tenkzl_filter_members:n {#5}
+            \tenkzl_bbox:
+            \tenkzl_label_place:nn {#4} {#3}
+          }
+      }
+  }
+% one corner label: anchor #1, placed m inside the box corner picked by
+% (col-extreme reg #2, x-sign #3, row-extreme reg #4, y-sign #5); text #6
+% under frame=oblique a corner label flips to the OUTSIDE of the traced
+% corner: the shear foreshortens the inside-corner band to ~planerise x m,
+% too narrow for a glyph next to the site dot, and the school letters
+% sheared regions from outside anyway (RMP GS2D genre)
+\cs_new:Npn \tenkzl_flipanchor:n #1
+  {
+    \str_case:nn {#1}
+      {
+        {north~west} {south~east}
+        {north~east} {south~west}
+        {south~west} {north~east}
+        {south~east} {north~west}
+      }
+  }
+\cs_new_protected:Npn \tenkzl_corner_label:nnnnnn #1#2#3#4#5#6
+  {
+    % the anchor POINT shears with the sheet; the label node itself stays
+    % upright in the paper frame (school convention: text never shears)
+    \tenkzl_map:nn { \tenkzl_cx:n{#2} #3 \l__tenkzl_m_dim }
+                   { \tenkzl_cy:n{#4} #5 \l__tenkzl_m_dim }
+    \tl_set:Ne \l__tenkzl_tmp_tl
+      { \bool_if:NTF \l__tenkzl_oblique_bool
+          { \tenkzl_flipanchor:n {#1} } {#1} }
+    \node[tn~label, anchor=\l__tenkzl_tmp_tl] at
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
+      { $#6$ };
+  }
+% place the label inside the requested corner of the boundary box (the four
+% corner anchors equal their key names; center is the box midpoint).  An
+% unrecognized `label at` draws nothing, as before.
+\cs_new_protected:Npn \tenkzl_label_place:nn #1#2
+  {
+    \str_case:nn {#1}
+      {
+        {north~west}
+          { \tenkzl_corner_label:nnnnnn {north~west}
+              {\l__tenkzl_cmin_int}{-}{\l__tenkzl_rmin_int}{+}{#2} }
+        {north~east}
+          { \tenkzl_corner_label:nnnnnn {north~east}
+              {\l__tenkzl_cmax_int}{+}{\l__tenkzl_rmin_int}{+}{#2} }
+        {south~west}
+          { \tenkzl_corner_label:nnnnnn {south~west}
+              {\l__tenkzl_cmin_int}{-}{\l__tenkzl_rmax_int}{-}{#2} }
+        {south~east}
+          { \tenkzl_corner_label:nnnnnn {south~east}
+              {\l__tenkzl_cmax_int}{+}{\l__tenkzl_rmax_int}{-}{#2} }
+        {center}
+          { \tenkzl_map:nn
+              { ( \tenkzl_cx:n{\l__tenkzl_cmin_int}
+                 + \tenkzl_cx:n{\l__tenkzl_cmax_int} ) / 2 }
+              { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
+                 + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
+            \node[tn~label, anchor=center] at
+              ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
+              { $#2$ }; }
+      }
+  }
+
+% =====================================================================
+% tenkzplanes: the bra-ket double layer
+%   \begin{tenkzplanes}[rows=, cols=, sheets={ket, bra}, sheet sep=, open=]
+%     body (optional records; an unaddressed cell lives on the KET sheet,
+%     and (r,c,0) addresses the bra sheet)
+%   \end{tenkzplanes}
+% A thin preset over the two-sheet lattice: sheets=2, pairing, default
+% sheet = ket (sheet 1) — two stacked oblique sheets, the ket sheet ABOVE
+% the bra sheet, with a physical pairing leg along S at every site: the
+% sandwich <psi|...|psi> of the RMP double-layer panels (arXiv:2011.12127
+% sec2fig4b bottom).
+% The sheets render at the double-layer-local frame ratios (slant 0.40,
+% rise 0.45) and, absent `sheet sep=', at the derived vertical offset
+% sep = (rows-1) x planerise + planegap — see the ratio comments above.
+% `open={(r,c),...}' is a cell set; those cells keep two dangling stubs
+% (ket down, bra up) instead of a contracted pairing leg — the open
+% physical indices of a marginal.  `trace={(r,c),...}' is the complementary
+% cell set: those sites' pairing legs close by the wrap loop between the
+% sheets (per site Tr_s, east-routed around the column in the paper frame),
+% so open sites carry the KEPT indices and traced sites the traced-out ones
+% of rho_kept = Tr_traced |psi><psi| (RMP 2011.12127 fig. 2(b) bottom).
+% These option values contain literal commas, so they MUST be braced:
+% pgfkeys splits the option list only at commas outside braces.
+% =====================================================================
+
+% rewrite the open list's top-level commas as unions through the shared
+% pre-scan, then resolve through the shared cell-set machinery: the
+% commas INSIDE a (r,c) or (r1-r2,c1-c2) term must not split terms, so
+% parenthesis depth decides which commas separate cells.
+% open=/trace= cells address pairing SEGMENTS, not sheets: the key "r-c"
+% acts on every interface of the column, "r-c-i" on interface i alone
+% (i = the lower sheet's index, 0 .. k-2 bottom-up).  The resolver runs
+% with the default sheet MASKED to -1 so an explicit third coordinate
+% never collapses to the bare column key the way a default-sheet cell
+% would ((r,c,0) must mean interface 0, not the whole column) -- and
+% with the SHEET guard suppressed: the third coordinate here is an
+% INTERFACE, range-checked in its own alphabet by \tenkzl_guard_iface:n
+% at render time, so the sheet-range warning would misstate both the
+% coordinate's meaning and its bound.
+\cs_new_protected:Npn \tenkzl_openset:n #1
+  {
+    \tl_clear:N \l_tenkz_cs_scan_tl
+    \int_zero:N \l_tenkz_cs_depth_int
+    \tl_map_inline:nn {#1} { \tenkz_cs_openscan:n {##1} }
+    \int_set:Nn \l_tenkz_cs_defsheet_int {-1}
+    \bool_set_false:N \l_tenkz_cs_guard_bool
+    \tenkz_cs_resolve:VN \l_tenkz_cs_scan_tl \l__tenkzl_open_prop
+    \bool_set_true:N \l_tenkz_cs_guard_bool
+    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
+  }
+
+% the trace= cell set, through the same comma-to-union rewrite,
+% default-sheet masking and guard suppression as open=
+\cs_new_protected:Npn \tenkzl_traceset:n #1
+  {
+    \tl_clear:N \l_tenkz_cs_scan_tl
+    \int_zero:N \l_tenkz_cs_depth_int
+    \tl_map_inline:nn {#1} { \tenkz_cs_openscan:n {##1} }
+    \int_set:Nn \l_tenkz_cs_defsheet_int {-1}
+    \bool_set_false:N \l_tenkz_cs_guard_bool
+    \tenkz_cs_resolve:VN \l_tenkz_cs_scan_tl \l__tenkzl_trace_prop
+    \bool_set_true:N \l_tenkz_cs_guard_bool
+    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
+  }
+
+% tenkzplanes IS a lattice picture: a literal preset over the one render
+% path (no private key family, no private renderer, no private header —
+% every accepted key IS a /tenkz/lattice key, and the picture emits the
+% same picture|lang=lattice line and lattice| header event as any other
+% lattice).  The preset states, through the ordinary state the user keys
+% then override:
+%   - the double-layer-local frame ratios (0.40/0.45, see the ratio
+%     comments: only the double layer has pairing legs that climb
+%     multiple row-levels, so it maximizes leg-to-dot clearance instead
+%     of the single sheet's leg-to-bond clearance) — installed ungated,
+%     exactly as the named preset ratios always were;
+%   - the oblique frame (a flat double layer would collapse the two
+%     sheets onto each other);
+%   - sheets={ket,bra} through the ordinary role-list machinery, which
+%     turns pairing on and homes a bare (r,c) on the top state sheet
+%     (the ket sheet — the Q2 convention shared by every role stack);
+%   - outer legs=none: the double layer keeps its established closed
+%     silhouette (the role-list WINDOW default stays `both` for stacks
+%     the user states as sheets={...} in tenkzlattice).
+\cs_new_protected:Npn \tenkzl_planes_preset:
+  {
+    \bool_set_true:N \l__tenkzl_oblique_bool
+    \cs_set_eq:NN \tenkz@r@planeslant \tenkz@r@planesslant
+    \cs_set_eq:NN \tenkz@r@planerise  \tenkz@r@planesrise
+    \tenkzl_rolelist:n { ket , bra }
+    \tl_set:Nn \l__tenkzl_outer_tl {none}
+  }
+
+\cs_new_protected:Npn \tenkzl_planes:nn #1#2
+  { \tenkzl_render:nnn { \tenkzl_planes_preset: } {#1}{#2} }
+
+\cs_new_protected:Npn \tenkzl_draw_pairs:
+  {
+    \tenkzl_guard_ifaces:
+    \int_step_inline:nn { \l__tenkzl_nrows_int }
+      {
+        \int_step_inline:nn { \l__tenkzl_ncols_int }
+          { \tenkzl_paircol:nn {##1}{####1} }
+      }
+  }
+% is column (#1,#2)'s interface #3 open / traced?  The bare column key
+% "r-c" acts on every interface, "r-c-i" on interface i alone; trace
+% beats open when a segment sits in both sets.
+\prg_new_conditional:Npnn \tenkzl_ifopen:nnn #1#2#3 { p, T, F, TF }
+  {
+    \bool_lazy_or:nnTF
+      { \prop_if_in_p:Ne \l__tenkzl_open_prop { \tenkzl_key:nn {#1}{#2} } }
+      { \prop_if_in_p:Ne \l__tenkzl_open_prop
+          { \tenkzl_key:nn {#1}{#2} - #3 } }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+\prg_new_conditional:Npnn \tenkzl_iftrace:nnn #1#2#3 { p, T, F, TF }
+  {
+    \bool_lazy_or:nnTF
+      { \prop_if_in_p:Ne \l__tenkzl_trace_prop { \tenkzl_key:nn {#1}{#2} } }
+      { \prop_if_in_p:Ne \l__tenkzl_trace_prop
+          { \tenkzl_key:nn {#1}{#2} - #3 } }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+% the physical column at (#1,#2): one pairing segment per interface,
+% bottom-up, each honouring open= (dangling stubs) and trace= (the east
+% wrap loop) — with two sheets exactly the Phase-1 bra-ket sandwich.  A
+% sheetless removal "r-c" deletes the whole column; a sheet-addressed
+% removal deletes every segment touching its sheet.
+\cs_new_protected:Npn \tenkzl_paircol:nn #1#2
+  {
+    \prop_if_in:NeF \l__tenkzl_removed_prop { \tenkzl_key:nn {#1}{#2} }
+      {
+        \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 2 }
+          {
+            \bool_lazy_or:nnF
+              { \tenkzl_removed_on_p:nnn {#1}{#2}{##1} }
+              { \tenkzl_removed_on_p:nnn {#1}{#2}
+                  { \int_eval:n {##1+1} } }
+              { \tenkzl_pairseg:nnn {#1}{#2}{##1} }
+          }
+      }
+  }
+% one pairing segment at column (#1,#2), interface #3: the leg along S
+% between the lower site (r,c,#3) and the upper site (r,c,#3+1); a
+% closed segment is that one leg; an open segment keeps two stubs —
+% upper site down, lower site up, VERTICAL in the paper frame
+% (physical-index ink never shears) — leaving the interface's physical
+% indices uncontracted (a marginal); a traced segment closes by the east
+% wrap loop instead (trace beats open).
+\cs_new_protected:Npn \tenkzl_pairseg:nnn #1#2#3
+  {
+    \tenkzl_xyz:nnnNN {#1}{#2}{#3} \l__tenkzl_qx_dim \l__tenkzl_qy_dim
+    \tenkzl_xyz:nnnNN {#1}{#2}{ \int_eval:n {#3+1} }
+      \l__tenkzl_px_dim \l__tenkzl_py_dim
+    \tenkzl_iftrace:nnnTF {#1}{#2}{#3}
+      { \tenkzl_pairtrace:nnn {#1}{#2}{#3} }
+      { \tenkzl_pairseg_aux:nnn {#1}{#2}{#3} }
+  }
+\cs_new_protected:Npn \tenkzl_pairseg_aux:nnn #1#2#3
+  {
+    \tenkzl_ifopen:nnnTF {#1}{#2}{#3}
+      {
+        \draw[physical~leg]
+          ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
+          ( \dim_use:N \l__tenkzl_qx_dim ,
+            \dim_eval:n { \l__tenkzl_qy_dim + \tenkz@dim{\tenkz@r@physleg} } );
+        \draw[physical~leg]
+          ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) --
+          ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_eval:n { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} } );
+      }
+      {
+        \draw[physical~leg]
+          ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
+          ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
+      }
+  }
+% warn once per open=/trace= key whose interface index exceeds the
+% stack's k-2 (the segment matches nothing); guarded, not clamped
+\cs_new_protected:Npn \tenkzl_guard_ifaces:
+  {
+    \prop_map_inline:Nn \l__tenkzl_open_prop  { \tenkzl_guard_iface:n {##1} }
+    \prop_map_inline:Nn \l__tenkzl_trace_prop { \tenkzl_guard_iface:n {##1} }
+  }
+\cs_new_protected:Npn \tenkzl_guard_iface:n #1
+  {
+    \seq_set_split:Nnn \l__tenkzl_parts_seq {-} {#1}
+    \int_compare:nNnT { \seq_count:N \l__tenkzl_parts_seq } > {2}
+      {
+        \int_compare:nNnT { \seq_item:Nn \l__tenkzl_parts_seq {3} } >
+          { \l__tenkzl_sheets_int - 2 }
+          {
+            \msg_warning:nnee { tenkz } { interface-range }
+              { \seq_item:Nn \l__tenkzl_parts_seq {3} }
+              { \int_eval:n { \l__tenkzl_sheets_int - 2 } }
+            \tenkz@event{warning|code=interface-range|interface=\seq_item:Nn
+              \l__tenkzl_parts_seq {3}}
+          }
+      }
+  }
+
+% one traced segment's wrap loop, drawn in the PAPER frame (physical ink
+% never shears): the interface's pairing is CLOSED by a racetrack east
+% of the column -- up out of the upper site, a stadium cap, down past
+% both sheets, a cap, and into the lower site from below.  The loop IS
+% Tr over this site's physical space: it contracts the upper sheet's
+% physical index with the lower sheet's, so the traced segment leaves no
+% open physical index (rho_kept = Tr_traced |psi><psi|, RMP 2011.12127
+% fig. 2(b) bottom).  The east straight swings \tenkz@r@planetracereach
+% beyond the site axis -- west of the depth neighbour's dot at the
+% default pitch -- crossing the in-plane bonds as distinct ink (no
+% junction); the caps are circular (radius = reach/2), so every join is
+% tangent-continuous.  Entered from \tenkzl_pairseg:nnn, so (px, py)
+% holds the upper site (r,c,#3+1) and (qx, qy) the lower site (r,c,#3);
+% the event names the interface only on a k>2 stack, so the Phase-1
+% double-layer log lines stay as they were.
+\cs_new_protected:Npn \tenkzl_pairtrace:nnn #1#2#3
+  {
+    % tip ordinates (into the dx/dy scratch dims): one physical-leg length
+    % ABOVE the ket site (dy) and one BELOW the bra site (dx)
+    \dim_set:Nn \l__tenkzl_dy_dim
+      { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
+    \dim_set:Nn \l__tenkzl_dx_dim
+      { \l__tenkzl_qy_dim - \tenkz@dim{\tenkz@r@physleg} }
+    \draw[trace]
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) --
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_dy_dim )
+      arc[start~angle=180, end~angle=0,
+          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@planetracereach} / 2 }]
+      --
+      ( \dim_eval:n
+          { \l__tenkzl_qx_dim + \tenkz@dim{\tenkz@r@planetracereach} } ,
+        \dim_use:N \l__tenkzl_dx_dim )
+      arc[start~angle=360, end~angle=180,
+          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@planetracereach} / 2 }]
+      --
+      ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) ;
+    \tenkz@event{pairtrace|picture=\the\tenkz@pictureid|site=#1-#2\int_compare:nNnT
+      { \l__tenkzl_sheets_int } > {2} {|interface=#3}}
+  }
+
+% -- (i) outer-face physical legs -------------------------------------
+% outer legs=both|top|bottom|none: the top sheet's up legs and the
+% bottom sheet's down legs, VERTICAL in the paper frame (physical-index
+% ink never shears) with the physleg length of physical=up — the stack's
+% open window.  A column removal removes its outer legs; a
+% sheet-addressed removal removes the legs of its own face only.
+\prg_new_conditional:Npnn \tenkzl_outer_face:n #1 { p, T, F, TF }
+  {
+    \bool_lazy_or:nnTF
+      { \str_if_eq_p:Vn \l__tenkzl_outer_tl {both} }
+      { \str_if_eq_p:Vn \l__tenkzl_outer_tl {#1} }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+\cs_new_protected:Npn \tenkzl_draw_outer:
+  {
+    \int_step_inline:nn { \l__tenkzl_nrows_int }
+      {
+        \int_step_inline:nn { \l__tenkzl_ncols_int }
+          { \tenkzl_outer_col:nn {##1}{####1} }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_outer_col:nn #1#2
+  {
+    \prop_if_in:NeF \l__tenkzl_removed_prop { \tenkzl_key:nn {#1}{#2} }
+      {
+        \bool_lazy_and:nnT
+          { \tenkzl_outer_face_p:n {top} }
+          { ! \tenkzl_removed_on_p:nnn {#1}{#2}
+              { \int_eval:n { \l__tenkzl_sheets_int - 1 } } }
+          {
+            \tenkzl_xyz:nnnNN {#1}{#2}{ \l__tenkzl_sheets_int - 1 }
+              \l__tenkzl_px_dim \l__tenkzl_py_dim
+            \draw[physical~leg]
+              ( \dim_use:N \l__tenkzl_px_dim ,
+                \dim_use:N \l__tenkzl_py_dim ) --
+              ( \dim_use:N \l__tenkzl_px_dim ,
+                \dim_eval:n { \l__tenkzl_py_dim
+                              + \tenkz@dim{\tenkz@r@physleg} } );
+          }
+        \bool_lazy_and:nnT
+          { \tenkzl_outer_face_p:n {bottom} }
+          { ! \tenkzl_removed_on_p:nnn {#1}{#2}{0} }
+          {
+            \tenkzl_xyz:nnnNN {#1}{#2}{0}
+              \l__tenkzl_px_dim \l__tenkzl_py_dim
+            \draw[physical~leg]
+              ( \dim_use:N \l__tenkzl_px_dim ,
+                \dim_use:N \l__tenkzl_py_dim ) --
+              ( \dim_use:N \l__tenkzl_px_dim ,
+                \dim_eval:n { \l__tenkzl_py_dim
+                              - \tenkz@dim{\tenkz@r@physleg} } );
+          }
+      }
+  }
+
+% -- (k) the boundary signature ---------------------------------------
+% One event per pairing/outer-leg picture, mirroring the grid's boundary
+% event: outer-leg counts per face, then per interface (bottom-up) the
+% closed / open / traced segment counts, each recounted with the draw
+% passes' own predicates.  The audit layer checks a stack's open index
+% budget against these fields.
+\cs_new_protected:Npn \tenkzl_emit_boundary:
+  {
+    \bool_lazy_or:nnT
+      { \l__tenkzl_pairing_bool }
+      { ! \str_if_eq_p:Vn \l__tenkzl_outer_tl {none} }
+      {
+        \int_zero:N \l__tenkzl_bot_int
+        \int_zero:N \l__tenkzl_bob_int
+        \int_step_inline:nn { \l__tenkzl_nrows_int }
+          {
+            \int_step_inline:nn { \l__tenkzl_ncols_int }
+              { \tenkzl_count_outer:nn {##1}{####1} }
+          }
+        \tl_clear:N \l__tenkzl_bnd_tl
+        \bool_if:NT \l__tenkzl_pairing_bool
+          {
+            \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 2 }
+              { \tenkzl_count_iface:n {##1} }
+          }
+        \tenkz@event{boundary|picture=\the\tenkz@pictureid|physical-up=\int_use:N
+          \l__tenkzl_bot_int|physical-down=\int_use:N
+          \l__tenkzl_bob_int\tl_use:N \l__tenkzl_bnd_tl}
+      }
+  }
+\cs_new_protected:Npn \tenkzl_count_outer:nn #1#2
+  {
+    \prop_if_in:NeF \l__tenkzl_removed_prop { \tenkzl_key:nn {#1}{#2} }
+      {
+        \bool_lazy_and:nnT
+          { \tenkzl_outer_face_p:n {top} }
+          { ! \tenkzl_removed_on_p:nnn {#1}{#2}
+              { \int_eval:n { \l__tenkzl_sheets_int - 1 } } }
+          { \int_incr:N \l__tenkzl_bot_int }
+        \bool_lazy_and:nnT
+          { \tenkzl_outer_face_p:n {bottom} }
+          { ! \tenkzl_removed_on_p:nnn {#1}{#2}{0} }
+          { \int_incr:N \l__tenkzl_bob_int }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_count_iface:n #1
+  {
+    \int_zero:N \l__tenkzl_bpc_int
+    \int_zero:N \l__tenkzl_bpo_int
+    \int_zero:N \l__tenkzl_bpt_int
+    \int_step_inline:nn { \l__tenkzl_nrows_int }
+      {
+        \int_step_inline:nn { \l__tenkzl_ncols_int }
+          { \tenkzl_count_seg:nnn {##1}{####1}{#1} }
+      }
+    \tl_put_right:Ne \l__tenkzl_bnd_tl
+      { |pair-closed-#1=\int_use:N \l__tenkzl_bpc_int
+        |pair-open-#1=\int_use:N \l__tenkzl_bpo_int
+        |pair-traced-#1=\int_use:N \l__tenkzl_bpt_int }
+  }
+\cs_new_protected:Npn \tenkzl_count_seg:nnn #1#2#3
+  {
+    \prop_if_in:NeF \l__tenkzl_removed_prop { \tenkzl_key:nn {#1}{#2} }
+      {
+        \bool_lazy_or:nnF
+          { \tenkzl_removed_on_p:nnn {#1}{#2}{#3} }
+          { \tenkzl_removed_on_p:nnn {#1}{#2}{ \int_eval:n {#3+1} } }
+          {
+            \tenkzl_iftrace:nnnTF {#1}{#2}{#3}
+              { \int_incr:N \l__tenkzl_bpt_int }
+              {
+                \tenkzl_ifopen:nnnTF {#1}{#2}{#3}
+                  { \int_incr:N \l__tenkzl_bpo_int }
+                  { \int_incr:N \l__tenkzl_bpc_int }
+              }
+          }
+      }
+  }
+
+% ---------- messages ----------
+% (unknown-name and sheet-range live with the shared cell-set algebra
+% in tenkz-core)
+\msg_new:nnn { tenkz } { sheet-role }
+  { Unknown~sheet~role~'#1'~in~sheets=:~the~roles~are~ket,~op~and~bra;~
+    the~sheet~draws~with~dot~sites. }
+\msg_new:nnn { tenkz } { interface-range }
+  { open=/trace=~addresses~pairing~interface~#1,~but~this~stack's~
+    interfaces~are~0..#2~(interface~i~joins~sheets~i~and~i+1,~counted~
+    from~the~bottom):~no~pairing~segment~matches. }
+
+% ---------- public entry points ----------
+\NewDocumentEnvironment { tenkzlattice } { O{} +b }
+  { \tenkzl_render:nn {#1}{#2} } { }
+\NewDocumentEnvironment { tenkzplanes } { O{} +b }
+  { \tenkzl_planes:nn {#1}{#2} } { }
+
+\ExplSyntaxOff
+\endinput

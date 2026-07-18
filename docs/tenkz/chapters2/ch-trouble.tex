@@ -1,0 +1,315 @@
+% chapters2/ch-trouble.tex — troubleshooting and the honest roadmap.
+%
+% Examples are adapted from the corrected test corpus (boundary_test,
+% cups_test (b)/(e), atoms_test A4, hard10_v3) — no invented
+% diagrams.  Fixed-point cups: rho^L west, rho^R east (the referee
+% gate corrected hard04_v3's swapped sides: the east cup is E_A's
+% input, so the fixed point of E_A rides the east bend).  The back-page quick-reference card that belongs to this
+% chapter's scope lives in manual2.tex (the quickrefcard block).
+\section{Troubleshooting and roadmap}\label{ch:trouble}
+
+A \pkg{} picture fails in three ways.  It can assert the wrong
+object --- a map drawn as a scalar, a trace drawn as a cup; it can be
+missing ink the author believes is there, which the package announces
+in the log; or it can be right and unreadable, its labels crowded out
+of their bands.  This chapter gives the shortest correct fix for each,
+in that order, and closes with the package's known limits, stated as
+the mathematics they cannot yet draw.
+
+\subsection{Read the event stream first}
+
+Every picture appends its events to \tnfile{\meta{jobname}.tnlog}: a
+\tnlogline{picture|id=\ldots} line, one \tnlogline{atom} and
+\tnlogline{bond} line per piece of ink, and one
+\tnlogline{boundary|\ldots} line --- the signature.  When a picture
+asserts the wrong object, the log says so before the eye does: read
+the picture's boundary line and ask whether those counts belong to
+the object the formula names.  A matrix keeps two open virtual indices; a
+map on the doubled space keeps four; a scalar keeps none.  The
+classic failure is the transfer map sealed into a scalar, which is
+why open boundaries are the default and sealing is opt-in:
+
+\begin{tnmultiples}[
+    formula   = {\mathcal{E}_A=\sum_i A^i\otimes\overline{A^{i}}},
+    caption   = {a map is not a scalar},
+    index     = {Four stubs are the map's two indices on the doubled
+                 virtual space: the west ket/bra pair and the east
+                 pair.  \tnval{boundary=none} seals all four, and the
+                 sealed picture logs
+                 \tnlogline{virtual-west=0|virtual-east=0} --- it
+                 asserts a scalar, which $\mathcal{E}_A$ is not.  The
+                 fix is deletion: open is the default.},
+    signature = {boundary|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0},
+    variants  = {{default (open)}{}, {boundary=none}{boundary=none}},
+    label     = {ex:sealed-map},
+  ]
+% E_A = sum_i A^i (x) conj(A^i), the unapplied transfer map:
+% a map must keep its four virtual stubs.  Sealing the same
+% source with boundary=none asserts a scalar instead.
+\begin{tenkz}[sandwich, variant]
+  \tn{A} \\
+  \tn*{A}
+\end{tenkz}
+\end{tnmultiples}
+
+An equation is checked side against side: the two pictures log
+consecutive ids, and they denote the same kind of object only if
+their boundary lines agree --- the same counts on the same sides, not
+merely the same totals.
+
+\begin{tnexample}[
+    formula   = {\mathcal{E}_A(\rho^R)=\rho^R},
+    caption   = {both sides log the same boundary line},
+    index     = {Left, the channel's ink with $\rho^R$ riding the east
+                 bend --- the applied channel closes its input side;
+                 right, the bare cap --- two ghost anchors and the
+                 same bend.  The tempting misspelling puts
+                 $\rho^R$ on a single wire (\tncmd{tnX}), which logs
+                 \tnlogline{virtual-west=1|virtual-east=1}: the same
+                 total, the wrong sides.  The signature distinguishes
+                 a matrix on one wire from the same matrix bent across
+                 a ket/bra pair.},
+    signature = {boundary|virtual-west=2|virtual-east=0|physical-up=0|physical-down=0},
+    label     = {ex:fixed-point-check},
+  ]
+% E_A(rho^R) = rho^R, the right fixed point: rho^R rides the
+% east (input) cup, the west (output) pair stays open.  Both
+% pictures log identical boundary lines, so the equation is
+% well formed; the ghosts anchor the bare cap.
+\[
+  \begin{tenkz}[sandwich, east={cup=$\rho^R$}]
+    \tn{A}\\
+    \tn*{A}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[rows={wire,wire}, east={cup=$\rho^R$}]
+    \tnghost{}\\
+    \tnghost{}
+  \end{tenkz}
+\]
+\end{tnexample}
+
+\subsection{A trace is not a cup}
+
+Matching signatures are necessary, never sufficient: two closed
+pictures can log identical boundary lines and denote different
+scalars.  The distinction is topological.  \tnkey{periodic} returns
+each row to \emph{itself} --- the trace over that row's virtual
+space --- while \tnkey{west=cup} and \tnkey{east=cup} tie
+\emph{adjacent rows to each other}, the ket-to-bra contraction.  On a
+sandwich the two closures produce the superoperator trace and the
+trace of the channel's output, and confusing them is the most common
+way to draw a correct-looking wrong number:
+
+\begin{tnmultiples}[
+    formula   = {\operatorname{Tr}\mathcal{E}_A^{2}
+                 \;\text{vs}\;
+                 \operatorname{Tr}\!\bigl[\mathcal{E}_A^{2}(\mathbf{1})\bigr]},
+    caption   = {same signature, different scalars},
+    index     = {\tnval{periodic} returns each row to itself: the left
+                 picture is $\operatorname{Tr}\mathcal{E}_A^{2}$, the
+                 superoperator trace.  The cups tie ket to bra: the
+                 right picture is
+                 $\operatorname{Tr}[\mathcal{E}_A^{2}(\mathbf{1})]$
+                 --- the east cup feeds in $\mathbf{1}$, the west cup
+                 traces the output.  The scalars differ for generic
+                 $A$, yet both pictures log the all-zero line quoted
+                 above.},
+    signature = {boundary|virtual-west=0|virtual-east=0|physical-up=0|physical-down=0},
+    variants  = {{periodic}{periodic},
+                 {west=cup, east=cup}{west=cup, east=cup}},
+    label     = {ex:trace-vs-cup},
+  ]
+% two closures of one two-site sandwich: a trace returns each
+% row to ITSELF; a cup ties the ket row to the bra row.
+% Tr E_A^2 (left) and Tr[E_A^2(1)] (right) differ in general.
+\begin{tenkz}[sandwich, variant]
+  \tn{A} & \tn{A} \\
+  \tn*{A} & \tn*{A}
+\end{tenkz}
+\end{tnmultiples}
+
+\subsection{Invisible ink: ghosts and holes}
+
+\tncmd{tnghost} is invisible ink --- an anchor that draws nothing;
+Example~\ref{ex:fixed-point-check} used it to give a bare cup
+something to bend around.  As a hole it is a trap: a physical pairing
+that meets a ghost silently swallows the live partner's leg, so the
+package warns.  A hole is \tncmd{tnskip}: the \emph{tensor} is
+deleted, its \emph{indices} survive.
+
+\begin{tnexample}[
+    formula   = {\partial_{C}\,\langle\Theta(B)|\Theta(C)\rangle,
+                 \quad |\Theta(C)\rangle=A_L\cdots C\cdots A_R},
+    caption   = {a hole is a deleted tensor, not deleted ink},
+    index     = {The overlap window, differentiated: removing the ket
+                 tensor $C$ leaves the tensor multiplying it, so the
+                 middle ket site is a hole.  \tncmd{tnskip} keeps the
+                 hole's indices open --- no bond bridges the gap, and
+                 the $\overline{B}$ below keeps its upward leg: the
+                 three open ends are exactly $C$'s indices.  A
+                 \tncmd{tnghost} there would drop that leg and
+                 warn.},
+    label     = {ex:hole},
+  ]
+% a tangent-space overlap window (hard10 genre), derivative in
+% the middle ket tensor: the tensor is REMOVED -- \tnskip keeps
+% the hole's virtual stubs open and leaves the bra's physical
+% leg dangling
+\begin{tenkz}[rows={ket, bra}, tensor style=box]
+  \tn{A_L} & \tnskip & \tn{A_R}\\
+  \tn*{A_L} & \tn*{B} & \tn*{A_R}
+\end{tenkz}
+\end{tnexample}
+
+Everything the package refuses to guess, it says in the log, prefixed
+\tnlogline{Package tenkz Warning}.  Six diagnostics recur:
+
+\medskip
+\noindent
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{47mm}
+                             >{\raggedright\arraybackslash}X@{}}
+\toprule
+The log says & The fix \\
+\midrule
+\emph{a physical pairing meets a \tncmd{tnghost} cell \ldots\ the
+partner's leg is dropped} &
+A ghost is invisible ink, not a hole: write \tncmd{tnskip} when the
+site is an uncontracted hole; the partner's leg then stays open. \\
+\addlinespace
+\emph{\tnval{trace=\{(physical, c)\}} \ldots\ needs a tensor cell in a ket row with
+a tensor cell in the bra row directly below} &
+The per-site partial trace contracts a ket's physical index with its
+bra's, so the traced column needs both sites; the cell was left
+untraced. \\
+\bottomrule
+\end{tabularx}
+% the diagnostics table is set as two blocks so a page may break
+% between them
+\smallskip
+\noindent
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{47mm}
+                             >{\raggedright\arraybackslash}X@{}}
+\emph{\tnval{trace=physical} currently closes single-row pictures
+only} &
+The multi-row wrap (outermost up leg into outermost down leg) is on
+the roadmap; no trace ink was drawn.  Restrict the trace to a one-row
+picture. \\
+\addlinespace
+\emph{\tnenv{tenkzplanes} draws the ket-over-bra double layer only} &
+\tnkey{sheets=} beyond \tnval{ket, bra} is on the roadmap; the double
+layer was drawn instead. \\
+\addlinespace
+\emph{\tnval{frame=vertical} does not yet transform \ldots\ the
+construct is skipped} &
+The vertical frame covers plain chains, sandwiches, periodic
+closures, and labels; the rest is horizontal-only.  Rotate the
+figure's grammar, or keep the picture horizontal. \\
+\addlinespace
+\emph{unknown cell-set name \ldots\ in a \tncmd{tnregion} expression}
+(an error) &
+Named cell sets are introduced by \tnval{name=} on an \emph{earlier}
+\tncmd{tnregion} of the same picture; check the spelling and the
+order. \\
+\bottomrule
+\end{tabularx}
+\medskip
+
+\subsection{Crowded labels}
+
+The house doctrine reserves a band for every kind of label
+(\S\ref{ch:house}), but geometry can defeat the default metric.  The
+recurring case: a rail whose open legs point \emph{into} the
+inter-layer gap and, at the default gap, descend onto the lower
+rail's ink.  The fix is \tnkey{layer sep}, a per-picture factor on
+the gap --- not a global \tnkey{pitch} change, which would dilate
+everything.
+
+\begin{tnmultiples}[
+    formula   = {A^{s_1}\!\cdots A^{s_n}\,\rho^R\,
+                 \bigl(A^{s'_1}\!\cdots A^{s'_n}\bigr)^{\dagger}},
+    caption   = {legs into the gap need a wider gap},
+    index     = {Both rails' legs point down
+                 (\tnval{rows=\{bra, bra\}}), so the upper rail's
+                 leg-tip labels descend into the inter-layer gap and,
+                 at the default gap, lose their clearance band.
+                 \tnval{layer sep=2} doubles this picture's gap and
+                 nothing else; the east bend carries the right fixed
+                 point $\rho^R$, the west pair stays open.},
+    variants  = {{default}{}, {layer sep=2}{layer sep=2}},
+    label     = {ex:layer-sep},
+  ]
+% both rails down (hard03 a2 orientation): the upper rail's
+% legs descend INTO the gap; layer sep=2 restores the label
+% band that the default gap denies them
+\begin{tenkz}[rows={bra, bra}, east={cup=$\rho^R$}, variant]
+  \tn[down=$s_1$]{} & \tndots & \tn[down=$s_n$]{}\\
+  \tn*[down=$s'_1$]{} & \tndots & \tn*[down=$s'_n$]{}
+\end{tenkz}
+\end{tnmultiples}
+
+For a single offending label, \tnkey{label pos} and
+\tnkey{label shift} move an atom's name within its cell, and
+\tnkey{no legs} silences a site whose legs carry no information.
+When a whole picture is too tight for its column, prefer
+\tnkey{compact} (one fixed smaller metric) over hand-tuned
+\tnkey{pitch} values.
+
+\subsection{Syntax traps}
+
+% long unbreakable key tokens: let these lists breathe
+\begin{itemize}\emergencystretch=3em\itemsep=2pt\parsep=2pt
+\item \textbf{Brace the value.}  Any key value containing a comma or
+  an equals sign must be braced: \tnval{rows=\{ket:nopair, bra\}},
+  \tnval{east=\{cup=$\rho^R$\}};
+  \tnval{trace=\{(physical, 2-3)\}} keeps its braces ---
+  the value carries a comma of its own.
+\item \textbf{Conjugation is the star.}  The bra-layer glyph is
+  \tncmd{tn*}; there is no \tnval{conj} key, and forgetting the star
+  leaves both layers un-conjugated with no warning: conjugation does
+  not change the counts, so the signature cannot catch it.
+\item \textbf{\tncmd{tnghost} takes an argument.}  Write
+  \tnval{\tncmd{tnghost}\{\}}; without the empty braces it swallows
+  the next token in the row.
+\end{itemize}
+
+\subsection{The roadmap}
+
+What the notation cannot yet draw: near-term items have designed
+spellings, horizon items are design work.
+
+\paragraph{Near term.}
+\begin{itemize}\emergencystretch=3em\itemsep=2pt\parsep=2pt
+\item \emph{Per-side row boundaries.}  A circuit applied to a fixed
+  input state is sealed west and open east, but \tnval{:open} and
+  \tnval{:none} treat \emph{both} ends of a row at once; the planned
+  key is \tnval{west boundary=none}.
+\item \emph{The identity strand.}  The tangent-space projector's
+  summand $P_L^{(i-1)}\otimes\mathbf{1}_i\otimes P_R^{(i+1)}$ needs a
+  bare vertical wire at site $i$; every piece of \pkg{} ink anchors
+  on a glyph, so $\mathbf{1}_i$ is today carried by algebra, not ink.
+\item \emph{Fused tall capsules.}  A gauge capsule spanning ket and
+  bra (\tnval{wires=2}) whose wire pair should continue as \emph{one}
+  combined stub; \tnkey{combined=} lives on \tncmd{tnfuse} only.
+\item \emph{Mirrored triangles.}  \tnkey{tri=} draws one orientation;
+  the mirror, needed for reflected canonical-form identities, is
+  pending.
+\item \emph{The vertical frame's missing passes.}  Cups, physical
+  traces, braces, cuts, and bond labels still assume the horizontal
+  frame; a vertical picture warns and skips them.
+\end{itemize}
+
+\paragraph{The horizon.}
+Inter-sheet closures --- $\langle\Psi|\Psi\rangle$ of a PEPS as one
+picture, the two-dimensional analogue of \tnkey{west=cup}; an
+operator sheet between ket and bra (\tnkey{sheets=} today stops at
+\tnval{ket, bra}); physical-leg arrows and directed signatures ---
+the $V$-versus-$V^{*}$ mark that graded and fermionic networks need,
+on the leg and in the boundary line; the splitting glyph, the mirror
+of \tncmd{tnfuse} and the zipper identity's missing right-hand side;
+\tncmd{tndefine}, binding a name to a glyph and its default legs
+once per document; and the web pipeline: the \tnfile{.tnlog} stream
+rendered as SVG, these diagrams on web pages without \TeX.
+
+Until then the discipline of this manual holds on its own: state the
+formula, draw the ink, and read the signature back.

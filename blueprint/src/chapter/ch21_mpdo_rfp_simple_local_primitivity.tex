@@ -168,15 +168,35 @@
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOLocalOrthogonality
+    \[
+        P_j\mathcal K_iP_{j^\prime}=0\quad\text{unless }i=j=j^\prime
+    \]
+    \begin{center}
+        % P_j K_i P_{j'} = 0 unless i=j=j': the sector-projector sandwich of a
+        % BNT element K_i.  Three `op' rows compose vertically: P_j's own down
+        % leg pairs with K_i's up leg, and K_i's down leg pairs with P_{j'}'s
+        % up leg, so only P_j's north stub and P_{j'}'s south stub survive --
+        % the matrix-product indices of P_j K_i P_{j'}.  Sealing the outer
+        % rows' sides (op:none) removes their own west/east stubs, leaving
+        % K_i's west/east open as the only horizontal legs.  Boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1);
+        % the right-hand side 0 is the zero element of the same matrix space,
+        % written as plain text since it carries no ink of its own.
+        \begin{tenkz}[rows={op:none, op, op:none}]
+            \tn[mpo]{P_j} \\
+            \tn[mpo]{\mathcal K_i} \\
+            \tn[mpo]{P_{j^\prime}}
+        \end{tenkz}
+        $\;=\;0\quad\text{unless }i=j=j^\prime$
+    \end{center}
     \caption{The local-orthogonality contraction of
     \cite[Appendix~C.2, lines~1457--1470]{Cirac2016MPDO_arXiv}.  After
     decomposing the sector trace matrix into primitive components, the source
     assumes that two components occur, obtains two locally orthogonal
-    summands, and chooses orthogonal projectors $P_1$ and $P_2$.  The first
-    two diagrams give the cross contractions
-    $P_1{\cal K}P_2=P_2{\cal K}P_1=0$, while the corresponding two-site
-    contraction in the last diagram also vanishes.  For
+    summands, and chooses orthogonal projectors $P_1$ and $P_2$.  The
+    displayed identity gives the cross contractions
+    $P_1{\cal K}P_2=P_2{\cal K}P_1=0$, and the corresponding two-site
+    contraction also vanishes.  For
     ${\cal A}_i=\spn\{\tr(XP_i{\cal K}P_i):X\}$, these vanishings and
     injectivity imply
     ${\cal A}_1+{\cal A}_2=\MN{D}$ and

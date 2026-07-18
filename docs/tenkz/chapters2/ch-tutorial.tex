@@ -1,0 +1,328 @@
+% chapters2/ch-tutorial.tex — the tutorial: the benchmark corpus B1–B8
+% rebuilt formula-first on the 0.5 boundary doctrine.
+%
+% Sources: the corrected acceptance corpus (part_B1..B8, boundary_test,
+% channel_test, pentagon_corrected).  Every diagram keeps the default
+% open boundary — stubs are matrix indices — and every printed equation
+% has matching boundary signatures on its two sides; the one identity
+% that cannot yet satisfy that rule (the zipper) is shown one-sided and
+% deferred to the roadmap.
+\section{Tutorial}\label{ch:tutorial}
+
+The tutorial assembles a working vocabulary one declaration at a time:
+a chain, an equation, a sandwich, a cup, a blocked word, a fused pair,
+a lattice window, a pentagon, a picture inside a sentence.  Each
+concept is stated as mathematics before it is typed as source, built
+from the package's benchmark corpus B1--B8; the dictionary of
+\S\ref{ch:mathematics} fixes what the ink means, and where that
+chapter has already drawn a concept's canonical picture the tutorial
+points there instead of re-drawing it, spending its own ink on what
+is new.  It ends where the dictionary begins, with one chain closed
+three ways.
+
+% ---------------------------------------------------------------------
+\subsection{One row: sites, wires, stubs}\label{sec:tut-row}
+
+A picture is a grid whose rows are layers and whose columns are sites:
+\verb|&| moves one site east, \verb|\\| one layer down, and adjacent
+cells in a row contract implicitly --- the wire between two tensors is
+their summed virtual index.  \tnkey{physical=up} types the row as a
+ket layer, growing an upward leg on every site, labelled at its tip by
+the \tnkey{up} cell key.  The ends of the wire stay open by default
+and render as protruding stubs: the row and column indices of the
+matrix word.  \tnkey{west label} and \tnkey{east label} name them at
+their tips, and \tnkey{bond label} names one addressed bond.
+
+\begin{tnexample}[
+    formula   = {\bigl(A^{i_1}A^{i_2}A^{i_3}\bigr)_{\alpha\beta}},
+    caption   = {a three-site matrix-product word},
+    index     = {Dots are sites; the wire through them is the
+                 contracted virtual index, with the bond $1$--$2$
+                 carrying the dimension label $D$.  The stubs are the
+                 open matrix indices, named $\alpha$, $\beta$ at their
+                 tips; each up leg carries one physical index.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=3|physical-down=0},
+    label     = {ex:tut-chain},
+  ]
+% (A^{i_1} A^{i_2} A^{i_3})_{alpha beta}: one matrix per
+% site; the wire is the summed virtual index, the stubs are
+% the open matrix indices alpha, beta
+\begin{tenkz}[physical=up, west label=$\alpha$,
+              east label=$\beta$, bond label={$D$ at 1-2}]
+  \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[up=$i_3$]{A}
+\end{tenkz}
+\end{tnexample}
+
+The source of Example~\ref{ex:tut-chain} contains no coordinate, no
+anchor, no offset: leg-tip, bond, and boundary labels sit in reserved
+bands computed from the metric, so they clear the ink at every pitch
+and under every glyph policy (\S\ref{ch:modes}).
+
+% ---------------------------------------------------------------------
+\subsection{Equations on the wire axis}\label{sec:tut-axis}
+
+Every picture is a math atom whose wire axis is pinned to the math
+axis of the surrounding formula, so \texttt{=}, $\otimes$, $\sum$, and
+stretchy parentheses compose pictures with no glue commands.  The
+gauge equation of Example~\ref{ex:gauge-eq} is typed exactly that
+way: two \tnenv{tenkz} pictures around a bare \verb|=| inside display
+math, wires and equals sign collinear because each picture behaves as
+one math atom.  \tncmd{tnX} sets a matrix \emph{on} the wire --- a
+capsule of pinned height, so $X$ and $X^{-1}$ render at the same size
+--- and adds no legs, which is what keeps the equation well-formed:
+both sides write the same boundary signature, and diffing the two
+\tnfile{.tnlog} lines is the mechanical half of checking a
+diagrammatic equation (\S\ref{sec:signatures}).
+
+% ---------------------------------------------------------------------
+\subsection{Typed rows and the sandwich}\label{sec:tut-layers}
+
+Multi-layer pictures are typed, not drawn: \tnkey{rows=\{ket, op,
+bra\}} declares a state layer, an operator layer, a conjugate state
+layer, and facing legs pair automatically, column by column; only the
+outermost legs stay open.  The starred cell \tncmd{tn*} is the
+conjugate tensor, its label overlined.  The two-layer case earns its
+own word --- \tnkey{sandwich} abbreviates \tnval{rows=\{ket, bra\}}
+--- and the transfer map of Example~\ref{ex:transfer-open} is its
+canonical inhabitant: ket over bra, the paired physical legs the
+summed index $i$, all four virtual stubs open, because a map on the
+doubled space is a matrix.  The picture draws no dagger, although the
+formula it denotes, $\mathcal{E}_A(X)=\sum_i A^{i}XA^{i\dagger}$,
+contains one: the star is ink, the transpose is reading order --- the
+arrow-free convention of \S\ref{sec:conjugate}.
+
+% ---------------------------------------------------------------------
+\subsection{Cups: closing one side}\label{sec:tut-cups}
+
+A cup ties the ends of two adjacent rows into a single bend:
+\tnkey{west=cup} on the left, \tnkey{east=cup} on the right, and
+an optional braced argument sets a matrix on the bend's apex.  One
+cup turns the unapplied transfer map into the applied channel of
+Example~\ref{ex:channel-x}: \tnval{east=\{cup=$X$\}} added to the
+sandwich and nothing else, the east bend consuming the input slot.
+The west pair must stay open: closing that side as well would draw
+the scalar $\operatorname{Tr}\mathcal{E}_A(X)$.  A bare cup is the
+identity on its open pair (Example~\ref{ex:ortho-cup}); with a fixed
+point on the apex, as in \tnval{east=\{cup=$\rho^R$\}}, the same
+construction draws the fixed-point equations and reduced density
+matrices of \S\ref{ch:rmp}.\sidenote{Boundary policy is per-row too:
+\tnval{rows=\{op:open, ket:none\}} keeps an operator row's virtual
+indices open above a sealed state row.  \S\ref{ch:reference} lists the
+row modifiers.}
+
+% ---------------------------------------------------------------------
+\subsection{Blocking: braces, ellipses, wide glyphs}\label{sec:tut-block}
+
+Blocking $L$ sites into one is three devices in a single source:
+\tncmd{tnspan} sets a brace over a run of columns starting at the
+current cell, \tncmd{tndots} is the ellipsis cell that interrupts the
+wire without closing it, and a \tnkey{wide=2} \tnkey{pill} glyph spans
+two columns, growing sideways --- never taller --- to hold the blocked
+label.
+
+\begin{tnexample}[
+    formula   = {\bigl(A^{(L)}\bigr)^{i_1\cdots i_L}
+                 = A^{i_1}\!\cdots A^{i_L}},
+    caption   = {blocking $L$ sites into one},
+    index     = {The brace spans the four columns of the word;
+                 \tncmd{tndots} interrupts the wire without closing
+                 it.  Under an ellipsis the drawn leg count is
+                 schematic: the left picture logs three up legs, the
+                 pill logs one wide leg standing for the whole
+                 $L$-tuple, so this is the one equation whose
+                 signatures are compared by eye, not by diff.},
+    label     = {ex:tut-block},
+  ]
+% (A^{(L)})^{i_1...i_L} = A^{i_1} ... A^{i_L}: the brace and
+% the ellipsis keep the site count schematic; the pill spans
+% two columns and carries the blocked physical index
+\[
+  \begin{tenkz}[physical=up]
+    \tn[up=$i_1$]{A}\tnspan[brace below]{4}{L\text{ copies}} &
+    \tn[up=$i_2$]{A} & \tndots & \tn[up=$i_L$]{A}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[physical=up]
+    \tn[pill, wide=2, up={$i_1\cdots i_L$}]{A^{(L)}}
+  \end{tenkz}
+\]
+\end{tnexample}
+
+% ---------------------------------------------------------------------
+\subsection{Fusing two wires into one}\label{sec:tut-fuse}
+
+An MPO acting on an MPS leaves two virtual wires on each side of the
+window; the fusing wedge \tncmd{tnfuse} merges such a pair into one
+combined index.  The wedge spans its own row and the next, and its
+combined leg --- leaving west by default --- is \emph{one} open index:
+a fuse consumes its side's boundary pair.
+
+\begin{tnexample}[
+    formula   = {\begin{aligned}[t]
+                   &V\,T^{s_1}\!\cdots T^{s_n},\\
+                   &T^{s}=\textstyle\sum_{s'}O^{ss'}\!\otimes A^{s'}
+                 \end{aligned}},
+    caption   = {the fusing wedge},
+    index     = {Each column is the composite tensor $T^{s}$ on the
+                 paired virtual space: the op row's down legs pair
+                 into the ket row's up legs, and the open up legs are
+                 the physical indices.  The single stroke leaving the
+                 wedge west is the combined index --- one open leg
+                 where the pair entered.},
+    signature = {boundary|virtual-west=1|virtual-east=2|physical-up=2|physical-down=0},
+    label     = {ex:tut-fuse},
+  ]
+% V T^{s_1} ... T^{s_n} with T^s = sum_{s'} O^{s s'} (x) A^{s'}:
+% the wedge V consumes the west pair; its combined leg is one
+% open index
+\begin{tenkz}[rows={op, ket}]
+  \tnfuse[span=2]{V} &
+  \tn[mpo]{O}\tnspan[brace above]{3}{n} &
+  \tndots & \tn[mpo]{O} \\
+  & \tn{A} & \tndots & \tn{A}
+\end{tenkz}
+\end{tnexample}
+
+\tnkey{combined=east} mirrors the wedge for the other end of a chain.
+What the wedge cannot yet do is stand on both sides of the zipper
+(pulling-through) identity: the identity's right-hand side needs the
+mirror-image \emph{splitting} glyph, one combined bond opening back
+into its pair.  Until that glyph exists, the two mirrored spellings
+log mirrored signatures --- one combined stub west against one
+combined stub east --- and may not face each other across an equals
+sign.  The splitting glyph is on the roadmap
+(\S\ref{ch:trouble}).
+
+% ---------------------------------------------------------------------
+\subsection{The lattice window}\label{sec:tut-lattice}
+
+Region schematics over a lattice window are cell-set data, never
+hand-traced polygons: \tncmd{tnregion} takes a set expression built
+from rectangles, singletons, registered names, and $+$/$-$ for union
+and difference, and the tracer computes the rectilinear boundary ---
+notches, holes, interior loops --- from the member sites.  Regions
+bind to semantic slots that carry document-wide colours, so ``the
+selected region'' looks the same in every figure.
+
+\begin{tnexample}[
+    formula   = {S = R\smallsetminus\{(2,2)\}},
+    caption   = {a window, a region, a hole},
+    index     = {\tnval{slot=selected} fills $R=(1$--$3)\times
+                 (1$--$3)$; \tnval{secondary} with \tnkey{outline}
+                 traces $S$, acquiring an interior loop around the
+                 removed site.  The rim legs are the virtual indices
+                 the window cuts; one distinguished edge is marked.},
+    label     = {ex:tut-lattice},
+  ]
+% R = (1-3, 1-3); S = R minus (2,2): the tracer computes the
+% outer boundary and the interior loop around the hole;
+% boundary legs mark the bonds the window cuts
+\begin{tenkzlattice}[rows=4, cols=4, boundary legs]
+  \tnregion[slot=selected,  name=R, label=$R$]{(1-3, 1-3)}
+  \tnregion[slot=secondary, outline, label=$S$,
+            label at=south west]{R - (2,2)}
+  \tnedge[distinguished]{(2,3)-(2,4)}
+  \tnsite[removed]{(2,2)}
+\end{tenkzlattice}
+\end{tnexample}
+
+% ---------------------------------------------------------------------
+\subsection{Fusion trees and the pentagon}\label{sec:tut-cd}
+
+Commutative diagrams are not contractions, so they live in their own
+environment.  In \tnenv{tenkzcd}'s polygon mode, \tnkey{polygon=5}
+sets five cells on a circle, vertex $1$ on top, clockwise;
+\tncmd{tntree} builds a fusion tree from a parenthesised word whose
+subscripts are the internal charges; \tncmd{tnarrow} draws a labelled
+arrow between vertices, and the starred form sets its label on the
+arrow's other side.
+
+\begin{tnexample}[
+    formula   = {\begin{aligned}[t]
+                   &\textstyle\sum_{u}
+                    \bigl[F^{abc}_{y}\bigr]_{xu}
+                    \bigl[F^{aud}_{e}\bigr]_{yw}\\
+                   &\hspace{2.1em}\times
+                    \bigl[F^{bcd}_{w}\bigr]_{uv}\\
+                   &=\bigl[F^{xcd}_{e}\bigr]_{yv}
+                     \bigl[F^{abv}_{e}\bigr]_{xw}
+                 \end{aligned}},
+    caption   = {the pentagon},
+    index     = {Each \tncmd{tntree} word is one association of
+                 $a,b,c,d$ fusing to $e$; the subscripts $x=ab$,
+                 $y=abc$, $u=bc$, $w=bcd$, $v=cd$ are the internal
+                 charges.  The two arrow paths from vertex $1$ to
+                 vertex $4$ compose to the same map, with the sum
+                 over $u$ running along the three-move path.},
+    label     = {ex:tut-pentagon},
+  ]
+% pentagon for a,b,c,d -> e; internal charges x=ab, y=abc,
+% u=bc, w=bcd, v=cd; the two F-move paths from vertex 1 to
+% vertex 4 agree, with a sum over u on the three-move path
+\begin{tenkzcd}[polygon=5, radius=32mm]
+  \tntree{(((a\,b)_x\,c)_y\,d)_e} &
+  \tntree{((a\,(b\,c)_u)_y\,d)_e} &
+  \tntree{(a\,((b\,c)_u\,d)_w)_e} &
+  \tntree{(a\,(b\,(c\,d)_v)_w)_e} &
+  \tntree{((a\,b)_x\,(c\,d)_v)_e}
+  \tnarrow[from=1, to=2]{F^{abc}_y}
+  \tnarrow[from=2, to=3]{F^{aud}_e}
+  \tnarrow[from=3, to=4]{F^{bcd}_w}
+  \tnarrow*[from=1, to=5]{F^{xcd}_e}
+  \tnarrow*[from=5, to=4]{F^{abv}_e}
+\end{tenkzcd}
+\end{tnexample}
+
+The tree is its word: \verb|(((a\,b)_x\,c)_y\,d)_e| says fuse $a$ with
+$b$ into $x$, then with $c$ into $y$, then with $d$ into the total
+charge $e$.  Every $F$-symbol slot holds a simple charge --- the mixed
+slots carry $x$, $u$, $v$, never a composite label like
+$bc$.\sidenote{Conventions of arXiv:1511.08090, eq.~(33): fused
+charges up, total charge down, the $F$-move mapping the
+left-associated tree to the right-associated one.}
+
+% ---------------------------------------------------------------------
+\subsection{A picture in a sentence}\label{sec:tut-inline}
+
+\tncmd{tnpic} is the command form of the environment --- the same
+grammar, the same keys --- and its \tnkey{inline} profile tightens the
+metric enough to sit inside running mathematics:
+
+\begin{tnexample}[
+    formula   = {X\succeq 0\;\Rightarrow\;\mathcal{E}_A(X)\succeq 0},
+    caption   = {a picture in running math},
+    index     = {The \tnkey{inline} profile shrinks the pitch,
+                 shortens the legs faster than the pitch, and
+                 tightens the label bands to spare the line height.
+                 The summand is the unapplied sandwich: four stubs,
+                 a map.},
+    signature = {boundary|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0},
+    label     = {ex:tut-inline},
+  ]
+% each summand of E_A is the congruence X -> A^i X (A^i)^dagger
+Positivity is termwise: since
+$\mathcal{E}_A(X)=\sum_{i}\,
+ \tnpic[sandwich, inline]{\tn{A^i} \\ \tn*{A^i}}\,(X)$,
+each summand is a congruence, and a sum of congruences
+preserves positivity.
+\end{tnexample}
+
+% ---------------------------------------------------------------------
+\subsection{One chain, three closures}\label{sec:tut-closures}
+
+The vocabulary can now say precisely what the tutorial's first chain
+denotes --- three different objects, depending on nothing but its
+boundary key.  Example~\ref{ex:read-closures} ran the gallery over a
+two-site word, and the same three closures apply verbatim to the
+chain of Example~\ref{ex:tut-chain}: \tnval{boundary=open} keeps the
+matrix word $(A^{i_1}A^{i_2}A^{i_3})_{\alpha\beta}$,
+\tnval{boundary=none} seals it into one number $c_{i_1i_2i_3}$ per
+configuration, and \tnval{periodic} returns the wire to itself ---
+the trace $\operatorname{Tr}\bigl(A^{i_1}A^{i_2}A^{i_3}\bigr)$.
+Nothing but the boundary key changes, and with it the object.
+
+From here the manual forks: \S\ref{ch:worked} composes this vocabulary
+into expectation-value windows and multi-layer identities,
+\S\ref{ch:modes} varies the glyph and metric systems over fixed
+sources, and \S\ref{ch:reference} lists every environment, command,
+and key.

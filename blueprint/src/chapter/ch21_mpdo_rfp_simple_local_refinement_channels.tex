@@ -147,10 +147,52 @@ the sitewise sector coordinates $\mathfrak R_2$ and $\mathfrak R_3$
 
 \begin{figure}[ht]
     \centering
-    \TNMPDORefinementConstruction
+    \[
+        \mathfrak R_2\xrightarrow{\mathcal T_0}L_k\otimes R_h
+        \xrightarrow{\mathcal T_1}(L_k\otimes R_h)\otimes\Omega_{k,h}
+        \xrightarrow{\mathcal T_2}\mathfrak R_3
+    \]
+    \begin{center}
+        % R_2 --T_0--> L_k tensor R_h --T_1--> (L_k tensor R_h) tensor
+        % Omega_{k,h} --T_2--> R_3.  Objects are the typed sector spaces of
+        % Appendix C.2 (arXiv:1606.00608, lines 1510-1516 and 1522-1545),
+        % not tensor legs, so this is a commutative-diagram (cd) picture,
+        % not a tensor-network contraction -- matching the abstract
+        % composite T = T_2 T_1 T_0 of MPDO_TMatrix.png, not the tensor
+        % rows it also draws.  T_0 traces the neighbouring subspins R_k
+        % tensor L_h from the two-site sector space, landing on the
+        % retained outer factors L_k tensor R_h.  T_1 adjoins the
+        % completed three-site neighbouring density Omega_{k,h} on the
+        % active/zero-weight sector.  T_2 reorders the six subspins into
+        % the three-site sector space R_3.
+        \begin{tenkzcd}[column sep=large]
+            \mathfrak R_2 \arrow[r, "\mathcal T_0"] &
+            L_k\otimes R_h \arrow[r, "\mathcal T_1"] &
+            (L_k\otimes R_h)\otimes\Omega_{k,h} \arrow[r, "\mathcal T_2"] &
+            \mathfrak R_3
+        \end{tenkzcd}
+    \end{center}
 
     \medskip
-    \TNMPDORefinementDirection
+    \[
+        \mathfrak R_2({\cal K}_2(X))\xrightarrow{\mathcal T}\mathfrak R_3({\cal K}_3(X))
+    \]
+    \begin{center}
+        % R_2(K_2(X)) --T--> R_3(K_3(X)): the refinement half of
+        % MPDO_TSKKK.png (arXiv:1606.00608 / CPSV16, Appendix C.2, eq.
+        % (3to5tcpm), lines~1510--1516, and Prop. C.7). Genre: cd -- both
+        % R_2(K_2(X)) and R_3(K_3(X)) are already-closed matrices (no
+        % open legs survive the sector-coordinate embedding), so the
+        % identity is a labelled arrow between two objects, not a tensor
+        % contraction. The arrow label T is the refinement channel
+        % T = T_2 T_1 T_0 of Definition~\ref{def:mpdo_physical_sector_t_map};
+        % the closure identity itself (T applied equals the closure) is
+        % Theorem~\ref{thm:mpdo_physical_sector_t_closure_identity}.
+        \begin{tenkzcd}
+            \mathfrak R_2({\cal K}_2(X)) \arrow[r, "\mathcal T"] &
+            \mathfrak R_3({\cal K}_3(X))
+        \end{tenkzcd}
+    \end{center}
     \caption{The refinement channel
     $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$ in physical-sector
     coordinates.}
@@ -963,11 +1005,13 @@ $\widehat{\cal K}$.
 
 \begin{figure}[htbp]
     \centering
-    \TNMPDOPhysicalIsometryTransport
-    \caption{Physical-isometry transport of the blocked channels. The
-    downward arrows conjugate the ket and bra indices by $U^{\otimes n}$ and
-    $(U^\dagger)^{\otimes n}$; the upward arrows give the inverse
-    conjugations. Hence the lower sector-coordinate channels induce the upper
+    \[
+        U^{\otimes4}\widehat{\mathcal T}^{\,2}(U^\dagger)^{\otimes2}=\mathcal T,\qquad
+        U^{\otimes2}\widehat{\mathcal S}^{\,2}(U^\dagger)^{\otimes4}=\mathcal S
+    \]
+    \caption{Physical-isometry transport of the blocked channels. Conjugating
+    the ket and bra indices by the tensor powers $U^{\otimes n}$ and
+    $(U^\dagger)^{\otimes n}$ carries the sector-coordinate channels to the
     ordinary-coordinate channels. This combines Proposition~C.7 with
     \cite[Appendix~C.2, lines~1510--1563 and 1821--1825]
     {Cirac2016MPDO_arXiv}.}

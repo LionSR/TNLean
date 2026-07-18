@@ -1,0 +1,409 @@
+% tenkzmanual2.sty — typographic system for the tenkz manual, second edition.
+%
+% Loaded by docs/tenkz/manual2.tex only.  The page is an asymmetric grid:
+% a 112 mm text column and a 50 mm margin column.  Mathematics lives in the
+% margin column, beside the diagram it describes; the diagram itself is the
+% primary object and is set first; the source that produced it follows in a
+% quiet block.  Every example is live-compiled: the body of a tnexample or
+% tnmultiples environment is written verbatim to an auxiliary file and read
+% back, so the rendered output is produced by the exact source shown.  If an
+% example stops compiling, the manual stops compiling.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tenkzmanual2}[2026/07/17 v2.0 tenkz manual second-edition typography]
+
+% ---------------------------------------------------------------------------
+%  Page grid (Tufte-lite, one-sided; margin column on the right)
+% ---------------------------------------------------------------------------
+\RequirePackage[a4paper,
+  left=20mm, textwidth=112mm,
+  marginparsep=7mm, marginparwidth=50mm,
+  top=25mm, bottom=30mm, headsep=7mm, head=14pt]{geometry}
+
+\RequirePackage{amsmath, amssymb}
+\RequirePackage{booktabs, array, tabularx, multicol}
+\RequirePackage{fancyvrb}
+\RequirePackage{needspace}
+\RequirePackage{fancyhdr}
+\RequirePackage{marginnote}
+\RequirePackage{tenkz}
+
+% full measure = text column + gutter + margin column (for hero rows,
+% wide diagrams, and the quick-reference card)
+\newlength{\mfullwidth}
+\AtBeginDocument{%
+  \setlength{\mfullwidth}{\dimexpr\textwidth+\marginparsep+\marginparwidth\relax}}
+
+% ---------------------------------------------------------------------------
+%  Palette (bound to the package's semantic hues)
+% ---------------------------------------------------------------------------
+\colorlet{mcmd}{tenkzMarked}          % command names
+\colorlet{mkey}{tenkzExtra}           % key names, sidenote numbers
+\definecolor{mrule}{gray}{0.60}       % example-unit rules
+\definecolor{msrcrule}{gray}{0.78}    % source-block left rule
+\definecolor{mquiet}{gray}{0.35}      % de-emphasised text
+\definecolor{mtag}{gray}{0.13}        % thumb-tags
+
+% ---------------------------------------------------------------------------
+%  Metrics (vertical rhythm of the example unit, panel spacing)
+% ---------------------------------------------------------------------------
+% \baselineskip- and em-relative values must be evaluated where they are
+% used, so these are macros rather than lengths
+\newcommand*{\mtwo@unitsep}{0.62\baselineskip}  % space above/below a unit
+\newcommand*{\mtwo@unitseam}{0.3\baselineskip}  % rule/caption/diagram/source seams
+\newcommand*{\mtwo@panelsep}{2.2em}             % gap between small-multiples panels
+\newcommand*{\mtwo@panellabelsep}{4pt}          % panel-to-variant-label gap
+
+% ---------------------------------------------------------------------------
+%  Margin apparatus: sidenotes, margin formulas, thumb-tags
+% ---------------------------------------------------------------------------
+\renewcommand*{\marginfont}{\footnotesize\normalfont\raggedright}
+
+% numbered sidenotes, numbers restart with each section
+\newcounter{sidenote}[section]
+\renewcommand*{\theHsidenote}{\arabic{section}.\arabic{sidenote}}
+\newcommand*{\msidemark}{\textsuperscript{\textcolor{mkey}{\arabic{sidenote}}}}
+% margin text opened by its sidenote number (shared by \sidenote and the
+% example unit's margin block)
+\newcommand{\mtwo@sidenotetext}[1]{\msidemark\hspace{0.3em}#1}
+% \sidenote{<text>} — superscript mark here, numbered note in the margin
+\newcommand{\sidenote}[1]{%
+  \refstepcounter{sidenote}\msidemark
+  \marginnote{\mtwo@sidenotetext{#1}}}
+
+% display-style formula at margin size (shared by \marginformula and the
+% example unit's margin block)
+\newcommand{\mtwo@displayformula}[1]{\footnotesize$\displaystyle #1$}
+% \marginformula{<math, no dollar signs>} — a display-style formula in the
+% margin column, anchored at the current line
+\newcommand{\marginformula}[1]{%
+  \marginnote{\mtwo@displayformula{#1}}}
+
+% \thumbtag[<voffset>]{<text>} — a reference thumb-tag, flush toward the
+% outer edge; place one at each reference entry (typically
+% \thumbtag{\textbackslash tn} or \thumbtag{boundary=}).  The optional
+% vertical offset shifts the tag down past a neighbouring margin block
+% when the two would share a line.
+% neutralise coloured markup inside tags: tags are white-on-dark
+\newcommand{\mtwo@tagreset}{%
+  \def\tncmd##1{\texttt{\char`\\##1}}%
+  \def\tnkey##1{\texttt{##1}}%
+  \def\tnenv##1{\texttt{##1}}}
+\newcommand{\thumbtag}[2][0pt]{%
+  \marginnote{\makebox[\linewidth][r]{%
+    \setlength{\fboxsep}{3.5pt}%
+    \colorbox{mtag}{\color{white}\mtwo@tagreset
+      \ttfamily\footnotesize\vphantom{gj\textbackslash}#2}}}[#1]}
+
+% \tnlogline{<line>} — one line of a .tnlog event stream, for quoting
+% boundary signatures inside sidenotes
+\newcommand{\tnlogline}[1]{{\ttfamily\scriptsize #1}}
+
+% ---------------------------------------------------------------------------
+%  Inline markup
+% ---------------------------------------------------------------------------
+\newcommand{\meta}[1]{{\normalfont\itshape$\langle$#1$\rangle$}}
+\newcommand{\tncmd}[1]{\textcolor{mcmd}{\texttt{\char`\\#1}}}
+\newcommand{\tnkey}[1]{\textcolor{mkey}{\texttt{#1}}}
+\newcommand{\tnval}[1]{\texttt{#1}}
+\newcommand{\tnenv}[1]{\textcolor{mcmd}{\texttt{#1}}}
+\newcommand{\tnfile}[1]{\texttt{#1}}
+
+% ---------------------------------------------------------------------------
+%  Reference apparatus
+% ---------------------------------------------------------------------------
+% the thin grey rule that frames example units and command signatures
+\newcommand*{\mtwo@thinrule}{{\color{mrule}\hrule height 0.5pt}}
+
+% \cmdsig{<signature>} — the usage line of a command or environment,
+% set between two thin rules
+\newcommand{\cmdsig}[1]{%
+  \par\addvspace{0.52\baselineskip}%
+  \mtwo@thinrule
+  \nobreak\vspace{0.28\baselineskip}%
+  {\noindent\ttfamily #1\par}%
+  \nobreak\vspace{0.28\baselineskip}%
+  \mtwo@thinrule
+  \par\addvspace{0.32\baselineskip}\noindent\ignorespaces}
+
+% \whynote{<text>} — the "why a command and not a key?" design note,
+% set as a sidenote beside the entry it explains
+\newcommand{\whynote}[1]{\sidenote{\textit{Why a command, not a key?}\ #1}}
+
+% header row for per-key tables
+\newcommand{\keyhead}{\normalfont Key & Values & Default & Meaning \\ \midrule}
+
+% ---------------------------------------------------------------------------
+%  Full-measure block (hero rows, wide diagrams)
+% ---------------------------------------------------------------------------
+% material between \mtwo@beginfullbox and \mtwo@endfullbox is boxed at the
+% full measure and hung from the text column's left edge, overhanging the
+% margin column (shared by fullwidth, wide example output, quickrefcard)
+\newsavebox{\mfwbox}
+\newcommand{\mtwo@beginfullbox}{%
+  \begin{lrbox}{\mfwbox}\begin{minipage}{\mfullwidth}}
+\newcommand{\mtwo@endfullbox}{%
+  \end{minipage}\end{lrbox}\makebox[\textwidth][l]{\usebox{\mfwbox}}}
+
+\newenvironment{fullwidth}
+  {\par\addvspace{0.8\baselineskip}\noindent\mtwo@beginfullbox}
+  {\mtwo@endfullbox\par\addvspace{0.8\baselineskip}}
+
+% ---------------------------------------------------------------------------
+%  The example unit
+% ---------------------------------------------------------------------------
+% Shared key family for tnexample and tnmultiples.
+\ExplSyntaxOn
+\box_new:N \l_mtwo_panel_box
+\box_new:N \l_mtwo_panellab_box
+\dim_new:N \l_mtwo_panel_dim
+\tl_new:N  \l_mtwo_sigbreak_tl
+\tl_new:N  \l_mtwo_formula_tl
+\tl_new:N  \l_mtwo_caption_tl
+\tl_new:N  \l_mtwo_index_tl
+\tl_new:N  \l_mtwo_signature_tl
+\tl_new:N  \l_mtwo_label_tl
+\tl_new:N  \l_mtwo_variants_tl
+\bool_new:N \l_mtwo_wide_bool
+\bool_new:N \l_mtwo_source_bool
+\bool_new:N \l_mtwo_first_bool
+\clist_new:N \l_mtwo_variants_clist
+
+\keys_define:nn { mtwo / unit }
+  {
+    formula   .tl_set:N   = \l_mtwo_formula_tl,
+    caption   .tl_set:N   = \l_mtwo_caption_tl,
+    index     .tl_set:N   = \l_mtwo_index_tl,
+    signature .tl_set:N   = \l_mtwo_signature_tl,
+    label     .tl_set:N   = \l_mtwo_label_tl,
+    variants  .tl_set:N   = \l_mtwo_variants_tl,
+    wide      .bool_set:N = \l_mtwo_wide_bool,
+    wide      .default:n  = { true },
+    source    .bool_set:N = \l_mtwo_source_bool,
+  }
+
+\cs_new_protected:Npn \mtwo_unit_setup:n #1
+  {
+    \tl_clear:N \l_mtwo_formula_tl
+    \tl_clear:N \l_mtwo_caption_tl
+    \tl_clear:N \l_mtwo_index_tl
+    \tl_clear:N \l_mtwo_signature_tl
+    \tl_clear:N \l_mtwo_label_tl
+    \tl_clear:N \l_mtwo_variants_tl
+    \bool_set_false:N \l_mtwo_wide_bool
+    \bool_set_true:N  \l_mtwo_source_bool
+    \keys_set:nn { mtwo / unit } {#1}
+  }
+
+% The caption line: rule, "example <n> . <caption>", label, sidenote mark,
+% and the combined margin block (formula over legend over signature).
+\cs_new_protected:Npn \mtwo_unit_head:
+  {
+    \par \addvspace{\mtwo@unitsep}
+    \mtwo@thinrule
+    \nobreak \vspace{\mtwo@unitseam}
+    \refstepcounter{tnexample}
+    \noindent
+    {
+      \small
+      {\scshape example~\thetnexample}
+      \tl_if_empty:NF \l_mtwo_caption_tl
+        { ~~\textcolor{mquiet}{$\cdot$}~~ \tl_use:N \l_mtwo_caption_tl }
+    }
+    \tl_if_empty:NF \l_mtwo_label_tl
+      { \exp_args:NV \label \l_mtwo_label_tl }
+    \tl_if_empty:NF \l_mtwo_index_tl
+      { \refstepcounter{sidenote} \, \msidemark }
+    \mtwo_unit_margin:
+    \par \nobreak
+  }
+
+\cs_new_protected:Npn \mtwo_unit_margin:
+  {
+    \bool_lazy_all:nF
+      {
+        { \tl_if_empty_p:N \l_mtwo_formula_tl }
+        { \tl_if_empty_p:N \l_mtwo_index_tl }
+        { \tl_if_empty_p:N \l_mtwo_signature_tl }
+      }
+      {
+        \marginnote
+          {
+            \tl_if_empty:NF \l_mtwo_formula_tl
+              {
+                \mtwo@displayformula { \tl_use:N \l_mtwo_formula_tl }
+                \par \smallskip
+              }
+            \tl_if_empty:NF \l_mtwo_index_tl
+              {
+                \footnotesize
+                \mtwo@sidenotetext { \tl_use:N \l_mtwo_index_tl }
+                \par
+              }
+            \tl_if_empty:NF \l_mtwo_signature_tl
+              {
+                \smallskip
+                % a .tnlog line; break points after each `|' so the
+                % signature wraps inside the margin column
+                \tl_set_eq:NN \l_mtwo_sigbreak_tl \l_mtwo_signature_tl
+                \tl_replace_all:Nnn \l_mtwo_sigbreak_tl { | } { | \allowbreak }
+                { \ttfamily \scriptsize \tl_use:N \l_mtwo_sigbreak_tl \par }
+              }
+          }
+      }
+  }
+
+% The rendered output, centred, at full or text measure.
+\cs_new_protected:Npn \mtwo_unit_output:n #1
+  {
+    \par \nobreak \vspace{\mtwo@unitseam}
+    \bool_if:NTF \l_mtwo_wide_bool
+      {
+        \noindent
+        \mtwo@beginfullbox
+        \centering #1 \par
+        \mtwo@endfullbox
+      }
+      { { \centering #1 \par } }
+  }
+
+% The quiet source block.  The \needspace check keeps a block from
+% opening with an orphan line or two at a page bottom: with less than
+% about four source lines of room, the break falls at the seam between
+% the rendered diagram and the source instead of inside the verbatim.
+\cs_new_protected:Npn \mtwo_unit_source:n #1
+  {
+    \par \nobreak \vspace{\mtwo@unitseam}
+    \needspace{3.2\baselineskip}
+    \VerbatimInput[fontsize=\footnotesize, baselinestretch=0.89,
+      frame=leftline,
+      framerule=0.8pt, rulecolor=\color{msrcrule},
+      framesep=0.9em, xleftmargin=0.9em]{#1}
+    \par \addvspace{\mtwo@unitsep}
+  }
+
+\cs_new_protected:Npn \mtwo_example_render:
+  {
+    \mtwo_unit_head:
+    \mtwo_unit_output:n { \input{\jobname.exa} }
+    \bool_if:NT \l_mtwo_source_bool
+      { \mtwo_unit_source:n { \jobname.exa } }
+  }
+
+% One small-multiples panel: define the `variant' style at grid and cell
+% level, render the shared body, set the variant keys beneath it.  The
+% panel's reference point is the render's own baseline (the wire axis),
+% so the wires of all panels in a row are collinear.
+\cs_new_protected:Npn \mtwo_variant_panel:nn #1 #2
+  {
+    \mode_leave_vertical:
+    \pgfqkeys{/tenkz/grid}{ variant/.style = {#2} }
+    \pgfqkeys{/tenkz/cell}{ variant/.style = {#2} }
+    \hbox_set:Nn \l_mtwo_panel_box { \input{\jobname.exm} \unskip }
+    \hbox_set:Nn \l_mtwo_panellab_box { \scriptsize \ttfamily #1 }
+    \dim_set:Nn \l_mtwo_panel_dim
+      {
+        \dim_max:nn { \box_wd:N \l_mtwo_panel_box }
+                    { \box_wd:N \l_mtwo_panellab_box }
+      }
+    \vtop
+      {
+        \hbox_to_wd:nn { \l_mtwo_panel_dim }
+          { \tex_hss:D \box_use:N \l_mtwo_panel_box \tex_hss:D }
+        \skip_vertical:n { \mtwo@panellabelsep }
+        \hbox_to_wd:nn { \l_mtwo_panel_dim }
+          { \tex_hss:D \box_use:N \l_mtwo_panellab_box \tex_hss:D }
+      }
+  }
+
+\cs_new_protected:Npn \mtwo_multiples_render:
+  {
+    \mtwo_unit_head:
+    \clist_set:NV \l_mtwo_variants_clist \l_mtwo_variants_tl
+    \mtwo_unit_output:n
+      {
+        \bool_set_true:N \l_mtwo_first_bool
+        \clist_map_inline:Nn \l_mtwo_variants_clist
+          {
+            \bool_if:NTF \l_mtwo_first_bool
+              { \bool_set_false:N \l_mtwo_first_bool }
+              { \hspace{\mtwo@panelsep} }
+            \mtwo_variant_panel:nn ##1
+          }
+      }
+    \bool_if:NT \l_mtwo_source_bool
+      { \mtwo_unit_source:n { \jobname.exm } }
+  }
+
+\NewDocumentCommand{\mtwoUnitSetup}{m}{\mtwo_unit_setup:n {#1}}
+\NewDocumentCommand{\mtwoExampleRender}{}{\mtwo_example_render:}
+\NewDocumentCommand{\mtwoMultiplesRender}{}{\mtwo_multiples_render:}
+\ExplSyntaxOff
+
+% example numbering restarts with each section
+\newcounter{tnexample}[section]
+\renewcommand{\thetnexample}{\arabic{section}.\arabic{tnexample}}
+\renewcommand*{\theHtnexample}{\thetnexample}
+
+% ----- tnexample -----------------------------------------------------------
+% \begin{tnexample}[<keys>]  <tenkz source, verbatim>  \end{tnexample}
+%
+% Keys: formula   = <math for the margin, no dollar signs>
+%       caption   = <caption text>
+%       index     = <ink-to-index legend, becomes a numbered sidenote>
+%       signature = <.tnlog boundary-signature line, quoted in the margin>
+%       label     = <\label name, referenced as Example \ref{...}>
+%       wide      (render the output at full measure)
+%       source    = false (suppress the printed source block)
+%
+% The body is written to \jobname.exa and rendered output-first: caption
+% line, diagram, then the source.  Inline % comments in the body are part
+% of the pedagogy: they are invisible in the render and visible in print.
+% Keep body lines at or below 68 characters --- the source block is set
+% verbatim at \footnotesize in the 112 mm text column and does not wrap.
+\newenvironment{tnexample}[1][]
+  {\mtwoUnitSetup{#1}%
+   \VerbatimEnvironment
+   \begin{VerbatimOut}{\jobname.exa}}
+  {\end{VerbatimOut}%
+   \mtwoExampleRender}
+
+% ----- tnmultiples ---------------------------------------------------------
+% \begin{tnmultiples}[<keys>, variants={{<lab>}{<opts>}, ...}]
+%   <tenkz source using the option `variant'>
+% \end{tnmultiples}
+%
+% The body is compiled once per variant; in each panel the grid/cell option
+% `variant' expands to that panel's <opts>, and <lab> is set beneath the
+% panel.  All tnexample keys apply; the shared source prints once.
+\newenvironment{tnmultiples}[1][]
+  {\mtwoUnitSetup{#1}%
+   \VerbatimEnvironment
+   \begin{VerbatimOut}{\jobname.exm}}
+  {\end{VerbatimOut}%
+   \mtwoMultiplesRender}
+
+% ---------------------------------------------------------------------------
+%  Quick-reference card (the back page)
+% ---------------------------------------------------------------------------
+% \begin{quickrefcard}[<title>] ... \end{quickrefcard} — a full-measure,
+% three-column card on its own page; structure it with \qrsection and \qritem.
+\newenvironment{quickrefcard}[1][The tenkz quick reference]
+  {\clearpage\thispagestyle{empty}\noindent\mtwo@beginfullbox
+   {\Large\scshape #1}\par\smallskip
+   {\color{mrule}\hrule height 0.8pt}\medskip
+   \begin{multicols}{3}\footnotesize\raggedright}
+  {\end{multicols}\mtwo@endfullbox\clearpage}
+\newcommand{\qrsection}[1]{\par\medskip{\normalfont\bfseries\small #1}\par\nobreak\smallskip}
+\newcommand{\qritem}[2]{\par\noindent\hangindent=1.1em\hangafter=1
+  {\ttfamily#1}\enspace\textcolor{mquiet}{---}\enspace#2\par}
+
+% ---------------------------------------------------------------------------
+%  Running heads
+% ---------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\itshape The \texttt{tenkz} manual\quad second edition}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\endinput

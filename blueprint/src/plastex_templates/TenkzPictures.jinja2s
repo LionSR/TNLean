@@ -1,0 +1,2 @@
+name: TenkzPicture
+{{ obj.tenkz_svg_html }}
