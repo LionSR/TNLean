@@ -17,7 +17,7 @@ below with the BNT physical-sector projections of arXiv:1606.00608,
 Appendix C.2, equations `generateMPDO` and `sigmaNKj`.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Kronecker
 
 namespace MPOTensor
 
@@ -31,6 +31,49 @@ noncomputable def sitewisePhysicalMatrix
     (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) :
     Matrix (Fin N → Fin e) (Fin N → Fin d) ℂ :=
   fun s t ↦ ∏ n : Fin N, V (s n) (t n)
+
+/-- Conjugate transpose commutes with the sitewise tensor power. -/
+theorem sitewisePhysicalMatrix_conjTranspose
+    (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) :
+    (sitewisePhysicalMatrix V N)ᴴ = sitewisePhysicalMatrix Vᴴ N := by
+  ext s t
+  simp [Matrix.conjTranspose_apply, sitewisePhysicalMatrix, star_prod]
+
+/-- The product of a sitewise tensor power with its conjugate transpose is the
+sitewise tensor power of the corresponding one-site product. -/
+theorem sitewisePhysicalMatrix_mul_conjTranspose
+    (V : Matrix (Fin d) (Fin e) ℂ) (N : ℕ) :
+    sitewisePhysicalMatrix V N * (sitewisePhysicalMatrix V N)ᴴ =
+      sitewisePhysicalMatrix (V * Vᴴ) N := by
+  classical
+  ext s t
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
+    sitewisePhysicalMatrix, star_prod]
+  simp_rw [← Finset.prod_mul_distrib]
+  rw [← Fintype.piFinset_univ]
+  rw [← Finset.prod_univ_sum
+    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin e)))
+    (fun n a ↦ V (s n) a * star (V (t n) a))]
+
+/-- On two sites, the configuration-indexed tensor power is the Kronecker square. -/
+theorem reindex_sitewisePhysicalMatrix_two
+    (V : Matrix (Fin e) (Fin d) ℂ) :
+    Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
+        (_root_.finTwoArrowEquiv (Fin d))
+        (sitewisePhysicalMatrix V 2) = V ⊗ₖ V := by
+  ext ⟨i, j⟩ ⟨a, b⟩
+  simp [Matrix.reindex_apply, sitewisePhysicalMatrix,
+    Matrix.kroneckerMap_apply, _root_.finTwoArrowEquiv]
+
+/-- The sitewise tensor power of the identity matrix is the identity matrix. -/
+@[simp] theorem sitewisePhysicalMatrix_one (d N : ℕ) :
+    sitewisePhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ) N = 1 := by
+  classical
+  ext x y
+  simp only [sitewisePhysicalMatrix, Matrix.one_apply]
+  rw [Fintype.prod_boole]
+  congr 1
+  exact propext funext_iff.symm
 
 private theorem list_prod_sum_ofFn {a n : Type*} [Fintype a]
     [Fintype n] [DecidableEq n] {N : ℕ}

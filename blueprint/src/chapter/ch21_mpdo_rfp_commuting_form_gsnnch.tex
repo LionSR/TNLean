@@ -316,6 +316,50 @@
     direct sum of tensor products.
 \end{proof}
 
+\begin{theorem}[Finite-chain cyclic neighboring-operator form]
+    \label{thm:mpdo_eta_local_sigma_nk2}
+    \lean{MPOTensor.sitewisePhysicalMatrix_conjTranspose}
+    \lean{MPOTensor.reindex_sitewisePhysicalMatrix_two}
+    \lean{MPOTensor.sitewisePhysicalMatrix_one}
+    \lean{MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose}
+    \lean{MPOTensor.singleKrausMap_bondProduct_of_unitary}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_positive_cyclic_eta_block_decomposition}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        thm:mpdo_commuting_bond_positive_eta_decomposition,
+        thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    Let $\sigma^{(N)}(\mathcal K)$ be realized, for every $N\geq2$, by
+    translates of one positive commuting bond.  There are one unitary $U$,
+    positive sector dimensions, and positive semidefinite operators
+    $\eta_{q,h}$, all independent of $N$, such that for every $N\geq2$ there
+    is a constant $c_N>0$ satisfying
+    \[
+        E_N^*(U^*)^{\otimes N}\sigma^{(N)}(\mathcal K)
+          U^{\otimes N}E_N
+        =c_N\bigoplus_{k_0,\ldots,k_{N-1}}
+          \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}},
+        \qquad k_N=k_0.
+    \]
+    Here $E_N$ is the cyclic regrouping from the edge factors
+    $H_{k_n,r}\otimes H_{k_{n+1},l}$ to the site factors
+    $H_{k_n,r}\otimes H_{k_n,l}$.  This is the finite-chain equation
+    \emph{sigmaNK2} in
+    \cite[Appendix~C.2, lines~1581--1593]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
+        thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    Choose the unitary and the neighboring operators from the decomposition
+    of the fixed bond.  Conjugation by $(U^*)^{\otimes N}$ carries the product
+    of its translates to the product of the conjugated two-site bonds.  The
+    cyclic regrouping theorem changes this product into the displayed direct
+    sum.  Applying both transformations to
+    $\sigma^{(N)}(\mathcal K)=c_N\prod_n B_{n,n+1}$ preserves the same
+    positive scalar $c_N$.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready

@@ -528,19 +528,35 @@ theorem singleKrausMap_embedLocalOperator_eq_range_mul_lift
     htwo, Matrix.one_mul]
   simp
 
-private theorem sitewisePhysicalMatrix_mul_conjTranspose
-    (V : Matrix (Fin d) (Fin e) ℂ) (N : ℕ) :
-    sitewisePhysicalMatrix V N * (sitewisePhysicalMatrix V N)ᴴ =
-      sitewisePhysicalMatrix (V * Vᴴ) N := by
-  classical
-  ext s t
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    sitewisePhysicalMatrix, star_prod]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin e)))
-    (fun n a ↦ V (s n) a * star (V (t n) a))]
+/-- Conjugation by a one-site unitary tensor power carries a complete periodic
+bond product to the product of the conjugated two-site bonds.
+
+Both unitary identities are stated explicitly: the first makes single-Kraus
+conjugation multiplicative, while the second removes its range projection.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1593. -/
+theorem singleKrausMap_bondProduct_of_unitary
+    (V : Matrix (Fin d) (Fin d) ℂ) (hV : Vᴴ * V = 1) (hV' : V * Vᴴ = 1)
+    {N : ℕ} (hN : 2 ≤ N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
+    singleKrausMap (sitewisePhysicalMatrix V N)
+        (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i B).prod =
+      (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i
+        (singleKrausMap (sitewisePhysicalMatrix V 2) B)).prod := by
+  have hW : (sitewisePhysicalMatrix V N)ᴴ * sitewisePhysicalMatrix V N = 1 :=
+    sitewisePhysicalMatrix_isometry V hV N
+  have hne : (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i B) ≠ [] := by
+    rw [List.ne_nil_iff_length_pos, List.length_ofFn]
+    omega
+  rw [singleKrausMap_list_prod_of_ne_nil _ hW _ hne, List.map_ofFn]
+  apply congrArg List.prod
+  apply congrArg List.ofFn
+  funext i
+  change singleKrausMap (sitewisePhysicalMatrix V N)
+      (embedLocalOperator 2 N hN i B) = _
+  rw [singleKrausMap_embedLocalOperator_eq_range_mul_lift V hV hN i B]
+  simp only [singleKrausMap_apply, Matrix.mul_one]
+  rw [sitewisePhysicalMatrix_mul_conjTranspose, hV']
+  rw [sitewisePhysicalMatrix_one, Matrix.one_mul]
 
 namespace PhysicalSupportRestrictionData
 

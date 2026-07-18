@@ -77,16 +77,8 @@ theorem sitewisePhysicalMatrix_two_mul_conjTranspose
     (V : Matrix (Fin d) (Fin e) ℂ) :
     sitewisePhysicalMatrix V 2 * (sitewisePhysicalMatrix V 2)ᴴ =
       twoSiteSectorProjection (V * Vᴴ) := by
-  rw [← sitewisePhysicalMatrix_two_eq_twoSiteSectorProjection]
-  classical
-  ext s t
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    sitewisePhysicalMatrix, star_prod]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin 2 ↦ (Finset.univ : Finset (Fin e)))
-    (fun n a ↦ V (s n) a * star (V (t n) a))]
+  rw [sitewisePhysicalMatrix_mul_conjTranspose,
+    sitewisePhysicalMatrix_two_eq_twoSiteSectorProjection]
 
 namespace PhysicalSupportRestrictionData
 
