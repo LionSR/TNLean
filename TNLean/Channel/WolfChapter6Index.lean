@@ -284,13 +284,11 @@ projection is a positive trace-preserving retraction onto its fixed-point
 space. If the original endomorphism is unital, the projection is unital as
 well.
 
-The trace-pairing adjoint step is provided by
-`LinearMap.HasBoundedOrbits.range_traceAdjointMap_meanErgodicProjection` and
-`IsPositiveMap.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction`.
-The adjoint of the mean-ergodic projection is a positive unital idempotent
-retraction onto the fixed-point space of the adjoint endomorphism.  The
-remaining step for Theorem 6.14 is to combine this retraction with the
-full-support star-algebra description.
+The trace-pairing adjoint step is now complete.  The adjoint of the
+mean-ergodic projection is a positive unital idempotent retraction onto the
+fixed-point space of the adjoint endomorphism.  The remaining step for
+Theorem 6.14 is to combine this retraction with the full-support star-algebra
+description.
 
 In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 

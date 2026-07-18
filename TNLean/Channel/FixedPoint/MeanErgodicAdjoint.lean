@@ -56,9 +56,9 @@ theorem isTracePreservingMap_iff_traceAdjointMap_one
 points of the trace adjoint of the original endomorphism.
 
 The proof uses the complementary decomposition
-`X - P(X) ∈ range(T - 1)`.  A fixed point of `T*` annihilates this range under
-the trace pairing, so it is fixed by `P*`.  This avoids any bounded-orbit or
-spectral hypothesis on `T*`.
+\(X - P(X) \in \operatorname{range}(T - \mathrm{id})\).  A fixed point of
+\(T^*\) annihilates this range under the trace pairing, so it is fixed by
+\(P^*\).  This avoids any bounded-orbit or spectral hypothesis on \(T^*\).
 
 Source: Wolf, Proposition 6.3 and Equation (6.14), local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--269; this is
