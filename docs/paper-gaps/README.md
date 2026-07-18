@@ -95,6 +95,11 @@ For MPDO renormalization fixed points:
   identities, mutual-information data processing, positive-length
   nonvanishing, and the source-shaped ZCL-and-SAL conclusion are formalized.
   This note is now a closure record.
+- `hjpw04_ssa_product_marginal_reference.tex` records the singular
+  product-marginal evaluation in the relative-entropy form of strong
+  subadditivity. The support-compressed tensor logarithm, the bipartite entropy
+  identity, and the exact Hayden--Jozsa--Petz--Winter equality criterion are
+  formalized. This note is now a closure record.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 
