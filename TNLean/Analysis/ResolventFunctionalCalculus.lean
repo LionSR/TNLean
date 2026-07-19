@@ -70,64 +70,6 @@ private lemma cfc_rpowIntegrand₀₁_eq_resolvent
   have hcalc := hEq hA_nonneg
   simpa [Algebra.algebraMap_eq_smul_one, ← Matrix.nonsing_inv_eq_ringInverse] using hcalc
 
-/-- Equality of all positive shifted resolvents on a fixed vector implies
-equality of the positive square roots on that vector.
-
-Jenčová--Ruskai, arXiv:0903.2895v4, lines 658–680, obtains the corresponding
-functional-calculus conclusion from analytic continuation and the Cauchy
-integral formula. Here the same positive-square-root specialization is proved
-with the Löwner integral representation of the real power `p = 1 / 2`. -/
-theorem sqrt_mulVec_eq_of_resolvent_mulVec_eq
-    {n : Type*} [Fintype n] [DecidableEq n]
-    {S T : Matrix n n ℂ} (hS : S.PosSemidef) (hT : T.PosSemidef)
-    {x : n → ℂ}
-    (hres : ∀ {t : ℝ}, 0 < t →
-      (t • (1 : Matrix n n ℂ) + S)⁻¹ *ᵥ x =
-        (t • (1 : Matrix n n ℂ) + T)⁻¹ *ᵥ x) :
-    CFC.sqrt S *ᵥ x = CFC.sqrt T *ᵥ x := by
-  let p : NNReal := 1 / 2
-  have hp : (p : ℝ) ∈ Ioo 0 1 := by
-    norm_num [p]
-  obtain ⟨μ, hμ⟩ :=
-    CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁
-      (Matrix n n ℂ) hp
-  have hSint := (hμ S hS.nonneg).1
-  have hTint := (hμ T hT.nonneg).1
-  have hintegrand : ∀ {t : ℝ}, 0 < t →
-      cfcₙ (Real.rpowIntegrand₀₁ p t) S *ᵥ x =
-        cfcₙ (Real.rpowIntegrand₀₁ p t) T *ᵥ x := by
-    intro t ht
-    have hSnonneg : (0 : Matrix n n ℂ) ≤ S := hS.nonneg
-    have hTnonneg : (0 : Matrix n n ℂ) ≤ T := hT.nonneg
-    have hcontS : ContinuousOn (Real.rpowIntegrand₀₁ (p : ℝ) t)
-        (quasispectrum ℝ S) :=
-      (Real.continuousOn_rpowIntegrand₀₁_Ici hp ht).mono (by grind)
-    have hcontT : ContinuousOn (Real.rpowIntegrand₀₁ (p : ℝ) t)
-        (quasispectrum ℝ T) :=
-      (Real.continuousOn_rpowIntegrand₀₁_Ici hp ht).mono (by grind)
-    rw [cfcₙ_eq_cfc hcontS, cfcₙ_eq_cfc hcontT,
-      cfc_rpowIntegrand₀₁_eq_resolvent hS hp ht,
-      cfc_rpowIntegrand₀₁_eq_resolvent hT hp ht]
-    simp only [sub_mulVec, smul_mulVec, one_mulVec]
-    rw [hres ht]
-  have hAE :
-      (fun t : ℝ ↦ cfcₙ (Real.rpowIntegrand₀₁ p t) S *ᵥ x) =ᵐ[μ.restrict (Ioi 0)]
-        fun t : ℝ ↦ cfcₙ (Real.rpowIntegrand₀₁ p t) T *ᵥ x := by
-    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
-    exact hintegrand ht
-  let L : Matrix n n ℂ →L[ℂ] (n → ℂ) :=
-    LinearMap.toContinuousLinearMap
-      { toFun := fun M ↦ M *ᵥ x
-        map_add' := fun M N ↦ add_mulVec M N x
-        map_smul' := fun c M ↦ smul_mulVec c M x }
-  rw [CFC.sqrt_eq_nnrpow, CFC.sqrt_eq_nnrpow,
-    show (1 / 2 : NNReal) = p by rfl,
-    (hμ S hS.nonneg).2, (hμ T hT.nonneg).2]
-  change L (∫ t in Ioi 0, cfcₙ (Real.rpowIntegrand₀₁ p t) S ∂μ) =
-    L (∫ t in Ioi 0, cfcₙ (Real.rpowIntegrand₀₁ p t) T ∂μ)
-  rw [← L.integral_comp_comm hSint, ← L.integral_comp_comm hTint]
-  exact integral_congr_ae hAE
-
 /-- Equality of all positive shifted resolvents after a fixed matrix is applied
 to their values on a vector implies the corresponding equality for positive
 square roots.
@@ -190,6 +132,29 @@ theorem mulVec_sqrt_mulVec_eq_of_mulVec_resolvent_mulVec_eq
     L (∫ t in Ioi 0, cfcₙ (Real.rpowIntegrand₀₁ p t) T ∂μ)
   rw [← L.integral_comp_comm hSint, ← L.integral_comp_comm hTint]
   exact integral_congr_ae hAE
+
+/-- Equality of all positive shifted resolvents on a fixed vector implies
+equality of the positive square roots on that vector.
+
+Jenčová--Ruskai, arXiv:0903.2895v4, lines 658–680, obtains the corresponding
+functional-calculus conclusion from analytic continuation and the Cauchy
+integral formula. Here the same positive-square-root specialization is proved
+with the Löwner integral representation of the real power `p = 1 / 2`. -/
+theorem sqrt_mulVec_eq_of_resolvent_mulVec_eq
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {S T : Matrix n n ℂ} (hS : S.PosSemidef) (hT : T.PosSemidef)
+    {x : n → ℂ}
+    (hres : ∀ {t : ℝ}, 0 < t →
+      (t • (1 : Matrix n n ℂ) + S)⁻¹ *ᵥ x =
+        (t • (1 : Matrix n n ℂ) + T)⁻¹ *ᵥ x) :
+    CFC.sqrt S *ᵥ x = CFC.sqrt T *ᵥ x := by
+  have hresOne : ∀ {t : ℝ}, 0 < t →
+      (1 : Matrix n n ℂ) *ᵥ ((t • 1 + S)⁻¹ *ᵥ x) =
+        (1 : Matrix n n ℂ) *ᵥ ((t • 1 + T)⁻¹ *ᵥ x) := by
+    intro t ht
+    simpa only [one_mulVec] using hres ht
+  simpa only [one_mulVec] using
+    mulVec_sqrt_mulVec_eq_of_mulVec_resolvent_mulVec_eq hS hT hresOne
 
 /-- The source-`B` left-right resolvent is the shifted resolvent of the
 relative modular Kronecker matrix on the vectorized identity.

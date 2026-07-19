@@ -15,6 +15,9 @@ reference matrix is represented as the square of its support inverse square root
 
 ## Main results
 
+* `Matrix.one_kronecker_transpose_mulVec_vec_transpose` identifies the
+  Kronecker matrix that represents right multiplication on a transposed
+  vectorization.
 * `Matrix.supportRelativeModular_sqrt_mulVec_vec_one` evaluates the positive
   square root of the support relative-modular matrix on the vectorized identity.
 * `Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq` turns a
@@ -34,6 +37,17 @@ formalized here; see `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
 open scoped Matrix ComplexOrder Kronecker MatrixOrder
 
 namespace Matrix
+
+/-- Under column-stacking vectorization, `1 ⊗ Pᵀ` represents right
+multiplication by `P` when the matrix itself is transposed before
+vectorization. -/
+theorem one_kronecker_transpose_mulVec_vec_transpose
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (M P : Matrix n n ℂ) :
+    ((1 : Matrix n n ℂ) ⊗ₖ Pᵀ) *ᵥ Matrix.vec Mᵀ =
+      Matrix.vec (M * P)ᵀ := by
+  rw [Matrix.kronecker_mulVec_vec]
+  simp only [Matrix.transpose_mul, Matrix.transpose_one, Matrix.mul_one]
 
 /-- The positive square root of the support relative-modular matrix, applied to
 the vectorized identity, is the vectorization of the support square-root ratio.
@@ -112,14 +126,8 @@ theorem supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq
     (hC.kronecker hDInvSq.transpose) hres
   rw [supportRelativeModular_sqrt_mulVec_vec_one hA hB,
     supportRelativeModular_sqrt_mulVec_vec_one hC hD] at hsqrt
-  rw [Matrix.kronecker_mulVec_vec, Matrix.kronecker_mulVec_vec] at hsqrt
-  have hratioTranspose :
-      Matrix.vec ((CFC.sqrt A * hB.supportInvSqrt) *
-        hB.isHermitian.supportProj)ᵀ =
-        Matrix.vec ((CFC.sqrt C * hD.supportInvSqrt) *
-          hB.isHermitian.supportProj)ᵀ := by
-    simpa only [Matrix.transpose_mul, Matrix.transpose_one,
-      Matrix.mul_one, Matrix.mul_assoc] using hsqrt
-  exact Matrix.transpose_injective (Matrix.vec_inj.mp hratioTranspose)
+  rw [one_kronecker_transpose_mulVec_vec_transpose,
+    one_kronecker_transpose_mulVec_vec_transpose] at hsqrt
+  exact Matrix.transpose_injective (Matrix.vec_inj.mp hsqrt)
 
 end Matrix

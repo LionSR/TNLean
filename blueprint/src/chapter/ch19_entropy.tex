@@ -2843,6 +2843,24 @@ Theorem~\ref{thm:trace_norm_abs}.
     as follows from uniqueness of the positive square root.
 \end{proof}
 
+\begin{lemma}[Right multiplication under transposed vectorization]
+    \label{lem:right_multiplication_transposed_vectorization}
+    \lean{Matrix.one_kronecker_transpose_mulVec_vec_transpose}
+    \leanok
+    For matrices $M$ and $P$, column-stacking vectorization satisfies
+    \[
+      \left(\mathbf 1\otimes P^{\mathsf T}\right)
+        \operatorname{vec}(M^{\mathsf T})
+      =\operatorname{vec}\!\left((MP)^{\mathsf T}\right).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the Kronecker vectorization identity
+    $(B\otimes A)\operatorname{vec}(X)=\operatorname{vec}(AXB^{\mathsf T})$
+    with $A=P^{\mathsf T}$, $B=\mathbf 1$, and $X=M^{\mathsf T}$.
+\end{proof}
+
 \begin{lemma}[Relative modular square-root ratio on the support]
     \label{lem:support_relative_modular_sqrt_ratio}
     \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
@@ -2880,7 +2898,8 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     \uses{lem:positive_sqrt_from_common_resolvents,
-        lem:support_inverse_square_root_positive_semidefinite}
+        lem:support_inverse_square_root_positive_semidefinite,
+        lem:right_multiplication_transposed_vectorization}
     The support inverse square roots are positive semidefinite.  Hence
     \[
       \sqrt{A\otimes(B^+)^{\mathsf T}}

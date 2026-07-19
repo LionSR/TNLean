@@ -384,8 +384,15 @@ then their square-root ratios agree on that same support:
   \bigl(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\bigr)P_B
     =\bigl(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\bigr)P_B.
 \end{align}
+The orientation of the vectorized restriction is fixed by
+\begin{align}
+  (\mathbf 1\otimes P_B^{\mathsf T})
+    \operatorname{vec}(M^{\mathsf T})
+    =\operatorname{vec}\bigl((MP_B)^{\mathsf T}\bigr).
+\end{align}
 Here the generalized inverse is the square of the support inverse square root.
 \footnote{Formal declarations:
+\leanid{Matrix.one_kronecker_transpose_mulVec_vec_transpose},
 \leanid{Matrix.supportRelativeModular_sqrt_mulVec_vec_one} and
 \leanid{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq} in
 \path{TNLean/Channel/Schwarz/SupportRelativeModular.lean}.}
