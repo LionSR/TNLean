@@ -133,36 +133,6 @@
     \end{TNDiagram}%
 }
 
-% Local purification of an MPO tensor: the ket and bra tensors share the
-% ancillary index (straight contraction on the right) and retain their physical
-% and virtual legs.
-\TNDeclareDiagram
-    {TNMPOLocalPurification}
-    {}
-    {display}
-    {compact}
-    {\TNMPOLocalPurification}
-    {chapter/ch20_mpdo_foundations.tex}{%
-    \begin{TNEquationRow}[compact]
-        \TNTerm{%
-            \TNMPOSite{purM}{at=origin}{M}
-            \TNOpenVirtualWest{purMWest}
-            \TNOpenVirtualEast{purMEast}
-            \TNOpenPhysicalNorth{purMKet}
-            \TNOpenPhysicalSouth{purMBra}}
-        \TNRelation{=}
-        \TNTerm{%
-            \TNMPDOPurificationMotif{pur}{at=origin}
-            \TNOpenVirtualWest{purKetWest}
-            \TNOpenVirtualEast{purKetEast}
-            \TNOpenVirtualWest{purBraWest}
-            \TNOpenVirtualEast{purBraEast}
-            \TNOpenPhysicalNorth{purKet}
-            \TNOpenPhysicalSouth{purBra}
-            \TNLabelRight{purAncillaMid}{k}}
-    \end{TNEquationRow}%
-}
-
 % The physical renormalization maps of the mixed-state RFP definition.
 \TNDeclareDiagram
     {TNMPORenormalizationTS}

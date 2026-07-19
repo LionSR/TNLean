@@ -326,10 +326,29 @@ Diagrammatically,
     denotes entrywise complex conjugation, and $(\cdot)_{e,e}$ denotes
     reindexing along $e$ back to $\{0, \ldots, D - 1\}$.
     See \cite[Section~4.3]{Cirac2016MPDO_arXiv}.
+    % Coefficient identity:
+    % M^{ij}_{\alpha\beta}
+    %   = \sum_{k,a,a',b,b'} e^{aa'}_{\alpha}
+    %       A^{(i,k)}_{ab}\overline{A^{(j,k)}_{a'b'}}
+    %       (e^{-1})^{\beta}_{bb'}.
+    % Both sides have boundary signature (1,1,1,1): alpha and beta are the
+    % west and east virtual indices, while i and j are the upper and lower
+    % physical indices.  The west e wedge splits alpha into a,a'; the east
+    % e^{-1} wedge combines b,b' into beta.  The unique inter-row pairleg is
+    % the ancillary contraction k; a,a',b,b' are the remaining contracted
+    % virtual indices.  No east cup is present, since beta remains free.
     The local contraction is
-    \TNMPOLocalPurification
-    where the straight internal line is the ancillary index $k$, while the
-    ket and bra physical legs remain external.
+    \[
+        \begin{tenkz}[physical=updown, tensor style=box]
+            \tn[mpo, up=$i$, down=$j$]{M}
+        \end{tenkz}
+        \;=\;
+        \begin{tenkz}[rows={op,op}, tensor style=box]
+            \tnfuse{e} & \tn[up=$i$]{A} &
+                \tnfuse[combined=east]{e^{-1}}\\
+                       & \tn*[down=$j$]{A} &
+        \end{tenkz}
+    \]
 \end{definition}
 
 \begin{theorem}[LPDOs are MPDOs]\label{thm:lpdo_is_mpdo}
