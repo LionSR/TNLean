@@ -987,6 +987,33 @@
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
 
+\begin{theorem}[Classical mutual information is bounded by ordinary rank]
+    \label{thm:classical_mutual_information_le_log_rank}
+    \lean{Entropy.classicalMutualInformation_le_log_rank}
+    \leanok
+    Let $X$ and $Y$ be finite sets and let $P=(P_{x,y})_{x\in X,y\in Y}$
+    be a joint probability distribution.  With natural logarithms,
+    \[
+        I(X:Y)_P\leq \log\operatorname{rank}_{\R}P.
+    \]
+    Equivalently, with logarithms to base two,
+    $2^{I(X:Y)_P}\leq\operatorname{rank}_{\R}P$.
+\end{theorem}
+\begin{proof}\leanok
+    This is Theorem~4.1 of \cite{Riazanov2017PSDRank}.  If the number of
+    nonzero rows exceeds the ordinary real rank, choose a nontrivial real
+    linear relation among those rows.  Nonnegativity forces the relation to
+    have coefficients of both signs.  Rescaling each row by
+    $1+\varepsilon\beta_x$ gives two endpoint distributions: each preserves
+    every column marginal, removes at least one row, and has no larger rank.
+    Mutual information is affine along these rescalings, so one endpoint has
+    mutual information no smaller than that of the original distribution.
+    Repeating the construction leaves at most
+    $\operatorname{rank}_{\R}P$ nonzero rows.  Finally,
+    $I(X:Y)\leq H(X)$, and the entropy of a distribution supported on $k$
+    points is at most $\log k$.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts the uniform estimate
     $I_L \le 4\log D$ for every MPDO. Its cited proof, however, treats mixed
@@ -1020,8 +1047,8 @@
     \]
     is a joint probability distribution.  Multiplication by the nonzero real
     scalar $Z^{-1}$ does not change rank, and the real matrix $\widehat P$ has
-    the same rank over $\R$ and $\C$.  Theorem~4.1 of
-    \cite{Riazanov2017PSDRank} gives
+    the same rank over $\R$ and $\C$.
+    Theorem~\ref{thm:classical_mutual_information_le_log_rank} gives
     $I(X:Y)\leq\log\operatorname{rank}_{\R}\widehat P$.  Therefore
     Theorem~\ref{thm:mpo_diagonal_cut_rank} yields
     \[

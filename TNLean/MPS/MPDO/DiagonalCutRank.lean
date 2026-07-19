@@ -17,7 +17,9 @@ therefore at most the square of the bond dimension.
 This is the algebraic part of the classical-diagonal analysis of the estimate
 in Proposition 4.5 of arXiv:1606.00608.  Combined with Theorem 4.1 of
 arXiv:1704.06507, it gives the stronger classical estimate
-$I(X:Y) \leq 2\log D$.  The information-theoretic implication is not proved in
+$I(X:Y) \leq 2\log D$.  The information-versus-rank theorem is formalized in
+`TNLean.Entropy.ClassicalMutualInformation`; the scalar normalization and
+real-to-complex rank comparison needed for the MPO corollary are not proved in
 this file.
 
 ## Main definitions

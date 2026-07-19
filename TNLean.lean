@@ -143,6 +143,7 @@ import TNLean.Axioms.Entropy
 -- declarations for the Simple MPDO RFP track (#236). SSA itself is sourced
 -- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules
 -- re-state the sanctioned entropy axioms under the Entropy namespace.
+import TNLean.Entropy.ClassicalMutualInformation
 import TNLean.Entropy.VonNeumann
 import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.TripartiteTrace
