@@ -300,6 +300,43 @@ with the common copy weight absorbed into $\mathcal K_s$.
 \leanid{MPOTensor.changePhysicalBasis_bntSectorProjection_basis},
 \leanid{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}, and
 \leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}.}
+
+The literal identity resolution in equation \emph{Pis} is recovered in the
+ambient physical space by choosing a BNT label $s_0$ from a copy with
+unit-modulus weight.  Assign every zero-weight Markov summand to $s_0$, while
+retaining the unique source label on each positive-weight summand.  The
+completed projections
+\[
+  \widehat P_s=\sum_{k:\widehat j_k=s}Q_k
+\]
+then satisfy
+\[
+  \sum_s\widehat P_s=\Id,
+  \qquad
+  \widehat P_s\widehat P_t=0\quad(s\ne t).
+\]
+Since a zero-weight $Q_k$ annihilates every physical slice, this reassignment
+preserves, whenever $s\ne t$ or $i\ne s$,
+\[
+  \widehat P_s K_i^{\beta\alpha}\widehat P_t=0.
+\]
+Thus the retained zero-weight summands account exactly for the difference
+between the active-support resolution and the source's equation \emph{Pis}.
+The construction and its SAL specialization are
+\leanid{MPOTensor.completedBntSectorProjection} and
+\leanid{MPOTensor.%
+exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent}.
+
+\paragraph{Scope restriction (copy-independent weights).}
+The latter theorem assumes explicitly that the copy weights of each BNT
+representative agree.  The paper obtains this equality from ZCL immediately
+before the separating-projector argument (lines 1646--1665).  Thus the present
+theorem proves the projector conclusion after that equality is supplied, but
+does not yet establish the source's standing-context implication from simple
+biCF, ZCL, and SAL alone.  A source-faithful theorem must derive the required
+copy independence from the source ZCL equation and the canonical-form gauge
+identity before invoking the completed-projector construction.
+
 The empty-word value $N=0$ is excluded because its closed virtual trace records
 the bond dimension and is not a physical chain.  Positivity and ZCL of every
 selected absorbed BNT representative are now formalized.  Positivity follows
