@@ -270,10 +270,13 @@ right tensor factors on which the two adjacent interactions act separately.
 The subsequent sector datum is now formalized in
 \leanid{MPSTensor.BeigiSectorGraphData}.  From its source equation~(2) alone,
 \leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
-constructs the finite directed graph and proves Beigi's ordered-cycle
-ground-space dimension formula for every $N>2$.  No chain-level ground-space
-equation, eventual degeneracy, or canonical-form datum is assumed in this
-sector-graph theorem.
+constructs the finite directed graph and proves the $N>2$ specialization of
+Beigi's ordered-cycle ground-space dimension formula.  Beigi states this
+formula for every periodic length, while the present restriction matches the
+NNCPH range in Theorem~3.10(iii).  No chain-level ground-space equation,
+eventual degeneracy, or canonical-form datum is assumed in this sector-graph
+theorem.  The remaining lengths $N=1,2$ require separate periodic-window
+conventions and are tracked by \ghissue{4400}.
 
 \section{Elimination plan}
 
