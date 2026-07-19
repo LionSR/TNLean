@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Irreducible.FixedPointProjection
+import TNLean.Algebra.PosSemidefSupport
 
 /-!
 # Faithful compression of a PSD matrix onto its support sector
@@ -39,7 +39,7 @@ variable {D : ℕ} {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
 `star v ⬝ᵥ (ρ *ᵥ v) > 0`. -/
 theorem dotProduct_mulVec_pos_of_supportProj_fixed
     {v : Fin D → ℂ} (hv_ne : v ≠ 0)
-    (hv_fix : MPSTensor.supportProj (D := D) ρ hρ *ᵥ v = v) :
+    (hv_fix : hρ.supportProj *ᵥ v = v) :
     0 < star v ⬝ᵥ (ρ *ᵥ v) := by
   classical
   have h_nonneg : 0 ≤ star v ⬝ᵥ (ρ *ᵥ v) := hρ.dotProduct_mulVec_nonneg v
@@ -48,8 +48,8 @@ theorem dotProduct_mulVec_pos_of_supportProj_fixed
   -- If the quadratic form vanishes, then `ρ *ᵥ v = 0`.
   have hρv : ρ *ᵥ v = 0 := (hρ.dotProduct_mulVec_zero_iff v).mp habs.symm
   -- Then the support projection also annihilates `v`.
-  have hPv : MPSTensor.supportProj (D := D) ρ hρ *ᵥ v = 0 :=
-    MPSTensor.supportProj_mulVec_eq_zero_of_mulVec_eq_zero (D := D) ρ hρ v hρv
+  have hPv : hρ.supportProj *ᵥ v = 0 :=
+    hρ.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hρv
   -- Combined with the fixed-point hypothesis, this forces `v = 0`.
   exact hv_ne (hv_fix.symm.trans hPv)
 
@@ -59,10 +59,10 @@ with `V * Vᴴ = 1` and `Vᴴ * V = P`. Then the compression `V * ρ * Vᴴ` is 
 theorem compression_on_support_posDef
     {k : ℕ} {V : Matrix (Fin k) (Fin D) ℂ}
     (hVVt : V * Vᴴ = 1)
-    (hVtV : Vᴴ * V = MPSTensor.supportProj (D := D) ρ hρ) :
+    (hVtV : Vᴴ * V = hρ.supportProj) :
     (V * ρ * Vᴴ).PosDef := by
   classical
-  set P : Matrix (Fin D) (Fin D) ℂ := MPSTensor.supportProj (D := D) ρ hρ with hP_def
+  set P : Matrix (Fin D) (Fin D) ℂ := hρ.supportProj with hP_def
   -- Hermiticity of `V * ρ * Vᴴ`.
   have h_herm : (V * ρ * Vᴴ).IsHermitian := by
     unfold Matrix.IsHermitian

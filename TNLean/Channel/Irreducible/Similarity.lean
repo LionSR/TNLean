@@ -60,7 +60,7 @@ private lemma supportProj_eq_mul_supportInv
     simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
       Function.comp_def] using hH.spectral_theorem
   have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [supportProj, U, sgn]
+    simp [supportProj, Matrix.PosSemidef.supportProj, U, sgn]
   have hS_def : supportInv (D := D) ρ hρ = U * Matrix.diagonal invEig * Uᴴ := by
     simp [supportInv, U, invEig]
   have hmul : (fun i => (↑(hH.eigenvalues i) : ℂ) * invEig i) = sgn := by

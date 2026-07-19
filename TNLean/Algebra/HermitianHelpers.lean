@@ -11,9 +11,10 @@ import TNLean.Algebra.MatrixAux
 # Hermitian matrix extremal eigenvalues
 
 This file provides lemmas for Hermitian complex matrices over an arbitrary finite
-index type: rank-one positive semidefinite criteria, the extremal eigenvalue
-lemmas, scalar-shift spectral formulae, and commutation transport from a power
-of a positive semidefinite matrix to the matrix itself.
+index type: decomposition into Hermitian components, rank-one positive
+semidefinite criteria, extremal eigenvalues, scalar-shift spectral formulae, and
+commutation transport from a power of a positive semidefinite matrix to the
+matrix itself.
 -/
 
 open scoped Matrix ComplexOrder InnerProductSpace
@@ -21,6 +22,35 @@ open scoped Matrix ComplexOrder InnerProductSpace
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 namespace Matrix
+
+omit [Fintype n] [DecidableEq n] in
+/-- Every complex square matrix is a fixed complex linear combination of two
+Hermitian matrices, chosen as its Hermitian and skew-Hermitian components. -/
+theorem exists_isHermitian_decomposition (X : Matrix n n ℂ) :
+    ∃ H₁ H₂ : Matrix n n ℂ,
+      H₁ = X + Xᴴ ∧ H₂ = Complex.I • (X - Xᴴ) ∧
+      H₁.IsHermitian ∧ H₂.IsHermitian ∧
+      X = (2⁻¹ : ℂ) • H₁ - ((2⁻¹ : ℂ) * Complex.I) • H₂ := by
+  let H₁ : Matrix n n ℂ := X + Xᴴ
+  let H₂ : Matrix n n ℂ := Complex.I • (X - Xᴴ)
+  have hH₁ : H₁.IsHermitian := by
+    change (X + Xᴴ)ᴴ = X + Xᴴ
+    rw [Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose]
+    exact add_comm _ _
+  have hH₂ : H₂.IsHermitian := by
+    change (Complex.I • (X - Xᴴ))ᴴ = Complex.I • (X - Xᴴ)
+    rw [Matrix.conjTranspose_smul, Matrix.conjTranspose_sub,
+      Matrix.conjTranspose_conjTranspose]
+    rw [show star Complex.I = -Complex.I by simp]
+    rw [neg_smul, ← smul_neg, neg_sub]
+  refine ⟨H₁, H₂, rfl, rfl, hH₁, hH₂, ?_⟩
+  change X = (2⁻¹ : ℂ) • (X + Xᴴ) -
+    ((2⁻¹ : ℂ) * Complex.I) • (Complex.I • (X - Xᴴ))
+  rw [smul_smul,
+    show ((2⁻¹ : ℂ) * Complex.I) * Complex.I = -(2⁻¹ : ℂ) by
+      rw [mul_assoc, Complex.I_mul_I]
+      ring]
+  module
 
 /-! ## Rank-one diagonal positivity criteria -/
 

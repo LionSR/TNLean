@@ -391,14 +391,18 @@ points):
 * `Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint` — conjugation by `√ρ`
   maps the carrier onto the corner-supported fixed points.
 
-In `TNLean.Channel.FixedPoint.MaximalSupport` (the maximal-support property
-and the removal of the corner restriction):
+In `TNLean.Channel.FixedPoint.MaximalSupportBasic` (the maximal-support property
+for arbitrary positive trace-preserving maps):
 
 * `Kraus.stationaryProj_absorb_of_le` — for positive semidefinite $P \preceq \rho$
   the support projection of $\rho$ absorbs $P$.
 * `IsPositiveMap.exists_maximalSupport_fixedPoint` — for an arbitrary positive
   trace-preserving map, the fixed point $T_\infty(\mathbf 1)$ has support carrying every
   fixed point, as in Wolf Proposition 6.9.
+
+In `TNLean.Channel.FixedPoint.MaximalSupport` (the Kraus specialization and
+the removal of the corner restriction):
+
 * `Kraus.exists_maximalSupport_fixedPoint` — a positive semidefinite fixed point
   $\rho_0$ whose
   support projection $Q_0$ satisfies $Q_0 X Q_0 = X$ for every fixed point $X$.
