@@ -479,6 +479,7 @@ import TNLean.MPS.MPDO.BNTThreeSiteReducedClosure
 import TNLean.MPS.MPDO.BNTSourceSectorProjectors
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.BNTProjectorSelection
+import TNLean.MPS.MPDO.BNTSeparatingProjectors
 import TNLean.MPS.MPDO.PhysicalSupportRestriction
 import TNLean.MPS.MPDO.PhysicalSupportSALTransport
 import TNLean.MPS.MPDO.PhysicalSupportBondTransport

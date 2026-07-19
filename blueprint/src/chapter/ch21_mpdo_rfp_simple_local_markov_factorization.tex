@@ -653,6 +653,66 @@ strong subadditivity for a normalized three-site reduced state.
     over the Hayashi sectors gives the asserted $P_sA_iP_t$ identities.
 \end{proof}
 
+\begin{definition}[Completion on the zero-weight Markov sectors]
+    \label{def:mpdo_completed_bnt_sector_projection}
+    \lean{MPOTensor.completedBntSectorLabel}
+    \lean{MPOTensor.completedBntSectorProjection}
+    \leanok
+    \uses{def:mpdo_bnt_sector_projection}
+    Fix a BNT label $s_0$.  Each positive-weight Markov sector retains its
+    unique BNT label, while every zero-weight Markov sector is assigned the
+    label $s_0$.  If $\widehat S_s$ is the set of Markov sectors with completed
+    label $s$, define
+    \[
+        \widehat P_s=\sum_{k\in\widehat S_s}Q_k.
+    \]
+\end{definition}
+
+\begin{theorem}[Separating projectors for a simple tensor satisfying SAL]
+    \label{thm:mpdo_sal_bnt_separating_projectors}
+    \lean{MPOTensor.completedBntSectorProjection_isOrthogonal}
+    \lean{MPOTensor.completedBntSectorProjection_mul_eq_zero}
+    \lean{MPOTensor.sum_completedBntSectorProjection}
+    \lean{MPOTensor.%
+      completedBntSectorProjection_mul_physicalSlice_mul_eq_zero}
+    \lean{MPOTensor.%
+      exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL}
+    \leanok
+    \uses{def:mpdo_completed_bnt_sector_projection,
+      thm:mpdo_bnt_projector_local_selection}
+    Let $K$ be simple, in biCF, and satisfy SAL.  Suppose that the common
+    blocking has been performed, the copy weights over each BNT representative
+    agree, and the representatives have a simultaneous one-site span.  There
+    is a distinguished BNT label $s_0$ such that the completed projectors are
+    orthogonal and, for distinct labels $s$ and $t$,
+    \[
+        \widehat P_s\widehat P_t=0,
+        \qquad
+        \sum_s\widehat P_s=\Id.
+    \]
+    For every physical slice of the $i$-th BNT representative, whenever
+    $s\ne t$ or $i\ne s$,
+    \[
+        \widehat P_sK_i^{\beta\alpha}\widehat P_t=0.
+    \]
+    This is the separating-projector lemma in
+    \cite[Appendix~C.2, lines~1680--1737]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_four_site_sal_bnt_sector_projectors,
+      thm:mpdo_bnt_projector_local_selection}
+    A unit-modulus BNT weight supplies the label $s_0$.  The Markov-sector
+    projections $Q_k$ are mutually orthogonal and sum to the identity, so
+    partitioning all labels by $\widehat S_s$ proves orthogonality and the
+    identity resolution.  If $p_k=0$, then
+    $Q_kK_i^{\beta\alpha}Q_k=0$ for every $i,\beta,\alpha$; if $p_k\ne0$, the
+    unique-label relation gives the same vanishing unless the label is $i$.
+    Distinct Markov sectors give zero off-diagonal corners.  Summing these
+    three cases proves the separating relation.
+\end{proof}
+
 \begin{theorem}[Positive-length BNT-sector compression]
     \label{thm:mpdo_bnt_projector_positive_length_compression}
     \lean{MPOTensor.singleKrausMap_sitewise_bntSectorProjection_mpo}
