@@ -473,9 +473,46 @@ def main() -> int:
             and "lacks required picture=" in finding.msg
             for finding in missing_picture_audit.findings
         )
+        pairleg_ports_log = work / "pairleg-upper-ports.tnlog"
+        pairleg_ports_log.write_text(
+            "picture|id=1|lang=grid\n"
+            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=center|column=1\n"
+            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=0|column=1\n"
+            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=-1|column=1\n"
+            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=bogus|column=1\n",
+            encoding="utf-8",
+        )
+        pairleg_ports_audit = Audit(pairleg_ports_log, None)
+        pairleg_ports_audit.parse_log()
+        malformed_upper_ports = [
+            finding.msg
+            for finding in pairleg_ports_audit.findings
+            if finding.rule == "malformed-event" and "upper-port=" in finding.msg
+        ]
+        warning_only_log = work / "warning-only.tnlog"
+        warning_only_log.write_text(
+            "picture|id=1|lang=grid\n"
+            "warning|picture=1|code=deferred-feature\n"
+            "boundary|picture=1|virtual-west=0|virtual-east=0|"
+            "physical-up=0|physical-down=0\n",
+            encoding="utf-8",
+        )
+        warning_only_audit = Audit(warning_only_log, None)
+        warning_only_status = warning_only_audit.run()
 
     if not missing_picture_guard:
         raise AssertionError("audit parser silently dropped a pictureless warning")
+    if len(malformed_upper_ports) != 3 or not all(
+        any(f"upper-port={value!r}" in msg for msg in malformed_upper_ports)
+        for value in ("0", "-1", "bogus")
+    ):
+        raise AssertionError("audit accepted a non-contraction pairleg upper-port")
+    if warning_only_status != 1 or not any(
+        finding.rule == "empty-picture" and finding.severity == "HARD"
+        for finding in warning_only_audit.findings
+    ):
+        raise AssertionError("warning-only grid picture counted as mathematical content")
     if hooks_findings:
         raise AssertionError("audit rejected a grid hooks event")
     inverse = pictures[1]

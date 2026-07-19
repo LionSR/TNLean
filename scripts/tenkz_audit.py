@@ -103,7 +103,8 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
                   "face": _enum("up", "down", "west", "east"),
                   "arity": _is_int, "at": _any},
     "pairleg": {"picture": _is_int, "upper": _is_cell, "lower": _is_cell,
-                "upper-port": _any, "column": _is_int},
+                "upper-port": lambda v: v == "center" or (_is_int(v) and int(v) > 0),
+                "column": _is_int},
     # The emitter normalizes the user-facing `bond dir=left|right` to
     # forward/reverse (direction along the wire); accept both spellings.
     "bond": {"picture": _is_int, "row": _is_int, "from": _is_int, "to": _is_int,
