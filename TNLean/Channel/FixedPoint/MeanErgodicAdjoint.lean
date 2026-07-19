@@ -25,8 +25,6 @@ adjoint projection is a positive unital retraction.
 
 open scoped Matrix Matrix.Norms.Frobenius
 
-universe u
-
 variable {D : ℕ}
 
 /-- A matrix endomorphism is trace-preserving if and only if its trace-pairing
@@ -37,7 +35,7 @@ sources `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`, lines
 723--737, and `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines
 226--256. -/
 theorem isTracePreservingMap_iff_traceAdjointMap_one
-    {n : Type u} [Fintype n] [DecidableEq n]
+    {n : Type*} [Fintype n] [DecidableEq n]
     {T : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
     IsTracePreservingMap T ↔ Matrix.traceAdjointMap T 1 = 1 := by
   constructor
