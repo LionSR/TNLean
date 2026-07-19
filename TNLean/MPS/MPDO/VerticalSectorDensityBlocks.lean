@@ -156,13 +156,14 @@ private theorem densityBlockLinearMap_list_prod
       rw [List.ofFn_succ, List.prod_cons]
 
 private theorem reindex_directSumDiagonalEmbedding_list_prod
-    {ι β : Type*} [Fintype ι] [DecidableEq ι]
+    {ι β : Type*} [Finite ι] [DecidableEq ι]
     {n : ι → Type*} [∀ k, Fintype (n k)] [∀ k, DecidableEq (n k)]
     [Fintype β] [DecidableEq β] (e : ((k : ι) × n k) ≃ β)
     (A : List (∀ k, Matrix (n k) (n k) ℂ)) :
     Matrix.reindex e e (Matrix.directSumDiagonalEmbedding A.prod) =
       (A.map fun X ↦
         Matrix.reindex e e (Matrix.directSumDiagonalEmbedding X)).prod := by
+  letI := Fintype.ofFinite ι
   induction A with
   | nil =>
       simp only [List.prod_nil, List.map_nil]
