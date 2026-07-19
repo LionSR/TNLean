@@ -17,6 +17,9 @@ the positive semidefinite matrices.
 
 * `quantumRelativeEntropy_kronecker_support` proves ancilla additivity on the
   finite-relative-entropy support domain.
+* `quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq`
+  propagates saturation of partial-trace data processing to each summand in the
+  finite Weyl average.
 
 ## References
 
@@ -77,3 +80,72 @@ theorem quantumRelativeEntropy_kronecker_support
     Complex.sub_re, Complex.add_re]
   rw [hρPρ, hρPσ, hτPτ, hτtrace]
   ring_nf
+
+/-- **Partial-trace saturation propagates to every Weyl summand.** Let `ρ` and
+`σ` be positive semidefinite matrices with `ker σ ⊆ ker ρ`. If their relative
+entropy is unchanged by the right partial trace, then the relative entropy of
+the finite Weyl average equals that of each Weyl-conjugated pair.
+
+The Weyl average is first identified with the marginal pair tensored with the
+maximally mixed ancilla. Singular-support ancilla additivity reduces its
+relative entropy to that of the marginals, while unitary invariance reduces the
+chosen summand to `D(ρ ‖ σ)`. The saturation hypothesis identifies these two
+values.
+
+This is an equality-propagation prerequisite for Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3 and equation (8); it does not assert the
+equality condition for joint convexity or Petz recovery. -/
+theorem quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq
+    {dS dC : ℕ} [NeZero dC]
+    {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
+    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hsupp : ∀ v : Fin dS × ZMod dC → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0)
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ))
+    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) (a b : ZMod dC) :
+    quantumRelativeEntropy
+        (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * ρ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ)
+        (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * σ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ) =
+      quantumRelativeEntropy
+        (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * ρ *
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ)
+        (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * σ *
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ) := by
+  classical
+  have hsuppM : ∀ w : Fin dS → ℂ,
+      (partialTraceRight σ).mulVec w = 0 → (partialTraceRight ρ).mulVec w = 0 :=
+    fun _ hw => partialTraceRight_support hσ hsupp hw
+  let U : unitary
+      (Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) :=
+    ⟨(1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b,
+      Matrix.kronecker_mem_unitary (Submonoid.one_mem _) (weyl_mem_unitary hζ a b)⟩
+  calc
+    quantumRelativeEntropy
+        (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * ρ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ)
+        (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * σ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ) =
+        quantumRelativeEntropy
+          (partialTraceRight ρ ⊗ₖ
+            ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ)))
+          (partialTraceRight σ ⊗ₖ
+            ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))) := by
+              rw [sum_kronecker_one_weyl_conj hζ ρ,
+                sum_kronecker_one_weyl_conj hζ σ]
+    _ = quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ) :=
+      quantumRelativeEntropy_kronecker_support hρ.partialTraceRight
+        hσ.partialTraceRight maximallyMixed_posDef.posSemidef maximallyMixed_trace hsuppM
+    _ = quantumRelativeEntropy ρ σ := heq.symm
+    _ = quantumRelativeEntropy
+        (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * ρ *
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ)
+        (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * σ *
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ) := by
+            simpa only [Unitary.coe_star, star_eq_conjTranspose, U] using
+              (quantumRelativeEntropy_conj_unitary hρ.isHermitian hσ.isHermitian U).symm

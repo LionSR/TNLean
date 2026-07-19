@@ -1108,6 +1108,24 @@ Theorem~\ref{thm:trace_norm_abs}.
     the injectivity of $b \mapsto \zeta^{b}$ on residues.
 \end{proof}
 
+\begin{theorem}[Unitarity of the Weyl operators]
+    \label{thm:weyl_operator_unitary}
+    \lean{Matrix.weylShift_mem_unitary}
+    \lean{Matrix.weylClock_mem_unitary}
+    \lean{Matrix.weyl_mem_unitary}
+    \leanok
+    Fix a dimension $d\geq 1$ and a primitive $d$-th root of unity $\zeta$.
+    The cyclic shift $X$, the clock operator $Z$, and every Weyl operator
+    $W(a,b)=X^aZ^b$ are unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+    The cyclic shift is the permutation matrix of a cyclic permutation.  The
+    clock operator is diagonal, and each diagonal entry is a power of $\zeta$,
+    hence has modulus one.  Thus $X$ and $Z$ are unitary, and so is every product
+    $X^aZ^b$.
+\end{proof}
+
 \begin{theorem}[Weyl-operator unitary 1-design twirl]
     \label{thm:weyl_twirl}
     \lean{Matrix.sum_weyl_conj}
@@ -1166,6 +1184,21 @@ Theorem~\ref{thm:trace_norm_abs}.
     $\mathbf 1_C / d_C$. The block trace is exactly the corresponding entry of the
     partial trace $\tr_C M$, so the average is $(\tr_C M) \otimes
     (\mathbf 1_C / d_C)$.
+\end{proof}
+
+\begin{theorem}[The maximally mixed ancilla]
+    \label{thm:maximally_mixed_ancilla}
+    \lean{Matrix.maximallyMixed_posDef}
+    \lean{Matrix.maximallyMixed_trace}
+    \leanok
+    For $d_C\geq 1$, the matrix $\tau_C=d_C^{-1}\mathbf 1_C$ is positive
+    definite and has trace one.
+\end{theorem}
+
+\begin{proof}\leanok
+    The identity is positive definite and $d_C^{-1}>0$, so $\tau_C$ is positive
+    definite.  Moreover,
+    $\operatorname{tr}\tau_C=d_C^{-1}\operatorname{tr}\mathbf 1_C=1$.
 \end{proof}
 
 \begin{lemma}[Reindexing invariance of the quantum relative entropy]
@@ -2213,6 +2246,58 @@ Theorem~\ref{thm:trace_norm_abs}.
         =D(\rho\,\Vert\,\sigma)\operatorname{tr}\tau
         =D(\rho\,\Vert\,\sigma).
     \]
+\end{proof}
+
+\begin{theorem}[Partial-trace saturation at each Weyl summand]
+    \label{thm:relative_entropy_weyl_average_eq_summand}
+    \lean{quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq}
+    \leanok
+    \uses{def:quantum_relative_entropy, def:partial_trace}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices on
+    $\mathcal H_S\otimes\mathbb C^{d_C}$ such that
+    $\ker\sigma\subseteq\ker\rho$, and suppose that
+    \[
+        D(\rho\Vert\sigma)
+          =D(\tr_C\rho\Vert\tr_C\sigma).
+    \]
+    For a primitive $d_C$-th root of unity, put
+    $U_{ab}=\mathbf 1_S\otimes W(a,b)$ and
+    \[
+        \overline X=\frac{1}{d_C^2}\sum_{c,e}U_{ce}XU_{ce}^{\dagger}.
+    \]
+    Then, for every $a,b$,
+    \[
+        D(\overline\rho\Vert\overline\sigma)
+          =D(U_{ab}\rho U_{ab}^{\dagger}\Vert
+              U_{ab}\sigma U_{ab}^{\dagger}).
+    \]
+    This is a scalar equality-propagation prerequisite for
+    \cite[Theorem~3 and equation~(8)]{Hayden2004Structure}; it neither
+    characterizes equality in joint convexity nor asserts recovery.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:twirl_partial_trace,
+        thm:partial_trace_kernel_inclusion,
+        thm:relative_entropy_ancilla_additivity_support,
+        thm:relative_entropy_unitary_invariance,
+        thm:weyl_operator_unitary,
+        thm:maximally_mixed_ancilla}
+    Let $\tau_C=d_C^{-1}\mathbf 1_C$.  The twirl identity gives
+    $\overline X=(\tr_C X)\otimes\tau_C$.  The support inclusion passes to the
+    partial traces, so support-domain ancilla additivity and the saturation
+    hypothesis give
+    \[
+        D(\overline\rho\Vert\overline\sigma)
+          =D(\tr_C\rho\Vert\tr_C\sigma)
+          =D(\rho\Vert\sigma).
+    \]
+    Every $U_{ab}$ is unitary, and unitary invariance gives
+    \[
+        D(U_{ab}\rho U_{ab}^{\dagger}\Vert
+            U_{ab}\sigma U_{ab}^{\dagger})=D(\rho\Vert\sigma).
+    \]
+    The two displayed identities prove the assertion.
 \end{proof}
 
 \begin{theorem}[Relative entropy against the product of the marginals]
