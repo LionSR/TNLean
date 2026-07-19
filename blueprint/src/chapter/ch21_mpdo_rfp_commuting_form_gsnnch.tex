@@ -540,6 +540,84 @@
     pairs as doubled physical indices.
 \end{proof}
 
+\begin{theorem}[A normal rescaling gives a geometric phase]
+    \label{thm:mpdo_eta_normal_rescaling_geometric_phase}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_unit_phase_power_mpo_eq_product_of_normal_smul}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
+    Let $A$ be the normal doubled-index source tensor of positive bond
+    dimension $D$, and let $C$ be a fixed tensor for its commuting-bond
+    product.  Suppose that $sC$ is normal for some $s>0$.  Then there is a
+    complex number $\zeta$, with
+    $|\zeta|=1$, such that, for every $N\geq2$,
+    \[
+        \rho^{(N)}(A)=(\zeta s)^N\prod_{n=0}^{N-1}B_{n,n+1}.
+    \]
+    This is a conditional reduction: it does not assert that $C$, or any
+    rescaling of $C$, is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality,
+        lem:mpv_smul, thm:normal_proportional_mpv_geometric_phase,
+        lem:mpdo_three_first_site_contraction_coefficients}
+    Scaling $C$ by $s$ gives
+    \[
+        V^{(N)}(sC)_\sigma=s^N V^{(N)}(C)_\sigma.
+    \]
+    Thus, for all sufficiently large $N$, the proportionality
+    $V^{(N)}(A)_\sigma=c_NV^{(N)}(C)_\sigma$ becomes
+    \[
+        V^{(N)}(A)_\sigma
+          =\frac{c_N}{s^N}V^{(N)}(sC)_\sigma,
+        \qquad \frac{c_N}{s^N}\ne0.
+    \]
+    The normal-tensor overlap dichotomy gives one $\zeta\in\C$, with
+    $|\zeta|=1$, such that
+    \[
+        V^{(N)}(A)_\sigma
+          =\zeta^N V^{(N)}(sC)_\sigma
+          =(\zeta s)^N V^{(N)}(C)_\sigma
+    \]
+    at every positive length.
+\end{proof}
+
+\begin{theorem}[A normal rescaling forces the positive geometric law]
+    \label{thm:mpdo_eta_normal_rescaling_positive_geometric_law}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      mpo_eq_positive_power_product_of_normal_smul}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
+    Let $A$ be the normal doubled-index source tensor of positive bond
+    dimension $D$, let $C$ be a fixed tensor for its commuting-bond product,
+    and suppose that $sC$ is normal for some $s>0$.  Then the unit phase is
+    trivial.  For every $N\geq2$,
+    \[
+        \rho^{(N)}(A)=s^N\prod_{n=0}^{N-1}B_{n,n+1}.
+    \]
+    Thus a positive normal rescaling of the fixed product tensor already
+    supplies the positive geometric realization law.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_eta_normal_rescaling_geometric_phase,
+        thm:cpsv_normal_mpv_phase_gauge}
+    Normality gives
+    \[
+        \lim_{N\to\infty}
+          \bigl\langle V^{(N)}(A),V^{(N)}(A)\bigr\rangle=1.
+    \]
+    Hence at two sufficiently large consecutive lengths, say $N$ and $N+1$,
+    both the source vector and the fixed bond product are nonzero.  Positivity
+    of the realization gives positive numbers $c_N,c_{N+1}$ satisfying
+    $(\zeta s)^N=c_N$ and $(\zeta s)^{N+1}=c_{N+1}$.  Consequently
+    $\zeta s=c_{N+1}/c_N>0$.  Since $|\zeta|=1$ and $s>0$, one has
+    $\zeta=1$.
+\end{proof}
+
 \begin{definition}[Rank-one trace factorization for neighboring operators]
     \label{def:mpdo_generic_eta_rank_one_trace_factorization}
     \lean{Matrix.EtaRankOneTraceFactorization}
