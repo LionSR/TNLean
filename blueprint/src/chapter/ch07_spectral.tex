@@ -3269,6 +3269,60 @@ transfers the support.
     $\operatorname{tr}(X_k)>0$, it follows that $\sigma_k>0$.
 \end{proof}
 
+\begin{theorem}[Fixed points of trace-preserving maps]%
+    \label{thm:wolf_6_14}
+    \lean{IsPositiveMap.exists_fixedPoints_densityBlocks_with_zero,
+        Matrix.exists_unitary_zero_extension_eq}
+    \leanok
+    \uses{thm:maximal_support_compression_density_blocks}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace preserving, and suppose
+    that $T^*$ satisfies the Schwarz inequality.  There are positive integers
+    $d_k,m_k$, positive definite density matrices
+    $\sigma_k\in\MN{m_k}$, a nonnegative integer $d_0$, and a unitary $U$
+    associated with a decomposition
+    \[
+        \mathbb C^D=\mathbb C^{d_0}\oplus
+          \bigoplus_k\mathbb C^{m_k}\otimes\mathbb C^{d_k}
+    \]
+    such that
+    \[
+        \operatorname{Fix}(T)
+          =U\left(0_{d_0}\oplus
+            \bigoplus_k\sigma_k\otimes\MN{d_k}\right)U^*.
+    \]
+    This is \cite[Theorem~6.14 and Equation~(6.63)]{Wolf2012Quantum}.
+    The two tensor factors are interchanged from the displayed convention in
+    the reference; the interchange is a unitary change of basis on each
+    summand.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:maximal_support_compression_density_blocks}
+    Let $V:\mathbb C^n\to\mathbb C^D$ be the maximal-support isometry and
+    let $U_c$ be the unitary in the density-block description of the
+    compressed fixed points.  The fixed-space equivalence gives
+    \[
+        \operatorname{Fix}(T)
+          =VU_c\left(\bigoplus_k
+              \sigma_k\otimes\MN{d_k}\right)U_c^*V^*.
+    \]
+    Put $W=VU_c$.  Then $W^*W=\Id_n$.  Compare $W$ with the canonical
+    inclusion of $\mathbb C^n$ as the second summand of
+    $\mathbb C^{D-n}\oplus\mathbb C^n$.  The two inclusions have the same
+    Gram matrix, so the finite-dimensional unitary extension theorem gives
+    an ambient unitary $U$ carrying the canonical inclusion to $W$.  Hence,
+    for every $A\in\MN{n}$,
+    \[
+        WAW^*=U(0_{D-n}\oplus A)U^*.
+    \]
+    Substituting the compressed density-block description for $A$ proves the
+    assertion.  The first block is the whole orthogonal complement of the
+    maximal stationary support, and is therefore one zero summand.  Positive
+    definiteness and trace one for every $\sigma_k$ are supplied by
+    Theorem~\ref{thm:maximal_support_compression_density_blocks}.
+\end{proof}
+
 \begin{theorem}[Conjugation by the square root at a fixed point of maximal support]%
     \label{thm:maximalSupport_weightedCorner}
     \lean{Kraus.exists_maximalSupport_weightedCorner_sqrt_eq}
