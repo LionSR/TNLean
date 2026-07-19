@@ -2982,13 +2982,13 @@ transfers the support.
     (Theorem~\ref{thm:transfer_channel}).
 \end{proof}
 
-\begin{lemma}[Loewner domination transfers the support]%
+\begin{lemma}[Scalar Loewner domination transfers the support]%
     \label{lem:stationaryProj_absorb_of_le}
-    \lean{Kraus.stationaryProj_absorb_of_le}
+    \lean{Kraus.stationaryProj_absorb_of_le_smul}
     \leanok
     \uses{def:support_proj}
-    Let $\rho, P \succeq 0$ with $P \preceq \rho$, and let $Q$ be the support projection
-    of $\rho$. Then
+    Let $\rho, P \succeq 0$ and $c\in\C$ with $P \preceq c\rho$, and let $Q$ be the
+    support projection of $\rho$. Then
     \[
         Q\,P = P, \qquad P\,Q = P.
     \]
@@ -3000,7 +3000,7 @@ transfers the support.
     The support projection absorbs $\rho$, so $(\Id - Q)\rho = 0$ and
     \[
         0 \;\preceq\; (\Id - Q)\,P\,(\Id - Q)
-        \;\preceq\; (\Id - Q)\,\rho\,(\Id - Q) \;=\; 0,
+        \;\preceq\; (\Id - Q)\,(c\rho)\,(\Id - Q) \;=\; 0,
     \]
     the middle inequality because conjugation by $\Id - Q$ preserves the Loewner order.
     Hence
@@ -3018,69 +3018,64 @@ transfers the support.
 
 \begin{theorem}[A fixed point of maximal support]%
     \label{thm:maximalSupport_fixedPoint}
-    \lean{Kraus.exists_maximalSupport_fixedPoint}
+    \lean{IsPositiveMap.exists_maximalSupport_fixedPoint}
     \leanok
-    \uses{def:tp_kraus, def:support_proj}
-    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving. There is a positive
-    semidefinite fixed point $\rho_0$ of $T$ such that, with $Q_0$ the support projection
-    of $\rho_0$, every fixed point $X$ of $T$ satisfies
+    \uses{def:positive_map, def:trace_preserving, def:mean_ergodic_projection,
+        def:support_proj}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, and let $T_\infty$ be its
+    mean-ergodic projection. Then $\rho_0=T_\infty(\Id)$ is positive semidefinite and
+    fixed by $T$. With $Q_0$ the support projection of $\rho_0$, every fixed point $X$
+    of $T$ satisfies
     \[
         Q_0\, X\, Q_0 = X.
     \]
     This is the maximal-support property of fixed points in Section~6.4
-    of~\cite{Wolf2012Quantum}; there the witness is the image of the identity under the
-    projection onto the fixed-point space, while here it is a sum of positive fixed
-    points.
+    of~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:isChannel_transferMap, thm:hermitian_fixedpoint_parts,
-        lem:stationaryProj_absorb_of_le}
-    Let $X_0, \ldots, X_{m-1}$ be a basis of the fixed-point space of $T$. Each $X_j$ splits
-    into fixed Hermitian components: with
+    \uses{thm:positive_trace_preserving_mean_ergodic_projection,
+        thm:positive_map_conjTranspose, thm:hermitian_fixedpoint_parts,
+        thm:psd_le_trace_smul_one, lem:stationaryProj_absorb_of_le}
+    Positivity of the mean-ergodic projection gives $\rho_0\succeq 0$, while its range
+    and idempotence give $T(\rho_0)=\rho_0$.  Each fixed point $X$ splits into fixed
+    Hermitian components:
     \[
-        H_{1,j} = X_j + X_j^{\dagger},
+        H_1 = X + X^{\dagger},
         \qquad
-        H_{2,j} = i\,\bigl(X_j - X_j^{\dagger}\bigr),
+        H_2 = i\,\bigl(X - X^{\dagger}\bigr),
     \]
-    both are Hermitian fixed points (the conjugate transpose of a fixed point is fixed),
+    Both are Hermitian fixed points (the conjugate transpose of a fixed point is fixed),
     and
     \[
-        X_j \;=\; \tfrac{1}{2}\,H_{1,j} - \tfrac{i}{2}\,H_{2,j}.
+        X \;=\; \tfrac{1}{2}\,H_1 - \tfrac{i}{2}\,H_2.
     \]
     By the decomposition of Hermitian fixed points into positive parts
     (Theorem~\ref{thm:hermitian_fixedpoint_parts}) there are positive semidefinite fixed
     points with
     \[
-        H_{1,j} = P^{+}_{1,j} - P^{-}_{1,j},
+        H_1 = P^{+}_1 - P^{-}_1,
         \qquad
-        H_{2,j} = P^{+}_{2,j} - P^{-}_{2,j}.
+        H_2 = P^{+}_2 - P^{-}_2.
     \]
-    Set
+    If $P\succeq0$ is any of these positive fixed points, then
+    $\tr(P)\Id-P\succeq0$. Positivity of $T_\infty$ and
+    $T_\infty(P)=P$ give
     \[
-        \rho_0 \;=\; \sum_{j=0}^{m-1}
-            \bigl(P^{+}_{1,j} + P^{-}_{1,j} + P^{+}_{2,j} + P^{-}_{2,j}\bigr),
+        \tr(P)\rho_0-P
+        =T_\infty\!\left(\tr(P)\Id-P\right)\succeq0.
     \]
-    a positive semidefinite fixed point. Every summand is dominated by $\rho_0$ in the
-    Loewner order, because the remaining summands are positive semidefinite, so the
-    support projection $Q_0$ of $\rho_0$ absorbs each of them
-    (Lemma~\ref{lem:stationaryProj_absorb_of_le}):
+    Thus $P\preceq\tr(P)\rho_0$, and scalar domination transfers the support, so
+    $Q_0P Q_0=P$. Substituting this identity into the two positive-part decompositions
+    gives
     \[
-        Q_0\, P^{\pm}_{k,j}\, Q_0 = P^{\pm}_{k,j}.
-    \]
-    Substituting into the two displayed decompositions gives
-    \[
-        Q_0\, H_{k,j}\, Q_0
-        \;=\; Q_0\,\bigl(P^{+}_{k,j} - P^{-}_{k,j}\bigr)\,Q_0
-        \;=\; H_{k,j},
+        Q_0\, H_k\, Q_0 = H_k,
         \qquad
-        Q_0\, X_j\, Q_0
-        \;=\; \tfrac{1}{2}\,Q_0 H_{1,j} Q_0 - \tfrac{i}{2}\,Q_0 H_{2,j} Q_0
-        \;=\; X_j.
+        Q_0\, X\, Q_0
+        = \tfrac{1}{2}\,Q_0 H_1 Q_0 - \tfrac{i}{2}\,Q_0 H_2 Q_0
+        = X.
     \]
-    A fixed point $X$ of $T$ is a
-    linear combination of the basis $X_0, \ldots, X_{m-1}$, so $Q_0\, X\, Q_0 = X$.
 \end{proof}
 
 \begin{theorem}[Conjugation by the square root at a fixed point of maximal support]%
