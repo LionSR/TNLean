@@ -361,6 +361,26 @@ SOURCE = r"""
 \ifnum\tenkzinteriorbondseen=2\else
   \errmessage{periodic hooks suppressed an unconsumed interior centred face}
 \fi
+\begin{tenkz}[rows={wire, wire}, periodic,
+    trace style=hooks, tensor style=box]
+  \tn[wires=2, west at=center, east at=none]{X}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic,
+    trace style=racetrack, tensor style=box]
+  \tn[wires=2, west at=center, east at=none]{X}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic,
+    trace style=hooks, tensor style=box]
+  \tnfuse[span=2, west at=center, east at=none]{V}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic,
+    trace style=racetrack, tensor style=box]
+  \tnfuse[span=2, west at=center, east at=none]{V}\\
+  &
+\end{tenkz}
 \end{document}
 """
 
@@ -1193,6 +1213,25 @@ def main() -> int:
         "boundary|picture=76|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
         "unconsumed interior centered faces changed boundary topology",
     )
+    for picture, closure in ((77, "hooks"), (78, "trace"),
+                             (79, "hooks"), (80, "trace")):
+        mismatch = pictures[picture]
+        require(
+            mismatch,
+            f"warning|picture={picture}|code=periodic-face-ports|row=1",
+            f"picture {picture} did not report its unmatched periodic face",
+        )
+        forbid(
+            mismatch,
+            f"{closure}|picture={picture}|",
+            f"picture {picture} closed a one-sided periodic face",
+        )
+        require(
+            mismatch,
+            f"boundary|picture={picture}|virtual-west=1|virtual-east=0|"
+            "physical-up=0|physical-down=0",
+            f"picture {picture} counted its unmatched centered face twice",
+        )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 
