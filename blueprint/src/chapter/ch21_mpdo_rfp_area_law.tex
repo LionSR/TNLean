@@ -987,18 +987,38 @@
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
 
-\begin{lemma}[Rank under real normalization]
-    \label{lem:matrix_rank_real_smul}
-    \lean{Matrix.rank_smul_of_ne_zero_real}
+\begin{theorem}[Rank under nonzero scalar multiplication]
+    \label{thm:matrix_rank_smul}
+    \lean{Matrix.rank_smul_of_ne_zero}
     \leanok
-    Let $A$ be a finite real matrix and let $a\neq0$.  Then
+    Let $K$ be a field, let $A$ be a finite matrix over $K$, and let
+    $a\in K$ be nonzero.  Then
     \[
-      \operatorname{rank}_{\R}(aA)=\operatorname{rank}_{\R}A.
+      \operatorname{rank}_{K}(aA)=\operatorname{rank}_{K}A.
     \]
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Multiplication by $a$ identifies the column spaces, with inverse given by
     multiplication by $a^{-1}$.
+\end{proof}
+
+\begin{theorem}[Rank under faithful scalar extension]
+    \label{thm:matrix_rank_scalar_extension}
+    \lean{Matrix.rank_map_algebraMap}
+    \leanok
+    Let $K\subseteq L$ be a faithful field extension, let
+    $\iota:K\hookrightarrow L$ be the inclusion, and let $A$ be a finite
+    matrix over $K$.  Then
+    \[
+      \operatorname{rank}_{L}\!\left((\iota(A_{ij}))_{ij}\right)
+      =\operatorname{rank}_{K} A.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    For every finite selection of columns, the selected columns are linearly
+    independent over $K$ if and only if their scalar extensions are linearly
+    independent over $L$.  Selecting a basis from each column space proves the
+    two rank inequalities.
 \end{proof}
 
 \begin{definition}[Joint probability distribution and marginals]
@@ -1119,31 +1139,28 @@
     points is at most $\log k$.
 \end{proof}
 
-\begin{theorem}[Classical estimate with an explicit rank bridge]
+\begin{theorem}[Classical estimate for normalized diagonal cut coefficients]
     \label{thm:mpo_diagonal_cut_classical_mutual_information}
     \lean{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log}
     \leanok
     \uses{thm:mpo_diagonal_cut_rank,
       thm:classical_mutual_information_le_log_rank,
-      lem:matrix_rank_real_smul}
+      thm:matrix_rank_smul,
+      thm:matrix_rank_scalar_extension}
     Let $D\geq1$, and let $W$ be a real diagonal coefficient matrix across a
-    periodic cut of an MPO with bond dimension $D$.  Suppose its
-    complexification is the cut matrix $P^{\C}$ from
-    Theorem~\ref{thm:mpo_diagonal_cut_rank} and
-    \[
-      \operatorname{rank}_{\R}W=\operatorname{rank}_{\C}P^{\C}.
-    \]
+    periodic cut of an MPO with bond dimension $D$.  Suppose its scalar
+    extension to $\C$ is the cut matrix $P^{\C}$ from
+    Theorem~\ref{thm:mpo_diagonal_cut_rank}.
     If $Z>0$ and $P=Z^{-1}W$ is a joint probability distribution, then
     \[
       I(X:Y)_P\leq2\log D.
     \]
-    The rank equality is an explicit scope restriction; its derivation from
-    the current diagonal-cut data remains open.
 \end{theorem}
 \begin{proof}\leanok
     Normalization does not change real rank by
-    Lemma~\ref{lem:matrix_rank_real_smul}.  The explicit rank bridge and
-    Theorem~\ref{thm:mpo_diagonal_cut_rank} therefore give
+    Theorem~\ref{thm:matrix_rank_smul}.  Faithful scalar extension does
+    not change rank by Theorem~\ref{thm:matrix_rank_scalar_extension}; hence
+    Theorem~\ref{thm:mpo_diagonal_cut_rank} gives
     \[
       \operatorname{rank}_{\R}P\leq D^2.
     \]

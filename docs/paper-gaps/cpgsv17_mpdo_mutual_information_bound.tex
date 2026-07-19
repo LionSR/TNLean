@@ -204,14 +204,17 @@ The rank factorization is formalized.
 The information-versus-rank theorem of Riazanov--Vyalyi is formalized by
 \leanid{Entropy.classicalMutualInformation_le_log_rank} in
 \doclink{TNLean/Entropy/ClassicalMutualInformation}.  Real scalar normalization
-preserves rank by \leanid{Matrix.rank_smul_of_ne_zero_real}.  The conditional
-assembly, with the real-to-complex rank equality stated explicitly, is
-\leanid{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log}; both are
-in \doclink{TNLean/MPS/MPDO/DiagonalCutRank}.  The remaining unconditional
-diagonal-MPO step is to construct the real cut matrix from positivity and
-diagonality and prove that its real rank equals the complex rank of its scalar
-extension.  The conditional theorem does not assert that this bridge follows
-from the current MPDO interface.
+preserves rank by \leanid{Matrix.rank_smul_of_ne_zero}, while faithful
+scalar extension preserves matrix rank by \leanid{Matrix.rank_map_algebraMap};
+both are in \doclink{TNLean/Algebra/MatrixRankBaseChange}.  The resulting
+finite-chain estimate
+\leanid{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log} is in
+\doclink{TNLean/MPS/MPDO/DiagonalCutRank}.  The estimate assumes a real
+coefficient matrix, its normalized joint distribution, and an identification
+of its complex scalar extension with the diagonal cut matrix.  The remaining
+step at the MPDO level is to construct that coefficient matrix and probability
+distribution, together with the two identifications, from positivity and
+diagonality of the finite-chain operator.
 
 \section{What the rank-three separation establishes}
 
