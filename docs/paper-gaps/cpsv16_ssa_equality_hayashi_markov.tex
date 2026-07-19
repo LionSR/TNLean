@@ -278,6 +278,41 @@ value on the left.  The $d_R^2$ weights sum to one.
 This statement does not characterize equality in joint convexity and does not
 imply an operator intertwining or Petz recovery identity.
 
+For positive definite inputs, the fixed-resolvent algebra of the equality
+case is now available for the Weyl family.  With
+$A_g=d_R^{-2}U_g\rho U_g^\dagger$, $B_g=d_R^{-2}U_g\sigma U_g^\dagger$,
+and
+\[
+  T_g(X)=A_gX+tXB_g,\qquad
+  T(X)=\Bigl(\sum_gA_g\Bigr)X+tX\Bigl(\sum_gB_g\Bigr),
+\]
+put $\Lambda_t=T^{-1}(\sum_gB_g)$.  For every $t>0$, direct expansion of
+the residuals $R_g=B_g-T_g(\Lambda_t)$ gives the exact identity
+\begin{align}
+  \sum_g\left\|T_g^{-1/2}(B_g)-T_g^{1/2}(\Lambda_t)\right\|_{\rm HS}^2
+  &={}
+  \sum_g\operatorname{Re}\langle B_g,T_g^{-1}(B_g)\rangle_{\rm HS}\notag\\
+  &\quad-
+  \operatorname{Re}\left\langle\sum_gB_g,
+    T^{-1}\Bigl(\sum_gB_g\Bigr)\right\rangle_{\rm HS}.
+\end{align}
+Consequently, if the right-hand side vanishes, then
+$T_g^{-1}(B_g)=\Lambda_t$ for every $g$, in particular for the identity Weyl
+element.  This is the fixed-$t$ calculation of Jen\v{c}ov\'a--Ruskai,
+arXiv:0903.2895, \S4 and Appendix, equations \texttt{Mj} and
+\texttt{basiceq}.
+\footnote{Formal declarations:
+\leanid{Matrix.weyl_resolvent_defect_identity} and
+\leanid{Matrix.weyl_resolvent_eq_of_defect_eq_zero} in
+\path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
+This result is deliberately restricted to positive definite inputs and one
+fixed value of $t$.  The missing analytic bridge is to rewrite the scalar
+equality in the preceding finite Weyl Jensen step as the integral of a
+nonnegative sum whose summands include a positive multiple of this defect,
+deduce its vanishing for every $t>0$, and then pass to singular supports.
+Thus the new identity advances the saturation analysis but does not by itself
+imply the Petz sandwich below.
+
 There is nevertheless a useful algebraic reduction for the identity summand.
 Write
 \[
