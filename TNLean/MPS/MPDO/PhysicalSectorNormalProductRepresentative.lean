@@ -87,12 +87,10 @@ theorem exists_normal_fixedProductTensorData_of_isSAL
           mpo K N =
             ((F.translationInvariantBondData hη).toCommutingFormData hN).product := by
   obtain ⟨F, hη⟩ := exists_positive_physicalSectorFactorization_of_isSAL K hK hSAL
+  let repr := F.fixedProductTensorData hη (bondDim_pos_of_isSAL K hSAL)
   refine ⟨F, hη, ?_, ?_⟩
   · exact hNormal
   · intro N hN
-    change mpo K N =
-      (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N hN i F.physicalBond).prod
-    exact F.mpo_eq_product_physicalBond hN
+    exact repr.mpo_eq_product N hN
 
 end MPOTensor
