@@ -307,6 +307,17 @@ lemma activeSectorTraceMatrix_isPrimitive :
   rw [happ]
   exact rightPairing_mul_leftPairing_re_pos (activeEquiv k) (activeEquiv h)
 
+/-- The rectangular remainder is exactly the failure of the opposite product
+`rightPairing * leftPairing` to be idempotent.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1484--1499. -/
+lemma rectangular_remainder_eq_mul_sub_sq :
+    rightPairing * (1 - leftPairing * rightPairing) * leftPairing =
+      rightPairing * leftPairing -
+        (rightPairing * leftPairing) * (rightPairing * leftPairing) := by
+  rw [Matrix.mul_sub, Matrix.mul_one, Matrix.sub_mul]
+  simp only [Matrix.mul_assoc]
+
 /-- The rectangular remainder from CPSV16, Appendix C.2, does not vanish for
 this factorization. -/
 lemma rectangular_remainder_ne_zero :
@@ -316,13 +327,8 @@ lemma rectangular_remainder_ne_zero :
   have hdiff :
       rightPairing * leftPairing -
           (rightPairing * leftPairing) * (rightPairing * leftPairing) = 0 := by
-    calc
-      rightPairing * leftPairing -
-          (rightPairing * leftPairing) * (rightPairing * leftPairing) =
-          rightPairing * (1 - leftPairing * rightPairing) * leftPairing := by
-        rw [Matrix.mul_sub, Matrix.mul_one, Matrix.sub_mul]
-        simp only [Matrix.mul_assoc]
-      _ = 0 := hzero
+    rw [← rectangular_remainder_eq_mul_sub_sq]
+    exact hzero
   exact (sub_eq_zero.mp hdiff).symm
 
 /-- Full virtual-matrix spanning does not force the rectangular remainder
