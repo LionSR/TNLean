@@ -1357,6 +1357,12 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{lemma}
 
+\begin{proof}\leanok
+    Every eigenvalue of $\tau$ is strictly positive.  Hence the function
+    defining the support inverse square root agrees on the spectrum with the
+    reciprocal of the positive square-root function.
+\end{proof}
+
 \begin{lemma}[Support inverse-square-root identity]
     \label{lem:support_inverse_square_root_sandwich}
     \lean{Matrix.PosSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt}
@@ -2789,9 +2795,11 @@ Theorem~\ref{thm:trace_norm_abs}.
       f_t(S)=t^{-1/2}\mathbf 1-t^{1/2}(t\mathbf 1+S)^{-1}.
     \]
     Applied to $x$, this is
-    $t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x$.  The hypothesis therefore makes
-    the two vector-valued integrands equal, and integration gives equality of
-    the positive square roots on $x$.
+    \[
+      f_t(S)x=t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x.
+    \]
+    The hypothesis therefore gives $f_t(S)x=f_t(T)x$ for every $t>0$.
+    Integration gives equality of the positive square roots on $x$.
 
     For the second assertion, factor
     \[

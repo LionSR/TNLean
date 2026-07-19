@@ -80,7 +80,8 @@ when the data-processing inequality for relative entropy is saturated and the
 reconstruction of the discarded subsystem from a recovery map. This recovery-map
 argument still lacks the singular-support extension of saturation-to-recovery
 and the subsequent structural analysis, which is why the forward direction is
-axiomatized rather than proved.  The positive-definite recovery implication and
+treated as an external assumption rather than proved.  The positive-definite
+recovery implication and
 the complementary trace-preserving extension of the support Petz map have now
 been supplied and are no longer part of this gap.
 
@@ -151,8 +152,8 @@ The reverse half uses the following entropy-additivity sub-lemmas, all proved in
 
 With these five facts the reverse implication is a finite computation, now
 carried out in \path{TNLean/Analysis/EntropyMarkovReverse.lean}; the
-forward implication remains an axiom until the singular-support recovery
-extension and the structural analysis are available.
+forward implication remains an external assumption until the singular-support
+recovery extension and the structural analysis are available.
 
 \section{Trace-preserving Petz channel now available}
 
@@ -433,9 +434,10 @@ reverse direction and an axiomatic forward direction. Only the forward
 direction, equality implies quantum-Markov-chain structure, still needs the
 singular-support recovery theorem and the structural analysis of recovered
 states; positive-definite recovery and the trace-preserving Petz channel are
-now available.  The forward direction alone is axiomatized. The reverse direction, a block-diagonal
-product state attains equality, is proved from entropy additivity over weighted
-direct sums and tensor factors together with unitary and reindexing invariance.
+now available.  The forward direction alone is postulated. The reverse
+direction, a block-diagonal product state attains equality, is proved from
+entropy additivity over weighted direct sums and tensor factors together with
+unitary and reindexing invariance.
 Until those remaining steps are formalized, the forward direction remains the
 irreducible axiomatic content of this characterization.
 
