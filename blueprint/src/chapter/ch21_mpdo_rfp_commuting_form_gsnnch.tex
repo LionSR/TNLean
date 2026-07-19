@@ -393,6 +393,7 @@
     \label{def:mpdo_cyclic_edge_weight_tensor}
     \lean{MPOTensor.cyclicEdgeWeightTensor}
     \lean{MPOTensor.cyclicEdgeWeightTensor_apply_eq}
+    \lean{MPOTensor.etaCyclicEdgeWeight}
     \leanok
     A scalar weight
     \[
@@ -441,13 +442,50 @@
     product gives such a tensor with positive virtual dimension $d^2$.
 \end{definition}
 
+\begin{theorem}[Fixed tensor for an eta-local bond product]
+    \label{thm:mpdo_eta_fixed_bond_product_tensor}
+    \lean{MPOTensor.%
+      reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight}
+    \lean{MPOTensor.EtaLocalStructureData.nonempty_fixedProductTensorData}
+    \lean{MPOTensor.EtaLocalStructureData.fixedProductTensorData}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor,
+        thm:mpdo_commuting_bond_positive_eta_decomposition}
+    Suppose $d>0$.  The fixed positive commuting bond carried by an eta-local
+    structure admits one matrix-product tensor $C$, with virtual dimension
+    $d^2$ and independent of $N$, such that for every $N\geq2$,
+    \[
+        \rho^{(N)}(C)=\prod_{n=0}^{N-1}B_{n,n+1}.
+    \]
+    No normality assertion is made for $C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
+        thm:mpdo_eta_pair_bond_cyclic_product_transport,
+        thm:mpdo_cyclic_edge_weight_tensor}
+    Choose the unitary $U$, sector dimensions, and neighboring operators
+    $\eta_{q,h}$ from the fixed-bond decomposition.  In the corresponding
+    sector coordinates, the product of the conjugated bonds has entries
+    \[
+        \bigoplus_{k_0,\ldots,k_{N-1}}
+          \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}},
+        \qquad k_N=k_0.
+    \]
+    The cyclic edge-weight tensor has exactly these entries.  Conjugating its
+    physical index by $U$ gives $C$; the two sitewise unitary conjugations
+    cancel, which yields the stated bond product.
+\end{proof}
+
 \begin{theorem}[Eventual proportionality from a fixed product tensor]
     \label{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality}
     \lean{MPOTensor.EtaLocalStructureData.%
       eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
     \leanok
     \uses{def:mpdo_eta_local_structure_data,
-        def:mpdo_fixed_bond_product_tensor}
+        def:mpdo_fixed_bond_product_tensor,
+        thm:mpdo_eta_fixed_bond_product_tensor}
     Suppose one fixed tensor $C$ generates the products of the bond carried
     by an eta-local structure.  Then the doubled-index tensors of $M$ and
     $C$ are eventually nonzero proportional.  The proof uses only lengths
