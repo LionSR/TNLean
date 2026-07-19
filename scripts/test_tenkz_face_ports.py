@@ -30,6 +30,7 @@ SOURCE = r"""
 \newcount\tenkzmatchedlabelseen
 \newcount\tenkzsurpluslabelseen
 \newcount\tenkzplainlabelseen
+\newcount\tenkzcenterlabelseen
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -276,6 +277,40 @@ SOURCE = r"""
 \ifnum\tenkzplainlabelseen=1\else
   \errmessage{plain-to-wide opened lower label was not rendered exactly once}
 \fi
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[pill, wide=2, no legs]{U} & \\
+  \tn[pill, wide=2, up at=center]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, tensor style=box]
+  \tn[wires=2, combined=north]{A}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire}, tensor style=box]
+  \tn[combined=west]{A}
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, tensor style=box]
+  \tn{A} & \tn[wires=2, west at=center]{X}\\
+  \tn{A} &
+\end{tenkz}
+\begin{tenkz}[rows={wire}]
+  \tn[label pos=bogus]{A}
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic, tensor style=box]
+  \tnfuse[span=2, west at=center, east at=center]{V}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic, trace style=hooks, tensor style=box]
+  \tnfuse[span=2, west at=center, east at=center]{V}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
+  \tn[pill, wide=2, down at={1}]{U} & \\
+  \tn[pill, wide=2, up at=center,
+      up={\global\advance\tenkzcenterlabelseen by 1\relax}]{L} &
+\end{tenkz}
+\ifnum\tenkzcenterlabelseen=1\else
+  \errmessage{wide-to-centered opened lower label was not rendered exactly once}
+\fi
 \end{document}
 """
 
@@ -351,7 +386,21 @@ def main() -> int:
             ]
             for picture in audit.pictures
         }
+        missing_picture_log = work / "missing-warning-picture.tnlog"
+        missing_picture_log.write_text(
+            "picture|id=1|lang=grid\nwarning|code=missing-owner\n",
+            encoding="utf-8",
+        )
+        missing_picture_audit = Audit(missing_picture_log, None)
+        missing_picture_audit.parse_log()
+        missing_picture_guard = any(
+            finding.rule == "malformed-event"
+            and "lacks required picture=" in finding.msg
+            for finding in missing_picture_audit.findings
+        )
 
+    if not missing_picture_guard:
+        raise AssertionError("audit parser silently dropped a pictureless warning")
     inverse = pictures[1]
     require(
         inverse,
@@ -883,6 +932,11 @@ def main() -> int:
         "trace|picture=54|row=2|side=below",
         "centered periodic face closed once per spanned row",
     )
+    require(
+        centered_periodic,
+        "boundary|picture=54|virtual-west=0|virtual-east=0|physical-up=0|physical-down=0",
+        "centered periodic closure remained open in the boundary signature",
+    )
     centered_hooks = pictures[55]
     require(
         centered_hooks,
@@ -893,6 +947,11 @@ def main() -> int:
         centered_hooks,
         "hooks|picture=55|row=2|side=below",
         "centered periodic hooks closed once per spanned row",
+    )
+    require(
+        centered_hooks,
+        "boundary|picture=55|virtual-west=0|virtual-east=0|physical-up=0|physical-down=0",
+        "centered periodic hooks remained open in the boundary signature",
     )
     opened_unmatched_wide = pictures[56]
     if paired_ports(opened_unmatched_wide) != [("1", "1")]:
@@ -911,6 +970,63 @@ def main() -> int:
         pictures[58],
         "boundary|picture=58|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
         "a suppressed split lower face survived below an absent upper site",
+    )
+    wide_suppressed_upper = pictures[60]
+    require(
+        wide_suppressed_upper,
+        "boundary|picture=60|virtual-west=2|virtual-east=2|physical-up=1|physical-down=0",
+        "wide no-legs owner reopened one centered lower port per column",
+    )
+    for picture_id, code, event in (
+        (61, "combined-side",
+         "warning|picture=61|code=combined-side|value=north"),
+        (62, "combined-wires",
+         "warning|picture=62|code=combined-wires|cell=1-1"),
+        (63, "combined-attach",
+         "warning|picture=63|code=combined-attach|row=1"),
+        (64, "label-pos",
+         "warning|picture=64|code=label-pos|pos=bogus"),
+    ):
+        require(pictures[picture_id], event,
+                f"{code} warning lost picture ownership")
+        if code not in parsed_warnings[picture_id]:
+            raise AssertionError(f"{code} warning was dropped by the audit parser")
+    fused_periodic = pictures[65]
+    require(
+        fused_periodic,
+        "trace|picture=65|row=1|side=above",
+        "centered fused periodic face did not close once",
+    )
+    forbid(
+        fused_periodic,
+        "trace|picture=65|row=2|side=below",
+        "centered fused periodic face closed once per spanned row",
+    )
+    require(
+        fused_periodic,
+        "boundary|picture=65|virtual-west=0|virtual-east=0|physical-up=0|physical-down=0",
+        "centered fused periodic closure remained open in the boundary signature",
+    )
+    fused_hooks = pictures[66]
+    require(
+        fused_hooks,
+        "hooks|picture=66|row=1|side=above",
+        "centered fused hooks did not close once",
+    )
+    forbid(
+        fused_hooks,
+        "hooks|picture=66|row=2|side=below",
+        "centered fused hooks closed once per spanned row",
+    )
+    require(
+        fused_hooks,
+        "boundary|picture=66|virtual-west=0|virtual-east=0|physical-up=0|physical-down=0",
+        "centered fused hooks remained open in the boundary signature",
+    )
+    require(
+        pictures[67],
+        "boundary|picture=67|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
+        "opened centered lower label fixture changed its face topology",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
