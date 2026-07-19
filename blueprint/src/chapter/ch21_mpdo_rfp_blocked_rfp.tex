@@ -1548,24 +1548,24 @@ physical indices, as in
     \lean{IsPositiveMap.%
       exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span}
     \leanok
-    Let $F:M_D(\mathbb C)\to M_D(\mathbb C)$ be positive and trace
-    nonincreasing.  Suppose that a family $(V_j)_{j\in J}$ consists of fixed
-    points of $F$ and that, for some $L>0$, the identity belongs to the
-    linear span of the products
+    Let $\mathcal M$ be a finite full matrix algebra over $\mathbb C$, and let
+    $F:\mathcal M\to\mathcal M$ be positive and trace nonincreasing.  Suppose
+    that a family $(V_j)_{j\in J}$ consists of fixed points of $F$ and that,
+    for some $L>0$, the identity belongs to the linear span of the products
     \[
       V_{j_1}\cdots V_{j_L}
     \]
-    in $M_D(\mathbb C)$.  Then $F$ has a positive-definite fixed point.
+    in $\mathcal M$.  Then $F$ has a positive-definite fixed point.
 \end{theorem}
 
 \begin{proof}\leanok
     Boundedness of the forward orbits gives the mean-ergodic projection $P$.
     Set $\rho=P(\mathbf 1)$ and let $Q$ be the support projection of $\rho$.
-    The maximal-support property of $\rho$ gives
+    For every $j$, the maximal-support property of $\rho$ gives
     \[
-      QV_jQ=V_j
+      QV_jQ=V_j.
     \]
-    for every $j$.  Since $Q$ is a projection, this implies
+    Since $Q$ is a projection, this implies
     $QV_j=V_j=V_jQ$, and therefore every positive-length product of the
     $V_j$ is supported on $Q$.  The product-span hypothesis then gives
     $Q\mathbf 1Q=\mathbf 1$, so $Q=\mathbf 1$.  Thus $\rho$ is positive
