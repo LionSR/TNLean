@@ -194,11 +194,46 @@ marginal.
 \leanid{Matrix.partialTraceRightPetzChannel_partialTraceRight} in
 \path{TNLean/Channel/PetzRecovery.lean}.}
 
-This leaf still does not supply the full recovery theorem needed by the
-forward strong-subadditivity characterization.  It does not prove that
-saturation of relative-entropy data processing forces recovery of the first
-argument.  That step, followed by the structural analysis of the recovered
-tripartite state, remains necessary before the forward axiom can be removed.
+The source support condition is also now connected to this completed channel.
+If positive semidefinite matrices $\rho$ and $\sigma$ satisfy
+$\ker\sigma\subseteq\ker\rho$, then the same inclusion holds after the right
+partial trace.  If $P_\tau$ is the support projection of
+$\tau=\operatorname{tr}_R\sigma$, this gives
+\begin{align}
+  P_\tau(\operatorname{tr}_R\rho)P_\tau
+    =\operatorname{tr}_R\rho.
+\end{align}
+Consequently the complementary term vanishes on
+$\operatorname{tr}_R\rho$, and
+\begin{align}
+  \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\rho)
+    =\mathcal R_\sigma(\operatorname{tr}_R\rho).
+\end{align}
+\footnote{Formal declarations:
+\leanid{Matrix.IsHermitian.supportProj_mul_mul_supportProj_of_mulVec_kernel_le}
+and
+\leanid{Matrix.partialTraceRightPetzChannel_apply_partialTraceRight_of_support}
+in \path{TNLean/Channel/Schwarz/PetzRecoverySupport.lean}.}
+Thus the choice of trace-preserving extension away from the support is no
+longer part of the forward equality gap.
+
+The exact remaining analytic implication is the equality case of data
+processing on this support domain:
+\begin{align}
+  D(\rho\Vert\sigma)
+    =D(\operatorname{tr}_R\rho\Vert\operatorname{tr}_R\sigma)
+  \quad\Longrightarrow\quad
+  \mathcal R_\sigma(\operatorname{tr}_R\rho)=\rho.
+\end{align}
+This is the forward implication of
+\cite[Theorem~3]{HaydenJozsaPetzWinter2004}.  The present proof of data
+processing establishes the inequality by regularization, unitary averaging,
+and joint convexity, but it does not yet analyze equality in those steps.
+After this analytic implication, the proof of the block decomposition still
+requires the invariant-state decomposition used in
+\cite[Theorem~6]{HaydenJozsaPetzWinter2004}; that is the
+Koashi--Imoto structural step.  Both steps remain necessary before the forward
+axiom can be removed.
 
 \section{Verdict}
 
