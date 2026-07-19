@@ -41,75 +41,6 @@ noncomputable section
 
 namespace Matrix
 
-private theorem trace_reindex_equiv
-    {m n : Type*} [Fintype m] [Fintype n]
-    (e : m ≃ n) (M : Matrix m m ℂ) :
-    Matrix.trace (Matrix.reindex e e M) = Matrix.trace M := by
-  classical
-  simpa [Matrix.trace, Matrix.reindex_apply] using
-    Fintype.sum_equiv e.symm _ _ (by intro; simp)
-
-private theorem trace_partialTraceLeft_mul
-    {α β : Type*} [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
-    (X : Matrix β β ℂ) (Y : Matrix (α × β) (α × β) ℂ) :
-    Matrix.trace (Matrix.partialTraceLeft Y * X) =
-      Matrix.trace (Y * ((1 : Matrix α α ℂ) ⊗ₖ X)) := by
-  classical
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply,
-    Matrix.partialTraceLeft_apply, Matrix.kroneckerMap_apply, Matrix.one_apply]
-  simp only [Finset.sum_mul]
-  simp_rw [Fintype.sum_prod_type]
-  simp
-  calc
-    (∑ x : β, ∑ y : β, ∑ i : α, Y (i, x) (i, y) * X y x) =
-        ∑ x : β, ∑ i : α, ∑ y : β, Y (i, x) (i, y) * X y x := by
-      apply Finset.sum_congr rfl
-      intro x _
-      rw [Finset.sum_comm]
-    _ = ∑ i : α, ∑ x : β, ∑ y : β, Y (i, x) (i, y) * X y x := by
-      rw [Finset.sum_comm]
-
-private theorem partialTraceLeft_kronecker
-    {α β : Type*} [Fintype α]
-    (A : Matrix α α ℂ) (B : Matrix β β ℂ) :
-    Matrix.partialTraceLeft (A ⊗ₖ B) = Matrix.trace A • B := by
-  classical
-  ext i j
-  simp only [Matrix.partialTraceLeft_apply, Matrix.kroneckerMap_apply,
-    Matrix.smul_apply, Matrix.trace, Matrix.diag]
-  rw [← Finset.sum_mul]
-  rfl
-
-private theorem trace_kronecker_partialTraceLeft_mul_eq
-    {α β : Type*} [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
-    (σ : Matrix α α ℂ) (A B : Matrix (α × β) (α × β) ℂ) :
-    Matrix.trace ((σ ⊗ₖ Matrix.partialTraceLeft B) * A) =
-      Matrix.trace
-        (B * ((1 : Matrix α α ℂ) ⊗ₖ
-          Matrix.partialTraceLeft (((σ ⊗ₖ (1 : Matrix β β ℂ)) * A)))) := by
-  classical
-  let X := Matrix.partialTraceLeft B
-  let Y := (σ ⊗ₖ (1 : Matrix β β ℂ)) * A
-  calc
-    Matrix.trace ((σ ⊗ₖ X) * A) =
-        Matrix.trace (((σ ⊗ₖ (1 : Matrix β β ℂ)) *
-          ((1 : Matrix α α ℂ) ⊗ₖ X)) * A) := by
-      rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
-    _ = Matrix.trace (((1 : Matrix α α ℂ) ⊗ₖ X) * Y) := by
-      simp only [Y, ← Matrix.mul_assoc]
-      rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
-        Matrix.mul_one, Matrix.one_mul]
-      simp
-    _ = Matrix.trace (Y * ((1 : Matrix α α ℂ) ⊗ₖ X)) :=
-      Matrix.trace_mul_comm _ _
-    _ = Matrix.trace (Matrix.partialTraceLeft Y * X) := by
-      rw [trace_partialTraceLeft_mul]
-    _ = Matrix.trace (X * Matrix.partialTraceLeft Y) :=
-      Matrix.trace_mul_comm _ _
-    _ = Matrix.trace
-        (B * ((1 : Matrix α α ℂ) ⊗ₖ Matrix.partialTraceLeft Y)) := by
-      rw [← trace_partialTraceLeft_mul]
-
 private theorem trace_blockDiagonal'_mul
     {K : ℕ} {m d : Fin K → ℕ}
     (M : (k : Fin K) →
@@ -197,7 +128,7 @@ private theorem trace_unitaryReindexLinearEquiv_symm_mul
     _ = Matrix.trace (Matrix.reindex e e (X * Ahat)) := by
       exact congrArg Matrix.trace
         (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e X Ahat)
-    _ = Matrix.trace (X * Ahat) := trace_reindex_equiv e (X * Ahat)
+    _ = Matrix.trace (X * Ahat) := Matrix.trace_submatrix_equiv e.symm (X * Ahat)
 
 end Matrix
 

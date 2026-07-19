@@ -40,6 +40,10 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
   left partial trace
 * `Matrix.partialTraceRight_kronecker`: the right partial trace of a Kronecker
   product
+* `Matrix.partialTraceLeft_kronecker`: the left partial trace of a Kronecker
+  product
+* `Matrix.trace_partialTraceLeft_mul`: the defining trace-pairing identity for
+  the left partial trace
 * `Matrix.partialTraceRightAlong`: the partial trace after choosing a product
   decomposition of the right factor
 * `Matrix.trace_eq_trace_traceLeft`: `tr(X) = tr(tr_A(X))`
@@ -54,7 +58,7 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
 * arXiv:1606.00608, Appendix D.2, lines 2225--2229: tripartite marginals.
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix ComplexOrder Kronecker
 open Matrix Finset BigOperators
 
 namespace Matrix
@@ -226,6 +230,77 @@ theorem trace_partialTraceLeft [Fintype β] (X : Matrix (α × β) (α × β) �
   simp only [Matrix.trace, Matrix.diag, partialTraceLeft_apply]
   rw [Finset.sum_comm, Fintype.sum_prod_type]
 
+/-- The partial trace over the left factor of a Kronecker product is the
+retained matrix multiplied by the trace of the discarded matrix. -/
+theorem partialTraceLeft_kronecker (A : Matrix α α ℂ) (B : Matrix β β ℂ) :
+    partialTraceLeft (kroneckerMap (· * ·) A B) = A.trace • B := by
+  classical
+  ext i j
+  simp only [partialTraceLeft_apply, kroneckerMap_apply, Matrix.smul_apply,
+    Matrix.trace, Matrix.diag]
+  rw [← Finset.sum_mul]
+  rfl
+
+/-- The left partial trace is adjoint to tensoring with the identity under the
+bilinear trace pairing:
+$\operatorname{tr}(\operatorname{tr}_\alpha(Y)X)
+=\operatorname{tr}(Y(1_\alpha\otimes X))$. -/
+theorem trace_partialTraceLeft_mul [Fintype β] [DecidableEq α]
+    (X : Matrix β β ℂ) (Y : Matrix (α × β) (α × β) ℂ) :
+    Matrix.trace (Matrix.partialTraceLeft Y * X) =
+      Matrix.trace (Y * ((1 : Matrix α α ℂ) ⊗ₖ X)) := by
+  classical
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply,
+    Matrix.partialTraceLeft_apply, Matrix.kroneckerMap_apply, Matrix.one_apply]
+  simp only [Finset.sum_mul]
+  simp_rw [Fintype.sum_prod_type]
+  simp only [ite_mul, one_mul, zero_mul, mul_ite, mul_zero, Finset.sum_ite_irrel,
+    Finset.sum_const_zero, Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte]
+  calc
+    (∑ x : β, ∑ y : β, ∑ i : α, Y (i, x) (i, y) * X y x) =
+        ∑ x : β, ∑ i : α, ∑ y : β, Y (i, x) (i, y) * X y x := by
+      apply Finset.sum_congr rfl
+      intro x _
+      rw [Finset.sum_comm]
+    _ = ∑ i : α, ∑ x : β, ∑ y : β, Y (i, x) (i, y) * X y x := by
+      rw [Finset.sum_comm]
+
+/-- The trace adjoint of the weighted left partial trace sends $B$ to
+$\sigma\otimes\operatorname{tr}_\alpha(B)$.
+
+This is the one-summand trace calculation in Wolf, Equation (1.40); local
+source `Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines
+536--570. -/
+theorem trace_kronecker_partialTraceLeft_mul_eq
+    [Fintype β] [DecidableEq α] [DecidableEq β]
+    (σ : Matrix α α ℂ) (A B : Matrix (α × β) (α × β) ℂ) :
+    Matrix.trace ((σ ⊗ₖ Matrix.partialTraceLeft B) * A) =
+      Matrix.trace
+        (B * ((1 : Matrix α α ℂ) ⊗ₖ
+          Matrix.partialTraceLeft (((σ ⊗ₖ (1 : Matrix β β ℂ)) * A)))) := by
+  classical
+  let X := Matrix.partialTraceLeft B
+  let Y := (σ ⊗ₖ (1 : Matrix β β ℂ)) * A
+  calc
+    Matrix.trace ((σ ⊗ₖ X) * A) =
+        Matrix.trace (((σ ⊗ₖ (1 : Matrix β β ℂ)) *
+          ((1 : Matrix α α ℂ) ⊗ₖ X)) * A) := by
+      rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
+    _ = Matrix.trace (((1 : Matrix α α ℂ) ⊗ₖ X) * Y) := by
+      simp only [Y, ← Matrix.mul_assoc]
+      rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+        Matrix.mul_one, Matrix.one_mul]
+      simp
+    _ = Matrix.trace (Y * ((1 : Matrix α α ℂ) ⊗ₖ X)) :=
+      Matrix.trace_mul_comm _ _
+    _ = Matrix.trace (Matrix.partialTraceLeft Y * X) := by
+      rw [trace_partialTraceLeft_mul]
+    _ = Matrix.trace (X * Matrix.partialTraceLeft Y) :=
+      Matrix.trace_mul_comm _ _
+    _ = Matrix.trace
+        (B * ((1 : Matrix α α ℂ) ⊗ₖ Matrix.partialTraceLeft Y)) := by
+      rw [← trace_partialTraceLeft_mul]
+
 /-- The partial trace over the first factor preserves Hermiticity. -/
 theorem partialTraceLeft_isHermitian {X : Matrix (α × β) (α × β) ℂ}
     (hX : X.IsHermitian) : (partialTraceLeft X).IsHermitian := by
@@ -362,9 +437,7 @@ noncomputable def traceRightLM (d d' : ℕ) :
 /-- Left partial trace of a Kronecker product: `tr_A(A ⊗ B) = tr(A) • B`. -/
 theorem traceLeft_kronecker (A : Matrix (Fin d) (Fin d) ℂ) (B : Matrix (Fin d') (Fin d') ℂ) :
     traceLeft (kroneckerMap (· * ·) A B) = A.trace • B := by
-  ext i j
-  simp only [traceLeft_apply, kroneckerMap_apply, Matrix.smul_apply, Matrix.trace,
-    Matrix.diag, smul_eq_mul, Finset.sum_mul]
+  exact partialTraceLeft_kronecker A B
 
 /-- Right partial trace of a Kronecker product: `tr_B(A ⊗ B) = tr(B) • A`. -/
 theorem traceRight_kronecker (A : Matrix (Fin d) (Fin d) ℂ) (B : Matrix (Fin d') (Fin d') ℂ) :
