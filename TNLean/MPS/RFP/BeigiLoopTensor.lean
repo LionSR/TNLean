@@ -30,7 +30,7 @@ from a product over disjoint pairs of physical sites.
   Hamiltonians*, arXiv:1105.1019v2, Section IV, source lines 602--606.
 -/
 
-open scoped BigOperators Matrix
+open scoped BigOperators Kronecker Matrix
 
 namespace MPSTensor.BeigiSectorGraphData
 
@@ -129,6 +129,269 @@ noncomputable def loopProductState (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] : NSiteSpace d N :=
   fun s ↦ ∑ t : Fin N → Fin d,
     (∏ n : Fin N, F.unitary (s n) (t n)) * F.loopCyclicProduct l t
+
+private theorem edgeProjector_mulVec_loopBondVector
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
+    (F.edgeProjector l.1 l.1).mulVec (F.loopBondVector l) =
+      F.loopBondVector l := by
+  exact (F.edgeProjector_isProj l.1 l.1).mem_iff_map_id.mp
+    (F.loopBondVector_mem l)
+
+private theorem loopCyclicProduct_etaCyclicEdgeEquiv_symm_constant
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {N : ℕ} [NeZero N]
+    (x : (n : Fin N) → Matrix.EtaEdgeIndex F.leftDim F.rightDim l.1 l.1) :
+    F.loopCyclicProduct l
+        ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm
+          ⟨fun _ ↦ l.1, x⟩) =
+      ∏ n : Fin N, F.loopBondVector l (x n) := by
+  classical
+  unfold loopCyclicProduct
+  have hsector : ∀ n : Fin N,
+      (F.sectorEquiv.symm
+        ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm
+          ⟨fun _ ↦ l.1, x⟩ n)).1 = l.1 := by
+    intro n
+    rw [Matrix.etaCyclicEdgeEquiv_symm_apply]
+    simp
+  rw [dif_pos hsector]
+  have hsite (m : Fin N) :
+      F.sectorEquiv.symm
+          ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm
+            ⟨fun _ ↦ l.1, x⟩ m) =
+        ⟨l.1,
+          (Matrix.etaFixedSectorCyclicEdgeEquiv F.leftDim F.rightDim
+            (fun _ : Fin N ↦ l.1)).symm x m⟩ := by
+    rw [Matrix.etaCyclicEdgeEquiv_symm_apply]
+    exact Equiv.symm_apply_apply F.sectorEquiv _
+  apply Finset.prod_congr rfl
+  intro n _
+  congr 1
+  apply Prod.ext
+  · apply Fin.ext
+    simp only [loopRightIndex, Fin.val_cast]
+    have h := congrArg (fun z ↦ z.2.1.val) (hsite n)
+    exact h
+  · apply Fin.ext
+    simp only [loopLeftIndex, Fin.val_cast]
+    have h := congrArg (fun z ↦ z.2.2.val) (hsite (n + 1))
+    have hedge := Matrix.etaFixedSectorCyclicEdgeEquiv_symm_edge
+      F.leftDim F.rightDim (fun _ : Fin N ↦ l.1) x n
+    exact h.trans (congrArg (fun z ↦ z.2.val) hedge)
+
+private theorem loopCyclicProduct_etaCyclicEdgeEquiv_symm_of_ne
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {N : ℕ} [NeZero N] (k : Fin N → Fin F.sectorCount)
+    (hk : k ≠ fun _ ↦ l.1)
+    (x : (n : Fin N) →
+      Matrix.EtaEdgeIndex F.leftDim F.rightDim (k n) (k (n + 1))) :
+    F.loopCyclicProduct l
+        ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm
+          ⟨k, x⟩) = 0 := by
+  unfold loopCyclicProduct
+  rw [dif_neg]
+  intro hsector
+  apply hk
+  funext n
+  have hsite :
+      F.sectorEquiv.symm
+          ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm
+            ⟨k, x⟩ n) =
+        ⟨k n,
+          (Matrix.etaFixedSectorCyclicEdgeEquiv F.leftDim F.rightDim k).symm x n⟩ := by
+    rw [Matrix.etaCyclicEdgeEquiv_symm_apply]
+    exact Equiv.symm_apply_apply F.sectorEquiv _
+  exact (congrArg Sigma.fst hsite).symm.trans (hsector n)
+
+private theorem blockGroundProduct_mulVec_loopCyclicProduct
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {N : ℕ} [NeZero N] :
+    (Matrix.blockDiagonal' fun k : Fin N → Fin F.sectorCount ↦
+        fun (x y : (n : Fin N) → Matrix.EtaEdgeIndex F.leftDim F.rightDim
+          (k n) (k (n + 1))) ↦ ∏ n : Fin N,
+          F.edgeProjector (k n) (k (n + 1)) (x n) (y n)).mulVec
+        (fun z ↦ F.loopCyclicProduct l
+          ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm z)) =
+      fun z ↦ F.loopCyclicProduct l
+        ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm z) := by
+  classical
+  let B : (k : Fin N → Fin F.sectorCount) →
+      Matrix ((n : Fin N) → Matrix.EtaEdgeIndex F.leftDim F.rightDim
+        (k n) (k (n + 1)))
+        ((n : Fin N) → Matrix.EtaEdgeIndex F.leftDim F.rightDim
+          (k n) (k (n + 1))) ℂ :=
+    fun k x y ↦ ∏ n : Fin N,
+      F.edgeProjector (k n) (k (n + 1)) (x n) (y n)
+  change (Matrix.blockDiagonal' B).mulVec
+      (fun z ↦ F.loopCyclicProduct l
+        ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm z)) = _
+  funext z
+  obtain ⟨k, x⟩ := z
+  simp only [Matrix.mulVec, dotProduct, Fintype.sum_sigma]
+  rw [Finset.sum_eq_single k]
+  · have hdiag (y : (n : Fin N) → Matrix.EtaEdgeIndex F.leftDim F.rightDim
+        (k n) (k (n + 1))) :
+        Matrix.blockDiagonal' B ⟨k, x⟩ ⟨k, y⟩ = B k x y := by
+      exact Matrix.blockDiagonal'_apply_eq B k x y
+    simp_rw [hdiag]
+    simp only [B]
+    by_cases hk : k = fun _ ↦ l.1
+    · subst k
+      simp_rw [F.loopCyclicProduct_etaCyclicEdgeEquiv_symm_constant l]
+      exact Matrix.piProduct_mulVec_pureTensor_of_mulVec_eq_self
+        (fun _ : Fin N ↦ F.edgeProjector l.1 l.1)
+        (fun _ : Fin N ↦ F.loopBondVector l)
+        (fun _ ↦ F.edgeProjector_mulVec_loopBondVector l) x
+    · simp_rw [F.loopCyclicProduct_etaCyclicEdgeEquiv_symm_of_ne l k hk]
+      simp
+  · intro h _ hne
+    apply Finset.sum_eq_zero
+    intro y _
+    have hoff : Matrix.blockDiagonal' B ⟨k, x⟩ ⟨h, y⟩ = 0 := by
+      exact Matrix.blockDiagonal'_apply_ne B x y (Ne.symm hne)
+    rw [hoff, zero_mul]
+  · exact fun h ↦ absurd (Finset.mem_univ k) h
+
+private theorem transformedGroundBondProduct_mulVec_loopCyclicProduct
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    ((List.ofFn fun i : Fin N ↦
+      MPOTensor.embedLocalOperator (d := d) 2 N hN i
+        (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+          (finTwoArrowEquiv (Fin d)).symm
+          (star (F.unitary ⊗ₖ F.unitary) *
+            twoSiteParentGroundProjectorMatrix A *
+              (F.unitary ⊗ₖ F.unitary)))).prod).mulVec
+        (F.loopCyclicProduct l) = F.loopCyclicProduct l := by
+  classical
+  let e := Matrix.etaCyclicEdgeEquiv (N := N)
+    F.leftDim F.rightDim F.sectorEquiv
+  let T := (List.ofFn fun i : Fin N ↦
+    MPOTensor.embedLocalOperator (d := d) 2 N hN i
+      (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+        (finTwoArrowEquiv (Fin d)).symm
+        (star (F.unitary ⊗ₖ F.unitary) *
+          twoSiteParentGroundProjectorMatrix A *
+            (F.unitary ⊗ₖ F.unitary)))).prod
+  have hblocks : Matrix.reindex e e T =
+      Matrix.blockDiagonal' fun k : Fin N → Fin F.sectorCount ↦
+        fun (x y : (n : Fin N) → Matrix.EtaEdgeIndex F.leftDim F.rightDim
+          (k n) (k (n + 1))) ↦ ∏ n : Fin N,
+            F.edgeProjector (k n) (k (n + 1)) (x n) (y n) := by
+    exact MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition
+      hN F.leftDim F.rightDim F.sectorEquiv F.edgeProjector
+      (star (F.unitary ⊗ₖ F.unitary) *
+        twoSiteParentGroundProjectorMatrix A * (F.unitary ⊗ₖ F.unitary))
+      F.groundProjector_block
+  have hfix : (Matrix.reindex e e T).mulVec
+      (F.loopCyclicProduct l ∘ e.symm) = F.loopCyclicProduct l ∘ e.symm := by
+    rw [hblocks]
+    exact F.blockGroundProduct_mulVec_loopCyclicProduct l
+  rw [Matrix.reindex_mulVec] at hfix
+  funext s
+  have hs := congrFun hfix (e s)
+  simpa only [Function.comp_apply, Equiv.symm_apply_apply] using hs
+
+private theorem loopProductState_eq_sitewisePhysicalMatrix_mulVec
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {N : ℕ} [NeZero N] :
+    F.loopProductState l =
+      (MPOTensor.sitewisePhysicalMatrix F.unitary N).mulVec
+        (F.loopCyclicProduct l) := by
+  rfl
+
+private theorem groundBondProduct_mulVec_loopProductState
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    ((List.ofFn fun i : Fin N ↦
+      MPOTensor.embedLocalOperator (d := d) 2 N hN i
+        (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+          (finTwoArrowEquiv (Fin d)).symm
+          (twoSiteParentGroundProjectorMatrix A))).prod).mulVec
+        (F.loopProductState l) = F.loopProductState l := by
+  classical
+  let W := MPOTensor.sitewisePhysicalMatrix F.unitary N
+  let Q := (List.ofFn fun i : Fin N ↦
+    MPOTensor.embedLocalOperator (d := d) 2 N hN i
+      (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+        (finTwoArrowEquiv (Fin d)).symm
+        (twoSiteParentGroundProjectorMatrix A))).prod
+  let T := (List.ofFn fun i : Fin N ↦
+    MPOTensor.embedLocalOperator (d := d) 2 N hN i
+      (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+        (finTwoArrowEquiv (Fin d)).symm
+        (star (F.unitary ⊗ₖ F.unitary) *
+          twoSiteParentGroundProjectorMatrix A *
+            (F.unitary ⊗ₖ F.unitary)))).prod
+  have hUUstar : F.unitary * F.unitaryᴴ = 1 := by
+    simpa only [Matrix.star_eq_conjTranspose] using
+      Unitary.mul_star_self_of_mem F.unitary_mem
+  have hWWstar : W * Wᴴ = 1 := by
+    simp only [W]
+    rw [MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose, hUUstar,
+      MPOTensor.sitewisePhysicalMatrix_one]
+  have hconj : singleKrausMap (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N) Q = T := by
+    simpa only [Q, T] using F.singleKrausMap_groundBondProduct hN
+  have hmatrix : Q * W = W * T := by
+    have hconj' : Wᴴ * Q * W = T := by
+      simpa only [singleKrausMap_apply,
+        MPOTensor.sitewisePhysicalMatrix_conjTranspose,
+        Matrix.conjTranspose_conjTranspose, W] using hconj
+    calc
+      Q * W = 1 * (Q * W) := by rw [Matrix.one_mul]
+      _ = (W * Wᴴ) * (Q * W) := by rw [hWWstar]
+      _ = W * (Wᴴ * Q * W) := by simp only [Matrix.mul_assoc]
+      _ = W * T := by rw [hconj']
+  rw [F.loopProductState_eq_sitewisePhysicalMatrix_mulVec l]
+  change Q.mulVec (W.mulVec (F.loopCyclicProduct l)) =
+    W.mulVec (F.loopCyclicProduct l)
+  rw [Matrix.mulVec_mulVec, hmatrix, ← Matrix.mulVec_mulVec,
+    F.transformedGroundBondProduct_mulVec_loopCyclicProduct l hN]
+
+/-- The product-of-pairs state associated with a positive Beigi loop has zero
+energy for the finite two-site parent Hamiltonian.
+
+This is the membership part of Beigi's ground-space description: it does not
+assert that the loop states span the ground space.
+
+**Scope restriction (chain length):** The theorem treats `N ≥ 2`, the
+nondegenerate range of the two-site periodic parent Hamiltonian used here.
+The length-one convention is recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500, and
+Section IV, source lines 602--606. -/
+theorem loopProductState_mem_ker_parentHamiltonian
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {N : ℕ} (hN : 2 ≤ N) :
+    letI : NeZero N := ⟨by omega⟩
+    F.loopProductState l ∈ LinearMap.ker (parentHamiltonian A 2 N) := by
+  letI : NeZero N := ⟨by omega⟩
+  exact F.mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self hN
+    (F.loopProductState l) (F.groundBondProduct_mulVec_loopProductState l hN)
+
+/-- In the Euclidean-space realization, every positive-loop product state
+belongs to the finite parent-Hamiltonian ground space.
+
+This theorem proves membership only; the assertion that these states span the
+ground space is a separate part of Beigi's argument.
+
+**Scope restriction (chain length):** The theorem treats `N ≥ 2`, the
+nondegenerate range of the two-site periodic parent Hamiltonian used here.
+The length-one convention is recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500, and
+Section IV, source lines 602--606. -/
+theorem loopProductState_mem_parentHamiltonianGroundSpaceES
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {N : ℕ} (hN : 2 ≤ N) :
+    letI : NeZero N := ⟨by omega⟩
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (F.loopProductState l) ∈
+      parentHamiltonianGroundSpaceES A 2 N := by
+  letI : NeZero N := ⟨by omega⟩
+  rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
+  exact ⟨F.loopProductState l, F.loopProductState_mem_ker_parentHamiltonian l hN, rfl⟩
 
 /-- The sector-coordinate loop tensor closes to the cyclic product of loop
 bond vectors at every positive length.
