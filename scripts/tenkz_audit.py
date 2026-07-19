@@ -18,6 +18,10 @@ Hard errors (exit 1):
                        leaf and vertex counts.
   duplicate-picture    Two `picture` lines share one id: picture identity
                        is the key of every back-reference.
+  conflicting-faceports
+                       Two faceports records declare different slots for the
+                       same cell face.  The first valid declaration remains
+                       authoritative; identical retries are idempotent.
   dangling-picture-ref An event references an undeclared picture.
   empty-picture        A grid/lattice/free picture emitted no content
                        events.  A tensor diagram with no atoms and no
@@ -113,6 +117,15 @@ def _is_cell(v: str) -> bool:
     return re.fullmatch(r"\d+-\d+", v) is not None
 
 
+def _is_nonnegative_int(v: str) -> bool:
+    if not _is_int(v):
+        return False
+    try:
+        return int(v) >= 0
+    except ValueError:
+        return False
+
+
 def _is_pairleg_port(v: str) -> bool:
     """A contraction starts at the centred face or a positive face slot."""
     if v == "center":
@@ -142,7 +155,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "atom": {"picture": _is_int, "cell": _is_cell, "name": _any, "kind": _any},
     "faceports": {"picture": _is_int, "cell": _is_cell,
                   "face": _enum("up", "down", "west", "east"),
-                  "arity": _is_int, "at": _any},
+                  "arity": _is_nonnegative_int, "at": _any},
     "pairleg": {"picture": _is_int, "upper": _is_cell, "lower": _is_cell,
                 "upper-port": _is_pairleg_port,
                 "column": _is_int},
@@ -375,25 +388,25 @@ class Audit:
                                  f"{want}=")
 
     @staticmethod
-    def _declared_face_ports(event: Event) -> Optional[set[str]]:
-        """Resolve one well-formed faceports event to its contraction slots."""
+    def _declared_face_ports(
+            event: Event) -> Optional[tuple[set[str], Optional[int]]]:
+        """Resolve explicit slots and an optional inclusive `rows` bound."""
         at = event.attrs.get("at", "").strip()
         if at == "center":
-            return {"center"}
+            return {"center"}, None
         if at == "none":
-            return set()
+            return set(), None
         if at == "rows":
             arity = event.attrs.get("arity", "")
-            if not _is_int(arity):
+            if not _is_nonnegative_int(arity):
                 return None
             count = int(arity)
-            if count < 0:
-                return None
-            return {str(slot) for slot in range(1, count + 1)}
+            # A one-row physical face emits its unique contraction as `center`.
+            return ({"center"} if count == 1 else set()), count
         slots = [slot.strip() for slot in at.split(",")]
         if slots and all(
                 _is_pairleg_port(slot) and slot != "center" for slot in slots):
-            return set(slots)
+            return set(slots), None
         return None
 
     def check_pairleg_faceports(self) -> None:
@@ -406,26 +419,90 @@ class Audit:
         for pic in self.pictures:
             if pic.lang != "grid":
                 continue
-            declared: dict[str, set[str]] = {}
+            declared: dict[
+                tuple[str, str], tuple[set[str], Optional[int], int]
+            ] = {}
             for event in pic.events:
-                if event.kind != "faceports" or event.attrs.get("face") != "down":
+                if event.kind != "faceports":
                     continue
                 cell = event.attrs.get("cell", "")
-                ports = self._declared_face_ports(event)
-                if not _is_cell(cell) or ports is None:
+                face = event.attrs.get("face", "")
+                if (not _is_cell(cell)
+                        or face not in {"up", "down", "west", "east"}):
                     continue
-                declared.setdefault(cell, set()).update(ports)
+                missing = [
+                    field for field in ("arity", "at")
+                    if field not in event.attrs
+                ]
+                if missing:
+                    fields = ",".join(f"{field}=" for field in missing)
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} faceports cell={cell} face={face} "
+                        f"lacks required {fields}",
+                    )
+                    continue
+                at = event.attrs["at"]
+                arity = event.attrs["arity"]
+                if not at or not _is_nonnegative_int(arity):
+                    continue  # FIELD_VALIDATORS already emitted malformed-event.
+                declaration = self._declared_face_ports(event)
+                if declaration is None:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} faceports cell={cell} "
+                        f"face={face} has invalid at={at!r}",
+                    )
+                    continue
+                ports, row_count = declaration
+                expected_arity = row_count if row_count is not None else len(ports)
+                if int(arity) != expected_arity:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} faceports cell={cell} face={face} "
+                        f"declares arity={arity} but at={at!r} resolves to "
+                        f"{expected_arity} port(s)",
+                    )
+                    continue
+                key = cell, face
+                previous = declared.get(key)
+                if previous is None:
+                    declared[key] = ports, row_count, event.line
+                    continue
+                previous_ports, previous_rows, previous_line = previous
+                if previous_ports == ports and previous_rows == row_count:
+                    continue
+                self.hard(
+                    "conflicting-faceports",
+                    f"{self.log_path.name}:{event.line}",
+                    f"picture {pic.ident} cell={cell} face={face} conflicts "
+                    f"with its declaration on line {previous_line}",
+                )
             for event in pic.events:
                 if event.kind != "pairleg":
                     continue
                 upper = event.attrs.get("upper", "")
                 port = event.attrs.get("upper-port", "")
+                down_key = upper, "down"
                 if (not _is_cell(upper) or not _is_pairleg_port(port)
-                        or upper not in declared):
+                        or down_key not in declared):
                     continue
-                if port in declared[upper]:
+                ports, row_count, _ = declared[down_key]
+                matches = port in ports
+                if not matches and row_count is not None and port != "center":
+                    matches = int(port) <= row_count
+                if matches:
                     continue
-                available = ",".join(sorted(declared[upper])) or "none"
+                available_parts = sorted(
+                    ports,
+                    key=lambda slot: -1 if slot == "center" else int(slot),
+                )
+                if row_count is not None:
+                    available_parts.append(f"rows 1..{row_count}")
+                available = ",".join(available_parts) or "none"
                 self.hard(
                     "pairleg-faceport-mismatch",
                     f"{self.log_path.name}:{event.line}",

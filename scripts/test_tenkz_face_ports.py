@@ -97,7 +97,7 @@ SOURCE = r"""
   &
 \end{tenkz}
 \begin{tenkz}[rows={op, ket}, tensor style=box]
-  \tn[down at=center]{U} & \\
+  \tn[down at={1}]{U} & \\
   \tn[pill, wide=2, up at={1,2}, down at=center]{L} &
 \end{tenkz}
 \begin{tenkz}[rows={wire, wire}]
@@ -383,6 +383,10 @@ SOURCE = r"""
   \tnfuse[span=2, west at=center, east at=none]{V}\\
   &
 \end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[wires=1, physical=down]{U}\\
+  \tn{L}
+\end{tenkz}
 \end{document}
 """
 
@@ -448,8 +452,13 @@ def main() -> int:
         audit = Audit(work / "face-ports.tnlog", None)
         audit.parse_log()
         audit.check_dialects()
+        audit.check_pairleg_faceports()
         hooks_findings = [
             finding for finding in audit.findings if "hooks" in finding.msg
+        ]
+        pairleg_faceport_findings = [
+            finding for finding in audit.findings
+            if finding.rule == "pairleg-faceport-mismatch"
         ]
         topology_hashes = {
             picture.ident: canonical_hash(picture) for picture in audit.pictures
@@ -495,6 +504,8 @@ def main() -> int:
             if finding.rule == "malformed-event" and "upper-port=" in finding.msg
         ]
         pairleg_faceports_log = work / "pairleg-faceports.tnlog"
+        overlong_arity = "9" * 5000
+        huge_arity = 1_000_000_000
         pairleg_faceports_log.write_text(
             "picture|id=1|lang=grid\n"
             "faceports|picture=1|cell=1-1|face=down|arity=1|at=center\n"
@@ -519,7 +530,58 @@ def main() -> int:
             "picture|id=6|lang=grid\n"
             "faceports|picture=6|cell=1-1|face=down|arity=3|at=rows\n"
             "pairleg|picture=6|upper=1-1|lower=2-3|upper-port=3|column=3\n"
-            "pairleg|picture=6|upper=1-1|lower=2-4|upper-port=4|column=4\n",
+            "pairleg|picture=6|upper=1-1|lower=2-4|upper-port=4|column=4\n"
+            "picture|id=7|lang=grid\n"
+            f"faceports|picture=7|cell=1-1|face=down|arity={overlong_arity}|at=rows\n"
+            "pairleg|picture=7|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "picture|id=8|lang=grid\n"
+            f"faceports|picture=8|cell=1-1|face=down|arity={huge_arity}|at=rows\n"
+            f"pairleg|picture=8|upper=1-1|lower=2-1|upper-port={huge_arity}|"
+            "column=1\n"
+            f"pairleg|picture=8|upper=1-1|lower=2-2|upper-port={huge_arity + 1}|"
+            "column=2\n"
+            "picture|id=9|lang=grid\n"
+            "faceports|picture=9|cell=1-1|face=down|arity=1|at=1\n"
+            "pairleg|picture=9|upper=1-1|lower=2-1|upper-port=center|column=1\n"
+            "picture|id=10|lang=grid\n"
+            "faceports|picture=10|cell=1-1|face=down|arity=1|at=rows\n"
+            "pairleg|picture=10|upper=1-1|lower=2-1|upper-port=center|column=1\n"
+            "picture|id=11|lang=grid\n"
+            "faceports|picture=11|cell=1-1|face=down|arity=1|at=1\n"
+            "faceports|picture=11|cell=1-1|face=down|arity=1|at=2\n"
+            "pairleg|picture=11|upper=1-1|lower=2-2|upper-port=2|column=2\n"
+            "picture|id=12|lang=grid\n"
+            "faceports|picture=12|cell=1-1|face=down|arity=1|at=1\n"
+            "faceports|picture=12|cell=1-1|face=down|arity=1|at=1\n"
+            "pairleg|picture=12|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "picture|id=13|lang=grid\n"
+            "faceports|picture=13|cell=1-1|face=down|arity=1|at=cetner\n"
+            "pairleg|picture=13|upper=1-1|lower=2-1|upper-port=center|column=1\n"
+            "picture|id=14|lang=grid\n"
+            "faceports|picture=14|cell=1-1|face=down|arity=2|at=1;2\n"
+            "pairleg|picture=14|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "picture|id=15|lang=grid\n"
+            "faceports|picture=15|cell=1-1|face=up|arity=1|at=1\n"
+            "faceports|picture=15|cell=1-1|face=up|arity=1|at=2\n"
+            "faceports|picture=15|cell=1-1|face=west|arity=1|at=center\n"
+            "faceports|picture=15|cell=1-1|face=west|arity=0|at=none\n"
+            "faceports|picture=15|cell=1-1|face=east|arity=1|at=1\n"
+            "faceports|picture=15|cell=1-1|face=east|arity=1|at=2\n"
+            "picture|id=16|lang=grid\n"
+            "faceports|picture=16|cell=1-1|face=down|at=rows\n"
+            "pairleg|picture=16|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "picture|id=17|lang=grid\n"
+            "faceports|picture=17|cell=1-1|face=down|arity=1\n"
+            "pairleg|picture=17|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "picture|id=18|lang=grid\n"
+            "faceports|picture=18|cell=1-1|face=down|arity=-1|at=rows\n"
+            "pairleg|picture=18|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "picture|id=19|lang=grid\n"
+            "faceports|picture=19|cell=1-1|face=down|arity=1|at=1,2\n"
+            "pairleg|picture=19|upper=1-1|lower=2-2|upper-port=2|column=2\n"
+            "picture|id=20|lang=grid\n"
+            "faceports|picture=20|cell=1-1|face=down|arity=0|at=center\n"
+            "pairleg|picture=20|upper=1-1|lower=2-1|upper-port=center|column=1\n",
             encoding="utf-8",
         )
         pairleg_faceports_audit = Audit(pairleg_faceports_log, None)
@@ -528,6 +590,31 @@ def main() -> int:
         pairleg_faceport_mismatches = [
             finding for finding in pairleg_faceports_audit.findings
             if finding.rule == "pairleg-faceport-mismatch"
+        ]
+        conflicting_faceports = [
+            finding for finding in pairleg_faceports_audit.findings
+            if finding.rule == "conflicting-faceports"
+        ]
+        malformed_faceports_at = [
+            finding.msg for finding in pairleg_faceports_audit.findings
+            if finding.rule == "malformed-event"
+            and "faceports cell=1-1 face=down has invalid at=" in finding.msg
+        ]
+        incomplete_faceports = [
+            finding.msg for finding in pairleg_faceports_audit.findings
+            if finding.rule == "malformed-event"
+            and "faceports cell=1-1 face=down lacks required" in finding.msg
+        ]
+        inconsistent_faceport_arities = [
+            finding.msg for finding in pairleg_faceports_audit.findings
+            if finding.rule == "malformed-event"
+            and "faceports cell=1-1 face=down declares arity=" in finding.msg
+        ]
+        malformed_rows_arities = [
+            finding.msg
+            for finding in pairleg_faceports_audit.findings
+            if finding.rule == "malformed-event"
+            and "faceports field arity=" in finding.msg
         ]
         warning_only_log = work / "warning-only.tnlog"
         warning_only_log.write_text(
@@ -554,6 +641,9 @@ def main() -> int:
         (3, "upper-port='2'"),
         (4, "upper-port='center'"),
         (6, "upper-port='4'"),
+        (8, f"upper-port='{huge_arity + 1}'"),
+        (9, "upper-port='center'"),
+        (11, "upper-port='2'"),
     }
     actual_pairleg_mismatches = {
         (picture, port)
@@ -566,6 +656,49 @@ def main() -> int:
         raise AssertionError(
             "pairleg face-port correlation missed a mismatch or rejected a declared/legacy slot"
         )
+    expected_conflicts = {
+        (11, "face=down"),
+        (15, "face=up"),
+        (15, "face=west"),
+        (15, "face=east"),
+    }
+    actual_conflicts = {
+        (picture, face)
+        for finding in conflicting_faceports
+        for picture, face in expected_conflicts
+        if f"picture {picture} " in finding.msg and face in finding.msg
+    }
+    if (len(conflicting_faceports) != len(expected_conflicts)
+            or actual_conflicts != expected_conflicts):
+        raise AssertionError(
+            "audit accepted a conflicting duplicate face declaration"
+        )
+    if len(malformed_faceports_at) != 2 or not all(
+        any(f"invalid at={value!r}" in msg for msg in malformed_faceports_at)
+        for value in ("cetner", "1;2")
+    ):
+        raise AssertionError(
+            "audit silently skipped a malformed face declaration: "
+            f"{malformed_faceports_at!r}"
+        )
+    if len(incomplete_faceports) != 2 or not all(
+        any(required in msg for msg in incomplete_faceports)
+        for required in ("required arity=", "required at=")
+    ):
+        raise AssertionError("audit silently skipped an incomplete face declaration")
+    if len(inconsistent_faceport_arities) != 2 or not all(
+        any(fragment in msg for msg in inconsistent_faceport_arities)
+        for fragment in (
+            "declares arity=1 but at='1,2' resolves to 2 port(s)",
+            "declares arity=0 but at='center' resolves to 1 port(s)",
+        )
+    ):
+        raise AssertionError("audit accepted an inconsistent face arity")
+    if len(malformed_rows_arities) != 2 or not all(
+        any(value in msg for msg in malformed_rows_arities)
+        for value in (overlong_arity, "arity='-1'")
+    ):
+        raise AssertionError("audit accepted or crashed on an overlong rows arity")
     if warning_only_status != 1 or not any(
         finding.rule == "empty-picture" and finding.severity == "HARD"
         for finding in warning_only_audit.findings
@@ -573,6 +706,8 @@ def main() -> int:
         raise AssertionError("warning-only grid picture counted as mathematical content")
     if hooks_findings:
         raise AssertionError("audit rejected a grid hooks event")
+    if pairleg_faceport_findings:
+        raise AssertionError("audit rejected a rendered pairleg declared by its upper face")
     inverse = pictures[1]
     require(
         inverse,
@@ -710,6 +845,15 @@ def main() -> int:
         "tall brick physical signature disagrees with its declared faces",
     )
     lower_surplus = pictures[16]
+    require(
+        lower_surplus,
+        "faceports|picture=16|cell=1-1|face=down|arity=1|at=1",
+        "explicit one-column face was not recorded as slot 1",
+    )
+    if paired_ports(lower_surplus) != [("1", "1")]:
+        raise AssertionError(
+            "explicit one-column face did not emit contraction slot 1"
+        )
     require(
         lower_surplus,
         "boundary|picture=16|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
@@ -1327,6 +1471,17 @@ def main() -> int:
             "physical-up=0|physical-down=0",
             f"picture {picture} counted its unmatched centered face twice",
         )
+    physical_rows_one = pictures[81]
+    require(
+        physical_rows_one,
+        "faceports|picture=81|cell=1-1|face=down|arity=1|at=rows",
+        "one-row physical face was not declared through rows",
+    )
+    require(
+        physical_rows_one,
+        "pairleg|picture=81|upper=1-1|lower=2-1|upper-port=center|column=1",
+        "one-row physical face lost its unique centered contraction",
+    )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 
