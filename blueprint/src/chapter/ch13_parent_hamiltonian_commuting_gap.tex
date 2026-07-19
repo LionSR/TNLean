@@ -2501,7 +2501,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.mpv_loopCoordinateTensor}
     \lean{MPSTensor.BeigiSectorGraphData.mpv_loopTensor}
     \leanok
-    \uses{def:beigi_loop_product_state}
+    \uses{def:beigi_loop_product_state, lem:mpv_rotate_physical}
     For every $N>0$, the periodic matrix product vector of $C_a$ has
     coefficient
     \[
@@ -2514,10 +2514,28 @@ specialization of that Appendix~D definition.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the trace of the closed matrix product as a sum over cyclic virtual
-    indices.  Each local Kronecker delta forces the virtual index at site $n$
-    to equal $l_n$, leaving precisely the displayed product.  Expanding the
-    one-site unitary at every physical leg gives its sitewise tensor power.
+    Write $D_a^{\mathrm L}$ for the left-factor dimension of sector~$a$.
+    Expanding the closed matrix product on a sector configuration
+    $((r_n,l_n))_{n=0}^{N-1}$ gives
+    \[
+        \sum_{g\in\{0,\ldots,D_a^{\mathrm L}-1\}^N}
+          \prod_{n=0}^{N-1}
+            \delta_{g_n,l_n}\,
+            \varphi_a\!\left(r_n,g_{n+1}\right)
+        =\prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}),
+    \]
+    where all site labels are read cyclically.  Indeed, the Kronecker deltas
+    leave only the assignment $g_n=l_n$.  If $A_a$ denotes the physical loop
+    tensor and $U$ the one-site unitary, then for a physical configuration
+    $s=(s_0,\ldots,s_{N-1})$ one has
+    \[
+        \operatorname{tr}(A_a^{s_0}\cdots A_a^{s_{N-1}})
+        =\sum_{t\in\{0,\ldots,d-1\}^N}
+          \left(\prod_{n=0}^{N-1}U_{s_n,t_n}\right)
+          \operatorname{tr}(C_a^{t_0}\cdots C_a^{t_{N-1}}).
+    \]
+    Substitution of the preceding cyclic coefficient formula gives the stated
+    sitewise-unitary image.
 \end{proof}
 
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}

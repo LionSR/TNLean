@@ -655,6 +655,7 @@ import TNLean.Wielandt.Inequality.EigenvectorSpreading
 import TNLean.Wielandt.Inequality.MatrixSpanExistence
 import TNLean.Wielandt.Inequality.MatrixSpanSharpBound
 import TNLean.Wielandt.Inequality.Bounds
+
 -- Layer 6c: Conditional Wielandt arguments
 -- These modules support specialized span-growth and aperiodicity routes. They
 -- are not on the active canonical / FT / BNT path, but they remain root-visible

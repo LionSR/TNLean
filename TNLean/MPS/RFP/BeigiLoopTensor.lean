@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
 
 /-!
@@ -36,53 +37,6 @@ namespace MPSTensor.BeigiSectorGraphData
 open FiniteWeightedDigraph
 
 variable {d D : ℕ} {A : MPSTensor d D}
-
-private theorem evalWord_physicalMix_ofFn
-    {m E : ℕ} (B : MPSTensor d E) (W : Matrix (Fin m) (Fin d) ℂ) :
-    ∀ (N : ℕ) (s : Fin N → Fin m),
-      evalWord (fun i : Fin m => ∑ j : Fin d, W i j • B j) (List.ofFn s) =
-        ∑ t : Fin N → Fin d,
-          (∏ n : Fin N, W (s n) (t n)) • evalWord B (List.ofFn t) := by
-  intro N
-  induction N with
-  | zero =>
-      intro s
-      classical
-      simp
-  | succ N ih =>
-      intro s
-      classical
-      rw [List.ofFn_succ, evalWord_cons]
-      rw [ih (fun n : Fin N => s n.succ)]
-      rw [Finset.sum_mul_sum]
-      let e : (Fin d × (Fin N → Fin d)) ≃ (Fin (N + 1) → Fin d) :=
-        Fin.consEquiv (fun _ => Fin d)
-      have hreindex :
-          (∑ t : Fin (N + 1) → Fin d,
-              (∏ n : Fin (N + 1), W (s n) (t n)) •
-                evalWord B (List.ofFn t)) =
-            ∑ p : Fin d × (Fin N → Fin d),
-              (∏ n : Fin (N + 1), W (s n) (e p n)) •
-                evalWord B (List.ofFn (e p)) :=
-        (Fintype.sum_equiv e
-          (f := fun p : Fin d × (Fin N → Fin d) =>
-            (∏ n : Fin (N + 1), W (s n) (e p n)) •
-              evalWord B (List.ofFn (e p)))
-          (g := fun t : Fin (N + 1) → Fin d =>
-            (∏ n : Fin (N + 1), W (s n) (t n)) •
-              evalWord B (List.ofFn t))
-          (by intro p; rfl)).symm
-      rw [hreindex, ← Fintype.sum_prod_type']
-      refine Finset.sum_congr rfl ?_
-      rintro ⟨i, t⟩ _
-      have hprod :
-          (∏ n : Fin (N + 1), W (s n) (e (i, t) n)) =
-            W (s 0) i * ∏ n : Fin N, W (s n.succ) (t n) := by
-        rw [Fin.prod_univ_succ]
-        simp [e, Fin.consEquiv]
-      have hlist : List.ofFn (e (i, t)) = i :: List.ofFn t := by
-        simp [e, Fin.consEquiv]
-      rw [hprod, hlist, evalWord_cons, smul_mul_smul_comm]
 
 /-- A nonzero vector in the edge ground space carried by a positive loop.
 
@@ -131,8 +85,10 @@ unitary to the sector-coordinate tensor.
 Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
 noncomputable def loopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : MPSTensor d (F.leftDim l.1) :=
-  fun i ↦ ∑ j : Fin d, F.unitary i j • F.loopCoordinateTensor l j
+  rotatePhysical F.unitary (F.loopCoordinateTensor l)
 
+/-- The left sector factor at site `n`, transported to the loop sector using
+the hypothesis that the physical index at that site belongs to the loop. -/
 private def loopLeftIndex (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} (s : Fin N → Fin d)
     (hsector : ∀ n, (F.sectorEquiv.symm (s n)).1 = l.1) (n : Fin N) :
@@ -140,6 +96,8 @@ private def loopLeftIndex (F : BeigiSectorGraphData A)
   Fin.cast (congrArg F.leftDim (hsector n))
     (F.sectorEquiv.symm (s n)).2.2
 
+/-- The right sector factor at site `n`, transported to the loop sector using
+the hypothesis that the physical index at that site belongs to the loop. -/
 private def loopRightIndex (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} (s : Fin N → Fin d)
     (hsector : ∀ n, (F.sectorEquiv.symm (s n)).1 = l.1) (n : Fin N) :
@@ -217,11 +175,8 @@ Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
 theorem mpv_loopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :
     mpv (F.loopTensor l) s = F.loopProductState l s := by
-  change Matrix.trace
-      (evalWord (fun i : Fin d => ∑ j : Fin d,
-        F.unitary i j • F.loopCoordinateTensor l j) (List.ofFn s)) = _
-  rw [evalWord_physicalMix_ofFn, Matrix.trace_sum]
-  simp only [Matrix.trace_smul, smul_eq_mul, loopProductState]
+  rw [loopTensor, MPSTensor.mpv_rotatePhysical]
+  simp only [loopProductState]
   apply Finset.sum_congr rfl
   intro t _
   congr 1
