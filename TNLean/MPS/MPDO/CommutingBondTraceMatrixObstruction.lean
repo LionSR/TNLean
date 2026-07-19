@@ -178,7 +178,7 @@ lemma tensor_isNormalTensor : MPSTensor.IsNormalTensor tensor.toMPSTensor :=
     tensor.toMPSTensor transferMap_toMPSTensor
 
 /-- The product tensor is already injective before blocking. -/
-lemma tensor_isInjective : MPSTensor.IsInjective tensor.toMPSTensor := by
+lemma tensor_isInjective : tensor.IsInjective := by
   apply top_unique
   intro X _hX
   have hdiv : (0 : Fin (2 * 2)).divNat = (0 : Fin 2) := by decide
@@ -264,7 +264,7 @@ line 1613, must be selected or pruned by a separate argument.  The example does
 not rule out another factorization with primitive trace matrix. -/
 theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive :
     tensor.IsMPDO ∧
-      MPSTensor.IsInjective tensor.toMPSTensor ∧
+      tensor.IsInjective ∧
       MPSTensor.IsNormalTensor tensor.toMPSTensor ∧
       tensor.IsSourceZCL ∧
       (∀ k h, (factorization.neighboringOperator k h).PosSemidef) ∧
