@@ -16,8 +16,8 @@ of the cardinality of its support. The proof applies Jensen's inequality to the 
 
 This file lies in the lower `Analysis` import layer because `TNLean.Analysis.Entropy` uses the
 generic Jensen estimate. Its declarations nevertheless use their final mathematical `Entropy`
-namespace. The alias module `TNLean.Entropy.VonNeumann` preserves a legacy root-level API; no
-parallel root declaration is introduced here.
+namespace. The alias module `TNLean.Entropy.VonNeumann` preserves legacy root-level declarations;
+no parallel root declaration is introduced here.
 -/
 
 open scoped BigOperators
