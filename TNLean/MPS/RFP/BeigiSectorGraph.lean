@@ -525,6 +525,11 @@ of length greater than two, the dimension is the sum over ordered cyclic
 sector sequences of the products of the adjacent edge-ground-space
 dimensions.
 
+**Scope restriction (chain length):** Beigi's equations (3)--(4) apply to all
+periodic lengths, whereas this theorem treats the range `N > 2` used by the
+NNCPH clause of arXiv:1606.00608, Theorem 3.10(iii). Documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
 Source: Beigi, arXiv:1105.1019v2, Section III, equations (3)--(4), page 4. -/
 theorem parentHamiltonianGroundSpaceES_finrank_eq
     (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 < N) :
