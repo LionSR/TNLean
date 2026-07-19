@@ -261,6 +261,23 @@ This is only equality of the scalar relative entropies.  It neither
 characterizes equality in the joint-convexity inequality nor supplies a Petz
 intertwining or recovery identity.
 
+Summing the preceding equality with the uniform Weyl weights gives the scalar
+equality associated with the finite Jensen step:
+\begin{align}
+  D(\overline\rho\Vert\overline\sigma)
+    =\frac{1}{d_R^2}\sum_{c,e}
+      D(U_{ce}\rho U_{ce}^{\dagger}\Vert
+        U_{ce}\sigma U_{ce}^{\dagger}).
+\end{align}
+Indeed, unitary invariance makes every summand equal to
+$D(\rho\Vert\sigma)$, while the preceding Weyl-summand equality gives the same
+value on the left.  The $d_R^2$ weights sum to one.
+\footnote{Formal declaration:
+\leanid{quantumRelativeEntropy_weyl_jensen_eq_of_partialTraceRight_eq} in
+\path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
+This statement does not characterize equality in joint convexity and does not
+imply an operator intertwining or Petz recovery identity.
+
 The exact remaining analytic implication is the equality case of data
 processing on this support domain:
 \begin{align}

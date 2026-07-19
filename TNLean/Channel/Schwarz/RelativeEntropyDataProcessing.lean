@@ -383,6 +383,30 @@ theorem weyl_mem_unitary {ζ : ℂ} (hζ : IsPrimitiveRoot ζ d) (a b : ZMod d) 
 
 end WeylUnitary
 
+section WeylRelativeEntropy
+
+variable {S : Type*} [Fintype S] [DecidableEq S] {dC : ℕ} [NeZero dC]
+
+/-- Conjugation by an identity-on-system lift of a Weyl operator preserves
+quantum relative entropy. -/
+theorem quantumRelativeEntropy_weyl_conj_eq
+    {ρ σ : Matrix (S × ZMod dC) (S × ZMod dC) ℂ}
+    (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian)
+    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) (a b : ZMod dC) :
+    quantumRelativeEntropy
+        (((1 : Matrix S S ℂ) ⊗ₖ weyl ζ a b) * ρ *
+          ((1 : Matrix S S ℂ) ⊗ₖ weyl ζ a b)ᴴ)
+        (((1 : Matrix S S ℂ) ⊗ₖ weyl ζ a b) * σ *
+          ((1 : Matrix S S ℂ) ⊗ₖ weyl ζ a b)ᴴ) =
+      quantumRelativeEntropy ρ σ := by
+  let U : unitary (Matrix (S × ZMod dC) (S × ZMod dC) ℂ) :=
+    ⟨(1 : Matrix S S ℂ) ⊗ₖ weyl ζ a b,
+      Matrix.kronecker_mem_unitary (Submonoid.one_mem _) (weyl_mem_unitary hζ a b)⟩
+  simpa only [Unitary.coe_star, star_eq_conjTranspose, U] using
+    quantumRelativeEntropy_conj_unitary hρ hσ U
+
+end WeylRelativeEntropy
+
 /-! ## The twirl as partial trace tensored with the maximally mixed ancilla -/
 
 section Twirl
@@ -605,8 +629,9 @@ theorem quantumRelativeEntropy_partialTraceRight_le
           × Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ =>
           quantumRelativeEntropy q.1 q.2) (P p) = quantumRelativeEntropy ρ σ := by
       intro p
-      simp only [hPdef]
-      exact quantumRelativeEntropy_conj_unitary hρ.isHermitian hσ.isHermitian (U p.1 p.2)
+      simpa only [hPdef, hUcoe, Unitary.coe_star, star_eq_conjTranspose] using
+        quantumRelativeEntropy_weyl_conj_eq hρ.isHermitian hσ.isHermitian
+          hζ p.1 p.2
     simp_rw [hterm]
     rw [← Finset.sum_smul, hwsum, one_smul]
   rw [← hLHS, ← hRHS]
