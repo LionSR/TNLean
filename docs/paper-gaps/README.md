@@ -49,11 +49,12 @@ For MPDO renormalization fixed points:
   density-weighted fixed-point argument in Appendix C.4. Wolf's full
   fixed-point theorem, including maximal-support reduction and the
   complementary zero summand, and its full-support direct-sum consequence are
-  now formalized. For the transported sector maps it remains to prove the
-  channel hypotheses on the full sector algebras. The note also records that
-  sector relabelling
-  follows from mutually inverse positive trace-preserving maps, not from a
-  bare linear equivalence.
+  now formalized.  The two transported square composites are proved trace
+  preserving on the full sector algebras by a maximal-support argument, and a
+  trace sandwich gives the same conclusion for each transported map; the
+  complete-positivity and adjoint Schwarz hypotheses remain.  The note also
+  records that sector relabelling follows from mutually inverse positive
+  trace-preserving maps, not from a bare linear equivalence.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
   elements with nilpotent physical-trace transfer matrices and records the
   positive physical blocking and chosen-BNT interpretation of the

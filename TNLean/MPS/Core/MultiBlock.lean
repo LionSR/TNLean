@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.TraceReindex
 import TNLean.MPS.Defs
 
 import Mathlib.Algebra.BigOperators.Fin
@@ -73,18 +74,6 @@ def evalWord {d : ℕ} {n : Type*} [Fintype n] [DecidableEq n]
     (A : Fin d → Matrix n n ℂ) : List (Fin d) → Matrix n n ℂ
   | [] => 1
   | i :: w => A i * evalWord A w
-
-namespace Matrix
-
-/-- Trace is invariant under reindexing of the basis. -/
-lemma trace_reindex {m n : Type*} [Fintype m] [Fintype n]
-    (e : m ≃ n) (M : Matrix m m ℂ) :
-    Matrix.trace ((Matrix.reindex e e) M) = Matrix.trace M := by
-  classical
-  simpa [trace, reindex_apply] using
-    Fintype.sum_equiv e.symm _ _ (by intro; simp)
-
-end Matrix
 
 section BlockDiagonal
 

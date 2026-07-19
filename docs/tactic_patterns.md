@@ -51,6 +51,24 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### product_span_transport — candidate
+- **Pattern:** transport membership in the span of fixed-length products through
+  a linear map that preserves the identity and the relevant products, using
+  `Submodule.span_induction` with separate generator, zero, addition, and scalar
+  cases.
+- **Seen:** 2 occurrences: the reindexing step in
+  `IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span`
+  and the block-diagonal step in
+  `IsPositiveDirectSumMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span`
+  (2026-07-19). This is below the rule-of-three promotion threshold.
+- **Abstraction (proposed):** a lemma transporting a product-span membership
+  statement through a linear map, parameterized by the product-compatibility
+  equation. Scout Mathlib's `Submodule.map_span` and `Submodule.map_mono` API
+  before introducing a project lemma.
+- **Notes:** The two current instances use matrix reindexing and block-diagonal
+  embedding. Record before a third coordinate-transport proof appears; confirm
+  that their product-family goal shapes agree before promotion.
+
 ### matrix_entry_cases — candidate
 - **Pattern:**
   ```
