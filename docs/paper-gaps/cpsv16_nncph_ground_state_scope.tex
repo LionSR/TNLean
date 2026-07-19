@@ -239,6 +239,20 @@ The reverse theorem requires both the explicit BNT relation
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
 the axiom \leanid{Axioms.beigi_nncph_to_rfp}.
 
+The eventual scale-invariance input to Beigi's classification is now proved
+without this axiom.  Let $P$ be a sector decomposition with representatives
+$A_1,\ldots,A_g$ and total tensor $B$. If the representative matrix product
+vectors are eventually linearly independent, the all-chain condition gives
+\[
+  \dim_{\mathbb C}\ker H_2^{(N)}(B)=g
+\]
+for all sufficiently large $N$.  This is
+\leanid{MPSTensor.HasBNTSectorData.}
+\hspace{0pt}\leanid{eventually_parentHamiltonian_groundSpace_finrank_eq}.
+The proof uses only the ground-space spanning equation and the dimension of the
+span of a finite linearly independent family.  It does not use the commuting
+interaction classification.
+
 \section{Elimination plan}
 
 A source-faithful formalization should replace the remaining axiom-backed
@@ -255,10 +269,12 @@ including the spanning condition in the parent-Hamiltonian ground-space clause:
 \end{align}
 The forward commutation implication uses the basic-vector form in
 Theorem~3.11 and the corresponding local projectors.  The reverse implication
-must internalize Beigi's
-one-dimensional nearest-neighbor commuting-Hamiltonian ground-space
-classification and identify the resulting locally orthogonal states with the
-basis of normal tensors of $A$.\footnote{Tracked by \ghissue{2633}.}
+must internalize the remaining part of Beigi's one-dimensional
+nearest-neighbor commuting-Hamiltonian ground-space classification: construct
+the finite sector graph, use eventual degeneracy constancy to reduce its cycles
+to loops with one-dimensional cyclic edge kernels, and identify the resulting
+locally orthogonal product-of-pairs states with the basis of normal tensors of
+$A$.\footnote{Tracked by \ghissue{2633}.}
 
 The current proof boundary is therefore: the reverse implication has the
 source ground-space hypothesis, but its proof is still the Beigi axiom; the
@@ -278,7 +294,9 @@ canonical form is subject to the source obstruction recorded in
 \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}. The single-normal-sector
 ground-space spanning clause and the multiplicity-one distinct-sector
 extension are proved. The repeated-copy and arbitrary-raw-weight extension
-remains open, as does the reverse Beigi implication.
+remains open.  In the reverse direction, eventual ground-space dimension
+stability is proved; the sector-graph classification and its identification
+with the basis of normal tensors remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
