@@ -319,6 +319,24 @@ It does not prove the ZCL replacement of the one-site marginal, derive the
 rank-one factorization, construct a quantum Markov decomposition, or prove
 SAL.
 
+The ZCL replacement itself is now formalized.  If $E$ is the physical-trace
+transfer and $E^2=\lambda E$ with $\lambda>0$, then for every $N\geq0$ the
+normalized $N$-site marginal obtained by tracing two sites from the
+length-$(N+2)$ chain equals the one obtained by tracing one site from the
+length-$(N+1)$ chain.  Entrywise, the two expressions are
+\[
+  \frac{\operatorname{tr}(M^{u,v}E^2)}
+       {\operatorname{tr}(E^{N+2})}
+  \quad\text{and}\quad
+  \frac{\operatorname{tr}(M^{u,v}E)}
+       {\operatorname{tr}(E^{N+1})},
+\]
+and the numerator and denominator of the first are both multiplied by
+$\lambda$.  This is
+\leanid{MPOTensor.reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}.
+It proves the first sentence of the source's line~1613 argument, but it does
+not separate the two boundary sector sums.
+
 There is a separate obstruction at source line~1613.  The phrase ``arguing as
 in Lemmas \emph{propSN} and \emph{SALZCL}'' does not show that source ZCL alone
 gives
@@ -367,6 +385,15 @@ replace the printed line-1613 argument by a direct Markov decomposition which
 does not require the rank-one trace matrix.  Source ZCL alone must not be
 presented as giving the factorization; the inverse-map and finite-chain audits
 in \ghissue{3593} do not supply it.
+One possible corrected route is to use the square of the trace matrix.  If a
+primitive nonnegative trace matrix $T$ satisfies $T^2=T^3$, then all powers
+from the second onward equal $T^2$, so $T^2$ is an idempotent Perron
+projection of rank one.  This is compatible with the four-sector example,
+where $T$ is not rank one but $T^2$ is.  What remains absent is a derivation of
+primitivity for the Beigi trace matrix from the normal source block and its
+fixed proportional commuting-bond presentation; the existing primitivity
+theorem starts from the SAL-derived inverse-map factorization and is therefore
+circular at this call site.
 \item Trace the fourth region, construct the quantum Markov decomposition at
 each admissible cut, and apply the all-cut Markov theorem.  Only then may the
 source proposition receive a formal declaration and a

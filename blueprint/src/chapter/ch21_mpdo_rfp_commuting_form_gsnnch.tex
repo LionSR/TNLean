@@ -622,6 +622,38 @@
     $\zeta=1$.
 \end{proof}
 
+\begin{lemma}[Marginal stability under source zero correlation length]
+    \label{lem:mpdo_source_zcl_marginal_stability}
+    \lean{MPOTensor.%
+      reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow}
+    \lean{MPOTensor.%
+      reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, lem:mpdo_trace_loop_chain}
+    Let $M$ have source zero correlation length.  For every $N\geq0$, the
+    normalized $N$-site marginal obtained by tracing two sites from
+    $\sigma^{(N+2)}(M)$ equals the normalized $N$-site marginal obtained by
+    tracing one site from $\sigma^{(N+1)}(M)$.
+
+    This is the first replacement at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  It does not imply
+    the rank-one trace factorization asserted later on that line.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $E=\mathcal T_M$ and choose $\lambda>0$ such that
+    $E^2=\lambda E$.  For physical configurations $u,v$ of length $N$, the
+    two marginal matrix elements are
+    \[
+        \frac{\tr(M^{u,v}E^2)}{\tr(E^{N+2})}
+        \quad\text{and}\quad
+        \frac{\tr(M^{u,v}E)}{\tr(E^{N+1})}.
+    \]
+    The numerator and denominator on the left are respectively $\lambda$
+    times those on the right, and source zero correlation length makes the
+    denominator on the right nonzero.
+\end{proof}
+
 \begin{definition}[Rank-one trace factorization for neighboring operators]
     \label{def:mpdo_generic_eta_rank_one_trace_factorization}
     \lean{Matrix.EtaRankOneTraceFactorization}
