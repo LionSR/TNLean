@@ -71,7 +71,7 @@ theorem IsPositiveMap.exists_fixedPoints_densityBlocks_with_zero
   have hUcRight : Uc * star Uc = 1 := Matrix.mem_unitaryGroup_iff.mp hUc
   let W : Matrix (Fin D) (Fin n) ℂ := V * Uc
   have hWH : Wᴴ = star Uc * Vᴴ := by
-    simp [W, Matrix.conjTranspose_mul]
+    simp only [W, Matrix.conjTranspose_mul, Matrix.star_eq_conjTranspose]
   have hW : Wᴴ * W = 1 := by
     rw [hWH]
     dsimp only [W]
@@ -103,19 +103,37 @@ theorem IsPositiveMap.exists_fixedPoints_densityBlocks_with_zero
         B = U * Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A) * star U := by
       calc
         B = V * Y * Vᴴ := hBY
-        _ = W * A * Wᴴ := by rw [hYeq, W, hWH]; simp [Matrix.mul_assoc]
+        _ = W * A * Wᴴ := by
+          rw [hYeq]
+          dsimp only [W]
+          simp only [Matrix.conjTranspose_mul, Matrix.star_eq_conjTranspose,
+            Matrix.mul_assoc]
         _ = U * Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A) * star U := by
           simpa only [U] using hzeroExtension A
     refine ⟨X, ?_⟩
-    rw [hBzero]
-    simp [hULeft, Matrix.mul_assoc]
+    change star U * B * U = Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A)
+    calc
+      star U * B * U =
+          star U *
+            (U * Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A) * star U) * U := by
+        rw [hBzero]
+      _ = (star U * U) * Matrix.reindex e₀ e₀
+            (Matrix.fromBlocks 0 0 0 A) * (star U * U) := by
+        simp only [Matrix.mul_assoc]
+      _ = Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A) := by
+        rw [hULeft]
+        simp
   · rintro ⟨X, hBcoord⟩
     let A : Matrix (Fin n) (Fin n) ℂ :=
       Matrix.reindex e e (Matrix.blockDiagonal' fun k ↦ σ k ⊗ₖ X k)
     let Y : Matrix (Fin n) (Fin n) ℂ := Uc * A * star Uc
     have hYcoord : star Uc * Y * Uc = A := by
       dsimp only [Y]
-      simp [hUcLeft, Matrix.mul_assoc]
+      calc
+        star Uc * (Uc * A * star Uc) * Uc =
+            (star Uc * Uc) * A * (star Uc * Uc) := by
+          simp only [Matrix.mul_assoc]
+        _ = A := by rw [hUcLeft]; simp
     have hYfix : IsPositiveMap.stationarySupportCompression T V Y = Y :=
       (hcompressedFixed Y).mpr ⟨X, hYcoord⟩
     have hBeq : B = V * Y * Vᴴ := by
@@ -131,5 +149,8 @@ theorem IsPositiveMap.exists_fixedPoints_densityBlocks_with_zero
         B = U * Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A) * star U := hBzero
         _ = W * A * Wᴴ := by
           simpa only [U] using (hzeroExtension A).symm
-        _ = V * Y * Vᴴ := by rw [Y, W, hWH]; simp [Matrix.mul_assoc]
+        _ = V * Y * Vᴴ := by
+          dsimp only [Y, W]
+          simp only [Matrix.conjTranspose_mul, Matrix.star_eq_conjTranspose,
+            Matrix.mul_assoc]
     exact (hambientFixed B).mpr ⟨Y, hYfix, hBeq⟩
