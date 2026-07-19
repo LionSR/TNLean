@@ -9,11 +9,9 @@ Authors: TNLean contributors
 
 Stable import surface for the maintained TNLean library.
 
-This file imports the modules intended for downstream users. Most
-specialized helper modules are still omitted from the root import list, but the
-public chapter-index modules and the chapter-facing semigroup modules are
-included so that blueprint links and the generated documentation can see
-them.
+This file imports the modules intended for downstream users. Most specialized helper modules
+are omitted from the root import list, but public chapter-index and chapter-facing semigroup
+modules are included so that blueprint links and the generated documentation can see them.
 
 The following archival modules are intentionally excluded
 (they live in `TNLean/Archive/`):
