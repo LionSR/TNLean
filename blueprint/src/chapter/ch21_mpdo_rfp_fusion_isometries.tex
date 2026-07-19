@@ -527,10 +527,74 @@ of the total fusion space.  The zipper orientation is that of
 is \cite[Theorem~4.14(iii), lines~986--991]{Cirac2016MPDO_arXiv}, with identity
 weights in the length-independent case at
 \cite[line~1010]{Cirac2016MPDO_arXiv}.
-\begin{center}
-    \centering
-    \TNMPDOUnweightedZipperReconstruction
-\end{center}
+% Coefficient formula: \(P_{\alpha,\beta}^{ij}=(M_\alpha M_\beta)^{ij}
+%   =\sum_q M_\alpha^{iq}\otimes M_\beta^{qj}\).  The middle physical index q
+%   is contracted once; i and j are the one free north and south indices.
+% The three rows are \(UP=HU\), \(PU^\dagger=U^\dagger H\), and
+%   \(P=U^\dagger HU\).  The final equality cancels \(U^\dagger U\) only;
+%   it does not assert \(UU^\dagger=1\) or completeness of the total fusion
+%   space.
+% Boundary signatures (west,east,up,down), left and right respectively:
+%   row 1: (1,2,1,1)=(1,2,1,1);
+%   row 2: (2,1,1,1)=(2,1,1,1);
+%   row 3: (2,2,1,1)=(2,2,1,1).
+% Ink-to-index map: each M box carries one product factor; their vertical
+%   stroke is the q contraction and their outer legs are i,j.  Each H box is
+%   the single aggregate letter \(H_{\alpha,\beta}^{ij}\).  A fusion bar
+%   presents the separate \(\alpha,\beta\) ports at \(\{1,2\}\) and the fused
+%   port at center.  The
+%   H--bar bonds lie on a fused row; the second row is structural, and the
+%   reconstruction hole prevents it from adding a second H channel.
+% Source verdict: Bultinck et al. arXiv:1511.08090, Eq. (21), states the two
+%   zipper orientations algebraically but gives no dedicated figure for that
+%   equation.  CPSV16 Theorem 4.14(iii) supplies the MPDO identity.  The old
+%   catalogue picture fixes only row order and topology, not coordinates;
+%   therefore the current diagonal fused bonds preserve the asserted
+%   contraction without inventing a centred tall H atom.
+\par\noindent\hfil
+\tnpic[rows={op,op}]{
+  \tnfuse[span=2, west at=center, east at={1,2}]{U_{\alpha,\beta}} &
+  \tn[mpo, up=$i$]{M_\alpha} \\
+  & \tn[mpo, down=$j$]{M_\beta}
+}
+\qquad$=$\qquad
+\tnpic[rows={op:fused,wire:west none}]{
+  \tn[mpo, west at=center, east at=center, up=$i$, down=$j$]{H} &
+  \tnfuse[span=2, west at=center, east at={1,2}]{U_{\alpha,\beta}} \\
+  &
+}
+\hfil\par
+\smallskip
+\par\noindent\hfil
+\tnpic[rows={op,op}]{
+  \tn[mpo, up=$i$]{M_\alpha} &
+  \tnfuse[span=2, west at={1,2}, east at=center]
+    {U_{\alpha,\beta}^{\dagger}} \\
+  \tn[mpo, down=$j$]{M_\beta} &
+}
+\qquad$=$\qquad
+\tnpic[rows={op:fused,wire:east none}]{
+  \tnfuse[span=2, west at={1,2}, east at=center]
+    {U_{\alpha,\beta}^{\dagger}} &
+  \tn[mpo, west at=center, east at=center, up=$i$, down=$j$]{H} \\
+  &
+}
+\hfil\par
+\smallskip
+\par\noindent\hfil
+\tnpic[rows={op,op}]{
+  \tn[mpo, up=$i$]{M_\alpha} \\
+  \tn[mpo, down=$j$]{M_\beta}
+}
+\qquad$=$\qquad
+\tnpic[rows={op:fused,wire}]{
+  \tnfuse[span=2, west at={1,2}, east at=center]
+    {U_{\alpha,\beta}^{\dagger}} &
+  \tn[mpo, west at=center, east at=center, up=$i$, down=$j$]{H} &
+  \tnfuse[span=2, west at=center, east at={1,2}]{U_{\alpha,\beta}} \\
+  & \tnskip &
+}
+\hfil\par
 
 \begin{definition}[Operator family of a fusion-isometry family]%
     \label{def:mpdo_bnt_fusion_operator_family}
