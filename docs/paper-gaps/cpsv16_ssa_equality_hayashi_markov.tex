@@ -376,10 +376,21 @@ definition and convexity argument directly to positive semidefinite pairs with
 $\ker B\subseteq\ker A$; see arXiv:0903.2895v4, lines 717--720.  Their singular
 equality argument then obtains the common relative-modular resolvent on the
 reference support and passes through functional calculus; see lines 766--793.
-Following the latter step, if two positive semidefinite pairs already have the
-same shifted generalized relative-modular resolvents on the identity after
-right restriction to the support projection $P_B$ of the smaller reference,
-then their square-root ratios agree on that same support:
+Following the latter step, consider two positive semidefinite pairs $(A,B)$ and
+$(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
+$B$, and write
+$B^+=(B^{-1/2}_{\mathrm{supp}})^2$ and
+$D^+=(D^{-1/2}_{\mathrm{supp}})^2$.  Suppose that, for every $t>0$, their
+shifted generalized relative-modular resolvents satisfy
+\begin{align}
+  &(\mathbf 1\otimes P_B^{\mathsf T})
+    \bigl(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\bigr)^{-1}
+    \operatorname{vec}(\mathbf 1^{\mathsf T}) \notag\\
+  &\qquad=(\mathbf 1\otimes P_B^{\mathsf T})
+    \bigl(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\bigr)^{-1}
+    \operatorname{vec}(\mathbf 1^{\mathsf T}).
+\end{align}
+Then their square-root ratios agree on the same support:
 \begin{align}
   \bigl(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\bigr)P_B
     =\bigl(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\bigr)P_B.
