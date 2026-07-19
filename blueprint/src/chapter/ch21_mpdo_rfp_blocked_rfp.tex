@@ -1873,8 +1873,8 @@ physical indices, as in
     to trace preservation.
 \end{proof}
 
-\begin{lemma}[Trace transfer through the canonical full-matrix extension]
-    \label{lem:direct_sum_extension_trace_transfer}
+\begin{theorem}[Trace transfer through the canonical full-matrix extension]
+    \label{thm:direct_sum_extension_trace_transfer}
     \lean{Matrix.IsTraceNonincreasingBetweenDirectSums.directSumExtension}
     \lean{Matrix.IsTracePreservingMap.isTracePreservingDirectSumMap_of_extension}
     \leanok
@@ -1891,7 +1891,7 @@ physical indices, as in
       \item if $\widehat F$ is trace preserving, then $F$ preserves the total
         trace on $\mathcal A$.
     \end{enumerate}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     If $Y\geq0$, then $\pi(Y)\geq0$, and the trace identities for diagonal
@@ -1940,7 +1940,7 @@ physical indices, as in
 \begin{proof}\leanok
     \uses{thm:positive_map_trace_preserving_from_fixed_product_span,
       thm:direct_sum_full_matrix_extension_compatibility,
-      lem:direct_sum_extension_trace_transfer}
+      thm:direct_sum_extension_trace_transfer}
     Multilinearity first gives
     \[
       C_L(\mathcal V)
