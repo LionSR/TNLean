@@ -101,75 +101,6 @@
 
 \input{tn_motifs_mpdo.tex} % chktex 27 (resolved within the TikZ library directory)
 
-\TNDeclareDiagram
-    {TNMPSLocal}
-    {tensor,label}
-    {display}
-    {compact}
-    {\TNMPSLocal{A}{i}}
-    {chapter/ch02_mps.tex}{%
-    \begin{TNDiagram}[compact]
-        \TNMPSSite{tnA}{at=origin}{#1}
-        \TNOpenVirtualWest{tnAWest}
-        \TNOpenVirtualEast{tnAEast}
-        \TNOpenPhysicalNorth{tnAKet}
-        \TNLabelAbove{tnAKetOpen}{#2}
-    \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
-    {TNMPSWord}
-    {tensor,left,right,length}
-    {display}
-    {compact}
-    {\TNMPSWord{A}{i}{k}{L}}
-    {chapter/ch02_mps.tex}{%
-    \begin{TNDiagram}[compact]
-        \TNMPSSite{tnL}{at=origin}{}
-        \TNMPSSite{tnM}{right=of tnL}{}
-        \TNOmission{tnWordOmission}{right=of tnM}
-        \TNMPSSite{tnR}{right=of tnWordOmission}{}
-        \TNConnectVirtual{tnLEast}{tnMWest}
-        \TNOpenVirtualWest{tnLWest}
-        \TNOpenVirtualEast{tnMEast}
-        \TNOpenVirtualWest{tnRWest}
-        \TNOpenVirtualEast{tnREast}
-        \TNOpenPhysicalNorth{tnLKet}
-        \TNOpenPhysicalNorth{tnMKet}
-        \TNOpenPhysicalNorth{tnRKet}
-        \TNLabelAbove{tnLKetOpen}{#2}
-        \TNLabelAbove{tnRKetOpen}{#3}
-        \TNLabelBelow{tnWordOmission}{#4}
-        \TNLabelLeft{tnL}{#1}
-    \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
-    {TNMPV}
-    {tensor,left,right,length}
-    {display}
-    {compact}
-    {\TNMPV{A}{i}{k}{L}}
-    {chapter/ch02_mps.tex}{%
-    \begin{TNDiagram}[compact]
-        \TNMPSSite{tnL}{at=origin}{}
-        \TNMPSSite{tnM}{right=of tnL}{}
-        \TNOmission{tnMPVOmission}{right=of tnM}
-        \TNMPSSite{tnR}{right=of tnMPVOmission}{}
-        \TNConnectVirtual{tnLEast}{tnMWest}
-        \TNOpenVirtualEast{tnMEast}
-        \TNOpenVirtualWest{tnRWest}
-        \TNOpenPhysicalNorth{tnLKet}
-        \TNOpenPhysicalNorth{tnMKet}
-        \TNOpenPhysicalNorth{tnRKet}
-        \TNTraceVirtualBelow{tnLWest}{tnREast}
-        \TNLabelAbove{tnLKetOpen}{#2}
-        \TNLabelAbove{tnRKetOpen}{#3}
-        \TNLabelLeft{tnL}{#1}
-        \TNLabelBelow{tnMPVOmission}{#4}
-    \end{TNDiagram}%
-}
-
 % Blocking: L neighbouring local tensors grouped (dashed box) into one
 % blocked tensor; physical legs poke out the top, the outer virtual legs
 % become the blocked bond.
@@ -199,40 +130,6 @@
         \TNGroupFit{tnBlockingBoundary}
             {(tnL)(tnM)(tnBlockingOmission)(tnR)}
         \TNLabelLeft{tnBlockingBoundary}{#1}
-    \end{TNDiagram}%
-}
-
-% MPV overlap: the top row carries copies of #1, the bottom row the conjugate
-% copies of #2; the shared physical indices are contracted between the rows and
-% both virtual rings are closed by the trace (the boxes above and below).
-\TNDeclareDiagram
-    {TNMPVOverlap}
-    {left,right,length}
-    {display}
-    {compact}
-    {\TNMPVOverlap{i}{k}{L}}
-    {chapter/ch02_mps.tex}{%
-    \begin{TNDiagram}[compact]
-        \TNMPDOOverlapWord{ovu}{at=origin}{#1}{#2}{#3}
-    \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
-    {TNTransferMap}
-    {tensor}
-    {display}
-    {compact}
-    {\TNTransferMap{A}}
-    {chapter/ch02_mps.tex}{%
-    \begin{TNDiagram}[compact]
-        \TNStackedMPOProduct{tn}{at=origin}{}{\overline{#1}}{}
-        \TNOpenVirtualWest{tnUpperWest}
-        \TNOpenVirtualWest{tnLowerWest}
-        \TNOpenVirtualEast{tnUpperEast}
-        \TNOpenVirtualEast{tnLowerEast}
-        \TNLabelLeft{tnCentre}{X}
-        \TNLabelRight{tnCentre}{\E_{#1}(X)}
-        \TNLabelRight{tnUpperBra}{i}
     \end{TNDiagram}%
 }
 

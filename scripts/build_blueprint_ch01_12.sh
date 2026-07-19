@@ -21,6 +21,7 @@ mkdir -p "$WORK_DIR/blueprint/src" "$WORK_DIR/tex"
 rsync -a --exclude='.tn_svg_cache/' \
   "$REPO_ROOT/blueprint/src/" "$WORK_DIR/blueprint/src/"
 cp -R "$REPO_ROOT/tex/tn" "$WORK_DIR/tex/tn"
+cp -R "$REPO_ROOT/tex/tenkz" "$WORK_DIR/tex/tenkz"
 
 # Verify that the dedicated router contains exactly ch01_* through ch12_*.
 echo "==> Checking the FT--MPS chapter router..."
