@@ -4,15 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Axioms.Entropy
+import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Channel.PartialTrace
 import TNLean.Entropy.StrongSubadditivity
 
 /-!
 # SSA equality and quantum Markov-chain structure
 
-This module states the sanctioned axiom
+This module states the derived theorem
 `_root_.hayashi_ssa_equality_characterization` from
-`TNLean/Axioms/Entropy.lean` in the `Entropy` namespace.
+`TNLean/Axioms/Entropy.lean` in the `Entropy` namespace.  Its forward
+implication is the sanctioned axiom
+`_root_.hayashi_ssa_equality_characterization_forward`, while its reverse
+implication is proved.
 
 For a tripartite density matrix `ρ_ABC`, equality in strong subadditivity,
 
@@ -23,9 +27,10 @@ subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 `B` splits as a finite direct sum `⊕_j (B_jᴸ ⊗ B_jᴿ)` and the state is a
 block-diagonal direct sum `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
 
-The actual proof is intentionally deferred to the sanctioned axiom in
-`TNLean.Axioms.Entropy`; this file provides only the named formulations and
-the namespace abbreviation for the quantum-Markov-chain decomposition.
+The forward implication is deferred to the sanctioned axiom in
+`TNLean.Axioms.Entropy`.  The reverse implication is proved in
+`TNLean.Analysis.EntropyMarkovReverse` and is used directly below, so it does
+not inherit the forward axiom.
 
 ## Main declarations
 
@@ -71,9 +76,10 @@ abbrev QuantumMarkovDecomposition
 /-- Equality in strong subadditivity is equivalent to the existence of a
 quantum-Markov-chain decomposition on the middle subsystem.
 
-This is a statement of the sanctioned axiom
-`_root_.hayashi_ssa_equality_characterization`; no new axiom is introduced by
-this file.
+This is a statement of the derived theorem
+`_root_.hayashi_ssa_equality_characterization`.  Its forward implication uses
+the sanctioned axiom `_root_.hayashi_ssa_equality_characterization_forward`;
+no new axiom is introduced by this file.
 
 Source: blueprint `thm:entropy_ssa_equality_quantum_markov`. -/
 theorem ssaEquality_iff_exists_quantumMarkovDecomposition
@@ -95,14 +101,17 @@ theorem exists_quantumMarkovDecomposition_of_ssaEquality
   (ssaEquality_iff_exists_quantumMarkovDecomposition ρ_ABC hρ_dm).mp hEq
 
 /-- Reverse direction of the Hayashi SSA-equality characterization: a
-quantum-Markov-chain decomposition forces equality in strong subadditivity. -/
+quantum-Markov-chain decomposition forces equality in strong subadditivity.
+
+This wrapper uses the proved reverse theorem directly and does not depend on
+the sanctioned forward axiom. -/
 theorem isSSAEquality_of_quantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
     (hMarkov : Nonempty (QuantumMarkovDecomposition ρ_ABC)) :
     IsSSAEquality ρ_ABC hρ_dm.1.isHermitian :=
-  (ssaEquality_iff_exists_quantumMarkovDecomposition ρ_ABC hρ_dm).mpr hMarkov
+  _root_.hayashi_ssa_equality_characterization_reverse ρ_ABC hρ_dm hMarkov
 
 /-- Trace a chosen factor of the right subsystem of a tripartite state.
 
