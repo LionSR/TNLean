@@ -150,18 +150,42 @@ and
 in
 \doclink{TNLean/Channel/FixedPoint/StationarySupportRestriction}.}
 
-It remains to apply the full-support fixed-point theorem to $\widetilde T$,
-transport its density-block form through $V$, and combine the complement of
-$Q$ with the kernels discarded when each density matrix is restricted to its
-support.  This last combination produces the single zero summand
-$\mathcal H_0$ of Theorem~6.14.
+The full-support fixed-point theorem is now applied to $\widetilde T$.  The
+trace adjoint commutes with the isometric compression,
+\begin{align}
+  \widetilde T^*(A)=V^*T^*(VAV^*)V,
+\end{align}
+and the Schwarz defect of this map is the compression of the Schwarz defect
+of $T^*$ plus a positive term supported on $\mathbf 1-VV^*$.  Hence the
+Schwarz hypothesis passes to $\widetilde T^*$ using only the positivity of
+$T$ already assumed in Theorem~6.14.  The full-support density-block theorem
+therefore gives
+\begin{align}
+  \operatorname{Fix}(\widetilde T)
+    =U\left(\bigoplus_k\sigma_k\otimes M_{d_k}(\mathbb C)\right)U^*,
+\end{align}
+where every $\sigma_k$ is positive semidefinite and has trace one.
+\footnote{Formal declarations:
+\leanid{Matrix.traceAdjointMap_stationarySupportCompression},
+\leanid{IsSchwarzMap.traceAdjointMap_stationarySupportCompression}, and
+\leanid{IsPositiveMap.exists_block_densities_of_maximalSupportCompression}
+in
+\doclink{TNLean/Channel/FixedPoint/SupportCompressedDensityBlocks}.}
+
+It remains to use the retained positive definite fixed point of
+$\widetilde T$ to prove that each $\sigma_k$ is positive definite, transport
+the resulting density-block form through $V$, and write the complement of
+$Q$ as the single zero summand $\mathcal H_0$ of Theorem~6.14.  In particular,
+the present reduction suggests that no second support compression of the
+individual matrices $\sigma_k$ is needed.
 
 Thus Proposition~1.5, its application to the full-support adjoint
 mean-ergodic projection, and the full-support Schr\"odinger-picture fixed-point
 formula, together with the maximal-support witness and the positive
 trace-preserving restriction to its support, are formalized, while
-Theorem~6.14 remains open.  The missing work is the application and transport
-of the full-support formula and the final assembly of the discarded kernels.
+Theorem~6.14 remains open.  The missing work is the positive-definiteness of
+the compressed density blocks, transport to the original space, and assembly
+of the complementary zero summand.
 
 \bibliographystyle{alpha}
 \bibliography{references}
