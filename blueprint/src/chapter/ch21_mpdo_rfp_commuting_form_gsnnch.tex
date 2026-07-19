@@ -540,6 +540,55 @@
     pairs as doubled physical indices.
 \end{proof}
 
+\begin{theorem}[A normal rescaling gives a geometric phase]
+    \label{thm:mpdo_eta_normal_rescaling_geometric_phase}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_unit_phase_power_mpo_eq_product_of_normal_smul}
+    \leanok
+    \uses{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality,
+        thm:normal_proportional_mpv_geometric_phase}
+    Let $A$ be the normal doubled-index source tensor, and let $C$ be a fixed
+    tensor for its commuting-bond product.  Suppose that $sC$ is normal for
+    some $s>0$.  Then there is a complex number $\zeta$, with
+    $|\zeta|=1$, such that, for every $N\geq2$,
+    \[
+        \rho^{(N)}(A)=(\zeta s)^N\prod_{n=0}^{N-1}B_{n,n+1}.
+    \]
+    This is a conditional reduction: it does not assert that $C$, or any
+    rescaling of $C$, is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    Scaling $C$ by $s$ multiplies its length-$N$ matrix-product vector by
+    $s^N$.  Eventual nonzero proportionality and the normal-tensor overlap
+    dichotomy then give one unit phase $\zeta$ for all lengths.
+\end{proof}
+
+\begin{theorem}[A normal rescaling forces the positive geometric law]
+    \label{thm:mpdo_eta_normal_rescaling_positive_geometric_law}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      mpo_eq_positive_power_product_of_normal_smul}
+    \leanok
+    \uses{thm:mpdo_eta_normal_rescaling_geometric_phase}
+    Under the preceding hypotheses, the unit phase is trivial.  For every
+    $N\geq2$,
+    \[
+        \rho^{(N)}(A)=s^N\prod_{n=0}^{N-1}B_{n,n+1}.
+    \]
+    Thus a positive normal rescaling of the fixed product tensor already
+    supplies the positive geometric realization law.
+\end{theorem}
+
+\begin{proof}\leanok
+    The self-overlap of the normal source tends to one.  Hence at two
+    sufficiently large consecutive lengths, say $N$ and $N+1$, both the
+    source vector and the fixed bond product are nonzero.  Positivity of the
+    realization gives positive numbers $c_N,c_{N+1}$ satisfying
+    $(\zeta s)^N=c_N$ and $(\zeta s)^{N+1}=c_{N+1}$.  Consequently
+    $\zeta s=c_{N+1}/c_N>0$.  Since $|\zeta|=1$ and $s>0$, one has
+    $\zeta=1$.
+\end{proof}
+
 \begin{definition}[Rank-one trace factorization for neighboring operators]
     \label{def:mpdo_generic_eta_rank_one_trace_factorization}
     \lean{Matrix.EtaRankOneTraceFactorization}
