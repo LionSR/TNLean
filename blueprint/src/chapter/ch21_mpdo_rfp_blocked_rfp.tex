@@ -478,6 +478,56 @@ physical indices, as in
     \cite[Appendix~C.4, lines~1980--1993]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Density blocks bound products of fixed points]
+    \label{thm:mpdo_density_blocks_fixed_point_product_dimension}
+    \lean{MPOTensor.fixedPointProductSpan_finrank_le_of_densityBlocks}
+    \leanok
+    \uses{def:mpdo_vertical_fixed_point_products}
+    Let
+    \[
+        \mathcal A=\bigoplus_{\alpha}M_{d_\alpha}(\mathbb C),
+    \]
+    and let $F:\mathcal A\to\mathcal A$ be positive and trace preserving.
+    Suppose that the trace adjoint $F^*$ satisfies the Schwarz inequality and
+    that $F$ fixes a family $\rho=(\rho_\alpha)_\alpha$ for which every
+    $\rho_\alpha$ is positive definite.  If $\mathcal F=\operatorname{Fix}(F)$,
+    then, for every $L>0$,
+    \[
+        \dim C_L(\mathcal F)\leq\dim\mathcal F.
+    \]
+    This is the density-block dimension estimate from
+    \cite[Theorem~6.14 and Equation~(6.63)]{Wolf2012Quantum} used in
+    \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:direct_sum_full_matrix_extension_compatibility,
+        thm:mean_ergodic_projection_density_block_form}
+    Extend $F$ to the full matrix algebra by diagonal compression followed by
+    block-diagonal embedding, and choose a numbered basis of the ambient
+    space.  The extension is positive and trace preserving, its trace adjoint
+    satisfies the Schwarz inequality, and the embedded family $\rho$ is a
+    positive definite fixed point.  The fixed points therefore have the form
+    \[
+        U\left(\bigoplus_k\sigma_k\otimes X_k\right)U^*,
+        \qquad X_k\in M_{h_k}(\mathbb C),
+    \]
+    where $\operatorname{tr}(\sigma_k)=1$.  The parametrization
+    $(X_k)_k\mapsto\bigoplus_k\sigma_k\otimes X_k$ is injective, since its
+    left partial trace is $(X_k)_k$.  Every product of $L$ fixed points lies
+    in the range of
+    \[
+        (Y_k)_k\longmapsto
+        U\left(\bigoplus_k\sigma_k^L\otimes Y_k\right)U^*.
+    \]
+    Thus the span of these products has dimension at most
+    $\sum_k h_k^2$, which is the dimension of the fixed-point space of the
+    extension.  The block-diagonal embedding sends products for $F$
+    injectively to products for the extension, while diagonal compression
+    sends fixed points of the extension injectively to fixed points of $F$.
+    The asserted inequality follows.
+\end{proof}
+
 \begin{theorem}[Fixed contractions and the dimension of their fixed-point space]
     \label{thm:mpdo_fixed_contractions_product_dimension}
     \lean{MPOTensor.%
