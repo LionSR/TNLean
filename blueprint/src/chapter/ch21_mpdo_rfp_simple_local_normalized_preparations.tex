@@ -400,10 +400,14 @@
         \end{cases}
         \qquad
         \overline{\mathcal T}_{k,h}(X)
-        =X\otimes\overline\Omega_{k,h},
+        =X\otimes\overline\Omega_{k,h}.
     \]
-    where the second density acts on the full direct-sum index space of
-    $\Omega_{k,h}$. On an active pair this is precisely the preparation
+    Thus $\mathcal H^{\Omega}_{k,h}$ is the carrier space, whereas
+    $\Omega_{k,h}$, $\widehat\Omega_{k,h}$, and
+    $\overline\Omega_{k,h}$ are operators on it: respectively the
+    unnormalized neighboring operator, its normalization on an active pair,
+    and its completed density on an arbitrary pair. On an active pair this is
+    precisely the preparation
     $\mathcal T_{k,h}$ of
     \cite[Appendix~C.2, lines~1527--1535]{Cirac2016MPDO_arXiv}; the inactive
     branch is a normalized extension.
@@ -1058,7 +1062,7 @@ the global controlled map $\mathcal S_0$. The four fiberwise types are
 % Formula: T_0^(k,h), S_2^(k,h), S_0^(k,l,h), and T_2^(k,h) have the displayed
 % matrix-algebra domains and codomains. Ink: every blue stroke denotes a
 % trace-preserving completely positive map, and its label specifies the map.
-\[
+\par\noindent\hfil
   \begin{tenkzcd}[maps, species={channel}, row sep=6mm]
     \mathcal A_2^{k,h} & \mathcal A_{\partial}^{k,h} \\
     \mathcal A_{\eta}^{k,h} & \mathcal A_2^{k,h} \\
@@ -1073,4 +1077,4 @@ the global controlled map $\mathcal S_0$. The four fiberwise types are
     \tnarrow[from={(4,1)}, to={(4,2)}, species=channel]
       {\mathcal T_2^{(k,h)}}
   \end{tenkzcd}
-\]
+\hfil\par

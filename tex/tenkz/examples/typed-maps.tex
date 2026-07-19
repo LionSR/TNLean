@@ -36,14 +36,21 @@
   \qquad
   \Omega_{k,h}=\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h}).
 \]
-On an active pair, let
+When $a_kb_h\ne0$, let
 \[
-  \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h},
-  \qquad
-  \overline\Omega_{k,h}=\widehat\Omega_{k,h}.
+  \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h}.
 \]
-On an inactive pair, $\overline\Omega_{k,h}$ denotes a chosen positive
-trace-one density on $\mathcal H^{\Omega}_{k,h}$.  Thus, in every case,
+For a nonzero finite-dimensional Hilbert space $H$, write
+$\tau_H=(\dim H)^{-1}I_H$.
+For every pair, define the completed density by
+\[
+  \overline\Omega_{k,h}
+  =\begin{cases}
+      \widehat\Omega_{k,h},&a_kb_h\ne0,\\
+      \tau_{\mathcal H^{\Omega}_{k,h}},&a_kb_h=0.
+    \end{cases}
+\]
+Then
 \[
   \overline\Omega_{k,h}\in
     \operatorname{End}(\mathcal H^{\Omega}_{k,h}),
