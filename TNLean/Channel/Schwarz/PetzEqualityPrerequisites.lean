@@ -20,6 +20,8 @@ the positive semidefinite matrices.
 * `quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq`
   propagates saturation of partial-trace data processing to each summand in the
   finite Weyl average.
+* `quantumRelativeEntropy_weyl_jensen_eq_of_partialTraceRight_eq` identifies
+  saturation of the finite Jensen inequality in the Weyl proof.
 
 ## References
 
@@ -123,10 +125,6 @@ theorem quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq
   have hsuppM : ∀ w : Fin dS → ℂ,
       (partialTraceRight σ).mulVec w = 0 → (partialTraceRight ρ).mulVec w = 0 :=
     fun _ hw => partialTraceRight_support hσ hsupp hw
-  let U : unitary
-      (Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) :=
-    ⟨(1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b,
-      Matrix.kronecker_mem_unitary (Submonoid.one_mem _) (weyl_mem_unitary hζ a b)⟩
   calc
     quantumRelativeEntropy
         (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
@@ -151,5 +149,72 @@ theorem quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq
           ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ)
         (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * σ *
           ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ) := by
-            simpa only [Unitary.coe_star, star_eq_conjTranspose, U] using
-              (quantumRelativeEntropy_conj_unitary hρ.isHermitian hσ.isHermitian U).symm
+            exact (quantumRelativeEntropy_weyl_conj_eq hρ.isHermitian
+              hσ.isHermitian hζ a b).symm
+
+/-- **Partial-trace saturation saturates the finite Weyl Jensen inequality.**
+Let ρ and σ be positive semidefinite matrices with ker σ ⊆ ker ρ. If their
+relative entropy is unchanged by the right partial trace, then the relative
+entropy of the finite Weyl average equals the uniform average of the relative
+entropies of the Weyl-conjugated pairs.
+
+This is the first equality-sensitive inequality in the finite Weyl proof of
+partial-trace data processing. It is a scalar equality-propagation prerequisite
+for Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3 and equation
+(8); it does not characterize equality in joint convexity or assert an operator
+intertwining or Petz recovery identity. -/
+theorem quantumRelativeEntropy_weyl_jensen_eq_of_partialTraceRight_eq
+    {dS dC : ℕ} [NeZero dC]
+    {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
+    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hsupp : ∀ v : Fin dS × ZMod dC → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0)
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ))
+    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) :
+    quantumRelativeEntropy
+        (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * ρ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ)
+        (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * σ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ) =
+      ∑ c : ZMod dC, ∑ e : ZMod dC, ((dC : ℝ) ^ 2)⁻¹ •
+        quantumRelativeEntropy
+          (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * ρ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ)
+          (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * σ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ) := by
+  classical
+  have hterm (c e : ZMod dC) :
+      quantumRelativeEntropy
+          (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * ρ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ)
+          (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * σ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ) =
+        quantumRelativeEntropy ρ σ := by
+    exact quantumRelativeEntropy_weyl_conj_eq hρ.isHermitian hσ.isHermitian
+      hζ c e
+  have haverage :
+      quantumRelativeEntropy
+          (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * ρ *
+              ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ)
+          (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * σ *
+              ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ) =
+        quantumRelativeEntropy ρ σ := by
+    calc
+      _ = quantumRelativeEntropy
+          (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ 0 0) * ρ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ 0 0)ᴴ)
+          (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ 0 0) * σ *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ 0 0)ᴴ) :=
+        quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq
+          hρ hσ hsupp heq hζ 0 0
+      _ = quantumRelativeEntropy ρ σ := hterm 0 0
+  rw [haverage]
+  simp_rw [hterm]
+  simp only [Finset.sum_const, Finset.card_univ, ZMod.card, nsmul_eq_mul,
+    smul_eq_mul]
+  have hdC : (dC : ℝ) ≠ 0 := by exact_mod_cast NeZero.ne dC
+  field_simp [hdC]
