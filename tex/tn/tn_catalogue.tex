@@ -332,29 +332,6 @@
     \end{TNEquationRow}%
 }
 
-% Vertical product of two distinct basis tensors, contracted through the
-% shared physical index.
-\TNDeclareDiagram
-    {TNMPDOBNTVerticalProduct}
-    {}
-    {display}
-    {compact}
-    {\TNMPDOBNTVerticalProduct}
-    {chapter/ch21_mpdo_rfp_simple_local_structure_capstone.tex}{%
-    \begin{TNEquationRow}[compact]
-        \TNTerm{%
-            \TNStackedMPOProduct{vp}{at=origin}{\mathcal K_y}{\mathcal K_x}{}
-            \TNOpenVirtualWest{vpUpperWest}
-            \TNOpenVirtualEast{vpUpperEast}
-            \TNOpenVirtualWest{vpLowerWest}
-            \TNOpenVirtualEast{vpLowerEast}
-            \TNOpenPhysicalNorth{vpUpperKet}
-            \TNOpenPhysicalSouth{vpLowerBra}}
-        \TNRelation{=}
-        \ensuremath{0\qquad(x\ne y)}
-    \end{TNEquationRow}%
-}
-
 % The two block closure maps: a boundary insertion on the virtual bond of a
 % block tensor, with the virtual loop closed by the trace, gives an operator
 % on the open physical legs.
