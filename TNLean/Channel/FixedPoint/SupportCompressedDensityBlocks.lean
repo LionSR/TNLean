@@ -165,14 +165,15 @@ is the full-support step in the proof of Wolf, Theorem 6.14; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1345--1386 and
 1483--1494.
 
-**Scope restriction (maximal-support compression):** This theorem describes
-the fixed points of the compressed map with positive definite density blocks.
-The transport to the original space with its complementary zero summand is
-completed in `TNLean.Channel.FixedPoint.WolfTheorem614`.  That completion is
-recorded in `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
+**Completion status:** This theorem records both the equivalence between the
+original and compressed fixed-point spaces and the positive definite
+density-block description after maximal-support compression.  The subsequent
+unitary transport with its complementary zero summand, completing Wolf,
+Theorem 6.14 and Equation (6.63), is proved in
+`TNLean.Channel.FixedPoint.WolfTheorem614`.  The completion is recorded in
+`docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
 
-The theorem records only the fixed-point description.  The corresponding
-formula for the mean ergodic projection is supplied by
+The corresponding formula for the mean ergodic projection is supplied by
 `IsPositiveMap.exists_block_densities_of_meanErgodicProjection`. -/
 theorem IsPositiveMap.exists_block_densities_of_maximalSupportCompression
     {T : MatD →ₗ[ℂ] MatD} (hT : IsPositiveMap T)
