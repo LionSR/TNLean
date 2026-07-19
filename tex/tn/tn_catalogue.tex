@@ -633,39 +633,10 @@
     {chapter/ch02_mps.tex,
      chapter/ch03_single.tex,
      chapter/ch12_symmetry.tex,
-     chapter/ch23_algebraic_ft.tex,
      chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
         \TNGaugeConjugatedMPSSite{tnGauge}{at=origin}{#2}{#1}{#3}
     \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
-    {TNPhysicalRealization}
-    {virtual,physical}
-    {display}
-    {normal}
-    {\TNPhysicalRealization{X}{i}}
-    {chapter/ch23_algebraic_ft.tex}{%
-    \begin{TNEquationRow}[normal]
-        \TNTerm[normal]{%
-            \TNMPSSite{tnA1}{at=origin}{}
-            \TNInsertion{tnX}{right=of tnA1}{#1}
-            \TNOpenVirtualWest{tnA1West}
-            \TNOpenPhysicalNorth{tnA1Ket}
-            \TNVirtualPort{tnXTotnA1}{tnX}{west}
-            \TNConnectVirtual{tnA1East}{tnXTotnA1}
-            \TNVirtualPort{tnXOpenEastPort}{tnX}{east}
-            \TNOpenVirtualEast{tnXOpenEastPort}}
-        \TNRelation{=}
-        \TNTerm[normal]{%
-            \TNMPSSite{tnA2}{at=origin}{}
-            \TNOpenVirtualWest{tnA2West}
-            \TNOpenVirtualEast{tnA2East}
-            \TNInsertion{tnO}{above=of tnA2}{#2}
-            \TNPhysicalPort{tnOTotnA2}{tnO}{south}
-            \TNConnectPhysical{tnA2Ket}{tnOTotnA2}}
-    \end{TNEquationRow}%
 }
 
 % Fix (#401): use a dedicated physical-leg operator insertion for
@@ -820,58 +791,12 @@
 }
 
 \TNDeclareDiagram
-    {TNInternalTraceInsertion}
-    {left,right,virtual}
-    {display}
-    {normal}
-    {\TNInternalTraceInsertion{i}{k}{X}}
-    {chapter/ch23_algebraic_ft.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNMPSSite{tnL}{at=origin}{}
-        \TNInsertion{tnX}{right=of tnL}{#3}
-        \TNMPSSite{tnR}{right=of tnX}{}
-        \TNOpenPhysicalNorth{tnLKet}
-        \TNOpenPhysicalNorth{tnRKet}
-        \TNLabelAbove{tnL}{#1}
-        \TNLabelAbove{tnR}{#2}
-        \TNVirtualPort{tnXTotnL}{tnX}{west}
-        \TNConnectVirtual{tnLEast}{tnXTotnL}
-        \TNVirtualPort{tnXTotnR}{tnX}{east}
-        \TNConnectVirtual{tnXTotnR}{tnRWest}
-        \TNTraceVirtualBelow{tnLWest}{tnREast}
-        \TNLabelBelow{tnX}{\tr}
-    \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
-    {TNExternalTraceInsertion}
-    {left,right,virtual}
-    {display}
-    {normal}
-    {\TNExternalTraceInsertion{i}{k}{X}}
-    {chapter/ch23_algebraic_ft.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNMPSSite{tnL}{at=origin}{}
-        \TNMPSSite{tnR}{right=of tnL}{}
-        \TNInsertion{tnY}{below=of tnL}{#3}
-        \TNOpenPhysicalNorth{tnLKet}
-        \TNOpenPhysicalNorth{tnRKet}
-        \TNLabelAbove{tnL}{#1}
-        \TNLabelAbove{tnR}{#2}
-        \TNConnectVirtual{tnLEast}{tnRWest}
-        \TNMPSExternalTraceInsertionMotif
-            {tnExternalTrace}{tnLWest}{tnREast}{tnY}{\tr}
-    \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
     {TNBoundaryRegrow}
     {virtual,left,right,length}
     {display}
     {normal}
     {\TNBoundaryRegrow{X}{i}{k}{L}}
-    {chapter/ch13_parent_hamiltonian_injective_ground_spaces.tex,
-     chapter/ch23_algebraic_ft.tex}{%
+    {chapter/ch13_parent_hamiltonian_injective_ground_spaces.tex}{%
     \begin{TNDiagram}[normal]
         \TNMPSSite{rA}{at=origin}{}
         \TNMPSSite{rB}{right=of rA}{}
@@ -888,44 +813,6 @@
         \TNVirtualPort{rXOpenEastPort}{rX}{east}\TNOpenVirtualEast{rXOpenEastPort}
         \TNLabelBelow{rB}{#4}
     \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
-    {TNLocalEqualityStep}
-    {left_virtual,right_virtual,physical}
-    {display}
-    {normal}
-    {\TNLocalEqualityStep{X}{Y}{i}}
-    {chapter/ch23_algebraic_ft.tex}{%
-    \begin{TNEquationRow}[normal]
-        \TNTerm[normal]{%
-        \TNTensor{lA}{at=origin}
-        \TNInsertion{lX}{right=of lA}{#1}
-        \TNMPSSite{lB}{right=of lX}{}
-        \TNOpenPhysicalNorth{lBKet}
-        \TNLabelAbove{lB}{#3}
-        \TNVirtualPort{lAOpenWestPort}{lA}{west}\TNOpenVirtualWest{lAOpenWestPort}
-        \TNVirtualPort{lATolX}{lA}{east}
-        \TNVirtualPort{lXTolA}{lX}{west}
-        \TNConnectVirtual{lATolX}{lXTolA}
-        \TNVirtualPort{lXTolB}{lX}{east}
-        \TNConnectVirtual{lXTolB}{lBWest}
-        \TNOpenVirtualEast{lBEast}}
-        \TNRelation{=}
-        \TNTerm[normal]{%
-        \TNTensor{rA}{at=origin}
-        \TNInsertion{rX}{right=of rA}{#2}
-        \TNMPSSite{rB}{right=of rX}{}
-        \TNOpenPhysicalNorth{rBKet}
-        \TNLabelAbove{rB}{#3}
-        \TNVirtualPort{rAOpenWestPort}{rA}{west}\TNOpenVirtualWest{rAOpenWestPort}
-        \TNVirtualPort{rATorX}{rA}{east}
-        \TNVirtualPort{rXTorA}{rX}{west}
-        \TNConnectVirtual{rATorX}{rXTorA}
-        \TNVirtualPort{rXTorB}{rX}{east}
-        \TNConnectVirtual{rXTorB}{rBWest}
-        \TNOpenVirtualEast{rBEast}}
-    \end{TNEquationRow}%
 }
 
 \TNDeclareDiagram
