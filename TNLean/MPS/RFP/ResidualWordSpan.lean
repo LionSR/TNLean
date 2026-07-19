@@ -142,4 +142,49 @@ theorem wordTupleSpanTop_one_of_blockwise_mul
         Matrix.nonsing_inv_mul (R j) (Ne.isUnit (hR j))]
       simp
 
+/-- Under the whole-direct-sum renormalization-fixed-point hypotheses, the
+one-site word tuples of the normal-tensor blocks span the product of their
+matrix algebras. This is the span consequence of the residual isometry
+condition in arXiv:1606.00608, eq:III_isometry (line 551) and Corollary
+III.cor3 (line 584).
+
+**Scope restriction (whole-tensor canonical form):** the hypotheses expose
+normality, irreducibility, left canonical form, and gauge-phase distinctness
+block by block. The passage from the paper's single canonical-form predicate
+to these hypotheses is recorded in
+docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
+theorem wordTupleSpanTop_one_of_isTransferIdempotent_directSum
+    [∀ k, NeZero (dim k)]
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hnormal : ∀ k, IsNormal (B k))
+    (hirr : ∀ k, IsIrreducibleTensor (B k))
+    (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
+    (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
+      ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k))
+    (hRFP : IsTransferIdempotent (directSumTensor B)) :
+    WordTupleSpanTop B 1 := by
+  classical
+  obtain ⟨X, Λ, U, hXdet, hΛpos, _, hdecomp, hU⟩ :=
+    exists_residualIsometryFamily_of_isTransferIdempotent_directSum B
+      hnormal hirr hleft hdist hRFP
+  let D : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
+    fun j ↦ Matrix.diagonal (fun k ↦ (Real.sqrt (Λ j k) : ℂ))
+  have hDdet : ∀ j, (D j).det ≠ 0 := by
+    intro j
+    rw [show D j = Matrix.diagonal
+      (fun k ↦ (Real.sqrt (Λ j k) : ℂ)) from rfl,
+      Matrix.det_diagonal, Finset.prod_ne_zero_iff]
+    intro k _
+    exact Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr (hΛpos j k)).ne'
+  apply wordTupleSpanTop_one_of_blockwise_mul U B
+    (fun j ↦ X j * D j) (fun j ↦ (X j)⁻¹)
+  · intro j
+    rw [Matrix.det_mul]
+    exact mul_ne_zero (hXdet j) (hDdet j)
+  · intro j
+    exact (Matrix.isUnit_nonsing_inv_det (X j) (Ne.isUnit (hXdet j))).ne_zero
+  · intro j i
+    simpa only [D, Matrix.mul_assoc] using hdecomp j i
+  · exact hU.wordTupleSpanTop_one
+
 end MPSTensor
