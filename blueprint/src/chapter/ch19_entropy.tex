@@ -1345,6 +1345,18 @@ Theorem~\ref{thm:trace_norm_abs}.
     Hermitian.
 \end{lemma}
 
+\begin{lemma}[Support inverse square root of a positive-definite matrix]
+    \label{lem:support_inverse_square_root_positive_definite}
+    \lean{Matrix.PosDef.supportInvSqrt_eq_inv_sqrt}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    If $\tau$ is positive definite, then its inverse square root on the support
+    is its ordinary inverse square root:
+    \[
+        \tau^{-1/2}_{\mathrm{supp}}=(\sqrt\tau)^{-1}.
+    \]
+\end{lemma}
+
 \begin{lemma}[Support inverse-square-root identity]
     \label{lem:support_inverse_square_root_sandwich}
     \lean{Matrix.PosSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt}
@@ -2750,10 +2762,10 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.sourceB_resolvent_eq_relativeModular}
     \lean{Matrix.relativeModular_sqrt_mulVec_vec_one}
     \leanok
-    Let $S,T$ be positive semidefinite matrices and let $x$ be a vector.  If
+    Let $S,T$ be positive semidefinite matrices and let $x$ be a vector.  If,
+    for every $t>0$,
     \[
-        (t\mathbf 1+S)^{-1}x=(t\mathbf 1+T)^{-1}x
-        \qquad(t>0),
+        (t\mathbf 1+S)^{-1}x=(t\mathbf 1+T)^{-1}x,
     \]
     then $\sqrt S\,x=\sqrt T\,x$.
 
@@ -2771,11 +2783,15 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Use the L\"owner integral representation of the power $p=1/2$.  Each
-    integrand is a scalar multiple of the identity minus a scalar multiple of
-    the shifted resolvent, so the hypothesis makes the two vector-valued
-    integrands equal.  Integration gives equality of the positive square
-    roots on $x$.
+    Use the L\"owner integral representation of the power $p=1/2$.  Its
+    integrand at $t>0$ is
+    \[
+      f_t(S)=t^{-1/2}\mathbf 1-t^{1/2}(t\mathbf 1+S)^{-1}.
+    \]
+    Applied to $x$, this is
+    $t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x$.  The hypothesis therefore makes
+    the two vector-valued integrands equal, and integration gives equality of
+    the positive square roots on $x$.
 
     For the second assertion, factor
     \[
