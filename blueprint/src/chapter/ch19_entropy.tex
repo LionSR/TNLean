@@ -2300,8 +2300,13 @@ Theorem~\ref{thm:trace_norm_abs}.
         thm:maximally_mixed_ancilla}
     Let $\tau_C=d_C^{-1}\mathbf 1_C$.  The twirl identity gives
     $\overline X=(\tr_C X)\otimes\tau_C$.  The support inclusion passes to the
-    partial traces, so support-domain ancilla additivity and the saturation
-    hypothesis give
+    partial traces:
+    \[
+        \ker\sigma\subseteq\ker\rho
+        \Longrightarrow
+        \ker(\tr_C\sigma)\subseteq\ker(\tr_C\rho).
+    \]
+    Hence support-domain ancilla additivity and the saturation hypothesis give
     \[
         D(\overline\rho\Vert\overline\sigma)
           =D(\tr_C\rho\Vert\tr_C\sigma)
