@@ -536,7 +536,8 @@
             \msg_warning:nnee { tenkz } { sheet-range }
               { \int_eval:n {#1} }
               { \int_eval:n { \l_tenkz_cs_sheets_int - 1 } }
-            \tenkz@event{warning|code=sheet-range|sheet=\int_eval:n {#1}}
+            \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+              code=sheet-range|sheet=\int_eval:n {#1}}
           }
       }
   }

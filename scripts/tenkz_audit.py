@@ -67,8 +67,7 @@ KNOWN_LANGS = {"grid", "cd", "lattice", "free", "planes"}
 EMPTY_CHECK_LANGS = {"grid", "lattice", "free"}
 
 # Event kinds each dialect is expected to emit.  `lattice` and `planes`
-# are left open: lattice currently emits nothing (see audit report) and
-# planes is a post-spec dialect still growing its vocabulary.
+# are left open while their event vocabularies are still growing.
 DIALECT_KINDS = {
     "grid": {"atom", "bond", "faceports", "pairleg", "trace", "pairtrace",
              "phtrace", "hooks", "cup", "hole", "warning", "boundary"},
@@ -235,6 +234,10 @@ class Audit:
                         self.hard("malformed-event", where,
                                   f"{kind} field {k}={v!r} fails validation: {line}")
                         ok = False
+                if kind != "picture" and "picture" not in attrs:
+                    self.hard("malformed-event", where,
+                              f"{kind} event lacks required picture=: {line}")
+                    ok = False
             if kind == "picture":
                 if not ok or "id" not in attrs or not _is_int(attrs["id"]):
                     continue

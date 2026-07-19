@@ -3020,13 +3020,20 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
     \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
     \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
       {
-        \tenkz_cell_physical_port:nnnN
-          {\int_eval:n{#1+1}}{#2}{up} \l_tmpa_bool
-        \bool_if:NT \l_tmpa_bool
+        \prop_if_in:NeF \l__tenkz_pwcenterused_prop
+          {#1-\tl_use:N\l__tenkz_pwbase_tl}
           {
-            \tenkz_leg_open:enn {\int_eval:n{#1+1}}{#2}{up}
-            \int_compare:nNnT {#3} = {1}
-              { \int_incr:N \l__tenkz_internalpu_int }
+            \tenkz_cell_physical_port:nnnN
+              {\int_eval:n{#1+1}}{\l__tenkz_pwbase_tl}{up} \l_tmpa_bool
+            \bool_if:NT \l_tmpa_bool
+              {
+                \prop_put:Nen \l__tenkz_pwcenterused_prop
+                  {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
+                \tenkz_leg_open:een
+                  {\int_eval:n{#1+1}}{\l__tenkz_pwbase_tl}{up}
+                \int_compare:nNnT {#3} = {1}
+                  { \int_incr:N \l__tenkz_internalpu_int }
+              }
           }
       }
       { \tenkz_draw_lower_surplus:nn {#1}{\l__tenkz_pwbase_tl} }

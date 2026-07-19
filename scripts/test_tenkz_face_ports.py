@@ -330,6 +330,12 @@ SOURCE = r"""
 \begin{tenkz}[physical=up, tensor style=box]
   \tn[pill, wide=2, up at=rows]{A} &
 \end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  & \tn[pill, wide=2, down at={3}]{U} & \\
+  \tn[pill, wide=2, up at=center]{L} & &
+\end{tenkz}
+\begin{tenkzlattice}[rows=1, cols=1, west=trace]
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -410,20 +416,21 @@ def main() -> int:
             ]
             for picture in audit.pictures
         }
-        pictureless_warning_log = work / "pictureless-warning.tnlog"
-        pictureless_warning_log.write_text(
-            "picture|id=1|lang=lattice\nwarning|code=plane-rise-low\n",
+        missing_picture_log = work / "missing-warning-picture.tnlog"
+        missing_picture_log.write_text(
+            "picture|id=1|lang=grid\nwarning|code=missing-owner\n",
             encoding="utf-8",
         )
-        pictureless_warning_audit = Audit(pictureless_warning_log, None)
-        pictureless_warning_audit.parse_log()
-        pictureless_warning_hard = any(
-            finding.severity == "HARD"
-            for finding in pictureless_warning_audit.findings
+        missing_picture_audit = Audit(missing_picture_log, None)
+        missing_picture_audit.parse_log()
+        missing_picture_guard = any(
+            finding.rule == "malformed-event"
+            and "lacks required picture=" in finding.msg
+            for finding in missing_picture_audit.findings
         )
 
-    if pictureless_warning_hard:
-        raise AssertionError("audit rejected a compatible pictureless warning")
+    if not missing_picture_guard:
+        raise AssertionError("audit parser silently dropped a pictureless warning")
     if hooks_findings:
         raise AssertionError("audit rejected a grid hooks event")
     inverse = pictures[1]
@@ -1116,6 +1123,19 @@ def main() -> int:
         "boundary|picture=72|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
         "invalid physical rows token survived boundary accounting",
     )
+    shifted_empty_upper = pictures[73]
+    require(
+        shifted_empty_upper,
+        "boundary|picture=73|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
+        "an empty shifted upper overlap did not open the centred lower owner",
+    )
+    require(
+        pictures[74],
+        "warning|picture=74|code=side-deferred|side=west|policy=trace",
+        "lattice side-policy warning lost picture ownership",
+    )
+    if "side-deferred" not in parsed_warnings[74]:
+        raise AssertionError("lattice side-policy warning was dropped by the audit parser")
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 
