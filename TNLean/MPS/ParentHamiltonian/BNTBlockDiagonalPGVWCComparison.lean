@@ -43,6 +43,74 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-- A cyclic segment one site longer than the interaction range belongs to the
+sum of the block ground spaces.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j,
+  \qquad S_M=\bigvee_jG_M(A_j).
+\]
+For a vector in the periodic chain space of \(B\), the two restrictions of an
+\((L+1)\)-site cyclic segment obtained by fixing its first or last site belong
+to \(S_L\).  The one-step intersection identity therefore places the segment
+itself in \(S_{L+1}\).
+
+This is the local \((L+1)\)-site form of the intersection argument in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1431--1452.  Its interior word
+has length \(L-1\), where the normalized BNT block-separation theorem applies
+under the source bound
+\(L\ge 3(r-1)(L_0+1)+1\).  Thus it does not assume that the wrapped tail of a
+boundary-crossing length-\(L\) window spans the product algebra; that tail may
+have length one. -/
+theorem
+    blockDiagonal_cyclicRestrict_succ_mem_iSup_groundSpace_of_chainGroundSpace_bnt_c1_pgvwc07
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hN : 0 < N) (hLsuccN : L + 1 ≤ N)
+    (hRange :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (i : Fin N) (τ : Fin N → Fin d) :
+    cyclicRestrictₗ hN (L + 1) i τ ψ ∈
+      ⨆ j : Fin r, groundSpace (A j) (L + 1) := by
+  classical
+  let S : Submodule ℂ (NSiteSpace d L) :=
+    ⨆ j : Fin r, groundSpace (A j) L
+  have hLocal : ∀ (k : Fin N) (ρ : Fin N → Fin d),
+      cyclicRestrictₗ hN L k ρ ψ ∈ S := by
+    rw [chainGroundSpace, dif_pos ⟨hN, by omega⟩] at hψ
+    simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+    intro k ρ
+    simpa [S, groundSpace_toTensorFromBlocks_eq_iSup μ A hμ L] using hψ k ρ
+  have hStep :=
+    pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07
+      (d := d) (L₀ := L₀) A hr hIrr hLeft hOverlap hBlocks hBlk hL₀
+      hUnital (n := L - 1) (by omega)
+  have hLpred : L - 1 + 1 = L := by omega
+  have hLpredSucc : L - 1 + 2 = L + 1 := by omega
+  rw [hLpred, hLpredSucc] at hStep
+  rw [← hStep]
+  constructor
+  · simp only [Submodule.mem_iInf, Submodule.mem_comap]
+    intro b
+    rw [cyclicRestrictₗ_restrictLast]
+    exact hLocal i _
+  · simp only [Submodule.mem_iInf, Submodule.mem_comap]
+    intro a
+    rw [cyclicRestrictₗ_restrictFirst hN hLsuccN]
+    exact hLocal (cyclicForwardSite i 1) _
+
 /-- Boundary-crossing local constraints give the \(C^j,D^j\) comparison for a
 fixed block-diagonal boundary representation.
 

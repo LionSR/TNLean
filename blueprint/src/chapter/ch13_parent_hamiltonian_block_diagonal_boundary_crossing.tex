@@ -1348,6 +1348,50 @@ in both cases.
     \]
 \end{proof}
 
+\begin{lemma}[One-step cyclic segments lie in the block ground-space sum]
+    \label{lem:block_diagonal_cyclic_segment_succ}
+    \lean{MPSTensor.blockDiagonal_cyclicRestrict_succ_mem_iSup_groundSpace_of_chainGroundSpace_bnt_c1_pgvwc07}
+    \leanok
+    \uses{thm:pgvwc_direct_sum_intersection_source_length}
+    Let $g\ge2$, and let $A^1,\ldots,A^g$ be separated normalized BNT blocks
+    that are injective at the common length $L_0>0$. Let every $\mu_j$ be
+    nonzero, and suppose that
+    \[
+        L\ge 3(g-1)(L_0+1)+1,
+        \qquad L+1\le N.
+    \]
+    If
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA^j\right),
+    \]
+    then every cyclic segment of $\psi$ on $L+1$ consecutive sites belongs to
+    \[
+        \sum_jG_{L+1}(A^j).
+    \]
+    This is the one-step intersection argument in
+    \cite[Theorem~12, proof lines~1431--1452]{PerezGarcia2007Matrix}. It uses
+    the middle-word length $L-1$ and makes no spanning assumption on a short
+    tail produced by opening a boundary-crossing interval.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pgvwc_direct_sum_intersection_source_length}
+    Fix an $(L+1)$-site cyclic segment. After fixing its last site, the
+    remaining length-$L$ segment satisfies the corresponding local constraint,
+    so it belongs to $\sum_jG_L(A^j)$. The same conclusion follows after
+    fixing its first site, using the adjacent cyclic constraint. Hence the
+    original segment belongs to
+    \[
+        \C^d\otimes\left(\sum_jG_L(A^j)\right)
+        \cap
+        \left(\sum_jG_L(A^j)\right)\otimes\C^d.
+    \]
+    Theorem~\ref{thm:pgvwc_direct_sum_intersection_source_length} identifies
+    this intersection with $\sum_jG_{L+1}(A^j)$.
+\end{proof}
+
 \begin{theorem}[Crossing-tail spans give periodic single-block states]
     \label{thm:block_diagonal_boundary_periodic_components_from_crossing_span}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1}
