@@ -1843,8 +1843,8 @@ physical indices, as in
     $\mathcal V=\spn_{\C}\{V_j:j\in J\}$ and, in the notation of
     \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}, define
     \[
-      C_L(\mathcal V)=\spn_{\C}
-        \{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+      C_L(\mathcal V)
+        =\spn_{\C}\{v_1\cdots v_L:v_1,\ldots,v_L\in\mathcal V\}.
     \]
     If $\mathbf 1\in C_L(\mathcal V)$ for some $L>0$, then $F$ is trace
     preserving.
@@ -1858,6 +1858,11 @@ physical indices, as in
       thm:psd_trace_pairing_self_dual,
       lem:posDef_weighted_trace_faithful,
       thm:trace_preserving_iff_trace_adjoint_unital}
+    Multilinearity gives
+    \[
+      C_L(\mathcal V)
+        =\spn_{\C}\{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+    \]
     By Theorem~\ref{thm:positive_map_faithful_fixed_point_from_product_span},
     there is a positive-definite matrix $\rho$ such that $F(\rho)=\rho$.
     Let $F^*$ be the trace-pairing adjoint and set
@@ -1931,8 +1936,8 @@ physical indices, as in
     Suppose that $F(V_j)=V_j$ for every $j\in J$.  With
     $\mathcal V=\spn_{\C}\{V_j:j\in J\}$, put
     \[
-      C_L(\mathcal V)=\spn_{\C}
-        \{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+      C_L(\mathcal V)
+        =\spn_{\C}\{v_1\cdots v_L:v_1,\ldots,v_L\in\mathcal V\}.
     \]
     If $\mathbf 1_{\mathcal A}\in C_L(\mathcal V)$ for some $L>0$, then $F$
     preserves the total trace on $\mathcal A$.  This is the finite-sector form
@@ -1944,6 +1949,11 @@ physical indices, as in
     \uses{thm:positive_map_trace_preserving_from_fixed_product_span,
       thm:direct_sum_full_matrix_extension_compatibility,
       lem:direct_sum_extension_trace_transfer}
+    Multilinearity first gives
+    \[
+      C_L(\mathcal V)
+        =\spn_{\C}\{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+    \]
     Let $\iota:\mathcal A\to\operatorname{End}(\bigoplus_\alpha
     \mathbb C^{d_\alpha})$ be the block-diagonal embedding and let
     $\widehat F$ be the canonical full-matrix extension.  These maps satisfy
