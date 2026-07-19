@@ -716,6 +716,67 @@
     again contradicting the strict positivity of some power of $T$.
 \end{proof}
 
+\begin{theorem}[Rank of a strictly positive idempotent]
+    \label{thm:matrix_positive_idempotent_rank_one}
+    \lean{Matrix.rank_eq_one_of_pos_of_mul_self_eq_self}
+    \leanok
+    Let $I$ be a nonempty finite index set, and let $P$ be a real matrix
+    indexed by $I\times I$. Suppose that $P^2=P$ and, for every $i,j\in I$,
+    \[
+        P_{i,j}>0.
+    \]
+    Then
+    \[
+        \operatorname{rank}(P)=1.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Put $u=P\mathbf 1$, so every coordinate of $u$ is positive and $Pu=u$.
+    For a fixed vector $x$ satisfying $Px=x$, choose an index $k$ at which
+    $x_i/u_i$ is maximal and put $c=x_k/u_k$. Then $y=cu-x$ is non-negative,
+    $y_k=0$, and $Py=y$. Hence
+    \[
+        0=y_k=(Py)_k=\sum_j P_{k,j}y_j.
+    \]
+    Since every $P_{k,j}$ is strictly positive, all coordinates of $y$ vanish.
+    Thus every fixed vector is proportional to $u$. The range of an idempotent
+    is its fixed space, so it is one-dimensional.
+\end{proof}
+
+\begin{theorem}[Rank of a stationary primitive square]
+    \label{thm:matrix_primitive_pow_two_rank_one}
+    \lean{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}
+    \leanok
+    Let $T$ be a primitive real $N\times N$ matrix, where
+    $N\geq 1$. If
+    \[
+        T^2=T^3,
+    \]
+    then
+    \[
+        \operatorname{rank}(T^2)=1.
+    \]
+    This finite-dimensional matrix lemma supports the argument sought at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}; it is not a theorem
+    asserted there.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:matrix_positive_idempotent_rank_one,
+        thm:matrix_pairing_sq_eq_cube}
+    Primitivity gives $m\geq 1$ such that $(T^m)_{i,j}>0$ for every $i,j$.
+    Stabilization gives $T^{2m}=T^2$. Thus, for every $i,j$,
+    \[
+        (T^2)_{i,j}=(T^{2m})_{i,j}
+        =\sum_k (T^m)_{i,k}(T^m)_{k,j}>0.
+    \]
+    The same stabilization identity gives $(T^2)^2=T^2$.
+    The preceding theorem applied to $P=T^2$ now gives the conclusion.
+\end{proof}
+
 \begin{theorem}[Idempotence of the sector trace matrix]
     \label{thm:matrix_pairing_idempotent}
     \lean{Matrix.mul_self_eq_self_of_pairing_idempotent}

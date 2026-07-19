@@ -389,7 +389,11 @@ One possible corrected route is to use the square of the trace matrix.  If a
 primitive nonnegative trace matrix $T$ satisfies $T^2=T^3$, then all powers
 from the second onward equal $T^2$, so $T^2$ is an idempotent Perron
 projection of rank one.  This is compatible with the four-sector example,
-where $T$ is not rank one but $T^2$ is.  What remains absent is a derivation of
+where $T$ is not rank one but $T^2$ is.  This finite-dimensional implication is
+formalized by
+\leanid{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}; the
+nonempty matrix convention is explicit, since primitivity is vacuous for the
+zero-dimensional matrix under the library definition.  What remains absent is a derivation of
 primitivity for the Beigi trace matrix from the normal source block and its
 fixed proportional commuting-bond presentation; the existing primitivity
 theorem starts from the SAL-derived inverse-map factorization and is therefore
