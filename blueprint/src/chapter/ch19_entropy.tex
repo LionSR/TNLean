@@ -2821,6 +2821,47 @@ Theorem~\ref{thm:trace_norm_abs}.
     as follows from uniqueness of the positive square root.
 \end{proof}
 
+\begin{lemma}[Relative modular square-root ratio on the support]
+    \label{lem:support_relative_modular_sqrt_ratio}
+    \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
+    \lean{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq}
+    \leanok
+    \uses{def:support_inverse_square_root,
+        lem:positive_sqrt_from_common_resolvents}
+    Let $A,B,C,D$ be positive semidefinite matrices such that
+    $\ker B\subseteq\ker A$ and $\ker D\subseteq\ker C$.  Write
+    $B^+=(B^{-1/2}_{\mathrm{supp}})^2$ and
+    $D^+=(D^{-1/2}_{\mathrm{supp}})^2$.  If, for every $t>0$,
+    \[
+      \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+        \operatorname{vec}(\mathbf 1^{\mathsf T})
+      =
+      \left(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\right)^{-1}
+        \operatorname{vec}(\mathbf 1^{\mathsf T}),
+    \]
+    then
+    \[
+      \sqrt A\,B^{-1/2}_{\mathrm{supp}}
+        =\sqrt C\,D^{-1/2}_{\mathrm{supp}}.
+    \]
+    This is the square-root specialization of the support functional-calculus
+    passage in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 717--720 and
+    766--793.  It does not derive the common resolvent equality from equality
+    of relative entropies.
+\end{lemma}
+
+\begin{proof}\leanok
+    The support inverse square roots are positive semidefinite.  Hence
+    \[
+      \sqrt{A\otimes(B^+)^{\mathsf T}}
+        =\sqrt A\otimes(B^{-1/2}_{\mathrm{supp}})^{\mathsf T},
+    \]
+    with the analogous identity for $C,D$.  Applying these square roots to the
+    vectorized identity gives the two support square-root ratios.  The preceding
+    common-resolvent lemma identifies the two square-root vectors, and injectivity
+    of vectorization gives the displayed matrix equality.
+\end{proof}
+
 \begin{theorem}[Positive-definite saturation gives the identity Weyl sandwich]
     \label{thm:partial_trace_saturation_identity_weyl_sandwich}
     \lean{Matrix.weyl_sqrt_ratio_eq_of_partialTraceRight_eq}
