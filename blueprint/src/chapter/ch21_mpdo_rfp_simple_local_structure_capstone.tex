@@ -218,7 +218,22 @@
 
 The physical supports are locally orthogonal:
 \begin{center}
-    \TNMPDOBNTVerticalProduct
+    % Formula: (\mathcal K_y^*\mathcal K_x)^{ij}_{a_y a_x;b_y b_x}
+    % = \sum_q (\mathcal K_y^*)^{iq}_{a_y b_y}
+    % (\mathcal K_x)^{qj}_{a_x b_x}=0 for x\ne y.
+    % Source: Papers/1606.00608/MPDO_KxKy.png and source TeX lines 863--868.
+    % Source verdict: the upper source glyph is plain \mathcal K_y, without a
+    % conjugate skin; here it is the source's adjoint-oriented upper occurrence.
+    % Ink-to-index: q is the sole contracted physical index; the free indices
+    % are west (a_y,a_x), east (b_y,b_x), up i, and down j.
+    % LHS paired signature: boundary|virtual-west=2|virtual-east=2|
+    % physical-up=1|physical-down=1. The typed-zero RHS has that same boundary
+    % type, although the plain 0 carries no tensor-network ink.
+    \begin{tenkz}[rows={op,op}]
+        \tn[mpo]{\mathcal K_y} \\
+        \tn[mpo]{\mathcal K_x}
+    \end{tenkz}
+    $\;=\;0\qquad(x\ne y)$
 \end{center}
 In contraction notation, local orthogonality is
 $\mathcal K_y^*\mathcal K_x=0$ whenever $x\ne y$.
