@@ -88,6 +88,8 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 | [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, `\uses` rules, blueprint build commands |
 | [`docs/prose_style.md`](docs/prose_style.md) | Prose conventions: no Lean jargon in the leanblueprint, banned software-engineering terms, banned LLM writing patterns (applies to `.tex` AND Lean docstrings/comments) |
 | [`docs/ci-automation.md`](docs/ci-automation.md) | CI workflows, auto-fix loops, iteration caps, commit message conventions |
+| [`docs/tactic_development.md`](docs/tactic_development.md) | Tactic self-improvement loop: detecting repeated proof patterns, promotion criteria, design rules for custom tactics/simp sets |
+| [`docs/tactic_patterns.md`](docs/tactic_patterns.md) | Living pattern ledger: promoted tactics, candidate patterns awaiting abstraction |
 
 ### Quick Reference (from the docs above)
 
@@ -111,6 +113,31 @@ When writing new proofs or closing sorrys, scout Mathlib first:
 - Grep Mathlib source: `.lake/packages/mathlib/Mathlib/` for related definitions/theorems
 - Reuse Mathlib lemmas rather than reproving from scratch
 - Not needed for cosmetic fixes, docstrings, imports, or renaming
+
+### Tactic Self-Improvement Loop
+
+Proof text must grow sublinearly with mathematical content: a tactic pattern
+paid for three times gets abstracted, not copied a fourth time. The full
+process is in `docs/tactic_development.md`; the pattern ledger is
+`docs/tactic_patterns.md`. In every proof-writing session:
+
+1. **Consult** the ledger's promoted section first and use existing custom
+   tactics/simp sets (`mpv_ext`, `block_words`, `transfer_simp` in
+   `TNLean/MPS/Tactic/Basic.lean`) where they apply — hand-writing a pattern
+   that has a promoted tactic is a review-blocking style issue.
+2. **Detect** repetition while writing, and in proof-heavy PRs run:
+
+   ```bash
+   python3 scripts/tactic_pattern_scan.py
+   ```
+
+3. **Record** noticed repetition as a candidate entry in the ledger — in the
+   same PR; recording is cheap and needs no design decision.
+4. **Promote** when a pattern hits ≥ 3 occurrences across ≥ 2 files (rule of
+   three): prefer a lemma, then a simp set, then `@[grind]` annotations +
+   `grind` for goal-closing patterns, then a macro, then an elab tactic
+   (weakest mechanism that removes the duplication). Refactor the known call
+   sites and update the ledger entry.
 
 ### Blueprint Updates
 
