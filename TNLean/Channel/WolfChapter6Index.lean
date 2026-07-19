@@ -220,8 +220,10 @@ This is the algebra step after the faithful invariant weight has been chosen.
 The source theorem begins with an arbitrary full-rank fixed point and invokes
 its proposition on positive fixed points to obtain that weight.  The
 full-rank-to-positive-definite reduction theorem remains open.  The explicit
-block realization from Equation (1.39), including the complementary zero
-summand, is completed in `TNLean.Channel.FixedPoint.WolfTheorem614`.
+trace-adjoint block realization from Equation (1.39) also remains open at this
+level of generality.  The downstream Schrödinger-picture density-block
+classification and its complementary zero summand are completed in
+`TNLean.Channel.FixedPoint.WolfTheorem614`.
 
 In `TNLean.Channel.FixedPoint.Algebra`:
 

@@ -3271,8 +3271,7 @@ transfers the support.
 
 \begin{theorem}[Fixed points of trace-preserving maps]%
     \label{thm:wolf_6_14}
-    \lean{IsPositiveMap.exists_fixedPoints_densityBlocks_with_zero,
-        Matrix.exists_unitary_zero_extension_eq}
+    \lean{IsPositiveMap.exists_fixedPoints_densityBlocks_with_zero}
     \leanok
     \uses{thm:maximal_support_compression_density_blocks}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace preserving, and suppose
@@ -3298,7 +3297,8 @@ transfers the support.
 
 \begin{proof}
     \leanok
-    \uses{thm:maximal_support_compression_density_blocks}
+    \uses{thm:maximal_support_compression_density_blocks,
+        lem:isometric_inclusion_zero_extension}
     Let $V:\mathbb C^n\to\mathbb C^D$ be the maximal-support isometry and
     let $U_c$ be the unitary in the density-block description of the
     compressed fixed points.  The fixed-space equivalence gives
