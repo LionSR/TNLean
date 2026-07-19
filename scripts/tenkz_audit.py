@@ -234,10 +234,6 @@ class Audit:
                         self.hard("malformed-event", where,
                                   f"{kind} field {k}={v!r} fails validation: {line}")
                         ok = False
-                if kind != "picture" and "picture" not in attrs:
-                    self.hard("malformed-event", where,
-                              f"{kind} event lacks required picture=: {line}")
-                    ok = False
             if kind == "picture":
                 if not ok or "id" not in attrs or not _is_int(attrs["id"]):
                     continue

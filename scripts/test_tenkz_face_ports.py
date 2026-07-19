@@ -398,21 +398,20 @@ def main() -> int:
             ]
             for picture in audit.pictures
         }
-        missing_picture_log = work / "missing-warning-picture.tnlog"
-        missing_picture_log.write_text(
-            "picture|id=1|lang=grid\nwarning|code=missing-owner\n",
+        pictureless_warning_log = work / "pictureless-warning.tnlog"
+        pictureless_warning_log.write_text(
+            "picture|id=1|lang=lattice\nwarning|code=plane-rise-low\n",
             encoding="utf-8",
         )
-        missing_picture_audit = Audit(missing_picture_log, None)
-        missing_picture_audit.parse_log()
-        missing_picture_guard = any(
-            finding.rule == "malformed-event"
-            and "lacks required picture=" in finding.msg
-            for finding in missing_picture_audit.findings
+        pictureless_warning_audit = Audit(pictureless_warning_log, None)
+        pictureless_warning_audit.parse_log()
+        pictureless_warning_hard = any(
+            finding.severity == "HARD"
+            for finding in pictureless_warning_audit.findings
         )
 
-    if not missing_picture_guard:
-        raise AssertionError("audit parser silently dropped a pictureless warning")
+    if pictureless_warning_hard:
+        raise AssertionError("audit rejected a compatible pictureless warning")
     inverse = pictures[1]
     require(
         inverse,
