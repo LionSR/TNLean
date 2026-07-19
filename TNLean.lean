@@ -216,6 +216,7 @@ import TNLean.Channel.FixedPoint.MaximalRank
 import TNLean.Channel.FixedPoint.MaximalSupportBasic
 import TNLean.Channel.FixedPoint.MaximalSupport
 import TNLean.Channel.FixedPoint.StationarySupportRestriction
+import TNLean.Channel.FixedPoint.SupportCompressedDensityBlocks
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.WedderburnDecomp
 import TNLean.Channel.FixedPoint.WeightedCornerFixedPoints
