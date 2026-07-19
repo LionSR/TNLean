@@ -1201,9 +1201,13 @@
     \]
 \end{lemma}
 \begin{proof}\leanok
-    Splitting a configuration on $L+R$ sites into its first $L$ and last $R$
-    components rewrites $Z$ as the sum of all diagonal entries of
-    $\rho^{(L+R)}(M)$, which is its trace.
+    Pairing each configuration $\sigma$ on $L+R$ sites with its unique block
+    split $(x,y)$ on $L$ and $R$ sites gives
+    \[
+      Z=\sum_{x,y}W_{x,y}
+      =\sum_\sigma\operatorname{Re}\rho^{(L+R)}(M)_{\sigma,\sigma}
+      =\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M).
+    \]
 \end{proof}
 
 \begin{theorem}[Classical estimate for a positive diagonal finite-chain operator]
