@@ -1172,20 +1172,43 @@
 \begin{definition}[Normalized diagonal distribution at fixed length]
     \label{def:mpo_normalized_diagonal_cut_distribution}
     \lean{MPOTensor.IsDiagonalAt,
+      MPOTensor.IsDiagonal,
       MPOTensor.diagonalCutRealMatrix,
       MPOTensor.diagonalCutMass,
       MPOTensor.normalizedDiagonalCutDistribution}
     \leanok
     \uses{def:mpo_tensor}
     For a chain of length $N=L+R$, call $\rho^{(N)}(M)$ diagonal if
-    $\rho^{(N)}(M)_{u,v}=0$ whenever $u\ne v$.  For configurations $x$ and $y$
-    on the two consecutive blocks, define
+    $\rho^{(N)}(M)_{u,v}=0$ whenever $u\ne v$.  Call $M$ globally diagonal if
+    $\rho^{(N)}(M)$ is diagonal for every $N>0$.  For configurations $x$ and
+    $y$ on the two consecutive blocks, define
     \[
       W_{x,y}=\operatorname{Re}\rho^{(L+R)}(M)_{(x,y),(x,y)},\qquad
       Z=\sum_{x,y}W_{x,y},\qquad
       \widehat P=Z^{-1}W.
     \]
 \end{definition}
+
+\begin{lemma}[Diagonal coefficient mass and trace]
+    \label{lem:mpo_diagonal_cut_mass_trace}
+    \lean{MPOTensor.diagonalCutMass_eq_trace_re}
+    \leanok
+    \uses{def:mpo_normalized_diagonal_cut_distribution}
+    For every MPO tensor $M$ and cut lengths $L,R$, the total diagonal
+    coefficient mass satisfies
+    \[
+      Z=\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Pairing each configuration $\sigma$ on $L+R$ sites with its unique block
+    split $(x,y)$ on $L$ and $R$ sites gives
+    \[
+      Z=\sum_{x,y}W_{x,y}
+      =\sum_\sigma\operatorname{Re}\rho^{(L+R)}(M)_{\sigma,\sigma}
+      =\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M).
+    \]
+\end{proof}
 
 \begin{theorem}[Classical estimate for a positive diagonal finite-chain operator]
     \label{thm:mpo_diagonal_finite_chain_classical_mutual_information}
@@ -1221,9 +1244,35 @@
     the bound.
 \end{proof}
 
+\begin{corollary}[Classical estimate for a diagonal matrix product density operator]
+    \label{cor:mpo_diagonal_classical_mutual_information}
+    \lean{MPOTensor.diagonalMPDO_classicalMutualInformation_le_two_log}
+    \leanok
+    Let $D\geq1$, and let $M$ generate diagonal positive semidefinite operators
+    at every positive chain length.  If $L+R>0$ and the trace at length $L+R$
+    is positive, then the classical mutual information of its normalized
+    diagonal coefficients satisfies
+    \[
+      I(X:Y)\leq2\log D.
+    \]
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information,
+      lem:mpo_diagonal_cut_mass_trace}
+    Global diagonality and positivity give the fixed-length hypotheses of
+    Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
+    Since the chain operator is diagonal,
+    \[
+      Z=\sum_{x,y}W_{x,y}
+      =\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M),
+    \]
+    so the trace positivity hypothesis supplies the required normalization.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
-    Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts the uniform estimate
-    $I_L \le 4\log D$ for every MPDO. Its cited proof, however, treats mixed
+    The proof of Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} invokes the
+    uniform estimate $I_L \le 4\log D$ for every MPDO. Its cited argument,
+    however, treats mixed
     tensor-network states obtained from local completely positive maps
     \cite{Wolf2008AreaLaws}. After purifying those maps, data processing and
     the pure-state boundary estimate give
