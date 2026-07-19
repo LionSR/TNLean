@@ -673,7 +673,6 @@ import TNLean.Wielandt.RectangularSpan.Universality
 import TNLean.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.RankOne.ExtractionFull
 import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
-
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.Cycles
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
