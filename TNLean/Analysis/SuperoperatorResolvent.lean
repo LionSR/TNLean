@@ -29,6 +29,9 @@ here.
   matrix `[[A⁻¹, 1], [1, B]]` has Schur complement `B - A` of its first block
   and Schur complement `A⁻¹ - B⁻¹` of its second block, so the two differences
   are positive semidefinite together.
+* `superop_leftRight_posDef`: the Kronecker matrix representing
+  `X ↦ A * X + t • (X * B)` is positive definite when `A`, `B`, and `t` are
+  positive definite, positive definite, and positive, respectively.
 * `superop_resolvent_antitone`: for `t > 0` and positive-definite `A₁ ≤ A₂`,
   `B₁ ≤ B₂`, the resolvent of the commuting-multiplication model is antitone:
   `(A₂ ⊗ₖ 1 + t • (1 ⊗ₖ B₂ᵀ))⁻¹` is at most `(A₁ ⊗ₖ 1 + t • (1 ⊗ₖ B₁ᵀ))⁻¹`.
@@ -82,6 +85,26 @@ lemma inv_le_inv_of_le {A B : Matrix n n ℂ}
 
 end Matrix.PosDef
 
+/-- The commuting-Kronecker matrix representing the positive left-right
+multiplication operator `X ↦ A * X + t • (X * B)` is positive definite when
+`A` and `B` are positive definite and `t > 0`.
+
+Under the vectorization `X ↦ Matrix.vec Xᵀ`, the displayed matrix acts as that
+left-right multiplication operator.  This is the fixed-resolvent positivity
+input in Jenčová--Ruskai, arXiv:0903.2895, §4 and Appendix. -/
+theorem superop_leftRight_posDef
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {t : ℝ} (ht : 0 < t) {A B : Matrix n n ℂ}
+    (hA : A.PosDef) (hB : B.PosDef) :
+    (A ⊗ₖ (1 : Matrix n n ℂ) +
+      t • ((1 : Matrix n n ℂ) ⊗ₖ Bᵀ)).PosDef := by
+  have hI : (1 : Matrix n n ℂ).PosDef := Matrix.PosDef.one
+  have hleft : (A ⊗ₖ (1 : Matrix n n ℂ)).PosDef :=
+    Matrix.PosDef.kronecker hA hI
+  have hright : ((1 : Matrix n n ℂ) ⊗ₖ Bᵀ).PosSemidef :=
+    Matrix.PosSemidef.kronecker hI.posSemidef hB.posSemidef.transpose
+  exact hleft.add_posSemidef (hright.smul ht.le)
+
 variable {D : ℕ}
 
 /-- **Joint Loewner-antitonicity of the commuting-multiplication resolvent.**
@@ -110,15 +133,10 @@ lemma superop_resolvent_antitone
   -- summand is positive definite and the second is positive semidefinite.
   have hIpd : I.PosDef := hI ▸ Matrix.PosDef.one
   have hIps : I.PosSemidef := hIpd.posSemidef
-  have hXposDef : ∀ {A B : Matrix (Fin D) (Fin D) ℂ}, A.PosDef → B.PosDef →
-      (A ⊗ₖ I + t • (I ⊗ₖ Bᵀ)).PosDef := by
-    intro A B hA hB
-    have h1 : (A ⊗ₖ I).PosDef := Matrix.PosDef.kronecker hA hIpd
-    have h2 : (I ⊗ₖ Bᵀ).PosSemidef :=
-      Matrix.PosSemidef.kronecker hIps hB.posSemidef.transpose
-    exact h1.add_posSemidef (h2.smul ht.le)
-  have hX₁ : X₁.PosDef := hXposDef hA₁ hB₁
-  have hX₂ : X₂.PosDef := hXposDef hA₂ hB₂
+  have hX₁ : X₁.PosDef := by
+    simpa only [hI] using superop_leftRight_posDef ht hA₁ hB₁
+  have hX₂ : X₂.PosDef := by
+    simpa only [hI] using superop_leftRight_posDef ht hA₂ hB₂
   -- `X₁ ≤ X₂`, because `X₂ - X₁ = (A₂ - A₁) ⊗ₖ I + t • (I ⊗ₖ (B₂ - B₁)ᵀ) ≥ 0`.
   have hXle : X₁ ≤ X₂ := by
     rw [Matrix.le_iff]
