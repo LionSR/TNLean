@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.SharedInfra.BlockAssembly
 
@@ -49,25 +50,7 @@ theorem trace_blockDiagonal'_mul
     (X : Matrix ((j : Fin r) × Fin (dim j)) ((j : Fin r) × Fin (dim j)) ℂ) :
     Matrix.trace (Matrix.blockDiagonal' M * X) =
       ∑ j : Fin r, Matrix.trace (M j * sigmaDiagonalBlock X j) := by
-  classical
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, sigmaDiagonalBlock,
-    Matrix.submatrix_apply]
-  rw [Fintype.sum_sigma]
-  refine Finset.sum_congr rfl ?_
-  intro j _
-  refine Finset.sum_congr rfl ?_
-  intro a _
-  rw [Fintype.sum_sigma]
-  rw [Finset.sum_eq_single j]
-  · simp
-  · intro k _ hkj
-    apply Finset.sum_eq_zero
-    intro b _
-    have hjk : j ≠ k := fun h => hkj h.symm
-    rw [Matrix.blockDiagonal'_apply_ne M a b hjk]
-    simp
-  · intro hj
-    exact (hj (Finset.mem_univ _)).elim
+  simpa only [sigmaDiagonalBlock] using Matrix.trace_blockDiagonal'_mul M X
 
 /-- The boundary parametrization of a block-diagonal tensor is the sum of the block
 boundary parametrizations applied to the diagonal boundary blocks. -/

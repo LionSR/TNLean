@@ -42,35 +42,6 @@ noncomputable section
 
 namespace Matrix
 
-private theorem trace_blockDiagonal'_mul
-    {K : ℕ} {m d : Fin K → ℕ}
-    (M : (k : Fin K) →
-      Matrix (Fin (m k) × Fin (d k)) (Fin (m k) × Fin (d k)) ℂ)
-    (X : Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
-      ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ) :
-    Matrix.trace (Matrix.blockDiagonal' M * X) =
-      ∑ k : Fin K, Matrix.trace
-        (M k * Matrix.directSumBlockCompression (m := m) (d := d) k X) := by
-  classical
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply,
-    Matrix.directSumBlockCompression]
-  rw [Fintype.sum_sigma]
-  refine Finset.sum_congr rfl ?_
-  intro k _
-  refine Finset.sum_congr rfl ?_
-  intro a _
-  rw [Fintype.sum_sigma]
-  rw [Finset.sum_eq_single k]
-  · simp
-  · intro j _ hjk
-    apply Finset.sum_eq_zero
-    intro b _
-    have hkj : k ≠ j := fun h ↦ hjk h.symm
-    rw [Matrix.blockDiagonal'_apply_ne M a b hkj]
-    simp
-  · intro hk
-    exact (hk (Finset.mem_univ _)).elim
-
 private theorem trace_density_blockMap_mul_eq
     {K : ℕ} {m d : Fin K → ℕ}
     (σ : ∀ k, Matrix (Fin (m k)) (Fin (m k)) ℂ)
@@ -87,8 +58,8 @@ private theorem trace_density_blockMap_mul_eq
               (((σ k) ⊗ₖ (1 : Matrix (Fin (d k)) (Fin (d k)) ℂ)) *
                 Matrix.directSumBlockCompression (m := m) (d := d) k A))) := by
   classical
-  rw [trace_blockDiagonal'_mul]
-  rw [Matrix.trace_mul_comm, trace_blockDiagonal'_mul]
+  rw [Matrix.trace_blockDiagonal'_mul]
+  rw [Matrix.trace_mul_comm, Matrix.trace_blockDiagonal'_mul]
   apply Finset.sum_congr rfl
   intro k _
   calc
