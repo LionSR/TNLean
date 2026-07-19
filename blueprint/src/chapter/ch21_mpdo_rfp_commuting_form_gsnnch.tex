@@ -545,8 +545,8 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       exists_unit_phase_power_mpo_eq_product_of_normal_smul}
     \leanok
-    \uses{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality,
-        thm:normal_proportional_mpv_geometric_phase}
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
     Let $A$ be the normal doubled-index source tensor, and let $C$ be a fixed
     tensor for its commuting-bond product.  Suppose that $sC$ is normal for
     some $s>0$.  Then there is a complex number $\zeta$, with
@@ -559,6 +559,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality,
+        lem:mpv_smul, thm:normal_proportional_mpv_geometric_phase,
+        lem:mpdo_three_first_site_contraction_coefficients}
     Scaling $C$ by $s$ multiplies its length-$N$ matrix-product vector by
     $s^N$.  Eventual nonzero proportionality and the normal-tensor overlap
     dichotomy then give one unit phase $\zeta$ for all lengths.
@@ -569,7 +572,8 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       mpo_eq_positive_power_product_of_normal_smul}
     \leanok
-    \uses{thm:mpdo_eta_normal_rescaling_geometric_phase}
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
     Under the preceding hypotheses, the unit phase is trivial.  For every
     $N\geq2$,
     \[
@@ -580,6 +584,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_eta_normal_rescaling_geometric_phase,
+        thm:cpsv_normal_mpv_phase_gauge}
     The self-overlap of the normal source tends to one.  Hence at two
     sufficiently large consecutive lengths, say $N$ and $N+1$, both the
     source vector and the fixed bond product are nonzero.  Positivity of the

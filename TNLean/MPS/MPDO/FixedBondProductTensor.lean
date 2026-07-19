@@ -180,6 +180,12 @@ fixed product tensor, or any rescaling of it, is normal.
 Source context: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`),
 lines 1570--1593, together with Corollary `eqV`, lines 1121--1128.  The
 remaining normal-representative problem is documented in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+
+**Scope restriction (positive normal rescaling):** The hypothesis `hRepr`
+assumes that the positively rescaled fixed-product tensor is normal.  This
+hypothesis is absent from Proposition C.8 (`3to4`) and its derivation remains
+open in issue #4271; see
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
     [NeZero D]
@@ -226,7 +232,13 @@ product, nonzero at those lengths.
 Source context: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`),
 lines 1570--1593, together with Corollary `eqV`, lines 1121--1128.  The
 normal-representative hypothesis is precisely the remaining condition recorded
-in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+
+**Scope restriction (positive normal rescaling):** The hypothesis `hRepr`
+assumes that the positively rescaled fixed-product tensor is normal.  This
+hypothesis is absent from Proposition C.8 (`3to4`) and its derivation remains
+open in issue #4271; see
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem mpo_eq_positive_power_product_of_normal_smul
     [NeZero D]
     (data : EtaLocalStructureData M)
