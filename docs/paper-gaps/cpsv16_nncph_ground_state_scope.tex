@@ -253,6 +253,23 @@ The proof uses only the ground-space spanning equation and the dimension of the
 span of a finite linearly independent family.  It does not use the commuting
 interaction classification.
 
+The local spatial-decomposition input is also now internal.  The canonical
+two-site parent interaction, written in ordered-pair coordinates as
+\leanid{MPSTensor.twoSiteParentInteractionMatrix}, is Hermitian because it is
+the transport of an orthogonal projector.  If the nearest-neighbor parent
+terms commute on three sites, their common left-associated coordinates are
+the two natural overlapping lifts of this matrix.  Therefore
+\leanid{MPSTensor.IsNNCPH.}
+\hspace{0pt}\leanid{twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_commute}
+supplies exactly the hypotheses of Beigi's spatial decomposition, with no
+canonical-form or ground-space-spanning assumption.  Its direct consequence
+\leanid{MPSTensor.IsNNCPH.}
+\hspace{0pt}\leanid{exists_unitary_blockActions_of_twoSiteParentInteractionMatrix}
+decomposes the middle physical space into a finite direct sum of left and
+right tensor factors on which the two adjacent interactions act separately.
+This completes the local Bravyi--Vyalyi step.  It does not yet construct the
+finite sector graph or analyze its cyclic ground spaces.
+
 \section{Elimination plan}
 
 A source-faithful formalization should replace the remaining axiom-backed
@@ -295,8 +312,9 @@ canonical form is subject to the source obstruction recorded in
 ground-space spanning clause and the multiplicity-one distinct-sector
 extension are proved. The repeated-copy and arbitrary-raw-weight extension
 remains open.  In the reverse direction, eventual ground-space dimension
-stability is proved; the sector-graph classification and its identification
-with the basis of normal tensors remain open.
+stability and the local spatial decomposition are proved; the sector-graph
+classification and its identification with the basis of normal tensors remain
+open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

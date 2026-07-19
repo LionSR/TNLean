@@ -627,6 +627,7 @@ import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.RFP.ResidualWordSpan
 import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
+import TNLean.MPS.RFP.BeigiSpatialDecomposition
 import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
 import TNLean.MPS.RFP.BNTWeightCounterexample
 
