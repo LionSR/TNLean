@@ -45,8 +45,9 @@ quantum-Markov-chain structure of the tripartite state
 
 In the present development the biconditional
 \eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is recovered by combining a
-forward-only axiom with a proved reverse direction.\footnote{The forward-only
-axiom is \leanid{hayashi_ssa_equality_characterization_forward} in
+forward-only external assumption with a proved reverse direction.\footnote{The
+forward-only external assumption is
+\leanid{hayashi_ssa_equality_characterization_forward} in
 \doclink{TNLean/Axioms/Entropy} (\path{TNLean/Axioms/Entropy.lean}); the proved
 reverse direction is
 \leanid{hayashi_ssa_equality_characterization_reverse} in
@@ -105,11 +106,11 @@ downstream result.
 
 \section{The one-directional hygiene split}
 
-Because only the forward direction is both deep and used, the axiom boundary is
-kept minimal: the axiom states the single forward
+Because only the forward direction is both deep and used, the assumption
+boundary is kept minimal: the external assumption states the single forward
 implication \eqref{eq:ssa-eq} $\Rightarrow$~\eqref{eq:qmc}, and the reverse
 implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} is a theorem. The full
-biconditional is recovered by combining the two, and the axiomatic content
+biconditional is recovered by combining the two, and the postulated content
 is reduced to exactly the part that genuinely needs the missing theory.
 
 The reverse half uses the following entropy-additivity sub-lemmas, all proved in
@@ -425,12 +426,12 @@ After this analytic implication, the proof of the block decomposition still
 requires the invariant-state decomposition used in
 \cite[Theorem~6]{HaydenJozsaPetzWinter2004}; that is the
 Koashi--Imoto structural step.  Both steps remain necessary before the forward
-axiom can be removed.
+external assumption can be removed.
 
 \section{Verdict}
 
 The strong-subadditivity equality characterization is now split into a proved
-reverse direction and an axiomatic forward direction. Only the forward
+reverse direction and a postulated forward direction. Only the forward
 direction, equality implies quantum-Markov-chain structure, still needs the
 singular-support recovery theorem and the structural analysis of recovered
 states; positive-definite recovery and the trace-preserving Petz channel are
@@ -439,7 +440,7 @@ direction, a block-diagonal product state attains equality, is proved from
 entropy additivity over weighted direct sums and tensor factors together with
 unitary and reindexing invariance.
 Until those remaining steps are formalized, the forward direction remains the
-irreducible axiomatic content of this characterization.
+irreducible unproved content of this characterization.
 
 \begin{thebibliography}{9}
 

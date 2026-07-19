@@ -156,6 +156,7 @@ import TNLean.Analysis.OperatorConvexity
 -- Layer 2b: Operator (Loewner) convexity of `a ↦ a^p` for `p ∈ [1,2]` (proved)
 import TNLean.Analysis.RpowConvexity
 import TNLean.Analysis.RelativeEntropyResolventIntegral
+import TNLean.Analysis.ResolventFunctionalCalculus
 -- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
