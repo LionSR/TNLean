@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.CommutingFormBridge
 /-!
 # Three-site coordinates for overlapping translates of a commuting bond
 
-This file places the first two adjacent translates of the bond carried by
-`MPOTensor.EtaLocalStructureData` in the abstract three-factor coordinates of the
+This file places the first two adjacent translates of one fixed positive commuting bond in the
+abstract three-factor coordinates of the
 Bravyi--Vyalyi decomposition.  One common equivalence identifies a three-site physical
 configuration with a left-associated triple.  Under this equivalence, the translate on
 sites zero and one is `Matrix.leftOverlappingLift`, while the translate on sites one and
@@ -27,6 +27,7 @@ commutation through the common equivalence gives the remaining hypothesis of
 * `MPOTensor.pairBondMatrix`
 * `MPOTensor.reindex_embedLocalOperator_zero_eq_leftOverlappingLift`
 * `MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift`
+* `MPOTensor.TranslationInvariantBondData.overlappingLifts_pairBond_comm`
 * `MPOTensor.EtaLocalStructureData.reindex_bondAt_zero_eq_leftOverlappingLift`
 * `MPOTensor.EtaLocalStructureData.reindex_bondAt_one_eq_rightOverlappingLift`
 * `MPOTensor.EtaLocalStructureData.overlappingLifts_pairBond_comm`
@@ -184,6 +185,85 @@ theorem reindex_embedLocalOperator_one_eq_rightOverlappingLift
     have hi : i ≠ i' := fun hi ↦ h hi.symm
     simp [Matrix.rightOverlappingLift, hi]
 
+namespace TranslationInvariantBondData
+
+variable {d : ℕ}
+
+/-- A fixed two-site bond written on an ordered pair of physical indices.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `expression` and Proposition
+`4to2`, lines 1571--1576 and 1599--1605. -/
+def pairBond (data : TranslationInvariantBondData d) :
+    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
+  pairBondMatrix data.bond
+
+/-- The pair-indexed bond is Hermitian because the fixed bond is positive semidefinite.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `expression`, lines 1571--1576. -/
+theorem pairBond_isHermitian (data : TranslationInvariantBondData d) :
+    data.pairBond.IsHermitian := by
+  exact data.bond_pos.isHermitian.reindex (finTwoArrowEquiv (Fin d))
+
+/-- The first adjacent translate is the left overlapping lift under the common three-site
+equivalence.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
+Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+theorem reindex_bondAt_zero_eq_leftOverlappingLift
+    (data : TranslationInvariantBondData d) :
+    Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
+        (threeSiteOverlappingEquiv (Fin d))
+        ((data.toCommutingFormData two_le_three).bondAt (0 : Fin 3)) =
+      Matrix.leftOverlappingLift data.pairBond := by
+  exact reindex_embedLocalOperator_zero_eq_leftOverlappingLift data.bond
+
+/-- The second adjacent translate is the right overlapping lift under the same three-site
+equivalence.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
+Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+theorem reindex_bondAt_one_eq_rightOverlappingLift
+    (data : TranslationInvariantBondData d) :
+    Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
+        (threeSiteOverlappingEquiv (Fin d))
+        ((data.toCommutingFormData two_le_three).bondAt (1 : Fin 3)) =
+      Matrix.rightOverlappingLift data.pairBond := by
+  exact reindex_embedLocalOperator_one_eq_rightOverlappingLift data.bond
+
+/-- The two abstract overlapping lifts of the pair-indexed fixed bond commute. Thus, together
+with Hermiticity, they satisfy the hypotheses of Beigi's spatial decomposition.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
+Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+theorem overlappingLifts_pairBond_comm (data : TranslationInvariantBondData d) :
+    Matrix.leftOverlappingLift data.pairBond *
+        Matrix.rightOverlappingLift data.pairBond =
+      Matrix.rightOverlappingLift data.pairBond *
+        Matrix.leftOverlappingLift data.pairBond := by
+  rw [← data.reindex_bondAt_zero_eq_leftOverlappingLift,
+    ← data.reindex_bondAt_one_eq_rightOverlappingLift]
+  change (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
+      (threeSiteOverlappingEquiv (Fin d)))
+        ((data.toCommutingFormData two_le_three).bondAt 0) *
+      (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
+        (threeSiteOverlappingEquiv (Fin d)))
+          ((data.toCommutingFormData two_le_three).bondAt 1) =
+    (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
+      (threeSiteOverlappingEquiv (Fin d)))
+        ((data.toCommutingFormData two_le_three).bondAt 1) *
+      (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
+        (threeSiteOverlappingEquiv (Fin d)))
+          ((data.toCommutingFormData two_le_three).bondAt 0)
+  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
+      (threeSiteOverlappingEquiv (Fin d)) (threeSiteOverlappingEquiv (Fin d)),
+    Matrix.reindexLinearEquiv_mul ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
+      (threeSiteOverlappingEquiv (Fin d)) (threeSiteOverlappingEquiv (Fin d))]
+  exact congrArg (Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
+    (threeSiteOverlappingEquiv (Fin d)))
+    (data.bond_comm two_le_three (0 : Fin 3) (1 : Fin 3))
+
+end TranslationInvariantBondData
+
 namespace EtaLocalStructureData
 
 variable {M : MPOTensor d D}
@@ -195,14 +275,14 @@ Source: arXiv:1606.00608, Appendix C.2, equation `expression` and Proposition
 `4to2`, lines 1571--1576 and 1599--1605. -/
 def pairBond (data : EtaLocalStructureData M) :
     Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
-  pairBondMatrix data.bondData.bond
+  data.bondData.pairBond
 
 /-- The pair-indexed bond is Hermitian because the source bond is positive semidefinite.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `expression`, lines 1571--1576. -/
 theorem pairBond_isHermitian (data : EtaLocalStructureData M) :
     data.pairBond.IsHermitian := by
-  exact data.bondData.bond_pos.isHermitian.reindex (finTwoArrowEquiv (Fin d))
+  exact data.bondData.pairBond_isHermitian
 
 /-- The first adjacent translate of the eta-local bond is the left overlapping lift under
 the common three-site equivalence.
@@ -215,7 +295,7 @@ theorem reindex_bondAt_zero_eq_leftOverlappingLift
         (threeSiteOverlappingEquiv (Fin d))
         ((data.formAt 3 two_le_three).bondAt (0 : Fin 3)) =
       Matrix.leftOverlappingLift data.pairBond := by
-  exact reindex_embedLocalOperator_zero_eq_leftOverlappingLift data.bondData.bond
+  exact data.bondData.reindex_bondAt_zero_eq_leftOverlappingLift
 
 /-- The second adjacent translate of the eta-local bond is the right overlapping lift
 under the same three-site equivalence.
@@ -228,7 +308,7 @@ theorem reindex_bondAt_one_eq_rightOverlappingLift
         (threeSiteOverlappingEquiv (Fin d))
         ((data.formAt 3 two_le_three).bondAt (1 : Fin 3)) =
       Matrix.rightOverlappingLift data.pairBond := by
-  exact reindex_embedLocalOperator_one_eq_rightOverlappingLift data.bondData.bond
+  exact data.bondData.reindex_bondAt_one_eq_rightOverlappingLift
 
 /-- The two abstract overlapping lifts of the pair-indexed eta-local bond commute.  Thus,
 together with `pairBond_isHermitian`, they satisfy exactly the hypotheses of
@@ -241,27 +321,7 @@ theorem overlappingLifts_pairBond_comm (data : EtaLocalStructureData M) :
         Matrix.rightOverlappingLift data.pairBond =
       Matrix.rightOverlappingLift data.pairBond *
         Matrix.leftOverlappingLift data.pairBond := by
-  rw [← data.reindex_bondAt_zero_eq_leftOverlappingLift,
-    ← data.reindex_bondAt_one_eq_rightOverlappingLift]
-  change (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
-      (threeSiteOverlappingEquiv (Fin d)))
-        ((data.formAt 3 two_le_three).bondAt 0) *
-      (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
-        (threeSiteOverlappingEquiv (Fin d)))
-          ((data.formAt 3 two_le_three).bondAt 1) =
-    (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
-      (threeSiteOverlappingEquiv (Fin d)))
-        ((data.formAt 3 two_le_three).bondAt 1) *
-      (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
-        (threeSiteOverlappingEquiv (Fin d)))
-          ((data.formAt 3 two_le_three).bondAt 0)
-  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
-      (threeSiteOverlappingEquiv (Fin d)) (threeSiteOverlappingEquiv (Fin d)),
-    Matrix.reindexLinearEquiv_mul ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
-      (threeSiteOverlappingEquiv (Fin d)) (threeSiteOverlappingEquiv (Fin d))]
-  exact congrArg (Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
-    (threeSiteOverlappingEquiv (Fin d)))
-    (data.formAt_bondAt_comm 3 two_le_three (0 : Fin 3) (1 : Fin 3))
+  exact data.bondData.overlappingLifts_pairBond_comm
 
 end EtaLocalStructureData
 end MPOTensor

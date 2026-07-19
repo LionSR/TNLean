@@ -18,8 +18,8 @@ independent of the chain length.
 * `etaCyclicEdgeWeight` gives the scalar neighboring-operator weight.
 * `reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight` identifies its
   closed operator in sector-edge coordinates.
-* `EtaLocalStructureData.nonempty_fixedProductTensorData` constructs an exact
-  fixed tensor for the commuting-bond product.
+* `TranslationInvariantBondData.fixedProductTensorData` constructs an exact
+  fixed tensor for an arbitrary positive commuting bond.
 
 ## References
 
@@ -204,14 +204,12 @@ private theorem singleKrausMap_comp_conjTranspose_of_mul_conjTranspose_eq_one
       simp only [Matrix.mul_assoc]
     _ = X := by rw [hV, one_mul, mul_one]
 
-namespace EtaLocalStructureData
-
-variable {D : ℕ} {M : MPOTensor d D}
+namespace TranslationInvariantBondData
 
 /-- The tensor obtained from one eta decomposition realizes the corresponding
 fixed periodic bond product at every chain length at least two. -/
 private theorem mpo_changePhysicalBasis_cyclicEtaWeight_eq_product
-    (data : EtaLocalStructureData M) {K : ℕ} (dl dr : Fin K → ℕ)
+    (data : TranslationInvariantBondData d) {K : ℕ} (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (U : Matrix (Fin d) (Fin d) ℂ)
     (eta : (q h : Fin K) →
@@ -228,28 +226,28 @@ private theorem mpo_changePhysicalBasis_cyclicEtaWeight_eq_product
     (N : ℕ) (hN : 2 ≤ N) :
     mpo (changePhysicalBasis U
       (cyclicEdgeWeightTensor (etaCyclicEdgeWeight dl dr e eta))) N =
-        (data.bondData.toCommutingFormData hN).product := by
+        (data.toCommutingFormData hN).product := by
   letI : NeZero N := ⟨by omega⟩
   let C₀ : MPOTensor d (d * d) :=
     cyclicEdgeWeightTensor (etaCyclicEdgeWeight dl dr e eta)
   let P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-    (data.bondData.toCommutingFormData hN).product
+    (data.toCommutingFormData hN).product
   change mpo (changePhysicalBasis U C₀) N = P
   rw [← singleKrausMap_sitewisePhysicalMatrix_mpo U C₀ N]
   let V := sitewisePhysicalMatrix U N
   change singleKrausMap V (mpo C₀ N) = P
   change Matrix.reindex (Matrix.etaPairSpatialBlockEquiv e).symm
       (Matrix.etaPairSpatialBlockEquiv e).symm
-      (star (U ⊗ₖ U) * pairBondMatrix data.bondData.bond * (U ⊗ₖ U)) = _ at hB
+      (star (U ⊗ₖ U) * pairBondMatrix data.bond * (U ⊗ₖ U)) = _ at hB
   have hsector : mpo C₀ N =
       singleKrausMap (sitewisePhysicalMatrix Uᴴ N) P := by
     dsimp only [C₀, P]
     change mpo (cyclicEdgeWeightTensor (etaCyclicEdgeWeight dl dr e eta)) N =
       singleKrausMap (sitewisePhysicalMatrix Uᴴ N)
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator 2 N hN i data.bondData.bond).prod
+          embedLocalOperator 2 N hN i data.bond).prod
     exact mpo_cyclicEdgeWeightTensor_eta_eq_conjugated_bondProduct
-      hN dl dr e U eta data.bondData.bond hU hB
+      hN dl dr e U eta data.bond hU hB
   have hsectorV : mpo C₀ N = singleKrausMap Vᴴ P := by
     rw [sitewisePhysicalMatrix_conjTranspose]
     exact hsector
@@ -262,7 +260,7 @@ private theorem mpo_changePhysicalBasis_cyclicEtaWeight_eq_product
       (Matrix.mem_unitaryGroup_iff.mp hU)
   rw [hUco, sitewisePhysicalMatrix_one]
 
-/-- The fixed commuting-bond product carried by an eta-local structure has one
+/-- Every positive fixed bond whose periodic translates commute has one
 exact matrix-product representation with positive bond dimension, independent
 of the chain length.
 
@@ -270,32 +268,65 @@ This proves only the finite representation of the product.  It does not assert
 that the representing tensor is normal and does not constrain the positive
 realization scalar of the source MPO.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4` and equation
-`sigmaNK2`, lines 1570--1593. -/
-theorem nonempty_fixedProductTensorData [NeZero d]
-    (data : EtaLocalStructureData M) :
-    Nonempty (TranslationInvariantBondData.FixedProductTensorData data.bondData) := by
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
+`4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+theorem nonempty_fixedProductTensorData (data : TranslationInvariantBondData d) :
+    Nonempty (FixedProductTensorData data) := by
   classical
-  obtain ⟨K, dl, dr, e, U, η, hU, _hdl, _hdr, _hη, hB⟩ :=
-    data.exists_positive_eta_pairBond_decomposition
-  refine ⟨{
-    bondDim := d * d
-    bondDim_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
-    tensor := changePhysicalBasis U
-      (cyclicEdgeWeightTensor (etaCyclicEdgeWeight dl dr e η))
-    mpo_eq_product := fun N hN ↦
-      data.mpo_changePhysicalBasis_cyclicEtaWeight_eq_product
-        dl dr e U η hU hB N hN }⟩
+  by_cases hd : d = 0
+  · subst d
+    refine ⟨{
+      bondDim := 1
+      bondDim_pos := by omega
+      tensor := fun i ↦ Fin.elim0 i
+      mpo_eq_product := ?_ }⟩
+    intro N hN
+    ext sigma
+    exact Fin.elim0 (sigma ⟨0, by omega⟩)
+  · letI : NeZero d := ⟨hd⟩
+    obtain ⟨K, dl, dr, e, U, η, hU, _hdl, _hdr, _hη, hB⟩ :=
+      data.exists_positive_eta_pairBond_decomposition
+    refine ⟨{
+      bondDim := d * d
+      bondDim_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
+      tensor := changePhysicalBasis U
+        (cyclicEdgeWeightTensor (etaCyclicEdgeWeight dl dr e η))
+      mpo_eq_product := fun N hN ↦
+        data.mpo_changePhysicalBasis_cyclicEtaWeight_eq_product
+          dl dr e U η hU hB N hN }⟩
 
 /-- A chosen exact matrix-product representation of the fixed commuting-bond
 product.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4` and equation
-`sigmaNK2`, lines 1570--1593. -/
-noncomputable def fixedProductTensorData [NeZero d]
-    (data : EtaLocalStructureData M) :
-    TranslationInvariantBondData.FixedProductTensorData data.bondData :=
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
+`4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+noncomputable def fixedProductTensorData (data : TranslationInvariantBondData d) :
+    FixedProductTensorData data :=
   Classical.choice data.nonempty_fixedProductTensorData
+
+end TranslationInvariantBondData
+
+namespace EtaLocalStructureData
+
+variable {D : ℕ} {M : MPOTensor d D}
+
+/-- The bond carried by an eta-local structure has one exact fixed matrix-product
+representation.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
+`4to2`, lines 1581--1605. -/
+theorem nonempty_fixedProductTensorData (data : EtaLocalStructureData M) :
+    Nonempty (TranslationInvariantBondData.FixedProductTensorData data.bondData) :=
+  data.bondData.nonempty_fixedProductTensorData
+
+/-- A chosen exact fixed matrix-product representation of the bond carried by an eta-local
+structure.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
+`4to2`, lines 1581--1605. -/
+noncomputable def fixedProductTensorData (data : EtaLocalStructureData M) :
+    TranslationInvariantBondData.FixedProductTensorData data.bondData :=
+  data.bondData.fixedProductTensorData
 
 end EtaLocalStructureData
 
