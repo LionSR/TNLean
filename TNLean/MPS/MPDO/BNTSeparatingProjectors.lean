@@ -14,6 +14,11 @@ annihilate every physical slice. Assigning them to one BNT label therefore
 gives orthogonal projectors which resolve the full physical identity and retain
 the local separation relation.
 
+**Local fix (inactive sectors):** The source removes zero-weight Markov
+summands before defining the separating projectors. The formal decomposition
+retains them and assigns them to one BNT label, as documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
 ## Main declarations
 
 * `completedBntSectorProjection`: the BNT projector after assigning every
@@ -40,6 +45,10 @@ The source removes zero-weight Markov summands before defining the sets
 $S_j$. Retaining the summands and assigning them to one label gives the same
 separation relation on every physical slice.
 
+**Local fix (inactive sectors):** This total assignment replaces the source's
+implicit removal of zero-weight summands; see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
 Source: arXiv:1606.00608, Appendix C.2, equations `QkKjs` and `Pis`, lines
 1698--1737. -/
 noncomputable def completedBntSectorLabel
@@ -56,6 +65,10 @@ noncomputable def completedBntSectorLabel
 
 /-- The projector obtained by summing all Markov-sector projections carrying
 one completed BNT label.
+
+**Local fix (inactive sectors):** The completed label assigns the retained
+zero-weight summands to one BNT sector; see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `Pis`, lines 1680--1712. -/
 noncomputable def completedBntSectorProjection
@@ -222,6 +235,11 @@ canonical form and simultaneous span express biCF, nonnilpotence expresses
 simplicity, copy independence is the conclusion immediately preceding the
 projector lemma, and SAL supplies the four-site quantum-Markov decomposition.
 There is no independent closing-matrix hypothesis.
+
+**Local fix (inactive sectors):** The source discards zero-weight Markov
+summands. Here they are assigned to the distinguished label $s_0$, which
+restores the ambient identity resolution without changing any physical slice;
+see `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `CFK`, `biCFK`, `Pis`, and
 `PjKiPj`, lines 1626--1737. -/
