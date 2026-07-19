@@ -32,6 +32,7 @@ SOURCE = r"""
 \newcount\tenkzplainlabelseen
 \newcount\tenkzcenterlabelseen
 \newcount\tenkzperiodicbondseen
+\newcount\tenkzinteriorbondseen
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -347,6 +348,19 @@ SOURCE = r"""
 \begin{tenkz}[rows={wire}, tensor style=box]
   \tn[west at={2}, east at=none]{A}
 \end{tenkz}
+\begingroup
+\tikzset{tenkz combined stub/.append style={/utils/exec={%
+  \global\advance\tenkzinteriorbondseen by 1\relax}}}
+\begin{tenkz}[rows={wire, wire, wire}, periodic,
+    trace style=hooks, tensor style=box]
+  \tn{A}\\
+  \tn[wires=2, west at=center, east at=center]{B}\\
+  &
+\end{tenkz}
+\endgroup
+\ifnum\tenkzinteriorbondseen=2\else
+  \errmessage{periodic hooks suppressed an unconsumed interior centred face}
+\fi
 \end{document}
 """
 
@@ -1162,6 +1176,22 @@ def main() -> int:
         invalid_one_row_virtual,
         "boundary|picture=75|virtual-west=0|virtual-east=0|physical-up=0|physical-down=0",
         "empty one-row virtual faces survived boundary accounting",
+    )
+    interior_centered = pictures[76]
+    require(
+        interior_centered,
+        "hooks|picture=76|row=1|side=above",
+        "interior centered fixture did not close its outer periodic row",
+    )
+    forbid(
+        interior_centered,
+        "hooks|picture=76|row=3|side=below",
+        "interior centered fixture closed through a continuation row",
+    )
+    require(
+        interior_centered,
+        "boundary|picture=76|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
+        "unconsumed interior centered faces changed boundary topology",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0

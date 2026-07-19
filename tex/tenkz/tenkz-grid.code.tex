@@ -1421,6 +1421,7 @@
       \tenkz_draw_bonds:
       \tenkz_compute_cups:
       \tenkz_compute_periodic_faces:
+      \tenkz_draw_combined_stubs:
       \tenkz_draw_boundaries:
       \tenkz_draw_cups:
       \tenkz_draw_legs:
@@ -1463,6 +1464,7 @@
 % -- nodes ------------------------------------------------------------
 \cs_new_protected:Npn \tenkz_place_nodes:
   {
+    \seq_clear:N \l__tenkz_combinedstubs_seq
     \int_step_inline:nn { \l__tenkz_nrows_int }
       {
         \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
@@ -1597,34 +1599,38 @@
 % ONE index (V : C^{D_1} x ... -> C^{D_1...k}), so a single stroke --
 % \tnfuse's combined-leg doctrine on the tall-glyph geometry.
 \cs_generate_variant:Nn \tenkz_stub_vec:n { V }
+\seq_new:N \l__tenkz_combinedstubs_seq
 \cs_new_protected:Npn \tenkz_combined_stub:nn #1#2
   {
-    % A two-sided trace consumes both endpoint faces.  Its racetrack or hook
-    % path begins at the node anchor itself, so a separate open-face stroke
-    % would be redundant; for hooks, its outer half would remain visibly
-    % dangling.  A mismatched periodic face is redrawn explicitly by the
-    % periodic-face pass below.
-    \bool_lazy_and:nnF
-      { \str_if_eq_p:Vn \l__tenkz_westpol_tl {trace} }
-      { \str_if_eq_p:Vn \l__tenkz_eastpol_tl {trace} }
+    \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
       {
-        \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
+        % West and east are independent faces.  In particular a gauge on a
+        % fused virtual space may have one centred index on both sides.
+        \clist_map_inline:nn {west,east}
           {
-            % West and east are independent faces.  In particular a gauge on
-            % a fused virtual space may have one centred index on both sides.
-            \clist_map_inline:nn {west,east}
-              {
-                \tenkz_face_ports:nN {##1} \l__tenkz_faceports_tl
-                \str_if_eq:VnT \l__tenkz_faceports_tl {center}
-                  {
-                    \draw[bond, tenkz~combined~stub]
-                      (\tenkz_node_name:nn{#1}{#2}.\tenkz_compass:n{##1}) --
-                      ++\tenkz_stub_vec:n {##1};
-                  }
-              }
+            \tenkz_face_ports:nN {##1} \l__tenkz_faceports_tl
+            \str_if_eq:VnT \l__tenkz_faceports_tl {center}
+              { \seq_put_right:Nn \l__tenkz_combinedstubs_seq
+                  { \tenkz_draw_combined_stub:nnn {#1}{#2}{##1} } }
           }
       }
   }
+
+% Centred tall faces are queued until the canonical periodic-pairing facts
+% exist.  Only a face actually consumed by that pairing loses its open stub;
+% interior and mismatched faces retain their independent open-index ink.
+\cs_new_protected:Npn \tenkz_draw_combined_stub:nnn #1#2#3
+  {
+    \prop_if_in:NnF \l__tenkz_periodicpaired_prop {#1-#2-#3}
+      {
+        \draw[bond, tenkz~combined~stub]
+          (\tenkz_node_name:nn{#1}{#2}.\tenkz_compass:n{#3}) --
+          ++\tenkz_stub_vec:n {#3};
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_combined_stubs:
+  { \seq_map_inline:Nn \l__tenkz_combinedstubs_seq {##1} }
 
 % the ownership/geometry bookkeeping of a wires=k glyph at (#1,#2):
 % recentre \l__tenkz_y_dim between the outer spanned rows, extend the extra
