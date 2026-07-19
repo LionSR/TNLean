@@ -56,9 +56,10 @@ current counts and full location lists).
   a linear map that preserves the identity and the relevant products, using
   `Submodule.span_induction` with separate generator, zero, addition, and scalar
   cases.
-- **Seen:** 2 occurrences, at
-  `TNLean/Channel/FixedPoint/TraceNonincreasingProductSpan.lean:234` and
-  `TNLean/Channel/FixedPoint/TraceNonincreasingDirectSum.lean:221`
+- **Seen:** 2 occurrences: the reindexing step in
+  `IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span`
+  and the block-diagonal step in
+  `IsPositiveDirectSumMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span`
   (2026-07-19). This is below the rule-of-three promotion threshold.
 - **Abstraction (proposed):** a lemma transporting a product-span membership
   statement through a linear map, parameterized by the product-compatibility
