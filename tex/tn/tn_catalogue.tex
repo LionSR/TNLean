@@ -133,37 +133,6 @@
     \end{TNDiagram}%
 }
 
-% The physical renormalization maps of the mixed-state RFP definition.
-\TNDeclareDiagram
-    {TNMPORenormalizationTS}
-    {}
-    {display}
-    {compact}
-    {\TNMPORenormalizationTS}
-    {chapter/ch21_mpdo_rfp_renormalization.tex}{%
-    \begin{TNEquationRow}[compact]
-        \ensuremath{M_1(X)=}
-        \TNTerm{%
-            \TNMPOSite{rtsOne}{at=origin}{M}
-            \TNOpenVirtualWest{rtsOneWest}
-            \TNOpenVirtualEast{rtsOneEast}
-            \TNOpenPhysicalNorth{rtsOneKet}
-            \TNOpenPhysicalSouth{rtsOneBra}}
-        \TNRelation{\xrightleftharpoons[\mathcal S]{\mathcal T}}
-        \TNTerm{%
-            \TNMPOSite{rtsLeft}{at=origin}{M}
-            \TNMPOSite{rtsRight}{right=of rtsLeft}{M}
-            \TNOpenVirtualWest{rtsLeftWest}
-            \TNConnectVirtual{rtsLeftEast}{rtsRightWest}
-            \TNOpenVirtualEast{rtsRightEast}
-            \TNOpenPhysicalNorth{rtsLeftKet}
-            \TNOpenPhysicalSouth{rtsLeftBra}
-            \TNOpenPhysicalNorth{rtsRightKet}
-            \TNOpenPhysicalSouth{rtsRightBra}}
-        \ensuremath{=M_2(X)}
-    \end{TNEquationRow}%
-}
-
 % The overlapping applications of T and S used after two-site blocking in
 % Theorem 4.9.  The endpoint frames identify one and two blocked sites; the
 % intermediate rows retain the original physical-site decomposition.

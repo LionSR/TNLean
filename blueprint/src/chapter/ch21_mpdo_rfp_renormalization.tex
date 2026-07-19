@@ -718,8 +718,49 @@ the remaining sites unchanged.
     transfer map for general mixed states. Its source zero-correlation-length
     consequence concerns the physical-trace transfer and is proved below.
     This is \cite[Definition~4.1, line~657]{Cirac2016MPDO_arXiv}.
-    The two maps act as follows on every virtual closure $X$:
-    \TNMPORenormalizationTS
+    On the open coefficient tensors the two maps have types:
+    % Formula: for every pair of virtual indices \alpha,\beta, set
+    % (M_{\alpha\beta})_{ij}=M^{ij}_{\alpha\beta} and
+    % ((MM)_{\alpha\beta})_{(i_1,i_2),(j_1,j_2)}
+    % =\sum_\gamma M^{i_1j_1}_{\alpha\gamma}
+    % M^{i_2j_2}_{\gamma\beta}.  The pictured identities are
+    % \mathcal T(M_{\alpha\beta})=(MM)_{\alpha\beta} and
+    % \mathcal S((MM)_{\alpha\beta})=M_{\alpha\beta} for every \alpha,\beta.
+    % Here i,j,\alpha,\beta are free on M_{\alpha\beta}, giving signature
+    % (1,1,1,1).  On (MM)_{\alpha\beta}, i_1,i_2,j_1,j_2,\alpha,\beta are
+    % free and \gamma is contracted between the two copies of M, giving
+    % signature (1,1,2,2).
+    % Contracting \alpha,\beta against X gives
+    % M_1(X)_{ij}=\tr(M^{ij}X) and
+    % M_2(X)_{(i_1,i_2),(j_1,j_2)}
+    % =\tr(M^{i_1j_1}M^{i_2j_2}X), hence
+    % \mathcal T[M_1(X)]=M_2(X) and \mathcal S[M_2(X)]=M_1(X) for every X.
+    % Their X-closed signatures are (0,0,1,1) and (0,0,2,2), respectively.
+    % Conversely, nondegeneracy of the trace pairing recovers the pictured
+    % open coefficient identities from the X-closed identities.
+    % Ink: each square M carries one west and one east virtual index and one
+    % north and one south physical index; the bond in each two-site object is
+    % the contracted virtual index \gamma.  Each blue stroke is a typed map
+    % between the complete objects at its endpoints, never a tensor contraction.
+    \par\noindent\hfil
+    \begin{tenkzcd}[maps, species={channel},
+        column sep=10mm, row sep=8mm]
+      \tnpic[inline, physical=updown]{
+        \tn[mpo]{M}
+      } &
+      \tnpic[inline, physical=updown]{
+        \tn[mpo]{M} & \tn[mpo]{M}
+      } \\
+      \tnpic[inline, physical=updown]{
+        \tn[mpo]{M} & \tn[mpo]{M}
+      } &
+      \tnpic[inline, physical=updown]{
+        \tn[mpo]{M}
+      }
+      \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T}
+      \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]{\mathcal S}
+    \end{tenkzcd}
+    \hfil\par
 \end{definition}
 
 \begin{definition}[Initial-coordinate regroupings]
