@@ -1364,6 +1364,33 @@ Theorem~\ref{thm:trace_norm_abs}.
     $\lambda_i^{-1/2}\lambda_i\lambda_i^{-1/2}=1$ otherwise.
 \end{proof}
 
+\begin{lemma}[Support inverse square root under scaling and a maximally mixed factor]
+    \label{lem:support_inverse_square_root_maximally_mixed}
+    \lean{Matrix.PosSemidef.supportInvSqrt_smul}
+    \lean{Matrix.PosSemidef.supportInvSqrt_kronecker_one}
+    \lean{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $\tau$ be positive semidefinite and let $c>0$. Then
+    \[
+        (c\tau)^{-1/2}_{\mathrm{supp}}
+          =c^{-1/2}\tau^{-1/2}_{\mathrm{supp}}.
+    \]
+    Consequently, for $d_R>0$,
+    \[
+        \bigl(\tau\otimes d_R^{-1}\mathbf 1_R\bigr)^{-1/2}_{\mathrm{supp}}
+          =\sqrt{d_R}\,
+            \bigl(\tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R\bigr).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The scalar identity follows from the functional calculus and
+    $\sqrt{cx}=\sqrt c\sqrt x$ for $c>0$.  The unital tensor embedding commutes
+    with the functional calculus, and substituting $c=d_R^{-1}$ gives the
+    second identity.
+\end{proof}
+
 \begin{definition}[Support Petz transpose map for a partial trace]
     \label{def:partial_trace_support_petz_map}
     \lean{Matrix.partialTraceRightPetzMap}
@@ -2372,6 +2399,71 @@ Theorem~\ref{thm:trace_norm_abs}.
           =\frac{d_C^2}{d_C^2}D(\rho\Vert\sigma)
           =D(\overline\rho\Vert\overline\sigma).
     \]
+\end{proof}
+
+\begin{lemma}[Maximally mixed support-sandwich normalization]
+    \label{lem:maximally_mixed_support_sandwich}
+    \lean{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul}
+    \leanok
+    \uses{lem:support_inverse_square_root_maximally_mixed}
+    Let $\tau$ be positive semidefinite on $\mathcal H_S$, let $X$ be a
+    matrix on $\mathcal H_S$, and let
+    $\overline\tau=\tau\otimes d_C^{-1}\mathbf 1_C$.  Then
+    \[
+        \overline\tau^{-1/2}_{\mathrm{supp}}
+        \bigl(X\otimes d_C^{-1}\mathbf 1_C\bigr)
+        \overline\tau^{-1/2}_{\mathrm{supp}}
+        =\bigl(\tau^{-1/2}_{\mathrm{supp}}X
+          \tau^{-1/2}_{\mathrm{supp}}\bigr)\otimes\mathbf 1_C.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    By the preceding support inverse formula, each outer factor contributes
+    $\sqrt{d_C}$.  These two factors cancel the coefficient $d_C^{-1}$ in
+    the middle tensor factor, leaving the asserted unital tensor embedding.
+\end{proof}
+
+\begin{theorem}[Identity Weyl sandwich implies raw Petz recovery]
+    \label{thm:weyl_identity_sandwich_petz_recovery}
+    \lean{Matrix.partialTraceRightPetzMap_eq_of_weyl_identity_sandwich}
+    \leanok
+    \uses{def:partial_trace_support_petz_map,
+        lem:partial_trace_support_petz_map_apply,
+        lem:maximally_mixed_support_sandwich}
+    Let $\rho$ and $\sigma$ be matrices on
+    $\mathcal H_S\otimes\mathbb C^{d_C}$, with $\sigma$ positive semidefinite,
+    and set
+    \[
+        \overline\sigma=(\tr_C\sigma)\otimes d_C^{-1}\mathbf 1_C.
+    \]
+    If the identity summand obeys the support sandwich identity
+    \[
+        \sqrt\sigma\,
+        \overline\sigma^{-1/2}_{\mathrm{supp}}
+        \bigl((\tr_C\rho)\otimes d_C^{-1}\mathbf 1_C\bigr)
+        \overline\sigma^{-1/2}_{\mathrm{supp}}\,
+        \sqrt\sigma=\rho,
+    \]
+    then the raw support Petz map recovers $\rho$:
+    \[
+        \mathcal R_\sigma(\tr_C\rho)=\rho.
+    \]
+    This is the algebraic reduction in
+    \cite[Theorem~3, equation~(8)]{Hayden2004Structure}.  It does not derive
+    the displayed sandwich identity from equality of relative entropies.
+\end{theorem}
+
+\begin{proof}\leanok
+    The preceding normalization rewrites the middle three factors as
+    \[
+        \bigl((\tr_C\sigma)^{-1/2}_{\mathrm{supp}}
+          (\tr_C\rho)
+          (\tr_C\sigma)^{-1/2}_{\mathrm{supp}}\bigr)
+          \otimes\mathbf 1_C.
+    \]
+    The support Petz formula therefore identifies the left-hand side of the
+    assumed sandwich identity with $\mathcal R_\sigma(\tr_C\rho)$.
 \end{proof}
 
 \begin{theorem}[Relative entropy against the product of the marginals]
