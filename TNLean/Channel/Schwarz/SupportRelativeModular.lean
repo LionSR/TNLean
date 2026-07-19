@@ -20,6 +20,8 @@ reference matrix is represented as the square of its support inverse square root
   vectorization.
 * `Matrix.supportRelativeModular_sqrt_mulVec_vec_one` evaluates the positive
   square root of the support relative-modular matrix on the vectorized identity.
+* `Matrix.supportRelativeModular_sourceB_solution` gives the canonical
+  support-domain solution of the singular source resolvent equation.
 * `Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq` turns a
   support-restricted common family of shifted resolvents into equality of
   support-restricted square-root ratios.
@@ -48,6 +50,75 @@ theorem one_kronecker_transpose_mulVec_vec_transpose
       Matrix.vec (M * P)ᵀ := by
   rw [Matrix.kronecker_mulVec_vec]
   simp only [Matrix.transpose_mul, Matrix.transpose_one, Matrix.mul_one]
+
+/-- The canonical support-domain vector built from the generalized relative
+modular resolvent solves the singular source equation.
+
+This is the algebraic source-side resolvent identity used in the equality
+argument of Jenčová--Ruskai, arXiv:0903.2895v4, lines 783--790, with the
+generalized inverse convention from lines 255--261. It does not derive a
+common resolvent from equality in data processing. -/
+theorem supportRelativeModular_sourceB_solution
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    {t : ℝ} (ht : 0 < t) :
+    let Bplus := hB.supportInvSqrt * hB.supportInvSqrt
+    let delta := A ⊗ₖ Bplusᵀ
+    let res := t • (1 : Matrix (n × n) (n × n) ℂ) + delta
+    let P := (1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ
+    let S := A ⊗ₖ (1 : Matrix n n ℂ) +
+      t • ((1 : Matrix n n ℂ) ⊗ₖ Bᵀ)
+    S *ᵥ (P *ᵥ (res⁻¹ *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ)) =
+      Matrix.vec Bᵀ := by
+  dsimp only
+  let Bplus := hB.supportInvSqrt * hB.supportInvSqrt
+  let delta := A ⊗ₖ Bplusᵀ
+  let res := t • (1 : Matrix (n × n) (n × n) ℂ) + delta
+  let P := (1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ
+  let S := A ⊗ₖ (1 : Matrix n n ℂ) +
+    t • ((1 : Matrix n n ℂ) ⊗ₖ Bᵀ)
+  let C := (1 : Matrix n n ℂ) ⊗ₖ Bᵀ
+  have hBplus : Bplus * B = hB.isHermitian.supportProj := by
+    simpa only [Bplus] using hB.supportInvSqrt_sq_mul_self
+  have hBplusPSD : Bplus.PosSemidef := by
+    simpa only [Bplus, hB.supportInvSqrt_isHermitian.eq] using
+      posSemidef_conjTranspose_mul_self hB.supportInvSqrt
+  have hdelta : delta.PosSemidef := hA.kronecker hBplusPSD.transpose
+  have hres : res.PosDef :=
+    (Matrix.PosDef.one.smul ht).add_posSemidef hdelta
+  letI : Invertible res := hres.isUnit.invertible
+  have hCdelta : C * delta =
+      A ⊗ₖ hB.isHermitian.supportProjᵀ := by
+    dsimp only [C, delta]
+    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
+      ← Matrix.transpose_mul, hBplus]
+  have hBTP : Bᵀ * hB.isHermitian.supportProjᵀ = Bᵀ := by
+    rw [← Matrix.transpose_mul, hB.isHermitian.supportProj_mul_self]
+  have hSP : S * P = C * res := by
+    dsimp only [S, P, C, res]
+    rw [Matrix.add_mul, Matrix.smul_mul,
+      ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+      Matrix.mul_one, Matrix.one_mul, hBTP,
+      Matrix.mul_add, Matrix.mul_smul, Matrix.mul_one, hCdelta]
+    simp only [Matrix.mul_one]
+    abel
+  have hCe : C *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ = Matrix.vec Bᵀ := by
+    dsimp only [C]
+    rw [Matrix.kronecker_mulVec_vec]
+    simp
+  calc
+    S *ᵥ (P *ᵥ (res⁻¹ *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ)) =
+        (S * P) *ᵥ (res⁻¹ *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ) :=
+      Matrix.mulVec_mulVec
+        (res⁻¹ *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ) S P
+    _ = (C * res) *ᵥ (res⁻¹ *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ) := by
+      rw [hSP]
+    _ = C *ᵥ ((res * res⁻¹) *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ) := by
+      rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec, Matrix.mul_assoc]
+    _ = C *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ := by
+      rw [Matrix.mul_inv_of_invertible]
+      simp
+    _ = Matrix.vec Bᵀ := hCe
 
 /-- The positive square root of the support relative-modular matrix, applied to
 the vectorized identity, is the vectorization of the support square-root ratio.
