@@ -449,19 +449,11 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
         Matrix.one_mul]
     _ = _ := by simpa only [Q, W] using htrace
 
-private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
-    LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N))
-        (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod =
-      ∑ k : Fin N → Fin F.sectorCount,
-        (↑(∏ n : Fin N,
-          Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
+private theorem toLin'_groundBondProduct {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    Matrix.toLin' ((List.ofFn fun i : Fin N ↦
+      MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod) =
+      (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod := by
   classical
-  let qMatrix := (List.ofFn fun i : Fin N ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
-  let qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
-  let qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
   have hfactor (i : Fin N) : Matrix.toLin'
       (MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)) =
       1 - localTerm A 2 N i := by
@@ -476,24 +468,46 @@ private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
       (MPOTensor.embedLocalOperator (d := d) 2 N hN i
         (LinearMap.toMatrix' (parentInteraction A 2))) = _
     rw [localTerm_eq_toLin'_embedLocalOperator (A := A) hN i]
+  change (Matrix.toLinAlgEquiv' :
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
+      Module.End ℂ (NSiteSpace d N)) _ = _
+  rw [map_list_prod, List.map_ofFn]
+  apply congrArg List.prod
+  apply congrArg List.ofFn
+  funext i
+  exact hfactor i
+
+private theorem conj_localComplementProduct {N : ℕ} :
+    (LinearEquiv.conjAlgEquiv ℂ
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
+        (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod =
+      (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod := by
+  rw [map_list_prod, List.map_ofFn]
+  apply congrArg List.prod
+  apply congrArg List.ofFn
+  funext i
+  simp only [Function.comp_apply, map_sub, map_one, localTermES,
+    LinearEquiv.conjAlgEquiv_apply, LinearEquiv.symm_symm]
+
+private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
+    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N))
+        (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod =
+      ∑ k : Fin N → Fin F.sectorCount,
+        (↑(∏ n : Fin N,
+          Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
+  classical
+  let qMatrix := (List.ofFn fun i : Fin N ↦
+    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
+  let qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
+  let qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
   have hMatrix : Matrix.toLin' qMatrix = qRaw := by
-    change (Matrix.toLinAlgEquiv' :
-      Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
-        Module.End ℂ (NSiteSpace d N)) qMatrix = qRaw
-    simp only [qMatrix, qRaw]
-    rw [map_list_prod, List.map_ofFn]
-    apply congrArg List.prod
-    apply congrArg List.ofFn
-    funext i
-    exact hfactor i
+    simpa only [qMatrix, qRaw] using
+      (toLin'_groundBondProduct (A := A) hN)
   have hES : (LinearEquiv.conjAlgEquiv ℂ e.symm) qRaw = qES := by
-    simp only [qRaw, qES]
-    rw [map_list_prod, List.map_ofFn]
-    apply congrArg List.prod
-    apply congrArg List.ofFn
-    funext i
-    simp only [Function.comp_apply, map_sub, map_one, localTermES, e,
-      LinearEquiv.conjAlgEquiv_apply, LinearEquiv.symm_symm]
+    simpa only [e, qRaw, qES] using
+      (conj_localComplementProduct (A := A) (N := N))
   calc
     LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N)) qES =
         LinearMap.trace ℂ (NSiteSpace d N) qRaw := by
@@ -542,38 +556,12 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
   let qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
   let qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
-  have hfactor (i : Fin N) : Matrix.toLin'
-      (MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)) =
-      1 - localTerm A 2 N i := by
-    rw [embedLocalOperator_groundBond_eq_one_sub]
-    change (Matrix.toLinAlgEquiv' :
-      Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
-        Module.End ℂ (NSiteSpace d N))
-        (1 - MPOTensor.embedLocalOperator (d := d) 2 N hN i
-          (LinearMap.toMatrix' (parentInteraction A 2))) = _
-    rw [map_sub, map_one]
-    change 1 - Matrix.toLin'
-      (MPOTensor.embedLocalOperator (d := d) 2 N hN i
-        (LinearMap.toMatrix' (parentInteraction A 2))) = _
-    rw [localTerm_eq_toLin'_embedLocalOperator (A := A) hN i]
   have hMatrix : Matrix.toLin' qMatrix = qRaw := by
-    change (Matrix.toLinAlgEquiv' :
-      Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
-        Module.End ℂ (NSiteSpace d N)) qMatrix = qRaw
-    simp only [qMatrix, qRaw]
-    rw [map_list_prod, List.map_ofFn]
-    apply congrArg List.prod
-    apply congrArg List.ofFn
-    funext i
-    exact hfactor i
+    simpa only [qMatrix, qRaw] using
+      (toLin'_groundBondProduct (A := A) hN)
   have hES : (LinearEquiv.conjAlgEquiv ℂ e.symm) qRaw = qES := by
-    simp only [qRaw, qES]
-    rw [map_list_prod, List.map_ofFn]
-    apply congrArg List.prod
-    apply congrArg List.ofFn
-    funext i
-    simp only [Function.comp_apply, map_sub, map_one, localTermES, e,
-      LinearEquiv.conjAlgEquiv_apply, LinearEquiv.symm_symm]
+    simpa only [e, qRaw, qES] using
+      (conj_localComplementProduct (A := A) (N := N))
   have hraw : qRaw v = v := by
     rw [← hMatrix, Matrix.toLin'_apply]
     exact hv

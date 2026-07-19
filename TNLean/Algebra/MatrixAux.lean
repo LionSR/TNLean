@@ -31,6 +31,9 @@ Extracted from various files for reusability.
   multiplicativity for Kronecker products
 - `Matrix.trace_blockDiagonal'_mul`: the trace pairing with a dependent
   block-diagonal matrix is the sum over diagonal block compressions
+- `Matrix.piProduct_mulVec_pureTensor`: a dependent product of matrices acts
+  componentwise on a pure tensor
+- `Matrix.reindex_mulVec`: matrix reindexing intertwines matrix--vector action
 - `Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one`: determinant
   AM--GM lower bound for the Hilbert--Schmidt trace form
 - `Matrix.PosSemidef.trace_mul_nonneg`: the trace product of two positive
@@ -91,6 +94,43 @@ theorem trace_blockDiagonal'_mul
     simp
   · intro hi
     exact (hi (Finset.mem_univ _)).elim
+
+/-! ## Matrix action on product vectors -/
+
+/-- A dependent product of matrices fixes a pure tensor whenever every factor
+fixes the corresponding vector. -/
+theorem piProduct_mulVec_pureTensor
+    {N : ℕ} {α : Fin N → Type*} [∀ n, Fintype (α n)]
+    (P : (n : Fin N) → Matrix (α n) (α n) ℂ)
+    (v : (n : Fin N) → α n → ℂ)
+    (hv : ∀ n, (P n).mulVec (v n) = v n)
+    (x : (n : Fin N) → α n) :
+    Matrix.mulVec
+        (fun (x y : (n : Fin N) → α n) ↦ ∏ n, P n (x n) (y n))
+        (fun y : (n : Fin N) → α n ↦ ∏ n, v n (y n)) x =
+      ∏ n, v n (x n) := by
+  classical
+  simp only [Matrix.mulVec, dotProduct]
+  rw [← Fintype.piFinset_univ]
+  simp_rw [← Finset.prod_mul_distrib]
+  rw [← Finset.prod_univ_sum
+    (fun n : Fin N ↦ (Finset.univ : Finset (α n)))
+    (fun n y ↦ P n (x n) y * v n y)]
+  apply Finset.prod_congr rfl
+  intro n _
+  simpa only [Matrix.mulVec, dotProduct] using congrFun (hv n) (x n)
+
+/-- Reindexing a square matrix along an equivalence intertwines its action on
+vectors with precomposition by the inverse equivalence. -/
+theorem reindex_mulVec {α β : Type*} [Fintype α] [Fintype β]
+    (e : α ≃ β) (M : Matrix α α ℂ) (v : α → ℂ) :
+    (Matrix.reindex e e M).mulVec (v ∘ e.symm) =
+      (M.mulVec v) ∘ e.symm := by
+  funext x
+  simp only [Matrix.mulVec, dotProduct, Matrix.reindex_apply,
+    Function.comp_apply]
+  exact Equiv.sum_comp e.symm
+    (fun y : α ↦ M (e.symm x) y * v y)
 
 /-! ## Uniform density matrices -/
 
