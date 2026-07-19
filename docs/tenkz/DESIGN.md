@@ -161,7 +161,7 @@ Cell commands (expandable; legal only inside `tenkz`/`\tnpic`):
 
 Typed-map rows belong to the categorical diagram language, not to the tensor-network language. Their vertices are mathematical objects and their joining strokes are maps, not contracted indices. A `\tnpic` occurring in an object cell remains an opaque mathematical object; the adjacent typed-map stroke does not acquire tensor ports or enter its contraction graph. The modes `maps` and `polygon` are disjoint, while ordinary grid mode retains the complete tikz-cd arrow grammar.
 
-A family is written as small multiples: one complete domain--codomain row for each member, with the same number of object columns in every row. A finite family is displayed in full, rather than by selected representatives. Parameters may remain symbolic when the displayed row asserts a formula uniformly over all their values. The matrix is a math object and may occur directly in displayed or running mathematics; it requires neither a figure wrapper nor a separate sizing mode.
+A family is written as small multiples: one complete domain--codomain row for each member, with the same number of object columns in every row. A finite family is displayed in full, rather than by selected representatives. Parameters may remain symbolic when the displayed row asserts a formula uniformly over all their values. The matrix is a math object and requires no separate sizing mode. In an ordinary TeX document it may occur in displayed or running mathematics. In blueprint chapter source, until the whole-equation web reroute (G20) lands, a `tenkzcd` must instead be a top-level block outside `$...$` and `\[...\]`; use `\par\noindent\hfil ... \hfil\par` for a centered nonfloating diagram, or a `figure` when a genuine float is intended.
 
 For the CPSV refinement, the middle-subspin Hilbert space is
 
@@ -176,17 +176,26 @@ The neighboring operator and the normalized active density on this space are
   \Omega_{k,h}=\bigoplus_l
     (\eta_{k,l}\otimes\eta_{l,h}),
   \qquad
-  \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h}.
+  \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h}
+  \quad(a_kb_h\ne0).
 \]
 
-On an active pair, the total completion agrees with the normalized density:
+For a nonzero finite-dimensional Hilbert space $H$, write
+$\tau_H=(\dim H)^{-1}I_H$ for its faithful uniform density.
+
+The total completed density is
 
 \[
-  \overline\Omega_{k,h}=\widehat\Omega_{k,h}.
+  \overline\Omega_{k,h}
+  =\begin{cases}
+      \widehat\Omega_{k,h},&a_kb_h\ne0,\\
+      \tau_{\mathcal H^{\Omega}_{k,h}},&a_kb_h=0.
+    \end{cases}
 \]
 
-On an inactive pair, $\overline\Omega_{k,h}$ denotes the chosen positive
-trace-one completion on $\mathcal H^{\Omega}_{k,h}$. A typed-map vertex records
+Thus
+$\overline\Omega_{k,h}\in\operatorname{End}(\mathcal H^{\Omega}_{k,h})$
+and $\operatorname{tr}(\overline\Omega_{k,h})=1$. A typed-map vertex records
 an operator space in the refinement displays below, not a coordinate
 expression, a carrier Hilbert space, or a density acting on that space.
 Introduce the five matrix algebras
