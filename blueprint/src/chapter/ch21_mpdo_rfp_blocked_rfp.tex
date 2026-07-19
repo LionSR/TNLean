@@ -1543,6 +1543,34 @@ physical indices, as in
     \]
 \end{proof}
 
+\begin{lemma}[Faithful fixed point from fixed product generators]
+    \label{lem:positive_map_faithful_fixed_point_from_product_span}
+    \lean{IsPositiveMap.%
+      exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span}
+    \leanok
+    Let $F:M_D(\mathbb C)\to M_D(\mathbb C)$ be positive and trace
+    nonincreasing.  Suppose that a family $(V_j)_{j\in J}$ consists of fixed
+    points of $F$ and that, for some $L>0$, the products
+    \[
+      V_{j_1}\cdots V_{j_L}
+    \]
+    span $M_D(\mathbb C)$.  Then $F$ has a positive-definite fixed point.
+\end{lemma}
+
+\begin{proof}\leanok
+    Boundedness of the forward orbits gives the mean-ergodic projection $P$.
+    Set $\rho=P(\mathbf 1)$ and let $Q$ be the support projection of $\rho$.
+    The maximal-support property of $\rho$ gives
+    \[
+      QV_jQ=V_j
+    \]
+    for every $j$.  Since $Q$ is a projection, this implies
+    $QV_j=V_j=V_jQ$, and therefore every positive-length product of the
+    $V_j$ is supported on $Q$.  The spanning hypothesis then gives
+    $Q\mathbf 1Q=\mathbf 1$, so $Q=\mathbf 1$.  Thus $\rho$ is positive
+    definite, and the construction of $P$ gives $F(\rho)=\rho$.
+\end{proof}
+
 \begin{theorem}[Trace preservation of the transported vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
     \lean{IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing,
@@ -1553,7 +1581,8 @@ physical indices, as in
       Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing,
       MPOTensor.transportedVerticalSector_composites_tracePreserving}
     \leanok
-    \uses{lem:mpdo_transported_vertical_sector_fixed_generators,
+    \uses{lem:positive_map_faithful_fixed_point_from_product_span,
+      lem:mpdo_transported_vertical_sector_fixed_generators,
       thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
       thm:mpdo_transported_vertical_sector_trace_loss}
     Suppose that every one-site and two-site multiplicity space is nonzero
