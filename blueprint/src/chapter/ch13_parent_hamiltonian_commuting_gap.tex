@@ -2538,6 +2538,127 @@ specialization of that Appendix~D definition.
     sitewise-unitary image.
 \end{proof}
 
+\begin{theorem}[Spatial conjugation of complementary interaction products]
+    \label{thm:beigi_complement_product_conjugation}
+    \lean{MPSTensor.BeigiSectorGraphData.singleKrausMap_groundBondProduct}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    Suppose that $A$ is equipped with Beigi sector data, with one-site spatial
+    unitary $U$.  For $N\geq2$, let $Q_N$ be the product of the translated
+    complementary parent interactions and let $\widetilde Q_N$ be the
+    corresponding product in sector coordinates.  Then
+    \[
+        (U^*)^{\otimes N}Q_NU^{\otimes N}=\widetilde Q_N.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The two-site coordinate identity gives
+    $(U^*\otimes U^*)(\mathbf 1-h)(U\otimes U)=\widetilde Q$ for one bond.
+    Conjugation by $(U^*)^{\otimes N}$ carries every translated copy of this
+    bond identity to the corresponding translated sector interaction.  Since
+    unitary conjugation distributes over an ordered product,
+    \[
+        (U^*)^{\otimes N}\!\left(\prod_{n=0}^{N-1}Q_n\right)U^{\otimes N}
+        =\prod_{n=0}^{N-1}
+          \left((U^*)^{\otimes N}Q_nU^{\otimes N}\right)
+        =\prod_{n=0}^{N-1}\widetilde Q_n
+        =\widetilde Q_N,
+    \]
+    where $Q_n$ and $\widetilde Q_n$ are the translated physical and sector
+    complementary interactions, respectively.
+\end{proof}
+
+\begin{theorem}[Fixed complementary-product vectors have zero parent energy]
+    \label{thm:beigi_complement_product_fixed_vector}
+    \lean{MPSTensor.BeigiSectorGraphData.mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    Suppose that $A$ is equipped with Beigi sector data.  For $N\geq2$, let
+    $h_0,\ldots,h_{N-1}$ be its translated length-two parent interactions and
+    set
+    \[
+        Q_N=\prod_{n=0}^{N-1}(\mathbf 1-h_n).
+    \]
+    Every vector fixed by $Q_N$ belongs to the kernel of the periodic parent
+    Hamiltonian $H_N=\sum_n h_n$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Under the Euclidean identification $E$, the matrix product of the
+    complementary interactions is carried to
+    \[
+        Q_N^{\mathrm{E}}=E^{-1}Q_NE
+        =\prod_{n=0}^{N-1}(\mathbf 1-h_n^{\mathrm{E}}).
+    \]
+    The operators $h_n^{\mathrm{E}}$ are commuting orthogonal projections.
+    For any commuting orthogonal projections $P_0,\ldots,P_{N-1}$,
+    \[
+        \prod_{n=0}^{N-1}(\mathbf 1-P_n)
+        =\operatorname{proj}_{\bigcap_{n=0}^{N-1}\ker P_n}.
+    \]
+    Applying this identity to the $h_n^{\mathrm{E}}$ gives
+    \[
+        Q_N^{\mathrm{E}}
+        =\operatorname{proj}_{\bigcap_{n=0}^{N-1}\ker h_n^{\mathrm{E}}},
+        \qquad
+        \bigcap_{n=0}^{N-1}\ker h_n^{\mathrm{E}}
+        =\ker\!\left(\sum_{n=0}^{N-1}h_n^{\mathrm{E}}\right)
+        =\ker H_N^{\mathrm{E}}.
+    \]
+    Thus $Q_Nv=v$ implies $E^{-1}v\in\ker H_N^{\mathrm{E}}$, and conjugating
+    back by $E$ gives $v\in\ker H_N$.
+\end{proof}
+
+\begin{theorem}[A positive Beigi loop gives a parent ground state]
+    \label{thm:beigi_loop_product_state_ground_state}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_ker_parentHamiltonian}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_parentHamiltonianGroundSpaceES}
+    \leanok
+    \uses{def:beigi_sector_graph, def:beigi_loop_product_state,
+        thm:beigi_complement_product_conjugation,
+        thm:beigi_complement_product_fixed_vector}
+    Let $a\to a$ be a positive loop.  For every $N\geq 2$, its physical
+    cyclic product-of-pairs state belongs to the kernel of the length-two
+    periodic parent Hamiltonian.  Equivalently, its Euclidean representative
+    belongs to the parent ground space.  This is only a membership assertion;
+    it does not assert that the loop states span the ground space.
+\end{theorem}
+
+\begin{proof}\leanok
+    In sector coordinates, the complete product $\widetilde Q_N$ of the
+    complementary two-site interactions is block diagonal over cyclic sector
+    sequences.  Write $\Phi_a(k;x)$ for the coefficient of the loop cyclic
+    product in the block indexed by $k$.  Its support lies in sector $a$, so
+    for every
+    $k\ne(a,\ldots,a)$ and every edge-index tuple $x$,
+    \[
+        \Phi_a(k;x)=0.
+    \]
+    Thus only the constant cyclic sector sequence contributes.  On this block,
+    $\widetilde Q_N$ is the tensor product of the edge projectors.  Since
+    $\varphi_a\in\operatorname{ran}P_{a,a}$,
+    \[
+        \widetilde Q_N\Phi_a
+        =P_{a,a}^{\otimes N}\Phi_a
+        =\Phi_a,
+        \qquad
+        \Phi_a(t_0,\ldots,t_{N-1})
+        =\prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}).
+    \]
+    If $U$ is the one-site spatial unitary and
+    $\Psi_a=U^{\otimes N}\Phi_a$ is the physical loop state, unitary
+    conjugation gives
+    \[
+        Q_N\Psi_a
+        =U^{\otimes N}\widetilde Q_N\Phi_a
+        =U^{\otimes N}\Phi_a
+        =\Psi_a.
+    \]
+    Theorem~\ref{thm:beigi_complement_product_fixed_vector} now yields
+    $\Psi_a\in\ker H_N$.
+\end{proof}
+
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
