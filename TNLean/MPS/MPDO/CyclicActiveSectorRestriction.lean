@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
+import TNLean.MPS.MPDO.InverseMapActiveSectorZCL
+import TNLean.Algebra.PerronFrobenius.Idempotent
 
 /-!
 # Cyclic-active physical sectors
@@ -26,11 +28,13 @@ the area law, zero correlation length, nor injectivity.
   1434--1450.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D N : ℕ} {K : MPOTensor d D}
+
+attribute [local instance] Classical.decEq Classical.propDecidable
 
 /-- A sector lies on a positive-length closed walk in the directed support of
 the neighboring operators.
@@ -48,12 +52,596 @@ def IsCyclicActiveSector (F : PhysicalSectorFactorization K)
       Relation.ReflTransGen
         (fun a b ↦ F.neighboringOperator a b ≠ 0) h k
 
+/-- The indicator weight of the sectors lying on a positive-length closed
+directed walk. -/
+noncomputable def cyclicActiveWeight (F : PhysicalSectorFactorization K)
+    (k : Fin F.sectorCount) : ℝ :=
+  by
+    classical
+    exact if F.IsCyclicActiveSector k then 1 else 0
+
+@[simp] theorem cyclicActiveWeight_ne_zero_iff
+    (F : PhysicalSectorFactorization K) (k : Fin F.sectorCount) :
+    F.cyclicActiveWeight k ≠ 0 ↔ F.IsCyclicActiveSector k := by
+  classical
+  simp [cyclicActiveWeight]
+
 /-- The subtype of sectors lying on a positive-length closed directed walk.
 
 Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
 449--514. -/
 abbrev CyclicActiveSector (F : PhysicalSectorFactorization K) :=
-  {k : Fin F.sectorCount // F.IsCyclicActiveSector k}
+  F.ActiveSector F.cyclicActiveWeight
+
+/-- The real trace matrix restricted to cyclic-active sectors. -/
+noncomputable abbrev cyclicActiveSectorTraceMatrix
+    (F : PhysicalSectorFactorization K) :
+    Matrix F.CyclicActiveSector F.CyclicActiveSector ℝ :=
+  F.activeSectorTraceMatrix F.cyclicActiveWeight
+
+/-- For a positive semidefinite neighboring family, operator support agrees
+with positive real trace support.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450. -/
+theorem neighboringOperator_trace_re_pos_iff
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (k h : Fin F.sectorCount) :
+    0 < (F.neighboringOperator k h).trace.re ↔
+      F.neighboringOperator k h ≠ 0 := by
+  constructor
+  · intro htrace hzero
+    simp [hzero] at htrace
+  · intro hne
+    exact (Complex.lt_def.mp ((hpos k h).trace_pos_of_ne_zero hne)).1
+
+private theorem exists_incoming_of_edge_reaches
+    {V : Type*} {r : V → V → Prop} {k h : V}
+    (hkh : r k h) (hreturn : Relation.ReflTransGen r h k) :
+    ∃ j, r j k := by
+  induction hreturn with
+  | refl => exact ⟨h, hkh⟩
+  | tail hab hbc ih => exact ⟨_, hbc⟩
+
+private theorem exists_rightTensor_entry_ne_zero_of_neighboringOperator_ne_zero
+    (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
+    (hkh : F.neighboringOperator k h ≠ 0) :
+    ∃ alpha x y, F.rightTensor k alpha x y ≠ 0 := by
+  classical
+  obtain ⟨x, y, hxy⟩ := Matrix.exists_entry_ne_zero_of_ne_zero _ hkh
+  rw [F.neighboringOperator_apply] at hxy
+  obtain ⟨alpha, _, halpha⟩ := Finset.exists_ne_zero_of_sum_ne_zero hxy
+  exact ⟨alpha, x.1, y.1, left_ne_zero_of_mul halpha⟩
+
+private theorem exists_leftTensor_entry_ne_zero_of_neighboringOperator_ne_zero
+    (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
+    (hkh : F.neighboringOperator k h ≠ 0) :
+    ∃ beta x y, F.leftTensor h beta x y ≠ 0 := by
+  classical
+  obtain ⟨x, y, hxy⟩ := Matrix.exists_entry_ne_zero_of_ne_zero _ hkh
+  rw [F.neighboringOperator_apply] at hxy
+  obtain ⟨beta, _, hbeta⟩ := Finset.exists_ne_zero_of_sum_ne_zero hxy
+  exact ⟨beta, x.2, y.2, right_ne_zero_of_mul hbeta⟩
+
+/-- Every cyclic-active sector contains a nonzero virtual matrix. -/
+theorem exists_sectorVirtualMatrix_ne_zero_of_isCyclicActiveSector
+    (F : PhysicalSectorFactorization K) {k : Fin F.sectorCount}
+    (hk : F.IsCyclicActiveSector k) :
+    ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0 := by
+  obtain ⟨h, hkh, hreturn⟩ := hk
+  obtain ⟨j, hjk⟩ := exists_incoming_of_edge_reaches
+    (r := fun a b ↦ F.neighboringOperator a b ≠ 0) hkh hreturn
+  obtain ⟨beta, xL, yL, hleft⟩ :=
+    F.exists_leftTensor_entry_ne_zero_of_neighboringOperator_ne_zero hjk
+  obtain ⟨alpha, xR, yR, hright⟩ :=
+    F.exists_rightTensor_entry_ne_zero_of_neighboringOperator_ne_zero hkh
+  refine ⟨(xL, xR), (yL, yR), ?_⟩
+  intro hzero
+  have hentry := congrFun (congrFun hzero beta) alpha
+  exact mul_ne_zero hleft hright hentry
+
+/-- If the sector virtual matrices span the full matrix algebra, every sector
+containing a nonzero virtual matrix lies on a directed two-cycle. -/
+theorem isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero
+    (F : PhysicalSectorFactorization K)
+    (hspan : Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤)
+    {k : Fin F.sectorCount} {x y : F.SectorIndex k}
+    (hA : F.sectorVirtualMatrix k x y ≠ 0) :
+    F.IsCyclicActiveSector k := by
+  classical
+  let A := F.sectorVirtualMatrix k x y
+  obtain ⟨Y, htraceY⟩ : ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+      Matrix.trace (A * Y) ≠ 0 := by
+    by_contra hall
+    push Not at hall
+    exact hA ((Matrix.trace_mul_right_eq_zero_iff A).mp hall)
+  have hYmem : Y ∈ Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) := by
+    rw [hspan]
+    exact Submodule.mem_top
+  obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hYmem
+  have hsum : Matrix.trace
+      (A * ∑ q, c q • F.sectorVirtualMatrixFamily q) ≠ 0 := by
+    rw [hc]
+    exact htraceY
+  simp only [Matrix.mul_sum, Matrix.mul_smul, Matrix.trace_sum,
+    Matrix.trace_smul] at hsum
+  obtain ⟨q, hq⟩ : ∃ q : F.SectorEntryIndex,
+      c q * Matrix.trace (A * F.sectorVirtualMatrixFamily q) ≠ 0 := by
+    by_contra hall
+    push Not at hall
+    exact hsum (Finset.sum_eq_zero fun q _ ↦ hall q)
+  have htrace : Matrix.trace (A * F.sectorVirtualMatrixFamily q) ≠ 0 :=
+    right_ne_zero_of_mul hq
+  have hAB : A * F.sectorVirtualMatrixFamily q ≠ 0 := by
+    intro hzero
+    exact htrace (by rw [hzero, Matrix.trace_zero])
+  have hBA : F.sectorVirtualMatrixFamily q * A ≠ 0 := by
+    intro hzero
+    apply htrace
+    rw [Matrix.trace_mul_comm, hzero, Matrix.trace_zero]
+  have hkq : F.neighboringOperator k q.1 ≠ 0 := by
+    intro hzero
+    apply hAB
+    exact F.sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero
+      k q.1 hzero x y q.2.1 q.2.2
+  have hqk : F.neighboringOperator q.1 k ≠ 0 := by
+    intro hzero
+    apply hBA
+    exact F.sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero
+      q.1 k hzero q.2.1 q.2.2 x y
+  exact ⟨q.1, hkq, Relation.ReflTransGen.single hqk⟩
+
+/-- For an injective tensor, every virtual matrix outside cyclic-active
+support vanishes. -/
+theorem sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (k : Fin F.sectorCount) (hk : ¬F.IsCyclicActiveSector k)
+    (x y : F.SectorIndex k) :
+    F.sectorVirtualMatrix k x y = 0 := by
+  by_contra hxy
+  exact hk (F.isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero
+    (F.sectorVirtualMatrixFamily_span_eq_top hK) hxy)
+
+/-- Replace the left tensor outside cyclic-active support by zero.
+
+For an injective tensor this leaves the physical-sector factorization
+unchanged, because every virtual matrix in a deleted sector already vanishes.
+It is an auxiliary representative used to apply source ZCL to the restricted
+trace matrix; it does not identify that matrix with the unreduced one.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `formK`, `etarl`, and
+`Tkn`, lines 1434--1493. -/
+noncomputable def cyclicActiveLeftRestriction
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
+    PhysicalSectorFactorization K where
+  sectorCount := F.sectorCount
+  leftDim := F.leftDim
+  rightDim := F.rightDim
+  leftDim_pos := F.leftDim_pos
+  rightDim_pos := F.rightDim_pos
+  sectorEquiv := F.sectorEquiv
+  physicalIsometry := F.physicalIsometry
+  physicalIsometry_isometry := F.physicalIsometry_isometry
+  leftTensor := fun k beta ↦
+    if F.IsCyclicActiveSector k then F.leftTensor k beta else 0
+  rightTensor := F.rightTensor
+  factorization := by
+    classical
+    intro beta alpha
+    rw [F.factorization]
+    congr 1
+    funext k
+    by_cases hk : F.IsCyclicActiveSector k
+    · simp [hk]
+    · ext x y
+      simp only [hk, if_false, Matrix.kroneckerMap_apply, Matrix.zero_apply,
+        zero_mul]
+      have hzero := F.sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector
+        hK k hk (x.1, x.2) (y.1, y.2)
+      exact congrFun (congrFun hzero beta) alpha
+
+@[simp] theorem cyclicActiveLeftRestriction_leftTensor
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (k : Fin F.sectorCount) (beta : Fin D) :
+    (F.cyclicActiveLeftRestriction hK).leftTensor k beta =
+      if F.IsCyclicActiveSector k then F.leftTensor k beta else 0 := rfl
+
+@[simp] theorem cyclicActiveLeftRestriction_rightTensor
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (k : Fin F.sectorCount) (alpha : Fin D) :
+    (F.cyclicActiveLeftRestriction hK).rightTensor k alpha =
+      F.rightTensor k alpha := rfl
+
+/-- The left restriction preserves neighboring operators whose target is
+cyclic-active and kills every other target column. -/
+theorem cyclicActiveLeftRestriction_neighboringOperator
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (k h : Fin F.sectorCount) :
+    (F.cyclicActiveLeftRestriction hK).neighboringOperator k h =
+      if F.IsCyclicActiveSector h then F.neighboringOperator k h else 0 := by
+  classical
+  by_cases hh : F.IsCyclicActiveSector h
+  · rw [if_pos hh]
+    ext x y
+    simp [neighboringOperator_apply, hh]
+  · rw [if_neg hh]
+    ext x y
+    simp only [neighboringOperator_apply,
+      cyclicActiveLeftRestriction_leftTensor,
+      cyclicActiveLeftRestriction_rightTensor, hh, if_false]
+    change (∑ _ : Fin D, _ * 0) = 0
+    simp
+
+private noncomputable def cyclicActiveLeftRestriction_activeSectorEquiv
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
+    (F.cyclicActiveLeftRestriction hK).ActiveSector F.cyclicActiveWeight ≃
+      F.CyclicActiveSector where
+  toFun k := ⟨k.1, k.2⟩
+  invFun k := ⟨k.1, k.2⟩
+  left_inv _ := Subtype.ext rfl
+  right_inv _ := Subtype.ext rfl
+
+/-- On cyclic-active indices, reindexing the restricted representative gives
+the original restricted trace matrix. -/
+theorem reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
+    Matrix.reindex (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
+      (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
+      ((F.cyclicActiveLeftRestriction hK).activeSectorTraceMatrix
+        F.cyclicActiveWeight) = F.cyclicActiveSectorTraceMatrix := by
+  ext k h
+  change ((F.cyclicActiveLeftRestriction hK).neighboringOperator
+      k.1 h.1).trace.re = (F.neighboringOperator k.1 h.1).trace.re
+  rw [F.cyclicActiveLeftRestriction_neighboringOperator hK]
+  rw [if_pos ((F.cyclicActiveWeight_ne_zero_iff h.1).1 h.2)]
+  rfl
+
+private theorem cyclicActiveLeftRestriction_leftTensor_eq_zero_of_weight_eq_zero
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (k : Fin F.sectorCount) (hk : F.cyclicActiveWeight k = 0)
+    (beta : Fin D) :
+    (F.cyclicActiveLeftRestriction hK).leftTensor k beta = 0 := by
+  rw [F.cyclicActiveLeftRestriction_leftTensor hK]
+  apply if_neg
+  intro hactive
+  exact (F.cyclicActiveWeight_ne_zero_iff k).2 hactive hk
+
+private theorem cyclicActiveLeftRestriction_neighboringOperator_posSemidef
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (k h : Fin F.sectorCount) :
+    ((F.cyclicActiveLeftRestriction hK).neighboringOperator k h).PosSemidef := by
+  rw [F.cyclicActiveLeftRestriction_neighboringOperator hK]
+  split
+  · exact hpos k h
+  · exact Matrix.PosSemidef.zero
+
+/-- Source ZCL gives the square--cube and constant-trace-power relations for
+one positive normalization of the cyclic-active trace matrix.
+
+The auxiliary left restriction kills inactive target columns while preserving
+the physical-sector factorization and every retained entry.  Thus this result
+concerns the restricted trace matrix only, not the unreduced Beigi matrix.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `Tkn` and `SALZCL`, lines
+1473--1497, used at Proposition `4to2`, lines 1606--1616. -/
+theorem cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hZCL : K.IsSourceZCL) :
+    ∃ lam : ℝ, 0 < lam ∧
+      let T := F.cyclicActiveSectorTraceMatrix
+      ((lam⁻¹ • T) ^ 2 = (lam⁻¹ • T) ^ 3) ∧
+        ∀ m : ℕ, 0 < m →
+          Matrix.trace ((lam⁻¹ • T) ^ m) = Matrix.trace (lam⁻¹ • T) := by
+  let G := F.cyclicActiveLeftRestriction hK
+  obtain ⟨lam, hlam, hpow, htrace⟩ :=
+    G.activeSectorTraceMatrix_normalized_relations_of_isSourceZCL
+      F.cyclicActiveWeight
+      (F.cyclicActiveLeftRestriction_leftTensor_eq_zero_of_weight_eq_zero hK)
+      (F.cyclicActiveLeftRestriction_neighboringOperator_posSemidef hK hpos)
+      hZCL
+  let e := F.cyclicActiveLeftRestriction_activeSectorEquiv hK
+  let TG := G.activeSectorTraceMatrix F.cyclicActiveWeight
+  let T := F.cyclicActiveSectorTraceMatrix
+  have hmatrix : Matrix.reindex e e TG = T := by
+    simpa only [e, TG, T, G] using
+      F.reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix hK
+  have hreindex : Matrix.reindex e e (lam⁻¹ • TG) = lam⁻¹ • T := by
+    change (Matrix.reindexAlgEquiv ℝ ℝ e) (lam⁻¹ • TG) = lam⁻¹ • T
+    rw [map_smul]
+    change lam⁻¹ • Matrix.reindex e e TG = lam⁻¹ • T
+    rw [hmatrix]
+  have hreindex_pow (m : ℕ) :
+      Matrix.reindex e e ((lam⁻¹ • TG) ^ m) = (lam⁻¹ • T) ^ m := by
+    change (Matrix.reindexAlgEquiv ℝ ℝ e) ((lam⁻¹ • TG) ^ m) = _
+    rw [map_pow]
+    change (Matrix.reindex e e (lam⁻¹ • TG)) ^ m = _
+    rw [hreindex]
+  refine ⟨lam, hlam, ?_, ?_⟩
+  · calc
+      (lam⁻¹ • T) ^ 2 = Matrix.reindex e e ((lam⁻¹ • TG) ^ 2) :=
+        (hreindex_pow 2).symm
+      _ = Matrix.reindex e e ((lam⁻¹ • TG) ^ 3) := congrArg _ hpow
+      _ = (lam⁻¹ • T) ^ 3 := hreindex_pow 3
+  · intro m hm
+    calc
+      Matrix.trace ((lam⁻¹ • T) ^ m) =
+          Matrix.trace (Matrix.reindex e e ((lam⁻¹ • TG) ^ m)) := by
+        rw [hreindex_pow]
+      _ = Matrix.trace ((lam⁻¹ • TG) ^ m) := by
+        simpa only [e, TG, G] using
+          (Matrix.trace_reindex (R := ℝ)
+            (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
+            ((lam⁻¹ • (F.cyclicActiveLeftRestriction hK).activeSectorTraceMatrix
+              F.cyclicActiveWeight) ^ m))
+      _ = Matrix.trace (lam⁻¹ • TG) := htrace m hm
+      _ = Matrix.trace (Matrix.reindex e e (lam⁻¹ • TG)) := by
+        simpa only [e, TG, G] using
+          (Matrix.trace_reindex (R := ℝ)
+            (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
+            (lam⁻¹ • (F.cyclicActiveLeftRestriction hK).activeSectorTraceMatrix
+              F.cyclicActiveWeight)).symm
+      _ = Matrix.trace (lam⁻¹ • T) := by rw [hreindex]
+
+/-- Injectivity reduces full virtual spanning to the cyclic-active sectors. -/
+theorem cyclicActiveSectorOneSiteMatrixFamily_span_eq_top
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
+    Submodule.span ℂ
+      (Set.range (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight)) = ⊤ := by
+  apply F.activeSectorOneSiteMatrixFamily_span_eq_top F.cyclicActiveWeight
+    (F.sectorVirtualMatrixFamily_span_eq_top hK)
+  intro k hk x y
+  apply F.sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector hK
+  intro hactive
+  exact (F.cyclicActiveWeight_ne_zero_iff k).2 hactive hk
+
+/-- An injective tensor with nonzero virtual dimension has a cyclic-active
+sector. -/
+theorem nonempty_cyclicActiveSector
+    (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective) :
+    Nonempty F.CyclicActiveSector := by
+  classical
+  have hspan := F.sectorVirtualMatrixFamily_span_eq_top hK
+  have hone_mem : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+      Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) := by
+    rw [hspan]
+    exact Submodule.mem_top
+  obtain ⟨c, hc⟩ :=
+    (Submodule.mem_span_range_iff_exists_fun ℂ).mp hone_mem
+  have hsum : (∑ q, c q • F.sectorVirtualMatrixFamily q) ≠ 0 := by
+    rw [hc]
+    exact one_ne_zero
+  obtain ⟨q, _, hq⟩ := Finset.exists_ne_zero_of_sum_ne_zero hsum
+  have hmatrix : F.sectorVirtualMatrixFamily q ≠ 0 := by
+    intro hzero
+    rw [hzero, smul_zero] at hq
+    exact hq rfl
+  have hactive := F.isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero
+    hspan hmatrix
+  exact ⟨⟨q.1, (F.cyclicActiveWeight_ne_zero_iff q.1).2 hactive⟩⟩
+
+/-- Every cyclic-active sector contains a nonzero virtual matrix, in the
+indicator-weight indexing used by the restricted trace matrix. -/
+theorem cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero
+    (F : PhysicalSectorFactorization K) (k : F.CyclicActiveSector) :
+    ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0 :=
+  F.exists_sectorVirtualMatrix_ne_zero_of_isCyclicActiveSector
+    ((F.cyclicActiveWeight_ne_zero_iff k).1 k.2)
+
+/-- Every edge between cyclic-active sectors closes through a third
+cyclic-active sector when the tensor is injective. -/
+theorem exists_cyclicActive_two_edge_return
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    {k h : F.CyclicActiveSector}
+    (hkh : F.neighboringOperator k h ≠ 0) :
+    ∃ j : F.CyclicActiveSector,
+      F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0 := by
+  classical
+  obtain ⟨kx, ky, hkxy⟩ :=
+    F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero k
+  obtain ⟨hx, hy, hhxy⟩ :=
+    F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero h
+  obtain ⟨ex, ey, heta⟩ := Matrix.exists_entry_ne_zero_of_ne_zero _ hkh
+  obtain ⟨beta, alpha, hkentry⟩ :=
+    Matrix.exists_entry_ne_zero_of_ne_zero _ hkxy
+  have hkleft : F.leftTensor k beta kx.1 ky.1 ≠ 0 :=
+    left_ne_zero_of_mul hkentry
+  obtain ⟨delta, gamma, hhentry⟩ :=
+    Matrix.exists_entry_ne_zero_of_ne_zero _ hhxy
+  have hhright : F.rightTensor h gamma hx.2 hy.2 ≠ 0 :=
+    right_ne_zero_of_mul hhentry
+  let x : F.SectorIndex k := (kx.1, ex.1)
+  let y : F.SectorIndex k := (ky.1, ey.1)
+  let u : F.SectorIndex h := (ex.2, hx.2)
+  let v : F.SectorIndex h := (ey.2, hy.2)
+  let A := F.sectorVirtualMatrix k x y
+  let B := F.sectorVirtualMatrix h u v
+  have hAB : A * B ≠ 0 := by
+    intro hzero
+    have hentry := congrFun (congrFun hzero beta) gamma
+    rw [Matrix.zero_apply,
+      F.sectorVirtualMatrix_mul_apply k h x y u v beta gamma] at hentry
+    exact mul_ne_zero (mul_ne_zero hkleft heta) hhright hentry
+  obtain ⟨Y, htraceY⟩ : ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+      Matrix.trace (A * B * Y) ≠ 0 := by
+    by_contra hall
+    push Not at hall
+    exact hAB ((Matrix.trace_mul_right_eq_zero_iff (A * B)).mp hall)
+  have hYmem : Y ∈ Submodule.span ℂ
+      (Set.range (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight)) := by
+    rw [F.cyclicActiveSectorOneSiteMatrixFamily_span_eq_top hK]
+    exact Submodule.mem_top
+  obtain ⟨c, hc⟩ :=
+    (Submodule.mem_span_range_iff_exists_fun ℂ).mp hYmem
+  have hsum : Matrix.trace
+      (A * B * ∑ q, c q •
+        F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q) ≠ 0 := by
+    rw [hc]
+    exact htraceY
+  simp only [Matrix.mul_sum, Matrix.mul_smul, Matrix.trace_sum,
+    Matrix.trace_smul] at hsum
+  obtain ⟨q, hq⟩ : ∃ q : F.ActiveSectorEntryIndex F.cyclicActiveWeight,
+      c q * Matrix.trace
+        (A * B * F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q) ≠ 0 := by
+    by_contra hall
+    push Not at hall
+    exact hsum (Finset.sum_eq_zero fun q _ ↦ hall q)
+  have htraceC : Matrix.trace
+      (A * B * F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q) ≠ 0 :=
+    right_ne_zero_of_mul hq
+  have hBC : B * F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q ≠ 0 := by
+    intro hzero
+    apply htraceC
+    rw [← Matrix.trace_mul_cycle B
+      (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q) A,
+      hzero, Matrix.zero_mul, Matrix.trace_zero]
+  have hCA : F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q * A ≠ 0 := by
+    intro hzero
+    apply htraceC
+    rw [Matrix.trace_mul_cycle A B
+      (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q),
+      hzero, Matrix.zero_mul, Matrix.trace_zero]
+  refine ⟨q.1, ?_, ?_⟩
+  · intro hzero
+    apply hBC
+    simpa [B, activeSectorOneSiteMatrixFamily] using
+      F.sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero
+        h q.1 hzero u v q.2.1 q.2.2
+  · intro hzero
+    apply hCA
+    simpa [A, activeSectorOneSiteMatrixFamily] using
+      F.sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero
+        q.1 k hzero q.2.1 q.2.2 x y
+
+/-- The cyclic-active support is one strongly connected component when the
+tensor is injective and the neighboring operators are positive semidefinite. -/
+theorem cyclicActiveSectorTraceMatrix_isIrreducible
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
+    Matrix.IsIrreducible F.cyclicActiveSectorTraceMatrix :=
+  F.activeSectorTraceMatrix_isIrreducible F.cyclicActiveWeight hpos
+    (F.cyclicActiveSectorOneSiteMatrixFamily_span_eq_top hK)
+    F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero
+
+/-- Every cyclic-active sector has a positive length-two return weight. -/
+theorem cyclicActiveSectorTraceMatrix_pow_two_diag_pos
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (k : F.CyclicActiveSector) :
+    0 < (F.cyclicActiveSectorTraceMatrix ^ 2) k k :=
+  F.activeSectorTraceMatrix_pow_two_diag_pos F.cyclicActiveWeight hpos
+    (F.cyclicActiveSectorOneSiteMatrixFamily_span_eq_top hK)
+    F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero k
+
+/-- Every cyclic-active sector has a positive length-three return weight. -/
+theorem cyclicActiveSectorTraceMatrix_pow_three_diag_pos
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (k : F.CyclicActiveSector) :
+    0 < (F.cyclicActiveSectorTraceMatrix ^ 3) k k :=
+  F.activeSectorTraceMatrix_pow_three_diag_pos F.cyclicActiveWeight hpos
+    (F.cyclicActiveSectorOneSiteMatrixFamily_span_eq_top hK)
+    F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero
+    (fun hkh ↦ F.exists_cyclicActive_two_edge_return hK hkh) k
+
+/-- The trace matrix on cyclic-active sectors is primitive for an injective
+tensor with positive semidefinite neighboring operators.
+
+The proof first removes sectors whose virtual matrices vanish, then applies
+the directed-cut argument to obtain one strongly connected component.  The
+trace pairing supplies closed walks of lengths two and three, hence
+aperiodicity.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471;
+Beigi, arXiv:1105.1019v2, lines 449--514. -/
+theorem cyclicActiveSectorTraceMatrix_isPrimitive
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
+    Matrix.IsPrimitive F.cyclicActiveSectorTraceMatrix :=
+  (F.cyclicActiveSectorTraceMatrix_isIrreducible hK hpos)
+    |>.isPrimitive_of_pow_two_diagonal_pos_of_pow_three_diagonal_pos
+      (F.cyclicActiveSectorTraceMatrix_pow_two_diag_pos hK hpos)
+      (F.cyclicActiveSectorTraceMatrix_pow_three_diag_pos hK hpos)
+
+private theorem matrix_pow_eq_pow_two_of_pow_two_eq_pow_three
+    {I : Type*} [Fintype I] [DecidableEq I] (T : Matrix I I ℝ)
+    (h : T ^ 2 = T ^ 3) :
+    ∀ m, 2 ≤ m → T ^ m = T ^ 2 := by
+  classical
+  have hmul : T * T = T * T * T := by
+    have e3 : T ^ 3 = T * T * T := by rw [pow_succ, pow_two]
+    rw [pow_two, e3] at h
+    exact h
+  intro m hm
+  induction m, hm using Nat.le_induction with
+  | base => rfl
+  | succ m _ ih =>
+      rw [pow_succ, ih]
+      calc
+        T ^ 2 * T = T * T * T := by rw [pow_two]
+        _ = T * T := hmul.symm
+        _ = T ^ 2 := (pow_two T).symm
+
+private theorem isPrimitive_smul_of_pos
+    {I : Type*} [Fintype I] [DecidableEq I]
+    {T : Matrix I I ℝ} (hT : Matrix.IsPrimitive T)
+    {c : ℝ} (hc : 0 < c) :
+    Matrix.IsPrimitive (c • T) := by
+  obtain ⟨m, hm, hpos⟩ := hT.exists_pos_pow
+  refine ⟨fun i j ↦ mul_nonneg hc.le (hT.nonneg i j), m, hm, ?_⟩
+  intro i j
+  rw [smul_pow, Matrix.smul_apply]
+  exact mul_pos (pow_pos hc m) (hpos i j)
+
+private theorem rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
+    {I : Type*} [Fintype I] [DecidableEq I] [Nonempty I]
+    {T : Matrix I I ℝ} (hprimitive : Matrix.IsPrimitive T)
+    (hpow : T ^ 2 = T ^ 3) :
+    (T ^ 2).rank = 1 := by
+  obtain ⟨m, hm, hmpos⟩ := hprimitive.exists_pos_pow
+  have htwom_pos (i j : I) : 0 < (T ^ (m + m)) i j := by
+    rw [pow_add, Matrix.mul_apply]
+    exact Finset.sum_pos (fun k _ ↦ mul_pos (hmpos i k) (hmpos k j))
+      Finset.univ_nonempty
+  have hsq_pos (i j : I) : 0 < (T ^ 2) i j := by
+    have heq := matrix_pow_eq_pow_two_of_pow_two_eq_pow_three
+      T hpow (m + m) (by omega)
+    have hentry := congrFun (congrFun heq i) j
+    exact hentry ▸ htwom_pos i j
+  have hsq_idem : T ^ 2 * T ^ 2 = T ^ 2 := by
+    rw [← pow_add]
+    exact matrix_pow_eq_pow_two_of_pow_two_eq_pow_three T hpow 4 (by omega)
+  exact Matrix.rank_eq_one_of_pos_of_mul_self_eq_self hsq_pos hsq_idem
+
+/-- If the normalized cyclic-active trace matrix satisfies the source-ZCL
+square--cube relation, then its square has rank one. -/
+theorem cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
+    (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hpow : F.cyclicActiveSectorTraceMatrix ^ 2 =
+      F.cyclicActiveSectorTraceMatrix ^ 3) :
+    (F.cyclicActiveSectorTraceMatrix ^ 2).rank = 1 := by
+  classical
+  letI : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
+  exact rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
+    (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos) hpow
+
+/-- A positive source normalization of the cyclic-active trace matrix has
+rank-one square whenever it satisfies the source-ZCL square--cube relation. -/
+theorem normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
+    (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {lam : ℝ} (hlam : 0 < lam)
+    (hpow : (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2 =
+      (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 3) :
+    ((lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2).rank = 1 := by
+  classical
+  letI : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
+  apply rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
+    (isPrimitive_smul_of_pos
+      (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos) (inv_pos.mpr hlam))
+  exact hpow
 
 private theorem reflTransGen_iterate_map
     {V W : Type*} (r : W → W → Prop) (step : V → V) (f : V → W)
