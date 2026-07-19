@@ -278,6 +278,27 @@ eventual degeneracy, or canonical-form datum is assumed in this sector-graph
 theorem.  The remaining lengths $N=1,2$ require separate periodic-window
 conventions and are tracked by \ghissue{4400}.
 
+The remaining finite graph comparison in Beigi's Section~IV is now proved
+without an axiom.  For a finite directed graph with nonnegative integral edge weights,
+the declarations
+\leanid{FiniteWeightedDigraph.cyclicEdgeWeight_eq_one},
+\leanid{FiniteWeightedDigraph.cycle_eq_constant}, and
+\leanid{FiniteWeightedDigraph.cycleWeightSum_eq_card_loop}
+show that eventual constancy of the ordered-cycle sum forces every cyclic edge
+weight to be one, every directed cycle to be a repeated loop, and every
+positive-length cycle sum to equal the number of positive loops.  The proof
+uses the two repetition maps from consecutive sufficiently large lengths into
+their common product, exactly as in the source.  Applied to the sector datum,
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{parentHamiltonianGroundSpaceES_finrank_eq_card_loop}
+identifies every parent-ground-space dimension with $N>2$ with the loop number
+whenever those dimensions are eventually constant.  Combining this with the
+BNT eventual-dimension theorem gives
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData}.
+This conclusion does not identify the loop states with the original BNT
+representatives.
+
 \section{Elimination plan}
 
 A source-faithful formalization should replace the remaining axiom-backed
@@ -295,12 +316,12 @@ including the spanning condition in the parent-Hamiltonian ground-space clause:
 The forward commutation implication uses the basic-vector form in
 Theorem~3.11 and the corresponding local projectors.  The reverse implication
 must internalize the remaining part of Beigi's one-dimensional
-nearest-neighbor commuting-Hamiltonian ground-space classification: use
-eventual degeneracy constancy together with the proved finite-sector-graph
-dimension formula to reduce its cycles to loops with one-dimensional cyclic
-edge kernels, and identify the resulting
-locally orthogonal product-of-pairs states with the basis of normal tensors of
-$A$.\footnote{Tracked by \ghissue{2633}.}
+nearest-neighbor commuting-Hamiltonian ground-space classification: identify
+the locally orthogonal product-of-pairs states associated with the proved
+sector loops with the basis of normal tensors of $A$.  Eventual degeneracy
+constancy, one-dimensional cyclic edge kernels, and the reduction of all
+directed cycles to loops are now proved and require no axiom.\footnote{Tracked
+by \ghissue{2633}.}
 
 The current proof boundary is therefore: the reverse implication has the
 source ground-space hypothesis, but its proof is still the Beigi axiom; the
@@ -321,9 +342,10 @@ canonical form is subject to the source obstruction recorded in
 ground-space spanning clause and the multiplicity-one distinct-sector
 extension are proved. The repeated-copy and arbitrary-raw-weight extension
 remains open.  In the reverse direction, eventual ground-space dimension
-stability, the local spatial decomposition, and the ordered-cycle sector-graph
-dimension formula are proved.  The reduction of this graph under eventual
-constancy and its identification with the basis of normal tensors remain open.
+stability, the local spatial decomposition, the ordered-cycle dimension
+formula, and the reduction of the sector graph to one-dimensional loops are
+proved.  The identification of the resulting loop states with the basis of
+normal tensors remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
