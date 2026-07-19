@@ -139,10 +139,10 @@ import TNLean.Channel.PetzRecovery
 import TNLean.Axioms.BrouwerFixedPoint
 -- Layer 2a: Axiomatized entropy inequalities (strong subadditivity)
 import TNLean.Axioms.Entropy
--- Layer 2a: `TNLean/Entropy/` namespace (issue #613) — entropy
--- declarations for the Simple MPDO RFP track (#236). SSA itself is sourced
--- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules
--- re-state the sanctioned entropy axioms under the Entropy namespace.
+-- Layer 2a: classical and quantum entropy declarations for matrix product density operators. The
+-- classical mutual-information rank bound is proved directly. SSA is sourced
+-- from `TNLean.Axioms.Entropy` and re-stated under the `Entropy` namespace.
+import TNLean.Entropy.ClassicalMutualInformation
 import TNLean.Entropy.VonNeumann
 import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.TripartiteTrace

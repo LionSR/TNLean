@@ -165,12 +165,47 @@ under consideration; positivity at all other lengths is unnecessary.  Hence a
 counterexample to the unrestricted estimate, if one exists, must be genuinely
 quantum rather than a classical hidden-state construction.
 
+\subsection{Local correction at the row-elimination endpoints}
+
+The displayed calculation in the proof of
+\cite[Theorem~4.1, Section~4.2]{Riazanov2017PSDRank} cancels the factor
+$1+\varepsilon\alpha_i$.  In the source's notation, $m_{ij}=P_{x,y}$ is a
+joint-probability entry, $p_i=\sum_jm_{ij}$ is its row marginal, and
+$\alpha_i=\beta_x$ is the row-perturbation coefficient.  The cancelled factor
+occurs between $m_{ij}(1+\varepsilon\alpha_i)$ and
+$p_i(1+\varepsilon\alpha_i)$.  The proof then chooses an endpoint of the
+admissible interval, precisely where this factor vanishes for at least one
+row.  At such a row the displayed quotient has the indeterminate form $0/0$,
+so the cancellation does not justify the endpoint identity as written.
+
+This is a local proof correction; the statement of the theorem is unchanged.
+Write mutual information as $H(X)+H(Y)-H(X,Y)$ and define $h(t)=-t\log t$
+for $t>0$, with $h(0)=0$.  Then
+\begin{align}
+  h(ab)=a\,h(b)+b\,h(a).
+\end{align}
+This identity is valid when either factor is zero.  The extra terms cancel
+against the row-marginal entropy because each row marginal is the sum of its
+entries, while the column marginal is fixed by the row relation.  Thus mutual
+information is affine on the whole closed admissible interval, including both
+endpoints.  This removes the endpoint singularity without strengthening the
+hypotheses or weakening the conclusion, so the discrepancy is classified as a
+local correction.
+\footnote{The corrected calculation is used in the proof of
+\leanid{Entropy.classicalMutualInformation_le_log_rank} in
+\doclink{TNLean/Entropy/ClassicalMutualInformation}.  Its zero-valid product
+identity is \leanid{Real.negMulLog_mul}.}
+
 The rank factorization is formalized.
 \footnote{Formal declarations:
 \leanid{MPOTensor.diagonalCutMatrix} and
 \leanid{MPOTensor.diagonalCutMatrix_rank_le} in
 \doclink{TNLean/MPS/MPDO/DiagonalCutRank}.}
-The information-versus-rank theorem of Riazanov--Vyalyi is not yet formalized.
+The information-versus-rank theorem of Riazanov--Vyalyi is formalized by
+\leanid{Entropy.classicalMutualInformation_le_log_rank} in
+\doclink{TNLean/Entropy/ClassicalMutualInformation}.  The remaining formal
+assembly of the diagonal-MPO estimate requires the scalar-normalization step
+and the comparison between real and complex matrix rank.
 
 \section{What the rank-three separation establishes}
 
