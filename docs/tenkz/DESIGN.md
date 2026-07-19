@@ -996,3 +996,20 @@ inside the resolver.
   cells' silhouette toward each edge plus daylight, so outlines hug
   bare beads and step out around legs and labels instead of carrying
   one worst-case margin.
+
+## 19. Named coefficient routing (recorded 2026-07-19)
+
+Several coefficient tensors may depend on the same direct-sum labels without
+turning those labels into one fused wire.  The free tier records this as an
+explicit typed graph: each coefficient glyph declares one port per incident
+index, each junction is a dot atom, and each labelled rail is a chain of
+`\tnjoin` edges.  Sharing a glyph therefore never collapses two names into one
+unlabelled strand.  This is the native spelling of the $j,q$ routing in
+`II_RFP.png` from arXiv:1606.00608.
+
+No routing command is added.  `\tnput` and `\tnjoin` already form the required
+grammatical class, and a dedicated command would only abbreviate one graph.
+The `boundary` skin of `\tnput` places an inkless typed endpoint, so open rails
+and their labels enter the event graph without acquiring a spurious tensor
+dot.  A regression should compare the complete join set and the degree of
+every coefficient, junction, and boundary node.

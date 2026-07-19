@@ -22,7 +22,8 @@
   { \end{tikzpicture} }
 
 % \tnput[<glyph keys>]{<name>}{<coordinate>}{<label>}
-%   glyph keys: dot|box|pill|mpo (skin), ports={e:virtual, ph:physical, ...},
+%   glyph keys: dot|box|pill|mpo|ring|boundary (skin),
+%   ports={e:virtual, ph:physical, ...},
 %   label pos=north|south|east|west (dot skin only)
 \tl_new:N \l__tenkz_fshape_tl    % \tnput skin word (free-owned: the tiers
                                  % share only L0/L1, never each other's locals)
@@ -38,6 +39,7 @@
   /tenkz/put/pill/.code={\tl_set:Nn \l__tenkz_fshape_tl {pill}},
   /tenkz/put/mpo/.code={\tl_set:Nn \l__tenkz_fshape_tl {mpo}},
   /tenkz/put/ring/.code={\tl_set:Nn \l__tenkz_fshape_tl {ring}},
+  /tenkz/put/boundary/.code={\tl_set:Nn \l__tenkz_fshape_tl {boundary}},
   /tenkz/put/ports/.store~in=\l__tenkz_fports_tl,
   % role= / species=: the semantic hue interface (see tenkz-core) —
   % the language's invariants cross the free-tier border.  Resolution
@@ -144,6 +146,13 @@
                    { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
         {ring} { \node[on-wire~matrix, \l__tenkz_frolesty_tl] (#2) at #3
                    { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
+        {boundary}
+          {
+            \coordinate (#2) at #3;
+            \tl_if_blank:nF {#4}
+              { \exp_args:NV \tenkz_free_dot_label:nnn
+                  \l__tenkz_flpos_tl {#2} {#4} }
+          }
       }
     % register declared port types:  ports={east:virtual, north:physical}
     % (str-normalized so the document's catcode-12 colon parses)
