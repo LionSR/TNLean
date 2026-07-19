@@ -1179,8 +1179,9 @@
     \leanok
     \uses{def:mpo_tensor}
     For a chain of length $N=L+R$, call $\rho^{(N)}(M)$ diagonal if
-    $\rho^{(N)}(M)_{u,v}=0$ whenever $u\ne v$.  For configurations $x$ and $y$
-    on the two consecutive blocks, define
+    $\rho^{(N)}(M)_{u,v}=0$ whenever $u\ne v$.  Call $M$ globally diagonal if
+    $\rho^{(N)}(M)$ is diagonal for every $N>0$.  For configurations $x$ and
+    $y$ on the two consecutive blocks, define
     \[
       W_{x,y}=\operatorname{Re}\rho^{(L+R)}(M)_{(x,y),(x,y)},\qquad
       Z=\sum_{x,y}W_{x,y},\qquad
@@ -1228,9 +1229,10 @@
     \lean{MPOTensor.diagonalMPDO_classicalMutualInformation_le_two_log}
     \leanok
     \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information}
-    Let $M$ generate diagonal positive semidefinite operators at every positive
-    chain length.  If $L+R>0$ and the trace at length $L+R$ is positive, then
-    the classical mutual information of its normalized diagonal coefficients satisfies
+    Let $D\geq1$, and let $M$ generate diagonal positive semidefinite operators
+    at every positive chain length.  If $L+R>0$ and the trace at length $L+R$
+    is positive, then the classical mutual information of its normalized
+    diagonal coefficients satisfies
     \[
       I(X:Y)\leq2\log D.
     \]
