@@ -159,8 +159,14 @@
     $Q$, and direct multiplication gives $Q(1-LQ)L\ne0$.
 \end{proof}
 
-% **Obstruction (dependence on Lemma C.5):** the source corollary includes the
-% unavailable rank-one trace factorization.  Documented in
+% **Refuted prerequisite (Lemma C.5):**
+% lem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
+% SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence its
+% use in the printed derivation of the source corollary fails, and that
+% corollary remains unformalized under the source hypotheses. A conditional
+% construction of rank-one and local-structure data under positive
+% semidefiniteness or linear independence is given by
+% thm:simple_mpdo_local_structure_data_of_sal_zcl. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{corollary}[Local sector structure from SAL and ZCL]
     \label{cor:mpdo_sal_zcl_local_sector_structure}
@@ -259,9 +265,14 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
-% **Obstruction (dependence on Lemma C.5):** the rank-one trace factorization
-% in this proposition is exactly the unavailable conclusion of
-% lem:mpdo_sal_zcl_rank_one_trace_matrix.  Documented in
+% **Refuted prerequisite (Lemma C.5):**
+% lem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
+% SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence its
+% use in the printed derivation of this proposition fails, and the proposition
+% remains unformalized under the source hypotheses. A conditional construction
+% of rank-one and local-structure data under positive semidefiniteness or linear
+% independence is given by
+% thm:simple_mpdo_local_structure_data_of_sal_zcl. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[SAL and ZCL give the BNT sector structure]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
