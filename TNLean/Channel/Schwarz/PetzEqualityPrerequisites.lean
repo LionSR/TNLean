@@ -157,7 +157,7 @@ theorem quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq
               (quantumRelativeEntropy_conj_unitary hρ.isHermitian hσ.isHermitian U).symm
 
 /-- **Partial-trace saturation saturates the finite Weyl Jensen inequality.**
-Let `ρ` and `σ` be positive semidefinite matrices with `ker σ ⊆ ker ρ`. If their
+Let ρ and σ be positive semidefinite matrices with ker σ ⊆ ker ρ. If their
 relative entropy is unchanged by the right partial trace, then the relative
 entropy of the finite Weyl average equals the uniform average of the relative
 entropies of the Weyl-conjugated pairs.
