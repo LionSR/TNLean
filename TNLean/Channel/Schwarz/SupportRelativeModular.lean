@@ -24,7 +24,10 @@ reference matrix is represented as the square of its support inverse square root
 
 * A. Jenčová and M. B. Ruskai, *A Unified Treatment of Convexity of Relative
   Entropy and Related Trace Functions, with Conditions for Equality*,
-  arXiv:0903.2895v4, §4.2, lines 717--720 and 766--793.
+  arXiv:0903.2895v4, §4.2, lines 766--793.
+
+The preceding singular equality-to-resolvent step at lines 717--720 is not
+formalized here; see `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
 -/
 
 open scoped Matrix ComplexOrder Kronecker MatrixOrder
@@ -70,41 +73,52 @@ theorem supportRelativeModular_sqrt_mulVec_vec_one
   rw [Matrix.kronecker_mulVec_vec]
   simp only [Matrix.transpose_one, Matrix.mul_one, Matrix.transpose_mul]
 
-/-- Equality of all positive shifted support relative-modular resolvents on the
-vectorized identity implies equality of the corresponding support square-root
-ratios.
+/-- Equality of all positive shifted relative-modular resolvents on the
+vectorized identity, after restriction to the support of the first reference
+matrix, implies equality of the square-root ratios on that support.
 
 This is the positive-square-root specialization of the singular-support
 functional-calculus step in Jenčová--Ruskai, arXiv:0903.2895v4, §4.2,
-lines 766--793. Their preceding equality argument is stated for supported pairs,
-but the functional-calculus implication here needs only positive semidefiniteness
-and the common resolvents. This theorem does not assert that equality for
-regularized pairs follows from equality of the original pair. -/
+lines 788--793. The restriction by the support projection is essential: the
+source asserts equality only on the complement of the kernel of the smaller
+reference matrix. This theorem does not supply that resolvent equality from
+equality in data processing; the missing preceding step is recorded in
+`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`. -/
 theorem supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq
     {n : Type*} [Fintype n] [DecidableEq n]
     {A B C D : Matrix n n ℂ}
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     (hC : C.PosSemidef) (hD : D.PosSemidef)
     (hres : ∀ {t : ℝ}, 0 < t →
-      (t • (1 : Matrix (n × n) (n × n) ℂ) +
-          A ⊗ₖ (hB.supportInvSqrt * hB.supportInvSqrt)ᵀ)⁻¹ *ᵥ
-          Matrix.vec (1 : Matrix n n ℂ)ᵀ =
-        (t • (1 : Matrix (n × n) (n × n) ℂ) +
-          C ⊗ₖ (hD.supportInvSqrt * hD.supportInvSqrt)ᵀ)⁻¹ *ᵥ
-          Matrix.vec (1 : Matrix n n ℂ)ᵀ) :
-    CFC.sqrt A * hB.supportInvSqrt =
-      CFC.sqrt C * hD.supportInvSqrt := by
+      ((1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ) *ᵥ
+          ((t • (1 : Matrix (n × n) (n × n) ℂ) +
+            A ⊗ₖ (hB.supportInvSqrt * hB.supportInvSqrt)ᵀ)⁻¹ *ᵥ
+            Matrix.vec (1 : Matrix n n ℂ)ᵀ) =
+        ((1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ) *ᵥ
+          ((t • (1 : Matrix (n × n) (n × n) ℂ) +
+            C ⊗ₖ (hD.supportInvSqrt * hD.supportInvSqrt)ᵀ)⁻¹ *ᵥ
+            Matrix.vec (1 : Matrix n n ℂ)ᵀ)) :
+    (CFC.sqrt A * hB.supportInvSqrt) * hB.isHermitian.supportProj =
+      (CFC.sqrt C * hD.supportInvSqrt) * hB.isHermitian.supportProj := by
   have hBInvSq : (hB.supportInvSqrt * hB.supportInvSqrt).PosSemidef := by
     simpa [hB.supportInvSqrt_isHermitian.eq] using
       posSemidef_conjTranspose_mul_self hB.supportInvSqrt
   have hDInvSq : (hD.supportInvSqrt * hD.supportInvSqrt).PosSemidef := by
     simpa [hD.supportInvSqrt_isHermitian.eq] using
       posSemidef_conjTranspose_mul_self hD.supportInvSqrt
-  have hsqrt := sqrt_mulVec_eq_of_resolvent_mulVec_eq
+  have hsqrt := mulVec_sqrt_mulVec_eq_of_mulVec_resolvent_mulVec_eq
     (hA.kronecker hBInvSq.transpose)
     (hC.kronecker hDInvSq.transpose) hres
   rw [supportRelativeModular_sqrt_mulVec_vec_one hA hB,
     supportRelativeModular_sqrt_mulVec_vec_one hC hD] at hsqrt
-  exact Matrix.transpose_injective (Matrix.vec_inj.mp hsqrt)
+  rw [Matrix.kronecker_mulVec_vec, Matrix.kronecker_mulVec_vec] at hsqrt
+  have hratioTranspose :
+      Matrix.vec ((CFC.sqrt A * hB.supportInvSqrt) *
+        hB.isHermitian.supportProj)ᵀ =
+        Matrix.vec ((CFC.sqrt C * hD.supportInvSqrt) *
+          hB.isHermitian.supportProj)ᵀ := by
+    simpa only [Matrix.transpose_mul, Matrix.transpose_one,
+      Matrix.mul_one, Matrix.mul_assoc] using hsqrt
+  exact Matrix.transpose_injective (Matrix.vec_inj.mp hratioTranspose)
 
 end Matrix

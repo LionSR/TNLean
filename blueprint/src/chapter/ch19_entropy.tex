@@ -2779,6 +2779,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{lemma}[Positive square root from common resolvents]
     \label{lem:positive_sqrt_from_common_resolvents}
     \lean{Matrix.sqrt_mulVec_eq_of_resolvent_mulVec_eq}
+    \lean{Matrix.mulVec_sqrt_mulVec_eq_of_mulVec_resolvent_mulVec_eq}
     \lean{Matrix.sourceB_resolvent_eq_relativeModular}
     \lean{Matrix.relativeModular_sqrt_mulVec_vec_one}
     \leanok
@@ -2788,6 +2789,11 @@ Theorem~\ref{thm:trace_norm_abs}.
         (t\mathbf 1+S)^{-1}x=(t\mathbf 1+T)^{-1}x,
     \]
     then $\sqrt S\,x=\sqrt T\,x$.
+    More generally, for any fixed matrix $Q$, if
+    \[
+        Q(t\mathbf 1+S)^{-1}x=Q(t\mathbf 1+T)^{-1}x
+    \]
+    for every $t>0$, then $Q\sqrt S\,x=Q\sqrt T\,x$.
 
     In particular, for positive definite $A,B$ and every $t>0$, put
     $\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$.  The source-$B$ left--right
@@ -2820,7 +2826,9 @@ Theorem~\ref{thm:trace_norm_abs}.
       f_t(S)x=t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x.
     \]
     The hypothesis therefore gives $f_t(S)x=f_t(T)x$ for every $t>0$.
-    Integration gives equality of the positive square roots on $x$.
+    Applying a fixed matrix $Q$, when present, commutes with this finite-
+    dimensional integral.  Integration gives the asserted equality of the
+    positive square roots on $x$.
 
     For the second assertion, factor
     \[
@@ -2840,41 +2848,47 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
     \lean{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq}
     \leanok
-    \uses{def:support_inverse_square_root,
-        lem:positive_sqrt_from_common_resolvents}
+    \uses{def:support_inverse_square_root}
     Let $A,B,C,D$ be positive semidefinite matrices.  Write
     $B^+=(B^{-1/2}_{\mathrm{supp}})^2$ and
-    $D^+=(D^{-1/2}_{\mathrm{supp}})^2$.  If, for every $t>0$,
+    $D^+=(D^{-1/2}_{\mathrm{supp}})^2$, and let $P_B$ be the orthogonal
+    projection onto $(\ker B)^\perp$.  If, for every $t>0$,
     \[
-      \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
-        \operatorname{vec}(\mathbf 1^{\mathsf T})
+      \left[
+        \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+          (\mathbf 1)
+      \right]P_B
       =
-      \left(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\right)^{-1}
-        \operatorname{vec}(\mathbf 1^{\mathsf T}),
+      \left[
+        \left(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\right)^{-1}
+          (\mathbf 1)
+      \right]P_B,
     \]
-    then
+    where the inverses act as relative-modular superoperators on matrices, then
     \[
-      \sqrt A\,B^{-1/2}_{\mathrm{supp}}
-        =\sqrt C\,D^{-1/2}_{\mathrm{supp}}.
+      \left(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\right)P_B
+        =\left(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\right)P_B.
     \]
     This is the square-root specialization of the support functional-calculus
-    passage in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 766--793.  No
-    kernel hypothesis is needed for this final implication once the common
-    generalized resolvents are given.  In the source application, the preceding
-    equality-to-resolvent argument is stated for pairs satisfying
-    $\ker B\subseteq\ker A$; this lemma does not formalize that preceding step.
+    passage in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 788--793.  The
+    projection $P_B$ is essential: the source gives the common generalized
+    resolvents only after restriction to $(\ker B)^\perp$.  The preceding
+    equality-to-resolvent argument, including its kernel hypotheses, is not
+    formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:positive_sqrt_from_common_resolvents,
+        lem:support_inverse_square_root_positive_semidefinite}
     The support inverse square roots are positive semidefinite.  Hence
     \[
       \sqrt{A\otimes(B^+)^{\mathsf T}}
         =\sqrt A\otimes(B^{-1/2}_{\mathrm{supp}})^{\mathsf T},
     \]
-    with the analogous identity for $C,D$.  Applying these square roots to the
-    vectorized identity gives the two support square-root ratios.  The preceding
-    common-resolvent lemma identifies the two square-root vectors, and injectivity
-    of vectorization gives the displayed matrix equality.
+    with the analogous identity for $C,D$.  Right multiplication by $P_B$ is a
+    fixed linear map on the vectorized matrix space.  Apply the projected
+    common-resolvent lemma, evaluate both relative-modular square roots on the
+    vectorized identity, and use injectivity of vectorization.
 \end{proof}
 
 \begin{theorem}[Positive-definite saturation gives the identity Weyl sandwich]
