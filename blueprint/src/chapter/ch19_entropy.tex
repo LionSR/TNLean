@@ -1417,6 +1417,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_sandwich}
     The support inverse square root commutes with $\tau$ by spectral functional
     calculus.  The claim therefore follows from
     Lemma~\ref{lem:support_inverse_square_root_sandwich}.
@@ -2897,7 +2898,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \label{lem:support_relative_modular_source_solution}
     \lean{Matrix.supportRelativeModular_sourceB_solution}
     \leanok
-    \uses{lem:support_inverse_square_root_generalized_inverse}
+    \uses{def:support_inverse_square_root}
     Let $A,B$ be positive semidefinite, let $t>0$, set
     $B^+=(B^{-1/2}_{\mathrm{supp}})^2$, and let $P_B$ be the support
     projection of $B$.  Then
@@ -2911,6 +2912,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_generalized_inverse}
     Put $C=\mathbf 1\otimes B^{\mathsf T}$.  The support generalized-inverse
     identity gives
     \[
