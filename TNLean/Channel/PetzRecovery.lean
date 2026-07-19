@@ -21,6 +21,8 @@ reference matrix.
 ## Main declarations
 
 * `Matrix.PosSemidef.supportInvSqrt`: the inverse square root on the support.
+* `Matrix.PosDef.supportInvSqrt_eq_inv_sqrt`: the support inverse square root
+  of a positive-definite matrix is its ordinary inverse square root.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: scaling by a positive real scalar.
 * `Matrix.PosSemidef.supportInvSqrt_kronecker_one`: compatibility with the
   unital left tensor embedding.

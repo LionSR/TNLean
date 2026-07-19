@@ -2775,9 +2775,16 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
     then $\sqrt S\,x=\sqrt T\,x$.
 
-    In particular, for positive definite $A,B$, the source-$B$ left--right
-    resolvent factors through the relative modular matrix
-    $\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$, and
+    In particular, for positive definite $A,B$ and every $t>0$, put
+    $\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$.  The source-$B$ left--right
+    resolvent satisfies
+    \[
+      \left(A\otimes\mathbf 1+t\,\mathbf 1\otimes B^{\mathsf T}\right)^{-1}
+        \operatorname{vec}(B^{\mathsf T})
+      =\left(t\mathbf 1+\Delta_{A,B}\right)^{-1}
+        \operatorname{vec}(\mathbf 1^{\mathsf T}),
+    \]
+    and
     \[
       \sqrt{\Delta_{A,B}}\,\operatorname{vec}(\mathbf 1^{\mathsf T})
         =\operatorname{vec}\!\left(
@@ -2841,7 +2848,10 @@ Theorem~\ref{thm:trace_norm_abs}.
       \sqrt\sigma\,\overline\sigma^{-1/2}\,
       \overline\rho\,\overline\sigma^{-1/2}\,\sqrt\sigma=\rho.
     \]
-    Hence the raw partial-trace Petz map recovers $\rho$ from $\tr_C\rho$.
+    Hence the raw partial-trace Petz map satisfies
+    \[
+      \mathcal R_\sigma(\tr_C\rho)=\rho.
+    \]
     This is the positive-definite case only; no singular-support conclusion is
     asserted.
 \end{theorem}
@@ -2852,9 +2862,16 @@ Theorem~\ref{thm:trace_norm_abs}.
         thm:weyl_identity_sandwich_petz_recovery}
     Apply the common-resolvent theorem to the identity Weyl summand and the
     Weyl average.  The preceding lemma converts the result to equality of the
-    two square-root ratios; the uniform scalar in the identity summand cancels,
-    and the Weyl twirl identifies the average with the displayed maximally
-    mixed extensions.
+    two square-root ratios.  For $c=d_C^{-2}$, the uniform scalar in the
+    identity summand cancels through
+    \[
+      \sqrt{c\rho}\,(\sqrt{c\sigma})^{-1}
+      =(\sqrt c\,\sqrt\rho)
+        \bigl((\sqrt c)^{-1}(\sqrt\sigma)^{-1}\bigr)
+      =\sqrt\rho\,(\sqrt\sigma)^{-1}.
+    \]
+    The Weyl twirl identifies the average with the displayed maximally mixed
+    extensions.
 
     Taking the adjoint product of the ratio equality yields
     \[

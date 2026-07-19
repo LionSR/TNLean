@@ -24,6 +24,10 @@ data-processing argument.
   every `t > 0`.
 * `Matrix.weyl_resolvent_eq_of_relativeEntropy_gap_eq_zero` combines this with
   the fixed-resolvent result to obtain the common source-`B` solution.
+* `Matrix.weightedWeylAverage_eq_partialTraceRight_kronecker` identifies the
+  Weyl average with the maximally mixed extension of the right partial trace.
+* `Matrix.weyl_sqrt_ratio_eq_of_partialTraceRight_eq` converts common
+  resolvents into equality of the positive square-root ratios.
 * `Matrix.weyl_identity_sandwich_of_partialTraceRight_eq` passes from the
   common resolvent through the relative modular square root to the
   positive-definite identity-Weyl sandwich.
@@ -763,7 +767,7 @@ theorem weyl_sqrt_ratio_eq_of_partialTraceRight_eq
 sandwich in the positive-definite case.
 
 The square-root ratio equality is converted to the sandwich by taking its
-Gram matrix and cancelling the invertible square root of `σ`. This is the
+Gram matrix and cancelling the invertible square root of σ. This is the
 positive-definite recovery step corresponding to Jenčová--Ruskai,
 arXiv:0903.2895v4, lines 658–680, and Hayden--Jozsa--Petz--Winter,
 arXiv:quant-ph/0304007v2, Theorem 3, equation (8).
@@ -866,7 +870,7 @@ theorem weyl_identity_sandwich_of_partialTraceRight_eq
   exact hsandwich
 
 /-- Positive-definite equality in right-partial-trace data processing implies
-recovery by the native raw Petz map.
+recovery by the raw partial-trace Petz map.
 
 This is the positive-definite specialization of Hayden--Jozsa--Petz--Winter,
 arXiv:quant-ph/0304007v2, Theorem 3, equation (8). -/

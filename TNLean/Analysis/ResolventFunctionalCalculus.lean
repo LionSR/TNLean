@@ -13,11 +13,15 @@ import Mathlib.LinearAlgebra.Matrix.Vec
 This file records the finite-dimensional passage from equality of resolvents on
 a fixed vector to equality of the positive square roots on that vector.
 
-## Main result
+## Main results
 
 * `Matrix.sqrt_mulVec_eq_of_resolvent_mulVec_eq` shows that if two positive
   semidefinite matrices have the same shifted inverse on a vector for every
   positive shift, then their positive square roots agree on that vector.
+* `Matrix.sourceB_resolvent_eq_relativeModular` factors the source-`B`
+  left--right resolvent through the relative modular Kronecker matrix.
+* `Matrix.relativeModular_sqrt_mulVec_vec_one` evaluates its positive square
+  root on the vectorized identity.
 
 ## References
 
