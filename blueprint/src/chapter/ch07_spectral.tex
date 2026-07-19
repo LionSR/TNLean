@@ -2583,7 +2583,9 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \[
       \widehat T(X)=X
       \ \Longrightarrow\
-      T(\pi(X))=\pi(\widehat T(X))=\pi(X)
+      T(\pi(X))=\pi(\widehat T(X))=\pi(X),
+      \qquad
+      X=\widehat T(X)=\iota(T(\pi(X)))=\iota(\pi(X))
     \]
     and
     \[
@@ -2688,6 +2690,8 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     $\operatorname{tr}_{m_k}(\sigma_k\otimes X)=X$.
 \end{proof}
 
+% Scope restriction documented in
+% docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
 \begin{theorem}[Density-block form of fixed points on a finite direct sum]%
     \label{thm:direct_sum_fixed_points_density_block_form}
     \lean{Matrix.IsPositiveDirectSumMap.exists_block_densities_of_fixedPoints}
@@ -2714,7 +2718,9 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     block-diagonal embedding.  This is the finite-direct-sum fixed-point step
     used in \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}; it
     does not assert the channel hypotheses for the particular sector maps in
-    that argument.
+    that argument.  This is the full-support restriction: the support
+    reduction and complementary zero summand of the general theorem remain
+    open.
 \end{theorem}
 
 \begin{proof}

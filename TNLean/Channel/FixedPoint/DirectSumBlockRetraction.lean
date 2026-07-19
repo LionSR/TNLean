@@ -202,7 +202,12 @@ fixed points have the density-block form obtained from Wolf's Theorem 6.14.
 
 This is the finite-index classification step used in arXiv:1606.00608,
 Appendix C.4, lines 1980--1995. The hypotheses for the particular sector map
-in that argument are not asserted here. -/
+in that argument are not asserted here.
+
+**Scope restriction (full support):** The fixed family is positive definite on
+every summand. The support reduction and complementary zero summand of the
+general theorem remain open in
+`docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`. -/
 theorem IsPositiveDirectSumMap.exists_block_densities_of_fixedPoints
     {T : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
       (∀ k, Matrix (n k) (n k) ℂ)}
