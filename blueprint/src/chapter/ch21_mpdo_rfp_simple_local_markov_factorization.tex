@@ -1422,13 +1422,39 @@ This is the single-block identity in
     hypothesis is used in this comparison.
 \end{theorem}
 
-The same comparison may be read directly as the following compact identity:
-\begin{center}
-    \TNMPDOHayashiSectorComparison
-\end{center}
-Here the closing entry $R_{\beta_3,\alpha_1}$ multiplies the physical slice
-in the basis adapted to sector $k$; compare
-\cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.
+For fixed $k,\alpha_1,\beta_3$, the identity reads coefficientwise as follows.
+% Formula:
+% R_{\beta_3,\alpha_1}
+% \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}((l,r),(l',r'))
+% = p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+% B^{(k)}_{\alpha_3,\beta_3}(r,r').
+% The displayed tensor has free indices beta_1 west, alpha_3 east, (l,r)
+% north, and (l',r') south.  None is contracted, so its boundary signature is
+% (1,1,1,1).  Its square is the coefficient tensor
+% \widetilde\kappa^{(k)}; the four incident strokes carry precisely those four
+% free indices.  The fixed k, alpha_1, and beta_3 select the sector and scalar
+% coefficients.  R, A, and B remain scalar factors under ordinary
+% multiplication; they are not tensor nodes.
+% Source comparison: Papers/1606.00608/MPDO_kappaab.png, from lines 1415--1438
+% of MPDO-22-12-17-2.tex, fixes the one-tensor four-leg topology.  The
+% normalized formula is Theorem thm:mpdo_inverse_map_hayashi_sector_comparison.
+\[
+R_{\beta_3,\alpha_1}\,
+\tnpic[
+    physical=updown,
+    west label=$\beta_1$,
+    east label=$\alpha_3$
+]{
+    \tn[
+        mpo,
+        up={$(l,r)$},
+        down={$(l',r')$}
+    ]{\widetilde\kappa^{(k)}}
+}
+=
+p_k\,A^{(k)}_{\alpha_1,\beta_1}(l,l')\,
+B^{(k)}_{\alpha_3,\beta_3}(r,r').
+\]
 
 \begin{proof}
     \leanok
