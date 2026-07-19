@@ -359,6 +359,7 @@ arXiv:0903.2895v4, lines 658--680.  The formal proof uses the equivalent
 L\"owner integral representation of the power $p=1/2$.
 \footnote{Formal declarations:
 \leanid{Matrix.sqrt_mulVec_eq_of_resolvent_mulVec_eq},
+\leanid{Matrix.mulVec_sqrt_mulVec_eq_of_mulVec_resolvent_mulVec_eq},
 \leanid{Matrix.sourceB_resolvent_eq_relativeModular}, and
 \leanid{Matrix.relativeModular_sqrt_mulVec_vec_one} in
 \path{TNLean/Analysis/ResolventFunctionalCalculus.lean}; and
@@ -369,6 +370,63 @@ L\"owner integral representation of the power $p=1/2$.
 Thus equality under the partial trace implies raw Petz recovery for positive
 definite inputs.  The remaining analytic work is the extension of this passage
 to singular supports.
+
+One part of that extension is now available.  Jen\v{c}ov\'a--Ruskai extend the
+definition and convexity argument directly to positive semidefinite pairs with
+$\ker B\subseteq\ker A$; see arXiv:0903.2895v4, lines 717--720.  Their singular
+equality argument then obtains the common relative-modular resolvent on the
+reference support and passes through functional calculus; see lines 766--793.
+Following the latter step, consider two positive semidefinite pairs $(A,B)$ and
+$(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
+$B$, and write
+$B^+=(B^{-1/2}_{\mathrm{supp}})^2$ and
+$D^+=(D^{-1/2}_{\mathrm{supp}})^2$.  Suppose that, for every $t>0$, their
+shifted generalized relative-modular resolvents satisfy
+\begin{align}
+  &(\mathbf 1\otimes P_B^{\mathsf T})
+    \bigl(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\bigr)^{-1}
+    \operatorname{vec}(\mathbf 1^{\mathsf T}) \notag\\
+  &\qquad=(\mathbf 1\otimes P_B^{\mathsf T})
+    \bigl(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\bigr)^{-1}
+    \operatorname{vec}(\mathbf 1^{\mathsf T}).
+\end{align}
+Then their square-root ratios agree on the same support:
+\begin{align}
+  \bigl(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\bigr)P_B
+    =\bigl(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\bigr)P_B.
+\end{align}
+The orientation of the vectorized restriction is fixed by
+\begin{align}
+  (\mathbf 1\otimes P_B^{\mathsf T})
+    \operatorname{vec}(M^{\mathsf T})
+    =\operatorname{vec}\bigl((MP_B)^{\mathsf T}\bigr).
+\end{align}
+Here the generalized inverse is the square of the support inverse square root.
+\footnote{Formal declarations:
+\leanid{Matrix.one_kronecker_transpose_mulVec_vec_transpose},
+\leanid{Matrix.supportRelativeModular_sqrt_mulVec_vec_one} and
+\leanid{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq} in
+\path{TNLean/Channel/Schwarz/SupportRelativeModular.lean}.}
+The restriction is essential.  Equality on the ambient vectorized identity
+would force equality of the two reference support projections, since each
+resolvent contributes $t^{-1}$ on the complement of its reference support.
+This is false in the intended data-processing application: if
+$\rho=\sigma$ is a rank-one maximally entangled state, equality under partial
+trace is automatic, whereas the comparison pair formed from its marginal is
+full rank.  Thus the ambient resolvent equality is not a consequence of the
+singular equality theorem.
+
+The kernel inclusion belongs to the preceding source theorem that must derive
+the support-restricted common resolvents from equality in data processing.  That
+theorem is not yet formalized, and therefore neither is the singular Petz
+recovery identity.
+
+In particular, the affine regularizations used to prove the inequality cannot
+by themselves prove its equality case.  Equality at the limiting pair implies
+only that the nonnegative regularized gaps tend to zero; it does not imply that
+any gap at positive regularization parameter is zero.  Thus the
+positive-definite equality theorem cannot be applied pointwise to those
+regularized pairs without an additional equality-preservation theorem.
 
 There is nevertheless a useful algebraic reduction for the identity summand.
 Write

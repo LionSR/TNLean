@@ -23,6 +23,8 @@ reference matrix.
 * `Matrix.PosSemidef.supportInvSqrt`: the inverse square root on the support.
 * `Matrix.PosDef.supportInvSqrt_eq_inv_sqrt`: the support inverse square root
   of a positive-definite matrix is its ordinary inverse square root.
+* `Matrix.PosSemidef.supportInvSqrt_posSemidef`: the support inverse square
+  root is positive semidefinite.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: scaling by a positive real scalar.
 * `Matrix.PosSemidef.supportInvSqrt_kronecker_one`: compatibility with the
   unital left tensor embedding.
@@ -77,6 +79,22 @@ theorem PosSemidef.supportInvSqrt_isHermitian {ρ : Matrix n n ℂ}
   rw [PosSemidef.supportInvSqrt, ← hρ.isHermitian.cfc_eq]
   exact Matrix.isHermitian_iff_isSelfAdjoint.mpr
     (cfc_predicate (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ)
+
+/-- The support inverse square root is positive semidefinite.
+
+This is the positivity of the generalized inverse square root used in
+Jenčová--Ruskai, arXiv:0903.2895v4, lines 255--261. -/
+theorem PosSemidef.supportInvSqrt_posSemidef {ρ : Matrix n n ℂ}
+    (hρ : ρ.PosSemidef) : hρ.supportInvSqrt.PosSemidef := by
+  unfold PosSemidef.supportInvSqrt
+  have hnonneg : 0 ≤ cfc (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ := by
+    apply cfc_nonneg
+    intro x _
+    split_ifs
+    · positivity
+    · exact le_rfl
+  rw [hρ.isHermitian.cfc_eq] at hnonneg
+  exact Matrix.nonneg_iff_posSemidef.mp hnonneg
 
 /-- On a positive-definite matrix, the support inverse square root is the
 ordinary inverse of the positive square root.
