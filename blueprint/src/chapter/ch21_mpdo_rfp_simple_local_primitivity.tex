@@ -716,21 +716,20 @@
     again contradicting the strict positivity of some power of $T$.
 \end{proof}
 
-\begin{lemma}[Rank of a strictly positive idempotent]
+\begin{theorem}[Rank of a strictly positive idempotent]
     \label{thm:matrix_positive_idempotent_rank_one}
     \lean{Matrix.rank_eq_one_of_pos_of_mul_self_eq_self}
     \leanok
     Let $I$ be a nonempty finite index set, and let $P$ be a real matrix
-    indexed by $I\times I$. If
+    indexed by $I\times I$. Suppose that $P^2=P$ and, for every $i,j\in I$,
     \[
-        P_{i,j}>0 \quad\text{for all }i,j\in I,
-        \qquad P^2=P,
+        P_{i,j}>0.
     \]
     then
     \[
         \operatorname{rank}(P)=1.
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
