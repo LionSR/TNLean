@@ -27,6 +27,8 @@ SOURCE = r"""
 \usepackage{tenkz}
 \pagestyle{empty}
 \newcommand{\lowerlabelprobe}{\typeout{TENKZ-LOWER-MATCH-LABEL}j}
+\newcount\tenkzmatchedlabelseen
+\newcount\tenkzsurpluslabelseen
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -245,6 +247,22 @@ SOURCE = r"""
   \tn[wires=2, west at=center, east at=center]{A}\\
   &
 \end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,2)}, tensor style=box]
+  \tn[pill, wide=2, down at={1,2}]{U} & \\
+  \tn[pill, wide=2, up at={1}]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
+  \tn[pill, wide=2, down at={1}]{U} & \\
+  \tn[pill, wide=2, up at={1,2},
+      up={\global\advance\tenkzmatchedlabelseen by 1\relax,
+          \global\advance\tenkzsurpluslabelseen by 1\relax}]{L} &
+\end{tenkz}
+\ifnum\tenkzmatchedlabelseen=1\else
+  \errmessage{matched opened lower label was not rendered exactly once}
+\fi
+\ifnum\tenkzsurpluslabelseen=1\else
+  \errmessage{surplus lower label was not rendered exactly once}
+\fi
 \end{document}
 """
 
@@ -710,6 +728,16 @@ def main() -> int:
             f"pairtrace|picture={picture_id}|row=1|col=1|site=1-1",
             "pair trace contracted a suppressed physical face",
         )
+    require(
+        pictures[44],
+        "boundary|picture=44|virtual-west=2|virtual-east=2|physical-up=1|physical-down=0",
+        "lower port facing a suppressed upper face did not remain open",
+    )
+    require(
+        pictures[45],
+        "boundary|picture=45|virtual-west=2|virtual-east=2|physical-up=0|physical-down=1",
+        "upper port facing a suppressed lower face did not remain open",
+    )
     partial_wide_open = pictures[46]
     if paired_ports(partial_wide_open) != [("2", "2")]:
         raise AssertionError("wide open= affected a physical slot in another column")
@@ -852,6 +880,19 @@ def main() -> int:
         centered_hooks,
         "hooks|picture=55|row=2|side=below",
         "centered periodic hooks closed once per spanned row",
+    )
+    opened_unmatched_wide = pictures[56]
+    if paired_ports(opened_unmatched_wide) != [("1", "1")]:
+        raise AssertionError("opened unmatched wide slot changed another contraction")
+    require(
+        opened_unmatched_wide,
+        "boundary|picture=56|virtual-west=2|virtual-east=2|physical-up=1|physical-down=1",
+        "opened unmatched wide slot was counted more than once",
+    )
+    require(
+        pictures[57],
+        "boundary|picture=57|virtual-west=2|virtual-east=2|physical-up=3|physical-down=1",
+        "matched and surplus opened lower slots were not both counted",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0

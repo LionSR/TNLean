@@ -2390,6 +2390,29 @@
       }
   }
 
+\tl_new:N \l__tenkz_nolegsbase_tl
+
+% Whether the tensor owning (row, column) suppresses its physical faces.
+% Owner resolution makes this valid on continuation columns of a wide glyph.
+\cs_new_protected:Npn \tenkz_cell_no_legs:nnN #1#2#3
+  {
+    \bool_set_false:N #3
+    \prop_get:NeNF \l__tenkz_owner_prop
+      {\int_eval:n{#1}-\int_eval:n{#2}} \l__tenkz_nolegsbase_tl
+      { \tl_set:Ne \l__tenkz_nolegsbase_tl {\int_eval:n{#2}} }
+    \tenkz_get:NeN \l__tenkz_kind_prop
+      {\int_eval:n{#1}-\l__tenkz_nolegsbase_tl} \l__tenkz_pkind_tl
+    \bool_lazy_or:nnT
+      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
+      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+      {
+        \tenkz_get:NeN \l__tenkz_opts_prop
+          {\int_eval:n{#1}-\l__tenkz_nolegsbase_tl} \l_tmpb_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+        \bool_if:NT \l__tenkz_cnolegs_bool { \bool_set_true:N #3 }
+      }
+  }
+
 % Does the upper row present a down-face port to slot #3 of the lower
 % glyph based at column #2?  Owner resolution is essential when either
 % glyph spans several columns.
@@ -2519,9 +2542,20 @@
         \prop_get:NeNT \l__tenkz_name_prop
           { \int_eval:n{#1+1} - \l__tenkz_pwbase_tl } \l__tenkz_pb_tl
           {
-            \tenkz_leg_candidate:nnT
-              { \int_eval:n{#1+1} }{ \l__tenkz_pwbase_tl }
+            \tenkz_cell_no_legs:nnN {\int_eval:n{#1+1}}
+              {\l__tenkz_pwbase_tl} \l_tmpa_bool
+            \bool_if:NTF \l_tmpa_bool
               {
+                % The lower face is absent, so this upper slot remains open.
+                \tenkz_pair_wide_leg:nn {#2}{#3}
+                \prop_if_in:NeF \l__tenkz_opencell_prop
+                  {#1-\int_eval:n{#2+#3-1}}
+                  { \int_incr:N \l__tenkz_internalpd_int }
+              }
+              {
+                \tenkz_leg_candidate:nnT
+                  { \int_eval:n{#1+1} }{ \l__tenkz_pwbase_tl }
+                  {
                 % The lower glyph must present this exact local slot.
                 % A non-centred lower face is not automatically dense.
                 \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
@@ -2584,8 +2618,10 @@
                     \tenkz_pair_wide_leg:nn {#2}{#3}
                     \bool_lazy_and:nnT
                       { ! \tenkz_traced_p:nn {#1}{#2} }
-                      { ! \prop_if_in_p:Ne \l__tenkz_opencell_prop {#1-#2} }
+                      { ! \prop_if_in_p:Ne \l__tenkz_opencell_prop
+                          {#1-\int_eval:n{#2+#3-1}} }
                       { \int_incr:N \l__tenkz_internalpd_int }
+                  }
                   }
               }
           }
@@ -2651,18 +2687,29 @@
         \prop_get:NeNT \l__tenkz_name_prop
           { \int_eval:n{#1+1} - \l__tenkz_pwbase_tl } \l__tenkz_pb_tl
           {
-            \tenkz_leg_candidate:nnT
-              { \int_eval:n{#1+1} }{ \l__tenkz_pwbase_tl }
+            \tenkz_cell_no_legs:nnN {\int_eval:n{#1+1}}
+              {\l__tenkz_pwbase_tl} \l_tmpa_bool
+            \bool_if:NTF \l_tmpa_bool
               {
-                % a traced segment's wrap loop is drawn by the
-                % pair-trace pass; an OPENED segment (open={(i,c)}, the
-                % per-segment nopair) keeps both faces' stubs instead
-                % of a wire
-                \bool_if:nF { \tenkz_traced_p:nn {#1}{#2} }
+                % The lower face is absent, so the upper index stays open.
+                \tenkz_leg_open:nnn {#1}{#2}{down}
+                \prop_if_in:NeF \l__tenkz_opencell_prop {#1-#2}
+                  { \int_incr:N \l__tenkz_internalpd_int }
+              }
+              {
+                \tenkz_leg_candidate:nnT
+                  { \int_eval:n{#1+1} }{ \l__tenkz_pwbase_tl }
                   {
-                    \prop_if_in:NeTF \l__tenkz_opencell_prop {#1-#2}
-                      { \tenkz_pair_below_open:nn {#1}{#2} }
-                      { \tenkz_pair_below_wire:nn {#1}{#2} }
+                    % a traced segment's wrap loop is drawn by the
+                    % pair-trace pass; an OPENED segment (open={(i,c)}, the
+                    % per-segment nopair) keeps both faces' stubs instead
+                    % of a wire
+                    \bool_if:nF { \tenkz_traced_p:nn {#1}{#2} }
+                      {
+                        \prop_if_in:NeTF \l__tenkz_opencell_prop {#1-#2}
+                          { \tenkz_pair_below_open:nn {#1}{#2} }
+                          { \tenkz_pair_below_wire:nn {#1}{#2} }
+                      }
                   }
               }
           }
@@ -4287,30 +4334,34 @@
 % slot.  This is the signature counterpart of the pairing pass.
 \cs_new_protected:Npn \tenkz_count_open_lower:nn #1#2
   {
-    \prop_get:NeNF \l__tenkz_owner_prop
-      {\int_eval:n{#1+1}-#2} \l__tenkz_pwbase_tl
-      { \tl_set:Nn \l__tenkz_pwbase_tl {#2} }
-    \tenkz_get:NeN \l__tenkz_kind_prop
-      {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l__tenkz_pkind_tl
-    \bool_lazy_or:nnT
-      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
-      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+    \tenkz_cell_no_legs:nnN {#1}{#2} \l_tmpa_bool
+    \bool_if:NF \l_tmpa_bool
       {
-        \tenkz_get:NeN \l__tenkz_opts_prop
-          {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l_tmpb_tl
-        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-        \bool_if:NF \l__tenkz_cnolegs_bool
+        \prop_get:NeNF \l__tenkz_owner_prop
+          {\int_eval:n{#1+1}-#2} \l__tenkz_pwbase_tl
+          { \tl_set:Nn \l__tenkz_pwbase_tl {#2} }
+        \tenkz_get:NeN \l__tenkz_kind_prop
+          {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l__tenkz_pkind_tl
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
+          { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
           {
-            \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
-            \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
-              { \prop_if_in:NeF \l__tenkz_sigopenlower_prop
-                  {#1-\tl_use:N\l__tenkz_pwbase_tl}
-                  { \prop_put:Nen \l__tenkz_sigopenlower_prop
-                      {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
-                    \int_incr:N \l__tenkz_bpu_int } }
-              { \clist_if_in:NeT \l__tenkz_faceports_tl
-                  {\int_eval:n{#2-\l__tenkz_pwbase_tl+1}}
-                  { \int_incr:N \l__tenkz_bpu_int } }
+            \tenkz_get:NeN \l__tenkz_opts_prop
+              {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l_tmpb_tl
+            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+            \bool_if:NF \l__tenkz_cnolegs_bool
+              {
+                \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
+                \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
+                  { \prop_if_in:NeF \l__tenkz_sigopenlower_prop
+                      {#1-\tl_use:N\l__tenkz_pwbase_tl}
+                      { \prop_put:Nen \l__tenkz_sigopenlower_prop
+                          {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
+                        \int_incr:N \l__tenkz_bpu_int } }
+                  { \clist_if_in:NeT \l__tenkz_faceports_tl
+                      {\int_eval:n{#2-\l__tenkz_pwbase_tl+1}}
+                      { \int_incr:N \l__tenkz_bpu_int } }
+              }
           }
       }
   }
