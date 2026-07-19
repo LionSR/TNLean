@@ -2826,11 +2826,11 @@ Theorem~\ref{thm:trace_norm_abs}.
       f_t(S)x=t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x.
     \]
     The hypothesis therefore gives $f_t(S)x=f_t(T)x$ for every $t>0$.
-    Since left multiplication by $Q$ is a bounded linear map on
-    $\mathbb{M}_n(\mathbb{C})$,
+    Since $M\mapsto Q(Mx)$ is a bounded linear map from
+    $\mathbb{M}_n(\mathbb{C})$ to $\mathbb{C}^n$,
     \[
-      Q\int_0^\infty f_t(S)\,d\mu(t)
-        =\int_0^\infty Qf_t(S)\,d\mu(t),
+      Q\left(\left(\int_0^\infty f_t(S)\,d\mu(t)\right)x\right)
+        =\int_0^\infty Q\bigl(f_t(S)x\bigr)\,d\mu(t),
     \]
     and similarly for $T$.  Integration therefore gives
     $Q\sqrt S\,x=Q\sqrt T\,x$.
