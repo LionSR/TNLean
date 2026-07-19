@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.RelativeEntropyResolventIntegral
+import TNLean.Analysis.ResolventFunctionalCalculus
 import TNLean.Channel.Schwarz.PetzEqualityPrerequisites
 import Mathlib.MeasureTheory.Measure.OpenPos
 
@@ -23,12 +24,21 @@ data-processing argument.
   every `t > 0`.
 * `Matrix.weyl_resolvent_eq_of_relativeEntropy_gap_eq_zero` combines this with
   the fixed-resolvent result to obtain the common source-`B` solution.
+* `Matrix.weightedWeylAverage_eq_partialTraceRight_kronecker` identifies the
+  Weyl average with the maximally mixed extension of the right partial trace.
+* `Matrix.weyl_sqrt_ratio_eq_of_partialTraceRight_eq` converts common
+  resolvents into equality of the positive square-root ratios.
+* `Matrix.weyl_identity_sandwich_of_partialTraceRight_eq` passes from the
+  common resolvent through the relative modular square root to the
+  positive-definite identity-Weyl sandwich.
+* `Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef` concludes
+  positive-definite recovery by the raw partial-trace Petz map.
 
 ## References
 
 * A. Jenčová and M. B. Ruskai, *A Unified Treatment of Convexity of Relative
   Entropy and Related Trace Functions, with Conditions for Equality*,
-  arXiv:0903.2895v4, §4 and Appendix.
+  arXiv:0903.2895v4, §4 and Appendix, especially lines 658–680.
 -/
 
 open Filter MeasureTheory Set Topology
@@ -124,6 +134,35 @@ private lemma trace_sum_re_eq
       Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) :
     ∑ g, (Matrix.trace (B g)).re = (Matrix.trace (∑ g, B g)).re := by
   rw [← Complex.re_sum, ← Matrix.trace_sum]
+
+/-- The weighted finite Weyl average is the right partial trace tensored with
+the maximally mixed right factor. -/
+theorem weightedWeylAverage_eq_partialTraceRight_kronecker
+    {dS dC : ℕ} [NeZero dC] {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC)
+    (M : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) :
+    weightedWeylAverage ζ M =
+      partialTraceRight M ⊗ₖ
+        ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ)) := by
+  calc
+    weightedWeylAverage ζ M =
+        ((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * M *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ := by
+      rw [weightedWeylAverage, Fintype.sum_prod_type]
+      simp only [weightedWeylConjugate]
+      rw [sum_sum_smul]
+      ext i j
+      norm_num
+    _ = partialTraceRight M ⊗ₖ
+        ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ)) :=
+      sum_kronecker_one_weyl_conj hζ M
+
+/-- The zero-index Weyl summand is the uniformly scaled original matrix. -/
+private lemma weightedWeylConjugate_zero_zero
+    {dS dC : ℕ} [NeZero dC] (ζ : ℂ)
+    (M : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) :
+    weightedWeylConjugate ζ M (0, 0) = ((dC : ℝ) ^ 2)⁻¹ • M := by
+  simp [weightedWeylConjugate, weyl, weylShift, weylClock]
 
 /-- Saturation under the right partial trace makes the coefficient-correct
 positive-definite finite-Weyl relative-entropy gap vanish.
@@ -616,5 +655,233 @@ theorem weyl_resolvent_eq_of_partialTraceRight_eq
     ∀ g, (S g)⁻¹ *ᵥ b g = Sbar⁻¹ *ᵥ bbar := by
   exact weyl_resolvent_eq_of_relativeEntropy_gap_eq_zero hρ hσ hζ
     (weylRelativeEntropyGap_eq_zero_of_partialTraceRight_eq hρ hσ heq hζ) ht
+
+/-- Saturation under the right partial trace identifies the positive square-root
+ratio of the original pair with that of its uniform Weyl average.
+
+The common resolvent is first rewritten as a relative-modular resolvent and
+then passed through the positive square-root functional calculus, following
+Jenčová--Ruskai, arXiv:0903.2895v4, lines 658–680.
+
+**Scope restriction (positive definite):** The singular-support extension is
+not asserted here. Documented in
+`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`. -/
+theorem weyl_sqrt_ratio_eq_of_partialTraceRight_eq
+    {dS dC : ℕ} [NeZero dC]
+    {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
+    (hρ : ρ.PosDef) (hσ : σ.PosDef)
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
+    let barρ := partialTraceRight ρ ⊗ₖ
+      ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))
+    CFC.sqrt ρ * hσ.posSemidef.supportInvSqrt =
+      CFC.sqrt barρ *
+        ((partialTraceRight_posDef hσ).kronecker
+          maximallyMixed_posDef).posSemidef.supportInvSqrt := by
+  classical
+  obtain ⟨ζ, hζ⟩ : ∃ ζ : ℂ, IsPrimitiveRoot ζ dC :=
+    ⟨_, Complex.isPrimitiveRoot_exp dC (NeZero.ne dC)⟩
+  let aZero := weightedWeylConjugate ζ ρ (0, 0)
+  let bZero := weightedWeylConjugate ζ σ (0, 0)
+  let aBar := weightedWeylAverage ζ ρ
+  let bBar := weightedWeylAverage ζ σ
+  have haZero : aZero.PosDef := weightedWeylConjugate_posDef hρ hζ (0, 0)
+  have hbZero : bZero.PosDef := weightedWeylConjugate_posDef hσ hζ (0, 0)
+  have haBar : aBar.PosDef := weightedWeylAverage_posDef hρ hζ
+  have hbBar : bBar.PosDef := weightedWeylAverage_posDef hσ hζ
+  have hmodularResolvent : ∀ {t : ℝ}, 0 < t →
+      (t • (1 : Matrix ((Fin dS × ZMod dC) × (Fin dS × ZMod dC))
+          ((Fin dS × ZMod dC) × (Fin dS × ZMod dC)) ℂ) +
+        aZero ⊗ₖ (bZero⁻¹)ᵀ)⁻¹ *ᵥ
+          Matrix.vec (1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ)ᵀ =
+      (t • (1 : Matrix ((Fin dS × ZMod dC) × (Fin dS × ZMod dC))
+          ((Fin dS × ZMod dC) × (Fin dS × ZMod dC)) ℂ) +
+        aBar ⊗ₖ (bBar⁻¹)ᵀ)⁻¹ *ᵥ
+          Matrix.vec (1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ)ᵀ := by
+    intro t ht
+    calc
+      _ = (aZero ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+              (Fin dS × ZMod dC) ℂ) +
+            t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ
+              bZeroᵀ))⁻¹ *ᵥ Matrix.vec bZeroᵀ :=
+        (sourceB_resolvent_eq_relativeModular haZero hbZero ht).symm
+      _ = (aBar ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+              (Fin dS × ZMod dC) ℂ) +
+            t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ
+              bBarᵀ))⁻¹ *ᵥ Matrix.vec bBarᵀ := by
+        simpa only [aZero, bZero, aBar, bBar, weightedWeylConjugate,
+          weightedWeylAverage] using
+          (weyl_resolvent_eq_of_partialTraceRight_eq hρ hσ heq hζ ht (0, 0))
+      _ = _ := sourceB_resolvent_eq_relativeModular haBar hbBar ht
+  have hsqrt := sqrt_mulVec_eq_of_resolvent_mulVec_eq
+    (haZero.kronecker hbZero.inv.transpose).posSemidef
+    (haBar.kronecker hbBar.inv.transpose).posSemidef hmodularResolvent
+  rw [relativeModular_sqrt_mulVec_vec_one haZero hbZero,
+    relativeModular_sqrt_mulVec_vec_one haBar hbBar] at hsqrt
+  have hratio : CFC.sqrt aZero * (CFC.sqrt bZero)⁻¹ =
+      CFC.sqrt aBar * (CFC.sqrt bBar)⁻¹ :=
+    Matrix.transpose_injective (Matrix.vec_inj.mp hsqrt)
+  have hqpos : 0 < ((dC : ℝ) ^ 2)⁻¹ := by
+    have hdC : (0 : ℝ) < dC := by
+      exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dC)
+    positivity
+  have haZeroEq : aZero = ((dC : ℝ) ^ 2)⁻¹ • ρ :=
+    weightedWeylConjugate_zero_zero ζ ρ
+  have hbZeroEq : bZero = ((dC : ℝ) ^ 2)⁻¹ • σ :=
+    weightedWeylConjugate_zero_zero ζ σ
+  have haBarEq : aBar = partialTraceRight ρ ⊗ₖ
+      ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ)) :=
+    weightedWeylAverage_eq_partialTraceRight_kronecker hζ ρ
+  have hbBarEq : bBar = partialTraceRight σ ⊗ₖ
+      ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ)) :=
+    weightedWeylAverage_eq_partialTraceRight_kronecker hζ σ
+  rw [haZeroEq, hbZeroEq, haBarEq, hbBarEq,
+    hρ.posSemidef.sqrt_smul hqpos.le,
+    hσ.posSemidef.sqrt_smul hqpos.le] at hratio
+  have hsqrtq : Real.sqrt (((dC : ℝ) ^ 2)⁻¹) ≠ 0 :=
+    Real.sqrt_ne_zero'.mpr hqpos
+  letI : Invertible (Real.sqrt (((dC : ℝ) ^ 2)⁻¹) : ℂ) :=
+    invertibleOfNonzero (by exact_mod_cast hsqrtq)
+  have hsqrtσunit : IsUnit (CFC.sqrt σ) := by
+    exact (CFC.isUnit_sqrt_iff σ hσ.posSemidef.nonneg).2 hσ.isUnit
+  have hsqrtσdet : IsUnit (CFC.sqrt σ).det :=
+    (Matrix.isUnit_iff_isUnit_det (CFC.sqrt σ)).mp hsqrtσunit
+  have hinvScale :
+      (Real.sqrt (((dC : ℝ) ^ 2)⁻¹) • CFC.sqrt σ)⁻¹ =
+        (Real.sqrt (((dC : ℝ) ^ 2)⁻¹))⁻¹ • (CFC.sqrt σ)⁻¹ := by
+    change (((Real.sqrt (((dC : ℝ) ^ 2)⁻¹) : ℂ) • CFC.sqrt σ)⁻¹ =
+      (((Real.sqrt (((dC : ℝ) ^ 2)⁻¹))⁻¹ : ℝ) : ℂ) • (CFC.sqrt σ)⁻¹)
+    rw [Complex.ofReal_inv]
+    simpa only [invOf_eq_inv] using
+      Matrix.inv_smul (A := CFC.sqrt σ)
+        (Real.sqrt (((dC : ℝ) ^ 2)⁻¹) : ℂ) hsqrtσdet
+  rw [hinvScale] at hratio
+  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+    inv_mul_cancel₀ hsqrtq, one_smul] at hratio
+  rw [PosDef.supportInvSqrt_eq_inv_sqrt hσ,
+    PosDef.supportInvSqrt_eq_inv_sqrt
+      ((partialTraceRight_posDef hσ).kronecker maximallyMixed_posDef)]
+  exact hratio
+
+/-- Saturation under the right partial trace gives the identity-Weyl Petz
+sandwich in the positive-definite case.
+
+The square-root ratio equality is converted to the sandwich by taking its
+Gram matrix and cancelling the invertible square root of σ. This is the
+positive-definite recovery step corresponding to Jenčová--Ruskai,
+arXiv:0903.2895v4, lines 658–680, and Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3, equation (8).
+
+**Scope restriction (positive definite):** The singular-support extension is
+not asserted here. Documented in
+`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`. -/
+theorem weyl_identity_sandwich_of_partialTraceRight_eq
+    {dS dC : ℕ} [NeZero dC]
+    {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
+    (hρ : ρ.PosDef) (hσ : σ.PosDef)
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
+    let hbarσ := (PosSemidef.partialTraceRight hσ.posSemidef).kronecker
+      maximallyMixed_posDef.posSemidef
+    hσ.isHermitian.cfc Real.sqrt *
+        (hbarσ.supportInvSqrt *
+          (partialTraceRight ρ ⊗ₖ
+            ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))) *
+          hbarσ.supportInvSqrt) *
+        hσ.isHermitian.cfc Real.sqrt = ρ := by
+  classical
+  let barρ := partialTraceRight ρ ⊗ₖ
+    ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))
+  let barσ := partialTraceRight σ ⊗ₖ
+    ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))
+  have hbarρ : barρ.PosDef :=
+    (partialTraceRight_posDef hρ).kronecker maximallyMixed_posDef
+  have hbarσ : barσ.PosDef :=
+    (partialTraceRight_posDef hσ).kronecker maximallyMixed_posDef
+  have hratio := weyl_sqrt_ratio_eq_of_partialTraceRight_eq hρ hσ heq
+  dsimp only at hratio
+  rw [PosDef.supportInvSqrt_eq_inv_sqrt hσ,
+    PosDef.supportInvSqrt_eq_inv_sqrt hbarσ] at hratio
+  change CFC.sqrt ρ * (CFC.sqrt σ)⁻¹ =
+    CFC.sqrt barρ * (CFC.sqrt barσ)⁻¹ at hratio
+  have hsqrtρ : (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ := by
+    exact (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)).isHermitian.eq
+  have hsqrtσ : (CFC.sqrt σ)ᴴ = CFC.sqrt σ := by
+    exact (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg σ)).isHermitian.eq
+  have hsqrtBarρ : (CFC.sqrt barρ)ᴴ = CFC.sqrt barρ := by
+    exact (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg barρ)).isHermitian.eq
+  have hsqrtBarσ : (CFC.sqrt barσ)ᴴ = CFC.sqrt barσ := by
+    exact (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg barσ)).isHermitian.eq
+  have hgram := congrArg (fun X => Xᴴ * X) hratio
+  have hleftGram :
+      (CFC.sqrt ρ * (CFC.sqrt σ)⁻¹)ᴴ *
+          (CFC.sqrt ρ * (CFC.sqrt σ)⁻¹) =
+        (CFC.sqrt σ)⁻¹ * ρ * (CFC.sqrt σ)⁻¹ := by
+    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv,
+      hsqrtρ, hsqrtσ]
+    calc
+      ((CFC.sqrt σ)⁻¹ * CFC.sqrt ρ) *
+            (CFC.sqrt ρ * (CFC.sqrt σ)⁻¹) =
+          (CFC.sqrt σ)⁻¹ * (CFC.sqrt ρ * CFC.sqrt ρ) *
+            (CFC.sqrt σ)⁻¹ := by noncomm_ring
+      _ = (CFC.sqrt σ)⁻¹ * ρ * (CFC.sqrt σ)⁻¹ := by
+        rw [CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg]
+  have hrightGram :
+      (CFC.sqrt barρ * (CFC.sqrt barσ)⁻¹)ᴴ *
+          (CFC.sqrt barρ * (CFC.sqrt barσ)⁻¹) =
+        (CFC.sqrt barσ)⁻¹ * barρ * (CFC.sqrt barσ)⁻¹ := by
+    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv,
+      hsqrtBarρ, hsqrtBarσ]
+    calc
+      ((CFC.sqrt barσ)⁻¹ * CFC.sqrt barρ) *
+            (CFC.sqrt barρ * (CFC.sqrt barσ)⁻¹) =
+          (CFC.sqrt barσ)⁻¹ * (CFC.sqrt barρ * CFC.sqrt barρ) *
+            (CFC.sqrt barσ)⁻¹ := by noncomm_ring
+      _ = (CFC.sqrt barσ)⁻¹ * barρ * (CFC.sqrt barσ)⁻¹ := by
+        rw [CFC.sqrt_mul_sqrt_self barρ hbarρ.posSemidef.nonneg]
+  have hgram' :
+      (CFC.sqrt σ)⁻¹ * ρ * (CFC.sqrt σ)⁻¹ =
+        (CFC.sqrt barσ)⁻¹ * barρ * (CFC.sqrt barσ)⁻¹ := by
+    exact hleftGram.symm.trans (hgram.trans hrightGram)
+  have hsqrtσunit : IsUnit (CFC.sqrt σ) :=
+    (CFC.isUnit_sqrt_iff σ hσ.posSemidef.nonneg).2 hσ.isUnit
+  letI : Invertible (CFC.sqrt σ) := hsqrtσunit.invertible
+  have hsandwich : CFC.sqrt σ *
+      ((CFC.sqrt barσ)⁻¹ * barρ * (CFC.sqrt barσ)⁻¹) *
+      CFC.sqrt σ = ρ := by
+    rw [← hgram']
+    calc
+      CFC.sqrt σ * ((CFC.sqrt σ)⁻¹ * ρ * (CFC.sqrt σ)⁻¹) * CFC.sqrt σ =
+          (CFC.sqrt σ * (CFC.sqrt σ)⁻¹) * ρ *
+            ((CFC.sqrt σ)⁻¹ * CFC.sqrt σ) := by noncomm_ring
+      _ = ρ := by
+        rw [mul_inv_of_invertible, inv_mul_of_invertible,
+          Matrix.one_mul, Matrix.mul_one]
+  have hsqrtCfc : hσ.isHermitian.cfc Real.sqrt = CFC.sqrt σ := by
+    rw [← hσ.isHermitian.cfc_eq, ← cfcₙ_eq_cfc]
+    exact (CFC.sqrt_eq_real_sqrt σ hσ.posSemidef.nonneg).symm
+  have hbarSupport :
+      ((PosSemidef.partialTraceRight hσ.posSemidef).kronecker
+        maximallyMixed_posDef.posSemidef).supportInvSqrt =
+          (CFC.sqrt barσ)⁻¹ := by
+    convert PosDef.supportInvSqrt_eq_inv_sqrt hbarσ using 1
+  dsimp only
+  rw [hsqrtCfc, hbarSupport]
+  exact hsandwich
+
+/-- Positive-definite equality in right-partial-trace data processing implies
+recovery by the raw partial-trace Petz map.
+
+This is the positive-definite specialization of Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3, equation (8). -/
+theorem partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef
+    {dS dC : ℕ} [NeZero dC]
+    {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
+    (hρ : ρ.PosDef) (hσ : σ.PosDef)
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
+    partialTraceRightPetzMap σ hσ.posSemidef (partialTraceRight ρ) = ρ := by
+  apply partialTraceRightPetzMap_eq_of_weyl_identity_sandwich hσ.posSemidef
+  exact weyl_identity_sandwich_of_partialTraceRight_eq hρ hσ heq
 
 end Matrix

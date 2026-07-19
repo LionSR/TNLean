@@ -21,6 +21,8 @@ reference matrix.
 ## Main declarations
 
 * `Matrix.PosSemidef.supportInvSqrt`: the inverse square root on the support.
+* `Matrix.PosDef.supportInvSqrt_eq_inv_sqrt`: the support inverse square root
+  of a positive-definite matrix is its ordinary inverse square root.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: scaling by a positive real scalar.
 * `Matrix.PosSemidef.supportInvSqrt_kronecker_one`: compatibility with the
   unital left tensor embedding.
@@ -52,7 +54,7 @@ reference matrix.
   relative-entropy monotonicity equation.
 -/
 
-open scoped Matrix BigOperators ComplexOrder Kronecker
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Kronecker
 
 namespace Matrix
 
@@ -75,6 +77,33 @@ theorem PosSemidef.supportInvSqrt_isHermitian {ρ : Matrix n n ℂ}
   rw [PosSemidef.supportInvSqrt, ← hρ.isHermitian.cfc_eq]
   exact Matrix.isHermitian_iff_isSelfAdjoint.mpr
     (cfc_predicate (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ)
+
+/-- On a positive-definite matrix, the support inverse square root is the
+ordinary inverse of the positive square root.
+
+This is the invertible specialization of the support inverse in
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
+equation (8). -/
+theorem PosDef.supportInvSqrt_eq_inv_sqrt {ρ : Matrix n n ℂ}
+    (hρ : ρ.PosDef) :
+    hρ.posSemidef.supportInvSqrt = (CFC.sqrt ρ)⁻¹ := by
+  unfold PosSemidef.supportInvSqrt
+  rw [← hρ.isHermitian.cfc_eq]
+  have hspectrum : ∀ x ∈ spectrum ℝ ρ, Real.sqrt x ≠ 0 := by
+    intro x hx
+    rw [hρ.isHermitian.spectrum_real_eq_range_eigenvalues] at hx
+    obtain ⟨i, rfl⟩ := hx
+    exact Real.sqrt_ne_zero'.mpr (hρ.eigenvalues_pos i)
+  rw [CFC.sqrt_eq_real_sqrt ρ hρ.posSemidef.nonneg, cfcₙ_eq_cfc,
+    Matrix.nonsing_inv_eq_ringInverse,
+    ← cfc_inv _ _ hspectrum]
+  apply cfc_congr
+  intro x hx
+  dsimp only
+  rw [if_pos]
+  intro hxzero
+  subst x
+  simpa using hspectrum 0 hx
 
 /-- The support inverse square root of a positive real multiple scales by the
 inverse square root of that multiple. This is the scalar normalization in the
