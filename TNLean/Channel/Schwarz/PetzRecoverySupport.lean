@@ -95,3 +95,6 @@ theorem partialTraceRightPetzChannel_apply_partialTraceRight_of_support
     (fun _ hw => partialTraceRight_support hσ hsupp hw)
 
 end Matrix
+
+#print axioms Matrix.IsHermitian.supportProj_mul_mul_supportProj_of_mulVec_kernel_le
+#print axioms Matrix.partialTraceRightPetzChannel_apply_partialTraceRight_of_support
