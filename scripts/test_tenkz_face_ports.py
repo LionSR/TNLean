@@ -26,6 +26,7 @@ SOURCE = r"""
 \documentclass{article}
 \usepackage{tenkz}
 \pagestyle{empty}
+\newcommand{\lowerlabelprobe}{\typeout{TENKZ-LOWER-MATCH-LABEL}j}
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -230,7 +231,19 @@ SOURCE = r"""
 \end{tenkz}
 \begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
   \tn[pill, wide=2, down at={1,2}]{U} & \\
-  \tn[pill, wide=2, up at={1,2}]{L} &
+  \tn[pill, wide=2, up at={1,2}, up={\lowerlabelprobe,$k$}]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[no legs]{U}\\
+  \tn[up at=center]{L}
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic, tensor style=box]
+  \tn[wires=2, west at=center, east at=center]{A}\\
+  &
+\end{tenkz}
+\begin{tenkz}[rows={wire, wire}, periodic, trace style=hooks, tensor style=box]
+  \tn[wires=2, west at=center, east at=center]{A}\\
+  &
 \end{tenkz}
 \end{document}
 """
@@ -799,6 +812,46 @@ def main() -> int:
         partial_wide_pair,
         "boundary|picture=52|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
         "opened wide owner counted its contracted lower slot as open",
+    )
+    if "TENKZ-LOWER-MATCH-LABEL" not in run.stdout:
+        raise AssertionError("opened matched lower slot dropped its aligned label")
+    suppressed_upper = pictures[53]
+    require(
+        suppressed_upper,
+        "faceports|picture=53|cell=2-1|face=up|arity=1|at=center",
+        "lower face below a no-legs tensor was not recorded",
+    )
+    forbid(
+        suppressed_upper,
+        "pairleg|picture=53|",
+        "lower face below a no-legs tensor was contracted",
+    )
+    require(
+        suppressed_upper,
+        "boundary|picture=53|virtual-west=2|virtual-east=2|physical-up=1|physical-down=0",
+        "lower face below a no-legs tensor did not remain open",
+    )
+    centered_periodic = pictures[54]
+    require(
+        centered_periodic,
+        "trace|picture=54|row=1|side=above",
+        "centered periodic face did not close once",
+    )
+    forbid(
+        centered_periodic,
+        "trace|picture=54|row=2|side=below",
+        "centered periodic face closed once per spanned row",
+    )
+    centered_hooks = pictures[55]
+    require(
+        centered_hooks,
+        "hooks|picture=55|row=1|side=above",
+        "centered periodic hooks did not close once",
+    )
+    forbid(
+        centered_hooks,
+        "hooks|picture=55|row=2|side=below",
+        "centered periodic hooks closed once per spanned row",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0

@@ -1980,20 +1980,29 @@
         \prop_get:NeNTF \l__tenkz_tall_prop
           {\int_eval:n{#1}-\l_tmpa_tl} \l_tmpb_tl
           {
-            \bool_if:NTF \l__tenkz_vertical_bool
+            % A combined tall face has one centred anchor for the whole
+            % glyph.  Split faces retain their separate row-height anchors.
+            \tenkz_cell_combined:nnnN {#1}{#2}{#3} \l_tmpa_bool
+            \bool_if:NTF \l_tmpa_bool
+              { \tl_set:Ne #4
+                  { (\l_tmpb_tl. \tenkz_compass:n {#3}) } }
               {
-                \pgfextracty \l__tenkz_tallx_dim
-                  { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl }
-                      { \tenkz_compass:n {#3} } }
-                \tl_set:Ne #4
-                  { ( \dim_eval:n { - \tenkz_rowy:n {#1} } ,
-                      \dim_use:N \l__tenkz_tallx_dim ) }
-              }
-              {
-                \pgfextractx \l__tenkz_tallx_dim
-                  { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl } {#3} }
-                \tl_set:Ne #4
-                  { ( \dim_use:N \l__tenkz_tallx_dim , \tenkz_rowy:n {#1} ) }
+                \bool_if:NTF \l__tenkz_vertical_bool
+                  {
+                    \pgfextracty \l__tenkz_tallx_dim
+                      { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl }
+                          { \tenkz_compass:n {#3} } }
+                    \tl_set:Ne #4
+                      { ( \dim_eval:n { - \tenkz_rowy:n {#1} } ,
+                          \dim_use:N \l__tenkz_tallx_dim ) }
+                  }
+                  {
+                    \pgfextractx \l__tenkz_tallx_dim
+                      { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl } {#3} }
+                    \tl_set:Ne #4
+                      { ( \dim_use:N \l__tenkz_tallx_dim ,
+                          \tenkz_rowy:n {#1} ) }
+                  }
               }
           }
           {
@@ -2367,6 +2376,19 @@
 \seq_new:N \l__tenkz_pwlowlab_seq
 \tl_new:N \l__tenkz_pwslotlab_tl
 \tl_new:N \l__tenkz_pwlowlabel_tl
+\prop_new:N \l__tenkz_pwlowerlabel_prop
+
+\cs_new_protected:Npn \tenkz_draw_lower_label:N #1
+  {
+    \tl_if_blank:VF \l__tenkz_pwlowlabel_tl
+      {
+        \node[label, anchor=\tenkz_compass:n{south},
+              shift={\tenkz_leg_vec:nn{1}
+                { \tenkz@dim{\tenkz@r@physleg}
+                  + \tenkz@dim{\tenkz@r@labelclear} }}]
+          at #1 { \tl_use:N \l__tenkz_pwlowlabel_tl };
+      }
+  }
 
 % Does the upper row present a down-face port to slot #3 of the lower
 % glyph based at column #2?  Owner resolution is essential when either
@@ -2428,6 +2450,10 @@
                 \tl_clear:N \l__tenkz_pwlowlabel_tl
                 \seq_pop_left:NNT \l__tenkz_pwlowlab_seq
                   \l__tenkz_pwlowlabel_tl { }
+                \exp_args:NNee \prop_put:Nnn
+                  \l__tenkz_pwlowerlabel_prop
+                  {#1-\l__tenkz_pwlowbase_tl-##1}
+                  {\exp_not:V \l__tenkz_pwlowlabel_tl}
                 \tenkz_lower_port_matched:nnnN
                   {#1}{\l__tenkz_pwlowbase_tl}{##1}
                   \l__tenkz_pwupperport_bool
@@ -2438,15 +2464,7 @@
                       \l__tenkz_pwlow_tl
                     \draw[physical~leg] \l__tenkz_pwlow_tl --
                       ++\tenkz_leg_vec:nn{1}{\tenkz@dim{\tenkz@r@physleg}};
-                    \tl_if_blank:VF \l__tenkz_pwlowlabel_tl
-                      {
-                        \node[label, anchor=\tenkz_compass:n{south},
-                              shift={\tenkz_leg_vec:nn{1}
-                                { \tenkz@dim{\tenkz@r@physleg}
-                                  + \tenkz@dim{\tenkz@r@labelclear} }}]
-                          at \l__tenkz_pwlow_tl
-                          { \tl_use:N \l__tenkz_pwlowlabel_tl };
-                      }
+                    \tenkz_draw_lower_label:N \l__tenkz_pwlow_tl
                     \int_compare:nNnT {#3} = {1}
                       { \int_incr:N \l__tenkz_internalpu_int }
                   }
@@ -2542,6 +2560,13 @@
                             \draw[physical~leg] \l__tenkz_pwlow_tl --
                               ++\tenkz_leg_vec:nn{1}
                                 {\tenkz@dim{\tenkz@r@physleg}};
+                            \prop_get:NeNT
+                              \l__tenkz_pwlowerlabel_prop
+                              {#1-\l__tenkz_pwbase_tl-
+                                \int_eval:n{#2+#3-\l__tenkz_pwbase_tl}}
+                              \l__tenkz_pwlowlabel_tl
+                              { \tenkz_draw_lower_label:N
+                                  \l__tenkz_pwlow_tl }
                           }
                           {
                             % contracted: one vertical wire, face to face
@@ -2883,11 +2908,45 @@
       }
   }
 
+% Leave the lower cell's upper face open when its row partner is absent
+% or suppresses physical ink with the no-legs option.
+\cs_new_protected:Npn \tenkz_open_lower_partner:nnn #1#2#3
+  {
+    \prop_get:NeNF \l__tenkz_owner_prop
+      {\int_eval:n{#1+1}-#2} \l__tenkz_pwbase_tl
+      { \tl_set:Ne \l__tenkz_pwbase_tl {#2} }
+    \tenkz_get:NeN \l__tenkz_opts_prop
+      {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l_tmpb_tl
+    \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+    \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
+    \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
+      {
+        \tenkz_cell_physical_port:nnnN
+          {\int_eval:n{#1+1}}{#2}{up} \l_tmpa_bool
+        \bool_if:NT \l_tmpa_bool
+          {
+            \tenkz_leg_open:enn {\int_eval:n{#1+1}}{#2}{up}
+            \int_compare:nNnT {#3} = {1}
+              { \int_incr:N \l__tenkz_internalpu_int }
+          }
+      }
+      { \tenkz_draw_lower_surplus:nn {#1}{\l__tenkz_pwbase_tl} }
+  }
+
+\cs_new_protected:Npn \tenkz_open_below_no_legs:nn #1#2
+  {
+    \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
+    \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+    \bool_if:NT \l__tenkz_cnolegs_bool
+      { \tenkz_open_lower_partner:nnn {#1}{#2}{1} }
+  }
+
 \cs_new_protected:Npn \tenkz_draw_legs:
   {
     \int_zero:N \l__tenkz_internalpu_int
     \int_zero:N \l__tenkz_internalpd_int
     \prop_clear:N \l__tenkz_lowersurplus_prop
+    \prop_clear:N \l__tenkz_pwlowerlabel_prop
     % A centred lower face is one index for the entire horizontal
     % interface, even when several separate upper glyphs meet its span.
     \prop_clear:N \l__tenkz_pwcenterused_prop
@@ -2940,27 +2999,11 @@
                     \str_case:Vn \l__tenkz_pkind_tl
                       {
                         {skip}
-                          {
-                            \prop_get:NeNF \l__tenkz_owner_prop
-                              {\int_eval:n{##1+1}-####1}
-                              \l__tenkz_pwbase_tl
-                              { \tl_set:Ne \l__tenkz_pwbase_tl {####1} }
-                            \tenkz_get:NeN \l__tenkz_opts_prop
-                              {\int_eval:n{##1+1}-\l__tenkz_pwbase_tl}
-                              \l_tmpb_tl
-                            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-                            \tenkz_face_ports:nN {up}
-                              \l__tenkz_faceports_tl
-                            \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
-                              { \tenkz_cell_physical_port:nnnN
-                                  {\int_eval:n{##1+1}}{####1}{up}
-                                  \l_tmpa_bool
-                                \bool_if:NT \l_tmpa_bool
-                                  { \tenkz_leg_open:enn
-                                      {\int_eval:n{##1+1}}{####1}{up} } }
-                              { \tenkz_draw_lower_surplus:nn
-                                  {##1}{\l__tenkz_pwbase_tl} }
-                          }
+                          { \tenkz_open_lower_partner:nnn {##1}{####1}{0} }
+                        {tn}
+                          { \tenkz_open_below_no_legs:nn {##1}{####1} }
+                        {tnc}
+                          { \tenkz_open_below_no_legs:nn {##1}{####1} }
                         {ghost}
                           { \tenkz_leg_candidate:nnT
                               { \int_eval:n{##1+1} }{####1}
@@ -4528,11 +4571,36 @@
   }
 \bool_new:N \l__tenkz_periodicwest_bool
 \bool_new:N \l__tenkz_periodiceast_bool
+
+% A centred virtual face is one index shared by every row of a tall owner.
+% Ordinary bond matching may reach it from any row, but a periodic closure
+% must consume it once, at the owner's base row and centred anchor.
+\cs_new_protected:Npn \tenkz_periodic_row_port:nnnN #1#2#3#4
+  {
+    \tenkz_cell_virtual_row_port:nnnN {#1}{#2}{#3} #4
+    \bool_if:NT #4
+      {
+        \tenkz_cell_combined:nnnN {#1}{#2}{#3} \l_tmpa_bool
+        \bool_if:NT \l_tmpa_bool
+          {
+            \prop_get:NeNF \l__tenkz_owner_prop
+              {\int_eval:n{#1}-\int_eval:n{#2}} \l__tenkz_virtualbase_tl
+              { \tl_set:Ne \l__tenkz_virtualbase_tl {\int_eval:n{#2}} }
+            \tenkz_get:NeN \l__tenkz_kind_prop
+              {\int_eval:n{#1}-\l__tenkz_virtualbase_tl} \l_tmpa_tl
+            \bool_lazy_or:nnT
+              { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
+              { \str_if_eq_p:Vn \l_tmpa_tl {tnv} }
+              { \bool_set_false:N #4 }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_periodic_endpoints:nnnN #1#2#3#4
   {
-    \tenkz_cell_virtual_row_port:nnnN {#1}{#2}{west}
+    \tenkz_periodic_row_port:nnnN {#1}{#2}{west}
       \l__tenkz_periodicwest_bool
-    \tenkz_cell_virtual_row_port:nnnN {#1}{#3}{east}
+    \tenkz_periodic_row_port:nnnN {#1}{#3}{east}
       \l__tenkz_periodiceast_bool
     \bool_set:Nn #4
       { \l__tenkz_periodicwest_bool && \l__tenkz_periodiceast_bool }
