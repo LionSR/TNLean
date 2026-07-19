@@ -558,7 +558,7 @@ summand quadratic forms and the quadratic form of their average.
 The vectorization is `X ↦ Matrix.vec Xᵀ`; hence
 `A ⊗ₖ 1 + t • (1 ⊗ₖ Bᵀ)` represents `X ↦ A * X + t • (X * B)`.
 This is the finite-Weyl specialization of Jenčová--Ruskai,
-arXiv:0903.2895, §4 and Appendix, equations `Mj` and `basiceq`. It is a
+arXiv:0903.2895, §4 and Appendix. It is a
 fixed-`t`, positive-definite statement and does not derive vanishing of the
 defect from relative-entropy equality.
 
@@ -644,6 +644,92 @@ theorem weyl_resolvent_defect_identity
       (dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar)).re
   simpa only [hsumS, hsumb, x] using hdef
 
+/-- **The source-`A` fixed-resolvent defect identity for the finite Weyl
+family.** Under the notation of `weyl_resolvent_defect_identity`, replacing
+the source vectors `vec (B g)ᵀ` by `vec (A g)ᵀ` gives the second nonnegative
+defect family needed in the relative-entropy integral representation.
+
+This is the source `X_j = A_j K`, with `K = 1`, in Jenčová--Ruskai,
+arXiv:0903.2895v4, §4 and Appendix. It remains a positive-definite,
+fixed-`t` statement. -/
+theorem weyl_sourceA_resolvent_defect_identity
+    {dS dC : ℕ} [NeZero dC]
+    {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
+    (hρ : ρ.PosDef) (hσ : σ.PosDef)
+    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) {t : ℝ} (ht : 0 < t) :
+    let U := fun g : ZMod dC × ZMod dC ↦
+      (1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ g.1 g.2
+    let q : ℝ := ((dC : ℝ) ^ 2)⁻¹
+    let A := fun g ↦ q • (U g * ρ * (U g)ᴴ)
+    let B := fun g ↦ q • (U g * σ * (U g)ᴴ)
+    let Abar := ∑ g, A g
+    let Bbar := ∑ g, B g
+    let S := fun g ↦ A g ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+        (Fin dS × ZMod dC) ℂ) +
+      t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ (B g)ᵀ)
+    let Sbar := Abar ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+        (Fin dS × ZMod dC) ℂ) +
+      t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ Bbarᵀ)
+    let a := fun g ↦ Matrix.vec (A g)ᵀ
+    let abar := Matrix.vec Abarᵀ
+    let x := Sbar⁻¹ *ᵥ abar
+    ∑ g, ∑ p, ‖((CFC.sqrt (S g))⁻¹ *ᵥ a g -
+      CFC.sqrt (S g) *ᵥ x) p‖ ^ 2 =
+      ∑ g, (dotProduct (star (a g)) ((S g)⁻¹ *ᵥ a g)).re -
+        (dotProduct (star abar) (Sbar⁻¹ *ᵥ abar)).re := by
+  classical
+  dsimp only
+  let N := Fin dS × ZMod dC
+  let G := ZMod dC × ZMod dC
+  let U : G → Matrix N N ℂ := fun g ↦
+    (1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ g.1 g.2
+  let q : ℝ := ((dC : ℝ) ^ 2)⁻¹
+  let A : G → Matrix N N ℂ := fun g ↦ q • (U g * ρ * (U g)ᴴ)
+  let B : G → Matrix N N ℂ := fun g ↦ q • (U g * σ * (U g)ᴴ)
+  let Abar : Matrix N N ℂ := ∑ g, A g
+  let Bbar : Matrix N N ℂ := ∑ g, B g
+  let S : G → Matrix (N × N) (N × N) ℂ := fun g ↦
+    A g ⊗ₖ (1 : Matrix N N ℂ) +
+      t • ((1 : Matrix N N ℂ) ⊗ₖ (B g)ᵀ)
+  let Sbar : Matrix (N × N) (N × N) ℂ :=
+    Abar ⊗ₖ (1 : Matrix N N ℂ) +
+      t • ((1 : Matrix N N ℂ) ⊗ₖ Bbarᵀ)
+  let a : G → N × N → ℂ := fun g ↦ Matrix.vec (A g)ᵀ
+  let abar : N × N → ℂ := Matrix.vec Abarᵀ
+  let x : N × N → ℂ := Sbar⁻¹ *ᵥ abar
+  have hdCpos : (0 : ℝ) < dC := by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dC)
+  have hqpos : 0 < q := by
+    simp only [q]
+    positivity
+  have hU (g : G) : U g ∈ unitary (Matrix N N ℂ) := by
+    exact Matrix.kronecker_mem_unitary (Submonoid.one_mem _)
+      (weyl_mem_unitary hζ g.1 g.2)
+  have hA (g : G) : (A g).PosDef := by
+    have hc := posDef_conj_unitary hρ ⟨U g, hU g⟩
+    simpa only [A, star_eq_conjTranspose] using hc.smul hqpos
+  have hB (g : G) : (B g).PosDef := by
+    have hc := posDef_conj_unitary hσ ⟨U g, hU g⟩
+    simpa only [B, star_eq_conjTranspose] using hc.smul hqpos
+  have hS (g : G) : (S g).PosDef :=
+    superop_leftRight_posDef ht (hA g) (hB g)
+  have hsumS : ∑ g, S g = Sbar := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    simp only [S, Sbar, Abar, Bbar, Matrix.sum_apply, Matrix.add_apply,
+      Matrix.smul_apply, Matrix.kroneckerMap_apply, Matrix.transpose_apply,
+      Finset.sum_add_distrib, Finset.sum_mul, Finset.mul_sum]
+    rw [Finset.smul_sum]
+  have hsuma : ∑ g, a g = abar := by
+    ext ⟨i, j⟩
+    simp only [a, abar, Abar, Matrix.vec, Matrix.transpose_apply,
+      Matrix.sum_apply, Finset.sum_apply]
+  have hdef := resolvent_sqrt_defect_identity S a hS
+  change (∑ g, ∑ p, ‖((CFC.sqrt (S g))⁻¹ *ᵥ a g -
+      CFC.sqrt (S g) *ᵥ x) p‖ ^ 2) =
+    ∑ g, (dotProduct (star (a g)) ((S g)⁻¹ *ᵥ a g)).re -
+      (dotProduct (star abar) (Sbar⁻¹ *ᵥ abar)).re
+  simpa only [hsumS, hsuma, x] using hdef
+
 /-- **Zero Weyl defect gives the common fixed-resolvent solution.**
 In the positive-definite finite Weyl family, if the difference of resolvent
 quadratic forms in `weyl_resolvent_defect_identity` vanishes at a fixed
@@ -652,8 +738,8 @@ Taking `g = (0, 0)` gives the identity-Weyl summand required in the
 partial-trace equality argument.
 
 This is the zero-defect conclusion of Jenčová--Ruskai,
-arXiv:0903.2895, §4 and Appendix, equations `Mj` and `basiceq` and Theorem
-`thm:eqJp`. It does not assert that equality of relative entropies makes the
+arXiv:0903.2895, §4 and Appendix. It does not assert that equality of
+relative entropies makes the
 displayed defect vanish.
 
 **Scope restriction (positive definite, fixed `t`):** The implication from

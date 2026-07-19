@@ -152,6 +152,27 @@ current counts and full location lists).
   cover (membership in red/blue/crossing regions) stated once in the
   RegionBlock development.
 
+### spectral_double_sum_continuity — candidate
+- **Pattern:**
+  ```
+  apply continuousOn_finsetSum Finset.univ
+  intro i _
+  apply continuousOn_finsetSum Finset.univ
+  intro j _ t ht
+  have ht0 : 0 < t := ht
+  have hα : 0 < α i := hA.eigenvalues_pos i
+  have hβ : 0 < β j := hB.eigenvalues_pos j
+  have hden : α i + t * β j ≠ 0 := by positivity
+  ```
+- **Seen:** 3 occurrences in
+  `TNLean/Analysis/RelativeEntropyResolventIntegral.lean` (lines 608, 637,
+  and 846 in the initial scan).
+- **Abstraction (proposed):** a local lemma reducing continuity of a finite
+  spectral double sum on `(0, ∞)` to continuity of one summand, while supplying
+  positivity of the two eigenvalues and nonvanishing of
+  `α i + t * β j`.  The repetition is presently confined to one file, so
+  retain it as a candidate rather than adding a general tactic.
+
 ---
 
 ## Rejected

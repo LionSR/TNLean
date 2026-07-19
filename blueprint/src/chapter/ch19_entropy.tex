@@ -2410,6 +2410,137 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
 \end{proof}
 
+\begin{lemma}[Positive homogeneity of relative entropy]
+    \label{lem:relative_entropy_positive_homogeneity}
+    \lean{Matrix.quantumRelativeEntropy_smul_posDef}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    If $A$ and $B$ are positive definite and $c>0$, then
+    \[
+        D(cA\Vert cB)=cD(A\Vert B).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The functional-calculus identity
+    $\log(cA)=(\log c)\mathbf 1+\log A$, and its analogue for $B$,
+    show that the scalar logarithmic terms cancel in
+    $\log(cA)-\log(cB)$.  Linearity of the trace then gives the result.
+\end{proof}
+
+\begin{theorem}[Partial-trace saturation gives zero weighted Weyl gap]
+    \label{thm:partial_trace_saturation_weyl_gap_zero}
+    \lean{Matrix.weylRelativeEntropyGap_eq_zero_of_partialTraceRight_eq}
+    \leanok
+    \uses{thm:relative_entropy_weyl_jensen_eq,
+        lem:relative_entropy_positive_homogeneity}
+    Let $\rho$ and $\sigma$ be positive definite, and suppose that
+    \[
+        D(\rho\Vert\sigma)
+          =D(\tr_C\rho\Vert\tr_C\sigma).
+    \]
+    For the uniformly weighted Weyl conjugates
+    $A_g=d_C^{-2}U_g\rho U_g^\dagger$ and
+    $B_g=d_C^{-2}U_g\sigma U_g^\dagger$, put
+    $A=\sum_gA_g$ and $B=\sum_gB_g$.  Then
+    \[
+        \sum_gD(A_g\Vert B_g)-D(A\Vert B)=0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Positive definiteness of $\sigma$ makes the support condition in
+    Theorem~\ref{thm:relative_entropy_weyl_jensen_eq} automatic.  That theorem
+    gives the equality with $d_C^{-2}$ multiplying each scalar relative
+    entropy.  Lemma~\ref{lem:relative_entropy_positive_homogeneity} moves this
+    coefficient inside both matrix arguments, which is precisely the stated
+    weighted gap.
+\end{proof}
+
+\begin{lemma}[Scalar logarithmic resolvent integral]
+    \label{lem:relative_entropy_scalar_resolvent_integral}
+    \lean{Matrix.relativeEntropyScalar}
+    \lean{Matrix.relativeEntropyScalar_integrableOn}
+    \lean{Matrix.integral_relativeEntropyScalar}
+    \leanok
+    Let $a,b>0$.  Then the function
+    \[
+      t\longmapsto
+      \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}
+    \]
+    is integrable on $(0,\infty)$, and
+    \[
+      \int_0^\infty
+      \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}\,dt
+      =a(\log a-\log b).
+    \]
+    This is the scalar identity underlying the spectral representation in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4.
+\end{lemma}
+
+\begin{proof}\leanok
+    The integrand is the derivative of
+    \[
+      a\bigl(\log(1+t)-\log(a+tb)\bigr).
+    \]
+    Its value at $t=0$ is $-a\log a$, whereas its limit as
+    $t\to\infty$ is $-a\log b$.  The derivative has constant sign, according
+    as $a-b$ is positive or negative, and is therefore integrable.  The
+    fundamental theorem of calculus gives the stated value.
+\end{proof}
+
+\begin{theorem}[Spectral resolvent representation of relative entropy]
+    \label{thm:relative_entropy_resolvent_integral}
+    \lean{Matrix.sourceAResolventQuadratic}
+    \lean{Matrix.sourceBResolventQuadratic}
+    \lean{Matrix.leftRight_mulVec_vec_transpose}
+    \lean{Matrix.sourceA_resolvent_quadratic_spectral}
+    \lean{Matrix.sourceB_resolvent_quadratic_spectral}
+    \lean{Matrix.sourceAResolventQuadratic_continuousOn}
+    \lean{Matrix.sourceBResolventQuadratic_continuousOn}
+    \lean{Matrix.quantumRelativeEntropy_posDef_spectral}
+    \lean{Matrix.relativeEntropyResolventIntegrand}
+    \lean{Matrix.relativeEntropyResolventIntegrand_integrableOn}
+    \lean{Matrix.relativeEntropyResolventIntegrand_continuousOn}
+    \lean{Matrix.quantumRelativeEntropy_resolvent_integral}
+    \leanok
+    \uses{def:quantum_relative_entropy,
+        lem:relative_entropy_scalar_resolvent_integral}
+    Let $A$ and $B$ be positive definite, with spectral resolutions
+    $A=\sum_i\alpha_i|u_i\rangle\langle u_i|$ and
+    $B=\sum_j\beta_j|v_j\rangle\langle v_j|$.  Put
+    $w_{ij}=\langle u_i,v_j\rangle$.  Let $L_A$ and $R_B$ denote left and
+    right multiplication, $L_A(X)=AX$ and $R_B(X)=XB$.  Then, for $t>0$,
+    \begin{align*}
+      \operatorname{Re}\langle A,(L_A+tR_B)^{-1}A\rangle_{\rm HS}
+        &=\sum_{i,j}\frac{\alpha_i^2}{\alpha_i+t\beta_j}|w_{ij}|^2,\\
+      \operatorname{Re}\langle B,(L_A+tR_B)^{-1}B\rangle_{\rm HS}
+        &=\sum_{i,j}\frac{\beta_j^2}{\alpha_i+t\beta_j}|w_{ij}|^2.
+    \end{align*}
+    Both quadratic forms are continuous on $(0,\infty)$.  Moreover,
+    \[
+      D(A\Vert B)=\int_0^\infty
+      \frac{
+        \operatorname{Re}\langle A,(L_A+tR_B)^{-1}A\rangle_{\rm HS}
+        -\operatorname{Re}\operatorname{Tr}B
+        +t\operatorname{Re}\langle B,(L_A+tR_B)^{-1}B\rangle_{\rm HS}}
+      {1+t}\,dt,
+    \]
+    and the displayed integrand is continuous and integrable on the positive
+    half-line.  This is the positive-definite spectral route of
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4.
+\end{theorem}
+
+\begin{proof}\leanok
+    Vectorization sends $L_A+tR_B$ to
+    $A\otimes\mathbf 1+t\mathbf 1\otimes B^{\mathsf T}$.  The vectors
+    $u_i\otimes\overline{v_j}$ diagonalize this matrix with eigenvalues
+    $\alpha_i+t\beta_j$, which proves the two quadratic-form identities.
+    Insert them into the integrand, use
+    $\sum_i|w_{ij}|^2=1$, and apply the preceding scalar integral term by
+    term.  The same finite spectral sum proves continuity and integrability.
+\end{proof}
+
 \begin{theorem}[Fixed-resolvent defect identity for the Weyl family]
     \label{thm:weyl_resolvent_defect_identity}
     \lean{Matrix.weyl_resolvent_defect_identity}
@@ -2439,8 +2570,7 @@ Theorem~\ref{thm:trace_norm_abs}.
           \langle B,T^{-1}(B)\rangle_{\mathrm{HS}}.
     \]
     This is the positive-definite, fixed-$t$ identity in
-    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895, \S4 and Appendix, equations
-    \texttt{Mj} and \texttt{basiceq}.  It does not infer zero defect from
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895, \S4 and Appendix.  It does not infer zero defect from
     equality of relative entropies and makes no assertion about singular
     supports.
 \end{theorem}
@@ -2464,6 +2594,86 @@ Theorem~\ref{thm:trace_norm_abs}.
         =\operatorname{Re}\langle r_g,S_g^{-1}r_g\rangle.
     \]
     Summing proves the identity.
+\end{proof}
+
+\begin{theorem}[Source-$A$ fixed-resolvent defect identity]
+    \label{thm:weyl_sourceA_resolvent_defect_identity}
+    \lean{Matrix.weyl_sourceA_resolvent_defect_identity}
+    \leanok
+    \uses{thm:weyl_operator_unitary}
+    Under the notation of Theorem~\ref{thm:weyl_resolvent_defect_identity},
+    set $\Gamma_t=T^{-1}(A)$.  Then, for every $t>0$,
+    \[
+      \sum_g\left\|
+        T_g^{-1/2}(A_g)-T_g^{1/2}(\Gamma_t)
+      \right\|_{\rm HS}^2
+      =\sum_g\operatorname{Re}
+        \langle A_g,T_g^{-1}(A_g)\rangle_{\rm HS}
+       -\operatorname{Re}\langle A,T^{-1}(A)\rangle_{\rm HS}.
+    \]
+    This is the second defect family in Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4, \S4 and Appendix.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the residual identity of
+    Theorem~\ref{thm:weyl_resolvent_defect_identity} with
+    $a_g=\operatorname{vec}(A_g^{\mathsf T})$ and
+    $\bar a=\operatorname{vec}(A^{\mathsf T})$.  Thus
+    \[
+      \sum_g\langle a_g,S_g^{-1}a_g\rangle
+        -\langle\bar a,S^{-1}\bar a\rangle
+      =\sum_g\|S_g^{-1/2}a_g-S_g^{1/2}S^{-1}\bar a\|^2,
+    \]
+    which is the asserted source-$A$ identity.
+\end{proof}
+
+\begin{theorem}[Finite-Weyl relative-entropy gap integral]
+    \label{thm:weyl_relative_entropy_gap_integral}
+    \lean{Matrix.weightedWeylConjugate}
+    \lean{Matrix.weightedWeylAverage}
+    \lean{Matrix.weylSourceAResolventDefect}
+    \lean{Matrix.weylSourceBResolventDefect}
+    \lean{Matrix.weylRelativeEntropyGap}
+    \lean{Matrix.weyl_relativeEntropy_gap_integral}
+    \lean{Matrix.weylSourceAResolventDefect_continuousOn}
+    \lean{Matrix.weylSourceBResolventDefect_continuousOn}
+    \lean{Matrix.weylSourceAResolventDefect_nonneg}
+    \lean{Matrix.weylSourceBResolventDefect_nonneg}
+    \lean{Matrix.weylRelativeEntropyGapIntegrand_integrableOn}
+    \lean{Matrix.weylRelativeEntropyGapIntegrand_continuousOn}
+    \lean{Matrix.weylRelativeEntropyGapIntegrand_nonneg}
+    \leanok
+    \uses{thm:relative_entropy_resolvent_integral,
+        thm:weyl_resolvent_defect_identity,
+        thm:weyl_sourceA_resolvent_defect_identity}
+    For the positive definite finite-Weyl family, let
+    \[
+      \operatorname{Def}_A(t)=
+        \sum_g\operatorname{Re}\langle A_g,T_g^{-1}(A_g)\rangle_{\rm HS}
+        -\operatorname{Re}\langle A,T^{-1}(A)\rangle_{\rm HS}
+    \]
+    and define $\operatorname{Def}_B(t)$ analogously, with the real parts of
+    the corresponding source-$B$ pairings.  Then both defects are
+    nonnegative and continuous for $t>0$, and
+    \[
+      \sum_gD(A_g\Vert B_g)-D(A\Vert B)
+      =\int_0^\infty
+        \frac{\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)}{1+t}\,dt.
+    \]
+    The integrand is continuous, nonnegative, and integrable on
+    $(0,\infty)$.  The coefficient of the source-$B$ defect is exactly $t$,
+    as prescribed by the integral formula and equality analysis of
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:relative_entropy_resolvent_integral} to each pair
+    $(A_g,B_g)$ and to $(A,B)$, and interchange the finite sum with the
+    integral.  The trace terms cancel because $B=\sum_gB_g$.  The two
+    fixed-resolvent identities write the defects as sums of squared norms,
+    proving nonnegativity.  Continuity and integrability follow from the
+    corresponding spectral assertions before taking the finite difference.
 \end{proof}
 
 \begin{theorem}[Zero Weyl defect gives the common resolvent solution]
@@ -2493,6 +2703,42 @@ Theorem~\ref{thm:trace_norm_abs}.
     $S_g^{-1/2}(b_g-S_gx)=0$ for every $g$.  Invertibility of
     $S_g^{-1/2}$ gives $b_g=S_gx$, and hence
     $S_g^{-1}b_g=x=S^{-1}\sum_hb_h$.
+\end{proof}
+
+\begin{theorem}[Zero finite-Weyl gap gives the common resolvent solution]
+    \label{thm:weyl_relative_entropy_zero_gap_resolvent}
+    \lean{Matrix.weyl_sourceB_defect_eq_zero_of_gap_eq_zero}
+    \lean{Matrix.weyl_resolvent_eq_of_relativeEntropy_gap_eq_zero}
+    \lean{Matrix.weyl_resolvent_eq_of_partialTraceRight_eq}
+    \leanok
+    \uses{thm:partial_trace_saturation_weyl_gap_zero,
+        thm:weyl_relative_entropy_gap_integral,
+        thm:weyl_resolvent_zero_defect}
+    Under the positive-definite finite-Weyl hypotheses, suppose that
+    \[
+      \sum_gD(A_g\Vert B_g)-D(A\Vert B)=0.
+    \]
+    Then $\operatorname{Def}_B(t)=0$ for every $t>0$, and consequently
+    \[
+      T_g^{-1}(B_g)=T^{-1}(B)
+    \]
+    for every $t>0$ and every Weyl index $g$.
+    In particular, equality of relative entropy under the right partial trace
+    implies this conclusion by
+    Theorem~\ref{thm:partial_trace_saturation_weyl_gap_zero}.
+    This is the positive-definite conclusion of the equality argument in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4 and Appendix.  It makes no
+    assertion at $t=0$ or for singular inputs.
+\end{theorem}
+
+\begin{proof}\leanok
+    The integrand in
+    Theorem~\ref{thm:weyl_relative_entropy_gap_integral} is nonnegative and
+    has integral zero, hence it vanishes almost everywhere.  Its continuity
+    improves this to vanishing at every $t>0$.  Since
+    $\operatorname{Def}_A(t)\geq0$, $\operatorname{Def}_B(t)\geq0$, and
+    $t/(1+t)>0$, it follows that $\operatorname{Def}_B(t)=0$.  Theorem
+    \ref{thm:weyl_resolvent_zero_defect} now gives the common solution.
 \end{proof}
 
 \begin{lemma}[Maximally mixed support-sandwich normalization]
