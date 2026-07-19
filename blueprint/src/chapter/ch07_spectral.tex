@@ -2634,9 +2634,14 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \[
         \widehat{S\circ T}=\widehat S\circ\widehat T,
     \]
-    and $S\circ T$ is again a direct-sum Kraus map.  If
-    $F:\mathcal A\to\mathcal A$ is a trace-preserving direct-sum Kraus map,
-    then its trace adjoint satisfies, for every $X\in\mathcal A$,
+    and $S\circ T$ is again a direct-sum Kraus map.  If an endomorphism
+    $T:\mathcal A\to\mathcal A$ has an extension satisfying
+    \[
+        \widehat T(Y^*Y)-\widehat T(Y^*)\widehat T(Y)\succeq0,
+    \]
+    then $T$ satisfies the corresponding inequality in every summand.
+    Finally, if $F:\mathcal A\to\mathcal A$ is a trace-preserving direct-sum
+    Kraus map, then its trace adjoint satisfies, for every $X\in\mathcal A$,
     \[
         F^*(X^*X)-F^*(X^*)F^*(X)\succeq0
     \]
@@ -2653,16 +2658,35 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
         =\iota_{\mathcal C}ST\pi_{\mathcal A}
         =\widehat{S\circ T}.
     \]
-    Products of Kraus operators therefore give a Kraus representation of the
-    composite.  If $F$ preserves the total trace, then $\widehat F$ preserves
-    the ordinary trace, so $(\widehat F)^*$ is unital.  Complete positivity
-    implies two-positivity for $(\widehat F)^*$, and Kadison--Schwarz gives
+    If $\widehat T(X)=\sum_i K_iXK_i^*$ and
+    $\widehat S(Y)=\sum_j L_jYL_j^*$, then
+    \[
+        \widehat{S\circ T}(X)
+          =\sum_{i,j}(L_jK_i)X(L_jK_i)^*,
+    \]
+    which gives the asserted Kraus representation.  For
+    $Y=\iota_{\mathcal A}(X)$, the $i$-th diagonal block of the extension
+    Schwarz inequality is
+    \[
+        \left[\widehat T(Y^*Y)-\widehat T(Y^*)\widehat T(Y)\right]_i
+          =T(X^*X)_i-T(X^*)_iT(X)_i\succeq0,
+    \]
+    which proves the descent assertion.  If $F$ preserves the total trace,
+    then $\widehat F$ preserves the ordinary trace, so $(\widehat F)^*$ is
+    unital.  Complete positivity implies two-positivity for
+    $(\widehat F)^*$, and Kadison--Schwarz gives
     \[
         (\widehat F)^*(Y^*Y)
           -(\widehat F)^*(Y^*)(\widehat F)^*(Y)\succeq0.
     \]
-    Using $(\widehat F)^*=\widehat{F^*}$ and compressing to each diagonal
-    summand gives the stated inequality.
+    For $Y=\iota_{\mathcal A}(X)$, use
+    $(\widehat F)^*=\widehat{F^*}$ and project this inequality onto the
+    $i$-th diagonal summand.  The resulting block identity is
+    \[
+        \left[\widehat{F^*}(Y^*Y)
+          -\widehat{F^*}(Y^*)\widehat{F^*}(Y)\right]_i
+        =F^*(X_i^*X_i)-F^*(X_i^*)F^*(X_i)\succeq0.
+    \]
 \end{proof}
 
 % Scope restriction documented in
