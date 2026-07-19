@@ -167,8 +167,8 @@ is the full-support step in the proof of Wolf, Theorem 6.14; local source
 
 **Scope restriction (maximal-support compression):** This theorem describes
 the fixed points of the compressed map with positive definite density blocks.
-It does not yet transport the description to the original space with its
-complementary zero summand.  This restriction is documented in
+The transport to the original space with its complementary zero summand is
+completed in `TNLean.Channel.FixedPoint.WolfTheorem614`.  This restriction is documented in
 `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
 
 The theorem records only the fixed-point description.  The corresponding

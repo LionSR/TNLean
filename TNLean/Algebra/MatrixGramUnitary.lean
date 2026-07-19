@@ -16,6 +16,10 @@ matrices: two rectangular matrices with the same Gram matrix differ by a
 unitary matrix on the codomain.  The proof passes through the corresponding
 linear maps on Euclidean spaces and extends the induced isometry between their
 ranges to the ambient finite-dimensional Hilbert space.
+
+It also applies this extension to an isometric rectangular matrix, realizing
+its compression as a unitary conjugate of the corresponding square matrix
+with one complementary zero block.
 -/
 
 open scoped Matrix InnerProductSpace

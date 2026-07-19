@@ -46,13 +46,12 @@ For MPDO renormalization fixed points:
 
 - `cpsv16_vertical_sector_invertibility.tex` separates the proved fixed
   contraction families and product-generation theorem from the remaining
-  density-weighted fixed-point argument in Appendix C.4. The full-support
-  adjoint Cesàro projection now has Wolf's weighted partial-trace block form;
-  taking its trace adjoint, reducing to support, and proving the transported
-  maps trace preserving on the full sector algebras remain open. Since those
-  algebras are direct sums rather than full matrix algebras, the application
-  also needs a block-diagonal full-matrix extension or a direct-sum version of
-  the fixed-point theorem. The note also records that sector relabelling
+  density-weighted fixed-point argument in Appendix C.4. Wolf's full
+  fixed-point theorem, including maximal-support reduction and the
+  complementary zero summand, and its full-support direct-sum consequence are
+  now formalized. For the transported sector maps it remains to prove the
+  channel hypotheses on the full sector algebras. The note also records that
+  sector relabelling
   follows from mutually inverse positive trace-preserving maps, not from a
   bare linear equivalence.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT

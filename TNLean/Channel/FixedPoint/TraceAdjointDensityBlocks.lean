@@ -96,9 +96,10 @@ proof of Theorem 6.14 and Equation (6.63); local sources
 and `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1483--1494.
 
 **Scope restriction (full support):** The fixed point is positive definite on
-the ambient space.  The positive-definite reduction of the block densities
-and the complementary zero summand required for the general theorem remain
-open in `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
+the ambient space.  The subsequent maximal-support reduction and the
+complementary zero summand are completed in
+`TNLean.Channel.FixedPoint.WolfTheorem614`; their construction is recorded in
+`docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
 
 **Convention (factor order):** Wolf writes the algebra and density factors in
 the opposite order.  Each summand is indexed by

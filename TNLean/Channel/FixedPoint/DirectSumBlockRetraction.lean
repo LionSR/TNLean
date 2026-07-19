@@ -205,8 +205,10 @@ Appendix C.4, lines 1980--1995. The hypotheses for the particular sector map
 in that argument are not asserted here.
 
 **Scope restriction (full support):** The fixed family is positive definite on
-every summand. The support reduction and complementary zero summand of the
-general theorem remain open in
+every summand. The maximal-support reduction and complementary zero summand
+for a full matrix algebra are completed in
+`TNLean.Channel.FixedPoint.WolfTheorem614`; the present direct-sum theorem
+retains its explicit full-support hypothesis. See
 `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`. -/
 theorem IsPositiveDirectSumMap.exists_block_densities_of_fixedPoints
     {T : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
