@@ -1189,12 +1189,28 @@
     \]
 \end{definition}
 
+\begin{lemma}[Diagonal coefficient mass and trace]
+    \label{lem:mpo_diagonal_cut_mass_trace}
+    \lean{MPOTensor.diagonalCutMass_eq_trace_re}
+    \leanok
+    \uses{def:mpo_normalized_diagonal_cut_distribution}
+    For every MPO tensor $M$ and cut lengths $L,R$, the total diagonal
+    coefficient mass satisfies
+    \[
+      Z=\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Splitting a configuration on $L+R$ sites into its first $L$ and last $R$
+    components rewrites $Z$ as the sum of all diagonal entries of
+    $\rho^{(L+R)}(M)$, which is its trace.
+\end{proof}
+
 \begin{theorem}[Classical estimate for a positive diagonal finite-chain operator]
     \label{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     \lean{MPOTensor.diagonalCutMatrix_apply_eq_mpo,
       MPOTensor.diagonalCutRealMatrix_map_ofReal_of_posSemidef,
       MPOTensor.diagonalCutRealMatrix_nonneg_of_posSemidef,
-      MPOTensor.diagonalCutMass_eq_trace_re,
       MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution,
       MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}
     \leanok
@@ -1228,7 +1244,6 @@
     \label{cor:mpo_diagonal_classical_mutual_information}
     \lean{MPOTensor.diagonalMPDO_classicalMutualInformation_le_two_log}
     \leanok
-    \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     Let $D\geq1$, and let $M$ generate diagonal positive semidefinite operators
     at every positive chain length.  If $L+R>0$ and the trace at length $L+R$
     is positive, then the classical mutual information of its normalized
@@ -1238,6 +1253,8 @@
     \]
 \end{corollary}
 \begin{proof}\leanok
+    \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information,
+      lem:mpo_diagonal_cut_mass_trace}
     Global diagonality and positivity give the fixed-length hypotheses of
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
     Since the chain operator is diagonal,
