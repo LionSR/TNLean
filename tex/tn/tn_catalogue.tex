@@ -189,47 +189,6 @@
     \end{TNDiagram}%
 }
 
-% Local BNT fusion identity from CPSV16, eq. (Ualphabeta).  The left-hand
-% isometry combines the two incoming bond factors, while its adjoint separates
-% the outgoing factors.  The right-hand side records the weighted final-sector
-% direct sum without introducing an F-move.
-\TNDeclareDiagram
-    {TNMPDOBNTFusionIdentity}
-    {}
-    {display}
-    {compact}
-    {\TNMPDOBNTFusionIdentity}
-    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
-    \begin{TNEquationRow}[compact]
-        \TNTerm{%
-            \TNSplitMap{bfiU}{at=origin}{U_{\alpha,\beta}}
-            \TNStackedMPOProduct{bfiProduct}{right=of bfiU}
-                {M_\alpha}{M_\beta}{}
-            \TNMergeMap{bfiUd}{right=of bfiProductUpper}
-                {U_{\alpha,\beta}^{\dagger}}
-            \TNConnectVirtual{bfiUFactorOne}{bfiProductUpperWest}
-            \TNConnectVirtual{bfiUFactorTwo}{bfiProductLowerWest}
-            \TNConnectVirtual{bfiProductUpperEast}{bfiUdFactorOne}
-            \TNConnectVirtual{bfiProductLowerEast}{bfiUdFactorTwo}
-            \TNOpenVirtualWest{bfiUCombined}
-            \TNOpenVirtualEast{bfiUdCombined}
-            \TNOpenPhysicalNorth{bfiProductUpperKet}
-            \TNOpenPhysicalSouth{bfiProductLowerBra}
-            \TNLabelAbove{bfiProductUpperKetOpen}{i}
-            \TNLabelBelow{bfiProductLowerBraOpen}{j}}
-        \TNRelation{=\displaystyle\bigoplus_\gamma}
-        \TNTerm{%
-            \TNWeightedMPOBlock{bfiBlock}{at=origin}
-                {M_\gamma}{M_\gamma}{}{\chi_{\alpha,\beta,\gamma}}
-            \TNOpenVirtualWest{bfiBlockWeightW}
-            \TNOpenVirtualEast{bfiBlockWeightedEast}
-            \TNOpenVirtualWest{bfiBlockLowerWest}
-            \TNOpenVirtualEast{bfiBlockLowerEast}
-            \TNOpenPhysicalNorth{bfiBlockUpperKet}
-            \TNOpenPhysicalSouth{bfiBlockLowerBra}}
-    \end{TNEquationRow}%
-}
-
 % The two unweighted zipper directions and the resulting reconstruction of a
 % product letter.  This follows the graphical arrangement of the zipper
 % figures in Bultinck et al., arXiv:1511.08090, while using the notation of
