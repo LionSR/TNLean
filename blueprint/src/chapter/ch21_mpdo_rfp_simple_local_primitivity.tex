@@ -745,9 +745,10 @@
     is its fixed space, so it is one-dimensional.
 \end{proof}
 
-\begin{theorem}[Rank of a stationary primitive square]
+\begin{theorem}[Rank and factorization of a stationary primitive square]
     \label{thm:matrix_primitive_pow_two_rank_one}
     \lean{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}
+    \lean{Matrix.IsPrimitive.exists_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three}
     \leanok
     Let $T$ be a primitive real $N\times N$ matrix, where
     $N\geq 1$. If
@@ -757,6 +758,12 @@
     then
     \[
         \operatorname{rank}(T^2)=1.
+    \]
+    There are vectors $a,b\in\mathbb R^N$ such that
+    \[
+        T^2=ab^{\mathsf T},
+        \qquad
+        \sum_i a_i b_i=1.
     \]
     This finite-dimensional matrix lemma supports the argument sought at
     \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}; it is not a theorem
@@ -775,6 +782,10 @@
     \]
     The same stabilization identity gives $(T^2)^2=T^2$.
     The preceding theorem applied to $P=T^2$ now gives the conclusion.
+    Since an idempotent has trace equal to its rank,
+    $\tr(T^2)=1$.  Factoring its one-dimensional range gives
+    $T^2=ab^{\mathsf T}$, and taking the trace yields
+    $\sum_i a_i b_i=1$.
 \end{proof}
 
 \begin{theorem}[Idempotence of the sector trace matrix]

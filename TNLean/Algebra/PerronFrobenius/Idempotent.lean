@@ -14,10 +14,12 @@ nonnegative real matrix whose second and third powers agree. Its square is a
 strictly positive idempotent, and the fixed space of such an idempotent is
 one-dimensional. Consequently the square has rank one.
 
-The result supports the rank-one trace factorization sought at
-arXiv:1606.00608, Appendix C.2, line 1613. It is a source-independent matrix
-lemma, not a statement asserted in that paper: applying it to the sector trace
-matrix still requires a separate, non-circular proof of primitivity.
+The results support the rank-one trace factorization sought at
+arXiv:1606.00608, Appendix C.2, line 1613.  In addition to the rank statement,
+the square is factored as an outer product with diagonal pairing one.  These
+are source-independent matrix lemmas, not statements asserted in that paper:
+applying them to the sector trace matrix still requires a separate,
+non-circular proof of primitivity.
 -/
 
 open scoped BigOperators Matrix
@@ -118,5 +120,39 @@ theorem IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three
     rw [← pow_add]
     exact pow_eq_pow_two_of_pow_two_eq_pow_three h 4 (by omega)
   exact rank_eq_one_of_pos_of_mul_self_eq_self hsq_pos hsq_idem
+
+/-- If a primitive nonnegative real matrix has equal second and third powers,
+then its square is an outer product whose diagonal pairing is one.
+
+This is the normalized factorization needed for the corrected two-step
+coefficient in arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1616.  It factors `T ^ 2`, not the one-step matrix `T` printed at
+line 1613. -/
+theorem IsPrimitive.exists_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three
+    {N : ℕ} [NeZero N] {T : Matrix (Fin N) (Fin N) ℝ}
+    (hT : T.IsPrimitive) (h : T ^ 2 = T ^ 3) :
+    ∃ a b : Fin N → ℝ, T ^ 2 = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
+  have hsq_idem : T ^ 2 * T ^ 2 = T ^ 2 := by
+    rw [← pow_add]
+    exact pow_eq_pow_two_of_pow_two_eq_pow_three h 4 (by omega)
+  have hrank := hT.rank_pow_two_eq_one_of_pow_two_eq_pow_three h
+  let f : (Fin N → ℝ) →ₗ[ℝ] (Fin N → ℝ) := Matrix.toLin' (T ^ 2)
+  have hf : IsIdempotentElem f := by
+    change Matrix.toLin' (T ^ 2) ∘ₗ Matrix.toLin' (T ^ 2) = Matrix.toLin' (T ^ 2)
+    rw [← Matrix.toLin'_mul, hsq_idem]
+  have hrange : Module.finrank ℝ (LinearMap.range f) = 1 := by
+    rw [Matrix.rank_eq_finrank_range_toLin (T ^ 2)
+      (Pi.basisFun ℝ (Fin N)) (Pi.basisFun ℝ (Fin N)), Matrix.toLin_eq_toLin'] at hrank
+    exact hrank
+  have htrace : Matrix.trace (T ^ 2) = 1 := by
+    have hproj := (LinearMap.isProj_range_iff_isIdempotentElem f).2 hf |>.trace
+    rw [Matrix.trace_toLin'_eq] at hproj
+    rw [hrange] at hproj
+    exact_mod_cast hproj
+  obtain ⟨a, b, hab⟩ :=
+    Matrix.hasRankOneFactorization_of_mul_self_eq_self hsq_idem htrace
+  refine ⟨a, b, hab, ?_⟩
+  rw [← Matrix.trace_vecMulVec, ← hab]
+  exact htrace
 
 end Matrix
