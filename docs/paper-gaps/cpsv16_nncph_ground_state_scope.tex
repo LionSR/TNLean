@@ -267,8 +267,13 @@ canonical-form or ground-space-spanning assumption.  Its direct consequence
 \hspace{0pt}\leanid{exists_unitary_blockActions_of_twoSiteParentInteractionMatrix}
 decomposes the middle physical space into a finite direct sum of left and
 right tensor factors on which the two adjacent interactions act separately.
-This completes the local Bravyi--Vyalyi step.  It does not yet construct the
-finite sector graph or analyze its cyclic ground spaces.
+The subsequent sector datum is now formalized in
+\leanid{MPSTensor.BeigiSectorGraphData}.  From its source equation~(2) alone,
+\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
+constructs the finite directed graph and proves Beigi's ordered-cycle
+ground-space dimension formula for every $N>2$.  No chain-level ground-space
+equation, eventual degeneracy, or canonical-form datum is assumed in this
+sector-graph theorem.
 
 \section{Elimination plan}
 
@@ -287,9 +292,10 @@ including the spanning condition in the parent-Hamiltonian ground-space clause:
 The forward commutation implication uses the basic-vector form in
 Theorem~3.11 and the corresponding local projectors.  The reverse implication
 must internalize the remaining part of Beigi's one-dimensional
-nearest-neighbor commuting-Hamiltonian ground-space classification: construct
-the finite sector graph, use eventual degeneracy constancy to reduce its cycles
-to loops with one-dimensional cyclic edge kernels, and identify the resulting
+nearest-neighbor commuting-Hamiltonian ground-space classification: use
+eventual degeneracy constancy together with the proved finite-sector-graph
+dimension formula to reduce its cycles to loops with one-dimensional cyclic
+edge kernels, and identify the resulting
 locally orthogonal product-of-pairs states with the basis of normal tensors of
 $A$.\footnote{Tracked by \ghissue{2633}.}
 
@@ -312,9 +318,9 @@ canonical form is subject to the source obstruction recorded in
 ground-space spanning clause and the multiplicity-one distinct-sector
 extension are proved. The repeated-copy and arbitrary-raw-weight extension
 remains open.  In the reverse direction, eventual ground-space dimension
-stability and the local spatial decomposition are proved; the sector-graph
-classification and its identification with the basis of normal tensors remain
-open.
+stability, the local spatial decomposition, and the ordered-cycle sector-graph
+dimension formula are proved.  The reduction of this graph under eventual
+constancy and its identification with the basis of normal tensors remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

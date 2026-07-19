@@ -21,7 +21,6 @@ The following archival modules are intentionally excluded
 * the archival alternate proof `TNLean.Archive.BlockingPeriodicityCFII2`;
 * the documentary counterexample `TNLean.Archive.BlockSepCounterexample`.
 -/
-
 -- Layer 0: General algebra
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.TracePairing
@@ -32,6 +31,7 @@ import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.OrthogonalProjection
+import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.PosSemidefSupport
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.ComplexPhasePositivity
@@ -628,9 +628,9 @@ import TNLean.MPS.RFP.ResidualWordSpan
 import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
 import TNLean.MPS.RFP.BeigiSpatialDecomposition
+import TNLean.MPS.RFP.BeigiSectorGraph
 import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
 import TNLean.MPS.RFP.BNTWeightCounterexample
-
 -- Layer 6a: Quantum Wielandt span-growth infrastructure
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.NonzeroTraceProduct
