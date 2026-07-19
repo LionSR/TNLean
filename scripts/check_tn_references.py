@@ -26,7 +26,6 @@ REFERENCE_CALLS = {
         r"\TNOpenPhysicalNorth{pKet}\TNOpenPhysicalSouth{pBra}"
         r"\end{TNDiagram}"
     ),
-    "stacked_mpo_zipper": r"\TNMPDOUnweightedZipperReconstruction",
     "compact_trace_cell": (
         r"\begin{TNDiagram}[compact]"
         r"\TNCompactTraceCell{c}{(0,0)}{M_\alpha}{X}{M_\alpha(X)}"
