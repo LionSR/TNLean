@@ -843,6 +843,156 @@
     trace matrix is primitive.
 \end{proof}
 
+\begin{definition}[Cyclic-active sectors]
+    \label{def:mpdo_cyclic_active_sector}
+    \lean{MPOTensor.PhysicalSectorFactorization.IsCyclicActiveSector,
+      MPOTensor.PhysicalSectorFactorization.cyclicActiveWeight,
+      MPOTensor.PhysicalSectorFactorization.CyclicActiveSector,
+      MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
+    For a physical-sector factorization with neighboring operators
+    $\eta_{k,h}$, retain a sector $k$ when there is a sector $h$ such that
+    \[
+        \eta_{k,h}\ne0,
+        \qquad h\leadsto k,
+    \]
+    where $\leadsto$ denotes reachability by nonzero neighboring operators.
+    The first edge $k\to h$ is explicit, so the resulting closed walk has
+    positive length even when the return path is empty.  Let $C$ be the set
+    of retained sectors and define
+    \[
+        T_{k,h}=\tr(\eta_{k,h})\qquad(k,h\in C).
+    \]
+    For positive semidefinite neighboring operators,
+    $T_{k,h}>0$ is equivalent to $\eta_{k,h}\ne0$.
+\end{definition}
+
+\begin{theorem}[Deletion of sectors absent from cyclic products]
+    \label{thm:mpdo_cyclic_active_deletion}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      neighboringOperator_ne_zero_of_cyclicNeighboringProduct_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      isCyclicActiveSector_of_cyclicNeighboringProduct_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
+    \leanok
+    \uses{def:mpdo_cyclic_active_sector,
+      def:mpdo_physical_sector_chain_coordinates}
+    Let $N\geq1$ and let $k=(k_0,\ldots,k_{N-1})$ be a cyclic sector
+    configuration.  If $k_n\notin C$ for some $n$, then
+    \[
+        \Omega_k=0.
+    \]
+    Thus deleting the sectors outside $C$ leaves every finite cyclic
+    neighboring product unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\Omega_k\ne0$, each factor $\eta_{k_n,k_{n+1}}$ is nonzero; otherwise
+    every matrix entry of the product vanishes.  Starting with the edge
+    $k_n\to k_{n+1}$ and following the remaining cyclic edges gives a return
+    path to $k_n$.  Hence every $k_n$ belongs to $C$.
+\end{proof}
+
+\begin{theorem}[Primitivity on cyclic-active sectors]
+    \label{thm:mpdo_cyclic_active_trace_matrix_primitive}
+    \lean{MPOTensor.PhysicalSectorFactorization.nonempty_cyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicActiveSectorOneSiteMatrixFamily_span_eq_top}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicActiveSectorTraceMatrix_isIrreducible}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicActiveSectorTraceMatrix_pow_two_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicActiveSectorTraceMatrix_pow_three_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicActiveSectorTraceMatrix_isPrimitive}
+    \leanok
+    \uses{def:injective, def:mpdo_cyclic_active_sector}
+    Suppose that the virtual dimension is positive, the MPO tensor is
+    injective, and every $\eta_{k,h}$ is positive semidefinite.  Then $C$ is
+    nonempty and the matrix $T$ is primitive.  More precisely, $T$ is
+    irreducible and every $k\in C$ satisfies
+    \[
+        (T^2)_{k,k}>0,
+        \qquad
+        (T^3)_{k,k}>0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The virtual matrices of all physical sectors span the full matrix
+    algebra.  Nondegeneracy and cyclicity of the trace pairing show that a
+    sector containing a nonzero virtual matrix lies on a directed two-cycle.
+    Hence every virtual matrix outside $C$ vanishes, and the virtual matrices
+    belonging to $C$ still span the full algebra.
+
+    If a proper directed cut separated two nonempty subsets of $C$, the
+    corresponding nonzero virtual matrix spaces would multiply to zero while
+    their sum was the full matrix algebra, a contradiction.  Thus $T$ is
+    irreducible.  The same trace pairing gives a two-edge return through each
+    sector and closes every retained edge through a third retained sector.
+    These yield the displayed positive diagonal entries of $T^2$ and $T^3$;
+    the coprime return lengths imply primitivity.
+\end{proof}
+
+\begin{theorem}[Rank-one cyclic-active two-step coefficient]
+    \label{thm:mpdo_cyclic_active_zcl_rank_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl,
+      thm:mpdo_cyclic_active_trace_matrix_primitive}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive}, suppose that
+    the physical-trace transfer has source zero correlation length.  There is
+    a number $\lambda>0$ such that, with $\widehat T=\lambda^{-1}T$,
+    \[
+        \widehat T^2=\widehat T^3,
+        \qquad
+        \rank(\widehat T^2)=1,
+    \]
+    and for every $m\geq1$,
+    \[
+        \tr(\widehat T^m)=\tr(\widehat T).
+    \]
+    The matrix $\widehat T^2$ is the two-step coefficient
+    \[
+        (\widehat T^2)_{k,h}
+        =\sum_{q\in C}\widehat T_{k,q}\widehat T_{q,h}
+    \]
+    obtained from two successive fully traced neighboring operators.  In the
+    argument of
+    \cite[Appendix~C.2, lines~1606--1616]{Cirac2016MPDO_arXiv}, it enters after
+    applying the zero-correlation-length marginal replacement once more than
+    at line~1613 and tracing three boundary sites.  The conditional
+    two-boundary formula in
+    Theorem~\ref{thm:mpdo_eta_fourth_region_trace_formula} instead contains
+    $\widehat T$ itself.  The assertion therefore neither identifies these
+    two coefficients nor implies that the unreduced Beigi trace matrix is
+    primitive or rank one.
+\end{theorem}
+
+\begin{proof}\leanok
+    Set the left sector tensor equal to zero outside $C$.  The preceding span
+    argument shows that this does not change the physical tensor, and the
+    neighboring operators with both indices in $C$ are unchanged.  The
+    normalized physical-trace identity gives
+    $\widehat T^2=\widehat T^3$ on the restricted indices.  By
+    Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive},
+    $\widehat T$ is primitive.  Its square is therefore a strictly positive
+    idempotent matrix and has rank one.  To use this factorization in the
+    fourth-region argument, apply the marginal replacement one further time,
+    so that the fully traced middle segment contributes $\widehat T^2$ rather
+    than $\widehat T$.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready
