@@ -52,8 +52,6 @@ private lemma cfc_rpowIntegrand₀₁_eq_resolvent
     rw [Real.rpowIntegrand₀₁_eq_sub (by grind) ht]
     have hg : ContinuousOn (fun z : ℝ ↦ (t + z)⁻¹) (spectrum ℝ X) := by
       fun_prop (disch := grind -abstractProof)
-    have hf : ContinuousOn (fun z : ℝ ↦ 1 + z) (spectrum ℝ X) := by
-      fun_prop
     have hspectrum : ∀ r ∈ spectrum ℝ X, t + r ≠ 0 := by
       grind
     have hcfc := cfc_sub (fun _ : ℝ ↦ t ^ (p - 1))
@@ -115,12 +113,6 @@ theorem sqrt_mulVec_eq_of_resolvent_mulVec_eq
       { toFun := fun M ↦ M *ᵥ x
         map_add' := fun M N ↦ add_mulVec M N x
         map_smul' := fun c M ↦ smul_mulVec c M x }
-  have hSmulInt : IntegrableOn
-      (fun t : ℝ ↦ cfcₙ (Real.rpowIntegrand₀₁ p t) S *ᵥ x) (Ioi 0) μ := by
-    exact L.integrable_comp hSint
-  have hTmulInt : IntegrableOn
-      (fun t : ℝ ↦ cfcₙ (Real.rpowIntegrand₀₁ p t) T *ᵥ x) (Ioi 0) μ := by
-    exact L.integrable_comp hTint
   rw [CFC.sqrt_eq_nnrpow, CFC.sqrt_eq_nnrpow,
     show (1 / 2 : NNReal) = p by rfl,
     (hμ S hS.nonneg).2, (hμ T hT.nonneg).2]
