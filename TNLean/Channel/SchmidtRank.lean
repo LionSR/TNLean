@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu and TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.MatrixRankBaseChange
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import Mathlib.Data.Complex.Basic
@@ -39,7 +40,6 @@ bounded Schmidt rank.
   Schmidt rank is equivalent to vanishing of the corresponding singular value.
 * `Matrix.exists_mul_eq_of_rank_le`: a matrix of rank at most `k` factors
   through a `k`-dimensional coordinate space.
-* `Matrix.rank_smul_of_ne_zero`: nonzero complex rescaling preserves matrix rank.
 
 ## References
 
@@ -63,20 +63,6 @@ theorem schmidtCoeffMatrix_apply (ψ : m × n → ℂ) (i : m) (j : n) :
   rfl
 
 variable [Fintype n]
-
-/-- Multiplication by a nonzero complex scalar does not change the rank of a
-matrix. -/
-theorem rank_smul_of_ne_zero {c : ℂ} (hc : c ≠ 0) (A : Matrix m n ℂ) :
-    (c • A).rank = A.rank := by
-  have hrange :
-      LinearMap.range (c • A).mulVecLin = LinearMap.range A.mulVecLin := by
-    ext v
-    constructor
-    · rintro ⟨x, rfl⟩
-      exact ⟨c • x, by simp⟩
-    · rintro ⟨x, rfl⟩
-      exact ⟨c⁻¹ • x, by simp [hc]⟩
-  rw [Matrix.rank, Matrix.rank, hrange]
 
 /-- A matrix whose rank is at most `k` factors through `ℂ^k`. -/
 theorem exists_mul_eq_of_rank_le

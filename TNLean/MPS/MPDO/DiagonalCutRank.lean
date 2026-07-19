@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.Defs
+import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Entropy.ClassicalMutualInformation
-import Mathlib.LinearAlgebra.Matrix.Rank
+import TNLean.MPS.MPDO.Defs
 
 /-!
 # Rank of a diagonal matrix-product-operator cut
@@ -19,9 +19,9 @@ This is the algebraic part of the classical-diagonal analysis of the estimate
 in Proposition 4.5 of arXiv:1606.00608.  Combined with Theorem 4.1 of
 arXiv:1704.06507, it gives the stronger classical estimate
 $I(X:Y) \leq 2\log D$.  The information-versus-rank theorem is formalized in
-`TNLean.Entropy.ClassicalMutualInformation`; the scalar normalization and
-real-to-complex rank comparison needed for the MPO corollary are handled below,
-with the latter retained as an explicit hypothesis.
+`TNLean.Entropy.ClassicalMutualInformation`; rank invariance under scalar
+normalization and scalar extension is proved in
+`TNLean.Algebra.MatrixRankBaseChange`.
 
 ## Main definitions
 
@@ -34,8 +34,8 @@ with the latter retained as an explicit hypothesis.
 * `MPOTensor.diagonalCutMatrix_rank_le`: the diagonal cut matrix of a periodic
   MPO has rank at most $D^2$.
 * `MPOTensor.diagonalCut_classicalMutualInformation_le_two_log`: normalized
-  real diagonal cut data has mutual information at most $2\log D$ once its
-  real rank is identified with the complex rank of the cut matrix.
+  real diagonal coefficients define a joint distribution whose mutual
+  information is at most $2\log D$.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -44,19 +44,6 @@ open Matrix
 namespace Matrix
 
 variable {D : ℕ} {r c : Type*} [Fintype c]
-
-/-- Multiplication by a nonzero real scalar does not change matrix rank. -/
-theorem rank_smul_of_ne_zero_real {a : ℝ} (ha : a ≠ 0) (A : Matrix r c ℝ) :
-    (a • A).rank = A.rank := by
-  have hrange :
-      LinearMap.range (a • A).mulVecLin = LinearMap.range A.mulVecLin := by
-    ext v
-    constructor
-    · rintro ⟨x, rfl⟩
-      exact ⟨a • x, by simp⟩
-    · rintro ⟨x, rfl⟩
-      exact ⟨a⁻¹ • x, by simp [ha]⟩
-  rw [Matrix.rank, Matrix.rank, hrange]
 
 /-- The matrix of trace pairings $(x,y) \mapsto \operatorname{tr}(A_xB_y)$
 between two finite families of square matrices. -/
@@ -124,33 +111,33 @@ theorem diagonalCutMatrix_rank_le (M : MPOTensor d D) (L R : ℕ) :
 
 /-- **Classical diagonal-MPO cut estimate.** Let `W` be the real diagonal
 coefficient matrix of a periodic MPO cut, let `Z > 0` be its total mass, and
-let `P = Z⁻¹ • W` be the normalized joint distribution. If real scalar
-extension preserves the rank of `W`, then the classical mutual information of
-`P` is at most `2 * log D`.
+let `P = Z⁻¹ • W` be the normalized joint distribution. Then the classical
+mutual information of `P` is at most `2 * log D`.
 
 This is the formal assembly of Riazanov--Vyalyi, Theorem 4.1
 (arXiv:1704.06507), with the diagonal cut factorization supporting
-arXiv:1606.00608, Proposition 4.5. The hypotheses `hcut` and `hrank_map` make
-the currently unavailable real-to-complex cut-data bridge explicit; this
-statement does not concern unrestricted quantum mutual information.
+arXiv:1606.00608, Proposition 4.5. This statement does not concern unrestricted
+quantum mutual information.
 
-**Scope restriction (real-to-complex rank bridge):** The equality of real and
-complex ranks is an explicit hypothesis rather than a consequence of the
-current MPDO API. This remaining bridge is documented in
+**Scope restriction (coefficient matrix and probability distribution):** The
+real coefficient matrix `W`, the joint distribution `P`, their normalization
+relation, and the identification of the scalar extension of `W` with the
+complex cut matrix are explicit hypotheses rather than consequences of the
+current MPDO definitions. This remaining construction is documented in
 `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
 theorem diagonalCut_classicalMutualInformation_le_two_log [NeZero D]
     (M : MPOTensor d D) (L R : ℕ)
     (W P : Matrix (Fin L → Fin d) (Fin R → Fin d) ℝ) (Z : ℝ)
     (hP : P.IsJointDistribution) (hZ : 0 < Z)
     (hnorm : P = Z⁻¹ • W)
-    (hcut : W.map Complex.ofReal = diagonalCutMatrix M L R)
-    (hrank_map : W.rank = (W.map Complex.ofReal).rank) :
+    (hcut : W.map Complex.ofReal = diagonalCutMatrix M L R) :
     Entropy.classicalMutualInformation P ≤ 2 * Real.log D := by
   have hD : (D : ℝ) ≠ 0 := by exact_mod_cast NeZero.ne D
   have hPrank : P.rank = W.rank := by
-    rw [hnorm, Matrix.rank_smul_of_ne_zero_real (inv_ne_zero hZ.ne')]
+    rw [hnorm, Matrix.rank_smul_of_ne_zero (inv_ne_zero hZ.ne')]
+  have hmap : W.map (algebraMap ℝ ℂ) = W.map Complex.ofReal := rfl
   have hWrank : W.rank ≤ D * D := by
-    rw [hrank_map, hcut]
+    rw [← Matrix.rank_map_algebraMap (L := ℂ) W, hmap, hcut]
     exact diagonalCutMatrix_rank_le M L R
   have hPrank_pos : 0 < P.rank := by
     rw [Matrix.rank, Module.finrank_pos_iff_exists_ne_zero]

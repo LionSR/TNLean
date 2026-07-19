@@ -52,6 +52,7 @@ import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.SpinCover
+import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Algebra.StarSubalgebraBlockDiagonal
 import TNLean.Algebra.StarSubalgebraBlockForm
@@ -66,7 +67,6 @@ import TNLean.Algebra.StarSubalgebraSemisimple
 import TNLean.Algebra.StarSubalgebraSimpleModule
 import TNLean.Algebra.StarSubalgebraSpatial
 import TNLean.Algebra.StarSubalgebraUnitaryIntertwiner
-
 -- Layer 0b: General analysis
 import TNLean.Analysis.MeanErgodic
 import TNLean.Analysis.ProjectionGeometry
