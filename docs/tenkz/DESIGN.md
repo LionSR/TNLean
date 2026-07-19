@@ -176,7 +176,8 @@ The neighboring operator and the normalized active density on this space are
   \Omega_{k,h}=\bigoplus_l
     (\eta_{k,l}\otimes\eta_{l,h}),
   \qquad
-  \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h}.
+  \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h}
+  \quad(a_kb_h\ne0).
 \]
 
 For a nonzero finite-dimensional Hilbert space $H$, write
