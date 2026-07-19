@@ -546,6 +546,7 @@ def main() -> int:
             "picture|id=10|lang=grid\n"
             "faceports|picture=10|cell=1-1|face=down|arity=1|at=rows\n"
             "pairleg|picture=10|upper=1-1|lower=2-1|upper-port=center|column=1\n"
+            "pairleg|picture=10|upper=1-1|lower=2-1|upper-port=1|column=1\n"
             "picture|id=11|lang=grid\n"
             "faceports|picture=11|cell=1-1|face=down|arity=1|at=1\n"
             "faceports|picture=11|cell=1-1|face=down|arity=1|at=2\n"
@@ -643,6 +644,7 @@ def main() -> int:
         (6, "upper-port='4'"),
         (8, f"upper-port='{huge_arity + 1}'"),
         (9, "upper-port='center'"),
+        (10, "upper-port='1'"),
         (11, "upper-port='2'"),
     }
     actual_pairleg_mismatches = {

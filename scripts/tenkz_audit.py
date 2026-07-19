@@ -484,7 +484,7 @@ class Audit:
                 ports, row_count, _ = declared[down_key]
                 matches = port in ports
                 if not matches and row_count is not None and port != "center":
-                    matches = int(port) <= row_count
+                    matches = row_count != 1 and int(port) <= row_count
                 if matches:
                     continue
                 available_parts = sorted(
