@@ -16,7 +16,7 @@ respect to the trace pairing gives the density-block formula for the original
 Cesàro projection and identifies its range with the fixed points of the
 original map.
 
-TNLean indexes a summand by the product of the multiplicity index and the
+Each summand is indexed by the product of the multiplicity index and the
 matrix-factor index.  Thus the left partial trace is over the multiplicity
 factor, and the Schrödinger-picture summand has the form
 $\sigma_k\otimes M_{d_k}(\mathbb C)$.
