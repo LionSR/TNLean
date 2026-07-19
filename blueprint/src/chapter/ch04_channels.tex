@@ -22,7 +22,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \label{def:positive_map_is_positive_linear_map}
     \lean{IsPositiveMap.toPositiveLinearMap}
     \leanok
-    \uses{def:positive_map, def:has_bounded_orbits}
+    \uses{def:positive_map}
     A positive matrix map $E : \MN{n} \to \MN{m}$ determines the same
     linear map regarded as a positive linear map: if
     $A,B\in\MN{n}$ and $A \le B$, then $E(A) \le E(B)$ in $\MN{m}$.
@@ -1045,7 +1045,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \label{thm:positive_trace_nonincreasing_bounded_orbits}
     \lean{IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing}
     \leanok
-    \uses{def:positive_map}
+    \uses{def:positive_map, def:has_bounded_orbits}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace nonincreasing.  Then the
     forward orbit $\{T^n(X):n\geq 0\}$ is bounded for every $X\in\MN{D}$.
     This is the trace-nonincreasing form of
@@ -1053,11 +1053,16 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    For $X\succeq 0$, positivity and trace nonincrease place every iterate
-    $T^n(X)$ in a bounded trace section of the positive cone.  Apply this to
-    the positive and negative parts of a Hermitian matrix, and then write an
-    arbitrary matrix as a complex linear combination of two Hermitian
-    matrices.
+    For $X\succeq 0$, positivity and induction on $n$ give
+    \[
+        T^n(X)\succeq 0,
+        \qquad
+        \tr(T^n(X))\leq\tr(X).
+    \]
+    Thus the orbit lies in a bounded trace section of the positive cone.
+    Apply this to the positive and negative parts of a Hermitian matrix, and
+    then write an arbitrary matrix as a complex linear combination of two
+    Hermitian matrices.
 \end{proof}
 
 \begin{theorem}[Positive trace-preserving mean-ergodic projection]
