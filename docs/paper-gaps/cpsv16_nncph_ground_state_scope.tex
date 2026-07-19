@@ -299,6 +299,21 @@ BNT eventual-dimension theorem gives
 This conclusion does not identify the loop states with the original BNT
 representatives.
 
+The product-of-pairs vector carried by each positive loop is now also
+constructed explicitly.  The declaration
+\leanid{MPSTensor.BeigiSectorGraphData.loopTensor} uses the left factor of the
+loop sector as its virtual space and the chosen nonzero loop-edge vector as
+the cyclic right--left bond.  For every positive length,
+\leanid{MPSTensor.BeigiSectorGraphData.mpv_loopTensor} identifies its periodic
+matrix product vector with the sitewise-unitary image of Beigi's cyclic
+product
+\[
+  \prod_n \varphi_a(r_n,l_{n+1}).
+\]
+This is the construction in Beigi, arXiv:1105.1019v2, source lines 602--606.
+It does not yet prove that these vectors belong to, or span, the parent ground
+space, nor does it identify them with the original BNT representatives.
+
 \section{Elimination plan}
 
 A source-faithful formalization should replace the remaining axiom-backed
@@ -343,9 +358,10 @@ ground-space spanning clause and the multiplicity-one distinct-sector
 extension are proved. The repeated-copy and arbitrary-raw-weight extension
 remains open.  In the reverse direction, eventual ground-space dimension
 stability, the local spatial decomposition, the ordered-cycle dimension
-formula, and the reduction of the sector graph to one-dimensional loops are
-proved.  The identification of the resulting loop states with the basis of
-normal tensors remains open.
+formula, the reduction of the sector graph to one-dimensional loops, and the
+exact matrix product realization of every positive loop state are proved.
+Parent-ground-space membership and spanning for these loop vectors, followed
+by their identification with the basis of normal tensors, remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

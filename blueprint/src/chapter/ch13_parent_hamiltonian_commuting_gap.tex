@@ -2473,6 +2473,53 @@ specialization of that Appendix~D definition.
     preserves the dimension of the ground space.
 \end{proof}
 
+\begin{definition}[Tensor associated with a positive Beigi loop]
+    \label{def:beigi_loop_product_state}
+    \lean{MPSTensor.BeigiSectorGraphData.loopBondVector}
+    \lean{MPSTensor.BeigiSectorGraphData.loopBondVector_mem}
+    \lean{MPSTensor.BeigiSectorGraphData.loopBondVector_ne_zero}
+    \lean{MPSTensor.BeigiSectorGraphData.loopCoordinateTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.loopTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.loopCyclicProduct}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductState}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    Let $a\to a$ be a positive loop and choose a nonzero vector
+    $\varphi_a\in\operatorname{ran}P_{a,a}$.  In sector coordinates define
+    the matrix product tensor
+    \[
+        (C_a^{(r,l)})_{x,y}=\delta_{x,l}\,\varphi_a(r,y),
+    \]
+    and set it to zero outside sector $a$.  The physical loop tensor is the
+    image of $C_a$ under the one-site unitary of the spatial decomposition.
+    Its associated cyclic product pairs the right factor at site $n$ with the
+    left factor at site $n+1$.
+\end{definition}
+
+\begin{theorem}[Periodic vector of a positive Beigi loop]
+    \label{thm:beigi_loop_tensor_periodic_vector}
+    \lean{MPSTensor.BeigiSectorGraphData.mpv_loopCoordinateTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.mpv_loopTensor}
+    \leanok
+    \uses{def:beigi_loop_product_state}
+    For every $N>0$, the periodic matrix product vector of $C_a$ has
+    coefficient
+    \[
+        \prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1})
+    \]
+    on a cyclic configuration in sector $a$, and coefficient zero on every
+    other sector configuration.  Consequently the periodic vector of the
+    physical loop tensor is exactly the sitewise-unitary image of this cyclic
+    product-of-pairs state.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the trace of the closed matrix product as a sum over cyclic virtual
+    indices.  Each local Kronecker delta forces the virtual index at site $n$
+    to equal $l_n$, leaving precisely the displayed product.  Expanding the
+    one-site unitary at every physical leg gives its sitewise tensor power.
+\end{proof}
+
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
