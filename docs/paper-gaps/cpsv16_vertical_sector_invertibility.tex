@@ -126,14 +126,23 @@ trace preserving precisely when the precompression output lies in its active
 image.  The established image identity is restricted to the source-generated
 contractions.
 
-There is also a domain bridge between the two results.  The present
-full-support theorem concerns an endomorphism of one full matrix algebra,
-whereas the transported composites act on dependent direct sums of matrix
-algebras.  Applying the theorem therefore requires either a trace-preserving
-Schwarz extension through the block-diagonal embedding and block projection,
-with its fixed-point space identified with that of the direct-sum map, or a
-direct-sum version of the fixed-point theorem.  Neither bridge is currently
-formalized.
+There is also a difference between the domains of the two results.  The
+present full-support theorem concerns an endomorphism of one full matrix
+algebra, whereas the transported composites act on dependent direct sums of
+matrix algebras.  The canonical full-matrix extension is now formalized: one
+first compresses to the diagonal blocks, applies the direct-sum map, and then
+embeds the output block diagonally.  Positivity, total-trace preservation, and
+the Schwarz inequality pass to this extension, its trace adjoint is the
+extension of the direct-sum trace adjoint, and its fixed points are exactly the
+block-diagonal images of the direct-sum fixed points.  Reindexing the extension
+by a finite equivalence and applying the full-support theorem now gives the
+density-block form of the fixed families on the original direct sum.  What
+remains is to verify the required channel hypotheses for the transported
+sector maps on the whole direct sums and to supply a blockwise
+positive-definite fixed family.  Alternatively, the support reduction and
+complementary zero summand still open in
+\path{docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex} would
+remove the latter full-support hypothesis.
 
 \section{Sector relabelling uses positivity, not linear isomorphism}
 
