@@ -2359,10 +2359,18 @@ Theorem~\ref{thm:trace_norm_abs}.
         D(U_{ce}\rho U_{ce}^{\dagger}\Vert
           U_{ce}\sigma U_{ce}^{\dagger})=D(\rho\Vert\sigma).
     \]
-    The preceding theorem identifies
-    $D(\overline\rho\Vert\overline\sigma)$ with the same value.  Since the
-    $d_C^2$ summands have uniform weight $d_C^{-2}$, the asserted equality
-    follows.
+    The preceding theorem gives
+    \[
+        D(\overline\rho\Vert\overline\sigma)=D(\rho\Vert\sigma).
+    \]
+    Substituting into the right-hand side gives
+    \[
+        \frac{1}{d_C^2}\sum_{c,e}
+          D(U_{ce}\rho U_{ce}^{\dagger}\Vert
+            U_{ce}\sigma U_{ce}^{\dagger})
+          =\frac{d_C^2}{d_C^2}D(\rho\Vert\sigma)
+          =D(\overline\rho\Vert\overline\sigma).
+    \]
 \end{proof}
 
 \begin{theorem}[Relative entropy against the product of the marginals]
