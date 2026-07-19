@@ -133,36 +133,6 @@
     \end{TNDiagram}%
 }
 
-\TNDeclareDiagram
-    {TNMPOCell}
-    {tensor,top,bottom}
-    {display}
-    {compact}
-    {\TNMPOCell{A}{i}{j}}
-    {chapter/ch20_mpdo_foundations.tex}{%
-    \begin{TNDiagram}[compact]
-        \TNMPOSite{tnM}{at=origin}{#1}
-        \TNOpenVirtualWest{tnMWest}
-        \TNOpenVirtualEast{tnMEast}
-        \TNOpenPhysicalNorth{tnMKet}
-        \TNOpenPhysicalSouth{tnMBra}
-        \TNLabelAbove{tnMKetOpen}{#2}
-        \TNLabelBelow{tnMBraOpen}{#3}
-    \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
-    {TNMPOChain}
-    {tensor,top_left,bottom_left,top_right,bottom_right,length}
-    {display}
-    {normal}
-    {\TNMPOChain{A}{i_1}{j_1}{i_N}{j_N}{L}}
-    {chapter/ch20_mpdo_foundations.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNIndexedPeriodicMPOWord{tn}{#2}{#3}{#4}{#5}{#6}{#1}
-    \end{TNDiagram}%
-}
-
 % Local purification of an MPO tensor: the ket and bra tensors share the
 % ancillary index (straight contraction on the right) and retain their physical
 % and virtual legs.
