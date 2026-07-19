@@ -18,9 +18,11 @@ written as a cyclic nearest-neighbor scalar weight, and transports the source
 positive realization from lengths at least two to eventual nonzero MPV
 proportionality.
 
-Normality is deliberately not included in the representation datum.  The
-passage from this finite tensor to a normal representative is a separate
-canonical-form problem; it is not asserted in Proposition C.8 of the source.
+Normality is deliberately not included in the representation datum. An
+arbitrary representation may contain an additional all-zero virtual summand,
+which cannot be removed by a nonzero scalar. Proposition C.8 instead selects
+its bond from the physical-sector factorization of the source tensor; that
+selected product family has the source tensor itself as a representative.
 
 ## Main declarations
 
@@ -173,19 +175,20 @@ theorem eventuallyNonzeroProportionalMPV₂_fixedProductTensor
 comparison with a normal source tensor already has one geometric coefficient:
 a unit phase times the positive rescaling, raised to the chain length.
 
-Thus the construction of a rescaled normal representative is not independent
-of the geometric-scalar problem.  This statement does not assert that the
+Thus the existence of a rescaled normal representative is not independent of
+the geometric-scalar problem. This statement does not assert that the
 fixed product tensor, or any rescaling of it, is normal.
 
 Source context: arXiv:1606.00608, Appendix C.2, Proposition C.8 (label:
-3to4), lines 1570--1593, together with Corollary eqV, lines 1121--1128.  The
-remaining normal-representative problem is documented in
+3to4), lines 1570--1593, together with Corollary eqV, lines 1121--1128. The
+distinction between source-selected and arbitrary presentations is documented in
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
 **Scope restriction (positive normal rescaling):** The hypothesis `hRepr`
-assumes that the positively rescaled fixed-product tensor is normal.  This
-hypothesis is absent from Proposition C.8 (label: 3to4), and its derivation
-remains open; see
+assumes that the positively rescaled fixed-product tensor is normal. This
+hypothesis is absent from Proposition C.8 (label: 3to4). It is false for an
+arbitrary supplied representation after adjoining an all-zero virtual summand;
+the source-selected bond instead uses the source tensor itself. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
     [NeZero D]
@@ -230,14 +233,15 @@ two.  Normality of the source makes its self-overlap, and hence the fixed bond
 product, nonzero at those lengths.
 
 Source context: arXiv:1606.00608, Appendix C.2, Proposition C.8 (label:
-3to4), lines 1570--1593, together with Corollary eqV, lines 1121--1128.  The
-normal-representative hypothesis is precisely the remaining condition recorded
-in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+3to4), lines 1570--1593, together with Corollary eqV, lines 1121--1128. The
+arbitrary-presentation hypothesis is discussed in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
 **Scope restriction (positive normal rescaling):** The hypothesis `hRepr`
-assumes that the positively rescaled fixed-product tensor is normal.  This
-hypothesis is absent from Proposition C.8 (label: 3to4), and its derivation
-remains open; see
+assumes that the positively rescaled fixed-product tensor is normal. This
+hypothesis is absent from Proposition C.8 (label: 3to4). It is false for an
+arbitrary supplied representation after adjoining an all-zero virtual summand;
+the source-selected bond instead uses the source tensor itself. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem mpo_eq_positive_power_product_of_normal_smul
     [NeZero D]

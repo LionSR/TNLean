@@ -1277,6 +1277,7 @@ commutativity is therefore the local identity
 \begin{theorem}[$\eta$-local structure from a positive physical-sector factorization]
     \label{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}
+    \lean{MPOTensor.PhysicalSectorFactorization.fixedProductTensorData}
     \leanok
     \uses{thm:mpdo_exact_physical_sector_bond_product,
       thm:mpdo_positive_translation_invariant_bond_data,
@@ -1288,9 +1289,11 @@ commutativity is therefore the local identity
     \[
       \rho_N=B_0B_1\cdots B_{N-1}.
     \]
-    Thus the positive normalization scalar may be chosen to be $1$. This is
-    Proposition~C.8 conditional on the coherently positive physical-sector
-    factorization that the source derives from SAL.
+    If the virtual dimension of $K$ is positive, then $K$ itself is a fixed
+    tensor representation of this product family, with the same virtual
+    dimension. Thus the positive normalization scalar may be chosen to be
+    $1$. This is Proposition~C.8 conditional on the coherently positive
+    physical-sector factorization that the source derives from SAL.
 \end{theorem}
 
 \begin{proof}
@@ -1319,4 +1322,36 @@ commutativity is therefore the local identity
     Theorem~\ref{thm:mpdo_eta_coherent_positive_choice} supplies the positive
     physical-sector factorization. Apply
     Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}.
+\end{proof}
+
+\begin{corollary}[Normal representative for the SAL-selected bond]%
+    \label{cor:mpdo_normal_fixed_product_tensor_of_is_sal}
+    \lean{MPOTensor.exists_normal_fixedProductTensorData_of_isSAL}
+    \leanok
+    \uses{def:mpdo_fixed_bond_product_tensor,
+      def:mpdo_physical_sector_factorization, def:nt_cpsv}
+    Let $K$ be injective and satisfy SAL, and suppose that its doubled-index
+    matrix-product tensor is normal. There is a positive physical-sector
+    factorization whose selected two-site bond $B$ has $K$ itself as a normal
+    fixed tensor representation. Its virtual dimension is the virtual
+    dimension of $K$, and for every $N\geq2$,
+    \[
+      \rho_N(K)=B_0B_1\cdots B_{N-1}.
+    \]
+    In particular, the scalar is one. This is an existential statement about
+    the bond selected in the proof of Proposition~C.8; it does not assert
+    uniqueness or normal rescalability for an arbitrary proportional
+    commuting-bond presentation.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_exact_physical_sector_bond_product,
+      thm:mpdo_eta_coherent_positive_choice}
+    SAL implies that the virtual dimension is positive. The positive
+    physical-sector factorization is supplied by
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. For its selected
+    bond, use $K$ as the fixed tensor. The exact product identity is
+    Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}, and normality
+    is the given hypothesis on the doubled-index tensor.
 \end{proof}
