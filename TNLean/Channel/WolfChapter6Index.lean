@@ -311,6 +311,27 @@ fixed-point space of the adjoint endomorphism.  The remaining step for
 Theorem 6.14 begins by combining this retraction with the full-support
 star-algebra description.
 
+In `TNLean.Channel.FixedPoint.StationarySupportRestriction`:
+
+* `IsPositiveMap.map_posSemidef_supported_on_fixedPoint_support` — the order
+  argument of Wolf Proposition 6.10 for a positive matrix supported on the
+  support of an arbitrary stationary positive matrix.
+* `IsPositiveMap.map_supported_on_fixedPoint_support` — the extension to every
+  supported matrix by decomposition into four positive matrices.
+* `IsPositiveMap.stationarySupportCompression_isPositiveMap` and
+  `IsPositiveMap.stationarySupportCompression_isTracePreservingMap` — the
+  supported compression is positive and trace-preserving.
+* `IsPositiveMap.exists_posDef_fixedPoint_stationarySupportCompression` — the
+  compressed stationary matrix is positive definite.
+* `IsPositiveMap.fixedPoint_iff_exists_fixedPoint_stationarySupportCompression`
+  — the scope-restricted auxiliary form of Wolf Equation (6.51), conditional
+  on a fixed-point space already known to be supported in the chosen corner.
+* `IsPositiveMap.exists_maximalSupportCompression` — the source-faithful
+  restriction theorem: it chooses $T_\infty(\mathbf 1)$ through
+  `IsPositiveMap.exists_maximalSupport_fixedPoint` and packages positivity,
+  trace preservation, a positive-definite compressed fixed point,
+  Equation (6.52), and the complementary zero summand of Equation (6.51).
+
 In `TNLean.Channel.FixedPoint.FullSupportBlockRetraction`:
 
 * `IsPositiveMap.exists_block_densities_of_adjoint_meanErgodicProjection` —
@@ -363,12 +384,12 @@ positive semidefinite fixed point):
   corner-restricted set only; extending by zero on the complement does not
   produce ambient fixed points in general.
 
-What is still missing for the full Wolf statement is the reduction to the
-support of a maximum-rank fixed point, including positive definiteness of the
-supported density blocks, and transport back to the ambient space with the
-complementary zero block.  Applying the full-support theorem to the transported
-sector channels of arXiv:1606.00608 additionally requires a direct-sum version
-or an extension through the block-diagonal embedding.
+What is still missing for the full Wolf statement is to apply the full-support
+block theorem to the positive trace-preserving support compression, transport
+the result back to the ambient space, and combine the discarded density
+kernels with the complementary zero block.  Applying the full-support theorem
+to the transported sector channels of arXiv:1606.00608 additionally requires a
+direct-sum version or an extension through the block-diagonal embedding.
 
 ### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED (Kraus case)
 

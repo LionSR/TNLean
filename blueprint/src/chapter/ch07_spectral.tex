@@ -3078,6 +3078,125 @@ transfers the support.
     \]
 \end{proof}
 
+\begin{theorem}[Restriction to the support of a stationary positive matrix]%
+    \label{thm:stationarySupport_restriction}
+    \lean{IsPositiveMap.map_supported_on_fixedPoint_support}
+    \leanok
+    \uses{def:positive_map, def:support_proj,
+        lem:stationaryProj_absorb_of_le}
+    Let $T:\MN{D}\to\MN{D}$ be positive, and let
+    $\rho\succeq0$ satisfy $T(\rho)=\rho$. If $Q$ is the support projection of
+    $\rho$, then for every $X\in\MN{D}$,
+    \[
+        QXQ=X \quad\Longrightarrow\quad QT(X)Q=T(X).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:stationaryProj_absorb_of_le}
+    First suppose $A\succeq0$ and $QAQ=A$.  On the support of $\rho$, the
+    matrix $\rho$ is positive definite, so $Q\preceq c\rho$ for some positive
+    scalar $c$.  Moreover,
+    \[
+        A\preceq\tr(A)Q,
+    \]
+    because this follows by compressing
+    $\tr(A)\Id-A\succeq0$ with $Q$.  Positivity and $T(\rho)=\rho$ therefore give
+    \[
+        0\preceq T(A)\preceq c\tr(A)\rho.
+    \]
+    Scalar domination transfers the support, hence $QT(A)Q=T(A)$.
+    Write $H_1=X+X^*$ and $H_2=\mathrm{i}(X-X^*)$, so that both matrices are
+    Hermitian and
+    \[
+        X=\tfrac{1}{2}H_1-\tfrac{\mathrm{i}}{2}H_2.
+    \]
+    Setting $A_j^\pm=QH_j^\pm Q$ gives positive matrices with
+    $QA_j^\pm Q=A_j^\pm$ and
+    \[
+        X=\tfrac{1}{2}(A_1^+-A_1^-)-\tfrac{\mathrm{i}}{2}(A_2^+-A_2^-).
+    \]
+    Applying the positive-input conclusion to these four matrices and using
+    linearity of $T$ gives the assertion.
+\end{proof}
+
+\begin{theorem}[Restriction to full-rank fixed points]%
+    \label{thm:stationarySupport_compression}
+    \lean{IsPositiveMap.exists_maximalSupportCompression}
+    \leanok
+    \uses{thm:maximalSupport_fixedPoint, thm:stationarySupport_restriction}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace preserving, set
+    $\rho_0=T_\infty(\Id)$, and let $Q_0$ be the support projection of
+    $\rho_0$. There are a finite-dimensional Hilbert space $\mathcal H$ and an
+    isometry $V:\mathcal H\to\mathbb C^D$ with
+    $V^*V=\Id_{\mathcal H}$ and $VV^*=Q_0$ such that
+    \[
+        \widetilde T(Y)=V^*T(VYV^*)V
+    \]
+    is positive and trace preserving and has a positive definite fixed point.
+    Moreover,
+    \[
+        T(VYV^*)=V\widetilde T(Y)V^*,
+    \]
+    and
+    \[
+        T(X)=X
+        \quad\Longleftrightarrow\quad
+        \exists\,Y:\widetilde T(Y)=Y,\quad X=VYV^*.
+    \]
+    These are Equations~(6.52) and~(6.51), respectively,
+    of~\cite{Wolf2012Quantum}. Thus the complementary fixed-point summand
+    vanishes.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:maximalSupport_fixedPoint, thm:stationarySupport_restriction}
+    Theorem~\ref{thm:maximalSupport_fixedPoint} gives $\rho_0$ and shows that
+    $Q_0XQ_0=X$ for every fixed point $X$ of $T$. Choose an isometry onto the
+    range of $Q_0$.
+    Positivity follows from positivity of conjugation and of $T$.  The matrix
+    $VYV^*$ is supported on $Q_0$, so the preceding theorem shows that its
+    image is also supported there. Inserting $Q_0=VV^*$ gives
+    \[
+        T(VYV^*)
+        =Q_0T(VYV^*)Q_0
+        =VV^*T(VYV^*)VV^*
+        =V\widetilde T(Y)V^*.
+    \]
+    By cyclicity of the trace, the isometry identity, and trace preservation of
+    $T$,
+    \[
+        \tr(\widetilde T(Y))
+        =\tr(V\widetilde T(Y)V^*)
+        =\tr(T(VYV^*))
+        =\tr(VYV^*)
+        =\tr(Y).
+    \]
+    Thus $\widetilde T$ is trace preserving. The compressed point
+    $\sigma_0=V^*\rho_0V$ is positive definite. Since
+    $V\sigma_0V^*=Q_0\rho_0Q_0=\rho_0$,
+    \[
+        \widetilde T(\sigma_0)
+        =V^*T(\rho_0)V
+        =V^*\rho_0V
+        =\sigma_0.
+    \]
+    If $T(X)=X$, then $Q_0XQ_0=X$, and hence
+    $X=V(V^*XV)V^*$. Moreover,
+    \[
+        \widetilde T(V^*XV)
+        =V^*T\bigl(V(V^*XV)V^*\bigr)V
+        =V^*T(X)V
+        =V^*XV.
+    \]
+    Conversely, if $\widetilde T(Y)=Y$, then the intertwining identity gives
+    \[
+        T(VYV^*)=V\widetilde T(Y)V^*=VYV^*.
+    \]
+\end{proof}
+
 \begin{theorem}[Conjugation by the square root at a fixed point of maximal support]%
     \label{thm:maximalSupport_weightedCorner}
     \lean{Kraus.exists_maximalSupport_weightedCorner_sqrt_eq}
