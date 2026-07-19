@@ -99,7 +99,6 @@ import TNLean.Channel.PositiveExamples
 import TNLean.Channel.BreuerHallMap
 import TNLean.Channel.ChoiTypeMap
 import TNLean.Channel.DensityRetract
-
 -- Layer 2 (Ch. 2 infrastructure): Choi–Jamiolkowski, Kraus, Stinespring
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled

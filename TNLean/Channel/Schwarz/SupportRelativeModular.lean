@@ -18,7 +18,8 @@ reference matrix is represented as the square of its support inverse square root
 * `Matrix.supportRelativeModular_sqrt_mulVec_vec_one` evaluates the positive
   square root of the support relative-modular matrix on the vectorized identity.
 * `Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq` turns a
-  common family of shifted resolvents into equality of support square-root ratios.
+  support-restricted common family of shifted resolvents into equality of
+  support-restricted square-root ratios.
 
 ## References
 
