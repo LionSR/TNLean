@@ -93,13 +93,18 @@ theorem
     simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
     intro k ρ
     simpa [S, groundSpace_toTensorFromBlocks_eq_iSup μ A hμ L] using hψ k ρ
-  have hStep :=
-    pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07
-      (d := d) (L₀ := L₀) A hr hIrr hLeft hOverlap hBlocks hBlk hL₀
-      hUnital (n := L - 1) (by omega)
   have hLpred : L - 1 + 1 = L := by omega
   have hLpredSucc : L - 1 + 2 = L + 1 := by omega
-  rw [hLpred, hLpredSucc] at hStep
+  have hStep :
+      ((⨅ b : Fin d,
+          (⨆ j : Fin r, groundSpace (A j) L).comap (restrictLastₗ b)) ⊓
+        (⨅ a : Fin d,
+          (⨆ j : Fin r, groundSpace (A j) L).comap (restrictFirstₗ a))) =
+        ⨆ j : Fin r, groundSpace (A j) (L + 1) := by
+    simpa only [hLpred, hLpredSucc] using
+      (pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07
+        (d := d) (L₀ := L₀) A hr hIrr hLeft hOverlap hBlocks hBlk hL₀
+        hUnital (n := L - 1) (by omega))
   rw [← hStep]
   constructor
   · simp only [Submodule.mem_iInf, Submodule.mem_comap]
