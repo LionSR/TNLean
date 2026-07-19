@@ -18,11 +18,22 @@ Hard errors (exit 1):
                        leaf and vertex counts.
   duplicate-picture    Two `picture` lines share one id: picture identity
                        is the key of every back-reference.
+  conflicting-faceports
+                       Two faceports records declare different slots for the
+                       same cell face.  The first valid declaration remains
+                       authoritative; identical retries are idempotent.
   dangling-picture-ref An event references an undeclared picture.
   empty-picture        A grid/lattice/free picture emitted no content
                        events.  A tensor diagram with no atoms and no
                        regions denotes no tensor network -- historically
                        the "34 fake diagrams" class.
+  pairleg-faceport-mismatch
+                       A grid pairleg names a contraction slot absent from the
+                       upper cell's declared down face.  Explicit declarations
+                       resolve `center`, comma-separated slots, `rows`, and
+                       `none`.  If no faceports event exists, the check is
+                       skipped for compatibility with legacy logs, including
+                       simple centred faces.
 
 Advisories (never affect the exit code):
   eq-boundary-mismatch Consecutive grid pictures joined by `=` in the
@@ -135,7 +146,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "atom": {"picture": _is_int, "cell": _is_cell, "name": _any, "kind": _any},
     "faceports": {"picture": _is_int, "cell": _is_cell,
                   "face": _enum("up", "down", "west", "east"),
-                  "arity": _is_int, "at": _any},
+                  "arity": _is_nonnegative_int, "at": _any},
     "pairleg": {"picture": _is_int, "upper": _is_cell, "lower": _is_cell,
                 "upper-port": _is_pairleg_port,
                 "column": _is_int},
@@ -367,6 +378,129 @@ class Audit:
                                  f"atom in {pic.lang} picture {pic.ident} lacks "
                                  f"{want}=")
 
+    @staticmethod
+    def _declared_face_ports(
+            event: Event) -> Optional[tuple[set[str], Optional[int]]]:
+        """Resolve explicit slots and an optional inclusive `rows` bound."""
+        at = event.attrs.get("at", "").strip()
+        if at == "center":
+            return {"center"}, None
+        if at == "none":
+            return set(), None
+        if at == "rows":
+            arity = event.attrs.get("arity", "")
+            if not _is_nonnegative_int(arity):
+                return None
+            count = int(arity)
+            # A one-row physical face emits its unique contraction as `center`.
+            return ({"center"} if count == 1 else set()), count
+        slots = [slot.strip() for slot in at.split(",")]
+        if slots and all(
+                _is_pairleg_port(slot) and slot != "center" for slot in slots):
+            return set(slots), None
+        return None
+
+    def check_pairleg_faceports(self) -> None:
+        """Cross-check pairleg slots against explicit upper down-face declarations.
+
+        Older event streams did not always emit faceports records.  Absence is
+        therefore deliberately not an error; an explicit declaration is the
+        authority whenever one is present.
+        """
+        for pic in self.pictures:
+            if pic.lang != "grid":
+                continue
+            declared: dict[
+                tuple[str, str], tuple[set[str], Optional[int], int]
+            ] = {}
+            for event in pic.events:
+                if event.kind != "faceports":
+                    continue
+                cell = event.attrs.get("cell", "")
+                face = event.attrs.get("face", "")
+                if (not _is_cell(cell)
+                        or face not in {"up", "down", "west", "east"}):
+                    continue
+                missing = [
+                    field for field in ("arity", "at")
+                    if field not in event.attrs
+                ]
+                if missing:
+                    fields = ",".join(f"{field}=" for field in missing)
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} faceports cell={cell} face={face} "
+                        f"lacks required {fields}",
+                    )
+                    continue
+                at = event.attrs["at"]
+                arity = event.attrs["arity"]
+                if not at or not _is_nonnegative_int(arity):
+                    continue  # FIELD_VALIDATORS already emitted malformed-event.
+                declaration = self._declared_face_ports(event)
+                if declaration is None:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} faceports cell={cell} "
+                        f"face={face} has invalid at={at!r}",
+                    )
+                    continue
+                ports, row_count = declaration
+                expected_arity = row_count if row_count is not None else len(ports)
+                if int(arity) != expected_arity:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} faceports cell={cell} face={face} "
+                        f"declares arity={arity} but at={at!r} resolves to "
+                        f"{expected_arity} port(s)",
+                    )
+                    continue
+                key = cell, face
+                previous = declared.get(key)
+                if previous is None:
+                    declared[key] = ports, row_count, event.line
+                    continue
+                previous_ports, previous_rows, previous_line = previous
+                if previous_ports == ports and previous_rows == row_count:
+                    continue
+                self.hard(
+                    "conflicting-faceports",
+                    f"{self.log_path.name}:{event.line}",
+                    f"picture {pic.ident} cell={cell} face={face} conflicts "
+                    f"with its declaration on line {previous_line}",
+                )
+            for event in pic.events:
+                if event.kind != "pairleg":
+                    continue
+                upper = event.attrs.get("upper", "")
+                port = event.attrs.get("upper-port", "")
+                down_key = upper, "down"
+                if (not _is_cell(upper) or not _is_pairleg_port(port)
+                        or down_key not in declared):
+                    continue
+                ports, row_count, _ = declared[down_key]
+                matches = port in ports
+                if not matches and row_count is not None and port != "center":
+                    matches = row_count != 1 and int(port) <= row_count
+                if matches:
+                    continue
+                available_parts = sorted(
+                    ports,
+                    key=lambda slot: -1 if slot == "center" else int(slot),
+                )
+                if row_count is not None:
+                    available_parts.append(f"rows 1..{row_count}")
+                available = ",".join(available_parts) or "none"
+                self.hard(
+                    "pairleg-faceport-mismatch",
+                    f"{self.log_path.name}:{event.line}",
+                    f"picture {pic.ident} pairleg upper={upper} names upper-port={port!r}, "
+                    f"but its declared down face has ports {available}",
+                )
+
     def check_repeated_topology(self) -> None:
         groups: dict[tuple[str, str], list[Picture]] = {}
         for pic in self.pictures:
@@ -487,6 +621,7 @@ class Audit:
         self.link_tex()
         self.check_empty_pictures()
         self.check_dialects()
+        self.check_pairleg_faceports()
         self.check_equation_boundaries()
         self.check_periodic_dots()
         self.check_repeated_topology()
