@@ -86,11 +86,15 @@ theorem quantumRelativeEntropy_kronecker_support
 entropy is unchanged by the right partial trace, then the relative entropy of
 the finite Weyl average equals that of each Weyl-conjugated pair.
 
-The Weyl average is first identified with the marginal pair tensored with the
-maximally mixed ancilla. Singular-support ancilla additivity reduces its
-relative entropy to that of the marginals, while unitary invariance reduces the
-chosen summand to `D(ρ ‖ σ)`. The saturation hypothesis identifies these two
-values.
+The Weyl average is first identified by the normalized identity
+\[
+d_C^{-2}\sum_{c,e}(\mathbf 1_S\otimes W(c,e))X
+  (\mathbf 1_S\otimes W(c,e))^\dagger
+  = (\operatorname{tr}_C X)\otimes(d_C^{-1}\mathbf 1_C).
+\]
+Singular-support ancilla additivity reduces its relative entropy to that of the
+marginals, while unitary invariance reduces the chosen summand to
+\(D(\rho\Vert\sigma)\). The saturation hypothesis identifies these two values.
 
 This is an equality-propagation prerequisite for Hayden--Jozsa--Petz--Winter,
 arXiv:quant-ph/0304007v2, Theorem 3 and equation (8); it does not assert the
