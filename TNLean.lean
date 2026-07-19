@@ -124,7 +124,6 @@ import TNLean.Channel.OpenSystem
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
-
 -- Layer 2: Quantum entropy infrastructure (depends on Channel.Basic, Channel.PartialTrace)
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.EntropyDecomposition
@@ -135,7 +134,6 @@ import TNLean.Analysis.MarginalSupport
 import TNLean.Analysis.CoisometricCompression
 import TNLean.Channel.MarginalSupportAbsorption
 import TNLean.Channel.PetzRecovery
-
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
 -- Layer 2a: Axiomatized entropy inequalities (strong subadditivity)
@@ -158,6 +156,7 @@ import TNLean.Axioms.LiebSubBoundary
 import TNLean.Analysis.OperatorConvexity
 -- Layer 2b: Operator (Loewner) convexity of `a ↦ a^p` for `p ∈ [1,2]` (proved)
 import TNLean.Analysis.RpowConvexity
+import TNLean.Analysis.RelativeEntropyResolventIntegral
 -- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
@@ -175,6 +174,7 @@ import TNLean.Channel.Schwarz.PetzRecoverySupport
 import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
 import TNLean.Channel.Schwarz.SSAEqualityDPI
 import TNLean.Channel.Schwarz.PetzEqualityPrerequisites
+import TNLean.Channel.Schwarz.WeylRelativeEntropyIntegral
 import TNLean.Channel.Schwarz.WeylTwirl
 import TNLean.Channel.Schwarz.PositiveOnAbelian
 import TNLean.Channel.Schwarz.SchwarzNormal
