@@ -478,7 +478,7 @@ import TNLean.MPS.MPDO.VerticalSectorCoordinates
 import TNLean.MPS.MPDO.VerticalSectorFixedGenerators
 import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorImagePreservation
-import TNLean.MPS.MPDO.VerticalSectorGeneration
+import TNLean.MPS.MPDO.VerticalSectorDensityBlocks
 import TNLean.MPS.MPDO.VerticalSectorTracePreservation
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
