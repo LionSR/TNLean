@@ -25,6 +25,9 @@ retains them and assigns them to one BNT label, as documented in
   zero-weight Markov summand to a distinguished BNT label.
 * `exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent`:
   the separating projectors selected by SAL after copy independence is supplied.
+* `exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL`:
+  the source-faithful standing-context theorem, with copy independence derived
+  from ZCL.
 
 ## References
 
@@ -240,11 +243,11 @@ simplicity, copy independence is the conclusion immediately preceding the
 projector lemma, and SAL supplies the four-site quantum-Markov decomposition.
 There is no independent closing-matrix hypothesis.
 
-**Scope restriction (copy-independent weights):** This theorem takes copy
-independence as the explicit hypothesis `hWeight`. The source obtains it from
-ZCL before the separating-projector lemma. A source-faithful standing-context
-formulation must instead derive `hWeight` from the source ZCL equation and the
-canonical-form gauge identity; see
+**Scope restriction (copy-independent weights):** This theorem assumes copy
+independence explicitly, while the source obtains it from ZCL before the
+separating-projector lemma. The standing-context theorem
+`exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL` derives this
+equality from the source ZCL equation and the canonical-form gauge identity; see
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 **Local fix (inactive sectors):** The source discards zero-weight Markov
@@ -313,5 +316,70 @@ theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_ind
   · intro i s t hst β α
     exact completedBntSectorProjection_mul_physicalSlice_mul_eq_zero
       hC hρ hη hR s₀ i s t hst β α
+
+/-- **Separating projectors in the source standing context.**
+
+Let $M$ be a simple tensor in block-injective canonical form which satisfies
+ZCL and SAL. Its horizontal canonical form is presented through the direct
+sum of the weighted BNT copies and their block-diagonal gauge. Simplicity says
+that no representative has nilpotent physical-trace transfer, while biCF gives
+the simultaneous one-site span after the common blocking. Then the BNT
+representatives admit orthogonal projectors $P_s$ such that
+\[
+  \sum_s P_s=\mathbf 1,
+  \qquad
+  P_sK_i^{\beta\alpha}P_t=0
+  \quad\text{whenever }s\ne t\text{ or }i\ne s.
+\]
+
+Unlike the preceding specialization, this theorem does not assume that the
+copy weights agree. It derives their equality from the source ZCL equation
+and the horizontal canonical-form gauge identity.
+
+Source: arXiv:1606.00608, Appendix C.2, Case II and Lemma `lemmus`, lines
+1626--1691; the projector argument continues through line 1737. -/
+theorem exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL
+    {D : ℕ} (M : MPOTensor d D)
+    (S : MPSTensor.SectorDecomposition (d * d))
+    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hnonNil : ∀ j,
+      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
+    (hZCL : IsSourceZCL M)
+    (hSAL : IsSAL M) :
+    ∃ P : Fin S.basisCount → Matrix (Fin d) (Fin d) ℂ,
+      (∀ s, IsOrthogonalProjection (P s)) ∧
+      (∀ s t, s ≠ t → P s * P t = 0) ∧
+      (∑ s, P s) = 1 ∧
+      ∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
+        ∀ (β α : Fin (S.basisDim i)),
+          P s * physicalSlice (S.basisMPOTensor i) β α * P t = 0 := by
+  subst D
+  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+    refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
+    intro i
+    simpa using hEq i
+  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+    fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
+  have hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q' :=
+    weight_copy_independent_of_isSourceZCL S rfl X hEq hZCL hnonNil
+  obtain ⟨_, _, _, _, hProj, hOrth, hSum, hSeparate⟩ :=
+    exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent
+      M S hM hCF hWeight hnonNil hSpan hSAL
+  exact ⟨_, hProj, hOrth, hSum, hSeparate⟩
 
 end MPOTensor

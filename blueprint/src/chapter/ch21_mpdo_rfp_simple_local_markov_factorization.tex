@@ -669,7 +669,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{definition}
 
 \begin{theorem}[Separating projectors with copy-independent weights]
-    \label{thm:mpdo_sal_bnt_separating_projectors}
+    \label{thm:mpdo_sal_bnt_separating_projectors_copy_independent}
     \lean{MPOTensor.completedBntSectorProjection_isOrthogonal}
     \lean{MPOTensor.completedBntSectorProjection_mul_eq_zero}
     \lean{MPOTensor.sum_completedBntSectorProjection}
@@ -699,9 +699,6 @@ strong subadditivity for a normalized three-site reduced state.
     separating-projector lemma in
     \cite[Appendix~C.2, lines~1680--1737]{Cirac2016MPDO_arXiv}.
 \end{theorem}
-% Scope restriction: the source-faithful standing-context implication from the
-% source ZCL equation and canonical-form gauge identity is not asserted here;
-% it must first derive copy independence as in lines 1646--1665.
 
 \begin{proof}
     \leanok
@@ -729,6 +726,41 @@ strong subadditivity for a normalized three-site reduced state.
       =0,
     \]
     since every summand vanishes by one of the three preceding cases.
+\end{proof}
+
+\begin{theorem}[Separating projectors for a simple tensor satisfying ZCL and SAL]
+    \label{thm:mpdo_sal_bnt_separating_projectors}
+    \lean{MPOTensor.%
+      exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL}
+    \leanok
+    \uses{thm:mpdo_simple_weight_copy_independent,
+      thm:mpdo_sal_bnt_separating_projectors_copy_independent}
+    Let $K$ be a simple tensor in block-injective canonical form which satisfies
+    ZCL and SAL.  For the representatives $\mathcal K_i$ of its BNT, there are
+    orthogonal projectors $P_s$ such that
+    \[
+      \sum_sP_s=\Id,
+      \qquad
+      P_sK_i^{\beta\alpha}P_t=0
+      \quad\text{whenever }s\ne t\text{ or }i\ne s.
+    \]
+    This is the separating-projector lemma in
+    \cite[Appendix~C.2, lines~1626--1691]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write the horizontal canonical form as
+    $K=G(\bigoplus_{j,q}\mu_{j,q}\mathcal K_j)G^{-1}$.  Restricting the ZCL
+    equation to the $(j,q)$-th block and using the non-nilpotence supplied by
+    simplicity gives
+    \[
+      \mu_{j,q}=\mu_{j,q'}
+      \qquad\text{for all }j,q,q'.
+    \]
+    The block-diagonal gauge preserves every positive-length periodic state,
+    so the canonical-form tensor and $K$ generate the same such states.  The
+    preceding copy-independent-weight theorem now supplies the projectors.
 \end{proof}
 
 \begin{theorem}[Positive-length BNT-sector compression]
