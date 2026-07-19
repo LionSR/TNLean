@@ -987,6 +987,20 @@
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
 
+\begin{lemma}[Rank under real normalization]
+    \label{lem:matrix_rank_real_smul}
+    \lean{Matrix.rank_smul_of_ne_zero_real}
+    \leanok
+    Let $A$ be a finite real matrix and let $a\neq0$.  Then
+    \[
+      \operatorname{rank}_{\R}(aA)=\operatorname{rank}_{\R}A.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Multiplication by $a$ identifies the column spaces, with inverse given by
+    multiplication by $a^{-1}$.
+\end{proof}
+
 \begin{definition}[Joint probability distribution and marginals]
     \label{def:finite_joint_distribution_marginals}
     \lean{Matrix.IsJointDistribution,
@@ -1103,6 +1117,39 @@
     $\operatorname{rank}_{\R}P$ nonzero rows.  Finally,
     $I(X:Y)\leq H(X)$, and the entropy of a distribution supported on $k$
     points is at most $\log k$.
+\end{proof}
+
+\begin{theorem}[Classical estimate with an explicit rank bridge]
+    \label{thm:mpo_diagonal_cut_classical_mutual_information}
+    \lean{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log}
+    \leanok
+    \uses{thm:mpo_diagonal_cut_rank,
+      thm:classical_mutual_information_le_log_rank,
+      lem:matrix_rank_real_smul}
+    Let $D\geq1$, and let $W$ be a real diagonal coefficient matrix across a
+    periodic cut of an MPO with bond dimension $D$.  Suppose its
+    complexification is the cut matrix $P^{\C}$ from
+    Theorem~\ref{thm:mpo_diagonal_cut_rank} and
+    \[
+      \operatorname{rank}_{\R}W=\operatorname{rank}_{\C}P^{\C}.
+    \]
+    If $Z>0$ and $P=Z^{-1}W$ is a joint probability distribution, then
+    \[
+      I(X:Y)_P\leq2\log D.
+    \]
+    The rank equality is an explicit scope restriction; its derivation from
+    the current diagonal-cut data remains open.
+\end{theorem}
+\begin{proof}\leanok
+    Normalization does not change real rank by
+    Lemma~\ref{lem:matrix_rank_real_smul}.  The explicit rank bridge and
+    Theorem~\ref{thm:mpo_diagonal_cut_rank} therefore give
+    \[
+      \operatorname{rank}_{\R}P\leq D^2.
+    \]
+    Theorem~\ref{thm:classical_mutual_information_le_log_rank} gives
+    $I(X:Y)_P\leq\log\operatorname{rank}_{\R}P$, and monotonicity of the
+    logarithm gives the result.
 \end{proof}
 
 \begin{remark}[Boundedness of the mutual information]
