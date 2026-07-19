@@ -116,6 +116,55 @@ of the unrestricted estimate is consequently unresolved: the cited argument
 does not prove it, while the observations above do not furnish a
 counterexample.
 
+\section{Diagonal matrix product operators}
+
+No diagonal tensor can violate the proposed estimate.  Fix a chain of length
+$N=L+R$ and write the normalized diagonal entries as the joint probability
+matrix
+\[
+  P_{x,y}
+  =\tr\!\left(
+    M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}
+    M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}
+  \right),
+\]
+where $x$ and $y$ label configurations on the two consecutive blocks.  Set
+$A_x=M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}$ and
+$B_y=M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}$.  Then
+\[
+  P_{x,y}=\tr(A_xB_y)
+  =\sum_{a,b=0}^{D-1}(A_x)_{ab}(B_y)_{ba}.
+\]
+Consequently $P$ factors through a complex vector space of dimension $D^2$,
+so $\operatorname{rank}_{\mathbb C}P\leq D^2$.  Since $P$ is real,
+$\operatorname{rank}_{\mathbb R}P=\operatorname{rank}_{\mathbb C}P$.
+
+Riazanov--Vyalyi prove for every finite joint probability matrix that
+\cite[Theorem~4.1]{Riazanov2017PSDRank}
+\[
+  I(X:Y)\leq\log\operatorname{rank}_{\mathbb R}P.
+\]
+Their rank is the ordinary real matrix rank, not the nonnegative rank.  Their
+proof eliminates linearly dependent rows while preserving nonnegativity and
+the column marginals, choosing at each step the endpoint at which mutual
+information does not decrease.  The final distribution has at most
+$\operatorname{rank}_{\mathbb R}P$ nonzero rows.  It follows that every
+diagonal periodic MPO satisfies the stronger finite-chain estimate
+\[
+  I_L^{(N)}\leq2\log D.
+\]
+This conclusion needs positivity and normalization only at the chain length
+under consideration; positivity at all other lengths is unnecessary.  Hence a
+counterexample to the unrestricted estimate, if one exists, must be genuinely
+quantum rather than a classical hidden-state construction.
+
+The rank factorization is formalized.
+\footnote{Formal declarations:
+\leanid{MPOTensor.diagonalCutMatrix} and
+\leanid{MPOTensor.diagonalCutMatrix_rank_le} in
+\doclink{TNLean/MPS/MPDO/DiagonalCutRank}.}
+The information-versus-rank theorem of Riazanov--Vyalyi is not yet formalized.
+
 \section{What the rank-three separation establishes}
 
 De las Cuevas--Schuch--P\'erez-Garc\'ia--Cirac give a rank-three separation in
