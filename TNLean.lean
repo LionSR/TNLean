@@ -40,6 +40,7 @@ import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.ConstantPowerSums
+import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.UnitModulusPowerSum
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.PiTensorProductPhase
@@ -608,7 +609,6 @@ import TNLean.MPS.Examples.MajumdarGhosh
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.ZMod2
 import TNLean.MPS.Examples.ZeroCorrelationExamples
-
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.ZeroCorrelationLength
@@ -631,6 +631,7 @@ import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
 import TNLean.MPS.RFP.BeigiSpatialDecomposition
 import TNLean.MPS.RFP.BeigiSectorGraph
+import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
 import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
 import TNLean.MPS.RFP.BNTWeightCounterexample
 -- Layer 6a: Quantum Wielandt span-growth infrastructure
@@ -641,7 +642,6 @@ import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.RankOne.Construction
 import TNLean.Wielandt.RankOne.Products
-
 -- Layer 6b: Proposition 3 and the quantum Wielandt inequality.
 -- `Inequality/` records the bounds of arXiv:0909.5347 / Wolf §6.9 in their
 -- standard notation. These declarations are independent of the MPS fundamental
