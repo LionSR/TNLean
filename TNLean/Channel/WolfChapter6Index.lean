@@ -219,8 +219,11 @@ In `TNLean.Channel.FixedPoint.AbstractAlgebra`:
 This is the algebra step after the faithful invariant weight has been chosen.
 The source theorem begins with an arbitrary full-rank fixed point and invokes
 its proposition on positive fixed points to obtain that weight.  The
-full-rank-to-positive-definite reduction theorem and the explicit block
-realization from Equation (1.39) remain open.
+full-rank-to-positive-definite reduction theorem remains open.  The explicit
+trace-adjoint block realization from Equation (1.39) also remains open at this
+level of generality.  The downstream Schrödinger-picture density-block
+classification and its complementary zero summand are completed in
+`TNLean.Channel.FixedPoint.WolfTheorem614`.
 
 In `TNLean.Channel.FixedPoint.Algebra`:
 
@@ -290,7 +293,7 @@ where the compressed map is unital with a positive-definite fixed point, applies
 Wolf Theorem 6.12 there (`Kraus.adjointFixedPointsStarSubalgebra`), and transports
 the `*`-algebra structure back along the compression isomorphism.
 
-### Wolf Theorem 6.14 (Wedderburn decomposition of fixed-point algebra) — PARTIALLY FORMALIZED
+### Wolf Theorem 6.14 (density-block form of fixed points) — FORMALIZED
 
 The general finite-dimensional convergence argument is provided by
 `LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection` in
@@ -307,9 +310,10 @@ well.
 
 The trace-pairing adjoint step is now complete.  The adjoint of the
 mean-ergodic projection is a positive unital idempotent retraction onto the
-fixed-point space of the adjoint endomorphism.  The remaining step for
-Theorem 6.14 begins by combining this retraction with the full-support
-star-algebra description.
+fixed-point space of the adjoint endomorphism.  Combining this retraction with
+the full-support star-algebra description, restricting to maximal stationary
+support, and adjoining the complementary zero summand gives the full statement
+of Theorem 6.14 and Equation (6.63).
 
 In `TNLean.Channel.FixedPoint.StationarySupportRestriction`:
 
@@ -349,6 +353,32 @@ In `TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks`:
   `U (⊕_k σ_k ⊗ tr_{m_k}((U† B U)_{kk})) U†`, and the fixed-point space is
   `U (⊕_k σ_k ⊗ M_{d_k}(ℂ)) U†`.
 
+In `TNLean.Channel.FixedPoint.SupportCompressedDensityBlocks`:
+
+* `IsPositiveMap.exists_block_densities_of_maximalSupportCompression` — the
+  maximal-support compression has positive-definite density blocks, and its
+  fixed points correspond exactly to the ambient fixed points carried by the
+  support isometry.
+
+In `TNLean.Algebra.MatrixGramUnitary`:
+
+* `Matrix.exists_unitary_zero_extension_eq` — an isometric inclusion extends
+  to an ambient unitary that identifies every compressed matrix with one
+  complementary zero block followed by that matrix.
+
+In `TNLean.Channel.FixedPoint.WolfTheorem614`:
+
+* `IsPositiveMap.exists_fixedPoints_densityBlocks_with_zero` — for every
+  positive trace-preserving matrix endomorphism whose trace adjoint satisfies
+  the Schwarz inequality, the fixed-point space is the unitary conjugate of
+  one complementary zero summand followed by positive-definite trace-one
+  density blocks, exactly as in Wolf Equation (6.63).
+
+In `TNLean.Channel.FixedPoint.DirectSumBlockRetraction`:
+
+* `Matrix.IsPositiveDirectSumMap.exists_block_densities_of_fixedPoints` — the
+  full-support consequence for a finite direct sum of full matrix algebras.
+
 In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 
 * `Kraus.starSubalgebra_isSemisimpleRing` — every finite-dimensional
@@ -384,12 +414,11 @@ positive semidefinite fixed point):
   corner-restricted set only; extending by zero on the complement does not
   produce ambient fixed points in general.
 
-What is still missing for the full Wolf statement is to apply the full-support
-block theorem to the positive trace-preserving support compression, transport
-the result back to the ambient space, and combine the discarded density
-kernels with the complementary zero block.  Applying the full-support theorem
-to the transported sector channels of arXiv:1606.00608 additionally requires a
-direct-sum version or an extension through the block-diagonal embedding.
+The full Wolf statement is therefore complete.  Its application to the
+transported sector maps of arXiv:1606.00608 is a separate tensor-attached
+problem: one must still prove the channel hypotheses for those maps on the
+whole direct-sum algebras.  This remaining boundary is recorded in
+`docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`.
 
 ### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED (Kraus case)
 
@@ -472,8 +501,9 @@ In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
 * Numbered theorem: `Kraus.wolf_theorem_6_15_scalar` —
   `TNLean.Channel.WolfChapter6Wrappers`.
 
-The general irreducible case with period `h > 1` requires Wedderburn blocks
-(Wolf Theorem 6.14, issue #27).
+The density-block decomposition required for the general irreducible case with
+period `h > 1` is now supplied by Wolf Theorem 6.14.  The corresponding
+conditional-expectation construction remains to be assembled.
 
 ---
 
@@ -515,8 +545,8 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
 
 * The remaining **existence direction** — that every trace-preserving positive
   Schwarz map admits a `MultiCycleDecomposition` on its asymptotic image, with
-  the cycles coming from the Wedderburn decomposition of the fixed-point algebra
-  — depends on Wolf Theorem 6.14 (issues #27 / #360) and is left to future work.
+  the cycles coming from the now-formalized density-block decomposition of the
+  fixed-point space — is left to future work.
 
 ---
 

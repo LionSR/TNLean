@@ -167,9 +167,9 @@ is the full-support step in the proof of Wolf, Theorem 6.14; local source
 
 **Scope restriction (maximal-support compression):** This theorem describes
 the fixed points of the compressed map with positive definite density blocks.
-It does not yet transport the description to the original space with its
-complementary zero summand.  This restriction is documented in
-`docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
+The transport to the original space with its complementary zero summand is
+completed in `TNLean.Channel.FixedPoint.WolfTheorem614`.  This restriction is
+documented in `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
 
 The theorem records only the fixed-point description.  The corresponding
 formula for the mean ergodic projection is supplied by
@@ -186,6 +186,10 @@ theorem IsPositiveMap.exists_block_densities_of_maximalSupportCompression
         (∃ ρfull : Matrix (Fin n) (Fin n) ℂ,
           ρfull.PosDef ∧
             IsPositiveMap.stationarySupportCompression T V ρfull = ρfull) ∧
+        (∀ B : MatD, T B = B ↔
+          ∃ X : Matrix (Fin n) (Fin n) ℂ,
+            IsPositiveMap.stationarySupportCompression T V X = X ∧
+              B = V * X * Vᴴ) ∧
         ∃ (K : ℕ) (d m : Fin K → ℕ)
           (e : ((k : Fin K) × (Fin (m k) × Fin (d k))) ≃ Fin n)
           (U : Matrix (Fin n) (Fin n) ℂ)
@@ -199,7 +203,8 @@ theorem IsPositiveMap.exists_block_densities_of_maximalSupportCompression
                   (Matrix.blockDiagonal' fun k ↦ σ k ⊗ₖ X k) := by
   dsimp only
   obtain ⟨hρ₀, n, V, hρ₀fix, hV, hVrange, hpositive, htrace, _,
-      ⟨ρfull, hρfull, hρfullFix⟩, _⟩ := hT.exists_maximalSupportCompression hTP
+      ⟨ρfull, hρfull, hρfullFix⟩, hambientFixed⟩ :=
+    hT.exists_maximalSupportCompression hTP
   have hcompressedSchwarz :
       IsSchwarzMap (Matrix.traceAdjointMap
         (IsPositiveMap.stationarySupportCompression T V)) :=
@@ -242,5 +247,5 @@ theorem IsPositiveMap.exists_block_densities_of_maximalSupportCompression
       exact hprincipal
     exact hblock.left_of_kronecker_of_trace_eq_one (hσtrace k)
   exact ⟨hρ₀, n, V, hρ₀fix, hV, hVrange,
-    ⟨ρfull, hρfull, hρfullFix⟩,
+    ⟨ρfull, hρfull, hρfullFix⟩, hambientFixed,
     K, d, m, e, U, σ, hU, hd, hm, hσ, hσtrace, hfixed⟩

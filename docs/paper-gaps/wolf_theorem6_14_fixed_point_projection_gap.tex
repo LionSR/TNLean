@@ -6,9 +6,9 @@
 
 \input{command}
 
-\title{Wolf Theorem~6.14: Fixed-Point Projection Gap}
+\title{Wolf Theorem~6.14: Fixed-Point Classification Completion Record}
 \author{}
-\date{2026-07-18}
+\date{2026-07-19}
 
 \begin{document}
 \maketitle
@@ -30,7 +30,7 @@ representation, removes off-diagonal inputs by positivity, and gives a
 positive semidefinite trace-one matrix for each summand.  No assumption of
 complete positivity, trace preservation, or a Schwarz inequality is added.
 
-\section{The remaining fixed-point theorem}
+\section{The fixed-point theorem}
 
 Let $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be positive and trace preserving,
 write $T^*$ for its trace-pairing adjoint, and suppose that $T^*$ satisfies the
@@ -193,15 +193,37 @@ positive-definite partial-trace facts are
 \leanid{Matrix.PosDef.left_of_kronecker_of_trace_eq_one} in
 \doclink{TNLean/Channel/PartialTrace}.}
 
-It remains to transport the density-block form through $V$ and write the
-complement of $Q$ as the single zero summand $\mathcal H_0$ of Theorem~6.14.
+The ambient transport is now formalized.  If $U_c$ is the compressed block
+unitary, then $W=VU_c$ is an isometry from the compressed space into the
+original space.  Compare it with the canonical inclusion of
+$\mathbb C^n$ into
+$\mathbb C^{D-n}\oplus\mathbb C^n$.  The two inclusions have the same Gram
+matrix.  The finite-dimensional unitary extension theorem therefore gives an
+ambient unitary $U$ satisfying
+\begin{align}
+    WAW^*=U(0_{D-n}\oplus A)U^*
+\end{align}
+for every $A\in M_n(\mathbb C)$.  Applying the retained fixed-space
+equivalence and substituting the compressed density-block formula yields
+\begin{align}
+    \operatorname{Fix}(T)
+      =U\left(0_{D-n}\oplus\bigoplus_k
+        \sigma_k\otimes M_{d_k}(\mathbb C)\right)U^*.
+\end{align}
+The first block is exactly the orthogonal complement of maximal stationary
+support, so it is one zero summand.  There are no further kernel blocks,
+because every $\sigma_k$ is positive definite.
+\footnote{Formal declarations:
+\leanid{Matrix.exists_unitary_zero_extension_eq} in
+\doclink{TNLean/Algebra/MatrixGramUnitary}, and
+\leanid{IsPositiveMap.exists_fixedPoints_densityBlocks_with_zero} in
+\doclink{TNLean/Channel/FixedPoint/WolfTheorem614}.}
 
-Thus Proposition~1.5, its application to the full-support adjoint
-mean-ergodic projection, and the full-support Schr\"odinger-picture fixed-point
-formula, together with the maximal-support witness and the positive
-trace-preserving restriction to its support, are formalized, while
-Theorem~6.14 remains open.  The missing work is transport to the original
-space and assembly of the complementary zero summand.
+Consequently, the statement and hypotheses of Wolf's Theorem~6.14 are now
+formalized in full.  The theorem assumes precisely positivity and trace
+preservation of $T$ and the Schwarz inequality for $T^*$; the fixed-point
+space has exactly the single complementary zero summand asserted in
+Equation~(6.63).  This document therefore records a closed paper gap.
 
 \bibliographystyle{alpha}
 \bibliography{references}
