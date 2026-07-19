@@ -2499,6 +2499,7 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \lean{Matrix.directSumDiagonalEmbedding}
     \lean{Matrix.directSumDiagonalCompression}
     \lean{Matrix.directSumExtension}
+    \lean{Matrix.directSumTraceAdjointMap}
     \leanok
     Let
     \[
@@ -2512,6 +2513,12 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     $T:\mathcal A\to\mathcal A$, its canonical full-matrix extension is
     \[
         \widehat T=\iota\circ T\circ\pi.
+    \]
+    The trace adjoint $T^*:\mathcal A\to\mathcal A$ is defined by
+    \[
+      \sum_k\operatorname{tr}(T^*(A)_kB_k)
+      =\sum_k\operatorname{tr}(A_kT(B)_k)
+      \qquad(A,B\in\mathcal A).
     \]
     This is the block-diagonal realization needed when the fixed-point
     argument in \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}
@@ -2532,7 +2539,10 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     $\mathcal A$, then $\widehat T$ is positive and satisfies the Schwarz
     inequality on $\operatorname{End}(\mathcal H)$.  If $T$ preserves the
     total trace $\sum_k\operatorname{tr}(A_k)$, then $\widehat T$ preserves
-    the ordinary trace.  Moreover, extension commutes with the trace adjoint.
+    the ordinary trace.  Moreover,
+    \[
+        (\widehat T)^*=\widehat{T^*}.
+    \]
     If $T$ is positive and its direct-sum trace adjoint satisfies the Schwarz
     inequality, then the trace adjoint of $\widehat T$ satisfies the Schwarz
     inequality on $\operatorname{End}(\mathcal H)$.  Finally,
@@ -2558,9 +2568,17 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     Block-diagonal embedding is a positive algebra homomorphism and converts
     the sum of the block traces into the full trace.  It follows that
     positivity, both stated Schwarz implications, and trace preservation pass
-    to $\widehat T$.  The embedding and
-    compression are adjoint for the trace pairing, which gives the adjoint
-    identity.  Since $\pi\circ\iota=\operatorname{id}$, the two fixed-point
+    to $\widehat T$.  The embedding and compression satisfy
+    \[
+      \operatorname{tr}(\iota(A)X)
+      =\sum_k\operatorname{tr}(A_k\pi(X)_k).
+    \]
+    Substitution of $\widehat T=\iota\circ T\circ\pi$ and the defining
+    pairing for $T^*$ gives
+    \[
+        (\widehat T)^*=\widehat{T^*}.
+    \]
+    Since $\pi\circ\iota=\operatorname{id}$, the two fixed-point
     implications are
     \[
       \widehat T(X)=X
