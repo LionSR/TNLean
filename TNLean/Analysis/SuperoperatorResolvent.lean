@@ -93,7 +93,7 @@ Under the vectorization `X ↦ Matrix.vec Xᵀ`, the displayed matrix acts as th
 left-right multiplication operator.  This is the fixed-resolvent positivity
 input in Jenčová--Ruskai, arXiv:0903.2895, §4 and Appendix. -/
 theorem superop_leftRight_posDef
-    {n : Type*} [Fintype n] [DecidableEq n]
+    {n : Type*} [Finite n] [DecidableEq n]
     {t : ℝ} (ht : 0 < t) {A B : Matrix n n ℂ}
     (hA : A.PosDef) (hB : B.PosDef) :
     (A ⊗ₖ (1 : Matrix n n ℂ) +
