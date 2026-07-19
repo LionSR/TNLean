@@ -119,17 +119,17 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 |---|---|---|---|---|
 | Prop `propsimple` (l.1333) | 1333–1341 | RFP ⇒ ZCL + SAL | `TNLean/MPS/MPDO/` | **needs verification** |
 | Lemma `Lsigma3` (l.1351) | 1351–1359 | SAL ⇒ direct sum structure for 3-spin reduced state | **out of scope** | — |
-| Lemma `propSN` (l.1406) | 1406–1411 | SAL ⇒ isometry U + r_k, l_k with primitive T | **out of scope** | — |
+| Lemma `propSN` (l.1406) | 1406–1411 | SAL ⇒ isometry U + r_k, l_k with primitive T | `TNLean/MPS/MPDO/InverseMapActiveSectorPrimitivity.lean` | **partial** — primitivity is proved on the nonzero-weight inverse-map sectors; the source's unqualified full-sector wording requires removal of inactive summands |
 | Lemma `SALZCL` (l.1484) | 1484–1487 | SAL + ZCL ⇒ T rank-1 (factorized) | **out of scope** | — |
 | Corollary (l.1503) | 1503–1506 | SAL + ZCL ⇒ structural form | **out of scope** | — |
 | Prop `3to5` (l.1510) | 1510–1517 | Structural form ⇒ tpCPM T,S exist (RFP) | **out of scope** | — |
 | Prop `3to4` (l.1569) | 1569–1577 | SAL ⇒ GSNNCH form | **out of scope** | — |
-| Prop `4to2` (l.1597) | 1597–1601 | GSNNCH + ZCL ⇒ SAL | **out of scope** | — |
+| Prop `4to2` (l.1597) | 1597–1601 | GSNNCH + ZCL ⇒ SAL | `TNLean/MPS/MPDO/CommutingBondTraceMatrixObstruction.lean`; `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` | **open** — Beigi's decomposition is formalized, but the source invokes the SAL-dependent `propSN`; the raw full-trace-matrix primitivity repair is formally false because inactive sectors may remain.  A SAL-independent active restriction or a direct Markov argument is still required |
 | Lemma `lemmus` (l.1647) | 1647–1649 | ZCL ⇒ μ_j,q independent of q | **out of scope** | — |
 | Lemma (l.1680) | 1680–1691 | SAL ⇒ orthogonal projectors P_j | **out of scope** | — |
 | Prop `prop2to3` (l.1740) | 1740–1743 | SAL + ZCL ⇒ BNTs satisfy (iv) of Theorem 4.9 | **out of scope** | — |
 | Prop `prop3to4` (l.1786) | 1786–1789 | (iv) ⇒ GSNNCH | **out of scope** | — |
-| Prop `prop4to2` (l.1801) | 1801–1804 | GSNNCH ⇒ SAL | **out of scope** | — |
+| Prop `prop4to2` (l.1801) | 1801–1804 | GSNNCH ⇒ SAL | `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` | **open** — downstream of the unresolved single-block implication at line 1597; the inactive-sector obstruction prevents using primitivity of the full Beigi trace matrix |
 | Prop `prop2to5` (l.1810) | 1810–1813 | SAL + ZCL ⇒ tpCPM T,S exist | **out of scope** | — |
 
 ### 2.7 Appendix D — Proofs of IV.12 / IV.13

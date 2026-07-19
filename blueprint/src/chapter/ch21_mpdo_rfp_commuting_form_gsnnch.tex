@@ -756,6 +756,45 @@
     decomposition or saturation of the area law.
 \end{remark}
 
+\begin{theorem}[Inactive-sector obstruction to full trace-matrix primitivity]
+    \label{thm:mpdo_commuting_bond_trace_matrix_primitivity_obstruction}
+    \lean{MPOTensor.CommutingBondTraceMatrixObstruction.%
+      normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl, def:mpdo}
+    There is an injective normal tensor $\mathcal K$, of physical dimension two
+    and bond dimension one, which generates MPDOs and has source zero
+    correlation length, together with one positive two-site bond $B$ whose
+    translates commute.  For every $N\geq2$,
+    \[
+        \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1},
+    \]
+    while the full trace matrix of its two Beigi sectors is
+    \[
+        T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+    \]
+    In particular, $T$ is not primitive.
+
+    This obstructs the unqualified primitivity step suggested at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  It does not obstruct
+    primitivity after a mathematically specified removal of inactive sectors,
+    and it does not disprove the stated commuting-form-to-SAL implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\mathcal K^{0,0}=1$ and let all other physical entries vanish.  The
+    doubled-index transfer and the physical-trace transfer are both the
+    identity on the one-dimensional bond algebra, so $\mathcal K$ is injective
+    and normal and has source zero correlation length.  Decompose the physical
+    space as $\mathbb C\oplus\mathbb C$ and take the left and right sector
+    factors to be $1$ on the first summand and $0$ on the second.  The resulting
+    neighboring operators are positive scalar matrices and give a single bond
+    whose commuting translates have exactly the required product at every
+    length.  Their traces are $1$ only for the ordered pair of first sectors,
+    giving the displayed matrix.  Its second row remains zero under every
+    positive power, so it is not primitive.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready
