@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Matrix.PosDef
@@ -28,6 +29,8 @@ Extracted from various files for reusability.
   trace form of the Frobenius norm
 - `Matrix.trace_conjTranspose_mul_self_kronecker`: Hilbert--Schmidt trace-form
   multiplicativity for Kronecker products
+- `Matrix.trace_blockDiagonal'_mul`: the trace pairing with a dependent
+  block-diagonal matrix is the sum over diagonal block compressions
 - `Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one`: determinant
   AM--GM lower bound for the Hilbert--Schmidt trace form
 - `Matrix.PosSemidef.trace_mul_nonneg`: the trace product of two positive
@@ -56,6 +59,38 @@ Extracted from various files for reusability.
 open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius MatrixOrder
 
 namespace Matrix
+
+/-! ## Dependent block-diagonal matrices -/
+
+/-- A dependent block-diagonal matrix pairs under the trace only with the
+diagonal block compressions of the other factor:
+$\operatorname{tr}((\bigoplus_i M_i)X)=\sum_i\operatorname{tr}(M_iX_{ii})$. -/
+theorem trace_blockDiagonal'_mul
+    {ι R : Type*} [Fintype ι] [DecidableEq ι]
+    {n : ι → Type*} [(i : ι) → Fintype (n i)] [Semiring R]
+    (M : (i : ι) → Matrix (n i) (n i) R)
+    (X : Matrix (Σ i, n i) (Σ i, n i) R) :
+    Matrix.trace (Matrix.blockDiagonal' M * X) =
+      ∑ i : ι, Matrix.trace
+        (M i * X.submatrix (fun a => ⟨i, a⟩) (fun a => ⟨i, a⟩)) := by
+  classical
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.submatrix_apply]
+  rw [Fintype.sum_sigma]
+  refine Finset.sum_congr rfl ?_
+  intro i _
+  refine Finset.sum_congr rfl ?_
+  intro a _
+  rw [Fintype.sum_sigma]
+  rw [Finset.sum_eq_single i]
+  · simp
+  · intro j _ hji
+    apply Finset.sum_eq_zero
+    intro b _
+    have hij : i ≠ j := fun h ↦ hji h.symm
+    rw [Matrix.blockDiagonal'_apply_ne M a b hij]
+    simp
+  · intro hi
+    exact (hi (Finset.mem_univ _)).elim
 
 /-! ## Uniform density matrices -/
 

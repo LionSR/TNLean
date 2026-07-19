@@ -2543,6 +2543,51 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     dimensions, the density matrices $\sigma_k$, and the displayed formula.
 \end{proof}
 
+% Scope restriction and factor-order convention documented in
+% docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
+\begin{theorem}[Density-block form of the Ces\`aro projection on full support]%
+    \label{thm:mean_ergodic_projection_density_block_form}
+    \lean{IsPositiveMap.exists_block_densities_of_meanErgodicProjection}
+    \leanok
+    \uses{thm:adjoint_mean_ergodic_projection_weighted_block_form}
+    Under the hypotheses of
+    Theorem~\ref{thm:adjoint_mean_ergodic_projection_weighted_block_form},
+    the mean-ergodic projection of $T$ satisfies
+    \[
+        P_T(B)=U\left(\bigoplus_k \sigma_k\otimes
+          \operatorname{tr}_{m_k}((U^*BU)_{kk})\right)U^*.
+    \]
+    Consequently,
+    \[
+        \operatorname{Fix}(T)
+        =U\left(\bigoplus_k \sigma_k\otimes\MN{d_k}\right)U^*.
+    \]
+    Here each summand is written on
+    $\mathbb C^{m_k}\otimes\mathbb C^{d_k}$, so
+    $\operatorname{tr}_{m_k}$ traces the first factor.  This is the
+    full-support part of Equation~(6.63) in
+    \cite[Theorem~6.14]{Wolf2012Quantum}; the density matrices are not yet
+    asserted to be positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:adjoint_mean_ergodic_projection_weighted_block_form}
+    For one summand, cyclicity of the trace and the defining property of the
+    partial trace give
+    \[
+      \operatorname{tr}\!\left(
+        (\sigma_k\otimes\operatorname{tr}_{m_k}B)A\right)
+      =\operatorname{tr}\!\left(
+        B\bigl(\Id_{m_k}\otimes
+          \operatorname{tr}_{m_k}((\sigma_k\otimes\Id_{d_k})A)\bigr)\right).
+    \]
+    Summing over the diagonal summands and applying the unitary change of
+    basis proves the displayed formula by nondegeneracy of the trace pairing.
+    Its range consists of the stated density blocks because
+    $\operatorname{tr}_{m_k}(\sigma_k\otimes X)=X$.
+\end{proof}
+
 Without a full-rank hypothesis on the fixed point, the corner-restricted fixed-point
 $*$-algebra of Theorem~\ref{thm:cornerFixedPointsStarSubalgebra} still carries the block
 structure through the compression onto the support sector; this is the

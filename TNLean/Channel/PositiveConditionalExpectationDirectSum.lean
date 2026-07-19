@@ -24,6 +24,8 @@ star-subalgebra
   coordinate direct-sum classification.
 * `StarSubalgebra.exists_block_densities_of_positive_retraction`: the classification for
   an arbitrary star-subalgebra.
+* `Matrix.trace_unitaryReindexLinearEquiv_symm_mul`: the trace-pairing identity
+  for unitary block coordinates.
 
 ## References
 
@@ -71,6 +73,36 @@ theorem unitaryReindexLinearEquiv_symm_apply
       U * Matrix.reindex e e A * star U := by
   simp [unitaryReindexLinearEquiv, Unitary.toUnits,
     Matrix.symm_reindexLinearEquiv, Matrix.coe_reindexLinearEquiv, Matrix.mul_assoc]
+
+/-- The inverse unitary block-coordinate change is adjoint to the forward
+change under the bilinear trace pairing:
+$\operatorname{tr}(\Phi^{-1}(X)A)=\operatorname{tr}(X\Phi(A))$. -/
+theorem trace_unitaryReindexLinearEquiv_symm_mul
+    {n H : Type*} [Fintype n] [DecidableEq n] [Fintype H] [DecidableEq H]
+    (e : H ≃ n) (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ)
+    (X : Matrix H H ℂ) (A : Matrix n n ℂ) :
+    Matrix.trace ((unitaryReindexLinearEquiv e U hU).symm X * A) =
+      Matrix.trace (X * unitaryReindexLinearEquiv e U hU A) := by
+  classical
+  rw [unitaryReindexLinearEquiv_symm_apply, unitaryReindexLinearEquiv_apply]
+  let Ahat := Matrix.reindex e.symm e.symm (star U * A * U)
+  have hreindex : Matrix.reindex e e Ahat = star U * A * U := by
+    ext i j
+    simp [Ahat]
+  calc
+    Matrix.trace ((U * Matrix.reindex e e X * star U) * A) =
+        Matrix.trace (U * (Matrix.reindex e e X * star U * A)) := by
+      simp only [Matrix.mul_assoc]
+    _ = Matrix.trace ((Matrix.reindex e e X * star U * A) * U) :=
+      Matrix.trace_mul_comm _ _
+    _ = Matrix.trace (Matrix.reindex e e X * (star U * A * U)) := by
+      simp only [Matrix.mul_assoc]
+    _ = Matrix.trace
+        (Matrix.reindex e e X * Matrix.reindex e e Ahat) := by rw [hreindex]
+    _ = Matrix.trace (Matrix.reindex e e (X * Ahat)) := by
+      exact congrArg Matrix.trace
+        (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e X Ahat)
+    _ = Matrix.trace (X * Ahat) := Matrix.trace_submatrix_equiv e.symm (X * Ahat)
 
 /-- Unitary change of basis and reindexing preserve positive semidefiniteness. -/
 theorem unitaryReindexLinearEquiv_posSemidef
