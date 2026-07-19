@@ -749,7 +749,7 @@
     \label{thm:matrix_primitive_pow_two_rank_one}
     \lean{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}
     \leanok
-    Let $T$ be a primitive non-negative real $N\times N$ matrix, where
+    Let $T$ be a primitive real $N\times N$ matrix, where
     $N\geq 1$. If
     \[
         T^2=T^3,
@@ -767,9 +767,13 @@
     \leanok
     \uses{thm:matrix_positive_idempotent_rank_one,
         thm:matrix_pairing_sq_eq_cube}
-    The identity $T^2=T^3$ gives $T^m=T^2$ for every $m\geq 2$. Some positive
-    power of $T$ has strictly positive entries. Squaring that power shows that
-    $T^2$ is strictly positive, and the same identity gives $(T^2)^2=T^2$.
+    Primitivity gives $m\geq 1$ such that $(T^m)_{i,j}>0$ for every $i,j$.
+    Stabilization gives $T^{2m}=T^2$. Thus, for every $i,j$,
+    \[
+        (T^2)_{i,j}=(T^{2m})_{i,j}
+        =\sum_k (T^m)_{i,k}(T^m)_{k,j}>0.
+    \]
+    The same stabilization identity gives $(T^2)^2=T^2$.
     The preceding theorem applied to $P=T^2$ now gives the conclusion.
 \end{proof}
 

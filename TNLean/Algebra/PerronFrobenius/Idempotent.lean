@@ -100,9 +100,8 @@ then its square has rank one.
 
 This is the finite-dimensional Perron-projection lemma supporting the proposed
 argument at arXiv:1606.00608, Appendix C.2, line 1613; it is not itself a
-claim of that source. The nonempty-index assumption is necessary for
-the library definition of primitivity: on the empty index set, strict
-positivity of a matrix power is vacuous and the square has rank zero. -/
+claim of that source. The assumption N ≥ 1 is necessary: for N = 0,
+primitivity is vacuous and the square has rank zero. -/
 theorem IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three
     {N : ℕ} [NeZero N] {T : Matrix (Fin N) (Fin N) ℝ}
     (hT : T.IsPrimitive) (h : T ^ 2 = T ^ 3) :
