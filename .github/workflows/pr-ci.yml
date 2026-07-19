@@ -33,6 +33,7 @@ on:
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_face_ports.py'
+      - 'scripts/test_tenkz_index_routing.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -59,6 +60,7 @@ on:
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_face_ports.py'
+      - 'scripts/test_tenkz_index_routing.py'
   workflow_dispatch:
 
 concurrency:
@@ -117,6 +119,7 @@ jobs:
               - 'scripts/tenkz_lint.py'
               - 'scripts/test_tenkz_pic.py'
               - 'scripts/test_tenkz_face_ports.py'
+              - 'scripts/test_tenkz_index_routing.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
 
@@ -312,6 +315,10 @@ jobs:
       - name: Test asymmetric tenkz face ports
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_face_ports.py
+
+      - name: Test tenkz coefficient-index routing
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_index_routing.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'

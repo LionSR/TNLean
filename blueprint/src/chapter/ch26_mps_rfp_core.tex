@@ -792,16 +792,104 @@
     Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} to each block.
 \end{proof}
 
-% BLOCKED figure (issue #4152): the source threads both j and q through X,
-% the coefficient tensor, and X^{-1}.  Face-specific splitting ports can now
-% represent the local U geometry, but not this block-and-multiplicity threading.
-% Keep the faithful formula as an equation until that general primitive lands;
-% do not substitute the coarser global-X picture.
-Across all blocks, the canonical form is
-    \[
-        A^i=\bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
-        \mu_{j,q}X_{j,q}\sqrt{\Lambda_j}\,U_j^iX_{j,q}^{-1}.
-    \]
+Across all blocks, the canonical form has the following routed representation.
+\begin{figure}[ht]
+    \centering
+    \begin{center}
+        \begin{tenkz}[physical=up, tensor style=box]
+            \tn{A}
+        \end{tenkz}
+        $\;=\;$
+        % TENKZ-II-RFP-BEGIN
+        \begin{tenkzfree}[tensor style=box]
+            \tnput[boundary, ports={east:virtual}]
+                {rfpWest}{(-8mm,0)}{}
+            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+                {rfpX}{(0,0)}{X}
+            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+                {rfpLambda}{(14mm,0)}{\sqrt\Lambda}
+            \tnput[box,
+                ports={south west:virtual,south:virtual,
+                    south east:virtual,north:physical}]
+                {rfpU}{(31mm,11mm)}{\quad U\quad}
+            \tnput[dot, ports={north:virtual,south:virtual,east:virtual}]
+                {rfpMain}{(31mm,0)}{}
+            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+                {rfpM}{(40mm,0)}{M}
+            \tnput[box,
+                ports={west:virtual,east:virtual,north west:virtual,
+                    south:virtual}]
+                {rfpXinv}{(54mm,0)}{X^{-1}}
+            \tnput[boundary, ports={west:virtual}]
+                {rfpEast}{(63mm,0)}{}
+            \tnput[boundary, ports={south:physical}]
+                {rfpPhysical}{(31mm,20mm)}{}
+
+            \tnput[boundary, label pos=west, ports={east:virtual}]
+                {rfpJwest}{(-8mm,-9mm)}{j}
+            \tnput[dot, ports={west:virtual,east:virtual,
+                    north:virtual,south:virtual}]
+                {rfpXj}{(0,-9mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpLambdaj}{(14mm,-9mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpUj}{(31mm,-9mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,
+                    north:virtual,south:virtual}]
+                {rfpXinvj}{(54mm,-9mm)}{}
+            \tnput[boundary, ports={west:virtual}]
+                {rfpJeast}{(63mm,-9mm)}{}
+
+            \tnput[boundary, label pos=west, ports={east:virtual}]
+                {rfpQwest}{(-8mm,-16mm)}{q}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpXq}{(0,-16mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpMq}{(40mm,-16mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpXinvq}{(54mm,-16mm)}{}
+            \tnput[boundary, ports={west:virtual}]
+                {rfpQeast}{(63mm,-16mm)}{}
+
+            \tnjoin{rfpWest.east}{rfpX.west}
+            \tnjoin{rfpX.east}{rfpLambda.west}
+            \tnjoin[route=hv]{rfpLambda.east}{rfpU.south west}
+            \tnjoin[route=vh]{rfpU.south east}{rfpXinv.north west}
+            \tnjoin{rfpU.south}{rfpMain.north}
+            \tnjoin{rfpMain.east}{rfpM.west}
+            \tnjoin{rfpM.east}{rfpXinv.west}
+            \tnjoin{rfpXinv.east}{rfpEast.west}
+            \tnjoin{rfpPhysical.south}{rfpU.north}
+
+            \tnjoin{rfpX.south}{rfpXj.north}
+            \tnjoin{rfpXj.south}{rfpXq.north}
+            \tnjoin{rfpLambda.south}{rfpLambdaj.north}
+            \tnjoin{rfpMain.south}{rfpUj.north}
+            \tnjoin{rfpM.south}{rfpMq.north}
+            \tnjoin{rfpXinv.south}{rfpXinvj.north}
+            \tnjoin{rfpXinvj.south}{rfpXinvq.north}
+
+            \tnjoin{rfpJwest.east}{rfpXj.west}
+            \tnjoin{rfpXj.east}{rfpLambdaj.west}
+            \tnjoin{rfpLambdaj.east}{rfpUj.west}
+            \tnjoin{rfpUj.east}{rfpXinvj.west}
+            \tnjoin{rfpXinvj.east}{rfpJeast.west}
+            \tnjoin{rfpQwest.east}{rfpXq.west}
+            \tnjoin{rfpXq.east}{rfpMq.west}
+            \tnjoin{rfpMq.east}{rfpXinvq.west}
+            \tnjoin{rfpXinvq.east}{rfpQeast.west}
+        \end{tenkzfree}
+        % TENKZ-II-RFP-END
+    \end{center}
+    \caption{Block-and-multiplicity routing in the isometry canonical form.
+        The independent rails $j$ and $q$ pass through the coefficient
+        network without being fused: $X$ and $X^{-1}$ depend on both,
+        $\sqrt\Lambda$ and $U$ carry the block label $j$, and $M$ carries
+        the multiplicity label $q$.  The upper leg of $U$ is the physical
+        index, as in the source figure
+        \cite[Section~3.4, lines~543--563]{Cirac2016MPDO_arXiv}.}
+    \label{fig:rfp_block_multiplicity_routing}
+\end{figure}
 Here $j$ labels the normal-tensor block and $q$ its repeated representation;
 the residual isometries in
 \cite[Section~3.4, lines~543--561]{Cirac2016MPDO_arXiv} also satisfy
