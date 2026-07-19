@@ -803,10 +803,23 @@
     \[
         \eta_{k,h}=w_kw_h I_1=\delta_{k,0}\delta_{h,0}I_1\succeq0.
     \]
-    They give a single bond whose commuting translates have exactly the
-    required product at every length.  Consequently,
+    In the sector coordinates the corresponding physical bond is
     \[
-        T_{k,h}=\tr(\eta_{k,h})=\delta_{k,0}\delta_{h,0}.
+        B=\sum_{k,h} I_{H_L^{(k)}}\otimes\eta_{k,h}\otimes
+        I_{H_R^{(h)}}
+        =I_{H_L^{(0)}}\otimes I_1\otimes I_{H_R^{(0)}}.
+    \]
+    Since only the all-zero physical-index word contributes, the
+    factorization identity is
+    \[
+        \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1}
+        \qquad (N\geq2).
+    \]
+    Consequently,
+    \[
+        T_{k,h}=\tr(\eta_{k,h})=\delta_{k,0}\delta_{h,0},
+        \qquad
+        T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
     \]
     For every $n\geq1$,
     \[
