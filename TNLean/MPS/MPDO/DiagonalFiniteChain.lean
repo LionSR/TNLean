@@ -16,8 +16,10 @@ distribution to a positive diagonal finite-chain matrix product operator.
 The resulting classical mutual information is at most twice the logarithm of
 the bond dimension.
 
-Only positivity and diagonality at the chain length under consideration are
-assumed.  No local purification or positivity at other lengths is required.
+The fixed-length theorem assumes positivity and diagonality only at the chain
+length under consideration; no local purification or positivity at other
+lengths is required there.  The global corollary instead assumes diagonality
+and positive semidefiniteness at every positive chain length.
 
 ## Main definitions
 
