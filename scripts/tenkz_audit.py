@@ -71,7 +71,7 @@ EMPTY_CHECK_LANGS = {"grid", "lattice", "free"}
 # planes is a post-spec dialect still growing its vocabulary.
 DIALECT_KINDS = {
     "grid": {"atom", "bond", "faceports", "pairleg", "trace", "pairtrace",
-             "phtrace", "cup", "hole", "boundary"},
+             "phtrace", "cup", "hole", "warning", "boundary"},
     "free": {"atom", "join", "boundary"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
 }
@@ -115,6 +115,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "cup": {"picture": _is_int, "side": _enum("west", "east"),
             "top": _is_int, "bottom": _is_int, "matrix": _is_int},
     "hole": {"picture": _is_int, "row": _is_int, "col": _is_int},
+    "warning": {"picture": _is_int, "code": _any},
     "boundary": {"picture": _is_int, "virtual-west": _is_int, "virtual-east": _is_int,
                  "physical-up": _is_int, "physical-down": _is_int},
     "cdcell": {"picture": _is_int, "index": _is_int},
@@ -145,9 +146,9 @@ class Picture:
     events: list[Event] = field(default_factory=list)
 
     def content(self) -> list[Event]:
-        """Events that denote ink.  `boundary` is a derived signature line
-        emitted even for pictures that draw nothing, so it is excluded."""
-        return [e for e in self.events if e.kind != "boundary"]
+        """Events that denote ink.  Derived boundaries and warning
+        diagnostics do not contribute to the canonical topology."""
+        return [e for e in self.events if e.kind not in {"boundary", "warning"}]
 
     def boundary(self) -> Optional[tuple[int, int, int, int]]:
         for e in self.events:

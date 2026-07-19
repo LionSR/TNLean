@@ -2402,9 +2402,8 @@
 
 % Draw every lower-face slot not met by an upper port, once per lower
 % glyph.  Argument #3 records their contribution to the boundary signature
-% when it is 1.  An open= interface already contributes the full declared
-% face arity in the signature pass, so that caller uses 0 while retaining
-% exactly the same visible legs and labels.
+% when it is 1.  Opened addressed slots are counted separately; unmatched
+% surplus slots still enter this counter exactly where their ink is drawn.
 \cs_new_protected:Npn \tenkz_draw_lower_surplus:nnn #1#2#3
   {
     \tl_set:Ne \l__tenkz_pwlowbase_tl {#2}
@@ -2420,7 +2419,9 @@
         \exp_args:NV \tenkz_cell_opts:n \l__tenkz_pwlowopts_tl
         \tenkz_face_ports:nN {up} \l__tenkz_pwlowports_tl
         \seq_set_from_clist:NV \l__tenkz_pwlowlab_seq \l__tenkz_cup_tl
-        \str_if_eq:VnF \l__tenkz_pwlowports_tl {center}
+        \bool_lazy_and:nnT
+          { ! \str_if_eq_p:Vn \l__tenkz_pwlowports_tl {center} }
+          { ! \str_if_eq_p:Vn \l__tenkz_pwlowports_tl {none} }
           {
             \exp_args:NV \clist_map_inline:nn \l__tenkz_pwlowports_tl
               {
@@ -2468,8 +2469,9 @@
     % Every declared port is an independent index.  Even when several
     % columns owner-resolve to one lower glyph, the pairing pass must retain
     % every upper port rather than collapse the face to one centre wire.
-    \exp_args:NV \clist_map_inline:nn \l__tenkz_pwcols_tl
-      { \tenkz_pair_wide_col:nnn {#1}{#2}{##1} }
+    \str_if_eq:VnF \l__tenkz_pwcols_tl {none}
+      { \exp_args:NV \clist_map_inline:nn \l__tenkz_pwcols_tl
+          { \tenkz_pair_wide_col:nnn {#1}{#2}{##1} } }
   }
 % one named column: row #1, base column #2, span-local index #3 (the
 % absolute column is #2 + #3 - 1)
@@ -2525,7 +2527,7 @@
                   { \prop_if_in_p:Ne \l__tenkz_opencell_prop
                       {#1-\int_eval:n{#2+#3-1}} }
                   { \tenkz_draw_lower_surplus:nnn
-                      {#1}{\l__tenkz_pwbase_tl}{0} }
+                      {#1}{\l__tenkz_pwbase_tl}{1} }
                 \bool_if:NTF \l__tenkz_pwlowerport_bool
                   {
                     \bool_if:nF { \tenkz_traced_p:nn {#1}{#2} }
@@ -2660,7 +2662,7 @@
           }
       }
       {
-        \tenkz_draw_lower_surplus:nnn {#1}{\l__tenkz_pwbase_tl}{0}
+        \tenkz_draw_lower_surplus:nnn {#1}{\l__tenkz_pwbase_tl}{1}
         \clist_if_in:NeT \l__tenkz_faceports_tl
           { \int_eval:n { #2 - \l__tenkz_pwbase_tl + 1 } }
           {
@@ -2774,6 +2776,8 @@
                 \int_step_inline:nn {\l__tenkz_cwires_int}
                   { \clist_put_right:Nn \l__tenkz_bkports_tl {##1} } } }
       }
+    \str_if_eq:VnT \l__tenkz_bkports_tl {none}
+      { \tl_clear:N \l__tenkz_bkports_tl }
     \bool_if:NTF \l__tenkz_vertical_bool
       {
         \pgfextractx \l__tenkz_bkface_dim
@@ -2979,22 +2983,24 @@
     \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
     \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
     \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
-    \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
-      {
-        \str_if_eq:nnTF {#3} {up}
-          { \tenkz_leg_stub:nnNn {north}{south} \l__tenkz_cup_tl   { 1} }
-          { \tenkz_leg_stub:nnNn {south}{north} \l__tenkz_cdown_tl {-1} }
-      }
-      {
-        % face at={c1,...}: one leg PER NAMED SPANNED COLUMN of the wide
-        % glyph -- each an independent open physical index (U_{(i1 i2),j}
-        % keeps one output per blocked site, hard08)
-        \str_if_eq:nnTF {#3} {up}
-          { \tenkz_leg_multi:nnnnNn {#1}{#2}{north}{south}
-              \l__tenkz_cup_tl   { 1} }
-          { \tenkz_leg_multi:nnnnNn {#1}{#2}{south}{north}
-              \l__tenkz_cdown_tl {-1} }
-      }
+    \str_if_eq:VnF \l__tenkz_faceports_tl {none}
+      { \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
+          {
+            \str_if_eq:nnTF {#3} {up}
+              { \tenkz_leg_stub:nnNn
+                  {north}{south} \l__tenkz_cup_tl {1} }
+              { \tenkz_leg_stub:nnNn
+                  {south}{north} \l__tenkz_cdown_tl {-1} }
+          }
+          {
+            % face at={c1,...}: one leg PER NAMED SPANNED COLUMN of the wide
+            % glyph -- each an independent open physical index.
+            \str_if_eq:nnTF {#3} {up}
+              { \tenkz_leg_multi:nnnnNn {#1}{#2}{north}{south}
+                  \l__tenkz_cup_tl {1} }
+              { \tenkz_leg_multi:nnnnNn {#1}{#2}{south}{north}
+                  \l__tenkz_cdown_tl {-1} }
+          } }
   }
 \cs_generate_variant:Nn \tenkz_leg_open:nnn { enn, een }
 

@@ -225,6 +225,13 @@ SOURCE = r"""
   \tn[wires=2, west at={1,2}, east at={1}]{A}\\
   &
 \end{tenkz}
+\begin{tenkz}[rows={op}, tensor style=box]
+  \tn[wide=2, up at={3}]{U} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
+  \tn[pill, wide=2, down at={1,2}]{U} & \\
+  \tn[pill, wide=2, up at={1,2}]{L} &
+\end{tenkz}
 \end{document}
 """
 
@@ -291,6 +298,14 @@ def main() -> int:
         audit.parse_log()
         topology_hashes = {
             picture.ident: canonical_hash(picture) for picture in audit.pictures
+        }
+        parsed_warnings = {
+            picture.ident: [
+                event.attrs.get("code", "")
+                for event in picture.events
+                if event.kind == "warning"
+            ]
+            for picture in audit.pictures
         }
 
     inverse = pictures[1]
@@ -395,6 +410,8 @@ def main() -> int:
     require(asymmetric_trace,
             "warning|picture=13|code=phtrace-face-ports|cell=1-1",
             "asymmetric physical trace was not rejected")
+    if "phtrace-face-ports" not in parsed_warnings[13]:
+        raise AssertionError("physical-trace warning was dropped by the audit parser")
     forbid(asymmetric_trace,
            "phtrace|picture=13|row=1|col=1",
            "asymmetric physical trace emitted a centre-only loop")
@@ -466,6 +483,8 @@ def main() -> int:
     require(pair_trace,
             "warning|picture=21|code=pair-trace-face-ports|cell=1-1",
             "multi-port pair trace was not rejected")
+    if "pair-trace-face-ports" not in parsed_warnings[21]:
+        raise AssertionError("pair-trace warning was dropped by the audit parser")
     forbid(pair_trace,
            "pairtrace|picture=21|row=1|col=1",
            "multi-port pair trace emitted a misleading centre loop")
@@ -474,14 +493,14 @@ def main() -> int:
     opened_wide = pictures[22]
     require(
         opened_wide,
-        "boundary|picture=22|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
-        "opened wide interface double-counted its lower-face ports",
+        "boundary|picture=22|virtual-west=2|virtual-east=2|physical-up=3|physical-down=1",
+        "opened wide interface omitted an unmatched lower-face port",
     )
     opened_plain = pictures[23]
     require(
         opened_plain,
-        "boundary|picture=23|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
-        "opened centred interface double-counted its lower-face ports",
+        "boundary|picture=23|virtual-west=2|virtual-east=2|physical-up=3|physical-down=1",
+        "opened centred interface omitted an unmatched lower-face port",
     )
     single_wire = pictures[24]
     require(single_wire,
@@ -734,6 +753,8 @@ def main() -> int:
         "warning|picture=49|code=periodic-face-ports|row=2",
         "sparse periodic endpoint was not reported",
     )
+    if "periodic-face-ports" not in parsed_warnings[49]:
+        raise AssertionError("periodic warning was dropped by the audit parser")
     require(
         sparse_periodic,
         "boundary|picture=49|virtual-west=1|virtual-east=0|physical-up=0|physical-down=0",
@@ -759,6 +780,25 @@ def main() -> int:
         sparse_hooks,
         "boundary|picture=50|virtual-west=1|virtual-east=0|physical-up=0|physical-down=0",
         "unmatched hook endpoint did not remain open",
+    )
+    invalid_physical = pictures[51]
+    require(
+        invalid_physical,
+        "faceports|picture=51|cell=1-1|face=up|arity=0|at=none",
+        "wholly out-of-range physical face was not rejected",
+    )
+    require(
+        invalid_physical,
+        "boundary|picture=51|virtual-west=1|virtual-east=1|physical-up=0|physical-down=1",
+        "rejected physical face left ink in the boundary signature",
+    )
+    partial_wide_pair = pictures[52]
+    if paired_ports(partial_wide_pair) != [("2", "2")]:
+        raise AssertionError("opened wide owner failed to contract its other slot")
+    require(
+        partial_wide_pair,
+        "boundary|picture=52|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
+        "opened wide owner counted its contracted lower slot as open",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
