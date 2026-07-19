@@ -24,6 +24,8 @@ star-subalgebra
   coordinate direct-sum classification.
 * `StarSubalgebra.exists_block_densities_of_positive_retraction`: the classification for
   an arbitrary star-subalgebra.
+* `Matrix.trace_unitaryReindexLinearEquiv_symm_mul`: the trace-pairing identity
+  for unitary block coordinates.
 
 ## References
 

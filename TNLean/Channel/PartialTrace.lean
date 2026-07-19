@@ -44,6 +44,8 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
   product
 * `Matrix.trace_partialTraceLeft_mul`: the defining trace-pairing identity for
   the left partial trace
+* `Matrix.trace_kronecker_partialTraceLeft_mul_eq`: the weighted one-summand
+  trace-adjoint identity
 * `Matrix.partialTraceRightAlong`: the partial trace after choosing a product
   decomposition of the right factor
 * `Matrix.trace_eq_trace_traceLeft`: `tr(X) = tr(tr_A(X))`

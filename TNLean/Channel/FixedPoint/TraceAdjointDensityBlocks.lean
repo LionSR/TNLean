@@ -101,7 +101,7 @@ and the complementary zero summand required for the general theorem remain
 open in `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
 
 **Convention (factor order):** Wolf writes the algebra and density factors in
-the opposite order.  TNLean indexes each summand by
+the opposite order.  Each summand is indexed by
 `Fin (m k) × Fin (d k)`, so `Matrix.partialTraceLeft` traces the multiplicity
 factor and the density block is $\sigma_k\otimes M_{d_k}(\mathbb C)$. -/
 theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection

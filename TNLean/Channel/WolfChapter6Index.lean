@@ -9,6 +9,7 @@ import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
 import TNLean.Channel.FixedPoint.FullSupportBlockRetraction
+import TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks
 import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.CornerFixedPoints
@@ -314,6 +315,14 @@ In `TNLean.Channel.FixedPoint.FullSupportBlockRetraction`:
   fixed-point star-algebra and has the weighted partial-trace block form of
   Wolf Equation (1.40).
 
+In `TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks`:
+
+* `IsPositiveMap.exists_block_densities_of_meanErgodicProjection` — under the
+  same full-support hypotheses, the mean-ergodic projection has the
+  Schrödinger-picture density-block form
+  `U (⊕_k σ_k ⊗ tr_{m_k}((U† B U)_{kk})) U†`, and the fixed-point space is
+  `U (⊕_k σ_k ⊗ M_{d_k}(ℂ)) U†`.
+
 In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 
 * `Kraus.starSubalgebra_isSemisimpleRing` — every finite-dimensional
@@ -349,10 +358,12 @@ positive semidefinite fixed point):
   corner-restricted set only; extending by zero on the complement does not
   produce ambient fixed points in general.
 
-What is still missing for the full Wolf statement is to take the trace adjoint
-of the weighted retraction formula, identify the Schrödinger-picture fixed
-points with the resulting density blocks, and transport the support-sector
-formula back to the ambient space with the complementary zero block.
+What is still missing for the full Wolf statement is the reduction to the
+support of a maximum-rank fixed point, including positive definiteness of the
+supported density blocks, and transport back to the ambient space with the
+complementary zero block.  Applying the full-support theorem to the transported
+sector channels of arXiv:1606.00608 additionally requires a direct-sum version
+or an extension through the block-diagonal embedding.
 
 ### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED (Kraus case)
 
