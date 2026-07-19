@@ -1095,16 +1095,10 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
         thm:positive_mean_ergodic_projection,
         thm:trace_preserving_mean_ergodic_projection,
         thm:unital_mean_ergodic_projection}
-    If $X\ge 0$, then $T^n(X)\ge 0$ and
-    $\tr(T^n(X))=\tr(X)$. Hence the orbit of $X$ lies in a bounded trace
-    section of the positive cone. For Hermitian $X$, write
-    $X=X_+-X_-$, and for arbitrary $X$ use the two Hermitian matrices
-    \[
-        H_1=X+X^*,\qquad H_2=i(X-X^*),\qquad
-        X=\frac12(H_1-iH_2).
-    \]
-    Thus every orbit is bounded. Theorem~\ref{thm:mean_ergodic_bounded_orbits}
-    gives the projection and its fixed-point characterization. Its positivity,
+    Trace preservation implies trace nonincrease, so
+    Theorem~\ref{thm:positive_trace_nonincreasing_bounded_orbits} gives
+    bounded orbits.  Theorem~\ref{thm:mean_ergodic_bounded_orbits} then gives
+    the projection and its fixed-point characterization.  Its positivity,
     trace preservation, and behavior on the identity follow from the three
     preceding theorems.
 \end{proof}

@@ -1646,33 +1646,16 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    Each transported map is positive and trace nonincreasing.  Hence the same
-    is true of either square composite $F$.  For $X\geq0$ and $n\geq0$,
+    Each transported map is positive and trace nonincreasing, and hence so is
+    either square composite $F$.  The preceding fixed-generator lemma and
+    product-spanning theorem give the hypotheses of
+    Theorem~\ref{thm:positive_map_faithful_fixed_point_from_product_span},
+    applied to the canonical full-matrix extension of the sector algebra.
+    Thus there is a positive-definite fixed point $\rho$:
     \[
-      0\leq\operatorname{tr}(F^n(X))
-        \leq\operatorname{tr}(X).
+      \rho\succ0,
+      \qquad F(\rho)=\rho.
     \]
-    Thus positive orbits remain in a bounded trace section; decomposition
-    into Hermitian parts gives bounded orbits for every input.  Let $P$ be the
-    mean-ergodic projection of $F$, set $\rho=P(\mathbf 1)$, and let $Q$ be
-    the support projection of $\rho$.  Positivity of $P$ implies that every
-    fixed operator is supported on $Q$.
-
-    The preceding fixed-generator lemma places every weighted vertical bond
-    contraction $V_j$ in the fixed-point space.  The support absorption
-    identities give
-    \[
-      QV_jQ=V_j,
-      \qquad QV_j=V_j=V_jQ,
-    \]
-    and hence, for every positive-length product,
-    \[
-      Q(V_{j_1}\cdots V_{j_L})
-        =V_{j_1}\cdots V_{j_L}
-        =(V_{j_1}\cdots V_{j_L})Q.
-    \]
-    These products span the sector algebra, so their common support contains
-    the identity.  Therefore $Q=\mathbf 1$ and $\rho$ is positive definite.
 
     Let $F^*$ be the trace adjoint and set
     \[
@@ -1684,8 +1667,8 @@ physical indices, as in
     $F$ implies that $\Delta$ is Hermitian.  Hence $\Delta\geq0$.  Since
     $F(\rho)=\rho$, one has $\operatorname{tr}(\rho\Delta)=0$.
     Positive definiteness of $\rho$ therefore forces $\Delta=0$, which is
-    equivalent to trace preservation.  This argument uses fixedness only of
-    the contraction factors, not of their products.
+    equivalent to trace preservation.  The faithful-fixed-point theorem uses
+    fixedness only of the contraction factors, not of their products.
 
     Finally, for positive $X$ the two trace-nonincreasing inequalities give
     \[
