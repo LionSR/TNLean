@@ -787,16 +787,33 @@
 
 \begin{proof}\leanok
     Let $\mathcal K^{0,0}=1$ and let all other physical entries vanish.  The
-    doubled-index transfer and the physical-trace transfer are both the
-    identity on the one-dimensional bond algebra, so $\mathcal K$ is injective
-    and normal and has source zero correlation length.  Decompose the physical
-    space nonminimally as $\mathbb C\oplus\mathbb C$ and take the left and right
-    sector factors to be $1$ on the first summand and $0$ on the second.  The
-    resulting neighboring operators are positive scalar matrices and give a single bond
-    whose commuting translates have exactly the required product at every
-    length.  Their traces are $1$ only for the ordered pair of first sectors,
-    giving the displayed matrix.  Its second row remains zero under every
-    positive power, so it is not primitive.
+    matrices $\{\mathcal K^{i,j}\}_{i,j=0}^1$ span $M_1(\mathbb C)$.  For every
+    $X\in M_1(\mathbb C)$, the doubled-index transfer $\mathcal E_{\mathcal K}$
+    and the physical-trace transfer $P_{\mathcal K}$ satisfy
+    \[
+        \mathcal E_{\mathcal K}(X)=X,
+        \qquad P_{\mathcal K}=I_1,
+        \qquad P_{\mathcal K}^2=P_{\mathcal K}.
+    \]
+    Hence $\mathcal K$ is injective and normal and has source zero correlation
+    length.  Decompose the physical space nonminimally as
+    $\mathbb C\oplus\mathbb C$.  With $w_0=1$ and $w_1=0$, take both sector
+    factors to be the scalar $w_k$ in sector $k$.  The neighboring operators
+    are
+    \[
+        \eta_{k,h}=w_kw_h I_1=\delta_{k,0}\delta_{h,0}I_1\succeq0.
+    \]
+    They give a single bond whose commuting translates have exactly the
+    required product at every length.  Consequently,
+    \[
+        T_{k,h}=\tr(\eta_{k,h})=\delta_{k,0}\delta_{h,0}.
+    \]
+    For every $n\geq1$,
+    \[
+        T^n=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+    \]
+    Thus no positive power has all entries strictly positive, so $T$ is not
+    primitive.
 \end{proof}
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]

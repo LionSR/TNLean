@@ -11,7 +11,8 @@ import TNLean.MPS.MPDO.ZCL
 # A nonminimal sector factorization with nonprimitive trace matrix
 
 This file records the inactive-sector obstruction in the converse argument of
-arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1603--1613.  Even for
+arXiv:1606.00608, Appendix C.2, the converse implication, lines 1603--1613.
+Even for
 a normal source block with source zero correlation length and one exact positive
 translation-invariant commuting-bond presentation, a chosen nonminimal
 middle-space decomposition can retain a physical summand on which the bond
@@ -19,7 +20,7 @@ vanishes.  Its trace matrix is then not primitive.
 
 The example is the pure product MPDO on a two-dimensional physical space.  Its
 bond dimension is one and its only nonzero tensor entry is
-`K^{0,0} = 1`.  The two one-dimensional Beigi sectors give neighboring
+$\mathcal K^{0,0}=1$.  The two one-dimensional Beigi sectors give neighboring
 operators with trace matrix
 \[
   T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
@@ -32,7 +33,7 @@ factorization merely from the displayed commuting product.
 
 ## References
 
-* arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1597--1619.
+* arXiv:1606.00608, Appendix C.2, converse implication, lines 1597--1619.
 * Beigi, arXiv:1105.1019v2, Lemma 2.1.
 -/
 
@@ -43,7 +44,8 @@ namespace MPOTensor.CommutingBondTraceMatrixObstruction
 /-- The indicator of the retained physical sector. -/
 noncomputable def sectorWeight (k : Fin 2) : ℂ := if k = 0 then 1 else 0
 
-/-- The bond-dimension-one pure product MPDO with only `K^{0,0}` nonzero. -/
+/-- The bond-dimension-one pure product MPDO with only
+$\mathcal K^{0,0}$ nonzero. -/
 noncomputable def tensor : MPOTensor 2 1 :=
   fun i j => if i = j then Matrix.of fun _ _ => sectorWeight i else 0
 
@@ -131,7 +133,7 @@ lemma neighboringOperator_posSemidef (k h : Fin 2) :
   intro i
   fin_cases k <;> fin_cases h <;> norm_num [sectorWeight, Complex.nonneg_iff]
 
-/-- The full two-sector trace matrix is `diag(1, 0)`. -/
+/-- The full two-sector trace matrix is $\operatorname{diag}(1,0)$. -/
 lemma traceMatrix_eq : traceMatrix = !![1, 0; 0, 0] := by
   have huniv : (Finset.univ : Finset (Fin 1 × Fin 1)) = {(0, 0)} := by
     ext x
