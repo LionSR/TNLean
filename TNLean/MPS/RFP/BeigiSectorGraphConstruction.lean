@@ -105,6 +105,9 @@ theorem IsNNCPH.twoSiteParentGroundProjectorMatrix_overlappingLifts_commute
     _ = (1 - Matrix.rightOverlappingLift H) * (1 - Matrix.leftOverlappingLift H) := by
       noncomm_ring
 
+/-- Idempotence of a block-diagonal eta-pair operator forces idempotence of each
+neighboring eta operator.  Positivity of the outer dimensions supplies fixed basis
+indices at which the identity factors evaluate to one, exposing the eta block. -/
 private theorem eta_isIdempotent_of_blockDiagonal_isIdempotent
     {K : ℕ} {dl dr : Fin K → ℕ}
     (hdl : ∀ q, 0 < dl q) (hdr : ∀ q, 0 < dr q)

@@ -60,12 +60,6 @@ def etaPairSpatialBlockEquiv {K : ℕ} {dl dr : Fin K → ℕ}
     simp only
     rw [e.apply_symm_apply, e.apply_symm_apply]
 
-end Matrix
-
-namespace MPOTensor.TranslationInvariantBondData
-
-variable {d : ℕ}
-
 /-- A positive two-site operator whose overlapping translates commute has one spatial
 decomposition and a positive neighboring operator \(\eta_{q,h}\) for each ordered pair of
 sectors such that
@@ -84,7 +78,7 @@ does not assert the rank-one trace factorization invoked later in Proposition 4t
 Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
 lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III,
 equation (2). -/
-theorem _root_.Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute
+theorem exists_positive_etaPair_decomposition_of_overlappingLifts_commute
     (B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (hB : B.PosSemidef)
     (hComm : Matrix.leftOverlappingLift B * Matrix.rightOverlappingLift B =
       Matrix.rightOverlappingLift B * Matrix.leftOverlappingLift B) :
@@ -284,6 +278,12 @@ theorem _root_.Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_
         exact hB'_right_sector_ne q q h h' hh lq lq' rq rq' lh lh' rh rh'
     · rw [Matrix.blockDiagonal'_apply_ne _ _ _ (fun hp ↦ hq (Prod.mk.inj hp).1)]
       exact hB'_left_sector_ne q q' h h' hq lq lq' rq rq' lh lh' rh rh'
+
+end Matrix
+
+namespace MPOTensor.TranslationInvariantBondData
+
+variable {d : ℕ}
 
 /-- A positive translation-invariant commuting bond has one chain-independent symmetric
 eta-pair decomposition.
