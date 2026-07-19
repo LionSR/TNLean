@@ -24,6 +24,7 @@ place them in the spanning argument.
 
 ## Main results
 
+* `IsPositiveMap.exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span`
 * `IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span`
 
 ## References
@@ -41,18 +42,19 @@ variable {D : ℕ}
 
 open Kraus
 
-/-- A positive trace-nonincreasing endomorphism is trace preserving when the
-identity lies in the span of positive-length products of a fixed family.
+/-- A positive trace-nonincreasing endomorphism has a positive-definite fixed
+point when the identity lies in the span of positive-length products of a
+fixed family.
 
 No product is assumed to be fixed.  The fixed factors lie on the support of
 the mean-ergodic image of the identity, so their products do as well.  The
-product-span hypothesis forces this support to be the identity.  Faithfulness
-then makes the positive trace-loss functional vanish.
+product-span hypothesis forces this support to be the identity.
 
 This is the channel-hypothesis step used at arXiv:1606.00608, Appendix C.4.
 Lines 1974--1980 supply the fixed contraction factors; lines 1980--1995
 supply their spanning context. -/
-private theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span_fin
+private theorem
+    IsPositiveMap.exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span_fin
     {J : Type*}
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T)
@@ -61,7 +63,7 @@ private theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_pro
     (hOne : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range fun x : Fin L → J =>
         (List.ofFn fun t => V (x t)).prod)) :
-    IsTracePreservingMap T := by
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosDef ∧ T ρ = ρ := by
   classical
   let hbounded := hT.hasBoundedOrbits_of_traceNonincreasing hTNI
   let ρ := LinearMap.meanErgodicProjection (𝕜 := ℂ)
@@ -132,41 +134,20 @@ private theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_pro
   have hQone : Q = 1 := by
     simpa [hQidem] using hOneSupport
   have hρposDef : ρ.PosDef := hρ.posDef_of_supportProj_eq_one hQone
-  let gap : Matrix (Fin D) (Fin D) ℂ :=
-    1 - Matrix.traceAdjointMap T 1
-  have hAdjointOne : (Matrix.traceAdjointMap T 1).PosSemidef :=
-    IsPositiveMap.traceAdjointMap hT 1 Matrix.PosSemidef.one
-  have hGapHermitian : gap.IsHermitian := by
-    exact Matrix.IsHermitian.sub Matrix.isHermitian_one hAdjointOne.isHermitian
-  have hGap : gap.PosSemidef := by
-    apply Matrix.PosSemidef.of_forall_trace_mul_nonneg hGapHermitian
-    intro X hX
-    have hloss : 0 ≤ Matrix.trace X - Matrix.trace (T X) :=
-      sub_nonneg.mpr (hTNI X hX)
-    simpa only [gap, Matrix.sub_mul, Matrix.trace_sub, Matrix.one_mul,
-      Matrix.trace_traceAdjointMap_mul] using hloss
-  have hGapTrace : Matrix.trace (ρ * gap) = 0 := by
-    calc
-      Matrix.trace (ρ * gap) = Matrix.trace (gap * ρ) := Matrix.trace_mul_comm _ _
-      _ = Matrix.trace ρ - Matrix.trace (T ρ) := by
-        simp only [gap, Matrix.sub_mul, Matrix.trace_sub, Matrix.one_mul,
-          Matrix.trace_traceAdjointMap_mul]
-      _ = 0 := by rw [hρfixed, sub_self]
-  have hGapZero : gap = 0 :=
-    Matrix.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hGap hρposDef hGapTrace
-  apply isTracePreservingMap_iff_traceAdjointMap_one.mpr
-  change 1 - Matrix.traceAdjointMap T 1 = 0 at hGapZero
-  exact (sub_eq_zero.mp hGapZero).symm
+  exact ⟨ρ, hρposDef, hρfixed⟩
 
-/-- A positive trace-nonincreasing endomorphism of a finite matrix algebra is
-trace preserving when the identity lies in the span of positive-length
-products of a fixed family.
+/-- A positive trace-nonincreasing endomorphism of a finite matrix algebra has
+a positive-definite fixed point when the identity lies in the span of
+positive-length products of a fixed family.
 
-This coordinate-free finite-index form is obtained from the preceding
-`Fin`-indexed argument by simultaneous matrix reindexing.  In
-arXiv:1606.00608, Appendix C.4, lines 1974--1980 supply the fixed factors to
-which this criterion is applied. -/
-theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span
+No product is assumed to be fixed. The maximal-support fixed point contains
+every fixed factor, hence every positive-length product of those factors. The
+spanning hypothesis makes its support the whole matrix algebra.
+
+This is the faithful fixed-point step used in arXiv:1606.00608, Appendix C.4,
+lines 1980--1995, before applying the density-block classification of the
+fixed-point space. -/
+theorem IsPositiveMap.exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span
     {n J : Type*} [Fintype n] [DecidableEq n]
     {T : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T)
@@ -175,7 +156,7 @@ theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_spa
     (hOne : (1 : Matrix n n ℂ) ∈
       Submodule.span ℂ (Set.range fun x : Fin L → J =>
         (List.ofFn fun t => V (x t)).prod)) :
-    IsTracePreservingMap T := by
+    ∃ ρ : Matrix n n ℂ, ρ.PosDef ∧ T ρ = ρ := by
   classical
   let e : n ≃ Fin (Fintype.card n) := Fintype.equivFin n
   let Φ := Matrix.reindexLinearEquiv ℂ ℂ e e
@@ -241,14 +222,66 @@ theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_spa
         rw [_root_.map_smul]
         exact Submodule.smul_mem productSpanFin c hX)
       hOne
-  have hTPFin : IsTracePreservingMap TFin :=
-    hTFin.tracePreserving_of_traceNonincreasing_of_fixed_product_span_fin
+  obtain ⟨ρFin, hρFin, hρFinFixed⟩ :=
+    hTFin.exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span_fin
       hTNIFin VFin L hL hFixedFin hOneFin
-  intro A
-  have h := hTPFin (Matrix.reindex e e A)
-  change Matrix.trace
-      (Matrix.reindex e e
-        (T (Matrix.reindex e.symm e.symm (Matrix.reindex e e A)))) =
-      Matrix.trace (Matrix.reindex e e A) at h
-  rw [hreindex_symm] at h
-  simpa only [Matrix.trace_reindex] using h
+  let ρ := Φ.symm ρFin
+  have hρ : ρ.PosDef := by
+    exact hρFin.reindex e.symm
+  have hρFixed : T ρ = ρ := by
+    have hΦρ : Φ ρ = ρFin := Φ.apply_symm_apply ρFin
+    apply Φ.injective
+    calc
+      Φ (T ρ) = TFin (Φ ρ) := by
+        change Matrix.reindex e e (T ρ) = Matrix.reindex e e
+          (T (Matrix.reindex e.symm e.symm (Matrix.reindex e e ρ)))
+        rw [hreindex_symm]
+      _ = Φ ρ := by rw [hΦρ, hρFinFixed]
+  exact ⟨ρ, hρ, hρFixed⟩
+
+/-- A positive trace-nonincreasing endomorphism of a finite matrix algebra is
+trace preserving when the identity lies in the span of positive-length
+products of a fixed family.
+
+This coordinate-free finite-index form is obtained from the preceding
+`Fin`-indexed argument by simultaneous matrix reindexing.  In
+arXiv:1606.00608, Appendix C.4, lines 1974--1980 supply the fixed factors to
+which this criterion is applied. -/
+theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span
+    {n J : Type*} [Fintype n] [DecidableEq n]
+    {T : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T)
+    (V : J → Matrix n n ℂ) (L : ℕ) (hL : 0 < L)
+    (hFixed : ∀ j, T (V j) = V j)
+    (hOne : (1 : Matrix n n ℂ) ∈
+      Submodule.span ℂ (Set.range fun x : Fin L → J =>
+        (List.ofFn fun t => V (x t)).prod)) :
+    IsTracePreservingMap T := by
+  obtain ⟨ρ, hρposDef, hρfixed⟩ :=
+    hT.exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span
+      hTNI V L hL hFixed hOne
+  let gap : Matrix n n ℂ := 1 - Matrix.traceAdjointMap T 1
+  have hAdjointOne : (Matrix.traceAdjointMap T 1).PosSemidef :=
+    IsPositiveMap.traceAdjointMap hT 1 Matrix.PosSemidef.one
+  have hGapHermitian : gap.IsHermitian := by
+    exact Matrix.IsHermitian.sub Matrix.isHermitian_one hAdjointOne.isHermitian
+  have hGap : gap.PosSemidef := by
+    apply Matrix.PosSemidef.of_forall_trace_mul_nonneg hGapHermitian
+    intro X hX
+    have hloss : 0 ≤ Matrix.trace X - Matrix.trace (T X) :=
+      sub_nonneg.mpr (hTNI X hX)
+    simpa only [gap, Matrix.sub_mul, Matrix.trace_sub, Matrix.one_mul,
+      Matrix.trace_traceAdjointMap_mul] using hloss
+  have hGapTrace : Matrix.trace (ρ * gap) = 0 := by
+    calc
+      Matrix.trace (ρ * gap) = Matrix.trace (gap * ρ) := Matrix.trace_mul_comm _ _
+      _ = Matrix.trace ρ - Matrix.trace (T ρ) := by
+        simp only [gap, Matrix.sub_mul, Matrix.trace_sub, Matrix.one_mul,
+          Matrix.trace_traceAdjointMap_mul]
+      _ = 0 := by rw [hρfixed, sub_self]
+  have hGapZero : gap = 0 :=
+    Matrix.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hGap hρposDef hGapTrace
+  change 1 - Matrix.traceAdjointMap T 1 = 0 at hGapZero
+  have hAdjointOneEq : Matrix.traceAdjointMap T 1 = 1 :=
+    (sub_eq_zero.mp hGapZero).symm
+  exact isTracePreservingMap_iff_traceAdjointMap_one.mpr hAdjointOneEq

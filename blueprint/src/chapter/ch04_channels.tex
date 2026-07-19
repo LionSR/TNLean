@@ -1041,6 +1041,30 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     of the mean-ergodic projection gives the conclusion.
 \end{proof}
 
+\begin{theorem}[Bounded orbits from trace nonincrease]
+    \label{thm:positive_trace_nonincreasing_bounded_orbits}
+    \lean{IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing}
+    \leanok
+    \uses{def:positive_map, def:has_bounded_orbits}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace nonincreasing.  Then the
+    forward orbit $\{T^n(X):n\geq 0\}$ is bounded for every $X\in\MN{D}$.
+    This is the trace-nonincreasing form of
+    \cite[Proposition~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $X\succeq 0$, positivity and induction on $n$ give
+    \[
+        T^n(X)\succeq 0,
+        \qquad
+        \tr(T^n(X))\leq\tr(X).
+    \]
+    Thus the orbit lies in a bounded trace section of the positive cone.
+    Apply this to the positive and negative parts of a Hermitian matrix, and
+    then write an arbitrary matrix as a complex linear combination of two
+    Hermitian matrices.
+\end{proof}
+
 \begin{theorem}[Positive trace-preserving mean-ergodic projection]
     \label{thm:positive_trace_preserving_mean_ergodic_projection}
     \lean{IsPositiveMap.hasBoundedOrbits_of_tracePreserving,
@@ -1067,19 +1091,14 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}\leanok
     \uses{thm:mean_ergodic_bounded_orbits,
+        thm:positive_trace_nonincreasing_bounded_orbits,
         thm:positive_mean_ergodic_projection,
         thm:trace_preserving_mean_ergodic_projection,
         thm:unital_mean_ergodic_projection}
-    If $X\ge 0$, then $T^n(X)\ge 0$ and
-    $\tr(T^n(X))=\tr(X)$. Hence the orbit of $X$ lies in a bounded trace
-    section of the positive cone. For Hermitian $X$, write
-    $X=X_+-X_-$, and for arbitrary $X$ use the two Hermitian matrices
-    \[
-        H_1=X+X^*,\qquad H_2=i(X-X^*),\qquad
-        X=\frac12(H_1-iH_2).
-    \]
-    Thus every orbit is bounded. Theorem~\ref{thm:mean_ergodic_bounded_orbits}
-    gives the projection and its fixed-point characterization. Its positivity,
+    Trace preservation implies trace nonincrease, so
+    Theorem~\ref{thm:positive_trace_nonincreasing_bounded_orbits} gives
+    bounded orbits.  Theorem~\ref{thm:mean_ergodic_bounded_orbits} then gives
+    the projection and its fixed-point characterization.  Its positivity,
     trace preservation, and behavior on the identity follow from the three
     preceding theorems.
 \end{proof}
@@ -1089,8 +1108,9 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \lean{isTracePreservingMap_iff_traceAdjointMap_one}
     \leanok
     \uses{def:trace_preserving, def:trace_pairing_adjoint}
-    A linear map $S:\MN{D}\to\MN{D}$ is trace-preserving if and only if its
-    trace-pairing adjoint fixes the identity:
+    On any finite full matrix algebra, a linear endomorphism $S$ is
+    trace-preserving if and only if its trace-pairing adjoint fixes the
+    identity:
     \[
         (\forall X,\; \tr(S(X))=\tr(X))
         \quad\Longleftrightarrow\quad
