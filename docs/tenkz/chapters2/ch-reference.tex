@@ -406,13 +406,21 @@ belongs directly in running mathematics or in a displayed equation.  No
 floating or numbered figure is part of the grammar.
 
 \thumbtag{\tncmd{tntree}}%
-\cmdsig{\textbackslash tntree\{\meta{bracketed word}\}\\
+\cmdsig{\textbackslash tntree[tree style=wire|ribbon,\\
+\hspace*{2em}role=\meta{role}, species=\meta{name}]%
+\{\meta{bracketed word}\}\\
 \textbackslash tnarrow*[from=\meta{i}, to=\meta{j}]\{\meta{label}\}}
 
 \noindent \tncmd{tntree} draws the fusion tree of a bracketed word,
 innermost pairs first: in
 \tnval{((a\textbackslash,b)\_x\textbackslash,c)\_y} the pair
 $(a,b)$ fuses into the internal charge $x$, then with $c$ into $y$.
+The default \tnkey{tree style=wire} draws the tree as trivalent lines;
+\tnkey{tree style=ribbon} draws the regular ribbon neighbourhood of the
+same parsed tree, with a nonsingular vertex patch and three attached bands
+at each trivalent vertex.  A declared \tnkey{species=} or a semantic
+\tnkey{role=} colours either skin, with the role prevailing when both are
+present.
 \tncmd{tnarrow} labels the arrow from slot $i$ to slot $j$; the
 starred form sets the label on the other side of the shaft.  The
 five-slot pentagon, trees and all, is Example~\ref{ex:tut-pentagon}.

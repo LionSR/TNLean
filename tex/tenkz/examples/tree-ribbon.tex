@@ -1,0 +1,19 @@
+\documentclass[varwidth=16cm, border=6pt]{standalone}
+\usepackage{amsmath, amssymb}
+\usepackage{tenkz}
+\begin{document}
+% In the multiplicity-free case, both pictures are the chosen fusion
+% morphism m_{ab}^{x}:a\otimes b\to x, where N_{ab}^{x}>0.
+% The wire skin draws its three incident simple objects as lines meeting at
+% one trivalent vertex.  The ribbon skin draws the same parsed tree as a
+% regular ribbon neighbourhood, with one labelled band for each simple
+% object and a nonsingular vertex patch joining the three bands.
+\tnset{species={anyon}}
+\[
+  \tntree[tree style=wire, species=anyon]{(a\,b)_x}
+  \qquad
+  \tntree[tree style=ribbon, species=anyon]{(a\,b)_x}
+  \qquad
+  \tntree[tree style=ribbon, role=marked]{(a\,b)_x}
+\]
+\end{document}

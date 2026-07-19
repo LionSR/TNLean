@@ -13,6 +13,9 @@ Hard errors (exit 1):
                        slot).  The stream is the contraction record; a
                        non-numeric coordinate names no cell, so the event
                        describes no drawable ink.
+  malformed-tree       A tree's canonical numeric bracketing is not a
+                       rooted binary tree, or disagrees with its declared
+                       leaf and vertex counts.
   duplicate-picture    Two `picture` lines share one id: picture identity
                        is the key of every back-reference.
   dangling-picture-ref An event references an undeclared picture.
@@ -76,8 +79,27 @@ DIALECT_KINDS = {
 }
 
 
+def _parse_int(v: str) -> Optional[int]:
+    if INT_RE.fullmatch(v) is None:
+        return None
+    try:
+        return int(v)
+    except ValueError:  # Python's configured decimal-digit safety limit
+        return None
+
+
 def _is_int(v: str) -> bool:
-    return INT_RE.fullmatch(v) is not None
+    return _parse_int(v) is not None
+
+
+def _is_positive_int(v: str) -> bool:
+    parsed = _parse_int(v)
+    return parsed is not None and parsed > 0
+
+
+def _is_nonnegative_int(v: str) -> bool:
+    parsed = _parse_int(v)
+    return parsed is not None and parsed >= 0
 
 
 def _is_cell(v: str) -> bool:
@@ -138,7 +160,12 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
               "fused": _enum("0", "1"),
               "role": _enum("none", "operator", "marked", "extra", "passive"),
               "species": _any},
-    "tree": {"picture": _is_int, "leaves": _is_int},
+    "tree": {"picture": _is_int, "id": _is_positive_int,
+             "style": _enum("wire", "ribbon"),
+             "leaves": _is_positive_int, "vertices": _is_nonnegative_int,
+             "topology": _any,
+             "role": _enum("none", "operator", "marked", "extra", "passive"),
+             "species": _any},
     "join": {"picture": _is_int, "from": _any, "to": _any},
 }
 
@@ -267,6 +294,8 @@ class Audit:
                 self.by_id[pid] = pic
                 self.pictures.append(pic)
                 continue
+            if kind == "tree":
+                self.check_tree_event(ev)
             ref = attrs.get("picture", "")
             if not _is_int(ref):
                 continue
@@ -278,6 +307,31 @@ class Audit:
                           f"{kind} references undeclared picture {pid}")
                 continue
             self.by_id[pid].events.append(ev)
+
+    def check_tree_event(self, event: Event) -> None:
+        """Validate the tree event as structural data, not display text."""
+        where = f"{self.log_path.name}:{event.line}"
+        required = {"id", "style", "leaves", "vertices", "topology",
+                    "role", "species"}
+        missing = sorted(required - event.attrs.keys())
+        if missing:
+            self.hard("malformed-tree", where,
+                      f"tree event lacks required field(s): {', '.join(missing)}")
+            return
+        shape = parse_tree_topology(event.attrs["topology"])
+        if shape is None:
+            self.hard("malformed-tree", where,
+                      f"invalid canonical topology {event.attrs['topology']!r}")
+            return
+        leaves, vertices = shape
+        if not (_is_positive_int(event.attrs["leaves"])
+                and _is_nonnegative_int(event.attrs["vertices"])):
+            return  # generic field validation already reports these values
+        declared = (int(event.attrs["leaves"]), int(event.attrs["vertices"]))
+        if declared != (leaves, vertices):
+            self.hard("malformed-tree", where,
+                      f"topology has {leaves} leaves and {vertices} vertices, "
+                      f"but event declares {declared[0]} and {declared[1]}")
 
     # ---------------- log-only checks ----------------
 
@@ -456,6 +510,52 @@ class Audit:
 
 
 # ---------------- canonical topology ----------------
+
+def parse_tree_topology(value: str) -> Optional[tuple[int, int]]:
+    """Return (leaves, internal vertices) for canonical numeric bracketing.
+
+    A canonical tree is either the next positive leaf number or a pair of
+    canonical trees.  Consequently the leaf sequence must be exactly
+    1,2,...,n; labels and TeX never enter this structural field.
+    """
+    pos = 0
+    leaf_numbers: list[int] = []
+
+    def parse_node() -> Optional[int]:
+        nonlocal pos
+        if pos >= len(value):
+            return None
+        if value[pos].isdigit():
+            start = pos
+            while pos < len(value) and value[pos].isdigit():
+                pos += 1
+            leaf = int(value[start:pos])
+            if leaf <= 0:
+                return None
+            leaf_numbers.append(leaf)
+            return 0
+        if value[pos] != "(":
+            return None
+        pos += 1
+        left = parse_node()
+        if left is None or pos >= len(value) or value[pos] != ",":
+            return None
+        pos += 1
+        right = parse_node()
+        if right is None or pos >= len(value) or value[pos] != ")":
+            return None
+        pos += 1
+        return left + right + 1
+
+    try:
+        vertices = parse_node()
+    except (RecursionError, ValueError):
+        return None
+    if (vertices is None or pos != len(value)
+            or leaf_numbers != list(range(1, len(leaf_numbers) + 1))):
+        return None
+    return len(leaf_numbers), vertices
+
 
 def canonical_hash(pic: Picture) -> str:
     """Order-free digest of a picture's content.  Attributes are sorted,
