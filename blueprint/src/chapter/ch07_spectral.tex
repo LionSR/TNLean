@@ -3037,13 +3037,23 @@ transfers the support.
     \leanok
     \uses{thm:positive_mean_ergodic_projection,
         thm:mean_ergodic_bounded_orbits,
-        thm:positive_map_conjTranspose, thm:hermitian_fixedpoint_parts,
-        thm:psd_le_trace_smul_one, lem:stationaryProj_absorb_of_le}
+        thm:positive_map_conjTranspose, thm:psd_le_trace_smul_one,
+        lem:stationaryProj_absorb_of_le}
     Positivity of the mean-ergodic projection gives $\rho_0\succeq 0$, while
-    its range and idempotence give $T(\rho_0)=\rho_0$.  Decompose a fixed
-    point into fixed Hermitian parts and dominate their positive and negative
-    parts by scalar multiples of $\rho_0$.  The support-absorption lemma then
-    gives $Q_0XQ_0=X$.
+    its range and idempotence give $T(\rho_0)=\rho_0$.  If $A\succeq0$, then
+    $A\preceq\tr(A)\Id$; applying the positive map $T_\infty$ gives
+    \[
+        T_\infty(A)\preceq\tr(A)\rho_0.
+    \]
+    Hence the support projection $Q_0$ absorbs $T_\infty(A)$.  For a fixed
+    Hermitian matrix $H$, write $H=H^+-H^-$.  Since
+    $T_\infty(H)=H$, linearity gives
+    \[
+        H=T_\infty(H^+)-T_\infty(H^-),
+    \]
+    so $Q_0HQ_0=H$.  Finally decompose an arbitrary fixed point into two
+    Hermitian fixed matrices, using preservation of conjugate transpose, and
+    conclude that $Q_0XQ_0=X$.
 \end{proof}
 
 \begin{theorem}[A fixed point of maximal support]%
