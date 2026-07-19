@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -34,6 +35,34 @@ def main() -> int:
     if chapter.count(BEGIN) != 1 or chapter.count(END) != 1:
         raise AssertionError("II_RFP routing markers must occur exactly once")
     body = chapter.split(BEGIN, 1)[1].split(END, 1)[0]
+    declared_ports: dict[str, dict[str, str]] = {}
+    for match in re.finditer(
+        r"\\tnput\[(?P<options>.*?)\]\s*\{(?P<name>[^}]+)\}", body, re.DOTALL
+    ):
+        ports = re.search(r"ports=\{(?P<ports>[^}]*)\}", match["options"], re.DOTALL)
+        if ports is None:
+            continue
+        declared_ports[match["name"]] = {
+            anchor.strip(): port_type.strip()
+            for item in ports["ports"].split(",")
+            for anchor, port_type in [item.rsplit(":", 1)]
+        }
+    expected_boundary_ports = {
+        "rfpWest": {"east": "virtual"},
+        "rfpEast": {"west": "virtual"},
+        "rfpPhysical": {"south": "physical"},
+        "rfpJwest": {"east": "virtual"},
+        "rfpJeast": {"west": "virtual"},
+        "rfpQwest": {"east": "virtual"},
+        "rfpQeast": {"west": "virtual"},
+    }
+    actual_boundary_ports = {
+        name: declared_ports.get(name) for name in expected_boundary_ports
+    }
+    if actual_boundary_ports != expected_boundary_ports:
+        raise AssertionError(
+            f"II_RFP boundary port declarations changed: {actual_boundary_ports}"
+        )
     source = (
         "\\documentclass{article}\n"
         "\\usepackage{tenkz}\n"
