@@ -723,16 +723,12 @@
 \cs_new_protected:Npn \tenkz_emit_faceports_one:nnnn #1#2#3#4
   {
     \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
-    \tenkz@event{faceports|picture=\the\tenkz@pictureid|%
-cell=#1-#2|face=#3|%
-arity=\tenkz_face_arity:nN {#4} \l__tenkz_faceports_tl|%
-at=\tl_use:N \l__tenkz_faceports_tl}
+    \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\tenkz_face_arity:nN {#4} \l__tenkz_faceports_tl|at=\tl_use:N \l__tenkz_faceports_tl}
   }
 \cs_new_protected:Npn \tenkz_emit_faceports_one:nnn #1#2#3
   { \tenkz_emit_faceports_one:nnnn {#1}{#2}{#3}{\l__tenkz_cwires_int} }
 \cs_new_protected:Npn \tenkz_emit_faceports_rows:nnn #1#2#3
-  { \tenkz@event{faceports|picture=\the\tenkz@pictureid|%
-cell=#1-#2|face=#3|arity=\int_use:N\l__tenkz_cwires_int|at=rows} }
+  { \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\int_use:N\l__tenkz_cwires_int|at=rows} }
 
 % Whether row #1 and the current cell data carry the physical face #2.
 % Pairing changes whether the face is open, not whether the index exists:
@@ -2676,9 +2672,7 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                               \l__tenkz_pwlow_tl
                             \draw[physical~leg]
                               \l__tenkz_pwpt_tl -- \l__tenkz_pwlow_tl;
-                            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|%
-upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|%
-upper-port=#3|column=\int_eval:n{#2+#3-1}}
+                            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=#3|column=\int_eval:n{#2+#3-1}}
                           }
                       }
                   }
@@ -2840,9 +2834,7 @@ upper-port=#3|column=\int_eval:n{#2+#3-1}}
             \draw[physical~leg]
               (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
               (\l__tenkz_pb_tl.\tenkz_compass:n{north});
-            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|%
-upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|%
-upper-port=center|column=#2}
+            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
           }
       }
       {
@@ -2855,9 +2847,7 @@ upper-port=center|column=#2}
             \draw[physical~leg]
               (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
               \l__tenkz_pwlow_tl;
-            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|%
-upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|%
-upper-port=center|column=#2}
+            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
           }
           { \tenkz_leg_open:nnn {#1}{#2}{down}
             \int_incr:N \l__tenkz_internalpd_int }
@@ -4630,8 +4620,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
                           {
                             \msg_warning:nnnn {tenkz}{phtrace-face-ports}
                               {1}{##1}
-                            \tenkz@event{warning|%
-picture=\the\tenkz@pictureid|code=phtrace-face-ports|cell=1-##1}
+                            \tenkz@event{warning|picture=\the\tenkz@pictureid|code=phtrace-face-ports|cell=1-##1}
                           }
                       } }
               }
