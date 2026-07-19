@@ -323,9 +323,6 @@ private theorem groundBondProduct_mulVec_loopProductState
         (star (F.unitary ⊗ₖ F.unitary) *
           twoSiteParentGroundProjectorMatrix A *
             (F.unitary ⊗ₖ F.unitary)))).prod
-  have hUstarU : F.unitaryᴴ * F.unitary = 1 := by
-    simpa only [Matrix.star_eq_conjTranspose] using
-      Unitary.star_mul_self_of_mem F.unitary_mem
   have hUUstar : F.unitary * F.unitaryᴴ = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.mul_star_self_of_mem F.unitary_mem
@@ -334,20 +331,7 @@ private theorem groundBondProduct_mulVec_loopProductState
     rw [MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose, hUUstar,
       MPOTensor.sitewisePhysicalMatrix_one]
   have hconj : singleKrausMap (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N) Q = T := by
-    have hprod := MPOTensor.singleKrausMap_bondProduct_of_unitary F.unitaryᴴ
-      (by simpa using hUUstar) (by simpa using hUstarU) hN
-      (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
-        (finTwoArrowEquiv (Fin d)).symm (twoSiteParentGroundProjectorMatrix A))
-    simp_rw [MPOTensor.singleKrausMap_sitewise_conjTranspose_two_eq] at hprod
-    have hpair : MPOTensor.pairBondMatrix
-        (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
-          (finTwoArrowEquiv (Fin d)).symm
-          (twoSiteParentGroundProjectorMatrix A)) =
-        twoSiteParentGroundProjectorMatrix A := by
-      ext x y
-      simp [MPOTensor.pairBondMatrix, Matrix.reindex_apply]
-    rw [hpair] at hprod
-    simpa only [Q, T] using hprod
+    simpa only [Q, T] using F.singleKrausMap_groundBondProduct hN
   have hmatrix : Q * W = W * T := by
     have hconj' : Wᴴ * Q * W = T := by
       simpa only [singleKrausMap_apply,

@@ -328,6 +328,16 @@ parent Hamiltonian used here; the length-one convention remains part of
 that the loop states span the parent ground space or identify them with the
 original BNT representatives.
 
+The auxiliary declaration
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self}
+is stated under the sector-data hypothesis, which supplies commutativity of
+all translated two-site parent interactions.  Thus it is a restricted
+fixed-vector criterion rather than an unrestricted assertion for arbitrary
+parent interactions.  If the criterion is needed independently of Beigi's
+decomposition, its hypothesis should be replaced by explicit pairwise
+commutativity of the translated interactions.
+
 \section{Elimination plan}
 
 A source-faithful formalization should replace the remaining axiom-backed
@@ -373,9 +383,10 @@ extension are proved. The repeated-copy and arbitrary-raw-weight extension
 remains open.  In the reverse direction, eventual ground-space dimension
 stability, the local spatial decomposition, the ordered-cycle dimension
 formula, the reduction of the sector graph to one-dimensional loops, and the
-exact matrix product realization of every positive loop state are proved.
-Parent-ground-space membership and spanning for these loop vectors, followed
-by their identification with the basis of normal tensors, remain open.
+exact matrix product realization and parent-ground-space membership of every
+positive loop state are proved.  Spanning of the parent ground space by these
+loop vectors, followed by their identification with the basis of normal
+tensors, remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

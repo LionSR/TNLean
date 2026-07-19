@@ -2538,13 +2538,36 @@ specialization of that Appendix~D definition.
     sitewise-unitary image.
 \end{proof}
 
+\begin{theorem}[Spatial conjugation of complementary interaction products]
+    \label{thm:beigi_complement_product_conjugation}
+    \lean{MPSTensor.BeigiSectorGraphData.singleKrausMap_groundBondProduct}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    Suppose that $A$ is equipped with Beigi sector data, with one-site spatial
+    unitary $U$.  For $N\geq2$, let $Q_N$ be the product of the translated
+    complementary parent interactions and let $\widetilde Q_N$ be the
+    corresponding product in sector coordinates.  Then
+    \[
+        (U^*)^{\otimes N}Q_NU^{\otimes N}=\widetilde Q_N.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The two-site coordinate identity gives
+    $(U^*\otimes U^*)(\mathbf 1-h)(U\otimes U)=\widetilde Q$ for one bond.
+    Conjugation by $(U^*)^{\otimes N}$ carries every translated copy of this
+    bond identity to the corresponding translated sector interaction and
+    preserves their ordered product, which gives the displayed equality.
+\end{proof}
+
 \begin{theorem}[Fixed complementary-product vectors have zero parent energy]
     \label{thm:beigi_complement_product_fixed_vector}
     \lean{MPSTensor.BeigiSectorGraphData.mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self}
     \leanok
     \uses{def:beigi_sector_graph}
-    For $N\geq2$, let $h_0,\ldots,h_{N-1}$ be the translated length-two
-    parent interactions and set
+    Suppose that $A$ is equipped with Beigi sector data.  For $N\geq2$, let
+    $h_0,\ldots,h_{N-1}$ be its translated length-two parent interactions and
+    set
     \[
         Q_N=\prod_{n=0}^{N-1}(\mathbf 1-h_n).
     \]
@@ -2576,6 +2599,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_parentHamiltonianGroundSpaceES}
     \leanok
     \uses{def:beigi_sector_graph, def:beigi_loop_product_state,
+        thm:beigi_complement_product_conjugation,
         thm:beigi_complement_product_fixed_vector}
     Let $a\to a$ be a positive loop.  For every $N\geq 2$, its physical
     cyclic product-of-pairs state belongs to the kernel of the length-two

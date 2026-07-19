@@ -29,6 +29,10 @@ Hamiltonian, its trace gives Beigi's ordered-cycle formula.
   coordinate identity;
 * `BeigiSectorGraphData.OrderedCycle`: ordered cyclic sector sequences whose
   adjacent edge ground spaces are nonzero;
+* `BeigiSectorGraphData.singleKrausMap_groundBondProduct`: spatial conjugation
+  of the complete complementary-interaction product;
+* `BeigiSectorGraphData.mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self`:
+  its fixed vectors have zero parent-Hamiltonian energy;
 * `BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq`: Beigi's
   finite-chain dimension formula.
 
@@ -264,6 +268,37 @@ private theorem singleKrausMap_groundBond_eq_transformedGroundBond
   rw [MPOTensor.singleKrausMap_sitewise_conjTranspose_two_eq]
   congr 1
 
+/-- Conjugating the product of complementary two-site parent interactions by
+the sitewise spatial unitary gives the corresponding product in sector
+coordinates.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
+    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    singleKrausMap (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N)
+        ((List.ofFn fun i : Fin N ↦
+          MPOTensor.embedLocalOperator (d := d) 2 N hN i
+            (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+              (finTwoArrowEquiv (Fin d)).symm
+              (twoSiteParentGroundProjectorMatrix A))).prod) =
+      (List.ofFn fun i : Fin N ↦
+        MPOTensor.embedLocalOperator (d := d) 2 N hN i
+          (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+            (finTwoArrowEquiv (Fin d)).symm
+            (star (F.unitary ⊗ₖ F.unitary) *
+              twoSiteParentGroundProjectorMatrix A *
+                (F.unitary ⊗ₖ F.unitary)))).prod := by
+  have hUstarU : F.unitaryᴴ * F.unitary = 1 := by
+    simpa only [Matrix.star_eq_conjTranspose] using
+      Unitary.star_mul_self_of_mem F.unitary_mem
+  have hUUstar : F.unitary * F.unitaryᴴ = 1 := by
+    simpa only [Matrix.star_eq_conjTranspose] using
+      Unitary.mul_star_self_of_mem F.unitary_mem
+  have hprod := MPOTensor.singleKrausMap_bondProduct_of_unitary F.unitaryᴴ
+    (by simpa using hUUstar) (by simpa using hUstarU) hN (groundBond A)
+  simp_rw [singleKrausMap_groundBond_eq_transformedGroundBond] at hprod
+  simpa only [groundBond, transformedGroundBond] using hprod
+
 private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i j : Fin N) :
     Commute
@@ -430,9 +465,6 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
   let W := MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N
   let Q := (List.ofFn fun i : Fin N ↦
     MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
-  have hUstarU : F.unitaryᴴ * F.unitary = 1 := by
-    simpa only [Matrix.star_eq_conjTranspose] using
-      Unitary.star_mul_self_of_mem F.unitary_mem
   have hUUstar : F.unitary * F.unitaryᴴ = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.mul_star_self_of_mem F.unitary_mem
@@ -442,18 +474,21 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
     rw [← MPOTensor.sitewisePhysicalMatrix_conjTranspose,
       MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose, hUUstar,
       MPOTensor.sitewisePhysicalMatrix_one]
-  have hprod := MPOTensor.singleKrausMap_bondProduct_of_unitary F.unitaryᴴ
-    (by simpa using hUUstar) (by simpa using hUstarU) hN (groundBond A)
-  simp_rw [singleKrausMap_groundBond_eq_transformedGroundBond] at hprod
+  have hprod := F.singleKrausMap_groundBondProduct hN
   have htrace := F.transformedGroundBondProduct_trace hN
-  rw [← hprod] at htrace
+  have hconj : singleKrausMap W Q =
+      (List.ofFn fun i : Fin N ↦
+        MPOTensor.embedLocalOperator (d := d) 2 N hN i
+          (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+            (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond)).prod := by
+    simpa only [W, Q, groundBond, transformedGroundBond] using hprod
   calc
     Matrix.trace Q = Matrix.trace (singleKrausMap W Q) := by
       simp only [singleKrausMap_apply]
       symm
       rw [Matrix.trace_mul_comm (W * Q) Wᴴ, ← Matrix.mul_assoc, hWstarW,
         Matrix.one_mul]
-    _ = _ := by simpa only [Q, W] using htrace
+    _ = _ := by rw [hconj]; exact htrace
 
 private theorem toLin'_groundBondProduct {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     Matrix.toLin' ((List.ofFn fun i : Fin N ↦
@@ -545,6 +580,12 @@ interactions belongs to the kernel of the finite parent Hamiltonian.
 
 For sector data of Beigi type, the translated parent interactions commute, so
 the product of their complements is the projector onto the common kernel.
+
+**Scope restriction (sector data):** This criterion is stated under
+`BeigiSectorGraphData A`, which supplies the commutativity of the translated
+parent interactions.  This restricted auxiliary form, and its possible
+generalization to an explicit commutativity hypothesis, are recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500. -/
 theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
