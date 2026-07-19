@@ -779,10 +779,10 @@
     This shows that primitivity cannot be inferred for an arbitrary selected
     factorization in the step suggested at
     \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  The same tensor also
-    has a one-sector factorization with primitive trace matrix.  Hence the
-    example does not exclude a source-faithful minimal or visible-sector
-    selection, and it does not disprove the stated commuting-form-to-SAL
-    implication.
+    has a one-sector factorization with positive semidefinite neighboring
+    operator and primitive trace matrix.  Hence the example does not exclude a
+    source-faithful minimal or visible-sector selection, and it does not
+    disprove the stated commuting-form-to-SAL implication.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -813,7 +813,21 @@
         T^n=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
     \]
     Thus no positive power has all entries strictly positive, so $T$ is not
-    primitive.
+    primitive.  For the alternative factorization, take one sector
+    $B^L=\mathbb C^2$ and $B^R=\mathbb C$, with
+
+    \[
+        l=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+        \qquad r=(1).
+    \]
+    Its sole neighboring operator is
+    $\widehat\eta_{0,0}=\operatorname{diag}(1,0)\succeq0$, and hence its trace
+    matrix is
+    \[
+        \widehat T=\bigl(\tr(\widehat\eta_{0,0})\bigr)=(1).
+    \]
+    Every positive power of $\widehat T$ equals $(1)$, so this one-sector
+    trace matrix is primitive.
 \end{proof}
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]

@@ -352,11 +352,13 @@ four-sector example
 virtual_spanning_does_not_force_rectangular_remainder_zero}
 satisfies the recorded
 positivity, primitivity, trace-one, and spanning conditions while its trace
-matrix is not idempotent.  The source-faithful audit in \ghissue{3593}
-formally refutes the printed rank-one conclusion: the same source-selected
-tensor has SAL and source ZCL, yet its trace matrix is not rank one.  Thus
-neither inverse-map provenance nor the finite-chain cyclic form supplies the
-missing rectangular vanishing.
+matrix is not idempotent.  The capstone theorem
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+tensor_refutes_printed_sal_zcl_rank_one_inference}
+adds SAL, source ZCL, and the source-selected inverse-map factorization, and
+proves that its active trace matrix is not rank one.  Thus neither inverse-map
+provenance nor the finite-chain cyclic form supplies the missing rectangular
+vanishing.
 
 Primitivity cannot be assumed for an arbitrary selected Beigi factorization.
 The theorem

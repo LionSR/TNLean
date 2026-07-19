@@ -104,10 +104,121 @@ noncomputable def factorization : PhysicalSectorFactorization tensor where
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
       simp [tensor, hkh]
 
+/-- The two physical basis vectors as one sector with a two-dimensional left
+factor and a one-dimensional right factor.
+
+Source: Beigi, arXiv:1105.1019v2, Lemma 2.1; arXiv:1606.00608,
+Appendix C.2, lines 1603--1605. -/
+noncomputable def oneSectorEquiv :
+    Fin 2 ≃ Sigma fun _k : Fin 1 => Fin 2 × Fin 1 where
+  toFun i := ⟨0, (i, 0)⟩
+  invFun q := q.2.1
+  left_inv _ := rfl
+  right_inv := by
+    rintro ⟨k, i, j⟩
+    have hk : k = 0 := Subsingleton.elim _ _
+    have hj : j = 0 := Subsingleton.elim _ _
+    subst k
+    subst j
+    rfl
+
+/-- A one-sector factorization of the product tensor, with the sector weight
+placed entirely in its two-dimensional left factor.
+
+Source: Beigi, arXiv:1105.1019v2, Lemma 2.1; arXiv:1606.00608,
+Appendix C.2, lines 1603--1605. -/
+noncomputable def oneSectorFactorization : PhysicalSectorFactorization tensor where
+  sectorCount := 1
+  leftDim := fun _ => 2
+  rightDim := fun _ => 1
+  leftDim_pos := fun _ => by omega
+  rightDim_pos := fun _ => by omega
+  sectorEquiv := oneSectorEquiv
+  physicalIsometry := 1
+  physicalIsometry_isometry := by simp
+  leftTensor := fun _ _ => Matrix.diagonal sectorWeight
+  rightTensor := fun _ _ => 1
+  factorization := by
+    intro beta alpha
+    ext q r
+    obtain ⟨k, x, y⟩ := q
+    obtain ⟨h, u, v⟩ := r
+    fin_cases k
+    fin_cases h
+    fin_cases y
+    fin_cases v
+    fin_cases beta
+    fin_cases alpha
+    simp [Matrix.reindex_apply, oneSectorEquiv, physicalSlice, tensor,
+      Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply, Matrix.diagonal_apply]
+    by_cases hxu : x = u
+    all_goals simp [hxu]
+
 /-- The real trace matrix of the neighboring operators considered in
 arXiv:1606.00608, Appendix C.2, line 1613. -/
 noncomputable def traceMatrix : Matrix (Fin 2) (Fin 2) ℝ :=
   fun k h => (Matrix.trace (factorization.neighboringOperator k h)).re
+
+/-- The real trace matrix of the one-sector neighboring family.
+
+Source: arXiv:1606.00608, Appendix C.2, line 1613. -/
+noncomputable def oneSectorTraceMatrix : Matrix (Fin 1) (Fin 1) ℝ :=
+  fun k h => (Matrix.trace (oneSectorFactorization.neighboringOperator k h)).re
+
+/-- The sole neighboring operator in the one-sector factorization is the
+rank-one diagonal matrix with diagonal $(1,0)$.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. -/
+lemma oneSector_neighboringOperator_eq
+    (k h : Fin oneSectorFactorization.sectorCount) :
+    oneSectorFactorization.neighboringOperator k h =
+      Matrix.diagonal (fun x : Fin 1 × Fin 2 => sectorWeight x.2) := by
+  ext x y
+  obtain ⟨x₁, x₂⟩ := x
+  obtain ⟨y₁, y₂⟩ := y
+  simp only [PhysicalSectorFactorization.neighboringOperator_apply, Finset.univ_unique,
+    Fin.default_eq_zero, Fin.isValue, Finset.sum_singleton]
+  fin_cases x₁
+  fin_cases y₁
+  simp only [oneSectorFactorization, Matrix.one_apply, Matrix.diagonal_apply]
+  simp only [if_true, one_mul, Prod.mk.injEq, true_and]
+
+/-- Every neighboring operator in the one-sector factorization is positive
+semidefinite.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. -/
+lemma oneSector_neighboringOperator_posSemidef
+    (k h : Fin oneSectorFactorization.sectorCount) :
+    (oneSectorFactorization.neighboringOperator k h).PosSemidef := by
+  rw [oneSector_neighboringOperator_eq]
+  apply Matrix.PosSemidef.diagonal
+  intro i
+  change (0 : ℂ) ≤ sectorWeight (show Fin 2 from i.2)
+  by_cases hi : (show Fin 2 from i.2) = 0
+  all_goals simp [sectorWeight, hi]
+
+/-- The one-sector trace matrix is the positive one-by-one matrix $(1)$.
+
+Source: arXiv:1606.00608, Appendix C.2, line 1613. -/
+lemma oneSectorTraceMatrix_eq : oneSectorTraceMatrix = 1 := by
+  ext k h
+  fin_cases k
+  fin_cases h
+  rw [oneSectorTraceMatrix, oneSector_neighboringOperator_eq]
+  norm_num [Matrix.trace, sectorWeight]
+  decide
+
+/-- The trace matrix of the one-sector factorization is primitive.
+
+Source: arXiv:1606.00608, Appendix C.2, line 1613. -/
+lemma oneSectorTraceMatrix_isPrimitive :
+    Matrix.IsPrimitive oneSectorTraceMatrix := by
+  rw [oneSectorTraceMatrix_eq]
+  refine ⟨?_, ⟨1, by norm_num, ?_⟩⟩
+  all_goals intro i j
+  all_goals fin_cases i
+  all_goals fin_cases j
+  all_goals norm_num
 
 /-- The neighboring operator is the scalar product of the two sector
 indicators. -/
@@ -261,7 +372,8 @@ matrix.
 
 This shows that the factorization needed after arXiv:1606.00608, Appendix C.2,
 line 1613, must be selected or pruned by a separate argument.  The example does
-not rule out another factorization with primitive trace matrix. -/
+not rule out another factorization with primitive trace matrix: the explicit
+one-sector factorization above has trace matrix $(1)$. -/
 theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive :
     tensor.IsMPDO ∧
       tensor.IsInjective ∧
@@ -271,9 +383,14 @@ theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitiv
       (∀ (N : ℕ) (hN : 2 ≤ N),
         mpo tensor N =
           (commutingBondData.bondData.toCommutingFormData hN).product) ∧
-      ¬ Matrix.IsPrimitive traceMatrix := by
+      ¬ Matrix.IsPrimitive traceMatrix ∧
+      oneSectorFactorization.sectorCount = 1 ∧
+      (∀ k h,
+        (oneSectorFactorization.neighboringOperator k h).PosSemidef) ∧
+      Matrix.IsPrimitive oneSectorTraceMatrix := by
   exact ⟨tensor_isMPDO, tensor_isInjective, tensor_isNormalTensor, tensor_isSourceZCL,
     neighboringOperator_posSemidef, mpo_eq_commutingBondProduct,
-    traceMatrix_not_isPrimitive⟩
+    traceMatrix_not_isPrimitive, rfl, oneSector_neighboringOperator_posSemidef,
+    oneSectorTraceMatrix_isPrimitive⟩
 
 end MPOTensor.CommutingBondTraceMatrixObstruction
