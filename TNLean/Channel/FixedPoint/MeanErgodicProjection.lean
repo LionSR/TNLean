@@ -7,12 +7,13 @@ import TNLean.Analysis.MeanErgodic
 import TNLean.Channel.Basic
 
 /-!
-# Positive trace-preserving mean-ergodic projections
+# Positive trace-nonincreasing mean-ergodic projections
 
-A positive trace-preserving endomorphism of a finite-dimensional complex matrix
-algebra has bounded forward orbits.  Its finite-dimensional mean-ergodic
-projection is therefore defined, is positive and trace-preserving, and fixes the
-identity whenever the original map fixes the identity.
+A positive trace-nonincreasing endomorphism of a finite-dimensional complex
+matrix algebra has bounded forward orbits.  Its finite-dimensional
+mean-ergodic projection is therefore defined and positive.  For a
+trace-preserving map, the projection is trace-preserving and fixes the identity
+whenever the original map fixes the identity.
 
 The bounded-orbit estimate is proved directly.  A positive semidefinite orbit
 remains in a bounded trace section of the positive cone.  Hermitian matrices are
@@ -21,8 +22,10 @@ complex linear combinations of two Hermitian matrices.
 
 ## Main statements
 
-* `IsPositiveMap.hasBoundedOrbits_of_tracePreserving`: positivity and trace
-  preservation imply bounded forward orbits on every matrix.
+* `IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing`: positivity and trace
+  nonincrease imply bounded forward orbits on every matrix.
+* `IsPositiveMap.hasBoundedOrbits_of_tracePreserving`: the trace-preserving
+  specialization.
 * `IsPositiveMap.meanErgodicProjection_isPositiveMap`: the mean-ergodic
   projection of a positive map is positive.
 * `IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap`: the
@@ -45,16 +48,16 @@ open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.Frobenius Topology
 variable {D : ℕ}
 
 /-- The forward orbit of a positive semidefinite matrix under a positive
-trace-preserving endomorphism is bounded.
+trace-nonincreasing endomorphism is bounded.
 
-Indeed, every iterate remains positive semidefinite and has the same trace, so
-the orbit lies in a bounded trace section of the positive cone.
+Indeed, every iterate remains positive semidefinite and its trace does not
+increase, so the orbit lies in a bounded trace section of the positive cone.
 
 Source: Wolf, Proposition 6.3 and Equation (6.14), local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
-private theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_tracePreserving
+private theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_traceNonincreasing
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) :
     Bornology.IsBounded (Set.range fun n : ℕ ↦ T^[n] X) := by
   have hiter_pos : ∀ n : ℕ, (T^[n] X).PosSemidef := by
@@ -64,19 +67,30 @@ private theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_tracePreserving
     | succ n ih =>
         rw [Function.iterate_succ_apply']
         exact hT _ ih
-  have hiter_trace : ∀ n : ℕ, Matrix.trace (T^[n] X) = Matrix.trace X := by
+  have hiter_trace : ∀ n : ℕ, Matrix.trace (T^[n] X) ≤ Matrix.trace X := by
     intro n
     induction n with
     | zero => rfl
     | succ n ih =>
-        rw [Function.iterate_succ_apply', hTP, ih]
+        rw [Function.iterate_succ_apply']
+        exact (hTNI _ (hiter_pos n)).trans ih
+  have hiter_trace_norm : ∀ n : ℕ,
+      ‖Matrix.trace (T^[n] X)‖ ≤ ‖Matrix.trace X‖ := by
+    intro n
+    rw [show ‖Matrix.trace (T^[n] X)‖ = (Matrix.trace (T^[n] X)).re from by
+        simpa using congrArg Complex.re
+          (Complex.norm_of_nonneg' (hiter_pos n).trace_nonneg),
+      show ‖Matrix.trace X‖ = (Matrix.trace X).re from by
+        simpa using congrArg Complex.re (Complex.norm_of_nonneg' hX.trace_nonneg)]
+    rw [← sub_nonneg]
+    simpa using (RCLike.nonneg_iff.mp (sub_nonneg.mpr (hiter_trace n))).1
   apply (posSemidef_trace_bounded_isBounded ‖Matrix.trace X‖).subset
   intro Y hY
   obtain ⟨n, rfl⟩ := hY
-  exact ⟨hiter_pos n, by rw [hiter_trace n]⟩
+  exact ⟨hiter_pos n, hiter_trace_norm n⟩
 
 /-- The forward orbit of a Hermitian matrix under a positive
-trace-preserving endomorphism is bounded.
+trace-nonincreasing endomorphism is bounded.
 
 The matrix is the difference of its positive and negative parts.  Each part
 has a bounded positive semidefinite orbit, and linearity gives the stated
@@ -84,9 +98,9 @@ bound.
 
 Source: Wolf, Proposition 6.3 and Equation (6.14), local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
-private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_tracePreserving
+private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_traceNonincreasing
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
     Bornology.IsBounded (Set.range fun n : ℕ ↦ T^[n] X) := by
   let Q₁ : Matrix (Fin D) (Fin D) ℂ := X⁺
@@ -98,8 +112,8 @@ private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_tracePreserving
   have hdecomp : X = Q₁ - Q₂ := by
     simpa only [Q₁, Q₂] using
       (CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)).symm
-  have hb₁ := hT.isBounded_orbit_of_posSemidef_of_tracePreserving hTP hQ₁
-  have hb₂ := hT.isBounded_orbit_of_posSemidef_of_tracePreserving hTP hQ₂
+  have hb₁ := hT.isBounded_orbit_of_posSemidef_of_traceNonincreasing hTNI hQ₁
+  have hb₂ := hT.isBounded_orbit_of_posSemidef_of_traceNonincreasing hTNI hQ₂
   rw [isBounded_iff_forall_norm_le] at hb₁ hb₂ ⊢
   obtain ⟨C₁, hC₁⟩ := hb₁
   obtain ⟨C₂, hC₂⟩ := hb₂
@@ -110,6 +124,51 @@ private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_tracePreserving
   rw [hdecomp, iterate_map_sub]
   calc
     ‖T^[n] Q₁ - T^[n] Q₂‖ ≤ ‖T^[n] Q₁‖ + ‖T^[n] Q₂‖ := norm_sub_le _ _
+    _ ≤ C₁ + C₂ := add_le_add (hC₁ _ ⟨n, rfl⟩) (hC₂ _ ⟨n, rfl⟩)
+
+/-- A positive trace-nonincreasing matrix endomorphism has bounded forward
+orbits. Positive orbits remain in the bounded trace section determined by
+their initial trace; Hermitian decomposition gives the general case.
+
+This is the trace-nonincreasing form of Wolf, Proposition 6.3. -/
+theorem IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T) :
+    T.HasBoundedOrbits := by
+  intro X
+  let H₁ : Matrix (Fin D) (Fin D) ℂ := X + Xᴴ
+  let H₂ : Matrix (Fin D) (Fin D) ℂ := Complex.I • (X - Xᴴ)
+  have hH₁ : H₁.IsHermitian := by
+    ext i j
+    simp [H₁, add_comm]
+  have hH₂ : H₂.IsHermitian := by
+    ext i j
+    simp [H₂, sub_eq_add_neg, add_comm]
+  have hdecomp : X = (2 : ℂ)⁻¹ • (H₁ - Complex.I • H₂) := by
+    ext i j
+    simp only [H₁, H₂, Matrix.add_apply, Matrix.sub_apply, Matrix.smul_apply,
+      smul_eq_mul]
+    ring_nf
+    rw [Complex.I_sq]
+    ring
+  have hb₁ := hT.isBounded_orbit_of_isHermitian_of_traceNonincreasing hTNI hH₁
+  have hb₂ := hT.isBounded_orbit_of_isHermitian_of_traceNonincreasing hTNI hH₂
+  rw [isBounded_iff_forall_norm_le] at hb₁ hb₂ ⊢
+  obtain ⟨C₁, hC₁⟩ := hb₁
+  obtain ⟨C₂, hC₂⟩ := hb₂
+  refine ⟨‖(2 : ℂ)⁻¹‖ * (C₁ + C₂), ?_⟩
+  intro Y hY
+  obtain ⟨n, rfl⟩ := hY
+  change ‖T^[n] X‖ ≤ ‖(2 : ℂ)⁻¹‖ * (C₁ + C₂)
+  rw [hdecomp, ← Module.End.coe_pow]
+  simp only [map_smul, map_sub]
+  rw [norm_smul]
+  apply mul_le_mul_of_nonneg_left _ (norm_nonneg _)
+  calc
+    ‖(T ^ n) H₁ - Complex.I • (T ^ n) H₂‖ ≤
+        ‖(T ^ n) H₁‖ + ‖Complex.I • (T ^ n) H₂‖ := norm_sub_le _ _
+    _ = ‖T^[n] H₁‖ + ‖T^[n] H₂‖ := by
+      simp only [norm_smul, Complex.norm_I, one_mul, Module.End.coe_pow]
     _ ≤ C₁ + C₂ := add_le_add (hC₁ _ ⟨n, rfl⟩) (hC₂ _ ⟨n, rfl⟩)
 
 /-- A positive trace-preserving endomorphism of a finite-dimensional complex
@@ -128,42 +187,8 @@ Source: Wolf, Proposition 6.3 and Equation (6.14), local source
 theorem IsPositiveMap.hasBoundedOrbits_of_tracePreserving
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
-    T.HasBoundedOrbits := by
-  intro X
-  let H₁ : Matrix (Fin D) (Fin D) ℂ := X + Xᴴ
-  let H₂ : Matrix (Fin D) (Fin D) ℂ := Complex.I • (X - Xᴴ)
-  have hH₁ : H₁.IsHermitian := by
-    ext i j
-    simp [H₁, add_comm]
-  have hH₂ : H₂.IsHermitian := by
-    ext i j
-    simp [H₂, sub_eq_add_neg, add_comm]
-  have hdecomp : X = (2 : ℂ)⁻¹ • (H₁ - Complex.I • H₂) := by
-    ext i j
-    simp only [H₁, H₂, Matrix.add_apply, Matrix.sub_apply, Matrix.smul_apply,
-      smul_eq_mul]
-    ring_nf
-    rw [Complex.I_sq]
-    ring
-  have hb₁ := hT.isBounded_orbit_of_isHermitian_of_tracePreserving hTP hH₁
-  have hb₂ := hT.isBounded_orbit_of_isHermitian_of_tracePreserving hTP hH₂
-  rw [isBounded_iff_forall_norm_le] at hb₁ hb₂ ⊢
-  obtain ⟨C₁, hC₁⟩ := hb₁
-  obtain ⟨C₂, hC₂⟩ := hb₂
-  refine ⟨‖(2 : ℂ)⁻¹‖ * (C₁ + C₂), ?_⟩
-  intro Y hY
-  obtain ⟨n, rfl⟩ := hY
-  change ‖T^[n] X‖ ≤ ‖(2 : ℂ)⁻¹‖ * (C₁ + C₂)
-  rw [hdecomp, ← Module.End.coe_pow]
-  simp only [map_smul, map_sub]
-  rw [norm_smul]
-  apply mul_le_mul_of_nonneg_left _ (norm_nonneg _)
-  calc
-    ‖(T ^ n) H₁ - Complex.I • (T ^ n) H₂‖ ≤
-        ‖(T ^ n) H₁‖ + ‖Complex.I • (T ^ n) H₂‖ := norm_sub_le _ _
-    _ = ‖T^[n] H₁‖ + ‖T^[n] H₂‖ := by
-      simp only [norm_smul, Complex.norm_I, one_mul, Module.End.coe_pow]
-    _ ≤ C₁ + C₂ := add_le_add (hC₁ _ ⟨n, rfl⟩) (hC₂ _ ⟨n, rfl⟩)
+    T.HasBoundedOrbits :=
+  hT.hasBoundedOrbits_of_traceNonincreasing hTP.isTraceNonincreasingMap
 
 /-- The finite-dimensional mean-ergodic projection of a positive matrix
 endomorphism is positive.

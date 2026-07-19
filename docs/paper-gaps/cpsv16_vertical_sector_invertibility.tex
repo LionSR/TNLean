@@ -136,16 +136,71 @@ the Schwarz inequality pass to this extension, its trace adjoint is the
 extension of the direct-sum trace adjoint, and its fixed points are exactly the
 block-diagonal images of the direct-sum fixed points.  Reindexing the extension
 by a finite equivalence and applying the full-support theorem now gives the
-density-block form of the fixed families on the original direct sum.  What
-remains is to verify the required channel hypotheses for the transported
-sector maps on the whole direct sums and to supply a blockwise
-positive-definite fixed family.  Alternatively, the maximal-support witness
+density-block form of the fixed families on the original direct sum.  The
+trace-preservation part of the required channel hypotheses for the two square
+composites is resolved below.  Complete positivity and the adjoint Schwarz
+inequality still have to be transferred to the full direct sums.
+Alternatively, the maximal-support witness
 $T_\infty(\mathbf 1)$ is now available for an arbitrary positive
 trace-preserving map.  The construction of the supported endomorphism and its
 complementary zero summand is now completed in the full-matrix theorem recorded
 in \path{docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex}; it
 removes the need to assume a positive-definite fixed point before applying the
 full-matrix classification.
+
+\section{Resolution of the composite trace hypothesis}
+
+The range inclusions
+\[
+  T(R_1(\mathcal A_1))\subseteq R_2(\mathcal A_2),
+  \qquad
+  S(R_2(\mathcal A_2))\subseteq R_1(\mathcal A_1)
+\]
+are not consequences presently extracted from lines 1974--1980.  They are
+not needed for trace preservation: first the two square composites preserve
+trace on their full algebras, and then a trace sandwich gives the same
+conclusion for each individual transported map.
+
+Let $F$ be either square composite.  It is positive and trace nonincreasing.
+Consequently all forward orbits are bounded: a positive orbit stays positive
+with decreasing trace, and Hermitian decomposition gives the general case.
+The mean-ergodic image $\rho=P(\mathbf 1)$ is then a positive fixed point whose
+support contains every fixed point of $F$.  In particular it contains every
+distinguished vertical bond contraction.  Since positive-length products of
+these contractions span the whole sector algebra, their common support must
+contain the identity.  Hence $\rho$ is positive definite.
+
+Let $F^*$ be the trace adjoint and define the trace-loss operator
+\[
+  \Delta=\mathbf 1-F^*(\mathbf 1).
+\]
+Trace nonincrease gives
+$\operatorname{tr}(\Delta X)=\operatorname{tr}(X)-
+\operatorname{tr}(F(X))\geq0$ for every positive $X$, and positivity of $F$
+makes $\Delta$ Hermitian.  Thus $\Delta\geq0$.  Since $\rho$ is fixed,
+$\operatorname{tr}(\rho\Delta)=0$; positive definiteness of $\rho$ forces
+$\Delta=0$, which is equivalent to trace preservation on the full algebra.
+
+Now let $X\geq0$ belong to the one-site sector algebra.  Positivity and trace
+nonincrease give
+\[
+  \operatorname{tr}((\widetilde S\widetilde T)(X))
+    \leq \operatorname{tr}(\widetilde T(X))
+    \leq \operatorname{tr}(X).
+\]
+The first and last terms are equal by the composite result, hence both
+inequalities are equalities.  Thus $\widetilde T$ preserves trace on the
+positive cone, and therefore on the full algebra by linearity.  The other
+square composite gives the same conclusion for $\widetilde S$.
+
+This argument is formalized first for full matrix algebras, then for finite
+direct sums by block-diagonal extension, and finally for the two transported
+vertical-sector composites.  It assumes neither multiplicativity nor
+fixedness of products.  The only product statement used is the
+basis-of-normal-tensors conclusion that products of the fixed contraction
+\emph{factors} span the ambient sector algebra.  Thus the trace-preservation
+subproblem is closed for the individual maps and their square composites even
+though the active-image inclusions remain unproved.
 
 \section{Sector relabelling uses positivity, not linear isomorphism}
 
@@ -185,9 +240,10 @@ one of the following source-faithful routes:
 The unrestricted CPSV16 conclusion should be completed in the following
 order:
 \begin{enumerate}
-    \item prove complete positivity and trace preservation of the transported
-          maps on the full sector algebras, including the required active-image
-          statement for every input;
+    \item prove complete positivity and the adjoint Schwarz inequality for the
+          two transported square composites on the full sector algebras;
+          trace preservation of the individual maps and composites is now
+          established without an all-input active-image statement;
     \item complete the density-weighted fixed-point theorem and transfer it to
           the sector direct sums, either through a block-diagonal full-matrix
           extension or through a direct-sum theorem, to prove
@@ -204,9 +260,12 @@ order:
 
 \section{Classification}
 
-\textbf{Verdict: open gap.}  Until these steps are proved, neither
-transported-map invertibility nor sector relabelling should carry a completion
-marker in the blueprint.
+\textbf{Verdict: trace subproblem closed; invertibility gap open.}  The two
+transported maps and their square composites are trace preserving under the
+source tensor hypotheses.  The stronger active-image inclusions remain
+unproved.  Until the remaining channel-structure and fixed-point steps are
+proved, neither transported-map invertibility nor sector relabelling should
+carry a completion marker in the blueprint.
 
 \bibliographystyle{alpha}
 \bibliography{references}

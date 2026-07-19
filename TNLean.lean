@@ -90,12 +90,10 @@ import TNLean.Analysis.LiebScalarIntegral
 import TNLean.Analysis.LiebOperatorIntegral
 import TNLean.Analysis.LiebIntegrandConcave
 import TNLean.Analysis.LiebOperatorConcave
-
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
 import TNLean.Topology.BrouwerProduct
 import TNLean.Topology.CompactRetractFixedPoint
-
 -- Layer 2: Quantum channels (general theory)
 import TNLean.Channel.Basic
 import TNLean.Channel.PositiveExamples
@@ -209,6 +207,8 @@ import TNLean.Channel.FixedPoint.DirectSumExtension
 import TNLean.Channel.FixedPoint.FullSupportBlockRetraction
 import TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks
 import TNLean.Channel.FixedPoint.DirectSumBlockRetraction
+import TNLean.Channel.FixedPoint.TraceNonincreasingProductSpan
+import TNLean.Channel.FixedPoint.TraceNonincreasingDirectSum
 import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.StationaryProjection
@@ -479,6 +479,7 @@ import TNLean.MPS.MPDO.VerticalSectorFixedGenerators
 import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorImagePreservation
 import TNLean.MPS.MPDO.VerticalSectorGeneration
+import TNLean.MPS.MPDO.VerticalSectorTracePreservation
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
@@ -594,7 +595,6 @@ import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.BNTSectorCommutingFamily
 import TNLean.MPS.MPDO.BlockedRFPConstruction
-
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.AKLTCorrelation

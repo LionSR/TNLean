@@ -13,17 +13,20 @@ import TNLean.Channel.Schwarz.PositiveMapProperties
 /-!
 # Maximal support for fixed points of positive maps
 
-For a positive trace-preserving endomorphism, the mean-ergodic image of the
+For a positive endomorphism with bounded orbits, the mean-ergodic image of the
 identity is a positive semidefinite fixed point whose support contains every
 fixed point.  The argument uses only positive-map and finite-dimensional
-support-projection facts.
+support-projection facts.  Trace preservation supplies bounded orbits as a
+special case.
 
 ## Main declarations
 
 * `Kraus.stationaryProj_absorb_of_le_smul` -- scalar domination transfers support.
 * `Kraus.stationaryProj_absorb_of_le` -- Loewner domination transfers support.
-* `IsPositiveMap.exists_maximalSupport_fixedPoint` -- the mean-ergodic image of
-  the identity has support carrying every fixed point.
+* `IsPositiveMap.exists_maximalSupport_fixedPoint_of_hasBoundedOrbits` -- the
+  bounded-orbit form of maximal support.
+* `IsPositiveMap.exists_maximalSupport_fixedPoint` -- the trace-preserving
+  specialization.
 
 ## References
 
@@ -125,6 +128,82 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+/-- The mean-ergodic image of the identity has maximal support among the fixed
+points of a positive endomorphism with bounded orbits.
+
+Unlike the trace-preserving form of Wolf, Proposition 6.9, the support
+argument needs only positivity and bounded orbits. -/
+theorem exists_maximalSupport_fixedPoint_of_hasBoundedOrbits
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hbounded : T.HasBoundedOrbits) :
+    let ρ₀ := LinearMap.meanErgodicProjection (𝕜 := ℂ)
+      (E := Matrix (Fin D) (Fin D) ℂ) T hbounded 1
+    ∃ hρ₀ : ρ₀.PosSemidef, T ρ₀ = ρ₀ ∧
+      ∀ X, T X = X → stationaryProj hρ₀ * X * stationaryProj hρ₀ = X := by
+  classical
+  dsimp only
+  let P := LinearMap.meanErgodicProjection (𝕜 := ℂ)
+    (E := Matrix (Fin D) (Fin D) ℂ) T hbounded
+  let ρ₀ : Matrix (Fin D) (Fin D) ℂ := P 1
+  have hPpos : IsPositiveMap P := hT.meanErgodicProjection_isPositiveMap hbounded
+  have hρ₀psd : ρ₀.PosSemidef := hPpos 1 Matrix.PosSemidef.one
+  have hPfixed (A : Matrix (Fin D) (Fin D) ℂ) (hA : T A = A) : P A = A :=
+    hbounded.meanErgodicProjection_apply_eq_self_iff A |>.2 hA
+  have hρ₀fix : T ρ₀ = ρ₀ := by
+    apply (hbounded.meanErgodicProjection_apply_eq_self_iff ρ₀).1
+    exact hbounded.meanErgodicProjection_apply_meanErgodicProjection 1
+  refine ⟨hρ₀psd, hρ₀fix, ?_⟩
+  intro X hXfix
+  cases isEmpty_or_nonempty (Fin D) with
+  | inl hD =>
+      letI := hD
+      have hXzero : X = 0 := Subsingleton.elim _ _
+      rw [hXzero, Matrix.mul_zero, Matrix.zero_mul]
+  | inr hD =>
+      letI := hD
+      have hbound (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosSemidef) :
+          P A ≤ A.trace • ρ₀ := by
+        have hshift : (A.trace • (1 : Matrix (Fin D) (Fin D) ℂ) - A).PosSemidef :=
+          hA.trace_smul_one_sub_self_posSemidef
+        have himage := hPpos _ hshift
+        change (P (A.trace • (1 : Matrix (Fin D) (Fin D) ℂ) - A)).PosSemidef at himage
+        rw [P.map_sub, P.map_smul] at himage
+        change (A.trace • ρ₀ - P A).PosSemidef at himage
+        exact sub_nonneg.mp himage.nonneg
+      have hsupported (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosSemidef) :
+          stationaryProj hρ₀psd * P A * stationaryProj hρ₀psd = P A := by
+        have hPA : (P A).PosSemidef := hPpos A hA
+        obtain ⟨hQA, hAQ⟩ := stationaryProj_absorb_of_le_smul
+          hρ₀psd hPA A.trace (hbound A hA)
+        rw [Matrix.mul_assoc, hAQ, hQA]
+      have hHermitianSupport (H : Matrix (Fin D) (Fin D) ℂ)
+          (hH : H.IsHermitian) (hHfix : T H = H) :
+          stationaryProj hρ₀psd * H * stationaryProj hρ₀psd = H := by
+        let A : Matrix (Fin D) (Fin D) ℂ := H⁺
+        let B : Matrix (Fin D) (Fin D) ℂ := H⁻
+        have hA : A.PosSemidef :=
+          Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H)
+        have hB : B.PosSemidef :=
+          Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg H)
+        have hdecomp : H = A - B := by
+          simpa only [A, B] using
+            (CFC.posPart_sub_negPart H (isSelfAdjoint_iff.mpr hH)).symm
+        rw [← hPfixed H hHfix, hdecomp, P.map_sub, Matrix.mul_sub,
+          Matrix.sub_mul, hsupported A hA, hsupported B hB]
+      obtain ⟨H₁, H₂, hH₁def, hH₂def, hH₁herm, hH₂herm, hXeq⟩ :=
+        Matrix.exists_isHermitian_decomposition X
+      have hXstar : T Xᴴ = Xᴴ := by
+        rw [hT.map_conjTranspose, hXfix]
+      have hH₁fix : T H₁ = H₁ := by
+        rw [hH₁def, T.map_add, hXfix, hXstar]
+      have hH₂fix : T H₂ = H₂ := by
+        rw [hH₂def, T.map_smul, T.map_sub, hXfix, hXstar]
+      have hH₁support := hHermitianSupport H₁ hH₁herm hH₁fix
+      have hH₂support := hHermitianSupport H₂ hH₂herm hH₂fix
+      conv_lhs => rw [hXeq]
+      rw [Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_smul, Matrix.smul_mul,
+        Matrix.mul_smul, Matrix.smul_mul, hH₁support, hH₂support, ← hXeq]
+
 /-- **Maximal support of fixed points.** Let $T$ be a positive trace-preserving
 endomorphism and $T_\infty$ its mean-ergodic projection. Then
 $\rho_0=T_\infty(\mathbf 1)$ is positive semidefinite and fixed by $T$, and its
@@ -139,66 +218,7 @@ theorem exists_maximalSupport_fixedPoint
       (E := Matrix (Fin D) (Fin D) ℂ) T hbounded 1
     ∃ hρ₀ : ρ₀.PosSemidef, T ρ₀ = ρ₀ ∧
       ∀ X : Mat, T X = X → stationaryProj hρ₀ * X * stationaryProj hρ₀ = X := by
-  classical
   dsimp only
-  let hbounded := hT.hasBoundedOrbits_of_tracePreserving hTP
-  let P := LinearMap.meanErgodicProjection (𝕜 := ℂ)
-    (E := Matrix (Fin D) (Fin D) ℂ) T hbounded
-  let ρ₀ : Mat := P 1
-  have hPpos : IsPositiveMap P := hT.meanErgodicProjection_isPositiveMap hbounded
-  have hρ₀psd : ρ₀.PosSemidef := hPpos 1 Matrix.PosSemidef.one
-  have hPfixed (A : Mat) (hA : T A = A) : P A = A :=
-    (hT.meanErgodicProjection_apply_eq_self_iff_of_tracePreserving hTP A).2 hA
-  have hρ₀fix : T ρ₀ = ρ₀ := by
-    apply (hT.meanErgodicProjection_apply_eq_self_iff_of_tracePreserving hTP ρ₀).1
-    exact hbounded.meanErgodicProjection_apply_meanErgodicProjection 1
-  refine ⟨hρ₀psd, hρ₀fix, ?_⟩
-  intro X hXfix
-  cases isEmpty_or_nonempty (Fin D) with
-  | inl hD =>
-      letI := hD
-      have hXzero : X = 0 := Subsingleton.elim _ _
-      rw [hXzero, Matrix.mul_zero, Matrix.zero_mul]
-  | inr hD =>
-      letI := hD
-      obtain ⟨H₁, H₂, hH₁def, hH₂def, hH₁herm, hH₂herm, hXeq⟩ :=
-        Matrix.exists_isHermitian_decomposition X
-      have hXstar : T Xᴴ = Xᴴ := by
-        rw [hT.map_conjTranspose, hXfix]
-      have hH₁fix : T H₁ = H₁ := by
-        rw [hH₁def, T.map_add, hXfix, hXstar]
-      have hH₂fix : T H₂ = H₂ := by
-        rw [hH₂def, T.map_smul, T.map_sub, hXfix, hXstar]
-      obtain ⟨P₁p, P₁m, hP₁p, hP₁m, hH₁parts, hf₁p, hf₁m⟩ :=
-        IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint
-          T hT hTP hH₁herm hH₁fix
-      obtain ⟨P₂p, P₂m, hP₂p, hP₂m, hH₂parts, hf₂p, hf₂m⟩ :=
-        IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint
-          T hT hTP hH₂herm hH₂fix
-      have hbound (A : Mat) (hA : A.PosSemidef) (hAfix : T A = A) :
-          A ≤ A.trace • ρ₀ := by
-        have hshift : (A.trace • (1 : Mat) - A).PosSemidef :=
-          hA.trace_smul_one_sub_self_posSemidef
-        have himage := hPpos _ hshift
-        change (P (A.trace • (1 : Mat) - A)).PosSemidef at himage
-        rw [P.map_sub, P.map_smul, hPfixed A hAfix] at himage
-        change (A.trace • ρ₀ - A).PosSemidef at himage
-        exact sub_nonneg.mp himage.nonneg
-      have hsupported (A : Mat) (hA : A.PosSemidef) (hAfix : T A = A) :
-          stationaryProj hρ₀psd * A * stationaryProj hρ₀psd = A := by
-        obtain ⟨hQA, hAQ⟩ := stationaryProj_absorb_of_le_smul
-          hρ₀psd hA A.trace (hbound A hA hAfix)
-        rw [Matrix.mul_assoc, hAQ, hQA]
-      have hH₁support :
-          stationaryProj hρ₀psd * H₁ * stationaryProj hρ₀psd = H₁ := by
-        rw [hH₁parts, Matrix.mul_sub, Matrix.sub_mul,
-          hsupported P₁p hP₁p hf₁p, hsupported P₁m hP₁m hf₁m]
-      have hH₂support :
-          stationaryProj hρ₀psd * H₂ * stationaryProj hρ₀psd = H₂ := by
-        rw [hH₂parts, Matrix.mul_sub, Matrix.sub_mul,
-          hsupported P₂p hP₂p hf₂p, hsupported P₂m hP₂m hf₂m]
-      conv_lhs => rw [hXeq]
-      rw [Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_smul, Matrix.smul_mul,
-        Matrix.mul_smul, Matrix.smul_mul, hH₁support, hH₂support, ← hXeq]
-
+  exact hT.exists_maximalSupport_fixedPoint_of_hasBoundedOrbits
+    (hT.hasBoundedOrbits_of_tracePreserving hTP)
 end IsPositiveMap
