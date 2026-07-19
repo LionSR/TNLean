@@ -476,13 +476,15 @@ def main() -> int:
             for finding in missing_picture_audit.findings
         )
         pairleg_ports_log = work / "pairleg-upper-ports.tnlog"
+        overlong_port = "9" * 5000
         pairleg_ports_log.write_text(
             "picture|id=1|lang=grid\n"
             "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=center|column=1\n"
             "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=1|column=1\n"
             "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=0|column=1\n"
             "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=-1|column=1\n"
-            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=bogus|column=1\n",
+            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=bogus|column=1\n"
+            f"pairleg|picture=1|upper=1-1|lower=2-1|upper-port={overlong_port}|column=1\n",
             encoding="utf-8",
         )
         pairleg_ports_audit = Audit(pairleg_ports_log, None)
@@ -506,9 +508,9 @@ def main() -> int:
 
     if not missing_picture_guard:
         raise AssertionError("audit parser silently dropped a pictureless warning")
-    if len(malformed_upper_ports) != 3 or not all(
+    if len(malformed_upper_ports) != 4 or not all(
         any(f"upper-port={value!r}" in msg for msg in malformed_upper_ports)
-        for value in ("0", "-1", "bogus")
+        for value in ("0", "-1", "bogus", overlong_port)
     ):
         raise AssertionError("audit accepted a non-contraction pairleg upper-port")
     if warning_only_status != 1 or not any(

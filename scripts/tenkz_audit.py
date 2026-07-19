@@ -86,7 +86,14 @@ def _is_cell(v: str) -> bool:
 
 def _is_pairleg_port(v: str) -> bool:
     """A contraction starts at the centred face or a positive face slot."""
-    return v == "center" or (_is_int(v) and int(v) > 0)
+    if v == "center":
+        return True
+    if not _is_int(v):
+        return False
+    try:
+        return int(v) > 0
+    except ValueError:
+        return False
 
 
 def _enum(*vals: str) -> Callable[[str], bool]:
