@@ -284,9 +284,4 @@ theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_spa
   change 1 - Matrix.traceAdjointMap T 1 = 0 at hGapZero
   have hAdjointOneEq : Matrix.traceAdjointMap T 1 = 1 :=
     (sub_eq_zero.mp hGapZero).symm
-  intro X
-  calc
-    Matrix.trace (T X) = Matrix.trace (1 * T X) := by simp
-    _ = Matrix.trace (Matrix.traceAdjointMap T 1 * X) :=
-      (Matrix.trace_traceAdjointMap_mul T 1 X).symm
-    _ = Matrix.trace X := by rw [hAdjointOneEq]; simp
+  exact isTracePreservingMap_iff_traceAdjointMap_one.mpr hAdjointOneEq

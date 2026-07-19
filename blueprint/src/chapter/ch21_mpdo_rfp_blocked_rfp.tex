@@ -1543,8 +1543,8 @@ physical indices, as in
     \]
 \end{proof}
 
-\begin{lemma}[Faithful fixed point from fixed product generators]
-    \label{lem:positive_map_faithful_fixed_point_from_product_span}
+\begin{theorem}[Faithful fixed point from fixed product generators]
+    \label{thm:positive_map_faithful_fixed_point_from_product_span}
     \lean{IsPositiveMap.%
       exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span}
     \leanok
@@ -1556,7 +1556,7 @@ physical indices, as in
       V_{j_1}\cdots V_{j_L}
     \]
     in $M_D(\mathbb C)$.  Then $F$ has a positive-definite fixed point.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Boundedness of the forward orbits gives the mean-ergodic projection $P$.
@@ -1582,7 +1582,7 @@ physical indices, as in
       Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing,
       MPOTensor.transportedVerticalSector_composites_tracePreserving}
     \leanok
-    \uses{lem:positive_map_faithful_fixed_point_from_product_span,
+    \uses{thm:positive_map_faithful_fixed_point_from_product_span,
       lem:mpdo_transported_vertical_sector_fixed_generators,
       thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
       thm:mpdo_transported_vertical_sector_trace_loss}
