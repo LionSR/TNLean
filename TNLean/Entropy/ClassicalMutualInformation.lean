@@ -22,6 +22,12 @@ P^{\varepsilon}_{x,y} &= (1 + \varepsilon\beta_x)P_{x,y},\\
 I(P^{\varepsilon}) &= I(P) + \varepsilon S(\beta).
 \end{aligned}
 $$
+Here
+$$
+S(\beta)=\sum_x\beta_x\left(h(p_x)-\sum_y h(P_{x,y})\right),
+$$
+where $h(t)=-t\log t$ with $h(0)=0$, and $p_x=\sum_y P_{x,y}$ is the row
+marginal.
 If $S(\beta)\geq 0$, the nonnegative endpoint is chosen; otherwise the nonpositive endpoint is
 chosen. Thus $\varepsilon S(\beta)\geq 0$, and the selected endpoint removes a row without
 decreasing mutual information. Repetition leaves at most $\operatorname{rank}_{\mathbb{R}}P$

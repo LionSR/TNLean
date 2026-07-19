@@ -987,10 +987,52 @@
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
 
+\begin{definition}[Joint probability distribution and marginals]
+    \label{def:finite_joint_distribution_marginals}
+    \lean{Matrix.IsJointDistribution,
+      Matrix.rowMarginal,
+      Matrix.columnMarginal}
+    \leanok
+    Let $X$ and $Y$ be finite sets.  A matrix
+    $P=(P_{x,y})_{x\in X,y\in Y}$ is a joint probability distribution if
+    \[
+      \forall x\in X,\ \forall y\in Y,\qquad P_{x,y}\geq0,
+      \qquad
+      \sum_{x\in X}\sum_{y\in Y}P_{x,y}=1.
+    \]
+    Its row and column marginals are respectively
+    \[
+      p_x=\sum_{y\in Y}P_{x,y},
+      \qquad
+      q_y=\sum_{x\in X}P_{x,y}.
+    \]
+\end{definition}
+
+\begin{definition}[Entropy and classical mutual information]
+    \label{def:finite_classical_mutual_information}
+    \lean{Entropy.probabilityEntropy,
+      Entropy.classicalMutualInformation}
+    \leanok
+    \uses{def:finite_joint_distribution_marginals}
+    For $t>0$, set $h(t)=-t\log t$, and set $h(0)=0$.  The entropy of a
+    probability distribution $a=(a_z)_{z\in Z}$ on a finite set is
+    \[
+      H(a)=\sum_{z\in Z}h(a_z).
+    \]
+    For a joint probability distribution $P$ with row and column marginals
+    $p$ and $q$, put
+    \[
+      H(P)=\sum_{x\in X}\sum_{y\in Y}h(P_{x,y}),
+      \qquad
+      I(X:Y)_P=H(p)+H(q)-H(P).
+    \]
+\end{definition}
+
 \begin{lemma}[Entropy is bounded by the logarithm of the support cardinality]
     \label{lem:probability_entropy_le_log_card_support}
     \lean{Entropy.probabilityEntropy_le_log_card_support}
     \leanok
+    \uses{def:finite_classical_mutual_information}
     Let $p=(p_z)_{z\in Z}$ be a probability distribution on a finite set $Z$.
     Define $h(t)=-t\log t$ for $t>0$ and $h(0)=0$.  Then
     \begin{align}
@@ -1018,6 +1060,7 @@
     \label{thm:classical_mutual_information_le_log_rank}
     \lean{Entropy.classicalMutualInformation_le_log_rank}
     \leanok
+    \uses{def:finite_classical_mutual_information}
     Let $X$ and $Y$ be finite sets and let $P=(P_{x,y})_{x\in X,y\in Y}$
     be a joint probability distribution.  With natural logarithms,
     \[
