@@ -327,15 +327,15 @@ The construction and its SAL specialization are
 \leanid{MPOTensor.%
 exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent}.
 
-\paragraph{Scope restriction (copy-independent weights).}
-The latter theorem assumes explicitly that the copy weights of each BNT
-representative agree.  The paper obtains this equality from ZCL immediately
-before the separating-projector argument (lines 1646--1665).  Thus the present
-theorem proves the projector conclusion after that equality is supplied, but
-does not yet establish the source's standing-context implication from simple
-biCF, ZCL, and SAL alone.  A source-faithful theorem must derive the required
-copy independence from the source ZCL equation and the canonical-form gauge
-identity before invoking the completed-projector construction.
+The source standing context is recovered by
+\leanid{MPOTensor.%
+exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL}.
+It applies the ZCL equation to the horizontal canonical-form gauge identity,
+uses simplicity to exclude a zero physical-trace transfer, and thereby derives
+the equality of the copy weights proved at lines 1646--1665.  It then invokes
+the copy-independent specialization above.  Consequently the final theorem
+assumes only the simple biCF, ZCL, and SAL context of Appendix~C.2, rather than
+assuming copy independence separately.
 
 The empty-word value $N=0$ is excluded because its closed virtual trace records
 the bond dimension and is not a physical chain.  Positivity and ZCL of every
