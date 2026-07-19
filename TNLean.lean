@@ -47,6 +47,7 @@ import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.Algebra.PerronFrobenius.RankOne
+import TNLean.Algebra.PerronFrobenius.Idempotent
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology

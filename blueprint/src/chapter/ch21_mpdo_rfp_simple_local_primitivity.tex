@@ -716,6 +716,43 @@
     again contradicting the strict positivity of some power of $T$.
 \end{proof}
 
+\begin{theorem}[Rank of a stationary primitive square]
+    \label{thm:matrix_primitive_pow_two_rank_one}
+    \lean{Matrix.rank_eq_one_of_pos_of_mul_self_eq_self}
+    \lean{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}
+    \leanok
+    Let $T$ be a primitive non-negative real $N\times N$ matrix, where
+    $N\geq 1$. If
+    \[
+        T^2=T^3,
+    \]
+    then
+    \[
+        \operatorname{rank}(T^2)=1.
+    \]
+    This finite-dimensional matrix lemma supports the argument sought at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}; it is not a theorem
+    asserted there.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The identity $T^2=T^3$ gives $T^m=T^2$ for every $m\geq 2$. Some positive
+    power of $T$ has strictly positive entries. Squaring that power shows that
+    $T^2$ is strictly positive, and the same identity gives $(T^2)^2=T^2$.
+
+    Put $P=T^2$ and $u=P\mathbf 1$, so every coordinate of $u$ is positive and
+    $Pu=u$. For a fixed vector $x$, choose an index $k$ at which $x_i/u_i$ is
+    maximal and put $c=x_k/u_k$. Then $y=cu-x$ is non-negative, $y_k=0$, and
+    $Py=y$. Hence
+    \[
+        0=y_k=(Py)_k=\sum_j P_{k,j}y_j.
+    \]
+    Since every $P_{k,j}$ is strictly positive, all coordinates of $y$ vanish.
+    Thus every fixed vector is proportional to $u$. The range of an idempotent
+    is its fixed space, so it is one-dimensional.
+\end{proof}
+
 \begin{theorem}[Idempotence of the sector trace matrix]
     \label{thm:matrix_pairing_idempotent}
     \lean{Matrix.mul_self_eq_self_of_pairing_idempotent}
