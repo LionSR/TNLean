@@ -11,6 +11,13 @@ import Mathlib.Analysis.SpecialFunctions.Log.NegMulLog
 
 This file proves that the entropy of a finite probability distribution is at most the logarithm
 of the cardinality of its support. The proof applies Jensen's inequality to the nonzero weights.
+
+## Implementation notes
+
+This file lies in the lower `Analysis` import layer because `TNLean.Analysis.Entropy` uses the
+generic Jensen estimate. Its declarations nevertheless use their final mathematical `Entropy`
+namespace. The alias module `TNLean.Entropy.VonNeumann` preserves a legacy root-level API; no
+parallel root declaration is introduced here.
 -/
 
 open scoped BigOperators
