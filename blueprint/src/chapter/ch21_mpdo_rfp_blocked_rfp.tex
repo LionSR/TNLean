@@ -1876,6 +1876,46 @@ physical indices, as in
     to trace preservation.
 \end{proof}
 
+\begin{lemma}[Trace transfer through the canonical full-matrix extension]
+    \label{lem:direct_sum_extension_trace_transfer}
+    \lean{Matrix.IsTraceNonincreasingBetweenDirectSums.directSumExtension}
+    \lean{Matrix.IsTracePreservingMap.isTracePreservingDirectSumMap_of_extension}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    Let
+    $\mathcal A=\bigoplus_{\alpha\in I}\mathcal M_{d_\alpha\times d_\alpha}$,
+    let $\iota:\mathcal A\to\operatorname{End}(\bigoplus_\alpha
+    \mathbb C^{d_\alpha})$ be the block-diagonal embedding, and let $\pi$ be
+    diagonal compression.  For a linear map $F:\mathcal A\to\mathcal A$, set
+    $\widehat F=\iota\circ F\circ\pi$.  Then:
+    \begin{enumerate}
+      \item if $F$ is trace nonincreasing on positive elements of $\mathcal A$,
+        then $\widehat F$ is trace nonincreasing;
+      \item if $\widehat F$ is trace preserving, then $F$ preserves the total
+        trace on $\mathcal A$.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}\leanok
+    If $Y\geq0$, then $\pi(Y)\geq0$, and the trace identities for diagonal
+    compression and block-diagonal embedding give
+    \[
+      \operatorname{tr}(\widehat F(Y))
+        =\operatorname{tr}_{\mathcal A}(F(\pi(Y)))
+        \leq\operatorname{tr}_{\mathcal A}(\pi(Y))
+        =\operatorname{tr}(Y).
+    \]
+    This proves the first assertion.  For $X\in\mathcal A$, the identity
+    $\pi\circ\iota=\operatorname{id}_{\mathcal A}$ gives
+    \[
+      \operatorname{tr}_{\mathcal A}(F(X))
+        =\operatorname{tr}(\widehat F(\iota(X)))
+        =\operatorname{tr}(\iota(X))
+        =\operatorname{tr}_{\mathcal A}(X),
+    \]
+    whenever $\widehat F$ is trace preserving.
+\end{proof}
+
 \begin{theorem}[Trace preservation on a finite sum from fixed products]
     \label{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span}
     \lean{Matrix.IsPositiveDirectSumMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span}
@@ -1902,7 +1942,8 @@ physical indices, as in
 
 \begin{proof}\leanok
     \uses{thm:positive_map_trace_preserving_from_fixed_product_span,
-      thm:direct_sum_full_matrix_extension_compatibility}
+      thm:direct_sum_full_matrix_extension_compatibility,
+      lem:direct_sum_extension_trace_transfer}
     Let $\iota:\mathcal A\to\operatorname{End}(\bigoplus_\alpha
     \mathbb C^{d_\alpha})$ be the block-diagonal embedding and let
     $\widehat F$ be the canonical full-matrix extension.  These maps satisfy
