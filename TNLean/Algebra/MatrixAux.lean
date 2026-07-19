@@ -100,9 +100,10 @@ theorem trace_blockDiagonal'_mul
 /-- A dependent product of matrices fixes a pure tensor whenever every factor
 fixes the corresponding vector. -/
 theorem piProduct_mulVec_pureTensor
+    {R : Type*} [CommSemiring R]
     {N : ℕ} {α : Fin N → Type*} [∀ n, Fintype (α n)]
-    (P : (n : Fin N) → Matrix (α n) (α n) ℂ)
-    (v : (n : Fin N) → α n → ℂ)
+    (P : (n : Fin N) → Matrix (α n) (α n) R)
+    (v : (n : Fin N) → α n → R)
     (hv : ∀ n, (P n).mulVec (v n) = v n)
     (x : (n : Fin N) → α n) :
     Matrix.mulVec
@@ -123,7 +124,8 @@ theorem piProduct_mulVec_pureTensor
 /-- Reindexing a square matrix along an equivalence intertwines its action on
 vectors with precomposition by the inverse equivalence. -/
 theorem reindex_mulVec {α β : Type*} [Fintype α] [Fintype β]
-    (e : α ≃ β) (M : Matrix α α ℂ) (v : α → ℂ) :
+    {R : Type*} [NonUnitalNonAssocSemiring R]
+    (e : α ≃ β) (M : Matrix α α R) (v : α → R) :
     (Matrix.reindex e e M).mulVec (v ∘ e.symm) =
       (M.mulVec v) ∘ e.symm := by
   funext x
