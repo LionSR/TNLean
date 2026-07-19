@@ -2792,14 +2792,10 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{theorem}[Positive-definite saturation gives the identity Weyl sandwich]
     \label{thm:partial_trace_saturation_identity_weyl_sandwich}
-    \lean{Matrix.weightedWeylAverage_eq_partialTraceRight_kronecker}
     \lean{Matrix.weyl_sqrt_ratio_eq_of_partialTraceRight_eq}
     \lean{Matrix.weyl_identity_sandwich_of_partialTraceRight_eq}
     \lean{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef}
     \leanok
-    \uses{thm:weyl_relative_entropy_zero_gap_resolvent,
-        lem:positive_sqrt_from_common_resolvents,
-        thm:weyl_identity_sandwich_petz_recovery}
     Let $\rho$ and $\sigma$ be positive definite and suppose that
     \[
       D(\rho\Vert\sigma)
@@ -2827,6 +2823,9 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:weyl_relative_entropy_zero_gap_resolvent,
+        lem:positive_sqrt_from_common_resolvents,
+        thm:weyl_identity_sandwich_petz_recovery}
     Apply the common-resolvent theorem to the identity Weyl summand and the
     Weyl average.  The preceding lemma converts the result to equality of the
     two square-root ratios; the uniform scalar in the identity summand cancels,

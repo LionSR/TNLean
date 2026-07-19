@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.TraceCFC
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
@@ -20,13 +21,32 @@ operator theory development.
   root of a positive-semidefinite matrix is Hermitian.
 * `Matrix.PosSemidef.cfc_sqrt_mul_self`: the square of that square root is the
   original matrix.
+* `Matrix.PosSemidef.sqrt_smul`: the positive square root commutes with
+  nonnegative real scaling.
 * `Matrix.PosSemidef.blockDiagonal'`: a finite dependent block diagonal of
   positive-semidefinite matrices is positive semidefinite.
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix ComplexOrder MatrixOrder
 
 namespace Matrix
+
+open scoped Classical in
+/-- The positive square root commutes with multiplication by a nonnegative
+real scalar. -/
+theorem PosSemidef.sqrt_smul
+    {n : Type*} [Fintype n]
+    {A : Matrix n n ℂ} (hA : A.PosSemidef) {c : ℝ} (hc : 0 ≤ c) :
+    CFC.sqrt (c • A) = Real.sqrt c • CFC.sqrt A := by
+  have hscaled : (c • A).PosSemidef := hA.smul hc
+  have hsqrt : (CFC.sqrt A).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg A)
+  have hcand : (Real.sqrt c • CFC.sqrt A).PosSemidef :=
+    hsqrt.smul (Real.sqrt_nonneg c)
+  apply (CFC.sqrt_eq_iff (c • A) (Real.sqrt c • CFC.sqrt A)
+    hscaled.nonneg hcand.nonneg).2
+  rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+    CFC.sqrt_mul_sqrt_self A hA.nonneg, Real.mul_self_sqrt hc]
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 

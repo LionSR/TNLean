@@ -667,8 +667,7 @@ theorem weyl_sqrt_ratio_eq_of_partialTraceRight_eq
     {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (heq : quantumRelativeEntropy ρ σ =
-      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ))
-    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) :
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
     let barρ := partialTraceRight ρ ⊗ₖ
       ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))
     CFC.sqrt ρ * hσ.posSemidef.supportInvSqrt =
@@ -676,6 +675,8 @@ theorem weyl_sqrt_ratio_eq_of_partialTraceRight_eq
         ((partialTraceRight_posDef hσ).kronecker
           maximallyMixed_posDef).posSemidef.supportInvSqrt := by
   classical
+  obtain ⟨ζ, hζ⟩ : ∃ ζ : ℂ, IsPrimitiveRoot ζ dC :=
+    ⟨_, Complex.isPrimitiveRoot_exp dC (NeZero.ne dC)⟩
   let aZero := weightedWeylConjugate ζ ρ (0, 0)
   let bZero := weightedWeylConjugate ζ σ (0, 0)
   let aBar := weightedWeylAverage ζ ρ
@@ -775,8 +776,7 @@ theorem weyl_identity_sandwich_of_partialTraceRight_eq
     {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (heq : quantumRelativeEntropy ρ σ =
-      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ))
-    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) :
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
     let hbarσ := (PosSemidef.partialTraceRight hσ.posSemidef).kronecker
       maximallyMixed_posDef.posSemidef
     hσ.isHermitian.cfc Real.sqrt *
@@ -794,7 +794,7 @@ theorem weyl_identity_sandwich_of_partialTraceRight_eq
     (partialTraceRight_posDef hρ).kronecker maximallyMixed_posDef
   have hbarσ : barσ.PosDef :=
     (partialTraceRight_posDef hσ).kronecker maximallyMixed_posDef
-  have hratio := weyl_sqrt_ratio_eq_of_partialTraceRight_eq hρ hσ heq hζ
+  have hratio := weyl_sqrt_ratio_eq_of_partialTraceRight_eq hρ hσ heq
   dsimp only at hratio
   rw [PosDef.supportInvSqrt_eq_inv_sqrt hσ,
     PosDef.supportInvSqrt_eq_inv_sqrt hbarσ] at hratio
@@ -875,10 +875,9 @@ theorem partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef
     {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (heq : quantumRelativeEntropy ρ σ =
-      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ))
-    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) :
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
     partialTraceRightPetzMap σ hσ.posSemidef (partialTraceRight ρ) = ρ := by
   apply partialTraceRightPetzMap_eq_of_weyl_identity_sandwich hσ.posSemidef
-  exact weyl_identity_sandwich_of_partialTraceRight_eq hρ hσ heq hζ
+  exact weyl_identity_sandwich_of_partialTraceRight_eq hρ hσ heq
 
 end Matrix

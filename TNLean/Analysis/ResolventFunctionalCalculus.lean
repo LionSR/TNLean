@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.Matrix.Order
+import TNLean.Analysis.MatrixSqrt
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.IntegralRepresentation
 import Mathlib.LinearAlgebra.Matrix.Vec
 
@@ -34,23 +34,6 @@ namespace Matrix
 attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
-
-open scoped Classical in
-/-- The positive square root commutes with multiplication by a nonnegative
-real scalar. -/
-theorem PosSemidef.sqrt_smul
-    {n : Type*} [Fintype n]
-    {A : Matrix n n ℂ} (hA : A.PosSemidef) {c : ℝ} (hc : 0 ≤ c) :
-    CFC.sqrt (c • A) = Real.sqrt c • CFC.sqrt A := by
-  have hscaled : (c • A).PosSemidef := hA.smul hc
-  have hsqrt : (CFC.sqrt A).PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg A)
-  have hcand : (Real.sqrt c • CFC.sqrt A).PosSemidef :=
-    hsqrt.smul (Real.sqrt_nonneg c)
-  apply (CFC.sqrt_eq_iff (c • A) (Real.sqrt c • CFC.sqrt A)
-    hscaled.nonneg hcand.nonneg).2
-  rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul,
-    CFC.sqrt_mul_sqrt_self A hA.nonneg, Real.mul_self_sqrt hc]
 
 /-- Resolvent form of the Löwner real-power integrand. -/
 private lemma cfc_rpowIntegrand₀₁_eq_resolvent
