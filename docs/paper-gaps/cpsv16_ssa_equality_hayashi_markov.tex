@@ -278,6 +278,42 @@ value on the left.  The $d_R^2$ weights sum to one.
 This statement does not characterize equality in joint convexity and does not
 imply an operator intertwining or Petz recovery identity.
 
+There is nevertheless a useful algebraic reduction for the identity summand.
+Write
+\[
+  \overline X=(\operatorname{tr}_R X)\otimes d_R^{-1}\mathbf 1_R.
+\]
+For every positive semidefinite $\tau$ on the left factor,
+\begin{align}
+  (\tau\otimes d_R^{-1}\mathbf 1_R)^{-1/2}_{\mathrm{supp}}
+    &=\sqrt{d_R}\,
+      (\tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R),\\
+  \overline\sigma^{-1/2}_{\mathrm{supp}}\,\overline\rho\,
+  \overline\sigma^{-1/2}_{\mathrm{supp}}
+    &=\bigl((\operatorname{tr}_R\sigma)^{-1/2}_{\mathrm{supp}}
+       (\operatorname{tr}_R\rho)
+       (\operatorname{tr}_R\sigma)^{-1/2}_{\mathrm{supp}}\bigr)
+       \otimes\mathbf 1_R.
+\end{align}
+The second identity follows because the two factors $\sqrt{d_R}$ cancel the
+coefficient $d_R^{-1}$ in $\overline\rho$.  Hence the operator identity
+\[
+  \sqrt\sigma\,\overline\sigma^{-1/2}_{\mathrm{supp}}\,
+  \overline\rho\,\overline\sigma^{-1/2}_{\mathrm{supp}}\,
+  \sqrt\sigma=\rho
+\]
+implies
+$\mathcal R_\sigma(\operatorname{tr}_R\rho)=\rho$ by the support Petz formula
+of \cite[Theorem~3, equation~(8)]{HaydenJozsaPetzWinter2004}.
+\footnote{Formal declarations:
+\leanid{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed},
+\leanid{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul}, and
+\leanid{Matrix.partialTraceRightPetzMap_eq_of_weyl_identity_sandwich} in
+\path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
+This implication is conditional on the displayed operator identity.  It does
+not infer that identity from the scalar equality in the finite Weyl Jensen
+step, and it makes no assertion for an arbitrary convex ensemble.
+
 The exact remaining analytic implication is the equality case of data
 processing on this support domain:
 \begin{align}

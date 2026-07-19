@@ -21,6 +21,9 @@ reference matrix.
 ## Main declarations
 
 * `Matrix.PosSemidef.supportInvSqrt`: the inverse square root on the support.
+* `Matrix.PosSemidef.supportInvSqrt_smul`: scaling by a positive real scalar.
+* `Matrix.PosSemidef.supportInvSqrt_kronecker_one`: compatibility with the
+  unital left tensor embedding.
 * `Matrix.partialTraceRightPetzMap`: the raw Petz transpose map for the right
   partial trace.
 * `Matrix.partialTraceRightPetzMap_isKrausCP`: complete positivity.
@@ -72,6 +75,48 @@ theorem PosSemidef.supportInvSqrt_isHermitian {ρ : Matrix n n ℂ}
   rw [PosSemidef.supportInvSqrt, ← hρ.isHermitian.cfc_eq]
   exact Matrix.isHermitian_iff_isSelfAdjoint.mpr
     (cfc_predicate (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ)
+
+/-- The support inverse square root of a positive real multiple scales by the
+inverse square root of that multiple. This is the scalar normalization in the
+support inverse appearing in Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3, equation (8). -/
+theorem PosSemidef.supportInvSqrt_smul {ρ : Matrix n n ℂ}
+    (hρ : ρ.PosSemidef) {c : ℝ} (hc : 0 < c) :
+    (hρ.smul hc.le).supportInvSqrt = (Real.sqrt c)⁻¹ • hρ.supportInvSqrt := by
+  unfold PosSemidef.supportInvSqrt
+  rw [← (hρ.smul hc.le).isHermitian.cfc_eq, ← hρ.isHermitian.cfc_eq]
+  refine (cfc_comp_smul (p := IsSelfAdjoint) c
+    (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ
+    (hf := (ρ.finite_real_spectrum.image (fun x : ℝ ↦ c • x)).continuousOn _)
+    (ha := hρ.isHermitian.isSelfAdjoint)).symm.trans ?_
+  have hfun :
+      (fun x : ℝ ↦ if c • x ≠ 0 then (Real.sqrt (c • x))⁻¹ else 0) =
+        fun x : ℝ ↦ (Real.sqrt c)⁻¹ •
+          (if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) := by
+    funext x
+    simp only [smul_eq_mul]
+    by_cases hx : x = 0
+    · simp [hx]
+    · rw [if_pos (mul_ne_zero hc.ne' hx), if_pos hx, Real.sqrt_mul hc.le,
+        mul_inv]
+  rw [hfun, cfc_smul (p := IsSelfAdjoint) (Real.sqrt c)⁻¹
+    (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ
+    (hf := ρ.finite_real_spectrum.continuousOn _)]
+
+/-- The support inverse square root commutes with the unital left tensor
+embedding. This is the tensor functional-calculus identity for the support
+inverse in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
+equation (8). -/
+theorem PosSemidef.supportInvSqrt_kronecker_one
+    {m : Type*} [Fintype m] [DecidableEq m]
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    (hρ.kronecker (Matrix.PosSemidef.one (n := m))).supportInvSqrt =
+      hρ.supportInvSqrt ⊗ₖ (1 : Matrix m m ℂ) := by
+  unfold PosSemidef.supportInvSqrt
+  rw [← (hρ.kronecker (Matrix.PosSemidef.one (n := m))).isHermitian.cfc_eq,
+    ← hρ.isHermitian.cfc_eq]
+  exact Matrix.cfc_kronecker_one hρ.isHermitian
+    (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0)
 
 /-- Sandwiching a positive-semidefinite matrix by its support inverse square
 root gives its support projection.  This is the spectral support identity
