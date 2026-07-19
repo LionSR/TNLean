@@ -31,6 +31,7 @@ SOURCE = r"""
 \newcount\tenkzsurpluslabelseen
 \newcount\tenkzplainlabelseen
 \newcount\tenkzcenterlabelseen
+\newcount\tenkzperiodicbondseen
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -245,10 +246,17 @@ SOURCE = r"""
   \tn[wires=2, west at=center, east at=center]{A}\\
   &
 \end{tenkz}
+\begingroup
+\tikzset{tenkz combined stub/.append style={/utils/exec={%
+  \global\advance\tenkzperiodicbondseen by 1\relax}}}
 \begin{tenkz}[rows={wire, wire}, periodic, trace style=hooks, tensor style=box]
   \tn[wires=2, west at=center, east at=center]{A}\\
   &
 \end{tenkz}
+\endgroup
+\ifnum\tenkzperiodicbondseen=0\else
+  \errmessage{periodic hooks retained a separate centred-face stub}
+\fi
 \begin{tenkz}[rows={op, ket}, open={(1,2)}, tensor style=box]
   \tn[pill, wide=2, down at={1,2}]{U} & \\
   \tn[pill, wide=2, up at={1}]{L} &

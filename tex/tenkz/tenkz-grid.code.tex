@@ -1599,18 +1599,28 @@
 \cs_generate_variant:Nn \tenkz_stub_vec:n { V }
 \cs_new_protected:Npn \tenkz_combined_stub:nn #1#2
   {
-    \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
+    % A two-sided trace consumes both endpoint faces.  Its racetrack or hook
+    % path begins at the node anchor itself, so a separate open-face stroke
+    % would be redundant; for hooks, its outer half would remain visibly
+    % dangling.  A mismatched periodic face is redrawn explicitly by the
+    % periodic-face pass below.
+    \bool_lazy_and:nnF
+      { \str_if_eq_p:Vn \l__tenkz_westpol_tl {trace} }
+      { \str_if_eq_p:Vn \l__tenkz_eastpol_tl {trace} }
       {
-        % West and east are independent faces.  In particular a gauge on a
-        % fused virtual space may have one centred index on both sides.
-        \clist_map_inline:nn {west,east}
+        \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
           {
-            \tenkz_face_ports:nN {##1} \l__tenkz_faceports_tl
-            \str_if_eq:VnT \l__tenkz_faceports_tl {center}
+            % West and east are independent faces.  In particular a gauge on
+            % a fused virtual space may have one centred index on both sides.
+            \clist_map_inline:nn {west,east}
               {
-                \draw[bond]
-                  (\tenkz_node_name:nn{#1}{#2}.\tenkz_compass:n{##1}) --
-                  ++\tenkz_stub_vec:n {##1};
+                \tenkz_face_ports:nN {##1} \l__tenkz_faceports_tl
+                \str_if_eq:VnT \l__tenkz_faceports_tl {center}
+                  {
+                    \draw[bond, tenkz~combined~stub]
+                      (\tenkz_node_name:nn{#1}{#2}.\tenkz_compass:n{##1}) --
+                      ++\tenkz_stub_vec:n {##1};
+                  }
               }
           }
       }
