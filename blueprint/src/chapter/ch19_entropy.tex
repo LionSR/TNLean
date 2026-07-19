@@ -2180,6 +2180,41 @@ Theorem~\ref{thm:trace_norm_abs}.
     eigenvalue is zero.
 \end{proof}
 
+\begin{theorem}[Ancilla additivity on the support domain]
+    \label{thm:relative_entropy_ancilla_additivity_support}
+    \lean{quantumRelativeEntropy_kronecker_support}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices such that
+    $\ker\sigma\subseteq\ker\rho$, and let $\tau$ be positive semidefinite with
+    $\operatorname{tr}\tau=1$.  Then
+    \[
+        D(\rho\otimes\tau\,\Vert\,\sigma\otimes\tau)
+        =D(\rho\,\Vert\,\sigma).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:hermitian_support_projection,
+        lem:log_kronecker_possemidef,
+        thm:support_projection_absorption_kernel_inclusion}
+    Write $P_\rho$, $P_\sigma$, and $P_\tau$ for the support projections.  The
+    kernel inclusion gives
+    \[
+        P_\sigma\rho P_\sigma=\rho,
+        \qquad \rho P_\sigma=\rho,
+    \]
+    while $\rho P_\rho=\rho$ and $\tau P_\tau=\tau$.  Substituting the singular
+    tensor-logarithm formulas into the relative entropy and using these four
+    identities cancels the two contributions containing $\log\tau$.  Factoring
+    the trace of the remaining tensor product gives
+    \[
+        D(\rho\otimes\tau\,\Vert\,\sigma\otimes\tau)
+        =D(\rho\,\Vert\,\sigma)\operatorname{tr}\tau
+        =D(\rho\,\Vert\,\sigma).
+    \]
+\end{proof}
+
 \begin{theorem}[Relative entropy against the product of the marginals]
     \label{thm:relative_entropy_product_marginals}
     \lean{quantumRelativeEntropy_product_marginals}

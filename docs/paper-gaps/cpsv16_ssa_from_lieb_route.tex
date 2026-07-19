@@ -263,8 +263,7 @@ in place. Concretely:
     conjugation (\leanid{Matrix.log_conj_unitary}, itself the $f=\log$ case of the
     functional-calculus covariance \leanid{Matrix.cfc_conj_unitary}) followed by
     trace cyclicity. This ingredient needs no Lieb input. The
-    ancilla-additivity ingredient is now formalized as well, on the
-    positive-definite domain:
+    ancilla-additivity ingredient is formalized on the positive-definite domain:
     \leanid{quantumRelativeEntropy_kronecker} in
     \doclink{TNLean/Channel/Schwarz/RelativeEntropyAncillaAdditivity}
     (\path{TNLean/Channel/Schwarz/RelativeEntropyAncillaAdditivity.lean}) proves
@@ -284,8 +283,15 @@ in place. Concretely:
     \path{TNLean/Analysis/CfcLogAdditive.lean}). The difference of tensor
     logarithms then cancels the $\mathbf 1\otimes\log\tau$ terms, the trace of the
     Kronecker product factors as a product of traces, and the unit trace of $\tau$
-    leaves $D(\rho\,\|\,\sigma)$. These results depend only on the standard Lean
-    axioms and need no Lieb input. The third ingredient of layer (5) is the
+    leaves $D(\rho\,\|\,\sigma)$.  The corresponding singular-support identity
+    is \leanid{quantumRelativeEntropy_kronecker_support} in
+    \doclink{TNLean/Channel/Schwarz/PetzEqualityPrerequisites}
+    (\path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}): it assumes
+    positive semidefiniteness, $\ker\sigma\subseteq\ker\rho$, and unit trace of
+    $\tau$, but no normalization of $\rho$ or $\sigma$.  Its proof uses the
+    tensor-logarithm formula on support projections and support absorption.
+    These results depend only on the standard Lean axioms and need no Lieb
+    input. The third ingredient of layer (5) is the
     twirling identity, which writes
     $\tr_C\rho\otimes(\mathbf 1_C/d_C)$ as a uniform average of conjugations by a
     unitary $1$-design on $C$. Because the current dependency carries no Haar
