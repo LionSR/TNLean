@@ -299,19 +299,46 @@ the residuals $R_g=B_g-T_g(\Lambda_t)$ gives the exact identity
 Consequently, if the right-hand side vanishes, then
 $T_g^{-1}(B_g)=\Lambda_t$ for every $g$, in particular for the identity Weyl
 element.  This is the fixed-$t$ calculation of Jen\v{c}ov\'a--Ruskai,
-arXiv:0903.2895, \S4 and Appendix, equations \texttt{Mj} and
-\texttt{basiceq}.
+arXiv:0903.2895v4, \S4 and Appendix.
 \footnote{Formal declarations:
 \leanid{Matrix.weyl_resolvent_defect_identity} and
 \leanid{Matrix.weyl_resolvent_eq_of_defect_eq_zero} in
 \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
-This result is deliberately restricted to positive definite inputs and one
-fixed value of $t$.  The missing analytic bridge is to rewrite the scalar
-equality in the preceding finite Weyl Jensen step as the integral of a
-nonnegative sum whose summands include a positive multiple of this defect,
-deduce its vanishing for every $t>0$, and then pass to singular supports.
-Thus the new identity advances the saturation analysis but does not by itself
-imply the Petz sandwich below.
+The positive-definite analytic connection is now available.  The scalar spectral
+identity is integrated exactly, and the finite Weyl gap is written as
+\[
+  \sum_gD(A_g\Vert B_g)-D(A\Vert B)
+  =\int_0^\infty
+    \frac{\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)}{1+t}\,dt.
+\]
+There is an essential normalization point.  Saturation of the finite Weyl
+Jensen inequality gives $d_R^{-2}$ times each relative entropy, whereas the
+displayed gap uses the weighted matrices
+$A_g=d_R^{-2}U_g\rho U_g^\dagger$ and
+$B_g=d_R^{-2}U_g\sigma U_g^\dagger$.  Positive homogeneity,
+$D(cA\Vert cB)=cD(A\Vert B)$ for $c>0$, identifies these two expressions.
+Consequently equality under the partial trace makes this precise weighted gap
+vanish; no separate gap hypothesis is needed.
+Both defects are nonnegative and continuous on $(0,\infty)$, while the full
+integrand is integrable there.  Hence a zero gap first gives almost-everywhere
+vanishing and then, by continuity, pointwise vanishing for every $t>0$.
+Since $t/(1+t)>0$ on this domain, the source-$B$ defect vanishes, and the
+fixed-resolvent theorem gives $T_g^{-1}(B_g)=T^{-1}(B)$ for every Weyl index.
+\footnote{Formal declarations:
+\leanid{Matrix.quantumRelativeEntropy_smul_posDef},
+\leanid{Matrix.weylRelativeEntropyGap_eq_zero_of_partialTraceRight_eq},
+\leanid{Matrix.quantumRelativeEntropy_resolvent_integral},
+\leanid{Matrix.weyl_relativeEntropy_gap_integral},
+\leanid{Matrix.weyl_sourceB_defect_eq_zero_of_gap_eq_zero},
+\leanid{Matrix.weyl_resolvent_eq_of_relativeEntropy_gap_eq_zero}, and
+\leanid{Matrix.weyl_resolvent_eq_of_partialTraceRight_eq} in
+\path{TNLean/Analysis/RelativeEntropyResolventIntegral.lean} and
+\path{TNLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean}.}
+This completes the positive-definite finite-Weyl integral step of
+Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4 and Appendix.  The remaining
+analytic
+work is the inverse-square-root passage from the common resolvent solution to
+the identity-Weyl sandwich, followed by extension to singular supports.
 
 There is nevertheless a useful algebraic reduction for the identity summand.
 Write
@@ -360,7 +387,9 @@ processing on this support domain:
 This is the forward implication of
 \cite[Theorem~3]{HaydenJozsaPetzWinter2004}.  The present proof of data
 processing establishes the inequality by regularization, unitary averaging,
-and joint convexity, but it does not yet analyze equality in those steps.
+and joint convexity.  In the positive-definite case its equality analysis now
+reaches the common Weyl resolvent solution, but not yet the limiting
+inverse-square-root sandwich required for recovery.
 After this analytic implication, the proof of the block decomposition still
 requires the invariant-state decomposition used in
 \cite[Theorem~6]{HaydenJozsaPetzWinter2004}; that is the
