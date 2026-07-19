@@ -264,13 +264,16 @@ whether in a sentence or between the delimiters of a displayed equation.
 % ---------------------------------------------------------------------
 \subsection{Fusion trees and the pentagon}\label{sec:tut-cd}
 
-Commutative diagrams are not contractions, so they live in their own
-environment.  In \tnenv{tenkzcd}'s polygon mode, \tnkey{polygon=5}
-sets five cells on a circle, vertex $1$ on top, clockwise;
-\tncmd{tntree} builds a fusion tree from a parenthesised word whose
-subscripts are the internal charges; \tncmd{tnarrow} draws a labelled
-arrow between vertices, and the starred form sets its label on the
-arrow's other side.
+The pentagon expresses equality of two composites of associativity
+isomorphisms.  After choosing bases in the fusion spaces, and either in
+the multiplicity-free case or with multiplicity labels suppressed, each
+vertex is the basis morphism represented by one parenthesised fusion
+tree for $a\otimes b\otimes c\otimes d$; each edge is an $F$-move.  In
+\tnenv{tenkzcd}'s polygon mode, \tnkey{polygon=5} sets five
+cells on a circle, vertex $1$ on top, clockwise.  The command
+\tncmd{tntree} builds a tree from a parenthesised word whose subscripts
+are the internal charges; \tncmd{tnarrow} draws a labelled arrow between
+vertices, and the starred form sets its label on the arrow's other side.
 
 \begin{tnexample}[
     formula   = {\begin{aligned}[t]
@@ -282,24 +285,70 @@ arrow's other side.
                    &=\bigl[F^{xcd}_{e}\bigr]_{yv}
                      \bigl[F^{abv}_{e}\bigr]_{xw}
                  \end{aligned}},
-    caption   = {the pentagon},
+    caption   = {the multiplicity-free pentagon in the wire skin},
     index     = {Each \tncmd{tntree} word is one association of
-                 $a,b,c,d$ fusing to $e$; the subscripts $x=ab$,
-                 $y=abc$, $u=bc$, $w=bcd$, $v=cd$ are the internal
-                 charges.  The two arrow paths from vertex $1$ to
+                 $a,b,c,d$ fusing to $e$.  The subscripts $x,u,v,w,y$
+                 are intermediate simple channels allowed by the
+                 corresponding fusion coefficients (for example,
+                 $N_{ab}^{x}>0$ and $N_{bc}^{u}>0$).  The two arrow
+                 paths from vertex $1$ to
                  vertex $4$ compose to the same map, with the sum
                  over $u$ running along the three-move path.},
     label     = {ex:tut-pentagon},
   ]
-% pentagon for a,b,c,d -> e; internal charges x=ab, y=abc,
-% u=bc, w=bcd, v=cd; the two F-move paths from vertex 1 to
-% vertex 4 agree, with a sum over u on the three-move path
+% Multiplicity-free specialization of arXiv:1511.08090, Eq. (33), for
+% a,b,c,d -> e.  The labels x,u,v,w,y are intermediate simple channels:
+% e.g. N_{ab}^x>0, N_{bc}^u>0, and N_{cd}^v>0; they are not composites.
+% The two F-move paths from vertex 1 to vertex 4 agree, with a sum over u.
+% Each simple object is a wire, and each trivalent point is fusion.
 \begin{tenkzcd}[polygon=5, radius=32mm]
-  \tntree{(((a\,b)_x\,c)_y\,d)_e} &
-  \tntree{((a\,(b\,c)_u)_y\,d)_e} &
-  \tntree{(a\,((b\,c)_u\,d)_w)_e} &
-  \tntree{(a\,(b\,(c\,d)_v)_w)_e} &
-  \tntree{((a\,b)_x\,(c\,d)_v)_e}
+  \tntree[tree style=wire]{(((a\,b)_x\,c)_y\,d)_e} &
+  \tntree[tree style=wire]{((a\,(b\,c)_u)_y\,d)_e} &
+  \tntree[tree style=wire]{(a\,((b\,c)_u\,d)_w)_e} &
+  \tntree[tree style=wire]{(a\,(b\,(c\,d)_v)_w)_e} &
+  \tntree[tree style=wire]{((a\,b)_x\,(c\,d)_v)_e}
+  \tnarrow[from=1, to=2]{F^{abc}_y}
+  \tnarrow[from=2, to=3]{F^{aud}_e}
+  \tnarrow[from=3, to=4]{F^{bcd}_w}
+  \tnarrow*[from=1, to=5]{F^{xcd}_e}
+  \tnarrow*[from=5, to=4]{F^{abv}_e}
+\end{tenkzcd}
+\end{tnexample}
+
+The ribbon skin changes the representation of each fusion tree, not the
+morphism it denotes.  It draws the regular ribbon neighbourhood of the
+tree: three bands meet in a nonsingular vertex patch, without a tensor
+bead or a doubled-wire convention.
+
+\vspace*{8mm}
+\begin{tnexample}[
+    formula   = {\begin{aligned}[t]
+                   &\textstyle\sum_{u}
+                    \bigl[F^{abc}_{y}\bigr]_{xu}
+                    \bigl[F^{aud}_{e}\bigr]_{yw}
+                    \bigl[F^{bcd}_{w}\bigr]_{uv}\\
+                   &=\bigl[F^{xcd}_{e}\bigr]_{yv}
+                     \bigl[F^{abv}_{e}\bigr]_{xw}
+                 \end{aligned}},
+    caption   = {the same multiplicity-free pentagon in the ribbon skin},
+    index     = {The five parenthesised words and five $F$-moves are
+                 exactly those of Example~\ref{ex:tut-pentagon}; only
+                 \tnkey{tree style=ribbon} changes.  Thus the polygon
+                 again compares the three-move and two-move composites,
+                 now using ribbon-neighbourhood representatives for its
+                 basis morphisms.},
+  ]
+% This is the same multiplicity-free specialization of equation (33),
+% with the same chosen fusion bases and suppressed multiplicity labels.
+% Each parenthesised word is identical to the wire example; tree style
+% changes only its ink.  Every trivalent fusion has a nonsingular vertex
+% patch, and the three incident simple objects are its three labelled bands.
+\begin{tenkzcd}[polygon=5, radius=32mm]
+  \tntree[tree style=ribbon]{(((a\,b)_x\,c)_y\,d)_e} &
+  \tntree[tree style=ribbon]{((a\,(b\,c)_u)_y\,d)_e} &
+  \tntree[tree style=ribbon]{(a\,((b\,c)_u\,d)_w)_e} &
+  \tntree[tree style=ribbon]{(a\,(b\,(c\,d)_v)_w)_e} &
+  \tntree[tree style=ribbon]{((a\,b)_x\,(c\,d)_v)_e}
   \tnarrow[from=1, to=2]{F^{abc}_y}
   \tnarrow[from=2, to=3]{F^{aud}_e}
   \tnarrow[from=3, to=4]{F^{bcd}_w}
@@ -312,9 +361,10 @@ The tree is its word: \verb|(((a\,b)_x\,c)_y\,d)_e| says fuse $a$ with
 $b$ into $x$, then with $c$ into $y$, then with $d$ into the total
 charge $e$.  Every $F$-symbol slot holds a simple charge --- the mixed
 slots carry $x$, $u$, $v$, never a composite label like
-$bc$.\sidenote{Conventions of arXiv:1511.08090, eq.~(33): fused
-charges up, total charge down, the $F$-move mapping the
-left-associated tree to the right-associated one.}
+$bc$.\sidenote{Multiplicity-free specialization of the conventions of
+arXiv:1511.08090, eq.~(33): intermediate simple channels up, total charge
+down, and the $F$-move mapping the left-associated tree to the
+right-associated one.}
 
 % ---------------------------------------------------------------------
 \subsection{A picture in a sentence}\label{sec:tut-inline}

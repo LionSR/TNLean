@@ -206,6 +206,12 @@
       line width=\tenkz@dim{\tenkz@r@fusionwidth}},
   tree junction/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
       minimum size=\tenkz@junctionfloor},
+  % A ribbon tree is a filled surface with two boundary curves, not a
+  % doubled wire.  The cd renderer draws the strip fills and their two
+  % boundaries separately, then joins three strips through a nonsingular
+  % vertex patch.  This style supplies only the semantic boundary/fill colours.
+  tree ribbon/.style={draw=tenkzInk, line width=\tenkz@wirewidth},
+  tree ribbon fill/.style={draw=tenkzPaper, fill=tenkzPaper},
   % wires
   bond/.style={draw=tenkzInk, line width=\tenkz@wirewidth},
   tenkz combined stub/.style={},
@@ -224,10 +230,30 @@
   marked bond/.style={bond, draw=tenkzMarked},
   extra bond/.style={bond, draw=tenkzExtra},
   passive bond/.style={bond, draw=tenkzPassive},
+  operator ribbon/.style={tree ribbon, draw=tenkzOperator,
+      fill=tenkzOperator!12!tenkzPaper},
+  operator ribbon fill/.style={draw=tenkzOperator!12!tenkzPaper,
+      fill=tenkzOperator!12!tenkzPaper},
+  marked ribbon/.style={tree ribbon, draw=tenkzMarked,
+      fill=tenkzMarked!12!tenkzPaper},
+  marked ribbon fill/.style={draw=tenkzMarked!12!tenkzPaper,
+      fill=tenkzMarked!12!tenkzPaper},
+  extra ribbon/.style={tree ribbon, draw=tenkzExtra,
+      fill=tenkzExtra!12!tenkzPaper},
+  extra ribbon fill/.style={draw=tenkzExtra!12!tenkzPaper,
+      fill=tenkzExtra!12!tenkzPaper},
+  passive ribbon/.style={tree ribbon, draw=tenkzPassive,
+      fill=tenkzPassive!12!tenkzPaper},
+  passive ribbon fill/.style={draw=tenkzPassive!12!tenkzPaper,
+      fill=tenkzPassive!12!tenkzPaper},
   operator tensor/.style={draw=tenkzOperator, fill=tenkzOperator},
   marked tensor/.style={draw=tenkzMarked, fill=tenkzMarked},
   extra tensor/.style={draw=tenkzExtra, fill=tenkzExtra},
   passive tensor/.style={draw=tenkzPassive, fill=tenkzPassive},
+  operator tree junction/.style={tree junction, operator tensor},
+  marked tree junction/.style={tree junction, marked tensor},
+  extra tree junction/.style={tree junction, extra tensor},
+  passive tree junction/.style={tree junction, passive tensor},
   operator outline/.style={draw=tenkzOperator, text=tenkzOperator},
   marked outline/.style={draw=tenkzMarked, text=tenkzMarked},
   extra outline/.style={draw=tenkzExtra, text=tenkzExtra},
@@ -367,7 +393,14 @@
       {
         species~#1~bond/.style={bond, draw=\l_tmpb_tl},
         species~#1~tensor/.style={draw=\l_tmpb_tl, fill=\l_tmpb_tl},
-        species~#1~outline/.style={draw=\l_tmpb_tl, text=\l_tmpb_tl}
+        species~#1~tree~junction/.style={tree~junction,
+          species~#1~tensor},
+        species~#1~outline/.style={draw=\l_tmpb_tl, text=\l_tmpb_tl},
+        species~#1~ribbon/.style={tree~ribbon, draw=\l_tmpb_tl,
+          fill=\l_tmpb_tl!12!tenkzPaper},
+        species~#1~ribbon~fill/.style={
+          draw=\l_tmpb_tl!12!tenkzPaper,
+          fill=\l_tmpb_tl!12!tenkzPaper}
       }
     \exp_args:NV \tikzset \l_tmpa_tl
   }
