@@ -2462,7 +2462,9 @@
         \tenkz_get:NeN \l__tenkz_opts_prop
           {\int_eval:n{#1+1}-\l__tenkz_pwlowbase_tl} \l__tenkz_pwlowopts_tl
         \exp_args:NV \tenkz_cell_opts:n \l__tenkz_pwlowopts_tl
-        \tenkz_face_ports:nN {up} \l__tenkz_pwlowports_tl
+        \bool_if:NTF \l__tenkz_cnolegs_bool
+          { \tl_set:Nn \l__tenkz_pwlowports_tl {none} }
+          { \tenkz_face_ports:nN {up} \l__tenkz_pwlowports_tl }
         \seq_set_from_clist:NV \l__tenkz_pwlowlab_seq \l__tenkz_cup_tl
         \bool_lazy_and:nnT
           { ! \str_if_eq_p:Vn \l__tenkz_pwlowports_tl {center} }
@@ -2742,6 +2744,12 @@
               \l__tenkz_pwlow_tl
             \draw[physical~leg] \l__tenkz_pwlow_tl --
               ++\tenkz_leg_vec:nn{1}{\tenkz@dim{\tenkz@r@physleg}};
+            \prop_get:NeNT
+              \l__tenkz_pwlowerlabel_prop
+              {#1-\l__tenkz_pwbase_tl-
+                \int_eval:n{#2-\l__tenkz_pwbase_tl+1}}
+              \l__tenkz_pwlowlabel_tl
+              { \tenkz_draw_lower_label:N \l__tenkz_pwlow_tl }
           }
         \tenkz_leg_open:nnn {#1}{#2}{down}
       }

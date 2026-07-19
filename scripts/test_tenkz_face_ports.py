@@ -29,6 +29,7 @@ SOURCE = r"""
 \newcommand{\lowerlabelprobe}{\typeout{TENKZ-LOWER-MATCH-LABEL}j}
 \newcount\tenkzmatchedlabelseen
 \newcount\tenkzsurpluslabelseen
+\newcount\tenkzplainlabelseen
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -262,6 +263,18 @@ SOURCE = r"""
 \fi
 \ifnum\tenkzsurpluslabelseen=1\else
   \errmessage{surplus lower label was not rendered exactly once}
+\fi
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tnskip & \\
+  \tn[pill, wide=2, no legs, up at={1,2}]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, open={(1,1)}, tensor style=box]
+  \tn[down at=center]{U} & \\
+  \tn[pill, wide=2, up at={1,2},
+      up={\global\advance\tenkzplainlabelseen by 1\relax,$k$}]{L} &
+\end{tenkz}
+\ifnum\tenkzplainlabelseen=1\else
+  \errmessage{plain-to-wide opened lower label was not rendered exactly once}
 \fi
 \end{document}
 """
@@ -893,6 +906,11 @@ def main() -> int:
         pictures[57],
         "boundary|picture=57|virtual-west=2|virtual-east=2|physical-up=3|physical-down=1",
         "matched and surplus opened lower slots were not both counted",
+    )
+    require(
+        pictures[58],
+        "boundary|picture=58|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
+        "a suppressed split lower face survived below an absent upper site",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
