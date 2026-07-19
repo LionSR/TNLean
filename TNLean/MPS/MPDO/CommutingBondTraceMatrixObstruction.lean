@@ -20,8 +20,8 @@ vanishes.  Its trace matrix is then not primitive.
 
 The example is the pure product MPDO on a two-dimensional physical space.  Its
 bond dimension is one and its only nonzero tensor entry is
-$\mathcal K^{0,0}=1$.  The two one-dimensional Beigi sectors give neighboring
-operators with trace matrix
+$\mathcal K^{0,0}=1$.  In the chosen two-sector Beigi-style factorization, the
+neighboring operators have trace matrix
 \[
   T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
 \]
@@ -64,8 +64,8 @@ noncomputable def sectorEquiv :
     subst y
     rfl
 
-/-- The sector factorization used in arXiv:1606.00608, Appendix C.2,
-lines 1603--1605, specialized to the product tensor. -/
+/-- A two-sector factorization of the kind invoked in arXiv:1606.00608,
+Appendix C.2, lines 1603--1605, specialized to the product tensor. -/
 noncomputable def factorization : PhysicalSectorFactorization tensor where
   sectorCount := 2
   leftDim := fun _ => 1
