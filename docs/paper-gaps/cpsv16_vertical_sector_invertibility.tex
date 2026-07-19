@@ -171,13 +171,17 @@ these contractions span the whole sector algebra, their common support must
 contain the identity.  Hence $\rho$ is positive definite.
 
 The full-matrix statement of this intermediate conclusion is now
-formalized: a positive trace-nonincreasing endomorphism with fixed factors
-for which the identity lies in the span of the products of one positive
-length has a positive-definite fixed point.  No product is required to be
-fixed.  The remaining fixed-point argument for the transported composites
-must still pass this statement through the finite direct sums and combine it
-with the density-block dimension bound; the present result alone does not
-prove that either composite is the identity.
+formalized.\footnote{Formal declaration:
+\leanid{IsPositiveMap.%
+exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span}
+in \doclink{TNLean/Channel/FixedPoint/TraceNonincreasingProductSpan}.}
+A positive trace-nonincreasing endomorphism with fixed factors for which the
+identity lies in the span of the products of one positive length has a
+positive-definite fixed point.  No product is required to be fixed.  The
+remaining fixed-point argument for the transported composites must still pass
+this statement through the finite direct sums and combine it with the
+density-block dimension bound; the present result alone does not prove that
+either composite is the identity.
 
 Let $F^*$ be the trace adjoint and define the trace-loss operator
 \[
