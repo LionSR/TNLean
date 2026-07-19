@@ -491,6 +491,7 @@
 \tl_new:N \l__tenkz_ceastat_tl
 \tl_new:N \l__tenkz_cphys_tl    % cell physical=: up|down|updown (empty = none)
 \bool_new:N \l__tenkz_cnolegs_bool
+\bool_new:N \l__tenkz_cphysicalrows_bool
 \tl_new:N \l__tenkz_crole_tl    % cell role word (empty = none)
 \tl_new:N \l__tenkz_cspec_tl    % cell species name (empty = none)
 % \tnfuse options
@@ -602,6 +603,7 @@
     \tl_clear:N \l__tenkz_ceastat_tl
     \tl_clear:N \l__tenkz_cphys_tl
     \bool_set_false:N \l__tenkz_cnolegs_bool
+    \bool_set_false:N \l__tenkz_cphysicalrows_bool
     \tl_clear:N \l__tenkz_crole_tl
     \tl_clear:N \l__tenkz_cspec_tl
     \int_set:Nn \l__tenkz_frows_int {2}
@@ -616,11 +618,11 @@
     \int_set_eq:NN \l__tenkz_cphysicalspan_int \l__tenkz_cwide_int
     \tl_if_empty:NF \l__tenkz_cphys_tl
       { \int_set_eq:NN \l__tenkz_cphysicalspan_int \l__tenkz_cwires_int }
-    \tenkz_normalize_slot_face:Nn \l__tenkz_clegsat_tl
+    \tenkz_normalize_physical_face:Nn \l__tenkz_clegsat_tl
       {\l__tenkz_cphysicalspan_int}
-    \tenkz_normalize_slot_face:Nn \l__tenkz_cupat_tl
+    \tenkz_normalize_physical_face:Nn \l__tenkz_cupat_tl
       {\l__tenkz_cphysicalspan_int}
-    \tenkz_normalize_slot_face:Nn \l__tenkz_cdownat_tl
+    \tenkz_normalize_physical_face:Nn \l__tenkz_cdownat_tl
       {\l__tenkz_cphysicalspan_int}
   }
 
@@ -703,6 +705,18 @@
           }
       }
   }
+% `rows' is the virtual-face default token.  Physical faces accept only a
+% centred port or explicit local columns; reject a leaked virtual token as an
+% empty face before any consumer attempts integer slot arithmetic.
+\cs_new_protected:Npn \tenkz_normalize_physical_face:Nn #1#2
+  {
+    \str_if_eq:VnTF #1 {rows}
+      {
+        \bool_set_true:N \l__tenkz_cphysicalrows_bool
+        \tl_set:Nn #1 {none}
+      }
+      { \tenkz_normalize_slot_face:Nn #1 {#2} }
+  }
 \cs_new_eq:NN \tenkz_normalize_virtual_face:Nn
   \tenkz_normalize_slot_face:Nn
 
@@ -744,8 +758,15 @@
       }
   }
 
+\msg_new:nnn { tenkz } { physical-face-rows }
+  { Physical~face~value~rows~at~cell~#1-#2~is~virtual-only;~the~face~is~empty. }
 \cs_new_protected:Npn \tenkz_emit_faceports:nn #1#2
   {
+    \bool_if:NT \l__tenkz_cphysicalrows_bool
+      {
+        \msg_warning:nnnn {tenkz}{physical-face-rows}{#1}{#2}
+        \tenkz@event{warning|picture=\the\tenkz@pictureid|code=physical-face-rows|cell=#1-#2}
+      }
     % `no legs' removes the physical faces themselves, not merely their
     % strokes.  Thus the event stream has the same topology as the ink and
     % boundary count.  On-wire matrices set this flag before reaching here.

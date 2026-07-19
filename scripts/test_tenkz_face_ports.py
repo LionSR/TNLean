@@ -327,6 +327,9 @@ SOURCE = r"""
   & \tn[pill, wide=2, no legs]{U} & \\
   \tn[pill, wide=2, up at=center]{L} & &
 \end{tenkz}
+\begin{tenkz}[physical=up, tensor style=box]
+  \tn[pill, wide=2, up at=rows]{A} &
+\end{tenkz}
 \end{document}
 """
 
@@ -398,6 +401,7 @@ def main() -> int:
         topology_hashes = {
             picture.ident: canonical_hash(picture) for picture in audit.pictures
         }
+        parsed_pictures = {picture.ident: picture for picture in audit.pictures}
         parsed_warnings = {
             picture.ident: [
                 event.attrs.get("code", "")
@@ -623,9 +627,13 @@ def main() -> int:
     require(single_wire,
             "faceports|picture=24|cell=1-1|face=east|arity=1|at=center",
             "single-wire centred east face was not recorded")
-    forbid(single_wire,
-           "warning|code=combined-wires|cell=1-1",
-           "single-wire centred face was mistaken for combined=")
+    if any(
+        event.kind == "warning"
+        and event.attrs.get("code") == "combined-wires"
+        and event.attrs.get("cell") == "1-1"
+        for event in parsed_pictures[24].events
+    ):
+        raise AssertionError("single-wire centred face was mistaken for combined=")
     physical_pair_trace = pictures[25]
     require(physical_pair_trace,
             "warning|picture=25|code=pair-trace-face-ports|cell=1-1",
@@ -1091,6 +1099,22 @@ def main() -> int:
         shifted_centered_lower,
         "boundary|picture=71|virtual-west=2|virtual-east=2|physical-up=1|physical-down=0",
         "shifted centered lower owner was not reopened",
+    )
+    invalid_physical_rows = pictures[72]
+    require(
+        invalid_physical_rows,
+        "warning|picture=72|code=physical-face-rows|cell=1-1",
+        "invalid physical rows token was not reported",
+    )
+    require(
+        invalid_physical_rows,
+        "faceports|picture=72|cell=1-1|face=up|arity=0|at=none",
+        "invalid physical rows token did not normalize to an empty face",
+    )
+    require(
+        invalid_physical_rows,
+        "boundary|picture=72|virtual-west=1|virtual-east=1|physical-up=0|physical-down=0",
+        "invalid physical rows token survived boundary accounting",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
