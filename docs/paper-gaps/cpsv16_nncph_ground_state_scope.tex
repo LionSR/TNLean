@@ -313,8 +313,20 @@ product
   \prod_n \varphi_a(r_n,l_{n+1}).
 \]
 This is the construction in Beigi, arXiv:1105.1019v2, source lines 602--606.
-It does not yet prove that these vectors belong to, or span, the parent ground
-space, nor does it identify them with the original BNT representatives.
+For every $N\geq2$,
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{loopProductState_mem_ker_parentHamiltonian}
+now proves that this vector belongs to the kernel of the length-two periodic
+parent Hamiltonian.  Its Euclidean-space form is recorded by
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{loopProductState_mem_parentHamiltonianGroundSpaceES}.
+The proof uses Beigi's local edge-ground-space condition from source
+lines 487--500 and the positive-loop specialization at lines 602--606.  The
+restriction $N\geq2$ is the nondegenerate range of the two-site periodic
+parent Hamiltonian used here; the length-one convention remains part of
+\ghissue{4400}.  This result proves membership only.  It does not yet prove
+that the loop states span the parent ground space or identify them with the
+original BNT representatives.
 
 \section{Elimination plan}
 

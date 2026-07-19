@@ -520,6 +520,79 @@ private theorem parentHamiltonianGroundSpaceES_finrank_eq_all_sequences
   rw [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES]
   exact htrace.symm
 
+/-- A vector fixed by the complete product of complementary two-site parent
+interactions belongs to the kernel of the finite parent Hamiltonian.
+
+For sector data of Beigi type, the translated parent interactions commute, so
+the product of their complements is the projector onto the common kernel.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500. -/
+theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
+    (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N)
+    (v : NSiteSpace d N)
+    (hv : ((List.ofFn fun i : Fin N ↦
+      MPOTensor.embedLocalOperator (d := d) 2 N hN i
+        (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+          (finTwoArrowEquiv (Fin d)).symm
+          (twoSiteParentGroundProjectorMatrix A))).prod).mulVec v = v) :
+    v ∈ LinearMap.ker (parentHamiltonian A 2 N) := by
+  classical
+  let qMatrix := (List.ofFn fun i : Fin N ↦
+    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
+  let qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
+  let qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+  have hfactor (i : Fin N) : Matrix.toLin'
+      (MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)) =
+      1 - localTerm A 2 N i := by
+    rw [embedLocalOperator_groundBond_eq_one_sub]
+    change (Matrix.toLinAlgEquiv' :
+      Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
+        Module.End ℂ (NSiteSpace d N))
+        (1 - MPOTensor.embedLocalOperator (d := d) 2 N hN i
+          (LinearMap.toMatrix' (parentInteraction A 2))) = _
+    rw [map_sub, map_one]
+    change 1 - Matrix.toLin'
+      (MPOTensor.embedLocalOperator (d := d) 2 N hN i
+        (LinearMap.toMatrix' (parentInteraction A 2))) = _
+    rw [localTerm_eq_toLin'_embedLocalOperator (A := A) hN i]
+  have hMatrix : Matrix.toLin' qMatrix = qRaw := by
+    change (Matrix.toLinAlgEquiv' :
+      Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
+        Module.End ℂ (NSiteSpace d N)) qMatrix = qRaw
+    simp only [qMatrix, qRaw]
+    rw [map_list_prod, List.map_ofFn]
+    apply congrArg List.prod
+    apply congrArg List.ofFn
+    funext i
+    exact hfactor i
+  have hES : (LinearEquiv.conjAlgEquiv ℂ e.symm) qRaw = qES := by
+    simp only [qRaw, qES]
+    rw [map_list_prod, List.map_ofFn]
+    apply congrArg List.prod
+    apply congrArg List.ofFn
+    funext i
+    simp only [Function.comp_apply, map_sub, map_one, localTermES, e,
+      LinearEquiv.conjAlgEquiv_apply, LinearEquiv.symm_symm]
+  have hraw : qRaw v = v := by
+    rw [← hMatrix, Matrix.toLin'_apply]
+    exact hv
+  have hfixES : qES (e.symm v) = e.symm v := by
+    rw [← hES]
+    simp only [LinearEquiv.conjAlgEquiv_apply]
+    change e.symm (qRaw (e (e.symm v))) = e.symm v
+    rw [e.apply_symm_apply, hraw]
+  have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
+    (fun i : Fin N ↦ localTermES A 2 i)
+    (fun i ↦ localTermES_isSymmetricProjection A 2 i)
+    (fun i j ↦ F.localTermES_commute hN i j)
+  rw [← parentHamiltonianES_eq_sum_localTermES] at hproj
+  have hkerES : e.symm v ∈ LinearMap.ker (parentHamiltonianES A 2 N) :=
+    hproj.mem_iff_map_id.mpr hfixES
+  rw [LinearMap.mem_ker] at hkerES ⊢
+  have h := congrArg e hkerES
+  simpa [parentHamiltonianES, e] using h
+
 /-- Beigi's finite-chain ground-space dimension formula: for a periodic chain
 of length greater than two, the dimension is the sum over ordered cyclic
 sector sequences of the products of the adjacent edge-ground-space

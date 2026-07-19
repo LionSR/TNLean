@@ -2538,6 +2538,34 @@ specialization of that Appendix~D definition.
     sitewise-unitary image.
 \end{proof}
 
+\begin{theorem}[A positive Beigi loop gives a parent ground state]
+    \label{thm:beigi_loop_product_state_ground_state}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_ker_parentHamiltonian}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_parentHamiltonianGroundSpaceES}
+    \leanok
+    \uses{def:beigi_sector_graph, def:beigi_loop_product_state,
+        thm:beigi_loop_tensor_periodic_vector}
+    Let $a\to a$ be a positive loop.  For every $N\geq 2$, its physical
+    cyclic product-of-pairs state belongs to the kernel of the length-two
+    periodic parent Hamiltonian.  Equivalently, its Euclidean representative
+    belongs to the parent ground space.  This is only a membership assertion;
+    it does not assert that the loop states span the ground space.
+\end{theorem}
+
+\begin{proof}\leanok
+    In sector coordinates, the complete product of the complementary
+    two-site interactions is block diagonal over cyclic sector sequences.
+    In the constant sector sequence $a$, its action is the tensor product of
+    the edge projectors $P_{a,a}$.  Each factor fixes the chosen vector
+    $\varphi_a\in\operatorname{ran}P_{a,a}$, hence their tensor product fixes
+    the cyclic product of copies of $\varphi_a$.  Every other sector block
+    acts on a zero coefficient.  Conjugating by the sitewise tensor power of
+    the spatial unitary shows that the complete product of complementary
+    physical interactions fixes the physical loop state.  Since the parent
+    interactions commute, this product is the projector onto their common
+    kernel, which is the kernel of the parent Hamiltonian.
+\end{proof}
+
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
