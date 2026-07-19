@@ -173,39 +173,6 @@
     \end{TNEquationRow}%
 }
 
-% Sectorwise comparison between the inverse-map contraction and the Hayashi
-% product in the basis adapted to the middle-site direct sum.
-\TNDeclareDiagram
-    {TNMPDOHayashiSectorComparison}
-    {}
-    {display}
-    {compact}
-    {\TNMPDOHayashiSectorComparison}
-    {chapter/ch21_mpdo_rfp_simple_local_markov_factorization.tex}{%
-    \begin{TNEquationRow}[compact]
-        \ensuremath{R_{\beta_3,\alpha_1}\,\cdot\,}
-        \TNTerm{%
-            \TNMPOSite{hscK}{at=origin}{\widetilde\kappa^{(k)}}
-            \TNOpenVirtualWest{hscKWest}
-            \TNOpenVirtualEast{hscKEast}
-            \TNOpenPhysicalNorth{hscKKet}
-            \TNOpenPhysicalSouth{hscKBra}
-            \TNLabelLeft{hscKWestOpen}{\beta_1}
-            \TNLabelRight{hscKEastOpen}{\alpha_3}
-            \TNLabelAbove{hscKKetOpen}{k;l,r}
-            \TNLabelBelow{hscKBraOpen}{k;l',r'}}
-        \TNRelation{=}
-        \ensuremath{p_k}
-        \TNTerm{%
-            \TNFactor{hscA}{at=origin}{A^{(k)}_{\alpha_1,\beta_1}}
-            \TNLabelAbove{hscA}{l,l'}}
-        \TNRelation{\otimes}
-        \TNTerm{%
-            \TNFactor{hscB}{at=origin}{B^{(k)}_{\alpha_3,\beta_3}}
-            \TNLabelAbove{hscB}{r,r'}}
-    \end{TNEquationRow}%
-}
-
 % Coefficient form of a basis of normal tensors: the gauge X, one basis
 % tensor with its physical leg, and X^{-1} on the virtual chain, threaded by
 % the block-index lines j and q; the coefficient tensor mu hangs on the two
