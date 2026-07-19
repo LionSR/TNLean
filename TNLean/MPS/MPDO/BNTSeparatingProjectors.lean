@@ -23,8 +23,8 @@ retains them and assigns them to one BNT label, as documented in
 
 * `completedBntSectorProjection`: the BNT projector after assigning every
   zero-weight Markov summand to a distinguished BNT label.
-* `exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL`: the separating
-  projectors selected by SAL for a simple tensor in biCF.
+* `exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent`:
+  the separating projectors selected by SAL after copy independence is supplied.
 
 ## References
 
@@ -85,7 +85,9 @@ noncomputable def completedBntSectorProjection
       hη.sectorProjection k
     else 0
 
-/-- Each completed BNT-sector matrix is an orthogonal projection. -/
+/-- Each completed BNT-sector matrix is an orthogonal projection.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Pis`, lines 1680--1712. -/
 theorem completedBntSectorProjection_isOrthogonal
     {K : (s : Fin g) → MPOTensor d (dim s)}
     {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
@@ -111,7 +113,9 @@ theorem completedBntSectorProjection_isOrthogonal
       · simp [hl]
     · simp [hk]
 
-/-- Completed projectors with distinct BNT labels are mutually orthogonal. -/
+/-- Completed projectors with distinct BNT labels are mutually orthogonal.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Pis`, lines 1680--1712. -/
 theorem completedBntSectorProjection_mul_eq_zero
     {K : (s : Fin g) → MPOTensor d (dim s)}
     {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
@@ -216,8 +220,8 @@ theorem completedBntSectorProjection_mul_physicalSlice_mul_eq_zero
     · simp [hlt]
   · simp [hks]
 
-/-- A simple tensor in biCF which satisfies SAL has separating projectors for
-its BNT representatives.
+/-- Under copy-independent BNT weights, a simple tensor in biCF which satisfies
+SAL has separating projectors for its BNT representatives.
 
 More precisely, there is a distinguished BNT label $s_0$ and a family of
 orthogonal projectors $P_s$ which resolves the physical identity. Whenever
@@ -236,6 +240,12 @@ simplicity, copy independence is the conclusion immediately preceding the
 projector lemma, and SAL supplies the four-site quantum-Markov decomposition.
 There is no independent closing-matrix hypothesis.
 
+**Scope restriction (copy-independent weights):** This theorem takes copy
+independence as the explicit hypothesis `hWeight`. The source obtains it from
+ZCL before the separating-projector lemma. A source-faithful standing-context
+wrapper must instead derive `hWeight` from the ZCL and canonical-form data; see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
 **Local fix (inactive sectors):** The source discards zero-weight Markov
 summands. Here they are assigned to the distinguished label $s_0$, which
 restores the ambient identity resolution without changing any physical slice;
@@ -243,7 +253,7 @@ see `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `CFK`, `biCFK`, `Pis`, and
 `PjKiPj`, lines 1626--1737. -/
-theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL
+theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
     (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)

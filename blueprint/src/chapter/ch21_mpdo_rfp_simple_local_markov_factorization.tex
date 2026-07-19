@@ -668,7 +668,7 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{definition}
 
-\begin{theorem}[Separating projectors for a simple tensor satisfying SAL]
+\begin{theorem}[Separating projectors with copy-independent weights]
     \label{thm:mpdo_sal_bnt_separating_projectors}
     \lean{MPOTensor.completedBntSectorProjection_isOrthogonal}
     \lean{MPOTensor.completedBntSectorProjection_mul_eq_zero}
@@ -676,15 +676,15 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
       completedBntSectorProjection_mul_physicalSlice_mul_eq_zero}
     \lean{MPOTensor.%
-      exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL}
+      exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent}
     \leanok
     \uses{def:mpdo_completed_bnt_sector_projection,
       thm:mpdo_bnt_projector_local_selection}
-    Let $K$ be simple, in biCF, and satisfy SAL.  Suppose that the common
-    blocking has been performed, the copy weights over each BNT representative
-    agree, and the representatives have a simultaneous one-site span.  There
-    is a distinguished BNT label $s_0$ such that the completed projectors are
-    orthogonal and, for distinct labels $s$ and $t$,
+    Let $K$ be simple, in biCF, and satisfy SAL.  Assume in addition that the
+    common blocking has been performed, the copy weights over each BNT
+    representative agree, and the representatives have a simultaneous
+    one-site span.  There is a distinguished BNT label $s_0$ such that the
+    completed projectors are orthogonal and, for distinct labels $s$ and $t$,
     \[
         \widehat P_s\widehat P_t=0,
         \qquad
@@ -695,8 +695,12 @@ strong subadditivity for a normalized three-site reduced state.
     \[
         \widehat P_sK_i^{\beta\alpha}\widehat P_t=0.
     \]
-    This is the separating-projector lemma in
-    \cite[Appendix~C.2, lines~1680--1737]{Cirac2016MPDO_arXiv}.
+    This is the copy-independent-weight specialization of the
+    separating-projector lemma in
+    \cite[Appendix~C.2, lines~1680--1737]{Cirac2016MPDO_arXiv}.  The
+    source-faithful standing-context implication from ZCL and canonical-form
+    data is not asserted here; it must first derive copy independence as in
+    lines~1646--1665.
 \end{theorem}
 
 \begin{proof}
