@@ -39,6 +39,8 @@ the positive semidefinite matrices.
 open scoped Matrix Kronecker ComplexOrder Matrix.Norms.L2Operator
 open Matrix
 
+namespace Matrix
+
 /-- The support inverse square root of a positive semidefinite left factor
 tensored with the maximally mixed right factor is the lifted support inverse
 square root multiplied by the square root of the right dimension.
@@ -46,7 +48,7 @@ square root multiplied by the square root of the right dimension.
 This is the functional-calculus normalization in the identity-summand
 specialization of Hayden--Jozsa--Petz--Winter,
 arXiv:quant-ph/0304007v2, Theorem 3, equation (8). -/
-theorem Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed
+theorem PosSemidef.supportInvSqrt_kronecker_maximallyMixed
     {m : Type*} [Fintype m] [DecidableEq m] {dC : ℕ} [NeZero dC]
     {σ : Matrix m m ℂ} (hσ : σ.PosSemidef) :
     (hσ.kronecker maximallyMixed_posDef.posSemidef).supportInvSqrt =
@@ -70,7 +72,7 @@ left tensor embedding.
 This is the tensor normalization needed to reduce the identity Weyl summand to
 the support Petz formula in Hayden--Jozsa--Petz--Winter,
 arXiv:quant-ph/0304007v2, Theorem 3, equation (8). -/
-theorem Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul
+theorem PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul
     {m : Type*} [Fintype m] [DecidableEq m] {dC : ℕ} [NeZero dC]
     {σ X : Matrix m m ℂ} (hσ : σ.PosSemidef) :
     let hbarσ := hσ.kronecker maximallyMixed_posDef.posSemidef
@@ -102,7 +104,7 @@ algebraic reduction of that hypothesis to the support formula in
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
 equation (8); it does not derive the hypothesis from scalar relative-entropy
 equality. -/
-theorem Matrix.partialTraceRightPetzMap_eq_of_weyl_identity_sandwich
+theorem partialTraceRightPetzMap_eq_of_weyl_identity_sandwich
     {dS dC : ℕ} [NeZero dC]
     {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
     (hσ : σ.PosSemidef)
@@ -120,6 +122,8 @@ theorem Matrix.partialTraceRightPetzMap_eq_of_weyl_identity_sandwich
   rw [← Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul
     (X := partialTraceRight ρ) (PosSemidef.partialTraceRight hσ)]
   exact hSandwich
+
+end Matrix
 
 /-- **Ancilla additivity on the singular support domain.** Let `ρ` and `σ` be
 positive semidefinite matrices with `ker σ ⊆ ker ρ`, and let `τ` be a positive
