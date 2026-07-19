@@ -76,18 +76,15 @@ ratios.
 
 This is the positive-square-root specialization of the singular-support
 functional-calculus step in Jenčová--Ruskai, arXiv:0903.2895v4, §4.2,
-lines 766--793, stated on its domain
-\(\ker B\subseteq\ker A\) and \(\ker D\subseteq\ker C\). Their preceding
-continuity argument, lines 717--720, is what supplies such resolvent equalities
-from equality of relative entropy; this theorem does not assert that equality
-for regularized pairs follows from equality of the original pair. -/
+lines 766--793. Their preceding equality argument is stated for supported pairs,
+but the functional-calculus implication here needs only positive semidefiniteness
+and the common resolvents. This theorem does not assert that equality for
+regularized pairs follows from equality of the original pair. -/
 theorem supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq
     {n : Type*} [Fintype n] [DecidableEq n]
     {A B C D : Matrix n n ℂ}
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     (hC : C.PosSemidef) (hD : D.PosSemidef)
-    (_hAB : ∀ v : n → ℂ, B.mulVec v = 0 → A.mulVec v = 0)
-    (_hCD : ∀ v : n → ℂ, D.mulVec v = 0 → C.mulVec v = 0)
     (hres : ∀ {t : ℝ}, 0 < t →
       (t • (1 : Matrix (n × n) (n × n) ℂ) +
           A ⊗ₖ (hB.supportInvSqrt * hB.supportInvSqrt)ᵀ)⁻¹ *ᵥ

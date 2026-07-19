@@ -375,9 +375,9 @@ definition and convexity argument directly to positive semidefinite pairs with
 $\ker B\subseteq\ker A$; see arXiv:0903.2895v4, lines 717--720.  Their singular
 equality argument then obtains the common relative-modular resolvent on the
 reference support and passes through functional calculus; see lines 766--793.
-Following the latter step, if two positive semidefinite supported pairs already
-have the same shifted generalized relative-modular resolvents on the vectorized
-identity, then
+Following the latter step, if two positive semidefinite pairs already have the
+same shifted generalized relative-modular resolvents on the vectorized identity,
+then
 \begin{align}
   \sqrt A\,B^{-1/2}_{\mathrm{supp}}
     =\sqrt C\,D^{-1/2}_{\mathrm{supp}}.
@@ -387,9 +387,11 @@ Here the generalized inverse is the square of the support inverse square root.
 \leanid{Matrix.supportRelativeModular_sqrt_mulVec_vec_one} and
 \leanid{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq} in
 \path{TNLean/Channel/Schwarz/SupportRelativeModular.lean}.}
-This proves only the resolvent-to-square-root passage.  It does not yet derive
-the common support resolvents from equality in data processing, and therefore
-does not yet prove the singular Petz recovery identity.
+No kernel hypothesis is needed for this final functional-calculus implication.
+The kernel inclusion belongs to the preceding source theorem that must derive
+the common support resolvents from equality in data processing.  That theorem
+is not yet formalized, and therefore neither is the singular Petz recovery
+identity.
 
 In particular, the affine regularizations used to prove the inequality cannot
 by themselves prove its equality case.  Equality at the limiting pair implies
