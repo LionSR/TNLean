@@ -870,10 +870,11 @@
     positive-length directed cycles, in the sense of
     \cite[Section~III]{Beigi2012Classification}.  Define
     \[
-        T_{k,h}=\tr(\eta_{k,h})\qquad(k,h\in C).
+        T_{k,h}=\operatorname{Re}\tr(\eta_{k,h})\qquad(k,h\in C).
     \]
-    For positive semidefinite neighboring operators,
-    $T_{k,h}>0$ is equivalent to $\eta_{k,h}\ne0$.
+    For positive semidefinite neighboring operators the trace is real, so
+    $T_{k,h}=\tr(\eta_{k,h})$, and $T_{k,h}>0$ is equivalent to
+    $\eta_{k,h}\ne0$.
 \end{definition}
 
 % **Local fix (cyclic-active restriction):** this theorem concerns the restricted
@@ -986,16 +987,9 @@
         (\widehat T^2)_{k,h}
         =\sum_{q\in C}\widehat T_{k,q}\widehat T_{q,h}
     \]
-    obtained from two successive fully traced neighboring operators.  In the
-    argument of
-    \cite[Appendix~C.2, lines~1606--1616]{Cirac2016MPDO_arXiv}, it enters after
-    applying the zero-correlation-length marginal replacement once more than
-    at line~1613 and tracing three boundary sites.  The conditional
-    two-boundary formula in
-    Theorem~\ref{thm:mpdo_eta_fourth_region_trace_formula} instead contains
-    $\widehat T$ itself.  The assertion therefore neither identifies these
-    two coefficients nor implies that the unreduced Beigi trace matrix is
-    primitive or rank one.
+    by matrix multiplication.  The assertion neither identifies
+    $\widehat T$ with $\widehat T^2$ nor implies that the unreduced Beigi trace
+    matrix is primitive or rank one.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1006,11 +1000,20 @@
     $\widehat T^2=\widehat T^3$ on the restricted indices.  By
     Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive},
     $\widehat T$ is primitive.  Its square is therefore a strictly positive
-    idempotent matrix and has rank one.  To use this factorization in the
-    fourth-region argument, apply the marginal replacement one further time,
-    so that the fully traced middle segment contributes $\widehat T^2$ rather
-    than $\widehat T$.
+    idempotent matrix and has rank one.
 \end{proof}
+
+% Tracked in https://github.com/LionSR/TNLean/issues/4445.
+\begin{remark}[Open three-boundary identification]
+    \notready
+    The remaining physical step is to apply the zero-correlation-length
+    marginal replacement one further time than at line~1613 of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, express the trace of three
+    boundary sites in the cyclic-active sector coordinates, and prove that
+    the fully traced middle segment contributes $\widehat T^2$.  This must be
+    done without identifying $\widehat T$ with $\widehat T^2$ or the
+    cyclic-active matrix with the unreduced Beigi matrix.
+\end{remark}
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}

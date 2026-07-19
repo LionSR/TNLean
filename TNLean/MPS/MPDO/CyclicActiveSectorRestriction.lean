@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
-import TNLean.MPS.MPDO.InverseMapActiveSectorZCL
+import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.Algebra.PerronFrobenius.Idempotent
-
+import TNLean.Algebra.TraceReindex
 /-!
 # Cyclic-active physical sectors
 
@@ -97,7 +97,11 @@ abbrev CyclicActiveSector (F : PhysicalSectorFactorization K) :=
 
 /-- The real trace matrix restricted to cyclic-active sectors.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1480--1482. -/
+Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1480--1482.
+
+**Local fix (cyclic-active restriction):** Unlike the source matrix, this
+matrix is indexed only by sectors on positive-length directed cycles.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable abbrev cyclicActiveSectorTraceMatrix
     (F : PhysicalSectorFactorization K) :
     Matrix F.CyclicActiveSector F.CyclicActiveSector ℝ :=
@@ -372,21 +376,11 @@ private theorem cyclicActiveLeftRestriction_neighboringOperator_posSemidef
   · exact hpos k h
   · exact Matrix.PosSemidef.zero
 
-private theorem trace_reindex_real
-    {I J : Type*} [Fintype I] [Fintype J]
-    (e : I ≃ J) (T : Matrix I I ℝ) :
-    Matrix.trace (Matrix.reindex e e T) = Matrix.trace T := by
-  classical
-  simpa [Matrix.trace, Matrix.reindex_apply] using
-    Fintype.sum_equiv e.symm _ _ (by intro; simp)
-
 /-- Source ZCL gives the square--cube and constant-trace-power relations for
 one positive normalization of the cyclic-active trace matrix.
-
 The auxiliary left restriction kills inactive target columns while preserving
 the physical-sector factorization and every retained entry.  Thus this result
 concerns the restricted trace matrix only, not the unreduced Beigi matrix.
-
 Source: arXiv:1606.00608, Appendix C.2, equations `Tkn` and `SALZCL`, lines
 1473--1497, used at Proposition `4to2`, lines 1606--1616.
 
@@ -440,14 +434,14 @@ theorem cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
         rw [hreindex_pow]
       _ = Matrix.trace ((lam⁻¹ • TG) ^ m) := by
         simpa only [e, TG, G] using
-          (trace_reindex_real
+          (Matrix.trace_reindex
             (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
             ((lam⁻¹ • (F.cyclicActiveLeftRestriction hK).activeSectorTraceMatrix
               F.cyclicActiveWeight) ^ m))
       _ = Matrix.trace (lam⁻¹ • TG) := htrace m hm
       _ = Matrix.trace (Matrix.reindex e e (lam⁻¹ • TG)) := by
         simpa only [e, TG, G] using
-          (trace_reindex_real
+          (Matrix.trace_reindex
             (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
             (lam⁻¹ • (F.cyclicActiveLeftRestriction hK).activeSectorTraceMatrix
               F.cyclicActiveWeight)).symm
@@ -680,62 +674,6 @@ theorem cyclicActiveSectorTraceMatrix_isPrimitive
       (F.cyclicActiveSectorTraceMatrix_pow_two_diag_pos hK hpos)
       (F.cyclicActiveSectorTraceMatrix_pow_three_diag_pos hK hpos)
 
-private theorem isPrimitive_smul_of_pos
-    {I : Type*} [Fintype I] [DecidableEq I]
-    {T : Matrix I I ℝ} (hT : Matrix.IsPrimitive T)
-    {c : ℝ} (hc : 0 < c) :
-    Matrix.IsPrimitive (c • T) := by
-  obtain ⟨m, hm, hpos⟩ := hT.exists_pos_pow
-  refine ⟨fun i j ↦ mul_nonneg hc.le (hT.nonneg i j), m, hm, ?_⟩
-  intro i j
-  rw [smul_pow, Matrix.smul_apply]
-  exact mul_pos (pow_pos hc m) (hpos i j)
-
-private theorem isPrimitive_reindex
-    {I J : Type*} [Fintype I] [Fintype J] [DecidableEq I] [DecidableEq J]
-    (e : I ≃ J) {T : Matrix I I ℝ} (hT : Matrix.IsPrimitive T) :
-    Matrix.IsPrimitive (Matrix.reindex e e T) := by
-  obtain ⟨m, hm, hpos⟩ := hT.exists_pos_pow
-  refine ⟨fun i j ↦ hT.nonneg (e.symm i) (e.symm j), m, hm, ?_⟩
-  intro i j
-  have hreindex_pow : Matrix.reindex e e (T ^ m) =
-      (Matrix.reindex e e T) ^ m := by
-    change (Matrix.reindexAlgEquiv ℝ ℝ e) (T ^ m) = _
-    rw [map_pow]
-    rfl
-  rw [← hreindex_pow]
-  exact hpos (e.symm i) (e.symm j)
-
-private theorem rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
-    {I : Type*} [Fintype I] [DecidableEq I] [Nonempty I]
-    {T : Matrix I I ℝ} (hprimitive : Matrix.IsPrimitive T)
-    (hpow : T ^ 2 = T ^ 3) :
-    (T ^ 2).rank = 1 := by
-  classical
-  let e : I ≃ Fin (Fintype.card I) := Fintype.equivFin I
-  let TF : Matrix (Fin (Fintype.card I)) (Fin (Fintype.card I)) ℝ :=
-    Matrix.reindex e e T
-  letI : NeZero (Fintype.card I) := ⟨Fintype.card_ne_zero⟩
-  have hprimitiveFin : Matrix.IsPrimitive TF := isPrimitive_reindex e hprimitive
-  have hpowFin : TF ^ 2 = TF ^ 3 := by
-    have hreindex_pow (m : ℕ) : Matrix.reindex e e (T ^ m) = TF ^ m := by
-      change (Matrix.reindexAlgEquiv ℝ ℝ e) (T ^ m) =
-        (Matrix.reindex e e T) ^ m
-      rw [map_pow]
-      rfl
-    rw [← hreindex_pow, ← hreindex_pow, hpow]
-  have hrank := hprimitiveFin.rank_pow_two_eq_one_of_pow_two_eq_pow_three hpowFin
-  calc
-    (T ^ 2).rank = (Matrix.reindex e e (T ^ 2)).rank :=
-      (Matrix.rank_reindex e e (T ^ 2)).symm
-    _ = (TF ^ 2).rank := by
-      congr 1
-      change (Matrix.reindexAlgEquiv ℝ ℝ e) (T ^ 2) =
-        (Matrix.reindex e e T) ^ 2
-      rw [map_pow]
-      rfl
-    _ = 1 := hrank
-
 /-- If the normalized cyclic-active trace matrix satisfies the source-ZCL
 square--cube relation, then its square has rank one.
 
@@ -753,8 +691,8 @@ theorem cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
     (F.cyclicActiveSectorTraceMatrix ^ 2).rank = 1 := by
   classical
   letI : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
-  exact rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
-    (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos) hpow
+  exact (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos)
+    |>.rank_pow_two_eq_one_of_pow_two_eq_pow_three hpow
 
 /-- A positive source normalization of the cyclic-active trace matrix has
 rank-one square whenever it satisfies the source-ZCL square--cube relation.
@@ -774,22 +712,19 @@ theorem normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
     ((lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2).rank = 1 := by
   classical
   letI : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
-  apply rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
-    (isPrimitive_smul_of_pos
-      (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos) (inv_pos.mpr hlam))
-  exact hpow
+  exact (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos)
+    |>.smul_of_pos (inv_pos.mpr hlam)
+    |>.rank_pow_two_eq_one_of_pow_two_eq_pow_three hpow
 
 /-- Source ZCL makes the normalized two-step trace coefficient on the
 cyclic-active sectors rank one.
 
-Writing `T k h = tr(eta k h)`, the entry of `T ^ 2` is the sum over two
-successive fully traced neighboring operators.  It is therefore the boundary
-coefficient obtained by applying the source-ZCL marginal replacement once
-more than at line 1613 and tracing three boundary sites.  The existing
-two-boundary formula contains `T`, not `T ^ 2`; identifying these expressions
-still requires that additional marginal-replacement argument.  This theorem
-applies only after deleting sectors absent from every nonzero cyclic product
-and makes no assertion about the unreduced Beigi trace matrix.
+Writing `T k h = Re (tr (eta k h))`, the entry of `T ^ 2` is the sum of the
+two-step products `T k q * T q h` over cyclic-active `q`.  Identifying this
+algebraic coefficient with a three-boundary physical trace still requires the
+additional marginal-replacement argument tracked in issue #4445.  This
+theorem applies only after deleting sectors absent from every nonzero cyclic
+product and makes no assertion about the unreduced Beigi trace matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497,
 and Proposition `4to2`, lines 1606--1616.

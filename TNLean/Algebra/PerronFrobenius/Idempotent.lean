@@ -97,28 +97,53 @@ theorem rank_eq_one_of_pos_of_mul_self_eq_self [Nonempty n]
     Matrix.toLin_eq_toLin']
   simpa only [f] using hrange
 
+/-- Multiplication by a positive scalar preserves primitivity. -/
+theorem IsPrimitive.smul_of_pos [DecidableEq n]
+    {T : Matrix n n ℝ} (hT : T.IsPrimitive)
+    {c : ℝ} (hc : 0 < c) : (c • T).IsPrimitive := by
+  obtain ⟨m, hm, hpos⟩ := hT.exists_pos_pow
+  refine ⟨fun i j ↦ mul_nonneg hc.le (hT.nonneg i j), m, hm, ?_⟩
+  intro i j
+  rw [smul_pow, Matrix.smul_apply]
+  exact mul_pos (pow_pos hc m) (hpos i j)
+
 /-- If a primitive nonnegative real matrix has equal second and third powers,
 then its square has rank one.
 
 This is the finite-dimensional Perron-projection lemma supporting the proposed
 argument at arXiv:1606.00608, Appendix C.2, line 1613; it is not itself a
-claim of that source. The assumption N ≥ 1 is necessary: for N = 0,
-primitivity is vacuous and the square has rank zero. -/
+claim of that source. Nonemptiness of the finite index type is necessary:
+primitivity is vacuous for the empty matrix, whose square has rank zero. -/
 theorem IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three
-    {N : ℕ} [NeZero N] {T : Matrix (Fin N) (Fin N) ℝ}
+    [DecidableEq n] [Nonempty n] {T : Matrix n n ℝ}
     (hT : T.IsPrimitive) (h : T ^ 2 = T ^ 3) :
     (T ^ 2).rank = 1 := by
   obtain ⟨m, hm, hpos⟩ := hT.exists_pos_pow
-  have htwom_pos (i j : Fin N) : 0 < (T ^ (m + m)) i j := by
+  have htwom_pos (i j : n) : 0 < (T ^ (m + m)) i j := by
     rw [pow_add, Matrix.mul_apply]
     exact Finset.sum_pos (fun k _ ↦ mul_pos (hpos i k) (hpos k j))
       Finset.univ_nonempty
-  have hsq_pos (i j : Fin N) : 0 < (T ^ 2) i j := by
-    rw [← pow_eq_pow_two_of_pow_two_eq_pow_three h (m + m) (by omega)]
+  have hstable : ∀ N, 2 ≤ N → T ^ N = T ^ 2 := by
+    have hmul : T * T = T * T * T := by
+      have htwo : T ^ 2 = T * T := by rw [pow_succ, pow_one]
+      have hthree : T ^ 3 = T * T * T := by rw [pow_succ, pow_succ, pow_one]
+      rw [htwo, hthree] at h
+      exact h
+    intro N hN
+    induction N, hN using Nat.le_induction with
+    | base => rfl
+    | succ k _ ih =>
+      rw [pow_succ, ih]
+      calc
+        T ^ 2 * T = T * T * T := by rw [pow_two]
+        _ = T * T := hmul.symm
+        _ = T ^ 2 := (pow_two T).symm
+  have hsq_pos (i j : n) : 0 < (T ^ 2) i j := by
+    rw [← hstable (m + m) (by omega)]
     exact htwom_pos i j
   have hsq_idem : T ^ 2 * T ^ 2 = T ^ 2 := by
     rw [← pow_add]
-    exact pow_eq_pow_two_of_pow_two_eq_pow_three h 4 (by omega)
+    exact hstable 4 (by omega)
   exact rank_eq_one_of_pos_of_mul_self_eq_self hsq_pos hsq_idem
 
 /-- If a primitive nonnegative real matrix has equal second and third powers,
