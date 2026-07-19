@@ -74,7 +74,7 @@ variable {L R : Type*} [Fintype L] [DecidableEq L]
   [Fintype R] [DecidableEq R]
 
 /-- If positive semidefinite matrices `ρ` and `σ` satisfy
-`ker σ ⊆ ker ρ`, then the completed Petz channel associated with `σ` agrees
+$\ker σ \subseteq \ker ρ$, then the completed Petz channel associated with `σ` agrees
 with its support formula when applied to `partialTraceRight ρ`.
 
 The support inclusion transfers to the two marginals, so the first marginal is
