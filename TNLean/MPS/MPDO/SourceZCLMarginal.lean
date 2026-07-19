@@ -23,6 +23,7 @@ at source line 1613 and does not construct a quantum Markov decomposition.
 
 * `MPOTensor.reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow`
 * `MPOTensor.reducedBlockState_succ_succ_eq_succ_of_isSourceZCL`
+* `MPOTensor.reducedBlockState_add_three_eq_succ_of_isSourceZCL`
 
 ## Reference
 
@@ -109,5 +110,38 @@ theorem reducedBlockState_succ_succ_eq_succ_of_isSourceZCL
     exact_mod_cast ne_of_gt hlam
   rw [htrace, hnum]
   field_simp
+
+/-- Under source zero correlation length, tracing three sites from length
+`L + 3` gives the same normalized `L`-site marginal as tracing one site from
+length `L + 1`.
+
+This is the iterated marginal replacement needed for the four-region argument:
+first apply the ZCL replacement while retaining `L + 1` sites, trace the last
+retained site, and then apply the ZCL replacement while retaining `L` sites.
+It makes no assertion that the neighboring trace matrix equals its square.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1606–1617. -/
+theorem reducedBlockState_add_three_eq_succ_of_isSourceZCL
+    (M : MPOTensor d D) (hZCL : IsSourceZCL M) (L : ℕ) :
+    M.reducedBlockState (L + 3) L (by omega) =
+      M.reducedBlockState (L + 1) L (by omega) := by
+  have hstep :
+      M.reducedBlockState (L + 3) (L + 1) (by omega) =
+        M.reducedBlockState (L + 2) (L + 1) (by omega) := by
+    simpa [Nat.add_assoc] using
+      reducedBlockState_succ_succ_eq_succ_of_isSourceZCL M hZCL (L + 1)
+  have htrace :
+      M.reducedBlockState (L + 3) L (by omega) =
+        M.reducedBlockState (L + 2) L (by omega) := by
+    ext u v
+    have hcollapse3 :=
+      collapse_last M (N := L + 3) (a := L) (b := 0) (c := 1) (by omega) u v
+    have hcollapse2 :=
+      collapse_last M (N := L + 2) (a := L) (b := 0) (c := 1) (by omega) u v
+    simp only [Nat.add_zero] at hcollapse3 hcollapse2
+    rw [← hcollapse3, ← hcollapse2]
+    exact Finset.sum_congr rfl fun y _ ↦ congr_fun (congr_fun hstep (Fin.append u y))
+      (Fin.append v y)
+  exact htrace.trans (reducedBlockState_succ_succ_eq_succ_of_isSourceZCL M hZCL L)
 
 end MPOTensor
