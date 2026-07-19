@@ -1570,9 +1570,13 @@ physical indices, as in
     \[
       QV_jQ=V_j.
     \]
-    Since $Q$ is a projection, this implies
-    $QV_j=V_j=V_jQ$, and therefore every positive-length product of the
-    $V_j$ is supported on $Q$.  The product-span hypothesis then gives
+    Since $Q$ is a projection, this implies $QV_j=V_j=V_jQ$.  By induction,
+    \[
+      Q\cdot V_{j_1}\cdots V_{j_k}\cdot Q
+        =V_{j_1}\cdots V_{j_k}
+      \qquad (k\geq1).
+    \]
+    The product-span hypothesis then gives
     $Q\mathbf 1Q=\mathbf 1$, so $Q=\mathbf 1$.  Thus $\rho$ is positive
     definite, and the construction of $P$ gives $F(\rho)=\rho$.
 \end{proof}
