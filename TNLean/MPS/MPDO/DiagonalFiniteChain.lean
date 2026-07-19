@@ -231,8 +231,8 @@ theorem diagonalFiniteChain_classicalMutualInformation_le_two_log [NeZero D]
   · exact diagonalCutRealMatrix_map_ofReal_of_posSemidef M L R hpos
 
 /-- **Classical estimate for a diagonal MPDO.** A globally diagonal MPDO with
-positive trace at length `L + R` has classical mutual information of its
-normalized diagonal coefficients at most `2 * log D`.
+positive trace at length $L+R$ has classical mutual information of its
+normalized diagonal coefficients at most $2\log D$.
 
 Global MPDO positivity supplies the fixed-length positive-semidefinite
 hypothesis.  The total mass $Z$ equals the real part of the finite-chain trace,
