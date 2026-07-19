@@ -1058,6 +1058,51 @@ specialization of that Appendix~D definition.
     Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
 \end{proof}
 
+\begin{theorem}[Nearest-neighbor parent ground spaces for a single normal RFP tensor]%
+    \label{thm:rfp_single_normal_nncph_ground_spaces}
+    \lean{MPSTensor.rfp_hasParentHamiltonianGroundSpaceSpanning_single}
+    \lean{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_single}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:nt_cpsv,
+        def:parent_hamiltonian_ground_space_spanning,
+        def:has_nncph_ground_spaces}
+    Let $A$ have positive bond dimension and be a normal renormalization
+    fixed-point tensor in the sense of \cite{Cirac2016MPDO_arXiv}. If the
+    canonical-form tensor consists of the single normal sector $A$, then for
+    every $N>2$,
+    \[
+        \ker H_2^{(N)}(A)=\spn\bigl\{V^{(N)}(A)\bigr\}.
+    \]
+    Its translated two-site interactions also commute and annihilate
+    $V^{(N)}(A)$. Hence the singleton family satisfies the all-chain
+    nearest-neighbor commuting parent-Hamiltonian ground-space condition.
+
+    This statement is restricted to one normal sector. It does not assert the
+    corresponding result for canonical-form tensors with several sectors or
+    repeated copies.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_eventually_injective, thm:rfp_nt_injective,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        thm:chain_ground_space_eq_mpv_blk,
+        lem:bnt_span_eq_sum_mpv_submodules,
+        thm:rfp_implies_nncph_ground_state}
+    Spectral normality gives eventual block injectivity. The fixed-point
+    equation then implies that the one-site matrices already span the full
+    matrix algebra. Thus $A$ is injective. For $N>2$, the finite-volume kernel
+    identity and injective periodic-chain theorem give
+    \[
+        \ker H_2^{(N)}(A)
+        =\mathcal G_{N,2}(A)
+        =\spn\bigl\{V^{(N)}(A)\bigr\}.
+    \]
+    The span of the matrix product vectors of the singleton family is the last
+    space in this equality. Theorem~\ref{thm:rfp_implies_nncph_ground_state}
+    supplies commutation and zero energy on every chain of length greater than
+    two.
+\end{proof}
+
 \begin{theorem}[Cyclic trace expansion for a closed MPS chain]\label{thm:trace_eval_word_eq_sum_cyclic}
     \lean{MPSTensor.trace_evalWord_eq_sum_cyclic}
     \leanok
