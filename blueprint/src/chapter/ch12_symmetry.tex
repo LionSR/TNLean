@@ -27,6 +27,27 @@ enter the string-order criteria.
     When the matrix is a unitary $u$, the rotation is written $A_u$.
 \end{definition}
 
+\begin{lemma}[Matrix product vector under physical rotation]
+    \label{lem:mpv_rotate_physical}
+    \lean{MPSTensor.mpv_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:mpv}
+    For a length-$N$ physical configuration
+    $s=(s_0,\ldots,s_{N-1})$, physical rotation satisfies
+    \[
+        \operatorname{tr}((A_M)^{s_0}\cdots(A_M)^{s_{N-1}})
+        =\sum_{t\in\{0,\ldots,d-1\}^N}
+          \left(\prod_{n=0}^{N-1}M_{s_n,t_n}\right)
+          \operatorname{tr}(A^{t_0}\cdots A^{t_{N-1}}).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute $(A_M)^{s_n}=\sum_{t_n}M_{s_n,t_n}A^{t_n}$ at each
+    site, distribute the finite sums through the ordered matrix product, and
+    use linearity of the trace.
+\end{proof}
+
 \begin{corollary}[Periodic symmetry yields gauge equivalence up to a root of unity]%
     \label{cor:symmetry_periodic_assembly}
     \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
