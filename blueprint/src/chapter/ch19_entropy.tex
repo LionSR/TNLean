@@ -2826,9 +2826,14 @@ Theorem~\ref{thm:trace_norm_abs}.
       f_t(S)x=t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x.
     \]
     The hypothesis therefore gives $f_t(S)x=f_t(T)x$ for every $t>0$.
-    Applying a fixed matrix $Q$, when present, commutes with this finite-
-    dimensional integral.  Integration gives the asserted equality of the
-    positive square roots on $x$.
+    Since left multiplication by $Q$ is a bounded linear map on
+    $\mathbb{M}_n(\mathbb{C})$,
+    \[
+      Q\int_0^\infty f_t(S)\,d\mu(t)
+        =\int_0^\infty Qf_t(S)\,d\mu(t),
+    \]
+    and similarly for $T$.  Integration therefore gives
+    $Q\sqrt S\,x=Q\sqrt T\,x$.
 
     For the second assertion, factor
     \[
@@ -2912,9 +2917,20 @@ Theorem~\ref{thm:trace_norm_abs}.
       =\operatorname{vec}\!\left(
         (\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
     \]
-    Right multiplication by $P_B$ is a fixed linear transformation on the
-    vectorized matrix space.  Apply the projected common-resolvent lemma to this
-    identity and its analogue for $C,D$, then use injectivity of vectorization.
+    Setting $Q=\mathbf 1\otimes P_B^{\mathsf T}$ and applying the common-
+    resolvent lemma (Lemma~\ref{lem:positive_sqrt_from_common_resolvents}) gives
+    \[
+      \operatorname{vec}\!\left(
+        (\sqrt A\,B^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right)
+      =\operatorname{vec}\!\left(
+        (\sqrt C\,D^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right).
+    \]
+    Since
+    \[
+      \operatorname{vec}(X^{\mathsf T})
+        =\operatorname{vec}(Y^{\mathsf T})\quad\Longrightarrow\quad X=Y,
+    \]
+    injectivity of vectorization gives the conclusion.
 \end{proof}
 
 \begin{theorem}[Positive-definite saturation gives the identity Weyl sandwich]
