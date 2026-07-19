@@ -54,6 +54,8 @@
       activeSectorTraceMatrix_not_rankOne}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       tensor_refutes_printed_sal_zcl_rank_one_inference}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      rectangular_remainder_eq_mul_sub_sq}
     \leanok
     \uses{def:is_sal, def:mpo_source_zcl,
       thm:mpdo_all_cut_markov_implies_sal,
@@ -77,19 +79,35 @@
 \begin{proof}
     \leanok
     The four physical sectors are one-dimensional.  Their cyclic transition
-    law is doubly stochastic, and conditioning on the middle physical label
-    gives a four-sector quantum-Markov decomposition at every admissible cut;
-    hence the tensor satisfies the strong area law.  Its physical-trace
+    law is doubly stochastic.  After tracing one site, conditioning on the
+    middle physical label gives, at every admissible cut,
+    \[
+      \rho_{ABC}
+      =\bigoplus_{k=0}^{3}\frac14\,
+        \rho^{L}_{A,k}\otimes\rho^{R}_{k,C}.
+    \]
+    Thus the reduced state has a four-sector quantum-Markov decomposition and
+    the tensor satisfies the strong area law.  Its physical-trace
     transfer is the idempotent matrix \(LQ\), so it has source zero correlation
     length.  The explicit Hayashi decomposition and inverse map recover the
     displayed tensors \(L,Q\).  The active trace matrix is primitive and has
-    trace one, but direct multiplication gives \(T^2\ne T\).  Any outer product
-    of trace one is idempotent, so \(T\) has no rank-one factorization.
+    trace one, but direct multiplication gives \(T^2\ne T\).  If
+    \(T=ab^{\mathsf T}\), then
+    \[
+      T^2=a(b^{\mathsf T}a)b^{\mathsf T}
+         =\left(\sum_k a_kb_k\right)T=T,
+    \]
+    where the last equality uses \(\tr(T)=1\).  Hence \(T\) has no rank-one
+    factorization.
 \end{proof}
 
 \begin{theorem}[Inverse-map factorization with a nonzero rectangular remainder]
     \label{thm:mpdo_inverse_map_nonzero_rectangular_remainder}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.normalizedFourSiteTail_tensor}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.crossSectorMatrix}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.sectorMatrix_eq_crossSectorMatrix}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.crossSectorMatrix_mul}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.trace_crossSectorMatrix_mul_transfer}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.threeSiteState}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.hayashiData}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.sectorTensorL_hayashiData}

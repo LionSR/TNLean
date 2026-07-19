@@ -170,28 +170,10 @@ private lemma sum_pathWeight_to (n : ℕ) (k : Fin 4) :
                     rw [transition_column_sum, one_mul]
             _ = 1 := ih
 
-private noncomputable def crossSectorMatrix (i j : Fin 4) :
-    Matrix (Fin 2) (Fin 2) ℂ :=
-  Matrix.vecMulVec (fun beta => leftPairing beta i) (fun alpha => rightPairing j alpha)
-
-private lemma sectorMatrix_eq_crossSectorMatrix (i : Fin 4) :
-    sectorMatrix i = crossSectorMatrix i i := rfl
-
-private lemma crossSectorMatrix_mul (i j k h : Fin 4) :
-    crossSectorMatrix i j * crossSectorMatrix k h =
-      (transition j k : ℂ) • crossSectorMatrix i h := by
-  rw [← pairing_eq_transition]
-  ext x y
-  fin_cases x <;> fin_cases y <;>
-    simp [crossSectorMatrix, Matrix.vecMulVec_apply, Matrix.mul_apply,
-      Fin.sum_univ_two] <;> ring
-
 private lemma trace_crossSectorMatrix_mul_loop (i k : Fin 4) :
     Matrix.trace (crossSectorMatrix i k * physTraceTransfer tensor) = 1 / 4 := by
-  rw [physTraceTransfer_tensor, leftPairing_mul_rightPairing]
-  fin_cases i <;> fin_cases k <;>
-    norm_num [crossSectorMatrix, leftPairing, rightPairing, Matrix.trace,
-      Matrix.mul_apply, Fin.sum_univ_two]
+  rw [physTraceTransfer_tensor]
+  exact trace_crossSectorMatrix_mul_transfer i k
 
 private lemma trace_crossSectorMatrix (i k : Fin 4) :
     Matrix.trace (crossSectorMatrix i k) = transition k i := by
@@ -212,7 +194,7 @@ private lemma evalWord_same_eq (i : Fin 4) (w : List (Fin 4)) :
       simp [evalWord, tensor, sectorMatrix_eq_crossSectorMatrix, lastFrom]
   | cons j w ih =>
       rw [evalWord_cons, tensor, if_pos rfl, sectorMatrix_eq_crossSectorMatrix,
-        ih j, Matrix.mul_smul, crossSectorMatrix_mul]
+        ih j, Matrix.mul_smul, crossSectorMatrix_mul, pairing_eq_transition]
       simp only [pathWeight_cons_cons, lastFrom, smul_smul]
       push_cast
       ring_nf

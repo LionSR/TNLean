@@ -224,14 +224,26 @@ noncomputable def threeSiteState :
       (rightPairing * leftPairing) x.2.1 x.2.2
     else 0
 
-private noncomputable def crossSectorMatrix (i j : Fin 4) :
+/-- The rank-one open sector matrix with left physical label `i` and right
+physical label `j`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1413--1455. -/
+noncomputable def crossSectorMatrix (i j : Fin 4) :
     Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.vecMulVec (fun beta => leftPairing beta i) (fun alpha => rightPairing j alpha)
 
-private lemma sectorMatrix_eq_crossSectorMatrix (i : Fin 4) :
+/-- A closed scalar sector is the open sector matrix with equal endpoint
+labels.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1413--1455. -/
+lemma sectorMatrix_eq_crossSectorMatrix (i : Fin 4) :
     sectorMatrix i = crossSectorMatrix i i := rfl
 
-private lemma crossSectorMatrix_mul (i j k h : Fin 4) :
+/-- Concatenating two open sector matrices contributes the neighboring
+transition weight at their common boundary.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1413--1455. -/
+lemma crossSectorMatrix_mul (i j k h : Fin 4) :
     crossSectorMatrix i j * crossSectorMatrix k h =
       (rightPairing * leftPairing) j k • crossSectorMatrix i h := by
   ext x y
@@ -239,7 +251,11 @@ private lemma crossSectorMatrix_mul (i j k h : Fin 4) :
     simp [crossSectorMatrix, Matrix.vecMulVec_apply, Matrix.mul_apply,
       Fin.sum_univ_two] <;> ring
 
-private lemma trace_crossSectorMatrix_mul_transfer (i k : Fin 4) :
+/-- Closing an open sector matrix against the normalized physical-trace
+transfer gives the uniform sector weight `1 / 4`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1413--1455. -/
+lemma trace_crossSectorMatrix_mul_transfer (i k : Fin 4) :
     Matrix.trace (crossSectorMatrix i k * (leftPairing * rightPairing)) = 1 / 4 := by
   fin_cases i <;> fin_cases k <;>
     norm_num [crossSectorMatrix, leftPairing, rightPairing, Matrix.trace,
