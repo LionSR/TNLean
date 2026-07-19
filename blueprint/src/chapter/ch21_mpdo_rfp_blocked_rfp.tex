@@ -1550,11 +1550,12 @@ physical indices, as in
     \leanok
     Let $F:M_D(\mathbb C)\to M_D(\mathbb C)$ be positive and trace
     nonincreasing.  Suppose that a family $(V_j)_{j\in J}$ consists of fixed
-    points of $F$ and that, for some $L>0$, the products
+    points of $F$ and that, for some $L>0$, the identity belongs to the
+    linear span of the products
     \[
       V_{j_1}\cdots V_{j_L}
     \]
-    span $M_D(\mathbb C)$.  Then $F$ has a positive-definite fixed point.
+    in $M_D(\mathbb C)$.  Then $F$ has a positive-definite fixed point.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1566,7 +1567,7 @@ physical indices, as in
     \]
     for every $j$.  Since $Q$ is a projection, this implies
     $QV_j=V_j=V_jQ$, and therefore every positive-length product of the
-    $V_j$ is supported on $Q$.  The spanning hypothesis then gives
+    $V_j$ is supported on $Q$.  The product-span hypothesis then gives
     $Q\mathbf 1Q=\mathbf 1$, so $Q=\mathbf 1$.  Thus $\rho$ is positive
     definite, and the construction of $P$ gives $F(\rho)=\rho$.
 \end{proof}
