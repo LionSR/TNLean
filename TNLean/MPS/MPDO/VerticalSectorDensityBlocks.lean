@@ -12,9 +12,9 @@ import TNLean.MPS.MPDO.VerticalSectorGeneration
 Wolf's density-block description identifies the fixed points of a positive
 trace-preserving map with blocks of the form $\sigma_k\otimes X_k$.  Products
 of $L$ fixed points therefore have blocks
-$\sigma_k^L\otimes(X_{1,k}\cdots X_{L,k})$.  This file turns that observation
-into the dimension bound used in the proof of the general MPDO
-renormalization fixed-point theorem.
+$\sigma_k^L\otimes(X_{1,k}\cdots X_{L,k})$.  The main result bounds the
+dimension of their span by the dimension of the fixed-point space, through
+the density-block parametrization of Wolf's Theorem 6.14.
 
 ## References
 
