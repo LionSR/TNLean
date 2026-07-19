@@ -336,6 +336,9 @@ SOURCE = r"""
 \end{tenkz}
 \begin{tenkzlattice}[rows=1, cols=1, west=trace]
 \end{tenkzlattice}
+\begin{tenkz}[rows={wire}, tensor style=box]
+  \tn[west at={2}, east at=none]{A}
+\end{tenkz}
 \end{document}
 """
 
@@ -1136,6 +1139,22 @@ def main() -> int:
     )
     if "side-deferred" not in parsed_warnings[74]:
         raise AssertionError("lattice side-policy warning was dropped by the audit parser")
+    invalid_one_row_virtual = pictures[75]
+    require(
+        invalid_one_row_virtual,
+        "faceports|picture=75|cell=1-1|face=west|arity=0|at=none",
+        "out-of-range one-row west face was not normalized to empty",
+    )
+    require(
+        invalid_one_row_virtual,
+        "faceports|picture=75|cell=1-1|face=east|arity=0|at=none",
+        "explicitly empty one-row east face was not preserved",
+    )
+    require(
+        invalid_one_row_virtual,
+        "boundary|picture=75|virtual-west=0|virtual-east=0|physical-up=0|physical-down=0",
+        "empty one-row virtual faces survived boundary accounting",
+    )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 

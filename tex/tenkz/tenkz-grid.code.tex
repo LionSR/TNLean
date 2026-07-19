@@ -3928,10 +3928,11 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
   }
 
 % Does the virtual face of the cell at (row, col) actually present a port
-% in that row?  Ordinary one-row cells return true.  Fusion bars and tall
-% wires=k glyphs resolve their base declaration, then test center, rows,
-% or the explicit sparse list through \tenkz_face_has_slot:nnnN.  Boundary
-% drawing, bond pairing, and their event counts all consult this predicate.
+% in that row?  Every ordinary glyph, including wires=1, resolves its face
+% declaration and tests center, rows, or the explicit sparse list through
+% \tenkz_face_has_slot:nnnN.  Fusion bars use the analogous span-aware path.
+% Boundary drawing, bond pairing, and their event counts all consult this
+% predicate.
 \int_new:N \l__tenkz_fuseport_int
 \tl_new:N \l__tenkz_virtualbase_tl
 \cs_new_protected:Npn \tenkz_cell_virtual_row_port:nnnN #1#2#3#4
@@ -3988,16 +3989,13 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
               {\int_use:N\l__tenkz_fusebase_int-\l__tenkz_virtualbase_tl}
               \l_tmpb_tl
             \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-            \int_compare:nNnT {\l__tenkz_cwires_int} > {1}
-              {
-                \tenkz_tall_resolve_combined:
-                \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
-                \int_set:Nn \l__tenkz_fuseport_int
-                  { #1 - \l__tenkz_fusebase_int + 1 }
-                \exp_args:NV \tenkz_face_has_slot:nnnN
-                  \l__tenkz_faceports_tl
-                  {\l__tenkz_cwires_int}{\l__tenkz_fuseport_int} #4
-              }
+            \tenkz_tall_resolve_combined:
+            \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
+            \int_set:Nn \l__tenkz_fuseport_int
+              { #1 - \l__tenkz_fusebase_int + 1 }
+            \exp_args:NV \tenkz_face_has_slot:nnnN
+              \l__tenkz_faceports_tl
+              {\l__tenkz_cwires_int}{\l__tenkz_fuseport_int} #4
           }
       }
   }
