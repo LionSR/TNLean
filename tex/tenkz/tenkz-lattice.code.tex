@@ -404,18 +404,21 @@
         {none}  { \tenkzl_side_word:nn {#1} {none} }
         {trace} { \msg_warning:nnnn {tenkz}{lattice-side-deferred}
                     {#1} {trace}
-                  \tenkz@event{warning|code=side-deferred|side=#1|policy=trace}
+                  \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+                    code=side-deferred|side=#1|policy=trace}
                   \tenkzl_side_word:nn {#1} {none} }
         {cup}   { \msg_warning:nnnn {tenkz}{lattice-side-deferred}
                     {#1} {cup}
-                  \tenkz@event{warning|code=side-deferred|side=#1|policy=cup}
+                  \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+                    code=side-deferred|side=#1|policy=cup}
                   \tenkzl_side_word:nn {#1} {none} }
       }
       {
         \tl_if_in:nnTF {#2} {cup=}
           {
             \msg_warning:nnnn {tenkz}{lattice-side-deferred} {#1} {cup}
-            \tenkz@event{warning|code=side-deferred|side=#1|policy=cup}
+            \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+              code=side-deferred|side=#1|policy=cup}
             \tenkzl_side_word:nn {#1} {none}
           }
           { \msg_error:nnne {tenkz}{lattice-side-policy}
@@ -469,7 +472,8 @@
         \str_case:nnF {##1} { {ket}{} {op}{} {bra}{} }
           {
             \msg_warning:nnn { tenkz } { sheet-role } {##1}
-            \tenkz@event{warning|code=sheet-role|role=##1}
+            \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+              code=sheet-role|role=##1}
           }
       }
     \seq_set_eq:NN \l__tenkzl_roles_seq \l__tenkzl_parts_seq
@@ -543,7 +547,8 @@
         \msg_warning:nnee { tenkz } { plane-rise-low } {#1}
           { \fp_eval:n
               { round( \tenkz@r@physleg / \tenkz@r@latticepitch , 3 ) } }
-        \tenkz@event{warning|code=plane-rise-low|rise=#1}
+        \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+          code=plane-rise-low|rise=#1}
       }
   }
 % set the per-picture slant ratio and guard the (0.30, 0.65) band
@@ -555,7 +560,8 @@
       { \fp_compare_p:nNn {#1} < {0.65} }
       {
         \msg_warning:nnn { tenkz } { plane-slant-band } {#1}
-        \tenkz@event{warning|code=plane-slant-band|slant=#1}
+        \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+          code=plane-slant-band|slant=#1}
       }
   }
 % tall-window guard, run at render time by both plane environments: a
@@ -580,8 +586,9 @@
               { \fp_eval:n
                   { ( \l__tenkzl_nrows_int - 1 ) * \tenkz@r@planeslant } }
               { \fp_eval:n { 0.5 * ( \l__tenkzl_ncols_int - 1 ) } }
-            \tenkz@event{warning|code=plane-tall-window|rows=\int_use:N
-              \l__tenkzl_nrows_int|cols=\int_use:N \l__tenkzl_ncols_int}
+            \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+              code=plane-tall-window|rows=\int_use:N \l__tenkzl_nrows_int|%
+              cols=\int_use:N \l__tenkzl_ncols_int}
           }
       }
   }
@@ -879,7 +886,8 @@
           { \int_use:N \l__tenkzl_gdr_int }
           { \int_use:N \l__tenkzl_gdc_int }
           { \dim_to_decimal_in_unit:nn { \l__tenkzl_y_dim } { 1mm } }
-        \tenkz@event{warning|code=sheet-coincide|dist=%
+        \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+          code=sheet-coincide|dist=%
           \dim_to_decimal_in_unit:nn { \l__tenkzl_x_dim } { 1mm }mm|dr=%
           \int_use:N \l__tenkzl_gdr_int|dc=\int_use:N \l__tenkzl_gdc_int}
       }
@@ -977,8 +985,9 @@
                       { \fp_eval:n
                           { abs( \l__tenkzl_ayy_tl )
                             * ( \l__tenkzl_nrows_int - 1 ) } }
-                    \tenkz@event{warning|code=planes-interleave|sep=\tl_use:N
-                      \l__tenkzl_sheetsep_tl}
+                    \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+                      code=planes-interleave|sep=\tl_use:N
+                        \l__tenkzl_sheetsep_tl}
                   }
               }
           }
@@ -1290,6 +1299,10 @@
   {
     \group_begin:
     \tenkzl_reset:
+    % Options and body commands may themselves emit guarded warnings.
+    % Assign the picture before either is read, so every event belongs to
+    % the same lattice picture and the picture header remains first.
+    \tenkz@beginpicture{lattice}
     #1
     \tl_if_empty:nF {#2} { \pgfqkeys{/tenkz/lattice}{#2} }
     % the option list has landed: sheets= and the default-sheet
@@ -1297,7 +1310,6 @@
     % body's recording commands and the draw passes consume it
     \tenkzl_sync_cs:
     #3
-    \tenkz@beginpicture{lattice}
     % header first: rows/cols bound the cell universe that the payload
     % events (region/edge/site below) index into -- the audit rebuilds
     % region set-algebra from these, so it needs the universe up front
@@ -2259,8 +2271,9 @@
             \msg_warning:nnee { tenkz } { interface-range }
               { \seq_item:Nn \l__tenkzl_parts_seq {3} }
               { \int_eval:n { \l__tenkzl_sheets_int - 2 } }
-            \tenkz@event{warning|code=interface-range|interface=\seq_item:Nn
-              \l__tenkzl_parts_seq {3}}
+            \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+              code=interface-range|interface=\seq_item:Nn
+                \l__tenkzl_parts_seq {3}}
           }
       }
   }

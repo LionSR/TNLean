@@ -248,7 +248,9 @@ whole language.
   \qritem{dot, box, pill, mpo}{glyph override}
   \qritem{wide=k}{span k columns}
   \qritem{wires=k}{span and terminate k wire rows}
-  \qritem{legs at=\{1,2\}}{physical legs at chosen spanned columns}
+  \qritem{legs at=\{1,2\}}{compatibility alias for both physical faces}
+  \qritem{up at=, down at=}{face ports: center or span-local columns}
+  \qritem{west at=, east at=}{virtual face ports: center or row slots}
   \qritem{tri=l|r}{canonical isometry triangle}
   \qritem{up=\{$i$\}, down=\{$j$\}}{physical-leg labels}
   \qritem{label pos=, label shift=}{atom-label placement}
@@ -294,6 +296,8 @@ whole language.
     event, beside the PDF}
   \qritem{boundary|virtual-west=..|..}{the signature: two sides of an
     equation must log matching lines}
+  \qritem{faceports|face=..|arity=..}{the declared arity of one face}
+  \qritem{pairleg|upper=..|lower=..}{one event per physical contraction}
 \end{quickrefcard}
 
 \end{document}

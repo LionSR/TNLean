@@ -56,19 +56,21 @@ B7:
 %   = (B-window) V, with V : C^{D_O} x C^{D_A} -> C^{D_B} fusing the two
 % bond spaces and B^i = sum_j V (O^{i j} (x) A^j) the fused site.  LHS:
 % V's single combined leg is the open west index; the east O/A pair stays
-% open.  RHS: the fused-bond B word; the bond-SPLITTING glyph (V at the
-% east end of a one-row word) is a tracked Phase-1 primitive, so V closes
-% the equation as a symbol here.
+% open.  RHS: the fused-bond B word meets V's centred west port, while the
+% east face presents the separate O/A pair.
 \[
   \begin{tenkz}[rows={op, ket}]
-    \tnfuse[span=2]{V} & \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} \\
+    \tnfuse[span=2, west at=center, east at={1,2}]{V} &
+    \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} \\
                        & \tn{A}                                & \tndots & \tn{A}
   \end{tenkz}
   \;=\;
-  \begin{tenkz}[physical=up]
-    \tn[box, up=$i_1$]{B}\tnspan[brace above]{3}{n} & \tndots & \tn[box, up=$i_n$]{B}
+  \begin{tenkz}[rows={ket:fused:nopair, wire:west none}]
+    \tn[box, up=$i_1$]{B}\tnspan[brace above]{3}{n} & \tndots &
+    \tn[box, up=$i_n$]{B} &
+    \tnfuse[span=2, west at=center, east at={1,2}]{V}\\
+    & & &
   \end{tenkz}
-  \,V
 \]
 
 % E_A(X) = sum_i A^i X (A^i)^dagger: the sum index i is explicit, so no

@@ -30,6 +30,8 @@ pdftocairo -png -r 200 -singlefile <file>.pdf <file>
 
 Audit the event stream after a compile: `scripts/tenkz_audit.py` over the
 produced `.tnlog`. `scripts/tenkz_lint.py` checks source conventions.
+The asymmetric-port regression is `python3 scripts/test_tenkz_face_ports.py`;
+it checks face arities and contraction multiplicities, not only compilation.
 
 ## expl3 and pgf pitfalls that have each shipped a bug here
 
