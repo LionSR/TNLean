@@ -992,17 +992,17 @@
     \lean{Entropy.negMulLog_sum_le_log_card_support}
     \leanok
     Let $p=(p_z)_{z\in Z}$ be a probability distribution on a finite set $Z$.
-    Then
+    Define $h(t)=-t\log t$ for $t>0$ and $h(0)=0$.  Then
     \begin{align}
-      \sum_{z\in Z}\operatorname{negMulLog}(p_z)
+      \sum_{z\in Z}h(p_z)
       \leq
       \log\left\lvert\{z\in Z:p_z\neq0\}\right\rvert.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    Jensen's inequality for the concave function
-    $t\mapsto\operatorname{negMulLog}(t)$ is applied to the nonzero values of
-    $p$ with uniform weights.  Zero values contribute nothing to the entropy.
+    Jensen's inequality for the concave function $h$ is applied to the nonzero
+    values of $p$ with uniform weights.  Zero values contribute nothing to the
+    entropy.
 \end{proof}
 
 \begin{theorem}[Classical mutual information is bounded by ordinary rank]
@@ -1025,14 +1025,14 @@
     have coefficients of both signs.  Rescaling each row by
     $1+\varepsilon\beta_x$ gives two endpoint distributions: each preserves
     every column marginal, removes at least one row, and has no larger rank.
-    Write $m=\min_x\beta_x<0<M=\max_x\beta_x$ and
+    Write $h(t)=-t\log t$ for $t>0$, with $h(0)=0$, and put
+    $m=\min_x\beta_x<0<M=\max_x\beta_x$.  Then
     \begin{align}
       I(X:Y)_{P^{(\varepsilon)}}
       &=I(X:Y)_P+\varepsilon S(\beta),\\
       S(\beta)
       &=\sum_x\beta_x\left(
-        \operatorname{negMulLog}(p_x)
-        -\sum_y\operatorname{negMulLog}(P_{x,y})
+        h(p_x)-\sum_y h(P_{x,y})
       \right).
     \end{align}
     If $S(\beta)\geq0$, choose $\varepsilon=-m^{-1}\geq0$; otherwise choose
