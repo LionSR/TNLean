@@ -10,10 +10,11 @@ import TNLean.Channel.FixedPoint.FullSupportBlockRetraction
 
 Suppose that a positive trace-preserving map has a positive-definite fixed
 point and that its trace adjoint satisfies the Schwarz inequality.  The
-adjoint Cesàro projection has the weighted partial-trace form proved in
-`FullSupportBlockRetraction`.  Taking its adjoint with respect to the trace
-pairing gives the density-block formula for the original Cesàro projection
-and identifies its range with the fixed points of the original map.
+adjoint Cesàro projection has the weighted partial-trace form supplied by the
+preceding full-support fixed-point decomposition.  Taking its adjoint with
+respect to the trace pairing gives the density-block formula for the original
+Cesàro projection and identifies its range with the fixed points of the
+original map.
 
 TNLean indexes a summand by the product of the multiplicity index and the
 matrix-factor index.  Thus the left partial trace is over the multiplicity
