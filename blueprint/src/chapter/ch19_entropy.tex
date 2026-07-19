@@ -1355,8 +1355,16 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
-    This follows from the spectral definition, since the reciprocal of every
-    positive square root is nonnegative and the zero eigenspace is sent to zero.
+    On the nonnegative spectrum of $\rho$, the defining function satisfies
+    \[
+      f(x)=
+      \begin{cases}
+        x^{-1/2}, & x>0,\\
+        0, & x=0
+      \end{cases}
+      \geq 0 \qquad (x\geq 0).
+    \]
+    The spectral functional calculus therefore gives $f(\rho)\geq 0$.
 \end{proof}
 
 \begin{lemma}[Support inverse square root of a positive-definite matrix]
@@ -2866,9 +2874,36 @@ Theorem~\ref{thm:trace_norm_abs}.
     with $A=P^{\mathsf T}$, $B=\mathbf 1$, and $X=M^{\mathsf T}$.
 \end{proof}
 
+\begin{lemma}[Support relative-modular square-root evaluation]
+    \label{lem:support_relative_modular_sqrt_evaluation}
+    \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $A$ and $B$ be positive semidefinite, and write
+    $B^+=(B^{-1/2}_{\mathrm{supp}})^2$.  Then
+    \[
+      \sqrt{A\otimes(B^+)^{\mathsf T}}\,
+        \operatorname{vec}(\mathbf 1^{\mathsf T})
+      =\operatorname{vec}\!\left(
+        (\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_positive_semidefinite}
+    The support inverse square root is positive semidefinite, and
+    \[
+      \left(\sqrt A\otimes
+        (B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right)^2
+      =A\otimes(B^+)^{\mathsf T}.
+    \]
+    Uniqueness of the positive square root gives the corresponding Kronecker
+    factorization.  Applying the Kronecker vectorization identity to
+    $\operatorname{vec}(\mathbf 1^{\mathsf T})$ gives the stated equation.
+\end{proof}
+
 \begin{lemma}[Relative modular square-root ratio on the support]
     \label{lem:support_relative_modular_sqrt_ratio}
-    \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
     \lean{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq}
     \leanok
     \uses{def:support_inverse_square_root}
@@ -2903,14 +2938,9 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     \uses{lem:positive_sqrt_from_common_resolvents,
-        lem:support_inverse_square_root_positive_semidefinite,
+        lem:support_relative_modular_sqrt_evaluation,
         lem:right_multiplication_transposed_vectorization}
-    The support inverse square roots are positive semidefinite.  Hence
-    \[
-      \sqrt{A\otimes(B^+)^{\mathsf T}}
-        =\sqrt A\otimes(B^{-1/2}_{\mathrm{supp}})^{\mathsf T},
-    \]
-    with the analogous identity for $C,D$.  Consequently,
+    By Lemma~\ref{lem:support_relative_modular_sqrt_evaluation},
     \[
       \sqrt{A\otimes(B^+)^{\mathsf T}}\,
         \operatorname{vec}(\mathbf 1^{\mathsf T})
