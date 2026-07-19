@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.TraceReindex
 import TNLean.Channel.FixedPoint.DirectSumExtension
 import TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks
 
@@ -44,11 +45,6 @@ theorem reindexEndomorphism_apply (e : α ≃ β)
   rfl
 
 omit [DecidableEq α] [DecidableEq β] in
-private theorem trace_reindex (e : α ≃ β) (A : Matrix α α ℂ) :
-    (Matrix.reindex e e A).trace = A.trace := by
-  simpa only [Matrix.reindex_apply] using Matrix.trace_submatrix_equiv e.symm A
-
-omit [DecidableEq α] [DecidableEq β] in
 private theorem trace_reindex_mul (e : α ≃ β) (A : Matrix α α ℂ)
     (B : Matrix β β ℂ) :
     (Matrix.reindex e e A * B).trace =
@@ -68,7 +64,7 @@ private theorem trace_reindex_mul (e : α ≃ β) (A : Matrix α α ℂ)
       exact congrArg Matrix.trace (congrArg (Matrix.reindex e e A * ·) hB)
     _ = (Matrix.reindex e e
           (A * Matrix.reindex e.symm e.symm B)).trace := by rw [hmul]
-    _ = (A * Matrix.reindex e.symm e.symm B).trace := trace_reindex e _
+    _ = (A * Matrix.reindex e.symm e.symm B).trace := Matrix.trace_reindex e _
 
 omit [DecidableEq α] [DecidableEq β] in
 private theorem reindex_conjugation (e : α ≃ β)
@@ -121,7 +117,7 @@ theorem IsTracePreservingMap.reindexEndomorphism
     (hT : IsTracePreservingMap T) (e : α ≃ β) :
     IsTracePreservingMap (reindexEndomorphism e T) := by
   intro A
-  rw [reindexEndomorphism_apply, trace_reindex, hT, trace_reindex]
+  rw [reindexEndomorphism_apply, Matrix.trace_reindex, hT, Matrix.trace_reindex]
 
 omit [DecidableEq α] [DecidableEq β] in
 /-- The trace adjoint commutes with simultaneous reindexing of matrix

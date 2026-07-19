@@ -176,4 +176,18 @@ theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
     simp [w, U, Matrix.mulVec_mulVec, Matrix.mul_assoc]
   simp [hPdef, hPeval, hSw]
 
+/-- A positive semidefinite matrix whose support projection is the identity
+is positive definite. -/
+theorem posDef_of_supportProj_eq_one
+    (hSupport : hρ.supportProj = 1) : ρ.PosDef := by
+  apply hρ.posDef_iff_isUnit.mpr
+  rw [← Matrix.mulVec_injective_iff_isUnit]
+  intro v w hvw
+  apply sub_eq_zero.mp
+  have hzero : ρ *ᵥ (v - w) = 0 := by
+    rw [Matrix.mulVec_sub, hvw, sub_self]
+  have hsuppzero := hρ.supportProj_mulVec_eq_zero_of_mulVec_eq_zero (v - w) hzero
+  rw [hSupport, Matrix.one_mulVec] at hsuppzero
+  exact hsuppzero
+
 end Matrix.PosSemidef

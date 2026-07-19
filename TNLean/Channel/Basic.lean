@@ -27,6 +27,8 @@ Chapters 3 and 6 of Wolf's lecture notes.
 ## Main results
 
 * `IsPositiveMap`: a linear map that preserves the PSD cone
+* `IsTraceNonincreasingMap`: a linear endomorphism that does not increase the
+  trace of positive semidefinite inputs
 * `IsCPMap`: a linear map that admits a Kraus representation
 * `IsCompletelyCopositiveMap`: a map whose composition with transposition is CP
 * `IsDecomposablePositiveMap`: a sum of a CP map and a completely copositive map
@@ -64,6 +66,19 @@ def IsPositiveMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ) : Prop :=
 /-- A linear map is **trace-preserving** if `Tr(E(X)) = Tr(X)` for all `X`. -/
 def IsTracePreservingMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
   ∀ X : Matrix n n ℂ, trace (E X) = trace X
+
+/-- A matrix endomorphism is **trace-nonincreasing** if it does not increase
+the trace of any positive semidefinite input. -/
+def IsTraceNonincreasingMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
+  ∀ X : Matrix n n ℂ, X.PosSemidef → trace (E X) ≤ trace X
+
+omit [DecidableEq n] in
+/-- Every trace-preserving matrix endomorphism is trace-nonincreasing. -/
+theorem IsTracePreservingMap.isTraceNonincreasingMap
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    (hE : IsTracePreservingMap E) : IsTraceNonincreasingMap E := by
+  intro X _
+  exact (hE X).le
 
 /-- A linear map is **completely positive** if it admits a Kraus representation:
 `E(X) = ∑ᵢ Kᵢ X Kᵢ†` for some family of operators `{Kᵢ}`.

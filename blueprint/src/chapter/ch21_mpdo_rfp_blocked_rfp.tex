@@ -1543,6 +1543,124 @@ physical indices, as in
     \]
 \end{proof}
 
+\begin{theorem}[Trace preservation of the transported vertical-sector maps]
+    \label{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    \lean{IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing,
+      IsPositiveMap.exists_maximalSupport_fixedPoint_of_hasBoundedOrbits,
+      IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span,
+      Matrix.IsPositiveDirectSumMap.%
+        tracePreserving_of_traceNonincreasing_of_fixed_product_span,
+      Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing,
+      MPOTensor.transportedVerticalSector_composites_tracePreserving}
+    \leanok
+    \uses{lem:mpdo_transported_vertical_sector_fixed_generators,
+      thm:mpdo_vertical_bond_contractions_generate_sector_algebra}
+    Suppose that every one-site and two-site multiplicity space is nonzero
+    and every corresponding diagonal weight is positive.  Let
+    $\widetilde M^{(1)}$ and $\widetilde M^{(2)}$ be the vertical tensors of
+    $M$ and its two-site blocking, and let $B_1$ and $B_2$ be their assembled
+    one-site and two-site canonical forms.  Assume that both canonical forms
+    are bases of normal tensors and that, for every vertical letter $\ell$,
+    \[
+      U_i\widetilde M^{(i)}_\ell U_i^\dagger=(B_i)_\ell,
+      \qquad
+      \widetilde M^{(i)}_\ell
+        =U_i^\dagger(B_i)_\ell U_i,
+      \qquad
+      U_iU_i^\dagger=\mathbf 1
+      \quad (i=1,2).
+    \]
+    Assume in addition that the physical maps $T$ and $S$ are completely
+    positive and trace preserving and that, for every horizontal bond matrix
+    $Z$, the two physical-coordinate identities hold:
+    \[
+      T(\mathcal M^{(1)}(Z))=\mathcal M^{(2)}(Z),
+      \qquad
+      S(\mathcal M^{(2)}(Z))=\mathcal M^{(1)}(Z).
+    \]
+    Then each transported map and both square composites preserve the
+    appropriate total sector trace.
+    For the individual maps,
+    \[
+      \sum_\beta\operatorname{tr}(\widetilde T(X)_\beta)
+        =\sum_\alpha\operatorname{tr}(X_\alpha),
+      \qquad
+      \sum_\alpha\operatorname{tr}(\widetilde S(Y)_\alpha)
+        =\sum_\beta\operatorname{tr}(Y_\beta).
+    \]
+    For the square composites,
+    \[
+      \sum_\alpha\operatorname{tr}
+        \bigl((\widetilde S\widetilde T)(X)_\alpha\bigr)
+        =\sum_\alpha\operatorname{tr}(X_\alpha),
+      \qquad
+      \sum_\beta\operatorname{tr}
+        \bigl((\widetilde T\widetilde S)(Y)_\beta\bigr)
+        =\sum_\beta\operatorname{tr}(Y_\beta).
+    \]
+    Neither of the stronger range inclusions
+    \[
+      T(R_1(\mathcal A_1))\subseteq R_2(\mathcal A_2),
+      \qquad
+      S(R_2(\mathcal A_2))\subseteq R_1(\mathcal A_1)
+    \]
+    is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each transported map is positive and trace nonincreasing.  Hence the same
+    is true of either square composite $F$.  For $X\geq0$ and $n\geq0$,
+    \[
+      0\leq\operatorname{tr}(F^n(X))
+        \leq\operatorname{tr}(X).
+    \]
+    Thus positive orbits remain in a bounded trace section; decomposition
+    into Hermitian parts gives bounded orbits for every input.  Let $P$ be the
+    mean-ergodic projection of $F$, set $\rho=P(\mathbf 1)$, and let $Q$ be
+    the support projection of $\rho$.  Positivity of $P$ implies that every
+    fixed operator is supported on $Q$.
+
+    The preceding fixed-generator lemma places every weighted vertical bond
+    contraction $V_j$ in the fixed-point space.  The support absorption
+    identities give
+    \[
+      QV_jQ=V_j,
+      \qquad QV_j=V_j=V_jQ,
+    \]
+    and hence, for every positive-length product,
+    \[
+      Q(V_{j_1}\cdots V_{j_L})
+        =V_{j_1}\cdots V_{j_L}
+        =(V_{j_1}\cdots V_{j_L})Q.
+    \]
+    These products span the sector algebra, so their common support contains
+    the identity.  Therefore $Q=\mathbf 1$ and $\rho$ is positive definite.
+
+    Let $F^*$ be the trace adjoint and set
+    \[
+      \Delta=\mathbf 1-F^*(\mathbf 1).
+    \]
+    Trace nonincrease gives
+    $\operatorname{tr}(\Delta X)=\operatorname{tr}(X)-
+    \operatorname{tr}(F(X))\geq0$ for every positive $X$, and positivity of
+    $F$ implies that $\Delta$ is Hermitian.  Hence $\Delta\geq0$.  Since
+    $F(\rho)=\rho$, one has $\operatorname{tr}(\rho\Delta)=0$.
+    Positive definiteness of $\rho$ therefore forces $\Delta=0$, which is
+    equivalent to trace preservation.  This argument uses fixedness only of
+    the contraction factors, not of their products.
+
+    Finally, for positive $X$ the two trace-nonincreasing inequalities give
+    \[
+      \operatorname{tr}((\widetilde S\widetilde T)(X))
+        \leq\operatorname{tr}(\widetilde T(X))
+        \leq\operatorname{tr}(X).
+    \]
+    The equality of the endpoints forces trace preservation by
+    $\widetilde T$ on the positive cone and hence on the whole algebra.
+    Interchanging the two maps proves the corresponding assertion for
+    $\widetilde S$.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}

@@ -479,6 +479,7 @@ import TNLean.MPS.MPDO.VerticalSectorFixedGenerators
 import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorImagePreservation
 import TNLean.MPS.MPDO.VerticalSectorGeneration
+import TNLean.MPS.MPDO.VerticalSectorTracePreservation
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
@@ -594,7 +595,6 @@ import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.BNTSectorCommutingFamily
 import TNLean.MPS.MPDO.BlockedRFPConstruction
-
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.AKLTCorrelation
