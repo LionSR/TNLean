@@ -723,12 +723,16 @@
 \cs_new_protected:Npn \tenkz_emit_faceports_one:nnnn #1#2#3#4
   {
     \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
-    \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\tenkz_face_arity:nN {#4} \l__tenkz_faceports_tl|at=\tl_use:N \l__tenkz_faceports_tl}
+    \tenkz@event{faceports|picture=\the\tenkz@pictureid|%
+cell=#1-#2|face=#3|%
+arity=\tenkz_face_arity:nN {#4} \l__tenkz_faceports_tl|%
+at=\tl_use:N \l__tenkz_faceports_tl}
   }
 \cs_new_protected:Npn \tenkz_emit_faceports_one:nnn #1#2#3
   { \tenkz_emit_faceports_one:nnnn {#1}{#2}{#3}{\l__tenkz_cwires_int} }
 \cs_new_protected:Npn \tenkz_emit_faceports_rows:nnn #1#2#3
-  { \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\int_use:N\l__tenkz_cwires_int|at=rows} }
+  { \tenkz@event{faceports|picture=\the\tenkz@pictureid|%
+cell=#1-#2|face=#3|arity=\int_use:N\l__tenkz_cwires_int|at=rows} }
 
 % Whether row #1 and the current cell data carry the physical face #2.
 % Pairing changes whether the face is open, not whether the index exists:
@@ -2672,7 +2676,9 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                               \l__tenkz_pwlow_tl
                             \draw[physical~leg]
                               \l__tenkz_pwpt_tl -- \l__tenkz_pwlow_tl;
-                            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=#3|column=\int_eval:n{#2+#3-1}}
+                            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|%
+upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|%
+upper-port=#3|column=\int_eval:n{#2+#3-1}}
                           }
                       }
                   }
@@ -2834,7 +2840,9 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
             \draw[physical~leg]
               (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
               (\l__tenkz_pb_tl.\tenkz_compass:n{north});
-            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
+            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|%
+upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|%
+upper-port=center|column=#2}
           }
       }
       {
@@ -2847,7 +2855,9 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
             \draw[physical~leg]
               (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
               \l__tenkz_pwlow_tl;
-            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
+            \tenkz@event{pairleg|picture=\the\tenkz@pictureid|%
+upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|%
+upper-port=center|column=#2}
           }
           { \tenkz_leg_open:nnn {#1}{#2}{down}
             \int_incr:N \l__tenkz_internalpd_int }
@@ -4620,7 +4630,8 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
                           {
                             \msg_warning:nnnn {tenkz}{phtrace-face-ports}
                               {1}{##1}
-                            \tenkz@event{warning|picture=\the\tenkz@pictureid|code=phtrace-face-ports|cell=1-##1}
+                            \tenkz@event{warning|%
+picture=\the\tenkz@pictureid|code=phtrace-face-ports|cell=1-##1}
                           }
                       } }
               }
@@ -4726,6 +4737,8 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
   }
 \bool_new:N \l__tenkz_periodicwest_bool
 \bool_new:N \l__tenkz_periodiceast_bool
+\bool_new:N \l__tenkz_periodicpair_bool
+\bool_new:N \l__tenkz_periodiccenter_bool
 
 % A centred virtual face is one index shared by every row of a tall owner.
 % Ordinary bond matching may reach it from any row, but a periodic closure
@@ -4804,7 +4817,9 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       \l__tenkz_periodicwest_bool
     \tenkz_periodic_row_port:nnnN {#1}{#3}{east}
       \l__tenkz_periodiceast_bool
-    \bool_set:Nn #4
+    % Keep the result outside the caller's scratch state: anchor resolution
+    % uses temporary booleans and must not turn a mismatch into a closure.
+    \bool_set:Nn \l__tenkz_periodicpair_bool
       { \l__tenkz_periodicwest_bool && \l__tenkz_periodiceast_bool }
     \bool_if:nT
       {
@@ -4816,20 +4831,33 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       {
         \msg_warning:nne {tenkz}{periodic-face-ports}
           {\int_eval:n{#1}}
-        \tenkz@event{warning|picture=\the\tenkz@pictureid|code=periodic-face-ports|row=\int_eval:n{#1}}
+        \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+code=periodic-face-ports|row=\int_eval:n{#1}}
         \bool_if:NTF \l__tenkz_periodicwest_bool
-          {
-            \tenkz_anchor:nnnN {#1}{#2}{west} \l__tenkz_pa_tl
-            \draw[\tl_use:N \l__tenkz_cell_tl]
-              \l__tenkz_pa_tl -- ++\tenkz_stub_vec:n{west};
-            \int_incr:N \l__tenkz_bvw_int
-          }
-          {
-            \tenkz_anchor:nnnN {#1}{#3}{east} \l__tenkz_pa_tl
-            \draw[\tl_use:N \l__tenkz_cell_tl]
-              \l__tenkz_pa_tl -- ++\tenkz_stub_vec:n{east};
-            \int_incr:N \l__tenkz_bve_int
-          }
+          { \tenkz_draw_periodic_unmatched:nnn {#1}{#2}{west} }
+          { \tenkz_draw_periodic_unmatched:nnn {#1}{#3}{east} }
+      }
+    \bool_set_eq:NN #4 \l__tenkz_periodicpair_bool
+  }
+
+% A centred tall or fusion face already owns one open stub and one boundary
+% count.  Only ordinary unmatched endpoints need the periodic pass to add ink.
+\cs_new_protected:Npn \tenkz_draw_periodic_unmatched:nnn #1#2#3
+  {
+    \tenkz_cell_combined:nnnN {#1}{#2}{#3}
+      \l__tenkz_periodiccenter_bool
+    \bool_if:NF \l__tenkz_periodiccenter_bool
+      { \tenkz_cell_fuse_combined:nnnN {#1}{#2}{#3}
+          \l__tenkz_periodiccenter_bool }
+    \bool_if:NF \l__tenkz_periodiccenter_bool
+      {
+        \tenkz_row_wirestyle:nN {#1} \l__tenkz_cell_tl
+        \tenkz_anchor:nnnN {#1}{#2}{#3} \l__tenkz_pa_tl
+        \draw[\tl_use:N \l__tenkz_cell_tl]
+          \l__tenkz_pa_tl -- ++\tenkz_stub_vec:n{#3};
+        \str_if_eq:nnTF {#3}{west}
+          { \int_incr:N \l__tenkz_bvw_int }
+          { \int_incr:N \l__tenkz_bve_int }
       }
   }
 

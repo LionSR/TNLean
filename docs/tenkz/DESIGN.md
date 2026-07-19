@@ -131,7 +131,7 @@ Environment keys:
 | `physical=up\|down\|updown\|none\|paired` | Single-row sugar and per-row list form; `physical={updown,up}` ≡ `rows={op,ket}`. Retained for one-row chains. |
 | `sandwich` | ≡ `rows={ket,bra}` with paired legs and midline axis. Literal sugar; expands to identical events (G21). |
 | `periodic` | Virtual trace closure arc (deferred pass, racetrack geometry). |
-| `trace=physical` | Close one centred upper port into one centred lower port at each site; asymmetric or multi-port faces remain open with a diagnostic. |
+| `trace=physical` | Close one centred upper/lower pair; otherwise warn and leave it open. |
 | `bond label={⟨math⟩ at ⟨c⟩-⟨c'⟩}` | Addressed bond label (G6); bare `bond label=⟨math⟩` = first bond. |
 | `bond dir=left\|right` or `{⟨dir⟩ at ⟨c⟩-⟨c'⟩,…}` | Directed virtual bonds, MPO orientation (G4); scalar applies to all bonds. |
 | `align=⟨row⟩` | Axis row (non-integers allowed); default = midline of wire rows — the multi-row `=` defect is closed with no per-call key. |
@@ -140,9 +140,24 @@ Environment keys:
 
 Cell commands (expandable; legal only inside `tenkz`/`\tnpic`):
 
-- `\tn[⟨keys⟩]{A}` / `\tn*[⟨keys⟩]{A}` — THE tensor atom; `*` = conjugate skin. Keys: shape (`dot`,`box`,`circle`,`tri=l|r`,`pill`,`diamond`,`mpo`,`peps`), `wide=⟨k⟩`, `wires=⟨k⟩` (span k rows, terminating each row's wire — quantikz `\gate[2]`), face ports `up at=`, `down at=`, `west at=`, `east at=` (`center` or local span slots), physical-leg labels `up=`,`down=`, leg suppression `no legs`, `pair=+1|-1|none` (per-cell override of the row pairing policy — the resolution of conflict 3), `hue=`, `on wire`, `name=`.  The older `legs at=` assigns the same slot list to both physical faces unless a face-specific key overrides it.
+- `\tn[⟨keys⟩]{A}` / `\tn*[⟨keys⟩]{A}` — THE tensor atom; `*` = conjugate skin.
+  Keys: shape (`dot`,`box`,`circle`,`tri=l|r`,`pill`,`diamond`,`mpo`,`peps`),
+  `wide=⟨k⟩`, `wires=⟨k⟩` (span k rows, terminating each row's wire — quantikz
+  `\gate[2]`), face ports `up at=`, `down at=`, `west at=`, `east at=` (`center`
+  or local span slots), physical-leg labels `up=`,`down=`, leg suppression
+  `no legs`, `pair=+1|-1|none` (per-cell override of the row pairing policy —
+  the resolution of conflict 3), `hue=`, `on wire`, `name=`. The older
+  `legs at=` assigns the same slot list to both physical faces unless a
+  face-specific key overrides it.
 - `\tnX[⟨keys⟩]{X}` — matrix ON the wire (gauge insertion; open ring, arity 2, no physical leg, narrow column). Documented as ≡ `\tn[on wire]{X}`; earns its two-letter spelling as the second-most-frequent atom (quantikz's `\ctrl` precedent). Symmetric by construction: it occupies its own cell on either side.
-- `\tnfuse[⟨keys⟩]{V}` — **fixed signature (single optional argument).** n-to-1 trivalent map. Keys: `span=⟨k⟩` (wire rows spanned, default 2) and the same `west at=` / `east at=` face data.  A centred face is the one fused port; the opposite local row slots are the separate ports.  A sparse list, such as `{1,3}`, draws, contracts, and counts only those slots.  `combined=west|east` remains the compatibility spelling (default `west`). *Why a command:* it rewrites wire topology (merges rows) — a different grammatical class from `\tn`, whose contract is to terminate the wires of its own rows.
+- `\tnfuse[⟨keys⟩]{V}` — **fixed signature (single optional argument).** n-to-1
+  trivalent map. Keys: `span=⟨k⟩` (wire rows spanned, default 2) and the same
+  `west at=` / `east at=` face data. A centred face is the one fused port; the
+  opposite local row slots are the separate ports. A sparse list, such as
+  `{1,3}`, draws, contracts, and counts only those slots. `combined=west|east`
+  remains the compatibility spelling (default `west`). *Why a command:* it
+  rewrites wire topology (merges rows) — a different grammatical class from
+  `\tn`, whose contract is to terminate the wires of its own rows.
 - `\tndots[⟨keys⟩]` — the canonical ellipsis cell: interrupts the implicit wire, typesets dots on the wire axis. The only legal ellipsis (G17 lints the literals).
 - `\tnghost{A}` — invisible sizing atom.
 - `\tnspan[⟨keys⟩]{⟨cols⟩}{⟨label⟩}` — column-range decoration anchored at the current cell: `brace above|below`, `box`, `shade`. Drawn in the deferred pass; spans ellipses.
