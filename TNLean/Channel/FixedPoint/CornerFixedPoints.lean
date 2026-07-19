@@ -5,8 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.CornerAlgebra
+import TNLean.Channel.FixedPoint.StationaryProjection
 import TNLean.Channel.Spectral.Support
 import TNLean.MPS.CanonicalForm.CyclicSectors.Compression
+import TNLean.MPS.Irreducible.FixedPointProjection
 
 /-!
 # Corner-restricted fixed points form a `*`-algebra (Wolf Corollary 6.6)
@@ -154,17 +156,6 @@ end Hypotheses
 
 section CornerFixedPoints
 
-/-- The support projection `Q := supportProj ρ` of a PSD matrix `ρ`. When `ρ` is
-the (maximum-rank) fixed point of `map K`, this is Wolf's projection onto the
-maximum-rank fixed point. -/
-noncomputable def stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) : Mat :=
-  MPSTensor.supportProj (D := D) ρ hρ_psd
-
-/-- `stationaryProj` is an orthogonal projection. -/
-theorem isOrthogonalProjection_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
-    IsOrthogonalProjection (stationaryProj hρ_psd) :=
-  MPSTensor.isOrthogonalProjection_supportProj (D := D) (ρ := ρ) (hρ := hρ_psd)
-
 /-- The lower-triangular vanishing `(1 - Q) Kᵢ Q = 0`, the support-invariance
 identity used to compress the channel. -/
 theorem stationaryProj_lowerZero (K : Fin d → Mat) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
@@ -173,7 +164,7 @@ theorem stationaryProj_lowerZero (K : Fin d → Mat) {ρ : Mat} (hρ_psd : ρ.Po
   have hρ_fix' : MPSTensor.transferMap (d := d) (D := D) K ρ = ρ := by
     simpa [map, MPSTensor.transferMap_apply] using hρ_fix
   have h := MPSTensor.lowerZero_of_posSemidef_fixedPoint (d := d) (D := D) K ρ hρ_psd hρ_fix'
-  simpa [stationaryProj] using h.2
+  simpa [stationaryProj, MPSTensor.supportProj] using h.2
 
 /-- `Q * adjointMap K Q * Q = Q`, i.e. the corner unit `Q` is fixed by the
 corner-restricted map. -/
@@ -226,8 +217,8 @@ theorem cornerFixed_mul
   have hQherm : Qᴴ = Q := hQproj.1.eq
   have hInv : ∀ i : Fin d, (1 - Q) * K i * Q = 0 :=
     stationaryProj_lowerZero K hρ_psd hρ_fix
-  have hQρ : Q * ρ = ρ := MPSTensor.supportProj_mul (D := D) (ρ := ρ) hρ_psd
-  have hρQ : ρ * Q = ρ := MPSTensor.mul_supportProj (D := D) (ρ := ρ) hρ_psd
+  have hQρ : Q * ρ = ρ := stationaryProj_mul hρ_psd
+  have hρQ : ρ * Q = ρ := mul_stationaryProj hρ_psd
   have hQρQ : Q * ρ * Q = ρ := by rw [hQρ, hρQ]
   set A : Fin d → Mat := cornerCompressionKraus K Q with hAdef
   have hAsupp : ∀ i : Fin d, Q * A i * Q = A i :=

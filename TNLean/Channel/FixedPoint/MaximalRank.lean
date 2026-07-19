@@ -75,7 +75,7 @@ theorem rank_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
     rw [Matrix.rank_mul_eq_left_of_isUnit_det Uᴴ (U * Matrix.diagonal w) hUH_unit,
       Matrix.rank_mul_eq_right_of_isUnit_det U (Matrix.diagonal w) hU_unit]
   have hP_def : stationaryProj hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [stationaryProj, MPSTensor.supportProj, hUdef, hsgndef]
+    simp [stationaryProj, Matrix.PosSemidef.supportProj, hUdef, hsgndef]
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (hH.eigenvalues j : ℂ)) * Uᴴ := by
     simpa [hUdef, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
       Function.comp_def] using hH.spectral_theorem
@@ -109,7 +109,7 @@ theorem trace_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
   have hU_unit : IsUnit U.det :=
     isUnit_iff_ne_zero.mpr (right_ne_zero_of_mul_eq_one hdet)
   have hP_def : stationaryProj hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [stationaryProj, MPSTensor.supportProj, hUdef, hsgndef]
+    simp [stationaryProj, Matrix.PosSemidef.supportProj, hUdef, hsgndef]
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (hH.eigenvalues j : ℂ)) * Uᴴ := by
     simpa [hUdef, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
       Function.comp_def] using hH.spectral_theorem
