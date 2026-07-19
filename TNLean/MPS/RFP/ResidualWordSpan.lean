@@ -24,7 +24,11 @@ namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ}
 
-private theorem IsResidualIsometryFamily.wordEntryFamily_one_gram
+/-- The one-letter entry vectors of a residual-isometry family have identity
+Gram matrix on the Sigma-indexed space of valid sector entries.
+
+Source: arXiv:1606.00608, equation `eq:III_isometry`, lines 549--554. -/
+theorem IsResidualIsometryFamily.wordEntryFamily_one_gram
     {U : (j : Fin r) → MPSTensor d (dim j)}
     (hU : IsResidualIsometryFamily U) (x y : BlockEntryIndex dim) :
     ∑ w : Fin 1 → Fin d,

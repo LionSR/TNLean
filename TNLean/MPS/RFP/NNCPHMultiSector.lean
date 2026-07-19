@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalBoundaryClosing
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
-import TNLean.MPS.RFP.ResidualWordSpan
+import TNLean.MPS.RFP.ResidualFamilySupport
 
 /-!
 # Nearest-neighbor ground spaces for multiplicity-one RFP sectors
