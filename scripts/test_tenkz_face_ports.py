@@ -494,6 +494,41 @@ def main() -> int:
             for finding in pairleg_ports_audit.findings
             if finding.rule == "malformed-event" and "upper-port=" in finding.msg
         ]
+        pairleg_faceports_log = work / "pairleg-faceports.tnlog"
+        pairleg_faceports_log.write_text(
+            "picture|id=1|lang=grid\n"
+            "faceports|picture=1|cell=1-1|face=down|arity=1|at=center\n"
+            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=center|column=1\n"
+            "pairleg|picture=1|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "picture|id=2|lang=grid\n"
+            "faceports|picture=2|cell=1-1|face=down|arity=2|at=1,2\n"
+            "pairleg|picture=2|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "pairleg|picture=2|upper=1-1|lower=2-2|upper-port=2|column=2\n"
+            "pairleg|picture=2|upper=1-1|lower=2-3|upper-port=3|column=3\n"
+            "picture|id=3|lang=grid\n"
+            "faceports|picture=3|cell=1-1|face=down|arity=2|at=1,3\n"
+            "pairleg|picture=3|upper=1-1|lower=2-1|upper-port=1|column=1\n"
+            "pairleg|picture=3|upper=1-1|lower=2-3|upper-port=3|column=3\n"
+            "pairleg|picture=3|upper=1-1|lower=2-2|upper-port=2|column=2\n"
+            "picture|id=4|lang=grid\n"
+            "faceports|picture=4|cell=1-1|face=down|arity=0|at=none\n"
+            "pairleg|picture=4|upper=1-1|lower=2-1|upper-port=center|column=1\n"
+            "picture|id=5|lang=grid\n"
+            "pairleg|picture=5|upper=1-1|lower=2-1|upper-port=center|column=1\n"
+            "pairleg|picture=5|upper=1-2|lower=2-2|upper-port=2|column=2\n"
+            "picture|id=6|lang=grid\n"
+            "faceports|picture=6|cell=1-1|face=down|arity=3|at=rows\n"
+            "pairleg|picture=6|upper=1-1|lower=2-3|upper-port=3|column=3\n"
+            "pairleg|picture=6|upper=1-1|lower=2-4|upper-port=4|column=4\n",
+            encoding="utf-8",
+        )
+        pairleg_faceports_audit = Audit(pairleg_faceports_log, None)
+        pairleg_faceports_audit.parse_log()
+        pairleg_faceports_audit.check_pairleg_faceports()
+        pairleg_faceport_mismatches = [
+            finding for finding in pairleg_faceports_audit.findings
+            if finding.rule == "pairleg-faceport-mismatch"
+        ]
         warning_only_log = work / "warning-only.tnlog"
         warning_only_log.write_text(
             "picture|id=1|lang=grid\n"
@@ -513,6 +548,24 @@ def main() -> int:
         for value in ("0", "-1", "bogus", overlong_port)
     ):
         raise AssertionError("audit accepted a non-contraction pairleg upper-port")
+    expected_pairleg_mismatches = {
+        (1, "upper-port='1'"),
+        (2, "upper-port='3'"),
+        (3, "upper-port='2'"),
+        (4, "upper-port='center'"),
+        (6, "upper-port='4'"),
+    }
+    actual_pairleg_mismatches = {
+        (picture, port)
+        for finding in pairleg_faceport_mismatches
+        for picture, port in expected_pairleg_mismatches
+        if f"picture {picture} " in finding.msg and port in finding.msg
+    }
+    if (len(pairleg_faceport_mismatches) != len(expected_pairleg_mismatches)
+            or actual_pairleg_mismatches != expected_pairleg_mismatches):
+        raise AssertionError(
+            "pairleg face-port correlation missed a mismatch or rejected a declared/legacy slot"
+        )
     if warning_only_status != 1 or not any(
         finding.rule == "empty-picture" and finding.severity == "HARD"
         for finding in warning_only_audit.findings

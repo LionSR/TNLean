@@ -23,6 +23,13 @@ Hard errors (exit 1):
                        events.  A tensor diagram with no atoms and no
                        regions denotes no tensor network -- historically
                        the "34 fake diagrams" class.
+  pairleg-faceport-mismatch
+                       A grid pairleg names a contraction slot absent from the
+                       upper cell's declared down face.  Explicit declarations
+                       resolve `center`, comma-separated slots, `rows`, and
+                       `none`.  If no faceports event exists, the check is
+                       skipped for compatibility with legacy logs, including
+                       simple centred faces.
 
 Advisories (never affect the exit code):
   eq-boundary-mismatch Consecutive grid pictures joined by `=` in the
@@ -367,6 +374,65 @@ class Audit:
                                  f"atom in {pic.lang} picture {pic.ident} lacks "
                                  f"{want}=")
 
+    @staticmethod
+    def _declared_face_ports(event: Event) -> Optional[set[str]]:
+        """Resolve one well-formed faceports event to its contraction slots."""
+        at = event.attrs.get("at", "").strip()
+        if at == "center":
+            return {"center"}
+        if at == "none":
+            return set()
+        if at == "rows":
+            arity = event.attrs.get("arity", "")
+            if not _is_int(arity):
+                return None
+            count = int(arity)
+            if count < 0:
+                return None
+            return {str(slot) for slot in range(1, count + 1)}
+        slots = [slot.strip() for slot in at.split(",")]
+        if slots and all(
+                _is_pairleg_port(slot) and slot != "center" for slot in slots):
+            return set(slots)
+        return None
+
+    def check_pairleg_faceports(self) -> None:
+        """Cross-check pairleg slots against explicit upper down-face declarations.
+
+        Older event streams did not always emit faceports records.  Absence is
+        therefore deliberately not an error; an explicit declaration is the
+        authority whenever one is present.
+        """
+        for pic in self.pictures:
+            if pic.lang != "grid":
+                continue
+            declared: dict[str, set[str]] = {}
+            for event in pic.events:
+                if event.kind != "faceports" or event.attrs.get("face") != "down":
+                    continue
+                cell = event.attrs.get("cell", "")
+                ports = self._declared_face_ports(event)
+                if not _is_cell(cell) or ports is None:
+                    continue
+                declared.setdefault(cell, set()).update(ports)
+            for event in pic.events:
+                if event.kind != "pairleg":
+                    continue
+                upper = event.attrs.get("upper", "")
+                port = event.attrs.get("upper-port", "")
+                if (not _is_cell(upper) or not _is_pairleg_port(port)
+                        or upper not in declared):
+                    continue
+                if port in declared[upper]:
+                    continue
+                available = ",".join(sorted(declared[upper])) or "none"
+                self.hard(
+                    "pairleg-faceport-mismatch",
+                    f"{self.log_path.name}:{event.line}",
+                    f"picture {pic.ident} pairleg upper={upper} names upper-port={port!r}, "
+                    f"but its declared down face has ports {available}",
+                )
+
     def check_repeated_topology(self) -> None:
         groups: dict[tuple[str, str], list[Picture]] = {}
         for pic in self.pictures:
@@ -487,6 +553,7 @@ class Audit:
         self.link_tex()
         self.check_empty_pictures()
         self.check_dialects()
+        self.check_pairleg_faceports()
         self.check_equation_boundaries()
         self.check_periodic_dots()
         self.check_repeated_topology()
