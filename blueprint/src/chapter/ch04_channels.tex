@@ -1041,6 +1041,25 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     of the mean-ergodic projection gives the conclusion.
 \end{proof}
 
+\begin{theorem}[Bounded orbits from trace nonincrease]
+    \label{thm:positive_trace_nonincreasing_bounded_orbits}
+    \lean{IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing}
+    \leanok
+    \uses{def:positive_map}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace nonincreasing.  Then the
+    forward orbit $\{T^n(X):n\geq 0\}$ is bounded for every $X\in\MN{D}$.
+    This is the trace-nonincreasing form of
+    \cite[Proposition~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $X\succeq 0$, positivity and trace nonincrease place every iterate
+    $T^n(X)$ in a bounded trace section of the positive cone.  Apply this to
+    the positive and negative parts of a Hermitian matrix, and then write an
+    arbitrary matrix as a complex linear combination of two Hermitian
+    matrices.
+\end{proof}
+
 \begin{theorem}[Positive trace-preserving mean-ergodic projection]
     \label{thm:positive_trace_preserving_mean_ergodic_projection}
     \lean{IsPositiveMap.hasBoundedOrbits_of_tracePreserving,
@@ -1067,6 +1086,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}\leanok
     \uses{thm:mean_ergodic_bounded_orbits,
+        thm:positive_trace_nonincreasing_bounded_orbits,
         thm:positive_mean_ergodic_projection,
         thm:trace_preserving_mean_ergodic_projection,
         thm:unital_mean_ergodic_projection}

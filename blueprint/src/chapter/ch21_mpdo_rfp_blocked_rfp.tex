@@ -1556,9 +1556,14 @@ physical indices, as in
       V_{j_1}\cdots V_{j_L}
     \]
     in $\mathcal M$.  Then $F$ has a positive-definite fixed point.
+    This is the local full-matrix intermediate implication used in
+    \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}; it is not
+    stated there as a separate theorem.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:positive_trace_nonincreasing_bounded_orbits,
+      thm:maximalSupport_fixedPoint_of_bounded_orbits}
     Boundedness of the forward orbits gives the mean-ergodic projection $P$.
     Set $\rho=P(\mathbf 1)$ and let $Q$ be the support projection of $\rho$.
     For every $j$, the maximal-support property of $\rho$ gives
@@ -1574,9 +1579,7 @@ physical indices, as in
 
 \begin{theorem}[Trace preservation of the transported vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
-    \lean{IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing,
-      IsPositiveMap.exists_maximalSupport_fixedPoint_of_hasBoundedOrbits,
-      IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span,
+    \lean{IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span,
       Matrix.IsPositiveDirectSumMap.%
         tracePreserving_of_traceNonincreasing_of_fixed_product_span,
       Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing,

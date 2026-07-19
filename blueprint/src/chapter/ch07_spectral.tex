@@ -3016,6 +3016,36 @@ transfers the support.
     Hermitian.
 \end{proof}
 
+\begin{theorem}[A fixed point of maximal support from bounded orbits]%
+    \label{thm:maximalSupport_fixedPoint_of_bounded_orbits}
+    \lean{IsPositiveMap.exists_maximalSupport_fixedPoint_of_hasBoundedOrbits}
+    \leanok
+    \uses{def:positive_map, def:mean_ergodic_projection, def:support_proj}
+    Let $T:\MN{D}\to\MN{D}$ be positive and have bounded orbits, and let
+    $T_\infty$ be its mean-ergodic projection.  Then
+    $\rho_0=T_\infty(\Id)$ is positive semidefinite and fixed by $T$.  If
+    $Q_0$ is the support projection of $\rho_0$, then every fixed point $X$
+    of $T$ satisfies
+    \[
+        Q_0\,X\,Q_0=X.
+    \]
+    This is the bounded-orbit form of the maximal-support argument underlying
+    \cite[Proposition~6.9]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:positive_mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits,
+        thm:positive_map_conjTranspose, thm:hermitian_fixedpoint_parts,
+        thm:psd_le_trace_smul_one, lem:stationaryProj_absorb_of_le}
+    Positivity of the mean-ergodic projection gives $\rho_0\succeq 0$, while
+    its range and idempotence give $T(\rho_0)=\rho_0$.  Decompose a fixed
+    point into fixed Hermitian parts and dominate their positive and negative
+    parts by scalar multiples of $\rho_0$.  The support-absorption lemma then
+    gives $Q_0XQ_0=X$.
+\end{proof}
+
 \begin{theorem}[A fixed point of maximal support]%
     \label{thm:maximalSupport_fixedPoint}
     \lean{IsPositiveMap.exists_maximalSupport_fixedPoint}
@@ -3036,46 +3066,10 @@ transfers the support.
 \begin{proof}
     \leanok
     \uses{thm:positive_trace_preserving_mean_ergodic_projection,
-        thm:positive_map_conjTranspose, thm:hermitian_fixedpoint_parts,
-        thm:psd_le_trace_smul_one, lem:stationaryProj_absorb_of_le}
-    Positivity of the mean-ergodic projection gives $\rho_0\succeq 0$, while its range
-    and idempotence give $T(\rho_0)=\rho_0$.  Each fixed point $X$ splits into fixed
-    Hermitian components:
-    \[
-        H_1 = X + X^{\dagger},
-        \qquad
-        H_2 = i\,\bigl(X - X^{\dagger}\bigr),
-    \]
-    Both are Hermitian fixed points (the conjugate transpose of a fixed point is fixed),
-    and
-    \[
-        X \;=\; \tfrac{1}{2}\,H_1 - \tfrac{i}{2}\,H_2.
-    \]
-    By the decomposition of Hermitian fixed points into positive parts
-    (Theorem~\ref{thm:hermitian_fixedpoint_parts}) there are positive semidefinite fixed
-    points with
-    \[
-        H_1 = P^{+}_1 - P^{-}_1,
-        \qquad
-        H_2 = P^{+}_2 - P^{-}_2.
-    \]
-    If $P\succeq0$ is any of these positive fixed points, then
-    $\tr(P)\Id-P\succeq0$. Positivity of $T_\infty$ and
-    $T_\infty(P)=P$ give
-    \[
-        \tr(P)\rho_0-P
-        =T_\infty\!\left(\tr(P)\Id-P\right)\succeq0.
-    \]
-    Thus $P\preceq\tr(P)\rho_0$, and scalar domination transfers the support, so
-    $Q_0P Q_0=P$. Substituting this identity into the two positive-part decompositions
-    gives
-    \[
-        Q_0\, H_k\, Q_0 = H_k,
-        \qquad
-        Q_0\, X\, Q_0
-        = \tfrac{1}{2}\,Q_0 H_1 Q_0 - \tfrac{i}{2}\,Q_0 H_2 Q_0
-        = X.
-    \]
+        thm:maximalSupport_fixedPoint_of_bounded_orbits}
+    Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection} gives
+    bounded orbits.  Apply
+    Theorem~\ref{thm:maximalSupport_fixedPoint_of_bounded_orbits}.
 \end{proof}
 
 \begin{theorem}[Restriction to the support of a stationary positive matrix]%
