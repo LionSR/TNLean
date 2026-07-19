@@ -216,14 +216,18 @@ construction is formalized in
 \doclink{TNLean/MPS/MPDO/DiagonalFiniteChain}.
 \footnote{Formal declarations:
 \leanid{MPOTensor.IsDiagonalAt},
+\leanid{MPOTensor.IsDiagonal},
 \leanid{MPOTensor.diagonalCutRealMatrix},
 \leanid{MPOTensor.diagonalCutMass},
 \leanid{MPOTensor.normalizedDiagonalCutDistribution},
 \leanid{MPOTensor.diagonalCutRealMatrix_map_ofReal_of_posSemidef},
 \leanid{MPOTensor.diagonalCutRealMatrix_nonneg_of_posSemidef},
+\leanid{MPOTensor.diagonalCutMass_eq_trace_re},
 \leanid{MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution},
 and
-\leanid{MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}.}
+\leanid{MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}.
+The global diagonal-MPDO corollary is
+\leanid{MPOTensor.diagonalMPDO_classicalMutualInformation_le_two_log}.}
 For a positive diagonal operator at the chosen length, the real diagonal
 coefficients are nonnegative, their scalar extension is the cut matrix, and
 division by their positive total mass gives a joint distribution.  Diagonality
