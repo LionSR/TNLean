@@ -1229,8 +1229,8 @@
     \leanok
     \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     Let $M$ generate diagonal positive semidefinite operators at every positive
-    chain length.  If the trace at length $L+R$ is positive, then the classical
-    mutual information of its normalized diagonal coefficients satisfies
+    chain length.  If $L+R>0$ and the trace at length $L+R$ is positive, then
+    the classical mutual information of its normalized diagonal coefficients satisfies
     \[
       I(X:Y)\leq2\log D.
     \]
@@ -1238,8 +1238,12 @@
 \begin{proof}\leanok
     Global diagonality and positivity give the fixed-length hypotheses of
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
-    The total mass of the diagonal coefficients is the real part of the trace,
-    so the assumed trace positivity supplies the required normalization.
+    Since the chain operator is diagonal,
+    \[
+      Z=\sum_{x,y}W_{x,y}
+      =\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M),
+    \]
+    so the trace positivity hypothesis supplies the required normalization.
 \end{proof}
 
 \begin{remark}[Boundedness of the mutual information]

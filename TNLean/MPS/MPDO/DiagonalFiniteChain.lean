@@ -235,8 +235,8 @@ positive trace at length `L + R` has classical mutual information of its
 normalized diagonal coefficients at most `2 * log D`.
 
 Global MPDO positivity supplies the fixed-length positive-semidefinite
-hypothesis, while `diagonalCutMass_eq_trace_re` identifies the positive trace
-with the normalization mass.
+hypothesis.  The total mass $Z$ equals the real part of the finite-chain trace,
+so trace positivity gives $Z>0$.
 
 This is a diagonal classical restriction of the bound invoked in the proof of
 arXiv:1606.00608, Proposition 4.5, lines 1316--1320, using Riazanov--Vyalyi,
