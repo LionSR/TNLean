@@ -125,10 +125,6 @@ theorem quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq
   have hsuppM : ∀ w : Fin dS → ℂ,
       (partialTraceRight σ).mulVec w = 0 → (partialTraceRight ρ).mulVec w = 0 :=
     fun _ hw => partialTraceRight_support hσ hsupp hw
-  let U : unitary
-      (Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) :=
-    ⟨(1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b,
-      Matrix.kronecker_mem_unitary (Submonoid.one_mem _) (weyl_mem_unitary hζ a b)⟩
   calc
     quantumRelativeEntropy
         (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
@@ -153,8 +149,8 @@ theorem quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq
           ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ)
         (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * σ *
           ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ) := by
-            simpa only [Unitary.coe_star, star_eq_conjTranspose, U] using
-              (quantumRelativeEntropy_conj_unitary hρ.isHermitian hσ.isHermitian U).symm
+            exact (quantumRelativeEntropy_weyl_conj_eq hρ.isHermitian
+              hσ.isHermitian hζ a b).symm
 
 /-- **Partial-trace saturation saturates the finite Weyl Jensen inequality.**
 Let ρ and σ be positive semidefinite matrices with ker σ ⊆ ker ρ. If their
@@ -196,13 +192,8 @@ theorem quantumRelativeEntropy_weyl_jensen_eq_of_partialTraceRight_eq
           (((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e) * σ *
             ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e)ᴴ) =
         quantumRelativeEntropy ρ σ := by
-    let U : unitary
-        (Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) :=
-      ⟨(1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ c e,
-        Matrix.kronecker_mem_unitary (Submonoid.one_mem _)
-          (weyl_mem_unitary hζ c e)⟩
-    simpa only [Unitary.coe_star, star_eq_conjTranspose, U] using
-      quantumRelativeEntropy_conj_unitary hρ.isHermitian hσ.isHermitian U
+    exact quantumRelativeEntropy_weyl_conj_eq hρ.isHermitian hσ.isHermitian
+      hζ c e
   have haverage :
       quantumRelativeEntropy
           (((dC : ℂ) ^ 2)⁻¹ • ∑ c : ZMod dC, ∑ e : ZMod dC,
