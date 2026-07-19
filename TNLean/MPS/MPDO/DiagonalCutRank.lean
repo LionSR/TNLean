@@ -119,12 +119,10 @@ This is the formal assembly of Riazanov--Vyalyi, Theorem 4.1
 arXiv:1606.00608, Proposition 4.5. This statement does not concern unrestricted
 quantum mutual information.
 
-**Scope restriction (coefficient matrix and probability distribution):** The
-real coefficient matrix `W`, the joint distribution `P`, their normalization
-relation, and the identification of the scalar extension of `W` with the
-complex cut matrix are explicit hypotheses rather than consequences of the
-current MPDO definitions. This remaining construction is documented in
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+This conditional form keeps the real coefficient matrix, its normalization,
+and its scalar-extension identity as explicit hypotheses.  For a positive
+diagonal finite-chain operator they are derived in
+`TNLean.MPS.MPDO.DiagonalFiniteChain`. -/
 theorem diagonalCut_classicalMutualInformation_le_two_log [NeZero D]
     (M : MPOTensor d D) (L R : ℕ)
     (W P : Matrix (Fin L → Fin d) (Fin R → Fin d) ℝ) (Z : ℝ)
