@@ -97,9 +97,28 @@ theorem trace_blockDiagonal'_mul
 
 /-! ## Matrix action on product vectors -/
 
+/-- A dependent product of matrices acts componentwise on a pure tensor. -/
+theorem piProduct_mulVec_pureTensor
+    {R : Type*} [CommSemiring R]
+    {N : ℕ} {α : Fin N → Type*} [∀ n, Fintype (α n)]
+    (P : (n : Fin N) → Matrix (α n) (α n) R)
+    (v : (n : Fin N) → α n → R)
+    (x : (n : Fin N) → α n) :
+    Matrix.mulVec
+        (fun (x y : (n : Fin N) → α n) ↦ ∏ n, P n (x n) (y n))
+        (fun y : (n : Fin N) → α n ↦ ∏ n, v n (y n)) x =
+      ∏ n, (P n).mulVec (v n) (x n) := by
+  classical
+  simp only [Matrix.mulVec, dotProduct]
+  rw [← Fintype.piFinset_univ]
+  simp_rw [← Finset.prod_mul_distrib]
+  rw [← Finset.prod_univ_sum
+    (fun n : Fin N ↦ (Finset.univ : Finset (α n)))
+    (fun n y ↦ P n (x n) y * v n y)]
+
 /-- A dependent product of matrices fixes a pure tensor whenever every factor
 fixes the corresponding vector. -/
-theorem piProduct_mulVec_pureTensor
+theorem piProduct_mulVec_pureTensor_of_mulVec_eq_self
     {R : Type*} [CommSemiring R]
     {N : ℕ} {α : Fin N → Type*} [∀ n, Fintype (α n)]
     (P : (n : Fin N) → Matrix (α n) (α n) R)
@@ -110,16 +129,10 @@ theorem piProduct_mulVec_pureTensor
         (fun (x y : (n : Fin N) → α n) ↦ ∏ n, P n (x n) (y n))
         (fun y : (n : Fin N) → α n ↦ ∏ n, v n (y n)) x =
       ∏ n, v n (x n) := by
-  classical
-  simp only [Matrix.mulVec, dotProduct]
-  rw [← Fintype.piFinset_univ]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Finset.prod_univ_sum
-    (fun n : Fin N ↦ (Finset.univ : Finset (α n)))
-    (fun n y ↦ P n (x n) y * v n y)]
+  rw [piProduct_mulVec_pureTensor]
   apply Finset.prod_congr rfl
   intro n _
-  simpa only [Matrix.mulVec, dotProduct] using congrFun (hv n) (x n)
+  exact congrFun (hv n) (x n)
 
 /-- Reindexing a square matrix along an equivalence intertwines its action on
 vectors with precomposition by the inverse equivalence. -/

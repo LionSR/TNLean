@@ -238,7 +238,7 @@ private theorem blockGroundProduct_mulVec_loopCyclicProduct
     by_cases hk : k = fun _ ↦ l.1
     · subst k
       simp_rw [F.loopCyclicProduct_etaCyclicEdgeEquiv_symm_constant l]
-      exact Matrix.piProduct_mulVec_pureTensor
+      exact Matrix.piProduct_mulVec_pureTensor_of_mulVec_eq_self
         (fun _ : Fin N ↦ F.edgeProjector l.1 l.1)
         (fun _ : Fin N ↦ F.loopBondVector l)
         (fun _ ↦ F.edgeProjector_mulVec_loopBondVector l) x
