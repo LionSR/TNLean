@@ -116,7 +116,7 @@ variable {d : ℕ}
 /-- In pair coordinates, conjugating a two-site operator by the tensor square
 of a conjugate-transposed one-site matrix is the corresponding Kronecker
 conjugation. -/
-private theorem singleKrausMap_sitewise_conjTranspose_two_eq
+theorem singleKrausMap_sitewise_conjTranspose_two_eq
     (U : Matrix (Fin d) (Fin d) ℂ)
     (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     singleKrausMap (sitewisePhysicalMatrix Uᴴ 2) B =
@@ -246,6 +246,33 @@ private theorem prod_etaEdgePartialProduct_singletons_univ {K N : ℕ} [NeZero N
     exact List.mem_ofFn.mpr ⟨i, rfl⟩
   rw [hfin]
   exact etaEdgePartialProduct_univ dl dr η k
+
+private theorem etaEdgePartialProduct_singletons_comm {K N : ℕ} [NeZero N]
+    (dl dr : Fin K → ℕ)
+    (η : (q h : Fin K) →
+      Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
+    (k : Fin N → Fin K) (i j : Fin N) :
+    etaEdgePartialProduct dl dr η k {i} * etaEdgePartialProduct dl dr η k {j} =
+      etaEdgePartialProduct dl dr η k {j} * etaEdgePartialProduct dl dr η k {i} := by
+  by_cases hij : i = j
+  · subst j
+    rfl
+  · calc
+      etaEdgePartialProduct dl dr η k {i} * etaEdgePartialProduct dl dr η k {j} =
+          etaEdgePartialProduct dl dr η k (insert i {j}) :=
+        etaEdgePartialProduct_singleton_mul dl dr η k {j} i (by simp [hij])
+      _ = etaEdgePartialProduct dl dr η k (insert j {i}) := by
+        congr 1
+        apply Finset.ext
+        intro q
+        simp only [Finset.mem_insert, Finset.mem_singleton]
+        exact or_comm
+      _ = etaEdgePartialProduct dl dr η k {j} *
+          etaEdgePartialProduct dl dr η k {i} :=
+        (etaEdgePartialProduct_singleton_mul dl dr η k {i} j
+          (by
+            simp only [Finset.mem_singleton]
+            exact fun hji ↦ hij hji.symm)).symm
 
 private theorem add_one_ne_self_of_two_le {N : ℕ} [NeZero N]
     (hN : 2 ≤ N) (i : Fin N) :
@@ -525,6 +552,68 @@ private theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
       simpa [Matrix.reindex_apply, Matrix.etaPairSpatialBlockEquiv,
         Matrix.blockDiagonal'_apply_ne _ _ _ hpairs] using hentry
     · rw [if_neg ha]
+
+/-- Two translated bonds commute whenever their common two-site matrix has a
+neighboring-operator decomposition.  This is the local-to-global commutation
+consequence of the same cyclic edge coordinates used in Beigi's finite-chain
+decomposition.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(3), pages 3--4. -/
+theorem embedLocalOperator_commute_of_etaPair_decomposition
+    {K N : ℕ} [NeZero N] (hN : 2 ≤ N) (dl dr : Fin K → ℕ)
+    (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
+    (η : (q h : Fin K) →
+      Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
+    (B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+    (hB : Matrix.reindex (Matrix.etaPairSpatialBlockEquiv e).symm
+        (Matrix.etaPairSpatialBlockEquiv e).symm B =
+      Matrix.blockDiagonal' fun qh : Fin K × Fin K ↦
+        ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
+          η qh.1 qh.2) ⊗ₖ
+            (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ))
+    (i j : Fin N) :
+    embedLocalOperator (d := d) 2 N hN i
+          (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+            (finTwoArrowEquiv (Fin d)).symm B) *
+        embedLocalOperator (d := d) 2 N hN j
+          (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+            (finTwoArrowEquiv (Fin d)).symm B) =
+      embedLocalOperator (d := d) 2 N hN j
+          (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+            (finTwoArrowEquiv (Fin d)).symm B) *
+        embedLocalOperator (d := d) 2 N hN i
+          (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+            (finTwoArrowEquiv (Fin d)).symm B) := by
+  classical
+  apply (Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
+    (Matrix.etaCyclicEdgeEquiv dl dr e)).injective
+  change (Matrix.reindexLinearEquiv ℂ ℂ (Matrix.etaCyclicEdgeEquiv dl dr e)
+      (Matrix.etaCyclicEdgeEquiv dl dr e))
+        (embedLocalOperator (d := d) 2 N hN i
+            (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+              (finTwoArrowEquiv (Fin d)).symm B) *
+          embedLocalOperator (d := d) 2 N hN j
+            (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+              (finTwoArrowEquiv (Fin d)).symm B)) =
+    (Matrix.reindexLinearEquiv ℂ ℂ (Matrix.etaCyclicEdgeEquiv dl dr e)
+      (Matrix.etaCyclicEdgeEquiv dl dr e))
+        (embedLocalOperator (d := d) 2 N hN j
+            (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+              (finTwoArrowEquiv (Fin d)).symm B) *
+          embedLocalOperator (d := d) 2 N hN i
+            (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
+              (finTwoArrowEquiv (Fin d)).symm B))
+  rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ (Matrix.etaCyclicEdgeEquiv dl dr e)
+      (Matrix.etaCyclicEdgeEquiv dl dr e) (Matrix.etaCyclicEdgeEquiv dl dr e),
+    ← Matrix.reindexLinearEquiv_mul ℂ ℂ (Matrix.etaCyclicEdgeEquiv dl dr e)
+      (Matrix.etaCyclicEdgeEquiv dl dr e) (Matrix.etaCyclicEdgeEquiv dl dr e),
+    Matrix.coe_reindexLinearEquiv,
+    reindex_embedLocalOperator_etaPairBond hN dl dr e η B hB i,
+    reindex_embedLocalOperator_etaPairBond hN dl dr e η B hB j,
+    ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext k
+  exact etaEdgePartialProduct_singletons_comm dl dr η k i j
 
 private theorem reindex_list_prod {α β : Type*} [Fintype α] [DecidableEq α]
     [Fintype β] [DecidableEq β] (e : α ≃ β) (l : List (Matrix α α ℂ)) :

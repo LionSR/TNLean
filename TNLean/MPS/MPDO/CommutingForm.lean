@@ -254,7 +254,7 @@ theorem embedLocalOperator_mul (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
 
 /-- The action of a cyclically embedded local operator is the sum over
 replacements of the configuration inside its window. -/
-private theorem embedLocalOperator_mulVec_apply (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+theorem embedLocalOperator_mulVec_apply (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
     (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ)
     (v : (Fin N → Fin d) → ℂ) (σ : Fin N → Fin d) :
     (embedLocalOperator (d := d) L N hLN i B).mulVec v σ =

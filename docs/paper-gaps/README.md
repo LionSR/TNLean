@@ -163,8 +163,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   tracked by issue #952.
 - `cpsv16_nncph_ground_state_scope.tex` records the separation between the
   zero-energy ground-vector predicate and the source ground-space spanning
-  predicates for CPSV16 Theorem 3.10(iii). The all-chain condition is now
-  named, but the spanning equation has not been proved for concrete tensors.
+  predicates for CPSV16 Theorem 3.10(iii). The finite Beigi sector graph and
+  its ordered-cycle ground-space dimension formula are formalized; reducing
+  the graph by eventual constancy and identifying its states with the chosen
+  normal-tensor basis remain open.
 - `cpsv16_parent_commuting_hamiltonian_scope.tex` records that the current
   parent commuting Hamiltonian predicate keeps only the idempotent-product
   consequence of CPSV16 Definition D.2, while the source definition also has

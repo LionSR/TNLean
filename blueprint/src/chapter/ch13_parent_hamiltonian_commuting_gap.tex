@@ -2358,6 +2358,59 @@ specialization of that Appendix~D definition.
     Theorem~\ref{thm:two_site_parent_interaction_commuting_overlaps}.
 \end{proof}
 
+\begin{definition}[Finite sector graph]\label{def:beigi_sector_graph}
+    \lean{MPSTensor.BeigiSectorGraphData}
+    \lean{MPSTensor.BeigiSectorGraphData.edgeGroundSpace}
+    \lean{MPSTensor.BeigiSectorGraphData.IsEdge}
+    \lean{MPSTensor.BeigiSectorGraphData.OrderedCycle}
+    \leanok
+    Suppose that a one-site unitary identifies the physical Hilbert space with
+    a finite direct sum
+    \[
+        \mathcal H\cong\bigoplus_a
+        \mathcal H_{a,l}\otimes\mathcal H_{a,r},
+    \]
+    and that in these coordinates the complementary two-site interaction is
+    \[
+        \bigoplus_{a,b}
+        \mathbf 1_{a,l}\otimes P_{a,b}\otimes\mathbf 1_{b,r},
+    \]
+    where each $P_{a,b}$ is an orthogonal projector.  The directed edge
+    $a\to b$ is present precisely when $\operatorname{ran}P_{a,b}$ is nonzero.
+    An ordered cycle of length $N$ is a sequence $(a_0,\ldots,a_{N-1})$ for
+    which every cyclically adjacent edge $a_n\to a_{n+1}$ is present.  Cyclic
+    rotations are not identified.  This is the graph following equation~(2)
+    of \cite[Section~III]{Beigi2012Classification}.
+\end{definition}
+
+\begin{theorem}[Ordered-cycle ground-space dimension formula]
+    \label{thm:beigi_ordered_cycle_ground_space_dimension}
+    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    For every $N>2$, the periodic ground-space dimension is
+    \[
+        \dim\ker H_N
+        =
+        \sum_{(a_0,\ldots,a_{N-1})}
+        \prod_{n=0}^{N-1}
+        \dim\operatorname{ran}P_{a_n,a_{n+1}},
+    \]
+    where the sum is over ordered cycles and the indices are read modulo $N$.
+    This is equations~(3)--(4) of
+    \cite[Section~III]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The translated parent interactions commute.  Hence the ordered product of
+    their complementary orthogonal projectors is the projector onto
+    $\ker H_N$.  In the cyclic sector coordinates this product is block
+    diagonal, with the block indexed by $(a_0,\ldots,a_{N-1})$ equal to the
+    tensor product of the adjacent projectors $P_{a_n,a_{n+1}}$.  Taking the
+    trace gives the product of their ranks.  A sequence containing a missing
+    edge contributes zero, leaving exactly the displayed ordered-cycle sum.
+\end{proof}
+
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
