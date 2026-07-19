@@ -84,6 +84,11 @@ def _is_cell(v: str) -> bool:
     return re.fullmatch(r"\d+-\d+", v) is not None
 
 
+def _is_pairleg_port(v: str) -> bool:
+    """A contraction starts at the centred face or a positive face slot."""
+    return v == "center" or (_is_int(v) and int(v) > 0)
+
+
 def _enum(*vals: str) -> Callable[[str], bool]:
     allowed = set(vals)
     return lambda v: v in allowed
@@ -103,7 +108,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
                   "face": _enum("up", "down", "west", "east"),
                   "arity": _is_int, "at": _any},
     "pairleg": {"picture": _is_int, "upper": _is_cell, "lower": _is_cell,
-                "upper-port": lambda v: v == "center" or (_is_int(v) and int(v) > 0),
+                "upper-port": _is_pairleg_port,
                 "column": _is_int},
     # The emitter normalizes the user-facing `bond dir=left|right` to
     # forward/reverse (direction along the wire); accept both spellings.

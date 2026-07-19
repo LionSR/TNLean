@@ -11,10 +11,12 @@ resolution for ordinary tall glyphs and physical contractions.
 
 from __future__ import annotations
 
+import io
 import os
 import shutil
 import subprocess
 import tempfile
+from contextlib import redirect_stdout
 from pathlib import Path
 
 from tenkz_audit import Audit, canonical_hash
@@ -499,7 +501,8 @@ def main() -> int:
             encoding="utf-8",
         )
         warning_only_audit = Audit(warning_only_log, None)
-        warning_only_status = warning_only_audit.run()
+        with redirect_stdout(io.StringIO()):
+            warning_only_status = warning_only_audit.run()
 
     if not missing_picture_guard:
         raise AssertionError("audit parser silently dropped a pictureless warning")
