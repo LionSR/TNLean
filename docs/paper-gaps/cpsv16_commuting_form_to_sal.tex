@@ -254,11 +254,28 @@ $a^2=2$ and $a^3=2$.  Thus an arbitrary fixed bond does not carry
 original coordinates.  Equation \emph{sigmaNK2} gives that scalar form only
 after the one-site unitary coordinate change.
 
-A normal representative is still not automatic.  Obtaining one requires the
-normal-block canonical-form argument that rules out additional canonical
-summands; this is the remaining part of \ghissue{4271}.  The separate
-geometric law $c_N=a^N$ for the realization scalars, and its absorption into
-one local normalization, remains tracked in \ghissue{4253}.
+The constructed tensor is not yet known to become normal after one positive
+rescaling.  Obtaining such a representative requires a normal-block
+canonical-form argument that rules out additional canonical summands; a
+general BNT direct sum does not supply a single normal block.
+
+The normal-representative and geometric-scalar questions are not independent.
+The theorem
+\leanid{MPOTensor.EtaLocalStructureData.%
+mpo_eq_positive_power_product_of_normal_smul}
+shows that if $sC$ is normal for one $s>0$, then
+\[
+  \sigma^{(N)}(\mathcal K)=s^N\prod_n B_{n,n+1}
+  \qquad (N\geq2).
+\]
+First, the normal-tensor fundamental theorem gives a possible unit phase
+$\zeta^N$.  The self-overlap of the normal source tends to one, so the fixed
+product is nonzero at two sufficiently large consecutive lengths.  The
+positive realization constants at those lengths force $\zeta=1$.  Thus any
+solution of the remaining positive normal-rescaling problem simultaneously
+proves the law $c_N=s^N$ and permits its absorption into one local
+normalization.  This joint remaining problem is tracked in \ghissue{4271};
+\ghissue{4253} records the same dependency from the scalar-law side.
 
 The scaled identity uses only the fixed commuting bond and its positive
 realization scalar.  It does not assert zero correlation length, rank-one trace
@@ -332,12 +349,15 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Restore the normal injective single-block hypothesis in the comparison
-between the matrix-product family and the fixed bond-product family.  Prove the
-proportional fundamental-theorem scalar law $c_N=a^N$ for one $a>0$, and absorb
-$a$ into the bond or neighboring operators.  The counterexample above shows
-that the generic proportional commuting-bond data cannot supply this law; this
-normalization problem is tracked in \ghissue{4253}.
+\item Prove that the exact fixed-product tensor has a single normal
+representative after one positive rescaling, or identify the weakest faithful
+replacement if canonical multiplicities cannot be removed.  The theorem
+\leanid{MPOTensor.EtaLocalStructureData.%
+mpo_eq_positive_power_product_of_normal_smul}
+then gives the positive geometric scalar law and its absorption automatically.
+The counterexample above shows that generic proportional commuting-bond data
+without the normal single-block input cannot supply this conclusion.  This
+joint normalization problem is tracked in \ghissue{4271} and \ghissue{4253}.
 \item Find a source-faithful property of the actual inverse-map neighboring
 family which excludes the nilpotent zero-eigenspace, or
 replace the printed line-1613 argument by a direct Markov decomposition which
