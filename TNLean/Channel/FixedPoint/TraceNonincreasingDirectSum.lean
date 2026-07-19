@@ -44,6 +44,15 @@ def IsTracePreservingBetweenDirectSums
       (∀ l, Matrix (m l) (m l) ℂ)) : Prop :=
   ∀ A, ∑ l, (T A l).trace = ∑ k, (A k).trace
 
+omit [DecidableEq ι] [(k : ι) → DecidableEq (n k)] in
+/-- For an endomorphism of one finite direct sum, the rectangular and
+endomorphism formulations of total-trace preservation agree. -/
+theorem isTracePreservingBetweenDirectSums_iff_isTracePreservingDirectSumMap
+    {T : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
+      (∀ k, Matrix (n k) (n k) ℂ)} :
+    IsTracePreservingBetweenDirectSums T ↔ IsTracePreservingDirectSumMap T :=
+  Iff.rfl
+
 /-- A map between two finite direct sums does not increase the total trace of
 a positive family. -/
 def IsTraceNonincreasingBetweenDirectSums
@@ -128,7 +137,7 @@ theorem isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing
       ∀ l, (T A l).PosSemidef)
     (hTNI : IsTraceNonincreasingBetweenDirectSums T)
     (hSNI : IsTraceNonincreasingBetweenDirectSums S)
-    (hComp : IsTracePreservingDirectSumMap (S.comp T)) :
+    (hComp : IsTracePreservingBetweenDirectSums (S.comp T)) :
     IsTracePreservingBetweenDirectSums T := by
   apply isTracePreservingBetweenDirectSums_of_posSemidef
   intro A hA

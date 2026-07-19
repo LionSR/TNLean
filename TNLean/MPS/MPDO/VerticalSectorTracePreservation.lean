@@ -233,10 +233,14 @@ theorem transportedVerticalSector_composites_tracePreserving
       hF₂TNI V₂ L₂ hL₂ hV₂fixed hOne₂
   have hTbarTrace : Matrix.IsTracePreservingBetweenDirectSums Tbar :=
     Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing
-      hTbarpos hTbarTNI hSbarTNI hF₁trace
+      hTbarpos hTbarTNI hSbarTNI
+        (Matrix.isTracePreservingBetweenDirectSums_iff_isTracePreservingDirectSumMap.mpr
+          hF₁trace)
   have hSbarTrace : Matrix.IsTracePreservingBetweenDirectSums Sbar :=
     Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing
-      hSbarpos hSbarTNI hTbarTNI hF₂trace
+      hSbarpos hSbarTNI hTbarTNI
+        (Matrix.isTracePreservingBetweenDirectSums_iff_isTracePreservingDirectSumMap.mpr
+          hF₂trace)
   exact ⟨hF₁trace, hF₂trace, hTbarTrace, hSbarTrace⟩
 
 end MPOTensor
