@@ -756,7 +756,7 @@
     decomposition or saturation of the area law.
 \end{remark}
 
-\begin{theorem}[Inactive-sector obstruction to full trace-matrix primitivity]
+\begin{theorem}[A nonminimal sector factorization need not be primitive]
     \label{thm:mpdo_commuting_bond_trace_matrix_primitivity_obstruction}
     \lean{MPOTensor.CommutingBondTraceMatrixObstruction.%
       normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
@@ -770,16 +770,19 @@
     \[
         \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1},
     \]
-    while the full trace matrix of its two Beigi sectors is
+    while the trace matrix of a chosen two-sector Beigi factorization is
     \[
         T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
     \]
     In particular, $T$ is not primitive.
 
-    This obstructs the unqualified primitivity step suggested at
-    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  It does not obstruct
-    primitivity after a mathematically specified removal of inactive sectors,
-    and it does not disprove the stated commuting-form-to-SAL implication.
+    This shows that primitivity cannot be inferred for an arbitrary selected
+    factorization in the step suggested at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  The same tensor also
+    has a one-sector factorization with primitive trace matrix.  Hence the
+    example does not exclude a source-faithful minimal or visible-sector
+    selection, and it does not disprove the stated commuting-form-to-SAL
+    implication.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -787,9 +790,9 @@
     doubled-index transfer and the physical-trace transfer are both the
     identity on the one-dimensional bond algebra, so $\mathcal K$ is injective
     and normal and has source zero correlation length.  Decompose the physical
-    space as $\mathbb C\oplus\mathbb C$ and take the left and right sector
-    factors to be $1$ on the first summand and $0$ on the second.  The resulting
-    neighboring operators are positive scalar matrices and give a single bond
+    space nonminimally as $\mathbb C\oplus\mathbb C$ and take the left and right
+    sector factors to be $1$ on the first summand and $0$ on the second.  The
+    resulting neighboring operators are positive scalar matrices and give a single bond
     whose commuting translates have exactly the required product at every
     length.  Their traces are $1$ only for the ordered pair of first sectors,
     giving the displayed matrix.  Its second row remains zero under every

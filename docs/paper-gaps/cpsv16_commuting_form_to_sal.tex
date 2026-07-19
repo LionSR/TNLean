@@ -358,8 +358,8 @@ tensor has SAL and source ZCL, yet its trace matrix is not rank one.  Thus
 neither inverse-map provenance nor the finite-chain cyclic form supplies the
 missing rectangular vanishing.
 
-Primitivity of the full Beigi trace matrix cannot repair this argument under
-the raw hypotheses either.  The theorem
+Primitivity cannot be assumed for an arbitrary selected Beigi factorization.
+The theorem
 \leanid{MPOTensor.CommutingBondTraceMatrixObstruction.%
 normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
 gives an injective normal bond-dimension-one product MPDO with source ZCL and
@@ -368,10 +368,14 @@ one-dimensional sectors have positive neighboring operators and trace matrix
 \[
   T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
 \]
-The second physical summand is inactive, but it is retained by the middle-space
-decomposition, so the full matrix is not primitive.  Beigi's Lemma~2.1 supplies
-only the direct-sum tensor-factor decomposition; it contains no assertion of
-primitivity or removal of inactive summands.
+The second physical summand is inactive, but it is retained by this nonminimal
+middle-space decomposition, so its full matrix is not primitive.  The same
+product tensor also has a one-sector factorization with the primitive
+$1\times1$ trace matrix $(1)$.  Thus this example does not exclude the
+existence of a primitive Beigi factorization.  It shows instead that Beigi's
+Lemma~2.1, which supplies only the direct-sum tensor-factor decomposition,
+must be supplemented by a source-faithful minimal or visible-sector selection
+before primitivity can be used.
 
 Consequently the source implication
 \[
@@ -398,10 +402,11 @@ The gap can be removed in the following stages.
 \begin{enumerate}
 \item Replace the full Beigi sector set by a source-faithfully defined active
 restriction, formed without using SAL, and prove that normality leaves one
-aperiodic recurrent component.  The raw full-matrix assertion is false by the
-inactive-sector example above.  The active-sector construction presently used
-for the inverse-map factorization depends on SAL-derived sector weights and
-therefore cannot be invoked at this call site.
+aperiodic recurrent component.  The inactive-sector example above shows that
+an arbitrary nonminimal factorization is insufficient; it does not rule out an
+appropriate existential selection.  The active-sector construction presently
+used for the inverse-map factorization depends on SAL-derived sector weights
+and therefore cannot be invoked at this call site.
 
 For such an active restriction, one possible corrected route is to use the
 square of its trace matrix.  If a primitive nonnegative matrix $T$ satisfies

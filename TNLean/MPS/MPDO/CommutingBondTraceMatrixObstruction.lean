@@ -8,14 +8,14 @@ import TNLean.MPS.MPDO.PhysicalSectorEtaLocalStructure
 import TNLean.MPS.MPDO.ZCL
 
 /-!
-# Inactive-sector obstruction to primitivity of a commuting-bond trace matrix
+# A nonminimal sector factorization with nonprimitive trace matrix
 
 This file records the inactive-sector obstruction in the converse argument of
-arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1603--1613.  A normal
-source block with source zero correlation length and one exact positive
-translation-invariant commuting-bond presentation need not make the full Beigi
-trace matrix primitive: the middle-space decomposition can retain a physical
-summand on which the bond vanishes.
+arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1603--1613.  Even for
+a normal source block with source zero correlation length and one exact positive
+translation-invariant commuting-bond presentation, a chosen nonminimal
+middle-space decomposition can retain a physical summand on which the bond
+vanishes.  Its trace matrix is then not primitive.
 
 The example is the pure product MPDO on a two-dimensional physical space.  Its
 bond dimension is one and its only nonzero tensor entry is
@@ -24,10 +24,11 @@ operators with trace matrix
 \[
   T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
 \]
-Thus the source hypotheses do not imply primitivity before inactive sectors
-are removed.  This does not refute a theorem about a source-faithfully defined
-active restriction of `T`; constructing that restriction and proving its
-primitivity remain separate obligations.
+This does not exclude another factorization with primitive trace matrix: the
+same product tensor has a one-sector factorization.  Thus an existential
+repair of the source proof requires a source-faithful minimal or visible-sector
+selection theorem; primitivity cannot be inferred for an arbitrary selected
+factorization merely from the displayed commuting product.
 
 ## References
 
@@ -252,13 +253,13 @@ lemma mpo_eq_commutingBondProduct (N : ℕ) (hN : 2 ≤ N) :
       (commutingBondData.bondData.toCommutingFormData hN).product := by
   exact factorization.mpo_eq_product_physicalBond hN
 
-/-- A normal MPDO block with source zero correlation length and an exact fixed
-positive commuting-bond presentation need not have a primitive full Beigi
-trace matrix.
+/-- A chosen nonminimal factorization of a normal source-ZCL MPDO with an exact
+fixed positive commuting-bond presentation need not have a primitive trace
+matrix.
 
-This formally obstructs the raw primitivity target suggested after
-arXiv:1606.00608, Appendix C.2, line 1613.  The example does not address a
-trace matrix restricted to a source-faithfully defined active sector set. -/
+This shows that the factorization needed after arXiv:1606.00608, Appendix C.2,
+line 1613, must be selected or pruned by a separate argument.  The example does
+not rule out another factorization with primitive trace matrix. -/
 theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive :
     tensor.IsMPDO ∧
       MPSTensor.IsInjective tensor.toMPSTensor ∧
