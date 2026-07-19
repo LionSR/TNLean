@@ -2596,6 +2596,75 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \]
 \end{proof}
 
+\begin{definition}[Kraus maps between finite sums of matrix algebras]
+    \label{def:kraus_map_between_direct_sums}
+    \lean{Matrix.directSumMapExtension, Matrix.IsKrausDirectSumMap}
+    \leanok
+    Let
+    \[
+        \mathcal A=\bigoplus_{i\in I}M_{n_i}(\mathbb C),
+        \qquad
+        \mathcal B=\bigoplus_{j\in J}M_{m_j}(\mathbb C),
+    \]
+    and write $\iota_{\mathcal A},\pi_{\mathcal A}$ and
+    $\iota_{\mathcal B},\pi_{\mathcal B}$ for the corresponding
+    block-diagonal embeddings and diagonal-block compressions.  The canonical
+    full-matrix extension of $T:\mathcal A\to\mathcal B$ is
+    \[
+        \widehat T=\iota_{\mathcal B}\circ T\circ\pi_{\mathcal A}.
+    \]
+    The map $T$ is a direct-sum Kraus map when $\widehat T$ has a Kraus
+    representation.
+\end{definition}
+
+% This is the finite-sum complete-positivity implication used for the
+% transported composites in CPSV16, Appendix C.4, lines 1974--1995.  It does
+% not establish Kraus representations for those transported maps; that is the
+% tensor-specific preparation and partial-trace step tracked in issue #4438.
+\begin{lemma}[Composition and trace-adjoint Schwarz for direct-sum Kraus maps]
+    \label{lem:direct_sum_kraus_composition_schwarz}
+    \lean{Matrix.directSumMapExtension_comp,
+        Matrix.IsKrausDirectSumMap.comp,
+        Matrix.isSchwarzDirectSumMap_of_directSumExtension_isSchwarzMap,
+        Matrix.IsKrausDirectSumMap.directSumTraceAdjointMap_isSchwarz}
+    \leanok
+    \uses{def:kraus_map_between_direct_sums}
+    For direct-sum Kraus maps
+    $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal C$, one has
+    \[
+        \widehat{S\circ T}=\widehat S\circ\widehat T,
+    \]
+    and $S\circ T$ is again a direct-sum Kraus map.  If
+    $F:\mathcal A\to\mathcal A$ is a trace-preserving direct-sum Kraus map,
+    then its trace adjoint satisfies, for every $X\in\mathcal A$,
+    \[
+        F^*(X^*X)-F^*(X^*)F^*(X)\succeq0
+    \]
+    in every summand.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:kadison_schwarz_2positive}
+    Since $\pi_{\mathcal B}\iota_{\mathcal B}=\operatorname{id}_{\mathcal B}$,
+    \[
+        \widehat S\,\widehat T
+        =\iota_{\mathcal C}S\pi_{\mathcal B}
+          \iota_{\mathcal B}T\pi_{\mathcal A}
+        =\iota_{\mathcal C}ST\pi_{\mathcal A}
+        =\widehat{S\circ T}.
+    \]
+    Products of Kraus operators therefore give a Kraus representation of the
+    composite.  If $F$ preserves the total trace, then $\widehat F$ preserves
+    the ordinary trace, so $(\widehat F)^*$ is unital.  Complete positivity
+    implies two-positivity for $(\widehat F)^*$, and Kadison--Schwarz gives
+    \[
+        (\widehat F)^*(Y^*Y)
+          -(\widehat F)^*(Y^*)(\widehat F)^*(Y)\succeq0.
+    \]
+    Using $(\widehat F)^*=\widehat{F^*}$ and compressing to each diagonal
+    summand gives the stated inequality.
+\end{proof}
+
 % Scope restriction documented in
 % docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
 \begin{theorem}[Weighted block form of the adjoint Ces\`aro projection on full support]%

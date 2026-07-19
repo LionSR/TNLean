@@ -30,7 +30,7 @@ the particular transported vertical-sector maps are separate.
 * `Matrix.IsKrausDirectSumMap`: complete positivity through this extension.
 -/
 
-open scoped Matrix MatrixOrder ComplexOrder BigOperators
+open scoped Matrix MatrixOrder ComplexOrder
 
 noncomputable section
 
@@ -84,14 +84,14 @@ theorem directSumMapExtension_comp
       (directSumMapExtension S).comp (directSumMapExtension T) := by
   apply LinearMap.ext
   intro A
-  simp [directSumMapExtension]
-  change S (T (directSumDiagonalCompression A)) =
-    S (directSumDiagonalCompression
-      (directSumDiagonalEmbedding (T (directSumDiagonalCompression A))))
+  change directSumDiagonalEmbedding (S (T (directSumDiagonalCompression A))) =
+    directSumDiagonalEmbedding
+      (S (directSumDiagonalCompression
+        (directSumDiagonalEmbedding (T (directSumDiagonalCompression A)))))
   rw [directSumDiagonalCompression_embedding]
 
-/-- A map between finite sums of full matrix algebras is completely positive
-when its canonical full-matrix extension admits a Kraus representation. -/
+/-- A map between finite sums of full matrix algebras is completely positive when its
+canonical full-matrix extension admits a Kraus representation. -/
 def IsKrausDirectSumMap
     (T : (∀ i, Matrix (n i) (n i) ℂ) →ₗ[ℂ]
       (∀ j, Matrix (m j) (m j) ℂ)) : Prop :=
