@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.TraceReindex
 import TNLean.Channel.FixedPoint.MaximalSupportBasic
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
 import TNLean.Channel.FixedPoint.DirectSumBlockRetraction
@@ -39,21 +38,6 @@ open Filter Function Set
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.Frobenius Topology
 
 variable {D : ℕ}
-
-/-- Trace nonincrease is invariant under a simultaneous change of matrix
-coordinates. -/
-theorem IsTraceNonincreasingMap.reindexEndomorphism
-    {α β : Type*} [Fintype α] [Fintype β]
-    {T : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ}
-    (hT : IsTraceNonincreasingMap T) (e : α ≃ β) :
-    IsTraceNonincreasingMap (Matrix.reindexEndomorphism e T) := by
-  classical
-  intro A hA
-  rw [Matrix.reindexEndomorphism_apply, Matrix.trace_reindex]
-  have htrace : Matrix.trace (A.submatrix e e) = Matrix.trace A := by
-    simpa only [Matrix.reindex_apply, Equiv.symm_symm] using
-      Matrix.trace_reindex e.symm A
-  exact (hT _ (hA.submatrix e)).trans_eq htrace
 
 open Kraus
 
@@ -200,7 +184,8 @@ theorem IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_spa
     fun j => Matrix.reindex e e (V j)
   have hTFin : IsPositiveMap TFin :=
     Matrix.IsPositiveMap.reindexEndomorphism hT e
-  have hTNIFin : IsTraceNonincreasingMap TFin := hTNI.reindexEndomorphism e
+  have hTNIFin : IsTraceNonincreasingMap TFin :=
+    Matrix.IsTraceNonincreasingMap.reindexEndomorphism hTNI e
   have hreindex_symm (A : Matrix n n ℂ) :
       Matrix.reindex e.symm e.symm (Matrix.reindex e e A) = A := by
     simpa only [Matrix.coe_reindexLinearEquiv,

@@ -120,6 +120,21 @@ theorem IsTracePreservingMap.reindexEndomorphism
   rw [reindexEndomorphism_apply, Matrix.trace_reindex, hT, Matrix.trace_reindex]
 
 omit [DecidableEq α] [DecidableEq β] in
+/-- Trace nonincrease is invariant under a simultaneous change of matrix
+coordinates. -/
+theorem IsTraceNonincreasingMap.reindexEndomorphism
+    {T : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ}
+    (hT : IsTraceNonincreasingMap T) (e : α ≃ β) :
+    IsTraceNonincreasingMap (reindexEndomorphism e T) := by
+  classical
+  intro A hA
+  rw [reindexEndomorphism_apply, Matrix.trace_reindex]
+  have htrace : Matrix.trace (A.submatrix e e) = Matrix.trace A := by
+    simpa only [Matrix.reindex_apply, Equiv.symm_symm] using
+      Matrix.trace_reindex e.symm A
+  exact (hT _ (hA.submatrix e)).trans_eq htrace
+
+omit [DecidableEq α] [DecidableEq β] in
 /-- The trace adjoint commutes with simultaneous reindexing of matrix
 coordinates. -/
 theorem traceAdjointMap_reindexEndomorphism (e : α ≃ β)
