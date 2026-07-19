@@ -9,11 +9,16 @@
     \]
     indexed by a ket index $i$ and a bra index $j$. Diagrammatically,
     \begin{center}
-        \TNMPOCell{M}{i}{j}
+        % Formula: (M^{ij})_{\alpha\beta}, with M^{ij}\in\operatorname{Mat}_D.
+        % Ink/index correspondence: the west and east legs carry the free
+        % virtual indices \alpha and \beta; the upper and lower legs carry the
+        % free physical indices i and j.  Nothing is contracted, so the
+        % boundary signature (virtual-west,virtual-east,physical-up,physical-down)
+        % is (1,1,1,1).
+        \begin{tenkz}[physical=updown]
+            \tn[mpo, up=$i$, down=$j$]{M}
+        \end{tenkz}
     \end{center}
-    The black node denotes the tensor $M$, the horizontal legs are virtual,
-    the upper leg is the ket index $i$, and the lower leg is the bra
-    index $j$.
 \end{definition}
 
 \begin{definition}[Doubled-index MPS view]\label{def:mpo_to_mps}
@@ -116,11 +121,25 @@
 
 Diagrammatically,
 \begin{center}
-    \TNMPOChain{M}{\sigma_1}{\tau_1}{\sigma_N}{\tau_N}{N}
+    % Formula: \rho^{(N)}(M)_{\sigma,\tau}
+    % = \operatorname{tr}(M^{\sigma_1\tau_1}\cdots
+    % M^{\sigma_N\tau_N})
+    % = \sum_{\alpha_1,\ldots,\alpha_N}
+    % M^{\sigma_1\tau_1}_{\alpha_1\alpha_2}\cdots
+    % M^{\sigma_N\tau_N}_{\alpha_N\alpha_1}.
+    % Ink/index correspondence: every horizontal virtual index is contracted,
+    % including the return bond \alpha_{N+1}=\alpha_1.  The upper legs carry
+    % the free indices \sigma_1,\ldots,\sigma_N and the lower legs carry
+    % \tau_1,\ldots,\tau_N, hence the semantic boundary signature is
+    % (0,0,N,N).  The \tndots atom abbreviates the omitted cells, so the drawn
+    % and logged physical arities are necessarily schematic rather than N.
+    \begin{tenkz}[physical=updown, periodic]
+        \tn[mpo, up=$\sigma_1$, down=$\tau_1$]{M} &
+        \tn[mpo, up=$\sigma_2$, down=$\tau_2$]{M} &
+        \tndots &
+        \tn[mpo, up=$\sigma_N$, down=$\tau_N$]{M}
+    \end{tenkz}
 \end{center}
-each black node denotes the same local tensor $M$, and the matrix entry
-$\rho^{(N)}(M)_{\sigma,\tau}$ is obtained by closing the outer virtual
-legs cyclically and taking the resulting trace.
 
 \begin{definition}[Cyclic-shift reindexing]\label{def:mpo_rotate_config}
     \lean{MPOTensor.rotateConfig}

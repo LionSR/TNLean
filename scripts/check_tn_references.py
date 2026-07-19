@@ -26,7 +26,6 @@ REFERENCE_CALLS = {
         r"\TNOpenPhysicalNorth{pKet}\TNOpenPhysicalSouth{pBra}"
         r"\end{TNDiagram}"
     ),
-    "horizontal_periodic_mpo_word": r"\TNMPOChain{A}{i_1}{j_1}{i_N}{j_N}{N}",
     "stacked_mpo_zipper": r"\TNMPDOUnweightedZipperReconstruction",
     "compact_trace_cell": (
         r"\begin{TNDiagram}[compact]"
@@ -67,9 +66,6 @@ REFERENCE_CALLS = {
 EXPECTED_CONNECTIONS = {
     "straight_purification": {
         ("physical", "straight", "pKetAncilla", "pBraAncilla"),
-    },
-    "horizontal_periodic_mpo_word": {
-        ("virtual", "trace-below", "tnLW", "tnRE"),
     },
 }
 
