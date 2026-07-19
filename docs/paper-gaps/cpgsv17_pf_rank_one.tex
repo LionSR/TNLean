@@ -488,12 +488,13 @@ block of length $L$ in a chain relevant to SAL,
   H_L=2+(L-1)h,
   \qquad H_N=Nh.
 \]
-Consequently $I_L=H_L+H_{N-L}-H_N=4-2h$, independently of $L$.  Thus the
-tensor satisfies the strong area law mathematically.  This entropy calculation
-is not yet a theorem about
-\leanid{MPOTensor.ActiveSectorSpanningCounterexample.tensor}; in particular,
-the formal counterexample theorem does not contain an \leanid{IsSAL}
-conjunct.
+Consequently $I_L=H_L+H_{N-L}-H_N=4-2h$, independently of $L$.  Formally, the
+same conclusion is obtained without logarithmic calculations: after one site
+is traced out, the diagonal state is an ordinary Markov path, and conditioning
+on its middle label gives a four-sector Hayashi decomposition at every
+admissible cut.  The theorem
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.tensor_isSAL} therefore
+proves the strong area law for this tensor.
 
 The inverse-map provenance is now explicit.  The refined Hayashi decomposition
 has four one-dimensional sectors of weight $1/4$, with diagonal left and right
@@ -509,13 +510,14 @@ same source-selected construction satisfies
 \]
 These statements are proved in
 \leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
-inverseMap_provenance_preserves_rectangular_remainder}.  Thus provenance does
-not supply the missing vanishing.  The remaining formal boundary is the strong
-area law: the entropy calculation above has not yet been expressed as an
-\leanid{IsSAL} theorem for this tensor.  Until that hypothesis is checked for
-the same witness, the example is not classified here as a formal counterexample
-to Lemma~C.5.  The provenance calculation and this remaining boundary are
-tracked in \ghissue{4270}.
+inverseMap_provenance_preserves_rectangular_remainder}.  Together with SAL,
+injectivity, and source ZCL, these facts are assembled in
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+tensor_refutes_printed_sal_zcl_rank_one_inference}.  The active trace matrix
+has no factorization $T_{k,h}=a_kb_h$, while $Q(1-LQ)L\ne0$.  Hence the example
+is a formal counterexample to the rank-one conclusion of the printed
+Lemma~C.5, not merely to an intermediate matrix argument.  This closes the
+verification tracked in \ghissue{4270}.
 
 \section{A positive-semidefinite route}
 
@@ -646,12 +648,10 @@ counterexample shows that these conclusions, even supplemented by injectivity,
 full virtual spanning, and positivity of every neighboring operator, do not
 imply the missing vanishing.  The explicit Hayashi decomposition and inverse-map
 calculation now show that the same nonzero nilpotent remainder occurs for the
-source-selected factorization.  Its induced classical cyclic family satisfies
-the strong area law by the entropy calculation above, but that last hypothesis
-has not yet been formalized for this tensor.  The example therefore refutes the
-printed matrix inference and rules out inverse-map provenance as its missing
-input, while the formal status of Lemma~C.5 itself awaits the strong-area-law
-theorem.
+source-selected factorization.  The all-cut Markov decomposition proves the
+strong area law for the same tensor.  Thus the example satisfies the printed
+SAL and ZCL hypotheses and refutes the asserted conclusion
+$T_{k,h}=a_kb_h$ of Lemma~C.5.
 
 This obstruction propagates to every source statement whose proof invokes the
 rank-one factorization from Lemma~C.5.  In particular, the structural
@@ -678,18 +678,15 @@ The local simple-MPDO structure is constructed only through these two corrected
 criteria; the former constructor with an abstract assumption asserting the
 false primitive trace-power implication has been removed.
 
-For the unconditional matrix product density operator argument, it would
-suffice to derive positive semidefiniteness, linear independence, or any
-equivalent exclusion of the generalized zero-eigenspace from the stated SAL
-and ZCL hypotheses.  The source audit provides no such derivation, and the
-explicit inverse-map calculation shows that provenance alone does not supply
-one.  Lemma~C.5 is therefore still classified as obstructed, rather than
-formalized or refuted, until the strong area law is formalized for the same
-four-sector tensor.  The same status applies to its structural corollary and to
+The all-cut Markov proof and the source-selected inverse-map calculation now
+show that Lemma~C.5 is false as printed: its injective four-sector witness
+satisfies SAL and source ZCL, while the asserted factorization
+$T_{k,h}=a_kb_h$ does not exist.  Consequently its structural corollary and
 the source implications (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) of
-Theorem~4.9.  Their corrected conditional forms remain available, but the
-additional conditions must not be attributed to the source theorem.  The
-remaining strong-area-law verification is recorded in \ghissue{4270}.
+Theorem~4.9 cannot be obtained by the printed argument.  Their corrected
+conditional forms remain available under positive semidefiniteness or the
+appropriate linear-independence hypothesis, but those additional conditions
+must not be attributed to the source theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
