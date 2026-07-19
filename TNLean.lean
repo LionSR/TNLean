@@ -32,6 +32,7 @@ import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.OrthogonalProjection
+import TNLean.Algebra.PosSemidefSupport
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.DirectedWalkCoboundary
@@ -209,8 +210,10 @@ import TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks
 import TNLean.Channel.FixedPoint.DirectSumBlockRetraction
 import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.CornerBlockForm
+import TNLean.Channel.FixedPoint.StationaryProjection
 import TNLean.Channel.FixedPoint.CornerFixedPoints
 import TNLean.Channel.FixedPoint.MaximalRank
+import TNLean.Channel.FixedPoint.MaximalSupportBasic
 import TNLean.Channel.FixedPoint.MaximalSupport
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.WedderburnDecomp

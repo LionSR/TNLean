@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Transfer
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.PosSemidefSupport
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Basic
 
@@ -48,19 +49,12 @@ variable {d D : ℕ}
 
 /-! ## Support projection of a PSD matrix -/
 
-/-- The (orthogonal) projection onto the support of a PSD matrix.
-
-We construct this using a unitary diagonalization `ρ = U * diag(λ) * Uᴴ` and then set
-`P = U * diag(1_{λ>0}) * Uᴴ`.
-
-This is the matrix-algebra version of the range projection of a positive operator.
--/
+/-- Compatibility name for the orthogonal projection onto the support of a
+positive semidefinite matrix.  The source-independent construction is
+`Matrix.PosSemidef.supportProj` in `TNLean.Algebra.PosSemidefSupport`. -/
 noncomputable def supportProj (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     Matrix (Fin D) (Fin D) ℂ :=
-  let hH : ρ.IsHermitian := hρ.isHermitian
-  let U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
-  let sgnEig : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
-  U * Matrix.diagonal sgnEig * Uᴴ
+  hρ.supportProj
 
 section SupportProjLemmas
 
@@ -160,7 +154,7 @@ lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
     simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
       Function.comp_def] using hH.spectral_theorem
   have hP_def : supportProj (D := D) ρ hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [supportProj, U, sgn]
+    simp [supportProj, Matrix.PosSemidef.supportProj, U, sgn]
   -- Compute `P * ρ`.
   rw [hP_def, hρ_spec, Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
     ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
@@ -270,7 +264,7 @@ lemma exists_supportProj_eq_mul (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosS
       simp [pinv, sgn, hi, mul_inv_cancel₀ hne]
     · simp [pinv, sgn, hi]
   have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [supportProj, U, sgn]
+    simp [supportProj, Matrix.PosSemidef.supportProj, U, sgn]
   have hglue : ∀ A B : Matrix (Fin D) (Fin D) ℂ,
       (U * A * Uᴴ) * (U * B * Uᴴ) = U * (A * B) * Uᴴ := by
     intro A B
@@ -513,7 +507,7 @@ theorem supportProj_ne_one_of_not_posDef
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
   set sgn : Fin D → ℂ := fun j => if 0 < hH.eigenvalues j then 1 else 0
   have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [supportProj, U, sgn]
+    simp [supportProj, Matrix.PosSemidef.supportProj, U, sgn]
   -- From `P = 1`, deduce `diag(sgn) = 1`.
   have hUU : Uᴴ * U = 1 := by
     rw [← Matrix.star_eq_conjTranspose]
