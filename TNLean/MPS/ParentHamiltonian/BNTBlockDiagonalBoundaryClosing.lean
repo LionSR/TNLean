@@ -29,8 +29,9 @@ variable {d : ℕ}
 
 /-- A length at which a tensor is block injective identifies the two boundary
 matrices in a word intertwiner and promotes the relation to one-site
-commutation. -/
-private theorem boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
+commutation. This is the boundary-identification step in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
+theorem boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
     {D S : ℕ} {A : MPSTensor d D}
     (hBlk : IsNBlkInjective A S) (hS : 0 < S)
     (X Y : Matrix (Fin D) (Fin D) ℂ)
@@ -139,8 +140,9 @@ theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq
       exact Matrix.trace_mul_comm _ _
 
 /-- Length-indexed form of the global-cut comparison, with the chain length
-kept as a separate variable. -/
-private theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
+kept as a separate variable. This is the change-of-cut comparison in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
+theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
     {N K S : ℕ} (hKS : K + S = N) (hS : 0 < S)
