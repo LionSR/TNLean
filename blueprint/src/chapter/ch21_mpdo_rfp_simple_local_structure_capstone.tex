@@ -84,11 +84,21 @@
 
 \begin{proof}
     \leanok
-    The four physical slices form a basis of the $2\times2$ matrices.  Computing
-    their dual basis and applying it to the two outer density matrices gives the
-    left and right inverse-map factors.  The factor four in the left contraction
-    is cancelled by the sector weight $1/4$.  Direct multiplication then gives
-    $Q(1-LQ)L\ne0$.
+    Write $S_i=L_{\mathord\bullet i}Q_{i\mathord\bullet}$ for the four physical
+    slices, and let $f_i(a,b)$ be their dual coefficients, so that
+    \[
+        \sum_{i=0}^{3}f_i(a,b)S_i=E_{ab}.
+    \]
+    With $T=QL$, $p_k=1/4$, and $(LQ)_{00}=1$, the two inverse-map contractions
+    are
+    \[
+        (LQ)_{00}^{-1}p_k\sum_{i=0}^{3}f_i(0,\beta)T_{ik}
+        =\frac14\bigl(4L_{\beta k}\bigr)=L_{\beta k},
+        \qquad
+        \sum_{i=0}^{3}f_i(\alpha,0)T_{ki}=Q_{k\alpha}.
+    \]
+    Hence the neighboring operators are those obtained directly from $L$ and
+    $Q$, and direct multiplication gives $Q(1-LQ)L\ne0$.
 \end{proof}
 
 % **Obstruction (dependence on Lemma C.5):** the source corollary includes the

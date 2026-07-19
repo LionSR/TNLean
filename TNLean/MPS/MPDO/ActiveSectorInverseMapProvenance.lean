@@ -81,6 +81,9 @@ private lemma sectorMatrix_linearIndependent : LinearIndependent ℂ sectorMatri
   · change c 3 = 0
     linear_combination h00 - 8 * h01 - (1 / 4) * h10 + 2 * h11
 
+/-- The coefficient table dual to the four sector matrices.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1415--1439. -/
 private noncomputable def dualCoefficient (i : Fin 4) : Matrix (Fin 2) (Fin 2) ℂ :=
   match i with
   | 0 => !![1, 8; 1 / 4, 2]
