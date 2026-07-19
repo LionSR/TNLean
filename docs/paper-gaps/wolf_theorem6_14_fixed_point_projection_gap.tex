@@ -113,19 +113,55 @@ support and range of every fixed point.
 \leanid{IsPositiveMap.exists_maximalSupport_fixedPoint} in
 \doclink{TNLean/Channel/FixedPoint/MaximalSupportBasic}.}
 
-Two arguments remain to obtain the general fixed-point statement above.  First, the
-positive semidefinite density matrices supplied by Proposition~1.5 must be
-restricted to their supports; this produces the positive definite matrices
-in Theorem~6.14.  Second, the discarded kernels must be combined with the
-subspace on which every fixed point vanishes, thereby recovering the zero
-summand $\mathcal H_0$.
+The restriction to this support is also formalized in the same generality.
+If $\rho\succeq0$ is any fixed point and $Q$ is its support projection, then
+every positive matrix in $Q M_D(\mathbb C)Q$ is mapped back into that corner.
+Decomposition into four positive matrices extends the conclusion to every
+matrix in the corner.  Hence, for an isometry $V$ with $V^*V=\mathbf 1$ and
+$VV^*=Q$, the map
+\begin{align}
+  \widetilde T(X)=V^*T(VXV^*)V
+\end{align}
+is positive and trace preserving, has a positive definite fixed point, and
+satisfies
+\begin{align}
+  T(VXV^*)=V\widetilde T(X)V^*.
+  \tag{Wolf, Equation (6.52)}
+\end{align}
+When $\rho=T_\infty(\mathbf 1)$, maximal support further gives
+\begin{align}
+  \operatorname{Fix}(T)=V\operatorname{Fix}(\widetilde T)V^*.
+  \tag{Wolf, Equation (6.51)}
+\end{align}
+Thus every ambient fixed point has zero complementary block.
+The auxiliary fixed-space equivalence is also retained in conditional form:
+for a general stationary $\rho$, it assumes
+$QXQ=X$ for every $X\in\operatorname{Fix}(T)$.  This is the hypothesis named
+\texttt{hmax} in
+\leanid{IsPositiveMap.fixedPoint_iff_exists_fixedPoint_stationarySupportCompression}.
+The source-faithful theorem
+\leanid{IsPositiveMap.exists_maximalSupportCompression} has no such exposed
+hypothesis: it takes $\rho_0=T_\infty(\mathbf 1)$ and derives the support property
+from \leanid{IsPositiveMap.exists_maximalSupport_fixedPoint}.
+\footnote{Formal declarations:
+\leanid{IsPositiveMap.map_supported_on_fixedPoint_support},
+and
+\leanid{IsPositiveMap.exists_maximalSupportCompression}
+in
+\doclink{TNLean/Channel/FixedPoint/StationarySupportRestriction}.}
+
+It remains to apply the full-support fixed-point theorem to $\widetilde T$,
+transport its density-block form through $V$, and combine the complement of
+$Q$ with the kernels discarded when each density matrix is restricted to its
+support.  This last combination produces the single zero summand
+$\mathcal H_0$ of Theorem~6.14.
 
 Thus Proposition~1.5, its application to the full-support adjoint
 mean-ergodic projection, and the full-support Schr\"odinger-picture fixed-point
-formula, together with the maximal-support witness, are formalized, while
-Theorem~6.14 remains open.  The missing work is to construct the supported
-endomorphism, apply the full-support formula there, and recover the zero block
-from the discarded kernels.
+formula, together with the maximal-support witness and the positive
+trace-preserving restriction to its support, are formalized, while
+Theorem~6.14 remains open.  The missing work is the application and transport
+of the full-support formula and the final assembly of the discarded kernels.
 
 \bibliographystyle{alpha}
 \bibliography{references}
