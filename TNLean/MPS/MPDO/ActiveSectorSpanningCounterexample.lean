@@ -24,9 +24,10 @@ while
 
 Thus spanning by the full virtual matrix algebra does not, by itself, prove
 the missing vanishing in the proof of Lemma C.5.  The induced classical cyclic
-family satisfies the strong area law mathematically, but the factorization
-below is chosen directly and has not been identified with the particular
-inverse-map factorization selected from the source Hayashi decomposition.
+family satisfies the strong area law mathematically.  The companion
+`ActiveSectorInverseMapProvenance` calculation identifies the factorization
+below with one selected by an explicit Hayashi decomposition, normalized tail,
+and inverse map.
 
 ## Main result
 
@@ -332,12 +333,11 @@ matrix is non-idempotent and the rectangular remainder is nonzero.
 
 This is a counterexample only to the proposed intermediate implication.  The
 formal statement does not assert the strong area law, although the induced
-classical cyclic family satisfies it by a direct entropy calculation.  What
-prevents this theorem from refuting Lemma C.5 of arXiv:1606.00608 is instead
-the unproved identification of the chosen direct-sum decomposition with the
-source-selected inverse-map factorization.  A proof of that lemma must use
-information beyond the concrete spanning and rectangular identities presently extracted from
-Appendix C.2, lines 1406--1499. -/
+classical cyclic family satisfies it by a direct entropy calculation.  The
+source-selected inverse-map identification is proved separately in
+`inverseMap_provenance_preserves_rectangular_remainder`.  A formal
+counterexample to Lemma C.5 of arXiv:1606.00608 still requires a theorem that
+the same tensor satisfies the strong area law. -/
 theorem virtual_spanning_does_not_force_rectangular_remainder_zero :
     tensor.IsInjective ∧ tensor.IsSourceZCL ∧
       physTraceTransfer tensor * physTraceTransfer tensor = physTraceTransfer tensor ∧
