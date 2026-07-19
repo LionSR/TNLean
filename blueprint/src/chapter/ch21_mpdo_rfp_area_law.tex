@@ -1000,9 +1000,18 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    Jensen's inequality for the concave function $h$ is applied to the nonzero
-    values of $p$ with uniform weights.  Zero values contribute nothing to the
-    entropy.
+    Let $k=\lvert\{z\in Z:p_z\neq0\}\rvert$.  Jensen's inequality for the
+    concave function $h$, with uniform weights on the support, gives
+    \begin{align}
+      \frac{1}{k}\sum_{\substack{z\in Z\\p_z\neq0}}h(p_z)
+      &\leq
+      h\left(\frac{1}{k}
+        \sum_{\substack{z\in Z\\p_z\neq0}}p_z\right)\\
+      &=h\left(\frac{1}{k}\right)
+       =\frac{\log k}{k}.
+    \end{align}
+    Multiplication by $k$ proves the result, since values outside the support
+    contribute $h(0)=0$.
 \end{proof}
 
 \begin{theorem}[Classical mutual information is bounded by ordinary rank]

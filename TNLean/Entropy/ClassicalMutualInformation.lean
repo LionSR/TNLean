@@ -24,11 +24,11 @@ I(P^{\varepsilon}) &= I(P) + \varepsilon S(\beta).
 $$
 If $S(\beta)\geq 0$, the nonnegative endpoint is chosen; otherwise the nonpositive endpoint is
 chosen. Thus $\varepsilon S(\beta)\geq 0$, and the selected endpoint removes a row without
-decreasing mutual information. Repetition leaves at most `rank P` nonzero rows, after which the
-Shannon entropy bound applies.
+decreasing mutual information. Repetition leaves at most $\operatorname{rank}_{\mathbb{R}}P$
+nonzero rows, after which the Shannon entropy bound applies.
 
 All logarithms are natural. Thus the final inequality is equivalent to the base-two form
-`2 ^ I(X : Y) ≤ rank P` in the source.
+$2^{I(X:Y)}\leq\operatorname{rank}_{\mathbb{R}}P$ in the source.
 
 ## Main definitions
 
@@ -627,8 +627,8 @@ probability matrix, the mutual information is at most the logarithm of its ordin
 matrix rank.
 
 This is Theorem 4.1 of arXiv:1704.06507. The source uses base-two logarithms and states
-the equivalent inequality `2 ^ I(X : Y) ≤ rank P`; the present statement uses the natural
-logarithm, as does the entropy theory in TNLean. -/
+the equivalent inequality $2^{I(X:Y)}\leq\operatorname{rank}_{\mathbb{R}}P$; the present
+statement uses the natural logarithm, as does the entropy theory in TNLean. -/
 theorem classicalMutualInformation_le_log_rank
     (P : Matrix X Y ℝ) (hP : P.IsJointDistribution) :
     classicalMutualInformation P ≤ Real.log P.rank := by
