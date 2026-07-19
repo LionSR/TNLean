@@ -3271,7 +3271,7 @@ positive maps, fixed points, or Theorem~6.14 of~\cite{Wolf2012Quantum}.
     Rescaling by the positive number $\tr(B)^{-1}$ proves $A>0$.
 \end{proof}
 
-% Scope restriction documented in
+% Completed support transport recorded in
 % docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
 \begin{theorem}[Density blocks after restriction to maximal stationary support]%
     \label{thm:maximal_support_compression_density_blocks}
@@ -3289,7 +3289,9 @@ positive maps, fixed points, or Theorem~6.14 of~\cite{Wolf2012Quantum}.
     \[
         \widetilde T(Y)=V^*T(VYV^*)V
     \]
-    has a positive definite fixed point.  There are positive integers
+    has a positive definite fixed point.  Moreover, $T(B)=B$ if and only if
+    there is a fixed point $Y$ of $\widetilde T$ such that $B=VYV^*$.
+    There are positive integers
     $d_k,m_k$, a unitary $U$ on $\mathcal H$, and positive definite
     density matrices $\sigma_k\in\MN{m_k}$ such that
     \[
@@ -3309,7 +3311,8 @@ positive maps, fixed points, or Theorem~6.14 of~\cite{Wolf2012Quantum}.
         thm:mean_ergodic_projection_density_block_form,
         thm:posdef_left_kronecker_trace_one}
     Theorem~\ref{thm:stationarySupport_compression} gives positivity, trace
-    preservation, and a positive definite fixed point for $\widetilde T$.
+    preservation, a positive definite fixed point for $\widetilde T$, and the
+    stated correspondence between the original and compressed fixed points.
     Directly from the trace pairing,
     \[
         \widetilde T^*(A)=V^*T^*(VAV^*)V.
