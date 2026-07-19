@@ -217,6 +217,23 @@ in \path{TNLean/Channel/Schwarz/PetzRecoverySupport.lean}.}
 Thus the choice of trace-preserving extension away from the support is no
 longer part of the forward equality gap.
 
+The tensor-product identity required to identify the pre-twirl pair is also
+available without invertibility.  If $\rho$ and $\sigma$ are positive
+semidefinite, $\ker\sigma\subseteq\ker\rho$, and $\tau$ is positive
+semidefinite with $\operatorname{tr}\tau=1$, then
+\begin{align}
+  D(\rho\otimes\tau\Vert\sigma\otimes\tau)=D(\rho\Vert\sigma).
+\end{align}
+The proof expands the logarithm of a singular tensor product through the three
+support projections; support absorption and $\operatorname{tr}\tau=1$ remove
+the projection and ancilla terms.
+\footnote{Formal declaration:
+\leanid{quantumRelativeEntropy_kronecker_support} in
+\path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
+This identity is a prerequisite for transporting equality through the
+Weyl-twirl proof of data processing.  It does not prove that equality yields
+recovery.
+
 The exact remaining analytic implication is the equality case of data
 processing on this support domain:
 \begin{align}
