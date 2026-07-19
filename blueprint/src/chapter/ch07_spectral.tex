@@ -3197,6 +3197,80 @@ transfers the support.
     \]
 \end{proof}
 
+The next three theorems are generic finite-matrix facts.  They do not depend on
+positive maps, fixed points, or Theorem~6.14 of~\cite{Wolf2012Quantum}.
+
+\begin{theorem}[Positive definiteness under the right partial trace]
+    \label{thm:posdef_partial_trace_right}
+    \lean{Matrix.PosDef.partialTraceRight}
+    \leanok
+    Let $I$ and $J$ be finite index sets, and let
+    $X\in\mathbb C^{(I\times J)\times(I\times J)}$ be positive definite.
+    If $J$ is nonempty, then
+    \[
+        \bigl(\operatorname{tr}_{J}X\bigr)_{i,i'}
+          =\sum_{j\in J}X_{(i,j),(i',j)}
+    \]
+    is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The right partial trace is the sum, over the nonempty set $J$, of the
+    positive-definite principal submatrices of $X$ indexed by $I\times\{j\}$.
+    A nonempty finite sum of positive-definite matrices is positive definite.
+\end{proof}
+
+\begin{theorem}[Positive definiteness under the left partial trace]
+    \label{thm:posdef_partial_trace_left}
+    \lean{Matrix.PosDef.partialTraceLeft}
+    \leanok
+    Let $I$ and $J$ be finite index sets, and let
+    $X\in\mathbb C^{(I\times J)\times(I\times J)}$ be positive definite.
+    If $I$ is nonempty, then
+    \[
+        \bigl(\operatorname{tr}_{I}X\bigr)_{j,j'}
+          =\sum_{i\in I}X_{(i,j),(i,j')}
+    \]
+    is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The left partial trace is the sum, over the nonempty set $I$, of the
+    positive-definite principal submatrices of $X$ indexed by $\{i\}\times J$.
+    A nonempty finite sum of positive-definite matrices is positive definite.
+\end{proof}
+
+\begin{theorem}[Positive Kronecker factor from a normalized product]
+    \label{thm:posdef_left_kronecker_trace_one}
+    \lean{Matrix.PosDef.left_of_kronecker_of_trace_eq_one}
+    \leanok
+    Let $I$ and $J$ be nonempty finite index sets, with
+    $A\in\mathbb C^{I\times I}$ and $B\in\mathbb C^{J\times J}$.  If
+    \[
+        A\otimes B>0
+        \qquad\text{and}\qquad
+        \tr(A)=1,
+    \]
+    then $A>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:posdef_partial_trace_left,
+        thm:posdef_partial_trace_right}
+    By Theorem~\ref{thm:posdef_partial_trace_left},
+    \[
+        \operatorname{tr}_{I}(A\otimes B)=\tr(A)B=B>0.
+    \]
+    Hence $\tr(B)>0$.  Theorem~\ref{thm:posdef_partial_trace_right} gives
+    \[
+        \operatorname{tr}_{J}(A\otimes B)=\tr(B)A>0.
+    \]
+    Rescaling by the positive number $\tr(B)^{-1}$ proves $A>0$.
+\end{proof}
+
 % Scope restriction documented in
 % docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
 \begin{theorem}[Density blocks after restriction to maximal stationary support]%
@@ -3204,10 +3278,7 @@ transfers the support.
     \lean{IsPositiveMap.exists_block_densities_of_maximalSupportCompression,
         Matrix.traceAdjointMap_stationarySupportCompression,
         IsSchwarzMap.stationarySupportCompression,
-        IsSchwarzMap.traceAdjointMap_stationarySupportCompression,
-        Matrix.PosDef.partialTraceRight,
-        Matrix.PosDef.partialTraceLeft,
-        Matrix.PosDef.left_of_kronecker_of_trace_eq_one}
+        IsSchwarzMap.traceAdjointMap_stationarySupportCompression}
     \leanok
     \uses{thm:stationarySupport_compression,
         thm:mean_ergodic_projection_density_block_form}
@@ -3235,7 +3306,8 @@ transfers the support.
 \begin{proof}
     \leanok
     \uses{thm:stationarySupport_compression,
-        thm:mean_ergodic_projection_density_block_form}
+        thm:mean_ergodic_projection_density_block_form,
+        thm:posdef_left_kronecker_trace_one}
     Theorem~\ref{thm:stationarySupport_compression} gives positivity, trace
     preservation, and a positive definite fixed point for $\widetilde T$.
     Directly from the trace pairing,
@@ -3256,17 +3328,9 @@ transfers the support.
           =\bigoplus_k\sigma_k\otimes X_k.
     \]
     Hence every principal block $\sigma_k\otimes X_k$ is positive definite.
-    Its two partial traces satisfy
-    \[
-        \operatorname{tr}_{m_k}(\sigma_k\otimes X_k)=X_k,
-        \qquad
-        \operatorname{tr}_{d_k}(\sigma_k\otimes X_k)
-          =\operatorname{tr}(X_k)\sigma_k.
-    \]
-    Both tensor factors have positive dimension.  Positive definiteness is
-    preserved by these partial traces, so $X_k>0$ and
-    $\operatorname{tr}(X_k)\sigma_k>0$.  Since
-    $\operatorname{tr}(X_k)>0$, it follows that $\sigma_k>0$.
+    Both tensor factors have positive dimension, and $\tr(\sigma_k)=1$.
+    Theorem~\ref{thm:posdef_left_kronecker_trace_one}, applied to
+    $\sigma_k\otimes X_k$, therefore gives $\sigma_k>0$.
 \end{proof}
 
 \begin{theorem}[Fixed points of trace-preserving maps]%
