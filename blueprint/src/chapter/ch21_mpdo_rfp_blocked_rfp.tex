@@ -1786,8 +1786,7 @@ physical indices, as in
 
 \begin{theorem}[Faithful fixed point from fixed product generators]
     \label{thm:positive_map_faithful_fixed_point_from_product_span}
-    \lean{IsPositiveMap.%
-      exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span}
+    \lean{IsPositiveMap.exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span}
     \leanok
     Let $\mathcal M$ be a finite full matrix algebra over $\mathbb C$, and let
     $F:\mathcal M\to\mathcal M$ be positive and trace nonincreasing.  Suppose
@@ -1806,6 +1805,14 @@ physical indices, as in
     \uses{thm:positive_trace_nonincreasing_bounded_orbits,
       thm:maximalSupport_fixedPoint_of_bounded_orbits}
     Boundedness of the forward orbits gives the mean-ergodic projection $P$.
+    After decomposing a Hermitian input into its positive and negative parts,
+    the passage to an arbitrary $X$ uses
+    \[
+      H_1=X+X^\dagger,
+      \qquad H_2=\mathrm{i}(X-X^\dagger),
+      \qquad X=\frac12(H_1-\mathrm{i}H_2),
+    \]
+    where $H_1$ and $H_2$ are Hermitian.
     Set $\rho=P(\mathbf 1)$ and let $Q$ be the support projection of $\rho$.
     For every $j$, the maximal-support property of $\rho$ gives
     \[
@@ -1817,23 +1824,137 @@ physical indices, as in
         =V_{j_1}\cdots V_{j_k}
       \qquad (k\geq1).
     \]
-    The product-span hypothesis then gives
-    $Q\mathbf 1Q=\mathbf 1$, so $Q=\mathbf 1$.  Thus $\rho$ is positive
-    definite, and the construction of $P$ gives $F(\rho)=\rho$.
+    The product-span hypothesis and linearity then give
+    $Q\mathbf 1Q=\mathbf 1$.  Since $Q^2=Q$, one has
+    \[
+      Q=Q^2=Q\mathbf 1Q=\mathbf 1.
+    \]
+    Thus $\rho$ is positive definite, and the construction of $P$ gives
+    $F(\rho)=\rho$.
+\end{proof}
+
+\begin{theorem}[Trace preservation from fixed product generators]
+    \label{thm:positive_map_trace_preserving_from_fixed_product_span}
+    \lean{IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span}
+    \leanok
+    Let $\mathcal M$ be a finite full matrix algebra over $\mathbb C$, and let
+    $F:\mathcal M\to\mathcal M$ be positive and trace nonincreasing.  Suppose
+    that $F(V_j)=V_j$ for every $j\in J$.  Put
+    $\mathcal V=\operatorname{span}\{V_j:j\in J\}$ and, in the notation of
+    \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}, define
+    \[
+      C_L(\mathcal V)=\operatorname{span}
+        \{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+    \]
+    If $\mathbf 1\in C_L(\mathcal V)$ for some $L>0$, then $F$ is trace
+    preserving.
+    This is the full-matrix trace step used in
+    \cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:positive_map_faithful_fixed_point_from_product_span,
+      thm:trace_pairing_adjoint_positive,
+      thm:psd_trace_pairing_self_dual,
+      lem:posDef_weighted_trace_faithful,
+      thm:trace_preserving_iff_trace_adjoint_unital}
+    By Theorem~\ref{thm:positive_map_faithful_fixed_point_from_product_span},
+    there is a positive-definite matrix $\rho$ such that $F(\rho)=\rho$.
+    Let $F^*$ be the trace-pairing adjoint and set
+    \[
+      \Delta=\mathbf 1-F^*(\mathbf 1).
+    \]
+    For every positive semidefinite $X$, trace nonincrease gives
+    \[
+      \operatorname{tr}(\Delta X)
+        =\operatorname{tr}(X)-\operatorname{tr}(F(X))\geq0.
+    \]
+    Positivity of $F^*$ and self-duality of the positive semidefinite cone
+    therefore give $\Delta\geq0$.  The fixed-point equation gives
+    $\operatorname{tr}(\rho\Delta)=0$, so positive definiteness of $\rho$
+    forces $\Delta=0$.  Thus $F^*(\mathbf 1)=\mathbf 1$, which is equivalent
+    to trace preservation.
+\end{proof}
+
+\begin{theorem}[Trace preservation on a finite sum from fixed products]
+    \label{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span}
+    \lean{Matrix.IsPositiveDirectSumMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span}
+    \leanok
+    Let
+    $\mathcal A=\bigoplus_{\alpha\in I}\mathcal M_{d_\alpha\times d_\alpha}$
+    be a finite sum of full matrix algebras, with total trace
+    \[
+      \operatorname{tr}_{\mathcal A}(X)
+        =\sum_{\alpha\in I}\operatorname{tr}(X_\alpha).
+    \]
+    Let $F:\mathcal A\to\mathcal A$ be positive and trace nonincreasing.
+    Suppose that $F(V_j)=V_j$ for every $j\in J$.  With
+    $\mathcal V=\operatorname{span}\{V_j:j\in J\}$, put
+    \[
+      C_L(\mathcal V)=\operatorname{span}
+        \{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+    \]
+    If $\mathbf 1_{\mathcal A}\in C_L(\mathcal V)$ for some $L>0$, then $F$
+    preserves the total trace on $\mathcal A$.  This is the finite-sector form
+    of the same step in
+    \cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:positive_map_trace_preserving_from_fixed_product_span,
+      thm:direct_sum_full_matrix_extension_compatibility}
+    Let $\iota:\mathcal A\to\operatorname{End}(\bigoplus_\alpha
+    \mathbb C^{d_\alpha})$ be the block-diagonal embedding and let
+    $\widehat F$ be the canonical full-matrix extension.  These maps satisfy
+    \[
+      \iota(XY)=\iota(X)\iota(Y),
+      \qquad \iota(\mathbf 1_{\mathcal A})=\mathbf 1,
+      \qquad \widehat F(\iota(X))=\iota(F(X)).
+    \]
+    The extension is positive and trace nonincreasing.  The matrices
+    $\iota(V_j)$ are fixed by $\widehat F$, and the displayed identities
+    carry the product-span hypothesis to the full matrix algebra.
+    Theorem~\ref{thm:positive_map_trace_preserving_from_fixed_product_span}
+    makes $\widehat F$ trace preserving.  Restricting to block-diagonal
+    matrices proves preservation of $\operatorname{tr}_{\mathcal A}$ by $F$.
+\end{proof}
+
+\begin{theorem}[Trace sandwich on finite sums of matrix algebras]
+    \label{thm:direct_sum_trace_preservation_sandwich}
+    \lean{Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing}
+    \leanok
+    Let $\mathcal A$ and $\mathcal B$ be finite sums of full matrix algebras,
+    and let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
+    linear maps.  Suppose that $T$ is positive, both maps are trace
+    nonincreasing, and $S\circ T$ is trace preserving.  Then $T$ is trace
+    preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    For every positive $X\in\mathcal A$, positivity of $T$ and the two
+    trace-nonincreasing inequalities give
+    \[
+      \operatorname{tr}_{\mathcal A}(X)
+        =\operatorname{tr}_{\mathcal A}(S(T(X)))
+        \leq\operatorname{tr}_{\mathcal B}(T(X))
+        \leq\operatorname{tr}_{\mathcal A}(X).
+    \]
+    Hence the middle term equals the endpoints.  Equality extends from the
+    positive cone to Hermitian matrices by positive and negative parts.  For
+    arbitrary $X$, put
+    \[
+      H_1=X+X^\dagger,
+      \qquad H_2=\mathrm{i}(X-X^\dagger),
+      \qquad X=\frac12(H_1-\mathrm{i}H_2).
+    \]
+    Both $H_1$ and $H_2$ are Hermitian, so linearity proves trace preservation
+    for every $X$.
 \end{proof}
 
 \begin{theorem}[Trace preservation of the transported vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
-    \lean{IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span,
-      Matrix.IsPositiveDirectSumMap.%
-        tracePreserving_of_traceNonincreasing_of_fixed_product_span,
-      Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing,
-      MPOTensor.transportedVerticalSector_composites_tracePreserving}
+    \lean{MPOTensor.transportedVerticalSector_composites_tracePreserving}
     \leanok
-    \uses{thm:positive_map_faithful_fixed_point_from_product_span,
-      lem:mpdo_transported_vertical_sector_fixed_generators,
-      thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
-      thm:mpdo_transported_vertical_sector_trace_loss}
     Suppose that every one-site and two-site multiplicity space is nonzero
     and every corresponding diagonal weight is positive.  Let
     $\widetilde M^{(1)}$ and $\widetilde M^{(2)}$ be the vertical tensors of
@@ -1887,39 +2008,29 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    Each transported map is positive and trace nonincreasing, and hence so is
-    either square composite $F$.  The preceding fixed-generator lemma and
+    \uses{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span,
+      thm:direct_sum_trace_preservation_sandwich,
+      lem:mpdo_transported_vertical_sector_fixed_generators,
+      thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
+      thm:mpdo_transported_vertical_sector_trace_loss}
+    Each transported map is positive and trace nonincreasing, and hence so are
+    the square composites $\widetilde S\widetilde T$ and
+    $\widetilde T\widetilde S$.  The fixed-generator lemma and the
     product-spanning theorem give the hypotheses of
-    Theorem~\ref{thm:positive_map_faithful_fixed_point_from_product_span},
-    applied to the canonical full-matrix extension of the sector algebra.
-    Thus there is a positive-definite fixed point $\rho$:
-    \[
-      \rho\succ0,
-      \qquad F(\rho)=\rho.
-    \]
+    Theorem~\ref{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span}
+    for both composites.  Thus both preserve the corresponding total trace.
 
-    Let $F^*$ be the trace adjoint and set
+    For positive $X\in\mathcal A_1$, one has
     \[
-      \Delta=\mathbf 1-F^*(\mathbf 1).
+      \operatorname{tr}_{\mathcal A_1}(X)
+        =\operatorname{tr}_{\mathcal A_1}
+          ((\widetilde S\widetilde T)(X))
+        \leq\operatorname{tr}_{\mathcal A_2}(\widetilde T(X))
+        \leq\operatorname{tr}_{\mathcal A_1}(X).
     \]
-    Trace nonincrease gives
-    $\operatorname{tr}(\Delta X)=\operatorname{tr}(X)-
-    \operatorname{tr}(F(X))\geq0$ for every positive $X$, and positivity of
-    $F$ implies that $\Delta$ is Hermitian.  Hence $\Delta\geq0$.  Since
-    $F(\rho)=\rho$, one has $\operatorname{tr}(\rho\Delta)=0$.
-    Positive definiteness of $\rho$ therefore forces $\Delta=0$, which is
-    equivalent to trace preservation.  The faithful-fixed-point theorem uses
-    fixedness only of the contraction factors, not of their products.
-
-    Finally, for positive $X$ the two trace-nonincreasing inequalities give
-    \[
-      \operatorname{tr}((\widetilde S\widetilde T)(X))
-        \leq\operatorname{tr}(\widetilde T(X))
-        \leq\operatorname{tr}(X).
-    \]
-    The equality of the endpoints forces trace preservation by
-    $\widetilde T$ on the positive cone and hence on the whole algebra.
-    Interchanging the two maps proves the corresponding assertion for
+    Theorem~\ref{thm:direct_sum_trace_preservation_sandwich} therefore makes
+    $\widetilde T$ trace preserving.  Applying the same theorem to
+    $\widetilde S$ and $\widetilde T\widetilde S$ proves the assertion for
     $\widetilde S$.
 \end{proof}
 
