@@ -103,9 +103,8 @@ theorem supportRelativeModular_sourceB_solution
     simp only [Matrix.mul_one]
     abel
   have hCe : C *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ = Matrix.vec Bᵀ := by
-    dsimp only [C]
-    rw [Matrix.kronecker_mulVec_vec]
-    simp
+    simpa only [C, Matrix.one_mul] using
+      one_kronecker_transpose_mulVec_vec_transpose (1 : Matrix n n ℂ) B
   calc
     S *ᵥ (P *ᵥ (res⁻¹ *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ)) =
         (S * P) *ᵥ (res⁻¹ *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ) :=
