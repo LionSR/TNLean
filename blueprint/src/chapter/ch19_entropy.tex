@@ -2744,6 +2744,106 @@ Theorem~\ref{thm:trace_norm_abs}.
     \ref{thm:weyl_resolvent_zero_defect} now gives the common solution.
 \end{proof}
 
+\begin{lemma}[Positive square root from common resolvents]
+    \label{lem:positive_sqrt_from_common_resolvents}
+    \lean{Matrix.sqrt_mulVec_eq_of_resolvent_mulVec_eq}
+    \lean{Matrix.sourceB_resolvent_eq_relativeModular}
+    \lean{Matrix.relativeModular_sqrt_mulVec_vec_one}
+    \leanok
+    Let $S,T$ be positive semidefinite matrices and let $x$ be a vector.  If
+    \[
+        (t\mathbf 1+S)^{-1}x=(t\mathbf 1+T)^{-1}x
+        \qquad(t>0),
+    \]
+    then $\sqrt S\,x=\sqrt T\,x$.
+
+    In particular, for positive definite $A,B$, the source-$B$ left--right
+    resolvent factors through the relative modular matrix
+    $\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$, and
+    \[
+      \sqrt{\Delta_{A,B}}\,\operatorname{vec}(\mathbf 1^{\mathsf T})
+        =\operatorname{vec}\!\left(
+          (\sqrt A\,(\sqrt B)^{-1})^{\mathsf T}\right).
+    \]
+    These are the positive-square-root specializations of the passage from
+    relative modular resolvents to analytic functions of the relative modular
+    operator in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 658--680.
+\end{lemma}
+
+\begin{proof}\leanok
+    Use the L\"owner integral representation of the power $p=1/2$.  Each
+    integrand is a scalar multiple of the identity minus a scalar multiple of
+    the shifted resolvent, so the hypothesis makes the two vector-valued
+    integrands equal.  Integration gives equality of the positive square
+    roots on $x$.
+
+    For the second assertion, factor
+    \[
+      L_A+tR_B=(\Delta_{A,B}+t\mathbf 1)R_B.
+    \]
+    Applying the inverse to $B=R_B(\mathbf 1)$ gives the shifted relative
+    modular resolvent on $\mathbf 1$.  Finally,
+    \[
+      \sqrt{\Delta_{A,B}}
+        =\sqrt A\otimes\bigl((\sqrt B)^{-1}\bigr)^{\mathsf T},
+    \]
+    as follows from uniqueness of the positive square root.
+\end{proof}
+
+\begin{theorem}[Positive-definite saturation gives the identity Weyl sandwich]
+    \label{thm:partial_trace_saturation_identity_weyl_sandwich}
+    \lean{Matrix.weightedWeylAverage_eq_partialTraceRight_kronecker}
+    \lean{Matrix.weyl_sqrt_ratio_eq_of_partialTraceRight_eq}
+    \lean{Matrix.weyl_identity_sandwich_of_partialTraceRight_eq}
+    \lean{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef}
+    \leanok
+    \uses{thm:weyl_relative_entropy_zero_gap_resolvent,
+        lem:positive_sqrt_from_common_resolvents,
+        thm:weyl_identity_sandwich_petz_recovery}
+    Let $\rho$ and $\sigma$ be positive definite and suppose that
+    \[
+      D(\rho\Vert\sigma)
+        =D(\tr_C\rho\Vert\tr_C\sigma).
+    \]
+    Put
+    \[
+      \overline\rho=(\tr_C\rho)\otimes d_C^{-1}\mathbf 1_C,
+      \qquad
+      \overline\sigma=(\tr_C\sigma)\otimes d_C^{-1}\mathbf 1_C.
+    \]
+    Then
+    \[
+      \sqrt\rho\,\sigma^{-1/2}
+        =\sqrt{\overline\rho}\,\overline\sigma^{-1/2},
+    \]
+    and consequently
+    \[
+      \sqrt\sigma\,\overline\sigma^{-1/2}\,
+      \overline\rho\,\overline\sigma^{-1/2}\,\sqrt\sigma=\rho.
+    \]
+    Hence the raw partial-trace Petz map recovers $\rho$ from $\tr_C\rho$.
+    This is the positive-definite case only; no singular-support conclusion is
+    asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the common-resolvent theorem to the identity Weyl summand and the
+    Weyl average.  The preceding lemma converts the result to equality of the
+    two square-root ratios; the uniform scalar in the identity summand cancels,
+    and the Weyl twirl identifies the average with the displayed maximally
+    mixed extensions.
+
+    Taking the adjoint product of the ratio equality yields
+    \[
+      \sigma^{-1/2}\rho\sigma^{-1/2}
+        =\overline\sigma^{-1/2}\overline\rho
+          \overline\sigma^{-1/2}.
+    \]
+    Multiplication by $\sqrt\sigma$ on both sides gives the sandwich.  The raw
+    Petz recovery identity follows from
+    Theorem~\ref{thm:weyl_identity_sandwich_petz_recovery}.
+\end{proof}
+
 \begin{lemma}[Maximally mixed support-sandwich normalization]
     \label{lem:maximally_mixed_support_sandwich}
     \lean{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul}
