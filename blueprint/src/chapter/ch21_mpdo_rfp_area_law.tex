@@ -987,6 +987,24 @@
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
 
+\begin{lemma}[Entropy is bounded by the logarithm of the support cardinality]
+    \label{lem:probability_entropy_le_log_card_support}
+    \lean{Entropy.negMulLog_sum_le_log_card_support}
+    \leanok
+    Let $p=(p_z)_{z\in Z}$ be a probability distribution on a finite set $Z$.
+    Then
+    \begin{align}
+      \sum_{z\in Z}\operatorname{negMulLog}(p_z)
+      \leq
+      \log\left\lvert\{z\in Z:p_z\neq0\}\right\rvert.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Jensen's inequality for the concave function
+    $t\mapsto\operatorname{negMulLog}(t)$ is applied to the nonzero values of
+    $p$ with uniform weights.  Zero values contribute nothing to the entropy.
+\end{proof}
+
 \begin{theorem}[Classical mutual information is bounded by ordinary rank]
     \label{thm:classical_mutual_information_le_log_rank}
     \lean{Entropy.classicalMutualInformation_le_log_rank}
@@ -1000,14 +1018,27 @@
     $2^{I(X:Y)_P}\leq\operatorname{rank}_{\R}P$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:probability_entropy_le_log_card_support}
     This is Theorem~4.1 of \cite{Riazanov2017PSDRank}.  If the number of
     nonzero rows exceeds the ordinary real rank, choose a nontrivial real
     linear relation among those rows.  Nonnegativity forces the relation to
     have coefficients of both signs.  Rescaling each row by
     $1+\varepsilon\beta_x$ gives two endpoint distributions: each preserves
     every column marginal, removes at least one row, and has no larger rank.
-    Mutual information is affine along these rescalings, so one endpoint has
-    mutual information no smaller than that of the original distribution.
+    Write $m=\min_x\beta_x<0<M=\max_x\beta_x$ and
+    \begin{align}
+      I(X:Y)_{P^{(\varepsilon)}}
+      &=I(X:Y)_P+\varepsilon S(\beta),\\
+      S(\beta)
+      &=\sum_x\beta_x\left(
+        \operatorname{negMulLog}(p_x)
+        -\sum_y\operatorname{negMulLog}(P_{x,y})
+      \right).
+    \end{align}
+    If $S(\beta)\geq0$, choose $\varepsilon=-m^{-1}\geq0$; otherwise choose
+    $\varepsilon=-M^{-1}\leq0$.  In either case
+    $\varepsilon S(\beta)\geq0$, so the selected endpoint has mutual
+    information no smaller than the original distribution.
     Repeating the construction leaves at most
     $\operatorname{rank}_{\R}P$ nonzero rows.  Finally,
     $I(X:Y)\leq H(X)$, and the entropy of a distribution supported on $k$
