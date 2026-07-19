@@ -2411,6 +2411,68 @@ specialization of that Appendix~D definition.
     edge contributes zero, leaving exactly the displayed ordered-cycle sum.
 \end{proof}
 
+\begin{theorem}[Classification of eventually constant weighted sector graphs]
+    \label{thm:beigi_eventually_constant_sector_graph}
+    \lean{FiniteWeightedDigraph.cyclicEdgeWeight_eq_one}
+    \lean{FiniteWeightedDigraph.cycle_eq_constant}
+    \lean{FiniteWeightedDigraph.cycleWeightSum_eq_card_loop}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    Let $G$ be a finite directed graph whose edge weights are nonnegative
+    integers, and let
+    \[
+        s_N=\sum_{(a_0,\ldots,a_{N-1})}
+        \prod_{n=0}^{N-1}w(a_n,a_{n+1})
+    \]
+    be the weighted sum over ordered cyclic vertex sequences.  Suppose that
+    $s_N$ is constant for all sufficiently large $N$.  Then every edge that
+    belongs to a directed cycle has weight one, every directed cycle is a
+    repetition of a single loop, and, for every $N>0$,
+    \[
+        s_N=\#\{a:w(a,a)>0\}.
+    \]
+    This is the comparison in
+    \cite[Section~IV]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a sufficiently large $N$ such that the sums at lengths $N$,
+    $N+1$, and $N(N+1)$ have their common eventual value.  Repeating each
+    ordered $N$-cycle $N+1$ times gives an injection into the cycles of length
+    $N(N+1)$, while repeating each ordered $(N+1)$-cycle $N$ times gives a
+    second injection.  Comparison of the three weighted sums shows first that
+    every positive cyclic weight is one.  Both injections must then be
+    exhaustive.  Hence a cycle at the common length has periods $N$ and
+    $N+1$; comparison of adjacent entries gives period one.  Repeating an
+    arbitrary shorter cycle to a sufficiently large length proves that it is
+    constant.  The only surviving ordered cycles at any positive length are
+    therefore the constant words supported on positive loops, each of weight
+    one.
+\end{proof}
+
+\begin{corollary}[Parent-ground-space dimension is the loop number]
+    \label{cor:beigi_parent_ground_space_loop_number}
+    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_card_loop}
+    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData}
+    \leanok
+    \uses{thm:beigi_ordered_cycle_ground_space_dimension,
+        thm:beigi_eventually_constant_sector_graph,
+        thm:nncph_eventual_ground_space_dimension}
+    If the parent-ground-space dimension is eventually constant, then for
+    every $N>2$ it equals the number of positive loops in the sector graph.
+    In particular, this conclusion holds under the BNT and all-chain
+    nearest-neighbor parent-ground-space hypotheses of
+    Theorem~\ref{thm:nncph_eventual_ground_space_dimension}.
+\end{corollary}
+
+\begin{proof}\leanok
+    The ordered-cycle dimension formula identifies the eventual
+    parent-ground-space dimension with the eventual weighted-cycle sum.
+    The preceding theorem identifies that sum, at every positive length, with
+    the loop number.  Transport between coefficient and Euclidean coordinates
+    preserves the dimension of the ground space.
+\end{proof}
+
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
