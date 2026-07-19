@@ -2494,6 +2494,108 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     supplies the unitary and the equivalence.
 \end{proof}
 
+\begin{definition}[Canonical full-matrix extension of a direct-sum map]%
+    \label{def:direct_sum_full_matrix_extension}
+    \lean{Matrix.directSumDiagonalEmbedding}
+    \lean{Matrix.directSumDiagonalCompression}
+    \lean{Matrix.directSumExtension}
+    \lean{Matrix.directSumTraceAdjointMap}
+    \leanok
+    Let
+    \[
+        \mathcal A=\bigoplus_{k\in I}M_{n_k}(\mathbb C),
+        \qquad
+        \mathcal H=\bigoplus_{k\in I}\mathbb C^{n_k}.
+    \]
+    Write $\iota:\mathcal A\to\operatorname{End}(\mathcal H)$ for the
+    block-diagonal embedding and $\pi:\operatorname{End}(\mathcal H)\to
+    \mathcal A$ for diagonal-block compression.  For a linear map
+    $T:\mathcal A\to\mathcal A$, its canonical full-matrix extension is
+    \[
+        \widehat T=\iota\circ T\circ\pi.
+    \]
+    The trace adjoint $T^*:\mathcal A\to\mathcal A$ is defined by
+    \[
+      \sum_k\operatorname{tr}(T^*(A)_kB_k)
+      =\sum_k\operatorname{tr}(A_kT(B)_k)
+      \qquad(A,B\in\mathcal A).
+    \]
+    This is the block-diagonal realization needed when the fixed-point
+    argument in \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}
+    is applied to finite direct sums of matrix algebras.
+\end{definition}
+
+\begin{theorem}[Channel and fixed-point compatibility of the canonical extension]%
+    \label{thm:direct_sum_full_matrix_extension_compatibility}
+    \lean{Matrix.IsPositiveDirectSumMap.directSumExtension_isPositiveMap}
+    \lean{Matrix.IsSchwarzDirectSumMap.directSumExtension_isSchwarzMap}
+    \lean{Matrix.IsTracePreservingDirectSumMap.directSumExtension_isTracePreservingMap}
+    \lean{Matrix.traceAdjointMap_directSumExtension}
+    \lean{Matrix.IsSchwarzDirectSumMap.traceAdjointMap_directSumExtension_isSchwarzMap}
+    \lean{Matrix.directSumExtension_apply_eq_self_iff}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    If $T$ is positive and satisfies the Schwarz inequality on
+    $\mathcal A$, then $\widehat T$ is positive and satisfies the Schwarz
+    inequality on $\operatorname{End}(\mathcal H)$.  If $T$ preserves the
+    total trace $\sum_k\operatorname{tr}(A_k)$, then $\widehat T$ preserves
+    the ordinary trace.  Moreover,
+    \[
+        (\widehat T)^*=\widehat{T^*}.
+    \]
+    If $T$ is positive and its direct-sum trace adjoint satisfies the Schwarz
+    inequality, then the trace adjoint of $\widehat T$ satisfies the Schwarz
+    inequality on $\operatorname{End}(\mathcal H)$.  Finally,
+    \[
+        \operatorname{Fix}(\widehat T)=\iota(\operatorname{Fix}(T)).
+    \]
+    Equivalently, for every $X\in\operatorname{End}(\mathcal H)$,
+    \[
+        \widehat T(X)=X
+        \quad\Longleftrightarrow\quad
+        \exists A\in\mathcal A,\quad T(A)=A\ \text{ and }\ X=\iota(A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    For the matrix $R_k$ formed from the column blocks of $A$ outside the
+    $k$th diagonal block, diagonal compression satisfies
+    \[
+        \pi(A^*A)_k-\pi(A)_k^*\pi(A)_k=R_k^*R_k\succeq0.
+    \]
+    Block-diagonal embedding is a positive algebra homomorphism and converts
+    the sum of the block traces into the full trace.  It follows that
+    positivity, both stated Schwarz implications, and trace preservation pass
+    to $\widehat T$.  The embedding and compression satisfy
+    \[
+      \operatorname{tr}(\iota(A)X)
+      =\sum_k\operatorname{tr}(A_k\pi(X)_k).
+    \]
+    Substitution of $\widehat T=\iota\circ T\circ\pi$ and the defining
+    pairing for $T^*$ gives
+    \[
+        (\widehat T)^*=\widehat{T^*}.
+    \]
+    Since $\pi\circ\iota=\operatorname{id}$, the two fixed-point
+    implications are
+    \[
+      \widehat T(X)=X
+      \ \Longrightarrow\
+      T(\pi(X))=\pi(\widehat T(X))=\pi(X),
+      \qquad
+      X=\widehat T(X)=\iota(T(\pi(X)))=\iota(\pi(X))
+    \]
+    and
+    \[
+      T(A)=A
+      \ \Longrightarrow\
+      \widehat T(\iota(A))
+      =\iota(T(\pi(\iota(A))))=\iota(T(A))=\iota(A).
+    \]
+\end{proof}
+
 % Scope restriction documented in
 % docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
 \begin{theorem}[Weighted block form of the adjoint Ces\`aro projection on full support]%
@@ -2586,6 +2688,54 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     basis proves the displayed formula by nondegeneracy of the trace pairing.
     Its range consists of the stated density blocks because
     $\operatorname{tr}_{m_k}(\sigma_k\otimes X)=X$.
+\end{proof}
+
+% Scope restriction documented in
+% docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
+\begin{theorem}[Density-block form of fixed points on a finite direct sum]%
+    \label{thm:direct_sum_fixed_points_density_block_form}
+    \lean{Matrix.IsPositiveDirectSumMap.exists_block_densities_of_fixedPoints}
+    \leanok
+    \uses{thm:direct_sum_full_matrix_extension_compatibility,
+        thm:mean_ergodic_projection_density_block_form}
+    Let
+    \[
+        \mathcal A=\bigoplus_{i\in I}M_{n_i}(\mathbb C)
+    \]
+    be a finite direct sum.  Suppose that $T:\mathcal A\to\mathcal A$ is
+    positive and preserves the total trace, that its trace adjoint satisfies
+    the Schwarz inequality, and that $T$ fixes a family $\rho=(\rho_i)_i$
+    with every $\rho_i$ positive definite.  Then there are positive integers
+    $d_k,m_k$, density matrices $\sigma_k\in M_{m_k}(\mathbb C)$, a unitary
+    $U$ on $\bigoplus_i\mathbb C^{n_i}$, and a reindexing of this space by
+    $\bigoplus_k(\mathbb C^{m_k}\otimes\mathbb C^{d_k})$ such that
+    \[
+        T(A)=A
+        \quad\Longleftrightarrow\quad
+        U^*\iota(A)U=\bigoplus_k \sigma_k\otimes X_k
+    \]
+    for some $X_k\in M_{d_k}(\mathbb C)$.  Here $\iota$ is the
+    block-diagonal embedding.  This is the finite-direct-sum fixed-point step
+    used in \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}; it
+    does not assert the channel hypotheses for the particular sector maps in
+    that argument.  This is the full-support restriction: the support
+    reduction and complementary zero summand of the general theorem remain
+    open.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:direct_sum_full_matrix_extension_compatibility,
+        thm:mean_ergodic_projection_density_block_form}
+    Extend $T$ by diagonal compression and block-diagonal embedding.  The
+    canonical extension is positive and trace preserving, its trace adjoint
+    satisfies the Schwarz inequality, and the embedded family $\iota(\rho)$
+    is a positive-definite fixed point.  After choosing a numbered basis of
+    the finite-dimensional ambient space, apply the full-support
+    density-block theorem.  Simultaneous reindexing preserves positivity,
+    trace preservation, the Schwarz inequality, the trace adjoint, and
+    positive definiteness.  Reindexing the resulting unitary and block
+    decomposition back to $\mathcal H$ gives the displayed equivalence.
 \end{proof}
 
 Without a full-rank hypothesis on the fixed point, the corner-restricted fixed-point
