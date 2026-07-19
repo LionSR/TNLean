@@ -234,6 +234,33 @@ This identity is a prerequisite for transporting equality through the
 Weyl-twirl proof of data processing.  It does not prove that equality yields
 recovery.
 
+The scalar equality can now be transported from the partial-trace pair to every
+individual Weyl summand.  Fix a primitive $d_R$-th root of unity, put
+$U_{ab}=\mathbf 1_L\otimes W(a,b)$, and write
+\begin{align}
+  \overline X
+    =\frac{1}{d_R^2}\sum_{c,e}U_{ce}XU_{ce}^{\dagger}
+    =(\operatorname{tr}_R X)\otimes(d_R^{-1}\mathbf 1_R).
+\end{align}
+If $\rho$ and $\sigma$ are positive semidefinite,
+$\ker\sigma\subseteq\ker\rho$, and partial-trace data processing is saturated,
+then for every $a,b$,
+\begin{align}
+  D(\overline\rho\Vert\overline\sigma)
+    =D(U_{ab}\rho U_{ab}^{\dagger}\Vert
+       U_{ab}\sigma U_{ab}^{\dagger}).
+\end{align}
+Indeed, the twirl identity, support-domain ancilla additivity, and the inherited
+support inclusion for the marginals identify the left-hand side with
+$D(\operatorname{tr}_R\rho\Vert\operatorname{tr}_R\sigma)$; unitary invariance
+identifies the right-hand side with $D(\rho\Vert\sigma)$.
+\footnote{Formal declaration:
+\leanid{quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq}
+in \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
+This is only equality of the scalar relative entropies.  It neither
+characterizes equality in the joint-convexity inequality nor supplies a Petz
+intertwining or recovery identity.
+
 The exact remaining analytic implication is the equality case of data
 processing on this support domain:
 \begin{align}
