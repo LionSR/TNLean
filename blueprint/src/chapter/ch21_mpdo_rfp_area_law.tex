@@ -202,6 +202,51 @@
     entries, so the sequence cannot converge.
 \end{proof}
 
+\begin{theorem}[Mutual information without a thermodynamic limit]
+    \label{thm:parity_mpdo_no_mutual_info_limit}
+    \lean{MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_parityTensor_of_odd,
+      MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_parityTensor_of_even,
+      MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_parityTensor_of_odd,
+      MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_parityTensor_of_even,
+      MPOTensor.ThermodynamicLimitCounterexample.blockEntropy_parityTensor_of_odd,
+      MPOTensor.ThermodynamicLimitCounterexample.blockEntropy_parityTensor_of_even,
+      MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_odd,
+      MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_even,
+      MPOTensor.ThermodynamicLimitCounterexample.binEntropy_one_div_three_pos,
+      MPOTensor.ThermodynamicLimitCounterexample.parityMutualInfoAfterCut,
+      MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_parityMutualInfoAfterCut}
+    \leanok
+    \uses{def:mutual_info_chain, def:parity_mpdo_counterexample}
+    Fix $L\geq1$.  For every $N>L$, the tensor in
+    Definition~\ref{def:parity_mpdo_counterexample} satisfies
+    \[
+        I_L^{(N)}=
+        \begin{cases}
+            0, & N \text{ odd},\\
+            h_2(1/3), & N \text{ even},
+        \end{cases}
+        \qquad
+        h_2(1/3)
+        =-\frac13\log\frac13-\frac23\log\frac23>0.
+    \]
+    Consequently the sequence $K\mapsto I_L^{(L+K+1)}$ does not converge,
+    giving the counterexample described in
+    \cite[Proposition~4.5, lines~801--806]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    At odd $N$, the normalized state and both of its nonempty marginals are
+    pure, so all three terms in $I_L^{(N)}=S_L+S_{N-L}-S_N$ vanish.  At even
+    $N$, the full state and both marginals have the same two nonzero
+    eigenvalues $1/3$ and $2/3$.  Each of their entropies is therefore
+    $h_2(1/3)$, and hence
+    \[
+        I_L^{(N)}=h_2(1/3)+h_2(1/3)-h_2(1/3)=h_2(1/3).
+    \]
+    The binary entropy is strictly positive at $1/3$.  Thus the odd and even
+    subsequences have distinct constant values.
+\end{proof}
+
 \begin{definition}[Map on the second tensor factor]
     \label{def:mpdo_id_tensor_map}
     \lean{Matrix.idTensorMap}

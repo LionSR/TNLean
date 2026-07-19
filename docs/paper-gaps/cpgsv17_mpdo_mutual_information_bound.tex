@@ -272,16 +272,22 @@ oscillation.  Primitivity or another aperiodicity assumption would exclude
 this example, but no such assumption occurs in Proposition~4.5.
 
 The finite-chain form, positivity, trace formula, alternating normalized
-entries, alternating one-site reduced entries, and nonconvergence of the
-one-site entry are formalized.
+states and marginals, their exact entropies and mutual informations, and the
+nonconvergence of both the one-site entry and mutual information are
+formalized.
 \footnote{Formal declarations:
 \leanid{MPOTensor.ThermodynamicLimitCounterexample.mpo_parityTensor_eq_diagonal},
 \leanid{MPOTensor.ThermodynamicLimitCounterexample.parityTensor_isMPDO},
 \leanid{MPOTensor.ThermodynamicLimitCounterexample.trace_mpo_parityTensor},
 \leanid{MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_odd},
 \leanid{MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_even},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_parityTensor_of_even},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.blockEntropy_parityTensor_of_even},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_odd},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_even},
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_reducedBlockState_one_zero_zero},
 and
-\leanid{MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_reducedBlockState_one_zero_zero}
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_parityMutualInfoAfterCut}
 in \doclink{TNLean/MPS/MPDO/ThermodynamicLimitCounterexample}.}
 
 Accordingly, the precise unconditional result that remains from the cited
