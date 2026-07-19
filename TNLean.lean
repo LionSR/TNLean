@@ -414,6 +414,7 @@ import TNLean.MPS.MPDO.ThermodynamicLimitCounterexample
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.LocalPurificationAreaLaw
+import TNLean.MPS.MPDO.DiagonalCutRank
 import TNLean.MPS.MPDO.PureRFPSAL
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.VerticalCoisometry

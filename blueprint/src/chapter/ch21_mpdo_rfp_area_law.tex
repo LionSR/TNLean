@@ -910,6 +910,38 @@
     hypothesis to the purifying pure state.
 \end{proof}
 
+\begin{theorem}[Rank of diagonal coefficients across a periodic cut]
+    \label{thm:mpo_diagonal_cut_rank}
+    \lean{MPOTensor.diagonalCutMatrix,
+      MPOTensor.diagonalCutMatrix_rank_le}
+    \leanok
+    \uses{def:mpo_tensor}
+    Split a periodic chain into consecutive blocks of lengths $L$ and $R$.
+    For words $x\in\{0,\ldots,d-1\}^L$ and
+    $y\in\{0,\ldots,d-1\}^R$, set
+    \[
+      P_{x,y}
+      =\tr\!\left(
+        M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}
+        M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}
+      \right).
+    \]
+    Then the ordinary complex rank of $P$ satisfies
+    \[
+      \operatorname{rank}_{\C} P\le D^2.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:mpo_eval_word_append}
+    For each word, write $A_x=M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}$
+    and $B_y=M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}$.  The identity
+    \[
+      P_{x,y}=\tr(A_xB_y)
+      =\sum_{a,b=0}^{D-1}(A_x)_{ab}(B_y)_{ba}
+    \]
+    factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts the uniform estimate
     $I_L \le 4\log D$ for every MPDO. Its cited proof, however, treats mixed
@@ -932,7 +964,26 @@
     one-site density matrix $q$. Thus its $L$-site marginal has rank
     $\operatorname{rank}(q)^L$, although its mutual information vanishes. The
     unrestricted estimate therefore requires a direct operator-Schmidt
-    argument not supplied by the cited proof. The bound remains open. The
+    argument not supplied by the cited proof.
+
+    Diagonal operators cannot violate the estimate.  Suppose that the
+    finite-chain operator is diagonal and positive semidefinite, with positive
+    trace $Z$.  If $P$ is the diagonal coefficient matrix in
+    Theorem~\ref{thm:mpo_diagonal_cut_rank}, then
+    \[
+        \widehat P=Z^{-1}P
+    \]
+    is a joint probability distribution.  Multiplication by the nonzero real
+    scalar $Z^{-1}$ does not change rank, and the real matrix $\widehat P$ has
+    the same rank over $\R$ and $\C$.  Theorem~4.1 of
+    \cite{Riazanov2017PSDRank} gives
+    $I(X:Y)\leq\log\operatorname{rank}_{\R}\widehat P$.  Therefore
+    Theorem~\ref{thm:mpo_diagonal_cut_rank} yields
+    \[
+      I_L^{(L+R)}\leq 2\log D.
+    \]
+    Thus any counterexample must have genuine quantum coherences.  The
+    unrestricted quantum estimate remains open. The
     same example as Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} also
     makes the iterated mutual-information limit false; see
     \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}. The
