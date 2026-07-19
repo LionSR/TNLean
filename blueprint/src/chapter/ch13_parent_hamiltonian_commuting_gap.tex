@@ -2292,6 +2292,72 @@ specialization of that Appendix~D definition.
     linear independence. The dimension of their span is therefore $g$.
 \end{proof}
 
+\begin{definition}[Two-site parent-interaction matrix]%
+    \label{def:two_site_parent_interaction_matrix}
+    \lean{MPSTensor.twoSiteParentInteractionMatrix}
+    \leanok
+    Let $A$ be a matrix product tensor.  Write its canonical two-site parent
+    interaction in the ordered-pair basis of the two-site physical Hilbert
+    space, and denote the resulting matrix by $Q_A$.
+\end{definition}
+
+\begin{theorem}[Hermitian commuting overlapping parent interactions]%
+    \label{thm:two_site_parent_interaction_commuting_overlaps}
+    \lean{MPSTensor.IsNNCPH.twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_commute}
+    \leanok
+    \uses{def:two_site_parent_interaction_matrix}
+    Suppose that the canonical length-two parent terms of $A$ commute on a
+    three-site chain.  Then $Q_A$ is Hermitian, and its natural placements on
+    the first and last pairs of a three-fold tensor product commute:
+    \[
+        (Q_A\otimes\mathbf 1)(\mathbf 1\otimes Q_A)
+        =
+        (\mathbf 1\otimes Q_A)(Q_A\otimes\mathbf 1).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The parent interaction is the orthogonal projector onto the orthogonal
+    complement of the local matrix product space, hence is Hermitian.
+    Transporting the adjacent three-site parent-term commutator to the common
+    left-associated tensor-product basis gives the displayed identity.
+\end{proof}
+
+\begin{theorem}[Spatial block actions of the two-site parent interaction]%
+    \label{thm:two_site_parent_interaction_spatial_blocks}
+    \lean{MPSTensor.IsNNCPH.exists_unitary_blockActions_of_twoSiteParentInteractionMatrix}
+    \leanok
+    \uses{thm:two_site_parent_interaction_commuting_overlaps}
+    Under the preceding hypothesis, there are positive integers
+    $d_q,m_q$, a unitary identification
+    \[
+        \mathcal H\cong\bigoplus_q
+        \mathcal H_{q,l}\otimes\mathcal H_{q,r},
+    \]
+    and Hermitian matrices $R_q$ on
+    $\mathcal H\otimes\mathcal H_{q,l}$ and $S_q$ on
+    $\mathcal H_{q,r}\otimes\mathcal H$ such that, after conjugating the
+    middle site by this unitary,
+    \[
+        Q_A=\bigoplus_q(R_q\otimes\mathbf 1_{q,r})
+        \qquad\text{on the first pair},
+    \]
+    and
+    \[
+        Q_A=\bigoplus_q(\mathbf 1_{q,l}\otimes S_q)
+        \qquad\text{on the last pair}.
+    \]
+    This is the spatial decomposition of
+    \cite[Lemma~2.1]{Beigi2012Classification} for the canonical parent
+    interaction.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the finite-dimensional spatial decomposition for two Hermitian
+    overlapping operators to $Q_A$ in both positions, using
+    Theorem~\ref{thm:two_site_parent_interaction_commuting_overlaps}.
+\end{proof}
+
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
