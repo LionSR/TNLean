@@ -1172,6 +1172,7 @@
 \begin{definition}[Normalized diagonal distribution at fixed length]
     \label{def:mpo_normalized_diagonal_cut_distribution}
     \lean{MPOTensor.IsDiagonalAt,
+      MPOTensor.IsDiagonal,
       MPOTensor.diagonalCutRealMatrix,
       MPOTensor.diagonalCutMass,
       MPOTensor.normalizedDiagonalCutDistribution}
@@ -1192,6 +1193,7 @@
     \lean{MPOTensor.diagonalCutMatrix_apply_eq_mpo,
       MPOTensor.diagonalCutRealMatrix_map_ofReal_of_posSemidef,
       MPOTensor.diagonalCutRealMatrix_nonneg_of_posSemidef,
+      MPOTensor.diagonalCutMass_eq_trace_re,
       MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution,
       MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}
     \leanok
@@ -1221,9 +1223,29 @@
     the bound.
 \end{proof}
 
+\begin{corollary}[Classical estimate for a diagonal matrix product density operator]
+    \label{cor:mpo_diagonal_classical_mutual_information}
+    \lean{MPOTensor.diagonalMPDO_classicalMutualInformation_le_two_log}
+    \leanok
+    \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information}
+    Let $M$ generate diagonal positive semidefinite operators at every positive
+    chain length.  If the trace at length $L+R$ is positive, then the classical
+    mutual information of its normalized diagonal coefficients satisfies
+    \[
+      I(X:Y)\leq2\log D.
+    \]
+\end{corollary}
+\begin{proof}\leanok
+    Global diagonality and positivity give the fixed-length hypotheses of
+    Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
+    The total mass of the diagonal coefficients is the real part of the trace,
+    so the assumed trace positivity supplies the required normalization.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
-    Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts the uniform estimate
-    $I_L \le 4\log D$ for every MPDO. Its cited proof, however, treats mixed
+    The proof of Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} invokes the
+    uniform estimate $I_L \le 4\log D$ for every MPDO. Its cited argument,
+    however, treats mixed
     tensor-network states obtained from local completely positive maps
     \cite{Wolf2008AreaLaws}. After purifying those maps, data processing and
     the pure-state boundary estimate give
