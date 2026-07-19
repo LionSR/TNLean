@@ -165,6 +165,36 @@ under consideration; positivity at all other lengths is unnecessary.  Hence a
 counterexample to the unrestricted estimate, if one exists, must be genuinely
 quantum rather than a classical hidden-state construction.
 
+\subsection{Local correction at the row-elimination endpoints}
+
+The displayed calculation in the proof of
+\cite[Theorem~4.1, Section~4.2]{Riazanov2017PSDRank} cancels the factor
+$1+\varepsilon\alpha_i$ between the joint probability
+$m_{ij}(1+\varepsilon\alpha_i)$ and the row marginal
+$p_i(1+\varepsilon\alpha_i)$.  The proof then chooses an endpoint of the
+admissible interval, precisely where this factor vanishes for at least one
+row.  At such a row the displayed quotient has the indeterminate form $0/0$,
+so the cancellation does not justify the endpoint identity as written.
+
+This is a local proof correction; the statement of the theorem is unchanged.
+Write mutual information as $H(X)+H(Y)-H(X,Y)$ and use
+\begin{align}
+  \operatorname{negMulLog}(ab)
+  =a\,\operatorname{negMulLog}(b)
+   +b\,\operatorname{negMulLog}(a).
+\end{align}
+This identity is valid when either factor is zero.  The extra terms cancel
+against the row-marginal entropy because each row marginal is the sum of its
+entries, while the column marginal is fixed by the row relation.  Thus mutual
+information is affine on the whole closed admissible interval, including both
+endpoints.  This removes the endpoint singularity without strengthening the
+hypotheses or weakening the conclusion, so the discrepancy is classified as a
+local correction.
+\footnote{The corrected calculation is used in the proof of
+\leanid{Entropy.classicalMutualInformation_le_log_rank} in
+\doclink{TNLean/Entropy/ClassicalMutualInformation}.  Its zero-valid product
+identity is \texttt{Real.negMulLog\_mul}.}
+
 The rank factorization is formalized.
 \footnote{Formal declarations:
 \leanid{MPOTensor.diagonalCutMatrix} and

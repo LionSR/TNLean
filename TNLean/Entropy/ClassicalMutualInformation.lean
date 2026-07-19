@@ -63,11 +63,11 @@ noncomputable def columnMarginal (P : Matrix X Y ℝ) (y : Y) : ℝ :=
   ∑ x, P x y
 
 /-- The set of rows which are not identically zero. -/
-noncomputable def nonzeroRows (P : Matrix X Y ℝ) : Finset X :=
+private noncomputable def nonzeroRows (P : Matrix X Y ℝ) : Finset X :=
   Finset.univ.filter fun x ↦ P.row x ≠ 0
 
 /-- Rescale each row of a matrix by a prescribed real number. -/
-noncomputable def scaleRows (c : X → ℝ) (P : Matrix X Y ℝ) : Matrix X Y ℝ :=
+private noncomputable def scaleRows (c : X → ℝ) (P : Matrix X Y ℝ) : Matrix X Y ℝ :=
   fun x y ↦ c x * P x y
 
 /-- The row rescaling `P^ε_x = (1 + ε β_x) P_x` used in the proof of the
@@ -247,7 +247,13 @@ private noncomputable def rowPerturbationSlope (P : Matrix X Y ℝ) (β : X → 
     (Real.negMulLog (Matrix.rowMarginal P x) - ∑ y, Real.negMulLog (P x y))
 
 /-- Mutual information is affine along a row perturbation which preserves the column
-marginal. -/
+marginal.
+
+**Local fix (arXiv:1704.06507, Theorem 4.1, Section 4.2):** The printed proof cancels the
+row factor `1 + ε * β x` inside a quotient and then evaluates at an endpoint where that
+factor can vanish. Here `Real.negMulLog_mul`, which remains valid at zero, replaces that
+undefined quotient cancellation. The correction is documented in
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
 private theorem classicalMutualInformation_rowPerturbation
     (P : Matrix X Y ℝ) (β : X → ℝ) (ε : ℝ)
     (hrel : ∀ y, ∑ x, β x * P x y = 0) :
@@ -345,6 +351,53 @@ private theorem classicalMutualInformation_rowPerturbation
   rw [hbeta_sum]
   ring
 
+/-- An admissible endpoint which kills a specified nonzero row and does not decrease
+mutual information yields the required row-eliminated distribution. -/
+private theorem exists_row_elimination_at_endpoint
+    (P : Matrix X Y ℝ) (hP : P.IsJointDistribution) (β : X → ℝ) (ε : ℝ) (x₀ : X)
+    (hrel : ∀ y, ∑ x, β x * P x y = 0)
+    (hfactor : ∀ x, 0 ≤ 1 + ε * β x) (hx₀ : x₀ ∈ P.nonzeroRows)
+    (hzero : 1 + ε * β x₀ = 0)
+    (hinfo : 0 ≤ ε * rowPerturbationSlope P β) :
+    ∃ Q : Matrix X Y ℝ,
+      Q.IsJointDistribution ∧
+      Matrix.columnMarginal Q = Matrix.columnMarginal P ∧
+      Q.rank ≤ P.rank ∧
+      Q.nonzeroRows.card < P.nonzeroRows.card ∧
+      classicalMutualInformation P ≤ classicalMutualInformation Q := by
+  classical
+  let Q := Matrix.rowPerturbation P β ε
+  have hQ : Q.IsJointDistribution :=
+    isJointDistribution_rowPerturbation P hP β ε hrel hfactor
+  have hQrank : Q.rank ≤ P.rank := rank_rowPerturbation_le P β ε
+  have hkill : Q.row x₀ = 0 := by
+    ext y
+    simp [Q, Matrix.rowPerturbation, Matrix.scaleRows, hzero]
+  have hsubset : Q.nonzeroRows ⊆ P.nonzeroRows := by
+    intro x hx
+    have hxQ : Q.row x ≠ 0 := by
+      simpa [Matrix.nonzeroRows] using hx
+    have hxP : P.row x ≠ 0 := by
+      intro hxP
+      apply hxQ
+      ext y
+      have hxy : P x y = 0 := by
+        simpa using congr_fun hxP y
+      simp [Q, Matrix.rowPerturbation, Matrix.scaleRows, hxy]
+    simpa [Matrix.nonzeroRows] using hxP
+  have hQcard : Q.nonzeroRows.card < P.nonzeroRows.card := by
+    apply Finset.card_lt_card
+    refine Finset.ssubset_iff_subset_ne.mpr ⟨hsubset, ?_⟩
+    intro heq
+    have hx₀Q : x₀ ∈ Q.nonzeroRows := heq.symm ▸ hx₀
+    have : Q.row x₀ ≠ 0 := by
+      simpa [Matrix.nonzeroRows] using hx₀Q
+    exact this hkill
+  have hQinfo : classicalMutualInformation P ≤ classicalMutualInformation Q := by
+    rw [classicalMutualInformation_rowPerturbation P β ε hrel]
+    exact le_add_of_nonneg_right hinfo
+  exact ⟨Q, hQ, columnMarginal_rowPerturbation P β ε hrel, hQrank, hQcard, hQinfo⟩
+
 /-- One Riazanov--Vyalyi row-elimination step. If the number of nonzero rows exceeds
 the ordinary real rank, there is another joint distribution with the same column marginal,
 no larger rank, strictly fewer nonzero rows, and no smaller mutual information.
@@ -393,84 +446,26 @@ private theorem exists_row_elimination
       exact hM_pos.le
   by_cases hslope : 0 ≤ rowPerturbationSlope P β
   · let ε := -m⁻¹
-    let Q := Matrix.rowPerturbation P β ε
     have hfactor : ∀ x, 0 ≤ 1 + ε * β x := by
       intro x
       have hmul := mul_le_mul_of_nonpos_left (hm_le x) (inv_nonpos.mpr hm_neg.le)
       rw [inv_mul_cancel₀ hm_neg.ne] at hmul
       dsimp [ε]
       linarith
-    have hQ : Q.IsJointDistribution :=
-      isJointDistribution_rowPerturbation P hP β ε hrel hfactor
-    have hQrank : Q.rank ≤ P.rank := rank_rowPerturbation_le P β ε
-    have hkill : Q.row xmin = 0 := by
-      ext y
-      have hxmin' : β xmin = m := hxmin
-      simp [Q, Matrix.rowPerturbation, Matrix.scaleRows, ε, hxmin', hm_neg.ne]
-    have hsubset : Q.nonzeroRows ⊆ P.nonzeroRows := by
-      intro x hx
-      have hxQ : Q.row x ≠ 0 := by
-        simpa [Matrix.nonzeroRows] using hx
-      have hxP : P.row x ≠ 0 := by
-        intro hxP
-        apply hxQ
-        ext y
-        have hxy : P x y = 0 := by
-          simpa using congr_fun hxP y
-        simp [Q, Matrix.rowPerturbation, Matrix.scaleRows, hxy]
-      simpa [Matrix.nonzeroRows] using hxP
-    have hQcard : Q.nonzeroRows.card < P.nonzeroRows.card := by
-      apply Finset.card_lt_card
-      refine Finset.ssubset_iff_subset_ne.mpr ⟨hsubset, ?_⟩
-      intro heq
-      have hxminQ : xmin ∈ Q.nonzeroRows := heq.symm ▸ hxminS
-      have : Q.row xmin ≠ 0 := by
-        simpa [Matrix.nonzeroRows] using hxminQ
-      exact this hkill
-    have hQinfo : classicalMutualInformation P ≤ classicalMutualInformation Q := by
-      rw [classicalMutualInformation_rowPerturbation P β ε hrel]
-      exact le_add_of_nonneg_right (mul_nonneg (by simp [ε, hm_neg.le]) hslope)
-    exact ⟨Q, hQ, columnMarginal_rowPerturbation P β ε hrel, hQrank, hQcard, hQinfo⟩
+    apply exists_row_elimination_at_endpoint P hP β ε xmin hrel hfactor hxminS
+    · simp [ε, hxmin, hm_neg.ne]
+    · exact mul_nonneg (by simp [ε, hm_neg.le]) hslope
   · let ε := -M⁻¹
-    let Q := Matrix.rowPerturbation P β ε
     have hfactor : ∀ x, 0 ≤ 1 + ε * β x := by
       intro x
       have hmul := mul_le_mul_of_nonneg_left (hle_M x) (inv_nonneg.mpr hM_pos.le)
       rw [inv_mul_cancel₀ hM_pos.ne'] at hmul
       dsimp [ε]
       linarith
-    have hQ : Q.IsJointDistribution :=
-      isJointDistribution_rowPerturbation P hP β ε hrel hfactor
-    have hQrank : Q.rank ≤ P.rank := rank_rowPerturbation_le P β ε
-    have hkill : Q.row xmax = 0 := by
-      ext y
-      have hxmax' : β xmax = M := hxmax
-      simp [Q, Matrix.rowPerturbation, Matrix.scaleRows, ε, hxmax', hM_pos.ne']
-    have hsubset : Q.nonzeroRows ⊆ P.nonzeroRows := by
-      intro x hx
-      have hxQ : Q.row x ≠ 0 := by
-        simpa [Matrix.nonzeroRows] using hx
-      have hxP : P.row x ≠ 0 := by
-        intro hxP
-        apply hxQ
-        ext y
-        have hxy : P x y = 0 := by
-          simpa using congr_fun hxP y
-        simp [Q, Matrix.rowPerturbation, Matrix.scaleRows, hxy]
-      simpa [Matrix.nonzeroRows] using hxP
-    have hQcard : Q.nonzeroRows.card < P.nonzeroRows.card := by
-      apply Finset.card_lt_card
-      refine Finset.ssubset_iff_subset_ne.mpr ⟨hsubset, ?_⟩
-      intro heq
-      have hxmaxQ : xmax ∈ Q.nonzeroRows := heq.symm ▸ hxmaxS
-      have : Q.row xmax ≠ 0 := by
-        simpa [Matrix.nonzeroRows] using hxmaxQ
-      exact this hkill
-    have hQinfo : classicalMutualInformation P ≤ classicalMutualInformation Q := by
-      rw [classicalMutualInformation_rowPerturbation P β ε hrel]
-      apply le_add_of_nonneg_right
-      exact mul_nonneg_of_nonpos_of_nonpos (by simp [ε, hM_pos.le]) (le_of_not_ge hslope)
-    exact ⟨Q, hQ, columnMarginal_rowPerturbation P β ε hrel, hQrank, hQcard, hQinfo⟩
+    apply exists_row_elimination_at_endpoint P hP β ε xmax hrel hfactor hxmaxS
+    · simp [ε, hxmax, hM_pos.ne']
+    · exact mul_nonneg_of_nonpos_of_nonpos
+        (by simp [ε, hM_pos.le]) (le_of_not_ge hslope)
 
 omit [Fintype X] in
 /-- For a nonnegative matrix, a row has zero sum exactly when it is the zero row. -/
@@ -570,7 +565,8 @@ private theorem classicalMutualInformation_le_probabilityEntropy_rowMarginal
   linarith
 
 /-- The entropy of a finite probability distribution is at most the logarithm of the
-cardinality of its support. -/
+cardinality of its support. This is the finite-probability form of the Jensen argument in
+`vonNeumannEntropy_le_log_rank`. -/
 private theorem probabilityEntropy_le_log_card_support
     {Z : Type*} [Fintype Z] (p : Z → ℝ) (hp : ∀ z, 0 ≤ p z)
     (hsum : ∑ z, p z = 1) :
