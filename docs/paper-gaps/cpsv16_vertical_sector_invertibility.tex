@@ -114,7 +114,11 @@ declaration:
 \leanid{MPOTensor.fixedPointProductSpan_finrank_le_of_densityBlocks}
 in \doclink{TNLean/MPS/MPDO/VerticalSectorDensityBlocks}.}
 No tensor hypothesis, multiplicativity assumption, or fixedness of products
-enters this result.
+enters this result.  It is nevertheless a full-support corollary: unlike
+Wolf's unrestricted Theorem~6.14, its statement assumes the positive-definite
+fixed family.  The tensor-attached argument must first obtain that family from
+the fixed contractions and their positive-length product span, as recorded in
+the elimination plan below.
 
 The positive trace-preserving mean-ergodic retraction on a full matrix algebra
 and its positive unital trace-adjoint retraction onto the adjoint fixed-point
@@ -277,15 +281,16 @@ order:
 
 \section{Classification}
 
-\textbf{Verdict: trace and density-dimension subproblems closed; invertibility
-gap open.}  The two transported maps and their square composites are trace
-preserving under the source tensor hypotheses.  The fixed-point
-density-block form now yields the required product-span dimension inequality
-on finite direct sums under its channel hypotheses.  The stronger
+\textbf{Verdict: trace subproblem closed; full-support density-dimension lemma
+proved; invertibility gap open.}  The two transported maps and their square
+composites are trace preserving under the source tensor hypotheses.  For a
+finite direct sum with a positive-definite fixed family, the density-block
+form now yields the required product-span dimension inequality.  The stronger
 active-image inclusions remain unproved and are not needed for this route.
-Until the adjoint Schwarz inequalities and the tensor-attached fixed-family
-application are proved, neither transported-map invertibility nor sector
-relabelling should carry a completion marker in the blueprint.
+Until the adjoint Schwarz inequalities and the tensor-attached construction
+of the faithful fixed families are proved, neither transported-map
+invertibility nor sector relabelling should carry a completion marker in the
+blueprint.
 
 \bibliographystyle{alpha}
 \bibliography{references}

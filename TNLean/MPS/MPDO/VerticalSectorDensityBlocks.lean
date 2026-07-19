@@ -306,7 +306,16 @@ Source: Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.14 and
 Equation (6.63); local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1469--1494.
 This is the dimension implication used in arXiv:1606.00608, Appendix C.4,
-lines 1980--1995. -/
+lines 1980--1995.
+
+**Scope restriction (faithful fixed family):** Wolf's Theorem 6.14 does not
+assume a positive-definite fixed point and allows a complementary zero
+summand.  The present theorem is its full-support corollary for a direct-sum
+map with a positive-definite fixed family.  In the CPSV16 argument this family
+is supplied separately by the fixed contraction factors and their
+positive-length product span.  This restriction and its elimination in the
+tensor-attached argument are documented in
+`docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`. -/
 theorem fixedPointProductSpan_finrank_le_of_densityBlocks
     {g : ℕ} {dim : Fin g → ℕ}
     {F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim}
