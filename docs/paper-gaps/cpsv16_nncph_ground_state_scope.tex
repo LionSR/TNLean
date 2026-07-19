@@ -105,14 +105,17 @@ now reduces the source spanning equation to exactly the reverse containment,
 using this easy inclusion.  Its nearest-neighbor specialization,
 \leanid{MPSTensor.hasNNCPHGroundSpaces_toTensorFromBlocks_iff_forall_isNNCPH_and_ker_le_bntMPSVectorSpan},
 states the all-chain condition as translated two-site commutation together with
-the same reverse containment for every \(N>2\).  The reverse containment itself
-is not proved here.
+the same reverse containment for every \(N>2\).  For a direct sum containing
+one copy of every distinct BNT basis tensor, whole-tensor transfer idempotence
+now implies this reverse containment.  The resulting spanning theorem is
+\leanid{MPSTensor.IsBNTCanonicalForm.}
+\hspace{0pt}\leanid{rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}.
 
 These reductions alone do not prove the full source theorem.  The
-canonical-form ground-space spanning condition for several sectors, the
-three-way equivalence with ZCL, the complete canonical-form hypotheses from the
-source statement, and the Beigi ground-space characterization as an internal
-theorem remain open.
+ground-space spanning condition for repeated copies and arbitrary raw sector
+weights, the three-way equivalence with ZCL, the complete canonical-form
+hypotheses from the source statement, and the Beigi ground-space
+characterization as an internal theorem remain open.
 For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
 are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
 Appendix~B supplies the basic-vector form.  The local projectors in
@@ -213,9 +216,24 @@ product vector for every \(N>2\).  This is recorded by
 \leanid{MPSTensor.rfp_hasParentHamiltonianGroundSpaceSpanning_single}.
 Combining this equality with the commutation and zero-energy equations gives
 \leanid{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_single}.  Thus the full
-forward NNCPH ground-space condition is proved for one normal sector.  The
-extension to canonical-form tensors with several sectors or repeated copies
-is not included in these declarations.
+forward NNCPH ground-space condition is proved for one normal sector.
+
+For a BNT canonical form with several distinct basis sectors, transfer
+idempotence of the whole direct sum gives residual tensors whose one-site entry
+vectors have identity Gram matrix.  Consequently the simultaneous one-site
+word tuples span the product
+of all block matrix algebras.  This span supplies a common one-letter
+expression for every block identity and propagates to every positive word
+length.  It replaces the right-canonical hypothesis in the local
+restriction-intersection calculation.  A global one-site change of cut then
+forces the block boundary matrices to commute with their tensors, so the
+periodic nearest-neighbor chain space splits into the sum of the single-block
+chain spaces.  Combining this splitting with the single-block injective
+periodic-chain theorem proves
+\leanid{MPSTensor.IsBNTCanonicalForm.}
+\hspace{0pt}\leanid{rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}.
+This is precisely the multiplicity-one distinct-sector forward case: it does
+not assert the result for repeated copies or arbitrary raw weights.
 The reverse theorem requires both the explicit BNT relation
 \leanid{MPSTensor.IsBNT} and the named all-chain condition
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
@@ -258,8 +276,9 @@ separate conditional construction and is not needed for the proved chain
 commutator. Extending from one normal tensor to the full repeated-sector
 canonical form is subject to the source obstruction recorded in
 \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}. The single-normal-sector
-ground-space spanning clause is proved, while its several-sector and
-repeated-copy extension remains open.
+ground-space spanning clause and the multiplicity-one distinct-sector
+extension are proved. The repeated-copy and arbitrary-raw-weight extension
+remains open, as does the reverse Beigi implication.
 
 \bibliographystyle{alpha}
 \bibliography{references}
