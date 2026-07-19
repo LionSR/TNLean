@@ -59,8 +59,8 @@ complex scalar. -/
 noncomputable def marginalInvSqrt (p : α → ℝ) (i : α) : ℂ :=
   ((Real.sqrt (p i) : ℝ) : ℂ)⁻¹
 
-@[simp]
 omit [Fintype α] [DecidableEq α] in
+@[simp]
 theorem star_marginalInvSqrt (p : α → ℝ) (i : α) :
     star (marginalInvSqrt p i) = marginalInvSqrt p i := by
   simp [marginalInvSqrt]
@@ -68,9 +68,9 @@ theorem star_marginalInvSqrt (p : α → ℝ) (i : α) :
 /-- Entrywise conjugation by the inverse square roots of the first marginal
 eigenvalues.
 
-This is the block scaling in the supported channel formula described before
-the entanglement-assisted mutual-information maximization of
-arXiv:quant-ph/0106052. -/
+This is the inverse marginal scaling in the finite-dimensional state--channel
+correspondence.  The entanglement-assisted mutual information of the resulting
+channel is the quantity maximized in arXiv:quant-ph/0106052, equation (9). -/
 noncomputable def supportedMarginalInputScaling (p : α → ℝ) :
     Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ where
   toFun X i j := marginalInvSqrt p i * X i j * marginalInvSqrt p j
@@ -94,8 +94,8 @@ noncomputable def supportedMarginalMap
     Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ :=
   operatorSchmidtMap ρ ∘ₗ supportedMarginalInputScaling p
 
-@[simp]
 omit [DecidableEq α] [Fintype β] [DecidableEq β] in
+@[simp]
 theorem supportedMarginalMap_apply
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ) (X : Matrix α α ℂ) :
     supportedMarginalMap ρ p X =
@@ -104,9 +104,9 @@ theorem supportedMarginalMap_apply
           operatorBlock ρ ij.1 ij.2 := by
   rfl
 
+omit [Fintype α] [DecidableEq α] in
 /-- Strict positivity of the marginal eigenvalues makes the input scaling
 surjective. -/
-omit [Fintype α] [DecidableEq α] in
 theorem supportedMarginalInputScaling_surjective (p : α → ℝ)
     (hp : ∀ i, 0 < p i) :
     Function.Surjective (supportedMarginalInputScaling p) := by
@@ -121,9 +121,9 @@ theorem supportedMarginalInputScaling_surjective (p : α → ℝ)
     exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (hp j))
   field_simp
 
+omit [DecidableEq α] [Fintype β] [DecidableEq β] in
 /-- The supported-marginal map has the same range as the original reshaped
 operator. -/
-omit [Fintype β] [DecidableEq β] in
 theorem range_supportedMarginalMap (ρ : Matrix (α × β) (α × β) ℂ)
     (p : α → ℝ) (hp : ∀ i, 0 < p i) :
     LinearMap.range (supportedMarginalMap ρ p) =
@@ -132,6 +132,7 @@ theorem range_supportedMarginalMap (ρ : Matrix (α × β) (α × β) ℂ)
   rw [LinearMap.range_eq_top.mpr (supportedMarginalInputScaling_surjective p hp)]
   rw [Submodule.map_top]
 
+omit [DecidableEq α] [Fintype β] [DecidableEq β] in
 /-- The linear rank of the supported-marginal map is the operator-Schmidt rank
 of the bipartite operator. -/
 theorem finrank_range_supportedMarginalMap (ρ : Matrix (α × β) (α × β) ℂ)
@@ -145,6 +146,7 @@ noncomputable def operatorBlockMarginal
     (ρ : Matrix (α × β) (α × β) ℂ) : Matrix α α ℂ :=
   fun i j ↦ Matrix.trace (operatorBlock ρ i j)
 
+omit [DecidableEq β] in
 /-- If the first marginal is diagonal with strictly positive eigenvalues, the
 supported-marginal map preserves trace. -/
 theorem supportedMarginalMap_trace
@@ -254,6 +256,7 @@ noncomputable def supportedMarginalReconstruction
   (tensorMapId (supportedMarginalMap ρ p) (diagonalMarginalPurificationProj p)).submatrix
     (fun ib ↦ (ib.2, ib.1)) (fun ib ↦ (ib.2, ib.1))
 
+omit [Fintype β] [DecidableEq β] in
 /-- The canonical purification and supported-marginal map reconstruct the
 original bipartite operator when every marginal eigenvalue is positive. -/
 theorem supportedMarginalReconstruction_eq
@@ -270,7 +273,7 @@ theorem supportedMarginalReconstruction_eq
   simp
   rw [Fintype.sum_prod_type]
   simp
-  rw [Finset.sum_eq_single j]
+  rw [Finset.sum_eq_single j (fun k _ hk ↦ by simp [hk]) (by simp)]
   simp
   have hi : (Real.sqrt (p i) : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (hp i))
@@ -278,6 +281,5 @@ theorem supportedMarginalReconstruction_eq
     exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (hp j))
   simp only [marginalInvSqrt]
   field_simp
-  intro k _ hk
 
 end Matrix
