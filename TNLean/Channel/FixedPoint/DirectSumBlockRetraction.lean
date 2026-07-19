@@ -204,6 +204,47 @@ namespace Matrix
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {n : ι → Type*} [∀ k, Fintype (n k)] [∀ k, DecidableEq (n k)]
 
+omit [∀ k, DecidableEq (n k)] in
+/-- The canonical full-matrix extension, after a simultaneous reindexing,
+inherits positivity, trace preservation, the Schwarz inequality for its trace
+adjoint, and a positive-definite fixed point from a faithful fixed family.
+
+This is the change-of-coordinates step used before applying the fixed-point
+classification of Wolf, Theorem 6.14, in arXiv:1606.00608, Appendix C.4,
+lines 1980--1995. -/
+theorem IsPositiveDirectSumMap.reindexedExtension_properties
+    {T : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
+      (∀ k, Matrix (n k) (n k) ℂ)}
+    (hT : IsPositiveDirectSumMap T)
+    (hTP : IsTracePreservingDirectSumMap T)
+    (hSchwarz : IsSchwarzDirectSumMap (Matrix.directSumTraceAdjointMap T))
+    {ρ : ∀ k, Matrix (n k) (n k) ℂ} (hρ : ∀ k, (ρ k).PosDef)
+    (hρfix : T ρ = ρ)
+    {β : Type*} [Fintype β]
+    (e : ((k : ι) × n k) ≃ β) :
+    IsPositiveMap (reindexEndomorphism e (directSumExtension T)) ∧
+      IsTracePreservingMap (reindexEndomorphism e (directSumExtension T)) ∧
+      IsSchwarzMap
+          (traceAdjointMap (reindexEndomorphism e (directSumExtension T))) ∧
+        (Matrix.reindex e e (directSumDiagonalEmbedding ρ)).PosDef ∧
+        reindexEndomorphism e (directSumExtension T)
+            (Matrix.reindex e e (directSumDiagonalEmbedding ρ)) =
+          Matrix.reindex e e (directSumDiagonalEmbedding ρ) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · exact IsPositiveMap.reindexEndomorphism
+      hT.directSumExtension_isPositiveMap e
+  · exact IsTracePreservingMap.reindexEndomorphism
+      hTP.directSumExtension_isTracePreservingMap e
+  · rw [traceAdjointMap_reindexEndomorphism]
+    exact IsSchwarzMap.reindexEndomorphism
+      (hSchwarz.traceAdjointMap_directSumExtension_isSchwarzMap hT) e
+  · exact (directSumDiagonalEmbedding_posDef hρ).reindex e
+  · let Φ := Matrix.reindexLinearEquiv ℂ ℂ e e
+    change Φ (directSumExtension T (Φ.symm (Φ
+      (directSumDiagonalEmbedding ρ)))) = Φ (directSumDiagonalEmbedding ρ)
+    rw [Φ.symm_apply_apply]
+    exact congrArg Φ ((directSumExtension_embedding_eq_self_iff T ρ).2 hρfix)
+
 /-- **Density-block form for fixed points on a finite direct sum.**
 
 Let `T` be a positive map of a finite sum of full matrix algebras that
@@ -247,25 +288,12 @@ theorem IsPositiveDirectSumMap.exists_block_densities_of_fixedPoints
   let TFin := reindexEndomorphism efin TExt
   let ρExt := directSumDiagonalEmbedding ρ
   let ρFin := Matrix.reindex efin efin ρExt
-  have hTFin : IsPositiveMap TFin := by
-    exact IsPositiveMap.reindexEndomorphism
-      hT.directSumExtension_isPositiveMap efin
-  have hTPFin : IsTracePreservingMap TFin := by
-    exact IsTracePreservingMap.reindexEndomorphism
-      hTP.directSumExtension_isTracePreservingMap efin
-  have hSchwarzExt : IsSchwarzMap (Matrix.traceAdjointMap TExt) := by
-    exact hSchwarz.traceAdjointMap_directSumExtension_isSchwarzMap hT
-  have hSchwarzFin : IsSchwarzMap (Matrix.traceAdjointMap TFin) := by
-    rw [traceAdjointMap_reindexEndomorphism]
-    exact IsSchwarzMap.reindexEndomorphism hSchwarzExt efin
-  have hρExt : ρExt.PosDef := directSumDiagonalEmbedding_posDef hρ
-  have hρFin : ρFin.PosDef := hρExt.reindex efin
-  have hρExtFix : TExt ρExt = ρExt := by
-    exact (directSumExtension_embedding_eq_self_iff T ρ).2 hρfix
-  have hρFinFix : TFin ρFin = ρFin := by
-    let Φ := Matrix.reindexLinearEquiv ℂ ℂ efin efin
-    change Φ (TExt (Φ.symm (Φ ρExt))) = Φ ρExt
-    rw [Φ.symm_apply_apply, hρExtFix]
+  obtain ⟨hTFin, hTPFin, hSchwarzFin, hρFin, hρFinFix⟩ :
+      IsPositiveMap TFin ∧ IsTracePreservingMap TFin ∧
+        IsSchwarzMap (Matrix.traceAdjointMap TFin) ∧
+        ρFin.PosDef ∧ TFin ρFin = ρFin := by
+    simpa only [ρFin, ρExt, TFin, TExt] using
+      hT.reindexedExtension_properties hTP hSchwarz hρ hρfix efin
   obtain ⟨K, d, m, eClass, UFin, σ, hUFin, hd, hm, hσpos, hσtrace,
       _, hfixed⟩ :=
     hTFin.exists_block_densities_of_meanErgodicProjection

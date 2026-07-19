@@ -9,7 +9,7 @@
 
 \title{CPSV16 Vertical-Sector Invertibility and Sector Relabelling}
 \author{}
-\date{2026-07-18}
+\date{2026-07-19}
 
 \begin{document}
 \maketitle
@@ -107,8 +107,18 @@ then the endomorphism is the identity.\footnote{Formal declarations:
 in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
 This second implication does not assume that products of distinguished
 contractions are fixed.  It isolates the source's dimension argument.  The
-formalized fixed-point theorem supplies the displayed inequality from the
-density-weighted form of $\mathcal F$ once its channel hypotheses are known.
+displayed inequality is now formalized for a positive trace-preserving map on
+a finite direct sum whenever its trace adjoint satisfies the Schwarz
+inequality and it has a positive-definite fixed family.\footnote{Formal
+declaration:
+\leanid{MPOTensor.fixedPointProductSpan_finrank_le_of_densityBlocks}
+in \doclink{TNLean/MPS/MPDO/VerticalSectorDensityBlocks}.}
+No tensor hypothesis, multiplicativity assumption, or fixedness of products
+enters this result.  It is nevertheless a full-support corollary: unlike
+Wolf's unrestricted Theorem~6.14, its statement assumes the positive-definite
+fixed family.  The tensor-attached argument must first obtain that family from
+the fixed contractions and their positive-length product span, as recorded in
+the elimination plan below.
 
 The positive trace-preserving mean-ergodic retraction on a full matrix algebra
 and its positive unital trace-adjoint retraction onto the adjoint fixed-point
@@ -126,20 +136,18 @@ trace preserving precisely when the precompression output lies in its active
 image.  The established image identity is restricted to the source-generated
 contractions.
 
-There is also a difference between the domains of the two results.  The
-present full-support theorem concerns an endomorphism of one full matrix
-algebra, whereas the transported composites act on dependent direct sums of
-matrix algebras.  The canonical full-matrix extension is now formalized: one
-first compresses to the diagonal blocks, applies the direct-sum map, and then
-embeds the output block diagonally.  Positivity, total-trace preservation, and
-the Schwarz inequality pass to this extension, its trace adjoint is the
-extension of the direct-sum trace adjoint, and its fixed points are exactly the
-block-diagonal images of the direct-sum fixed points.  Reindexing the extension
-by a finite equivalence and applying the full-support theorem now gives the
-density-block form of the fixed families on the original direct sum.  The
+The passage from one full matrix algebra to the dependent direct sums is also
+complete for this dimension estimate.  One compresses to the diagonal blocks,
+applies the direct-sum map, and embeds the result block diagonally.  Positivity,
+total-trace preservation, and the Schwarz inequality pass to this extension;
+its fixed points compress injectively to the fixed points of the direct-sum
+map, while products of direct-sum fixed points embed injectively among the
+products of fixed points of the extension.  The density-block calculation on
+the extension therefore gives
+$\dim C_L(\mathcal F)\leq\dim\mathcal F$ on the original direct sum.  The
 trace-preservation part of the required channel hypotheses for the two square
 composites is resolved below.  Complete positivity and the adjoint Schwarz
-inequality still have to be transferred to the full direct sums.
+inequality still have to be obtained from the source tensor hypotheses.
 Alternatively, the maximal-support witness
 $T_\infty(\mathbf 1)$ is now available for an arbitrary positive
 trace-preserving map.  The construction of the supported endomorphism and its
@@ -257,12 +265,12 @@ order:
           two transported square composites on the full sector algebras;
           trace preservation of the individual maps and composites is now
           established without an all-input active-image statement;
-    \item complete the density-weighted fixed-point theorem and transfer it to
-          the sector direct sums, either through a block-diagonal full-matrix
-          extension or through a direct-sum theorem, to prove
-          $\dim C_L(\mathcal F)\leq\dim\mathcal F$ for the fixed-point spaces
-          of $\widetilde S\widetilde T$ and $\widetilde T\widetilde S$;
-    \item combine this dimension bound with the fixed contraction families,
+    \item apply the maximal-support fixed-point construction to the canonical
+          full-matrix extensions and compress the resulting positive-definite
+          fixed points to positive-definite fixed families on the sector
+          direct sums;
+    \item apply the proved density-block dimension bound and combine it with
+          the fixed contraction families,
           the already proved product-generation theorem, and the
           finite-dimensional implication above to obtain both identity
           compositions;
@@ -273,12 +281,16 @@ order:
 
 \section{Classification}
 
-\textbf{Verdict: trace subproblem closed; invertibility gap open.}  The two
-transported maps and their square composites are trace preserving under the
-source tensor hypotheses.  The stronger active-image inclusions remain
-unproved.  Until the remaining channel-structure and fixed-point steps are
-proved, neither transported-map invertibility nor sector relabelling should
-carry a completion marker in the blueprint.
+\textbf{Verdict: trace subproblem closed; full-support density-dimension lemma
+proved; invertibility gap open.}  The two transported maps and their square
+composites are trace preserving under the source tensor hypotheses.  For a
+finite direct sum with a positive-definite fixed family, the density-block
+form now yields the required product-span dimension inequality.  The stronger
+active-image inclusions remain unproved and are not needed for this route.
+Until the adjoint Schwarz inequalities and the tensor-attached construction
+of the faithful fixed families are proved, neither transported-map
+invertibility nor sector relabelling should carry a completion marker in the
+blueprint.
 
 \bibliographystyle{alpha}
 \bibliography{references}
