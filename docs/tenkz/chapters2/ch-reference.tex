@@ -137,7 +137,9 @@ legs point into the inter-layer gap, \tnkey{layer sep=} widens it
 \tnval{trace=physical} closes every site's up leg into its own down
 leg by an arc around the glyph --- per site the partial trace
 $\operatorname{Tr}_{\mathrm{ph}}M=\sum_s M^{ss}$.  Traced legs are
-closed indices and leave the signature.  The per-column form
+closed indices and leave the signature.  This per-site form requires
+one centred port on each physical face; asymmetric or multi-port faces
+remain open and produce a diagnostic.  The per-column form
 \tnval{trace=\{(physical, c)\}} instead closes chosen
 ket sites into the bra row below, one wrap loop per listed column
 --- the marginal of the kept sites; the cell-set value takes ranges
@@ -191,7 +193,11 @@ An empty label, \tnval{\textbackslash tn\{\}}, is an anonymous tensor
 \texttt{wires=} & \meta{k} & \texttt{1} &
   span and terminate $k$ wire rows (also on \tncmd{tnX}) \\
 \texttt{legs at=} & \texttt{\{c,\ldots\}} & centre &
-  physical legs at chosen spanned columns \\
+  compatibility alias: the same physical ports on both faces \\
+\texttt{up at=}, \texttt{down at=} & \texttt{center|\{c,\ldots\}} & centre &
+  face-specific physical ports at span-local columns \\
+\texttt{west at=}, \texttt{east at=} & \texttt{center|\{r,\ldots\}} & rows &
+  fused or separate virtual ports at span-local rows \\
 \texttt{up=}, \texttt{down=} & \meta{math} / \texttt{\{m,\ldots\}} & --- &
   leg labels, one per leg \\
 \texttt{label pos=} & compass & auto &
@@ -204,10 +210,14 @@ An empty label, \tnval{\textbackslash tn\{\}}, is an anonymous tensor
 \end{tabularx}\par}
 \medskip
 
-The wide-glyph keys are live in Example~\ref{ex:rmp-blocking}: there
-\tnval{wide=2} spans the isometry across both blocked columns and
-\tnval{legs at=\{1,2\}} keeps one output leg per spanned column, so
-both sides of the drawn equation read \tnval{physical-up=2}.
+The wide-glyph keys are live in Example~\ref{ex:rmp-blocking}.  There
+\tnval{wide=2} spans the isometry across both blocked columns,
+\tnval{up at=\{1,2\}} gives two output ports, and
+\tnval{down at=center} gives the fused input one port.  The older
+\tnval{legs at=\{1,2\}} remains an alias for assigning the same list
+to both physical faces; an explicit face key overrides it on that face.
+On a virtual face, a sparse list such as \tnval{east at=\{1,3\}}
+draws, contracts, and counts only those span-local row slots.
 
 \thumbtag{\tncmd{tnX}}%
 \cmdsig{\textbackslash tnX[\meta{cell keys}]\{\meta{label}\}}
@@ -638,7 +648,7 @@ widths still apply, so a free picture matches its grid neighbours.
 
 The entries above are the whole 0.5 language.  What it cannot yet
 draw --- inter-sheet closures, an operator sheet between the layers,
-directed physical legs and directed signatures, the splitting glyph
---- is stated as mathematics in the roadmap of
+and directed physical legs and directed signatures --- is stated as
+mathematics in the roadmap of
 \S\ref{ch:trouble}, and the one-page card on the back page
 compresses this chapter to one line per object.

@@ -113,38 +113,58 @@
 
 \begin{figure}[ht]
     \centering
-    \[
-        A^{i_1}A^{i_2}=\sum_jV^{i_1i_2}_jA^j
-    \]
     \begin{center}
         % A^{i_1}A^{i_2} = sum_j V^{i_1 i_2}_j A^j (eq:corr_kraus_isometry_decomp,
         % CPSV16 Thm 3.1, lines 396-412): two copies of A on physical legs
         % i_1, i_2 fuse through the isometry V into a single copy of A on
         % physical leg j.  V is a wide pill spanning both blocked columns;
-        % legs at={1,2} keeps one open up leg per column (i_1, i_2); the
-        % vertical V-A bond it seals below is the summed index j.  Both
+        % up at={1,2} keeps one open up leg per column (i_1, i_2), while
+        % down at=center gives the summed index j one port.  Both
         % sides carry the same boundary signature
         % (virtual-west=1 | virtual-east=1 | physical-up=2).
         \begin{tenkz}[physical=up]
             \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A}
         \end{tenkz}
-        $\;=\;\displaystyle\sum_j$
+        $\;=\;$
         \begin{tenkz}[rows={op:none, ket}]
-            \tn[pill, wide=2, legs at={1,2}, up={$i_1$,$i_2$}]{V} & \\
+            \tn[pill, wide=2, up at={1,2}, down at=center,
+                up={$i_1$,$i_2$}]{V} & \\
             \tn[wide=2]{A^j} &
         \end{tenkz}
     \end{center}
     \medskip
-    \[
-        \sum_{i_1,i_2}(V^\dagger)^j_{i_1i_2}A^{i_1}A^{i_2}=A^j
-    \]
+    \begin{center}
+        % sum_{i_1,i_2} (V^dagger)^j_{i_1 i_2} A^{i_1} A^{i_2} = A^j
+        % (CPSV16 Thm 3.1, lines 396--412, source image II_UAAA.png):
+        % V^dagger has one open upper port j and two lower ports, at the
+        % blocked columns, contracted separately with A^{i_1}, A^{i_2}.
+        % The two pairleg events certify that neither contraction is lost;
+        % the boundary signature (virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0) certifies that no second upper
+        % port is introduced.
+        \begin{tenkz}[rows={op:none, ket}]
+            \tn[pill, wide=2, up at=center, down at={1,2},
+                up=$j$]{V^\dagger} & \\
+            \tn{A} & \tn{A}
+        \end{tenkz}
+        $\;=\;$
+        \begin{tenkz}[physical=up]
+            \tn[up=$j$]{A}
+        \end{tenkz}
+    \end{center}
+    \begin{equation}\label{eq:corr_AA_isometry_adjoint}
+        \sum_{i_1,i_2}(V^\dagger)^j_{i_1,i_2}
+            A^{i_1}A^{i_2}=A^j .
+    \end{equation}
     \caption{The fusion identity of the renormalization fixed-point
         characterization: two contracted copies of $A$ equal a single copy of
         $A$ with the isometry $V$ merging the summed index $j$ into the
         physical pair $(i_1,i_2)$, which is
         equation~(\ref{eq:corr_AA_isometry}); conversely, applying $V^\dagger$
         to the two physical legs of the contracted pair recovers the single
-        tensor. The source draws the isometry as $U$
+        tensor, as stated in
+        equation~(\ref{eq:corr_AA_isometry_adjoint}). The source draws the
+        isometry as $U$
         \cite[Theorem~3.1, lines~396--412]{Cirac2016MPDO_arXiv}.}
     \label{fig:rfp_kraus_isometry}
 \end{figure}
@@ -772,11 +792,11 @@
     Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} to each block.
 \end{proof}
 
-% BLOCKED figure (issue #4152): II_RFP.png has one open leg above U and two
-% separately contracted legs below it, the splitting glyph absent from tenkz
-% 0.6.  The source also threads both j and q through X, the coefficient tensor,
-% and X^{-1}.  Keep the faithful formula as an equation until that general
-% primitive lands; do not substitute the coarser global-X picture.
+% BLOCKED figure (issue #4152): the source threads both j and q through X,
+% the coefficient tensor, and X^{-1}.  Face-specific splitting ports can now
+% represent the local U geometry, but not this block-and-multiplicity threading.
+% Keep the faithful formula as an equation until that general primitive lands;
+% do not substitute the coarser global-X picture.
 Across all blocks, the canonical form is
     \[
         A^i=\bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}

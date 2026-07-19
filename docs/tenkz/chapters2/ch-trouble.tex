@@ -196,6 +196,11 @@ The multi-row wrap (outermost up leg into outermost down leg) is on
 the roadmap; no trace ink was drawn.  Restrict the trace to a one-row
 picture. \\
 \addlinespace
+\emph{\tnval{trace=physical} requires centred physical faces} &
+The per-site arc closes one upper port into one lower port.  An
+asymmetric or multi-port face remains open; use a centred face or draw
+the intended multi-index contraction as a paired stack. \\
+\addlinespace
 \emph{\tnenv{tenkzplanes} draws the ket-over-bra double layer only} &
 \tnkey{sheets=} beyond \tnval{ket, bra} is on the roadmap; the double
 layer was drawn instead. \\
@@ -288,9 +293,6 @@ spellings, horizon items are design work.
   summand $P_L^{(i-1)}\otimes\mathbf{1}_i\otimes P_R^{(i+1)}$ needs a
   bare vertical wire at site $i$; every piece of \pkg{} ink anchors
   on a glyph, so $\mathbf{1}_i$ is today carried by algebra, not ink.
-\item \emph{Fused tall capsules.}  A gauge capsule spanning ket and
-  bra (\tnval{wires=2}) whose wire pair should continue as \emph{one}
-  combined stub; \tnkey{combined=} lives on \tncmd{tnfuse} only.
 \item \emph{Mirrored triangles.}  \tnkey{tri=} draws one orientation;
   the mirror, needed for reflected canonical-form identities, is
   pending.
@@ -305,8 +307,7 @@ picture, the two-dimensional analogue of \tnkey{west=cup}; an
 operator sheet between ket and bra (\tnkey{sheets=} today stops at
 \tnval{ket, bra}); physical-leg arrows and directed signatures ---
 the $V$-versus-$V^{*}$ mark that graded and fermionic networks need,
-on the leg and in the boundary line; the splitting glyph, the mirror
-of \tncmd{tnfuse} and the zipper identity's missing right-hand side;
+on the leg and in the boundary line;
 \tncmd{tndefine}, binding a name to a glyph and its default legs
 once per document; and the web pipeline: the \tnfile{.tnlog} stream
 rendered as SVG, these diagrams on web pages without \TeX.

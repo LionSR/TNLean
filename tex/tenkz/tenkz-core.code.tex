@@ -208,6 +208,7 @@
       minimum size=\tenkz@junctionfloor},
   % wires
   bond/.style={draw=tenkzInk, line width=\tenkz@wirewidth},
+  tenkz combined stub/.style={},
   fused bond/.style={bond, double=tenkzPaper, double distance=1.1pt},
   physical leg/.style={bond},
   operator bond/.style={bond, draw=tenkzOperator},
@@ -536,7 +537,8 @@
             \msg_warning:nnee { tenkz } { sheet-range }
               { \int_eval:n {#1} }
               { \int_eval:n { \l_tenkz_cs_sheets_int - 1 } }
-            \tenkz@event{warning|code=sheet-range|sheet=\int_eval:n {#1}}
+            \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+              code=sheet-range|sheet=\int_eval:n {#1}}
           }
       }
   }

@@ -2,7 +2,7 @@
 % from formula to finished diagram: the expectation-value window, an
 % MPO--MPO product (operator hue + dir), a periodic operator on a
 % periodic state, the entanglement cut, gauge insertions on a fused
-% chain, and the zipper with its tracked splitting-glyph note.  All
+% chain, and the zipper with its fusion and splitting endpoints.  All
 % sources are adapted from the verified Phase-0.5 corpus (gallery
 % S1--S5 and B7) — none are invented for this chapter; every quoted
 % signature line was checked against the emitter's .tnlog output.
@@ -215,13 +215,10 @@ at the other end.  On the left of Example~\ref{ex:worked-zipper},
 \tncmd{tnfuse} with \tnval{span=2} terminates both layers' wires on
 one glyph whose single west leg is the combined index; the east
 $O$/$A$ pair stays open.  On the right the fused word runs on a single
-wire.  The two sides do not yet balance as
-pictures: the right-hand end should carry a
-bond-\emph{splitting} glyph --- $V$ standing at the east end of a
-one-row word, splitting the fused bond back into the $O$/$A$ pair.
-That glyph is a tracked primitive (\S\ref{ch:trouble}); until it
-lands, $V$ closes the equation as a symbol, and the two signature
-lines in the margin record exactly the index it stands in for.
+wire and meets the centred west face of the right-hand $V$.  Its east
+face has two ports, so the one fused bond opens back into the separate
+operator and state bonds.  Thus the two sides have the same boundary
+signature, as required by equation~(28).
 
 \begin{tnexample}[
     formula   = {\begin{gathered}
@@ -230,12 +227,10 @@ lines in the margin record exactly the index it stands in for.
                  B^{i}\,V=\sum_{j}V\,(O^{ij}\otimes A^{j})
                  \end{gathered}},
     caption   = {the zipper},
-    index     = {LHS \tnlogline{virtual-west=1|virtual-east=2}: $V$'s
-                 combined leg west, the open $O$/$A$ pair east.  RHS
-                 \tnlogline{virtual-west=1|virtual-east=1}: the east
-                 index is the fused bond, closed here by the printed
-                 symbol $V$ --- the splitting glyph's stand-in.  Both
-                 sides read \tnlogline{physical-up=2} as drawn.},
+    index     = {Both sides read
+                 \tnlogline{virtual-west=1|virtual-east=2}: one fused
+                 bond on the west and the separate $O$/$A$ pair on the
+                 east.  Both also read \tnlogline{physical-up=2}.},
     label     = {ex:worked-zipper},
   ]
 % zipper (arXiv:2203.12563 eq 28): V fuses the O and A bond
@@ -248,13 +243,13 @@ lines in the margin record exactly the index it stands in for.
     & \tn{A} & \tndots & \tn{A}
   \end{tenkz}
   \;=\;
-  % the bond-SPLITTING glyph (V at the east end of a one-row
-  % word) is a tracked primitive: until it lands, V closes
-  % the fused index of the right-hand word as a symbol
-  \begin{tenkz}[physical=up]
+  % On the RHS, west at=center attaches V to the single fused B bond;
+  % east at={1,2} presents the two separate O/A bonds of the source.
+  \begin{tenkz}[rows={ket:fused:nopair, wire:west none}]
     \tn[box, up=$i_1$]{B}\tnspan[brace above]{3}{n} &
-    \tndots & \tn[box, up=$i_n$]{B}
+    \tndots & \tn[box, up=$i_n$]{B} &
+    \tnfuse[span=2, west at=center, east at={1,2}]{V}\\
+    & & &
   \end{tenkz}
-  \,V
 \]
 \end{tnexample}

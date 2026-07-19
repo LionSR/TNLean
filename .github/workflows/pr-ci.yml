@@ -22,9 +22,7 @@ on:
       - 'blueprint/src/**'
       - 'tex/tn/**'
       - 'tex/tenkz/**'
-      - 'docs/tenkz/manual2.tex'
-      - 'docs/tenkz/tenkzmanual2.sty'
-      - 'docs/tenkz/chapters2/**'
+      - 'docs/tenkz/**'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
@@ -34,6 +32,7 @@ on:
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_face_ports.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -49,9 +48,7 @@ on:
       - 'blueprint/src/**'
       - 'tex/tn/**'
       - 'tex/tenkz/**'
-      - 'docs/tenkz/manual2.tex'
-      - 'docs/tenkz/tenkzmanual2.sty'
-      - 'docs/tenkz/chapters2/**'
+      - 'docs/tenkz/**'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
@@ -61,6 +58,7 @@ on:
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_face_ports.py'
   workflow_dispatch:
 
 concurrency:
@@ -109,9 +107,7 @@ jobs:
               - 'blueprint/src/**'
               - 'tex/tn/**'
               - 'tex/tenkz/**'
-              - 'docs/tenkz/manual2.tex'
-              - 'docs/tenkz/tenkzmanual2.sty'
-              - 'docs/tenkz/chapters2/**'
+              - 'docs/tenkz/**'
               - 'docs/slides/**'
               - 'blueprint/.chktexrc'
               - 'blueprint/latexindent.yaml'
@@ -120,6 +116,7 @@ jobs:
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_lint.py'
               - 'scripts/test_tenkz_pic.py'
+              - 'scripts/test_tenkz_face_ports.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
 
@@ -311,6 +308,10 @@ jobs:
       - name: Smoke-test tenkz picture pipeline
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
+
+      - name: Test asymmetric tenkz face ports
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_face_ports.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'

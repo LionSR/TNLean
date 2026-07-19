@@ -67,10 +67,10 @@ KNOWN_LANGS = {"grid", "cd", "lattice", "free", "planes"}
 EMPTY_CHECK_LANGS = {"grid", "lattice", "free"}
 
 # Event kinds each dialect is expected to emit.  `lattice` and `planes`
-# are left open: lattice currently emits nothing (see audit report) and
-# planes is a post-spec dialect still growing its vocabulary.
+# are left open while their event vocabularies are still growing.
 DIALECT_KINDS = {
-    "grid": {"atom", "bond", "trace", "pairtrace", "phtrace", "cup", "hole", "boundary"},
+    "grid": {"atom", "bond", "faceports", "pairleg", "trace", "pairtrace",
+             "phtrace", "hooks", "cup", "hole", "warning", "boundary"},
     "free": {"atom", "join", "boundary"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
 }
@@ -99,16 +99,23 @@ def _any(v: str) -> bool:
 FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "picture": {"id": _is_int, "lang": _any},
     "atom": {"picture": _is_int, "cell": _is_cell, "name": _any, "kind": _any},
+    "faceports": {"picture": _is_int, "cell": _is_cell,
+                  "face": _enum("up", "down", "west", "east"),
+                  "arity": _is_int, "at": _any},
+    "pairleg": {"picture": _is_int, "upper": _is_cell, "lower": _is_cell,
+                "upper-port": _any, "column": _is_int},
     # The emitter normalizes the user-facing `bond dir=left|right` to
     # forward/reverse (direction along the wire); accept both spellings.
     "bond": {"picture": _is_int, "row": _is_int, "from": _is_int, "to": _is_int,
              "dir": _enum("none", "left", "right", "forward", "reverse")},
     "trace": {"picture": _is_int, "row": _is_int, "side": _enum("above", "below")},
+    "hooks": {"picture": _is_int, "row": _is_int, "side": _enum("above", "below")},
     "pairtrace": {"picture": _is_int, "row": _is_int, "col": _is_int, "site": _is_cell},
     "phtrace": {"picture": _is_int, "row": _is_int, "col": _is_int},
     "cup": {"picture": _is_int, "side": _enum("west", "east"),
             "top": _is_int, "bottom": _is_int, "matrix": _is_int},
     "hole": {"picture": _is_int, "row": _is_int, "col": _is_int},
+    "warning": {"picture": _is_int, "code": _any},
     "boundary": {"picture": _is_int, "virtual-west": _is_int, "virtual-east": _is_int,
                  "physical-up": _is_int, "physical-down": _is_int},
     "cdcell": {"picture": _is_int, "index": _is_int},
@@ -139,9 +146,9 @@ class Picture:
     events: list[Event] = field(default_factory=list)
 
     def content(self) -> list[Event]:
-        """Events that denote ink.  `boundary` is a derived signature line
-        emitted even for pictures that draw nothing, so it is excluded."""
-        return [e for e in self.events if e.kind != "boundary"]
+        """Events that denote ink.  Derived boundaries and warning
+        diagnostics do not contribute to the canonical topology."""
+        return [e for e in self.events if e.kind not in {"boundary", "warning"}]
 
     def boundary(self) -> Optional[tuple[int, int, int, int]]:
         for e in self.events:
@@ -227,6 +234,10 @@ class Audit:
                         self.hard("malformed-event", where,
                                   f"{kind} field {k}={v!r} fails validation: {line}")
                         ok = False
+                if kind != "picture" and "picture" not in attrs:
+                    self.hard("malformed-event", where,
+                              f"{kind} event lacks required picture=: {line}")
+                    ok = False
             if kind == "picture":
                 if not ok or "id" not in attrs or not _is_int(attrs["id"]):
                     continue
@@ -245,7 +256,7 @@ class Audit:
                 continue
             ref = attrs.get("picture", "")
             if not _is_int(ref):
-                continue  # already reported as malformed above
+                continue
             pid = int(ref)
             if pid == 0 and kind == "tree":
                 continue  # \tntree in running math, outside any picture
@@ -443,6 +454,17 @@ def canonical_hash(pic: Picture) -> str:
         attrs = {k: v for k, v in e.attrs.items() if k != "picture"}
         if e.kind == "bond" and attrs.get("dir") == "none":
             del attrs["dir"]
+        if e.kind == "faceports":
+            at = attrs.get("at", "")
+            try:
+                if at == "rows":
+                    slots = range(1, int(attrs["arity"]) + 1)
+                    attrs["at"] = ",".join(str(slot) for slot in slots)
+                elif at not in {"center", "none"}:
+                    slots = sorted({int(slot) for slot in at.split(",")})
+                    attrs["at"] = ",".join(str(slot) for slot in slots)
+            except (KeyError, ValueError):
+                pass  # malformed fields are reported by the parser
         lines.append(e.kind + "|" + "|".join(
             f"{k}={v}" for k, v in sorted(attrs.items())))
     payload = "\n".join(sorted(lines)).encode("utf-8")
