@@ -46,7 +46,7 @@ def IsTracePreservingBetweenDirectSums
 
 /-- A map between two finite direct sums does not increase the total trace of
 a positive family. -/
-def IsDirectSumTraceNonincreasing
+def IsTraceNonincreasingBetweenDirectSums
     {κ : Type*} {m : κ → Type*} [Fintype κ] [(l : κ) → Fintype (m l)]
     (T : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
       (∀ l, Matrix (m l) (m l) ℂ)) : Prop :=
@@ -126,8 +126,8 @@ theorem isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing
       (∀ k, Matrix (n k) (n k) ℂ)}
     (hTpos : ∀ A, (∀ k, (A k).PosSemidef) →
       ∀ l, (T A l).PosSemidef)
-    (hTNI : IsDirectSumTraceNonincreasing T)
-    (hSNI : IsDirectSumTraceNonincreasing S)
+    (hTNI : IsTraceNonincreasingBetweenDirectSums T)
+    (hSNI : IsTraceNonincreasingBetweenDirectSums S)
     (hComp : IsTracePreservingDirectSumMap (S.comp T)) :
     IsTracePreservingBetweenDirectSums T := by
   apply isTracePreservingBetweenDirectSums_of_posSemidef
@@ -138,10 +138,10 @@ theorem isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing
 
 omit [(k : ι) → DecidableEq (n k)] in
 /-- Trace nonincrease passes to the canonical full-matrix extension. -/
-theorem IsDirectSumTraceNonincreasing.directSumExtension
+theorem IsTraceNonincreasingBetweenDirectSums.directSumExtension
     {T : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
       (∀ k, Matrix (n k) (n k) ℂ)}
-    (hT : IsDirectSumTraceNonincreasing T) :
+    (hT : IsTraceNonincreasingBetweenDirectSums T) :
     IsTraceNonincreasingMap (directSumExtension T) := by
   intro A hA
   rw [directSumExtension_apply, trace_directSumDiagonalEmbedding]
@@ -177,7 +177,7 @@ theorem IsPositiveDirectSumMap.tracePreserving_of_traceNonincreasing_of_fixed_pr
     {T : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
       (∀ k, Matrix (n k) (n k) ℂ)}
     (hT : IsPositiveDirectSumMap T)
-    (hTNI : IsDirectSumTraceNonincreasing T)
+    (hTNI : IsTraceNonincreasingBetweenDirectSums T)
     (V : J → (∀ k, Matrix (n k) (n k) ℂ))
     (L : ℕ) (hL : 0 < L)
     (hFixed : ∀ j, T (V j) = V j)

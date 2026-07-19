@@ -171,16 +171,16 @@ theorem transportedVerticalSector_composites_tracePreserving
     transportedVerticalSectorS_trace_le
       dim₁ mult₁ dim₂ mult₂ weight₂ hMult₂ hWeight₂
       U₁ hU₁ U₂ hU₂ S hSCPTP X hX
-  have hTbarTNI : Matrix.IsDirectSumTraceNonincreasing Tbar := by
+  have hTbarTNI : Matrix.IsTraceNonincreasingBetweenDirectSums Tbar := by
     intro X hX
     exact hTbarle X hX
-  have hSbarTNI : Matrix.IsDirectSumTraceNonincreasing Sbar := by
+  have hSbarTNI : Matrix.IsTraceNonincreasingBetweenDirectSums Sbar := by
     intro X hX
     exact hSbarle X hX
-  have hF₁TNI : Matrix.IsDirectSumTraceNonincreasing F₁ := by
+  have hF₁TNI : Matrix.IsTraceNonincreasingBetweenDirectSums F₁ := by
     intro X hX
     exact (hSbarle (Tbar X) (hTbarpos X hX)).trans (hTbarle X hX)
-  have hF₂TNI : Matrix.IsDirectSumTraceNonincreasing F₂ := by
+  have hF₂TNI : Matrix.IsTraceNonincreasingBetweenDirectSums F₂ := by
     intro X hX
     exact (hTbarle (Sbar X) (hSbarpos X hX)).trans (hSbarle X hX)
   obtain ⟨L₁, hL₁, hSpan₁⟩ :=
