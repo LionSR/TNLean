@@ -1169,6 +1169,58 @@
     logarithm gives the result.
 \end{proof}
 
+\begin{definition}[Normalized diagonal distribution at fixed length]
+    \label{def:mpo_normalized_diagonal_cut_distribution}
+    \lean{MPOTensor.IsDiagonalAt,
+      MPOTensor.diagonalCutRealMatrix,
+      MPOTensor.diagonalCutMass,
+      MPOTensor.normalizedDiagonalCutDistribution}
+    \leanok
+    \uses{def:mpo_tensor}
+    For a chain of length $N=L+R$, call $\rho^{(N)}(M)$ diagonal if
+    $\rho^{(N)}(M)_{u,v}=0$ whenever $u\ne v$.  For configurations $x$ and $y$
+    on the two consecutive blocks, define
+    \[
+      W_{x,y}=\operatorname{Re}\rho^{(L+R)}(M)_{(x,y),(x,y)},\qquad
+      Z=\sum_{x,y}W_{x,y},\qquad
+      \widehat P=Z^{-1}W.
+    \]
+\end{definition}
+
+\begin{theorem}[Classical estimate for a positive diagonal finite-chain operator]
+    \label{thm:mpo_diagonal_finite_chain_classical_mutual_information}
+    \lean{MPOTensor.diagonalCutMatrix_apply_eq_mpo,
+      MPOTensor.diagonalCutRealMatrix_map_ofReal_of_posSemidef,
+      MPOTensor.diagonalCutRealMatrix_nonneg_of_posSemidef,
+      MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution,
+      MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}
+    \leanok
+    \uses{def:mpo_normalized_diagonal_cut_distribution,
+      thm:mpo_diagonal_cut_rank}
+    Let $D\geq1$.  Suppose that $\rho^{(L+R)}(M)$ is diagonal and positive
+    semidefinite, and that $Z>0$.  Then $W_{x,y}\geq0$, the scalar extension of
+    $W$ to $\C$ is the diagonal cut matrix of
+    Theorem~\ref{thm:mpo_diagonal_cut_rank}, and $\widehat P$ is a joint
+    probability distribution.  Its classical mutual information satisfies
+    \[
+      I(X:Y)_{\widehat P}\leq2\log D.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpo_diagonal_cut_classical_mutual_information}
+    Positive semidefiniteness makes every diagonal entry real and nonnegative,
+    so $W_{x,y}\geq0$ and its scalar extension recovers the complex diagonal
+    cut matrix.  Since $Z$ is the sum of the entries of $W$,
+    \[
+      \sum_{x,y}\widehat P_{x,y}
+      =Z^{-1}\sum_{x,y}W_{x,y}=1.
+    \]
+    Thus $\widehat P$ is a joint probability distribution.  Diagonality says
+    that these coefficients constitute the full classical finite-chain state,
+    and Theorem~\ref{thm:mpo_diagonal_cut_classical_mutual_information} gives
+    the bound.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} asserts the uniform estimate
     $I_L \le 4\log D$ for every MPDO. Its cited proof, however, treats mixed
@@ -1193,22 +1245,11 @@
     unrestricted estimate therefore requires a direct operator-Schmidt
     argument not supplied by the cited proof.
 
-    Diagonal operators cannot violate the estimate.  Suppose that the
-    finite-chain operator is diagonal and positive semidefinite, with positive
-    trace $Z$.  If $P$ is the diagonal coefficient matrix in
-    Theorem~\ref{thm:mpo_diagonal_cut_rank}, then
-    \[
-        \widehat P=Z^{-1}P
-    \]
-    is a joint probability distribution.  Multiplication by the nonzero real
-    scalar $Z^{-1}$ does not change rank, and the real matrix $\widehat P$ has
-    the same rank over $\R$ and $\C$.
-    Theorem~\ref{thm:classical_mutual_information_le_log_rank} gives
-    $I(X:Y)\leq\log\operatorname{rank}_{\R}\widehat P$.  Therefore
-    Theorem~\ref{thm:mpo_diagonal_cut_rank} yields
-    \[
-      I_L^{(L+R)}\leq 2\log D.
-    \]
+    Diagonal operators cannot violate the finite-chain estimate.  Indeed,
+    Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}
+    bounds by $2\log D$ the classical mutual information of the normalized
+    diagonal coefficients whenever the finite-chain operator is diagonal and
+    positive semidefinite and has positive total mass.
     Thus any counterexample must have genuine quantum coherences.  The
     unrestricted quantum estimate remains open. The
     same example as Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} also

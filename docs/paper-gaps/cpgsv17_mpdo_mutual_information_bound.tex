@@ -211,10 +211,25 @@ finite-chain estimate
 \leanid{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log} is in
 \doclink{TNLean/MPS/MPDO/DiagonalCutRank}.  The estimate assumes a real
 coefficient matrix, its normalized joint distribution, and an identification
-of its complex scalar extension with the diagonal cut matrix.  The remaining
-step at the MPDO level is to construct that coefficient matrix and probability
-distribution, together with the two identifications, from positivity and
-diagonality of the finite-chain operator.
+of its complex scalar extension with the diagonal cut matrix.  The fixed-length
+construction is formalized in
+\doclink{TNLean/MPS/MPDO/DiagonalFiniteChain}.
+\footnote{Formal declarations:
+\leanid{MPOTensor.IsDiagonalAt},
+\leanid{MPOTensor.diagonalCutRealMatrix},
+\leanid{MPOTensor.diagonalCutMass},
+\leanid{MPOTensor.normalizedDiagonalCutDistribution},
+\leanid{MPOTensor.diagonalCutRealMatrix_map_ofReal_of_posSemidef},
+\leanid{MPOTensor.diagonalCutRealMatrix_nonneg_of_posSemidef},
+\leanid{MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution},
+and
+\leanid{MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}.}
+For a positive diagonal operator at the chosen length, the real diagonal
+coefficients are nonnegative, their scalar extension is the cut matrix, and
+division by their positive total mass gives a joint distribution.  Diagonality
+identifies these normalized coefficients with the full classical finite-chain
+distribution.  The conclusion is classical; it does not settle the
+unrestricted quantum mutual-information question.
 
 \section{What the rank-three separation establishes}
 
