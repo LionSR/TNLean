@@ -1522,6 +1522,142 @@ Theorem~\ref{thm:trace_norm_abs}.
     $\mathcal R_\sigma(X)$ does not change its value.
 \end{proof}
 
+\begin{definition}[Support projection of a Hermitian matrix]
+    \label{def:hermitian_support_projection}
+    \lean{Matrix.IsHermitian.supportProj,
+        Matrix.IsHermitian.supportProj_isHermitian,
+        Matrix.IsHermitian.mul_supportProj_self}
+    \leanok
+    Let $A$ be Hermitian, with spectral decomposition
+    $A=U\operatorname{diag}(\lambda_i)U^\dagger$. Its support projection is
+    \[
+        P_A=U\operatorname{diag}(\mathbf 1_{\lambda_i\ne 0})U^\dagger.
+    \]
+\end{definition}
+
+\begin{theorem}[Support projection absorption under kernel inclusion]
+    \label{thm:support_projection_absorption_kernel_inclusion}
+    \lean{Matrix.IsHermitian.supportProj_mul_mul_supportProj_of_mulVec_kernel_le}
+    \leanok
+    \uses{def:hermitian_support_projection}
+    Let $A$ and $B$ be Hermitian matrices such that
+    $\ker A\subseteq\ker B$. If $P_A$ is the support projection of $A$, then
+    \[
+        P_A B P_A=B.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:hermitian_support_projection}
+    The complementary projection $\mathbf 1-P_A$ has range contained in
+    $\ker A$, and hence in $\ker B$. Thus
+    $B(\mathbf 1-P_A)=0$. Taking adjoints gives
+    $(\mathbf 1-P_A)B=0$, and the result follows.
+\end{proof}
+
+\begin{definition}[Lift along one basis vector]
+    \label{def:single_basis_vector_lift}
+    \lean{Matrix.liftVec}
+    \leanok
+    For $w\in H_L$ and a distinguished basis vector $e_r\in H_R$, define the
+    lift $J_r w=w\otimes e_r\in H_L\otimes H_R$.
+\end{definition}
+
+\begin{theorem}[Matrix action on a basis-vector lift]
+    \label{thm:matrix_action_single_basis_vector_lift}
+    \lean{Matrix.mulVec_liftVec_apply}
+    \leanok
+    \uses{def:single_basis_vector_lift}
+    Let $X$ be a matrix on $H_L\otimes H_R$. For basis indices $i,s$ and $r$,
+    \[
+        [XJ_r w]_{(i,s)}=\sum_j X_{(i,s),(j,r)}w_j.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:single_basis_vector_lift}
+    Expand the matrix-vector product. The factor $e_r$ is zero away from the
+    index $r$, so the sum over the second index has only one nonzero term.
+\end{proof}
+
+\begin{theorem}[Quadratic form of a right marginal]
+    \label{thm:partial_trace_quadratic_form_split}
+    \lean{Matrix.qform_partialTraceRight_split}
+    \leanok
+    \uses{def:partial_trace, def:single_basis_vector_lift}
+    Let $X$ be a matrix on $H_L\otimes H_R$, let $w\in H_L$, and let
+    $(e_r)_r$ be the distinguished orthonormal basis of $H_R$. Then
+    \[
+        \langle w,(\operatorname{tr}_R X)w\rangle
+        =\sum_r\langle w\otimes e_r,X(w\otimes e_r)\rangle.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:matrix_action_single_basis_vector_lift, def:partial_trace}
+    Expanding the matrix products and the partial trace gives
+    \[
+        \sum_{i,j,r}\overline{w_i}X_{(i,r),(j,r)}w_j
+    \]
+    on both sides.
+\end{proof}
+
+\begin{theorem}[Kernel inclusion descends under partial trace]
+    \label{thm:partial_trace_kernel_inclusion}
+    \lean{Matrix.partialTraceRight_support}
+    \leanok
+    \uses{def:partial_trace}
+    Let $\sigma$ be positive semidefinite on $H_L\otimes H_R$, and let $\rho$
+    be any matrix on the same space such that
+    $\ker\sigma\subseteq\ker\rho$. Then
+    \[
+        \ker(\operatorname{tr}_R\sigma)
+        \subseteq\ker(\operatorname{tr}_R\rho).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_quadratic_form_split}
+    If $w\in\ker(\operatorname{tr}_R\sigma)$, then
+    \[
+        0=\langle w,(\operatorname{tr}_R\sigma)w\rangle
+        =\sum_r\langle w\otimes e_r,\sigma(w\otimes e_r)\rangle.
+    \]
+    Each summand is nonnegative and therefore vanishes. Positive
+    semidefiniteness shows that
+    $\sigma(w\otimes e_r)=0$ for every $r$, so the joint kernel inclusion gives
+    $\rho(w\otimes e_r)=0$. Summing the diagonal components over $r$ yields
+    $(\operatorname{tr}_R\rho)w=0$.
+\end{proof}
+
+\begin{theorem}[The first marginal lies in the Petz support domain]
+    \label{thm:partial_trace_petz_channel_first_marginal_agreement}
+    \lean{Matrix.partialTraceRightPetzChannel_apply_partialTraceRight_of_support}
+    \leanok
+    \uses{def:partial_trace_petz_channel,
+        def:partial_trace_support_petz_map, def:partial_trace}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices on
+    $H_L\otimes H_R$ such that $\ker\sigma\subseteq\ker\rho$. Then
+    \[
+        \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\rho)
+        =\mathcal R_\sigma(\operatorname{tr}_R\rho).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_kernel_inclusion,
+        thm:support_projection_absorption_kernel_inclusion,
+        thm:partial_trace_petz_channel_supported_agreement}
+    Kernel inclusion descends through the partial trace, giving
+    $\ker(\operatorname{tr}_R\sigma)\subseteq
+    \ker(\operatorname{tr}_R\rho)$. The preceding absorption lemma therefore
+    yields
+    $P_\tau(\operatorname{tr}_R\rho)P_\tau
+      =\operatorname{tr}_R\rho$, where
+    $\tau=\operatorname{tr}_R\sigma$. Agreement of the completed channel with
+    the support Petz map now applies.
+\end{proof}
+
 \begin{theorem}[The support Petz map recovers its reference]
     \label{thm:partial_trace_support_petz_map_reference_recovery}
     \lean{Matrix.partialTraceRightPetzMap_partialTraceRight}
