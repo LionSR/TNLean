@@ -1345,6 +1345,20 @@ Theorem~\ref{thm:trace_norm_abs}.
     Hermitian.
 \end{lemma}
 
+\begin{lemma}[Positivity of the support inverse square root]
+    \label{lem:support_inverse_square_root_positive_semidefinite}
+    \lean{Matrix.PosSemidef.supportInvSqrt_posSemidef}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    The inverse square root of a positive semidefinite matrix on its support is
+    positive semidefinite.
+\end{lemma}
+
+\begin{proof}\leanok
+    This follows from the spectral definition, since the reciprocal of every
+    positive square root is nonnegative and the zero eigenspace is sent to zero.
+\end{proof}
+
 \begin{lemma}[Support inverse square root of a positive-definite matrix]
     \label{lem:support_inverse_square_root_positive_definite}
     \lean{Matrix.PosDef.supportInvSqrt_eq_inv_sqrt}
