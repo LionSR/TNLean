@@ -910,8 +910,8 @@
     hypothesis to the purifying pure state.
 \end{proof}
 
-\begin{lemma}[Rank of diagonal coefficients across a periodic cut]
-    \label{lem:mpo_diagonal_cut_rank}
+\begin{theorem}[Rank of diagonal coefficients across a periodic cut]
+    \label{thm:mpo_diagonal_cut_rank}
     \lean{MPOTensor.diagonalCutMatrix,
       MPOTensor.diagonalCutMatrix_rank_le}
     \leanok
@@ -930,8 +930,9 @@
     \[
       \operatorname{rank}_{\C} P\le D^2.
     \]
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
+    \uses{lem:mpo_eval_word_append}
     For each word, write $A_x=M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}$
     and $B_y=M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}$.  The identity
     \[
@@ -965,12 +966,19 @@
     unrestricted estimate therefore requires a direct operator-Schmidt
     argument not supplied by the cited proof.
 
-    Diagonal operators cannot violate the estimate.  If the normalized
-    finite-chain operator is diagonal, the matrix $P$ in
-    Lemma~\ref{lem:mpo_diagonal_cut_rank} is a joint probability distribution.
-    Theorem~4.1 of \cite{Riazanov2017PSDRank} gives
-    $I(X:Y)\leq\log\operatorname{rank}_{\R}P$.  Since a real matrix has the
-    same rank over $\R$ and $\C$, Lemma~\ref{lem:mpo_diagonal_cut_rank} yields
+    Diagonal operators cannot violate the estimate.  Suppose that the
+    finite-chain operator is diagonal and positive semidefinite, with positive
+    trace $Z$.  If $P$ is the diagonal coefficient matrix in
+    Theorem~\ref{thm:mpo_diagonal_cut_rank}, then
+    \[
+        \widehat P=Z^{-1}P
+    \]
+    is a joint probability distribution.  Multiplication by the nonzero real
+    scalar $Z^{-1}$ does not change rank, and the real matrix $\widehat P$ has
+    the same rank over $\R$ and $\C$.  Theorem~4.1 of
+    \cite{Riazanov2017PSDRank} gives
+    $I(X:Y)\leq\log\operatorname{rank}_{\R}\widehat P$.  Therefore
+    Theorem~\ref{thm:mpo_diagonal_cut_rank} yields
     \[
       I_L^{(L+R)}\leq 2\log D.
     \]
