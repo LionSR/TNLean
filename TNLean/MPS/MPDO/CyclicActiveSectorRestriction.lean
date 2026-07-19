@@ -355,6 +355,14 @@ private theorem cyclicActiveLeftRestriction_neighboringOperator_posSemidef
   · exact hpos k h
   · exact Matrix.PosSemidef.zero
 
+private theorem trace_reindex_real
+    {I J : Type*} [Fintype I] [Fintype J]
+    (e : I ≃ J) (T : Matrix I I ℝ) :
+    Matrix.trace (Matrix.reindex e e T) = Matrix.trace T := by
+  classical
+  simpa [Matrix.trace, Matrix.reindex_apply] using
+    Fintype.sum_equiv e.symm _ _ (by intro; simp)
+
 /-- Source ZCL gives the square--cube and constant-trace-power relations for
 one positive normalization of the cyclic-active trace matrix.
 
@@ -410,14 +418,14 @@ theorem cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
         rw [hreindex_pow]
       _ = Matrix.trace ((lam⁻¹ • TG) ^ m) := by
         simpa only [e, TG, G] using
-          (Matrix.trace_reindex (R := ℝ)
+          (trace_reindex_real
             (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
             ((lam⁻¹ • (F.cyclicActiveLeftRestriction hK).activeSectorTraceMatrix
               F.cyclicActiveWeight) ^ m))
       _ = Matrix.trace (lam⁻¹ • TG) := htrace m hm
       _ = Matrix.trace (Matrix.reindex e e (lam⁻¹ • TG)) := by
         simpa only [e, TG, G] using
-          (Matrix.trace_reindex (R := ℝ)
+          (trace_reindex_real
             (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
             (lam⁻¹ • (F.cyclicActiveLeftRestriction hK).activeSectorTraceMatrix
               F.cyclicActiveWeight)).symm
@@ -639,6 +647,7 @@ private theorem isPrimitive_reindex
       (Matrix.reindex e e T) ^ m := by
     change (Matrix.reindexAlgEquiv ℝ ℝ e) (T ^ m) = _
     rw [map_pow]
+    rfl
   rw [← hreindex_pow]
   exact hpos (e.symm i) (e.symm j)
 
@@ -655,8 +664,10 @@ private theorem rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
   have hprimitiveFin : Matrix.IsPrimitive TF := isPrimitive_reindex e hprimitive
   have hpowFin : TF ^ 2 = TF ^ 3 := by
     have hreindex_pow (m : ℕ) : Matrix.reindex e e (T ^ m) = TF ^ m := by
-      change (Matrix.reindexAlgEquiv ℝ ℝ e) (T ^ m) = TF ^ m
+      change (Matrix.reindexAlgEquiv ℝ ℝ e) (T ^ m) =
+        (Matrix.reindex e e T) ^ m
       rw [map_pow]
+      rfl
     rw [← hreindex_pow, ← hreindex_pow, hpow]
   have hrank := hprimitiveFin.rank_pow_two_eq_one_of_pow_two_eq_pow_three hpowFin
   calc
@@ -664,8 +675,10 @@ private theorem rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
       (Matrix.rank_reindex e e (T ^ 2)).symm
     _ = (TF ^ 2).rank := by
       congr 1
-      change (Matrix.reindexAlgEquiv ℝ ℝ e) (T ^ 2) = TF ^ 2
+      change (Matrix.reindexAlgEquiv ℝ ℝ e) (T ^ 2) =
+        (Matrix.reindex e e T) ^ 2
       rw [map_pow]
+      rfl
     _ = 1 := hrank
 
 /-- If the normalized cyclic-active trace matrix satisfies the source-ZCL
