@@ -5,6 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Schwarz.PetzRecoverySupport
 import TNLean.Channel.Schwarz.SSAEqualityDPI
+import TNLean.Analysis.SuperoperatorResolvent
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import Mathlib.Data.Complex.BigOperators
+import Mathlib.LinearAlgebra.Matrix.Vec
 
 /-!
 # Singular-support prerequisites for equality in data processing
@@ -28,6 +32,10 @@ the positive semidefinite matrices.
   saturation of the finite Jensen inequality in the Weyl proof.
 * `Matrix.partialTraceRightPetzMap_eq_of_weyl_identity_sandwich` reduces the
   identity-summand support sandwich to the native raw partial-trace Petz map.
+* `Matrix.weyl_resolvent_defect_identity` proves the positive-definite,
+  fixed-`t` squared-defect identity for the finite Weyl family.
+* `Matrix.weyl_resolvent_eq_of_defect_eq_zero` shows that zero defect gives
+  the common resolvent solution for every Weyl summand.
 
 ## References
 
@@ -36,7 +44,7 @@ the positive semidefinite matrices.
   arXiv:quant-ph/0304007v2.
 -/
 
-open scoped Matrix Kronecker ComplexOrder Matrix.Norms.L2Operator
+open scoped Matrix Kronecker ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open Matrix
 
 namespace Matrix
@@ -310,3 +318,448 @@ theorem quantumRelativeEntropy_weyl_jensen_eq_of_partialTraceRight_eq
     smul_eq_mul]
   have hdC : (dC : ℝ) ≠ 0 := by exact_mod_cast NeZero.ne dC
   field_simp [hdC]
+
+namespace Matrix
+
+variable {n : Type*} [Fintype n]
+
+private lemma star_mulVec_dotProduct (S : Matrix n n ℂ) (hS : S.IsHermitian)
+    (x y : n → ℂ) :
+    star (S *ᵥ x) ⬝ᵥ y = star x ⬝ᵥ (S *ᵥ y) := by
+  rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
+
+variable [DecidableEq n]
+
+private lemma resolvent_residual_expand (S : Matrix n n ℂ) (hS : S.PosDef)
+    (b x : n → ℂ) :
+    dotProduct (star (b - S *ᵥ x)) (S⁻¹ *ᵥ (b - S *ᵥ x)) =
+      dotProduct (star b) (S⁻¹ *ᵥ b) - dotProduct (star b) x -
+        dotProduct (star x) b + dotProduct (star x) (S *ᵥ x) := by
+  letI : Invertible S := hS.isUnit.invertible
+  have hinv (y : n → ℂ) : S⁻¹ *ᵥ (S *ᵥ y) = y := by
+    rw [mulVec_mulVec, inv_mul_of_invertible, one_mulVec]
+  have hinv' (y : n → ℂ) : S *ᵥ (S⁻¹ *ᵥ y) = y := by
+    rw [mulVec_mulVec, mul_inv_of_invertible, one_mulVec]
+  simp only [star_sub, sub_dotProduct, mulVec_sub, dotProduct_sub, hinv]
+  rw [star_mulVec_dotProduct S hS.isHermitian]
+  rw [hinv']
+  rw [star_mulVec_dotProduct S hS.isHermitian]
+  ring
+
+private theorem resolvent_residual_identity
+    {ι : Type*} [Fintype ι] [Nonempty ι]
+    (S : ι → Matrix n n ℂ) (b : ι → n → ℂ)
+    (hS : ∀ i, (S i).PosDef) :
+    let Sbar := ∑ i, S i
+    let bbar := ∑ i, b i
+    let x := Sbar⁻¹ *ᵥ bbar
+    ∑ i, dotProduct (star (b i - S i *ᵥ x))
+      ((S i)⁻¹ *ᵥ (b i - S i *ᵥ x)) =
+      (∑ i, dotProduct (star (b i)) ((S i)⁻¹ *ᵥ b i)) -
+        dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar) := by
+  classical
+  dsimp only
+  let Sbar : Matrix n n ℂ := ∑ i, S i
+  let bbar : n → ℂ := ∑ i, b i
+  let x : n → ℂ := Sbar⁻¹ *ᵥ bbar
+  have hSbar : Sbar.PosDef := by
+    exact Matrix.posDef_sum Finset.univ_nonempty (fun i _ ↦ hS i)
+  letI : Invertible Sbar := hSbar.isUnit.invertible
+  have hx : Sbar *ᵥ x = bbar := by
+    simp only [x, mulVec_mulVec, mul_inv_of_invertible, one_mulVec]
+  have hsumStarB : ∑ i, star (b i) = star bbar := by
+    ext j
+    simp [bbar]
+  have hsumB : ∑ i, b i = bbar := rfl
+  have hsumSx : ∑ i, S i *ᵥ x = Sbar *ᵥ x := by
+    simpa [Sbar] using (Matrix.sum_mulVec Finset.univ S x).symm
+  change (∑ i, dotProduct (star (b i - S i *ᵥ x))
+      ((S i)⁻¹ *ᵥ (b i - S i *ᵥ x))) =
+    (∑ i, dotProduct (star (b i)) ((S i)⁻¹ *ᵥ b i)) -
+      dotProduct (star bbar) x
+  simp_rw [resolvent_residual_expand (hS := hS _)]
+  rw [Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.sum_sub_distrib]
+  have hleft : ∑ i, dotProduct (star (b i)) x = dotProduct (star bbar) x := by
+    rw [← hsumStarB]
+    simpa using (sum_dotProduct Finset.univ (fun i ↦ star (b i)) x).symm
+  have hright : ∑ i, dotProduct (star x) (b i) = dotProduct (star x) bbar := by
+    rw [← hsumB]
+    simpa using (dotProduct_sum (star x) Finset.univ b).symm
+  have hlast : ∑ i, dotProduct (star x) (S i *ᵥ x) =
+      dotProduct (star x) (Sbar *ᵥ x) := by
+    rw [← hsumSx]
+    simpa using (dotProduct_sum (star x) Finset.univ (fun i ↦ S i *ᵥ x)).symm
+  rw [hleft, hright, hlast, hx]
+  ring
+
+private lemma sum_norm_sq_eq_re_dotProduct (y : n → ℂ) :
+    ∑ p, ‖y p‖ ^ 2 = (dotProduct (star y) y).re := by
+  simp [dotProduct, Complex.sq_norm, ← Complex.normSq_eq_conj_mul_self]
+
+private lemma sqrt_inv_mulVec_normSq (S : Matrix n n ℂ) (hS : S.PosDef)
+    (r : n → ℂ) :
+    ∑ p, ‖((CFC.sqrt S)⁻¹ *ᵥ r) p‖ ^ 2 =
+      (dotProduct (star r) (S⁻¹ *ᵥ r)).re := by
+  let Q : Matrix n n ℂ := CFC.sqrt S
+  have hSnonneg : 0 ≤ S := hS.posSemidef.nonneg
+  have hQQ : Q * Q = S := by
+    simpa [Q] using CFC.sqrt_mul_sqrt_self S hSnonneg
+  have hQunit : IsUnit Q := by
+    change IsUnit (CFC.sqrt S)
+    rw [CFC.isUnit_sqrt_iff_isStrictlyPositive,
+      Matrix.isStrictlyPositive_iff_posDef]
+    exact hS
+  letI : Invertible Q := hQunit.invertible
+  letI : Invertible S := hS.isUnit.invertible
+  have hQherm : Q.IsHermitian := by
+    show Qᴴ = Q
+    simpa only [Q, star_eq_conjTranspose] using
+      (CFC.sqrt_nonneg (a := S)).isSelfAdjoint.star_eq
+  let y : n → ℂ := Q⁻¹ *ᵥ r
+  have hy : Q *ᵥ y = r := by
+    simp only [y, mulVec_mulVec, mul_inv_of_invertible, one_mulVec]
+  have hSinv : S⁻¹ = Q⁻¹ * Q⁻¹ := by
+    rw [← hQQ, Matrix.mul_inv_rev]
+  have hcancel : (Q⁻¹ * Q⁻¹) *ᵥ (Q *ᵥ y) = Q⁻¹ *ᵥ y := by
+    rw [mulVec_mulVec, Matrix.mul_assoc, inv_mul_of_invertible,
+      Matrix.mul_one]
+  have hquad : dotProduct (star r) (S⁻¹ *ᵥ r) =
+      dotProduct (star y) y := by
+    rw [← hy, hSinv, hcancel, star_mulVec_dotProduct Q hQherm]
+    rw [mulVec_mulVec, mul_inv_of_invertible, one_mulVec]
+  calc
+    ∑ p, ‖((CFC.sqrt S)⁻¹ *ᵥ r) p‖ ^ 2 =
+        (dotProduct (star y) y).re := by
+          simpa only [Q, y] using sum_norm_sq_eq_re_dotProduct y
+    _ = (dotProduct (star r) (S⁻¹ *ᵥ r)).re := congrArg Complex.re hquad.symm
+
+private lemma sqrt_defect_eq_sqrt_inv_residual
+    (S : Matrix n n ℂ) (hS : S.PosDef) (b x : n → ℂ) :
+    (CFC.sqrt S)⁻¹ *ᵥ b - CFC.sqrt S *ᵥ x =
+      (CFC.sqrt S)⁻¹ *ᵥ (b - S *ᵥ x) := by
+  let Q : Matrix n n ℂ := CFC.sqrt S
+  have hQunit : IsUnit Q := by
+    change IsUnit (CFC.sqrt S)
+    rw [CFC.isUnit_sqrt_iff_isStrictlyPositive,
+      Matrix.isStrictlyPositive_iff_posDef]
+    exact hS
+  letI : Invertible Q := hQunit.invertible
+  have hQQ : Q * Q = S := by
+    simpa [Q] using CFC.sqrt_mul_sqrt_self S hS.posSemidef.nonneg
+  change Q⁻¹ *ᵥ b - Q *ᵥ x = Q⁻¹ *ᵥ (b - S *ᵥ x)
+  rw [mulVec_sub]
+  congr 1
+  rw [← hQQ, mulVec_mulVec, ← Matrix.mul_assoc,
+    inv_mul_of_invertible, Matrix.one_mul]
+
+private theorem resolvent_sqrt_defect_identity
+    {ι : Type*} [Fintype ι] [Nonempty ι]
+    (S : ι → Matrix n n ℂ) (b : ι → n → ℂ)
+    (hS : ∀ i, (S i).PosDef) :
+    let Sbar := ∑ i, S i
+    let bbar := ∑ i, b i
+    let x := Sbar⁻¹ *ᵥ bbar
+    ∑ i, ∑ p, ‖((CFC.sqrt (S i))⁻¹ *ᵥ b i -
+      CFC.sqrt (S i) *ᵥ x) p‖ ^ 2 =
+      ∑ i, (dotProduct (star (b i)) ((S i)⁻¹ *ᵥ b i)).re -
+        (dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar)).re := by
+  classical
+  dsimp only
+  let Sbar : Matrix n n ℂ := ∑ i, S i
+  let bbar : n → ℂ := ∑ i, b i
+  let x : n → ℂ := Sbar⁻¹ *ᵥ bbar
+  have hresComplex :
+      ∑ i, dotProduct (star (b i - S i *ᵥ x))
+          ((S i)⁻¹ *ᵥ (b i - S i *ᵥ x)) =
+        (∑ i, dotProduct (star (b i)) ((S i)⁻¹ *ᵥ b i)) -
+          dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar) := by
+    simpa only [x, bbar, Sbar] using resolvent_residual_identity S b hS
+  have hres := congrArg Complex.re hresComplex
+  change (∑ i, ∑ p, ‖((CFC.sqrt (S i))⁻¹ *ᵥ b i -
+      CFC.sqrt (S i) *ᵥ x) p‖ ^ 2) = _
+  calc
+    ∑ i, ∑ p, ‖((CFC.sqrt (S i))⁻¹ *ᵥ b i -
+        CFC.sqrt (S i) *ᵥ x) p‖ ^ 2 =
+        ∑ i, (dotProduct (star (b i - S i *ᵥ x))
+          ((S i)⁻¹ *ᵥ (b i - S i *ᵥ x))).re := by
+            apply Finset.sum_congr rfl
+            intro i _
+            rw [sqrt_defect_eq_sqrt_inv_residual (S i) (hS i),
+              sqrt_inv_mulVec_normSq (S i) (hS i)]
+    _ = ∑ i, (dotProduct (star (b i)) ((S i)⁻¹ *ᵥ b i)).re -
+        (dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar)).re := by
+          simpa only [Complex.re_sum, Complex.sub_re] using hres
+
+private theorem resolvent_eq_of_sqrt_defect_sum_eq_zero
+    {ι : Type*} [Fintype ι] [Nonempty ι]
+    (S : ι → Matrix n n ℂ) (b : ι → n → ℂ)
+    (hS : ∀ i, (S i).PosDef)
+    (hzero :
+      let Sbar := ∑ i, S i
+      let bbar := ∑ i, b i
+      let x := Sbar⁻¹ *ᵥ bbar
+      ∑ i, ∑ p, ‖((CFC.sqrt (S i))⁻¹ *ᵥ b i -
+        CFC.sqrt (S i) *ᵥ x) p‖ ^ 2 = 0) :
+    ∀ i, (S i)⁻¹ *ᵥ b i = (∑ j, S j)⁻¹ *ᵥ (∑ j, b j) := by
+  classical
+  let Sbar : Matrix n n ℂ := ∑ i, S i
+  let bbar : n → ℂ := ∑ i, b i
+  let x : n → ℂ := Sbar⁻¹ *ᵥ bbar
+  change (∑ i, ∑ p, ‖((CFC.sqrt (S i))⁻¹ *ᵥ b i -
+      CFC.sqrt (S i) *ᵥ x) p‖ ^ 2) = 0 at hzero
+  have hi (i : ι) : ∑ p, ‖((CFC.sqrt (S i))⁻¹ *ᵥ b i -
+      CFC.sqrt (S i) *ᵥ x) p‖ ^ 2 = 0 := by
+    exact (Finset.sum_eq_zero_iff_of_nonneg
+      (fun j _ ↦ Finset.sum_nonneg (fun p _ ↦ sq_nonneg _))).mp hzero i
+      (Finset.mem_univ i)
+  intro i
+  have hm : (CFC.sqrt (S i))⁻¹ *ᵥ b i -
+      CFC.sqrt (S i) *ᵥ x = 0 := by
+    funext p
+    have hp : ‖((CFC.sqrt (S i))⁻¹ *ᵥ b i -
+        CFC.sqrt (S i) *ᵥ x) p‖ ^ 2 = 0 :=
+      (Finset.sum_eq_zero_iff_of_nonneg (fun q _ ↦ sq_nonneg _)).mp (hi i) p
+        (Finset.mem_univ p)
+    exact norm_eq_zero.mp (sq_eq_zero_iff.mp hp)
+  let Q : Matrix n n ℂ := CFC.sqrt (S i)
+  have hQunit : IsUnit Q := by
+    change IsUnit (CFC.sqrt (S i))
+    rw [CFC.isUnit_sqrt_iff_isStrictlyPositive,
+      Matrix.isStrictlyPositive_iff_posDef]
+    exact hS i
+  letI : Invertible Q := hQunit.invertible
+  letI : Invertible (S i) := (hS i).isUnit.invertible
+  have hresInv : Q⁻¹ *ᵥ (b i - S i *ᵥ x) = 0 := by
+    rw [← sqrt_defect_eq_sqrt_inv_residual (S i) (hS i) (b i) x]
+    exact hm
+  have hres : b i - S i *ᵥ x = 0 := by
+    have hcancel : Q *ᵥ (Q⁻¹ *ᵥ (b i - S i *ᵥ x)) = b i - S i *ᵥ x := by
+      calc
+        Q *ᵥ (Q⁻¹ *ᵥ (b i - S i *ᵥ x)) =
+            (Q * Q⁻¹) *ᵥ (b i - S i *ᵥ x) := mulVec_mulVec _ _ _
+        _ = b i - S i *ᵥ x := by rw [mul_inv_of_invertible, one_mulVec]
+    calc
+      b i - S i *ᵥ x = Q *ᵥ (Q⁻¹ *ᵥ (b i - S i *ᵥ x)) := hcancel.symm
+      _ = 0 := by rw [hresInv, Matrix.mulVec_zero]
+  have hb : b i = S i *ᵥ x := sub_eq_zero.mp hres
+  change (S i)⁻¹ *ᵥ b i = x
+  rw [hb, mulVec_mulVec, inv_mul_of_invertible, one_mulVec]
+
+end Matrix
+
+namespace Matrix
+
+/-- **The fixed-resolvent defect identity for the finite Weyl family.**
+Let `A g` and `B g` be the uniformly weighted Weyl conjugates of positive
+definite matrices `ρ` and `σ`. For `t > 0`, the squared norm of the
+square-root resolvent defect is the difference between the sum of the
+summand quadratic forms and the quadratic form of their average.
+
+The vectorization is `X ↦ Matrix.vec Xᵀ`; hence
+`A ⊗ₖ 1 + t • (1 ⊗ₖ Bᵀ)` represents `X ↦ A * X + t • (X * B)`.
+This is the finite-Weyl specialization of Jenčová--Ruskai,
+arXiv:0903.2895, §4 and Appendix, equations `Mj` and `basiceq`. It is a
+fixed-`t`, positive-definite statement and does not derive vanishing of the
+defect from relative-entropy equality.
+
+**Scope restriction (positive definite, fixed `t`):** The source equality
+analysis also uses integration in `t` and limiting arguments for singular
+matrices. Those steps are not asserted here. Documented in
+`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`. -/
+theorem weyl_resolvent_defect_identity
+    {dS dC : ℕ} [NeZero dC]
+    {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
+    (hρ : ρ.PosDef) (hσ : σ.PosDef)
+    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) {t : ℝ} (ht : 0 < t) :
+    let U := fun g : ZMod dC × ZMod dC ↦
+      (1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ g.1 g.2
+    let q : ℝ := ((dC : ℝ) ^ 2)⁻¹
+    let A := fun g ↦ q • (U g * ρ * (U g)ᴴ)
+    let B := fun g ↦ q • (U g * σ * (U g)ᴴ)
+    let Abar := ∑ g, A g
+    let Bbar := ∑ g, B g
+    let S := fun g ↦ A g ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+        (Fin dS × ZMod dC) ℂ) +
+      t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ (B g)ᵀ)
+    let Sbar := Abar ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+        (Fin dS × ZMod dC) ℂ) +
+      t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ Bbarᵀ)
+    let b := fun g ↦ Matrix.vec (B g)ᵀ
+    let bbar := Matrix.vec Bbarᵀ
+    let x := Sbar⁻¹ *ᵥ bbar
+    ∑ g, ∑ p, ‖((CFC.sqrt (S g))⁻¹ *ᵥ b g -
+      CFC.sqrt (S g) *ᵥ x) p‖ ^ 2 =
+      ∑ g, (dotProduct (star (b g)) ((S g)⁻¹ *ᵥ b g)).re -
+        (dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar)).re := by
+  classical
+  dsimp only
+  let N := Fin dS × ZMod dC
+  let G := ZMod dC × ZMod dC
+  let U : G → Matrix N N ℂ := fun g ↦
+    (1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ g.1 g.2
+  let q : ℝ := ((dC : ℝ) ^ 2)⁻¹
+  let A : G → Matrix N N ℂ := fun g ↦ q • (U g * ρ * (U g)ᴴ)
+  let B : G → Matrix N N ℂ := fun g ↦ q • (U g * σ * (U g)ᴴ)
+  let Abar : Matrix N N ℂ := ∑ g, A g
+  let Bbar : Matrix N N ℂ := ∑ g, B g
+  let S : G → Matrix (N × N) (N × N) ℂ := fun g ↦
+    A g ⊗ₖ (1 : Matrix N N ℂ) +
+      t • ((1 : Matrix N N ℂ) ⊗ₖ (B g)ᵀ)
+  let Sbar : Matrix (N × N) (N × N) ℂ :=
+    Abar ⊗ₖ (1 : Matrix N N ℂ) +
+      t • ((1 : Matrix N N ℂ) ⊗ₖ Bbarᵀ)
+  let b : G → N × N → ℂ := fun g ↦ Matrix.vec (B g)ᵀ
+  let bbar : N × N → ℂ := Matrix.vec Bbarᵀ
+  let x : N × N → ℂ := Sbar⁻¹ *ᵥ bbar
+  have hdCpos : (0 : ℝ) < dC := by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dC)
+  have hqpos : 0 < q := by
+    simp only [q]
+    positivity
+  have hU (g : G) : U g ∈ unitary (Matrix N N ℂ) := by
+    exact Matrix.kronecker_mem_unitary (Submonoid.one_mem _)
+      (weyl_mem_unitary hζ g.1 g.2)
+  have hA (g : G) : (A g).PosDef := by
+    have hc := posDef_conj_unitary hρ ⟨U g, hU g⟩
+    simpa only [A, star_eq_conjTranspose] using hc.smul hqpos
+  have hB (g : G) : (B g).PosDef := by
+    have hc := posDef_conj_unitary hσ ⟨U g, hU g⟩
+    simpa only [B, star_eq_conjTranspose] using hc.smul hqpos
+  have hS (g : G) : (S g).PosDef :=
+    superop_leftRight_posDef ht (hA g) (hB g)
+  have hsumS : ∑ g, S g = Sbar := by
+    ext ⟨a, b⟩ ⟨c, d⟩
+    simp only [S, Sbar, Abar, Bbar, Matrix.sum_apply, Matrix.add_apply,
+      Matrix.smul_apply, Matrix.kroneckerMap_apply, Matrix.transpose_apply,
+      Finset.sum_add_distrib, Finset.sum_mul, Finset.mul_sum]
+    rw [Finset.smul_sum]
+  have hsumb : ∑ g, b g = bbar := by
+    ext ⟨a, c⟩
+    simp only [b, bbar, Bbar, Matrix.vec, Matrix.transpose_apply,
+      Matrix.sum_apply, Finset.sum_apply]
+  have hdef := resolvent_sqrt_defect_identity S b hS
+  change (∑ g, ∑ p, ‖((CFC.sqrt (S g))⁻¹ *ᵥ b g -
+      CFC.sqrt (S g) *ᵥ x) p‖ ^ 2) =
+    ∑ g, (dotProduct (star (b g)) ((S g)⁻¹ *ᵥ b g)).re -
+      (dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar)).re
+  simpa only [hsumS, hsumb, x] using hdef
+
+/-- **Zero Weyl defect gives the common fixed-resolvent solution.**
+In the positive-definite finite Weyl family, if the difference of resolvent
+quadratic forms in `weyl_resolvent_defect_identity` vanishes at a fixed
+`t > 0`, then every summand has the same resolvent solution as the average.
+Taking `g = (0, 0)` gives the identity-Weyl summand required in the
+partial-trace equality argument.
+
+This is the zero-defect conclusion of Jenčová--Ruskai,
+arXiv:0903.2895, §4 and Appendix, equations `Mj` and `basiceq` and Theorem
+`thm:eqJp`. It does not assert that equality of relative entropies makes the
+displayed defect vanish.
+
+**Scope restriction (positive definite, fixed `t`):** The implication from
+relative-entropy equality to zero defect, integration in `t`, and singular
+supports remain outside this theorem. Documented in
+`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`. -/
+theorem weyl_resolvent_eq_of_defect_eq_zero
+    {dS dC : ℕ} [NeZero dC]
+    {ρ σ : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ}
+    (hρ : ρ.PosDef) (hσ : σ.PosDef)
+    {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) {t : ℝ} (ht : 0 < t)
+    (hzero :
+      let U := fun g : ZMod dC × ZMod dC ↦
+        (1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ g.1 g.2
+      let q : ℝ := ((dC : ℝ) ^ 2)⁻¹
+      let A := fun g ↦ q • (U g * ρ * (U g)ᴴ)
+      let B := fun g ↦ q • (U g * σ * (U g)ᴴ)
+      let Abar := ∑ g, A g
+      let Bbar := ∑ g, B g
+      let S := fun g ↦ A g ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+          (Fin dS × ZMod dC) ℂ) +
+        t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ (B g)ᵀ)
+      let Sbar := Abar ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+          (Fin dS × ZMod dC) ℂ) +
+        t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ Bbarᵀ)
+      let b := fun g ↦ Matrix.vec (B g)ᵀ
+      let bbar := Matrix.vec Bbarᵀ
+      ∑ g, (dotProduct (star (b g)) ((S g)⁻¹ *ᵥ b g)).re -
+        (dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar)).re = 0) :
+    let U := fun g : ZMod dC × ZMod dC ↦
+      (1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ g.1 g.2
+    let q : ℝ := ((dC : ℝ) ^ 2)⁻¹
+    let A := fun g ↦ q • (U g * ρ * (U g)ᴴ)
+    let B := fun g ↦ q • (U g * σ * (U g)ᴴ)
+    let Abar := ∑ g, A g
+    let Bbar := ∑ g, B g
+    let S := fun g ↦ A g ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+        (Fin dS × ZMod dC) ℂ) +
+      t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ (B g)ᵀ)
+    let Sbar := Abar ⊗ₖ (1 : Matrix (Fin dS × ZMod dC)
+        (Fin dS × ZMod dC) ℂ) +
+      t • ((1 : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) ⊗ₖ Bbarᵀ)
+    let b := fun g ↦ Matrix.vec (B g)ᵀ
+    let bbar := Matrix.vec Bbarᵀ
+    ∀ g, (S g)⁻¹ *ᵥ b g = Sbar⁻¹ *ᵥ bbar := by
+  classical
+  dsimp only at hzero ⊢
+  let N := Fin dS × ZMod dC
+  let G := ZMod dC × ZMod dC
+  let U : G → Matrix N N ℂ := fun g ↦
+    (1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ g.1 g.2
+  let q : ℝ := ((dC : ℝ) ^ 2)⁻¹
+  let A : G → Matrix N N ℂ := fun g ↦ q • (U g * ρ * (U g)ᴴ)
+  let B : G → Matrix N N ℂ := fun g ↦ q • (U g * σ * (U g)ᴴ)
+  let Abar : Matrix N N ℂ := ∑ g, A g
+  let Bbar : Matrix N N ℂ := ∑ g, B g
+  let S : G → Matrix (N × N) (N × N) ℂ := fun g ↦
+    A g ⊗ₖ (1 : Matrix N N ℂ) +
+      t • ((1 : Matrix N N ℂ) ⊗ₖ (B g)ᵀ)
+  let Sbar : Matrix (N × N) (N × N) ℂ :=
+    Abar ⊗ₖ (1 : Matrix N N ℂ) +
+      t • ((1 : Matrix N N ℂ) ⊗ₖ Bbarᵀ)
+  let b : G → N × N → ℂ := fun g ↦ Matrix.vec (B g)ᵀ
+  let bbar : N × N → ℂ := Matrix.vec Bbarᵀ
+  let x : N × N → ℂ := Sbar⁻¹ *ᵥ bbar
+  change (∑ g, (dotProduct (star (b g)) ((S g)⁻¹ *ᵥ b g)).re -
+      (dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar)).re) = 0 at hzero
+  change ∀ g, (S g)⁻¹ *ᵥ b g = Sbar⁻¹ *ᵥ bbar
+  have hdCpos : (0 : ℝ) < dC := by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dC)
+  have hqpos : 0 < q := by
+    simp only [q]
+    positivity
+  have hU (g : G) : U g ∈ unitary (Matrix N N ℂ) := by
+    exact Matrix.kronecker_mem_unitary (Submonoid.one_mem _)
+      (weyl_mem_unitary hζ g.1 g.2)
+  have hA (g : G) : (A g).PosDef := by
+    have hc := posDef_conj_unitary hρ ⟨U g, hU g⟩
+    simpa only [A, star_eq_conjTranspose] using hc.smul hqpos
+  have hB (g : G) : (B g).PosDef := by
+    have hc := posDef_conj_unitary hσ ⟨U g, hU g⟩
+    simpa only [B, star_eq_conjTranspose] using hc.smul hqpos
+  have hS (g : G) : (S g).PosDef :=
+    superop_leftRight_posDef ht (hA g) (hB g)
+  have hsumS : ∑ g, S g = Sbar := by
+    ext ⟨a, b⟩ ⟨c, d⟩
+    simp only [S, Sbar, Abar, Bbar, Matrix.sum_apply, Matrix.add_apply,
+      Matrix.smul_apply, Matrix.kroneckerMap_apply, Matrix.transpose_apply,
+      Finset.sum_add_distrib, Finset.sum_mul, Finset.mul_sum]
+    rw [Finset.smul_sum]
+  have hsumb : ∑ g, b g = bbar := by
+    ext ⟨a, c⟩
+    simp only [b, bbar, Bbar, Matrix.vec, Matrix.transpose_apply,
+      Matrix.sum_apply, Finset.sum_apply]
+  have hdef := resolvent_sqrt_defect_identity S b hS
+  have hnormZero :
+      ∑ g, ∑ p, ‖((CFC.sqrt (S g))⁻¹ *ᵥ b g -
+        CFC.sqrt (S g) *ᵥ x) p‖ ^ 2 = 0 := by
+    calc
+      _ = ∑ g, (dotProduct (star (b g)) ((S g)⁻¹ *ᵥ b g)).re -
+          (dotProduct (star bbar) (Sbar⁻¹ *ᵥ bbar)).re := by
+            simpa only [hsumS, hsumb, x] using hdef
+      _ = 0 := hzero
+  have hall := resolvent_eq_of_sqrt_defect_sum_eq_zero S b hS
+    (by simpa only [hsumS, hsumb, x] using hnormZero)
+  intro g
+  simpa only [hsumS, hsumb] using hall g
+
+end Matrix
