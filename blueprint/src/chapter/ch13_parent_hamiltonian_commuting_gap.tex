@@ -1103,6 +1103,47 @@ specialization of that Appendix~D definition.
     two.
 \end{proof}
 
+\begin{theorem}[Nearest-neighbor parent ground spaces for distinct multiplicity-one RFP sectors]%
+    \label{thm:rfp_multiplicity_one_bnt_parent_ground_spaces}
+    \lean{MPSTensor.IsBNTCanonicalForm.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}
+    \leanok
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence,
+        def:parent_hamiltonian_ground_space_spanning}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
+    tensor. If $B$ is a renormalization fixed point, then for every $N>2$,
+    \[
+        \ker H_2^{(N)}(B)
+        =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}.
+    \]
+    This is the multiplicity-one distinct-sector case of
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}. It does not include repeated
+    copies of a basis tensor or arbitrary raw sector weights.
+\end{theorem}
+
+\begin{proof}\leanok
+    The residual isometry equations imply that the simultaneous one-site
+    matrices $(A_j^i)_j$ span the product of the block matrix algebras. Hence
+    the same is true for every positive word length. The one-step restriction
+    intersection therefore gives
+    \[
+        \mathcal G_{N,2}(B)
+        \subseteq \bigvee_j G_N(A_j).
+    \]
+    Comparing this block decomposition before and after moving the periodic
+    cut by one site shows that every block boundary matrix commutes with the
+    corresponding one-site matrices. Thus each block component lies in
+    $\mathcal G_{N,2}(A_j)$, and
+    \[
+        \mathcal G_{N,2}(B)
+        =\bigvee_j\mathcal G_{N,2}(A_j).
+    \]
+    Each block is a normal renormalization fixed point, so one-site
+    injectivity and the injective periodic-chain theorem identify its chain
+    space with the line spanned by $V^{(N)}(A_j)$. The finite-volume kernel
+    identity completes the proof.
+\end{proof}
+
 \begin{theorem}[Cyclic trace expansion for a closed MPS chain]\label{thm:trace_eval_word_eq_sum_cyclic}
     \lean{MPSTensor.trace_evalWord_eq_sum_cyclic}
     \leanok
