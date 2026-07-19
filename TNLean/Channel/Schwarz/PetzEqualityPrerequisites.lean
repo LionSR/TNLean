@@ -15,6 +15,10 @@ the positive semidefinite matrices.
 
 ## Main result
 
+* `Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed` computes the
+  support inverse square root of a maximally mixed extension.
+* `Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul` cancels
+  the dimension factors in the corresponding support sandwich.
 * `quantumRelativeEntropy_kronecker_support` proves ancilla additivity on the
   finite-relative-entropy support domain.
 * `quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq`
