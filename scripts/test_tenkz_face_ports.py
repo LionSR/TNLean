@@ -323,6 +323,10 @@ SOURCE = r"""
   \tn[pill, wide=2, no legs]{U} & \\
   \tn{L_1} & \tn{L_2}
 \end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  & \tn[pill, wide=2, no legs]{U} & \\
+  \tn[pill, wide=2, up at=center]{L} & &
+\end{tenkz}
 \end{document}
 """
 
@@ -387,6 +391,10 @@ def main() -> int:
         )
         audit = Audit(work / "face-ports.tnlog", None)
         audit.parse_log()
+        audit.check_dialects()
+        hooks_findings = [
+            finding for finding in audit.findings if "hooks" in finding.msg
+        ]
         topology_hashes = {
             picture.ident: canonical_hash(picture) for picture in audit.pictures
         }
@@ -412,6 +420,8 @@ def main() -> int:
 
     if pictureless_warning_hard:
         raise AssertionError("audit rejected a compatible pictureless warning")
+    if hooks_findings:
+        raise AssertionError("audit rejected a grid hooks event")
     inverse = pictures[1]
     require(
         inverse,
@@ -1070,6 +1080,17 @@ def main() -> int:
         nolegs_upper_two_lower,
         "boundary|picture=70|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
         "wide no-legs upper owner did not open both ordinary lower owners",
+    )
+    shifted_centered_lower = pictures[71]
+    forbid(
+        shifted_centered_lower,
+        "pairleg|picture=71|",
+        "shifted centered lower owner was contracted through a suppressed face",
+    )
+    require(
+        shifted_centered_lower,
+        "boundary|picture=71|virtual-west=2|virtual-east=2|physical-up=1|physical-down=0",
+        "shifted centered lower owner was not reopened",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0

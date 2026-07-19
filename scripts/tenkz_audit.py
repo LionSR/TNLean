@@ -71,7 +71,7 @@ EMPTY_CHECK_LANGS = {"grid", "lattice", "free"}
 # planes is a post-spec dialect still growing its vocabulary.
 DIALECT_KINDS = {
     "grid": {"atom", "bond", "faceports", "pairleg", "trace", "pairtrace",
-             "phtrace", "cup", "hole", "warning", "boundary"},
+             "phtrace", "hooks", "cup", "hole", "warning", "boundary"},
     "free": {"atom", "join", "boundary"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
 }
@@ -110,6 +110,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "bond": {"picture": _is_int, "row": _is_int, "from": _is_int, "to": _is_int,
              "dir": _enum("none", "left", "right", "forward", "reverse")},
     "trace": {"picture": _is_int, "row": _is_int, "side": _enum("above", "below")},
+    "hooks": {"picture": _is_int, "row": _is_int, "side": _enum("above", "below")},
     "pairtrace": {"picture": _is_int, "row": _is_int, "col": _is_int, "site": _is_cell},
     "phtrace": {"picture": _is_int, "row": _is_int, "col": _is_int},
     "cup": {"picture": _is_int, "side": _enum("west", "east"),

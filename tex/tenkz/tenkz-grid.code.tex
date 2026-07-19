@@ -3013,12 +3013,23 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
 \cs_generate_variant:Nn \tenkz_open_lower_partner:nnn { nen }
 
 \int_new:N \l__tenkz_openlowerspan_int
+\prop_new:N \l__tenkz_openlowerowner_prop
 \cs_new_protected:Npn \tenkz_open_lower_span:nnn #1#2#3
   {
     \int_set:Nn \l__tenkz_openlowerspan_int {#3}
     \int_step_inline:nn {\l__tenkz_openlowerspan_int}
-      { \tenkz_open_lower_partner:nen
-          {#1}{\int_eval:n{#2+##1-1}}{1} }
+      {
+        \prop_get:NeNF \l__tenkz_owner_prop
+          {\int_eval:n{#1+1}-\int_eval:n{#2+##1-1}} \l__tenkz_pwbase_tl
+          { \tl_set:Ne \l__tenkz_pwbase_tl {\int_eval:n{#2+##1-1}} }
+        \prop_if_in:NeF \l__tenkz_openlowerowner_prop
+          {#1-\l__tenkz_pwbase_tl}
+          {
+            \prop_put:Nen \l__tenkz_openlowerowner_prop
+              {#1-\l__tenkz_pwbase_tl} {}
+            \tenkz_open_lower_partner:nen {#1}{\l__tenkz_pwbase_tl}{1}
+          }
+      }
   }
 
 \cs_new_protected:Npn \tenkz_open_below_no_legs:nn #1#2
@@ -3035,6 +3046,7 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
     \int_zero:N \l__tenkz_internalpd_int
     \prop_clear:N \l__tenkz_lowersurplus_prop
     \prop_clear:N \l__tenkz_pwlowerlabel_prop
+    \prop_clear:N \l__tenkz_openlowerowner_prop
     % A centred lower face is one index for the entire horizontal
     % interface, even when several separate upper glyphs meet its span.
     \prop_clear:N \l__tenkz_pwcenterused_prop
