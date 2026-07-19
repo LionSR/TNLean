@@ -843,12 +843,17 @@
     trace matrix is primitive.
 \end{proof}
 
+% **Local fix (cyclic-active restriction):** CPSV16 Lemma `propSN` assumes SAL.
+% The following restricted construction repairs the arbitrary-factorization obstruction.
+% See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{definition}[Cyclic-active sectors]
     \label{def:mpdo_cyclic_active_sector}
-    \lean{MPOTensor.PhysicalSectorFactorization.IsCyclicActiveSector,
-      MPOTensor.PhysicalSectorFactorization.cyclicActiveWeight,
-      MPOTensor.PhysicalSectorFactorization.CyclicActiveSector,
-      MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.IsCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveWeight}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveWeight_ne_zero_iff}
+    \lean{MPOTensor.PhysicalSectorFactorization.CyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_trace_re_pos_iff}
     \leanok
     \uses{def:mpdo_physical_sector_factorization,
       def:mpdo_minimal_neighboring_operator}
@@ -860,8 +865,10 @@
     \]
     where $\leadsto$ denotes reachability by nonzero neighboring operators.
     The first edge $k\to h$ is explicit, so the resulting closed walk has
-    positive length even when the return path is empty.  Let $C$ be the set
-    of retained sectors and define
+    positive length even when the return path is empty.  The set $C$ of
+    retained sectors is therefore exactly the set of vertices occurring in
+    positive-length directed cycles, in the sense of
+    \cite[Section~III]{Beigi2012Classification}.  Define
     \[
         T_{k,h}=\tr(\eta_{k,h})\qquad(k,h\in C).
     \]
@@ -869,16 +876,16 @@
     $T_{k,h}>0$ is equivalent to $\eta_{k,h}\ne0$.
 \end{definition}
 
+% **Local fix (cyclic-active restriction):** this theorem concerns the restricted
+% cyclic support, not the full trace matrix in CPSV16 Lemma `propSN`. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{theorem}[Deletion of sectors absent from cyclic products]
     \label{thm:mpdo_cyclic_active_deletion}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      neighboringOperator_ne_zero_of_cyclicNeighboringProduct_ne_zero}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      isCyclicActiveSector_of_cyclicNeighboringProduct_ne_zero}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_cyclic_edges}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_ne_zero_of_cyclicNeighboringProduct_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_cyclicNeighboringProduct_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
     \leanok
     \uses{def:mpdo_cyclic_active_sector,
       def:mpdo_physical_sector_chain_coordinates}
@@ -898,19 +905,22 @@
     path to $k_n$.  Hence every $k_n$ belongs to $C$.
 \end{proof}
 
+% **Local fix (cyclic-active restriction):** this is a restricted replacement for
+% the primitive-matrix step of the SAL-dependent CPSV16 Lemma `propSN`. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{theorem}[Primitivity on cyclic-active sectors]
     \label{thm:mpdo_cyclic_active_trace_matrix_primitive}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_sectorVirtualMatrix_ne_zero_of_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.nonempty_cyclicActiveSector}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveSectorOneSiteMatrixFamily_span_eq_top}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveSectorTraceMatrix_isIrreducible}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveSectorTraceMatrix_pow_two_diag_pos}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveSectorTraceMatrix_pow_three_diag_pos}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveSectorTraceMatrix_isPrimitive}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorOneSiteMatrixFamily_span_eq_top}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_cyclicActive_two_edge_return}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_isIrreducible}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_pow_two_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_pow_three_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_isPrimitive}
     \leanok
     \uses{def:injective, def:mpdo_cyclic_active_sector}
     Suppose that the virtual dimension is positive, the MPO tensor is
@@ -940,15 +950,24 @@
     the coprime return lengths imply primitivity.
 \end{proof}
 
+% **Local fix (cyclic-active restriction):** CPSV16 line 1613 uses the one-step
+% coefficient, whereas this restricted theorem proves rank one for its square.
+% See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{theorem}[Rank-one cyclic-active two-step coefficient]
     \label{thm:mpdo_cyclic_active_zcl_rank_one}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_leftTensor}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_rightTensor}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_neighboringOperator}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl,
-      thm:mpdo_cyclic_active_trace_matrix_primitive}
+      thm:mpdo_cyclic_active_trace_matrix_primitive,
+      thm:matrix_primitive_pow_two_rank_one}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive}, suppose that
     the physical-trace transfer has source zero correlation length.  There is

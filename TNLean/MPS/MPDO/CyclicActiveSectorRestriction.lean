@@ -53,7 +53,12 @@ can return through a possibly empty directed path.  The explicit outgoing
 edge excludes the empty reflexive walk.
 
 Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
-449--514; arXiv:1606.00608, Appendix C.2, lines 1441--1450. -/
+449--514; arXiv:1606.00608, Appendix C.2, lines 1441--1450.
+
+**Local fix (cyclic-active restriction):** This definition isolates the
+nonzero cyclic support missing from the SAL-dependent primitive-matrix step
+of CPSV16 Lemma `propSN`.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def IsCyclicActiveSector (F : PhysicalSectorFactorization K)
     (k : Fin F.sectorCount) : Prop :=
   ∃ h : Fin F.sectorCount,
@@ -92,7 +97,7 @@ abbrev CyclicActiveSector (F : PhysicalSectorFactorization K) :=
 
 /-- The real trace matrix restricted to cyclic-active sectors.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1461--1470. -/
+Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1480--1482. -/
 noncomputable abbrev cyclicActiveSectorTraceMatrix
     (F : PhysicalSectorFactorization K) :
     Matrix F.CyclicActiveSector F.CyclicActiveSector ℝ :=
@@ -164,7 +169,11 @@ theorem exists_sectorVirtualMatrix_ne_zero_of_isCyclicActiveSector
 /-- If the sector virtual matrices span the full matrix algebra, every sector
 containing a nonzero virtual matrix lies on a directed two-cycle.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** This is a restricted trace-pairing
+consequence used in place of the SAL-dependent primitive-matrix step of
+`propSN`.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero
     (F : PhysicalSectorFactorization K)
     (hspan : Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤)
@@ -217,7 +226,11 @@ theorem isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero
 /-- For an injective tensor, every virtual matrix outside cyclic-active
 support vanishes.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** This removes only sectors outside
+nonzero cyclic support; it does not assert primitivity of the unreduced trace
+matrix.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (k : Fin F.sectorCount) (hk : ¬F.IsCyclicActiveSector k)
@@ -235,7 +248,11 @@ It is an auxiliary representative used to apply source ZCL to the restricted
 trace matrix; it does not identify that matrix with the unreduced one.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `formK`, `etarl`, and
-`Tkn`, lines 1434--1493. -/
+`Tkn`, lines 1434--1493.
+
+**Local fix (cyclic-active restriction):** This auxiliary representative
+implements the restricted repair; it is not the SAL decomposition in
+`propSN`.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveLeftRestriction
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
     PhysicalSectorFactorization K where
@@ -290,7 +307,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 cyclic-active and kills every other target column.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `etarl` and `Tkn`, lines
-1441--1470. -/
+1441--1482. -/
 theorem cyclicActiveLeftRestriction_neighboringOperator
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (k h : Fin F.sectorCount) :
@@ -321,7 +338,7 @@ private noncomputable def cyclicActiveLeftRestriction_activeSectorEquiv
 /-- On cyclic-active indices, reindexing the restricted representative gives
 the original restricted trace matrix.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1461--1470. -/
+Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1480--1482. -/
 theorem reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
     Matrix.reindex (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
@@ -371,7 +388,12 @@ the physical-sector factorization and every retained entry.  Thus this result
 concerns the restricted trace matrix only, not the unreduced Beigi matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `Tkn` and `SALZCL`, lines
-1473--1497, used at Proposition `4to2`, lines 1606--1616. -/
+1473--1497, used at Proposition `4to2`, lines 1606--1616.
+
+**Local fix (cyclic-active restriction):** The conclusion is transported to
+the restricted matrix.  It neither invokes SAL nor identifies this matrix
+with the full matrix of `propSN`.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
@@ -433,7 +455,11 @@ theorem cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
 
 /-- Injectivity reduces full virtual spanning to the cyclic-active sectors.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** This restricted spanning statement
+replaces the SAL-dependent sector selection in `propSN`.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorOneSiteMatrixFamily_span_eq_top
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
     Submodule.span ℂ
@@ -448,7 +474,11 @@ theorem cyclicActiveSectorOneSiteMatrixFamily_span_eq_top
 /-- An injective tensor with nonzero virtual dimension has a cyclic-active
 sector.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** Nonemptiness is proved for the
+restricted support, without the SAL hypothesis of `propSN`.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem nonempty_cyclicActiveSector
     (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective) :
     Nonempty F.CyclicActiveSector := by
@@ -475,7 +505,11 @@ theorem nonempty_cyclicActiveSector
 /-- Every cyclic-active sector contains a nonzero virtual matrix, in the
 indicator-weight indexing used by the restricted trace matrix.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** This is an indexed form of the
+restricted support statement, not the SAL-dependent sector selection in
+`propSN`.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero
     (F : PhysicalSectorFactorization K) (k : F.CyclicActiveSector) :
     ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0 :=
@@ -485,7 +519,11 @@ theorem cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero
 /-- Every edge between cyclic-active sectors closes through a third
 cyclic-active sector when the tensor is injective.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** The length-three return is proved
+on the restricted support and replaces the paper's blocking assertion.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_cyclicActive_two_edge_return
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     {k h : F.CyclicActiveSector}
@@ -572,7 +610,11 @@ theorem exists_cyclicActive_two_edge_return
 /-- The cyclic-active support is one strongly connected component when the
 tensor is injective and the neighboring operators are positive semidefinite.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** Irreducibility is asserted only
+for the restricted trace matrix, without the SAL hypothesis of `propSN`.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_isIrreducible
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
@@ -583,7 +625,11 @@ theorem cyclicActiveSectorTraceMatrix_isIrreducible
 
 /-- Every cyclic-active sector has a positive length-two return weight.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** This return weight belongs to the
+restricted trace matrix.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_pow_two_diag_pos
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
@@ -595,7 +641,11 @@ theorem cyclicActiveSectorTraceMatrix_pow_two_diag_pos
 
 /-- Every cyclic-active sector has a positive length-three return weight.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
+
+**Local fix (cyclic-active restriction):** This return weight belongs to the
+restricted trace matrix and replaces the paper's blocking assertion.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_pow_three_diag_pos
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
@@ -615,7 +665,12 @@ trace pairing supplies closed walks of lengths two and three, hence
 aperiodicity.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471;
-Beigi, arXiv:1105.1019v2, lines 449--514. -/
+Beigi, arXiv:1105.1019v2, lines 449--514.
+
+**Local fix (cyclic-active restriction):** This proves primitivity only after
+deleting sectors absent from nonzero cyclic products.  It is not the
+SAL-dependent full-matrix assertion of `propSN`.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_isPrimitive
     (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
@@ -685,7 +740,11 @@ private theorem rank_pow_two_eq_one_of_isPrimitive_of_pow_two_eq_pow_three
 square--cube relation, then its square has rank one.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `SALZCL`, lines
-1490--1497. -/
+1490--1497.
+
+**Local fix (cyclic-active restriction):** The rank-one conclusion concerns
+the square of the restricted trace matrix, not the one-step full matrix in
+the printed proof.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
     (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
@@ -701,7 +760,11 @@ theorem cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
 rank-one square whenever it satisfies the source-ZCL square--cube relation.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `SALZCL`, lines
-1490--1497. -/
+1490--1497.
+
+**Local fix (cyclic-active restriction):** The rank-one conclusion concerns
+the square of the restricted trace matrix, not the one-step full matrix in
+the printed proof.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
     (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
@@ -729,7 +792,12 @@ applies only after deleting sectors absent from every nonzero cyclic product
 and makes no assertion about the unreduced Beigi trace matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497,
-and Proposition `4to2`, lines 1606--1616. -/
+and Proposition `4to2`, lines 1606--1616.
+
+**Local fix (cyclic-active restriction):** CPSV16 line 1613 uses the one-step
+coefficient, whereas this theorem proves rank one for the square of the
+restricted coefficient.  The additional marginal replacement remains open.
+See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL
     (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
@@ -825,7 +893,11 @@ Thus deleting all non-cyclic-active sector blocks leaves every finite cyclic
 bond product unchanged: precisely the deleted blocks vanish.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1441--1450; Beigi,
-arXiv:1105.1019v2, directed-cycle discussion at lines 449--514. -/
+arXiv:1105.1019v2, directed-cycle discussion at lines 449--514.
+
+**Local fix (cyclic-active restriction):** This deletion concerns the
+restricted cyclic support and makes no primitivity claim about the full trace
+matrix.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector
     (F : PhysicalSectorFactorization K) [NeZero N]
     (k : Fin N → Fin F.sectorCount) (n : Fin N)
