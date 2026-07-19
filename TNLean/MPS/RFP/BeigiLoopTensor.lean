@@ -134,15 +134,8 @@ private theorem edgeProjector_mulVec_loopBondVector
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     (F.edgeProjector l.1 l.1).mulVec (F.loopBondVector l) =
       F.loopBondVector l := by
-  have hproj : LinearMap.IsProj (F.edgeGroundSpace l.1 l.1)
-      (Matrix.toLin' (F.edgeProjector l.1 l.1)) := by
-    rw [edgeGroundSpace, LinearMap.isProj_range_iff_isIdempotentElem]
-    change Matrix.toLin' (F.edgeProjector l.1 l.1) *
-      Matrix.toLin' (F.edgeProjector l.1 l.1) =
-        Matrix.toLin' (F.edgeProjector l.1 l.1)
-    rw [Module.End.mul_eq_comp, ← Matrix.toLin'_mul,
-      (F.edgeProjector_isOrthogonal l.1 l.1).2.eq]
-  exact hproj.mem_iff_map_id.mp (F.loopBondVector_mem l)
+  exact (F.edgeProjector_isProj l.1 l.1).mem_iff_map_id.mp
+    (F.loopBondVector_mem l)
 
 private theorem loopCyclicProduct_etaCyclicEdgeEquiv_symm_constant
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)

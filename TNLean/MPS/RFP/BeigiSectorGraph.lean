@@ -130,6 +130,19 @@ noncomputable def edgeGroundSpace (F : BeigiSectorGraphData A)
     Submodule ℂ (Matrix.EtaEdgeIndex F.leftDim F.rightDim a b → ℂ) :=
   LinearMap.range (Matrix.toLin' (F.edgeProjector a b))
 
+/-- The edge projector is a projection onto its edge ground space.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(3), pages 3--4. -/
+theorem edgeProjector_isProj (F : BeigiSectorGraphData A)
+    (a b : Fin F.sectorCount) :
+    LinearMap.IsProj (F.edgeGroundSpace a b)
+      (Matrix.toLin' (F.edgeProjector a b)) := by
+  rw [edgeGroundSpace, LinearMap.isProj_range_iff_isIdempotentElem]
+  change Matrix.toLin' (F.edgeProjector a b) *
+    Matrix.toLin' (F.edgeProjector a b) = Matrix.toLin' (F.edgeProjector a b)
+  rw [Module.End.mul_eq_comp, ← Matrix.toLin'_mul,
+    (F.edgeProjector_isOrthogonal a b).2.eq]
+
 /-- A directed edge is present exactly when its edge ground space is nonzero.
 
 Source: Beigi, arXiv:1105.1019v2, Section III, graph definition immediately
@@ -353,15 +366,8 @@ private theorem edgeProjector_trace (F : BeigiSectorGraphData A)
     Matrix.trace (F.edgeProjector a b) =
       (Module.finrank ℂ (F.edgeGroundSpace a b) : ℂ) := by
   classical
-  have hproj : LinearMap.IsProj (F.edgeGroundSpace a b)
-      (Matrix.toLin' (F.edgeProjector a b)) := by
-    rw [edgeGroundSpace, LinearMap.isProj_range_iff_isIdempotentElem]
-    change Matrix.toLin' (F.edgeProjector a b) *
-      Matrix.toLin' (F.edgeProjector a b) = Matrix.toLin' (F.edgeProjector a b)
-    rw [Module.End.mul_eq_comp, ← Matrix.toLin'_mul,
-      (F.edgeProjector_isOrthogonal a b).2.eq]
   rw [← Matrix.trace_toLin'_eq]
-  exact hproj.trace
+  exact (F.edgeProjector_isProj a b).trace
 
 private theorem transformedGroundBondProduct_trace (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
