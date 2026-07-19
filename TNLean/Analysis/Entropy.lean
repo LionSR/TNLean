@@ -369,8 +369,9 @@ theorem vonNeumannEntropy_le_log_rank
     vonNeumannEntropy ρ hρ.isHermitian ≤ Real.log ρ.rank := by
   rw [vonNeumannEntropy, hρ.isHermitian.rank_eq_card_non_zero_eigs,
     Fintype.card_subtype]
-  exact Entropy.negMulLog_sum_le_log_card_support _ hρ.eigenvalues_nonneg
-    (posSemidef_trace_one_eigenvalues_sum_one hρ hρ_tr)
+  simpa [Entropy.probabilityEntropy] using
+    Entropy.probabilityEntropy_le_log_card_support _ hρ.eigenvalues_nonneg
+      (posSemidef_trace_one_eigenvalues_sum_one hρ hρ_tr)
 
 /-- A positive semidefinite trace-one matrix of rank at most one has zero von
 Neumann entropy. -/

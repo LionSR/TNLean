@@ -87,10 +87,6 @@ namespace Entropy
 
 variable {X Y : Type*} [Fintype X] [Fintype Y]
 
-/-- Shannon entropy, with natural logarithms, of a finite family of real weights. -/
-noncomputable def probabilityEntropy {Z : Type*} [Fintype Z] (p : Z → ℝ) : ℝ :=
-  ∑ z, Real.negMulLog (p z)
-
 /-- Classical mutual information in the entropy form
 `I(X : Y) = H(X) + H(Y) - H(X,Y)`, with natural logarithms.
 
@@ -583,7 +579,7 @@ private theorem probabilityEntropy_rowMarginal_le_log_nonzeroRows
     ext x
     simp [Matrix.nonzeroRows, row_eq_zero_iff_rowMarginal_eq_zero P hP.1 x]
   rw [← hsupport]
-  exact negMulLog_sum_le_log_card_support (Matrix.rowMarginal P) hrow_nonneg hrow_sum
+  exact probabilityEntropy_le_log_card_support (Matrix.rowMarginal P) hrow_nonneg hrow_sum
 
 /-- Every joint distribution has a nonzero row. -/
 private theorem nonzeroRows_nonempty
