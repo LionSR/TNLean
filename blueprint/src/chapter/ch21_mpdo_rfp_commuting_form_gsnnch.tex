@@ -756,6 +756,93 @@
     decomposition or saturation of the area law.
 \end{remark}
 
+\begin{theorem}[A nonminimal sector factorization need not be primitive]
+    \label{thm:mpdo_commuting_bond_trace_matrix_primitivity_obstruction}
+    \lean{MPOTensor.CommutingBondTraceMatrixObstruction.%
+      normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl, def:mpdo,
+      def:injective, def:normal}
+    There is an injective normal tensor $\mathcal K$, of physical dimension two
+    and bond dimension one, which generates MPDOs and has source zero
+    correlation length, together with one positive two-site bond $B$ whose
+    translates commute.  For every $N\geq2$,
+    \[
+        \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1},
+    \]
+    while the trace matrix of a chosen two-sector Beigi factorization is
+    \[
+        T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+    \]
+    In particular, $T$ is not primitive.
+
+    This shows that primitivity cannot be inferred for an arbitrary selected
+    factorization in the step suggested at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  The same tensor also
+    has a one-sector factorization with positive semidefinite neighboring
+    operator and primitive trace matrix.  Hence the example does not exclude a
+    source-faithful minimal or visible-sector selection, and it does not
+    disprove the stated commuting-form-to-SAL implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\mathcal K^{0,0}=1$ and let all other physical entries vanish.  The
+    matrices $\{\mathcal K^{i,j}\}_{i,j=0}^1$ span $M_1(\mathbb C)$.  For every
+    $X\in M_1(\mathbb C)$, the doubled-index transfer $\mathcal E_{\mathcal K}$
+    and the physical-trace transfer $P_{\mathcal K}$ satisfy
+    \[
+        \mathcal E_{\mathcal K}(X)=X,
+        \qquad P_{\mathcal K}=I_1,
+        \qquad P_{\mathcal K}^2=P_{\mathcal K}.
+    \]
+    Hence $\mathcal K$ is injective and normal and has source zero correlation
+    length.  Decompose the physical space nonminimally as
+    $\mathbb C\oplus\mathbb C$.  With $w_0=1$ and $w_1=0$, take both sector
+    factors to be the scalar $w_k$ in sector $k$.  The neighboring operators
+    are
+    \[
+        \eta_{k,h}=w_kw_h I_1=\delta_{k,0}\delta_{h,0}I_1\succeq0.
+    \]
+    In the sector coordinates the corresponding physical bond is
+    \[
+        B=\sum_{k,h} I_{H_L^{(k)}}\otimes\eta_{k,h}\otimes
+        I_{H_R^{(h)}}
+        =I_{H_L^{(0)}}\otimes I_1\otimes I_{H_R^{(0)}}.
+    \]
+    Since only the all-zero physical-index word contributes, the
+    factorization identity is
+    \[
+        \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1}
+        \qquad (N\geq2).
+    \]
+    Consequently,
+    \[
+        T_{k,h}=\tr(\eta_{k,h})=\delta_{k,0}\delta_{h,0},
+        \qquad
+        T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+    \]
+    For every $n\geq1$,
+    \[
+        T^n=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+    \]
+    Thus no positive power has all entries strictly positive, so $T$ is not
+    primitive.  For the alternative factorization, take one sector
+    $B^L=\mathbb C^2$ and $B^R=\mathbb C$, with
+
+    \[
+        l=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+        \qquad r=(1).
+    \]
+    Its sole neighboring operator is
+    $\widehat\eta_{0,0}=\operatorname{diag}(1,0)\succeq0$, and hence its trace
+    matrix is
+    \[
+        \widehat T=\bigl(\tr(\widehat\eta_{0,0})\bigr)=(1).
+    \]
+    Every positive power of $\widehat T$ equals $(1)$, so this one-sector
+    trace matrix is primitive.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready

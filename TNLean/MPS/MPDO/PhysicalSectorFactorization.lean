@@ -38,13 +38,15 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A source-minimal physical-sector factorization of an MPO tensor.
+/-- A physical-sector factorization of an MPO tensor.
 
 The physical space is decomposed as
 $\bigoplus_k B_k^L\otimes B_k^R$.  The matrices `leftTensor k beta` and
 `rightTensor k alpha` are the factors $(l_k)_\beta$ and $(r_k)_\alpha$ in
-the transformed physical slice.  The only compatibility imposed on these
-data is the displayed direct-sum factorization from the source.
+the transformed physical slice.  Positivity of the left and right factor
+dimensions does not impose minimality under coarsening the direct sum or
+deleting inactive summands.  The only compatibility imposed on these data is
+the displayed direct-sum factorization from the source.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 1381--1388; the explicit slice factorization is derived at lines 1435--1448. -/

@@ -352,9 +352,32 @@ four-sector example
 virtual_spanning_does_not_force_rectangular_remainder_zero}
 satisfies the recorded
 positivity, primitivity, trace-one, and spanning conditions while its trace
-matrix is not idempotent.  The source-faithful audit in \ghissue{3593}
-classifies this rank-one step as obstructed: neither the inverse-map provenance
-nor the finite-chain cyclic form supplies the missing rectangular vanishing.
+matrix is not idempotent.  The capstone theorem
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+tensor_refutes_printed_sal_zcl_rank_one_inference}
+adds SAL, source ZCL, and the source-selected inverse-map factorization, and
+proves that its active trace matrix is not rank one.  Thus neither inverse-map
+provenance nor the finite-chain cyclic form supplies the missing rectangular
+vanishing.
+
+Primitivity cannot be assumed for an arbitrary selected Beigi factorization.
+The theorem
+\leanid{MPOTensor.CommutingBondTraceMatrixObstruction.%
+normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
+gives an injective normal bond-dimension-one product MPDO with source ZCL and
+one exact fixed positive commuting-bond presentation.  The chosen two-sector
+Beigi-style factorization has positive neighboring operators and trace matrix
+\[
+  T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+\]
+The second physical summand is inactive, but it is retained by this nonminimal
+middle-space decomposition, so its full matrix is not primitive.  The same
+product tensor also has a one-sector factorization with the primitive
+$1\times1$ trace matrix $(1)$.  Thus this example does not exclude the
+existence of a primitive Beigi factorization.  It shows instead that Beigi's
+Lemma~2.1, which supplies only the direct-sum tensor-factor decomposition,
+must be supplemented by a source-faithful minimal or visible-sector selection
+before primitivity can be used.
 
 Consequently the source implication
 \[
@@ -379,25 +402,24 @@ restriction that isolates only its final entropy-theoretic step.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Find a source-faithful property of the actual inverse-map neighboring
-family which excludes the nilpotent zero-eigenspace, or
-replace the printed line-1613 argument by a direct Markov decomposition which
-does not require the rank-one trace matrix.  Source ZCL alone must not be
-presented as giving the factorization; the inverse-map and finite-chain audits
-in \ghissue{3593} do not supply it.
-One possible corrected route is to use the square of the trace matrix.  If a
-primitive nonnegative trace matrix $T$ satisfies $T^2=T^3$, then all powers
-from the second onward equal $T^2$, so $T^2$ is an idempotent Perron
-projection of rank one.  This is compatible with the four-sector example,
-where $T$ is not rank one but $T^2$ is.  This finite-dimensional implication is
+\item Replace the full Beigi sector set by a source-faithfully defined active
+restriction, formed without using SAL, and prove that normality leaves one
+aperiodic recurrent component.  The inactive-sector example above shows that
+an arbitrary nonminimal factorization is insufficient; it does not rule out an
+appropriate existential selection.  The active-sector construction presently
+used for the inverse-map factorization depends on SAL-derived sector weights
+and therefore cannot be invoked at this call site.
+
+For such an active restriction, one possible corrected route is to use the
+square of its trace matrix.  If a primitive nonnegative matrix $T$ satisfies
+$T^2=T^3$, then $T^2$ is an idempotent Perron projection of rank one.  This is
 formalized by
 \leanid{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}; the
 nonempty matrix convention is explicit, since primitivity is vacuous for the
-zero-dimensional matrix under the library definition.  What remains absent is a derivation of
-primitivity for the Beigi trace matrix from the normal source block and its
-fixed proportional commuting-bond presentation; the existing primitivity
-theorem starts from the SAL-derived inverse-map factorization and is therefore
-circular at this call site.
+zero-dimensional matrix under the library definition.  The construction and
+primitivity of the required SAL-independent active restriction remain absent.
+Alternatively, replace the printed line-1613 argument by a direct Markov
+decomposition which does not require any rank-one trace matrix.
 \item Trace the fourth region, construct the quantum Markov decomposition at
 each admissible cut, and apply the all-cut Markov theorem.  Only then may the
 source proposition receive a formal declaration and a
