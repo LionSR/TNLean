@@ -1345,6 +1345,28 @@ Theorem~\ref{thm:trace_norm_abs}.
     Hermitian.
 \end{lemma}
 
+\begin{lemma}[Positivity of the support inverse square root]
+    \label{lem:support_inverse_square_root_positive_semidefinite}
+    \lean{Matrix.PosSemidef.supportInvSqrt_posSemidef}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    The inverse square root of a positive semidefinite matrix on its support is
+    positive semidefinite.
+\end{lemma}
+
+\begin{proof}\leanok
+    On the nonnegative spectrum of $\rho$, the defining function satisfies
+    \[
+      f(x)=
+      \begin{cases}
+        x^{-1/2}, & x>0,\\
+        0, & x=0
+      \end{cases}
+      \geq 0 \qquad (x\geq 0).
+    \]
+    The spectral functional calculus therefore gives $f(\rho)\geq 0$.
+\end{proof}
+
 \begin{lemma}[Support inverse square root of a positive-definite matrix]
     \label{lem:support_inverse_square_root_positive_definite}
     \lean{Matrix.PosDef.supportInvSqrt_eq_inv_sqrt}
@@ -2765,6 +2787,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{lemma}[Positive square root from common resolvents]
     \label{lem:positive_sqrt_from_common_resolvents}
     \lean{Matrix.sqrt_mulVec_eq_of_resolvent_mulVec_eq}
+    \lean{Matrix.mulVec_sqrt_mulVec_eq_of_mulVec_resolvent_mulVec_eq}
     \lean{Matrix.sourceB_resolvent_eq_relativeModular}
     \lean{Matrix.relativeModular_sqrt_mulVec_vec_one}
     \leanok
@@ -2774,6 +2797,11 @@ Theorem~\ref{thm:trace_norm_abs}.
         (t\mathbf 1+S)^{-1}x=(t\mathbf 1+T)^{-1}x,
     \]
     then $\sqrt S\,x=\sqrt T\,x$.
+    More generally, for any fixed matrix $Q$, if
+    \[
+        Q(t\mathbf 1+S)^{-1}x=Q(t\mathbf 1+T)^{-1}x
+    \]
+    for every $t>0$, then $Q\sqrt S\,x=Q\sqrt T\,x$.
 
     In particular, for positive definite $A,B$ and every $t>0$, put
     $\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$.  The source-$B$ left--right
@@ -2805,8 +2833,16 @@ Theorem~\ref{thm:trace_norm_abs}.
     \[
       f_t(S)x=t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x.
     \]
-    The hypothesis therefore gives $f_t(S)x=f_t(T)x$ for every $t>0$.
-    Integration gives equality of the positive square roots on $x$.
+    The hypothesis therefore gives
+    $Q\bigl(f_t(S)x\bigr)=Q\bigl(f_t(T)x\bigr)$ for every $t>0$.
+    Since $M\mapsto Q(Mx)$ is a bounded linear map from
+    $\mathbb{M}_n(\mathbb{C})$ to $\mathbb{C}^n$,
+    \[
+      Q\left(\left(\int_0^\infty f_t(S)\,d\mu(t)\right)x\right)
+        =\int_0^\infty Q\bigl(f_t(S)x\bigr)\,d\mu(t),
+    \]
+    and similarly for $T$.  Integration therefore gives
+    $Q\sqrt S\,x=Q\sqrt T\,x$.
 
     For the second assertion, factor
     \[
@@ -2819,6 +2855,113 @@ Theorem~\ref{thm:trace_norm_abs}.
         =\sqrt A\otimes\bigl((\sqrt B)^{-1}\bigr)^{\mathsf T},
     \]
     as follows from uniqueness of the positive square root.
+\end{proof}
+
+\begin{lemma}[Right multiplication under transposed vectorization]
+    \label{lem:right_multiplication_transposed_vectorization}
+    \lean{Matrix.one_kronecker_transpose_mulVec_vec_transpose}
+    \leanok
+    For matrices $M$ and $P$, column-stacking vectorization satisfies
+    \[
+      \left(\mathbf 1\otimes P^{\mathsf T}\right)
+        \operatorname{vec}(M^{\mathsf T})
+      =\operatorname{vec}\!\left((MP)^{\mathsf T}\right).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the Kronecker vectorization identity
+    $(B\otimes A)\operatorname{vec}(X)=\operatorname{vec}(AXB^{\mathsf T})$
+    with $A=P^{\mathsf T}$, $B=\mathbf 1$, and $X=M^{\mathsf T}$.
+\end{proof}
+
+\begin{lemma}[Support relative-modular square-root evaluation]
+    \label{lem:support_relative_modular_sqrt_evaluation}
+    \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $A$ and $B$ be positive semidefinite, and write
+    $B^+=(B^{-1/2}_{\mathrm{supp}})^2$.  Then
+    \[
+      \sqrt{A\otimes(B^+)^{\mathsf T}}\,
+        \operatorname{vec}(\mathbf 1^{\mathsf T})
+      =\operatorname{vec}\!\left(
+        (\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_positive_semidefinite}
+    The support inverse square root is positive semidefinite, and
+    \[
+      \left(\sqrt A\otimes
+        (B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right)^2
+      =A\otimes(B^+)^{\mathsf T}.
+    \]
+    Uniqueness of the positive square root gives the corresponding Kronecker
+    factorization.  Applying the Kronecker vectorization identity to
+    $\operatorname{vec}(\mathbf 1^{\mathsf T})$ gives the stated equation.
+\end{proof}
+
+\begin{lemma}[Relative modular square-root ratio on the support]
+    \label{lem:support_relative_modular_sqrt_ratio}
+    \lean{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $A,B,C,D$ be positive semidefinite matrices.  Write
+    $B^+=(B^{-1/2}_{\mathrm{supp}})^2$ and
+    $D^+=(D^{-1/2}_{\mathrm{supp}})^2$, and let $P_B$ be the orthogonal
+    projection onto $(\ker B)^\perp$.  If, for every $t>0$,
+    \[
+      \left[
+        \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+          (\mathbf 1)
+      \right]P_B
+      =
+      \left[
+        \left(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\right)^{-1}
+          (\mathbf 1)
+      \right]P_B,
+    \]
+    where the inverses act as relative-modular superoperators on matrices, then
+    \[
+      \left(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\right)P_B
+        =\left(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\right)P_B.
+    \]
+    This is the square-root specialization of the support functional-calculus
+    passage in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 788--793.  The
+    projection $P_B$ is essential: the source gives the common generalized
+    resolvents only after restriction to $(\ker B)^\perp$.  Deriving this
+    restricted equality requires the preceding singular equality argument and
+    its kernel hypotheses.
+    % Formalization status: the preceding equality-to-resolvent step remains open.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive_sqrt_from_common_resolvents,
+        lem:support_relative_modular_sqrt_evaluation,
+        lem:right_multiplication_transposed_vectorization}
+    By Lemma~\ref{lem:support_relative_modular_sqrt_evaluation},
+    \[
+      \sqrt{A\otimes(B^+)^{\mathsf T}}\,
+        \operatorname{vec}(\mathbf 1^{\mathsf T})
+      =\operatorname{vec}\!\left(
+        (\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
+    \]
+    Setting $Q=\mathbf 1\otimes P_B^{\mathsf T}$ and applying the common-
+    resolvent lemma (Lemma~\ref{lem:positive_sqrt_from_common_resolvents}) gives
+    \[
+      \operatorname{vec}\!\left(
+        (\sqrt A\,B^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right)
+      =\operatorname{vec}\!\left(
+        (\sqrt C\,D^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right).
+    \]
+    Since
+    \[
+      \operatorname{vec}(X^{\mathsf T})
+        =\operatorname{vec}(Y^{\mathsf T})\quad\Longrightarrow\quad X=Y,
+    \]
+    injectivity of vectorization gives the conclusion.
 \end{proof}
 
 \begin{theorem}[Positive-definite saturation gives the identity Weyl sandwich]
