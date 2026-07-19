@@ -243,7 +243,8 @@ There is no independent closing-matrix hypothesis.
 **Scope restriction (copy-independent weights):** This theorem takes copy
 independence as the explicit hypothesis `hWeight`. The source obtains it from
 ZCL before the separating-projector lemma. A source-faithful standing-context
-wrapper must instead derive `hWeight` from the ZCL and canonical-form data; see
+formulation must instead derive `hWeight` from the ZCL and canonical-form data;
+see
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 **Local fix (inactive sectors):** The source discards zero-weight Markov
