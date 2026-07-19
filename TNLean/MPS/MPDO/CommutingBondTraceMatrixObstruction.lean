@@ -371,9 +371,10 @@ fixed positive commuting-bond presentation need not have a primitive trace
 matrix.
 
 This shows that the factorization needed after arXiv:1606.00608, Appendix C.2,
-line 1613, must be selected or pruned by a separate argument.  The example does
-not rule out another factorization with primitive trace matrix: the explicit
-one-sector factorization above has trace matrix $(1)$. -/
+line 1613, must be selected after deleting inactive summands by a separate
+argument.  The example does not rule out another factorization with primitive
+trace matrix: the explicit one-sector factorization above has trace matrix
+$(1)$. -/
 theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive :
     tensor.IsMPDO ∧
       tensor.IsInjective ∧
@@ -383,6 +384,7 @@ theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitiv
       (∀ (N : ℕ) (hN : 2 ≤ N),
         mpo tensor N =
           (commutingBondData.bondData.toCommutingFormData hN).product) ∧
+      traceMatrix = !![1, 0; 0, 0] ∧
       ¬ Matrix.IsPrimitive traceMatrix ∧
       oneSectorFactorization.sectorCount = 1 ∧
       (∀ k h,
@@ -390,7 +392,7 @@ theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitiv
       Matrix.IsPrimitive oneSectorTraceMatrix := by
   exact ⟨tensor_isMPDO, tensor_isInjective, tensor_isNormalTensor, tensor_isSourceZCL,
     neighboringOperator_posSemidef, mpo_eq_commutingBondProduct,
-    traceMatrix_not_isPrimitive, rfl, oneSector_neighboringOperator_posSemidef,
-    oneSectorTraceMatrix_isPrimitive⟩
+    traceMatrix_eq, traceMatrix_not_isPrimitive, rfl,
+    oneSector_neighboringOperator_posSemidef, oneSectorTraceMatrix_isPrimitive⟩
 
 end MPOTensor.CommutingBondTraceMatrixObstruction
