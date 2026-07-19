@@ -25,7 +25,7 @@ renormalization fixed-point theorem.
   Appendix C.4, lines 1980--1995.
 -/
 
-open scoped Matrix MatrixOrder ComplexOrder BigOperators Kronecker
+open scoped Matrix MatrixOrder ComplexOrder Kronecker
 
 noncomputable section
 
@@ -189,6 +189,9 @@ private theorem pi_list_prod_apply
   | cons A l ih =>
       rw [List.prod_cons, List.map_cons, List.prod_cons, Pi.mul_apply, ih]
 
+/-- Full-matrix density-block argument underlying the public direct-sum
+theorem below.  This is the dimension implication of Wolf, Theorem 6.14 and
+Equation (6.63); see the public wrapper for the source and scope discussion. -/
 private theorem matrixFixedPointProductSpan_finrank_le_of_densityBlocks
     {N : ℕ} {F : Matrix (Fin N) (Fin N) ℂ →ₗ[ℂ]
       Matrix (Fin N) (Fin N) ℂ}
@@ -315,7 +318,10 @@ map with a positive-definite fixed family.  In the CPSV16 argument this family
 is supplied separately by the fixed contraction factors and their
 positive-length product span.  This restriction and its elimination in the
 tensor-attached argument are documented in
-`docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`. -/
+`docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`.
+
+The condition $L>0$ is retained to match the quantifier in the cited
+formulation; the proof also gives the bound for $L=0$. -/
 theorem fixedPointProductSpan_finrank_le_of_densityBlocks
     {g : ℕ} {dim : Fin g → ℕ}
     {F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim}
@@ -333,25 +339,12 @@ theorem fixedPointProductSpan_finrank_le_of_densityBlocks
   let EFin := Matrix.reindexEndomorphism efin E
   let ρExt := Matrix.directSumDiagonalEmbedding ρ
   let ρFin := Matrix.reindex efin efin ρExt
-  have hEFin : IsPositiveMap EFin :=
-    Matrix.IsPositiveMap.reindexEndomorphism
-      hF.directSumExtension_isPositiveMap efin
-  have hTPFin : IsTracePreservingMap EFin :=
-    Matrix.IsTracePreservingMap.reindexEndomorphism
-      hTP.directSumExtension_isTracePreservingMap efin
-  have hSchwarzExt : IsSchwarzMap (Matrix.traceAdjointMap E) :=
-    hSchwarz.traceAdjointMap_directSumExtension_isSchwarzMap hF
-  have hSchwarzFin : IsSchwarzMap (Matrix.traceAdjointMap EFin) := by
-    rw [Matrix.traceAdjointMap_reindexEndomorphism]
-    exact Matrix.IsSchwarzMap.reindexEndomorphism hSchwarzExt efin
-  have hρFin : ρFin.PosDef :=
-    (Matrix.directSumDiagonalEmbedding_posDef hρ).reindex efin
-  have hρExtFix : E ρExt = ρExt :=
-    (Matrix.directSumExtension_embedding_eq_self_iff F ρ).2 hρfix
-  have hρFinFix : EFin ρFin = ρFin := by
-    let Ψ := Matrix.reindexLinearEquiv ℂ ℂ efin efin
-    change Ψ (E (Ψ.symm (Ψ ρExt))) = Ψ ρExt
-    rw [Ψ.symm_apply_apply, hρExtFix]
+  obtain ⟨hEFin, hTPFin, hSchwarzFin, hρFin, hρFinFix⟩ :
+      IsPositiveMap EFin ∧ IsTracePreservingMap EFin ∧
+        IsSchwarzMap (Matrix.traceAdjointMap EFin) ∧
+        ρFin.PosDef ∧ EFin ρFin = ρFin := by
+    simpa only [ρFin, ρExt, EFin, E] using
+      hF.reindexedExtension_properties hTP hSchwarz hρ hρfix efin
   have hFull := matrixFixedPointProductSpan_finrank_le_of_densityBlocks
     hEFin hTPFin hSchwarzFin hρFin hρFinFix L
   let ιmap : VerticalSectorAlgebra dim →ₗ[ℂ]

@@ -485,7 +485,7 @@ physical indices, as in
     \uses{def:mpdo_vertical_fixed_point_products}
     Let
     \[
-        \mathcal A=\bigoplus_{\alpha}M_{d_\alpha}(\mathbb C),
+        \mathcal A=\prod_\alpha M_{d_\alpha},
     \]
     and let $F:\mathcal A\to\mathcal A$ be positive and trace preserving.
     Suppose that the trace adjoint $F^*$ satisfies the Schwarz inequality and
@@ -525,10 +525,15 @@ physical indices, as in
     \]
     Thus the span of these products has dimension at most
     $\sum_k h_k^2$, which is the dimension of the fixed-point space of the
-    extension.  The block-diagonal embedding sends products for $F$
-    injectively to products for the extension, while diagonal compression
-    sends fixed points of the extension injectively to fixed points of $F$.
-    The asserted inequality follows.
+    extension.  Writing $\mathcal E$ for the fixed-point space of the
+    full-matrix extension, the injective block-diagonal embedding and
+    diagonal compression give the dimension chain
+    \[
+        \dim C_L(\mathcal F)
+        \leq \dim C_L(\mathcal E)
+        \leq \dim\mathcal E
+        \leq \dim\mathcal F.
+    \]
 \end{proof}
 
 \begin{theorem}[Fixed contractions and the dimension of their fixed-point space]
