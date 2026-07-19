@@ -392,6 +392,7 @@ private theorem resolvent_residual_identity
   rw [hleft, hright, hlast, hx]
   ring
 
+omit [DecidableEq n] in
 private lemma sum_norm_sq_eq_re_dotProduct (y : n → ℂ) :
     ∑ p, ‖y p‖ ^ 2 = (dotProduct (star y) y).re := by
   simp [dotProduct, Complex.sq_norm, ← Complex.normSq_eq_conj_mul_self]
@@ -412,7 +413,7 @@ private lemma sqrt_inv_mulVec_normSq (S : Matrix n n ℂ) (hS : S.PosDef)
   letI : Invertible Q := hQunit.invertible
   letI : Invertible S := hS.isUnit.invertible
   have hQherm : Q.IsHermitian := by
-    show Qᴴ = Q
+    change Qᴴ = Q
     simpa only [Q, star_eq_conjTranspose] using
       (CFC.sqrt_nonneg (a := S)).isSelfAdjoint.star_eq
   let y : n → ℂ := Q⁻¹ *ᵥ r
@@ -558,7 +559,7 @@ summand quadratic forms and the quadratic form of their average.
 The vectorization is `X ↦ Matrix.vec Xᵀ`; hence
 `A ⊗ₖ 1 + t • (1 ⊗ₖ Bᵀ)` represents `X ↦ A * X + t • (X * B)`.
 This is the finite-Weyl specialization of Jenčová--Ruskai,
-arXiv:0903.2895, §4 and Appendix. It is a
+arXiv:0903.2895v4, Appendix, lines 1313--1343. It is a
 fixed-`t`, positive-definite statement and does not derive vanishing of the
 defect from relative-entropy equality.
 
@@ -738,7 +739,8 @@ Taking `g = (0, 0)` gives the identity-Weyl summand required in the
 partial-trace equality argument.
 
 This is the zero-defect conclusion of Jenčová--Ruskai,
-arXiv:0903.2895, §4 and Appendix. It does not assert that equality of
+arXiv:0903.2895v4, §4, lines 652--674, using the squared-defect expansion
+from Appendix, lines 1313--1343. It does not assert that equality of
 relative entropies makes the
 displayed defect vanish.
 
