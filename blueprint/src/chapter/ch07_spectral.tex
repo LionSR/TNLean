@@ -2494,6 +2494,70 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     supplies the unitary and the equivalence.
 \end{proof}
 
+\begin{definition}[Canonical full-matrix extension of a direct-sum map]%
+    \label{def:direct_sum_full_matrix_extension}
+    \lean{Matrix.directSumDiagonalEmbedding}
+    \lean{Matrix.directSumDiagonalCompression}
+    \lean{Matrix.directSumExtension}
+    \leanok
+    Let
+    \[
+        \mathcal A=\bigoplus_{k\in I}M_{n_k}(\mathbb C),
+        \qquad
+        \mathcal H=\bigoplus_{k\in I}\mathbb C^{n_k}.
+    \]
+    Write $\iota:\mathcal A\to\operatorname{End}(\mathcal H)$ for the
+    block-diagonal embedding and $\pi:\operatorname{End}(\mathcal H)\to
+    \mathcal A$ for diagonal-block compression.  For a linear map
+    $T:\mathcal A\to\mathcal A$, its canonical full-matrix extension is
+    \[
+        \widehat T=\iota\circ T\circ\pi.
+    \]
+    This is the block-diagonal realization needed when the fixed-point
+    argument in \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}
+    is applied to finite direct sums of matrix algebras.
+\end{definition}
+
+\begin{theorem}[Channel and fixed-point compatibility of the canonical extension]%
+    \label{thm:direct_sum_full_matrix_extension_compatibility}
+    \lean{Matrix.IsPositiveDirectSumMap.directSumExtension_isPositiveMap}
+    \lean{Matrix.IsSchwarzDirectSumMap.directSumExtension_isSchwarzMap}
+    \lean{Matrix.IsTracePreservingDirectSumMap.directSumExtension_isTracePreservingMap}
+    \lean{Matrix.traceAdjointMap_directSumExtension}
+    \lean{Matrix.directSumExtension_apply_eq_self_iff}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    If $T$ is positive and satisfies the Schwarz inequality on
+    $\mathcal A$, then $\widehat T$ is positive and satisfies the Schwarz
+    inequality on $\operatorname{End}(\mathcal H)$.  If $T$ preserves the
+    total trace $\sum_k\operatorname{tr}(A_k)$, then $\widehat T$ preserves
+    the ordinary trace.  Moreover, extension commutes with the trace adjoint,
+    and
+    \[
+        \operatorname{Fix}(\widehat T)=\iota(\operatorname{Fix}(T)).
+    \]
+    Equivalently, for every $X\in\operatorname{End}(\mathcal H)$,
+    \[
+        \widehat T(X)=X
+        \quad\Longleftrightarrow\quad
+        \exists A\in\mathcal A,\quad T(A)=A\ \text{ and }\ X=\iota(A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    Diagonal compression is positive and its Schwarz defect is the Gram
+    matrix of the off-diagonal column blocks.  Block-diagonal embedding is a
+    positive algebra homomorphism and converts the sum of the block traces
+    into the full trace.  It follows that positivity, the Schwarz inequality,
+    and trace preservation pass to $\widehat T$.  The embedding and
+    compression are adjoint for the trace pairing, which gives the adjoint
+    identity.  Finally, the image of $\widehat T$ is block diagonal;
+    compressing a fixed-point equation gives a fixed point of $T$, while
+    embedding a fixed point of $T$ gives a fixed point of $\widehat T$.
+\end{proof}
+
 % Scope restriction documented in
 % docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
 \begin{theorem}[Weighted block form of the adjoint Ces\`aro projection on full support]%
