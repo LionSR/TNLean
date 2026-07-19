@@ -11,9 +11,9 @@ import Mathlib.Analysis.SpecialFunctions.Sqrt
 /-!
 # Positive-semidefinite matrix square roots
 
-This file records the two elementary Hermitian functional-calculus facts about
-the positive-semidefinite square root used throughout the finite-dimensional
-operator theory development.
+This file records elementary facts about positive-semidefinite square roots
+and block-diagonal matrices used throughout the finite-dimensional operator
+theory development.
 
 ## Main results
 
