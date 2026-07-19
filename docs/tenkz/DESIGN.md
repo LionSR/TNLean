@@ -179,6 +179,9 @@ The neighboring operator and the normalized active density on this space are
   \widehat\Omega_{k,h}=\frac{1}{a_kb_h}\Omega_{k,h}.
 \]
 
+For a nonzero finite-dimensional Hilbert space $H$, write
+$\tau_H=(\dim H)^{-1}I_H$ for its faithful uniform density.
+
 The total completed density is
 
 \[
