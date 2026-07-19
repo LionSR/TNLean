@@ -108,10 +108,11 @@ states the all-chain condition as translated two-site commutation together with
 the same reverse containment for every \(N>2\).  The reverse containment itself
 is not proved here.
 
-This still does not prove the full source theorem.  The present declarations do
-not yet prove the named ground-space spanning condition, the three-way
-equivalence with ZCL, the complete canonical-form hypotheses from the source
-statement, or the Beigi ground-space characterization as an internal theorem.
+These reductions alone do not prove the full source theorem.  The
+canonical-form ground-space spanning condition for several sectors, the
+three-way equivalence with ZCL, the complete canonical-form hypotheses from the
+source statement, and the Beigi ground-space characterization as an internal
+theorem remain open.
 For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
 are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
 Appendix~B supplies the basic-vector form.  The local projectors in
@@ -205,6 +206,16 @@ the canonical parent interactions transports the preceding result to
 \leanid{MPSTensor.rfp_implies_nncph_ground_state}.  Hence these declarations
 prove the commutation and zero-energy equations for a single CPSV normal
 tensor without an external axiom.
+For the same single tensor, transfer idempotence and normality imply one-site
+injectivity.  The injective periodic-chain theorem therefore identifies the
+kernel of the two-site parent Hamiltonian with the line spanned by the matrix
+product vector for every \(N>2\).  This is recorded by
+\leanid{MPSTensor.rfp_hasParentHamiltonianGroundSpaceSpanning_single}.
+Combining this equality with the commutation and zero-energy equations gives
+\leanid{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_single}.  Thus the full
+forward NNCPH ground-space condition is proved for one normal sector.  The
+extension to canonical-form tensors with several sectors or repeated copies
+is not included in these declarations.
 The reverse theorem requires both the explicit BNT relation
 \leanid{MPSTensor.IsBNT} and the named all-chain condition
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
@@ -246,8 +257,9 @@ normal tensor. The even-chain physical-pair factorization remains a
 separate conditional construction and is not needed for the proved chain
 commutator. Extending from one normal tensor to the full repeated-sector
 canonical form is subject to the source obstruction recorded in
-\path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}. The full source
-implication also still requires the ground-space spanning clause.
+\path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}. The single-normal-sector
+ground-space spanning clause is proved, while its several-sector and
+repeated-copy extension remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
