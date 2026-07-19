@@ -117,15 +117,6 @@ def _is_cell(v: str) -> bool:
     return re.fullmatch(r"\d+-\d+", v) is not None
 
 
-def _is_nonnegative_int(v: str) -> bool:
-    if not _is_int(v):
-        return False
-    try:
-        return int(v) >= 0
-    except ValueError:
-        return False
-
-
 def _is_pairleg_port(v: str) -> bool:
     """A contraction starts at the centred face or a positive face slot."""
     if v == "center":
