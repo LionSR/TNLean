@@ -26,10 +26,11 @@ underlying question was isolated in
 counterexample was added in
 \href{https://github.com/LionSR/TNLean/pull/849}{pull request \#849}; and the
 positive-semidefinite replacement theorem was added in
-\href{https://github.com/LionSR/TNLean/pull/917}{pull request \#917}. The open
-final inverse-map provenance audit and the obstruction verdict are recorded in
-\href{https://github.com/LionSR/TNLean/issues/3593}{issue \#3593}. The
-source passage is
+\href{https://github.com/LionSR/TNLean/pull/917}{pull request \#917}. The
+inverse-map provenance question is recorded in
+\href{https://github.com/LionSR/TNLean/issues/4270}{issue \#4270}; the preceding
+audit and obstruction verdict are recorded in
+\href{https://github.com/LionSR/TNLean/issues/3593}{issue \#3593}. The source passage is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1394--1499}.}
 
 The paper constructs positive semidefinite neighboring operators $\eta_{k,h}$ and defines
@@ -494,21 +495,26 @@ is not yet a theorem about
 the formal counterexample theorem does not contain an \leanid{IsSAL}
 conjunct.
 
-The remaining boundary is solely one of provenance.  The displayed
-\leanid{MPOTensor.ActiveSectorSpanningCounterexample.factorization} satisfies
-the exact fields of \leanid{MPOTensor.PhysicalSectorFactorization}, hence the
-direct-sum factorization conclusion displayed in Lemma~C.4, and it has the
-recorded positivity and primitivity properties.  It is nevertheless built
-directly, rather than as an instance of
-\leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization}.
-The source-minimal structure deliberately forgets the Hayashi decomposition,
-tail choice, inverse-map indices, and rephasing which produced it.  No theorem
-presently identifies the chosen factorization with the source-selected one.
-The example is therefore a counterexample to the printed universal matrix
-inference from the displayed Lemma~C.4 conclusions and ZCL, but is not yet a
-genuine counterexample to Lemma~C.5.  Deciding that last point requires either
-realizing this factorization from explicit source provenance, or proving that
-such provenance forces $Q(1-LQ)L=0$; this focused provenance question is
+The inverse-map provenance is now explicit.  The refined Hayashi decomposition
+has four one-dimensional sectors of weight $1/4$, with diagonal left and right
+density matrices determined by $QL$.  Its normalized four-site tail is $LQ$.
+The four nonzero physical slices form a basis of the virtual matrix algebra;
+computing the dual basis shows that the source inverse map recovers the
+displayed closed tensors $L$ and $Q$ exactly.  Consequently its neighboring
+operators agree with those of
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.factorization}, and the
+same source-selected construction satisfies
+\[
+  Q(1-LQ)L\ne0.
+\]
+These statements are proved in
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+inverseMap_provenance_preserves_rectangular_remainder}.  Thus provenance does
+not supply the missing vanishing.  The remaining formal boundary is the strong
+area law: the entropy calculation above has not yet been expressed as an
+\leanid{IsSAL} theorem for this tensor.  Until that hypothesis is checked for
+the same witness, the example is not classified here as a formal counterexample
+to Lemma~C.5.  The provenance calculation and this remaining boundary are
 tracked in \ghissue{4270}.
 
 \section{A positive-semidefinite route}
@@ -638,14 +644,14 @@ Consequently the strongest source-faithful common-matrix conclusion remains
 together with entrywise nonnegativity and primitivity.  The formal
 counterexample shows that these conclusions, even supplemented by injectivity,
 full virtual spanning, and positivity of every neighboring operator, do not
-imply the missing vanishing.  Its induced classical cyclic family does satisfy
-the strong area law by the entropy calculation above.  However, the directly
-chosen \leanid{PhysicalSectorFactorization} has not been identified with the
-particular inverse-map factorization produced from the Hayashi decomposition.
-The example therefore refutes the printed matrix inference but does not yet
-refute Lemma~C.5 itself.  The source proof remains obstructed because it
-derives no identity from the inverse-map provenance that excludes the
-nilpotent remainder.
+imply the missing vanishing.  The explicit Hayashi decomposition and inverse-map
+calculation now show that the same nonzero nilpotent remainder occurs for the
+source-selected factorization.  Its induced classical cyclic family satisfies
+the strong area law by the entropy calculation above, but that last hypothesis
+has not yet been formalized for this tensor.  The example therefore refutes the
+printed matrix inference and rules out inverse-map provenance as its missing
+input, while the formal status of Lemma~C.5 itself awaits the strong-area-law
+theorem.
 
 This obstruction propagates to every source statement whose proof invokes the
 rank-one factorization from Lemma~C.5.  In particular, the structural
@@ -675,14 +681,15 @@ false primitive trace-power implication has been removed.
 For the unconditional matrix product density operator argument, it would
 suffice to derive positive semidefiniteness, linear independence, or any
 equivalent exclusion of the generalized zero-eigenspace from the stated SAL
-and ZCL hypotheses.  The source and inverse-map provenance audit provides no
-such derivation.  Lemma~C.5 is therefore classified as obstructed, rather than
-formalized or refuted.  The same status applies to its structural corollary and
-to the source implications (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) of
+and ZCL hypotheses.  The source audit provides no such derivation, and the
+explicit inverse-map calculation shows that provenance alone does not supply
+one.  Lemma~C.5 is therefore still classified as obstructed, rather than
+formalized or refuted, until the strong area law is formalized for the same
+four-sector tensor.  The same status applies to its structural corollary and to
+the source implications (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) of
 Theorem~4.9.  Their corrected conditional forms remain available, but the
 additional conditions must not be attributed to the source theorem.  The
-remaining decision whether the four-sector SAL example is realized by the
-source-selected inverse-map factorization is isolated in \ghissue{4270}.
+remaining strong-area-law verification is recorded in \ghissue{4270}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
