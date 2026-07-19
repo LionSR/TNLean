@@ -584,6 +584,7 @@ import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingBondEtaDecomposition
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicTransport
+import TNLean.MPS.MPDO.CommutingBondTraceMatrixObstruction
 import TNLean.MPS.MPDO.CyclicEdgeWeightTensor
 import TNLean.MPS.MPDO.FixedBondProductTensor
 import TNLean.MPS.MPDO.FixedBondProductEtaTensor
@@ -678,7 +679,6 @@ import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.Cycles
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
-
 -- Chapter 2 §2.3 normal-form existence (SVD + Lorentz)
 import TNLean.Channel.NormalForm
 
