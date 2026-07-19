@@ -231,20 +231,34 @@ eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
 derives eventual nonzero proportionality to the source tensor without adding
 a length-one hypothesis.
 
-For the fixed bond carried by an eta-local structure, this construction is now
-complete.  The theorem
-\leanid{MPOTensor.EtaLocalStructureData.nonempty_fixedProductTensorData}
+The fixed tensor is now constructed directly from an arbitrary
+\leanid{MPOTensor.TranslationInvariantBondData}.  The theorem
+\leanid{MPOTensor.TranslationInvariantBondData.fixedProductTensorData}
 assembles the chain-independent Beigi sector coordinates and neighboring
-operators into the cyclic scalar weight, then transports the resulting tensor
-back through the same one-site unitary.  Its virtual dimension is $d^2$, and
-its operator family equals the fixed bond product for every $N\geq2$.
+operators into a cyclic scalar weight in the transformed one-site coordinates,
+then conjugates the resulting tensor back through the same one-site unitary.
+It uses only positivity and commutation of the periodic translates.
 
-The constructed tensor is not yet known to be normal.  Obtaining a normal
-representative requires the normal-block canonical-form argument that rules
-out additional canonical summands; this is the remaining part of
-\ghissue{4271}.  The separate geometric law $c_N=a^N$ for the realization
-scalars, and its absorption into one local normalization, remains tracked in
-\ghissue{4253}.
+The coordinate qualification is necessary.  In physical dimension $d=2$, let
+$X$ be the Pauli flip and $B=\Id+X\otimes X$.  Then $B\succeq0$, all periodic
+translates commute, and
+\[
+  \langle 0^N,(\prod_n B_{n,n+1})0^N\rangle=2
+\]
+for every $N\geq2$.  At $N=2$ the repository's periodic product is
+$B^2=2B$; for $N\geq3$ the empty edge set and the full cycle give the two
+terms with zero boundary.  A scalar edge weight in the original coordinates
+would make this entry $a^N$, so the cases $N=2$ and $N=3$ would require both
+$a^2=2$ and $a^3=2$.  Thus an arbitrary fixed bond does not carry
+\leanid{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm} in the
+original coordinates.  Equation \emph{sigmaNK2} gives that scalar form only
+after the one-site unitary coordinate change.
+
+A normal representative is still not automatic.  Obtaining one requires the
+normal-block canonical-form argument that rules out additional canonical
+summands; this is the remaining part of \ghissue{4271}.  The separate
+geometric law $c_N=a^N$ for the realization scalars, and its absorption into
+one local normalization, remains tracked in \ghissue{4253}.
 
 The scaled identity uses only the fixed commuting bond and its positive
 realization scalar.  It does not assert zero correlation length, rank-one trace
