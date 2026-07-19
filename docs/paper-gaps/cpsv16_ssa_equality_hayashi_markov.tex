@@ -45,8 +45,9 @@ quantum-Markov-chain structure of the tripartite state
 
 In the present development the biconditional
 \eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is recovered by combining a
-forward-only axiom with a proved reverse direction.\footnote{The forward-only
-axiom is \leanid{hayashi_ssa_equality_characterization_forward} in
+forward-only external assumption with a proved reverse direction.\footnote{The
+forward-only external assumption is
+\leanid{hayashi_ssa_equality_characterization_forward} in
 \doclink{TNLean/Axioms/Entropy} (\path{TNLean/Axioms/Entropy.lean}); the proved
 reverse direction is
 \leanid{hayashi_ssa_equality_characterization_reverse} in
@@ -59,11 +60,12 @@ and the right-hand structure is recorded by
 finite decomposition, the unitary basis change, the weights $p_j$, the component
 density operators, and the block-diagonal equality.} The forward direction is an
 external stand-in: that implication is a theorem of Ruskai, of
-Hayden--Jozsa--Petz--Winter, and of Hayashi, but its proof rests on
-the full saturation-to-recovery theorem and the structural analysis of
-recovered states.  The trace-preserving extension of the support Petz map is
-now available, but those two later steps are not.  The reverse direction is
-proved from the entropy-additivity sub-lemmas listed below.
+Hayden--Jozsa--Petz--Winter, and of Hayashi, but its proof rests on the full
+singular-support saturation-to-recovery theorem and the structural analysis of
+recovered states.  Positive-definite saturation-to-recovery and the
+trace-preserving extension of the support Petz map are now available; the
+singular-support extension and structural step are not.  The reverse direction
+is proved from the entropy-additivity sub-lemmas listed below.
 
 \section{The point at issue: only the forward direction is consumed}
 
@@ -77,10 +79,12 @@ downstream. Its proof is the deep part of the characterization: it requires
 recovery-map theory and the Petz transpose channel, that is, the analysis of
 when the data-processing inequality for relative entropy is saturated and the
 reconstruction of the discarded subsystem from a recovery map. This recovery-map
-argument still lacks the saturation-to-recovery theorem and the subsequent
-structural analysis, which is why the forward direction is axiomatized rather
-than proved.  The complementary trace-preserving extension of the support
-Petz map has now been supplied and is no longer part of this gap.
+argument still lacks the singular-support extension of saturation-to-recovery
+and the subsequent structural analysis, which is why the forward direction is
+treated as an external assumption rather than proved.  The positive-definite
+recovery implication and
+the complementary trace-preserving extension of the support Petz map have now
+been supplied and are no longer part of this gap.
 
 \paragraph{Reverse direction (tractable, currently unused).}
 The implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} --- a state of the
@@ -102,11 +106,11 @@ downstream result.
 
 \section{The one-directional hygiene split}
 
-Because only the forward direction is both deep and used, the axiom boundary is
-kept minimal: the axiom states the single forward
+Because only the forward direction is both deep and used, the assumption
+boundary is kept minimal: the external assumption states the single forward
 implication \eqref{eq:ssa-eq} $\Rightarrow$~\eqref{eq:qmc}, and the reverse
 implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} is a theorem. The full
-biconditional is recovered by combining the two, and the axiomatic content
+biconditional is recovered by combining the two, and the postulated content
 is reduced to exactly the part that genuinely needs the missing theory.
 
 The reverse half uses the following entropy-additivity sub-lemmas, all proved in
@@ -149,8 +153,8 @@ The reverse half uses the following entropy-additivity sub-lemmas, all proved in
 
 With these five facts the reverse implication is a finite computation, now
 carried out in \path{TNLean/Analysis/EntropyMarkovReverse.lean}; the
-forward implication remains an axiom until the full saturation-to-recovery
-theorem and the structural analysis are available.
+forward implication remains an external assumption until the singular-support
+recovery extension and the structural analysis are available.
 
 \section{Trace-preserving Petz channel now available}
 
@@ -335,11 +339,36 @@ fixed-resolvent theorem gives $T_g^{-1}(B_g)=T^{-1}(B)$ for every Weyl index.
 \leanid{Matrix.weyl_resolvent_eq_of_partialTraceRight_eq} in
 \path{TNLean/Analysis/RelativeEntropyResolventIntegral.lean} and
 \path{TNLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean}.}
-This completes the positive-definite finite-Weyl integral step of
-Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4 and Appendix.  The remaining
-analytic
-work is the inverse-square-root passage from the common resolvent solution to
-the identity-Weyl sandwich, followed by extension to singular supports.
+The positive-definite inverse-square-root passage is now also complete.  The
+source-$B$ resolvent factors through the relative modular matrix
+$\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$.  Equality of its shifted
+resolvents on the vectorized identity passes through the positive square-root
+functional calculus, giving
+\begin{align}
+  \sqrt\rho\,\sigma^{-1/2}
+    =\sqrt{\overline\rho}\,\overline\sigma^{-1/2}.
+\end{align}
+Taking adjoint products and cancelling $\sqrt\sigma$ gives
+\begin{align}
+  \sqrt\sigma\,\overline\sigma^{-1/2}\,\overline\rho\,
+    \overline\sigma^{-1/2}\,\sqrt\sigma=\rho.
+\end{align}
+This is the positive-square-root specialization of the relative-modular
+analytic-continuation argument in Jen\v{c}ov\'a--Ruskai,
+arXiv:0903.2895v4, lines 658--680.  The formal proof uses the equivalent
+L\"owner integral representation of the power $p=1/2$.
+\footnote{Formal declarations:
+\leanid{Matrix.sqrt_mulVec_eq_of_resolvent_mulVec_eq},
+\leanid{Matrix.sourceB_resolvent_eq_relativeModular}, and
+\leanid{Matrix.relativeModular_sqrt_mulVec_vec_one} in
+\path{TNLean/Analysis/ResolventFunctionalCalculus.lean}; and
+\leanid{Matrix.weyl_sqrt_ratio_eq_of_partialTraceRight_eq},
+\leanid{Matrix.weyl_identity_sandwich_of_partialTraceRight_eq}, and
+\leanid{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef} in
+\path{TNLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean}.}
+Thus equality under the partial trace implies raw Petz recovery for positive
+definite inputs.  The remaining analytic work is the extension of this passage
+to singular supports.
 
 There is nevertheless a useful algebraic reduction for the identity summand.
 Write
@@ -373,12 +402,13 @@ of \cite[Theorem~3, equation~(8)]{HaydenJozsaPetzWinter2004}.
 \leanid{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul}, and
 \leanid{Matrix.partialTraceRightPetzMap_eq_of_weyl_identity_sandwich} in
 \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
-This implication is conditional on the displayed operator identity.  It does
-not infer that identity from the scalar equality in the finite Weyl Jensen
-step, and it makes no assertion for an arbitrary convex ensemble.
+The algebraic implication itself is conditional on the displayed operator
+identity.  The positive-definite finite-Weyl argument above now supplies that
+identity from equality of relative entropy under the partial trace.  No claim
+is made here for an arbitrary convex ensemble or for singular inputs.
 
-The exact remaining analytic implication is the equality case of data
-processing on this support domain:
+The exact remaining analytic implication is the singular-support equality case
+of data processing:
 \begin{align}
   D(\rho\Vert\sigma)
     =D(\operatorname{tr}_R\rho\Vert\operatorname{tr}_R\sigma)
@@ -389,26 +419,28 @@ This is the forward implication of
 \cite[Theorem~3]{HaydenJozsaPetzWinter2004}.  The present proof of data
 processing establishes the inequality by regularization, unitary averaging,
 and joint convexity.  In the positive-definite case its equality analysis now
-reaches the common Weyl resolvent solution, but not yet the limiting
-inverse-square-root sandwich required for recovery.
+reaches the common Weyl resolvent solution, the inverse-square-root sandwich,
+and raw Petz recovery.  What remains is to control the same passage on the
+supports of singular inputs.
 After this analytic implication, the proof of the block decomposition still
 requires the invariant-state decomposition used in
 \cite[Theorem~6]{HaydenJozsaPetzWinter2004}; that is the
 Koashi--Imoto structural step.  Both steps remain necessary before the forward
-axiom can be removed.
+external assumption can be removed.
 
 \section{Verdict}
 
 The strong-subadditivity equality characterization is now split into a proved
-reverse direction and an axiomatic forward direction. Only the forward
+reverse direction and a postulated forward direction. Only the forward
 direction, equality implies quantum-Markov-chain structure, still needs the
-full saturation-to-recovery theorem and the structural analysis of recovered
-states; the trace-preserving Petz channel is now available.  The forward
-direction alone is axiomatized. The reverse direction, a block-diagonal
-product state attains equality, is proved from entropy additivity over weighted
-direct sums and tensor factors together with unitary and reindexing invariance.
+singular-support recovery theorem and the structural analysis of recovered
+states; positive-definite recovery and the trace-preserving Petz channel are
+now available.  The forward direction alone is postulated. The reverse
+direction, a block-diagonal product state attains equality, is proved from
+entropy additivity over weighted direct sums and tensor factors together with
+unitary and reindexing invariance.
 Until those remaining steps are formalized, the forward direction remains the
-irreducible axiomatic content of this characterization.
+irreducible unproved content of this characterization.
 
 \begin{thebibliography}{9}
 

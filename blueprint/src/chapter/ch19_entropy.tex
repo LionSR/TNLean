@@ -1345,6 +1345,24 @@ Theorem~\ref{thm:trace_norm_abs}.
     Hermitian.
 \end{lemma}
 
+\begin{lemma}[Support inverse square root of a positive-definite matrix]
+    \label{lem:support_inverse_square_root_positive_definite}
+    \lean{Matrix.PosDef.supportInvSqrt_eq_inv_sqrt}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    If $\tau$ is positive definite, then its inverse square root on the support
+    is its ordinary inverse square root:
+    \[
+        \tau^{-1/2}_{\mathrm{supp}}=(\sqrt\tau)^{-1}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Every eigenvalue of $\tau$ is strictly positive.  Hence the function
+    defining the support inverse square root agrees on the spectrum with the
+    reciprocal of the positive square-root function.
+\end{proof}
+
 \begin{lemma}[Support inverse-square-root identity]
     \label{lem:support_inverse_square_root_sandwich}
     \lean{Matrix.PosSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt}
@@ -2742,6 +2760,128 @@ Theorem~\ref{thm:trace_norm_abs}.
     $\operatorname{Def}_A(t)\geq0$, $\operatorname{Def}_B(t)\geq0$, and
     $t/(1+t)>0$, it follows that $\operatorname{Def}_B(t)=0$.  Theorem
     \ref{thm:weyl_resolvent_zero_defect} now gives the common solution.
+\end{proof}
+
+\begin{lemma}[Positive square root from common resolvents]
+    \label{lem:positive_sqrt_from_common_resolvents}
+    \lean{Matrix.sqrt_mulVec_eq_of_resolvent_mulVec_eq}
+    \lean{Matrix.sourceB_resolvent_eq_relativeModular}
+    \lean{Matrix.relativeModular_sqrt_mulVec_vec_one}
+    \leanok
+    Let $S,T$ be positive semidefinite matrices and let $x$ be a vector.  If,
+    for every $t>0$,
+    \[
+        (t\mathbf 1+S)^{-1}x=(t\mathbf 1+T)^{-1}x,
+    \]
+    then $\sqrt S\,x=\sqrt T\,x$.
+
+    In particular, for positive definite $A,B$ and every $t>0$, put
+    $\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$.  The source-$B$ left--right
+    resolvent satisfies
+    \[
+      \left(A\otimes\mathbf 1+t\,\mathbf 1\otimes B^{\mathsf T}\right)^{-1}
+        \operatorname{vec}(B^{\mathsf T})
+      =\left(t\mathbf 1+\Delta_{A,B}\right)^{-1}
+        \operatorname{vec}(\mathbf 1^{\mathsf T}),
+    \]
+    and
+    \[
+      \sqrt{\Delta_{A,B}}\,\operatorname{vec}(\mathbf 1^{\mathsf T})
+        =\operatorname{vec}\!\left(
+          (\sqrt A\,(\sqrt B)^{-1})^{\mathsf T}\right).
+    \]
+    These are the positive-square-root specializations of the passage from
+    relative modular resolvents to analytic functions of the relative modular
+    operator in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 658--680.
+\end{lemma}
+
+\begin{proof}\leanok
+    Use the L\"owner integral representation of the power $p=1/2$.  Its
+    integrand at $t>0$ is
+    \[
+      f_t(S)=t^{-1/2}\mathbf 1-t^{1/2}(t\mathbf 1+S)^{-1}.
+    \]
+    Applied to $x$, this is
+    \[
+      f_t(S)x=t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x.
+    \]
+    The hypothesis therefore gives $f_t(S)x=f_t(T)x$ for every $t>0$.
+    Integration gives equality of the positive square roots on $x$.
+
+    For the second assertion, factor
+    \[
+      L_A+tR_B=(\Delta_{A,B}+t\mathbf 1)R_B.
+    \]
+    Applying the inverse to $B=R_B(\mathbf 1)$ gives the shifted relative
+    modular resolvent on $\mathbf 1$.  Finally,
+    \[
+      \sqrt{\Delta_{A,B}}
+        =\sqrt A\otimes\bigl((\sqrt B)^{-1}\bigr)^{\mathsf T},
+    \]
+    as follows from uniqueness of the positive square root.
+\end{proof}
+
+\begin{theorem}[Positive-definite saturation gives the identity Weyl sandwich]
+    \label{thm:partial_trace_saturation_identity_weyl_sandwich}
+    \lean{Matrix.weyl_sqrt_ratio_eq_of_partialTraceRight_eq}
+    \lean{Matrix.weyl_identity_sandwich_of_partialTraceRight_eq}
+    \lean{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef}
+    \leanok
+    Let $\rho$ and $\sigma$ be positive definite and suppose that
+    \[
+      D(\rho\Vert\sigma)
+        =D(\tr_C\rho\Vert\tr_C\sigma).
+    \]
+    Put
+    \[
+      \overline\rho=(\tr_C\rho)\otimes d_C^{-1}\mathbf 1_C,
+      \qquad
+      \overline\sigma=(\tr_C\sigma)\otimes d_C^{-1}\mathbf 1_C.
+    \]
+    Then
+    \[
+      \sqrt\rho\,\sigma^{-1/2}
+        =\sqrt{\overline\rho}\,\overline\sigma^{-1/2},
+    \]
+    and consequently
+    \[
+      \sqrt\sigma\,\overline\sigma^{-1/2}\,
+      \overline\rho\,\overline\sigma^{-1/2}\,\sqrt\sigma=\rho.
+    \]
+    Hence the raw partial-trace Petz map satisfies
+    \[
+      \mathcal R_\sigma(\tr_C\rho)=\rho.
+    \]
+    This is the positive-definite case only; no singular-support conclusion is
+    asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:weyl_relative_entropy_zero_gap_resolvent,
+        lem:positive_sqrt_from_common_resolvents,
+        thm:weyl_identity_sandwich_petz_recovery}
+    Apply the common-resolvent theorem to the identity Weyl summand and the
+    Weyl average.  The preceding lemma converts the result to equality of the
+    two square-root ratios.  For $c=d_C^{-2}$, the uniform scalar in the
+    identity summand cancels through
+    \[
+      \sqrt{c\rho}\,(\sqrt{c\sigma})^{-1}
+      =(\sqrt c\,\sqrt\rho)
+        \bigl((\sqrt c)^{-1}(\sqrt\sigma)^{-1}\bigr)
+      =\sqrt\rho\,(\sqrt\sigma)^{-1}.
+    \]
+    The Weyl twirl identifies the average with the displayed maximally mixed
+    extensions.
+
+    Taking the adjoint product of the ratio equality yields
+    \[
+      \sigma^{-1/2}\rho\sigma^{-1/2}
+        =\overline\sigma^{-1/2}\overline\rho
+          \overline\sigma^{-1/2}.
+    \]
+    Multiplication by $\sqrt\sigma$ on both sides gives the sandwich.  The raw
+    Petz recovery identity follows from
+    Theorem~\ref{thm:weyl_identity_sandwich_petz_recovery}.
 \end{proof}
 
 \begin{lemma}[Maximally mixed support-sandwich normalization]
