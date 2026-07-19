@@ -311,6 +311,18 @@ SOURCE = r"""
 \ifnum\tenkzcenterlabelseen=1\else
   \errmessage{wide-to-centered opened lower label was not rendered exactly once}
 \fi
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[pill, wide=2, down at={3}]{U} & \\
+  \tn{L_1} & \tn{L_2}
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[pill, wide=2, down at={3}]{U} & \\
+  \tn[pill, wide=2, up at=center]{L} &
+\end{tenkz}
+\begin{tenkz}[rows={op, ket}, tensor style=box]
+  \tn[pill, wide=2, no legs]{U} & \\
+  \tn{L_1} & \tn{L_2}
+\end{tenkz}
 \end{document}
 """
 
@@ -1027,6 +1039,38 @@ def main() -> int:
         pictures[67],
         "boundary|picture=67|virtual-west=2|virtual-east=2|physical-up=2|physical-down=1",
         "opened centered lower label fixture changed its face topology",
+    )
+    empty_upper_two_lower = pictures[68]
+    require(
+        empty_upper_two_lower,
+        "faceports|picture=68|cell=1-1|face=down|arity=0|at=none",
+        "out-of-range upper face did not normalize to empty",
+    )
+    forbid(
+        empty_upper_two_lower,
+        "pairleg|picture=68|",
+        "empty upper face contracted a lower physical index",
+    )
+    require(
+        empty_upper_two_lower,
+        "boundary|picture=68|virtual-west=2|virtual-east=2|physical-up=3|physical-down=0",
+        "empty wide upper face did not open both ordinary lower owners",
+    )
+    require(
+        pictures[69],
+        "boundary|picture=69|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
+        "empty wide upper face reopened a centered lower owner twice",
+    )
+    nolegs_upper_two_lower = pictures[70]
+    forbid(
+        nolegs_upper_two_lower,
+        "pairleg|picture=70|",
+        "wide no-legs upper owner contracted a lower physical index",
+    )
+    require(
+        nolegs_upper_two_lower,
+        "boundary|picture=70|virtual-west=2|virtual-east=2|physical-up=2|physical-down=0",
+        "wide no-legs upper owner did not open both ordinary lower owners",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0

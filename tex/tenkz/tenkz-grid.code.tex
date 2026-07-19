@@ -2515,7 +2515,12 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
     % Every declared port is an independent index.  Even when several
     % columns owner-resolve to one lower glyph, the pairing pass must retain
     % every upper port rather than collapse the face to one centre wire.
-    \str_if_eq:VnF \l__tenkz_pwcols_tl {none}
+    \str_if_eq:VnTF \l__tenkz_pwcols_tl {none}
+      {
+        % An empty upper face contracts nothing.  Visit the full owner span
+        % so every lower owner facing it retains its declared up face.
+        \tenkz_open_lower_span:nnn {#1}{#2}{\l__tenkz_cwide_int}
+      }
       { \exp_args:NV \clist_map_inline:nn \l__tenkz_pwcols_tl
           { \tenkz_pair_wide_col:nnn {#1}{#2}{##1} } }
   }
@@ -3005,13 +3010,23 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
       }
       { \tenkz_draw_lower_surplus:nn {#1}{\l__tenkz_pwbase_tl} }
   }
+\cs_generate_variant:Nn \tenkz_open_lower_partner:nnn { nen }
+
+\int_new:N \l__tenkz_openlowerspan_int
+\cs_new_protected:Npn \tenkz_open_lower_span:nnn #1#2#3
+  {
+    \int_set:Nn \l__tenkz_openlowerspan_int {#3}
+    \int_step_inline:nn {\l__tenkz_openlowerspan_int}
+      { \tenkz_open_lower_partner:nen
+          {#1}{\int_eval:n{#2+##1-1}}{1} }
+  }
 
 \cs_new_protected:Npn \tenkz_open_below_no_legs:nn #1#2
   {
     \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
     \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
     \bool_if:NT \l__tenkz_cnolegs_bool
-      { \tenkz_open_lower_partner:nnn {#1}{#2}{1} }
+      { \tenkz_open_lower_span:nnn {#1}{#2}{\l__tenkz_cwide_int} }
   }
 
 \cs_new_protected:Npn \tenkz_draw_legs:
