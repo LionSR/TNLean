@@ -2262,6 +2262,36 @@ specialization of that Appendix~D definition.
     Definition~\ref{def:has_nncph_ground_space}, uniformly in \(N\).
 \end{proof}
 
+\begin{theorem}[Eventual dimension of nearest-neighbor parent ground spaces]%
+    \label{thm:nncph_eventual_ground_space_dimension}
+    \lean{MPSTensor.HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq}
+    \leanok
+    \uses{def:sector_weight_data, def:has_nncph_ground_spaces}
+    Let $P$ be a sector decomposition with representatives
+    $A_1,\ldots,A_g$ and total tensor $B$. Suppose that the vectors
+    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
+    sufficiently large $N$, and that $B$ satisfies the all-chain
+    nearest-neighbor commuting parent-Hamiltonian ground-space condition with
+    these representatives. Then there is $N_0$ such that, for every $N>N_0$,
+    \[
+        \dim_{\C}\ker H_2^{(N)}(B)=g.
+    \]
+    Thus the ground-state degeneracy is eventually constant, as required in
+    \cite[Section~IV]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:bnt_span, def:has_nncph_ground_spaces}
+    Choose $N_0\geq2$ beyond the linear-independence threshold. For $N>N_0$,
+    the ground-space spanning equation gives
+    \[
+        \ker H_2^{(N)}(B)
+        =\spn\{\ket{V^{(N)}(A_j)}:j=1,\ldots,g\}.
+    \]
+    Identifying these vectors with their coefficient functions preserves
+    linear independence. The dimension of their span is therefore $g$.
+\end{proof}
+
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
