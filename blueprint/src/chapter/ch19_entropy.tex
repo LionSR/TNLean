@@ -2320,6 +2320,51 @@ Theorem~\ref{thm:trace_norm_abs}.
     The two displayed identities prove the assertion.
 \end{proof}
 
+\begin{theorem}[Saturation of the finite Weyl Jensen inequality]
+    \label{thm:relative_entropy_weyl_jensen_eq}
+    \lean{quantumRelativeEntropy_weyl_jensen_eq_of_partialTraceRight_eq}
+    \leanok
+    \uses{def:quantum_relative_entropy, def:partial_trace}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices on
+    $\mathcal H_S\otimes\mathbb C^{d_C}$ such that
+    $\ker\sigma\subseteq\ker\rho$, and suppose that
+    \[
+        D(\rho\Vert\sigma)
+          =D(\tr_C\rho\Vert\tr_C\sigma).
+    \]
+    For a primitive $d_C$-th root of unity, put
+    $U_{ce}=\mathbf 1_S\otimes W(c,e)$ and
+    \[
+        \overline X=\frac{1}{d_C^2}\sum_{c,e}U_{ce}XU_{ce}^{\dagger}.
+    \]
+    Then
+    \[
+        D(\overline\rho\Vert\overline\sigma)
+          =\frac{1}{d_C^2}\sum_{c,e}
+            D(U_{ce}\rho U_{ce}^{\dagger}\Vert
+              U_{ce}\sigma U_{ce}^{\dagger}).
+    \]
+    This scalar identity is associated with the finite Jensen step in the
+    Weyl proof of data processing.  It is a prerequisite for
+    \cite[Theorem~3 and equation~(8)]{Hayden2004Structure}; it neither
+    characterizes equality in joint convexity nor asserts recovery.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_weyl_average_eq_summand,
+        thm:relative_entropy_unitary_invariance,
+        thm:weyl_operator_unitary}
+    Unitary invariance gives, for every $c,e$,
+    \[
+        D(U_{ce}\rho U_{ce}^{\dagger}\Vert
+          U_{ce}\sigma U_{ce}^{\dagger})=D(\rho\Vert\sigma).
+    \]
+    The preceding theorem identifies
+    $D(\overline\rho\Vert\overline\sigma)$ with the same value.  Since the
+    $d_C^2$ summands have uniform weight $d_C^{-2}$, the asserted equality
+    follows.
+\end{proof}
+
 \begin{theorem}[Relative entropy against the product of the marginals]
     \label{thm:relative_entropy_product_marginals}
     \lean{quantumRelativeEntropy_product_marginals}
