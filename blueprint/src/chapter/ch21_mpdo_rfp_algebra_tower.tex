@@ -60,7 +60,35 @@
 
 The two closure maps have the same local form:
 \begin{center}
-    \TNMPDOBlockClosureMap
+    % Formula: M_\alpha(X)_{ij}
+    % = \sum_{a,b}(M_\alpha^{ij})_{ab}X_{ba}
+    % = \operatorname{tr}(M_\alpha^{ij}X).
+    % Source verdict: Papers/1606.00608/DAVID_Fig10.png, cited at source TeX
+    % lines 1974--1980, places X immediately left of the boxed M_\alpha.
+    % Ink-to-index and contraction audit: the direct adjacent virtual bond and
+    % the single-row periodic return below together contract a and b;
+    % the unlabeled upper and lower physical stubs carry the free i and j.
+    % Paired signature (formula and network):
+    % boundary|virtual-west=0|virtual-east=0|physical-up=1|physical-down=1.
+    $M_\alpha(X)=$
+    \begin{tenkz}[periodic, physical=updown, tensor style=box]
+        \tn[box, no legs]{X} & \tn[mpo]{M_\alpha}
+    \end{tenkz}
+    \qquad
+    % Formula: A_\alpha(X)_{ij}
+    % = \sum_{a,b}(A_\alpha^{ij})_{ab}X_{ba}
+    % = \operatorname{tr}(A_\alpha^{ij}X).
+    % Source verdict: the second panel of DAVID_Fig10.png has the same geometry,
+    % with X immediately left of the boxed A_\alpha.
+    % Ink-to-index and contraction audit: the direct adjacent virtual bond and
+    % the single-row periodic return below together contract a and b;
+    % the unlabeled upper and lower physical stubs carry the free i and j.
+    % Paired signature (formula and network):
+    % boundary|virtual-west=0|virtual-east=0|physical-up=1|physical-down=1.
+    $A_\alpha(X)=$
+    \begin{tenkz}[periodic, physical=updown, tensor style=box]
+        \tn[box, no legs]{X} & \tn[mpo]{A_\alpha}
+    \end{tenkz}
 \end{center}
 In each cell, $X$ is inserted on the virtual bond and the virtual indices are
 closed by $\tr$; the physical legs remain open.  Their spans are the
