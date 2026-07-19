@@ -264,7 +264,12 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 
 ### Wolf Proposition 6.8 (Positive fixed-points)
 
-* `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
+* `IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint` — the source-faithful
+  positive trace-preserving statement for the canonical positive and negative parts in
+  `TNLean.Channel.FixedPoint.Cesaro`.
+* `IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint` — the existential
+  compatibility form.
+* `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — the channel specialization.
 * Numbered theorem: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
 
 ### Wolf Corollary 6.6 (projected support corner) — FORMALIZED
@@ -391,6 +396,9 @@ and the removal of the corner restriction):
 
 * `Kraus.stationaryProj_absorb_of_le` — for positive semidefinite $P \preceq \rho$
   the support projection of $\rho$ absorbs $P$.
+* `IsPositiveMap.exists_maximalSupport_fixedPoint` — for an arbitrary positive
+  trace-preserving map, the fixed point $T_\infty(\mathbf 1)$ has support carrying every
+  fixed point, as in Wolf Proposition 6.9.
 * `Kraus.exists_maximalSupport_fixedPoint` — a positive semidefinite fixed point
   $\rho_0$ whose
   support projection $Q_0$ satisfies $Q_0 X Q_0 = X$ for every fixed point $X$.

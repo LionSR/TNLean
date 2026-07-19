@@ -12,15 +12,20 @@ This file proves that every quantum channel (CPTP map) on `M_D(ℂ)` has a nonze
 PSD fixed point, using the Cesàro mean / Markov-Kakutani argument. It also states
 the decomposition of Hermitian fixed points (Wolf Proposition 6.8).
 
-Note: the proofs only use positivity + trace-preservation (not full CP), but the
-statements are for channels (`IsChannel`) which carry a CP hypothesis.
+The decomposition theorem uses only positivity and trace preservation. The fixed-point
+existence theorem is stated for channels.
 
 ## Main results
 
 * `cesaroMean`: the Cesàro mean of iterates of a linear map
 * `cesaroMean_telescope`: telescoping identity for Cesàro means
 * `IsChannel.exists_posSemidef_fixedPoint`: existence of PSD fixed point
-* `IsChannel.posSemidef_parts_of_hermitian_fixedPoint`: Wolf Proposition 6.8
+* `IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint`: Wolf Proposition 6.8
+  for positive trace-preserving maps, stated for the canonical positive and negative
+  parts.
+* `IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint`: existential compatibility
+  form of the preceding theorem.
+* `IsChannel.posSemidef_parts_of_hermitian_fixedPoint`: the channel specialization.
 
 ## References
 
@@ -129,19 +134,19 @@ private theorem psd_orthogonal_difference_eq_zero
     _ = Y * V * star V := (mul_assoc Y V (star V)).symm
     _ = 0 := by rw [hYV_zero, zero_mul]
 
-/-- **Wolf Proposition 6.8** (Hermitian part):
-If `E` is trace-preserving and positive, and `X` is a Hermitian fixed point,
-then the positive and negative parts of `X` are also fixed points.
+/-- **Wolf Proposition 6.8** (Hermitian part). If `E` is positive and
+trace-preserving, and `X` is a Hermitian fixed point, then the positive and
+negative parts of `X` are also fixed points.
 
-More precisely: there exist PSD `Q₁`, `Q₂` (the CFC positive and negative parts)
-with `X = Q₁ - Q₂` and `E(Q₁) = Q₁` and `E(Q₂) = Q₂`. -/
-theorem IsChannel.posSemidef_parts_of_hermitian_fixedPoint
-    (hE : IsChannel E)
+More precisely, the canonical CFC parts satisfy `E(X⁺) = X⁺` and `E(X⁻) = X⁻`.
+
+Source: Wolf, *Quantum Channels & Operations*, Proposition 6.8; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1155--1201. -/
+theorem IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint
+    (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX_herm : X.IsHermitian)
     (hX_fix : E X = X) :
-    ∃ Q₁ Q₂ : Matrix (Fin D) (Fin D) ℂ,
-      Q₁.PosSemidef ∧ Q₂.PosSemidef ∧
-      X = Q₁ - Q₂ ∧ E Q₁ = Q₁ ∧ E Q₂ = Q₂ := by
+    E X⁺ = X⁺ ∧ E X⁻ = X⁻ := by
   -- Use CFC positive and negative parts
   set Q₁ := X⁺ with hQ₁_def
   set Q₂ := X⁻ with hQ₂_def
@@ -157,10 +162,10 @@ theorem IsChannel.posSemidef_parts_of_hermitian_fixedPoint
   have hQ₁Q₂ : Q₁ * Q₂ = 0 := CFC.posPart_mul_negPart X
   have hQ₂Q₁ : Q₂ * Q₁ = 0 := CFC.negPart_mul_posPart X
   -- E preserves PSD (positivity)
-  have hEQ₁_psd : (E Q₁).PosSemidef := hE.pos Q₁ hQ₁_psd
-  have hEQ₂_psd : (E Q₂).PosSemidef := hE.pos Q₂ hQ₂_psd
+  have hEQ₁_psd : (E Q₁).PosSemidef := hE Q₁ hQ₁_psd
+  have hEQ₂_psd : (E Q₂).PosSemidef := hE Q₂ hQ₂_psd
   -- E is trace-preserving
-  have hEQ₁_tr : trace (E Q₁) = trace Q₁ := hE.tp Q₁
+  have hEQ₁_tr : trace (E Q₁) = trace Q₁ := hTP Q₁
   -- From E(X) = X and X = Q₁ - Q₂: E(Q₁) - E(Q₂) = Q₁ - Q₂
   have hE_diff : E Q₁ - E Q₂ = Q₁ - Q₂ := by
     rw [← map_sub]; rw [← hX_decomp]; exact hX_fix
@@ -191,7 +196,37 @@ theorem IsChannel.posSemidef_parts_of_hermitian_fixedPoint
   -- Therefore E(Q₁) = Q₁ and E(Q₂) = Q₂
   have hEQ₁ : E Q₁ = Q₁ := by rw [hEQ₁_eq, hY_zero, add_zero]
   have hEQ₂ : E Q₂ = Q₂ := by rw [hEQ₂_eq, hY_zero, add_zero]
-  exact ⟨Q₁, Q₂, hQ₁_psd, hQ₂_psd, hX_decomp, hEQ₁, hEQ₂⟩
+  simpa [hQ₁_def, hQ₂_def] using And.intro hEQ₁ hEQ₂
+
+/-- Existential compatibility form of Wolf Proposition 6.8. The witnesses are the
+canonical positive and negative parts of the Hermitian fixed point. -/
+theorem IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint
+    (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX_herm : X.IsHermitian)
+    (hX_fix : E X = X) :
+    ∃ Q₁ Q₂ : Matrix (Fin D) (Fin D) ℂ,
+      Q₁.PosSemidef ∧ Q₂.PosSemidef ∧
+      X = Q₁ - Q₂ ∧ E Q₁ = Q₁ ∧ E Q₂ = Q₂ := by
+  have hX_sa : IsSelfAdjoint X := isSelfAdjoint_iff.mpr hX_herm
+  obtain ⟨hpos, hneg⟩ :=
+    IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint
+      E hE hTP hX_herm hX_fix
+  exact ⟨X⁺, X⁻,
+    Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X),
+    Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X),
+    (CFC.posPart_sub_negPart X hX_sa).symm, hpos, hneg⟩
+
+/-- Wolf Proposition 6.8 specialized to a completely positive
+trace-preserving map. -/
+theorem IsChannel.posSemidef_parts_of_hermitian_fixedPoint
+    (hE : IsChannel E)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX_herm : X.IsHermitian)
+    (hX_fix : E X = X) :
+    ∃ Q₁ Q₂ : Matrix (Fin D) (Fin D) ℂ,
+      Q₁.PosSemidef ∧ Q₂.PosSemidef ∧
+      X = Q₁ - Q₂ ∧ E Q₁ = Q₁ ∧ E Q₂ = Q₂ :=
+  IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint
+    E hE.cp.isPositiveMap hE.tp hX_herm hX_fix
 
 end FixedPointDecomposition
 

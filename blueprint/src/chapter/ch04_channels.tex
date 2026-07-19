@@ -310,6 +310,22 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $\rho\mapsto T(X\rho X^\dagger)$ is positive and trace-preserving.
 \end{proof}
 
+\begin{theorem}[The trace bounds a positive matrix]
+    \label{thm:psd_le_trace_smul_one}
+    \lean{Matrix.PosSemidef.trace_smul_one_sub_self_posSemidef}
+    \leanok
+    Let $D\geq 1$ and let $P\in\MN{D}$ be positive semidefinite. Then
+    \[
+        P\preceq \tr(P)\Id.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $P$ with nonnegative eigenvalues $\lambda_1,\ldots,\lambda_D$.
+    Each eigenvalue is bounded above by their sum $\tr(P)$, so every eigenvalue
+    of $\tr(P)\Id-P$ is nonnegative.
+\end{proof}
+
 \begin{theorem}[Forward Lorentz-cone trace inequality]
     \label{thm:psd_trace_square_le_square_trace}
     \lean{Matrix.PosSemidef.trace_sq_re_le_trace_re_sq}
@@ -1175,25 +1191,32 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
-    \lean{IsChannel.posSemidef_parts_of_hermitian_fixedPoint}
+    \lean{IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint}
     \leanok
-    \uses{def:channel}
-    Let $E$ be a quantum channel and $X = E(X)$ a Hermitian
-    fixed point with decomposition $X = P_+ - P_-$ into orthogonal
-    positive and negative parts ($P_\pm \ge 0$, $\tr(P_+ P_-) = 0$).
+    \uses{def:positive_map, def:trace_preserving}
+    Let $E$ be a positive trace-preserving linear map and let $X = E(X)$ be a Hermitian
+    fixed point. Let $P_+=X^+$ and $P_-=X^-$ be its canonical positive and negative
+    parts. Thus $X=P_+-P_-$, $P_\pm\geq0$, and $P_+P_-=P_-P_+=0$.
     Then $E(P_+) = P_+$ and $E(P_-) = P_-$.
     This is \cite[Proposition~6.8]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Let $Q$ be the support projection of $P_+$.
-    Trace preservation and positivity give
-    $\tr(Q E(P_-)) = 0$
-    and $E(P_-) \ge 0$, so $Q E(P_-) = 0$.
-    The fixed-point equation
-    $E(P_+) - E(P_-) = P_+ - P_-$ then identifies
-    $E(P_\pm) = P_\pm$.
+    The fixed-point equation gives a common difference
+    \[
+        Y=E(P_+)-P_+=E(P_-)-P_-.
+    \]
+    Hence $P_++Y$ and $P_-+Y$ are positive semidefinite, while trace
+    preservation gives $\tr(Y)=0$. Diagonalize $P_+$. Since
+    $P_+P_-=P_-P_+=0$, each eigenvector belongs to the kernel of $P_+$ or to
+    the kernel of $P_-$. Positivity of the corresponding matrix $P_++Y$ or
+    $P_-+Y$ shows that every diagonal coefficient of $Y$ in this basis is
+    nonnegative. Their sum is $\tr(Y)=0$, so every such coefficient vanishes.
+    A positive semidefinite matrix with a zero diagonal coefficient annihilates
+    the corresponding basis vector. Applying this to $P_++Y$ or $P_-+Y$ shows
+    that $Y$ annihilates the entire eigenbasis. Thus $Y=0$, and consequently
+    $E(P_\pm)=P_\pm$.
 \end{proof}
 
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}

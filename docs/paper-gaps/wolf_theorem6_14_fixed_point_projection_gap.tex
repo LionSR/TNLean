@@ -105,6 +105,14 @@ $\operatorname{Fix}(T)$ under the full-support hypothesis.
 in
 \doclink{TNLean/Channel/FixedPoint/TraceAdjointDensityBlocks}.}
 
+The maximal-support witness required for the reduction is now formalized for the
+source's full generality: for every positive trace-preserving map,
+$\rho_0=T_\infty(\mathbf 1)$ is positive semidefinite and its support contains the
+support and range of every fixed point.
+\footnote{Formal declaration:
+\leanid{IsPositiveMap.exists_maximalSupport_fixedPoint} in
+\doclink{TNLean/Channel/FixedPoint/MaximalSupport}.}
+
 Two arguments remain to obtain the general fixed-point statement above.  First, the
 positive semidefinite density matrices supplied by Proposition~1.5 must be
 restricted to their supports; this produces the positive definite matrices
@@ -114,9 +122,10 @@ summand $\mathcal H_0$.
 
 Thus Proposition~1.5, its application to the full-support adjoint
 mean-ergodic projection, and the full-support Schr\"odinger-picture fixed-point
-formula are formalized, while Theorem~6.14 remains open.  The missing work is
-the positive-definite support reduction and the recovery of the zero block
-from the kernels.
+formula, together with the maximal-support witness, are formalized, while
+Theorem~6.14 remains open.  The missing work is to construct the supported
+endomorphism, apply the full-support formula there, and recover the zero block
+from the discarded kernels.
 
 \bibliographystyle{alpha}
 \bibliography{references}
