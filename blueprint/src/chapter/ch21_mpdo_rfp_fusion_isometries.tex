@@ -306,17 +306,50 @@ them.
     Definition~\ref{def:mpdo_bnt_label_idempotent_coefficient_form}.
 \end{definition}
 
-The following compact display depicts the sitewise identity
-$U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^{\dagger}
- =\bigoplus_\gamma\chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}$ from
+For fixed labels $\alpha,\beta$, put
+$G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
+\chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}$.  Then
 \cite[Theorem~4.14(iii), equation~(89), lines~986--991]
-{Cirac2016MPDO_arXiv}.  Its arrangement follows the physical isometry and
-weighted direct-sum decomposition in
-\cite[Proposition~4.13, lines~943--959]{Cirac2016MPDO_arXiv}.
-\begin{center}
-    \centering
-    \TNMPDOBNTFusionIdentity
-\end{center}
+{Cirac2016MPDO_arXiv} gives
+% For fixed \alpha,\beta,
+%   U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^{\dagger}
+%     = G_{\alpha,\beta}^{ij},
+%   G_{\alpha,\beta}^{ij}
+%     = \bigoplus_\gamma \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}.
+% Coefficientwise, with x,y,i,j free,
+%   (G_{\alpha,\beta}^{ij})_{x,y}
+%     = \sum_{q,a_1,a_2,b_1,b_2}
+%       (U_{\alpha,\beta})_{x,(a_1,b_1)}
+%       (M_\alpha^{iq})_{a_1,a_2}(M_\beta^{qj})_{b_1,b_2}
+%       (U_{\alpha,\beta}^{\dagger})_{(a_2,b_2),y}.
+% Thus q,a_1,a_2,b_1,b_2 are contracted.  For
+% x=(\gamma,r,a) and y=(\gamma',r',a'),
+%   (G_{\alpha,\beta}^{ij})_{(\gamma,r,a),(\gamma',r',a')}
+%     = \delta_{\gamma,\gamma'}(\chi_{\alpha,\beta,\gamma})_{r,r'}
+%       (M_\gamma^{ij})_{a,a'},
+% or, since chi is diagonal,
+%   \delta_{\gamma,\gamma'}\delta_{r,r'}\chi_{\alpha,\beta,\gamma;r}
+%       (M_\gamma^{ij})_{a,a'}.
+% The sector \gamma is a direct-sum block label, not a contraction index.
+% Ink-to-index map: the combined west and east fuser legs are x and y;
+% the north and south physical legs are i and j; the unique inter-row
+% pairleg is q; and the four fuser-to-tensor strands carry a_1,b_1,a_2,b_2.
+% The left and right objects each have boundary signature (1,1,1,1).
+% The single G_{\alpha,\beta} atom has no internal contraction.  The cited
+% source states the algebraic identity and direct-sum decomposition, but
+% contains no dedicated diagram for U_{\alpha,\beta}.
+\par\noindent\hfil
+\tnpic[rows={op,op}]{
+    \tnfuse[combined=west]{U_{\alpha,\beta}} &
+    \tn[mpo, up=$i$]{M_\alpha} &
+    \tnfuse[combined=east]{U_{\alpha,\beta}^{\dagger}} \\
+    & \tn[mpo, down=$j$]{M_\beta} &
+}
+\qquad$=$\qquad
+\tnpic[physical=updown]{
+    \tn[mpo, up=$i$, down=$j$]{G_{\alpha,\beta}}
+}
+\hfil\par
 
 \begin{theorem}[Weighted zipper identities]%
     \label{thm:mpdo_bnt_weighted_zipper}
