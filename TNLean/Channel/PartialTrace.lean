@@ -42,6 +42,10 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
   product
 * `Matrix.partialTraceLeft_kronecker`: the left partial trace of a Kronecker
   product
+* `Matrix.PosDef.partialTraceRight`: the right partial trace of a positive
+  definite matrix is positive definite when the traced factor is nonempty
+* `Matrix.PosDef.partialTraceLeft`: the analogous statement for the left
+  partial trace
 * `Matrix.trace_partialTraceLeft_mul`: the defining trace-pairing identity for
   the left partial trace
 * `Matrix.trace_kronecker_partialTraceLeft_mul_eq`: the weighted one-summand
@@ -109,6 +113,22 @@ theorem PosSemidef.partialTraceRight [Finite α] {X : Matrix (α × β) (α × �
     rfl
   rw [h_eq]
   exact Matrix.posSemidef_sum _ fun _ _ => hX.submatrix _
+
+/-- The partial trace over a nonempty second factor preserves positive
+definiteness.  It is a nonempty sum of positive-definite principal
+submatrices. -/
+theorem PosDef.partialTraceRight [Finite α] [Nonempty β]
+    {X : Matrix (α × β) (α × β) ℂ} (hX : X.PosDef) :
+    (Matrix.partialTraceRight X).PosDef := by
+  cases nonempty_fintype α
+  have h_eq : (Matrix.partialTraceRight X : Matrix α α ℂ) =
+      ∑ k : β, X.submatrix (fun a ↦ (a, k)) (fun a ↦ (a, k)) := by
+    ext i j
+    simp only [Matrix.sum_apply, Matrix.submatrix_apply]
+    rfl
+  rw [h_eq]
+  exact Matrix.posDef_sum Finset.univ_nonempty fun k _ ↦
+    hX.submatrix fun i j hij ↦ (Prod.ext_iff.mp hij).1
 
 /-- The trace is invariant under the partial trace over the second factor. -/
 theorem trace_partialTraceRight [Fintype α] (X : Matrix (α × β) (α × β) ℂ) :
@@ -323,7 +343,48 @@ theorem PosSemidef.partialTraceLeft [Finite β] {X : Matrix (α × β) (α × β
   rw [h_eq]
   exact Matrix.posSemidef_sum _ fun _ _ => hX.submatrix _
 
+/-- The partial trace over a nonempty first factor preserves positive
+definiteness.  It is a nonempty sum of positive-definite principal
+submatrices. -/
+theorem PosDef.partialTraceLeft [Finite β] [Nonempty α]
+    {X : Matrix (α × β) (α × β) ℂ} (hX : X.PosDef) :
+    (Matrix.partialTraceLeft X).PosDef := by
+  cases nonempty_fintype β
+  have h_eq : (Matrix.partialTraceLeft X : Matrix β β ℂ) =
+      ∑ k : α, X.submatrix (fun b ↦ (k, b)) (fun b ↦ (k, b)) := by
+    ext i j
+    simp only [Matrix.sum_apply, Matrix.submatrix_apply]
+    rfl
+  rw [h_eq]
+  exact Matrix.posDef_sum Finset.univ_nonempty fun k _ ↦
+    hX.submatrix fun i j hij ↦ (Prod.ext_iff.mp hij).2
+
 end GeneralLeft
+
+section KroneckerPosDef
+
+variable {α β : Type*} [Fintype α] [Finite β] [Nonempty α] [Nonempty β]
+
+/-- If a Kronecker product is positive definite and its left factor has trace
+one, then the left factor is positive definite.
+
+The first partial trace shows that the right factor is positive definite.  The
+second partial trace is then a positive scalar multiple of the left factor. -/
+theorem PosDef.left_of_kronecker_of_trace_eq_one
+    {A : Matrix α α ℂ} {B : Matrix β β ℂ}
+    (hAB : (A ⊗ₖ B).PosDef) (hAtrace : A.trace = 1) : A.PosDef := by
+  cases nonempty_fintype β
+  have hB : B.PosDef := by
+    have h := hAB.partialTraceLeft
+    rw [partialTraceLeft_kronecker, hAtrace, one_smul] at h
+    exact h
+  have hscaled : (B.trace • A).PosDef := by
+    simpa only [partialTraceRight_kronecker] using hAB.partialTraceRight
+  have htrace : 0 < B.trace := hB.trace_pos
+  have hrescaled := hscaled.smul (inv_pos.mpr htrace)
+  simpa only [smul_smul, inv_mul_cancel₀ (ne_of_gt htrace), one_smul] using hrescaled
+
+end KroneckerPosDef
 
 /-- The trace is invariant under reindexing a matrix by an equivalence of its
 index type. -/

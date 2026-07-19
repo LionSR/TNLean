@@ -166,10 +166,9 @@ is the full-support step in the proof of Wolf, Theorem 6.14; local source
 1483--1494.
 
 **Scope restriction (maximal-support compression):** This theorem describes
-the fixed points of the compressed map with positive semidefinite density
-blocks.  It does not yet prove that these blocks are positive definite or
-transport the description to the original space with its complementary zero
-summand.  This restriction is documented in
+the fixed points of the compressed map with positive definite density blocks.
+It does not yet transport the description to the original space with its
+complementary zero summand.  This restriction is documented in
 `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`.
 
 The theorem records only the fixed-point description.  The corresponding
@@ -193,7 +192,7 @@ theorem IsPositiveMap.exists_block_densities_of_maximalSupportCompression
           (σ : ∀ k, Matrix (Fin (m k)) (Fin (m k)) ℂ),
           U ∈ Matrix.unitaryGroup (Fin n) ℂ ∧
             (∀ k, 0 < d k) ∧ (∀ k, 0 < m k) ∧
-            (∀ k, (σ k).PosSemidef) ∧ (∀ k, (σ k).trace = 1) ∧
+            (∀ k, (σ k).PosDef) ∧ (∀ k, (σ k).trace = 1) ∧
             ∀ B, IsPositiveMap.stationarySupportCompression T V B = B ↔
               ∃ X : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ,
                 star U * B * U = Matrix.reindex e e
@@ -205,9 +204,43 @@ theorem IsPositiveMap.exists_block_densities_of_maximalSupportCompression
       IsSchwarzMap (Matrix.traceAdjointMap
         (IsPositiveMap.stationarySupportCompression T V)) :=
     hSchwarz.traceAdjointMap_stationarySupportCompression hT V hV
-  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, _, hfixed⟩ :=
+  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, _, hσtrace, _, hfixed⟩ :=
     hpositive.exists_block_densities_of_meanErgodicProjection
       htrace hcompressedSchwarz hρfull hρfullFix
+  obtain ⟨X, hρblocks⟩ := (hfixed ρfull).mp hρfullFix
+  let Uunitary : unitary (Matrix (Fin n) (Fin n) ℂ) := ⟨U, hU⟩
+  have hUunit : IsUnit U := ⟨Unitary.toUnits Uunitary, rfl⟩
+  have hρcoord : (star U * ρfull * U).PosDef := by
+    simpa only [star_eq_conjTranspose] using
+      hρfull.conjTranspose_mul_mul_same
+        (Matrix.mulVec_injective_iff_isUnit.mpr hUunit)
+  have hreindexed :
+      (Matrix.reindex e e
+        (Matrix.blockDiagonal' fun k ↦ σ k ⊗ₖ X k)).PosDef := by
+    rw [← hρblocks]
+    exact hρcoord
+  have hblockDiagonal :
+      (Matrix.blockDiagonal' fun k ↦ σ k ⊗ₖ X k).PosDef := by
+    have hprincipal := hreindexed.submatrix e.injective
+    simpa only [Matrix.reindex_apply, Matrix.submatrix_submatrix,
+      Equiv.symm_comp_self, Matrix.submatrix_id_id] using hprincipal
+  have hσ : ∀ k, (σ k).PosDef := by
+    intro k
+    letI : Nonempty (Fin (m k)) := Fin.pos_iff_nonempty.mp (hm k)
+    letI : Nonempty (Fin (d k)) := Fin.pos_iff_nonempty.mp (hd k)
+    have hblock : (σ k ⊗ₖ X k).PosDef := by
+      have hprincipal := hblockDiagonal.submatrix
+        (e := fun i ↦ ⟨k, i⟩)
+        (fun _ _ hij ↦ eq_of_heq (Sigma.mk.inj_iff.mp hij).2)
+      have heq :
+          (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ X j).submatrix
+              (fun i ↦ ⟨k, i⟩) (fun i ↦ ⟨k, i⟩) = σ k ⊗ₖ X k := by
+        ext i j
+        exact Matrix.blockDiagonal'_apply_eq
+          (fun q : Fin K ↦ σ q ⊗ₖ X q) k i j
+      rw [heq] at hprincipal
+      exact hprincipal
+    exact hblock.left_of_kronecker_of_trace_eq_one (hσtrace k)
   exact ⟨hρ₀, n, V, hρ₀fix, hV, hVrange,
     ⟨ρfull, hρfull, hρfullFix⟩,
-    K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, hfixed⟩
+    K, d, m, e, U, σ, hU, hd, hm, hσ, hσtrace, hfixed⟩
