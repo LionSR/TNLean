@@ -1673,6 +1673,15 @@
       {
         \tenkzl_xyz:nnnNN {#1}{#2}{#3}
           \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+        % Boundary tips normally dominate this outward coordinate, but a
+        % trace may retain closure endpoints after every routing-side site is
+        % removed.  Keep the real site centre as the fallback silhouette;
+        % the corridor adds the rendered dot radius and daylight below.
+        \tenkzl_side_cup_project:NNN
+          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
+        \dim_set:Nn \l__tenkzl_cupsil_dim
+          { \dim_max:nn {\l__tenkzl_cupsil_dim}
+              {\l__tenkzl_cupproj_dim} }
         \tenkzl_side_cup_project_trans:NNN
           \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
         \dim_set:Nn \l__tenkzl_cuptransmin_dim

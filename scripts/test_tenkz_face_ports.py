@@ -533,6 +533,16 @@ SOURCE = r"""
     rows=1, cols=2, sheets={ket,op,bra},
     boundary=open, outer legs=none, west=trace, east=trace]
 \end{tenkzlattice}
+% If every north routing-side site is removed, the surviving lower-row sites
+% still provide a finite measured silhouette for their west/east closures.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra}, frame=oblique,
+    boundary=open, outer legs=none, west=trace, east=trace]
+  \tnsite[removed]{(1,1,0)}
+  \tnsite[removed]{(1,2,0)}
+  \tnsite[removed]{(1,1,1)}
+  \tnsite[removed]{(1,2,1)}
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -1931,6 +1941,26 @@ def main() -> int:
         "pair-traced-1=0|virtual-west=0|virtual-east=0|virtual-north=6|"
         "virtual-south=6",
         "operator cover stack changed periodic boundary ownership",
+    )
+    routing_side_removed = pictures[101]
+    for sheet in range(2):
+        require(
+            routing_side_removed,
+            f"trace|picture=101|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=2|from=2-1|to=2-2",
+            f"removed routing side lost surviving sheet {sheet} closure",
+        )
+    forbid(
+        routing_side_removed,
+        "trace|picture=101|lang=lattice|axis=west-east|sheet=0|slot=1|",
+        "fully removed routing row emitted invented topology",
+    )
+    require(
+        routing_side_removed,
+        "boundary|picture=101|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
+        "virtual-north=0|virtual-south=4",
+        "removed routing side changed surviving boundary ownership",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
