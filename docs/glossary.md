@@ -87,9 +87,12 @@ interfaces.
 - **Sanctioned bridges:** `_root_.isPrimitive_iff`,
   `_root_.isPrimitive_iff_period_one`, and, for transfer maps,
   `MPSTensor.isPeripherallyPrimitive_iff`.
-- **Caveat:** by itself this predicate does not assert irreducibility, existence
-  of a positive-definite fixed point, trace preservation, or spectral radius
-  one. Those facts must be supplied separately where required.
+- **Caveat:** `_root_.isPrimitive_iff_period_one` requires a specified nonzero
+  fixed point and finiteness of `peripheralEigenvalues E`; it is not an
+  unconditional period-one characterization of an arbitrary linear map. By
+  itself `IsPrimitive` does not assert irreducibility, existence of a
+  positive-definite fixed point, trace preservation, or spectral radius one.
+  Those facts must be supplied separately where required.
 
 ### `MPSTensor.IsPeripherallyPrimitive`
 
@@ -173,16 +176,21 @@ interfaces.
 - **Declaration:**
   `MPSTensor.IsStronglyIrreduciblePaper (A : MPSTensor d D) : Prop`.
 - **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** the Proposition 3(c) package: a positive-definite fixed point,
-  peripheral primitivity, and irreducibility of the transfer map.
+- **Meaning:** the project's strengthened interpretation of Proposition 3(c):
+  a positive-definite fixed point, peripheral primitivity, and an explicit
+  `IsIrreducibleMap` conjunct. The last conjunct formalizes the paper's phrase
+  “the corresponding eigenvector” as uniqueness of the fixed-point space, as
+  documented in the declaration's source comment.
 - **Source:** arXiv:0909.5347 Proposition 3(c),
   `Papers/0909.5347/main.tex:420-430` and `:501-509`; Wolf Theorem 6.7(3).
 - **Sanctioned bridges:**
   `MPSTensor.primitivePaper_iff_stronglyIrreducible` and
   `MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible`.
 - **Caveat:** both equivalences require `[NeZero D]` and left-canonical
-  normalization. This predicate is stronger data than peripheral primitivity
-  alone.
+  normalization. The explicit irreducibility conjunct is additional data beyond
+  the cited passage's literal positive-eigenvector and peripheral-uniqueness
+  wording; it records the interpretation above and makes this predicate
+  strictly stronger than peripheral primitivity alone.
 
 ## Injectivity
 
@@ -322,17 +330,22 @@ model different levels of data and different sources.
 - **Declaration:** `MPSTensor.IsCanonicalForm μ A : Prop`.
 - **Defined in:** `TNLean/PiAlgebra/CanonicalFormSepAux.lean` despite living in
   the `MPSTensor` namespace.
-- **Meaning:** injective blocks, left-canonical normalization, non-increasing
+- **Meaning:** a stronger separated biCF/CFII-after-blocking specialization:
+  one-site injective blocks, left-canonical normalization, non-increasing
   nonzero weights, positive block dimensions, and normalized self-overlap.
-- **Source:** arXiv:1606.00608 equation `II_CF1` and
-  `Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`; arXiv:2011.12127,
+- **Source:** the direct-sum shape comes from arXiv:1606.00608 equation `II_CF1`
+  and `Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`; the additional
+  injectivity, normalization, positivity, and overlap hypotheses implement the
+  stronger separated form used after blocking. Compare arXiv:2011.12127,
   `Papers/2011.12127/TN-Review-main.tex:1831-1836`.
 - **Sanctioned bridges:** `MPSTensor.IsCanonicalForm.of_peripheral_primitive`,
   `MPSTensor.IsCanonicalForm.toHasInjectiveBlocks`,
   `MPSTensor.IsCanonicalForm.toIsLeftCanonicalBlockFamily`, and
   `MPSTensor.IsCanonicalForm.toHasNormalizedSelfOverlap`.
-- **Caveat:** this already-separated family does not retain repeated-copy
-  multiplicities of the paper's two-layer BNT decomposition.
+- **Caveat:** this is not the paper's bare direct-sum CF predicate: it assumes
+  one-site injectivity, left-canonical normalization, positive dimensions, and
+  normalized self-overlap. The already-separated family also does not retain
+  repeated-copy multiplicities of the paper's two-layer BNT decomposition.
 
 ### `MPSTensor.IsNormalCanonicalForm`
 
@@ -386,10 +399,13 @@ model different levels of data and different sources.
   supplier declarations
   `MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks` and
   `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos`.
-- **Caveat:** this is the canonical predicate when multiplicities and raw sector
-  weights matter. It is not equivalent to the flattened
-  `IsNormalCanonicalFormBNT`; multiplicity recovery is genuine mathematical
-  content, not a change of packaging.
+- **Caveat:** `exists_isBNTCanonicalForm_afterBlocking_pos` is conditional: after
+  constructing prepared blocks it requires both `∀ k, ‖μ k‖ ≤ 1` and
+  `∃ k, ‖μ k‖ = 1` before it yields the canonical-form witness. It is not an
+  unconditional existence theorem. This is the canonical predicate when
+  multiplicities and raw sector weights matter. It is not equivalent to the
+  flattened `IsNormalCanonicalFormBNT`; multiplicity recovery is genuine
+  mathematical content, not a change of packaging.
 
 ### MPDO canonical-form predicates
 
@@ -403,8 +419,10 @@ model different levels of data and different sources.
   equivalence with `IsHorizontalCF`.
 - `MPOTensor.IsVerticalCF` in `TNLean/MPS/MPDO/VerticalCF.lean` is the vertical
   basis decomposition with positive multiplicities, positive diagonal weights,
-  and an isometry, sourced to arXiv:1606.00608 lines 1901 and 1956. Its
-  zero-sector caveat is recorded in
+  and a coisometry `U` satisfying `U * Uᴴ = 1` (equivalently, `Uᴴ` is an
+  isometry), sourced to arXiv:1606.00608 lines 1901 and 1956. The reverse
+  identity is deliberately absent so zero sectors may be discarded; this
+  caveat is recorded in
   `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 - `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
   horizontal canonical form plus the MPDO and nonnilpotent-sector conditions of
