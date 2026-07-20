@@ -272,7 +272,6 @@ import TNLean.MPS.Chain.AlgebraIsomorphism
 import TNLean.MPS.Chain.FundamentalTheorem
 import TNLean.MPS.Chain.GaugePhase
 import TNLean.MPS.Chain.BlockedChainFT
-import TNLean.MPS.Chain.SameStateBridge
 import TNLean.MPS.Chain.TranslationInvariance
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Core.Blocking
