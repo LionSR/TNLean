@@ -88,9 +88,11 @@ and the `on-wire matrix` style name for `ring tensor`.
   `/tenkz/lattice` key, and its pictures emit the standard lattice
   header event.
 - The lattice takes the four-sided policy (`west=`/`east=`/`north=`/
-  `south=`, plus `boundary=` as the all-sides shorthand). `trace` and
-  `cup` are accepted grammar there; their closure ink lands with the
-  inter-sheet closure engine.
+  `south=`, plus `boundary=` as the all-sides shorthand). Opposing
+  `trace` sides close the corresponding virtual axis within each sheet;
+  `cup` contracts matching ket-bra boundary indices. One-sided or
+  geometrically incomplete closures diagnose the real open endpoints
+  without inventing topology.
 - The package version string reads v0.6.
 - The periodic racetrack drop is per-obstruction: the base clearance
   (0.30 pitch) covers only the glyph silhouette, and open legs, labelled

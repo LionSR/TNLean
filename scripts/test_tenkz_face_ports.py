@@ -42,6 +42,209 @@ SOURCE = r"""
   \global\advance\tenkzcuplabelseen by 1\relax $W$}
 \newcommand{\tenkzsitelabelprobe}{%
   \global\advance\tenkzsitelabelseen by 1\relax $A_\star$}
+% Inspect the final private route coordinates for the one-row labelled trace.
+% An event-only assertion cannot distinguish a real loop from coincident
+% out-and-back paths, so this wrapper fails on the collapsed geometry itself.
+\makeatletter
+\ExplSyntaxOn
+\bool_new:N \g__tenkzl_test_one_row_label_bool
+\bool_new:N \g__tenkzl_test_routing_basis_bool
+\dim_new:N \g__tenkzl_test_routing_dx_dim
+\dim_new:N \g__tenkzl_test_routing_dy_dim
+\cs_new_protected:Npn \tenkzOneRowLabelProbe
+  { \bool_gset_true:N \g__tenkzl_test_one_row_label_bool }
+\cs_new_protected:Npn \tenkzRoutingBasisProbe
+  { \bool_gset_true:N \g__tenkzl_test_routing_basis_bool }
+\cs_new_eq:NN \__tenkzl_test_draw_complete_trace:nnnnnn
+  \tenkzl_draw_complete_trace_at:nnnnnn
+\cs_set_protected:Npn \tenkzl_draw_complete_trace_at:nnnnnn #1#2#3#4#5#6
+  {
+    \__tenkzl_test_draw_complete_trace:nnnnnn {#1}{#2}{#3}{#4}{#5}{#6}
+    \bool_if:NT \g__tenkzl_test_routing_basis_bool
+      {
+        \dim_gset_eq:NN \g__tenkzl_test_routing_dx_dim
+          \l__tenkzl_cupdx_dim
+        \dim_gset_eq:NN \g__tenkzl_test_routing_dy_dim
+          \l__tenkzl_cupdy_dim
+        \str_if_eq:nnTF {#1}{west}
+          { \tenkzl_side_cup_direction:n {north} }
+          { \tenkzl_side_cup_direction:n {east} }
+        \bool_set:Nn \l_tmpa_bool
+          {
+            \dim_compare_p:nNn { \g__tenkzl_test_routing_dx_dim } =
+              { \l__tenkzl_cupdx_dim }
+            &&
+            \dim_compare_p:nNn { \g__tenkzl_test_routing_dy_dim } =
+              { \l__tenkzl_cupdy_dim }
+          }
+        \bool_if:NF \l_tmpa_bool
+          { \tex_errmessage:D { incomplete~stub~clobbered~routing~basis } }
+        \bool_gset_false:N \g__tenkzl_test_routing_basis_bool
+      }
+    \bool_if:NT \g__tenkzl_test_bbox_lead_bool
+      {
+        \int_compare:nNnT { \g__tenkzl_test_bbox_calls_int } < {2}
+          { \tex_errmessage:D { complete~trace~skipped~body-label~boxes } }
+        \bool_set:Nn \l_tmpa_bool
+          {
+            \dim_compare_p:nNn { \l__tenkzl_trasx_dim } =
+              { \l__tenkzl_trax_dim }
+            &&
+            \dim_compare_p:nNn { \l__tenkzl_trasy_dim } =
+              { \l__tenkzl_tray_dim }
+            &&
+            \dim_compare_p:nNn { \l__tenkzl_trbsx_dim } =
+              { \l__tenkzl_trbx_dim }
+            &&
+            \dim_compare_p:nNn { \l__tenkzl_trbsy_dim } =
+              { \l__tenkzl_trby_dim }
+          }
+        \bool_if:NT \l_tmpa_bool
+          { \tex_errmessage:D { body-label~box~did~not~move~either~lead } }
+        \bool_gset_false:N \g__tenkzl_test_bbox_lead_bool
+      }
+    \bool_if:NT \g__tenkzl_test_one_row_label_bool
+      {
+        \dim_compare:nNnT { \l__tenkzl_tratx_dim } =
+          { \l__tenkzl_trbtx_dim }
+          {
+            \dim_compare:nNnT { \l__tenkzl_traty_dim } =
+              { \l__tenkzl_trbty_dim }
+              { \tex_errmessage:D { labelled~one-row~trace~tips~collapsed } }
+          }
+        \dim_compare:nNnT { \l__tenkzl_trasx_dim } =
+          { \l__tenkzl_trbsx_dim }
+          {
+            \dim_compare:nNnT { \l__tenkzl_trasy_dim } =
+              { \l__tenkzl_trbsy_dim }
+              { \tex_errmessage:D { labelled~one-row~trace~escapes~collapsed } }
+          }
+        \bool_gset_false:N \g__tenkzl_test_one_row_label_bool
+      }
+  }
+\bool_new:N \g__tenkzl_test_fallback_label_bool
+\bool_new:N \g__tenkzl_test_fallback_escape_called_bool
+\cs_new_protected:Npn \tenkzFallbackLabelProbe
+  {
+    \bool_gset_true:N \g__tenkzl_test_fallback_label_bool
+    \bool_gset_false:N \g__tenkzl_test_fallback_escape_called_bool
+  }
+\cs_new_eq:NN \__tenkzl_test_avoid_label_stub:nnnNNNNNN
+  \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+\cs_set_protected:Npn \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+  #1#2#3#4#5#6#7#8#9
+  {
+    \__tenkzl_test_avoid_label_stub:nnnNNNNNN
+      {#1}{#2}{#3}#4#5#6#7#8#9
+    \bool_if:NT \g__tenkzl_test_fallback_label_bool
+      { \bool_gset_true:N \g__tenkzl_test_fallback_escape_called_bool }
+  }
+\cs_new_eq:NN \__tenkzl_test_draw_trace_stub:nnn
+  \tenkzl_draw_trace_stub_at:nnn
+\cs_set_protected:Npn \tenkzl_draw_trace_stub_at:nnn #1#2#3
+  {
+    \__tenkzl_test_draw_trace_stub:nnn {#1}{#2}{#3}
+    \bool_if:NT \g__tenkzl_test_fallback_label_bool
+      {
+        \bool_if:NF \g__tenkzl_test_fallback_escape_called_bool
+          { \tex_errmessage:D { fallback~trace~skipped~label~escape } }
+        \dim_compare:nNnT { \l__tenkzl_trasx_dim } =
+          { \l__tenkzl_trax_dim }
+          {
+            \dim_compare:nNnT { \l__tenkzl_trasy_dim } =
+              { \l__tenkzl_tray_dim }
+              { \tex_errmessage:D { fallback~trace~ignored~site~label } }
+          }
+        \bool_gset_false:N \g__tenkzl_test_fallback_label_bool
+      }
+  }
+\bool_new:N \g__tenkzl_test_sealed_tip_bool
+\int_new:N \g__tenkzl_test_obstacle_min_int
+\int_new:N \g__tenkzl_test_obstacle_calls_int
+\bool_new:N \g__tenkzl_test_bbox_lead_bool
+\int_new:N \g__tenkzl_test_bbox_calls_int
+\bool_new:N \g__tenkzl_test_pairtrace_obstacle_bool
+\dim_new:N \g__tenkzl_test_pairtrace_top_dim
+\cs_new_protected:Npn \tenkzSealedTipProbe
+  { \bool_gset_true:N \g__tenkzl_test_sealed_tip_bool }
+\cs_new_protected:Npn \tenkzObstacleProbe #1
+  { \int_gset:Nn \g__tenkzl_test_obstacle_min_int {#1} }
+\cs_new_protected:Npn \tenkzBBoxLeadProbe
+  {
+    \bool_gset_true:N \g__tenkzl_test_bbox_lead_bool
+    \int_gzero:N \g__tenkzl_test_bbox_calls_int
+  }
+\cs_new_protected:Npn \tenkzPairtraceObstacleProbe
+  { \bool_gset_true:N \g__tenkzl_test_pairtrace_obstacle_bool }
+\cs_new_eq:NN \__tenkzl_test_pairtrace:nnn \tenkzl_pairtrace:nnn
+\cs_set_protected:Npn \tenkzl_pairtrace:nnn #1#2#3
+  {
+    \__tenkzl_test_pairtrace:nnn {#1}{#2}{#3}
+    \bool_if:NT \g__tenkzl_test_pairtrace_obstacle_bool
+      {
+        \dim_gset:Nn \g__tenkzl_test_pairtrace_top_dim
+          {
+            \l__tenkzl_dy_dim
+            + \tenkz@dim{\tenkz@r@planetracereach} / 2
+          }
+      }
+  }
+\cs_new_eq:NN \__tenkzl_test_trace_include_obstacle_bbox:nnnn
+  \tenkzl_trace_include_obstacle_bbox:nnnn
+\cs_set_protected:Npn \tenkzl_trace_include_obstacle_bbox:nnnn #1#2#3#4
+  {
+    \bool_if:NT \g__tenkzl_test_bbox_lead_bool
+      { \int_gincr:N \g__tenkzl_test_bbox_calls_int }
+    \__tenkzl_test_trace_include_obstacle_bbox:nnnn {#1}{#2}{#3}{#4}
+  }
+\cs_new_eq:NN \__tenkzl_test_trace_silhouette:n
+  \tenkzl_trace_silhouette:n
+\cs_new_eq:NN \__tenkzl_test_trace_include_obstacle:nn
+  \tenkzl_trace_include_obstacle:nn
+\cs_set_protected:Npn \tenkzl_trace_include_obstacle:nn #1#2
+  {
+    \int_compare:nNnT { \g__tenkzl_test_obstacle_min_int } > {0}
+      { \int_gincr:N \g__tenkzl_test_obstacle_calls_int }
+    \__tenkzl_test_trace_include_obstacle:nn {#1}{#2}
+  }
+\cs_set_protected:Npn \tenkzl_trace_silhouette:n #1
+  {
+    \int_gzero:N \g__tenkzl_test_obstacle_calls_int
+    \__tenkzl_test_trace_silhouette:n {#1}
+    \bool_if:NT \g__tenkzl_test_pairtrace_obstacle_bool
+      {
+        \dim_compare:nNnF { \l__tenkzl_cupsil_dim } >
+          { \g__tenkzl_test_pairtrace_top_dim }
+          { \tex_errmessage:D { periodic~lane~crossed~pairing~racetrack } }
+        \bool_gset_false:N \g__tenkzl_test_pairtrace_obstacle_bool
+      }
+    \bool_if:NT \g__tenkzl_test_sealed_tip_bool
+      {
+        \tenkzl_xyz:nnnNN {1}{1}{0}
+          \l__tenkzl_labelprojx_dim \l__tenkzl_labelprojy_dim
+        \tenkzl_side_cup_project:NNN
+          \l__tenkzl_labelprojx_dim \l__tenkzl_labelprojy_dim
+          \l__tenkzl_cupproj_dim
+        \dim_add:Nn \l__tenkzl_cupproj_dim
+          { \tenkz@dim{\tenkz@r@daylight} }
+        \dim_compare:nNnF { \l__tenkzl_cupsil_dim } =
+          { \l__tenkzl_cupproj_dim }
+          { \tex_errmessage:D { sealed~side~invented~a~boundary~tip } }
+        \bool_gset_false:N \g__tenkzl_test_sealed_tip_bool
+      }
+    \int_compare:nNnT { \g__tenkzl_test_obstacle_min_int } > {0}
+      {
+        \int_compare:nNnT { \seq_count:N \l__tenkzl_obstacles_seq } <
+          { \g__tenkzl_test_obstacle_min_int }
+          { \tex_errmessage:D { rendered~obstacles~were~not~registered } }
+        \int_compare:nNnT { \g__tenkzl_test_obstacle_calls_int } <
+          { \g__tenkzl_test_obstacle_min_int }
+          { \tex_errmessage:D { trace~silhouette~missed~an~obstacle } }
+        \int_gzero:N \g__tenkzl_test_obstacle_min_int
+      }
+  }
+\ExplSyntaxOff
+\makeatother
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -468,6 +671,175 @@ SOURCE = r"""
     col vector={0pt,0pt}, row vector={0pt,-9mm},
     sheet vector={2mm,4mm}, boundary=open, outer legs=none, east=cup]
 \end{tenkzlattice}
+% T_C : (V tensor Vbar)^R_W -> (V tensor Vbar)^R_E.  The site-wise
+% pairing ink contracts every physical ket index with its bra index; the
+% in-column bonds contract neighbouring virtual row indices; north/south
+% trace closes the remaining virtual row indices within each sheet.
+% The nonempty body is a live customization layer, not placeholder syntax.
+\begin{tenkzlattice}[
+    rows=3, cols=1, sheets={ket,bra}, boundary=open,
+    outer legs=none, north=trace, south=trace]
+  \global\advance\tenkzlatticebodyseen by 1\relax
+  \tnsite[role=marked, label=$T_C$]{(2,1,1)}
+  \tnedge[role=marked]{(1,1,1)-(2,1,1)}
+\end{tenkzlattice}
+\ifnum\tenkzlatticebodyseen=2\else
+  \errmessage{periodic lattice body customization did not execute exactly once}
+\fi
+% The same sheet-local closure path must survive both named projected frames.
+\begin{tenkzlattice}[
+    rows=2, cols=3, sheets={ket,bra}, frame=oblique,
+    boundary=open, outer legs=none, west=trace, east=trace]
+\end{tenkzlattice}
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra}, frame=slab,
+    boundary=open, outer legs=none, north=trace, south=trace]
+\end{tenkzlattice}
+% A sheet-local removal breaks only its own endpoint pair.  The survivor is
+% open and diagnosed; the other sheet still closes normally.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets={ket,bra}, boundary=open,
+    outer legs=none, west=trace, east=trace]
+  \tnsite[removed]{(1,2,1)}
+\end{tenkzlattice}
+% A zero routing vector is rejected before projection; every real endpoint
+% stays open instead of receiving invented periodic topology.
+\begin{tenkzlattice}[
+    rows=2, cols=1, sheets={ket,bra},
+    col vector={0pt,0pt}, row vector={0pt,-9mm},
+    sheet vector={2mm,4mm}, boundary=open, outer legs=none,
+    north=trace, south=trace]
+\end{tenkzlattice}
+% Periodic silhouette routing is genuinely sheet-parametric: a one-sheet
+% stack has no phantom sheet-1 tip, while every tip in a three-sheet stack
+% contributes to the measured exterior obstacle.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets=1, frame=slab,
+    boundary=open, outer legs=none, west=trace, east=trace]
+\end{tenkzlattice}
+\begin{tenkzlattice}[
+    rows=2, cols=1, sheets={ket,bra,aux}, frame=oblique,
+    boundary=open, outer legs=none, north=trace, south=trace]
+  \tnsite[role=marked, label=$S_2$]{(2,1,2)}
+\end{tenkzlattice}
+% Routing-side removals are sheet-local too.  The surviving sheet-0 north
+% tips still determine the west/east return silhouette independently.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra}, frame=slab,
+    boundary=open, outer legs=none, west=trace, east=trace]
+  \tnsite[removed]{(1,1,1)}
+  \tnsite[removed]{(1,2,1)}
+\end{tenkzlattice}
+% Operator boxes remain the final opaque cover pass, so same-sheet trace
+% stubs terminate beneath their boundary rather than crossing the interior.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets={ket,op,bra},
+    boundary=open, outer legs=none, west=trace, east=trace]
+\end{tenkzlattice}
+% If every north routing-side site is removed, the surviving lower-row sites
+% still provide a finite measured silhouette for their west/east closures.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra}, frame=oblique,
+    boundary=open, outer legs=none, west=trace, east=trace]
+  \tnsite[removed]{(1,1,0)}
+  \tnsite[removed]{(1,2,0)}
+  \tnsite[removed]{(1,1,1)}
+  \tnsite[removed]{(1,2,1)}
+\end{tenkzlattice}
+% Default role-stack outer legs remain physically open while north/south
+% virtual traces leave the same sites on visibly distinct paper-frame rays.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=open,
+    north=trace, south=trace]
+\end{tenkzlattice}
+% A boundary label is live body customization.  Its measured box controls an
+% endpoint escape as well as the exterior lane, so the lead stays connected.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets=1, boundary=open,
+    outer legs=none, west=trace, east=trace]
+  \tnsite[role=marked, label=$A_{\partial}^{\mathrm{east}}$]{(1,2,0)}
+\end{tenkzlattice}
+% A one-row N/S closure queries one label box for both endpoints.  The two
+% trace-private escapes remain distinct after sharing the measured safe side.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=1, boundary=open,
+    outer legs=none, north=trace, south=trace]
+  \tenkzOneRowLabelProbe
+  \tnsite[role=marked, label=$L_{\partial}^{\mathrm{north}}$]{(1,1,0)}
+\end{tenkzlattice}
+% A sealed routing side contributes no theoretical boundary-leg tip.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=1, boundary=none,
+    west=trace, east=trace, north=none, south=none]
+  \tenkzSealedTipProbe
+\end{tenkzlattice}
+% One-sided fallback geometry uses the same exact site-label escape as a
+% complete trace, including under an expert vector aimed through the label.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=1, boundary=none,
+    col vector={8mm,8mm}, row vector={0mm,-8mm}, east=trace]
+  \tenkzFallbackLabelProbe
+  \tnsite[label=$L_{\partial}^{\mathrm{east}}$]{(1,1,0)}
+\end{tenkzlattice}
+% A completed perpendicular cup publishes its actual curve/control geometry
+% to the later trace silhouette.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=none,
+    outer legs=none, north={cup=$M_{\mathrm{boundary}}$},
+    west=trace, east=trace]
+  \tenkzObstacleProbe{14}
+\end{tenkzlattice}
+% Region and distinguished-edge labels are live body obstacles too; both
+% materialized rectangles feed the periodic route's measured silhouette.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets=1, frame=oblique, boundary=none,
+    west=trace, east=trace, north=none, south=none]
+  \tenkzObstacleProbe{8}
+  \tenkzBBoxLeadProbe
+  \tnregion[slot=selected, label={R_{\mathrm{boundary}}},
+    label at=south east]{(1-2,1-2)}
+  \tnedge[distinguished, label=$E_{\mathrm{boundary}}$]{(1,1)-(1,2)}
+\end{tenkzlattice}
+% Default role-stack outer physical legs are already-rendered ink and publish
+% both endpoints before a sealed-side west/east trace chooses its lane.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=none,
+    west=trace, east=trace]
+  \tenkzObstacleProbe{4}
+\end{tenkzlattice}
+% A sheet-local removal leaves one real north-cup stub.  Its two actual
+% endpoints enter the same obstacle registry before the surviving trace.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=none,
+    outer legs=none, north=cup, west=trace, east=trace]
+  \tenkzObstacleProbe{2}
+  \tnsite[removed]{(1,1,0)}
+\end{tenkzlattice}
+% Bare numeric sheets own their physical= legs directly.  Every actual up/down
+% segment publishes both endpoints before the west/east trace chooses a lane.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets=2, physical=updown, boundary=none,
+    west=trace, east=trace]
+  \tenkzObstacleProbe{16}
+\end{tenkzlattice}
+% A physical ket--bra pairing trace is already-rendered ink.  Its racetrack
+% bounds must feed the shared obstacle registry and move the periodic lane
+% beyond the upper cap instead of letting the later halo cut through it.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=none,
+    outer legs=none, trace={(1,1)}, west=trace, east=trace]
+  \tenkzObstacleProbe{4}
+  \tenkzPairtraceObstacleProbe
+\end{tenkzlattice}
+% Row 1 is incomplete and renders a west-side fallback before row 2 closes.
+% The complete row must restore the north routing basis rather than inheriting
+% that fallback's west direction through shared projection registers.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets=1, boundary=none,
+    west=trace, east=trace]
+  \tenkzRoutingBasisProbe
+  \tnsite[removed]{(1,2,0)}
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -490,7 +862,11 @@ def require(lines: list[str], expected: str, message: str) -> None:
 
 
 def forbid(lines: list[str], forbidden: str, message: str) -> None:
-    if forbidden in lines:
+    if forbidden.endswith("|"):
+        found = any(forbidden in line for line in lines)
+    else:
+        found = forbidden in lines
+    if found:
         raise AssertionError(f"{message}: found {forbidden!r}")
 
 
@@ -1524,11 +1900,19 @@ def main() -> int:
     )
     require(
         pictures[74],
-        "warning|picture=74|code=side-deferred|side=west|policy=trace",
-        "lattice side-policy warning lost picture ownership",
+        "warning|picture=74|code=side-trace-unpaired|side=west|opposite=east",
+        "one-sided lattice trace warning lost picture ownership",
     )
-    if "side-deferred" not in parsed_warnings[74]:
+    if "side-trace-unpaired" not in parsed_warnings[74]:
         raise AssertionError("lattice side-policy warning was dropped by the audit parser")
+    require(
+        pictures[74],
+        "boundary|picture=74|physical-up=0|physical-down=0|virtual-west=1|"
+        "virtual-east=0|virtual-north=0|virtual-south=0",
+        "one-sided trace did not leave its requested endpoint open",
+    )
+    forbid(pictures[74], "trace|picture=74|lang=lattice|",
+           "one-sided lattice trace invented return topology")
     invalid_one_row_virtual = pictures[75]
     require(
         invalid_one_row_virtual,
@@ -1711,6 +2095,277 @@ def main() -> int:
         "pair-open-0=0|pair-traced-0=0|virtual-west=2|virtual-east=2|"
         "virtual-north=4|virtual-south=4",
         "zero-vector cup did not preserve its surviving boundary ports",
+    )
+    transfer_column = pictures[92]
+    require(
+        transfer_column,
+        "edge|picture=92|from=1-1|to=2-1|role=marked",
+        "periodic transfer-operator body customization was discarded",
+    )
+    for sheet in range(2):
+        require(
+            transfer_column,
+            f"trace|picture=92|lang=lattice|axis=north-south|sheet={sheet}|"
+            "slot=1|from=1-1|to=3-1",
+            f"transfer column did not close sheet {sheet} north to south",
+        )
+    require(
+        transfer_column,
+        "boundary|picture=92|physical-up=0|physical-down=0|pair-closed-0=3|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=6|virtual-east=6|"
+        "virtual-north=0|virtual-south=0",
+        "transfer-column free-index signature is not T_C",
+    )
+    oblique_column_trace = pictures[93]
+    for sheet in range(2):
+        for row in range(1, 3):
+            require(
+                oblique_column_trace,
+                f"trace|picture=93|lang=lattice|axis=west-east|sheet={sheet}|"
+                f"slot={row}|from={row}-1|to={row}-3",
+                f"oblique frame lost west/east trace at sheet {sheet}, row {row}",
+            )
+    require(
+        oblique_column_trace,
+        "boundary|picture=93|physical-up=0|physical-down=0|pair-closed-0=6|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
+        "virtual-north=6|virtual-south=6",
+        "oblique west/east trace changed its exact virtual signature",
+    )
+    slab_row_trace = pictures[94]
+    for sheet in range(2):
+        for col in range(1, 3):
+            require(
+                slab_row_trace,
+                f"trace|picture=94|lang=lattice|axis=north-south|sheet={sheet}|"
+                f"slot={col}|from=1-{col}|to=2-{col}",
+                f"slab frame lost north/south trace at sheet {sheet}, col {col}",
+            )
+    partial_trace = pictures[95]
+    require(
+        partial_trace,
+        "warning|picture=95|code=side-trace-incomplete|axis=west-east|"
+        "sheet=1|slot=1|side=west",
+        "sheet-local periodic removal was not diagnosed",
+    )
+    require(
+        partial_trace,
+        "trace|picture=95|lang=lattice|axis=west-east|sheet=0|slot=1|"
+        "from=1-1|to=1-2",
+        "one sheet's missing endpoint suppressed the surviving sheet trace",
+    )
+    require(
+        partial_trace,
+        "boundary|picture=95|physical-up=0|physical-down=0|pair-closed-0=1|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=1|virtual-east=0|"
+        "virtual-north=3|virtual-south=3",
+        "incomplete trace did not expose exactly its surviving endpoint",
+    )
+    zero_vector_trace = pictures[96]
+    require(
+        zero_vector_trace,
+        "warning|picture=96|code=side-trace-zero-vector|axis=north-south",
+        "zero routing vector reached periodic trace projection",
+    )
+    forbid(
+        zero_vector_trace,
+        "trace|picture=96|lang=lattice|",
+        "zero routing vector emitted invented trace geometry",
+    )
+    require(
+        zero_vector_trace,
+        "boundary|picture=96|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=4|virtual-east=4|"
+        "virtual-north=2|virtual-south=2",
+        "zero-vector trace did not preserve every surviving endpoint",
+    )
+    one_sheet_trace = pictures[97]
+    require(
+        one_sheet_trace,
+        "trace|picture=97|lang=lattice|axis=west-east|sheet=0|slot=1|"
+        "from=1-1|to=1-2",
+        "one-sheet periodic silhouette lost its only real closure",
+    )
+    forbid(
+        one_sheet_trace,
+        "sheet=1|",
+        "one-sheet periodic silhouette invented a phantom sheet",
+    )
+    three_sheet_trace = pictures[98]
+    for sheet in range(3):
+        require(
+            three_sheet_trace,
+            f"trace|picture=98|lang=lattice|axis=north-south|sheet={sheet}|"
+            "slot=1|from=1-1|to=2-1",
+            f"three-sheet periodic silhouette lost sheet {sheet}",
+        )
+    require(
+        three_sheet_trace,
+        "boundary|picture=98|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|pair-closed-1=2|pair-open-1=0|"
+        "pair-traced-1=0|virtual-west=6|virtual-east=6|virtual-north=0|"
+        "virtual-south=0",
+        "three-sheet periodic closure changed its exact virtual signature",
+    )
+    asymmetric_trace = pictures[99]
+    for sheet, row in ((0, 1), (0, 2), (1, 2)):
+        require(
+            asymmetric_trace,
+            f"trace|picture=99|lang=lattice|axis=west-east|sheet={sheet}|"
+            f"slot={row}|from={row}-1|to={row}-2",
+            f"asymmetric routing-side removal lost sheet {sheet}, row {row}",
+        )
+    forbid(
+        asymmetric_trace,
+        "trace|picture=99|lang=lattice|axis=west-east|sheet=1|slot=1|",
+        "removed routing-side endpoints emitted an invented closure",
+    )
+    require(
+        asymmetric_trace,
+        "boundary|picture=99|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
+        "virtual-north=2|virtual-south=4",
+        "asymmetric routing-side removal changed surviving boundary ownership",
+    )
+    operator_trace = pictures[100]
+    for sheet in range(3):
+        require(
+            operator_trace,
+            f"trace|picture=100|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-2",
+            f"operator cover stack lost periodic sheet {sheet}",
+        )
+    require(
+        operator_trace,
+        "boundary|picture=100|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|pair-closed-1=2|pair-open-1=0|"
+        "pair-traced-1=0|virtual-west=0|virtual-east=0|virtual-north=6|"
+        "virtual-south=6",
+        "operator cover stack changed periodic boundary ownership",
+    )
+    routing_side_removed = pictures[101]
+    for sheet in range(2):
+        require(
+            routing_side_removed,
+            f"trace|picture=101|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=2|from=2-1|to=2-2",
+            f"removed routing side lost surviving sheet {sheet} closure",
+        )
+    forbid(
+        routing_side_removed,
+        "trace|picture=101|lang=lattice|axis=west-east|sheet=0|slot=1|",
+        "fully removed routing row emitted invented topology",
+    )
+    require(
+        routing_side_removed,
+        "boundary|picture=101|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
+        "virtual-north=0|virtual-south=4",
+        "removed routing side changed surviving boundary ownership",
+    )
+    outer_leg_trace = pictures[102]
+    for sheet in range(2):
+        require(
+            outer_leg_trace,
+            f"trace|picture=102|lang=lattice|axis=north-south|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-1",
+            f"outer-leg separation lost sheet {sheet} periodic closure",
+        )
+    require(
+        outer_leg_trace,
+        "boundary|picture=102|physical-up=1|physical-down=1|pair-closed-0=1|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=2|virtual-east=2|"
+        "virtual-north=0|virtual-south=0",
+        "outer-leg separation changed physical or virtual boundary ownership",
+    )
+    labelled_trace = pictures[103]
+    require(
+        labelled_trace,
+        "trace|picture=103|lang=lattice|axis=west-east|sheet=0|slot=1|"
+        "from=1-1|to=1-2",
+        "boundary-label escape lost the periodic closure",
+    )
+    one_row_labelled_trace = pictures[104]
+    require(
+        one_row_labelled_trace,
+        "trace|picture=104|lang=lattice|axis=north-south|sheet=0|slot=1|"
+        "from=1-1|to=1-1",
+        "one-row boundary label collapsed the periodic closure",
+    )
+    require(
+        pictures[105],
+        "trace|picture=105|lang=lattice|axis=west-east|sheet=0|slot=1|"
+        "from=1-1|to=1-1",
+        "sealed routing-side fixture lost its periodic closure",
+    )
+    require(
+        pictures[106],
+        "warning|picture=106|code=side-trace-unpaired|side=east|opposite=west",
+        "labelled fallback fixture lost its one-sided diagnostic",
+    )
+    for sheet in range(2):
+        require(
+            pictures[107],
+            f"trace|picture=107|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-1",
+            f"perpendicular-cup fixture lost sheet {sheet} trace",
+        )
+    for row in range(1, 3):
+        require(
+            pictures[108],
+            "trace|picture=108|lang=lattice|axis=west-east|sheet=0|"
+            f"slot={row}|from={row}-1|to={row}-2",
+            f"body-label obstacle fixture lost row {row} trace",
+        )
+    for sheet in range(2):
+        require(
+            pictures[109],
+            f"trace|picture=109|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-1",
+            f"outer-leg obstacle fixture lost sheet {sheet} trace",
+        )
+    require(
+        pictures[110],
+        "warning|picture=110|code=side-cup-incomplete|side=north|cell=1-1|"
+        "sheet=1",
+        "incomplete-cup obstacle fixture lost its honest stub diagnostic",
+    )
+    require(
+        pictures[110],
+        "trace|picture=110|lang=lattice|axis=west-east|sheet=1|slot=1|"
+        "from=1-1|to=1-1",
+        "incomplete-cup obstacle fixture lost its surviving trace",
+    )
+    for sheet in range(2):
+        require(
+            pictures[111],
+            f"trace|picture=111|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-2",
+            f"bare-physical obstacle fixture lost sheet {sheet} trace",
+        )
+    for sheet in range(2):
+        require(
+            pictures[112],
+            f"trace|picture=112|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-1",
+            f"pairtrace obstacle fixture lost sheet {sheet} trace",
+        )
+    require(
+        pictures[112],
+        "pairtrace|picture=112|site=1-1",
+        "pairtrace obstacle fixture lost its physical closure",
+    )
+    require(
+        pictures[113],
+        "warning|picture=113|code=side-trace-incomplete|axis=west-east|"
+        "sheet=0|slot=1|side=west",
+        "ordering fixture lost its leading incomplete trace",
+    )
+    require(
+        pictures[113],
+        "trace|picture=113|lang=lattice|axis=west-east|sheet=0|slot=2|"
+        "from=2-1|to=2-2",
+        "ordering fixture lost its later complete trace",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
