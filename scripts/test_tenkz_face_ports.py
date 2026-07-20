@@ -38,6 +38,7 @@ SOURCE = r"""
 \newcount\tenkzlatticebodyseen
 \newcount\tenkzcuplabelseen
 \newcount\tenkzsitelabelseen
+\newcount\tenkzlatticeskinchecks
 \newcommand{\tenkzcuplabelprobe}{%
   \global\advance\tenkzcuplabelseen by 1\relax $W$}
 \newcommand{\tenkzsitelabelprobe}{%
@@ -47,6 +48,26 @@ SOURCE = r"""
 % out-and-back paths, so this wrapper fails on the collapsed geometry itself.
 \makeatletter
 \ExplSyntaxOn
+\prop_new:N \g__tenkzl_test_skin_prop
+\cs_new_protected:Npn \tenkzLatticeSkinProbe #1#2
+  { \prop_gput:Nnn \g__tenkzl_test_skin_prop {#1} {#2} }
+\cs_new_protected:Npn \tenkzLatticeSkinProbeDone
+  {
+    \prop_if_empty:NF \g__tenkzl_test_skin_prop
+      { \tex_errmessage:D { lattice~skin~probe~did~not~visit~every~sheet } }
+  }
+\cs_new_eq:NN \__tenkzl_test_select_sheet:n \tenkzl_select_sheet:n
+\cs_set_protected:Npn \tenkzl_select_sheet:n #1
+  {
+    \__tenkzl_test_select_sheet:n {#1}
+    \prop_get:NnNT \g__tenkzl_test_skin_prop {#1} \l_tmpa_tl
+      {
+        \tl_if_eq:NNF \l__tenkzl_skin_tl \l_tmpa_tl
+          { \tex_errmessage:D { lattice~tensor~style~resolved~wrong~skin } }
+        \prop_gremove:Nn \g__tenkzl_test_skin_prop {#1}
+        \global\advance\tenkzlatticeskinchecks by 1\relax
+      }
+  }
 \bool_new:N \g__tenkzl_test_one_row_label_bool
 \bool_new:N \g__tenkzl_test_routing_basis_bool
 \dim_new:N \g__tenkzl_test_routing_dx_dim
@@ -862,6 +883,34 @@ SOURCE = r"""
   \tn[dot, up at=none, label pos=north]{A}\tnspan[brace above]{1}{probe}
 \end{tenkz}
 \tenkzNoneFaceLabelAssert
+% The lattice reads the shared glyph policy for every non-operator site.
+% Defaults stay beads, picture-local box policy reaches bare and role sheets,
+% and an operator sheet remains the dedicated MPO box.
+\tenkzLatticeSkinProbe{0}{tensor}
+\begin{tenkzlattice}[rows=1, cols=2, boundary=none]
+\end{tenkzlattice}
+\tenkzLatticeSkinProbe{0}{box tensor}
+\begin{tenkzlattice}[
+    rows=1, cols=2, boundary=none, tensor style=box]
+\end{tenkzlattice}
+\tenkzLatticeSkinProbe{0}{box tensor}
+\tenkzLatticeSkinProbe{1}{mpo tensor}
+\tenkzLatticeSkinProbe{2}{box tensor}
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets={ket,op,bra}, boundary=none,
+    outer legs=none, tensor style=box]
+\end{tenkzlattice}
+\tenkzLatticeSkinProbeDone
+\ifnum\tenkzlatticeskinchecks=5\else
+  \errmessage{lattice tensor style did not exercise every skin contract}
+\fi
+% Outer-leg drawing and counting share the endpoint-survival predicate.  Each
+% sheet-local removal suppresses exactly the physical leg on its own face.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets={ket,bra}, boundary=none]
+  \tnsite[removed]{(1,1,1)}
+  \tnsite[removed]{(1,2,0)}
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -2389,6 +2438,16 @@ def main() -> int:
         "trace|picture=113|lang=lattice|axis=west-east|sheet=0|slot=2|"
         "from=2-1|to=2-2",
         "ordering fixture lost its later complete trace",
+    )
+    removed_outer_picture = max(pictures)
+    removed_outer_legs = pictures[removed_outer_picture]
+    require(
+        removed_outer_legs,
+        f"boundary|picture={removed_outer_picture}|physical-up=1|physical-down=1|"
+        "pair-closed-0=0|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
+        "virtual-north=0|virtual-south=0",
+        "outer-leg drawing and counting disagreed after sheet removals",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
