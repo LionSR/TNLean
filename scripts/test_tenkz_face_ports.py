@@ -19,7 +19,7 @@ import tempfile
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from tenkz_audit import Audit, canonical_hash
+from tenkz_audit import Audit, Event, canonical_hash
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -844,40 +844,34 @@ SOURCE = r"""
 """
 
 
-def events_by_picture(lines: list[str]) -> dict[int, list[str]]:
-    pictures: dict[int, list[str]] = {}
-    current = 0
-    for line in lines:
-        if line.startswith("picture|"):
-            current = int(dict(field.split("=", 1) for field in line.split("|")[1:])["id"])
-            pictures[current] = []
-        elif current:
-            pictures[current].append(line)
-    return pictures
+def events_by_picture(audit: Audit) -> dict[int, list[Event]]:
+    """Typed events per picture, read from the audit's own parse
+    (`Audit.events`) instead of hand-splitting the `.tnlog` a second
+    time; `require`/`forbid`/`paired_ports` below consume `Event.raw`/
+    `.kind`/`.attrs` rather than re-parsing pipe-delimited fields."""
+    return {pid: list(events) for pid, events in
+            ((p, audit.events(p)) for p in audit.by_id)}
 
 
-def require(lines: list[str], expected: str, message: str) -> None:
-    if expected not in lines:
+def require(events: list[Event], expected: str, message: str) -> None:
+    if expected not in (e.raw for e in events):
         raise AssertionError(f"{message}: missing {expected!r}")
 
 
-def forbid(lines: list[str], forbidden: str, message: str) -> None:
+def forbid(events: list[Event], forbidden: str, message: str) -> None:
     if forbidden.endswith("|"):
-        found = any(forbidden in line for line in lines)
+        found = any(forbidden in event.raw for event in events)
     else:
-        found = forbidden in lines
+        found = forbidden in (event.raw for event in events)
     if found:
         raise AssertionError(f"{message}: found {forbidden!r}")
 
 
-def paired_ports(lines: list[str]) -> list[tuple[str, str]]:
-    result: list[tuple[str, str]] = []
-    for line in lines:
-        if not line.startswith("pairleg|"):
-            continue
-        attrs = dict(field.split("=", 1) for field in line.split("|")[1:])
-        result.append((attrs["upper-port"], attrs["column"]))
-    return sorted(result)
+def paired_ports(events: list[Event]) -> list[tuple[str, str]]:
+    return sorted(
+        (e.attrs["upper-port"], e.attrs["column"])
+        for e in events if e.kind == "pairleg"
+    )
 
 
 def main() -> int:
@@ -929,13 +923,11 @@ def main() -> int:
             print(invalid_run.stdout)
             print("FAIL: an embedded cup= substring bypassed the lattice side policy")
             return 1
-        pictures = events_by_picture(
-            (work / "face-ports.tnlog").read_text(encoding="utf-8").splitlines()
-        )
         audit = Audit(work / "face-ports.tnlog", None)
         audit.parse_log()
         audit.check_dialects()
         audit.check_pairleg_faceports()
+        pictures = events_by_picture(audit)
         hooks_findings = [
             finding for finding in audit.findings if "hooks" in finding.msg
         ]

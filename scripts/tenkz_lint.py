@@ -38,14 +38,16 @@ from bisect import bisect_right
 from dataclasses import dataclass
 from pathlib import Path
 
+from tenkz_audit import ENVIRONMENT_LANGS
+
 # Bodies scanned for the dots rule: the grid languages whose cells feed
 # the implicit wire.  (tenkzcd cells are math objects and tenkzfree has
 # no implicit wire, so a literal ellipsis there is ordinary math.)
-DOTS_ENVS = {"tenkz", "tenkzlattice", "tenkzplanes", "tnpic"}
+DOTS_ENVS = set(ENVIRONMENT_LANGS) - {"tenkzcd", "tenkzfree"}
 
 # Bodies scanned for the raw-ink rule: every tenkz-family body -- the
 # theme contract covers all five sub-languages.
-INK_ENVS = {"tenkz", "tenkzcd", "tenkzlattice", "tenkzfree", "tenkzplanes", "tnpic"}
+INK_ENVS = set(ENVIRONMENT_LANGS)
 
 DOTS_PATTERNS = [
     ("dots", re.compile(r"\\ldots\b|\\cdots\b|(?<!\.)\.\.\.(?!\.)")),

@@ -28,8 +28,8 @@
 % mpo) always override the policy; the event stream always records the
 % RESOLVED skin.
 
-% Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape.
-\usetikzlibrary{shapes.geometric}
+% Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape;
+% the library itself loads with the rest of tenkz.sty's tikz libraries.
 
 % ---------- semantic hues (a theme may rebind colours, nothing else) ----------
 \colorlet{tenkzInk}{black!92}
@@ -85,7 +85,6 @@
                                % the default pitch, and wide enough that the
                                % stadium caps (radius = reach/2) read as smooth
                                % turnarounds rather than kinks
-\def\tenkz@r@regionmargin{0.36}% < pitch/2 so notches read; > glyph radius
 \def\tenkz@r@corner{0.14}      % rounded-corner radius of traces and hulls
 \def\tenkz@r@glyphbox{0.22}    % inscribed-glyph minimum: box side, pill
                                % height; also the span decorations' lateral
@@ -161,7 +160,6 @@
   % glyph skins
   tensor/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
       minimum size=\tenkz@dim{\tenkz@r@dotdia}, line width=\tenkz@wirewidth},
-  conjugate tensor/.style={tensor},
   box tensor/.style={draw=tenkzInk, fill=tenkzPaper, rectangle,
       inner sep=1.6pt, minimum size=\tenkz@dim{\tenkz@r@glyphbox},
       line width=\tenkz@wirewidth, text=tenkzInk},
@@ -214,6 +212,12 @@
   tree ribbon fill/.style={draw=tenkzPaper, fill=tenkzPaper},
   % wires
   bond/.style={draw=tenkzInk, line width=\tenkz@wirewidth},
+  % No-op by default: an observability hook, not ink. It rides on every
+  % open-stub draw for a periodic-pairing candidate face
+  % (\tenkz_draw_combined_stub:nnn in tenkz-grid) so a test can
+  % `/.append style` a probe (e.g. a counter) onto that exact draw call
+  % without touching the grid renderer itself; see
+  % scripts/test_tenkz_face_ports.py.
   tenkz combined stub/.style={},
   fused bond/.style={bond, double=tenkzPaper, double distance=1.1pt},
   physical leg/.style={bond},
@@ -283,8 +287,6 @@
       mark=at position 0.55 with
       {\arrow{Straight Barb[length=\tenkz@fusedbarblen, reversed]}}},
       postaction=decorate},
-  bond arrow/.style={bond, dir marks},
-  fused bond arrow/.style={fused bond, fused dir marks},
   % annotation ink (never confusable with 0.55pt wires)
   cut/.style={draw=tenkzPassive, dashed, line width=\tenkz@annwidth},
   brace/.style={draw=tenkzInk, line width=\tenkz@annwidth,
@@ -407,6 +409,42 @@
 \pgfkeys{
   /tenkz/species/.code={\tenkz_species_declare:n{#1}},
 }
+
+% ---------- shared core-forward installer ----------
+% \tenkz_install_core_forwards:nn {<family>}{<comma list>}: install, in
+% pgfkeys family /tenkz/<family>, one pass-through key per name in the
+% list, each forwarding to the shared /tenkz/<name> key above with the
+% same value.  <name> is one of: pitch, compact, inline, tensor~style,
+% species.  Every picture-scope sub-language (grid, cd, lattice, and the
+% command-scope \tntree family) hand-copied this 4-6 line block, two of
+% them spelling the forward two different ways (\pgfkeys{/tenkz/pitch=#1}
+% vs \pgfqkeys{/tenkz}{pitch=#1}); one mechanism, one spelling (GOAL.md
+% "one universal language"). Per-atom families (/tenkz/cell, /tenkz/put,
+% /tenkz/join) do NOT call this: pitch/compact/inline pick the picture's
+% metric once, not per atom, so those families never had these keys and
+% do not gain them here -- an existing pattern, not a new exemption.
+\msg_new:nnn { tenkz } { internal }
+  { Internal~error:~#1. }
+\cs_new_protected:Npn \tenkz_install_core_forward_one:nn #1#2
+  {
+    \str_case:nnF {#2}
+      {
+        {pitch}        {\pgfkeys{/tenkz/#1/pitch/.code=
+                          {\pgfqkeys{/tenkz}{pitch=##1}}}}
+        {compact}      {\pgfkeys{/tenkz/#1/compact/.code=
+                          {\pgfqkeys{/tenkz}{compact}}}}
+        {inline}       {\pgfkeys{/tenkz/#1/inline/.code=
+                          {\pgfqkeys{/tenkz}{inline}}}}
+        {tensor~style} {\pgfkeys{/tenkz/#1/tensor~style/.code=
+                          {\pgfqkeys{/tenkz}{tensor~style=##1}}}}
+        {species}      {\pgfkeys{/tenkz/#1/species/.code=
+                          {\pgfqkeys{/tenkz}{species={##1}}}}}
+      }
+      { \msg_error:nnn { tenkz } { internal }
+          { unknown~core~forward~name~'#2'~(tenkz\_install\_core\_forwards) } }
+  }
+\cs_new_protected:Npn \tenkz_install_core_forwards:nn #1#2
+  { \clist_map_inline:nn {#2} { \tenkz_install_core_forward_one:nn {#1}{##1} } }
 
 % ---------- the cell-set algebra (shared by every tier) ----------
 % One addressing algebra serves every tier: terms `(r,c)` |

@@ -163,6 +163,11 @@
 \dim_new:N \l__tenkzl_lp_dim          % lattice pitch = latticepitch x pitch
 \dim_new:N \l__tenkzl_svx_dim         % sheet vector S (paper frame)
 \dim_new:N \l__tenkzl_svy_dim
+\dim_new:N \l__tenkzl_rowdrop_dim     % scratch: |ayy| x lp x (nrows-1), the
+                                      % frame's total per-row depth drift over
+                                      % the window -- shared by the derived
+                                      % sheet-sep default and the interleave
+                                      % guard, which must price the same drift
 \dim_new:N \l__tenkzl_cvecx_dim       % expert col vector={x,y}
 \dim_new:N \l__tenkzl_cvecy_dim
 \dim_new:N \l__tenkzl_rvecx_dim       % expert row vector={x,y}
@@ -195,12 +200,16 @@
                                       % empty until the render-time default
 \tl_new:N   \l__tenkzl_skin_tl        % ambient sheet's site skin (node style)
 \bool_new:N \l__tenkzl_opsheet_bool   % ambient sheet is an op sheet
-% boundary-event counters (the stack's signature, see \tenkzl_emit_boundary:)
+% boundary-event counters (the stack's signature, see \tenkzl_emit_boundary:).
+% \tenkzl_outer_col:nn and \tenkzl_pairseg_aux:nnn/\tenkzl_pairseg:nnn
+% increment these THEMSELVES, guarded by the exact predicate that decided
+% the ink, so the drawn ink is the only source of the audited signature
+% (no separate re-derivation of "is this cell/interface open/traced?").
 \int_new:N  \l__tenkzl_bot_int        % outer legs, top face
 \int_new:N  \l__tenkzl_bob_int        % outer legs, bottom face
-\int_new:N  \l__tenkzl_bpc_int        % one interface: closed pairing legs
-\int_new:N  \l__tenkzl_bpo_int        %   open segments
-\int_new:N  \l__tenkzl_bpt_int        %   traced segments
+\prop_new:N \l__tenkzl_bpc_prop       % interface -> closed pairing legs
+\prop_new:N \l__tenkzl_bpo_prop       % interface -> open segments
+\prop_new:N \l__tenkzl_bpt_prop       % interface -> traced segments
 \tl_new:N   \l__tenkzl_bnd_tl         % accumulated per-interface fields
 \int_new:N  \l__tenkzl_bvw_int        % open virtual indices on the west side
 \int_new:N  \l__tenkzl_bve_int        % open virtual indices on the east side
@@ -306,13 +315,6 @@
   /tenkz/lattice/physical/updown/.code=
       {\tl_set:Nn \l__tenkzl_physical_tl {updown}},
   /tenkz/lattice/physical/none/.code={\tl_set:Nn \l__tenkzl_physical_tl {none}},
-  /tenkz/lattice/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
-  /tenkz/lattice/compact/.code={\pgfkeys{/tenkz/compact}},
-  % the shared forward-to-core plumbing: the glyph policy reads the same
-  % in every family
-  /tenkz/lattice/tensor~style/.code={\pgfqkeys{/tenkz}{tensor~style=#1}},
-  % species={...}: picture-scope species declaration (see tenkz-core)
-  /tenkz/lattice/species/.code={\pgfqkeys{/tenkz}{species={#1}}},
   % frame=oblique renders THIS sheet in the named oblique metric frame
   % (see the frame map below); frame=flat is the rectilinear default.
   % frame=slab is the full-pitch RMP showcase preset (slant 0.60, rise
@@ -384,6 +386,11 @@
   /tenkz/lattice/sheet~vector/.code={\bool_set_true:N \l__tenkzl_custsheet_bool
       \tenkzl_vecpair:nNN {#1} \l__tenkzl_svecx_dim \l__tenkzl_svecy_dim},
 }
+% pitch=/compact=/inline=/tensor~style=/species= forward to the shared
+% /tenkz key space (tenkz-core.code.tex); one installer, every picture-
+% scope family (GOAL.md "one universal language"). This also gains
+% inline=, missing here before (grid and cd already had it).
+\tenkz_install_core_forwards:nn {lattice} {pitch,compact,inline,tensor~style,species}
 
 % "{x,y}" -> two dims (an expert basis vector in paper coordinates)
 \cs_new_protected:Npn \tenkzl_vecpair:nNN #1#2#3
@@ -748,16 +755,6 @@
                                 % Never 0.48-0.52: an open ket-down stub tip
                                 % lands ambiguously tangent to the next row's
                                 % bond there.
-\def\tenkz@r@planesep{1.4}      % LEGACY fixed tenkzplanes ket-over-bra offset
-                                % (x lattice pitch), superseded by the derived
-                                % default sep = (rows-1) x planerise +
-                                % planegap: no static number survives a
-                                % row-count change (1.4 near-merges dots at
-                                % 3x3 -- 0.85mm of white between 1.76mm dots,
-                                % plane_sweep2 z_S2 -- and interleaves the
-                                % sheets outright at 4x4, z_C1, since
-                                % 1.4 < 3 x rise).  Kept only as a documented
-                                % name; nothing reads it by default.
 \def\tenkz@r@planegap{0.70}     % air between the two disjoint sheets of the
                                 % double layer (x lattice pitch): the derived
                                 % default sheet sep = (rows-1) x planerise +
@@ -767,7 +764,10 @@
                                 % (plane_sweep2 z_S3 winner, z_R1/z_R2 across
                                 % sizes; matches the RMP secfig4bPEPS bottom
                                 % panel: disjoint sheets plus about one
-                                % row-rise of air)
+                                % row-rise of air).  A prior fixed sep = 1.4
+                                % (independent of row count) near-merged dots
+                                % at 3x3 and interleaved the sheets outright
+                                % at 4x4, which is why sep is derived here.
 \def\tenkz@r@sheetcoincide{1.25}% near-coincidence floor of the expert
                                 % sheet~vector= guard, as a MULTIPLE of the
                                 % bead diameter (so a dot-metric retune moves
@@ -1010,19 +1010,22 @@
       }
       {
         \dim_zero:N \l__tenkzl_svx_dim
+        % row-drop distance, priced once: the frame's ACTUAL per-row drop
+        % |ayy| (flat drops a full lp per row, oblique the rise, an expert
+        % R whatever it states) times the number of row gaps in the window
+        \dim_set:Nn \l__tenkzl_rowdrop_dim
+          { \fp_to_dim:n
+              { abs( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
+                  * ( \l__tenkzl_nrows_int - 1 ) } }
         \tl_if_empty:NTF \l__tenkzl_sheetsep_tl
           {
-            % derived default: priced in the frame's ACTUAL per-row drop
-            % |ayy| (flat drops a full lp per row, oblique the rise, an
-            % expert R whatever it states), so every frame's upper sheet
-            % clears the lower sheet's full depth drift plus one air gap
-            % -- the flat-frame default used to assume the oblique rise
-            % and stacked the plainest sheets={ket,bra} into bead blobs
+            % derived default: the upper sheet clears the lower sheet's
+            % full depth drift plus one air gap -- the flat-frame default
+            % used to assume the oblique rise and stacked the plainest
+            % sheets={ket,bra} into bead blobs
             \dim_set:Nn \l__tenkzl_svy_dim
-              { \fp_to_dim:n
-                  { abs( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
-                      * ( \l__tenkzl_nrows_int - 1 )
-                    + \tenkz@r@planegap * \l__tenkzl_lp_dim } }
+              { \l__tenkzl_rowdrop_dim
+                  + \tenkz@r@planegap \l__tenkzl_lp_dim }
           }
           {
             \dim_set:Nn \l__tenkzl_svy_dim
@@ -1033,9 +1036,7 @@
             \int_compare:nNnT { \l__tenkzl_sheets_int } > {1}
               {
                 \dim_compare:nNnT { \l__tenkzl_svy_dim } <
-                  { \fp_to_dim:n
-                      { abs( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
-                          * ( \l__tenkzl_nrows_int - 1 ) } }
+                  { \l__tenkzl_rowdrop_dim }
                   {
                     \msg_warning:nnee { tenkz } { planes-interleave }
                       { \tl_use:N \l__tenkzl_sheetsep_tl }
@@ -1426,13 +1427,23 @@
           { \tl_set:Nn \l__tenkzl_outer_tl {both} }
           { \tl_set:Nn \l__tenkzl_outer_tl {none} }
       }
+    % reset the boundary-signature counters before the two passes that
+    % (re-)populate them as a side effect of their own ink decisions --
+    % a pass that does not run this picture (pairing off, outer=none)
+    % correctly leaves its counters at zero/empty
+    \prop_clear:N \l__tenkzl_bpc_prop
+    \prop_clear:N \l__tenkzl_bpo_prop
+    \prop_clear:N \l__tenkzl_bpt_prop
     \bool_if:NT \l__tenkzl_pairing_bool
       { \tenkzl_draw_pairs: }  % (h) inter-sheet physical pairing
+    \int_zero:N \l__tenkzl_bot_int
+    \int_zero:N \l__tenkzl_bob_int
     \str_if_eq:VnF \l__tenkzl_outer_tl {none}
       { \tenkzl_draw_outer: }  % (i) outer-face physical legs
     \tenkzl_draw_side_traces:  % (j) same-sheet opposing-side closures
     \tenkzl_draw_opsites:      % (k) op-sheet boxes (the cover pass)
-    \tenkzl_emit_boundary:     % (l) event stream only, no ink
+    \tenkzl_emit_boundary:     % (l) event stream only, no ink -- assembles
+                               % the event from the counts just recorded
   }
 
 % -- (f') virtual side cups -------------------------------------------
@@ -2817,13 +2828,22 @@
     \prop_clear:N \l__tenkzl_member_prop
     \clist_map_inline:nn {#1} { \tenkzl_filter_cell:n {##1} }
   }
-\cs_new_protected:Npn \tenkzl_filter_cell:n #1
+% resolve a serialized cell key #1 ("r-c" or "r-c-h") to its sheet index,
+% into #2: shared by region filtering and the min-sheet scan below, which
+% both need the same "explicit third component, else the default sheet"
+% rule and previously re-typed it in lockstep.  Also leaves
+% \l__tenkzl_parts_seq split on #1, which \tenkzl_filter_cell:n reuses for
+% the row/col components.
+\cs_new_protected:Npn \tenkzl_cellkey_sheet:nN #1#2
   {
     \seq_set_split:Nnn \l__tenkzl_parts_seq {-} {#1}
     \int_compare:nNnTF { \seq_count:N \l__tenkzl_parts_seq } > {2}
-      { \int_set:Nn \l__tenkzl_hsel_int
-          { \seq_item:Nn \l__tenkzl_parts_seq {3} } }
-      { \int_set_eq:NN \l__tenkzl_hsel_int \l__tenkzl_defsheet_int }
+      { \int_set:Nn #2 { \seq_item:Nn \l__tenkzl_parts_seq {3} } }
+      { \int_set_eq:NN #2 \l__tenkzl_defsheet_int }
+  }
+\cs_new_protected:Npn \tenkzl_filter_cell:n #1
+  {
+    \tenkzl_cellkey_sheet:nN {#1} \l__tenkzl_hsel_int
     \int_compare:nNnT { \l__tenkzl_hsel_int } = { \l__tenkzl_sheet_int }
       {
         \prop_put:Nen \l__tenkzl_member_prop
@@ -2841,11 +2861,7 @@
   }
 \cs_new_protected:Npn \tenkzl_minsheet_cell:n #1
   {
-    \seq_set_split:Nnn \l__tenkzl_parts_seq {-} {#1}
-    \int_compare:nNnTF { \seq_count:N \l__tenkzl_parts_seq } > {2}
-      { \int_set:Nn \l__tenkzl_hsel_int
-          { \seq_item:Nn \l__tenkzl_parts_seq {3} } }
-      { \int_set_eq:NN \l__tenkzl_hsel_int \l__tenkzl_defsheet_int }
+    \tenkzl_cellkey_sheet:nN {#1} \l__tenkzl_hsel_int
     \int_compare:nNnT { \l__tenkzl_hsel_int } < { \l__tenkzl_minsheet_int }
       { \int_set_eq:NN \l__tenkzl_minsheet_int \l__tenkzl_hsel_int }
   }
@@ -3194,30 +3210,42 @@
           { \tl_clear:N \l__tenkzl_stint_tl }
       }
   }
+% shared surviving-cell iterator: call #1 {row}{col} for every (row,col)
+% of the frame's window that is NOT removed on the ambient sheet (see
+% \tenkzl_removed:nnF).  Centralizes the double int_step_inline + removed
+% guard that \tenkzl_sites_ink:, \tenkzl_draw_physical: and
+% \tenkzl_draw_legs: each opened separately; #1 must be a plain :nn
+% function called by name, never an inline body, so the loop-variable
+% hashes never nest a third level deep (HACKING.md's \int_step_inline:nnn
+% ##1-doubling pitfall).
+\cs_new_protected:Npn \tenkzl_foreach_surviving:N #1
+  {
+    \int_step_inline:nn { \l__tenkzl_nrows_int }
+      {
+        \int_step_inline:nn { \l__tenkzl_ncols_int }
+          {
+            \tenkzl_removed:nnF {##1}{####1}
+              { #1 {##1}{####1} }
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_site_ink_cell:nn #1#2
+  {
+    % glyphs never shear: a site is a point of the sheet,
+    % so only its POSITION passes through the frame map
+    \tenkzl_site:nn {#1}{#2}
+    \tenkzl_site_tint:nn {#1}{#2}
+    % the comma is LITERAL: pgfkeys splits the option
+    % list before expanding items, so the tint must be
+    % its own item (empty when the site carries no role)
+    \node[\l__tenkzl_skin_tl , \l__tenkzl_stint_tl] at
+      ( \dim_use:N \l__tenkzl_px_dim ,
+        \dim_use:N \l__tenkzl_py_dim ) {};
+  }
 \cs_new_protected:Npn \tenkzl_sites_ink:
   {
     \str_if_eq:VnF \l__tenkzl_sitemode_tl {none}
-      {
-        \int_step_inline:nn { \l__tenkzl_nrows_int }
-          {
-            \int_step_inline:nn { \l__tenkzl_ncols_int }
-              {
-                \tenkzl_removed:nnF {##1}{####1}
-                  {
-                    % glyphs never shear: a site is a point of the sheet,
-                    % so only its POSITION passes through the frame map
-                    \tenkzl_site:nn {##1}{####1}
-                    \tenkzl_site_tint:nn {##1}{####1}
-                    % the comma is LITERAL: pgfkeys splits the option
-                    % list before expanding items, so the tint must be
-                    % its own item (empty when the site carries no role)
-                    \node[\l__tenkzl_skin_tl , \l__tenkzl_stint_tl] at
-                      ( \dim_use:N \l__tenkzl_px_dim ,
-                        \dim_use:N \l__tenkzl_py_dim ) {};
-                  }
-              }
-          }
-      }
+      { \tenkzl_foreach_surviving:N \tenkzl_site_ink_cell:nn }
   }
 % the cover pass: every op sheet's boxes, painted once per picture after
 % the pairing and outer-leg ink (quantikz gate read: the box covers the
@@ -3244,56 +3272,48 @@
 % the pairing/outer ink with no duplicate strokes.  physical= thus
 % speaks only for bare sheets (the single sheet and numeric
 % wire-sheet stacks), where no other pass owns the faces.
+\cs_new_protected:Npn \tenkzl_physical_leg_cell:nn #1#2
+  {
+    % physical legs rise VERTICALLY in the paper frame: the
+    % physical index points out of the sheet and never
+    % shears (RMP sec2fig4b), so only the FOOT is mapped
+    \tenkzl_site:nn {#1}{#2}
+    \draw[physical~leg]
+      ( \dim_use:N \l__tenkzl_px_dim ,
+        \dim_use:N \l__tenkzl_py_dim ) --
+      ( \dim_use:N \l__tenkzl_px_dim ,
+        \dim_eval:n { \l__tenkzl_py_dim
+                      + \tenkz@dim{\tenkz@r@physleg} } );
+    \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+    \dim_set:Nn \l__tenkzl_qy_dim
+      { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_px_dim \l__tenkzl_py_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_qx_dim \l__tenkzl_qy_dim
+    \str_if_eq:VnT \l__tenkzl_physical_tl {updown}
+      {
+        \draw[physical~leg]
+          ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_use:N \l__tenkzl_py_dim ) --
+          ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_eval:n { \l__tenkzl_py_dim
+                          - \tenkz@dim{\tenkz@r@physleg} } );
+        \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+        \dim_set:Nn \l__tenkzl_qy_dim
+          { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} }
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_px_dim \l__tenkzl_py_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_qx_dim \l__tenkzl_qy_dim
+      }
+  }
 \cs_new_protected:Npn \tenkzl_draw_physical:
   {
     \bool_lazy_and:nnT
       { ! \l__tenkzl_roles_bool }
       { ! \str_if_eq_p:Vn \l__tenkzl_physical_tl {none} }
-      {
-        \int_step_inline:nn { \l__tenkzl_nrows_int }
-          {
-            \int_step_inline:nn { \l__tenkzl_ncols_int }
-              {
-                \tenkzl_removed:nnF {##1}{####1}
-                  {
-                    % physical legs rise VERTICALLY in the paper frame: the
-                    % physical index points out of the sheet and never
-                    % shears (RMP sec2fig4b), so only the FOOT is mapped
-                    \tenkzl_site:nn {##1}{####1}
-                    \draw[physical~leg]
-                      ( \dim_use:N \l__tenkzl_px_dim ,
-                        \dim_use:N \l__tenkzl_py_dim ) --
-                      ( \dim_use:N \l__tenkzl_px_dim ,
-                        \dim_eval:n { \l__tenkzl_py_dim
-                                      + \tenkz@dim{\tenkz@r@physleg} } );
-                    \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
-                    \dim_set:Nn \l__tenkzl_qy_dim
-                      { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
-                    \tenkzl_record_obstacle_point:NN
-                      \l__tenkzl_px_dim \l__tenkzl_py_dim
-                    \tenkzl_record_obstacle_point:NN
-                      \l__tenkzl_qx_dim \l__tenkzl_qy_dim
-                    \str_if_eq:VnT \l__tenkzl_physical_tl {updown}
-                      {
-                        \draw[physical~leg]
-                          ( \dim_use:N \l__tenkzl_px_dim ,
-                            \dim_use:N \l__tenkzl_py_dim ) --
-                          ( \dim_use:N \l__tenkzl_px_dim ,
-                            \dim_eval:n { \l__tenkzl_py_dim
-                                          - \tenkz@dim{\tenkz@r@physleg} } );
-                        \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
-                        \dim_set:Nn \l__tenkzl_qy_dim
-                          { \l__tenkzl_py_dim
-                            - \tenkz@dim{\tenkz@r@physleg} }
-                        \tenkzl_record_obstacle_point:NN
-                          \l__tenkzl_px_dim \l__tenkzl_py_dim
-                        \tenkzl_record_obstacle_point:NN
-                          \l__tenkzl_qx_dim \l__tenkzl_qy_dim
-                      }
-                  }
-              }
-          }
-      }
+      { \tenkzl_foreach_surviving:N \tenkzl_physical_leg_cell:nn }
   }
 
 % -- (e) boundary legs ------------------------------------------------
@@ -3306,6 +3326,21 @@
 \bool_new:N \l__tenkzl_sopen_bool
 \bool_new:N \l__tenkzl_wopen_bool
 \bool_new:N \l__tenkzl_eopen_bool
+\cs_new_protected:Npn \tenkzl_boundary_leg_cell:nn #1#2
+  {
+    \bool_lazy_and:nnT { \l__tenkzl_nopen_bool }
+      { \int_compare_p:nNn {#1} = {1} }
+      { \tenkzl_leg:nnn {#1}{#2}{up} }
+    \bool_lazy_and:nnT { \l__tenkzl_sopen_bool }
+      { \int_compare_p:nNn {#1} = { \l__tenkzl_nrows_int } }
+      { \tenkzl_leg:nnn {#1}{#2}{down} }
+    \bool_lazy_and:nnT { \l__tenkzl_wopen_bool }
+      { \int_compare_p:nNn {#2} = {1} }
+      { \tenkzl_leg:nnn {#1}{#2}{left} }
+    \bool_lazy_and:nnT { \l__tenkzl_eopen_bool }
+      { \int_compare_p:nNn {#2} = { \l__tenkzl_ncols_int } }
+      { \tenkzl_leg:nnn {#1}{#2}{right} }
+  }
 \cs_new_protected:Npn \tenkzl_draw_legs:
   {
     \tenkzl_side_open:nN {north} \l__tenkzl_nopen_bool
@@ -3317,29 +3352,7 @@
         { \l__tenkzl_nopen_bool } { \l__tenkzl_sopen_bool }
         { \l__tenkzl_wopen_bool } { \l__tenkzl_eopen_bool }
       }
-      {
-        \int_step_inline:nn { \l__tenkzl_nrows_int }
-          {
-            \int_step_inline:nn { \l__tenkzl_ncols_int }
-              {
-                \tenkzl_removed:nnF {##1}{####1}
-                  {
-                    \bool_lazy_and:nnT { \l__tenkzl_nopen_bool }
-                      { \int_compare_p:nNn {##1} = {1} }
-                      { \tenkzl_leg:nnn {##1}{####1}{up} }
-                    \bool_lazy_and:nnT { \l__tenkzl_sopen_bool }
-                      { \int_compare_p:nNn {##1} = { \l__tenkzl_nrows_int } }
-                      { \tenkzl_leg:nnn {##1}{####1}{down} }
-                    \bool_lazy_and:nnT { \l__tenkzl_wopen_bool }
-                      { \int_compare_p:nNn {####1} = {1} }
-                      { \tenkzl_leg:nnn {##1}{####1}{left} }
-                    \bool_lazy_and:nnT { \l__tenkzl_eopen_bool }
-                      { \int_compare_p:nNn {####1} = { \l__tenkzl_ncols_int } }
-                      { \tenkzl_leg:nnn {##1}{####1}{right} }
-                  }
-              }
-          }
-      }
+      { \tenkzl_foreach_surviving:N \tenkzl_boundary_leg_cell:nn }
   }
 \cs_new_protected:Npn \tenkzl_leg:nnn #1#2#3
   {
@@ -3577,31 +3590,25 @@
 % INTERFACE, range-checked in its own alphabet by \tenkzl_guard_iface:n
 % at render time, so the sheet-range warning would misstate both the
 % coordinate's meaning and its bound.
+% shared open=/trace= set-builder: #2 is the destination prop
+% (\l__tenkzl_open_prop or \l__tenkzl_trace_prop) -- the comma-to-union
+% rewrite, default-sheet masking and guard suppression are identical for
+% both keys, only the target differs
+\cs_new_protected:Npn \tenkzl_pairset:nN #1#2
+  {
+    \tl_clear:N \l_tenkz_cs_scan_tl
+    \int_zero:N \l_tenkz_cs_depth_int
+    \tl_map_inline:nn {#1} { \tenkz_cs_openscan:n {##1} }
+    \int_set:Nn \l_tenkz_cs_defsheet_int {-1}
+    \bool_set_false:N \l_tenkz_cs_guard_bool
+    \tenkz_cs_resolve:VN \l_tenkz_cs_scan_tl #2
+    \bool_set_true:N \l_tenkz_cs_guard_bool
+    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
+  }
 \cs_new_protected:Npn \tenkzl_openset:n #1
-  {
-    \tl_clear:N \l_tenkz_cs_scan_tl
-    \int_zero:N \l_tenkz_cs_depth_int
-    \tl_map_inline:nn {#1} { \tenkz_cs_openscan:n {##1} }
-    \int_set:Nn \l_tenkz_cs_defsheet_int {-1}
-    \bool_set_false:N \l_tenkz_cs_guard_bool
-    \tenkz_cs_resolve:VN \l_tenkz_cs_scan_tl \l__tenkzl_open_prop
-    \bool_set_true:N \l_tenkz_cs_guard_bool
-    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
-  }
-
-% the trace= cell set, through the same comma-to-union rewrite,
-% default-sheet masking and guard suppression as open=
+  { \tenkzl_pairset:nN {#1} \l__tenkzl_open_prop }
 \cs_new_protected:Npn \tenkzl_traceset:n #1
-  {
-    \tl_clear:N \l_tenkz_cs_scan_tl
-    \int_zero:N \l_tenkz_cs_depth_int
-    \tl_map_inline:nn {#1} { \tenkz_cs_openscan:n {##1} }
-    \int_set:Nn \l_tenkz_cs_defsheet_int {-1}
-    \bool_set_false:N \l_tenkz_cs_guard_bool
-    \tenkz_cs_resolve:VN \l_tenkz_cs_scan_tl \l__tenkzl_trace_prop
-    \bool_set_true:N \l_tenkz_cs_guard_bool
-    \int_set_eq:NN \l_tenkz_cs_defsheet_int \l__tenkzl_defsheet_int
-  }
+  { \tenkzl_pairset:nN {#1} \l__tenkzl_trace_prop }
 
 % tenkzplanes IS a lattice picture: a literal preset over the one render
 % path (no private key family, no private renderer, no private header —
@@ -3643,23 +3650,27 @@
           { \tenkzl_paircol:nn {##1}{####1} }
       }
   }
-% is column (#1,#2)'s interface #3 open / traced?  The bare column key
-% "r-c" acts on every interface, "r-c-i" on interface i alone; trace
-% beats open when a segment sits in both sets.
-\prg_new_conditional:Npnn \tenkzl_ifopen:nnn #1#2#3 { p, T, F, TF }
+% is column (#1,#2)'s interface #3 a member of prop #4 (open_prop or
+% trace_prop)?  The bare column key "r-c" acts on every interface,
+% "r-c-i" on interface i alone -- shared by \tenkzl_ifopen:nnn and
+% \tenkzl_iftrace:nnn below, which differ only in which prop they pass.
+\prg_new_conditional:Npnn \tenkzl_ifmember:nnnN #1#2#3#4 { p }
   {
     \bool_lazy_or:nnTF
-      { \prop_if_in_p:Ne \l__tenkzl_open_prop { \tenkzl_key:nn {#1}{#2} } }
-      { \prop_if_in_p:Ne \l__tenkzl_open_prop
-          { \tenkzl_key:nn {#1}{#2} - #3 } }
+      { \prop_if_in_p:Ne #4 { \tenkzl_key:nn {#1}{#2} } }
+      { \prop_if_in_p:Ne #4 { \tenkzl_key:nn {#1}{#2} - #3 } }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+% trace beats open when a segment sits in both sets (call order at the
+% draw/count sites checks trace first).
+\prg_new_conditional:Npnn \tenkzl_ifopen:nnn #1#2#3 { p, T, F, TF }
+  {
+    \bool_if:nTF { \tenkzl_ifmember_p:nnnN {#1}{#2}{#3} \l__tenkzl_open_prop }
       { \prg_return_true: } { \prg_return_false: }
   }
 \prg_new_conditional:Npnn \tenkzl_iftrace:nnn #1#2#3 { p, T, F, TF }
   {
-    \bool_lazy_or:nnTF
-      { \prop_if_in_p:Ne \l__tenkzl_trace_prop { \tenkzl_key:nn {#1}{#2} } }
-      { \prop_if_in_p:Ne \l__tenkzl_trace_prop
-          { \tenkzl_key:nn {#1}{#2} - #3 } }
+    \bool_if:nTF { \tenkzl_ifmember_p:nnnN {#1}{#2}{#3} \l__tenkzl_trace_prop }
       { \prg_return_true: } { \prg_return_false: }
   }
 % the physical column at (#1,#2): one pairing segment per interface,
@@ -3688,19 +3699,32 @@
 % (physical-index ink never shears) — leaving the interface's physical
 % indices uncontracted (a marginal); a traced segment closes by the east
 % wrap loop instead (trace beats open).
+% boundary-signature accumulator: prop #2 counts segments PER INTERFACE
+% (key #1), incremented in lockstep with the ink so \tenkzl_emit_boundary:
+% only ever reads what \tenkzl_pairseg:nnn/\tenkzl_pairseg_aux:nnn drew.
+\cs_new_protected:Npn \tenkzl_ifacecount_incr:nN #1#2
+  {
+    \prop_get:NnNTF #2 {#1} \l_tmpa_tl
+      { \prop_put:Nne #2 {#1} { \int_eval:n { \l_tmpa_tl + 1 } } }
+      { \prop_put:Nnn #2 {#1} {1} }
+  }
 \cs_new_protected:Npn \tenkzl_pairseg:nnn #1#2#3
   {
     \tenkzl_xyz:nnnNN {#1}{#2}{#3} \l__tenkzl_qx_dim \l__tenkzl_qy_dim
     \tenkzl_xyz:nnnNN {#1}{#2}{ \int_eval:n {#3+1} }
       \l__tenkzl_px_dim \l__tenkzl_py_dim
     \tenkzl_iftrace:nnnTF {#1}{#2}{#3}
-      { \tenkzl_pairtrace:nnn {#1}{#2}{#3} }
+      {
+        \tenkzl_ifacecount_incr:nN {#3} \l__tenkzl_bpt_prop
+        \tenkzl_pairtrace:nnn {#1}{#2}{#3}
+      }
       { \tenkzl_pairseg_aux:nnn {#1}{#2}{#3} }
   }
 \cs_new_protected:Npn \tenkzl_pairseg_aux:nnn #1#2#3
   {
     \tenkzl_ifopen:nnnTF {#1}{#2}{#3}
       {
+        \tenkzl_ifacecount_incr:nN {#3} \l__tenkzl_bpo_prop
         \draw[physical~leg]
           ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
           ( \dim_use:N \l__tenkzl_qx_dim ,
@@ -3711,6 +3735,7 @@
             \dim_eval:n { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} } );
       }
       {
+        \tenkzl_ifacecount_incr:nN {#3} \l__tenkzl_bpc_prop
         \draw[physical~leg]
           ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
           ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
@@ -3846,6 +3871,7 @@
           { ! \tenkzl_removed_on_p:nnn {#1}{#2}
               { \int_eval:n { \l__tenkzl_sheets_int - 1 } } }
           {
+            \int_incr:N \l__tenkzl_bot_int
             \tenkzl_xyz:nnnNN {#1}{#2}{ \l__tenkzl_sheets_int - 1 }
               \l__tenkzl_px_dim \l__tenkzl_py_dim
             \draw[physical~leg]
@@ -3866,6 +3892,7 @@
           { \tenkzl_outer_face_p:n {bottom} }
           { ! \tenkzl_removed_on_p:nnn {#1}{#2}{0} }
           {
+            \int_incr:N \l__tenkzl_bob_int
             \tenkzl_xyz:nnnNN {#1}{#2}{0}
               \l__tenkzl_px_dim \l__tenkzl_py_dim
             \draw[physical~leg]
@@ -3888,9 +3915,14 @@
 % -- (k) the boundary signature ---------------------------------------
 % One event per pairing/outer-leg picture, mirroring the grid's boundary
 % event: outer-leg counts per face, then per interface (bottom-up) the
-% closed / open / traced segment counts, each recounted with the draw
-% passes' own predicates.  The audit layer checks a stack's open index
-% budget against these fields.
+% closed / open / traced segment counts.  \tenkzl_draw_outer: and
+% \tenkzl_draw_pairs: (called earlier in \tenkzl_draw_all:) already
+% incremented \l__tenkzl_bot_int/\l__tenkzl_bob_int and the
+% \l__tenkzl_bp*_prop accumulators as their own ink decisions were made;
+% this pass only reads them back and emits the event -- the drawn ink is
+% the sole source of the audited signature, not a second re-derivation.
+% The audit layer checks a stack's open index budget against these
+% fields.
 \cs_new_protected:Npn \tenkzl_emit_boundary:
   {
     \bool_lazy_any:nT
@@ -3903,19 +3935,12 @@
         { \str_if_eq_p:Vn \l__tenkzl_spol_tl {trace} }
       }
       {
-        \int_zero:N \l__tenkzl_bot_int
-        \int_zero:N \l__tenkzl_bob_int
-        \int_step_inline:nn { \l__tenkzl_nrows_int }
-          {
-            \int_step_inline:nn { \l__tenkzl_ncols_int }
-              { \tenkzl_count_outer:nn {##1}{####1} }
-          }
         \tl_clear:N \l__tenkzl_bnd_tl
         \tenkzl_count_virtual_boundary:
         \bool_if:NT \l__tenkzl_pairing_bool
           {
             \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 2 }
-              { \tenkzl_count_iface:n {##1} }
+              { \tenkzl_emit_iface:n {##1} }
           }
         \tenkz@event{boundary|picture=\the\tenkz@pictureid|physical-up=\int_use:N
           \l__tenkzl_bot_int|physical-down=\int_use:N
@@ -4129,53 +4154,21 @@
           { \int_eval:n {#1} }{ \int_eval:n {#2} }{ \int_eval:n {#3} } }
       { \int_incr:N #4 }
   }
-\cs_new_protected:Npn \tenkzl_count_outer:nn #1#2
+% look up interface #1's recorded count in prop #2, defaulting to 0 when
+% the interface drew nothing of that kind (never expand \q_no_value:
+% the F branch supplies the default directly)
+\cs_new_protected:Npn \tenkzl_ifacecount_get:nNN #1#2#3
   {
-    \prop_if_in:NeF \l__tenkzl_removed_prop { \tenkzl_key:nn {#1}{#2} }
-      {
-        \bool_lazy_and:nnT
-          { \tenkzl_outer_face_p:n {top} }
-          { ! \tenkzl_removed_on_p:nnn {#1}{#2}
-              { \int_eval:n { \l__tenkzl_sheets_int - 1 } } }
-          { \int_incr:N \l__tenkzl_bot_int }
-        \bool_lazy_and:nnT
-          { \tenkzl_outer_face_p:n {bottom} }
-          { ! \tenkzl_removed_on_p:nnn {#1}{#2}{0} }
-          { \int_incr:N \l__tenkzl_bob_int }
-      }
+    \prop_get:NnNTF #2 {#1} #3 { } { \tl_set:Nn #3 {0} }
   }
-\cs_new_protected:Npn \tenkzl_count_iface:n #1
+\cs_new_protected:Npn \tenkzl_emit_iface:n #1
   {
-    \int_zero:N \l__tenkzl_bpc_int
-    \int_zero:N \l__tenkzl_bpo_int
-    \int_zero:N \l__tenkzl_bpt_int
-    \int_step_inline:nn { \l__tenkzl_nrows_int }
-      {
-        \int_step_inline:nn { \l__tenkzl_ncols_int }
-          { \tenkzl_count_seg:nnn {##1}{####1}{#1} }
-      }
-    \tl_put_right:Ne \l__tenkzl_bnd_tl
-      { |pair-closed-#1=\int_use:N \l__tenkzl_bpc_int
-        |pair-open-#1=\int_use:N \l__tenkzl_bpo_int
-        |pair-traced-#1=\int_use:N \l__tenkzl_bpt_int }
-  }
-\cs_new_protected:Npn \tenkzl_count_seg:nnn #1#2#3
-  {
-    \prop_if_in:NeF \l__tenkzl_removed_prop { \tenkzl_key:nn {#1}{#2} }
-      {
-        \bool_lazy_or:nnF
-          { \tenkzl_removed_on_p:nnn {#1}{#2}{#3} }
-          { \tenkzl_removed_on_p:nnn {#1}{#2}{ \int_eval:n {#3+1} } }
-          {
-            \tenkzl_iftrace:nnnTF {#1}{#2}{#3}
-              { \int_incr:N \l__tenkzl_bpt_int }
-              {
-                \tenkzl_ifopen:nnnTF {#1}{#2}{#3}
-                  { \int_incr:N \l__tenkzl_bpo_int }
-                  { \int_incr:N \l__tenkzl_bpc_int }
-              }
-          }
-      }
+    \tenkzl_ifacecount_get:nNN {#1} \l__tenkzl_bpc_prop \l_tmpa_tl
+    \tl_put_right:Ne \l__tenkzl_bnd_tl { |pair-closed-#1=\tl_use:N \l_tmpa_tl }
+    \tenkzl_ifacecount_get:nNN {#1} \l__tenkzl_bpo_prop \l_tmpa_tl
+    \tl_put_right:Ne \l__tenkzl_bnd_tl { |pair-open-#1=\tl_use:N \l_tmpa_tl }
+    \tenkzl_ifacecount_get:nNN {#1} \l__tenkzl_bpt_prop \l_tmpa_tl
+    \tl_put_right:Ne \l__tenkzl_bnd_tl { |pair-traced-#1=\tl_use:N \l_tmpa_tl }
   }
 
 % ---------- messages ----------

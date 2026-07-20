@@ -137,13 +137,6 @@
   /tenkz/cd/polygon/.code={\int_set:Nn \l__tenkzcd_ngon_int {#1}},
   /tenkz/cd/maps/.code={\bool_set_true:N \l__tenkzcd_maps_bool},
   /tenkz/cd/radius/.store~in=\l__tenkzcd_radius_tl,
-  /tenkz/cd/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
-  /tenkz/cd/compact/.code={\pgfkeys{/tenkz/compact}},
-  /tenkz/cd/inline/.code={\pgfkeys{/tenkz/inline}},
-  /tenkz/cd/species/.code={\pgfqkeys{/tenkz}{species={#1}}},
-  % the shared forward-to-core plumbing: the glyph policy reads the same
-  % in every family, so \tnpic cells inside a cd picture obey it
-  /tenkz/cd/tensor~style/.code={\pgfqkeys{/tenkz}{tensor~style=#1}},
   % unrecognized keys pass through to the underlying picture
   /tenkz/cd/.unknown/.code={
     \tl_if_eq:NNTF \pgfkeyscurrentvalue \pgfkeysnovalue@text
@@ -154,6 +147,10 @@
             \exp_not:o \pgfkeyscurrentvalue , } }
   },
 }
+% pitch=/compact=/inline=/tensor~style=/species= forward to the shared
+% /tenkz key space (tenkz-core.code.tex); one installer, every picture-
+% scope family (GOAL.md "one universal language").
+\tenkz_install_core_forwards:nn {cd} {pitch,compact,inline,tensor~style,species}
 \pgfkeys{
   /tenkz/tree/.is~family,
   /tenkz/tree/tree~style/.is~choice,
@@ -168,10 +165,12 @@
     \tenkz_species_check:n {#1}
     \tl_set:Nn \l__tenkzcd_tree_species_tl {#1}
   },
-  /tenkz/tree/pitch/.code={\pgfqkeys{/tenkz}{pitch=#1}},
-  /tenkz/tree/compact/.code={\pgfqkeys{/tenkz}{compact}},
-  /tenkz/tree/inline/.code={\pgfqkeys{/tenkz}{inline}},
 }
+% pitch=/compact=/inline= forward to the shared /tenkz key space
+% (tenkz-core.code.tex); tree is command-scope like /tenkz/cell, so it
+% keeps its own role=/species= above (per-vertex, validated) instead of
+% the picture-scope forwarding species= the other three families use.
+\tenkz_install_core_forwards:nn {tree} {pitch,compact,inline}
 \pgfkeys{
   /tenkz/arrow/.is~family,
   /tenkz/arrow/from/.store~in=\l__tenkzcd_afrom_tl,
@@ -293,26 +292,23 @@
     % pop the two children and fuse them
     \seq_pop_right:NN \l__tenkzcd_stack_seq \l__tenkzcd_cb_tl
     \seq_pop_right:NN \l__tenkzcd_stack_seq \l__tenkzcd_ca_tl
-    \exp_last_unbraced:NV \tenkz_cd_unpack_a:nnnnn \l__tenkzcd_ca_tl
-    \exp_last_unbraced:NV \tenkz_cd_unpack_b:nnnnn \l__tenkzcd_cb_tl
+    \exp_last_unbraced:NNV \tenkz_cd_unpack:Nnnnnn a \l__tenkzcd_ca_tl
+    \exp_last_unbraced:NNV \tenkz_cd_unpack:Nnnnnn b \l__tenkzcd_cb_tl
     \tenkz_cd_tree_fuse:
   }
 
-\cs_new_protected:Npn \tenkz_cd_unpack_a:nnnnn #1#2#3#4#5
+% A fusion vertex always has exactly two children, so the two popped
+% stack tuples are unpacked by the same five assignments; #1 (bare `a`
+% or `b`) selects which child's register family receives them, via the
+% `x#1_dim`/`l#1_int`/`ch#1_tl`/`node#1_int`/`topo#1_tl` naming already
+% shared by both families -- one function body instead of two.
+\cs_new_protected:Npn \tenkz_cd_unpack:Nnnnnn #1#2#3#4#5#6
   {
-    \dim_set:Nn \l__tenkzcd_xa_dim {#1}
-    \int_set:Nn \l__tenkzcd_la_int {#2}
-    \tl_set:Nn  \l__tenkzcd_cha_tl {#3}
-    \int_set:Nn \l__tenkzcd_nodea_int {#4}
-    \tl_set:Nn \l__tenkzcd_topoa_tl {#5}
-  }
-\cs_new_protected:Npn \tenkz_cd_unpack_b:nnnnn #1#2#3#4#5
-  {
-    \dim_set:Nn \l__tenkzcd_xb_dim {#1}
-    \int_set:Nn \l__tenkzcd_lb_int {#2}
-    \tl_set:Nn  \l__tenkzcd_chb_tl {#3}
-    \int_set:Nn \l__tenkzcd_nodeb_int {#4}
-    \tl_set:Nn \l__tenkzcd_topob_tl {#5}
+    \dim_set:cn { l__tenkzcd_x #1 _dim }     {#2}
+    \int_set:cn { l__tenkzcd_l #1 _int }     {#3}
+    \tl_set:cn  { l__tenkzcd_ch #1 _tl }     {#4}
+    \int_set:cn { l__tenkzcd_node #1 _int }  {#5}
+    \tl_set:cn  { l__tenkzcd_topo #1 _tl }   {#6}
   }
 
 % Join the two children on the stack.  Parsing records one abstract
@@ -1133,11 +1129,11 @@
   }
 \cs_new_protected:Npn \tenkz_cd_grid_aux:nn #1#2
   {
-    % same baseline convention as the `tenkz cd baseline` style, inlined
-    % because tikzcd routes its options through its own key family
+    % tikzcd forwards unrecognized keys to /tikz/.cd, so the shared
+    % `tenkz cd baseline` style applies here exactly as it does for the
+    % tree, maps and polygon renderers
     \begin{tikzcd}
-      [ baseline={([yshift=-\dim_use:N \l__tenkzcd_axis_dim]
-                   current~bounding~box.center)}, #1 ]
+      [ tenkz~cd~baseline, #1 ]
       #2
     \end{tikzcd}
   }

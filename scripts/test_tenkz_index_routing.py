@@ -20,11 +20,6 @@ BEGIN = "% TENKZ-II-RFP-BEGIN"
 END = "% TENKZ-II-RFP-END"
 
 
-def attrs(line: str) -> tuple[str, dict[str, str]]:
-    fields = line.split("|")
-    return fields[0], dict(field.split("=", 1) for field in fields[1:])
-
-
 def main() -> int:
     engine = shutil.which("xelatex")
     if engine is None:
@@ -91,19 +86,21 @@ def main() -> int:
             print("FAIL: II_RFP routing fixture did not compile")
             return 1
         log_path = work / "ii-rfp-routing.tnlog"
-        lines = log_path.read_text(encoding="utf-8").splitlines()
         audit = Audit(log_path, tex)
         audit.parse_log()
         audit.check_dialects()
         hard = [finding for finding in audit.findings if finding.severity == "HARD"]
         if hard:
             raise AssertionError(f"II_RFP event stream has hard findings: {hard}")
+        # Reuse the audit's own parse instead of re-splitting the .tnlog a
+        # second time (both scripts did this independently; tenkz_audit's
+        # Event objects already carry the typed attrs dict).
+        events = audit.events()
 
-    parsed = [attrs(line) for line in lines]
     atoms = {
-        event["name"]: event["kind"]
-        for kind, event in parsed
-        if kind == "atom"
+        event.attrs["name"]: event.attrs["kind"]
+        for event in events
+        if event.kind == "atom"
     }
     expected_atoms = {
         "rfpWest": "boundary", "rfpX": "box", "rfpLambda": "box",
@@ -119,9 +116,9 @@ def main() -> int:
         raise AssertionError(f"II_RFP atoms changed: {atoms}")
 
     joins = [
-        frozenset((event["from"], event["to"]))
-        for kind, event in parsed
-        if kind == "join"
+        frozenset((event.attrs["from"], event.attrs["to"]))
+        for event in events
+        if event.kind == "join"
     ]
     expected_joins = {
         frozenset(edge)

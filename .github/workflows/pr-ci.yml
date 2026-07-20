@@ -40,6 +40,7 @@ on:
       - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_tree.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -73,6 +74,7 @@ on:
       - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_tree.py'
   workflow_dispatch:
 
 concurrency:
@@ -140,6 +142,7 @@ jobs:
               - 'scripts/test_tenkz_cd_map_labels.py'
               - 'scripts/test_tenkz_face_ports.py'
               - 'scripts/test_tenkz_index_routing.py'
+              - 'scripts/test_tenkz_tree.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
 
@@ -381,6 +384,10 @@ jobs:
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_index_routing.py
+
+      - name: Test tenkz fusion-tree topology
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_tree.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'

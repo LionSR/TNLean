@@ -21,8 +21,10 @@ signature\sidenote{\tnlogline{boundary|\allowbreak
 picture=\meta{n}|\allowbreak virtual-west=\meta{w}|\allowbreak
 virtual-east=\meta{e}|\allowbreak physical-up=\meta{u}|\allowbreak
 physical-down=\meta{d}} --- the open-index count that two sides of an
-equation must share.  The lattice, plane, tree, and free dialects log
-their own events and carry no boundary line.} that
+equation must share.  \tnenv{tenkzlattice} and \tnenv{tenkzplanes}
+pictures log the same boundary line (open sheets in place of open
+wires); the free and cd dialects log their own events and carry no
+boundary line.} that
 \S\ref{ch:mathematics} reads.  Keys whose values contain commas
 or an equals sign must keep their braces:
 \tnval{trace=\{(physical, 2-3)\}} keeps its braces.
@@ -87,6 +89,16 @@ padded with bare wire.
   $0.8$ and $0.62$ pitch profiles \\
 \texttt{tensor style=} & \texttt{dot|box} & \texttt{dot} &
   glyph policy (Section~\ref{sec:ref-policy}) \\
+\texttt{frame=} & \texttt{flat|vertical} & \texttt{flat} &
+  rotates the whole grammar $90°$: columns descend, legs point
+  west/east, \tncmd{tndots} draws \texttt{\textbackslash vdots} \\
+\texttt{chain axis=} & \texttt{east|south} & \texttt{east} &
+  alias of \texttt{frame=} naming the run direction (east = flat,
+  south = vertical) \\
+\texttt{trace style=} & \texttt{racetrack|hooks} & flat:
+  \texttt{racetrack}, vertical: \texttt{hooks} &
+  how a traced side closes; never sets whether (that is
+  \texttt{periodic} or \texttt{west=trace}/\texttt{east=trace}) \\
 \bottomrule
 \end{tabularx}\par}
 \medskip
@@ -206,6 +218,16 @@ An empty label, \tnval{\textbackslash tn\{\}}, is an anonymous tensor
   nudge the label \\
 \texttt{no legs} & --- & --- &
   suppress this cell's physical legs \\
+\texttt{physical=} & \texttt{up|down|updown} & --- &
+  per-brick legs on a WIRE row (the row itself draws none); a per-cell
+  override of the picture-scope \texttt{physical=} sugar \\
+\texttt{role=} & \meta{role} & --- &
+  \texttt{operator}, \texttt{marked}, \texttt{extra}, or
+  \texttt{passive}; same hue mechanism as \tncmd{tnput}'s
+  \texttt{role=} (below, \tnenv{tenkzfree}) \\
+\texttt{species=} & \meta{name} & --- &
+  hue of a species declared by \tncmd{tnset}; \texttt{role=} prevails
+  if both are present \\
 \bottomrule
 \end{tabularx}\par}
 \medskip
@@ -469,6 +491,30 @@ edge, and site commands drawn over the window.
   \texttt{slab} & \texttt{flat} &
   the sheared sheet: bonds shear, glyphs and labels stay upright
   (Example~\ref{ex:rmp-peps}) \\
+\bottomrule
+\end{tabularx}\par}
+\medskip
+
+The plane-geometry keys tune the frame's projection past the three
+\texttt{frame=} presets --- expert overrides, guarded but not clamped:
+
+\medskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}p{29mm}p{23mm}p{11mm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\keyhead
+\texttt{plane slant=}, \texttt{plane rise=} & \meta{ratio} & preset &
+  explicit depth-axis ratios of the lattice pitch, overriding
+  \texttt{frame=oblique|slab} \\
+\texttt{plane lean=} & \texttt{east|west} & \texttt{east} &
+  mirrors the depth axis by negating the slant register \\
+\texttt{col vector=}, \texttt{row vector=}, \texttt{sheet vector=} &
+  \texttt{\{x,y\}} & --- &
+  expert escape hatch: set the projected basis directly, in paper
+  lengths \\
+\texttt{outer legs=} & \texttt{both|top|} \texttt{bottom|none} & auto &
+  physical legs on the sheet stack's outer faces (both for a role-list
+  sheet stack, none otherwise) \\
 \bottomrule
 \end{tabularx}\par}
 \medskip
