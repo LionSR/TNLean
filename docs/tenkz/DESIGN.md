@@ -471,7 +471,7 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 | `trace clearance` | 0.55·pitch | racetrack clears leg labels on the outer row |
 | `label clearance` | 0.12·pitch | one constant for every quadrant (G7) |
 | `junction diameter` | 3.2 × wire width (≥ 0.9mm) | below 3×, a junction is indistinguishable from a wire crossing at 600 dpi |
-| `region margin` | 0.36·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
+| `region margin` (`\tenkz@r@latticemargin`) | 0.27·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
 | `compact` / `inline` | 0.8 scale / em-based scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
 | `map column gap` | max(0.34·pitch, widest map-name band + 2·daylight) | the floor keeps a short composition compact; measured opaque label ink clears both adjacent objects without budgeting glyphs; explicit `column sep=` remains an opt-in override |
 | `map row gap` | 0.50·pitch | adjacent small multiples remain distinct without figure-scale leading; `row sep=` overrides it |
@@ -482,7 +482,45 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 
 ### 5.1 Event stream v2 (`.tnlog`)
 
-Every environment emits `picture|id|lang=grid|cd|lattice|free|src=⟨file:line⟩` (via currfile — identity without a registry), then dialect events: grid → `atom`, `bond` (with `fused`/`dir` attributes), `leg`, `pairleg`, `trace`, `fuse`, `span`; cd → `cdcell`, `cdobject`, `cdarrow`, `cdmap`, `tree`; lattice → `lattice`, `region|slot|cellset-normal-form`, `edge`, `site`; free → `put`, `join`. `\tndefine`/use emit `def|name|hash` / `use|name`. plasTeX compiles bodies standalone, so identical events flow in web builds.
+Every environment emits `picture|id=N|lang=L` at `\tenkz@beginpicture` (the
+only writer of `lang=`; `L` is one of `grid`, `cd`, `lattice`, `free`),
+then dialect events carrying an explicit `picture=N` back-reference.
+`warning` events are cross-cutting (any dialect may emit one) and, like
+`boundary`, are stripped from a picture's content before dialect and
+empty-picture checks run — they are diagnostics and derived data, not
+ink. The table below is generated from the `\tenkz@event{...}` call
+sites themselves (grep `tenkz@event{` across `tex/tenkz/*.code.tex`),
+not hand-maintained prose — the two drift out of step otherwise.
+
+| Dialect | Content event kinds | Source module |
+|---|---|---|
+| `grid` | `atom`, `bond`, `faceports`, `pairleg`, `hole`, `cup`, `boundary`, `phtrace`, `pairtrace`, `trace`, `hooks` | `tenkz-grid.code.tex` |
+| `free` | `atom`, `join` | `tenkz-free.code.tex` |
+| `lattice` | `lattice`, `site`, `region`, `edge`, `pairtrace`, `boundary` | `tenkz-lattice.code.tex` |
+| `cd` | `cdcell`, `cdobject`, `cdmap`, `cdarrow`, `tree` | `tenkz-cd.code.tex` |
+
+Notes against the previous (wrong) table: grid never emits `leg`, `fuse`,
+or `span` — those names do not occur in the code; `\tnput`'s event kind
+is literally `atom` (with a `kind=` attribute selecting its inkless-endpoint
+skin), not `put`; `lattice` was previously undocumented entirely, and its
+`tenkzplanes` pictures do emit a `boundary` line (contradicting a stale
+`ch-reference.tex` sidenote that has been corrected alongside this table).
+`scripts/tenkz_audit.py`'s `DIALECT_KINDS` is generated from this same
+grep and must be kept in step with it by hand until a script does the
+generation.
+
+**The `at=rows` emit/input asymmetry.** `physical=rows` is an *input*
+token (`tenkz_normalize_physical_face:Nn`, `tenkz-grid.code.tex`) meaning
+"ports span the whole row's width, not this cell's face." On the *emit*
+side, `\tenkz_emit_faceports_rows:nnn` writes the literal string `at=rows`
+as a `faceports` event's `at=` value — a sentinel meaning "no per-cell
+slot list was computed; consult the row," not a resolved position list
+the way `at=` reads for every other `faceports` event. A `.tnlog` consumer
+must special-case `at=rows` as non-positional. See the one-line note at
+the emitter (`tenkz-grid.code.tex`, `\tenkz_emit_faceports_rows:nnn`).
+
+`\tndefine`/use emit `def|name|hash` / `use|name`. plasTeX compiles
+bodies standalone, so identical events flow in web builds.
 
 ### 5.2 The sugar contract (G21)
 
@@ -515,11 +553,33 @@ Per migrated entry: (a) pixel diff against the old render, with intentional chan
 
 ### 5.7 Lint and gallery layers (G15, G17)
 
-`tenkz_lint.py`: bans literal `...`/`\ldots` inside picture bodies (must be `\tndots`); raw-ink lint (off-theme colors, raw `line width=`) applies to `tenkzfree` bodies and any residual raw tikzpicture in chapters; escape `% tn-lint: allow ⟨rule⟩ ⟨reason⟩`. `tenkz_gallery.py`: auto-extracts every picture from the 35 chapter files, compiles standalone in both themes, renders one page per chapter (image beside verbatim source), and publishes perceptual-hash dedup clusters — render-level drift detection complementing the event-level topology advisory. Both run as CI artifacts on every figure-touching PR.
+`tenkz_lint.py`: bans literal `...`/`\ldots` inside picture bodies (must be `\tndots`); raw-ink lint (off-theme colors, raw `line width=`) applies to `tenkzfree` bodies and any residual raw tikzpicture in chapters; escape `% tn-lint: allow ⟨rule⟩ ⟨reason⟩`. It runs as a CI step on every figure-touching PR. `tenkz_gallery.py` — auto-extracts every picture from the chapter files, compiles standalone in both themes, renders one page per chapter (image beside verbatim source), and publishes perceptual-hash dedup clusters, as render-level drift detection complementing the event-level topology advisory — is a **roadmap item, not yet built**: no such script exists in `scripts/` and no CI step runs it. (Found by the 2026-07 key-surface census; the gate before the next milestone close should either build it or drop this paragraph.)
 
 ### 5.8 Deleted from the audit
 
 Contexts/role/profile hand-entered metadata and their assert-equal churn (now derived); the chapter-local-TikZ ban; the repeated-topology-must-be-motif failure and its motif-exemption loophole; the unused-diagram and PEPS-chapter-usage checks.
+
+### 5.9 Key-surface census (2026-07 gate)
+
+130 leaf `/tenkz` pgfkeys, across 12 families — counted by parsing every `/tenkz(...)/.code`, `.store~in`, and `.is~choice` declaration in `tex/tenkz/*.code.tex`, excluding choice-value branches and family roots:
+
+| Family | Leaf keys | Source |
+|---|---:|---|
+| `/tenkz` (root) | 5 | `tenkz-core.code.tex` |
+| `/tenkz/grid` | 23 | `tenkz-grid.code.tex` |
+| `/tenkz/cell` | 23 | `tenkz-grid.code.tex` |
+| `/tenkz/lattice` | 27 | `tenkz-lattice.code.tex` |
+| `/tenkz/region` | 7 | `tenkz-lattice.code.tex` |
+| `/tenkz/edge` | 5 | `tenkz-lattice.code.tex` |
+| `/tenkz/site` | 3 | `tenkz-lattice.code.tex` |
+| `/tenkz/put` | 10 | `tenkz-free.code.tex` |
+| `/tenkz/join` | 8 | `tenkz-free.code.tex` |
+| `/tenkz/cd` | 8 | `tenkz-cd.code.tex` |
+| `/tenkz/tree` | 6 | `tenkz-cd.code.tex` |
+| `/tenkz/arrow` | 5 | `tenkz-cd.code.tex` |
+| **total** | **130** | |
+
+For scale, quantikz's public key surface is roughly 40 — tenkz is a wider language by design (four sub-languages, not one), but the ratio is worth carrying forward rather than re-discovering at the next gate. No family here is flagged for removal: this is a measurement, not a verdict. Pruning candidates (a family whose keys have exactly one call site across `tex/tenkz/examples/` and the blueprint chapters) are **0.9-freeze material** — the manual and reference chapter become the binding contract at 0.9 (GOAL.md), and a key still resting on a single call site at that point is the moment to cut it, not before. Record the count at every gate (issue #4158); prune later.
 
 ---
 

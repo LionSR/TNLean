@@ -264,13 +264,11 @@
   /tenkz/grid/east~label/.store~in=\l__tenkz_elabel_tl,
   /tenkz/grid/bond~label/.code={\tenkz_bond_label:n{#1}},
   /tenkz/grid/align/.store~in=\l__tenkz_align_tl,
-  /tenkz/grid/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
-  /tenkz/grid/compact/.code={\pgfkeys{/tenkz/compact}},
-  /tenkz/grid/inline/.code={\pgfkeys{/tenkz/inline}},
-  /tenkz/grid/tensor~style/.code={\pgfqkeys{/tenkz}{tensor~style=#1}},
-  % species={...}: picture-scope species declaration (see tenkz-core)
-  /tenkz/grid/species/.code={\pgfqkeys{/tenkz}{species={#1}}},
 }
+% pitch=/compact=/inline=/tensor~style=/species= forward to the shared
+% /tenkz key space (tenkz-core.code.tex); one installer, every picture-
+% scope family (GOAL.md "one universal language").
+\tenkz_install_core_forwards:nn {grid} {pitch,compact,inline,tensor~style,species}
 
 % ---------- the side-policy alphabet (west= / east=) ----------
 % One enum, applied per picture side: open | none | trace | cup |
@@ -662,6 +660,36 @@
       }
   }
 
+% The brick (cell physical=) up/down default, layered OVER the resolver:
+% when neither an explicit at= nor legs at= override exists AND this
+% cell's physical= key names the face, a wires=k brick presents `rows'
+% (one port per spanned wire) instead of the resolver's generic `center'.
+% This cannot live inside \tenkz_face_ports:nN itself: the identical
+% up/down branch there also serves an ORDINARY cell's paired or open
+% face, and a wires=1 cell with physical=down on a paired row must still
+% resolve to `center' (regression: routing it into the wide-glyph pairing
+% path instead of the plain pairing path breaks a non-wide op/ket cell
+% that merely happens to declare a physical= word).  Only the four brick
+% consumers below -- which are reached exclusively through a stated
+% physical= face -- may apply this override.
+\cs_new_protected:Npn \tenkz_brick_face_ports:nN #1#2
+  {
+    \tenkz_face_ports:nN {#1} #2
+    \str_if_eq:nnTF {#1}{up}
+      { \tl_if_empty:NT \l__tenkz_cupat_tl
+          { \tl_if_empty:NT \l__tenkz_clegsat_tl
+              { \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                  { \tl_set:Nn #2 {rows} } } } }
+      { \tl_if_empty:NT \l__tenkz_cdownat_tl
+          { \tl_if_empty:NT \l__tenkz_clegsat_tl
+              { \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                  { \tl_set:Nn #2 {rows} } } } }
+  }
+
 % The virtual `rows' token needs the span of the atom that owns the face:
 % `wires=k' for an ordinary tall glyph, `span=k' for a fusion bar.  Keep
 % that span an explicit argument rather than consulting either register
@@ -727,6 +755,9 @@
   }
 \cs_new_protected:Npn \tenkz_emit_faceports_one:nnn #1#2#3
   { \tenkz_emit_faceports_one:nnnn {#1}{#2}{#3}{\l__tenkz_cwires_int} }
+% `at=rows' here is a sentinel, not a resolved slot list: it says "consult
+% the row's width, no per-cell ports were computed" (DESIGN.md 5.1) --
+% every other `faceports' event's `at=' is an actual position list.
 \cs_new_protected:Npn \tenkz_emit_faceports_rows:nnn #1#2#3
   { \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\int_use:N\l__tenkz_cwires_int|at=rows} }
 
@@ -772,6 +803,14 @@
     % boundary count.  On-wire matrices set this flag before reaching here.
     \bool_if:NF \l__tenkz_cnolegs_bool
       {
+        % An event fires whenever a face is EXPLICITLY declared (up
+        % at=/down at=/legs at=, whatever value it resolves to -- even
+        % the literal word `center' is worth an audit event when the
+        % user wrote it) or when the brick default (`rows') applies;
+        % the plain undeclared default is the majority case and stays
+        % silent.  This cannot collapse to one branch on the resolved
+        % token: an explicit `up at=center' and the undeclared default
+        % both resolve to `center', yet only the former is an event.
         \bool_if:nT { \tenkz_physical_face_active_p:nn {#1}{up} }
           {
             \tl_if_empty:NTF \l__tenkz_cupat_tl
@@ -958,14 +997,6 @@
       { (\dim_eval:n{ ( #2 ) * ( 0 - (#1) ) },0pt) }
       { (0pt,\dim_eval:n{ ( #2 ) * (#1) }) }
   }
-% the paper direction of a logical up|down physical leg
-\cs_new:Npn \tenkz_legdir:n #1
-  {
-    \bool_if:NTF \l__tenkz_vertical_bool
-      { \str_if_eq:nnTF {#1} {up} {west} {east} }
-      { \str_if_eq:nnTF {#1} {up} {north} {south} }
-  }
-
 % row-type queries (1-indexed); empty when out of range
 \cs_new:Npn \tenkz_rowtype:n #1
   { \seq_item:Nn \l__tenkz_rowtypes_seq {#1} }
@@ -2406,13 +2437,30 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
 \bool_new:N \l__tenkz_pwupperport_bool
 \int_new:N \l__tenkz_internalpu_int
 \int_new:N \l__tenkz_internalpd_int
-\prop_new:N \l__tenkz_lowersurplus_prop
+% One shared "run once per key" prop backs every skip-if-seen site below
+% (surplus draws, centred-face pairing, open-lower ownership, signature
+% dedup): #1 is the call family's own name, spelled out so a reader can
+% trace a dedup to its site without first learning an abbreviation table;
+% it keeps the four families from colliding in the one key space, #2 the
+% site's own row/col key.  The picture-wide reset lives once at the top
+% of \tenkz_draw_legs: -- every consumer runs inside that one pass, after
+% it, so a second reset before \tenkz_emit_signature: would only ever
+% find its own namespace's keys.
+\prop_new:N \l__tenkz_once_prop
+\prg_new_conditional:Npnn \tenkz_once_p:nn #1#2 { p, T, F, TF }
+  {
+    \prop_if_in:NeTF \l__tenkz_once_prop {#1-#2}
+      { \prg_return_false: }
+      {
+        \prop_put:Nen \l__tenkz_once_prop {#1-#2} {}
+        \prg_return_true:
+      }
+  }
 \tl_new:N \l__tenkz_pwlownode_tl
 \tl_new:N \l__tenkz_pwlowbase_tl
 \tl_new:N \l__tenkz_pwlowopts_tl
 \tl_new:N \l__tenkz_pwlowports_tl
 \seq_new:N \l__tenkz_pwlab_seq
-\prop_new:N \l__tenkz_pwcenterused_prop
 \seq_new:N \l__tenkz_pwlowlab_seq
 \tl_new:N \l__tenkz_pwslotlab_tl
 \tl_new:N \l__tenkz_pwlowlabel_tl
@@ -2431,26 +2479,55 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
   }
 
 \tl_new:N \l__tenkz_nolegsbase_tl
+\bool_new:N \l__tenkz_rok_bool   % \tenkz_resolve_owner:nnNN's own scratch:
+                                 % never a caller's own #N target (below)
+
+% The tensor owning (row, col): the owner_prop lookup with its col-itself
+% fallback, repeated at every consumer that must locate a wide/tall
+% glyph's base cell before reading its kind or options.  #1 and #2 are
+% normalized through \int_eval:n before use, not just passed through:
+% callers include raw int registers (e.g. \l__tenkz_last_int), and a
+% register token silently fails to match a prop key without this
+% (HACKING.md's registers-in-prop-keys pitfall).
+\cs_new_protected:Npn \tenkz_owner_col:nnN #1#2#3
+  {
+    \prop_get:NeNF \l__tenkz_owner_prop {\int_eval:n{#1}-\int_eval:n{#2}} #3
+      { \tl_set:Ne #3 {\int_eval:n{#2}} }
+  }
+
+% Resolve (row, col) to its owner #3 and, when the owner is a tensor
+% (kind tn/tnc), reparse its declared options into #4 = true -- the
+% owner-walk/kind-gate/opts-reparse idiom every pairing and counting
+% consumer below shared by hand.  #4 false leaves the ambient
+% \tenkz_cell_opts:n state exactly as the caller found it, matching
+% every existing call site's own short-circuit.  Callers must pass a
+% #4 distinct from any scratch this call is nested inside (several
+% consumers below are themselves invoked with \l_tmpa_bool as THEIR
+% OWN output, so this function never reads or writes \l_tmpa_bool).
+\cs_new_protected:Npn \tenkz_resolve_owner:nnNN #1#2#3#4
+  {
+    \tenkz_owner_col:nnN {#1}{#2} #3
+    \tenkz_get:NeN \l__tenkz_kind_prop {\int_eval:n{#1}-#3} \l__tenkz_pkind_tl
+    \bool_set_false:N #4
+    \bool_lazy_or:nnT
+      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
+      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+      {
+        \bool_set_true:N #4
+        \tenkz_get:NeN \l__tenkz_opts_prop {\int_eval:n{#1}-#3} \l_tmpb_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+      }
+  }
 
 % Whether the tensor owning (row, column) suppresses its physical faces.
 % Owner resolution makes this valid on continuation columns of a wide glyph.
 \cs_new_protected:Npn \tenkz_cell_no_legs:nnN #1#2#3
   {
     \bool_set_false:N #3
-    \prop_get:NeNF \l__tenkz_owner_prop
-      {\int_eval:n{#1}-\int_eval:n{#2}} \l__tenkz_nolegsbase_tl
-      { \tl_set:Ne \l__tenkz_nolegsbase_tl {\int_eval:n{#2}} }
-    \tenkz_get:NeN \l__tenkz_kind_prop
-      {\int_eval:n{#1}-\l__tenkz_nolegsbase_tl} \l__tenkz_pkind_tl
-    \bool_lazy_or:nnT
-      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
-      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
-      {
-        \tenkz_get:NeN \l__tenkz_opts_prop
-          {\int_eval:n{#1}-\l__tenkz_nolegsbase_tl} \l_tmpb_tl
-        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-        \bool_if:NT \l__tenkz_cnolegs_bool { \bool_set_true:N #3 }
-      }
+    \tenkz_resolve_owner:nnNN {#1}{#2} \l__tenkz_nolegsbase_tl
+      \l__tenkz_rok_bool
+    \bool_if:NT \l__tenkz_rok_bool
+      { \bool_if:NT \l__tenkz_cnolegs_bool { \bool_set_true:N #3 } }
   }
 
 % Does the upper row present a down-face port to slot #3 of the lower
@@ -2460,18 +2537,10 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
   {
     \bool_set_false:N #4
     \int_set:Nn \l_tmpa_int {#2+#3-1}
-    \prop_get:NeNF \l__tenkz_owner_prop
-      {#1-\int_use:N\l_tmpa_int} \l__tenkz_pwbase_tl
-      { \tl_set:Ne \l__tenkz_pwbase_tl { \int_use:N\l_tmpa_int } }
-    \tenkz_get:NeN \l__tenkz_kind_prop
-      {#1-\l__tenkz_pwbase_tl} \l__tenkz_pkind_tl
-    \bool_lazy_or:nnT
-      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
-      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+    \tenkz_resolve_owner:nnNN {#1}{\int_use:N\l_tmpa_int}
+      \l__tenkz_pwbase_tl \l__tenkz_rok_bool
+    \bool_if:NT \l__tenkz_rok_bool
       {
-        \tenkz_get:NeN \l__tenkz_opts_prop
-          {#1-\l__tenkz_pwbase_tl} \l_tmpb_tl
-        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
         \bool_if:NF \l__tenkz_cnolegs_bool
           {
             \tenkz_face_ports:nN {down} \l__tenkz_faceports_tl
@@ -2492,11 +2561,8 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
 \cs_new_protected:Npn \tenkz_draw_lower_surplus:nnn #1#2#3
   {
     \tl_set:Ne \l__tenkz_pwlowbase_tl {#2}
-    \prop_if_in:NeF \l__tenkz_lowersurplus_prop
-      {#1-\l__tenkz_pwlowbase_tl}
+    \tenkz_once_p:nnT {lower-surplus} {#1-\l__tenkz_pwlowbase_tl}
       {
-        \prop_put:Nen \l__tenkz_lowersurplus_prop
-          {#1-\l__tenkz_pwlowbase_tl} {}
         \tenkz_get:NeN \l__tenkz_name_prop
           {\int_eval:n{#1+1}-\l__tenkz_pwlowbase_tl} \l__tenkz_pwlownode_tl
         \tenkz_get:NeN \l__tenkz_opts_prop
@@ -2608,11 +2674,8 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                 \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
                 \bool_set_false:N \l__tenkz_pwlowerport_bool
                 \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
-                  { \prop_if_in:NeF \l__tenkz_pwcenterused_prop
-                      {#1-\tl_use:N\l__tenkz_pwbase_tl}
-                      { \bool_set_true:N \l__tenkz_pwlowerport_bool
-                        \prop_put:Nen \l__tenkz_pwcenterused_prop
-                          {#1-\tl_use:N\l__tenkz_pwbase_tl} {} } }
+                  { \tenkz_once_p:nnT {paired-with-center} {#1-\tl_use:N\l__tenkz_pwbase_tl}
+                      { \bool_set_true:N \l__tenkz_pwlowerport_bool } }
                   { \clist_if_in:NeT \l__tenkz_faceports_tl
                       { \int_eval:n { #2 + #3 - \l__tenkz_pwbase_tl } }
                       { \bool_set_true:N \l__tenkz_pwlowerport_bool } }
@@ -2786,11 +2849,8 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
     \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
       {
         \tenkz_leg_open:nnn {#1}{#2}{down}
-        \prop_if_in:NeF \l__tenkz_pwcenterused_prop
-          {#1-\tl_use:N\l__tenkz_pwbase_tl}
+        \tenkz_once_p:nnT {paired-with-center} {#1-\tl_use:N\l__tenkz_pwbase_tl}
           {
-            \prop_put:Nen \l__tenkz_pwcenterused_prop
-              {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
             \tenkz_leg_open:een { \int_eval:n{#1+1} }
               {\l__tenkz_pwbase_tl}{up}
           }
@@ -2822,19 +2882,16 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
     \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
     \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
       {
-        \prop_if_in:NeTF \l__tenkz_pwcenterused_prop
-          {#1-\tl_use:N\l__tenkz_pwbase_tl}
+        \tenkz_once_p:nnTF {paired-with-center} {#1-\tl_use:N\l__tenkz_pwbase_tl}
           {
-            \tenkz_leg_open:nnn {#1}{#2}{down}
-            \int_incr:N \l__tenkz_internalpd_int
-          }
-          {
-            \prop_put:Nen \l__tenkz_pwcenterused_prop
-              {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
             \draw[physical~leg]
               (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
               (\l__tenkz_pb_tl.\tenkz_compass:n{north});
             \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
+          }
+          {
+            \tenkz_leg_open:nnn {#1}{#2}{down}
+            \int_incr:N \l__tenkz_internalpd_int
           }
       }
       {
@@ -2899,23 +2956,16 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
   {
     \tenkz_get:NnN \l__tenkz_name_prop {#1-#2} \l__tenkz_pa_tl
     \seq_set_from_clist:NV \l__tenkz_leglab_seq #4
+    % \tenkz_brick_face_ports:nN already carries the up/updown,
+    % down/updown precedence; materialize its `rows' default into the
+    % k explicit column slots this per-face drawing loop walks
     \str_if_eq:nnTF {#3}{north}
-      {
-        \tenkz_face_ports:nN {up} \l__tenkz_bkports_tl
-        \tl_if_empty:NT \l__tenkz_cupat_tl
-          { \tl_if_empty:NT \l__tenkz_clegsat_tl
-              { \tl_clear:N \l__tenkz_bkports_tl
-                \int_step_inline:nn {\l__tenkz_cwires_int}
-                  { \clist_put_right:Nn \l__tenkz_bkports_tl {##1} } } }
-      }
-      {
-        \tenkz_face_ports:nN {down} \l__tenkz_bkports_tl
-        \tl_if_empty:NT \l__tenkz_cdownat_tl
-          { \tl_if_empty:NT \l__tenkz_clegsat_tl
-              { \tl_clear:N \l__tenkz_bkports_tl
-                \int_step_inline:nn {\l__tenkz_cwires_int}
-                  { \clist_put_right:Nn \l__tenkz_bkports_tl {##1} } } }
-      }
+      { \tenkz_brick_face_ports:nN {up} \l__tenkz_bkports_tl }
+      { \tenkz_brick_face_ports:nN {down} \l__tenkz_bkports_tl }
+    \str_if_eq:VnT \l__tenkz_bkports_tl {rows}
+      { \tl_clear:N \l__tenkz_bkports_tl
+        \int_step_inline:nn {\l__tenkz_cwires_int}
+          { \clist_put_right:Nn \l__tenkz_bkports_tl {##1} } }
     \str_if_eq:VnT \l__tenkz_bkports_tl {none}
       { \tl_clear:N \l__tenkz_bkports_tl }
     \bool_if:NTF \l__tenkz_vertical_bool
@@ -2986,38 +3036,35 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
           {
             \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
             \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
+            % \tenkz_brick_face_ports:nN's `rows' default already carries
+            % the up/updown, down/updown precedence; \tenkz_face_arity:nN
+            % reads it back through the one arity table, so each face is
+            % a single query.  (\tenkz_leg_count:nN is not reused here:
+            % it resolves through the plain, non-brick-aware
+            % \tenkz_face_ports:nN, which every ordinary paired/open cell
+            % also relies on.)
             \bool_if:NF \l__tenkz_cnolegs_bool
               { \tl_if_empty:NF \l__tenkz_cphys_tl
                   {
                     \bool_lazy_or:nnT
                       { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
                       { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
-                      { \tl_if_empty:NTF \l__tenkz_cupat_tl
-                          { \tl_if_empty:NTF \l__tenkz_clegsat_tl
-                              { \int_add:Nn \l__tenkz_bpu_int
-                                  { \l__tenkz_cwires_int } }
-                              { \tenkz_leg_count:nN
-                                  {up} \l__tenkz_facearity_int
-                                \int_add:Nn \l__tenkz_bpu_int
-                                  { \l__tenkz_facearity_int } } }
-                          { \tenkz_leg_count:nN {up} \l__tenkz_facearity_int
-                            \int_add:Nn \l__tenkz_bpu_int
-                              { \l__tenkz_facearity_int } } }
+                      { \tenkz_brick_face_ports:nN {up} \l__tenkz_faceports_tl
+                        \int_set:Nn \l__tenkz_facearity_int
+                          { \tenkz_face_arity:nN
+                              {\l__tenkz_cwires_int} \l__tenkz_faceports_tl }
+                        \int_add:Nn \l__tenkz_bpu_int
+                          { \l__tenkz_facearity_int } }
                     \bool_lazy_or:nnT
                       { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
                       { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
-                      { \tl_if_empty:NTF \l__tenkz_cdownat_tl
-                          { \tl_if_empty:NTF \l__tenkz_clegsat_tl
-                              { \int_add:Nn \l__tenkz_bpd_int
-                                  { \l__tenkz_cwires_int } }
-                              { \tenkz_leg_count:nN
-                                  {down} \l__tenkz_facearity_int
-                                \int_add:Nn \l__tenkz_bpd_int
-                                  { \l__tenkz_facearity_int } } }
-                          { \tenkz_leg_count:nN
-                              {down} \l__tenkz_facearity_int
-                            \int_add:Nn \l__tenkz_bpd_int
-                              { \l__tenkz_facearity_int } } }
+                      { \tenkz_brick_face_ports:nN {down}
+                          \l__tenkz_faceports_tl
+                        \int_set:Nn \l__tenkz_facearity_int
+                          { \tenkz_face_arity:nN
+                              {\l__tenkz_cwires_int} \l__tenkz_faceports_tl }
+                        \int_add:Nn \l__tenkz_bpd_int
+                          { \l__tenkz_facearity_int } }
                   } }
           }
       }
@@ -3027,24 +3074,22 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
 % or suppresses physical ink with the no-legs option.
 \cs_new_protected:Npn \tenkz_open_lower_partner:nnn #1#2#3
   {
-    \prop_get:NeNF \l__tenkz_owner_prop
-      {\int_eval:n{#1+1}-#2} \l__tenkz_pwbase_tl
-      { \tl_set:Ne \l__tenkz_pwbase_tl {#2} }
+    % unconditional reparse: unlike \tenkz_resolve_owner:nnNN's callers,
+    % this site's caller has already established the partner is a
+    % tensor, so there is no kind to gate on
+    \tenkz_owner_col:nnN {\int_eval:n{#1+1}}{#2} \l__tenkz_pwbase_tl
     \tenkz_get:NeN \l__tenkz_opts_prop
       {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l_tmpb_tl
     \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
     \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
     \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
       {
-        \prop_if_in:NeF \l__tenkz_pwcenterused_prop
-          {#1-\tl_use:N\l__tenkz_pwbase_tl}
+        \tenkz_once_p:nnT {paired-with-center} {#1-\tl_use:N\l__tenkz_pwbase_tl}
           {
             \tenkz_cell_physical_port:nnnN
               {\int_eval:n{#1+1}}{\l__tenkz_pwbase_tl}{up} \l_tmpa_bool
             \bool_if:NT \l_tmpa_bool
               {
-                \prop_put:Nen \l__tenkz_pwcenterused_prop
-                  {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
                 \tenkz_leg_open:een
                   {\int_eval:n{#1+1}}{\l__tenkz_pwbase_tl}{up}
                 \int_compare:nNnT {#3} = {1}
@@ -3057,22 +3102,15 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
 \cs_generate_variant:Nn \tenkz_open_lower_partner:nnn { nen }
 
 \int_new:N \l__tenkz_openlowerspan_int
-\prop_new:N \l__tenkz_openlowerowner_prop
 \cs_new_protected:Npn \tenkz_open_lower_span:nnn #1#2#3
   {
     \int_set:Nn \l__tenkz_openlowerspan_int {#3}
     \int_step_inline:nn {\l__tenkz_openlowerspan_int}
       {
-        \prop_get:NeNF \l__tenkz_owner_prop
-          {\int_eval:n{#1+1}-\int_eval:n{#2+##1-1}} \l__tenkz_pwbase_tl
-          { \tl_set:Ne \l__tenkz_pwbase_tl {\int_eval:n{#2+##1-1}} }
-        \prop_if_in:NeF \l__tenkz_openlowerowner_prop
-          {#1-\l__tenkz_pwbase_tl}
-          {
-            \prop_put:Nen \l__tenkz_openlowerowner_prop
-              {#1-\l__tenkz_pwbase_tl} {}
-            \tenkz_open_lower_partner:nen {#1}{\l__tenkz_pwbase_tl}{1}
-          }
+        \tenkz_owner_col:nnN {\int_eval:n{#1+1}}{\int_eval:n{#2+##1-1}}
+          \l__tenkz_pwbase_tl
+        \tenkz_once_p:nnT {open-lower-owner} {#1-\l__tenkz_pwbase_tl}
+          { \tenkz_open_lower_partner:nen {#1}{\l__tenkz_pwbase_tl}{1} }
       }
   }
 
@@ -3088,12 +3126,14 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
   {
     \int_zero:N \l__tenkz_internalpu_int
     \int_zero:N \l__tenkz_internalpd_int
-    \prop_clear:N \l__tenkz_lowersurplus_prop
     \prop_clear:N \l__tenkz_pwlowerlabel_prop
-    \prop_clear:N \l__tenkz_openlowerowner_prop
-    % A centred lower face is one index for the entire horizontal
-    % interface, even when several separate upper glyphs meet its span.
-    \prop_clear:N \l__tenkz_pwcenterused_prop
+    % The one shared once-per-key prop (ls/pwc/olo namespaces here, sol
+    % in \tenkz_emit_signature: below) resets once per picture, at the
+    % top of the pass every consumer runs inside -- see the declaration
+    % comment.  A centred lower face is one index for the entire
+    % horizontal interface, even when several separate upper glyphs meet
+    % its span, which is exactly what the pwc namespace deduplicates.
+    \prop_clear:N \l__tenkz_once_prop
     \int_step_inline:nn { \l__tenkz_nrows_int }
       {
         \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
@@ -3202,34 +3242,17 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
 \cs_generate_variant:Nn \seq_set_from_clist:Nn { NV }
 \cs_new_protected:Npn \tenkz_leg_multi:nnnnNn #1#2#3#4#5#6
   {
-    % the glyph-edge coordinate is one rectangle edge, so ONE paper
-    % ordinate serves every spanned column: the edge's y in the
-    % horizontal frame, its x in the vertical one (where the edge anchor
-    % word itself passes through the compass map)
-    \bool_if:NTF \l__tenkz_vertical_bool
-      {
-        \pgfextractx \l__tenkz_tmp_dim
-          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl }
-              { \tenkz_compass:n {#3} } }
-      }
-      {
-        \pgfextracty \l__tenkz_tmp_dim
-          { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {#3} }
-      }
     \seq_set_from_clist:NV \l__tenkz_leglab_seq #5
     \exp_args:NV \clist_map_inline:nn \l__tenkz_faceports_tl
       {
-        % leg base = (column abscissa, edge ordinate) in the logical
-        % frame; the vertical frame maps the column abscissa x to paper
-        % y = -x and keeps the extracted edge coordinate as paper x
-        \dim_set:Nn \l__tenkz_x_dim { \tenkz_colx:n { #2 + ##1 - 1 } }
-        \bool_if:NTF \l__tenkz_vertical_bool
-          { \tl_set:Ne \l__tenkz_legbase_tl
-              { ( \dim_use:N \l__tenkz_tmp_dim ,
-                  \dim_eval:n { -\l__tenkz_x_dim } ) } }
-          { \tl_set:Ne \l__tenkz_legbase_tl
-              { ( \dim_use:N \l__tenkz_x_dim ,
-                  \dim_use:N \l__tenkz_tmp_dim ) } }
+        % leg base = the glyph's face #3 presented at absolute column
+        % (#2 + ##1 - 1) -- exactly \tenkz_edgept:NnnN's own contract,
+        % so the anchor math (shape-edge ordinate, column abscissa,
+        % frame map) lives in the one place both share.  Re-extracting
+        % the shared edge anchor once per named column instead of once
+        % per call is a negligible cost at these column counts.
+        \tenkz_edgept:NnnN \l__tenkz_pa_tl {#3} { #2 + ##1 - 1 }
+          \l__tenkz_legbase_tl
         % offsets as ++/shift vectors, never inside calc (see leg_stub)
         \draw[physical~leg]
           \l__tenkz_legbase_tl --
@@ -3586,8 +3609,12 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     \tenkz_get:NeN \l__tenkz_opts_prop {#1-#2} \l__tenkz_silq_tl
     \exp_args:NV \tenkz_cell_opts:n \l__tenkz_silq_tl
     % cell-level physical= faces of a wires=k brick
-    \tenkz_sil_brick:n {#3}
-    % row-typed legs and wrap loops
+    \tenkz_sil_brick:nn {#1}{#3}
+    % row-typed legs and wrap loops.  `#3 at=none' draws no leg (the
+    % leg pass's own gate, \tenkz_leg_open:nnn); the silhouette must
+    % read the same resolved face so clearance and ink cannot drift --
+    % this is the one gate both passes share.
+    \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
     \str_if_eq:nnTF {#3} {up}
       {
         \bool_if:nTF { \tenkz_traced_p:nn {#1}{#2} }
@@ -3596,7 +3623,10 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
             \bool_lazy_and:nnT
               { \tenkz_openup_p:n {#1} }
               { ! \l__tenkz_cnolegs_bool }
-              { \tenkz_sil_leg:N \l__tenkz_cup_tl }
+              {
+                \str_if_eq:VnF \l__tenkz_faceports_tl {none}
+                  { \tenkz_sil_leg:N \l__tenkz_cup_tl }
+              }
           }
       }
       {
@@ -3606,7 +3636,10 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
             \bool_lazy_and:nnT
               { \tenkz_opendown_p:n {#1} }
               { ! \l__tenkz_cnolegs_bool }
-              { \tenkz_sil_leg:N \l__tenkz_cdown_tl }
+              {
+                \str_if_eq:VnF \l__tenkz_faceports_tl {none}
+                  { \tenkz_sil_leg:N \l__tenkz_cdown_tl }
+              }
           }
       }
     % external bead label with a component on the queried side.  The
@@ -3621,34 +3654,48 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
               { \tenkz_auto_quadrant:nN {#1} \l__tenkz_silq_tl }
               { \tl_set:Ne \l__tenkz_silq_tl
                   { \tenkz_compass:V \l__tenkz_clpos_tl } }
-            \str_if_eq:nnTF {#3} {up}
-              { \str_if_in:NnT \l__tenkz_silq_tl {north}
-                  { \tenkz_sil_band: } }
-              { \str_if_in:NnT \l__tenkz_silq_tl {south}
-                  { \tenkz_sil_band: } }
+            % re-resolve: the quadrant/compass calls above may have
+            % reused the shared scratch tl.  A `none' face has no leg
+            % to widen the label past, so it takes the plain band.
+            \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
+            \str_if_eq:VnF \l__tenkz_faceports_tl {none}
+              {
+                \str_if_eq:nnTF {#3} {up}
+                  { \str_if_in:NnT \l__tenkz_silq_tl {north}
+                      { \tenkz_sil_band: } }
+                  { \str_if_in:NnT \l__tenkz_silq_tl {south}
+                      { \tenkz_sil_band: } }
+              }
           }
       }
   }
 
 % the face legs of a wires=k brick (cell physical=), from the already
 % parsed options: one leg row per stated face, hung off the glyph's
-% edge like any other leg
-\cs_new_protected:Npn \tenkz_sil_brick:n #1
+% edge like any other leg.  This gate matches \tenkz_brick_legs:nn's
+% own condition -- an EXPLICIT physical= word on the cell -- not the
+% broader \tenkz_physical_face_active_p:nn the audit emitter uses (that
+% predicate also fires from row typing alone, which the brick draw pass
+% never reads; matching it here would reserve clearance for brick faces
+% the brick pass does not draw, contradicting the resolver's own
+% ink-and-clearance-cannot-drift-apart contract).  A brick's implicit,
+% row-typed leg is priced by the ordinary open/paired branch below this
+% call, exactly as for a wires=1 cell.
+\cs_new_protected:Npn \tenkz_sil_brick:nn #1#2
   {
     \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
       {
-        \str_if_eq:nnTF {#1} {up}
+        \tl_if_empty:NF \l__tenkz_cphys_tl
           {
-            \bool_lazy_or:nnT
-              { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
-              { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
-              { \tenkz_sil_leg:N \l__tenkz_cup_tl }
-          }
-          {
-            \bool_lazy_or:nnT
-              { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
-              { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
-              { \tenkz_sil_leg:N \l__tenkz_cdown_tl }
+            \str_if_eq:nnTF {#2} {up}
+              { \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                  { \tenkz_sil_leg:N \l__tenkz_cup_tl } }
+              { \bool_lazy_or:nnT
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {down} }
+                  { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
+                  { \tenkz_sil_leg:N \l__tenkz_cdown_tl } }
           }
       }
   }
@@ -3676,7 +3723,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
         \tenkz_get:NeN \l__tenkz_opts_prop
           { \int_use:N \l__tenkz_silr_int - #2 } \l__tenkz_silq_tl
         \exp_args:NV \tenkz_cell_opts:n \l__tenkz_silq_tl
-        \tenkz_sil_brick:n {#3}
+        \tenkz_sil_brick:nn { \int_use:N \l__tenkz_silr_int } {#3}
       }
   }
 
@@ -3895,6 +3942,21 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 % the face exactly as the drawing and event passes do.  The base row remains
 % available for centred-anchor geometry.
 \int_new:N \l__tenkz_fusebase_int
+% Walk \l__tenkz_fusebase_int (already primed by the caller) up from the
+% current row while the cell at (fusebase, #2) has kind #1, landing on the
+% first row whose kind differs.  #3 is the kind tl, read on entry and left
+% holding the landing row's kind -- the base-row search every fuse-bar /
+% wires=k continuation-row consumer below repeats by hand.
+\cs_new_protected:Npn \tenkz_walk_base_while:nnN #1#2#3
+  {
+    \bool_while_do:nn
+      { \str_if_eq_p:Vn #3 {#1} }
+      {
+        \int_decr:N \l__tenkz_fusebase_int
+        \tenkz_get:NeN \l__tenkz_kind_prop
+          {\int_use:N\l__tenkz_fusebase_int-#2} #3
+      }
+  }
 \cs_new_protected:Npn \tenkz_cell_fuse_combined:nnnN #1#2#3#4
   {
     \bool_set_false:N #4
@@ -3905,13 +3967,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       { \str_if_eq_p:Vn \l_tmpa_tl {fuse} }
       { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
       {
-        \bool_while_do:nn
-          { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
-          {
-            \int_decr:N \l__tenkz_fusebase_int
-            \tenkz_get:NeN \l__tenkz_kind_prop
-              {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpa_tl
-          }
+        \tenkz_walk_base_while:nnN {fusec}{\int_eval:n{#2}} \l_tmpa_tl
         \tenkz_get:NeN \l__tenkz_opts_prop
           {\int_use:N\l__tenkz_fusebase_int-\int_eval:n{#2}} \l_tmpb_tl
         \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
@@ -3954,9 +4010,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \cs_new_protected:Npn \tenkz_cell_virtual_row_port:nnnN #1#2#3#4
   {
     \bool_set_true:N #4
-    \prop_get:NeNF \l__tenkz_owner_prop
-      {\int_eval:n{#1}-\int_eval:n{#2}} \l__tenkz_virtualbase_tl
-      { \tl_set:Ne \l__tenkz_virtualbase_tl {\int_eval:n{#2}} }
+    \tenkz_owner_col:nnN {#1}{#2} \l__tenkz_virtualbase_tl
     \int_set:Nn \l__tenkz_fusebase_int {#1}
     \tenkz_get:NeN \l__tenkz_kind_prop
       {\int_use:N\l__tenkz_fusebase_int-\l__tenkz_virtualbase_tl} \l_tmpa_tl
@@ -3965,14 +4019,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
       {
         \bool_set_false:N #4
-        \bool_while_do:nn
-          { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
-          {
-            \int_decr:N \l__tenkz_fusebase_int
-            \tenkz_get:NeN \l__tenkz_kind_prop
-              {\int_use:N\l__tenkz_fusebase_int-\l__tenkz_virtualbase_tl}
-              \l_tmpa_tl
-          }
+        \tenkz_walk_base_while:nnN {fusec}{\l__tenkz_virtualbase_tl} \l_tmpa_tl
         \tenkz_get:NeN \l__tenkz_opts_prop
           {\int_use:N\l__tenkz_fusebase_int-\l__tenkz_virtualbase_tl}
           \l_tmpb_tl
@@ -3986,14 +4033,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       }
       {
         % Continuation rows of an ordinary wires=k glyph are `tnv'.
-        \bool_while_do:nn
-          { \str_if_eq_p:Vn \l_tmpa_tl {tnv} }
-          {
-            \int_decr:N \l__tenkz_fusebase_int
-            \tenkz_get:NeN \l__tenkz_kind_prop
-              {\int_use:N\l__tenkz_fusebase_int-\l__tenkz_virtualbase_tl}
-              \l_tmpa_tl
-          }
+        \tenkz_walk_base_while:nnN {tnv}{\l__tenkz_virtualbase_tl} \l_tmpa_tl
         \bool_lazy_any:nT
           {
             { \str_if_eq_p:Vn \l_tmpa_tl {tn} }
@@ -4399,7 +4439,6 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       { \tenkz_face_arity:nN {\l__tenkz_cwires_int} \l__tenkz_faceports_tl }
   }
 \int_new:N \l__tenkz_facearity_int
-\prop_new:N \l__tenkz_sigopenlower_prop
 
 % Does the physical face of the glyph owning (row, column) contain the
 % particular column?  This is the per-slot counterpart of
@@ -4408,18 +4447,9 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \cs_new_protected:Npn \tenkz_cell_physical_port:nnnN #1#2#3#4
   {
     \bool_set_false:N #4
-    \prop_get:NeNF \l__tenkz_owner_prop
-      {\int_eval:n{#1}-\int_eval:n{#2}} \l__tenkz_pwbase_tl
-      { \tl_set:Ne \l__tenkz_pwbase_tl {\int_eval:n{#2}} }
-    \tenkz_get:NeN \l__tenkz_kind_prop
-      {\int_eval:n{#1}-\l__tenkz_pwbase_tl} \l__tenkz_pkind_tl
-    \bool_lazy_or:nnT
-      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
-      { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+    \tenkz_resolve_owner:nnNN {#1}{#2} \l__tenkz_pwbase_tl \l__tenkz_rok_bool
+    \bool_if:NT \l__tenkz_rok_bool
       {
-        \tenkz_get:NeN \l__tenkz_opts_prop
-          {\int_eval:n{#1}-\l__tenkz_pwbase_tl} \l_tmpb_tl
-        \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
         \bool_if:NF \l__tenkz_cnolegs_bool
           {
             \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
@@ -4441,27 +4471,16 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     \tenkz_cell_no_legs:nnN {#1}{#2} \l_tmpa_bool
     \bool_if:NF \l_tmpa_bool
       {
-        \prop_get:NeNF \l__tenkz_owner_prop
-          {\int_eval:n{#1+1}-#2} \l__tenkz_pwbase_tl
-          { \tl_set:Nn \l__tenkz_pwbase_tl {#2} }
-        \tenkz_get:NeN \l__tenkz_kind_prop
-          {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l__tenkz_pkind_tl
-        \bool_lazy_or:nnT
-          { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tn} }
-          { \str_if_eq_p:Vn \l__tenkz_pkind_tl {tnc} }
+        \tenkz_resolve_owner:nnNN {\int_eval:n{#1+1}}{#2}
+          \l__tenkz_pwbase_tl \l__tenkz_rok_bool
+        \bool_if:NT \l__tenkz_rok_bool
           {
-            \tenkz_get:NeN \l__tenkz_opts_prop
-              {\int_eval:n{#1+1}-\l__tenkz_pwbase_tl} \l_tmpb_tl
-            \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
             \bool_if:NF \l__tenkz_cnolegs_bool
               {
                 \tenkz_face_ports:nN {up} \l__tenkz_faceports_tl
                 \str_if_eq:VnTF \l__tenkz_faceports_tl {center}
-                  { \prop_if_in:NeF \l__tenkz_sigopenlower_prop
-                      {#1-\tl_use:N\l__tenkz_pwbase_tl}
-                      { \prop_put:Nen \l__tenkz_sigopenlower_prop
-                          {#1-\tl_use:N\l__tenkz_pwbase_tl} {}
-                        \int_incr:N \l__tenkz_bpu_int } }
+                  { \tenkz_once_p:nnT {sig-open-lower} {#1-\tl_use:N\l__tenkz_pwbase_tl}
+                      { \int_incr:N \l__tenkz_bpu_int } }
                   { \clist_if_in:NeT \l__tenkz_faceports_tl
                       {\int_eval:n{#2-\l__tenkz_pwbase_tl+1}}
                       { \int_incr:N \l__tenkz_bpu_int } }
@@ -4474,7 +4493,9 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
   {
     \int_set_eq:NN \l__tenkz_bpu_int \l__tenkz_internalpu_int
     \int_set_eq:NN \l__tenkz_bpd_int \l__tenkz_internalpd_int
-    \prop_clear:N \l__tenkz_sigopenlower_prop
+    % the `sig-open-lower' namespace of \l__tenkz_once_prop resets with the rest of
+    % it at the top of \tenkz_draw_legs:, which this pass always follows
+    % within the same picture (see the declaration comment)
     % trace=physical closes each traced site's up+down pair per site, so
     % those legs leave the signature (single-row form only; the deferred
     % multi-row form keeps its counts until it draws)
