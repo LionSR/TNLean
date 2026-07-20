@@ -521,13 +521,14 @@ theorem support_resolvent_eq_of_defect_eq_zero
     exact congrFun (Fintype.sum_eq_zero_iff_of_nonneg hnonneg |>.mp hreszero) i
   have hGr : G i *ᵥ (b i - S i *ᵥ x) = 0 :=
     (hG.dotProduct_mulVec_zero_iff (b i - S i *ᵥ x)).mp hterm
+  have hSG : S i * G i = P := by
+    simpa only [G, P] using (hS i).self_mul_supportInvSqrt_sq
   have hPr : P *ᵥ (b i - S i *ᵥ x) = 0 := by
     calc
       P *ᵥ (b i - S i *ᵥ x) =
-          (S i * G i) *ᵥ (b i - S i *ᵥ x) := by
-            rw [show S i * G i = P from by
-              simpa only [G, P] using (hS i).self_mul_supportInvSqrt_sq]
-      _ = S i *ᵥ (G i *ᵥ (b i - S i *ᵥ x)) := mulVec_mulVec _ _ _
+          (S i * G i) *ᵥ (b i - S i *ᵥ x) := by rw [hSG]
+      _ = S i *ᵥ (G i *ᵥ (b i - S i *ᵥ x)) :=
+        (Matrix.mulVec_mulVec (b i - S i *ᵥ x) (S i) (G i)).symm
       _ = 0 := by rw [hGr, Matrix.mulVec_zero]
   have hPrSelf : P *ᵥ (b i - S i *ᵥ x) = b i - S i *ᵥ x := by
     rw [mulVec_sub, show P *ᵥ b i = b i from hb i]
@@ -536,9 +537,9 @@ theorem support_resolvent_eq_of_defect_eq_zero
   have hr : b i - S i *ᵥ x = 0 := hPrSelf ▸ hPr
   have hbS : b i = S i *ᵥ x := sub_eq_zero.mp hr
   change G i *ᵥ b i = P *ᵥ x
-  rw [hbS, mulVec_mulVec]
-  rw [show G i * S i = P from by
-    simpa only [G, P] using (hS i).supportInvSqrt_sq_mul_self]
+  have hGS : G i * S i = P := by
+    simpa only [G, P] using (hS i).supportInvSqrt_sq_mul_self
+  rw [hbS, mulVec_mulVec, hGS]
 
 private theorem resolvent_residual_identity
     {ι : Type*} [Fintype ι] [Nonempty ι]
