@@ -153,7 +153,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
-| TNKrausMap | ch16_channel_representations:417 | `[sandwich, west label=$\rho$, east label=$T(\rho)$]: \tn{K_i} \\ \tn*{K_i}` | trivial (K5 `pair label=$i$` optional) |
+| TNKrausMap | ch16_channel_representations:467 | `[sandwich, east={cup=$\rho$}, west label=$T(\rho)$]: \tn{K_i} \\ \tn*{K_i}` | source-faithful applied channel; exact boundary `(2,0,0,0)`, no package change |
 | TNStinespring | ch16_channel_representations:697 | `[sandwich, west label=$\rho$, east label=$\tr_E[V\rho V^\dagger]$]: \tn{V} \\ \tn*{V}` | trivial (K5 `pair label=$E$` optional) |
 | TNChoiMatrix | ch16_channel_representations:108 | `[sandwich, close west={$\Omega$}]: \tn{T} \\ \tn{\mathrm{id}}` | trivial (0.6 bare identity-wire atom would let `id` be a plain wire) |
 | TNTransferMapTracePairing | ch16_channel_representations:1478 | demote: `T(\rho)=\sum_{ij}t_{ij}\tr(\sigma_j\rho)\,\sigma_i` (+ optional `\tnpic[inline, periodic]{\tnX{\sigma_j}&\tnX{\rho}}` for the trace loop) | needs-judgment (candidate demotion to plain math) |
