@@ -272,7 +272,8 @@ theorem supportedMarginalReconstruction_eq
     Pi.star_apply, diagonalMarginalPurification]
   simp only [RCLike.star_def, ite_mul, zero_mul, mul_ite, mul_zero]
   rw [Fintype.sum_prod_type]
-  simp
+  simp only [Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq',
+    Finset.mem_univ, ↓reduceIte]
   rw [Finset.sum_eq_single j (fun k _ hk ↦ by simp [hk]) (by simp)]
   simp
   have hi : (Real.sqrt (p i) : ℂ) ≠ 0 := by
