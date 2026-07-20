@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.PetzRecovery
 import Mathlib.Data.Complex.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Vec
@@ -25,7 +26,7 @@ gives a common generalized-inverse solution after projection to each support.
 ## References
 
 * A. Jenčová and M. B. Ruskai, arXiv:0903.2895v4, Appendix, equations `(Mj)`
-  and `(eq:Schz1)`, and §4.2, equation `(basiceq)`.
+  and `(eq:Schz1)`, and §3.1, equation `(basiceq)`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -33,11 +34,6 @@ open scoped Matrix BigOperators ComplexOrder
 namespace Matrix
 
 variable {n : Type*} [Fintype n]
-
-private lemma star_mulVec_dotProduct (S : Matrix n n ℂ) (hS : S.IsHermitian)
-    (x y : n → ℂ) :
-    star (S *ᵥ x) ⬝ᵥ y = star x ⬝ᵥ (S *ᵥ y) := by
-  rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
 
 variable [DecidableEq n]
 
@@ -57,13 +53,13 @@ private lemma support_resolvent_residual_expand
     simpa only [G, P] using hS.self_mul_supportInvSqrt_sq
   have hPb (y : n → ℂ) :
       dotProduct (star b) (P *ᵥ y) = dotProduct (star b) y := by
-    rw [← star_mulVec_dotProduct P hS.isHermitian.supportProj_isHermitian b y]
+    rw [← hS.isHermitian.supportProj_isHermitian.star_mulVec_dotProduct b y]
     rw [hb]
   simp only [star_sub, sub_dotProduct, mulVec_sub, dotProduct_sub]
   rw [mulVec_mulVec, hGS, hPb]
-  rw [star_mulVec_dotProduct S hS.isHermitian]
+  rw [hS.isHermitian.star_mulVec_dotProduct]
   rw [mulVec_mulVec, hSG, hb]
-  rw [star_mulVec_dotProduct S hS.isHermitian]
+  rw [hS.isHermitian.star_mulVec_dotProduct]
   rw [mulVec_mulVec]
   rw [show S * P = S from hS.isHermitian.mul_supportProj_self]
   ring
@@ -155,7 +151,7 @@ solution for each summand is the restriction of the summed solution to that
 summand's support.
 
 This is the support-domain form of the common-resolvent conclusion
-`(basiceq)` in Jenčová--Ruskai, arXiv:0903.2895v4, §4.2. Its residual
+`(basiceq)` in Jenčová--Ruskai, arXiv:0903.2895v4, §3.1. Its residual
 calculation is the one in the Appendix, equations `(Mj)` and `(eq:Schz1)`. -/
 theorem support_resolvent_eq_of_defect_eq_zero
     {ι : Type*} [Fintype ι] [Nonempty ι]
