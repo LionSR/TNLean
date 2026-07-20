@@ -69,8 +69,11 @@ private lemma tendsto_mpvInner_one_of_overlap_one
 **Permutation rigidity for basis-of-normal-tensors (BNT) decompositions, primitive branch.**
 
 Two finite families of primitive blocks whose MPV overlaps are asymptotically orthonormal
-and which span the same MPV subspace at each system size must agree blockwise up to a
-permutation, dimension equality, and gauge-phase equivalence.
+and which eventually span the same MPV subspace must agree blockwise up to a permutation,
+dimension equality, and gauge-phase equivalence.
+
+The eventual span hypothesis is the comparison used in CPSV16, arXiv:1606.00608,
+local source lines 522–525 and 1305–1307.
 -/
 theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     {d g : ℕ}
@@ -86,7 +89,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     (hA_off : ∀ i j, i ≠ j → Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
     (hB_self : ∀ j, Tendsto (fun N => mpvOverlap (d := d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
     (hB_off : ∀ i j, i ≠ j → Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N) atTop (nhds 0))
-    (hspan : ∀ N,
+    (hspan : ∀ᶠ N : ℕ in atTop,
       Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (A j) N))
       =
       Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (B j) N))) :
@@ -386,7 +389,7 @@ The key new ingredient is a proof that the equal-span hypothesis forces
 * `MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho`:
   If two BNT-like families with `gA` and `gB` blocks respectively are both
   injective, normalised, and have asymptotically orthonormal overlaps, and they
-  span the same MPV subspace at every system size, then
+  eventually span the same MPV subspace, then
   1. `gA = gB`,
   2. there is a permutation `perm : Fin gA ≃ Fin gB`, and
   3. each block `A j` is gauge-phase equivalent to `B (perm j)` (with matching
@@ -405,9 +408,12 @@ namespace MPSTensor
 **Primitive basis-of-normal-tensors permutation step, span-equality formulation.**
 
 Two BNT-like families with possibly different numbers of blocks `gA`, `gB`
-that are injective, normalised, asymptotically orthonormal, and span the same
-MPV subspace at every system size must have `gA = gB` and agree blockwise up to
-a permutation, dimension equality, and gauge-phase equivalence.
+that are injective, normalised, asymptotically orthonormal, and eventually span
+the same MPV subspace must have `gA = gB` and agree blockwise up to a
+permutation, dimension equality, and gauge-phase equivalence.
+
+The eventual span hypothesis is the comparison used in CPSV16, arXiv:1606.00608,
+local source lines 522–525 and 1305–1307.
 -/
 lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
     {d gA gB : ℕ}
@@ -425,7 +431,7 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
     (hB_self : ∀ j, Tendsto (fun N => mpvOverlap (d := d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
     (hB_off : ∀ i j, i ≠ j →
       Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N) atTop (nhds 0))
-    (hspan : ∀ N,
+    (hspan : ∀ᶠ N : ℕ in atTop,
       Submodule.span ℂ (Set.range (fun j : Fin gA => mpvState (d := d) (A j) N))
         =
       Submodule.span ℂ (Set.range (fun j : Fin gB => mpvState (d := d) (B j) N))) :
@@ -448,10 +454,14 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
   -- ═══════════════════════════════════════════════════════════════════════════
   have hBoth : ∀ᶠ N in atTop,
       LinearIndependent ℂ (fun j : Fin gA => mpvState (d := d) (A j) N) ∧
-      LinearIndependent ℂ (fun j : Fin gB => mpvState (d := d) (B j) N) := by
-    filter_upwards [hA_li, hB_li] with N hA hB
-    exact ⟨hA, hB⟩
-  obtain ⟨N, hA_N, hB_N⟩ := hBoth.exists
+      LinearIndependent ℂ (fun j : Fin gB => mpvState (d := d) (B j) N) ∧
+      Submodule.span ℂ
+          (Set.range (fun j : Fin gA => mpvState (d := d) (A j) N)) =
+        Submodule.span ℂ
+          (Set.range (fun j : Fin gB => mpvState (d := d) (B j) N)) := by
+    filter_upwards [hA_li, hB_li, hspan] with N hA hB hspanN
+    exact ⟨hA, hB, hspanN⟩
+  obtain ⟨N, hA_N, hB_N, hspanN⟩ := hBoth.exists
   -- ═══════════════════════════════════════════════════════════════════════════
   -- Step 3: Deduce gA = gB via finrank_span_eq_card.
   -- ═══════════════════════════════════════════════════════════════════════════
@@ -462,7 +472,7 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
       (fun j : Fin gA => mpvState (d := d) (A j) N))) =
     Module.finrank ℂ ↥(Submodule.span ℂ (Set.range
       (fun j : Fin gB => mpvState (d := d) (B j) N))) := by
-    rw [hspan N]
+    rw [hspanN]
   have hcard : Fintype.card (Fin gA) = Fintype.card (Fin gB) := by
     rw [← hfA, hfAB, hfB]
   simp only [Fintype.card_fin] at hcard
