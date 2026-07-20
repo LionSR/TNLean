@@ -165,16 +165,6 @@ variable {I J : Type*} [Finite I] [DecidableEq I] [Finite J] [DecidableEq J]
 variable {d : I → ℕ} {e : J → ℕ}
 variable [∀ i, NeZero (d i)] [∀ j, NeZero (e j)]
 
-noncomputable local instance sourceMatrix_isSimpleRing (i : I) :
-    IsSimpleRing (Matrix (Fin (d i)) (Fin (d i)) ℂ) := by
-  have : Nonempty (Fin (d i)) := Fin.pos_iff_nonempty.mp (NeZero.pos (d i))
-  exact IsSimpleRing.matrix (Fin (d i)) ℂ
-
-noncomputable local instance targetMatrix_isSimpleRing (j : J) :
-    IsSimpleRing (Matrix (Fin (e j)) (Fin (e j)) ℂ) := by
-  have : Nonempty (Fin (e j)) := Fin.pos_iff_nonempty.mp (NeZero.pos (e j))
-  exact IsSimpleRing.matrix (Fin (e j)) ℂ
-
 /-- The star-algebra equivalence obtained by restricting a product equivalence
 to a supplied pair of simple matrix summands.
 
