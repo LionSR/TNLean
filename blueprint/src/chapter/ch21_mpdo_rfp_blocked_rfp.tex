@@ -1923,6 +1923,67 @@ physical indices, as in
     $\widetilde S$.
 \end{proof}
 
+\begin{theorem}[Complete positivity and adjoint Schwarz for the transported maps]
+    \label{thm:mpdo_transported_vertical_sector_composites_schwarz}
+    \lean{MPOTensor.transportTToVerticalCoordinates_isKrausCP,
+      MPOTensor.transportSToVerticalCoordinates_isKrausCP,
+      MPOTensor.verticalSectorBlockDiagonal_eq_equivReindexMap_comp_embedding,
+      MPOTensor.verticalSectorBlocks_eq_compression_comp_equivReindexMap,
+      MPOTensor.directSumMapExtension_transportedVerticalSectorT,
+      MPOTensor.directSumMapExtension_transportedVerticalSectorS,
+      MPOTensor.transportedVerticalSectorT_isKrausDirectSumMap,
+      MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap,
+      MPOTensor.transportedVerticalSector_composites_traceAdjointSchwarz}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      thm:mpdo_vertical_sector_partial_trace_kraus,
+      lem:direct_sum_kraus_composition_schwarz,
+      thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
+    the maps
+    \[
+      \widetilde T:\mathcal A_1\longrightarrow\mathcal A_2,
+      \qquad
+      \widetilde S:\mathcal A_2\longrightarrow\mathcal A_1
+    \]
+    are completely positive.  Consequently, both square composites are
+    completely positive, and their trace adjoints satisfy the Schwarz
+    inequality in every simple summand.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\iota_i$ and $\pi_i$ be block-diagonal inclusion and diagonal-block
+    extraction, respectively, and let $W_i$ denote the canonical reindexing
+    from the weighted vertical-sector coordinates to the retained physical
+    coordinates.  The full-matrix extension of the transported refinement
+    map has the factorization
+    \[
+      \widehat{\widetilde T}
+        =\widehat{\widetilde R}_2\circ W_2^{-1}\circ
+          T_{\mathrm v}\circ W_1\circ\widehat R_1.
+    \]
+    Here $\widehat R_1$ is normalized state preparation,
+    $\widehat{\widetilde R}_2$ is controlled partial trace, and
+    $T_{\mathrm v}$ is the physical refinement map composed with
+    single-operator conjugations and a physical-index reindexing.  Every
+    factor is completely positive.  The analogous identity
+    \[
+      \widehat{\widetilde S}
+        =\widehat{\widetilde R}_1\circ W_1^{-1}\circ
+          S_{\mathrm v}\circ W_2\circ\widehat R_2
+    \]
+    proves complete positivity of $\widetilde S$.  These factorizations are
+    exact on the full matrix algebras: $\pi_iW_i^{-1}$ is precisely extraction
+    of the retained diagonal sector blocks.  Thus no range inclusion is used.
+
+    Composition gives complete positivity of
+    $\widetilde S\widetilde T$ and $\widetilde T\widetilde S$.
+    The preceding theorem gives trace preservation of these two composites.
+    Their trace adjoints are therefore unital completely positive maps, and
+    the Kadison--Schwarz inequality applies in each simple summand.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
