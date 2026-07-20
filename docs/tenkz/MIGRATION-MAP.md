@@ -213,7 +213,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
 | TNPhysicalRealization | ch23_algebraic_ft:188 | `\tnpic[physical=up]{\tn{A}&\tnX{X}} = \tnpic[rows={op,ket}]{\tn{O_A(X)}\\ \tn{A}}` | trivial |
-| TNLinearTwist | ch12_symmetry:153 | `[rows={op,ket}]: \tn[up=$i$]{u} \\ \tn{A}` | trivial |
+| TNLinearTwist | ch12_symmetry:153 | `[rows={op:none,ket}]: \tn[role=operator,up=$i$]{U(g)} \\ \tn{A}` | trivial (`op:none` is required because $U(g)$ has no virtual legs) |
 | TNPermutationTwist | ch12_symmetry:549 | fold into the `\tndefine`d PermutationTwistLabeled with $\sigma_g$ | trivial |
 | TNTwistedTransfer | ch12_symmetry:616 | `[rows={ket,op,bra}, west label=$X$, east label=$\mathcal E_u(X)$]: \tn{A^{(n)}} \\ \tn{u} \\ \tn*{A^{(n')}}` | trivial |
 | TNStringOrderParameter | ch12_symmetry:634 | `[rows={ket,op,bra}]` word with `\tnghost` end cells in the op row, `\tndots`, length brace $L$ | trivial |
