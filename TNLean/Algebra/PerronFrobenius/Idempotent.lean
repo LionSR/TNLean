@@ -125,7 +125,7 @@ theorem IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three
 then its square is an outer product whose diagonal pairing is one.
 
 This is the normalized factorization needed for the corrected two-step
-coefficient in arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+coefficient in arXiv:1606.00608, Appendix C.2, Proposition 4to2, lines
 1606--1616.  It factors `T ^ 2`, not the one-step matrix `T` printed at
 line 1613. -/
 theorem IsPrimitive.exists_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three
