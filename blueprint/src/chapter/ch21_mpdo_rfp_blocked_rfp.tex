@@ -263,6 +263,114 @@ physical indices, as in
     \cite[Appendix~C.4, lines~1957--1971]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Complete positivity of the normalized vertical-sector maps]
+    \label{thm:mpdo_vertical_sector_partial_trace_kraus}
+    \lean{MPOTensor.verticalSectorSwapEquiv}
+    \lean{MPOTensor.normalizedVerticalSectorEmbedding_isKrausDirectSumMap}
+    \lean{MPOTensor.verticalSectorPartialTrace_isKrausDirectSumMap}
+    \leanok
+    \uses{def:mpdo_normalized_vertical_sector_maps,
+        def:kraus_map_between_direct_sums}
+    Let $(d_\alpha)_\alpha$ and $(r_\alpha)_\alpha$ be finite families of
+    dimensions with $r_\alpha>0$, and suppose that every diagonal entry of
+    $\mu_\alpha$ is positive.  Then the normalized embedding
+    \[
+        R_\mu:\bigoplus_\alpha M_{d_\alpha}(\mathbb C)
+          \longrightarrow \bigoplus_\alpha M_{r_\alpha d_\alpha}(\mathbb C),
+        \qquad
+        R_\mu((X_\alpha)_\alpha)
+          =\left(\frac{\mu_\alpha}{m_\alpha}\otimes X_\alpha\right)_\alpha
+    \]
+    is a direct-sum Kraus map.  Without any condition on the multiplicities,
+    the map
+    \[
+        \widetilde R:\bigoplus_\alpha M_{r_\alpha d_\alpha}(\mathbb C)
+          \longrightarrow \bigoplus_\alpha M_{d_\alpha}(\mathbb C),
+        \qquad
+        \widetilde R((Y_\alpha)_\alpha)
+          =\bigl(\operatorname{tr}_{\mathrm{mult}}(Y_\alpha)\bigr)_\alpha
+    \]
+    is a direct-sum Kraus map.  Its restriction to the weighted sectors is
+    the retraction in
+    \cite[Appendix~C.4, lines~1961--1970]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_equiv_reindex_cptp,
+        thm:mpdo_state_preparation_kraus_resolution,
+        thm:mpdo_controlled_kraus_map_cptp,
+        thm:mpdo_controlled_kraus_map_same_block,
+        thm:mpdo_controlled_dependent_partial_trace_same_block,
+        thm:mpdo_controlled_kraus_map_off_block,
+        thm:mpdo_controlled_dependent_partial_trace_cptp,
+        lem:is_kraus_cp_comp}
+    Exchange the two coordinates within each sector by
+    \[
+        w(\alpha,q,i)=(\alpha,i,q).
+    \]
+    Let $R_w$ be the corresponding matrix reindexing.  For the normalized
+    embedding, set
+    \[
+        \rho_\alpha=m_\alpha^{-1}\mu_\alpha.
+    \]
+    The hypotheses give $\rho_\alpha\succeq0$ and
+    $\operatorname{tr}(\rho_\alpha)=1$.  Let $\mathcal P$ be the
+    orthogonally controlled preparation of these density matrices.  Thus
+    \[
+      [\mathcal P(Z)]_{\langle\alpha,(i,q)\rangle,
+          \langle\beta,(j,s)\rangle}
+      =\begin{cases}
+        Z_{\langle\alpha,i\rangle,\langle\alpha,j\rangle}
+          \rho_\alpha(q,s), & \alpha=\beta,\\
+        0, & \alpha\ne\beta.
+      \end{cases}
+    \]
+    The preparation Kraus operators resolve the identity in each sector, so
+    $\mathcal P$ is trace-preserving and completely positive.  Reindexing by
+    $w^{-1}$ changes $X_\alpha\otimes\rho_\alpha$ into
+    $\rho_\alpha\otimes X_\alpha$.  Consequently, the full-matrix extension
+    satisfies
+    \[
+      [\widehat R_\mu(Z)]_{\langle\alpha,(q,i)\rangle,
+          \langle\beta,(s,j)\rangle}
+      =\begin{cases}
+        \rho_\alpha(q,s)
+          Z_{\langle\alpha,i\rangle,\langle\alpha,j\rangle},
+          & \alpha=\beta,\\
+        0, & \alpha\ne\beta,
+      \end{cases}
+    \]
+    and
+    \[
+        \widehat R_\mu=R_{w^{-1}}\circ\mathcal P.
+    \]
+    This proves complete positivity of the normalized embedding.
+
+    Now let $\mathcal C_{\mathrm{tr}}$ be the controlled partial trace over
+    the $\mathbb C^{r_\alpha}$ factors.  For a matrix $Y$ on
+    $\bigoplus_\alpha(\mathbb C^{r_\alpha}\otimes\mathbb C^{d_\alpha})$,
+    the full-matrix extension satisfies
+    \[
+      [\widehat{\widetilde R}(Y)]_{\langle\alpha,i\rangle,
+          \langle\beta,j\rangle}
+      =\begin{cases}
+        \displaystyle\sum_{q=0}^{r_\alpha-1}
+          Y_{\langle\alpha,(q,i)\rangle,\langle\alpha,(q,j)\rangle},
+          & \alpha=\beta,\\
+        0, & \alpha\ne\beta.
+      \end{cases}
+    \]
+    The diagonal case is the ordinary right partial trace after applying
+    $R_w$, and the off-diagonal case vanishes under the orthogonal sector
+    control.  Hence
+    \[
+        \widehat{\widetilde R}=\mathcal C_{\mathrm{tr}}\circ R_w.
+    \]
+    Equivalence reindexing and the controlled dependent partial trace are
+    trace-preserving completely positive maps, so their composition has a
+    Kraus representation.
+\end{proof}
+
 \begin{lemma}[Retraction of the normalized vertical-sector embedding]
     \label{lem:mpdo_vertical_sector_retraction}
     \lean{MPOTensor.verticalMultiplicityTrace_ne_zero}

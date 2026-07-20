@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.FixedPoint.DirectSumKraus
 import TNLean.Channel.PartialTrace
 import TNLean.MPS.MPDO.Defs
 
@@ -123,6 +124,162 @@ theorem verticalSectorPartialTrace_apply {g : ℕ} (dim mult : Fin g → ℕ)
     (Y : VerticalWeightedSectorSpace dim mult) (α : Fin g) :
     verticalSectorPartialTrace dim mult Y α = Matrix.traceLeft (Y α) :=
   rfl
+
+/-- Exchange the multiplicity and simple-matrix coordinates within every
+vertical sector.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1961--1970. -/
+def verticalSectorSwapEquiv {g : ℕ} (dim mult : Fin g → ℕ) :
+    (Σ α, Fin (mult α) × Fin (dim α)) ≃
+      (Σ α, Fin (dim α) × Fin (mult α)) where
+  toFun x := ⟨x.1, x.2.swap⟩
+  invFun x := ⟨x.1, x.2.swap⟩
+  left_inv x := by
+    obtain ⟨α, i, j⟩ := x
+    rfl
+  right_inv x := by
+    obtain ⟨α, i, j⟩ := x
+    rfl
+
+/-- The normalized embedding of the simple vertical-sector algebras is
+completely positive as a map between finite sums of matrix algebras.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1957--1968. -/
+theorem normalizedVerticalSectorEmbedding_isKrausDirectSumMap
+    {g : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (hMult : ∀ α, 0 < mult α)
+    (hWeight : ∀ α q, (0 : ℂ) < weight α q) :
+    Matrix.IsKrausDirectSumMap
+      (normalizedVerticalSectorEmbedding dim mult weight) := by
+  let ρ : (α : Fin g) → Matrix (Fin (mult α)) (Fin (mult α)) ℂ :=
+    fun α ↦ (verticalMultiplicityTrace weight α)⁻¹ •
+      Matrix.diagonal (weight α)
+  have hTrace (α : Fin g) : 0 < verticalMultiplicityTrace weight α := by
+    apply Finset.sum_pos'
+    · intro q _
+      exact (hWeight α q).le
+    · let q : Fin (mult α) := ⟨0, hMult α⟩
+      exact ⟨q, Finset.mem_univ q, hWeight α q⟩
+  have hρ (α : Fin g) : (ρ α).PosSemidef := by
+    dsimp only [ρ]
+    exact (Matrix.PosSemidef.diagonal (fun q ↦ (hWeight α q).le)).smul
+      (inv_nonneg.mpr (hTrace α).le)
+  have hρTrace (α : Fin g) : Matrix.trace (ρ α) = 1 := by
+    simp only [ρ, Matrix.trace_smul, Matrix.trace_diagonal]
+    change (verticalMultiplicityTrace weight α)⁻¹ *
+      verticalMultiplicityTrace weight α = 1
+    field_simp [ne_of_gt (hTrace α)]
+  let P :
+      Matrix (Σ α, Fin (dim α)) (Σ α, Fin (dim α)) ℂ →ₗ[ℂ]
+        Matrix (Σ α, Fin (dim α) × Fin (mult α))
+          (Σ α, Fin (dim α) × Fin (mult α)) ℂ :=
+    Matrix.controlledKrausMap
+      (fun α ↦ Fintype.card (Fin (mult α)))
+      (fun α j ↦ Matrix.preparationKraus (ρ α) (hρ α)
+        ((Fintype.equivFin (Fin (mult α))).symm j))
+  have hP : IsKrausCPTP P := by
+    dsimp only [P]
+    apply Matrix.controlledKrausMap_isKrausCPTP
+    intro α
+    exact Matrix.preparationKraus_resolution (ρ α) (hρ α) (hρTrace α)
+  change IsKrausCP
+    (Matrix.directSumMapExtension
+      (normalizedVerticalSectorEmbedding dim mult weight))
+  rw [show Matrix.directSumMapExtension
+      (normalizedVerticalSectorEmbedding dim mult weight) =
+        Matrix.equivReindexMap (verticalSectorSwapEquiv dim mult).symm ∘ₗ P by
+    apply LinearMap.ext
+    intro Z
+    ext ⟨α, ⟨q, i⟩⟩ ⟨β, ⟨s, j⟩⟩
+    by_cases hαβ : α = β
+    · subst β
+      simp only [Matrix.directSumMapExtension_apply,
+        Matrix.directSumDiagonalEmbedding_apply,
+        Matrix.blockDiagonal'_apply_eq,
+        normalizedVerticalSectorEmbedding_apply,
+        Matrix.directSumDiagonalCompression_apply,
+        Matrix.smul_apply,
+        Matrix.kroneckerMap_apply,
+        LinearMap.comp_apply,
+        Matrix.equivReindexMap,
+        LinearEquiv.coe_toLinearMap,
+        Matrix.coe_reindexLinearEquiv,
+        Matrix.reindex_apply,
+        Matrix.submatrix_apply,
+        verticalSectorSwapEquiv]
+      change _ = P Z ⟨α, (i, q)⟩ ⟨α, (j, s)⟩
+      dsimp only [P]
+      rw [Matrix.controlledKrausMap_sameBlock_apply,
+        Matrix.rectangularKrausMap_equiv
+          (Fintype.equivFin (Fin (mult α))),
+        Matrix.rectangularKrausMap_preparationKraus_eq]
+      change _ = Matrix.kroneckerMap (fun x y : ℂ ↦ x * y)
+        (Z.submatrix (Sigma.mk α) (Sigma.mk α)) (ρ α) (i, q) (j, s)
+      simp only [Matrix.kroneckerMap_apply, Matrix.submatrix_apply, ρ,
+        Matrix.smul_apply, smul_eq_mul]
+      ring
+    · rw [Matrix.directSumMapExtension_apply,
+        Matrix.directSumDiagonalEmbedding_apply,
+        Matrix.blockDiagonal'_apply_ne _ _ _ hαβ]
+      simp only [LinearMap.comp_apply, Matrix.equivReindexMap,
+        LinearEquiv.coe_toLinearMap, Matrix.coe_reindexLinearEquiv,
+        Matrix.reindex_apply, verticalSectorSwapEquiv]
+      change 0 = P Z ⟨α, (i, q)⟩ ⟨β, (j, s)⟩
+      dsimp only [P]
+      rw [Matrix.controlledKrausMap_apply_of_ne _ _ _ hαβ]]
+  exact isKrausCP_comp hP.isKrausCP
+    (Matrix.equivReindexMap_isKrausCPTP
+      (verticalSectorSwapEquiv dim mult).symm).isKrausCP
+
+/-- Partial trace over the multiplicity coordinate is completely positive as
+a map between the finite sums of vertical-sector matrix algebras.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1961--1970. -/
+theorem verticalSectorPartialTrace_isKrausDirectSumMap
+    {g : ℕ} (dim mult : Fin g → ℕ) :
+    Matrix.IsKrausDirectSumMap
+      (verticalSectorPartialTrace dim mult) := by
+  change IsKrausCP
+    (Matrix.directSumMapExtension (verticalSectorPartialTrace dim mult))
+  rw [show Matrix.directSumMapExtension (verticalSectorPartialTrace dim mult) =
+      Matrix.controlledPartialTraceRightLM
+          (α := fun α : Fin g ↦ Fin (dim α))
+          (β := fun α : Fin g ↦ Fin (mult α)) ∘ₗ
+        Matrix.equivReindexMap (verticalSectorSwapEquiv dim mult) by
+    apply LinearMap.ext
+    intro Y
+    ext ⟨α, i⟩ ⟨β, j⟩
+    by_cases hαβ : α = β
+    · subst β
+      simp only [Matrix.directSumMapExtension_apply,
+        Matrix.directSumDiagonalEmbedding_apply,
+        Matrix.blockDiagonal'_apply_eq,
+        verticalSectorPartialTrace_apply,
+        Matrix.directSumDiagonalCompression_apply,
+        Matrix.traceLeft_apply,
+        LinearMap.comp_apply,
+        Matrix.controlledPartialTraceRightLM_sameBlock_apply,
+        Matrix.partialTraceRight_apply,
+        Matrix.submatrix_apply,
+        Matrix.equivReindexMap,
+        LinearEquiv.coe_toLinearMap,
+        Matrix.coe_reindexLinearEquiv,
+        Matrix.reindex_apply,
+        verticalSectorSwapEquiv]
+      rfl
+    · rw [Matrix.directSumMapExtension_apply,
+        Matrix.directSumDiagonalEmbedding_apply,
+        Matrix.blockDiagonal'_apply_ne _ _ _ hαβ,
+        LinearMap.comp_apply,
+        Matrix.controlledPartialTraceRightLM,
+        Matrix.controlledKrausMap_apply_of_ne _ _ _ hαβ]]
+  exact isKrausCP_comp
+    (Matrix.equivReindexMap_isKrausCPTP
+      (verticalSectorSwapEquiv dim mult)).isKrausCP
+    (Matrix.controlledPartialTraceRightLM_isKrausCPTP
+      (α := fun α : Fin g ↦ Fin (dim α))
+      (β := fun α : Fin g ↦ Fin (mult α))).isKrausCP
 
 /-- Partial trace is a left inverse of the normalized vertical-sector
 embedding.
