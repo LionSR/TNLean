@@ -62,22 +62,6 @@ theorem exists_jump_leakage_of_full_algebra_generation
   · exact hP.2.1 hP0
   · exact hP.2.2 hP1
 
-/-- Adjoining arbitrary additional matrices cannot destroy full algebra
-generation. -/
-theorem adjoin_union_eq_top_of_adjoin_eq_top
-    {S T : Set Mat} (hS : Algebra.adjoin ℂ S = ⊤) :
-    Algebra.adjoin ℂ (S ∪ T) = ⊤ := by
-  apply top_unique
-  rw [← hS]
-  exact Algebra.adjoin_mono Set.subset_union_left
-
-/-- In particular, adjoining one Hamiltonian-dependent matrix `κ` preserves
-full generation. -/
-theorem adjoin_insert_eq_top_of_adjoin_eq_top
-    {S : Set Mat} (hS : Algebra.adjoin ℂ S = ⊤) (κ : Mat) :
-    Algebra.adjoin ℂ (S ∪ ({κ} : Set Mat)) = ⊤ :=
-  adjoin_union_eq_top_of_adjoin_eq_top hS
-
 /-- Full generation by the jumps alone excludes a block-upper-triangular
 Lindblad decomposition for every choice of the frozen Hamiltonian encoded in
 `F`.  Compare arXiv:2602.16067v1, Outlook, line 855. -/
@@ -86,7 +70,9 @@ theorem full_jump_algebra_implies_no_blockUpperTriangular
     (hGen : Algebra.adjoin ℂ (Set.range F.L) = ⊤) :
     ¬ HasBlockUpperTriangularLindblad F.toLinearMap := by
   apply full_algebra_generation_implies_no_blockUpperTriangular F
-  exact adjoin_insert_eq_top_of_adjoin_eq_top hGen F.toGeneratorDecomp.κ
+  apply top_unique
+  rw [← hGen]
+  exact Algebra.adjoin_mono Set.subset_union_left
 
 /-- The corresponding frozen Lindblad generator is non-reducible.  Since `F`
 is arbitrary, this applies to every frozen Hamiltonian with the same
@@ -129,25 +115,13 @@ theorem adjoin_A_B_eq_top : Algebra.adjoin ℂ ({A, B} : Set Mat4) = ⊤ := by
     rw [← A_cube]
     exact S.pow_mem hA 3
   have h22 : e 2 2 ∈ S := by
-    convert S.mul_mem h23 hB using 1
-    ext i j
-    fin_cases i <;> fin_cases j <;>
-      simp [e, B, Matrix.mul_apply, Fin.sum_univ_succ]
+    simpa [e, B] using S.mul_mem h23 hB
   have h33 : e 3 3 ∈ S := by
-    convert S.mul_mem hB h23 using 1
-    ext i j
-    fin_cases i <;> fin_cases j <;>
-      simp [e, B, Matrix.mul_apply, Fin.sum_univ_succ]
+    simpa [e, B] using S.mul_mem hB h23
   have h21 : e 2 1 ∈ S := by
-    convert S.mul_mem h22 hA using 1
-    ext i j
-    fin_cases i <;> fin_cases j <;>
-      simp [e, A, Matrix.mul_apply, Fin.sum_univ_succ]
+    simpa [e, A, Matrix.mul_add] using S.mul_mem h22 hA
   have h03 : e 0 3 ∈ S := by
-    convert S.mul_mem hA h33 using 1
-    ext i j
-    fin_cases i <;> fin_cases j <;>
-      simp [e, A, Matrix.mul_apply, Fin.sum_univ_succ]
+    simpa [e, A, Matrix.add_mul] using S.mul_mem hA h33
   have h10 : e 1 0 ∈ S := by
     have := S.sub_mem (S.sub_mem hA h21) h03
     simpa [A, sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using this
