@@ -36,28 +36,36 @@ $A_0A_1A_2=B_0B_1B_2=1$.  The combined tensors do not generate the same MPV:
 the length-one word selecting site zero has coefficient $1$ for the combined
 tensor of $\mathbf A$ and coefficient $2$ for that of $\mathbf B$.
 
-Consequently the former assertion
-\path{MPSChainTensor.SameStateBridgeHyp} has no construction even after adding
-injectivity of the second chain.  It is not the blocking argument in
+Consequently the former abstract same-state reduction assertion has no
+construction even after adding injectivity of the second chain.%
+\footnote{Former formal declaration:
+    \leanid{MPSChainTensor.SameStateBridgeHyp} in
+    \doclink{TNLean/MPS/Chain/SameStateBridge}.}
+It is not the blocking argument in
 \cite[Theorem~\textup{thm:inj\_MPS}, lines~688--725]{Molnar2018NormalPEPS}.
 
 \section{The source-faithful route}
 
 The source assumes that every local tensor in both chains is injective and
 derives one invertible gauge per bond directly from equality of the single
-closed-chain state.  This statement is formalized as
-\path{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState} and is
-recorded in Chapter~24 of the blueprint.  It does not pass through an
-all-length MPV assertion for the combined tensor.
+closed-chain state.  This statement is formalized directly in Chapter~24 of
+the blueprint.%
+\footnote{Formal declaration:
+    \leanid{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState}
+    in \doclink{TNLean/PEPS/CycleMPSChainOverlapCapstone}.}
+It does not pass through an all-length MPV assertion for the combined tensor.
 
 For constant chains, equality at one length likewise determines a tensor only
 up to a scalar whose $n$-th power is one and a similarity transformation.  A
 phase-free conclusion from one fixed length is false: in bond dimension one,
 replace $A=1$ by $B=\omega$ for a nontrivial $n$-th root of unity $\omega$.
 The length-$n$ states agree, but scalar conjugation cannot change $1$ into
-$\omega$.  The all-length hypothesis used by
-\path{MPSChainTensor.ti_reduction_corollary} rules out this phase and remains a
-separate, stronger theorem.
+$\omega$.  The all-length hypothesis in the corresponding
+translation-invariant reduction rules out this phase and remains a separate,
+stronger theorem.%
+\footnote{Formal declaration:
+    \leanid{MPSChainTensor.ti_reduction_corollary} in
+    \doclink{TNLean/PiAlgebra/TIReduction}.}
 
 \section{Resolution}
 
