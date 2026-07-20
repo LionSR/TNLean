@@ -1404,6 +1404,32 @@ Theorem~\ref{thm:trace_norm_abs}.
     $\lambda_i^{-1/2}\lambda_i\lambda_i^{-1/2}=1$ otherwise.
 \end{proof}
 
+\begin{lemma}[Support generalized-inverse identity]
+    \label{lem:support_inverse_square_root_generalized_inverse}
+    \lean{Matrix.PosSemidef.supportInvSqrt_sq_mul_self}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    If $P_\tau$ is the orthogonal projector onto the support of a positive
+    semidefinite matrix $\tau$, then
+    \[
+        \left(\tau^{-1/2}_{\mathrm{supp}}\right)^2\tau=P_\tau.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_sandwich}
+    The support inverse square root commutes with $\tau$ by spectral functional
+    calculus, so
+    \[
+      \left(\tau^{-1/2}_{\mathrm{supp}}\right)^2\tau
+      =\tau^{-1/2}_{\mathrm{supp}}\,\tau\,
+        \tau^{-1/2}_{\mathrm{supp}}
+      =P_\tau,
+    \]
+    where the last step is
+    Lemma~\ref{lem:support_inverse_square_root_sandwich}.
+\end{proof}
+
 \begin{lemma}[Support inverse square root under scaling and a maximally mixed factor]
     \label{lem:support_inverse_square_root_maximally_mixed}
     \lean{Matrix.PosSemidef.supportInvSqrt_smul}
@@ -2873,6 +2899,55 @@ Theorem~\ref{thm:trace_norm_abs}.
     This is the Kronecker vectorization identity
     $(B\otimes A)\operatorname{vec}(X)=\operatorname{vec}(AXB^{\mathsf T})$
     with $A=P^{\mathsf T}$, $B=\mathbf 1$, and $X=M^{\mathsf T}$.
+\end{proof}
+
+\begin{lemma}[Canonical support-domain source resolvent solution]
+    \label{lem:support_relative_modular_source_solution}
+    \lean{Matrix.supportRelativeModular_sourceB_solution}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $A,B$ be positive semidefinite, let $t>0$, set
+    $B^+=(B^{-1/2}_{\mathrm{supp}})^2$, and let $P_B$ be the support
+    projection of $B$.  Then
+    \[
+      \left(A\otimes\mathbf 1+t(\mathbf 1\otimes B^{\mathsf T})\right)
+      (\mathbf 1\otimes P_B^{\mathsf T})
+      \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+      \operatorname{vec}(\mathbf 1^{\mathsf T})
+      =\operatorname{vec}(B^{\mathsf T}).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_generalized_inverse,
+      lem:right_multiplication_transposed_vectorization}
+    Put $C=\mathbf 1\otimes B^{\mathsf T}$.  The support generalized-inverse
+    identity gives
+    \[
+      C\left(A\otimes(B^+)^{\mathsf T}\right)
+        =A\otimes P_B^{\mathsf T}.
+    \]
+    Together with $B^{\mathsf T}P_B^{\mathsf T}=B^{\mathsf T}$, this factors
+    the left two operators as
+    \[
+      \left(A\otimes\mathbf 1+tC\right)
+        (\mathbf 1\otimes P_B^{\mathsf T})
+      =C\left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right).
+    \]
+    The shifted relative-modular matrix is positive definite and hence
+    invertible, so
+    \[
+      \left(A\otimes\mathbf 1+tC\right)
+        (\mathbf 1\otimes P_B^{\mathsf T})
+        \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+      =C.
+    \]
+    The Kronecker vectorization identity gives
+    \[
+      C\operatorname{vec}(\mathbf 1^{\mathsf T})
+        =\operatorname{vec}(B^{\mathsf T}),
+    \]
+    which is the claim.
 \end{proof}
 
 \begin{lemma}[Support relative-modular square-root evaluation]
