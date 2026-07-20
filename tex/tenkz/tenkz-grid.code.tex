@@ -264,13 +264,11 @@
   /tenkz/grid/east~label/.store~in=\l__tenkz_elabel_tl,
   /tenkz/grid/bond~label/.code={\tenkz_bond_label:n{#1}},
   /tenkz/grid/align/.store~in=\l__tenkz_align_tl,
-  /tenkz/grid/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
-  /tenkz/grid/compact/.code={\pgfkeys{/tenkz/compact}},
-  /tenkz/grid/inline/.code={\pgfkeys{/tenkz/inline}},
-  /tenkz/grid/tensor~style/.code={\pgfqkeys{/tenkz}{tensor~style=#1}},
-  % species={...}: picture-scope species declaration (see tenkz-core)
-  /tenkz/grid/species/.code={\pgfqkeys{/tenkz}{species={#1}}},
 }
+% pitch=/compact=/inline=/tensor~style=/species= forward to the shared
+% /tenkz key space (tenkz-core.code.tex); one installer, every picture-
+% scope family (GOAL.md "one universal language").
+\tenkz_install_core_forwards:nn {grid} {pitch,compact,inline,tensor~style,species}
 
 % ---------- the side-policy alphabet (west= / east=) ----------
 % One enum, applied per picture side: open | none | trace | cup |
@@ -757,6 +755,9 @@
   }
 \cs_new_protected:Npn \tenkz_emit_faceports_one:nnn #1#2#3
   { \tenkz_emit_faceports_one:nnnn {#1}{#2}{#3}{\l__tenkz_cwires_int} }
+% `at=rows' here is a sentinel, not a resolved slot list: it says "consult
+% the row's width, no per-cell ports were computed" (DESIGN.md 5.1) --
+% every other `faceports' event's `at=' is an actual position list.
 \cs_new_protected:Npn \tenkz_emit_faceports_rows:nnn #1#2#3
   { \tenkz@event{faceports|picture=\the\tenkz@pictureid|cell=#1-#2|face=#3|arity=\int_use:N\l__tenkz_cwires_int|at=rows} }
 
