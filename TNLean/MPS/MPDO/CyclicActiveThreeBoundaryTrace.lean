@@ -111,7 +111,7 @@ theorem sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two
       ((F.neighboringOperator a b).trace.re : ℂ)
     exact (hpos a b).isHermitian.trace_eq_ofReal_re
   simp_rw [htrace, Matrix.smul_apply]
-  push_cast
+  norm_cast
 
 /-- Summing the partial traces of the three-site closures over the
 intermediate cyclic-active sector leaves the outer boundary operator with
