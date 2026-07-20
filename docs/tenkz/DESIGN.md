@@ -471,7 +471,7 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 | `trace clearance` | 0.55·pitch | racetrack clears leg labels on the outer row |
 | `label clearance` | 0.12·pitch | one constant for every quadrant (G7) |
 | `junction diameter` | 3.2 × wire width (≥ 0.9mm) | below 3×, a junction is indistinguishable from a wire crossing at 600 dpi |
-| `region margin` | 0.36·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
+| `region margin` (`\tenkz@r@latticemargin`) | 0.27·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
 | `compact` / `inline` | 0.8 scale / em-based scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
 | `map column gap` | max(0.34·pitch, widest map-name band + 2·daylight) | the floor keeps a short composition compact; measured opaque label ink clears both adjacent objects without budgeting glyphs; explicit `column sep=` remains an opt-in override |
 | `map row gap` | 0.50·pitch | adjacent small multiples remain distinct without figure-scale leading; `row sep=` overrides it |

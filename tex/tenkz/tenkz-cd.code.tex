@@ -293,26 +293,23 @@
     % pop the two children and fuse them
     \seq_pop_right:NN \l__tenkzcd_stack_seq \l__tenkzcd_cb_tl
     \seq_pop_right:NN \l__tenkzcd_stack_seq \l__tenkzcd_ca_tl
-    \exp_last_unbraced:NV \tenkz_cd_unpack_a:nnnnn \l__tenkzcd_ca_tl
-    \exp_last_unbraced:NV \tenkz_cd_unpack_b:nnnnn \l__tenkzcd_cb_tl
+    \exp_last_unbraced:NNV \tenkz_cd_unpack:Nnnnnn a \l__tenkzcd_ca_tl
+    \exp_last_unbraced:NNV \tenkz_cd_unpack:Nnnnnn b \l__tenkzcd_cb_tl
     \tenkz_cd_tree_fuse:
   }
 
-\cs_new_protected:Npn \tenkz_cd_unpack_a:nnnnn #1#2#3#4#5
+% A fusion vertex always has exactly two children, so the two popped
+% stack tuples are unpacked by the same five assignments; #1 (bare `a`
+% or `b`) selects which child's register family receives them, via the
+% `x#1_dim`/`l#1_int`/`ch#1_tl`/`node#1_int`/`topo#1_tl` naming already
+% shared by both families -- one function body instead of two.
+\cs_new_protected:Npn \tenkz_cd_unpack:Nnnnnn #1#2#3#4#5#6
   {
-    \dim_set:Nn \l__tenkzcd_xa_dim {#1}
-    \int_set:Nn \l__tenkzcd_la_int {#2}
-    \tl_set:Nn  \l__tenkzcd_cha_tl {#3}
-    \int_set:Nn \l__tenkzcd_nodea_int {#4}
-    \tl_set:Nn \l__tenkzcd_topoa_tl {#5}
-  }
-\cs_new_protected:Npn \tenkz_cd_unpack_b:nnnnn #1#2#3#4#5
-  {
-    \dim_set:Nn \l__tenkzcd_xb_dim {#1}
-    \int_set:Nn \l__tenkzcd_lb_int {#2}
-    \tl_set:Nn  \l__tenkzcd_chb_tl {#3}
-    \int_set:Nn \l__tenkzcd_nodeb_int {#4}
-    \tl_set:Nn \l__tenkzcd_topob_tl {#5}
+    \dim_set:cn { l__tenkzcd_x #1 _dim }     {#2}
+    \int_set:cn { l__tenkzcd_l #1 _int }     {#3}
+    \tl_set:cn  { l__tenkzcd_ch #1 _tl }     {#4}
+    \int_set:cn { l__tenkzcd_node #1 _int }  {#5}
+    \tl_set:cn  { l__tenkzcd_topo #1 _tl }   {#6}
   }
 
 % Join the two children on the stack.  Parsing records one abstract
@@ -1133,11 +1130,11 @@
   }
 \cs_new_protected:Npn \tenkz_cd_grid_aux:nn #1#2
   {
-    % same baseline convention as the `tenkz cd baseline` style, inlined
-    % because tikzcd routes its options through its own key family
+    % tikzcd forwards unrecognized keys to /tikz/.cd, so the shared
+    % `tenkz cd baseline` style applies here exactly as it does for the
+    % tree, maps and polygon renderers
     \begin{tikzcd}
-      [ baseline={([yshift=-\dim_use:N \l__tenkzcd_axis_dim]
-                   current~bounding~box.center)}, #1 ]
+      [ tenkz~cd~baseline, #1 ]
       #2
     \end{tikzcd}
   }
