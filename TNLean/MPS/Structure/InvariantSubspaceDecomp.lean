@@ -122,7 +122,7 @@ private lemma orthProj_spectral_eq'
 
 /-- Common spectral and block construction underlying the general and strict
 invariant-subspace decompositions. The final two implications record exactly the
-additional dimension information needed by the strict public theorem. -/
+additional dimension information needed by the strict variant. -/
 private theorem exists_twoBlock_decomp_of_lowerZero_aux
     (A : MPSTensor d D)
     (P : Matrix (Fin D) (Fin D) ℂ)
@@ -513,10 +513,6 @@ References:
   invariant-subspace step in the "canonical forms" reduction.
 -/
 
-section StrictDimDecrease
-
-variable {d D : ℕ}
-
 /-- **Strict dimension decrease** for the invariant-projection splitting step.
 
 If `A` admits an invariant orthogonal projection `P` with `P ≠ 0` and `P ≠ 1`, then
@@ -543,7 +539,5 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
   have hn_lt : n < D := by omega
   have hm_lt : m < D := by omega
   exact ⟨n, m, hnm, hn_lt, hm_lt, A₁, A₂, hSame⟩
-
-end StrictDimDecrease
 
 end MPSTensor

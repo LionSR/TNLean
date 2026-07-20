@@ -47,6 +47,10 @@ abstracted — record why, so it is not re-proposed).
 ### invariant-subspace two-block fork — promoted
 - **Pattern:** the general and strict invariant-subspace decompositions repeated the
   spectral split, block construction, and MPV calculation.
+```
+spectral split → block extraction → MPV calculation
+spectral split → block extraction → MPV calculation → strict bounds
+```
 - **Seen:** 2 full proof paths in
   `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`.
 - **Abstraction:** the private semantic construction
