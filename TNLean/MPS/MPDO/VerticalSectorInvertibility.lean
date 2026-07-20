@@ -19,7 +19,7 @@ then shows that the endomorphism is the identity.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  Appendix C.4, lines 1980--1993.
+  Appendix C.4, lines 1980--1995.
 * M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.14 and
   Equation (6.63).
 -/
@@ -41,7 +41,9 @@ No product of the fixed factors is assumed to be fixed.  The proof applies
 the full-matrix maximal-support theorem to the canonical block-diagonal
 extension and then takes its diagonal blocks.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
+Local finite-product consequence used to formalize arXiv:1606.00608,
+Appendix C.4, lines 1980--1993.  CPSV16 instead applies Wolf's density-block
+description directly, including its possible zero summand. -/
 theorem IsPositiveDirectSumMap.exists_posDef_fixedFamily_of_fixed_product_span
     {F : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
       (∀ k, Matrix (n k) (n k) ℂ)}
@@ -134,7 +136,7 @@ contractions first give a positive-definite fixed family.  Wolf's
 density-block description then bounds the dimension of the products of fixed
 points, which forces every sector matrix to be fixed.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
+Source application: arXiv:1606.00608, Appendix C.4, lines 1980--1995. -/
 theorem eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)

@@ -40,7 +40,8 @@ namespace MPOTensor
 /-- If the weighted vertical bond contractions span by products of length
 `L`, then the identity belongs to the corresponding pointwise product span.
 
-Source: arXiv:1606.00608, Appendix C.4, lines 1980--1990. -/
+Local pointwise-product reformulation of arXiv:1606.00608, Appendix C.4,
+lines 1980--1990. -/
 theorem one_mem_product_span_of_weightedVerticalBondContractions
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
