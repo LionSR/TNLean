@@ -40,6 +40,7 @@ on:
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_cd_map_labels.py'
+      - 'scripts/test_tenkz_label_overlap.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_tree.py'
@@ -76,6 +77,7 @@ on:
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_cd_map_labels.py'
+      - 'scripts/test_tenkz_label_overlap.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_tree.py'
@@ -145,6 +147,7 @@ jobs:
               - 'scripts/tenkz_lint.py'
               - 'scripts/test_tenkz_pic.py'
               - 'scripts/test_tenkz_cd_map_labels.py'
+              - 'scripts/test_tenkz_label_overlap.py'
               - 'scripts/test_tenkz_face_ports.py'
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_tenkz_tree.py'
@@ -408,6 +411,10 @@ jobs:
       - name: Test measured tenkz typed-map label bands
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_cd_map_labels.py
+
+      - name: Test measured tenkz label overlaps
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_label_overlap.py
 
       - name: Test asymmetric tenkz face ports
         if: env.TEX_CHANGED == 'true'
