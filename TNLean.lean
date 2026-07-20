@@ -539,7 +539,7 @@ import TNLean.MPS.MPDO.PhysicalSectorProductTransport
 import TNLean.MPS.MPDO.PhysicalSectorEtaLocalStructure
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalTransport
 import TNLean.MPS.MPDO.SectorPairingTransfer
-import TNLean.MPS.MPDO.CyclicActiveSectorRestriction
+import TNLean.MPS.MPDO.CyclicActiveThreeBoundaryTrace
 import TNLean.MPS.MPDO.ActiveSectorSpanningCounterexample
 import TNLean.MPS.MPDO.ActiveSectorInverseMapProvenance
 import TNLean.MPS.MPDO.ActiveSectorSpanningAreaLaw
