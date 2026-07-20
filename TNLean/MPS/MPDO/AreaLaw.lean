@@ -481,6 +481,27 @@ theorem mutualInfoChain_eq_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
 
 end MPOTensor
 
+/-- Closed-form entrywise expansion of the reduced block state. -/
+theorem reducedBlockState_eq_sum {d D : ℕ} (M : MPOTensor d D) {N L : ℕ}
+    (hL : L ≤ N) (u v : Fin L → Fin d) :
+    M.reducedBlockState N L hL u v =
+      ∑ w : Fin (N - L) → Fin d,
+        M.normalizedMPO N
+          (Fin.append u w ∘ Fin.cast (show N = L + (N - L) by omega))
+          (Fin.append v w ∘ Fin.cast (show N = L + (N - L) by omega)) := by
+  rw [MPOTensor.reducedBlockState]
+  simp only [blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
+    blockSplitEquiv_symm_apply, MPOTensor.blockReindexEquiv, Equiv.arrowCongr_symm,
+    Equiv.refl_symm, finCongr_symm]
+  rfl
+
+/-- The reduced block state of the normalized MPO has unit trace. -/
+theorem reducedBlockState_trace {d D : ℕ} (M : MPOTensor d D) (N L : ℕ)
+    (hL : L ≤ N) (htr : (MPOTensor.mpo M N).trace ≠ 0) :
+    (M.reducedBlockState N L hL).trace = 1 := by
+  rw [MPOTensor.reducedBlockState, blockReducedState_trace,
+    Matrix.trace_submatrix_equiv, MPOTensor.normalizedMPO_trace M N htr]
+
 /-! ## Pure-state analogue -/
 
 namespace MPSTensor

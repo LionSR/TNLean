@@ -119,19 +119,6 @@ theorem normalizedMPO_comp_finRotate_pow {d D : ℕ} (M : MPOTensor d D) (N p : 
   have key := congrFun (congrFun h C) C'
   simpa only [Matrix.submatrix_apply] using key
 
-/-- Closed-form entrywise expansion of the reduced block state. -/
-theorem reducedBlockState_eq_sum {d D : ℕ} (M : MPOTensor d D) {N m : ℕ} (hm : m ≤ N)
-    (u v : Fin m → Fin d) :
-    M.reducedBlockState N m hm u v
-      = ∑ w : Fin (N - m) → Fin d,
-          M.normalizedMPO N (Fin.append u w ∘ Fin.cast (show N = m + (N - m) by omega))
-            (Fin.append v w ∘ Fin.cast (show N = m + (N - m) by omega)) := by
-  rw [MPOTensor.reducedBlockState]
-  simp only [blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
-    blockSplitEquiv_symm_apply, MPOTensor.blockReindexEquiv, Equiv.arrowCongr_symm,
-    Equiv.refl_symm, finCongr_symm]
-  rfl
-
 /-- Appending `u` to a suffix-reindexed config equals reindexing the whole
 append: `append u (w ∘ cast) ∘ cast = append u w ∘ cast`. -/
 theorem append_glue {d N m k k' : ℕ} (u : Fin m → Fin d) (w : Fin k → Fin d)
@@ -369,13 +356,6 @@ theorem blockEntropy_congr {d D : ℕ} (M : MPOTensor d D) (N : ℕ) {j k : ℕ}
     (hj : j ≤ N) (hk : k ≤ N) (hM : (mpo M N).PosSemidef) :
     M.blockEntropy N j hj hM = M.blockEntropy N k hk hM := by
   subst h; rfl
-
-/-- The reduced block state of the normalized MPO has unit trace. -/
-theorem reducedBlockState_trace {d D : ℕ} (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
-    (htr : (mpo M N).trace ≠ 0) :
-    (M.reducedBlockState N L hL).trace = 1 := by
-  rw [MPOTensor.reducedBlockState, blockReducedState_trace, Matrix.trace_submatrix_equiv,
-    normalizedMPO_trace M N htr]
 
 /-- **Strong subadditivity in block-entropy form.** For contiguous segments of
 sizes `a`, `b`, `c` fitting in the chain, the block entropies obey
