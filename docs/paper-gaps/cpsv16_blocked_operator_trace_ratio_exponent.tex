@@ -1,0 +1,92 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{./command}
+
+\title{The Trace-Ratio Exponent in the Blocked Vertical-Operator Formula}
+\author{}
+\date{2026-07-21}
+
+\begin{document}
+\maketitle
+
+\section{The two formulas in Appendix C.4}
+
+Appendix~C.4 of \cite{Cirac2016MPDO_arXiv} compares the one-site and
+two-site vertical canonical forms.  Its lines~2001--2008 pair their sectors
+and show that the corresponding representative tensors satisfy
+\begin{equation}
+  A^{(2)}_{\sigma(\alpha)}
+  =\frac{m_\alpha}{n_{\sigma(\alpha)}}
+    V_\alpha A^{(1)}_\alpha V_\alpha^*,
+  \label{eq:letter-scaling}
+\end{equation}
+up to the harmless identification of equal bond dimensions.  Here
+$m_\alpha=\operatorname{tr}(\mu_\alpha)$ and
+$n_\beta=\operatorname{tr}(\nu_\beta)$ are the traces of the positive
+diagonal multiplicity matrices.
+
+For a closed chain of length $L$, multiplying every tensor letter by a scalar
+$c$ multiplies the resulting operator by $c^L$.  Unitary conjugation and the
+identification of the bond indices do not change the closing trace.  Thus
+\eqref{eq:letter-scaling} gives the coefficient
+\begin{equation}
+  \left(\frac{m_\alpha}{n_{\sigma(\alpha)}}\right)^L
+  \operatorname{tr}\!\left(\nu_{\sigma(\alpha)}^L\right).
+  \label{eq:correct-coefficient}
+\end{equation}
+
+Line~2013 instead prints
+\begin{equation}
+  \frac{m_\alpha^L}{n_{\sigma(\alpha)}}
+  \operatorname{tr}\!\left(\nu_{\sigma(\alpha)}^L\right).
+  \label{eq:printed-coefficient}
+\end{equation}
+The two expressions differ by the factor
+$n_{\sigma(\alpha)}^{L-1}$.  No normalization setting this factor equal to
+one appears in the source.
+
+\section{Confirmation later in the source}
+
+The same appendix resolves the exponent unambiguously at line~2040, where it
+uses
+\begin{equation}
+  \operatorname{tr}\!\left[
+    \left(\frac{m_\alpha}{n_{\sigma(\alpha)}}
+      \nu_{\sigma(\alpha)}\right)^L\right]
+  =
+  \left(\frac{m_\alpha}{n_{\sigma(\alpha)}}\right)^L
+  \operatorname{tr}\!\left(\nu_{\sigma(\alpha)}^L\right).
+  \label{eq:source-confirmation}
+\end{equation}
+This is precisely \eqref{eq:correct-coefficient}.  It also agrees directly
+with the tensor-letter scaling at line~2008.  Therefore the denominator in
+line~2013 is missing the exponent $L$; this is a local typographical error,
+not an additional hypothesis or a change in the mathematical argument.
+
+\section{Formal correction}
+
+The simultaneous blocked-operator representations use
+\eqref{eq:correct-coefficient}.  The formal statement retains the same sector
+equivalence, bond-dimension identifications, and unitary matrices that give
+\eqref{eq:letter-scaling}; it introduces no normalization of the multiplicity
+matrices.  The corresponding declaration is
+\path{MPOTensor.transportedVerticalSector_exists_blockedOperatorRepresentations}
+in
+\path{TNLean/MPS/MPDO/VerticalBlockedOperatorRepresentations.lean}.
+This correction is tracked in \ghissue{4586}.
+
+\paragraph{Verdict.}
+The coefficient consistent with both the preceding tensor identity and the
+later trace-power calculation is
+$\bigl(m_\alpha/n_{\sigma(\alpha)}\bigr)^L
+\operatorname{tr}(\nu_{\sigma(\alpha)}^L)$.  The expression printed at
+line~2013 has a missing exponent on the denominator.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
