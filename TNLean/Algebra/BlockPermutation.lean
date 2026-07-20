@@ -171,39 +171,6 @@ theorem existsUnique_eq_blockIdeal (I : TwoSidedIdeal (∀ i, R i)) (hI : IsAtom
   rcases (isAtom_iff_exists_eq_blockIdeal I).1 hI with ⟨i, hi⟩
   exact ⟨i, hi, fun j hj => (blockIdeal_injective (hi.symm.trans hj)).symm⟩
 
-/-- A ring automorphism of `∀ i, R i` (product of simple rings) permutes the block ideals,
-yielding a permutation `σ : ι ≃ ι`. -/
-theorem ringEquiv_pi_simple_permutes_blockIdeals
-    (T : (∀ i, R i) ≃+* (∀ i, R i)) :
-    ∃ σ : ι ≃ ι, ∀ i : ι, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i) := by
-  classical
-  have huniq :
-      ∀ i, ∃! j, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R j :=
-    fun i =>
-      existsUnique_eq_blockIdeal _
-        ((T.mapTwoSidedIdeal.isAtom_iff _).2 (isAtom_blockIdeal (R := R) i))
-  let σfun : ι → ι := fun i => (huniq i).choose
-  have hσfun :
-      ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σfun i) :=
-    fun i => (huniq i).choose_spec.1
-  have hσfun_inj : Function.Injective σfun := by
-    intro i j hij
-    refine blockIdeal_injective (R := R) ?_
-    refine T.mapTwoSidedIdeal.injective ?_
-    simp [hσfun, hij]
-  have hσfun_surj : Function.Surjective σfun := by
-    intro k
-    have hAtom : IsAtom (T.mapTwoSidedIdeal.symm (blockIdeal R k)) := by
-      rw [← T.mapTwoSidedIdeal.isAtom_iff]
-      simp [isAtom_blockIdeal]
-    rcases (isAtom_iff_exists_eq_blockIdeal (R := R) _).1 hAtom with ⟨i, hi⟩
-    refine ⟨i, blockIdeal_injective (R := R) ?_⟩
-    rw [← hσfun i, ← hi]
-    simp
-  refine
-    ⟨Equiv.ofBijective σfun ⟨hσfun_inj, hσfun_surj⟩, fun i => ?_⟩
-  simpa using hσfun i
-
 /-- A ring isomorphism between two finite products of simple rings matches
 their block ideals through an equivalence of the two index types.
 
@@ -243,6 +210,13 @@ theorem exists_blockEquiv_of_ringEquiv_pi_simple
   refine ⟨Equiv.ofBijective σfun ⟨hσfun_inj, hσfun_surj⟩, ?_⟩
   intro i
   simpa using hσfun i
+
+/-- A ring automorphism of `∀ i, R i` (product of simple rings) permutes the block ideals,
+yielding a permutation `σ : ι ≃ ι`. -/
+theorem ringEquiv_pi_simple_permutes_blockIdeals
+    (T : (∀ i, R i) ≃+* (∀ i, R i)) :
+    ∃ σ : ι ≃ ι, ∀ i : ι, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i) :=
+  exists_blockEquiv_of_ringEquiv_pi_simple T
 
 end BlockPermutation
 

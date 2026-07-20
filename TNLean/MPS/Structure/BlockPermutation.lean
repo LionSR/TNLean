@@ -57,12 +57,6 @@ theorem ringEquiv_maps_single_support
     T (Pi.single i M) j = 0 :=
   ringEquiv_maps_single_support_between T σ hσ M j hj
 
-theorem ringEquiv_symm_maps_blockIdeal
-    (T : (∀ j, R j) ≃+* (∀ j, R j)) (σ : ι ≃ ι)
-    (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i)) (i : ι) :
-    T.symm.mapTwoSidedIdeal (blockIdeal R (σ i)) = blockIdeal R i :=
-  ringEquiv_symm_maps_blockIdeal_between T σ hσ i
-
 end BlockIdealMembership
 
 /-! ### T maps Pi.single i 1 to Pi.single (σ i) 1 -/
