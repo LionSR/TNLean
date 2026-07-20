@@ -41,7 +41,12 @@ entry is empty iff its body calls no drawing macro at all — finds
 exactly **33**, and the review-side counts have been corrected to match.
 This table is the authoritative census.
 
-The 12 multi-use entries account for 38 occurrences (10+5+3+3+3+2×7); every other entry is single-use. Two multi-use entries (`TNPEPSNormalRegionsRS`, `TNPEPSNormalRegionT`) have region-genre bodies; three (`TNPEPSEdgeGaugeOrientation`, `TNPEPSGaugeVertexAction`, `TNPEPSVertexInjectivityMap`) have free-genre bodies — they are counted once, under multi-use.
+At the original census, the 12 multi-use entries accounted for 38 occurrences
+(10+5+3+3+3+2×7); every other entry was single-use. Two multi-use entries
+(`TNPEPSNormalRegionsRS`, `TNPEPSNormalRegionT`) had region-genre bodies; three
+(`TNPEPSEdgeGaugeOrientation`, `TNPEPSGaugeVertexAction`,
+`TNPEPSVertexInjectivityMap`) had free-genre bodies. They are counted once,
+under multi-use, even after a row records its later migration.
 
 ## Needs-new-key list (cross-checked against the 0.6 gap list)
 
@@ -114,7 +119,7 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 | TNCondCTwo | 3 | ch12_symmetry:770,798,861 | `\tnpic[sandwich]{\tnX{#1} & \tn{A}\\ \tnX{#1^\dagger} & \tn*{A}} = \tnpic[sandwich]{\tn{A} & \tnX{#1}\\ \tn*{A} & \tnX{#1^\dagger}}` | trivial |
 | TNPermutationTwistLabeled | 2 before this migration | ch12_symmetry:591,593 | one inline three-panel chain `i \xrightarrow{\sigma_h} \sigma(h)(i) \xrightarrow{\sigma_g} \sigma(g)(\sigma(h)(i))`, with each index on the open upper physical stub | migrated inline in PR #4505; catalogue wrapper removed |
 | TNPEPSVertexInjectivityMap | 2 | ch24_peps_ft_foundations:224; ch24_peps_ft:43 | tenkzfree 5-leg star (`ports={…:virtual, north east:physical}`) `\longmapsto` math vector | needs-judgment (free-tier star) |
-| TNPEPSNormalRegionsRS | 2 | ch24_peps_ft_normal_square:91,1213 | two `tenkzlattice` panels: `\tnregion[slot=selected, label=$R$]{…}` / `[slot=secondary, label=$S$]{…}` | trivial |
+| TNPEPSNormalRegionsRS | 2 before this migration | ch24_peps_ft_normal_square:91,1232 before this migration | two identical inline pairs of 5-by-5 `tenkzlattice` panels: the eight-cell notched region $R$ and the nine-cell square region $S$, each with boundary $(V,P)=(20,0)$ | migrated inline; declaration and private motif removed |
 | TNPEPSNormalRegionT | 2 | ch24_peps_ft_normal_square:95,1217 | `tenkzlattice` + `\tnregion[slot=selected, label=$T$]{…}` | trivial |
 | TNPEPSGaugeVertexAction | 2 | ch24_peps_ft_balanced_edge_scalars:206; ch24_peps_ft_foundations:106 | tenkzfree star with $Z_{e_i}^{\pm1}$ nodes on each leg (FourBondGaugeStar shape) | needs-judgment (free-tier star) |
 | TNLocalEqualityStep | 2 | ch23_algebraic_ft:409,1646 | `\tnpic[physical=up]{\tn{}&\tnX{#1}&\tn[up=$#3$]{}} = \tnpic[physical=up]{\tn{}&\tnX{#2}&\tn[up=$#3$]{}}` | trivial |
@@ -135,7 +140,7 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
 | TNPEPSEdgeBlockingReduction | ch24_peps_ft_edge_middle:215 | five-site patch (pentagon graph) with region overlays `\rightsquigarrow` blocked 3-tensor row (`\tnpic` + K1 box) | needs-judgment + K7 (region highlight on a free-tier graph), K1 |
-| TNPEPSInjectiveRegionUnionProof | ch24_peps_ft_normal_union:211 | 5 `tenkzlattice` panels joined by `=`/`⊆` math, regions via `\tnregion` slots | trivial |
+| TNPEPSInjectiveRegionUnionProof | ch24_peps_ft_normal_union:211 before this migration | four inline `tenkzfree` panels for the two inverse steps and the reinserted intersection, with boundary signatures $(0,3)$, $(4,1)$, $(3,2)$, and $(3,0)$ | migrated inline; declaration and private motif removed |
 | TNPEPSNormalRectangleCover | ch24_peps_ft_normal_square:242 | `tenkzlattice[rows=4, cols=4]` + overlapping `\tnregion[outline]` rectangles | trivial |
 | TNPEPSNormalEdgeComplementTopCollar | ch24_peps_ft_normal_square:517 | two lattice panels with `=`; complement + `slot=collar` regions | trivial |
 | TNPEPSNormalOneSiteSeparation | ch24_peps_ft_normal_square:1173 | two inline 5-by-5 `tenkzlattice` panels; $R=(2\mathbin{-}4,2\mathbin{-}4)\setminus\{(4,4)\}$ and $S=(2\mathbin{-}4,2\mathbin{-}4)$ via region slots, with the present site $v=(4,4)$ marked in both and $R\subset S=R\cup\{v\}$ shown explicitly | migrated inline; no package change |
@@ -164,7 +169,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
 | TNPEPSStateContraction | ch24_peps_ft:34 | tenkzfree: 5 `\tnput` (pentagon + chord), typed `\tnjoin`s, physical ports open | trivial (verbose) |
-| TNPEPSInjectiveRegionUnion | ch24_peps_ft_normal_union:204 | tenkzfree 4-node union schematic; or redesign as `tenkzlattice` regions $A\cup B$ | needs-judgment |
+| TNPEPSInjectiveRegionUnion | ch24_peps_ft_normal_union:204 before this migration | inline `tenkzfree` four-block $K_4$ with six internal virtual contractions and four open physical legs | migrated inline; declaration and private motif removed |
 | TNPEPSLocalTensorStar | ch24_peps_ft_foundations:39 | tenkzfree: one `\tnput[ports={north:virtual, south:virtual, east:virtual, west:virtual, north east:physical}]` star | trivial |
 | TNPEPSVertexScalarBalance | ch24_peps_ft_balanced_edge_scalars:8 | tenkzfree star; `\tnjoin[label=$c_{v,e}$]` per incident edge | trivial |
 | TNPEPSEdgeGaugeAbsorption | ch24_peps_ft_edge_kernel_gauges:848 | tenkzfree: star $B_v$ `\longmapsto` star with $Z_{e_i}^{\pm1}$ nodes on all four legs | needs-judgment (star pair) |
