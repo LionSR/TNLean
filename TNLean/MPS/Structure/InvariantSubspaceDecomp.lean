@@ -107,7 +107,7 @@ private lemma mpv_twoBlockTensor_eq {n m N : ℕ}
 
 /-! ## Invariant projection ⇒ two-block block diagonal tensor
 
-### Shared construction
+### Spectral splitting and block extraction
 -/
 
 /-- Spectral decomposition auxiliary lemma for a Hermitian matrix (matrix form). -/
@@ -499,7 +499,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
   exact ⟨n, m, hnm, A₁, A₂, hSame⟩
 
 
-/-! ## Strict dimension decrease variant
+/-! ### Strict dimension decrease variant
 
 The following theorem strengthens `exists_twoBlock_decomp_of_lowerZero` by showing that
 both returned block dimensions are *strictly smaller* than `D`. This is the key
