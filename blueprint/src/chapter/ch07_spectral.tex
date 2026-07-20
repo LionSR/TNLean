@@ -2532,11 +2532,12 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     classification conclusion of that passage.
 \end{definition}
 
-The preceding definition and the elementary laws below provide supporting
-facts for the classification argument.  They do not prove Schwarz equality
-for the transported maps, multiplicativity, a relabeling or dimension matching
-of the simple summands, or implementation on each summand by unitary
-conjugation.
+The preceding definition and the trace-adjoint laws in the next lemma provide
+supporting facts for the classification argument.  By themselves, they do not
+prove Schwarz equality or multiplicativity.  The inverse-CPTP theorem below
+supplies those two conclusions; relabeling and dimension matching of the simple
+summands, and implementation on each summand by unitary conjugation, remain
+outside the present result.
 
 \begin{lemma}[Trace-adjoint laws for two finite sums of matrix algebras]%
     \label{lem:direct_sum_rectangular_trace_adjoint}
@@ -2754,6 +2755,58 @@ conjugation.
           -\widehat{F^*}(Y^*)\widehat{F^*}(Y)\right]_i
         =(F^*(X^*X))_i-(F^*(X^*))_i(F^*(X))_i\succeq0.
     \]
+\end{proof}
+
+\begin{theorem}[Mutually inverse CPTP maps give a star equivalence]%
+    \label{thm:direct_sum_inverse_cptp_star_equiv}
+    \lean{Matrix.IsKrausCP.kadison_schwarz_of_map_one_eq_one}
+    \lean{Matrix.IsSchwarzBetweenDirectSums}
+    \lean{Matrix.IsKrausDirectSumMap.is_schwarz_between_direct_sums}
+    \lean{Matrix.IsKrausDirectSumMap.map_conjTranspose_between}
+    \lean{Matrix.schwarz_equality_of_mutual_inverse_kraus_direct_sum_maps}
+    \lean{Matrix.map_mul_of_mutual_inverse_kraus_direct_sum_maps}
+    \lean{Matrix.starAlgEquivOfMutualInverseKrausDirectSumMaps}
+    \lean{Matrix.starAlgEquivOfMutualInverseKrausDirectSumMaps_apply}
+    \lean{Matrix.starAlgEquivOfMutualInverseKrausDirectSumMaps_symm_apply}
+    \lean{Matrix.directSumTraceAdjointMapBetween_comp_eq_id_of_comp_eq_id}
+    \lean{Matrix.directSumTraceAdjointMapBetween_map_mul_of_mutual_inverse}
+    \lean{Matrix.directSumTraceAdjointStarAlgEquiv}
+    \lean{Matrix.directSumTraceAdjointStarAlgEquiv_apply}
+    \lean{Matrix.directSumTraceAdjointStarAlgEquiv_symm_apply}
+    \leanok
+    \uses{def:kraus_map_between_direct_sums,
+        lem:direct_sum_rectangular_trace_adjoint}
+    Let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
+    mutually inverse completely positive trace-preserving maps between finite
+    direct sums of full matrix algebras.  Their trace adjoints are mutually
+    inverse unital completely positive maps.  Moreover, for all
+    $X,Y\in\mathcal B$,
+    \[
+        T^*(XY)=T^*(X)T^*(Y),
+        \qquad T^*(X^*)=T^*(X)^*,
+    \]
+    and likewise for $S^*$.  Thus $T^*$ and $S^*$ determine mutually inverse
+    star-algebra equivalences.  This theorem does not yet identify the simple
+    summands or their dimensions.
+\end{theorem}
+
+\begin{proof}\leanok
+    Complete positivity and trace preservation make both trace adjoints
+    unital Schwarz maps.  For $F=T^*$ and $G=S^*$, let
+    \[
+        \Delta_F(X)=F(X^*X)-F(X)^*F(X)\succeq0.
+    \]
+    Positivity of $G$ gives $G(\Delta_F(X))\succeq0$.  The Schwarz inequality
+    for $G$, together with $GF=\operatorname{id}$, gives
+    $-G(\Delta_F(X))\succeq0$.  Hence $G(\Delta_F(X))=0$, and injectivity of
+    $G$ implies $\Delta_F(X)=0$.  Polarization of this equality gives
+    multiplicativity.  Positivity gives preservation of the adjoint, so the
+    mutually inverse maps are star-algebra equivalences.  This supplies an
+    algebraic route to the block-classification step for which
+    \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv} cites
+    \cite[Theorem~8]{WolfPerezGarcia2010Inverse}.  The latter instead uses
+    extreme states and the positive inverse to identify the blocks, then the
+    Schwarz condition to exclude transposition.
 \end{proof}
 
 % Scope restriction documented in

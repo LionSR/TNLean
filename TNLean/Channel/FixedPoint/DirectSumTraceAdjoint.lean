@@ -20,10 +20,12 @@ where trace-preserving completely positive maps run in opposite directions
 between two products of simple matrix algebras.
 
 These are supporting trace-adjoint facts, not a formalization of the
-classification conclusion in that passage. The remaining argument is recorded
-in `docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`; it still requires
-Schwarz equality, multiplicativity, the relabeling and dimension matching of
-simple summands, and their implementation by unitary conjugations.
+classification conclusion in that passage. Schwarz equality, multiplicativity,
+and the resulting star-algebra equivalence are established in
+`TNLean.Channel.FixedPoint.DirectSumInverseKraus`. The remaining argument,
+recorded in `docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`, is the
+relabeling and dimension matching of simple summands and their implementation
+by unitary conjugations.
 
 ## Main definitions
 
