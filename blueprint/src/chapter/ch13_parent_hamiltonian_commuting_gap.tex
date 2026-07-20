@@ -1503,6 +1503,91 @@ specialization of that Appendix~D definition.
     \]
 \end{proof}
 
+\begin{definition}[Two-site support of a residual isometry family]
+    \label{def:residual_family_two_site_support}
+    \lean{MPSTensor.residualFamilyPhysicalIsometryMatrix}
+    \lean{MPSTensor.ResidualFamilyAppendixBData}
+    \lean{MPSTensor.ResidualFamilyAppendixBData.TwoSiteBoundary}
+    \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondEmbedding}
+    \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondSupportProjection}
+    \leanok
+    \uses{def:is_residual_isometry_family,
+        def:appendixB_two_site_bond_embedding,
+        def:appendixB_two_site_basic_support_projector}
+    Let
+    \[
+        \mathcal V=\bigsqcup_j\{j\}\times[D_j]\times[D_j]
+    \]
+    be the disjoint union of the within-sector virtual pairs, and let
+    $V:\mathcal V\to\mathbb C^d$ be the common physical map whose matrix
+    elements are
+    \[
+        V_{i,(j,\alpha,\beta)}=(U_j^i)_{\alpha,\beta}.
+    \]
+    For each sector insert the vector
+    $\ket{\varphi_j}=\sum_b\lambda_{j,b}\ket{b,b}$ on the middle virtual
+    bond, apply $V$ on both sites, and sum the resulting physical vectors.
+    This defines the equal-sector two-site embedding
+    \[
+        I_{\mathrm{res}}:\prod_j\mathbb C^{D_j\times D_j}
+            \longrightarrow (\mathbb C^d)^{\otimes2}.
+    \]
+    Unequal-sector virtual bonds do not occur.  The corresponding physical
+    support operator $P_{2,\mathrm{res}}$ is the orthogonal projector onto
+    $G_2(\bigoplus_j B_j)$.
+\end{definition}
+
+\begin{theorem}[Range of the residual-family bond embedding]
+    \label{thm:residual_family_two_site_support}
+    \lean{MPSTensor.IsResidualIsometryFamily.residualFamilyPhysicalIsometryMatrix_isometry}
+    \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondEmbedding_range}
+    \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondEmbedding_range_eq_directSum_groundSpace}
+    \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondSupportProjection_range}
+    \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondSupportProjection_eq_complement}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_residualFamilyAppendixBData}
+    \leanok
+    \uses{lem:residual_isometry_family_one_gram,
+        def:residual_family_two_site_support,
+        thm:appendixB_two_site_basic_embedding_range,
+        def:parent_interaction}
+    The common physical map is an isometry,
+    \[
+        V^*V=1.
+    \]
+    Moreover, the equal-sector bond embedding and the physical support
+    projector satisfy
+    \[
+        \operatorname{ran}(I_{\mathrm{res}})
+        =\sum_j G_2(B_j)
+        =G_2\!\left(\bigoplus_j B_j\right),
+        \qquad
+        \operatorname{ran}(P_{2,\mathrm{res}})
+        =\operatorname{ran}(I_{\mathrm{res}}),
+    \]
+    and
+    \[
+        P_{2,\mathrm{res}}
+        =1-q_2\!\left(\bigoplus_j B_j\right).
+    \]
+    If the $B_j$ form a basis of normal tensors and their direct sum is a
+    renormalization fixed point, the sectorwise Appendix~B decompositions and
+    the common residual isometry required above exist.
+% Scope restriction (multiplicity-one canonical form): repeated copies remain
+% outside this statement; see docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    The first identity is the one-letter Gram identity on the disjoint union
+    of the within-sector virtual pairs.  In each sector, the bond insertion
+    has range $G_2(B_j)$; allowing independent outer-boundary coefficients
+    and summing over sectors therefore gives $\sum_jG_2(B_j)$.  The local
+    ground space of a direct sum is this sum, which proves the two range
+    identities.  Orthogonal projection onto that space is complementary to
+    its parent interaction.  Finally, the residual-isometry form of the
+    cross-block fixed-point structure supplies the simultaneous sector
+    decompositions.
+\end{proof}
+
 \begin{theorem}[Commutation of adjacent two-site basic support projectors]
     \label{thm:appendixB_two_site_basic_support_projectors_commute}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_commute_lifts}

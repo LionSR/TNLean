@@ -623,6 +623,7 @@ import TNLean.MPS.RFP.Decorrelation
 import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.RFP.ResidualWordSpan
+import TNLean.MPS.RFP.ResidualFamilySupport
 import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
 import TNLean.MPS.RFP.BeigiSpatialDecomposition
