@@ -127,6 +127,7 @@
 \prop_new:N \l__tenkzl_labelxmax_prop  % "r-c-h" -> east paper coordinate
 \prop_new:N \l__tenkzl_labelymin_prop  % "r-c-h" -> south paper coordinate
 \prop_new:N \l__tenkzl_labelymax_prop  % "r-c-h" -> north paper coordinate
+\seq_new:N  \l__tenkzl_obstacles_seq   % actual rendered obstacle points {x}{y}
 \prop_new:N \l__tenkzl_cupdegenerate_prop % side -> 1 when its frame vector is zero
 \prop_new:N \l__tenkzl_tracedegenerate_prop % opposing-side axis -> 1 when routing degenerates
 
@@ -684,6 +685,7 @@
     \prop_clear:N \l__tenkzl_labelxmax_prop
     \prop_clear:N \l__tenkzl_labelymin_prop
     \prop_clear:N \l__tenkzl_labelymax_prop
+    \seq_clear:N \l__tenkzl_obstacles_seq
     \prop_clear:N \l__tenkzl_cupdegenerate_prop
     \prop_clear:N \l__tenkzl_tracedegenerate_prop
   }
@@ -1588,6 +1590,35 @@
 \tl_new:N  \l__tenkzl_cupnode_tl
 \tl_new:N  \l__tenkzl_labelbbox_tl
 
+% Trace routes are the final non-cover ink pass.  Earlier body labels and
+% side cups publish the paper points of their actual rendered geometry here,
+% so a later trace measures one common obstacle contract instead of predicting
+% separate frame-specific offsets for each producer.
+\cs_new_protected:Npn \tenkzl_record_obstacle_point:NN #1#2
+  {
+    \seq_put_right:Nx \l__tenkzl_obstacles_seq
+      {
+        \exp_not:N \tenkzl_trace_include_obstacle:nn
+          { \dim_use:N #1 } { \dim_use:N #2 }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_record_obstacle_bbox:n #1
+  {
+    \pgfextractx \l__tenkzl_labelxmin_dim { \pgfpointanchor{#1}{west} }
+    \pgfextractx \l__tenkzl_labelxmax_dim { \pgfpointanchor{#1}{east} }
+    \pgfextracty \l__tenkzl_labelymin_dim { \pgfpointanchor{#1}{south} }
+    \pgfextracty \l__tenkzl_labelymax_dim { \pgfpointanchor{#1}{north} }
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
+  }
+
 % The point at reach #5 from boundary site (#2,#3) on sheet #4.  The
 % logical point and its sheet shift both pass through the one frame map.
 \cs_new_protected:Npn \tenkzl_side_point:nnnnnNN #1#2#3#4#5#6#7
@@ -2085,6 +2116,21 @@
           (\dim_use:N \l__tenkzl_cupblx_dim,\dim_use:N \l__tenkzl_cupbly_dim)
           --
           (\dim_use:N \l__tenkzl_cupbtx_dim,\dim_use:N \l__tenkzl_cupbty_dim);
+        % Publish the line endpoints and Bezier controls.  The curve lies in
+        % their convex hull, so every later directional silhouette bounds the
+        % complete rendered cup without reverse-engineering its corridor.
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupalx_dim \l__tenkzl_cupaly_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupacx_dim \l__tenkzl_cupacy_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupbcx_dim \l__tenkzl_cupbcy_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupblx_dim \l__tenkzl_cupbly_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim
         % Both plain endpoint stubs render after the haloed connector, so its
         % round preaction caps cannot nick either sheet wire.
         \draw[bond]
@@ -2130,14 +2176,16 @@
         \dim_eval:n
           { ( \l__tenkzl_cupaly_dim + 3 \l__tenkzl_cupacy_dim
               + 3 \l__tenkzl_cupbcy_dim + \l__tenkzl_cupbly_dim ) / 8 } ) {};
-    \node[tn~label,anchor=center] at
+    \tenkzl_record_obstacle_bbox:n {\l__tenkzl_cupnode_tl}
+    \node[tn~label,anchor=center] (tenkzl-cup-label-probe) at
       ($(\l__tenkzl_cupnode_tl.center)
         +(\dim_use:N \l__tenkzl_cuplabeldx_dim,
           \dim_use:N \l__tenkzl_cuplabeldy_dim)$)
       {\box_use:N \l__tenkzl_cuplabel_box};
+    \tenkzl_record_obstacle_bbox:n {tenkzl-cup-label-probe}
   }
 
-% -- (k) same-sheet periodic virtual closures -------------------------
+% -- (j) same-sheet periodic virtual closures -------------------------
 % Opposing trace policies close the corresponding lattice axis on EACH
 % sheet.  The west/east pair closes the column axis and routes beyond the
 % measured north silhouette; north/south closes the row axis and routes
@@ -2332,45 +2380,43 @@
               }
           }
       }
-    \str_case:nn {#1}
+    % Only real routing-side legs contribute tips.  An open side draws them;
+    % a trace side will draw its sheet-local stubs later in this pass.  A
+    % sealed side contributes nothing, while a cup has already registered its
+    % actual rendered curve in the shared obstacle sequence.
+    \tenkzl_side_open:nN {#1} \l_tmpa_bool
+    \tenkzl_side_trace:nT {#1} { \bool_set_true:N \l_tmpa_bool }
+    \bool_if:NT \l_tmpa_bool
       {
-        {west}
-          { \int_step_inline:nn {\l__tenkzl_nrows_int}
-              { \tenkzl_trace_silhouette_at:nnn {west}{##1}{1} } }
-        {east}
-          { \int_step_inline:nn {\l__tenkzl_nrows_int}
-              { \tenkzl_trace_silhouette_at:nnn {east}{##1}
-                  {\l__tenkzl_ncols_int} } }
-        {north}
-          { \int_step_inline:nn {\l__tenkzl_ncols_int}
-              { \tenkzl_trace_silhouette_at:nnn {north}{1}{##1} } }
-        {south}
-          { \int_step_inline:nn {\l__tenkzl_ncols_int}
-              { \tenkzl_trace_silhouette_at:nnn {south}
-                  {\l__tenkzl_nrows_int}{##1} } }
+        \str_case:nn {#1}
+          {
+            {west}
+              { \int_step_inline:nn {\l__tenkzl_nrows_int}
+                  { \tenkzl_trace_silhouette_at:nnn {west}{##1}{1} } }
+            {east}
+              { \int_step_inline:nn {\l__tenkzl_nrows_int}
+                  { \tenkzl_trace_silhouette_at:nnn {east}{##1}
+                      {\l__tenkzl_ncols_int} } }
+            {north}
+              { \int_step_inline:nn {\l__tenkzl_ncols_int}
+                  { \tenkzl_trace_silhouette_at:nnn {north}{1}{##1} } }
+            {south}
+              { \int_step_inline:nn {\l__tenkzl_ncols_int}
+                  { \tenkzl_trace_silhouette_at:nnn {south}
+                      {\l__tenkzl_nrows_int}{##1} } }
+          }
       }
     \dim_add:Nn \l__tenkzl_cupsil_dim {\tenkz@dim{\tenkz@r@daylight}}
-    \prop_map_inline:Nn \l__tenkzl_labelxmin_prop
-      {
-        \dim_set:Nn \l__tenkzl_labelxmin_dim {##2}
-        \prop_get:NnN \l__tenkzl_labelxmax_prop {##1}
-          \l__tenkzl_labelbbox_tl
-        \dim_set:Nn \l__tenkzl_labelxmax_dim {\l__tenkzl_labelbbox_tl}
-        \prop_get:NnN \l__tenkzl_labelymin_prop {##1}
-          \l__tenkzl_labelbbox_tl
-        \dim_set:Nn \l__tenkzl_labelymin_dim {\l__tenkzl_labelbbox_tl}
-        \prop_get:NnN \l__tenkzl_labelymax_prop {##1}
-          \l__tenkzl_labelbbox_tl
-        \dim_set:Nn \l__tenkzl_labelymax_dim {\l__tenkzl_labelbbox_tl}
-        \tenkzl_trace_include_corner:NN
-          \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
-        \tenkzl_trace_include_corner:NN
-          \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
-        \tenkzl_trace_include_corner:NN
-          \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
-        \tenkzl_trace_include_corner:NN
-          \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
-      }
+    \seq_map_inline:Nn \l__tenkzl_obstacles_seq
+      {##1}
+  }
+
+\cs_new_protected:Npn \tenkzl_trace_include_obstacle:nn #1#2
+  {
+    \dim_set:Nn \l__tenkzl_labelprojx_dim {#1}
+    \dim_set:Nn \l__tenkzl_labelprojy_dim {#2}
+    \tenkzl_trace_include_corner:NN
+      \l__tenkzl_labelprojx_dim \l__tenkzl_labelprojy_dim
   }
 
 \cs_new_protected:Npn \tenkzl_trace_include_corner:NN #1#2
@@ -2568,8 +2614,23 @@
       { \tenkzl_trace_separate_open_ns_stub:N \l__tenkzl_tratx_dim }
     \str_if_eq:nnT {#1}{south}
       { \tenkzl_trace_separate_open_ns_stub:N \l__tenkzl_tratx_dim }
+    \dim_set_eq:NN \l__tenkzl_trasx_dim \l__tenkzl_trax_dim
+    \dim_set_eq:NN \l__tenkzl_trasy_dim \l__tenkzl_tray_dim
+    \tenkzl_side_cup_direction:n {#1}
+    \dim_compare:nNnF { \l__tenkzl_cupnorm_dim } = {0pt}
+      {
+        \dim_set:Nn \l__tenkzl_cupbulge_dim
+          { \tenkz@dim{\tenkz@r@dotdia} / 2
+            + \tenkz@dim{\tenkz@r@daylight} }
+        \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+          {#2}{#3}{\l__tenkzl_trsheet_int}
+          \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+          \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+          \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
+      }
     \draw[bond]
       (\dim_use:N \l__tenkzl_trax_dim,\dim_use:N \l__tenkzl_tray_dim) --
+      (\dim_use:N \l__tenkzl_trasx_dim,\dim_use:N \l__tenkzl_trasy_dim) --
       (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim);
   }
 
@@ -3023,7 +3084,8 @@
         % itself never shears)
         \tl_if_blank:nF {#8}
           {
-            \node[tn~label, anchor=south~west] at
+            \node[tn~label, anchor=south~west]
+              (tenkzl-edge-label-probe) at
               ( \dim_eval:n
                   { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
                     + \tenkz@dim{\tenkz@r@labelclear} } ,
@@ -3031,6 +3093,7 @@
                   { ( \l__tenkzl_qy_dim + \l__tenkzl_py_dim ) / 2
                     + \tenkz@dim{\tenkz@r@labelclear} } )
               {#8};
+            \tenkzl_record_obstacle_bbox:n {tenkzl-edge-label-probe}
           }
         % the audit rebuilds region set-algebra from these events (a
         % distinguished edge names two cells of the header's universe)
@@ -3301,6 +3364,7 @@
     \prop_put:Nee \l__tenkzl_labelymax_prop
       { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
       { \dim_use:N \l__tenkzl_labelymax_dim }
+    \tenkzl_record_obstacle_bbox:n {tenkzl-site-label-probe}
   }
 % all six record groups are consumed (the inset #6 is label-irrelevant):
 % a leftover group would be typeset in the picture's nullfont context --
@@ -3347,9 +3411,11 @@
     \tl_set:Ne \l__tenkzl_tmp_tl
       { \bool_if:NTF \l__tenkzl_oblique_bool
           { \tenkzl_flipanchor:n {#1} } {#1} }
-    \node[tn~label, anchor=\l__tenkzl_tmp_tl] at
+    \node[tn~label, anchor=\l__tenkzl_tmp_tl]
+      (tenkzl-region-label-probe) at
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
       { $#6$ };
+    \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
   }
 % place the label inside the requested corner of the boundary box (the four
 % corner anchors equal their key names; center is the box midpoint).  An
@@ -3376,9 +3442,11 @@
                  + \tenkzl_cx:n{\l__tenkzl_cmax_int} ) / 2 }
               { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
                  + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
-            \node[tn~label, anchor=center] at
+            \node[tn~label, anchor=center]
+              (tenkzl-region-label-probe) at
               ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
-              { $#2$ }; }
+              { $#2$ };
+            \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe} }
       }
   }
 

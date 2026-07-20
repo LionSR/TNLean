@@ -45,6 +45,7 @@ SOURCE = r"""
 % Inspect the final private route coordinates for the one-row labelled trace.
 % An event-only assertion cannot distinguish a real loop from coincident
 % out-and-back paths, so this wrapper fails on the collapsed geometry itself.
+\makeatletter
 \ExplSyntaxOn
 \bool_new:N \g__tenkzl_test_one_row_label_bool
 \cs_new_protected:Npn \tenkzOneRowLabelProbe
@@ -73,7 +74,90 @@ SOURCE = r"""
         \bool_gset_false:N \g__tenkzl_test_one_row_label_bool
       }
   }
+\bool_new:N \g__tenkzl_test_fallback_label_bool
+\bool_new:N \g__tenkzl_test_fallback_escape_called_bool
+\cs_new_protected:Npn \tenkzFallbackLabelProbe
+  {
+    \bool_gset_true:N \g__tenkzl_test_fallback_label_bool
+    \bool_gset_false:N \g__tenkzl_test_fallback_escape_called_bool
+  }
+\cs_new_eq:NN \__tenkzl_test_avoid_label_stub:nnnNNNNNN
+  \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+\cs_set_protected:Npn \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+  #1#2#3#4#5#6#7#8#9
+  {
+    \__tenkzl_test_avoid_label_stub:nnnNNNNNN
+      {#1}{#2}{#3}#4#5#6#7#8#9
+    \bool_if:NT \g__tenkzl_test_fallback_label_bool
+      { \bool_gset_true:N \g__tenkzl_test_fallback_escape_called_bool }
+  }
+\cs_new_eq:NN \__tenkzl_test_draw_trace_stub:nnn
+  \tenkzl_draw_trace_stub_at:nnn
+\cs_set_protected:Npn \tenkzl_draw_trace_stub_at:nnn #1#2#3
+  {
+    \__tenkzl_test_draw_trace_stub:nnn {#1}{#2}{#3}
+    \bool_if:NT \g__tenkzl_test_fallback_label_bool
+      {
+        \bool_if:NF \g__tenkzl_test_fallback_escape_called_bool
+          { \tex_errmessage:D { fallback~trace~skipped~label~escape } }
+        \dim_compare:nNnT { \l__tenkzl_trasx_dim } =
+          { \l__tenkzl_trax_dim }
+          {
+            \dim_compare:nNnT { \l__tenkzl_trasy_dim } =
+              { \l__tenkzl_tray_dim }
+              { \tex_errmessage:D { fallback~trace~ignored~site~label } }
+          }
+        \bool_gset_false:N \g__tenkzl_test_fallback_label_bool
+      }
+  }
+\bool_new:N \g__tenkzl_test_sealed_tip_bool
+\int_new:N \g__tenkzl_test_obstacle_min_int
+\int_new:N \g__tenkzl_test_obstacle_calls_int
+\cs_new_protected:Npn \tenkzSealedTipProbe
+  { \bool_gset_true:N \g__tenkzl_test_sealed_tip_bool }
+\cs_new_protected:Npn \tenkzObstacleProbe #1
+  { \int_gset:Nn \g__tenkzl_test_obstacle_min_int {#1} }
+\cs_new_eq:NN \__tenkzl_test_trace_silhouette:n
+  \tenkzl_trace_silhouette:n
+\cs_new_eq:NN \__tenkzl_test_trace_include_obstacle:nn
+  \tenkzl_trace_include_obstacle:nn
+\cs_set_protected:Npn \tenkzl_trace_include_obstacle:nn #1#2
+  {
+    \int_compare:nNnT { \g__tenkzl_test_obstacle_min_int } > {0}
+      { \int_gincr:N \g__tenkzl_test_obstacle_calls_int }
+    \__tenkzl_test_trace_include_obstacle:nn {#1}{#2}
+  }
+\cs_set_protected:Npn \tenkzl_trace_silhouette:n #1
+  {
+    \int_gzero:N \g__tenkzl_test_obstacle_calls_int
+    \__tenkzl_test_trace_silhouette:n {#1}
+    \bool_if:NT \g__tenkzl_test_sealed_tip_bool
+      {
+        \tenkzl_xyz:nnnNN {1}{1}{0}
+          \l__tenkzl_labelprojx_dim \l__tenkzl_labelprojy_dim
+        \tenkzl_side_cup_project:NNN
+          \l__tenkzl_labelprojx_dim \l__tenkzl_labelprojy_dim
+          \l__tenkzl_cupproj_dim
+        \dim_add:Nn \l__tenkzl_cupproj_dim
+          { \tenkz@dim{\tenkz@r@daylight} }
+        \dim_compare:nNnF { \l__tenkzl_cupsil_dim } =
+          { \l__tenkzl_cupproj_dim }
+          { \tex_errmessage:D { sealed~side~invented~a~boundary~tip } }
+        \bool_gset_false:N \g__tenkzl_test_sealed_tip_bool
+      }
+    \int_compare:nNnT { \g__tenkzl_test_obstacle_min_int } > {0}
+      {
+        \int_compare:nNnT { \seq_count:N \l__tenkzl_obstacles_seq } <
+          { \g__tenkzl_test_obstacle_min_int }
+          { \tex_errmessage:D { rendered~obstacles~were~not~registered } }
+        \int_compare:nNnT { \g__tenkzl_test_obstacle_calls_int } <
+          { \g__tenkzl_test_obstacle_min_int }
+          { \tex_errmessage:D { trace~silhouette~missed~an~obstacle } }
+        \int_gzero:N \g__tenkzl_test_obstacle_min_int
+      }
+  }
 \ExplSyntaxOff
+\makeatother
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -596,6 +680,37 @@ SOURCE = r"""
   \tenkzOneRowLabelProbe
   \tnsite[role=marked, label=$L_{\partial}^{\mathrm{north}}$]{(1,1,0)}
 \end{tenkzlattice}
+% A sealed routing side contributes no theoretical boundary-leg tip.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=1, boundary=none,
+    west=trace, east=trace, north=none, south=none]
+  \tenkzSealedTipProbe
+\end{tenkzlattice}
+% One-sided fallback geometry uses the same exact site-label escape as a
+% complete trace, including under an expert vector aimed through the label.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=1, boundary=none,
+    col vector={8mm,8mm}, row vector={0mm,-8mm}, east=trace]
+  \tenkzFallbackLabelProbe
+  \tnsite[label=$L_{\partial}^{\mathrm{east}}$]{(1,1,0)}
+\end{tenkzlattice}
+% A completed perpendicular cup publishes its actual curve/control geometry
+% to the later trace silhouette.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=none,
+    outer legs=none, north=cup, west=trace, east=trace]
+  \tenkzObstacleProbe{6}
+\end{tenkzlattice}
+% Region and distinguished-edge labels are live body obstacles too; both
+% materialized rectangles feed the periodic route's measured silhouette.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets=1, frame=oblique, boundary=none,
+    west=trace, east=trace, north=none, south=none]
+  \tenkzObstacleProbe{8}
+  \tnregion[slot=selected, label=R,
+    label at=north east]{(1-2,1-2)}
+  \tnedge[distinguished, label=E]{(1,1)-(1,2)}
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -618,7 +733,11 @@ def require(lines: list[str], expected: str, message: str) -> None:
 
 
 def forbid(lines: list[str], forbidden: str, message: str) -> None:
-    if forbidden in lines:
+    if forbidden.endswith("|"):
+        found = any(line.startswith(forbidden) for line in lines)
+    else:
+        found = forbidden in lines
+    if found:
         raise AssertionError(f"{message}: found {forbidden!r}")
 
 
@@ -2044,6 +2163,31 @@ def main() -> int:
         "from=1-1|to=1-1",
         "one-row boundary label collapsed the periodic closure",
     )
+    require(
+        pictures[105],
+        "trace|picture=105|lang=lattice|axis=west-east|sheet=0|slot=1|"
+        "from=1-1|to=1-1",
+        "sealed routing-side fixture lost its periodic closure",
+    )
+    require(
+        pictures[106],
+        "warning|picture=106|code=side-trace-unpaired|side=east|opposite=west",
+        "labelled fallback fixture lost its one-sided diagnostic",
+    )
+    for sheet in range(2):
+        require(
+            pictures[107],
+            f"trace|picture=107|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-1",
+            f"perpendicular-cup fixture lost sheet {sheet} trace",
+        )
+    for row in range(1, 3):
+        require(
+            pictures[108],
+            "trace|picture=108|lang=lattice|axis=west-east|sheet=0|"
+            f"slot={row}|from={row}-1|to={row}-2",
+            f"body-label obstacle fixture lost row {row} trace",
+        )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 
