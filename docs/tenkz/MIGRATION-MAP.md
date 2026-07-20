@@ -156,7 +156,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | TNKrausMap | ch16_channel_representations:467 | `[sandwich, east={cup=$\rho$}, west label=$T(\rho)$]: \tn{K_i} \\ \tn*{K_i}` | source-faithful applied channel; exact boundary `(2,0,0,0)`, no package change |
 | TNStinespring | ch16_channel_representations:768 | `[sandwich, east={cup=$\rho$}, west label=$T(\rho)$]: \tn{V} \\ \tn*{V}` | migrated inline (applied channel; the house input is the east cup; the unique unlabelled pairleg traces $E$) |
 | TNChoiMatrix | ch16_channel_representations:108 | `[rows={wire,wire}, east={cup=$\ketbra{\Omega}{\Omega}$}, west label=$\tau$]: \tnghost{} & \tnX[wires=2]{T\otimes\id} & \tnghost{} \\ \tnghost{} & & \tnghost{}` | applied two-wire Choi map; zero pairlegs, exact boundary `(2,0,0,0)`, no package change |
-| TNTransferMapTracePairing | ch16_channel_representations:1478 | demote: `T(\rho)=\sum_{ij}t_{ij}\tr(\sigma_j\rho)\,\sigma_i` (+ optional `\tnpic[inline, periodic]{\tnX{\sigma_j}&\tnX{\rho}}` for the trace loop) | needs-judgment (candidate demotion to plain math) |
+| TNTransferMapTracePairing | ch16_channel_representations:1478 | demote to the adjacent coefficient definition and expansion theorem; no replacement picture | demoted here: the legacy figure contracted only $\sigma_j$ with $\rho$, while $t_{ij}$, $\sigma_i$, and $T(\rho)$ were unattached labels; the separate public `TNCompactTraceCell` remains |
 | TNTwoPointCorrelator | ch14_correlations:50 | `[sandwich, west={cup=$Y$}, east={cup=$X\rho^R$}]` with `\tnX[wires=2]{\mathcal E_A^n}` between ghost anchors | trivial (a doubled-index map between input and trace-pairing cups; not a periodic word) |
 
 ### 5b. Free tier (irregular graphs, stars, projector chains)

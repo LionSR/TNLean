@@ -8,11 +8,6 @@
     \TN@annotationterminal{#1}{#2}%
     \TN@label{#1}{(0,0)}{#3}%
 }
-\newcommand{\TN@motiflabelright}[3]{%
-    \TN@annotationterminal{#1}{#2}%
-    \TN@label[anchor=west]{#1}{(0,0)}{#3}%
-}
-
 % TNPEPSEdgeBlockingReduction
 \newcommand{\TNPEPSEdgeBlockingReductionMotif}{%
         \TNEventInternal{motif|picture=\the\TN@pictureid|name=TNPEPSEdgeBlockingReduction|kind=peps-edge-reduction}%
@@ -668,17 +663,6 @@
         \TN@motiflabel{tnClientLabel2112}{(-0.42,0.60)}{c_{v,e_3}}
         \TN@motiflabel{tnClientLabel2113}{(0.42,-0.60)}{c_{v,e_4}}
         \TN@motiflabel{tnClientLabel2114}{(2.35,0)}{\displaystyle\prod_{e \ni v} c_{v,e} = 1}
-}
-
-% TNTransferMapTracePairing
-\newcommand{\TNTransferMapTracePairingMotif}{%
-        \TNEventInternal{motif|picture=\the\TN@pictureid|name=TNTransferMapTracePairing|kind=transfer-pairing}%
-        \TNCompactTraceCell{tp}{(0,0)}{\sigma_j}{\rho}{}
-        \TNExpression{tpCoeff}{(2.10,0)}{t_{ij}}
-        \TNExpression{tpOut}{(3.45,0)}{\sigma_i}
-        \TN@motiflabel{tnClientLabel2174}{(1.35,0)}{\cdot}
-        \TN@motiflabel{tnClientLabel2175}{(2.78,0)}{\cdot}
-        \TN@motiflabelright{tnClientLabel2176}{(4.15,0)}{=T(\rho)}
 }
 
 \makeatother
