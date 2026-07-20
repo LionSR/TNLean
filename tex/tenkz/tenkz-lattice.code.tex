@@ -2266,13 +2266,67 @@
       }
   }
 
-% The side-cup silhouette scanner already measures every surviving site and
-% boundary tip in the chosen direction.  Extend that exact silhouette by
-% every already-rendered body site-label rectangle; body content therefore
-% remains materialize-once even when it controls periodic routing.
+% Add every surviving boundary tip on one routing-side cell to the periodic
+% silhouette.  Unlike a cup, a trace is sheet-local and may have any positive
+% sheet count, so its scan must neither invent sheet 1 nor stop after it.
+\cs_new_protected:Npn \tenkzl_trace_silhouette_at:nnn #1#2#3
+  {
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_cupscansheet_int
+      {
+        \tenkzl_endpoint_exists:nnnT
+          {#2}{#3}{\l__tenkzl_cupscansheet_int}
+          {
+            \tenkzl_side_cup_silhouette_point:nnnn
+              {#1}{#2}{#3}{\l__tenkzl_cupscansheet_int}
+          }
+      }
+  }
+
+% Measure every surviving site and every real routing-side boundary tip in
+% the chosen direction, then extend that exact silhouette by every already-
+% rendered body site-label rectangle.  Body content therefore remains
+% materialize-once even when it controls periodic routing.
 \cs_new_protected:Npn \tenkzl_trace_silhouette:n #1
   {
-    \tenkzl_side_cup_silhouette:n {#1}
+    \tenkzl_side_cup_direction:n {#1}
+    \dim_set:Nn \l__tenkzl_cupsil_dim { -\c_max_dim }
+    \dim_set:Nn \l__tenkzl_cuptransmin_dim { \c_max_dim }
+    \dim_set:Nn \l__tenkzl_cuptransmax_dim { -\c_max_dim }
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_cupscansheet_int
+      {
+        \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+          \l__tenkzl_cupscanrow_int
+          {
+            \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+              \l__tenkzl_cupscancol_int
+              {
+                \tenkzl_side_cup_site_silhouette:nnn
+                  {\l__tenkzl_cupscanrow_int}
+                  {\l__tenkzl_cupscancol_int}
+                  {\l__tenkzl_cupscansheet_int}
+              }
+          }
+      }
+    \str_case:nn {#1}
+      {
+        {west}
+          { \int_step_inline:nn {\l__tenkzl_nrows_int}
+              { \tenkzl_trace_silhouette_at:nnn {west}{##1}{1} } }
+        {east}
+          { \int_step_inline:nn {\l__tenkzl_nrows_int}
+              { \tenkzl_trace_silhouette_at:nnn {east}{##1}
+                  {\l__tenkzl_ncols_int} } }
+        {north}
+          { \int_step_inline:nn {\l__tenkzl_ncols_int}
+              { \tenkzl_trace_silhouette_at:nnn {north}{1}{##1} } }
+        {south}
+          { \int_step_inline:nn {\l__tenkzl_ncols_int}
+              { \tenkzl_trace_silhouette_at:nnn {south}
+                  {\l__tenkzl_nrows_int}{##1} } }
+      }
+    \dim_add:Nn \l__tenkzl_cupsil_dim {\tenkz@dim{\tenkz@r@daylight}}
     \prop_map_inline:Nn \l__tenkzl_labelxmin_prop
       {
         \dim_set:Nn \l__tenkzl_labelxmin_dim {##2}

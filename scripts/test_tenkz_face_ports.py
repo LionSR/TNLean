@@ -507,6 +507,26 @@ SOURCE = r"""
     sheet vector={2mm,4mm}, boundary=open, outer legs=none,
     north=trace, south=trace]
 \end{tenkzlattice}
+% Periodic silhouette routing is genuinely sheet-parametric: a one-sheet
+% stack has no phantom sheet-1 tip, while every tip in a three-sheet stack
+% contributes to the measured exterior obstacle.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets=1, frame=slab,
+    boundary=open, outer legs=none, west=trace, east=trace]
+\end{tenkzlattice}
+\begin{tenkzlattice}[
+    rows=2, cols=1, sheets={ket,bra,aux}, frame=oblique,
+    boundary=open, outer legs=none, north=trace, south=trace]
+  \tnsite[role=marked, label=$S_2$]{(2,1,2)}
+\end{tenkzlattice}
+% Routing-side removals are sheet-local too.  The surviving sheet-0 north
+% tips still determine the west/east return silhouette independently.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra}, frame=slab,
+    boundary=open, outer legs=none, west=trace, east=trace]
+  \tnsite[removed]{(1,1,1)}
+  \tnsite[removed]{(1,2,1)}
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -1841,6 +1861,54 @@ def main() -> int:
         "pair-open-0=0|pair-traced-0=0|virtual-west=4|virtual-east=4|"
         "virtual-north=2|virtual-south=2",
         "zero-vector trace did not preserve every surviving endpoint",
+    )
+    one_sheet_trace = pictures[97]
+    require(
+        one_sheet_trace,
+        "trace|picture=97|lang=lattice|axis=west-east|sheet=0|slot=1|"
+        "from=1-1|to=1-2",
+        "one-sheet periodic silhouette lost its only real closure",
+    )
+    forbid(
+        one_sheet_trace,
+        "sheet=1|",
+        "one-sheet periodic silhouette invented a phantom sheet",
+    )
+    three_sheet_trace = pictures[98]
+    for sheet in range(3):
+        require(
+            three_sheet_trace,
+            f"trace|picture=98|lang=lattice|axis=north-south|sheet={sheet}|"
+            "slot=1|from=1-1|to=2-1",
+            f"three-sheet periodic silhouette lost sheet {sheet}",
+        )
+    require(
+        three_sheet_trace,
+        "boundary|picture=98|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|pair-closed-1=2|pair-open-1=0|"
+        "pair-traced-1=0|virtual-west=6|virtual-east=6|virtual-north=0|"
+        "virtual-south=0",
+        "three-sheet periodic closure changed its exact virtual signature",
+    )
+    asymmetric_trace = pictures[99]
+    for sheet, row in ((0, 1), (0, 2), (1, 2)):
+        require(
+            asymmetric_trace,
+            f"trace|picture=99|lang=lattice|axis=west-east|sheet={sheet}|"
+            f"slot={row}|from={row}-1|to={row}-2",
+            f"asymmetric routing-side removal lost sheet {sheet}, row {row}",
+        )
+    forbid(
+        asymmetric_trace,
+        "trace|picture=99|lang=lattice|axis=west-east|sheet=1|slot=1|",
+        "removed routing-side endpoints emitted an invented closure",
+    )
+    require(
+        asymmetric_trace,
+        "boundary|picture=99|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
+        "virtual-north=2|virtual-south=4",
+        "asymmetric routing-side removal changed surviving boundary ownership",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
