@@ -105,7 +105,10 @@ private lemma mpv_twoBlockTensor_eq {n m N : ℕ}
         simp only [h0, h1]
 
 
-/-! ## Main theorem: invariant projection ⇒ two-block block diagonal tensor -/
+/-! ## Invariant projection ⇒ two-block block diagonal tensor
+
+### Shared construction
+-/
 
 /-- Spectral decomposition auxiliary lemma for a Hermitian matrix (matrix form). -/
 private lemma orthProj_spectral_eq'
@@ -470,6 +473,8 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
     _ = mpv A₁ σ + mpv A₂ σ := hTrace_diagPart
     _ = mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ :=
       hmpv_twoBlockTensor.symm
+
+/-! ### General decomposition theorem -/
 
 /-- Canonical-form reduction step (Wolf/Cirac/Verstraete):
 
