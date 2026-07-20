@@ -55,6 +55,21 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ---
 
+## Completed refactors
+
+### Cyclic-sector compression transport
+- **Pattern:** the transfer-intertwining branch in
+  `exists_compressedTensor_of_supported_projection_with_letter_and_isometry`
+  manually reopened both reindexed block coordinate systems to prove the
+  per-letter identity.
+- **Reuse:** prove the already-returned letter-expansion identity before
+  packaging the existential, then compose `cornerCompressionExpand_mul` and
+  `cornerCompressionExpand_conjTranspose`.
+- **Result:** the theorem proof decreased from 421 to 362 lines (59 lines net),
+  with no new declaration; the file diff is 18 insertions and 77 deletions.
+
+---
+
 ## Candidates
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
