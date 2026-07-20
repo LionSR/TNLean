@@ -542,6 +542,8 @@ private structure ComplementProductTransport (A : MPSTensor d D)
   hMatrix : Matrix.toLin' qMatrix = qRaw
   hES : (LinearEquiv.conjAlgEquiv ℂ e.symm) qRaw = qES
 
+/-- The canonical matrix, raw-linear, and Euclidean transport witness for the
+complete complementary-interaction product. -/
 private noncomputable def complementProductTransport (A : MPSTensor d D)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     ComplementProductTransport A N hN where
