@@ -195,7 +195,17 @@ current counts and full location lists).
 
 ## Rejected
 
-(none yet)
+### RFP structural semantic helper split — rejected
+- **Pattern:** split `rfp_nt_structural_full_sqSum` into private matrix-unit
+  realization and residual-tensor construction theorems, each with a large
+  existential interface.
+- **Seen:** one proof in `TNLean/MPS/RFP/StructuralFull.lean`; neither proposed
+  helper has another caller.
+- **Reason:** the split would move the existing linear proof into two one-use
+  declarations without reducing its hypotheses or calculations. Instead,
+  derive left canonicality directly from the already-proved pair-index
+  orthogonality. This removes seven local constructions/proofs and reduces the
+  theorem proof from 387 to 346 lines (41 lines net), with no new declaration.
 
 ## Retired
 

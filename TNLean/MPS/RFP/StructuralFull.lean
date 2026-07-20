@@ -215,33 +215,6 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
       _ = (Matrix.trace Y / (D : ℂ)) • (1 : Mat) := by
             rw [hc_norm]
             simp [smul_smul, div_eq_mul_inv, mul_comm]
-  let T : Mat →ₗ[ℂ] Mat :=
-    fixedPointProj (1 : Mat) (by simpa [Matrix.trace_one] using hD_neC)
-  have hT_tp : IsTracePreservingMap T := by
-    intro Y
-    simp [T, fixedPointProj, Matrix.trace_one]
-  let e : Fin D × Fin D ≃ Fin (Fintype.card (Fin D × Fin D)) :=
-    Fintype.equivFin (Fin D × Fin D)
-  let Efin : Fin (Fintype.card (Fin D × Fin D)) → Mat := E ∘ e.symm
-  have hEfin_map : ∀ Y : Mat, T Y = ∑ i, Efin i * Y * (Efin i)ᴴ := by
-    intro Y
-    calc
-      T Y = (Matrix.trace Y / (D : ℂ)) • (1 : Mat) := by
-        simp [T, fixedPointProj, Matrix.trace_one]
-      _ = ∑ p : Fin D × Fin D, E p * Y * (E p)ᴴ := by
-        symm
-        exact hE_map Y
-      _ = ∑ i, Efin i * Y * (Efin i)ᴴ := by
-        symm
-        change ∑ i, E (e.symm i) * Y * (E (e.symm i))ᴴ = _
-        rw [e.symm.sum_comp (fun p : Fin D × Fin D => E p * Y * (E p)ᴴ)]
-  have hE_left_fin : ∑ i, (Efin i)ᴴ * Efin i = 1 := by
-    exact kraus_sum_conjTranspose_mul_of_tp Efin T hEfin_map hT_tp
-  have hE_left : ∑ p : Fin D × Fin D, (E p)ᴴ * E p = 1 := by
-    have hsum : ∑ i, (Efin i)ᴴ * Efin i = ∑ p : Fin D × Fin D, (E p)ᴴ * E p := by
-      change ∑ i, (E (e.symm i))ᴴ * E (e.symm i) = _
-      rw [e.symm.sum_comp (fun p : Fin D × Fin D => (E p)ᴴ * E p)]
-    rwa [hsum] at hE_left_fin
   have hL_herm : Lᴴ = L := by
     simp [L, Matrix.diagonal_conjTranspose]
   have hL_sq : L * L = ((D : ℂ) / Matrix.trace ρ) • ρ := by
@@ -382,35 +355,21 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
               · simpa [hpq] using hc_norm'
               · simp [hpq]
   have hU_left : ∑ i : Fin d, (U i)ᴴ * U i = 1 := by
+    ext a b
+    rw [Matrix.sum_apply, Matrix.one_apply]
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply]
+    rw [Finset.sum_comm]
     calc
-      ∑ i : Fin d, (U i)ᴴ * U i
-          = ∑ i : Fin d,
-              (∑ p : Fin D × Fin D, V i p • E p)ᴴ *
-                (∑ q : Fin D × Fin D, V i q • E q) := by
-              simp [U]
-      _ = ∑ i : Fin d, ∑ p : Fin D × Fin D, ∑ q : Fin D × Fin D,
-            (star (V i p) * V i q) • ((E p)ᴴ * E q) := by
-              simp_rw [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
-                Matrix.sum_mul, Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, smul_smul]
-      _ = ∑ p : Fin D × Fin D, ∑ q : Fin D × Fin D,
-            (∑ i : Fin d, star (V i p) * V i q) • ((E p)ᴴ * E q) := by
-              rw [Finset.sum_comm]
-              apply Finset.sum_congr rfl
-              intro p _
-              rw [Finset.sum_comm]
-              simp_rw [← Finset.sum_smul]
-      _ = ∑ p : Fin D × Fin D, ∑ q : Fin D × Fin D,
-            (if p = q then 1 else 0) • ((E p)ᴴ * E q) := by
-              refine Finset.sum_congr rfl ?_
-              intro p _
-              refine Finset.sum_congr rfl ?_
-              intro q _
-              rw [hV_entry]
-              by_cases hpq : p = q <;> simp [hpq]
-      _ = ∑ p : Fin D × Fin D, (E p)ᴴ * E p := by
-              simp only [ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
-                Finset.mem_univ, ↓reduceIte]
-      _ = 1 := hE_left
+      ∑ x : Fin D, ∑ i : Fin d, star (U i x a) * U i x b =
+          ∑ x : Fin D, if (x, a) = (x, b) then (D : ℂ)⁻¹ else 0 := by
+            refine Finset.sum_congr rfl ?_
+            intro x _
+            exact hU_pair (x, a) (x, b)
+      _ = if a = b then 1 else 0 := by
+            by_cases hab : a = b
+            · subst b
+              simp [hD_neC]
+            · simp [Prod.ext_iff, hab]
   have hB_fact : ∀ i : Fin d, B i = L * U i := by
     intro i
     calc
