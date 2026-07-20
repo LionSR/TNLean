@@ -1,9 +1,11 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.Algebra.SpinCover
 import TNLean.Analysis.Entropy
+import TNLean.Analysis.SchattenNorm
 import TNLean.Channel.Semigroup.Kernel
 import TNLean.Channel.Semigroup.LindbladForm.Basic
 
@@ -21,8 +23,17 @@ state spans the kernel and is fixed by the exponential semigroup.
 
 The final theorem is deliberately assumption-driven. Its `hDecay` hypothesis
 is the CMLSI/relative-entropy-decay input which is not yet available in TNLean,
-and `hPinsker` is the trace-distance Pinsker input.  In particular, this file
-does not define trace distance using TNLean's ambient operator norm.
+and `hPinsker` is the quantum Pinsker input. The distance itself is the matrix
+Schatten one-norm, rather than TNLean's ambient operator norm.
+
+## References
+
+- `Notes/OpenProblemsQC/problems/q3_two_of_three_pauli_dissipation.tex`
+  gives the complete mathematical argument and fixes the normalization of the
+  generator and the logarithmic time bound.
+- Li Gao and Cambyse Rouzé, *Complete entropic inequalities for quantum Markov
+  chains*, arXiv:2102.04146, Theorems 1.1 and 3.3, gives the CMLSI estimate used
+  as an explicit hypothesis below.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -79,7 +90,10 @@ def twoPauliGenerator (a b : Fin 3) (γa γb : ℝ) :
     twoPauliGenerator a b γa γb (1 : QubitMat) = 0 := by
   simp [twoPauliGenerator, dissipator_pauli]
 
-/-- Exact diagonal action on the three Pauli basis vectors. -/
+/-- Exact diagonal action on the three Pauli basis vectors.
+
+This is equation `eq:q3-pauli-spectrum` in
+`Notes/OpenProblemsQC/problems/q3_two_of_three_pauli_dissipation.tex`. -/
 theorem twoPauliGenerator_pauli (a b k : Fin 3) (γa γb : ℝ) :
     twoPauliGenerator a b γa γb (SpinCover.pauli k) =
       ((-2 * ((if a = k then 0 else γa) + (if b = k then 0 else γb)) : ℝ) : ℂ) •
@@ -208,8 +222,8 @@ theorem maximallyMixed_mem_densityMatrices : maximallyMixed ∈ densityMatrices 
   · exact maximallyMixed_posDef.posSemidef
   · simp [maximallyMixed, Matrix.trace_smul, Matrix.trace_one]
 
-/-- The maximally mixed state packages the one-dimensional kernel as the
-`HasSimpleKernel` API used by the semigroup theory. -/
+/-- The maximally mixed state realizes the one-dimensional kernel in the form
+used by the semigroup theory. -/
 theorem twoPauliGenerator_hasSimpleKernel {a b : Fin 3} (hab : a ≠ b)
     {γa γb : ℝ} (hγa : 0 < γa) (hγb : 0 < γb) :
     HasSimpleKernel (twoPauliGenerator a b γa γb) maximallyMixed where
@@ -259,13 +273,13 @@ section AnalyticAssembly
 
 variable {State : Type*}
 
-/-- Algebraic assembly of the desired mixing estimate.
+/-- Composition of entropy decay and Pinsker's inequality.
 
-`hDecay` is precisely the currently absent CMLSI consequence (exponential
-relative-entropy decay). `hPinsker` is precisely the currently absent Pinsker
-layer for the intended squared trace distance `distSq`. The theorem keeps that
-distance abstract rather than replacing it by the ambient operator norm. -/
-theorem squared_traceDistance_bound_of_entropy_decay_and_pinsker
+`hDecay` is the currently absent CMLSI consequence (exponential
+relative-entropy decay), and `hPinsker` is the currently absent Pinsker
+inequality for the intended squared trace distance `distSq`. The theorem keeps
+that distance abstract rather than replacing it by the ambient operator norm. -/
+theorem squared_trace_distance_bound_of_entropy_decay_and_pinsker
     (Drel : State → State → ℝ) (distSq : State → State → ℝ)
     (evolve : ℝ → State → State) (ρ ω : State) (n : ℕ) (α t : ℝ)
     (hDecay : Drel (evolve t ρ) ω ≤ Real.exp (-α * t) * Drel ρ ω)
@@ -286,7 +300,7 @@ bound `n⁻ᵖ`, it suffices to run until the exponential factor is at most
 `n⁻ᵖ / (2 n log 2)`. Turning this displayed exponential condition into a
 closed formula for `t` is elementary real analysis and independent of the
 currently absent CMLSI and Pinsker inputs. -/
-theorem squared_traceDistance_le_rpow_of_exp_threshold
+theorem squared_trace_distance_le_rpow_of_exp_threshold
     (Drel : State → State → ℝ) (distSq : State → State → ℝ)
     (evolve : ℝ → State → State) (ρ ω : State) (n : ℕ) (p α t : ℝ)
     (hn : 0 < n)
@@ -296,7 +310,7 @@ theorem squared_traceDistance_le_rpow_of_exp_threshold
     (hThreshold : Real.exp (-α * t) ≤
       (n : ℝ) ^ (-p) / (2 * ((n : ℝ) * Real.log 2))) :
     distSq (evolve t ρ) ω ≤ (n : ℝ) ^ (-p) := by
-  have hbase := squared_traceDistance_bound_of_entropy_decay_and_pinsker
+  have hbase := squared_trace_distance_bound_of_entropy_decay_and_pinsker
     Drel distSq evolve ρ ω n α t hDecay hInitial hPinsker
   have hnR : (0 : ℝ) < n := Nat.cast_pos.mpr hn
   have hlog : 0 < Real.log 2 := Real.log_pos (by norm_num)
@@ -309,29 +323,25 @@ theorem squared_traceDistance_le_rpow_of_exp_threshold
     _ = (n : ℝ) ^ (-p) := by
       field_simp [ne_of_gt hscale]
 
-/-- Q3-facing finite-matrix assembly using TNLean's actual quantum relative
-entropy.  The trace distance remains an abstract nonnegative function because a
-Schatten-1 matrix norm is not currently available; no operator norm is silently
-substituted.  The matrix size `2 ^ n` records an `n`-qubit system. -/
-theorem q3_traceDistance_sq_bound_of_entropy_decay_and_pinsker
+/-- Finite-matrix form of the Q3 estimate using quantum relative entropy and
+the matrix Schatten one-norm. The matrix size `2 ^ n` records an `n`-qubit
+system. Quantum Pinsker and entropy decay remain explicit hypotheses. -/
+theorem q3_traceNorm_sq_bound_of_entropy_decay_and_pinsker
     (n : ℕ)
-    (traceDistance : Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ →
-      Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ → ℝ)
     (evolve : ℝ → Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ →
       Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ)
     (ρ ω : Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ) (α t : ℝ)
-    (hTraceDistance_nonneg : ∀ X Y, 0 ≤ traceDistance X Y)
     (hDecay : quantumRelativeEntropy (evolve t ρ) ω ≤
       Real.exp (-α * t) * quantumRelativeEntropy ρ ω)
     (hInitial : quantumRelativeEntropy ρ ω ≤ (n : ℝ) * Real.log 2)
-    (hPinsker : (traceDistance (evolve t ρ) ω) ^ 2 ≤
+    (hPinsker : Matrix.traceNorm (evolve t ρ - ω) ^ 2 ≤
       2 * quantumRelativeEntropy (evolve t ρ) ω) :
-    0 ≤ traceDistance (evolve t ρ) ω ∧
-      (traceDistance (evolve t ρ) ω) ^ 2 ≤
+    0 ≤ Matrix.traceNorm (evolve t ρ - ω) ∧
+      Matrix.traceNorm (evolve t ρ - ω) ^ 2 ≤
         2 * Real.exp (-α * t) * ((n : ℝ) * Real.log 2) := by
-  refine ⟨hTraceDistance_nonneg _ _, ?_⟩
-  exact squared_traceDistance_bound_of_entropy_decay_and_pinsker
-    quantumRelativeEntropy (fun X Y => (traceDistance X Y) ^ 2)
+  refine ⟨Matrix.traceNorm_nonneg _, ?_⟩
+  exact squared_trace_distance_bound_of_entropy_decay_and_pinsker
+    quantumRelativeEntropy (fun X Y => Matrix.traceNorm (X - Y) ^ 2)
       evolve ρ ω n α t hDecay hInitial hPinsker
 
 /-- The exact logarithmic Q3 time scale implies the exponential threshold for
@@ -375,25 +385,24 @@ theorem q3_exp_threshold_of_logarithmic_time
       rw [Real.exp_log hn, Real.exp_log hc]
     _ = Real.exp (Real.log n * (-2 * p)) / (2 * (n * Real.log 2)) := by ring
 
-/-- Fully assembled `n`-qubit Q3 estimate at the exact logarithmic time from the
-LaTeX solution.  The explicit inputs are entropy decay with the CMLSI lower-bound
-rate `γstar / 2`, the `n log 2` initial entropy bound, and Pinsker. -/
-theorem q3_traceDistance_le_rpow_of_logarithmic_time
+/-- Conditional `n`-qubit Q3 estimate at the logarithmic time in
+`Notes/OpenProblemsQC/problems/q3_two_of_three_pauli_dissipation.tex`,
+equation `eq:q3-threshold`. The explicit inputs are entropy decay with the
+CMLSI lower-bound rate `γstar / 2`, the `n log 2` initial entropy bound, and
+quantum Pinsker. -/
+theorem q3_traceNorm_le_rpow_of_logarithmic_time
     (n : ℕ) (hn : 0 < n) (p γstar t : ℝ) (hp : 0 ≤ p) (hγstar : 0 < γstar)
-    (traceDistance : Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ →
-      Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ → ℝ)
     (evolve : ℝ → Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ →
       Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ)
     (ρ ω : Matrix (Fin (2 ^ n)) (Fin (2 ^ n)) ℂ)
-    (hTraceDistance_nonneg : ∀ X Y, 0 ≤ traceDistance X Y)
     (hDecay : quantumRelativeEntropy (evolve t ρ) ω ≤
       Real.exp (-(γstar / 2) * t) * quantumRelativeEntropy ρ ω)
     (hInitial : quantumRelativeEntropy ρ ω ≤ (n : ℝ) * Real.log 2)
-    (hPinsker : (traceDistance (evolve t ρ) ω) ^ 2 ≤
+    (hPinsker : Matrix.traceNorm (evolve t ρ - ω) ^ 2 ≤
       2 * quantumRelativeEntropy (evolve t ρ) ω)
     (ht : (2 / γstar) *
       ((2 * p + 1) * Real.log (n : ℝ) + Real.log (2 * Real.log 2)) ≤ t) :
-    traceDistance (evolve t ρ) ω ≤ (n : ℝ) ^ (-p) := by
+    Matrix.traceNorm (evolve t ρ - ω) ≤ (n : ℝ) ^ (-p) := by
   have hnR : (0 : ℝ) < n := Nat.cast_pos.mpr hn
   have hThreshold : Real.exp (-(γstar / 2) * t) ≤
       (n : ℝ) ^ (-2 * p) / (2 * ((n : ℝ) * Real.log 2)) :=
@@ -401,9 +410,9 @@ theorem q3_traceDistance_le_rpow_of_logarithmic_time
   have hThreshold' : Real.exp (-(γstar / 2) * t) ≤
       (n : ℝ) ^ (-(2 * p)) / (2 * ((n : ℝ) * Real.log 2)) := by
     simpa only [neg_mul] using hThreshold
-  have hsq : (traceDistance (evolve t ρ) ω) ^ 2 ≤ (n : ℝ) ^ (-(2 * p)) :=
-    squared_traceDistance_le_rpow_of_exp_threshold
-      quantumRelativeEntropy (fun X Y => (traceDistance X Y) ^ 2)
+  have hsq : Matrix.traceNorm (evolve t ρ - ω) ^ 2 ≤ (n : ℝ) ^ (-(2 * p)) :=
+    squared_trace_distance_le_rpow_of_exp_threshold
+      quantumRelativeEntropy (fun X Y => Matrix.traceNorm (X - Y) ^ 2)
         evolve ρ ω n (2 * p) (γstar / 2) t hn hDecay hInitial hPinsker hThreshold'
   have hrpowSq : (n : ℝ) ^ (-(2 * p)) = ((n : ℝ) ^ (-p)) ^ 2 := by
     calc
@@ -413,7 +422,7 @@ theorem q3_traceDistance_le_rpow_of_logarithmic_time
       _ = ((n : ℝ) ^ (-p)) ^ (2 : ℝ) := Real.rpow_mul hnR.le (-p) 2
       _ = ((n : ℝ) ^ (-p)) ^ 2 := Real.rpow_two _
   rw [hrpowSq] at hsq
-  exact (sq_le_sq₀ (hTraceDistance_nonneg _ _) (Real.rpow_nonneg hnR.le _)).mp hsq
+  exact (sq_le_sq₀ (Matrix.traceNorm_nonneg _) (Real.rpow_nonneg hnR.le _)).mp hsq
 
 end AnalyticAssembly
 

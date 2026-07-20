@@ -186,15 +186,15 @@ fixed-point classification. The principal declaration suffixes are
 \texttt{fixed\_iff\_scalar}, under the namespaces displayed in the source.
 
 The three \texttt{q3\_} corollaries then work over actual
-$2^n$-dimensional matrices: the first combines entropy decay with Pinsker, the
-second proves exactly the logarithmic threshold \eqref{eq:q3-threshold}, and
-\texttt{q3\_traceDistance\_le\_rpow\_of\_}\allowbreak
+$2^n$-dimensional matrices and use TNLean's matrix Schatten $1$-norm. The first
+combines entropy decay with Pinsker, the second proves exactly the logarithmic
+threshold \eqref{eq:q3-threshold}, and
+\texttt{q3\_traceNorm\_le\_rpow\_of\_}\allowbreak
 \texttt{logarithmic\_time} derives the unsquared $n^{-p}$ conclusion. These
 theorems take CMLSI decay and Pinsker as explicit hypotheses. TNLean does not yet
-contain matrix Schatten $1$-norms, quantum Pinsker, CMLSI tensorization, or the
-nonautonomous entropy chain rule, so the cited analytic inputs of the proof
-remain transparently outside the current machine-checked kernel. No operator
-norm is substituted for trace norm.
+contain quantum Pinsker, CMLSI tensorization, or the nonautonomous entropy chain
+rule, so the cited analytic inputs of the proof remain outside the current
+machine-checked kernel. No operator norm is substituted for trace norm.
 \end{remark}
 
 \ifstandalone
