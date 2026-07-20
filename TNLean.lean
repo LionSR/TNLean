@@ -246,7 +246,6 @@ import TNLean.Channel.Peripheral.Powers
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Channel.Peripheral.CyclicGroup
-import TNLean.Channel.Semigroup.HamiltonianIndependentContractivity
 -- Layer 2c: Spectral theory (QPF + transfer-operator gaps)
 import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
@@ -314,7 +313,6 @@ import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
 import TNLean.MPS.ParentHamiltonian.Martingale
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 -- Downstream users needing periodic-chain definitions may import the uniqueness capstone.
-
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
@@ -328,7 +326,6 @@ import TNLean.MPS.Symmetry.VirtualRepresentation
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.StringOrder
-
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
@@ -695,6 +692,9 @@ import TNLean.Channel.Semigroup.KossakowskiForm
 import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.LiouvillianKernel
 import TNLean.Channel.Semigroup.ReducibleQDS
+import TNLean.Channel.Semigroup.RelaxationConditions
+import TNLean.Channel.Semigroup.HamiltonianIndependentContractivity
+import TNLean.Channel.Semigroup.WeightedLoweringContractivity
 import TNLean.Channel.Determinant
 
 -- PEPS (exploratory)
