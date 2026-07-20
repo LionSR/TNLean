@@ -36,6 +36,19 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### eta_cyclic_local_operator_transport — promoted
+- **Pattern:** reindexing a translated two-site bond into cyclic edge coordinates, then
+  proving it is block diagonal with a single active edge factor.
+- **Seen:** two implementations: 269 declaration/proof lines in
+  `PhysicalSectorProductRealization.lean` and 250 in
+  `CommutingBondEtaCyclicTransport.lean` before the refactor.
+- **Abstraction:** `MPOTensor.reindex_embedLocalOperator_etaPairBond` in
+  `TNLean/MPS/MPDO/CommutingBondEtaCyclicCore.lean`; the physical-sector route supplies
+  only its coordinate equivalence and local block-decomposition law.
+- **Notes:** the physical specialization is 10 proof lines. Its two coordinate bridges
+  are 30 and 44 declaration/proof lines. Including the dependency-neutral module split,
+  the refactor removes 364 source lines overall (865 additions, 1229 deletions).
+
 ### invariant-subspace two-block fork — promoted
 - **Pattern:** the general and strict invariant-subspace decompositions repeated the
   spectral split, block construction, and MPV calculation.
