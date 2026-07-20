@@ -1596,17 +1596,17 @@ a common dilation space.
 \label{sec:trace_pairing_expansion}
 %% =========================================================
 
-The trace-pairing expansion separates a linear map into the scalar input
-pairing, the transfer coefficients, and the output basis element:
-\[
-    T(\rho)=\sum_i\sum_j t_{ij}\,\tr(\sigma_j\rho)\,\sigma_i.
-\]
-The diagram records the same factorization by closing the input matrix with
-$\sigma_j$, weighting the resulting scalar by $t_{ij}$, and producing the output
-matrix through $\sigma_i$:
-\begin{center}
-    \TNTransferMapTracePairing
-\end{center}
+% Formula/source: Wolf, Eq. (2.20), defines the transfer coefficients by
+% \widehat T_{\alpha\beta}=\tr(F_\alpha^\dagger T(G_\beta)).
+% In the chapter's same-D trace-self-dual specialization, the input and output
+% bases are identified with {\sigma_i}, and this becomes
+% t_{ij}=\tr(\sigma_i T(\sigma_j)) together with
+% T(\rho)=\sum_{i,j}t_{ij}\tr(\sigma_j\rho)\sigma_i.
+% Index verdict: j is summed in the input coordinate \tr(\sigma_j\rho), while
+% i is summed in the coefficient and output basis element \sigma_i.  This is an
+% algebraic basis expansion, not one tensor-network contraction.  In the
+% retired figure only \sigma_j and \rho were contracted; t_{ij}, \sigma_i, and
+% the equality to T(\rho) were unattached labels.
 
 \begin{definition}[Trace-self-dual basis]\label{def:trace_pairing_self_dual_basis}
     \lean{TracePairingSelfDualBasis}

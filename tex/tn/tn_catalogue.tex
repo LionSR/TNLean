@@ -829,22 +829,4 @@
     \end{TNDiagram}%
 }
 
-% ---------- Quantum-channel representation diagrams ----------
-
-% Trace-pairing transfer form
-% T(rho)=sum_{i,j} t_ij tr(sigma_j rho) sigma_i.  The trace loop passes through
-% rho and sigma_j; the scalar coefficient t_ij joins the two basis labels, and
-% sigma_i supplies the output matrix legs.
-\TNDeclareDiagram
-    {TNTransferMapTracePairing}
-    {}
-    {display}
-    {compact}
-    {\TNTransferMapTracePairing}
-    {chapter/ch16_channel_representations.tex}{%
-    \begin{TNDiagram}[compact]
-        \TNTransferMapTracePairingMotif
-    \end{TNDiagram}%
-}
-
 \makeatother
