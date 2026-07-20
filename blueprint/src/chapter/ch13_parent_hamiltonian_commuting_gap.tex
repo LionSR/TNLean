@@ -2360,6 +2360,7 @@ specialization of that Appendix~D definition.
 
 \begin{definition}[Finite sector graph]\label{def:beigi_sector_graph}
     \lean{MPSTensor.BeigiSectorGraphData}
+    \lean{MPSTensor.BeigiSectorGraphData.unitary_mul_conjTranspose}
     \lean{MPSTensor.BeigiSectorGraphData.edgeGroundSpace}
     \lean{MPSTensor.BeigiSectorGraphData.IsEdge}
     \lean{MPSTensor.BeigiSectorGraphData.OrderedCycle}
@@ -2614,23 +2615,6 @@ specialization of that Appendix~D definition.
     \]
     Substitution of the preceding cyclic coefficient formula gives the stated
     sitewise-unitary image.
-\end{proof}
-
-\begin{lemma}[Right-unitarity of the Beigi spatial coordinate matrix]
-    \label{lem:beigi_spatial_coordinate_right_unitary}
-    \lean{MPSTensor.BeigiSectorGraphData.unitary_mul_conjTranspose}
-    \leanok
-    \uses{def:beigi_sector_graph}
-    Suppose that $A$ is equipped with Beigi sector data, with one-site spatial
-    unitary $U$.  Then
-    \[
-        UU^*=\mathbf 1.
-    \]
-\end{lemma}
-
-\begin{proof}\leanok
-    Since the spatial coordinate matrix is unitary, multiplying it by its
-    adjoint gives the identity.
 \end{proof}
 
 \begin{theorem}[Spatial conjugation of complementary interaction products]
