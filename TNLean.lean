@@ -246,7 +246,6 @@ import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Channel.Peripheral.CyclicGroup
 import TNLean.Channel.Semigroup.RelaxationConditions
-
 -- Layer 2c: Spectral theory (QPF + transfer-operator gaps)
 import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
@@ -480,6 +479,7 @@ import TNLean.MPS.MPDO.VerticalSectorDensityBlocks
 import TNLean.MPS.MPDO.VerticalSectorTracePreservation
 import TNLean.MPS.MPDO.VerticalSectorCompletePositivity
 import TNLean.MPS.MPDO.VerticalSectorInvertibility
+import TNLean.MPS.MPDO.VerticalSectorIdentity
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
