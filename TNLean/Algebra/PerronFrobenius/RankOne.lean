@@ -476,7 +476,8 @@ theorem trace_eq_trace_sq_of_pairing_idempotent
 
 /-- If `T^2 = T^3`, then every power `T^N` for `N ≥ 2` agrees with `T^2`. -/
 theorem pow_eq_pow_two_of_pow_two_eq_pow_three
-    {T : Matrix (Fin n) (Fin n) ℝ} (h : T ^ 2 = T ^ 3) :
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {T : Matrix ι ι ℝ} (h : T ^ 2 = T ^ 3) :
     ∀ N, 2 ≤ N → T ^ N = T ^ 2 := by
   have hmul : T * T = T * T * T := by
     have e2 : T ^ 2 = T * T := by rw [pow_succ, pow_one]

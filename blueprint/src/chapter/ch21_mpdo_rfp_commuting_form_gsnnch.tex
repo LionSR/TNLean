@@ -843,6 +843,197 @@
     trace matrix is primitive.
 \end{proof}
 
+% **Local fix (cyclic-active restriction):** CPSV16 Lemma `propSN` assumes SAL.
+% The following restricted construction repairs the arbitrary-factorization obstruction.
+% See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{definition}[Cyclic-active sectors]
+    \label{def:mpdo_cyclic_active_sector}
+    \lean{MPOTensor.PhysicalSectorFactorization.IsCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveWeight}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveWeight_ne_zero_iff}
+    \lean{MPOTensor.PhysicalSectorFactorization.CyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_trace_re_pos_iff}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
+    For a physical-sector factorization with neighboring operators
+    $\eta_{k,h}$, retain a sector $k$ when there is a sector $h$ such that
+    \[
+        \eta_{k,h}\ne0,
+        \qquad h\leadsto k,
+    \]
+    where $\leadsto$ denotes reachability by nonzero neighboring operators.
+    The first edge $k\to h$ is explicit, so the resulting closed walk has
+    positive length even when the return path is empty.  The set $C$ of
+    retained sectors is therefore exactly the set of vertices occurring in
+    positive-length directed cycles, in the sense of
+    \cite[Section~III]{Beigi2012Classification}.  Define
+    \[
+        T_{k,h}=\operatorname{Re}\tr(\eta_{k,h})\qquad(k,h\in C).
+    \]
+    For positive semidefinite neighboring operators the trace is real, so
+    $T_{k,h}=\tr(\eta_{k,h})$, and $T_{k,h}>0$ is equivalent to
+    $\eta_{k,h}\ne0$.
+\end{definition}
+
+% **Local fix (cyclic-active restriction):** this theorem concerns the restricted
+% cyclic support, not the full trace matrix in CPSV16 Lemma `propSN`. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Deletion of sectors absent from cyclic products]
+    \label{thm:mpdo_cyclic_active_deletion}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_cyclic_edges}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_ne_zero_of_cyclicNeighboringProduct_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_cyclicNeighboringProduct_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
+    \leanok
+    \uses{def:mpdo_cyclic_active_sector,
+      def:mpdo_physical_sector_chain_coordinates}
+    Let $N\geq1$ and let $k=(k_0,\ldots,k_{N-1})$ be a cyclic sector
+    configuration.  If $k_n\notin C$ for some $n$, then
+    \[
+        \Omega_k=0.
+    \]
+    Thus deleting the sectors outside $C$ leaves every finite cyclic
+    neighboring product unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\Omega_k\ne0$, each factor $\eta_{k_n,k_{n+1}}$ is nonzero; otherwise
+    every matrix entry of the product vanishes.  Starting with the edge
+    $k_n\to k_{n+1}$ and following the remaining cyclic edges gives a return
+    path to $k_n$.  Hence every $k_n$ belongs to $C$.
+\end{proof}
+
+% **Local fix (cyclic-active restriction):** this is a restricted replacement for
+% the primitive-matrix step of the SAL-dependent CPSV16 Lemma `propSN`. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Primitivity on cyclic-active sectors]
+    \label{thm:mpdo_cyclic_active_trace_matrix_primitive}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_sectorVirtualMatrix_ne_zero_of_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.nonempty_cyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorOneSiteMatrixFamily_span_eq_top}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_cyclicActive_two_edge_return}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_isIrreducible}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_pow_two_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_pow_three_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_isPrimitive}
+    \leanok
+    \uses{def:injective, def:mpdo_cyclic_active_sector}
+    Suppose that the virtual dimension is positive, the MPO tensor is
+    injective, and every $\eta_{k,h}$ is positive semidefinite.  Then $C$ is
+    nonempty and the matrix $T$ is primitive.  More precisely, $T$ is
+    irreducible and every $k\in C$ satisfies
+    \[
+        (T^2)_{k,k}>0,
+        \qquad
+        (T^3)_{k,k}>0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The virtual matrices of all physical sectors span the full matrix
+    algebra.  If $A=A_k^{xy}$ is nonzero, nondegeneracy of the trace pairing
+    gives a virtual matrix $B=A_q^{uv}$ such that
+    \[
+        \tr(AB)\ne0.
+    \]
+    Cyclicity gives $\tr(BA)=\tr(AB)\ne0$, and therefore
+    \[
+        \eta_{k,q}\ne0,
+        \qquad
+        \eta_{q,k}\ne0.
+    \]
+    Thus a sector containing a nonzero virtual matrix lies on a directed
+    two-cycle.  Hence every virtual matrix outside $C$ vanishes, and the
+    virtual matrices belonging to $C$ still span the full algebra.
+
+    If a proper directed cut separated two nonempty subsets $C_1,C_2$ of
+    $C$, let $V_{C_i}$ denote the span of the virtual matrices in $C_i$.
+    Absence of an edge across the cut gives
+    \[
+        V_{C_1}V_{C_2}=\{0\},
+        \qquad
+        V_{C_1}+V_{C_2}=M_D(\mathbb C).
+    \]
+    Both spaces contain a nonzero matrix.  This contradicts the one-sided
+    product obstruction for two nonzero subspaces whose sum is the full
+    matrix algebra.  Thus $T$ is irreducible.  The same trace pairing gives a
+    two-edge return through each sector and closes every retained edge
+    through a third retained sector.  These yield the displayed positive
+    diagonal entries of $T^2$ and $T^3$; the coprime return lengths imply
+    primitivity.
+\end{proof}
+
+% **Local fix (cyclic-active restriction):** CPSV16 line 1613 uses the one-step
+% coefficient, whereas this restricted theorem proves rank one for its square.
+% See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Rank-one cyclic-active two-step coefficient]
+    \label{thm:mpdo_cyclic_active_zcl_rank_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_leftTensor}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_rightTensor}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_neighboringOperator}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl,
+      thm:mpdo_cyclic_active_trace_matrix_primitive,
+      thm:matrix_primitive_pow_two_rank_one}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive}, suppose that
+    the physical-trace transfer has source zero correlation length.  There is
+    a number $\lambda>0$ such that, with $\widehat T=\lambda^{-1}T$,
+    \[
+        \widehat T^2=\widehat T^3,
+        \qquad
+        \rank(\widehat T^2)=1,
+    \]
+    and for every $m\geq1$,
+    \[
+        \tr(\widehat T^m)=\tr(\widehat T).
+    \]
+    The matrix $\widehat T^2$ is the two-step coefficient
+    \[
+        (\widehat T^2)_{k,h}
+        =\sum_{q\in C}\widehat T_{k,q}\widehat T_{q,h}
+    \]
+    by matrix multiplication.  The assertion neither identifies
+    $\widehat T$ with $\widehat T^2$ nor implies that the unreduced Beigi trace
+    matrix is primitive or rank one.
+\end{theorem}
+
+\begin{proof}\leanok
+    Set the left sector tensor equal to zero outside $C$.  The preceding span
+    argument shows that this does not change the physical tensor, and the
+    neighboring operators with both indices in $C$ are unchanged.  The
+    source zero-correlation-length relation, transported through this
+    restricted factorization, gives
+    $\widehat T^2=\widehat T^3$ on the cyclic-active indices.  By
+    Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive},
+    $\widehat T$ is primitive.  Its square is therefore a strictly positive
+    idempotent matrix and has rank one.
+\end{proof}
+
+% Tracked in https://github.com/LionSR/TNLean/issues/4445.
+\begin{remark}[Open three-boundary identification]
+    \notready
+    The remaining physical step is to apply the zero-correlation-length
+    marginal replacement one further time than at line~1613 of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, express the trace of three
+    boundary sites in the cyclic-active sector coordinates, and prove that
+    the fully traced middle segment contributes $\widehat T^2$.  This must be
+    done without identifying $\widehat T$ with $\widehat T^2$ or the
+    cyclic-active matrix with the unreduced Beigi matrix.
+\end{remark}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready
