@@ -202,7 +202,7 @@ import TNLean.Channel.FixedPoint.ChoiEffros
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
-import TNLean.Channel.FixedPoint.DirectSumExtension
+import TNLean.Channel.FixedPoint.DirectSumKraus
 import TNLean.Channel.FixedPoint.FullSupportBlockRetraction
 import TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks
 import TNLean.Channel.FixedPoint.DirectSumBlockRetraction
