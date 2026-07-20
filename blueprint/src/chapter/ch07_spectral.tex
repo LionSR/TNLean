@@ -2850,6 +2850,45 @@ outside the present result.
     $D_i=E_{\sigma(i)}$.
 \end{proof}
 
+\begin{theorem}[Unitary action within matched simple summands]%
+    \label{thm:direct_sum_star_equiv_block_unitary}
+    \lean{MPSTensor.exists_unitary_block_implementers_of_starAlgEquiv_pi_matrix}
+    \lean{Matrix.exists_blockEquiv_dim_eq_unitary_of_starAlgEquiv_pi_matrix}
+    \lean{Matrix.exists_blockEquiv_dim_eq_unitary_of_mutual_inverse_kraus_direct_sum_maps}
+    \leanok
+    \uses{thm:direct_sum_inverse_cptp_star_equiv,
+        thm:direct_sum_inverse_cptp_block_matching}
+    Retain an equivalence $\sigma:I\simeq J$ which matches the block ideals
+    of a star-algebra isomorphism
+    \[
+        \Phi:\prod_{i\in I}M_{D_i}(\C)
+        \simeq \prod_{j\in J}M_{E_j}(\C),
+    \]
+    together with equalities $D_i=E_{\sigma(i)}$.  Then there are unitaries
+    $U_i\in M_{E_{\sigma(i)}}(\C)$ such that
+    \[
+        \Phi(0,\ldots,0,X,0,\ldots,0)_{\sigma(i)}
+        =U_i\,\iota_i(X)\,U_i^*
+    \]
+    for every $X\in M_{D_i}(\C)$, where $\iota_i$ is the reindexing induced
+    by the retained dimension equality.  In particular, this conclusion
+    applies to the trace-adjoint star-algebra isomorphism of any mutually
+    inverse completely positive trace-preserving pair.  This is the
+    blockwise-unitary statement in
+    \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}; it does not assert
+    the later MPDO multiplicity or coefficient relations.
+\end{theorem}
+
+\begin{proof}\leanok
+    The restriction of $\Phi$ to a matched block is a star-algebra
+    isomorphism.  After reindexing by $D_i=E_{\sigma(i)}$, it is an
+    automorphism of a full complex matrix algebra.  Skolem--Noether writes
+    this automorphism as conjugation by an invertible matrix $P$.  Preservation
+    of the adjoint implies that $P^*P$ commutes with every matrix and is
+    therefore a positive scalar multiple of the identity.  Dividing $P$ by
+    the positive square root of this scalar produces the required unitary.
+\end{proof}
+
 % Scope restriction documented in
 % docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
 \begin{theorem}[Weighted block form of the adjoint Ces\`aro projection on full support]%

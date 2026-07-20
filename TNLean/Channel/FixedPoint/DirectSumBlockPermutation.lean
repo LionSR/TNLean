@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.BlockPermutation
+import TNLean.Algebra.SkolemNoetherUnitary
 import TNLean.Channel.FixedPoint.DirectSumInverseKraus
 
 import Mathlib.RingTheory.SimpleRing.Matrix
@@ -89,6 +90,34 @@ theorem exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix
   simp only [Module.finrank_self, Fintype.card_fin, mul_one] at hfinrank
   exact Nat.mul_self_inj.mp hfinrank
 
+/-- A star-algebra equivalence between finite products of nonzero full matrix
+algebras acts by unitary conjugation inside the simple summands selected by its
+block-ideal matching.
+
+This is the blockwise-unitary portion of arXiv:1606.00608, Appendix C.4,
+line 1997, following Wolf--Perez-Garcia, arXiv:1005.4545, Theorem 8,
+source lines 322--324. The companion formula for the inverse map is not
+asserted here. -/
+theorem exists_blockEquiv_dim_eq_unitary_of_starAlgEquiv_pi_matrix
+    (T : (∀ i, Matrix (Fin (d i)) (Fin (d i)) ℂ) ≃⋆ₐ[ℂ]
+      (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ)) :
+    ∃ sigma : ι ≃ κ, ∃ hDim : ∀ i, d i = e (sigma i),
+      (∀ i, T.toRingEquiv.mapTwoSidedIdeal
+        (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+          MPSTensor.blockIdeal
+            (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (sigma i)) ∧
+      ∃ U : ∀ i, Matrix.unitaryGroup (Fin (e (sigma i))) ℂ,
+        ∀ (i : ι) (M : Matrix (Fin (d i)) (Fin (d i)) ℂ),
+          T (Pi.single i M) (sigma i) =
+            (U i : Matrix (Fin (e (sigma i))) (Fin (e (sigma i))) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) M *
+                (U i : Matrix (Fin (e (sigma i))) (Fin (e (sigma i))) ℂ)ᴴ := by
+  obtain ⟨sigma, hsigma, hDim⟩ :=
+    exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix T
+  exact ⟨sigma, hDim, hsigma,
+    MPSTensor.exists_unitary_block_implementers_of_starAlgEquiv_pi_matrix
+      T sigma hsigma hDim⟩
+
 /-- Mutually inverse completely positive trace-preserving maps between two
 finite products of nonzero full matrix algebras match their simple summands
 and the corresponding matrix dimensions.
@@ -117,6 +146,38 @@ theorem exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps
           MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (σ i)) ∧
       ∀ i, d i = e (σ i) := by
   exact exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix
+    (directSumTraceAdjointStarAlgEquiv T S hT hS hTTP hSTP hST hTS).symm
+
+/-- The trace-adjoint star-algebra equivalence associated with mutually inverse
+completely positive trace-preserving maps acts by unitary conjugation on its
+matched simple matrix summands.
+
+This is the algebraic blockwise-unitary step in arXiv:1606.00608,
+Appendix C.4, line 1997. It does not specialize the formula to transported
+MPDO sectors or assert the later multiplicity and coefficient relations. -/
+theorem exists_blockEquiv_dim_eq_unitary_of_mutual_inverse_kraus_direct_sum_maps
+    [Fintype ι] [Fintype κ]
+    (T : (∀ i, Matrix (Fin (d i)) (Fin (d i)) ℂ) →ₗ[ℂ]
+      (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ))
+    (S : (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ) →ₗ[ℂ]
+      (∀ i, Matrix (Fin (d i)) (Fin (d i)) ℂ))
+    (hT : IsKrausDirectSumMap T) (hS : IsKrausDirectSumMap S)
+    (hTTP : IsTracePreservingBetweenDirectSums T)
+    (hSTP : IsTracePreservingBetweenDirectSums S)
+    (hST : S.comp T = LinearMap.id) (hTS : T.comp S = LinearMap.id) :
+    let E := (directSumTraceAdjointStarAlgEquiv T S hT hS hTTP hSTP hST hTS).symm
+    ∃ sigma : ι ≃ κ, ∃ hDim : ∀ i, d i = e (sigma i),
+      (∀ i, E.toRingEquiv.mapTwoSidedIdeal
+        (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+          MPSTensor.blockIdeal
+            (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (sigma i)) ∧
+      ∃ U : ∀ i, Matrix.unitaryGroup (Fin (e (sigma i))) ℂ,
+        ∀ (i : ι) (M : Matrix (Fin (d i)) (Fin (d i)) ℂ),
+          E (Pi.single i M) (sigma i) =
+            (U i : Matrix (Fin (e (sigma i))) (Fin (e (sigma i))) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) M *
+                (U i : Matrix (Fin (e (sigma i))) (Fin (e (sigma i))) ℂ)ᴴ := by
+  exact exists_blockEquiv_dim_eq_unitary_of_starAlgEquiv_pi_matrix
     (directSumTraceAdjointStarAlgEquiv T S hT hS hTTP hSTP hST hTS).symm
 
 end Matrix
