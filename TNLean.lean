@@ -26,6 +26,7 @@ import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.TracePairing
 import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether
+import TNLean.Algebra.SkolemNoetherUnitary
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp

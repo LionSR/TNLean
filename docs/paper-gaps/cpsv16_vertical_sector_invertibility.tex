@@ -309,13 +309,22 @@ restriction to each paired block is a bijective complex-linear map
 and comparison of dimensions gives $d_i=e_{\sigma(i)}$.
 Applying this result to the trace-adjoint $*$-algebra isomorphism proves both
 this block-ideal matching relation and the dimension equality for every
-mutually inverse CPTP pair.\footnote{Formal
+mutually inverse CPTP pair.  The second conclusion is now proved while
+retaining these particular witnesses.  The restriction to a paired block is
+a $*$-algebra isomorphism; after reindexing by the retained dimension
+equality, Skolem--Noether gives an invertible implementer $P$.  Preservation
+of the adjoint forces $P^*P$ to be a positive scalar matrix, and normalization
+therefore gives a unitary implementer on the actual target block.\footnote{Formal
 declarations:
 \leanid{MPSTensor.exists_blockEquiv_of_ringEquiv_pi_simple} in
 \doclink{TNLean/Algebra/BlockPermutation};
+\leanid{MPSTensor.exists_unitary_conj_of_starAlgEquiv_matrix} and
+\leanid{MPSTensor.%
+exists_unitary_block_implementers_of_starAlgEquiv_pi_matrix} in
+\doclink{TNLean/Algebra/SkolemNoetherUnitary};
 \leanid{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix} and
 \leanid{Matrix.%
-exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps} in
+exists_blockEquiv_dim_eq_unitary_of_mutual_inverse_kraus_direct_sum_maps} in
 \doclink{TNLean/Channel/FixedPoint/DirectSumBlockPermutation}.}
 
 \section{Elimination plan}
@@ -331,29 +340,30 @@ The first two steps of the Appendix~C.4 argument are complete:
           product-generation theorem, and gives both identity compositions;
 \end{enumerate}
 The inverse-UCP multiplicative-domain step is also complete: the rectangular
-trace adjoints form mutually inverse $*$-algebra equivalences.  The remaining
-generic simple-summand correspondence is now complete as well: it gives an
-equivalence of the sector index sets, identifies the actual block ideals
-carried into one another by the star-algebra isomorphism, and proves equality
-of the paired matrix dimensions.  It remains to identify each paired
-component map with unitary conjugation and then specialize the resulting
-formula to the transported vertical-sector maps.
+trace adjoints form mutually inverse $*$-algebra equivalences.  The generic
+simple-summand correspondence and its internal unitary action are complete as
+well: they give an equivalence of the sector index sets, identify the actual
+block ideals carried into one another, prove equality of the paired matrix
+dimensions, and implement every retained paired component by unitary
+conjugation.  It remains to specialize this formula to the transported
+vertical-sector maps.
 
 \section{Classification}
 
 \textbf{Verdict: transported-map invertibility, the inverse-UCP
-multiplicative-domain step, and generic simple-summand matching are closed;
-unitary implementation remains open.}  The two transported maps and their
+multiplicative-domain step, generic simple-summand matching, and generic
+unitary implementation are closed; the transported-sector specialization
+remains open.}  The two transported maps and their
 square composites are trace preserving under the source tensor hypotheses.
 Their two compositions are identities, and the rectangular trace adjoints
 form mutually inverse $*$-algebra equivalences.  For any such pair, the simple
 summands are matched by an equivalence of the index sets, the corresponding
 block ideals are carried into one another by the star-algebra isomorphism,
-and the paired matrix dimensions are equal.  The stronger active-image
-inclusions remain unproved and are not needed for this route.  The blockwise
-unitary-conjugation formula and its specialization to the transported
-vertical-sector maps remain to be proved before the conclusion of
-Appendix~C.4, line~1997 is complete.
+the paired matrix dimensions are equal, and the induced map on each matched
+summand is unitary conjugation.  The stronger active-image inclusions remain
+unproved and are not needed for this route.  Specializing the generic unitary
+formula to the transported vertical-sector maps remains necessary before the
+conclusion of Appendix~C.4, line~1997 is complete.
 
 \bibliographystyle{alpha}
 \bibliography{references}
