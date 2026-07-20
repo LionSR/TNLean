@@ -13,7 +13,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Issue Automation](#issue-automation-issue-automationyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
-  - [Oversized Lean File Guard](#oversized-lean-file-guard-pr-ciyml-file-length-job)
+  - [Lean Module Policy](#lean-module-policy-pr-ciyml-file-length-job)
   - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
@@ -250,13 +250,38 @@ diagrams render to SVG.
 
 ---
 
-### Oversized Lean File Guard (`pr-ci.yml`, `file-length` job)
+### Lean Module Policy (`pr-ci.yml`, `file-length` job)
 
-**What it does**: Reports `.lean` files above the 1000-line style limit.
+**What it does**: Enforces two blocking structural checks:
 
-**When it runs**: On pull requests. The check is advisory while `main` still
-contains existing files above the limit; once those files are split, remove the
-`continue-on-error` line in the workflow to make it a blocking gate.
+- Ordinary `.lean` files may not exceed 1000 lines. The exact path passed with
+  `--import-only-aggregator` is exempt only after the checker removes nested Lean
+  comments and verifies that every remaining command is an `import`. Missing,
+  excluded, empty, malformed, or declaration-bearing exemptions fail even when
+  the file is below the limit. CI currently registers only `TNLean.lean`.
+- New Git-tracked production modules below `TNLean/` may not end in a numeral
+  (optionally followed by one letter). `TNLean/Archive/` and untracked scratch
+  files are outside this production policy. Existing continuation files form a
+  shrinking allowlist: pull-request CI compares the proposed set with its
+  merge-base value and rejects additions; a new name fails, and a removed or
+  renamed file leaves a stale entry that must be deleted in the same change.
+  Exact names whose numeral
+  denotes a mathematical object or source label have path-specific documented
+  exceptions in `scripts/check_numbered_lean_files.py`.
+
+When a proof approaches the cap, split by mathematical responsibility rather
+than chronology. Put shared definitions and setup in a family `Basic.lean`
+module, choose concept names such as `BoundaryRecovery.lean` for the proof
+modules, and use a concept-named import-only aggregator. Do not create
+`Foo2.lean`, `Foo3.lean`, or variants such as `Foo3b.lean`. A new semantic
+exception must explain why the numeral belongs to the mathematics or source
+citation; it is not an escape hatch for continuation files.
+
+**When it runs**: On pull requests and pushes to `main` whenever Lean sources,
+either checker, their tests, this documentation, or the workflow changes. CI
+runs the policy unit tests before both repository checks. The numbered-module
+ratchet compares a pull request with its merge base and a push with the commit
+recorded by the push event before any commit in that push was applied.
 
 ---
 
