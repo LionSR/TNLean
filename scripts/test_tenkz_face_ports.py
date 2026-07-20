@@ -735,8 +735,9 @@ SOURCE = r"""
 % to the later trace silhouette.
 \begin{tenkzlattice}[
     rows=1, cols=1, sheets={ket,bra}, boundary=none,
-    outer legs=none, north=cup, west=trace, east=trace]
-  \tenkzObstacleProbe{6}
+    outer legs=none, north={cup=$M_{\mathrm{boundary}}$},
+    west=trace, east=trace]
+  \tenkzObstacleProbe{14}
 \end{tenkzlattice}
 % Region and distinguished-edge labels are live body obstacles too; both
 % materialized rectangles feed the periodic route's measured silhouette.
@@ -746,8 +747,8 @@ SOURCE = r"""
   \tenkzObstacleProbe{8}
   \tenkzBBoxLeadProbe
   \tnregion[slot=selected, label={R_{\mathrm{boundary}}},
-    label at=north east]{(1-2,1-2)}
-  \tnedge[distinguished, label=E]{(1,1)-(1,2)}
+    label at=south east]{(1-2,1-2)}
+  \tnedge[distinguished, label=$E_{\mathrm{boundary}}$]{(1,1)-(1,2)}
 \end{tenkzlattice}
 % Default role-stack outer physical legs are already-rendered ink and publish
 % both endpoints before a sealed-side west/east trace chooses its lane.
