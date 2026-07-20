@@ -573,8 +573,22 @@ reordering basis states rather than by a general linear map. % The statements of
     \]
     In tensor-network notation the local tensor is unchanged and only the
     physical leg is relabelled:
+    % Formula: (A^{\sigma_g})^i = A^{\sigma(g)(i)}.
+    % Source verdict: the adjacent defining identity is the source; there is
+    % no dedicated source figure.
+    % Ink-to-index: i and \sigma(g)(i) label the free upper physical stub of
+    % the same one-site tensor A; the relabelling arrow carries no index.
+    % Contractions: none.
+    % Paired boundary: boundary|virtual-west=1|virtual-east=1|
+    % physical-up=1|physical-down=0.
     \begin{center}
-        \TNPermutationTwist{i}{\sigma(g)(i)}
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{A}
+        \end{tenkz}
+        \qquad $\xrightarrow{\sigma_g}$ \qquad
+        \begin{tenkz}[physical=up]
+            \tn[up=$\sigma(g)(i)$]{A}
+        \end{tenkz}
     \end{center}
 \end{definition}
 
