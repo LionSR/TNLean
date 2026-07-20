@@ -35,6 +35,13 @@ SOURCE = r"""
 \newcount\tenkzcenterlabelseen
 \newcount\tenkzperiodicbondseen
 \newcount\tenkzinteriorbondseen
+\newcount\tenkzlatticebodyseen
+\newcount\tenkzcuplabelseen
+\newcount\tenkzsitelabelseen
+\newcommand{\tenkzcuplabelprobe}{%
+  \global\advance\tenkzcuplabelseen by 1\relax $W$}
+\newcommand{\tenkzsitelabelprobe}{%
+  \global\advance\tenkzsitelabelseen by 1\relax $A_\star$}
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -387,6 +394,80 @@ SOURCE = r"""
   \tn[wires=1, physical=down]{U}\\
   \tn{L}
 \end{tenkz}
+% Lattice side cups on every frame and every side.  Picture 82 also
+% proves that the environment body remains a live customization layer:
+% its commands execute once and their recorded edge survives the cup pass.
+\begin{tenkzlattice}[
+    rows=3, cols=2, sheets={ket,bra}, boundary=open,
+    outer legs=none, east=cup]
+  \global\advance\tenkzlatticebodyseen by 1\relax
+  \tnsite[role=marked, label={\tenkzsitelabelprobe}]{(2,2,1)}
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
+\end{tenkzlattice}
+\ifnum\tenkzlatticebodyseen=1\else
+  \errmessage{tenkzlattice body customization did not execute exactly once}
+\fi
+\ifnum\tenkzsitelabelseen=1\else
+  \errmessage{customized lattice site label did not materialize exactly once}
+\fi
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra}, frame=oblique,
+    boundary=open, outer legs=none, west={cup={\tenkzcuplabelprobe}}]
+\end{tenkzlattice}
+\ifnum\tenkzcuplabelseen=2\else
+  \errmessage{lattice cup matrix labels did not materialize exactly once}
+\fi
+\begin{tenkzlattice}[
+    rows=2, cols=3, sheets={ket,bra}, frame=slab,
+    boundary=open, outer legs=none, north={cup=$N$}]
+\end{tenkzlattice}
+\begin{tenkzlattice}[
+    rows=2, cols=3, sheets={ket,bra}, boundary=open,
+    outer legs=none, south={cup=$S$}]
+\end{tenkzlattice}
+% Numeric stacks have no ket-bra meaning.  The policy seals the requested
+% side, warns, and must not invent cup ink.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets=2, boundary=open,
+    outer legs=none, east=cup]
+\end{tenkzlattice}
+% A sheet-local removal arrives through an integer register at the east and
+% south dispatch sites.  Keep a live body command here so the regression also
+% guards the environment's customization layer.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets={ket,bra}, boundary=open,
+    outer legs=none, east=cup]
+  \tnsite[removed]{(1,2,1)}
+  \tnsite[role=marked]{(1,1,1)}
+\end{tenkzlattice}
+% Role stacks default to physical outer legs.  North/south virtual cups must
+% leave those physical indices visibly distinct rather than sharing a ray.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra}, boundary=open, north=cup]
+  \tnsite[label=$b$]{(1,2,1)}
+\end{tenkzlattice}
+% An arbitrary expert side vector may point directly into the paper
+% north-east label quadrant.  The label remains a foreground customization
+% and the cup's stub/corridor must route or gap around its exact rendered box.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra},
+    col vector={8mm,8mm}, row vector={0mm,-9mm},
+    sheet vector={2mm,4mm}, boundary=open, outer legs=none, east=cup]
+  \tnsite[role=marked, label=$D_\star$]{(1,2,1)}
+\end{tenkzlattice}
+% Physical trace loops render after virtual cups.  Their halo makes this
+% supported combination an overpass, never a false black junction.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=open,
+    outer legs=none, east=cup, trace={(1,1)}]
+\end{tenkzlattice}
+% A zero expert side vector is diagnosed before cup projection.  With no
+% drawable closure direction, both surviving boundary ports remain open.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets={ket,bra},
+    col vector={0pt,0pt}, row vector={0pt,-9mm},
+    sheet vector={2mm,4mm}, boundary=open, outer legs=none, east=cup]
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -445,6 +526,32 @@ def main() -> int:
         if run.returncode:
             print(run.stdout)
             print("FAIL: face-port fixture did not compile")
+            return 1
+        invalid_side = work / "invalid-lattice-side.tex"
+        invalid_side.write_text(
+            r"""\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkzlattice}[
+  rows=1, cols=1, sheets={ket,bra}, east={xcup=$M$}]
+\end{tenkzlattice}
+\end{document}
+""",
+            encoding="utf-8",
+        )
+        invalid_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", invalid_side.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if invalid_run.returncode == 0 or "Unknown side policy 'xcup=$M$'" not in (
+            invalid_run.stdout
+        ):
+            print(invalid_run.stdout)
+            print("FAIL: an embedded cup= substring bypassed the lattice side policy")
             return 1
         pictures = events_by_picture(
             (work / "face-ports.tnlog").read_text(encoding="utf-8").splitlines()
@@ -1483,6 +1590,127 @@ def main() -> int:
         physical_rows_one,
         "pairleg|picture=81|upper=1-1|lower=2-1|upper-port=center|column=1",
         "one-row physical face lost its unique centered contraction",
+    )
+    customized_east_cups = pictures[82]
+    require(
+        customized_east_cups,
+        "edge|picture=82|from=2-1|to=2-2|role=marked",
+        "tenkzlattice body customization was overwritten by automatic closure",
+    )
+    for row in range(1, 4):
+        require(
+            customized_east_cups,
+            f"cup|picture=82|lang=lattice|side=east|cell={row}-2|"
+            "sheet-a=0|sheet-b=1|matrix=0",
+            f"customized east cup at row {row} was not recorded",
+        )
+    require(
+        customized_east_cups,
+        "boundary|picture=82|physical-up=0|physical-down=0|pair-closed-0=6|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=6|virtual-east=0|"
+        "virtual-north=4|virtual-south=4",
+        "body customization changed east-cup boundary ownership",
+    )
+    for picture, side, cells in (
+        (83, "west", ("1-1", "2-1")),
+        (84, "north", ("1-1", "1-2", "1-3")),
+        (85, "south", ("2-1", "2-2", "2-3")),
+    ):
+        for cell in cells:
+            require(
+                pictures[picture],
+                f"cup|picture={picture}|lang=lattice|side={side}|cell={cell}|"
+                "sheet-a=0|sheet-b=1|matrix=1",
+                f"labeled {side} cup at {cell} was not recorded",
+            )
+    invalid_cup_stack = pictures[86]
+    require(
+        invalid_cup_stack,
+        "warning|picture=86|code=side-cup-stack|side=east",
+        "numeric lattice cup stack did not emit its guarded warning",
+    )
+    forbid(
+        invalid_cup_stack,
+        "cup|picture=86|",
+        "numeric lattice stack invented a ket-bra cup",
+    )
+    removed_east_endpoint = pictures[87]
+    require(
+        removed_east_endpoint,
+        "warning|picture=87|code=side-cup-incomplete|side=east|cell=1-2|sheet=0",
+        "partial east cup did not report its surviving open endpoint",
+    )
+    forbid(
+        removed_east_endpoint,
+        "cup|picture=87|lang=lattice|side=east|cell=1-2|",
+        "removed east sheet endpoint still emitted a ket-bra cup",
+    )
+    require(
+        removed_east_endpoint,
+        "boundary|picture=87|physical-up=0|physical-down=0|pair-closed-0=1|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=2|virtual-east=1|"
+        "virtual-north=3|virtual-south=3",
+        "register-valued east/south coordinates ignored a sheet removal",
+    )
+    default_outer_north_cup = pictures[88]
+    for col in range(1, 3):
+        require(
+            default_outer_north_cup,
+            f"cup|picture=88|lang=lattice|side=north|cell=1-{col}|"
+            "sheet-a=0|sheet-b=1|matrix=0",
+            f"default-outer north cup at column {col} was not recorded",
+        )
+    require(
+        default_outer_north_cup,
+        "boundary|picture=88|physical-up=4|physical-down=4|pair-closed-0=4|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=4|virtual-east=4|"
+        "virtual-north=0|virtual-south=4",
+        "north cup changed the default outer physical signature",
+    )
+    diagonal_label_cup = pictures[89]
+    for row in range(1, 3):
+        require(
+            diagonal_label_cup,
+            f"cup|picture=89|lang=lattice|side=east|cell={row}-2|"
+            "sheet-a=0|sheet-b=1|matrix=0",
+            f"diagonal expert east cup at row {row} was not recorded",
+        )
+    traced_east_cup = pictures[90]
+    require(
+        traced_east_cup,
+        "cup|picture=90|lang=lattice|side=east|cell=1-1|"
+        "sheet-a=0|sheet-b=1|matrix=0",
+        "east virtual cup disappeared beside a physical trace loop",
+    )
+    require(
+        traced_east_cup,
+        "pairtrace|picture=90|site=1-1",
+        "physical trace loop disappeared beside an east virtual cup",
+    )
+    require(
+        traced_east_cup,
+        "boundary|picture=90|physical-up=0|physical-down=0|pair-closed-0=0|"
+        "pair-open-0=0|pair-traced-0=1|virtual-west=2|virtual-east=0|"
+        "virtual-north=2|virtual-south=2",
+        "trace-plus-cup combination changed boundary ownership",
+    )
+    zero_vector_cup = pictures[91]
+    require(
+        zero_vector_cup,
+        "warning|picture=91|code=side-cup-zero-vector|side=east",
+        "zero expert side vector reached cup projection without a guard",
+    )
+    forbid(
+        zero_vector_cup,
+        "cup|picture=91|",
+        "zero expert side vector emitted misleading cup geometry",
+    )
+    require(
+        zero_vector_cup,
+        "boundary|picture=91|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=2|virtual-east=2|"
+        "virtual-north=4|virtual-south=4",
+        "zero-vector cup did not preserve its surviving boundary ports",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
