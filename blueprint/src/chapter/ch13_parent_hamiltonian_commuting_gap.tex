@@ -2616,9 +2616,24 @@ specialization of that Appendix~D definition.
     sitewise-unitary image.
 \end{proof}
 
+\begin{lemma}[Right-unitarity of the Beigi spatial coordinate matrix]
+    \label{lem:beigi_spatial_coordinate_right_unitary}
+    \lean{MPSTensor.BeigiSectorGraphData.unitary_mul_conjTranspose}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    Suppose that $A$ is equipped with Beigi sector data, with one-site spatial
+    unitary $U$.  Then
+    \[
+        UU^*=\mathbf 1.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the right-unitarity identity for the spatial coordinate matrix.
+\end{proof}
+
 \begin{theorem}[Spatial conjugation of complementary interaction products]
     \label{thm:beigi_complement_product_conjugation}
-    \lean{MPSTensor.BeigiSectorGraphData.unitary_mul_conjTranspose}
     \lean{MPSTensor.BeigiSectorGraphData.singleKrausMap_groundBondProduct}
     \leanok
     \uses{def:beigi_sector_graph}
@@ -2671,11 +2686,11 @@ specialization of that Appendix~D definition.
         =\prod_{n=0}^{N-1}(\mathbf 1-h_n^{\mathrm{E}}).
     \]
     The operators $h_n^{\mathrm{E}}$ are orthogonal projections.  Beigi sector
-    data supply pairwise commutativity, which Euclidean transport preserves:
+    data supply pairwise commutativity, which Euclidean transport preserves.
+    For all $0\leq m,n<N$,
     \[
         h_m^{\mathrm{E}}h_n^{\mathrm{E}}
-        =h_n^{\mathrm{E}}h_m^{\mathrm{E}}
-        \qquad (0\leq m,n<N).
+        =h_n^{\mathrm{E}}h_m^{\mathrm{E}}.
     \]
     For any commuting orthogonal projections $P_0,\ldots,P_{N-1}$,
     \[
