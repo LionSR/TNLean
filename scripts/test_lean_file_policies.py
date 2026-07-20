@@ -132,6 +132,14 @@ class NumberedLeanFilePolicyTests(CapturedCheck):
         self.assertEqual(status, 1)
         self.assertIn(f"{new_path}: added to the numbered debt allowlist", output)
 
+        push_baseline = numbered._debt_allowlist_at_merge_base(self.root, "HEAD^")
+        push_status, push_output = self.check(
+            frozenset({old_path, new_path}),
+            base_debt=push_baseline,
+        )
+        self.assertEqual(push_status, 1)
+        self.assertIn(f"{new_path}: added to the numbered debt allowlist", push_output)
+
     def test_removing_debt_allowlist_entry_is_allowed(self) -> None:
         path = "TNLean/Proof2.lean"
         self.track(path)

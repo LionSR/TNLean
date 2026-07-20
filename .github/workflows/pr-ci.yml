@@ -228,9 +228,12 @@ jobs:
           --root .
           --base-ref "origin/${{ github.event.pull_request.base.ref }}"
 
-      - name: Reject new numbered-sequel modules (main)
+      - name: Reject new numbered-sequel modules (push or dispatch)
         if: github.event_name != 'pull_request'
-        run: python3 scripts/check_numbered_lean_files.py --root .
+        run: >
+          python3 scripts/check_numbered_lean_files.py
+          --root .
+          --base-ref HEAD^
 
   blueprint:
     name: Check blueprint compiles without errors
