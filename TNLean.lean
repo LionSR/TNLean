@@ -55,6 +55,8 @@ import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.SpinCover
 import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Algebra.MatrixRankClosed
+import TNLean.Algebra.OperatorBlock
+import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.StarSubalgebraBlockDiagonal
 import TNLean.Algebra.StarSubalgebraBlockForm
 import TNLean.Algebra.CommutingOverlappingDecomp
@@ -122,6 +124,7 @@ import TNLean.Channel.OpenSystem
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
+import TNLean.Channel.SupportedMarginalChannel
 -- Layer 2: Quantum entropy infrastructure (depends on Channel.Basic, Channel.PartialTrace)
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.EntropyDecomposition

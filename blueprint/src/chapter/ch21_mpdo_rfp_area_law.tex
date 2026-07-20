@@ -1269,6 +1269,85 @@
     so the trace positivity hypothesis supplies the required normalization.
 \end{proof}
 
+\begin{definition}[Operator-Schmidt rank]
+    \label{def:bipartite_operator_schmidt_rank}
+    \lean{Matrix.HasOperatorSchmidtDecomposition,
+      Matrix.operatorSchmidtRank, Matrix.operatorSchmidtRank_minimal}
+    \leanok
+    For a bipartite density operator
+    $\rho\in\mathcal M_{d_A}\otimes\mathcal M_{d_B}$, its
+    \emph{operator-Schmidt rank} is the least integer $r$ for which there are
+    matrices $A_t\in\mathcal M_{d_A}$ and $B_t\in\mathcal M_{d_B}$ satisfying
+    \[
+        \rho=\sum_{t=1}^{r}A_t\otimes B_t.
+    \]
+    No Hermiticity or positivity condition is imposed on the factors. This is
+    the definition in \cite[Equation~(1)]{DeLasCuevas2019Separability}; the
+    same formula defines the rank of an arbitrary complex bipartite matrix.
+\end{definition}
+
+\begin{theorem}[Coefficient-space characterization of operator-Schmidt rank]
+    \label{thm:operator_schmidt_coefficient_space}
+    \lean{Matrix.range_operatorSchmidtMap_eq_operatorBlockSpan,
+      Matrix.operatorSchmidtRank_eq_finrank_operatorBlockSpan,
+      Matrix.operatorSchmidtRank_minimal}
+    \leanok
+    \uses{def:bipartite_operator_schmidt_rank}
+    Write $\rho_{ij}\in\mathcal M_{d_B}$ for the blocks determined by a basis
+    of the first factor, and define
+    \[
+        \mathcal R_\rho(X)=\sum_{i,j}X_{ij}\rho_{ij}.
+    \]
+    Then
+    \[
+        \operatorname{OSR}(\rho)
+        =\dim\operatorname{range}\mathcal R_\rho
+        =\dim\operatorname{span}\{\rho_{ij}:1\leq i,j\leq d_A\}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The range of $\mathcal R_\rho$ is the span of the blocks. If
+    $\rho=\sum_{t=1}^{r}A_t\otimes B_t$, every block belongs to
+    $\operatorname{span}\{B_1,\ldots,B_r\}$, so the range dimension is at most
+    $r$. Conversely, choose a basis $B_1,\ldots,B_s$ of the block span and
+    expand each block as $\rho_{ij}=\sum_t(A_t)_{ij}B_t$. This gives
+    $\rho=\sum_{t=1}^{s}A_t\otimes B_t$, where
+    $s=\dim\operatorname{range}\mathcal R_\rho$.
+\end{proof}
+
+\begin{theorem}[Channel of a faithful bipartite marginal]
+    \label{thm:supported_marginal_channel}
+    \lean{Matrix.finrank_range_supportedMarginalMap,
+      Matrix.supportedMarginalMap_isKrausCPTP,
+      Matrix.supportedMarginalReconstruction_eq}
+    \leanok
+    \uses{def:bipartite_operator_schmidt_rank,
+      thm:operator_schmidt_coefficient_space}
+    Let $\rho\geq0$ be a bipartite complex matrix whose first marginal is
+    faithful. Choose an eigenbasis in which
+    $\operatorname{tr}_B\rho=\operatorname{diag}(p_1,\ldots,p_{d_A})$ with
+    every $p_i>0$, and define the linear map $\Phi_\rho$ on matrix units by
+    \[
+        \Phi_\rho(E_{ij})=\frac{\rho_{ij}}{\sqrt{p_ip_j}}.
+    \]
+    Then $\Phi_\rho$ is completely positive and trace preserving,
+    \[
+        \dim\operatorname{range}\Phi_\rho=\operatorname{OSR}(\rho),
+    \]
+    and application of $\Phi_\rho$ to the first half of
+    $\sum_{i,j}\sqrt{p_ip_j}\,E_{ij}\otimes E_{ij}$, followed by restoring the
+    order of the two factors, reconstructs $\rho$.
+\end{theorem}
+\begin{proof}\leanok
+    Strict positivity of the $p_i$ makes the entrywise input scaling
+    invertible, so it does not change the range. Positivity of $\rho$ gives a
+    Kraus representation of $\Phi_\rho$, while the displayed marginal equation
+    gives trace preservation. Substitution on matrix units proves the
+    reconstruction identity. This is the finite-dimensional Choi
+    representation \cite{Choi1975CompletelyPositive} with the input marginal
+    absorbed into the canonical purification.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     The proof of Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} invokes the
     uniform estimate $I_L \le 4\log D$ for every MPDO. Its cited argument,
@@ -1286,8 +1365,9 @@
     last expression is $4\log D$. A general positive MPO need not admit this
     local purification.
 
-    The two virtual bonds do give an operator-Schmidt decomposition with at most
-    $D^2$ terms, but they do not bound the ordinary rank of either marginal.
+    By Theorem~\ref{thm:operator_schmidt_coefficient_space}, the two virtual
+    bonds give an operator-Schmidt decomposition with at most $D^2$ terms, but
+    they do not bound the ordinary rank of either marginal.
     For example, a bond-one tensor can generate $q^{\otimes N}$ for a full-rank
     one-site density matrix $q$. Thus its $L$-site marginal has rank
     $\operatorname{rank}(q)^L$, although its mutual information vanishes. The
@@ -1299,8 +1379,11 @@
     bounds by $2\log D$ the classical mutual information of the normalized
     diagonal coefficients whenever the finite-chain operator is diagonal and
     positive semidefinite and has positive total mass.
-    Thus any counterexample must have genuine quantum coherences.  The
-    unrestricted quantum estimate remains open. The
+    Thus any counterexample must have genuine quantum coherences.
+    Theorem~\ref{thm:supported_marginal_channel} identifies the faithful-marginal
+    problem with a channel whose linear range has dimension
+    $\operatorname{OSR}(\rho)$; it does not supply the desired mutual-information
+    inequality. The unrestricted quantum estimate remains open. The
     same example as Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} also
     makes the iterated mutual-information limit false; see
     \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}. The
