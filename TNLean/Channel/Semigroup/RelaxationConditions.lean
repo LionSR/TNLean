@@ -89,7 +89,9 @@ private theorem not_isNontrivialProjection_of_eq_smul_one
     · exact hP_nt.2.1 (by rw [hP, hc0, zero_smul])
     · exact hP_nt.2.2 (by rw [hP, hc1, one_smul])
 
-private theorem lower_left_block_vanishes_on_adjoin
+/-- If an orthogonal projection has vanishing lower-left block on a set of
+matrices, then that block vanishes on the entire unital algebra they generate. -/
+theorem lower_left_block_vanishes_on_adjoin
     {P : Mat} (hP : IsOrthogonalProjection P) (S : Set Mat)
     (hS : ∀ A : Mat, A ∈ S → (1 - P) * A * P = 0) :
     ∀ A : Mat, A ∈ Algebra.adjoin ℂ S → (1 - P) * A * P = 0 := by
