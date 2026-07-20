@@ -247,6 +247,18 @@ theorem PosSemidef.supportInvSqrt_sq_mul_self
     _ = hρ.isHermitian.supportProj :=
       hρ.supportInvSqrt_mul_self_mul_supportInvSqrt
 
+/-- The square of the support inverse square root is a right generalized
+inverse: multiplying the original positive-semidefinite matrix by it gives
+the support projection. -/
+theorem PosSemidef.self_mul_supportInvSqrt_sq
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    ρ * (hρ.supportInvSqrt * hρ.supportInvSqrt) =
+      hρ.isHermitian.supportProj := by
+  simpa [Matrix.conjTranspose_mul, hρ.isHermitian.eq,
+    hρ.supportInvSqrt_isHermitian.eq,
+    hρ.isHermitian.supportProj_isHermitian.eq] using
+      congrArg Matrix.conjTranspose hρ.supportInvSqrt_sq_mul_self
+
 section PartialTrace
 
 variable {L R : Type*} [Fintype L] [DecidableEq L]
