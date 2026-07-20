@@ -2771,17 +2771,25 @@ specialization of that Appendix~D definition.
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose a nonzero coefficient of the loop-edge vector $\varphi_a$.
-    The constant edge-index configuration formed from this coefficient has
-    cyclic amplitude equal to a product of $N$ nonzero factors.  Hence every
-    loop product state is nonzero.  Write $\Phi_a^{(N)}$ for the cyclic product
-    in sector coordinates.  If $a\ne b$, then every sector configuration $s$
+    Write $\Phi_a^{(N)}$ for the cyclic product in sector coordinates and
+    $\Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}$ for the physical state, where
+    $U$ is the one-site spatial unitary.  Choose $q$ with
+    $\varphi_a(q)\ne0$.  On the constant edge-index configuration,
+    \[
+        \Phi_a^{(N)}(q,\ldots,q)
+        =\prod_{n=0}^{N-1}\varphi_a(q)\ne0.
+    \]
+    Thus $\Phi_a^{(N)}\ne0$, and unitarity gives
+    \[
+        \Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}\ne0.
+    \]
+    If $a\ne b$, then every sector configuration $s$
     satisfies $\Phi_a^{(N)}(s)=0$ or $\Phi_b^{(N)}(s)=0$, and hence
     \[
         \langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle
         =\sum_s\overline{\Phi_a^{(N)}(s)}\,\Phi_b^{(N)}(s)=0.
     \]
-    If $U$ is the one-site spatial unitary, then
+    Moreover,
     \[
         \langle\Psi_a^{(N)},\Psi_b^{(N)}\rangle
         =\langle U^{\otimes N}\Phi_a^{(N)},
