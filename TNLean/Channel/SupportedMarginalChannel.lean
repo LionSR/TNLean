@@ -163,7 +163,7 @@ theorem supportedMarginalMap_trace
   rw [hmargin]
   rw [Fintype.sum_prod_type]
   simp only [Matrix.diagonal_apply]
-  simp
+  simp only [mul_ite, mul_zero, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
   rw [Matrix.trace]
   apply Finset.sum_congr rfl
   intro i _
@@ -233,8 +233,8 @@ theorem supportedMarginalMap_isKrausCPTP
     (hmargin : operatorBlockMarginal ρ = Matrix.diagonal fun i ↦ (p i : ℂ)) :
     IsKrausCPTP (supportedMarginalMap ρ p) := by
   apply isKrausCPTP_of_isKrausCP_trace_preserving
-  exact supportedMarginalMap_isKrausCP ρ p hρ
-  exact supportedMarginalMap_trace ρ p hp hmargin
+  · exact supportedMarginalMap_isKrausCP ρ p hρ
+  · exact supportedMarginalMap_trace ρ p hp hmargin
 
 /-- The canonical purification vector of a diagonal marginal with eigenvalues
 `p`, written in its eigenbasis. -/
@@ -270,7 +270,7 @@ theorem supportedMarginalReconstruction_eq
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, operatorBlock,
     bipartiteSlice_apply, diagonalMarginalPurificationProj, Matrix.vecMulVec_apply,
     Pi.star_apply, diagonalMarginalPurification]
-  simp
+  simp only [RCLike.star_def, ite_mul, zero_mul, mul_ite, mul_zero]
   rw [Fintype.sum_prod_type]
   simp
   rw [Finset.sum_eq_single j (fun k _ hk ↦ by simp [hk]) (by simp)]
