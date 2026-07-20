@@ -13,8 +13,7 @@ This file imports the modules intended for downstream users. Most specialized he
 are omitted from the root import list, but public chapter-index and chapter-facing semigroup
 modules are included so that blueprint links and the generated documentation can see them.
 
-The following archival modules are intentionally excluded
-(they live in `TNLean/Archive/`):
+The following modules in `TNLean/Archive/` are intentionally excluded:
 
 * the archival alternate proof `TNLean.Archive.BlockingPeriodicityCFII2`;
 * the documentary counterexample `TNLean.Archive.BlockSepCounterexample`.
@@ -630,6 +629,7 @@ import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
 import TNLean.MPS.RFP.BeigiSpatialDecomposition
 import TNLean.MPS.RFP.BeigiSectorGraph
+import TNLean.MPS.RFP.BeigiSectorGraphConstruction
 import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
 import TNLean.MPS.RFP.BeigiLoopTensor
 import TNLean.MPS.RFP.PhaseMultiplicityCounterexample

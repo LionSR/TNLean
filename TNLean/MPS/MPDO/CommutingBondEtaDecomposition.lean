@@ -16,6 +16,7 @@ finite chain.
 ## Main declarations
 
 * `Matrix.etaPairSpatialBlockEquiv`
+* `Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute`
 * `MPOTensor.TranslationInvariantBondData.exists_positive_eta_pairBond_decomposition`
 * `MPOTensor.EtaLocalStructureData.exists_positive_eta_pairBond_decomposition`
 
@@ -59,30 +60,28 @@ def etaPairSpatialBlockEquiv {K : ℕ} {dl dr : Fin K → ℕ}
     simp only
     rw [e.apply_symm_apply, e.apply_symm_apply]
 
-end Matrix
-
-namespace MPOTensor.TranslationInvariantBondData
-
-variable {d : ℕ}
-
-/-- A positive translation-invariant commuting bond has one spatial decomposition and a
-positive neighboring operator \(\eta_{q,h}\) for each ordered pair of sectors such that
+/-- A positive two-site operator whose overlapping translates commute has one spatial
+decomposition and a positive neighboring operator \(\eta_{q,h}\) for each ordered pair of
+sectors such that
 \[
   (U^*\otimes U^*)B(U\otimes U)
     =\bigoplus_{q,h}\mathbf 1_{q,l}\otimes\eta_{q,h}\otimes\mathbf 1_{h,r}.
 \]
 
-The unitary and the family \(\eta\) depend only on the fixed two-site bond, not on a chain
-length or a bond position.  Thus this is the local transport from Beigi's block actions to
-the neighboring operators in equation sigmaNK2.
+This is the local matrix argument transporting Beigi's one-sided block actions to the
+symmetric two-sided coordinates used in equation sigmaNK2.  It assumes only positivity of
+the two-site operator and commutation of its two overlapping lifts.
 
 No zero-correlation-length or area-law hypothesis is used.  In particular, this theorem
 does not assert the rank-one trace factorization invoked later in Proposition 4to2.
 
 Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
-lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
-theorem exists_positive_eta_pairBond_decomposition
-    (data : TranslationInvariantBondData d) :
+lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III,
+equation (2). -/
+theorem exists_positive_etaPair_decomposition_of_overlappingLifts_commute
+    (B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (hB : B.PosSemidef)
+    (hComm : Matrix.leftOverlappingLift B * Matrix.rightOverlappingLift B =
+      Matrix.rightOverlappingLift B * Matrix.leftOverlappingLift B) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)
       (e : ((q : Fin K) × (Fin (dr q) × Fin (dl q))) ≃ Fin d)
       (U : Matrix (Fin d) (Fin d) ℂ)
@@ -93,18 +92,19 @@ theorem exists_positive_eta_pairBond_decomposition
         (∀ q h, (η q h).PosSemidef) ∧
         Matrix.reindex (Matrix.etaPairSpatialBlockEquiv e).symm
             (Matrix.etaPairSpatialBlockEquiv e).symm
-            (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)) =
+            (star (U ⊗ₖ U) * B * (U ⊗ₖ U)) =
           Matrix.blockDiagonal' fun qh : Fin K × Fin K ↦
             ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
               η qh.1 qh.2) ⊗ₖ
                 (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ) := by
   classical
   obtain ⟨K, dl, dr, e, U, R, S, hU, hdl, hdr, _, _, hR, hS⟩ :=
-    data.exists_unitary_blockActions_of_pairBond
-  let B' := star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)
-  let BR := star ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ U) * data.pairBond *
+    Matrix.exists_unitary_blockActions_of_overlappingLifts_commute B B
+      hB.isHermitian hB.isHermitian hComm
+  let B' := star (U ⊗ₖ U) * B * (U ⊗ₖ U)
+  let BR := star ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ U) * B *
     ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ U)
-  let BS := star (U ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) * data.pairBond *
+  let BS := star (U ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) * B *
     (U ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))
   let η : (q h : Fin K) →
       Matrix (Fin (dr q) × Fin (dl h)) (Fin (dr q) × Fin (dl h)) ℂ :=
@@ -253,13 +253,8 @@ theorem exists_positive_eta_pairBond_decomposition
       simp [Matrix.one_apply, hl]
   refine ⟨K, dl, dr, e, U, η, hU, hdl, hdr, ?_, ?_⟩
   · intro q h
-    have hpair : data.pairBond.PosSemidef := by
-      have hsub := data.bond_pos.submatrix
-        (finTwoArrowEquiv (Fin d)).symm
-      simpa [TranslationInvariantBondData.pairBond, pairBondMatrix,
-        Matrix.reindex_apply] using hsub
     have hBpos : B'.PosSemidef := by
-      have hconj := hpair.mul_mul_conjTranspose_same (B := star (U ⊗ₖ U))
+      have hconj := hB.mul_mul_conjTranspose_same (B := star (U ⊗ₖ U))
       simpa [B', Matrix.star_eq_conjTranspose] using hconj
     let f : Fin (dr q) × Fin (dl h) → Fin d × Fin d := fun x ↦
       (e ⟨q, (x.1, ⟨0, hdl q⟩)⟩, e ⟨h, (⟨0, hdr h⟩, x.2)⟩)
@@ -283,6 +278,41 @@ theorem exists_positive_eta_pairBond_decomposition
         exact hB'_right_sector_ne q q h h' hh lq lq' rq rq' lh lh' rh rh'
     · rw [Matrix.blockDiagonal'_apply_ne _ _ _ (fun hp ↦ hq (Prod.mk.inj hp).1)]
       exact hB'_left_sector_ne q q' h h' hq lq lq' rq rq' lh lh' rh rh'
+
+end Matrix
+
+namespace MPOTensor.TranslationInvariantBondData
+
+variable {d : ℕ}
+
+/-- A positive translation-invariant commuting bond has one chain-independent symmetric
+eta-pair decomposition.
+
+Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
+lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+theorem exists_positive_eta_pairBond_decomposition
+    (data : TranslationInvariantBondData d) :
+    ∃ (K : ℕ) (dl dr : Fin K → ℕ)
+      (e : ((q : Fin K) × (Fin (dr q) × Fin (dl q))) ≃ Fin d)
+      (U : Matrix (Fin d) (Fin d) ℂ)
+      (η : (q h : Fin K) →
+        Matrix (Fin (dr q) × Fin (dl h)) (Fin (dr q) × Fin (dl h)) ℂ),
+      U ∈ Matrix.unitaryGroup (Fin d) ℂ ∧
+        (∀ q, 0 < dl q) ∧ (∀ q, 0 < dr q) ∧
+        (∀ q h, (η q h).PosSemidef) ∧
+        Matrix.reindex (Matrix.etaPairSpatialBlockEquiv e).symm
+            (Matrix.etaPairSpatialBlockEquiv e).symm
+            (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)) =
+          Matrix.blockDiagonal' fun qh : Fin K × Fin K ↦
+            ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
+              η qh.1 qh.2) ⊗ₖ
+                (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ) := by
+  have hpair : data.pairBond.PosSemidef := by
+    have hsub := data.bond_pos.submatrix (finTwoArrowEquiv (Fin d)).symm
+    simpa [TranslationInvariantBondData.pairBond, pairBondMatrix,
+      Matrix.reindex_apply] using hsub
+  exact Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute
+    data.pairBond hpair data.overlappingLifts_pairBond_comm
 
 end MPOTensor.TranslationInvariantBondData
 
