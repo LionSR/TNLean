@@ -3783,6 +3783,35 @@
     \draw[trace]
       ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_dx_dim ) --
       ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) ;
+    % The straight return lies between the two east cap endpoints, and each
+    % semicircle stays inside the axis-aligned paper-frame bounds below.
+    % Publish all four corners so a later directional silhouette contains the
+    % actual pairing racetrack without depending on the lattice frame.
+    \dim_set:Nn \l__tenkzl_labelxmin_dim
+      { \dim_min:nn { \l__tenkzl_px_dim }{ \l__tenkzl_qx_dim } }
+    \dim_set:Nn \l__tenkzl_labelxmax_dim
+      {
+        \dim_max:nn { \l__tenkzl_px_dim }{ \l__tenkzl_qx_dim }
+        + \tenkz@dim{\tenkz@r@planetracereach}
+      }
+    \dim_set:Nn \l__tenkzl_labelymin_dim
+      {
+        \l__tenkzl_dx_dim
+        - \tenkz@dim{\tenkz@r@planetracereach} / 2
+      }
+    \dim_set:Nn \l__tenkzl_labelymax_dim
+      {
+        \l__tenkzl_dy_dim
+        + \tenkz@dim{\tenkz@r@planetracereach} / 2
+      }
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
     \tenkz@event{pairtrace|picture=\the\tenkz@pictureid|site=#1-#2\int_compare:nNnT
       { \l__tenkzl_sheets_int } > {2} {|interface=#3}}
   }
