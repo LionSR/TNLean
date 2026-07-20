@@ -811,15 +811,150 @@ weights in the length-independent case at
 
 \begin{figure}[ht]
     \centering
-    \TNMPDORecursiveStructureOperator
-    \caption{A schematic recursive contraction for the structure operator
-        $Q$. Each four-legged box $X$ is the tensor
-        $X=(\chi_{\alpha,\beta,\gamma,k})_{k,\alpha,\beta,\gamma}$ of
-        diagonal entries of $\chi_{\alpha,\beta,\gamma}$, and the terminal
-        contraction is $\operatorname{tr}(M_\gamma)$. The dots indicate index
-        contractions, while the omitted middle part repeats the displayed
-        pattern. This is only the schematic form of the source display and
-        does not assert that $Q$ is a projector
+    % Writing Q_N for the N-site operator and r=N-1, the recursion is
+    %   Q_N = \bigoplus_{\substack{\alpha_1,\ldots,\alpha_{r+1}\\
+    %                    \beta_1,\ldots,\beta_r\\k_1,\ldots,k_r}}
+    %         \left(\prod_{s=1}^{r}
+    %           \chi_{\alpha_s,\beta_s,\alpha_{s+1},k_s}\right)
+    %         \operatorname{tr}(M_{\alpha_{r+1}}).
+    % Source verdict: CPSV16 lines 999--1008 and MPDO_Structure.png give this
+    %   recursive coefficient graph.  The image is the source for the open
+    %   copy rails, repeated-step ellipsis, and terminal virtual trace.
+    % Ink-to-index map: the four east ports of X_s, from top to bottom, are
+    %   k_s, alpha_s, beta_s, gamma_s.  The first three meet distinct open
+    %   copy rails.  For consecutive steps, gamma_s and alpha_{s+1} are two
+    %   incidences on the same rail, which remains open above and below; the
+    %   rail is a diagonal copy register and does not sum that label.  The
+    %   ellipsis repeats precisely this routing.  On the terminal rail,
+    %   gamma_r meets both X_r and the selector port of M_{gamma_r}.  Only the
+    %   two virtual ports of M_{gamma_r} are contracted with one another; its
+    %   physical input and output remain open.
+    % Boundary signature: the r coefficient boxes have 3r+1 unique open copy
+    %   rails.  With the terminal physical pair, Q_N has semantic signature
+    %   (virtual-west, virtual-east, physical-up, physical-down)
+    %   = (0,0,3r+2,3r+2) = (0,0,3N-1,3N-1).
+    %   The four visible X boxes separated by the ellipsis expose 14 copy-rail
+    %   pairs plus the terminal physical pair, so the displayed event graph
+    %   has finite signature (0,0,15,15).
+    % Projector caveat: lines 1010--1015 require length-independent structure
+    %   coefficients and projector terminal traces before Q is a projector;
+    %   the contraction displayed here asserts only the operator Q_N.
+    \ensuremath{Q={}}
+    \begin{tenkzfree}[compact, tensor style=box]
+        \tnput[box,
+            ports={20:physical,7:physical,-7:physical,-20:physical}]
+            {Xone}{(0mm,-7mm)}{X}
+        \tnput[box,
+            ports={20:physical,7:physical,-7:physical,-20:physical}]
+            {Xtwo}{(24mm,-2mm)}{X}
+        \tnput[box,
+            ports={20:physical,7:physical,-7:physical,-20:physical}]
+            {Xthree}{(48mm,3mm)}{X}
+        \tnput[box,
+            ports={20:physical,7:physical,-7:physical,-20:physical}]
+            {Xlast}{(80mm,8mm)}{X}
+        \tnput[boundary, label pos=north]
+            {Omission}{(70mm,0mm)}{\cdots}
+
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Kone}{(9.5mm,-7mm |- Xone.20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Aone}{(12mm,-7mm |- Xone.7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Bone}{(14.5mm,-7mm |- Xone.-7)}{}
+
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Atwo}{(36mm,-2mm |- Xtwo.7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Gone}{(36mm,-7mm |- Xone.-20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Ktwo}{(33.5mm,-2mm |- Xtwo.20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Btwo}{(38.5mm,-2mm |- Xtwo.-7)}{}
+
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Athree}{(60mm,3mm |- Xthree.7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Gtwo}{(60mm,-2mm |- Xtwo.-20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Kthree}{(57.5mm,3mm |- Xthree.20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Bthree}{(62.5mm,3mm |- Xthree.-7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Gthree}{(67mm,3mm |- Xthree.-20)}{}
+
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Klast}{(89.5mm,8mm |- Xlast.20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Alast}{(92mm,8mm |- Xlast.7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Blast}{(94.5mm,8mm |- Xlast.-7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Glast}{(102mm,8mm |- Xlast.-20)}{}
+        \tnput[dot, ports={east:physical,north:physical,south:physical}]
+            {Selector}{(102mm,0mm)}{}
+
+        \tnput[mpo,
+            ports={north:physical,south:physical,west:physical,
+                south west:virtual,south east:virtual}]
+            {Mlast}{(116mm,0mm)}{M_{\gamma_r}}
+
+        \foreach \name/\x in {
+                Kone/9.5,Aone/12,Bone/14.5,
+                Ktwo/33.5,Atwo/36,Btwo/38.5,
+                Kthree/57.5,Athree/60,Bthree/62.5,Gthree/67,
+                Klast/89.5,Alast/92,Blast/94.5,Glast/102} {
+            \tnput[boundary, ports={south:physical}]
+                {\name Top}{(\x mm,18mm)}{}
+            \tnput[boundary, ports={north:physical}]
+                {\name Bottom}{(\x mm,-20mm)}{}
+        }
+        \tnput[boundary, ports={south:physical}]
+            {Mtop}{(116mm,18mm)}{}
+        \tnput[boundary, ports={north:physical}]
+            {Mbottom}{(116mm,-20mm)}{}
+
+        \tnjoin{Xone.20}{Kone.west}
+        \tnjoin{Xone.7}{Aone.west}
+        \tnjoin{Xone.-7}{Bone.west}
+        \tnjoin{Xone.-20}{Gone.west}
+        \tnjoin{Xtwo.20}{Ktwo.west}
+        \tnjoin{Xtwo.7}{Atwo.west}
+        \tnjoin{Xtwo.-7}{Btwo.west}
+        \tnjoin{Xtwo.-20}{Gtwo.west}
+        \tnjoin{Xthree.20}{Kthree.west}
+        \tnjoin{Xthree.7}{Athree.west}
+        \tnjoin{Xthree.-7}{Bthree.west}
+        \tnjoin{Xthree.-20}{Gthree.west}
+        \tnjoin{Xlast.20}{Klast.west}
+        \tnjoin{Xlast.7}{Alast.west}
+        \tnjoin{Xlast.-7}{Blast.west}
+        \tnjoin{Xlast.-20}{Glast.west}
+
+        \foreach \name in {
+                Kone,Aone,Bone,Ktwo,Btwo,Kthree,Bthree,Gthree,
+                Klast,Alast,Blast} {
+            \tnjoin{\name Top.south}{\name.north}
+            \tnjoin{\name.south}{\name Bottom.north}
+        }
+        \tnjoin{AtwoTop.south}{Atwo.north}
+        \tnjoin{Atwo.south}{Gone.north}
+        \tnjoin{Gone.south}{AtwoBottom.north}
+        \tnjoin{AthreeTop.south}{Athree.north}
+        \tnjoin{Athree.south}{Gtwo.north}
+        \tnjoin{Gtwo.south}{AthreeBottom.north}
+
+        \tnjoin{GlastTop.south}{Glast.north}
+        \tnjoin{Glast.south}{Selector.north}
+        \tnjoin{Selector.south}{GlastBottom.north}
+        \tnjoin{Selector.east}{Mlast.west}
+        \tnjoin[route=arc, out=-90, in=-90]
+            {Mlast.south west}{Mlast.south east}
+        \tnjoin{Mtop.south}{Mlast.north}
+        \tnjoin{Mlast.south}{Mbottom.north}
+    \end{tenkzfree}
+    \caption{The recursive contraction defining the structure operator $Q$,
+        with terminal factor $\operatorname{tr}(M_{\gamma_r})$
         \cite[lines~999--1008]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_recursive_structure_operator}
 \end{figure}
