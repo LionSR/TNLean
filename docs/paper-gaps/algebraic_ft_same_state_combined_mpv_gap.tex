@@ -1,0 +1,84 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Fixed-Length Chain Equality Does Not Imply Combined-Tensor MPV Equality}
+\author{}
+\date{2026-07-20}
+
+\begin{document}
+\maketitle
+
+\section{The incompatible statements}
+
+For a site-dependent closed chain
+$\mathbf A=(A_0,\ldots,A_{n-1})$, equality of the fixed-length states tests
+only cyclic products containing one matrix from each site, in their cyclic
+order.  In contrast, MPV equality for the tensor obtained by combining the
+site and physical indices tests every word in the enlarged alphabet.  Such a
+word may repeat one site and omit every other site.  Therefore fixed-length
+state equality cannot imply combined-tensor MPV equality.
+
+This distinction is visible already for physical and bond dimensions one and
+chain length three.  Take
+\[
+  A_0=A_1=A_2=1,
+  \qquad
+  B_0=2,\quad B_1=\tfrac12,\quad B_2=1.
+\]
+Every local tensor of both chains is injective, and the two closed-chain
+coefficients agree because
+$A_0A_1A_2=B_0B_1B_2=1$.  The combined tensors do not generate the same MPV:
+the length-one word selecting site zero has coefficient $1$ for the combined
+tensor of $\mathbf A$ and coefficient $2$ for that of $\mathbf B$.
+
+Consequently the former abstract same-state reduction assertion has no
+construction even after adding injectivity of the second chain.%
+\footnote{Former formal declaration:
+    \leanid{MPSChainTensor.SameStateBridgeHyp} in
+    \doclink{TNLean/MPS/Chain/SameStateBridge}.}
+It is not the blocking argument in
+\cite[Theorem~\textup{thm:inj\_MPS}, lines~688--725]{Molnar2018NormalPEPS}.
+
+\section{The source-faithful route}
+
+The source assumes that every local tensor in both chains is injective and
+derives one invertible gauge per bond directly from equality of the single
+closed-chain state.  This statement is formalized directly in Chapter~24 of
+the blueprint.%
+\footnote{Formal declaration:
+    \leanid{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState}
+    in \doclink{TNLean/PEPS/CycleMPSChainOverlapCapstone}.}
+It does not pass through an all-length MPV assertion for the combined tensor.
+
+For constant chains, equality at one length likewise determines a tensor only
+up to a scalar whose $n$-th power is one and a similarity transformation.  A
+phase-free conclusion from one fixed length is false: in bond dimension one,
+replace $A=1$ by $B=\omega$ for a nontrivial $n$-th root of unity $\omega$.
+The length-$n$ states agree, but scalar conjugation cannot change $1$ into
+$\omega$.  The all-length hypothesis in the corresponding
+translation-invariant reduction rules out this phase and remains a separate,
+stronger theorem.%
+\footnote{Formal declaration:
+    \leanid{MPSChainTensor.ti_reduction_corollary} in
+    \doclink{TNLean/PiAlgebra/TIReduction}.}
+
+\section{Verdict}
+
+\textbf{Classification: unfaithful theorem.}
+The abstract same-state reduction hypothesis asserted a mathematically false
+implication not supplied by the cited source, so it and its consumers are
+removed.
+The fixed-length injective-chain Fundamental Theorem is represented only by
+the direct source-faithful theorem in Chapter~24.  The Chapter~23 results based
+on combined-tensor MPV equality remain explicitly all-length results and are
+not presented as consequences of fixed-length state equality.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
