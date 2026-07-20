@@ -524,6 +524,27 @@ theorem loopProductState_mem_parentHamiltonianGroundSpaceES
   rw [loopProductStateES, parentHamiltonianGroundSpaceES, Submodule.mem_map]
   exact ⟨F.loopProductState l, F.loopProductState_mem_ker_parentHamiltonian l hN, rfl⟩
 
+private theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_finrank_eq
+    (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 < N)
+    (hfinrank : Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =
+      Fintype.card (Loop F.edgeWeight)) :
+    letI : NeZero N := ⟨by omega⟩
+    Submodule.span ℂ
+      (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
+      parentHamiltonianGroundSpaceES A 2 N := by
+  letI : NeZero N := ⟨by omega⟩
+  apply Submodule.eq_of_le_of_finrank_eq
+  · rw [Submodule.span_le]
+    rintro _ ⟨l, rfl⟩
+    change F.loopProductStateES l ∈ parentHamiltonianGroundSpaceES A 2 N
+    exact F.loopProductState_mem_parentHamiltonianGroundSpaceES l (by omega)
+  · calc
+      Module.finrank ℂ (Submodule.span ℂ
+          (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l))) =
+          Fintype.card (Loop F.edgeWeight) :=
+        finrank_span_eq_card F.loopProductStateES_linearIndependent
+      _ = Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) := hfinrank.symm
+
 /-- If the parent-ground-space dimension is eventually constant, then at every
 length greater than two the positive-loop product states span the whole parent
 ground space.
@@ -544,19 +565,8 @@ theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES
     Submodule.span ℂ
       (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
       parentHamiltonianGroundSpaceES A 2 N := by
-  letI : NeZero N := ⟨by omega⟩
-  apply Submodule.eq_of_le_of_finrank_eq
-  · rw [Submodule.span_le]
-    rintro _ ⟨l, rfl⟩
-    change F.loopProductStateES l ∈ parentHamiltonianGroundSpaceES A 2 N
-    exact F.loopProductState_mem_parentHamiltonianGroundSpaceES l (by omega)
-  · calc
-      Module.finrank ℂ (Submodule.span ℂ
-          (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l))) =
-          Fintype.card (Loop F.edgeWeight) :=
-        finrank_span_eq_card F.loopProductStateES_linearIndependent
-      _ = Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) :=
-        (F.parentHamiltonianGroundSpaceES_finrank_eq_card_loop hparent hN).symm
+  exact F.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_finrank_eq hN
+    (F.parentHamiltonianGroundSpaceES_finrank_eq_card_loop hparent hN)
 
 /-- In the BNT nearest-neighbor setting, positive-loop product states span the
 whole parent ground space at every length greater than two.
@@ -578,17 +588,9 @@ theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSecto
     Submodule.span ℂ
       (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
       parentHamiltonianGroundSpaceES P.toTensor 2 N := by
-  letI : NeZero N := ⟨by omega⟩
-  rcases hBNT.eventually_parentHamiltonian_groundSpace_finrank_eq hNNCPH with
-    ⟨N₀, hraw⟩
-  have hparent : ∃ c N₁ : ℕ, ∀ M : ℕ, N₁ < M →
-      Module.finrank ℂ
-        (parentHamiltonianGroundSpaceES P.toTensor 2 M) = c := by
-    refine ⟨P.basisCount, N₀, ?_⟩
-    intro M hM
-    rw [parentHamiltonianGroundSpaceES_finrank_eq_ker]
-    exact hraw M hM
-  exact F.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES hparent hN
+  exact F.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_finrank_eq hN
+    (F.parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData
+      hBNT hNNCPH hN)
 
 /-- The sector-coordinate loop tensor closes to the cyclic product of loop
 bond vectors at every positive length.
