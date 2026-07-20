@@ -46,9 +46,9 @@
   \coordinate (#1) at ($(#2)!#4!#5:(#3)$);}
 \ExplSyntaxOn
 % Typed-map rows are mathematical objects joined by named maps.  One
-% third-pitch column air keeps adjacent object names distinct without
-% turning a short composition into a display-width commutative diagram;
-% half a pitch separates family members as small multiples.
+% third-pitch column air is the floor for an unlabelled or sub-floor band;
+% measured names grow it before placement.  Half a pitch separates family
+% members as small multiples.
 \def\tenkz@r@mapgap{0.34}
 \def\tenkz@r@maprowsep{0.50}
 
@@ -124,7 +124,10 @@
 \int_new:N \l__tenkzcd_fromcol_int
 \int_new:N \l__tenkzcd_torow_int
 \int_new:N \l__tenkzcd_tocol_int
+\int_new:N \l__tenkzcd_mapdecls_int
 \seq_new:N \l__tenkzcd_addr_seq
+\dim_new:N \l__tenkzcd_mapgap_dim
+\quark_new:N \q__tenkzcd_map_scan_stop
 
 % ---------- keys ----------
 \pgfkeys{
@@ -754,6 +757,38 @@
 % the existing wire styles, never an arrow tip.  Requiring (r,c)->(r,c+1)
 % makes composition left-to-right by grammar, not by a decorative head.
 
+% Map declarations conventionally follow the matrix objects, but their
+% opaque label bands determine the matrix spacing.  Delimited scanning finds
+% literal top-level declarations without expanding objects or entering their
+% balanced groups; the post-matrix count check rejects any hidden declaration.
+\cs_new_protected:Npn \tenkz_cd_measure_map_labels:n #1
+  { \tenkz_cd_measure_map_labels:w #1 \tnarrow \q__tenkzcd_map_scan_stop }
+
+\cs_new_protected:Npn \tenkz_cd_measure_map_labels:w #1 \tnarrow
+  {
+    \peek_meaning_remove:NTF \q__tenkzcd_map_scan_stop
+      { }
+      { \tenkz_cd_measure_map_label_aux }
+  }
+
+\NewDocumentCommand \tenkz_cd_measure_map_label_aux { s O{} m }
+  {
+    \int_incr:N \l__tenkzcd_mapdecls_int
+    \hbox_set:Nn \l_tmpa_box
+      {
+        \begin{tikzpicture}[baseline]
+          \node[tn~label, fill=tenkzPaper, outer~sep=0pt]
+            {$\tenkz@labelsize #3$};
+        \end{tikzpicture}
+      }
+    \dim_set:Nn \l_tmpa_dim
+      { \box_wd:N \l_tmpa_box
+        + \tenkz@r@daylight\tenkz@pitch * 2 }
+    \dim_compare:nNnT { \l_tmpa_dim } > { \l__tenkzcd_mapgap_dim }
+      { \dim_set_eq:NN \l__tenkzcd_mapgap_dim \l_tmpa_dim }
+    \tenkz_cd_measure_map_labels:w
+  }
+
 \cs_new_protected:Npn \tenkz_cd_map_address:nnNN #1#2#3#4
   {
     \tl_set:Ne \l_tmpa_tl { \tl_to_str:n {#2} }
@@ -806,7 +841,7 @@
     \draw[#1]
       (tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
         \int_use:N\l__tenkzcd_fromcol_int.base~east) --
-      node[tn~label, fill=tenkzPaper, #2]
+      node[tn~label, fill=tenkzPaper, outer~sep=0pt, #2]
         {$\tenkz@labelsize #3$}
       (tenkzmap-\int_use:N\l__tenkzcd_torow_int-
         \int_use:N\l__tenkzcd_tocol_int.base~west);
@@ -910,6 +945,10 @@
   {
     \tenkz_cd_measure_map:n {#2}
     \seq_gclear:N \g__tenkzcd_maps_seq
+    \int_zero:N \l__tenkzcd_mapdecls_int
+    \dim_set:Nn \l__tenkzcd_mapgap_dim
+      { \tenkz@dim{\tenkz@r@mapgap} }
+    \tenkz_cd_measure_map_labels:n {#2}
     \bool_if:NT \l__tenkzcd_mapmatrixvalid_bool
       {
         \tl_set:Nn \l__tenkzcd_body_tl {#2}
@@ -917,14 +956,29 @@
         \tl_put_right:Nn \l__tenkzcd_body_tl { \\ }
         \bool_gset_true:N \g__tenkzcd_inmaps_bool
         \begin{tikzpicture}[tenkz~every~picture, tenkz~cd~baseline]
-          \matrix (tenkzmap)
-            [matrix~of~math~nodes,
-             column~sep=\tenkz@dim{\tenkz@r@mapgap},
-             row~sep=\tenkz@dim{\tenkz@r@maprowsep},
-             nodes={inner~sep=1pt}, #1]
-            { \tl_use:N \l__tenkzcd_body_tl };
-          \seq_map_inline:Nn \g__tenkzcd_maps_seq
-            { \tenkz_cd_draw_map:nnnnnnn ##1 }
+          % Passthrough keys belong to the matrix and its cells.  Their scope
+          % ends before deferred house-label nodes are drawn.
+          \begin{scope}
+            \matrix (tenkzmap)
+              [matrix~of~math~nodes,
+               column~sep=\dim_use:N \l__tenkzcd_mapgap_dim,
+               row~sep=\tenkz@dim{\tenkz@r@maprowsep},
+               nodes={inner~sep=1pt, outer~sep=0pt}, #1]
+              { \tl_use:N \l__tenkzcd_body_tl };
+          \end{scope}
+          \int_compare:nNnTF
+            { \seq_count:N \g__tenkzcd_maps_seq }
+            = { \l__tenkzcd_mapdecls_int }
+            {
+              \seq_map_inline:Nn \g__tenkzcd_maps_seq
+                { \tenkz_cd_draw_map:nnnnnnn ##1 }
+            }
+            {
+              \PackageError{tenkz}{Typed-map~declarations~must~be~literal~
+                top-level~commands~after~the~objects}{A~grouped~or~nested~
+                declaration~cannot~be~measured~without~entering~an~opaque~
+                object.~Move~each~\string\tnarrow\space to~top~level.}
+            }
         \end{tikzpicture}
         \bool_gset_false:N \g__tenkzcd_inmaps_bool
       }

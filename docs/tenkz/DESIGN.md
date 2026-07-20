@@ -159,6 +159,16 @@ Cell commands (expandable; legal only inside `tenkz`/`\tnpic`):
   `\tnarrow[from={(r,c)}, to={(r,c+1)}, species=⟨species⟩]{⟨name⟩}`;
   `fused` selects the fused line type, and `\tnarrow*` places the name on the opposite side. Every map must have either a role or a declared species. The line style records the map's type; the label records only the map itself. There are no arrowheads: the order of the objects determines the order of composition. Vertical maps, reverse maps, and maps that skip an object column lie outside this grammar.
 
+Map declarations are literal top-level commands after the matrix objects.
+Grouping or nesting a declaration is an error: the layout pass does not enter
+an opaque object merely to discover geometry that the outer matrix would own.
+
+The object-column gap is uniform across the small multiples and is measured
+from their widest opaque map-name band: its width plus two daylights, with
+`0.34·pitch` as the floor. Thus a long or superscripted name cannot erase the
+adjacent objects. An explicit `column sep=` remains an authoritative opt-in
+override and may deliberately undercut this automatic clearance.
+
 Typed-map rows belong to the categorical diagram language, not to the tensor-network language. Their vertices are mathematical objects and their joining strokes are maps, not contracted indices. A `\tnpic` occurring in an object cell remains an opaque mathematical object; the adjacent typed-map stroke does not acquire tensor ports or enter its contraction graph. The modes `maps` and `polygon` are disjoint, while ordinary grid mode retains the complete tikz-cd arrow grammar.
 
 A family is written as small multiples: one complete domain--codomain row for each member, with the same number of object columns in every row. A finite family is displayed in full, rather than by selected representatives. Parameters may remain symbolic when the displayed row asserts a formula uniformly over all their values. The matrix is a math object and requires no separate sizing mode. In an ordinary TeX document it may occur in displayed or running mathematics. In blueprint chapter source, until the whole-equation web reroute (G20) lands, a `tenkzcd` must instead be a top-level block outside `$...$` and `\[...\]`; use `\par\noindent\hfil ... \hfil\par` for a centered nonfloating diagram, or a `figure` when a genuine float is intended.
@@ -463,7 +473,7 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 | `junction diameter` | 3.2 × wire width (≥ 0.9mm) | below 3×, a junction is indistinguishable from a wire crossing at 600 dpi |
 | `region margin` | 0.36·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
 | `compact` / `inline` | 0.8 scale / em-based scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
-| `map column gap` | 0.34·pitch | a short composition remains a mathematical atom rather than expanding to display width; wider labels override it with `column sep=` |
+| `map column gap` | max(0.34·pitch, widest map-name band + 2·daylight) | the floor keeps a short composition compact; measured opaque label ink clears both adjacent objects without budgeting glyphs; explicit `column sep=` remains an opt-in override |
 | `map row gap` | 0.50·pitch | adjacent small multiples remain distinct without figure-scale leading; `row sep=` overrides it |
 
 ---
@@ -976,6 +986,10 @@ drop, and the braces' unnamed 0.20 offset.
   only, so a brace over unlabeled cells is not pushed out by labels
   elsewhere in the row, and a box-mode brace clears the *actual*
   (strut-grown) box edge instead of a nominal minimum.
+- **Typed-map label bands** (`tenkzcd[maps]`): the uniform object-column
+  gap is the widest opaque map-name band plus two daylights, with the
+  historical map gap as its floor.  The actual label node is measured; no
+  glyph budget or superscript allowance is predicted.
 
 The former per-consumer scan functions `\tenkz_span_leg_labels:nnnnN`
 and `\tenkz_span_dot_labels:nnnnN` are deleted; their logic lives
