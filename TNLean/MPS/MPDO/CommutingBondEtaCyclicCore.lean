@@ -13,12 +13,6 @@ This file transports a two-site neighboring-operator decomposition around a peri
 finite chain.  The argument is purely algebraic: it uses neither zero correlation length,
 trace factorization, a Markov decomposition, nor saturation of the area law.
 
-## Main declarations
-
-* `Matrix.etaCyclicEdgeEquiv`
-* `MPOTensor.reindex_embedLocalOperator_etaPairBond`
-* `MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition`
-
 ## References
 
 * arXiv:1606.00608, Appendix C.2, equation expression, lines 1571--1576,
@@ -666,7 +660,7 @@ theorem reindex_product_embedLocalOperator_of_etaPair_decomposition
     Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := d) 2 N (by omega) i
+          embedLocalOperator (d := d) 2 N hN i
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm B)).prod =
       Matrix.blockDiagonal' fun k : Fin N → Fin K ↦
