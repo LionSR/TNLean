@@ -1407,12 +1407,15 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{lemma}[Support generalized-inverse identity]
     \label{lem:support_inverse_square_root_generalized_inverse}
     \lean{Matrix.PosSemidef.supportInvSqrt_sq_mul_self}
+    \lean{Matrix.PosSemidef.self_mul_supportInvSqrt_sq}
     \leanok
     \uses{def:support_inverse_square_root}
     If $P_\tau$ is the orthogonal projector onto the support of a positive
     semidefinite matrix $\tau$, then
     \[
-        \left(\tau^{-1/2}_{\mathrm{supp}}\right)^2\tau=P_\tau.
+        \left(\tau^{-1/2}_{\mathrm{supp}}\right)^2\tau
+        =\tau\left(\tau^{-1/2}_{\mathrm{supp}}\right)^2
+        =P_\tau.
     \]
 \end{lemma}
 
@@ -1427,7 +1430,8 @@ Theorem~\ref{thm:trace_norm_abs}.
       =P_\tau,
     \]
     where the last step is
-    Lemma~\ref{lem:support_inverse_square_root_sandwich}.
+    Lemma~\ref{lem:support_inverse_square_root_sandwich}. Taking adjoints gives
+    the identity with $\tau$ on the left.
 \end{proof}
 
 \begin{lemma}[Support inverse square root under scaling and a maximally mixed factor]
@@ -2605,6 +2609,72 @@ Theorem~\ref{thm:trace_norm_abs}.
     Insert them into the integrand, use
     $\sum_i|w_{ij}|^2=1$, and apply the preceding scalar integral term by
     term.  The same finite spectral sum proves continuity and integrability.
+\end{proof}
+
+\begin{lemma}[Residual identity on the supports]
+    \label{lem:support_resolvent_residual_identity}
+    \lean{Matrix.support_resolvent_residual_identity}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $I$ be a finite nonempty set. For each $i\in I$, let $S_i$ be a
+    positive-semidefinite matrix, let $P_i$ be its support projection, and let
+    $b_i$ lie in its support. Write
+    \[
+      S=\sum_i S_i,\qquad b=\sum_i b_i,\qquad
+      G_i=\left((S_i)^{-1/2}_{\mathrm{supp}}\right)^2,
+      \qquad G=\left(S^{-1/2}_{\mathrm{supp}}\right)^2.
+    \]
+    Assume also that $b$ lies in the support of $S$, and put $x=Gb$. Then
+    \[
+      \sum_i \langle b_i-S_i x,G_i(b_i-S_i x)\rangle
+      =\sum_i\langle b_i,G_i b_i\rangle-\langle b,Gb\rangle.
+    \]
+    Jen\v{c}ov\'a and Ruskai give the positive-definite residual expansion in
+    equations~$(\mathrm{Mj})$ and~$(\mathrm{eq:Schz1})$ of the Appendix to
+    arXiv:0903.2895v4. The support assumptions make the same expansion valid
+    for the generalized inverses of the $S_i$ and of $S$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_generalized_inverse}
+    Since $G_iS_i=S_iG_i=P_i$ and $P_i b_i=b_i$, expansion of the $i$th
+    summand gives
+    \[
+      \langle b_i,G_i b_i\rangle-
+      \langle b_i,x\rangle-
+      \langle x,b_i\rangle+
+      \langle x,S_i x\rangle.
+    \]
+    Sum over $i$. The support assumption on $b$ gives $Sx=SGb=b$, so the
+    last three terms combine to $-\langle b,Gb\rangle$.
+\end{proof}
+
+\begin{theorem}[Zero support-resolvent defect gives a common solution]
+    \label{thm:support_resolvent_zero_defect}
+    \lean{Matrix.support_resolvent_eq_of_defect_eq_zero}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Under the hypotheses and notation of the preceding lemma, suppose that
+    \[
+      \sum_i\langle b_i,G_i b_i\rangle-\langle b,Gb\rangle=0.
+    \]
+    Then, for every $i\in I$,
+    \[
+      G_i b_i=P_i x.
+    \]
+    This is the support-domain form of the common-resolvent equation
+    $(\mathrm{basiceq})$ in Section~4.2 of Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4. Its residual calculation is the one in the Appendix,
+    equations~$(\mathrm{Mj})$ and~$(\mathrm{eq:Schz1})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:support_resolvent_residual_identity}
+    The preceding lemma writes the vanishing defect as a finite sum of
+    nonnegative quadratic forms. Hence $G_i(b_i-S_ix)=0$ for every $i$.
+    Multiplication by $S_i$ shows that $P_i(b_i-S_ix)=0$. Both $b_i$ and
+    $S_ix$ lie in the support of $S_i$, so $b_i=S_ix$. Multiplication by
+    $G_i$ now gives $G_i b_i=P_i x$.
 \end{proof}
 
 \begin{theorem}[Fixed-resolvent defect identity for the Weyl family]
