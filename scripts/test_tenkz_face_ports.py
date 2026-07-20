@@ -176,6 +176,21 @@ SOURCE = r"""
   }
 \cs_new_protected:Npn \tenkzPairtraceObstacleProbe
   { \bool_gset_true:N \g__tenkzl_test_pairtrace_obstacle_bool }
+\bool_new:N \g__tenkz_test_none_face_label_bool
+\cs_new_protected:Npn \tenkzNoneFaceLabelProbe
+  { \bool_gset_true:N \g__tenkz_test_none_face_label_bool }
+\cs_new_protected:Npn \tenkzNoneFaceLabelAssert
+  {
+    \bool_if:NT \g__tenkz_test_none_face_label_bool
+      { \tex_errmessage:D { none~face~dropped~external~label~clearance } }
+  }
+\cs_new_eq:NN \__tenkz_test_sil_band: \tenkz_sil_band:
+\cs_set_protected:Npn \tenkz_sil_band:
+  {
+    \bool_if:NT \g__tenkz_test_none_face_label_bool
+      { \bool_gset_false:N \g__tenkz_test_none_face_label_bool }
+    \__tenkz_test_sil_band:
+  }
 \cs_new_eq:NN \__tenkzl_test_pairtrace:nnn \tenkzl_pairtrace:nnn
 \cs_set_protected:Npn \tenkzl_pairtrace:nnn #1#2#3
   {
@@ -840,6 +855,13 @@ SOURCE = r"""
   \tenkzRoutingBasisProbe
   \tnsite[removed]{(1,2,0)}
 \end{tenkzlattice}
+% An absent upper face suppresses only the leg.  Its north external bead
+% label remains ink and must still reserve the ordinary label band.
+\tenkzNoneFaceLabelProbe
+\begin{tenkz}[physical=up]
+  \tn[dot, up at=none, label pos=north]{A}\tnspan[brace above]{1}{probe}
+\end{tenkz}
+\tenkzNoneFaceLabelAssert
 \end{document}
 """
 
@@ -934,6 +956,10 @@ def main() -> int:
         pairleg_faceport_findings = [
             finding for finding in audit.findings
             if finding.rule == "pairleg-faceport-mismatch"
+        ]
+        dialect_findings = [
+            finding for finding in audit.findings
+            if finding.rule == "dialect-mismatch"
         ]
         topology_hashes = {
             picture.ident: canonical_hash(picture) for picture in audit.pictures
@@ -1185,6 +1211,11 @@ def main() -> int:
         raise AssertionError("audit rejected a grid hooks event")
     if pairleg_faceport_findings:
         raise AssertionError("audit rejected a rendered pairleg declared by its upper face")
+    if dialect_findings:
+        raise AssertionError(
+            "audit rejected an emitted event in its declared dialect: "
+            f"{[finding.msg for finding in dialect_findings]!r}"
+        )
     inverse = pictures[1]
     require(
         inverse,

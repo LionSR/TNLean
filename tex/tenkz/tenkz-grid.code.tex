@@ -3609,7 +3609,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     \tenkz_get:NeN \l__tenkz_opts_prop {#1-#2} \l__tenkz_silq_tl
     \exp_args:NV \tenkz_cell_opts:n \l__tenkz_silq_tl
     % cell-level physical= faces of a wires=k brick
-    \tenkz_sil_brick:nn {#1}{#3}
+    \tenkz_sil_brick:n {#3}
     % row-typed legs and wrap loops.  `#3 at=none' draws no leg (the
     % leg pass's own gate, \tenkz_leg_open:nnn); the silhouette must
     % read the same resolved face so clearance and ink cannot drift --
@@ -3654,18 +3654,14 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
               { \tenkz_auto_quadrant:nN {#1} \l__tenkz_silq_tl }
               { \tl_set:Ne \l__tenkz_silq_tl
                   { \tenkz_compass:V \l__tenkz_clpos_tl } }
-            % re-resolve: the quadrant/compass calls above may have
-            % reused the shared scratch tl.  A `none' face has no leg
-            % to widen the label past, so it takes the plain band.
-            \tenkz_face_ports:nN {#3} \l__tenkz_faceports_tl
-            \str_if_eq:VnF \l__tenkz_faceports_tl {none}
-              {
-                \str_if_eq:nnTF {#3} {up}
-                  { \str_if_in:NnT \l__tenkz_silq_tl {north}
-                      { \tenkz_sil_band: } }
-                  { \str_if_in:NnT \l__tenkz_silq_tl {south}
-                      { \tenkz_sil_band: } }
-              }
+            % The external bead label is ink even when the queried face
+            % resolves to `none'.  Only leg clearance follows face ports;
+            % the label always contributes its plain band on its own side.
+            \str_if_eq:nnTF {#3} {up}
+              { \str_if_in:NnT \l__tenkz_silq_tl {north}
+                  { \tenkz_sil_band: } }
+              { \str_if_in:NnT \l__tenkz_silq_tl {south}
+                  { \tenkz_sil_band: } }
           }
       }
   }
@@ -3681,13 +3677,13 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 % ink-and-clearance-cannot-drift-apart contract).  A brick's implicit,
 % row-typed leg is priced by the ordinary open/paired branch below this
 % call, exactly as for a wires=1 cell.
-\cs_new_protected:Npn \tenkz_sil_brick:nn #1#2
+\cs_new_protected:Npn \tenkz_sil_brick:n #1
   {
     \int_compare:nNnT { \l__tenkz_cwires_int } > {1}
       {
         \tl_if_empty:NF \l__tenkz_cphys_tl
           {
-            \str_if_eq:nnTF {#2} {up}
+            \str_if_eq:nnTF {#1} {up}
               { \bool_lazy_or:nnT
                   { \str_if_eq_p:Vn \l__tenkz_cphys_tl {up} }
                   { \str_if_eq_p:Vn \l__tenkz_cphys_tl {updown} }
@@ -3723,7 +3719,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
         \tenkz_get:NeN \l__tenkz_opts_prop
           { \int_use:N \l__tenkz_silr_int - #2 } \l__tenkz_silq_tl
         \exp_args:NV \tenkz_cell_opts:n \l__tenkz_silq_tl
-        \tenkz_sil_brick:nn { \int_use:N \l__tenkz_silr_int } {#3}
+        \tenkz_sil_brick:n {#3}
       }
   }
 
