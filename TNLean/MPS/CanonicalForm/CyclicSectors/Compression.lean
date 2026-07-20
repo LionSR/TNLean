@@ -201,6 +201,20 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
   -- `reindex eST.symm eST.symm (X i) = B i`.
   have hExST_X : ∀ i, Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (X i) = B i :=
     fun i => (Matrix.reindexLinearEquiv ℂ ℂ eST eST).symm_apply_apply (B i)
+  have hLetter : ∀ i : Fin d, expand (C i) = A i := by
+    intro i
+    have hBlockBack :
+        Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+            (Matrix.fromBlocks
+              (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (C i))
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) =
+          B i := by
+      rw [hExM_C i, ← hX_block i]
+      exact hExST_X i
+    calc
+      expand (C i) = Umat * B i * Umatᴴ := by
+        rw [hexpand_def, hBlockBack]
+      _ = A i := (hA_i i).symm
   refine ⟨n, C, cornerEmbed, V, ?_, ?_, ?_, ?_, ?_, ?_, ?_, hV_iso, hV_range,
     hEmbed_eq_V⟩
   -- (1) Trace identity: n = tr P
@@ -414,71 +428,9 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
     rw [map_sum]
     refine Finset.sum_congr rfl ?_
     intro i _
-    -- Per-letter: expand ((C i)ᴴ * Z * C i) = (A i)ᴴ * expand Z * A i.
-    -- Abbreviations for readability.
-    set M' : Matrix S S ℂ := Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm Z
-    set F : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
-      Matrix.fromBlocks M'
-        (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) with hF_def
-    set G : MatrixAlg D := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm F
-    -- `expand Z = Umat * G * Umatᴴ`.
-    have hexpand_Z : expand Z = Umat * G * Umatᴴ := hexpand_def Z
-    -- `(A i)ᴴ = Umat * (B i)ᴴ * Umatᴴ`.
-    have hA_i_ct : (A i)ᴴ = Umat * (B i)ᴴ * Umatᴴ := by
-      rw [hA_i i, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-        Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
-    -- Reduction: reindex eS.symm eS.symm ((C i)ᴴ * Z * C i) = (B11 i)ᴴ * M' * B11 i.
-    have hExM_letter :
-        Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm ((C i)ᴴ * Z * C i) =
-          (B11 i)ᴴ * M' * B11 i := by
-      rw [← Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-            eS.symm eS.symm eS.symm ((C i)ᴴ * Z) (C i),
-          ← Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-            eS.symm eS.symm eS.symm ((C i)ᴴ) Z]
-      have hCt_reindex :
-          Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm ((C i)ᴴ) = (B11 i)ᴴ := by
-        change Matrix.reindex eS.symm eS.symm ((C i)ᴴ) = (B11 i)ᴴ
-        simpa [Matrix.conjTranspose_reindex] using congrArg (fun M => Mᴴ) (hExM_C i)
-      rw [hCt_reindex, hExM_C i]
-    -- Block identity: fromBlocks ((B11 i)ᴴ * M' * B11 i) 0 0 0 = (X i)ᴴ * F * X i.
-    have hF_letter :
-        Matrix.fromBlocks ((B11 i)ᴴ * M' * B11 i) (0 : Matrix S T ℂ)
-            (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) =
-          (X i)ᴴ * F * X i := by
-      rw [hX_block i, hF_def]
-      rw [show (Matrix.fromBlocks (B11 i) (0 : Matrix S T ℂ)
-              (0 : Matrix T S ℂ) (0 : Matrix T T ℂ))ᴴ =
-            Matrix.fromBlocks (B11 i)ᴴ (0 : Matrix S T ℂ)
-              (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) from by
-          simp [Matrix.fromBlocks_conjTranspose]]
-      simp [Matrix.fromBlocks_multiply]
-    -- Compute LHS = Umat * ((B i)ᴴ * G * B i) * Umatᴴ.
-    have hLHS :
-        expand ((C i)ᴴ * Z * C i) = Umat * ((B i)ᴴ * G * B i) * Umatᴴ := by
-      rw [hexpand_def ((C i)ᴴ * Z * C i)]
-      congr 1
-      congr 1
-      rw [hExM_letter, hF_letter]
-      rw [← Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-            eST.symm eST.symm eST.symm ((X i)ᴴ * F) (X i),
-          ← Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-            eST.symm eST.symm eST.symm ((X i)ᴴ) F]
-      have hXct_reindex :
-          Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm ((X i)ᴴ) = (B i)ᴴ := by
-        change Matrix.reindex eST.symm eST.symm ((X i)ᴴ) = (B i)ᴴ
-        simpa [Matrix.conjTranspose_reindex] using congrArg (fun M => Mᴴ) (hExST_X i)
-      rw [hXct_reindex, hExST_X i]
-    -- Compute RHS = Umat * ((B i)ᴴ * G * B i) * Umatᴴ.
-    have hRHS :
-        (A i)ᴴ * expand Z * A i = Umat * ((B i)ᴴ * G * B i) * Umatᴴ := by
-      rw [hexpand_Z, hA_i_ct, hA_i i]
-      calc
-        (Umat * (B i)ᴴ * Umatᴴ) * (Umat * G * Umatᴴ) * (Umat * B i * Umatᴴ)
-            = Umat * (B i)ᴴ * (Umatᴴ * Umat) * G * (Umatᴴ * Umat) * B i * Umatᴴ := by
-              noncomm_ring
-        _ = Umat * ((B i)ᴴ * G * B i) * Umatᴴ := by
-              rw [hU'U]; noncomm_ring
-    rw [hLHS, hRHS]
+    rw [cornerCompressionExpand_mul Umat eST eS hU'U,
+      cornerCompressionExpand_mul Umat eST eS hU'U,
+      ← cornerCompressionExpand_conjTranspose Umat eST eS, hLetter]
   -- (5) Multiplicativity: (φ (X * Y)).1 = (φ X).1 * (φ Y).1.
   · intro X Y
     change expand (X * Y) = expand X * expand Y
@@ -490,18 +442,7 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
   -- (7) Letter expansion: φ(C_i) is the original supported ambient letter.
   · intro i
     change expand (C i) = A i
-    have hBlockBack :
-        Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-            (Matrix.fromBlocks
-              (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (C i))
-              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) =
-          B i := by
-      rw [hExM_C i, ← hX_block i]
-      exact hExST_X i
-    calc
-      expand (C i) = Umat * B i * Umatᴴ := by
-        rw [hexpand_def, hBlockBack]
-      _ = A i := (hA_i i).symm
+    exact hLetter i
 
 /-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
 space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
