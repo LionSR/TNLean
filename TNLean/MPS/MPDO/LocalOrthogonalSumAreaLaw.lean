@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.EntropyDecomposition
+import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.InvariantProjection
-import TNLean.MPS.MPDO.MutualInfoMonotone
 
 /-!
 # Saturated area law for local orthogonal sums

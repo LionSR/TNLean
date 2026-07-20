@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.EntropyDecomposition
 import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
+import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.SimpleLocalStructure
 
 /-!
@@ -29,15 +29,6 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-private theorem mul_eq_self_of_isHermitian_of_mul_eq_self
-    {n : Type*} [Fintype n]
-    {A P : Matrix n n ℂ} (hA : A.IsHermitian) (hP : P.IsHermitian)
-    (hleft : P * A = A) :
-    A * P = A := by
-  classical
-  have hstar := congrArg Matrix.conjTranspose hleft
-  simpa only [Matrix.conjTranspose_mul, hA.eq, hP.eq] using hstar
-
 /-- The probability of the absorbed BNT sector in the normalized positive-
 length periodic state.  The copy number is part of the weight.  Positive
 normalizations are part of the definition, so there is neither an empty-chain
@@ -52,9 +43,8 @@ noncomputable def bntSectorProbability
     (_hSectorTrace : ∀ s, 0 < Matrix.trace
       (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N))
     (s : Fin S.basisCount) : ℝ :=
-  (S.copies s : ℝ) *
-    (Matrix.trace (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N)).re /
-      (Matrix.trace (mpo M N)).re
+  localOrthogonalSectorProbability M
+    (fun j ↦ commonWeightAbsorbedBasisMPOTensor S hWeight j) S.copies N s
 
 /-- Every BNT-sector probability is strictly positive when the full and
 sector chain operators have positive trace. -/
@@ -68,13 +58,9 @@ theorem bntSectorProbability_pos
       (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N))
     (s : Fin S.basisCount) :
     0 < bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s := by
-  rw [bntSectorProbability]
-  have hMre : 0 < (Matrix.trace (mpo M N)).re :=
-    (RCLike.pos_iff.mp hMtrace).1
-  have hSre : 0 < (Matrix.trace
-      (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N)).re :=
-    (RCLike.pos_iff.mp (hSectorTrace s)).1
-  exact div_pos (mul_pos (by exact_mod_cast S.copies_pos s) hSre) hMre
+  exact localOrthogonalSectorProbability_pos M
+    (fun j ↦ commonWeightAbsorbedBasisMPOTensor S hWeight j)
+    S.copies S.copies_pos hMtrace hSectorTrace s
 
 /-- The normalized full chain is the probability-weighted sum of the
 normalized absorbed BNT sectors.
@@ -91,38 +77,10 @@ theorem normalizedMPO_eq_sum_bntSectorProbability_smul
     normalizedMPO M N = ∑ s : Fin S.basisCount,
       (bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s : ℂ) •
         normalizedMPO (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
-  classical
-  have hMtraceEq : Matrix.trace (mpo M N) =
-      ((Matrix.trace (mpo M N)).re : ℂ) := by
-    apply Complex.ext
-    · rfl
-    · simpa using (RCLike.pos_iff.mp hMtrace).2
-  have hSectorTraceEq : ∀ s, Matrix.trace
-      (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) =
-        ((Matrix.trace
-          (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N)).re : ℂ) :=
-    fun s ↦ by
-      apply Complex.ext
-      · rfl
-      · simpa using (RCLike.pos_iff.mp (hSectorTrace s)).2
-  have hpComplex (s : Fin S.basisCount) :
-      (bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s : ℂ) =
-        (S.copies s : ℂ) *
-          Matrix.trace (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) /
-            Matrix.trace (mpo M N) := by
-    rw [bntSectorProbability, hMtraceEq, hSectorTraceEq s]
-    norm_num
-  have hdecomp :=
-    mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor M S hM hWeight hN
-  rw [normalizedMPO]
-  nth_rewrite 2 [hdecomp]
-  rw [Finset.smul_sum]
-  apply Finset.sum_congr rfl
-  intro s _
-  rw [normalizedMPO, hpComplex]
-  simp only [smul_smul]
-  congr 1
-  field_simp [(ne_of_gt hMtrace), (ne_of_gt (hSectorTrace s))]
+  exact normalizedMPO_eq_sum_localOrthogonalSectorProbability_smul M
+    (fun j ↦ commonWeightAbsorbedBasisMPOTensor S hWeight j) S.copies
+    (mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+      M S hM hWeight hN) hMtrace hSectorTrace
 
 /-- Left local invariance fixes the first site of every normalized periodic
 state.
@@ -281,17 +239,10 @@ theorem reducedBlockState_eq_sum_bntSectorProbability_smul
     reducedBlockState M N L hL = ∑ s : Fin S.basisCount,
       (bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s : ℂ) •
         reducedBlockState (commonWeightAbsorbedBasisMPOTensor S hWeight s) N L hL := by
-  classical
-  have hfull := normalizedMPO_eq_sum_bntSectorProbability_smul
-    M S hM hWeight hN hMtrace hSectorTrace
-  ext u v
-  rw [reducedBlockState_eq_sum]
-  simp_rw [hfull, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
-  simp_rw [reducedBlockState_eq_sum]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro s _
-  rw [Finset.mul_sum]
+  exact reducedBlockState_eq_sum_localOrthogonalSectorProbability_smul M
+    (fun j ↦ commonWeightAbsorbedBasisMPOTensor S hWeight j) S.copies hL
+    (mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+      M S hM hWeight hN) hMtrace hSectorTrace
 
 /-- Entropy of every nonempty marginal splits into the Shannon entropy of
 the BNT-sector probabilities and the probability-weighted sector entropies.
@@ -327,65 +278,20 @@ theorem blockEntropy_eq_sum_bntSectorProbability
           bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s *
             blockEntropy (commonWeightAbsorbedBasisMPOTensor S hWeight s)
               N L hL (hSectorMpdo s N hN)) := by
-  classical
   obtain ⟨L', rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hLpos)
-  let K : (s : Fin S.basisCount) → MPOTensor d (S.basisDim s) :=
-    fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s
-  let p : Fin S.basisCount → ℝ := fun s ↦
-    bntSectorProbability M S hWeight N hN hMtrace hSectorTrace s
-  let ρ : (s : Fin S.basisCount) →
-      Matrix (Fin (L' + 1) → Fin d) (Fin (L' + 1) → Fin d) ℂ :=
-    fun s ↦ reducedBlockState (K s) N (L' + 1) hL
-  let Q : Fin S.basisCount →
-      Matrix (Fin (L' + 1) → Fin d) (Fin (L' + 1) → Fin d) ℂ :=
-    fun s ↦ firstSiteMatrix (bntSectorProjection hC hρ₃ hη hR s) L'
-  have hp : ∀ s, 0 < p s := fun s ↦
-    bntSectorProbability_pos M S hWeight hN hMtrace hSectorTrace s
-  have hρpos : ∀ s, (ρ s).PosSemidef := fun s ↦
-    reducedBlockState_posSemidef (K s) N (L' + 1) hL (hSectorMpdo s N hN)
-  have hρtrace : ∀ s, Matrix.trace (ρ s) = 1 := fun s ↦
-    reducedBlockState_trace (K s) N (L' + 1) hL (ne_of_gt (hSectorTrace s))
-  have hQherm : ∀ s, (Q s).IsHermitian := fun s ↦
-    firstSiteMatrix_isHermitian
-      (bntSectorProjection_isOrthogonal hC hρ₃ hη hR s).1 L'
-  have hQρ : ∀ s, Q s * ρ s = ρ s := fun s ↦
-    firstSiteMatrix_mul_reducedBlockState_of_ketLeftMul_eq
-      (K s) (bntSectorProjection hC hρ₃ hη hR s)
-        (ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
-          S hWeight hC hρ₃ hη hR s) hL
-  have hρQ : ∀ s, ρ s * Q s = ρ s := fun s ↦
-    mul_eq_self_of_isHermitian_of_mul_eq_self (hρpos s).isHermitian
-      (hQherm s) (hQρ s)
-  have hQorth : ∀ s t, s ≠ t → Q s * Q t = 0 := by
-    intro s t hst
-    change firstSiteMatrix (bntSectorProjection hC hρ₃ hη hR s) L' *
-      firstSiteMatrix (bntSectorProjection hC hρ₃ hη hR t) L' = 0
-    rw [firstSiteMatrix_mul_firstSiteMatrix,
-      bntSectorProjection_mul_eq_zero hC hρ₃ hη hR hst]
-    ext u v
-    simp [firstSiteMatrix]
-  have hsum : reducedBlockState M N (L' + 1) hL =
-      ∑ s, (p s : ℂ) • ρ s := by
-    exact reducedBlockState_eq_sum_bntSectorProbability_smul
-      M S hM hWeight hN (by omega) hL hMtrace hSectorTrace
-  have hadd := vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports
-    (reducedBlockState M N (L' + 1) hL)
-    (reducedBlockState_isHermitian M N (L' + 1) hL (hMpdo N hN))
-    (fun s ↦ (p s : ℂ) • ρ s) Q
-    (fun s ↦ ((hρpos s).smul (a := (p s : ℂ))
-      (by exact_mod_cast (hp s).le)).isHermitian)
-    hsum (fun s ↦ ⟨by rw [Matrix.mul_smul, hQρ],
-      by rw [Matrix.smul_mul, hρQ]⟩) hQorth
-  calc
-    blockEntropy M N (L' + 1) hL (hMpdo N hN) =
-        ∑ s, vonNeumannEntropy ((p s : ℂ) • ρ s)
-          (((hρpos s).smul (a := (p s : ℂ))
-            (by exact_mod_cast (hp s).le)).isHermitian) := hadd
-    _ = _ := by
-      apply Finset.sum_congr rfl
-      intro s _
-      simpa only [K, p, ρ, blockEntropy, add_comm] using
-        vonNeumannEntropy_smul (hρpos s) (hρtrace s) (p s)
+  exact blockEntropy_eq_sum_localOrthogonalSectorProbability M
+    (fun j ↦ commonWeightAbsorbedBasisMPOTensor S hWeight j) S.copies
+    (fun j ↦ bntSectorProjection hC hρ₃ hη hR j) S.copies_pos
+    (bntSectorProjection_isOrthogonal hC hρ₃ hη hR)
+    (fun hst ↦ bntSectorProjection_mul_eq_zero hC hρ₃ hη hR hst)
+    hMpdo hSectorMpdo hN hL
+    (mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+      M S hM hWeight hN) hMtrace hSectorTrace
+    (fun s ↦ firstSiteMatrix_mul_reducedBlockState_of_ketLeftMul_eq
+      (commonWeightAbsorbedBasisMPOTensor S hWeight s)
+      (bntSectorProjection hC hρ₃ hη hR s)
+      (ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
+        S hWeight hC hρ₃ hη hR s) hL)
 
 /-- Equality in strong subadditivity descends from the full tensor to every
 absorbed BNT sector.  The four regions have lengths

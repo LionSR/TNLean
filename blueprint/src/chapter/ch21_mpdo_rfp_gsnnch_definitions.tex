@@ -376,12 +376,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 
 \begin{theorem}[Local orthogonal sums preserve SAL]
     \label{thm:mpdo_local_orthogonal_sum_sal}
-    \lean{MPOTensor.OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState}
     \lean{MPOTensor.isSAL_of_localOrthogonalSum}
-    \lean{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily}
-    \lean{MPOTensor.isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSectorFamily}
     \leanok
-    \uses{def:is_sal,def:mpdo_orthogonal_commuting_sector_family}
+    \uses{def:is_sal}
     Let $\{K_x\}_{x=0}^{g-1}$ be a nonempty finite family of MPO tensors,
     let $n_x$ be positive natural numbers, and let $P_x$ be pairwise
     orthogonal one-site projections.  Suppose that, for every $N>0$,
@@ -429,6 +426,73 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     The first sum is independent of $L$, while sectorwise SAL gives
     $I_L(K_x)=I_{L+1}(K_x)$ for every $x$.  Therefore
     $I_L(M)=I_{L+1}(M)$ throughout the SAL range.
+\end{proof}
+
+\begin{lemma}[Commuting sector products have local marginal support]
+    \label{lem:mpdo_orthogonal_commuting_sector_marginal_support}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState}
+    \leanok
+    \uses{def:mpdo_orthogonal_commuting_sector_family,
+        def:mpdo_vertical_one_site_actions}
+    Suppose that $K_x$ is the periodic product of translates of a positive
+    two-site operator $B_x$, and that $B_x$ is supported on
+    $P_x\otimes P_x$.  If $N\geq2$ and $1\leq L\leq N$, then the normalized
+    marginal of $K_x$ on the first $L$ sites satisfies
+    \[
+        \bigl(P_x\otimes\Id^{\otimes(L-1)}\bigr)
+          \widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The first translated bond is fixed by multiplication by $P_x$ on its
+    first tensor factor.  Hence the full periodic product is fixed by the
+    corresponding one-site action.  Taking the partial trace over the final
+    $N-L$ sites preserves this identity.
+\end{proof}
+
+\begin{corollary}[Orthogonal commuting sector sums preserve SAL]
+    \label{cor:mpdo_orthogonal_commuting_sector_sum_sal}
+    \lean{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily}
+    \leanok
+    \uses{thm:mpdo_local_orthogonal_sum_sal,
+        lem:mpdo_orthogonal_commuting_sector_marginal_support,
+        def:mpdo_orthogonal_commuting_sector_family}
+    Let $K_x$ be a nonempty finite family with orthogonally supported
+    commuting sector products, and let $n_x$ be positive natural numbers.
+    Suppose that, for every $N>0$,
+    \[
+        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x).
+    \]
+    If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
+\end{corollary}
+
+\begin{proof}\leanok
+    The preceding lemma supplies the marginal-support hypothesis of
+    Theorem~\ref{thm:mpdo_local_orthogonal_sum_sal}; the remaining hypotheses
+    are precisely the assumed outer-sector equality, positivity of the
+    multiplicities, and sectorwise SAL.
+\end{proof}
+
+\begin{corollary}[Orthogonal BNT sector sums preserve SAL]
+    \label{cor:mpdo_bnt_orthogonal_sector_sum_sal}
+    \lean{MPOTensor.isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSectorFamily}
+    \leanok
+    \uses{cor:mpdo_orthogonal_commuting_sector_sum_sal,def:same_mpv2_pos}
+    Let $M$ have a nonempty basis-of-normal-tensors decomposition with
+    positive copy numbers $n_x$ and copy-independent weights $\mu_x$.  Put
+    $K_x=\mu_xA_x$, and suppose that the decomposition generates the same
+    positive-length matrix product vectors as $M$.  If an independently
+    supplied orthogonally supported commuting sector family realizes the
+    tensors $K_x$, and every $K_x$ satisfies SAL, then $M$ satisfies SAL.
+\end{corollary}
+
+\begin{proof}\leanok
+    The positive-length canonical-form identity gives
+    \[
+        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x).
+    \]
+    Apply Corollary~\ref{cor:mpdo_orthogonal_commuting_sector_sum_sal}.
 \end{proof}
 
 \begin{corollary}[Orthogonal BNT sector products give the GSNNCH form]
