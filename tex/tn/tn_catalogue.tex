@@ -332,25 +332,6 @@
     \end{TNEquationRow}%
 }
 
-% The two block closure maps: a boundary insertion on the virtual bond of a
-% block tensor, with the virtual loop closed by the trace, gives an operator
-% on the open physical legs.
-\TNDeclareDiagram
-    {TNMPDOBlockClosureMap}
-    {}
-    {display}
-    {compact}
-    {\TNMPDOBlockClosureMap}
-    {chapter/ch21_mpdo_rfp_algebra_tower.tex}{%
-    \begin{TNEquationRow}[compact]
-        \ensuremath{M_\alpha(X)=}
-        \TNTerm{\TNSymmetryTraceCell{bcm}{M_\alpha}{X}{}}
-        \qquad
-        \ensuremath{A_\alpha(X)=}
-        \TNTerm{\TNSymmetryTraceCell{bca}{A_\alpha}{X}{}}
-    \end{TNEquationRow}%
-}
-
 % The BNT-label operator O_L(M_alpha): L vertically read copies of M_alpha
 % are multiplied along the vertical index and closed by the trace, while the
 % horizontal legs remain open.  This follows source figure MPDO_O_L_A_.png.

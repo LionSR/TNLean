@@ -38,13 +38,6 @@
         {(#1PhiOne)}{P_{12}}%
 }
 
-% The existing trace-cell and vertical-word constructions use a centre point.
-% These wrappers give catalogue terms a coordinate-free origin convention.
-\newcommand{\TNSymmetryTraceCell}[4]{%
-    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=trace-cell}%
-    \TNCompactTraceCell{#1}{(0,0)}{#2}{#3}{#4}%
-}
-
 % A periodic MPS closure may carry a virtual insertion on the return bond.
 % The insertion is placed by the surrounding diagram; this motif supplies its
 % two typed ports and the canonical rounded routing from the outer site ports.
