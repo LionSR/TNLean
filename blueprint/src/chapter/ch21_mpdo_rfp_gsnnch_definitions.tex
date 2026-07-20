@@ -374,6 +374,59 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Definition~\ref{def:mpdo_source_gsnnch} is one.
 \end{proof}
 
+\begin{theorem}[Local orthogonal sums preserve SAL]
+    \label{thm:mpdo_local_orthogonal_sum_sal}
+    \lean{MPOTensor.isSAL_of_localOrthogonalSum}
+    \leanok
+    \uses{def:is_sal}
+    Let $\{K_x\}_{x=0}^{g-1}$ be a nonempty finite family of MPO tensors,
+    let $n_x$ be positive natural numbers, and let $P_x$ be pairwise
+    orthogonal one-site projections.  Suppose that, for every $N>0$,
+    \[
+        \rho^{(N)}(M)=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
+    \]
+    For $1\leq L\leq N$, write $\widehat\rho_{x,N,L}$ for the normalized
+    marginal of $\rho^{(N)}(K_x)$ on the first $L$ sites.  Assume that the
+    sector label is visible on the first retained site:
+    \[
+        \bigl(P_x\otimes\Id^{\otimes(L-1)}\bigr)
+          \widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}.
+    \]
+    If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
+
+    This is the conditional last inference in the proposition at
+    \cite[Appendix~C.2, lines~1801--1808]{Cirac2016MPDO_arXiv}.  It assumes
+    sectorwise SAL.  The printed proposition states the conclusion from the
+    GSNNCH form alone, but its proof invokes the single-sector proposition at
+    lines~1597--1619, whose hypotheses include ZCL.  The theorem here does not
+    supply that omitted sectorwise implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_smul, thm:entropy_pairwise_annihilating_support,
+        def:mpdo_vertical_one_site_actions}
+    For fixed $N$, put
+    \[
+        p_x=\frac{n_x\tr(\rho^{(N)}(K_x))}
+          {\tr(\rho^{(N)}(M))}.
+    \]
+    Positivity of the chain operators, positivity of $n_x$, and nonemptiness
+    of the family give $p_x>0$ and a nonzero normalization for $M$.  Every
+    nonempty normalized marginal is the sum of the sector marginals with
+    weights $p_x$.  The first-site support identity and $P_xP_y=0$ for
+    $x\ne y$ make these summands pairwise orthogonal.  Hence
+    \[
+        S_L(M)=\sum_x\bigl(-p_x\log p_x+p_xS_L(K_x)\bigr).
+    \]
+    Substitution in $I_L=S_L+S_{N-L}-S_N$ gives
+    \[
+        I_L(M)= -\sum_xp_x\log p_x+\sum_xp_xI_L(K_x).
+    \]
+    The first sum is independent of $L$, while sectorwise SAL gives
+    $I_L(K_x)=I_{L+1}(K_x)$ for every $x$.  Therefore
+    $I_L(M)=I_{L+1}(M)$ throughout the SAL range.
+\end{proof}
+
 \begin{corollary}[Orthogonal BNT sector products give the GSNNCH form]
     \label{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
     \lean{MPOTensor.hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor}

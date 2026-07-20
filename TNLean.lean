@@ -437,7 +437,7 @@ import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.LinearMarkedTensor
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
-import TNLean.MPS.MPDO.InvariantProjection
+import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.VerticalReduction
 import TNLean.MPS.MPDO.PeriodicExclusion
