@@ -199,4 +199,15 @@ current counts and full location lists).
 
 ## Retired
 
-(none yet)
+### invariant-subspace two-block fork — retired
+- **Pattern:** the general and strict invariant-subspace decompositions repeated the
+  spectral split, block construction, and MPV calculation.
+- **Seen:** 2 full proof paths in
+  `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`.
+- **Abstraction:** the private semantic construction
+  `exists_twoBlock_decomp_of_lowerZero_aux`; the strict public theorem adds only
+  positivity and arithmetic for the strict dimension bounds.
+- **Notes:** Counting proof lines inclusively from `:= by` through the final proof line,
+  the two public implementations had 307 + 243 = 550 lines. The shared construction
+  and two projections have 342 + 4 + 8 = 354 lines, a net reduction of 196 lines
+  (35.6%). Both public theorem statements are unchanged.
