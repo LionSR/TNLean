@@ -682,12 +682,12 @@ import TNLean.Channel.NormalForm
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index
 import TNLean.Channel.WolfChapter6Index
-
 -- Chapter 7 semigroup material exposed for blueprint/doc links
 import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.Semigroup.Perturbation
 import TNLean.Channel.Semigroup.GeneratorDefs
 import TNLean.Channel.Semigroup.LindbladForm
+import TNLean.Channel.Semigroup.PauliDissipation
 import TNLean.Channel.Semigroup.KossakowskiForm
 import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.LiouvillianKernel
