@@ -14,7 +14,7 @@ The process has two artifacts:
 Promoted tactics live in the source tree:
 
 - `TNLean/MPS/Tactic/Basic.lean` — MPS/channel/overlap-specific simp sets and
-  tactic macros (`mpv_ext`, `block_words`, `transfer_simp`).
+  tactic macros (`mpv_ext`, `transfer_simp`).
 - `TNLean/Tactic/` — cross-cutting tactics not tied to MPS (create the
   directory when the first such tactic is promoted).
 
@@ -67,8 +67,8 @@ Prefer the weakest mechanism that removes the duplication, in this order:
    `.lake/packages/mathlib/Mathlib/`) — the lemma may already exist.
 2. **A simp set** (`register_simp_attr`). When the block is a fixed list of
    rewrites (`simp only [a, b, c, ...]` repeated verbatim), tag the lemmas
-   with a custom attribute and replace the list with the set. Existing sets:
-   `mps_block_words`, `mps_transfer`.
+   with a custom attribute and replace the list with the set. Existing set:
+   `mps_transfer`.
 3. **`@[grind]` annotations + `grind`.** When the block *closes* a goal
    (rather than normalizing it) by combining hypotheses, case-splitting, and
    arithmetic, try the core `grind` tactic before writing any custom tactic.
@@ -100,7 +100,7 @@ Where it fits in this project:
 
 - **Leaf goals, not normalization.** `grind` either closes a goal or fails;
   it does not leave a usable normal form. Use it as a terminal discharger
-  after the structural steps (`ext`, `mpv_ext`, `block_words`, …) have
+  after the structural steps (`ext`, `mpv_ext`, …) have
   exposed a first-order goal. The "no search" rule below therefore also
   means: never wrap `grind` inside a promoted normalization tactic; call it
   explicitly at the leaf so failures are local and visible.

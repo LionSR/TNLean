@@ -106,7 +106,6 @@ TACTIC_HEADS = (
     "bound",
     "grind",
     "mpv_ext",
-    "block_words",
     "transfer_simp",
 )
 

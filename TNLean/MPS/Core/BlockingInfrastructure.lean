@@ -285,7 +285,6 @@ dimensions leaves the tensors and their MPV/transfer-map properties unchanged.
 
 /-- The physical dimension of an iterated blocking is the physical dimension of
 direct blocking by the product length. -/
-@[mps_block_words]
 theorem blockPhysDim_blockPhysDim (d m n : ℕ) :
     blockPhysDim (blockPhysDim d m) n = blockPhysDim d (m * n) := by
   simp [blockPhysDim_eq_pow, pow_mul]
@@ -393,7 +392,6 @@ theorem wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
 
 /-- Grouping a direct blocked index and then flattening the iterated index recovers the
 original direct blocked index. -/
-@[mps_block_words]
 theorem iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n))) :
     iteratedBlockIndex d m n (directToIteratedBlockIndex d m n i) = i :=
@@ -413,7 +411,6 @@ theorem directToIteratedBlockIndex_surjective (d m n : ℕ) :
 
 /-- Flattening an iterated blocked index and then grouping it back recovers the iterated
 blocked index. -/
-@[mps_block_words]
 theorem directToIteratedBlockIndex_iteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     directToIteratedBlockIndex d m n (iteratedBlockIndex d m n i) = i := by
@@ -430,17 +427,16 @@ noncomputable def directIteratedBlockEquiv (d m n : ℕ) :
   left_inv := iteratedBlockIndex_directToIteratedBlockIndex d m n
   right_inv := directToIteratedBlockIndex_iteratedBlockIndex d m n
 
-@[simp, mps_block_words] theorem directIteratedBlockEquiv_apply (d m n : ℕ)
+@[simp] theorem directIteratedBlockEquiv_apply (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n))) :
     directIteratedBlockEquiv d m n i = directToIteratedBlockIndex d m n i := rfl
 
-@[simp, mps_block_words] theorem directIteratedBlockEquiv_symm_apply (d m n : ℕ)
+@[simp] theorem directIteratedBlockEquiv_symm_apply (d m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     (directIteratedBlockEquiv d m n).symm i = iteratedBlockIndex d m n i := rfl
 
 /-- An iterated blocked index `j` is the grouping of a direct blocked index `i`
 exactly when flattening `j` recovers `i`. -/
-@[mps_block_words]
 theorem eq_directToIteratedBlockIndex_iff_iteratedBlockIndex_eq (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n)))
     (j : Fin (blockPhysDim (blockPhysDim d m) n)) :
@@ -464,7 +460,6 @@ theorem wordOfBlock_cast_length (d : ℕ) {L₁ L₂ : ℕ} (h : L₁ = L₂)
 
 /-- Iterated physical blocking agrees with direct blocking after the canonical
 index relabeling from iterated blocks to flattened blocks. -/
-@[mps_block_words]
 theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     blockTensor (d := blockPhysDim d m) (D := D)

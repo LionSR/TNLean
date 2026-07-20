@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
-import TNLean.MPS.Tactic.Basic
 
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.Card
@@ -55,12 +54,12 @@ noncomputable def decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L �
 noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (Fin d) :=
   List.ofFn (decodeBlock d L i)
 
-@[simp, mps_block_words] lemma length_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
+@[simp] lemma length_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
     (wordOfBlock d L i).length = L := by
   classical
   simp [wordOfBlock]
 
-@[simp, mps_block_words]
+@[simp]
 lemma wordOfBlock_one (d : ℕ) (i : Fin (blockPhysDim d 1)) :
     wordOfBlock d 1 i = [singleBlockEquiv d i] := by
   rfl
@@ -147,7 +146,7 @@ noncomputable def blockTensor (A : MPSTensor d D) (L : ℕ) :
     MPSTensor (blockPhysDim d L) D :=
   fun i => evalWord A (wordOfBlock d L i)
 
-@[simp, mps_block_words]
+@[simp]
 lemma blockTensor_one_apply (A : MPSTensor d D) (i : Fin (blockPhysDim d 1)) :
     blockTensor (d := d) (D := D) A 1 i = A (singleBlockEquiv d i) := by
   simp [blockTensor, MPSTensor.evalWord]
@@ -156,24 +155,22 @@ lemma blockTensor_one_apply (A : MPSTensor d D) (i : Fin (blockPhysDim d 1)) :
 noncomputable def flattenBlockedWord (d L : ℕ) : List (Fin (blockPhysDim d L)) → List (Fin d)
   | w => (w.map (wordOfBlock d L)).flatten
 
-@[simp, mps_block_words]
+@[simp]
 lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
   simp [flattenBlockedWord]
 
-@[mps_block_words]
 lemma flattenBlockedWord_cons (d L : ℕ) (i : Fin (blockPhysDim d L))
     (w : List (Fin (blockPhysDim d L))) :
     flattenBlockedWord d L (i :: w) = wordOfBlock d L i ++ flattenBlockedWord d L w := by
   simp [flattenBlockedWord]
 
-@[simp, mps_block_words]
+@[simp]
 lemma flattenBlockedWord_one (d : ℕ) (w : List (Fin (blockPhysDim d 1))) :
     flattenBlockedWord d 1 w = w.map (singleBlockEquiv d) := by
   induction w with
   | nil => simp [flattenBlockedWord]
   | cons i w ih => simp [flattenBlockedWord_cons, ih]
 
-@[mps_block_words]
 lemma evalWord_blockTensor (A : MPSTensor d D) (L : ℕ) :
     ∀ w : List (Fin (blockPhysDim d L)),
       evalWord (blockTensor (d := d) (D := D) A L) w =
@@ -187,7 +184,7 @@ lemma evalWord_blockTensor (A : MPSTensor d D) (L : ℕ) :
       -- `flattenBlockedWord (i :: w) = wordOfBlock i ++ flattenBlockedWord w`.
       simp [evalWord, blockTensor, flattenBlockedWord_cons, ih, evalWord_append]
 
-@[simp, mps_block_words]
+@[simp]
 lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d 1)) :
     mpv (blockTensor (d := d) (D := D) A 1) σ =
@@ -196,7 +193,6 @@ lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
   rfl
 
 /-- Length of a flattened blocked word. -/
-@[mps_block_words]
 lemma length_flattenBlockedWord (d L : ℕ) :
     ∀ w : List (Fin (blockPhysDim d L)), (flattenBlockedWord d L w).length = w.length * L := by
   intro w
@@ -222,7 +218,6 @@ noncomputable def blockedConfigEquiv (d N L : ℕ) :
 /-- Reading a blocked configuration through `blockedConfigEquiv` gives the flattened blocked
 word.  This is the word-level identification used in the blocking step of
 arXiv:1606.00608, lines 318--344. -/
-@[mps_block_words]
 lemma ofFn_blockedConfigEquiv (d N L : ℕ)
     (σ : Fin N → Fin (blockPhysDim d L)) :
     List.ofFn (blockedConfigEquiv d N L σ) = flattenBlockedWord d L (List.ofFn σ) := by

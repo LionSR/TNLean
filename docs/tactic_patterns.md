@@ -31,14 +31,6 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** elab rather than macro because it inspects the goal to
   distinguish the two predicate forms.
 
-### block_words — promoted
-- **Pattern:** repeated `simp only [...]` lists normalizing direct/iterated
-  blocking maps and `wordOfBlock` expressions.
-- **Abstraction:** `@[mps_block_words]` simp set + `block_words` macro
-  (`TNLean/MPS/Tactic/Basic.lean`).
-- **Notes:** used across `MPS/Core/Blocking.lean`,
-  `MPS/Core/BlockingInfrastructure.lean`, `MPS/ParentHamiltonian/BlockStrip.lean`.
-
 ### transfer_simp — promoted
 - **Pattern:** unfolding `transferMap A X` to `∑ i, A i * X * (A i)ᴴ`.
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
@@ -199,4 +191,14 @@ current counts and full location lists).
 
 ## Retired
 
-(none yet)
+### block_words — retired
+- **Pattern:** repeated `simp only [...]` lists normalizing direct/iterated
+  blocking maps and `wordOfBlock` expressions.
+- **Former abstraction:** `@[mps_block_words]` simp set + `block_words` macro
+  (`TNLean/MPS/Tactic/Basic.lean`).
+- **Audit:** #4535 found 18 annotations but zero tactic invocations. The natural
+  consumers use individual blocking lemmas together with local definitions or
+  unrelated algebraic rewrites, so replacing them by the macro would add proof
+  steps rather than remove duplication.
+- **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
+  proof-body lines changed 0.

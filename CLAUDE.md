@@ -122,7 +122,7 @@ process is in `docs/tactic_development.md`; the pattern ledger is
 `docs/tactic_patterns.md`. In every proof-writing session:
 
 1. **Consult** the ledger's promoted section first and use existing custom
-   tactics/simp sets (`mpv_ext`, `block_words`, `transfer_simp` in
+   tactics/simp sets (`mpv_ext`, `transfer_simp` in
    `TNLean/MPS/Tactic/Basic.lean`) where they apply — hand-writing a pattern
    that has a promoted tactic is a review-blocking style issue.
 2. **Detect** repetition while writing, and in proof-heavy PRs run:
