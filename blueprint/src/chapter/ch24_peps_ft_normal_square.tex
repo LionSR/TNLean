@@ -88,7 +88,24 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     the proof of \cite[Theorem~3]{Molnar2018NormalPEPS}.
     The source shapes are:
     \begin{center}
-        \TNPEPSNormalRegionsRS
+        % Source/formula verdict: Molnar et al., arXiv:1804.04964,
+        % paper_normal.tex:1405--1429 and source PDF p. 15 depict
+        % R=(2-4,2-4)\{(4,4)} and S=(2-4,2-4).
+        % Ink-to-index verdict: every dot is an ordinary tensor; every lattice
+        % edge is a virtual index, and the selected fill records membership only.
+        % Structural count verdict (not mechanically emitted as a lattice
+        % signature): each 5-by-5 panel has 25 sites, 40 internal virtual
+        % contractions, and 20 cut virtual bonds; (4,4) remains ordinary.
+        % Structurally derived boundary/type verdict: no physical index is
+        % exposed, so each panel has (V,P)=(20,0).
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=$R$]
+                {(2-4,2-4) - (4,4)}
+        \end{tenkzlattice}
+        \(\qquad\text{and}\qquad\)
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=$S$]{(2-4,2-4)}
+        \end{tenkzlattice}
 
         \vspace{0.5em}
 
@@ -1229,7 +1246,24 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     % Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
     The source regions are:
     \begin{center}
-        \TNPEPSNormalRegionsRS
+        % Source/formula verdict: Molnar et al., arXiv:1804.04964,
+        % paper_normal.tex:1405--1429 and source PDF p. 15 depict
+        % R=(2-4,2-4)\{(4,4)} and S=(2-4,2-4).
+        % Ink-to-index verdict: every dot is an ordinary tensor; every lattice
+        % edge is a virtual index, and the selected fill records membership only.
+        % Structural count verdict (not mechanically emitted as a lattice
+        % signature): each 5-by-5 panel has 25 sites, 40 internal virtual
+        % contractions, and 20 cut virtual bonds; (4,4) remains ordinary.
+        % Structurally derived boundary/type verdict: no physical index is
+        % exposed, so each panel has (V,P)=(20,0).
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=$R$]
+                {(2-4,2-4) - (4,4)}
+        \end{tenkzlattice}
+        \(\qquad\text{and}\qquad\)
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=$S$]{(2-4,2-4)}
+        \end{tenkzlattice}
 
         \vspace{0.5em}
 
