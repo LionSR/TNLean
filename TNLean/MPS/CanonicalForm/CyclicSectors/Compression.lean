@@ -16,7 +16,6 @@ import Mathlib.Data.Matrix.Block
 import Mathlib.Data.Matrix.Diagonal
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.Logic.Equiv.Sum
-import Mathlib.Tactic.NoncommRing
 
 /-!
 # Compression to cyclic sectors
