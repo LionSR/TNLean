@@ -127,7 +127,10 @@
 \prop_new:N \l__tenkzl_labelxmax_prop  % "r-c-h" -> east paper coordinate
 \prop_new:N \l__tenkzl_labelymin_prop  % "r-c-h" -> south paper coordinate
 \prop_new:N \l__tenkzl_labelymax_prop  % "r-c-h" -> north paper coordinate
+\seq_new:N  \l__tenkzl_obstacles_seq   % actual rendered obstacle points {x}{y}
+\seq_new:N  \l__tenkzl_obstaclebboxes_seq % actual label boxes {xmin}{xmax}{ymin}{ymax}
 \prop_new:N \l__tenkzl_cupdegenerate_prop % side -> 1 when its frame vector is zero
+\prop_new:N \l__tenkzl_tracedegenerate_prop % opposing-side axis -> 1 when routing degenerates
 
 % plane state (Phase-1 plane slice)
 \bool_new:N \l__tenkzl_oblique_bool   % frame=oblique: shear in-plane ink
@@ -284,10 +287,9 @@
   /tenkz/lattice/boundary~legs/.code={\bool_set_true:N \l__tenkzl_legs_bool},
   % west= / east= / north= / south=: one side, one policy word of the
   % 0.6 alphabet.  `open` and `none` draw or seal that side's boundary
-  % legs (resolution: the side word wins, else boundary=).  `trace` and
-  % `cup[={m}]` ties the ket and bra virtual boundary indices at each
-  % site on that side.  `trace` remains reserved for the distinct
-  % same-sheet closure of opposing sides.
+  % legs (resolution: the side word wins, else boundary=).  `cup[={m}]`
+  % ties the ket and bra virtual boundary indices at each site on that
+  % side.  `trace` is the distinct same-sheet closure of opposing sides.
   /tenkz/lattice/west/.code ={\tenkzl_side:nn {west} {#1}},
   /tenkz/lattice/east/.code ={\tenkzl_side:nn {east} {#1}},
   /tenkz/lattice/north/.code={\tenkzl_side:nn {north}{#1}},
@@ -397,11 +399,20 @@
     Unknown~side~policy~'#2'~at~#1=.~A~window~side~takes~exactly~one~
     word~of~the~policy~alphabet:~open,~none,~trace,~cup~or~cup={m}.
   }
-\msg_new:nnn { tenkz } { lattice-side-deferred }
+\msg_new:nnn { tenkz } { lattice-side-trace-unpaired }
   {
-    #1=#2:~the~inter-sheet~closure~ink~of~the~lattice~tier~lands~with~
-    the~0.6~phase-B~closure~engine;~until~then~the~side~is~drawn~
-    SEALED~(a~closed~side~has~no~open~stubs).
+    #1=trace~needs~#2=trace~to~close~the~same-sheet~virtual~index.~The~
+    requested~side~is~left~open~and~no~return~path~is~drawn.
+  }
+\msg_new:nnn { tenkz } { lattice-side-trace-incomplete }
+  {
+    The~#1~trace~at~sheet~#2,~slot~#3~has~only~one~surviving~endpoint.~
+    That~virtual~index~is~left~open.
+  }
+\msg_new:nnn { tenkz } { lattice-side-trace-zero-vector }
+  {
+    The~#1~same-sheet~trace~cannot~use~the~degenerate~expert~frame.~Its~
+    surviving~virtual~indices~are~left~open.
   }
 \msg_new:nnn { tenkz } { lattice-side-cup-stack }
   {
@@ -447,11 +458,7 @@
       {
         {open}  { \tenkzl_side_word:nn {#1} {open} }
         {none}  { \tenkzl_side_word:nn {#1} {none} }
-        {trace} { \msg_warning:nnnn {tenkz}{lattice-side-deferred}
-                    {#1} {trace}
-                  \tenkz@event{warning|picture=\the\tenkz@pictureid|%
-                    code=side-deferred|side=#1|policy=trace}
-                  \tenkzl_side_word:nn {#1} {none} }
+        {trace} { \tenkzl_side_word:nn {#1} {trace} }
         {cup}   { \tenkzl_side_cup:nn {#1} {} }
       }
       {
@@ -679,7 +686,10 @@
     \prop_clear:N \l__tenkzl_labelxmax_prop
     \prop_clear:N \l__tenkzl_labelymin_prop
     \prop_clear:N \l__tenkzl_labelymax_prop
+    \seq_clear:N \l__tenkzl_obstacles_seq
+    \seq_clear:N \l__tenkzl_obstaclebboxes_seq
     \prop_clear:N \l__tenkzl_cupdegenerate_prop
+    \prop_clear:N \l__tenkzl_tracedegenerate_prop
   }
 
 % ---------- geometry ----------
@@ -1420,8 +1430,9 @@
       { \tenkzl_draw_pairs: }  % (h) inter-sheet physical pairing
     \str_if_eq:VnF \l__tenkzl_outer_tl {none}
       { \tenkzl_draw_outer: }  % (i) outer-face physical legs
-    \tenkzl_draw_opsites:      % (j) op-sheet boxes (the cover pass)
-    \tenkzl_emit_boundary:     % (k) event stream only, no ink
+    \tenkzl_draw_side_traces:  % (j) same-sheet opposing-side closures
+    \tenkzl_draw_opsites:      % (k) op-sheet boxes (the cover pass)
+    \tenkzl_emit_boundary:     % (l) event stream only, no ink
   }
 
 % -- (f') virtual side cups -------------------------------------------
@@ -1434,6 +1445,8 @@
 % crossing an explicit overpass rather than a false black junction; its
 % gap uses the existing emphasis stroke, not a predictive clearance metric.
 \tikzset{tenkz~lattice~cup/.style={bond,
+  preaction={draw=tenkzPaper, line~width=\tenkz@emphwidth}}}
+\tikzset{tenkz~lattice~side~trace/.style={trace,
   preaction={draw=tenkzPaper, line~width=\tenkz@emphwidth}}}
 % Pair traces render after virtual cups.  Their matching halo makes a later
 % physical closure visibly pass over, rather than join, an east cup stub.
@@ -1578,6 +1591,43 @@
 \int_new:N \l__tenkzl_cupscancol_int
 \tl_new:N  \l__tenkzl_cupnode_tl
 \tl_new:N  \l__tenkzl_labelbbox_tl
+
+% Trace routes are the final non-cover ink pass.  Earlier body labels and
+% side cups publish the paper points of their actual rendered geometry here,
+% so a later trace measures one common obstacle contract instead of predicting
+% separate frame-specific offsets for each producer.
+\cs_new_protected:Npn \tenkzl_record_obstacle_point:NN #1#2
+  {
+    \seq_put_right:Nx \l__tenkzl_obstacles_seq
+      {
+        \exp_not:N \tenkzl_trace_include_obstacle:nn
+          { \dim_use:N #1 } { \dim_use:N #2 }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_record_obstacle_bbox:n #1
+  {
+    \pgfextractx \l__tenkzl_labelxmin_dim { \pgfpointanchor{#1}{west} }
+    \pgfextractx \l__tenkzl_labelxmax_dim { \pgfpointanchor{#1}{east} }
+    \pgfextracty \l__tenkzl_labelymin_dim { \pgfpointanchor{#1}{south} }
+    \pgfextracty \l__tenkzl_labelymax_dim { \pgfpointanchor{#1}{north} }
+    \seq_put_right:Nx \l__tenkzl_obstaclebboxes_seq
+      {
+        \exp_not:N \tenkzl_trace_include_obstacle_bbox:nnnn
+          { \dim_use:N \l__tenkzl_labelxmin_dim }
+          { \dim_use:N \l__tenkzl_labelxmax_dim }
+          { \dim_use:N \l__tenkzl_labelymin_dim }
+          { \dim_use:N \l__tenkzl_labelymax_dim }
+      }
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
+  }
 
 % The point at reach #5 from boundary site (#2,#3) on sheet #4.  The
 % logical point and its sheet shift both pass through the one frame map.
@@ -1891,49 +1941,69 @@
           { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
           \l__tenkzl_labelbbox_tl
         \dim_set:Nn \l__tenkzl_labelymax_dim { \l__tenkzl_labelbbox_tl }
-        \tenkzl_side_cup_project_trans:NNN
-          \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
-          \l__tenkzl_labeltransmin_dim
-        \dim_set_eq:NN \l__tenkzl_labeltransmax_dim
-          \l__tenkzl_labeltransmin_dim
-        \tenkzl_side_cup_label_trans_corner:NN
-          \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
-        \tenkzl_side_cup_label_trans_corner:NN
-          \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
-        \tenkzl_side_cup_label_trans_corner:NN
-          \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
-        \tenkzl_side_cup_project_trans:NNN #4 #5
-          \l__tenkzl_labelsiteproj_dim
-        \bool_set:Nn \l_tmpa_bool
-          {
-            ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } <
-                { \l__tenkzl_labeltransmin_dim - \l__tenkzl_cupbulge_dim }
-            &&
-            ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } >
-                { \l__tenkzl_labeltransmax_dim + \l__tenkzl_cupbulge_dim }
-          }
-        \bool_if:NT \l_tmpa_bool
-          {
-            \dim_compare:nNnTF
-              { \l__tenkzl_labelsiteproj_dim
-                - \l__tenkzl_labeltransmin_dim } <
+        \tenkzl_side_cup_avoid_loaded_label_stub:NNNNNN
+          #4 #5 #6 #7 #8 #9
+      }
+  }
+
+% Route one site-to-tip lead around the bbox currently loaded in the four
+% label dimension registers.  Both site labels and the general materialized
+% body-label registry use this single measured escape contract.
+\cs_new_protected:Npn \tenkzl_side_cup_avoid_loaded_label_stub:NNNNNN
+  #1#2#3#4#5#6
+  {
+    \tenkzl_side_cup_project_trans:NNN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+      \l__tenkzl_labeltransmin_dim
+    \dim_set_eq:NN \l__tenkzl_labeltransmax_dim
+      \l__tenkzl_labeltransmin_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
+    \tenkzl_side_cup_avoid_loaded_trans_stub:NNNNNN #1#2#3#4#5#6
+  }
+
+% Avoid the currently accumulated transverse forbidden interval.  The current
+% tip, not the immutable site centre, decides collision and nearest side; the
+% general body-label path first unions all rectangles and invokes this once,
+% so a later rectangle cannot undo an earlier escape.
+\cs_new_protected:Npn \tenkzl_side_cup_avoid_loaded_trans_stub:NNNNNN
+  #1#2#3#4#5#6
+  {
+    \tenkzl_side_cup_project_trans:NNN #3 #4
+      \l__tenkzl_labelsiteproj_dim
+    \bool_set:Nn \l_tmpa_bool
+      {
+        ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } <
+            { \l__tenkzl_labeltransmin_dim - \l__tenkzl_cupbulge_dim }
+        &&
+        ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } >
+            { \l__tenkzl_labeltransmax_dim + \l__tenkzl_cupbulge_dim }
+      }
+    \bool_if:NT \l_tmpa_bool
+      {
+        \dim_compare:nNnTF
+          { \l__tenkzl_labelsiteproj_dim
+            - \l__tenkzl_labeltransmin_dim } <
+          { \l__tenkzl_labeltransmax_dim
+            - \l__tenkzl_labelsiteproj_dim }
+          { \dim_set:Nn \l__tenkzl_labelshift_dim
+              { \l__tenkzl_labeltransmin_dim
+                - 2 \l__tenkzl_cupbulge_dim } }
+          { \dim_set:Nn \l__tenkzl_labelshift_dim
               { \l__tenkzl_labeltransmax_dim
-                - \l__tenkzl_labelsiteproj_dim }
-              { \dim_set:Nn \l__tenkzl_labelshift_dim
-                  { \l__tenkzl_labeltransmin_dim
-                    - 2 \l__tenkzl_cupbulge_dim } }
-              { \dim_set:Nn \l__tenkzl_labelshift_dim
-                  { \l__tenkzl_labeltransmax_dim
-                    + 2 \l__tenkzl_cupbulge_dim } }
-            \tenkzl_side_cup_project:NNN #4 #5 \l__tenkzl_cupproj_dim
-            \dim_add:Nn \l__tenkzl_cupproj_dim
-              { \tenkz@dim{\tenkz@r@dotdia} / 2 }
-            \tenkzl_side_cup_from_projections:NNNN
-              \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #8 #9
-            \tenkzl_side_cup_project:NNN #6 #7 \l__tenkzl_cupproj_dim
-            \tenkzl_side_cup_from_projections:NNNN
-              \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #6 #7
-          }
+                + 2 \l__tenkzl_cupbulge_dim } }
+        \tenkzl_side_cup_project:NNN #1 #2 \l__tenkzl_cupproj_dim
+        \dim_add:Nn \l__tenkzl_cupproj_dim
+          { \tenkz@dim{\tenkz@r@dotdia} / 2 }
+        \tenkzl_side_cup_from_projections:NNNN
+          \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #5 #6
+        \tenkzl_side_cup_project:NNN #3 #4 \l__tenkzl_cupproj_dim
+        \tenkzl_side_cup_from_projections:NNNN
+          \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #3 #4
       }
   }
 
@@ -2076,6 +2146,21 @@
           (\dim_use:N \l__tenkzl_cupblx_dim,\dim_use:N \l__tenkzl_cupbly_dim)
           --
           (\dim_use:N \l__tenkzl_cupbtx_dim,\dim_use:N \l__tenkzl_cupbty_dim);
+        % Publish the line endpoints and Bezier controls.  The curve lies in
+        % their convex hull, so every later directional silhouette bounds the
+        % complete rendered cup without reverse-engineering its corridor.
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupalx_dim \l__tenkzl_cupaly_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupacx_dim \l__tenkzl_cupacy_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupbcx_dim \l__tenkzl_cupbcy_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupblx_dim \l__tenkzl_cupbly_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim
         % Both plain endpoint stubs render after the haloed connector, so its
         % round preaction caps cannot nick either sheet wire.
         \draw[bond]
@@ -2103,6 +2188,10 @@
     \draw[bond]
       (\dim_use:N \l__tenkzl_cupax_dim,\dim_use:N \l__tenkzl_cupay_dim) --
       (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim);
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim
     \msg_warning:nnne {tenkz}{lattice-side-cup-incomplete}
       {#1}{\int_eval:n {#2}-\int_eval:n {#3}}
     \tenkz@event{warning|picture=\the\tenkz@pictureid|%
@@ -2121,11 +2210,552 @@
         \dim_eval:n
           { ( \l__tenkzl_cupaly_dim + 3 \l__tenkzl_cupacy_dim
               + 3 \l__tenkzl_cupbcy_dim + \l__tenkzl_cupbly_dim ) / 8 } ) {};
-    \node[tn~label,anchor=center] at
+    \tenkzl_record_obstacle_bbox:n {\l__tenkzl_cupnode_tl}
+    \node[tn~label,anchor=center] (tenkzl-cup-label-probe) at
       ($(\l__tenkzl_cupnode_tl.center)
         +(\dim_use:N \l__tenkzl_cuplabeldx_dim,
           \dim_use:N \l__tenkzl_cuplabeldy_dim)$)
       {\box_use:N \l__tenkzl_cuplabel_box};
+    \tenkzl_record_obstacle_bbox:n {tenkzl-cup-label-probe}
+  }
+
+% -- (j) same-sheet periodic virtual closures -------------------------
+% Opposing trace policies close the corresponding lattice axis on EACH
+% sheet.  The west/east pair closes the column axis and routes beyond the
+% measured north silhouette; north/south closes the row axis and routes
+% beyond the measured east silhouette.  Every point is first produced by
+% the single lattice frame map.  The exterior lane is then resolved in an
+% orthonormal paper-frame basis from the measured silhouette plus the shared
+% daylight, never from a predicted frame-specific offset.
+\dim_new:N \l__tenkzl_trax_dim
+\dim_new:N \l__tenkzl_tray_dim
+\dim_new:N \l__tenkzl_tratx_dim
+\dim_new:N \l__tenkzl_traty_dim
+\dim_new:N \l__tenkzl_trbx_dim
+\dim_new:N \l__tenkzl_trby_dim
+\dim_new:N \l__tenkzl_trbtx_dim
+\dim_new:N \l__tenkzl_trbty_dim
+\dim_new:N \l__tenkzl_tralx_dim
+\dim_new:N \l__tenkzl_traly_dim
+\dim_new:N \l__tenkzl_trblx_dim
+\dim_new:N \l__tenkzl_trbly_dim
+\dim_new:N \l__tenkzl_trasx_dim
+\dim_new:N \l__tenkzl_trasy_dim
+\dim_new:N \l__tenkzl_trbsx_dim
+\dim_new:N \l__tenkzl_trbsy_dim
+\dim_new:N \l__tenkzl_trtransa_dim
+\dim_new:N \l__tenkzl_trtransb_dim
+\dim_new:N \l__tenkzl_trlane_dim
+\int_new:N \l__tenkzl_trsheet_int
+\int_new:N \l__tenkzl_trslot_int
+\int_new:N \l__tenkzl_trordinal_int
+
+\prg_new_conditional:Npnn \tenkzl_side_trace:n #1 { T, F, TF }
+  {
+    \tenkzl_side_policy:nN {#1} \l__tenkzl_tmp_tl
+    \str_if_eq:VnTF \l__tenkzl_tmp_tl {trace}
+      { \prg_return_true: } { \prg_return_false: }
+  }
+
+\prg_new_conditional:Npnn \tenkzl_endpoint_exists:nnn #1#2#3
+    { p, T, F, TF }
+  {
+    \bool_lazy_and:nnTF
+      { ! \prop_if_in_p:Ne \l__tenkzl_removed_prop
+          { \tenkzl_key:nn { \int_eval:n {#1} }{ \int_eval:n {#2} } } }
+      { ! \tenkzl_removed_on_p:nnn
+          { \int_eval:n {#1} }{ \int_eval:n {#2} }{ \int_eval:n {#3} } }
+      { \prg_return_true: } { \prg_return_false: }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_side_traces:
+  {
+    \tenkzl_draw_trace_axis:nnn {west}{east}{north}
+    \tenkzl_draw_trace_axis:nnn {north}{south}{east}
+  }
+
+% #1/#2 are opposing endpoint sides; #3 is the exterior routing side.
+\cs_new_protected:Npn \tenkzl_draw_trace_axis:nnn #1#2#3
+  {
+    \tenkzl_side_trace:nTF {#1}
+      {
+        \tenkzl_side_trace:nTF {#2}
+          { \tenkzl_draw_paired_trace_axis:nnn {#1}{#2}{#3} }
+          { \tenkzl_draw_unpaired_trace_side:nn {#1}{#2} }
+      }
+      { \tenkzl_side_trace:nT {#2}
+          { \tenkzl_draw_unpaired_trace_side:nn {#2}{#1} } }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_unpaired_trace_side:nn #1#2
+  {
+    \msg_warning:nnnn {tenkz}{lattice-side-trace-unpaired}{#1}{#2}
+    \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+      code=side-trace-unpaired|side=#1|opposite=#2}
+    \tenkzl_draw_trace_side_stubs:n {#1}
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_paired_trace_axis:nnn #1#2#3
+  {
+    % Both the closure axis and its exterior routing axis must survive an
+    % expert frame.  A zero vector has no honest topology to draw.
+    \tenkzl_side_cup_direction:n {#1}
+    \bool_set:Nn \l_tmpa_bool
+      { \dim_compare_p:nNn { \l__tenkzl_cupnorm_dim } = {0pt} }
+    \tenkzl_side_cup_direction:n {#3}
+    \bool_set:Nn \l_tmpb_bool
+      { \dim_compare_p:nNn { \l__tenkzl_cupnorm_dim } = {0pt} }
+    \bool_lazy_or:nnTF { \l_tmpa_bool } { \l_tmpb_bool }
+      {
+        \prop_put:Nnn \l__tenkzl_tracedegenerate_prop {#1-#2}{1}
+        \msg_warning:nnn {tenkz}{lattice-side-trace-zero-vector}{#1/#2}
+        \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+          code=side-trace-zero-vector|axis=#1-#2}
+        \tenkzl_draw_trace_side_stubs:n {#1}
+        \tenkzl_draw_trace_side_stubs:n {#2}
+      }
+      {
+        \tenkzl_trace_silhouette:n {#3}
+        \str_if_eq:nnTF {#1}{west}
+          {
+            \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+              \l__tenkzl_trsheet_int
+              {
+                \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+                  \l__tenkzl_trslot_int
+                  {
+                    \int_set:Nn \l__tenkzl_trordinal_int
+                      { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
+                        + \l__tenkzl_trslot_int - 1 }
+                    \tenkzl_draw_trace_at:nnnnnn {west}{east}
+                      {\l__tenkzl_trslot_int}{1}
+                      {\l__tenkzl_trslot_int}{\l__tenkzl_ncols_int}
+                  }
+              }
+          }
+          {
+            \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+              \l__tenkzl_trsheet_int
+              {
+                \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+                  \l__tenkzl_trslot_int
+                  {
+                    \int_set:Nn \l__tenkzl_trordinal_int
+                      { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
+                        + \l__tenkzl_trslot_int - 1 }
+                    \tenkzl_draw_trace_at:nnnnnn {north}{south}
+                      {1}{\l__tenkzl_trslot_int}
+                      {\l__tenkzl_nrows_int}{\l__tenkzl_trslot_int}
+                  }
+              }
+          }
+      }
+  }
+
+% Add every surviving boundary tip on one routing-side cell to the periodic
+% silhouette.  Unlike a cup, a trace is sheet-local and may have any positive
+% sheet count, so its scan must neither invent sheet 1 nor stop after it.
+\cs_new_protected:Npn \tenkzl_trace_silhouette_at:nnn #1#2#3
+  {
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_cupscansheet_int
+      {
+        \tenkzl_endpoint_exists:nnnT
+          {#2}{#3}{\l__tenkzl_cupscansheet_int}
+          {
+            \tenkzl_side_cup_silhouette_point:nnnn
+              {#1}{#2}{#3}{\l__tenkzl_cupscansheet_int}
+          }
+      }
+  }
+
+% Cup routing only needs a site's transverse span because a real cup always
+% has outward boundary tips.  A trace may retain closure endpoints after all
+% routing-side sites are removed, so its private wrapper also measures each
+% surviving site centre outward.  The corridor adds dot radius and daylight.
+\cs_new_protected:Npn \tenkzl_trace_site_silhouette:nnn #1#2#3
+  {
+    \tenkzl_side_cup_site_silhouette:nnn {#1}{#2}{#3}
+    \tenkzl_endpoint_exists:nnnT {#1}{#2}{#3}
+      {
+        \tenkzl_xyz:nnnNN {#1}{#2}{#3}
+          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+        \tenkzl_side_cup_project:NNN
+          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
+        \dim_set:Nn \l__tenkzl_cupsil_dim
+          { \dim_max:nn {\l__tenkzl_cupsil_dim}
+              {\l__tenkzl_cupproj_dim} }
+      }
+  }
+
+% Measure every surviving site and every real routing-side boundary tip in
+% the chosen direction, then extend that exact silhouette by every already-
+% rendered body site-label rectangle.  Body content therefore remains
+% materialize-once even when it controls periodic routing.
+\cs_new_protected:Npn \tenkzl_trace_silhouette:n #1
+  {
+    \tenkzl_side_cup_direction:n {#1}
+    \dim_set:Nn \l__tenkzl_cupsil_dim { -\c_max_dim }
+    \dim_set:Nn \l__tenkzl_cuptransmin_dim { \c_max_dim }
+    \dim_set:Nn \l__tenkzl_cuptransmax_dim { -\c_max_dim }
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_cupscansheet_int
+      {
+        \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+          \l__tenkzl_cupscanrow_int
+          {
+            \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+              \l__tenkzl_cupscancol_int
+              {
+                \tenkzl_trace_site_silhouette:nnn
+                  {\l__tenkzl_cupscanrow_int}
+                  {\l__tenkzl_cupscancol_int}
+                  {\l__tenkzl_cupscansheet_int}
+              }
+          }
+      }
+    % Only real routing-side legs contribute tips.  An open side draws them;
+    % a trace side will draw its sheet-local stubs later in this pass.  A
+    % sealed side contributes nothing, while a cup has already registered its
+    % actual rendered curve in the shared obstacle sequence.
+    \tenkzl_side_open:nN {#1} \l_tmpa_bool
+    \tenkzl_side_trace:nT {#1} { \bool_set_true:N \l_tmpa_bool }
+    \bool_if:NT \l_tmpa_bool
+      {
+        \str_case:nn {#1}
+          {
+            {west}
+              { \int_step_inline:nn {\l__tenkzl_nrows_int}
+                  { \tenkzl_trace_silhouette_at:nnn {west}{##1}{1} } }
+            {east}
+              { \int_step_inline:nn {\l__tenkzl_nrows_int}
+                  { \tenkzl_trace_silhouette_at:nnn {east}{##1}
+                      {\l__tenkzl_ncols_int} } }
+            {north}
+              { \int_step_inline:nn {\l__tenkzl_ncols_int}
+                  { \tenkzl_trace_silhouette_at:nnn {north}{1}{##1} } }
+            {south}
+              { \int_step_inline:nn {\l__tenkzl_ncols_int}
+                  { \tenkzl_trace_silhouette_at:nnn {south}
+                      {\l__tenkzl_nrows_int}{##1} } }
+          }
+      }
+    \dim_add:Nn \l__tenkzl_cupsil_dim {\tenkz@dim{\tenkz@r@daylight}}
+    \seq_map_inline:Nn \l__tenkzl_obstacles_seq
+      {##1}
+  }
+
+\cs_new_protected:Npn \tenkzl_trace_include_obstacle:nn #1#2
+  {
+    \dim_set:Nn \l__tenkzl_labelprojx_dim {#1}
+    \dim_set:Nn \l__tenkzl_labelprojy_dim {#2}
+    \tenkzl_trace_include_corner:NN
+      \l__tenkzl_labelprojx_dim \l__tenkzl_labelprojy_dim
+  }
+
+% Accumulate one stored body-label rectangle into a single transverse
+% forbidden interval.  Complete traces apply the union once to both leads, so
+% multiple or overlapping boxes cannot undo one another's escape.
+\cs_new_protected:Npn \tenkzl_trace_include_obstacle_bbox:nnnn #1#2#3#4
+  {
+    \dim_set:Nn \l__tenkzl_labelxmin_dim {#1}
+    \dim_set:Nn \l__tenkzl_labelxmax_dim {#2}
+    \dim_set:Nn \l__tenkzl_labelymin_dim {#3}
+    \dim_set:Nn \l__tenkzl_labelymax_dim {#4}
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
+  }
+
+\cs_new_protected:Npn \tenkzl_trace_include_corner:NN #1#2
+  {
+    \tenkzl_side_cup_project:NNN #1 #2 \l__tenkzl_cupproj_dim
+    \dim_set:Nn \l__tenkzl_cupsil_dim
+      { \dim_max:nn {\l__tenkzl_cupsil_dim}
+          {\l__tenkzl_cupproj_dim + \tenkz@dim{\tenkz@r@daylight}} }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_trace_at:nnnnnn #1#2#3#4#5#6
+  {
+    \bool_set:Nn \l_tmpa_bool
+      { \tenkzl_endpoint_exists_p:nnn {#3}{#4}{\l__tenkzl_trsheet_int} }
+    \bool_set:Nn \l_tmpb_bool
+      { \tenkzl_endpoint_exists_p:nnn {#5}{#6}{\l__tenkzl_trsheet_int} }
+    \bool_if:NTF \l_tmpa_bool
+      {
+        \bool_if:NTF \l_tmpb_bool
+          { \tenkzl_draw_complete_trace_at:nnnnnn {#1}{#2}{#3}{#4}{#5}{#6} }
+          { \tenkzl_draw_incomplete_trace_at:nnnn {#1}{#3}{#4}{#1-#2} }
+      }
+      { \bool_if:NT \l_tmpb_bool
+          { \tenkzl_draw_incomplete_trace_at:nnnn {#2}{#5}{#6}{#1-#2} } }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_complete_trace_at:nnnnnn #1#2#3#4#5#6
+  {
+    % An earlier incomplete endpoint may have used the shared projection
+    % registers for its own side vector.  Re-establish this axis's routing
+    % basis for every complete closure instead of relying on loop ordering.
+    \str_if_eq:nnTF {#1}{west}
+      { \tenkzl_side_cup_direction:n {north} }
+      { \tenkzl_side_cup_direction:n {east} }
+    \tenkzl_side_point:nnnnnNN {#1}{#3}{#4}{\l__tenkzl_trsheet_int}{0pt}
+      \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+    \tenkzl_side_point:nnnnnNN {#1}{#3}{#4}{\l__tenkzl_trsheet_int}
+      {\tenkz@dim{\tenkz@r@boundaryleg}}
+      \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+    \tenkzl_side_point:nnnnnNN {#2}{#5}{#6}{\l__tenkzl_trsheet_int}{0pt}
+      \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
+    \tenkzl_side_point:nnnnnNN {#2}{#5}{#6}{\l__tenkzl_trsheet_int}
+      {\tenkz@dim{\tenkz@r@boundaryleg}}
+      \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
+    % Physical outer legs are vertical in the paper frame.  North/south
+    % virtual stubs would otherwise lie on the same ray, so stagger their tips
+    % toward the paper-east routing lane by the existing bead/daylight band.
+    % The haloed return then never crosses and punches a gap in the physical
+    % ray.  This is measured resolution after the frame map, not a second map.
+    \str_if_eq:nnT {#1}{north}
+      {
+        \tenkzl_trace_separate_ns_stub:N \l__tenkzl_tratx_dim
+        \tenkzl_trace_separate_ns_stub:N \l__tenkzl_trbtx_dim
+        % Adjacent sheets can project one south tip and the next north tip
+        % to the same paper point.  Shorten them toward their own sites by a
+        % measured bead/daylight gap so their eastbound leads are not
+        % collinear and cannot acquire a false inter-sheet segment.
+        \dim_sub:Nn \l__tenkzl_traty_dim
+          { \tenkz@dim{\tenkz@r@daylight} }
+        \dim_add:Nn \l__tenkzl_trbty_dim
+          { \tenkz@dim{\tenkz@r@daylight} }
+      }
+    \dim_set:Nn \l__tenkzl_cupbulge_dim
+      { \tenkz@dim{\tenkz@r@dotdia} / 2
+        + \tenkz@dim{\tenkz@r@daylight} }
+    % Reuse the measured cup endpoint escape: a farther exterior lane alone
+    % cannot stop a fixed lead from crossing an opaque body label.
+    \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+      {#3}{#4}{\l__tenkzl_trsheet_int}
+      \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+      \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+      \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
+    \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+      {#5}{#6}{\l__tenkzl_trsheet_int}
+      \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
+      \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
+      \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
+    \seq_if_empty:NF \l__tenkzl_obstaclebboxes_seq
+      {
+        \dim_set:Nn \l__tenkzl_labeltransmin_dim {\c_max_dim}
+        \dim_set:Nn \l__tenkzl_labeltransmax_dim {-\c_max_dim}
+        \seq_map_inline:Nn \l__tenkzl_obstaclebboxes_seq {##1}
+        \tenkzl_side_cup_avoid_loaded_trans_stub:NNNNNN
+          \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+          \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+          \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
+        \tenkzl_side_cup_avoid_loaded_trans_stub:NNNNNN
+          \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
+          \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
+          \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
+      }
+    % A one-row N/S closure queries the same site label for both endpoints.
+    % The shared avoidance primitive deliberately chooses one safe transverse
+    % coordinate; restore sheet-local distinction farther on that safe side.
+    \tenkzl_trace_stagger_label_escape:nNNNNNN {1}
+      \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+      \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+      \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
+    \tenkzl_trace_stagger_label_escape:nNNNNNN {2}
+      \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
+      \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
+      \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
+    \tenkzl_side_cup_project_trans:NNN
+      \l__tenkzl_tratx_dim \l__tenkzl_traty_dim \l__tenkzl_trtransa_dim
+    \tenkzl_side_cup_project_trans:NNN
+      \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim \l__tenkzl_trtransb_dim
+    \dim_set:Nn \l__tenkzl_trlane_dim
+      { \l__tenkzl_cupsil_dim + \tenkz@dim{\tenkz@r@dotdia} / 2
+        + \tenkz@dim{\tenkz@r@daylight}
+        + ( \tenkz@dim{\tenkz@r@dotdia}
+            + \tenkz@dim{\tenkz@r@daylight} )
+          * \l__tenkzl_trordinal_int }
+    \tenkzl_side_cup_from_projections:NNNN
+      \l__tenkzl_trlane_dim \l__tenkzl_trtransa_dim
+      \l__tenkzl_tralx_dim \l__tenkzl_traly_dim
+    \tenkzl_side_cup_from_projections:NNNN
+      \l__tenkzl_trlane_dim \l__tenkzl_trtransb_dim
+      \l__tenkzl_trblx_dim \l__tenkzl_trbly_dim
+    \draw[tenkz~lattice~side~trace]
+      (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim) --
+      (\dim_use:N \l__tenkzl_tralx_dim,\dim_use:N \l__tenkzl_traly_dim) --
+      (\dim_use:N \l__tenkzl_trblx_dim,\dim_use:N \l__tenkzl_trbly_dim) --
+      (\dim_use:N \l__tenkzl_trbtx_dim,\dim_use:N \l__tenkzl_trbty_dim);
+    % Plain endpoint stubs follow the haloed return path, preserving both caps.
+    \draw[bond]
+      (\dim_use:N \l__tenkzl_trax_dim,\dim_use:N \l__tenkzl_tray_dim) --
+      (\dim_use:N \l__tenkzl_trasx_dim,\dim_use:N \l__tenkzl_trasy_dim) --
+      (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim);
+    \draw[bond]
+      (\dim_use:N \l__tenkzl_trbtx_dim,\dim_use:N \l__tenkzl_trbty_dim) --
+      (\dim_use:N \l__tenkzl_trbsx_dim,\dim_use:N \l__tenkzl_trbsy_dim) --
+      (\dim_use:N \l__tenkzl_trbx_dim,\dim_use:N \l__tenkzl_trby_dim);
+    \tenkz@event{trace|picture=\the\tenkz@pictureid|lang=lattice|%
+      axis=#1-#2|sheet=\int_eval:n {\l__tenkzl_trsheet_int}|%
+      slot=\int_eval:n {\l__tenkzl_trslot_int}|%
+      from=\int_eval:n {#3}-\int_eval:n {#4}|%
+      to=\int_eval:n {#5}-\int_eval:n {#6}}
+  }
+
+% If label avoidance moved an escape point transversely, move both that point
+% and its tip another #1 daylight bands in the same label-free direction.
+% The site-to-escape stubs then diverge immediately outside the opaque dot,
+% while the label clearance proved by the shared primitive only increases.
+\cs_new_protected:Npn \tenkzl_trace_stagger_label_escape:nNNNNNN
+  #1#2#3#4#5#6#7
+  {
+    \tenkzl_side_cup_project_trans:NNN #2 #3
+      \l__tenkzl_labelsiteproj_dim
+    \tenkzl_side_cup_project_trans:NNN #6 #7
+      \l__tenkzl_labelshift_dim
+    \dim_compare:nNnF
+      {\l__tenkzl_labelshift_dim} = {\l__tenkzl_labelsiteproj_dim}
+      {
+        \dim_set:Nn \l__tenkzl_cupstubshift_dim
+          { \tenkz@dim{\tenkz@r@daylight} * #1 }
+        \dim_compare:nNnT
+          {\l__tenkzl_labelshift_dim} < {\l__tenkzl_labelsiteproj_dim}
+          { \dim_set:Nn \l__tenkzl_cupstubshift_dim
+              {-\l__tenkzl_cupstubshift_dim} }
+        \tenkzl_side_cup_project:NNN #4 #5 \l__tenkzl_cupproj_dim
+        \tenkzl_side_cup_project_trans:NNN #4 #5
+          \l__tenkzl_labelshift_dim
+        \dim_add:Nn \l__tenkzl_labelshift_dim
+          {\l__tenkzl_cupstubshift_dim}
+        \tenkzl_side_cup_from_projections:NNNN
+          \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #4 #5
+        \tenkzl_side_cup_project:NNN #6 #7 \l__tenkzl_cupproj_dim
+        \tenkzl_side_cup_project_trans:NNN #6 #7
+          \l__tenkzl_labelshift_dim
+        \dim_add:Nn \l__tenkzl_labelshift_dim
+          {\l__tenkzl_cupstubshift_dim}
+        \tenkzl_side_cup_from_projections:NNNN
+          \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #6 #7
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_trace_separate_ns_stub:N #1
+  {
+    \dim_add:Nn #1
+      { ( \tenkz@dim{\tenkz@r@dotdia}
+          + \tenkz@dim{\tenkz@r@daylight} )
+        * \int_eval:n { \l__tenkzl_trordinal_int + 1 } }
+  }
+
+% An unresolved trace has no eastbound return lane.  Its honest open virtual
+% stub instead leaves toward paper west, away from both the vertical physical
+% ray and the north-east site-label quadrant.
+\cs_new_protected:Npn \tenkzl_trace_separate_open_ns_stub:N #1
+  {
+    \dim_sub:Nn #1
+      { ( \tenkz@dim{\tenkz@r@dotdia}
+          + \tenkz@dim{\tenkz@r@daylight} )
+        * \int_eval:n { \l__tenkzl_trordinal_int + 1 } }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_incomplete_trace_at:nnnn #1#2#3#4
+  {
+    \tenkzl_draw_trace_stub_at:nnn {#1}{#2}{#3}
+    \msg_warning:nnnnn {tenkz}{lattice-side-trace-incomplete}
+      {#4}{\int_eval:n {\l__tenkzl_trsheet_int}}
+      {\int_eval:n {\l__tenkzl_trslot_int}}
+    \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+      code=side-trace-incomplete|axis=#4|sheet=\int_eval:n
+      {\l__tenkzl_trsheet_int}|slot=\int_eval:n {\l__tenkzl_trslot_int}|side=#1}
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_trace_stub_at:nnn #1#2#3
+  {
+    \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{\l__tenkzl_trsheet_int}{0pt}
+      \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+    \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{\l__tenkzl_trsheet_int}
+      {\tenkz@dim{\tenkz@r@boundaryleg}}
+      \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+    \str_if_eq:nnT {#1}{north}
+      { \tenkzl_trace_separate_open_ns_stub:N \l__tenkzl_tratx_dim }
+    \str_if_eq:nnT {#1}{south}
+      { \tenkzl_trace_separate_open_ns_stub:N \l__tenkzl_tratx_dim }
+    \dim_set_eq:NN \l__tenkzl_trasx_dim \l__tenkzl_trax_dim
+    \dim_set_eq:NN \l__tenkzl_trasy_dim \l__tenkzl_tray_dim
+    \tenkzl_side_cup_direction:n {#1}
+    \dim_compare:nNnF { \l__tenkzl_cupnorm_dim } = {0pt}
+      {
+        \dim_set:Nn \l__tenkzl_cupbulge_dim
+          { \tenkz@dim{\tenkz@r@dotdia} / 2
+            + \tenkz@dim{\tenkz@r@daylight} }
+        \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+          {#2}{#3}{\l__tenkzl_trsheet_int}
+          \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+          \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+          \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
+      }
+    \draw[bond]
+      (\dim_use:N \l__tenkzl_trax_dim,\dim_use:N \l__tenkzl_tray_dim) --
+      (\dim_use:N \l__tenkzl_trasx_dim,\dim_use:N \l__tenkzl_trasy_dim) --
+      (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim);
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_trace_side_stubs:n #1
+  {
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_trsheet_int
+      {
+        \str_case:nn {#1}
+          {
+            {west} { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+              \l__tenkzl_trslot_int
+              { \int_set:Nn \l__tenkzl_trordinal_int
+                  { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
+                    + \l__tenkzl_trslot_int - 1 }
+                \tenkzl_endpoint_exists:nnnT
+                  {\l__tenkzl_trslot_int}{1}{\l__tenkzl_trsheet_int}
+                  { \tenkzl_draw_trace_stub_at:nnn {west}
+                      {\l__tenkzl_trslot_int}{1} } } }
+            {east} { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+              \l__tenkzl_trslot_int
+              { \int_set:Nn \l__tenkzl_trordinal_int
+                  { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
+                    + \l__tenkzl_trslot_int - 1 }
+                \tenkzl_endpoint_exists:nnnT
+                  {\l__tenkzl_trslot_int}{\l__tenkzl_ncols_int}
+                  {\l__tenkzl_trsheet_int}
+                  { \tenkzl_draw_trace_stub_at:nnn {east}
+                      {\l__tenkzl_trslot_int}
+                      {\l__tenkzl_ncols_int} } } }
+            {north} { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+              \l__tenkzl_trslot_int
+              { \int_set:Nn \l__tenkzl_trordinal_int
+                  { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
+                    + \l__tenkzl_trslot_int - 1 }
+                \tenkzl_endpoint_exists:nnnT
+                  {1}{\l__tenkzl_trslot_int}{\l__tenkzl_trsheet_int}
+                  { \tenkzl_draw_trace_stub_at:nnn {north}{1}
+                      {\l__tenkzl_trslot_int} } } }
+            {south} { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+              \l__tenkzl_trslot_int
+              { \int_set:Nn \l__tenkzl_trordinal_int
+                  { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
+                    + \l__tenkzl_trslot_int - 1 }
+                \tenkzl_endpoint_exists:nnnT {\l__tenkzl_nrows_int}
+                  {\l__tenkzl_trslot_int}
+                  {\l__tenkzl_trsheet_int}
+                  { \tenkzl_draw_trace_stub_at:nnn {south}
+                      {\l__tenkzl_nrows_int}
+                      {\l__tenkzl_trslot_int} } } }
+          }
+      }
   }
 
 % removed-site events.  The audit rebuilds region set-algebra from these
@@ -2527,7 +3157,8 @@
         % itself never shears)
         \tl_if_blank:nF {#8}
           {
-            \node[tn~label, anchor=south~west] at
+            \node[tn~label, anchor=south~west]
+              (tenkzl-edge-label-probe) at
               ( \dim_eval:n
                   { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
                     + \tenkz@dim{\tenkz@r@labelclear} } ,
@@ -2535,6 +3166,7 @@
                   { ( \l__tenkzl_qy_dim + \l__tenkzl_py_dim ) / 2
                     + \tenkz@dim{\tenkz@r@labelclear} } )
               {#8};
+            \tenkzl_record_obstacle_bbox:n {tenkzl-edge-label-probe}
           }
         % the audit rebuilds region set-algebra from these events (a
         % distinguished edge names two cells of the header's universe)
@@ -2634,6 +3266,13 @@
                       ( \dim_use:N \l__tenkzl_px_dim ,
                         \dim_eval:n { \l__tenkzl_py_dim
                                       + \tenkz@dim{\tenkz@r@physleg} } );
+                    \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+                    \dim_set:Nn \l__tenkzl_qy_dim
+                      { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
+                    \tenkzl_record_obstacle_point:NN
+                      \l__tenkzl_px_dim \l__tenkzl_py_dim
+                    \tenkzl_record_obstacle_point:NN
+                      \l__tenkzl_qx_dim \l__tenkzl_qy_dim
                     \str_if_eq:VnT \l__tenkzl_physical_tl {updown}
                       {
                         \draw[physical~leg]
@@ -2642,6 +3281,14 @@
                           ( \dim_use:N \l__tenkzl_px_dim ,
                             \dim_eval:n { \l__tenkzl_py_dim
                                           - \tenkz@dim{\tenkz@r@physleg} } );
+                        \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+                        \dim_set:Nn \l__tenkzl_qy_dim
+                          { \l__tenkzl_py_dim
+                            - \tenkz@dim{\tenkz@r@physleg} }
+                        \tenkzl_record_obstacle_point:NN
+                          \l__tenkzl_px_dim \l__tenkzl_py_dim
+                        \tenkzl_record_obstacle_point:NN
+                          \l__tenkzl_qx_dim \l__tenkzl_qy_dim
                       }
                   }
               }
@@ -2805,6 +3452,7 @@
     \prop_put:Nee \l__tenkzl_labelymax_prop
       { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
       { \dim_use:N \l__tenkzl_labelymax_dim }
+    \tenkzl_record_obstacle_bbox:n {tenkzl-site-label-probe}
   }
 % all six record groups are consumed (the inset #6 is label-irrelevant):
 % a leftover group would be typeset in the picture's nullfont context --
@@ -2851,9 +3499,11 @@
     \tl_set:Ne \l__tenkzl_tmp_tl
       { \bool_if:NTF \l__tenkzl_oblique_bool
           { \tenkzl_flipanchor:n {#1} } {#1} }
-    \node[tn~label, anchor=\l__tenkzl_tmp_tl] at
+    \node[tn~label, anchor=\l__tenkzl_tmp_tl]
+      (tenkzl-region-label-probe) at
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
       { $#6$ };
+    \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
   }
 % place the label inside the requested corner of the boundary box (the four
 % corner anchors equal their key names; center is the box midpoint).  An
@@ -2880,9 +3530,11 @@
                  + \tenkzl_cx:n{\l__tenkzl_cmax_int} ) / 2 }
               { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
                  + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
-            \node[tn~label, anchor=center] at
+            \node[tn~label, anchor=center]
+              (tenkzl-region-label-probe) at
               ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
-              { $#2$ }; }
+              { $#2$ };
+            \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe} }
       }
   }
 
@@ -3131,6 +3783,35 @@
     \draw[trace]
       ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_dx_dim ) --
       ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) ;
+    % The straight return lies between the two east cap endpoints, and each
+    % semicircle stays inside the axis-aligned paper-frame bounds below.
+    % Publish all four corners so a later directional silhouette contains the
+    % actual pairing racetrack without depending on the lattice frame.
+    \dim_set:Nn \l__tenkzl_labelxmin_dim
+      { \dim_min:nn { \l__tenkzl_px_dim }{ \l__tenkzl_qx_dim } }
+    \dim_set:Nn \l__tenkzl_labelxmax_dim
+      {
+        \dim_max:nn { \l__tenkzl_px_dim }{ \l__tenkzl_qx_dim }
+        + \tenkz@dim{\tenkz@r@planetracereach}
+      }
+    \dim_set:Nn \l__tenkzl_labelymin_dim
+      {
+        \l__tenkzl_dx_dim
+        - \tenkz@dim{\tenkz@r@planetracereach} / 2
+      }
+    \dim_set:Nn \l__tenkzl_labelymax_dim
+      {
+        \l__tenkzl_dy_dim
+        + \tenkz@dim{\tenkz@r@planetracereach} / 2
+      }
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
     \tenkz@event{pairtrace|picture=\the\tenkz@pictureid|site=#1-#2\int_compare:nNnT
       { \l__tenkzl_sheets_int } > {2} {|interface=#3}}
   }
@@ -3173,6 +3854,13 @@
               ( \dim_use:N \l__tenkzl_px_dim ,
                 \dim_eval:n { \l__tenkzl_py_dim
                               + \tenkz@dim{\tenkz@r@physleg} } );
+            \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+            \dim_set:Nn \l__tenkzl_qy_dim
+              { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
+            \tenkzl_record_obstacle_point:NN
+              \l__tenkzl_px_dim \l__tenkzl_py_dim
+            \tenkzl_record_obstacle_point:NN
+              \l__tenkzl_qx_dim \l__tenkzl_qy_dim
           }
         \bool_lazy_and:nnT
           { \tenkzl_outer_face_p:n {bottom} }
@@ -3186,6 +3874,13 @@
               ( \dim_use:N \l__tenkzl_px_dim ,
                 \dim_eval:n { \l__tenkzl_py_dim
                               - \tenkz@dim{\tenkz@r@physleg} } );
+            \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+            \dim_set:Nn \l__tenkzl_qy_dim
+              { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} }
+            \tenkzl_record_obstacle_point:NN
+              \l__tenkzl_px_dim \l__tenkzl_py_dim
+            \tenkzl_record_obstacle_point:NN
+              \l__tenkzl_qx_dim \l__tenkzl_qy_dim
           }
       }
   }
@@ -3198,9 +3893,15 @@
 % budget against these fields.
 \cs_new_protected:Npn \tenkzl_emit_boundary:
   {
-    \bool_lazy_or:nnT
-      { \l__tenkzl_pairing_bool }
-      { ! \str_if_eq_p:Vn \l__tenkzl_outer_tl {none} }
+    \bool_lazy_any:nT
+      {
+        { \l__tenkzl_pairing_bool }
+        { ! \str_if_eq_p:Vn \l__tenkzl_outer_tl {none} }
+        { \str_if_eq_p:Vn \l__tenkzl_wpol_tl {trace} }
+        { \str_if_eq_p:Vn \l__tenkzl_epol_tl {trace} }
+        { \str_if_eq_p:Vn \l__tenkzl_npol_tl {trace} }
+        { \str_if_eq_p:Vn \l__tenkzl_spol_tl {trace} }
+      }
       {
         \int_zero:N \l__tenkzl_bot_int
         \int_zero:N \l__tenkzl_bob_int
@@ -3256,6 +3957,99 @@
           }
       }
     \tenkzl_count_unresolved_side_cups:
+    \tenkzl_count_unresolved_side_traces:
+  }
+
+% A successful opposing trace consumes both same-sheet endpoints.  A
+% one-sided request, a degenerate expert frame, or a missing endpoint leaves
+% exactly the surviving requested ports open in the boundary signature.
+\cs_new_protected:Npn \tenkzl_count_unresolved_side_traces:
+  {
+    \tenkzl_count_trace_axis:nn {west}{east}
+    \tenkzl_count_trace_axis:nn {north}{south}
+  }
+
+\cs_new_protected:Npn \tenkzl_count_trace_axis:nn #1#2
+  {
+    \tenkzl_side_trace:nTF {#1}
+      {
+        \tenkzl_side_trace:nTF {#2}
+          { \tenkzl_count_paired_trace_axis:nn {#1}{#2} }
+          { \tenkzl_count_trace_side:n {#1} }
+      }
+      { \tenkzl_side_trace:nT {#2} { \tenkzl_count_trace_side:n {#2} } }
+  }
+
+\cs_new_protected:Npn \tenkzl_count_paired_trace_axis:nn #1#2
+  {
+    \prop_if_in:NnTF \l__tenkzl_tracedegenerate_prop {#1-#2}
+      {
+        \tenkzl_count_trace_side:n {#1}
+        \tenkzl_count_trace_side:n {#2}
+      }
+      {
+        \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+          \l__tenkzl_trsheet_int
+          {
+            \str_if_eq:nnTF {#1}{west}
+              {
+                \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+                  \l__tenkzl_trslot_int
+                  { \tenkzl_count_trace_pair_at:nnnnNN
+                      {\l__tenkzl_trslot_int}{1}
+                      {\l__tenkzl_trslot_int}{\l__tenkzl_ncols_int}
+                      \l__tenkzl_bvw_int \l__tenkzl_bve_int }
+              }
+              {
+                \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+                  \l__tenkzl_trslot_int
+                  { \tenkzl_count_trace_pair_at:nnnnNN
+                      {1}{\l__tenkzl_trslot_int}
+                      {\l__tenkzl_nrows_int}{\l__tenkzl_trslot_int}
+                      \l__tenkzl_bvn_int \l__tenkzl_bvs_int }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_count_trace_pair_at:nnnnNN #1#2#3#4#5#6
+  {
+    \bool_set:Nn \l_tmpa_bool
+      { \tenkzl_endpoint_exists_p:nnn {#1}{#2}{\l__tenkzl_trsheet_int} }
+    \bool_set:Nn \l_tmpb_bool
+      { \tenkzl_endpoint_exists_p:nnn {#3}{#4}{\l__tenkzl_trsheet_int} }
+    \bool_if:NTF \l_tmpa_bool
+      { \bool_if:NF \l_tmpb_bool { \int_incr:N #5 } }
+      { \bool_if:NT \l_tmpb_bool { \int_incr:N #6 } }
+  }
+
+\cs_new_protected:Npn \tenkzl_count_trace_side:n #1
+  {
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_trsheet_int
+      {
+        \str_case:nn {#1}
+          {
+            {west} { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+              \l__tenkzl_trslot_int
+              { \tenkzl_count_virtual_at:nnnN {\l__tenkzl_trslot_int}{1}
+                  {\l__tenkzl_trsheet_int} \l__tenkzl_bvw_int } }
+            {east} { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+              \l__tenkzl_trslot_int
+              { \tenkzl_count_virtual_at:nnnN {\l__tenkzl_trslot_int}
+                  {\l__tenkzl_ncols_int}
+                  {\l__tenkzl_trsheet_int} \l__tenkzl_bve_int } }
+            {north} { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+              \l__tenkzl_trslot_int
+              { \tenkzl_count_virtual_at:nnnN {1}{\l__tenkzl_trslot_int}
+                  {\l__tenkzl_trsheet_int} \l__tenkzl_bvn_int } }
+            {south} { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+              \l__tenkzl_trslot_int
+              { \tenkzl_count_virtual_at:nnnN {\l__tenkzl_nrows_int}
+                  {\l__tenkzl_trslot_int}
+                  {\l__tenkzl_trsheet_int} \l__tenkzl_bvs_int } }
+          }
+      }
   }
 
 % A requested cup consumes two ports only when both endpoints and a usable

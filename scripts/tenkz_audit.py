@@ -154,7 +154,12 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     # forward/reverse (direction along the wire); accept both spellings.
     "bond": {"picture": _is_int, "row": _is_int, "from": _is_int, "to": _is_int,
              "dir": _enum("none", "left", "right", "forward", "reverse")},
-    "trace": {"picture": _is_int, "row": _is_int, "side": _enum("above", "below")},
+    "trace": {"picture": _is_int, "row": _is_int,
+              "side": _enum("above", "below"),
+              "lang": _enum("lattice"),
+              "axis": _enum("west-east", "north-south"),
+              "sheet": _is_nonnegative_int, "slot": _is_positive_int,
+              "from": _is_cell, "to": _is_cell},
     "hooks": {"picture": _is_int, "row": _is_int, "side": _enum("above", "below")},
     "pairtrace": {"picture": _is_int, "row": _is_int, "col": _is_int, "site": _is_cell},
     "phtrace": {"picture": _is_int, "row": _is_int, "col": _is_int},
