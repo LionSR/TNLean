@@ -28,6 +28,7 @@ dimensions.
 * `IsKrausCPTP.isKrausCP`: a trace-preserving Kraus map is a Kraus CP map.
 * `IsKrausCP.map_posSemidef`: a Kraus CP map preserves positive
   semidefiniteness.
+* `IsKrausCP.traceAdjointMap`: the trace adjoint of a Kraus CP map is Kraus CP.
 * `IsKrausCPTP.trace_map`: a map satisfying `IsKrausCPTP` preserves trace.
 * `isKrausCPTP_of_isKrausCP_trace_preserving`: a Kraus CP map that preserves
   trace is Kraus CPTP.
@@ -122,6 +123,26 @@ theorem IsKrausCP.map_posSemidef
   obtain ⟨r, A, hA⟩ := hS
   rw [hA]
   exact Matrix.posSemidef_sum _ fun i _ => hX.mul_mul_conjTranspose_same (A i)
+
+/-- The trace adjoint of a completely positive map in rectangular Kraus form
+is completely positive. A Kraus family `A i` for the original map gives the
+conjugate-transposed Kraus family `(A i)ᴴ` for its trace adjoint. -/
+theorem IsKrausCP.traceAdjointMap
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCP S) :
+    IsKrausCP (Matrix.traceAdjointMap S) := by
+  obtain ⟨r, A, hA⟩ := hS
+  refine ⟨r, fun i ↦ (A i)ᴴ, ?_⟩
+  intro X
+  apply Matrix.ext_iff_trace_mul_right.mpr
+  intro Y
+  rw [Matrix.trace_traceAdjointMap_mul, hA]
+  rw [Matrix.mul_sum, Matrix.trace_sum, Matrix.sum_mul, Matrix.trace_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [Matrix.conjTranspose_conjTranspose]
+  simpa only [Matrix.mul_assoc] using
+    Matrix.trace_mul_cycle (X * A i) Y (A i)ᴴ
 
 /-- A completely positive map in rectangular Kraus form sends positive
 semidefinite matrices to positive semidefinite matrices. -/

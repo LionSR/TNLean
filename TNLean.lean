@@ -208,6 +208,7 @@ import TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks
 import TNLean.Channel.FixedPoint.DirectSumBlockRetraction
 import TNLean.Channel.FixedPoint.TraceNonincreasingProductSpan
 import TNLean.Channel.FixedPoint.TraceNonincreasingDirectSum
+import TNLean.Channel.FixedPoint.DirectSumTraceAdjoint
 import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.StationaryProjection
@@ -259,7 +260,6 @@ import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.CrossCorrelation
 import TNLean.Spectral.QuantitativeGap
-
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
 import TNLean.MPS.OpenBoundary

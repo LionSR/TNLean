@@ -28,6 +28,8 @@ the particular transported vertical-sector maps are separate.
 * `Matrix.directSumMapExtension`: the canonical full-matrix extension of a map
   between two finite sums of matrix algebras.
 * `Matrix.IsKrausDirectSumMap`: complete positivity through this extension.
+* `Matrix.IsKrausDirectSumMap.map_posSemidef`: complete positivity preserves
+  positive-semidefinite families.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder
@@ -96,6 +98,22 @@ def IsKrausDirectSumMap
     (T : (∀ i, Matrix (n i) (n i) ℂ) →ₗ[ℂ]
       (∀ j, Matrix (m j) (m j) ℂ)) : Prop :=
   IsKrausCP (directSumMapExtension T)
+
+/-- A completely positive map between finite sums of full matrix algebras
+sends every positive-semidefinite family to a positive-semidefinite family. -/
+theorem IsKrausDirectSumMap.map_posSemidef
+    {T : (∀ i, Matrix (n i) (n i) ℂ) →ₗ[ℂ]
+      (∀ j, Matrix (m j) (m j) ℂ)}
+    (hT : IsKrausDirectSumMap T)
+    {A : ∀ i, Matrix (n i) (n i) ℂ}
+    (hA : ∀ i, (A i).PosSemidef) (j : κ) :
+    (T A j).PosSemidef := by
+  have hExt :
+      (directSumMapExtension T (directSumDiagonalEmbedding A)).PosSemidef :=
+    IsKrausCP.map_posSemidef hT (directSumDiagonalEmbedding_posSemidef hA)
+  have hj := directSumDiagonalCompression_posSemidef hExt j
+  simpa only [directSumMapExtension_apply,
+    directSumDiagonalCompression_embedding] using hj
 
 /-- Composition preserves complete positivity for maps between finite sums of
 full matrix algebras. -/
