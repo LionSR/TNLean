@@ -376,18 +376,22 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 
 \begin{theorem}[Local orthogonal sums preserve SAL]
     \label{thm:mpdo_local_orthogonal_sum_sal}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState}
     \lean{MPOTensor.isSAL_of_localOrthogonalSum}
+    \lean{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily}
+    \lean{MPOTensor.isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSectorFamily}
     \leanok
-    \uses{def:is_sal}
+    \uses{def:is_sal,def:mpdo_orthogonal_commuting_sector_family}
     Let $\{K_x\}_{x=0}^{g-1}$ be a nonempty finite family of MPO tensors,
     let $n_x$ be positive natural numbers, and let $P_x$ be pairwise
     orthogonal one-site projections.  Suppose that, for every $N>0$,
     \[
         \rho^{(N)}(M)=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
     \]
-    For $1\leq L\leq N$, write $\widehat\rho_{x,N,L}$ for the normalized
-    marginal of $\rho^{(N)}(K_x)$ on the first $L$ sites.  Assume that the
-    sector label is visible on the first retained site:
+    For $N\geq2$ and $1\leq L\leq N$, write
+    $\widehat\rho_{x,N,L}$ for the normalized marginal of
+    $\rho^{(N)}(K_x)$ on the first $L$ sites.  Assume that the sector label is
+    visible on the first retained site:
     \[
         \bigl(P_x\otimes\Id^{\otimes(L-1)}\bigr)
           \widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}.

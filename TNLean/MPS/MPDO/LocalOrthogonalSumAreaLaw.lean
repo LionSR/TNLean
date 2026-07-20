@@ -226,12 +226,15 @@ The support hypothesis states the mathematical content of locality needed in
 the entropy argument.  In particular, it is independent of the BNT projectors
 whose present construction assumes SAL.
 
+The support condition starts at chain length two.  This is sufficient because
+the mutual-information comparison in `IsSAL` has `1 ≤ L < N / 2`, and hence
+only invokes marginal support when `N ≥ 4`.
+
 **Scope restriction (exact local sum):** The theorem assumes the exact local
 orthogonal-sum equality at every positive chain length and is supplied with
 one-site projections whose tensor extensions support every nonempty normalized
-sector marginal.  These two hypotheses are not consequences presently derived
-from the commuting-sector structure.  This restriction is documented in
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+sector marginal on chains of length at least two.  This restriction is
+documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_localOrthogonalSum
     (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
     (multiplicity : Fin g → ℕ) (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
@@ -241,7 +244,7 @@ theorem isSAL_of_localOrthogonalSum
     (hPorthogonal : ∀ {s t}, s ≠ t → P s * P t = 0)
     (hM : ∀ (N : ℕ), 0 < N →
       mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
-    (hsupport : ∀ (s : Fin g) (N L : ℕ) (hL : L + 1 ≤ N),
+    (hsupport : ∀ (s : Fin g) (N L : ℕ), 2 ≤ N → (hL : L + 1 ≤ N) →
       firstSiteMatrix (P s) L * reducedBlockState (K s) N (L + 1) hL =
         reducedBlockState (K s) N (L + 1) hL)
     (hSectorSAL : ∀ s, IsSAL (K s)) :
@@ -303,7 +306,7 @@ theorem isSAL_of_localOrthogonalSum
         M K multiplicity P hmultiplicity hP hPorthogonal hMpdo hSectorMpdo
         (N := N) (L := l) (by omega) hlN (hM N (by omega))
         (hMtrace N (by omega)) (hSectorTrace N (by omega))
-        (fun s ↦ hsupport s N l hlN)
+        (fun s ↦ hsupport s N l (by omega) hlN)
     have hEm := hEntropy m (by omega) (hmN.trans (Nat.div_le_self N 2))
     have hEcomp := hEntropy (N - m) (by omega) (Nat.sub_le N m)
     have hEN := hEntropy N (by omega) (le_refl N)

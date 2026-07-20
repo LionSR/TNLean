@@ -408,10 +408,25 @@ at every positive chain length, supplied one-site projections supporting every
 nonempty sector marginal, and positive natural multiplicities.  It must not be
 presented as a proof that GSNNCH alone implies SAL.  The structure
 \leanid{MPOTensor.OrthogonalCommutingSectorFamily} records fixed one-site
-projections and commuting sector products, but it does not yet discharge either
-the all-positive-length exact equality or the marginal-support hypothesis.  The
-local direct-sum implication does not use SAL-derived BNT projectors and hence
-does not reason circularly.
+projections and commuting sector products.  Projection idempotence together
+with its bond-support and exact sector-product fields implies that every
+nonempty sector marginal on a chain of length at least two is supported on the
+matching projection at its first site; this is
+\leanid{MPOTensor.OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState}.
+The chain-length restriction is sufficient here, since the mutual-information
+comparison in SAL only uses chains of length at least four.
+
+The sector-family structure does not contain the outer tensor or its
+multiplicities, and therefore cannot by itself supply the exact outer sum at
+every positive length.  In the BNT specialization that equality is already
+provided by
+\leanid{MPOTensor.mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor},
+while positivity of the natural multiplicities is part of the sector
+decomposition.  Consequently
+\leanid{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily} assumes the exact
+outer sum and sectorwise SAL, and proves only the non-circular final local
+direct-sum implication.  It neither derives the sectorwise SAL premise nor
+uses ZCL.
 
 \paragraph{Verdict.}
 Proposition~\emph{4to2} is classified as an open gap.  The proved implication
