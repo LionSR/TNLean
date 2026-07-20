@@ -15,11 +15,17 @@ This background also applies to Q2
 Wolff--Malz--Trivedi conjecture discussed in items (b)--(d) below.
 
 Spohn's theorem \cite{Spohn1977} and the Frigerio--Evans theory
-\cite{Frigerio1978,Evans1977} settle the time-independent problem:
-if $\Alg(\{L_\alpha\}\cup\{H\})=\M_d$ (Evans irreducibility), then the
-semigroup $e^{t\Ld}$ has a unique, full-rank, exponentially attracting fixed
-point. TNLean formalizes the corresponding algebraic relaxation conditions.
-Here the Hamiltonian is instead an adversarial, time-dependent drive.
+\cite{Frigerio1978,Evans1977} give algebraic criteria for irreducibility and
+relaxation in the time-independent problem. In the present notation, a
+standard sufficient condition is
+\begin{equation}
+  \Alg\!\left(\{L_\alpha\}_\alpha\cup\{\kappa\}\right)=\M_d,
+  \qquad
+  \kappa=iH+\frac12\sum_\alpha L_\alpha^\dagger L_\alpha.
+\end{equation}
+TNLean formalizes the corresponding condition excluding nontrivial reducing
+subspaces. Here the Hamiltonian is instead an adversarial, time-dependent
+drive.
 
 Wolff, Malz, and Trivedi \cite{Wolff2026Contractivity}
 (arXiv:2602.16067, February 2026, unpublished as of July 2026) introduce the
@@ -29,8 +35,9 @@ For a dissipator $\Dd=\sum_j\Dd_{L_j}$ on $\C^d$, they prove:
 \begin{enumerate}[label=(\alph*)]
 	\item \emph{Necessity:} $\Alg(\{L_j,L_j^\dagger\}_j)=\M_d$ is necessary for
 	      HIC.
-	\item \emph{Unital dissipators:} if all $\Dd_{L_j}$ are unital
-	      (e.g.\ Hermitian jump operators), HIC is equivalent to
+	\item \emph{Unital dissipators:} if the total dissipator $\Dd$ is unital
+	      (in particular, if every $\Dd_{L_j}$ is unital, as for Hermitian
+	      jump operators), HIC is equivalent to
 	      $\Alg(\{L_j,L_j^\dagger\}_j)=\M_d$, or equivalently to $\Dd$ alone having
 	      the maximally mixed state as its unique fixed point.
 	\item \emph{$d=2$:} HIC holds if and only if
@@ -55,9 +62,10 @@ $L=\ketbra01+\alpha\ketbra12$ whenever
 $\alpha\in(\sqrt3-\sqrt2,\sqrt3+\sqrt2)$. Arbitrary positive weights in
 general dimension are not covered by these results.
 
-For comparison, Yoshida and Hamazaki \cite{Yoshida2026Steady} give a necessary
-and sufficient algebraic criterion for steady-state uniqueness under
-quasiperiodic drives with Hermitian jump operators. Their single-qubit example
+For comparison, under their stated recurrence and analyticity hypotheses,
+Yoshida and Hamazaki \cite{Yoshida2026Steady} give algebraic criteria for
+steady-state uniqueness under quasiperiodic drives with Hermitian jump
+operators. Their single-qubit example
 ($H_t=\tfrac\omega2\sigma^z$,
 $L_t=\sqrt\kappa(\sigma^x\cos\omega t+\sigma^y\sin\omega t)$) has full
 instantaneous Spohn algebra at every time but a nonunique steady state, showing

@@ -9,7 +9,7 @@ import TNLean.Channel.Semigroup.RelaxationConditions
 # Algebraic companion to the Hamiltonian-independent contractivity conjecture
 
 This file kernel-checks algebraic and finite-dimensional pieces surrounding the
-open conjecture in Wolff--Malz--Trivedi, arXiv:2602.16067v1, Section "Outlook
+conjecture posed by Wolff--Malz--Trivedi, arXiv:2602.16067v1, Section "Outlook
 and open questions", lines 853--855 of the source.  It does **not** formalize or
 claim the full analytic Hamiltonian-independent contractivity conjecture.
 
