@@ -2614,6 +2614,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{lemma}[Residual identity on the supports]
     \label{lem:support_resolvent_residual_identity}
     \lean{Matrix.support_resolvent_residual_identity}
+    \lean{Matrix.IsHermitian.star_mulVec_dotProduct}
     \leanok
     \uses{def:support_inverse_square_root}
     Let $I$ be a finite nonempty set. For each $i\in I$, let $S_i$ be a
@@ -2663,13 +2664,14 @@ Theorem~\ref{thm:trace_norm_abs}.
       G_i b_i=P_i x.
     \]
     This is the support-domain form of the common-resolvent equation
-    $(\mathrm{basiceq})$ in Section~4.2 of Jen\v{c}ov\'a--Ruskai,
+    $(\mathrm{basiceq})$ in Section~3.1 of Jen\v{c}ov\'a--Ruskai,
     arXiv:0903.2895v4. Its residual calculation is the one in the Appendix,
     equations~$(\mathrm{Mj})$ and~$(\mathrm{eq:Schz1})$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:support_resolvent_residual_identity}
+    \uses{lem:support_resolvent_residual_identity,
+          lem:support_inverse_square_root_generalized_inverse}
     The preceding lemma writes the vanishing defect as a finite sum of
     nonnegative quadratic forms. Hence $G_i(b_i-S_ix)=0$ for every $i$.
     Multiplication by $S_i$ shows that $P_i(b_i-S_ix)=0$. Both $b_i$ and
