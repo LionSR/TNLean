@@ -19,6 +19,25 @@ Appendix C.2, equations `generateMPDO` and `sigmaNKj`.
 
 open scoped Matrix BigOperators Kronecker
 
+namespace Matrix
+
+/-- Reindexing the input and output bases commutes with a single-Kraus
+conjugation. -/
+theorem reindex_singleKrausMap
+    {α α' β β' : Type*} [Fintype α] [Fintype α']
+    [Fintype β] [Fintype β']
+    (eα : α ≃ α') (eβ : β ≃ β')
+    (V : Matrix β α ℂ) (X : Matrix α α ℂ) :
+    reindex eβ eβ (singleKrausMap V X) =
+      singleKrausMap (reindex eβ eα V) (reindex eα eα X) := by
+  simp only [singleKrausMap_apply]
+  change reindexLinearEquiv ℂ ℂ eβ eβ (V * X * Vᴴ) = _
+  rw [← reindexLinearEquiv_mul ℂ ℂ eβ eα eβ,
+    ← reindexLinearEquiv_mul ℂ ℂ eβ eα eα]
+  simp only [Matrix.coe_reindexLinearEquiv, Matrix.conjTranspose_reindex]
+
+end Matrix
+
 namespace MPOTensor
 
 variable {d D e : ℕ}
