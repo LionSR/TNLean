@@ -216,8 +216,18 @@ inequality, the fixed contractions and the density-block bound force the
 endomorphism to be the identity.  For the transported composites, complete
 positivity of the canonical lifts and the established trace preservation now
 give the required trace-adjoint Schwarz inequalities from the source tensor
-hypotheses.  The remaining application is to instantiate the criterion twice,
-using the fixed contraction families and their positive-length product spans.
+hypotheses.  Instantiating the criterion twice with the fixed contraction
+families and their positive-length product spans gives
+\[
+  \widetilde S\widetilde T=\operatorname{id}_{\mathcal A_1},
+  \qquad
+  \widetilde T\widetilde S=\operatorname{id}_{\mathcal A_2}.
+\]
+These are precisely the two identity compositions in
+\cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.\footnote{Formal
+declaration:
+\leanid{MPOTensor.transportedVerticalSector_composites_eq_id}
+in \doclink{TNLean/MPS/MPDO/VerticalSectorIdentity}.}
 
 Let $F^*$ be the trace adjoint and define the trace-loss operator
 \[
@@ -286,35 +296,31 @@ one of the following source-faithful routes:
 
 \section{Elimination plan}
 
-The unrestricted CPSV16 conclusion should be completed in the following
-order:
+The first two steps of the Appendix~C.4 argument are complete:
 \begin{enumerate}
     \item complete positivity of the canonical lifts of the transported maps,
           and hence the adjoint Schwarz inequality for the two trace-preserving
           square composites, is established without an all-input active-image
           statement;
-    \item apply the finite-product identity criterion to each square
+    \item the finite-product identity criterion is applied to each square
           composite, using the fixed contraction families and the proved
-          product-generation theorem, to obtain both identity compositions;
-    \item derive the permutation and matching dimensions from the resulting
-          positive, trace-preserving inverse pair, retaining the Schwarz
-          hypothesis for the unitary-conjugation conclusion.
+          product-generation theorem, and gives both identity compositions;
 \end{enumerate}
+The remaining step is to derive the sector permutation and matching dimensions
+from the resulting positive, trace-preserving inverse pair, retaining the
+Schwarz hypothesis for the unitary-conjugation conclusion.
 
 \section{Classification}
 
-\textbf{Verdict: trace, complete-positivity, and abstract fixed-point
-subproblems closed; invertibility gap open.}  The two transported maps and
-their square composites are trace preserving under the source tensor
-hypotheses, and the trace adjoints of the square composites satisfy the
-Schwarz inequality.  The
-positive-definite fixed-family construction on finite products, the
-density-block product-span bound, and the resulting abstract identity
-criterion are proved.  The stronger active-image inclusions remain unproved
-and are not needed for this route.  Until the identity criterion is
-instantiated for the two tensor-attached square composites, neither
-transported-map invertibility nor sector relabelling should carry a completion
-marker in the blueprint.
+\textbf{Verdict: transported-map invertibility closed; sector relabelling
+open.}  The two transported maps and their square composites are trace
+preserving under the source tensor hypotheses, and the trace adjoints of the
+square composites satisfy the Schwarz inequality.  The positive-definite
+fixed-family construction, density-block product-span bound, and abstract
+identity criterion prove that both composites are identities.  The stronger
+active-image inclusions remain unproved and are not needed for this route.
+The sector permutation, matching dimensions, and unitary-conjugation
+classification from Appendix~C.4, lines~1995--2003 remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
