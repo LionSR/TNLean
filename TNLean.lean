@@ -246,7 +246,6 @@ import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Channel.Peripheral.CyclicGroup
 import TNLean.Channel.Semigroup.RelaxationConditions
-
 -- Layer 2c: Spectral theory (QPF + transfer-operator gaps)
 import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
@@ -935,7 +934,8 @@ import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.NormalSquareComparisonRegion
 -- The unconditional interior-window Fundamental Theorem on the open square lattice.
 import TNLean.PEPS.NormalSquareFundamentalTheorem2
--- Shared two-tensor normal PEPS blocking data and its one-edge projections.
+-- Shared blocking data for two normal PEPS tensors: the conjunction
+-- region-injectivity predicate and its one-edge projections.
 import TNLean.PEPS.NormalPairBlocking
 -- The absorbed gauge family of a general normal PEPS blocking: the bare-edge
 -- absorbed equality at every edge of an arbitrary finite simple graph.
