@@ -19,12 +19,6 @@
     \TNPurificationSite{#1}{(#1OriginPlacement)}{A}{\overline A}%
 }
 
-\newcommand{\TNMPDOCompactTraceMotif}[5]{%
-    \TNMPDOMotifEvent{#1}{compact-trace}%
-    \TNPlaceObjectInternal{#1Origin}{#2}%
-    \TNCompactTraceCell{#1}{(#1OriginPlacement)}{#3}{#4}{#5}%
-}
-
 \newcommand{\TNMPDOFactorChainTwo}[3]{%
     \TNMPDOMotifEvent{#1}{factor-chain-two}%
     \TNPlaceObjectInternal{#1Origin}{#2}%
@@ -234,30 +228,6 @@
     \TNMorphismArrow{#1ArrowThree}{(#1MSecond.east)}{(#1RFirst.north)}{F^{bcd}_{i}}%
     \TNMorphismArrow{#1ArrowFour}{(#1LRoot.east)}{(#1PLeft.west)}{F^{fcd}_{e}}%
     \TNMorphismArrow{#1ArrowFive}{(#1PRight.east)}{(#1RRoot.west)}{F^{abj}_{e}}%
-}
-
-% Recursive Q word with a semantic omitted column and a trace cell at its
-% right boundary.
-\newcommand{\TNMPDORecursiveStructureMotif}[2]{%
-    \TNMPDOMotifEvent{#1}{recursive-structure-operator}%
-    \TNMPOSite{#1One}{#2}{X}%
-    \TNMPOSite{#1Two}{right=of #1One}{X}%
-    \TNMPOSite{#1Three}{right=of #1Two}{X}%
-    \TNOmission{#1Omission}{right=of #1Three}%
-    \TNMPOSite{#1Last}{right=of #1Omission}{X}%
-    \TNMPDOCompactTraceMotif{#1Trace}{right=2cm of #1Last}{M_\gamma}{1}{}%
-    \TNConnectVirtual{#1OneEast}{#1TwoWest}%
-    \TNConnectVirtual{#1TwoEast}{#1ThreeWest}%
-    \TNOpenVirtualEast{#1ThreeEast}%
-    \TNOpenVirtualWest{#1LastWest}%
-    \TNConnectVirtual{#1LastEast}{#1TraceInsertionW}%
-    \TNOpenVirtualWest{#1OneWest}%
-    \foreach \name in {One,Two,Three,Last} {%
-        \TNOpenPhysicalNorth{#1\name Ket}%
-        \TNOpenPhysicalSouth{#1\name Bra}%
-    }%
-    \TNLabelAbove{#1TwoKetOpen}{k}%
-    \TNLabelBelow{#1TwoBraOpen}{\alpha,\beta,\gamma}%
 }
 
 \makeatother
