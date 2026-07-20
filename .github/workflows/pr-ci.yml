@@ -103,7 +103,7 @@ jobs:
       pull-requests: read
     outputs:
       lean: ${{ steps.filter.outputs.lean }}
-      module-policy: ${{ steps.filter.outputs.module-policy }}
+      module_policy: ${{ steps.filter.outputs.module_policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
       workflow: ${{ steps.filter.outputs.workflow }}
     steps:
@@ -118,7 +118,7 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
-            module-policy:
+            module_policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
               - 'scripts/test_lean_file_policies.py'
@@ -187,7 +187,7 @@ jobs:
       !cancelled() && (
         github.event_name != 'pull_request' ||
         needs.changes.outputs.lean == 'true' ||
-        needs.changes.outputs.module-policy == 'true' ||
+        needs.changes.outputs.module_policy == 'true' ||
         needs.changes.outputs.workflow == 'true'
       )
     runs-on: ubuntu-latest
