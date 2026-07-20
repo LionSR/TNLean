@@ -220,8 +220,10 @@ The proof uses only projection idempotence, `bond_supported`, and
 length.  Thus it is independent of the BNT projectors whose current
 construction uses saturated-area-law input.
 
-Source: CPSV16, Definition 4.8, lines 838--850, and Appendix C.2,
-Proposition `prop4to2`, lines 1801--1808. -/
+Local consequence of the sector support in CPSV16, Definition 4.8,
+lines 838--850, used in the final direct-sum inference at lines 1801--1808.
+The paper does not state this marginal-support identity separately; see
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState
     {K : (s : Fin g) → MPOTensor d (dim s)}
     (F : OrthogonalCommutingSectorFamily K) (s : Fin g)
