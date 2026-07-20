@@ -520,41 +520,88 @@ It is meant to prevent the proof from drifting away from the source argument.
 
 \section{Blueprint diagrams}
 
-The blueprint now uses semantic tensor-network commands for the Section 3 moves
-that should remain visually attached to the proof.
+The edge-blocking reduction remains a named tensor-network diagram.  The other
+geometric steps are drawn directly where they enter the argument, while steps
+that are intrinsically algebraic are stated by their component equations.
 
 \begin{itemize}
 \item $\backslash$\texttt{TNPEPSEdgeBlockingReduction} depicts the chosen edge
   and the passage to the three-site chain. Its endpoint labels follow
   \path{eq:block_to_mps}: the two circled endpoints are $A'_1$ and $A'_2$,
   while the boxed complement is $A'_3$.
-\item $\backslash$\texttt{TNPEPSEdgeInsertedCoeff} depicts the single
-  edge-blocked contraction with one virtual matrix $X$ inserted on the chosen
-  bond. This is the diagram attached to the definition of the inserted-edge
-  coefficient, before comparing two tensor networks.
-\item $\backslash$\texttt{TNPEPSThreeSiteInsertionComparison} depicts the
-  comparison of a virtual insertion in the two three-site chains, as in the
-  statement of \path{lem:inj_isomorph}.
-\item $\backslash$\texttt{TNPEPSInsertionPhysicalRealization} depicts the
-  realization of a virtual insertion as a physical operation on either
-  neighboring site.
-\item $\backslash$\texttt{TNPEPSPhysicalToVirtualInsertion} depicts the
-  converse step in which two neighboring physical operations determine a
-  virtual operation on the shared bond.
-\item $\backslash$\texttt{TNPEPSEdgeInsertionEquality} depicts the full
-  PEPS comparison after the edge gauges have been absorbed into the second
-  tensor family, matching the five-vertex graph and the distinguished
-  $(2,5)$-edge insertion in \path{eq:inj_equal_edge}.
-\item $\backslash$\texttt{TNPEPSEdgeGaugeAbsorption} depicts the local
-  absorption of incident oriented edge gauges into a $B$-tensor, producing
-  $\widetilde B_v$.
-\item $\backslash$\texttt{TNPEPSTwoInjectiveTensorInsertionComparison}
-  depicts the generalized two-injective-tensor comparison with an arbitrary
-  matrix inserted on a shared virtual bond.
-\item $\backslash$\texttt{TNPEPSTwoInjectiveGaugeScalarReduction} depicts the
-  residual virtual operators $Z,U,W$ that appear after applying an inverse
-  for one injective block in the proof of
-  \path{lem:inj_equal_tensors_2}.
+% Former TNPEPSThreeSiteInsertionComparison: migrated inline at
+% ch24_peps_ft_edge_kernel_gauges.tex; source paper_normal.tex:255--274,565--580;
+% both closed-chain panels have boundary (V,P)=(0,3).
+\item The comparison of a virtual insertion in the two closed three-site
+  chains is drawn inline in the statement of \path{lem:inj_isomorph}.
+% Former TNPEPSInsertionPhysicalRealization: migrated inline at
+% ch24_peps_ft_edge_kernel_gauges.tex; source paper_normal.tex:303--352;
+% each panel has boundary (V,P)=(0,3).
+\item The realization of a virtual insertion as a physical operation on either
+  neighboring site is drawn as the corresponding three-panel equality.
+% Former TNPEPSPhysicalToVirtualInsertion: migrated inline at
+% ch24_peps_ft_edge_kernel_gauges.tex; source paper_normal.tex:355--485;
+% each panel has boundary (V,P)=(0,3).
+\item The converse implication, in which two neighboring physical operations
+  determine one virtual operation on their shared bond, is also drawn inline.
+% Former TNPEPSEdgeInsertionEquality: migrated inline at
+% ch24_peps_ft_edge_kernel_gauges.tex; source paper_normal.tex:1037--1065;
+% each five-site panel has boundary (V,P)=(0,5).
+\item After the edge gauges have been absorbed into the second tensor family,
+  the five-site comparison with its distinguished $(2,5)$-edge insertion is
+  drawn inline beside \path{eq:inj_equal_edge}.
+% Former TNPEPSTwoInjectiveTensorInsertionComparison: migrated inline at
+% ch24_peps_ft_edge_kernel_gauges.tex; source paper_normal.tex:1067--1094;
+% the three-shared-bond subcase has boundary (V,P)=(2,2).
+\item The comparison of two injective tensors with a matrix inserted on a
+  shared virtual bond is drawn inline in the three-shared-bond subcase, with
+  the external virtual indices shown explicitly.
+% Former TNPEPSTwoInjectiveGaugeScalarReduction: migrated inline at
+% ch24_peps_ft_edge_kernel_gauges.tex; source paper_normal.tex:1157--1193;
+% all four panels have boundary (V,P)=(3,1).
+\item The four residual-operator forms involving $Z$, $U$, and $W$ are drawn
+  inline in the proof of \path{lem:inj_equal_tensors_2}.
+% Former TNPEPSEdgeInsertedCoeff: demoted to the exact defining equation at
+% ch24_peps_ft_edge_middle.tex.  For fixed e, sigma, and X the coefficient has
+% boundary (V,P)=(0,0); the former picture's three open legs had the wrong type.
+\item The inserted-edge coefficient is given by its defining contraction.
+  Once the edge, physical indices, and inserted matrix are fixed, this
+  coefficient is a scalar; a three-open-leg picture would describe a different
+  object.
+% Former TNPEPSEdgeGaugeOrientation: demoted to the endpoint-action equations
+% in ch24_peps_ft_foundations.tex and ch24_peps_ft_balanced_edge_scalars.tex;
+% the two-vertex tensor would have boundary (deg(u)+deg(w)-2,2).
+\item The orientation convention for an edge gauge is stated by the two
+  endpoint actions, rather than by a separate contraction.
+% Former TNPEPSGaugeVertexAction: demoted to the exact component equations in
+% ch24_peps_ft_foundations.tex and ch24_peps_ft_balanced_edge_scalars.tex;
+% the general vertex tensor has boundary (deg(v),1).
+\item The action of all incident edge gauges on a vertex is stated by its
+  valence-independent component equation.
+% Former TNPEPSGaugeCancellation: demoted to the exact inverse-contraction
+% equation in ch24_peps_ft_foundations.tex; its kernel has boundary (V,P)=(2,0).
+\item Cancellation of the two endpoint actions on an internal edge is stated
+  as the corresponding matrix-inverse identity.
+% Former TNPEPSBlockedMiddleLocalGaugeFormula: demoted to the exact component
+% equation in ch24_peps_ft_edge_kernel_gauges.tex; the general boundary is
+% (V,P)=(deg(v),1), not the five-leg boundary of the former picture.
+\item The local gauge obtained from the blocked-middle comparison is stated by
+  its component equation at an arbitrary vertex.
+% Former TNPEPSEdgeGaugeAbsorption: demoted to the exact component equation in
+% ch24_peps_ft_edge_kernel_gauges.tex; paper_normal.tex:1212--1314 is
+% vertex-specific and the general boundary is (V,P)=(deg(v),1).
+\item Absorption of the incident edge gauges into $B_v$ is stated by the
+  vertexwise equation defining $\widetilde B_v$.
+% Former TNPEPSLocalGaugeExtraction: demoted to the exact component equation in
+% ch24_peps_ft_edge_kernel_gauges.tex; no standalone source picture has equal
+% boundary types on the two sides.
+\item Extraction of the local gauge is stated by the component equation that
+  expresses $B_v$ as the action of the incident edge matrices on $A_v$.
+% Former TNPEPSGlobalConsistency: demoted to the exact component equation in
+% ch24_peps_ft_edge_kernel_gauges.tex; paper_normal.tex:1212--1314 gives the
+% vertexwise equations rather than a leg-suppressed scalar picture.
+\item Global consistency is stated by the single gauge family satisfying the
+  local component equation at every vertex.
 \end{itemize}
 
 The inline comparison
@@ -563,10 +610,12 @@ belongs to the normal-region argument of \cite[Section~4]{Molnar2018NormalPEPS},
 where $R\subset S=R\cup\{v\}$; it is not part of the one-vertex-versus-complement
 theorem in Section~3.
 
-These diagrams deliberately keep the local dot convention used in the blueprint,
-but they preserve the distinctions that matter in the paper: tensor sites,
-blocked regions, virtual matrix insertions, and physical operations are not
-drawn as the same object.
+The retained and inline diagrams keep the local dot convention used in the
+blueprint, but preserve the distinctions that matter in the paper: tensor
+sites, blocked regions, virtual matrix insertions, and physical operations are
+not drawn as the same object.  The component equations are used precisely when
+a separate picture would obscure the boundary data or assert a contraction not
+present in the source.
 
 \section{Conclusion}
 
