@@ -59,8 +59,7 @@ noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (F
   classical
   simp [wordOfBlock]
 
-@[simp]
-lemma wordOfBlock_one (d : ℕ) (i : Fin (blockPhysDim d 1)) :
+@[simp] lemma wordOfBlock_one (d : ℕ) (i : Fin (blockPhysDim d 1)) :
     wordOfBlock d 1 i = [singleBlockEquiv d i] := by
   rfl
 
@@ -146,8 +145,7 @@ noncomputable def blockTensor (A : MPSTensor d D) (L : ℕ) :
     MPSTensor (blockPhysDim d L) D :=
   fun i => evalWord A (wordOfBlock d L i)
 
-@[simp]
-lemma blockTensor_one_apply (A : MPSTensor d D) (i : Fin (blockPhysDim d 1)) :
+@[simp] lemma blockTensor_one_apply (A : MPSTensor d D) (i : Fin (blockPhysDim d 1)) :
     blockTensor (d := d) (D := D) A 1 i = A (singleBlockEquiv d i) := by
   simp [blockTensor, MPSTensor.evalWord]
 
@@ -155,8 +153,7 @@ lemma blockTensor_one_apply (A : MPSTensor d D) (i : Fin (blockPhysDim d 1)) :
 noncomputable def flattenBlockedWord (d L : ℕ) : List (Fin (blockPhysDim d L)) → List (Fin d)
   | w => (w.map (wordOfBlock d L)).flatten
 
-@[simp]
-lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
+@[simp] lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
   simp [flattenBlockedWord]
 
 lemma flattenBlockedWord_cons (d L : ℕ) (i : Fin (blockPhysDim d L))
@@ -164,8 +161,7 @@ lemma flattenBlockedWord_cons (d L : ℕ) (i : Fin (blockPhysDim d L))
     flattenBlockedWord d L (i :: w) = wordOfBlock d L i ++ flattenBlockedWord d L w := by
   simp [flattenBlockedWord]
 
-@[simp]
-lemma flattenBlockedWord_one (d : ℕ) (w : List (Fin (blockPhysDim d 1))) :
+@[simp] lemma flattenBlockedWord_one (d : ℕ) (w : List (Fin (blockPhysDim d 1))) :
     flattenBlockedWord d 1 w = w.map (singleBlockEquiv d) := by
   induction w with
   | nil => simp [flattenBlockedWord]
@@ -184,8 +180,7 @@ lemma evalWord_blockTensor (A : MPSTensor d D) (L : ℕ) :
       -- `flattenBlockedWord (i :: w) = wordOfBlock i ++ flattenBlockedWord w`.
       simp [evalWord, blockTensor, flattenBlockedWord_cons, ih, evalWord_append]
 
-@[simp]
-lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
+@[simp] lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d 1)) :
     mpv (blockTensor (d := d) (D := D) A 1) σ =
       mpv A (fun n => singleBlockEquiv d (σ n)) := by
