@@ -21,7 +21,9 @@ This is the sector-relabeling and dimension-matching part of
 arXiv:1606.00608, Appendix C.4, line 1997. The cited proof in
 Wolf--Perez-Garcia, arXiv:1005.4545, Theorem 8, source lines 322--324, first
 permutes summands of equal matrix dimension and only then identifies the map
-inside each summand. Unitary implementation is not proved here.
+inside each summand. The present file proves the resulting blockwise-unitary
+formula for the star-algebra equivalence. The companion inverse formula and
+the transported MPDO specialization are not asserted here.
 -/
 
 open scoped Matrix
