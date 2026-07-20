@@ -1968,9 +1968,10 @@ physical indices, as in
     \lean{MPOTensor.verticalSectorBlockDiagonal_eq_equivReindexMap_comp_embedding}
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
-    Let $\iota$ be block-diagonal inclusion of the simple-sector algebra and
-    let $W$ be the canonical reindexing to retained physical coordinates.
-    Then the retained-coordinate inclusion is
+    Let $\iota$ be block-diagonal inclusion of the weighted vertical-sector
+    block family into its full matrix algebra, and let $W$ be the canonical
+    reindexing to retained physical coordinates.  Then the retained-coordinate
+    inclusion is
     \[
       \iota_{\mathrm v}=W\circ\iota.
     \]
@@ -1986,9 +1987,9 @@ physical indices, as in
     \lean{MPOTensor.verticalSectorBlocks_eq_compression_comp_equivReindexMap}
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
-    Let $\pi$ be diagonal-block extraction from the direct sum and let $W$ be
-    the canonical reindexing to retained physical coordinates.  Then the
-    retained-coordinate extraction is
+    Let $\pi$ be diagonal-block extraction to the weighted vertical-sector
+    block family, and let $W$ be the canonical reindexing to retained physical
+    coordinates.  Then the retained-coordinate extraction is
     \[
       \pi_{\mathrm v}=\pi\circ W^{-1}.
     \]
