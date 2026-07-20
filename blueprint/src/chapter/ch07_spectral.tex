@@ -2542,6 +2542,7 @@ outside the present result.
 \begin{lemma}[Trace-adjoint laws for two finite sums of matrix algebras]%
     \label{lem:direct_sum_rectangular_trace_adjoint}
     \lean{Matrix.sum_trace_directSumTraceAdjointMapBetween_mul}
+    \lean{Matrix.directSumTraceAdjointMapBetween_involutive}
     \lean{Matrix.directSumTraceAdjointMapBetween_id}
     \lean{Matrix.directSumTraceAdjointMapBetween_comp}
     \lean{Matrix.directSumTraceAdjointMapBetween_self}
@@ -2558,6 +2559,7 @@ outside the present result.
         \operatorname{id}_{\mathcal A}^*=\operatorname{id}_{\mathcal A},
         \qquad
         (S\circ T)^*=T^*\circ S^*,
+        \qquad (T^*)^*=T,
         \qquad
         (\widehat T)^*=\widehat{T^*}.
     \]
@@ -2588,6 +2590,31 @@ outside the present result.
     \]
     Thus the adjoint again has a Kraus representation, and compression of
     positive block-diagonal matrices gives the stated positivity.
+\end{proof}
+
+\begin{lemma}[Trace adjoint of a trace-preserving star isomorphism]
+    \label{lem:direct_sum_trace_adjoint_star_equiv_inverse}
+    \lean{Matrix.directSumTraceAdjointMapBetween_starAlgEquiv_eq_symm}
+    \leanok
+    Let $\Phi:\mathcal A\simeq\mathcal B$ be a star-algebra isomorphism
+    between finite products of full matrix algebras.  If $\Phi$ preserves the
+    total block trace, then
+    \[
+        \Phi^*=\Phi^{-1}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:direct_sum_rectangular_trace_adjoint}
+    For $A\in\mathcal B$ and $B\in\mathcal A$, multiplicativity and trace
+    preservation give
+    \[
+      \sum_j\operatorname{tr}(A_j\Phi(B)_j)
+      =\sum_j\operatorname{tr}
+        \bigl(\Phi(\Phi^{-1}(A)B)_j\bigr)
+      =\sum_i\operatorname{tr}(\Phi^{-1}(A)_iB_i).
+    \]
+    Nondegeneracy of the trace pairing gives the asserted identity.
 \end{proof}
 
 \begin{theorem}[Channel and fixed-point compatibility of the canonical extension]%
@@ -2912,6 +2939,76 @@ outside the present result.
     of the adjoint implies that $P^*P$ commutes with every matrix and is
     therefore a positive scalar multiple of the identity.  Dividing $P$ by
     the positive square root of this scalar produces the required unitary.
+\end{proof}
+
+\begin{lemma}[Total trace under unitary action on matched summands]
+    \label{lem:direct_sum_block_unitary_trace_preserving}
+    \lean{Matrix.isTracePreservingBetweenDirectSums_of_unitary_block_implementers}
+    \leanok
+    Let $\Phi:\mathcal A\simeq\mathcal B$ match the simple summands by an
+    equivalence $\sigma:I\simeq J$, with $D_i=E_{\sigma(i)}$.  Suppose that
+    there are unitaries $U_i$ satisfying
+    \[
+      \Phi(0,\ldots,0,X,0,\ldots,0)_{\sigma(i)}
+      =U_i\,\iota_i(X)\,U_i^*.
+    \]
+    Then $\Phi$ preserves the total block trace.
+\end{lemma}
+
+\begin{proof}\leanok
+    The image of a matrix supported on the $i$-th summand is supported on the
+    $\sigma(i)$-th summand.  Unitary conjugation and reindexing preserve the
+    trace, so
+    \[
+      \sum_j\operatorname{tr}
+        \bigl(\Phi(0,\ldots,0,X,0,\ldots,0)_j\bigr)
+      =\operatorname{tr}(X).
+    \]
+    Summing this identity over the source summands proves the result.
+\end{proof}
+
+\begin{theorem}[Unitary action of an invertible CPTP map]
+    \label{thm:direct_sum_inverse_cptp_forward_unitary}
+    \lean{Matrix.%
+      exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps}
+    \leanok
+    Let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
+    mutually inverse completely positive trace-preserving maps between finite
+    products of nonzero full matrix algebras.  There are an equivalence
+    $\sigma:I\simeq J$, equalities $D_i=E_{\sigma(i)}$, and unitaries
+    $U_i\in M_{E_{\sigma(i)}}(\C)$ such that
+    \[
+      T(0,\ldots,0,X,0,\ldots,0)
+      =(0,\ldots,0,U_i\,\iota_i(X)\,U_i^*,0,\ldots,0)
+    \]
+    with the nonzero entry on the right in position $\sigma(i)$, and
+    \[
+      S(0,\ldots,0,Y,0,\ldots,0)
+      =(0,\ldots,0,\iota_i^{-1}(U_i^*YU_i),0,\ldots,0)
+    \]
+    with the entries on the left and right in positions $\sigma(i)$ and $i$,
+    respectively.  These identities hold for every $i\in I$,
+    $X\in M_{D_i}(\C)$, and $Y\in M_{E_{\sigma(i)}}(\C)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:direct_sum_inverse_cptp_star_equiv,
+      thm:direct_sum_star_equiv_block_unitary,
+      lem:direct_sum_block_unitary_trace_preserving,
+      lem:direct_sum_trace_adjoint_star_equiv_inverse,
+      lem:direct_sum_rectangular_trace_adjoint}
+    Let $\Phi=S^*:\mathcal A\simeq\mathcal B$ be the star-algebra
+    isomorphism obtained from the inverse pair.  Theorem~
+    \ref{thm:direct_sum_star_equiv_block_unitary} supplies $\sigma$, the
+    dimension equalities, and the unitaries for $\Phi$.  Lemma~
+    \ref{lem:direct_sum_block_unitary_trace_preserving} shows that $\Phi$
+    preserves the total trace, hence Lemma~
+    \ref{lem:direct_sum_trace_adjoint_star_equiv_inverse} gives
+    $\Phi^*=\Phi^{-1}$.  On the other hand, involutivity of the trace adjoint
+    gives $\Phi^*=S$.  Therefore $S=\Phi^{-1}$, and the two inverse laws imply
+    $T=\Phi$.  The unitary formula for $\Phi$ gives the asserted formula for
+    $T$, while the inverse formula for $S=\Phi^{-1}$ uses the same summand
+    matching and the same unitaries.
 \end{proof}
 
 % Scope restriction documented in
