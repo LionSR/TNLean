@@ -58,7 +58,7 @@ The source lives in `TNLean/` and is organized into **layers 0-6 with sublayers*
 | **5b** | `MPS/RFP/` | Renormalization fixed-point scaffolding |
 | **6** | `Wielandt/` | Span-growth, rank-one extraction, rectangular span, Wielandt bound, primitivity equivalences |
 
-**Other modules**: `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (exploratory), `MPS/MPDO/` (density operator foundations), `Archive/` (legacy, excluded from root imports), `Scratch/` (experimental).
+**Other modules**: `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), and `Archive/` (legacy, excluded from root imports).
 
 ### Key Types and Definitions
 
