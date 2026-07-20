@@ -659,17 +659,29 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     $A_j$.
 \end{proof}
 
-\begin{figure}[ht]
-    \centering
-    \TNBNTDecomposition
-    \caption{The decomposition behind the coefficient form: the tensor is
-        $A^i = X\bigl(\bigoplus_{j}\bigoplus_{q}\mu_{j,q}A_j^i\bigr)X^{-1}$
-        with $A_j$ a basis of normal tensors, and the direct sums are drawn
-        as the block-index lines $j$ and $q$ threading the gauge $X$, the
-        basis tensor $A_j$, the coefficient tensor $\mu$, and $X^{-1}$. This
-        is \cite[Section~2.3, lines~304--313]{Cirac2016MPDO_arXiv}.}
-    \label{fig:bnt_decomposition}
-\end{figure}
+Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
+normal tensors of $A$. For suitable coefficients $\mu_{j,q}$ and invertible
+matrices $X_{j,q}$, write
+$M_j=\operatorname{diag}(\mu_{j,1},\ldots,\mu_{j,r_j})$ and
+$X=\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}X_{j,q}$. Then
+% Source: CPSV16, Section 2.3, labels eq:II_ABasicTensors and eq:II_X,
+% source lines 283--301; rendered Equations (20a)--(21).
+% Source-faithfulness verdict: the display labelled Eq19 in the source replaces
+% direct sums by tensor products and is explicitly declared nonliteral at
+% source lines 304--313; it is rendered as Equation (23).
+% Index/type verdict: A^i_{alpha,beta} has physical index i and virtual indices
+% alpha,beta; j and q select direct-sum summands and are not contraction legs.
+\[
+    \begin{array}{rcl}
+        A^i
+        &=&X\left[\bigoplus_{j=1}^{g}
+            \left(M_j\otimes A_j^i\right)\right]X^{-1} \\
+        &=&\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
+            \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+    \end{array}
+\]
+This is \cite[Section~2.3, Equations~(20a)--(21)]{Cirac2016MPDO_arXiv}. It is
+the decomposition used below to separate the normal blocks.
 
 The eventual linear-independence clause is produced from the asymptotic
 overlaps: diagonal overlaps tending to one and off-diagonal overlaps tending to
