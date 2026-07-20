@@ -70,6 +70,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ## Completed refactors
 
+### Exact-sector matching through the proportional core
+- **Pattern:** The equal-MPV sector matcher repeated the eventually-proportional
+  matcher's fixed-length linear-independence and coefficient-comparison proof
+  instead of specializing it at scalar `1`.
+- **Reuse:** `exists_block_match_exact` now applies
+  `exists_block_match_exact_of_eventuallyProportional` through
+  `SameMPV₂Pos.toNonzeroProportionalMPV₂` and
+  `NonzeroProportionalMPV₂.eventually`. The two low-level overlap lemmas used
+  by the surviving proof live in `SectorBNT/MatchAux.lean`.
+- **Result:** Across `ExactMatch.lean`, `ProportionalMatch/Core.lean`, and
+  `MatchAux.lean`, the declaration count fell from 7 to 6. The
+  exact-match-specific proof bodies fell from 195 lines to 2 lines, counting
+  from the first tactic after `:= by` through the last tactic. Total source
+  lines fell from 666 to 481 (185 lines net). The public theorem statement and
+  blueprint link are unchanged.
+
 ### Cyclic-sector compression transport
 - **Pattern:** the transfer-intertwining branch in
   `exists_compressedTensor_of_supported_projection_with_letter_and_isometry`
