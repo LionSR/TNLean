@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.TorusWindowChain
+import TNLean.PEPS.TorusCoordinateSwap
+import TNLean.PEPS.TorusWindowFamily
 
 /-!
 # The staircase window family around a vertical edge
@@ -127,6 +128,47 @@ def verticalStaircaseWindow (s : TorusVertex width height) (L K j : ℕ) :
   torusArcRectangle
     (s.1 + ((L - 1 - (j - K) : ℕ) : ZMod width), s.2 + ((K - j : ℕ) : ZMod height)) L K
 
+/-! ### Coordinate-swap covariance -/
+
+/-- The first vertical end window is the coordinate transpose of the first horizontal
+end window with exchanged side lengths. -/
+theorem torusCoordinateSwapRegion_horizontalStaircaseRightWindow
+    (s : TorusVertex width height) (L K : ℕ) :
+    torusCoordinateSwapRegion
+        (horizontalStaircaseRightWindow (s.2, s.1) K L) =
+      verticalStaircaseRightWindow s L K := by
+  rw [horizontalStaircaseRightWindow, verticalStaircaseRightWindow,
+    torusCoordinateSwapRegion_torusArcRectangle]
+
+/-- The last vertical end window is the coordinate transpose of the last horizontal
+end window with exchanged side lengths. -/
+theorem torusCoordinateSwapRegion_horizontalStaircaseLeftWindow
+    (s : TorusVertex width height) (L K : ℕ) :
+    torusCoordinateSwapRegion
+        (horizontalStaircaseLeftWindow (s.2, s.1) K L) =
+      verticalStaircaseLeftWindow s L K := by
+  rw [horizontalStaircaseLeftWindow, verticalStaircaseLeftWindow,
+    torusCoordinateSwapRegion_torusArcRectangle]
+
+/-- The vertical staircase patch is the coordinate transpose of the horizontal
+staircase patch with exchanged side lengths. -/
+theorem torusCoordinateSwapRegion_horizontalStaircasePatch
+    (s : TorusVertex width height) (L K : ℕ) :
+    torusCoordinateSwapRegion (horizontalStaircasePatch (s.2, s.1) K L) =
+      verticalStaircasePatch s L K := by
+  rw [horizontalStaircasePatch, verticalStaircasePatch, torusCoordinateSwapRegion_union,
+    torusCoordinateSwapRegion_torusArcRectangle,
+    torusCoordinateSwapRegion_torusArcRectangle]
+
+/-- Each vertical staircase window is the coordinate transpose of the corresponding
+horizontal staircase window with exchanged side lengths. -/
+theorem torusCoordinateSwapRegion_staircaseWindow
+    (s : TorusVertex width height) (L K j : ℕ) :
+    torusCoordinateSwapRegion (staircaseWindow (s.2, s.1) K L j) =
+      verticalStaircaseWindow s L K j := by
+  rw [staircaseWindow, verticalStaircaseWindow,
+    torusCoordinateSwapRegion_torusArcRectangle]
+
 /-- The first window of the family is the right end window: at `j = 0` the column
 offset is `L - 1` and the row offset `K`, the start of `verticalStaircaseRightWindow`. -/
 theorem verticalStaircaseWindow_zero (s : TorusVertex width height) (L K : ℕ) :
@@ -178,6 +220,43 @@ def verticalStaircaseUnion (s : TorusVertex width height) (L K j : ℕ) :
     Finset (TorusVertex width height) :=
   verticalStaircaseWindow s L K j ∪ verticalStaircaseWindow s L K (j + 1)
 
+/-- Each vertical consecutive-window union is the coordinate transpose of the
+corresponding horizontal union with exchanged side lengths. -/
+theorem torusCoordinateSwapRegion_staircaseUnion
+    (s : TorusVertex width height) (L K j : ℕ) :
+    torusCoordinateSwapRegion (staircaseUnion (s.2, s.1) K L j) =
+      verticalStaircaseUnion s L K j := by
+  rw [staircaseUnion, verticalStaircaseUnion, torusCoordinateSwapRegion_union,
+    torusCoordinateSwapRegion_staircaseWindow,
+    torusCoordinateSwapRegion_staircaseWindow]
+
+section GraphCovariance
+
+variable [Fact (1 < width)] [Fact (1 < height)]
+
+/-- Graph-isomorphism form of coordinate-swap covariance for staircase windows. -/
+theorem Region_map_torusCoordinateSwap_staircaseWindow
+    (s : TorusVertex width height) (L K j : ℕ) :
+    Region.map (torusCoordinateSwap (width := height) (height := width))
+        (staircaseWindow (s.2, s.1) K L j) = verticalStaircaseWindow s L K j :=
+  torusCoordinateSwapRegion_staircaseWindow s L K j
+
+/-- Graph-isomorphism form of coordinate-swap covariance for consecutive unions. -/
+theorem Region_map_torusCoordinateSwap_staircaseUnion
+    (s : TorusVertex width height) (L K j : ℕ) :
+    Region.map (torusCoordinateSwap (width := height) (height := width))
+        (staircaseUnion (s.2, s.1) K L j) = verticalStaircaseUnion s L K j :=
+  torusCoordinateSwapRegion_staircaseUnion s L K j
+
+/-- Graph-isomorphism form of coordinate-swap covariance for staircase patches. -/
+theorem Region_map_torusCoordinateSwap_horizontalStaircasePatch
+    (s : TorusVertex width height) (L K : ℕ) :
+    Region.map (torusCoordinateSwap (width := height) (height := width))
+        (horizontalStaircasePatch (s.2, s.1) K L) = verticalStaircasePatch s L K :=
+  torusCoordinateSwapRegion_horizontalStaircasePatch s L K
+
+end GraphCovariance
+
 /-- **A descending-arm consecutive union is an `L × (K + 1)` cyclic rectangle.**
 
 For `j < K` the windows `W_j` and `W_{j+1}` share the column band
@@ -194,16 +273,11 @@ theorem verticalStaircaseUnion_eq_verticalRectangle {L K : ℕ} (hh : 1 < height
       torusArcRectangle
         (s.1 + ((L - 1 : ℕ) : ZMod width), s.2 + ((K - (j + 1) : ℕ) : ZMod height))
         L (K + 1) := by
-  rw [verticalStaircaseUnion, verticalStaircaseWindow, verticalStaircaseWindow,
-    Finset.union_comm]
-  -- The column offsets agree on the descending arm and the row offsets differ by one.
-  have hcolj : (L - 1 - (j - K) : ℕ) = (L - 1 : ℕ) := by omega
-  have hcolj1 : (L - 1 - ((j + 1) - K) : ℕ) = (L - 1 : ℕ) := by omega
-  have hrow : ((K - j : ℕ) : ZMod height) = ((K - (j + 1) : ℕ) : ZMod height) + 1 := by
-    rw [show (K - j : ℕ) = (K - (j + 1)) + 1 by omega]; push_cast; ring
-  rw [hcolj, hcolj1, hrow, ← add_assoc]
-  exact verticalAdjacentWindows_union (by omega) hh
-    (s.1 + ((L - 1 : ℕ) : ZMod width), s.2 + ((K - (j + 1) : ℕ) : ZMod height))
+  have h := congrArg torusCoordinateSwapRegion
+    (staircaseUnion_eq_horizontalRectangle (width := height) (height := width)
+      (L := K) (K := L) hh (s.2, s.1) hj)
+  simpa only [torusCoordinateSwapRegion_staircaseUnion,
+    torusCoordinateSwapRegion_torusArcRectangle] using h
 
 /-- **A right-shifting-arm consecutive union is an `(L + 1) × K` cyclic rectangle.**
 
@@ -220,17 +294,11 @@ theorem verticalStaircaseUnion_eq_horizontalRectangle {L K : ℕ} (hw : 1 < widt
     verticalStaircaseUnion s L K j =
       torusArcRectangle
         (s.1 + ((L - 1 - ((j + 1) - K) : ℕ) : ZMod width), s.2) (L + 1) K := by
-  rw [verticalStaircaseUnion, verticalStaircaseWindow, verticalStaircaseWindow,
-    Finset.union_comm]
-  -- The row offsets vanish on the right-shifting arm and the column offsets differ by one.
-  have hrowj : (K - j : ℕ) = 0 := by omega
-  have hrowj1 : (K - (j + 1) : ℕ) = 0 := by omega
-  have hcol : ((L - 1 - (j - K) : ℕ) : ZMod width) =
-      ((L - 1 - ((j + 1) - K) : ℕ) : ZMod width) + 1 := by
-    rw [show (L - 1 - (j - K) : ℕ) = (L - 1 - ((j + 1) - K)) + 1 by omega]; push_cast; ring
-  rw [hrowj, hrowj1, hcol, Nat.cast_zero, add_zero, ← add_assoc]
-  exact horizontalAdjacentWindows_union (by omega) hw
-    (s.1 + ((L - 1 - ((j + 1) - K) : ℕ) : ZMod width), s.2)
+  have h := congrArg torusCoordinateSwapRegion
+    (staircaseUnion_eq_verticalRectangle (width := height) (height := width)
+      (L := K) (K := L) hw (s.2, s.1) hj (by simpa [Nat.add_comm] using hjK))
+  simpa only [torusCoordinateSwapRegion_staircaseUnion,
+    torusCoordinateSwapRegion_torusArcRectangle] using h
 
 /-- Each consecutive union of the staircase family is injective: on the descending arm
 it is the `L × (K + 1)` cyclic rectangle, on the right-shifting arm the `(L + 1) × K`
@@ -273,26 +341,13 @@ theorem mem_verticalStaircaseWindow {L K j : ℕ} (hxw : 2 * L ≤ width) (hyh :
       ((L - 1 - (j - K) : ℕ) ≤ (v.1 - s.1).val ∧
           (v.1 - s.1).val < (L - 1 - (j - K)) + L) ∧
         ((K - j : ℕ) ≤ (v.2 - s.2).val ∧ (v.2 - s.2).val < (K - j) + K) := by
-  have hw0 : 0 < width := NeZero.pos width
-  have hh0 : 0 < height := NeZero.pos height
-  have hLj : L - 1 - (j - K) ≤ L - 1 := Nat.sub_le _ _
-  have hKj : K - j ≤ K := Nat.sub_le _ _
-  rw [verticalStaircaseWindow, mem_torusArcRectangle,
-    zmod_val_sub_shift width v.1 s.1 (L - 1 - (j - K)) (by omega),
-    zmod_val_sub_shift height v.2 s.2 (K - j) (by omega)]
-  have hdx := ZMod.val_lt (v.1 - s.1)
-  have hdy := ZMod.val_lt (v.2 - s.2)
-  constructor
-  · rintro ⟨hx, hy⟩
-    refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩ <;> (split_ifs at hx hy with hcx hcy <;> omega)
-  · rintro ⟨⟨hx0, hx1⟩, ⟨hy0, hy1⟩⟩
-    refine ⟨?_, ?_⟩
-    · rw [if_neg (by omega)]; omega
-    · rw [if_neg (by omega)]; omega
+  rw [← torusCoordinateSwapRegion_staircaseWindow s L K j,
+    mem_torusCoordinateSwapRegion, mem_staircaseWindow hyh hxw]
+  exact and_comm
 
 /-! ### The subset nesting `W_j ⊆ U_j ⊆ P`
 
-The nesting consumed by the patch chaining.  Each window sits in its consecutive union
+The nesting consumed by the patch chaining. Each window sits in its consecutive union
 (definitionally), and every window — hence every union — sits in the staircase patch
 `P`. -/
 
@@ -319,25 +374,10 @@ Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
 theorem verticalStaircaseWindow_subset_patch {L K j : ℕ} (hL : 0 < L)
     (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
     verticalStaircaseWindow s L K j ⊆ verticalStaircasePatch s L K := by
-  intro v hv
-  rw [mem_verticalStaircaseWindow hxw hyh] at hv
-  obtain ⟨⟨hx0, hx1⟩, ⟨hy0, hy1⟩⟩ := hv
-  rw [verticalStaircasePatch, Finset.mem_union, mem_torusArcRectangle, mem_torusArcRectangle]
-  dsimp only
-  have hdx := ZMod.val_lt (v.1 - s.1)
-  have hdy := ZMod.val_lt (v.2 - s.2)
-  have hw0 : 0 < width := NeZero.pos width
-  have hLj : L - 1 - (j - K) ≤ L - 1 := Nat.sub_le _ _
-  have hKj : K - j ≤ K := Nat.sub_le _ _
-  by_cases harm : K ≤ j
-  · -- Right-shifting arm: the horizontal band, with row offset `0`.
-    right
-    exact ⟨by omega, by omega⟩
-  · -- Descending arm: the vertical band, column offset `L - 1`.
-    left
-    rw [zmod_val_sub_shift width v.1 s.1 (L - 1) (by omega)]
-    rw [if_neg (by omega)]
-    exact ⟨by omega, by omega⟩
+  rw [← torusCoordinateSwapRegion_staircaseWindow,
+    ← torusCoordinateSwapRegion_horizontalStaircasePatch]
+  exact torusCoordinateSwapRegion_mono
+    (staircaseWindow_subset_patch hL hyh hxw (s.2, s.1))
 
 /-- **Each consecutive union sits in the staircase patch.**  The union of two windows of
 the family, both of which sit in the patch.
@@ -348,16 +388,15 @@ Step 2. -/
 theorem verticalStaircaseUnion_subset_patch {L K j : ℕ} (hL : 0 < L)
     (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
     verticalStaircaseUnion s L K j ⊆ verticalStaircasePatch s L K := by
-  rw [verticalStaircaseUnion, Finset.union_subset_iff]
-  exact ⟨verticalStaircaseWindow_subset_patch hL hxw hyh s,
-    verticalStaircaseWindow_subset_patch hL hxw hyh s⟩
+  rw [← torusCoordinateSwapRegion_staircaseUnion,
+    ← torusCoordinateSwapRegion_horizontalStaircasePatch]
+  exact torusCoordinateSwapRegion_mono
+    (staircaseUnion_subset_patch hL hyh hxw (s.2, s.1))
 
 /-! ### The patch is the union of the family
 
 The staircase patch `P = ⋃_j W_j` is exactly the union of the `L + K` windows of the
-family.  The forward inclusion is the per-window subset; the reverse threads a patch
-vertex through the arm it lies on — a vertical-band vertex through a descending window, a
-horizontal-band vertex through a right-shifting window. -/
+family. The result follows by transposing the corresponding horizontal family. -/
 
 /-- **The patch is the union of the staircase family.**  The staircase patch `P` equals
 the union of the `L + K` windows `W_0, …, W_{L+K-1}`: every window sits in `P`, and
@@ -372,41 +411,21 @@ theorem biUnion_verticalStaircaseWindow_eq_patch {L K : ℕ} (hL : 0 < L) (hK : 
     (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
     (Finset.range (L + K)).biUnion (verticalStaircaseWindow s L K) =
       verticalStaircasePatch s L K := by
-  apply Finset.Subset.antisymm
-  · -- Forward: every window sits in the patch.
-    rw [Finset.biUnion_subset]
-    exact fun j _ => verticalStaircaseWindow_subset_patch hL hxw hyh s
-  · -- Reverse: thread a patch vertex through its arm.
-    intro v hv
-    simp only [Finset.mem_biUnion, Finset.mem_range]
-    rw [verticalStaircasePatch, Finset.mem_union, mem_torusArcRectangle,
-      mem_torusArcRectangle] at hv
-    dsimp only at hv
-    have hw0 : 0 < width := NeZero.pos width
-    have hh0 : 0 < height := NeZero.pos height
-    have hdx := ZMod.val_lt (v.1 - s.1)
-    have hdy := ZMod.val_lt (v.2 - s.2)
-    rcases hv with ⟨hcx, hcy⟩ | ⟨hcx, hcy⟩
-    · -- Vertical band: a descending window `W_j`, `j = K - min (v.2 - s.2).val K`.
-      rw [zmod_val_sub_shift width v.1 s.1 (L - 1) (by omega)] at hcx
-      have hnw : ¬ (v.1 - s.1).val < L - 1 := by
-        intro h; rw [if_pos h] at hcx; omega
-      rw [if_neg hnw] at hcx
-      refine ⟨K - min (v.2 - s.2).val K, by omega, ?_⟩
-      rw [mem_verticalStaircaseWindow hxw hyh]
-      have hcol : L - 1 - ((K - min (v.2 - s.2).val K) - K) = L - 1 := by omega
-      have hrow : K - (K - min (v.2 - s.2).val K) = min (v.2 - s.2).val K := by omega
-      rw [hcol, hrow]
-      exact ⟨⟨by omega, by omega⟩, ⟨by omega, by omega⟩⟩
-    · -- Horizontal band: a right-shifting window `W_{K+i}`,
-      -- `i = (L - 1) - min (v.1 - s.1).val (L - 1)`.
-      refine ⟨K + ((L - 1) - min (v.1 - s.1).val (L - 1)), by omega, ?_⟩
-      rw [mem_verticalStaircaseWindow hxw hyh]
-      have hcol : L - 1 - ((K + ((L - 1) - min (v.1 - s.1).val (L - 1))) - K) =
-          min (v.1 - s.1).val (L - 1) := by omega
-      have hrow : K - (K + ((L - 1) - min (v.1 - s.1).val (L - 1))) = 0 := by omega
-      rw [hcol, hrow]
-      exact ⟨⟨by omega, by omega⟩, ⟨by omega, by omega⟩⟩
+  calc
+    (Finset.range (L + K)).biUnion (verticalStaircaseWindow s L K) =
+        (Finset.range (K + L)).biUnion
+          (fun j => torusCoordinateSwapRegion (staircaseWindow (s.2, s.1) K L j)) := by
+      rw [Nat.add_comm]
+      congr 1
+      funext j
+      exact (torusCoordinateSwapRegion_staircaseWindow s L K j).symm
+    _ = torusCoordinateSwapRegion
+        ((Finset.range (K + L)).biUnion (staircaseWindow (s.2, s.1) K L)) :=
+      (torusCoordinateSwapRegion_biUnion _ _).symm
+    _ = torusCoordinateSwapRegion (horizontalStaircasePatch (s.2, s.1) K L) := by
+      rw [biUnion_staircaseWindow_eq_patch hK hL hyh hxw]
+    _ = verticalStaircasePatch s L K :=
+      torusCoordinateSwapRegion_horizontalStaircasePatch s L K
 
 end PEPS
 end TNLean

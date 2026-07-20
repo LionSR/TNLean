@@ -9,6 +9,9 @@ Authors: TNLean contributors
 
 Stable import surface for the maintained TNLean library.
 
+This import-only root aggregator is the exact path exempted from the ordinary
+1000-line module cap; CI validates that it contains no Lean declarations.
+
 This file imports the modules intended for downstream users. Most specialized helper modules
 are omitted from the root import list, but public chapter-index and chapter-facing semigroup
 modules are included so that blueprint links and the generated documentation can see them.
@@ -732,6 +735,7 @@ import TNLean.PEPS.TorusWindowRegion
 import TNLean.PEPS.TorusWindowSingleCrossingObstruction
 import TNLean.PEPS.TorusRowColumnReductionObstruction
 import TNLean.PEPS.TorusDeformedWindow
+import TNLean.PEPS.TorusCoordinateSwap
 import TNLean.PEPS.TorusWindowChain
 import TNLean.PEPS.TorusWindowFamily
 import TNLean.PEPS.TorusWindowFamilyVertical
