@@ -627,12 +627,23 @@ acts first on the index.
     $(A^{\sigma_{gh}})^i = A^{\sigma(g)(\sigma(h)(i))} = ((A^{\sigma_g})^{\sigma_h})^i$.
     Diagrammatically this is just two consecutive relabellings of the same
     local tensor:
-    % Label the two arrows by \sigma_h and \sigma_g so
-    % the relabelling order matches the composition \sigma(g) \circ \sigma(h).
+    % Formula: A^i \xrightarrow{\sigma_h} A^{\sigma(h)(i)}
+    %   \xrightarrow{\sigma_g} A^{\sigma(g)(\sigma(h)(i))}.
+    % Source verdict: the adjacent componentwise equality is the source;
+    % there is no dedicated source figure.
+    % Ink-to-index: the three upper stubs carry, from left to right, the free
+    % physical indices i, \sigma(h)(i), and \sigma(g)(\sigma(h)(i)).  The two
+    % arrows record relabelling by \sigma_h and then \sigma_g; they are not
+    % tensor-network contractions.
+    % Contractions: none in any panel.
+    % Common boundary: boundary|virtual-west=1|virtual-east=1|
+    % physical-up=1|physical-down=0.
     \begin{center}
-        \TNPermutationTwistLabeled{i}{\sigma(h)(i)}{\sigma_h}
-        \qquad
-        \TNPermutationTwistLabeled{\sigma(h)(i)}{\sigma(g)(\sigma(h)(i))}{\sigma_g}
+        \tnpic[physical=up]{\tn[up=$i$]{A}}
+        \qquad $\xrightarrow{\sigma_h}$ \qquad
+        \tnpic[physical=up]{\tn[up=$\sigma(h)(i)$]{A}}
+        \qquad $\xrightarrow{\sigma_g}$ \qquad
+        \tnpic[physical=up]{\tn[up=$\sigma(g)(\sigma(h)(i))$]{A}}
     \end{center}
 \end{proof}
 
