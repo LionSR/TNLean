@@ -147,6 +147,14 @@ theorem edgeProjector_isProj (F : BeigiSectorGraphData A)
   rw [Module.End.mul_eq_comp, ← Matrix.toLin'_mul,
     (F.edgeProjector_isOrthogonal a b).2.eq]
 
+/-- The spatial coordinate matrix is right-unitary.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+theorem unitary_mul_conjTranspose (F : BeigiSectorGraphData A) :
+    F.unitary * F.unitaryᴴ = 1 := by
+  simpa only [Matrix.star_eq_conjTranspose] using
+    Unitary.mul_star_self_of_mem F.unitary_mem
+
 /-- A directed edge is present exactly when its edge ground space is nonzero.
 
 Source: Beigi, arXiv:1105.1019v2, Section III, graph definition immediately
@@ -291,9 +299,7 @@ theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
   have hUstarU : F.unitaryᴴ * F.unitary = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
-  have hUUstar : F.unitary * F.unitaryᴴ = 1 := by
-    simpa only [Matrix.star_eq_conjTranspose] using
-      Unitary.mul_star_self_of_mem F.unitary_mem
+  have hUUstar := F.unitary_mul_conjTranspose
   have hprod := MPOTensor.singleKrausMap_bondProduct_of_unitary F.unitaryᴴ
     (by simpa using hUUstar) (by simpa using hUstarU) hN (groundBond A)
   simp_rw [singleKrausMap_groundBond_eq_transformedGroundBond] at hprod
@@ -314,12 +320,9 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
         (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond)
   have hUstarU : star F.unitary * F.unitary = 1 :=
     Unitary.star_mul_self_of_mem F.unitary_mem
-  have hUUstar : F.unitary * star F.unitary = 1 :=
-    Unitary.mul_star_self_of_mem F.unitary_mem
   have hUstarU' : F.unitaryᴴ * F.unitary = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using hUstarU
-  have hUUstar' : F.unitary * F.unitaryᴴ = 1 := by
-    simpa only [Matrix.star_eq_conjTranspose] using hUUstar
+  have hUUstar' := F.unitary_mul_conjTranspose
   have hWstarW : Wᴴ * W = 1 := by
     simp only [W, MPOTensor.sitewisePhysicalMatrix_conjTranspose,
       Matrix.conjTranspose_conjTranspose]
@@ -465,9 +468,7 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
   let W := MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N
   let Q := (List.ofFn fun i : Fin N ↦
     MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
-  have hUUstar : F.unitary * F.unitaryᴴ = 1 := by
-    simpa only [Matrix.star_eq_conjTranspose] using
-      Unitary.mul_star_self_of_mem F.unitary_mem
+  have hUUstar := F.unitary_mul_conjTranspose
   have hWstarW : Wᴴ * W = 1 := by
     simp only [W, MPOTensor.sitewisePhysicalMatrix_conjTranspose,
       Matrix.conjTranspose_conjTranspose]
@@ -530,6 +531,28 @@ private theorem conj_localComplementProduct {N : ℕ} :
   simp only [Function.comp_apply, map_sub, map_one, localTermES,
     LinearEquiv.conjAlgEquiv_apply, LinearEquiv.symm_symm]
 
+/-- The three realizations of the complete complementary-interaction product,
+together with the canonical identifications between them. -/
+private structure ComplementProductTransport (A : MPSTensor d D)
+    (N : ℕ) [NeZero N] (hN : 2 ≤ N) where
+  qMatrix : Matrix (Cfg d N) (Cfg d N) ℂ
+  qRaw : Module.End ℂ (NSiteSpace d N)
+  qES : Module.End ℂ (EuclideanSpace ℂ (Cfg d N))
+  e : EuclideanSpace ℂ (Cfg d N) ≃ₗ[ℂ] NSiteSpace d N
+  hMatrix : Matrix.toLin' qMatrix = qRaw
+  hES : (LinearEquiv.conjAlgEquiv ℂ e.symm) qRaw = qES
+
+private noncomputable def complementProductTransport (A : MPSTensor d D)
+    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    ComplementProductTransport A N hN where
+  qMatrix := (List.ofFn fun i : Fin N ↦
+    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
+  qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
+  qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
+  e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+  hMatrix := toLin'_groundBondProduct (A := A) hN
+  hES := conj_localComplementProduct (A := A) (N := N)
+
 private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N))
@@ -538,25 +561,18 @@ private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
         (↑(∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
   classical
-  let qMatrix := (List.ofFn fun i : Fin N ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
-  let qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
-  let qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
-  have hMatrix : Matrix.toLin' qMatrix = qRaw := by
-    simpa only [qMatrix, qRaw] using
-      (toLin'_groundBondProduct (A := A) hN)
-  have hES : (LinearEquiv.conjAlgEquiv ℂ e.symm) qRaw = qES := by
-    simpa only [e, qRaw, qES] using
-      (conj_localComplementProduct (A := A) (N := N))
+  let transport := complementProductTransport A hN
+  change LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N)) transport.qES = _
   calc
-    LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N)) qES =
-        LinearMap.trace ℂ (NSiteSpace d N) qRaw := by
-          rw [← hES]
-          exact LinearMap.trace_conj' qRaw e.symm
-    _ = Matrix.trace qMatrix := by
-      rw [← hMatrix, Matrix.trace_toLin'_eq]
-    _ = _ := F.groundBondProduct_trace hN
+    LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N)) transport.qES =
+        LinearMap.trace ℂ (NSiteSpace d N) transport.qRaw := by
+          rw [← transport.hES]
+          exact LinearMap.trace_conj' transport.qRaw transport.e.symm
+    _ = Matrix.trace transport.qMatrix := by
+      rw [← transport.hMatrix, Matrix.trace_toLin'_eq]
+    _ = _ := by
+      simpa only [transport, complementProductTransport] using
+        F.groundBondProduct_trace hN
 
 private theorem parentHamiltonianGroundSpaceES_finrank_eq_all_sequences
     (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
@@ -598,35 +614,27 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
           (twoSiteParentGroundProjectorMatrix A))).prod).mulVec v = v) :
     v ∈ LinearMap.ker (parentHamiltonian A 2 N) := by
   classical
-  let qMatrix := (List.ofFn fun i : Fin N ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
-  let qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
-  let qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
-  have hMatrix : Matrix.toLin' qMatrix = qRaw := by
-    simpa only [qMatrix, qRaw] using
-      (toLin'_groundBondProduct (A := A) hN)
-  have hES : (LinearEquiv.conjAlgEquiv ℂ e.symm) qRaw = qES := by
-    simpa only [e, qRaw, qES] using
-      (conj_localComplementProduct (A := A) (N := N))
-  have hraw : qRaw v = v := by
-    rw [← hMatrix, Matrix.toLin'_apply]
+  let transport := complementProductTransport A hN
+  have hraw : transport.qRaw v = v := by
+    rw [← transport.hMatrix, Matrix.toLin'_apply]
     exact hv
-  have hfixES : qES (e.symm v) = e.symm v := by
-    rw [← hES]
+  have hfixES : transport.qES (transport.e.symm v) = transport.e.symm v := by
+    rw [← transport.hES]
     simp only [LinearEquiv.conjAlgEquiv_apply]
-    change e.symm (qRaw (e (e.symm v))) = e.symm v
-    rw [e.apply_symm_apply, hraw]
+    change transport.e.symm
+      (transport.qRaw (transport.e (transport.e.symm v))) = transport.e.symm v
+    rw [transport.e.apply_symm_apply, hraw]
   have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
     (fun i : Fin N ↦ localTermES A 2 i)
     (fun i ↦ localTermES_isSymmetricProjection A 2 i)
     (fun i j ↦ F.localTermES_commute hN i j)
   rw [← parentHamiltonianES_eq_sum_localTermES] at hproj
-  have hkerES : e.symm v ∈ LinearMap.ker (parentHamiltonianES A 2 N) :=
+  have hkerES : transport.e.symm v ∈
+      LinearMap.ker (parentHamiltonianES A 2 N) :=
     hproj.mem_iff_map_id.mpr hfixES
   rw [LinearMap.mem_ker] at hkerES ⊢
-  have h := congrArg e hkerES
-  simpa [parentHamiltonianES, e] using h
+  have h := congrArg transport.e hkerES
+  simpa [parentHamiltonianES, transport, complementProductTransport] using h
 
 /-- Beigi's finite-chain ground-space dimension formula: for a periodic chain
 of length greater than two, the dimension is the sum over ordered cyclic
