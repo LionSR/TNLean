@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.TraceNonincreasingProductSpan
 import TNLean.MPS.MPDO.VerticalSectorDensityBlocks
-import TNLean.MPS.MPDO.VerticalSectorTracePreservation
+import TNLean.MPS.MPDO.VerticalSectorGeneration
 
 /-!
 # Identity criterion for vertical-sector maps
