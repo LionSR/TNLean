@@ -267,8 +267,25 @@ canonical-form or ground-space-spanning assumption.  Its direct consequence
 \hspace{0pt}\leanid{exists_unitary_blockActions_of_twoSiteParentInteractionMatrix}
 decomposes the middle physical space into a finite direct sum of left and
 right tensor factors on which the two adjacent interactions act separately.
-The subsequent sector datum is now formalized in
-\leanid{MPSTensor.BeigiSectorGraphData}.  From its source equation~(2) alone,
+The symmetric two-sided form is also internal.  The complementary two-site
+interaction is a positive semidefinite orthogonal projector, and its two
+overlapping lifts commute under the same three-site hypothesis.  The theorem
+\leanid{Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute}
+combines the two one-sided block actions into
+\[
+  (U\otimes U)^*(\mathbf 1-Q_A)(U\otimes U)
+  =\bigoplus_{q,h}
+    \mathbf 1_{q,l}\otimes\eta_{q,h}\otimes\mathbf 1_{h,r}.
+\]
+Idempotence of the left-hand side forces every $\eta_{q,h}$ to be idempotent;
+its positivity then makes it an orthogonal projector.  Consequently
+\leanid{MPSTensor.IsNNCPH.nonempty_beigiSectorGraphData} constructs a finite
+sector graph directly from the three-site commuting-parent hypothesis, and
+\leanid{MPSTensor.IsNNCPH.beigiSectorGraphData} chooses such a graph.  No
+canonical-form, all-chain ground-space, or eventual-dimension hypothesis is
+used in this construction.
+
+For a finite sector graph,
 \leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
 constructs the finite directed graph and proves the $N>2$ specialization of
 Beigi's ordered-cycle ground-space dimension formula.  Beigi states this
@@ -381,12 +398,12 @@ canonical form is subject to the source obstruction recorded in
 ground-space spanning clause and the multiplicity-one distinct-sector
 extension are proved. The repeated-copy and arbitrary-raw-weight extension
 remains open.  In the reverse direction, eventual ground-space dimension
-stability, the local spatial decomposition, the ordered-cycle dimension
-formula, the reduction of the sector graph to one-dimensional loops, and the
-exact matrix product realization and parent-ground-space membership of every
-positive loop state are proved.  Spanning of the parent ground space by these
-loop vectors, followed by their identification with the basis of normal
-tensors, remains open.
+stability, the symmetric sector-graph construction from three-site commuting
+parent terms, the ordered-cycle dimension formula, the reduction of the
+sector graph to one-dimensional loops, and the exact matrix product realization
+and parent-ground-space membership of every positive loop state are proved.
+Spanning of the parent ground space by these loop vectors, followed by their
+identification with the basis of normal tensors, remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
