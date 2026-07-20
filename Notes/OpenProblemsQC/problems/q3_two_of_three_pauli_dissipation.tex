@@ -1,0 +1,205 @@
+\documentclass[class=article,11pt,a4paper,crop=false]{standalone}
+\input{../preamble.tex}
+
+\begin{document}
+
+% Q3: Two-of-three Pauli dissipation under arbitrary drive
+%======================================================================
+\section{Q3: Two-of-three Pauli dissipation under arbitrary drive}
+\label{sec:pauli}
+%======================================================================
+
+\subsection{Statement and conventions}
+
+For $n$ qubits, let
+\begin{equation}\label{eq:pauli-lindblad}
+ \dot\rho_t=-i[H(t),\rho_t]
+ +\sum_{i=1}^n(\gamma_x\Dd_{X_i}+\gamma_y\Dd_{Y_i}
+ +\gamma_z\Dd_{Z_i})(\rho_t),
+ \qquad \Dd_P(\rho)=P\rho P-\rho.
+\end{equation}
+The rates are nonnegative. To make ``arbitrary drive'' precise, we take
+$H(t)$ to be Hermitian, strongly measurable, and locally integrable in
+operator norm; equivalently, one may assume $H$ continuous if only classical
+solutions are desired. Equation~\eqref{eq:pauli-lindblad} then has a unique
+absolutely continuous solution for every initial density matrix.
+
+\begin{problem}[Q3: two rates suffice]\label{prob:two-pauli}
+Suppose at least two of $\{\gamma_x,\gamma_y,\gamma_z\}$ are positive. Prove,
+uniformly over the drive $H(t)$, that
+$\norm{\rho_t-\id^{\otimes n}/2^n}_1\le 1/\mathrm{poly}(n)$ after
+$O(\log n)$ time, with constants depending only on two positive rates.
+\end{problem}
+
+\subsection{Solution}
+
+Set $\tau_n=\id^{\otimes n}/2^n$. Choose two distinct Pauli directions
+$a,b\in\{x,y,z\}$ whose rates are positive, and put
+\begin{equation}\label{eq:gamma-star}
+ \gamma_*:=\min\{\gamma_a,\gamma_b\}>0.
+\end{equation}
+The following explicit estimate resolves \cref{prob:two-pauli}.
+
+\begin{theorem}[Drive-independent mixing from two Pauli rates]
+\label{thm:q3-solved}
+Every solution of \eqref{eq:pauli-lindblad} satisfies
+\begin{equation}\label{eq:q3-trace-bound}
+ \boxed{\quad
+ \norm{\rho_t-\tau_n}_1
+ \le \sqrt{2n\log 2} \exp\!\left(-\frac{\gamma_*t}{4}\right).
+ \quad}
+\end{equation}
+Consequently, for every $p\ge0$ and $n\ge1$,
+\begin{equation}\label{eq:q3-threshold}
+ t\ge \frac{2}{\gamma_*}
+ ((2p+1)\log n+\log(2\log2))
+ \quad\Longrightarrow\quad
+ \norm{\rho_t-\tau_n}_1\le n^{-p}.
+\end{equation}
+The estimate is uniform in $H$, in the initial state, and in the value of the
+third nonnegative rate.
+\end{theorem}
+
+\begin{proof}
+We separate the finite-dimensional one-site calculation from the entropic
+argument.
+
+\paragraph{1. The one-qubit generator.}
+First retain only the two chosen rates and write
+\[
+ \mathcal L_{ab}=\gamma_a\Dd_{P_a}+\gamma_b\Dd_{P_b}.
+\]
+If $P_c$ is the remaining Pauli matrix, direct multiplication in the Pauli
+basis gives
+\begin{align}
+ \mathcal L_{ab}(\id)&=0,\nonumber\\
+ \mathcal L_{ab}(P_a)&=-2\gamma_bP_a,&
+ \mathcal L_{ab}(P_b)&=-2\gamma_aP_b,&
+ \mathcal L_{ab}(P_c)&=-2(\gamma_a+\gamma_b)P_c.
+ \label{eq:q3-pauli-spectrum}
+\end{align}
+Thus the fixed-point algebra is $\mathbb C\id$, the stationary density matrix
+is $\tau_1=\id/2$, and the spectral gap in the convention of
+\cite{GaoRouze2022Complete} is
+\begin{equation}\label{eq:q3-gap}
+ \lambda(\mathcal L_{ab})=2\gamma_*.
+\end{equation}
+Moreover, $A\mapsto P_jAP_j$ is self-adjoint for the Hilbert--Schmidt inner
+product. Hence $\mathcal L_{ab}$ is trace-symmetric, equivalently GNS-symmetric with
+respect to $\tau_1$.
+
+\paragraph{2. A dimension-independent complete MLSI constant.}
+Gao and Rouz\'e prove that every finite-dimensional GNS-symmetric quantum
+Markov semigroup satisfies a complete modified logarithmic Sobolev inequality
+(CMLSI), with
+\[
+ \alpha_{\rm CMLSI}(\mathcal L)
+ \ge \frac{\lambda(\mathcal L)}{C_{\tau,\mathrm{cb}}(\M:\mathcal F)},
+\]
+where $\mathcal F$ is the fixed-point algebra
+\cite[Theorems~1.1 and~3.3]{GaoRouze2022Complete}. For the primitive inclusion
+$\mathbb C\id\subset\M_2$, their complete index is $4$. Combining this with
+\eqref{eq:q3-gap} yields the explicit, nonoptimal bound
+\begin{equation}\label{eq:q3-alpha}
+ \alpha_{ab}\ge\frac{\lambda(\mathcal L_{ab})}{4}
+ =\frac{\gamma_*}{2}.
+\end{equation}
+CMLSI tensorizes, so the sum of the copies of $\mathcal L_{ab}$ on the $n$ sites has
+the same lower bound $\alpha_{ab}$. In entropy-production form, for every
+(possibly entangled) $n$-qubit state $\rho$,
+\begin{equation}\label{eq:q3-cmlsi}
+ \operatorname{EP}_{\Dd^{(n)}_{ab}}(\rho)
+ \ge \alpha_{ab}D(\rho\,\| \tau_n).
+\end{equation}
+This is precisely where completeness is useful: the inequality remains valid
+when a site is viewed together with all other sites as an ancilla.
+
+If the third rate is positive, its entropy-production term may simply be
+added. Indeed, for a Pauli involution $P$,
+\[
+ \operatorname{EP}_{\Dd_P}(\rho)
+ =D(\rho\,\|\,P\rho P)=D(P\rho P\,\| \rho)\ge0.
+\]
+Therefore the full dissipator in \eqref{eq:pauli-lindblad} still obeys
+\eqref{eq:q3-cmlsi} with the lower bound \eqref{eq:q3-alpha}.
+
+\paragraph{3. The Hamiltonian does not contribute.}
+Because $\log\tau_n=-(n\log2)\id$, the Hamiltonian part of the relative-entropy
+derivative is, at every regular time,
+\[
+ i\,\tr\!\left([H(t),\rho_t]
+       (\log\rho_t-\log\tau_n)\right)=0.
+\]
+The term containing $\log\tau_n$ vanishes because it is scalar, and the other
+term vanishes by cyclicity of the trace and
+$[\rho_t,\log\rho_t]=0$. Hence, for almost every $t$,
+\begin{equation}\label{eq:q3-differential}
+ \frac{d}{dt}D(\rho_t\,\| \tau_n)
+ =-\operatorname{EP}_{\Dd^{(n)}}(\rho_t)
+ \le-\alpha_{ab}D(\rho_t\,\| \tau_n).
+\end{equation}
+For non-full-rank states this identity follows by replacing $\rho$ with
+$(1-\varepsilon)\rho+\varepsilon\tau_n$ and taking
+$\varepsilon\downarrow0$, or directly from the integrated entropy-production
+form of CMLSI. The same approximation treats locally integrable drives.
+Gr\"onwall's inequality now gives
+\begin{equation}\label{eq:q3-entropy-decay}
+ D(\rho_t\,\| \tau_n)
+ \le e^{-\alpha_{ab}t}D(\rho_0\,\| \tau_n)
+ \le n\log2\,e^{-\alpha_{ab}t},
+\end{equation}
+where the last step uses
+$D(\rho_0\,\| \tau_n)=n\log2-S(\rho_0)\le n\log2$.
+
+\paragraph{4. Trace distance.}
+Quantum Pinsker's inequality and \eqref{eq:q3-alpha}--\eqref{eq:q3-entropy-decay}
+give
+\[
+ \norm{\rho_t-\tau_n}_1^2
+ \le2D(\rho_t\,\| \tau_n)
+ \le2n\log2\,e^{-\gamma_*t/2},
+\]
+which is \eqref{eq:q3-trace-bound}. Substituting
+\eqref{eq:q3-threshold} into its right-hand side gives $n^{-p}$, proving the
+last assertion.
+\end{proof}
+
+\begin{remark}[Constants and scope]\label{rem:q3-constants}
+The constant $\gamma_*/2$ in \eqref{eq:q3-alpha} is only the general
+Gao--Rouz\'e index bound. Determining the optimal CMLSI constant of the
+anisotropic two-Pauli qubit generator is a separate sharp-constant question.
+The estimate above is nevertheless uniform as one adds qubits or an arbitrary
+Hamiltonian drive. Uniformity necessarily deteriorates when one of the two
+selected rates tends to zero, since then the one-site fixed algebra ceases to
+be scalar.
+\end{remark}
+
+\begin{remark}[Machine-checked part]\label{rem:q3-lean}
+\leanstatus{Channel/\allowbreak Semigroup/\allowbreak PauliDissipation}
+The new Lean module formalizes, without \texttt{sorry}, the Pauli conjugation
+identities, the general distinct-pair generator, its diagonal action
+\eqref{eq:q3-pauli-spectrum}, the scalar-kernel theorem, the faithful
+maximally mixed fixed state, and the corresponding autonomous-semigroup
+fixed-point classification. The principal declaration suffixes are
+\texttt{pauli}, \texttt{trace\_conjTranspose\_symmetry},
+\texttt{eq\_zero\_iff}, \texttt{hasSimpleFaithfulKernel}, and
+\texttt{fixed\_iff\_scalar}, under the namespaces displayed in the source.
+
+The three \texttt{q3\_} corollaries then work over actual
+$2^n$-dimensional matrices and use TNLean's matrix Schatten $1$-norm. The first
+combines entropy decay with Pinsker, the second proves exactly the logarithmic
+threshold \eqref{eq:q3-threshold}, and
+\texttt{q3\_traceNorm\_le\_rpow\_of\_}\allowbreak
+\texttt{logarithmic\_time} derives the unsquared $n^{-p}$ conclusion. These
+theorems take CMLSI decay and Pinsker as explicit hypotheses. TNLean does not yet
+contain quantum Pinsker, CMLSI tensorization, or the nonautonomous entropy chain
+rule, so the cited analytic inputs of the proof remain outside the current
+machine-checked kernel. No operator norm is substituted for trace norm.
+\end{remark}
+
+\ifstandalone
+\bibliographystyle{alpha}
+\bibliography{../refs}
+\fi
+
+\end{document}
