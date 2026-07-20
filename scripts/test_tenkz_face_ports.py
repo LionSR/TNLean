@@ -543,6 +543,19 @@ SOURCE = r"""
   \tnsite[removed]{(1,1,1)}
   \tnsite[removed]{(1,2,1)}
 \end{tenkzlattice}
+% Default role-stack outer legs remain physically open while north/south
+% virtual traces leave the same sites on visibly distinct paper-frame rays.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=open,
+    north=trace, south=trace]
+\end{tenkzlattice}
+% A boundary label is live body customization.  Its measured box controls an
+% endpoint escape as well as the exterior lane, so the lead stays connected.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets=1, boundary=open,
+    outer legs=none, west=trace, east=trace]
+  \tnsite[role=marked, label=$A_{\partial}^{\mathrm{east}}$]{(1,2,0)}
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -1961,6 +1974,28 @@ def main() -> int:
         "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
         "virtual-north=0|virtual-south=4",
         "removed routing side changed surviving boundary ownership",
+    )
+    outer_leg_trace = pictures[102]
+    for sheet in range(2):
+        require(
+            outer_leg_trace,
+            f"trace|picture=102|lang=lattice|axis=north-south|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-1",
+            f"outer-leg separation lost sheet {sheet} periodic closure",
+        )
+    require(
+        outer_leg_trace,
+        "boundary|picture=102|physical-up=1|physical-down=1|pair-closed-0=1|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=2|virtual-east=2|"
+        "virtual-north=0|virtual-south=0",
+        "outer-leg separation changed physical or virtual boundary ownership",
+    )
+    labelled_trace = pictures[103]
+    require(
+        labelled_trace,
+        "trace|picture=103|lang=lattice|axis=west-east|sheet=0|slot=1|"
+        "from=1-1|to=1-2",
+        "boundary-label escape lost the periodic closure",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0

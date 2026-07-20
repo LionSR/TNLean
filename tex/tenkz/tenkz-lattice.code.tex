@@ -2157,6 +2157,10 @@
 \dim_new:N \l__tenkzl_traly_dim
 \dim_new:N \l__tenkzl_trblx_dim
 \dim_new:N \l__tenkzl_trbly_dim
+\dim_new:N \l__tenkzl_trasx_dim
+\dim_new:N \l__tenkzl_trasy_dim
+\dim_new:N \l__tenkzl_trbsx_dim
+\dim_new:N \l__tenkzl_trbsy_dim
 \dim_new:N \l__tenkzl_trtransa_dim
 \dim_new:N \l__tenkzl_trtransb_dim
 \dim_new:N \l__tenkzl_trlane_dim
@@ -2405,6 +2409,39 @@
     \tenkzl_side_point:nnnnnNN {#2}{#5}{#6}{\l__tenkzl_trsheet_int}
       {\tenkz@dim{\tenkz@r@boundaryleg}}
       \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
+    % Physical outer legs are vertical in the paper frame.  North/south
+    % virtual stubs would otherwise lie on the same ray, so stagger their tips
+    % toward the paper-east routing lane by the existing bead/daylight band.
+    % The haloed return then never crosses and punches a gap in the physical
+    % ray.  This is measured resolution after the frame map, not a second map.
+    \str_if_eq:nnT {#1}{north}
+      {
+        \tenkzl_trace_separate_ns_stub:N \l__tenkzl_tratx_dim
+        \tenkzl_trace_separate_ns_stub:N \l__tenkzl_trbtx_dim
+        % Adjacent sheets can project one south tip and the next north tip
+        % to the same paper point.  Shorten them toward their own sites by a
+        % measured bead/daylight gap so their eastbound leads are not
+        % collinear and cannot acquire a false inter-sheet segment.
+        \dim_sub:Nn \l__tenkzl_traty_dim
+          { \tenkz@dim{\tenkz@r@daylight} }
+        \dim_add:Nn \l__tenkzl_trbty_dim
+          { \tenkz@dim{\tenkz@r@daylight} }
+      }
+    \dim_set:Nn \l__tenkzl_cupbulge_dim
+      { \tenkz@dim{\tenkz@r@dotdia} / 2
+        + \tenkz@dim{\tenkz@r@daylight} }
+    % Reuse the measured cup endpoint escape: a farther exterior lane alone
+    % cannot stop a fixed lead from crossing an opaque body label.
+    \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+      {#3}{#4}{\l__tenkzl_trsheet_int}
+      \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+      \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+      \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
+    \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+      {#5}{#6}{\l__tenkzl_trsheet_int}
+      \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
+      \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
+      \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
     \tenkzl_side_cup_project_trans:NNN
       \l__tenkzl_tratx_dim \l__tenkzl_traty_dim \l__tenkzl_trtransa_dim
     \tenkzl_side_cup_project_trans:NNN
@@ -2429,15 +2466,36 @@
     % Plain endpoint stubs follow the haloed return path, preserving both caps.
     \draw[bond]
       (\dim_use:N \l__tenkzl_trax_dim,\dim_use:N \l__tenkzl_tray_dim) --
+      (\dim_use:N \l__tenkzl_trasx_dim,\dim_use:N \l__tenkzl_trasy_dim) --
       (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim);
     \draw[bond]
       (\dim_use:N \l__tenkzl_trbtx_dim,\dim_use:N \l__tenkzl_trbty_dim) --
+      (\dim_use:N \l__tenkzl_trbsx_dim,\dim_use:N \l__tenkzl_trbsy_dim) --
       (\dim_use:N \l__tenkzl_trbx_dim,\dim_use:N \l__tenkzl_trby_dim);
     \tenkz@event{trace|picture=\the\tenkz@pictureid|lang=lattice|%
       axis=#1-#2|sheet=\int_eval:n {\l__tenkzl_trsheet_int}|%
       slot=\int_eval:n {\l__tenkzl_trslot_int}|%
       from=\int_eval:n {#3}-\int_eval:n {#4}|%
       to=\int_eval:n {#5}-\int_eval:n {#6}}
+  }
+
+\cs_new_protected:Npn \tenkzl_trace_separate_ns_stub:N #1
+  {
+    \dim_add:Nn #1
+      { ( \tenkz@dim{\tenkz@r@dotdia}
+          + \tenkz@dim{\tenkz@r@daylight} )
+        * \int_eval:n { \l__tenkzl_trordinal_int + 1 } }
+  }
+
+% An unresolved trace has no eastbound return lane.  Its honest open virtual
+% stub instead leaves toward paper west, away from both the vertical physical
+% ray and the north-east site-label quadrant.
+\cs_new_protected:Npn \tenkzl_trace_separate_open_ns_stub:N #1
+  {
+    \dim_sub:Nn #1
+      { ( \tenkz@dim{\tenkz@r@dotdia}
+          + \tenkz@dim{\tenkz@r@daylight} )
+        * \int_eval:n { \l__tenkzl_trordinal_int + 1 } }
   }
 
 \cs_new_protected:Npn \tenkzl_draw_incomplete_trace_at:nnnn #1#2#3#4
@@ -2458,6 +2516,10 @@
     \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{\l__tenkzl_trsheet_int}
       {\tenkz@dim{\tenkz@r@boundaryleg}}
       \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+    \str_if_eq:nnT {#1}{north}
+      { \tenkzl_trace_separate_open_ns_stub:N \l__tenkzl_tratx_dim }
+    \str_if_eq:nnT {#1}{south}
+      { \tenkzl_trace_separate_open_ns_stub:N \l__tenkzl_tratx_dim }
     \draw[bond]
       (\dim_use:N \l__tenkzl_trax_dim,\dim_use:N \l__tenkzl_tray_dim) --
       (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim);
@@ -2472,13 +2534,19 @@
           {
             {west} { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
               \l__tenkzl_trslot_int
-              { \tenkzl_endpoint_exists:nnnT
+              { \int_set:Nn \l__tenkzl_trordinal_int
+                  { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
+                    + \l__tenkzl_trslot_int - 1 }
+                \tenkzl_endpoint_exists:nnnT
                   {\l__tenkzl_trslot_int}{1}{\l__tenkzl_trsheet_int}
                   { \tenkzl_draw_trace_stub_at:nnn {west}
                       {\l__tenkzl_trslot_int}{1} } } }
             {east} { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
               \l__tenkzl_trslot_int
-              { \tenkzl_endpoint_exists:nnnT
+              { \int_set:Nn \l__tenkzl_trordinal_int
+                  { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
+                    + \l__tenkzl_trslot_int - 1 }
+                \tenkzl_endpoint_exists:nnnT
                   {\l__tenkzl_trslot_int}{\l__tenkzl_ncols_int}
                   {\l__tenkzl_trsheet_int}
                   { \tenkzl_draw_trace_stub_at:nnn {east}
@@ -2486,13 +2554,19 @@
                       {\l__tenkzl_ncols_int} } } }
             {north} { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
               \l__tenkzl_trslot_int
-              { \tenkzl_endpoint_exists:nnnT
+              { \int_set:Nn \l__tenkzl_trordinal_int
+                  { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
+                    + \l__tenkzl_trslot_int - 1 }
+                \tenkzl_endpoint_exists:nnnT
                   {1}{\l__tenkzl_trslot_int}{\l__tenkzl_trsheet_int}
                   { \tenkzl_draw_trace_stub_at:nnn {north}{1}
                       {\l__tenkzl_trslot_int} } } }
             {south} { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
               \l__tenkzl_trslot_int
-              { \tenkzl_endpoint_exists:nnnT {\l__tenkzl_nrows_int}
+              { \int_set:Nn \l__tenkzl_trordinal_int
+                  { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
+                    + \l__tenkzl_trslot_int - 1 }
+                \tenkzl_endpoint_exists:nnnT {\l__tenkzl_nrows_int}
                   {\l__tenkzl_trslot_int}
                   {\l__tenkzl_trsheet_int}
                   { \tenkzl_draw_trace_stub_at:nnn {south}
