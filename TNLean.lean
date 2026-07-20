@@ -592,7 +592,6 @@ import TNLean.MPS.MPDO.FixedBondProductEtaTensor
 import TNLean.MPS.MPDO.PhysicalSectorNormalProductRepresentative
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
 import TNLean.MPS.MPDO.GSNNCHSectorSum
-import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw
 import TNLean.MPS.MPDO.BNTSectorCommutingFamily
 import TNLean.MPS.MPDO.BlockedRFPConstruction
