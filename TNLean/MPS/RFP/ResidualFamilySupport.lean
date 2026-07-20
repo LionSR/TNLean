@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
-import TNLean.MPS.RFP.AppendixBCommutation
+import TNLean.MPS.RFP.AppendixBSupport
 import TNLean.MPS.RFP.ResidualWordSpan
 
 /-!
@@ -253,6 +253,11 @@ variable {P : SectorDecomposition d}
 
 /-- Whole-direct-sum transfer idempotence supplies simultaneous Appendix B
 data on the disjoint union of the within-sector residual-pair spaces.
+
+**Scope restriction (multiplicity-one canonical form):** this theorem treats
+one copy of each distinct normal tensor.  The repeated-copy physical-space
+construction in CPSV16, Corollary `III.cor3`, remains separate; see
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
 
 Source: arXiv:1606.00608, equations `III_CFI_RFP` and `eq:III_isometry`, lines
 543--555, and Corollary `III.cor3`, lines 583--589. -/
