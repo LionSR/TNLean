@@ -100,12 +100,13 @@ the associated reshaped linear map.
 
 For complex matrices, `operatorSchmidtRank_minimal` proves that this equals the
 minimum number of elementary tensor factors in arXiv:1903.05373, equation (1). -/
-noncomputable def operatorSchmidtRank (ρ : Matrix (m × n) (m × n) R) : ℕ :=
+noncomputable def operatorSchmidtRank [Finite n]
+    (ρ : Matrix (m × n) (m × n) R) : ℕ :=
   Module.finrank R (LinearMap.range (operatorSchmidtMap ρ))
 
 /-- Operator-Schmidt rank is the dimension of the span of the operator blocks. -/
 theorem operatorSchmidtRank_eq_finrank_operatorBlockSpan
-    (ρ : Matrix (m × n) (m × n) R) :
+    [Finite n] (ρ : Matrix (m × n) (m × n) R) :
     operatorSchmidtRank ρ = Module.finrank R (operatorBlockSpan ρ) := by
   rw [operatorSchmidtRank, range_operatorSchmidtMap_eq_operatorBlockSpan]
 

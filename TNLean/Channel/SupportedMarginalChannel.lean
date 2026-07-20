@@ -136,7 +136,8 @@ theorem range_supportedMarginalMap (ρ : Matrix (α × β) (α × β) ℂ)
 omit [DecidableEq α] [Fintype β] [DecidableEq β] in
 /-- The linear rank of the supported-marginal map is the operator-Schmidt rank
 of the bipartite operator. -/
-theorem finrank_range_supportedMarginalMap (ρ : Matrix (α × β) (α × β) ℂ)
+theorem finrank_range_supportedMarginalMap [Finite β]
+    (ρ : Matrix (α × β) (α × β) ℂ)
     (p : α → ℝ) (hp : ∀ i, 0 < p i) :
     Module.finrank ℂ (LinearMap.range (supportedMarginalMap ρ p)) =
       operatorSchmidtRank ρ := by
