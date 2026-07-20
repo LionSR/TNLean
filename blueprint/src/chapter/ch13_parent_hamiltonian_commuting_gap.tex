@@ -2584,6 +2584,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.loopSchmidtFactorization}
     \lean{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor}
     \lean{MPSTensor.BeigiSectorGraphData.minimalLoopTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor_sector_apply}
     \leanok
     \uses{def:beigi_loop_product_state}
     Let $\Phi_a=(\varphi_a(r,l))_{r,l}$ and write
@@ -2615,6 +2616,27 @@ specialization of that Appendix~D definition.
     If $r_a=0$, then the intermediate index set in the factorization
     $\Phi_a=X_aY_a$ is empty.  Every entry of $X_aY_a$ is therefore zero,
     contrary to $\varphi_a\ne0$.
+\end{proof}
+
+\begin{theorem}[Injectivity of the minimal Beigi loop tensor]
+    \label{thm:beigi_minimal_loop_tensor_injective}
+    \lean{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor_isInjective}
+    \lean{MPSTensor.BeigiSectorGraphData.minimalLoopTensor_isInjective}
+    \lean{MPSTensor.BeigiSectorGraphData.minimalLoopTensor_isNormal}
+    \leanok
+    \uses{def:beigi_loop_schmidt_support, def:injective, def:normal}
+    The tensor $\widetilde C_a$ on the Schmidt support is injective, as is its
+    image under the one-site unitary.  In particular, the physical tensor is
+    normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    In a rank factorization $\Phi_a=X_aY_a$ through
+    $r_a=\rank\Phi_a$, the columns of $Y_a$ and the rows of $X_a$ each span
+    $\C^{r_a}$.  Their pairwise outer products therefore span
+    $M_{r_a}(\C)$, and these outer products are precisely the loop-sector
+    letters of $\widetilde C_a$.  A unitary change of physical coordinates preserves
+    this span.  One-site injectivity implies normality.
 \end{proof}
 
 \begin{theorem}[Periodic vector of a positive Beigi loop]

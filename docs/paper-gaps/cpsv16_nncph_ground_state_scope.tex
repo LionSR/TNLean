@@ -342,10 +342,19 @@ space to $\C^{r_a}$.  Their letters are
 $(Y_a)_{\alpha,l}(X_a)_{r,\beta}$, and
 \leanid{MPSTensor.BeigiSectorGraphData.mpv_minimalLoopTensor} proves that this
 restriction leaves every positive-length periodic vector equal to Beigi's
-product-of-pairs vector.  No injectivity, normality, or normalization condition
-is imposed on these tensors at this stage.  Consequently, the spanning
-statement below may equivalently be formulated using the periodic vectors of
-the minimal Schmidt-support tensors.
+product-of-pairs vector.  Exactness of the rank factorization shows that the
+columns of $Y_a$ and the rows of $X_a$ span $\C^{r_a}$.  Their outer products
+are the letters of the minimal tensor, and hence
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{minimalLoopCoordinateTensor_isInjective} proves one-site
+injectivity.  The one-site unitary preserves this spanning property, giving
+\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor_isInjective} and the
+normality conclusion
+\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor_isNormal}.
+No normalization, transfer-idempotence, or identification with the original
+basis of normal tensors is asserted at this stage.  Consequently, the
+spanning statement below may equivalently be formulated using the periodic
+vectors of the minimal Schmidt-support tensors.
 
 For every $N\geq2$,
 \leanid{MPSTensor.BeigiSectorGraphData.}
