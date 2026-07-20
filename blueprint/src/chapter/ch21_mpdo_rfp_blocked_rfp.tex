@@ -686,6 +686,41 @@ physical indices, as in
     Thus $\mathcal F=\mathcal A$, and $F$ is the identity.
 \end{proof}
 
+\begin{theorem}[Identity criterion from fixed contractions]
+    \label{thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity}
+    \lean{MPOTensor.%
+        eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz}
+    \leanok
+    \uses{thm:mpdo_direct_sum_faithful_fixed_family,
+        thm:mpdo_density_blocks_fixed_point_product_dimension,
+        thm:mpdo_fixed_contractions_product_dimension}
+    Let $F$ be a positive trace-preserving endomorphism of
+    $\mathcal A=\prod_\alpha M_{d_\alpha}$ whose trace adjoint satisfies the
+    Schwarz inequality.  Suppose that, for some $L>0$,
+    \[
+        C_L(V_c)=\mathcal A,
+        \qquad F(V_c(X))=V_c(X)
+    \]
+    for every bond matrix $X$.  Then $F=\operatorname{id}_{\mathcal A}$.
+    No product $V_c(X_1)\cdots V_c(X_L)$ is assumed to be fixed.
+
+    This is the implication used for each transported square composite in
+    \cite[Appendix~C.4, lines~1980--1993]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The fixed contractions and their positive-length product span give a
+    positive-definite fixed family $\rho=(\rho_\alpha)_\alpha$.  Hence
+    Theorem~\ref{thm:mpdo_density_blocks_fixed_point_product_dimension}
+    gives
+    \[
+        \dim C_L(\mathcal F)\leq\dim\mathcal F,
+        \qquad \mathcal F=\operatorname{Fix}(F).
+    \]
+    Since $C_L(V_c)=\mathcal A$ and $V_c(X)\in\mathcal F$, the preceding
+    theorem gives $F=\operatorname{id}_{\mathcal A}$.
+\end{proof}
+
 \begin{definition}[Retained coordinates for the vertical-sector algebra]
     \label{def:mpdo_retained_vertical_sector_coordinates}
     \lean{MPOTensor.verticalSectorFinEquiv}
@@ -1746,6 +1781,42 @@ physical indices, as in
     The product-span hypothesis then gives
     $Q\mathbf 1Q=\mathbf 1$, so $Q=\mathbf 1$.  Thus $\rho$ is positive
     definite, and the construction of $P$ gives $F(\rho)=\rho$.
+\end{proof}
+
+\begin{theorem}[Faithful fixed family in a finite product]
+    \label{thm:mpdo_direct_sum_faithful_fixed_family}
+    \lean{Matrix.IsPositiveDirectSumMap.%
+        exists_posDef_fixedFamily_of_fixed_product_span}
+    \leanok
+    \uses{thm:positive_map_faithful_fixed_point_from_product_span,
+        thm:direct_sum_full_matrix_extension_compatibility}
+    Let $F$ be a positive trace-preserving endomorphism of
+    $\mathcal A=\prod_\alpha M_{d_\alpha}$.  Suppose that each $V_j$ is
+    fixed by $F$ and, for some $L>0$, the identity belongs to
+    \[
+        \spn_{\C}\{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+    \]
+    Then there is a fixed family $\rho=(\rho_\alpha)_\alpha$ such that every
+    $\rho_\alpha$ is positive definite.
+
+    This is the finite-product form of the faithful fixed-point argument in
+    \cite[Appendix~C.4, lines~1980--1993]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Extend $F$ to the full matrix algebra by diagonal compression followed
+    by block-diagonal embedding.  This extension is positive and trace
+    preserving.  Block-diagonal embedding preserves the identity and every
+    product $V_{j_1}\cdots V_{j_L}$, so
+    Theorem~\ref{thm:positive_map_faithful_fixed_point_from_product_span}
+    gives a positive-definite fixed point $\widehat\rho$ of the extension.
+    Fixed points of the extension are block diagonal.  Thus
+    \[
+        \widehat\rho=\bigoplus_\alpha\rho_\alpha,
+        \qquad F(\rho)=\rho.
+    \]
+    Every diagonal block $\rho_\alpha$ of the positive-definite matrix
+    $\widehat\rho$ is positive definite.
 \end{proof}
 
 \begin{theorem}[Trace preservation of the transported vertical-sector maps]

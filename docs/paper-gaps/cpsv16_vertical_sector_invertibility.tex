@@ -186,10 +186,20 @@ in \doclink{TNLean/Channel/FixedPoint/TraceNonincreasingProductSpan}.}
 A positive trace-nonincreasing endomorphism with fixed factors for which the
 identity lies in the span of the products of one positive length has a
 positive-definite fixed point.  No product is required to be fixed.  The
-remaining fixed-point argument for the transported composites must still pass
-this statement through the finite direct sums and combine it with the
-density-block dimension bound; the present result alone does not prove that
-either composite is the identity.
+finite-product passage and its combination with the density-block dimension
+bound are now also formalized.\footnote{Formal declarations:
+\leanid{Matrix.IsPositiveDirectSumMap.%
+exists_posDef_fixedFamily_of_fixed_product_span} and
+\leanid{MPOTensor.%
+eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz}
+in \doclink{TNLean/MPS/MPDO/VerticalSectorInvertibility}.}
+A positive trace-preserving endomorphism of
+a finite product therefore has a positive-definite fixed family under the
+same product-span hypothesis; if its trace adjoint satisfies the Schwarz
+inequality, the fixed contractions and the density-block bound force the
+endomorphism to be the identity.  The remaining application to the transported
+composites is to derive the required positivity and adjoint Schwarz properties
+from the source tensor hypotheses.
 
 Let $F^*$ be the trace adjoint and define the trace-loss operator
 \[
@@ -265,15 +275,9 @@ order:
           two transported square composites on the full sector algebras;
           trace preservation of the individual maps and composites is now
           established without an all-input active-image statement;
-    \item apply the maximal-support fixed-point construction to the canonical
-          full-matrix extensions and compress the resulting positive-definite
-          fixed points to positive-definite fixed families on the sector
-          direct sums;
-    \item apply the proved density-block dimension bound and combine it with
-          the fixed contraction families,
-          the already proved product-generation theorem, and the
-          finite-dimensional implication above to obtain both identity
-          compositions;
+    \item apply the finite-product identity criterion to each square
+          composite, using the fixed contraction families and the proved
+          product-generation theorem, to obtain both identity compositions;
     \item derive the permutation and matching dimensions from the resulting
           positive, trace-preserving inverse pair, retaining the Schwarz
           hypothesis for the unitary-conjugation conclusion.
@@ -281,16 +285,16 @@ order:
 
 \section{Classification}
 
-\textbf{Verdict: trace subproblem closed; full-support density-dimension lemma
-proved; invertibility gap open.}  The two transported maps and their square
-composites are trace preserving under the source tensor hypotheses.  For a
-finite direct sum with a positive-definite fixed family, the density-block
-form now yields the required product-span dimension inequality.  The stronger
-active-image inclusions remain unproved and are not needed for this route.
-Until the adjoint Schwarz inequalities and the tensor-attached construction
-of the faithful fixed families are proved, neither transported-map
-invertibility nor sector relabelling should carry a completion marker in the
-blueprint.
+\textbf{Verdict: trace and abstract fixed-point subproblems closed;
+invertibility gap open.}  The two transported maps and their square composites
+are trace preserving under the source tensor hypotheses.  The
+positive-definite fixed-family construction on finite products, the
+density-block product-span bound, and the resulting abstract identity
+criterion are proved.  The stronger active-image inclusions remain unproved
+and are not needed for this route.  Until the adjoint Schwarz inequalities are
+derived for the tensor-attached square composites and the identity criterion
+is instantiated for them, neither transported-map invertibility nor sector
+relabelling should carry a completion marker in the blueprint.
 
 \bibliographystyle{alpha}
 \bibliography{references}
