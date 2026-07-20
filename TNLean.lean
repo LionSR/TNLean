@@ -630,7 +630,7 @@ import TNLean.MPS.RFP.BeigiSpatialDecomposition
 import TNLean.MPS.RFP.BeigiSectorGraph
 import TNLean.MPS.RFP.BeigiSectorGraphConstruction
 import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
-import TNLean.MPS.RFP.BeigiLoopInjectivity
+import TNLean.MPS.RFP.BeigiLoopFixedPoint
 import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
 import TNLean.MPS.RFP.BNTWeightCounterexample
 -- Layer 6a: Quantum Wielandt span-growth infrastructure
