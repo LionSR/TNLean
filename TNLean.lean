@@ -55,7 +55,6 @@ import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.SpinCover
 import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Algebra.MatrixRankClosed
-import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.StarSubalgebraBlockDiagonal
 import TNLean.Algebra.StarSubalgebraBlockForm
 import TNLean.Algebra.CommutingOverlappingDecomp

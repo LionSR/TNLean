@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Channel.KrausCPTP
+import TNLean.Channel.PartialTrace
 import TNLean.Channel.TensorMap
 
 /-!
@@ -34,8 +35,8 @@ this range dimension is not asserted here.
   the operator-Schmidt reshaping.
 * `Matrix.finrank_range_supportedMarginalMap`: its linear rank is the
   operator-Schmidt rank of the bipartite operator.
-* `Matrix.supportedMarginalMap_isKrausCPTP`: positivity and the faithful
-  marginal equation make the supported-marginal map a quantum channel.
+* `Matrix.supportedMarginalMap_isKrausCPTP`: positivity and a faithful right
+  partial trace make the supported-marginal map a quantum channel.
 * `Matrix.supportedMarginalReconstruction_eq`: applying this channel to the
   canonical purification reconstructs the original bipartite operator.
 
@@ -141,10 +142,14 @@ theorem finrank_range_supportedMarginalMap (ρ : Matrix (α × β) (α × β) �
       operatorSchmidtRank ρ := by
   rw [operatorSchmidtRank, range_supportedMarginalMap ρ p hp]
 
-/-- The first marginal written in operator-block coordinates. -/
-noncomputable def operatorBlockMarginal
-    (ρ : Matrix (α × β) (α × β) ℂ) : Matrix α α ℂ :=
-  fun i j ↦ Matrix.trace (operatorBlock ρ i j)
+omit [Fintype α] [DecidableEq α] [DecidableEq β] in
+/-- The trace of an operator block is the corresponding entry of the right
+partial trace. -/
+@[simp]
+theorem trace_operatorBlock
+    (ρ : Matrix (α × β) (α × β) ℂ) (i j : α) :
+    Matrix.trace (operatorBlock ρ i j) = partialTraceRight ρ i j := by
+  rfl
 
 omit [DecidableEq β] in
 /-- If the first marginal is diagonal with strictly positive eigenvalues, the
@@ -152,14 +157,14 @@ supported-marginal map preserves trace. -/
 theorem supportedMarginalMap_trace
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
     (hp : ∀ i, 0 < p i)
-    (hmargin : operatorBlockMarginal ρ = Matrix.diagonal fun i ↦ (p i : ℂ))
+    (hmargin : partialTraceRight ρ = Matrix.diagonal fun i ↦ (p i : ℂ))
     (X : Matrix α α ℂ) :
     Matrix.trace (supportedMarginalMap ρ p X) = Matrix.trace X := by
   rw [supportedMarginalMap_apply, Matrix.trace_sum]
   simp_rw [Matrix.trace_smul]
   change ∑ x : α × α,
       (marginalInvSqrt p x.1 * X x.1 x.2 * marginalInvSqrt p x.2) *
-        operatorBlockMarginal ρ x.1 x.2 = Matrix.trace X
+        partialTraceRight ρ x.1 x.2 = Matrix.trace X
   rw [hmargin]
   rw [Fintype.sum_prod_type]
   simp only [Matrix.diagonal_apply]
@@ -230,7 +235,7 @@ diagonal determines a trace-preserving completely positive map. -/
 theorem supportedMarginalMap_isKrausCPTP
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
     (hρ : ρ.PosSemidef) (hp : ∀ i, 0 < p i)
-    (hmargin : operatorBlockMarginal ρ = Matrix.diagonal fun i ↦ (p i : ℂ)) :
+    (hmargin : partialTraceRight ρ = Matrix.diagonal fun i ↦ (p i : ℂ)) :
     IsKrausCPTP (supportedMarginalMap ρ p) := by
   apply isKrausCPTP_of_isKrausCP_trace_preserving
   · exact supportedMarginalMap_isKrausCP ρ p hρ
