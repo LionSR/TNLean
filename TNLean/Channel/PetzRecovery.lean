@@ -26,7 +26,9 @@ reference matrix.
 * `Matrix.PosSemidef.supportInvSqrt_posSemidef`: the support inverse square
   root is positive semidefinite.
 * `Matrix.PosSemidef.supportInvSqrt_sq_mul_self`: the squared support inverse
-  square root is a generalized inverse on the support.
+  square root is a left generalized inverse on the support.
+* `Matrix.PosSemidef.self_mul_supportInvSqrt_sq`: the squared support inverse
+  square root is a right generalized inverse on the support.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: scaling by a positive real scalar.
 * `Matrix.PosSemidef.supportInvSqrt_kronecker_one`: compatibility with the
   unital left tensor embedding.
@@ -249,7 +251,10 @@ theorem PosSemidef.supportInvSqrt_sq_mul_self
 
 /-- The square of the support inverse square root is a right generalized
 inverse: multiplying the original positive-semidefinite matrix by it gives
-the support projection. -/
+the support projection.
+
+This is the adjoint companion to the generalized-inverse convention of
+Jenčová--Ruskai, arXiv:0903.2895v4, lines 255--261. -/
 theorem PosSemidef.self_mul_supportInvSqrt_sq
     {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
     ρ * (hρ.supportInvSqrt * hρ.supportInvSqrt) =

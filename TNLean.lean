@@ -168,6 +168,7 @@ import TNLean.Channel.Schwarz.RelativeEntropyDataProcessing
 import TNLean.Channel.Schwarz.PetzRecoverySupport
 import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
 import TNLean.Channel.Schwarz.SSAEqualityDPI
+import TNLean.Channel.Schwarz.SupportResolvent
 import TNLean.Channel.Schwarz.PetzEqualityPrerequisites
 import TNLean.Channel.Schwarz.SupportRelativeModular
 import TNLean.Channel.Schwarz.WeylRelativeEntropyIntegral
