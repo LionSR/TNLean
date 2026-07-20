@@ -12,7 +12,8 @@ import TNLean.Channel.FixedPoint.TraceNonincreasingProductSpan
 The canonical block-diagonal extension transfers trace nonincrease and fixed
 product generators from a finite direct sum to a full matrix algebra.  The
 full-matrix product-span theorem then gives trace preservation on the original
-direct sum.
+direct sum.  For a trace-preserving endomorphism, the same extension also
+produces a componentwise positive-definite fixed family.
 
 This is the finite-direct-sum form needed for arXiv:1606.00608, Appendix C.4.
 Lines 1974--1980 identify the fixed contraction families, and lines
@@ -171,6 +172,60 @@ theorem IsTracePreservingMap.isTracePreservingDirectSumMap_of_extension
   simpa only [directSumExtension_apply, directSumDiagonalCompression_embedding,
     trace_directSumDiagonalEmbedding] using h
 
+/-- The block-diagonal embedding carries identity membership in a span of
+pointwise products to identity membership in the corresponding full-matrix
+product span. -/
+private theorem directSumDiagonalEmbedding_one_mem_product_span
+    {J : Type*}
+    (V : J → (∀ k, Matrix (n k) (n k) ℂ))
+    (L : ℕ)
+    (hOne : (1 : ∀ k, Matrix (n k) (n k) ℂ) ∈
+      Submodule.span ℂ (Set.range fun x : Fin L → J ↦
+        (List.ofFn fun t ↦ V (x t)).prod)) :
+    (1 : Matrix ((k : ι) × n k) ((k : ι) × n k) ℂ) ∈
+      Submodule.span ℂ (Set.range fun x : Fin L → J ↦
+        (List.ofFn fun t ↦ directSumDiagonalEmbedding (V (x t))).prod) := by
+  classical
+  let productSpan := Submodule.span ℂ
+    (Set.range fun x : Fin L → J ↦
+      (List.ofFn fun t ↦ directSumDiagonalEmbedding (V (x t))).prod)
+  have hEmbeddingProd (l : List J) :
+      directSumDiagonalEmbedding (l.map V).prod =
+        (l.map (fun j ↦ directSumDiagonalEmbedding (V j))).prod := by
+    induction l with
+    | nil =>
+        simp only [List.map_nil, List.prod_nil]
+        exact Matrix.blockDiagonal'_one
+    | cons a l ih =>
+        simp only [List.map_cons, List.prod_cons]
+        rw [directSumDiagonalEmbedding_mul, ih]
+  have hOneEmbedded :
+      directSumDiagonalEmbedding (1 : ∀ k, Matrix (n k) (n k) ℂ) = 1 :=
+    Matrix.blockDiagonal'_one
+  rw [← hOneEmbedded]
+  exact Submodule.span_induction (p := fun X _ ↦
+      directSumDiagonalEmbedding X ∈ productSpan)
+    (fun X hX ↦ by
+      obtain ⟨x, rfl⟩ := hX
+      apply Submodule.subset_span
+      refine ⟨x, ?_⟩
+      have hprod := hEmbeddingProd (List.ofFn x)
+      rw [List.map_ofFn, List.map_ofFn] at hprod
+      have hfun : V ∘ x = fun t ↦ V (x t) := rfl
+      have hfunW : (fun j ↦ directSumDiagonalEmbedding (V j)) ∘ x =
+          fun t ↦ directSumDiagonalEmbedding (V (x t)) := rfl
+      simpa only [hfun, hfunW] using hprod.symm)
+    (by
+      rw [map_zero]
+      exact Submodule.zero_mem productSpan)
+    (fun X Y _ _ hX hY ↦ by
+      rw [map_add]
+      exact Submodule.add_mem productSpan hX hY)
+    (fun c X _ hX ↦ by
+      rw [_root_.map_smul]
+      exact Submodule.smul_mem productSpan c hX)
+    hOne
+
 omit [DecidableEq ι] in
 /-- A positive trace-nonincreasing endomorphism of a finite sum of matrix
 algebras preserves the total trace when the identity family lies in the span
@@ -202,48 +257,73 @@ theorem IsPositiveDirectSumMap.tracePreserving_of_traceNonincreasing_of_fixed_pr
   have hETNI : IsTraceNonincreasingMap E := hTNI.directSumExtension
   have hWFixed (j : J) : E (W j) = W j := by
     exact (directSumExtension_embedding_eq_self_iff T (V j)).2 (hFixed j)
-  have hEmbeddingProd (l : List J) :
-      directSumDiagonalEmbedding (l.map V).prod = (l.map W).prod := by
-    induction l with
-    | nil =>
-        simp only [List.map_nil, List.prod_nil]
-        change Matrix.blockDiagonal' (1 : ∀ k, Matrix (n k) (n k) ℂ) = 1
-        exact Matrix.blockDiagonal'_one
-    | cons a l ih =>
-        simp only [List.map_cons, List.prod_cons]
-        rw [directSumDiagonalEmbedding_mul, ih]
-  let productSpan := Submodule.span ℂ
-    (Set.range fun x : Fin L → J ↦ (List.ofFn fun t ↦ W (x t)).prod)
-  have hOneEmbedded :
-      directSumDiagonalEmbedding (1 : ∀ k, Matrix (n k) (n k) ℂ) = 1 := by
-    exact Matrix.blockDiagonal'_one
   have hOneFull :
-      (1 : Matrix ((k : ι) × n k) ((k : ι) × n k) ℂ) ∈ productSpan := by
-    rw [← hOneEmbedded]
-    exact Submodule.span_induction (p := fun X _ ↦
-        directSumDiagonalEmbedding X ∈ productSpan)
-      (fun X hX ↦ by
-        obtain ⟨x, rfl⟩ := hX
-        apply Submodule.subset_span
-        refine ⟨x, ?_⟩
-        have hprod := hEmbeddingProd (List.ofFn x)
-        rw [List.map_ofFn, List.map_ofFn] at hprod
-        have hfun : V ∘ x = fun t ↦ V (x t) := rfl
-        have hfunW : W ∘ x = fun t ↦ W (x t) := rfl
-        simpa only [hfun, hfunW] using hprod.symm)
-      (by
-        rw [map_zero]
-        exact Submodule.zero_mem productSpan)
-      (fun X Y _ _ hX hY ↦ by
-        rw [map_add]
-        exact Submodule.add_mem productSpan hX hY)
-      (fun c X _ hX ↦ by
-        rw [_root_.map_smul]
-        exact Submodule.smul_mem productSpan c hX)
-      hOne
+      (1 : Matrix ((k : ι) × n k) ((k : ι) × n k) ℂ) ∈
+        Submodule.span ℂ (Set.range fun x : Fin L → J ↦
+          (List.ofFn fun t ↦ W (x t)).prod) := by
+    simpa only [W] using directSumDiagonalEmbedding_one_mem_product_span V L hOne
   have hETrace : IsTracePreservingMap E :=
     hEpos.tracePreserving_of_traceNonincreasing_of_fixed_product_span
       hETNI W L hL hWFixed hOneFull
   exact Matrix.IsTracePreservingMap.isTracePreservingDirectSumMap_of_extension hETrace
+
+omit [DecidableEq ι] in
+/-- A positive trace-preserving endomorphism of a finite product of matrix
+algebras has a positive-definite fixed family when the identity belongs to
+the span of positive-length products of a fixed family.
+
+No product of the fixed factors is assumed to be fixed.  The proof applies
+the full-matrix maximal-support theorem to the canonical block-diagonal
+extension and then takes its diagonal blocks.
+
+Local finite-product consequence used to formalize arXiv:1606.00608,
+Appendix C.4, lines 1980--1993.  CPSV16 instead applies Wolf's density-block
+description directly, including its possible zero summand. -/
+theorem IsPositiveDirectSumMap.exists_posDef_fixedFamily_of_fixed_product_span
+    {J : Type*}
+    {F : (∀ k, Matrix (n k) (n k) ℂ) →ₗ[ℂ]
+      (∀ k, Matrix (n k) (n k) ℂ)}
+    (hF : IsPositiveDirectSumMap F)
+    (hTP : IsTracePreservingDirectSumMap F)
+    (V : J → (∀ k, Matrix (n k) (n k) ℂ))
+    (L : ℕ) (hL : 0 < L)
+    (hFixed : ∀ j, F (V j) = V j)
+    (hOne : (1 : ∀ k, Matrix (n k) (n k) ℂ) ∈
+      Submodule.span ℂ (Set.range fun x : Fin L → J ↦
+        (List.ofFn fun t ↦ V (x t)).prod)) :
+    ∃ ρ : ∀ k, Matrix (n k) (n k) ℂ,
+      (∀ k, (ρ k).PosDef) ∧ F ρ = ρ := by
+  classical
+  let E := directSumExtension F
+  let W : J → Matrix ((k : ι) × n k) ((k : ι) × n k) ℂ :=
+    fun j ↦ directSumDiagonalEmbedding (V j)
+  have hEpos : IsPositiveMap E :=
+    hF.directSumExtension_isPositiveMap
+  have hETP : IsTracePreservingMap E :=
+    hTP.directSumExtension_isTracePreservingMap
+  have hETNI : IsTraceNonincreasingMap E := by
+    intro X _
+    exact (hETP X).le
+  have hWFixed (j : J) : E (W j) = W j := by
+    exact (directSumExtension_embedding_eq_self_iff F (V j)).2 (hFixed j)
+  have hOneFull :
+      (1 : Matrix ((k : ι) × n k) ((k : ι) × n k) ℂ) ∈
+        Submodule.span ℂ (Set.range fun x : Fin L → J ↦
+          (List.ofFn fun t ↦ W (x t)).prod) := by
+    simpa only [W] using directSumDiagonalEmbedding_one_mem_product_span V L hOne
+  obtain ⟨ρFull, hρFull, hρFullFixed⟩ :=
+    hEpos.exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span
+      hETNI W L hL hWFixed hOneFull
+  obtain ⟨ρ, hρFixed, hρFullEq⟩ :=
+    (directSumExtension_apply_eq_self_iff F ρFull).mp hρFullFixed
+  refine ⟨ρ, ?_, hρFixed⟩
+  intro k
+  have hρBlock : (directSumDiagonalCompression ρFull k).PosDef := by
+    rw [directSumDiagonalCompression_apply]
+    apply hρFull.submatrix
+    intro a b hab
+    simpa using hab
+  rw [hρFullEq, directSumDiagonalCompression_embedding] at hρBlock
+  exact hρBlock
 
 end Matrix
