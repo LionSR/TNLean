@@ -1,7 +1,7 @@
 /-
-Copyright (c) 2026 Sirui Lu and TNLean contributors. All rights reserved.
+Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Sirui Lu
+Authors: TNLean contributors
 -/
 import TNLean.Channel.Semigroup.RelaxationConditions
 
@@ -22,7 +22,7 @@ nonzero, and then instantiates the abstract obstruction.
 
 ## Main declarations
 
-- `exists_ne_zero_mem_ker_of_invariant_of_pow_eq_zero`: a nilpotent restriction to a nonzero
+- `exists_ne_zero_mem_ker_of_map_le_of_pow_eq_zero`: a nilpotent restriction to a nonzero
   invariant subspace has a nonzero kernel vector.
 - `ker_le_invariant_of_pow_eq_zero_of_ker_eq_span`: every nonzero invariant subspace contains
   the one-dimensional kernel.
@@ -39,28 +39,10 @@ noncomputable section
 
 variable {K V : Type*} [DivisionRing K] [AddCommGroup V] [Module K V]
 
-/-- A submodule is invariant under an endomorphism when the endomorphism maps each of its
-vectors back into the submodule. -/
-def Submodule.IsInvariant (f : Module.End K V) (W : Submodule K V) : Prop :=
-  ∀ ⦃x : V⦄, x ∈ W → f x ∈ W
-
-namespace Submodule.IsInvariant
-
-/-- Invariance under `f` implies invariance under every power of `f`. -/
-theorem pow {f : Module.End K V} {W : Submodule K V} (hW : W.IsInvariant f)
-    (k : ℕ) ⦃x : V⦄ (hx : x ∈ W) : (f ^ k) x ∈ W := by
-  induction k generalizing x with
-  | zero => simpa using hx
-  | succ k ih =>
-      rw [pow_succ, Module.End.mul_apply]
-      exact ih (hW hx)
-
-end Submodule.IsInvariant
-
 /-- If a nilpotent endomorphism preserves a nonzero submodule, its kernel meets that submodule
 nontrivially.  This statement does not require finite dimensionality. -/
-theorem exists_ne_zero_mem_ker_of_invariant_of_pow_eq_zero
-    (f : Module.End K V) (W : Submodule K V) (hW : W.IsInvariant f) (hW0 : W ≠ ⊥)
+theorem exists_ne_zero_mem_ker_of_map_le_of_pow_eq_zero
+    (f : Module.End K V) (W : Submodule K V) (hW : W.map f ≤ W) (hW0 : W ≠ ⊥)
     {n : ℕ} (hn : f ^ n = 0) :
     ∃ y : V, y ≠ 0 ∧ y ∈ W ∧ y ∈ LinearMap.ker f := by
   classical
@@ -78,7 +60,8 @@ theorem exists_ne_zero_mem_ker_of_invariant_of_pow_eq_zero
     rw [hkzero] at hk'
     simpa using hk'
   let y := (f ^ (k - 1)) x
-  refine ⟨y, ?_, Submodule.IsInvariant.pow hW (k - 1) hxW, ?_⟩
+  have hW' : W ≤ W.comap f := Submodule.map_le_iff_le_comap.mp hW
+  refine ⟨y, ?_, W.le_comap_pow_of_le_comap hW' (k - 1) hxW, ?_⟩
   · intro hy
     have hlt : k - 1 < k := Nat.sub_lt (Nat.zero_lt_of_ne_zero hk0) (by decide)
     exact (Nat.find_min hex hlt) hy
@@ -92,10 +75,10 @@ theorem exists_ne_zero_mem_ker_of_invariant_of_pow_eq_zero
 contains `v`. -/
 theorem mem_invariant_of_pow_eq_zero_of_ker_eq_span
     (f : Module.End K V) (v : V) (W : Submodule K V)
-    (hW : W.IsInvariant f) (hW0 : W ≠ ⊥) {n : ℕ} (hn : f ^ n = 0)
+    (hW : W.map f ≤ W) (hW0 : W ≠ ⊥) {n : ℕ} (hn : f ^ n = 0)
     (hker : LinearMap.ker f = K ∙ v) : v ∈ W := by
   obtain ⟨y, hy0, hyW, hyker⟩ :=
-    exists_ne_zero_mem_ker_of_invariant_of_pow_eq_zero f W hW hW0 hn
+    exists_ne_zero_mem_ker_of_map_le_of_pow_eq_zero f W hW hW0 hn
   rw [hker, Submodule.mem_span_singleton] at hyker
   obtain ⟨c, rfl⟩ := hyker
   have hc : c ≠ 0 := by
@@ -109,7 +92,7 @@ theorem mem_invariant_of_pow_eq_zero_of_ker_eq_span
 submodule. -/
 theorem ker_le_invariant_of_pow_eq_zero_of_ker_eq_span
     (f : Module.End K V) (v : V) (W : Submodule K V)
-    (hW : W.IsInvariant f) (hW0 : W ≠ ⊥) {n : ℕ} (hn : f ^ n = 0)
+    (hW : W.map f ≤ W) (hW0 : W ≠ ⊥) {n : ℕ} (hn : f ^ n = 0)
     (hker : LinearMap.ker f = K ∙ v) : LinearMap.ker f ≤ W := by
   rw [hker]
   apply Submodule.span_le.2
@@ -122,7 +105,7 @@ submodules.  Orthogonal subspaces are disjoint, so this is the exact algebraic o
 in the weighted-lowering argument. -/
 theorem not_disjoint_invariant_of_pow_eq_zero_of_ker_eq_span
     (f : Module.End K V) (v : V) (hv : v ≠ 0) {W₁ W₂ : Submodule K V}
-    (hW₁ : W₁.IsInvariant f) (hW₂ : W₂.IsInvariant f) (hW₁0 : W₁ ≠ ⊥)
+    (hW₁ : W₁.map f ≤ W₁) (hW₂ : W₂.map f ≤ W₂) (hW₁0 : W₁ ≠ ⊥)
     (hW₂0 : W₂ ≠ ⊥) {n : ℕ} (hn : f ^ n = 0)
     (hker : LinearMap.ker f = K ∙ v) : ¬Disjoint W₁ W₂ := by
   intro hdisj
@@ -237,7 +220,7 @@ theorem ground_ne_zero (n : ℕ) : ground n ≠ 0 := by
 /-- Every nonzero subspace invariant under a weighted lowering operator with nonzero edge
 weights contains the ground basis vector. -/
 theorem ground_mem_invariant {n : ℕ} (w : Fin n → ℂ) (hw : ∀ i : Fin n, w i ≠ 0)
-    (W : Submodule ℂ (Fin (n + 1) → ℂ)) (hW : W.IsInvariant (operator w))
+    (W : Submodule ℂ (Fin (n + 1) → ℂ)) (hW : W.map (operator w) ≤ W)
     (hW0 : W ≠ ⊥) : ground n ∈ W :=
   mem_invariant_of_pow_eq_zero_of_ker_eq_span (operator w) (ground n) W hW hW0
     (operator_pow_dimension_eq_zero w) (ker_operator w hw)
@@ -245,8 +228,8 @@ theorem ground_mem_invariant {n : ℕ} (w : Fin n → ℂ) (hw : ∀ i : Fin n, 
 /-- Two nonzero invariant subspaces of a weighted lowering operator with nonzero edge weights
 cannot be disjoint.  In particular, there are no two nonzero orthogonal invariant subspaces. -/
 theorem not_disjoint_invariant {n : ℕ} (w : Fin n → ℂ) (hw : ∀ i : Fin n, w i ≠ 0)
-    {W₁ W₂ : Submodule ℂ (Fin (n + 1) → ℂ)} (hW₁ : W₁.IsInvariant (operator w))
-    (hW₂ : W₂.IsInvariant (operator w)) (hW₁0 : W₁ ≠ ⊥) (hW₂0 : W₂ ≠ ⊥) :
+    {W₁ W₂ : Submodule ℂ (Fin (n + 1) → ℂ)} (hW₁ : W₁.map (operator w) ≤ W₁)
+    (hW₂ : W₂.map (operator w) ≤ W₂) (hW₁0 : W₁ ≠ ⊥) (hW₂0 : W₂ ≠ ⊥) :
     ¬Disjoint W₁ W₂ :=
   not_disjoint_invariant_of_pow_eq_zero_of_ker_eq_span (operator w) (ground n)
     (ground_ne_zero n) hW₁ hW₂ hW₁0 hW₂0 (operator_pow_dimension_eq_zero w)
@@ -264,7 +247,7 @@ invariant subspaces.  This is the concrete Q1 obstruction needed after the analy
 constant-trace-norm argument produces positive and negative invariant support spaces. -/
 theorem not_orthogonal_invariant {n : ℕ} (w : Fin n → ℂ)
     (hw : ∀ i : Fin n, w i ≠ 0) {W₁ W₂ : Submodule ℂ (Fin (n + 1) → ℂ)}
-    (hW₁ : W₁.IsInvariant (operator w)) (hW₂ : W₂.IsInvariant (operator w))
+    (hW₁ : W₁.map (operator w) ≤ W₁) (hW₂ : W₂.map (operator w) ≤ W₂)
     (hW₁0 : W₁ ≠ ⊥) (hW₂0 : W₂ ≠ ⊥) : ¬AreOrthogonal W₁ W₂ := by
   intro hOrtho
   have hv₁ : ground n ∈ W₁ := ground_mem_invariant w hw W₁ hW₁ hW₁0
