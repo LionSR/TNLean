@@ -106,7 +106,25 @@ The Choi--Jamio\l{}kowski isomorphism bends the input legs of the channel $T$
 around the maximally entangled pair $\ket{\Omega}$, presenting the map as the
 matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
 \begin{center}
-    \TNChoiMatrix
+    % Formula: \tau=(T\otimes\id)(\ketbra{\Omega}{\Omega}).
+    % Source verdict: Wolf, Proposition 2.1 and Equation (2.1), applies the
+    %   two-wire map T\otimes\id to the maximally entangled projector.
+    % In indices, \tau_{(i_1,i_2),(j_1,j_2)}
+    %   =D^{-1}(T(E_{i_2j_2}))_{i_1j_1}; there is no summed Kraus index and
+    %   therefore no pairleg between the two rails.
+    % The east matrix cup is the input projector \ketbra{\Omega}{\Omega}.
+    % The opaque two-wire atom acts by T on one tensor factor and by \id on
+    %   the other; the two west rails are the output indices of \tau.
+    % Boundary signature: (virtual-west=2 | virtual-east=0 |
+    % physical-up=0 | physical-down=0).
+    \begin{tenkz}[
+        rows={wire,wire},
+        east={cup=$\ketbra{\Omega}{\Omega}$},
+        west label=$\tau$
+    ]
+        \tnghost{} & \tnX[wires=2]{T\otimes\id} & \tnghost{} \\
+        \tnghost{} & & \tnghost{}
+    \end{tenkz}
 \end{center}
 
 \begin{definition}[Choi matrix]\label{def:choi_matrix}
