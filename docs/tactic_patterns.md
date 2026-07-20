@@ -199,4 +199,22 @@ current counts and full location lists).
 
 ## Retired
 
-(none yet)
+### exact-sector coefficient comparison — retired
+- **Pattern:** The equal-MPV sector matcher repeated the proportional matcher's
+  fixed-length linear-independence and coefficient-comparison proof instead of
+  specializing it at scalar `1`.
+- **Seen:** `exists_nondecaying_overlap_exact` and `exists_block_match_exact` in
+  `TNLean/MPS/FundamentalTheorem/SectorBNT/ExactMatch.lean`, parallel to the
+  eventually proportional declarations in `ProportionalMatch/Core.lean`.
+- **Abstraction:** `exists_block_match_exact` now applies
+  `exists_block_match_exact_of_eventuallyProportional` through
+  `SameMPV₂Pos.toNonzeroProportionalMPV₂` and
+  `NonzeroProportionalMPV₂.eventually`. The two low-level overlap lemmas used by
+  the surviving proof live in `SectorBNT/OverlapInfrastructure.lean`.
+- **Notes:** Counting declarations in `ExactMatch.lean`,
+  `ProportionalMatch/Core.lean`, and the new overlap-infrastructure module gives
+  7 before and 6 after. Counting the exact-match-specific proof-body lines from
+  the first tactic after `:= by` through each proof's last tactic gives 195
+  before and 2 after. Total source lines across these modules fall from 666 to
+  479, a net reduction of 187 lines. Both relocated lemmas remain used by the
+  proportional coefficient-comparison proof.
