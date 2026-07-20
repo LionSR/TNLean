@@ -452,16 +452,21 @@ edge, and site commands drawn over the window.
   all four virtual sides open or sealed \\
 \texttt{west=}, \texttt{east=},
 \texttt{north=}, \texttt{south=} &
-  \texttt{open|none|cup|cup=}\meta{m} & --- &
-  override one virtual side; \texttt{cup} contracts matching ket--bra
-  boundary indices \\
-\texttt{sheets=} & \meta{n}\texttt{|\{ket,bra,\ldots\}} & \texttt{1} &
+  \texttt{open|none|}\newline
+  \texttt{trace|cup|}\newline
+  \texttt{cup=}\meta{m} & --- &
+  override one virtual side; opposing \texttt{trace} values close each
+  sheet to itself, while \texttt{cup} contracts matching ket--bra indices \\
+\texttt{sheets=} & \meta{n}\texttt{|}\newline
+  \texttt{\{ket,bra,\ldots\}} & \texttt{1} &
   numeric sheets or a top-to-bottom role stack \\
-\texttt{outer legs=} & \texttt{both|top|bottom|none} & --- &
+\texttt{outer legs=} & \texttt{both|top|}\newline
+  \texttt{bottom|none} & --- &
   outer physical faces of a role stack \\
 \texttt{physical=} & \texttt{up|none} & \texttt{none} &
   a physical leg on every site \\
-\texttt{frame=} & \texttt{flat|oblique|slab} & \texttt{flat} &
+\texttt{frame=} & \texttt{flat|oblique|}\newline
+  \texttt{slab} & \texttt{flat} &
   the sheared sheet: bonds shear, glyphs and labels stay upright
   (Example~\ref{ex:rmp-peps}) \\
 \bottomrule
@@ -520,6 +525,34 @@ its bonds from the drawing.
             label=$S$, label at=south west]{R - (2,2)}
   \tnedge[distinguished]{(2,3)-(2,4)}
   \tnsite[removed]{(2,2)}
+\end{tenkzlattice}
+\end{tnexample}
+
+Opposing side traces are periodic virtual closures within each sheet.
+Thus \tnval{north=trace, south=trace} closes the row axis but never
+ties ket to bra; the site-wise pairing legs make that separate physical
+contraction.  A lone \tnval{north=trace} warns and leaves its real
+endpoints open rather than inventing a return path.
+
+\begin{tnexample}[
+    formula   = {T_C:\bigl(V\otimes\overline V\bigr)^{\otimes R}_{W}
+                 \longrightarrow
+                 \bigl(V\otimes\overline V\bigr)^{\otimes R}_{E}},
+    caption   = {a periodic PEPS-column transfer operator},
+    index     = {The body remains a live customization layer: the marked
+                 site and edge are drawn together with the declarative
+                 closure.  West and east carry the $2R$ free virtual
+                 indices; north, south, and every physical pair are closed.},
+    label     = {ex:ref-lattice-transfer},
+  ]
+% T_C : (V tensor Vbar)^R_W -> (V tensor Vbar)^R_E.
+% Pairing ink contracts each ket physical index with its bra index;
+% in-column bonds contract neighbouring virtual indices; north/south
+% trace closes the remaining row-axis virtual indices within each sheet.
+\begin{tenkzlattice}[rows=3, cols=1, sheets={ket,bra},
+    boundary=open, outer legs=none, north=trace, south=trace]
+  \tnsite[role=marked, label=$T_C$]{(2,1,1)}
+  \tnedge[role=marked]{(1,1,1)-(2,1,1)}
 \end{tenkzlattice}
 \end{tnexample}
 

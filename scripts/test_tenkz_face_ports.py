@@ -468,6 +468,45 @@ SOURCE = r"""
     col vector={0pt,0pt}, row vector={0pt,-9mm},
     sheet vector={2mm,4mm}, boundary=open, outer legs=none, east=cup]
 \end{tenkzlattice}
+% T_C : (V tensor Vbar)^R_W -> (V tensor Vbar)^R_E.  The site-wise
+% pairing ink contracts every physical ket index with its bra index; the
+% in-column bonds contract neighbouring virtual row indices; north/south
+% trace closes the remaining virtual row indices within each sheet.
+% The nonempty body is a live customization layer, not placeholder syntax.
+\begin{tenkzlattice}[
+    rows=3, cols=1, sheets={ket,bra}, boundary=open,
+    outer legs=none, north=trace, south=trace]
+  \global\advance\tenkzlatticebodyseen by 1\relax
+  \tnsite[role=marked, label=$T_C$]{(2,1,1)}
+  \tnedge[role=marked]{(1,1,1)-(2,1,1)}
+\end{tenkzlattice}
+\ifnum\tenkzlatticebodyseen=2\else
+  \errmessage{periodic lattice body customization did not execute exactly once}
+\fi
+% The same sheet-local closure path must survive both named projected frames.
+\begin{tenkzlattice}[
+    rows=2, cols=3, sheets={ket,bra}, frame=oblique,
+    boundary=open, outer legs=none, west=trace, east=trace]
+\end{tenkzlattice}
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets={ket,bra}, frame=slab,
+    boundary=open, outer legs=none, north=trace, south=trace]
+\end{tenkzlattice}
+% A sheet-local removal breaks only its own endpoint pair.  The survivor is
+% open and diagnosed; the other sheet still closes normally.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets={ket,bra}, boundary=open,
+    outer legs=none, west=trace, east=trace]
+  \tnsite[removed]{(1,2,1)}
+\end{tenkzlattice}
+% A zero routing vector is rejected before projection; every real endpoint
+% stays open instead of receiving invented periodic topology.
+\begin{tenkzlattice}[
+    rows=2, cols=1, sheets={ket,bra},
+    col vector={0pt,0pt}, row vector={0pt,-9mm},
+    sheet vector={2mm,4mm}, boundary=open, outer legs=none,
+    north=trace, south=trace]
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -1524,11 +1563,19 @@ def main() -> int:
     )
     require(
         pictures[74],
-        "warning|picture=74|code=side-deferred|side=west|policy=trace",
-        "lattice side-policy warning lost picture ownership",
+        "warning|picture=74|code=side-trace-unpaired|side=west|opposite=east",
+        "one-sided lattice trace warning lost picture ownership",
     )
-    if "side-deferred" not in parsed_warnings[74]:
+    if "side-trace-unpaired" not in parsed_warnings[74]:
         raise AssertionError("lattice side-policy warning was dropped by the audit parser")
+    require(
+        pictures[74],
+        "boundary|picture=74|physical-up=0|physical-down=0|virtual-west=1|"
+        "virtual-east=0|virtual-north=0|virtual-south=0",
+        "one-sided trace did not leave its requested endpoint open",
+    )
+    forbid(pictures[74], "trace|picture=74|lang=lattice|",
+           "one-sided lattice trace invented return topology")
     invalid_one_row_virtual = pictures[75]
     require(
         invalid_one_row_virtual,
@@ -1711,6 +1758,89 @@ def main() -> int:
         "pair-open-0=0|pair-traced-0=0|virtual-west=2|virtual-east=2|"
         "virtual-north=4|virtual-south=4",
         "zero-vector cup did not preserve its surviving boundary ports",
+    )
+    transfer_column = pictures[92]
+    require(
+        transfer_column,
+        "edge|picture=92|from=1-1|to=2-1|role=marked",
+        "periodic transfer-operator body customization was discarded",
+    )
+    for sheet in range(2):
+        require(
+            transfer_column,
+            f"trace|picture=92|lang=lattice|axis=north-south|sheet={sheet}|"
+            "slot=1|from=1-1|to=3-1",
+            f"transfer column did not close sheet {sheet} north to south",
+        )
+    require(
+        transfer_column,
+        "boundary|picture=92|physical-up=0|physical-down=0|pair-closed-0=3|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=6|virtual-east=6|"
+        "virtual-north=0|virtual-south=0",
+        "transfer-column free-index signature is not T_C",
+    )
+    oblique_column_trace = pictures[93]
+    for sheet in range(2):
+        for row in range(1, 3):
+            require(
+                oblique_column_trace,
+                f"trace|picture=93|lang=lattice|axis=west-east|sheet={sheet}|"
+                f"slot={row}|from={row}-1|to={row}-3",
+                f"oblique frame lost west/east trace at sheet {sheet}, row {row}",
+            )
+    require(
+        oblique_column_trace,
+        "boundary|picture=93|physical-up=0|physical-down=0|pair-closed-0=6|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
+        "virtual-north=6|virtual-south=6",
+        "oblique west/east trace changed its exact virtual signature",
+    )
+    slab_row_trace = pictures[94]
+    for sheet in range(2):
+        for col in range(1, 3):
+            require(
+                slab_row_trace,
+                f"trace|picture=94|lang=lattice|axis=north-south|sheet={sheet}|"
+                f"slot={col}|from=1-{col}|to=2-{col}",
+                f"slab frame lost north/south trace at sheet {sheet}, col {col}",
+            )
+    partial_trace = pictures[95]
+    require(
+        partial_trace,
+        "warning|picture=95|code=side-trace-incomplete|axis=west-east|"
+        "sheet=1|slot=1|side=west",
+        "sheet-local periodic removal was not diagnosed",
+    )
+    require(
+        partial_trace,
+        "trace|picture=95|lang=lattice|axis=west-east|sheet=0|slot=1|"
+        "from=1-1|to=1-2",
+        "one sheet's missing endpoint suppressed the surviving sheet trace",
+    )
+    require(
+        partial_trace,
+        "boundary|picture=95|physical-up=0|physical-down=0|pair-closed-0=1|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=1|virtual-east=0|"
+        "virtual-north=3|virtual-south=3",
+        "incomplete trace did not expose exactly its surviving endpoint",
+    )
+    zero_vector_trace = pictures[96]
+    require(
+        zero_vector_trace,
+        "warning|picture=96|code=side-trace-zero-vector|axis=north-south",
+        "zero routing vector reached periodic trace projection",
+    )
+    forbid(
+        zero_vector_trace,
+        "trace|picture=96|lang=lattice|",
+        "zero routing vector emitted invented trace geometry",
+    )
+    require(
+        zero_vector_trace,
+        "boundary|picture=96|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|virtual-west=4|virtual-east=4|"
+        "virtual-north=2|virtual-south=2",
+        "zero-vector trace did not preserve every surviving endpoint",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
