@@ -265,8 +265,10 @@ whole language.
   \qritem{\textbackslash tnregion[slot=, label=, label at=, inset=,
     outline, name=]\{(1-3, 2-4)\}}{region; named sets compose:
     \texttt{R - (2,2)}}
-  \qritem{\textbackslash tnedge[style]\{(2,3)-(2,4)\}}{one edge}
-  \qritem{\textbackslash tnsite[style]\{(2,2)\}}{one site}
+  \qritem{\textbackslash tnedge[role=, style=, label=, none]
+    \{(2,3)-(2,4)\}}{decorate, label, or suppress one edge}
+  \qritem{\textbackslash tnsite[removed, role=, label=]\{(2,2)\}}
+    {remove or decorate one site}
 
   \qrsection{Planes (tenkzplanes)}
   \qritem{rows=, cols=, sheets=\{ket, bra\}}{the double layer,
