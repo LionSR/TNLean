@@ -329,31 +329,175 @@ gauges on the virtual legs of $K$ and identifies the block index of
 $\mathcal K_j$ with the label $j$:
 \[
     % K^{-1}K in block-injective canonical form (arXiv:1606.00608,
-    % eq. biCFK, Appendix C.2 lines 1666--1670; paper figure
-    % MPDO_biCF.png).  Panel 1 contracts K^{-1} with K through their
-    % doubled physical index.  Panel 2 substitutes
-    % K=X(bigoplus_j K_j)X^{-1}: K^{-1} remains on the upper rail, while
-    % X and X^{-1} flank K_j on the lower rail and extend to the internal
-    % block-index rail beneath it.
-    % Panel 3 removes the resolved K^{-1}-K pair and leaves the gauge legs
-    % and block-index wires.  Every panel has boundary signature
-    % (virtual-west=2 | virtual-east=2 | physical-up=0 |
-    % physical-down=0).
-    \begin{tenkz}[rows={ket, bra}, compact]
-        \tn{K^{-1}} \\
-        \tn{K}
-    \end{tenkz}
+    % eq. biCFK, Appendix C.2 lines 1666--1670; MPDO_biCF.png is the
+    % ink specification).  In panel 1 the vertical contraction joins the
+    % physical input of K to the corresponding input of K^{-1}; the other
+    % physical/output index of K^{-1} remains open above.  Its primitive
+    % boundary signature is (virtual-west=2 | virtual-east=2 |
+    % physical-up=1 | physical-down=0).
+    \begin{tenkzfree}[tensor style=box, compact]
+        \tnput[box, ports={west:virtual,east:virtual,
+                north:physical,south:physical}]
+            {biInvOne}{(0,8mm)}{K^{-1}}
+        \tnput[box, ports={west:virtual,east:virtual,north:physical}]
+            {biKOne}{(0,-5mm)}{K}
+        \tnput[boundary, ports={east:virtual}]
+            {biInvOneWest}{(-8mm,8mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biInvOneEast}{(8mm,8mm)}{}
+        \tnput[boundary, ports={east:virtual}]
+            {biKOneWest}{(-8mm,-5mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biKOneEast}{(8mm,-5mm)}{}
+        \tnput[boundary, ports={south:physical}]
+            {biOutOne}{(0,18mm)}{}
+        \tnjoin{biInvOneWest.east}{biInvOne.west}
+        \tnjoin{biInvOne.east}{biInvOneEast.west}
+        \tnjoin{biKOneWest.east}{biKOne.west}
+        \tnjoin{biKOne.east}{biKOneEast.west}
+        \tnjoin{biOutOne.south}{biInvOne.north}
+        \begin{scope}[bond/.append style={dashed}]
+            \tnjoin{biInvOne.south}{biKOne.north}
+        \end{scope}
+    \end{tenkzfree}
     \;=\;
-    \begin{tenkz}[rows={ket, bra, wire:none}, compact]
-        & \tn{K^{-1}} & \\
-        \tnX[wires=2]{X} & \tn{\mathcal K} & \tnX[wires=2]{X^{-1}} \\
-        & \tnghost{} &
-    \end{tenkz}
+    % Panel 2 resolves each virtual boundary index into the tensor leg and
+    % the j- and q-rails used by the block decomposition.  X and X^{-1}
+    % tap both rails, while K_j taps only the j-rail.  Thus the composite
+    % virtual boundaries of panel 1 appear here as four primitive virtual
+    % wires on each side (tensor, gauge, j, q); the open physical signature
+    % remains (physical-up=1 | physical-down=0).
+    \begin{tenkzfree}[tensor style=box, compact]
+        \tnput[box, ports={west:virtual,east:virtual,
+                north:physical,south:physical}]
+            {biInvTwo}{(18mm,15mm)}{K^{-1}}
+        \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+            {biXTwo}{(0,0)}{X}
+        \tnput[box, ports={west:virtual,east:virtual,
+                north:physical,south:virtual}]
+            {biKTwo}{(18mm,0)}{\mathcal K_j}
+        \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+            {biXinvTwo}{(36mm,0)}{X^{-1}}
+        \tnput[boundary, ports={east:virtual}]
+            {biInvTwoWest}{(10mm,15mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biInvTwoEast}{(26mm,15mm)}{}
+        \tnput[boundary, ports={east:virtual}]
+            {biGaugeTwoWest}{(-7mm,0)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biGaugeTwoEast}{(43mm,0)}{}
+        \tnput[boundary, ports={south:physical}]
+            {biOutTwo}{(18mm,27mm)}{}
+        \tnput[boundary, label pos=west, ports={east:virtual}]
+            {biJTwoWest}{(-7mm,-10mm)}{j}
+        \tnput[dot, ports={west:virtual,east:virtual,
+                north:virtual,south:virtual}]
+            {biXjTwo}{(0,-10mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biKjTwo}{(18mm,-10mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,
+                north:virtual,south:virtual}]
+            {biXinvjTwo}{(36mm,-10mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biJTwoEast}{(43mm,-10mm)}{}
+        \tnput[boundary, label pos=west, ports={east:virtual}]
+            {biQTwoWest}{(-7mm,-18mm)}{q}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biXqTwo}{(0,-18mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biXinvqTwo}{(36mm,-18mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biQTwoEast}{(43mm,-18mm)}{}
+        \tnjoin{biInvTwoWest.east}{biInvTwo.west}
+        \tnjoin{biInvTwo.east}{biInvTwoEast.west}
+        \tnjoin{biOutTwo.south}{biInvTwo.north}
+        \begin{scope}[bond/.append style={dashed}]
+            \tnjoin{biInvTwo.south}{biKTwo.north}
+        \end{scope}
+        \tnjoin{biGaugeTwoWest.east}{biXTwo.west}
+        \tnjoin{biXTwo.east}{biKTwo.west}
+        \tnjoin{biKTwo.east}{biXinvTwo.west}
+        \tnjoin{biXinvTwo.east}{biGaugeTwoEast.west}
+        \tnjoin{biXTwo.south}{biXjTwo.north}
+        \tnjoin{biXjTwo.south}{biXqTwo.north}
+        \tnjoin{biKTwo.south}{biKjTwo.north}
+        \tnjoin{biXinvTwo.south}{biXinvjTwo.north}
+        \tnjoin{biXinvjTwo.south}{biXinvqTwo.north}
+        \tnjoin{biJTwoWest.east}{biXjTwo.west}
+        \tnjoin{biXjTwo.east}{biKjTwo.west}
+        \tnjoin{biKjTwo.east}{biXinvjTwo.west}
+        \tnjoin{biXinvjTwo.east}{biJTwoEast.west}
+        \tnjoin{biQTwoWest.east}{biXqTwo.west}
+        \tnjoin{biXqTwo.east}{biXinvqTwo.west}
+        \tnjoin{biXinvqTwo.east}{biQTwoEast.west}
+    \end{tenkzfree}
     \;=\;
-    \begin{tenkz}[rows={wire, wire}, compact]
-        \tnX[wires=2]{X} & \tnghost{} & \tnX[wires=2]{X^{-1}} \\
-        & \tnghost{} &
-    \end{tenkz}
+    % Panel 3 is the componentwise identity.  The inward virtual legs of X
+    % and X^{-1} form the two matrix-unit elbows: the left open tip points
+    % west and the right open tip points east, exactly as in MPDO_biCF.png.
+    % The vertical line is physical, not virtual: it is normal to the tensor
+    % rail, continues the north/output port of K^{-1}, and ends at the
+    % j-rail dot which records delta_{j,j'}.  The q-rail passes independently
+    % below.  The primitive boundary signature is (virtual-west=4 |
+    % virtual-east=4 | physical-up=1 | physical-down=0).
+    \begin{tenkzfree}[tensor style=box, compact]
+        \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+            {biXThree}{(0,0)}{X}
+        \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+            {biXinvThree}{(36mm,0)}{X^{-1}}
+        \tnput[boundary, ports={east:virtual}]
+            {biGaugeThreeWest}{(-7mm,0)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biGaugeThreeEast}{(43mm,0)}{}
+        \tnput[boundary, ports={west:virtual,north:virtual}]
+            {biLeftElbow}{(12mm,0)}{}
+        \tnput[boundary, ports={east:virtual}]
+            {biLeftUnit}{(9mm,10mm)}{}
+        \tnput[boundary, ports={east:virtual,north:virtual}]
+            {biRightElbow}{(24mm,0)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biRightUnit}{(27mm,10mm)}{}
+        \tnput[boundary, ports={south:physical}]
+            {biOutThree}{(18mm,14mm)}{}
+        \tnput[boundary, label pos=west, ports={east:virtual}]
+            {biJThreeWest}{(-7mm,-10mm)}{j}
+        \tnput[dot, ports={west:virtual,east:virtual,
+                north:virtual,south:virtual}]
+            {biXjThree}{(0,-10mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,north:physical}]
+            {biDeltaThree}{(18mm,-10mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,
+                north:virtual,south:virtual}]
+            {biXinvjThree}{(36mm,-10mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biJThreeEast}{(43mm,-10mm)}{}
+        \tnput[boundary, label pos=west, ports={east:virtual}]
+            {biQThreeWest}{(-7mm,-18mm)}{q}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biXqThree}{(0,-18mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biXinvqThree}{(36mm,-18mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biQThreeEast}{(43mm,-18mm)}{}
+        \tnjoin{biGaugeThreeWest.east}{biXThree.west}
+        \tnjoin{biXThree.east}{biLeftElbow.west}
+        \tnjoin[route=vh]{biLeftElbow.north}{biLeftUnit.east}
+        \tnjoin[route=hv]{biRightUnit.west}{biRightElbow.north}
+        \tnjoin[route=vh]{biRightElbow.east}{biXinvThree.west}
+        \tnjoin{biXinvThree.east}{biGaugeThreeEast.west}
+        \tnjoin{biOutThree.south}{biDeltaThree.north}
+        \tnjoin{biXThree.south}{biXjThree.north}
+        \tnjoin{biXjThree.south}{biXqThree.north}
+        \tnjoin{biXinvThree.south}{biXinvjThree.north}
+        \tnjoin{biXinvjThree.south}{biXinvqThree.north}
+        \tnjoin{biJThreeWest.east}{biXjThree.west}
+        \tnjoin{biXjThree.east}{biDeltaThree.west}
+        \tnjoin{biDeltaThree.east}{biXinvjThree.west}
+        \tnjoin{biXinvjThree.east}{biJThreeEast.west}
+        \tnjoin{biQThreeWest.east}{biXqThree.west}
+        \tnjoin{biXqThree.east}{biXinvqThree.west}
+        \tnjoin{biXinvqThree.east}{biQThreeEast.west}
+    \end{tenkzfree}
 \]
 Consequently,
 \[
