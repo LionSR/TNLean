@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
 
 /-!
 # Product realization from physical-sector coordinates
@@ -26,6 +27,14 @@ open scoped Matrix BigOperators Kronecker
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
+
+/-- The eta ordering `(right, left)` of a physical sector, encoded by the
+existing finite sector coordinates. -/
+private noncomputable def etaSectorFinEquiv
+    (F : PhysicalSectorFactorization K) :
+    Matrix.EtaSiteIndex F.sectorCount F.leftDim F.rightDim ≃
+      Fin (Fintype.card (SectorSiteIndex F)) :=
+  (Equiv.sigmaCongrRight fun _ ↦ Equiv.prodComm _ _).trans F.sectorFinEquiv.symm
 
 /-- The pointwise finite encoding of the transformed physical chain. -/
 private noncomputable def physicalConfigEquiv
@@ -157,6 +166,38 @@ private noncomputable def sectorEdgeChainEquiv
     physicalConfigEquiv, physicalFinEquiv, sectorChainEquiv]
   rfl
 
+/-- The physical-sector cyclic coordinates are the eta cyclic coordinates
+after swapping the one-site `(left, right)` ordering. -/
+private theorem etaCyclicEdgeEquiv_eq_sectorEdgeChainEquiv
+    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N] :
+    Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.etaSectorFinEquiv =
+      F.sectorEdgeChainEquiv N := by
+  have hinv :
+      (Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim
+        F.etaSectorFinEquiv).symm = (F.sectorEdgeChainEquiv N).symm := by
+    apply Equiv.ext
+    rintro ⟨k, x⟩
+    funext n
+    rw [Matrix.etaCyclicEdgeEquiv_symm_apply,
+      F.sectorEdgeChainEquiv_symm_apply]
+    have hswap :
+        (fun m ↦
+          (((Matrix.etaFixedSectorCyclicEdgeEquiv F.leftDim F.rightDim k).symm
+              x m).2,
+            ((Matrix.etaFixedSectorCyclicEdgeEquiv F.leftDim F.rightDim k).symm
+              x m).1)) =
+          (F.cyclicEdgeEquiv k).symm x := by
+      apply (F.cyclicEdgeEquiv k).injective
+      funext m
+      rw [F.cyclicEdgeEquiv_apply]
+      rw [Equiv.apply_symm_apply]
+      exact Matrix.etaFixedSectorCyclicEdgeEquiv_symm_edge
+        F.leftDim F.rightDim k x m
+    exact congrArg (fun z ↦ F.sectorFinEquiv.symm ⟨k n, z⟩)
+      (congrFun hswap n)
+  have h := congrArg (fun e ↦ e.symm) hinv
+  simpa using h
+
 /-- Under complete cyclic-edge coordinates, the sector-coordinate MPO is
 block diagonal and each fixed-sector block is the product of its edge
 matrix entries.
@@ -196,112 +237,6 @@ private theorem reindex_mpo_sectorCoordinateTensor_sectorEdgeChainEquiv
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh,
       Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
 
-/-- The product on a chosen set of cyclic edges in a fixed sector
-configuration.  Edges outside the set carry the identity matrix.
-
-This is the scalar-entry form of a partial tensor product. -/
-private noncomputable def edgePartialProduct
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (k : Fin N → Fin F.sectorCount) (s : Finset (Fin N)) :
-    Matrix ((n : Fin N) → NeighborIndex F (k n) (k (n + 1)))
-      ((n : Fin N) → NeighborIndex F (k n) (k (n + 1))) ℂ :=
-  fun x y ↦ ∏ n : Fin N,
-    if n ∈ s then
-      F.neighboringOperator (k n) (k (n + 1)) (x n) (y n)
-    else if x n = y n then 1 else 0
-
-@[simp] private theorem edgePartialProduct_empty
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (k : Fin N → Fin F.sectorCount) :
-    F.edgePartialProduct k ∅ = 1 := by
-  ext x y
-  simp only [edgePartialProduct, Finset.notMem_empty, ↓reduceIte,
-    Matrix.one_apply]
-  rw [Fintype.prod_boole]
-  congr 1
-  exact propext funext_iff.symm
-
-@[simp] private theorem edgePartialProduct_univ
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (k : Fin N → Fin F.sectorCount) :
-    F.edgePartialProduct k Finset.univ =
-      fun x y ↦ ∏ n : Fin N,
-        F.neighboringOperator (k n) (k (n + 1)) (x n) (y n) := by
-  ext x y
-  simp [edgePartialProduct]
-
-/-- Multiplying a partial tensor product on the left by a new single-edge
-factor adjoins that edge. -/
-private theorem edgePartialProduct_singleton_mul
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (k : Fin N → Fin F.sectorCount) (s : Finset (Fin N))
-    (i : Fin N) (hi : i ∉ s) :
-    F.edgePartialProduct k {i} * F.edgePartialProduct k s =
-      F.edgePartialProduct k (insert i s) := by
-  classical
-  ext x y
-  simp only [Matrix.mul_apply, edgePartialProduct]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun n : Fin N ↦
-      (Finset.univ : Finset (NeighborIndex F (k n) (k (n + 1)))))
-    (fun n z ↦
-      (if n ∈ ({i} : Finset (Fin N)) then
-        F.neighboringOperator (k n) (k (n + 1)) (x n) z
-      else if x n = z then 1 else 0) *
-      (if n ∈ s then
-        F.neighboringOperator (k n) (k (n + 1)) z (y n)
-      else if z = y n then 1 else 0))]
-  apply Finset.prod_congr rfl
-  intro n _
-  by_cases hni : n = i
-  · subst n
-    simp [hi]
-  · by_cases hns : n ∈ s
-    · simp [hni, hns]
-    · by_cases hxy : x n = y n
-      · simp [hni, hns, hxy]
-      · simp [hni, hns, hxy]
-
-/-- The ordered product of the single-edge matrices indexed by a list
-without repetitions is the partial tensor product over the entries of that
-list. -/
-private theorem prod_edgePartialProduct_singletons
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (k : Fin N → Fin F.sectorCount) (l : List (Fin N)) (hl : l.Nodup) :
-    (l.map fun i ↦ F.edgePartialProduct k {i}).prod =
-      F.edgePartialProduct k l.toFinset := by
-  induction l with
-  | nil => simp
-  | cons i l ih =>
-      rw [List.nodup_cons] at hl
-      simp only [List.map_cons, List.prod_cons, List.toFinset_cons]
-      rw [ih hl.2]
-      exact F.edgePartialProduct_singleton_mul k l.toFinset i (by
-        simpa only [List.mem_toFinset] using hl.1)
-
-/-- The ordered product over all cyclic edges is the complete product of
-neighboring-operator entries. -/
-private theorem prod_edgePartialProduct_singletons_univ
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (k : Fin N → Fin F.sectorCount) :
-    (List.ofFn fun i : Fin N ↦ F.edgePartialProduct k {i}).prod =
-      fun x y ↦ ∏ n : Fin N,
-        F.neighboringOperator (k n) (k (n + 1)) (x n) (y n) := by
-  have hlist : List.ofFn (fun i : Fin N ↦ F.edgePartialProduct k {i}) =
-      (List.ofFn id).map fun i ↦ F.edgePartialProduct k {i} := by
-    simp
-  rw [hlist]
-  rw [F.prod_edgePartialProduct_singletons k (List.ofFn id)
-    (List.nodup_ofFn.mpr Function.injective_id)]
-  have hfin : (List.ofFn id : List (Fin N)).toFinset = Finset.univ := by
-    ext i
-    simp only [List.mem_toFinset, Finset.mem_univ, iff_true]
-    exact List.mem_ofFn.mpr ⟨i, rfl⟩
-  rw [hfin]
-  exact F.edgePartialProduct_univ k
-
 /-- The sector-coordinate bond indexed by two-site configurations. -/
 noncomputable def sectorBond (F : PhysicalSectorFactorization K) :
     Matrix
@@ -321,340 +256,51 @@ noncomputable def sectorBond (F : PhysicalSectorFactorization K) :
   rw [Equiv.symm_apply_apply, twoSiteGlobalRegroupEquiv_symm_apply]
   rfl
 
-private theorem add_one_ne_self_of_three_le {N : ℕ} [NeZero N]
-    (hN : 3 ≤ N) (i : Fin N) :
-    i + 1 ≠ i := by
-  have h1 : ((1 : Fin N) : ℕ) = 1 := by
-    change 1 % N = 1
-    rw [Nat.mod_eq_of_lt (by omega)]
-  intro h
-  have hval := congrArg Fin.val h
-  rw [Fin.val_add_eq_ite, h1] at hval
-  have := i.isLt
-  split_ifs at hval <;> omega
-
-private theorem mem_cyclicWindowSupport_two {N : ℕ} (i q : Fin N) :
-    q ∈ MPSTensor.cyclicWindowSupport N 2 i ↔
-      q = i ∨ q = MPSTensor.cyclicForwardSite i 1 := by
-  rw [MPSTensor.cyclicWindowSupport]
-  simp only [Finset.mem_image, Finset.mem_range]
-  constructor
-  · rintro ⟨r, hr, rfl⟩
-    interval_cases r
-    · simp
-    · simp
-  · rintro (rfl | rfl)
-    · exact ⟨0, by simp, by simp⟩
-    · exact ⟨1, by simp, rfl⟩
-
-/-- In complete cyclic-edge coordinates, a translated two-site sector bond
-is block diagonal in the sector configuration and acts only on the
-corresponding edge.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
-1586--1593. -/
-private theorem reindex_embedLocalOperator_sectorBond
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (hN : 3 ≤ N) (i : Fin N) :
-    Matrix.reindex (F.sectorEdgeChainEquiv N) (F.sectorEdgeChainEquiv N)
-        (embedLocalOperator
-          (d := Fintype.card (SectorSiteIndex F)) 2 N (by omega) i F.sectorBond) =
-      Matrix.blockDiagonal' fun k ↦ F.edgePartialProduct k {i} := by
-  classical
-  ext ⟨k, x⟩ ⟨h, y⟩
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    embedLocalOperator_apply]
-  by_cases hkh : k = h
-  · subst h
-    rw [Matrix.blockDiagonal'_apply_eq]
-    let sx := (F.cyclicEdgeEquiv k).symm x
-    let sy := (F.cyclicEdgeEquiv k).symm y
-    have hxchain : (F.sectorEdgeChainEquiv N).symm ⟨k, x⟩ =
-        fun n ↦ F.sectorFinEquiv.symm ⟨k n, sx n⟩ := by
-      funext n
-      exact F.sectorEdgeChainEquiv_symm_apply N k x n
-    have hychain : (F.sectorEdgeChainEquiv N).symm ⟨k, y⟩ =
-        fun n ↦ F.sectorFinEquiv.symm ⟨k n, sy n⟩ := by
-      funext n
-      exact F.sectorEdgeChainEquiv_symm_apply N k y n
-    rw [hxchain, hychain]
-    simp only [sectorBond, sectorCoordinateBond, Matrix.reindex_apply,
-      Equiv.symm_symm, MPSTensor.extractWindow, finTwoArrowEquiv_apply,
-      Equiv.toFun_as_coe, piFinTwoEquiv_apply, Fin.isValue,
-      Matrix.submatrix_apply, Fin.coe_ofNat_eq_mod, Nat.zero_mod,
-      Nat.add_zero, Nat.reduceMod, edgePartialProduct,
-      Finset.mem_singleton, neighboringOperator_apply]
-    have hi0 : (⟨i.val % N, Nat.mod_lt _ (Fin.pos i)⟩ : Fin N) = i := by
-      ext
-      exact Nat.mod_eq_of_lt i.isLt
-    have hi1 : (⟨(i.val + 1) % N, Nat.mod_lt _ (Fin.pos i)⟩ : Fin N) =
-        i + 1 := by
-      ext
-      simp [Fin.add_def]
-    rw [hi0, hi1]
-    have hregx : F.twoSiteGlobalRegroupEquiv
-        (F.sectorFinEquiv.symm ⟨k i, sx i⟩,
-          F.sectorFinEquiv.symm ⟨k (i + 1), sx (i + 1)⟩) =
-        ⟨(k i, k (i + 1)), F.twoSiteRegroupEquiv (k i) (k (i + 1))
-          (sx i, sx (i + 1))⟩ := by
-      change F.twoSiteGlobalRegroupEquiv
-          (F.twoSiteSectorEmbedding (k i) (k (i + 1))
-            (sx i, sx (i + 1))) = _
-      exact F.twoSiteGlobalRegroupEquiv_twoSiteSectorEmbedding _ _ _
-    have hregy : F.twoSiteGlobalRegroupEquiv
-        (F.sectorFinEquiv.symm ⟨k i, sy i⟩,
-          F.sectorFinEquiv.symm ⟨k (i + 1), sy (i + 1)⟩) =
-        ⟨(k i, k (i + 1)), F.twoSiteRegroupEquiv (k i) (k (i + 1))
-          (sy i, sy (i + 1))⟩ := by
-      change F.twoSiteGlobalRegroupEquiv
-          (F.twoSiteSectorEmbedding (k i) (k (i + 1))
-            (sy i, sy (i + 1))) = _
-      exact F.twoSiteGlobalRegroupEquiv_twoSiteSectorEmbedding _ _ _
-    rw [hregx, hregy, Matrix.blockDiagonal'_apply_eq]
+/-- In eta pair coordinates, the physical-sector bond has the neighboring
+operator decomposition required by cyclic eta transport. -/
+private theorem sectorCoordinateBond_etaPair_decomposition
+    (F : PhysicalSectorFactorization K) :
+    Matrix.reindex (Matrix.etaPairSpatialBlockEquiv F.etaSectorFinEquiv).symm
+        (Matrix.etaPairSpatialBlockEquiv F.etaSectorFinEquiv).symm
+        F.sectorCoordinateBond =
+      Matrix.blockDiagonal' fun qh : Fin F.sectorCount × Fin F.sectorCount ↦
+        ((1 : Matrix (Fin (F.leftDim qh.1)) (Fin (F.leftDim qh.1)) ℂ) ⊗ₖ
+          F.neighboringOperator qh.1 qh.2) ⊗ₖ
+            (1 : Matrix (Fin (F.rightDim qh.2)) (Fin (F.rightDim qh.2)) ℂ) := by
+  ext ⟨⟨q, h⟩, ⟨⟨lq, rq, lh⟩, rh⟩⟩
+    ⟨⟨q', h'⟩, ⟨⟨lq', rq', lh'⟩, rh'⟩⟩
+  change F.sectorCoordinateBond
+      (F.sectorFinEquiv.symm ⟨q, (lq, rq)⟩,
+        F.sectorFinEquiv.symm ⟨h, (lh, rh)⟩)
+      (F.sectorFinEquiv.symm ⟨q', (lq', rq')⟩,
+        F.sectorFinEquiv.symm ⟨h', (lh', rh')⟩) = _
+  have hx : F.twoSiteGlobalRegroupEquiv
+      (F.sectorFinEquiv.symm ⟨q, (lq, rq)⟩,
+        F.sectorFinEquiv.symm ⟨h, (lh, rh)⟩) =
+      ⟨(q, h), ((lq, rh), (rq, lh))⟩ := by
+    change F.twoSiteGlobalRegroupEquiv
+        (F.twoSiteSectorEmbedding q h ((lq, rq), (lh, rh))) = _
+    exact F.twoSiteGlobalRegroupEquiv_twoSiteSectorEmbedding q h _
+  have hy : F.twoSiteGlobalRegroupEquiv
+      (F.sectorFinEquiv.symm ⟨q', (lq', rq')⟩,
+        F.sectorFinEquiv.symm ⟨h', (lh', rh')⟩) =
+      ⟨(q', h'), ((lq', rh'), (rq', lh'))⟩ := by
+    change F.twoSiteGlobalRegroupEquiv
+        (F.twoSiteSectorEmbedding q' h' ((lq', rq'), (lh', rh'))) = _
+    exact F.twoSiteGlobalRegroupEquiv_twoSiteSectorEmbedding q' h' _
+  simp only [sectorCoordinateBond, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_symm]
+  rw [hx, hy]
+  by_cases hp : (q, h) = (q', h')
+  · have hq : q = q' := congrArg Prod.fst hp
+    have hh : h = h' := congrArg Prod.snd hp
+    subst q'
+    subst h'
+    rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiagonal'_apply_eq]
     simp only [Matrix.kroneckerMap_apply, Matrix.one_apply]
-    change (if AgreesOutsideWindow 2 (by omega) i
-          (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sx n⟩)
-          (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sy n⟩) then
-        (if ((sx i).1, (sx (i + 1)).2) =
-            ((sy i).1, (sy (i + 1)).2) then 1 else 0) *
-          F.neighboringOperator (k i) (k (i + 1))
-            ((sx i).2, (sx (i + 1)).1) ((sy i).2, (sy (i + 1)).1)
-      else 0) = _
-    have hxedge : ∀ n : Fin N,
-        x n = ((sx n).2, (sx (n + 1)).1) := by
-      intro n
-      simpa only [sx, cyclicEdgeEquiv_apply] using
-        (congrFun ((F.cyclicEdgeEquiv k).apply_symm_apply x) n).symm
-    have hyedge : ∀ n : Fin N,
-        y n = ((sy n).2, (sy (n + 1)).1) := by
-      intro n
-      simpa only [sy, cyclicEdgeEquiv_apply] using
-        (congrFun ((F.cyclicEdgeEquiv k).apply_symm_apply y) n).symm
-    have hj : MPSTensor.cyclicForwardSite i 1 = i + 1 := by
-      ext
-      simp [MPSTensor.cyclicForwardSite, Fin.add_def]
-    have hij : i + 1 ≠ i := by
-      exact add_one_ne_self_of_three_le hN i
-    have hcondition :
-        (AgreesOutsideWindow 2 (by omega) i
-            (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sx n⟩)
-            (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sy n⟩) ∧
-          ((sx i).1, (sx (i + 1)).2) =
-            ((sy i).1, (sy (i + 1)).2)) ↔
-          ∀ n : Fin N, n ≠ i → x n = y n := by
-      constructor
-      · rintro ⟨ha, hb⟩ n hni
-        rw [hxedge, hyedge]
-        apply Prod.ext
-        · by_cases hnj : n = i + 1
-          · subst n
-            exact congrArg (fun z : Fin (F.leftDim (k i)) ×
-              Fin (F.rightDim (k (i + 1))) ↦ z.2) hb
-          · have hs := (agreesOutsideWindow_iff 2 (by omega) i _ _).mp ha
-              n (by
-                rw [← MPSTensor.mem_cyclicWindowSupport_iff (by omega),
-                  mem_cyclicWindowSupport_two, hj]
-                simp [hni, hnj])
-            have hs' := congrArg F.sectorFinEquiv hs
-            simp only [Equiv.apply_symm_apply, Sigma.mk.injEq,
-              true_and] at hs'
-            exact congrArg Prod.snd (eq_of_heq hs').symm
-        · by_cases hn1i : n + 1 = i
-          · rw [hn1i]
-            exact congrArg (fun z : Fin (F.leftDim (k i)) ×
-              Fin (F.rightDim (k (i + 1))) ↦ z.1) hb
-          · have hn1j : n + 1 ≠ i + 1 := by
-              intro hn
-              exact hni (add_right_cancel hn)
-            have hs := (agreesOutsideWindow_iff 2 (by omega) i _ _).mp ha
-              (n + 1) (by
-                rw [← MPSTensor.mem_cyclicWindowSupport_iff (by omega),
-                  mem_cyclicWindowSupport_two, hj]
-                simp [hn1i, hn1j])
-            have hs' := congrArg F.sectorFinEquiv hs
-            simp only [Equiv.apply_symm_apply, Sigma.mk.injEq,
-              true_and] at hs'
-            exact congrArg Prod.fst (eq_of_heq hs').symm
-      · intro he
-        constructor
-        · rw [agreesOutsideWindow_iff]
-          intro q hq
-          have hqi : q ≠ i := by
-            intro h
-            subst q
-            exact hq (by simp)
-          have hqj : q ≠ i + 1 := by
-            intro h
-            subst q
-            apply hq
-            rw [← MPSTensor.mem_cyclicWindowSupport_iff (by omega),
-              mem_cyclicWindowSupport_two, hj]
-            simp
-          congr 1
-          refine Sigma.ext rfl (heq_of_eq ?_)
-          apply Prod.ext
-          · let p : Fin N := q - 1
-            have hpnext : p + 1 = q := by simp [p]
-            have hpne : p ≠ i := by
-              intro hp
-              have : q = i + 1 := by rw [← hpnext, hp]
-              exact hqj this
-            have hpedge := congrArg Prod.snd (he p hpne).symm
-            rw [hxedge p, hyedge p, hpnext] at hpedge
-            exact hpedge
-          · have hqedge := congrArg Prod.fst (he q hqi).symm
-            rw [hxedge q, hyedge q] at hqedge
-            exact hqedge
-        · apply Prod.ext
-          · let p : Fin N := i - 1
-            have hpnext : p + 1 = i := by simp [p]
-            have hpne : p ≠ i := by
-              intro hp
-              have hpnext' := hpnext
-              rw [hp] at hpnext'
-              exact hij hpnext'
-            have hpedge := he p hpne
-            rw [hxedge p, hyedge p, hpnext] at hpedge
-            exact congrArg (fun z : NeighborIndex F (k p) (k i) ↦ z.2) hpedge
-          · have hedge := congrArg Prod.fst (he (i + 1) hij)
-            rw [hxedge (i + 1), hyedge (i + 1)] at hedge
-            exact hedge
-    by_cases he : ∀ n : Fin N, n ≠ i → x n = y n
-    · obtain ⟨ha, hb⟩ := hcondition.mpr he
-      rw [if_pos ha, if_pos hb, one_mul]
-      rw [Finset.prod_eq_single i]
-      · rw [if_pos rfl]
-        rw [hxedge i, hyedge i]
-        rfl
-      · intro n _ hni
-        rw [if_neg hni, if_pos (he n hni)]
-      · simp
-    · have hnot : ¬ (AgreesOutsideWindow 2 (by omega) i
-            (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sx n⟩)
-            (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sy n⟩) ∧
-          ((sx i).1, (sx (i + 1)).2) =
-            ((sy i).1, (sy (i + 1)).2)) := by
-        exact fun hc ↦ he (hcondition.mp hc)
-      push Not at he
-      obtain ⟨n, hni, hnxy⟩ := he
-      have hprod : (∏ q : Fin N,
-          if q = i then
-            ∑ a, F.rightTensor (k q) a (x q).1 (y q).1 *
-              F.leftTensor (k (q + 1)) a (x q).2 (y q).2
-          else if x q = y q then 1 else 0) = 0 := by
-        apply Finset.prod_eq_zero (Finset.mem_univ n)
-        simp [hni, hnxy]
-      rw [hprod]
-      by_cases ha : AgreesOutsideWindow 2 (by omega) i
-          (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sx n⟩)
-          (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sy n⟩)
-      · rw [if_pos ha]
-        have hb : ((sx i).1, (sx (i + 1)).2) ≠
-            ((sy i).1, (sy (i + 1)).2) := fun hb ↦ hnot ⟨ha, hb⟩
-        rw [if_neg hb, zero_mul]
-      · rw [if_neg ha]
-  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
-    let sx := (F.cyclicEdgeEquiv k).symm x
-    let ty := (F.cyclicEdgeEquiv h).symm y
-    have hxchain : (F.sectorEdgeChainEquiv N).symm ⟨k, x⟩ =
-        fun n ↦ F.sectorFinEquiv.symm ⟨k n, sx n⟩ := by
-      funext n
-      exact F.sectorEdgeChainEquiv_symm_apply N k x n
-    have hychain : (F.sectorEdgeChainEquiv N).symm ⟨h, y⟩ =
-        fun n ↦ F.sectorFinEquiv.symm ⟨h n, ty n⟩ := by
-      funext n
-      exact F.sectorEdgeChainEquiv_symm_apply N h y n
-    rw [hxchain, hychain]
-    simp only [sectorBond, sectorCoordinateBond, Matrix.reindex_apply,
-      Equiv.symm_symm, MPSTensor.extractWindow, finTwoArrowEquiv_apply,
-      Equiv.toFun_as_coe, piFinTwoEquiv_apply, Fin.isValue,
-      Matrix.submatrix_apply, Fin.coe_ofNat_eq_mod, Nat.zero_mod,
-      Nat.add_zero, Nat.reduceMod]
-    have hi0 : (⟨i.val % N, Nat.mod_lt _ (Fin.pos i)⟩ : Fin N) = i := by
-      ext
-      exact Nat.mod_eq_of_lt i.isLt
-    have hi1 : (⟨(i.val + 1) % N, Nat.mod_lt _ (Fin.pos i)⟩ : Fin N) =
-        i + 1 := by
-      ext
-      simp [Fin.add_def]
-    rw [hi0, hi1]
-    have hregx : F.twoSiteGlobalRegroupEquiv
-        (F.sectorFinEquiv.symm ⟨k i, sx i⟩,
-          F.sectorFinEquiv.symm ⟨k (i + 1), sx (i + 1)⟩) =
-        ⟨(k i, k (i + 1)), F.twoSiteRegroupEquiv (k i) (k (i + 1))
-          (sx i, sx (i + 1))⟩ := by
-      change F.twoSiteGlobalRegroupEquiv
-          (F.twoSiteSectorEmbedding (k i) (k (i + 1))
-            (sx i, sx (i + 1))) = _
-      exact F.twoSiteGlobalRegroupEquiv_twoSiteSectorEmbedding _ _ _
-    have hregy : F.twoSiteGlobalRegroupEquiv
-        (F.sectorFinEquiv.symm ⟨h i, ty i⟩,
-          F.sectorFinEquiv.symm ⟨h (i + 1), ty (i + 1)⟩) =
-        ⟨(h i, h (i + 1)), F.twoSiteRegroupEquiv (h i) (h (i + 1))
-          (ty i, ty (i + 1))⟩ := by
-      change F.twoSiteGlobalRegroupEquiv
-          (F.twoSiteSectorEmbedding (h i) (h (i + 1))
-            (ty i, ty (i + 1))) = _
-      exact F.twoSiteGlobalRegroupEquiv_twoSiteSectorEmbedding _ _ _
-    rw [hregx, hregy]
-    by_cases ha : AgreesOutsideWindow 2 (by omega) i
-        (fun n ↦ F.sectorFinEquiv.symm ⟨k n, sx n⟩)
-        (fun n ↦ F.sectorFinEquiv.symm ⟨h n, ty n⟩)
-    · rw [if_pos ha]
-      have hpairs : (k i, k (i + 1)) ≠ (h i, h (i + 1)) := by
-        intro hp
-        apply hkh
-        funext q
-        by_cases hq : ((q.val + N - i.val) % N < 2)
-        · rw [← MPSTensor.mem_cyclicWindowSupport_iff (by omega),
-            mem_cyclicWindowSupport_two] at hq
-          rcases hq with rfl | hq
-          · exact congrArg Prod.fst hp
-          · have hj : MPSTensor.cyclicForwardSite i 1 = i + 1 := by
-              ext
-              simp [MPSTensor.cyclicForwardSite, Fin.add_def]
-            rw [hj] at hq
-            subst q
-            exact congrArg Prod.snd hp
-        · have hs := (agreesOutsideWindow_iff 2 (by omega) i _ _).mp ha q hq
-          have hs' := congrArg F.sectorFinEquiv hs
-          simpa only [Equiv.apply_symm_apply] using
-            (congrArg Sigma.fst hs').symm
-      rw [Matrix.blockDiagonal'_apply_ne _ _ _ hpairs]
-    · rw [if_neg ha]
-
-private theorem reindex_list_prod
-    {α β : Type*} [Fintype α] [DecidableEq α]
-    [Fintype β] [DecidableEq β] (e : α ≃ β)
-    (l : List (Matrix α α ℂ)) :
-    Matrix.reindex e e l.prod =
-      (l.map fun A ↦ Matrix.reindex e e A).prod := by
-  induction l with
-  | nil =>
-      ext x y
-      simp [Matrix.reindex_apply, Matrix.one_apply]
-  | cons A l ih =>
-      simp only [List.prod_cons, List.map_cons]
-      change Matrix.reindexLinearEquiv ℂ ℂ e e (A * l.prod) = _
-      rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ e e e]
-      simp only [Matrix.coe_reindexLinearEquiv, ih]
-
-private theorem blockDiagonal'_list_prod
-    {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {α : ι → Type*} [∀ i, Fintype (α i)] [∀ i, DecidableEq (α i)]
-    (l : List ((i : ι) → Matrix (α i) (α i) ℂ)) :
-    (l.map Matrix.blockDiagonal').prod =
-      Matrix.blockDiagonal' fun i ↦ (l.map fun A ↦ A i).prod := by
-  induction l with
-  | nil =>
-      ext ⟨i, x⟩ ⟨j, y⟩
-      by_cases hij : i = j
-      · subst j
-        simp [Matrix.one_apply, Matrix.blockDiagonal'_apply]
-      · simp [Matrix.blockDiagonal'_apply_ne _ _ _ hij, hij]
-  | cons A l ih =>
-      simp only [List.map_cons, List.prod_cons]
-      rw [ih, ← Matrix.blockDiagonal'_mul]
+    by_cases hl : lq = lq' <;> by_cases hr : rh = rh' <;> simp [hl, hr]
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hp,
+      Matrix.blockDiagonal'_apply_ne _ _ _ hp]
 
 /-- For every length at least three, the sector-coordinate MPO is exactly
 the ordered product of the translated sector bonds. -/
@@ -666,50 +312,14 @@ theorem mpo_sectorCoordinateTensor_eq_product_sectorBond
         embedLocalOperator
           (d := Fintype.card (SectorSiteIndex F)) 2 N (by omega) i
             F.sectorBond).prod := by
+  have hcyclic := reindex_product_embedLocalOperator_of_etaPair_decomposition
+    (d := Fintype.card (SectorSiteIndex F)) (N := N) (by omega)
+    F.leftDim F.rightDim F.etaSectorFinEquiv F.neighboringOperator
+    F.sectorCoordinateBond F.sectorCoordinateBond_etaPair_decomposition
   apply (Matrix.reindex (F.sectorEdgeChainEquiv N)
     (F.sectorEdgeChainEquiv N)).injective
   rw [F.reindex_mpo_sectorCoordinateTensor_sectorEdgeChainEquiv]
-  rw [reindex_list_prod]
-  rw [show (List.ofFn fun i : Fin N ↦
-      embedLocalOperator
-        (d := Fintype.card (SectorSiteIndex F)) 2 N (by omega) i
-          F.sectorBond).map
-        (fun A ↦ Matrix.reindex (F.sectorEdgeChainEquiv N)
-          (F.sectorEdgeChainEquiv N) A) =
-      List.ofFn (fun i : Fin N ↦
-        Matrix.reindex (F.sectorEdgeChainEquiv N) (F.sectorEdgeChainEquiv N)
-          (embedLocalOperator
-            (d := Fintype.card (SectorSiteIndex F)) 2 N (by omega) i
-              F.sectorBond)) by
-    simp
-    rfl]
-  have hmap :
-      (List.ofFn fun i : Fin N ↦
-        Matrix.reindex (F.sectorEdgeChainEquiv N) (F.sectorEdgeChainEquiv N)
-          (embedLocalOperator
-            (d := Fintype.card (SectorSiteIndex F)) 2 N (by omega) i
-              F.sectorBond)) =
-      List.ofFn (fun i : Fin N ↦
-        Matrix.blockDiagonal' fun k ↦ F.edgePartialProduct k {i}) := by
-    exact congrArg List.ofFn (funext fun i ↦
-      F.reindex_embedLocalOperator_sectorBond hN i)
-  rw [hmap]
-  rw [show List.ofFn (fun i : Fin N ↦
-      Matrix.blockDiagonal' fun k ↦ F.edgePartialProduct k {i}) =
-      (List.ofFn fun i : Fin N ↦
-        fun k ↦ F.edgePartialProduct k {i}).map Matrix.blockDiagonal' by
-    simp
-    rfl]
-  rw [blockDiagonal'_list_prod]
-  congr
-  funext k
-  symm
-  have hl : (List.ofFn fun i : Fin N ↦
-      fun q ↦ F.edgePartialProduct q {i}).map (fun A ↦ A k) =
-      List.ofFn (fun i : Fin N ↦ F.edgePartialProduct k {i}) := by
-    simp
-    rfl
-  rw [hl]
-  exact F.prod_edgePartialProduct_singletons_univ k
+  simpa only [sectorBond, F.etaCyclicEdgeEquiv_eq_sectorEdgeChainEquiv]
+    using hcyclic.symm
 
 end MPOTensor.PhysicalSectorFactorization
