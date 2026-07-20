@@ -189,26 +189,6 @@
     \end{TNDiagram}%
 }
 
-% Closing an L-site chain of the local BNT fusion identity.  On the right the
-% multiplicity loop and the M_gamma loop are disjoint, so their traces factor.
-\TNDeclareDiagram
-    {TNMPDOFusionTracePower}
-    {}
-    {figure}
-    {compact}
-    {\TNMPDOFusionTracePower}
-    {chapter/ch21_mpdo_rfp_fusion_isometries.tex}{%
-    \begin{TNEquationRow}[compact]
-        \TNTerm{%
-            \TNMPDOStackedPeriodicWord{ftpLeft}{at=origin}
-                {M_\alpha}{M_\beta}{L\text{ sites}}}
-        \TNRelation{=\displaystyle\sum_\gamma}
-        \TNTerm{%
-            \TNMPDOStackedPeriodicWord{ftpRight}{at=origin}
-                {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{L\text{ sites}}}
-    \end{TNEquationRow}%
-}
-
 % Recursive contraction for the structure operator Q in CPSV16, lines
 % 999--1008.  Each X has the four ordered indices k, alpha, beta, gamma;
 % the lower wires retain earlier labels while the recursion proceeds.

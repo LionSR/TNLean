@@ -236,22 +236,6 @@
     \TNMorphismArrow{#1ArrowFive}{(#1PRight.east)}{(#1RRoot.west)}{F^{abj}_{e}}%
 }
 
-% A three-cell periodic double-layer word.  Both layers close independently,
-% so the two traces remain distinct in the event graph.
-\newcommand{\TNMPDOStackedPeriodicWord}[5]{%
-    \TNMPDOMotifEvent{#1}{stacked-periodic-word}%
-    \TNStackedMPOProduct{#1Left}{#2}{#3}{#4}{}%
-    \TNStackedMPOProduct{#1Middle}{right=of #1LeftUpper}{#3}{#4}{}%
-    \TNStackedMPOProduct{#1Right}{right=of #1MiddleUpper}{#3}{#4}{}%
-    \TNConnectVirtual{#1LeftUpperEast}{#1MiddleUpperWest}%
-    \TNConnectVirtual{#1MiddleUpperEast}{#1RightUpperWest}%
-    \TNConnectVirtual{#1LeftLowerEast}{#1MiddleLowerWest}%
-    \TNConnectVirtual{#1MiddleLowerEast}{#1RightLowerWest}%
-    \TNTraceVirtualAbove{#1LeftUpperWest}{#1RightUpperEast}%
-    \TNTraceVirtualBelow{#1LeftLowerWest}{#1RightLowerEast}%
-    \TNLabelBelow{#1MiddleLower}{#5}%
-}
-
 % Recursive Q word with a semantic omitted column and a trace cell at its
 % right boundary.
 \newcommand{\TNMPDORecursiveStructureMotif}[2]{%
