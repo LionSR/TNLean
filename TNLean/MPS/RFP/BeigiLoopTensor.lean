@@ -323,9 +323,7 @@ private theorem groundBondProduct_mulVec_loopProductState
         (star (F.unitary ⊗ₖ F.unitary) *
           twoSiteParentGroundProjectorMatrix A *
             (F.unitary ⊗ₖ F.unitary)))).prod
-  have hUUstar : F.unitary * F.unitaryᴴ = 1 := by
-    simpa only [Matrix.star_eq_conjTranspose] using
-      Unitary.mul_star_self_of_mem F.unitary_mem
+  have hUUstar := F.unitary_mul_conjTranspose
   have hWWstar : W * Wᴴ = 1 := by
     simp only [W]
     rw [MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose, hUUstar,
