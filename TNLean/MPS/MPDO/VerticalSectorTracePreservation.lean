@@ -37,46 +37,6 @@ noncomputable section
 
 namespace MPOTensor
 
-/-- The BNT product-span formulation agrees with the pointwise product family
-used by the direct-sum trace criterion. -/
-private theorem one_mem_product_span_of_weightedVerticalBondContractions
-    {g D L : ℕ} {dim : Fin g → ℕ}
-    (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
-    (hSpan : WeightedVerticalBondContractionProductSpanTop m A L) :
-    (1 : VerticalSectorAlgebra dim) ∈
-      Submodule.span ℂ (Set.range fun x : Fin L → Matrix (Fin D) (Fin D) ℂ ↦
-        (List.ofFn fun t ↦ weightedVerticalBondContraction m A (x t)).prod) := by
-  have hOneRaw : (1 : VerticalSectorAlgebra dim) ∈
-      Submodule.span ℂ (Set.range
-        (weightedVerticalBondContractionProduct (L := L) m A)) := by
-    rw [hSpan]
-    exact Submodule.mem_top
-  have hRange : Set.range (weightedVerticalBondContractionProduct
-      (L := L) m A) =
-      Set.range (fun x : Fin L → Matrix (Fin D) (Fin D) ℂ ↦
-        (List.ofFn fun t ↦ weightedVerticalBondContraction m A (x t)).prod) := by
-    ext Y
-    constructor
-    · rintro ⟨x, rfl⟩
-      refine ⟨x, ?_⟩
-      funext α
-      change ((List.ofFn fun t ↦
-          weightedVerticalBondContraction m A (x t)).prod) α =
-        (List.ofFn fun t ↦ weightedVerticalBondContraction m A (x t) α).prod
-      rw [Pi.list_prod_apply, List.map_ofFn]
-      rfl
-    · rintro ⟨x, rfl⟩
-      refine ⟨x, ?_⟩
-      funext α
-      change (List.ofFn fun t ↦
-          weightedVerticalBondContraction m A (x t) α).prod =
-        ((List.ofFn fun t ↦ weightedVerticalBondContraction m A (x t)).prod) α
-      rw [Pi.list_prod_apply, List.map_ofFn]
-      rfl
-  rw [← hRange]
-  exact hOneRaw
-
 /-- The transported coarse-graining and refinement maps, as well as their two
 square composites, preserve the appropriate total sector traces.
 

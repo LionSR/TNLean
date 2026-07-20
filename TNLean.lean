@@ -479,6 +479,7 @@ import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorImagePreservation
 import TNLean.MPS.MPDO.VerticalSectorDensityBlocks
 import TNLean.MPS.MPDO.VerticalSectorTracePreservation
+import TNLean.MPS.MPDO.VerticalSectorInvertibility
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
@@ -681,7 +682,6 @@ import TNLean.Channel.Peripheral.Cycles
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
 -- Chapter 2 §2.3 normal-form existence (SVD + Lorentz)
 import TNLean.Channel.NormalForm
-
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index
 import TNLean.Channel.WolfChapter6Index
