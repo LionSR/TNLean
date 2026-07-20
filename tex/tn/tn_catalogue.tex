@@ -343,26 +343,6 @@
     \end{TNDiagram}%
 }
 
-% Fix (#401): use a dedicated physical-leg operator insertion for
-% general linear twists, and keep permutation twists for index relabellings.
-\TNDeclareDiagram
-    {TNLinearTwist}
-    {twist,label}
-    {display}
-    {normal}
-    {\TNLinearTwist{u}{i}}
-    {chapter/ch12_symmetry.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNMPSSite{tnA}{at=origin}{}
-        \TNOpenVirtualWest{tnAWest}
-        \TNOpenVirtualEast{tnAEast}
-        \TNInsertion{tnu}{above=of tnA}{#1}
-        \TNPhysicalPort{tnuTotnA}{tnu}{south}
-        \TNConnectPhysical{tnAKet}{tnuTotnA}
-        \TNLabelAbove{tnu.north}{#2}
-    \end{TNDiagram}%
-}
-
 % Fix (#401): make the relabelling arrow explicit so multi-step
 % permutation diagrams can distinguish \sigma_h from \sigma_g.
 \TNDeclareDiagram
