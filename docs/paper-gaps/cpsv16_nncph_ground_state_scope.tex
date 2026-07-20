@@ -351,10 +351,31 @@ injectivity.  The one-site unitary preserves this spanning property, giving
 \leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor_isInjective} and the
 normality conclusion
 \leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor_isNormal}.
-No normalization, transfer-idempotence, or identification with the original
-basis of normal tensors is asserted at this stage.  Consequently, the
-spanning statement below may equivalently be formulated using the periodic
-vectors of the minimal Schmidt-support tensors.
+Here $\lVert\varphi_a\rVert_2$ denotes the Euclidean norm of the bond vector,
+equivalently the Frobenius norm of its coefficient matrix; it is not the
+supremum norm on the ordinary coordinate-function space.  With
+$P=Y_aY_a^*$ and $Q=X_a^*X_a$, the transfer map of the minimal coordinate
+tensor has the rank-one form
+\[
+  \mathcal E_a(Z)=\operatorname{tr}(QZ)P,
+  \qquad
+  \mathcal E_a^2=\lVert\varphi_a\rVert_2^2\mathcal E_a.
+\]
+The declaration \leanid{MPSTensor.BeigiSectorGraphData.loopBondVector}
+chooses a nonzero vector but does not normalize it.  Thus transfer
+idempotence is not asserted for the raw tensor unless
+$\lVert\varphi_a\rVert_2=1$.  The separate declaration
+\leanid{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor} defines
+$\lVert\varphi_a\rVert_2^{-1}\widetilde C_a$ without changing the raw tensor
+or any of its exact state formulas.  Its transfer map is idempotent by
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{normalizedMinimalLoopTensor_isTransferIdempotent}, and its
+length-$N$ matrix product vector is
+$\lVert\varphi_a\rVert_2^{-N}$ times the original loop state by
+\leanid{MPSTensor.BeigiSectorGraphData.mpv_normalizedMinimalLoopTensor}.
+No identification with the original basis of normal tensors is asserted at
+this stage.  Consequently, the spanning statement below may equivalently be
+formulated using the periodic vectors of the minimal Schmidt-support tensors.
 
 For every $N\geq2$,
 \leanid{MPSTensor.BeigiSectorGraphData.}
