@@ -314,8 +314,7 @@ import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
 import TNLean.MPS.ParentHamiltonian.Martingale
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
--- The finite-chain uniqueness capstone is not part of this foundational layer.
--- Downstream files may import it when they need the periodic-chain definitions.
+-- Downstream users needing periodic-chain definitions may import the uniqueness capstone.
 
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
@@ -478,6 +477,7 @@ import TNLean.MPS.MPDO.VerticalSectorFixedGenerators
 import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorImagePreservation
 import TNLean.MPS.MPDO.VerticalSectorDensityBlocks
+import TNLean.MPS.MPDO.VerticalSectorTracePreservation
 import TNLean.MPS.MPDO.VerticalSectorCompletePositivity
 import TNLean.MPS.MPDO.VerticalSectorInvertibility
 import TNLean.MPS.MPDO.PRFP

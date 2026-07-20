@@ -16,8 +16,8 @@ refinement and coarse-graining maps.  Thus both transported vertical-sector
 maps are completely positive between finite sums of matrix algebras.
 
 The two square composites are trace preserving by the independent
-maximal-support argument in `VerticalSectorTracePreservation`.  Complete
-positivity therefore gives the Schwarz inequalities for their trace adjoints.
+maximal-support argument established earlier.  Complete positivity therefore
+gives the Schwarz inequalities for their trace adjoints.
 
 ## References
 
