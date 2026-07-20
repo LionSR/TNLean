@@ -1,7 +1,7 @@
 name: PR CI
 
 # The pull-request pipeline: Lean build + style lint, blueprint lint and
-# Lean-blueprint sync, and the oversized-file guard, formerly
+# Lean-blueprint sync, and the Lean module-policy guards, formerly
 # lean_action_ci.yml, lint-blueprint.yml, and oversized-lean-files.yml.
 # One workflow means one completion event for the auto-fix dispatcher and
 # per-job change gating: Lean-only changes skip the TeX pipeline, and
@@ -18,6 +18,11 @@ on:
       - 'lake-manifest.json'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
+      - 'scripts/check_numbered_lean_files.py'
+      - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/test_lean_file_policies.py'
+      - 'docs/ci-automation.md'
+      - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
       - 'blueprint/src/**'
       - 'tex/tn/**'
@@ -46,6 +51,11 @@ on:
       - 'lake-manifest.json'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
+      - 'scripts/check_numbered_lean_files.py'
+      - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/test_lean_file_policies.py'
+      - 'docs/ci-automation.md'
+      - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
       - 'blueprint/src/**'
       - 'tex/tn/**'
@@ -107,6 +117,11 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
+              - 'scripts/check_numbered_lean_files.py'
+              - 'scripts/check_oversized_lean_files.py'
+              - 'scripts/test_lean_file_policies.py'
+              - 'docs/ci-automation.md'
+              - 'docs/CONTRIBUTING.md'
             blueprint:
               - 'blueprint/src/**'
               - 'tex/tn/**'
@@ -164,11 +179,14 @@ jobs:
           key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
 
   file-length:
-    name: Check Lean file lengths
+    name: Check Lean module policies
     needs: changes
     if: |
-      !cancelled() && github.event_name == 'pull_request' &&
-      (needs.changes.outputs.lean == 'true' || needs.changes.outputs.workflow == 'true')
+      !cancelled() && (
+        github.event_name != 'pull_request' ||
+        needs.changes.outputs.lean == 'true' ||
+        needs.changes.outputs.workflow == 'true'
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -181,11 +199,19 @@ jobs:
         with:
           python-version: '3.12'
 
-      # New oversized files (any Lean file over 1000 lines) fail the check.
+      - name: Test Lean module-policy checkers
+        run: PYTHONPATH=scripts python3 scripts/test_lean_file_policies.py -v
+
+      # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
+      # exemption is accepted only while its uncommented content is import-only.
       - name: Run oversized-file guard
         run: >
           python3 scripts/check_oversized_lean_files.py
           --root .
+          --generated-aggregator TNLean.lean
+
+      - name: Reject new numbered-sequel modules
+        run: python3 scripts/check_numbered_lean_files.py --root .
 
   blueprint:
     name: Check blueprint compiles without errors

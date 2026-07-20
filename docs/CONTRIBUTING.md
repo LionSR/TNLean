@@ -402,10 +402,29 @@ The following workflows run automatically:
 | **PR Review** (`pr-review.yml`) | After a successful PR CI run | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation, plus blueprint/prose review |
 | **Issue Automation** (`issue-automation.yml`) | Issue opened/labeled/closed/reopened; PR opened/merged | Classifies new issues, posts Mathlib scouting reports, keeps tracking issues current (progress comments, sub-issue counts, `all-resolved` label — deterministic, no model), and scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), filing them with the `follow-up` label |
 | **Blueprint Lint** (`pr-ci.yml`, `blueprint` job) | PRs touching blueprint or Lean files | Validates LaTeX blueprint for broken labels and references |
-| **Oversized Lean File Guard** (`pr-ci.yml`, `file-length` job) | PRs touching Lean files | Reports `.lean` files above the 1000-line style limit; advisory while main still has existing oversized files |
+| **Lean Module Policy** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching Lean policy paths | Blocks ordinary files above 1000 lines and new numbered-sequel production modules; validates exact import-only aggregator exemptions |
 | **Lean Linter-Warning Sweep** (`housekeeping.yml`, `linter-sweep` job) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
 | **Lean Linter-Warning Auto-Fix** (`lean-linter-warning-autofix.yml`) | Manual dispatch | Runs the warning sweep and can open a guarded Lean-only PR when explicitly requested |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
+
+### Splitting large Lean modules
+
+Do not split a proof according to where editing happened to stop. A filename
+such as `Recovery2.lean` or `Recovery3b.lean` hides the module's mathematical
+role and is rejected for new tracked production files. Instead:
+
+1. identify the mathematical responsibilities in the large module;
+2. move repeated definitions, notation, and setup into a family `Basic.lean`;
+3. give each proof module a concept name, for example
+   `BoundaryRecovery.lean` or `OverlapInjectivity.lean`; and
+4. if callers need one import, provide a concept-named import-only aggregator.
+
+The numbered-file allowlist in `scripts/check_numbered_lean_files.py` records
+legacy debt and may only shrink. Numerals intrinsic to a mathematical object
+(such as `ZMod2`) or to an explicitly cited source result require an exact,
+documented semantic exception. Generated import aggregators can exceed the
+line cap only when their exact path is passed to the size checker; the checker
+validates that uncommented content contains imports and nothing else.
 
 ### What CI checks before merge
 
