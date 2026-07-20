@@ -120,6 +120,14 @@
                                       % both endpoint orders (bond suppression)
 \seq_new:N  \l__tenkzl_sitelabels_seq % \tnsite[label=]: {r}{c}{h}{label}
 \prop_new:N \l__tenkzl_siterole_prop  % \tnsite[role=]: "r-c[-h]" -> tint style
+% Exact paper-frame bounds captured from each already-rendered site-label
+% node.  Side-cup routing consumes these coordinates without typesetting or
+% otherwise expanding customizable label content a second time.
+\prop_new:N \l__tenkzl_labelxmin_prop  % "r-c-h" -> west paper coordinate
+\prop_new:N \l__tenkzl_labelxmax_prop  % "r-c-h" -> east paper coordinate
+\prop_new:N \l__tenkzl_labelymin_prop  % "r-c-h" -> south paper coordinate
+\prop_new:N \l__tenkzl_labelymax_prop  % "r-c-h" -> north paper coordinate
+\prop_new:N \l__tenkzl_cupdegenerate_prop % side -> 1 when its frame vector is zero
 
 % plane state (Phase-1 plane slice)
 \bool_new:N \l__tenkzl_oblique_bool   % frame=oblique: shear in-plane ink
@@ -136,6 +144,10 @@
                                       % (the column's inter-sheet legs close
                                       % by the east wrap loop: per site Tr_s)
 \tl_new:N   \l__tenkzl_sheetsep_tl    % sheet-sep ratio (of lattice pitch)
+\tl_new:N   \l__tenkzl_wcupmat_tl     % optional matrix on a west side cup
+\tl_new:N   \l__tenkzl_ecupmat_tl     % optional matrix on an east side cup
+\tl_new:N   \l__tenkzl_ncupmat_tl     % optional matrix on a north side cup
+\tl_new:N   \l__tenkzl_scupmat_tl     % optional matrix on a south side cup
 
 % projected-basis frame state (see the frame-map section): the map
 % coefficients are DECIMAL COEFFICIENT token lists (they multiply a dim
@@ -187,6 +199,10 @@
 \int_new:N  \l__tenkzl_bpo_int        %   open segments
 \int_new:N  \l__tenkzl_bpt_int        %   traced segments
 \tl_new:N   \l__tenkzl_bnd_tl         % accumulated per-interface fields
+\int_new:N  \l__tenkzl_bvw_int        % open virtual indices on the west side
+\int_new:N  \l__tenkzl_bve_int        % open virtual indices on the east side
+\int_new:N  \l__tenkzl_bvn_int        % open virtual indices on the north side
+\int_new:N  \l__tenkzl_bvs_int        % open virtual indices on the south side
 
 % \tnedge / \tnsite option state (reset per command call)
 \tl_new:N   \l__tenkzl_estyle_tl      % resolved edge draw style
@@ -194,6 +210,8 @@
 \tl_new:N   \l__tenkzl_edgelabel_tl   % \tnedge[label=]
 \bool_new:N \l__tenkzl_enone_bool     % \tnedge[none]
 \bool_new:N \l__tenkzl_sremoved_bool  % \tnsite[removed]
+\bool_new:N \l__tenkzl_cupaexists_bool % side-cup sheet-0 endpoint survives
+\bool_new:N \l__tenkzl_cupbexists_bool % side-cup sheet-1 endpoint survives
 \tl_new:N   \l__tenkzl_sitelabel_tl   % \tnsite[label=]
 \tl_new:N   \l__tenkzl_srole_tl       % \tnsite[role=]: resolved tint style
 \tl_new:N   \l__tenkzl_stint_tl       % draw-pass scratch: a site's tint
@@ -267,10 +285,9 @@
   % west= / east= / north= / south=: one side, one policy word of the
   % 0.6 alphabet.  `open` and `none` draw or seal that side's boundary
   % legs (resolution: the side word wins, else boundary=).  `trace` and
-  % `cup[={m}]` are accepted grammar — the side-policy alphabet is one
-  % language across the tiers — but their closure ink lands with the
-  % inter-sheet closure engine (0.6 phase B); until then they warn and
-  % seal the side (a closed side has no open stubs).
+  % `cup[={m}]` ties the ket and bra virtual boundary indices at each
+  % site on that side.  `trace` remains reserved for the distinct
+  % same-sheet closure of opposing sides.
   /tenkz/lattice/west/.code ={\tenkzl_side:nn {west} {#1}},
   /tenkz/lattice/east/.code ={\tenkzl_side:nn {east} {#1}},
   /tenkz/lattice/north/.code={\tenkzl_side:nn {north}{#1}},
@@ -386,6 +403,21 @@
     the~0.6~phase-B~closure~engine;~until~then~the~side~is~drawn~
     SEALED~(a~closed~side~has~no~open~stubs).
   }
+\msg_new:nnn { tenkz } { lattice-side-cup-stack }
+  {
+    #1=cup~needs~exactly~the~two-sheet~role~stack~sheets={ket,bra};~the~
+    side~is~sealed~and~no~cup~ink~is~drawn.
+  }
+\msg_new:nnn { tenkz } { lattice-side-cup-incomplete }
+  {
+    The~#1~cup~at~cell~#2~has~only~one~surviving~sheet~endpoint.~That~
+    virtual~index~is~left~open.
+  }
+\msg_new:nnn { tenkz } { lattice-side-cup-zero-vector }
+  {
+    The~#1~cup~cannot~use~a~zero-length~expert~side~vector.~Its~surviving~
+    virtual~indices~are~left~open.
+  }
 \cs_new_protected:Npn \tenkzl_side_word:nn #1#2
   {
     \str_case:nn {#1}
@@ -396,6 +428,19 @@
         {south} { \tl_set:Nn \l__tenkzl_spol_tl {#2} }
       }
   }
+\cs_new_protected:Npn \tenkzl_side_cup:nn #1#2
+  {
+    \tenkzl_side_word:nn {#1} {cup}
+    \str_case:nn {#1}
+      {
+        {west}  { \tl_set:Nn \l__tenkzl_wcupmat_tl {#2} }
+        {east}  { \tl_set:Nn \l__tenkzl_ecupmat_tl {#2} }
+        {north} { \tl_set:Nn \l__tenkzl_ncupmat_tl {#2} }
+        {south} { \tl_set:Nn \l__tenkzl_scupmat_tl {#2} }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_side_cupval:nw #1 cup=#2 \q_stop
+  { \tenkzl_side_cup:nn {#1} {#2} }
 \cs_new_protected:Npn \tenkzl_side:nn #1#2
   {
     \str_case:nnF {#2}
@@ -407,19 +452,12 @@
                   \tenkz@event{warning|picture=\the\tenkz@pictureid|%
                     code=side-deferred|side=#1|policy=trace}
                   \tenkzl_side_word:nn {#1} {none} }
-        {cup}   { \msg_warning:nnnn {tenkz}{lattice-side-deferred}
-                    {#1} {cup}
-                  \tenkz@event{warning|picture=\the\tenkz@pictureid|%
-                    code=side-deferred|side=#1|policy=cup}
-                  \tenkzl_side_word:nn {#1} {none} }
+        {cup}   { \tenkzl_side_cup:nn {#1} {} }
       }
       {
-        \tl_if_in:nnTF {#2} {cup=}
+        \regex_match:nnTF { \A cup = } {#2}
           {
-            \msg_warning:nnnn {tenkz}{lattice-side-deferred} {#1} {cup}
-            \tenkz@event{warning|picture=\the\tenkz@pictureid|%
-              code=side-deferred|side=#1|policy=cup}
-            \tenkzl_side_word:nn {#1} {none}
+            \tenkzl_side_cupval:nw {#1} #2 \q_stop
           }
           { \msg_error:nnne {tenkz}{lattice-side-policy}
               {#1} { \tl_to_str:n {#2} } }
@@ -604,6 +642,10 @@
     \tl_clear:N \l__tenkzl_epol_tl
     \tl_clear:N \l__tenkzl_npol_tl
     \tl_clear:N \l__tenkzl_spol_tl
+    \tl_clear:N \l__tenkzl_wcupmat_tl
+    \tl_clear:N \l__tenkzl_ecupmat_tl
+    \tl_clear:N \l__tenkzl_ncupmat_tl
+    \tl_clear:N \l__tenkzl_scupmat_tl
     \bool_set_false:N \l__tenkzl_oblique_bool
     \tl_clear:N \l__tenkzl_leansign_tl
     % one sheet at index 0, no pairing, preset frame: the flat basis
@@ -633,6 +675,11 @@
     \prop_clear:N \l__tenkzl_nobond_prop
     \seq_clear:N \l__tenkzl_sitelabels_seq
     \prop_clear:N \l__tenkzl_siterole_prop
+    \prop_clear:N \l__tenkzl_labelxmin_prop
+    \prop_clear:N \l__tenkzl_labelxmax_prop
+    \prop_clear:N \l__tenkzl_labelymin_prop
+    \prop_clear:N \l__tenkzl_labelymax_prop
+    \prop_clear:N \l__tenkzl_cupdegenerate_prop
   }
 
 % ---------- geometry ----------
@@ -1289,6 +1336,7 @@
 % =====================================================================
 % rendering
 % =====================================================================
+\pgfdeclarelayer{tenkz-lattice-labels}
 \cs_new_protected:Npn \tenkzl_render:nn #1#2
   { \tenkzl_render:nnn { } {#1} {#2} }
 % #1 is a PRESET: code run between the reset and the user keys, so a
@@ -1327,6 +1375,7 @@
     \tenkzl_frame_setup:
     \dim_set:Nn \l__tenkzl_m_dim { \tenkz@r@latticemargin\tenkz@pitch }
     \begin{tikzpicture}[tenkz~every~picture]
+      \pgfsetlayers{background,main,tenkz-lattice-labels}
       \tenkzl_draw_all:
     \end{tikzpicture}
     \group_end:
@@ -1356,6 +1405,7 @@
         \tenkzl_select_sheet:n {##1}
         \tenkzl_sheet_pass:
       }
+    \tenkzl_draw_side_cups:    % (f') ket-bra virtual boundary cups
     \tenkzl_emit_sites:        % (g) event stream only, no ink
     % the outer-legs default resolves here: a role-list stack is a
     % WINDOW (outer faces open, boundary doctrine); numeric stacks and
@@ -1372,6 +1422,710 @@
       { \tenkzl_draw_outer: }  % (i) outer-face physical legs
     \tenkzl_draw_opsites:      % (j) op-sheet boxes (the cover pass)
     \tenkzl_emit_boundary:     % (k) event stream only, no ink
+  }
+
+% -- (f') virtual side cups -------------------------------------------
+% A lattice-side cup contracts the virtual boundary index of the ket
+% sheet with the corresponding index of the bra sheet.  It is therefore
+% defined only for the two-sheet role stack sheets={ket,bra}; operator
+% stacks and numeric sheet stacks carry no inferred contraction.
+% Different sitewise cups can cross in a 2D projection even though their
+% indices do not contract.  The paper-coloured preaction makes every such
+% crossing an explicit overpass rather than a false black junction; its
+% gap uses the existing emphasis stroke, not a predictive clearance metric.
+\tikzset{tenkz~lattice~cup/.style={bond,
+  preaction={draw=tenkzPaper, line~width=\tenkz@emphwidth}}}
+% Pair traces render after virtual cups.  Their matching halo makes a later
+% physical closure visibly pass over, rather than join, an east cup stub.
+\tikzset{tenkz~lattice~pair~trace/.style={trace,
+  preaction={draw=tenkzPaper, line~width=\tenkz@emphwidth}}}
+\prg_new_conditional:Npnn \tenkzl_if_cup_stack: { p, T, F, TF }
+  {
+    \bool_lazy_all:nTF
+      {
+        { \l__tenkzl_roles_bool }
+        { \int_compare_p:nNn { \l__tenkzl_sheets_int } = {2} }
+        { \str_if_eq_p:ee { \tenkzl_role:n {0} } {bra} }
+        { \str_if_eq_p:ee { \tenkzl_role:n {1} } {ket} }
+      }
+      { \prg_return_true: }
+      { \prg_return_false: }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_side_cups:
+  {
+    \tenkzl_draw_side_cups:n {west}
+    \tenkzl_draw_side_cups:n {east}
+    \tenkzl_draw_side_cups:n {north}
+    \tenkzl_draw_side_cups:n {south}
+  }
+
+\cs_new_protected:Npn \tenkzl_side_policy:nN #1#2
+  {
+    \str_case:nn {#1}
+      {
+        {west}  { \tl_set_eq:NN #2 \l__tenkzl_wpol_tl }
+        {east}  { \tl_set_eq:NN #2 \l__tenkzl_epol_tl }
+        {north} { \tl_set_eq:NN #2 \l__tenkzl_npol_tl }
+        {south} { \tl_set_eq:NN #2 \l__tenkzl_spol_tl }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_side_cup_matrix:nN #1#2
+  {
+    \str_case:nn {#1}
+      {
+        {west}  { \tl_set_eq:NN #2 \l__tenkzl_wcupmat_tl }
+        {east}  { \tl_set_eq:NN #2 \l__tenkzl_ecupmat_tl }
+        {north} { \tl_set_eq:NN #2 \l__tenkzl_ncupmat_tl }
+        {south} { \tl_set_eq:NN #2 \l__tenkzl_scupmat_tl }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_side_cups:n #1
+  {
+    \tenkzl_side_policy:nN {#1} \l__tenkzl_tmp_tl
+    \str_if_eq:VnT \l__tenkzl_tmp_tl {cup}
+      {
+        \tenkzl_if_cup_stack:TF
+          {
+            \tenkzl_side_cup_direction:n {#1}
+            \dim_compare:nNnTF { \l__tenkzl_cupnorm_dim } = {0pt}
+              {
+                \prop_put:Nnn \l__tenkzl_cupdegenerate_prop {#1}{1}
+                \msg_warning:nnn {tenkz}{lattice-side-cup-zero-vector}{#1}
+                \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+                  code=side-cup-zero-vector|side=#1}
+              }
+              {
+                \tenkzl_side_cup_silhouette:n {#1}
+                \str_case:nn {#1}
+                  {
+                    {west}
+                      { \int_step_inline:nn { \l__tenkzl_nrows_int }
+                          { \tenkzl_draw_side_cup_at:nnn {west}{##1}{1} } }
+                    {east}
+                      { \int_step_inline:nn { \l__tenkzl_nrows_int }
+                          { \tenkzl_draw_side_cup_at:nnn {east}{##1}
+                              { \l__tenkzl_ncols_int } } }
+                    {north}
+                      { \int_step_inline:nn { \l__tenkzl_ncols_int }
+                          { \tenkzl_draw_side_cup_at:nnn {north}{1}{##1} } }
+                    {south}
+                      { \int_step_inline:nn { \l__tenkzl_ncols_int }
+                          { \tenkzl_draw_side_cup_at:nnn {south}
+                              { \l__tenkzl_nrows_int }{##1} } }
+                  }
+              }
+          }
+          {
+            \msg_warning:nnn {tenkz}{lattice-side-cup-stack} {#1}
+            \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+              code=side-cup-stack|side=#1}
+          }
+      }
+  }
+
+\dim_new:N \l__tenkzl_cupax_dim
+\dim_new:N \l__tenkzl_cupay_dim
+\dim_new:N \l__tenkzl_cupatx_dim
+\dim_new:N \l__tenkzl_cupaty_dim
+\dim_new:N \l__tenkzl_cupasx_dim
+\dim_new:N \l__tenkzl_cupasy_dim
+\dim_new:N \l__tenkzl_cupalx_dim
+\dim_new:N \l__tenkzl_cupaly_dim
+\dim_new:N \l__tenkzl_cupacx_dim
+\dim_new:N \l__tenkzl_cupacy_dim
+\dim_new:N \l__tenkzl_cupbx_dim
+\dim_new:N \l__tenkzl_cupby_dim
+\dim_new:N \l__tenkzl_cupbtx_dim
+\dim_new:N \l__tenkzl_cupbty_dim
+\dim_new:N \l__tenkzl_cupbsx_dim
+\dim_new:N \l__tenkzl_cupbsy_dim
+\dim_new:N \l__tenkzl_cupblx_dim
+\dim_new:N \l__tenkzl_cupbly_dim
+\dim_new:N \l__tenkzl_cupbcx_dim
+\dim_new:N \l__tenkzl_cupbcy_dim
+\dim_new:N \l__tenkzl_cupdx_dim
+\dim_new:N \l__tenkzl_cupdy_dim
+\dim_new:N \l__tenkzl_cupnorm_dim
+\dim_new:N \l__tenkzl_cupsil_dim
+\dim_new:N \l__tenkzl_cupproj_dim
+\dim_new:N \l__tenkzl_cupbulge_dim
+\dim_new:N \l__tenkzl_cuptransmin_dim
+\dim_new:N \l__tenkzl_cuptransmax_dim
+\dim_new:N \l__tenkzl_cuptransmid_dim
+\dim_new:N \l__tenkzl_cuptranstarget_dim
+\dim_new:N \l__tenkzl_cuplane_dim
+\dim_new:N \l__tenkzl_cuplabelband_dim
+\dim_new:N \l__tenkzl_cuplabeloffset_dim
+\dim_new:N \l__tenkzl_cuplabeldx_dim
+\dim_new:N \l__tenkzl_cuplabeldy_dim
+\dim_new:N \l__tenkzl_cupstubshift_dim
+\dim_new:N \l__tenkzl_labelxmin_dim
+\dim_new:N \l__tenkzl_labelxmax_dim
+\dim_new:N \l__tenkzl_labelymin_dim
+\dim_new:N \l__tenkzl_labelymax_dim
+\dim_new:N \l__tenkzl_labelprojx_dim
+\dim_new:N \l__tenkzl_labelprojy_dim
+\dim_new:N \l__tenkzl_labeltransmin_dim
+\dim_new:N \l__tenkzl_labeltransmax_dim
+\dim_new:N \l__tenkzl_labelsiteproj_dim
+\dim_new:N \l__tenkzl_labelshift_dim
+\box_new:N \l__tenkzl_cuplabel_box
+\int_new:N \l__tenkzl_cupscansheet_int
+\int_new:N \l__tenkzl_cupscanrow_int
+\int_new:N \l__tenkzl_cupscancol_int
+\tl_new:N  \l__tenkzl_cupnode_tl
+\tl_new:N  \l__tenkzl_labelbbox_tl
+
+% The point at reach #5 from boundary site (#2,#3) on sheet #4.  The
+% logical point and its sheet shift both pass through the one frame map.
+\cs_new_protected:Npn \tenkzl_side_point:nnnnnNN #1#2#3#4#5#6#7
+  {
+    \tenkzl_select_sheet:n {#4}
+    \dim_set:Nn \l__tenkzl_x_dim { \tenkzl_cx:n {#3} }
+    \dim_set:Nn \l__tenkzl_y_dim { \tenkzl_cy:n {#2} }
+    \str_case:nn {#1}
+      {
+        {west}  { \dim_sub:Nn \l__tenkzl_x_dim {#5} }
+        {east}  { \dim_add:Nn \l__tenkzl_x_dim {#5} }
+        {north} { \dim_add:Nn \l__tenkzl_y_dim {#5} }
+        {south} { \dim_sub:Nn \l__tenkzl_y_dim {#5} }
+      }
+    \tenkzl_map:nn { \l__tenkzl_x_dim } { \l__tenkzl_y_dim }
+    \dim_set_eq:NN #6 \l__tenkzl_px_dim
+    \dim_set_eq:NN #7 \l__tenkzl_py_dim
+  }
+
+% The paper-frame outward direction of one logical lattice-pitch step.
+% Side-cup clearance is resolved along this vector, so a sheared or
+% expert frame gets the same daylight as a flat frame.
+\cs_new_protected:Npn \tenkzl_side_cup_direction:n #1
+  {
+    \str_case:nn {#1}
+      {
+        {west}
+          { \dim_set:Nn \l__tenkzl_cupdx_dim
+              { -\l__tenkzl_axx_tl \l__tenkzl_lp_dim }
+            \dim_set:Nn \l__tenkzl_cupdy_dim
+              { -\l__tenkzl_ayx_tl \l__tenkzl_lp_dim } }
+        {east}
+          { \dim_set:Nn \l__tenkzl_cupdx_dim
+              { \l__tenkzl_axx_tl \l__tenkzl_lp_dim }
+            \dim_set:Nn \l__tenkzl_cupdy_dim
+              { \l__tenkzl_ayx_tl \l__tenkzl_lp_dim } }
+        {north}
+          { \dim_set:Nn \l__tenkzl_cupdx_dim
+              { \l__tenkzl_axy_tl \l__tenkzl_lp_dim }
+            \dim_set:Nn \l__tenkzl_cupdy_dim
+              { \l__tenkzl_ayy_tl \l__tenkzl_lp_dim } }
+        {south}
+          { \dim_set:Nn \l__tenkzl_cupdx_dim
+              { -\l__tenkzl_axy_tl \l__tenkzl_lp_dim }
+            \dim_set:Nn \l__tenkzl_cupdy_dim
+              { -\l__tenkzl_ayy_tl \l__tenkzl_lp_dim } }
+      }
+    \dim_set:Nn \l__tenkzl_cupnorm_dim
+      { \fp_to_dim:n
+          { sqrt( \l__tenkzl_cupdx_dim ^ 2 + \l__tenkzl_cupdy_dim ^ 2 ) } }
+  }
+
+% Project paper point (#1,#2) onto the current side's outward unit axis.
+\cs_new_protected:Npn \tenkzl_side_cup_project:NNN #1#2#3
+  {
+    \dim_set:Nn #3
+      { \fp_to_dim:n
+          { ( #1 * \l__tenkzl_cupdx_dim + #2 * \l__tenkzl_cupdy_dim )
+              / \l__tenkzl_cupnorm_dim } }
+  }
+
+% Project a paper point onto the unit axis perpendicular to the current
+% side direction.  Together with \tenkzl_side_cup_project:NNN this is an
+% orthonormal paper-frame coordinate system for obstacle routing.
+\cs_new_protected:Npn \tenkzl_side_cup_project_trans:NNN #1#2#3
+  {
+    \dim_set:Nn #3
+      { \fp_to_dim:n
+          { ( -#1 * \l__tenkzl_cupdy_dim + #2 * \l__tenkzl_cupdx_dim )
+              / \l__tenkzl_cupnorm_dim } }
+  }
+
+\cs_new_protected:Npn \tenkzl_side_cup_site_silhouette:nnn #1#2#3
+  {
+    \bool_set:Nn \l_tmpa_bool
+      {
+        ! \prop_if_in_p:Ne \l__tenkzl_removed_prop
+          { \tenkzl_key:nn { \int_eval:n {#1} }{ \int_eval:n {#2} } }
+        && ! \tenkzl_removed_on_p:nnn
+          { \int_eval:n {#1} }{ \int_eval:n {#2} }{ \int_eval:n {#3} }
+      }
+    \bool_if:NT \l_tmpa_bool
+      {
+        \tenkzl_xyz:nnnNN {#1}{#2}{#3}
+          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+        \tenkzl_side_cup_project_trans:NNN
+          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
+        \dim_set:Nn \l__tenkzl_cuptransmin_dim
+          { \dim_min:nn { \l__tenkzl_cuptransmin_dim }
+              { \l__tenkzl_cupproj_dim } }
+        \dim_set:Nn \l__tenkzl_cuptransmax_dim
+          { \dim_max:nn { \l__tenkzl_cuptransmax_dim }
+              { \l__tenkzl_cupproj_dim } }
+      }
+  }
+
+% Add one boundary port tip to the side silhouette.  The resolver scans
+% the same two-sheet ports that the draw pass consumes; its result is the
+% outermost projected tip plus the shared daylight metric.
+\cs_new_protected:Npn \tenkzl_side_cup_silhouette_point:nnnn #1#2#3#4
+  {
+    \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{#4}
+      { \tenkz@dim{\tenkz@r@boundaryleg} }
+      \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+    \tenkzl_side_cup_project:NNN
+      \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
+    \dim_set:Nn \l__tenkzl_cupsil_dim
+      { \dim_max:nn { \l__tenkzl_cupsil_dim } { \l__tenkzl_cupproj_dim } }
+  }
+
+\cs_new_protected:Npn \tenkzl_side_cup_silhouette_at:nnn #1#2#3
+  {
+    \bool_set:Nn \l_tmpa_bool
+      {
+        ! \prop_if_in_p:Ne \l__tenkzl_removed_prop
+            { \tenkzl_key:nn { \int_eval:n {#2} }{ \int_eval:n {#3} } }
+        && ! \tenkzl_removed_on_p:nnn
+          { \int_eval:n {#2} }{ \int_eval:n {#3} }{0}
+        && ! \tenkzl_removed_on_p:nnn
+          { \int_eval:n {#2} }{ \int_eval:n {#3} }{1}
+      }
+    \bool_if:NT \l_tmpa_bool
+      {
+        \tenkzl_side_cup_silhouette_point:nnnn {#1}{#2}{#3}{0}
+        \tenkzl_side_cup_silhouette_point:nnnn {#1}{#2}{#3}{1}
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_side_cup_silhouette:n #1
+  {
+    \tenkzl_side_cup_direction:n {#1}
+    \dim_set:Nn \l__tenkzl_cupsil_dim { -\c_max_dim }
+    \dim_set:Nn \l__tenkzl_cuptransmin_dim { \c_max_dim }
+    \dim_set:Nn \l__tenkzl_cuptransmax_dim { -\c_max_dim }
+    % Named loop registers make the row/column/sheet ownership explicit;
+    % nested inline placeholders are too easy to permute at this depth.
+    \int_step_variable:nnNn {0} { \l__tenkzl_sheets_int - 1 }
+      \l__tenkzl_cupscansheet_int
+      {
+        \int_step_variable:nnNn {1} { \l__tenkzl_nrows_int }
+          \l__tenkzl_cupscanrow_int
+          {
+            \int_step_variable:nnNn {1} { \l__tenkzl_ncols_int }
+              \l__tenkzl_cupscancol_int
+              {
+                \tenkzl_side_cup_site_silhouette:nnn
+                  { \l__tenkzl_cupscanrow_int }
+                  { \l__tenkzl_cupscancol_int }
+                  { \l__tenkzl_cupscansheet_int }
+              }
+          }
+      }
+    \str_case:nn {#1}
+      {
+        {west}
+          { \int_step_inline:nn { \l__tenkzl_nrows_int }
+              { \tenkzl_side_cup_silhouette_at:nnn {west}{##1}{1} } }
+        {east}
+          { \int_step_inline:nn { \l__tenkzl_nrows_int }
+              { \tenkzl_side_cup_silhouette_at:nnn {east}{##1}
+                  { \l__tenkzl_ncols_int } } }
+        {north}
+          { \int_step_inline:nn { \l__tenkzl_ncols_int }
+              { \tenkzl_side_cup_silhouette_at:nnn {north}{1}{##1} } }
+        {south}
+          { \int_step_inline:nn { \l__tenkzl_ncols_int }
+              { \tenkzl_side_cup_silhouette_at:nnn {south}
+                  { \l__tenkzl_nrows_int }{##1} } }
+      }
+    \dim_add:Nn \l__tenkzl_cupsil_dim { \tenkz@dim{\tenkz@r@daylight} }
+  }
+
+% Resolve a collision-free exterior corridor after both endpoint stubs have
+% been mapped.  The transverse lane sits beyond the full two-sheet site
+% silhouette, not merely beyond the current sheet; the outward lane is also
+% staggered per boundary cell so matrix markers cannot coincide.  Both
+% clearances use existing bead/daylight metrics.
+\cs_new_protected:Npn \tenkzl_side_cup_corridor:nnn #1#2#3
+  {
+    \tl_if_blank:VTF \l__tenkzl_tmp_tl
+      { \dim_zero:N \l__tenkzl_cuplabelband_dim }
+      {
+        \hbox_set:Nn \l__tenkzl_cuplabel_box
+          { \scriptsize \tl_use:N \l__tenkzl_tmp_tl }
+        \dim_set:Nn \l__tenkzl_cuplabelband_dim
+          { \dim_max:nn { \box_wd:N \l__tenkzl_cuplabel_box }
+              { \box_ht:N \l__tenkzl_cuplabel_box
+                + \box_dp:N \l__tenkzl_cuplabel_box }
+            + 2pt }
+      }
+    \dim_set:Nn \l__tenkzl_cupbulge_dim
+      { \tenkz@dim{\tenkz@r@dotdia} / 2
+        + \tenkz@dim{\tenkz@r@daylight} }
+    \tenkzl_side_cup_project_trans:NNN
+      \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim \l__tenkzl_cuptransmid_dim
+    \tenkzl_side_cup_project_trans:NNN
+      \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim \l__tenkzl_cupproj_dim
+    \dim_set:Nn \l__tenkzl_cuptransmid_dim
+      { ( \l__tenkzl_cuptransmid_dim + \l__tenkzl_cupproj_dim ) / 2 }
+    % Site labels occupy the paper north-east quadrant.  Choose the opposite
+    % transverse exterior for every cup on this side.  The sign is the
+    % projection of paper north-east onto the side's transverse axis.
+    \dim_compare:nNnTF
+      { \l__tenkzl_cupdx_dim - \l__tenkzl_cupdy_dim } > {0pt}
+      { \dim_set:Nn \l__tenkzl_cuptranstarget_dim
+          { \l__tenkzl_cuptransmin_dim - \l__tenkzl_cupbulge_dim } }
+      { \dim_set:Nn \l__tenkzl_cuptranstarget_dim
+          { \l__tenkzl_cuptransmax_dim + \l__tenkzl_cupbulge_dim } }
+    \str_case:nn {#1}
+      {
+        {west}  { \int_set:Nn \l_tmpa_int {#2 - 1} }
+        {east}  { \int_set:Nn \l_tmpa_int {#2 - 1} }
+        {north} { \int_set:Nn \l_tmpa_int {#3 - 1} }
+        {south} { \int_set:Nn \l_tmpa_int {#3 - 1} }
+      }
+    \dim_set:Nn \l__tenkzl_cuplane_dim
+      { \l__tenkzl_cupsil_dim + \tenkz@dim{\tenkz@r@dotdia} / 2
+        + \tenkz@dim{\tenkz@r@daylight} }
+    \prg_replicate:nn { \l_tmpa_int }
+      {
+        % A cubic midpoint inherits three quarters of a shared-control
+        % displacement.  Include the measured scriptsize label band and two
+        % daylight gaps so the rendered label of one cup cannot meet the next
+        % cup's matrix disk under an expert frame.
+        \dim_add:Nn \l__tenkzl_cuplane_dim
+          { \tenkz@dim{\tenkz@r@dotdia}
+            + \l__tenkzl_cuplabelband_dim
+            + 2 \tenkz@dim{\tenkz@r@daylight} }
+      }
+    % First move outward past the exact bounds of either endpoint's rendered
+    % site label, then turn into the shared transverse lane.  Querying the
+    % node bounds recorded by \tenkzl_sitelabel:nnnn keeps arbitrary body
+    % customization materialize-once while preventing an outboard label from
+    % being crossed by the cup's old transverse-first lead.
+    \tenkzl_side_cup_include_label_bbox:nnnn {#1}{#2}{#3}{0}
+    \tenkzl_side_cup_include_label_bbox:nnnn {#1}{#2}{#3}{1}
+    \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN {#2}{#3}{0}
+      \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+      \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim
+      \l__tenkzl_cupasx_dim \l__tenkzl_cupasy_dim
+    \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN {#2}{#3}{1}
+      \l__tenkzl_cupbx_dim \l__tenkzl_cupby_dim
+      \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim
+      \l__tenkzl_cupbsx_dim \l__tenkzl_cupbsy_dim
+    \tenkzl_side_cup_project_trans:NNN
+      \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim \l__tenkzl_cuptransmid_dim
+    \tenkzl_side_cup_from_projections:NNNN
+      \l__tenkzl_cuplane_dim \l__tenkzl_cuptransmid_dim
+      \l__tenkzl_cupalx_dim \l__tenkzl_cupaly_dim
+    \tenkzl_side_cup_from_projections:NNNN
+      \l__tenkzl_cuplane_dim \l__tenkzl_cuptranstarget_dim
+      \l__tenkzl_cupacx_dim \l__tenkzl_cupacy_dim
+    \dim_set_eq:NN \l__tenkzl_cupbcx_dim \l__tenkzl_cupacx_dim
+    \dim_set_eq:NN \l__tenkzl_cupbcy_dim \l__tenkzl_cupacy_dim
+    \tenkzl_side_cup_project_trans:NNN
+      \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim \l__tenkzl_cupproj_dim
+    \tenkzl_side_cup_from_projections:NNNN
+      \l__tenkzl_cuplane_dim \l__tenkzl_cupproj_dim
+      \l__tenkzl_cupblx_dim \l__tenkzl_cupbly_dim
+    \dim_set:Nn \l__tenkzl_cuplabeloffset_dim
+      { \tenkz@dim{\tenkz@r@dotdia} / 2
+        + \tenkz@dim{\tenkz@r@labelclear}
+        + \l__tenkzl_cuplabelband_dim / 2 }
+    \dim_compare:nNnT { \l__tenkzl_cuptranstarget_dim } <
+      { ( \l__tenkzl_cuptransmin_dim + \l__tenkzl_cuptransmax_dim ) / 2 }
+      { \dim_set:Nn \l__tenkzl_cuplabeloffset_dim
+          { -\l__tenkzl_cuplabeloffset_dim } }
+    \dim_set:Nn \l__tenkzl_cuplabeldx_dim
+      { \fp_to_dim:n
+          { -\l__tenkzl_cuplabeloffset_dim * \l__tenkzl_cupdy_dim
+              / \l__tenkzl_cupnorm_dim } }
+    \dim_set:Nn \l__tenkzl_cuplabeldy_dim
+      { \fp_to_dim:n
+          { \l__tenkzl_cuplabeloffset_dim * \l__tenkzl_cupdx_dim
+              / \l__tenkzl_cupnorm_dim } }
+    % North/south virtual cups and the default outer physical legs would
+    % otherwise share one ray.  Move the virtual stub tips toward the same
+    % label-free transverse exterior; the opaque site disk hides their common
+    % origin while the two index lines leave it in visibly distinct directions.
+    \str_if_eq:nnT {#1} {north}
+      { \tenkzl_side_cup_separate_stub_tips: }
+    \str_if_eq:nnT {#1} {south}
+      { \tenkzl_side_cup_separate_stub_tips: }
+  }
+
+% If a side vector points through a customized label (possible for arbitrary
+% expert vectors), leave the opaque site disk transversely before proceeding
+% outward.  The escape reaches its final transverse coordinate at the bead
+% radius, before the north-east label rectangle begins, and the remainder of
+% the stub therefore stays on one clear side of the exact rendered box.
+\cs_new_protected:Npn \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
+  #1#2#3#4#5#6#7#8#9
+  {
+    \dim_set_eq:NN #8 #4
+    \dim_set_eq:NN #9 #5
+    \prop_get:NeNT \l__tenkzl_labelxmin_prop
+      { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+      \l__tenkzl_labelbbox_tl
+      {
+        \dim_set:Nn \l__tenkzl_labelxmin_dim { \l__tenkzl_labelbbox_tl }
+        \prop_get:NeN \l__tenkzl_labelxmax_prop
+          { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelxmax_dim { \l__tenkzl_labelbbox_tl }
+        \prop_get:NeN \l__tenkzl_labelymin_prop
+          { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelymin_dim { \l__tenkzl_labelbbox_tl }
+        \prop_get:NeN \l__tenkzl_labelymax_prop
+          { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelymax_dim { \l__tenkzl_labelbbox_tl }
+        \tenkzl_side_cup_project_trans:NNN
+          \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+          \l__tenkzl_labeltransmin_dim
+        \dim_set_eq:NN \l__tenkzl_labeltransmax_dim
+          \l__tenkzl_labeltransmin_dim
+        \tenkzl_side_cup_label_trans_corner:NN
+          \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+        \tenkzl_side_cup_label_trans_corner:NN
+          \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+        \tenkzl_side_cup_label_trans_corner:NN
+          \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
+        \tenkzl_side_cup_project_trans:NNN #4 #5
+          \l__tenkzl_labelsiteproj_dim
+        \bool_set:Nn \l_tmpa_bool
+          {
+            ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } <
+                { \l__tenkzl_labeltransmin_dim - \l__tenkzl_cupbulge_dim }
+            &&
+            ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } >
+                { \l__tenkzl_labeltransmax_dim + \l__tenkzl_cupbulge_dim }
+          }
+        \bool_if:NT \l_tmpa_bool
+          {
+            \dim_compare:nNnTF
+              { \l__tenkzl_labelsiteproj_dim
+                - \l__tenkzl_labeltransmin_dim } <
+              { \l__tenkzl_labeltransmax_dim
+                - \l__tenkzl_labelsiteproj_dim }
+              { \dim_set:Nn \l__tenkzl_labelshift_dim
+                  { \l__tenkzl_labeltransmin_dim
+                    - 2 \l__tenkzl_cupbulge_dim } }
+              { \dim_set:Nn \l__tenkzl_labelshift_dim
+                  { \l__tenkzl_labeltransmax_dim
+                    + 2 \l__tenkzl_cupbulge_dim } }
+            \tenkzl_side_cup_project:NNN #4 #5 \l__tenkzl_cupproj_dim
+            \dim_add:Nn \l__tenkzl_cupproj_dim
+              { \tenkz@dim{\tenkz@r@dotdia} / 2 }
+            \tenkzl_side_cup_from_projections:NNNN
+              \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #8 #9
+            \tenkzl_side_cup_project:NNN #6 #7 \l__tenkzl_cupproj_dim
+            \tenkzl_side_cup_from_projections:NNNN
+              \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #6 #7
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_side_cup_label_trans_corner:NN #1#2
+  {
+    \tenkzl_side_cup_project_trans:NNN #1 #2 \l__tenkzl_cupproj_dim
+    \dim_set:Nn \l__tenkzl_labeltransmin_dim
+      { \dim_min:nn { \l__tenkzl_labeltransmin_dim }
+          { \l__tenkzl_cupproj_dim } }
+    \dim_set:Nn \l__tenkzl_labeltransmax_dim
+      { \dim_max:nn { \l__tenkzl_labeltransmax_dim }
+          { \l__tenkzl_cupproj_dim } }
+  }
+
+% Extend the current cup's outward turning plane beyond one endpoint label's
+% already-rendered paper rectangle.  The maximum projection of an axis-aligned
+% rectangle is obtained by choosing each coordinate according to the sign of
+% the outward paper vector.
+\cs_new_protected:Npn \tenkzl_side_cup_include_label_bbox:nnnn #1#2#3#4
+  {
+    \prop_get:NeNT \l__tenkzl_labelxmin_prop
+      { \int_eval:n {#2}-\int_eval:n {#3}-\int_eval:n {#4} }
+      \l__tenkzl_labelbbox_tl
+      {
+        \dim_set:Nn \l__tenkzl_labelxmin_dim { \l__tenkzl_labelbbox_tl }
+        \prop_get:NeN \l__tenkzl_labelxmax_prop
+          { \int_eval:n {#2}-\int_eval:n {#3}-\int_eval:n {#4} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelxmax_dim { \l__tenkzl_labelbbox_tl }
+        \prop_get:NeN \l__tenkzl_labelymin_prop
+          { \int_eval:n {#2}-\int_eval:n {#3}-\int_eval:n {#4} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelymin_dim { \l__tenkzl_labelbbox_tl }
+        \prop_get:NeN \l__tenkzl_labelymax_prop
+          { \int_eval:n {#2}-\int_eval:n {#3}-\int_eval:n {#4} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelymax_dim { \l__tenkzl_labelbbox_tl }
+        \dim_compare:nNnTF { \l__tenkzl_cupdx_dim } < {0pt}
+          { \dim_set_eq:NN \l__tenkzl_labelprojx_dim \l__tenkzl_labelxmin_dim }
+          { \dim_set_eq:NN \l__tenkzl_labelprojx_dim \l__tenkzl_labelxmax_dim }
+        \dim_compare:nNnTF { \l__tenkzl_cupdy_dim } < {0pt}
+          { \dim_set_eq:NN \l__tenkzl_labelprojy_dim \l__tenkzl_labelymin_dim }
+          { \dim_set_eq:NN \l__tenkzl_labelprojy_dim \l__tenkzl_labelymax_dim }
+        \tenkzl_side_cup_project:NNN
+          \l__tenkzl_labelprojx_dim \l__tenkzl_labelprojy_dim
+          \l__tenkzl_cupproj_dim
+        \dim_set:Nn \l__tenkzl_cuplane_dim
+          { \dim_max:nn { \l__tenkzl_cuplane_dim }
+              { \l__tenkzl_cupproj_dim
+                + \tenkz@dim{\tenkz@r@daylight} } }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_side_cup_separate_stub_tips:
+  {
+    \dim_set:Nn \l__tenkzl_cupstubshift_dim
+      { \tenkz@dim{\tenkz@r@dotdia}
+        + \tenkz@dim{\tenkz@r@daylight} }
+    \dim_compare:nNnT { \l__tenkzl_cuptranstarget_dim } <
+      { ( \l__tenkzl_cuptransmin_dim + \l__tenkzl_cuptransmax_dim ) / 2 }
+      { \dim_set:Nn \l__tenkzl_cupstubshift_dim
+          { -\l__tenkzl_cupstubshift_dim } }
+    \dim_add:Nn \l__tenkzl_cupatx_dim
+      { \fp_to_dim:n
+          { -\l__tenkzl_cupstubshift_dim * \l__tenkzl_cupdy_dim
+              / \l__tenkzl_cupnorm_dim } }
+    \dim_add:Nn \l__tenkzl_cupaty_dim
+      { \fp_to_dim:n
+          { \l__tenkzl_cupstubshift_dim * \l__tenkzl_cupdx_dim
+              / \l__tenkzl_cupnorm_dim } }
+    \dim_add:Nn \l__tenkzl_cupbtx_dim
+      { \fp_to_dim:n
+          { -\l__tenkzl_cupstubshift_dim * \l__tenkzl_cupdy_dim
+              / \l__tenkzl_cupnorm_dim } }
+    \dim_add:Nn \l__tenkzl_cupbty_dim
+      { \fp_to_dim:n
+          { \l__tenkzl_cupstubshift_dim * \l__tenkzl_cupdx_dim
+              / \l__tenkzl_cupnorm_dim } }
+  }
+
+% Reconstruct a paper point from outward and transverse orthonormal
+% projections.  The side direction has already passed through the single
+% lattice frame map, so this is metric resolution rather than a second map.
+\cs_new_protected:Npn \tenkzl_side_cup_from_projections:NNNN #1#2#3#4
+  {
+    \dim_set:Nn #3
+      { \fp_to_dim:n
+          { ( #1 * \l__tenkzl_cupdx_dim - #2 * \l__tenkzl_cupdy_dim )
+              / \l__tenkzl_cupnorm_dim } }
+    \dim_set:Nn #4
+      { \fp_to_dim:n
+          { ( #1 * \l__tenkzl_cupdy_dim + #2 * \l__tenkzl_cupdx_dim )
+              / \l__tenkzl_cupnorm_dim } }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_side_cup_at:nnn #1#2#3
+  {
+    \prop_if_in:NeF \l__tenkzl_removed_prop
+      { \tenkzl_key:nn { \int_eval:n {#2} }{ \int_eval:n {#3} } }
+      {
+        \bool_set:Nn \l__tenkzl_cupaexists_bool
+          { ! \tenkzl_removed_on_p:nnn
+              { \int_eval:n {#2} }{ \int_eval:n {#3} }{0} }
+        \bool_set:Nn \l__tenkzl_cupbexists_bool
+          { ! \tenkzl_removed_on_p:nnn
+              { \int_eval:n {#2} }{ \int_eval:n {#3} }{1} }
+        \bool_if:NTF \l__tenkzl_cupaexists_bool
+          {
+            \bool_if:NTF \l__tenkzl_cupbexists_bool
+              { \tenkzl_draw_complete_side_cup_at:nnn {#1}{#2}{#3} }
+              { \tenkzl_draw_incomplete_side_cup_at:nnnn {#1}{#2}{#3}{0} }
+          }
+          { \bool_if:NT \l__tenkzl_cupbexists_bool
+              { \tenkzl_draw_incomplete_side_cup_at:nnnn {#1}{#2}{#3}{1} } }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_complete_side_cup_at:nnn #1#2#3
+  {
+        \tenkzl_side_cup_matrix:nN {#1} \l__tenkzl_tmp_tl
+        \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{0}{0pt}
+          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+        \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{0}
+          { \tenkz@dim{\tenkz@r@boundaryleg} }
+          \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim
+        \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{1}{0pt}
+          \l__tenkzl_cupbx_dim \l__tenkzl_cupby_dim
+        \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{1}
+          { \tenkz@dim{\tenkz@r@boundaryleg} }
+          \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim
+        \tenkzl_side_cup_corridor:nnn {#1}{#2}{#3}
+        \draw[tenkz~lattice~cup]
+          (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim) --
+          (\dim_use:N \l__tenkzl_cupalx_dim,\dim_use:N \l__tenkzl_cupaly_dim)
+          .. controls
+          (\dim_use:N \l__tenkzl_cupacx_dim,\dim_use:N \l__tenkzl_cupacy_dim)
+          and
+          (\dim_use:N \l__tenkzl_cupbcx_dim,\dim_use:N \l__tenkzl_cupbcy_dim)
+          ..
+          (\dim_use:N \l__tenkzl_cupblx_dim,\dim_use:N \l__tenkzl_cupbly_dim)
+          --
+          (\dim_use:N \l__tenkzl_cupbtx_dim,\dim_use:N \l__tenkzl_cupbty_dim);
+        % Both plain endpoint stubs render after the haloed connector, so its
+        % round preaction caps cannot nick either sheet wire.
+        \draw[bond]
+          (\dim_use:N \l__tenkzl_cupax_dim,\dim_use:N \l__tenkzl_cupay_dim) --
+          (\dim_use:N \l__tenkzl_cupasx_dim,\dim_use:N \l__tenkzl_cupasy_dim) --
+          (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim);
+        \draw[bond]
+          (\dim_use:N \l__tenkzl_cupbtx_dim,\dim_use:N \l__tenkzl_cupbty_dim) --
+          (\dim_use:N \l__tenkzl_cupbsx_dim,\dim_use:N \l__tenkzl_cupbsy_dim) --
+          (\dim_use:N \l__tenkzl_cupbx_dim,\dim_use:N \l__tenkzl_cupby_dim);
+        \tl_if_blank:VF \l__tenkzl_tmp_tl
+          { \tenkzl_draw_side_cup_matrix:nnn {#1}{#2}{#3} }
+        \tenkz@event{cup|picture=\the\tenkz@pictureid|lang=lattice|%
+          side=#1|cell=\int_eval:n {#2}-\int_eval:n {#3}|sheet-a=0|sheet-b=1|%
+          matrix=\tl_if_blank:VTF \l__tenkzl_tmp_tl {0}{1}}
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_incomplete_side_cup_at:nnnn #1#2#3#4
+  {
+    \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{#4}{0pt}
+      \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+    \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{#4}
+      { \tenkz@dim{\tenkz@r@boundaryleg} }
+      \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim
+    \draw[bond]
+      (\dim_use:N \l__tenkzl_cupax_dim,\dim_use:N \l__tenkzl_cupay_dim) --
+      (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim);
+    \msg_warning:nnne {tenkz}{lattice-side-cup-incomplete}
+      {#1}{\int_eval:n {#2}-\int_eval:n {#3}}
+    \tenkz@event{warning|picture=\the\tenkz@pictureid|%
+      code=side-cup-incomplete|side=#1|cell=\int_eval:n {#2}-\int_eval:n {#3}|%
+      sheet=#4}
+  }
+
+\cs_new_protected:Npn \tenkzl_draw_side_cup_matrix:nnn #1#2#3
+  {
+    \tl_set:Ne \l__tenkzl_cupnode_tl
+      {tzl-cup-\the\tenkz@pictureid-#1-\int_eval:n{#2}-\int_eval:n{#3}}
+    \node[tensor] (\l__tenkzl_cupnode_tl) at
+      ( \dim_eval:n
+          { ( \l__tenkzl_cupalx_dim + 3 \l__tenkzl_cupacx_dim
+              + 3 \l__tenkzl_cupbcx_dim + \l__tenkzl_cupblx_dim ) / 8 } ,
+        \dim_eval:n
+          { ( \l__tenkzl_cupaly_dim + 3 \l__tenkzl_cupacy_dim
+              + 3 \l__tenkzl_cupbcy_dim + \l__tenkzl_cupbly_dim ) / 8 } ) {};
+    \node[tn~label,anchor=center] at
+      ($(\l__tenkzl_cupnode_tl.center)
+        +(\dim_use:N \l__tenkzl_cuplabeldx_dim,
+          \dim_use:N \l__tenkzl_cuplabeldy_dim)$)
+      {\box_use:N \l__tenkzl_cuplabel_box};
   }
 
 % removed-site events.  The audit rebuilds region set-algebra from these
@@ -1985,15 +2739,72 @@
     \int_compare:nNnT {#3} = { \l__tenkzl_sheet_int }
       {
         \tenkzl_site:nn {#1}{#2}
-        \node[tn~label, anchor=south~west] at
-          ( \dim_eval:n { \l__tenkzl_px_dim
-                          + \tenkz@dim{\tenkz@r@dotdia} / 2
-                          + \tenkz@dim{\tenkz@r@labelclear} } ,
-            \dim_eval:n { \l__tenkzl_py_dim
-                          + \tenkz@dim{\tenkz@r@dotdia} / 2
-                          + \tenkz@dim{\tenkz@r@labelclear} } )
-          {#4};
+        \begin{pgfonlayer}{tenkz-lattice-labels}
+          \node[tn~label, anchor=south~west, fill=tenkzPaper]
+            (tenkzl-site-label-probe) at
+            ( \dim_eval:n { \l__tenkzl_px_dim
+                            + \tenkz@dim{\tenkz@r@dotdia} / 2
+                            + \tenkz@dim{\tenkz@r@labelclear} } ,
+              \dim_eval:n { \l__tenkzl_py_dim
+                            + \tenkz@dim{\tenkz@r@dotdia} / 2
+                            + \tenkz@dim{\tenkz@r@labelclear} } )
+            {#4};
+        \end{pgfonlayer}
+        \tenkzl_record_site_label_bbox:nnn {#1}{#2}{#3}
       }
+  }
+
+% Capture the exact rectangle of the node just materialized above.  Repeated
+% labels for one address are unioned, so later cup routing clears every glyph
+% without expanding any label token list during its geometry pass.
+\cs_new_protected:Npn \tenkzl_record_site_label_bbox:nnn #1#2#3
+  {
+    \pgfextractx \l__tenkzl_labelxmin_dim
+      { \pgfpointanchor{tenkzl-site-label-probe}{west} }
+    \pgfextractx \l__tenkzl_labelxmax_dim
+      { \pgfpointanchor{tenkzl-site-label-probe}{east} }
+    \pgfextracty \l__tenkzl_labelymin_dim
+      { \pgfpointanchor{tenkzl-site-label-probe}{south} }
+    \pgfextracty \l__tenkzl_labelymax_dim
+      { \pgfpointanchor{tenkzl-site-label-probe}{north} }
+    \prop_get:NeNT \l__tenkzl_labelxmin_prop
+      { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+      \l__tenkzl_labelbbox_tl
+      {
+        \dim_set:Nn \l__tenkzl_labelxmin_dim
+          { \dim_min:nn { \l__tenkzl_labelxmin_dim }
+              { \l__tenkzl_labelbbox_tl } }
+        \prop_get:NeN \l__tenkzl_labelxmax_prop
+          { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelxmax_dim
+          { \dim_max:nn { \l__tenkzl_labelxmax_dim }
+              { \l__tenkzl_labelbbox_tl } }
+        \prop_get:NeN \l__tenkzl_labelymin_prop
+          { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelymin_dim
+          { \dim_min:nn { \l__tenkzl_labelymin_dim }
+              { \l__tenkzl_labelbbox_tl } }
+        \prop_get:NeN \l__tenkzl_labelymax_prop
+          { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+          \l__tenkzl_labelbbox_tl
+        \dim_set:Nn \l__tenkzl_labelymax_dim
+          { \dim_max:nn { \l__tenkzl_labelymax_dim }
+              { \l__tenkzl_labelbbox_tl } }
+      }
+    \prop_put:Nee \l__tenkzl_labelxmin_prop
+      { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+      { \dim_use:N \l__tenkzl_labelxmin_dim }
+    \prop_put:Nee \l__tenkzl_labelxmax_prop
+      { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+      { \dim_use:N \l__tenkzl_labelxmax_dim }
+    \prop_put:Nee \l__tenkzl_labelymin_prop
+      { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+      { \dim_use:N \l__tenkzl_labelymin_dim }
+    \prop_put:Nee \l__tenkzl_labelymax_prop
+      { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
+      { \dim_use:N \l__tenkzl_labelymax_dim }
   }
 % all six record groups are consumed (the inset #6 is label-irrelevant):
 % a leftover group would be typeset in the picture's nullfont context --
@@ -2301,8 +3112,13 @@
       { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
     \dim_set:Nn \l__tenkzl_dx_dim
       { \l__tenkzl_qy_dim - \tenkz@dim{\tenkz@r@physleg} }
+    % Endpoint stubs meet the opaque site disks plainly.  Only the exterior
+    % return receives the crossing halo; applying it to the whole path would
+    % cut a paper-coloured U-shaped scar into both endpoint disks.
     \draw[trace]
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) --
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_dy_dim );
+    \draw[tenkz~lattice~pair~trace]
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_dy_dim )
       arc[start~angle=180, end~angle=0,
           radius=\dim_eval:n { \tenkz@dim{\tenkz@r@planetracereach} / 2 }]
@@ -2311,8 +3127,9 @@
           { \l__tenkzl_qx_dim + \tenkz@dim{\tenkz@r@planetracereach} } ,
         \dim_use:N \l__tenkzl_dx_dim )
       arc[start~angle=360, end~angle=180,
-          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@planetracereach} / 2 }]
-      --
+          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@planetracereach} / 2 }];
+    \draw[trace]
+      ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_dx_dim ) --
       ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) ;
     \tenkz@event{pairtrace|picture=\the\tenkz@pictureid|site=#1-#2\int_compare:nNnT
       { \l__tenkzl_sheets_int } > {2} {|interface=#3}}
@@ -2393,6 +3210,7 @@
               { \tenkzl_count_outer:nn {##1}{####1} }
           }
         \tl_clear:N \l__tenkzl_bnd_tl
+        \tenkzl_count_virtual_boundary:
         \bool_if:NT \l__tenkzl_pairing_bool
           {
             \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 2 }
@@ -2400,8 +3218,122 @@
           }
         \tenkz@event{boundary|picture=\the\tenkz@pictureid|physical-up=\int_use:N
           \l__tenkzl_bot_int|physical-down=\int_use:N
-          \l__tenkzl_bob_int\tl_use:N \l__tenkzl_bnd_tl}
+          \l__tenkzl_bob_int\tl_use:N \l__tenkzl_bnd_tl|virtual-west=\int_use:N
+          \l__tenkzl_bvw_int|virtual-east=\int_use:N \l__tenkzl_bve_int|%
+          virtual-north=\int_use:N \l__tenkzl_bvn_int|virtual-south=\int_use:N
+          \l__tenkzl_bvs_int}
       }
+  }
+\cs_new_protected:Npn \tenkzl_count_virtual_boundary:
+  {
+    \int_zero:N \l__tenkzl_bvw_int
+    \int_zero:N \l__tenkzl_bve_int
+    \int_zero:N \l__tenkzl_bvn_int
+    \int_zero:N \l__tenkzl_bvs_int
+    \tenkzl_side_open:nN {west}  \l__tenkzl_wopen_bool
+    \tenkzl_side_open:nN {east}  \l__tenkzl_eopen_bool
+    \tenkzl_side_open:nN {north} \l__tenkzl_nopen_bool
+    \tenkzl_side_open:nN {south} \l__tenkzl_sopen_bool
+    \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 1 }
+      {
+        \int_step_inline:nn { \l__tenkzl_nrows_int }
+          {
+            \bool_if:NT \l__tenkzl_wopen_bool
+              { \tenkzl_count_virtual_at:nnnN {####1}{1}{##1}
+                  \l__tenkzl_bvw_int }
+            \bool_if:NT \l__tenkzl_eopen_bool
+              { \tenkzl_count_virtual_at:nnnN {####1}
+                  { \l__tenkzl_ncols_int }{##1} \l__tenkzl_bve_int }
+          }
+        \int_step_inline:nn { \l__tenkzl_ncols_int }
+          {
+            \bool_if:NT \l__tenkzl_nopen_bool
+              { \tenkzl_count_virtual_at:nnnN {1}{####1}{##1}
+                  \l__tenkzl_bvn_int }
+            \bool_if:NT \l__tenkzl_sopen_bool
+              { \tenkzl_count_virtual_at:nnnN
+                  { \l__tenkzl_nrows_int }{####1}{##1} \l__tenkzl_bvs_int }
+          }
+      }
+    \tenkzl_count_unresolved_side_cups:
+  }
+
+% A requested cup consumes two ports only when both endpoints and a usable
+% side direction exist.  Partial removals leave the sole survivor open;
+% degenerate expert directions leave every surviving endpoint open.
+\cs_new_protected:Npn \tenkzl_count_unresolved_side_cups:
+  {
+    \tenkzl_if_cup_stack:T
+      {
+        \tenkzl_count_unresolved_cup_side:nN {west} \l__tenkzl_bvw_int
+        \tenkzl_count_unresolved_cup_side:nN {east} \l__tenkzl_bve_int
+        \tenkzl_count_unresolved_cup_side:nN {north} \l__tenkzl_bvn_int
+        \tenkzl_count_unresolved_cup_side:nN {south} \l__tenkzl_bvs_int
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_count_unresolved_cup_side:nN #1#2
+  {
+    \tenkzl_side_policy:nN {#1} \l__tenkzl_tmp_tl
+    \str_if_eq:VnT \l__tenkzl_tmp_tl {cup}
+      {
+        \prop_if_in:NnTF \l__tenkzl_cupdegenerate_prop {#1}
+          { \tl_set:Nn \l__tenkzl_tmp_tl {all} }
+          { \tl_set:Nn \l__tenkzl_tmp_tl {incomplete} }
+        \str_case:nn {#1}
+          {
+            {west}
+              { \int_step_inline:nn { \l__tenkzl_nrows_int }
+                  { \tenkzl_count_unresolved_cup_at:nnVN
+                      {##1}{1} \l__tenkzl_tmp_tl #2 } }
+            {east}
+              { \int_step_inline:nn { \l__tenkzl_nrows_int }
+                  { \tenkzl_count_unresolved_cup_at:nnVN
+                      {##1}{\l__tenkzl_ncols_int} \l__tenkzl_tmp_tl #2 } }
+            {north}
+              { \int_step_inline:nn { \l__tenkzl_ncols_int }
+                  { \tenkzl_count_unresolved_cup_at:nnVN
+                      {1}{##1} \l__tenkzl_tmp_tl #2 } }
+            {south}
+              { \int_step_inline:nn { \l__tenkzl_ncols_int }
+                  { \tenkzl_count_unresolved_cup_at:nnVN
+                      {\l__tenkzl_nrows_int}{##1} \l__tenkzl_tmp_tl #2 } }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_count_unresolved_cup_at:nnnN #1#2#3#4
+  {
+    \str_if_eq:nnTF {#3}{all}
+      {
+        \tenkzl_count_virtual_at:nnnN {#1}{#2}{0} #4
+        \tenkzl_count_virtual_at:nnnN {#1}{#2}{1} #4
+      }
+      {
+        \prop_if_in:NeF \l__tenkzl_removed_prop
+          { \tenkzl_key:nn { \int_eval:n {#1} }{ \int_eval:n {#2} } }
+          {
+            \bool_set:Nn \l__tenkzl_cupaexists_bool
+              { ! \tenkzl_removed_on_p:nnn
+                  { \int_eval:n {#1} }{ \int_eval:n {#2} }{0} }
+            \bool_set:Nn \l__tenkzl_cupbexists_bool
+              { ! \tenkzl_removed_on_p:nnn
+                  { \int_eval:n {#1} }{ \int_eval:n {#2} }{1} }
+            \bool_if:NTF \l__tenkzl_cupaexists_bool
+              { \bool_if:NF \l__tenkzl_cupbexists_bool { \int_incr:N #4 } }
+              { \bool_if:NT \l__tenkzl_cupbexists_bool { \int_incr:N #4 } }
+          }
+      }
+  }
+\cs_generate_variant:Nn \tenkzl_count_unresolved_cup_at:nnnN { nnVN }
+\cs_new_protected:Npn \tenkzl_count_virtual_at:nnnN #1#2#3#4
+  {
+    \bool_lazy_and:nnT
+      { ! \prop_if_in_p:Ne \l__tenkzl_removed_prop
+          { \tenkzl_key:nn { \int_eval:n {#1} }{ \int_eval:n {#2} } } }
+      { ! \tenkzl_removed_on_p:nnn
+          { \int_eval:n {#1} }{ \int_eval:n {#2} }{ \int_eval:n {#3} } }
+      { \int_incr:N #4 }
   }
 \cs_new_protected:Npn \tenkzl_count_outer:nn #1#2
   {
