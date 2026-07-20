@@ -114,8 +114,8 @@ now implies this reverse containment.  The resulting spanning theorem is
 These reductions alone do not prove the full source theorem.  The
 ground-space spanning condition for repeated copies and arbitrary raw sector
 weights, the three-way equivalence with ZCL, the complete canonical-form
-hypotheses from the source statement, and the Beigi ground-space
-characterization as an internal theorem remain open.
+hypotheses from the source statement, and the identification of Beigi's loop
+states with the basis of normal tensors remain open.
 For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
 are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
 Appendix~B supplies the basic-vector form.  The local projectors in
@@ -329,6 +329,8 @@ product
 \[
   \prod_n \varphi_a(r_n,l_{n+1}).
 \]
+For a positive loop $a\to a$, denote the resulting physical state on a chain
+of length $N$ by $\Psi_a^{(N)}$.
 This is the construction in Beigi, arXiv:1105.1019v2, source lines 602--606.
 For every $N\geq2$,
 \leanid{MPSTensor.BeigiSectorGraphData.}
@@ -341,9 +343,29 @@ The proof uses Beigi's local edge-ground-space condition from source
 lines 487--500 and the positive-loop specialization at lines 602--606.  The
 restriction $N\geq2$ is the nondegenerate range of the two-site periodic
 parent Hamiltonian used here; the length-one convention remains part of
-\ghissue{4400}.  This result proves membership only.  It does not yet prove
-that the loop states span the parent ground space or identify them with the
-original BNT representatives.
+\ghissue{4400}.  At every positive length the loop vectors are nonzero by
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{loopProductStateES_ne_zero}, and distinct loop vectors are
+orthogonal by
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{loopProductStateES_inner_eq_zero_of_ne}.  Consequently they
+are linearly independent, as recorded by
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{loopProductStateES_linearIndependent}.  If the parent
+ground-space dimension is eventually constant, membership and the loop-count
+dimension formula therefore give, for every $N>2$,
+\begin{align}
+  \operatorname{span}\{\Psi_a^{(N)}:a\to a\text{ is a positive loop}\}
+  =\ker H_2^{(N)}(A).
+\end{align}
+This is
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{span_loopProductStateES_eq_parentHamiltonianGroundSpaceES}.
+Its BNT and all-chain specialization is
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSectorData}.
+These results do not yet identify the loop states with the original BNT
+representatives.
 
 The auxiliary declaration
 \leanid{MPSTensor.BeigiSectorGraphData.}
@@ -402,8 +424,10 @@ stability, the symmetric sector-graph construction from three-site commuting
 parent terms, the ordered-cycle dimension formula, the reduction of the
 sector graph to one-dimensional loops, and the exact matrix product realization
 and parent-ground-space membership of every positive loop state are proved.
-Spanning of the parent ground space by these loop vectors, followed by their
-identification with the basis of normal tensors, remains open.
+The loop vectors are also proved to span the parent ground space for every
+$N>2$ under the eventual-dimension hypothesis supplied by BNT eventual linear
+independence together with the source all-chain ground-space condition.  Their
+identification with the basis of normal tensors remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
