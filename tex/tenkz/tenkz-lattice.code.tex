@@ -128,6 +128,7 @@
 \prop_new:N \l__tenkzl_labelymin_prop  % "r-c-h" -> south paper coordinate
 \prop_new:N \l__tenkzl_labelymax_prop  % "r-c-h" -> north paper coordinate
 \seq_new:N  \l__tenkzl_obstacles_seq   % actual rendered obstacle points {x}{y}
+\seq_new:N  \l__tenkzl_obstaclebboxes_seq % actual label boxes {xmin}{xmax}{ymin}{ymax}
 \prop_new:N \l__tenkzl_cupdegenerate_prop % side -> 1 when its frame vector is zero
 \prop_new:N \l__tenkzl_tracedegenerate_prop % opposing-side axis -> 1 when routing degenerates
 
@@ -686,6 +687,7 @@
     \prop_clear:N \l__tenkzl_labelymin_prop
     \prop_clear:N \l__tenkzl_labelymax_prop
     \seq_clear:N \l__tenkzl_obstacles_seq
+    \seq_clear:N \l__tenkzl_obstaclebboxes_seq
     \prop_clear:N \l__tenkzl_cupdegenerate_prop
     \prop_clear:N \l__tenkzl_tracedegenerate_prop
   }
@@ -1609,6 +1611,14 @@
     \pgfextractx \l__tenkzl_labelxmax_dim { \pgfpointanchor{#1}{east} }
     \pgfextracty \l__tenkzl_labelymin_dim { \pgfpointanchor{#1}{south} }
     \pgfextracty \l__tenkzl_labelymax_dim { \pgfpointanchor{#1}{north} }
+    \seq_put_right:Nx \l__tenkzl_obstaclebboxes_seq
+      {
+        \exp_not:N \tenkzl_trace_include_obstacle_bbox:nnnn
+          { \dim_use:N \l__tenkzl_labelxmin_dim }
+          { \dim_use:N \l__tenkzl_labelxmax_dim }
+          { \dim_use:N \l__tenkzl_labelymin_dim }
+          { \dim_use:N \l__tenkzl_labelymax_dim }
+      }
     \tenkzl_record_obstacle_point:NN
       \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
     \tenkzl_record_obstacle_point:NN
@@ -1931,49 +1941,69 @@
           { \int_eval:n {#1}-\int_eval:n {#2}-\int_eval:n {#3} }
           \l__tenkzl_labelbbox_tl
         \dim_set:Nn \l__tenkzl_labelymax_dim { \l__tenkzl_labelbbox_tl }
-        \tenkzl_side_cup_project_trans:NNN
-          \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
-          \l__tenkzl_labeltransmin_dim
-        \dim_set_eq:NN \l__tenkzl_labeltransmax_dim
-          \l__tenkzl_labeltransmin_dim
-        \tenkzl_side_cup_label_trans_corner:NN
-          \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
-        \tenkzl_side_cup_label_trans_corner:NN
-          \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
-        \tenkzl_side_cup_label_trans_corner:NN
-          \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
-        \tenkzl_side_cup_project_trans:NNN #4 #5
-          \l__tenkzl_labelsiteproj_dim
-        \bool_set:Nn \l_tmpa_bool
-          {
-            ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } <
-                { \l__tenkzl_labeltransmin_dim - \l__tenkzl_cupbulge_dim }
-            &&
-            ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } >
-                { \l__tenkzl_labeltransmax_dim + \l__tenkzl_cupbulge_dim }
-          }
-        \bool_if:NT \l_tmpa_bool
-          {
-            \dim_compare:nNnTF
-              { \l__tenkzl_labelsiteproj_dim
-                - \l__tenkzl_labeltransmin_dim } <
+        \tenkzl_side_cup_avoid_loaded_label_stub:NNNNNN
+          #4 #5 #6 #7 #8 #9
+      }
+  }
+
+% Route one site-to-tip lead around the bbox currently loaded in the four
+% label dimension registers.  Both site labels and the general materialized
+% body-label registry use this single measured escape contract.
+\cs_new_protected:Npn \tenkzl_side_cup_avoid_loaded_label_stub:NNNNNN
+  #1#2#3#4#5#6
+  {
+    \tenkzl_side_cup_project_trans:NNN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+      \l__tenkzl_labeltransmin_dim
+    \dim_set_eq:NN \l__tenkzl_labeltransmax_dim
+      \l__tenkzl_labeltransmin_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
+    \tenkzl_side_cup_avoid_loaded_trans_stub:NNNNNN #1#2#3#4#5#6
+  }
+
+% Avoid the currently accumulated transverse forbidden interval.  The current
+% tip, not the immutable site centre, decides collision and nearest side; the
+% general body-label path first unions all rectangles and invokes this once,
+% so a later rectangle cannot undo an earlier escape.
+\cs_new_protected:Npn \tenkzl_side_cup_avoid_loaded_trans_stub:NNNNNN
+  #1#2#3#4#5#6
+  {
+    \tenkzl_side_cup_project_trans:NNN #3 #4
+      \l__tenkzl_labelsiteproj_dim
+    \bool_set:Nn \l_tmpa_bool
+      {
+        ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } <
+            { \l__tenkzl_labeltransmin_dim - \l__tenkzl_cupbulge_dim }
+        &&
+        ! \dim_compare_p:nNn { \l__tenkzl_labelsiteproj_dim } >
+            { \l__tenkzl_labeltransmax_dim + \l__tenkzl_cupbulge_dim }
+      }
+    \bool_if:NT \l_tmpa_bool
+      {
+        \dim_compare:nNnTF
+          { \l__tenkzl_labelsiteproj_dim
+            - \l__tenkzl_labeltransmin_dim } <
+          { \l__tenkzl_labeltransmax_dim
+            - \l__tenkzl_labelsiteproj_dim }
+          { \dim_set:Nn \l__tenkzl_labelshift_dim
+              { \l__tenkzl_labeltransmin_dim
+                - 2 \l__tenkzl_cupbulge_dim } }
+          { \dim_set:Nn \l__tenkzl_labelshift_dim
               { \l__tenkzl_labeltransmax_dim
-                - \l__tenkzl_labelsiteproj_dim }
-              { \dim_set:Nn \l__tenkzl_labelshift_dim
-                  { \l__tenkzl_labeltransmin_dim
-                    - 2 \l__tenkzl_cupbulge_dim } }
-              { \dim_set:Nn \l__tenkzl_labelshift_dim
-                  { \l__tenkzl_labeltransmax_dim
-                    + 2 \l__tenkzl_cupbulge_dim } }
-            \tenkzl_side_cup_project:NNN #4 #5 \l__tenkzl_cupproj_dim
-            \dim_add:Nn \l__tenkzl_cupproj_dim
-              { \tenkz@dim{\tenkz@r@dotdia} / 2 }
-            \tenkzl_side_cup_from_projections:NNNN
-              \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #8 #9
-            \tenkzl_side_cup_project:NNN #6 #7 \l__tenkzl_cupproj_dim
-            \tenkzl_side_cup_from_projections:NNNN
-              \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #6 #7
-          }
+                + 2 \l__tenkzl_cupbulge_dim } }
+        \tenkzl_side_cup_project:NNN #1 #2 \l__tenkzl_cupproj_dim
+        \dim_add:Nn \l__tenkzl_cupproj_dim
+          { \tenkz@dim{\tenkz@r@dotdia} / 2 }
+        \tenkzl_side_cup_from_projections:NNNN
+          \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #5 #6
+        \tenkzl_side_cup_project:NNN #3 #4 \l__tenkzl_cupproj_dim
+        \tenkzl_side_cup_from_projections:NNNN
+          \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #3 #4
       }
   }
 
@@ -2158,6 +2188,10 @@
     \draw[bond]
       (\dim_use:N \l__tenkzl_cupax_dim,\dim_use:N \l__tenkzl_cupay_dim) --
       (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim);
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+    \tenkzl_record_obstacle_point:NN
+      \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim
     \msg_warning:nnne {tenkz}{lattice-side-cup-incomplete}
       {#1}{\int_eval:n {#2}-\int_eval:n {#3}}
     \tenkz@event{warning|picture=\the\tenkz@pictureid|%
@@ -2419,6 +2453,25 @@
       \l__tenkzl_labelprojx_dim \l__tenkzl_labelprojy_dim
   }
 
+% Accumulate one stored body-label rectangle into a single transverse
+% forbidden interval.  Complete traces apply the union once to both leads, so
+% multiple or overlapping boxes cannot undo one another's escape.
+\cs_new_protected:Npn \tenkzl_trace_include_obstacle_bbox:nnnn #1#2#3#4
+  {
+    \dim_set:Nn \l__tenkzl_labelxmin_dim {#1}
+    \dim_set:Nn \l__tenkzl_labelxmax_dim {#2}
+    \dim_set:Nn \l__tenkzl_labelymin_dim {#3}
+    \dim_set:Nn \l__tenkzl_labelymax_dim {#4}
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymin_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmin_dim \l__tenkzl_labelymax_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymin_dim
+    \tenkzl_side_cup_label_trans_corner:NN
+      \l__tenkzl_labelxmax_dim \l__tenkzl_labelymax_dim
+  }
+
 \cs_new_protected:Npn \tenkzl_trace_include_corner:NN #1#2
   {
     \tenkzl_side_cup_project:NNN #1 #2 \l__tenkzl_cupproj_dim
@@ -2488,6 +2541,20 @@
       \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
       \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
       \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
+    \seq_if_empty:NF \l__tenkzl_obstaclebboxes_seq
+      {
+        \dim_set:Nn \l__tenkzl_labeltransmin_dim {\c_max_dim}
+        \dim_set:Nn \l__tenkzl_labeltransmax_dim {-\c_max_dim}
+        \seq_map_inline:Nn \l__tenkzl_obstaclebboxes_seq {##1}
+        \tenkzl_side_cup_avoid_loaded_trans_stub:NNNNNN
+          \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+          \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+          \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
+        \tenkzl_side_cup_avoid_loaded_trans_stub:NNNNNN
+          \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
+          \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
+          \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
+      }
     % A one-row N/S closure queries the same site label for both endpoints.
     % The shared avoidance primitive deliberately chooses one safe transverse
     % coordinate; restore sheet-local distinction farther on that safe side.
@@ -3737,6 +3804,13 @@
               ( \dim_use:N \l__tenkzl_px_dim ,
                 \dim_eval:n { \l__tenkzl_py_dim
                               + \tenkz@dim{\tenkz@r@physleg} } );
+            \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+            \dim_set:Nn \l__tenkzl_qy_dim
+              { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
+            \tenkzl_record_obstacle_point:NN
+              \l__tenkzl_px_dim \l__tenkzl_py_dim
+            \tenkzl_record_obstacle_point:NN
+              \l__tenkzl_qx_dim \l__tenkzl_qy_dim
           }
         \bool_lazy_and:nnT
           { \tenkzl_outer_face_p:n {bottom} }
@@ -3750,6 +3824,13 @@
               ( \dim_use:N \l__tenkzl_px_dim ,
                 \dim_eval:n { \l__tenkzl_py_dim
                               - \tenkz@dim{\tenkz@r@physleg} } );
+            \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+            \dim_set:Nn \l__tenkzl_qy_dim
+              { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} }
+            \tenkzl_record_obstacle_point:NN
+              \l__tenkzl_px_dim \l__tenkzl_py_dim
+            \tenkzl_record_obstacle_point:NN
+              \l__tenkzl_qx_dim \l__tenkzl_qy_dim
           }
       }
   }

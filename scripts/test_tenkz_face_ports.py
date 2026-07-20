@@ -55,6 +55,28 @@ SOURCE = r"""
 \cs_set_protected:Npn \tenkzl_draw_complete_trace_at:nnnnnn #1#2#3#4#5#6
   {
     \__tenkzl_test_draw_complete_trace:nnnnnn {#1}{#2}{#3}{#4}{#5}{#6}
+    \bool_if:NT \g__tenkzl_test_bbox_lead_bool
+      {
+        \int_compare:nNnT { \g__tenkzl_test_bbox_calls_int } < {2}
+          { \tex_errmessage:D { complete~trace~skipped~body-label~boxes } }
+        \bool_set:Nn \l_tmpa_bool
+          {
+            \dim_compare_p:nNn { \l__tenkzl_trasx_dim } =
+              { \l__tenkzl_trax_dim }
+            &&
+            \dim_compare_p:nNn { \l__tenkzl_trasy_dim } =
+              { \l__tenkzl_tray_dim }
+            &&
+            \dim_compare_p:nNn { \l__tenkzl_trbsx_dim } =
+              { \l__tenkzl_trbx_dim }
+            &&
+            \dim_compare_p:nNn { \l__tenkzl_trbsy_dim } =
+              { \l__tenkzl_trby_dim }
+          }
+        \bool_if:NT \l_tmpa_bool
+          { \tex_errmessage:D { body-label~box~did~not~move~either~lead } }
+        \bool_gset_false:N \g__tenkzl_test_bbox_lead_bool
+      }
     \bool_if:NT \g__tenkzl_test_one_row_label_bool
       {
         \dim_compare:nNnT { \l__tenkzl_tratx_dim } =
@@ -113,10 +135,25 @@ SOURCE = r"""
 \bool_new:N \g__tenkzl_test_sealed_tip_bool
 \int_new:N \g__tenkzl_test_obstacle_min_int
 \int_new:N \g__tenkzl_test_obstacle_calls_int
+\bool_new:N \g__tenkzl_test_bbox_lead_bool
+\int_new:N \g__tenkzl_test_bbox_calls_int
 \cs_new_protected:Npn \tenkzSealedTipProbe
   { \bool_gset_true:N \g__tenkzl_test_sealed_tip_bool }
 \cs_new_protected:Npn \tenkzObstacleProbe #1
   { \int_gset:Nn \g__tenkzl_test_obstacle_min_int {#1} }
+\cs_new_protected:Npn \tenkzBBoxLeadProbe
+  {
+    \bool_gset_true:N \g__tenkzl_test_bbox_lead_bool
+    \int_gzero:N \g__tenkzl_test_bbox_calls_int
+  }
+\cs_new_eq:NN \__tenkzl_test_trace_include_obstacle_bbox:nnnn
+  \tenkzl_trace_include_obstacle_bbox:nnnn
+\cs_set_protected:Npn \tenkzl_trace_include_obstacle_bbox:nnnn #1#2#3#4
+  {
+    \bool_if:NT \g__tenkzl_test_bbox_lead_bool
+      { \int_gincr:N \g__tenkzl_test_bbox_calls_int }
+    \__tenkzl_test_trace_include_obstacle_bbox:nnnn {#1}{#2}{#3}{#4}
+  }
 \cs_new_eq:NN \__tenkzl_test_trace_silhouette:n
   \tenkzl_trace_silhouette:n
 \cs_new_eq:NN \__tenkzl_test_trace_include_obstacle:nn
@@ -707,9 +744,25 @@ SOURCE = r"""
     rows=2, cols=2, sheets=1, frame=oblique, boundary=none,
     west=trace, east=trace, north=none, south=none]
   \tenkzObstacleProbe{8}
-  \tnregion[slot=selected, label=R,
+  \tenkzBBoxLeadProbe
+  \tnregion[slot=selected, label={R_{\mathrm{boundary}}},
     label at=north east]{(1-2,1-2)}
   \tnedge[distinguished, label=E]{(1,1)-(1,2)}
+\end{tenkzlattice}
+% Default role-stack outer physical legs are already-rendered ink and publish
+% both endpoints before a sealed-side west/east trace chooses its lane.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=none,
+    west=trace, east=trace]
+  \tenkzObstacleProbe{4}
+\end{tenkzlattice}
+% A sheet-local removal leaves one real north-cup stub.  Its two actual
+% endpoints enter the same obstacle registry before the surviving trace.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets={ket,bra}, boundary=none,
+    outer legs=none, north=cup, west=trace, east=trace]
+  \tenkzObstacleProbe{2}
+  \tnsite[removed]{(1,1,0)}
 \end{tenkzlattice}
 \end{document}
 """
@@ -734,7 +787,7 @@ def require(lines: list[str], expected: str, message: str) -> None:
 
 def forbid(lines: list[str], forbidden: str, message: str) -> None:
     if forbidden.endswith("|"):
-        found = any(line.startswith(forbidden) for line in lines)
+        found = any(forbidden in line for line in lines)
     else:
         found = forbidden in lines
     if found:
@@ -2188,6 +2241,25 @@ def main() -> int:
             f"slot={row}|from={row}-1|to={row}-2",
             f"body-label obstacle fixture lost row {row} trace",
         )
+    for sheet in range(2):
+        require(
+            pictures[109],
+            f"trace|picture=109|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-1",
+            f"outer-leg obstacle fixture lost sheet {sheet} trace",
+        )
+    require(
+        pictures[110],
+        "warning|picture=110|code=side-cup-incomplete|side=north|cell=1-1|"
+        "sheet=1",
+        "incomplete-cup obstacle fixture lost its honest stub diagnostic",
+    )
+    require(
+        pictures[110],
+        "trace|picture=110|lang=lattice|axis=west-east|sheet=1|slot=1|"
+        "from=1-1|to=1-1",
+        "incomplete-cup obstacle fixture lost its surviving trace",
+    )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
 
