@@ -2,6 +2,11 @@
 
 Date: 2026-07-19
 
+> **Superseded 2026-07-20:** The standalone FT--MPS artifact again includes
+> Chapter 12, *Symmetries and String Order*. The historical audit below records
+> the temporary Chapters 1--11 routing decision; it is not the current router
+> contract.
+
 ## Scope and method
 
 This began as a read-only audit of `blueprint/src/content_ft_mps.tex`, which
