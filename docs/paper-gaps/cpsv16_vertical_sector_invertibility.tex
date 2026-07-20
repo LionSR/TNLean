@@ -150,10 +150,19 @@ products of fixed points of the extension.  The density-block calculation on
 the extension therefore gives
 $\dim C_L(\mathcal F)\leq\dim\mathcal F$ on the original direct sum.  Positivity
 and trace preservation for the two square composites are resolved below.  The
-remaining hypothesis of the abstract identity criterion is the Schwarz
-inequality for the trace adjoint.  The route proposed in \ghissue{4418} is to
-prove complete positivity of the canonical lifts of the transported maps and
-then derive this Schwarz inequality.
+Schwarz hypothesis of the abstract identity criterion is also resolved.  The
+canonical full-matrix lifts of the two transported maps factor into normalized
+state preparation, retained-coordinate reindexings, the physical completely
+positive maps, single-operator conjugations, and controlled partial trace.
+Consequently the two transported maps and their square composites are
+completely positive.  Since the square composites preserve trace, their trace
+adjoints are unital completely positive maps and satisfy the Schwarz
+inequality in every simple summand.\footnote{Formal declarations:
+\leanid{MPOTensor.transportedVerticalSectorT_isKrausDirectSumMap},
+\leanid{MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap}, and
+\leanid{MPOTensor.%
+transportedVerticalSector_composites_traceAdjointSchwarz}
+in \doclink{TNLean/MPS/MPDO/VerticalSectorCompletePositivity}.}
 Alternatively, the maximal-support witness
 $T_\infty(\mathbf 1)$ is now available for an arbitrary positive
 trace-preserving map.  The construction of the supported endomorphism and its
@@ -204,11 +213,11 @@ A positive trace-preserving endomorphism of
 a finite product therefore has a positive-definite fixed family under the
 same product-span hypothesis; if its trace adjoint satisfies the Schwarz
 inequality, the fixed contractions and the density-block bound force the
-endomorphism to be the identity.  The remaining application to the transported
-composites is to derive the trace-adjoint Schwarz inequalities from the source
-tensor hypotheses---with complete positivity of the canonical lifts as the
-proposed route---and instantiate the criterion using the already established
-positivity and trace preservation.
+endomorphism to be the identity.  For the transported composites, complete
+positivity of the canonical lifts and the established trace preservation now
+give the required trace-adjoint Schwarz inequalities from the source tensor
+hypotheses.  The remaining application is to instantiate the criterion twice,
+using the fixed contraction families and their positive-length product spans.
 
 Let $F^*$ be the trace adjoint and define the trace-loss operator
 \[
@@ -280,11 +289,10 @@ one of the following source-faithful routes:
 The unrestricted CPSV16 conclusion should be completed in the following
 order:
 \begin{enumerate}
-    \item prove complete positivity of the canonical lifts of the transported
-          maps and use it to derive the adjoint Schwarz inequality for the two
-          square composites on the full sector algebras;
-          trace preservation of the individual maps and composites is now
-          established without an all-input active-image statement;
+    \item complete positivity of the canonical lifts of the transported maps,
+          and hence the adjoint Schwarz inequality for the two trace-preserving
+          square composites, is established without an all-input active-image
+          statement;
     \item apply the finite-product identity criterion to each square
           composite, using the fixed contraction families and the proved
           product-generation theorem, to obtain both identity compositions;
@@ -295,16 +303,18 @@ order:
 
 \section{Classification}
 
-\textbf{Verdict: trace and abstract fixed-point subproblems closed;
-invertibility gap open.}  The two transported maps and their square composites
-are trace preserving under the source tensor hypotheses.  The
+\textbf{Verdict: trace, complete-positivity, and abstract fixed-point
+subproblems closed; invertibility gap open.}  The two transported maps and
+their square composites are trace preserving under the source tensor
+hypotheses, and the trace adjoints of the square composites satisfy the
+Schwarz inequality.  The
 positive-definite fixed-family construction on finite products, the
 density-block product-span bound, and the resulting abstract identity
 criterion are proved.  The stronger active-image inclusions remain unproved
-and are not needed for this route.  Until the adjoint Schwarz inequalities are
-derived for the tensor-attached square composites and the identity criterion
-is instantiated for them, neither transported-map invertibility nor sector
-relabelling should carry a completion marker in the blueprint.
+and are not needed for this route.  Until the identity criterion is
+instantiated for the two tensor-attached square composites, neither
+transported-map invertibility nor sector relabelling should carry a completion
+marker in the blueprint.
 
 \bibliographystyle{alpha}
 \bibliography{references}

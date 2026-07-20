@@ -1923,6 +1923,192 @@ physical indices, as in
     $\widetilde S$.
 \end{proof}
 
+\begin{lemma}[Complete positivity of refinement in vertical coordinates]
+    \label{lem:mpdo_transport_t_vertical_coordinates_cp}
+    \lean{MPOTensor.transportTToVerticalCoordinates_isKrausCP}
+    \leanok
+    \uses{def:mpdo_vertical_coordinate_map_transport}
+    If the physical refinement map $T$ is completely positive, then the
+    transported map $T_{\mathrm v}$ in vertical canonical coordinates is
+    completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Definition~\ref{def:mpdo_vertical_coordinate_map_transport},
+    \[
+      T_{\mathrm v}(Z)
+        =U_2J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger.
+    \]
+    The two single-operator conjugations and the reindexing $J$ are completely
+    positive, so the assertion follows by composition.
+\end{proof}
+
+\begin{lemma}[Complete positivity of coarse-graining in vertical coordinates]
+    \label{lem:mpdo_transport_s_vertical_coordinates_cp}
+    \lean{MPOTensor.transportSToVerticalCoordinates_isKrausCP}
+    \leanok
+    \uses{def:mpdo_vertical_coordinate_map_transport}
+    If the physical coarse-graining map $S$ is completely positive, then the
+    transported map $S_{\mathrm v}$ in vertical canonical coordinates is
+    completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Definition~\ref{def:mpdo_vertical_coordinate_map_transport},
+    \[
+      S_{\mathrm v}(W)
+        =U_1S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger.
+    \]
+    Again, single-operator conjugation, reindexing, and composition preserve
+    complete positivity.
+\end{proof}
+
+\begin{lemma}[Retained-coordinate block-diagonal inclusion]
+    \label{lem:mpdo_vertical_sector_block_diagonal_reindex}
+    \lean{MPOTensor.verticalSectorBlockDiagonal_eq_equivReindexMap_comp_embedding}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    Let $\iota$ be block-diagonal inclusion of the weighted vertical-sector
+    block family into its full matrix algebra, and let $W$ be the canonical
+    reindexing to retained physical coordinates.  Then the retained-coordinate
+    inclusion is
+    \[
+      \iota_{\mathrm v}=W\circ\iota.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the defining relation between the direct-sum and retained
+    coordinates.
+\end{proof}
+
+\begin{lemma}[Retained-coordinate diagonal-block extraction]
+    \label{lem:mpdo_vertical_sector_blocks_reindex}
+    \lean{MPOTensor.verticalSectorBlocks_eq_compression_comp_equivReindexMap}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    Let $\pi$ be diagonal-block extraction to the weighted vertical-sector
+    block family, and let $W$ be the canonical reindexing to retained physical
+    coordinates.  Then the retained-coordinate extraction is
+    \[
+      \pi_{\mathrm v}=\pi\circ W^{-1}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the inverse defining relation between the retained and direct-sum
+    coordinates.
+\end{proof}
+
+\begin{lemma}[Full-matrix factorization of transported refinement]
+    \label{lem:mpdo_transported_vertical_sector_t_extension}
+    \lean{MPOTensor.directSumMapExtension_transportedVerticalSectorT}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_vertical_sector_block_diagonal_reindex,
+      lem:mpdo_vertical_sector_blocks_reindex}
+    Write $\widehat R_1$ for normalized state preparation,
+    $\widehat{\widetilde R}_2$ for controlled partial trace, and $W_i$ for
+    retained-coordinate reindexing.  The full-matrix extension of the
+    transported refinement map is
+    \[
+      \widehat{\widetilde T}
+        =\widehat{\widetilde R}_2\circ W_2^{-1}\circ
+          T_{\mathrm v}\circ W_1\circ\widehat R_1.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the preceding inclusion and extraction identities into
+    $\widetilde T=\widetilde R_2T_{\mathrm v}R_1$.
+\end{proof}
+
+\begin{lemma}[Full-matrix factorization of transported coarse-graining]
+    \label{lem:mpdo_transported_vertical_sector_s_extension}
+    \lean{MPOTensor.directSumMapExtension_transportedVerticalSectorS}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_vertical_sector_block_diagonal_reindex,
+      lem:mpdo_vertical_sector_blocks_reindex}
+    Write $\widehat R_2$ for normalized state preparation,
+    $\widehat{\widetilde R}_1$ for controlled partial trace, and $W_i$ for
+    retained-coordinate reindexing.  The full-matrix extension of the
+    transported coarse-graining map is
+    \[
+      \widehat{\widetilde S}
+        =\widehat{\widetilde R}_1\circ W_1^{-1}\circ
+          S_{\mathrm v}\circ W_2\circ\widehat R_2.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the preceding inclusion and extraction identities into
+    $\widetilde S=\widetilde R_1S_{\mathrm v}R_2$.
+\end{proof}
+
+\begin{theorem}[Complete positivity and adjoint Schwarz for the transported maps]
+    \label{thm:mpdo_transported_vertical_sector_composites_schwarz}
+    \lean{MPOTensor.transportedVerticalSectorT_isKrausDirectSumMap,
+      MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap,
+      MPOTensor.transportedVerticalSector_composites_traceAdjointSchwarz}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_transport_t_vertical_coordinates_cp,
+      lem:mpdo_transport_s_vertical_coordinates_cp,
+      lem:mpdo_transported_vertical_sector_t_extension,
+      lem:mpdo_transported_vertical_sector_s_extension,
+      thm:mpdo_vertical_sector_partial_trace_kraus,
+      lem:direct_sum_kraus_composition_schwarz,
+      thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
+    the maps
+    \[
+      \widetilde T:\mathcal A_1\longrightarrow\mathcal A_2,
+      \qquad
+      \widetilde S:\mathcal A_2\longrightarrow\mathcal A_1
+    \]
+    are completely positive.  The trace adjoints of the two square composites
+    satisfy the Schwarz inequality in every simple summand.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\iota_i$ and $\pi_i$ be block-diagonal inclusion and diagonal-block
+    extraction, respectively, and let $W_i$ denote the canonical reindexing
+    from the weighted vertical-sector coordinates to the retained physical
+    coordinates.  The full-matrix extension of the transported refinement
+    map has the factorization
+    \[
+      \widehat{\widetilde T}
+        =\widehat{\widetilde R}_2\circ W_2^{-1}\circ
+          T_{\mathrm v}\circ W_1\circ\widehat R_1.
+    \]
+    Here $\widehat R_1$ is normalized state preparation,
+    $\widehat{\widetilde R}_2$ is controlled partial trace, and
+    \[
+      T_{\mathrm v}(Z)
+        =U_2J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger.
+    \]
+    Every factor is completely positive.  The analogous identities
+    \[
+      S_{\mathrm v}(W)
+        =U_1S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger,
+      \qquad
+      \widehat{\widetilde S}
+        =\widehat{\widetilde R}_1\circ W_1^{-1}\circ
+          S_{\mathrm v}\circ W_2\circ\widehat R_2
+    \]
+    prove complete positivity of $\widetilde S$.  These factorizations are
+    exact on the full matrix algebras: $\pi_iW_i^{-1}$ is precisely extraction
+    of the retained diagonal sector blocks.  Thus no range inclusion is used.
+
+    Composition gives complete positivity of
+    $\widetilde S\widetilde T$ and $\widetilde T\widetilde S$.
+    The preceding theorem gives trace preservation of these two composites.
+    Their trace adjoints are therefore unital completely positive maps, and
+    the Kadison--Schwarz inequality applies in each simple summand.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
