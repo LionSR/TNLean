@@ -101,31 +101,32 @@ noncomputable instance instSimple (i : ι) :
   have : Nonempty (Fin (D i)) := Fin.pos_iff_nonempty.mp (NeZero.pos (D i))
   exact IsSimpleRing.matrix (Fin (D i)) ℂ
 
-/-- The per-block map: `M ↦ T(Pi.single i M)(σ i)`. -/
+/-- The homogeneous matrix-algebra specialization of `blockComponentMap`:
+`M ↦ T(Pi.single i M)(σ i)`. -/
 noncomputable def componentMap
     (T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
          (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ))
     (σ : ι ≃ ι) (i : ι)
     (M : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ :=
-  T (Pi.single i M) (σ i)
+  blockComponentMap T σ i M
 
 private theorem componentMap_map_zero
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι} :
     componentMap T σ i 0 = 0 := by
-  simp [componentMap, Pi.single_zero, map_zero]
+  simp [componentMap, blockComponentMap, Pi.single_zero, map_zero]
 
 private theorem componentMap_map_add
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
     (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M + N) = componentMap T σ i M + componentMap T σ i N := by
-  simp [componentMap, Pi.single_add, map_add, Pi.add_apply]
+  simp [componentMap, blockComponentMap, Pi.single_add, map_add, Pi.add_apply]
 
 theorem componentMap_map_mul
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
     (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M * N) = componentMap T σ i M * componentMap T σ i N := by
-  simp only [componentMap, Pi.single_mul, map_mul, Pi.mul_apply]
+  simp only [componentMap, blockComponentMap, Pi.single_mul, map_mul, Pi.mul_apply]
 
 theorem componentMap_map_one
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
@@ -134,7 +135,8 @@ theorem componentMap_map_one
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
     (i : ι) :
     componentMap T σ i 1 = 1 := by
-  simp only [componentMap, ringEquiv_single_one_eq T σ hσ i, Pi.single_eq_same]
+  simp only [componentMap, blockComponentMap, ringEquiv_single_one_eq T σ hσ i,
+    Pi.single_eq_same]
 
 /-- The component map commutes with ℂ-scalar multiplication when T is a ℂ-algebra map. -/
 theorem componentMap_map_smul_of_algEquiv

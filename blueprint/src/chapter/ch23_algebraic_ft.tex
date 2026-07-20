@@ -980,7 +980,7 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     gives~$\sigma$.
 \end{proof}
 
-\begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
+\begin{theorem}[Summand matching and dimension preservation]\label{thm:dim_preserved}
     \lean{MPSTensor.dim_preserved}
     \lean{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix}
     \leanok
@@ -990,9 +990,10 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
         \prod_{i\in I}M_{D_i}(\C)
         \simeq \prod_{j\in J}M_{E_j}(\C)
     \]
-    determines an equivalence $\sigma:I\simeq J$ satisfying
-    $D_i=E_{\sigma(i)}$ for every $i\in I$. For an automorphism of one
-    product, the induced permutation preserves every block dimension.
+    determines an equivalence $\sigma:I\simeq J$ such that the isomorphism
+    carries the $i$-th block ideal onto the $\sigma(i)$-th block ideal and
+    $D_i=E_{\sigma(i)}$ for every $i\in I$. For an automorphism of one product,
+    the induced permutation preserves every block ideal and its dimension.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:ring_perm, thm:component_map_bijective}
@@ -1013,6 +1014,7 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \lean{MPSTensor.blockComponentMap_injective}
     \lean{MPSTensor.blockComponentMap_surjective}
     \lean{MPSTensor.blockComponentMap_bijective}
+    \lean{MPSTensor.componentMap_surjective}
     \lean{MPSTensor.componentMap_bijective}
     \leanok
     \uses{thm:ring_perm}

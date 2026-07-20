@@ -296,13 +296,20 @@ The first conclusion is now proved for an arbitrary $*$-algebra isomorphism
 between two finite products of nonzero full matrix algebras.  The block ideals
 are precisely the atoms in the two-sided ideal lattices, so the induced order
 isomorphism gives an equivalence $\sigma$ of the block index sets.  Its
+defining matching relation is
+\[
+    E(I_i)=J_{\sigma(i)},
+\]
+where $E$ is the given $*$-algebra isomorphism and $I_i,J_j$ are the source
+and target block ideals.  Its
 restriction to each paired block is a bijective complex-linear map
 \[
     M_{d_i}(\mathbb C)\longrightarrow M_{e_{\sigma(i)}}(\mathbb C),
 \]
 and comparison of dimensions gives $d_i=e_{\sigma(i)}$.
-Applying this result to the trace-adjoint $*$-algebra isomorphism proves the
-same conclusion for every mutually inverse CPTP pair.\footnote{Formal
+Applying this result to the trace-adjoint $*$-algebra isomorphism proves both
+this block-ideal matching relation and the dimension equality for every
+mutually inverse CPTP pair.\footnote{Formal
 declarations:
 \leanid{MPSTensor.exists_blockEquiv_of_ringEquiv_pi_simple} in
 \doclink{TNLean/Algebra/BlockPermutation};
@@ -326,10 +333,11 @@ The first two steps of the Appendix~C.4 argument are complete:
 The inverse-UCP multiplicative-domain step is also complete: the rectangular
 trace adjoints form mutually inverse $*$-algebra equivalences.  The remaining
 generic simple-summand correspondence is now complete as well: it gives an
-equivalence of the sector index sets and equality of the paired matrix
-dimensions.  It remains to identify each paired component map with unitary
-conjugation and then specialize the resulting formula to the transported
-vertical-sector maps.
+equivalence of the sector index sets, identifies the actual block ideals
+carried into one another by the star-algebra isomorphism, and proves equality
+of the paired matrix dimensions.  It remains to identify each paired
+component map with unitary conjugation and then specialize the resulting
+formula to the transported vertical-sector maps.
 
 \section{Classification}
 
@@ -339,11 +347,13 @@ unitary implementation remains open.}  The two transported maps and their
 square composites are trace preserving under the source tensor hypotheses.
 Their two compositions are identities, and the rectangular trace adjoints
 form mutually inverse $*$-algebra equivalences.  For any such pair, the simple
-summands are matched by an equivalence of the index sets and the paired matrix
-dimensions are equal.  The stronger active-image inclusions remain unproved
-and are not needed for this route.  The blockwise unitary-conjugation formula
-and its specialization to the transported vertical-sector maps remain to be
-proved before the conclusion of Appendix~C.4, line~1997 is complete.
+summands are matched by an equivalence of the index sets, the corresponding
+block ideals are carried into one another by the star-algebra isomorphism,
+and the paired matrix dimensions are equal.  The stronger active-image
+inclusions remain unproved and are not needed for this route.  The blockwise
+unitary-conjugation formula and its specialization to the transported
+vertical-sector maps remain to be proved before the conclusion of
+Appendix~C.4, line~1997 is complete.
 
 \bibliographystyle{alpha}
 \bibliography{references}

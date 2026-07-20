@@ -2824,9 +2824,13 @@ outside the present result.
     \]
     If $T:\mathcal A\to\mathcal B$ and
     $S:\mathcal B\to\mathcal A$ are mutually inverse completely positive
-    trace-preserving maps, then there is an equivalence $\sigma:I\simeq J$
-    such that
+    trace-preserving maps, let $\Phi:\mathcal A\simeq\mathcal B$ be the
+    star-algebra isomorphism obtained from their trace adjoints.  Write $I_i$
+    and $J_j$ for the block ideals of $\mathcal A$ and $\mathcal B$,
+    respectively.  Then there is an equivalence $\sigma:I\simeq J$ such that
     \[
+        \Phi(I_i)=J_{\sigma(i)},
+        \qquad
         D_i=E_{\sigma(i)}
     \]
     for every $i\in I$. This is the simple-summand matching conclusion used
@@ -2841,7 +2845,8 @@ outside the present result.
     By Theorem~\ref{thm:direct_sum_inverse_cptp_star_equiv}, the rectangular
     trace adjoints determine a star-algebra isomorphism between
     $\mathcal A$ and $\mathcal B$. Theorem~\ref{thm:dim_preserved} applied to
-    this isomorphism gives the equivalence~$\sigma$ and the equalities
+    this isomorphism gives the equivalence~$\sigma$, proves that it carries
+    $I_i$ onto $J_{\sigma(i)}$, and gives the equalities
     $D_i=E_{\sigma(i)}$.
 \end{proof}
 

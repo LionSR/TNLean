@@ -30,7 +30,7 @@ noncomputable section
 namespace Matrix
 
 variable {ι κ : Type*}
-variable [Finite ι] [Finite κ]
+variable [Finite ι] [DecidableEq ι] [Finite κ] [DecidableEq κ]
 variable {d : ι → ℕ} {e : κ → ℕ}
 variable [∀ i, NeZero (d i)] [∀ j, NeZero (e j)]
 
@@ -71,11 +71,15 @@ arXiv:1005.4545, Theorem 8, source lines 322--324. -/
 theorem exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix
     (T : (∀ i, Matrix (Fin (d i)) (Fin (d i)) ℂ) ≃⋆ₐ[ℂ]
       (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ)) :
-    ∃ σ : ι ≃ κ, ∀ i, d i = e (σ i) := by
+    ∃ σ : ι ≃ κ,
+      (∀ i, T.toRingEquiv.mapTwoSidedIdeal
+        (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+          MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (σ i)) ∧
+      ∀ i, d i = e (σ i) := by
   classical
   obtain ⟨σ, hσ⟩ :=
     MPSTensor.exists_blockEquiv_of_ringEquiv_pi_simple T.toRingEquiv
-  refine ⟨σ, ?_⟩
+  refine ⟨σ, hσ, ?_⟩
   intro i
   let φ := blockComponentLinearMap T σ i
   have hφBij : Function.Bijective φ := by
@@ -97,7 +101,7 @@ arXiv:1005.4545, Theorem 8, source lines 322--324.
 unitary action within each paired summand. That remaining conclusion is
 documented in `docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`. -/
 theorem exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps
-    [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
+    [Fintype ι] [Fintype κ]
     (T : (∀ i, Matrix (Fin (d i)) (Fin (d i)) ℂ) →ₗ[ℂ]
       (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ))
     (S : (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ) →ₗ[ℂ]
@@ -106,7 +110,12 @@ theorem exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps
     (hTTP : IsTracePreservingBetweenDirectSums T)
     (hSTP : IsTracePreservingBetweenDirectSums S)
     (hST : S.comp T = LinearMap.id) (hTS : T.comp S = LinearMap.id) :
-    ∃ σ : ι ≃ κ, ∀ i, d i = e (σ i) := by
+    let E := (directSumTraceAdjointStarAlgEquiv T S hT hS hTTP hSTP hST hTS).symm
+    ∃ σ : ι ≃ κ,
+      (∀ i, E.toRingEquiv.mapTwoSidedIdeal
+        (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+          MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (σ i)) ∧
+      ∀ i, d i = e (σ i) := by
   exact exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix
     (directSumTraceAdjointStarAlgEquiv T S hT hS hTTP hSTP hST hTS).symm
 
