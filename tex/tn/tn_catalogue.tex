@@ -920,21 +920,6 @@
 
 % ---------- Quantum-channel representation diagrams ----------
 
-% Stinespring dilation T(rho) = tr_E[V rho V^dagger]: the isometry V and its
-% adjoint map the system into a larger space; the environment E is traced out
-% (the loop on the right), leaving the channel output T(rho) on the system legs.
-\TNDeclareDiagram
-    {TNStinespring}
-    {}
-    {display}
-    {compact}
-    {\TNStinespring}
-    {chapter/ch16_channel_representations.tex}{%
-    \begin{TNDiagram}[compact]
-        \TNStinespringMotif
-    \end{TNDiagram}%
-}
-
 % Choi--Jamiolkowski isomorphism tau = (T tensor id)(|Omega><Omega|): the channel
 % T (double layer) has its input legs bent around the maximally entangled pair
 % |Omega|, presenting the map as a matrix on the doubled space.
