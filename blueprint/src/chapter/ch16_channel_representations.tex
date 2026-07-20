@@ -1596,11 +1596,13 @@ a common dilation space.
 \label{sec:trace_pairing_expansion}
 %% =========================================================
 
-% Formula/source: Wolf, Eq. (2.20), defines the transfer coefficients by
-% \widehat T_{\alpha\beta}=\tr(F_\alpha^\dagger T(G_\beta)).
-% In the chapter's same-D trace-self-dual specialization, the input and output
-% bases are identified with {\sigma_i}, and this becomes
-% t_{ij}=\tr(\sigma_i T(\sigma_j)) together with
+% Formula/source: Wolf, Eq. (2.20), writes the transfer coefficients for
+% Hilbert--Schmidt orthonormal bases as
+% \widehat T_{\alpha\beta}=\tr(F_\alpha^\dagger T(G_\beta)).  Identifying the
+% two bases with a Hermitian Hilbert--Schmidt orthonormal basis {\sigma_i}
+% gives t_{ij}=\tr(\sigma_i T(\sigma_j)).  The chapter proves the analogous
+% coordinate expansion more generally for a basis self-dual under the
+% bilinear pairing (A,B)\mapsto\tr(AB):
 % T(\rho)=\sum_{i,j}t_{ij}\tr(\sigma_j\rho)\sigma_i.
 % Index verdict: j is summed in the input coordinate \tr(\sigma_j\rho), while
 % i is summed in the coefficient and output basis element \sigma_i.  This is an
