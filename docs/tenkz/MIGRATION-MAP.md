@@ -118,7 +118,7 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 | TNPEPSNormalRegionT | 2 | ch24_peps_ft_normal_square:95,1217 | `tenkzlattice` + `\tnregion[slot=selected, label=$T$]{…}` | trivial |
 | TNPEPSGaugeVertexAction | 2 | ch24_peps_ft_balanced_edge_scalars:206; ch24_peps_ft_foundations:106 | tenkzfree star with $Z_{e_i}^{\pm1}$ nodes on each leg (FourBondGaugeStar shape) | needs-judgment (free-tier star) |
 | TNLocalEqualityStep | 2 | ch23_algebraic_ft:409,1646 | `\tnpic[physical=up]{\tn{}&\tnX{#1}&\tn[up=$#3$]{}} = \tnpic[physical=up]{\tn{}&\tnX{#2}&\tn[up=$#3$]{}}` | trivial |
-| TNBoundaryRegrow | 2 | ch23_algebraic_ft:407; ch13_parent_hamiltonian_injective_ground_spaces:638 | `\tnpic[physical=up]{\tn[up=$#2$]{}&\tn{}&\tn[up=$#3$]{}&\tnX{#1}}` + length label below | trivial |
+| TNBoundaryRegrow | 2 at census; 1 before this migration | ch23_algebraic_ft:407 (migrated inline in #4403); ch13_parent_hamiltonian_injective_ground_spaces:638 (migrated here) | `[periodic, physical=up]: \tnX{X'} & \tn[up=$\sigma_1$]{A} & \tn{A} & \tndots & \tn[up=$\sigma_{L+1}$]{A}` + an `$L+1$ sites` brace | migrated inline here as the traced word defining $\Gamma_{L+1}(X')$ |
 
 ## 3. cd genre → tenkzcd / `\tntree` (5 entries)
 
