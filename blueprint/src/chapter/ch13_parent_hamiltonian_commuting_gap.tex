@@ -2561,6 +2561,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.loopTensor}
     \lean{MPSTensor.BeigiSectorGraphData.loopCyclicProduct}
     \lean{MPSTensor.BeigiSectorGraphData.loopProductState}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductStateES}
     \leanok
     \uses{def:beigi_sector_graph}
     Let $a\to a$ be a positive loop and choose a nonzero vector
@@ -2572,7 +2573,8 @@ specialization of that Appendix~D definition.
     and set it to zero outside sector $a$.  The physical loop tensor is the
     image of $C_a$ under the one-site unitary of the spatial decomposition.
     Its associated cyclic product pairs the right factor at site $n$ with the
-    left factor at site $n+1$.
+    left factor at site $n+1$.  The corresponding $N$-site product state is
+    denoted by $\Psi_a^{(N)}\in(\mathbb C^d)^{\otimes N}$.
 \end{definition}
 
 \begin{theorem}[Periodic vector of a positive Beigi loop]
@@ -2742,6 +2744,64 @@ specialization of that Appendix~D definition.
     \]
     Theorem~\ref{thm:beigi_complement_product_fixed_vector} now yields
     $\Psi_a\in\ker H_N$.
+\end{proof}
+
+\begin{theorem}[Positive Beigi loops span the parent ground space]
+    \label{thm:beigi_loop_product_states_span_ground_space}
+    \lean{MPSTensor.BeigiSectorGraphData.loopCyclicProduct_ne_zero}
+    \lean{MPSTensor.BeigiSectorGraphData.loopCyclicProduct_inner_eq_zero_of_ne}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductState_ne_zero}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductStateES_ne_zero}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductStateES_inner_eq_zero_of_ne}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductStateES_linearIndependent}
+    \lean{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES}
+    \lean{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSectorData}
+    \leanok
+    \uses{thm:beigi_loop_product_state_ground_state,
+        cor:beigi_parent_ground_space_loop_number}
+    Suppose that the parent-ground-space dimension is eventually constant.
+    For every $N>2$, the positive-loop product states form a nonzero pairwise
+    orthogonal family and
+    \[
+        \operatorname{span}\{\Psi_a^{(N)}:a\to a\text{ is a positive loop}\}
+        =\ker H_N.
+    \]
+    In particular, the same conclusion holds under the BNT and all-chain
+    nearest-neighbor parent-ground-space hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write $\Phi_a^{(N)}$ for the cyclic product in sector coordinates and
+    $\Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}$ for the physical state, where
+    $U$ is the one-site spatial unitary.  Choose $q$ with
+    $\varphi_a(q)\ne0$.  On the constant edge-index configuration,
+    \[
+        \Phi_a^{(N)}(q,\ldots,q)
+        =\prod_{n=0}^{N-1}\varphi_a(q)\ne0.
+    \]
+    Thus $\Phi_a^{(N)}\ne0$, and unitarity gives
+    \[
+        \Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}\ne0.
+    \]
+    If $a\ne b$, then every sector configuration $s$
+    satisfies $\Phi_a^{(N)}(s)=0$ or $\Phi_b^{(N)}(s)=0$, and hence
+    \[
+        \langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle
+        =\sum_s\overline{\Phi_a^{(N)}(s)}\,\Phi_b^{(N)}(s)=0.
+    \]
+    Moreover,
+    \[
+        \langle\Psi_a^{(N)},\Psi_b^{(N)}\rangle
+        =\langle U^{\otimes N}\Phi_a^{(N)},
+            U^{\otimes N}\Phi_b^{(N)}\rangle
+        =\langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle=0.
+    \]
+    Thus the loop states are linearly independent.  Their span is contained in
+    $\ker H_N$ by
+    Theorem~\ref{thm:beigi_loop_product_state_ground_state}.  Its dimension is
+    the number of positive loops, which equals $\dim\ker H_N$ by
+    Corollary~\ref{cor:beigi_parent_ground_space_loop_number}.  The inclusion
+    is consequently an equality.
 \end{proof}
 
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
