@@ -219,29 +219,29 @@ every finite union of injective regions.
                 ports={45:virtual,east:virtual,-45:virtual,north:physical}]
                 {unionLeft}{(-14mm,0)}{A\setminus B}
             \tnput[dot, label pos=east,
-                ports={-135:virtual,-45:virtual,-65:virtual,north:physical}]
-                {unionOverlap}{(0,11mm)}{A\cap B}
+                ports={-135:virtual,-35:virtual,-70:virtual,north:physical}]
+                {unionOverlap}{(-4mm,11mm)}{A\cap B}
             \tnput[dot, label pos=east,
                 ports={west:virtual,135:virtual,-135:virtual,north:physical}]
                 {unionRight}{(14mm,0)}{B\setminus A}
             \tnput[dot, label pos=south,
-                ports={135:virtual,115:virtual,45:virtual,north:physical}]
-                {unionOutside}{(0,-11mm)}{(A\cup B)^c}
+                ports={150:virtual,110:virtual,45:virtual,north:physical}]
+                {unionOutside}{(4mm,-11mm)}{(A\cup B)^c}
 
             \tnput[boundary, ports={south:physical}]
                 {unionLeftPhysical}{(-14mm,7mm)}{}
             \tnput[boundary, ports={south:physical}]
-                {unionOverlapPhysical}{(0,18mm)}{}
+                {unionOverlapPhysical}{(-4mm,18mm)}{}
             \tnput[boundary, ports={south:physical}]
                 {unionRightPhysical}{(14mm,7mm)}{}
             \tnput[boundary, ports={south:physical}]
-                {unionOutsidePhysical}{(0,-4mm)}{}
+                {unionOutsidePhysical}{(4mm,-4mm)}{}
 
             \tnjoin{unionLeft.45}{unionOverlap.-135}
             \tnjoin{unionLeft.east}{unionRight.west}
-            \tnjoin{unionLeft.-45}{unionOutside.135}
-            \tnjoin{unionOverlap.-45}{unionRight.135}
-            \tnjoin{unionOverlap.-65}{unionOutside.115}
+            \tnjoin{unionLeft.-45}{unionOutside.150}
+            \tnjoin{unionOverlap.-35}{unionRight.135}
+            \tnjoin{unionOverlap.-70}{unionOutside.110}
             \tnjoin{unionRight.-135}{unionOutside.45}
             \tnjoin{unionLeft.north}{unionLeftPhysical.south}
             \tnjoin{unionOverlap.north}{unionOverlapPhysical.south}
