@@ -34,6 +34,8 @@ Extracted from various files for reusability.
 - `Matrix.piProduct_mulVec_pureTensor`: a dependent product of matrices acts
   componentwise on a pure tensor
 - `Matrix.reindex_mulVec`: matrix reindexing intertwines matrix--vector action
+- `Matrix.IsHermitian.star_mulVec_dotProduct`: a Hermitian matrix may be moved
+  between the two arguments of the complex dot product
 - `Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one`: determinant
   AM--GM lower bound for the Hilbert--Schmidt trace form
 - `Matrix.PosSemidef.trace_mul_nonneg`: the trace product of two positive
@@ -62,6 +64,15 @@ Extracted from various files for reusability.
 open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius MatrixOrder
 
 namespace Matrix
+
+/-! ## Hermitian matrix action -/
+
+/-- A Hermitian matrix may be moved between the two arguments of the complex
+dot product. -/
+theorem IsHermitian.star_mulVec_dotProduct {n : Type*} [Fintype n]
+    {S : Matrix n n ℂ} (hS : S.IsHermitian) (x y : n → ℂ) :
+    star (S *ᵥ x) ⬝ᵥ y = star x ⬝ᵥ (S *ᵥ y) := by
+  rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
 
 /-! ## Dependent block-diagonal matrices -/
 

@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixAux
+import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Channel.Schwarz.PetzRecoverySupport
 import TNLean.Channel.Schwarz.SSAEqualityDPI
-import TNLean.Analysis.SuperoperatorResolvent
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 import Mathlib.Data.Complex.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Vec
@@ -323,11 +324,6 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n]
 
-private lemma star_mulVec_dotProduct (S : Matrix n n ℂ) (hS : S.IsHermitian)
-    (x y : n → ℂ) :
-    star (S *ᵥ x) ⬝ᵥ y = star x ⬝ᵥ (S *ᵥ y) := by
-  rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
-
 variable [DecidableEq n]
 
 private lemma resolvent_residual_expand (S : Matrix n n ℂ) (hS : S.PosDef)
@@ -341,9 +337,9 @@ private lemma resolvent_residual_expand (S : Matrix n n ℂ) (hS : S.PosDef)
   have hinv' (y : n → ℂ) : S *ᵥ (S⁻¹ *ᵥ y) = y := by
     rw [mulVec_mulVec, mul_inv_of_invertible, one_mulVec]
   simp only [star_sub, sub_dotProduct, mulVec_sub, dotProduct_sub, hinv]
-  rw [star_mulVec_dotProduct S hS.isHermitian]
+  rw [hS.isHermitian.star_mulVec_dotProduct]
   rw [hinv']
-  rw [star_mulVec_dotProduct S hS.isHermitian]
+  rw [hS.isHermitian.star_mulVec_dotProduct]
   ring
 
 private theorem resolvent_residual_identity
@@ -426,7 +422,7 @@ private lemma sqrt_inv_mulVec_normSq (S : Matrix n n ℂ) (hS : S.PosDef)
       Matrix.mul_one]
   have hquad : dotProduct (star r) (S⁻¹ *ᵥ r) =
       dotProduct (star y) y := by
-    rw [← hy, hSinv, hcancel, star_mulVec_dotProduct Q hQherm]
+    rw [← hy, hSinv, hcancel, hQherm.star_mulVec_dotProduct]
     rw [mulVec_mulVec, mul_inv_of_invertible, one_mulVec]
   calc
     ∑ p, ‖((CFC.sqrt S)⁻¹ *ᵥ r) p‖ ^ 2 =
