@@ -3,6 +3,8 @@
 % e.g. two Trotter layers of imaginary-time evolution:
 %
 %   <psi| O_2 O_1 |psi>,   O_k = e^{-delta H}  (one Trotter step)
+%   sum_{s_0,s_1,s_2} \overline{\psi}_{s_2} (O_2)_{s_2,s_1}
+%       (O_1)_{s_1,s_0} \psi_{s_0}                    (at each site)
 %
 % Sheets top-to-bottom: ket, op, op, bra — O_1 is the op sheet under
 % the ket (applied first), O_2 the sheet above the bra.  The three
@@ -10,12 +12,16 @@
 %   interface 2 (ket-O_1):  ket physical index into O_1's input;
 %   interface 1 (O_1-O_2):  the operator product O_2 O_1;
 %   interface 0 (O_2-bra):  O_2's output into the bra.
-% Both op sheets box their sites over the pairing ink; the outer faces
-% keep the role-list default (open window of the boundary doctrine).
+% Thus every site contracts s_0 at ket-O_1, s_1 at O_1-O_2, and s_2 at
+% O_2-bra.  Both op sheets box their sites over this pairing ink.  The
+% lattice frame seals the exterior virtual boundary: suppressed outer
+% virtual stubs are fixed boundary contractions, not physical indices.
+% outer legs=none removes the ket and bra outer physical stubs, so the
+% diagram has no free physical boundary and denotes the displayed scalar.
 \documentclass[border=6pt]{standalone}
 \usepackage{tenkz}
 \begin{document}
 \begin{tenkzlattice}[rows=3, cols=3, sheets={ket, op, op, bra},
-                     frame=oblique]
+                     outer legs=none, frame=oblique]
 \end{tenkzlattice}
 \end{document}
