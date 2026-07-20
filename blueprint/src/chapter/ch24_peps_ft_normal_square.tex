@@ -1166,7 +1166,26 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     Diagrammatically, in the square-lattice proof this is the comparison
     between the source regions $R$ and $S=R\cup\{v\}$:
     \begin{center}
-        \TNPEPSNormalOneSiteSeparation
+        % Source verdict: paper_normal.tex:1519--1544 compares the injective
+        % regions R and S=R\cup\{v\}; their complements are injective as well.
+        % Type verdict: this is a lattice/set schematic, not a tensor
+        % contraction. The marked site v remains present with all its bonds.
+        % Cell-set audit: R=(2-4,2-4)-(4,4) has eight selected cells, while
+        % S=(2-4,2-4) has nine; v=(4,4) is marked in both pictures.
+        % Contraction/boundary audit: there are no tensor contractions and no
+        % tensor boundary signature; the boundary legs are cut lattice edges.
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=$R$]
+                {(2-4,2-4) - (4,4)}
+            \tnsite[role=marked, label=$v$]{(4,4)}
+        \end{tenkzlattice}
+        \qquad
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=$S$]{(2-4,2-4)}
+            \tnsite[role=marked, label=$v$]{(4,4)}
+        \end{tenkzlattice}
+        \qquad
+        $R\subset S=R\cup\{v\}$.
     \end{center}
 \end{definition}
 
