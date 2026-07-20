@@ -765,23 +765,5 @@
         \TN@motiflabelright{tnClientLabel2176}{(4.15,0)}{=T(\rho)}
 }
 
-% TNTwoPointCorrelator
-\newcommand{\TNTwoPointCorrelatorMotif}{%
-        \TNEventInternal{motif|picture=\the\TN@pictureid|name=TNTwoPointCorrelator|kind=correlator}%
-        \TNComponent{coR}{(0,0)}{\rho^R}
-        \TNInsertion{coX}{(1.05,0)}{}
-        \TNMap{coE}{(2.3,0)}{\E_A^n}
-        \TNInsertion{coY}{(3.55,0)}{}
-        \TNVirtualPort{coRTocoX}{coR}{east}\TNVirtualPort{coXTocoR}{coX}{west}\TNConnectVirtual{coRTocoX}{coXTocoR}
-        \TNVirtualPort{coXTocoE}{coX}{east}\TNVirtualPort{coETocoX}{coE}{west}\TNConnectVirtual{coXTocoE}{coETocoX}
-        \TNVirtualPort{coETocoY}{coE}{east}\TNVirtualPort{coYTocoE}{coY}{west}\TNConnectVirtual{coETocoY}{coYTocoE}
-        \TN@motiflabel{tnClientLabel2192}{(1.05,0.28)}{X}
-        \TN@motiflabel{tnClientLabel2193}{(3.55,0.28)}{Y}
-        \TNVirtualPort{coRTrace}{coR}{west}
-        \TNVirtualPort{coYTrace}{coY}{east}
-        \TNTraceVirtualBelow{coRTrace}{coYTrace}
-        \TN@motiflabel{tnClientLabel2197}{(1.8,-1.08)}{\tr}
-}
-
 \makeatother
 \endinput
