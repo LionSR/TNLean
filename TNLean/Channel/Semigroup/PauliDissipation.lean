@@ -269,7 +269,7 @@ theorem expSemigroup_fixes_maximallyMixed (a b : Fin 3) (γa γb : ℝ)
   expSemigroup_apply_eq_self_of_generator_apply_eq_zero _
     (twoPauliGenerator_maximallyMixed a b γa γb) t ht
 
-section AnalyticAssembly
+section ConditionalTraceNormEstimates
 
 variable {State : Type*}
 
@@ -424,6 +424,6 @@ theorem q3_traceNorm_le_rpow_of_logarithmic_time
   rw [hrpowSq] at hsq
   exact (sq_le_sq₀ (Matrix.traceNorm_nonneg _) (Real.rpow_nonneg hnR.le _)).mp hsq
 
-end AnalyticAssembly
+end ConditionalTraceNormEstimates
 
 end PauliDissipation
