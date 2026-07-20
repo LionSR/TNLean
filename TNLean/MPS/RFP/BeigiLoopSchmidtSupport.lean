@@ -213,6 +213,21 @@ theorem minimalLoopCoordinateTensor_sector_apply
   simp [minimalLoopCoordinateTensor, Matrix.mul_apply, loopSchmidtBridge,
     hright, hleft, Matrix.vecMulVec_apply]
 
+/-- Outside the chosen loop sector, every letter of the minimal coordinate
+tensor vanishes.
+
+Source context: Beigi, arXiv:1105.1019v2, Section IV, equation (10) and the
+paragraph following it.  The Schmidt-support refinement is recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
+theorem minimalLoopCoordinateTensor_sector_ne
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    (k : Fin F.sectorCount) (hk : k ≠ l.1)
+    (q : Fin (F.rightDim k)) (a : Fin (F.leftDim k)) :
+    F.minimalLoopCoordinateTensor l (F.sectorEquiv ⟨k, (q, a)⟩) = 0 := by
+  classical
+  ext α β
+  simp [minimalLoopCoordinateTensor, Matrix.mul_apply, loopSchmidtBridge, hk]
+
 /-- Each ambient loop letter is the rectangular Schmidt-support letter
 followed by the left factor of the bond coefficient matrix.
 
