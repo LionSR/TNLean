@@ -2363,6 +2363,56 @@ physical indices, as in
     relabelling.
 \end{proof}
 
+\begin{theorem}[Coefficient comparison for transported vertical sectors]
+    \label{thm:mpdo_transported_vertical_sector_coefficient_comparison}
+    \lean{MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq}
+    \leanok
+    Under the hypotheses and with the notation of Theorem~
+    \ref{thm:mpdo_transported_vertical_sector_unitary_relabeling}, let
+    $\mu_\alpha$ and $\nu_\beta$ be the positive diagonal multiplicity
+    matrices in the one-site and two-site vertical canonical forms, and set
+    \[
+      m_\alpha=\operatorname{tr}(\mu_\alpha),
+      \qquad
+      n_\beta=\operatorname{tr}(\nu_\beta).
+    \]
+    For every horizontal bond matrix $X$ and every sector $\alpha$,
+    \[
+      A^{(2)}_{\sigma(\alpha)}(X)
+      =\frac{m_\alpha}{n_{\sigma(\alpha)}}
+        V_\alpha\,
+        \iota_\alpha\bigl(A^{(1)}_\alpha(X)\bigr)V_\alpha^*.
+    \]
+    Consequently, for every tensor letter $a$,
+    \[
+      A^{(2)}_{\sigma(\alpha),a}
+      =\frac{m_\alpha}{n_{\sigma(\alpha)}}
+        V_\alpha\,\iota_\alpha
+          \bigl(A^{(1)}_{\alpha,a}\bigr)V_\alpha^*.
+    \]
+    This is the coefficient identity in
+    \cite[Appendix~C.4, lines~2001--2008]{Cirac2016MPDO_arXiv}.  It compares
+    the traces of the multiplicity matrices; it does not assert equality of
+    their dimensions or of their individual diagonal entries.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_vertical_bond_contraction_encoded_matrix_unit,
+      lem:mpdo_vertical_sector_retraction,
+      thm:mpdo_transported_vertical_sector_unitary_relabeling,
+      thm:mpdo_transported_vertical_sector_maps}
+    Decompose the weighted contraction family into its individual matrix
+    summands.  At the summand paired with $\alpha$, the unitary formula gives
+    \[
+      m_\alpha V_\alpha
+        \iota_\alpha\bigl(A^{(1)}_\alpha(X)\bigr)V_\alpha^*
+      =n_{\sigma(\alpha)}A^{(2)}_{\sigma(\alpha)}(X).
+    \]
+    Positivity of $\nu_{\sigma(\alpha)}$ makes
+    $n_{\sigma(\alpha)}$ nonzero, so division gives the first identity.
+    Taking $X$ to be a matrix unit gives the tensor-letter identity.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
