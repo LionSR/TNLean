@@ -49,23 +49,6 @@ abstracted — record why, so it is not re-proposed).
   are 30 and 44 declaration/proof lines. Including the dependency-neutral module split,
   the refactor removes 364 source lines overall (865 additions, 1229 deletions).
 
-### invariant-subspace two-block fork — promoted
-- **Pattern:** the general and strict invariant-subspace decompositions repeated the
-  spectral split, block construction, and MPV calculation.
-```
-spectral split → block extraction → MPV calculation
-spectral split → block extraction → MPV calculation → strict bounds
-```
-- **Seen:** 2 full proof paths in
-  `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`.
-- **Abstraction:** the private semantic construction
-  `exists_twoBlock_decomp_of_lowerZero_aux`; the strict public theorem adds only
-  positivity and arithmetic for the strict dimension bounds.
-- **Notes:** Counting proof lines inclusively from `:= by` through the final proof line,
-  the two public implementations had 307 + 243 = 550 lines. The shared construction
-  and two projections have 342 + 4 + 8 = 354 lines, a net reduction of 196 lines
-  (35.6%). Both public theorem statements are unchanged.
-
 ---
 
 ## Completed refactors
@@ -103,6 +86,25 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
+
+### invariant-subspace two-block fork — candidate
+- **Pattern:** the general and strict invariant-subspace decompositions repeated the
+  spectral split, block construction, and MPV calculation.
+```
+spectral split → block extraction → MPV calculation
+spectral split → block extraction → MPV calculation → strict bounds
+```
+- **Seen:** 2 full proof paths in
+  `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`; no further occurrence is
+  currently identified, so this remains below the promotion threshold.
+- **Abstraction:** the implemented private semantic construction
+  `exists_twoBlock_decomp_of_lowerZero_aux`; the strict public theorem adds only
+  positivity and arithmetic for the strict dimension bounds.
+- **Notes:** The local helper is retained because it removes two long proof paths without
+  adding a public interface. Counting proof lines inclusively from `:= by` through the
+  final proof line, the two public implementations had 307 + 243 = 550 lines. The shared
+  construction and two projections have 342 + 4 + 8 = 354 lines, a net reduction of 196
+  lines (35.6%). Both public theorem statements are unchanged.
 
 ### product_span_transport — candidate
 - **Pattern:** transport membership in the span of fixed-length products through
