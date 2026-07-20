@@ -798,4 +798,28 @@ theorem cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector
   obtain ⟨n, hn⟩ := hk
   exact F.cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector k n hn
 
+/-- Deleting a cyclic sector word outside the cyclic-active support remains
+valid after any linear coordinate contraction.
+
+In particular, reindexing a cyclic block and then taking either of the two
+surviving boundary partial traces cannot turn a deleted zero block into a
+nonzero contribution.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617, together with the cyclic sector decomposition at lines 1441--1450.
+
+**Local fix (cyclic-active restriction):** This assertion concerns deletion
+outside the positive-length cyclic support; it does not identify the
+restricted trace matrix with the unreduced Beigi matrix.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem map_cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector
+    (F : PhysicalSectorFactorization K) [NeZero N]
+    (k : Fin N → Fin F.sectorCount)
+    (hk : ¬ ∀ n, F.IsCyclicActiveSector (k n))
+    {V : Type*} [AddCommMonoid V] [Module ℂ V]
+    (f : Matrix (SectorChainFiber F k) (SectorChainFiber F k) ℂ →ₗ[ℂ] V) :
+    f (F.cyclicNeighboringProduct k) = 0 := by
+  rw [F.cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector k hk,
+    map_zero]
+
 end MPOTensor.PhysicalSectorFactorization

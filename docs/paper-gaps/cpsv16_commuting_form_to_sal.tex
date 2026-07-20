@@ -428,12 +428,26 @@ fully traced middle edges.  Their coefficient is
   (T^2)_{q,h}=\sum_{r\in C}
     \tr(\eta_{q,r})\tr(\eta_{r,h}).
 \]
-Thus the proved rank-one statement supplies the separating boundary
-coefficient only in this three-boundary form.  What remains is to express the
-iterated marginal replacement in the physical-sector coordinates, carry the
-cyclic deletion through the two surviving partial traces, extract an explicit
-outer-product factorization of the restricted $\widehat T^2$, and construct
-the direct-sum Markov decomposition.  The present conditional theorem
+The second iteration of the normalized marginal identity is now
+\leanid{MPOTensor.reducedBlockState_add_three_eq_succ_of_isSourceZCL}.
+The coefficient calculation in cyclic-active physical-sector coordinates is
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+sum_cyclicActive_partialTraceRight_threeSiteSectorClosure}.  Its normalized
+form, with each traced edge scaled by $\lambda^{-1}$, is
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two} and yields precisely
+the coefficient $(\widehat T^2)_{q,h}$.  Also,
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+map_cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
+shows that an arbitrary linear coordinate contraction preserves the deletion
+of every vanishing cyclic summand.  Thus the proved rank-one statement
+supplies the separating boundary coefficient in this three-boundary form.
+
+What remains is to transport the normalized marginal equality through the
+complete physical-sector direct sum while retaining the two outer partial
+traces, extract an explicit outer-product factorization of the restricted
+$\widehat T^2$, and construct the direct-sum Markov decomposition.  The
+present conditional theorem
 \leanid{Matrix.eta_fourth_region_trace_formula} still assumes a factorization
 of the one-step matrix and cannot be discharged directly by the new theorem.
 
@@ -500,11 +514,11 @@ implies SAL.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Formalize the second iteration of the ZCL marginal replacement: replace
-the one-site boundary trace by a three-site trace of a chain longer by two
-sites, and identify its fully traced middle coefficient with the restricted
-matrix $\widehat T^2$.  The cyclic-active deletion theorem must also be carried
-through the two adjacent partial traces.
+\item Transport the proved second ZCL marginal replacement through the
+complete physical-sector direct sum.  Retain the two outer partial traces and
+insert the proved middle coefficient $\widehat T^2$.  The general linear
+deletion theorem already shows that discarded cyclic summands remain zero;
+the missing step is the dependent direct-sum reindexing of the full marginal.
 \item Extract an explicit outer-product factorization of
 $\widehat T^2$, separate the two remaining boundary sector sums, and construct
 the quantum Markov decomposition at each admissible cut.

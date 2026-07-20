@@ -27,6 +27,7 @@ decomposition.
 ## Main results
 
 * `MPOTensor.PhysicalSectorFactorization.sum_cyclicActive_trace_mul_trace_eq_pow_two`.
+* `MPOTensor.PhysicalSectorFactorization.sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two`.
 * `MPOTensor.PhysicalSectorFactorization.sum_cyclicActive_partialTraceRight_threeSiteSectorClosure`.
 
 ## Reference
@@ -76,6 +77,41 @@ theorem sum_cyclicActive_trace_mul_trace_eq_pow_two
     exact (hpos a b).isHermitian.trace_eq_ofReal_re
   simp_rw [htrace]
   norm_cast
+
+/-- After rescaling each traced neighboring edge by \(\lambda^{-1}\), the two
+fully traced middle edges give the square of the normalized cyclic-active
+trace matrix:
+\[
+  \sum_{r\in C}\lambda^{-1}\operatorname{tr}(\eta_{q,r})
+    \lambda^{-1}\operatorname{tr}(\eta_{r,h})
+  =\bigl((\lambda^{-1}T_C)^2\bigr)_{q,h}.
+\]
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active restriction):** This is the normalized two-step
+coefficient on the positive-length cyclic support.  It does not identify the
+one-step matrix with its square or with the unreduced Beigi matrix.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (lam : ℝ) (q h : F.CyclicActiveSector) :
+    ∑ r : F.CyclicActiveSector,
+        ((lam⁻¹ : ℝ) : ℂ) * (F.neighboringOperator q r).trace *
+          (((lam⁻¹ : ℝ) : ℂ) * (F.neighboringOperator r h).trace) =
+      ((((lam⁻¹ : ℝ) • F.cyclicActiveSectorTraceMatrix) ^ 2) q h : ℂ) := by
+  classical
+  rw [pow_two, Matrix.mul_apply]
+  have htrace (a b : F.CyclicActiveSector) :
+      (F.neighboringOperator a b).trace =
+        (F.cyclicActiveSectorTraceMatrix a b : ℂ) := by
+    change (F.neighboringOperator a b).trace =
+      ((F.neighboringOperator a b).trace.re : ℂ)
+    exact (hpos a b).isHermitian.trace_eq_ofReal_re
+  simp_rw [htrace, Matrix.smul_apply]
+  push_cast
 
 /-- Summing the partial traces of the three-site closures over the
 intermediate cyclic-active sector leaves the outer boundary operator with
