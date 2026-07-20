@@ -310,42 +310,6 @@
     \end{TNDiagram}%
 }
 
-% Fix (#401): make the relabelling arrow explicit so multi-step
-% permutation diagrams can distinguish \sigma_h from \sigma_g.
-\TNDeclareDiagram
-    {TNPermutationTwistLabeled}
-    {left,right,permutation}
-    {display}
-    {normal}
-    {\TNPermutationTwistLabeled{i}{k}{\sigma}}
-    {chapter/ch12_symmetry.tex}{%
-    \begin{TNEquationRow}[normal]
-        \TNTerm[normal]{%
-            \TNMPSSite{tnL}{at=origin}{}
-            \TNOpenVirtualWest{tnLWest}
-            \TNOpenVirtualEast{tnLEast}
-            \TNOpenPhysicalNorth{tnLKet}
-            \TNLabelAbove{tnL}{#1}}
-        \TNRelation{\xrightarrow{#3}}
-        \TNTerm[normal]{%
-            \TNMPSSite{tnR}{at=origin}{}
-            \TNOpenVirtualWest{tnRWest}
-            \TNOpenVirtualEast{tnREast}
-            \TNOpenPhysicalNorth{tnRKet}
-            \TNLabelAbove{tnR}{#2}}
-    \end{TNEquationRow}%
-}
-
-\TNDeclareDiagram
-    {TNPermutationTwist}
-    {left,right}
-    {display}
-    {normal}
-    {\TNPermutationTwist{i}{k}}
-    {chapter/ch12_symmetry.tex}{%
-    \TNPermutationTwistLabeled{#1}{#2}{\sigma_g}%
-}
-
 \TNDeclareDiagram
     {TNCondCOne}
     {twist,virtual,label}
@@ -564,18 +528,6 @@
     {chapter/ch24_peps_ft_edge_kernel_gauges.tex}{%
     \begin{TNDiagram}[normal]
         \TNPEPSTwoInjectiveGaugeScalarReductionMotif
-    \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
-    {TNPEPSOneVertexComplementComparison}
-    {}
-    {display}
-    {normal}
-    {\TNPEPSOneVertexComplementComparison}
-    {chapter/ch24_peps_ft_region_transfer_covariance.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNPEPSOneVertexComplementComparisonMotif
     \end{TNDiagram}%
 }
 

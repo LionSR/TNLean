@@ -112,7 +112,7 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 | TNGroundSpaceMap | 3 | ch13_parent_hamiltonian_injective_ground_spaces:42,525,546 | `\tnpic[periodic, physical=up]{\tn[up=$#2$]{} & \tn{} & \tndots & \tn[up=$#3$]{} & \tnX{#5}}` + length label | needs-judgment (source draws $X$ on the trace return wire; respell as on-row `\tnX` under `periodic` — same contraction) |
 | TNCondCOne | 3 | ch12_symmetry:757,838,1184 | `\tnpic[rows={op,ket}]{\tn{#1}\\ \tn[…]{A}} = \tnpic[physical=up]{\tnX{#2} & \tn{A} & \tnX{#2^\dagger}}` | trivial |
 | TNCondCTwo | 3 | ch12_symmetry:770,798,861 | `\tnpic[sandwich]{\tnX{#1} & \tn{A}\\ \tnX{#1^\dagger} & \tn*{A}} = \tnpic[sandwich]{\tn{A} & \tnX{#1}\\ \tn*{A} & \tnX{#1^\dagger}}` | trivial |
-| TNPermutationTwistLabeled | 2 | ch12_symmetry:591,593 | `\tnpic[physical=up]{\tn[up=$#1$]{A}} \xrightarrow{#3} \tnpic[physical=up]{\tn[up=$#2$]{A}}` | trivial |
+| TNPermutationTwistLabeled | 2 before this migration | ch12_symmetry:591,593 | one inline three-panel chain `i \xrightarrow{\sigma_h} \sigma(h)(i) \xrightarrow{\sigma_g} \sigma(g)(\sigma(h)(i))`, with each index on the open upper physical stub | migrated inline in PR #4505; catalogue wrapper removed |
 | TNPEPSVertexInjectivityMap | 2 | ch24_peps_ft_foundations:224; ch24_peps_ft:43 | tenkzfree 5-leg star (`ports={…:virtual, north east:physical}`) `\longmapsto` math vector | needs-judgment (free-tier star) |
 | TNPEPSNormalRegionsRS | 2 | ch24_peps_ft_normal_square:91,1213 | two `tenkzlattice` panels: `\tnregion[slot=selected, label=$R$]{…}` / `[slot=secondary, label=$S$]{…}` | trivial |
 | TNPEPSNormalRegionT | 2 | ch24_peps_ft_normal_square:95,1217 | `tenkzlattice` + `\tnregion[slot=selected, label=$T$]{…}` | trivial |
@@ -214,7 +214,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 |---|---|---|---|
 | TNPhysicalRealization | ch23_algebraic_ft:188 | `\tnpic[physical=up]{\tn{A}&\tnX{X}} = \tnpic[rows={op,ket}]{\tn{O_A(X)}\\ \tn{A}}` | trivial |
 | TNLinearTwist | ch12_symmetry:153 | `[rows={op:none,ket}]: \tn[role=operator,up=$i$]{U(g)} \\ \tn{A}` | trivial (`op:none` is required because $U(g)$ has no virtual legs) |
-| TNPermutationTwist | ch12_symmetry:549 | fold into the `\tndefine`d PermutationTwistLabeled with $\sigma_g$ | trivial |
+| TNPermutationTwist | ch12_symmetry:549 | two inline one-site panels with upper physical labels $i$ and $\sigma(g)(i)$, joined by $\xrightarrow{\sigma_g}$ | migrated inline in PR #4505; catalogue wrapper removed |
 | TNTwistedTransfer | ch12_symmetry:616 | `[rows={ket,op,bra}, west label=$X$, east label=$\mathcal E_u(X)$]: \tn{A^{(n)}} \\ \tn{u} \\ \tn*{A^{(n')}}` | trivial |
 | TNStringOrderParameter | ch12_symmetry:634 | `[rows={ket,op,bra}]` word with `\tnghost` end cells in the op row, `\tndots`, length brace $L$ | trivial |
 | TNInternalTraceInsertion | ch23_algebraic_ft:372 | `[periodic, physical=up]: \tn[up=$i$]{} & \tnX{X} & \tn[up=$k$]{}` | trivial |
@@ -230,7 +230,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | TNPEPSPhysicalToVirtualInsertion | ch24_peps_ft_edge_kernel_gauges:372 | three strips ($O_1$ physical, $O_2$ physical, $\Longrightarrow$ $W$ on bond) | **needs-new-key K6** / free fallback |
 | TNPEPSEdgeInsertionEquality | ch24_peps_ft_edge_kernel_gauges:903 | five-site pentagon patch with $X$ on an edge, `=`, relabelled copy | needs-judgment (free-tier graph + K7 if regions kept) |
 | TNPEPSTwoInjectiveTensorInsertionComparison | ch24_peps_ft_edge_kernel_gauges:1293 | two-site pair with $X$ insertion `=` $B$-copy | needs-judgment (free/lattice strip) |
-| TNPEPSOneVertexComplementComparison | ch24_peps_ft_region_transfer_covariance:279 | pure 1D rows: `\tnpic[physical=up]{\tn{A_R}&\tn{A_v}} = \tnpic{\tn{A_S}} \propto \tnpic{\tn{\widetilde B_S}} = \tnpic{\tn{\widetilde B_R}&\tn{\widetilde B_v}}` | trivial |
+| TNPEPSOneVertexComplementComparison | 1 before this migration; ch24_peps_ft_region_transfer_covariance:321 | Section 4 normal-region comparison for $R\subset S=R\cup\{v\}$: `\tnpic[physical=up]{\tn{A_R}&\tn{A}} = \tnpic[physical=up]{\tn{A_S}} \propto \tnpic[physical=up]{\tn{\widetilde B_S}} = \tnpic[physical=up]{\tn{\widetilde B_R}&\tn{\widetilde B}}` | migrated inline in PR #4505; catalogue wrapper and motif removed |
 | TNPEPSBlockedMiddleLocalGaugeFormula | ch24_peps_ft_edge_kernel_gauges:815 | gauge-dressed site equation (peps-gauge family) → tenkzfree composition | needs-judgment |
 | TNPEPSLocalGaugeExtraction | ch24_peps_ft_edge_kernel_gauges:941 | gauge-extraction equation → tenkzfree composition | needs-judgment |
 | TNPEPSGlobalConsistency | ch24_peps_ft_edge_kernel_gauges:975 | two-site consistency relation (EdgeGaugeOrientation shape) → reuse that `\tndefine`d free body with different scalars | needs-judgment |
