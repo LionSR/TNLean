@@ -25,6 +25,8 @@ reference matrix.
   of a positive-definite matrix is its ordinary inverse square root.
 * `Matrix.PosSemidef.supportInvSqrt_posSemidef`: the support inverse square
   root is positive semidefinite.
+* `Matrix.PosSemidef.supportInvSqrt_sq_mul_self`: the squared support inverse
+  square root is a generalized inverse on the support.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: scaling by a positive real scalar.
 * `Matrix.PosSemidef.supportInvSqrt_kronecker_one`: compatibility with the
   unital left tensor embedding.
@@ -209,6 +211,41 @@ theorem PosSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt
           simpa [f, hi] using congrArg Complex.ofReal hreal
       unfold Matrix.IsHermitian.supportProj
       rw [Matrix.IsHermitian.cfc, Unitary.conjStarAlgAut_apply, hdiag]
+
+/-- The square of the support inverse square root is a generalized inverse:
+multiplying it by the original matrix gives the support projection.
+
+This is the generalized-inverse convention of Jenčová--Ruskai,
+arXiv:0903.2895v4, lines 255--261. -/
+theorem PosSemidef.supportInvSqrt_sq_mul_self
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInvSqrt * hρ.supportInvSqrt * ρ =
+      hρ.isHermitian.supportProj := by
+  have hcomm : hρ.supportInvSqrt * ρ = ρ * hρ.supportInvSqrt := by
+    let f : ℝ → ℝ := fun x ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0
+    change hρ.isHermitian.cfc f * ρ = ρ * hρ.isHermitian.cfc f
+    have hid := hρ.isHermitian.cfc_id
+    calc
+      hρ.isHermitian.cfc f * ρ =
+          hρ.isHermitian.cfc f * hρ.isHermitian.cfc id :=
+        congrArg (hρ.isHermitian.cfc f * ·) hid.symm
+      _ = hρ.isHermitian.cfc (fun x ↦ f x * id x) :=
+        (hρ.isHermitian.cfc_mul f id).symm
+      _ = hρ.isHermitian.cfc (fun x ↦ id x * f x) := by
+        congr 1
+        funext x
+        ring
+      _ = hρ.isHermitian.cfc id * hρ.isHermitian.cfc f :=
+        hρ.isHermitian.cfc_mul id f
+      _ = ρ * hρ.isHermitian.cfc f :=
+        congrArg (· * hρ.isHermitian.cfc f) hid
+  calc
+    hρ.supportInvSqrt * hρ.supportInvSqrt * ρ =
+        hρ.supportInvSqrt * (hρ.supportInvSqrt * ρ) := Matrix.mul_assoc ..
+    _ = hρ.supportInvSqrt * (ρ * hρ.supportInvSqrt) := by rw [hcomm]
+    _ = hρ.supportInvSqrt * ρ * hρ.supportInvSqrt := (Matrix.mul_assoc ..).symm
+    _ = hρ.isHermitian.supportProj :=
+      hρ.supportInvSqrt_mul_self_mul_supportInvSqrt
 
 section PartialTrace
 

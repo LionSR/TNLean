@@ -404,6 +404,7 @@ The orientation of the vectorized restriction is fixed by
 Here the generalized inverse is the square of the support inverse square root.
 \footnote{Formal declarations:
 \leanid{Matrix.one_kronecker_transpose_mulVec_vec_transpose},
+\leanid{Matrix.supportRelativeModular_sourceB_solution},
 \leanid{Matrix.supportRelativeModular_sqrt_mulVec_vec_one} and
 \leanid{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq} in
 \path{TNLean/Channel/Schwarz/SupportRelativeModular.lean}.}
@@ -415,6 +416,16 @@ $\rho=\sigma$ is a rank-one maximally entangled state, equality under partial
 trace is automatic, whereas the comparison pair formed from its marginal is
 full rank.  Thus the ambient resolvent equality is not a consequence of the
 singular equality theorem.
+
+The canonical source-side projected resolver is now known to solve its
+singular left--right equation: after projection by
+$\mathbf 1\otimes P_B^{\mathsf T}$, multiplication by
+$A\otimes\mathbf 1+t(\mathbf 1\otimes B^{\mathsf T})$ gives
+$\operatorname{vec}(B^{\mathsf T})$.  This uses only the generalized-inverse
+identity $(B^{-1/2}_{\mathrm{supp}})^2B=P_B$ and does not supply equality
+with the comparison resolver.  The remaining step is the support-domain
+relative-entropy defect identity and its zero-defect consequence, tracked in
+issue~\#4435.
 
 The kernel inclusion belongs to the preceding source theorem that must derive
 the support-restricted common resolvents from equality in data processing.  That
