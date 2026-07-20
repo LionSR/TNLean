@@ -337,7 +337,10 @@ stated at line~1997.
 exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps}
 in \doclink{TNLean/Channel/FixedPoint/DirectSumBlockPermutation}, and
 \leanid{MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv} in
-\doclink{TNLean/MPS/MPDO/VerticalSectorRelabeling}.}
+\doclink{TNLean/MPS/MPDO/VerticalSectorRelabeling}, and
+\leanid{MPOTensor.%
+transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq} in
+\doclink{TNLean/MPS/MPDO/VerticalSectorCoefficientComparison}.}
 
 \section{Elimination plan}
 
@@ -358,16 +361,28 @@ well: they give an equivalence of the sector index sets, identify the actual
 block ideals carried into one another, prove equality of the paired matrix
 dimensions, and implement every retained paired component by unitary
 conjugation.  The specialization to both original transported maps, with the
-same relabelling and the same unitaries, is also complete.  The remaining
-calculation begins at line~2001: it compares
-the multiplicity factors and yields the coefficient identity at line~2008.
+same relabelling and the same unitaries, is also complete.  Finally, applying
+the transported refinement map to the weighted contraction family gives
+\[
+  m_\alpha V_\alpha\iota_\alpha(M_\alpha(X))V_\alpha^*
+  =n_{\sigma(\alpha)}A_{\sigma(\alpha)}(X).
+\]
+Since the positive multiplicity matrix $\nu_{\sigma(\alpha)}$ has nonzero
+trace, cancellation proves
+\[
+  A_{\sigma(\alpha)}(X)
+  =\frac{m_\alpha}{n_{\sigma(\alpha)}}
+    V_\alpha\iota_\alpha(M_\alpha(X))V_\alpha^*,
+\]
+and evaluation on matrix units gives the tensor-letter identity at line~2008.
+This comparison concerns the traces of the multiplicity matrices.  It does
+not identify their dimensions, the matrices themselves, or their individual
+diagonal entries.
 
 \section{Classification}
 
-\textbf{Verdict: transported-map invertibility, the inverse-UCP
-multiplicative-domain step, generic simple-summand matching, and generic
-unitary implementation are closed; the two transported maps have the
-mutually inverse blockwise-unitary forms with the same witnesses.}  The two transported maps and their
+\textbf{Verdict: the Appendix~C.4 argument through the coefficient identity at
+line~2008 is closed.}  The two transported maps and their
 square composites are trace preserving under the source tensor hypotheses.
 Their two compositions are identities, and the rectangular trace adjoints
 form mutually inverse $*$-algebra equivalences.  For any such pair, the simple
@@ -375,9 +390,12 @@ summands are matched by an equivalence of the index sets, the corresponding
 block ideals are carried into one another by the star-algebra isomorphism,
 the paired matrix dimensions are equal, and the induced map on each matched
 summand is unitary conjugation.  The corresponding formulas now hold for
-$\widetilde T$ and $\widetilde S$ themselves.  The stronger active-image inclusions remain unproved
-and are not needed for this route.  No equality of multiplicities or weights,
-and no coefficient formula from Appendix~C.4, lines~2001--2008, is asserted.
+$\widetilde T$ and $\widetilde S$ themselves.  Their action on the weighted
+contraction family gives the trace-ratio coefficient formula and its
+tensor-letter specialization.  The stronger active-image inclusions remain
+unproved and are not needed for this route.  No equality of multiplicities,
+multiplicity matrices, or individual weights is asserted, and no conclusion
+after Appendix~C.4, line~2008 is included.
 
 \bibliographystyle{alpha}
 \bibliography{references}
