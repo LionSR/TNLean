@@ -44,7 +44,12 @@ variable {d D : ℕ} {K : MPOTensor d D}
 /-- The trace of a positive neighboring operator is the complexification of
 the corresponding cyclic-active trace-matrix entry.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455.
+
+**Local fix (cyclic-active restriction):** This equality is recorded on the
+positive-length cyclic support used in the three-boundary coefficient.  It
+does not identify the restricted trace matrix with the unreduced Beigi
+matrix.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix
     (F : PhysicalSectorFactorization K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
