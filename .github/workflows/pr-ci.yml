@@ -1,7 +1,7 @@
 name: PR CI
 
 # The pull-request pipeline: Lean build + style lint, blueprint lint and
-# Lean-blueprint sync, and the oversized-file guard, formerly
+# Lean-blueprint sync, and the Lean module-policy guards, formerly
 # lean_action_ci.yml, lint-blueprint.yml, and oversized-lean-files.yml.
 # One workflow means one completion event for the auto-fix dispatcher and
 # per-job change gating: Lean-only changes skip the TeX pipeline, and
@@ -18,6 +18,11 @@ on:
       - 'lake-manifest.json'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
+      - 'scripts/check_numbered_lean_files.py'
+      - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/test_lean_file_policies.py'
+      - 'docs/ci-automation.md'
+      - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
       - 'blueprint/src/**'
       - 'tex/tn/**'
@@ -46,6 +51,11 @@ on:
       - 'lake-manifest.json'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
+      - 'scripts/check_numbered_lean_files.py'
+      - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/test_lean_file_policies.py'
+      - 'docs/ci-automation.md'
+      - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
       - 'blueprint/src/**'
       - 'tex/tn/**'
@@ -93,6 +103,7 @@ jobs:
       pull-requests: read
     outputs:
       lean: ${{ steps.filter.outputs.lean }}
+      module_policy: ${{ steps.filter.outputs.module_policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
       workflow: ${{ steps.filter.outputs.workflow }}
     steps:
@@ -107,6 +118,12 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
+            module_policy:
+              - 'scripts/check_numbered_lean_files.py'
+              - 'scripts/check_oversized_lean_files.py'
+              - 'scripts/test_lean_file_policies.py'
+              - 'docs/ci-automation.md'
+              - 'docs/CONTRIBUTING.md'
             blueprint:
               - 'blueprint/src/**'
               - 'tex/tn/**'
@@ -164,28 +181,66 @@ jobs:
           key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
 
   file-length:
-    name: Check Lean file lengths
+    name: Check Lean module policies
     needs: changes
     if: |
-      !cancelled() && github.event_name == 'pull_request' &&
-      (needs.changes.outputs.lean == 'true' || needs.changes.outputs.workflow == 'true')
+      !cancelled() && (
+        github.event_name != 'pull_request' ||
+        needs.changes.outputs.lean == 'true' ||
+        needs.changes.outputs.module_policy == 'true' ||
+        needs.changes.outputs.workflow == 'true'
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
-      # New oversized files (any Lean file over 1000 lines) fail the check.
+      - name: Test Lean module-policy checkers
+        run: PYTHONPATH=scripts python3 scripts/test_lean_file_policies.py -v
+
+      # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
+      # exemption is accepted only while its uncommented content is import-only.
       - name: Run oversized-file guard
         run: >
           python3 scripts/check_oversized_lean_files.py
           --root .
+          --import-only-aggregator TNLean.lean
+
+      - name: Fetch pull-request base for the debt ratchet
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin \
+            "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+
+      - name: Reject new numbered-sequel modules (pull request)
+        if: github.event_name == 'pull_request'
+        run: >
+          python3 scripts/check_numbered_lean_files.py
+          --root .
+          --base-ref "origin/${{ github.event.pull_request.base.ref }}"
+
+      - name: Reject new numbered-sequel modules (push)
+        if: github.event_name == 'push'
+        run: >
+          python3 scripts/check_numbered_lean_files.py
+          --root .
+          --base-ref "${{ github.event.before }}"
+
+      - name: Reject new numbered-sequel modules (manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: >
+          python3 scripts/check_numbered_lean_files.py
+          --root .
+          --base-ref HEAD^
 
   blueprint:
     name: Check blueprint compiles without errors
