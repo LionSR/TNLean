@@ -362,25 +362,6 @@ private theorem loopProductState_eq_sitewisePhysicalMatrix_mulVec
         (F.loopCyclicProduct l) := by
   rfl
 
-private theorem sitewisePhysicalMatrix_conjTranspose_mul_self
-    (F : BeigiSectorGraphData A) (N : ℕ) :
-    (MPOTensor.sitewisePhysicalMatrix F.unitary N)ᴴ *
-        MPOTensor.sitewisePhysicalMatrix F.unitary N = 1 := by
-  have hUstarU : F.unitaryᴴ * F.unitary = 1 := by
-    simpa only [Matrix.star_eq_conjTranspose] using
-      Unitary.star_mul_self_of_mem F.unitary_mem
-  calc
-    (MPOTensor.sitewisePhysicalMatrix F.unitary N)ᴴ *
-        MPOTensor.sitewisePhysicalMatrix F.unitary N =
-        MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N *
-          (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N)ᴴ := by
-      simp only [MPOTensor.sitewisePhysicalMatrix_conjTranspose,
-        Matrix.conjTranspose_conjTranspose]
-    _ = MPOTensor.sitewisePhysicalMatrix (F.unitaryᴴ * F.unitary) N := by
-      rw [MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose]
-      simp only [Matrix.conjTranspose_conjTranspose]
-    _ = 1 := by rw [hUstarU, MPOTensor.sitewisePhysicalMatrix_one]
-
 /-- A positive-loop product state is nonzero at every positive chain length.
 
 Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
@@ -389,7 +370,10 @@ theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
     F.loopProductState (N := N) l ≠ 0 := by
   classical
   let W := MPOTensor.sitewisePhysicalMatrix F.unitary N
-  have hWstarW : Wᴴ * W = 1 := F.sitewisePhysicalMatrix_conjTranspose_mul_self N
+  have hWstarW : Wᴴ * W = 1 := by
+    apply MPOTensor.sitewisePhysicalMatrix_isometry
+    simpa only [Matrix.star_eq_conjTranspose] using
+      Unitary.star_mul_self_of_mem F.unitary_mem
   rw [F.loopProductState_eq_sitewisePhysicalMatrix_mulVec l]
   intro hzero
   apply F.loopCyclicProduct_ne_zero (N := N) l
@@ -420,7 +404,10 @@ theorem loopProductStateES_inner_eq_zero_of_ne
       (F.loopProductStateES (N := N) m) = 0 := by
   classical
   let W := MPOTensor.sitewisePhysicalMatrix F.unitary N
-  have hWstarW : Wᴴ * W = 1 := F.sitewisePhysicalMatrix_conjTranspose_mul_self N
+  have hWstarW : Wᴴ * W = 1 := by
+    apply MPOTensor.sitewisePhysicalMatrix_isometry
+    simpa only [Matrix.star_eq_conjTranspose] using
+      Unitary.star_mul_self_of_mem F.unitary_mem
   rw [loopProductStateES, loopProductStateES]
   change inner ℂ (WithLp.toLp 2 (F.loopProductState l))
     (WithLp.toLp 2 (F.loopProductState m)) = 0
