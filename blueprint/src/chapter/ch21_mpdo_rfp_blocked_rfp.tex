@@ -2109,6 +2109,52 @@ physical indices, as in
     the Kadison--Schwarz inequality applies in each simple summand.
 \end{proof}
 
+\begin{theorem}[Transported vertical-sector composites are identities]
+    \label{thm:mpdo_transported_vertical_sector_composites_identity}
+    \lean{MPOTensor.transportedVerticalSector_composites_eq_id}
+    \leanok
+    \uses{thm:mpdo_transported_vertical_sector_composites_trace_preserving,
+      thm:mpdo_transported_vertical_sector_composites_schwarz,
+      lem:mpdo_transported_vertical_sector_fixed_generators,
+      thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
+      thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity}
+    Under precisely the hypotheses of
+    Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
+    the transported maps satisfy
+    \[
+      \widetilde S\circ\widetilde T
+        =\operatorname{id}_{\mathcal A_1},
+      \qquad
+      \widetilde T\circ\widetilde S
+        =\operatorname{id}_{\mathcal A_2}.
+    \]
+    Thus $\widetilde T$ and $\widetilde S$ are mutually inverse.  This is the
+    identity-composition conclusion of
+    \cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each square composite $F$, positivity follows from positivity of the
+    two transported maps.  Theorems~
+    \ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    and~\ref{thm:mpdo_transported_vertical_sector_composites_schwarz} give
+    trace preservation and the Schwarz inequality for $F^*$, respectively.
+    Lemma~\ref{lem:mpdo_transported_vertical_sector_fixed_generators} gives
+    \[
+      F(V_i(X))=V_i(X)
+    \]
+    for every bond matrix $X$.  Theorem~
+    \ref{thm:mpdo_vertical_bond_contractions_generate_sector_algebra} gives a
+    positive integer $L_i$ such that
+    \[
+      C_{L_i}(V_i)=\mathcal A_i.
+    \]
+    Applying Theorem~
+    \ref{thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity} first to
+    $F=\widetilde S\circ\widetilde T$ and then to
+    $F=\widetilde T\circ\widetilde S$ proves the two identities.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
