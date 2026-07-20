@@ -1,0 +1,449 @@
+\documentclass[class=article,11pt,a4paper,crop=false]{standalone}
+\input{../preamble.tex}
+
+\begin{document}
+
+% Q1: Weighted lowering under arbitrary drive
+%======================================================================
+\section{Q1: Weighted lowering under arbitrary drive --- resolved}\label{sec:q1}
+%======================================================================
+
+\subsection{Background: Hamiltonian-independent contractivity}\label{sec:hic-background}
+
+This background also applies to Q2
+(\sharedref{Q2 in the primary-list document}{sec:q2}), which states the
+Wolff--Malz--Trivedi conjecture discussed in items (b)--(d) below.
+
+Spohn's theorem \cite{Spohn1977} and the Frigerio--Evans theory
+\cite{Frigerio1978,Evans1977} give algebraic criteria for irreducibility and
+relaxation in the time-independent problem. In the present notation, a
+standard sufficient condition is
+\begin{equation}
+  \Alg\!\left(\{L_\alpha\}_\alpha\cup\{\kappa\}\right)=\M_d,
+  \qquad
+  \kappa=iH+\frac12\sum_\alpha L_\alpha^\dagger L_\alpha.
+\end{equation}
+TNLean formalizes the corresponding condition excluding nontrivial reducing
+subspaces. Here the Hamiltonian is instead an adversarial, time-dependent
+drive.
+
+Wolff, Malz, and Trivedi \cite{Wolff2026Contractivity}
+(arXiv:2602.16067, February 2026, unpublished as of July 2026) introduce the
+HIC notion of
+\sharedref{the HIC definition in the primary-list introduction}{def:hic}.
+For a dissipator $\Dd=\sum_j\Dd_{L_j}$ on $\C^d$, they prove:
+\begin{enumerate}[label=(\alph*)]
+	\item \emph{Necessity:} $\Alg(\{L_j,L_j^\dagger\}_j)=\M_d$ is necessary for
+	      HIC.
+	\item \emph{Unital dissipators:} if the total dissipator $\Dd$ is unital
+	      (in particular, if every $\Dd_{L_j}$ is unital, as for Hermitian
+	      jump operators), HIC is equivalent to
+	      $\Alg(\{L_j,L_j^\dagger\}_j)=\M_d$, or equivalently to $\Dd$ alone having
+	      the maximally mixed state as its unique fixed point.
+	\item \emph{$d=2$:} HIC holds if and only if
+	      $\Alg(\{L_j,L_j^\dagger\}_j)=\M_2$.
+	\item \emph{$d=3$:} the stronger condition $\Alg(\{L_j\}_j)=\M_3$, without
+	      adjoining adjoints, is sufficient.
+	\item \emph{Counterexamples:} an Evans-irreducible dissipator on
+	      $\C^2\otimes\C^2$, with jump operators
+	      $(\sigma^z+2\sigma^-)\otimes\id$ and
+	      $\ketbra11\otimes\sigma^\pm$, loses its unique-fixed-point property after
+	      adding the constant Hamiltonian $H=\sigma^y\otimes\id$. They also give a
+	      rapidly varying drive that defeats contractivity despite a uniformly
+	      gapped instantaneous spectrum. Thus the standard Davies/Lindblad
+	      irreducibility condition
+	      $\Alg(\{L_\alpha\}\cup\{\sum_\alpha L_\alpha^\dagger L_\alpha\})=\M_d$
+	      does not imply HIC.
+\end{enumerate}
+For ladder jumps, their spectral criterion proves HIC for uniform and
+angular-momentum ladders through $d=5$, for the harmonic-oscillator ladder
+through $d=3$, and, when $d=3$, for
+$L=\ketbra01+\alpha\ketbra12$ whenever
+$\alpha\in(\sqrt3-\sqrt2,\sqrt3+\sqrt2)$. Arbitrary positive weights in
+general dimension are not covered by these results.
+
+For comparison, under their stated recurrence and analyticity hypotheses,
+Yoshida and Hamazaki \cite{Yoshida2026Steady} give algebraic criteria for
+steady-state uniqueness under quasiperiodic drives with Hermitian jump
+operators. Their single-qubit example
+($H_t=\tfrac\omega2\sigma^z$,
+$L_t=\sqrt\kappa(\sigma^x\cos\omega t+\sigma^y\sin\omega t)$) has full
+instantaneous Spohn algebra at every time but a nonunique steady state, showing
+that instantaneous algebraic conditions do not suffice. Di~Meglio et al.\
+\cite{DiMeglio2024Relaxation} give quantitative relaxation criteria for fixed,
+known time-dependent generators.
+
+\subsection{The problem}
+
+We use the convention
+$\Dd_L(X)=LXL^\dagger-\tfrac12\{L^\dagger L,X\}$, write
+$\M_d=M_d(\C)$, and let $\ket0,\dots,\ket{d-1}$ be the standard orthonormal
+basis of $\C^d$.
+
+\begin{problem}[Q1: weighted lowering under arbitrary drive]\label{prob:lowering}
+	On $\C^d$ with basis $\ket0,\dots,\ket{d-1}$, let
+	\begin{equation}
+		L=\sum_{i=1}^{d-1}\sqrt{\gamma_i} \ketbra{i-1}{i},
+		\qquad \gamma_i>0.
+		\label{eq:q1-lowering}
+	\end{equation}
+	Characterize the drives $H(t)$ for which the propagator of
+	$\Ld(t)=-i[H(t),\cdot]+\Dd_L$ sends every traceless $X$ to $0$ in trace
+	norm, and determine for which $\{\gamma_i\}$ this holds for every locally
+	integrable drive $H(t)$.
+\end{problem}
+
+\begin{remark}[Corrected transcription]\label{rem:q1-correction}
+	An earlier transcription used the diagonal terms $\ketbra{i}{i}$. Rahul
+	Trivedi clarified that the intended jump is the lowering operator
+	\eqref{eq:q1-lowering}, with transitions
+	$\ket{i}\mapsto\ket{i-1}$. Thus $\Dd_L$ describes weighted amplitude damping,
+	not pure dephasing, and the diagonal-kernel objection does not apply.
+	Because every weight is nonzero, $L$ and $L^\dagger$ generate $\M_d$, so the
+	necessary algebraic condition of \cite{Wolff2026Contractivity} holds. For
+	$d=2$, item~(c) above already gives HIC. The theorem below treats every
+	$d\ge2$ with constants uniform over the drive.
+\end{remark}
+
+\subsection{Resolution}\label{sec:q1-resolution}
+
+\begin{definition}[Contractivity and HIC]\label{def:q1-hic}
+	Let $\mathcal E^H_{t,s}$ be the propagator of
+	$\Ld^H_t=-i[H(t),\cdot\,]+\Dd_L$, where $H=H^\dagger$ has locally integrable
+	matrix entries. For fixed $H$, the evolution is \emph{exponentially
+		contractive} if there are $K_H,\gamma_H>0$ such that, for every pair of
+	states $\rho,\sigma$ and all $t\ge s\ge0$,
+	\begin{equation}
+		\norm{\mathcal E^H_{t,s}(\rho-\sigma)}_1
+		\le K_H e^{-\gamma_H(t-s)}\norm{\rho-\sigma}_1.
+		\label{eq:q1-contractivity}
+	\end{equation}
+	The dissipator $\Dd_L$ is \emph{Hamiltonian-independently contractive} (HIC)
+	if such $K_H,\gamma_H$ exist for every
+	$H=H^\dagger\in L^1_{\mathrm{loc}}$. As in
+	\sharedref{the Q2 definition}{def:q2-hic}, one may equivalently quantify
+	\eqref{eq:q1-contractivity} over all nonzero traceless Hermitian matrices:
+	for the Jordan decomposition $X=X_+-X_-$, such an $X$ equals
+	$c(\rho-\sigma)$ with
+	$c=\norm{X}_1/2$, $\rho=X_+/c$, and $\sigma=X_-/c$.
+\end{definition}
+
+\begin{theorem}[Resolution of Q1]\label{thm:q1-main}
+	Fix $d\ge2$ and let $L$ be the weighted lowering operator
+	\eqref{eq:q1-lowering}.
+	\begin{enumerate}[label=\textup{(\roman*)}]
+		\item \textup{(Positive rates are sufficient.)} If $\gamma_i>0$ for every
+		      $i$, there are constants $K\ge1$ and $\gamma>0$, depending only on
+		      $d$ and on the rate vector
+		      $(\gamma_1,\dots,\gamma_{d-1})$, such that for every
+		      $H=H^\dagger\in L^1_{\mathrm{loc}}$, every nonzero traceless
+		      Hermitian $X$, and all $t\ge s\ge0$,
+		      \begin{equation}
+			      \norm{\mathcal E^H_{t,s}(X)}_1
+			      \le K e^{-\gamma(t-s)}\norm{X}_1.
+			      \label{eq:q1-uniform-bound}
+		      \end{equation}
+		      The same bound with $K$ replaced by $2K$ holds for every traceless
+		      matrix $X\in\M_d$, not necessarily Hermitian. In particular,
+		      $\Dd_L$ is HIC.
+		\item \textup{(Every edge is necessary.)} If the rates are only required
+		      to be nonnegative and
+		      $\gamma_{i_0}=0$ for some $i_0\in\{1,\dots,d-1\}$, then
+		      $\Dd_L$ is not HIC: already the undriven generator $(H\equiv0)$ has
+		      two orthogonal dark states whose traceless difference is a
+		      stationary fixed point.
+	\end{enumerate}
+	Thus, among nonnegative rate vectors, positivity of every edge is necessary
+	and sufficient for HIC.
+\end{theorem}
+
+Part~(i) uses the relaxed-control compactness argument from Q2 in
+\sharedref{the Q2 context file}{sec:q2}. The required definitions and lemmas
+are recalled below. The remaining point is specific to a single lowering
+jump: $\Alg(\{L\})\ne\M_d$ (see \cref{rem:q1-wmt}), so the sufficient
+jump-algebra hypothesis of \cite{Wolff2026Contractivity}~(d) does not apply.
+
+\subsubsection*{Relaxed controls}
+
+Let
+$\mathsf V=\{X\in\M_d:X=X^\dagger,\ \tr X=0\}$ be a real normed space with
+the trace norm. For $U\in\mathrm U(d)$, define
+\begin{equation}
+	\Dd_U(X)=U^\dagger\Dd_L(UXU^\dagger)U=\Dd_{U^\dagger LU}(X),
+	\qquad
+	\mathcal K=\{\Dd_U:U\in\mathrm U(d)\},\quad
+	\mathcal C=\operatorname{conv}(\mathcal K).
+	\label{eq:q1-control-sets}
+\end{equation}
+The compactness of $\mathrm U(d)$ and continuity of $U\mapsto\Dd_U$ imply
+that $\mathcal K$ and $\mathcal C$ are compact. By Carath\'eodory's theorem,
+every $A\in\mathcal C$ has a finite representation
+\begin{equation}
+	A=\sum_{r=1}^R\alpha_r\Dd_{U_r}
+	=\sum_{r=1}^R\Dd_{M_r},
+	\qquad M_r=\sqrt{\alpha_r}\,U_r^\dagger LU_r,\quad
+	\alpha_r>0,\ \sum_r\alpha_r=1,
+	\label{eq:q1-caratheodory}
+\end{equation}
+where the scalar weights have been absorbed into the jumps. Thus every
+relaxed generator extends to a Lindblad generator on $\M_d$ with finitely many
+weighted jumps $M_r$.
+
+We use the following finite-dimensional facts, proved in
+\sharedref{the Q2 context file}{sec:q2}.
+
+\begin{lemma}[Relaxed-control compactness;
+		\sharedref{Q2}{lem:q2-relaxed-compactness}]
+	\label{lem:q1-relaxed-compactness}
+	Fix $T>0$. If $A_n:[0,T]\to\mathcal C$ are measurable, the $X_n(0)$ lie in a
+	compact set, and $X_n(t)=X_n(0)+\int_0^tA_n X_n$, then a subsequence has
+	$A_n\stackrel{*}{\rightharpoonup}A$ in $L^\infty$ with
+	$A(t)\in\mathcal C$ a.e.\ and $X_n\to X$ uniformly, where
+	$X(t)=X(0)+\int_0^tAX$. Every relaxed trajectory obeys
+	$\norm{X(t)}_1\le\norm{X(s)}_1$ for $t\ge s$, because each constant piece of
+	a $\mathcal C$-valued control exponentiates through
+	\eqref{eq:q1-caratheodory} to a completely positive, trace-preserving map.
+\end{lemma}
+
+\begin{lemma}[Trace-norm directional derivative;
+		\sharedref{Q2}{lem:q2-trace-directional}]
+	\label{lem:q1-trace-directional}
+	For Hermitian $X,Y$ with $P_0$ the orthogonal projection onto $\ker X$,
+	\begin{equation}
+		D_+\norm{\cdot}_1(X;Y)
+		:=\lim_{h\downarrow0}\frac{\norm{X+hY}_1-\norm{X}_1}{h}
+		=\tr\!(\operatorname{sgn}(X)\,Y)+\norm{P_0YP_0}_1.
+		\label{eq:q1-trace-directional}
+	\end{equation}
+\end{lemma}
+
+\begin{lemma}[Fixed-inertia density lemma;
+		\sharedref{Q2}{lem:q2-fixed-inertia}]
+	\label{lem:q1-fixed-inertia}
+	Let $X:I\to\mathsf V$ be differentiable at an interior point $t_0$ that is a
+	density point of the set of times whose inertia equals that of $X(t_0)$. If
+	$P_0$ is the projection onto $\ker X(t_0)$, then
+	$P_0\dot X(t_0)P_0=0$.
+\end{lemma}
+
+\subsubsection*{Algebraic obstruction}
+
+\begin{lemma}[Invariant subspaces of a nilpotent with one-dimensional kernel]
+	\label{lem:q1-nilpotent}
+	If $N\in\M_d$ is nilpotent with $\dim\ker N=1$, then every nonzero
+	$N$-invariant subspace $W$ contains $\ker N$.
+\end{lemma}
+
+\begin{proof}
+	The restriction $N|_W$ is nilpotent on the nonzero space $W$, hence
+	singular. Thus some nonzero $w\in W$ lies in $\ker N$. Since
+	$\dim\ker N=1$, it follows that
+	$\ker N=\operatorname{span}\{w\}\subseteq W$.
+\end{proof}
+
+For \eqref{eq:q1-lowering} with all $\gamma_i>0$, one has
+$L\ket0=0$ and
+$L\ket i=\sqrt{\gamma_i}\ket{i-1}\ne0$ for $i\ge1$. Hence $L^d=0$ and
+$\ker L=\operatorname{span}\{\ket0\}$. Every unitary conjugate
+$N=U^\dagger LU$ is likewise nilpotent with one-dimensional kernel.
+
+\begin{lemma}[No nonzero constant-norm relaxed trajectory]
+	\label{lem:q1-no-constant}
+	If all $\gamma_i>0$, there is no relaxed trajectory $\dot X=A(t)X$,
+	$A(t)\in\mathcal C$, on a nontrivial interval with $X\ne0$ and
+	$\norm{X(t)}_1$ constant.
+\end{lemma}
+
+\begin{proof}
+	Suppose such a trajectory exists. Only finitely many inertias occur, so one
+	inertia stratum has positive measure. Choose $t_0$ in the interior of the
+	interval that is a density point of this stratum, a Lebesgue point of $A$,
+	and a point of differentiability at which $\dot X=AX$. The integral equation
+	gives
+	$X(t_0+h)-X(t_0)=h\,A(t_0)X(t_0)+o(|h|)$ for signed $h\to0$. Put
+	$X=X(t_0)$ and $Y=A(t_0)X$, and let $P_\pm,P_0$ be the positive, negative,
+	and zero spectral projections of $X$. Since $X$ is nonzero and traceless, it
+	has eigenvalues of both signs, so
+	\begin{equation}
+		P_+\ne0\quad\text{and}\quad P_-\ne0.
+		\label{eq:q1-both-nonzero}
+	\end{equation}
+	By \cref{lem:q1-fixed-inertia}, $P_0YP_0=0$. Constancy of
+	$\norm{X(t)}_1$ and \cref{lem:q1-trace-directional} then give
+	\begin{equation}
+		0=D_+\norm{\cdot}_1(X;Y)
+		=\tr\!(\operatorname{sgn}(X)\,Y)+\norm{P_0YP_0}_1
+		=\tr\!(\operatorname{sgn}(X)\,Y).
+		\label{eq:q1-directional-zero}
+	\end{equation}
+
+	Write $A(t_0)=\sum_r\Dd_{M_r}$ as in \eqref{eq:q1-caratheodory},
+	diagonalize
+	$X=\sum_k\lambda_k\ketbra{e_k}{e_k}$, and set
+	$s_k=\operatorname{sgn}(\lambda_k)$. Expanding
+	$\Dd_M(X)=MXM^\dagger-\tfrac12\{M^\dagger M,X\}$ in this eigenbasis gives
+	the total-jump right-derivative identity
+	\begin{equation}
+		0=\tr\!(\operatorname{sgn}(X)\,Y)
+		=-\sum_{r}\sum_{k,l}|\lambda_k|\,(1-s_ks_l)
+		\big|\bra{e_l}M_r\ket{e_k}\big|^2.
+		\label{eq:q1-total-derivative}
+	\end{equation}
+	This is the computation underlying Proposition~19 of
+	\cite{Wolff2026Contractivity}. Since $A$ is only measurable, the calculation
+	must be made for the total weighted-jump list $\{M_r\}$; at singular $X$, the
+	trace-norm directional derivative is nonlinear in the direction and cannot
+	be averaged over the separate $\Dd_{U_r}$.
+
+	Every summand in \eqref{eq:q1-total-derivative} is nonnegative before the
+	minus sign because $1-s_ks_l\ge0$, and hence every summand vanishes. Fix
+	$r$. If $\lambda_k>0$ and $\lambda_l\le0$, then
+	$|\lambda_k|(1-s_ks_l)\ge|\lambda_k|>0$, so
+	$\bra{e_l}M_r\ket{e_k}=0$. Therefore $M_r$ maps
+	$V_+:=P_+\C^d$ into itself. Symmetrically, it maps
+	$V_-:=P_-\C^d$ into itself. Thus $V_+$ and $V_-$ are invariant under every
+	$M_r$, and hence under $U_r^\dagger LU_r$.
+
+	Fix one index $r$ and set $N=U_r^\dagger LU_r$. Then $N$ is nilpotent with
+	$\dim\ker N=1$. By \eqref{eq:q1-both-nonzero}, both $V_+$ and $V_-$ are
+	nonzero; they are orthogonal spectral subspaces of the Hermitian matrix $X$,
+	and both are $N$-invariant. By \cref{lem:q1-nilpotent}, each contains
+	$\ker N$, so
+	$\{0\}\ne\ker N\subseteq V_+\cap V_-=\{0\}$, a contradiction.
+\end{proof}
+
+\subsubsection*{Proof of \cref{thm:q1-main}}
+
+\begin{proof}[Proof of part~\textup{(i)}]
+	Pass to the interaction frame
+	$X(t)=W(t)^\dagger\mathcal E^H_{t,s}(X_0)W(t)$, where
+	$\dot W=-iH(t)W$. Then
+	$\dot X=\Dd_{W(t)}(X)$ with $\Dd_{W(t)}\in\mathcal K$. Since unitary
+	conjugation preserves the trace norm, it suffices to estimate the larger
+	class of relaxed $\mathcal C$-valued controls. For $T>0$, define
+	\begin{equation}
+		q_T=\sup\big\{\norm{X(T)}_1:\dot X=A(t)X,\ A(t)\in\mathcal C\ \text{a.e.},\
+		\norm{X(0)}_1=1\big\}.
+	\end{equation}
+	By \cref{lem:q1-relaxed-compactness}, the supremum is attained and
+	$q_T\le1$. It is positive because the exponential of a constant control is
+	invertible. If $q_T=1$, a maximizing trajectory would have constant trace
+	norm, contrary to \cref{lem:q1-no-constant}. Hence $0<q_T<1$.
+
+	Split $[s,t]$ into $\lfloor(t-s)/T\rfloor$ intervals of length $T$ and a
+	final interval of length less than $T$. The cocycle identity and trace-norm
+	monotonicity give \eqref{eq:q1-uniform-bound} with
+	\begin{equation}
+		K=q_T^{-1}\ge1,\qquad \gamma=-\frac{\log q_T}{T}>0,
+		\label{eq:q1-constants}
+	\end{equation}
+	for any fixed $T>0$. These constants depend only on $d$ and the rate vector
+	through $\mathcal C$.
+
+	For a general traceless $X\in\M_d$, write $X=X_1+iX_2$, where
+	$X_1=\tfrac12(X+X^\dagger)$ and
+	$X_2=\tfrac1{2i}(X-X^\dagger)$ are traceless Hermitian matrices. Since
+	$\norm{X^\dagger}_1=\norm{X}_1$, one has
+	$\norm{X_1}_1,\norm{X_2}_1\le\norm{X}_1$. Complex linearity gives
+	\begin{equation}
+		\norm{\mathcal E^H_{t,s}(X)}_1
+		\le\norm{\mathcal E^H_{t,s}(X_1)}_1+\norm{\mathcal E^H_{t,s}(X_2)}_1
+		\le 2Ke^{-\gamma(t-s)}\norm{X}_1.
+	\end{equation}
+	The equivalence in \cref{def:q1-hic} yields the stated estimate for
+	differences of states.
+\end{proof}
+
+\begin{proof}[Proof of part~\textup{(ii)}]
+	If $\gamma_{i_0}=0$, then
+	$L\ket{i_0}=\sqrt{\gamma_{i_0}}\ket{i_0-1}=0$. Thus both $\ket0$ and
+	$\ket{i_0}$ lie in $\ker L$, so $\dim\ker L\ge2$. For every $\ket\psi$ with
+	$L\ket\psi=0$, one has $\Dd_L(\ketbra\psi\psi)=0$. Hence
+	$\ketbra00$ and $\ketbra{i_0}{i_0}$ are orthogonal dark states of the
+	undriven generator. Their difference
+	$\Delta=\ketbra00-\ketbra{i_0}{i_0}$ is a nonzero traceless Hermitian fixed
+	point, and therefore
+	$\norm{\mathcal E^0_{t,0}(\Delta)}_1=\norm{\Delta}_1=2$ for all $t\ge0$.
+	No estimate \eqref{eq:q1-contractivity} with $\gamma_H>0$ can hold for
+	$H\equiv0$. Thus $\Dd_L$ is not contractive for the zero drive and is not
+	HIC.
+\end{proof}
+
+\begin{remark}[Why a pointwise $C=1$ differential estimate fails]
+	\label{rem:q1-pointwise}
+	Even when all $\gamma_i>0$, there is no pointwise estimate
+	$\partial_+\norm{X(t)}_1\le-c\,\norm{X(t)}_1$ with $c>0$. Let $d=3$,
+	$\gamma_1=\gamma_2=1$, so
+	$L=\ketbra01+\ketbra12$, and take
+	$X=\ketbra00-\ketbra22$, whose kernel is
+	$\operatorname{span}\{\ket1\}$. A direct calculation gives
+	$\Dd_L(X)=\operatorname{diag}(0,-1,1)$. Hence, for $0<h<1$,
+	\begin{equation}
+		\norm{X+h\,\Dd_L(X)}_1
+		=\norm{\operatorname{diag}(1,-h,-1+h)}_1
+		=1+h+(1-h)=2=\norm{X}_1,
+	\end{equation}
+	so the right derivative is zero. In
+	\cref{lem:q1-trace-directional}, the signed contribution is
+	$\tr(\operatorname{sgn}(X)\Dd_L(X))=-1$, while the eigenvalue emerging from
+	the kernel site $\ket1$ contributes
+	$\norm{P_0\Dd_L(X)P_0}_1=+1$. The compactness argument proves the theorem by
+	excluding a constant-norm trajectory on an interval, not by imposing strict
+	decay at every instant.
+\end{remark}
+
+\begin{remark}[Position relative to Wolff--Malz--Trivedi]\label{rem:q1-wmt}
+	The spectral sufficient criterion of \cite{Wolff2026Contractivity} proves HIC
+	for uniform and angular-momentum ladders through $d=5$, harmonic-oscillator
+	ladders through $d=3$, and the general three-level ladder
+	$L=\ketbra01+\alpha\ketbra12$ when
+	$\alpha\in(\sqrt3-\sqrt2,\sqrt3+\sqrt2)$. In the notation of
+	\eqref{eq:q1-lowering}, the last condition is
+	$\sqrt{\gamma_2/\gamma_1}\in(\sqrt3-\sqrt2,\sqrt3+\sqrt2)$.
+
+	Their algebraic sufficient conditions do not generally apply to the present
+	single jump. Indeed,
+	$\Alg(\{L\})=\operatorname{span}\{\id,L,\dots,L^{d-1}\}$ is the
+	$d$-dimensional polynomial algebra generated by a regular nilpotent shift,
+	and is not $\M_d$ for $d\ge2$. The unital criterion also does not apply,
+	because $\Dd_L(\id)=[L,L^\dagger]\ne0$. The necessary condition holds:
+	$\Alg(\{L,L^\dagger\})=\M_d$ for positive rates. In $d=2$, the complete
+	characterization of \cite{Wolff2026Contractivity} already gives HIC
+	(\cref{rem:q1-correction}). \Cref{thm:q1-main} removes the remaining
+	dimension and rate restrictions and gives one pair $(K,\gamma)$ uniform over
+	all locally integrable Hermitian drives.
+\end{remark}
+
+\begin{remark}[Exact formalization status]\label{rem:q1-lean}
+	As in \sharedref{the Q2 formalization remark}{rem:hic-lean}, the analytic
+	relaxed-control proof of \cref{thm:q1-main}(i) is not formalized. In
+	particular, the formalization does not include weak-$*$ compactness of
+	controls, propagators with locally integrable coefficients, the trace-norm
+	directional derivative, or degenerate Hermitian eigenvalue perturbation.
+	\par\smallskip\noindent
+	\leanstatus{Channel/\allowbreak Semigroup/\allowbreak WeightedLowering\allowbreak Contractivity}
+	\par\smallskip\noindent
+	The Lean kernel checks the finite-dimensional algebraic obstruction. The
+	module defines the weighted lowering endomorphism with arbitrary nonzero
+	complex edge weights and proves:
+	\begin{itemize}[leftmargin=2em,itemsep=0pt,topsep=2pt]
+		\item \nolinkurl{WeightedLowering.operator_pow_dimension_eq_zero},
+		\item \nolinkurl{WeightedLowering.ker_operator},
+		\item \nolinkurl{WeightedLowering.ground_mem_invariant}, and
+		\item \nolinkurl{WeightedLowering.not_orthogonal_invariant}.
+	\end{itemize}
+	These declarations state that the shift is nilpotent, its kernel is exactly
+	the ground-state line, every nonzero invariant subspace contains that line,
+	and two nonzero invariant subspaces cannot be orthogonal. They do not
+	formalize \eqref{eq:q1-total-derivative}, the relaxed-control argument, or
+	the HIC theorem. The formal file is therefore a kernel-checked algebraic
+	companion to the proof, not a formal verification of
+	\cref{thm:q1-main}.
+\end{remark}
+
+\ifstandalone
+	\bibliographystyle{alpha}
+	\bibliography{../refs}
+\fi
+
+\end{document}
