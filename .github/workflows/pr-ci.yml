@@ -32,6 +32,7 @@ on:
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_index_routing.py'
   pull_request:
@@ -59,6 +60,7 @@ on:
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_index_routing.py'
   workflow_dispatch:
@@ -118,6 +120,7 @@ jobs:
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_lint.py'
               - 'scripts/test_tenkz_pic.py'
+              - 'scripts/test_tenkz_cd_map_labels.py'
               - 'scripts/test_tenkz_face_ports.py'
               - 'scripts/test_tenkz_index_routing.py'
             workflow:
@@ -311,6 +314,10 @@ jobs:
       - name: Smoke-test tenkz picture pipeline
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
+
+      - name: Test measured tenkz typed-map label bands
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_cd_map_labels.py
 
       - name: Test asymmetric tenkz face ports
         if: env.TEX_CHANGED == 'true'
