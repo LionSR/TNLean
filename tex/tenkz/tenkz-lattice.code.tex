@@ -1673,15 +1673,6 @@
       {
         \tenkzl_xyz:nnnNN {#1}{#2}{#3}
           \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
-        % Boundary tips normally dominate this outward coordinate, but a
-        % trace may retain closure endpoints after every routing-side site is
-        % removed.  Keep the real site centre as the fallback silhouette;
-        % the corridor adds the rendered dot radius and daylight below.
-        \tenkzl_side_cup_project:NNN
-          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
-        \dim_set:Nn \l__tenkzl_cupsil_dim
-          { \dim_max:nn {\l__tenkzl_cupsil_dim}
-              {\l__tenkzl_cupproj_dim} }
         \tenkzl_side_cup_project_trans:NNN
           \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
         \dim_set:Nn \l__tenkzl_cuptransmin_dim
@@ -2292,6 +2283,25 @@
       }
   }
 
+% Cup routing only needs a site's transverse span because a real cup always
+% has outward boundary tips.  A trace may retain closure endpoints after all
+% routing-side sites are removed, so its private wrapper also measures each
+% surviving site centre outward.  The corridor adds dot radius and daylight.
+\cs_new_protected:Npn \tenkzl_trace_site_silhouette:nnn #1#2#3
+  {
+    \tenkzl_side_cup_site_silhouette:nnn {#1}{#2}{#3}
+    \tenkzl_endpoint_exists:nnnT {#1}{#2}{#3}
+      {
+        \tenkzl_xyz:nnnNN {#1}{#2}{#3}
+          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
+        \tenkzl_side_cup_project:NNN
+          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
+        \dim_set:Nn \l__tenkzl_cupsil_dim
+          { \dim_max:nn {\l__tenkzl_cupsil_dim}
+              {\l__tenkzl_cupproj_dim} }
+      }
+  }
+
 % Measure every surviving site and every real routing-side boundary tip in
 % the chosen direction, then extend that exact silhouette by every already-
 % rendered body site-label rectangle.  Body content therefore remains
@@ -2311,7 +2321,7 @@
             \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
               \l__tenkzl_cupscancol_int
               {
-                \tenkzl_side_cup_site_silhouette:nnn
+                \tenkzl_trace_site_silhouette:nnn
                   {\l__tenkzl_cupscanrow_int}
                   {\l__tenkzl_cupscancol_int}
                   {\l__tenkzl_cupscansheet_int}
