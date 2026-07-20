@@ -167,11 +167,18 @@ on the bond space.
 \begin{proof}\leanok\uses{lem:gauge_equiv_twisted}
     The physical action is transferred to the virtual level by the same
     local move that replaces the twisted tensor by a gauge-conjugated one:
-    % Use a physical-leg operator insertion for the
-    % linear twist \widetilde{A}_g^{\,i} = \sum_j U(g)_{ij}\, A^j rather
-    % than the relabelling-only permutation-twist glyph.
+    % Formula: (\widetilde A_g^i)_{ab}=\sum_j U(g)_{ij}(A^j)_{ab}.
+    % Source verdict: U(g) acts only on the physical index of A and has
+    % no virtual indices.
+    % Index map: i is the free upper physical index, j is the unique
+    % contracted index, and a,b are the free west/east virtual indices.
+    % Boundary: virtual-west=1 | virtual-east=1 | physical-up=1 |
+    % physical-down=0.
     \begin{center}
-        \TNLinearTwist{U(g)}{i}
+        \begin{tenkz}[rows={op:none,ket}]
+            \tn[role=operator,up=$i$]{U(g)} \\
+            \tn{A}
+        \end{tenkz}
         \qquad $\leadsto$ \qquad
         \TNGaugeConjugation{X(g)}{i}{X(g)^{-1}}
     \end{center}
