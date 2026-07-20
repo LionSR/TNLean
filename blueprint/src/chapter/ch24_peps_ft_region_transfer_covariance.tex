@@ -275,11 +275,6 @@
         \exists\lambda_v\in\C^\times,\qquad
         A_v=\lambda_v\widetilde B_v.
     \]
-    \begin{center}
-        \TNPEPSOneVertexComplementComparison
-    \end{center}
-    This is the final local comparison following the post-absorption insertion
-    equality in \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     With $A_1=A_v$, $A_2=A_{v^c}$, $B_1=\widetilde B_v$, and
@@ -304,16 +299,42 @@
     uses the same scalar comparison after comparing two injective regions
     $R\subset S=R\cup\{v\}$. If the region comparisons give
     $A_R=\lambda_R\widetilde B_R$ and
-    $A_S=\lambda_S\widetilde B_S$, then the source-paper diagram reads
-    \[
-        A_R A_v
-        =
-        A_S
-        =
-        \lambda_S\widetilde B_S
-        =
-        \lambda_S\widetilde B_R\widetilde B_v.
-    \]
+    $A_S=\lambda_S\widetilde B_S$, the source-paper comparison is
+    % Formula: A_R A_v=A_S\propto\widetilde B_S=\widetilde B_R\widetilde B_v.
+    % Source verdict: Molnar et al., arXiv:1804.04964, page 16, lines
+    %   1544--1570 of paper_normal.tex.  The source labels the tensors at v
+    %   simply by A and \widetilde B.
+    % Ink-to-index map: the horizontal bond in each two-tensor panel is the
+    %   contracted boundary index between R and v.  The upper stubs are free
+    %   physical indices, and the outer horizontal stubs are free virtual
+    %   boundary indices.
+    % Type verdict: the single upper leg of A_S or \widetilde B_S denotes the
+    %   fused physical space H_R\otimes H_v; the source draws that composite
+    %   leg once, while the factored panels expose its H_R and H_v factors.
+    % Contraction audit: the two-tensor panels have one internal virtual
+    %   contraction; the one-tensor panels have none.
+    % Two-tensor boundary signature:
+    %   boundary|virtual-west=1|virtual-east=1|physical-up=2|physical-down=0.
+    % One-tensor boundary signature:
+    %   boundary|virtual-west=1|virtual-east=1|physical-up=1|physical-down=0.
+    \begin{center}
+        \tnpic[physical=up]{
+            \tn[label pos=south]{A_R} & \tn[label pos=south]{A}
+        }
+        \quad$=$\quad
+        \tnpic[physical=up]{
+            \tn[label pos=south]{A_S}
+        }
+        \quad$\propto$\quad
+        \tnpic[physical=up]{
+            \tn[label pos=south]{\widetilde B_S}
+        }
+        \quad$=$\quad
+        \tnpic[physical=up]{
+            \tn[label pos=south]{\widetilde B_R} &
+            \tn[label pos=south]{\widetilde B}
+        }.
+    \end{center}
     Applying the left inverse supplied by injectivity of the block
     $A_R=\lambda_R\widetilde B_R$ gives
     $A_v=(\lambda_S/\lambda_R)\widetilde B_v$.

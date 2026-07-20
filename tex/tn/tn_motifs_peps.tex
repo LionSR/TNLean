@@ -170,50 +170,6 @@
         \end{TNPanel}
 }
 
-% TNPEPSOneVertexComplementComparison
-\newcommand{\TNPEPSOneVertexComplementComparisonMotif}{%
-        \TNEventInternal{motif|picture=\the\TN@pictureid|name=TNPEPSOneVertexComplementComparison|kind=peps-region}%
-        \begin{TNPanel}{tnClientPanel1529}{(0,0)}
-            \TNTensor{oneSiteAR}{(1.00,0)}
-            \TNTensor{oneSiteA}{(2.00,0)}
-            \TNPhysicalPort{oneSiteAROpenKetPort}{oneSiteAR}{north}\TNOpenPhysicalNorth{oneSiteAROpenKetPort}
-            \TNPhysicalPort{oneSiteAOpenKetPort}{oneSiteA}{north}\TNOpenPhysicalNorth{oneSiteAOpenKetPort}
-            \TNVirtualPort{oneSiteAROpenWestPort}{oneSiteAR}{west}\TNOpenVirtualWest{oneSiteAROpenWestPort}
-            \TNVirtualPort{oneSiteARTooneSiteA}{oneSiteAR}{east}\TNVirtualPort{oneSiteATooneSiteAR}{oneSiteA}{west}\TNConnectVirtual{oneSiteARTooneSiteA}{oneSiteATooneSiteAR}
-            \TNVirtualPort{oneSiteAOpenEastPort}{oneSiteA}{east}\TNOpenVirtualEast{oneSiteAOpenEastPort}
-            \TN@motiflabel{tnClientLabel1537}{($(oneSiteAR.south)+(0,-0.30)$)}{A_R}
-            \TN@motiflabel{tnClientLabel1538}{($(oneSiteA.south)+(0,-0.30)$)}{A_v}
-        \end{TNPanel}
-        \TN@motiflabel{tnClientLabel1540}{(3.12,0)}{=}
-        \begin{TNPanel}{tnClientPanel1541}{(3.55cm,0)}
-            \TNTensor{oneSiteAS}{(1.00,0)}
-            \TNPhysicalPort{oneSiteASOpenKetPort}{oneSiteAS}{north}\TNOpenPhysicalNorth{oneSiteASOpenKetPort}
-            \TNVirtualPort{oneSiteASOpenWestPort}{oneSiteAS}{west}\TNOpenVirtualWest{oneSiteASOpenWestPort}
-            \TNVirtualPort{oneSiteASOpenEastPort}{oneSiteAS}{east}\TNOpenVirtualEast{oneSiteASOpenEastPort}
-            \TN@motiflabel{tnClientLabel1546}{($(oneSiteAS.south)+(0,-0.30)$)}{A_S}
-        \end{TNPanel}
-        \TN@motiflabel{tnClientLabel1548}{(5.42,0)}{\propto}
-        \begin{TNPanel}{tnClientPanel1549}{(5.95cm,0)}
-            \TNTensor{oneSiteBS}{(1.00,0)}
-            \TNPhysicalPort{oneSiteBSOpenKetPort}{oneSiteBS}{north}\TNOpenPhysicalNorth{oneSiteBSOpenKetPort}
-            \TNVirtualPort{oneSiteBSOpenWestPort}{oneSiteBS}{west}\TNOpenVirtualWest{oneSiteBSOpenWestPort}
-            \TNVirtualPort{oneSiteBSOpenEastPort}{oneSiteBS}{east}\TNOpenVirtualEast{oneSiteBSOpenEastPort}
-            \TN@motiflabel{tnClientLabel1554}{($(oneSiteBS.south)+(0,-0.30)$)}{\widetilde B_S}
-        \end{TNPanel}
-        \TN@motiflabel{tnClientLabel1556}{(7.82,0)}{=}
-        \begin{TNPanel}{tnClientPanel1557}{(8.25cm,0)}
-            \TNTensor{oneSiteBR}{(1.00,0)}
-            \TNTensor{oneSiteB}{(2.00,0)}
-            \TNPhysicalPort{oneSiteBROpenKetPort}{oneSiteBR}{north}\TNOpenPhysicalNorth{oneSiteBROpenKetPort}
-            \TNPhysicalPort{oneSiteBOpenKetPort}{oneSiteB}{north}\TNOpenPhysicalNorth{oneSiteBOpenKetPort}
-            \TNVirtualPort{oneSiteBROpenWestPort}{oneSiteBR}{west}\TNOpenVirtualWest{oneSiteBROpenWestPort}
-            \TNVirtualPort{oneSiteBRTooneSiteB}{oneSiteBR}{east}\TNVirtualPort{oneSiteBTooneSiteBR}{oneSiteB}{west}\TNConnectVirtual{oneSiteBRTooneSiteB}{oneSiteBTooneSiteBR}
-            \TNVirtualPort{oneSiteBOpenEastPort}{oneSiteB}{east}\TNOpenVirtualEast{oneSiteBOpenEastPort}
-            \TN@motiflabel{tnClientLabel1565}{($(oneSiteBR.south)+(0,-0.30)$)}{\widetilde B_R}
-            \TN@motiflabel{tnClientLabel1566}{($(oneSiteB.south)+(0,-0.30)$)}{\widetilde B_v}
-        \end{TNPanel}
-}
-
 % TNPEPSInjectiveRegionUnion
 \newcommand{\TNPEPSInjectiveRegionUnionMotif}{%
         \TNEventInternal{motif|picture=\the\TN@pictureid|name=TNPEPSInjectiveRegionUnion|kind=peps-region}%
