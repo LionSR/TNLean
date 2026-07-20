@@ -1,0 +1,11 @@
+% Regression: trace_warn — imported current-behavior fixture from the handoff corpus.
+% Formula: misuse: trace= addressing a pairing interface a bare wire word does not
+\documentclass[varwidth=16cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\begin{document}
+% misuse: trace= addressing a pairing interface a bare wire word does not
+% have must warn (grid-interface-range) and leave the picture as-is
+\begin{tenkz}[trace={(1, 2)}]
+  \tn{A} & \tn{B} & \tn{C}
+\end{tenkz}
+\end{document}

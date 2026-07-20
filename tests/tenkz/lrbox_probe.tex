@@ -1,0 +1,19 @@
+% Regression: lrbox_probe — imported current-behavior fixture from the handoff corpus.
+% Formula: geometry-only; no tensor identity.
+\documentclass{article}
+\usepackage{tenkz}
+\newsavebox{\probebox}
+\begin{document}
+outside box:
+\begin{tenkz}[physical=up]
+  \tn[up=$i$]{A} & \tn[up=$j$]{B}
+\end{tenkz}
+
+inside lrbox:
+\begin{lrbox}{\probebox}
+\begin{tenkz}[physical=up]
+  \tn[up=$i$]{A} & \tn[up=$j$]{B}
+\end{tenkz}
+\end{lrbox}
+\usebox{\probebox}
+\end{document}

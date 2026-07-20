@@ -1,0 +1,18 @@
+% Regression: p_species — imported current-behavior fixture from the handoff corpus.
+% Formula: geometry-only; no tensor identity.
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tnset{species={alpha,beta,gamma,delta,epsilon}}
+\makeatletter
+\pgfkeysgetvalue{/tikz/species alpha bond/.@cmd}{\tmpa}
+\typeout{SPECIES-A: \meaning\tmpa}
+\pgfkeysgetvalue{/tikz/species epsilon bond/.@cmd}{\tmpb}
+\typeout{SPECIES-E: \meaning\tmpb}
+\makeatother
+\begin{tikzpicture}
+\draw[species alpha bond] (0,0) -- (1,0);
+\draw[species epsilon bond] (0,1) -- (1,1);
+\end{tikzpicture}
+SURVIVED
+\end{document}
