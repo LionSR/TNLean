@@ -1151,55 +1151,6 @@
 \newcommand{\TNFactorChainThree}[3]{\TN@factorChain{#1}{#2}{3}{#3}}
 \newcommand{\TNFactorChainFour}[3]{\TN@factorChain{#1}{#2}{4}{#3}}
 
-% Coefficient form of a basis of normal tensors.  The horizontal bond passes
-% through the two gauges and the normal tensor.  The parallel sector buses
-% retain the distinct block and copy indices, and the coefficient component
-% meets each bus through its own typed port.
-\newcommand{\TNBNTCoefficientDecomposition}[2]{%
-    \coordinate (#1Centre) at #2;%
-    \TNSectorGauge{#1Gauge}
-        {($(#1Centre)+(-\TN@cellpitch-\TN@cellpitch,0)$)}{X_{j,q}}%
-    \TNMPSSite{#1Tensor}{(#1Centre)}{}%
-    \TNLabelRight{#1Tensor.south east}{A_j}%
-    \TNInverseSectorGauge{#1Inverse}
-        {($(#1Centre)+(\TN@cellpitch+\TN@cellpitch,0)$)}{X_{j,q}^{-1}}%
-    \TNConnectVirtual{#1GaugeE}{#1TensorWest}%
-    \TNConnectVirtual{#1TensorEast}{#1InverseW}%
-    \TNOpenVirtualWest{#1GaugeW}%
-    \TNOpenVirtualEast{#1InverseE}%
-    \TNOpenPhysicalNorth{#1TensorKet}%
-    \TNLabelLeft{#1GaugeWOpen}{\alpha}%
-    \TNLabelRight{#1InverseEOpen}{\beta}%
-    \TNLabelAbove{#1TensorKetOpen}{i}%
-
-    \TNVirtualSouthPort{#1TensorBlock}{#1Tensor}{0.5}%
-    \TNSectorBus{#1BlockBus}
-        {($(#1GaugeBlock)+(0,-\TN@layerpitch)$)}
-        {($(#1InverseBlock)+(0,-\TN@layerpitch)$)}{j}%
-    \TNParallelSectorBus{#1CopyBus}{#1BlockBus}{-\TN@layerpitch}{q}%
-
-    \TNSectorBusProjectTap{#1BlockBus}{#1GaugeBlockTap}{#1GaugeBlock}%
-    \TNSectorBusProjectTap{#1BlockBus}{#1TensorBlockTap}{#1TensorBlock}%
-    \TNSectorBusProjectTap{#1BlockBus}{#1InverseBlockTap}{#1InverseBlock}%
-    \TNSectorBusProjectTap{#1CopyBus}{#1GaugeCopyTap}{#1GaugeCopy}%
-    \TNSectorBusProjectTap{#1CopyBus}{#1InverseCopyTap}{#1InverseCopy}%
-    \TNConnectVirtual{#1GaugeBlock}{#1GaugeBlockTap}%
-    \TNConnectVirtual{#1TensorBlock}{#1TensorBlockTap}%
-    \TNConnectVirtual{#1InverseBlock}{#1InverseBlockTap}%
-    \TNConnectVirtual{#1GaugeCopy}{#1GaugeCopyTap}%
-    \TNConnectVirtual{#1InverseCopy}{#1InverseCopyTap}%
-
-    \TNComponent{#1Coefficient}
-        {($(#1Centre)+(0,-\TN@layerpitch-\TN@layerpitch/2)$)}{\mu}%
-    \TNVirtualNorthPort{#1CoefficientBlock}{#1Coefficient}{0.5}%
-    \TNVirtualSouthPort{#1CoefficientCopy}{#1Coefficient}{0.5}%
-    \TNSectorBusProjectTap
-        {#1BlockBus}{#1CoefficientBlockTap}{#1CoefficientBlock}%
-    \TNSectorBusProjectTap
-        {#1CopyBus}{#1CoefficientCopyTap}{#1CoefficientCopy}%
-    \TNConnectVirtual{#1CoefficientBlock}{#1CoefficientBlockTap}%
-    \TNConnectVirtual{#1CoefficientCopy}{#1CoefficientCopyTap}%
-}
 \newcommand{\TNThreeSiteChain}[4]{\TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}}
 \newcommand{\TNThreeSiteInsertion}[5]{%
     \TN@boxedThreeSiteInsertion{#1}{#2}{#3}{#4}{#5}%
