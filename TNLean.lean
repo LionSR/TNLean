@@ -486,6 +486,7 @@ import TNLean.MPS.MPDO.VerticalSectorInvertibility
 import TNLean.MPS.MPDO.VerticalSectorIdentity
 import TNLean.MPS.MPDO.VerticalSectorRelabeling
 import TNLean.MPS.MPDO.VerticalSectorCoefficientComparison
+import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure

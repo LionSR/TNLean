@@ -2413,6 +2413,81 @@ physical indices, as in
     Taking $X$ to be a matrix unit gives the tensor-letter identity.
 \end{proof}
 
+\begin{theorem}[Simultaneous representations of the blocked vertical operator]
+    \label{thm:mpdo_blocked_vertical_operator_representations}
+    \lean{MPOTensor.transportedVerticalSector_exists_blockedOperatorRepresentations}
+    \lean{MPOTensor.verticalBNTMPO_verticalTensor_blockTwo}
+    \lean{MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction}
+    \lean{MPOTensor.mpo_verticalBNTMPO_verticalAssembledTensor_eq_sum}
+    \lean{MPOTensor.mpo_verticalBNTMPO_eq_sum_of_coisometry_reconstruction}
+    \lean{MPOTensor.mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex}
+    \lean{MPOTensor.blockedVerticalOperatorRepresentations_of_unitaryBlockEquiv}
+    \leanok
+    \uses{thm:mpdo_transported_vertical_sector_coefficient_comparison,
+      def:vertical_cf_mpdo, def:mpdo_two_site_blocking}
+    Under the hypotheses and with the sector correspondence of Theorem~
+    \ref{thm:mpdo_transported_vertical_sector_coefficient_comparison}, let
+    \(B\) be the vertical reading of the two-site blocking, and write
+    \[
+      O_L(A)=\operatorname{Tr}_{\mathrm{bond}}
+        \bigl(A_{i_1}\cdots A_{i_L}\bigr)
+    \]
+    for the length-$L$ closed-chain operator.  If $L>0$, then the same
+    equivalence $\sigma$, dimension identifications, and unitaries appearing
+    in the tensor-letter identity satisfy
+    \[
+    \begin{aligned}
+      O_L(B)
+      &=\sum_\alpha
+        \left(\frac{m_\alpha}{n_{\sigma(\alpha)}}\right)^L
+        \operatorname{tr}\!\left(\nu_{\sigma(\alpha)}^L\right)
+        O_L\!\left(A^{(1)}_\alpha\right), \\
+      O_L(B)
+      &=\sum_{\alpha,\beta}
+        \operatorname{tr}(\mu_\alpha^L)
+        \operatorname{tr}(\mu_\beta^L)
+        O_L\!\left(A^{(1)}_\alpha\right)
+        O_L\!\left(A^{(1)}_\beta\right).
+    \end{aligned}
+    \]
+    These are the two representations in
+    \cite[Appendix~C.4, lines~2011--2018]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Local fix (blocked coefficient exponent):} CPSV16 Appendix C.4,
+    line~2013 prints $m_\gamma^L/n_\gamma$.  The line-2008 tensor scaling and
+    line~2040 give $(m_\gamma/n_\gamma)^L$.  This is documented in
+    \path{docs/paper-gaps/cpsv16_blocked_operator_trace_ratio_exponent.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_operator_product_mpo, lem:mpv_vertical_assembled,
+      thm:mpdo_transported_vertical_sector_coefficient_comparison}
+    The two-site vertical canonical form first gives
+    \[
+      O_L(B)=\sum_\delta
+        \operatorname{tr}(\nu_\delta^L)
+        O_L\!\left(A^{(2)}_\delta\right).
+    \]
+    Reindex this sum by $\delta=\sigma(\alpha)$.  The tensor-letter identity
+    from the preceding theorem multiplies every letter of
+    $A^{(1)}_\alpha$ by
+    $m_\alpha/n_{\sigma(\alpha)}$.  Along a chain of length $L$ this scalar
+    therefore occurs to the power $L$; unitary conjugation and the bond-index
+    identification leave the closing trace unchanged.  This proves the first
+    formula.
+
+    For the second formula, the vertical reading of a two-site block is the
+    product tensor of two copies of the one-site vertical reading.  Closed
+    chains turn this tensor product into multiplication of operators.  Expand
+    each copy by the one-site vertical canonical form,
+    \[
+      O_L(\widetilde M)=\sum_\alpha
+        \operatorname{tr}(\mu_\alpha^L)
+        O_L\!\left(A^{(1)}_\alpha\right),
+    \]
+    and distribute the product of the two finite sums.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
