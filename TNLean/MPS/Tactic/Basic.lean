@@ -13,13 +13,11 @@ for recurring proof patterns in MPS / channel / overlap files.
 
 ## Custom simp attributes
 
-* `mps_block_words` : direct/iterated blocking maps, `wordOfBlock` expressions
 * `mps_transfer` : transfer map unfoldings
 
 ## Tactic macros
 
 * `mpv_ext` : introduce `N`, `σ` for `SameMPV₂` or `N`, `hN`, `σ` for `SameMPV₂Pos`
-* `block_words` : normalize direct/iterated blocking maps and `wordOfBlock` expressions
 * `transfer_simp` : unfold transfer maps using `@[mps_transfer]`
 
 ## Design
@@ -32,9 +30,6 @@ mechanism; the tactic macros are thin sugar over the attributes.
 open Lean Elab Tactic Meta
 
 /-! ### Custom simp attribute sets -/
-
-/-- Simp set for direct/iterated blocking maps and `wordOfBlock` normal forms. -/
-register_simp_attr mps_block_words
 
 /-- Simp set for transfer map unfoldings. -/
 register_simp_attr mps_transfer
@@ -79,20 +74,6 @@ elab "mpv_ext" : tactic => do
       let (fvarId, mvarId) ← mvarId.intro `σ
       pure (fvarId, [mvarId])
     Term.addLocalVarInfo (mkNullNode) (mkFVar fvSId)
-
-/--
-Normalize direct/iterated blocking maps and `wordOfBlock` expressions.
-
-Uses the lemmas tagged with `@[mps_block_words]`.  After `block_words`:
-* `directIteratedBlockEquiv d m n i` is rewritten to `directToIteratedBlockIndex d m n i`
-* iterated-blocking dimension identities are unfolded
-* word-of-block normal forms are applied
-* grouped index equalities are reduced to flattened-index equalities
-
-The tactic does not rewrite general matrix multiplication or common MPS tensor identities;
-it only normalises the block-word presentation.
--/
-macro "block_words" : tactic => `(tactic| simp only [mps_block_words])
 
 /--
 Unfold transfer maps using `@[mps_transfer]`.
