@@ -28,6 +28,8 @@ dimensions.
 * `IsKrausCPTP.isKrausCP`: a trace-preserving Kraus map is a Kraus CP map.
 * `IsKrausCP.map_posSemidef`: a Kraus CP map preserves positive
   semidefiniteness.
+* `IsKrausCP.kadison_schwarz_of_map_one_eq_one`: a unital rectangular Kraus
+  map satisfies the Kadison--Schwarz inequality.
 * `IsKrausCP.traceAdjointMap`: the trace adjoint of a Kraus CP map is Kraus CP.
 * `IsKrausCPTP.trace_map`: a map satisfying `IsKrausCPTP` preserves trace.
 * `isKrausCPTP_of_isKrausCP_trace_preserving`: a Kraus CP map that preserves
@@ -123,6 +125,61 @@ theorem IsKrausCP.map_posSemidef
   obtain ⟨r, A, hA⟩ := hS
   rw [hA]
   exact Matrix.posSemidef_sum _ fun i _ => hX.mul_mul_conjTranspose_same (A i)
+
+/-- A unital completely positive map in rectangular Kraus form satisfies the
+Kadison--Schwarz inequality.
+
+This is the dimension-changing counterpart of the usual Kraus
+Kadison--Schwarz inequality. It supplies the Schwarz condition used in
+Wolf--Perez-Garcia, arXiv:1005.4545, source line 306. -/
+theorem IsKrausCP.kadison_schwarz_of_map_one_eq_one
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {E : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ}
+    (hE : IsKrausCP E) (hOne : E 1 = 1) (X : Matrix α α ℂ) :
+    (E (Xᴴ * X) - (E X)ᴴ * E X).PosSemidef := by
+  obtain ⟨r, K, hK⟩ := hE
+  have hUnital : ∑ i, K i * (K i)ᴴ = (1 : Matrix β β ℂ) := by
+    simpa [hK, Matrix.mul_one] using hOne
+  have hGap :
+      E (Xᴴ * X) - (E X)ᴴ * E X =
+        ∑ i, (X * (K i)ᴴ - (K i)ᴴ * E X)ᴴ *
+          (X * (K i)ᴴ - (K i)ᴴ * E X) := by
+    have hExpand (i : Fin r) :
+        (X * (K i)ᴴ - (K i)ᴴ * E X)ᴴ *
+            (X * (K i)ᴴ - (K i)ᴴ * E X) =
+          K i * (Xᴴ * X) * (K i)ᴴ - K i * Xᴴ * ((K i)ᴴ * E X) -
+            (E X)ᴴ * (K i * X * (K i)ᴴ) +
+              (E X)ᴴ * (K i * (K i)ᴴ) * E X := by
+      simp only [Matrix.conjTranspose_sub, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_conjTranspose, Matrix.sub_mul, Matrix.mul_sub,
+        Matrix.mul_assoc]
+      abel
+    have hReassocTwo (i : Fin r) :
+        K i * Xᴴ * ((K i)ᴴ * E X) =
+          K i * Xᴴ * (K i)ᴴ * E X := by
+      simp only [Matrix.mul_assoc]
+    have hReassocFour (i : Fin r) :
+        (E X)ᴴ * (K i * (K i)ᴴ) * E X =
+          (E X)ᴴ * K i * (K i)ᴴ * E X := by
+      simp only [Matrix.mul_assoc]
+    simp_rw [hExpand]
+    simp_rw [hReassocTwo, hReassocFour]
+    simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+    rw [← Finset.sum_mul (f := fun i ↦ K i * Xᴴ * (K i)ᴴ)]
+    rw [← Finset.mul_sum (a := (E X)ᴴ) (f := fun i ↦ K i * X * (K i)ᴴ)]
+    rw [← Finset.sum_mul (f := fun i ↦ (E X)ᴴ * K i * (K i)ᴴ)]
+    have hStar : E Xᴴ = (E X)ᴴ := by
+      rw [hK, hK]
+      simp only [Matrix.conjTranspose_sum, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+    have hUnit : ∑ i, (E X)ᴴ * K i * (K i)ᴴ = (E X)ᴴ := by
+      simp_rw [Matrix.mul_assoc]
+      rw [← Finset.mul_sum, hUnital, Matrix.mul_one]
+    rw [← hK, ← hK, ← hK, hStar, hUnit]
+    noncomm_ring
+  rw [hGap]
+  exact Matrix.posSemidef_sum _ fun i _ ↦
+    Matrix.posSemidef_conjTranspose_mul_self _
 
 /-- The trace adjoint of a completely positive map in rectangular Kraus form
 is completely positive. A Kraus family `A i` for the original map gives the

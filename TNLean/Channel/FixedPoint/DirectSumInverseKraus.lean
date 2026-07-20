@@ -28,62 +28,6 @@ noncomputable section
 
 namespace Matrix
 
-variable {α β : Type*}
-variable [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
-
-/-- A unital rectangular Kraus map satisfies the Kadison--Schwarz inequality.
-
-This is the rectangular Kraus form of the usual Kadison--Schwarz inequality.
-It is the inequality appearing in the definition of a Schwarz map in
-Wolf--Perez-Garcia, arXiv:1005.4545, source line 306. -/
-theorem IsKrausCP.kadison_schwarz_of_map_one_eq_one
-    {E : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ}
-    (hE : IsKrausCP E) (hOne : E 1 = 1) (X : Matrix α α ℂ) :
-    (E (Xᴴ * X) - (E X)ᴴ * E X).PosSemidef := by
-  obtain ⟨r, K, hK⟩ := hE
-  have hUnital : ∑ i, K i * (K i)ᴴ = (1 : Matrix β β ℂ) := by
-    simpa [hK, Matrix.mul_one] using hOne
-  have hGap :
-      E (Xᴴ * X) - (E X)ᴴ * E X =
-        ∑ i, (X * (K i)ᴴ - (K i)ᴴ * E X)ᴴ *
-          (X * (K i)ᴴ - (K i)ᴴ * E X) := by
-    have hExpand (i : Fin r) :
-        (X * (K i)ᴴ - (K i)ᴴ * E X)ᴴ *
-            (X * (K i)ᴴ - (K i)ᴴ * E X) =
-          K i * (Xᴴ * X) * (K i)ᴴ - K i * Xᴴ * ((K i)ᴴ * E X) -
-            (E X)ᴴ * (K i * X * (K i)ᴴ) +
-              (E X)ᴴ * (K i * (K i)ᴴ) * E X := by
-      simp only [conjTranspose_sub, conjTranspose_mul,
-        conjTranspose_conjTranspose, Matrix.sub_mul, Matrix.mul_sub,
-        Matrix.mul_assoc]
-      abel
-    have hReassocTwo (i : Fin r) :
-        K i * Xᴴ * ((K i)ᴴ * E X) =
-          K i * Xᴴ * (K i)ᴴ * E X := by
-      simp only [Matrix.mul_assoc]
-    have hReassocFour (i : Fin r) :
-        (E X)ᴴ * (K i * (K i)ᴴ) * E X =
-          (E X)ᴴ * K i * (K i)ᴴ * E X := by
-      simp only [Matrix.mul_assoc]
-    simp_rw [hExpand]
-    simp_rw [hReassocTwo, hReassocFour]
-    simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
-    rw [← Finset.sum_mul (f := fun i ↦ K i * Xᴴ * (K i)ᴴ)]
-    rw [← Finset.mul_sum (a := (E X)ᴴ) (f := fun i ↦ K i * X * (K i)ᴴ)]
-    rw [← Finset.sum_mul (f := fun i ↦ (E X)ᴴ * K i * (K i)ᴴ)]
-    have hStar : E Xᴴ = (E X)ᴴ := by
-      rw [hK, hK]
-      simp only [conjTranspose_sum, conjTranspose_mul,
-        conjTranspose_conjTranspose, Matrix.mul_assoc]
-    have hUnit : ∑ i, (E X)ᴴ * K i * (K i)ᴴ = (E X)ᴴ := by
-      simp_rw [Matrix.mul_assoc]
-      rw [← Finset.mul_sum, hUnital, Matrix.mul_one]
-    rw [← hK, ← hK, ← hK, hStar, hUnit]
-    noncomm_ring
-  rw [hGap]
-  exact Matrix.posSemidef_sum _ fun i _ ↦
-    Matrix.posSemidef_conjTranspose_mul_self _
-
 variable {ι κ : Type*}
 variable [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
 variable {n : ι → Type*} {m : κ → Type*}
@@ -100,7 +44,27 @@ def IsSchwarzBetweenDirectSums
       (∀ j, Matrix (m j) (m j) ℂ)) : Prop :=
   ∀ A j,
     (T (fun i ↦ (A i)ᴴ * A i) j -
-      (T A j)ᴴ * T A j).PosSemidef
+      T (fun i ↦ (A i)ᴴ) j * T A j).PosSemidef
+
+/-- A completely positive map between finite matrix direct sums preserves
+the adjoint operation.
+
+This is the adjoint-preservation input for the algebraic argument preceding
+arXiv:1606.00608, Appendix C.4, line 1997. -/
+theorem IsKrausDirectSumMap.map_conjTranspose_between
+    {T : (∀ i, Matrix (n i) (n i) ℂ) →ₗ[ℂ]
+      (∀ j, Matrix (m j) (m j) ℂ)}
+    (hT : IsKrausDirectSumMap T) (A : ∀ i, Matrix (n i) (n i) ℂ) :
+    T (fun i ↦ (A i)ᴴ) = fun j ↦ (T A j)ᴴ := by
+  have hPositive : IsPositiveMap (directSumMapExtension T) :=
+    fun X hX ↦ IsKrausCP.map_posSemidef hT hX
+  have hStar := hPositive.map_conjTranspose (directSumDiagonalEmbedding A)
+  rw [← directSumDiagonalEmbedding_conjTranspose] at hStar
+  simp only [directSumMapExtension_apply,
+    directSumDiagonalCompression_embedding] at hStar
+  rw [← directSumDiagonalEmbedding_conjTranspose] at hStar
+  apply_fun directSumDiagonalCompression at hStar
+  simpa only [directSumDiagonalCompression_embedding] using hStar
 
 /-- A unital completely positive map between finite matrix direct sums
 satisfies the Schwarz inequality in each output summand.
@@ -132,29 +96,10 @@ theorem IsKrausDirectSumMap.is_schwarz_between_direct_sums
   have hj := directSumDiagonalCompression_posSemidef h j
   simp only [directSumDiagonalCompression_embedding, Pi.sub_apply,
     Pi.mul_apply] at hj
+  rw [← congrFun (hT.map_conjTranspose_between A) j] at hj
   change (T (fun i ↦ (A i)ᴴ * A i) j -
-    (T A j)ᴴ * T A j).PosSemidef at hj
+    T (fun i ↦ (A i)ᴴ) j * T A j).PosSemidef at hj
   exact hj
-
-/-- A completely positive map between finite matrix direct sums preserves
-the adjoint operation.
-
-This is the adjoint-preservation input for the algebraic argument preceding
-arXiv:1606.00608, Appendix C.4, line 1997. -/
-theorem IsKrausDirectSumMap.map_conjTranspose_between
-    {T : (∀ i, Matrix (n i) (n i) ℂ) →ₗ[ℂ]
-      (∀ j, Matrix (m j) (m j) ℂ)}
-    (hT : IsKrausDirectSumMap T) (A : ∀ i, Matrix (n i) (n i) ℂ) :
-    T (fun i ↦ (A i)ᴴ) = fun j ↦ (T A j)ᴴ := by
-  have hPositive : IsPositiveMap (directSumMapExtension T) :=
-    fun X hX ↦ IsKrausCP.map_posSemidef hT hX
-  have hStar := hPositive.map_conjTranspose (directSumDiagonalEmbedding A)
-  rw [← directSumDiagonalEmbedding_conjTranspose] at hStar
-  simp only [directSumMapExtension_apply,
-    directSumDiagonalCompression_embedding] at hStar
-  rw [← directSumDiagonalEmbedding_conjTranspose] at hStar
-  apply_fun directSumDiagonalCompression at hStar
-  simpa only [directSumDiagonalCompression_embedding] using hStar
 
 /-- Mutually inverse unital completely positive maps attain equality in the
 Schwarz inequality at every element. This gives an algebraic alternative to
@@ -174,7 +119,9 @@ theorem schwarz_equality_of_mutual_inverse_kraus_direct_sum_maps
   let Δ : ∀ i, Matrix (n i) (n i) ℂ :=
     F (fun j ↦ (A j)ᴴ * A j) - fun i ↦ (F A i)ᴴ * F A i
   have hΔ (i : ι) : (Δ i).PosSemidef := by
-    exact hF.is_schwarz_between_direct_sums hFOne A i
+    simpa only [Δ, Pi.sub_apply,
+      congrFun (hF.map_conjTranspose_between A) i] using
+        hF.is_schwarz_between_direct_sums hFOne A i
   have hGΔ (j : κ) : (G Δ j).PosSemidef :=
     hG.map_posSemidef hΔ j
   have hGFA : G (F A) = A := by
@@ -192,7 +139,7 @@ theorem schwarz_equality_of_mutual_inverse_kraus_direct_sum_maps
       rw [hGFProduct, hGFA]
       abel
     rw [hIdentity]
-    exact hSchwarz
+    simpa only [congrFun (hG.map_conjTranspose_between (F A)) j] using hSchwarz
   have hGΔZero : G Δ = 0 := by
     funext j
     exact Matrix.PosSemidef.eq_zero_of_neg_posSemidef (hGΔ j) (hNegGΔ j)
