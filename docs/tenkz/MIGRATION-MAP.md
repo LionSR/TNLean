@@ -53,7 +53,7 @@ The WHATS-NEW-0.5 §Gaps (0.6 backlog) is: *per-side boundary control, bare iden
 | K2 `periodic=physical` — vertical trace closure of a stacked op-row column (multi-row analogue of per-glyph `trace=physical`) | TNMPDOBNTOperatorTraceClosure (`O_L(M_α)` vertical word) | **no** | none faithful; demote to `O_L(M_α)=\tr_v(M_α^{⊗v L})`-style plain math |
 | K3 lattice `physical stubs` — per-site physical leg (diagonal stub) on tenkzlattice vertices | TNPEPSLatticeState, TNPEPSTorusGeometry | **no** | draw the patch in tenkzfree with `ports={north east:physical}` per site (verbose) |
 | K4 lattice `torus`/identification marks (opposite-boundary gluing) | TNPEPSTorusGeometry | **no** (but anticipated by the final spec's manual plan, ch5 "torus/cylinder marks") | annotation arrows outside the picture |
-| K5 `pair label=` / plain (dot-free) label on a cup apex or paired internal leg | TNKrausMap ($i$), TNStinespring ($E$), TNMPOLocalPurification ($k$ on the ancilla cup) | **no** | drop the label (index already in $K_i$), or accept the `close east={…}` fixed-point-dot styling |
+| K5 `pair label=` / plain (dot-free) label on a cup apex or paired internal leg | TNMPOLocalPurification ($k$ on the ancilla cup) | **no** | drop the $k$ label (the sole closed ancilla pair makes the contraction unambiguous), or accept the `close east={…}` fixed-point-dot styling |
 | K6 `\tnedge[insert=$X$]` — on-edge insertion glyph in the lattice tier | TNPEPSEdgeInsertedCoeff, TNPEPSThreeSiteInsertionComparison, TNPEPSPhysicalToVirtualInsertion (lattice-strip route) | **no** | tenkzfree: the insertion is its own `\tnput` node with two `\tnjoin`s — expressible today |
 | K7 free-tier region highlight — hull/slot fill over a set of `\tnput` nodes | TNPEPSEdgeBlockingReduction + TNPEPSEdgeInsertionEquality (pentagon patch with region overlays), TNAppendixB* grouping regions | **no** | hand-drawn dashed box in tenkzfree (violates "no raw styling at call sites") |
 
@@ -154,7 +154,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
 | TNKrausMap | ch16_channel_representations:467 | `[sandwich, east={cup=$\rho$}, west label=$T(\rho)$]: \tn{K_i} \\ \tn*{K_i}` | source-faithful applied channel; exact boundary `(2,0,0,0)`, no package change |
-| TNStinespring | ch16_channel_representations:697 | `[sandwich, west label=$\rho$, east label=$\tr_E[V\rho V^\dagger]$]: \tn{V} \\ \tn*{V}` | trivial (K5 `pair label=$E$` optional) |
+| TNStinespring | ch16_channel_representations:768 | `[sandwich, east={cup=$\rho$}, west label=$T(\rho)$]: \tn{V} \\ \tn*{V}` | migrated inline (applied channel; the house input is the east cup; the unique unlabelled pairleg traces $E$) |
 | TNChoiMatrix | ch16_channel_representations:108 | `[sandwich, close west={$\Omega$}]: \tn{T} \\ \tn{\mathrm{id}}` | trivial (0.6 bare identity-wire atom would let `id` be a plain wire) |
 | TNTransferMapTracePairing | ch16_channel_representations:1478 | demote: `T(\rho)=\sum_{ij}t_{ij}\tr(\sigma_j\rho)\,\sigma_i` (+ optional `\tnpic[inline, periodic]{\tnX{\sigma_j}&\tnX{\rho}}` for the trace loop) | needs-judgment (candidate demotion to plain math) |
 | TNTwoPointCorrelator | ch14_correlations:50 | `[sandwich, west={cup=$Y$}, east={cup=$X\rho^R$}]` with `\tnX[wires=2]{\mathcal E_A^n}` between ghost anchors | trivial (a doubled-index map between input and trace-pairing cups; not a periodic word) |

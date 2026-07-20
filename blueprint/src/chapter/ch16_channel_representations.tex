@@ -765,7 +765,24 @@ channel through an isometry $V$ into a larger space,
 $T(\rho)=\tr_E[V\rho V^\dagger]$; tracing out the environment $E$ returns the
 channel:
 \begin{center}
-    \TNStinespring
+    % Formula/source: Wolf, Sec. 2.2, proof of Thm. 2.5, gives the
+    % Schrödinger-picture identity
+    % T(\rho)=\operatorname{tr}_{\mathbb C^r}(V\rho V^\dagger).
+    % Indices: \rho contracts the east system-index pair; the west system
+    % pair consists of the free indices of T(\rho), while the unique vertical
+    % pairleg contracts the repeated dilation-space index e.
+    % Orientation: the starred lower V is the conjugate bra layer; together
+    % with the return path it represents V^\dagger in the operator formula.
+    % Boundary signature: (virtual-west=2 | virtual-east=0 |
+    % physical-up=0 | physical-down=0).
+    \begin{tenkz}[
+        sandwich,
+        east={cup=$\rho$},
+        west label=$T(\rho)$
+    ]
+        \tn{V} \\
+        \tn*{V}
+    \end{tenkz}
 \end{center}
 
 \begin{definition}[Stinespring matrix]\label{def:stinespring_v}
