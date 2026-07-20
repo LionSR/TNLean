@@ -71,7 +71,7 @@ satisfies the Schwarz inequality in each output summand.
 
 This is the Schwarz input for the algebraic argument preceding
 arXiv:1606.00608, Appendix C.4, line 1997. -/
-theorem IsKrausDirectSumMap.is_schwarz_between_direct_sums
+theorem IsKrausDirectSumMap.isSchwarzBetweenDirectSums
     {T : (∀ i, Matrix (n i) (n i) ℂ) →ₗ[ℂ]
       (∀ j, Matrix (m j) (m j) ℂ)}
     (hT : IsKrausDirectSumMap T) (hOne : T 1 = 1) :
@@ -121,7 +121,7 @@ theorem schwarz_equality_of_mutual_inverse_kraus_direct_sum_maps
   have hΔ (i : ι) : (Δ i).PosSemidef := by
     simpa only [Δ, Pi.sub_apply,
       congrFun (hF.map_conjTranspose_between A) i] using
-        hF.is_schwarz_between_direct_sums hFOne A i
+        hF.isSchwarzBetweenDirectSums hFOne A i
   have hGΔ (j : κ) : (G Δ j).PosSemidef :=
     hG.map_posSemidef hΔ j
   have hGFA : G (F A) = A := by
@@ -130,7 +130,7 @@ theorem schwarz_equality_of_mutual_inverse_kraus_direct_sum_maps
       G (F (fun j ↦ (A j)ᴴ * A j)) = fun j ↦ (A j)ᴴ * A j := by
     exact LinearMap.congr_fun hGF _
   have hNegGΔ (j : κ) : (-G Δ j).PosSemidef := by
-    have hSchwarz := hG.is_schwarz_between_direct_sums hGOne (F A) j
+    have hSchwarz := hG.isSchwarzBetweenDirectSums hGOne (F A) j
     have hIdentity :
         -G Δ j =
           G (fun i ↦ (F A i)ᴴ * F A i) j -
