@@ -153,7 +153,6 @@ import TNLean.Analysis.OperatorConvexity
 import TNLean.Analysis.RpowConvexity
 import TNLean.Analysis.RelativeEntropyResolventIntegral
 import TNLean.Analysis.ResolventFunctionalCalculus
--- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.Schwarz.Douglas
@@ -209,6 +208,7 @@ import TNLean.Channel.FixedPoint.DirectSumBlockRetraction
 import TNLean.Channel.FixedPoint.TraceNonincreasingProductSpan
 import TNLean.Channel.FixedPoint.TraceNonincreasingDirectSum
 import TNLean.Channel.FixedPoint.DirectSumTraceAdjoint
+import TNLean.Channel.FixedPoint.DirectSumInverseKraus
 import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.StationaryProjection
