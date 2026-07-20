@@ -166,10 +166,12 @@ interfaces.
   `MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef`.
 - **Caveat:** every listed bridge requires `[NeZero D]`. The two bridges from
   peripheral primitivity additionally require left-canonical normalization and,
-  respectively, injectivity or irreducibility. The bridge to strong
-  irreducibility requires `ρ.PosDef`; PSD alone is insufficient. Consequently
-  `HasPrimitiveFixedPoint` is not an unconditional synonym for any of the
-  preceding predicates.
+  respectively, injectivity or irreducibility.
+  `isPrimitiveMPS_of_isStronglyIrreduciblePaper` likewise requires the explicit
+  left-canonical equation; strong irreducibility alone is insufficient. The
+  bridge in the opposite direction requires `ρ.PosDef`; PSD alone is
+  insufficient. Consequently `HasPrimitiveFixedPoint` is not an unconditional
+  synonym for any of the preceding predicates.
 
 ### `MPSTensor.IsStronglyIrreduciblePaper`
 
@@ -351,17 +353,21 @@ model different levels of data and different sources.
 
 - **Declaration:** `MPSTensor.IsNormalCanonicalForm μ A : Prop`.
 - **Defined in:** `TNLean/PiAlgebra/CanonicalFormSepAux.lean`.
-- **Meaning:** irreducible, left-canonical, peripherally primitive blocks with
-  non-increasing nonzero weights and positive block dimensions.
-- **Source:** arXiv:1606.00608, lines 233--246 and equation `II_CF1`; arXiv:2011.12127,
-  lines 1828--1836.
+- **Meaning:** a stronger prepared specialization with irreducible,
+  left-canonical, peripherally primitive blocks, non-increasing nonzero weights,
+  and positive block dimensions.
+- **Source:** its direct-sum shape is based on arXiv:1606.00608, lines 233--246
+  and equation `II_CF1`, and arXiv:2011.12127, lines 1828--1836. The
+  left-canonical, ordered-weight, and positive-dimension fields are additional
+  prepared-data hypotheses rather than part of the paper's bare CF definition.
 - **Sanctioned bridges:**
   `MPSTensor.IsNormalCanonicalForm.toHasIrreducibleBlocks`,
   `MPSTensor.IsNormalCanonicalForm.toIsLeftCanonicalBlockFamily`,
   `MPSTensor.IsNormalCanonicalForm.toHasPrimitiveBlocks`, and
   `MPSTensor.IsNormalCanonicalForm.ofSeparatedData`.
-- **Caveat:** no public theorem identifies this predicate with
-  `MPSTensor.IsCanonicalForm`; the block hypotheses differ. The positive
+- **Caveat:** this does not encode the source's modulus-bound and unit-witness
+  normalization for copy weights. No public theorem identifies this predicate
+  with `MPSTensor.IsCanonicalForm`; the block hypotheses differ. The positive
   dimensions are explicit and are used to obtain the needed `NeZero` instances.
 
 ### `MPSTensor.IsNormalCanonicalFormBNT`
@@ -399,7 +405,9 @@ model different levels of data and different sources.
   supplier declarations
   `MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks` and
   `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos`.
-- **Caveat:** `exists_isBNTCanonicalForm_afterBlocking_pos` is conditional: after
+- **Caveat:** `IsBNTCanonicalForm.blockTensor` requires a strictly positive
+  blocking length `0 < p`; it does not assert preservation at length zero.
+  `exists_isBNTCanonicalForm_afterBlocking_pos` is conditional: after
   constructing prepared blocks it requires both `∀ k, ‖μ k‖ ≤ 1` and
   `∃ k, ‖μ k‖ = 1` before it yields the canonical-form witness. It is not an
   unconditional existence theorem. This is the canonical predicate when
