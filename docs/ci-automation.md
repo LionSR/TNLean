@@ -255,7 +255,7 @@ diagrams render to SVG.
 **What it does**: Enforces two blocking structural checks:
 
 - Ordinary `.lean` files may not exceed 1000 lines. The exact path passed with
-  `--generated-aggregator` is exempt only after the checker removes nested Lean
+  `--import-only-aggregator` is exempt only after the checker removes nested Lean
   comments and verifies that every remaining command is an `import`. Missing,
   excluded, empty, malformed, or declaration-bearing exemptions fail even when
   the file is below the limit. CI currently registers only `TNLean.lean`.

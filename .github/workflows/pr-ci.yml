@@ -103,6 +103,7 @@ jobs:
       pull-requests: read
     outputs:
       lean: ${{ steps.filter.outputs.lean }}
+      module-policy: ${{ steps.filter.outputs.module-policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
       workflow: ${{ steps.filter.outputs.workflow }}
     steps:
@@ -117,6 +118,7 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
+            module-policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
               - 'scripts/test_lean_file_policies.py'
@@ -185,6 +187,7 @@ jobs:
       !cancelled() && (
         github.event_name != 'pull_request' ||
         needs.changes.outputs.lean == 'true' ||
+        needs.changes.outputs.module-policy == 'true' ||
         needs.changes.outputs.workflow == 'true'
       )
     runs-on: ubuntu-latest
@@ -208,7 +211,7 @@ jobs:
         run: >
           python3 scripts/check_oversized_lean_files.py
           --root .
-          --generated-aggregator TNLean.lean
+          --import-only-aggregator TNLean.lean
 
       - name: Reject new numbered-sequel modules
         run: python3 scripts/check_numbered_lean_files.py --root .

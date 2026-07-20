@@ -208,19 +208,19 @@ def main() -> int:
         help="Known oversized file (repeatable; warning rather than error).",
     )
     parser.add_argument(
-        "--generated-aggregator",
+        "--import-only-aggregator",
         action="append",
         default=[],
         metavar="PATH",
         help=(
-            "Exact generated import-aggregator path to exempt (repeatable). "
+            "Exact import-only aggregator path to exempt (repeatable). "
             "The file is rejected unless its uncommented content is import-only."
         ),
     )
     args = parser.parse_args()
     root = args.root.resolve()
     known, known_outside = _normalize_paths(root, args.known)
-    aggregators, aggregator_outside = _normalize_paths(root, args.generated_aggregator)
+    aggregators, aggregator_outside = _normalize_paths(root, args.import_only_aggregator)
     for path in known_outside + aggregator_outside:
         print(f"::error title=Path outside repository::{path}")
     if known_outside or aggregator_outside:
