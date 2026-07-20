@@ -527,6 +527,12 @@ SOURCE = r"""
   \tnsite[removed]{(1,1,1)}
   \tnsite[removed]{(1,2,1)}
 \end{tenkzlattice}
+% Operator boxes remain the final opaque cover pass, so same-sheet trace
+% stubs terminate beneath their boundary rather than crossing the interior.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets={ket,op,bra},
+    boundary=open, outer legs=none, west=trace, east=trace]
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -1909,6 +1915,22 @@ def main() -> int:
         "pair-open-0=0|pair-traced-0=0|virtual-west=0|virtual-east=0|"
         "virtual-north=2|virtual-south=4",
         "asymmetric routing-side removal changed surviving boundary ownership",
+    )
+    operator_trace = pictures[100]
+    for sheet in range(3):
+        require(
+            operator_trace,
+            f"trace|picture=100|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-2",
+            f"operator cover stack lost periodic sheet {sheet}",
+        )
+    require(
+        operator_trace,
+        "boundary|picture=100|physical-up=0|physical-down=0|pair-closed-0=2|"
+        "pair-open-0=0|pair-traced-0=0|pair-closed-1=2|pair-open-1=0|"
+        "pair-traced-1=0|virtual-west=0|virtual-east=0|virtual-north=6|"
+        "virtual-south=6",
+        "operator cover stack changed periodic boundary ownership",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
