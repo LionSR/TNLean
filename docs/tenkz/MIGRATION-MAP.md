@@ -4,7 +4,7 @@ Generated 2026-07-17. READ-ONLY analysis of:
 
 - `tex/tn/tn_catalogue.tex` — all 114 `\TNDeclareDiagram` entries (every entry has ≥1 chapter call site; no chapter uses a non-catalogue `\TN` macro).
 - Call sites: `grep -rn '\\TN[A-Z]' blueprint/src/chapter/` (140 macro occurrences on 140 lines).
-- tenkz surface: `docs/tenkz/USAGE.md` (Phase-0, from the tenkz/06-manual stack worktree) + `docs/tenkz/WHATS-NEW-0.5.md` (0.5 additions + §Gaps = the 0.6 list).
+- tenkz surface: `docs/tenkz/USAGE.md` (Phase-0, from the tenkz/06-manual stack worktree) + `docs/tenkz/WHATS-NEW-0.5.md` (0.5 additions + §Gaps = the 0.6 list) — both since superseded and deleted; the current surface is `docs/tenkz/manual2.tex` + `docs/tenkz/chapters2/`.
 
 Spelling note: the tenkz bodies sketched below were written against the
 0.5 surface and predate the 0.6 rename sweep — read `close west/east` as

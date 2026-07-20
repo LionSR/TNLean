@@ -315,13 +315,6 @@
   /tenkz/lattice/physical/updown/.code=
       {\tl_set:Nn \l__tenkzl_physical_tl {updown}},
   /tenkz/lattice/physical/none/.code={\tl_set:Nn \l__tenkzl_physical_tl {none}},
-  /tenkz/lattice/pitch/.code={\pgfkeys{/tenkz/pitch=#1}},
-  /tenkz/lattice/compact/.code={\pgfkeys{/tenkz/compact}},
-  % the shared forward-to-core plumbing: the glyph policy reads the same
-  % in every family
-  /tenkz/lattice/tensor~style/.code={\pgfqkeys{/tenkz}{tensor~style=#1}},
-  % species={...}: picture-scope species declaration (see tenkz-core)
-  /tenkz/lattice/species/.code={\pgfqkeys{/tenkz}{species={#1}}},
   % frame=oblique renders THIS sheet in the named oblique metric frame
   % (see the frame map below); frame=flat is the rectilinear default.
   % frame=slab is the full-pitch RMP showcase preset (slant 0.60, rise
@@ -393,6 +386,11 @@
   /tenkz/lattice/sheet~vector/.code={\bool_set_true:N \l__tenkzl_custsheet_bool
       \tenkzl_vecpair:nNN {#1} \l__tenkzl_svecx_dim \l__tenkzl_svecy_dim},
 }
+% pitch=/compact=/inline=/tensor~style=/species= forward to the shared
+% /tenkz key space (tenkz-core.code.tex); one installer, every picture-
+% scope family (GOAL.md "one universal language"). This also gains
+% inline=, missing here before (grid and cd already had it).
+\tenkz_install_core_forwards:nn {lattice} {pitch,compact,inline,tensor~style,species}
 
 % "{x,y}" -> two dims (an expert basis vector in paper coordinates)
 \cs_new_protected:Npn \tenkzl_vecpair:nNN #1#2#3

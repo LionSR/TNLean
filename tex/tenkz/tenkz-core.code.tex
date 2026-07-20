@@ -410,6 +410,42 @@
   /tenkz/species/.code={\tenkz_species_declare:n{#1}},
 }
 
+% ---------- shared core-forward installer ----------
+% \tenkz_install_core_forwards:nn {<family>}{<comma list>}: install, in
+% pgfkeys family /tenkz/<family>, one pass-through key per name in the
+% list, each forwarding to the shared /tenkz/<name> key above with the
+% same value.  <name> is one of: pitch, compact, inline, tensor~style,
+% species.  Every picture-scope sub-language (grid, cd, lattice, and the
+% command-scope \tntree family) hand-copied this 4-6 line block, two of
+% them spelling the forward two different ways (\pgfkeys{/tenkz/pitch=#1}
+% vs \pgfqkeys{/tenkz}{pitch=#1}); one mechanism, one spelling (GOAL.md
+% "one universal language"). Per-atom families (/tenkz/cell, /tenkz/put,
+% /tenkz/join) do NOT call this: pitch/compact/inline pick the picture's
+% metric once, not per atom, so those families never had these keys and
+% do not gain them here -- an existing pattern, not a new exemption.
+\msg_new:nnn { tenkz } { internal }
+  { Internal~error:~#1. }
+\cs_new_protected:Npn \tenkz_install_core_forward_one:nn #1#2
+  {
+    \str_case:nnF {#2}
+      {
+        {pitch}        {\pgfkeys{/tenkz/#1/pitch/.code=
+                          {\pgfqkeys{/tenkz}{pitch=##1}}}}
+        {compact}      {\pgfkeys{/tenkz/#1/compact/.code=
+                          {\pgfqkeys{/tenkz}{compact}}}}
+        {inline}       {\pgfkeys{/tenkz/#1/inline/.code=
+                          {\pgfqkeys{/tenkz}{inline}}}}
+        {tensor~style} {\pgfkeys{/tenkz/#1/tensor~style/.code=
+                          {\pgfqkeys{/tenkz}{tensor~style=##1}}}}
+        {species}      {\pgfkeys{/tenkz/#1/species/.code=
+                          {\pgfqkeys{/tenkz}{species={##1}}}}}
+      }
+      { \msg_error:nnn { tenkz } { internal }
+          { unknown~core~forward~name~'#2'~(tenkz\_install\_core\_forwards) } }
+  }
+\cs_new_protected:Npn \tenkz_install_core_forwards:nn #1#2
+  { \clist_map_inline:nn {#2} { \tenkz_install_core_forward_one:nn {#1}{##1} } }
+
 % ---------- the cell-set algebra (shared by every tier) ----------
 % One addressing algebra serves every tier: terms `(r,c)` |
 % `(r1-r2,c1-c2)`, optionally with a trailing third coordinate, or a
