@@ -120,7 +120,13 @@ first apply the ZCL replacement while retaining `L + 1` sites, trace the last
 retained site, and then apply the ZCL replacement while retaining `L` sites.
 It makes no assertion that the neighboring trace matrix equals its square.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1606–1617. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1606–1617.
+
+**Local fix (additional marginal replacement):** The printed argument makes
+only the first replacement before returning to the one-step trace
+coefficient.  This theorem records the further replacement needed for the
+two-step coefficient.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem reducedBlockState_add_three_eq_succ_of_isSourceZCL
     (M : MPOTensor d D) (hZCL : IsSourceZCL M) (L : ℕ) :
     M.reducedBlockState (L + 3) L (by omega) =
