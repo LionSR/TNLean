@@ -2499,31 +2499,95 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \lean{Matrix.directSumDiagonalEmbedding}
     \lean{Matrix.directSumDiagonalCompression}
     \lean{Matrix.directSumExtension}
+    \lean{Matrix.directSumMapExtension}
     \lean{Matrix.directSumTraceAdjointMap}
+    \lean{Matrix.directSumTraceAdjointMapBetween}
     \leanok
     Let
     \[
         \mathcal A=\bigoplus_{k\in I}M_{n_k}(\mathbb C),
         \qquad
-        \mathcal H=\bigoplus_{k\in I}\mathbb C^{n_k}.
+        \mathcal B=\bigoplus_{l\in J}M_{m_l}(\mathbb C),
     \]
-    Write $\iota:\mathcal A\to\operatorname{End}(\mathcal H)$ for the
-    block-diagonal embedding and $\pi:\operatorname{End}(\mathcal H)\to
-    \mathcal A$ for diagonal-block compression.  For a linear map
-    $T:\mathcal A\to\mathcal A$, its canonical full-matrix extension is
+    and let $\mathcal H_A=\bigoplus_{k\in I}\mathbb C^{n_k}$ and
+    $\mathcal H_B=\bigoplus_{l\in J}\mathbb C^{m_l}$.  Write $\iota_A,\iota_B$
+    for the block-diagonal embeddings and $\pi_A,\pi_B$ for diagonal-block
+    compression.  For a linear map $T:\mathcal A\to\mathcal B$, its canonical
+    full-matrix extension is
     \[
-        \widehat T=\iota\circ T\circ\pi.
+        \widehat T=\iota_B\circ T\circ\pi_A:
+        \operatorname{End}(\mathcal H_A)\longrightarrow
+        \operatorname{End}(\mathcal H_B).
     \]
-    The trace adjoint $T^*:\mathcal A\to\mathcal A$ is defined by
+    For $X\in\mathcal A$ and $Y\in\mathcal B$, the trace adjoint
+    $T^*:\mathcal B\to\mathcal A$ is defined by
     \[
-      \sum_k\operatorname{tr}(T^*(A)_kB_k)
-      =\sum_k\operatorname{tr}(A_kT(B)_k)
-      \qquad(A,B\in\mathcal A).
+      \sum_{k\in I}\operatorname{tr}(T^*(Y)_kX_k)
+      =\sum_{l\in J}\operatorname{tr}(Y_lT(X)_l).
     \]
-    This is the block-diagonal realization needed when the fixed-point
-    argument in \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}
-    is applied to finite direct sums of matrix algebras.
+    This is the block-diagonal realization needed for the fixed-point and
+    classification arguments in
+    \cite[Appendix~C.4, lines~1980--2003]{Cirac2016MPDO_arXiv}.
+    It is only an auxiliary construction: it does not assert the
+    classification conclusion of that passage.
 \end{definition}
+
+The preceding definition and the elementary laws below provide supporting
+facts for the classification argument.  They do not prove Schwarz equality
+for the transported maps, multiplicativity, a relabeling or dimension matching
+of the simple summands, or implementation on each summand by unitary
+conjugation.
+
+\begin{lemma}[Trace-adjoint laws for two finite sums of matrix algebras]%
+    \label{lem:direct_sum_rectangular_trace_adjoint}
+    \lean{Matrix.sum_trace_directSumTraceAdjointMapBetween_mul}
+    \lean{Matrix.directSumTraceAdjointMapBetween_id}
+    \lean{Matrix.directSumTraceAdjointMapBetween_comp}
+    \lean{Matrix.directSumTraceAdjointMapBetween_self}
+    \lean{Matrix.IsTracePreservingBetweenDirectSums.directSumTraceAdjointMapBetween_one}
+    \lean{Matrix.traceAdjointMap_directSumMapExtension}
+    \lean{IsKrausCP.traceAdjointMap}
+    \lean{Matrix.IsKrausDirectSumMap.map_posSemidef}
+    \lean{Matrix.IsKrausDirectSumMap.directSumTraceAdjointMapBetween}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    For maps $T:\mathcal A\to\mathcal B$ and
+    $S:\mathcal B\to\mathcal C$, trace adjoints satisfy
+    \[
+        \operatorname{id}_{\mathcal A}^*=\operatorname{id}_{\mathcal A},
+        \qquad
+        (S\circ T)^*=T^*\circ S^*,
+        \qquad
+        (\widehat T)^*=\widehat{T^*}.
+    \]
+    If $T$ preserves the total trace, then $T^*(\Id_{\mathcal B})=
+    \Id_{\mathcal A}$.  If $\widehat T$ admits a Kraus representation, then
+    so does $\widehat{T^*}$; in particular, both $T$ and $T^*$ send families
+    of positive-semidefinite matrices to positive-semidefinite families.
+    These statements are only the adjoint and positivity part of the
+    classification argument; none of its multiplicative or blockwise
+    conclusions is asserted here.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    The defining trace identity and nondegeneracy of the trace pairing give
+    the identity and composition formulas.  Total-trace preservation gives,
+    for every $X\in\mathcal A$,
+    \[
+        \sum_{k\in I}\operatorname{tr}(T^*(\Id_{\mathcal B})_kX_k)
+        =\sum_{l\in J}\operatorname{tr}(T(X)_l)
+        =\sum_{k\in I}\operatorname{tr}(X_k),
+    \]
+    so $T^*(\Id_{\mathcal B})=\Id_{\mathcal A}$.  Finally, if
+    $\widehat T(X)=\sum_a K_aXK_a^*$, cyclicity of the trace shows that
+    \[
+        (\widehat T)^*(Y)=\sum_a K_a^*YK_a.
+    \]
+    Thus the adjoint again has a Kraus representation, and compression of
+    positive block-diagonal matrices gives the stated positivity.
+\end{proof}
 
 \begin{theorem}[Channel and fixed-point compatibility of the canonical extension]%
     \label{thm:direct_sum_full_matrix_extension_compatibility}
@@ -2535,6 +2599,9 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \lean{Matrix.directSumExtension_apply_eq_self_iff}
     \leanok
     \uses{def:direct_sum_full_matrix_extension}
+    In the endomorphic case $\mathcal B=\mathcal A$, write
+    $\mathcal H=\mathcal H_A=\mathcal H_B$ and
+    $\iota=\iota_A=\iota_B$.
     If $T$ is positive and satisfies the Schwarz inequality on
     $\mathcal A$, then $\widehat T$ is positive and satisfies the Schwarz
     inequality on $\operatorname{End}(\mathcal H)$.  If $T$ preserves the
