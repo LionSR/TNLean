@@ -1,5 +1,5 @@
 % chapters2/ch-reference.tex — the reference.  Every environment, cell
-% command, and key of tenkz 0.5, one entry per object: usage line
+% command, and key of tenkz 0.6, one entry per object: usage line
 % (\cmdsig), per-key table, and a minimal live example.  All example
 % bodies are adapted from the verified acceptance corpus
 % (boundary_test, cups_test, atoms_test, adv_brace, adv_conj, cd_test,
@@ -448,6 +448,17 @@ edge, and site commands drawn over the window.
   site glyphs, or bonds only \\
 \texttt{boundary legs} & --- & --- &
   bonds cut by the window dangle at the rim \\
+\texttt{boundary=} & \texttt{open|none} & \texttt{none} &
+  all four virtual sides open or sealed \\
+\texttt{west=}, \texttt{east=},
+\texttt{north=}, \texttt{south=} &
+  \texttt{open|none|cup|cup=}\meta{m} & --- &
+  override one virtual side; \texttt{cup} contracts matching ket--bra
+  boundary indices \\
+\texttt{sheets=} & \meta{n}\texttt{|\{ket,bra,\ldots\}} & \texttt{1} &
+  numeric sheets or a top-to-bottom role stack \\
+\texttt{outer legs=} & \texttt{both|top|bottom|none} & --- &
+  outer physical faces of a role stack \\
 \texttt{physical=} & \texttt{up|none} & \texttt{none} &
   a physical leg on every site \\
 \texttt{frame=} & \texttt{flat|oblique|slab} & \texttt{flat} &
@@ -655,9 +666,13 @@ widths still apply, so a free picture matches its grid neighbours.
 \end{tenkzfree}
 \end{tnexample}
 
-The entries above are the whole 0.5 language.  What it cannot yet
-draw --- inter-sheet closures, an operator sheet between the layers,
-and directed physical legs and directed signatures --- is stated as
-mathematics in the roadmap of
+The entries above are the whole 0.6 language.  A lattice side
+\tnval{cup} contracts each matching virtual ket--bra boundary pair;
+an optional matrix rides the resolved exterior connector.  This is
+distinct from a same-sheet periodic virtual trace.  If a sheet-local
+removal leaves only one endpoint of a requested cup, that endpoint remains
+open and the picture warns; a zero-length expert side vector likewise leaves
+the affected ports open rather than inventing a closure.  Remaining deferred
+objects are stated as mathematics in the roadmap of
 \S\ref{ch:trouble}, and the one-page card on the back page
 compresses this chapter to one line per object.
