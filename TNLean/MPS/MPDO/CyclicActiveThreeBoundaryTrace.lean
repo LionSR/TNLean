@@ -41,6 +41,20 @@ namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
+/-- The trace of a positive neighboring operator is the complexification of
+the corresponding cyclic-active trace-matrix entry.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455. -/
+theorem neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (a b : F.CyclicActiveSector) :
+    (F.neighboringOperator a b).trace =
+      (F.cyclicActiveSectorTraceMatrix a b : ℂ) := by
+  change (F.neighboringOperator a b).trace =
+    ((F.neighboringOperator a b).trace.re : ℂ)
+  exact (hpos a b).isHermitian.trace_eq_ofReal_re
+
 /-- The two fully traced middle neighboring operators give the square of the
 cyclic-active trace matrix:
 \[
@@ -69,13 +83,7 @@ theorem sum_cyclicActive_trace_mul_trace_eq_pow_two
       ((F.cyclicActiveSectorTraceMatrix ^ 2) q h : ℂ) := by
   classical
   rw [pow_two, Matrix.mul_apply]
-  have htrace (a b : F.CyclicActiveSector) :
-      (F.neighboringOperator a b).trace =
-        (F.cyclicActiveSectorTraceMatrix a b : ℂ) := by
-    change (F.neighboringOperator a b).trace =
-      ((F.neighboringOperator a b).trace.re : ℂ)
-    exact (hpos a b).isHermitian.trace_eq_ofReal_re
-  simp_rw [htrace]
+  simp_rw [F.neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix hpos]
   norm_cast
 
 /-- After rescaling each traced neighboring edge by \(\lambda^{-1}\), the two
@@ -104,13 +112,8 @@ theorem sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two
       ((((lam⁻¹ : ℝ) • F.cyclicActiveSectorTraceMatrix) ^ 2) q h : ℂ) := by
   classical
   rw [pow_two, Matrix.mul_apply]
-  have htrace (a b : F.CyclicActiveSector) :
-      (F.neighboringOperator a b).trace =
-        (F.cyclicActiveSectorTraceMatrix a b : ℂ) := by
-    change (F.neighboringOperator a b).trace =
-      ((F.neighboringOperator a b).trace.re : ℂ)
-    exact (hpos a b).isHermitian.trace_eq_ofReal_re
-  simp_rw [htrace, Matrix.smul_apply]
+  simp_rw [F.neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix hpos,
+    Matrix.smul_apply]
   norm_cast
 
 /-- Summing the partial traces of the three-site closures over the

@@ -657,8 +657,8 @@
 % **Local fix (additional marginal replacement):** the printed proof returns
 % to a one-step coefficient after its first replacement.  See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{lemma}[Iterated marginal stability under zero correlation length]
-    \label{lem:mpdo_source_zcl_iterated_marginal_stability}
+\begin{theorem}[Iterated marginal stability under zero correlation length]
+    \label{thm:mpdo_source_zcl_iterated_marginal_stability}
     \lean{MPOTensor.reducedBlockState_add_three_eq_succ_of_isSourceZCL}
     \leanok
     \uses{lem:mpdo_source_zcl_marginal_stability}
@@ -666,7 +666,7 @@
     normalized $L$-site marginal obtained by tracing three sites from
     $\sigma^{(L+3)}(M)$ equals the normalized $L$-site marginal obtained by
     tracing one site from $\sigma^{(L+1)}(M)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     First retain $L+1$ sites and apply
@@ -1054,10 +1054,12 @@
 % **Local fix (cyclic-active restriction):** the intermediate sum is over the
 % positive-length cyclic support.  See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{lemma}[Cyclic-active three-boundary trace coefficient]
-    \label{lem:mpdo_cyclic_active_three_boundary_trace}
+\begin{theorem}[Cyclic-active three-boundary trace coefficient]
+    \label{thm:mpdo_cyclic_active_three_boundary_trace}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       sum_cyclicActive_trace_mul_trace_eq_pow_two}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two}
     \lean{MPOTensor.PhysicalSectorFactorization.%
@@ -1090,7 +1092,7 @@
         \lambda^{-1}\tr(\eta_{r,h})
       =(\widehat T_C^2)_{q,h}.
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Positivity makes each $\tr(\eta_{a,b})$ real.  Expanding matrix
@@ -1110,9 +1112,9 @@
 % Tracked in https://github.com/LionSR/TNLean/issues/4445.
 \begin{remark}[Open fourth-region coordinate identification]
     \notready
-    Lemma~\ref{lem:mpdo_source_zcl_iterated_marginal_stability} gives the
+    Theorem~\ref{thm:mpdo_source_zcl_iterated_marginal_stability} gives the
     required equality of normalized marginals, while
-    Lemma~\ref{lem:mpdo_cyclic_active_three_boundary_trace} and
+    Theorem~\ref{thm:mpdo_cyclic_active_three_boundary_trace} and
     Theorem~\ref{thm:mpdo_cyclic_active_deletion} give the local coefficient
     and the deletion of vanishing cyclic summands.  It remains to
     transport the marginal equality through the complete physical-sector
