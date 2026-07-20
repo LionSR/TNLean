@@ -654,6 +654,27 @@
     denominator on the right nonzero.
 \end{proof}
 
+% **Local fix (additional marginal replacement):** the printed proof returns
+% to a one-step coefficient after its first replacement.  See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Iterated marginal stability under zero correlation length]
+    \label{thm:mpdo_source_zcl_iterated_marginal_stability}
+    \lean{MPOTensor.reducedBlockState_add_three_eq_succ_of_isSourceZCL}
+    \leanok
+    \uses{lem:mpdo_source_zcl_marginal_stability}
+    Let $M$ have source zero correlation length.  For every $L\geq0$, the
+    normalized $L$-site marginal obtained by tracing three sites from
+    $\sigma^{(L+3)}(M)$ equals the normalized $L$-site marginal obtained by
+    tracing one site from $\sigma^{(L+1)}(M)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    First retain $L+1$ sites and apply
+    Lemma~\ref{lem:mpdo_source_zcl_marginal_stability}.  Trace the last of
+    these retained sites, and then apply the same lemma while retaining $L$
+    sites.
+\end{proof}
+
 \begin{definition}[Rank-one trace factorization for neighboring operators]
     \label{def:mpdo_generic_eta_rank_one_trace_factorization}
     \lean{Matrix.EtaRankOneTraceFactorization}
@@ -887,6 +908,8 @@
     \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_cyclicNeighboringProduct_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      map_cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
     \leanok
     \uses{def:mpdo_cyclic_active_sector,
       def:mpdo_physical_sector_chain_coordinates}
@@ -896,14 +919,19 @@
         \Omega_k=0.
     \]
     Thus deleting the sectors outside $C$ leaves every finite cyclic
-    neighboring product unchanged.
+    neighboring product unchanged.  For every linear contraction $\Phi$,
+    including a composition of reindexings and partial traces,
+    \[
+        \Omega_k=0 \quad\Longrightarrow\quad \Phi(\Omega_k)=0.
+    \]
 \end{theorem}
 
 \begin{proof}\leanok
     If $\Omega_k\ne0$, each factor $\eta_{k_n,k_{n+1}}$ is nonzero; otherwise
     every matrix entry of the product vanishes.  Starting with the edge
     $k_n\to k_{n+1}$ and following the remaining cyclic edges gives a return
-    path to $k_n$.  Hence every $k_n$ belongs to $C$.
+    path to $k_n$.  Hence every $k_n$ belongs to $C$.  The last assertion is
+    the linear identity $\Phi(0)=0$.
 \end{proof}
 
 % **Local fix (cyclic-active restriction):** this is a restricted replacement for
@@ -1023,15 +1051,76 @@
 \end{proof}
 
 % Tracked in https://github.com/LionSR/TNLean/issues/4445.
-\begin{remark}[Open three-boundary identification]
+% **Local fix (cyclic-active restriction):** the intermediate sum is over the
+% positive-length cyclic support.  See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Cyclic-active three-boundary trace coefficient]
+    \label{thm:mpdo_cyclic_active_three_boundary_trace}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sum_cyclicActive_trace_mul_trace_eq_pow_two}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sum_cyclicActive_partialTraceRight_threeSiteSectorClosure}
+    \leanok
+    \uses{def:mpdo_cyclic_active_sector,
+      thm:mpdo_sector_closure_partial_traces}
+    Let $C$ be the set of cyclic-active sectors and suppose that every
+    neighboring operator is positive semidefinite.  For $q,h\in C$,
+    \[
+        \sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h})
+        =(T_C^2)_{q,h}.
+    \]
+    More generally, if $B_{q,h}(X)$ denotes the outer boundary operator in
+    the three-site closure, then
+    \[
+      \sum_{r\in C}\tr_{\mathrm{mid}}
+        \bigl(B_{q,h}(X)\otimes\eta_{q,r}\otimes\eta_{r,h}\bigr)
+      =(T_C^2)_{q,h}B_{q,h}(X).
+    \]
+    Here $\tr_{\mathrm{mid}}$ traces both neighboring factors.  No equality
+    between $T_C$ and $T_C^2$ is asserted.
+
+    For every $\lambda\in\R$, set
+    $\widehat T_C=\lambda^{-1}T_C$.  The same calculation with each fully
+    traced edge multiplied by $\lambda^{-1}$ gives
+    \[
+      \sum_{r\in C}
+        \lambda^{-1}\tr(\eta_{q,r})\,
+        \lambda^{-1}\tr(\eta_{r,h})
+      =(\widehat T_C^2)_{q,h}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity makes each $\tr(\eta_{a,b})$ real.  Expanding matrix
+    multiplication gives
+    \[
+      (T_C^2)_{q,h}=\sum_{r\in C}(T_C)_{q,r}(T_C)_{r,h}
+      =\sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h}).
+    \]
+    The partial trace of the fixed-sector three-site closure is
+    \[
+      \tr(\eta_{q,r})\tr(\eta_{r,h})B_{q,h}(X).
+    \]
+    Summing over $r\in C$ proves the second identity.  Multiplying each of the
+    two trace factors by $\lambda^{-1}$ gives the normalized identity.
+\end{proof}
+
+% Tracked in https://github.com/LionSR/TNLean/issues/4445.
+\begin{remark}[Open fourth-region coordinate identification]
     \notready
-    The remaining physical step is to apply the zero-correlation-length
-    marginal replacement one further time than at line~1613 of
-    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, express the trace of three
-    boundary sites in the cyclic-active sector coordinates, and prove that
-    the fully traced middle segment contributes $\widehat T^2$.  This must be
-    done without identifying $\widehat T$ with $\widehat T^2$ or the
-    cyclic-active matrix with the unreduced Beigi matrix.
+    Theorem~\ref{thm:mpdo_source_zcl_iterated_marginal_stability} gives the
+    required equality of normalized marginals, while
+    Theorem~\ref{thm:mpdo_cyclic_active_three_boundary_trace} and
+    Theorem~\ref{thm:mpdo_cyclic_active_deletion} give the local coefficient
+    and the deletion of vanishing cyclic summands.  It remains to
+    transport the marginal equality through the complete physical-sector
+    direct sum, retaining the two outer partial traces.  This must be done
+    without identifying $T_C$ with $T_C^2$ or $T_C$ with the unreduced Beigi
+    matrix.
 \end{remark}
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
