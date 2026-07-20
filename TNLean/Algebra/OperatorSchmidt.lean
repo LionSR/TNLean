@@ -9,6 +9,7 @@ import Mathlib.LinearAlgebra.Dimension.Free
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
 import Mathlib.LinearAlgebra.Matrix.Kronecker
+import TNLean.Algebra.OperatorBlock
 
 /-!
 # Operator-Schmidt rank
@@ -49,14 +50,6 @@ open scoped BigOperators Kronecker
 namespace Matrix
 
 variable {R m n : Type*}
-
-/-- The `(i,j)` operator block of a bipartite matrix, regarded as a matrix on
-the second factor.
-
-This is the block family used in the ordinary operator-Schmidt decomposition;
-see arXiv:1903.05373, definition preceding Theorem 1. -/
-def operatorBlock (ρ : Matrix (m × n) (m × n) R) (i j : m) : Matrix n n R :=
-  fun k l ↦ ρ (i, k) (j, l)
 
 section Semiring
 

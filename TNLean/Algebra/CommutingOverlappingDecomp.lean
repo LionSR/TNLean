@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.OperatorSchmidt
+import TNLean.Algebra.OperatorBlock
 import TNLean.Algebra.StarSubalgebraBlockForm
 
 /-!
@@ -125,7 +125,7 @@ the two first-factor indices fixed. It is the complex specialization of
 `operatorBlock`.
 
 Source: Beigi, arXiv:1105.1019v2, proof of Lemma 2.1 (`lem:comm`). -/
-def leftMiddleSlice (X : Matrix (a × b) (a × b) ℂ) (i i' : a) : Matrix b b ℂ :=
+abbrev leftMiddleSlice (X : Matrix (a × b) (a × b) ℂ) (i i' : a) : Matrix b b ℂ :=
   operatorBlock X i i'
 
 /-- The middle-factor coefficient matrix of an operator on the last two factors, with
@@ -187,7 +187,7 @@ private theorem conj_left_tensor_apply (X : Matrix (a × b) (a × b) ℂ)
       (star U * leftMiddleSlice X i i' * U) j j' := by
   simp only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_kronecker,
     Matrix.conjTranspose_one, Matrix.mul_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, Fintype.sum_prod_type, leftMiddleSlice, operatorBlock]
+    Matrix.one_apply, Fintype.sum_prod_type, operatorBlock_apply]
   simp
 
 omit [DecidableEq b] in
@@ -229,7 +229,7 @@ theorem middleSlices_commute_of_overlappingLifts_commute
       rightMiddleSlice Y k k' * leftMiddleSlice X i i' := by
   ext j j'
   have h := congrFun (congrFun hComm ((i, j), k)) ((i', j'), k')
-  simpa [leftOverlappingLift, rightOverlappingLift, leftMiddleSlice, operatorBlock,
+  simpa [leftOverlappingLift, rightOverlappingLift, operatorBlock_apply,
     rightMiddleSlice, Matrix.mul_apply, Matrix.one_apply, Fintype.sum_prod_type] using h
 
 /-- **Middle-space spatial decomposition for commuting overlapping operators.** Suppose
