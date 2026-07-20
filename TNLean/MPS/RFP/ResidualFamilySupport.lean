@@ -10,9 +10,9 @@ import TNLean.MPS.RFP.ResidualWordSpan
 /-!
 # Two-site support of a residual-isometry family
 
-This file constructs the common physical isometry carried by the valid
-Sigma-indexed virtual pairs of a family of distinct normal sectors.  The index
-space is
+This file constructs the common physical isometry carried by the disjoint
+union of the within-sector virtual pairs of a family of distinct normal
+sectors.  The index space is
 `BlockEntryIndex dim = Σ j, Fin (dim j) × Fin (dim j)`, not the full square
 of the direct-sum bond space: cross-sector virtual pairs are absent from the
 source isometry equation.
@@ -36,6 +36,37 @@ noncomputable def residualFamilyPhysicalIsometryMatrix
     Matrix (Fin d) (BlockEntryIndex dim) ℂ :=
   fun i x ↦ U x.1 i x.2.1 x.2.2
 
+/-- The one-letter Gram identity, written in the orientation used by the
+matrix of the common physical isometry. -/
+private theorem IsResidualIsometryFamily.residual_entry_gram
+    {U : (j : Fin r) → MPSTensor d (dim j)}
+    (hU : IsResidualIsometryFamily U)
+    (j k : Fin r) (a b : Fin (dim j)) (c e : Fin (dim k)) :
+    ∑ i : Fin d, star (U j i a b) * U k i c e =
+      if (⟨j, (a, b)⟩ : BlockEntryIndex dim) = ⟨k, (c, e)⟩ then 1 else 0 := by
+  have hGram := hU.wordEntryFamily_one_gram
+    (⟨k, (c, e)⟩ : BlockEntryIndex dim) ⟨j, (a, b)⟩
+  rw [← Equiv.sum_comp (Equiv.funUnique (Fin 1) (Fin d)).symm
+    (fun w : Fin 1 → Fin d ↦
+      wordEntryFamily U 1 ⟨k, (c, e)⟩ w *
+        star (wordEntryFamily U 1 ⟨j, (a, b)⟩ w))] at hGram
+  simp only [wordEntryFamily, blockEntryValue, wordTuple,
+    Equiv.funUnique_symm_apply, List.ofFn_succ, List.ofFn_zero,
+    evalWord_cons, evalWord_nil, mul_one, uniqueElim_const] at hGram
+  calc
+    ∑ i : Fin d, star (U j i a b) * U k i c e =
+        ∑ i : Fin d, U k i c e * star (U j i a b) := by
+          apply Finset.sum_congr rfl
+          intro i _
+          rw [mul_comm]
+    _ = if (⟨k, (c, e)⟩ : BlockEntryIndex dim) = ⟨j, (a, b)⟩ then 1 else 0 := hGram
+    _ = if (⟨j, (a, b)⟩ : BlockEntryIndex dim) = ⟨k, (c, e)⟩ then 1 else 0 := by
+      by_cases h : (⟨j, (a, b)⟩ : BlockEntryIndex dim) = ⟨k, (c, e)⟩
+      · rw [if_pos h, if_pos h.symm]
+      · have hk : (⟨k, (c, e)⟩ : BlockEntryIndex dim) ≠ ⟨j, (a, b)⟩ :=
+          fun hk ↦ h hk.symm
+        rw [if_neg h, if_neg hk]
+
 /-- The cross-sector residual-isometry equations say that the common physical
 matrix is an isometry on `BlockEntryIndex dim`.
 
@@ -49,20 +80,9 @@ theorem IsResidualIsometryFamily.residualFamilyPhysicalIsometryMatrix_isometry
   ext x y
   rcases x with ⟨j, a, b⟩
   rcases y with ⟨k, c, e⟩
-  by_cases hjk : j = k
-  · subst k
-    simp only [residualFamilyPhysicalIsometryMatrix, Matrix.mul_apply,
-      Matrix.conjTranspose_apply, Matrix.one_apply]
-    rw [show (∑ i : Fin d, star (U j i a b) * U j i c e) =
-        ∑ i : Fin d, U j i c e * star (U j i a b) by
-      apply Finset.sum_congr rfl
-      intro i _
-      exact mul_comm _ _]
-    rw [hU.1 j c e a b]
-    simp [eq_comm]
-  · have hCross := hU.2 k j (Ne.symm hjk) c e a b
-    simpa [residualFamilyPhysicalIsometryMatrix, Matrix.mul_apply,
-      Matrix.conjTranspose_apply, Matrix.one_apply, hjk, mul_comm] using hCross
+  simpa [residualFamilyPhysicalIsometryMatrix, Matrix.mul_apply,
+    Matrix.conjTranspose_apply, Matrix.one_apply] using
+      hU.residual_entry_gram j k a b c e
 
 /-- Simultaneous Appendix B data for a finite family of sectors.  The fields
 are precisely the sectorwise product-pair form and the common cross-sector
@@ -83,7 +103,8 @@ namespace ResidualFamilyAppendixBData
 variable {B : (j : Fin r) → MPSTensor d (dim j)}
 
 /-- The boundary-coordinate space for the equal-sector two-site basic
-vectors.  It is the curried form of functions on `BlockEntryIndex dim`.
+vectors: for each sector, a coefficient function on its two outer
+virtual indices.
 
 Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
 abbrev TwoSiteBoundary (dim : Fin r → ℕ) :=
@@ -166,7 +187,7 @@ insertion.
 Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578, and the
 parent-space construction, lines 511--524. -/
 noncomputable def twoSiteBondSupportProjection
-    (_h : ResidualFamilyAppendixBData B) :
+    (B : (j : Fin r) → MPSTensor d (dim j)) :
     NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)
   e.toLinearMap.comp
@@ -180,7 +201,7 @@ Source: arXiv:1606.00608, equations `III_CFI_RFP` and (3.17)--(3.18), lines
 543--578. -/
 theorem twoSiteBondSupportProjection_range
     (h : ResidualFamilyAppendixBData B) :
-    LinearMap.range h.twoSiteBondSupportProjection =
+    LinearMap.range (twoSiteBondSupportProjection B) =
       LinearMap.range h.twoSiteBondEmbedding := by
   rw [h.twoSiteBondEmbedding_range_eq_directSum_groundSpace]
   ext ψ
@@ -210,8 +231,8 @@ the canonical two-site support projector of the direct-sum tensor.
 Source: arXiv:1606.00608, parent construction, lines 511--524, and equations
 (3.16)--(3.18), lines 549--578. -/
 theorem twoSiteBondSupportProjection_eq_complement
-    (h : ResidualFamilyAppendixBData B) :
-    h.twoSiteBondSupportProjection =
+    (B : (j : Fin r) → MPSTensor d (dim j)) :
+    twoSiteBondSupportProjection B =
       1 - parentInteraction (directSumTensor B) 2 := by
   apply LinearMap.ext
   intro v
@@ -231,7 +252,7 @@ namespace IsBNTCanonicalForm
 variable {P : SectorDecomposition d}
 
 /-- Whole-direct-sum transfer idempotence supplies simultaneous Appendix B
-data on the faithful Sigma-indexed residual-pair space.
+data on the disjoint union of the within-sector residual-pair spaces.
 
 Source: arXiv:1606.00608, equations `III_CFI_RFP` and `eq:III_isometry`, lines
 543--555, and Corollary `III.cor3`, lines 583--589. -/
@@ -248,21 +269,8 @@ theorem exists_residualFamilyAppendixBData
       U := U j
       hX_det := hX j
       hΛ_pos := fun k ↦ Real.sqrt_pos.2 (hΛ j k)
-      hU_pair := by
-        intro p q
-        rw [show (∑ i : Fin d, star (U j i p.1 p.2) * U j i q.1 q.2) =
-            ∑ i : Fin d, U j i q.1 q.2 * star (U j i p.1 p.2) by
-          apply Finset.sum_congr rfl
-          intro i _
-          exact mul_comm _ _]
-        rw [hU.1 j q.1 q.2 p.1 p.2]
-        by_cases hpq : p = q
-        · subst q
-          simp
-        · have hne : ¬ (q.1 = p.1 ∧ q.2 = p.2) := by
-            intro h
-            exact hpq (Prod.ext h.1.symm h.2.symm)
-          simp [hpq, hne]
+      hU_pair := fun p q ↦ by
+        simpa using hU.residual_entry_gram j j p.1 p.2 q.1 q.2
       hA_eq := hBasis j }
   exact ⟨{ sector := sector, residual := hU }⟩
 
