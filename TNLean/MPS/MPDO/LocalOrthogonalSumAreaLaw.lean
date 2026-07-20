@@ -43,6 +43,85 @@ private theorem mul_eq_self_of_isHermitian_of_mul_eq_self
   have hstar := congrArg Matrix.conjTranspose hleft
   simpa only [Matrix.conjTranspose_mul, hA.eq, hP.eq] using hstar
 
+/-- Support of the first site of a normalized chain is preserved by every
+nonempty prefix marginal.
+
+This is the elementary marginalization step used in CPSV16, Appendix C.2,
+lines 1760--1770 and 1801--1808. -/
+theorem firstSiteMatrix_mul_reducedBlockState_of_mul_normalizedMPO
+    (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
+    {N' L : ℕ} (hL : L + 1 ≤ N' + 1)
+    (hfull : firstSiteMatrix P N' * normalizedMPO M (N' + 1) =
+      normalizedMPO M (N' + 1)) :
+    firstSiteMatrix P L * reducedBlockState M (N' + 1) (L + 1) hL =
+      reducedBlockState M (N' + 1) (L + 1) hL := by
+  ext u v
+  obtain ⟨a, u', rfl⟩ : ∃ a u', u = Fin.cons a u' :=
+    ⟨u 0, u ∘ Fin.succ, (Fin.cons_self_tail u).symm⟩
+  obtain ⟨b, v', rfl⟩ : ∃ b v', v = Fin.cons b v' :=
+    ⟨v 0, v ∘ Fin.succ, (Fin.cons_self_tail v).symm⟩
+  rw [firstSiteMatrix_mul_apply]
+  simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ]
+  simp_rw [reducedBlockState_eq_sum]
+  simp_rw [Finset.mul_sum]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro w _
+  let z : Fin N' → Fin d :=
+    Fin.append u' w ∘ Fin.cast (show N' = L + (N' + 1 - (L + 1)) by omega)
+  let full (x : Fin d) : Fin (N' + 1) → Fin d :=
+    Fin.append (Fin.cons x u') w ∘
+      Fin.cast (show N' + 1 = L + 1 + (N' + 1 - (L + 1)) by omega)
+  let full' : Fin (N' + 1) → Fin d :=
+    Fin.append (Fin.cons b v') w ∘
+      Fin.cast (show N' + 1 = L + 1 + (N' + 1 - (L + 1)) by omega)
+  change (∑ x : Fin d, P a x * normalizedMPO M (N' + 1) (full x) full') =
+    normalizedMPO M (N' + 1) (full a) full'
+  have htail (x : Fin d) : full x ∘ Fin.succ = z := by
+    funext i
+    simp only [full, z, Function.comp_apply]
+    by_cases hi : i.val < L
+    · have hleft : Fin.cast
+          (show N' + 1 = L + 1 + (N' + 1 - (L + 1)) by omega) i.succ =
+          Fin.castAdd (N' + 1 - (L + 1)) (Fin.succ ⟨i.val, hi⟩) := by
+        apply Fin.ext
+        simp
+      have hright : Fin.cast
+          (show N' = L + (N' + 1 - (L + 1)) by omega) i =
+          Fin.castAdd (N' + 1 - (L + 1)) ⟨i.val, hi⟩ := by
+        apply Fin.ext
+        simp
+      rw [hleft, hright, Fin.append_left, Fin.append_left, Fin.cons_succ]
+    · let k : Fin (N' + 1 - (L + 1)) := ⟨i.val - L, by omega⟩
+      have hleft : Fin.cast
+          (show N' + 1 = L + 1 + (N' + 1 - (L + 1)) by omega) i.succ =
+          Fin.natAdd (L + 1) k := by
+        apply Fin.ext
+        simp [k]
+        omega
+      have hright : Fin.cast
+          (show N' = L + (N' + 1 - (L + 1)) by omega) i =
+          Fin.natAdd L k := by
+        apply Fin.ext
+        simp [k]
+        omega
+      rw [hleft, hright, Fin.append_right, Fin.append_right]
+  have hfull_eq (x : Fin d) : full x = Fin.cons x z := by
+    funext i
+    refine Fin.cases ?_ (fun j ↦ ?_) i
+    · simp only [full, Function.comp_apply]
+      have hzero : Fin.cast
+          (show N' + 1 = L + 1 + (N' + 1 - (L + 1)) by omega) 0 =
+          Fin.castAdd (N' + 1 - (L + 1)) (0 : Fin (L + 1)) := by
+        apply Fin.ext
+        simp
+      rw [hzero, Fin.append_left, Fin.cons_zero]
+      simp
+    · exact congrFun (htail x) j
+  have hentry := congrFun (congrFun hfull (full a)) full'
+  rw [firstSiteMatrix_mul_apply] at hentry
+  simpa only [hfull_eq, Fin.cons_zero, Function.comp_def, Fin.cons_succ] using hentry
+
 /-- The probability of a local orthogonal sector in the normalized
 length-`N` state.
 
