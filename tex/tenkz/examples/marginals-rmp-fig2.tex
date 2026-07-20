@@ -29,13 +29,17 @@
 \begin{tenkzlattice}[rows=4, cols=4, frame=oblique, physical=up]
 \end{tenkzlattice}
 \par\medskip
-% rho_kept = Tr_{col 4} |psi><psi|: the double layer with the rightmost
-% column's inter-sheet pairings closed by wrap loops
-\begin{tenkzplanes}[rows=4, cols=4, sheets={ket, bra}, trace={(1-4,4)}]
-\end{tenkzplanes}
-\par\medskip
-% (b') the same marginal with the KEPT columns' physical indices open
-% (the paper draws rho's row/column indices as stubs); trace beats open
+% rho_{1:3} = Tr_{col 4} |psi><psi| acts on the 12 kept sites.  Columns 1--3
+% retain one ket and one bra physical
+% index at each site, while the four physical pairs in column 4 are traced.
+% Ink-to-index correspondence: black vertices on the upper and lower sheets
+% are the ket tensors A and conjugate bra tensors; horizontal and diagonal lines
+% contract virtual indices within each sheet.  The twelve rising stubs in
+% columns 1--3 are the free bra physical indices and the twelve falling stubs
+% are the free ket physical indices.  Each wrap loop in column 4 joins the
+% ket and bra physical indices at one site, and no other ket--bra segment is
+% present.  The lattice frame seals the exterior virtual boundary: suppressed
+% outer virtual stubs are fixed boundary contractions, not physical traces.
 \begin{tenkzplanes}[rows=4, cols=4, sheets={ket, bra},
                     open={(1-4,1-3)}, trace={(1-4,4)}]
 \end{tenkzplanes}
