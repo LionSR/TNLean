@@ -2670,6 +2670,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor}
     \lean{MPSTensor.BeigiSectorGraphData.minimalLoopTensor}
     \lean{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor_sector_apply}
+    \lean{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor_sector_ne}
     \leanok
     \uses{def:beigi_loop_product_state}
     Let $\Phi_a=(\varphi_a(r,l))_{r,l}$ and write
@@ -2687,6 +2688,22 @@ specialization of that Appendix~D definition.
     \]
     again extended by zero outside sector~$a$.  Its physical tensor is its
     image under the same one-site unitary.
+\end{definition}
+
+\begin{definition}[Normalized minimal tensor associated with a positive Beigi loop]
+    \label{def:beigi_normalized_minimal_loop_tensor}
+    \lean{MPSTensor.BeigiSectorGraphData.loopBondNorm}
+    \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopCoordinateTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor}
+    \leanok
+    \uses{def:beigi_loop_schmidt_support}
+    Let $\nu_a=\lVert\varphi_a\rVert_2>0$, where the norm is the
+    Hilbert-space norm of the bond vector, or equivalently the Frobenius norm
+    of $\Phi_a$.  In either coordinate system, the normalized representative is
+    \[
+        \widehat C_a=\nu_a^{-1}\widetilde C_a.
+    \]
+    The raw coordinate and physical tensors are retained separately.
 \end{definition}
 
 \begin{lemma}[Positive Schmidt dimension of a Beigi loop]
@@ -2724,15 +2741,56 @@ specialization of that Appendix~D definition.
     this span.  One-site injectivity implies normality.
 \end{proof}
 
+\begin{theorem}[Transfer fixed point of a normalized Beigi loop tensor]
+    \label{thm:beigi_normalized_minimal_loop_tensor_rfp}
+    \lean{MPSTensor.BeigiSectorGraphData.loopBondNorm_pos}
+    \lean{MPSTensor.BeigiSectorGraphData.loopBondNorm_ne_zero}
+    \lean{MPSTensor.BeigiSectorGraphData.loopBondNorm_eq_frobeniusNorm}
+    \lean{MPSTensor.BeigiSectorGraphData.transferMap_minimalLoopCoordinateTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.transferMap_minimalLoopCoordinateTensor_comp_self}
+    \lean{MPSTensor.BeigiSectorGraphData.transferMap_normalizedMinimalLoopCoordinateTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopCoordinateTensor_isTransferIdempotent}
+    \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_isTransferIdempotent}
+    \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_isInjective}
+    \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_isNormal}
+    \leanok
+    \uses{def:beigi_normalized_minimal_loop_tensor,
+        thm:beigi_minimal_loop_tensor_injective,
+        def:mps_transfer_idempotence}
+    The transfer map of the unnormalized coordinate tensor is
+    \[
+        \mathcal E_a(Z)=\operatorname{tr}(X_a^*X_aZ)Y_aY_a^*,
+        \qquad
+        \mathcal E_a^2=\nu_a^2\mathcal E_a.
+    \]
+    Hence the transfer map of $\widehat C_a$ is idempotent.  This remains
+    true after the physical unitary rotation.  The normalized physical tensor
+    is injective and therefore normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    Summing the Kraus terms over the loop-sector coordinates gives the stated
+    rank-one formula.  Cyclicity of the trace and $\Phi_a=X_aY_a$ give
+    \[
+        \operatorname{tr}(X_a^*X_aY_aY_a^*)
+          =\operatorname{tr}(\Phi_a^*\Phi_a)=\nu_a^2.
+    \]
+    Scaling every letter by $\nu_a^{-1}$ scales the transfer map by
+    $\nu_a^{-2}$, which makes it idempotent.  A unitary change of physical
+    coordinates leaves the transfer map invariant, and the nonzero scalar
+    preserves injectivity.
+\end{proof}
+
 \begin{theorem}[Periodic vector of a positive Beigi loop]
     \label{thm:beigi_loop_tensor_periodic_vector}
     \lean{MPSTensor.BeigiSectorGraphData.mpv_loopCoordinateTensor}
     \lean{MPSTensor.BeigiSectorGraphData.mpv_loopTensor}
     \lean{MPSTensor.BeigiSectorGraphData.mpv_minimalLoopCoordinateTensor}
     \lean{MPSTensor.BeigiSectorGraphData.mpv_minimalLoopTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.mpv_normalizedMinimalLoopTensor}
     \leanok
     \uses{def:beigi_loop_product_state, def:beigi_loop_schmidt_support,
-        lem:mpv_rotate_physical}
+        def:beigi_normalized_minimal_loop_tensor, lem:mpv_rotate_physical}
     For every $N>0$, the periodic matrix product vector of $C_a$ has
     coefficient
     \[
@@ -2742,7 +2800,8 @@ specialization of that Appendix~D definition.
     other sector configuration.  Consequently the periodic vector of the
     physical loop tensor is exactly the sitewise-unitary image of this cyclic
     product-of-pairs state.  The same identities hold for the tensor on the
-    minimal Schmidt support.
+    minimal Schmidt support.  For the normalized minimal tensor it is
+    $\nu_a^{-N}\Psi_a^{(N)}$.
 \end{theorem}
 
 \begin{proof}\leanok
