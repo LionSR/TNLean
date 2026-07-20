@@ -496,7 +496,7 @@ not hand-maintained prose — the two drift out of step otherwise.
 |---|---|---|
 | `grid` | `atom`, `bond`, `faceports`, `pairleg`, `hole`, `cup`, `boundary`, `phtrace`, `pairtrace`, `trace`, `hooks` | `tenkz-grid.code.tex` |
 | `free` | `atom`, `join` | `tenkz-free.code.tex` |
-| `lattice` | `lattice`, `site`, `region`, `edge`, `pairtrace`, `boundary` | `tenkz-lattice.code.tex` |
+| `lattice` | `lattice`, `site`, `region`, `edge`, `cup`, `trace`, `pairtrace`, `boundary` | `tenkz-lattice.code.tex` |
 | `cd` | `cdcell`, `cdobject`, `cdmap`, `cdarrow`, `tree` | `tenkz-cd.code.tex` |
 
 Notes against the previous (wrong) table: grid never emits `leg`, `fuse`,
