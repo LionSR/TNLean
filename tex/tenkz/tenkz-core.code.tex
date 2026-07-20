@@ -22,10 +22,10 @@
 %                      \overline{A}, and no external auto label exists,
 %                      so brace clearances tighten accordingly.
 % The policy is a document-wide \tnset key and a per-picture key of the
-% tenkz environment, \tnpic, and tenkzfree (the environments group, so a
-% picture-local assignment scopes itself; tenkzcd cells inherit it through
-% the \tnpic objects they contain).  Explicit per-cell skins (dot, box, pill,
-% mpo) always override the policy; the event stream always records the
+% tenkz environment, \tnpic, tenkzlattice, and tenkzfree.  These environments
+% group, so a picture-local assignment scopes itself; tenkzcd cells inherit
+% it through the \tnpic objects they contain.  Explicit per-cell skins (dot,
+% box, pill, mpo) always override the policy.  The event stream records the
 % RESOLVED skin.
 
 % Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape;
@@ -123,8 +123,11 @@
 
 % ---------- glyph policy (see the tensor-style doctrine above) ----------
 % \tenkz@tensorstyle holds the resolved mode, `dot` or `box`; grid cells
-% and \tnput read it as their default skin at option-parse time.
+% and \tnput read it as their default skin at option-parse time;
+% \tenkz@tensorskin is the corresponding resolved TikZ node style for
+% automatic-site families such as tenkzlattice.
 \def\tenkz@tensorstyle{dot}
+\def\tenkz@tensorskin{tensor}
 
 % ---------- pgfkeys front door ----------
 \def\tnset#1{\pgfqkeys{/tenkz}{#1}}
@@ -141,8 +144,10 @@
                        \let\tenkz@r@physleg\tenkz@r@inlinephysleg
                        \let\tenkz@r@labelclear\tenkz@r@inlinelabelclear},
   /tenkz/tensor style/.is choice,
-  /tenkz/tensor style/dot/.code={\def\tenkz@tensorstyle{dot}},
-  /tenkz/tensor style/box/.code={\def\tenkz@tensorstyle{box}},
+  /tenkz/tensor style/dot/.code={\def\tenkz@tensorstyle{dot}%
+                                  \def\tenkz@tensorskin{tensor}},
+  /tenkz/tensor style/box/.code={\def\tenkz@tensorstyle{box}%
+                                  \def\tenkz@tensorskin{box tensor}},
 }
 
 % Label mathematics is script-size by default: glyphs are compact marks, not

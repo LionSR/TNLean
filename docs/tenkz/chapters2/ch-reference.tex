@@ -62,7 +62,8 @@ padded with bare wire.
   trace: each row closed to itself \\
 \texttt{west label=}, \texttt{east label=} & \meta{math} & --- &
   boundary index at the stub tip \\
-\texttt{west=}, \texttt{east=} & \texttt{open|none|trace|cup|cup=\meta{m}} &
+\texttt{west=}, \texttt{east=} & \texttt{open|none|}\newline
+  \texttt{trace|cup|}\newline \texttt{cup=}\meta{m} &
   --- & the side policy; \texttt{cup} ties adjacent row pairs, the
   \texttt{cup=} value rides the bend \\
 \texttt{layer sep=} & \meta{factor} & \texttt{1} &
@@ -456,8 +457,10 @@ five-slot pentagon, trees and all, is Example~\ref{ex:tut-pentagon}.
 \textbackslash end\{tenkzlattice\}}
 
 A finite window of a two-dimensional lattice: sites, bonds, and the
-regions of an entanglement argument.  The body is a list of region,
-edge, and site commands drawn over the window.
+regions of an entanglement argument.  The body is a live customization
+layer, executed exactly once to record any number of \tncmd{tnregion},
+\tncmd{tnedge}, and \tncmd{tnsite} commands.  The later drawing passes
+consume those records; they do not replay the body for each sheet.
 
 \medskip
 {\footnotesize
@@ -484,54 +487,65 @@ edge, and site commands drawn over the window.
   numeric sheets or a top-to-bottom role stack \\
 \texttt{outer legs=} & \texttt{both|top|}\newline
   \texttt{bottom|none} & --- &
-  outer physical faces of a role stack \\
-\texttt{physical=} & \texttt{up|none} & \texttt{none} &
-  a physical leg on every site \\
-\texttt{frame=} & \texttt{flat|oblique|}\newline
-  \texttt{slab} & \texttt{flat} &
-  the sheared sheet: bonds shear, glyphs and labels stay upright
-  (Example~\ref{ex:rmp-peps}) \\
+  outer physical faces of a role stack; role lists default to
+  \texttt{both}, while other stacks default to \texttt{none} \\
+\texttt{physical=} & \texttt{up|updown|none} & \texttt{none} &
+  on bare sheets only, \texttt{up} draws one upward leg per site and
+  \texttt{updown} draws both; role stacks use pairing and outer legs \\
+\texttt{pitch=} & \meta{length} & \texttt{11mm} &
+  the lattice metric unit \\
+\texttt{compact}, \texttt{inline} & --- & --- &
+  use the $0.8$ and $0.62$ pitch profiles \\
+\texttt{tensor style=} & \texttt{dot|box} & \texttt{dot} &
+  site glyph policy for bare and non-operator role sheets; operator sheets
+  remain MPO boxes \\
+\texttt{species=} & \texttt{\{name,\ldots\}} & --- &
+  declare names; semantic-cycle hues are assigned in order \\
 \bottomrule
 \end{tabularx}\par}
-\medskip
-
-The plane-geometry keys tune the frame's projection past the three
-\texttt{frame=} presets --- expert overrides, guarded but not clamped:
-
-\medskip
+\smallskip
 {\footnotesize
 \noindent\begin{tabularx}{\linewidth}{@{}p{29mm}p{23mm}p{11mm}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \keyhead
-\texttt{plane slant=}, \texttt{plane rise=} & \meta{ratio} & preset &
-  explicit depth-axis ratios of the lattice pitch, overriding
-  \texttt{frame=oblique|slab} \\
+\texttt{frame=} & \texttt{flat|oblique|}\newline
+  \texttt{slab} & \texttt{flat} &
+  the sheared sheet: bonds shear, glyphs and labels stay upright
+  (Example~\ref{ex:rmp-peps}) \\
+\texttt{plane slant=}, \texttt{plane rise=} & \meta{ratio} &
+  \texttt{0.45}, \texttt{0.60} & oblique-frame basis ratios \\
 \texttt{plane lean=} & \texttt{east|west} & \texttt{east} &
-  mirrors the depth axis by negating the slant register \\
-\texttt{col vector=}, \texttt{row vector=}, \texttt{sheet vector=} &
-  \texttt{\{x,y\}} & --- &
-  expert escape hatch: set the projected basis directly, in paper
-  lengths \\
-\texttt{outer legs=} & \texttt{both|top|} \texttt{bottom|none} & auto &
-  physical legs on the sheet stack's outer faces (both for a role-list
-  sheet stack, none otherwise) \\
+  choose the oblique frame's horizontal lean \\
+\texttt{sheet sep=} & \meta{ratio} & auto &
+  override the distance between sheets \\
+\texttt{pairing} & --- & role list &
+  pair every adjacent sheet interface \\
+\texttt{open=}, \texttt{trace=} & \meta{cell set} & --- &
+  leave selected pairing interfaces open, or close them by wrap loops \\
+\texttt{col vector=}, \texttt{row vector=},
+  \texttt{sheet vector=} & \texttt{\{x,y\}} & preset &
+  expert paper-frame basis vectors \\
 \bottomrule
 \end{tabularx}\par}
 \medskip
 
 \thumbtag{\tncmd{tnregion}}%
 \cmdsig{\textbackslash tnregion[\meta{keys}]\{\meta{cell set}\}\\
-\textbackslash tnedge[distinguished]\{(r,c)-(r,c)\}\\
-\textbackslash tnsite[removed]\{(r,c)\}}
+\textbackslash tnedge[\meta{keys}]\{\meta{site}-\meta{site}\}\\
+\textbackslash tnsite[\meta{keys}]\{\meta{site}\}}
 
 \noindent A region is a set of cells, written as ranges
 \tnval{(1-3, 2-4)}; a named region composes by set algebra, as in
 \tnval{R - (2,2)}.\whynote{Regions are open-ended in number and
 compose by name, so they are drawn commands, not window keys: the
 window is configured once, while an argument may lay any number of
-overlapping subsets over it.}  \tncmd{tnedge} strokes one bond in the
-emphasis width; \tncmd{tnsite} with any option removes the site and
-its bonds from the drawing.
+overlapping subsets over it.}  \tncmd{tnedge} defaults to the
+distinguished stroke.  Its keys are \tnkey{distinguished}, \tnkey{none},
+\tnkey{role=operator|marked|extra|passive}, \tnkey{style=} (TikZ options),
+and \tnkey{label=}.  \tncmd{tnsite} removes a site and its bonds only with
+\tnkey{removed}; \tnkey{role=operator|marked|extra|passive} and
+\tnkey{label=} customize a retained site.  A site may be written
+\tnval{(r,c)} or, in a stack, \tnval{(r,c,h)}.
 
 \medskip
 {\footnotesize

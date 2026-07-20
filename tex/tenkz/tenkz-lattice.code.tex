@@ -678,7 +678,7 @@
     \bool_set_false:N \l__tenkzl_roles_bool
     \tl_clear:N \l__tenkzl_rolelist_tl
     \tl_clear:N \l__tenkzl_outer_tl
-    \tl_set:Nn \l__tenkzl_skin_tl {tensor}
+    \tl_set:Ne \l__tenkzl_skin_tl { \tenkz@tensorskin }
     \bool_set_false:N \l__tenkzl_opsheet_bool
     \prop_clear:N \l__tenkzl_open_prop
     \prop_clear:N \l__tenkzl_trace_prop
@@ -854,9 +854,9 @@
       { \l__tenkzl_ayx_tl \l__tenkzl_fx_dim
         + \l__tenkzl_ayy_tl \l__tenkzl_fy_dim + \l__tenkzl_shy_dim }
   }
-% select the pass's sheet: ambient index, shift h S, and site skin --
-% op sheets box their sites (the mpo skin); every other role, and the
-% bare wire-sheets, keeps the dot
+% select the pass's sheet: ambient index, shift h S, and site skin.  An op
+% sheet always uses the MPO box; every other role and every bare sheet reads
+% the core's resolved tensor-style skin.
 \cs_new_protected:Npn \tenkzl_select_sheet:n #1
   {
     \int_set:Nn \l__tenkzl_sheet_int {#1}
@@ -866,7 +866,7 @@
       { \str_if_eq_p:ee { \tenkzl_role:n {#1} } {op} }
     \bool_if:NTF \l__tenkzl_opsheet_bool
       { \tl_set:Nn \l__tenkzl_skin_tl { mpo~tensor } }
-      { \tl_set:Nn \l__tenkzl_skin_tl { tensor } }
+      { \tl_set:Ne \l__tenkzl_skin_tl { \tenkz@tensorskin } }
   }
 % paper-frame centre of site (#1,#2) on the current sheet
 % -> (\l__tenkzl_px_dim, \l__tenkzl_py_dim)
@@ -1714,14 +1714,7 @@
 
 \cs_new_protected:Npn \tenkzl_side_cup_site_silhouette:nnn #1#2#3
   {
-    \bool_set:Nn \l_tmpa_bool
-      {
-        ! \prop_if_in_p:Ne \l__tenkzl_removed_prop
-          { \tenkzl_key:nn { \int_eval:n {#1} }{ \int_eval:n {#2} } }
-        && ! \tenkzl_removed_on_p:nnn
-          { \int_eval:n {#1} }{ \int_eval:n {#2} }{ \int_eval:n {#3} }
-      }
-    \bool_if:NT \l_tmpa_bool
+    \tenkzl_endpoint_exists:nnnT {#1}{#2}{#3}
       {
         \tenkzl_xyz:nnnNN {#1}{#2}{#3}
           \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
@@ -1754,12 +1747,8 @@
   {
     \bool_set:Nn \l_tmpa_bool
       {
-        ! \prop_if_in_p:Ne \l__tenkzl_removed_prop
-            { \tenkzl_key:nn { \int_eval:n {#2} }{ \int_eval:n {#3} } }
-        && ! \tenkzl_removed_on_p:nnn
-          { \int_eval:n {#2} }{ \int_eval:n {#3} }{0}
-        && ! \tenkzl_removed_on_p:nnn
-          { \int_eval:n {#2} }{ \int_eval:n {#3} }{1}
+        \tenkzl_endpoint_exists_p:nnn {#2}{#3}{0}
+        && \tenkzl_endpoint_exists_p:nnn {#2}{#3}{1}
       }
     \bool_if:NT \l_tmpa_bool
       {
@@ -2112,24 +2101,18 @@
 
 \cs_new_protected:Npn \tenkzl_draw_side_cup_at:nnn #1#2#3
   {
-    \prop_if_in:NeF \l__tenkzl_removed_prop
-      { \tenkzl_key:nn { \int_eval:n {#2} }{ \int_eval:n {#3} } }
+    \bool_set:Nn \l__tenkzl_cupaexists_bool
+      { \tenkzl_endpoint_exists_p:nnn {#2}{#3}{0} }
+    \bool_set:Nn \l__tenkzl_cupbexists_bool
+      { \tenkzl_endpoint_exists_p:nnn {#2}{#3}{1} }
+    \bool_if:NTF \l__tenkzl_cupaexists_bool
       {
-        \bool_set:Nn \l__tenkzl_cupaexists_bool
-          { ! \tenkzl_removed_on_p:nnn
-              { \int_eval:n {#2} }{ \int_eval:n {#3} }{0} }
-        \bool_set:Nn \l__tenkzl_cupbexists_bool
-          { ! \tenkzl_removed_on_p:nnn
-              { \int_eval:n {#2} }{ \int_eval:n {#3} }{1} }
-        \bool_if:NTF \l__tenkzl_cupaexists_bool
-          {
-            \bool_if:NTF \l__tenkzl_cupbexists_bool
-              { \tenkzl_draw_complete_side_cup_at:nnn {#1}{#2}{#3} }
-              { \tenkzl_draw_incomplete_side_cup_at:nnnn {#1}{#2}{#3}{0} }
-          }
-          { \bool_if:NT \l__tenkzl_cupbexists_bool
-              { \tenkzl_draw_incomplete_side_cup_at:nnnn {#1}{#2}{#3}{1} } }
+        \bool_if:NTF \l__tenkzl_cupbexists_bool
+          { \tenkzl_draw_complete_side_cup_at:nnn {#1}{#2}{#3} }
+          { \tenkzl_draw_incomplete_side_cup_at:nnnn {#1}{#2}{#3}{0} }
       }
+      { \bool_if:NT \l__tenkzl_cupbexists_bool
+          { \tenkzl_draw_incomplete_side_cup_at:nnnn {#1}{#2}{#3}{1} } }
   }
 
 \cs_new_protected:Npn \tenkzl_draw_complete_side_cup_at:nnn #1#2#3
@@ -3864,51 +3847,48 @@
   }
 \cs_new_protected:Npn \tenkzl_outer_col:nn #1#2
   {
-    \prop_if_in:NeF \l__tenkzl_removed_prop { \tenkzl_key:nn {#1}{#2} }
+    \bool_lazy_and:nnT
+      { \tenkzl_outer_face_p:n {top} }
+      { \tenkzl_endpoint_exists_p:nnn {#1}{#2}
+          { \int_eval:n { \l__tenkzl_sheets_int - 1 } } }
       {
-        \bool_lazy_and:nnT
-          { \tenkzl_outer_face_p:n {top} }
-          { ! \tenkzl_removed_on_p:nnn {#1}{#2}
-              { \int_eval:n { \l__tenkzl_sheets_int - 1 } } }
-          {
-            \int_incr:N \l__tenkzl_bot_int
-            \tenkzl_xyz:nnnNN {#1}{#2}{ \l__tenkzl_sheets_int - 1 }
-              \l__tenkzl_px_dim \l__tenkzl_py_dim
-            \draw[physical~leg]
-              ( \dim_use:N \l__tenkzl_px_dim ,
-                \dim_use:N \l__tenkzl_py_dim ) --
-              ( \dim_use:N \l__tenkzl_px_dim ,
-                \dim_eval:n { \l__tenkzl_py_dim
-                              + \tenkz@dim{\tenkz@r@physleg} } );
-            \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
-            \dim_set:Nn \l__tenkzl_qy_dim
-              { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
-            \tenkzl_record_obstacle_point:NN
-              \l__tenkzl_px_dim \l__tenkzl_py_dim
-            \tenkzl_record_obstacle_point:NN
-              \l__tenkzl_qx_dim \l__tenkzl_qy_dim
-          }
-        \bool_lazy_and:nnT
-          { \tenkzl_outer_face_p:n {bottom} }
-          { ! \tenkzl_removed_on_p:nnn {#1}{#2}{0} }
-          {
-            \int_incr:N \l__tenkzl_bob_int
-            \tenkzl_xyz:nnnNN {#1}{#2}{0}
-              \l__tenkzl_px_dim \l__tenkzl_py_dim
-            \draw[physical~leg]
-              ( \dim_use:N \l__tenkzl_px_dim ,
-                \dim_use:N \l__tenkzl_py_dim ) --
-              ( \dim_use:N \l__tenkzl_px_dim ,
-                \dim_eval:n { \l__tenkzl_py_dim
-                              - \tenkz@dim{\tenkz@r@physleg} } );
-            \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
-            \dim_set:Nn \l__tenkzl_qy_dim
-              { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} }
-            \tenkzl_record_obstacle_point:NN
-              \l__tenkzl_px_dim \l__tenkzl_py_dim
-            \tenkzl_record_obstacle_point:NN
-              \l__tenkzl_qx_dim \l__tenkzl_qy_dim
-          }
+        \int_incr:N \l__tenkzl_bot_int
+        \tenkzl_xyz:nnnNN {#1}{#2}{ \l__tenkzl_sheets_int - 1 }
+          \l__tenkzl_px_dim \l__tenkzl_py_dim
+        \draw[physical~leg]
+          ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_use:N \l__tenkzl_py_dim ) --
+          ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_eval:n { \l__tenkzl_py_dim
+                          + \tenkz@dim{\tenkz@r@physleg} } );
+        \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+        \dim_set:Nn \l__tenkzl_qy_dim
+          { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_px_dim \l__tenkzl_py_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_qx_dim \l__tenkzl_qy_dim
+      }
+    \bool_lazy_and:nnT
+      { \tenkzl_outer_face_p:n {bottom} }
+      { \tenkzl_endpoint_exists_p:nnn {#1}{#2}{0} }
+      {
+        \int_incr:N \l__tenkzl_bob_int
+        \tenkzl_xyz:nnnNN {#1}{#2}{0}
+          \l__tenkzl_px_dim \l__tenkzl_py_dim
+        \draw[physical~leg]
+          ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_use:N \l__tenkzl_py_dim ) --
+          ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_eval:n { \l__tenkzl_py_dim
+                          - \tenkz@dim{\tenkz@r@physleg} } );
+        \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+        \dim_set:Nn \l__tenkzl_qy_dim
+          { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} }
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_px_dim \l__tenkzl_py_dim
+        \tenkzl_record_obstacle_point:NN
+          \l__tenkzl_qx_dim \l__tenkzl_qy_dim
       }
   }
 
@@ -4129,29 +4109,21 @@
         \tenkzl_count_virtual_at:nnnN {#1}{#2}{1} #4
       }
       {
-        \prop_if_in:NeF \l__tenkzl_removed_prop
-          { \tenkzl_key:nn { \int_eval:n {#1} }{ \int_eval:n {#2} } }
+        \bool_set:Nn \l__tenkzl_cupaexists_bool
+          { \tenkzl_endpoint_exists_p:nnn {#1}{#2}{0} }
+        \bool_set:Nn \l__tenkzl_cupbexists_bool
+          { \tenkzl_endpoint_exists_p:nnn {#1}{#2}{1} }
+        \bool_if:NTF \l__tenkzl_cupaexists_bool
           {
-            \bool_set:Nn \l__tenkzl_cupaexists_bool
-              { ! \tenkzl_removed_on_p:nnn
-                  { \int_eval:n {#1} }{ \int_eval:n {#2} }{0} }
-            \bool_set:Nn \l__tenkzl_cupbexists_bool
-              { ! \tenkzl_removed_on_p:nnn
-                  { \int_eval:n {#1} }{ \int_eval:n {#2} }{1} }
-            \bool_if:NTF \l__tenkzl_cupaexists_bool
-              { \bool_if:NF \l__tenkzl_cupbexists_bool { \int_incr:N #4 } }
-              { \bool_if:NT \l__tenkzl_cupbexists_bool { \int_incr:N #4 } }
+            \bool_if:NF \l__tenkzl_cupbexists_bool { \int_incr:N #4 }
           }
+          { \bool_if:NT \l__tenkzl_cupbexists_bool { \int_incr:N #4 } }
       }
   }
 \cs_generate_variant:Nn \tenkzl_count_unresolved_cup_at:nnnN { nnVN }
 \cs_new_protected:Npn \tenkzl_count_virtual_at:nnnN #1#2#3#4
   {
-    \bool_lazy_and:nnT
-      { ! \prop_if_in_p:Ne \l__tenkzl_removed_prop
-          { \tenkzl_key:nn { \int_eval:n {#1} }{ \int_eval:n {#2} } } }
-      { ! \tenkzl_removed_on_p:nnn
-          { \int_eval:n {#1} }{ \int_eval:n {#2} }{ \int_eval:n {#3} } }
+    \tenkzl_endpoint_exists:nnnT {#1}{#2}{#3}
       { \int_incr:N #4 }
   }
 % look up interface #1's recorded count in prop #2, defaulting to 0 when

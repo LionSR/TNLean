@@ -74,8 +74,8 @@ tenkz-cd.code.tex         L2b tenkzcd: grid mode = tikz-cd verbatim + house arro
                               TN objects; polygon=n mode = native polar placement of named
                               nodes, arrows rendered through tikz-cd's arrow-style vocabulary;
                               \tntree bracketing parser with internal charges (G5)
-tenkz-lattice.code.tex    L2c tenkzlattice: rows×cols site grid (dot/tensor/\tnpic skins),
-                              dangling boundary legs, torus/cylinder wrap marks; cell-set
+tenkz-lattice.code.tex    L2c tenkzlattice: rows×cols site grid (dot or bond-only skins),
+                              per-side openings, traces, and two-sheet cups; cell-set
                               algebra; rectilinear hull tracer WITH notches (fallback G18);
                               \tnregion / \tnedge / \tnsite on semantic slots
 tenkz-free.code.tex       L2d tenkzfree: tikzpicture preset + \tnput/\tnjoin; the only place
@@ -101,13 +101,13 @@ docs/tenkz_style_guide.md replaces the TN sections of the blueprint style guide
 
 ### 1.3 Sub-language relations and the bridge object
 
-`\tnpic{…}` is the bridge: a robust, saveboxed, overlay-free command form of the `tenkz` environment producing a self-contained math atom. It is legal (a) inline in running math (B8), (b) as a cell object in `tenkzcd` (B5), (c) as a site skin in `tenkzlattice` (`site=\tnpic{…}` for PEPS patches with drawn tensors). The cd and region languages therefore *contain* TN pictures without sharing the contraction grammar. All four languages write to one `.tnlog` with a `lang=` tag.
+`\tnpic{…}` is the bridge: a robust, saveboxed, overlay-free command form of the `tenkz` environment producing a self-contained math atom. It is legal (a) inline in running math (B8) and (b) as a cell object in `tenkzcd` (B5). The cd language therefore contains TN pictures without sharing the contraction grammar; lattice sites use their own `site=dot|none` policy. All four languages write to one `.tnlog` with a `lang=` tag.
 
 Region hulls: the tracer computes rectilinear outlines with notches from cell-set expressions in expl3. Day 1 ships with G18 fallbacks (`fill` mode as per-cell rounded squares; `outline` restricted to simply-connected sets) so B6-family figures render before the notch algorithm is final.
 
 ### 1.4 The slice contract (G1)
 
-Every environment and `\tnpic` yields a **slice**: a TeX box whose declared axis (`align=` row, default the midline of the wire rows) is pinned to the math axis (`\fontdimen22\textfont2`), with published border anchors (N/S/E/W + corners) and a picture id in the event stream. Consequences: plain `=`, `\to`, `\Rightarrow`, `\sum`, and `\left(…\right)` compose diagrams with zero glue commands; tikz-cd cells, lattice site skins, and running math all receive the same box type. Embedded slices are opaque except axis + border in v1 (port re-export across an embedding is a documented v2 extension).
+Every environment and `\tnpic` yields a **slice**: a TeX box whose declared axis (`align=` row, default the midline of the wire rows) is pinned to the math axis (`\fontdimen22\textfont2`), with published border anchors (N/S/E/W + corners) and a picture id in the event stream. Consequences: plain `=`, `\to`, `\Rightarrow`, `\sum`, and `\left(…\right)` compose diagrams with zero glue commands; tikz-cd cells, complete lattice windows, and running math all receive the same box type. Embedded slices are opaque except axis + border in v1 (port re-export across an embedding is a documented v2 extension).
 
 ### 1.5 Engine and web pipeline
 
@@ -278,16 +278,18 @@ partial trace.
 
 ### 2.3 Math / CD objects
 
-- `\tnpic[⟨keys⟩]{⟨grid body⟩}` — command form of `tenkz`; the inline math atom and the cd/lattice embedding vehicle. Identical grammar and keys; `inline` switches to text-style metrics with the axis on the inter-layer midline.
+- `\tnpic[⟨keys⟩]{⟨grid body⟩}` — command form of `tenkz`; the inline-math and cd embedding vehicle. Identical grammar and keys; `inline` switches to text-style metrics with the axis on the inter-layer midline.
 - `\tntree[⟨keys⟩]{⟨bracketing⟩}` — fusion tree from a parenthesization word **with internal-charge subscripts** (G5): `(((a\,b)_x\,c)_y\,d)_e` labels internal edges x, y and the total charge e. Module trees carry type marks for mixed wire types; `grow=down|up`. Kills the 5 frozen fusion-tree macros: the bracketing *is* the data.
 
 ### 2.4 `tenkzlattice` — lattice-region schematics
 
-`\begin{tenkzlattice}[rows=, cols=, site=dot|none|⟨pic⟩ (e.g. site=\tnpic{…}), boundary legs, physical=up|none, topology=plane|cylinder|torus, remove={(r,c),…}, pitch=] … \end{tenkzlattice}`
+`\begin{tenkzlattice}[rows=, cols=, site=dot|none, boundary=open|none, west|east|north|south=open|none|trace|cup|cup=⟨m⟩, physical=up|updown|none, pitch=, compact, inline, tensor style=, species=, frame=flat|oblique|slab, plane slant=, plane rise=, plane lean=east|west, sheets=, sheet sep=, pairing, open=, trace=, outer legs=, col|row|sheet vector={x,y}] … \end{tenkzlattice}`
 
 - `\tnregion[slot=selected|secondary|complement|collar, label=⟨math⟩, label at=⟨anchor⟩, outline, name=⟨R⟩]{⟨cell set⟩}` — cell-set algebra: `(r1-r2, c1-c2)` rectangles, `(r,c)` singletons, `+`/`-` union/difference, named sets (`R - (2,2)`). Hull traced automatically with notches (fallback per G18). Slots bind document-wide semantic colors; role stability is audited (G10).
-- `\tnedge[distinguished|slot=]{(r,c)-(r',c')}` — lattice-edge decoration, own layer (under sites, over wires).
-- `\tnsite[removed|distinguished|⟨keys⟩]{(r,c)}` — single-site decoration.
+- `\tnedge[distinguished|none|role=operator|marked|extra|passive|style=⟨TikZ⟩|label=⟨math⟩]{(r,c[,h])-(r',c'[,h'])}` — lattice-edge decoration, suppression, or label, on its own layer (under sites, over wires).
+- `\tnsite[removed|role=operator|marked|extra|passive|label=⟨math⟩]{(r,c[,h])}` — single-site removal or decoration.
+
+The environment body is a live execute-once customization layer. It records any number of `\tnregion`, `\tnedge`, and `\tnsite` commands before the lattice draw passes consume them; a stacked lattice never replays the body once per sheet.
 
 ### 2.5 `tenkzfree` — sanctioned free placement
 
@@ -635,7 +637,7 @@ Quantikz-style citable artifact; arXiv-shippable (single `tenkz.sty` + code file
 2. **Tutorial** (5–6 pages): spine is literally B1→B8, one concept per boxed example, rendered output beside verbatim source; includes the **deliberate type-error demonstration** (G24: a physical–virtual `\tnjoin` and the compile error it produces).
 3. **Reference** (~2 pages of tables + one block per command): per environment a key table; per command one signature line, key table, minimal example, and the printed **"why this is a command and not a key"** justification (G22) — the anti-sugar-creep rule is part of the citable contract.
 4. **The house style** (2–3 pages): glyph dictionary (glyph, key, mathematical meaning); semantic hue table and region slots; the metric table in geometry-appendix format (G23: constant, value, derivation from pitch, printed motivation); ellipsis and label-quadrant policies; the **canonical-spelling table** — one sanctioned drawing per semantic object (transfer map: sandwich vs opaque pill, and when each is correct); the **genre-ownership table** (G23) mapping every Tier-A/B/C use case in the brief to exactly one sub-language home.
-5. **Sub-language chapters:** tenkzcd (grid mode, polygon mode, the raw tikz-cd fallback shown side-by-side per G25, `\tntree` grammar including internal charges and module-tree marks); tenkzlattice (cell-set algebra, slots, torus/cylinder marks, `site=\tnpic{…}` skins); tenkzfree (typed anchors, `\tnjoin`, and the escape policy: when free placement is legitimate).
+5. **Sub-language chapters:** tenkzcd (grid mode, polygon mode, the raw tikz-cd fallback shown side-by-side per G25, `\tntree` grammar including internal charges and module-tree marks); tenkzlattice (cell-set algebra, semantic roles, side policies, and stacked-sheet closures); tenkzfree (typed anchors, `\tnjoin`, and the escape policy: when free placement is legitimate).
 6. **Extension:** worked `\tndeclareatom` example (adding the RMP circle-matrix-on-wire glyph) documenting the typed-port contract; restyling via `\tnset` with the complete style-name table.
 7. **Migration appendix:** the `\TN*` → tenkz mapping table auto-generated from the Phase-1 shim; idiom conversions.
 8. **Troubleshooting:** real failure modes with cell-coordinate error messages (missing `{}`, trailing `\\`, unequal column counts, `&` under plasTeX and `align`), the **&-free fallback** (`\tndefine` route, named explicitly), externalization-vs-audit interaction, stale SVG cache.
@@ -997,6 +999,29 @@ them.
 3. **The prose gate.** Manual and documentation prose follows the Elements of Style: every
    sentence asserts. Hedges, caveats, and self-commentary go in `%` comments — sanctioned
    murmuring, visible in printed source blocks — never in the running text.
+
+### 17.1 Recurring simplification gate (2026-07-20)
+
+The gate asks three questions after each migration slice.
+
+1. **What grew ad hoc?** The `tenkzlattice` public key family outgrew its
+   reference table. The table omitted `pitch`, `compact`, `inline`, `tensor
+   style`, `species`, the oblique-frame overrides, `sheet sep`, `pairing`,
+   `open`, `trace`, and the three expert basis vectors; it also omitted
+   `updown` from `physical`. The design still advertised the unimplemented
+   `topology=`, `remove=`, and `site=\tnpic{…}` forms, while the edge and site
+   signatures predated their real key families. The reference and
+   quick-reference entries now describe the implemented surface.
+2. **Which two things are secretly one thing?** Drawing, silhouette, and
+   boundary-counting passes repeated the same question: does `(r,c,h)` survive
+   both a whole-column removal and a sheet-addressed removal? They now share
+   `\tenkzl_endpoint_exists:nnn`. Cup and trace routing remain separate: a cup
+   joins the two sheets of one boundary port, whereas a trace joins opposing
+   sides within each sheet.
+3. **What would be deleted in a redesign?** `boundary legs` is exactly the
+   compatibility spelling of `boundary=open`. Keep it while migrated sources
+   use it; once an in-repository search reaches zero, delete the alias and its
+   reference row rather than maintaining two names for one policy.
 
 
 ## 18. The silhouette (recorded 2026-07-18)
