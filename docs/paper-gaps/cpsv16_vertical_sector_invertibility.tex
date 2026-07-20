@@ -326,6 +326,18 @@ exists_unitary_block_implementers_of_starAlgEquiv_pi_matrix} in
 \leanid{Matrix.%
 exists_blockEquiv_dim_eq_unitary_of_mutual_inverse_kraus_direct_sum_maps} in
 \doclink{TNLean/Channel/FixedPoint/DirectSumBlockPermutation}.}
+The trace pairing for this unitary star-algebra isomorphism identifies it with
+the original forward map, not merely with the adjoint of the inverse.  Its
+inverse uses the same retained relabelling and the adjoints of the same
+unitaries.  Applied to the two transported vertical-sector maps, this gives
+the two full single-summand formulas for $\widetilde T$ and $\widetilde S$
+stated at line~1997.
+\footnote{Formal declarations:
+\leanid{Matrix.%
+exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps}
+in \doclink{TNLean/Channel/FixedPoint/DirectSumBlockPermutation}, and
+\leanid{MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv} in
+\doclink{TNLean/MPS/MPDO/VerticalSectorRelabeling}.}
 
 \section{Elimination plan}
 
@@ -345,25 +357,27 @@ simple-summand correspondence and its internal unitary action are complete as
 well: they give an equivalence of the sector index sets, identify the actual
 block ideals carried into one another, prove equality of the paired matrix
 dimensions, and implement every retained paired component by unitary
-conjugation.  It remains to specialize this formula to the transported
-vertical-sector maps.
+conjugation.  The specialization to both original transported maps, with the
+same relabelling and the same unitaries, is also complete.  The remaining
+calculation begins at line~2001: it compares
+the multiplicity factors and yields the coefficient identity at line~2008.
 
 \section{Classification}
 
 \textbf{Verdict: transported-map invertibility, the inverse-UCP
 multiplicative-domain step, generic simple-summand matching, and generic
-unitary implementation are closed; the transported-sector specialization
-remains open.}  The two transported maps and their
+unitary implementation are closed; the two transported maps have the
+mutually inverse blockwise-unitary forms with the same witnesses.}  The two transported maps and their
 square composites are trace preserving under the source tensor hypotheses.
 Their two compositions are identities, and the rectangular trace adjoints
 form mutually inverse $*$-algebra equivalences.  For any such pair, the simple
 summands are matched by an equivalence of the index sets, the corresponding
 block ideals are carried into one another by the star-algebra isomorphism,
 the paired matrix dimensions are equal, and the induced map on each matched
-summand is unitary conjugation.  The stronger active-image inclusions remain
-unproved and are not needed for this route.  Specializing the generic unitary
-formula to the transported vertical-sector maps remains necessary before the
-conclusion of Appendix~C.4, line~1997 is complete.
+summand is unitary conjugation.  The corresponding formulas now hold for
+$\widetilde T$ and $\widetilde S$ themselves.  The stronger active-image inclusions remain unproved
+and are not needed for this route.  No equality of multiplicities or weights,
+and no coefficient formula from Appendix~C.4, lines~2001--2008, is asserted.
 
 \bibliographystyle{alpha}
 \bibliography{references}

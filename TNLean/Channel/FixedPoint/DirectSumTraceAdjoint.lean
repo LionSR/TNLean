@@ -151,6 +151,65 @@ private theorem eq_of_sum_trace_mul_eq
         simp [Y, hki]
       · simp
 
+omit [(i : ι) → DecidableEq (n i)] [(j : κ) → DecidableEq (m j)] in
+/-- Taking the rectangular trace adjoint twice recovers the original map.
+
+This is the involutivity of the trace pairing used in the classification at
+CPSV16, arXiv:1606.00608, Appendix C.4, line 1997. -/
+theorem directSumTraceAdjointMapBetween_involutive
+    {T : (∀ i, Matrix (n i) (n i) ℂ) →ₗ[ℂ]
+      (∀ j, Matrix (m j) (m j) ℂ)} :
+    directSumTraceAdjointMapBetween (directSumTraceAdjointMapBetween T) = T := by
+  apply LinearMap.ext
+  intro B
+  apply eq_of_sum_trace_mul_eq
+  intro X
+  calc
+    ∑ j, (directSumTraceAdjointMapBetween
+          (directSumTraceAdjointMapBetween T) B j * X j).trace =
+        ∑ i, (B i * directSumTraceAdjointMapBetween T X i).trace :=
+      sum_trace_directSumTraceAdjointMapBetween_mul
+        (directSumTraceAdjointMapBetween T) B X
+    _ = ∑ i, (directSumTraceAdjointMapBetween T X i * B i).trace := by
+      apply Finset.sum_congr rfl
+      intro i _
+      exact Matrix.trace_mul_comm _ _
+    _ = ∑ j, (X j * T B j).trace :=
+      sum_trace_directSumTraceAdjointMapBetween_mul T X B
+    _ = ∑ j, (T B j * X j).trace := by
+      apply Finset.sum_congr rfl
+      intro j _
+      exact Matrix.trace_mul_comm _ _
+
+omit [DecidableEq ι] in
+/-- The trace adjoint of a trace-preserving star-algebra equivalence is its
+inverse.
+
+This is the trace-pairing passage from the adjoint star-algebra isomorphism to
+the original reversible map in CPSV16, arXiv:1606.00608, Appendix C.4,
+line 1997. -/
+theorem directSumTraceAdjointMapBetween_starAlgEquiv_eq_symm
+    (E : (∀ i, Matrix (n i) (n i) ℂ) ≃⋆ₐ[ℂ]
+      (∀ j, Matrix (m j) (m j) ℂ))
+    (hE : IsTracePreservingBetweenDirectSums
+      E.toAlgEquiv.toLinearEquiv.toLinearMap) :
+    directSumTraceAdjointMapBetween E.toAlgEquiv.toLinearEquiv.toLinearMap =
+      E.symm.toAlgEquiv.toLinearEquiv.toLinearMap := by
+  apply LinearMap.ext
+  intro A
+  apply eq_of_sum_trace_mul_eq
+  intro B
+  calc
+    ∑ i, (directSumTraceAdjointMapBetween
+        E.toAlgEquiv.toLinearEquiv.toLinearMap A i * B i).trace =
+        ∑ j, (A j * E B j).trace :=
+      sum_trace_directSumTraceAdjointMapBetween_mul
+        E.toAlgEquiv.toLinearEquiv.toLinearMap A B
+    _ = ∑ j, (E (E.symm A * B) j).trace := by
+      simp only [map_mul, E.apply_symm_apply, Pi.mul_apply]
+    _ = ∑ i, ((E.symm A * B) i).trace := hE (E.symm A * B)
+    _ = ∑ i, (E.symm A i * B i).trace := rfl
+
 omit [(i : ι) → DecidableEq (n i)] in
 /-- The trace adjoint of the identity on a finite sum of matrix algebras is
 the identity. -/

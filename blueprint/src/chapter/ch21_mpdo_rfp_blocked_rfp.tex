@@ -2313,6 +2313,56 @@ physical indices, as in
     $F=\widetilde T\circ\widetilde S$ proves the two identities.
 \end{proof}
 
+\begin{theorem}[Unitary relabelling of transported vertical sectors]
+    \label{thm:mpdo_transported_vertical_sector_unitary_relabeling}
+    \lean{MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv}
+    \leanok
+    Under the hypotheses of Theorem~
+    \ref{thm:mpdo_transported_vertical_sector_composites_identity}, write
+    \[
+      \mathcal A_1=\prod_{\alpha}M_{D^{(1)}_\alpha}(\C),
+      \qquad
+      \mathcal A_2=\prod_{\beta}M_{D^{(2)}_\beta}(\C).
+    \]
+    There are an equivalence $\sigma$ of the two sector index sets, equalities
+    $D^{(1)}_\alpha=D^{(2)}_{\sigma(\alpha)}$, and unitaries
+    $V_\alpha\in M_{D^{(2)}_{\sigma(\alpha)}}(\C)$ such that
+    \[
+      \widetilde T(0,\ldots,0,X,0,\ldots,0)
+      =(0,\ldots,0,V_\alpha\,\iota_\alpha(X)\,V_\alpha^*,0,\ldots,0),
+    \]
+    where the nonzero entry on the right is in position $\sigma(\alpha)$, and
+    \[
+      \widetilde S(0,\ldots,0,Y,0,\ldots,0)
+      =(0,\ldots,0,\iota_\alpha^{-1}
+        (V_\alpha^*YV_\alpha),0,\ldots,0),
+    \]
+    where the entries on the left and right are in positions $\sigma(\alpha)$
+    and $\alpha$, respectively.  These identities hold for every
+    $X\in M_{D^{(1)}_\alpha}(\C)$ and
+    $Y\in M_{D^{(2)}_{\sigma(\alpha)}}(\C)$.
+    Here $\iota_\alpha$ is the reindexing induced by the displayed dimension
+    equality.  These are the mutually inverse unitary formulas of
+    \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}.  They make no assertion
+    about the multiplicities, weights, or coefficient identity at
+    lines~2001--2008.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:direct_sum_inverse_cptp_forward_unitary,
+      lem:cpsv_bnt_block_dimensions_positive,
+      thm:mpdo_transported_vertical_sector_composites_trace_preserving,
+      thm:mpdo_transported_vertical_sector_composites_schwarz,
+      thm:mpdo_transported_vertical_sector_composites_identity}
+    The two basis-of-normal-tensors decompositions have positive matrix
+    dimensions.  The transported maps are completely positive and preserve
+    the total block trace, and the preceding theorem gives both inverse laws.
+    Apply Theorem~\ref{thm:direct_sum_inverse_cptp_forward_unitary} to this
+    pair.  Its equivalence of summands, dimension equalities, and unitary
+    matrices give the two displayed formulas without changing the chosen
+    relabelling.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
