@@ -735,7 +735,6 @@ import TNLean.PEPS.TorusWindowRegion
 import TNLean.PEPS.TorusWindowSingleCrossingObstruction
 import TNLean.PEPS.TorusRowColumnReductionObstruction
 import TNLean.PEPS.TorusDeformedWindow
-import TNLean.PEPS.TorusCoordinateSwap
 import TNLean.PEPS.TorusWindowChain
 import TNLean.PEPS.TorusWindowFamily
 import TNLean.PEPS.TorusWindowFamilyVertical

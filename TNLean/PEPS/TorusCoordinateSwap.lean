@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.RegionTransportData
-import TNLean.PEPS.TorusWindowChain
+import TNLean.PEPS.RegionTransport
+import TNLean.PEPS.TorusWindowComplement
 
 /-!
 # Coordinate swap on the discrete torus
@@ -157,14 +157,6 @@ theorem Region_map_torusCoordinateSwap_torusArcRectangle
       torusArcRectangle (s.2, s.1) yLen xLen := by
   change torusCoordinateSwapRegion (torusArcRectangle s xLen yLen) = _
   exact torusCoordinateSwapRegion_torusArcRectangle s xLen yLen
-
-/-- Region inclusion is preserved by a graph isomorphism. -/
-theorem Region_map_mono {V W : Type*}
-    {G : SimpleGraph V} {G' : SimpleGraph W} (φ : G ≃g G') {R S : Finset V}
-    (h : R ⊆ S) : Region.map φ R ⊆ Region.map φ S := by
-  intro w hw
-  rw [mem_Region_map] at hw ⊢
-  exact h hw
 
 end PEPS
 end TNLean
