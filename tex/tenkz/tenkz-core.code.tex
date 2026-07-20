@@ -165,7 +165,8 @@
   % glyph skins
   tensor/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
       minimum size=\tenkz@dim{\tenkz@r@dotdia}, line width=\tenkz@wirewidth},
-  box tensor/.style={draw=tenkzInk, fill=tenkzPaper, rectangle,
+  box tensor/.style={tenkz audited glyph, draw=tenkzInk, fill=tenkzPaper,
+      rectangle,
       inner sep=1.6pt, minimum size=\tenkz@dim{\tenkz@r@glyphbox},
       line width=\tenkz@wirewidth, text=tenkzInk},
   mpo tensor/.style={box tensor},
@@ -300,7 +301,8 @@
   % `label/.style` would clobber TikZ's built-in /tikz/label key
   % document-wide, silently swallowing `label=above:$x$` on every node of
   % every picture that merely loads tenkz.
-  tn label/.style={text=tenkzInk, inner sep=1pt, font=\scriptsize},
+  tn label/.style={tenkz audited label, text=tenkzInk, inner sep=1pt,
+      font=\scriptsize},
   cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
       -{Straight Barb[length=3.4pt]},
       shorten <=3.5pt, shorten >=3.5pt},
@@ -340,6 +342,82 @@
 \def\tenkz@beginpicture#1{\global\advance\tenkz@pictureuid by 1\relax
   \tenkz@pictureid=\tenkz@pictureuid
   \tenkz@event{picture|id=\the\tenkz@pictureid|lang=#1}}
+
+% Measured audit geometry.  Coordinates are written as integer scaled points,
+% so the event stream is independent of locale and TeX's decimal formatting.
+% Node rectangles use live TikZ anchors.  Horizontal wire rectangles use the
+% two live endpoint anchors plus the stroke's vertical half-width; both caps
+% terminate under opaque nodes, so longitudinal cap ink is not visible.
+\newcount\tenkz@bboxuid
+\newdimen\tenkz@bboxxmin
+\newdimen\tenkz@bboxxmax
+\newdimen\tenkz@bboxymin
+\newdimen\tenkz@bboxymax
+\newdimen\tenkz@bboxxa
+\newdimen\tenkz@bboxya
+\newdimen\tenkz@bboxxb
+\newdimen\tenkz@bboxyb
+\newif\iftenkz@bboxcapture
+\tenkz@bboxcapturetrue
+\def\tenkz@bboxlabeluse{%
+  \iftenkz@bboxcapture
+    \ifnum\tenkz@pictureid>0\relax
+      \tenkz@event{label-use|picture=\the\tenkz@pictureid}%
+    \fi
+  \fi}
+\def\tenkz@writebbox#1{%
+  \global\advance\tenkz@bboxuid by 1\relax
+  \tenkz@event{bbox|picture=\the\tenkz@pictureid|class=#1|%
+    id=\the\tenkz@bboxuid|xmin=\number\tenkz@bboxxmin|%
+    xmax=\number\tenkz@bboxxmax|ymin=\number\tenkz@bboxymin|%
+    ymax=\number\tenkz@bboxymax}}
+\def\tenkz@emitnodebbox#1#2{%
+  \begingroup
+  \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#2}{west}}%
+  \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#2}{east}}%
+  \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#2}{south}}%
+  \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#2}{north}}%
+  \tenkz@writebbox{#1}%
+  \endgroup}
+\def\tenkz@capturelabelbbox{%
+  \iftenkz@bboxcapture
+    \ifnum\tenkz@pictureid>0\relax
+      \tenkz@emitnodebbox{label}{\tikzlastnode}%
+    \fi
+  \fi}
+\def\tenkz@captureglyphbbox{%
+  \iftenkz@bboxcapture
+    \ifnum\tenkz@pictureid>0\relax
+      \tenkz@emitnodebbox{glyph}{\tikzlastnode}%
+    \fi
+  \fi}
+\def\tenkz@emitwirebbox#1#2#3#4#5{%
+  \begingroup
+  \pgfextractx{\tenkz@bboxxa}{\pgfpointanchor{#1}{#2}}%
+  \pgfextracty{\tenkz@bboxya}{\pgfpointanchor{#1}{#2}}%
+  \pgfextractx{\tenkz@bboxxb}{\pgfpointanchor{#3}{#4}}%
+  \pgfextracty{\tenkz@bboxyb}{\pgfpointanchor{#3}{#4}}%
+  \ifdim\tenkz@bboxxa<\tenkz@bboxxb
+    \tenkz@bboxxmin=\tenkz@bboxxa \tenkz@bboxxmax=\tenkz@bboxxb
+  \else
+    \tenkz@bboxxmin=\tenkz@bboxxb \tenkz@bboxxmax=\tenkz@bboxxa
+  \fi
+  \ifdim\tenkz@bboxya<\tenkz@bboxyb
+    \tenkz@bboxymin=\tenkz@bboxya \tenkz@bboxymax=\tenkz@bboxyb
+  \else
+    \tenkz@bboxymin=\tenkz@bboxyb \tenkz@bboxymax=\tenkz@bboxya
+  \fi
+  \advance\tenkz@bboxymin by -#5\relax
+  \advance\tenkz@bboxymax by  #5\relax
+  \tenkz@writebbox{wire}%
+  \endgroup}
+\tikzset{
+  tenkz audited label/.style={
+    /utils/exec=\tenkz@bboxlabeluse,
+    append after command={\pgfextra{\tenkz@capturelabelbbox}}},
+  tenkz audited glyph/.style={
+    append after command={\pgfextra{\tenkz@captureglyphbbox}}},
+}
 
 % ---------- species (the 0.6 hue contract, clause 2) ----------
 % Species declare NAMES, never colors: `species={right,left}' (document

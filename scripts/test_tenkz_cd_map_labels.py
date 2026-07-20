@@ -50,7 +50,7 @@ SOURCE = r"""
       (tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
         \int_use:N\l__tenkzcd_fromcol_int.base~east) --
       node[inner~sep=0pt, outer~sep=0pt, #2]
-        (tenkz-test-map-label-\int_use:N\g__tenkztest_map_int)
+        (tenkz-map-label-\the\tenkz@pictureid-#3)
         {
           \exp_args:Nc \box_use:N
             { l__tenkzcd_map_label_#3_box }
@@ -60,8 +60,8 @@ SOURCE = r"""
     \path let
       \p1=(tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
         \int_use:N\l__tenkzcd_fromcol_int.base~east),
-      \p2=(tenkz-test-map-label-\int_use:N\g__tenkztest_map_int.west),
-      \p3=(tenkz-test-map-label-\int_use:N\g__tenkztest_map_int.east),
+      \p2=(tenkz-map-label-\the\tenkz@pictureid-#3.west),
+      \p3=(tenkz-map-label-\the\tenkz@pictureid-#3.east),
       \p4=(tenkzmap-\int_use:N\l__tenkzcd_torow_int-
         \int_use:N\l__tenkzcd_tocol_int.base~west)
     in \pgfextra
