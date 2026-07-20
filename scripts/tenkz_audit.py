@@ -108,8 +108,8 @@ DIALECT_KINDS = {
     "grid": {"atom", "bond", "faceports", "pairleg", "trace", "pairtrace",
              "phtrace", "hooks", "cup", "hole", "warning", "boundary"},
     "free": {"atom", "join"},
-    "lattice": {"lattice", "site", "region", "edge", "pairtrace",
-                "boundary", "warning"},
+    "lattice": {"lattice", "site", "region", "edge", "cup", "trace",
+                "pairtrace", "boundary", "warning"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
 }
 
