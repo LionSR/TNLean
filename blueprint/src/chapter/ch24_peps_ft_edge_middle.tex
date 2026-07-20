@@ -116,9 +116,23 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     For an edge $e=(u,v)$ and a matrix $X$ acting on the bond space of $e$,
     the edge insertion coefficient is the contraction obtained by inserting
     $X$ between the endpoint tensors and the open middle tensor:
-    \begin{center}
-        \TNPEPSEdgeInsertedCoeff
-    \end{center}
+    % Formula: C_A(e,X;sigma) is the sum below over inserted boundary data beta.
+    % Ink-to-index: there is no retained ink.  The fixed e, sigma and X coefficient is
+    % a scalar, with boundary signature (V,P)=(0,0); the old three-open-leg picture
+    % instead drew the unfixed family.  No exact standalone picture occurs in
+    % Papers/1804.04964/paper_normal.tex; see the Section 3 route recorded in
+    % docs/paper-gaps/peps_injective_ft_section3_route.tex.
+    \[
+        C_A(e,X;\sigma)
+        =
+        \sum_{\beta}
+        A_u(\beta_u,\sigma_u)\,
+        X_{\beta_{e,u},\beta_{e,v}}\,
+        C^{\mathrm{open}}_{A,M_e}
+            (\beta_{\widehat e,u},\beta_{\widehat e,v};
+             \sigma|_{M_e})\,
+        A_v(\beta_v,\sigma_v).
+    \]
 \end{definition}
 
 \begin{theorem}[Middle tensor reindexing for an opened edge]%

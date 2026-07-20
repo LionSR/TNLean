@@ -82,10 +82,19 @@ transformation that leaves the generated state unchanged.
     For an edge $e = (u,w)$ with $u < w$ and gauge $X_e \in \mathrm{GL}(D_e)$,
     the gauge matrix applied at vertex $v$ is $X_e$ if $v = u$ and
     $(X_e^{-1})^\top$ if $v = w$.
-    Diagrammatically, the ordered edge carries opposite endpoint actions:
-    \begin{center}
-        \TNPEPSEdgeGaugeOrientation
-    \end{center}
+    % Formula: the two endpoint actions of the ordered edge e=(u,w) are X_e and
+    % (X_e^{-1})^top.  No standalone source figure states this convention.
+    % Ink-to-index/type verdict: the old scalar picture suppressed the physical and
+    % external virtual legs; the actual two-vertex object would have boundary
+    % (V,P)=(deg(u)+deg(w)-2,2).  The exact convention is therefore kept as algebra.
+    \[
+        X_{v,e}
+        =
+        \begin{cases}
+            X_e, & v=u,\\
+            (X_e^{-1})^\top, & v=w.
+        \end{cases}
+    \]
 \end{definition}
 
 \begin{definition}[Gauge vertex action]%
@@ -100,11 +109,18 @@ transformation that leaves the generated state unchanged.
     $A^X_v(\eta, \sigma)
         = \sum_{\eta'} (\prod_{ie} M_{ie}(\eta(ie), \eta'(ie)))
         A_v(\eta', \sigma)$.
-    In tensor-network notation, one inserts the appropriate gauge matrix on
-    each incident virtual leg of the local tensor:
-    \begin{center}
-        \TNPEPSGaugeVertexAction
-    \end{center}
+    % Formula: the displayed component equation is the gauge action at v.
+    % Ink-to-index/type verdict: Papers/1804.04964/paper_normal.tex:1212--1314
+    % draws only particular vertices.  The general object has boundary
+    % (V,P)=(deg(v),1), whereas the old picture hard-coded degree four; retain the
+    % valence-independent equation rather than asserting a universal star picture.
+    \[
+        (A^X)_v(\eta,\sigma)
+        =
+        \sum_{\eta'}
+        \left(\prod_{ie\ni v}
+            M_{ie}(\eta(ie),\eta'(ie))\right)A_v(\eta',\sigma).
+    \]
 \end{definition}
 
 \begin{definition}[Apply gauge]%
@@ -173,9 +189,14 @@ transformation that leaves the generated state unchanged.
     \uses{def:applyGauge, def:peps_stateCoeff}
     Applying a gauge to a PEPS tensor preserves the state coefficients.
     Along each internal edge, the two endpoint insertions cancel:
-    \begin{center}
-        \TNPEPSGaugeCancellation
-    \end{center}
+    % Formula: contraction of X_e with the transposed inverse on the other endpoint
+    % gives the Kronecker delta.  Ink-to-index/type verdict: i and k remain free, so
+    % this identity kernel has (V,P)=(2,0).  It has no separate source figure; the
+    % old two-star drawing introduced unrelated external legs.
+    \[
+        \sum_j X_e(j,i)\,\bigl((X_e^{-1})^\top\bigr)(j,k)
+        =\delta_{ik}.
+    \]
 \end{theorem}
 
 \begin{theorem}[Gauge equivalence implies same state]%
