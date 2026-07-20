@@ -28,8 +28,8 @@
 % mpo) always override the policy; the event stream always records the
 % RESOLVED skin.
 
-% Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape.
-\usetikzlibrary{shapes.geometric}
+% Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape;
+% the library itself loads with the rest of tenkz.sty's tikz libraries.
 
 % ---------- semantic hues (a theme may rebind colours, nothing else) ----------
 \colorlet{tenkzInk}{black!92}
@@ -85,7 +85,6 @@
                                % the default pitch, and wide enough that the
                                % stadium caps (radius = reach/2) read as smooth
                                % turnarounds rather than kinks
-\def\tenkz@r@regionmargin{0.36}% < pitch/2 so notches read; > glyph radius
 \def\tenkz@r@corner{0.14}      % rounded-corner radius of traces and hulls
 \def\tenkz@r@glyphbox{0.22}    % inscribed-glyph minimum: box side, pill
                                % height; also the span decorations' lateral
@@ -161,7 +160,6 @@
   % glyph skins
   tensor/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
       minimum size=\tenkz@dim{\tenkz@r@dotdia}, line width=\tenkz@wirewidth},
-  conjugate tensor/.style={tensor},
   box tensor/.style={draw=tenkzInk, fill=tenkzPaper, rectangle,
       inner sep=1.6pt, minimum size=\tenkz@dim{\tenkz@r@glyphbox},
       line width=\tenkz@wirewidth, text=tenkzInk},
@@ -214,6 +212,12 @@
   tree ribbon fill/.style={draw=tenkzPaper, fill=tenkzPaper},
   % wires
   bond/.style={draw=tenkzInk, line width=\tenkz@wirewidth},
+  % No-op by default: an observability hook, not ink. It rides on every
+  % open-stub draw for a periodic-pairing candidate face
+  % (\tenkz_draw_combined_stub:nnn in tenkz-grid) so a test can
+  % `/.append style` a probe (e.g. a counter) onto that exact draw call
+  % without touching the grid renderer itself; see
+  % scripts/test_tenkz_face_ports.py.
   tenkz combined stub/.style={},
   fused bond/.style={bond, double=tenkzPaper, double distance=1.1pt},
   physical leg/.style={bond},
@@ -283,8 +287,6 @@
       mark=at position 0.55 with
       {\arrow{Straight Barb[length=\tenkz@fusedbarblen, reversed]}}},
       postaction=decorate},
-  bond arrow/.style={bond, dir marks},
-  fused bond arrow/.style={fused bond, fused dir marks},
   % annotation ink (never confusable with 0.55pt wires)
   cut/.style={draw=tenkzPassive, dashed, line width=\tenkz@annwidth},
   brace/.style={draw=tenkzInk, line width=\tenkz@annwidth,
