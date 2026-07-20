@@ -614,7 +614,45 @@ weights in the length-independent case at
 
 \begin{figure}[ht]
     \centering
-    \TNMPDOFusionTracePower
+    % Formula:
+    %   O_L(M_\alpha)O_L(M_\beta)
+    %     = \sum_\gamma \operatorname{tr}
+    %       (\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+    % Source verdict: CPSV16 Theorem 4.14(ii)--(iii), source TeX lines
+    %   962--991, states the formula algebraically.  MPDO_O_L_A_.png fixes
+    %   the periodic-word convention for O_L(M); the source has no dedicated
+    %   picture of the complete product law.  The horizontal words below are
+    %   the house-style quarter-turn of that source word.
+    % Ink-to-index map: at site \ell on the left, the vertical pairleg carries
+    %   q_\ell and contracts the bra index of M_\alpha with the ket index of
+    %   M_\beta.  Their periodic rows contract a_0=a_L and b_0=b_L
+    %   independently; i_\ell and j_\ell remain free.  On the right, the
+    %   upper wire row is the multiplicity trace
+    %   tr(\chi_{\alpha,\beta,\gamma}^{L}) (labelled \chi in the ink), and the
+    %   lower operator row is O_L(M_\gamma).  These two loops have no pairleg.
+    %   The sum over \gamma is a sector sum, not a contraction edge.
+    % Boundary signatures (virtual-west, virtual-east, physical-up,
+    %   physical-down): both sides have semantic signature (0,0,L,L).
+    %   Each three-site representative emits (0,0,3,3).
+    \tnpic[compact, rows={op,op}, periodic]{
+        \tn[mpo, up=$i_1$]{M_\alpha} &
+        \tn[mpo]{M_\alpha} & \tndots &
+        \tn[mpo, up=$i_L$]{M_\alpha} \\
+        \tn[mpo, down=$j_1$]{M_\beta}
+            \tnspan[brace below]{4}{$L\text{ sites}$} &
+        \tn[mpo]{M_\beta} & \tndots &
+        \tn[mpo, down=$j_L$]{M_\beta}
+    }
+    \qquad$=\displaystyle\sum_\gamma$\qquad
+    % The doubled row gap makes the absent chi--M_gamma pairleg unmistakable
+    % at print size.
+    \tnpic[compact, rows={wire,op}, layer sep=2, periodic]{
+        \tn[box]{\chi} & \tn[box]{\chi} & \tndots & \tn[box]{\chi} \\
+        \tn[mpo, up=$i_1$, down=$j_1$]{M_\gamma}
+            \tnspan[brace below]{4}{$L\text{ sites}$} &
+        \tn[mpo]{M_\gamma} & \tndots &
+        \tn[mpo, up=$i_L$, down=$j_L$]{M_\gamma}
+    }
     \caption{Closing an $L$-site chain of the local fusion identity. On the
         left, the bra legs of the $M_\alpha$ operator are contracted with the
         ket legs of the $M_\beta$ operator. On the right, the multiplicity loop
