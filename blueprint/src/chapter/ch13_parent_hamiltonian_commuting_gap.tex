@@ -2577,12 +2577,55 @@ specialization of that Appendix~D definition.
     denoted by $\Psi_a^{(N)}\in(\mathbb C^d)^{\otimes N}$.
 \end{definition}
 
+\begin{definition}[Schmidt-support tensor associated with a positive Beigi loop]
+    \label{def:beigi_loop_schmidt_support}
+    \lean{MPSTensor.BeigiSectorGraphData.loopSchmidtRank}
+    \lean{MPSTensor.BeigiSectorGraphData.LoopSchmidtFactorization}
+    \lean{MPSTensor.BeigiSectorGraphData.loopSchmidtFactorization}
+    \lean{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.minimalLoopTensor}
+    \leanok
+    \uses{def:beigi_loop_product_state}
+    Let $\Phi_a=(\varphi_a(r,l))_{r,l}$ and write
+    $r_a=\rank\Phi_a$.  Choose a rank factorization
+    \[
+        \Phi_a=X_aY_a,
+        \qquad
+        X_a\in M_{D_a^{\mathrm R},r_a}(\C),\quad
+        Y_a\in M_{r_a,D_a^{\mathrm L}}(\C).
+    \]
+    The tensor on the minimal Schmidt support is
+    \[
+        (\widetilde C_a^{(r,l)})_{\alpha,\beta}
+          =(Y_a)_{\alpha,l}(X_a)_{r,\beta},
+    \]
+    again extended by zero outside sector~$a$.  Its physical tensor is its
+    image under the same one-site unitary.
+\end{definition}
+
+\begin{lemma}[Positive Schmidt dimension of a Beigi loop]
+    \label{lem:beigi_loop_schmidt_rank_pos}
+    \lean{MPSTensor.BeigiSectorGraphData.loopSchmidtRank_pos}
+    \leanok
+    \uses{def:beigi_loop_schmidt_support}
+    The Schmidt rank $r_a$ of the nonzero loop bond vector is positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $r_a=0$, then the intermediate index set in the factorization
+    $\Phi_a=X_aY_a$ is empty.  Every entry of $X_aY_a$ is therefore zero,
+    contrary to $\varphi_a\ne0$.
+\end{proof}
+
 \begin{theorem}[Periodic vector of a positive Beigi loop]
     \label{thm:beigi_loop_tensor_periodic_vector}
     \lean{MPSTensor.BeigiSectorGraphData.mpv_loopCoordinateTensor}
     \lean{MPSTensor.BeigiSectorGraphData.mpv_loopTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.mpv_minimalLoopCoordinateTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.mpv_minimalLoopTensor}
     \leanok
-    \uses{def:beigi_loop_product_state, lem:mpv_rotate_physical}
+    \uses{def:beigi_loop_product_state, def:beigi_loop_schmidt_support,
+        lem:mpv_rotate_physical}
     For every $N>0$, the periodic matrix product vector of $C_a$ has
     coefficient
     \[
@@ -2591,7 +2634,8 @@ specialization of that Appendix~D definition.
     on a cyclic configuration in sector $a$, and coefficient zero on every
     other sector configuration.  Consequently the periodic vector of the
     physical loop tensor is exactly the sitewise-unitary image of this cyclic
-    product-of-pairs state.
+    product-of-pairs state.  The same identities hold for the tensor on the
+    minimal Schmidt support.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2606,8 +2650,22 @@ specialization of that Appendix~D definition.
         =\prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}),
     \]
     where all site labels are read cyclically.  Indeed, the Kronecker deltas
-    leave only the assignment $g_n=l_n$.  If $A_a$ denotes the physical loop
-    tensor and $U$ the one-site unitary, then for a physical configuration
+    leave only the assignment $g_n=l_n$.
+
+    For the minimal tensor, let $S^{(r,l)}$ be the rectangular matrix whose
+    only nonzero row is row $l$, equal there to row $r$ of $X_a$.  Then
+    \[
+        C_a^{(r,l)}=S^{(r,l)}Y_a,
+        \qquad
+        \widetilde C_a^{(r,l)}=Y_aS^{(r,l)}.
+    \]
+    For every nonempty word there is therefore a rectangular matrix $R$ such
+    that its two products are $RY_a$ and $Y_aR$, respectively.  Cyclicity of
+    the trace gives $\tr(RY_a)=\tr(Y_aR)$, proving equality of all
+    positive-length periodic vectors.
+
+    If $A_a$ denotes the physical loop tensor and $U$ the one-site unitary,
+    then for a physical configuration
     $s=(s_0,\ldots,s_{N-1})$ one has
     \[
         \operatorname{tr}(A_a^{s_0}\cdots A_a^{s_{N-1}})
