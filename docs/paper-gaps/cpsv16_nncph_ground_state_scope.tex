@@ -332,6 +332,21 @@ product
 For a positive loop $a\to a$, denote the resulting physical state on a chain
 of length $N$ by $\Psi_a^{(N)}$.
 This is the construction in Beigi, arXiv:1105.1019v2, source lines 602--606.
+The ambient left factor need not be the minimal virtual space: Beigi assumes
+only that the selected bond vector is nonzero, not that its coefficient matrix
+has full rank.  Writing that matrix as
+$\Phi_a=X_aY_a$ through its positive Schmidt rank $r_a$, the declarations
+\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor} and
+\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor} restrict the virtual
+space to $\C^{r_a}$.  Their letters are
+$(Y_a)_{\alpha,l}(X_a)_{r,\beta}$, and
+\leanid{MPSTensor.BeigiSectorGraphData.mpv_minimalLoopTensor} proves that this
+restriction leaves every positive-length periodic vector equal to Beigi's
+product-of-pairs vector.  No injectivity, normality, or normalization condition
+is imposed on these tensors at this stage.  Consequently, the spanning
+statement below may equivalently be formulated using the periodic vectors of
+the minimal Schmidt-support tensors.
+
 For every $N\geq2$,
 \leanid{MPSTensor.BeigiSectorGraphData.}
 \hspace{0pt}\leanid{loopProductState_mem_ker_parentHamiltonian}
