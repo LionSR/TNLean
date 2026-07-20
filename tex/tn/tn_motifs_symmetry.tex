@@ -81,23 +81,6 @@
     \TNConnectPhysical{#1TwistLower}{#1LowerPhysical}%
 }
 
-% One twisted transfer cell.  The remaining arguments name the twist, input,
-% output, and layer indices; the four virtual ports are opened to the sides.
-\newcommand{\TNSymmetryTransferCell}[7]{%
-    \TNEventInternal{motif|picture=\the\TN@pictureid|name=#1|kind=transfer-cell}%
-    \TN@twistlayers{#1}{#2}%
-    \TNOpenVirtualWest{#1UpperWest}%
-    \TNOpenVirtualWest{#1LowerWest}%
-    \TNOpenVirtualEast{#1UpperEast}%
-    \TNOpenVirtualEast{#1LowerEast}%
-    \TN@twistphysical{#1}%
-    \TNLabelAbove{#1Twist}{#3}%
-    \TNLabelLeft{#1Twist}{#4}%
-    \TNLabelRight{#1Twist}{#5}%
-    \TNLabelAbove{#1Upper}{#6}%
-    \TNLabelBelow{#1Lower}{#7}%
-}
-
 % A local cell in a string-order word has the same twisted two-layer geometry
 % but leaves its virtual ports available to the surrounding word.
 \newcommand{\TN@stringcell}[3]{%
