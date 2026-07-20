@@ -42,6 +42,38 @@ SOURCE = r"""
   \global\advance\tenkzcuplabelseen by 1\relax $W$}
 \newcommand{\tenkzsitelabelprobe}{%
   \global\advance\tenkzsitelabelseen by 1\relax $A_\star$}
+% Inspect the final private route coordinates for the one-row labelled trace.
+% An event-only assertion cannot distinguish a real loop from coincident
+% out-and-back paths, so this wrapper fails on the collapsed geometry itself.
+\ExplSyntaxOn
+\bool_new:N \g__tenkzl_test_one_row_label_bool
+\cs_new_protected:Npn \tenkzOneRowLabelProbe
+  { \bool_gset_true:N \g__tenkzl_test_one_row_label_bool }
+\cs_new_eq:NN \__tenkzl_test_draw_complete_trace:nnnnnn
+  \tenkzl_draw_complete_trace_at:nnnnnn
+\cs_set_protected:Npn \tenkzl_draw_complete_trace_at:nnnnnn #1#2#3#4#5#6
+  {
+    \__tenkzl_test_draw_complete_trace:nnnnnn {#1}{#2}{#3}{#4}{#5}{#6}
+    \bool_if:NT \g__tenkzl_test_one_row_label_bool
+      {
+        \dim_compare:nNnT { \l__tenkzl_tratx_dim } =
+          { \l__tenkzl_trbtx_dim }
+          {
+            \dim_compare:nNnT { \l__tenkzl_traty_dim } =
+              { \l__tenkzl_trbty_dim }
+              { \tex_errmessage:D { labelled~one-row~trace~tips~collapsed } }
+          }
+        \dim_compare:nNnT { \l__tenkzl_trasx_dim } =
+          { \l__tenkzl_trbsx_dim }
+          {
+            \dim_compare:nNnT { \l__tenkzl_trasy_dim } =
+              { \l__tenkzl_trbsy_dim }
+              { \tex_errmessage:D { labelled~one-row~trace~escapes~collapsed } }
+          }
+        \bool_gset_false:N \g__tenkzl_test_one_row_label_bool
+      }
+  }
+\ExplSyntaxOff
 \begin{document}
 \begin{tenkz}[rows={op:none, ket}, tensor style=box]
   \tn[pill, wide=2, up at=center, down at={1,2}]{U^\dagger} & \\
@@ -555,6 +587,14 @@ SOURCE = r"""
     rows=1, cols=2, sheets=1, boundary=open,
     outer legs=none, west=trace, east=trace]
   \tnsite[role=marked, label=$A_{\partial}^{\mathrm{east}}$]{(1,2,0)}
+\end{tenkzlattice}
+% A one-row N/S closure queries one label box for both endpoints.  The two
+% trace-private escapes remain distinct after sharing the measured safe side.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=1, boundary=open,
+    outer legs=none, north=trace, south=trace]
+  \tenkzOneRowLabelProbe
+  \tnsite[role=marked, label=$L_{\partial}^{\mathrm{north}}$]{(1,1,0)}
 \end{tenkzlattice}
 \end{document}
 """
@@ -1996,6 +2036,13 @@ def main() -> int:
         "trace|picture=103|lang=lattice|axis=west-east|sheet=0|slot=1|"
         "from=1-1|to=1-2",
         "boundary-label escape lost the periodic closure",
+    )
+    one_row_labelled_trace = pictures[104]
+    require(
+        one_row_labelled_trace,
+        "trace|picture=104|lang=lattice|axis=north-south|sheet=0|slot=1|"
+        "from=1-1|to=1-1",
+        "one-row boundary label collapsed the periodic closure",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0

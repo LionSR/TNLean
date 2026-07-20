@@ -2442,6 +2442,17 @@
       \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
       \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
       \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
+    % A one-row N/S closure queries the same site label for both endpoints.
+    % The shared avoidance primitive deliberately chooses one safe transverse
+    % coordinate; restore sheet-local distinction farther on that safe side.
+    \tenkzl_trace_stagger_label_escape:nNNNNNN {1}
+      \l__tenkzl_trax_dim \l__tenkzl_tray_dim
+      \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
+      \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
+    \tenkzl_trace_stagger_label_escape:nNNNNNN {2}
+      \l__tenkzl_trbx_dim \l__tenkzl_trby_dim
+      \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim
+      \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
     \tenkzl_side_cup_project_trans:NNN
       \l__tenkzl_tratx_dim \l__tenkzl_traty_dim \l__tenkzl_trtransa_dim
     \tenkzl_side_cup_project_trans:NNN
@@ -2477,6 +2488,43 @@
       slot=\int_eval:n {\l__tenkzl_trslot_int}|%
       from=\int_eval:n {#3}-\int_eval:n {#4}|%
       to=\int_eval:n {#5}-\int_eval:n {#6}}
+  }
+
+% If label avoidance moved an escape point transversely, move both that point
+% and its tip another #1 daylight bands in the same label-free direction.
+% The site-to-escape stubs then diverge immediately outside the opaque dot,
+% while the label clearance proved by the shared primitive only increases.
+\cs_new_protected:Npn \tenkzl_trace_stagger_label_escape:nNNNNNN
+  #1#2#3#4#5#6#7
+  {
+    \tenkzl_side_cup_project_trans:NNN #2 #3
+      \l__tenkzl_labelsiteproj_dim
+    \tenkzl_side_cup_project_trans:NNN #6 #7
+      \l__tenkzl_labelshift_dim
+    \dim_compare:nNnF
+      {\l__tenkzl_labelshift_dim} = {\l__tenkzl_labelsiteproj_dim}
+      {
+        \dim_set:Nn \l__tenkzl_cupstubshift_dim
+          { \tenkz@dim{\tenkz@r@daylight} * #1 }
+        \dim_compare:nNnT
+          {\l__tenkzl_labelshift_dim} < {\l__tenkzl_labelsiteproj_dim}
+          { \dim_set:Nn \l__tenkzl_cupstubshift_dim
+              {-\l__tenkzl_cupstubshift_dim} }
+        \tenkzl_side_cup_project:NNN #4 #5 \l__tenkzl_cupproj_dim
+        \tenkzl_side_cup_project_trans:NNN #4 #5
+          \l__tenkzl_labelshift_dim
+        \dim_add:Nn \l__tenkzl_labelshift_dim
+          {\l__tenkzl_cupstubshift_dim}
+        \tenkzl_side_cup_from_projections:NNNN
+          \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #4 #5
+        \tenkzl_side_cup_project:NNN #6 #7 \l__tenkzl_cupproj_dim
+        \tenkzl_side_cup_project_trans:NNN #6 #7
+          \l__tenkzl_labelshift_dim
+        \dim_add:Nn \l__tenkzl_labelshift_dim
+          {\l__tenkzl_cupstubshift_dim}
+        \tenkzl_side_cup_from_projections:NNNN
+          \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #6 #7
+      }
   }
 
 \cs_new_protected:Npn \tenkzl_trace_separate_ns_stub:N #1
