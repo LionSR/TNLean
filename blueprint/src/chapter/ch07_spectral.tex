@@ -2854,7 +2854,6 @@ outside the present result.
     \label{thm:unitary_skolem_noether_matrix}
     \lean{MPSTensor.exists_unitary_conj_of_starAlgEquiv_matrix}
     \leanok
-    \uses{thm:skolem_noether}
     Every star-algebra automorphism $\Phi$ of a nonzero full complex matrix
     algebra is implemented by a unitary: there is a unitary matrix $U$ such
     that
@@ -2865,6 +2864,7 @@ outside the present result.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:skolem_noether}
     By Skolem--Noether, there is an invertible matrix $P$ such that
     $\Phi(X)=PXP^{-1}$.  Preservation of the adjoint implies that $P^*P$
     commutes with every matrix, hence $P^*P=c\Id$ for a scalar $c$.  Positivity
@@ -2880,9 +2880,6 @@ outside the present result.
     \lean{Matrix.exists_blockEquiv_dim_eq_unitary_of_starAlgEquiv_pi_matrix}
     \lean{Matrix.exists_blockEquiv_dim_eq_unitary_of_mutual_inverse_kraus_direct_sum_maps}
     \leanok
-    \uses{thm:unitary_skolem_noether_matrix,
-        thm:direct_sum_inverse_cptp_star_equiv,
-        thm:direct_sum_inverse_cptp_block_matching}
     Retain an equivalence $\sigma:I\simeq J$ which matches the block ideals
     of a star-algebra isomorphism
     \[
@@ -2905,6 +2902,9 @@ outside the present result.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:unitary_skolem_noether_matrix,
+        thm:direct_sum_inverse_cptp_star_equiv,
+        thm:direct_sum_inverse_cptp_block_matching}
     The restriction of $\Phi$ to a matched block is a star-algebra
     isomorphism.  After reindexing by $D_i=E_{\sigma(i)}$, it is an
     automorphism of a full complex matrix algebra.  Skolem--Noether writes
