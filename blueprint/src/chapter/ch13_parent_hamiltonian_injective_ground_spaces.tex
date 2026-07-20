@@ -635,7 +635,24 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     restrictions on their common $(L-1)$-site overlap and then reconstructs the
     full $(L+1)$-site word from a single boundary matrix:
     \begin{center}
-        \TNBoundaryRegrow{X'}{\sigma_1}{\sigma_{L+1}}{L+1}
+        % Formula/source: Perez-Garcia et al., Eq. (eq:injectivity), define
+        % Gamma_{L+1}(X') by the coefficients
+        % tr(X' A^{sigma_1} ... A^{sigma_{L+1}}).
+        % In indices, this is the sum of
+        % X'_{a_0 a_1}(A^{sigma_1})_{a_1 a_2} ...
+        % (A^{sigma_{L+1}})_{a_{L+1} a_0} over every virtual index a_r.
+        % The physical indices sigma_1,...,sigma_{L+1} remain free.
+        % Orientation: placing X' first matches the source's cyclic order;
+        % the periodic return closes the final A factor back into X'.
+        % Semantic boundary signature: (virtual-west=0 | virtual-east=0 |
+        % physical-up=L+1 | physical-down=0).  This finite schematic emits
+        % (virtual-west=0 | virtual-east=0 | physical-up=3 | physical-down=0).
+        \begin{tenkz}[periodic, physical=up]
+            \tnX{X'} &
+            \tn[up=$\sigma_1$]{A}%
+            \tnspan[brace below]{4}{$L+1\text{ sites}$} &
+            \tn{A} & \tndots & \tn[up=$\sigma_{L+1}$]{A}
+        \end{tenkz}
     \end{center}
     \begin{enumerate}
         \item From the right ground condition, for each physical index~$i$ there

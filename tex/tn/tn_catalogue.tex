@@ -445,31 +445,6 @@
 }
 
 \TNDeclareDiagram
-    {TNBoundaryRegrow}
-    {virtual,left,right,length}
-    {display}
-    {normal}
-    {\TNBoundaryRegrow{X}{i}{k}{L}}
-    {chapter/ch13_parent_hamiltonian_injective_ground_spaces.tex}{%
-    \begin{TNDiagram}[normal]
-        \TNMPSSite{rA}{at=origin}{}
-        \TNMPSSite{rB}{right=of rA}{}
-        \TNMPSSite{rC}{right=of rB}{}
-        \TNInsertion{rX}{right=of rC}{#1}
-        \foreach \n in {rA,rB,rC} {\TNOpenPhysicalNorth{\n Ket}}
-        \TNLabelAbove{rA}{#2}
-        \TNLabelAbove{rC}{#3}
-        \TNOpenVirtualWest{rAWest}
-        \TNConnectVirtual{rAEast}{rBWest}
-        \TNConnectVirtual{rBEast}{rCWest}
-        \TNVirtualPort{rXTorC}{rX}{west}
-        \TNConnectVirtual{rCEast}{rXTorC}
-        \TNVirtualPort{rXOpenEastPort}{rX}{east}\TNOpenVirtualEast{rXOpenEastPort}
-        \TNLabelBelow{rB}{#4}
-    \end{TNDiagram}%
-}
-
-\TNDeclareDiagram
     {TNGroundSpaceMap}
     {tensor,left,right,length,virtual}
     {display}
