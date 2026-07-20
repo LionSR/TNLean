@@ -16,10 +16,10 @@ one-dimensional. Consequently the square has rank one.
 
 The results support the rank-one trace factorization sought at
 arXiv:1606.00608, Appendix C.2, line 1613.  In addition to the rank statement,
-the square is factored as an outer product with diagonal pairing one.  These
-are source-independent matrix lemmas, not statements asserted in that paper:
-applying them to the sector trace matrix still requires a separate,
-non-circular proof of primitivity.
+the square is factored as $a b^{\mathsf T}$ for real vectors satisfying
+$a \mathbin{\cdot} b=1$.  These are source-independent matrix lemmas, not
+statements asserted in that paper: applying them to the sector trace matrix
+still requires a separate, non-circular proof of primitivity.
 -/
 
 open scoped BigOperators Matrix
@@ -122,7 +122,8 @@ theorem IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three
   exact rank_eq_one_of_pos_of_mul_self_eq_self hsq_pos hsq_idem
 
 /-- If a primitive nonnegative real matrix has equal second and third powers,
-then its square is an outer product whose diagonal pairing is one.
+then its square has the form $a b^{\mathsf T}$ for real vectors satisfying
+$a \mathbin{\cdot} b=1$.
 
 This is the normalized factorization needed for the corrected two-step
 coefficient in arXiv:1606.00608, Appendix C.2, Proposition 4to2, lines
