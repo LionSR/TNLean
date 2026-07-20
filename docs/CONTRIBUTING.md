@@ -420,9 +420,10 @@ role and is rejected for new tracked production files. Instead:
 4. if callers need one import, provide a concept-named import-only aggregator.
 
 The numbered-file allowlist in `scripts/check_numbered_lean_files.py` records
-legacy debt and may only shrink. Numerals intrinsic to a mathematical object
+legacy debt and may only shrink; pull-request CI compares it with the merge-base
+allowlist and rejects additions. Numerals intrinsic to a mathematical object
 (such as `ZMod2`) or to an explicitly cited source result require an exact,
-documented semantic exception. Generated import aggregators can exceed the
+documented semantic exception. Import-only aggregators can exceed the
 line cap only when their exact path is passed to the size checker; the checker
 validates that uncommented content contains imports and nothing else.
 

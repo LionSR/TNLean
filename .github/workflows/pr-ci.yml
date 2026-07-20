@@ -196,6 +196,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -213,7 +215,21 @@ jobs:
           --root .
           --import-only-aggregator TNLean.lean
 
-      - name: Reject new numbered-sequel modules
+      - name: Fetch pull-request base for the debt ratchet
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin \
+            "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+
+      - name: Reject new numbered-sequel modules (pull request)
+        if: github.event_name == 'pull_request'
+        run: >
+          python3 scripts/check_numbered_lean_files.py
+          --root .
+          --base-ref "origin/${{ github.event.pull_request.base.ref }}"
+
+      - name: Reject new numbered-sequel modules (main)
+        if: github.event_name != 'pull_request'
         run: python3 scripts/check_numbered_lean_files.py --root .
 
   blueprint:

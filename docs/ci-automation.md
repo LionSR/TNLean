@@ -262,8 +262,10 @@ diagrams render to SVG.
 - New Git-tracked production modules below `TNLean/` may not end in a numeral
   (optionally followed by one letter). `TNLean/Archive/` and untracked scratch
   files are outside this production policy. Existing continuation files form a
-  shrinking allowlist: a new name fails, and a removed or renamed file leaves a
-  stale entry that must be deleted in the same change. Exact names whose numeral
+  shrinking allowlist: pull-request CI compares the proposed set with its
+  merge-base value and rejects additions; a new name fails, and a removed or
+  renamed file leaves a stale entry that must be deleted in the same change.
+  Exact names whose numeral
   denotes a mathematical object or source label have path-specific documented
   exceptions in `scripts/check_numbered_lean_files.py`.
 

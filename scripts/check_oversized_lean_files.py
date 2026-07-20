@@ -20,6 +20,8 @@ THRESHOLD: int = 1000
 EXCLUDE_DIRS: tuple[str, ...] = (".lake", "lake-packages", "tmp")
 IMPORT_COMMAND = re.compile(r"import\s+[A-Za-z_][A-Za-z0-9_'.]*(?:\.[A-Za-z0-9_']+)*")
 
+# This guidance is intentionally size-specific.  The numbered-name checker
+# gives complementary advice about choosing mathematical module names.
 SPLIT_GUIDANCE = (
     "Split by mathematical responsibility into concept-named modules; move shared "
     "definitions and setup into a family Basic.lean module; and keep only imports "
@@ -120,21 +122,21 @@ def _normalize_paths(root: Path, paths: list[str]) -> tuple[set[str], list[str]]
 def check_files(
     root: Path,
     known_oversized: set[str],
-    generated_aggregators: set[str] | None = None,
+    import_only_aggregators: set[str] | None = None,
 ) -> int:
     """Scan Lean files under *root* and return 1 for any policy violation."""
-    generated_aggregators = generated_aggregators or set()
+    import_only_aggregators = import_only_aggregators or set()
     oversized: list[tuple[int, str]] = []
     known: list[tuple[int, str]] = []
     errors = 0
     total = 0
     valid_aggregators: set[str] = set()
 
-    for relative in sorted(generated_aggregators):
+    for relative in sorted(import_only_aggregators):
         path = root / relative
         if path.suffix != ".lean" or not path.is_file() or _is_excluded(path, root):
             print(
-                f"::error file={relative},title=Invalid generated aggregator exemption::"
+                f"::error file={relative},title=Invalid import-only aggregator exemption::"
                 f"{relative}: exemption must name an existing, scanned .lean file"
             )
             errors += 1
@@ -142,7 +144,7 @@ def check_files(
         reason = validate_import_aggregator(path)
         if reason is not None:
             print(
-                f"::error file={relative},title=Invalid generated aggregator exemption::"
+                f"::error file={relative},title=Invalid import-only aggregator exemption::"
                 f"{relative}: {reason}"
             )
             errors += 1
@@ -180,7 +182,7 @@ def check_files(
     print(
         f"Scanned {total} .lean files, {total_oversized} nonexempt files exceed "
         f"{THRESHOLD} lines ({len(known)} known, {len(oversized)} new); "
-        f"validated {len(valid_aggregators)} of {len(generated_aggregators)} "
+        f"validated {len(valid_aggregators)} of {len(import_only_aggregators)} "
         "exact aggregator exemption(s)."
     )
     if oversized:

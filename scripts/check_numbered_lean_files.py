@@ -10,8 +10,10 @@ allowlist in the same change.  Genuine mathematical/source numbers belong in
 from __future__ import annotations
 
 import argparse
+import ast
 import re
 import subprocess
+from collections.abc import Mapping
 from pathlib import Path
 
 NUMBERED_STEM = re.compile(r"\d+[A-Za-z]?$")
@@ -81,6 +83,8 @@ SEMANTIC_EXCEPTIONS: dict[str, str] = {
         "Corollary 4.1 is the source result formalized by this module.",
 }
 
+# This guidance is intentionally naming-specific.  The size checker gives
+# complementary advice about decomposing a large mathematical development.
 SPLIT_GUIDANCE = (
     "Choose names for mathematical responsibilities (for example, "
     "BoundaryRecovery.lean), move shared definitions into a family Basic.lean "
@@ -110,12 +114,86 @@ def _has_numbered_suffix(path: str) -> bool:
     return NUMBERED_STEM.search(Path(path).stem) is not None
 
 
+def _debt_allowlist_from_source(source: str) -> frozenset[str]:
+    """Read ``NUMBERED_DEBT_ALLOWLIST`` from one checker source revision."""
+    tree = ast.parse(source)
+    for statement in tree.body:
+        if not isinstance(statement, (ast.Assign, ast.AnnAssign)):
+            continue
+        targets = statement.targets if isinstance(statement, ast.Assign) else [statement.target]
+        if not any(isinstance(target, ast.Name) and target.id == "NUMBERED_DEBT_ALLOWLIST"
+                   for target in targets):
+            continue
+        value = statement.value
+        if (
+            not isinstance(value, ast.Call)
+            or not isinstance(value.func, ast.Name)
+            or value.func.id != "frozenset"
+            or len(value.args) != 1
+            or value.keywords
+        ):
+            raise ValueError("NUMBERED_DEBT_ALLOWLIST must be a literal frozenset")
+        parsed = ast.literal_eval(value.args[0])
+        if not isinstance(parsed, set) or not all(isinstance(path, str) for path in parsed):
+            raise ValueError("NUMBERED_DEBT_ALLOWLIST must contain only literal paths")
+        return frozenset(parsed)
+    raise ValueError("NUMBERED_DEBT_ALLOWLIST assignment not found")
+
+
+def _debt_allowlist_at_merge_base(root: Path, base_ref: str) -> frozenset[str] | None:
+    """Return the debt set at the merge base with *base_ref*.
+
+    ``None`` is returned only while this checker is first introduced and is
+    therefore absent from the base revision.
+    """
+    merge_base = subprocess.run(
+        ["git", "-C", str(root), "merge-base", "HEAD", base_ref],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if merge_base.returncode != 0:
+        raise ValueError(
+            f"cannot find merge base with {base_ref}: {merge_base.stderr.strip()}"
+        )
+    base_commit = merge_base.stdout.strip()
+    result = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "show",
+            f"{base_commit}:scripts/check_numbered_lean_files.py",
+        ],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if result.returncode != 0:
+        missing_path = (
+            "does not exist in" in result.stderr
+            or "exists on disk, but not in" in result.stderr
+        )
+        if missing_path:
+            return None
+        raise ValueError(
+            f"cannot read checker at merge base {base_commit}: {result.stderr.strip()}"
+        )
+    return _debt_allowlist_from_source(result.stdout)
+
+
 def check_numbered_files(
     root: Path,
     debt_allowlist: frozenset[str] = NUMBERED_DEBT_ALLOWLIST,
-    semantic_exceptions: dict[str, str] = SEMANTIC_EXCEPTIONS,
+    semantic_exceptions: Mapping[str, str] | None = None,
+    base_debt_allowlist: frozenset[str] | None = None,
 ) -> int:
     """Check the numbered-name ratchet and return a process exit status."""
+    semantic_exceptions = dict(
+        SEMANTIC_EXCEPTIONS if semantic_exceptions is None else semantic_exceptions
+    )
     try:
         tracked = _tracked_production_lean_files(root)
     except (subprocess.CalledProcessError, UnicodeDecodeError) as error:
@@ -123,6 +201,12 @@ def check_numbered_files(
         return 1
 
     errors: list[str] = []
+    if base_debt_allowlist is not None:
+        for path in sorted(debt_allowlist - base_debt_allowlist):
+            errors.append(
+                f"{path}: added to the numbered debt allowlist; this set may only shrink"
+            )
+
     overlap = debt_allowlist & semantic_exceptions.keys()
     for path in sorted(overlap):
         errors.append(f"{path}: listed as both structural debt and a semantic exception")
@@ -173,8 +257,28 @@ def main() -> int:
         description="Reject new numbered-sequel names in tracked production Lean modules."
     )
     parser.add_argument("--root", type=Path, default=Path("."), help="Repository root")
+    parser.add_argument(
+        "--base-ref",
+        help=(
+            "Pull-request merge-base ref used to enforce that the debt allowlist "
+            "only shrinks"
+        ),
+    )
     args = parser.parse_args()
-    return check_numbered_files(args.root.resolve())
+    root = args.root.resolve()
+    base_debt_allowlist: frozenset[str] | None = None
+    if args.base_ref is not None:
+        try:
+            base_debt_allowlist = _debt_allowlist_at_merge_base(root, args.base_ref)
+        except (SyntaxError, ValueError) as error:
+            print(f"::error title=Numbered Lean file check failed::{error}")
+            return 1
+        if base_debt_allowlist is None:
+            print(
+                "Initializing the numbered-module debt baseline: the checker is absent "
+                f"from {args.base_ref}."
+            )
+    return check_numbered_files(root, base_debt_allowlist=base_debt_allowlist)
 
 
 if __name__ == "__main__":
