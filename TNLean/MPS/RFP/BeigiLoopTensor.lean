@@ -549,7 +549,7 @@ private theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_fin
 length greater than two the positive-loop product states span the whole parent
 ground space.
 
-**Scope restriction (chain length):** The theorem treats `N > 2`, the range
+**Scope restriction (chain length):** The theorem treats $N > 2$, the range
 covered by the ordered-cycle ground-space dimension formula used here.  The
 short-chain conventions are recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
@@ -571,7 +571,7 @@ theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES
 /-- In the BNT nearest-neighbor setting, positive-loop product states span the
 whole parent ground space at every length greater than two.
 
-**Scope restriction (chain length):** The theorem treats `N > 2`, the range
+**Scope restriction (chain length):** The theorem treats $N > 2$, the range
 covered by the ordered-cycle ground-space dimension formula used here.  The
 short-chain conventions are recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
