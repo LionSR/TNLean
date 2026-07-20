@@ -130,6 +130,14 @@ noncomputable def loopProductState (F : BeigiSectorGraphData A)
   fun s ↦ ∑ t : Fin N → Fin d,
     (∏ n : Fin N, F.unitary (s n) (t n)) * F.loopCyclicProduct l t
 
+/-- The Euclidean-space realization of a positive-loop product state.
+
+Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+noncomputable def loopProductStateES (F : BeigiSectorGraphData A)
+    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
+    EuclideanSpace ℂ (Fin N → Fin d) :=
+  (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (F.loopProductState l)
+
 private theorem edgeProjector_mulVec_loopBondVector
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     (F.edgeProjector l.1 l.1).mulVec (F.loopBondVector l) =
@@ -202,6 +210,60 @@ private theorem loopCyclicProduct_etaCyclicEdgeEquiv_symm_of_ne
     rw [Matrix.etaCyclicEdgeEquiv_symm_apply]
     exact Equiv.symm_apply_apply F.sectorEquiv _
   exact (congrArg Sigma.fst hsite).symm.trans (hsector n)
+
+/-- The cyclic product belonging to a positive loop is nonzero at every
+positive chain length.
+
+Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+theorem loopCyclicProduct_ne_zero (F : BeigiSectorGraphData A)
+    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
+    F.loopCyclicProduct l ≠ (0 : NSiteSpace d N) := by
+  classical
+  have hexists : ∃ q, F.loopBondVector l q ≠ 0 := by
+    by_contra h
+    push Not at h
+    apply F.loopBondVector_ne_zero l
+    funext q
+    exact h q
+  obtain ⟨q, hq⟩ := hexists
+  let x : (n : Fin N) →
+      Matrix.EtaEdgeIndex F.leftDim F.rightDim l.1 l.1 := fun _ ↦ q
+  intro hzero
+  have hvalue := congrFun hzero
+    ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm
+      ⟨fun _ ↦ l.1, x⟩)
+  rw [F.loopCyclicProduct_etaCyclicEdgeEquiv_symm_constant l x] at hvalue
+  have hprod : ∏ n : Fin N, F.loopBondVector l (x n) ≠ 0 := by
+    exact Finset.prod_ne_zero_iff.mpr fun n _ ↦ by simpa only [x] using hq
+  exact hprod hvalue
+
+/-- Cyclic products belonging to distinct positive loops have disjoint sector
+support and hence zero inner product.
+
+Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+theorem loopCyclicProduct_inner_eq_zero_of_ne
+    (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight}
+    {N : ℕ} [NeZero N] (hlm : l ≠ m) :
+    inner ℂ (WithLp.toLp 2 (F.loopCyclicProduct (N := N) l))
+      (WithLp.toLp 2 (F.loopCyclicProduct (N := N) m)) = 0 := by
+  classical
+  rw [EuclideanSpace.inner_toLp_toLp, dotProduct]
+  apply Finset.sum_eq_zero
+  intro s _
+  by_cases hl : ∀ n, (F.sectorEquiv.symm (s n)).1 = l.1
+  · have hm : ¬ ∀ n, (F.sectorEquiv.symm (s n)).1 = m.1 := by
+      intro hm
+      apply hlm
+      apply Subtype.ext
+      exact (hl 0).symm.trans (hm 0)
+    have hmzero : F.loopCyclicProduct m s = 0 := by
+      unfold loopCyclicProduct
+      rw [dif_neg hm]
+    rw [hmzero, zero_mul]
+  · have hlzero : F.loopCyclicProduct l s = 0 := by
+      unfold loopCyclicProduct
+      rw [dif_neg hl]
+    rw [Pi.star_apply, hlzero, star_zero, mul_zero]
 
 private theorem blockGroundProduct_mulVec_loopCyclicProduct
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
@@ -300,6 +362,91 @@ private theorem loopProductState_eq_sitewisePhysicalMatrix_mulVec
         (F.loopCyclicProduct l) := by
   rfl
 
+private theorem sitewisePhysicalMatrix_conjTranspose_mul_self
+    (F : BeigiSectorGraphData A) (N : ℕ) :
+    (MPOTensor.sitewisePhysicalMatrix F.unitary N)ᴴ *
+        MPOTensor.sitewisePhysicalMatrix F.unitary N = 1 := by
+  have hUstarU : F.unitaryᴴ * F.unitary = 1 := by
+    simpa only [Matrix.star_eq_conjTranspose] using
+      Unitary.star_mul_self_of_mem F.unitary_mem
+  calc
+    (MPOTensor.sitewisePhysicalMatrix F.unitary N)ᴴ *
+        MPOTensor.sitewisePhysicalMatrix F.unitary N =
+        MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N *
+          (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N)ᴴ := by
+      simp only [MPOTensor.sitewisePhysicalMatrix_conjTranspose,
+        Matrix.conjTranspose_conjTranspose]
+    _ = MPOTensor.sitewisePhysicalMatrix (F.unitaryᴴ * F.unitary) N := by
+      rw [MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose]
+      simp only [Matrix.conjTranspose_conjTranspose]
+    _ = 1 := by rw [hUstarU, MPOTensor.sitewisePhysicalMatrix_one]
+
+/-- A positive-loop product state is nonzero at every positive chain length.
+
+Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
+    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
+    F.loopProductState (N := N) l ≠ 0 := by
+  classical
+  let W := MPOTensor.sitewisePhysicalMatrix F.unitary N
+  have hWstarW : Wᴴ * W = 1 := F.sitewisePhysicalMatrix_conjTranspose_mul_self N
+  rw [F.loopProductState_eq_sitewisePhysicalMatrix_mulVec l]
+  intro hzero
+  apply F.loopCyclicProduct_ne_zero (N := N) l
+  have hzero' := congrArg (fun v ↦ Wᴴ *ᵥ v) hzero
+  simp only [Matrix.mulVec_zero] at hzero'
+  change Wᴴ *ᵥ W *ᵥ F.loopCyclicProduct (N := N) l = 0 at hzero'
+  rw [Matrix.mulVec_mulVec, hWstarW, Matrix.one_mulVec] at hzero'
+  exact hzero'
+
+/-- The Euclidean realization of a positive-loop product state is nonzero at
+every positive chain length.
+
+Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+theorem loopProductStateES_ne_zero (F : BeigiSectorGraphData A)
+    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
+    F.loopProductStateES (N := N) l ≠ 0 := by
+  exact (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.injective.ne
+    (F.loopProductState_ne_zero l)
+
+/-- Euclidean positive-loop product states belonging to distinct loops are
+orthogonal at every positive chain length.
+
+Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+theorem loopProductStateES_inner_eq_zero_of_ne
+    (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight}
+    {N : ℕ} [NeZero N] (hlm : l ≠ m) :
+    inner ℂ (F.loopProductStateES (N := N) l)
+      (F.loopProductStateES (N := N) m) = 0 := by
+  classical
+  let W := MPOTensor.sitewisePhysicalMatrix F.unitary N
+  have hWstarW : Wᴴ * W = 1 := F.sitewisePhysicalMatrix_conjTranspose_mul_self N
+  rw [loopProductStateES, loopProductStateES]
+  change inner ℂ (WithLp.toLp 2 (F.loopProductState l))
+    (WithLp.toLp 2 (F.loopProductState m)) = 0
+  rw [F.loopProductState_eq_sitewisePhysicalMatrix_mulVec l,
+    F.loopProductState_eq_sitewisePhysicalMatrix_mulVec m]
+  change inner ℂ (WithLp.toLp 2 (W *ᵥ F.loopCyclicProduct l))
+    (WithLp.toLp 2 (W *ᵥ F.loopCyclicProduct m)) = 0
+  rw [EuclideanSpace.inner_toLp_toLp, dotProduct_comm, Matrix.star_mulVec,
+    ← Matrix.dotProduct_mulVec, Matrix.mulVec_mulVec, hWstarW,
+    Matrix.one_mulVec, dotProduct_comm]
+  exact F.loopCyclicProduct_inner_eq_zero_of_ne hlm
+
+/-- The Euclidean positive-loop product states are linearly independent at
+every positive chain length.
+
+Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+theorem loopProductStateES_linearIndependent
+    (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] :
+    LinearIndependent ℂ
+      (fun l : Loop F.edgeWeight ↦ F.loopProductStateES (N := N) l) := by
+  apply linearIndependent_of_ne_zero_of_inner_eq_zero
+  · intro l
+    exact F.loopProductStateES_ne_zero l
+  · intro l m hlm
+    exact F.loopProductStateES_inner_eq_zero_of_ne hlm
+
 private theorem groundBondProduct_mulVec_loopProductState
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
@@ -385,11 +532,76 @@ theorem loopProductState_mem_parentHamiltonianGroundSpaceES
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} (hN : 2 ≤ N) :
     letI : NeZero N := ⟨by omega⟩
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (F.loopProductState l) ∈
+    F.loopProductStateES l ∈ parentHamiltonianGroundSpaceES A 2 N := by
+  letI : NeZero N := ⟨by omega⟩
+  rw [loopProductStateES, parentHamiltonianGroundSpaceES, Submodule.mem_map]
+  exact ⟨F.loopProductState l, F.loopProductState_mem_ker_parentHamiltonian l hN, rfl⟩
+
+/-- If the parent-ground-space dimension is eventually constant, then at every
+length greater than two the positive-loop product states span the whole parent
+ground space.
+
+**Scope restriction (chain length):** The theorem treats `N > 2`, the range
+covered by the ordered-cycle ground-space dimension formula used here.  The
+short-chain conventions are recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500, and
+Section IV, source lines 602--606. -/
+theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES
+    (F : BeigiSectorGraphData A)
+    (hparent : ∃ c N₀ : ℕ, ∀ M : ℕ, N₀ < M →
+      Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 M) = c)
+    {N : ℕ} (hN : 2 < N) :
+    letI : NeZero N := ⟨by omega⟩
+    Submodule.span ℂ
+      (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
       parentHamiltonianGroundSpaceES A 2 N := by
   letI : NeZero N := ⟨by omega⟩
-  rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
-  exact ⟨F.loopProductState l, F.loopProductState_mem_ker_parentHamiltonian l hN, rfl⟩
+  apply Submodule.eq_of_le_of_finrank_eq
+  · rw [Submodule.span_le]
+    rintro _ ⟨l, rfl⟩
+    change F.loopProductStateES l ∈ parentHamiltonianGroundSpaceES A 2 N
+    exact F.loopProductState_mem_parentHamiltonianGroundSpaceES l (by omega)
+  · calc
+      Module.finrank ℂ (Submodule.span ℂ
+          (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l))) =
+          Fintype.card (Loop F.edgeWeight) :=
+        finrank_span_eq_card F.loopProductStateES_linearIndependent
+      _ = Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) :=
+        (F.parentHamiltonianGroundSpaceES_finrank_eq_card_loop hparent hN).symm
+
+/-- In the BNT nearest-neighbor setting, positive-loop product states span the
+whole parent ground space at every length greater than two.
+
+**Scope restriction (chain length):** The theorem treats `N > 2`, the range
+covered by the ordered-cycle ground-space dimension formula used here.  The
+short-chain conventions are recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source: CPSV16, Definition 3.9 and Theorem 3.10, source lines 517--540;
+Beigi, arXiv:1105.1019v2, Section III, source lines 487--500, and Section IV,
+source lines 602--606. -/
+theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSectorData
+    {P : SectorDecomposition d} (F : BeigiSectorGraphData P.toTensor)
+    (hBNT : HasBNTSectorData P)
+    (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis)
+    {N : ℕ} (hN : 2 < N) :
+    letI : NeZero N := ⟨by omega⟩
+    Submodule.span ℂ
+      (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
+      parentHamiltonianGroundSpaceES P.toTensor 2 N := by
+  letI : NeZero N := ⟨by omega⟩
+  rcases hBNT.eventually_parentHamiltonian_groundSpace_finrank_eq hNNCPH with
+    ⟨N₀, hraw⟩
+  have hparent : ∃ c N₁ : ℕ, ∀ M : ℕ, N₁ < M →
+      Module.finrank ℂ
+        (parentHamiltonianGroundSpaceES P.toTensor 2 M) = c := by
+    refine ⟨P.basisCount, N₀, ?_⟩
+    intro M hM
+    rw [parentHamiltonianGroundSpaceES_finrank_eq_ker]
+    exact hraw M hM
+  exact F.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES hparent hN
 
 /-- The sector-coordinate loop tensor closes to the cyclic product of loop
 bond vectors at every positive length.
