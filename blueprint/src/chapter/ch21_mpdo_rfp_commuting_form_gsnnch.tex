@@ -937,18 +937,36 @@
 
 \begin{proof}\leanok
     The virtual matrices of all physical sectors span the full matrix
-    algebra.  Nondegeneracy and cyclicity of the trace pairing show that a
-    sector containing a nonzero virtual matrix lies on a directed two-cycle.
-    Hence every virtual matrix outside $C$ vanishes, and the virtual matrices
-    belonging to $C$ still span the full algebra.
+    algebra.  If $A=A_k^{xy}$ is nonzero, nondegeneracy of the trace pairing
+    gives a virtual matrix $B=A_q^{uv}$ such that
+    \[
+        \tr(AB)\ne0.
+    \]
+    Cyclicity gives $\tr(BA)=\tr(AB)\ne0$, and therefore
+    \[
+        \eta_{k,q}\ne0,
+        \qquad
+        \eta_{q,k}\ne0.
+    \]
+    Thus a sector containing a nonzero virtual matrix lies on a directed
+    two-cycle.  Hence every virtual matrix outside $C$ vanishes, and the
+    virtual matrices belonging to $C$ still span the full algebra.
 
-    If a proper directed cut separated two nonempty subsets of $C$, the
-    corresponding nonzero virtual matrix spaces would multiply to zero while
-    their sum was the full matrix algebra, a contradiction.  Thus $T$ is
-    irreducible.  The same trace pairing gives a two-edge return through each
-    sector and closes every retained edge through a third retained sector.
-    These yield the displayed positive diagonal entries of $T^2$ and $T^3$;
-    the coprime return lengths imply primitivity.
+    If a proper directed cut separated two nonempty subsets $C_1,C_2$ of
+    $C$, let $V_{C_i}$ denote the span of the virtual matrices in $C_i$.
+    Absence of an edge across the cut gives
+    \[
+        V_{C_1}V_{C_2}=\{0\},
+        \qquad
+        V_{C_1}+V_{C_2}=M_D(\mathbb C).
+    \]
+    Both spaces contain a nonzero matrix.  This contradicts the one-sided
+    product obstruction for two nonzero subspaces whose sum is the full
+    matrix algebra.  Thus $T$ is irreducible.  The same trace pairing gives a
+    two-edge return through each sector and closes every retained edge
+    through a third retained sector.  These yield the displayed positive
+    diagonal entries of $T^2$ and $T^3$; the coprime return lengths imply
+    primitivity.
 \end{proof}
 
 % **Local fix (cyclic-active restriction):** CPSV16 line 1613 uses the one-step
@@ -996,8 +1014,9 @@
     Set the left sector tensor equal to zero outside $C$.  The preceding span
     argument shows that this does not change the physical tensor, and the
     neighboring operators with both indices in $C$ are unchanged.  The
-    normalized physical-trace identity gives
-    $\widehat T^2=\widehat T^3$ on the restricted indices.  By
+    source zero-correlation-length relation, transported through this
+    restricted factorization, gives
+    $\widehat T^2=\widehat T^3$ on the cyclic-active indices.  By
     Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive},
     $\widehat T$ is primitive.  Its square is therefore a strictly positive
     idempotent matrix and has rank one.

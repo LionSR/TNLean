@@ -7,6 +7,7 @@ import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.Algebra.PerronFrobenius.Idempotent
 import TNLean.Algebra.TraceReindex
+
 /-!
 # Cyclic-active physical sectors
 
@@ -70,7 +71,11 @@ def IsCyclicActiveSector (F : PhysicalSectorFactorization K)
 directed walk.
 
 Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
-449--514; arXiv:1606.00608, Appendix C.2, lines 1441--1450. -/
+449--514; arXiv:1606.00608, Appendix C.2, lines 1441--1450.
+
+**Local fix (cyclic-active restriction):** This indicator vanishes outside
+the positive-length cyclic support, rather than ranging over every source
+sector.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveWeight (F : PhysicalSectorFactorization K)
     (k : Fin F.sectorCount) : ℝ :=
   by
@@ -91,7 +96,11 @@ Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
 /-- The subtype of sectors lying on a positive-length closed directed walk.
 
 Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
-449--514. -/
+449--514.
+
+**Local fix (cyclic-active restriction):** This subtype contains only the
+positive-length cyclic support, rather than every source sector.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 abbrev CyclicActiveSector (F : PhysicalSectorFactorization K) :=
   F.ActiveSector F.cyclicActiveWeight
 
@@ -722,9 +731,10 @@ cyclic-active sectors rank one.
 Writing `T k h = Re (tr (eta k h))`, the entry of `T ^ 2` is the sum of the
 two-step products `T k q * T q h` over cyclic-active `q`.  Identifying this
 algebraic coefficient with a three-boundary physical trace still requires the
-additional marginal-replacement argument tracked in issue #4445.  This
-theorem applies only after deleting sectors absent from every nonzero cyclic
-product and makes no assertion about the unreduced Beigi trace matrix.
+additional marginal-replacement argument documented in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.  This theorem applies only
+after deleting sectors absent from every nonzero cyclic product and makes no
+assertion about the unreduced Beigi trace matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497,
 and Proposition `4to2`, lines 1606--1616.

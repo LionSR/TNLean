@@ -123,27 +123,12 @@ theorem IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three
     rw [pow_add, Matrix.mul_apply]
     exact Finset.sum_pos (fun k _ ↦ mul_pos (hpos i k) (hpos k j))
       Finset.univ_nonempty
-  have hstable : ∀ N, 2 ≤ N → T ^ N = T ^ 2 := by
-    have hmul : T * T = T * T * T := by
-      have htwo : T ^ 2 = T * T := by rw [pow_succ, pow_one]
-      have hthree : T ^ 3 = T * T * T := by rw [pow_succ, pow_succ, pow_one]
-      rw [htwo, hthree] at h
-      exact h
-    intro N hN
-    induction N, hN using Nat.le_induction with
-    | base => rfl
-    | succ k _ ih =>
-      rw [pow_succ, ih]
-      calc
-        T ^ 2 * T = T * T * T := by rw [pow_two]
-        _ = T * T := hmul.symm
-        _ = T ^ 2 := (pow_two T).symm
   have hsq_pos (i j : n) : 0 < (T ^ 2) i j := by
-    rw [← hstable (m + m) (by omega)]
+    rw [← pow_eq_pow_two_of_pow_two_eq_pow_three h (m + m) (by omega)]
     exact htwom_pos i j
   have hsq_idem : T ^ 2 * T ^ 2 = T ^ 2 := by
     rw [← pow_add]
-    exact hstable 4 (by omega)
+    exact pow_eq_pow_two_of_pow_two_eq_pow_three h 4 (by omega)
   exact rank_eq_one_of_pos_of_mul_self_eq_self hsq_pos hsq_idem
 
 /-- If a primitive nonnegative real matrix has equal second and third powers,

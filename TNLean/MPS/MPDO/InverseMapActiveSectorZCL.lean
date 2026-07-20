@@ -20,9 +20,6 @@ neighboring operators are positive semidefinite.
 
 ## Main results
 
-* `PhysicalSectorFactorization.activeSectorTraceMatrix_normalized_relations_of_isSourceZCL`:
-  source zero correlation length gives normalized square--cube and trace-power
-  relations on the active trace matrix of a positive sector factorization.
 * `exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations`:
   the inverse-map construction has one rephasing for which positivity,
   primitivity, and both normalized relations hold.
