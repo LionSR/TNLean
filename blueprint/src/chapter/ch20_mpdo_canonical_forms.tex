@@ -334,7 +334,11 @@ $\mathcal K_j$ with the label $j$:
     % physical input of K to the corresponding input of K^{-1}; the other
     % physical/output index of K^{-1} remains open above.  Its primitive
     % boundary signature is (virtual-west=2 | virtual-east=2 |
-    % physical-up=1 | physical-down=0).
+    % physical-up=1 | physical-down=0).  The paper distinguishes both
+    % physical contractions by a dashed stroke.  The public tenkzfree
+    % grammar has no semantic dash key, so the typed physical--physical
+    % joins below use the ordinary solid bond; issue #4536 tracks the
+    % missing public spelling.
     \begin{tenkzfree}[tensor style=box, compact]
         \tnput[box, ports={west:virtual,east:virtual,
                 north:physical,south:physical}]
@@ -356,9 +360,7 @@ $\mathcal K_j$ with the label $j$:
         \tnjoin{biKOneWest.east}{biKOne.west}
         \tnjoin{biKOne.east}{biKOneEast.west}
         \tnjoin{biOutOne.south}{biInvOne.north}
-        \begin{scope}[bond/.append style={dashed}]
-            \tnjoin{biInvOne.south}{biKOne.north}
-        \end{scope}
+        \tnjoin{biInvOne.south}{biKOne.north}
     \end{tenkzfree}
     \;=\;
     % Panel 2 resolves each virtual boundary index into the tensor leg and
@@ -411,9 +413,7 @@ $\mathcal K_j$ with the label $j$:
         \tnjoin{biInvTwoWest.east}{biInvTwo.west}
         \tnjoin{biInvTwo.east}{biInvTwoEast.west}
         \tnjoin{biOutTwo.south}{biInvTwo.north}
-        \begin{scope}[bond/.append style={dashed}]
-            \tnjoin{biInvTwo.south}{biKTwo.north}
-        \end{scope}
+        \tnjoin{biInvTwo.south}{biKTwo.north}
         \tnjoin{biGaugeTwoWest.east}{biXTwo.west}
         \tnjoin{biXTwo.east}{biKTwo.west}
         \tnjoin{biKTwo.east}{biXinvTwo.west}
