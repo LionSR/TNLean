@@ -84,26 +84,34 @@ def sectorVirtualMatrixFamily (F : PhysicalSectorFactorization K)
   F.sectorVirtualMatrix q.1 q.2.1 q.2.2
 
 /-- Suppose the sector virtual matrices span the full virtual matrix algebra
-and both endpoint sectors of every nonzero neighboring edge contain a nonzero
-virtual matrix. Then every nonzero edge `k → h` has a two-edge return
+and the endpoint sectors of a nonzero neighboring edge contain nonzero
+virtual matrices. Then that edge `k → h` has a two-edge return
 `h → j → k`.
 
 Indeed, a nonzero neighboring entry gives sector matrices `A` and `B` with
 `A * B ≠ 0`. Nondegeneracy of the trace pairing and the spanning hypothesis
 give a sector matrix `C` with `trace (A * B * C) ≠ 0`. Cyclicity of the trace
-then forces both `B * C` and `C * A` to be nonzero. -/
-theorem exists_two_edge_return_of_neighboringOperator_ne_zero
+then forces both `B * C` and `C * A` to be nonzero.
+
+Source: arXiv:1606.00608, Appendix C.2, proof of Lemma `propSN`,
+lines 1451--1471.
+
+**Local fix (triangle closure):** The explicit two-edge return replaces the
+blocking assertion in the source. See
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
+theorem exists_two_edge_return_of_neighboringOperator_ne_zero_of_endpoints
     (F : PhysicalSectorFactorization K)
     (hspan : Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤)
-    (hnonzero : ∀ {k h}, F.neighboringOperator k h ≠ 0 →
-      (∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0) ∧
-        ∃ x y : F.SectorIndex h, F.sectorVirtualMatrix h x y ≠ 0)
-    {k h : Fin F.sectorCount} (hkh : F.neighboringOperator k h ≠ 0) :
+    {k h : Fin F.sectorCount}
+    (hk : ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (hh : ∃ x y : F.SectorIndex h, F.sectorVirtualMatrix h x y ≠ 0)
+    (hkh : F.neighboringOperator k h ≠ 0) :
     ∃ j : Fin F.sectorCount,
       F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0 := by
   classical
   obtain ⟨ex, ey, heta⟩ := Matrix.exists_entry_ne_zero_of_ne_zero _ hkh
-  obtain ⟨⟨kx, ky, hkxy⟩, ⟨hx, hy, hhxy⟩⟩ := hnonzero hkh
+  obtain ⟨kx, ky, hkxy⟩ := hk
+  obtain ⟨hx, hy, hhxy⟩ := hh
   obtain ⟨beta, alpha, hkentry⟩ :=
     Matrix.exists_entry_ne_zero_of_ne_zero _ hkxy
   have hkleft : F.leftTensor k beta kx.1 ky.1 ≠ 0 :=
@@ -166,6 +174,30 @@ theorem exists_two_edge_return_of_neighboringOperator_ne_zero
   · intro hz
     exact hCA (F.sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero
       q.1 k hz q.2.1 q.2.2 x y)
+
+/-- Suppose the sector virtual matrices span the full virtual matrix algebra
+and both endpoint sectors of every nonzero neighboring edge contain a nonzero
+virtual matrix. Then every nonzero edge `k → h` has a two-edge return
+`h → j → k`.
+
+Source: arXiv:1606.00608, Appendix C.2, proof of Lemma `propSN`,
+lines 1451--1471.
+
+**Local fix (triangle closure):** The explicit two-edge return replaces the
+blocking assertion in the source. See
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
+theorem exists_two_edge_return_of_neighboringOperator_ne_zero
+    (F : PhysicalSectorFactorization K)
+    (hspan : Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤)
+    (hnonzero : ∀ {k h}, F.neighboringOperator k h ≠ 0 →
+      (∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0) ∧
+        ∃ x y : F.SectorIndex h, F.sectorVirtualMatrix h x y ≠ 0)
+    {k h : Fin F.sectorCount} (hkh : F.neighboringOperator k h ≠ 0) :
+    ∃ j : Fin F.sectorCount,
+      F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0 := by
+  obtain ⟨hk, hh⟩ := hnonzero hkh
+  exact F.exists_two_edge_return_of_neighboringOperator_ne_zero_of_endpoints
+    hspan hk hh hkh
 
 /-- Under the spanning and endpoint-nonvanishing hypotheses, the terminal
 sector of every nonzero neighboring edge reaches its initial sector through

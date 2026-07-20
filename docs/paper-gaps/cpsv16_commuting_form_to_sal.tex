@@ -379,6 +379,64 @@ Lemma~2.1, which supplies only the direct-sum tensor-factor decomposition,
 must be supplemented by a source-faithful minimal or visible-sector selection
 before primitivity can be used.
 
+Such a visible-sector selection is now available without SAL.  A sector is
+called cyclic-active when it has an outgoing nonzero neighboring operator
+followed by a possibly empty return path.  The explicit first edge excludes
+the empty reflexive walk.  This is
+\leanid{MPOTensor.PhysicalSectorFactorization.IsCyclicActiveSector}.  Every
+nonzero finite cyclic neighboring product uses only cyclic-active sectors, and
+therefore deleting all other sectors leaves every finite cyclic bond product
+unchanged; see
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector}.
+
+For an injective tensor with positive semidefinite neighboring operators, the
+cyclic-active sectors are nonempty and their trace matrix is primitive.  The
+proof uses the nondegeneracy of the matrix trace pairing twice.  First, every
+nonzero virtual sector lies on a directed two-cycle, so all virtual matrices
+outside the cyclic-active set vanish and the retained virtual matrices still
+span the full matrix algebra.  The directed-cut argument then gives one
+strongly connected component.  Second, every retained sector has a return of
+length two, and every retained edge closes through a third retained sector;
+the resulting coprime return lengths give aperiodicity.  This is
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+cyclicActiveSectorTraceMatrix_isPrimitive}.  No inverse-map sector weights,
+SAL, or Hayashi decomposition occur in this argument.
+
+Source ZCL gives a positive normalization
+$\widehat T=\lambda^{-1}T$ of this restricted matrix satisfying
+\[
+  \widehat T^2=\widehat T^3,
+  \qquad \operatorname{rank}(\widehat T^2)=1,
+  \qquad
+  \tr(\widehat T^m)=\tr(\widehat T)\quad(m\geq1).
+\]
+The combined result is
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL}.
+It concerns the restricted matrix only.  In particular, it neither makes the
+unreduced trace matrix primitive nor asserts that $\widehat T$ itself has rank
+one.
+
+This last distinction determines how the new result can enter Proposition
+\emph{4to2}.  The two-boundary expression at source lines~1613--1616 contains
+the one-step coefficient $T_{q,h}=\tr(\eta_{q,h})$.  It does not contain
+$T^2$.  Applying the ZCL marginal replacement once further, and hence tracing
+three boundary sites of a chain longer by two sites, produces two successive
+fully traced middle edges.  Their coefficient is
+\[
+  (T^2)_{q,h}=\sum_{r\in C}
+    \tr(\eta_{q,r})\tr(\eta_{r,h}).
+\]
+Thus the proved rank-one statement supplies the separating boundary
+coefficient only in this three-boundary form.  What remains is to express the
+iterated marginal replacement in the physical-sector coordinates, carry the
+cyclic deletion through the two surviving partial traces, extract an explicit
+outer-product factorization of the restricted $\widehat T^2$, and construct
+the direct-sum Markov decomposition.  The present conditional theorem
+\leanid{Matrix.eta_fourth_region_trace_formula} still assumes a factorization
+of the one-step matrix and cannot be discharged directly by the new theorem.
+
 Consequently the source implication
 \[
   \text{one translation-invariant commuting bond}
@@ -442,28 +500,16 @@ implies SAL.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Replace the full Beigi sector set by a source-faithfully defined active
-restriction, formed without using SAL, and prove that normality leaves one
-aperiodic recurrent component.  The inactive-sector example above shows that
-an arbitrary nonminimal factorization is insufficient; it does not rule out an
-appropriate existential selection.  The active-sector construction presently
-used for the inverse-map factorization depends on SAL-derived sector weights
-and therefore cannot be invoked at this call site.
-
-For such an active restriction, one possible corrected route is to use the
-square of its trace matrix.  If a primitive nonnegative matrix $T$ satisfies
-$T^2=T^3$, then $T^2$ is an idempotent Perron projection of rank one.  This is
-formalized by
-\leanid{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}; the
-nonempty matrix convention is explicit, since primitivity is vacuous for the
-zero-dimensional matrix under the library definition.  The construction and
-primitivity of the required SAL-independent active restriction remain absent.
-Alternatively, replace the printed line-1613 argument by a direct Markov
-decomposition which does not require any rank-one trace matrix.
-\item Trace the fourth region, construct the quantum Markov decomposition at
-each admissible cut, and apply the all-cut Markov theorem.  Only then may the
-source proposition receive a formal declaration and a
-\texttt{\string\leanok} marker.
+\item Formalize the second iteration of the ZCL marginal replacement: replace
+the one-site boundary trace by a three-site trace of a chain longer by two
+sites, and identify its fully traced middle coefficient with the restricted
+matrix $\widehat T^2$.  The cyclic-active deletion theorem must also be carried
+through the two adjacent partial traces.
+\item Extract an explicit outer-product factorization of
+$\widehat T^2$, separate the two remaining boundary sector sums, and construct
+the quantum Markov decomposition at each admissible cut.
+\item Apply the all-cut Markov theorem.  Only then may the source proposition
+receive a formal declaration and a \texttt{\string\leanok} marker.
 \end{enumerate}
 
 \bibliographystyle{alpha}

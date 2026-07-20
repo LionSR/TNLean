@@ -747,11 +747,12 @@
 
 \begin{theorem}[Rank and factorization of a stationary primitive square]
     \label{thm:matrix_primitive_pow_two_rank_one}
+    \lean{Matrix.IsPrimitive.smul_of_pos}
     \lean{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}
     \lean{Matrix.IsPrimitive.exists_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three}
     \leanok
     Let $T$ be a primitive real $N\times N$ matrix, where
-    $N\geq 1$. If
+    $N\geq 1$.  Multiplication by a positive scalar preserves primitivity.  If
     \[
         T^2=T^3,
     \]

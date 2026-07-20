@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.Data.Complex.Basic
 
 /-!
 # Trace under matrix reindexing
@@ -17,8 +16,8 @@ the row and column index sets.
 namespace Matrix
 
 /-- Trace is invariant under simultaneous reindexing of the rows and columns. -/
-theorem trace_reindex {m n : Type*} [Fintype m] [Fintype n]
-    (e : m ≃ n) (M : Matrix m m ℂ) :
+theorem trace_reindex {R m n : Type*} [AddCommMonoid R] [Fintype m] [Fintype n]
+    (e : m ≃ n) (M : Matrix m m R) :
     Matrix.trace (Matrix.reindex e e M) = Matrix.trace M := by
   classical
   simpa [trace, reindex_apply] using
