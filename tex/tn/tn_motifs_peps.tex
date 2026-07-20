@@ -8,10 +8,6 @@
     \TN@annotationterminal{#1}{#2}%
     \TN@label{#1}{(0,0)}{#3}%
 }
-\newcommand{\TN@motiflabelleft}[3]{%
-    \TN@annotationterminal{#1}{#2}%
-    \TN@label[anchor=east]{#1}{(0,0)}{#3}%
-}
 \newcommand{\TN@motiflabelright}[3]{%
     \TN@annotationterminal{#1}{#2}%
     \TN@label[anchor=west]{#1}{(0,0)}{#3}%
@@ -716,18 +712,6 @@
         \TN@motiflabel{tnClientLabel2112}{(-0.42,0.60)}{c_{v,e_3}}
         \TN@motiflabel{tnClientLabel2113}{(0.42,-0.60)}{c_{v,e_4}}
         \TN@motiflabel{tnClientLabel2114}{(2.35,0)}{\displaystyle\prod_{e \ni v} c_{v,e} = 1}
-}
-
-% TNChoiMatrix
-\newcommand{\TNChoiMatrixMotif}{%
-        \TNEventInternal{motif|picture=\the\TN@pictureid|name=TNChoiMatrix|kind=quantum-channel}%
-        \TNStackedMPOProduct{cm}{(0,0)}{T}{\mathrm{id}}{}
-        \TNOpenVirtualWest{cmUpperWest}
-        \TNOpenVirtualWest{cmLowerWest}
-        \TNOpenVirtualEast{cmUpperEast}
-        \TNOpenVirtualEast{cmLowerEast}
-        \TN@motiflabelleft{tnClientLabel2160}{(-0.70,0)}{\ket{\Omega}\!\bra{\Omega}}
-        \TN@motiflabelright{tnClientLabel2161}{(0.70,0)}{\tau}
 }
 
 % TNTransferMapTracePairing
