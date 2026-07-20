@@ -487,10 +487,22 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 Every environment emits `picture|id=N|lang=L` at `\tenkz@beginpicture` (the
 only writer of `lang=`; `L` is one of `grid`, `cd`, `lattice`, `free`),
 then dialect events carrying an explicit `picture=N` back-reference.
-`warning` events are cross-cutting (any dialect may emit one) and, like
-`boundary`, are stripped from a picture's content before dialect and
-empty-picture checks run — they are diagnostics and derived data, not
-ink. The table below is generated from the `\tenkz@event{...}` call
+`warning`, `label-use`, and `bbox` events are cross-cutting (any dialect may
+emit them) and, like `boundary`, are stripped from a picture's content before
+dialect and empty-picture checks run — they are diagnostics and derived data,
+not topology. Every library-owned `tn label` style use emits `label-use` and
+one live-anchor rectangle
+`bbox|picture=...|class=label|id=...|xmin=...|xmax=...|ymin=...|ymax=...`.
+Coordinates are integer scaled points. Axis-aligned box/MPO glyph skins emit
+the same record with `class=glyph`; typed maps additionally emit sibling object
+boxes and their two visible, label-occluded wire segments with `class=wire`.
+Circular, rounded, or triangular glyphs, container nodes, and bent or compound
+paths do not emit a rectangle: their axis-aligned boxes contain non-ink area
+and would make a strict rectangle-intersection check unsound. The audit rejects
+a strict label/ink rectangle intersection, permits tangency, and rejects any mismatch
+between a picture's `label-use` and label-box counts.
+
+The table below is generated from the `\tenkz@event{...}` call
 sites themselves (grep `tenkz@event{` across `tex/tenkz/*.code.tex`),
 not hand-maintained prose — the two drift out of step otherwise.
 

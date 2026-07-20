@@ -798,6 +798,7 @@
     \exp_args:Nc \hbox_set:Nn
       { l__tenkzcd_map_label_\int_use:N \l__tenkzcd_mapdecls_int _box }
       {
+        \tenkz@bboxcapturefalse
         \begin{tikzpicture}[baseline]
           \node[tn~label, fill=tenkzPaper, outer~sep=0pt]
             { $\tenkz@labelsize #3$ };
@@ -869,16 +870,19 @@
 
 \cs_new_protected:Npn \tenkz_cd_map_path:nnn #1#2#3
   {
+    \tenkz@bboxcapturefalse
     \draw[#1]
       (tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
         \int_use:N\l__tenkzcd_fromcol_int.base~east) --
       node[inner~sep=0pt, outer~sep=0pt, #2]
+        (tenkz-map-label-\the\tenkz@pictureid-#3)
         {
           \exp_args:Nc \box_use:N
             { l__tenkzcd_map_label_#3_box }
         }
       (tenkzmap-\int_use:N\l__tenkzcd_torow_int-
         \int_use:N\l__tenkzcd_tocol_int.base~west);
+    \tenkz@bboxcapturetrue
   }
 
 \cs_new_protected:Npn \tenkz_cd_draw_map:nnnnnnn #1#2#3#4#5#6#7
@@ -933,6 +937,7 @@
         \tenkz_cd_map_style:nnnN {#4}{#5}{#6} \l__tenkzcd_mapstyle_tl
         \exp_args:NV \tenkz_cd_map_path:nnn
           \l__tenkzcd_mapstyle_tl {#3}{#7}
+        \tenkz_cd_emit_map_bboxes:nn {#7}{#4}
         \tenkz@event{cdmap|picture=\the\tenkz@pictureid|
           from=\int_use:N\l__tenkzcd_fromrow_int-
                \int_use:N\l__tenkzcd_fromcol_int|
@@ -942,6 +947,36 @@
           role=\tl_if_blank:nTF {#5}{none}{#5}|
           species=\tl_if_blank:nTF {#6}{none}{#6}}
       }
+  }
+
+% The typed-map overlap contract is measured from the production nodes, after
+% the path exists.  The wire is opaque-label-overpainted, so its visible ink is
+% the pair of segments ending at the label's west/east edges.  A fused bond's
+% outer half-width is 1.1pt (0.55pt line width around a 1.1pt double gap).
+\cs_new_protected:Npn \tenkz_cd_emit_map_bboxes:nn #1#2
+  {
+    \tenkz@bboxlabeluse
+    \tenkz@emitnodebbox{label}
+      {tenkz-map-label-\the\tenkz@pictureid-#1}
+    \tenkz@emitnodebbox{glyph}
+      {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+        \int_use:N\l__tenkzcd_fromcol_int}
+    \tenkz@emitnodebbox{glyph}
+      {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
+        \int_use:N\l__tenkzcd_tocol_int}
+    \str_if_eq:nnTF {#2}{1}
+      { \dim_set:Nn \l_tmpa_dim {1.1pt} }
+      { \dim_set:Nn \l_tmpa_dim {\tenkz@wirewidth / 2} }
+    \tenkz@emitwirebbox
+      {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+        \int_use:N\l__tenkzcd_fromcol_int}{base~east}
+      {tenkz-map-label-\the\tenkz@pictureid-#1}{west}
+      {\l_tmpa_dim}
+    \tenkz@emitwirebbox
+      {tenkz-map-label-\the\tenkz@pictureid-#1}{east}
+      {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
+        \int_use:N\l__tenkzcd_tocol_int}{base~west}
+      {\l_tmpa_dim}
   }
 
 \cs_new_protected:Npn \tenkz_cd_measure_map:n #1
