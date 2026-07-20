@@ -2703,8 +2703,14 @@ specialization of that Appendix~D definition.
     \[
         \widehat C_a=\nu_a^{-1}\widetilde C_a
     \]
-    in sector and physical coordinates, respectively.  The original tensor
-    and its exact periodic-vector identities remain unchanged.
+    in sector and physical coordinates, respectively.  The raw coordinate
+    and physical tensors remain separately unchanged.  For every $N>0$,
+    Theorem~\ref{thm:beigi_loop_tensor_periodic_vector} gives
+    \[
+        \ket{V^{(N)}(\widehat C_a)}=\nu_a^{-N}\Psi_a^{(N)},
+    \]
+    Thus the normalized periodic vector determines the same ray as the periodic
+    vector of the raw physical tensor.
 \end{definition}
 
 \begin{lemma}[Positive Schmidt dimension of a Beigi loop]
@@ -2748,6 +2754,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.loopBondNorm_ne_zero}
     \lean{MPSTensor.BeigiSectorGraphData.loopBondNorm_eq_frobeniusNorm}
     \lean{MPSTensor.BeigiSectorGraphData.transferMap_minimalLoopCoordinateTensor}
+    \lean{MPSTensor.BeigiSectorGraphData.transferMap_minimalLoopCoordinateTensor_comp_self}
     \lean{MPSTensor.BeigiSectorGraphData.transferMap_normalizedMinimalLoopCoordinateTensor}
     \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopCoordinateTensor_isTransferIdempotent}
     \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_isTransferIdempotent}

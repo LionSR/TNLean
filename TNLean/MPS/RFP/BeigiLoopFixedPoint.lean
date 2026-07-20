@@ -25,8 +25,10 @@ length `N`, it multiplies Beigi's product-of-pairs vector by `‖φ‖₂⁻ᴺ`
   Hamiltonians*, arXiv:1105.1019v2, Section IV, source lines 602--606.
 * J. I. Cirac, D. Pérez-García, N. Schuch, and F. Verstraete, *Matrix product
   density operators: Renormalization fixed points and boundary theories*,
-  arXiv:1606.00608, equations `eq:basic-vectors-RFP-pure` and `eq:III_varphi`,
-  source lines 570--578.
+  arXiv:1606.00608, equations `III_CFI_RFP` and `eq:III_isometry`, source
+  lines 543--555; equations `eq:basic-vectors-RFP-pure` and `eq:III_varphi`,
+  source lines 570--578; and the fixed-point normal-form derivation, source
+  lines 1293--1300.
 -/
 
 open scoped BigOperators ComplexOrder Kronecker Matrix Matrix.Norms.Frobenius
@@ -94,7 +96,8 @@ vector.  The normalized RFP representative divides by its Euclidean norm; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578, and
+the fixed-point normal-form derivation, source lines 1293--1300. -/
 noncomputable def loopBondNorm (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : ℝ :=
   ‖(WithLp.toLp 2 (F.loopBondVector l) :
@@ -102,8 +105,9 @@ noncomputable def loopBondNorm (F : BeigiSectorGraphData A)
 
 /-- The Euclidean norm of a positive-loop bond vector is positive.
 
-Source: Beigi, arXiv:1105.1019v2, source lines 602--606.  The normalization
-correction is recorded in
+Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16, fixed-point
+normal-form derivation, source lines 1293--1300.  The normalization correction
+is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem loopBondNorm_pos (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : 0 < F.loopBondNorm l := by
@@ -112,8 +116,9 @@ theorem loopBondNorm_pos (F : BeigiSectorGraphData A)
 
 /-- The Euclidean norm of a positive-loop bond vector is nonzero.
 
-Source: Beigi, arXiv:1105.1019v2, source lines 602--606.  The normalization
-correction is recorded in
+Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16, fixed-point
+normal-form derivation, source lines 1293--1300.  The normalization correction
+is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem loopBondNorm_ne_zero (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : F.loopBondNorm l ≠ 0 :=
@@ -122,8 +127,9 @@ theorem loopBondNorm_ne_zero (F : BeigiSectorGraphData A)
 /-- The Euclidean norm of the loop bond vector is the Frobenius norm of its
 coefficient matrix.
 
-Source: Beigi, arXiv:1105.1019v2, source lines 602--606.  The normalization
-correction is recorded in
+Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16, fixed-point
+normal-form derivation, source lines 1293--1300.  The normalization correction
+is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem loopBondNorm_eq_frobeniusNorm (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) :
@@ -141,7 +147,9 @@ norm gives the normalized fixed-point representative; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555,
+`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578, and
+the fixed-point normal-form derivation, source lines 1293--1300. -/
 noncomputable def normalizedMinimalLoopCoordinateTensor
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     MPSTensor d (F.loopSchmidtRank l) :=
@@ -155,7 +163,9 @@ representative of Beigi's product-of-pairs tensor on its Schmidt support; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555,
+`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578, and
+the fixed-point normal-form derivation, source lines 1293--1300. -/
 noncomputable def normalizedMinimalLoopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : MPSTensor d (F.loopSchmidtRank l) :=
   fun i ↦ ((F.loopBondNorm l : ℂ)⁻¹) • F.minimalLoopTensor l i
@@ -177,8 +187,11 @@ rank-one map on the virtual matrix algebra.
 rank factorization through the Schmidt support; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+Source context: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555, and the
+fixed-point normal-form derivation, source lines 1293--1300.  The rank-one
+formula itself is the local rank-factorization calculation recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem transferMap_minimalLoopCoordinateTensor
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     (Z : Matrix (Fin (F.loopSchmidtRank l))
@@ -247,6 +260,45 @@ private theorem loopSchmidtGram_trace
       rw [(F.loopSchmidtFactorization l).mul_eq]
       rw [← F.loopBondNorm_eq_frobeniusNorm l]
 
+/-- Squaring the transfer map of the unnormalized minimal loop tensor gives
+the same map multiplied by the squared Euclidean bond norm.
+
+**Local fix (Schmidt support and normalization):** Beigi's chosen bond vector
+is nonzero but need not have unit norm.  Thus the raw transfer map is a scalar
+multiple of an idempotent rather than necessarily idempotent itself; see
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source context: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555, and the
+fixed-point normal-form derivation, source lines 1293--1300.  The scalar
+identity itself is the local rank-factorization calculation recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
+theorem transferMap_minimalLoopCoordinateTensor_comp_self
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
+    transferMap (F.minimalLoopCoordinateTensor l) ∘ₗ
+        transferMap (F.minimalLoopCoordinateTensor l) =
+      (((F.loopBondNorm l) ^ 2 : ℝ) : ℂ) •
+        transferMap (F.minimalLoopCoordinateTensor l) := by
+  apply LinearMap.ext
+  intro Z
+  simp only [LinearMap.comp_apply, LinearMap.smul_apply]
+  let Q := (F.loopSchmidtFactorization l).rightFactorᴴ *
+    (F.loopSchmidtFactorization l).rightFactor
+  let P := (F.loopSchmidtFactorization l).leftFactor *
+    (F.loopSchmidtFactorization l).leftFactorᴴ
+  have hformula (W : Matrix (Fin (F.loopSchmidtRank l))
+      (Fin (F.loopSchmidtRank l)) ℂ) :
+      transferMap (F.minimalLoopCoordinateTensor l) W =
+        Matrix.trace (Q * W) • P := by
+    simpa only [Q, P, Matrix.mul_assoc] using
+      F.transferMap_minimalLoopCoordinateTensor l W
+  have htrace : Matrix.trace (Q * P) =
+      (((F.loopBondNorm l) ^ 2 : ℝ) : ℂ) := by
+    simpa only [Q, P, Matrix.mul_assoc] using F.loopSchmidtGram_trace l
+  rw [hformula, hformula]
+  simp only [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul, htrace,
+    smul_smul, mul_comm]
+
 /-- Euclidean normalization multiplies the rank-one transfer formula by the
 inverse squared bond norm.
 
@@ -255,7 +307,8 @@ norm of the bond vector, equivalently the Frobenius norm of its coefficient
 matrix; see `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555, and the
+fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem transferMap_normalizedMinimalLoopCoordinateTensor
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     (Z : Matrix (Fin (F.loopSchmidtRank l))
@@ -284,7 +337,8 @@ removes the factor `‖φ‖₂²` from the square of the raw rank-one transfer 
 see `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555, and the
+fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem normalizedMinimalLoopCoordinateTensor_isTransferIdempotent
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     IsTransferIdempotent (F.normalizedMinimalLoopCoordinateTensor l) := by
@@ -323,7 +377,8 @@ physical coordinates; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555, and the
+fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem normalizedMinimalLoopTensor_isTransferIdempotent
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     IsTransferIdempotent (F.normalizedMinimalLoopTensor l) := by
@@ -345,7 +400,8 @@ nonzero inverse bond norm preserves one-site injectivity; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555, and the
+fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem normalizedMinimalLoopTensor_isInjective
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     IsInjective (F.normalizedMinimalLoopTensor l) := by
@@ -359,7 +415,8 @@ one-site injectivity of the normalized representative; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555, and the
+fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem normalizedMinimalLoopTensor_isNormal
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     IsNormal (F.normalizedMinimalLoopTensor l) :=
@@ -373,7 +430,9 @@ Euclidean bond norm at each site; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, arXiv:1105.1019v2, source lines 602--606; CPSV16,
-`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578. -/
+`III_CFI_RFP` and `eq:III_isometry`, source lines 543--555,
+`eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578, and
+the fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem mpv_normalizedMinimalLoopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :
     mpv (F.normalizedMinimalLoopTensor l) s =
