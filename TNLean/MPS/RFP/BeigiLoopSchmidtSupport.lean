@@ -175,6 +175,44 @@ noncomputable def minimalLoopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : MPSTensor d (F.loopSchmidtRank l) :=
   rotatePhysical F.unitary (F.minimalLoopCoordinateTensor l)
 
+/-- At a coordinate in the loop sector, the minimal tensor letter is the
+outer product of a column of the left rank factor and a row of the right rank
+factor.
+
+Source context: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation),
+and Section IV, equation (10) and the paragraph following it.  The
+Schmidt-support refinement is recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
+theorem minimalLoopCoordinateTensor_sector_apply
+    (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    (q : Fin (F.rightDim l.1)) (a : Fin (F.leftDim l.1)) :
+    F.minimalLoopCoordinateTensor l
+        (F.sectorEquiv ⟨l.1, (q, a)⟩) =
+      Matrix.vecMulVec
+        ((F.loopSchmidtFactorization l).leftFactor.col a)
+        ((F.loopSchmidtFactorization l).rightFactor.row q) := by
+  classical
+  have hsite :
+      F.sectorEquiv.symm (F.sectorEquiv ⟨l.1, (q, a)⟩) =
+        ⟨l.1, (q, a)⟩ :=
+    Equiv.symm_apply_apply F.sectorEquiv _
+  have hq :
+      (F.sectorEquiv.symm (F.sectorEquiv ⟨l.1, (q, a)⟩)).1 = l.1 :=
+    congrArg Sigma.fst hsite
+  have hright :
+      Fin.cast (congrArg F.rightDim hq)
+          (F.sectorEquiv.symm (F.sectorEquiv ⟨l.1, (q, a)⟩)).2.1 = q := by
+    apply Fin.ext
+    simpa only [Fin.val_cast] using congrArg (fun z ↦ z.2.1.val) hsite
+  have hleft :
+      Fin.cast (congrArg F.leftDim hq)
+          (F.sectorEquiv.symm (F.sectorEquiv ⟨l.1, (q, a)⟩)).2.2 = a := by
+    apply Fin.ext
+    simpa only [Fin.val_cast] using congrArg (fun z ↦ z.2.2.val) hsite
+  ext α β
+  simp [minimalLoopCoordinateTensor, Matrix.mul_apply, loopSchmidtBridge,
+    hright, hleft, Matrix.vecMulVec_apply]
+
 /-- Each ambient loop letter is the rectangular Schmidt-support letter
 followed by the left factor of the bond coefficient matrix.
 
