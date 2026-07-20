@@ -2383,6 +2383,84 @@ specialization of that Appendix~D definition.
     of \cite[Section~III]{Beigi2012Classification}.
 \end{definition}
 
+\begin{theorem}[Symmetric spatial form of a commuting positive interaction]
+    \label{thm:commuting_positive_interaction_symmetric_spatial_form}
+    \lean{Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute}
+    \lean{Matrix.etaPairSpatialBlockEquiv}
+    \leanok
+    Let $B\geq0$ be a two-site operator whose overlapping placements commute:
+    \[
+        (B\otimes\mathbf 1)(\mathbf 1\otimes B)
+        =
+        (\mathbf 1\otimes B)(B\otimes\mathbf 1).
+    \]
+    There are positive integers $d_{q,l},d_{q,r}$, a one-site unitary $U$,
+    and positive semidefinite operators $\eta_{q,h}$ on
+    $\mathcal H_{q,r}\otimes\mathcal H_{h,l}$ such that
+    \[
+        (U\otimes U)^*B(U\otimes U)
+        =\bigoplus_{q,h}
+          \mathbf 1_{q,l}\otimes\eta_{q,h}\otimes\mathbf 1_{h,r}.
+    \]
+    This is the symmetric two-sided form obtained from
+    \cite[Lemma~2.1 and Section~III, equation~(2)]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the spatial decomposition to the two overlapping placements of $B$.
+    In the resulting coordinates, matrix entries vanish unless both the left
+    and right sector labels agree.  For fixed sectors $q,h$, choose unit
+    vectors $l_0\in\mathcal H_{q,l}$ and
+    $r_0\in\mathcal H_{h,r}$ and define
+    \[
+      \langle r,l|\eta_{q,h}|r',l'\rangle
+      =\langle l_0,r;l,r_0|\widetilde B|l_0,r';l',r_0\rangle,
+      \qquad
+      \widetilde B=(U\otimes U)^*B(U\otimes U).
+    \]
+    The left block action makes the right outer factor an identity, while the
+    right block action makes the left outer factor an identity.  Hence the
+    displayed matrix element is independent of the chosen outer coordinates
+    and gives the stated direct sum.  Each $\eta_{q,h}$ is a compression of
+    the positive semidefinite matrix $\widetilde B$, so it is positive
+    semidefinite.
+\end{proof}
+
+\begin{theorem}[Sector graph of a commuting parent interaction]
+    \label{thm:nncph_beigi_sector_graph}
+    \lean{MPSTensor.IsNNCPH.nonempty_beigiSectorGraphData}
+    \lean{MPSTensor.IsNNCPH.beigiSectorGraphData}
+    \lean{MPSTensor.twoSiteParentInteractionMatrix_isStarProjection}
+    \lean{MPSTensor.twoSiteParentGroundProjectorMatrix_isStarProjection}
+    \lean{MPSTensor.twoSiteParentGroundProjectorMatrix_posSemidef}
+    \lean{MPSTensor.IsNNCPH.twoSiteParentGroundProjectorMatrix_overlappingLifts_commute}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    Suppose that the canonical length-two parent terms of $A$ commute on a
+    three-site chain.  Then the complementary two-site interaction admits a
+    finite sector graph as in Definition~\ref{def:beigi_sector_graph}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:commuting_positive_interaction_symmetric_spatial_form}
+    The canonical two-site parent interaction $Q_A$ is an orthogonal
+    projector.  Thus $\mathbf 1-Q_A$ is a positive semidefinite orthogonal
+    projector.  The overlapping placements of $\mathbf 1-Q_A$ commute because
+    those of $Q_A$ commute.  Apply
+    Theorem~\ref{thm:commuting_positive_interaction_symmetric_spatial_form} to
+    obtain
+    \[
+      (U\otimes U)^*(\mathbf 1-Q_A)(U\otimes U)
+      =\bigoplus_{q,h}
+        \mathbf 1_{q,l}\otimes\eta_{q,h}\otimes\mathbf 1_{h,r}.
+    \]
+    The left-hand side is idempotent, so every block on the right is
+    idempotent.  Evaluating the two outer identity factors at fixed unit
+    vectors gives $\eta_{q,h}^2=\eta_{q,h}$.  Since $\eta_{q,h}\geq0$, each
+    $\eta_{q,h}$ is an orthogonal projector and therefore defines the required
+    edge projection.
+\end{proof}
+
 \begin{theorem}[Ordered-cycle ground-space dimension formula]
     \label{thm:beigi_ordered_cycle_ground_space_dimension}
     \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
