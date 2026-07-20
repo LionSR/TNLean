@@ -392,10 +392,50 @@ Markov decompositions at all admissible cuts imply SAL.\footnote{This is
 direct-sum hypothesis is a marked scope restriction, not an additional
 hypothesis on the source proposition.
 
+\paragraph{Local fix (the later orthogonal-sector statement).}
+The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
+that the GSNNCH form alone implies SAL.  Its proof applies Proposition
+\emph{4to2} to each summand, although Proposition \emph{4to2} assumes ZCL at
+source lines~1597--1600.  The surrounding main theorem also includes ZCL in
+condition~(iii), at source lines~851--893.  Thus the printed statement omits a
+hypothesis used by its proof.
+
+The final sentence of the proof is nevertheless a separate mathematical
+claim: a finite orthogonal direct sum on fixed one-site subspaces satisfies
+SAL whenever every summand satisfies SAL.  The present scope-restricted theorem
+therefore assumes SAL for the summands, the exact local orthogonal-sum identity
+at every positive chain length, supplied one-site projections supporting every
+nonempty sector marginal, and positive natural multiplicities.  It must not be
+presented as a proof that GSNNCH alone implies SAL.  The structure
+\leanid{MPOTensor.OrthogonalCommutingSectorFamily} records fixed one-site
+projections and commuting sector products.  Projection idempotence together
+with its bond-support and exact sector-product fields implies that every
+nonempty sector marginal on a chain of length at least two is supported on the
+matching projection at its first site; this is
+\leanid{MPOTensor.OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState}.
+The chain-length restriction is sufficient here, since the mutual-information
+comparison in SAL only uses chains of length at least four.
+
+The sector-family structure does not contain the outer tensor or its
+multiplicities, and therefore cannot by itself supply the exact outer sum at
+every positive length.  In the BNT specialization that equality is already
+provided by
+\leanid{MPOTensor.mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor},
+while positivity of the natural multiplicities is part of the sector
+decomposition.  Consequently
+\leanid{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily} assumes the exact
+outer sum and sectorwise SAL, and proves only the non-circular final local
+direct-sum implication.  It neither derives the sectorwise SAL premise nor
+uses ZCL.
+
 \paragraph{Verdict.}
 Proposition~\emph{4to2} is classified as an open gap.  The proved implication
 from quantum Markov decompositions at every admissible cut to SAL is a scope
-restriction that isolates only its final entropy-theoretic step.
+restriction that isolates only its final entropy-theoretic step.  The later
+orthogonal direct-sum implication is likewise formalized only as a
+scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
+sectorwise premise nor proves the printed assertion that the GSNNCH form alone
+implies SAL.
 
 \section{Elimination plan}
 

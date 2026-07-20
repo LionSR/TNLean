@@ -437,7 +437,7 @@ import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.LinearMarkedTensor
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
-import TNLean.MPS.MPDO.InvariantProjection
+import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.VerticalReduction
 import TNLean.MPS.MPDO.PeriodicExclusion
@@ -592,7 +592,7 @@ import TNLean.MPS.MPDO.FixedBondProductEtaTensor
 import TNLean.MPS.MPDO.PhysicalSectorNormalProductRepresentative
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
 import TNLean.MPS.MPDO.GSNNCHSectorSum
-import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
+import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw
 import TNLean.MPS.MPDO.BNTSectorCommutingFamily
 import TNLean.MPS.MPDO.BlockedRFPConstruction
 -- MPS examples
