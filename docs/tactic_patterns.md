@@ -44,6 +44,23 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### invariant-subspace two-block fork — promoted
+- **Pattern:** the general and strict invariant-subspace decompositions repeated the
+  spectral split, block construction, and MPV calculation.
+```
+spectral split → block extraction → MPV calculation
+spectral split → block extraction → MPV calculation → strict bounds
+```
+- **Seen:** 2 full proof paths in
+  `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`.
+- **Abstraction:** the private semantic construction
+  `exists_twoBlock_decomp_of_lowerZero_aux`; the strict public theorem adds only
+  positivity and arithmetic for the strict dimension bounds.
+- **Notes:** Counting proof lines inclusively from `:= by` through the final proof line,
+  the two public implementations had 307 + 243 = 550 lines. The shared construction
+  and two projections have 342 + 4 + 8 = 354 lines, a net reduction of 196 lines
+  (35.6%). Both public theorem statements are unchanged.
+
 ---
 
 ## Candidates
