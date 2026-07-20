@@ -2498,6 +2498,12 @@
 
 \cs_new_protected:Npn \tenkzl_draw_complete_trace_at:nnnnnn #1#2#3#4#5#6
   {
+    % An earlier incomplete endpoint may have used the shared projection
+    % registers for its own side vector.  Re-establish this axis's routing
+    % basis for every complete closure instead of relying on loop ordering.
+    \str_if_eq:nnTF {#1}{west}
+      { \tenkzl_side_cup_direction:n {north} }
+      { \tenkzl_side_cup_direction:n {east} }
     \tenkzl_side_point:nnnnnNN {#1}{#3}{#4}{\l__tenkzl_trsheet_int}{0pt}
       \l__tenkzl_trax_dim \l__tenkzl_tray_dim
     \tenkzl_side_point:nnnnnNN {#1}{#3}{#4}{\l__tenkzl_trsheet_int}
@@ -3260,6 +3266,13 @@
                       ( \dim_use:N \l__tenkzl_px_dim ,
                         \dim_eval:n { \l__tenkzl_py_dim
                                       + \tenkz@dim{\tenkz@r@physleg} } );
+                    \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+                    \dim_set:Nn \l__tenkzl_qy_dim
+                      { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
+                    \tenkzl_record_obstacle_point:NN
+                      \l__tenkzl_px_dim \l__tenkzl_py_dim
+                    \tenkzl_record_obstacle_point:NN
+                      \l__tenkzl_qx_dim \l__tenkzl_qy_dim
                     \str_if_eq:VnT \l__tenkzl_physical_tl {updown}
                       {
                         \draw[physical~leg]
@@ -3268,6 +3281,14 @@
                           ( \dim_use:N \l__tenkzl_px_dim ,
                             \dim_eval:n { \l__tenkzl_py_dim
                                           - \tenkz@dim{\tenkz@r@physleg} } );
+                        \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
+                        \dim_set:Nn \l__tenkzl_qy_dim
+                          { \l__tenkzl_py_dim
+                            - \tenkz@dim{\tenkz@r@physleg} }
+                        \tenkzl_record_obstacle_point:NN
+                          \l__tenkzl_px_dim \l__tenkzl_py_dim
+                        \tenkzl_record_obstacle_point:NN
+                          \l__tenkzl_qx_dim \l__tenkzl_qy_dim
                       }
                   }
               }

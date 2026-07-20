@@ -48,13 +48,39 @@ SOURCE = r"""
 \makeatletter
 \ExplSyntaxOn
 \bool_new:N \g__tenkzl_test_one_row_label_bool
+\bool_new:N \g__tenkzl_test_routing_basis_bool
+\dim_new:N \g__tenkzl_test_routing_dx_dim
+\dim_new:N \g__tenkzl_test_routing_dy_dim
 \cs_new_protected:Npn \tenkzOneRowLabelProbe
   { \bool_gset_true:N \g__tenkzl_test_one_row_label_bool }
+\cs_new_protected:Npn \tenkzRoutingBasisProbe
+  { \bool_gset_true:N \g__tenkzl_test_routing_basis_bool }
 \cs_new_eq:NN \__tenkzl_test_draw_complete_trace:nnnnnn
   \tenkzl_draw_complete_trace_at:nnnnnn
 \cs_set_protected:Npn \tenkzl_draw_complete_trace_at:nnnnnn #1#2#3#4#5#6
   {
     \__tenkzl_test_draw_complete_trace:nnnnnn {#1}{#2}{#3}{#4}{#5}{#6}
+    \bool_if:NT \g__tenkzl_test_routing_basis_bool
+      {
+        \dim_gset_eq:NN \g__tenkzl_test_routing_dx_dim
+          \l__tenkzl_cupdx_dim
+        \dim_gset_eq:NN \g__tenkzl_test_routing_dy_dim
+          \l__tenkzl_cupdy_dim
+        \str_if_eq:nnTF {#1}{west}
+          { \tenkzl_side_cup_direction:n {north} }
+          { \tenkzl_side_cup_direction:n {east} }
+        \bool_set:Nn \l_tmpa_bool
+          {
+            \dim_compare_p:nNn { \g__tenkzl_test_routing_dx_dim } =
+              { \l__tenkzl_cupdx_dim }
+            &&
+            \dim_compare_p:nNn { \g__tenkzl_test_routing_dy_dim } =
+              { \l__tenkzl_cupdy_dim }
+          }
+        \bool_if:NF \l_tmpa_bool
+          { \tex_errmessage:D { incomplete~stub~clobbered~routing~basis } }
+        \bool_gset_false:N \g__tenkzl_test_routing_basis_bool
+      }
     \bool_if:NT \g__tenkzl_test_bbox_lead_bool
       {
         \int_compare:nNnT { \g__tenkzl_test_bbox_calls_int } < {2}
@@ -764,6 +790,22 @@ SOURCE = r"""
     outer legs=none, north=cup, west=trace, east=trace]
   \tenkzObstacleProbe{2}
   \tnsite[removed]{(1,1,0)}
+\end{tenkzlattice}
+% Bare numeric sheets own their physical= legs directly.  Every actual up/down
+% segment publishes both endpoints before the west/east trace chooses a lane.
+\begin{tenkzlattice}[
+    rows=1, cols=2, sheets=2, physical=updown, boundary=none,
+    west=trace, east=trace]
+  \tenkzObstacleProbe{16}
+\end{tenkzlattice}
+% Row 1 is incomplete and renders a west-side fallback before row 2 closes.
+% The complete row must restore the north routing basis rather than inheriting
+% that fallback's west direction through shared projection registers.
+\begin{tenkzlattice}[
+    rows=2, cols=2, sheets=1, boundary=none,
+    west=trace, east=trace]
+  \tenkzRoutingBasisProbe
+  \tnsite[removed]{(1,2,0)}
 \end{tenkzlattice}
 \end{document}
 """
@@ -2260,6 +2302,25 @@ def main() -> int:
         "trace|picture=110|lang=lattice|axis=west-east|sheet=1|slot=1|"
         "from=1-1|to=1-1",
         "incomplete-cup obstacle fixture lost its surviving trace",
+    )
+    for sheet in range(2):
+        require(
+            pictures[111],
+            f"trace|picture=111|lang=lattice|axis=west-east|sheet={sheet}|"
+            "slot=1|from=1-1|to=1-2",
+            f"bare-physical obstacle fixture lost sheet {sheet} trace",
+        )
+    require(
+        pictures[112],
+        "warning|picture=112|code=side-trace-incomplete|axis=west-east|"
+        "sheet=0|slot=1|side=west",
+        "ordering fixture lost its leading incomplete trace",
+    )
+    require(
+        pictures[112],
+        "trace|picture=112|lang=lattice|axis=west-east|sheet=0|slot=2|"
+        "from=2-1|to=2-2",
+        "ordering fixture lost its later complete trace",
     )
     print("PASS: physical faces, compatibility aliases, and virtual face arity")
     return 0
