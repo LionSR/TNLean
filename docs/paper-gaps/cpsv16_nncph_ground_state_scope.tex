@@ -528,6 +528,17 @@ multiplicity-one, unit-weight representative, using Beigi's
 finite-degeneracy classification.  Neither statement establishes the
 unrestricted repeated-copy, raw-weight canonical-form theorem.
 
+The parent-ground-space identity in CPSV16 applies for $N>2$, whereas
+the permutation-rigidity lemmas previously required equality of the two
+matrix-product-vector spans at every length.  Only eventual span equality is
+used in their proofs: one chooses a sufficiently large length at which both
+families are linearly independent, and all subsequent overlap comparisons are
+asymptotic.  The comparison is therefore now stated under eventual span
+equality.  This gives exactly the $N>2$ boundary needed at CPSV16, source
+lines 522--525 together with lines 1305--1307; once normal representatives
+have been matched, the resulting gauge--phase relation determines their
+vectors at every positive length.
+
 The auxiliary declaration
 \leanid{MPSTensor.BeigiSectorGraphData.}
 \hspace{0pt}\leanid{mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self}
