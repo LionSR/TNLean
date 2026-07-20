@@ -277,7 +277,9 @@ Every PR touching Lean code should be reviewed against these criteria:
 
 6. **Documentation** -- Every new `def` and major `theorem` must have a docstring.
    Module files should have a header comment with `## References` citing the
-   relevant arXiv paper(s).
+   relevant arXiv paper(s). Every new public predicate must add or update its
+   entry in the [concept glossary](glossary.md), including its source, sanctioned
+   bridges, and any conditional or missing equivalences.
 
 7. **Blueprint sync** -- If the PR formalizes a statement from the blueprint,
    add `\lean{LeanDeclName}` and `\leanok` tags to the corresponding
