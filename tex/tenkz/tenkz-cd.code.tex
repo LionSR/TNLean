@@ -103,7 +103,7 @@
 \fp_new:N  \l__tenkzcd_angle_fp
 \seq_new:N \l__tenkzcd_cells_seq
 \seq_new:N \g__tenkzcd_arrows_seq    % {from}{to}{side keys}{label}
-\seq_new:N \g__tenkzcd_maps_seq      % {from}{to}{side}{fused}{role}{species}{label}
+\seq_new:N \g__tenkzcd_maps_seq      % {from}{to}{side}{fused}{role}{species}{label box ordinal}
 \bool_new:N \g__tenkzcd_inpoly_bool  % a polygon body is being typeset
 \bool_new:N \g__tenkzcd_inmaps_bool  % a typed-map matrix is being typeset
 \tl_new:N  \l__tenkzcd_afrom_tl
@@ -116,6 +116,7 @@
 \bool_new:N \l__tenkzcd_maps_bool
 \bool_new:N \l__tenkzcd_mapvalid_bool
 \bool_new:N \l__tenkzcd_mapmatrixvalid_bool
+\bool_new:N \l__tenkzcd_mapdeclsvalid_bool
 \seq_new:N \l__tenkzcd_maprows_seq
 \seq_new:N \l__tenkzcd_mapcells_seq
 \int_new:N \l__tenkzcd_maprows_int
@@ -125,6 +126,7 @@
 \int_new:N \l__tenkzcd_torow_int
 \int_new:N \l__tenkzcd_tocol_int
 \int_new:N \l__tenkzcd_mapdecls_int
+\int_new:N \g__tenkzcd_mapordinal_int
 \seq_new:N \l__tenkzcd_addr_seq
 \dim_new:N \l__tenkzcd_mapgap_dim
 \quark_new:N \q__tenkzcd_map_scan_stop
@@ -703,7 +705,8 @@
                 { \bool_if:NTF \l__tenkzcd_afused_bool {1}{0} }
                 { \tl_use:N \l__tenkzcd_arole_tl }
                 { \tl_use:N \l__tenkzcd_aspecies_tl }
-                { \exp_not:n {#3} } }
+                { \int_use:N \g__tenkzcd_mapordinal_int } }
+            \int_gzero:N \g__tenkzcd_mapordinal_int
             \group_end:
           }
           {
@@ -760,34 +763,66 @@
 % Map declarations conventionally follow the matrix objects, but their
 % opaque label bands determine the matrix spacing.  Delimited scanning finds
 % literal top-level declarations without expanding objects or entering their
-% balanced groups; the post-matrix count check rejects any hidden declaration.
+% balanced groups; the copied-body tags let the post-matrix check reject any
+% skipped, hidden, or otherwise misassociated declaration.
 \cs_new_protected:Npn \tenkz_cd_measure_map_labels:n #1
-  { \tenkz_cd_measure_map_labels:w #1 \tnarrow \q__tenkzcd_map_scan_stop }
+  {
+    \tl_clear:N \l__tenkzcd_body_tl
+    \tenkz_cd_measure_map_labels:w #1 \tnarrow \q__tenkzcd_map_scan_stop
+  }
 
 \cs_new_protected:Npn \tenkz_cd_measure_map_labels:w #1 \tnarrow
   {
+    \tl_put_right:Nn \l__tenkzcd_body_tl {#1}
     \peek_meaning_remove:NTF \q__tenkzcd_map_scan_stop
       { }
       { \tenkz_cd_measure_map_label_aux }
   }
 
+% Tag each scanned declaration in the copied matrix body.  The tag and its
+% \tnarrow execute adjacently, so the recording pass can associate a map with
+% its measured label even when TeX conditionals skip declarations.  A hidden
+% declaration inside an opaque group has no tag and records ordinal zero.
+\cs_new_protected:Npn \tenkz_cd_mark_map:n #1
+  { \int_gset:Nn \g__tenkzcd_mapordinal_int {#1} }
+
 \NewDocumentCommand \tenkz_cd_measure_map_label_aux { s O{} m }
   {
     \int_incr:N \l__tenkzcd_mapdecls_int
-    \hbox_set:Nn \l_tmpa_box
+    % Box registers are allocated once per declaration ordinal, but their
+    % contents remain local to this tenkzcd group.  A document therefore uses
+    % only as many registers as its largest typed-map family, and no material
+    % can leak from one environment to the next.
+    \cs_if_exist:cF
+      { l__tenkzcd_map_label_\int_use:N \l__tenkzcd_mapdecls_int _box }
+      {
+        \exp_args:Nc \box_new:N
+          { l__tenkzcd_map_label_\int_use:N \l__tenkzcd_mapdecls_int _box }
+      }
+    \exp_args:Nc \hbox_set:Nn
+      { l__tenkzcd_map_label_\int_use:N \l__tenkzcd_mapdecls_int _box }
       {
         \begin{tikzpicture}[baseline]
           \node[tn~label, fill=tenkzPaper, outer~sep=0pt]
-            {$\tenkz@labelsize #3$};
+            { $\tenkz@labelsize #3$ };
         \end{tikzpicture}
       }
     \dim_set:Nn \l_tmpa_dim
-      { \box_wd:N \l_tmpa_box
+      { \exp_args:Nc \box_wd:N
+          { l__tenkzcd_map_label_\int_use:N \l__tenkzcd_mapdecls_int _box }
         + \tenkz@r@daylight\tenkz@pitch * 2 }
     \dim_compare:nNnT { \l_tmpa_dim } > { \l__tenkzcd_mapgap_dim }
       { \dim_set_eq:NN \l__tenkzcd_mapgap_dim \l_tmpa_dim }
+    \tl_put_right:Nn \l__tenkzcd_body_tl { \tenkz_cd_mark_map:n }
+    \tl_put_right:Ne \l__tenkzcd_body_tl
+      { { \int_use:N \l__tenkzcd_mapdecls_int } \exp_not:N \tnarrow }
+    \IfBooleanT {#1} { \tl_put_right:Nn \l__tenkzcd_body_tl { * } }
+    \tl_put_right:Ne \l__tenkzcd_body_tl
+      { [ \exp_not:n {#2} ] { \exp_not:n {#3} } }
     \tenkz_cd_measure_map_labels:w
   }
+
+\cs_new:Npn \tenkz_cd_map_ordinal:nnnnnnn #1#2#3#4#5#6#7 {#7}
 
 \cs_new_protected:Npn \tenkz_cd_map_address:nnNN #1#2#3#4
   {
@@ -841,8 +876,11 @@
     \draw[#1]
       (tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
         \int_use:N\l__tenkzcd_fromcol_int.base~east) --
-      node[tn~label, fill=tenkzPaper, outer~sep=0pt, #2]
-        {$\tenkz@labelsize #3$}
+      node[inner~sep=0pt, outer~sep=0pt, #2]
+        {
+          \exp_args:Nc \box_use:N
+            { l__tenkzcd_map_label_#3_box }
+        }
       (tenkzmap-\int_use:N\l__tenkzcd_torow_int-
         \int_use:N\l__tenkzcd_tocol_int.base~west);
   }
@@ -951,9 +989,9 @@
     \tenkz_cd_measure_map_labels:n {#2}
     \bool_if:NT \l__tenkzcd_mapmatrixvalid_bool
       {
-        \tl_set:Nn \l__tenkzcd_body_tl {#2}
         \tl_replace_all:Nnn \l__tenkzcd_body_tl { & } { \pgfmatrixnextcell }
         \tl_put_right:Nn \l__tenkzcd_body_tl { \\ }
+        \int_gzero:N \g__tenkzcd_mapordinal_int
         \bool_gset_true:N \g__tenkzcd_inmaps_bool
         \begin{tikzpicture}[tenkz~every~picture, tenkz~cd~baseline]
           % Passthrough keys belong to the matrix and its cells.  Their scope
@@ -966,9 +1004,18 @@
                nodes={inner~sep=1pt, outer~sep=0pt}, #1]
               { \tl_use:N \l__tenkzcd_body_tl };
           \end{scope}
-          \int_compare:nNnTF
+          \bool_set_true:N \l__tenkzcd_mapdeclsvalid_bool
+          \int_compare:nNnF
             { \seq_count:N \g__tenkzcd_maps_seq }
             = { \l__tenkzcd_mapdecls_int }
+            { \bool_set_false:N \l__tenkzcd_mapdeclsvalid_bool }
+          \seq_map_indexed_inline:Nn \g__tenkzcd_maps_seq
+            {
+              \int_compare:nNnF {##1}
+                = { \tenkz_cd_map_ordinal:nnnnnnn ##2 }
+                { \bool_set_false:N \l__tenkzcd_mapdeclsvalid_bool }
+            }
+          \bool_if:NTF \l__tenkzcd_mapdeclsvalid_bool
             {
               \seq_map_inline:Nn \g__tenkzcd_maps_seq
                 { \tenkz_cd_draw_map:nnnnnnn ##1 }
@@ -981,6 +1028,7 @@
             }
         \end{tikzpicture}
         \bool_gset_false:N \g__tenkzcd_inmaps_bool
+        \int_gzero:N \g__tenkzcd_mapordinal_int
       }
   }
 
