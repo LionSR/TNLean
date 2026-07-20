@@ -68,6 +68,15 @@ theorem mem_Region_map_apply (φ : G ≃g G') (R : Finset V) (v : V) :
   rw [mem_Region_map]
   rw [show φ.symm (φ v) = v from φ.symm_apply_apply v]
 
+omit [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
+  [DecidableRel G.Adj] [DecidableRel G'.Adj] in
+/-- Region inclusion is preserved by a graph isomorphism. -/
+theorem Region_map_mono (φ : G ≃g G') {R S : Finset V} (h : R ⊆ S) :
+    Region.map φ R ⊆ Region.map φ S := by
+  intro w hw
+  rw [mem_Region_map] at hw ⊢
+  exact h hw
+
 omit [DecidableRel G.Adj] [DecidableRel G'.Adj] in
 /-- The image of the set complement is the set complement of the image: the edge action carries
 `univ \ R` to `univ \ (Region.map φ R)`.  This is the bookkeeping that lets the complement-side

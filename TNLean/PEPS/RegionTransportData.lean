@@ -74,6 +74,35 @@ theorem Region_map_univ (φ : G ≃g G') :
     Region.map φ (Finset.univ : Finset V) = (Finset.univ : Finset W) := by
   ext w; simp only [mem_Region_map, Finset.mem_univ]
 
+/-! ### Transport of abstract region injectivity -/
+
+omit [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
+  [DecidableRel G.Adj] [DecidableRel G'.Adj] in
+/-- Pull region-injectivity data on the target graph back along a graph isomorphism.
+A source region is injective exactly when its image is injective for the target data. -/
+def RegionInjectivityData.pullback (φ : G ≃g G') (κ : RegionInjectivityData W) :
+    RegionInjectivityData V where
+  IsInjective R := κ.IsInjective (Region.map φ R)
+
+omit [Fintype V] [DecidableEq V] [LinearOrder V] [Fintype W] [DecidableEq W] [LinearOrder W]
+  [DecidableRel G.Adj] [DecidableRel G'.Adj] in
+@[simp] theorem RegionInjectivityData.pullback_isInjective
+    (φ : G ≃g G') (κ : RegionInjectivityData W) (R : Finset V) :
+    (κ.pullback φ).IsInjective R ↔ κ.IsInjective (Region.map φ R) :=
+  Iff.rfl
+
+omit [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
+  [DecidableRel G.Adj] [DecidableRel G'.Adj] in
+/-- Union closure is preserved when region-injectivity data is pulled back along a
+graph isomorphism. -/
+theorem RegionInjectivityUnionClosure.pullback (φ : G ≃g G')
+    {κ : RegionInjectivityData W} (h : RegionInjectivityUnionClosure κ) :
+    RegionInjectivityUnionClosure (κ.pullback φ) where
+  union_injective := by
+    intro A B hA hB
+    rw [RegionInjectivityData.pullback_isInjective, Region_map_union]
+    exact h.union_injective hA hB
+
 /-! ### The image block is injective for the transported tensor -/
 
 omit [DecidableEq V] [DecidableEq W] in
