@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PiAlgebra.FundamentalTheoremComplete
-import TNLean.MPS.Chain.SameStateBridge
 import TNLean.MPS.Chain.TranslationInvariance
 
 /-!
@@ -17,7 +16,6 @@ $B^i = X A^i X^{-1}$ for a single `X ∈ GL(D, ℂ)`, so `B` is injective.
 ## Main results
 
 * `ti_reduction_corollary` — from `SameMPV` on combined tensors
-* `ti_reduction_of_sameState` — from `SameState` via the blocking connection hypothesis
 
 ## References
 
@@ -50,24 +48,5 @@ theorem ti_reduction_corollary
     MPSTensor.IsInjective B := by
   obtain ⟨X, hGauge⟩ := ti_tensors_single_gauge A B hn hA hMPV
   exact ⟨⟨X, hGauge⟩, MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩⟩
-
-/-- **TI Reduction from SameState**.
-
-Same conclusion as `ti_reduction_corollary`, from fixed-length `SameState`
-at chain length `n ≥ 3` using the blocking connection hypothesis
-`SameStateBridgeHyp`. -/
-theorem ti_reduction_of_sameState
-    (hBridge : SameStateBridgeHyp d D)
-    (A B : MPSTensor d D)
-    (hn : 3 ≤ n)
-    (hA : MPSTensor.IsInjective A)
-    (hState : SameState (fun _ : Fin n => A) (fun _ : Fin n => B)) :
-    (∃ X : GL (Fin D) ℂ, ∀ i : Fin d,
-      B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) ∧
-    MPSTensor.IsInjective B := by
-  have hInj : IsInjective (fun _ : Fin n => A) := fun _ => hA
-  have hMPV := sameMPV_chainCombined_of_sameState hBridge
-    (fun _ : Fin n => A) (fun _ : Fin n => B) hInj hn hState
-  exact ti_reduction_corollary A B (Nat.lt_of_lt_of_le (by omega) hn) hA hMPV
 
 end MPSChainTensor
