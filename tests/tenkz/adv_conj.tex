@@ -1,0 +1,11 @@
+% Regression: adv_conj — imported current-behavior fixture from the handoff corpus.
+% Formula: geometry-only; no tensor identity.
+\documentclass[varwidth=10cm, border=3pt]{standalone}
+\usepackage{amsmath}
+\usepackage{tenkz}
+\begin{document}
+dot: \tnpic[sandwich]{\tn{A}\\ \tn*{A}}
+\quad box: \tnpic[sandwich, tensor style=box]{\tn{A}\\ \tn*{A}}
+\quad boxbrace: \tnpic[tensor style=box]{\tn{A}\tnspan[brace below]{2}{L} & \tn*{A}}
+\quad dotbrace: \tnpic{\tn{A}\tnspan[brace below]{2}{L} & \tn*{A}}
+\end{document}

@@ -1,0 +1,15 @@
+% Regression: p3_probe_opop — imported current-behavior fixture from the handoff corpus.
+% p3 probe — plain op-over-op rows, no modifiers: does the automatic
+% physical pairing (T_a's down leg into T_b's up leg) compile?
+% Formula: sum_m T_a^{l,m} T_b^{m,p} (the eq-3 LHS of arXiv:2203.12563)
+\documentclass[varwidth=19cm, border=6pt]{standalone}
+\usepackage{amsmath, amssymb}
+\usepackage{tenkz}
+\begin{document}
+\[
+  \begin{tenkz}[rows={op, op}]
+    \tn{T_a} \\
+    \tn{T_b}
+  \end{tenkz}
+\]
+\end{document}
