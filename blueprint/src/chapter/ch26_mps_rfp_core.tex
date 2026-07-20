@@ -1121,6 +1121,29 @@ of the per-block theorem above.
     and $j\ne j'$ cases.
 \end{definition}
 
+\begin{lemma}[One-letter Gram matrix of a residual isometry family]%
+    \label{lem:residual_isometry_family_one_gram}
+    \lean{MPSTensor.IsResidualIsometryFamily.wordEntryFamily_one_gram}
+    \leanok
+    \uses{def:is_residual_isometry_family}
+    Let
+    \[
+        \mathcal V=\bigsqcup_j\{j\}\times [D_j]\times[D_j]
+    \]
+    be the disjoint union of the within-sector virtual pairs.  For
+    $x=(j,\alpha,\beta)$ in $\mathcal V$, set
+    $u_x(i)=(U_j^i)_{\alpha,\beta}$.  Then
+    \[
+        \sum_i u_x(i)\overline{u_y(i)}=\delta_{x,y}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    If $x$ and $y$ belong to the same sector, the assertion is the
+    within-sector part of the residual isometry condition.  If they belong to
+    distinct sectors, it is the cross-sector vanishing condition.
+\end{proof}
+
 \begin{lemma}[Covariance of the mixed transfer operator]%
     \label{lem:mixed_transfer_conj_apply}
     \lean{MPSTensor.mixedTransferMap₂_conj_apply}
