@@ -2809,6 +2809,42 @@ outside the present result.
     Schwarz condition to exclude transposition.
 \end{proof}
 
+\begin{theorem}[Simple-summand matching for inverse CPTP maps]%
+    \label{thm:direct_sum_inverse_cptp_block_matching}
+    \lean{Matrix.exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps}
+    \leanok
+    \uses{thm:direct_sum_inverse_cptp_star_equiv,
+        thm:dim_preserved}
+    Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers, and
+    set
+    \[
+        \mathcal A=\prod_{i\in I}M_{D_i}(\C),
+        \qquad
+        \mathcal B=\prod_{j\in J}M_{E_j}(\C).
+    \]
+    If $T:\mathcal A\to\mathcal B$ and
+    $S:\mathcal B\to\mathcal A$ are mutually inverse completely positive
+    trace-preserving maps, then there is an equivalence $\sigma:I\simeq J$
+    such that
+    \[
+        D_i=E_{\sigma(i)}
+    \]
+    for every $i\in I$. This is the simple-summand matching conclusion used
+    in \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}; the unitary action
+    within the paired summands is a separate conclusion.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:direct_sum_inverse_cptp_star_equiv,
+        thm:dim_preserved}
+    By Theorem~\ref{thm:direct_sum_inverse_cptp_star_equiv}, the rectangular
+    trace adjoints determine a star-algebra isomorphism between
+    $\mathcal A$ and $\mathcal B$. Theorem~\ref{thm:dim_preserved} applied to
+    this isomorphism gives the equivalence~$\sigma$ and the equalities
+    $D_i=E_{\sigma(i)}$.
+\end{proof}
+
 % Scope restriction documented in
 % docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex.
 \begin{theorem}[Weighted block form of the adjoint Ces\`aro projection on full support]%

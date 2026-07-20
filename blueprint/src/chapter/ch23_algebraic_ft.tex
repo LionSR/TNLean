@@ -957,66 +957,80 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     hence so is $I_k$.
 \end{proof}
 
-\begin{theorem}[Ring isomorphisms permute block ideals]\label{thm:ring_perm}
+\begin{theorem}[Ring isomorphisms match block ideals]\label{thm:ring_perm}
     \lean{MPSTensor.ringEquiv_pi_simple_permutes_blockIdeals}
+    \lean{MPSTensor.exists_blockEquiv_of_ringEquiv_pi_simple}
     \leanok
     \uses{def:block_ideal}
-    Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
-    Every ring isomorphism $T : \prod_k R_k \to \prod_k R_k$
-    permutes the block ideals:
-    there exists a permutation $\pi$ such that
-    $T$ maps the $k$-th block ideal to the $\pi(k)$-th block ideal.
+    Let $\{R_i\}_{i\in I}$ and $\{S_j\}_{j\in J}$ be two finite families of
+    simple rings. Every ring isomorphism
+    $T : \prod_{i\in I}R_i \to \prod_{j\in J}S_j$ determines an equivalence
+    $\sigma:I\simeq J$ such that $T$ maps the $i$-th block ideal onto the
+    $\sigma(i)$-th block ideal. In particular, an automorphism of one product
+    permutes its block ideals.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:block_ideal_atom}
-    By Theorem~\ref{thm:block_ideal_atom}, each block ideal is an atom in the
-    lattice of two-sided ideals of $\prod_k R_k$.
-    A ring isomorphism induces an order automorphism of this lattice,
-    so it permutes the atoms. Since the atoms are exactly the block ideals,
-    this gives the required permutation~$\pi$.
+    By Theorem~\ref{thm:block_ideal_atom}, the atoms in each two-sided ideal
+    lattice are exactly its block ideals. The induced order isomorphism
+    therefore assigns a unique target block ideal to every source block
+    ideal. Applying its inverse shows that this assignment is bijective and
+    gives~$\sigma$.
 \end{proof}
 
 \begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
     \lean{MPSTensor.dim_preserved}
+    \lean{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix}
     \leanok
-    Assume $D_k \ge 1$ for all~$k$.
-    If $T$ is an algebra automorphism of
-    $\prod_{k=0}^{r-1} \MN{D_k}$,
-    and $\pi$ is the induced permutation, then
-    $D_{\pi(k)} = D_k$ for all~$k$.
+    Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers.
+    A star-algebra isomorphism
+    \[
+        \prod_{i\in I}M_{D_i}(\C)
+        \simeq \prod_{j\in J}M_{E_j}(\C)
+    \]
+    determines an equivalence $\sigma:I\simeq J$ satisfying
+    $D_i=E_{\sigma(i)}$ for every $i\in I$. For an automorphism of one
+    product, the induced permutation preserves every block dimension.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:ring_perm}
-    The restriction of $T$ to the $k$-th block ideal
-    induces a $\C$-algebra isomorphism
-    $\MN{D_k} \cong \MN{D_{\pi(k)}}$,
-    which forces $D_k = D_{\pi(k)}$
-    by comparing dimensions as $\C$-vector spaces.
+\begin{proof}\leanok\uses{thm:ring_perm, thm:component_map_bijective}
+    The isomorphism carries the $i$-th block ideal onto the
+    $\sigma(i)$-th block ideal. Its restriction gives a bijective complex
+    linear map from $M_{D_i}(\C)$ to $M_{E_{\sigma(i)}}(\C)$. Comparing
+    dimensions gives $D_i^2=E_{\sigma(i)}^2$, hence
+    $D_i=E_{\sigma(i)}$.
 \end{proof}
 
-\begin{theorem}[Per-block component maps are bijections]\label{thm:component_map_bijective}
+\begin{theorem}[Paired component maps are bijections]\label{thm:component_map_bijective}
+    \lean{MPSTensor.mem_blockIdeal_iff}
+    \lean{MPSTensor.pi_single_mem_blockIdeal}
+    \lean{MPSTensor.blockComponentMap}
+    \lean{MPSTensor.ringEquiv_maps_single_support_between}
+    \lean{MPSTensor.ringEquiv_symm_maps_blockIdeal_between}
+    \lean{MPSTensor.blockComponentMap_injective}
+    \lean{MPSTensor.blockComponentMap_surjective}
+    \lean{MPSTensor.blockComponentMap_bijective}
     \lean{MPSTensor.componentMap_bijective}
     \leanok
     \uses{thm:ring_perm}
-    Assume $D_k \ge 1$ for all~$k$.
-    Let $T$ be a ring automorphism of $\prod_{k=0}^{r-1} \MN{D_k}$, and let $\pi$
-    be the induced permutation from Theorem~\ref{thm:ring_perm}.
-    For each block index $k$, the map
+    Under the hypotheses of Theorem~\ref{thm:ring_perm}, for each $i\in I$
+    the map
     \[
-        M \mapsto (T(0, \ldots, 0, M, 0, \ldots, 0))_{\pi(k)}
+        x\longmapsto \bigl(T(0,\ldots,0,x,0,\ldots,0)\bigr)_{\sigma(i)}
     \]
-    from $\MN{D_k}$ to $\MN{D_{\pi(k)}}$ is bijective.
+    from $R_i$ to $S_{\sigma(i)}$ is bijective.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:ring_perm} forces a single-support element in the $k$-th
-    block ideal to remain supported on the $\pi(k)$-th block after applying~$T$.
+    Theorem~\ref{thm:ring_perm} forces an element supported in the $i$-th
+    block ideal to remain supported in the $\sigma(i)$-th block after
+    applying~$T$.
     Injectivity follows from injectivity of~$T$.
     For surjectivity, apply the same argument to $T^{-1}$ and the inverse
-    permutation.
+    equivalence.
 \end{proof}
 
 \begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}

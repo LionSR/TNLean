@@ -50,46 +50,18 @@ section BlockIdealMembership
 variable {ι : Type*} [Finite ι] [DecidableEq ι]
 variable {R : ι → Type*} [∀ i, Ring (R i)] [∀ i, IsSimpleRing (R i)]
 
-/-- An element belongs to the block ideal at `i` iff all other components vanish. -/
-theorem mem_blockIdeal_iff {i : ι} {x : ∀ j, R j} :
-    x ∈ blockIdeal R i ↔ ∀ j, j ≠ i → x j = 0 := by
-  classical
-  have h_eq : blockIdeal R i =
-      (Ideal.pi fun j =>
-        ((Function.update (⊥ : ∀ k, TwoSidedIdeal (R k)) i ⊤) j).asIdeal).toTwoSided := by
-    simp [blockIdeal, twoSidedIdealPiOrderIso]
-  rw [h_eq, Ideal.mem_toTwoSided, Ideal.mem_pi]
-  constructor
-  · intro h j hj
-    have := h j; rw [Function.update_of_ne hj] at this
-    exact TwoSidedIdeal.mem_asIdeal.mp this
-  · intro h j
-    by_cases hj : j = i
-    · subst hj; rw [Function.update_self]; exact TwoSidedIdeal.mem_asIdeal.mpr trivial
-    · rw [Function.update_of_ne hj]
-      exact TwoSidedIdeal.mem_asIdeal.mpr (h j hj ▸ (⊥ : TwoSidedIdeal (R j)).asIdeal.zero_mem)
-
-/-- `Pi.single i M` belongs to the block ideal at `i`. -/
-theorem pi_single_mem_blockIdeal {i : ι} (M : R i) :
-    Pi.single i M ∈ blockIdeal R i :=
-  mem_blockIdeal_iff.mpr (fun _ hj => Pi.single_eq_of_ne hj M)
-
 theorem ringEquiv_maps_single_support
     (T : (∀ j, R j) ≃+* (∀ j, R j)) (σ : ι ≃ ι)
     (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i))
     {i : ι} (M : R i) (j : ι) (hj : j ≠ σ i) :
-    T (Pi.single i M) j = 0 := by
-  have : T (Pi.single i M) ∈ blockIdeal R (σ i) := by
-    rw [← hσ i, RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]
-    simp [pi_single_mem_blockIdeal M]
-  exact (mem_blockIdeal_iff.mp this) j hj
+    T (Pi.single i M) j = 0 :=
+  ringEquiv_maps_single_support_between T σ hσ M j hj
 
 theorem ringEquiv_symm_maps_blockIdeal
     (T : (∀ j, R j) ≃+* (∀ j, R j)) (σ : ι ≃ ι)
     (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i)) (i : ι) :
-    T.symm.mapTwoSidedIdeal (blockIdeal R (σ i)) = blockIdeal R i := by
-  rw [← hσ i]; ext x
-  simp [RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]
+    T.symm.mapTwoSidedIdeal (blockIdeal R (σ i)) = blockIdeal R i :=
+  ringEquiv_symm_maps_blockIdeal_between T σ hσ i
 
 end BlockIdealMembership
 
@@ -203,20 +175,8 @@ theorem componentMap_surjective
     (hσ : ∀ i, T.mapTwoSidedIdeal
         (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) : Function.Surjective (componentMap T σ i) := by
-  intro N
-  have h_mem : T.symm (Pi.single (σ i) N) ∈
-      blockIdeal (fun k => Matrix (Fin (D k)) (Fin (D k)) ℂ) i := by
-    rw [← ringEquiv_symm_maps_blockIdeal T σ hσ i,
-        RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]
-    simp [pi_single_mem_blockIdeal]
-  have h_eq : T.symm (Pi.single (σ i) N) =
-      Pi.single i (T.symm (Pi.single (σ i) N) i) := by
-    ext j; by_cases hj : j = i
-    · subst hj; simp
-    · rw [mem_blockIdeal_iff.mp h_mem j hj, Pi.single_eq_of_ne hj]
-  exact ⟨T.symm (Pi.single (σ i) N) i, by
-    simp only [componentMap, ← h_eq, T.apply_symm_apply, Pi.single_eq_same]⟩
+    (i : ι) : Function.Surjective (componentMap T σ i) :=
+  blockComponentMap_surjective T σ hσ i
 
 theorem componentMap_bijective
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}

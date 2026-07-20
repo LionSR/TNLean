@@ -208,7 +208,7 @@ import TNLean.Channel.FixedPoint.DirectSumBlockRetraction
 import TNLean.Channel.FixedPoint.TraceNonincreasingProductSpan
 import TNLean.Channel.FixedPoint.TraceNonincreasingDirectSum
 import TNLean.Channel.FixedPoint.DirectSumTraceAdjoint
-import TNLean.Channel.FixedPoint.DirectSumInverseKraus
+import TNLean.Channel.FixedPoint.DirectSumBlockPermutation
 import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.StationaryProjection

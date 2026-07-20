@@ -284,7 +284,7 @@ A linear equivalence between two finite products of matrix spaces does not
 determine their simple summands.  The trace adjoints of a mutually inverse
 CPTP pair have now been proved to be mutually inverse $*$-algebra
 homomorphisms, by the Schwarz-defect argument above.  The sector relabelling
-therefore reduces to the following source-faithful algebraic step:
+therefore reduces to the following two algebraic conclusions:
 \begin{enumerate}
     \item apply uniqueness of the simple summands to this $*$-algebra
           equivalence, obtaining the sector permutation and equality of the
@@ -292,6 +292,24 @@ therefore reduces to the following source-faithful algebraic step:
     \item identify each matched simple-summand isomorphism with unitary
           conjugation.
 \end{enumerate}
+The first conclusion is now proved for an arbitrary $*$-algebra isomorphism
+between two finite products of nonzero full matrix algebras.  The block ideals
+are precisely the atoms in the two-sided ideal lattices, so the induced order
+isomorphism gives an equivalence $\sigma$ of the block index sets.  Its
+restriction to each paired block is a bijective complex-linear map
+\[
+    M_{d_i}(\mathbb C)\longrightarrow M_{e_{\sigma(i)}}(\mathbb C),
+\]
+and comparison of dimensions gives $d_i=e_{\sigma(i)}$.
+Applying this result to the trace-adjoint $*$-algebra isomorphism proves the
+same conclusion for every mutually inverse CPTP pair.\footnote{Formal
+declarations:
+\leanid{MPSTensor.exists_blockEquiv_of_ringEquiv_pi_simple} in
+\doclink{TNLean/Algebra/BlockPermutation};
+\leanid{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix} and
+\leanid{Matrix.%
+exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps} in
+\doclink{TNLean/Channel/FixedPoint/DirectSumBlockPermutation}.}
 
 \section{Elimination plan}
 
@@ -307,20 +325,25 @@ The first two steps of the Appendix~C.4 argument are complete:
 \end{enumerate}
 The inverse-UCP multiplicative-domain step is also complete: the rectangular
 trace adjoints form mutually inverse $*$-algebra equivalences.  The remaining
-step is the simple-summand classification of this equivalence, giving the
-sector permutation, matching dimensions, and unitary conjugations.
+generic simple-summand correspondence is now complete as well: it gives an
+equivalence of the sector index sets and equality of the paired matrix
+dimensions.  It remains to identify each paired component map with unitary
+conjugation and then specialize the resulting formula to the transported
+vertical-sector maps.
 
 \section{Classification}
 
-\textbf{Verdict: transported-map invertibility and the inverse-UCP
-multiplicative-domain step are closed; sector relabelling remains open.}  The
-two transported maps and their square composites are trace preserving under
-the source tensor hypotheses.  Their two compositions are identities, and
-the rectangular trace adjoints form mutually inverse $*$-algebra
-equivalences.  The stronger active-image inclusions remain unproved and are
-not needed for this route.  The sector permutation, matching dimensions, and
-unitary-conjugation classification from Appendix~C.4, lines~1995--2003 remain
-open.
+\textbf{Verdict: transported-map invertibility, the inverse-UCP
+multiplicative-domain step, and generic simple-summand matching are closed;
+unitary implementation remains open.}  The two transported maps and their
+square composites are trace preserving under the source tensor hypotheses.
+Their two compositions are identities, and the rectangular trace adjoints
+form mutually inverse $*$-algebra equivalences.  For any such pair, the simple
+summands are matched by an equivalence of the index sets and the paired matrix
+dimensions are equal.  The stronger active-image inclusions remain unproved
+and are not needed for this route.  The blockwise unitary-conjugation formula
+and its specialization to the transported vertical-sector maps remain to be
+proved before the conclusion of Appendix~C.4, line~1997 is complete.
 
 \bibliographystyle{alpha}
 \bibliography{references}
