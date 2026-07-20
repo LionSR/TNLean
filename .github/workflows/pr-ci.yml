@@ -228,8 +228,15 @@ jobs:
           --root .
           --base-ref "origin/${{ github.event.pull_request.base.ref }}"
 
-      - name: Reject new numbered-sequel modules (push or dispatch)
-        if: github.event_name != 'pull_request'
+      - name: Reject new numbered-sequel modules (push)
+        if: github.event_name == 'push'
+        run: >
+          python3 scripts/check_numbered_lean_files.py
+          --root .
+          --base-ref "${{ github.event.before }}"
+
+      - name: Reject new numbered-sequel modules (manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
         run: >
           python3 scripts/check_numbered_lean_files.py
           --root .

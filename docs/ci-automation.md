@@ -279,7 +279,9 @@ citation; it is not an escape hatch for continuation files.
 
 **When it runs**: On pull requests and pushes to `main` whenever Lean sources,
 either checker, their tests, this documentation, or the workflow changes. CI
-runs the policy unit tests before both repository checks.
+runs the policy unit tests before both repository checks. The numbered-module
+ratchet compares a pull request with its merge base and a push with the commit
+recorded by the push event before any commit in that push was applied.
 
 ---
 

@@ -73,7 +73,7 @@ class NumberedLeanFilePolicyTests(CapturedCheck):
         self.assertEqual(status, 1)
         self.assertIn("debt allowlist; this set may only shrink", output)
 
-    def test_merge_base_debt_allowlist_rejects_a_later_addition(self) -> None:
+    def test_base_debt_ratchet_rejects_pr_and_multicommit_push_additions(self) -> None:
         old_path = "TNLean/Old2.lean"
         new_path = "TNLean/New3.lean"
         self.track(old_path)
@@ -132,7 +132,25 @@ class NumberedLeanFilePolicyTests(CapturedCheck):
         self.assertEqual(status, 1)
         self.assertIn(f"{new_path}: added to the numbered debt allowlist", output)
 
-        push_baseline = numbered._debt_allowlist_at_merge_base(self.root, "HEAD^")
+        self.track("TNLean/Unrelated.lean")
+        subprocess.run(
+            [
+                "git", "-C", str(self.root),
+                "-c", "user.name=Test",
+                "-c", "user.email=test@example.com",
+                "commit", "-qm", "later commit in the same push",
+            ],
+            check=True,
+        )
+
+        parent_baseline = numbered._debt_allowlist_at_merge_base(self.root, "HEAD^")
+        parent_status, _ = self.check(
+            frozenset({old_path, new_path}),
+            base_debt=parent_baseline,
+        )
+        self.assertEqual(parent_status, 0)
+
+        push_baseline = numbered._debt_allowlist_at_merge_base(self.root, base_ref)
         push_status, push_output = self.check(
             frozenset({old_path, new_path}),
             base_debt=push_baseline,
