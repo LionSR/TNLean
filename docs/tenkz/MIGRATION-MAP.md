@@ -138,7 +138,7 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 | TNPEPSInjectiveRegionUnionProof | ch24_peps_ft_normal_union:211 | 5 `tenkzlattice` panels joined by `=`/`⊆` math, regions via `\tnregion` slots | trivial |
 | TNPEPSNormalRectangleCover | ch24_peps_ft_normal_square:242 | `tenkzlattice[rows=4, cols=4]` + overlapping `\tnregion[outline]` rectangles | trivial |
 | TNPEPSNormalEdgeComplementTopCollar | ch24_peps_ft_normal_square:517 | two lattice panels with `=`; complement + `slot=collar` regions | trivial |
-| TNPEPSNormalOneSiteSeparation | ch24_peps_ft_normal_square:1169 | two lattice panels; `\tnsite[removed]` + region slots | trivial |
+| TNPEPSNormalOneSiteSeparation | ch24_peps_ft_normal_square:1173 | two inline 5-by-5 `tenkzlattice` panels; $R=(2\mathbin{-}4,2\mathbin{-}4)\setminus\{(4,4)\}$ and $S=(2\mathbin{-}4,2\mathbin{-}4)$ via region slots, with the present site $v=(4,4)$ marked in both and $R\subset S=R\cup\{v\}$ shown explicitly | migrated inline; no package change |
 | TNPEPSNormalEdgeBlockingReduction | ch24_peps_ft_normal_square:1236 | lattice panel `\rightsquigarrow` blocked grid row | needs-judgment (mixed lattice+grid display), K1 for the blocked box |
 | TNPEPSNormalEdgeBlockingHypotheses | ch24_peps_ft_normal_square:1123 | single lattice panel with hypothesis regions | trivial |
 | TNPEPSNormalBlockingHypotheses | ch24_peps_ft_normal_capstone:33 | nested lattice panels (outer + two inner) with regions | trivial |
