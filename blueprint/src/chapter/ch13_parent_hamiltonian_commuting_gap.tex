@@ -2699,18 +2699,11 @@ specialization of that Appendix~D definition.
     \uses{def:beigi_loop_schmidt_support}
     Let $\nu_a=\lVert\varphi_a\rVert_2>0$, where the norm is the
     Hilbert-space norm of the bond vector, or equivalently the Frobenius norm
-    of $\Phi_a$.  The normalized minimal tensors are
+    of $\Phi_a$.  In either coordinate system, the normalized representative is
     \[
-        \widehat C_a=\nu_a^{-1}\widetilde C_a
+        \widehat C_a=\nu_a^{-1}\widetilde C_a.
     \]
-    in sector and physical coordinates, respectively.  The raw coordinate
-    and physical tensors remain separately unchanged.  For every $N>0$,
-    Theorem~\ref{thm:beigi_loop_tensor_periodic_vector} gives
-    \[
-        \ket{V^{(N)}(\widehat C_a)}=\nu_a^{-N}\Psi_a^{(N)},
-    \]
-    Thus the normalized periodic vector determines the same ray as the periodic
-    vector of the raw physical tensor.
+    The raw coordinate and physical tensors are retained separately.
 \end{definition}
 
 \begin{lemma}[Positive Schmidt dimension of a Beigi loop]
@@ -2797,7 +2790,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.mpv_normalizedMinimalLoopTensor}
     \leanok
     \uses{def:beigi_loop_product_state, def:beigi_loop_schmidt_support,
-        lem:mpv_rotate_physical}
+        def:beigi_normalized_minimal_loop_tensor, lem:mpv_rotate_physical}
     For every $N>0$, the periodic matrix product vector of $C_a$ has
     coefficient
     \[

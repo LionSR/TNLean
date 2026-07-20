@@ -203,7 +203,7 @@ theorem transferMap_minimalLoopCoordinateTensor
         ((F.loopSchmidtFactorization l).leftFactor *
           (F.loopSchmidtFactorization l).leftFactorᴴ) := by
   classical
-  rw [transferMap_apply]
+  transfer_simp
   calc
     (∑ i : Fin d, F.minimalLoopCoordinateTensor l i * Z *
         (F.minimalLoopCoordinateTensor l i)ᴴ) =
