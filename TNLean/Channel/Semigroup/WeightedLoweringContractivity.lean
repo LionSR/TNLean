@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Semigroup.RelaxationConditions
+import Mathlib.Data.Complex.Basic
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.LinearAlgebra.Pi
 
 /-!
 # Algebraic obstruction for weighted lowering operators
@@ -24,8 +26,6 @@ nonzero, and then instantiates the abstract obstruction.
 
 - `exists_ne_zero_mem_ker_of_map_le_of_pow_eq_zero`: a nilpotent restriction to a nonzero
   invariant subspace has a nonzero kernel vector.
-- `ker_le_invariant_of_pow_eq_zero_of_ker_eq_span`: every nonzero invariant subspace contains
-  the one-dimensional kernel.
 - `WeightedLowering.operator`: the weighted shift sending basis vector `i.succ` to a nonzero
   multiple of basis vector `i`.
 - `WeightedLowering.operator_pow_dimension_eq_zero`: the shift is nilpotent.
@@ -87,18 +87,6 @@ theorem mem_invariant_of_pow_eq_zero_of_ker_eq_span
     simp at hy0
   convert W.smul_mem (c⁻¹) hyW using 1
   simp [hc]
-
-/-- Under the same hypotheses, the whole kernel line lies in every nonzero invariant
-submodule. -/
-theorem ker_le_invariant_of_pow_eq_zero_of_ker_eq_span
-    (f : Module.End K V) (v : V) (W : Submodule K V)
-    (hW : W.map f ≤ W) (hW0 : W ≠ ⊥) {n : ℕ} (hn : f ^ n = 0)
-    (hker : LinearMap.ker f = K ∙ v) : LinearMap.ker f ≤ W := by
-  rw [hker]
-  apply Submodule.span_le.2
-  intro x hx
-  rw [Set.mem_singleton_iff.mp hx]
-  exact mem_invariant_of_pow_eq_zero_of_ker_eq_span f v W hW hW0 hn hker
 
 /-- A nilpotent endomorphism with one-dimensional kernel has no two nonzero disjoint invariant
 submodules.  Orthogonal subspaces are disjoint, so this is the exact algebraic obstruction used
