@@ -261,7 +261,7 @@ basis-of-normal-tensors conclusion that products of the fixed contraction
 subproblem is closed for the individual maps and their square composites even
 though the active-image inclusions remain unproved.
 
-\section{Sector relabelling uses positivity, not linear isomorphism}
+\section{Sector relabelling from the star-algebra equivalence}
 
 After proving mutual invertibility, CPSV16 cites the argument of
 Wolf--P\'erez-Garc\'ia, Theorem~8
@@ -281,17 +281,16 @@ the transpose alternative
 \cite[Theorem~8 and its proof]{WolfPerezGarcia2010Inverse}.
 
 A linear equivalence between two finite products of matrix spaces does not
-determine their simple summands.  Likewise, the existing theorem that ring
-automorphisms permute simple block ideals cannot be applied until
-multiplicativity has been derived.  The sector relabelling therefore requires
-one of the following source-faithful routes:
+determine their simple summands.  The trace adjoints of a mutually inverse
+CPTP pair have now been proved to be mutually inverse $*$-algebra
+homomorphisms, by the Schwarz-defect argument above.  The sector relabelling
+therefore reduces to the following source-faithful algebraic step:
 \begin{enumerate}
-    \item formalize the positive order-isomorphism argument on the normalized
-          density-operator sections and then exclude transposition by the
-          Schwarz inequality; or
-    \item prove that mutually inverse completely positive maps between the
-          direct sums are $*$-isomorphisms, and apply uniqueness of the simple
-          summands.
+    \item apply uniqueness of the simple summands to this $*$-algebra
+          equivalence, obtaining the sector permutation and equality of the
+          corresponding matrix dimensions;
+    \item identify each matched simple-summand isomorphism with unitary
+          conjugation.
 \end{enumerate}
 
 \section{Elimination plan}
@@ -306,21 +305,22 @@ The first two steps of the Appendix~C.4 argument are complete:
           composite, using the fixed contraction families and the proved
           product-generation theorem, and gives both identity compositions;
 \end{enumerate}
-The remaining step is to derive the sector permutation and matching dimensions
-from the resulting positive, trace-preserving inverse pair, retaining the
-Schwarz hypothesis for the unitary-conjugation conclusion.
+The inverse-UCP multiplicative-domain step is also complete: the rectangular
+trace adjoints form mutually inverse $*$-algebra equivalences.  The remaining
+step is the simple-summand classification of this equivalence, giving the
+sector permutation, matching dimensions, and unitary conjugations.
 
 \section{Classification}
 
-\textbf{Verdict: transported-map invertibility closed; sector relabelling
-open.}  The two transported maps and their square composites are trace
-preserving under the source tensor hypotheses, and the trace adjoints of the
-square composites satisfy the Schwarz inequality.  The positive-definite
-fixed-family construction, density-block product-span bound, and abstract
-identity criterion prove that both composites are identities.  The stronger
-active-image inclusions remain unproved and are not needed for this route.
-The sector permutation, matching dimensions, and unitary-conjugation
-classification from Appendix~C.4, lines~1995--2003 remain open.
+\textbf{Verdict: transported-map invertibility and the inverse-UCP
+multiplicative-domain step are closed; sector relabelling remains open.}  The
+two transported maps and their square composites are trace preserving under
+the source tensor hypotheses.  Their two compositions are identities, and
+the rectangular trace adjoints form mutually inverse $*$-algebra
+equivalences.  The stronger active-image inclusions remain unproved and are
+not needed for this route.  The sector permutation, matching dimensions, and
+unitary-conjugation classification from Appendix~C.4, lines~1995--2003 remain
+open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
