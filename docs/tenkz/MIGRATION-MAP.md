@@ -46,7 +46,9 @@ At the original census, the 12 multi-use entries accounted for 38 occurrences
 (`TNPEPSNormalRegionsRS`, `TNPEPSNormalRegionT`) had region-genre bodies; three
 (`TNPEPSEdgeGaugeOrientation`, `TNPEPSGaugeVertexAction`,
 `TNPEPSVertexInjectivityMap`) had free-genre bodies. They are counted once,
-under multi-use, even after a row records its later migration.
+under multi-use, even after a row records its later migration. The first two
+free-genre entries were demoted to their exact component formulas in issue
+#4531.
 
 ## Needs-new-key list (cross-checked against the 0.6 gap list)
 
@@ -59,8 +61,8 @@ The WHATS-NEW-0.5 §Gaps (0.6 backlog) is: *per-side boundary control, bare iden
 | K3 lattice `physical stubs` — per-site physical leg (diagonal stub) on tenkzlattice vertices | TNPEPSLatticeState, TNPEPSTorusGeometry | **no** | draw the patch in tenkzfree with `ports={north east:physical}` per site (verbose) |
 | K4 lattice `torus`/identification marks (opposite-boundary gluing) | TNPEPSTorusGeometry | **no** (but anticipated by the final spec's manual plan, ch5 "torus/cylinder marks") | annotation arrows outside the picture |
 | K5 `pair label=` / plain (dot-free) label on a cup apex or paired internal leg | TNMPOLocalPurification ($k$ on the ancilla cup) | **no** | drop the $k$ label (the sole closed ancilla pair makes the contraction unambiguous), or accept the `close east={…}` fixed-point-dot styling |
-| K6 `\tnedge[insert=$X$]` — on-edge insertion glyph in the lattice tier | TNPEPSEdgeInsertedCoeff, TNPEPSThreeSiteInsertionComparison, TNPEPSPhysicalToVirtualInsertion (lattice-strip route) | **no** | tenkzfree: the insertion is its own `\tnput` node with two `\tnjoin`s — expressible today |
-| K7 free-tier region highlight — hull/slot fill over a set of `\tnput` nodes | TNPEPSEdgeBlockingReduction + TNPEPSEdgeInsertionEquality (pentagon patch with region overlays), TNAppendixB* grouping regions | **no** | hand-drawn dashed box in tenkzfree (violates "no raw styling at call sites") |
+| K6 `\tnedge[insert=$X$]` — on-edge insertion glyph in the lattice tier | none after issue #4531: TNPEPSEdgeInsertedCoeff was demoted, while TNPEPSThreeSiteInsertionComparison and TNPEPSPhysicalToVirtualInsertion used the free-tier fallback | **no** | tenkzfree: the insertion is its own `\tnput` node with two `\tnjoin`s — expressible today |
+| K7 free-tier region highlight — hull/slot fill over a set of `\tnput` nodes | TNPEPSEdgeBlockingReduction and TNAppendixB* grouping regions; TNPEPSEdgeInsertionEquality migrated without region overlays in issue #4531 | **no** | hand-drawn dashed box in tenkzfree (violates "no raw styling at call sites") |
 
 Tangential 0.6 overlap: the *bare identity-wire atom* gap would let TNChoiMatrix's `id` layer be a plain wire instead of a boxed `\tn{\mathrm{id}}` (cosmetic, not blocking); *bond dir* for TNPEPSEdgeGaugeOrientation's oriented edge already shipped in 0.5. **No catalogue entry needs** per-side boundary control, `combined=` on `wires=k`, inter-sheet closures, directed signatures, or mirrored `tri=`.
 
@@ -113,7 +115,7 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 | entry | uses | call sites | tenkz spelling sketch (the `\tndefine` body) | risk |
 |---|---:|---|---|---|
 | TNGaugeConjugation | 10 | ch23_algebraic_ft:77,1592,1594; ch12_symmetry:155,267,399,401; ch02_mps:227; ch03_single:227; ch24_peps_ft_edge_kernel_gauges:605 | `\tnpic[physical=up]{\tnX{#1} & \tn[up=$#2$]{A} & \tnX{#3}}` | trivial |
-| TNPEPSEdgeGaugeOrientation | 5 | ch24_peps_ft_balanced_edge_scalars:34,109,127,147; ch24_peps_ft_foundations:87 | tenkzfree: two 4-leg `\tnput` stars, oriented shared edge via `\tnjoin[dir]` + $Z_e$ node on the edge | needs-judgment (star pair in free tier; bond dir exists) |
+| TNPEPSEdgeGaugeOrientation | 5 before this migration | ch24_peps_ft_balanced_edge_scalars:34,109,127,147; ch24_peps_ft_foundations:87 before this migration | exact component equations adjacent to the five former call sites | demoted to the exact component equations; catalogue declaration and private motif removed |
 | TNGroundSpaceMap | 3 | ch13_parent_hamiltonian_injective_ground_spaces:42,525,546 | `\tnpic[periodic, physical=up]{\tn[up=$#2$]{} & \tn{} & \tndots & \tn[up=$#3$]{} & \tnX{#5}}` + length label | needs-judgment (source draws $X$ on the trace return wire; respell as on-row `\tnX` under `periodic` — same contraction) |
 | TNCondCOne | 3 | ch12_symmetry:757,838,1184 | `\tnpic[rows={op,ket}]{\tn{#1}\\ \tn[…]{A}} = \tnpic[physical=up]{\tnX{#2} & \tn{A} & \tnX{#2^\dagger}}` | trivial |
 | TNCondCTwo | 3 | ch12_symmetry:770,798,861 | `\tnpic[sandwich]{\tnX{#1} & \tn{A}\\ \tnX{#1^\dagger} & \tn*{A}} = \tnpic[sandwich]{\tn{A} & \tnX{#1}\\ \tn*{A} & \tnX{#1^\dagger}}` | trivial |
@@ -121,7 +123,7 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 | TNPEPSVertexInjectivityMap | 2 | ch24_peps_ft_foundations:224; ch24_peps_ft:43 | tenkzfree 5-leg star (`ports={…:virtual, north east:physical}`) `\longmapsto` math vector | needs-judgment (free-tier star) |
 | TNPEPSNormalRegionsRS | 2 before this migration | ch24_peps_ft_normal_square:91,1232 before this migration | two identical inline pairs of 5-by-5 `tenkzlattice` panels: the eight-cell notched region $R$ and the nine-cell square region $S$, each with boundary $(V,P)=(20,0)$ | migrated inline; declaration and private motif removed |
 | TNPEPSNormalRegionT | 2 | ch24_peps_ft_normal_square:95,1217 | `tenkzlattice` + `\tnregion[slot=selected, label=$T$]{…}` | trivial |
-| TNPEPSGaugeVertexAction | 2 | ch24_peps_ft_balanced_edge_scalars:206; ch24_peps_ft_foundations:106 | tenkzfree star with $Z_{e_i}^{\pm1}$ nodes on each leg (FourBondGaugeStar shape) | needs-judgment (free-tier star) |
+| TNPEPSGaugeVertexAction | 2 before this migration | ch24_peps_ft_balanced_edge_scalars:206; ch24_peps_ft_foundations:106 before this migration | exact component equations adjacent to the two former call sites | demoted to the exact component equations; catalogue declaration and private motif removed |
 | TNLocalEqualityStep | 2 | ch23_algebraic_ft:409,1646 | `\tnpic[physical=up]{\tn{}&\tnX{#1}&\tn[up=$#3$]{}} = \tnpic[physical=up]{\tn{}&\tnX{#2}&\tn[up=$#3$]{}}` | trivial |
 | TNBoundaryRegrow | 2 at census; 1 before this migration | ch23_algebraic_ft:407 (migrated inline in #4403); ch13_parent_hamiltonian_injective_ground_spaces:638 (migrated here) | `[periodic, physical=up]: \tnX{X'} & \tn[up=$\sigma_1$]{A} & \tn{A} & \tndots & \tn[up=$\sigma_{L+1}$]{A}` + an `$L+1$ sites` brace | migrated inline here as the traced word defining $\Gamma_{L+1}(X')$ |
 
@@ -172,10 +174,10 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | TNPEPSInjectiveRegionUnion | ch24_peps_ft_normal_union:204 before this migration | inline `tenkzfree` four-block $K_4$ with six internal virtual contractions and four open physical legs | migrated inline; declaration and private motif removed |
 | TNPEPSLocalTensorStar | ch24_peps_ft_foundations:39 | tenkzfree: one `\tnput[ports={north:virtual, south:virtual, east:virtual, west:virtual, north east:physical}]` star | trivial |
 | TNPEPSVertexScalarBalance | ch24_peps_ft_balanced_edge_scalars:8 | tenkzfree star; `\tnjoin[label=$c_{v,e}$]` per incident edge | trivial |
-| TNPEPSEdgeGaugeAbsorption | ch24_peps_ft_edge_kernel_gauges:848 | tenkzfree: star $B_v$ `\longmapsto` star with $Z_{e_i}^{\pm1}$ nodes on all four legs | needs-judgment (star pair) |
-| TNPEPSGaugeCancellation | ch24_peps_ft_foundations:177 | tenkzfree: two stars with $Z$, $Z^{-1}$ on the shared edge `=` two bare stars | needs-judgment |
-| TNPEPSTINormalGaugeAbsorption | ch24_peps_ft_normal_square:1251 | tenkzfree: square tensor star `=` gauge-dressed star | needs-judgment |
-| TNPEPSTwoInjectiveGaugeScalarReduction | ch24_peps_ft_edge_kernel_gauges:1056 | tenkzfree: three-leg fan `=` fan+$Z$ `=` fan+$U$ `=` fan+$W$ (4 panels) | needs-judgment |
+| TNPEPSEdgeGaugeAbsorption | ch24_peps_ft_edge_kernel_gauges:848 before this migration | exact component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
+| TNPEPSGaugeCancellation | ch24_peps_ft_foundations:177 before this migration | exact component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
+| TNPEPSTINormalGaugeAbsorption | ch24_peps_ft_normal_square:1251 before this migration | inline tenkzfree: square tensor star `=` gauge-dressed star | migrated inline; catalogue declaration and private motif removed |
+| TNPEPSTwoInjectiveGaugeScalarReduction | ch24_peps_ft_edge_kernel_gauges:1056 before this migration | inline tenkzfree: three-leg fan `=` fan+$Z$ `=` fan+$U$ `=` fan+$W$ (4 panels) | migrated inline; catalogue declaration and private motif removed |
 | TNAppendixBAdjacentBondProjectors | ch13_parent_hamiltonian_commuting_gap:1307 | tenkzfree: 3 fusion nodes $U_0U_1U_2$ + 2 $\varphi$ sites, `\tnjoin[route=vh]`, highlighted $P_{01},P_{12}$ | needs-judgment + K7 (group highlight) |
 | TNAppendixBPhysicalSupportTransport | ch13_parent_hamiltonian_commuting_gap:1459 | same body + two overlapping support regions above | needs-judgment + K7 |
 | TNAppendixBChainTransport | ch13_parent_hamiltonian_commuting_gap:1718 | respell hexagon ring as `[periodic, physical=up]` 6-cell row ($h_i$, $h_{i+1}$ highlighted labels) `\xrightarrow{R^{(3)}_{i,\tau}}` 3-site open row | needs-judgment (layout redesign ring→periodic row; same contraction) |
@@ -229,16 +231,16 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
-| TNPEPSEdgeInsertedCoeff | ch24_peps_ft_edge_middle:120 | 3-site strip with $X$ on a bond: `tenkzlattice[rows=1, cols=3, boundary legs]` + edge insertion; or tenkzfree with $X$ as its own node | **needs-new-key K6** (`\tnedge[insert=]`; free-tier fallback exists) |
-| TNPEPSThreeSiteInsertionComparison | ch24_peps_ft_edge_kernel_gauges:475 | two such strips joined by `=` ($A$-family with $X$ = $B$-family with $Y$) | **needs-new-key K6** (same; free fallback) |
-| TNPEPSInsertionPhysicalRealization | ch24_peps_ft_edge_kernel_gauges:185 | site with $M$ on west bond + $\eta$ labels + south stub `=` site with $O(\cdot)$ on physical leg | needs-judgment (south virtual stub: free tier or lattice strip) |
-| TNPEPSPhysicalToVirtualInsertion | ch24_peps_ft_edge_kernel_gauges:372 | three strips ($O_1$ physical, $O_2$ physical, $\Longrightarrow$ $W$ on bond) | **needs-new-key K6** / free fallback |
-| TNPEPSEdgeInsertionEquality | ch24_peps_ft_edge_kernel_gauges:903 | five-site pentagon patch with $X$ on an edge, `=`, relabelled copy | needs-judgment (free-tier graph + K7 if regions kept) |
-| TNPEPSTwoInjectiveTensorInsertionComparison | ch24_peps_ft_edge_kernel_gauges:1293 | two-site pair with $X$ insertion `=` $B$-copy | needs-judgment (free/lattice strip) |
+| TNPEPSEdgeInsertedCoeff | ch24_peps_ft_edge_middle:120 before this migration | exact coefficient equation adjacent to the former call site | demoted to the exact coefficient equation; catalogue declaration and private motif removed |
+| TNPEPSThreeSiteInsertionComparison | ch24_peps_ft_edge_kernel_gauges:475 before this migration | inline tenkzfree: closed three-site $A$-chain with $X$ `=` $B$-chain with $Y$ | migrated inline; catalogue declaration and private motif removed |
+| TNPEPSInsertionPhysicalRealization | ch24_peps_ft_edge_kernel_gauges:185 before this migration | inline tenkzfree: bond insertion $M$ `=` physical $O_1$ insertion `=` physical $O_2$ insertion | migrated inline; catalogue declaration and private motif removed |
+| TNPEPSPhysicalToVirtualInsertion | ch24_peps_ft_edge_kernel_gauges:372 before this migration | inline tenkzfree: physical $O_1$ and $O_2$ insertions imply virtual $W$ insertion | migrated inline; catalogue declaration and private motif removed |
+| TNPEPSEdgeInsertionEquality | ch24_peps_ft_edge_kernel_gauges:903 before this migration | inline tenkzfree: five-site pentagon-and-chord patch with $X$, equal to the relabelled copy | migrated inline; catalogue declaration and private motif removed |
+| TNPEPSTwoInjectiveTensorInsertionComparison | ch24_peps_ft_edge_kernel_gauges:1293 before this migration | inline tenkzfree: explicitly scoped three-shared-bond proof subcase with external boundaries | migrated inline; catalogue declaration and private motif removed |
 | TNPEPSOneVertexComplementComparison | 1 before this migration; ch24_peps_ft_region_transfer_covariance:321 | Section 4 normal-region comparison for $R\subset S=R\cup\{v\}$: `\tnpic[physical=up]{\tn{A_R}&\tn{A}} = \tnpic[physical=up]{\tn{A_S}} \propto \tnpic[physical=up]{\tn{\widetilde B_S}} = \tnpic[physical=up]{\tn{\widetilde B_R}&\tn{\widetilde B}}` | migrated inline in PR #4505; catalogue wrapper and motif removed |
-| TNPEPSBlockedMiddleLocalGaugeFormula | ch24_peps_ft_edge_kernel_gauges:815 | gauge-dressed site equation (peps-gauge family) → tenkzfree composition | needs-judgment |
-| TNPEPSLocalGaugeExtraction | ch24_peps_ft_edge_kernel_gauges:941 | gauge-extraction equation → tenkzfree composition | needs-judgment |
-| TNPEPSGlobalConsistency | ch24_peps_ft_edge_kernel_gauges:975 | two-site consistency relation (EdgeGaugeOrientation shape) → reuse that `\tndefine`d free body with different scalars | needs-judgment |
+| TNPEPSBlockedMiddleLocalGaugeFormula | ch24_peps_ft_edge_kernel_gauges:815 before this migration | exact component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
+| TNPEPSLocalGaugeExtraction | ch24_peps_ft_edge_kernel_gauges:941 before this migration | exact component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
+| TNPEPSGlobalConsistency | ch24_peps_ft_edge_kernel_gauges:975 before this migration | exact local-gauge consistency component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
 
 ---
 

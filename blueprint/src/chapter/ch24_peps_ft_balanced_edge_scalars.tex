@@ -30,9 +30,9 @@ constant.
     \uses{def:edgeScalarAt}
     If two edge-scalar families are multiplied, then their endpoint scalars
     satisfy $(cd)_{v,e}=c_{v,e}d_{v,e}$ on every oriented half-edge.
-    \begin{center}
-        \TNPEPSEdgeGaugeOrientation
-    \end{center}
+    % The endpoint-action convention is the equation in Definition~\ref{def:edgeGaugeAt}.
+    % No independent source picture occurs here; the old scalar diagram suppressed the
+    % boundary (deg(u)+deg(w)-2,2) of the two-vertex tensor network.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -105,9 +105,8 @@ constant.
     \uses{def:GaugeEquivModEdgeScalars}
     Every edge-gauge family is equivalent to itself modulo balanced edge
     scalars, witnessed by $c_e=1$ for every edge $e$.
-    \begin{center}
-        \TNPEPSEdgeGaugeOrientation
-    \end{center}
+    % This is the same algebraic endpoint convention as
+    % Definition~\ref{def:edgeGaugeAt}, not a separate tensor-network identity.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -123,9 +122,8 @@ constant.
         thm:edgeScalarAt_ne_zero}
     If one gauge family differs from another by balanced edge scalars, then the
     second differs from the first by the inverse balanced edge-scalar family.
-    \begin{center}
-        \TNPEPSEdgeGaugeOrientation
-    \end{center}
+    % The inverse endpoint action is already stated exactly by
+    % Definition~\ref{def:edgeGaugeAt}; there is no additional source figure.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -143,9 +141,8 @@ constant.
     If one gauge family differs from a second by balanced edge scalars, and the
     second differs from a third by balanced edge scalars, then the first differs
     from the third by the pointwise product of the two scalar families.
-    \begin{center}
-        \TNPEPSEdgeGaugeOrientation
-    \end{center}
+    % The multiplication takes place in the endpoint equation; a repeated picture
+    % would not add a contraction asserted by the source.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -202,9 +199,9 @@ constant.
     \uses{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq, def:applyGauge}
     If two gauge families differ by a balanced edge-scalar reweighting, then
     applying them to the same PEPS tensor produces the same gauged tensor.
-    \begin{center}
-        \TNPEPSGaugeVertexAction
-    \end{center}
+    % The general gauge action is the valence-independent component equation in
+    % Definition~\ref{def:gaugeVertex}; the old degree-four star was not a source
+    % figure and did not represent an arbitrary vertex.
 \end{theorem}
 
 \begin{proof}\leanok

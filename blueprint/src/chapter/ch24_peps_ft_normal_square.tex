@@ -1300,8 +1300,54 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     $X$ and one vertical matrix $Y$, unique up to scalar. Absorbing these
     matrices into $B$ gives a tensor $\widetilde B$, equivalently the final
     local gauge formula of \cite[Theorem~3]{Molnar2018NormalPEPS}:
+    % Formula (paper_normal.tex:1451--1471):
+    % B = lambda (Y on north)(Y^{-1} on south)(X on west)(X^{-1} on east) A.
+    % Ink-to-index: the four gauge capsules act on the four virtual indices of A;
+    % the diagonal north-east stub is the unchanged physical index.
+    % Boundary signature: both sides have (V,P)=(4,1).  Source verdict: exact
+    % translation-invariant square-lattice gauge absorption in house style.
     \begin{center}
-        \TNPEPSTINormalGaugeAbsorption
+        \begin{tenkzfree}
+            \tnput[ports={west:virtual,east:virtual,north:virtual,
+                south:virtual,45:physical}]{tiAbsB}{(0,0)}{B}
+            \tnput[boundary, ports={east:virtual}]{tiAbsBwest}{(-8mm,0)}{}
+            \tnput[boundary, ports={west:virtual}]{tiAbsBeast}{(8mm,0)}{}
+            \tnput[boundary, ports={south:virtual}]{tiAbsBnorth}{(0,8mm)}{}
+            \tnput[boundary, ports={north:virtual}]{tiAbsBsouth}{(0,-8mm)}{}
+            \tnput[boundary, ports={225:physical}]{tiAbsBphys}{(6mm,6mm)}{}
+            \tnjoin{tiAbsB.west}{tiAbsBwest.east}
+            \tnjoin{tiAbsB.east}{tiAbsBeast.west}
+            \tnjoin{tiAbsB.north}{tiAbsBnorth.south}
+            \tnjoin{tiAbsB.south}{tiAbsBsouth.north}
+            \tnjoin{tiAbsB.45}{tiAbsBphys.225}
+        \end{tenkzfree}
+        \(\;=\lambda\,\)
+        \begin{tenkzfree}
+            \tnput[ports={west:virtual,east:virtual,north:virtual,
+                south:virtual,45:physical}]{tiAbsA}{(0,0)}{A}
+            \tnput[ring, role=operator, ports={west:virtual,east:virtual}]
+                {tiAbsX}{(-8mm,0)}{X}
+            \tnput[ring, role=operator, ports={west:virtual,east:virtual}]
+                {tiAbsXinv}{(8mm,0)}{X^{-1}}
+            \tnput[ring, role=operator, ports={north:virtual,south:virtual}]
+                {tiAbsY}{(0,8mm)}{Y}
+            \tnput[ring, role=operator, ports={north:virtual,south:virtual}]
+                {tiAbsYinv}{(0,-8mm)}{Y^{-1}}
+            \tnput[boundary, ports={east:virtual}]{tiAbsWest}{(-16mm,0)}{}
+            \tnput[boundary, ports={west:virtual}]{tiAbsEast}{(16mm,0)}{}
+            \tnput[boundary, ports={south:virtual}]{tiAbsNorth}{(0,16mm)}{}
+            \tnput[boundary, ports={north:virtual}]{tiAbsSouth}{(0,-16mm)}{}
+            \tnput[boundary, ports={225:physical}]{tiAbsPhys}{(6mm,6mm)}{}
+            \tnjoin{tiAbsA.west}{tiAbsX.east}
+            \tnjoin{tiAbsX.west}{tiAbsWest.east}
+            \tnjoin{tiAbsA.east}{tiAbsXinv.west}
+            \tnjoin{tiAbsXinv.east}{tiAbsEast.west}
+            \tnjoin{tiAbsA.north}{tiAbsY.south}
+            \tnjoin{tiAbsY.north}{tiAbsNorth.south}
+            \tnjoin{tiAbsA.south}{tiAbsYinv.north}
+            \tnjoin{tiAbsYinv.south}{tiAbsSouth.north}
+            \tnjoin{tiAbsA.45}{tiAbsPhys.225}
+        \end{tenkzfree}
     \end{center}
     The torus form of this absorption, with the gauge family carried onto
     every edge by the translations from one matrix per orientation class, is
