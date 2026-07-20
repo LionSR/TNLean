@@ -405,7 +405,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 
 \begin{proof}\leanok
     \uses{thm:entropy_smul, thm:entropy_pairwise_annihilating_support,
-        def:mpdo_vertical_one_site_actions}
+        def:mpdo_vertical_one_site_actions,
+        lem:mpdo_orthogonal_commuting_sector_marginal_support}
     For fixed $N$, put
     \[
         p_x=\frac{n_x\tr(\rho^{(N)}(K_x))}
@@ -413,9 +414,14 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \]
     Positivity of the chain operators, positivity of $n_x$, and nonemptiness
     of the family give $p_x>0$ and a nonzero normalization for $M$.  Every
-    nonempty normalized marginal is the sum of the sector marginals with
-    weights $p_x$.  The first-site support identity and $P_xP_y=0$ for
-    $x\ne y$ make these summands pairwise orthogonal.  Hence
+    nonempty normalized marginal decomposes as
+    \[
+        \widehat\rho_{N,L}(M)=\sum_x p_x\widehat\rho_{x,N,L}.
+    \]
+    Put $Q_x=P_x\otimes\Id^{\otimes(L-1)}$.  The support identity gives
+    $Q_x\widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}$, while $P_xP_y=0$ for
+    $x\ne y$ gives $Q_xQ_y=0$.  Thus the summands have pairwise annihilating
+    supports.  Hence
     \[
         S_L(M)=\sum_x\bigl(-p_x\log p_x+p_xS_L(K_x)\bigr).
     \]
@@ -458,8 +464,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \uses{thm:mpdo_local_orthogonal_sum_sal,
         lem:mpdo_orthogonal_commuting_sector_marginal_support,
         def:mpdo_orthogonal_commuting_sector_family}
-    Let $K_x$ be a nonempty finite family with orthogonally supported
-    commuting sector products, and let $n_x$ be positive natural numbers.
+    Let $K_x$ be a nonempty finite family, let an orthogonally supported
+    commuting sector family realize the tensors $K_x$, and let $n_x$ be
+    positive natural numbers.
     Suppose that, for every $N>0$,
     \[
         \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x).
