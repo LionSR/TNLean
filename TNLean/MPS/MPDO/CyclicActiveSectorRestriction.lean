@@ -533,82 +533,15 @@ theorem exists_cyclicActive_two_edge_return
     (hkh : F.neighboringOperator k h ≠ 0) :
     ∃ j : F.CyclicActiveSector,
       F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0 := by
-  classical
-  obtain ⟨kx, ky, hkxy⟩ :=
-    F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero k
-  obtain ⟨hx, hy, hhxy⟩ :=
-    F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero h
-  obtain ⟨ex, ey, heta⟩ := Matrix.exists_entry_ne_zero_of_ne_zero _ hkh
-  obtain ⟨beta, alpha, hkentry⟩ :=
-    Matrix.exists_entry_ne_zero_of_ne_zero _ hkxy
-  have hkleft : F.leftTensor k beta kx.1 ky.1 ≠ 0 :=
-    left_ne_zero_of_mul hkentry
-  obtain ⟨delta, gamma, hhentry⟩ :=
-    Matrix.exists_entry_ne_zero_of_ne_zero _ hhxy
-  have hhright : F.rightTensor h gamma hx.2 hy.2 ≠ 0 :=
-    right_ne_zero_of_mul hhentry
-  let x : F.SectorIndex k := (kx.1, ex.1)
-  let y : F.SectorIndex k := (ky.1, ey.1)
-  let u : F.SectorIndex h := (ex.2, hx.2)
-  let v : F.SectorIndex h := (ey.2, hy.2)
-  let A := F.sectorVirtualMatrix k x y
-  let B := F.sectorVirtualMatrix h u v
-  have hAB : A * B ≠ 0 := by
-    intro hzero
-    have hentry := congrFun (congrFun hzero beta) gamma
-    rw [Matrix.zero_apply,
-      F.sectorVirtualMatrix_mul_apply k h x y u v beta gamma] at hentry
-    exact mul_ne_zero (mul_ne_zero hkleft heta) hhright hentry
-  obtain ⟨Y, htraceY⟩ : ∃ Y : Matrix (Fin D) (Fin D) ℂ,
-      Matrix.trace (A * B * Y) ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    exact hAB ((Matrix.trace_mul_right_eq_zero_iff (A * B)).mp hall)
-  have hYmem : Y ∈ Submodule.span ℂ
-      (Set.range (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight)) := by
-    rw [F.cyclicActiveSectorOneSiteMatrixFamily_span_eq_top hK]
-    exact Submodule.mem_top
-  obtain ⟨c, hc⟩ :=
-    (Submodule.mem_span_range_iff_exists_fun ℂ).mp hYmem
-  have hsum : Matrix.trace
-      (A * B * ∑ q, c q •
-        F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q) ≠ 0 := by
-    rw [hc]
-    exact htraceY
-  simp only [Matrix.mul_sum, Matrix.mul_smul, Matrix.trace_sum,
-    Matrix.trace_smul] at hsum
-  obtain ⟨q, hq⟩ : ∃ q : F.ActiveSectorEntryIndex F.cyclicActiveWeight,
-      c q * Matrix.trace
-        (A * B * F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q) ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    exact hsum (Finset.sum_eq_zero fun q _ ↦ hall q)
-  have htraceC : Matrix.trace
-      (A * B * F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q) ≠ 0 :=
-    right_ne_zero_of_mul hq
-  have hBC : B * F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q ≠ 0 := by
-    intro hzero
-    apply htraceC
-    rw [← Matrix.trace_mul_cycle B
-      (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q) A,
-      hzero, Matrix.zero_mul, Matrix.trace_zero]
-  have hCA : F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q * A ≠ 0 := by
-    intro hzero
-    apply htraceC
-    rw [Matrix.trace_mul_cycle A B
-      (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight q),
-      hzero, Matrix.zero_mul, Matrix.trace_zero]
-  refine ⟨q.1, ?_, ?_⟩
-  · intro hzero
-    apply hBC
-    simpa [B, activeSectorOneSiteMatrixFamily] using
-      F.sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero
-        h q.1 hzero u v q.2.1 q.2.2
-  · intro hzero
-    apply hCA
-    simpa [A, activeSectorOneSiteMatrixFamily] using
-      F.sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero
-        q.1 k hzero q.2.1 q.2.2 x y
+  obtain ⟨j, hhj, hjk⟩ :=
+    F.exists_two_edge_return_of_neighboringOperator_ne_zero_of_endpoints
+      (F.sectorVirtualMatrixFamily_span_eq_top hK)
+      (F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero k)
+      (F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero h) hkh
+  have hjactive : F.IsCyclicActiveSector j :=
+    ⟨k, hjk, Relation.ReflTransGen.head hkh
+      (Relation.ReflTransGen.single hhj)⟩
+  exact ⟨⟨j, (F.cyclicActiveWeight_ne_zero_iff j).2 hjactive⟩, hhj, hjk⟩
 
 /-- The cyclic-active support is one strongly connected component when the
 tensor is injective and the neighboring operators are positive semidefinite.
