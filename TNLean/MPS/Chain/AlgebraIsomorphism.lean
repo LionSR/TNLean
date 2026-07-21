@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Structure.LinearExtension
-import TNLean.Algebra.SkolemNoether
+import TNLean.MPS.FundamentalTheorem.Basic
 /-!
 # Algebra isomorphism between virtual bond algebras
 
@@ -105,23 +105,8 @@ theorem virtual_bond_gauge [NeZero D]
     have hCBzero : ∀ i, chainCombinedTensor B i = 0 := fun i => by
       rw [← hT i, hT0]; simp
     exact trace_ne_zero_of_injective hCA hEq hCBzero
-  -- T is bijective (simplicity of the matrix algebra).
-  have hBij := linear_mul_endomorphism_bijective T hMul hNz
-  -- Promote T to an algebra homomorphism.
-  let Talg := linearMapToAlgHom T hMul hBij.2
-  -- Build the algebra equivalence.
-  let Tequiv : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-    AlgEquiv.ofBijective Talg hBij
-  -- Apply Skolem–Noether: Tequiv is conjugation by some W.
-  obtain ⟨W, hW⟩ := skolemNoether_matrix Tequiv
-  -- Extract T(M) = W * M * W⁻¹.
-  have hTM : ∀ M, T M =
-      (W : Matrix _ _ ℂ) * M * ((W⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-    intro M
-    have := hW M
-    change Tequiv M = _ at this
-    simp only [Tequiv, AlgEquiv.ofBijective_apply, Talg] at this
-    exact this
+  -- Simplicity and Skolem--Noether identify `T` as an inner automorphism.
+  obtain ⟨W, hTM⟩ := exists_inner_of_linear_mul_endomorphism T hMul hNz
   -- trace(T(M)) = trace(M) since conjugation preserves trace.
   have hTr : ∀ M, Matrix.trace (T M) = Matrix.trace M := by
     intro M; rw [hTM M]; exact trace_conj_eq W M
