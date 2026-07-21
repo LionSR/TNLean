@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import io
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -15,6 +16,16 @@ from tenkz_audit import Audit
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def finding_picture_id(message: str) -> int:
+    """Return the exact leading picture identifier from an audit finding."""
+    match = re.match(r"^picture (-?\d+)\b", message)
+    if match is None:
+        raise AssertionError(f"overlap finding lacks a picture prefix: {message}")
+    return int(match.group(1))
+
+
 SOURCE = r"""
 \documentclass{article}
 \usepackage{tenkz}
@@ -66,17 +77,22 @@ SOURCE = r"""
 
 % Safe: production spacing is derived from the same materialized label box.
 % Matrix passthrough may change the live object shape; measurement follows it.
+\begingroup
+\tikzset{tn label/.append style={draw, line join=round, line width=2pt}}
 \begin{tenkzcd}[maps, species={channel}, nodes={circle}]
   A & B
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
     {\rule{18mm}{0pt}\mathcal T}
 \end{tenkzcd}
+\endgroup
 
 % Shared style capture covers unnamed production labels in every core tier.
 \begin{tenkzfree}
   \tnput[box]{a}{(0,0)}{A}
   \tnput[box]{b}{(20mm,0)}{}
   \tnjoin[label=f]{a.east}{b.west}
+  \node[tn label, draw, line join=round, line width=2pt]
+    at (40mm,0) {$g$};
 \end{tenkzfree}
 \begin{tenkz}
   \tn{B} & \tn[box]{}
@@ -414,6 +430,10 @@ def audit_status(path: Path) -> tuple[int, Audit]:
 
 
 def main() -> int:
+    if (finding_picture_id("picture 1 label bbox id=1 intersects rect glyph") != 1
+            or finding_picture_id(
+                "picture 12 label bbox id=1 intersects rect glyph") != 12):
+        raise AssertionError("picture-id parser aliases picture 1 and picture 12")
     engine = shutil.which("xelatex")
     if engine is None:
         print("SKIP: xelatex not found")
@@ -452,26 +472,18 @@ def main() -> int:
 
         overlaps = [finding for finding in audit.findings
                     if finding.rule == "label-overlap"]
-        overlap_pictures = {
-            picture_id for picture_id in (1, 7, 12)
-            if any(f"picture {picture_id}" in finding.msg for finding in overlaps)
-        }
+        label_events = [event for event in audit.events()
+                        if event.kind == "bbox"
+                        and event.attrs.get("class") == "label"]
+        if any(not {"shape", "radius"} <= event.attrs.keys()
+               for event in label_events):
+            raise AssertionError("a measured label omitted exact shape fields")
+        overlap_pictures = {finding_picture_id(finding.msg) for finding in overlaps}
         if overlap_pictures != {1, 7, 12}:
             raise AssertionError(
                 "overlap findings missed an unsafe picture: "
                 + "; ".join(finding.msg for finding in overlaps)
             )
-        if any(f"picture {picture_id}" in finding.msg
-               for finding in overlaps for picture_id in (2, 3, 4, 5, 6)):
-            raise AssertionError(
-                "audit rejected a safely spaced fixture: "
-                + "; ".join(finding.msg for finding in overlaps)
-            )
-        if any(f"picture {picture_id}" in finding.msg
-               for finding in overlaps
-               for picture_id in (8, 9, 10, 11, 13, 14, 15, 16, 17, 18,
-                                  19, 20)):
-            raise AssertionError("audit rejected live customized geometry")
 
         empty_regions = [
             event for event in audit.events(11)
@@ -489,7 +501,8 @@ def main() -> int:
                 if event.kind == "bbox"
             }
             geometry_kinds = {event.kind for event in audit.events(picture_id)}
-            if bbox_classes != {"label", "wire"} or "glyph-geometry" not in geometry_kinds:
+            if (bbox_classes != {"label"}
+                    or not {"glyph-geometry", "wire-geometry"} <= geometry_kinds):
                 raise AssertionError(
                     f"picture {picture_id} emitted incomplete geometry: "
                     f"bbox={bbox_classes}, kinds={geometry_kinds}"
@@ -509,14 +522,23 @@ def main() -> int:
                 f"typed-map objects were not audited exactly once: {len(map_glyphs)}"
             )
         map_wires = [event for event in audit.events(2)
-                     if event.kind == "bbox"
-                     and event.attrs.get("class") == "wire"]
-        if not map_wires or len(map_wires) > 2:
+                     if event.kind == "wire-geometry"]
+        if len(map_wires) != 1:
             raise AssertionError(
-                f"typed-map emitted an invalid wire partition: {len(map_wires)}"
+                f"typed-map emitted invalid exact wire geometry: {len(map_wires)}"
             )
-        wire_heights = [int(event.attrs["ymax"]) - int(event.attrs["ymin"])
-                        for event in map_wires]
+        map_labels = [event for event in audit.events(2)
+                      if event.kind == "bbox"
+                      and event.attrs.get("class") == "label"]
+        if (len(map_labels) != 1
+                or map_labels[0].attrs.get("shape") != "roundrect"
+                or abs(int(map_labels[0].attrs.get("radius", "0"))
+                       - 65536) > 1):
+            raise AssertionError(
+                "typed-map stored label lost its exact shape: "
+                + repr([event.attrs for event in map_labels])
+            )
+        wire_heights = [int(event.attrs["outer"]) for event in map_wires]
         if any(height >= 65536 for height in wire_heights):
             raise AssertionError(
                 f"typed-map wire bbox followed an offset label: {wire_heights}sp"
@@ -532,6 +554,21 @@ def main() -> int:
                     f"picture {picture_id} did not capture label coverage: "
                     f"uses={uses}, labels={labels}"
                 )
+        free_labels = [event for event in audit.events(3)
+                       if event.kind == "bbox"
+                       and event.attrs.get("class") == "label"]
+        free_shapes = {event.attrs.get("shape") for event in free_labels}
+        if free_shapes != {"rect", "roundrect"}:
+            raise AssertionError(
+                f"drawn/default labels emitted stale shapes: {free_shapes}"
+            )
+        drawn_labels = [event for event in free_labels
+                        if event.attrs.get("shape") == "roundrect"]
+        if (len(drawn_labels) != 1
+                or abs(int(drawn_labels[0].attrs["radius"]) - 65536) > 1):
+            raise AssertionError(
+                "drawn sharp label did not emit its half-stroke radius"
+            )
 
         missing = work / "missing-label-bbox.tnlog"
         missing.write_text(
@@ -677,6 +714,8 @@ def main() -> int:
              "has no captured path state"),
             ("nonrectangle-label.tex", NONRECTANGLE_LABEL,
              "unsupported live shape"),
+            ("rounded-label.tex", customized_label("rounded corners=1pt"),
+             "has rounded corners"),
             ("miter-glyph.tex", customized_glyph("line join=miter"),
              "non-round line join"),
             ("bevel-glyph.tex", customized_glyph("line join=bevel"),
@@ -796,7 +835,8 @@ def main() -> int:
             "picture|id=1|lang=free\n"
             "atom|picture=1|name=a|kind=dot\n"
             "label-use|picture=1\n"
-            "bbox|picture=1|class=label|id=1|xmin=8|xmax=10|ymin=8|ymax=10\n"
+            "bbox|picture=1|class=label|id=1|xmin=8|xmax=10|ymin=8|ymax=10|"
+            "shape=rect|radius=0\n"
             "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
             "glyph-geometry|picture=1|owner=1|shape=circle|xmin=-10|xmax=10|"
             "ymin=-10|ymax=10|radius=0|stroke=0|"
@@ -827,7 +867,7 @@ def main() -> int:
                 "atom|picture=1|name=a|kind=dot\n"
                 "label-use|picture=1\n"
                 f"bbox|picture=1|class=label|id=1|xmin={xmin}|xmax={xmax}|"
-                f"ymin={ymin}|ymax={ymax}\n"
+                f"ymin={ymin}|ymax={ymax}|shape=rect|radius=0\n"
                 "ink-use|picture=1|class=glyph|id=1|shape=triangle\n"
                 "glyph-geometry|picture=1|owner=1|shape=triangle|"
                 "xmin=-2|xmax=12|ymin=-12|ymax=12|radius=0|stroke=2|"
@@ -861,6 +901,253 @@ def main() -> int:
                 + "; ".join(finding.msg for finding in tangent_audit.findings)
             )
 
+        def write_round_label_glyph_fixture(name: str, edge: int) -> Path:
+            fixture = work / name
+            fixture.write_text(
+                "picture|id=1|lang=free\n"
+                "atom|picture=1|name=a|kind=dot\n"
+                "label-use|picture=1\n"
+                "bbox|picture=1|class=label|id=1|owner=0|"
+                "xmin=0|xmax=100|ymin=0|ymax=100|"
+                "shape=roundrect|radius=40\n"
+                "ink-use|picture=1|class=glyph|id=1|shape=rect\n"
+                "glyph-geometry|picture=1|owner=1|shape=rect|"
+                f"xmin=-10|xmax={edge}|ymin=-10|ymax={edge}|"
+                "radius=0|stroke=0|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n",
+                encoding="utf-8",
+            )
+            return fixture
+
+        near_status, near_audit = audit_status(
+            write_round_label_glyph_fixture("round-label-near-miss.tnlog", 10)
+        )
+        if near_status != 0:
+            raise AssertionError(
+                "round-label corner near miss was rejected: "
+                + "; ".join(finding.msg for finding in near_audit.findings)
+            )
+        inward_status, inward_audit = audit_status(
+            write_round_label_glyph_fixture("round-label-overlap.tnlog", 12)
+        )
+        if inward_status != 1 or not any(
+                finding.rule == "label-overlap"
+                for finding in inward_audit.findings):
+            raise AssertionError("audit missed round-label corner overlap")
+
+        round_branches = work / "round-label-glyph-branches.tnlog"
+        round_branches.write_text(
+            "picture|id=1|lang=free\n"
+            "atom|picture=1|name=a|kind=dot\n"
+            "label-use|picture=1\n"
+            "bbox|picture=1|class=label|id=1|owner=0|"
+            "xmin=0|xmax=100|ymin=0|ymax=100|"
+            "shape=roundrect|radius=40\n"
+            "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
+            "glyph-geometry|picture=1|owner=1|shape=circle|"
+            "xmin=40|xmax=60|ymin=40|ymax=60|radius=0|stroke=0|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
+            "ink-use|picture=1|class=glyph|id=2|shape=roundrect\n"
+            "glyph-geometry|picture=1|owner=2|shape=roundrect|"
+            "xmin=45|xmax=65|ymin=45|ymax=65|radius=5|stroke=0|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
+            "ink-use|picture=1|class=glyph|id=3|shape=triangle\n"
+            "glyph-geometry|picture=1|owner=3|shape=triangle|"
+            "xmin=40|xmax=60|ymin=40|ymax=60|radius=0|stroke=1|"
+            "x1=40|y1=40|x2=60|y2=50|x3=40|y3=60\n",
+            encoding="utf-8",
+        )
+        branches_status, branches_audit = audit_status(round_branches)
+        branch_shapes = {
+            shape for shape in ("circle", "roundrect", "triangle")
+            if any(f"intersects {shape} glyph" in finding.msg
+                   for finding in branches_audit.findings)
+        }
+        if branches_status != 1 or branch_shapes != {
+                "circle", "roundrect", "triangle"}:
+            raise AssertionError(
+                f"round-label glyph branches were not exercised: {branch_shapes}"
+            )
+
+        def write_cut_wire_fixture(
+                name: str, query: tuple[int, int, int, int], inner: int = 0,
+                y: int = 10, outer: int = 20,
+        ) -> Path:
+            fixture = work / name
+            qxmin, qxmax, qymin, qymax = query
+            fixture.write_text(
+                "picture|id=1|lang=free\n"
+                "atom|picture=1|name=a|kind=dot\n"
+                "label-use|picture=1\n"
+                "bbox|picture=1|class=label|id=1|owner=0|"
+                "xmin=20|xmax=80|ymin=0|ymax=60|"
+                "shape=roundrect|radius=20\n"
+                "label-use|picture=1\n"
+                "bbox|picture=1|class=label|id=2|owner=0|"
+                f"xmin={qxmin}|xmax={qxmax}|ymin={qymin}|ymax={qymax}|"
+                "shape=rect|radius=0\n"
+                "ink-use|picture=1|class=wire|id=1\n"
+                "wire-geometry|picture=1|owner=1|shape=rect-minus-label|"
+                f"xmin=0|xmax=100|y={y}|outer={outer}|inner={inner}|"
+                "cut-shape=roundrect|cut-xmin=20|cut-xmax=80|"
+                "cut-ymin=0|cut-ymax=60|cut-radius=20|cut-id=1\n",
+                encoding="utf-8",
+            )
+            return fixture
+
+        crescent_status, crescent_audit = audit_status(
+            write_cut_wire_fixture("wire-corner-crescent.tnlog", (21, 25, 1, 5))
+        )
+        if crescent_status != 1 or not any(
+                "visible typed-map wire" in finding.msg
+                for finding in crescent_audit.findings):
+            raise AssertionError("audit missed visible rounded-corner wire ink")
+        covered_status, covered_audit = audit_status(
+            write_cut_wire_fixture("wire-covered-by-label.tnlog", (35, 45, 5, 15))
+        )
+        covered_overlaps = [finding for finding in covered_audit.findings
+                            if finding.rule == "label-overlap"]
+        if (covered_status != 1 or len(covered_overlaps) != 1
+                or "intersects label bbox" not in covered_overlaps[0].msg
+                or "visible typed-map wire" in covered_overlaps[0].msg):
+            raise AssertionError(
+                "covered query did not suppress cascading wire diagnostics"
+            )
+        tangent_status, tangent_audit = audit_status(
+            write_cut_wire_fixture("wire-strict-tangent.tnlog", (0, 10, 20, 25))
+        )
+        if tangent_status != 0:
+            raise AssertionError(
+                "wire or cut tangency was rejected: "
+                + "; ".join(finding.msg for finding in tangent_audit.findings)
+            )
+        odd_overlap_status, odd_overlap_audit = audit_status(
+            write_cut_wire_fixture(
+                "odd-sp-wire-overlap.tnlog", (5, 10, 18022, 18023),
+                y=0, outer=36045,
+            )
+        )
+        if odd_overlap_status != 1 or not any(
+                "visible typed-map wire" in finding.msg
+                for finding in odd_overlap_audit.findings):
+            raise AssertionError("audit lost an odd-width half-sp overlap")
+        odd_disjoint_status, odd_disjoint_audit = audit_status(
+            write_cut_wire_fixture(
+                "odd-sp-wire-disjoint.tnlog", (5, 10, 18023, 18024),
+                y=0, outer=36045,
+            )
+        )
+        if odd_disjoint_status != 0:
+            raise AssertionError(
+                "audit invented overlap beyond an odd-width half-sp boundary: "
+                + "; ".join(
+                    finding.msg for finding in odd_disjoint_audit.findings
+                )
+            )
+        gap_status, gap_audit = audit_status(
+            write_cut_wire_fixture(
+                "fused-wire-gap.tnlog", (5, 10, 6, 14), inner=10
+            )
+        )
+        if gap_status != 0:
+            raise AssertionError(
+                "audit treated the fused paper gap as wire ink: "
+                + "; ".join(finding.msg for finding in gap_audit.findings)
+            )
+        solid_center_status, solid_center_audit = audit_status(
+            write_cut_wire_fixture(
+                "colored-or-translucent-inner.tnlog", (5, 10, 6, 14), inner=0
+            )
+        )
+        if solid_center_status != 1 or not any(
+                "visible typed-map wire" in finding.msg
+                for finding in solid_center_audit.findings):
+            raise AssertionError(
+                "audit treated a visible inner band as an empty fused gap"
+            )
+        rail_status, rail_audit = audit_status(
+            write_cut_wire_fixture(
+                "fused-wire-rail.tnlog", (5, 10, 1, 4), inner=10
+            )
+        )
+        if rail_status != 1 or not any(
+                "visible typed-map wire" in finding.msg
+                for finding in rail_audit.findings):
+            raise AssertionError("audit missed a fused typed-map rail overlap")
+
+        malformed_wire_prefix = (
+            "picture|id=1|lang=free\n"
+            "atom|picture=1|name=a|kind=dot\n"
+            "label-use|picture=1\n"
+            "bbox|picture=1|class=label|id=1|owner=0|"
+            "xmin=20|xmax=80|ymin=0|ymax=60|"
+            "shape=roundrect|radius=20\n"
+        )
+        malformed_wire_event = (
+            "ink-use|picture=1|class=wire|id=1\n"
+            "wire-geometry|picture=1|owner=1|shape=rect-minus-label|"
+            "xmin=0|xmax=100|y=10|outer=20|inner=0|"
+            "cut-shape=roundrect|cut-xmin=20|cut-xmax=80|"
+            "cut-ymin=0|cut-ymax=60|cut-radius=20"
+        )
+
+        def assert_malformed_wire(
+                filename: str, body: str, diagnostic: str) -> None:
+            fixture = work / filename
+            fixture.write_text(body, encoding="utf-8")
+            status, malformed_audit = audit_status(fixture)
+            if status != 1 or not any(
+                    finding.rule == "malformed-event"
+                    and diagnostic in finding.msg
+                    for finding in malformed_audit.findings):
+                raise AssertionError(
+                    f"audit missed malformed wire case {filename}: "
+                    + "; ".join(
+                        finding.msg for finding in malformed_audit.findings
+                    )
+                )
+
+        assert_malformed_wire(
+            "wire-missing-cut-id.tnlog",
+            malformed_wire_prefix + malformed_wire_event + "\n",
+            "lacks required field(s): cut-id",
+        )
+        assert_malformed_wire(
+            "wire-duplicate-cut-id.tnlog",
+            malformed_wire_prefix
+            + "label-use|picture=1\n"
+            + "bbox|picture=1|class=label|id=1|owner=0|"
+            + "xmin=20|xmax=80|ymin=0|ymax=60|"
+            + "shape=roundrect|radius=20\n"
+            + malformed_wire_event + "|cut-id=1\n",
+            "references non-unique cut label bbox id=1",
+        )
+        assert_malformed_wire(
+            "wire-dangling-cut-id.tnlog",
+            malformed_wire_prefix + malformed_wire_event + "|cut-id=99\n",
+            "references missing cut label bbox id=99",
+        )
+        assert_malformed_wire(
+            "wire-mismatched-cut-id.tnlog",
+            malformed_wire_prefix
+            + malformed_wire_event.replace("cut-xmin=20", "cut-xmin=21")
+            + "|cut-id=1\n",
+            "cut geometry disagrees with label bbox id=1",
+        )
+        assert_malformed_wire(
+            "wire-negative-inner.tnlog",
+            malformed_wire_prefix
+            + malformed_wire_event.replace("inner=0", "inner=-1")
+            + "|cut-id=1\n",
+            "wire-geometry field inner='-1' fails validation",
+        )
+        assert_malformed_wire(
+            "wire-degenerate-inner.tnlog",
+            malformed_wire_prefix
+            + malformed_wire_event.replace("inner=0", "inner=20")
+            + "|cut-id=1\n",
+            "inner gap=20 is not smaller than outer width=20",
+        )
+
         oversized_roundrect = work / "oversized-roundrect.tnlog"
         oversized_roundrect.write_text(
             "picture|id=1|lang=free\n"
@@ -876,6 +1163,23 @@ def main() -> int:
                 and "exceeds half" in finding.msg
                 for finding in oversized_audit.findings):
             raise AssertionError("audit clamped malformed roundrect geometry")
+
+        nonsquare_circle = work / "nonsquare-circle.tnlog"
+        nonsquare_circle.write_text(
+            "picture|id=1|lang=free\n"
+            "atom|picture=1|name=a|kind=dot\n"
+            "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
+            "glyph-geometry|picture=1|owner=1|shape=circle|"
+            "xmin=0|xmax=10|ymin=0|ymax=12|radius=0|stroke=0|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n",
+            encoding="utf-8",
+        )
+        circle_status, circle_audit = audit_status(nonsquare_circle)
+        if circle_status != 1 or not any(
+                finding.rule == "malformed-event"
+                and "ellipses are unsupported" in finding.msg
+                for finding in circle_audit.findings):
+            raise AssertionError("audit accepted a nonsquare circle geometry")
 
         empty_region = work / "empty-region.tnlog"
         empty_region.write_text(
@@ -919,6 +1223,26 @@ def main() -> int:
                 finding.rule == "bbox-coverage"
                 for finding in missing_ink_audit.findings) != 2:
             raise AssertionError("audit accepted unmeasured glyph/wire owners")
+
+        duplicate_geometry = work / "duplicate-ink-geometry.tnlog"
+        duplicate_geometry.write_text(
+            "picture|id=1|lang=free\n"
+            "atom|picture=1|name=a|kind=dot\n"
+            "ink-use|picture=1|class=glyph|id=1|shape=rect\n"
+            "glyph-geometry|picture=1|owner=1|shape=rect|"
+            "xmin=0|xmax=10|ymin=0|ymax=10|radius=0|stroke=0|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
+            "glyph-geometry|picture=1|owner=1|shape=rect|"
+            "xmin=0|xmax=10|ymin=0|ymax=10|radius=0|stroke=0|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n",
+            encoding="utf-8",
+        )
+        duplicate_status, duplicate_audit = audit_status(duplicate_geometry)
+        if duplicate_status != 1 or not any(
+                finding.rule == "bbox-coverage"
+                and "produced 2 matching geometries" in finding.msg
+                for finding in duplicate_audit.findings):
+            raise AssertionError("audit accepted duplicate owner geometry")
 
         missing_class = work / "missing-ink-class.tnlog"
         missing_class.write_text(

@@ -34,8 +34,8 @@ Hard errors (exit 1):
                        `none`.  If no faceports event exists, the check is
                        skipped for compatibility with legacy logs, including
                        simple centred faces.
-  label-overlap       A measured `tn label` rectangle strictly intersects a
-                      sibling glyph node or explicit visible wire node.
+  label-overlap       A measured `tn label` visible support strictly intersects
+                      a sibling glyph node or explicit visible wire node.
   bbox-coverage       A library-owned label, glyph, or wire use did not
                       produce its required measured geometry.
 
@@ -73,6 +73,7 @@ import hashlib
 import re
 import sys
 from dataclasses import dataclass, field
+from fractions import Fraction
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -198,28 +199,91 @@ def _rects_intersect(left: Rect, right: Rect) -> bool:
             and max(left[2], right[2]) < min(left[3], right[3]))
 
 
+def _circle2_intersects_rect(center: Point, diameter: int, rect: Rect) -> bool:
+    """Strict overlap of a circle in doubled coordinates with a rectangle."""
+    doubled_rect = tuple(2 * coordinate for coordinate in rect)
+    return _point_rect_distance_sq(center, doubled_rect) < diameter * diameter
+
+
+def _circles2_intersect(
+        left_center: Point, left_diameter: int,
+        right_center: Point, right_diameter: int) -> bool:
+    dx = left_center[0] - right_center[0]
+    dy = left_center[1] - right_center[1]
+    diameter = left_diameter + right_diameter
+    return dx * dx + dy * dy < diameter * diameter
+
+
 def _circle_intersects_rect(bounds: Rect, rect: Rect) -> bool:
     xmin, xmax, ymin, ymax = bounds
     # Double every coordinate so half-scaled-point centres remain exact.
     center = (xmin + xmax, ymin + ymax)
-    doubled_rect = tuple(2 * coordinate for coordinate in rect)
-    diameter = min(xmax - xmin, ymax - ymin)
-    return _point_rect_distance_sq(center, doubled_rect) < diameter * diameter
+    return _circle2_intersects_rect(center, xmax - xmin, rect)
+
+
+def _roundrect_parts(bounds: Rect, radius: int) -> tuple[
+        tuple[Rect, Rect], tuple[tuple[Point, int], ...]]:
+    xmin, xmax, ymin, ymax = bounds
+    rectangles = (
+        (xmin + radius, xmax - radius, ymin, ymax),
+        (xmin, xmax, ymin + radius, ymax - radius),
+    )
+    circles = tuple(
+        ((2 * x, 2 * y), 2 * radius)
+        for x, y in ((xmin + radius, ymin + radius),
+                     (xmin + radius, ymax - radius),
+                     (xmax - radius, ymin + radius),
+                     (xmax - radius, ymax - radius))
+    )
+    return rectangles, circles
 
 
 def _roundrect_intersects_rect(bounds: Rect, radius: int, rect: Rect) -> bool:
-    xmin, xmax, ymin, ymax = bounds
-    horizontal = (xmin + radius, xmax - radius, ymin, ymax)
-    vertical = (xmin, xmax, ymin + radius, ymax - radius)
-    if _rects_intersect(horizontal, rect) or _rects_intersect(vertical, rect):
+    rectangles, circles = _roundrect_parts(bounds, radius)
+    if any(_rects_intersect(part, rect) for part in rectangles):
         return True
-    for center in ((xmin + radius, ymin + radius),
-                   (xmin + radius, ymax - radius),
-                   (xmax - radius, ymin + radius),
-                   (xmax - radius, ymax - radius)):
-        if _point_rect_distance_sq(center, rect) < radius * radius:
-            return True
-    return False
+    return any(_circle2_intersects_rect(center, diameter, rect)
+               for center, diameter in circles)
+
+
+def _circle2_intersects_roundrect(
+        center: Point, diameter: int, bounds: Rect, radius: int) -> bool:
+    rectangles, circles = _roundrect_parts(bounds, radius)
+    if any(_circle2_intersects_rect(center, diameter, part)
+           for part in rectangles):
+        return True
+    return any(_circles2_intersect(center, diameter, other_center, other_diameter)
+               for other_center, other_diameter in circles)
+
+
+def _circle_intersects_roundrect(
+        circle: Rect, bounds: Rect, radius: int) -> bool:
+    center = (circle[0] + circle[1], circle[2] + circle[3])
+    return _circle2_intersects_roundrect(
+        center, circle[1] - circle[0], bounds, radius)
+
+
+def _roundrects_intersect(
+        left: Rect, left_radius: int, right: Rect, right_radius: int) -> bool:
+    left_rectangles, left_circles = _roundrect_parts(left, left_radius)
+    if any(_roundrect_intersects_rect(right, right_radius, part)
+           for part in left_rectangles):
+        return True
+    return any(_circle2_intersects_roundrect(
+        center, diameter, right, right_radius)
+        for center, diameter in left_circles)
+
+
+def _label_shapes_intersect(
+        left_shape: str, left: Rect, left_radius: int,
+        right_shape: str, right: Rect, right_radius: int) -> bool:
+    if left_shape == "rect" and right_shape == "rect":
+        return _rects_intersect(left, right)
+    if left_shape == "roundrect" and right_shape == "rect":
+        return _roundrect_intersects_rect(left, left_radius, right)
+    if left_shape == "rect" and right_shape == "roundrect":
+        return _roundrect_intersects_rect(right, right_radius, left)
+    return _roundrects_intersect(left, left_radius, right, right_radius)
 
 
 def _polygon_intersects_rect(points: tuple[Point, ...], rect: Rect) -> bool:
@@ -301,6 +365,29 @@ def _point_within_segment_stroke(
     return perpendicular * perpendicular < stroke * stroke * length_sq
 
 
+def _point_in_convex_polygon_closed(
+        point: Point, points: tuple[Point, ...]) -> bool:
+    crosses = [_cross(points[index], points[(index + 1) % len(points)], point)
+               for index in range(len(points))]
+    return all(cross >= 0 for cross in crosses) or all(
+        cross <= 0 for cross in crosses)
+
+
+def _stroked_polygon_intersects_circle2(
+        points: tuple[Point, ...], stroke: int,
+        center: Point, diameter: int) -> bool:
+    doubled_points = tuple((2 * x, 2 * y) for x, y in points)
+    if _point_in_convex_polygon_closed(center, doubled_points):
+        return True
+    reach = diameter + 2 * stroke
+    return any(
+        _point_within_segment_stroke(
+            center, point, doubled_points[(index + 1) % len(points)], reach
+        )
+        for index, point in enumerate(doubled_points)
+    )
+
+
 def _segment_stroke_intersects_rect(
         start: Point, end: Point, stroke: int, rect: Rect) -> bool:
     if _segment_intersects_rect(start, end, rect):
@@ -326,6 +413,21 @@ def _stroked_polygon_intersects_rect(
             point, points[(index + 1) % len(points)], stroke, rect
         )
         for index, point in enumerate(points)
+    )
+
+
+def _stroked_polygon_intersects_roundrect(
+        points: tuple[Point, ...], stroke: int,
+        bounds: Rect, radius: int) -> bool:
+    rectangles, circles = _roundrect_parts(bounds, radius)
+    if any(_stroked_polygon_intersects_rect(points, stroke, part)
+           for part in rectangles):
+        return True
+    return any(
+        _stroked_polygon_intersects_circle2(
+            points, stroke, center, diameter
+        )
+        for center, diameter in circles
     )
 
 
@@ -369,7 +471,9 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
                  "physical-up": _is_int, "physical-down": _is_int},
     "bbox": {"picture": _is_int, "class": _enum("label", "wire"),
              "id": _is_positive_int, "xmin": _is_int, "xmax": _is_int,
-             "ymin": _is_int, "ymax": _is_int},
+             "ymin": _is_int, "ymax": _is_int,
+             "shape": _enum("rect", "roundrect"),
+             "radius": _is_nonnegative_int},
     "glyph-geometry": {"picture": _is_int, "owner": _is_positive_int,
                        "shape": _enum("rect", "circle", "roundrect", "triangle"),
                        "xmin": _is_int, "xmax": _is_int,
@@ -379,6 +483,16 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
                        "x1": _is_int, "y1": _is_int,
                        "x2": _is_int, "y2": _is_int,
                        "x3": _is_int, "y3": _is_int},
+    "wire-geometry": {"picture": _is_int, "owner": _is_positive_int,
+                      "shape": _enum("rect-minus-label"),
+                      "xmin": _is_int, "xmax": _is_int,
+                      "y": _is_int, "outer": _is_positive_int,
+                      "inner": _is_nonnegative_int,
+                      "cut-shape": _enum("rect", "roundrect"),
+                      "cut-xmin": _is_int, "cut-xmax": _is_int,
+                      "cut-ymin": _is_int, "cut-ymax": _is_int,
+                      "cut-radius": _is_nonnegative_int,
+                      "cut-id": _is_positive_int},
     "lattice": {"picture": _is_int, "rows": _is_positive_int,
                 "cols": _is_positive_int, "sheets": _is_positive_int,
                 "roles": _any},
@@ -427,7 +541,8 @@ class Picture:
         diagnostics do not contribute to the canonical topology."""
         return [e for e in self.events
                 if e.kind not in {"bbox", "label-use", "ink-use",
-                                  "glyph-geometry", "boundary", "warning"}]
+                                  "glyph-geometry", "wire-geometry",
+                                  "boundary", "warning"}]
 
     def boundary(self) -> Optional[tuple[int, int, int, int]]:
         for e in self.events:
@@ -620,11 +735,16 @@ class Audit:
     def check_label_overlaps(self) -> None:
         """Reject label intersections with exact sibling visible geometry."""
         bbox_required = {"class", "id", "xmin", "xmax", "ymin", "ymax"}
+        label_required = {"shape", "radius"}
         glyph_required = {"owner", "shape", "xmin", "xmax", "ymin", "ymax",
                           "radius", "stroke", "x1", "y1", "x2", "y2",
                           "x3", "y3"}
+        wire_required = {"owner", "shape", "xmin", "xmax", "y", "outer",
+                         "inner",
+                         "cut-shape", "cut-xmin", "cut-xmax", "cut-ymin",
+                         "cut-ymax", "cut-radius", "cut-id"}
         for pic in self.pictures:
-            rectangles: list[tuple[Event, str, int, int, int, int]] = []
+            rectangles: list[tuple[Event, str, Rect, str, int]] = []
             for event in pic.events:
                 if event.kind != "bbox":
                     continue
@@ -653,8 +773,45 @@ class Audit:
                         f"({xmin},{ymin})--({xmax},{ymax})",
                     )
                     continue
+                shape = "rect"
+                radius = 0
+                if event.attrs["class"] == "label":
+                    missing = sorted(label_required - event.attrs.keys())
+                    if missing:
+                        self.hard(
+                            "malformed-event",
+                            f"{self.log_path.name}:{event.line}",
+                            "label bbox event lacks required field(s): "
+                            + ", ".join(missing),
+                        )
+                        continue
+                    if (event.attrs["shape"] not in {"rect", "roundrect"}
+                            or not _is_nonnegative_int(event.attrs["radius"])):
+                        continue
+                    shape = event.attrs["shape"]
+                    radius = int(event.attrs["radius"])
+                    if shape == "rect" and radius != 0:
+                        self.hard(
+                            "malformed-event",
+                            f"{self.log_path.name}:{event.line}",
+                            f"rect label bbox id={event.attrs['id']} has "
+                            f"nonzero radius={radius}",
+                        )
+                        continue
+                    if (shape == "roundrect"
+                            and (2 * radius > xmax - xmin
+                                 or 2 * radius > ymax - ymin)):
+                        self.hard(
+                            "malformed-event",
+                            f"{self.log_path.name}:{event.line}",
+                            f"roundrect label bbox id={event.attrs['id']} "
+                            f"radius={radius} exceeds half its measured width "
+                            "or height",
+                        )
+                        continue
                 rectangles.append(
-                    (event, event.attrs["class"], xmin, xmax, ymin, ymax)
+                    (event, event.attrs["class"],
+                     (xmin, xmax, ymin, ymax), shape, radius)
                 )
             glyphs: list[
                 tuple[Event, str, Rect, int, int, tuple[Point, ...]]
@@ -685,6 +842,15 @@ class Audit:
                         f"({bounds[1]},{bounds[3]})",
                     )
                     continue
+                if (event.attrs["shape"] == "circle"
+                        and bounds[1] - bounds[0] != bounds[3] - bounds[2]):
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"circle glyph owner={event.attrs['owner']} has unequal "
+                        "measured width and height; ellipses are unsupported",
+                    )
+                    continue
                 radius = int(event.attrs["radius"])
                 stroke = int(event.attrs["stroke"])
                 if radius < 0 or stroke < 0:
@@ -704,13 +870,151 @@ class Audit:
                                for index in range(1, 4))
                 glyphs.append((event, event.attrs["shape"], bounds,
                                radius, stroke, points))
+            cut_wires: list[tuple[Event, Rect, int, str, Rect, int, int]] = []
+            for event in pic.events:
+                if event.kind != "wire-geometry":
+                    continue
+                missing = sorted(wire_required - event.attrs.keys())
+                if missing:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        "wire-geometry event lacks required field(s): "
+                        + ", ".join(missing),
+                    )
+                    continue
+                numeric = wire_required - {"shape", "cut-shape"}
+                if any(not _is_int(event.attrs[field]) for field in numeric):
+                    continue
+                if (event.attrs["shape"] != "rect-minus-label"
+                        or event.attrs["cut-shape"] not in {"rect", "roundrect"}
+                        or not _is_positive_int(event.attrs["owner"])
+                        or not _is_positive_int(event.attrs["cut-id"])
+                        or not _is_positive_int(event.attrs["outer"])
+                        or not _is_nonnegative_int(event.attrs["inner"])
+                        or not _is_nonnegative_int(event.attrs["cut-radius"])):
+                    continue  # FIELD_VALIDATORS already reported the bad value.
+                xmin = int(event.attrs["xmin"])
+                xmax = int(event.attrs["xmax"])
+                center_y = int(event.attrs["y"])
+                outer = int(event.attrs["outer"])
+                bounds = (
+                    xmin,
+                    xmax,
+                    Fraction(2 * center_y - outer, 2),
+                    Fraction(2 * center_y + outer, 2),
+                )
+                cut = tuple(int(event.attrs[field]) for field in (
+                    "cut-xmin", "cut-xmax", "cut-ymin", "cut-ymax"
+                ))
+                radius = int(event.attrs["cut-radius"])
+                inner = int(event.attrs["inner"])
+                if xmin > xmax:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"wire owner={event.attrs['owner']} has inverted "
+                        f"horizontal extents: {xmin}--{xmax}",
+                    )
+                    continue
+                if cut[0] > cut[1] or cut[2] > cut[3]:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"wire owner={event.attrs['owner']} has inverted cut "
+                        f"extents: ({cut[0]},{cut[2]})--({cut[1]},{cut[3]})",
+                    )
+                    continue
+                if inner >= outer:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"wire owner={event.attrs['owner']} inner gap={inner} "
+                        f"is not smaller than outer width={outer}",
+                    )
+                    continue
+                if event.attrs["cut-shape"] == "rect" and radius != 0:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"rect wire cut owner={event.attrs['owner']} has "
+                        f"nonzero radius={radius}",
+                    )
+                    continue
+                if (event.attrs["cut-shape"] == "roundrect"
+                        and (2 * radius > cut[1] - cut[0]
+                             or 2 * radius > cut[3] - cut[2])):
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"roundrect wire cut owner={event.attrs['owner']} "
+                        f"radius={radius} exceeds half its width or height",
+                    )
+                    continue
+                cut_wires.append((event, bounds, inner,
+                                  event.attrs["cut-shape"], cut, radius,
+                                  int(event.attrs["cut-id"])))
             labels = [rect for rect in rectangles if rect[1] == "label"]
             wire_boxes = [rect for rect in rectangles if rect[1] == "wire"]
+            labels_by_id: dict[int, tuple[Event, str, Rect, str, int]] = {}
+            duplicate_label_ids: set[int] = set()
             for label in labels:
-                label_rect = (label[2], label[3], label[4], label[5])
+                label_id = int(label[0].attrs["id"])
+                if label_id in labels_by_id:
+                    duplicate_label_ids.add(label_id)
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{label[0].line}",
+                        f"picture {pic.ident} repeats label bbox id={label_id}",
+                    )
+                    continue
+                labels_by_id[label_id] = label
+
+            valid_cut_wires: list[
+                tuple[Event, Rect, int, str, Rect, int, int]
+            ] = []
+            for wire in cut_wires:
+                if wire[6] in duplicate_label_ids:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{wire[0].line}",
+                        f"wire owner={wire[0].attrs['owner']} references "
+                        f"non-unique cut label bbox id={wire[6]}",
+                    )
+                    continue
+                cut_label = labels_by_id.get(wire[6])
+                if cut_label is None:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{wire[0].line}",
+                        f"wire owner={wire[0].attrs['owner']} references missing "
+                        f"cut label bbox id={wire[6]}",
+                    )
+                    continue
+                if (cut_label[2] != wire[4] or cut_label[3] != wire[3]
+                        or cut_label[4] != wire[5]):
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{wire[0].line}",
+                        f"wire owner={wire[0].attrs['owner']} cut geometry "
+                        f"disagrees with label bbox id={wire[6]}",
+                    )
+                    continue
+                valid_cut_wires.append(wire)
+            reported_label_pairs: set[tuple[int, int]] = set()
+            for label in labels:
+                label_rect = label[2]
+                label_shape = label[3]
+                label_radius = label[4]
+                label_id = int(label[0].attrs["id"])
                 for other in wire_boxes:
-                    other_rect = (other[2], other[3], other[4], other[5])
-                    if _rects_intersect(label_rect, other_rect):
+                    other_rect = other[2]
+                    if label_shape == "rect":
+                        intersects = _rects_intersect(label_rect, other_rect)
+                    else:
+                        intersects = _roundrect_intersects_rect(
+                            label_rect, label_radius, other_rect)
+                    if intersects:
                         self.hard(
                             "label-overlap",
                             f"{self.log_path.name}:{label[0].line}",
@@ -718,17 +1022,83 @@ class Audit:
                             f"{label[0].attrs['id']} intersects {other[1]} bbox "
                             f"id={other[0].attrs['id']}",
                         )
+                for (wire_event, wire_rect, inner, cut_shape, cut_rect,
+                     cut_radius, cut_id) in valid_cut_wires:
+                    if label_id == cut_id:
+                        continue
+                    if _label_shapes_intersect(
+                            label_shape, label_rect, label_radius,
+                            cut_shape, cut_rect, cut_radius):
+                        pair = tuple(sorted((label_id, cut_id)))
+                        if pair not in reported_label_pairs:
+                            reported_label_pairs.add(pair)
+                            self.hard(
+                                "label-overlap",
+                                f"{self.log_path.name}:{label[0].line}",
+                                f"picture {pic.ident} label bbox id={label_id} "
+                                f"intersects label bbox id={cut_id}",
+                            )
+                        continue
+                    wire_rects: list[Rect] = [wire_rect]
+                    if inner > 0:
+                        gap_bottom = Fraction(
+                            wire_rect[2] + wire_rect[3] - inner, 2
+                        )
+                        gap_top = Fraction(
+                            wire_rect[2] + wire_rect[3] + inner, 2
+                        )
+                        wire_rects = [
+                            (wire_rect[0], wire_rect[1],
+                             wire_rect[2], gap_bottom),
+                            (wire_rect[0], wire_rect[1],
+                             gap_top, wire_rect[3]),
+                        ]
+                    if label_shape == "rect":
+                        intersects = any(
+                            _rects_intersect(label_rect, rail)
+                            for rail in wire_rects
+                        )
+                    else:
+                        intersects = any(
+                            _roundrect_intersects_rect(
+                                label_rect, label_radius, rail
+                            )
+                            for rail in wire_rects
+                        )
+                    if intersects:
+                        self.hard(
+                            "label-overlap",
+                            f"{self.log_path.name}:{label[0].line}",
+                            f"picture {pic.ident} label bbox id={label_id} "
+                            "intersects visible typed-map wire owned by ink "
+                            f"id={wire_event.attrs['owner']}",
+                        )
                 for event, shape, bounds, radius, stroke, points in glyphs:
-                    if shape == "rect":
-                        intersects = _rects_intersect(bounds, label_rect)
-                    elif shape == "circle":
-                        intersects = _circle_intersects_rect(bounds, label_rect)
-                    elif shape == "roundrect":
+                    if label_shape == "rect":
+                        if shape == "rect":
+                            intersects = _rects_intersect(bounds, label_rect)
+                        elif shape == "circle":
+                            intersects = _circle_intersects_rect(bounds, label_rect)
+                        elif shape == "roundrect":
+                            intersects = _roundrect_intersects_rect(
+                                bounds, radius, label_rect)
+                        elif shape == "triangle":
+                            intersects = _stroked_polygon_intersects_rect(
+                                points, stroke, label_rect)
+                        else:
+                            continue
+                    elif shape == "rect":
                         intersects = _roundrect_intersects_rect(
-                            bounds, radius, label_rect)
+                            label_rect, label_radius, bounds)
+                    elif shape == "circle":
+                        intersects = _circle_intersects_roundrect(
+                            bounds, label_rect, label_radius)
+                    elif shape == "roundrect":
+                        intersects = _roundrects_intersect(
+                            label_rect, label_radius, bounds, radius)
                     elif shape == "triangle":
-                        intersects = _stroked_polygon_intersects_rect(
-                            points, stroke, label_rect)
+                        intersects = _stroked_polygon_intersects_roundrect(
+                            points, stroke, label_rect, label_radius)
                     else:
                         continue  # generic field validation reports the shape
                     if intersects:
@@ -782,7 +1152,7 @@ class Audit:
 
             geometry_by_owner: dict[int, list[Event]] = {}
             for event in pic.events:
-                if (event.kind != "glyph-geometry"
+                if (event.kind not in {"glyph-geometry", "wire-geometry"}
                         and (event.kind != "bbox"
                              or event.attrs.get("class") != "wire")):
                     continue
@@ -815,14 +1185,22 @@ class Audit:
                         )
                 else:
                     matching = [event for event in geometry
-                                if event.kind == "bbox"
-                                and event.attrs.get("class") == "wire"]
+                                if event.kind == "wire-geometry"
+                                or (event.kind == "bbox"
+                                    and event.attrs.get("class") == "wire")]
                 if not matching:
                     self.hard(
                         "bbox-coverage",
                         f"{self.log_path.name}:{use.line}",
                         f"picture {pic.ident} {expected} ink-use id={owner} "
                         "produced no matching geometry",
+                    )
+                elif len(matching) != 1:
+                    self.hard(
+                        "bbox-coverage",
+                        f"{self.log_path.name}:{use.line}",
+                        f"picture {pic.ident} {expected} ink-use id={owner} "
+                        f"produced {len(matching)} matching geometries",
                     )
             for owner, geometry in geometry_by_owner.items():
                 if owner not in uses_by_id:
