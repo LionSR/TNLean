@@ -1184,7 +1184,9 @@ surjective.  Documented in
 
 **Local fix (Figure-11 fixed-pair support):** Unused blocked labels are left
 for empty multiplicity fibers.  Documented in
-`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`. -/
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 theorem exists_flatBlockedBNTComparison
     {d g₂ : ℕ}
     (S : RetainedProductSpectralFamily dim mult weight B)
@@ -1235,6 +1237,100 @@ theorem ambientInclusion_isometry {d : ℕ}
     _ = (S.retainedInclusion x)ᴴ * S.retainedInclusion x := by
       rw [hsquare, Matrix.mul_one]
     _ = 1 := S.retainedInclusion_isometry x
+
+/-- The composite ambient inclusion intertwines an active weighted corner
+with the blocked vertical tensor. -/
+theorem ambient_intertwine {d : ℕ}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    verticalTensor (blockTwo M) ab * S.ambientInclusion U x =
+      S.ambientInclusion U x *
+        (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) := by
+  have hsquare := verticalTensor_blockTwo_squared_coisometry_reconstruction
+    M (verticalAssembledTensor dim mult weight B) U hU hReconstruct
+  let W := verticalCoisometrySquare U
+  let R := S.retainedInclusion x
+  let C := retainedVerticalProductTensor dim mult weight B
+  calc
+    verticalTensor (blockTwo M) ab * S.ambientInclusion U x =
+        (Wᴴ * C ab * W) * (Wᴴ * R) := by
+      rw [hsquare.2 ab]
+      rfl
+    _ = Wᴴ * C ab * (W * Wᴴ) * R := by
+      simp only [Matrix.mul_assoc]
+    _ = Wᴴ * (C ab * R) := by
+      rw [hsquare.1]
+      simp only [Matrix.mul_one, Matrix.mul_assoc]
+    _ = Wᴴ * (R * (S.coefficient x.1 x.2 • S.block x.1 x.2 ab)) := by
+      rw [S.retained_intertwine x ab]
+    _ = S.ambientInclusion U x *
+        (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) := by
+      simp only [ambientInclusion, W, R, Matrix.mul_assoc]
+
+/-- The adjoint composite ambient inclusion satisfies the reverse
+intertwining identity. -/
+theorem ambient_intertwine_adjoint {d : ℕ}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    (S.ambientInclusion U x)ᴴ * verticalTensor (blockTwo M) ab =
+      (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) *
+        (S.ambientInclusion U x)ᴴ := by
+  have hsquare := verticalTensor_blockTwo_squared_coisometry_reconstruction
+    M (verticalAssembledTensor dim mult weight B) U hU hReconstruct
+  let W := verticalCoisometrySquare U
+  let R := S.retainedInclusion x
+  let C := retainedVerticalProductTensor dim mult weight B
+  calc
+    (S.ambientInclusion U x)ᴴ * verticalTensor (blockTwo M) ab =
+        (Rᴴ * W) * (Wᴴ * C ab * W) := by
+      rw [hsquare.2 ab]
+      simp only [ambientInclusion, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_conjTranspose, W, R, C,
+        retainedVerticalProductTensor]
+    _ = Rᴴ * (W * Wᴴ) * C ab * W := by
+      simp only [Matrix.mul_assoc]
+    _ = (Rᴴ * C ab) * W := by
+      rw [hsquare.1]
+      simp only [Matrix.mul_one, Matrix.mul_assoc]
+    _ = ((S.coefficient x.1 x.2 • S.block x.1 x.2 ab) * Rᴴ) * W := by
+      rw [S.retained_intertwine_adjoint x ab]
+    _ = (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) *
+        (S.ambientInclusion U x)ᴴ := by
+      simp only [ambientInclusion, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_conjTranspose, W, R, Matrix.mul_assoc]
+
+/-- Compression of the blocked vertical tensor by a composite ambient
+inclusion gives its active weighted corner. -/
+theorem ambient_compression {d : ℕ}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    S.coefficient x.1 x.2 • S.block x.1 x.2 ab =
+      (S.ambientInclusion U x)ᴴ * verticalTensor (blockTwo M) ab *
+        S.ambientInclusion U x := by
+  rw [S.ambient_intertwine_adjoint M U hU hReconstruct x ab,
+    Matrix.mul_assoc, S.ambientInclusion_isometry U hU x,
+    Matrix.mul_one]
 
 end RetainedProductSpectralFamily
 
