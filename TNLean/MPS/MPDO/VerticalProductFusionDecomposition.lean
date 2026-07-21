@@ -2958,4 +2958,117 @@ end OriginalCornerFamily
 
 end RetainedProductSpectralFamily
 
+/-- The one-site vertical BNT is closed under pairwise products through
+positive diagonal multiplicity matrices and coisometries onto the active
+product sectors.  The adjoint coisometries reconstruct every product letter,
+including when a common zero corner is discarded by the forward map.
+
+**Scope restriction (active product BNT):** Only active product corners are
+retained.  A one-site BNT label absent from a fixed product pair has zero
+fusion multiplicity.  Documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+**Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
+active family; no unsupported corner is inserted.  Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+**Local fix (Figure-11 fusion coisometry):** The fusion map has retained-row
+orientation and is a coisometry onto the active direct sum.  Its adjoint gives
+the exact reconstruction.  Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+theorem transportedVerticalSector_exists_positiveFusionDecomposition
+    {g₁ g₂ d D : ℕ}
+    (dim₁ mult₁ : Fin g₁ → ℕ)
+    (weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ)
+    (dim₂ mult₂ : Fin g₂ → ℕ)
+    (weight₂ : (β : Fin g₂) → Fin (mult₂ β) → ℂ)
+    (hMult₁ : ∀ α, 0 < mult₁ α)
+    (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
+    (hMult₂ : ∀ β, 0 < mult₂ β)
+    (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
+    (M : MPOTensor d D)
+    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (hBNT₁ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+      (fun α ↦ ⟨dim₁ α, A₁ α⟩))
+    (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor (blockTwo M))
+      (fun β ↦ ⟨dim₂ β, A₂ β⟩))
+    (U₁ : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
+      (Fin d) ℂ)
+    (U₂ : Matrix
+      (Fin (∑ q : Fin (∑ β : Fin g₂, mult₂ β), verticalCopyDim dim₂ mult₂ q))
+      (Fin (d * d)) ℂ)
+    (hU₁ : U₁ * U₁ᴴ = 1)
+    (hU₂ : U₂ * U₂ᴴ = 1)
+    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+    (Smap : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d) (Fin d) ℂ)
+    (hTCPTP : IsKrausCPTP T)
+    (hSCPTP : IsKrausCPTP Smap)
+    (hForward₁ : ∀ ab, U₁ * verticalTensor M ab * U₁ᴴ =
+      verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab)
+    (hReconstruct₁ : ∀ ab, verticalTensor M ab =
+      U₁ᴴ * verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab * U₁)
+    (hForward₂ : ∀ ab, U₂ * verticalTensor (blockTwo M) ab * U₂ᴴ =
+      verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab)
+    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
+      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
+    (hTphys : ∀ X, T (physClose1 M X) = physClose2 M X)
+    (hSphys : ∀ X, Smap (physClose2 M X) = physClose1 M X)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    ∃ (chi : DiagonalChiFamily (Fin g₁))
+      (U : ∀ α β : Fin g₁,
+        Matrix
+          ((γ : Fin g₁) × (Fin (chi.dim α β γ) × Fin (dim₁ γ)))
+          (Fin (dim₁ α * dim₁ β)) ℂ),
+      chi.PosEntries ∧
+      (∀ α β, U α β * (U α β)ᴴ = 1) ∧
+      (∀ (α β : Fin g₁) (i j : Fin D),
+        U α β *
+            (mulTensor (verticalBNTMPO (A₁ α))
+              (verticalBNTMPO (A₁ β))) i j *
+            (U α β)ᴴ =
+          Matrix.blockDiagonal' fun γ =>
+            chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) i j) ∧
+      ∀ (α β : Fin g₁) (i j : Fin D),
+        (mulTensor (verticalBNTMPO (A₁ α))
+          (verticalBNTMPO (A₁ β))) i j =
+          (U α β)ᴴ *
+            (Matrix.blockDiagonal' fun γ =>
+              chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) i j) *
+            U α β := by
+  classical
+  obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=
+    transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
+      dim₁ mult₁ weight₁ dim₂ mult₂ weight₂
+      hMult₁ hWeight₁ hMult₂ hWeight₂ M A₁ A₂ hBNT₁ hBNT₂
+      U₁ U₂ hU₁ hU₂ T Smap hTCPTP hSCPTP
+      hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ hTphys hSphys
+  obtain ⟨R⟩ := exists_retainedProductSpectralFamily
+    dim₁ mult₁ weight₁ A₁ M U₁ hU₁ hReconstruct₁ hHorizontal hM
+  letI : ∀ γ, NeZero (dim₂ γ) := fun γ ↦
+    ⟨(hBNT₂.blocks_dim_pos γ).ne'⟩
+  obtain ⟨C⟩ := R.exists_flatBlockedBNTComparison
+    M U₁ hU₁ hReconstruct₁ dim₂ A₂ hBNT₂
+  have hNormal₂ : ∀ γ, MPSTensor.IsNormalTensor (A₂ γ) := fun γ ↦
+    hBNT₂.blocks_normal γ
+  have hActivePos : ∀ j, (0 : ℂ) < R.flatCoefficient j * C.phase j := fun j ↦
+    C.activeCoefficient_mul_phase_pos M hHorizontal hM
+      U₁ hU₁ hReconstruct₁ mult₂ hMult₂ weight₂ hWeight₂
+      U₂ hU₂ hReconstruct₂ hNormal₂ j
+  choose omega homega hGram _hQ using fun j ↦
+    C.exists_unitaryNormalization M hHorizontal hM
+      U₁ hU₁ hReconstruct₁ mult₂ hMult₂ weight₂ hWeight₂
+      U₂ hU₂ hReconstruct₂ hNormal₂ j
+  obtain ⟨O⟩ := R.exists_originalCornerFamily C hMult₁ hWeight₁
+    mult₂ hMult₂ weight₂ hWeight₂ sigma hDim V hLetter
+    hActivePos omega homega hGram
+  let Fam := O.toBNTFusionCoisometryFamily hMult₁
+  exact ⟨Fam.chi, Fam.fusionCoisometry, Fam.posEntries,
+    Fam.coisometry, Fam.fusion, Fam.reconstruction⟩
+
 end MPOTensor
