@@ -61,7 +61,7 @@ seven proposed keys; it is not a request to migrate catalogue calls.
 | K1 `\tnspan[box]` | **implemented** | One measured dashed enclosure over a grid-cell range; labels have compass placement. |
 | K2 `periodic=physical` | **demoted to exact algebra** | `Papers/1606.00608/MPDO-22-12-17-2.tex:962-967` defines the object by a trace, while `blueprint/src/chapter/ch21_mpdo_rfp_algebraic.tex:35-50` gives its exact components.  A generic vertical graphical trace would add ambiguous ink. |
 | K3 lattice physical stubs | **delivered** | The lattice `physical=` policy now draws per-site physical legs, including oblique frames. |
-| K4 lattice torus marks | **delivered by #4562** | Opposite-side trace closures and their four-side audit records cover the torus geometry. |
+| K4 lattice torus marks | **owned by #4396; delivered by PR #4562** | Opposite-side trace closures and their four-side audit records cover the torus geometry. |
 | K5 `pair label=` | **not required** | `TNMPOLocalPurification` remains legible with the existing cup policy or no redundant label. |
 | K6 lattice edge insertion | **not required** | After #4531, grid `\tnX` and a named free atom cover the remaining meanings. |
 | K7 free-tier region | **implemented** | `\tnregion` accepts named `\tnput` atoms, named `\tnjoin` routes, and earlier named regions through the shared measured renderer. |
@@ -84,7 +84,7 @@ both K1 and K7.
 | TNMPDOBNTOperatorTraceClosure | K2 vertical closure | demoted to `[O_L(M_\alpha)]_{a,b}=\operatorname{tr}(\widehat M_\alpha^{a_1b_1}\cdots\widehat M_\alpha^{a_Lb_L})`; no generic closure key |
 | TNAppendixBAdjacentBondProjectors | K7 named subgraph groups | supported by atom-and-join member sets |
 | TNAppendixBPhysicalSupportTransport | K7 overlapping support regions | supported by named regions used as later members |
-| TNPEPSTorusGeometry | K4 torus identifications | delivered by #4562; no enclosure work remains |
+| TNPEPSTorusGeometry | K4 torus identifications | owned by #4396; delivered by PR #4562; no enclosure work remains |
 
 ---
 
