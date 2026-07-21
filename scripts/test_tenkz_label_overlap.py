@@ -84,6 +84,11 @@ SOURCE = r"""
   A & B & C
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{f}
 \end{tenkzcd}
+% Empty resolved regions are legitimate no-ops and still emit audit data.
+\begin{tenkzlattice}[rows=1, cols=1]
+  \tnregion[name=R]{(1,1)}
+  \tnregion{R - R}
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -202,8 +207,18 @@ def main() -> int:
                 + "; ".join(finding.msg for finding in overlaps)
             )
         if any(f"picture {picture_id}" in finding.msg
-               for finding in overlaps for picture_id in (8, 9, 10)):
+               for finding in overlaps for picture_id in (8, 9, 10, 11)):
             raise AssertionError("audit rejected live customized geometry")
+
+        empty_regions = [
+            event for event in audit.events(11)
+            if event.kind == "region" and event.attrs.get("cells") == ""
+        ]
+        if len(empty_regions) != 1 or any(
+                finding.rule == "malformed-event"
+                and "region field cells=''" in finding.msg
+                for finding in audit.findings):
+            raise AssertionError("audit rejected a live empty resolved region")
 
         for picture_id in (1, 2):
             bbox_classes = {
@@ -409,6 +424,35 @@ def main() -> int:
                 and "exceeds half" in finding.msg
                 for finding in oversized_audit.findings):
             raise AssertionError("audit clamped malformed roundrect geometry")
+
+        empty_region = work / "empty-region.tnlog"
+        empty_region.write_text(
+            "picture|id=1|lang=lattice\n"
+            "region|picture=1|slot=selected|cells=\n",
+            encoding="utf-8",
+        )
+        empty_region_status, empty_region_audit = audit_status(empty_region)
+        if empty_region_status != 0:
+            raise AssertionError(
+                "audit rejected a synthetic empty resolved region: "
+                + "; ".join(
+                    finding.msg for finding in empty_region_audit.findings
+                )
+            )
+
+        malformed_region = work / "malformed-region.tnlog"
+        malformed_region.write_text(
+            "picture|id=1|lang=lattice\n"
+            "region|picture=1|slot=selected|cells=1-1,bad\n",
+            encoding="utf-8",
+        )
+        malformed_region_status, malformed_region_audit = audit_status(
+            malformed_region
+        )
+        if malformed_region_status != 1 or not any(
+                finding.rule == "malformed-event"
+                for finding in malformed_region_audit.findings):
+            raise AssertionError("audit weakened non-empty region validation")
 
         missing_ink = work / "missing-ink-geometry.tnlog"
         missing_ink.write_text(
