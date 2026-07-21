@@ -1954,7 +1954,27 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
                       { \tl_set:Nn \l__tenkz_fcombined_tl {west} } } }
           } }
   }
+\tl_new:N \l__tenkz_fusebound_tl
 \cs_new_protected:Npn \tenkz_node_fuse:nn #1#2
+  {
+    \tenkz_enclosure_allocate:nN {cell:#1-#2} \l__tenkz_fusebound_tl
+    \begin{scope}[local~bounding~box=\l__tenkz_fusebound_tl]
+      \tenkz_node_fuse_aux:nn {#1}{#2}
+    \end{scope}
+    % Keep topology bookkeeping in the picture scope: the measurement scope
+    % above is deliberately local and must not swallow the bar's row claims.
+    \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+    \int_step_inline:nnn { #1 + 1 } { #1 + \l__tenkz_frows_int - 1 }
+      {
+        \prop_put:Nen \l__tenkz_kind_prop  {##1-#2} {fusec}
+        \prop_put:Nen \l__tenkz_owner_prop {##1-#2} {#2}
+        % Every row claimed by the bar denotes the same measured ink.  Register
+        % each continuation cell so a span on any crossed row resolves to it.
+        \tenkz_enclosure_register_existing:eV
+          {cell:##1-#2} \l__tenkz_fusebound_tl
+      }
+  }
+\cs_new_protected:Npn \tenkz_node_fuse_aux:nn #1#2
   {
     % Face notation is primary.  A centred west/east face is the fused
     % face; the opposite integer-list/rows face carries the separate bonds.
@@ -2001,14 +2021,6 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
                   { \l__tenkz_tmp_dim } { bond }
               }
           }
-      }
-    % the bar owns its column in every spanned row; continuation rows are
-    % marked `fusec` so the node pass does not draw the bar twice
-    \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
-    \int_step_inline:nnn { #1 + 1 } { #1 + \l__tenkz_frows_int - 1 }
-      {
-        \prop_put:Nen \l__tenkz_kind_prop  {##1-#2} {fusec}
-        \prop_put:Nen \l__tenkz_owner_prop {##1-#2} {#2}
       }
     % the bar label sits above the combined stub, clear of both wires
     \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl

@@ -74,6 +74,14 @@ SOURCE = r"""
   \tn{D}\tnspan[box, label pos=east]{2}{S} & \tn{E} &
 \end{tenkz}
 
+% A fusion bar has no glyph node, but its wedge, fused stub, and label are
+% measured ink.  A box containing only that bar must resolve on either row
+% instead of manufacturing an unregistered owner-cell name.
+\begin{tenkz}[rows={wire,wire}]
+  \tnfuse[span=2]{V}\tnspan[box, label pos=west]{1}{F} \\
+  \tnspan[box, label pos=east]{1}{G}
+\end{tenkz}
+
 % A three-sheet lattice body remains a live execute-once customization layer
 % after the public region command moves to dialect dispatch.  The global count
 % detects both a skipped body and an accidental once-per-sheet replay.
@@ -219,7 +227,7 @@ def main() -> int:
             raise AssertionError("valid enclosure fixture failed structural audit")
 
         pictures = audit.pictures
-        if len(pictures) != 7:
+        if len(pictures) != 8:
             summary = [
                 (picture.ident, picture.lang,
                  [event.kind for event in picture.events])
@@ -236,10 +244,12 @@ def main() -> int:
             for event in spans
         }
         expected_spans = {
+            ("1", "1", "1", "box"),
             ("1", "1", "3", "box"),
+            ("2", "1", "1", "box"),
             ("2", "1", "2", "box"),
         }
-        if not expected_spans <= got_spans or len(spans) != 3:
+        if not expected_spans <= got_spans or len(spans) != 5:
             raise AssertionError(f"unexpected span records: {got_spans}")
 
         joins = [event for event in audit.events() if event.kind == "join"]
