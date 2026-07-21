@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 import TNLean.MPS.MPDO.VerticalCoisometry
 import TNLean.MPS.MPDO.HorizontalBlocking
+import TNLean.MPS.CanonicalForm.BNTCharacterization
+import TNLean.MPS.CanonicalForm.BNTTransport
 import TNLean.MPS.MPDO.VerticalBNTConstruction
 import TNLean.MPS.MPDO.VerticalSpectral
 import TNLean.MPS.Tactic.Basic
@@ -25,6 +27,8 @@ Appendix C.4, lines 2020--2029.
   reconstruction, horizontal canonical-form, and positivity hypotheses.
 * `RetainedProductSpectralFamily.flat_sameMPV₂Pos`: the single enumerated
   active family reconstructs the retained product at every positive length.
+* `FlatBlockedBNTComparison`: the one-way gauge-phase comparison from active
+  product corners to a blocked two-site BNT.
 
 ## References
 
@@ -585,6 +589,11 @@ nonvanishing hypothesis on the product of the two copy weights: a zero block
 is passed unchanged to the subsequent spectral decomposition, where it has no
 active normal summands.
 
+**Local fix (Figure-11 fixed-pair support):** The conclusion is retained for
+every copy pair, but only its nonzero spectral corners become active fusion
+summands.  Unused blocked labels are represented later by empty fibers.
+Documented in `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors
     {g d D : ℕ} (dim mult : Fin g → ℕ)
@@ -1064,6 +1073,145 @@ theorem flat_sameMPV₂Pos
     (retainedVerticalProductTensor dim mult weight B)
     S.flatCoefficient S.flatBlock S.flatInclusion
     S.flatInclusion_isometry S.flat_intertwine_adjoint S.flat_reconstruction
+
+/-- Every active normal corner of the retained product is gauge-phase
+equivalent to some normal tensor in a BNT for the blocked vertical tensor.
+
+This is only the coverage direction: a blocked BNT label need not occur in
+the product of a prescribed pair, or even among the active product corners.
+The conclusion therefore chooses a blocked label for each active corner and
+makes no converse assertion.
+
+**Scope restriction (active product BNT):** Proposition 2.7 classifies the
+nonzero canonical-form coefficients.  Hence this theorem covers active
+product corners only and does not assert surjectivity onto the blocked BNT.
+Documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+**Local fix (Figure-11 fixed-pair support):** A fixed product pair may have no
+corner of a given blocked label; such a label has an empty multiplicity fiber.
+Documented in `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029, using Proposition 2.7
+(`prop:char-BNT`). -/
+theorem exists_blockedBNT_gaugePhase_of_flatBlock
+    {d g₂ : ℕ}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (dim₂ : Fin g₂ → ℕ)
+    (A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ))
+    [∀ γ, NeZero (dim₂ γ)]
+    (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors
+      (verticalTensor (blockTwo M)) (fun γ ↦ ⟨dim₂ γ, A₂ γ⟩)) :
+    ∀ j : Fin (Fintype.card S.ActiveLabel),
+      ∃ γ : Fin g₂, ∃ hdim : dim₂ γ = S.flatDim j,
+      ∃ X : GL (Fin (S.flatDim j)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+        ∀ ab, S.flatBlock j ab = ζ •
+          ((X : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) *
+            (cast (congr_arg (MPSTensor (D * D)) hdim) (A₂ γ)) ab *
+              (↑(X⁻¹) : Matrix (Fin (S.flatDim j))
+                (Fin (S.flatDim j)) ℂ)) := by
+  letI : ∀ j, NeZero (S.flatDim j) := fun j ↦
+    ⟨(S.flatDim_pos j).ne'⟩
+  have hsquare := verticalTensor_blockTwo_squared_coisometry_reconstruction
+    M (verticalAssembledTensor dim mult weight B) U hU hReconstruct
+  have hSame : MPSTensor.SameMPV₂Pos (verticalTensor (blockTwo M))
+      (retainedVerticalProductTensor dim mult weight B) :=
+    MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction
+      (verticalTensor (blockTwo M))
+      (retainedVerticalProductTensor dim mult weight B)
+      (verticalCoisometrySquare U) hsquare.1 hsquare.2
+  have hBNTProduct : MPSTensor.IsCPSVBasisOfNormalTensors
+      (retainedVerticalProductTensor dim mult weight B)
+      (fun γ ↦ ⟨dim₂ γ, A₂ γ⟩) :=
+    hBNT₂.of_sameMPV₂Pos hSame
+  have hCharacterization :=
+    (MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
+      (retainedVerticalProductTensor dim mult weight B)
+      S.flatCoefficient S.flatBlock A₂ S.flatBlock_normal
+      S.flat_sameMPV₂Pos).mp hBNTProduct
+  intro j
+  exact hCharacterization.2.1 j (S.flatCoefficient_ne j)
+
+/-- A simultaneous choice of the blocked BNT label, dimension equality,
+gauge, and phase for every enumerated active product corner.
+
+The map `label` need not be surjective: unused blocked BNT labels are allowed.
+
+**Scope restriction (active product BNT):** This structure records only the
+one-way coverage of active product corners.  Empty fibers record unused
+blocked labels.  Documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+**Local fix (Figure-11 fixed-pair support):** No nonempty multiplicity space is
+asserted for an unused blocked label.  Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+structure FlatBlockedBNTComparison {g₂ : ℕ}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (dim₂ : Fin g₂ → ℕ)
+    (A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)) where
+  /-- Blocked BNT label covering an active product corner. -/
+  label : Fin (Fintype.card S.ActiveLabel) → Fin g₂
+  /-- Equality of the blocked and active corner bond dimensions. -/
+  dim_eq : ∀ j, dim₂ (label j) = S.flatDim j
+  /-- Invertible gauge from the chosen blocked tensor to the active corner. -/
+  gauge : ∀ j, GL (Fin (S.flatDim j)) ℂ
+  /-- Unit-modulus proportionality phase. -/
+  phase : Fin (Fintype.card S.ActiveLabel) → ℂ
+  /-- Every chosen phase has modulus one. -/
+  phase_norm : ∀ j, ‖phase j‖ = 1
+  /-- Exact gauge-phase relation for every tensor letter. -/
+  block_eq : ∀ j ab, S.flatBlock j ab = phase j •
+    ((gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) *
+      (cast (congr_arg (MPSTensor (D * D)) (dim_eq j))
+        (A₂ (label j))) ab *
+      (↑((gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
+        (Fin (S.flatDim j)) ℂ))
+
+/-- The active-to-blocked BNT comparisons can be chosen simultaneously.
+
+**Scope restriction (active product BNT):** The chosen label map need not be
+surjective.  Documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+**Local fix (Figure-11 fixed-pair support):** Unused blocked labels are left
+for empty multiplicity fibers.  Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`. -/
+theorem exists_flatBlockedBNTComparison
+    {d g₂ : ℕ}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (dim₂ : Fin g₂ → ℕ)
+    (A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ))
+    [∀ γ, NeZero (dim₂ γ)]
+    (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors
+      (verticalTensor (blockTwo M)) (fun γ ↦ ⟨dim₂ γ, A₂ γ⟩)) :
+    Nonempty (FlatBlockedBNTComparison S dim₂ A₂) := by
+  classical
+  have hExists := exists_blockedBNT_gaugePhase_of_flatBlock
+    S M U hU hReconstruct dim₂ A₂ hBNT₂
+  choose label dim_eq gauge phase phase_norm block_eq using hExists
+  exact ⟨{
+    label := label
+    dim_eq := dim_eq
+    gauge := gauge
+    phase := phase
+    phase_norm := phase_norm
+    block_eq := block_eq }⟩
 
 /-- Composing with the squared vertical reconstruction gives an isometry into
 the blocked ambient bond space. -/
