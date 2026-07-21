@@ -6,11 +6,11 @@ Authors: TNLean contributors
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3b
 
 /-!
-# Transport and fused-leg utilities for overlapping region blocks
+# Transport and fused-leg lemmas for overlapping region blocks
 
-This file provides transport lemmas for physical configurations and blocked-region weights,
+This file proves transport lemmas for physical configurations and blocked-region weights,
 together with surjectivity of the physical leg fused from the blue and complement blocks of a
-three-block geometry. These utilities support the live overlapping-union route and later region
+three-block geometry. These results support the overlapping-union argument and later region
 transport constructions.
 -/
 
