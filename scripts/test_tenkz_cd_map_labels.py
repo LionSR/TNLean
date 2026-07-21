@@ -214,6 +214,56 @@ TYPED_MAP_VISIBLE_GEOMETRY = r"""
 \end{document}
 """
 
+NESTED_TYPED_MAP_OWNERSHIP = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkzcd}[maps, species={channel}]
+  \tnpic[inline]{\tn[box]{A} & \tn[box]{B}} &
+  \tnpic[inline]{\tn[box]{C} & \tn[box]{D}} \\
+  \tnpic[inline]{\tn[box]{E} & \tn[box]{F}} &
+  \tnpic[inline]{\tn[box]{G} & \tn[box]{H}}
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{f}
+  \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]{g}
+\end{tenkzcd}
+\makeatletter
+\def\tenkzassertrelax#1{%
+  \expandafter\ifx\csname #1\endcsname\relax\else
+    \PackageError{tenkz test}{Audit ownership state '#1' was not released}{}%
+  \fi}
+\ifx\tenkz@auditinstallowner\relax\else
+  \PackageError{tenkz test}{Per-node audit claimant leaked its scope}{}%
+\fi
+\tenkzassertrelax{tenkz@audittoken@tenkzmap-1-1}
+\tenkzassertrelax{tenkz@audittoken@tenkzmap-1-2}
+\tenkzassertrelax{tenkz@audittoken@tenkzmap-2-1}
+\tenkzassertrelax{tenkz@audittoken@tenkzmap-2-2}
+\def\tenkzassertpictureclean#1{%
+  \tenkzassertrelax{tenkz@audittoken@tz#1-1-1}%
+  \tenkzassertrelax{tenkz@audittoken@tz#1-1-2}%
+  \tenkzassertrelax{tenkz@audittoken@tzbw#1}%
+  \tenkzassertrelax{tenkz@audittoken@tzbe#1}%
+  \tenkzassertrelax{tenkz@glyphsnaptoken@tzbw#1}%
+  \tenkzassertrelax{tenkz@glyphsnaptoken@tzbe#1}}
+\tenkzassertpictureclean{2}
+\tenkzassertpictureclean{3}
+\tenkzassertpictureclean{4}
+\tenkzassertpictureclean{5}
+\newcount\tenkztesttoken
+\tenkztesttoken=1
+\loop
+  \edef\tenkztesttokenname{\the\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@auditowner@\tenkztesttokenname}%
+  \tenkzassertrelax{tenkz@snapshotdone@\tenkztesttokenname}%
+  \tenkzassertrelax{tenkz@glypharcflag@\tenkztesttokenname}%
+  \tenkzassertrelax{tenkz@glypharc@\tenkztesttokenname}%
+  \ifnum\tenkztesttoken<\tenkz@glyphsnapuid
+    \advance\tenkztesttoken by 1
+\repeat
+\makeatother
+\end{document}
+"""
+
 
 SCALAR = re.compile(r"TENKZ-(FLOOR|DAYLIGHT|OVERRIDE)-SP=(-?[0-9]+)")
 MAP_VALUE = re.compile(
@@ -397,6 +447,36 @@ def main() -> int:
                     f"typed-map picture {picture} wire cuts disagree with "
                     f"visible label {label_bounds}: {segments}"
                 )
+
+        nested_tex = work / "nested-typed-map-ownership.tex"
+        nested_tex.write_text(NESTED_TYPED_MAP_OWNERSHIP, encoding="utf-8")
+        nested_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", nested_tex.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if nested_run.returncode:
+            raise AssertionError(
+                "nested typed-map ownership fixture did not compile: "
+                + nested_run.stdout[-1000:]
+            )
+        nested_log = (work / "nested-typed-map-ownership.tnlog").read_text(
+            encoding="utf-8"
+        )
+        outer_glyphs = [
+            line for line in nested_log.splitlines()
+            if line.startswith("glyph-geometry|picture=1|")
+        ]
+        if len(outer_glyphs) != 4 or any("|shape=rect|" not in line
+                                         for line in outer_glyphs):
+            raise AssertionError(
+                "nested typed-map cells did not retain four owned rectangles: "
+                + repr(outer_glyphs)
+            )
 
     scalars = {name: int(value) for name, value in SCALAR.findall(run.stdout)}
     maps = {index: {} for index in range(1, 7)}
