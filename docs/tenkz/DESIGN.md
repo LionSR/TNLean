@@ -145,7 +145,7 @@ Cell commands (expandable; legal only inside `tenkz`/`\tnpic`):
 - `\tnfuse[⟨keys⟩]{V}` — **fixed signature (single optional argument).** n-to-1 trivalent map. Keys: `span=⟨k⟩` (wire rows spanned, default 2) and the same `west at=` / `east at=` face data.  A centred face is the one fused port; the opposite local row slots are the separate ports.  A sparse list, such as `{1,3}`, draws, contracts, and counts only those slots.  `combined=west|east` remains the compatibility spelling (default `west`). *Why a command:* it rewrites wire topology (merges rows) — a different grammatical class from `\tn`, whose contract is to terminate the wires of its own rows.
 - `\tndots[⟨keys⟩]` — the canonical ellipsis cell: interrupts the implicit wire, typesets dots on the wire axis. The only legal ellipsis (G17 lints the literals).
 - `\tnghost{A}` — invisible sizing atom.
-- `\tnspan[⟨keys⟩]{⟨cols⟩}{⟨label⟩}` — column-range decoration anchored at the current cell: `brace above|below`, `box`, `shade`. Drawn in the deferred pass; spans ellipses.
+- `\tnspan[⟨keys⟩]{⟨cols⟩}{⟨label⟩}` — column-range decoration anchored at the current cell: `brace above|below` or measured `box`, with `label pos=` at a compass point, corner, or centre.  A box fits the rendered member glyphs, including ellipses and asymmetric row ranges, while legs remain outside it.  Unknown modes, including the removed `shade` spelling, fail closed.
 - `\tncut[⟨keys⟩]{⟨label⟩}` — labeled dashed bipartition line after the current column (quantikz `\slice`).
 
 ### 2.2 `tenkzcd` — commutative diagrams
@@ -296,7 +296,17 @@ The environment body is a live execute-once customization layer. It records any 
 `\begin{tenkzfree}[⟨keys⟩] … \end{tenkzfree}` — a themed tikzpicture preset for genuinely non-grid diagrams (MERA, lassos, star tensors, ad hoc contractions).
 
 - `\tnput[⟨keys⟩]{⟨name⟩}{(x,y)}{A}` — place any L1 glyph with typed anchors.
-- `\tnjoin[route=straight|hv|vh|arc, trace=above|below|right, label=, dir=, fused]{⟨a.E⟩}{⟨b.W⟩}` — typed connection; carries the runtime port-type assertion (the only place assertions still fire).
+- `\tnjoin[name=⟨name⟩, route=straight|hv|vh|arc, trace=above|below|right, label=, dir=, fused]{⟨a.E⟩}{⟨b.W⟩}` — typed connection; an optional name makes the measured route and its label available to a region.
+- `\tnregion[group|slot=selected|secondary|complement|collar, outline, label=, label pos=, name=]{⟨members⟩}` — a measured enclosure over comma-separated names of earlier `\tnput` atoms, named `\tnjoin` routes, or named regions.  The public command dispatches to this name-set grammar in `tenkzfree` and to cell-set algebra in `tenkzlattice`.
+
+The free environment body is an execute-once customization layer: atoms,
+joins, and regions remain ordinary body commands, and the shared semantic
+TikZ styles (`group region`, `region selected`, and the other region slots)
+may be extended with `/.append style` without bypassing measured geometry.
+Every enclosure is drawn on the background layer, so later members cannot
+be covered by its fill.  The historical `/tenkz/region` key family remains
+the lattice option path for compatibility; public `\tnregion` dispatch does
+not rename document-level lattice extensions.
 
 ### 2.6 Setup and extension
 
@@ -445,7 +455,7 @@ Two-layer split: **semantic styles** (what a mark means) bind to **theme slots**
 | `trace` | `periodic`/`trace=` arcs | 0.55pt | racetrack, clearance 0.55·pitch |
 | `cut` | `\tncut` | 0.40pt dashed | |
 | `brace` | `\tnspan[brace *]` | 0.40pt | annotation ink |
-| `group box` | `\tnspan[box/shade]` | 0.40pt dashed / shade | |
+| `group region` | `\tnspan[box]`, `\tnregion[group]` | 0.40pt dashed, no fill | one meaning and one measured renderer in grid and free tiers |
 | `ellipsis` | `\tndots` | label ink | the only legal dots |
 | `label` | all labels | — | quadrant via `pos=auto` (G7) |
 | `region selected` | `slot=selected` | 0.80pt outline + fill | shaded R in B6 |
@@ -570,14 +580,14 @@ not hand-maintained prose — the two drift out of step otherwise.
 
 | Dialect | Content event kinds | Source module |
 |---|---|---|
-| `grid` | `atom`, `bond`, `faceports`, `pairleg`, `hole`, `cup`, `boundary`, `phtrace`, `pairtrace`, `trace`, `hooks` | `tenkz-grid.code.tex` |
-| `free` | `atom`, `join` | `tenkz-free.code.tex` |
+| `grid` | `atom`, `bond`, `faceports`, `pairleg`, `hole`, `cup`, `boundary`, `phtrace`, `pairtrace`, `trace`, `hooks`, `span` | `tenkz-grid.code.tex` |
+| `free` | `atom`, `join`, `region` | `tenkz-free.code.tex` |
 | `lattice` | `lattice`, `site`, `region`, `edge`, `cup`, `trace`, `pairtrace`, `label-anchor-site`, `boundary` | `tenkz-lattice.code.tex` |
 | `cd` | `cdcell`, `cdobject`, `cdmap`, `cdarrow`, `tree` | `tenkz-cd.code.tex` |
 
-Notes against the previous (wrong) table: grid never emits `leg`, `fuse`,
-or `span` — those names do not occur in the code; `\tnput`'s event kind
-is literally `atom` (with a `kind=` attribute selecting its inkless-endpoint
+Notes against the previous table: grid never emits `leg` or `fuse`; a
+deferred range decoration emits `span` with its row, column, length, and
+kind.  `\tnput`'s event kind is literally `atom` (with a `kind=` attribute selecting its inkless-endpoint
 skin), not `put`; `lattice` was previously undocumented entirely, and its
 `tenkzplanes` pictures do emit a `boundary` line (contradicting a stale
 `ch-reference.tex` sidenote that has been corrected alongside this table).
@@ -608,9 +618,9 @@ Structural in the grid: bonds are virtual–virtual and pairings physical–phys
 
 ### 5.4 Invariants
 
-*Hard errors (compile time):* leg-parity violations in paired rows; unequal column counts (cell-coordinate error message); lattice cell sets outside grid bounds; unresolved named sets; polygon arrows to nonexistent vertices; duplicate `\tndefine`; port-type mismatch in `\tnjoin`.
+*Hard errors (compile time):* leg-parity violations in paired rows; unequal column counts (cell-coordinate error message); out-of-range spans; unknown span modes; lattice cell sets outside grid bounds; unresolved or duplicate enclosure names; polygon arrows to nonexistent vertices; duplicate `\tndefine`; port-type mismatch in `\tnjoin`.
 
-*Hard errors (audit time):* empty picture — any `lang=grid|lattice|free` picture with zero atom/region events (would have caught all 33 fake diagrams); a `figure`-wrapped picture whose body emitted no events (caption-mismatch class).
+*Hard errors (audit time):* malformed region records (lattice regions require `cells=`, free regions require `members=`); duplicate free enclosure names; a free region member not declared by an earlier atom, named join, or named region; empty picture — any `lang=grid|lattice|free` picture with zero content events (would have caught all 33 fake diagrams); a `figure`-wrapped picture whose body emitted no events (caption-mismatch class).
 
 *Advisories (never build failures):*
 - **Ellipsis policy:** a `periodic` chain of ≥ 4 columns without `\tndots`.
@@ -637,23 +647,25 @@ Contexts/role/profile hand-entered metadata and their assert-equal churn (now de
 
 ### 5.9 Key-surface census (2026-07 gate)
 
-130 leaf `/tenkz` pgfkeys, across 12 families — counted by parsing every `/tenkz(...)/.code`, `.store~in`, and `.is~choice` declaration in `tex/tenkz/*.code.tex`, excluding choice-value branches and family roots:
+142 leaf `/tenkz` pgfkeys, across 14 families — counted by parsing every `/tenkz(...)/.code`, `.store~in`, and `.is~choice` declaration in `tex/tenkz/*.code.tex`, excluding choice-value branches and family roots:
 
 | Family | Leaf keys | Source |
 |---|---:|---|
 | `/tenkz` (root) | 5 | `tenkz-core.code.tex` |
 | `/tenkz/grid` | 23 | `tenkz-grid.code.tex` |
 | `/tenkz/cell` | 23 | `tenkz-grid.code.tex` |
+| `/tenkz/span` | 4 | `tenkz-grid.code.tex` |
 | `/tenkz/lattice` | 27 | `tenkz-lattice.code.tex` |
 | `/tenkz/region` | 7 | `tenkz-lattice.code.tex` |
 | `/tenkz/edge` | 5 | `tenkz-lattice.code.tex` |
 | `/tenkz/site` | 3 | `tenkz-lattice.code.tex` |
 | `/tenkz/put` | 10 | `tenkz-free.code.tex` |
-| `/tenkz/join` | 8 | `tenkz-free.code.tex` |
+| `/tenkz/join` | 9 | `tenkz-free.code.tex` |
+| `/tenkz/free region` | 7 | `tenkz-free.code.tex` |
 | `/tenkz/cd` | 8 | `tenkz-cd.code.tex` |
 | `/tenkz/tree` | 6 | `tenkz-cd.code.tex` |
 | `/tenkz/arrow` | 5 | `tenkz-cd.code.tex` |
-| **total** | **130** | |
+| **total** | **142** | |
 
 For scale, quantikz's public key surface is roughly 40 — tenkz is a wider language by design (four sub-languages, not one), but the ratio is worth carrying forward rather than re-discovering at the next gate. No family here is flagged for removal: this is a measurement, not a verdict. Pruning candidates (a family whose keys have exactly one call site across `tex/tenkz/examples/` and the blueprint chapters) are **0.9-freeze material** — the manual and reference chapter become the binding contract at 0.9 (GOAL.md), and a key still resting on a single call site at that point is the moment to cut it, not before. Record the count at every gate (issue #4158); prune later.
 

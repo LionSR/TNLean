@@ -16,6 +16,14 @@ Hard errors (exit 1):
   malformed-tree       A tree's canonical numeric bracketing is not a
                        rooted binary tree, or disagrees with its declared
                        leaf and vertex counts.
+  malformed-region     A lattice region lacks cells= or a free region lacks
+                       members=, so its declarative extent is unavailable.
+  unknown-region-member
+                       A free region references a name before an atom, join,
+                       or earlier named region declares it.
+  duplicate-enclosure-name
+                       Two free atoms, joins, or regions share one semantic
+                       enclosure name in a picture.
   duplicate-picture    Two `picture` lines share one id: picture identity
                        is the key of every back-reference.
   conflicting-faceports
@@ -111,8 +119,8 @@ EMPTY_CHECK_LANGS = {"grid", "lattice", "free"}
 # (see Picture.content), so listing them here is harmless but never load-bearing.
 DIALECT_KINDS = {
     "grid": {"atom", "bond", "faceports", "pairleg", "trace", "pairtrace",
-             "phtrace", "hooks", "cup", "hole", "warning", "boundary"},
-    "free": {"atom", "join"},
+             "phtrace", "hooks", "cup", "hole", "span", "warning", "boundary"},
+    "free": {"atom", "join", "region"},
     "lattice": {"lattice", "site", "region", "edge", "cup", "trace",
                 "pairtrace", "label-anchor-site", "boundary", "warning"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
@@ -520,6 +528,20 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
              "role": _enum("none", "operator", "marked", "extra", "passive"),
              "species": _any},
     "join": {"picture": _is_int, "from": _any, "to": _any},
+    "lattice": {"picture": _is_int, "rows": _is_positive_int,
+                "cols": _is_positive_int, "sheets": _is_positive_int,
+                "roles": _any},
+    "site": {"picture": _is_int, "cell": _any, "mode": _enum("removed")},
+    "edge": {"picture": _is_int, "from": _any, "to": _any,
+             "role": _enum("none", "operator", "marked", "extra", "passive")},
+    "span": {"picture": _is_int, "row": _is_positive_int,
+             "col": _is_positive_int, "length": _is_positive_int,
+             "kind": _enum("brace above", "brace below", "box")},
+    "region": {"picture": _is_int, "lang": _enum("free", "lattice"),
+               "slot": _enum("selected", "secondary", "complement",
+                             "collar", "group"),
+               "cells": _any, "members": _any, "outline": _enum("0", "1"),
+               "name": _any},
 }
 
 
@@ -734,6 +756,57 @@ class Audit:
                                  f"{self.log_path.name}:{e.line}",
                                  f"atom in {pic.lang} picture {pic.ident} lacks "
                                  f"{want}=")
+                elif e.kind == "region":
+                    want = "cells" if pic.lang == "lattice" else "members"
+                    if want not in e.attrs:
+                        self.hard("malformed-region",
+                                  f"{self.log_path.name}:{e.line}",
+                                  f"region in {pic.lang} picture {pic.ident} "
+                                  f"lacks {want}=")
+
+    def check_free_region_names(self) -> None:
+        """Validate the ordered named-member grammar recorded by free regions.
+
+        Atom names, optional join names, and optional region names share one
+        namespace.  Region members must already be declared, which also makes
+        nesting direction explicit and rejects forward/cyclic references.
+        """
+        for pic in self.pictures:
+            if pic.lang != "free":
+                continue
+            declared: dict[str, Event] = {}
+            for event in pic.events:
+                name: Optional[str] = None
+                if event.kind == "atom":
+                    name = event.attrs.get("name")
+                elif event.kind == "join":
+                    name = event.attrs.get("name")
+                elif event.kind == "region":
+                    members = [
+                        member.strip()
+                        for member in event.attrs.get("members", "").split(",")
+                        if member.strip()
+                    ]
+                    for member in members:
+                        if member not in declared:
+                            self.hard(
+                                "unknown-region-member",
+                                f"{self.log_path.name}:{event.line}",
+                                f"free region references {member!r} before a "
+                                "named atom, join, or region declares it",
+                            )
+                    name = event.attrs.get("name")
+                if not name:
+                    continue
+                if name in declared:
+                    self.hard(
+                        "duplicate-enclosure-name",
+                        f"{self.log_path.name}:{event.line}",
+                        f"free enclosure name {name!r} was already declared "
+                        f"at line {declared[name].line}",
+                    )
+                else:
+                    declared[name] = event
 
     def check_label_overlaps(self) -> None:
         """Reject label intersections with exact sibling visible geometry."""
@@ -1521,6 +1594,7 @@ class Audit:
         self.link_tex()
         self.check_empty_pictures()
         self.check_dialects()
+        self.check_free_region_names()
         self.check_bbox_coverage()
         self.check_label_overlaps()
         self.check_pairleg_faceports()

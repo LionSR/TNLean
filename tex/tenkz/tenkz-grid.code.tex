@@ -460,11 +460,44 @@
 % swallows a paired partner's leg (that pairing now warns).
 \NewDocumentCommand \tnskip { }
   { \tenkz_record:nnn {skip}{}{} }
+\tl_new:N \l__tenkz_spankind_tl
+\tl_new:N \l__tenkz_spanlabelpos_tl
+\pgfkeys{
+  /tenkz/span/.is~family,
+  /tenkz/span/brace~above/.code={
+      \tl_set:Nn \l__tenkz_spankind_tl {brace~above}},
+  /tenkz/span/brace~below/.code={
+      \tl_set:Nn \l__tenkz_spankind_tl {brace~below}},
+  /tenkz/span/box/.code={\tl_set:Nn \l__tenkz_spankind_tl {box}},
+  /tenkz/span/label~pos/.is~choice,
+  /tenkz/span/label~pos/north/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {north}},
+  /tenkz/span/label~pos/south/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {south}},
+  /tenkz/span/label~pos/east/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {east}},
+  /tenkz/span/label~pos/west/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {west}},
+  /tenkz/span/label~pos/north~east/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {north~east}},
+  /tenkz/span/label~pos/north~west/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {north~west}},
+  /tenkz/span/label~pos/south~east/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {south~east}},
+  /tenkz/span/label~pos/south~west/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {south~west}},
+  /tenkz/span/label~pos/center/.code={
+      \tl_set:Nn \l__tenkz_spanlabelpos_tl {center}},
+}
 \NewDocumentCommand \tnspan { O{brace~above} m m }
   {
+    \tl_set:Nn \l__tenkz_spankind_tl {brace~above}
+    \tl_set:Nn \l__tenkz_spanlabelpos_tl {north}
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/span}{#1} }
     \seq_put_right:Ne \l__tenkz_spans_seq
       { { \int_use:N \l__tenkz_row_int }{ \int_use:N \l__tenkz_col_int }
-        { #2 }{ \exp_not:n{#1} }{ \exp_not:n{#3} } }
+        { #2 }{ \l__tenkz_spankind_tl }{ \l__tenkz_spanlabelpos_tl }
+        { \exp_not:n{#3} } }
   }
 \NewDocumentCommand \tncut { O{} m }
   {
@@ -1409,7 +1442,8 @@
       }
     \seq_if_empty:NF \l__tenkz_spans_seq
       {
-        \msg_warning:nnn {tenkz}{vertical-unsupported} {\token_to_str:N \tnspan~braces}
+        \msg_warning:nnn {tenkz}{vertical-unsupported}
+          {\token_to_str:N \tnspan~decorations}
         \seq_clear:N \l__tenkz_spans_seq
       }
     \seq_if_empty:NF \l__tenkz_cuts_seq
@@ -1448,6 +1482,7 @@
     \begin{tikzpicture}
       [ tenkz~every~picture,
         baseline={(0pt,\dim_use:N \l__tenkz_axis_dim)} ]
+      \pgfsetlayers{background,main}
       \tenkz_place_nodes:
       \tenkz_draw_bonds:
       \tenkz_compute_cups:
@@ -1555,6 +1590,8 @@
             {ghost}{ \tenkz_node_ghost:nn {#1}{#2} }
             {fuse} { \tenkz_node_fuse:nn {#1}{#2} }
           }
+        \prop_get:NnNT \l__tenkz_name_prop {#1-#2} \l_tmpa_tl
+          { \tenkz_enclosure_register_existing:eV {cell:#1-#2} \l_tmpa_tl }
       }
   }
 
@@ -3441,7 +3478,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \cs_new_protected:Npn \tenkz_draw_decorations:
   {
     \seq_map_inline:Nn \l__tenkz_spans_seq
-      { \tenkz_draw_span:nnnnn ##1 }
+      { \tenkz_draw_span:nnnnnn ##1 }
     \seq_map_inline:Nn \l__tenkz_cuts_seq
       { \tenkz_draw_cut:nnn ##1 }
     \seq_map_inline:Nn \l__tenkz_bondlabels_seq
@@ -3760,25 +3797,59 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
         + \tenkz@dim{\tenkz@r@fuseover} }
   }
 
-\cs_new_protected:Npn \tenkz_draw_span:nnnnn #1#2#3#4#5
+\clist_new:N \l__tenkz_spanmembers_clist
+\tl_new:N \l__tenkz_spanmembers_tl
+\tl_new:N \l__tenkz_spanstyle_tl
+\tl_new:N \l__tenkz_spanlabel_tl
+\tl_new:N \l__tenkz_spanname_tl
+\bool_new:N \l__tenkz_spanvalid_bool
+\msg_new:nnn { tenkz } { span-range }
+  {
+    A~\token_to_str:N \tnspan~at~row~#1,~column~#2~has~length~#3,~but~
+    this~picture~has~#4~columns.~Use~a~positive~length~whose~last~column~
+    remains~inside~the~grid.
+  }
+
+\cs_new_protected:Npn \tenkz_draw_span:nnnnnn #1#2#3#4#5#6
+  {
+    \bool_set_true:N \l__tenkz_spanvalid_bool
+    \bool_lazy_or:nnT
+      { \int_compare_p:nNn {#3} < {1} }
+      { \int_compare_p:nNn { #2 + #3 - 1 } > {\l__tenkz_ncols_int} }
+      {
+        \msg_error:nnxxxx {tenkz}{span-range}{#1}{#2}{#3}
+          {\int_use:N \l__tenkz_ncols_int}
+        \bool_set_false:N \l__tenkz_spanvalid_bool
+      }
+    \bool_if:NT \l__tenkz_spanvalid_bool
+      {
+        \str_case:nn {#4}
+          {
+            {brace~below}
+              { \tenkz_draw_span_brace:nnnnn {#1}{#2}{#3}{below}{#6} }
+            {brace~above}
+              { \tenkz_draw_span_brace:nnnnn {#1}{#2}{#3}{above}{#6} }
+            {box} { \tenkz_draw_span_box:nnnnn {#1}{#2}{#3}{#5}{#6} }
+          }
+        \tenkz@event{span|picture=\the\tenkz@pictureid|row=#1|col=#2|length=#3|kind=#4}
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_span_brace:nnnnn #1#2#3#4#5
   {
     \dim_set:Nn \l__tenkz_x_dim
       { \tenkz_colx:n {#2} - \tenkz@dim{\tenkz@r@glyphbox} }
     \dim_set:Nn \l__tenkz_tmp_dim
       { \tenkz_colx:n { #2 + #3 - 1 } + \tenkz@dim{\tenkz@r@glyphbox} }
-    % the brace sits one daylight gap beyond the span's silhouette,
-    % measured over ITS columns only -- a brace over unlabeled cells is
-    % not pushed out by labels elsewhere in the row, and a box-mode
-    % brace hugs the (inscribed-label) boxes
-    \str_if_eq:nnTF {#4} {brace~below}
+    \str_if_eq:nnTF {#4} {below}
       {
         \tenkz_silhouette:nnnnN {#1} {#2} { #2 + #3 - 1 } {down}
           \l__tenkz_y_dim
         \dim_set:Nn \l__tenkz_y_dim
           { \tenkz_rowy:n {#1} - \l__tenkz_y_dim
             - \tenkz@dim{\tenkz@r@daylight} }
-        % brace bulges downward: trace right-to-left, label below
-        \tenkz_span_brace:NNnnn \l__tenkz_tmp_dim \l__tenkz_x_dim {north} {-1} {#5}
+        \tenkz_span_brace:NNnnn \l__tenkz_tmp_dim \l__tenkz_x_dim
+          {north} {-1} {#5}
       }
       {
         \tenkz_silhouette:nnnnN {#1} {#2} { #2 + #3 - 1 } {up}
@@ -3786,9 +3857,40 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
         \dim_set:Nn \l__tenkz_y_dim
           { \tenkz_rowy:n {#1} + \l__tenkz_y_dim
             + \tenkz@dim{\tenkz@r@daylight} }
-        % brace bulges upward: trace left-to-right, label above
-        \tenkz_span_brace:NNnnn \l__tenkz_x_dim \l__tenkz_tmp_dim {south} {1} {#5}
+        \tenkz_span_brace:NNnnn \l__tenkz_x_dim \l__tenkz_tmp_dim
+          {south} {1} {#5}
       }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_span_box:nnnnn #1#2#3#4#5
+  {
+    \clist_clear:N \l__tenkz_spanmembers_clist
+    \int_step_inline:nnn {#2} { #2 + #3 - 1 }
+      {
+        \tl_set:Ne \l_tmpa_tl {cell:#1-##1}
+        \tenkz_enclosure_if_registered:VTF \l_tmpa_tl
+          { \clist_put_right:NV \l__tenkz_spanmembers_clist \l_tmpa_tl }
+          {
+            \prop_get:NnNT \l__tenkz_owner_prop {#1-##1} \l_tmpb_tl
+              {
+                \tl_set:Ne \l_tmpa_tl {cell:#1-\l_tmpb_tl}
+                \clist_if_in:NVF \l__tenkz_spanmembers_clist \l_tmpa_tl
+                  { \clist_put_right:NV \l__tenkz_spanmembers_clist \l_tmpa_tl }
+              }
+          }
+      }
+    \tl_set:Ne \l__tenkz_spanmembers_tl
+      { \clist_use:Nn \l__tenkz_spanmembers_clist {,} }
+    \tl_set:Nn \l__tenkz_spanstyle_tl {group~region}
+    \tl_set:Nn \l__tenkz_spanlabel_tl { $\tenkz@labelsize #5$ }
+    \tl_clear:N \l__tenkz_spanname_tl
+    \tl_set:Nn \l__tenkz_spanlabelpos_tl {#4}
+    \tenkz_enclosure_draw:VVVVV
+      \l__tenkz_spanmembers_tl
+      \l__tenkz_spanstyle_tl
+      \l__tenkz_spanlabel_tl
+      \l__tenkz_spanlabelpos_tl
+      \l__tenkz_spanname_tl
   }
 
 % the shared brace+label of a span, given the two endpoints (their order sets

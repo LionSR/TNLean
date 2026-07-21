@@ -1109,6 +1109,8 @@
 \tl_new:N \l__tenkzl_rname_tl
 \tl_new:N \l__tenkzl_rinset_tl
 \pgfkeys{
+  % Keep the historical /tenkz/region family: public \tnregion now dispatches
+  % by dialect, but document-level key extensions must remain compatible.
   /tenkz/region/.is~family,
   % slot= is a CHOICE, not free text: a typo'd slot used to expand to no
   % style at all and stroke a plain black outline -- the picture lost
@@ -1123,7 +1125,8 @@
       {\tl_set:Nn \l__tenkzl_rslot_tl {complement}},
   /tenkz/region/slot/collar/.code=
       {\tl_set:Nn \l__tenkzl_rslot_tl {collar}},
-  /tenkz/region/outline/.code={\bool_set_true:N \l__tenkzl_routline_bool},
+  /tenkz/region/outline/.code=
+      {\bool_set_true:N \l__tenkzl_routline_bool},
   /tenkz/region/label/.store~in=\l__tenkzl_rlabel_tl,
   % label pos= is the 0.6 placement spelling (one vocabulary across
   % every label kind); label at= stays as its alias
@@ -1137,7 +1140,7 @@
   /tenkz/region/inset/.store~in=\l__tenkzl_rinset_tl,
 }
 
-\NewDocumentCommand \tnregion { O{} m }
+\cs_new_protected:Npn \tenkz_lattice_region:nn #1#2
   {
     \tl_set:Nn \l__tenkzl_rslot_tl {selected}
     \bool_set_false:N \l__tenkzl_routline_bool
@@ -1150,8 +1153,13 @@
     \tenkzl_serialize:NN \l__tenkzl_member_prop \l__tenkzl_cells_clist
     % register name -> cells for later expressions
     \tl_if_empty:NF \l__tenkzl_rname_tl
-      { \prop_put:NVV \l_tenkz_cs_names_prop \l__tenkzl_rname_tl
-          \l__tenkzl_cells_clist }
+      {
+        \prop_if_in:NVTF \l_tenkz_cs_names_prop \l__tenkzl_rname_tl
+          { \msg_error:nnV {tenkz}{enclosure-duplicate}
+              \l__tenkzl_rname_tl }
+          { \prop_put:NVV \l_tenkz_cs_names_prop \l__tenkzl_rname_tl
+              \l__tenkzl_cells_clist }
+      }
     \seq_put_right:Ne \l__tenkzl_regions_seq
       {
         { \l__tenkzl_rslot_tl }
