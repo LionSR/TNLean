@@ -21,6 +21,7 @@ SOURCE = r"""
 \makeatletter
 \newif\iftenkzTestSecondaryMain
 \newif\iftenkzTestSelectedMain
+\newcount\tenkzTestLatticeBodyRuns
 \def\tenkzTestSecondaryFillLayer{}
 \def\tenkzTestSelectedFillLayer{}
 \newcommand*{\tenkzTestSecondaryLayer}{%
@@ -73,14 +74,20 @@ SOURCE = r"""
   \tn{D}\tnspan[box, label pos=east]{2}{S} & \tn{E} &
 \end{tenkz}
 
-% The lattice body remains a live execute-once customization layer after the
-% public region command moves to dialect dispatch.
-\begin{tenkzlattice}[rows=2, cols=3, physical=up]
+% A three-sheet lattice body remains a live execute-once customization layer
+% after the public region command moves to dialect dispatch.  The global count
+% detects both a skipped body and an accidental once-per-sheet replay.
+\begin{tenkzlattice}[
+    rows=2, cols=3, sheets={ket,op,bra}, physical=up]
+  \global\advance\tenkzTestLatticeBodyRuns by 1\relax
   \tikzset{region selected/.append style={rounded corners=0pt}}
   \pgfkeysifdefined{/tenkz/region/label/.@cmd}{}{%
     \errmessage{legacy lattice region family missing}}
   \tnregion[slot=selected, label={$Q$}]{(1-2,2-3)}
 \end{tenkzlattice}
+\ifnum\tenkzTestLatticeBodyRuns=1\relax\else
+  \errmessage{three-sheet lattice body did not execute exactly once}
+\fi
 
 % Oblique named atoms and named joins, including external label ink.
 \begin{tenkzfree}
