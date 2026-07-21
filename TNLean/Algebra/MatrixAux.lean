@@ -32,7 +32,8 @@ Extracted from various files for reusability.
 - `Matrix.trace_blockDiagonal'_mul`: the trace pairing with a dependent
   block-diagonal matrix is the sum over diagonal block compressions
 - `Matrix.sigmaBlockInclusion`: the canonical isometric inclusion of one
-  summand into a dependent direct sum
+  summand into a dependent direct sum, with orthogonal ranges for distinct
+  summands
 - `Matrix.piProduct_mulVec_pureTensor`: a dependent product of matrices acts
   componentwise on a pure tensor
 - `Matrix.reindex_mulVec`: matrix reindexing intertwines matrix--vector action
@@ -100,6 +101,18 @@ theorem sigmaBlockInclusion_isometry
     simp [sigmaBlockInclusion, Matrix.mul_apply, Matrix.conjTranspose_apply]
   · simp [sigmaBlockInclusion, Matrix.mul_apply, Matrix.conjTranspose_apply,
       h, Ne.symm h]
+
+/-- The canonical inclusions of two distinct dependent summands have
+orthogonal ranges. -/
+theorem sigmaBlockInclusion_conjTranspose_mul_of_ne
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (dim : ι → Type*) [(k : ι) → Fintype (dim k)]
+    [(k : ι) → DecidableEq (dim k)] {k l : ι} (hkl : k ≠ l) :
+    (sigmaBlockInclusion dim k)ᴴ * sigmaBlockInclusion dim l = 0 := by
+  have hlk : l ≠ k := Ne.symm hkl
+  ext a b
+  simp [sigmaBlockInclusion, Matrix.mul_apply, Matrix.conjTranspose_apply,
+    hlk]
 
 /-- A dependent block-diagonal matrix preserves each canonical summand. -/
 theorem blockDiagonal'_mul_sigmaBlockInclusion
