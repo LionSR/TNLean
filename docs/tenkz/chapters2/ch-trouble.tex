@@ -233,20 +233,18 @@ everything.
 \begin{tnmultiples}[
     formula   = {A^{s_1}\!\cdots A^{s_n}\,\rho^R\,
                  \bigl(A^{s'_1}\!\cdots A^{s'_n}\bigr)^{\dagger}},
-    caption   = {legs into the gap need a wider gap},
-    index     = {Both rails' legs point down
-                 (\tnval{rows=\{bra, bra\}}), so the upper rail's
-                 leg-tip labels descend into the inter-layer gap and,
-                 at the default gap, lose their clearance band.
-                 \tnval{layer sep=2} doubles this picture's gap and
-                 nothing else; the east bend carries the right fixed
-                 point $\rho^R$, the west pair stays open.},
-    variants  = {{default}{}, {layer sep=2}{layer sep=2}},
+    caption   = {wider gaps restore the label band},
+    index     = {Both rails point down, so the upper labels descend into
+                 the gap.  The stock gap violates the overlap audit.
+                 \tnval{layer sep=1.5} is sufficient;
+                 \tnval{layer sep=2} doubles the gap.  The east cup is
+                 $\rho^R$; the west pair remains open.},
+    variants  = {{layer sep=1.5}{layer sep=1.5},
+                 {layer sep=2}{layer sep=2}},
     label     = {ex:layer-sep},
   ]
-% both rails down (hard03 a2 orientation): the upper rail's
-% legs descend INTO the gap; layer sep=2 restores the label
-% band that the default gap denies them
+% Both rails point down; the stock gap violates the overlap audit.
+% These panels show safe local repairs at 1.5 and 2.
 \begin{tenkz}[rows={bra, bra}, east={cup=$\rho^R$}, variant]
   \tn[down=$s_1$]{} & \tndots & \tn[down=$s_n$]{}\\
   \tn*[down=$s'_1$]{} & \tndots & \tn*[down=$s'_n$]{}
