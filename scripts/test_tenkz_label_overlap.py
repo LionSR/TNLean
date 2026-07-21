@@ -361,6 +361,20 @@ def main() -> int:
                 for finding in missing_class_audit.findings):
             raise AssertionError("audit accepted an ink-use without class")
 
+        glyph_bbox = work / "glyph-bbox.tnlog"
+        glyph_bbox.write_text(
+            "picture|id=1|lang=free\n"
+            "bbox|picture=1|class=glyph|id=1|owner=1|"
+            "xmin=0|xmax=1|ymin=0|ymax=1\n",
+            encoding="utf-8",
+        )
+        glyph_bbox_status, glyph_bbox_audit = audit_status(glyph_bbox)
+        if glyph_bbox_status != 1 or not any(
+                finding.rule == "malformed-event"
+                and "class=glyph" in finding.msg
+                for finding in glyph_bbox_audit.findings):
+            raise AssertionError("audit accepted obsolete glyph bbox geometry")
+
         grid_source = (ROOT / "tex/tenkz/tenkz-grid.code.tex").read_text(
             encoding="utf-8")
         for function in ("tenkz_draw_lower_label:N", "tenkz_pair_wide_leg:nn",

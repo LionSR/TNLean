@@ -275,7 +275,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "boundary": {"picture": _is_int, "virtual-west": _is_int, "virtual-east": _is_int,
                  "virtual-north": _is_int, "virtual-south": _is_int,
                  "physical-up": _is_int, "physical-down": _is_int},
-    "bbox": {"picture": _is_int, "class": _enum("label", "glyph", "wire"),
+    "bbox": {"picture": _is_int, "class": _enum("label", "wire"),
              "id": _is_positive_int, "xmin": _is_int, "xmax": _is_int,
              "ymin": _is_int, "ymax": _is_int},
     "glyph-geometry": {"picture": _is_int, "owner": _is_positive_int,
@@ -542,7 +542,7 @@ class Audit:
                         f"bbox event lacks required field(s): {', '.join(missing)}",
                     )
                     continue
-                if (event.attrs["class"] not in {"label", "glyph", "wire"}
+                if (event.attrs["class"] not in {"label", "wire"}
                         or any(not _is_int(event.attrs[field])
                                for field in ("xmin", "xmax", "ymin", "ymax"))
                         or not _is_positive_int(event.attrs["id"])):
@@ -671,18 +671,18 @@ class Audit:
 
             geometry_by_owner: dict[int, list[Event]] = {}
             for event in pic.events:
-                if event.kind not in {"bbox", "glyph-geometry"}:
+                if (event.kind != "glyph-geometry"
+                        and (event.kind != "bbox"
+                             or event.attrs.get("class") != "wire")):
                     continue
                 owner_text = event.attrs.get("owner", "")
                 if not _is_positive_int(owner_text):
-                    if (event.kind != "bbox"
-                            or event.attrs.get("class") != "label"):
-                        self.hard(
-                            "bbox-coverage",
-                            f"{self.log_path.name}:{event.line}",
-                            f"picture {pic.ident} {event.kind} has no positive "
-                            "ink owner",
-                        )
+                    self.hard(
+                        "bbox-coverage",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} {event.kind} has no positive "
+                        "ink owner",
+                    )
                     continue
                 geometry_by_owner.setdefault(int(owner_text), []).append(event)
 
