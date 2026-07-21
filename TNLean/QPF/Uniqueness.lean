@@ -231,30 +231,6 @@ lemma exists_critical_scalar [Nonempty (Fin D)]
   · rw [h_key, hst]; intro h_pd
     exact hHc_not_pd ((Matrix.IsUnit.posDef_star_right_conjugate_iff hS_unit).mp h_pd)
 
-/-- **Uniqueness** (Wolf Theorem 6.3(2), non-degeneracy): any two nonzero PSD
-fixed points of an injective transfer map are proportional. -/
-theorem posSemidef_fixedPoint_unique
-    (A : MPSTensor d D) (hA : IsInjective A)
-    (ρ σ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
-    (hσ_psd : σ.PosSemidef) (hσ_ne : σ ≠ 0)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
-    (hσ_fix : transferMap (d := d) (D := D) A σ = σ) :
-    ∃ c : ℂ, σ = c • ρ := by
-  classical
-  have hρ_pd := posSemidef_fixedPoint_isPosDef A hA ρ hρ_psd hρ_ne hρ_fix
-  have hσ_pd := posSemidef_fixedPoint_isPosDef A hA σ hσ_psd hσ_ne hσ_fix
-  by_cases hD : D = 0
-  · exact ⟨1, by ext i; exact (Fin.elim0 (hD ▸ i))⟩
-  · haveI : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
-    obtain ⟨c₀, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
-    set τ := σ - (↑c₀ : ℂ) • ρ
-    have hτ_fix : transferMap (d := d) (D := D) A τ = τ := by
-      simp only [τ, map_sub, LinearMap.map_smul, hρ_fix, hσ_fix]
-    by_cases hτ_ne : τ = 0
-    · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
-    · exact absurd (posSemidef_fixedPoint_isPosDef A hA τ hτ_psd hτ_ne hτ_fix) hτ_not_pd
-
 /-- **Uniqueness under irreducibility** (Wolf Theorem 6.3(2)): any PSD fixed point
 of an irreducible transfer map is proportional to a fixed nonzero PSD fixed point. -/
 theorem posSemidef_fixedPoint_unique_of_irreducible
@@ -285,6 +261,20 @@ theorem posSemidef_fixedPoint_unique_of_irreducible
     · exact absurd
         (posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr τ hτ_psd hτ_ne hτ_fix)
         hτ_not_pd
+
+/-- **Uniqueness** (Wolf Theorem 6.3(2), non-degeneracy): any two nonzero PSD
+fixed points of an injective transfer map are proportional. -/
+theorem posSemidef_fixedPoint_unique
+    (A : MPSTensor d D) (hA : IsInjective A)
+    (ρ σ : Matrix (Fin D) (Fin D) ℂ)
+    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
+    (hσ_psd : σ.PosSemidef) (hσ_ne : σ ≠ 0)
+    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
+    (hσ_fix : transferMap (d := d) (D := D) A σ = σ) :
+    ∃ c : ℂ, σ = c • ρ := by
+  have _hσ_ne := hσ_ne
+  exact posSemidef_fixedPoint_unique_of_irreducible A
+    (injective_implies_irreducibleCP A hA) ρ σ hρ_psd hρ_ne hσ_psd hρ_fix hσ_fix
 
 end Uniqueness
 

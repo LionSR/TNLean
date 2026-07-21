@@ -86,68 +86,6 @@ private lemma ker_invariant_under_adjoint
   intro i
   exact (hρ_psd.dotProduct_mulVec_zero_iff _).mp (h_each_zero i)
 
-private lemma ker_contains_all_of_span
-    (A : MPSTensor d D) (hA : IsInjective A)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (x : Fin D → ℂ)
-    (h : ∀ i : Fin d, ρ *ᵥ ((A i)ᴴ *ᵥ x) = 0) :
-    ∀ M : Matrix (Fin D) (Fin D) ℂ, ρ *ᵥ (M *ᵥ x) = 0 := by
-  intro M
-  suffices ∀ N : Matrix (Fin D) (Fin D) ℂ, ρ *ᵥ (Nᴴ *ᵥ x) = 0 by
-    specialize this Mᴴ; rwa [Matrix.conjTranspose_conjTranspose] at this
-  intro N
-  have hN : N ∈ Submodule.span ℂ (Set.range A) := hA ▸ Submodule.mem_top
-  induction hN using Submodule.span_induction with
-  | mem y hy =>
-    obtain ⟨i, rfl⟩ := hy
-    exact h i
-  | zero => simp
-  | add a b _ _ ha hb =>
-    simp [Matrix.add_mulVec, Matrix.mulVec_add, ha, hb]
-  | smul c a _ ha =>
-    simp [Matrix.conjTranspose_smul, Matrix.smul_mulVec, Matrix.mulVec_smul, ha]
-
-/-- **Positive definiteness from injectivity** (Wolf Theorem 6.3(2)):
-If `A` is injective and `ρ` is a nonzero PSD fixed point of the transfer map,
-then `ρ` is positive definite. -/
-theorem posSemidef_fixedPoint_isPosDef
-    (A : MPSTensor d D) (hA : IsInjective A)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
-    ρ.PosDef := by
-  classical
-  rw [Matrix.posDef_iff_dotProduct_mulVec]
-  refine ⟨hρ_psd.isHermitian, fun x hx => ?_⟩
-  have h_nonneg := hρ_psd.dotProduct_mulVec_nonneg x
-  suffices h_ne : star x ⬝ᵥ (ρ *ᵥ x) ≠ 0 from
-    lt_of_le_of_ne h_nonneg (Ne.symm h_ne)
-  intro h_zero
-  have h_ker := (hρ_psd.dotProduct_mulVec_zero_iff x).mp h_zero
-  have h_inv := ker_invariant_under_adjoint A ρ hρ_psd hρ_fix x h_ker
-  have h_all := ker_contains_all_of_span A hA ρ x h_inv
-  have h_surj : ∀ v : Fin D → ℂ, ρ *ᵥ v = 0 := by
-    intro v
-    have ⟨k, hk⟩ : ∃ k, x k ≠ 0 := by
-      by_contra h_all_zero; push Not at h_all_zero
-      exact hx (funext h_all_zero)
-    let M : Matrix (Fin D) (Fin D) ℂ :=
-      Matrix.of (fun i j => if j = k then v i * (x k)⁻¹ else 0)
-    have hMx : M *ᵥ x = v := by
-      ext i
-      simp only [M, Matrix.mulVec, dotProduct, Matrix.of_apply]
-      rw [Finset.sum_eq_single k]
-      · simp [hk]
-      · intro j _ hj; simp [hj]
-      · exact absurd (Finset.mem_univ k)
-    rw [← hMx]; exact h_all M
-  have h_rho_zero : ρ = 0 := by
-    ext i j
-    have h := congr_fun (h_surj (Pi.single j 1)) i
-    simp only [Matrix.mulVec, dotProduct, Pi.single_apply, Pi.zero_apply] at h
-    simpa [Finset.sum_ite_eq, Finset.mem_univ] using h
-  exact hρ_ne h_rho_zero
-
 /-- Corollary for the irreducibility-based formulation (still Wolf Theorem 6.3(2),
 but with `IsIrreducibleMap E` instead of `IsInjective A`). -/
 theorem posSemidef_fixedPoint_isPosDef_of_irreducible
@@ -301,6 +239,18 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   rcases hQ_zero_or_one with h | h
   · exact hQ_ne_zero h
   · exact hQ_ne_one (by convert h)
+
+/-- **Positive definiteness from injectivity** (Wolf Theorem 6.3(2)):
+If `A` is injective and `ρ` is a nonzero PSD fixed point of the transfer map,
+then `ρ` is positive definite. -/
+theorem posSemidef_fixedPoint_isPosDef
+    (A : MPSTensor d D) (hA : IsInjective A)
+    (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
+    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
+    ρ.PosDef :=
+  posSemidef_fixedPoint_isPosDef_of_irreducible A
+    (injective_implies_irreducibleCP A hA) ρ hρ_psd hρ_ne hρ_fix
 
 end PosDef
 
