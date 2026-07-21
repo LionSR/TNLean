@@ -9,6 +9,7 @@ import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.CanonicalForm.BNTTransport
 import TNLean.MPS.MPDO.VerticalBNTConstruction
+import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.VerticalSpectral
 import TNLean.MPS.Tactic.Basic
 
@@ -1786,6 +1787,94 @@ theorem ambient_compression {d : ℕ}
   rw [S.ambient_intertwine_adjoint M U hU hReconstruct x ab,
     Matrix.mul_assoc, S.ambientInclusion_isometry U hU x,
     Matrix.mul_one]
+
+/-- The scalar multiplying the blocked BNT representative in every active
+product corner is positive.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029, using the sector-weight
+positivity argument from Proposition 4.13, lines 1898--1902. -/
+theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
+    {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {S : RetainedProductSpectralFamily dim mult weight B}
+    (C : FlatBlockedBNTComparison S dim₂ A₂)
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (U₁ : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU₁ : U₁ * U₁ᴴ = 1)
+    (hReconstruct₁ : ∀ ab, verticalTensor M ab =
+      U₁ᴴ * verticalAssembledTensor dim mult weight B ab * U₁)
+    (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (hWeight₂ : ∀ γ q, (0 : ℂ) < weight₂ γ q)
+    (U₂ : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g₂, mult₂ γ),
+        verticalCopyDim dim₂ mult₂ q))
+      (Fin (d * d)) ℂ)
+    (hU₂ : U₂ * U₂ᴴ = 1)
+    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
+      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
+    (hNormal₂ : ∀ γ, MPSTensor.IsNormalTensor (A₂ γ))
+    (j : Fin (Fintype.card S.ActiveLabel)) :
+    (0 : ℂ) < S.flatCoefficient j * C.phase j := by
+  let x := S.activeLabelEquiv j
+  let A := cast (congrArg (MPSTensor (D * D)) (C.dim_eq j))
+    (A₂ (C.label j))
+  let Vact := S.ambientInclusion U₁ x
+  let Vref := C.referenceInclusion mult₂ hMult₂ U₂ j
+  let c := S.flatCoefficient j * C.phase j
+  let c₀ := weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩
+  letI : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
+  have hA : MPSTensor.IsNormalTensor A :=
+    (MPSTensor.isNormalTensor_cast_iff (C.dim_eq j) (A₂ (C.label j))).2
+      (hNormal₂ (C.label j))
+  have hVact : Vactᴴ * Vact = 1 := by
+    exact S.ambientInclusion_isometry U₁ hU₁ x
+  have hVref : Vrefᴴ * Vref = 1 := by
+    exact C.referenceInclusion_isometry mult₂ hMult₂ U₂ hU₂ j
+  have hphase : C.phase j ≠ 0 := by
+    apply norm_ne_zero_iff.mp
+    rw [C.phase_norm j]
+    exact one_ne_zero
+  have hc : c ≠ 0 := mul_ne_zero (S.flatCoefficient_ne j) hphase
+  have hActiveCorner : ∀ ab,
+      c • ((C.gauge j : Matrix (Fin (S.flatDim j))
+          (Fin (S.flatDim j)) ℂ) * A ab *
+        (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
+          (Fin (S.flatDim j)) ℂ)) =
+        Vactᴴ * verticalTensor (blockTwo M) ab * Vact := by
+    intro ab
+    calc
+      c • ((C.gauge j : Matrix (Fin (S.flatDim j))
+            (Fin (S.flatDim j)) ℂ) * A ab *
+          (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
+            (Fin (S.flatDim j)) ℂ)) =
+        S.flatCoefficient j • S.flatBlock j ab := by
+          rw [C.block_eq j ab]
+          simp only [c, A, smul_smul]
+      _ = Vactᴴ * verticalTensor (blockTwo M) ab * Vact := by
+        change S.coefficient x.1 x.2 • S.block x.1 x.2 ab = _
+        exact S.ambient_compression M U₁ hU₁ hReconstruct₁ x ab
+  have hReferenceCorner : ∀ ab, c₀ • A ab =
+      Vrefᴴ * verticalTensor (blockTwo M) ab * Vref := by
+    intro ab
+    exact C.reference_compression M mult₂ hMult₂ weight₂ U₂ hU₂
+      hReconstruct₂ j ab
+  have hSectorAct := sectorProjectorData_of_gauge_corner
+    (blockTwo M) A Vact hVact (C.gauge j) c hActiveCorner
+  have hSectorRef := sectorProjectorData_of_gauge_corner
+    (blockTwo M) A Vref hVref 1 c₀ (by
+      intro ab
+      simpa using hReferenceCorner ab)
+  have hRange := exists_rangeProjection_corner_ne_zero
+    (blockTwo M) A hA Vact hVact (C.gauge j) c hc hActiveCorner
+  obtain ⟨N, hne⟩ :=
+    (hHorizontal.blockTwo).exists_sectorCompression_ne_zero_of_corner
+      (blockTwo M) (Vact * Vactᴴ) hRange
+  exact sector_weight_pos hM.blockTwo hSectorRef
+    (hWeight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩)
+    hSectorAct N hne
 
 end RetainedProductSpectralFamily
 

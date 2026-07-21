@@ -2597,14 +2597,6 @@ physical indices, as in
     \lean{MPOTensor.verticalAssembledTensor_mul_verticalCopyBlockInclusion}
     \lean{MPOTensor.verticalCopyBlockInclusion_conjTranspose_mul_verticalAssembledTensor}
     \lean{MPOTensor.verticalCopyBlockInclusion_compression}
-    \lean{MPOTensor.blockedReferenceInclusion}
-    \lean{MPOTensor.blockedReferenceInclusion_isometry}
-    \lean{MPOTensor.blockedReference_intertwine}
-    \lean{MPOTensor.blockedReference_intertwine_adjoint}
-    \lean{MPOTensor.blockedReference_compression}
-    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.referenceInclusion}
-    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.referenceInclusion_isometry}
-    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.reference_compression}
     \lean{MPOTensor.retainedProductBlockInclusion_isometry}
     \lean{MPOTensor.retainedVerticalProductTensor_mul_retainedProductBlockInclusion}
     \lean{MPOTensor.retainedProductBlockInclusion_conjTranspose_mul_retainedVerticalProductTensor}
@@ -2764,6 +2756,71 @@ physical indices, as in
     decomposition, then covers each active corner by a blocked BNT tensor up
     to an invertible gauge and a unit-modulus phase.  Classical choice makes
     these comparisons simultaneous.
+\end{proof}
+
+\begin{theorem}[Distinguished blocked reference corners]
+    \label{thm:mpdo_blocked_reference_corners}
+    \lean{MPOTensor.blockedReferenceInclusion}
+    \lean{MPOTensor.blockedReferenceInclusion_isometry}
+    \lean{MPOTensor.blockedReference_intertwine}
+    \lean{MPOTensor.blockedReference_intertwine_adjoint}
+    \lean{MPOTensor.blockedReference_compression}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.referenceInclusion}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
+referenceInclusion_isometry}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.reference_compression}
+    \leanok
+    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
+      thm:mpdo_retained_vertical_product_canonical_hypotheses,
+      lem:matrix_sigma_block_inclusion}
+    Assume that every blocked BNT label has positive multiplicity and that the
+    blocked vertical tensor has the exact coisometric reconstruction
+    $T=U_2^\dagger C_2U_2$.  Let $E_{\gamma,0}$ be the canonical inclusion of
+    the first copy of label $\gamma$, and put
+    $F_\gamma=U_2^\dagger E_{\gamma,0}$.  Then $F_\gamma$ is an isometry,
+    intertwines $T$ with the distinguished weighted BNT copy in both
+    directions, and compresses $T$ to that copy exactly.  For an active
+    product corner covered by $\gamma$, transport $F_\gamma$ along the stated
+    equality of bond dimensions.  The transported map remains an isometry and
+    obeys the corresponding transported compression identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    The copy inclusion is isometric and selects one diagonal block of the
+    assembled tensor.  Inserting $T=U_2^\dagger C_2U_2$ and
+    $U_2U_2^\dagger=1$ gives both intertwining identities and compression.
+    Transport along equality of bond dimensions preserves these equations.
+\end{proof}
+
+\begin{theorem}[Positivity of active product coefficients]
+    \label{thm:mpdo_active_product_coefficient_phase_pos}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
+activeCoefficient_mul_phase_pos}
+    \leanok
+    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
+      thm:mpdo_blocked_reference_corners,
+      thm:mpdo_grouped_sector_compression_nonzero,
+      thm:mpdo_sector_weight_pos}
+    Suppose that $M$ is horizontally canonical and generates positive
+    operators.  Assume exact coisometric reconstructions of its one-site and
+    blocked vertical tensors, positive multiplicities and weights for the
+    blocked BNT, and normality of its BNT representatives.  For every active
+    product corner $j$, one has
+    \[
+      0<\lambda_j\zeta_j.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Compare two isometric corners of the blocked vertical tensor carrying the
+    same normal representative.  The distinguished blocked copy has positive
+    weight by hypothesis.  The active corner has weight
+    $\lambda_j\zeta_j$ by its exact compression and gauge--phase identity.
+    This scalar is nonzero because $\lambda_j>0$ and $|\zeta_j|=1$.
+    Normality gives a nonzero range-projection corner; horizontal canonicality
+    separates it at some finite chain length.  The sector-weight comparison
+    with the distinguished reference corner then yields
+    $\lambda_j\zeta_j>0$.
 \end{proof}
 
 \begin{theorem}[Two-site closure of the two-site blocking]
