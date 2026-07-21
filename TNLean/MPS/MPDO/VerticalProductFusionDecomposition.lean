@@ -1605,6 +1605,102 @@ private theorem castBondColumns_compression
   cases h
   simpa using hcorner v
 
+private theorem castBondColumns_orthogonal
+    {r m₁ n₁ m₂ n₂ : ℕ}
+    (V₁ : Matrix (Fin r) (Fin m₁) ℂ)
+    (V₂ : Matrix (Fin r) (Fin m₂) ℂ)
+    (hV : V₁ᴴ * V₂ = 0) (h₁ : m₁ = n₁) (h₂ : m₂ = n₂) :
+    let V₁' := cast
+      (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h₁) V₁
+    let V₂' := cast
+      (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h₂) V₂
+    V₁'ᴴ * V₂' = 0 := by
+  cases h₁
+  cases h₂
+  simpa using hV
+
+private theorem castBondColumns_intertwining
+    {r m n e : ℕ} (T : MPSTensor e r) (A : MPSTensor e m)
+    (V : Matrix (Fin r) (Fin m) ℂ) (c : ℂ)
+    (hinter : ∀ v, T v * V = V * (c • A v)) (h : m = n)
+    (v : Fin e) :
+    let A' := cast (congrArg (MPSTensor e) h) A
+    let V' := cast (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h) V
+    T v * V' = V' * (c • A' v) := by
+  cases h
+  simpa using hinter v
+
+private noncomputable def unitaryTransportMap
+    {r m n : ℕ} (h : m = n) (W : Matrix (Fin r) (Fin n) ℂ)
+    (U : Matrix.unitaryGroup (Fin n) ℂ) :
+    Matrix (Fin r) (Fin m) ℂ :=
+  cast (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h.symm)
+    (W * (U : Matrix (Fin n) (Fin n) ℂ))
+
+private theorem unitaryTransportMap_isometry
+    {r m n : ℕ} (h : m = n) (W : Matrix (Fin r) (Fin n) ℂ)
+    (U : Matrix.unitaryGroup (Fin n) ℂ) (hW : Wᴴ * W = 1) :
+    (unitaryTransportMap h W U)ᴴ * unitaryTransportMap h W U = 1 := by
+  cases h
+  simp only [unitaryTransportMap, cast_eq, Matrix.conjTranspose_mul]
+  rw [Matrix.mul_assoc, ← Matrix.mul_assoc Wᴴ W, hW, Matrix.one_mul]
+  exact Matrix.mem_unitaryGroup_iff'.mp U.prop
+
+private theorem unitaryTransportMap_orthogonal
+    {r m₁ n₁ m₂ n₂ : ℕ} (h₁ : m₁ = n₁) (h₂ : m₂ = n₂)
+    (W₁ : Matrix (Fin r) (Fin n₁) ℂ)
+    (W₂ : Matrix (Fin r) (Fin n₂) ℂ)
+    (U₁ : Matrix.unitaryGroup (Fin n₁) ℂ)
+    (U₂ : Matrix.unitaryGroup (Fin n₂) ℂ) (hW : W₁ᴴ * W₂ = 0) :
+    (unitaryTransportMap h₁ W₁ U₁)ᴴ *
+        unitaryTransportMap h₂ W₂ U₂ = 0 := by
+  cases h₁
+  cases h₂
+  simp only [unitaryTransportMap, cast_eq, Matrix.conjTranspose_mul]
+  rw [Matrix.mul_assoc, ← Matrix.mul_assoc W₁ᴴ W₂, hW,
+    Matrix.zero_mul, Matrix.mul_zero]
+
+private theorem unitaryTransportMap_intertwining
+    {r m n e : ℕ} (h : m = n) (T : MPSTensor e r)
+    (A₁ : MPSTensor e m) (A₂ : MPSTensor e n)
+    (W : Matrix (Fin r) (Fin n) ℂ)
+    (U : Matrix.unitaryGroup (Fin n) ℂ) (c t : ℂ)
+    (hinter : ∀ v, T v * W = W * (c • A₂ v))
+    (hA : ∀ v, A₂ v = t •
+      ((U : Matrix (Fin n) (Fin n) ℂ) *
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) (A₁ v) *
+        (U : Matrix (Fin n) (Fin n) ℂ)ᴴ)) (v : Fin e) :
+    T v * unitaryTransportMap h W U =
+      unitaryTransportMap h W U * ((c * t) • A₁ v) := by
+  cases h
+  simp only [unitaryTransportMap, cast_eq]
+  have hA' : A₂ v = t • ((U : Matrix (Fin m) (Fin m) ℂ) * A₁ v *
+      (U : Matrix (Fin m) (Fin m) ℂ)ᴴ) := by
+    simpa [finCongr] using hA v
+  rw [← Matrix.mul_assoc, hinter, hA']
+  simp only [Matrix.mul_assoc, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+  rw [show (U : Matrix (Fin m) (Fin m) ℂ)ᴴ * U = 1 by
+    exact Matrix.mem_unitaryGroup_iff'.mp U.prop]
+  simp only [Matrix.mul_one]
+
+private theorem unitaryTransportMap_corner
+    {r m n : ℕ} (h : m = n) (A₁ : Matrix (Fin m) (Fin m) ℂ)
+    (A₂ : Matrix (Fin n) (Fin n) ℂ) (W : Matrix (Fin r) (Fin n) ℂ)
+    (U : Matrix.unitaryGroup (Fin n) ℂ) (c t : ℂ)
+    (hA : A₂ = t • ((U : Matrix (Fin n) (Fin n) ℂ) *
+      Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) A₁ *
+      (U : Matrix (Fin n) (Fin n) ℂ)ᴴ)) :
+    unitaryTransportMap h W U * ((c * t) • A₁) *
+        (unitaryTransportMap h W U)ᴴ =
+      W * (c • A₂) * Wᴴ := by
+  cases h
+  have hA' : A₂ = t • ((U : Matrix (Fin m) (Fin m) ℂ) * A₁ *
+      (U : Matrix (Fin m) (Fin m) ℂ)ᴴ) := by
+    simpa [finCongr] using hA
+  simp only [unitaryTransportMap, cast_eq, Matrix.conjTranspose_mul]
+  rw [hA']
+  simp only [Matrix.mul_assoc, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+
 /-- The distinguished blocked reference inclusion transported to the bond
 dimension of an active product corner.
 
