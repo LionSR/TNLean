@@ -66,6 +66,16 @@ def main() -> int:
                 + mutated_run.stderr
             )
 
+        missing = work / "missing.tsv"
+        missing_run = validate(missing)
+        if (missing_run.returncode == 0
+                or f"cannot read {missing}:" not in missing_run.stderr):
+            raise AssertionError(
+                "read failure did not identify the overridden provenance path:\n"
+                + missing_run.stdout
+                + missing_run.stderr
+            )
+
     print("PASS: tenkz provenance source-name invariant")
     return 0
 

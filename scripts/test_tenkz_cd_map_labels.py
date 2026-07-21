@@ -186,7 +186,8 @@ TYPED_MAP_VISIBLE_GEOMETRY = r"""
 \endgroup
 \begingroup
 \tikzset{tn label/.append style={
-  inner sep=0pt, outer sep=8pt, draw, line join=round, line width=4pt}}
+  inner sep=0pt, outer sep=8pt, fill=tenkzPaper,
+  draw, line join=round, line width=4pt}}
 \begin{tenkzcd}[maps, species={channel}]
   A & B
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
@@ -196,7 +197,8 @@ TYPED_MAP_VISIBLE_GEOMETRY = r"""
 \begingroup
 \tikzset{tenkz every picture/.append style={rotate=180},
   tn label/.append style={
-    inner sep=0pt, outer sep=8pt, draw, line join=round, line width=4pt}}
+    inner sep=0pt, outer sep=8pt, fill=tenkzPaper,
+    draw, line join=round, line width=4pt}}
 \begin{tenkzcd}[maps, species={channel}]
   A & B
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
@@ -212,7 +214,8 @@ TYPED_MAP_WIRE_WIDTHS = r"""
 \begin{document}
 \begingroup
 \tikzset{
-  tn label/.append style={draw, line join=round, line width=10pt},
+  tn label/.append style={
+    fill=tenkzPaper, draw, line join=round, line width=10pt},
   bond/.append style={line width=1pt},
   operator bond/.append style={line width=4pt}}
 \begin{tenkzcd}[maps]
@@ -223,7 +226,8 @@ TYPED_MAP_WIRE_WIDTHS = r"""
 \tnset{species={channel}}
 \begingroup
 \tikzset{
-  tn label/.append style={draw, line join=round, line width=10pt},
+  tn label/.append style={
+    fill=tenkzPaper, draw, line join=round, line width=10pt},
   fused bond/.append style={line width=1pt, double distance=1pt},
   species channel bond/.append style={line width=2pt, double distance=3pt}}
 \begin{tenkzcd}[maps]
@@ -446,6 +450,8 @@ def main() -> int:
              "unsupported live shape"),
             ("transparent-typed-map-label.tex", "fill opacity=0",
              "zero fill opacity"),
+            ("translucent-typed-map-label.tex", "fill opacity=.5",
+             "background is not opaque"),
             ("zero-text-typed-map-label.tex", "text opacity=0",
              "zero text opacity"),
         ):

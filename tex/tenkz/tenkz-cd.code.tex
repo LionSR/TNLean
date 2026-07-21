@@ -835,6 +835,14 @@
             { $\tenkz@labelsize #3$ };
         \end{tikzpicture}
       }
+    \int_compare:nNnF
+      { \use:c { tenkz@labelopaque@map-\the\tenkz@pictureid-
+          \int_use:N\l__tenkzcd_mapdecls_int } }
+      = {1}
+      {
+        \PackageError{tenkz}{Typed-map~label~background~is~not~opaque}
+          {Use~fill~opacity=1~for~typed-map~labels.}
+      }
     \dim_set:Nn \l_tmpa_dim
       { \exp_args:Nc \box_wd:N
           { l__tenkzcd_map_label_\int_use:N \l__tenkzcd_mapdecls_int _box }

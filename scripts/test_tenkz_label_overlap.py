@@ -53,6 +53,9 @@ SOURCE = r"""
   \tenkzassertrelax{tenkz@strokeopacity@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@fillopacity@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@textopacity@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@textwidth@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@textheight@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@textdepth@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@invalid@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@outercount@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@modecount@\tenkztesttoken}%
@@ -78,7 +81,8 @@ SOURCE = r"""
 % Safe: production spacing is derived from the same materialized label box.
 % Matrix passthrough may change the live object shape; measurement follows it.
 \begingroup
-\tikzset{tn label/.append style={draw, line join=round, line width=2pt}}
+\tikzset{tn label/.append style={
+  fill=tenkzPaper, draw, line join=round, line width=2pt}}
 \begin{tenkzcd}[maps, species={channel}, nodes={circle}]
   A & B
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
@@ -91,7 +95,7 @@ SOURCE = r"""
   \tnput[box]{a}{(0,0)}{A}
   \tnput[box]{b}{(20mm,0)}{}
   \tnjoin[label=f]{a.east}{b.west}
-  \node[tn label, draw, line join=round, line width=2pt]
+  \node[tn label, fill=tenkzPaper, draw, line join=round, line width=2pt]
     at (40mm,0) {$g$};
 \end{tenkzfree}
 \begin{tenkz}
@@ -171,14 +175,14 @@ SOURCE = r"""
     {\rule{0.2pt}{0.2pt}};
 \end{tenkzfree}
 \endgroup
-% Label outer separation is likewise invisible positioning whitespace.
+% Transparent-label inner and outer separation are invisible whitespace.
 \begingroup
 \tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
   minimum width=1pt, minimum height=1pt, inner sep=0pt,
   outer sep=0pt, draw=none}}
 \begin{tenkzfree}
   \tnput[box]{label-margin-safe}{(4pt,0)}{}
-  \node[tn label, inner sep=0pt, outer sep=8pt] at (0,0)
+  \node[tn label, inner sep=9pt, outer sep=8pt] at (0,0)
     {\rule{1pt}{1pt}};
 \end{tenkzfree}
 \endgroup
@@ -714,35 +718,40 @@ def main() -> int:
              "has no captured path state"),
             ("nonrectangle-label.tex", NONRECTANGLE_LABEL,
              "unsupported live shape"),
-            ("rounded-label.tex", customized_label("rounded corners=1pt"),
+            ("rounded-label.tex", customized_label(
+                "fill=tenkzPaper, rounded corners=1pt"),
              "has rounded corners"),
             ("miter-glyph.tex", customized_glyph("line join=miter"),
              "non-round line join"),
             ("bevel-glyph.tex", customized_glyph("line join=bevel"),
              "non-round line join"),
-            ("miter-label.tex", customized_label("draw, line join=miter"),
+            ("miter-label.tex", customized_label(
+                "fill=tenkzPaper, draw, line join=miter"),
              "non-round line join"),
             ("double-glyph.tex", customized_glyph("double"),
              "double stroke"),
             ("double-distance-glyph.tex",
              customized_glyph("double distance=2pt"), "double stroke"),
-            ("double-label.tex", customized_label("draw, double"),
+            ("double-label.tex", customized_label(
+                "fill=tenkzPaper, draw, double"),
              "double stroke"),
             ("dashed-glyph.tex", customized_glyph("dashed"),
              "dashed stroke"),
-            ("dashed-label.tex", customized_label("draw, dashed"),
+            ("dashed-label.tex", customized_label(
+                "fill=tenkzPaper, draw, dashed"),
              "dashed stroke"),
             ("zero-draw-glyph.tex", customized_glyph("draw opacity=0"),
              "zero draw opacity"),
             ("zero-draw-label.tex",
-             customized_label("draw, draw opacity=0"),
+             customized_label("fill=tenkzPaper, draw, draw opacity=0"),
              "zero draw opacity"),
             ("zero-fill-glyph.tex", customized_glyph("fill opacity=0"),
              "zero fill opacity"),
-            ("zero-fill-label.tex", customized_label("fill opacity=0"),
+            ("zero-fill-label.tex", customized_label(
+                "fill=tenkzPaper, fill opacity=0"),
              "zero fill opacity"),
-            ("no-fill-label.tex",
-             customized_label("fill=none, draw=none"), "has no active fill"),
+            ("outline-label.tex", customized_label("fill=none, draw"),
+             "has an outline"),
             ("zero-text-label.tex", customized_label("text opacity=0"),
              "zero text opacity"),
             ("shade-glyph.tex", customized_glyph("shade"),
@@ -967,6 +976,58 @@ def main() -> int:
             raise AssertionError(
                 f"round-label glyph branches were not exercised: {branch_shapes}"
             )
+
+        anchor_prefix = (
+            "picture|id=1|lang=lattice\n"
+            "lattice|picture=1|rows=1|cols=1\n"
+            "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
+            "glyph-geometry|picture=1|owner=1|shape=circle|"
+            "xmin=40|xmax=60|ymin=40|ymax=60|radius=0|stroke=0|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
+            "label-use|picture=1\n"
+            "bbox|picture=1|class=label|id=1|owner=0|"
+            "xmin=45|xmax=65|ymin=45|ymax=65|shape=rect|radius=0\n"
+        )
+        valid_anchor = work / "lattice-label-anchor-site.tnlog"
+        valid_anchor.write_text(
+            anchor_prefix
+            + "label-anchor-site|picture=1|label=1|x=50|y=50\n",
+            encoding="utf-8",
+        )
+        valid_anchor_status, valid_anchor_audit = audit_status(valid_anchor)
+        if valid_anchor_status != 0:
+            raise AssertionError(
+                "declared lattice corner-label adjacency was rejected: "
+                + "; ".join(
+                    finding.msg for finding in valid_anchor_audit.findings
+                )
+            )
+
+        wrong_anchor = work / "lattice-label-wrong-anchor-site.tnlog"
+        wrong_anchor.write_text(
+            anchor_prefix
+            + "label-anchor-site|picture=1|label=1|x=51|y=50\n",
+            encoding="utf-8",
+        )
+        wrong_anchor_status, wrong_anchor_audit = audit_status(wrong_anchor)
+        if wrong_anchor_status != 1 or not any(
+                finding.rule == "malformed-event"
+                and "matches no circle glyph center" in finding.msg
+                for finding in wrong_anchor_audit.findings):
+            raise AssertionError("audit accepted a nonexistent label anchor site")
+
+        wrong_dialect = work / "free-label-anchor-site.tnlog"
+        wrong_dialect.write_text(
+            anchor_prefix.replace("lang=lattice", "lang=free", 1)
+            + "label-anchor-site|picture=1|label=1|x=50|y=50\n",
+            encoding="utf-8",
+        )
+        wrong_dialect_status, wrong_dialect_audit = audit_status(wrong_dialect)
+        if wrong_dialect_status != 1 or not any(
+                finding.rule == "dialect-mismatch"
+                and "valid only in a lattice picture" in finding.msg
+                for finding in wrong_dialect_audit.findings):
+            raise AssertionError("audit accepted a non-lattice label anchor site")
 
         def write_cut_wire_fixture(
                 name: str, query: tuple[int, int, int, int], inner: int = 0,
