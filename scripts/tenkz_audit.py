@@ -973,7 +973,7 @@ class Audit:
                     continue
                 labels_by_id[label_id] = label
 
-            label_anchor_sites: dict[int, tuple[int, int]] = {}
+            label_anchor_sites: dict[int, set[tuple[int, int]]] = {}
             for event in pic.events:
                 if event.kind != "label-anchor-site":
                     continue
@@ -999,12 +999,13 @@ class Audit:
                 label_id = int(event.attrs["label"])
                 if label_id <= 0:
                     continue
-                if label_id in label_anchor_sites:
+                anchor_site = (int(event.attrs["x"]), int(event.attrs["y"]))
+                if anchor_site in label_anchor_sites.get(label_id, set()):
                     self.hard(
                         "malformed-event",
                         f"{self.log_path.name}:{event.line}",
-                        f"picture {pic.ident} repeats anchor site for label "
-                        f"bbox id={label_id}",
+                        f"picture {pic.ident} repeats anchor site "
+                        f"{anchor_site} for label bbox id={label_id}",
                     )
                     continue
                 if label_id not in labels_by_id:
@@ -1015,7 +1016,6 @@ class Audit:
                         f"label bbox id={label_id}",
                     )
                     continue
-                anchor_site = (int(event.attrs["x"]), int(event.attrs["y"]))
                 if not any(
                         shape == "circle"
                         and 2 * anchor_site[0] == bounds[0] + bounds[1]
@@ -1028,7 +1028,7 @@ class Audit:
                         f"id={label_id} matches no circle glyph center",
                     )
                     continue
-                label_anchor_sites[label_id] = anchor_site
+                label_anchor_sites.setdefault(label_id, set()).add(anchor_site)
 
             valid_cut_wires: list[
                 tuple[Event, Rect, int, str, Rect, int, int]
@@ -1134,10 +1134,11 @@ class Audit:
                             f"id={wire_event.attrs['owner']}",
                         )
                 for event, shape, bounds, radius, stroke, points in glyphs:
-                    anchor_site = label_anchor_sites.get(label_id)
-                    if (shape == "circle" and anchor_site is not None
-                            and 2 * anchor_site[0] == bounds[0] + bounds[1]
-                            and 2 * anchor_site[1] == bounds[2] + bounds[3]):
+                    anchor_sites = label_anchor_sites.get(label_id, set())
+                    if (shape == "circle" and any(
+                            2 * site[0] == bounds[0] + bounds[1]
+                            and 2 * site[1] == bounds[2] + bounds[3]
+                            for site in anchor_sites)):
                         continue
                     if label_shape == "rect":
                         if shape == "rect":

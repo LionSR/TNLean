@@ -3486,6 +3486,38 @@
         {south~east} {north~west}
       }
   }
+\cs_new_protected:Npn \tenkzl_record_region_label_site:nn #1#2
+  {
+    \str_if_eq:VnF \l__tenkzl_sitemode_tl {none}
+      {
+        \bool_if:NF \l__tenkzl_opsheet_bool
+          {
+            \int_compare:nNnT {#1} > {0}
+              {
+                \int_compare:nNnT {#1} < {\l__tenkzl_ncols_int + 1}
+                  {
+                    \int_compare:nNnT {#2} > {0}
+                      {
+                        \int_compare:nNnT {#2} < {\l__tenkzl_nrows_int + 1}
+                          {
+                            \tenkzl_removed:nnF {#2}{#1}
+                              {
+                                \tenkzl_map:nn
+                                  { \tenkzl_cx:n{#1} }
+                                  { \tenkzl_cy:n{#2} }
+                                \tenkz@event{label-anchor-site|%
+                                  picture=\the\tenkz@pictureid|%
+                                  label=\the\tenkz@bboxuid|%
+                                  x=\number\l__tenkzl_px_dim|%
+                                  y=\number\l__tenkzl_py_dim}
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
 \cs_new_protected:Npn \tenkzl_corner_label:nnnnnn #1#2#3#4#5#6
   {
     % the anchor POINT shears with the sheet; the label node itself stays
@@ -3501,12 +3533,21 @@
       { $#6$ };
     \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
     % A corner label deliberately occupies the pocket beside its extreme
-    % site.  Publish that one semantic adjacency so the overlap audit can
-    % distinguish it from an accidental collision with any other site.
-    \tenkzl_map:nn { \tenkzl_cx:n{#2} } { \tenkzl_cy:n{#4} }
-    \tenkz@event{label-anchor-site|picture=\the\tenkz@pictureid|%
-      label=\the\tenkz@bboxuid|x=\number\l__tenkzl_px_dim|%
-      y=\number\l__tenkzl_py_dim}
+    % site.  Under an oblique frame its flipped anchor can also meet the one
+    % diagonally exterior site.  Publish only those semantic adjacencies so
+    % the overlap audit still rejects every unrelated collision.
+    \tenkzl_record_region_label_site:nn {#2}{#4}
+    \bool_if:NT \l__tenkzl_oblique_bool
+      {
+        \int_set:Nn \l_tmpa_int {#2}
+        \str_if_eq:nnTF {#3}{-}
+          { \int_decr:N \l_tmpa_int } { \int_incr:N \l_tmpa_int }
+        \int_set:Nn \l_tmpb_int {#4}
+        \str_if_eq:nnTF {#5}{+}
+          { \int_decr:N \l_tmpb_int } { \int_incr:N \l_tmpb_int }
+        \tenkzl_record_region_label_site:nn
+          {\l_tmpa_int}{\l_tmpb_int}
+      }
   }
 % place the label inside the requested corner of the boundary box (the four
 % corner anchors equal their key names; center is the box midpoint).  An
