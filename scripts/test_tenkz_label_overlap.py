@@ -58,6 +58,27 @@ SOURCE = r"""
   \node[tn label, inner sep=0pt] at (4.7mm,4.7mm)
     {\rule{0.3mm}{0.3mm}};
 \end{tenkzfree}
+% Final corner overrides must likewise win over the semantic skin defaults.
+\tikzset{
+  pill tensor/.append style={rounded corners=0pt},
+  box tensor/.append style={rounded corners=1.5pt}}
+\begin{tenkzfree}
+  \tnput[pill]{sharp-pill}{(0,0)}{}
+  \tnput[box]{rounded-box}{(20mm,0)}{}
+\end{tenkzfree}
+\end{document}
+"""
+
+INVALID_CORNERS = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\begin{document}
+\tikzset{box tensor/.append style={
+  /utils/exec={\pgfsetcornersarced{\pgfpoint{2pt}{3pt}}}}}
+\begin{tenkzfree}
+  \tnput[box]{bad}{(0,0)}{}
+\end{tenkzfree}
 \end{document}
 """
 
@@ -172,6 +193,34 @@ def main() -> int:
             raise AssertionError(
                 f"final rectangle override emitted stale geometry: {reshaped}"
             )
+
+        corner_events = [
+            event for event in audit.events(8)
+            if event.kind == "glyph-geometry"
+        ]
+        corner_shapes = [event.attrs.get("shape") for event in corner_events]
+        if corner_shapes != ["rect", "roundrect"]:
+            raise AssertionError(
+                f"final corner overrides emitted stale geometry: {corner_shapes}"
+            )
+        if corner_events[0].attrs.get("radius") != "0":
+            raise AssertionError("sharp pill retained its declared corner radius")
+        if corner_events[1].attrs.get("radius") != str(round(1.5 * 65536)):
+            raise AssertionError("rounded box did not emit its live corner radius")
+
+        invalid = work / "invalid-corners.tex"
+        invalid.write_text(INVALID_CORNERS, encoding="utf-8")
+        invalid_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", invalid.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if invalid_run.returncode == 0 or "unequal corner radii" not in invalid_run.stdout:
+            raise AssertionError("audit accepted a non-isotropic rounded rectangle")
 
         exact = work / "exact-shapes.tnlog"
         exact.write_text(
