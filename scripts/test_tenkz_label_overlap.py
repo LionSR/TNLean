@@ -20,6 +20,42 @@ SOURCE = r"""
 \usepackage{tenkz}
 \pagestyle{empty}
 \begin{document}
+\makeatletter
+\def\tenkzassertrelax#1{%
+  \expandafter\ifx\csname #1\endcsname\relax\else
+    \PackageError{tenkz test}{Snapshot state '#1' was not released}{}%
+  \fi}
+\def\tenkzassertsnapshotclean{%
+  \edef\tenkztesttoken{\the\tenkz@glyphsnapuid}%
+  \tenkzassertrelax{tenkz@outerx@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@outery@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@stroke@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@draw@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@fill@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@double@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@shade@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@fade@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@pathpicture@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@clip@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@join@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@dash@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@strokeopacity@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@fillopacity@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@textopacity@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@invalid@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@outercount@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@modecount@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@usecount@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@snapshotdone@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@glypharcflag@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@glypharc@\tenkztesttoken}}
+\newcount\tenkztestouterhookcalls
+\def\tenkztestcountouterhook{%
+  \let\tenkztestrealouterhook\pgf@outer@adjust@hook
+  \def\pgf@outer@adjust@hook{%
+    \global\advance\tenkztestouterhookcalls by 1\relax
+    \tenkztestrealouterhook}}
+\makeatother
 % Deliberately unsafe: the explicit separation overrides the measured label band.
 \begin{tenkzcd}[maps, species={channel}, column sep=2mm]
   A & B
@@ -84,11 +120,102 @@ SOURCE = r"""
   A & B & C
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{f}
 \end{tenkzcd}
+\tenkzassertrelax{tenkz@glyphsnaptoken@tenkzmap-1-3}
 % Empty resolved regions are legitimate no-ops and still emit audit data.
 \begin{tenkzlattice}[rows=1, cols=1]
   \tnregion[name=R]{(1,1)}
   \tnregion{R - R}
 \end{tenkzlattice}
+% Visible glyph ink includes the live stroke, but not positioning margin.
+\begingroup
+\tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
+  minimum width=4pt, minimum height=4pt, inner sep=0pt,
+  outer sep=20pt, line width=4pt}}
+\begin{tenkzfree}
+  \tnput[box]{stroke-hit}{(0,0)}{}
+  \node[tn label, inner sep=0pt, outer sep=0pt] at (3pt,0)
+    {\rule{0.2pt}{0.2pt}};
+\end{tenkzfree}
+\begin{tenkzfree}
+  \tnput[box]{margin-safe}{(0,0)}{}
+  \node[tn label, inner sep=0pt, outer sep=0pt] at (10pt,0)
+    {\rule{0.2pt}{0.2pt}};
+\end{tenkzfree}
+\endgroup
+\tenkzassertsnapshotclean
+% draw=none removes the stroke band from visible geometry.
+\begingroup
+\tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
+  minimum width=4pt, minimum height=4pt, inner sep=0pt,
+  outer sep=20pt, line width=4pt, draw=none}}
+\begin{tenkzfree}
+  \tnput[box]{undrawn}{(0,0)}{}
+  \node[tn label, inner sep=0pt, outer sep=0pt] at (3pt,0)
+    {\rule{0.2pt}{0.2pt}};
+\end{tenkzfree}
+\endgroup
+% Label outer separation is likewise invisible positioning whitespace.
+\begingroup
+\tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
+  minimum width=1pt, minimum height=1pt, inner sep=0pt,
+  outer sep=0pt, draw=none}}
+\begin{tenkzfree}
+  \tnput[box]{label-margin-safe}{(4pt,0)}{}
+  \node[tn label, inner sep=0pt, outer sep=8pt] at (0,0)
+    {\rule{1pt}{1pt}};
+\end{tenkzfree}
+\endgroup
+\tenkzassertsnapshotclean
+% Circle anchors use max(outer xsep, outer ysep) on every axis.
+\begingroup
+\tikzset{tensor/.append style={circle, minimum width=4pt,
+  minimum height=4pt, inner sep=0pt, outer xsep=2pt, outer ysep=5pt,
+  line width=4pt}}
+\begin{tenkzfree}
+  \tnput{anisotropic-circle}{(0,0)}{}
+\end{tenkzfree}
+\endgroup
+% A late line-width override is the width used by the audit snapshot.
+\begingroup
+\tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
+  minimum width=4pt, minimum height=4pt, inner sep=0pt,
+  outer sep=0pt, line width=4pt}}
+\begin{tenkzfree}
+  \tnput[box]{late-width}{(0,0)}{}
+\end{tenkzfree}
+\endgroup
+% Ordinary coordinate rotation does not transform the node shape.
+\begingroup
+\tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
+  minimum width=4pt, minimum height=4pt}}
+\begin{tenkzfree}
+  \begin{scope}[rotate=45]
+    \tnput[box]{untransformed-rotate}{(0,0)}{}
+  \end{scope}
+\end{tenkzfree}
+\endgroup
+% outer sep=auto must be evaluated at execute-end-node, not parsed literally.
+\begingroup
+\tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
+  minimum width=4pt, minimum height=4pt, inner sep=0pt,
+  outer sep=auto, line width=4pt,
+  /utils/exec=\tenkztestcountouterhook}}
+\begin{tenkzfree}
+  \tnput[box]{auto-drawn}{(0,0)}{}
+\end{tenkzfree}
+\endgroup
+\ifnum\tenkztestouterhookcalls=1\relax\else
+  \PackageError{tenkz test}{Audited outer hook did not run exactly once}{}%
+\fi
+\begingroup
+\tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
+  minimum width=4pt, minimum height=4pt, inner sep=0pt,
+  outer sep=auto, line width=4pt, draw=none}}
+\begin{tenkzfree}
+  \tnput[box]{auto-undrawn}{(0,0)}{}
+\end{tenkzfree}
+\endgroup
+\tenkzassertsnapshotclean
 \end{document}
 """
 
@@ -144,6 +271,135 @@ INACTIVE_SNAPSHOT = r"""
 \end{document}
 """
 
+TRANSFORMED_RECT = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tikzset{box tensor/.append style={rotate=45, transform shape}}
+\begin{tenkzfree}
+  \tnput[box]{bad}{(0,0)}{}
+\end{tenkzfree}
+\end{document}
+"""
+
+TRANSFORMED_CIRCLE = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tikzset{tensor/.append style={xscale=2, transform shape}}
+\begin{tenkzfree}
+  \tnput{bad}{(0,0)}{}
+\end{tenkzfree}
+\end{document}
+"""
+
+TRANSFORMED_TRIANGLE = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tikzset{canonical tensor/.append style={rotate=30, transform shape}}
+\begin{tenkz}
+  \tn[tri=l]{}
+\end{tenkz}
+\end{document}
+"""
+
+TRANSFORMED_LABEL = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkzfree}
+  \node[tn label, rotate=45, transform shape] at (0,0) {$f$};
+\end{tenkzfree}
+\end{document}
+"""
+
+DRAW_ONLY_GLYPH = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tikzset{box tensor/.append style={fill=none}}
+\begin{tenkzfree}
+  \tnput[box]{bad}{(0,0)}{}
+\end{tenkzfree}
+\end{document}
+"""
+
+NONRECTANGLE_LABEL = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkzfree}
+  \node[tn label, circle] at (0,0) {$f$};
+\end{tenkzfree}
+\end{document}
+"""
+
+NONAUDITED_CUSTOMIZATION = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\usetikzlibrary{fadings}
+\begin{document}
+\begin{tikzpicture}
+  \node[draw, fill=blue, line join=miter, dashed, double,
+    draw opacity=0, fill opacity=0, path fading=west] at (0,0) {control};
+\end{tikzpicture}
+\end{document}
+"""
+
+NESTED_END_HOOK = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\newif\ifinhook
+\tikzset{box tensor/.append style={execute at end node={%
+  \ifinhook\else\global\inhooktrue
+  \tikz[baseline] \node[tn label] {inner};%
+  \global\inhookfalse\fi}}}
+\begin{tenkzfree}
+  \tnput[box]{outer}{(0,0)}{}
+\end{tenkzfree}
+\makeatletter
+\ifnum\tenkz@auditpendingdepth=0\relax\else
+  \PackageError{tenkz test}{Pending audit stack did not drain}{}%
+\fi
+\expandafter\ifx\csname tenkz@auditpending@1\endcsname\relax\else
+  \PackageError{tenkz test}{Pending audit stack slot was not released}{}%
+\fi
+\expandafter\ifx\csname tenkz@auditpending@2\endcsname\relax\else
+  \PackageError{tenkz test}{Nested audit stack slot was not released}{}%
+\fi
+\makeatother
+\end{document}
+"""
+
+
+def customized_glyph(options: str, preamble: str = "") -> str:
+    return r"""
+\documentclass{article}
+\usepackage{tenkz}
+%s
+\begin{document}
+\tikzset{box tensor/.append style={%s}}
+\begin{tenkzfree}
+  \tnput[box]{bad}{(0,0)}{}
+\end{tenkzfree}
+\end{document}
+""" % (preamble, options)
+
+
+def customized_label(options: str, preamble: str = "") -> str:
+    return r"""
+\documentclass{article}
+\usepackage{tenkz}
+%s
+\begin{document}
+\begin{tenkzfree}
+  \node[tn label, %s] at (0,0) {$f$};
+\end{tenkzfree}
+\end{document}
+""" % (preamble, options)
+
 
 def audit_status(path: Path) -> tuple[int, Audit]:
     audit = Audit(path, None)
@@ -192,10 +448,10 @@ def main() -> int:
         overlaps = [finding for finding in audit.findings
                     if finding.rule == "label-overlap"]
         overlap_pictures = {
-            picture_id for picture_id in (1, 7)
+            picture_id for picture_id in (1, 7, 12)
             if any(f"picture {picture_id}" in finding.msg for finding in overlaps)
         }
-        if overlap_pictures != {1, 7}:
+        if overlap_pictures != {1, 7, 12}:
             raise AssertionError(
                 "overlap findings missed an unsafe picture: "
                 + "; ".join(finding.msg for finding in overlaps)
@@ -207,7 +463,9 @@ def main() -> int:
                 + "; ".join(finding.msg for finding in overlaps)
             )
         if any(f"picture {picture_id}" in finding.msg
-               for finding in overlaps for picture_id in (8, 9, 10, 11)):
+               for finding in overlaps
+               for picture_id in (8, 9, 10, 11, 13, 14, 15, 16, 17, 18,
+                                  19, 20)):
             raise AssertionError("audit rejected live customized geometry")
 
         empty_regions = [
@@ -289,12 +547,22 @@ def main() -> int:
         }
         if shapes != {"circle", "roundrect", "triangle"}:
             raise AssertionError(f"core shape fixture emitted {shapes}")
+        triangle_geometry = [
+            event for event in audit.events(6)
+            if event.kind == "glyph-geometry"
+            and event.attrs.get("shape") == "triangle"
+        ]
+        if (len(triangle_geometry) != 1
+                or int(triangle_geometry[0].attrs["stroke"]) <= 0):
+            raise AssertionError(
+                "live triangle fixture lost its nonzero visible stroke"
+            )
 
         reshaped = {
             event.attrs.get("shape") for event in audit.events(7)
             if event.kind == "glyph-geometry"
         }
-        if reshaped != {"rect"}:
+        if reshaped != {"roundrect"}:
             raise AssertionError(
                 f"final rectangle override emitted stale geometry: {reshaped}"
             )
@@ -304,13 +572,15 @@ def main() -> int:
             if event.kind == "glyph-geometry"
         ]
         corner_shapes = [event.attrs.get("shape") for event in corner_events]
-        if corner_shapes != ["rect", "roundrect"]:
+        if corner_shapes != ["roundrect", "roundrect"]:
             raise AssertionError(
                 f"final corner overrides emitted stale geometry: {corner_shapes}"
             )
-        if corner_events[0].attrs.get("radius") != "0":
-            raise AssertionError("sharp pill retained its declared corner radius")
-        if corner_events[1].attrs.get("radius") != str(round(1.5 * 65536)):
+        if abs(int(corner_events[0].attrs["radius"])
+               - round(0.275 * 65536)) > 1:
+            raise AssertionError("sharp pill omitted its visible stroke radius")
+        if abs(int(corner_events[1].attrs["radius"])
+               - round(1.775 * 65536)) > 1:
             raise AssertionError("rounded box did not emit its live corner radius")
 
         outer_gap = [event for event in audit.events(9)
@@ -329,9 +599,47 @@ def main() -> int:
                 f"{len(rounded_map)}"
             )
         if ({event.attrs.get("shape") for event in rounded_map} != {"roundrect"}
-                or {event.attrs.get("radius") for event in rounded_map}
-                != {str(round(2 * 65536))}):
-            raise AssertionError("typed-map rounded-corner passthrough was not preserved")
+                or any(abs(int(event.attrs["radius"])
+                           - round(2 * 65536)) > 1
+                       for event in rounded_map)):
+            raise AssertionError(
+                "typed-map rounded-corner passthrough was not preserved: "
+                + repr([(event.attrs.get("shape"), event.attrs.get("radius"))
+                        for event in rounded_map])
+            )
+
+        expected_widths = {
+            12: 8, 13: 8, 14: 4, 16: 8, 17: 8, 19: 8, 20: 4,
+        }
+        for picture_id, expected_pt in expected_widths.items():
+            geometry = [event for event in audit.events(picture_id)
+                        if event.kind == "glyph-geometry"]
+            if len(geometry) != 1:
+                raise AssertionError(
+                    f"picture {picture_id} lost exact glyph geometry"
+                )
+            width = int(geometry[0].attrs["xmax"]) - int(geometry[0].attrs["xmin"])
+            if abs(width - round(expected_pt * 65536)) > 2:
+                raise AssertionError(
+                    f"picture {picture_id} emitted width {width}sp, "
+                    f"expected {expected_pt}pt: {geometry[0].attrs}"
+                )
+
+        label_boxes = [event for event in audit.events(15)
+                       if event.kind == "bbox"
+                       and event.attrs.get("class") == "label"]
+        if len(label_boxes) != 1:
+            raise AssertionError("label outer-separation fixture lost its bbox")
+        label_width = (int(label_boxes[0].attrs["xmax"])
+                       - int(label_boxes[0].attrs["xmin"]))
+        if label_width >= round(2 * 65536):
+            raise AssertionError("label bbox retained invisible outer separation")
+
+        rotate_control = [event for event in audit.events(18)
+                          if event.kind == "glyph-geometry"]
+        if (len(rotate_control) != 1
+                or rotate_control[0].attrs.get("shape") != "roundrect"):
+            raise AssertionError("ordinary node rotation was rejected as transformed")
 
         invalid = work / "invalid-corners.tex"
         invalid.write_text(INVALID_CORNERS, encoding="utf-8")
@@ -351,6 +659,54 @@ def main() -> int:
             ("rounded-triangle.tex", ROUNDED_TRIANGLE, "has rounded corners"),
             ("oversized-outer-sep.tex", OVERSIZED_OUTER_SEP,
              "radius exceeds half its"),
+            ("transformed-rect.tex", TRANSFORMED_RECT,
+             "unsupported affine"),
+            ("transformed-circle.tex", TRANSFORMED_CIRCLE,
+             "unsupported affine"),
+            ("transformed-triangle.tex", TRANSFORMED_TRIANGLE,
+             "unsupported affine"),
+            ("transformed-label.tex", TRANSFORMED_LABEL,
+             "unsupported affine"),
+            ("draw-only-glyph.tex", DRAW_ONLY_GLYPH, "has no filled shape"),
+            ("nonrectangle-label.tex", NONRECTANGLE_LABEL,
+             "unsupported live shape"),
+            ("miter-glyph.tex", customized_glyph("line join=miter"),
+             "non-round line join"),
+            ("bevel-glyph.tex", customized_glyph("line join=bevel"),
+             "non-round line join"),
+            ("miter-label.tex", customized_label("draw, line join=miter"),
+             "non-round line join"),
+            ("double-glyph.tex", customized_glyph("double"),
+             "double stroke"),
+            ("double-distance-glyph.tex",
+             customized_glyph("double distance=2pt"), "double stroke"),
+            ("double-label.tex", customized_label("draw, double"),
+             "double stroke"),
+            ("dashed-glyph.tex", customized_glyph("dashed"),
+             "dashed stroke"),
+            ("dashed-label.tex", customized_label("draw, dashed"),
+             "dashed stroke"),
+            ("zero-draw-glyph.tex", customized_glyph("draw opacity=0"),
+             "zero draw opacity"),
+            ("zero-draw-label.tex",
+             customized_label("draw, draw opacity=0"),
+             "zero draw opacity"),
+            ("zero-fill-glyph.tex", customized_glyph("fill opacity=0"),
+             "zero fill opacity"),
+            ("zero-fill-label.tex", customized_label("fill opacity=0"),
+             "zero fill opacity"),
+            ("no-fill-label.tex",
+             customized_label("fill=none, draw=none"), "has no active fill"),
+            ("zero-text-label.tex", customized_label("text opacity=0"),
+             "zero text opacity"),
+            ("shade-glyph.tex", customized_glyph("shade"),
+             "uses shading"),
+            ("fading-glyph.tex",
+             customized_glyph("path fading=west", "\\usetikzlibrary{fadings}"),
+             "uses fading"),
+            ("path-picture-glyph.tex",
+             customized_glyph("path picture={\\fill (0,0) circle[radius=1pt];}"),
+             "uses a path picture"),
         ):
             failure = work / filename
             failure.write_text(source, encoding="utf-8")
@@ -385,6 +741,49 @@ def main() -> int:
                 + inactive_run.stdout[-1000:]
             )
 
+        nonaudited = work / "nonaudited-customization.tex"
+        nonaudited.write_text(NONAUDITED_CUSTOMIZATION, encoding="utf-8")
+        nonaudited_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error",
+             nonaudited.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if nonaudited_run.returncode:
+            raise AssertionError(
+                "non-audited TikZ customization was not transparent: "
+                + nonaudited_run.stdout[-1000:]
+            )
+
+        nested = work / "nested-end-hook.tex"
+        nested.write_text(NESTED_END_HOOK, encoding="utf-8")
+        nested_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", nested.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if nested_run.returncode:
+            raise AssertionError(
+                "nested audited execute-end hook corrupted the pending stack: "
+                + nested_run.stdout[-1000:]
+            )
+        nested_log = (work / "nested-end-hook.tnlog").read_text(encoding="utf-8")
+        if (nested_log.count("label-use|") != 1
+                or nested_log.count("class=label|") != 1
+                or nested_log.count("glyph-geometry|") != 1):
+            raise AssertionError(
+                "nested audited execute-end hook lost or duplicated geometry: "
+                + nested_log
+            )
+
         exact = work / "exact-shapes.tnlog"
         exact.write_text(
             "picture|id=1|lang=free\n"
@@ -393,13 +792,16 @@ def main() -> int:
             "bbox|picture=1|class=label|id=1|xmin=8|xmax=10|ymin=8|ymax=10\n"
             "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
             "glyph-geometry|picture=1|owner=1|shape=circle|xmin=-10|xmax=10|"
-            "ymin=-10|ymax=10|radius=0|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
+            "ymin=-10|ymax=10|radius=0|stroke=0|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
             "ink-use|picture=1|class=glyph|id=2|shape=roundrect\n"
             "glyph-geometry|picture=1|owner=2|shape=roundrect|xmin=20|xmax=40|"
-            "ymin=20|ymax=40|radius=8|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
+            "ymin=20|ymax=40|radius=8|stroke=0|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
             "ink-use|picture=1|class=glyph|id=3|shape=triangle\n"
             "glyph-geometry|picture=1|owner=3|shape=triangle|xmin=50|xmax=70|"
-            "ymin=0|ymax=20|radius=0|x1=70|y1=10|x2=50|y2=20|x3=50|y3=0\n",
+            "ymin=0|ymax=20|radius=0|stroke=0|"
+            "x1=70|y1=10|x2=50|y2=20|x3=50|y3=0\n",
             encoding="utf-8",
         )
         exact_status, exact_audit = audit_status(exact)
@@ -409,12 +811,55 @@ def main() -> int:
                 + "; ".join(finding.msg for finding in exact_audit.findings)
             )
 
+        def write_triangle_stroke_fixture(
+                name: str, bounds: tuple[int, int, int, int]) -> Path:
+            fixture = work / name
+            xmin, xmax, ymin, ymax = bounds
+            fixture.write_text(
+                "picture|id=1|lang=free\n"
+                "atom|picture=1|name=a|kind=dot\n"
+                "label-use|picture=1\n"
+                f"bbox|picture=1|class=label|id=1|xmin={xmin}|xmax={xmax}|"
+                f"ymin={ymin}|ymax={ymax}\n"
+                "ink-use|picture=1|class=glyph|id=1|shape=triangle\n"
+                "glyph-geometry|picture=1|owner=1|shape=triangle|"
+                "xmin=-2|xmax=12|ymin=-12|ymax=12|radius=0|stroke=2|"
+                "x1=0|y1=0|x2=10|y2=10|x3=10|y3=-10\n",
+                encoding="utf-8",
+            )
+            return fixture
+
+        for name, bounds in (
+            ("triangle-edge-stroke.tnlog", (11, 12, -1, 1)),
+            ("triangle-vertex-stroke.tnlog", (-2, -1, -1, 1)),
+        ):
+            triangle_status, triangle_audit = audit_status(
+                write_triangle_stroke_fixture(name, bounds)
+            )
+            if triangle_status != 1 or not any(
+                    finding.rule == "label-overlap"
+                    for finding in triangle_audit.findings):
+                raise AssertionError(
+                    f"audit missed exact triangle stroke overlap in {name}"
+                )
+
+        tangent_status, tangent_audit = audit_status(
+            write_triangle_stroke_fixture(
+                "triangle-stroke-tangent.tnlog", (-4, -2, -1, 1)
+            )
+        )
+        if tangent_status != 0:
+            raise AssertionError(
+                "triangle stroke tangency was rejected: "
+                + "; ".join(finding.msg for finding in tangent_audit.findings)
+            )
+
         oversized_roundrect = work / "oversized-roundrect.tnlog"
         oversized_roundrect.write_text(
             "picture|id=1|lang=free\n"
             "ink-use|picture=1|class=glyph|id=1|shape=roundrect\n"
             "glyph-geometry|picture=1|owner=1|shape=roundrect|"
-            "xmin=0|xmax=10|ymin=0|ymax=10|radius=6|"
+            "xmin=0|xmax=10|ymin=0|ymax=10|radius=6|stroke=0|"
             "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n",
             encoding="utf-8",
         )

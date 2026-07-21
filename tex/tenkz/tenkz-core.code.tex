@@ -313,8 +313,8 @@
   % `label/.style` would clobber TikZ's built-in /tikz/label key
   % document-wide, silently swallowing `label=above:$x$` on every node of
   % every picture that merely loads tenkz.
-  tn label/.style={tenkz audited label, text=tenkzInk, inner sep=1pt,
-      font=\scriptsize},
+  tn label/.style={tenkz audited label, shape=rectangle, text=tenkzInk,
+      fill=tenkzPaper, inner sep=1pt, font=\scriptsize},
   cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
       -{Straight Barb[length=3.4pt]},
       shorten <=3.5pt, shorten >=3.5pt},
@@ -357,9 +357,10 @@
 
 % Measured audit geometry.  Coordinates are written as integer scaled points,
 % so the event stream is independent of locale and TeX's decimal formatting.
-% Labels and explicit wire nodes use live rectangles.  Core glyph nodes also
-% retain their shape: circles use live cardinal anchors, rounded rectangles
-% carry the production corner radius, and triangles use live corner anchors.
+% Labels use visible live rectangles.  Core glyph nodes retain their visible
+% filled shape after outer-separation removal: circles use live cardinal
+% anchors, rounded rectangles carry the final stroke-expanded corner radius,
+% and triangles use live centerline corners plus an explicit half-stroke.
 % Typed-map wire rectangles use endpoint anchors plus the stroke's vertical
 % half-width; both caps terminate under opaque nodes, so longitudinal cap ink
 % is not visible.
@@ -372,6 +373,7 @@
 \newdimen\tenkz@glyphradiusy
 \newdimen\tenkz@glyphouterxsep
 \newdimen\tenkz@glyphouterysep
+\newdimen\tenkz@glyphhalfstroke
 \newdimen\tenkz@glyphwidth
 \newdimen\tenkz@glyphheight
 \newdimen\tenkz@glyphdiameter
@@ -390,7 +392,37 @@
 \newdimen\tenkz@bboxxb
 \newdimen\tenkz@bboxyb
 \newif\iftenkz@bboxcapture
+\newif\iftenkz@identitylinear
+\newif\iftenkz@labelrectangle
 \tenkz@bboxcapturetrue
+\let\tenkz@labelgeometrykey\relax
+% Mirror the actual backend graphic state without changing any PGF arguments.
+% Assignments remain local to the same TeX groups as the driver mutations, so
+% inherited scopes and final node options are observed at the real path use.
+\def\tenkz@empty{}
+\def\tenkz@livejoin{miter}
+\def\tenkz@livedash{}
+\def\tenkz@livestrokeopacity{1}
+\def\tenkz@livefillopacity{1}
+\let\tenkz@sys@miterjoin\pgfsys@miterjoin
+\let\tenkz@sys@roundjoin\pgfsys@roundjoin
+\let\tenkz@sys@beveljoin\pgfsys@beveljoin
+\let\tenkz@sys@setdash\pgfsys@setdash
+\let\tenkz@sys@strokeopacity\pgfsys@stroke@opacity
+\let\tenkz@sys@fillopacity\pgfsys@fill@opacity
+\def\pgfsys@miterjoin{\def\tenkz@livejoin{miter}\tenkz@sys@miterjoin}
+\def\pgfsys@roundjoin{\def\tenkz@livejoin{round}\tenkz@sys@roundjoin}
+\def\pgfsys@beveljoin{\def\tenkz@livejoin{bevel}\tenkz@sys@beveljoin}
+\def\pgfsys@setdash#1#2{%
+  \edef\tenkz@livedash{#1}%
+  \tenkz@sys@setdash{#1}{#2}}
+\def\pgfsys@stroke@opacity#1{%
+  \edef\tenkz@livestrokeopacity{#1}%
+  \tenkz@sys@strokeopacity{#1}}
+\def\pgfsys@fill@opacity#1{%
+  \edef\tenkz@livefillopacity{#1}%
+  \tenkz@sys@fillopacity{#1}}
+\newcount\tenkz@auditpendingdepth
 \def\tenkz@begininkuse#1{%
   \global\advance\tenkz@inkuid by 1\relax
   \tenkz@inkowner=\tenkz@inkuid
@@ -410,43 +442,402 @@
     xmin=\number\tenkz@bboxxmin|%
     xmax=\number\tenkz@bboxxmax|ymin=\number\tenkz@bboxymin|%
     ymax=\number\tenkz@bboxymax}}
-\def\tenkz@emitnodebbox#1#2{%
-  \begingroup
-  \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#2}{west}}%
-  \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#2}{east}}%
-  \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#2}{south}}%
-  \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#2}{north}}%
-  \tenkz@writebbox{#1}%
-  \endgroup}
-\def\tenkz@capturelabelbbox{%
-  \iftenkz@bboxcapture
-    \ifnum\tenkz@pictureid>0\relax
-      \tenkz@emitnodebbox{label}{\tikzlastnode}%
-    \fi
+\def\tenkz@checklinear#1#2#3#4#5#6{%
+  \tenkz@identitylineartrue
+  \pgf@xa=#1pt\relax
+  \ifdim\pgf@xa=1pt\else\tenkz@identitylinearfalse\fi
+  \pgf@xa=#2pt\relax
+  \ifdim\pgf@xa=0pt\else\tenkz@identitylinearfalse\fi
+  \pgf@xa=#3pt\relax
+  \ifdim\pgf@xa=0pt\else\tenkz@identitylinearfalse\fi
+  \pgf@xa=#4pt\relax
+  \ifdim\pgf@xa=1pt\else\tenkz@identitylinearfalse\fi}
+\def\tenkz@requireidentitylinear#1#2{%
+  \edef\tenkz@nodematrix{\csname pgf@sh@nt@#1\endcsname}%
+  \expandafter\tenkz@checklinear\tenkz@nodematrix
+  \iftenkz@identitylinear\else
+    \PackageError{tenkz}{Audited #2 node '#1' has unsupported affine transform}%
+      {Remove transform shape, or use an untransformed audited node.}%
   \fi}
+\def\tenkz@requirelabelrectangle#1{%
+  \tenkz@labelrectangletrue
+  \edef\tenkz@livelabelshape{\csname pgf@sh@ns@#1\endcsname}%
+  \def\tenkz@pgfrectangle{rectangle}%
+  \ifx\tenkz@livelabelshape\tenkz@pgfrectangle\else
+    \tenkz@labelrectanglefalse
+    \PackageError{tenkz}{Audited label node '#1' has unsupported live shape
+      '\tenkz@livelabelshape'}{Use the rectangular tn label shape.}%
+  \fi}
+\def\tenkz@storelabelgeometry{%
+  \ifx\tenkz@labelgeometrykey\relax\else
+    \pgfextractx{\tenkz@bboxxa}{\pgfpointanchor{\tikzlastnode}{center}}%
+    \pgfextracty{\tenkz@bboxya}{\pgfpointanchor{\tikzlastnode}{center}}%
+    \pgf@x=\tenkz@bboxxmin \advance\pgf@x by -\tenkz@bboxxa
+    \expandafter\xdef\csname tenkz@labelxmin@\tenkz@labelgeometrykey
+      \endcsname{\the\pgf@x}%
+    \pgf@x=\tenkz@bboxxmax \advance\pgf@x by -\tenkz@bboxxa
+    \expandafter\xdef\csname tenkz@labelxmax@\tenkz@labelgeometrykey
+      \endcsname{\the\pgf@x}%
+    \pgf@y=\tenkz@bboxymin \advance\pgf@y by -\tenkz@bboxya
+    \expandafter\xdef\csname tenkz@labelymin@\tenkz@labelgeometrykey
+      \endcsname{\the\pgf@y}%
+    \pgf@y=\tenkz@bboxymax \advance\pgf@y by -\tenkz@bboxya
+    \expandafter\xdef\csname tenkz@labelymax@\tenkz@labelgeometrykey
+      \endcsname{\the\pgf@y}%
+  \fi}
+\def\tenkz@cleanupstoredlabelgeometry#1{%
+  \global\expandafter\let\csname tenkz@labelxmin@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelxmax@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelymin@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelymax@#1\endcsname\relax}
+\def\tenkz@emitstoredlabelbbox#1#2{%
+  \begingroup
+  \tenkz@requireidentitylinear{#1}{label}%
+  \tenkz@requirelabelrectangle{#1}%
+  \iftenkz@identitylinear
+  \iftenkz@labelrectangle
+    \pgfextractx{\tenkz@bboxxa}{\pgfpointanchor{#1}{center}}%
+    \pgfextracty{\tenkz@bboxya}{\pgfpointanchor{#1}{center}}%
+    \tenkz@bboxxmin=\csname tenkz@labelxmin@#2\endcsname\relax
+    \tenkz@bboxxmax=\csname tenkz@labelxmax@#2\endcsname\relax
+    \tenkz@bboxymin=\csname tenkz@labelymin@#2\endcsname\relax
+    \tenkz@bboxymax=\csname tenkz@labelymax@#2\endcsname\relax
+    \advance\tenkz@bboxxmin by \tenkz@bboxxa
+    \advance\tenkz@bboxxmax by \tenkz@bboxxa
+    \advance\tenkz@bboxymin by \tenkz@bboxya
+    \advance\tenkz@bboxymax by \tenkz@bboxya
+    \tenkz@writebbox{label}%
+  \fi
+  \fi
+  \endgroup}
+\def\tenkz@cleanupvisiblesnapshot#1{%
+  \global\expandafter\let\csname tenkz@outerx@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@outery@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@stroke@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@draw@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@fill@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@double@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@shade@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@fade@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@pathpicture@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@clip@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@join@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@dash@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@strokeopacity@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@fillopacity@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@textopacity@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@invalid@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@outercount@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@modecount@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@usecount@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@snapshotdone@#1\endcsname\relax}
+% Convert the effective outer separation to numeric lengths.  This is called
+% only from the real \pgf@outer@adjust@hook invocation in \pgfmultipartnode.
+\def\tenkz@snapshotoutersep#1{%
+  \tenkz@incrementtokenslot{outercount}{#1}%
+  \pgfmathsetlength{\pgf@x}{\pgfkeysvalueof{/pgf/outer xsep}}%
+  \expandafter\xdef\csname tenkz@outerx@#1\endcsname{\the\pgf@x}%
+  \pgfmathsetlength{\pgf@y}{\pgfkeysvalueof{/pgf/outer ysep}}%
+  \expandafter\xdef\csname tenkz@outery@#1\endcsname{\the\pgf@y}}
+\def\tenkz@armvisiblesnapshot#1{%
+  \global\advance\tenkz@auditpendingdepth by 1\relax
+  \expandafter\xdef\csname tenkz@auditpending@%
+    \the\tenkz@auditpendingdepth\endcsname{#1}}
+\def\tenkz@incrementtokenslot#1#2{%
+  \count@=\csname tenkz@#1@#2\endcsname\relax
+  \advance\count@ by 1\relax
+  \expandafter\xdef\csname tenkz@#1@#2\endcsname{\the\count@}}
+\def\tenkz@capturepathmode#1{%
+  \tenkz@incrementtokenslot{modecount}{#1}%
+  \csname tenkz@savedmode@#1\endcsname
+  \iftikz@mode@shade
+    \expandafter\gdef\csname tenkz@shade@#1\endcsname{1}%
+  \else
+    \expandafter\gdef\csname tenkz@shade@#1\endcsname{0}%
+  \fi
+  \iftikz@mode@fade@path
+    \expandafter\gdef\csname tenkz@fade@#1\endcsname{1}%
+  \else\iftikz@mode@fade@scope
+    \expandafter\gdef\csname tenkz@fade@#1\endcsname{1}%
+  \else
+    \expandafter\gdef\csname tenkz@fade@#1\endcsname{0}%
+  \fi\fi
+  \ifx\tikz@path@picture\pgfutil@empty
+    \expandafter\gdef\csname tenkz@pathpicture@#1\endcsname{0}%
+  \else
+    \expandafter\gdef\csname tenkz@pathpicture@#1\endcsname{1}%
+  \fi}
+\def\tenkz@captureactualpath#1#2{%
+  \tenkz@incrementtokenslot{usecount}{#1}%
+  \pgfutil@in@{draw}{#2}%
+  \ifpgfutil@in@
+    \expandafter\gdef\csname tenkz@draw@#1\endcsname{1}%
+    \pgf@x=.5\pgflinewidth
+    \expandafter\xdef\csname tenkz@stroke@#1\endcsname{\the\pgf@x}%
+  \else
+    \expandafter\gdef\csname tenkz@draw@#1\endcsname{0}%
+    \expandafter\gdef\csname tenkz@stroke@#1\endcsname{0pt}%
+  \fi
+  \pgfutil@in@{fill}{#2}%
+  \ifpgfutil@in@
+    \expandafter\gdef\csname tenkz@fill@#1\endcsname{1}%
+  \else
+    \expandafter\gdef\csname tenkz@fill@#1\endcsname{0}%
+  \fi
+  \pgfutil@in@{clip}{#2}%
+  \ifpgfutil@in@
+    \expandafter\gdef\csname tenkz@clip@#1\endcsname{1}%
+  \else
+    \expandafter\gdef\csname tenkz@clip@#1\endcsname{0}%
+  \fi
+  \iftikz@mode@double
+    \expandafter\gdef\csname tenkz@double@#1\endcsname{1}%
+  \else
+    \expandafter\gdef\csname tenkz@double@#1\endcsname{0}%
+  \fi
+  \expandafter\xdef\csname tenkz@join@#1\endcsname{\tenkz@livejoin}%
+  \ifx\tenkz@livedash\tenkz@empty
+    \expandafter\gdef\csname tenkz@dash@#1\endcsname{0}%
+  \else
+    \expandafter\gdef\csname tenkz@dash@#1\endcsname{1}%
+  \fi
+  \expandafter\xdef\csname tenkz@strokeopacity@#1\endcsname{%
+    \tenkz@livestrokeopacity}%
+  \expandafter\xdef\csname tenkz@fillopacity@#1\endcsname{%
+    \tenkz@livefillopacity}}
+\def\tenkz@setinvalid#1#2{%
+  \edef\tenkz@invalidcode{\csname tenkz@invalid@#1\endcsname}%
+  \ifnum\tenkz@invalidcode=0\relax
+    \expandafter\gdef\csname tenkz@invalid@#1\endcsname{#2}%
+  \fi}
+\def\tenkz@validateactualpath#1{%
+  \expandafter\gdef\csname tenkz@invalid@#1\endcsname{0}%
+  % Prefer the semantic reason for a rejected path over the lower-level
+  % single-pass guard: path pictures and similar effects can themselves add
+  % mode evaluations or path uses.
+  \ifnum\csname tenkz@double@#1\endcsname=1\relax
+    \tenkz@setinvalid{#1}{5}%
+  \fi
+  \ifnum\csname tenkz@shade@#1\endcsname=1\relax
+    \tenkz@setinvalid{#1}{6}%
+  \fi
+  \ifnum\csname tenkz@fade@#1\endcsname=1\relax
+    \tenkz@setinvalid{#1}{7}%
+  \fi
+  \ifnum\csname tenkz@pathpicture@#1\endcsname=1\relax
+    \tenkz@setinvalid{#1}{10}%
+  \fi
+  \ifnum\csname tenkz@clip@#1\endcsname=1\relax
+    \tenkz@setinvalid{#1}{9}%
+  \fi
+  \ifnum\csname tenkz@draw@#1\endcsname=1\relax
+    \edef\tenkz@actualjoin{\csname tenkz@join@#1\endcsname}%
+    \def\tenkz@roundjoin{round}%
+    \ifx\tenkz@actualjoin\tenkz@roundjoin\else
+      \tenkz@setinvalid{#1}{1}%
+    \fi
+    \ifnum\csname tenkz@dash@#1\endcsname=1\relax
+      \tenkz@setinvalid{#1}{2}%
+    \fi
+    \pgf@xa=\csname tenkz@strokeopacity@#1\endcsname pt\relax
+    \ifdim\pgf@xa>0pt\else\tenkz@setinvalid{#1}{3}\fi
+  \fi
+  \ifnum\csname tenkz@fill@#1\endcsname=1\relax
+    \pgf@xa=\csname tenkz@fillopacity@#1\endcsname pt\relax
+    \ifdim\pgf@xa>0pt\else\tenkz@setinvalid{#1}{4}\fi
+  \fi
+  \ifnum\csname tenkz@usecount@#1\endcsname=1\relax
+  \else\tenkz@setinvalid{#1}{8}\fi
+  \ifnum\csname tenkz@outercount@#1\endcsname=1\relax
+  \else\tenkz@setinvalid{#1}{12}\fi
+  \ifnum\csname tenkz@modecount@#1\endcsname=1\relax
+  \else\tenkz@setinvalid{#1}{11}\fi}
+\def\tenkz@runouterhook#1{%
+  \expandafter\ifx\csname tenkz@outeractive@#1\endcsname\relax
+    \csname tenkz@savedouter@#1\endcsname
+  \else
+    \expandafter\let\csname tenkz@outeractive@#1\endcsname\relax
+    \csname tenkz@savedouter@#1\endcsname
+    \tenkz@snapshotoutersep{#1}%
+  \fi}
+\def\tenkz@runactualusage#1{%
+  \expandafter\let\csname tenkz@savedusepath@#1\endcsname\pgfusepath
+  \expandafter\let\csname tenkz@savedmode@#1\endcsname\tikz@mode
+  \def\pgfusepath##1{%
+    \tenkz@captureactualpath{#1}{##1}%
+    \csname tenkz@savedusepath@#1\endcsname{##1}}%
+  \def\tikz@mode{\tenkz@capturepathmode{#1}}%
+  \csname tenkz@savedusage@#1\endcsname
+  \expandafter\let\csname tenkz@savedusepath@#1\endcsname\relax
+  \expandafter\let\csname tenkz@savedmode@#1\endcsname\relax
+  \tenkz@validateactualpath{#1}}
+% The unarmed branch is the original four-argument call.  An audited token
+% wraps only its node's one real outer-adjust hook and its original path-use
+% callback; all arguments and backend calls are forwarded unchanged.
+\let\tenkz@multipartnode\pgfmultipartnode
+\def\pgfmultipartnode#1#2#3#4{%
+  \ifnum\tenkz@auditpendingdepth=0\relax
+    \tenkz@multipartnode{#1}{#2}{#3}{#4}%
+  \else
+    \edef\tenkz@token{\csname tenkz@auditpending@%
+      \the\tenkz@auditpendingdepth\endcsname}%
+    \global\expandafter\let\csname tenkz@auditpending@%
+      \the\tenkz@auditpendingdepth\endcsname\relax
+    \global\advance\tenkz@auditpendingdepth by -1\relax
+    \expandafter\let\csname tenkz@savedouter@\tenkz@token\endcsname
+      \pgf@outer@adjust@hook
+    \expandafter\def\csname tenkz@outeractive@\tenkz@token\endcsname{1}%
+    \expandafter\def\csname tenkz@savedusage@\tenkz@token\endcsname{#4}%
+    \expandafter\gdef\csname tenkz@outercount@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@modecount@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@usecount@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@draw@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@fill@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@stroke@\tenkz@token\endcsname{0pt}%
+    \expandafter\gdef\csname tenkz@double@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@shade@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@fade@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@pathpicture@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@clip@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@join@\tenkz@token\endcsname{unknown}%
+    \expandafter\gdef\csname tenkz@dash@\tenkz@token\endcsname{0}%
+    \expandafter\gdef\csname tenkz@strokeopacity@\tenkz@token\endcsname{1}%
+    \expandafter\gdef\csname tenkz@fillopacity@\tenkz@token\endcsname{1}%
+    \edef\pgf@outer@adjust@hook{%
+      \noexpand\tenkz@runouterhook{\tenkz@token}}%
+    \edef\tenkz@wrappedusage{%
+      \noexpand\tenkz@runactualusage{\tenkz@token}}%
+    \tenkz@multipartnode{#1}{#2}{#3}{\tenkz@wrappedusage}%
+    \expandafter\let\expandafter\pgf@outer@adjust@hook
+      \csname tenkz@savedouter@\tenkz@token\endcsname
+    \expandafter\let\csname tenkz@savedouter@\tenkz@token\endcsname\relax
+    \expandafter\let\csname tenkz@outeractive@\tenkz@token\endcsname\relax
+    \expandafter\let\csname tenkz@savedusage@\tenkz@token\endcsname\relax
+  \fi}
+\def\tenkz@visiblestateerror#1#2#3{%
+  \ifcase#1\relax
+  \or\PackageError{tenkz}{Audited #2 node '#3' has a non-round line join}%
+      {Use line join=round for audited visible geometry.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has a dashed stroke}%
+      {Use a solid stroke for audited visible geometry.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has zero draw opacity}%
+      {Use positive draw opacity or draw=none.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has zero fill opacity}%
+      {Use positive fill opacity or fill=none.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has a double stroke}%
+      {Double strokes are not representable by the audit geometry.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' uses shading}%
+      {Shaded paths are not representable by the audit geometry.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' uses fading}%
+      {Faded paths are not representable by the audit geometry.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has multiple path uses}%
+      {Use one ordinary fill/draw path for audited visible geometry.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' uses clipping}%
+      {Clipped nodes are not representable by the audit geometry.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' uses a path picture}%
+      {Path pictures are not representable by the audit geometry.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has multiple mode evaluations}%
+      {Use an ordinary single-pass TikZ node.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has multiple outer adjustments}%
+      {Use an ordinary single-pass PGF node.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has no active fill}%
+      {Audited labels require an opaque rectangular background fill.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has zero text opacity}%
+      {Use positive text opacity for audited labels.}%
+  \else\PackageError{tenkz}{Audited #2 node '#3' has invalid visible state}%
+      {Use an ordinary filled, optionally round-stroked audited node.}%
+  \fi}
+\def\tenkz@capturelabelbbox#1{%
+  \edef\tenkz@visibleinvalid{\csname tenkz@invalid@#1\endcsname}%
+  % Exact label geometry is the filled rectangle.  Without that background,
+  % the support would be the individual text glyphs, which this audit does not
+  % attempt to reconstruct.
+  \ifnum\tenkz@visibleinvalid=0\relax
+    \ifnum\csname tenkz@fill@#1\endcsname=1\relax\else
+      \tenkz@setinvalid{#1}{13}%
+      \edef\tenkz@visibleinvalid{13}%
+    \fi
+  \fi
+  \ifnum\tenkz@visibleinvalid=0\relax
+    \pgf@xa=\csname tenkz@fillopacity@#1\endcsname pt\relax
+    \ifdim\pgf@xa>0pt\else
+      \tenkz@setinvalid{#1}{4}%
+      \edef\tenkz@visibleinvalid{4}%
+    \fi
+  \fi
+  \ifnum\tenkz@visibleinvalid=0\relax
+    \pgf@xa=\csname tenkz@textopacity@#1\endcsname pt\relax
+    \ifdim\pgf@xa>0pt\else
+      \tenkz@setinvalid{#1}{14}%
+      \edef\tenkz@visibleinvalid{14}%
+    \fi
+  \fi
+  \ifnum\tenkz@visibleinvalid=0\relax
+    \ifnum\tenkz@pictureid>0\relax
+      \begingroup
+      \tenkz@requireidentitylinear{\tikzlastnode}{label}%
+      \tenkz@requirelabelrectangle{\tikzlastnode}%
+      \iftenkz@identitylinear
+      \iftenkz@labelrectangle
+        \tenkz@glyphouterxsep=\csname tenkz@outerx@#1\endcsname\relax
+        \tenkz@glyphouterysep=\csname tenkz@outery@#1\endcsname\relax
+        \tenkz@glyphhalfstroke=\csname tenkz@stroke@#1\endcsname\relax
+        \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{\tikzlastnode}{west}}%
+        \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{\tikzlastnode}{east}}%
+        \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{\tikzlastnode}{south}}%
+        \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{\tikzlastnode}{north}}%
+        \advance\tenkz@bboxxmin by \tenkz@glyphouterxsep
+        \advance\tenkz@bboxxmax by -\tenkz@glyphouterxsep
+        \advance\tenkz@bboxymin by \tenkz@glyphouterysep
+        \advance\tenkz@bboxymax by -\tenkz@glyphouterysep
+        \advance\tenkz@bboxxmin by -\tenkz@glyphhalfstroke
+        \advance\tenkz@bboxxmax by \tenkz@glyphhalfstroke
+        \advance\tenkz@bboxymin by -\tenkz@glyphhalfstroke
+        \advance\tenkz@bboxymax by \tenkz@glyphhalfstroke
+        \tenkz@storelabelgeometry
+        \iftenkz@bboxcapture
+          \tenkz@writebbox{label}%
+        \fi
+      \fi
+      \fi
+      \endgroup
+    \fi
+    \tenkz@cleanupvisiblesnapshot{#1}%
+  \else
+    \tenkz@cleanupvisiblesnapshot{#1}%
+    \tenkz@visiblestateerror{\tenkz@visibleinvalid}{label}{\tikzlastnode}%
+  \fi}
+\def\tenkz@snapshotvisible#1{%
+  \expandafter\ifx\csname tenkz@snapshotdone@#1\endcsname\relax
+    \expandafter\gdef\csname tenkz@snapshotdone@#1\endcsname{1}%
+    \ifx\tikz@textopacity\pgfutil@empty
+      \expandafter\gdef\csname tenkz@textopacity@#1\endcsname{1}%
+    \else
+      \expandafter\xdef\csname tenkz@textopacity@#1\endcsname{\tikz@textopacity}%
+    \fi
+    \tenkz@armvisiblesnapshot{#1}%
+  \fi
+}
 % Capture the final corner state while TikZ is still constructing the node.
 % `append after command' runs too late: PGF has restored the path-local
 % \ifpgf@arccorners and \pgf@corner@arc state by then.  Each audited node gets a
 % globally unique token, and `execute at end node' snapshots the state under
 % that token for the matching append-after callback to consume.
-\def\tenkz@snapshotglyphcorners#1{%
-  \pgfmathsetlength{\pgf@x}{\pgfkeysvalueof{/pgf/outer xsep}}%
-  \expandafter\xdef\csname tenkz@glyphouterx@#1\endcsname{\the\pgf@x}%
-  \pgfmathsetlength{\pgf@y}{\pgfkeysvalueof{/pgf/outer ysep}}%
-  \expandafter\xdef\csname tenkz@glyphoutery@#1\endcsname{\the\pgf@y}%
-  \ifpgf@arccorners
-    \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{1}%
-    \expandafter\xdef\csname tenkz@glypharc@#1\endcsname{\pgf@corner@arc}%
-  \else
-    \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{0}%
-    \expandafter\gdef\csname tenkz@glypharc@#1\endcsname{{0pt}{0pt}}%
+\def\tenkz@snapshotglyphstate#1{%
+  \expandafter\ifx\csname tenkz@snapshotdone@#1\endcsname\relax
+    \ifpgf@arccorners
+      \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{1}%
+      \expandafter\xdef\csname tenkz@glypharc@#1\endcsname{\pgf@corner@arc}%
+    \else
+      \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{0}%
+      \expandafter\gdef\csname tenkz@glypharc@#1\endcsname{{0pt}{0pt}}%
+    \fi
+    \tenkz@snapshotvisible{#1}%
   \fi}
 \def\tenkz@setglypharcaux#1#2{%
   \tenkz@glyphradiusx=#1\relax
   \tenkz@glyphradiusy=#2\relax}
 \def\tenkz@readglyphcorners#1{%
-  \tenkz@glyphouterxsep=\csname tenkz@glyphouterx@#1\endcsname\relax
-  \tenkz@glyphouterysep=\csname tenkz@glyphoutery@#1\endcsname\relax
   \edef\tenkz@glypharcflag{\csname tenkz@glypharcflag@#1\endcsname}%
   \ifnum\tenkz@glypharcflag=1\relax
     \edef\tenkz@glypharcs{\csname tenkz@glypharc@#1\endcsname}%
@@ -495,8 +886,9 @@
 % not the base style's starting shape or declared radius.
 \def\tenkz@resolveglyphshape#1#2{%
   \edef\tenkz@livepgfshape{\csname pgf@sh@ns@#1\endcsname}%
-  \tenkz@glyphouterxsep=\csname tenkz@glyphouterx@#2\endcsname\relax
-  \tenkz@glyphouterysep=\csname tenkz@glyphoutery@#2\endcsname\relax
+  \tenkz@glyphouterxsep=\csname tenkz@outerx@#2\endcsname\relax
+  \tenkz@glyphouterysep=\csname tenkz@outery@#2\endcsname\relax
+  \tenkz@glyphhalfstroke=\csname tenkz@stroke@#2\endcsname\relax
   \def\tenkz@pgfcircle{circle}%
   \def\tenkz@pgfrectangle{rectangle}%
   \def\tenkz@pgftriangle{isosceles triangle}%
@@ -507,9 +899,11 @@
     \tenkz@readglyphcorners{#2}%
     \ifdim\tenkz@glyphradius>0pt
       \def\tenkz@glyphshape{roundrect}%
+    \else\ifdim\tenkz@glyphhalfstroke>0pt
+      \def\tenkz@glyphshape{roundrect}%
     \else
       \def\tenkz@glyphshape{rect}%
-    \fi
+    \fi\fi
   \else\ifx\tenkz@livepgfshape\tenkz@pgftriangle
     \tenkz@readglyphcorners{#2}%
     \ifdim\tenkz@glyphradius>0pt
@@ -530,20 +924,35 @@
     id=\the\tenkz@inkowner|shape=\tenkz@glyphshape}}
 \def\tenkz@captureglyphgeometry#1#2#3{%
   \tenkz@captureglyphgeometrynode{\tikzlastnode}{#1}{#2}{#3}}
+\def\tenkz@cleanupglyphsnapshot#1{%
+  \global\expandafter\let\csname tenkz@glypharcflag@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@glypharc@#1\endcsname\relax
+  \tenkz@cleanupvisiblesnapshot{#1}}
 \def\tenkz@captureglyphgeometrynode#1#2#3#4{%
-  \iftenkz@bboxcapture
-    \ifnum\tenkz@pictureid>0\relax
+  \edef\tenkz@visibleinvalid{\csname tenkz@invalid@#4\endcsname}%
+  \ifnum\tenkz@visibleinvalid=0\relax
+    \iftenkz@bboxcapture
+      \ifnum\tenkz@pictureid>0\relax
       \global\advance\tenkz@inkuid by 1\relax
       \tenkz@inkowner=\tenkz@inkuid
       \tenkz@resolveglyphshape{#1}{#4}%
+      \edef\tenkz@glyphfill{\csname tenkz@fill@#4\endcsname}%
+      \ifnum\tenkz@glyphfill=1\relax\else
+        \def\tenkz@glyphshape{unsupported}%
+        \PackageError{tenkz}{Audited glyph node '#1' has no filled shape}%
+          {Give every audited glyph a live fill, not only a drawn outline.}%
+      \fi
+      \tenkz@requireidentitylinear{#1}{glyph}%
+      \iftenkz@identitylinear\else\def\tenkz@glyphshape{unsupported}\fi
       \tenkz@emitglyphinkuse
       \tenkz@emitglyphgeometry{#1}%
+      \fi
     \fi
-  \fi
-  \global\expandafter\let\csname tenkz@glypharcflag@#4\endcsname\relax
-  \global\expandafter\let\csname tenkz@glypharc@#4\endcsname\relax
-  \global\expandafter\let\csname tenkz@glyphouterx@#4\endcsname\relax
-  \global\expandafter\let\csname tenkz@glyphoutery@#4\endcsname\relax}
+    \tenkz@cleanupglyphsnapshot{#4}%
+  \else
+    \tenkz@cleanupglyphsnapshot{#4}%
+    \tenkz@visiblestateerror{\tenkz@visibleinvalid}{glyph}{#1}%
+  \fi}
 \def\tenkz@emitglyphgeometry#1{%
   \begingroup
   \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{west}}%
@@ -565,8 +974,13 @@
     \advance\tenkz@bboxymin by \tenkz@glyphouterysep
     \advance\tenkz@bboxymax by -\tenkz@glyphouterysep
   \fi
+  \advance\tenkz@bboxxmin by -\tenkz@glyphhalfstroke
+  \advance\tenkz@bboxxmax by \tenkz@glyphhalfstroke
+  \advance\tenkz@bboxymin by -\tenkz@glyphhalfstroke
+  \advance\tenkz@bboxymax by \tenkz@glyphhalfstroke
   \def\tenkz@roundrect{roundrect}%
   \ifx\tenkz@glyphshape\tenkz@roundrect
+    \advance\tenkz@glyphradius by \tenkz@glyphhalfstroke
     \tenkz@glyphwidth=\tenkz@bboxxmax
     \advance\tenkz@glyphwidth by -\tenkz@bboxxmin
     \tenkz@glyphheight=\tenkz@bboxymax
@@ -600,6 +1014,10 @@
     \ifdim\tenkz@glyphytwo>\tenkz@bboxymax \tenkz@bboxymax=\tenkz@glyphytwo\fi
     \ifdim\tenkz@glyphythree<\tenkz@bboxymin \tenkz@bboxymin=\tenkz@glyphythree\fi
     \ifdim\tenkz@glyphythree>\tenkz@bboxymax \tenkz@bboxymax=\tenkz@glyphythree\fi
+    \advance\tenkz@bboxxmin by -\tenkz@glyphhalfstroke
+    \advance\tenkz@bboxxmax by \tenkz@glyphhalfstroke
+    \advance\tenkz@bboxymin by -\tenkz@glyphhalfstroke
+    \advance\tenkz@bboxymax by \tenkz@glyphhalfstroke
   \else
     \tenkz@glyphxone=0pt \tenkz@glyphyone=0pt
     \tenkz@glyphxtwo=0pt \tenkz@glyphytwo=0pt
@@ -609,7 +1027,7 @@
     owner=\the\tenkz@inkowner|shape=\tenkz@glyphshape|%
     xmin=\number\tenkz@bboxxmin|xmax=\number\tenkz@bboxxmax|%
     ymin=\number\tenkz@bboxymin|ymax=\number\tenkz@bboxymax|%
-    radius=\number\tenkz@glyphradius|%
+    radius=\number\tenkz@glyphradius|stroke=\number\tenkz@glyphhalfstroke|%
     x1=\number\tenkz@glyphxone|y1=\number\tenkz@glyphyone|%
     x2=\number\tenkz@glyphxtwo|y2=\number\tenkz@glyphytwo|%
     x3=\number\tenkz@glyphxthree|y3=\number\tenkz@glyphythree}%
@@ -634,16 +1052,32 @@
   \advance\tenkz@bboxymax by  #5\relax
   \tenkz@writebbox{wire}%
   \endgroup}
+% This helper is intentionally tokenized outside ExplSyntax: TikZ's coordinate
+% parser requires the literal space in the `canvas cs:' delimiter.
+\def\tenkz@canvascoordinate#1#2#3{%
+  \coordinate (#1) at (canvas cs:x=#2,y=#3);}
 
 \tikzset{
   tenkz audited label/.style={
-    /utils/exec=\tenkz@bboxlabeluse,
-    append after command={\pgfextra{\tenkz@capturelabelbbox}}},
+    /utils/exec=\tenkz@installlabelaudit},
   tenkz audited glyph/.style 2 args={
     /utils/exec={\tenkz@installglyphaudit{#1}{#2}}},
   tenkz audited glyph deferred/.style={
     /utils/exec=\tenkz@installdeferredglyphaudit},
 }
+\def\tenkz@installlabelaudit{%
+  \tenkz@bboxlabeluse
+  \ifnum\tenkz@pictureid>0\relax
+    \global\advance\tenkz@glyphsnapuid by 1\relax
+    \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
+    \edef\tenkz@installlabelsnapshot{%
+      \noexpand\tikzset{%
+        execute at end node={%
+          \noexpand\tenkz@snapshotvisible{\tenkz@glyphsnaptoken}},%
+        append after command={\noexpand\pgfextra{%
+          \noexpand\tenkz@capturelabelbbox{\tenkz@glyphsnaptoken}}}}}%
+    \tenkz@installlabelsnapshot
+  \fi}
 \def\tenkz@installglyphaudit#1#2{%
   \iftenkz@bboxcapture
     \ifnum\tenkz@pictureid>0\relax
@@ -652,7 +1086,7 @@
       \edef\tenkz@installglyphsnapshot{%
         \noexpand\tikzset{%
           execute at end node={%
-            \noexpand\tenkz@snapshotglyphcorners{\tenkz@glyphsnaptoken}},%
+            \noexpand\tenkz@snapshotglyphstate{\tenkz@glyphsnaptoken}},%
           append after command={\noexpand\pgfextra{%
             \noexpand\tenkz@captureglyphgeometry{#1}{#2}%
               {\tenkz@glyphsnaptoken}}}}}%
@@ -669,7 +1103,7 @@
       \edef\tenkz@installglyphsnapshot{%
         \noexpand\tikzset{%
           execute at end node={%
-            \noexpand\tenkz@snapshotglyphcorners{\tenkz@glyphsnaptoken}},%
+            \noexpand\tenkz@snapshotglyphstate{\tenkz@glyphsnaptoken}},%
           append after command={\noexpand\pgfextra{%
             \noexpand\tenkz@recorddeferredglyph{\tenkz@glyphsnaptoken}}}}}%
       \tenkz@installglyphsnapshot

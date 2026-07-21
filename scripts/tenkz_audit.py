@@ -241,6 +241,94 @@ def _polygon_intersects_rect(points: tuple[Point, ...], rect: Rect) -> bool:
     return True
 
 
+def _cross(left: Point, right: Point, point: Point) -> int:
+    return ((right[0] - left[0]) * (point[1] - left[1])
+            - (right[1] - left[1]) * (point[0] - left[0]))
+
+
+def _on_segment(left: Point, right: Point, point: Point) -> bool:
+    return (_cross(left, right, point) == 0
+            and min(left[0], right[0]) <= point[0] <= max(left[0], right[0])
+            and min(left[1], right[1]) <= point[1] <= max(left[1], right[1]))
+
+
+def _segments_intersect_closed(a: Point, b: Point, c: Point, d: Point) -> bool:
+    abc = _cross(a, b, c)
+    abd = _cross(a, b, d)
+    cda = _cross(c, d, a)
+    cdb = _cross(c, d, b)
+    if ((abc > 0) != (abd > 0) and (cda > 0) != (cdb > 0)):
+        return True
+    return ((abc == 0 and _on_segment(a, b, c))
+            or (abd == 0 and _on_segment(a, b, d))
+            or (cda == 0 and _on_segment(c, d, a))
+            or (cdb == 0 and _on_segment(c, d, b)))
+
+
+def _segment_intersects_rect(start: Point, end: Point, rect: Rect) -> bool:
+    xmin, xmax, ymin, ymax = rect
+    if (xmin <= start[0] <= xmax and ymin <= start[1] <= ymax):
+        return True
+    if (xmin <= end[0] <= xmax and ymin <= end[1] <= ymax):
+        return True
+    corners = ((xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax))
+    return any(
+        _segments_intersect_closed(start, end, corner, following)
+        for corner, following in zip(corners, corners[1:] + corners[:1])
+    )
+
+
+def _point_within_segment_stroke(
+        point: Point, start: Point, end: Point, stroke: int) -> bool:
+    dx = end[0] - start[0]
+    dy = end[1] - start[1]
+    length_sq = dx * dx + dy * dy
+    if length_sq == 0:
+        distance_sq = ((point[0] - start[0]) ** 2
+                       + (point[1] - start[1]) ** 2)
+        return distance_sq < stroke * stroke
+    projection = ((point[0] - start[0]) * dx
+                  + (point[1] - start[1]) * dy)
+    if projection <= 0:
+        distance_sq = ((point[0] - start[0]) ** 2
+                       + (point[1] - start[1]) ** 2)
+        return distance_sq < stroke * stroke
+    if projection >= length_sq:
+        distance_sq = ((point[0] - end[0]) ** 2
+                       + (point[1] - end[1]) ** 2)
+        return distance_sq < stroke * stroke
+    perpendicular = dx * (point[1] - start[1]) - dy * (point[0] - start[0])
+    return perpendicular * perpendicular < stroke * stroke * length_sq
+
+
+def _segment_stroke_intersects_rect(
+        start: Point, end: Point, stroke: int, rect: Rect) -> bool:
+    if _segment_intersects_rect(start, end, rect):
+        return True
+    if (_point_rect_distance_sq(start, rect) < stroke * stroke
+            or _point_rect_distance_sq(end, rect) < stroke * stroke):
+        return True
+    xmin, xmax, ymin, ymax = rect
+    return any(
+        _point_within_segment_stroke(corner, start, end, stroke)
+        for corner in ((xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax))
+    )
+
+
+def _stroked_polygon_intersects_rect(
+        points: tuple[Point, ...], stroke: int, rect: Rect) -> bool:
+    if _polygon_intersects_rect(points, rect):
+        return True
+    if stroke <= 0:
+        return False
+    return any(
+        _segment_stroke_intersects_rect(
+            point, points[(index + 1) % len(points)], stroke, rect
+        )
+        for index, point in enumerate(points)
+    )
+
+
 # kind -> {field: validator}; fields absent here are accepted as opaque.
 # Numeric slots are validated strictly: they are cell/row coordinates, and
 # a coordinate that is not an integer addresses nothing.
@@ -287,6 +375,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
                        "xmin": _is_int, "xmax": _is_int,
                        "ymin": _is_int, "ymax": _is_int,
                        "radius": _is_nonnegative_int,
+                       "stroke": _is_nonnegative_int,
                        "x1": _is_int, "y1": _is_int,
                        "x2": _is_int, "y2": _is_int,
                        "x3": _is_int, "y3": _is_int},
@@ -529,10 +618,11 @@ class Audit:
                                  f"{want}=")
 
     def check_label_overlaps(self) -> None:
-        """Reject label intersections with sibling glyph/wire node geometry."""
+        """Reject label intersections with exact sibling visible geometry."""
         bbox_required = {"class", "id", "xmin", "xmax", "ymin", "ymax"}
         glyph_required = {"owner", "shape", "xmin", "xmax", "ymin", "ymax",
-                          "radius", "x1", "y1", "x2", "y2", "x3", "y3"}
+                          "radius", "stroke", "x1", "y1", "x2", "y2",
+                          "x3", "y3"}
         for pic in self.pictures:
             rectangles: list[tuple[Event, str, int, int, int, int]] = []
             for event in pic.events:
@@ -566,7 +656,9 @@ class Audit:
                 rectangles.append(
                     (event, event.attrs["class"], xmin, xmax, ymin, ymax)
                 )
-            glyphs: list[tuple[Event, str, Rect, int, tuple[Point, ...]]] = []
+            glyphs: list[
+                tuple[Event, str, Rect, int, int, tuple[Point, ...]]
+            ] = []
             for event in pic.events:
                 if event.kind != "glyph-geometry":
                     continue
@@ -594,6 +686,9 @@ class Audit:
                     )
                     continue
                 radius = int(event.attrs["radius"])
+                stroke = int(event.attrs["stroke"])
+                if radius < 0 or stroke < 0:
+                    continue  # FIELD_VALIDATORS already reported the bad value.
                 if (event.attrs["shape"] == "roundrect"
                         and (2 * radius > bounds[1] - bounds[0]
                              or 2 * radius > bounds[3] - bounds[2])):
@@ -608,7 +703,7 @@ class Audit:
                                 int(event.attrs[f"y{index}"]))
                                for index in range(1, 4))
                 glyphs.append((event, event.attrs["shape"], bounds,
-                               radius, points))
+                               radius, stroke, points))
             labels = [rect for rect in rectangles if rect[1] == "label"]
             wire_boxes = [rect for rect in rectangles if rect[1] == "wire"]
             for label in labels:
@@ -623,7 +718,7 @@ class Audit:
                             f"{label[0].attrs['id']} intersects {other[1]} bbox "
                             f"id={other[0].attrs['id']}",
                         )
-                for event, shape, bounds, radius, points in glyphs:
+                for event, shape, bounds, radius, stroke, points in glyphs:
                     if shape == "rect":
                         intersects = _rects_intersect(bounds, label_rect)
                     elif shape == "circle":
@@ -632,7 +727,8 @@ class Audit:
                         intersects = _roundrect_intersects_rect(
                             bounds, radius, label_rect)
                     elif shape == "triangle":
-                        intersects = _polygon_intersects_rect(points, label_rect)
+                        intersects = _stroked_polygon_intersects_rect(
+                            points, stroke, label_rect)
                     else:
                         continue  # generic field validation reports the shape
                     if intersects:
