@@ -2491,6 +2491,7 @@ physical indices, as in
 \begin{theorem}[Canonical hypotheses for the retained vertical product]
     \label{thm:mpdo_retained_vertical_product_canonical_hypotheses}
     \lean{MPOTensor.verticalCoisometrySquare}
+    \lean{MPOTensor.verticalCoisometrySquare_isCoisometry}
     \lean{MPOTensor.verticalTensor_blockTwo_squared_coisometry_reconstruction}
     \lean{MPSTensor.projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction}
     \lean{MPOTensor.retainedVerticalProduct_projectorClosure_and_noPeriodicVectors}
@@ -2566,6 +2567,56 @@ physical indices, as in
     closure and periodic-exclusion properties of the preceding theorem.  Its
     spectral construction discards precisely the corners on which every
     letter vanishes and retains the isometry of every nonzero corner.
+\end{proof}
+
+\begin{definition}[Simultaneous spectral data for retained copy pairs]
+    \label{def:mpdo_retained_product_spectral_family}
+    \lean{MPOTensor.retainedVerticalProductTensor}
+    \lean{MPOTensor.retainedProductBlockInclusion}
+    \lean{MPOTensor.RetainedProductSpectralFamily}
+    \lean{MPOTensor.RetainedProductSpectralFamily.ActiveLabel}
+    \lean{MPOTensor.RetainedProductSpectralFamily.activeLabelEquiv}
+    \leanok
+    \uses{thm:mpdo_weighted_vertical_product_block_normal_decomposition}
+    A retained-product spectral family records, simultaneously for every
+    ordered pair of retained BNT copies, all nonzero normal corners, their
+    positive spectral coefficients, and their local isometries.  Its active
+    labels form the dependent union of the local corner families; this union
+    is enumerated by a single finite type.  The local isometries and their
+    range projections remain part of the data.
+\end{definition}
+
+\begin{theorem}[Existence and inclusions of retained-product spectral data]
+    \label{thm:mpdo_retained_product_spectral_family_exists}
+    \lean{MPOTensor.retainedProductBlockInclusion_isometry}
+    \lean{MPOTensor.retainedVerticalProductTensor_mul_retainedProductBlockInclusion}
+    \lean{MPOTensor.retainedProductBlockInclusion_conjTranspose_mul_retainedVerticalProductTensor}
+    \lean{MPOTensor.exists_retainedProductSpectralFamily}
+    \lean{MPOTensor.RetainedProductSpectralFamily.retainedInclusion}
+    \lean{MPOTensor.RetainedProductSpectralFamily.ambientInclusion}
+    \lean{MPOTensor.RetainedProductSpectralFamily.retainedInclusion_isometry}
+    \lean{MPOTensor.RetainedProductSpectralFamily.retained_intertwine}
+    \lean{MPOTensor.RetainedProductSpectralFamily.retained_intertwine_adjoint}
+    \lean{MPOTensor.RetainedProductSpectralFamily.ambientInclusion_isometry}
+    \leanok
+    \uses{def:mpdo_retained_product_spectral_family,
+      thm:mpdo_weighted_vertical_product_block_normal_decomposition}
+    Simultaneous retained-product spectral data exist.  The canonical
+    inclusion of a copy pair, followed by its local corner isometry, is an
+    isometry into the retained product bond space and intertwines in both
+    directions.  Composing once more with the adjoint of the squared vertical
+    coisometry gives an isometry into the bond space of the blocked vertical
+    tensor.  These explicit composite inclusions retain the range projections
+    required for the sector-weight comparison.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the exact normal-corner decomposition of every copy-pair tensor.
+    The canonical copy-pair inclusions are isometries and select the weighted
+    diagonal blocks of the retained product tensor.  Composition with each
+    local isometry gives the retained inclusion and both intertwining
+    identities.  Finally, the Kronecker square of the vertical coisometry is a
+    coisometry, so its adjoint preserves the isometry relation.
 \end{proof}
 
 \begin{theorem}[Two-site closure of the two-site blocking]

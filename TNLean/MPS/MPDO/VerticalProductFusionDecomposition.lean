@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 import TNLean.MPS.MPDO.VerticalCoisometry
 import TNLean.MPS.MPDO.HorizontalBlocking
+import TNLean.MPS.MPDO.VerticalBNTConstruction
 import TNLean.MPS.MPDO.VerticalSpectral
 import TNLean.MPS.Tactic.Basic
 
@@ -94,6 +95,16 @@ noncomputable def verticalCoisometrySquare {d n : ℕ}
     Matrix (Fin (n * n)) (Fin (d * d)) ℂ :=
   (U ⊗ₖ U).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
 
+/-- The Kronecker square of a coisometry is again a coisometry. -/
+theorem verticalCoisometrySquare_isCoisometry {d n : ℕ}
+    (U : Matrix (Fin n) (Fin d) ℂ) (hU : U * Uᴴ = 1) :
+    verticalCoisometrySquare U * (verticalCoisometrySquare U)ᴴ = 1 := by
+  unfold verticalCoisometrySquare
+  rw [Matrix.conjTranspose_submatrix,
+    Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _,
+    Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hU,
+    Matrix.one_kronecker_one, Matrix.submatrix_one_equiv]
+
 private def verticalProductSectorEquiv {g : ℕ} (dim mult : Fin g → ℕ) :
     ((α : Fin g) × (Fin (mult α) × Fin (dim α))) ×
       ((α : Fin g) × (Fin (mult α) × Fin (dim α))) ≃
@@ -124,6 +135,37 @@ def productRetainedEquiv {g : ℕ} (dim mult : Fin g → ℕ) :
     (Equiv.prodCongr (verticalSectorFinEquiv dim mult).symm
       (verticalSectorFinEquiv dim mult).symm |>.trans
         (verticalProductSectorEquiv dim mult))
+
+/-- An ordered pair of retained vertical BNT copy labels. -/
+abbrev VerticalCopyPair {g : ℕ} (mult : Fin g → ℕ) :=
+  ((α : Fin g) × Fin (mult α)) × ((α : Fin g) × Fin (mult α))
+
+/-- The canonical inclusion of one retained copy-pair bond space into the
+square of the full retained vertical bond space.
+
+Source: CPSV16, Appendix C.4, lines 2020--2025. -/
+noncomputable def retainedProductBlockInclusion
+    {g : ℕ} (dim mult : Fin g → ℕ) (p : VerticalCopyPair mult) :
+    Matrix
+      (Fin ((∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q) *
+        (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q)))
+      (Fin (dim p.1.1 * dim p.2.1)) ℂ :=
+  (Matrix.sigmaBlockInclusion
+    (fun q : VerticalCopyPair mult ↦ Fin (dim q.1.1) × Fin (dim q.2.1)) p).submatrix
+      (productRetainedEquiv dim mult) finProdFinEquiv.symm
+
+/-- Each canonical retained copy-pair inclusion is an isometry, including
+when its domain has dimension zero. -/
+theorem retainedProductBlockInclusion_isometry
+    {g : ℕ} (dim mult : Fin g → ℕ) (p : VerticalCopyPair mult) :
+    (retainedProductBlockInclusion dim mult p)ᴴ *
+        retainedProductBlockInclusion dim mult p = 1 := by
+  classical
+  unfold retainedProductBlockInclusion
+  rw [Matrix.conjTranspose_submatrix,
+    Matrix.submatrix_mul_equiv _ _ _ (productRetainedEquiv dim mult) _,
+    Matrix.sigmaBlockInclusion_isometry,
+    Matrix.submatrix_one_equiv]
 
 /-- Equality of all positive-length closed MPOs gives equality of the
 corresponding positive-length matrix product vectors after joining each ket
@@ -173,11 +215,7 @@ theorem verticalTensor_blockTwo_squared_coisometry_reconstruction
           (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor ab *
             verticalCoisometrySquare U := by
   constructor
-  · unfold verticalCoisometrySquare
-    rw [Matrix.conjTranspose_submatrix,
-      Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _,
-      Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hU,
-      Matrix.one_kronecker_one, Matrix.submatrix_one_equiv]
+  · exact verticalCoisometrySquare_isCoisometry U hU
   · intro ab
     rw [← verticalBNTMPO_toMPSTensor (verticalTensor (blockTwo M)),
       verticalBNTMPO_verticalTensor_blockTwo]
@@ -294,6 +332,18 @@ noncomputable def weightedVerticalProductBlock
     (mulTensor (verticalBNTMPO (B p.1.1))
       (verticalBNTMPO (B p.2.1))).toMPSTensor ab
 
+/-- The square of the retained assembled vertical tensor, before separating
+its ordered copy-pair blocks. -/
+noncomputable def retainedVerticalProductTensor
+    {g D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α)) :
+    MPSTensor (D * D)
+      ((∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q) *
+        (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q)) :=
+  (mulTensor (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
+    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))).toMPSTensor
+
 /-- The product of two assembled vertical tensors is block diagonal over
 pairs of active BNT copies. The block for copies `(α, q)` and `(β, r)` is the
 raw product tensor for `(α, β)`, multiplied by the product of their diagonal
@@ -309,9 +359,7 @@ theorem mulTensor_verticalAssembledTensor_reindex
     (B : (α : Fin g) → MPSTensor (D * D) (dim α)) (ab : Fin (D * D)) :
     Matrix.reindex (productRetainedEquiv dim mult)
         (productRetainedEquiv dim mult)
-        ((mulTensor
-          (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
-          (verticalBNTMPO (verticalAssembledTensor dim mult weight B))).toMPSTensor ab) =
+        (retainedVerticalProductTensor dim mult weight B ab) =
       Matrix.blockDiagonal' fun p :
           ((α : Fin g) × Fin (mult α)) × ((α : Fin g) × Fin (mult α)) =>
         Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
@@ -323,8 +371,8 @@ theorem mulTensor_verticalAssembledTensor_reindex
   rcases y with ⟨⟨⟨α', q'⟩, ⟨β', r'⟩⟩, ⟨i', j'⟩⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
   simp [productRetainedEquiv, verticalProductSectorEquiv,
-    weightedVerticalProductBlock, toMPSTensor, mulTensor_apply,
-    verticalBNTMPO_apply]
+    retainedVerticalProductTensor, weightedVerticalProductBlock,
+    toMPSTensor, mulTensor_apply, verticalBNTMPO_apply]
   by_cases hp :
       ((⟨α, q⟩ : (α : Fin g) × Fin (mult α)),
         (⟨β, r⟩ : (α : Fin g) × Fin (mult α))) =
@@ -353,6 +401,104 @@ theorem mulTensor_verticalAssembledTensor_reindex
       exact mul_zero _
     · rw [verticalAssembledTensor_apply_copy_ne dim mult weight B hleft]
       exact zero_mul _
+
+/-- A retained copy-pair inclusion intertwines its weighted block with the
+full retained product tensor. -/
+theorem retainedVerticalProductTensor_mul_retainedProductBlockInclusion
+    {g D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (p : VerticalCopyPair mult) (ab : Fin (D * D)) :
+    retainedVerticalProductTensor dim mult weight B ab *
+        retainedProductBlockInclusion dim mult p =
+      retainedProductBlockInclusion dim mult p *
+        weightedVerticalProductBlock dim mult weight B p ab := by
+  classical
+  let blockIndex := fun q : VerticalCopyPair mult ↦
+    Fin (dim q.1.1) × Fin (dim q.2.1)
+  let C := fun q : VerticalCopyPair mult ↦
+    Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
+      (weightedVerticalProductBlock dim mult weight B q ab)
+  let E := Matrix.sigmaBlockInclusion blockIndex p
+  have h := Matrix.blockDiagonal'_mul_sigmaBlockInclusion C p
+  rw [← mulTensor_verticalAssembledTensor_reindex dim mult weight B ab] at h
+  have hleft : retainedVerticalProductTensor dim mult weight B ab *
+      retainedProductBlockInclusion dim mult p =
+        (Matrix.reindex (productRetainedEquiv dim mult)
+          (productRetainedEquiv dim mult)
+          (retainedVerticalProductTensor dim mult weight B ab) * E).submatrix
+            (productRetainedEquiv dim mult) finProdFinEquiv.symm := by
+    simpa only [retainedProductBlockInclusion, E, Matrix.reindex_apply,
+      Matrix.submatrix_submatrix, Equiv.symm_comp_self,
+      Matrix.submatrix_id_id] using
+      (Matrix.submatrix_mul_equiv
+        (Matrix.reindex (productRetainedEquiv dim mult)
+          (productRetainedEquiv dim mult)
+          (retainedVerticalProductTensor dim mult weight B ab)) E
+        (productRetainedEquiv dim mult) (productRetainedEquiv dim mult)
+        finProdFinEquiv.symm)
+  have hright : retainedProductBlockInclusion dim mult p *
+      weightedVerticalProductBlock dim mult weight B p ab =
+        (E * C p).submatrix
+          (productRetainedEquiv dim mult) finProdFinEquiv.symm := by
+    simpa only [retainedProductBlockInclusion, E, C, Matrix.reindex_apply,
+      Matrix.submatrix_submatrix, Equiv.symm_comp_self,
+      Matrix.submatrix_id_id] using
+      (Matrix.submatrix_mul_equiv E (C p)
+        (productRetainedEquiv dim mult) finProdFinEquiv.symm
+        finProdFinEquiv.symm)
+  have hpull := congrArg
+    (fun X ↦ X.submatrix (productRetainedEquiv dim mult) finProdFinEquiv.symm) h
+  exact hleft.trans (hpull.trans hright.symm)
+
+/-- The adjoint retained copy-pair inclusion satisfies the reverse
+intertwining identity. -/
+theorem retainedProductBlockInclusion_conjTranspose_mul_retainedVerticalProductTensor
+    {g D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (p : VerticalCopyPair mult) (ab : Fin (D * D)) :
+    (retainedProductBlockInclusion dim mult p)ᴴ *
+        retainedVerticalProductTensor dim mult weight B ab =
+      weightedVerticalProductBlock dim mult weight B p ab *
+        (retainedProductBlockInclusion dim mult p)ᴴ := by
+  classical
+  let blockIndex := fun q : VerticalCopyPair mult ↦
+    Fin (dim q.1.1) × Fin (dim q.2.1)
+  let C := fun q : VerticalCopyPair mult ↦
+    Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
+      (weightedVerticalProductBlock dim mult weight B q ab)
+  let E := Matrix.sigmaBlockInclusion blockIndex p
+  have h := Matrix.sigmaBlockInclusion_conjTranspose_mul_blockDiagonal' C p
+  rw [← mulTensor_verticalAssembledTensor_reindex dim mult weight B ab] at h
+  have hleft : (retainedProductBlockInclusion dim mult p)ᴴ *
+      retainedVerticalProductTensor dim mult weight B ab =
+        (Eᴴ * Matrix.reindex (productRetainedEquiv dim mult)
+          (productRetainedEquiv dim mult)
+          (retainedVerticalProductTensor dim mult weight B ab)).submatrix
+            finProdFinEquiv.symm (productRetainedEquiv dim mult) := by
+    simpa only [retainedProductBlockInclusion, E, Matrix.reindex_apply,
+      Matrix.conjTranspose_submatrix, Matrix.submatrix_submatrix,
+      Equiv.symm_comp_self, Matrix.submatrix_id_id] using
+      (Matrix.submatrix_mul_equiv Eᴴ
+        (Matrix.reindex (productRetainedEquiv dim mult)
+          (productRetainedEquiv dim mult)
+          (retainedVerticalProductTensor dim mult weight B ab))
+        finProdFinEquiv.symm (productRetainedEquiv dim mult)
+        (productRetainedEquiv dim mult))
+  have hright : weightedVerticalProductBlock dim mult weight B p ab *
+      (retainedProductBlockInclusion dim mult p)ᴴ =
+        (C p * Eᴴ).submatrix
+          finProdFinEquiv.symm (productRetainedEquiv dim mult) := by
+    simpa only [retainedProductBlockInclusion, E, C, Matrix.reindex_apply,
+      Matrix.conjTranspose_submatrix, Matrix.submatrix_submatrix,
+      Equiv.symm_comp_self, Matrix.submatrix_id_id] using
+      (Matrix.submatrix_mul_equiv (C p) Eᴴ finProdFinEquiv.symm
+        finProdFinEquiv.symm (productRetainedEquiv dim mult))
+  have hpull := congrArg
+    (fun X ↦ X.submatrix finProdFinEquiv.symm
+      (productRetainedEquiv dim mult)) h
+  exact hleft.trans (hpull.trans hright.symm)
 
 /-- Every ordered pair of retained vertical BNT copies inherits projector
 closure and absence of periodic vectors from the blocked vertical tensor.
@@ -456,5 +602,197 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition
   exact MPSTensor.exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
     (weightedVerticalProductBlock dim mult weight B p)
     hCanonical.1 hCanonical.2
+
+/-- The simultaneous isometry-retaining spectral decompositions of all
+retained copy-pair tensors.  The local inclusions are kept explicitly because
+their range projections are the projectors used in the subsequent positivity
+comparison.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+structure RetainedProductSpectralFamily
+    {g D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α)) where
+  /-- Number of nonzero spectral corners in a copy-pair tensor. -/
+  count : VerticalCopyPair mult → ℕ
+  /-- Bond dimension of a local spectral corner. -/
+  localDim : (p : VerticalCopyPair mult) → Fin (count p) → ℕ
+  /-- Positive spectral coefficient of a local corner. -/
+  coefficient : (p : VerticalCopyPair mult) → Fin (count p) → ℂ
+  /-- Normal tensor of a local corner. -/
+  block : (p : VerticalCopyPair mult) → (k : Fin (count p)) →
+    MPSTensor (D * D) (localDim p k)
+  /-- Inclusion of a local corner into its copy-pair bond space. -/
+  localInclusion : (p : VerticalCopyPair mult) → (k : Fin (count p)) →
+    Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (localDim p k)) ℂ
+  localDim_pos : ∀ p k, 0 < localDim p k
+  coefficient_pos : ∀ p k, (0 : ℂ) < coefficient p k
+  block_normal : ∀ p k, MPSTensor.IsNormalTensor (block p k)
+  localInclusion_isometry : ∀ p k,
+    (localInclusion p k)ᴴ * localInclusion p k = 1
+  localInclusion_orthogonal : ∀ p k l, k ≠ l →
+    (localInclusion p k)ᴴ * localInclusion p l = 0
+  local_intertwine : ∀ p k ab,
+    weightedVerticalProductBlock dim mult weight B p ab * localInclusion p k =
+      localInclusion p k * (coefficient p k • block p k ab)
+  local_intertwine_adjoint : ∀ p k ab,
+    (localInclusion p k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab =
+      (coefficient p k • block p k ab) * (localInclusion p k)ᴴ
+  local_compression : ∀ p k ab,
+    coefficient p k • block p k ab =
+      (localInclusion p k)ᴴ *
+        weightedVerticalProductBlock dim mult weight B p ab *
+          localInclusion p k
+  local_reconstruction : ∀ p ab,
+    weightedVerticalProductBlock dim mult weight B p ab =
+      ∑ k, localInclusion p k * (coefficient p k • block p k ab) *
+        (localInclusion p k)ᴴ
+  local_sameMPV₂Pos : ∀ p, MPSTensor.SameMPV₂Pos
+    (weightedVerticalProductBlock dim mult weight B p)
+    (MPSTensor.toTensorFromBlocks (d := D * D)
+      (μ := coefficient p) (block p))
+  local_dimension_bound : ∀ p,
+    (∑ k, localDim p k) ≤ dim p.1.1 * dim p.2.1
+
+/-- The local spectral decompositions may be chosen simultaneously for every
+retained copy pair.  Empty active families are preserved. -/
+theorem exists_retainedProductSpectralFamily
+    {g d D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    Nonempty (RetainedProductSpectralFamily dim mult weight B) := by
+  classical
+  have hExists := fun p ↦
+    exists_weightedVerticalProductBlock_normalDecomposition
+      dim mult weight B M U hU hReconstruct hHorizontal hM p
+  choose count localDim coefficient block localInclusion
+    localDim_pos coefficient_pos block_normal localInclusion_isometry
+    localInclusion_orthogonal local_intertwine local_intertwine_adjoint
+    local_compression local_reconstruction local_sameMPV₂Pos
+    local_dimension_bound using hExists
+  exact ⟨{
+    count := count
+    localDim := localDim
+    coefficient := coefficient
+    block := block
+    localInclusion := localInclusion
+    localDim_pos := localDim_pos
+    coefficient_pos := coefficient_pos
+    block_normal := block_normal
+    localInclusion_isometry := localInclusion_isometry
+    localInclusion_orthogonal := localInclusion_orthogonal
+    local_intertwine := local_intertwine
+    local_intertwine_adjoint := local_intertwine_adjoint
+    local_compression := local_compression
+    local_reconstruction := local_reconstruction
+    local_sameMPV₂Pos := local_sameMPV₂Pos
+    local_dimension_bound := local_dimension_bound }⟩
+
+namespace RetainedProductSpectralFamily
+
+variable {g D : ℕ} {dim mult : Fin g → ℕ}
+  {weight : (α : Fin g) → Fin (mult α) → ℂ}
+  {B : (α : Fin g) → MPSTensor (D * D) (dim α)}
+
+/-- The dependent type of all active local corners over all retained copy
+pairs. -/
+abbrev ActiveLabel (S : RetainedProductSpectralFamily dim mult weight B) :=
+  (p : VerticalCopyPair mult) × Fin (S.count p)
+
+/-- Enumeration of all active local corners by one finite type. -/
+noncomputable def activeLabelEquiv
+    (S : RetainedProductSpectralFamily dim mult weight B) :
+    Fin (Fintype.card S.ActiveLabel) ≃ S.ActiveLabel :=
+  (Fintype.equivFin S.ActiveLabel).symm
+
+/-- The inclusion of an active local corner into the complete retained
+product bond space. -/
+noncomputable def retainedInclusion
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (x : S.ActiveLabel) :
+    Matrix
+      (Fin ((∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q) *
+        (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q)))
+      (Fin (S.localDim x.1 x.2)) ℂ :=
+  retainedProductBlockInclusion dim mult x.1 * S.localInclusion x.1 x.2
+
+/-- The inclusion of an active local corner into the bond space of the
+blocked vertical tensor. -/
+noncomputable def ambientInclusion {d : ℕ}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (x : S.ActiveLabel) :
+    Matrix (Fin (d * d)) (Fin (S.localDim x.1 x.2)) ℂ :=
+  (verticalCoisometrySquare U)ᴴ * S.retainedInclusion x
+
+/-- Every flattened retained inclusion is an isometry. -/
+theorem retainedInclusion_isometry
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (x : S.ActiveLabel) :
+    (S.retainedInclusion x)ᴴ * S.retainedInclusion x = 1 := by
+  rw [retainedInclusion, Matrix.conjTranspose_mul, Matrix.mul_assoc,
+    ← Matrix.mul_assoc (retainedProductBlockInclusion dim mult x.1)ᴴ,
+    retainedProductBlockInclusion_isometry, Matrix.one_mul,
+    S.localInclusion_isometry]
+
+/-- Every flattened retained inclusion intertwines its active normal corner
+with the full retained product tensor. -/
+theorem retained_intertwine
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    retainedVerticalProductTensor dim mult weight B ab * S.retainedInclusion x =
+      S.retainedInclusion x * (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) := by
+  rw [retainedInclusion, ← Matrix.mul_assoc,
+    retainedVerticalProductTensor_mul_retainedProductBlockInclusion,
+    Matrix.mul_assoc, S.local_intertwine]
+  exact (Matrix.mul_assoc _ _ _).symm
+
+/-- The adjoint flattened retained inclusion satisfies the reverse
+intertwining identity. -/
+theorem retained_intertwine_adjoint
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    (S.retainedInclusion x)ᴴ * retainedVerticalProductTensor dim mult weight B ab =
+      (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) *
+        (S.retainedInclusion x)ᴴ := by
+  rw [retainedInclusion, Matrix.conjTranspose_mul, Matrix.mul_assoc,
+    retainedProductBlockInclusion_conjTranspose_mul_retainedVerticalProductTensor,
+    ← Matrix.mul_assoc, S.local_intertwine_adjoint]
+  exact Matrix.mul_assoc _ _ _
+
+/-- Composing with the squared vertical reconstruction gives an isometry into
+the blocked ambient bond space. -/
+theorem ambientInclusion_isometry {d : ℕ}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1) (x : S.ActiveLabel) :
+    (S.ambientInclusion U x)ᴴ * S.ambientInclusion U x = 1 := by
+  have hsquare := verticalCoisometrySquare_isCoisometry U hU
+  unfold ambientInclusion
+  calc
+    (((verticalCoisometrySquare U)ᴴ * S.retainedInclusion x)ᴴ *
+          ((verticalCoisometrySquare U)ᴴ * S.retainedInclusion x)) =
+        (S.retainedInclusion x)ᴴ *
+          (verticalCoisometrySquare U * (verticalCoisometrySquare U)ᴴ) *
+            S.retainedInclusion x := by
+      simp only [Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+    _ = (S.retainedInclusion x)ᴴ * S.retainedInclusion x := by
+      rw [hsquare, Matrix.mul_one]
+    _ = 1 := S.retainedInclusion_isometry x
+
+end RetainedProductSpectralFamily
 
 end MPOTensor
