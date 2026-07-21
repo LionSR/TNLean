@@ -40,6 +40,16 @@ if [[ "$metadata_failed" -ne 0 ]]; then
   exit 1
 fi
 
+# These package-internal probes intentionally open the tenkz event log without
+# creating a tenkz picture.  Keep the exception explicit: every other fixture
+# must prove that the event instrumentation wrote at least one record.
+is_zero_event_probe() {
+  case "$1" in
+    geom.tex|p_pitch.tex|p_species.tex|plane_experiment.tex) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/tenkz-corpus.XXXXXX")
 trap 'rm -rf "$WORK"' EXIT
 cp -R "$CORPUS/." "$WORK/"
@@ -76,6 +86,13 @@ compile_one() {
     return 1
   fi
 
+  if ! grep -q '[^[:space:]]' "$WORK/$stem.tnlog" \
+      && ! is_zero_event_probe "$name"; then
+    echo "FAIL: $name produced an empty $stem.tnlog" \
+      >"$RESULTS/$stem.fail"
+    return 1
+  fi
+
   if ! python3 "$REPO/scripts/tenkz_audit.py" \
       "$WORK/$stem.tnlog" "$WORK/$name" >"$audit_report" 2>&1; then
     {
@@ -88,6 +105,7 @@ compile_one() {
   : >"$RESULTS/$stem.ok"
 }
 export -f compile_one
+export -f is_zero_event_probe
 
 find "$WORK" -maxdepth 1 -type f -name '*.tex' -print0 \
   | LC_ALL=C sort -z >"$WORK/sources.list"

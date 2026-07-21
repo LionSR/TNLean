@@ -33,14 +33,14 @@ g06_stageA.tex	standalone	tests/tenkz/g06_stageA.tex	compiles, emits tnlog, and 
 g06_stageB.tex	standalone	tests/tenkz/g06_stageB.tex	compiles, emits tnlog, and passes tenkz_audit
 g06_stageC.tex	standalone	tests/tenkz/g06_stageC.tex	compiles, emits tnlog, and passes tenkz_audit
 gallery.tex	standalone	tests/tenkz/gallery.tex	compiles, emits tnlog, and passes tenkz_audit
-geom.tex	standalone	tests/tenkz/geom.tex	compiles, emits tnlog, and passes tenkz_audit
+geom.tex	standalone	tests/tenkz/geom.tex	compiles and passes audit with an intentionally empty tnlog (package-internal geometry probe)
 gr_t1_fusion.tex	standalone	tests/tenkz/gr_t1_fusion.tex	compiles, emits tnlog, and passes tenkz_audit
 gr_t2_fsymbol.tex	standalone	tests/tenkz/gr_t2_fsymbol.tex	compiles, emits tnlog, and passes tenkz_audit
 gr_t3_action.tex	standalone	tests/tenkz/gr_t3_action.tex	compiles, emits tnlog, and passes tenkz_audit
 gr_t4_lasso.tex	standalone	tests/tenkz/gr_t4_lasso.tex	compiles, emits tnlog, and passes tenkz_audit
 gr_t5_zipper.tex	standalone	tests/tenkz/gr_t5_zipper.tex	compiles, emits tnlog, and passes tenkz_audit
 gr_t6_leftinv.tex	standalone	tests/tenkz/gr_t6_leftinv.tex	compiles, emits tnlog, and passes tenkz_audit
-gr_t7_coset.tex	standalone	tests/tenkz/gr_t7_coset.tex	compiles, emits tnlog, and passes tenkz_audit
+gr_t7_coset.tex	standalone	tests/tenkz/gr_t7_coset.tex	curated: shifts two gray boxes 4 mm right to clear k_x^-1; compiles and passes audit
 gr_t8_sum.tex	standalone	tests/tenkz/gr_t8_sum.tex	compiles, emits tnlog, and passes tenkz_audit
 grid_test.tex	standalone	tests/tenkz/grid_test.tex	compiles, emits tnlog, and passes tenkz_audit
 hard01_ortho.tex	standalone	tests/tenkz/hard01_ortho.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -160,8 +160,8 @@ p_label_vanilla.tex	excluded	-	stale API or parser probe; does not compile on ad
 p_newcup.tex	standalone	tests/tenkz/p_newcup.tex	compiles, emits tnlog, and passes tenkz_audit
 p_oldcup.tex	excluded	-	stale API or parser probe; does not compile on adoption base
 p_orient.tex	excluded	-	stale API or parser probe; does not compile on adoption base
-p_pitch.tex	standalone	tests/tenkz/p_pitch.tex	compiles, emits tnlog, and passes tenkz_audit
-p_species.tex	standalone	tests/tenkz/p_species.tex	compiles, emits tnlog, and passes tenkz_audit
+p_pitch.tex	standalone	tests/tenkz/p_pitch.tex	compiles and passes audit with an intentionally empty tnlog (package-key probe)
+p_species.tex	standalone	tests/tenkz/p_species.tex	compiles and passes audit with an intentionally empty tnlog (species-style probe)
 p_speciesmsg.tex	excluded	-	intentional negative diagnostic
 p_specscope.tex	excluded	-	stale API or parser probe; does not compile on adoption base
 p_usagefree.tex	standalone	tests/tenkz/p_usagefree.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -172,7 +172,7 @@ part_B4.tex	standalone	tests/tenkz/part_B4.tex	compiles, emits tnlog, and passes
 part_B7.tex	standalone	tests/tenkz/part_B7.tex	compiles, emits tnlog, and passes tenkz_audit
 part_B8.tex	standalone	tests/tenkz/part_B8.tex	compiles, emits tnlog, and passes tenkz_audit
 pentagon_corrected.tex	standalone	tests/tenkz/pentagon_corrected.tex	compiles, emits tnlog, and passes tenkz_audit
-plane_experiment.tex	standalone	tests/tenkz/plane_experiment.tex	compiles, emits tnlog, and passes tenkz_audit
+plane_experiment.tex	standalone	tests/tenkz/plane_experiment.tex	compiles and passes audit with an intentionally empty tnlog (bare-TikZ plane experiment)
 plane_mirror_probe.tex	standalone	tests/tenkz/plane_mirror_probe.tex	compiles, emits tnlog, and passes tenkz_audit
 plane_stress.tex	standalone	tests/tenkz/plane_stress.tex	compiles, emits tnlog, and passes tenkz_audit
 plane_sweep1.tex	standalone	tests/tenkz/plane_sweep1.tex	compiles, emits tnlog, and passes tenkz_audit
