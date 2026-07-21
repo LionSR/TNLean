@@ -75,6 +75,34 @@ def HasNoPeriodicVectors (A : MPSTensor d D) : Prop :=
     ∀ μ : ℂ, Module.End.HasEigenvalue (transferMap (d := d) (D := n) B) μ →
       ‖μ‖ = r → μ = (r : ℂ)
 
+/-- Absence of nontrivial periodic vectors passes to an isometric corner.
+
+If `C` is intertwined with `A` by an isometry `V`, then every irreducible
+corner of `C` is an irreducible corner of `A` through the composite isometry.
+The peripheral-eigenvalue conclusion for `A` therefore gives the same
+conclusion for `C`.
+
+Source: arXiv:1606.00608, lines 220--230. -/
+theorem HasNoPeriodicVectors.of_isometry_intertwine
+    {n : ℕ} {A : MPSTensor d D} {C : MPSTensor d n}
+    (hA : HasNoPeriodicVectors A)
+    (V : Matrix (Fin D) (Fin n) ℂ) (hV : Vᴴ * V = 1)
+    (hint : ∀ i : Fin d, A i * V = V * C i) :
+    HasNoPeriodicVectors C := by
+  intro m W B ρ r hW hintW hirr hρ hr hfix μ hμ hnorm
+  apply hA (V * W) B ρ r
+  · rw [Matrix.conjTranspose_mul, Matrix.mul_assoc,
+      ← Matrix.mul_assoc Vᴴ V W, hV, Matrix.one_mul, hW]
+  · intro i
+    rw [← Matrix.mul_assoc, hint i, Matrix.mul_assoc, hintW i,
+      ← Matrix.mul_assoc]
+  · exact hirr
+  · exact hρ
+  · exact hr
+  · exact hfix
+  · exact hμ
+  · exact hnorm
+
 /-- The transfer map of an intertwined corner: if `A i * V = V * B i` for
 every letter, then conjugation by `V` intertwines the transfer maps,
 `E_A(V X V†) = V E_B(X) V†`.
