@@ -97,7 +97,7 @@ theorem IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner
 
 /-- A nonzero normal representative gives a nonzero physical range corner
 through an exact gauge-corner identity. -/
-private theorem exists_rangeProjection_corner_ne_zero
+theorem exists_rangeProjection_corner_ne_zero
     {n : ℕ} [NeZero n] (M : MPOTensor d D) (A : MPSTensor (D * D) n)
     (hA : A.IsNormalTensor) (V : Matrix (Fin d) (Fin n) ℂ)
     (hV : Vᴴ * V = 1) (X : GL (Fin n) ℂ) (ω : ℂ) (hω : ω ≠ 0)

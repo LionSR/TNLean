@@ -2312,12 +2312,17 @@ tensor.  This is the contraction in
 \begin{theorem}[A nonzero vertical corner has a nonzero sector compression]
     \label{thm:mpdo_grouped_sector_compression_nonzero}
     \lean{MPOTensor.IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner}
+    \lean{MPOTensor.exists_rangeProjection_corner_ne_zero}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo_vertical_loops,
         def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero}
     Let $M$ be horizontally canonical and let $P$ be a matrix for which
     $P\widetilde M_vP$ is nonzero for some vertical letter $v$.  Then the
     first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
+    In particular, suppose that $A$ is a normal tensor, $V$ is an isometry,
+    and the compression by $V$ is a nonzero scalar multiple of an invertible
+    conjugate of $A$.  Then the range projector $VV^\dagger$ has a nonzero
+    vertical corner and hence a nonzero first-site compression.
     This is the separation step used in
     \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
 \end{theorem}
