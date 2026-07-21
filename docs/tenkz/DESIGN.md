@@ -494,11 +494,26 @@ diagnostics and derived data, not topology. Every library-owned `tn label`
 style use emits `label-use` and one live-anchor rectangle
 `bbox|picture=...|class=label|id=...|xmin=...|xmax=...|ymin=...|ymax=...`.
 Coordinates are integer scaled points. Every core glyph skin emits a paired
-`ink-use` and exact live-node geometry: rectangles by their extents, circles by
-their extents and radius, rounded rectangles by their extents and production
-corner radius, and canonical triangles by their three live corner anchors.
+`ink-use` and exact live-node geometry after removing evaluated outer
+separation. The geometry includes the final live half-stroke (`stroke=`):
+rectangles use their visible extents, circles use their visible extents and
+radius, rounded rectangles use their visible extents and stroked corner radius,
+and canonical triangles use their three centerline corner anchors plus the
+exact polygon-edge and vertex stroke band. Audited glyphs must have a live fill;
+draw-only customizations fail closed because their interior is not ink. Labels
+likewise use their visible live rectangle after removing outer separation and
+adding any live stroke; this exact rectangle contract requires an active
+positive-opacity background fill and positive text opacity. Audited labels and
+glyphs permit translation but reject non-identity linear node transforms, and
+labels reject non-rectangle shapes.
+The snapshot observes the real post-adjustment outer separation and the actual
+path-use support, so the exact geometry is independent of stroke/fill color and
+of positive opacity. It fails closed for effects outside that model: non-round
+line joins, dashed or double strokes, zero opacity on active ink, shading,
+fading, path pictures, clipping, or multiple path-use/mode/outer-adjust passes.
 Typed maps additionally emit sibling object geometry and the two explicit
-visible, opaque-label-split wire rectangles. The audit rejects a strict
+wire rectangles split at that same visible filled-and-stroked label boundary.
+The audit rejects a strict
 intersection between a label and any sibling glyph/wire node, permits
 tangency, and rejects any label, glyph, or wire-node use without matching
 geometry.

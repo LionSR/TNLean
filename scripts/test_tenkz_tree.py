@@ -29,6 +29,22 @@ SOURCE = r"""
 \end{document}
 """
 
+NESTED_CD_SOURCE = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\begin{document}
+\begin{tenkzcd}[column sep=large]
+  \tntree{(a\,b)_c} \arrow[r, "F"] \arrow[d, "G"']
+    & \tntree{(b\,a)_c} \arrow[d, "G"] \\
+  A \arrow[r, "F"'] & B
+\end{tenkzcd}
+\makeatletter
+\typeout{TENKZ-CELL-SHAPE=\csname pgf@sh@ns@\tikzcdmatrixname-1-1\endcsname}
+\makeatother
+\end{document}
+"""
+
 
 def main() -> int:
     engine = shutil.which("xelatex")
@@ -76,6 +92,42 @@ def main() -> int:
             raise AssertionError("the two skins did not preserve one topology")
         if "role=marked|species=anyon" not in lines[2]:
             raise AssertionError("tree role/species semantics were not recorded")
+
+        nested_tex = work / "nested-cd-trees.tex"
+        nested_tex.write_text(NESTED_CD_SOURCE, encoding="utf-8")
+        nested_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", nested_tex.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if nested_run.returncode:
+            print(nested_run.stdout)
+            print("FAIL: nested tikz-cd tree fixture did not compile")
+            return 1
+        if "TENKZ-CELL-SHAPE=asymmetrical rectangle" not in nested_run.stdout:
+            raise AssertionError("tenkz changed the enclosing tikz-cd cell shape")
+
+        nested_log = work / "nested-cd-trees.tnlog"
+        nested_audit = Audit(nested_log, nested_tex)
+        with redirect_stdout(io.StringIO()):
+            nested_status = nested_audit.run()
+        if nested_status:
+            raise AssertionError("audit rejected valid nested tikz-cd tree events")
+        nested_events = nested_audit.events()
+        label_uses = sum(event.kind == "label-use" for event in nested_events)
+        label_boxes = sum(
+            event.kind == "bbox" and event.attrs.get("class") == "label"
+            for event in nested_events
+        )
+        if label_uses != 6 or label_boxes != label_uses:
+            raise AssertionError(
+                "nested tikz-cd trees did not emit exactly one bbox per owned label: "
+                f"uses={label_uses}, bboxes={label_boxes}"
+            )
 
         malformed = work / "malformed.tnlog"
         overlong = "9" * 5000

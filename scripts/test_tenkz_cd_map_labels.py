@@ -163,6 +163,58 @@ MISASSOCIATED_SOURCE = r"""
 \end{tenkzcd}
 \end{document}
 """
+
+
+def customized_typed_map_label(options: str) -> str:
+    return r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tikzset{tn label/.append style={%s}}
+\begin{tenkzcd}[maps, species={channel}]
+  A & B
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{f}
+\end{tenkzcd}
+\end{document}
+""" % options
+
+
+TYPED_MAP_VISIBLE_GEOMETRY = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\begingroup
+\tikzset{tn label/.append style={
+  inner sep=0pt, outer sep=8pt, draw=none}}
+\begin{tenkzcd}[maps, species={channel}]
+  A & B
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
+    {\rule{10pt}{4pt}}
+\end{tenkzcd}
+\endgroup
+\begingroup
+\tikzset{tn label/.append style={
+  inner sep=0pt, outer sep=8pt, draw, line join=round, line width=4pt}}
+\begin{tenkzcd}[maps, species={channel}]
+  A & B
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
+    {\rule{10pt}{4pt}}
+\end{tenkzcd}
+\endgroup
+\begingroup
+\tikzset{tenkz every picture/.append style={rotate=180},
+  tn label/.append style={
+    inner sep=0pt, outer sep=8pt, draw, line join=round, line width=4pt}}
+\begin{tenkzcd}[maps, species={channel}]
+  A & B
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
+    {\rule{10pt}{4pt}}
+\end{tenkzcd}
+\endgroup
+\end{document}
+"""
+
+
 SCALAR = re.compile(r"TENKZ-(FLOOR|DAYLIGHT|OVERRIDE)-SP=(-?[0-9]+)")
 MAP_VALUE = re.compile(
     r"TENKZ-MAP-([1-6])-(LEFT|BAND|RIGHT|GAP)-SP=(-?[0-9]+)"
@@ -236,6 +288,115 @@ def main() -> int:
             raise AssertionError(
                 "misassociated declaration failed without the grammar error"
             )
+
+        for filename, options, diagnostic in (
+            ("miter-typed-map-label.tex", "draw, line join=miter",
+             "non-round line join"),
+            ("round-typed-map-label.tex", "circle",
+             "unsupported live shape"),
+            ("transparent-typed-map-label.tex", "fill opacity=0",
+             "zero fill opacity"),
+            ("zero-text-typed-map-label.tex", "text opacity=0",
+             "zero text opacity"),
+        ):
+            failure_tex = work / filename
+            failure_tex.write_text(
+                customized_typed_map_label(options), encoding="utf-8"
+            )
+            failure_run = subprocess.run(
+                [engine, "-interaction=nonstopmode", "-halt-on-error",
+                 failure_tex.name],
+                cwd=work,
+                env=env,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                timeout=120,
+            )
+            if failure_run.returncode == 0 or diagnostic not in failure_run.stdout:
+                raise AssertionError(
+                    f"typed-map label accepted {options!r}: "
+                    + failure_run.stdout[-1000:]
+                )
+
+        geometry_tex = work / "typed-map-visible-geometry.tex"
+        geometry_tex.write_text(TYPED_MAP_VISIBLE_GEOMETRY, encoding="utf-8")
+        geometry_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error",
+             geometry_tex.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if geometry_run.returncode:
+            raise AssertionError(
+                "typed-map visible-geometry fixture did not compile: "
+                + geometry_run.stdout[-1000:]
+            )
+        geometry_log = (work / "typed-map-visible-geometry.tnlog").read_text(
+            encoding="utf-8"
+        )
+        visible_bounds: dict[int, tuple[int, int]] = {}
+        wire_bounds: dict[int, list[tuple[int, int]]] = {1: [], 2: [], 3: []}
+        for line in geometry_log.splitlines():
+            if not line.startswith("bbox|"):
+                continue
+            fields = dict(field.split("=", 1) for field in line.split("|")[1:])
+            picture = int(fields["picture"])
+            bounds = (int(fields["xmin"]), int(fields["xmax"]))
+            if fields["class"] == "label":
+                if picture in visible_bounds:
+                    raise AssertionError(
+                        f"typed-map picture {picture} emitted duplicate label bboxes"
+                    )
+                visible_bounds[picture] = bounds
+            elif fields["class"] == "wire" and picture in wire_bounds:
+                wire_bounds[picture].append(bounds)
+        for picture in (1, 2, 3):
+            if geometry_log.count(f"label-use|picture={picture}") != 1:
+                raise AssertionError(
+                    f"typed-map picture {picture} lost or duplicated label-use"
+                )
+        expected_widths = {1: 10 * 65536, 2: 14 * 65536, 3: 14 * 65536}
+        visible_widths = {
+            picture: xmax - xmin
+            for picture, (xmin, xmax) in visible_bounds.items()
+        }
+        if visible_bounds.keys() != expected_widths.keys() or any(
+                not close(visible_widths[picture], expected)
+                for picture, expected in expected_widths.items()):
+            raise AssertionError(
+                "typed-map bboxes retained outer sep or omitted round stroke: "
+                f"actual={visible_widths}, expected={expected_widths}"
+            )
+        for picture, label_bounds in visible_bounds.items():
+            segments = sorted(wire_bounds[picture])
+            if len(segments) != 2:
+                raise AssertionError(
+                    f"typed-map picture {picture} used full-wire fallback: "
+                    f"{segments}"
+                )
+            endpoints = [endpoint for segment in segments for endpoint in segment]
+            boundary_matches = {
+                boundary for boundary in label_bounds
+                if any(close(endpoint, boundary) for endpoint in endpoints)
+            }
+            segment_matches = [
+                {
+                    boundary for boundary in label_bounds
+                    if any(close(endpoint, boundary) for endpoint in segment)
+                }
+                for segment in segments
+            ]
+            if (boundary_matches != set(label_bounds)
+                    or any(len(matches) != 1 for matches in segment_matches)):
+                raise AssertionError(
+                    f"typed-map picture {picture} wire cuts disagree with "
+                    f"visible label {label_bounds}: {segments}"
+                )
 
     scalars = {name: int(value) for name, value in SCALAR.findall(run.stdout)}
     maps = {index: {} for index in range(1, 7)}

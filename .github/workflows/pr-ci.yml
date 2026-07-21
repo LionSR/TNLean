@@ -37,6 +37,7 @@ on:
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_corpus.sh'
+      - 'scripts/test_tenkz_corpus_provenance.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_cd_map_labels.py'
@@ -74,6 +75,7 @@ on:
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_corpus.sh'
+      - 'scripts/test_tenkz_corpus_provenance.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_cd_map_labels.py'
@@ -156,6 +158,7 @@ jobs:
               - 'tests/tenkz/**'
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_corpus.sh'
+              - 'scripts/test_tenkz_corpus_provenance.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
 
@@ -174,6 +177,9 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v6
+
+      - name: Test tenkz provenance invariant
+        run: python3 scripts/test_tenkz_corpus_provenance.py
 
       - name: Install TeX dependencies
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1

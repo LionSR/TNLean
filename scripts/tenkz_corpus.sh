@@ -4,6 +4,8 @@ set -euo pipefail
 
 REPO=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 CORPUS="$REPO/tests/tenkz"
+# Test seam for the isolated manifest-mutation regression.
+PROVENANCE=${TENKZ_CORPUS_PROVENANCE:-"$CORPUS/PROVENANCE.tsv"}
 JOBS=${TENKZ_CORPUS_JOBS:-4}
 
 if ! command -v python3 >/dev/null 2>&1; then
@@ -16,8 +18,9 @@ if ! [[ "$JOBS" =~ ^[1-9][0-9]*$ ]]; then
   exit 1
 fi
 
-python3 - "$REPO" <<'PY'
+python3 - "$REPO" "$PROVENANCE" <<'PY'
 import csv
+import hashlib
 import subprocess
 import sys
 from collections import Counter
@@ -26,7 +29,7 @@ from pathlib import Path
 
 repo = Path(sys.argv[1])
 corpus = repo / "tests" / "tenkz"
-provenance = corpus / "PROVENANCE.tsv"
+provenance = Path(sys.argv[2])
 
 
 def fail(message: str) -> None:
@@ -58,6 +61,21 @@ if any(not name or Path(name).name != name or not name.endswith(".tex")
     fail("every PROVENANCE.tsv source_file must be a plain .tex basename")
 if any(not record["reason"].strip() for record in records):
     fail("every PROVENANCE.tsv row needs a non-empty reason")
+
+# Independent source-name invariant derived from tenkz/handoff-artifacts.
+# Sorting and LF-delimiting make the digest insensitive to TSV row order.
+expected_source_names_sha256 = (
+    "8cacfc473627c36fc5c6f31cc48a6055c30c363cfca7470c07d56cd52fac47f1"
+)
+source_names_payload = "".join(
+    f"{name}\n" for name in sorted(source_names)
+).encode("utf-8")
+actual_source_names_sha256 = hashlib.sha256(source_names_payload).hexdigest()
+if actual_source_names_sha256 != expected_source_names_sha256:
+    fail(
+        "PROVENANCE.tsv source-file census SHA-256 must be "
+        f"{expected_source_names_sha256}, got {actual_source_names_sha256}"
+    )
 
 # Independent handoff-census invariant: do not derive these values from the TSV
 # being checked.  A changed manifest must not redefine its own expected corpus.
