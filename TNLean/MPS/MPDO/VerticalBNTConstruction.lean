@@ -16,6 +16,8 @@ weighted sector sum.
 
 ## Main result
 
+* `MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction`: an exact
+  isometric decomposition gives equality of positive-length closed chains.
 * `isBNT_verticalTensor_of_grouping`: the grouped sector
   decomposition furnishes an `IsBNT` witness for the vertical tensor.
 
@@ -54,7 +56,7 @@ $A^i=\bigoplus_k \mu_k A_k^i$: the adjoint intertwining moves the closing word
 into each corner, and the isometry removes the two adjacent inclusion maps.
 
 Source: arXiv:1606.00608, eq:II_CF1 and lines 237--242. -/
-theorem sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
+lemma sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
     {s r : ℕ} {dim : Fin r → ℕ}
     (T : MPSTensor s d) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor s (dim k))
