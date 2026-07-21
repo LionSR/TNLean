@@ -566,6 +566,8 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 
 \begin{theorem}[Sufficient condition for canonical form]
     \label{thm:projector_closure_canonical_form}
+    \lean{MPSTensor.%
+        exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
     \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
     \leanok
     \uses{def:invariant_projector_closure, def:no_periodic_vectors,
@@ -576,6 +578,13 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     and nonzero weights $\mu_1, \ldots, \mu_r$, such that
     \[
         \mc{V}^+(A) = \mc{V}^+\Bigl(\bigoplus_{k=1}^r \mu_k A_k\Bigr).
+    \]
+    Moreover, there are isometries $V_k:\mathbb C^{D_k}\to\mathbb C^D$
+    with pairwise orthogonal ranges such that
+    \[
+        A^iV_k=V_k(\mu_k A_k^i),
+        \qquad
+        A^i=\sum_k V_k(\mu_k A_k^i)V_k^\dagger.
     \]
     This is the sufficient condition for canonical form
     of~\cite[Section~2]{Cirac2016MPDO_arXiv}, with that paper's convention
