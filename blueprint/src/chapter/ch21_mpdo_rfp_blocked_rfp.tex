@@ -2715,9 +2715,11 @@ physical indices, as in
 
 \begin{theorem}[Coverage of active product corners by the blocked BNT]
     \label{thm:mpdo_active_product_corner_blocked_bnt_coverage}
-    \lean{MPOTensor.exists_blockedBNT_gaugePhase_of_flatBlock}
-    \lean{MPOTensor.FlatBlockedBNTComparison}
-    \lean{MPOTensor.exists_flatBlockedBNTComparison}
+    \lean{MPOTensor.RetainedProductSpectralFamily.%
+exists_blockedBNT_gaugePhase_of_flatBlock}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison}
+    \lean{MPOTensor.RetainedProductSpectralFamily.%
+exists_flatBlockedBNTComparison}
     \leanok
     \uses{thm:mpdo_retained_product_flat_reconstruction,
       thm:mpdo_retained_vertical_product_canonical_hypotheses,
