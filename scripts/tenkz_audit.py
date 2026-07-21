@@ -646,9 +646,19 @@ class Audit:
                 )
             uses_by_id: dict[int, Event] = {}
             for event in pic.events:
-                if (event.kind != "ink-use"
-                        or not _is_positive_int(event.attrs.get("id", ""))):
+                if event.kind != "ink-use":
                     continue
+                missing = sorted({"class", "id"} - event.attrs.keys())
+                if missing:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        "ink-use event lacks required field(s): "
+                        + ", ".join(missing),
+                    )
+                    continue
+                if not _is_positive_int(event.attrs["id"]):
+                    continue  # FIELD_VALIDATORS already reported the bad value.
                 owner = int(event.attrs["id"])
                 if owner in uses_by_id:
                     self.hard(
