@@ -10,6 +10,7 @@ import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.CanonicalForm.BNTTransport
 import TNLean.MPS.CanonicalForm.NormalCommutant
 import TNLean.MPS.MPDO.FigureEightPairwise
+import TNLean.MPS.MPDO.BNTFusionCoisometries
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.VerticalBNTConstruction
 import TNLean.MPS.MPDO.VerticalBNT
@@ -2727,6 +2728,233 @@ theorem exists_originalCornerFamily
               B (originalCornerLabel S C sigma p k) ab) *
             (originalCornerInclusion S C sigma hDim V omega p k)ᴴ := by
         rw [Finset.smul_sum]
+
+namespace OriginalCornerFamily
+
+variable {S : RetainedProductSpectralFamily dim mult weight B}
+variable (O : OriginalCornerFamily S)
+
+private abbrev distinguishedPair
+    (hMult : ∀ α, 0 < mult α) (α β : Fin g) : VerticalCopyPair mult :=
+  (⟨α, ⟨0, hMult α⟩⟩, ⟨β, ⟨0, hMult β⟩⟩)
+
+private noncomputable def chi
+    (hMult : ∀ α, 0 < mult α) : DiagonalChiFamily (Fin g) where
+  dim α β γ := Fintype.card
+    {k : Fin (S.count (distinguishedPair hMult α β)) //
+      O.label (distinguishedPair hMult α β) k = γ}
+  entry α β γ t := O.coefficient (distinguishedPair hMult α β)
+    ((Fintype.equivFin
+      {k : Fin (S.count (distinguishedPair hMult α β)) //
+        O.label (distinguishedPair hMult α β) k = γ}).symm t).1
+
+private noncomputable def groupedFusionCoisometry
+    (hMult : ∀ α, 0 < mult α) (α β : Fin g) :
+    Matrix ((γ : Fin g) ×
+        (Fin ((chi O hMult).dim α β γ) × Fin (dim γ)))
+      (Fin (dim α * dim β)) ℂ :=
+  let p := distinguishedPair hMult α β
+  Matrix.reindex
+    (Matrix.sigmaFiberBlockEquiv (O.label p) dim) (Equiv.refl _)
+    (Matrix.sigmaBlockRow (O.inclusion p))
+
+private theorem groupedFusionCoisometry_coisometry
+    (hMult : ∀ α, 0 < mult α) (α β : Fin g) :
+    groupedFusionCoisometry O hMult α β *
+        (groupedFusionCoisometry O hMult α β)ᴴ = 1 := by
+  let p := distinguishedPair hMult α β
+  let W := O.inclusion p
+  let rowEquiv := Matrix.sigmaFiberBlockEquiv (O.label p) dim
+  change Matrix.reindex rowEquiv (Equiv.refl _) (Matrix.sigmaBlockRow W) *
+      (Matrix.reindex rowEquiv (Equiv.refl _) (Matrix.sigmaBlockRow W))ᴴ = 1
+  rw [Matrix.conjTranspose_reindex,
+    show Matrix.reindex rowEquiv (Equiv.refl _)
+        (Matrix.sigmaBlockRow W) =
+      Matrix.reindexLinearEquiv ℂ ℂ rowEquiv (Equiv.refl _)
+        (Matrix.sigmaBlockRow W) by rfl,
+    show Matrix.reindex (Equiv.refl _) rowEquiv
+        (Matrix.sigmaBlockRow W)ᴴ =
+      Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) rowEquiv
+        (Matrix.sigmaBlockRow W)ᴴ by rfl,
+    Matrix.reindexLinearEquiv_mul ℂ ℂ rowEquiv (Equiv.refl _) rowEquiv,
+    Matrix.sigmaBlockRow_isCoisometry W
+      (O.inclusion_isometry p) (O.inclusion_orthogonal p),
+    Matrix.reindexLinearEquiv_one]
+
+private theorem groupedFusionCoisometry_fusion
+    (hMult : ∀ α, 0 < mult α) (α β : Fin g) (ab : Fin (D * D)) :
+    groupedFusionCoisometry O hMult α β *
+        (mulTensor (verticalBNTMPO (B α))
+          (verticalBNTMPO (B β))).toMPSTensor ab *
+        (groupedFusionCoisometry O hMult α β)ᴴ =
+      Matrix.blockDiagonal' fun γ =>
+        (chi O hMult).matrix α β γ ⊗ₖ B γ ab := by
+  let T := (mulTensor (verticalBNTMPO (B α))
+    (verticalBNTMPO (B β))).toMPSTensor
+  have hsigma := Matrix.sigmaBlockRow_conjugation T
+    (fun k v ↦ O.coefficient (distinguishedPair hMult α β) k •
+      B (O.label (distinguishedPair hMult α β) k) v)
+    (O.inclusion (distinguishedPair hMult α β))
+    (O.inclusion_isometry (distinguishedPair hMult α β))
+    (O.inclusion_orthogonal (distinguishedPair hMult α β))
+    (O.intertwine (distinguishedPair hMult α β)) ab
+  have hgroup := Matrix.reindex_blockDiagonal'_sigmaFiberBlockEquiv
+    (O.label (distinguishedPair hMult α β)) dim
+    (O.coefficient (distinguishedPair hMult α β)) (fun γ ↦ B γ ab)
+  dsimp only [groupedFusionCoisometry]
+  change Matrix.reindex
+        (Matrix.sigmaFiberBlockEquiv
+          (O.label (distinguishedPair hMult α β)) dim)
+        (Equiv.refl _)
+        (Matrix.sigmaBlockRow (O.inclusion (distinguishedPair hMult α β))) *
+      T ab *
+      (Matrix.reindex
+        (Matrix.sigmaFiberBlockEquiv
+          (O.label (distinguishedPair hMult α β)) dim)
+        (Equiv.refl _)
+        (Matrix.sigmaBlockRow (O.inclusion (distinguishedPair hMult α β))))ᴴ = _
+  rw [Matrix.conjTranspose_reindex]
+  change Matrix.reindexLinearEquiv ℂ ℂ
+        (Matrix.sigmaFiberBlockEquiv
+          (O.label (distinguishedPair hMult α β)) dim) (Equiv.refl _)
+        (Matrix.sigmaBlockRow (O.inclusion (distinguishedPair hMult α β))) *
+      Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) (Equiv.refl _) (T ab) *
+      Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _)
+        (Matrix.sigmaFiberBlockEquiv
+          (O.label (distinguishedPair hMult α β)) dim)
+        (Matrix.sigmaBlockRow (O.inclusion (distinguishedPair hMult α β)))ᴴ = _
+  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim)
+      (Equiv.refl _) (Equiv.refl _),
+    Matrix.reindexLinearEquiv_mul ℂ ℂ
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim)
+      (Equiv.refl _)
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim),
+    hsigma]
+  change Matrix.reindex
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim)
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim)
+      (Matrix.blockDiagonal' fun k =>
+        O.coefficient (distinguishedPair hMult α β) k •
+          B (O.label (distinguishedPair hMult α β) k) ab) = _
+  dsimp only [chi, DiagonalChiFamily.matrix]
+  exact hgroup
+
+private theorem groupedFusionCoisometry_reconstruction
+    (hMult : ∀ α, 0 < mult α) (α β : Fin g) (ab : Fin (D * D)) :
+    (mulTensor (verticalBNTMPO (B α))
+        (verticalBNTMPO (B β))).toMPSTensor ab =
+      (groupedFusionCoisometry O hMult α β)ᴴ *
+        (Matrix.blockDiagonal' fun γ =>
+          (chi O hMult).matrix α β γ ⊗ₖ B γ ab) *
+        groupedFusionCoisometry O hMult α β := by
+  let T := (mulTensor (verticalBNTMPO (B α))
+    (verticalBNTMPO (B β))).toMPSTensor
+  have hsigma := Matrix.sigmaBlockRow_reconstruction T
+    (fun k v ↦ O.coefficient (distinguishedPair hMult α β) k •
+      B (O.label (distinguishedPair hMult α β) k) v)
+    (O.inclusion (distinguishedPair hMult α β))
+    (O.reconstruction (distinguishedPair hMult α β)) ab
+  have hgroup := Matrix.reindex_blockDiagonal'_sigmaFiberBlockEquiv
+    (O.label (distinguishedPair hMult α β)) dim
+    (O.coefficient (distinguishedPair hMult α β)) (fun γ ↦ B γ ab)
+  dsimp only [groupedFusionCoisometry]
+  dsimp only [chi, DiagonalChiFamily.matrix]
+  change T ab =
+    (Matrix.reindex
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim)
+      (Equiv.refl _)
+      (Matrix.sigmaBlockRow (O.inclusion (distinguishedPair hMult α β))))ᴴ *
+      _ *
+      Matrix.reindex
+        (Matrix.sigmaFiberBlockEquiv
+          (O.label (distinguishedPair hMult α β)) dim)
+        (Equiv.refl _)
+        (Matrix.sigmaBlockRow (O.inclusion (distinguishedPair hMult α β)))
+  rw [hsigma]
+  rw [← hgroup]
+  rw [Matrix.conjTranspose_reindex]
+  change (Matrix.sigmaBlockRow
+        (O.inclusion (distinguishedPair hMult α β)))ᴴ *
+      Matrix.blockDiagonal' (fun k =>
+        O.coefficient (distinguishedPair hMult α β) k •
+          B (O.label (distinguishedPair hMult α β) k) ab) *
+      Matrix.sigmaBlockRow (O.inclusion (distinguishedPair hMult α β)) =
+    Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _)
+          (Matrix.sigmaFiberBlockEquiv
+            (O.label (distinguishedPair hMult α β)) dim)
+          (Matrix.sigmaBlockRow
+            (O.inclusion (distinguishedPair hMult α β)))ᴴ *
+      Matrix.reindexLinearEquiv ℂ ℂ
+          (Matrix.sigmaFiberBlockEquiv
+            (O.label (distinguishedPair hMult α β)) dim)
+          (Matrix.sigmaFiberBlockEquiv
+            (O.label (distinguishedPair hMult α β)) dim)
+          (Matrix.blockDiagonal' (fun k =>
+            O.coefficient (distinguishedPair hMult α β) k •
+              B (O.label (distinguishedPair hMult α β) k) ab)) *
+      Matrix.reindexLinearEquiv ℂ ℂ
+          (Matrix.sigmaFiberBlockEquiv
+            (O.label (distinguishedPair hMult α β)) dim) (Equiv.refl _)
+          (Matrix.sigmaBlockRow (O.inclusion (distinguishedPair hMult α β)))
+  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.refl _)
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim)
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim),
+    Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.refl _)
+      (Matrix.sigmaFiberBlockEquiv
+        (O.label (distinguishedPair hMult α β)) dim) (Equiv.refl _)]
+  rfl
+
+/-- The positive original-label corners determine the fusion coisometries of
+the BNT family.
+
+**Scope restriction (active product BNT):** Only active product corners are
+retained.  A BNT label absent from a fixed product pair has zero fusion
+multiplicity.  Documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+**Local fix (Figure-11 fixed-pair support):** The construction uses the
+distinguished retained copy of each label and permits an empty active family
+for its product pair.  Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+**Local fix (Figure-11 fusion coisometry):** The row map is a coisometry onto
+the active direct sum; its adjoint reconstructs the raw product, including a
+possible common zero corner.  Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+noncomputable def toBNTFusionCoisometryFamily
+    (hMult : ∀ α, 0 < mult α) : BNTFusionCoisometryFamily (Fin g) D where
+  bondDim := dim
+  tensor := fun γ ↦ verticalBNTMPO (B γ)
+  chi := chi O hMult
+  posEntries := by
+    intro α β γ t
+    exact O.coefficient_pos _ _
+  fusionCoisometry := groupedFusionCoisometry O hMult
+  coisometry := groupedFusionCoisometry_coisometry O hMult
+  fusion := by
+    intro α β i j
+    simpa only [toMPSTensor, verticalBNTMPO_apply,
+      MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat] using
+      groupedFusionCoisometry_fusion O hMult α β (finProdFinEquiv (i, j))
+  reconstruction := by
+    intro α β i j
+    simpa only [toMPSTensor, verticalBNTMPO_apply,
+      MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat] using
+      groupedFusionCoisometry_reconstruction O hMult α β
+        (finProdFinEquiv (i, j))
+
+end OriginalCornerFamily
 
 end RetainedProductSpectralFamily
 

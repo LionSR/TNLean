@@ -2921,6 +2921,69 @@ exists_unitaryNormalization}
     raw reconstruction.
 \end{proof}
 
+\begin{theorem}[Fusion coisometries from original-label corners]
+    \label{thm:mpdo_original_corner_family_to_fusion_coisometry}
+    \lean{MPOTensor.RetainedProductSpectralFamily.OriginalCornerFamily.%
+toBNTFusionCoisometryFamily}
+    \leanok
+    \uses{def:mpdo_original_corner_family,
+      def:mpdo_bnt_fusion_coisometry_family,
+      thm:vertical_sector_coisometry}
+    Given an original-label corner family, choose the distinguished retained
+    copy of every BNT label.  For fixed
+    labels $\alpha,\beta$, let the multiplicity of $\gamma$ be the number of
+    active corners of the distinguished copy pair whose original label is
+    $\gamma$, and put the corresponding positive corner coefficients on the
+    diagonal of $\chi_{\alpha,\beta,\gamma}$.  The block row of the adjoints
+    of the corner inclusions, regrouped by these label fibers, defines a
+    fusion coisometry.  It satisfies
+    \[
+      \chi_{\alpha,\beta,\gamma;r}>0,
+      \qquad
+      U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1,
+      \qquad
+      U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}^\dagger
+        =\bigoplus_\gamma
+          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
+    \]
+    together with the exact reconstruction
+    \[
+      (M_\alpha M_\beta)^{ij}
+        =U_{\alpha,\beta}^\dagger
+          \left(\bigoplus_\gamma
+            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+          U_{\alpha,\beta}.
+    \]
+    Empty label fibers contribute zero-dimensional diagonal blocks.
+    This is the decomposition of CPSV16, Appendix C.4, lines 2020--2029.
+
+    \textbf{Scope restriction (active product BNT):} Only active product
+    corners are retained.  A label absent from the distinguished copy pair
+    has zero fusion multiplicity.  See
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):} The distinguished copy
+    pair may have an empty active family; no unsupported corner is inserted.
+    See \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
+    a coisometry onto the active direct sum.  Exact reconstruction includes
+    any common zero corner discarded by the forward map.  See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each distinguished copy pair, form the block row from the adjoints of
+    its pairwise orthogonal isometric corner inclusions.  The block-row
+    identity makes this map a coisometry.  Its forward conjugation is block
+    diagonal over the active corners, while the corner reconstruction gives
+    the reverse identity.  Regrouping the active-corner sum by the original
+    label turns each label fiber into the diagonal matrix whose entries are
+    precisely the positive corner coefficients.  These identities are valid
+    without separate cases when a fiber or the whole active family is empty.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
