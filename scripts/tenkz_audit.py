@@ -204,7 +204,6 @@ def _circle_intersects_rect(bounds: Rect, rect: Rect) -> bool:
 
 def _roundrect_intersects_rect(bounds: Rect, radius: int, rect: Rect) -> bool:
     xmin, xmax, ymin, ymax = bounds
-    radius = min(radius, (xmax - xmin) // 2, (ymax - ymin) // 2)
     horizontal = (xmin + radius, xmax - radius, ymin, ymax)
     vertical = (xmin, xmax, ymin + radius, ymax - radius)
     if _rects_intersect(horizontal, rect) or _rects_intersect(vertical, rect):
@@ -589,11 +588,22 @@ class Audit:
                         f"({bounds[1]},{bounds[3]})",
                     )
                     continue
+                radius = int(event.attrs["radius"])
+                if (event.attrs["shape"] == "roundrect"
+                        and (2 * radius > bounds[1] - bounds[0]
+                             or 2 * radius > bounds[3] - bounds[2])):
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"roundrect glyph owner={event.attrs['owner']} radius="
+                        f"{radius} exceeds half its measured width or height",
+                    )
+                    continue
                 points = tuple((int(event.attrs[f"x{index}"]),
                                 int(event.attrs[f"y{index}"]))
                                for index in range(1, 4))
                 glyphs.append((event, event.attrs["shape"], bounds,
-                               int(event.attrs["radius"]), points))
+                               radius, points))
             labels = [rect for rect in rectangles if rect[1] == "label"]
             wire_boxes = [rect for rect in rectangles if rect[1] == "wire"]
             for label in labels:
