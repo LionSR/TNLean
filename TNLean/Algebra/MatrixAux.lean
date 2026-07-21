@@ -34,7 +34,7 @@ Extracted from various files for reusability.
 - `Matrix.sigmaBlockInclusion`: the canonical isometric inclusion of one
   summand into a dependent direct sum, with orthogonal ranges for distinct
   summands
-- `Matrix.sigmaFiberBlockEquiv`: the canonical regrouping of a dependent sum
+- `Matrix.sigmaFiberBlockEquiv`: a chosen regrouping of a dependent sum
   into the fibers of a finite label map
 - `Matrix.reindex_blockDiagonal'_sigmaFiberBlockEquiv`: regrouping a dependent
   block diagonal produces diagonal multiplicity matrices tensored with the
