@@ -154,6 +154,11 @@ def _is_lattice_cell_list(v: str) -> bool:
                            for cell in v.split(","))
 
 
+def _is_region_cell_list(v: str) -> bool:
+    """A resolved region may be empty; non-empty memberships stay strict."""
+    return not v or _is_lattice_cell_list(v)
+
+
 def _is_pairleg_port(v: str) -> bool:
     """A contraction starts at the centred face or a positive face slot."""
     if v == "center":
@@ -292,7 +297,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
              "mode": _enum("removed")},
     "region": {"picture": _is_int,
                "slot": _enum("selected", "secondary", "complement", "collar"),
-               "cells": _is_lattice_cell_list},
+               "cells": _is_region_cell_list},
     "edge": {"picture": _is_int, "from": _is_lattice_cell,
              "to": _is_lattice_cell,
              "role": _enum("none", "operator", "marked", "extra", "passive")},
