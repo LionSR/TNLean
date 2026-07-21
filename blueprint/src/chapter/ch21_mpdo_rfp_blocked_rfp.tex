@@ -2601,7 +2601,10 @@ physical indices, as in
     \leanok
     \uses{def:mpdo_retained_product_spectral_family,
       thm:mpdo_weighted_vertical_product_block_normal_decomposition}
-    Simultaneous retained-product spectral data exist.  The canonical
+    Suppose that the one-site vertical tensor has the stated exact
+    coisometric reconstruction, that $M$ is horizontally canonical, and that
+    $M$ generates positive operators.  Then simultaneous retained-product
+    spectral data exist.  The canonical
     inclusion of a copy pair, followed by its local corner isometry, is an
     isometry into the retained product bond space and intertwines in both
     directions.  Composing once more with the adjoint of the squared vertical
@@ -2617,6 +2620,54 @@ physical indices, as in
     local isometry gives the retained inclusion and both intertwining
     identities.  Finally, the Kronecker square of the vertical coisometry is a
     coisometry, so its adjoint preserves the isometry relation.
+\end{proof}
+
+\begin{theorem}[Flattened reconstruction of the retained product]
+    \label{thm:mpdo_retained_product_flat_reconstruction}
+    \lean{MPOTensor.retainedVerticalProductTensor_eq_sum_pairBlocks}
+    \lean{MPOTensor.retainedProductBlockInclusion_orthogonal_of_ne}
+    \lean{MPOTensor.RetainedProductSpectralFamily.retainedInclusion_orthogonal_of_ne}
+    \lean{MPOTensor.RetainedProductSpectralFamily.retained_compression}
+    \lean{MPOTensor.RetainedProductSpectralFamily.retained_reconstruction_active}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatDim}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatCoefficient}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatBlock}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatInclusion}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatDim_pos}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatCoefficient_pos}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatCoefficient_ne}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatBlock_normal}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatInclusion_isometry}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flatInclusion_orthogonal_of_ne}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flat_intertwine}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flat_intertwine_adjoint}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flat_compression}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flat_reconstruction}
+    \lean{MPOTensor.RetainedProductSpectralFamily.flat_sameMPV₂Pos}
+    \leanok
+    \uses{def:mpdo_retained_product_spectral_family,
+      lem:same_mpv_exact_isometric_decomposition}
+    Enumerate the dependent family of active corners by a single finite label
+    set.  The resulting coefficients are positive, the blocks are normal, and
+    the inclusion ranges are pairwise orthogonal.  For every tensor letter,
+    \[
+      C^i=\sum_j W_j\bigl(\lambda_j A_j^i\bigr)W_j^\dagger,
+      \qquad
+      W_j^\dagger W_l=\delta_{jl}.
+    \]
+    Each compression $W_j^\dagger C^iW_j$ is
+    $\lambda_jA_j^i$, and $C$ has the same positive-length closed chains as
+    the finite direct sum $\bigoplus_j\lambda_jA_j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    First reconstruct the retained product as the sum of its canonical
+    copy-pair blocks.  Substitute the exact local spectral reconstruction in
+    every pair, distribute the two inclusion maps across the finite sums, and
+    identify the iterated sum with the dependent active-label sum.  Finally
+    transport this sum through the active-label enumeration.  Isometry,
+    orthogonality, intertwining, and compression are inherited by composition;
+    the closed-chain equality follows from the exact isometric reconstruction.
 \end{proof}
 
 \begin{theorem}[Two-site closure of the two-site blocking]
