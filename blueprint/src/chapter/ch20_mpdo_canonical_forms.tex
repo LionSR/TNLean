@@ -3479,6 +3479,7 @@ tensor.  This is the contraction in
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \lean{MPOTensor.verticalCF_of_horizontalCF}
+    \lean{MPOTensor.IsHorizontalCF.exists_cpsvVerticalDecomposition}
     \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo}
     A tensor in horizontal canonical form that generates matrix product
@@ -3493,6 +3494,8 @@ tensor.  This is the contraction in
         U\widetilde MU^\dagger=B,\qquad
         \widetilde M=U^\dagger BU.
     \]
+    The latter declaration retains the literal CPSV16 basis-of-normal-tensors
+    predicate together with these same positive and coisometric data.
     This is \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 

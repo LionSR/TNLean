@@ -2986,8 +2986,8 @@ toBNTFusionCoisometryFamily}
     without separate cases when a fiber or the whole active family is empty.
 \end{proof}
 
-\begin{theorem}[Positive fusion decomposition of vertical products]
-    \label{thm:mpdo_vertical_product_positive_fusion_decomposition}
+\begin{theorem}[Positive fusion from transported vertical sectors]
+    \label{thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.transportedVerticalSector_exists_positiveFusionDecomposition}
     \leanok
     \uses{lem:cpsv_bnt_block_dimensions_positive,
@@ -3051,6 +3051,67 @@ toBNTFusionCoisometryFamily}
     label gives the positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$;
     corner intertwining and corner reconstruction give the two displayed
     identities.
+\end{proof}
+
+\begin{theorem}[Positive fusion decomposition of vertical products]
+    \label{thm:mpdo_vertical_product_positive_fusion_decomposition}
+    \lean{MPOTensor.exists_positiveFusionDecomposition_of_isRFPViaTS}
+    \leanok
+    \uses{def:is_rfp_via_ts,
+      thm:vertical_cf_of_horizontal_cf,
+      thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
+    Let $M$ be in horizontal canonical form, generate matrix product density
+    operators, and satisfy the renormalization fixed-point condition of
+    Definition~\ref{def:is_rfp_via_ts}.  Then one may choose a vertical basis
+    of normal tensors $\{M_\alpha\}_\alpha$ for which there are positive
+    diagonal matrices $\chi_{\alpha,\beta,\gamma}$ and matrices
+    $U_{\alpha,\beta}$.  Every diagonal entry of
+    $\chi_{\alpha,\beta,\gamma}$ is positive, and
+    \[
+      U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1,
+    \]
+    \[
+      U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}^{\dagger}
+        =\bigoplus_\gamma
+          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
+    \]
+    and
+    \[
+      (M_\alpha M_\beta)^{ij}
+        =U_{\alpha,\beta}^{\dagger}
+          \left(\bigoplus_\gamma
+            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+          U_{\alpha,\beta}.
+    \]
+    Thus the original renormalization fixed-point, horizontal-canonical, and
+    matrix-product-density-operator assumptions suffice for the positive
+    fusion decomposition of CPSV16, Appendix C.4, lines 2020--2029.
+
+    \textbf{Scope restriction (active product BNT):} Only active product
+    corners occur.  A label absent from a fixed product pair has zero fusion
+    multiplicity.  See
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):} A fixed product pair
+    may have no active corner, and no unsupported sector is inserted.  See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
+    a coisometry onto the active direct sum, and its adjoint gives the exact
+    reconstruction.  See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Proposition~4.13 to $M$ and to its two-site blocking, retaining in
+    each case the literal basis-of-normal-tensors assertion, the positive
+    multiplicity matrices, and both coisometric decomposition identities.
+    Unpack the two completely positive, trace-preserving maps in the
+    renormalization fixed-point condition.  The preceding transported-sector
+    theorem then supplies the positive diagonal family, the row
+    coisometries, the forward fusion identity, and exact reconstruction for
+    the chosen one-site vertical basis.
 \end{proof}
 
 \begin{theorem}[Two-site closure of the two-site blocking]
