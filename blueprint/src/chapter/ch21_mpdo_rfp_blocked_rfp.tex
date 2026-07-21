@@ -2771,7 +2771,6 @@ referenceInclusion_isometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.reference_compression}
     \leanok
     \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_retained_vertical_product_canonical_hypotheses,
       lem:matrix_sigma_block_inclusion}
     Assume that every blocked BNT label has positive multiplicity and that the
     blocked vertical tensor has the exact coisometric reconstruction
@@ -2799,6 +2798,7 @@ activeCoefficient_mul_phase_pos}
     \leanok
     \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
       thm:mpdo_blocked_reference_corners,
+      thm:mpdo_retained_product_spectral_family_exists,
       thm:mpdo_grouped_sector_compression_nonzero,
       thm:mpdo_sector_weight_pos}
     Suppose that $M$ is horizontally canonical and generates positive
@@ -2821,6 +2821,33 @@ activeCoefficient_mul_phase_pos}
     separates it at some finite chain length.  The sector-weight comparison
     with the distinguished reference corner then yields
     $\lambda_j\zeta_j>0$.
+\end{proof}
+
+\begin{theorem}[Unitary normalization of active product gauges]
+    \label{thm:mpdo_active_product_gauge_unitary_normalization}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
+exists_unitaryNormalization}
+    \leanok
+    \uses{thm:mpdo_active_product_coefficient_phase_pos,
+      thm:mpdo_blocked_reference_corners,
+      thm:mpdo_pairwise_vertical_gram_conjugation,
+      thm:normal_tensor_gram_rigidity}
+    Under the hypotheses of the preceding positivity theorem, for every
+    active product corner $j$ there is a real number $\omega_j>0$ such that
+    \[
+      X_j^\dagger X_j=\omega_j\Id,
+      \qquad
+      \omega_j^{-1/2}X_j\in\U(D_j).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the Figure~8 comparison to the active corner and the distinguished
+    blocked reference corner.  Both coefficients are positive, so horizontal
+    canonicality and positivity identify their Gram-dressed normal tensors.
+    Normal-tensor rigidity then makes $X_j^\dagger X_j$ a positive real
+    multiple of the identity.  Division by the positive square root gives a
+    unitary matrix.
 \end{proof}
 
 \begin{theorem}[Two-site closure of the two-site blocking]
