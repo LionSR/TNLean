@@ -2488,11 +2488,12 @@ separate step.
             P^{\mathrm R}_{\varepsilon}.
     \]
     Then
-    \[
-        C_\varepsilon C_\varepsilon^\dagger=1,
-        \qquad
-        C_\varepsilon^\dagger C_\varepsilon=1.
-    \]
+    \begin{align}
+        C_\varepsilon C_\varepsilon^\dagger&=1,
+        \label{eq:mpdo_final_sector_comparison_right_unitary}\\
+        C_\varepsilon^\dagger C_\varepsilon&=1.
+        \label{eq:mpdo_final_sector_comparison_left_unitary}
+    \end{align}
     The conclusion is conditional on the simultaneous selector identities.
     It is the fixed-output-channel invertibility consequence of the
     simultaneous inverse used in \cite[lines~247--277]{Bultinck2017Anyons}.
@@ -2549,7 +2550,9 @@ separate step.
         lem:matrix_kronecker_identity_cancellation}
     Injectivity gives
     $C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon}$.
-    Substitute this expression into the two identities for $C_\varepsilon$:
+    Substitute this expression into
+    \eqref{eq:mpdo_final_sector_comparison_right_unitary} and
+    \eqref{eq:mpdo_final_sector_comparison_left_unitary}:
     \[
         (F_\varepsilon F_\varepsilon^\dagger)
           \otimes1_{D_\varepsilon}=1,

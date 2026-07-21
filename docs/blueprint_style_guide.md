@@ -46,6 +46,23 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
     should usually be inline with `$...$`; use displayed equations only when the
     expression is long or when several implications must be compared. Avoid
     long paragraphs whose only mathematical content is described in words.
+12. **Label equations a later sentence points back to; reference them with
+    `\eqref`, not words.** If a proof or statement needs to point back to a
+    displayed equation later — in the same proof, a later proof, or another
+    statement — display it in a numbered environment (`equation`, or `align`
+    with per-line `\label{}` when several related equations are shown
+    together) with `\label{eq:<chapter-prefix>_...}`. Do not leave such an
+    equation as a bare `\[...\]` display. When referring back to it, cite
+    `\eqref{eq:...}` (optionally preceded by "Equation~", e.g.
+    `Equation~\eqref{eq:foo_bar}` or `Substituting \eqref{eq:foo_bar} into...`).
+    Do not describe a previously displayed equation in words instead —
+    phrases like "the preceding identity", "the equation above", "the first
+    displayed identity", or "the two equations above" — since a reader cannot
+    tell which equation is meant once another display intervenes, and the
+    reference goes stale silently if a later edit inserts a display between
+    them. A bare `\[...\]` display remains fine for an equation that no later
+    sentence in the file needs to point back to, and for a reference to a
+    display in an external cited source (which has no local `\label`).
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:

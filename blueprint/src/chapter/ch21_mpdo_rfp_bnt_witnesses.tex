@@ -66,28 +66,33 @@
     A proposition-level BNT-label theorem witness contains the source-side
     same-length product law, which holds for every positive length $L$, and
     the idempotent scalar law,
-    \[
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma),
-        \qquad
-        m_\gamma = \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
-    \]
+        &= \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma),
+        \label{eq:mpdo_bnt_witness_same_length_product}\\
+        m_\gamma &= \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+        \label{eq:mpdo_bnt_witness_idempotent_law}
+    \end{align}
     A witness also carries the positive-length trace-power law
     $c^{(L)}_{\alpha,\beta,\gamma}
         = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$
     and positivity of the diagonal $\chi_{\alpha,\beta,\gamma}$-entries.
-    Substituting the trace-power law into the two equations above rewrites
-    them with the coefficients as $\chi$-traces,
-    \[
+    Substituting the trace-power law into
+    \eqref{eq:mpdo_bnt_witness_same_length_product} and
+    \eqref{eq:mpdo_bnt_witness_idempotent_law} rewrites them with the
+    coefficients as $\chi$-traces,
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        = \sum_\gamma \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L}) O_L(M_\gamma),
-        \qquad
+        &= \sum_\gamma \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L}) O_L(M_\gamma),
+        \label{eq:mpdo_bnt_witness_same_length_product_chi}\\
         m_\gamma
-        = \sum_{\alpha,\beta} \operatorname{tr}(\chi_{\alpha,\beta,\gamma}) m_\alpha m_\beta.
-    \]
+        &= \sum_{\alpha,\beta} \operatorname{tr}(\chi_{\alpha,\beta,\gamma}) m_\alpha m_\beta.
+        \label{eq:mpdo_bnt_witness_idempotent_law_chi}
+    \end{align}
     At every positive length the BNT-label coefficient family also agrees
     with the canonical coefficient family determined by these
-    $\chi$-matrices, so both pairs of equations above hold equally with
+    $\chi$-matrices, so \eqref{eq:mpdo_bnt_witness_same_length_product_chi}
+    and \eqref{eq:mpdo_bnt_witness_idempotent_law_chi} hold equally with
     that canonical family in place of $c^{(L)}_{\alpha,\beta,\gamma}$.
     If $\sigma_n$ and $\tau_n$ are the source and target label maps for a
     positive blocked length $n$, then the blocked-basis coefficients

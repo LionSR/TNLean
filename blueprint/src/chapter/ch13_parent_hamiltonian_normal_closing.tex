@@ -94,11 +94,11 @@ is derived from the cyclic-window constraints crossing the periodic cut.
         X M A^v = M Y_v
     \]
     Taking $M=\Id$ gives
-    \[
+    \begin{equation}\label{eq:ph_normal_closing_boundary_word_value}
         Y_v = X A^v .
-    \]
-    Taking $M=A^j$ and substituting the preceding identity gives, for every
-    word $v$ of length $K$,
+    \end{equation}
+    Taking $M=A^j$ and substituting \eqref{eq:ph_normal_closing_boundary_word_value}
+    gives, for every word $v$ of length $K$,
     \[
         (X A^j-A^jX)A^v=0
     \]
@@ -186,16 +186,17 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     For every physical letter $j$,
     Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
     gives
-    \[
+    \begin{equation}\label{eq:ph_normal_closing_boundary_trace_window}
         \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
         =
         \operatorname{tr}\left(A^jA^\alpha Y_\nu\right)
-    \]
+    \end{equation}
     Put
     \[
         Z=X A^\alpha A^\nu-A^\alpha Y_\nu .
     \]
-    For every physical letter $j$, the preceding identity gives
+    For every physical letter $j$,
+    \eqref{eq:ph_normal_closing_boundary_trace_window} gives
     \[
         \operatorname{tr}(A^j Z)=0 .
     \]

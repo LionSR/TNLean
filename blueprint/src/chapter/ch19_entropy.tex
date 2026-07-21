@@ -3030,12 +3030,12 @@ Theorem~\ref{thm:trace_norm_abs}.
     \leanok
     \uses{thm:weyl_resolvent_defect_identity}
     Under the hypotheses and notation of the preceding theorem, suppose that
-    \[
+    \begin{equation}\label{eq:weyl_resolvent_zero_defect_hyp}
         \sum_g\operatorname{Re}
           \langle B_g,T_g^{-1}(B_g)\rangle_{\mathrm{HS}}
           -\operatorname{Re}
           \langle B,T^{-1}(B)\rangle_{\mathrm{HS}}=0.
-    \]
+    \end{equation}
     Then, for every Weyl index $g$,
     \[
         T_g^{-1}(B_g)=T^{-1}(B).
@@ -3049,8 +3049,9 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{theorem}
 
 \begin{proof}\leanok
-    The preceding identity writes the hypothesis as a finite sum of squared
-    norms.  Each term is nonnegative, so every term vanishes.  Thus
+    Equation~\eqref{eq:weyl_resolvent_zero_defect_hyp} writes the hypothesis as
+    a finite sum of squared norms.  Each term is nonnegative, so every term
+    vanishes.  Thus
     $S_g^{-1/2}(b_g-S_gx)=0$ for every $g$.  Invertibility of
     $S_g^{-1/2}$ gives $b_g=S_gx$, and hence
     $S_g^{-1}b_g=x=S^{-1}\sum_hb_h$.

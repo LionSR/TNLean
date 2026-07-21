@@ -2058,13 +2058,13 @@ module over the subalgebra.
     Let $S$ be a $*$-subalgebra of $\MN{D}$. There are positive integers
     $d_k,m_k$ and an orthonormal basis
     $(f_{k,i,j})_{k<K,\,i<m_k,\,j<d_k}$ of $\C^D$ such that every $A\in S$ acts by
-    \[
+    \begin{equation}\label{eq:spec_subalgebra_action}
         A f_{k,i,j}=\sum_{j'=0}^{d_k-1}(B_k)_{j'j}f_{k,i,j'},
-    \]
+    \end{equation}
     while every $T\in\MN{D}$ commuting with all members of $S$ acts by
-    \[
+    \begin{equation}\label{eq:spec_commutant_action}
         T f_{k,i,j}=\sum_{i'=0}^{m_k-1}(C_k)_{i'i}f_{k,i',j}.
-    \]
+    \end{equation}
     Thus the same orthonormal identification realizes $S$ on the second tensor factor
     and its commutant on the complementary first tensor factor. This is the
     finite-dimensional $C^*$-algebra step used in the proof of
@@ -2074,8 +2074,9 @@ module over the subalgebra.
 \begin{proof}
     \leanok
     \uses{thm:starSubalgebra_global_adapted_orthonormal_basis}
-    Choose the adapted orthonormal basis $(f_{k,i,j})$ for $S$. The first displayed
-    identity is its defining action property. If $T$ commutes with $S$, the row transport
+    Choose the adapted orthonormal basis $(f_{k,i,j})$ for $S$.
+    Equation~\eqref{eq:spec_subalgebra_action} is its defining action property.
+    If $T$ commutes with $S$, the row transport
     \[
         \tau_{k,i',i}(v)
         =\sum_j\langle f_{k,i',j},v\rangle f_{k,i,j}
@@ -2083,7 +2084,7 @@ module over the subalgebra.
     also commutes with $S$, and so does $\tau_{k,i',i}T$. Schur's lemma makes this
     composite scalar on each irreducible row and makes its matrix coefficients vanish
     between different isotypic components. Expanding $T f_{k,i,j}$ in the orthonormal
-    basis therefore gives the second displayed identity, with coefficients
+    basis therefore gives \eqref{eq:spec_commutant_action}, with coefficients
     $(C_k)_{i'i}$ independent of $j$.
 \end{proof}
 

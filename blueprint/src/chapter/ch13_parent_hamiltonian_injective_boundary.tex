@@ -336,17 +336,19 @@ and combines them into the commutation $X A^j = A^j X$.
     \leanok
     Fix $j$ and $\sigma$. Lemma~\ref{lem:boundary_assignment_first_letter_products}
     gives
-    \[
+    \begin{align}
         Y_M(\rho^+_{j,\sigma})A^j
-        =
+        &=
         Y_M(\tau^+_\eta(\mu))A^j,
-        \qquad
+        \label{eq:ph_first_letter_transport_plus}\\
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^j
-        =
+        &=
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j.
-    \]
-    Multiply the two identities on the right by $A^\sigma$ and use the assumed
-    product equation for the chosen pair $j,\sigma$.
+        \label{eq:ph_first_letter_transport_minus}
+    \end{align}
+    Multiply \eqref{eq:ph_first_letter_transport_plus} and
+    \eqref{eq:ph_first_letter_transport_minus} on the right by $A^\sigma$ and use
+    the assumed product equation for the chosen pair $j,\sigma$.
 \end{proof}
 
 \begin{lemma}[Endpoint words for the periodic-boundary windows]

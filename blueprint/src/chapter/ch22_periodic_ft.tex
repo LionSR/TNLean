@@ -1748,7 +1748,7 @@ unconditional result.
     \]
     Applying the block identity at the sector $u$ to each of these $m$-site
     blocks gives
-    \[
+    \begin{equation}\label{eq:pft_intermediate_block_identity}
         A_u^{i_1}F_{u+1}^{\mathbf i_1}
         A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
         \cdots
@@ -1759,9 +1759,9 @@ unconditional result.
         \widetilde B_{u+q+1}^{i_2}\widetilde F_{u+q+2}^{\mathbf i_2}
         \cdots
         \widetilde B_{u+q+m-1}^{i_m}\widetilde F_{u+q}^{\mathbf i_m}.
-    \]
-    For each $r\in\mathbb Z_m$, substituting $\mathbf i=\mathbf i_r$ in the
-    displayed identity gives
+    \end{equation}
+    For each $r\in\mathbb Z_m$, substituting $\mathbf i=\mathbf i_r$ in
+    \eqref{eq:pft_intermediate_block_identity} gives
     \[
         \widetilde F_{u+q+r}^{\mathbf i_r}
         =
@@ -1785,7 +1785,7 @@ unconditional result.
     \]
     Applying
     $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ to both
-    sides of the intermediate block-identity equation above and collecting the
+    sides of \eqref{eq:pft_intermediate_block_identity} and collecting the
     sector phases gives
     \[
         \begin{aligned}

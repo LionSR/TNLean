@@ -2297,13 +2297,14 @@ physical indices, as in
     Under precisely the hypotheses of
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
     the transported maps satisfy
-    \[
+    \begin{align}
       \widetilde S\circ\widetilde T
-        =\operatorname{id}_{\mathcal A_1},
-      \qquad
+        &=\operatorname{id}_{\mathcal A_1},
+        \label{eq:mpdo_transported_vertical_sector_ST_id}\\
       \widetilde T\circ\widetilde S
-        =\operatorname{id}_{\mathcal A_2}.
-    \]
+        &=\operatorname{id}_{\mathcal A_2}.
+        \label{eq:mpdo_transported_vertical_sector_TS_id}
+    \end{align}
     Thus $\widetilde T$ and $\widetilde S$ are mutually inverse.  This is the
     identity-composition conclusion of
     \cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.
@@ -2328,7 +2329,9 @@ physical indices, as in
     Applying Theorem~
     \ref{thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity} first to
     $F=\widetilde S\circ\widetilde T$ and then to
-    $F=\widetilde T\circ\widetilde S$ proves the two identities.
+    $F=\widetilde T\circ\widetilde S$ proves
+    \eqref{eq:mpdo_transported_vertical_sector_ST_id} and
+    \eqref{eq:mpdo_transported_vertical_sector_TS_id}.
 \end{proof}
 
 \begin{theorem}[Unitary relabelling of transported vertical sectors]
