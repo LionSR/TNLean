@@ -490,7 +490,7 @@ then dialect events carrying an explicit `picture=N` back-reference.
 `warning`, `label-use`, `ink-use`, `bbox`, `glyph-geometry`, and
 `wire-geometry` events are cross-cutting (any dialect may emit them).
 `label-anchor-site` is the corresponding lattice-only relation for a region
-corner label and its deliberately adjacent extreme site. These records, like
+corner label and its deliberately adjacent site or sites. These records, like
 `boundary`, are stripped from a picture's content before dialect and
 empty-picture checks run — they are diagnostics and derived data, not topology.
 Every library-owned `tn label`
@@ -533,7 +533,7 @@ rejects a strict
 intersection between a label and any sibling glyph/wire node, permits
 tangency, and rejects any label, glyph, or wire-node use without matching
 geometry. A lattice `label-anchor-site` relation permits only the corner
-label's intersection with the circle centered at its declared extreme site;
+label's intersection with a circle centered at a declared adjacent site;
 all other sibling intersections remain errors. Typed-map path restyling may
 change colour, positive width, opacity,
 or ordinary/double stroke, but fails closed for path-local affine transforms,
