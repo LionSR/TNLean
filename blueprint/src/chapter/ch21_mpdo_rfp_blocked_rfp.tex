@@ -2597,6 +2597,14 @@ physical indices, as in
     \lean{MPOTensor.verticalAssembledTensor_mul_verticalCopyBlockInclusion}
     \lean{MPOTensor.verticalCopyBlockInclusion_conjTranspose_mul_verticalAssembledTensor}
     \lean{MPOTensor.verticalCopyBlockInclusion_compression}
+    \lean{MPOTensor.blockedReferenceInclusion}
+    \lean{MPOTensor.blockedReferenceInclusion_isometry}
+    \lean{MPOTensor.blockedReference_intertwine}
+    \lean{MPOTensor.blockedReference_intertwine_adjoint}
+    \lean{MPOTensor.blockedReference_compression}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.referenceInclusion}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.referenceInclusion_isometry}
+    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.reference_compression}
     \lean{MPOTensor.retainedProductBlockInclusion_isometry}
     \lean{MPOTensor.retainedVerticalProductTensor_mul_retainedProductBlockInclusion}
     \lean{MPOTensor.retainedProductBlockInclusion_conjTranspose_mul_retainedVerticalProductTensor}
@@ -2613,7 +2621,8 @@ physical indices, as in
     \leanok
     \uses{def:mpdo_retained_product_spectral_family,
       thm:mpdo_weighted_vertical_product_block_normal_decomposition,
-      thm:mpdo_retained_vertical_product_canonical_hypotheses}
+      thm:mpdo_retained_vertical_product_canonical_hypotheses,
+      lem:matrix_sigma_block_inclusion}
     Suppose that the one-site vertical tensor has the stated exact
     coisometric reconstruction, that $M$ is horizontally canonical, and that
     $M$ generates positive operators.  Then simultaneous retained-product
@@ -2637,6 +2646,10 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
+    In copy coordinates the assembled tensor is block diagonal.  The
+    canonical dependent-sum inclusion is an isometry, and the two
+    block-diagonal intertwining identities give its forward, adjoint, and
+    compression formulas.
     Choose the exact normal-corner decomposition of every copy-pair tensor.
     The canonical copy-pair inclusions are isometries and select the weighted
     diagonal blocks of the retained product tensor.  Composition with each
@@ -2646,6 +2659,11 @@ physical indices, as in
     coisometry identity $WW^\dagger=1$ transports both retained intertwining
     identities from $C$ to $T$; the compression identity then follows from
     $J^\dagger J=1$.
+    For any blocked BNT label, choose its first multiplicity copy.  Composing
+    its canonical inclusion with the adjoint reconstruction coisometry gives
+    an isometric reference corner of the blocked vertical tensor.  Transport
+    along an equality of bond dimensions preserves its isometry and exact
+    compression formula.
 \end{proof}
 
 \begin{theorem}[Flattened reconstruction of the retained product]

@@ -383,6 +383,145 @@ theorem verticalCopyBlockInclusion_compression
   rw [verticalCopyBlockInclusion_conjTranspose_mul_verticalAssembledTensor,
     Matrix.mul_assoc, verticalCopyBlockInclusion_isometry, Matrix.mul_one]
 
+/-- The inclusion of the first retained copy of a blocked BNT label into the
+blocked vertical bond space.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+noncomputable def blockedReferenceInclusion
+    {g d : ℕ} (dim mult : Fin g → ℕ) (hMult : ∀ γ, 0 < mult γ)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g, mult γ), verticalCopyDim dim mult q))
+      (Fin (d * d)) ℂ)
+    (γ : Fin g) : Matrix (Fin (d * d)) (Fin (dim γ)) ℂ :=
+  Uᴴ * verticalCopyBlockInclusion dim mult ⟨γ, ⟨0, hMult γ⟩⟩
+
+/-- The distinguished blocked reference inclusion is an isometry.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+theorem blockedReferenceInclusion_isometry
+    {g d : ℕ} (dim mult : Fin g → ℕ) (hMult : ∀ γ, 0 < mult γ)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g, mult γ), verticalCopyDim dim mult q))
+      (Fin (d * d)) ℂ)
+    (hU : U * Uᴴ = 1) (γ : Fin g) :
+    (blockedReferenceInclusion dim mult hMult U γ)ᴴ *
+        blockedReferenceInclusion dim mult hMult U γ = 1 := by
+  let E := verticalCopyBlockInclusion dim mult ⟨γ, ⟨0, hMult γ⟩⟩
+  calc
+    (blockedReferenceInclusion dim mult hMult U γ)ᴴ *
+        blockedReferenceInclusion dim mult hMult U γ =
+      Eᴴ * U * (Uᴴ * E) := by
+        simp only [blockedReferenceInclusion, Matrix.conjTranspose_mul,
+          Matrix.conjTranspose_conjTranspose, E, Matrix.mul_assoc]
+    _ = Eᴴ * (U * Uᴴ) * E := by
+      simp only [Matrix.mul_assoc]
+    _ = Eᴴ * E := by rw [hU, Matrix.mul_one]
+    _ = 1 := verticalCopyBlockInclusion_isometry dim mult _
+
+/-- The distinguished reference copy intertwines with the blocked vertical
+tensor.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+theorem blockedReference_intertwine
+    {g d D : ℕ} (M : MPOTensor d D)
+    (dim mult : Fin g → ℕ) (hMult : ∀ γ, 0 < mult γ)
+    (weight : (γ : Fin g) → Fin (mult γ) → ℂ)
+    (A : (γ : Fin g) → MPSTensor (D * D) (dim γ))
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g, mult γ), verticalCopyDim dim mult q))
+      (Fin (d * d)) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor (blockTwo M) ab =
+      Uᴴ * verticalAssembledTensor dim mult weight A ab * U)
+    (γ : Fin g) (ab : Fin (D * D)) :
+    verticalTensor (blockTwo M) ab *
+        blockedReferenceInclusion dim mult hMult U γ =
+      blockedReferenceInclusion dim mult hMult U γ *
+        (weight γ ⟨0, hMult γ⟩ • A γ ab) := by
+  let E := verticalCopyBlockInclusion dim mult ⟨γ, ⟨0, hMult γ⟩⟩
+  calc
+    verticalTensor (blockTwo M) ab *
+        blockedReferenceInclusion dim mult hMult U γ =
+      (Uᴴ * verticalAssembledTensor dim mult weight A ab * U) *
+        (Uᴴ * E) := by rw [hReconstruct ab]; rfl
+    _ = Uᴴ * verticalAssembledTensor dim mult weight A ab *
+        (U * Uᴴ) * E := by simp only [Matrix.mul_assoc]
+    _ = Uᴴ * (verticalAssembledTensor dim mult weight A ab * E) := by
+      rw [hU]
+      simp only [Matrix.mul_one, Matrix.mul_assoc]
+    _ = Uᴴ * (E * (weight γ ⟨0, hMult γ⟩ • A γ ab)) := by
+      rw [verticalAssembledTensor_mul_verticalCopyBlockInclusion]
+    _ = blockedReferenceInclusion dim mult hMult U γ *
+        (weight γ ⟨0, hMult γ⟩ • A γ ab) := by
+      simp only [blockedReferenceInclusion, E, Matrix.mul_assoc]
+
+/-- The adjoint distinguished reference inclusion satisfies the reverse
+intertwining identity.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+theorem blockedReference_intertwine_adjoint
+    {g d D : ℕ} (M : MPOTensor d D)
+    (dim mult : Fin g → ℕ) (hMult : ∀ γ, 0 < mult γ)
+    (weight : (γ : Fin g) → Fin (mult γ) → ℂ)
+    (A : (γ : Fin g) → MPSTensor (D * D) (dim γ))
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g, mult γ), verticalCopyDim dim mult q))
+      (Fin (d * d)) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor (blockTwo M) ab =
+      Uᴴ * verticalAssembledTensor dim mult weight A ab * U)
+    (γ : Fin g) (ab : Fin (D * D)) :
+    (blockedReferenceInclusion dim mult hMult U γ)ᴴ *
+        verticalTensor (blockTwo M) ab =
+      (weight γ ⟨0, hMult γ⟩ • A γ ab) *
+        (blockedReferenceInclusion dim mult hMult U γ)ᴴ := by
+  let E := verticalCopyBlockInclusion dim mult ⟨γ, ⟨0, hMult γ⟩⟩
+  calc
+    (blockedReferenceInclusion dim mult hMult U γ)ᴴ *
+        verticalTensor (blockTwo M) ab =
+      (Eᴴ * U) *
+        (Uᴴ * verticalAssembledTensor dim mult weight A ab * U) := by
+      rw [hReconstruct ab]
+      simp only [blockedReferenceInclusion, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_conjTranspose, E]
+    _ = Eᴴ * (U * Uᴴ) * verticalAssembledTensor dim mult weight A ab * U := by
+      simp only [Matrix.mul_assoc]
+    _ = (Eᴴ * verticalAssembledTensor dim mult weight A ab) * U := by
+      rw [hU]
+      simp only [Matrix.mul_one, Matrix.mul_assoc]
+    _ = ((weight γ ⟨0, hMult γ⟩ • A γ ab) * Eᴴ) * U := by
+      rw [verticalCopyBlockInclusion_conjTranspose_mul_verticalAssembledTensor]
+    _ = (weight γ ⟨0, hMult γ⟩ • A γ ab) *
+        (blockedReferenceInclusion dim mult hMult U γ)ᴴ := by
+      simp only [blockedReferenceInclusion, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_conjTranspose, E, Matrix.mul_assoc]
+
+/-- Compression by the distinguished reference inclusion selects its
+distinguished weighted blocked BNT copy.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+theorem blockedReference_compression
+    {g d D : ℕ} (M : MPOTensor d D)
+    (dim mult : Fin g → ℕ) (hMult : ∀ γ, 0 < mult γ)
+    (weight : (γ : Fin g) → Fin (mult γ) → ℂ)
+    (A : (γ : Fin g) → MPSTensor (D * D) (dim γ))
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g, mult γ), verticalCopyDim dim mult q))
+      (Fin (d * d)) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor (blockTwo M) ab =
+      Uᴴ * verticalAssembledTensor dim mult weight A ab * U)
+    (γ : Fin g) (ab : Fin (D * D)) :
+    weight γ ⟨0, hMult γ⟩ • A γ ab =
+      (blockedReferenceInclusion dim mult hMult U γ)ᴴ *
+        verticalTensor (blockTwo M) ab *
+          blockedReferenceInclusion dim mult hMult U γ := by
+  rw [blockedReference_intertwine_adjoint M dim mult hMult weight A U hU
+      hReconstruct γ ab,
+    Matrix.mul_assoc,
+    blockedReferenceInclusion_isometry dim mult hMult U hU γ,
+    Matrix.mul_one]
+
 private def verticalProductSectorEquiv {g : ℕ} (dim mult : Fin g → ℕ) :
     ((α : Fin g) × (Fin (mult α) × Fin (dim α))) ×
       ((α : Fin g) × (Fin (mult α) × Fin (dim α))) ≃
@@ -1391,6 +1530,100 @@ structure FlatBlockedBNTComparison {g₂ : ℕ}
         (A₂ (label j))) ab *
       (↑((gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
         (Fin (S.flatDim j)) ℂ))
+
+private theorem castBondColumns_isometry
+    {r m n : ℕ} (V : Matrix (Fin r) (Fin m) ℂ)
+    (hV : Vᴴ * V = 1) (h : m = n) :
+    let V' := cast (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h) V
+    V'ᴴ * V' = 1 := by
+  cases h
+  simpa using hV
+
+private theorem castBondColumns_compression
+    {r m n e : ℕ} (T : MPSTensor e r) (A : MPSTensor e m)
+    (V : Matrix (Fin r) (Fin m) ℂ) (c : ℂ)
+    (hcorner : ∀ v, c • A v = Vᴴ * T v * V) (h : m = n)
+    (v : Fin e) :
+    let A' := cast (congrArg (MPSTensor e) h) A
+    let V' := cast (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h) V
+    c • A' v = V'ᴴ * T v * V' := by
+  cases h
+  simpa using hcorner v
+
+/-- The distinguished blocked reference inclusion transported to the bond
+dimension of an active product corner.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+noncomputable def FlatBlockedBNTComparison.referenceInclusion
+    {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {S : RetainedProductSpectralFamily dim mult weight B}
+    (C : FlatBlockedBNTComparison S dim₂ A₂)
+    (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
+    (U₂ : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g₂, mult₂ γ),
+        verticalCopyDim dim₂ mult₂ q))
+      (Fin (d * d)) ℂ)
+    (j : Fin (Fintype.card S.ActiveLabel)) :
+    Matrix (Fin (d * d)) (Fin (S.flatDim j)) ℂ :=
+  cast (congrArg (fun n ↦ Matrix (Fin (d * d)) (Fin n) ℂ) (C.dim_eq j))
+    (blockedReferenceInclusion dim₂ mult₂ hMult₂ U₂ (C.label j))
+
+/-- Every transported distinguished reference inclusion is an isometry.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+theorem FlatBlockedBNTComparison.referenceInclusion_isometry
+    {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {S : RetainedProductSpectralFamily dim mult weight B}
+    (C : FlatBlockedBNTComparison S dim₂ A₂)
+    (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
+    (U₂ : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g₂, mult₂ γ),
+        verticalCopyDim dim₂ mult₂ q))
+      (Fin (d * d)) ℂ)
+    (hU₂ : U₂ * U₂ᴴ = 1)
+    (j : Fin (Fintype.card S.ActiveLabel)) :
+    (C.referenceInclusion mult₂ hMult₂ U₂ j)ᴴ *
+        C.referenceInclusion mult₂ hMult₂ U₂ j = 1 := by
+  exact castBondColumns_isometry
+    (blockedReferenceInclusion dim₂ mult₂ hMult₂ U₂ (C.label j))
+    (blockedReferenceInclusion_isometry dim₂ mult₂ hMult₂ U₂ hU₂ (C.label j))
+    (C.dim_eq j)
+
+/-- Compression by the transported reference inclusion is the distinguished
+weighted blocked BNT copy, transported to the active bond dimension.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+theorem FlatBlockedBNTComparison.reference_compression
+    {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {S : RetainedProductSpectralFamily dim mult weight B}
+    (C : FlatBlockedBNTComparison S dim₂ A₂)
+    (M : MPOTensor d D)
+    (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (U₂ : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g₂, mult₂ γ),
+        verticalCopyDim dim₂ mult₂ q))
+      (Fin (d * d)) ℂ)
+    (hU₂ : U₂ * U₂ᴴ = 1)
+    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
+      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
+    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin (D * D)) :
+    weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩ •
+        (cast (congrArg (MPSTensor (D * D)) (C.dim_eq j))
+          (A₂ (C.label j))) ab =
+      (C.referenceInclusion mult₂ hMult₂ U₂ j)ᴴ *
+        verticalTensor (blockTwo M) ab *
+          C.referenceInclusion mult₂ hMult₂ U₂ j := by
+  exact castBondColumns_compression
+    (verticalTensor (blockTwo M)) (A₂ (C.label j))
+    (blockedReferenceInclusion dim₂ mult₂ hMult₂ U₂ (C.label j))
+    (weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩)
+    (blockedReference_compression M dim₂ mult₂ hMult₂ weight₂ A₂ U₂ hU₂
+      hReconstruct₂ (C.label j))
+    (C.dim_eq j) ab
 
 /-- The active-to-blocked BNT comparisons can be chosen simultaneously.
 
