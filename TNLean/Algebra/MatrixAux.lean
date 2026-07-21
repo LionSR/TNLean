@@ -156,6 +156,41 @@ theorem sigmaBlockInclusion_compression
   rw [Matrix.mul_assoc, blockDiagonal'_mul_sigmaBlockInclusion,
     ← Matrix.mul_assoc, sigmaBlockInclusion_isometry, Matrix.one_mul]
 
+/-- A dependent block-diagonal matrix is the sum of the conjugated matrices
+on its canonical summands. -/
+theorem blockDiagonal'_eq_sum_sigmaBlockInclusion
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {dim : ι → Type*} [(k : ι) → Fintype (dim k)]
+    [(k : ι) → DecidableEq (dim k)]
+    (B : (k : ι) → Matrix (dim k) (dim k) ℂ) :
+    Matrix.blockDiagonal' B =
+      ∑ k, sigmaBlockInclusion dim k * B k *
+        (sigmaBlockInclusion dim k)ᴴ := by
+  classical
+  ext x y
+  rcases x with ⟨k, a⟩
+  rcases y with ⟨l, b⟩
+  simp only [Matrix.sum_apply]
+  by_cases h : k = l
+  · subst l
+    rw [Matrix.blockDiagonal'_apply_eq, Finset.sum_eq_single k]
+    · simp [sigmaBlockInclusion, Matrix.mul_apply,
+        Matrix.conjTranspose_apply]
+    · intro j _ hj
+      simp [sigmaBlockInclusion, Matrix.mul_apply,
+        Matrix.conjTranspose_apply, Ne.symm hj]
+    · simp
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ h]
+    symm
+    apply Finset.sum_eq_zero
+    intro j _
+    by_cases hj : j = k
+    · subst j
+      simp [sigmaBlockInclusion, Matrix.mul_apply,
+        Matrix.conjTranspose_apply, Ne.symm h]
+    · simp [sigmaBlockInclusion, Matrix.mul_apply,
+        Matrix.conjTranspose_apply, Ne.symm hj]
+
 /-- The range projection of a canonical summand inclusion commutes with every
 dependent block-diagonal matrix. -/
 theorem blockDiagonal'_commute_sigmaBlockInclusion_rangeProjection
