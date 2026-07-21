@@ -92,15 +92,14 @@ theorem quantum_perron_frobenius [DecidableEq (Fin D)]
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       HasUniqueFixedPoint (transferMap (d := d) (D := D) A) ρ := by
+  have hIrr := injective_implies_irreducibleCP A hA
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := exists_posSemidef_fixedPoint A (by convert hNorm) hD
-  have hρ_pd := posSemidef_fixedPoint_isPosDef A hA ρ hρ_psd hρ_ne hρ_fix
   exact ⟨ρ, {
     fixed := hρ_fix
-    pos_def := hρ_pd
-    unique := fun σ hσ_psd hσ_fix => by
-      by_cases hσ : σ = 0
-      · exact ⟨0, by simp [hσ]⟩
-      · exact posSemidef_fixedPoint_unique A hA ρ σ hρ_psd hρ_ne hσ_psd hσ hρ_fix hσ_fix
+    pos_def := posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ hρ_psd hρ_ne hρ_fix
+    unique := fun σ hσ_psd hσ_fix =>
+      posSemidef_fixedPoint_unique_of_irreducible A hIrr ρ σ
+        hρ_psd hρ_ne hσ_psd hρ_fix hσ_fix
   }⟩
 
 /-! ### Reduction: handle the `D = 0` edge case
