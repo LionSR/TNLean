@@ -394,8 +394,10 @@
 \newif\iftenkz@bboxcapture
 \newif\iftenkz@identitylinear
 \newif\iftenkz@labelrectangle
+\newif\iftenkz@auditownermatch
 \tenkz@bboxcapturetrue
 \let\tenkz@labelgeometrykey\relax
+\let\tenkz@auditinstallowner\relax
 % Mirror the actual backend graphic state without changing any PGF arguments.
 % Assignments remain local to the same TeX groups as the driver mutations, so
 % inherited scopes and final node options are observed at the real path use.
@@ -422,7 +424,13 @@
 \def\pgfsys@fill@opacity#1{%
   \edef\tenkz@livefillopacity{#1}%
   \tenkz@sys@fillopacity{#1}}
-\newcount\tenkz@auditpendingdepth
+% Node options can be inherited by nested pictures.  Reset the local claimant
+% at the start of every node; an audited installer below then claims only that
+% node, and the surrounding claimant is restored when the node group closes.
+\let\tenkz@node@reset@hook\tikz@node@reset@hook
+\def\tikz@node@reset@hook{%
+  \tenkz@node@reset@hook
+  \let\tenkz@auditinstallowner\relax}
 \def\tenkz@begininkuse#1{%
   \global\advance\tenkz@inkuid by 1\relax
   \tenkz@inkowner=\tenkz@inkuid
@@ -530,6 +538,7 @@
   \global\expandafter\let\csname tenkz@outercount@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@modecount@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@usecount@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@auditowner@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@snapshotdone@#1\endcsname\relax}
 % Convert the effective outer separation to numeric lengths.  This is called
 % only from the real \pgf@outer@adjust@hook invocation in \pgfmultipartnode.
@@ -539,10 +548,33 @@
   \expandafter\xdef\csname tenkz@outerx@#1\endcsname{\the\pgf@x}%
   \pgfmathsetlength{\pgf@y}{\pgfkeysvalueof{/pgf/outer ysep}}%
   \expandafter\xdef\csname tenkz@outery@#1\endcsname{\the\pgf@y}}
-\def\tenkz@armvisiblesnapshot#1{%
-  \global\advance\tenkz@auditpendingdepth by 1\relax
-  \expandafter\xdef\csname tenkz@auditpending@%
-    \the\tenkz@auditpendingdepth\endcsname{#1}}
+\def\tenkz@checkcurrentauditowner#1{%
+  \tenkz@auditownermatchfalse
+  \edef\tenkz@currentauditowner{\tenkz@auditinstallowner}%
+  \edef\tenkz@intendedauditowner{#1}%
+  \ifx\tenkz@currentauditowner\tenkz@intendedauditowner
+    \tenkz@auditownermatchtrue
+  \fi}
+\def\tenkz@checklastauditowner#1{%
+  \tenkz@auditownermatchfalse
+  \expandafter\ifx\csname tenkz@auditowner@#1\endcsname\relax
+  \else
+    \edef\tenkz@currentauditowner{\tikzlastnode}%
+    \edef\tenkz@intendedauditowner{%
+      \csname tenkz@auditowner@#1\endcsname}%
+    \ifx\tenkz@currentauditowner\tenkz@intendedauditowner
+      \tenkz@auditownermatchtrue
+    \fi
+  \fi}
+\def\tenkz@checkrequiredlastauditowner#1{%
+  \tenkz@checklastauditowner{#1}%
+  \iftenkz@auditownermatch\else
+    \edef\tenkz@currentauditowner{\tenkz@auditinstallowner}%
+    \edef\tenkz@intendedauditowner{#1}%
+    \ifx\tenkz@currentauditowner\tenkz@intendedauditowner
+      \tenkz@auditownermatchtrue
+    \fi
+  \fi}
 \def\tenkz@incrementtokenslot#1#2{%
   \count@=\csname tenkz@#1@#2\endcsname\relax
   \advance\count@ by 1\relax
@@ -671,19 +703,26 @@
   \expandafter\let\csname tenkz@savedusepath@#1\endcsname\relax
   \expandafter\let\csname tenkz@savedmode@#1\endcsname\relax
   \tenkz@validateactualpath{#1}}
-% The unarmed branch is the original four-argument call.  An audited token
-% wraps only its node's one real outer-adjust hook and its original path-use
-% callback; all arguments and backend calls are forwarded unchanged.
+% The unclaimed branch is the original four-argument call.  The per-node local
+% claimant binds its token to PGF's final node name here: nested pictures can
+% inherit outer hooks, so construction order alone cannot identify ownership.
 \let\tenkz@multipartnode\pgfmultipartnode
 \def\pgfmultipartnode#1#2#3#4{%
-  \ifnum\tenkz@auditpendingdepth=0\relax
+  \ifx\tenkz@auditinstallowner\relax\else
+    \expandafter\xdef\csname tenkz@auditowner@%
+      \tenkz@auditinstallowner\endcsname{#3}%
+    \expandafter\ifx\csname tenkz@snapshotdone@%
+      \tenkz@auditinstallowner\endcsname\relax
+    \else
+      \expandafter\xdef\csname tenkz@audittoken@#3\endcsname{%
+        \tenkz@auditinstallowner}%
+    \fi
+  \fi
+  \expandafter\ifx\csname tenkz@audittoken@#3\endcsname\relax
     \tenkz@multipartnode{#1}{#2}{#3}{#4}%
   \else
-    \edef\tenkz@token{\csname tenkz@auditpending@%
-      \the\tenkz@auditpendingdepth\endcsname}%
-    \global\expandafter\let\csname tenkz@auditpending@%
-      \the\tenkz@auditpendingdepth\endcsname\relax
-    \global\advance\tenkz@auditpendingdepth by -1\relax
+    \edef\tenkz@token{\csname tenkz@audittoken@#3\endcsname}%
+    \global\expandafter\let\csname tenkz@audittoken@#3\endcsname\relax
     \expandafter\let\csname tenkz@savedouter@\tenkz@token\endcsname
       \pgf@outer@adjust@hook
     \expandafter\def\csname tenkz@outeractive@\tenkz@token\endcsname{1}%
@@ -748,6 +787,17 @@
       {Use an ordinary filled, optionally round-stroked audited node.}%
   \fi}
 \def\tenkz@capturelabelbbox#1{%
+  \tenkz@checkrequiredlastauditowner{#1}%
+  \iftenkz@auditownermatch
+    \expandafter\ifx\csname tenkz@invalid@#1\endcsname\relax
+      \tenkz@cleanupvisiblesnapshot{#1}%
+      \PackageError{tenkz}{Audited label node '\tikzlastnode' has no captured path state}%
+        {The node did not run its owned PGF path callback.}%
+    \else
+      \tenkz@capturelabelbboxstate{#1}%
+    \fi
+  \fi}
+\def\tenkz@capturelabelbboxstate#1{%
   \edef\tenkz@visibleinvalid{\csname tenkz@invalid@#1\endcsname}%
   % Exact label geometry is the filled rectangle.  Without that background,
   % the support would be the individual text glyphs, which this audit does not
@@ -808,31 +858,44 @@
     \tenkz@visiblestateerror{\tenkz@visibleinvalid}{label}{\tikzlastnode}%
   \fi}
 \def\tenkz@snapshotvisible#1{%
-  \expandafter\ifx\csname tenkz@snapshotdone@#1\endcsname\relax
-    \expandafter\gdef\csname tenkz@snapshotdone@#1\endcsname{1}%
-    \ifx\tikz@textopacity\pgfutil@empty
-      \expandafter\gdef\csname tenkz@textopacity@#1\endcsname{1}%
-    \else
-      \expandafter\xdef\csname tenkz@textopacity@#1\endcsname{\tikz@textopacity}%
+  \tenkz@checkcurrentauditowner{#1}%
+  \iftenkz@auditownermatch
+    \expandafter\ifx\csname tenkz@snapshotdone@#1\endcsname\relax
+      % PGF calls the multipart usage argument only for shapes with a
+      % background or foreground path.  Do not arm pathless coordinate nodes
+      % that inherit a matrix's `every node' style.
+      \pgfutil@ifundefined{pgf@sh@bg@\tikz@shape}{%
+        \pgfutil@ifundefined{pgf@sh@fg@\tikz@shape}{}{%
+          \tenkz@snapshotvisiblepath{#1}}%
+      }{\tenkz@snapshotvisiblepath{#1}}%
     \fi
-    \tenkz@armvisiblesnapshot{#1}%
   \fi
 }
+\def\tenkz@snapshotvisiblepath#1{%
+  \expandafter\gdef\csname tenkz@snapshotdone@#1\endcsname{1}%
+  \ifx\tikz@textopacity\pgfutil@empty
+    \expandafter\gdef\csname tenkz@textopacity@#1\endcsname{1}%
+  \else
+    \expandafter\xdef\csname tenkz@textopacity@#1\endcsname{\tikz@textopacity}%
+  \fi}
 % Capture the final corner state while TikZ is still constructing the node.
 % `append after command' runs too late: PGF has restored the path-local
 % \ifpgf@arccorners and \pgf@corner@arc state by then.  Each audited node gets a
 % globally unique token, and `execute at end node' snapshots the state under
 % that token for the matching append-after callback to consume.
 \def\tenkz@snapshotglyphstate#1{%
-  \expandafter\ifx\csname tenkz@snapshotdone@#1\endcsname\relax
-    \ifpgf@arccorners
-      \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{1}%
-      \expandafter\xdef\csname tenkz@glypharc@#1\endcsname{\pgf@corner@arc}%
-    \else
-      \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{0}%
-      \expandafter\gdef\csname tenkz@glypharc@#1\endcsname{{0pt}{0pt}}%
+  \tenkz@checkcurrentauditowner{#1}%
+  \iftenkz@auditownermatch
+    \expandafter\ifx\csname tenkz@snapshotdone@#1\endcsname\relax
+      \ifpgf@arccorners
+        \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{1}%
+        \expandafter\xdef\csname tenkz@glypharc@#1\endcsname{\pgf@corner@arc}%
+      \else
+        \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{0}%
+        \expandafter\gdef\csname tenkz@glypharc@#1\endcsname{{0pt}{0pt}}%
+      \fi
+      \tenkz@snapshotvisible{#1}%
     \fi
-    \tenkz@snapshotvisible{#1}%
   \fi}
 \def\tenkz@setglypharcaux#1#2{%
   \tenkz@glyphradiusx=#1\relax
@@ -923,14 +986,22 @@
   \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=glyph|%
     id=\the\tenkz@inkowner|shape=\tenkz@glyphshape}}
 \def\tenkz@captureglyphgeometry#1#2#3{%
-  \tenkz@captureglyphgeometrynode{\tikzlastnode}{#1}{#2}{#3}}
+  \tenkz@checkrequiredlastauditowner{#3}%
+  \iftenkz@auditownermatch
+    \tenkz@captureglyphgeometrynode{\tikzlastnode}{#1}{#2}{#3}%
+  \fi}
 \def\tenkz@cleanupglyphsnapshot#1{%
   \global\expandafter\let\csname tenkz@glypharcflag@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@glypharc@#1\endcsname\relax
   \tenkz@cleanupvisiblesnapshot{#1}}
 \def\tenkz@captureglyphgeometrynode#1#2#3#4{%
-  \edef\tenkz@visibleinvalid{\csname tenkz@invalid@#4\endcsname}%
-  \ifnum\tenkz@visibleinvalid=0\relax
+  \expandafter\ifx\csname tenkz@invalid@#4\endcsname\relax
+    \tenkz@cleanupglyphsnapshot{#4}%
+    \PackageError{tenkz}{Audited glyph node '#1' has no captured path state}%
+      {The node did not run its owned PGF path callback.}%
+  \else
+    \edef\tenkz@visibleinvalid{\csname tenkz@invalid@#4\endcsname}%
+    \ifnum\tenkz@visibleinvalid=0\relax
     \iftenkz@bboxcapture
       \ifnum\tenkz@pictureid>0\relax
       \global\advance\tenkz@inkuid by 1\relax
@@ -949,9 +1020,10 @@
       \fi
     \fi
     \tenkz@cleanupglyphsnapshot{#4}%
-  \else
-    \tenkz@cleanupglyphsnapshot{#4}%
-    \tenkz@visiblestateerror{\tenkz@visibleinvalid}{glyph}{#1}%
+    \else
+      \tenkz@cleanupglyphsnapshot{#4}%
+      \tenkz@visiblestateerror{\tenkz@visibleinvalid}{glyph}{#1}%
+    \fi
   \fi}
 \def\tenkz@emitglyphgeometry#1{%
   \begingroup
@@ -1070,6 +1142,7 @@
   \ifnum\tenkz@pictureid>0\relax
     \global\advance\tenkz@glyphsnapuid by 1\relax
     \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
+    \edef\tenkz@auditinstallowner{\tenkz@glyphsnaptoken}%
     \edef\tenkz@installlabelsnapshot{%
       \noexpand\tikzset{%
         execute at end node={%
@@ -1083,6 +1156,7 @@
     \ifnum\tenkz@pictureid>0\relax
       \global\advance\tenkz@glyphsnapuid by 1\relax
       \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
+      \edef\tenkz@auditinstallowner{\tenkz@glyphsnaptoken}%
       \edef\tenkz@installglyphsnapshot{%
         \noexpand\tikzset{%
           execute at end node={%
@@ -1094,12 +1168,20 @@
     \fi
   \fi}
 \def\tenkz@recorddeferredglyph#1{%
-  \expandafter\xdef\csname tenkz@glyphsnaptoken@\tikzlastnode\endcsname{#1}}
+  \tenkz@checklastauditowner{#1}%
+  \iftenkz@auditownermatch
+    \expandafter\ifx\csname tenkz@invalid@#1\endcsname\relax
+      \tenkz@cleanupglyphsnapshot{#1}%
+    \else
+      \expandafter\xdef\csname tenkz@glyphsnaptoken@\tikzlastnode\endcsname{#1}%
+    \fi
+  \fi}
 \def\tenkz@installdeferredglyphaudit{%
   \iftenkz@bboxcapture
     \ifnum\tenkz@pictureid>0\relax
       \global\advance\tenkz@glyphsnapuid by 1\relax
       \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
+      \edef\tenkz@auditinstallowner{\tenkz@glyphsnaptoken}%
       \edef\tenkz@installglyphsnapshot{%
         \noexpand\tikzset{%
           execute at end node={%

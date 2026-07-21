@@ -46,6 +46,7 @@ SOURCE = r"""
   \tenkzassertrelax{tenkz@outercount@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@modecount@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@usecount@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@auditowner@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@snapshotdone@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@glypharcflag@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@glypharc@\tenkztesttoken}}
@@ -354,21 +355,25 @@ NESTED_END_HOOK = r"""
 \newif\ifinhook
 \tikzset{box tensor/.append style={execute at end node={%
   \ifinhook\else\global\inhooktrue
-  \tikz[baseline] \node[tn label] {inner};%
+  \tikz[baseline] \node[tn label] (inner-audit) {inner};%
   \global\inhookfalse\fi}}}
 \begin{tenkzfree}
   \tnput[box]{outer}{(0,0)}{}
 \end{tenkzfree}
 \makeatletter
-\ifnum\tenkz@auditpendingdepth=0\relax\else
-  \PackageError{tenkz test}{Pending audit stack did not drain}{}%
+\def\tenkzassertrelax#1{%
+  \expandafter\ifx\csname #1\endcsname\relax\else
+    \PackageError{tenkz test}{Audit ownership state '#1' was not released}{}%
+  \fi}
+\ifx\tenkz@auditinstallowner\relax\else
+  \PackageError{tenkz test}{Per-node audit claimant leaked its scope}{}%
 \fi
-\expandafter\ifx\csname tenkz@auditpending@1\endcsname\relax\else
-  \PackageError{tenkz test}{Pending audit stack slot was not released}{}%
-\fi
-\expandafter\ifx\csname tenkz@auditpending@2\endcsname\relax\else
-  \PackageError{tenkz test}{Nested audit stack slot was not released}{}%
-\fi
+\tenkzassertrelax{tenkz@audittoken@outer}
+\tenkzassertrelax{tenkz@audittoken@inner-audit}
+\tenkzassertrelax{tenkz@auditowner@1}
+\tenkzassertrelax{tenkz@snapshotdone@1}
+\tenkzassertrelax{tenkz@auditowner@2}
+\tenkzassertrelax{tenkz@snapshotdone@2}
 \makeatother
 \end{document}
 """
@@ -668,6 +673,8 @@ def main() -> int:
             ("transformed-label.tex", TRANSFORMED_LABEL,
              "unsupported affine"),
             ("draw-only-glyph.tex", DRAW_ONLY_GLYPH, "has no filled shape"),
+            ("pathless-glyph.tex", customized_glyph("coordinate"),
+             "has no captured path state"),
             ("nonrectangle-label.tex", NONRECTANGLE_LABEL,
              "unsupported live shape"),
             ("miter-glyph.tex", customized_glyph("line join=miter"),

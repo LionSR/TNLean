@@ -1066,12 +1066,19 @@
             \int_step_inline:nn {\l__tenkzcd_mapcols_int}
               {
                 \edef\tenkz@mapnode{tenkzmap-##1-####1}
-                \edef\tenkz@mapsnaptoken{%
-                  \csname tenkz@glyphsnaptoken@\tenkz@mapnode\endcsname}
-                \tenkz@captureglyphgeometrynode
-                  {\tenkz@mapnode}{rect}{0pt}{\tenkz@mapsnaptoken}
-                \global\expandafter\let
-                  \csname tenkz@glyphsnaptoken@\tenkz@mapnode\endcsname\relax
+                \expandafter\ifx\csname tenkz@glyphsnaptoken@%
+                  \tenkz@mapnode\endcsname\relax
+                  \PackageError{tenkz}{Audited map node '\tenkz@mapnode'
+                    has no captured path state}%
+                    {The deferred node did not run its owned PGF path callback.}%
+                \else
+                  \edef\tenkz@mapsnaptoken{%
+                    \csname tenkz@glyphsnaptoken@\tenkz@mapnode\endcsname}
+                  \tenkz@captureglyphgeometrynode
+                    {\tenkz@mapnode}{rect}{0pt}{\tenkz@mapsnaptoken}
+                  \global\expandafter\let
+                    \csname tenkz@glyphsnaptoken@\tenkz@mapnode\endcsname\relax
+                \fi
               }
           }
       \fi
