@@ -224,7 +224,18 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
     tensor-network notation the gauge conjugates the local tensor on its virtual
     legs, with the physical index~$i$ on the upper leg:
     \begin{center}
-        \TNGaugeConjugation{X}{i}{X^{-1}}
+        % Formula/source: Papers/1606.00608/MPDO-22-12-17-2.tex,
+        % lines 1173--1178, gives B^i = X A^i X^{-1} in the single-block
+        % fundamental-theorem corollary.
+        % Ink-to-index map: i labels the free physical leg, while the west
+        % and east wires carry the free virtual indices of B^i.
+        % Contraction set: exactly the two bonds X--A and A--X^{-1} are summed.
+        % Type verdict: the picture is a rank-three local tensor.
+        % Boundary signature: virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \begin{tenkz}[physical=up]
+            \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+        \end{tenkz}
     \end{center}
 \end{theorem}
 

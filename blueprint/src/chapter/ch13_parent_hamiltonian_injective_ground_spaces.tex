@@ -39,13 +39,25 @@ $\mathcal G_L^A$.
     \]
     In tensor-network notation,
     \begin{center}
-        \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X}
+        % Formula/source: Papers/quant-ph_0608197/MPSarchive.tex,
+        % lines 889--898, defines Gamma_L(X) with coefficients
+        % tr(X A_{i_1}\cdots A_{i_L}).
+        % Ink-to-index map: sigma_1,...,sigma_L are the free upper physical
+        % indices; every virtual index lies on the closed A-word--X loop.
+        % Contraction set: all L+1 virtual bonds around the periodic loop are summed.
+        % Type verdict: a rank-L physical tensor, equivalently a length-L state.
+        % Boundary signature: semantic virtual-west=0 | virtual-east=0 |
+        % physical-up=L | physical-down=0; the finite schematic emits 3 up legs.
+        \begin{tenkz}[periodic, physical=up]
+            \tnX{X} &
+            \tn[up=$\sigma_1$]{A}\tnspan[brace below]{4}{L} &
+            \tn{A} & \tndots & \tn[up=$\sigma_L$]{A}
+        \end{tenkz}
     \end{center}
-    the upper chain denotes the word tensor $A^\sigma$ with open physical
-    indices $\sigma_1,\ldots,\sigma_L$, and the lower red node denotes the boundary
-    matrix $X$ inserted on the closing virtual bond before taking the trace.
-    The chain length~$L$ is fixed by the surrounding formula, not by an extra
-    label inside the diagram.
+    the chain denotes the word tensor $A^\sigma$ with open physical indices
+    $\sigma_1,\ldots,\sigma_L$, and the red capsule denotes the boundary matrix
+    $X$ inserted on the closing virtual bond before taking the trace.  The brace
+    records the chain length~$L$.
 \end{definition}
 
 \begin{lemma}[Evaluation formula]\label{lem:ground_space_map_apply}
@@ -522,7 +534,19 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     The restriction simply absorbs the last tensor into the boundary matrix:
     \begin{center}
-        \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{A^j X}
+        % Formula/source: Papers/quant-ph_0608197/MPSarchive.tex,
+        % lines 889--898, with boundary argument A^j X in Gamma_L.
+        % Ink-to-index map: sigma_1,...,sigma_L remain free; j is absorbed into
+        % the boundary capsule and carries no free leg in this shortened state.
+        % Contraction set: every virtual bond of the periodic A-word--A^jX loop.
+        % Type verdict: a rank-L physical tensor in G_L(A).
+        % Boundary signature: semantic virtual-west=0 | virtual-east=0 |
+        % physical-up=L | physical-down=0; the finite schematic emits 3 up legs.
+        \begin{tenkz}[periodic, physical=up]
+            \tnX{A^j X} &
+            \tn[up=$\sigma_1$]{A}\tnspan[brace below]{4}{L} &
+            \tn{A} & \tndots & \tn[up=$\sigma_L$]{A}
+        \end{tenkz}
     \end{center}
     Direct computation:
     $\psi(\sigma_1,\ldots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
@@ -543,7 +567,19 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     On the right restriction one first rotates the trace and then reads the
     resulting boundary matrix on the shortened window:
     \begin{center}
-        \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X A^i}
+        % Formula/source: Papers/quant-ph_0608197/MPSarchive.tex,
+        % lines 889--898, with the cyclically rotated boundary argument X A^i.
+        % Ink-to-index map: sigma_1,...,sigma_L remain free; i has been absorbed
+        % into the boundary capsule and is not a free leg of the shortened state.
+        % Contraction set: every virtual bond of the periodic A-word--XA^i loop.
+        % Type verdict: a rank-L physical tensor in G_L(A).
+        % Boundary signature: semantic virtual-west=0 | virtual-east=0 |
+        % physical-up=L | physical-down=0; the finite schematic emits 3 up legs.
+        \begin{tenkz}[periodic, physical=up]
+            \tnX{X A^i} &
+            \tn[up=$\sigma_1$]{A}\tnspan[brace below]{4}{L} &
+            \tn{A} & \tndots & \tn[up=$\sigma_L$]{A}
+        \end{tenkz}
     \end{center}
     By trace cyclicity:
     $\psi(i,\sigma_1,\ldots,\sigma_L) = \tr(A^i A^{\sigma} X)

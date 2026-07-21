@@ -263,7 +263,18 @@ boundary conditions (PBC).
     \]
     In tensor-network notation,
     \begin{center}
-        \TNGaugeConjugation{X}{i}{X^{-1}}
+        % Formula/source: Papers/1606.00608/MPDO-22-12-17-2.tex,
+        % lines 187--195, draws B^i = X A^i X^{-1} as I_B=XCX.png.
+        % Ink-to-index map: i is the free upper physical index; the west
+        % and east wires carry the two virtual matrix indices.
+        % Contraction set: the two internal horizontal bonds are summed,
+        % implementing the products X A^i and A^i X^{-1}.
+        % Type verdict: both sides are rank-three local MPS tensors.
+        % Boundary signature: virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \begin{tenkz}[physical=up]
+            \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+        \end{tenkz}
     \end{center}
     the black node denotes the tensor named in the surrounding formula,
     the upper leg is the physical index~$i$, and the two red side nodes
@@ -787,7 +798,21 @@ This is the identity used in
     virtual bonds are contracted, the $L$ physical legs merge into a single
     composite index, and the two outer bonds remain as the bond of $A^{[L]}$.
     \begin{center}
-        \TNBlocking{A}{i_1}{i_L}{L}
+        % Formula/source: Papers/1606.00608/MPDO-22-12-17-2.tex,
+        % lines 227--231, defines C^i=B^{i_1}\cdots B^{i_L} and draws the
+        % blocked word in I_Blocking.png.
+        % Ink-to-index map: i_1,...,i_L are the free physical indices;
+        % the two outer wires are the blocked tensor's virtual indices.
+        % Contraction set: every horizontal bond inside the dashed enclosure
+        % is summed; the enclosure and its label add no contraction.
+        % Type verdict: a rank-(L+2) word tensor, regarded as a rank-three
+        % tensor after combining the L physical indices.
+        % Boundary signature: semantic virtual-west=1 | virtual-east=1 |
+        % physical-up=L | physical-down=0; the finite schematic emits 3 up legs.
+        \begin{tenkz}[physical=up, tensor style=box]
+            \tn[up=$i_1$]{A}\tnspan[box, label pos=west]{4}{A^{[L]}} &
+            \tn{A} & \tndots & \tn[up=$i_L$]{A}
+        \end{tenkz}
     \end{center}
 \end{definition}
 
