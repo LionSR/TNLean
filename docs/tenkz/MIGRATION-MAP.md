@@ -50,23 +50,41 @@ under multi-use, even after a row records its later migration. The first two
 free-genre entries were demoted to their exact component formulas in issue
 #4531.
 
-## Needs-new-key list (cross-checked against the 0.6 gap list)
+## Capability disposition (cross-checked against the 0.6 gap list)
 
-The WHATS-NEW-0.5 §Gaps (0.6 backlog) is: *per-side boundary control, bare identity-wire atom, `combined=` on `wires=k` glyphs, inter-sheet closures, directed signatures, mirrored `tri=` closures.* **Almost none of the keys the catalogue migration needs are on that list** — the 0.6 backlog is RMP-reproduction-driven, not migration-driven. Keys needed, none of which exist in 0.5:
+The historical WHATS-NEW-0.5 gap list was RMP-reproduction-driven rather
+than migration-driven.  This table records the current disposition of its
+seven proposed keys; it is not a request to migrate catalogue calls.
 
-| key (proposed) | blocked entries | on 0.6 list? | fallback without the key |
-|---|---|---|---|
-| K1 `\tnspan[box]` — dashed group-fit box over a cell range (blocked-tensor box) | TNBlocking, TNMPDOTwoSiteBlocking, TNMPDOBlockedRFPChannels, TNPEPSEdgeBlockingReduction, TNPEPSNormalEdgeBlockingReduction (blocked-row halves) | **no** | redesign the grouping as `\tnspan[brace below]` |
-| K2 `periodic=physical` — vertical trace closure of a stacked op-row column (multi-row analogue of per-glyph `trace=physical`) | TNMPDOBNTOperatorTraceClosure (`O_L(M_α)` vertical word) | **no** | none faithful; demote to `O_L(M_α)=\tr_v(M_α^{⊗v L})`-style plain math |
-| K3 lattice `physical stubs` — per-site physical leg (diagonal stub) on tenkzlattice vertices | TNPEPSLatticeState, TNPEPSTorusGeometry | **no** | draw the patch in tenkzfree with `ports={north east:physical}` per site (verbose) |
-| K4 lattice `torus`/identification marks (opposite-boundary gluing) | TNPEPSTorusGeometry | **no** (but anticipated by the final spec's manual plan, ch5 "torus/cylinder marks") | annotation arrows outside the picture |
-| K5 `pair label=` / plain (dot-free) label on a cup apex or paired internal leg | TNMPOLocalPurification ($k$ on the ancilla cup) | **no** | drop the $k$ label (the sole closed ancilla pair makes the contraction unambiguous), or accept the `close east={…}` fixed-point-dot styling |
-| K6 `\tnedge[insert=$X$]` — on-edge insertion glyph in the lattice tier | none after issue #4531: TNPEPSEdgeInsertedCoeff was demoted; TNPEPSThreeSiteInsertionComparison uses a periodic grid-tier capsule; TNPEPSPhysicalToVirtualInsertion uses the free tier | **no** | grid tier: place `\tnX` on a periodic row; free tier: use a `\tnput` node with two `\tnjoin`s — both are expressible today |
-| K7 free-tier region highlight — hull/slot fill over a set of `\tnput` nodes | TNPEPSEdgeBlockingReduction and TNAppendixB* grouping regions; TNPEPSEdgeInsertionEquality migrated without region overlays in issue #4531 | **no** | hand-drawn dashed box in tenkzfree (violates "no raw styling at call sites") |
+| key | disposition | evidence / remaining use |
+|---|---|---|
+| K1 `\tnspan[box]` | **implemented** | One measured dashed enclosure over a grid-cell range; labels have compass placement. |
+| K2 `periodic=physical` | **demoted to exact algebra** | `Papers/1606.00608/MPDO-22-12-17-2.tex:962-967` defines the object by a trace, while `blueprint/src/chapter/ch21_mpdo_rfp_algebraic.tex:35-50` gives its exact components.  A generic vertical graphical trace would add ambiguous ink. |
+| K3 lattice physical stubs | **delivered** | The lattice `physical=` policy now draws per-site physical legs, including oblique frames. |
+| K4 lattice torus marks | **owned by #4396; delivered by PR #4562** | Opposite-side trace closures and their four-side audit records cover the torus geometry. |
+| K5 `pair label=` | **not required** | `TNMPOLocalPurification` remains legible with the existing cup policy or no redundant label. |
+| K6 lattice edge insertion | **not required** | After #4531, grid `\tnX` and a named free atom cover the remaining meanings. |
+| K7 free-tier region | **implemented** | `\tnregion` accepts named `\tnput` atoms, named `\tnjoin` routes, and earlier named regions through the shared measured renderer. |
 
-Tangential 0.6 overlap: the *bare identity-wire atom* gap would let TNChoiMatrix's `id` layer be a plain wire instead of a boxed `\tn{\mathrm{id}}` (cosmetic, not blocking); *bond dir* for TNPEPSEdgeGaugeOrientation's oriented edge already shipped in 0.5. **No catalogue entry needs** per-side boundary control, `combined=` on `wires=k`, inter-sheet closures, directed signatures, or mirrored `tri=`.
+Tangential overlap: a bare identity-wire atom would let TNChoiMatrix's `id`
+layer be a plain wire instead of a boxed `\tn{\mathrm{id}}` (cosmetic, not
+blocking).  No catalogue entry needs another enclosure grammar.
 
-Recommendation for Phase-1 sequencing: K1 and K5 are one-day keys that unblock 8 entries; K2–K4 unblock 3 pedagogical PEPS/MPDO figures and can land with the lattice batch; K6/K7 are optional (free-tier fallbacks exist).
+The nine catalogue rows reviewed for the enclosure work have these explicit
+dispositions.  `TNPEPSEdgeBlockingReduction` appears once even though it uses
+both K1 and K7.
+
+| catalogue entry | requested ink | disposition |
+|---|---|---|
+| TNBlocking | K1 long blocked word | supported by `\tnspan[box]` |
+| TNMPDOBlockedRFPChannels | K1 disjoint blocked factors | supported by independent spans |
+| TNMPDOTwoSiteBlocking | K1 two-site capability | capability tested abstractly; `Papers/1606.00608/MPDO_K=MM.png` contains no enclosure, so no source ink is assigned to this entry |
+| TNPEPSEdgeBlockingReduction | K1 blocked row plus K7 graph region | both capabilities supported; catalogue migration remains separate |
+| TNPEPSNormalEdgeBlockingReduction | K1 blocked row halves | supported by independent spans |
+| TNMPDOBNTOperatorTraceClosure | K2 vertical closure | demoted to `[O_L(M_\alpha)]_{a,b}=\operatorname{tr}(\widehat M_\alpha^{a_1b_1}\cdots\widehat M_\alpha^{a_Lb_L})`; no generic closure key |
+| TNAppendixBAdjacentBondProjectors | K7 named subgraph groups | supported by atom-and-join member sets |
+| TNAppendixBPhysicalSupportTransport | K7 overlapping support regions | supported by named regions used as later members |
+| TNPEPSTorusGeometry | K4 torus identifications | owned by #4396; delivered by PR #4562; no enclosure work remains |
 
 ---
 
@@ -141,16 +159,16 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
-| TNPEPSEdgeBlockingReduction | ch24_peps_ft_edge_middle:215 | five-site patch (pentagon graph) with region overlays `\rightsquigarrow` blocked 3-tensor row (`\tnpic` + K1 box) | needs-judgment + K7 (region highlight on a free-tier graph), K1 |
+| TNPEPSEdgeBlockingReduction | ch24_peps_ft_edge_middle:215 | five-site patch (pentagon graph) with named free-tier regions `\rightsquigarrow` blocked 3-tensor row (`\tnpic` + `\tnspan[box]`) | needs-judgment; K1 and K7 capabilities now exist |
 | TNPEPSInjectiveRegionUnionProof | ch24_peps_ft_normal_union:211 before this migration | four inline `tenkzfree` panels for the two inverse steps and the reinserted intersection, with boundary signatures $(0,3)$, $(4,1)$, $(3,2)$, and $(3,0)$ | migrated inline; declaration and private motif removed |
 | TNPEPSNormalRectangleCover | ch24_peps_ft_normal_square:242 | `tenkzlattice[rows=4, cols=4]` + overlapping `\tnregion[outline]` rectangles | trivial |
 | TNPEPSNormalEdgeComplementTopCollar | ch24_peps_ft_normal_square:517 | two lattice panels with `=`; complement + `slot=collar` regions | trivial |
 | TNPEPSNormalOneSiteSeparation | ch24_peps_ft_normal_square:1173 | two inline 5-by-5 `tenkzlattice` panels; $R=(2\mathbin{-}4,2\mathbin{-}4)\setminus\{(4,4)\}$ and $S=(2\mathbin{-}4,2\mathbin{-}4)$ via region slots, with the present site $v=(4,4)$ marked in both and $R\subset S=R\cup\{v\}$ shown explicitly | migrated inline; no package change |
-| TNPEPSNormalEdgeBlockingReduction | ch24_peps_ft_normal_square:1236 | lattice panel `\rightsquigarrow` blocked grid row | needs-judgment (mixed lattice+grid display), K1 for the blocked box |
+| TNPEPSNormalEdgeBlockingReduction | ch24_peps_ft_normal_square:1236 | lattice panel `\rightsquigarrow` blocked grid row | needs-judgment (mixed lattice+grid display); `\tnspan[box]` exists |
 | TNPEPSNormalEdgeBlockingHypotheses | ch24_peps_ft_normal_square:1123 | single lattice panel with hypothesis regions | trivial |
 | TNPEPSNormalBlockingHypotheses | ch24_peps_ft_normal_capstone:33 | nested lattice panels (outer + two inner) with regions | trivial |
-| TNPEPSLatticeState | ch24_peps_ft:15 | `tenkzlattice[rows=3, cols=3, boundary legs]` + per-site physical stubs | **needs-new-key K3** (`physical stubs`) |
-| TNPEPSTorusGeometry | ch24_peps_ft_torus:7 | `tenkzlattice` patch + opposite-boundary identification marks | **needs-new-key K4** (`torus` marks) + K3 |
+| TNPEPSLatticeState | ch24_peps_ft:15 | `tenkzlattice[rows=3, cols=3, boundary legs, physical=up]` | capability delivered |
+| TNPEPSTorusGeometry | ch24_peps_ft_torus:7 | `tenkzlattice` patch + opposite-boundary trace closures | delivered by #4562 |
 
 Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all become `\tnregion` cell-set data (spec §migration table); none survive as coordinates.
 
@@ -178,8 +196,8 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | TNPEPSGaugeCancellation | ch24_peps_ft_foundations:177 before this migration | exact component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
 | TNPEPSTINormalGaugeAbsorption | ch24_peps_ft_normal_square:1251 before this migration | inline tenkzfree: square tensor star `=` gauge-dressed star | migrated inline; catalogue declaration and private motif removed |
 | TNPEPSTwoInjectiveGaugeScalarReduction | ch24_peps_ft_edge_kernel_gauges:1056 before this migration | inline tenkzfree: three-leg fan `=` fan+$Z$ `=` fan+$U$ `=` fan+$W$ (4 panels) | migrated inline; catalogue declaration and private motif removed |
-| TNAppendixBAdjacentBondProjectors | ch13_parent_hamiltonian_commuting_gap:1307 | tenkzfree: 3 fusion nodes $U_0U_1U_2$ + 2 $\varphi$ sites, `\tnjoin[route=vh]`, highlighted $P_{01},P_{12}$ | needs-judgment + K7 (group highlight) |
-| TNAppendixBPhysicalSupportTransport | ch13_parent_hamiltonian_commuting_gap:1459 | same body + two overlapping support regions above | needs-judgment + K7 |
+| TNAppendixBAdjacentBondProjectors | ch13_parent_hamiltonian_commuting_gap:1307 | tenkzfree: 3 fusion nodes $U_0U_1U_2$ + 2 $\varphi$ sites, named joins, highlighted $P_{01},P_{12}$ | needs-judgment; K7 capability now exists |
+| TNAppendixBPhysicalSupportTransport | ch13_parent_hamiltonian_commuting_gap:1459 | same body + two overlapping named support regions above | needs-judgment; K7 capability now exists |
 | TNAppendixBChainTransport | ch13_parent_hamiltonian_commuting_gap:1718 | respell hexagon ring as `[periodic, physical=up]` 6-cell row ($h_i$, $h_{i+1}$ highlighted labels) `\xrightarrow{R^{(3)}_{i,\tau}}` 3-site open row | needs-judgment (layout redesign ring→periodic row; same contraction) |
 
 ## 6. drawn-single-use → inline tenkz grid body (38 entries)
@@ -191,7 +209,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | TNMPSLocal | ch02_mps:22 | `\tnpic[physical=up]{\tn[up=$i$]{A}}` | trivial |
 | TNMPSWord | ch02_mps:40 | `[physical=up]: \tn[up=$i$]{A} & \tn{A} & \tndots & \tn[up=$k$]{A}` + `\tnspan[brace below]{4}{L}` | trivial |
 | TNMPV | ch02_mps:152 | `[periodic, physical=up]: \tn[up=$i$]{A} & \tn{A} & \tndots & \tn[up=$k$]{A}` | trivial |
-| TNBlocking | ch02_mps:733 | word row + dashed group box labelled $A$ over all cells | **needs-new-key K1** (`\tnspan[box]`; brace fallback) |
+| TNBlocking | ch02_mps:733 | word row + `\tnspan[box]` labelled $A$ over all cells | capability exists; migration remains separate |
 | TNMPVOverlap | ch02_mps:850 | `[rows={ket,bra}, periodic]: \tn{A}&\tndots&\tn{A}\\ \tn*{B}&\tndots&\tn*{B}` | trivial |
 | TNTransferMap | ch02_mps:169 | `[sandwich, west label=$X$, east label=$\mathcal E_A(X)$]: \tn{A} \\ \tn*{A}` | trivial (K5 pair label $i$ optional) |
 | TNMPOCell | ch20_mpdo_foundations:12 | `[physical=updown]: \tn[mpo, up=$i$, down=$j$]{A}` | trivial |
@@ -203,17 +221,17 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
-| TNMPDOBlockedRFPChannels | ch21_mpdo_rfp_simple_local_refinement_channels:888 | math arrows $\widehat{\mathcal T},\widehat{\mathcal S}$ between `\tnpic` factor chains (2/3/4 cells) + blocked-site boxes | **needs-new-key K1** (blocked boxes; brace fallback) |
+| TNMPDOBlockedRFPChannels | ch21_mpdo_rfp_simple_local_refinement_channels:888 | math arrows $\widehat{\mathcal T},\widehat{\mathcal S}$ between `\tnpic` factor chains (2/3/4 cells) + blocked-site boxes | K1 capability exists; migration remains separate |
 | TNMPDOHayashiSectorComparison | ch21_mpdo_rfp_simple_local_markov_factorization:555 | `R\cdot\tnpic[physical=updown, west label=$\beta_1$, east label=$\alpha_3$]{\tn[mpo, up=…, down=…]{\widetilde\kappa^{(k)}}} = p_k\,A^{(k)}\otimes B^{(k)}` | trivial |
 | TNBNTDecomposition | ch10_bnt:664 | demoted to the exact CPSV16 coefficient decomposition $A^i=X[\bigoplus_j(M_j\otimes A_j^i)]X^{-1}=\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}$; no diagram remains | exact plain mathematics: the paper explicitly warns that its graphical $j,q$ lines replace direct sums by tensor products and are not literal tensor-network legs |
 | TNMPDOBNTFusionIdentity | ch21_mpdo_rfp_fusion_isometries:318 | `\tnfuse[combined=west]{U_{\alpha\beta}} &` stacked $M_\alpha/M_\beta$ `& \tnfuse[combined=east]{U^\dagger} = \bigoplus_\gamma` weighted block (`\tnX{\chi_{\alpha\beta\gamma}}`) | trivial (`\tnfuse` + doubled combined stub exist) |
 | TNMPDOUnweightedZipperReconstruction | ch21_mpdo_rfp_fusion_isometries:499 | 3 zipper equations, each `\tnfuse` + `\tn[mpo]{H}` grids | trivial |
 | TNMPDOFusionTracePower | ch21_mpdo_rfp_fusion_isometries:520 | `[rows={op,op}, periodic]` $M_\alpha$ row over $M_\beta$ row `= \sum_\gamma` `[rows={wire,op}, periodic]` $\chi$ row over $M_\gamma$ row | trivial (the right rows are disjoint; only the left rows pair physically) |
 | TNMPDORecursiveStructureOperator | ch21_mpdo_rfp_fusion_isometries:813 | `tenkzfree`: degree-four $X_s$ boxes meet open $k_s,\alpha_s,\beta_s,\gamma_s$ copy rails; $\gamma_s$ and $\alpha_{s+1}$ share one open rail, and the final rail selects traced $M_{\gamma_r}$ with its physical pair open | source-faithful free-tier routing; no package change |
-| TNMPDOTwoSiteBlocking | ch21_mpdo_rfp_blocked_rfp:5 | `\tnpic[physical=updown]{\tn[mpo]{M}} = \tnpic[physical=updown]{\tn[mpo]{K}&\tn[mpo]{K}}` + grouped-leg boxes | **needs-new-key K1** (or drop the grouping box) |
+| TNMPDOTwoSiteBlocking | ch21_mpdo_rfp_blocked_rfp:5 | `\tnpic[physical=updown]{\tn[mpo]{M}} = \tnpic[physical=updown]{\tn[mpo]{K}&\tn[mpo]{K}}` | source PNG has no grouping enclosure; test K1 only as an abstract two-site fixture |
 | TNMPDOBNTVerticalProduct | ch21_mpdo_rfp_simple_local_structure_capstone:48 | `[rows={op,op}]: \tn[mpo]{\mathcal K_y} \\ \tn[mpo]{\mathcal K_x}` `= 0\ (x\ne y)` | trivial |
 | TNMPDOBlockClosureMap | ch21_mpdo_rfp_algebra_tower:63 | `M_\alpha(X)=\tnpic[physical=updown, periodic]{\tn[mpo]{M_\alpha}&\tnX{X}}` (twice, for $M_\alpha$ and $A_\alpha$) | trivial |
-| TNMPDOBNTOperatorTraceClosure | ch21_mpdo_rfp_bnt_coefficients:32 | `O_L(M_\alpha)=` vertical stack of $L$ op rows, physically trace-closed top-to-bottom, horizontal legs open | **needs-new-key K2** (`periodic=physical`) |
+| TNMPDOBNTOperatorTraceClosure | ch21_mpdo_rfp_bnt_coefficients:32 | exact component trace formula | K2 demoted: the cited sources specify algebra, not an unambiguous reusable physical-axis closure |
 
 ### Symmetry / algebraic FT (ch12, ch23)
 

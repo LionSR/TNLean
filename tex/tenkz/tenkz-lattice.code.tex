@@ -1108,7 +1108,10 @@
 \tl_new:N \l__tenkzl_rlabelat_tl
 \tl_new:N \l__tenkzl_rname_tl
 \tl_new:N \l__tenkzl_rinset_tl
+\bool_new:N \l__tenkzl_region_valid_bool
 \pgfkeys{
+  % Keep the historical /tenkz/region family: public \tnregion now dispatches
+  % by dialect, but document-level key extensions must remain compatible.
   /tenkz/region/.is~family,
   % slot= is a CHOICE, not free text: a typo'd slot used to expand to no
   % style at all and stroke a plain black outline -- the picture lost
@@ -1123,7 +1126,13 @@
       {\tl_set:Nn \l__tenkzl_rslot_tl {complement}},
   /tenkz/region/slot/collar/.code=
       {\tl_set:Nn \l__tenkzl_rslot_tl {collar}},
-  /tenkz/region/outline/.code={\bool_set_true:N \l__tenkzl_routline_bool},
+  /tenkz/region/slot/.unknown/.code={
+      \bool_set_false:N \l__tenkzl_region_valid_bool
+      \PackageError{tenkz}
+        {Choice~'\pgfkeys@was@choice'~unknown~in~lattice-region~slot}
+        {Use~selected,~secondary,~complement,~or~collar.}},
+  /tenkz/region/outline/.code=
+      {\bool_set_true:N \l__tenkzl_routline_bool},
   /tenkz/region/label/.store~in=\l__tenkzl_rlabel_tl,
   % label pos= is the 0.6 placement spelling (one vocabulary across
   % every label kind); label at= stays as its alias
@@ -1136,8 +1145,14 @@
   % inside its superset's.
   /tenkz/region/inset/.store~in=\l__tenkzl_rinset_tl,
 }
+\pgfkeysdef{/tenkz/region/.unknown}
+  {
+    \bool_set_false:N \l__tenkzl_region_valid_bool
+    \PackageError{tenkz}{Unknown~lattice-region~key~'\pgfkeyscurrentname'}
+      {Check~the~\token_to_str:N \tnregion~option~spelling.}
+  }
 
-\NewDocumentCommand \tnregion { O{} m }
+\cs_new_protected:Npn \tenkz_lattice_region:nn #1#2
   {
     \tl_set:Nn \l__tenkzl_rslot_tl {selected}
     \bool_set_false:N \l__tenkzl_routline_bool
@@ -1145,21 +1160,59 @@
     \tl_set:Nn \l__tenkzl_rlabelat_tl {north~west}
     \tl_clear:N \l__tenkzl_rname_tl
     \tl_set:Nn \l__tenkzl_rinset_tl {0}
+    \bool_set_true:N \l__tenkzl_region_valid_bool
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/region}{#1} }
+    % A literally blank declaration is malformed, but a valid set expression
+    % may resolve to the empty set (for example R - R).  That established
+    % no-op still emits its audit event and must not be conflated with {}.
+    \tl_if_blank:nT {#2}
+      {
+        \bool_set_false:N \l__tenkzl_region_valid_bool
+        \PackageError{tenkz}{A~lattice~region~needs~a~cell-set~expression}
+          {Give~a~nonempty~cell-set~expression.}
+      }
+    \tl_if_empty:NF \l__tenkzl_rlabel_tl
+      {
+        \tenkz_enclosure_label_position:VF \l__tenkzl_rlabelat_tl
+          {
+            \bool_set_false:N \l__tenkzl_region_valid_bool
+            \msg_error:nnV {tenkz}{enclosure-label-pos}
+              \l__tenkzl_rlabelat_tl
+          }
+      }
     \tenkz_cs_resolve:nN {#2} \l__tenkzl_member_prop
+    \bool_if:NF \l_tenkz_cs_valid_bool
+      { \bool_set_false:N \l__tenkzl_region_valid_bool }
     \tenkzl_serialize:NN \l__tenkzl_member_prop \l__tenkzl_cells_clist
     % register name -> cells for later expressions
-    \tl_if_empty:NF \l__tenkzl_rname_tl
-      { \prop_put:NVV \l_tenkz_cs_names_prop \l__tenkzl_rname_tl
-          \l__tenkzl_cells_clist }
-    \seq_put_right:Ne \l__tenkzl_regions_seq
+    \bool_if:NT \l__tenkzl_region_valid_bool
       {
-        { \l__tenkzl_rslot_tl }
-        { \bool_if:NTF \l__tenkzl_routline_bool {1} {0} }
-        { \exp_not:V \l__tenkzl_rlabel_tl }
-        { \l__tenkzl_rlabelat_tl }
-        { \exp_not:V \l__tenkzl_cells_clist }
-        { \l__tenkzl_rinset_tl }
+        \tl_if_empty:NF \l__tenkzl_rname_tl
+          {
+            \prop_if_in:NVTF \l_tenkz_cs_names_prop \l__tenkzl_rname_tl
+              {
+                \msg_error:nnV {tenkz}{enclosure-duplicate}
+                  \l__tenkzl_rname_tl
+                \bool_set_false:N \l__tenkzl_region_valid_bool
+              }
+              { \prop_put:NVV \l_tenkz_cs_names_prop \l__tenkzl_rname_tl
+                  \l__tenkzl_cells_clist }
+          }
+      }
+    % Parsing and name registration form one transaction.  A TeX error
+    % returns in nonstop mode, so only a valid declaration may enter the
+    % deferred draw/label/event sequence; the first named set stays intact.
+    \bool_if:NT \l__tenkzl_region_valid_bool
+      {
+        \seq_put_right:Ne \l__tenkzl_regions_seq
+          {
+            { \l__tenkzl_rslot_tl }
+            { \bool_if:NTF \l__tenkzl_routline_bool {1} {0} }
+            { \exp_not:V \l__tenkzl_rlabel_tl }
+            { \l__tenkzl_rlabelat_tl }
+            { \exp_not:V \l__tenkzl_cells_clist }
+            { \l__tenkzl_rinset_tl }
+          }
       }
   }
 \cs_generate_variant:Nn \prop_put:Nnn { NVV }
@@ -2876,7 +2929,7 @@
     % normalized to a clist of cell keys), not the source expression; it
     % fires once per picture, on the sheet-0 pass
     \int_compare:nNnT { \l__tenkzl_sheet_int } = {0}
-      { \tenkz@event{region|picture=\the\tenkz@pictureid|slot=#1|cells=#5} }
+      { \tenkz@event{region|picture=\the\tenkz@pictureid|lang=lattice|slot=#1|cells=#5} }
   }
 
 % =====================================================================
@@ -3002,8 +3055,11 @@
       }
     \tl_if_empty:NF \l__tenkzl_path_tl
       {
-        \draw[ #1, even~odd~rule,
-               rounded~corners=\tenkz@dim{0.10} ] \l__tenkzl_path_tl ;
+        % The metric radius is the fallback.  Semantic style extensions from
+        % the execute-once environment body arrive through #1 and must remain
+        % free to replace it.
+        \draw[ rounded~corners=\tenkz@dim{0.10}, #1,
+               even~odd~rule ] \l__tenkzl_path_tl ;
       }
   }
 
@@ -3550,12 +3606,46 @@
       }
   }
 % place the label inside the requested corner of the boundary box (the four
-% corner anchors equal their key names; center is the box midpoint).  An
-% unrecognized `label at` draws nothing, as before.
+% corner anchors equal their key names; side positions use the corresponding
+% edge midpoint; center is the box midpoint).  The command parser validates
+% this same nine-position vocabulary before a declaration is deferred.
+\cs_new_protected:Npn \tenkzl_side_label:nnnn #1#2#3#4
+  {
+    \tenkzl_map:nn {#2} {#3}
+    \node[tn~label, anchor=#1]
+      (tenkzl-region-label-probe) at
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
+      { $#4$ };
+    \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
+  }
 \cs_new_protected:Npn \tenkzl_label_place:nn #1#2
   {
     \str_case:nn {#1}
       {
+        {north}
+          { \tenkzl_side_label:nnnn {south}
+              { ( \tenkzl_cx:n{\l__tenkzl_cmin_int}
+                  + \tenkzl_cx:n{\l__tenkzl_cmax_int} ) / 2 }
+              { \tenkzl_cy:n{\l__tenkzl_rmin_int} + \l__tenkzl_m_dim }
+              {#2} }
+        {south}
+          { \tenkzl_side_label:nnnn {north}
+              { ( \tenkzl_cx:n{\l__tenkzl_cmin_int}
+                  + \tenkzl_cx:n{\l__tenkzl_cmax_int} ) / 2 }
+              { \tenkzl_cy:n{\l__tenkzl_rmax_int} - \l__tenkzl_m_dim }
+              {#2} }
+        {west}
+          { \tenkzl_side_label:nnnn {east}
+              { \tenkzl_cx:n{\l__tenkzl_cmin_int} - \l__tenkzl_m_dim }
+              { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
+                  + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
+              {#2} }
+        {east}
+          { \tenkzl_side_label:nnnn {west}
+              { \tenkzl_cx:n{\l__tenkzl_cmax_int} + \l__tenkzl_m_dim }
+              { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
+                  + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
+              {#2} }
         {north~west}
           { \tenkzl_corner_label:nnnnnn {north~west}
               {\l__tenkzl_cmin_int}{-}{\l__tenkzl_rmin_int}{+}{#2} }

@@ -206,8 +206,8 @@ whole language.
     indices stay open}
   \qritem{\textbackslash tnghost\{\}}{invisible anchor; pairing onto
     it warns}
-  \qritem{\textbackslash tnspan[brace above|below]\{n\}\{L\}}{brace
-    over n columns}
+  \qritem{\textbackslash tnspan[brace above|below|box, label pos=]
+    \{n\}\{L\}}{brace or box over n bodies}
   \qritem{\textbackslash tncut\{S\}}{dashed cut across the bond east
     of the cell; adds no index}
 
@@ -289,11 +289,12 @@ whole language.
   \qritem{polygon=5, radius=}{slots on a polygon}
 
   \qrsection{Free placement (tenkzfree)}
-  \qritem{\textbackslash tnput[shape, ports=]\{name\}\{(x,y)\}\{A\}}{%
-    typed node; shapes dot|box|pill|mpo|ring|boundary}
-  \qritem{\textbackslash tnjoin[route=, dir, fused, label=, out=,
-    in=]\{a.east\}\{b.west\}}{wire; \texttt{route=}
-    straight|hv|vh|curve; \texttt{dir}: argument order = direction}
+  \qritem{\textbackslash tnput[shape, ports=]\{n\}\{(x,y)\}\{A\}}{typed node}
+  \qritem{\textbackslash tnjoin[name=, route=, \ldots]\{a.E\}\{b.W\}}{%
+    named measured wire; routes straight|hv|vh|arc (curve is the 0.5 alias)}
+  \qritem{\textbackslash tnregion[group|slot=, outline, label=,
+    label pos=, name=]\{members\}}{measured enclosure over earlier atoms,
+    named joins, or named regions}
 
   \qrsection{The event stream}
   \qritem{.tnlog}{one \texttt{picture|atom|bond|boundary} line per
