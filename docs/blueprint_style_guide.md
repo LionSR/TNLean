@@ -47,22 +47,39 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
     expression is long or when several implications must be compared. Avoid
     long paragraphs whose only mathematical content is described in words.
 12. **Label equations a later sentence points back to; reference them with
-    `\eqref`, not words.** If a proof or statement needs to point back to a
+    `\ref`, not words.** If a proof or statement needs to point back to a
     displayed equation later — in the same proof, a later proof, or another
-    statement — display it in a numbered environment (`equation`, or `align`
-    with per-line `\label{}` when several related equations are shown
-    together) with `\label{eq:<chapter-prefix>_...}`. Do not leave such an
-    equation as a bare `\[...\]` display. When referring back to it, cite
-    `\eqref{eq:...}` (optionally preceded by "Equation~", e.g.
-    `Equation~\eqref{eq:foo_bar}` or `Substituting \eqref{eq:foo_bar} into...`).
-    Do not describe a previously displayed equation in words instead —
-    phrases like "the preceding identity", "the equation above", "the first
-    displayed identity", or "the two equations above" — since a reader cannot
-    tell which equation is meant once another display intervenes, and the
+    statement — display it in a numbered environment with
+    `\label{eq:<chapter-prefix>_...}`. Do not leave such an equation as a bare
+    `\[...\]` display. When referring back to it, cite it with plain
+    `\ref{eq:...}`, not the `\eqref` macro: write `equation~\ref{eq:foo_bar}`
+    or `Substituting~\ref{eq:foo_bar} into...`, matching the existing house
+    convention (`Lemma~\ref{...}`, `Theorem~\ref{...}`). Do not describe a
+    previously displayed equation in words instead — phrases like "the
+    preceding identity", "the equation above", "the first displayed
+    identity", or "the two equations above" — since a reader cannot tell
+    which equation is meant once another display intervenes, and the
     reference goes stale silently if a later edit inserts a display between
     them. A bare `\[...\]` display remains fine for an equation that no later
     sentence in the file needs to point back to, and for a reference to a
     display in an external cited source (which has no local `\label`).
+    - **Keep labels concise.** `eq:<chapter-prefix>_<two-to-four-word gist>`
+      (e.g. `eq:ph_boundary_scaled`, not
+      `eq:ph_boundary_crossing_scaled_boundary_equal_via_intermediate_step`).
+      Reuse the surrounding entry's own label as the prefix gist rather than
+      re-describing the whole statement; drop words already implied by the
+      chapter prefix.
+    - **Use a multi-line `align` when a display carries more than one
+      logically distinct equation.** Do not pack several equalities into one
+      `equation`/`\[...\]` display separated by `\qquad` or commas merely to
+      avoid a second environment. Give each distinct equation its own aligned
+      line (`&=`) and, when either line is referenced later, its own
+      `\label{}` ending in a short line-distinguishing suffix
+      (`_lhs`/`_rhs`, `_plus`/`_minus`, or the varying symbol). A genuine
+      single chain of equalities (`a=b=c=d`) inside one already-labeled
+      display stays one `equation`/`align` block; referring to "the last
+      equality" *within* that same chain is not a violation of this rule —
+      only references that reach for a *different, earlier* display are.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:
