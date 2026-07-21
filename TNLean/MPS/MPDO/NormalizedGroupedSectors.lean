@@ -42,14 +42,20 @@ private theorem cast_MPSTensor_apply {s : ℕ} (h : m = n)
   rfl
 
 /-- Absorb the normalized square gauge into a rectangular physical sector map
-and transport its column index to the representative bond dimension. -/
+and transport its column index to the representative bond dimension.
+
+Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
 noncomputable def normalizedGroupedSectorMap (h : m = n)
     (V : Matrix (Fin d) (Fin n) ℂ) (X : Matrix (Fin n) (Fin n) ℂ)
     (omega : ℝ) : Matrix (Fin d) (Fin m) ℂ :=
   cast (congrArg (fun k ↦ Matrix (Fin d) (Fin k) ℂ) h.symm)
     (V * (((Real.sqrt omega : ℂ))⁻¹ • X))
 
-private theorem normalizedGroupedSectorMap_isometry (h : m = n)
+/-- Absorbing a normalized unitary gauge into an isometry preserves its
+isometry relation.
+
+Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
+theorem normalizedGroupedSectorMap_isometry (h : m = n)
     (V : Matrix (Fin d) (Fin n) ℂ) (X : Matrix (Fin n) (Fin n) ℂ)
     (omega : ℝ) (hV : Vᴴ * V = 1)
     (hQ : (((Real.sqrt omega : ℂ))⁻¹ • X) ∈
@@ -70,7 +76,11 @@ private theorem normalizedGroupedSectorMap_isometry (h : m = n)
       rw [← Matrix.star_eq_conjTranspose]
       exact Matrix.mem_unitaryGroup_iff'.mp hQ
 
-private theorem normalizedGroupedSectorMap_orthogonal
+/-- Absorbing normalized gauges into two orthogonal sector maps preserves
+their orthogonality.
+
+Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
+theorem normalizedGroupedSectorMap_orthogonal
     {m₁ n₁ m₂ n₂ : ℕ} (h₁ : m₁ = n₁) (h₂ : m₂ = n₂)
     (V₁ : Matrix (Fin d) (Fin n₁) ℂ) (V₂ : Matrix (Fin d) (Fin n₂) ℂ)
     (X₁ : Matrix (Fin n₁) (Fin n₁) ℂ)
@@ -157,7 +167,11 @@ private theorem normalized_gauge_corner
           ((Real.sqrt omega : ℂ))⁻¹ * (omega : ℂ)) := by ring
       _ = c := by rw [hscalar, mul_one]]
 
-private theorem normalizedGroupedSectorMap_intertwining (h : m = n)
+/-- The normalized sector map intertwines with the ungauged representative
+tensor.
+
+Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
+theorem normalizedGroupedSectorMap_intertwining (h : m = n)
     (T : Matrix (Fin d) (Fin d) ℂ) (A : Matrix (Fin m) (Fin m) ℂ)
     (V : Matrix (Fin d) (Fin n) ℂ) (X : GL (Fin n) ℂ)
     (c : ℂ) (omega : ℝ)
@@ -170,7 +184,11 @@ private theorem normalizedGroupedSectorMap_intertwining (h : m = n)
   cases h
   exact normalized_gauge_intertwining T A V X c omega hinter
 
-private theorem normalizedGroupedSectorMap_corner (h : m = n)
+/-- Conjugation by the normalized sector map reproduces the original gauged
+corner exactly.
+
+Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
+theorem normalizedGroupedSectorMap_corner (h : m = n)
     (A : Matrix (Fin m) (Fin m) ℂ) (V : Matrix (Fin d) (Fin n) ℂ)
     (X : GL (Fin n) ℂ) (c : ℂ) (omega : ℝ) (homega : 0 < omega)
     (hGram : (X : Matrix (Fin n) (Fin n) ℂ)ᴴ * X = (omega : ℂ) • 1) :
