@@ -30,20 +30,23 @@
     % the L-fold product.  In components this is the equality displayed below.
     % Ink-to-index after demotion: there is no diagram ink.  The multi-indices
     % \mathbf a and \mathbf b are free horizontal indices; the matrix indices
-    % of the factors M_alpha^{a_r b_r} are contracted by the trace.
+    % of the factors \widehat M_alpha^{a_r b_r}=M_alpha^{(a_r,b_r)} are
+    % contracted by the trace.
     % Contraction set: precisely the cyclic matrix-index contraction encoded by
     % \operatorname{tr}; no physical index is summed.
     % Type verdict and boundary signature: the result is an operator on the
     % length-L horizontal physical space, with components indexed by
     % (\mathbf a,\mathbf b).  An exact displayed formula is preferable here
     % because the old vertical-closure picture obscured which legs stayed free.
+    Write $\widehat M_\alpha^{ab}=M_\alpha^{(a,b)}$ for the vertical reading.
     The vertical indices of the $L$ copies are contracted cyclically, while
     the horizontal legs remain open, as in
     \cite[lines~962--967]{Cirac2016MPDO_arXiv}:
     \[
         \bigl[O_L(M_\alpha)\bigr]_{\mathbf a,\mathbf b}
         =\operatorname{tr}\!\left(
-            M_\alpha^{a_1b_1}\cdots M_\alpha^{a_Lb_L}
+            \widehat M_\alpha^{a_1b_1}\cdots
+            \widehat M_\alpha^{a_Lb_L}
           \right),
         \qquad
         \mathbf a=(a_1,\ldots,a_L),\quad
