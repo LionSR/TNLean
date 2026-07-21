@@ -923,7 +923,6 @@ import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap2
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3b
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap4
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap6
 import TNLean.PEPS.RegionBlock.CoarseThreeSite
