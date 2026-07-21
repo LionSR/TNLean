@@ -72,6 +72,13 @@ blueprint/src/print.xdv
 
 # Local scratch / experiments
 Scratch/
+/tmp/
+
+# tenkz manual generated artifacts
+/docs/tenkz/*.exa
+/docs/tenkz/*.exm
+/docs/tenkz/*.tnlog
+/docs/tenkz/manual2.pdf
 
 # Nested Lake artifacts in vendored local packages
 External/**/.lake/
