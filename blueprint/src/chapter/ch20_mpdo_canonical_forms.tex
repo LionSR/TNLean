@@ -2315,14 +2315,16 @@ tensor.  This is the contraction in
     \lean{MPOTensor.exists_rangeProjection_corner_ne_zero}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo_vertical_loops,
-        def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero}
+        def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero,
+        thm:cpsv_normal_mpv_phase_gauge}
     Let $M$ be horizontally canonical and let $P$ be a matrix for which
     $P\widetilde M_vP$ is nonzero for some vertical letter $v$.  Then the
     first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
-    In particular, suppose that $A$ is a normal tensor, $V$ is an isometry,
-    and the compression by $V$ is a nonzero scalar multiple of an invertible
-    conjugate of $A$.  Then the range projector $VV^\dagger$ has a nonzero
-    vertical corner and hence a nonzero first-site compression.
+    Under the same horizontal canonical-form hypothesis, suppose in addition
+    that $A$ is a normal tensor, $V$ is an isometry, and the compression by
+    $V$ is a nonzero scalar multiple of an invertible conjugate of $A$.  Then
+    the range projector $VV^\dagger$ has a nonzero vertical corner and hence a
+    nonzero first-site compression.
     This is the separation step used in
     \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -2331,6 +2333,11 @@ tensor.  This is the contraction in
     first-site insertion by $P$ has the same matrix product vectors as zero.
     Lemma~L for the horizontal canonical form would then force the inserted
     tensor itself to vanish, contrary to the assumed nonzero corner.
+    For the range-projector specialization, normality supplies a nonzero
+    letter of $A$.  A nonzero scalar and an invertible conjugation preserve
+    this letter.  If every $VV^\dagger$ corner vanished, compressing by
+    $V^\dagger$ and $V$ and using $V^\dagger V=1$ would contradict the exact
+    gauge-corner identity.
 \end{proof}
 
 \begin{theorem}[The sector trace identity]

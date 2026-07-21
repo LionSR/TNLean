@@ -96,7 +96,12 @@ theorem IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner
   exact hv0
 
 /-- A nonzero normal representative gives a nonzero physical range corner
-through an exact gauge-corner identity. -/
+through an exact gauge-corner identity.
+
+Source context: arXiv:1606.00608, Proposition 4.13, line 1898, where
+$P_{\alpha,k}$ selects a nonzero normal sector of the vertical direct sum.
+The present lemma isolates the algebraic nonvanishing implication from the
+exact gauge-corner identity. -/
 theorem exists_rangeProjection_corner_ne_zero
     {n : ℕ} [NeZero n] (M : MPOTensor d D) (A : MPSTensor (D * D) n)
     (hA : A.IsNormalTensor) (V : Matrix (Fin d) (Fin n) ℂ)
