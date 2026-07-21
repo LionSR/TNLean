@@ -10,6 +10,7 @@ import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.CanonicalForm.BNTTransport
 import TNLean.MPS.CanonicalForm.NormalCommutant
 import TNLean.MPS.MPDO.FigureEightPairwise
+import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.VerticalBNTConstruction
 import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.VerticalSpectral
@@ -1533,6 +1534,57 @@ structure FlatBlockedBNTComparison {g₂ : ℕ}
         (A₂ (label j))) ab *
       (↑((gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
         (Fin (S.flatDim j)) ℂ))
+
+/-- The active normal corners of every retained copy pair, transported back
+to the original one-site BNT labels and normalized by isometries.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+structure OriginalCornerFamily
+    (S : RetainedProductSpectralFamily dim mult weight B) where
+  /-- Original BNT label carried by each active copy-pair corner.
+
+  Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+  label : ∀ p : VerticalCopyPair mult, Fin (S.count p) → Fin g
+  /-- Positive coefficient of the transported original BNT tensor.
+
+  Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+  coefficient : ∀ p : VerticalCopyPair mult, Fin (S.count p) → ℂ
+  /-- Every transported coefficient is positive.
+
+  Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+  coefficient_pos : ∀ p k, (0 : ℂ) < coefficient p k
+  /-- Isometric inclusion of an original-label corner into its raw copy-pair
+  bond space.
+
+  Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+  inclusion : ∀ (p : VerticalCopyPair mult) (k : Fin (S.count p)),
+    Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (dim (label p k))) ℂ
+  /-- Every original-label corner inclusion is an isometry.
+
+  Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+  inclusion_isometry : ∀ p k, (inclusion p k)ᴴ * inclusion p k = 1
+  /-- Distinct active corners of a fixed copy pair have orthogonal ranges.
+
+  Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+  inclusion_orthogonal : ∀ p k l, k ≠ l →
+    (inclusion p k)ᴴ * inclusion p l = 0
+  /-- Each inclusion intertwines the raw product tensor with its positive
+  multiple of the original BNT tensor.
+
+  Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+  intertwine : ∀ p k ab,
+    (mulTensor (verticalBNTMPO (B p.1.1))
+        (verticalBNTMPO (B p.2.1))).toMPSTensor ab * inclusion p k =
+      inclusion p k * (coefficient p k • B (label p k) ab)
+  /-- The original-label corners reconstruct every letter of the raw product
+  tensor.
+
+  Source: CPSV16, Appendix C.4, lines 2025--2029. -/
+  reconstruction : ∀ p ab,
+    (mulTensor (verticalBNTMPO (B p.1.1))
+        (verticalBNTMPO (B p.2.1))).toMPSTensor ab =
+      ∑ k, inclusion p k * (coefficient p k • B (label p k) ab) *
+        (inclusion p k)ᴴ
 
 private theorem castBondColumns_isometry
     {r m n : ℕ} (V : Matrix (Fin r) (Fin m) ℂ)

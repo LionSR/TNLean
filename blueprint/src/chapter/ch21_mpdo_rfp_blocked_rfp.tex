@@ -2791,6 +2791,21 @@ referenceInclusion_isometry}
     Transport along equality of bond dimensions preserves these equations.
 \end{proof}
 
+\begin{definition}[Original-label corner family]
+    \label{def:mpdo_original_corner_family}
+    \lean{MPOTensor.RetainedProductSpectralFamily.OriginalCornerFamily}
+    \leanok
+    \uses{def:mpdo_retained_product_spectral_family,
+      thm:mpdo_active_product_corner_blocked_bnt_coverage}
+    An original-label corner family for the retained product records, for
+    every active corner of each copy pair, an original one-site BNT label, a
+    positive coefficient, and an isometric inclusion into the raw product
+    bond space.  Distinct corners belonging to one copy pair have orthogonal
+    ranges.  Each inclusion intertwines the raw product tensor with the stated
+    positive multiple of its original BNT representative, and the resulting
+    corners reconstruct every tensor letter exactly.
+\end{definition}
+
 \begin{theorem}[Positivity of active product coefficients]
     \label{thm:mpdo_active_product_coefficient_phase_pos}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
@@ -2828,7 +2843,11 @@ activeCoefficient_mul_phase_pos}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
 exists_unitaryNormalization}
     \leanok
-    \uses{thm:mpdo_active_product_coefficient_phase_pos,
+    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
+      thm:mpdo_retained_product_spectral_family_exists,
+      lem:mpdo_horizontal_cf_block_two,
+      thm:mpdo_block_two_as_positive_blocking,
+      thm:mpdo_active_product_coefficient_phase_pos,
       thm:mpdo_blocked_reference_corners,
       thm:mpdo_pairwise_vertical_gram_conjugation,
       thm:normal_tensor_gram_rigidity}
