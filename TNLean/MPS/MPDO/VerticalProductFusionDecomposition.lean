@@ -19,11 +19,18 @@ Appendix C.4, lines 2020--2029.
   Appendix C.4, lines 2020--2029
 -/
 
-open scoped Matrix
+open scoped Matrix BigOperators Kronecker
 
 noncomputable section
 
 namespace MPOTensor
+
+/-- The Kronecker square of a rectangular vertical coisometry, with both
+product index spaces encoded by the standard finite-product equivalence. -/
+noncomputable def verticalCoisometrySquare {d n : ℕ}
+    (U : Matrix (Fin n) (Fin d) ℂ) :
+    Matrix (Fin (n * n)) (Fin (d * d)) ℂ :=
+  (U ⊗ₖ U).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
 
 /-- Equality of all positive-length closed MPOs gives equality of the
 corresponding positive-length matrix product vectors after joining each ket
@@ -54,5 +61,44 @@ theorem sameMPV₂Pos_toMPSTensor_of_mpo_eq
           (fun n ↦ finProdFinEquiv (ket n, bra n)) :=
       (MPSTensor.mpv_toMPSTensor_pairConfig M₂ ket bra).symm
     _ = MPSTensor.mpv M₂.toMPSTensor σ := by rw [hpair]
+
+/-- Squaring an exact one-site vertical reconstruction gives an exact
+two-site reconstruction through the Kronecker square of the same coisometry.
+
+The retained two-site tensor is the product of two copies of the retained
+one-site tensor. This is a tensor-level identity; it does not infer support
+of any fixed pair of BNT labels from the closed-chain sum.
+
+Source: CPSV16, Appendix C.4, lines 2015--2025. -/
+theorem verticalTensor_blockTwo_squared_coisometry_reconstruction
+    {d D n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    (U : Matrix (Fin n) (Fin d) ℂ) (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab = Uᴴ * A ab * U) :
+    verticalCoisometrySquare U * (verticalCoisometrySquare U)ᴴ = 1 ∧
+      ∀ ab, verticalTensor (blockTwo M) ab =
+        (verticalCoisometrySquare U)ᴴ *
+          (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor ab *
+            verticalCoisometrySquare U := by
+  constructor
+  · unfold verticalCoisometrySquare
+    rw [Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _,
+      Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hU,
+      Matrix.one_kronecker_one, Matrix.submatrix_one_equiv]
+  · intro ab
+    rw [← verticalBNTMPO_toMPSTensor (verticalTensor (blockTwo M)),
+      verticalBNTMPO_verticalTensor_blockTwo]
+    obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ab
+    unfold verticalCoisometrySquare
+    simp only [toMPSTensor, mulTensor_apply, verticalBNTMPO_apply,
+      MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+    rw [Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _,
+      Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _]
+    congr 1
+    rw [Matrix.mul_sum, Matrix.sum_mul]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [hReconstruct, hReconstruct, Matrix.conjTranspose_kronecker,
+      ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
 
 end MPOTensor
