@@ -366,7 +366,13 @@
 \newcount\tenkz@bboxuid
 \newcount\tenkz@inkuid
 \newcount\tenkz@inkowner
+\newcount\tenkz@glyphsnapuid
 \newdimen\tenkz@glyphradius
+\newdimen\tenkz@glyphradiusx
+\newdimen\tenkz@glyphradiusy
+\newdimen\tenkz@glyphwidth
+\newdimen\tenkz@glyphheight
+\newdimen\tenkz@glyphdiameter
 \newdimen\tenkz@glyphxone
 \newdimen\tenkz@glyphyone
 \newdimen\tenkz@glyphxtwo
@@ -416,30 +422,63 @@
       \tenkz@emitnodebbox{label}{\tikzlastnode}%
     \fi
   \fi}
+% Capture the final corner state while TikZ is still constructing the node.
+% `append after command' runs too late: PGF has restored the path-local
+% \ifpgf@arccorners and \pgf@corner@arc state by then.  Each audited node gets a
+% globally unique token, and `execute at end node' snapshots the state under
+% that token for the matching append-after callback to consume.
+\def\tenkz@snapshotglyphcorners#1{%
+  \ifpgf@arccorners
+    \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{1}%
+    \expandafter\xdef\csname tenkz@glypharc@#1\endcsname{\pgf@corner@arc}%
+  \else
+    \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{0}%
+    \expandafter\gdef\csname tenkz@glypharc@#1\endcsname{{0pt}{0pt}}%
+  \fi}
+\def\tenkz@setglypharcaux#1#2{%
+  \tenkz@glyphradiusx=#1\relax
+  \tenkz@glyphradiusy=#2\relax}
+\def\tenkz@readglyphcorners#1{%
+  \edef\tenkz@glypharcflag{\csname tenkz@glypharcflag@#1\endcsname}%
+  \ifnum\tenkz@glypharcflag=1\relax
+    \edef\tenkz@glypharcs{\csname tenkz@glypharc@#1\endcsname}%
+    \expandafter\tenkz@setglypharcaux\tenkz@glypharcs
+    \ifdim\tenkz@glyphradiusx<0pt
+      \PackageError{tenkz}{Audited rounded rectangle has a negative x radius}%
+        {Use an isotropic, nonnegative corner radius.}%
+    \fi
+    \ifdim\tenkz@glyphradiusy<0pt
+      \PackageError{tenkz}{Audited rounded rectangle has a negative y radius}%
+        {Use an isotropic, nonnegative corner radius.}%
+    \fi
+    \ifdim\tenkz@glyphradiusx=\tenkz@glyphradiusy\relax
+    \else
+      \PackageError{tenkz}{Audited rounded rectangle has unequal corner radii}%
+        {Use the same nonnegative radius in both axes.}%
+    \fi
+    \tenkz@glyphradius=\tenkz@glyphradiusx
+  \else
+    \tenkz@glyphradius=0pt
+  \fi}
+
 % Resolve the node's final PGF shape identity after every style addition has
-% run.  A semantic skin may be restyled from (say) circle to rectangle; the
-% event must describe that live node, not the base style's starting shape.
-% PGF does not retain `rounded corners' as part of the node-shape identity: both
-% sharp and rounded nodes are named `rectangle'.  Therefore a built-in
-% roundrect retains its declared production radius.  Later corner-radius
-% overrides are outside the audited customization contract; use a box skin for
-% a sharp rectangle rather than mutating a pill/ring's rounded-corner path.
+% run.  A semantic skin may be restyled from (say) circle to rectangle, or its
+% rounded corners may be enabled/disabled; the event describes that live node,
+% not the base style's starting shape or declared radius.
 \def\tenkz@resolveglyphshape#1#2{%
   \edef\tenkz@livepgfshape{\csname pgf@sh@ns@#1\endcsname}%
   \def\tenkz@pgfcircle{circle}%
   \def\tenkz@pgfrectangle{rectangle}%
   \def\tenkz@pgftriangle{isosceles triangle}%
-  \def\tenkz@declaredroundrect{roundrect}%
-  \def\tenkz@declaredshape{#2}%
   \ifx\tenkz@livepgfshape\tenkz@pgfcircle
     \def\tenkz@glyphshape{circle}%
     \tenkz@glyphradius=0pt
   \else\ifx\tenkz@livepgfshape\tenkz@pgfrectangle
-    \ifx\tenkz@declaredshape\tenkz@declaredroundrect
+    \tenkz@readglyphcorners{#2}%
+    \ifdim\tenkz@glyphradius>0pt
       \def\tenkz@glyphshape{roundrect}%
     \else
       \def\tenkz@glyphshape{rect}%
-      \tenkz@glyphradius=0pt
     \fi
   \else\ifx\tenkz@livepgfshape\tenkz@pgftriangle
     \def\tenkz@glyphshape{triangle}%
@@ -454,15 +493,16 @@
 \def\tenkz@emitglyphinkuse{%
   \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=glyph|%
     id=\the\tenkz@inkowner|shape=\tenkz@glyphshape}}
-\def\tenkz@captureglyphgeometry#1#2{%
+\def\tenkz@captureglyphgeometry#1#2#3{%
   \iftenkz@bboxcapture
     \ifnum\tenkz@pictureid>0\relax
       \global\advance\tenkz@inkuid by 1\relax
       \tenkz@inkowner=\tenkz@inkuid
-      \tenkz@glyphradius=#2\relax
-      \tenkz@resolveglyphshape{\tikzlastnode}{#1}%
+      \tenkz@resolveglyphshape{\tikzlastnode}{#3}%
       \tenkz@emitglyphinkuse
       \tenkz@emitglyphgeometry{\tikzlastnode}%
+      \global\expandafter\let\csname tenkz@glypharcflag@#3\endcsname\relax
+      \global\expandafter\let\csname tenkz@glypharc@#3\endcsname\relax
     \fi
   \fi}
 \def\tenkz@emitglyphgeometry#1{%
@@ -471,6 +511,23 @@
   \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#1}{east}}%
   \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{south}}%
   \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#1}{north}}%
+  \def\tenkz@roundrect{roundrect}%
+  \ifx\tenkz@glyphshape\tenkz@roundrect
+    \tenkz@glyphwidth=\tenkz@bboxxmax
+    \advance\tenkz@glyphwidth by -\tenkz@bboxxmin
+    \tenkz@glyphheight=\tenkz@bboxymax
+    \advance\tenkz@glyphheight by -\tenkz@bboxymin
+    \tenkz@glyphdiameter=\tenkz@glyphradius
+    \advance\tenkz@glyphdiameter by \tenkz@glyphradius
+    \ifdim\tenkz@glyphdiameter>\tenkz@glyphwidth
+      \PackageError{tenkz}{Audited rounded rectangle radius exceeds half its width}%
+        {Reduce the corner radius or enlarge the node.}%
+    \fi
+    \ifdim\tenkz@glyphdiameter>\tenkz@glyphheight
+      \PackageError{tenkz}{Audited rounded rectangle radius exceeds half its height}%
+        {Reduce the corner radius or enlarge the node.}%
+    \fi
+  \fi
   \def\tenkz@triangle{triangle}%
   \ifx\tenkz@glyphshape\tenkz@triangle
     \pgfextractx{\tenkz@glyphxone}{\pgfpointanchor{#1}{apex}}%
@@ -498,7 +555,7 @@
   \global\advance\tenkz@inkuid by 1\relax
   \tenkz@inkowner=\tenkz@inkuid
   \tenkz@glyphradius=0pt
-  \tenkz@resolveglyphshape{#1}{rect}%
+  \def\tenkz@glyphshape{rect}%
   \tenkz@emitglyphinkuse
   \tenkz@emitglyphgeometry{#1}%
   \endgroup}
@@ -528,7 +585,17 @@
     /utils/exec=\tenkz@bboxlabeluse,
     append after command={\pgfextra{\tenkz@capturelabelbbox}}},
   tenkz audited glyph/.style 2 args={
-    append after command={\pgfextra{\tenkz@captureglyphgeometry{#1}{#2}}}},
+    /utils/exec={%
+      \global\advance\tenkz@glyphsnapuid by 1\relax
+      \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
+      \xdef\tenkz@installglyphsnapshot{%
+        \noexpand\tikzset{%
+          execute at end node={%
+            \noexpand\tenkz@snapshotglyphcorners{\tenkz@glyphsnaptoken}},%
+          append after command={\noexpand\pgfextra{%
+            \noexpand\tenkz@captureglyphgeometry{#1}{#2}%
+              {\tenkz@glyphsnaptoken}}}}}}%
+      \tenkz@installglyphsnapshot},
 }
 
 % ---------- species (the 0.6 hue contract, clause 2) ----------
