@@ -154,6 +154,26 @@ LATTICE_STYLE_PROBE = r"""
 \end{document}
 """
 
+
+EMPTY_BOX_LABEL_PROBE = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\newcount\tenkzTestEmptySpanLabelNodes
+\begin{document}
+\begingroup
+\tikzset{tn label/.append style={/utils/exec={%
+  \global\advance\tenkzTestEmptySpanLabelNodes by 1\relax}}}
+\begin{tenkz}[tensor style=box]
+  \tn{A}\tnspan[box]{1}{}
+\end{tenkz}
+\endgroup
+\ifnum\tenkzTestEmptySpanLabelNodes=0\relax\else
+  \errmessage{empty box span materialized a phantom label node}
+\fi
+\end{document}
+"""
+
 NEGATIVE = {
     "shade": (r"""
 \begin{tenkz}\tn{A}\tnspan[shade]{1}{A}\end{tenkz}
@@ -241,6 +261,220 @@ ENCLOSURE_RECOVERY = r"""
   \tn{D}\tnspan[box]{1}{\typeout{TENKZ-GOOD-OPTION-SPAN-INK}good}
   \typeout{TENKZ-EMPTY-SPAN-RECOVERED}
 \end{tenkz}
+\end{document}
+"""
+
+
+DUPLICATE_RECOVERY = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\newcommand*{\tenkzTestDuplicateAtomInk}{%
+  \typeout{TENKZ-DUPLICATE-ATOM-INK}X}
+\newcommand*{\tenkzTestDuplicateJoinInk}{%
+  \typeout{TENKZ-DUPLICATE-JOIN-INK}bad}
+\newcommand*{\tenkzTestDuplicateLatticeInk}{%
+  \typeout{TENKZ-DUPLICATE-LATTICE-INK}bad}
+\newcommand*{\tenkzTestBadFreeSlotInk}{%
+  \typeout{TENKZ-BAD-FREE-SLOT-INK}bad}
+\newcommand*{\tenkzTestBadArcInk}{%
+  \typeout{TENKZ-BAD-ARC-INK}bad}
+\newcommand*{\tenkzTestBadTypeInk}{%
+  \typeout{TENKZ-BAD-TYPE-INK}bad}
+\newcommand*{\tenkzTestBadLatticeSlotInk}{%
+  \typeout{TENKZ-BAD-LATTICE-SLOT-INK}bad}
+\newcommand*{\tenkzTestBadLatticeSetInk}{%
+  \typeout{TENKZ-BAD-LATTICE-SET-INK}bad}
+\newcommand*{\tenkzTestRejectedInk}{%
+  \typeout{TENKZ-REJECTED-DECLARATION-INK}bad}
+\newcommand*{\tenkzTestValidAtomInk}{%
+  \typeout{TENKZ-VALID-ATOM-INK}C}
+\newcommand*{\tenkzTestValidJoinInk}{%
+  \typeout{TENKZ-VALID-JOIN-INK}good}
+\newcommand*{\tenkzTestValidRawJoinInk}{%
+  \typeout{TENKZ-VALID-RAW-JOIN-INK}raw}
+\newcommand*{\tenkzTestValidLatticeInk}{%
+  \typeout{TENKZ-VALID-LATTICE-INK}good}
+\newcommand*{\tenkzTestValidNorthLabel}{%
+  \typeout{TENKZ-VALID-NORTH-LABEL}north}
+\makeatletter
+\ExplSyntaxOn
+\tl_new:N \g__tenkz_test_first_atom_tl
+\tl_new:N \g__tenkz_test_first_join_tl
+\cs_new_protected:Npn \tenkz_test_save_enclosure:nN #1#2
+  {
+    \prop_get:NeNTF \g__tenkz_enclosure_prop
+      { \the\tenkz@pictureid / #1 } #2
+      { }
+      { \typeout{TENKZ-TEST-MISSING-ENCLOSURE-#1} }
+  }
+\cs_new_protected:Npn \tenkz_test_same_enclosure:nN #1#2
+  {
+    \prop_get:NeNTF \g__tenkz_enclosure_prop
+      { \the\tenkz@pictureid / #1 } \l_tmpa_tl
+      {
+        \tl_if_eq:NNF \l_tmpa_tl #2
+          { \typeout{TENKZ-TEST-ENCLOSURE-OVERWRITTEN-#1} }
+      }
+      { \typeout{TENKZ-TEST-MISSING-ENCLOSURE-#1} }
+  }
+\cs_new_protected:Npn \tenkz_test_atom_port:
+  {
+    \prop_get:NeNTF \g__tenkz_ports_prop
+      { \the\tenkz@pictureid / a.east } \l_tmpa_tl
+      {
+        \str_if_eq:VnF \l_tmpa_tl {virtual}
+          { \typeout{TENKZ-TEST-ATOM-PORT-OVERWRITTEN} }
+      }
+      { \typeout{TENKZ-TEST-ATOM-PORT-MISSING} }
+  }
+\cs_new_protected:Npn \tenkzTestBadFreeRegistry
+  {
+    \clist_map_inline:nn
+      {badarc,badtype,badfree,badpos,badputkey,badspeciesatom,
+       badrole,badjoinkey,badspeciesjoin,badendpoint,badspaced,
+       badportsformat,badportstype,badfreekey}
+      {
+        \tenkz_enclosure_if_registered:nT {##1}
+          { \typeout{TENKZ-TEST-BAD-FREE-REGISTERED-##1} }
+      }
+  }
+\cs_new_protected:Npn \tenkzTestLatticeRegistry
+  {
+    \prop_if_in:NnT \l_tenkz_cs_names_prop {BadSlot}
+      { \typeout{TENKZ-TEST-BAD-LATTICE-SLOT-REGISTERED} }
+    \prop_if_in:NnT \l_tenkz_cs_names_prop {BadSet}
+      { \typeout{TENKZ-TEST-BAD-LATTICE-SET-REGISTERED} }
+    \prop_if_in:NnT \l_tenkz_cs_names_prop {BadKey}
+      { \typeout{TENKZ-TEST-BAD-LATTICE-KEY-REGISTERED} }
+    \prop_if_in:NnT \l_tenkz_cs_names_prop {BadEmpty}
+      { \typeout{TENKZ-TEST-BAD-LATTICE-EMPTY-REGISTERED} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\begin{tenkzfree}
+  \tnput[box, ports={east:virtual}]{a}{(0,0)}{A}
+  \ExplSyntaxOn
+  \tenkz_test_save_enclosure:nN {a} \g__tenkz_test_first_atom_tl
+  \ExplSyntaxOff
+  \tnput[box, ports={east:physical}]{a}{(0,8mm)}
+    {\tenkzTestDuplicateAtomInk}
+  \ExplSyntaxOn
+  \tenkz_test_same_enclosure:nN {a} \g__tenkz_test_first_atom_tl
+  \tenkz_test_atom_port:
+  \ExplSyntaxOff
+  \tnput[box, ports={west:virtual}]{b}{(2,0)}{B}
+  \tnput[box]{c}{(4,0)}{\tenkzTestValidAtomInk}
+  \tnput[box, ports={west:physical}]{d}{(2,-1)}{D}
+  \tnput[box, label pos=sideways]{badpos}{(5,0)}{\tenkzTestRejectedInk}
+  \tnput[box, mystery=1]{badputkey}{(6,0)}{\tenkzTestRejectedInk}
+  \tnput[box, species=undeclared]{badspeciesatom}{(7,0)}
+    {\tenkzTestRejectedInk}
+  \tnput[box]{}{(8,0)}{\tenkzTestRejectedInk}
+  \tnput[box, ports={east}]{badportsformat}{(9,0)}{\tenkzTestRejectedInk}
+  \tnput[box, ports={east:bogus}]{badportstype}{(10,0)}{\tenkzTestRejectedInk}
+  \tnjoin[name=j, label=first]{a.east}{b.west}
+  \ExplSyntaxOn
+  \tenkz_test_save_enclosure:nN {j} \g__tenkz_test_first_join_tl
+  \ExplSyntaxOff
+  \tnjoin[name=j,
+    label={\tenkzTestDuplicateJoinInk}]{a.east}{b.west}
+  \ExplSyntaxOn
+  \tenkz_test_same_enclosure:nN {j} \g__tenkz_test_first_join_tl
+  \ExplSyntaxOff
+  \tnjoin[name=k, label={\tenkzTestValidJoinInk}]
+    {a.east}{b.west}
+  \tnjoin[label={\tenkzTestValidRawJoinInk}]
+    {$(a)+(0mm,5mm)$}{$(b)+(0mm,5mm)$}
+  \coordinate (rawA) at (0mm,10mm);
+  \coordinate (rawB) at (20mm,10mm);
+  \tnjoin[name=raw, label={\tenkzTestValidRawJoinInk}]{rawA}{rawB}
+  \tnjoin[name=badarc, route=arc, label={\tenkzTestBadArcInk}]
+    {a.east}{b.west}
+  \tnjoin[name=badtype, label={\tenkzTestBadTypeInk}]
+    {a.east}{d.west}
+  \tnjoin[name=badrole, role=bogus, label={\tenkzTestRejectedInk}]
+    {a.east}{b.west}
+  \tnjoin[name=badjoinkey, mystery=1, label={\tenkzTestRejectedInk}]
+    {a.east}{b.west}
+  \tnjoin[name=badspeciesjoin, species=undeclared,
+    label={\tenkzTestRejectedInk}]{a.east}{b.west}
+  \tnjoin[name=badendpoint, label={\tenkzTestRejectedInk}]
+    {missing.east}{b.west}
+  \tnjoin[name=badspaced, label={\tenkzTestRejectedInk}]
+    {missing.north east}{b.west}
+  \tnregion[slot=bogus, name=badfree, label={\tenkzTestBadFreeSlotInk}]
+    {a}
+  \tnregion[mystery=1, name=badfreekey, label={\tenkzTestRejectedInk}]{a}
+  \tnregion[name=goodfree]{a,b,k}
+  \tenkzTestBadFreeRegistry
+\end{tenkzfree}
+\begin{tenkzlattice}[rows=2, cols=2]
+  \tnregion[name=R]{(1,1)}
+  \tnregion[name=R, label={\tenkzTestDuplicateLatticeInk}]
+    {(2,2)}
+  \tnregion[slot=secondary]{R}
+  \tnregion[slot=bogus, name=BadSlot,
+    label={\tenkzTestBadLatticeSlotInk}]{(2,1)}
+  \tnregion[name=BadSet, label={\tenkzTestBadLatticeSetInk}]{missing}
+  \tnregion[mystery=1, name=BadKey, label={\tenkzTestRejectedInk}]{(2,1)}
+  \tnregion[name=BadEmpty, label={\tenkzTestRejectedInk}]{}
+  \tenkzTestLatticeRegistry
+  \tnregion[name=S, label={\tenkzTestValidLatticeInk}]
+    {(1,2)}
+  \tnregion[slot=collar]{S}
+  \tnregion[label pos=north, label={\tenkzTestValidNorthLabel}]{S}
+\end{tenkzlattice}
+\typeout{TENKZ-DUPLICATE-RECOVERED}
+\end{document}
+"""
+
+
+SPAN_SYNTAX_RECOVERY = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\newcommand*{\tenkzTestBadSpanInk}{%
+  \typeout{TENKZ-BAD-SPAN-SYNTAX-INK}bad}
+\newcommand*{\tenkzTestGoodSpanInk}{%
+  \typeout{TENKZ-GOOD-SPAN-SYNTAX-INK}good}
+\begin{document}
+\begin{tenkz}
+  \tn{A}\tnspan[box]{notaninteger}{\tenkzTestBadSpanInk} &
+  \tn{B}\tnspan[box]{1+1}{\tenkzTestBadSpanInk} &
+  \tn{C}\tnspan[box]{02}{\tenkzTestGoodSpanInk} & \tn{D}
+  \\
+  \tn[box, species=undeclared]{X}
+    \tnspan[box]{1}{\tenkzTestBadSpanInk} &
+  \tn{Y}\tnspan[box]{1}{\tenkzTestGoodSpanInk} & \tn{Z} & \tn{W}
+  \\
+  \tn[role=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tn[physical=sideways]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tn[tri=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tn[mystery=1]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tnfuse[span=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tnfuse[combined=sideways]{X}
+    \tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tn[wide=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tn[wires=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tnfuse[span=0]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tn[west at=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tn[up at={1,bogus}]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \\
+  \tn[legs at=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+\end{tenkz}
+\typeout{TENKZ-SPAN-SYNTAX-RECOVERED}
 \end{document}
 """
 
@@ -337,6 +571,8 @@ def main() -> int:
             event for event in audit.events()
             if event.kind == "region" and "cells" in event.attrs
         ]
+        if any(event.attrs.get("lang") != "lattice" for event in lattice_regions):
+            raise AssertionError("lattice region events lost their dialect tag")
         if len(lattice_regions) != 1 or lattice_regions[0].attrs["cells"] != (
             "1-2,1-3,2-2,2-3"
         ):
@@ -375,6 +611,13 @@ def main() -> int:
             rasters[name] = (work / f"{name}.png").read_bytes()
         if rasters["lattice-default"] == rasters["lattice-sharp"]:
             raise AssertionError("lattice body style extension changed no final ink")
+
+        empty_label = compile_tex(
+            engine, work, "empty-box-label", EMPTY_BOX_LABEL_PROBE, env
+        )
+        if empty_label.returncode:
+            print(empty_label.stdout)
+            raise AssertionError("empty box span materialized label geometry")
 
         # Synthetic logs exercise the audit independently of TeX's own
         # fail-closed grammar, including forward references and cross-kind
@@ -448,6 +691,185 @@ region|picture=1|lang=free|slot=selected|members=a|outline=0|name=a
         if sum("|name=good" in line for line in recovery_joins) != 1:
             raise AssertionError(
                 f"valid recovery control emitted {recovery_joins!r}"
+            )
+
+        # A duplicate semantic name is a rejected transaction, not merely a
+        # diagnostic.  In nonstop mode it must not draw the second atom/join,
+        # emit a second event, mutate the first declaration's registries, or
+        # append a lattice region to the deferred render pass.  Later valid
+        # declarations in each dialect must still commit.
+        duplicate_recovered = compile_tex(
+            engine, work, "duplicate-recovery", DUPLICATE_RECOVERY,
+            env, halt_on_error=False,
+        )
+        if duplicate_recovered.returncode == 0:
+            raise AssertionError("duplicate recovery compilation succeeded")
+        if "Invalid end-point for range" in duplicate_recovered.stdout:
+            print(duplicate_recovered.stdout)
+            raise AssertionError("endpoint grammar emitted a regex warning")
+        if duplicate_recovered.stdout.count("already defined in this") < 3:
+            print(duplicate_recovered.stdout)
+            raise AssertionError("duplicate recovery missed a diagnostic")
+        if "TENKZ-DUPLICATE-RECOVERED" not in duplicate_recovered.stdout:
+            print(duplicate_recovered.stdout)
+            raise AssertionError("duplicate recovery did not reach its sentinel")
+        for marker in (
+            "TENKZ-DUPLICATE-ATOM-INK",
+            "TENKZ-DUPLICATE-JOIN-INK",
+            "TENKZ-DUPLICATE-LATTICE-INK",
+            "TENKZ-BAD-FREE-SLOT-INK",
+            "TENKZ-BAD-ARC-INK",
+            "TENKZ-BAD-TYPE-INK",
+            "TENKZ-BAD-LATTICE-SLOT-INK",
+            "TENKZ-BAD-LATTICE-SET-INK",
+            "TENKZ-REJECTED-DECLARATION-INK",
+            "TENKZ-TEST-ENCLOSURE-OVERWRITTEN",
+            "TENKZ-TEST-MISSING-ENCLOSURE",
+            "TENKZ-TEST-ATOM-PORT-OVERWRITTEN",
+            "TENKZ-TEST-ATOM-PORT-MISSING",
+            "TENKZ-TEST-BAD-FREE-REGISTERED",
+            "TENKZ-TEST-BAD-LATTICE-SLOT-REGISTERED",
+            "TENKZ-TEST-BAD-LATTICE-SET-REGISTERED",
+            "TENKZ-TEST-BAD-LATTICE-KEY-REGISTERED",
+            "TENKZ-TEST-BAD-LATTICE-EMPTY-REGISTERED",
+        ):
+            if marker in duplicate_recovered.stdout:
+                raise AssertionError(
+                    f"duplicate declaration leaked side effect {marker!r}"
+                )
+        for marker in (
+            "TENKZ-VALID-ATOM-INK",
+            "TENKZ-VALID-JOIN-INK",
+            "TENKZ-VALID-RAW-JOIN-INK",
+            "TENKZ-VALID-LATTICE-INK",
+            "TENKZ-VALID-NORTH-LABEL",
+        ):
+            if marker not in duplicate_recovered.stdout:
+                raise AssertionError(
+                    f"valid control missed render marker {marker!r}"
+                )
+        duplicate_events = (work / "duplicate-recovery.tnlog").read_text(
+            encoding="utf-8"
+        ).splitlines()
+        duplicate_atoms = [
+            line for line in duplicate_events if line.startswith("atom|")
+        ]
+        if sum("|name=a|" in line for line in duplicate_atoms) != 1:
+            raise AssertionError(
+                f"duplicate atom emitted unexpected events {duplicate_atoms!r}"
+            )
+        if sum("|name=c|" in line for line in duplicate_atoms) != 1:
+            raise AssertionError(
+                f"valid atom control emitted {duplicate_atoms!r}"
+            )
+        if any(
+            f"|name={name}|" in line
+            for line in duplicate_atoms
+            for name in (
+                "badpos", "badputkey", "badspeciesatom",
+                "badportsformat", "badportstype",
+            )
+        ) or any("|name=|" in line for line in duplicate_atoms):
+            raise AssertionError(
+                f"invalid atom emitted semantic events {duplicate_atoms!r}"
+            )
+        duplicate_joins = [
+            line for line in duplicate_events if line.startswith("join|")
+        ]
+        if sum("|name=j" in line for line in duplicate_joins) != 1:
+            raise AssertionError(
+                f"duplicate join emitted unexpected events {duplicate_joins!r}"
+            )
+        if sum("|name=k" in line for line in duplicate_joins) != 1:
+            raise AssertionError(
+                f"valid join control emitted {duplicate_joins!r}"
+            )
+        if sum("|name=raw" in line for line in duplicate_joins) != 1:
+            raise AssertionError(
+                f"raw TikZ coordinate join emitted {duplicate_joins!r}"
+            )
+        if any(
+            f"|name={name}" in line
+            for line in duplicate_joins
+            for name in (
+                "badarc", "badtype", "badrole", "badjoinkey",
+                "badspeciesjoin", "badendpoint", "badspaced",
+            )
+        ):
+            raise AssertionError(
+                f"invalid join emitted semantic events {duplicate_joins!r}"
+            )
+        free_regions = [
+            line for line in duplicate_events
+            if line.startswith("region|") and "|lang=free|" in line
+        ]
+        if any(
+            f"|name={name}" in line
+            for line in free_regions
+            for name in ("badfree", "badfreekey")
+        ):
+            raise AssertionError(
+                f"invalid free region emitted {free_regions!r}"
+            )
+        if sum("|name=goodfree" in line for line in free_regions) != 1:
+            raise AssertionError(
+                f"valid free-region control emitted {free_regions!r}"
+            )
+        lattice_regions = [
+            line for line in duplicate_events
+            if line.startswith("region|") and "|lang=free|" not in line
+        ]
+        if sum("|cells=1-1" in line for line in lattice_regions) != 2:
+            raise AssertionError(
+                "first lattice name was not preserved through duplicate: "
+                f"{lattice_regions!r}"
+            )
+        if any("|cells=2-2" in line for line in lattice_regions):
+            raise AssertionError(
+                f"duplicate lattice region emitted {lattice_regions!r}"
+            )
+        if sum("|cells=1-2" in line for line in lattice_regions) != 3:
+            raise AssertionError(
+                f"valid lattice controls emitted {lattice_regions!r}"
+            )
+        if len(lattice_regions) != 5:
+            raise AssertionError(
+                f"invalid lattice declaration entered events {lattice_regions!r}"
+            )
+
+        span_syntax = compile_tex(
+            engine, work, "span-syntax-recovery", SPAN_SYNTAX_RECOVERY,
+            env, halt_on_error=False,
+        )
+        if span_syntax.returncode == 0:
+            raise AssertionError("span syntax recovery compilation succeeded")
+        if span_syntax.stdout.count("decimal integer syntax") != 2:
+            print(span_syntax.stdout)
+            raise AssertionError("span syntax recovery missed diagnostics")
+        if "combined=sideways is not a fusion side" not in span_syntax.stdout:
+            print(span_syntax.stdout)
+            raise AssertionError("fusion-side recovery missed its diagnostic")
+        if "TENKZ-SPAN-SYNTAX-RECOVERED" not in span_syntax.stdout:
+            raise AssertionError("span syntax recovery missed its sentinel")
+        if "TENKZ-BAD-SPAN-SYNTAX-INK" in span_syntax.stdout:
+            raise AssertionError("invalid span syntax rendered label ink")
+        if "TENKZ-GOOD-SPAN-SYNTAX-INK" not in span_syntax.stdout:
+            raise AssertionError("valid canonical span missed label ink")
+        syntax_events = (work / "span-syntax-recovery.tnlog").read_text(
+            encoding="utf-8"
+        ).splitlines()
+        syntax_spans = [
+            line for line in syntax_events if line.startswith("span|")
+        ]
+        if len(syntax_spans) != 2 or not any(
+            "|row=1|col=3|length=2|" in line for line in syntax_spans
+        ) or not any(
+            "|row=2|col=2|length=1|" in line for line in syntax_spans
+        ) or any(
+            "|row=2|col=1|" in line for line in syntax_spans
+        ):
+            raise AssertionError(
+                f"span lengths were not rejected/canonicalized: {syntax_spans!r}"
             )
 
         # Shared enclosure resolution is a transaction boundary for both

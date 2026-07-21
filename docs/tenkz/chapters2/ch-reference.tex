@@ -743,10 +743,10 @@ for example \tnval{group region/.append style=\{rounded corners=0pt\}}.
 \noindent\begin{tabularx}{\linewidth}{@{}p{26mm}p{24mm}p{13mm}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \keyhead
-\texttt{route=} & \texttt{straight|hv|} \texttt{vh|curve} &
+\texttt{route=} & \texttt{straight|hv|} \texttt{vh|arc} &
   \texttt{straight} & how the wire runs \\
 \texttt{out=}, \texttt{in=} & \meta{angle} & --- &
-  tangents of a \texttt{curve} route \\
+  tangents of an \texttt{arc} route \\
 \texttt{label=} & \meta{math} & --- &
   label at the wire's midpoint \\
 \texttt{name=} & \meta{name} & --- &
@@ -763,6 +763,10 @@ for example \tnval{group region/.append style=\{rounded corners=0pt\}}.
   directed wire: argument order is the direction \\
 \bottomrule
 \end{tabularx}\par}
+\medskip
+
+\tnval{curve} remains the pre-0.6 compatibility alias for \tnval{arc}.
+
 \medskip
 
 \thumbtag{\tncmd{tnregion}}%
@@ -811,12 +815,12 @@ silently dropping ink.
     label     = {ex:ref-free},
   ]
 % typed ports; the directed join reads argument order as
-% direction (out of a, into b); the curve carries T
+% direction (out of a, into b); the arc carries T
 \begin{tenkzfree}
   \tnput[ports={east:virtual, north:physical}]{a}{(0,0)}{A}
   \tnput[ports={west:virtual}]{b}{(14mm,0)}{B}
   \tnjoin[name=jalpha, dir]{a.east}{b.west}
-  \tnjoin[name=jT, route=curve, out=90, in=90, label=T]
+  \tnjoin[name=jT, route=arc, out=90, in=90, label=T]
     {a.north}{b.north}
   \tnregion[slot=secondary, outline, label={$R$},
             label pos=north east]{a,b,jalpha,jT}

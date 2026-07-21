@@ -1402,6 +1402,28 @@
     \tenkz_enclosure_register_existing:eV {#1} #2
   }
 
+% Allocate only when the semantic name is still free.  Error recovery is not
+% a transaction boundary by itself: under nonstop mode \msg_error:nnn returns
+% to its caller.  Free-tier commands therefore use this conditional form to
+% keep a rejected duplicate from drawing ink, emitting events, or overwriting
+% any registry owned by the first declaration.
+\cs_new_protected:Npn \tenkz_enclosure_allocate:nNTF #1#2#3#4
+  {
+    \tl_set:Ne \l_tmpa_tl { \int_use:N \tenkz@pictureid / #1 }
+    \prop_if_in:NVTF \g__tenkz_enclosure_prop \l_tmpa_tl
+      {
+        \msg_error:nnn {tenkz}{enclosure-duplicate}{#1}
+        #4
+      }
+      {
+        \tenkz_enclosure_fresh:N #2
+        \prop_gput:NVV \g__tenkz_enclosure_prop \l_tmpa_tl #2
+        #3
+      }
+  }
+\cs_generate_variant:Nn \tenkz_enclosure_allocate:nNTF { VNTF }
+\cs_generate_variant:Nn \prop_gput:Nnn { NVn, NVV, NVe }
+
 \cs_new_protected:Npn \tenkz_enclosure_resolve:n #1
   {
     \seq_clear:N \l__tenkz_enclosure_nodes_seq
@@ -1553,6 +1575,8 @@
       { \prg_return_false: }
       { \prg_return_true: }
   }
+\prg_generate_conditional_variant:Nnn \tenkz_enclosure_label_position:n
+  { V } { T, F, TF }
 
 % Position an already formatted label #2 outside node #3.  `center' is the
 % deliberate exception: it is useful for a region name placed in empty fill.
@@ -1606,7 +1630,7 @@
             \tl_set:Ne \l_tmpa_tl { \int_use:N \tenkz@pictureid / #5 }
             \prop_gput:NVV \g__tenkz_enclosure_prop \l_tmpa_tl
               \l__tenkz_enclosure_result_tl
-            \prop_gput:NVx \g__tenkz_enclosure_depth_prop \l_tmpa_tl
+            \prop_gput:NVe \g__tenkz_enclosure_depth_prop \l_tmpa_tl
               { \int_use:N \l__tenkz_enclosure_depth_int }
           }
         \tenkz_enclosure_activate_fill_layer:
@@ -1672,10 +1696,16 @@
     option~list.~A~declaration~inside~a~group~or~picture~ends~with~
     that~group.
   }
-\cs_new_protected:Npn \tenkz_species_check:n #1
+\prg_new_protected_conditional:Npnn \tenkz_species_if_declared:n #1
+  { T, F, TF }
   {
     \pgfkeysifdefined { /tikz/species~#1~bond/.@cmd }
-      { }
+      { \prg_return_true: }
+      { \prg_return_false: }
+  }
+\cs_new_protected:Npn \tenkz_species_check:n #1
+  {
+    \tenkz_species_if_declared:nF {#1}
       { \msg_error:nnn { tenkz } { unknown-species } {#1} }
   }
 \cs_generate_variant:Nn \tenkz_species_check:n { e, V }
@@ -1794,6 +1824,7 @@
 \int_new:N \l_tenkz_cs_defsheet_int
 \int_new:N \l_tenkz_cs_sheets_int
 \bool_new:N \l_tenkz_cs_guard_bool
+\bool_new:N \l_tenkz_cs_valid_bool
 \bool_set_true:N \l_tenkz_cs_guard_bool
 \msg_new:nnn { tenkz } { unknown-name }
   { Unknown~cell-set~name~'#1'~in~a~\token_to_str:N \tnregion \ expression. }
@@ -1823,6 +1854,7 @@
 % expression -> membership prop
 \cs_new_protected:Npn \tenkz_cs_resolve:nN #1#2
   {
+    \bool_set_true:N \l_tenkz_cs_valid_bool
     \prop_clear:N \l_tenkz_cs_result_prop
     \tl_set:Nn \l_tenkz_cs_expr_tl {#1}
     \tl_remove_all:Nn \l_tenkz_cs_expr_tl { ~ }
@@ -1884,6 +1916,7 @@
           }
           {
             \msg_error:nnn { tenkz } { unknown-name } {#1}
+            \bool_set_false:N \l_tenkz_cs_valid_bool
           }
       }
   }
