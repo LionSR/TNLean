@@ -366,7 +366,6 @@
 \newcount\tenkz@bboxuid
 \newcount\tenkz@inkuid
 \newcount\tenkz@inkowner
-\newcount\tenkz@glyphowner
 \newdimen\tenkz@glyphradius
 \newdimen\tenkz@glyphxone
 \newdimen\tenkz@glyphyone
@@ -417,22 +416,53 @@
       \tenkz@emitnodebbox{label}{\tikzlastnode}%
     \fi
   \fi}
-\def\tenkz@captureglyphgeometry{%
-  \iftenkz@bboxcapture
-    \ifnum\tenkz@pictureid>0\relax
-      \tenkz@inkowner=\tenkz@glyphowner
-      \tenkz@emitglyphgeometry{\tikzlastnode}%
+% Resolve the node's final PGF shape identity after every style addition has
+% run.  A semantic skin may be restyled from (say) circle to rectangle; the
+% event must describe that live node, not the base style's starting shape.
+% PGF does not retain `rounded corners' as part of the node-shape identity: both
+% sharp and rounded nodes are named `rectangle'.  Therefore a built-in
+% roundrect retains its declared production radius.  Later corner-radius
+% overrides are outside the audited customization contract; use a box skin for
+% a sharp rectangle rather than mutating a pill/ring's rounded-corner path.
+\def\tenkz@resolveglyphshape#1#2{%
+  \edef\tenkz@livepgfshape{\csname pgf@sh@ns@#1\endcsname}%
+  \def\tenkz@pgfcircle{circle}%
+  \def\tenkz@pgfrectangle{rectangle}%
+  \def\tenkz@pgftriangle{isosceles triangle}%
+  \def\tenkz@declaredroundrect{roundrect}%
+  \def\tenkz@declaredshape{#2}%
+  \ifx\tenkz@livepgfshape\tenkz@pgfcircle
+    \def\tenkz@glyphshape{circle}%
+    \tenkz@glyphradius=0pt
+  \else\ifx\tenkz@livepgfshape\tenkz@pgfrectangle
+    \ifx\tenkz@declaredshape\tenkz@declaredroundrect
+      \def\tenkz@glyphshape{roundrect}%
+    \else
+      \def\tenkz@glyphshape{rect}%
+      \tenkz@glyphradius=0pt
     \fi
-  \fi}
-\def\tenkz@beginglyphgeometry#1#2{%
+  \else\ifx\tenkz@livepgfshape\tenkz@pgftriangle
+    \def\tenkz@glyphshape{triangle}%
+    \tenkz@glyphradius=0pt
+  \else
+    \def\tenkz@glyphshape{unsupported}%
+    \tenkz@glyphradius=0pt
+    \PackageError{tenkz}{Audited glyph node '#1' has unsupported live shape
+      '\tenkz@livepgfshape'}{Use a circle, rectangle, rounded rectangle, or
+      isosceles triangle for a library-owned glyph.}%
+  \fi\fi\fi}
+\def\tenkz@emitglyphinkuse{%
+  \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=glyph|%
+    id=\the\tenkz@inkowner|shape=\tenkz@glyphshape}}
+\def\tenkz@captureglyphgeometry#1#2{%
   \iftenkz@bboxcapture
     \ifnum\tenkz@pictureid>0\relax
       \global\advance\tenkz@inkuid by 1\relax
-      \global\tenkz@glyphowner=\tenkz@inkuid
-      \global\tenkz@glyphradius=#2\relax
-      \xdef\tenkz@glyphshape{#1}%
-      \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=glyph|%
-        id=\the\tenkz@glyphowner|shape=#1}%
+      \tenkz@inkowner=\tenkz@inkuid
+      \tenkz@glyphradius=#2\relax
+      \tenkz@resolveglyphshape{\tikzlastnode}{#1}%
+      \tenkz@emitglyphinkuse
+      \tenkz@emitglyphgeometry{\tikzlastnode}%
     \fi
   \fi}
 \def\tenkz@emitglyphgeometry#1{%
@@ -465,8 +495,11 @@
   \endgroup}
 \def\tenkz@emitmanualglyphbbox#1{%
   \begingroup
-  \tenkz@beginglyphgeometry{rect}{0pt}%
-  \tenkz@inkowner=\tenkz@glyphowner
+  \global\advance\tenkz@inkuid by 1\relax
+  \tenkz@inkowner=\tenkz@inkuid
+  \tenkz@glyphradius=0pt
+  \tenkz@resolveglyphshape{#1}{rect}%
+  \tenkz@emitglyphinkuse
   \tenkz@emitglyphgeometry{#1}%
   \endgroup}
 \def\tenkz@emitwirebbox#1#2#3#4#5{%
@@ -495,8 +528,7 @@
     /utils/exec=\tenkz@bboxlabeluse,
     append after command={\pgfextra{\tenkz@capturelabelbbox}}},
   tenkz audited glyph/.style 2 args={
-    /utils/exec={\tenkz@beginglyphgeometry{#1}{#2}},
-    append after command={\pgfextra{\tenkz@captureglyphgeometry}}},
+    append after command={\pgfextra{\tenkz@captureglyphgeometry{#1}{#2}}}},
 }
 
 % ---------- species (the 0.6 hue contract, clause 2) ----------
