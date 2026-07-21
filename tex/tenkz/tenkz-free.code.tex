@@ -203,6 +203,8 @@
 \tl_new:N \l__tenkz_jbound_tl   % measured path + label box
 \bool_new:N \l__tenkz_jfused_bool
 \bool_new:N \l__tenkz_jdir_bool
+\bool_new:N \l__tenkz_jroute_valid_bool
+\clist_const:Nn \c__tenkz_jroutes_clist { straight, hv, vh, arc, curve }
 \pgfkeys{
   /tenkz/join/.is~family,
   /tenkz/join/route/.store~in=\l__tenkz_jroute_tl,
@@ -241,6 +243,19 @@
     \bool_set_false:N \l__tenkz_jfused_bool
     \bool_set_false:N \l__tenkz_jdir_bool
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/join}{#1} }
+    % Validate the route before any named enclosure allocation, drawing, or
+    % event emission.  \PackageError returns under nonstop recovery, so the
+    % error branch must also gate every later side effect.
+    \clist_if_in:NVTF \c__tenkz_jroutes_clist \l__tenkz_jroute_tl
+      { \bool_set_true:N \l__tenkz_jroute_valid_bool }
+      {
+        \bool_set_false:N \l__tenkz_jroute_valid_bool
+        \PackageError{tenkz}
+          {Unknown~route~'\tl_use:N \l__tenkz_jroute_tl'}
+          {Routes:~straight,~hv,~vh,~arc~(alias:~curve).}
+      }
+    \bool_if:NT \l__tenkz_jroute_valid_bool
+      {
     % type assertion when both endpoints declared types
     \prop_get:NeNT \g__tenkz_ports_prop {\the\tenkz@pictureid/#2} \l_tmpa_tl
       {
@@ -296,6 +311,7 @@
         \end{scope}
       }
     \tenkz@event{join|picture=\the\tenkz@pictureid|from=#2|to=#3|dir=\bool_if:NTF \l__tenkz_jdir_bool {forward}{none}|role=\tenkz_free_word:N \l__tenkz_jrole_tl|species=\tenkz_free_word:N \l__tenkz_jspec_tl\tl_if_empty:NF \l__tenkz_jname_tl {|name=\tl_use:N \l__tenkz_jname_tl}}
+      }
     \group_end:
   }
 

@@ -183,15 +183,50 @@ NEGATIVE = {
   \tnregion[name=R]{(2,2)}
 \end{tenkzlattice}
 """, "already defined in this"),
+    "unknown-named-join-route": (r"""
+\begin{tenkzfree}
+  \tnput[box, ports={east:virtual}]{a}{(0,0)}{A}
+  \tnput[box, ports={west:virtual}]{b}{(1,0)}{B}
+  \tnjoin[name=bad, route=sideways]{a.east}{b.west}
+\end{tenkzfree}
+""", "Unknown route 'sideways'"),
 }
 
 
-def compile_tex(engine: str, work: Path, name: str, source: str,
-                env: dict[str, str]) -> subprocess.CompletedProcess[str]:
+UNKNOWN_ROUTE_RECOVERY = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\begin{document}
+\begin{tenkzfree}
+  \tnput[box, ports={east:virtual}]{a}{(0,0)}{A}
+  \tnput[box, ports={west:virtual}]{b}{(1,0)}{B}
+  \tnjoin[name=bad, route=sideways]{a.east}{b.west}
+  \tnjoin[name=good]{a.east}{b.west}
+  \ExplSyntaxOn
+  \tenkz_enclosure_if_registered:nT {bad}
+    { \typeout{TENKZ-BAD-ROUTE-REGISTERED} }
+  \tenkz_enclosure_if_registered:nF {good}
+    { \typeout{TENKZ-GOOD-ROUTE-MISSING} }
+  \ExplSyntaxOff
+  \typeout{TENKZ-UNKNOWN-ROUTE-RECOVERED}
+\end{tenkzfree}
+\end{document}
+"""
+
+
+def compile_tex(
+    engine: str, work: Path, name: str, source: str,
+    env: dict[str, str], *, halt_on_error: bool = True,
+) -> subprocess.CompletedProcess[str]:
     tex = work / f"{name}.tex"
     tex.write_text(source, encoding="utf-8")
+    command = [engine, "-interaction=nonstopmode"]
+    if halt_on_error:
+        command.append("-halt-on-error")
+    command.append(tex.name)
     return subprocess.run(
-        [engine, "-interaction=nonstopmode", "-halt-on-error", tex.name],
+        command,
         cwd=work,
         env=env,
         text=True,
@@ -352,6 +387,38 @@ region|picture=1|lang=free|slot=selected|members=a|outline=0|name=a
                 raise AssertionError(
                     f"negative fixture {name!r} missed diagnostic {diagnostic!r}"
                 )
+
+        # TeX's nonstop recovery returns after \PackageError.  The invalid
+        # named join must still fail closed: no enclosure registry entry and
+        # no semantic join event may survive the diagnostic.
+        recovered = compile_tex(
+            engine, work, "unknown-route-recovery", UNKNOWN_ROUTE_RECOVERY,
+            env, halt_on_error=False,
+        )
+        if recovered.returncode == 0:
+            raise AssertionError("unknown route recovery compilation succeeded")
+        if "Unknown route 'sideways'" not in recovered.stdout:
+            print(recovered.stdout)
+            raise AssertionError("unknown route recovery missed its diagnostic")
+        if "TENKZ-UNKNOWN-ROUTE-RECOVERED" not in recovered.stdout:
+            print(recovered.stdout)
+            raise AssertionError("unknown route fixture did not exercise recovery")
+        if "TENKZ-BAD-ROUTE-REGISTERED" in recovered.stdout:
+            raise AssertionError("unknown route registered a named enclosure")
+        if "TENKZ-GOOD-ROUTE-MISSING" in recovered.stdout:
+            raise AssertionError("valid recovery control missed its enclosure")
+        recovery_log = work / "unknown-route-recovery.tnlog"
+        recovery_joins = [
+            line
+            for line in recovery_log.read_text(encoding="utf-8").splitlines()
+            if line.startswith("join|")
+        ]
+        if any("|name=bad" in line for line in recovery_joins):
+            raise AssertionError("unknown route emitted a semantic join event")
+        if sum("|name=good" in line for line in recovery_joins) != 1:
+            raise AssertionError(
+                f"valid recovery control emitted {recovery_joins!r}"
+            )
 
     print("PASS: measured enclosure grammar, records, and failures are stable")
     return 0
