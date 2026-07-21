@@ -75,6 +75,127 @@ def HasNoPeriodicVectors (A : MPSTensor d D) : Prop :=
     ∀ μ : ℂ, Module.End.HasEigenvalue (transferMap (d := d) (D := n) B) μ →
       ‖μ‖ = r → μ = (r : ℂ)
 
+/-- Absence of nontrivial periodic vectors passes to an isometric corner.
+
+If `C` is intertwined with `A` by an isometry `V`, then every irreducible
+corner of `C` is an irreducible corner of `A` through the composite isometry.
+The peripheral-eigenvalue conclusion for `A` therefore gives the same
+conclusion for `C`.
+
+Source: arXiv:1606.00608, lines 220--230. -/
+theorem HasNoPeriodicVectors.of_isometry_intertwine
+    {n : ℕ} {A : MPSTensor d D} {C : MPSTensor d n}
+    (hA : HasNoPeriodicVectors A)
+    (V : Matrix (Fin D) (Fin n) ℂ) (hV : Vᴴ * V = 1)
+    (hint : ∀ i : Fin d, A i * V = V * C i) :
+    HasNoPeriodicVectors C := by
+  intro m W B ρ r hW hintW hirr hρ hr hfix μ hμ hnorm
+  apply hA (V * W) B ρ r
+  · rw [Matrix.conjTranspose_mul, Matrix.mul_assoc,
+      ← Matrix.mul_assoc Vᴴ V W, hV, Matrix.one_mul, hW]
+  · intro i
+    rw [← Matrix.mul_assoc, hint i, Matrix.mul_assoc, hintW i,
+      ← Matrix.mul_assoc]
+  · exact hirr
+  · exact hρ
+  · exact hr
+  · exact hfix
+  · exact hμ
+  · exact hnorm
+
+/-- Projector closure and absence of periodic vectors descend to each block of
+a dependent block-diagonal decomposition, even when the block coordinates are
+reindexed by separate equivalences.
+
+The canonical inclusion of one dependent summand, transported back to the
+ambient coordinates, is an isometry intertwining the selected block with the
+ambient tensor on both sides.  Its range projection therefore commutes with
+every ambient letter, so projector closure passes to the compression; absence
+of periodic vectors passes through the same isometric intertwiner.
+
+Source: arXiv:1606.00608, canonical nonzero-sector decomposition at lines
+214--230. -/
+theorem projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal
+    {ι : Type*} [Finite ι] [DecidableEq ι]
+    (dim : ι → ℕ) (blockIndex : ι → Type*)
+    [(k : ι) → Finite (blockIndex k)]
+    (blockEquiv : (k : ι) → Fin (dim k) ≃ blockIndex k)
+    (A : MPSTensor d D) (B : (k : ι) → MPSTensor d (dim k))
+    (e : Fin D ≃ (k : ι) × blockIndex k)
+    (hblock : ∀ i, Matrix.reindex e e (A i) =
+      Matrix.blockDiagonal' fun k ↦
+        Matrix.reindex (blockEquiv k) (blockEquiv k) (B k i))
+    (hClosure : HasInvariantProjectorClosure A)
+    (hPer : HasNoPeriodicVectors A) (k : ι) :
+    HasInvariantProjectorClosure (B k) ∧ HasNoPeriodicVectors (B k) := by
+  classical
+  letI := Fintype.ofFinite ι
+  letI (l : ι) := Fintype.ofFinite (blockIndex l)
+  let E := Matrix.sigmaBlockInclusion blockIndex k
+  let V : Matrix (Fin D) (Fin (dim k)) ℂ :=
+    E.submatrix e (blockEquiv k)
+  have hV : Vᴴ * V = 1 := by
+    dsimp only [V]
+    rw [Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv _ _ _ e _,
+      Matrix.sigmaBlockInclusion_isometry,
+      Matrix.submatrix_one_equiv]
+  have hint : ∀ i, A i * V = V * B k i := by
+    intro i
+    let C := fun l ↦ Matrix.reindex (blockEquiv l) (blockEquiv l) (B l i)
+    have h := Matrix.blockDiagonal'_mul_sigmaBlockInclusion C k
+    have hleft : A i * V =
+        (Matrix.reindex e e (A i) * E).submatrix e (blockEquiv k) := by
+      simpa only [V, E, Matrix.reindex_apply, Matrix.submatrix_submatrix,
+        Equiv.symm_comp_self, Matrix.submatrix_id_id] using
+        (Matrix.submatrix_mul_equiv (Matrix.reindex e e (A i)) E
+          e e (blockEquiv k))
+    have hright : V * B k i =
+        (E * C k).submatrix e (blockEquiv k) := by
+      simpa only [V, E, C, Matrix.reindex_apply,
+        Matrix.submatrix_submatrix, Equiv.symm_comp_self,
+        Matrix.submatrix_id_id] using
+        (Matrix.submatrix_mul_equiv E (C k) e (blockEquiv k) (blockEquiv k))
+    rw [← hblock i] at h
+    have hpull := congrArg (fun M ↦ M.submatrix e (blockEquiv k)) h
+    exact hleft.trans (hpull.trans hright.symm)
+  have hintStar : ∀ i, Vᴴ * A i = B k i * Vᴴ := by
+    intro i
+    let C := fun l ↦ Matrix.reindex (blockEquiv l) (blockEquiv l) (B l i)
+    have h := Matrix.sigmaBlockInclusion_conjTranspose_mul_blockDiagonal' C k
+    have hleft : Vᴴ * A i =
+        (Eᴴ * Matrix.reindex e e (A i)).submatrix (blockEquiv k) e := by
+      simpa only [V, E, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+        Matrix.submatrix_submatrix, Equiv.symm_comp_self,
+        Matrix.submatrix_id_id] using
+        (Matrix.submatrix_mul_equiv Eᴴ (Matrix.reindex e e (A i))
+          (blockEquiv k) e e)
+    have hright : B k i * Vᴴ =
+        (C k * Eᴴ).submatrix (blockEquiv k) e := by
+      simpa only [V, E, C, Matrix.reindex_apply,
+        Matrix.conjTranspose_submatrix, Matrix.submatrix_submatrix,
+        Equiv.symm_comp_self, Matrix.submatrix_id_id] using
+        (Matrix.submatrix_mul_equiv (C k) Eᴴ
+          (blockEquiv k) (blockEquiv k) e)
+    rw [← hblock i] at h
+    have hpull := congrArg (fun M ↦ M.submatrix (blockEquiv k) e) h
+    exact hleft.trans (hpull.trans hright.symm)
+  have hComm : ∀ i, A i * (V * Vᴴ) = (V * Vᴴ) * A i := by
+    intro i
+    calc
+      A i * (V * Vᴴ) = (A i * V) * Vᴴ := (Matrix.mul_assoc _ _ _).symm
+      _ = (V * B k i) * Vᴴ := by rw [hint i]
+      _ = V * (B k i * Vᴴ) := Matrix.mul_assoc _ _ _
+      _ = V * (Vᴴ * A i) := by rw [hintStar i]
+      _ = (V * Vᴴ) * A i := (Matrix.mul_assoc _ _ _).symm
+  have hcompress : (fun i ↦ Vᴴ * A i * V) = B k := by
+    funext i
+    rw [Matrix.mul_assoc, hint i, ← Matrix.mul_assoc, hV, Matrix.one_mul]
+  constructor
+  · rw [← hcompress]
+    exact hasInvariantProjectorClosure_compress_of_commutes A hClosure V hV hComm
+  · exact hPer.of_isometry_intertwine V hV hint
+
 /-- The transfer map of an intertwined corner: if `A i * V = V * B i` for
 every letter, then conjugation by `V` intertwines the transfer maps,
 `E_A(V X V†) = V E_B(X) V†`.
@@ -228,8 +349,8 @@ private lemma mpv_eq_zero_of_letter_zero {n : ℕ} (B : MPSTensor d n)
   simp only [mpv, coeff, List.ofFn_succ, evalWord_cons, hB, Matrix.zero_mul,
     Matrix.trace_zero]
 
-/-- **Sufficient condition for canonical form** (arXiv:1606.00608,
-lines 253--255).
+/-- **Spectrally normalized nonzero corners with their ambient isometries**
+(arXiv:1606.00608, lines 214--230 and 253--255).
 
 If `A` satisfies the invariant-projector closure condition and has no
 nontrivial `p`-periodic vectors, then there are nonzero weights `μ k` and
@@ -240,24 +361,38 @@ vector coefficients at every positive length.  This is the canonical form
 matrix product vectors, with the source convention `∑ₖ Dₖ ≤ D` that allows
 zero blocks (eq:II_Aiplusk1, line 219).
 
+The isometries of the irreducible decomposition are retained for every
+nonzero corner. Their ranges are pairwise orthogonal, they intertwine `A` with
+the weighted normal blocks, and the sum of their corners reconstructs each
+letter of `A` exactly. The omitted orthogonal complement therefore carries
+only the zero tensor.
+
 Corners of `A` carrying the zero tensor cannot be rescaled to spectral radius
 one and are omitted from the direct sum because they vanish at every positive
 length. The positive-length convention is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`. -/
-theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure
+theorem exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
     (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
     (hPer : HasNoPeriodicVectors A) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      (∀ k, IsNormalTensor (blocks k)) ∧
-      (∀ k, μ k ≠ 0) ∧
+      (blocks : (k : Fin r) → MPSTensor d (dim k))
+      (V : (k : Fin r) → Matrix (Fin D) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
+      (∀ k, (0 : ℂ) < μ k) ∧
+      (∀ k, IsNormalTensor (blocks k)) ∧
+      (∀ k, (V k)ᴴ * V k = 1) ∧
+      (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
+      (∀ (k : Fin r) (i : Fin d), A i * V k = V k * (μ k • blocks k i)) ∧
+      (∀ (k : Fin r) (i : Fin d), (V k)ᴴ * A i =
+        (μ k • blocks k i) * (V k)ᴴ) ∧
+      (∀ (k : Fin r) (i : Fin d), μ k • blocks k i = (V k)ᴴ * A i * V k) ∧
+      (∀ i : Fin d, A i = ∑ k, V k * (μ k • blocks k i) * (V k)ᴴ) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       (∑ k, dim k) ≤ D := by
   classical
-  obtain ⟨r₀, dim₀, blocks₀, V, hpos, hiso, hsum, -, hint, -, -, hirr, hSame⟩ :=
+  obtain ⟨r₀, dim₀, blocks₀, V₀, hpos, hiso, hsum, horth, hint, hintStar,
+    hcorner, hirr, hSame⟩ :=
     exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure A hClosure
-  -- Perron--Frobenius eigenvalue and eigenvector of every nonzero corner.
   have hPF : ∀ k : Fin r₀, (∃ i, blocks₀ k i ≠ 0) →
       ∃ (ρ : Matrix (Fin (dim₀ k)) (Fin (dim₀ k)) ℂ) (t : ℝ),
         ρ.PosDef ∧ 0 < t ∧
@@ -266,15 +401,85 @@ theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorCl
     haveI : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
     exact exists_posDef_transferMap_eigenvector_of_irreducible (blocks₀ k) (hirr k) hk
   choose ρf tf hρf htf hEigf using hPF
-  -- The kept indices: corners with a nonzero letter matrix.
   let κ := {k : Fin r₀ // ∃ i, blocks₀ k i ≠ 0}
   let e : Fin (Fintype.card κ) ≃ κ := (Fintype.equivFin κ).symm
-  have hsqrt_ne : ∀ x : κ, ((Real.sqrt (tf x.1 x.2) : ℝ) : ℂ) ≠ 0 := fun x =>
-    Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr (htf x.1 x.2)).ne'
+  let μf : κ → ℂ := fun x => ((Real.sqrt (tf x.1 x.2) : ℝ) : ℂ)
+  let normalized : (x : κ) → MPSTensor d (dim₀ x.1) := fun x i =>
+    (μf x)⁻¹ • blocks₀ x.1 i
+  have hμpos : ∀ x : κ, (0 : ℂ) < μf x := by
+    intro x
+    change (0 : ℂ) < ((Real.sqrt (tf x.1 x.2) : ℝ) : ℂ)
+    exact Complex.zero_lt_real.mpr (Real.sqrt_pos.mpr (htf x.1 x.2))
+  have hμne : ∀ x : κ, μf x ≠ 0 := fun x => (hμpos x).ne'
+  have hrecover : ∀ (x : κ) (i : Fin d),
+      μf x • normalized x i = blocks₀ x.1 i := by
+    intro x i
+    simp only [normalized, smul_smul, mul_inv_cancel₀ (hμne x), one_smul]
   refine ⟨Fintype.card κ, fun j => dim₀ (e j).1,
-    fun j => ((Real.sqrt (tf (e j).1 (e j).2) : ℝ) : ℂ),
-    fun j => fun i => (((Real.sqrt (tf (e j).1 (e j).2) : ℝ) : ℂ))⁻¹ • blocks₀ (e j).1 i,
-    ?_, ?_, fun j => hsqrt_ne (e j), fun j => hpos (e j).1, ?_⟩
+    fun j => μf (e j), fun j => normalized (e j), fun j => V₀ (e j).1,
+    fun j => hpos (e j).1, fun j => hμpos (e j), ?_,
+    fun j => hiso (e j).1, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro j
+    haveI : NeZero (dim₀ (e j).1) := ⟨(hpos (e j).1).ne'⟩
+    exact isNormalTensor_invSqrt_smul_of_unique_peripheral
+      (blocks₀ (e j).1) (hirr (e j).1)
+      (ρf (e j).1 (e j).2) (tf (e j).1 (e j).2)
+      (hρf (e j).1 (e j).2) (htf (e j).1 (e j).2)
+      (hEigf (e j).1 (e j).2)
+      (fun z hz hnorm =>
+        hPer (V₀ (e j).1) (blocks₀ (e j).1)
+          (ρf (e j).1 (e j).2) (tf (e j).1 (e j).2)
+          (hiso (e j).1) (hint (e j).1) (hirr (e j).1)
+          (hρf (e j).1 (e j).2) (htf (e j).1 (e j).2)
+          (hEigf (e j).1 (e j).2) z hz hnorm)
+  · intro j l hjl
+    exact horth (e j).1 (e l).1 fun h => hjl (e.injective (Subtype.ext h))
+  · intro j i
+    rw [hrecover]
+    exact hint (e j).1 i
+  · intro j i
+    rw [hrecover]
+    exact hintStar (e j).1 i
+  · intro j i
+    rw [hrecover]
+    exact hcorner (e j).1 i
+  · intro i
+    have hfull : A i =
+        ∑ k : Fin r₀, V₀ k * blocks₀ k i * (V₀ k)ᴴ := by
+      calc
+        A i = A i * 1 := (Matrix.mul_one _).symm
+        _ = A i * ∑ k : Fin r₀, V₀ k * (V₀ k)ᴴ := by rw [hsum]
+        _ = ∑ k : Fin r₀, A i * (V₀ k * (V₀ k)ᴴ) := by
+          rw [Matrix.mul_sum]
+        _ = ∑ k : Fin r₀, V₀ k * blocks₀ k i * (V₀ k)ᴴ := by
+          refine Finset.sum_congr rfl fun k _ => ?_
+          rw [← Matrix.mul_assoc, hint k i, Matrix.mul_assoc]
+    have hkeep :
+        ∑ k ∈ Finset.univ.filter (fun k => ∃ w, blocks₀ k w ≠ 0),
+            V₀ k * blocks₀ k i * (V₀ k)ᴴ =
+          ∑ k : Fin r₀, V₀ k * blocks₀ k i * (V₀ k)ᴴ := by
+      refine Finset.sum_filter_of_ne ?_
+      intro k _ hne
+      by_contra hk
+      push Not at hk
+      exact hne (by rw [hk i, Matrix.mul_zero, Matrix.zero_mul])
+    have hsubtype :
+        ∑ k ∈ Finset.univ.filter (fun k => ∃ w, blocks₀ k w ≠ 0),
+            V₀ k * blocks₀ k i * (V₀ k)ᴴ =
+          ∑ x : κ, V₀ x.1 * blocks₀ x.1 i * (V₀ x.1)ᴴ :=
+      Finset.sum_subtype _ (by simp) _
+    calc
+      A i = ∑ k : Fin r₀, V₀ k * blocks₀ k i * (V₀ k)ᴴ := hfull
+      _ = ∑ x : κ, V₀ x.1 * blocks₀ x.1 i * (V₀ x.1)ᴴ := by
+        rw [← hkeep, hsubtype]
+      _ = ∑ j : Fin (Fintype.card κ),
+          V₀ (e j).1 * blocks₀ (e j).1 i * (V₀ (e j).1)ᴴ :=
+        (Equiv.sum_comp e
+          (fun x : κ => V₀ x.1 * blocks₀ x.1 i * (V₀ x.1)ᴴ)).symm
+      _ = ∑ j : Fin (Fintype.card κ),
+          V₀ (e j).1 * (μf (e j) • normalized (e j) i) * (V₀ (e j).1)ᴴ := by
+        refine Finset.sum_congr rfl fun j _ => ?_
+        rw [hrecover]
   · -- Positive-length matrix product vector equality.
     intro N hN σ
     have hA : mpv A σ = ∑ k : Fin r₀, mpv (blocks₀ k) σ :=
@@ -295,28 +500,19 @@ theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorCl
     rw [hA, ← hkeep, hsubtype, hequiv, mpv_toTensorFromBlocks_eq_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [mpv_smul, smul_eq_mul, ← mul_assoc, ← mul_pow,
-      mul_inv_cancel₀ (hsqrt_ne (e j)), one_pow, one_mul]
-  · -- Every kept, rescaled corner is a normal tensor.
-    intro j
-    haveI : NeZero (dim₀ (e j).1) := ⟨(hpos (e j).1).ne'⟩
-    refine isNormalTensor_invSqrt_smul_of_unique_peripheral (blocks₀ (e j).1)
-      (hirr (e j).1) (ρf (e j).1 (e j).2) (tf (e j).1 (e j).2) (hρf (e j).1 (e j).2)
-      (htf (e j).1 (e j).2) (hEigf (e j).1 (e j).2) ?_
-    intro μ hμ hnorm
-    exact hPer (V (e j).1) (blocks₀ (e j).1) (ρf (e j).1 (e j).2) (tf (e j).1 (e j).2)
-      (hiso (e j).1) (hint (e j).1) (hirr (e j).1) (hρf (e j).1 (e j).2)
-      (htf (e j).1 (e j).2) (hEigf (e j).1 (e j).2) μ hμ hnorm
+      mul_inv_cancel₀ (hμne (e j)), one_pow, one_mul]
   · -- The block dimensions sum to at most `D`.
     have hDim : ∑ k : Fin r₀, dim₀ k = D := by
       have hc : (∑ k : Fin r₀, (dim₀ k : ℂ)) = (D : ℂ) := by
         calc ∑ k : Fin r₀, (dim₀ k : ℂ)
-            = ∑ k : Fin r₀, Matrix.trace ((V k)ᴴ * V k) := by
+            = ∑ k : Fin r₀, Matrix.trace ((V₀ k)ᴴ * V₀ k) := by
               refine Finset.sum_congr rfl fun k _ => ?_
               rw [hiso k, Matrix.trace_one, Fintype.card_fin]
-          _ = ∑ k : Fin r₀, Matrix.trace (V k * (V k)ᴴ) := by
+          _ = ∑ k : Fin r₀, Matrix.trace (V₀ k * (V₀ k)ᴴ) := by
               refine Finset.sum_congr rfl fun k _ => ?_
               exact Matrix.trace_mul_comm _ _
-          _ = Matrix.trace (∑ k : Fin r₀, V k * (V k)ᴴ) := (Matrix.trace_sum _ _).symm
+          _ = Matrix.trace (∑ k : Fin r₀, V₀ k * (V₀ k)ᴴ) :=
+            (Matrix.trace_sum _ _).symm
           _ = (D : ℂ) := by rw [hsum, Matrix.trace_one, Fintype.card_fin]
       exact_mod_cast hc
     calc ∑ j : Fin (Fintype.card κ), dim₀ (e j).1
@@ -326,5 +522,27 @@ theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorCl
       _ ≤ ∑ k : Fin r₀, dim₀ k :=
           Finset.sum_le_sum_of_subset (Finset.filter_subset _ _)
       _ = D := hDim
+
+/-- **Sufficient condition for canonical form** (arXiv:1606.00608,
+lines 253--255).
+
+This is the positive-length matrix-product-vector consequence of
+`exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure`.
+It forgets the ambient isometries and the literal reconstruction. -/
+theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure
+    (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
+    (hPer : HasNoPeriodicVectors A) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      (∀ k, IsNormalTensor (blocks k)) ∧
+      (∀ k, μ k ≠ 0) ∧
+      (∀ k, 0 < dim k) ∧
+      (∑ k, dim k) ≤ D := by
+  obtain ⟨r, dim, μ, blocks, -, hdim, hμ, hNormal, -, -, -, -, -, -, hSame,
+    hsum⟩ :=
+    exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
+      A hClosure hPer
+  exact ⟨r, dim, μ, blocks, hSame, hNormal, fun k => (hμ k).ne', hdim, hsum⟩
 
 end MPSTensor

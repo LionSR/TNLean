@@ -14,6 +14,7 @@ import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 import Mathlib.LinearAlgebra.Matrix.Transvection
 import Mathlib.Topology.Instances.Matrix
+import TNLean.Algebra.DependentBlockDiagonal
 
 /-!
 # Auxiliary matrix lemmas
@@ -29,8 +30,6 @@ Extracted from various files for reusability.
   trace form of the Frobenius norm
 - `Matrix.trace_conjTranspose_mul_self_kronecker`: Hilbert--Schmidt trace-form
   multiplicativity for Kronecker products
-- `Matrix.trace_blockDiagonal'_mul`: the trace pairing with a dependent
-  block-diagonal matrix is the sum over diagonal block compressions
 - `Matrix.piProduct_mulVec_pureTensor`: a dependent product of matrices acts
   componentwise on a pure tensor
 - `Matrix.reindex_mulVec`: matrix reindexing intertwines matrix--vector action
@@ -73,38 +72,6 @@ theorem IsHermitian.star_mulVec_dotProduct {n : Type*} [Fintype n]
     {S : Matrix n n ℂ} (hS : S.IsHermitian) (x y : n → ℂ) :
     star (S *ᵥ x) ⬝ᵥ y = star x ⬝ᵥ (S *ᵥ y) := by
   rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
-
-/-! ## Dependent block-diagonal matrices -/
-
-/-- A dependent block-diagonal matrix pairs under the trace only with the
-diagonal block compressions of the other factor:
-$\operatorname{tr}((\bigoplus_i M_i)X)=\sum_i\operatorname{tr}(M_iX_{ii})$. -/
-theorem trace_blockDiagonal'_mul
-    {ι R : Type*} [Fintype ι] [DecidableEq ι]
-    {n : ι → Type*} [(i : ι) → Fintype (n i)] [Semiring R]
-    (M : (i : ι) → Matrix (n i) (n i) R)
-    (X : Matrix (Σ i, n i) (Σ i, n i) R) :
-    Matrix.trace (Matrix.blockDiagonal' M * X) =
-      ∑ i : ι, Matrix.trace
-        (M i * X.submatrix (fun a => ⟨i, a⟩) (fun a => ⟨i, a⟩)) := by
-  classical
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.submatrix_apply]
-  rw [Fintype.sum_sigma]
-  refine Finset.sum_congr rfl ?_
-  intro i _
-  refine Finset.sum_congr rfl ?_
-  intro a _
-  rw [Fintype.sum_sigma]
-  rw [Finset.sum_eq_single i]
-  · simp
-  · intro j _ hji
-    apply Finset.sum_eq_zero
-    intro b _
-    have hij : i ≠ j := fun h ↦ hji h.symm
-    rw [Matrix.blockDiagonal'_apply_ne M a b hij]
-    simp
-  · intro hi
-    exact (hi (Finset.mem_univ _)).elim
 
 /-! ## Matrix action on product vectors -/
 
