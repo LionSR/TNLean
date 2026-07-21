@@ -27,7 +27,7 @@ weighted sector sum.
 
 open scoped Matrix BigOperators ComplexOrder
 
-namespace MPOTensor
+namespace MPSTensor
 
 variable {d D : ℕ}
 
@@ -47,8 +47,14 @@ private lemma conjTranspose_mul_evalWord_of_intertwining
       exact (Matrix.mul_assoc _ _ _).symm
 
 /-- A literal reconstruction by isometric intertwined sectors gives the
-positive-length matrix product vector of their weighted block sum. -/
-private lemma sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
+positive-length matrix product vector of their weighted direct sum.
+
+This is the trace decomposition underlying the canonical form
+$A^i=\bigoplus_k \mu_k A_k^i$: the adjoint intertwining moves the closing word
+into each corner, and the isometry removes the two adjacent inclusion maps.
+
+Source: arXiv:1606.00608, eq:II_CF1 and lines 237--242. -/
+theorem sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
     {s r : ℕ} {dim : Fin r → ℕ}
     (T : MPSTensor s d) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor s (dim k))
@@ -99,6 +105,12 @@ private lemma sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
       simp only [List.length_ofFn, List.length_cons] at hlength
       simp only [List.length_cons, hlength]
 
+end MPSTensor
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
 /-- The BNT representatives in a particular grouped vertical decomposition
 form an algebraic BNT for the vertical tensor.
 
@@ -130,7 +142,7 @@ theorem isBNT_verticalTensor_of_grouping
   let C := MPSTensor.mpvPhaseClassData blocks
   have hPositive : MPSTensor.SameMPV₂Pos (verticalTensor M)
       (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks) :=
-    sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
+    MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
       (verticalTensor M) μ blocks V hiso hinter hreconstruct
   change MPSTensor.IsBNT (verticalTensor M) C.g
     (fun j => dim (C.repr j)) (fun j => blocks (C.repr j))

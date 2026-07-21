@@ -613,6 +613,28 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     periodic vector of $A$.
 \end{proof}
 
+\begin{lemma}[Closed-chain equality from an exact isometric decomposition]
+    \label{lem:same_mpv_exact_isometric_decomposition}
+    \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction}
+    \leanok
+    \uses{def:same_mpv2_pos, def:block_diagonal_tensor}
+    Suppose that isometries $V_k$ satisfy
+    \[
+      V_k^\dagger A^i=(\mu_kB_k^i)V_k^\dagger,
+      \qquad
+      A^i=\sum_k V_k(\mu_kB_k^i)V_k^\dagger.
+    \]
+    Then $A$ and $\bigoplus_k\mu_kB_k$ have the same matrix product vectors
+    at every positive length.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the first letter by the reconstruction formula.  In each summand,
+    move the remaining word through $V_k^\dagger$ using the intertwining
+    relation.  Cyclicity of trace places $V_k^\dagger V_k=1$ next to the
+    weighted block word, leaving precisely its closed-chain trace.
+\end{proof}
+
 \begin{theorem}[Sufficient condition for canonical form]
     \label{thm:projector_closure_canonical_form}
     \lean{MPSTensor.%
