@@ -37,10 +37,13 @@ tenkz dimensions, keys, or TikZ styles without opening a tenkz environment. The
 driver names these four exceptions explicitly and rejects an empty `.tnlog` from
 every other fixture, so a broken event writer cannot silently pass the corpus.
 
-`gr_t7_coset.tex` is the one included fixture whose diagram geometry differs
-from the handoff source. Its two gray action boxes move 4 mm to the right so the
-`k_x^{-1}` label clears the next box under the measured-overlap audit; the
-formula and diagram topology are unchanged.
+Two included fixtures have documented presentation-only curations.
+`gr_t7_coset.tex` moves its two gray action boxes 4 mm right so the
+`k_x^{-1}` label clears the next box under the measured-overlap audit.
+`plane_sweep1.tex` keeps its compact 0.45/0.55 region annotation visibly as
+`R`, but uses `\scriptscriptstyle` so the adopted stress probe fits the compact
+cell-corner clearance contract measured by the audit. Both formulas and diagram
+topologies are unchanged.
 
 Every standalone fixture begins with a one-line `% Regression:` header and has a
 `% Formula:` comment. Geometry-only fixtures state their geometry contract rather

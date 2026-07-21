@@ -163,14 +163,19 @@
 \tikzset{
   tenkz every picture/.style={line cap=round, line join=round},
   % glyph skins
-  tensor/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
+  tensor/.style={tenkz audited glyph={circle}{0pt},
+      draw=tenkzInk, fill=tenkzInk,
+      circle, inner sep=0pt,
       minimum size=\tenkz@dim{\tenkz@r@dotdia}, line width=\tenkz@wirewidth},
-  box tensor/.style={tenkz audited glyph, draw=tenkzInk, fill=tenkzPaper,
+  box tensor/.style={tenkz audited glyph={rect}{0pt},
+      draw=tenkzInk, fill=tenkzPaper,
       rectangle,
       inner sep=1.6pt, minimum size=\tenkz@dim{\tenkz@r@glyphbox},
       line width=\tenkz@wirewidth, text=tenkzInk},
   mpo tensor/.style={box tensor},
-  pill tensor/.style={draw=tenkzInk, fill=tenkzPaper, rectangle,
+  pill tensor/.style={tenkz audited glyph={roundrect}{2.2pt},
+      draw=tenkzInk, fill=tenkzPaper,
+      rectangle,
       rounded corners=2.2pt, inner xsep=3.2pt, inner ysep=2.2pt,
       minimum height=\tenkz@dim{\tenkz@r@glyphbox},
       line width=\tenkz@wirewidth, text=tenkzInk},
@@ -180,7 +185,10 @@
   % \tenkz@r@wireglyphcap is HALF the minimum size -- exactly the radius
   % that closes the minimal rectangle into a stadium -- which is why it is
   % not \tenkz@r@corner (the trace/hull radius, a different object).
-  on-wire matrix/.style={draw=tenkzAction, fill=tenkzPaper, rectangle,
+  on-wire matrix/.style={
+      tenkz audited glyph={roundrect}{\tenkz@dim{\tenkz@r@wireglyphcap}},
+      draw=tenkzAction,
+      fill=tenkzPaper, rectangle,
       rounded corners=\tenkz@dim{\tenkz@r@wireglyphcap},
       inner xsep=1.8pt, inner ysep=1.4pt,
       minimum size=\tenkz@dim{\tenkz@r@wireglyph},
@@ -198,7 +206,9 @@
   % apex angle 55: the flat-side height grows like 2 tan(apex/2) * text
   % width, so a narrower apex trades a slightly longer glyph for the
   % vertical clearance the sandwich genre needs across the layer gap
-  canonical tensor/.style={draw=tenkzInk, fill=tenkzPaper,
+  canonical tensor/.style={tenkz audited glyph={triangle}{0pt},
+      draw=tenkzInk,
+      fill=tenkzPaper,
       isosceles triangle, isosceles triangle apex angle=55,
       isosceles triangle stretches, inner sep=0.6pt,
       minimum width=\tenkz@dim{0.34},
@@ -208,7 +218,9 @@
   right canonical tensor/.style={canonical tensor, shape border rotate=180},
   fusion map/.style={draw=tenkzInk, fill=tenkzInk, line cap=round,
       line width=\tenkz@dim{\tenkz@r@fusionwidth}},
-  tree junction/.style={draw=tenkzInk, fill=tenkzInk, circle, inner sep=0pt,
+  tree junction/.style={tenkz audited glyph={circle}{0pt}, draw=tenkzInk,
+      fill=tenkzInk,
+      circle, inner sep=0pt,
       minimum size=\tenkz@junctionfloor},
   % A ribbon tree is a filled surface with two boundary curves, not a
   % doubled wire.  The cd renderer draws the strip fills and their two
@@ -345,10 +357,23 @@
 
 % Measured audit geometry.  Coordinates are written as integer scaled points,
 % so the event stream is independent of locale and TeX's decimal formatting.
-% Node rectangles use live TikZ anchors.  Horizontal wire rectangles use the
-% two live endpoint anchors plus the stroke's vertical half-width; both caps
-% terminate under opaque nodes, so longitudinal cap ink is not visible.
+% Labels and explicit wire nodes use live rectangles.  Core glyph nodes also
+% retain their shape: circles use live cardinal anchors, rounded rectangles
+% carry the production corner radius, and triangles use live corner anchors.
+% Typed-map wire rectangles use endpoint anchors plus the stroke's vertical
+% half-width; both caps terminate under opaque nodes, so longitudinal cap ink
+% is not visible.
 \newcount\tenkz@bboxuid
+\newcount\tenkz@inkuid
+\newcount\tenkz@inkowner
+\newcount\tenkz@glyphowner
+\newdimen\tenkz@glyphradius
+\newdimen\tenkz@glyphxone
+\newdimen\tenkz@glyphyone
+\newdimen\tenkz@glyphxtwo
+\newdimen\tenkz@glyphytwo
+\newdimen\tenkz@glyphxthree
+\newdimen\tenkz@glyphythree
 \newdimen\tenkz@bboxxmin
 \newdimen\tenkz@bboxxmax
 \newdimen\tenkz@bboxymin
@@ -359,16 +384,23 @@
 \newdimen\tenkz@bboxyb
 \newif\iftenkz@bboxcapture
 \tenkz@bboxcapturetrue
+\def\tenkz@begininkuse#1{%
+  \global\advance\tenkz@inkuid by 1\relax
+  \tenkz@inkowner=\tenkz@inkuid
+  \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=#1|%
+    id=\the\tenkz@inkowner}}
 \def\tenkz@bboxlabeluse{%
   \iftenkz@bboxcapture
     \ifnum\tenkz@pictureid>0\relax
+      \tenkz@inkowner=0\relax
       \tenkz@event{label-use|picture=\the\tenkz@pictureid}%
     \fi
   \fi}
 \def\tenkz@writebbox#1{%
   \global\advance\tenkz@bboxuid by 1\relax
   \tenkz@event{bbox|picture=\the\tenkz@pictureid|class=#1|%
-    id=\the\tenkz@bboxuid|xmin=\number\tenkz@bboxxmin|%
+    id=\the\tenkz@bboxuid|owner=\the\tenkz@inkowner|%
+    xmin=\number\tenkz@bboxxmin|%
     xmax=\number\tenkz@bboxxmax|ymin=\number\tenkz@bboxymin|%
     ymax=\number\tenkz@bboxymax}}
 \def\tenkz@emitnodebbox#1#2{%
@@ -385,12 +417,58 @@
       \tenkz@emitnodebbox{label}{\tikzlastnode}%
     \fi
   \fi}
-\def\tenkz@captureglyphbbox{%
+\def\tenkz@captureglyphgeometry{%
   \iftenkz@bboxcapture
     \ifnum\tenkz@pictureid>0\relax
-      \tenkz@emitnodebbox{glyph}{\tikzlastnode}%
+      \tenkz@inkowner=\tenkz@glyphowner
+      \tenkz@emitglyphgeometry{\tikzlastnode}%
     \fi
   \fi}
+\def\tenkz@beginglyphgeometry#1#2{%
+  \iftenkz@bboxcapture
+    \ifnum\tenkz@pictureid>0\relax
+      \global\advance\tenkz@inkuid by 1\relax
+      \global\tenkz@glyphowner=\tenkz@inkuid
+      \global\tenkz@glyphradius=#2\relax
+      \xdef\tenkz@glyphshape{#1}%
+      \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=glyph|%
+        id=\the\tenkz@glyphowner|shape=#1}%
+    \fi
+  \fi}
+\def\tenkz@emitglyphgeometry#1{%
+  \begingroup
+  \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{west}}%
+  \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#1}{east}}%
+  \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{south}}%
+  \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#1}{north}}%
+  \def\tenkz@triangle{triangle}%
+  \ifx\tenkz@glyphshape\tenkz@triangle
+    \pgfextractx{\tenkz@glyphxone}{\pgfpointanchor{#1}{apex}}%
+    \pgfextracty{\tenkz@glyphyone}{\pgfpointanchor{#1}{apex}}%
+    \pgfextractx{\tenkz@glyphxtwo}{\pgfpointanchor{#1}{left corner}}%
+    \pgfextracty{\tenkz@glyphytwo}{\pgfpointanchor{#1}{left corner}}%
+    \pgfextractx{\tenkz@glyphxthree}{\pgfpointanchor{#1}{right corner}}%
+    \pgfextracty{\tenkz@glyphythree}{\pgfpointanchor{#1}{right corner}}%
+  \else
+    \tenkz@glyphxone=0pt \tenkz@glyphyone=0pt
+    \tenkz@glyphxtwo=0pt \tenkz@glyphytwo=0pt
+    \tenkz@glyphxthree=0pt \tenkz@glyphythree=0pt
+  \fi
+  \tenkz@event{glyph-geometry|picture=\the\tenkz@pictureid|%
+    owner=\the\tenkz@inkowner|shape=\tenkz@glyphshape|%
+    xmin=\number\tenkz@bboxxmin|xmax=\number\tenkz@bboxxmax|%
+    ymin=\number\tenkz@bboxymin|ymax=\number\tenkz@bboxymax|%
+    radius=\number\tenkz@glyphradius|%
+    x1=\number\tenkz@glyphxone|y1=\number\tenkz@glyphyone|%
+    x2=\number\tenkz@glyphxtwo|y2=\number\tenkz@glyphytwo|%
+    x3=\number\tenkz@glyphxthree|y3=\number\tenkz@glyphythree}%
+  \endgroup}
+\def\tenkz@emitmanualglyphbbox#1{%
+  \begingroup
+  \tenkz@beginglyphgeometry{rect}{0pt}%
+  \tenkz@inkowner=\tenkz@glyphowner
+  \tenkz@emitglyphgeometry{#1}%
+  \endgroup}
 \def\tenkz@emitwirebbox#1#2#3#4#5{%
   \begingroup
   \pgfextractx{\tenkz@bboxxa}{\pgfpointanchor{#1}{#2}}%
@@ -411,12 +489,14 @@
   \advance\tenkz@bboxymax by  #5\relax
   \tenkz@writebbox{wire}%
   \endgroup}
+
 \tikzset{
   tenkz audited label/.style={
     /utils/exec=\tenkz@bboxlabeluse,
     append after command={\pgfextra{\tenkz@capturelabelbbox}}},
-  tenkz audited glyph/.style={
-    append after command={\pgfextra{\tenkz@captureglyphbbox}}},
+  tenkz audited glyph/.style 2 args={
+    /utils/exec={\tenkz@beginglyphgeometry{#1}{#2}},
+    append after command={\pgfextra{\tenkz@captureglyphgeometry}}},
 }
 
 % ---------- species (the 0.6 hue contract, clause 2) ----------

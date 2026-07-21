@@ -3470,40 +3470,27 @@
           }
       }
   }
-% one corner label: anchor #1, placed m inside the box corner picked by
-% (col-extreme reg #2, x-sign #3, row-extreme reg #4, y-sign #5); text #6
-% under frame=oblique a corner label flips to the OUTSIDE of the traced
-% corner: the shear foreshortens the inside-corner band to ~planerise x m,
-% too narrow for a glyph next to the site dot, and the school letters
-% sheared regions from outside anyway (RMP GS2D genre)
-\cs_new:Npn \tenkzl_flipanchor:n #1
-  {
-    \str_case:nn {#1}
-      {
-        {north~west} {south~east}
-        {north~east} {south~west}
-        {south~west} {north~east}
-        {south~east} {north~west}
-      }
-  }
+% one corner label: semantic corner #1, placed in the cell-corner pocket picked
+% by (col-extreme reg #2, x-sign #3, row-extreme reg #4, y-sign #5); text #6.
+% A cell corner lies half one lattice pitch from the extreme member site in
+% both logical directions: it is the Voronoi point maximally separated from
+% that site and any diagonal nonmember.  Map that point once with the lattice,
+% then center the upright label there.  Its paper fill may interrupt the region
+% stroke, while the node stays clear of both site glyphs.
 \cs_new_protected:Npn \tenkzl_corner_label:nnnnnn #1#2#3#4#5#6
   {
-    % the anchor POINT shears with the sheet; the label node itself stays
-    % upright in the paper frame (school convention: text never shears)
-    \tenkzl_map:nn { \tenkzl_cx:n{#2} #3 \l__tenkzl_m_dim }
-                   { \tenkzl_cy:n{#4} #5 \l__tenkzl_m_dim }
-    \tl_set:Ne \l__tenkzl_tmp_tl
-      { \bool_if:NTF \l__tenkzl_oblique_bool
-          { \tenkzl_flipanchor:n {#1} } {#1} }
-    \node[tn~label, anchor=\l__tenkzl_tmp_tl]
+    \tenkzl_map:nn
+      { \tenkzl_cx:n{#2} #3 \tenkz@r@latticepitch\tenkz@pitch / 2 }
+      { \tenkzl_cy:n{#4} #5 \tenkz@r@latticepitch\tenkz@pitch / 2 }
+    \node[tn~label, anchor=center, fill=tenkzPaper]
       (tenkzl-region-label-probe) at
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
       { $#6$ };
     \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
   }
-% place the label inside the requested corner of the boundary box (the four
-% corner anchors equal their key names; center is the box midpoint).  An
-% unrecognized `label at` draws nothing, as before.
+% place the label in the requested corner pocket of the boundary box; center
+% stays at the box midpoint.  An unrecognized `label at` draws nothing, as
+% before.
 \cs_new_protected:Npn \tenkzl_label_place:nn #1#2
   {
     \str_case:nn {#1}
