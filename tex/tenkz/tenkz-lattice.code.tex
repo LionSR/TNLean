@@ -3010,8 +3010,11 @@
       }
     \tl_if_empty:NF \l__tenkzl_path_tl
       {
-        \draw[ #1, even~odd~rule,
-               rounded~corners=\tenkz@dim{0.10} ] \l__tenkzl_path_tl ;
+        % The metric radius is the fallback.  Semantic style extensions from
+        % the execute-once environment body arrive through #1 and must remain
+        % free to replace it.
+        \draw[ rounded~corners=\tenkz@dim{0.10}, #1,
+               even~odd~rule ] \l__tenkzl_path_tl ;
       }
   }
 

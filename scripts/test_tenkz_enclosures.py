@@ -76,7 +76,7 @@ SOURCE = r"""
 % The lattice body remains a live execute-once customization layer after the
 % public region command moves to dialect dispatch.
 \begin{tenkzlattice}[rows=2, cols=3, physical=up]
-  \tikzset{region selected/.append style={rounded corners=1pt}}
+  \tikzset{region selected/.append style={rounded corners=0pt}}
   \pgfkeysifdefined{/tenkz/region/label/.@cmd}{}{%
     \errmessage{legacy lattice region family missing}}
   \tnregion[slot=selected, label={$Q$}]{(1-2,2-3)}
@@ -125,6 +125,17 @@ SOURCE = r"""
     \errmessage{outer region fill was not drawn behind the inner fill}
   \fi
 \end{tenkzfree}
+\end{document}
+"""
+
+LATTICE_STYLE_PROBE = r"""
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkzlattice}[rows=2, cols=3, physical=up]
+%s
+  \tnregion[slot=selected]{(1-2,2-3)}
+\end{tenkzlattice}
 \end{document}
 """
 
@@ -179,6 +190,10 @@ def main() -> int:
     engine = shutil.which("xelatex")
     if engine is None:
         print("FAIL: xelatex is required")
+        return 1
+    converter = shutil.which("pdftocairo")
+    if converter is None:
+        print("FAIL: pdftocairo is required")
         return 1
 
     with tempfile.TemporaryDirectory(prefix="tenkz-enclosures-") as tmp:
@@ -244,6 +259,40 @@ def main() -> int:
             "1-2,1-3,2-2,2-3"
         ):
             raise AssertionError("lattice public-region dispatch is incomplete")
+
+        # A non-empty lattice body is a live style-extension layer, not only
+        # a command-recording buffer.  Raster comparison observes the final
+        # path after every draw option has been applied, so a later hardcoded
+        # corner radius cannot silently erase the customization.
+        style_sources = {
+            "lattice-default": "",
+            "lattice-sharp": (
+                r"\tikzset{region selected/.append style={rounded corners=0pt}}"
+            ),
+        }
+        rasters: dict[str, bytes] = {}
+        for name, body in style_sources.items():
+            style_run = compile_tex(
+                engine, work, name, LATTICE_STYLE_PROBE % body, env
+            )
+            if style_run.returncode:
+                print(style_run.stdout)
+                raise AssertionError(f"lattice style probe {name!r} did not compile")
+            raster_run = subprocess.run(
+                [converter, "-png", "-r", "300", "-singlefile",
+                 f"{name}.pdf", name],
+                cwd=work,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                timeout=120,
+            )
+            if raster_run.returncode:
+                print(raster_run.stdout)
+                raise AssertionError(f"lattice style probe {name!r} did not render")
+            rasters[name] = (work / f"{name}.png").read_bytes()
+        if rasters["lattice-default"] == rasters["lattice-sharp"]:
+            raise AssertionError("lattice body style extension changed no final ink")
 
         # Synthetic logs exercise the audit independently of TeX's own
         # fail-closed grammar, including forward references and cross-kind
