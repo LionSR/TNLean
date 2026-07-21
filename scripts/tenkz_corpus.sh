@@ -6,23 +6,133 @@ REPO=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 CORPUS="$REPO/tests/tenkz"
 JOBS=${TENKZ_CORPUS_JOBS:-4}
 
-for command in timeout xelatex python3; do
-  if ! command -v "$command" >/dev/null 2>&1; then
-    echo "FAIL: tenkz corpus requires $command" >&2
-    exit 1
-  fi
-done
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "FAIL: tenkz corpus requires python3" >&2
+  exit 1
+fi
 
 if ! [[ "$JOBS" =~ ^[1-9][0-9]*$ ]]; then
   echo "FAIL: TENKZ_CORPUS_JOBS must be a positive integer (got '$JOBS')" >&2
   exit 1
 fi
 
+python3 - "$REPO" <<'PY'
+import csv
+import subprocess
+import sys
+from collections import Counter
+from pathlib import Path
+
+
+repo = Path(sys.argv[1])
+corpus = repo / "tests" / "tenkz"
+provenance = corpus / "PROVENANCE.tsv"
+
+
+def fail(message: str) -> None:
+    print(f"FAIL: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+try:
+    with provenance.open(encoding="utf-8", newline="") as stream:
+        rows = list(csv.reader(stream, dialect="excel-tab"))
+except OSError as exc:
+    fail(f"cannot read tests/tenkz/PROVENANCE.tsv: {exc}")
+
+header = ["source_file", "disposition", "adopted_path", "reason"]
+if not rows or rows[0] != header:
+    fail(f"PROVENANCE.tsv header must be exactly {header!r}")
+if any(len(row) != len(header) for row in rows[1:]):
+    bad = next(index for index, row in enumerate(rows[1:], 2)
+               if len(row) != len(header))
+    fail(f"PROVENANCE.tsv row {bad} must have exactly four tab-separated fields")
+
+records = [dict(zip(header, row)) for row in rows[1:]]
+source_names = [record["source_file"] for record in records]
+duplicates = sorted(name for name, count in Counter(source_names).items() if count > 1)
+if duplicates:
+    fail("PROVENANCE.tsv repeats source_file entries: " + ", ".join(duplicates))
+if any(not name or Path(name).name != name or not name.endswith(".tex")
+       for name in source_names):
+    fail("every PROVENANCE.tsv source_file must be a plain .tex basename")
+if any(not record["reason"].strip() for record in records):
+    fail("every PROVENANCE.tsv row needs a non-empty reason")
+
+expected_counts = {"standalone": 257, "support": 1, "excluded": 20}
+actual_counts = Counter(record["disposition"] for record in records)
+if actual_counts != expected_counts:
+    fail(
+        "PROVENANCE.tsv disposition census must be "
+        "257 standalone, 1 support, and 20 excluded; got "
+        + ", ".join(f"{key}={actual_counts.get(key, 0)}" for key in expected_counts)
+    )
+
+standalone = {
+    record["source_file"]: record["adopted_path"]
+    for record in records if record["disposition"] == "standalone"
+}
+actual_tex = {path.name for path in corpus.glob("*.tex") if path.is_file()}
+if set(standalone) != actual_tex:
+    missing = sorted(set(standalone) - actual_tex)
+    extra = sorted(actual_tex - set(standalone))
+    details = []
+    if missing:
+        details.append("missing tracked fixtures: " + ", ".join(missing))
+    if extra:
+        details.append("fixtures absent from provenance: " + ", ".join(extra))
+    fail("standalone corpus disagrees with PROVENANCE.tsv (" + "; ".join(details) + ")")
+for source_name, adopted_path in standalone.items():
+    expected_path = f"tests/tenkz/{source_name}"
+    if adopted_path != expected_path:
+        fail(f"{source_name} adopted_path must be {expected_path}, got {adopted_path!r}")
+
+support_records = [record for record in records if record["disposition"] == "support"]
+support_paths = {record["adopted_path"] for record in support_records}
+actual_support = {
+    path.relative_to(repo).as_posix()
+    for path in corpus.glob("*.inc") if path.is_file()
+}
+if support_paths != actual_support:
+    fail(
+        "support include census disagrees with PROVENANCE.tsv: expected "
+        f"{sorted(support_paths)!r}, found {sorted(actual_support)!r}"
+    )
+if any(not path.startswith("tests/tenkz/") or not path.endswith(".inc")
+       for path in support_paths):
+    fail("support adopted_path must name a tests/tenkz/*.inc file")
+if any(record["adopted_path"] != "-" for record in records
+       if record["disposition"] == "excluded"):
+    fail("excluded PROVENANCE.tsv rows must use '-' as adopted_path")
+
+tracked = subprocess.run(
+    ["git", "-C", str(repo), "ls-files", "--", "tests/tenkz"],
+    check=False,
+    text=True,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+)
+if tracked.returncode != 0:
+    fail("cannot verify tracked corpus files with git: " + tracked.stderr.strip())
+tracked_fixtures = {
+    line for line in tracked.stdout.splitlines()
+    if line.endswith((".tex", ".inc"))
+}
+actual_fixtures = {
+    f"tests/tenkz/{name}" for name in actual_tex
+} | actual_support
+if tracked_fixtures != actual_fixtures:
+    missing = sorted(actual_fixtures - tracked_fixtures)
+    stale = sorted(tracked_fixtures - actual_fixtures)
+    details = []
+    if missing:
+        details.append("untracked fixtures: " + ", ".join(missing))
+    if stale:
+        details.append("tracked fixtures missing on disk: " + ", ".join(stale))
+    fail("git fixture census mismatch (" + "; ".join(details) + ")")
+PY
+
 source_count=$(find "$CORPUS" -maxdepth 1 -type f -name '*.tex' | wc -l | tr -d ' ')
-if [[ "$source_count" -eq 0 ]]; then
-  echo "FAIL: no standalone corpus files found in $CORPUS" >&2
-  exit 1
-fi
 
 metadata_failed=0
 while IFS= read -r source; do
@@ -39,6 +149,18 @@ done < <(find "$CORPUS" -maxdepth 1 -type f -name '*.tex' | LC_ALL=C sort)
 if [[ "$metadata_failed" -ne 0 ]]; then
   exit 1
 fi
+
+if [[ "${TENKZ_CORPUS_VALIDATE_ONLY:-0}" == 1 ]]; then
+  echo "PASS: validated provenance and metadata for $source_count standalone tenkz corpus files"
+  exit 0
+fi
+
+for command in timeout xelatex; do
+  if ! command -v "$command" >/dev/null 2>&1; then
+    echo "FAIL: tenkz corpus requires $command" >&2
+    exit 1
+  fi
+done
 
 # These package-internal probes intentionally open the tenkz event log without
 # creating a tenkz picture.  Keep the exception explicit: every other fixture
