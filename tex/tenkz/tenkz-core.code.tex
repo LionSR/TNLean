@@ -313,8 +313,8 @@
   % `label/.style` would clobber TikZ's built-in /tikz/label key
   % document-wide, silently swallowing `label=above:$x$` on every node of
   % every picture that merely loads tenkz.
-  tn label/.style={tenkz audited label, shape=rectangle, text=tenkzInk,
-      fill=tenkzPaper, inner sep=1pt, font=\scriptsize},
+  tn label/.style={tenkz audited label, shape=rectangle, rounded corners=0pt,
+      text=tenkzInk, fill=tenkzPaper, inner sep=1pt, font=\scriptsize},
   cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
       -{Straight Barb[length=3.4pt]},
       shorten <=3.5pt, shorten >=3.5pt},
@@ -357,18 +357,20 @@
 
 % Measured audit geometry.  Coordinates are written as integer scaled points,
 % so the event stream is independent of locale and TeX's decimal formatting.
-% Labels use visible live rectangles.  Core glyph nodes retain their visible
-% filled shape after outer-separation removal: circles use live cardinal
+% Labels use visible live rectangles or sharp round-stroked rectangles.  Core
+% glyph nodes retain their visible filled shape after outer-separation removal:
+% circles use live cardinal
 % anchors, rounded rectangles carry the final stroke-expanded corner radius,
 % and triangles use live centerline corners plus an explicit half-stroke.
-% Typed-map wire rectangles use endpoint anchors plus the stroke's vertical
-% half-width; both caps terminate under opaque nodes, so longitudinal cap ink
-% is not visible.
+% Typed-map wire geometry is the endpoint-anchor rectangle, expanded by the
+% stroke's vertical half-width, minus the exact opaque label support.  Both
+% caps terminate under opaque nodes, so longitudinal cap ink is not visible.
 \newcount\tenkz@bboxuid
 \newcount\tenkz@inkuid
 \newcount\tenkz@inkowner
 \newcount\tenkz@glyphsnapuid
 \newdimen\tenkz@glyphradius
+\newdimen\tenkz@labelradius
 \newdimen\tenkz@glyphradiusx
 \newdimen\tenkz@glyphradiusy
 \newdimen\tenkz@glyphouterxsep
@@ -403,18 +405,27 @@
 % inherited scopes and final node options are observed at the real path use.
 \def\tenkz@empty{}
 \def\tenkz@livejoin{miter}
+\def\tenkz@livecap{butt}
 \def\tenkz@livedash{}
 \def\tenkz@livestrokeopacity{1}
 \def\tenkz@livefillopacity{1}
+\def\tenkz@liveblendmode{normal}
 \let\tenkz@sys@miterjoin\pgfsys@miterjoin
 \let\tenkz@sys@roundjoin\pgfsys@roundjoin
 \let\tenkz@sys@beveljoin\pgfsys@beveljoin
+\let\tenkz@sys@buttcap\pgfsys@buttcap
+\let\tenkz@sys@roundcap\pgfsys@roundcap
+\let\tenkz@sys@rectcap\pgfsys@rectcap
 \let\tenkz@sys@setdash\pgfsys@setdash
 \let\tenkz@sys@strokeopacity\pgfsys@stroke@opacity
 \let\tenkz@sys@fillopacity\pgfsys@fill@opacity
+\let\tenkz@sys@blendmode\pgfsys@blend@mode
 \def\pgfsys@miterjoin{\def\tenkz@livejoin{miter}\tenkz@sys@miterjoin}
 \def\pgfsys@roundjoin{\def\tenkz@livejoin{round}\tenkz@sys@roundjoin}
 \def\pgfsys@beveljoin{\def\tenkz@livejoin{bevel}\tenkz@sys@beveljoin}
+\def\pgfsys@buttcap{\def\tenkz@livecap{butt}\tenkz@sys@buttcap}
+\def\pgfsys@roundcap{\def\tenkz@livecap{round}\tenkz@sys@roundcap}
+\def\pgfsys@rectcap{\def\tenkz@livecap{rect}\tenkz@sys@rectcap}
 \def\pgfsys@setdash#1#2{%
   \edef\tenkz@livedash{#1}%
   \tenkz@sys@setdash{#1}{#2}}
@@ -424,6 +435,9 @@
 \def\pgfsys@fill@opacity#1{%
   \edef\tenkz@livefillopacity{#1}%
   \tenkz@sys@fillopacity{#1}}
+\def\pgfsys@blend@mode#1{%
+  \edef\tenkz@liveblendmode{#1}%
+  \tenkz@sys@blendmode{#1}}
 % Node options can be inherited by nested pictures.  Reset the local claimant
 % at the start of every node; an audited installer below then claims only that
 % node, and the surrounding claimant is restored when the node group closes.
@@ -450,6 +464,13 @@
     xmin=\number\tenkz@bboxxmin|%
     xmax=\number\tenkz@bboxxmax|ymin=\number\tenkz@bboxymin|%
     ymax=\number\tenkz@bboxymax}}
+\def\tenkz@writelabelbbox{%
+  \global\advance\tenkz@bboxuid by 1\relax
+  \tenkz@event{bbox|picture=\the\tenkz@pictureid|class=label|%
+    id=\the\tenkz@bboxuid|owner=\the\tenkz@inkowner|%
+    xmin=\number\tenkz@bboxxmin|xmax=\number\tenkz@bboxxmax|%
+    ymin=\number\tenkz@bboxymin|ymax=\number\tenkz@bboxymax|%
+    shape=\tenkz@labelshape|radius=\number\tenkz@labelradius}}
 \def\tenkz@checklinear#1#2#3#4#5#6{%
   \tenkz@identitylineartrue
   \pgf@xa=#1pt\relax
@@ -492,12 +513,18 @@
     \pgf@y=\tenkz@bboxymax \advance\pgf@y by -\tenkz@bboxya
     \expandafter\xdef\csname tenkz@labelymax@\tenkz@labelgeometrykey
       \endcsname{\the\pgf@y}%
+    \expandafter\xdef\csname tenkz@labelshape@\tenkz@labelgeometrykey
+      \endcsname{\tenkz@labelshape}%
+    \expandafter\xdef\csname tenkz@labelradius@\tenkz@labelgeometrykey
+      \endcsname{\the\tenkz@labelradius}%
   \fi}
 \def\tenkz@cleanupstoredlabelgeometry#1{%
   \global\expandafter\let\csname tenkz@labelxmin@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@labelxmax@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@labelymin@#1\endcsname\relax
-  \global\expandafter\let\csname tenkz@labelymax@#1\endcsname\relax}
+  \global\expandafter\let\csname tenkz@labelymax@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelshape@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelradius@#1\endcsname\relax}
 \def\tenkz@emitstoredlabelbbox#1#2{%
   \begingroup
   \tenkz@requireidentitylinear{#1}{label}%
@@ -514,7 +541,9 @@
     \advance\tenkz@bboxxmax by \tenkz@bboxxa
     \advance\tenkz@bboxymin by \tenkz@bboxya
     \advance\tenkz@bboxymax by \tenkz@bboxya
-    \tenkz@writebbox{label}%
+    \edef\tenkz@labelshape{\csname tenkz@labelshape@#2\endcsname}%
+    \tenkz@labelradius=\csname tenkz@labelradius@#2\endcsname\relax
+    \tenkz@writelabelbbox
   \fi
   \fi
   \endgroup}
@@ -783,6 +812,8 @@
       {Audited labels require an opaque rectangular background fill.}%
   \or\PackageError{tenkz}{Audited #2 node '#3' has zero text opacity}%
       {Use positive text opacity for audited labels.}%
+  \or\PackageError{tenkz}{Audited #2 node '#3' has a negative live half-stroke}%
+      {Use a nonnegative line width for audited labels.}%
   \else\PackageError{tenkz}{Audited #2 node '#3' has invalid visible state}%
       {Use an ordinary filled, optionally round-stroked audited node.}%
   \fi}
@@ -790,7 +821,7 @@
   \tenkz@checkrequiredlastauditowner{#1}%
   \iftenkz@auditownermatch
     \expandafter\ifx\csname tenkz@invalid@#1\endcsname\relax
-      \tenkz@cleanupvisiblesnapshot{#1}%
+      \tenkz@cleanupglyphsnapshot{#1}%
       \PackageError{tenkz}{Audited label node '\tikzlastnode' has no captured path state}%
         {The node did not run its owned PGF path callback.}%
     \else
@@ -823,11 +854,23 @@
     \fi
   \fi
   \ifnum\tenkz@visibleinvalid=0\relax
+    \ifnum\csname tenkz@draw@#1\endcsname=1\relax
+      \pgf@xa=\csname tenkz@stroke@#1\endcsname\relax
+      \ifdim\pgf@xa<0pt
+        \tenkz@setinvalid{#1}{15}%
+        \edef\tenkz@visibleinvalid{15}%
+      \fi
+    \fi
+  \fi
+  \ifnum\tenkz@visibleinvalid=0\relax
     \ifnum\tenkz@pictureid>0\relax
       \begingroup
       \tenkz@requireidentitylinear{\tikzlastnode}{label}%
       \tenkz@requirelabelrectangle{\tikzlastnode}%
       \iftenkz@identitylinear
+      \iftenkz@labelrectangle
+        \tenkz@readlabelcorners{#1}%
+      \fi
       \iftenkz@labelrectangle
         \tenkz@glyphouterxsep=\csname tenkz@outerx@#1\endcsname\relax
         \tenkz@glyphouterysep=\csname tenkz@outery@#1\endcsname\relax
@@ -844,17 +887,24 @@
         \advance\tenkz@bboxxmax by \tenkz@glyphhalfstroke
         \advance\tenkz@bboxymin by -\tenkz@glyphhalfstroke
         \advance\tenkz@bboxymax by \tenkz@glyphhalfstroke
+        \ifdim\tenkz@glyphhalfstroke>0pt
+          \def\tenkz@labelshape{roundrect}%
+          \tenkz@labelradius=\tenkz@glyphhalfstroke
+        \else
+          \def\tenkz@labelshape{rect}%
+          \tenkz@labelradius=0pt
+        \fi
         \tenkz@storelabelgeometry
         \iftenkz@bboxcapture
-          \tenkz@writebbox{label}%
+          \tenkz@writelabelbbox
         \fi
       \fi
       \fi
       \endgroup
     \fi
-    \tenkz@cleanupvisiblesnapshot{#1}%
+    \tenkz@cleanupglyphsnapshot{#1}%
   \else
-    \tenkz@cleanupvisiblesnapshot{#1}%
+    \tenkz@cleanupglyphsnapshot{#1}%
     \tenkz@visiblestateerror{\tenkz@visibleinvalid}{label}{\tikzlastnode}%
   \fi}
 \def\tenkz@snapshotvisible#1{%
@@ -922,6 +972,23 @@
   \else
     \tenkz@glyphradius=0pt
   \fi}
+\def\tenkz@readlabelcorners#1{%
+  \edef\tenkz@glypharcflag{\csname tenkz@glypharcflag@#1\endcsname}%
+  \ifnum\tenkz@glypharcflag=1\relax
+    \edef\tenkz@glypharcs{\csname tenkz@glypharc@#1\endcsname}%
+    \expandafter\tenkz@setglypharcaux\tenkz@glypharcs
+    \ifdim\tenkz@glyphradiusx=0pt\relax
+      \ifdim\tenkz@glyphradiusy=0pt\relax\else
+        \tenkz@rejectlabelcorners
+      \fi
+    \else
+      \tenkz@rejectlabelcorners
+    \fi
+  \fi}
+\def\tenkz@rejectlabelcorners{%
+  \tenkz@labelrectanglefalse
+  \PackageError{tenkz}{Audited label node '\tikzlastnode' has rounded corners}%
+    {Use a sharp rectangular fill; a round line join may round only its stroke.}}
 
 % PGF's public triangle corner anchors include `outer sep'.  These private
 % audit anchors use the shape's saved, pre-separation vertices instead; the
@@ -1146,7 +1213,7 @@
     \edef\tenkz@installlabelsnapshot{%
       \noexpand\tikzset{%
         execute at end node={%
-          \noexpand\tenkz@snapshotvisible{\tenkz@glyphsnaptoken}},%
+          \noexpand\tenkz@snapshotglyphstate{\tenkz@glyphsnaptoken}},%
         append after command={\noexpand\pgfextra{%
           \noexpand\tenkz@capturelabelbbox{\tenkz@glyphsnaptoken}}}}}%
     \tenkz@installlabelsnapshot
