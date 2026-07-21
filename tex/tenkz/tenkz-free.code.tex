@@ -2,9 +2,9 @@
 % diagrams (MERA, lassos, star tensors).  The only tier with runtime
 % port-type assertions: the grid languages are type-safe by construction.
 %
-% Phase-0 scope: \tnput places any L1 glyph with typed anchors recorded in
-% the port registry; \tnjoin draws a typed connection (straight, orthogonal,
-% or curved) and asserts endpoint types match.
+% \tnput places any L1 glyph with typed anchors recorded in the port registry;
+% \tnjoin draws a typed connection and asserts endpoint types match; \tnregion
+% encloses named atoms, named joins, or earlier named regions.
 
 \ExplSyntaxOn
 
@@ -18,6 +18,7 @@
     \check@mathfonts
     \begin{tikzpicture}[tenkz~every~picture,
       baseline={(0pt,\dim_eval:n{-\fontdimen22\textfont2})}]
+      \pgfsetlayers{background,main}
   }
   { \end{tikzpicture} }
 
@@ -31,7 +32,10 @@
 \tl_new:N \l__tenkz_flpos_tl
 \tl_new:N \l__tenkz_frole_tl     % \tnput role word (empty = none)
 \tl_new:N \l__tenkz_fspec_tl     % \tnput species name (empty = none)
+\bool_new:N \l__tenkz_fcommit_bool % semantic name allocation succeeded
+\bool_new:N \l__tenkz_fkeys_valid_bool
 \tl_new:N \l__tenkz_frolesty_tl  % resolved role/species style (or empty)
+\tl_new:N \l__tenkz_fbound_tl    % measured glyph + external-label box
 \pgfkeys{
   /tenkz/put/.is~family,
   /tenkz/put/dot/.code={\tl_set:Nn \l__tenkz_fshape_tl {dot}},
@@ -51,8 +55,17 @@
   /tenkz/put/role/marked/.code={\tl_set:Nn \l__tenkz_frole_tl {marked}},
   /tenkz/put/role/extra/.code={\tl_set:Nn \l__tenkz_frole_tl {extra}},
   /tenkz/put/role/passive/.code={\tl_set:Nn \l__tenkz_frole_tl {passive}},
-  /tenkz/put/species/.code={\tenkz_species_check:n{#1}
-      \tl_set:Nn \l__tenkz_fspec_tl {#1}},
+  /tenkz/put/role/.unknown/.code={
+      \bool_set_false:N \l__tenkz_fkeys_valid_bool
+      \PackageError{tenkz}{Choice~'\pgfkeys@was@choice'~unknown~in~put~role}
+        {Use~operator,~marked,~extra,~or~passive.}},
+  /tenkz/put/species/.code={
+      \tenkz_species_if_declared:nTF {#1}
+        { \tl_set:Nn \l__tenkz_fspec_tl {#1} }
+        {
+          \bool_set_false:N \l__tenkz_fkeys_valid_bool
+          \msg_error:nnn { tenkz } { unknown-species } {#1}
+        }},
   % label pos = north|south|east|west: which side of a BEAD carries its
   % external label (default south, the historical band).  A vertical or
   % rotated chain sends a wire through the south band at every dot
@@ -65,7 +78,18 @@
   /tenkz/put/label~pos/south/.code={\tl_set:Nn \l__tenkz_flpos_tl {south}},
   /tenkz/put/label~pos/east/.code ={\tl_set:Nn \l__tenkz_flpos_tl {east}},
   /tenkz/put/label~pos/west/.code ={\tl_set:Nn \l__tenkz_flpos_tl {west}},
+  /tenkz/put/label~pos/.unknown/.code={
+      \bool_set_false:N \l__tenkz_fkeys_valid_bool
+      \PackageError{tenkz}
+        {Choice~'\pgfkeys@was@choice'~unknown~in~put~label~pos}
+        {Use~north,~south,~east,~or~west.}},
 }
+\pgfkeysdef{/tenkz/put/.unknown}
+  {
+    \bool_set_false:N \l__tenkz_fkeys_valid_bool
+    \PackageError{tenkz}{Unknown~put~key~'\pgfkeyscurrentname'}
+      {Check~the~\token_to_str:N \tnput~option~spelling.}
+  }
 
 % the dot label at compass side #1: label node one clearance band beyond
 % the bead's #1 anchor, anchored on the opposite side so the text extends
@@ -110,6 +134,27 @@
 \cs_new:Npn \tenkz_free_word:N #1
   { \tl_if_empty:NTF #1 {none} { \tl_use:N #1 } }
 
+\tl_new:N \l__tenkz_fportitem_tl
+\cs_new_protected:Npn \tenkz_free_ports_validate:
+  {
+    \tl_if_empty:NF \l__tenkz_fports_tl
+      {
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_fports_tl
+          {
+            \tl_set:Ne \l__tenkz_fportitem_tl { \tl_to_str:n {##1} }
+            \regex_match:nVF
+              { \A [^:]+ : ( virtual | physical ) \Z }
+              \l__tenkz_fportitem_tl
+              {
+                \bool_set_false:N \l__tenkz_fkeys_valid_bool
+                \PackageError{tenkz}
+                  {Malformed~port~declaration~'\tl_use:N \l__tenkz_fportitem_tl'}
+                  {Use~anchor:virtual~or~anchor:physical.}
+              }
+          }
+      }
+  }
+
 \NewDocumentCommand \tnput { O{} m m m }
   {
     \group_begin:
@@ -120,7 +165,28 @@
     \tl_clear:N \l__tenkz_frole_tl
     \tl_clear:N \l__tenkz_fspec_tl
     \tl_set:Nn \l__tenkz_flpos_tl {south}
+    \bool_set_true:N \l__tenkz_fkeys_valid_bool
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/put}{#1} }
+    % Validate the whole typed-port list before semantic-name allocation or
+    % glyph ink.  The delimiter parser below is intentionally tiny and may
+    % only receive the closed anchor:(virtual|physical) grammar.
+    \tenkz_free_ports_validate:
+    \bool_set_false:N \l__tenkz_fcommit_bool
+    \tl_if_blank:nTF {#2}
+      {
+        \bool_set_false:N \l__tenkz_fkeys_valid_bool
+        \PackageError{tenkz}{A~free~atom~name~must~not~be~empty}
+          {Give~the~atom~a~unique~semantic~name.}
+      }
+      { }
+    \bool_if:NT \l__tenkz_fkeys_valid_bool
+      {
+        \tenkz_enclosure_allocate:nNTF {#2} \l__tenkz_fbound_tl
+          { \bool_set_true:N \l__tenkz_fcommit_bool }
+          { }
+      }
+    \bool_if:NT \l__tenkz_fcommit_bool
+      {
     % the role/species style rides its own literal option slot (an
     % empty slot is an inert trailing option); beads resolve through
     % the tensor family, inscribed-label skins through outline
@@ -132,28 +198,35 @@
     % every inscribed label carries \tenkz@glyphstrut: mixed labels
     % (descenders, superscripts) must share one glyph height (the core
     % strut contract; free has no strut-clearing skins)
-    \str_case:Vn \l__tenkz_fshape_tl
-      {
-        {dot}  { \node[tensor, \l__tenkz_frolesty_tl] (#2) at #3 {};
-                 \tl_if_blank:nF {#4}
-                   { \exp_args:NV \tenkz_free_dot_label:nnn
-                       \l__tenkz_flpos_tl {#2} {#4} } }
-        {box}  { \node[box~tensor, \l__tenkz_frolesty_tl] (#2) at #3
-                   { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
-        {pill} { \node[pill~tensor, \l__tenkz_frolesty_tl] (#2) at #3
-                   { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
-        {mpo}  { \node[mpo~tensor, \l__tenkz_frolesty_tl] (#2) at #3
-                   { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
-        {ring} { \node[on-wire~matrix, \l__tenkz_frolesty_tl] (#2) at #3
-                   { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
-        {boundary}
-          {
-            \coordinate (#2) at #3;
-            \tl_if_blank:nF {#4}
-              { \exp_args:NV \tenkz_free_dot_label:nnn
-                  \l__tenkz_flpos_tl {#2} {#4} }
-          }
-      }
+    \begin{scope}[local~bounding~box=\l__tenkz_fbound_tl]
+      \str_case:Vn \l__tenkz_fshape_tl
+        {
+          {dot}  { \node[tensor, \l__tenkz_frolesty_tl] (#2) at #3 {};
+                   \tl_if_blank:nF {#4}
+                     { \exp_args:NV \tenkz_free_dot_label:nnn
+                         \l__tenkz_flpos_tl {#2} {#4} } }
+          {box}  { \node[box~tensor, \l__tenkz_frolesty_tl] (#2) at #3
+                     { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
+          {pill} { \node[pill~tensor, \l__tenkz_frolesty_tl] (#2) at #3
+                     { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
+          {mpo}  { \node[mpo~tensor, \l__tenkz_frolesty_tl] (#2) at #3
+                     { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
+          {ring} { \node[on-wire~matrix, \l__tenkz_frolesty_tl] (#2) at #3
+                     { $\tenkz@labelsize \tenkz@glyphstrut #4$ }; }
+          {boundary}
+            {
+              \coordinate (#2) at #3;
+              % A coordinate alone does not establish a usable local bounding
+              % box.  Add a zero-size, zero-ink path node so a named boundary
+              % endpoint remains a valid measured region member.
+              \path (#2) node[inner~sep=0pt, outer~sep=0pt,
+                minimum~size=0pt] {};
+              \tl_if_blank:nF {#4}
+                { \exp_args:NV \tenkz_free_dot_label:nnn
+                    \l__tenkz_flpos_tl {#2} {#4} }
+            }
+        }
+    \end{scope}
     % register declared port types:  ports={east:virtual, north:physical}
     % (str-normalized so the document's catcode-12 colon parses)
     \tl_if_empty:NF \l__tenkz_fports_tl
@@ -162,6 +235,7 @@
           { \exp_args:Ne \tenkz_free_port:n { \tl_to_str:n { #2 . ##1 } } }
       }
     \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|kind=\tl_use:N \l__tenkz_fshape_tl|role=\tenkz_free_word:N \l__tenkz_frole_tl|species=\tenkz_free_word:N \l__tenkz_fspec_tl}
+      }
     \group_end:
   }
 \use:e
@@ -189,8 +263,16 @@
 \tl_new:N \l__tenkz_jrole_tl    % join role word (empty = none)
 \tl_new:N \l__tenkz_jspec_tl    % join species name (empty = none)
 \tl_new:N \l__tenkz_jrolesty_tl % resolved role/species bond style (or empty)
+\tl_new:N \l__tenkz_jname_tl    % optional enclosure-visible join name
+\tl_new:N \l__tenkz_jbound_tl   % measured path + label box
 \bool_new:N \l__tenkz_jfused_bool
 \bool_new:N \l__tenkz_jdir_bool
+\bool_new:N \l__tenkz_jroute_valid_bool
+\bool_new:N \l__tenkz_jcommit_bool
+\bool_new:N \l__tenkz_jkeys_valid_bool
+\seq_new:N \l__tenkz_jendpoint_parts_seq
+\tl_new:N \l__tenkz_jendpoint_name_tl
+\clist_const:Nn \c__tenkz_jroutes_clist { straight, hv, vh, arc, curve }
 \pgfkeys{
   /tenkz/join/.is~family,
   /tenkz/join/route/.store~in=\l__tenkz_jroute_tl,
@@ -203,6 +285,7 @@
   /tenkz/join/dir/.code={\bool_set_true:N \l__tenkz_jdir_bool},
   /tenkz/join/out/.store~in=\l__tenkz_jout_tl,
   /tenkz/join/in/.store~in=\l__tenkz_jin_tl,
+  /tenkz/join/name/.store~in=\l__tenkz_jname_tl,
   % role= / species=: the semantic hue of the WIRE (worklist item 1,
   % the operator-hued \tnjoin, as a grammar instance).  Resolution is
   % pure style indirection through the derived bond styles of
@@ -212,9 +295,55 @@
   /tenkz/join/role/marked/.code={\tl_set:Nn \l__tenkz_jrole_tl {marked}},
   /tenkz/join/role/extra/.code={\tl_set:Nn \l__tenkz_jrole_tl {extra}},
   /tenkz/join/role/passive/.code={\tl_set:Nn \l__tenkz_jrole_tl {passive}},
-  /tenkz/join/species/.code={\tenkz_species_check:n{#1}
-      \tl_set:Nn \l__tenkz_jspec_tl {#1}},
+  /tenkz/join/role/.unknown/.code={
+      \bool_set_false:N \l__tenkz_jkeys_valid_bool
+      \PackageError{tenkz}{Choice~'\pgfkeys@was@choice'~unknown~in~join~role}
+        {Use~operator,~marked,~extra,~or~passive.}},
+  /tenkz/join/species/.code={
+      \tenkz_species_if_declared:nTF {#1}
+        { \tl_set:Nn \l__tenkz_jspec_tl {#1} }
+        {
+          \bool_set_false:N \l__tenkz_jkeys_valid_bool
+          \msg_error:nnn { tenkz } { unknown-species } {#1}
+        }},
 }
+\pgfkeysdef{/tenkz/join/.unknown}
+  {
+    \bool_set_false:N \l__tenkz_jkeys_valid_bool
+    \PackageError{tenkz}{Unknown~join~key~'\pgfkeyscurrentname'}
+      {Check~the~\token_to_str:N \tnjoin~option~spelling.}
+  }
+
+\cs_new_protected:Npn \tenkz_free_join_endpoint:n #1
+  {
+    % Plain semantic endpoints belong to the free-tier registry and can be
+    % rejected before PGF sees them.  Coordinate calculus such as
+    % `$(a)+(0,5mm)$' is deliberately open TikZ syntax: it is not a semantic
+    % name and must pass through to PGF unchanged.
+    \regex_match:nnT
+      { \A [-A-Za-z0-9:_]+ ( \. [^.()$,+]+ )? \Z }
+      {#1}
+      {
+        \seq_set_split:Nnn \l__tenkz_jendpoint_parts_seq {.} {#1}
+        \tl_set:Ne \l__tenkz_jendpoint_name_tl
+          { \seq_item:Nn \l__tenkz_jendpoint_parts_seq {1} }
+        \tenkz_enclosure_if_registered:VF \l__tenkz_jendpoint_name_tl
+          {
+            % TikZ coordinates and nodes declared directly in the environment
+            % are also legitimate endpoints.  PGF records both by defining
+            % pgf@sh@ns@<name>; only a simple name absent from both registries
+            % is an endpoint error.  More complex coordinate calculus remains
+            % open TikZ syntax and never enters this branch.
+            \cs_if_exist:cF
+              { pgf@sh@ns@\tl_use:N \l__tenkz_jendpoint_name_tl }
+              {
+                \bool_set_false:N \l__tenkz_jcommit_bool
+                \PackageError{tenkz}{Unknown~join~endpoint~'#1'}
+                  {Declare~the~named~atom~or~TikZ~coordinate~before~joining.}
+              }
+          }
+      }
+  }
 
 \NewDocumentCommand \tnjoin { O{} m m }
   {
@@ -224,9 +353,46 @@
     \tl_clear:N \l__tenkz_jout_tl \tl_clear:N \l__tenkz_jin_tl
     \tl_clear:N \l__tenkz_jrole_tl
     \tl_clear:N \l__tenkz_jspec_tl
+    \tl_clear:N \l__tenkz_jname_tl
     \bool_set_false:N \l__tenkz_jfused_bool
     \bool_set_false:N \l__tenkz_jdir_bool
+    \bool_set_true:N \l__tenkz_jkeys_valid_bool
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/join}{#1} }
+    % Validate the route before any named enclosure allocation, drawing, or
+    % event emission.  \PackageError returns under nonstop recovery, so the
+    % error branch must also gate every later side effect.
+    \clist_if_in:NVTF \c__tenkz_jroutes_clist \l__tenkz_jroute_tl
+      { \bool_set_true:N \l__tenkz_jroute_valid_bool }
+      {
+        \bool_set_false:N \l__tenkz_jroute_valid_bool
+        \PackageError{tenkz}
+          {Unknown~route~'\tl_use:N \l__tenkz_jroute_tl'}
+          {Routes:~straight,~hv,~vh,~arc~(alias:~curve).}
+      }
+    \bool_if:NF \l__tenkz_jkeys_valid_bool
+      { \bool_set_false:N \l__tenkz_jroute_valid_bool }
+    \bool_if:NT \l__tenkz_jroute_valid_bool
+      {
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l__tenkz_jroute_tl {arc} }
+          { \str_if_eq_p:Vn \l__tenkz_jroute_tl {curve} }
+          {
+            \bool_lazy_or:nnT
+              { \tl_if_empty_p:N \l__tenkz_jout_tl }
+              { \tl_if_empty_p:N \l__tenkz_jin_tl }
+              {
+                \bool_set_false:N \l__tenkz_jroute_valid_bool
+                \PackageError{tenkz}
+                  {Arc~route~requires~both~out=~and~in=}
+                  {Give~departure/arrival~angles,~e.g.~out=90,~in=90.}
+              }
+          }
+      }
+    \bool_if:NT \l__tenkz_jroute_valid_bool
+      {
+    \bool_set_true:N \l__tenkz_jcommit_bool
+    \tenkz_free_join_endpoint:n {#2}
+    \tenkz_free_join_endpoint:n {#3}
     % type assertion when both endpoints declared types
     \prop_get:NeNT \g__tenkz_ports_prop {\the\tenkz@pictureid/#2} \l_tmpa_tl
       {
@@ -234,12 +400,15 @@
           {
             \tl_if_eq:NNF \l_tmpa_tl \l_tmpb_tl
               {
+                \bool_set_false:N \l__tenkz_jcommit_bool
                 \PackageError{tenkz}
                   {Port~type~mismatch:~#2~is~\l_tmpa_tl,~#3~is~\l_tmpb_tl}
                   {Only~equal~port~types~may~be~joined.}
               }
           }
       }
+    \bool_if:NT \l__tenkz_jcommit_bool
+      {
     % wire style, mark style and role style stay SEPARATE option slots:
     % pgfkeys splits the option list on literal commas before expanding,
     % so a comma packed inside one tl would fuse both names into one
@@ -269,31 +438,44 @@
     % elbow's horizontal segment (pos 0.5 of -|/|- is the corner, so
     % 0.25/0.75 is the first/second segment's midpoint).
     \tl_clear:N \l__tenkz_jlabelnode_tl
-    % unknown routes fail CLOSED: silence here would drop the wire but
-    % keep the join event, and the audit stream would certify ink that
-    % was never drawn
-    \str_case:VnF \l__tenkz_jroute_tl
+    \tl_if_empty:NTF \l__tenkz_jname_tl
+      { \tenkz_free_join_route:nn {#2}{#3} }
+      {
+        \tenkz_enclosure_allocate:VNTF \l__tenkz_jname_tl
+          \l__tenkz_jbound_tl
+          {
+            \begin{scope}[local~bounding~box=\l__tenkz_jbound_tl]
+              \tenkz_free_join_route:nn {#2}{#3}
+            \end{scope}
+          }
+          { \bool_set_false:N \l__tenkz_jcommit_bool }
+      }
+    \bool_if:NT \l__tenkz_jcommit_bool
+      { \tenkz@event{join|picture=\the\tenkz@pictureid|from=#2|to=#3|dir=\bool_if:NTF \l__tenkz_jdir_bool {forward}{none}|role=\tenkz_free_word:N \l__tenkz_jrole_tl|species=\tenkz_free_word:N \l__tenkz_jspec_tl\tl_if_empty:NF \l__tenkz_jname_tl {|name=\tl_use:N \l__tenkz_jname_tl}} }
+      }
+      }
+    \group_end:
+  }
+
+\cs_new_protected:Npn \tenkz_free_join_route:nn #1#2
+  {
+    % The public command validates the closed route vocabulary before any
+    % side effect, so this renderer only dispatches known cases.
+    \str_case:Vn \l__tenkz_jroute_tl
       {
         {straight} { \tenkz_free_label_node:n {0.5}
-                     \tenkz_free_join_draw:nnnn {} {#2} { -- } {#3} }
+                     \tenkz_free_join_draw:nnnn {} {#1} { -- } {#2} }
         {hv} { \tenkz_free_label_node:n {0.25}
                \tenkz_free_join_draw:nnnn
                  { rounded~corners=\tenkz@dim{\tenkz@r@corner} }
-                 {#2} { -| } {#3} }
+                 {#1} { -| } {#2} }
         {vh} { \tenkz_free_label_node:n {0.75}
                \tenkz_free_join_draw:nnnn
                  { rounded~corners=\tenkz@dim{\tenkz@r@corner} }
-                 {#2} { |- } {#3} }
-        {arc}   { \tenkz_free_arc_join:nn {#2} {#3} }
-        {curve} { \tenkz_free_arc_join:nn {#2} {#3} }
+                 {#1} { |- } {#2} }
+        {arc}   { \tenkz_free_arc_join:nn {#1} {#2} }
+        {curve} { \tenkz_free_arc_join:nn {#1} {#2} }
       }
-      {
-        \PackageError{tenkz}
-          {Unknown~route~'\tl_use:N \l__tenkz_jroute_tl'}
-          {Routes:~straight,~hv,~vh,~arc~(alias:~curve).}
-      }
-    \tenkz@event{join|picture=\the\tenkz@pictureid|from=#2|to=#3|dir=\bool_if:NTF \l__tenkz_jdir_bool {forward}{none}|role=\tenkz_free_word:N \l__tenkz_jrole_tl|species=\tenkz_free_word:N \l__tenkz_jspec_tl}
-    \group_end:
   }
 
 % the on-path label node at pos #1 (empty when the join is unlabeled)
@@ -325,25 +507,90 @@
   }
 
 % the arc route (DESIGN spells it `arc'; `curve' survives as the 0.5
-% alias): an out=/in= curve.  The angles have no sensible default, so
-% an empty out= or in= is a hard error; the wire falls back to the
-% straight chord so a draft still shows the connection being flagged.
+% alias): an out=/in= curve.  Public preflight has already rejected an
+% empty angle before any route ink can reach this renderer.
 \cs_new_protected:Npn \tenkz_free_arc_join:nn #1#2
   {
     \tenkz_free_label_node:n {0.5}
-    \bool_lazy_or:nnTF
-      { \tl_if_empty_p:N \l__tenkz_jout_tl }
-      { \tl_if_empty_p:N \l__tenkz_jin_tl }
+    \tenkz_free_join_draw:nnnn {} {#1}
+      { to[out=\tl_use:N\l__tenkz_jout_tl,
+           in=\tl_use:N\l__tenkz_jin_tl] } {#2}
+  }
+
+% A free-tier region is the same public grammatical class as a lattice
+% region, but its members are semantic names registered by \tnput, named
+% \tnjoin paths, or earlier named regions.  Geometry remains declarative:
+% the shared enclosure renderer measures every member and adds daylight.
+\tl_new:N \l__tenkz_frslot_tl
+\tl_new:N \l__tenkz_frstyle_tl
+\tl_new:N \l__tenkz_frlabel_tl
+\tl_new:N \l__tenkz_frlabelpos_tl
+\tl_new:N \l__tenkz_frname_tl
+\clist_new:N \l__tenkz_frmembers_clist
+\bool_new:N \l__tenkz_froutline_bool
+\bool_new:N \l__tenkz_frkeys_valid_bool
+\pgfkeys{
+  /tenkz/free~region/.is~family,
+  /tenkz/free~region/group/.code={
+      \tl_set:Nn \l__tenkz_frslot_tl {group}
+      \tl_set:Nn \l__tenkz_frstyle_tl {group~region}},
+  /tenkz/free~region/slot/.is~choice,
+  /tenkz/free~region/slot/selected/.code={
+      \tl_set:Nn \l__tenkz_frslot_tl {selected}
+      \tl_set:Nn \l__tenkz_frstyle_tl {region~selected}},
+  /tenkz/free~region/slot/secondary/.code={
+      \tl_set:Nn \l__tenkz_frslot_tl {secondary}
+      \tl_set:Nn \l__tenkz_frstyle_tl {region~secondary}},
+  /tenkz/free~region/slot/complement/.code={
+      \tl_set:Nn \l__tenkz_frslot_tl {complement}
+      \tl_set:Nn \l__tenkz_frstyle_tl {region~complement}},
+  /tenkz/free~region/slot/collar/.code={
+      \tl_set:Nn \l__tenkz_frslot_tl {collar}
+      \tl_set:Nn \l__tenkz_frstyle_tl {region~collar}},
+  /tenkz/free~region/slot/.unknown/.code={
+      \bool_set_false:N \l__tenkz_frkeys_valid_bool
+      \PackageError{tenkz}
+        {Choice~'\pgfkeys@was@choice'~unknown~in~free-region~slot}
+        {Use~selected,~secondary,~complement,~or~collar.}},
+  /tenkz/free~region/outline/.code={
+      \bool_set_true:N \l__tenkz_froutline_bool},
+  /tenkz/free~region/label/.store~in=\l__tenkz_frlabel_tl,
+  /tenkz/free~region/label~pos/.store~in=\l__tenkz_frlabelpos_tl,
+  /tenkz/free~region/label~at/.store~in=\l__tenkz_frlabelpos_tl,
+  /tenkz/free~region/name/.store~in=\l__tenkz_frname_tl,
+}
+\pgfkeysdef{/tenkz/free~region/.unknown}
+  {
+    \bool_set_false:N \l__tenkz_frkeys_valid_bool
+    \PackageError{tenkz}{Unknown~free-region~key~'\pgfkeyscurrentname'}
+      {Check~the~\token_to_str:N \tnregion~option~spelling.}
+  }
+
+\cs_new_protected:Npn \tenkz_free_region:nn #1#2
+  {
+    \tl_set:Nn \l__tenkz_frslot_tl {selected}
+    \tl_set:Nn \l__tenkz_frstyle_tl {region~selected}
+    \tl_clear:N \l__tenkz_frlabel_tl
+    \tl_set:Nn \l__tenkz_frlabelpos_tl {north~west}
+    \tl_clear:N \l__tenkz_frname_tl
+    \bool_set_false:N \l__tenkz_froutline_bool
+    \bool_set_true:N \l__tenkz_frkeys_valid_bool
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/free~region}{#1} }
+    \bool_if:NT \l__tenkz_froutline_bool
+      { \tl_put_right:Nn \l__tenkz_frstyle_tl {,region~outline} }
+    \clist_set:Nn \l__tenkz_frmembers_clist {#2}
+    \bool_if:NT \l__tenkz_frkeys_valid_bool
       {
-        \PackageError{tenkz}
-          {route=arc~needs~both~out=~and~in=~angles}
-          {Give~departure/arrival~angles,~e.g.~out=90,~in=90.}
-        \tenkz_free_join_draw:nnnn {} {#1} { -- } {#2}
-      }
-      {
-        \tenkz_free_join_draw:nnnn {} {#1}
-          { to[out=\tl_use:N\l__tenkz_jout_tl,
-               in=\tl_use:N\l__tenkz_jin_tl] } {#2}
+        \tenkz_enclosure_draw:VVVVVTF
+          \l__tenkz_frmembers_clist
+          \l__tenkz_frstyle_tl
+          \l__tenkz_frlabel_tl
+          \l__tenkz_frlabelpos_tl
+          \l__tenkz_frname_tl
+          {
+            \tenkz@event{region|picture=\the\tenkz@pictureid|lang=free|slot=\tl_use:N \l__tenkz_frslot_tl|members=\clist_use:Nn \l__tenkz_frmembers_clist {,}|outline=\bool_if:NTF \l__tenkz_froutline_bool {1}{0}\tl_if_empty:NF \l__tenkz_frname_tl {|name=\tl_use:N \l__tenkz_frname_tl}}
+          }
+          { }
       }
   }
 

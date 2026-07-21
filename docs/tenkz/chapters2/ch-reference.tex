@@ -321,14 +321,21 @@ draws nothing and routes the bond straight through; a physical
 pairing onto a ghost warns, naming \tncmd{tnskip} as the fix.
 
 \thumbtag{\tncmd{tnspan}}%
-\cmdsig{\textbackslash tnspan[brace above|below]\{\meta{n}\}%
-\{\meta{label}\}\qquad \textbackslash tncut\{\meta{label}\}}
+\cmdsig{\textbackslash tnspan[\meta{mode}, label pos=\meta{compass}]%
+\{\meta{n}\}\{\meta{label}\}\\
+\meta{mode}=brace above|brace below|box\qquad
+\textbackslash tncut\{\meta{label}\}}
 
-\noindent Annotation ink, written directly after the cell it
-anchors to.  \tncmd{tnspan} sets a brace over the next $n$ columns;
+\noindent Write annotation ink directly after its anchor cell.
+\tncmd{tnspan} sets a brace over the next $n$ columns or
+fits one dashed \tnval{box} to their rendered tensor bodies;
 \tncmd{tncut} hangs a dashed stroke across the bond east of its
-cell.\whynote{The brace names columns, the stroke crosses a bond ---
-neither belongs to a glyph.}  Neither adds nor removes an index: the signature is the
+cell.  Box labels accept the four compass sides, the four corners, and
+\tnval{center}; the default is north.  Legs remain outside a box, so its
+meaning is ``these local factors form one object'', not a contraction.
+Unknown modes, including the removed \tnval{shade}, stop compilation.
+\whynote{The brace names columns, the box groups bodies, and the stroke crosses a bond ---
+none belongs to a glyph.}  None adds or removes an index: the signature is the
 undecorated word's, so an equation between a cut picture and an uncut
 one is well-formed.
 
@@ -347,6 +354,23 @@ one is well-formed.
 \begin{tenkz}[physical=up]
   \tn[up=$i$]{A}\tnspan[brace above]{2}{L} &
   \tn[up=$j$]{A}\tncut{S_L} & \tn{A} & \tn{A}
+\end{tenkz}
+\end{tnexample}
+
+\begin{tnexample}[
+    formula   = {A^{[3]}_{i_1i_2i_3}=A^{i_1}A^{i_2}A^{i_3}},
+    caption   = {a measured blocked-tensor enclosure},
+    index     = {The dashed outline measures the three tensor bodies.
+                 Their physical legs $i_1,i_2,i_3$ and the two boundary
+                 virtual legs remain outside and keep their usual index
+                 meaning.  The west label is presentation ink.},
+    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=3|physical-down=0},
+    label     = {ex:ref-span-box},
+  ]
+% The body enclosure records a blocked local object, never a trace.
+\begin{tenkz}[physical=up, tensor style=box]
+  \tn[up=$i_1$]{A}\tnspan[box, label pos=west]{3}{A^{[3]}} &
+  \tn[up=$i_2$]{A} & \tn[up=$i_3$]{A}
 \end{tenkz}
 \end{tnexample}
 
@@ -674,13 +698,15 @@ double layer (\S\ref{ch:trouble}).
 \subsection{Free placement: \tnenv{tenkzfree}}
 
 \thumbtag{\tnenv{tenkzfree}}%
-\cmdsig{\textbackslash begin\{tenkzfree\}[\meta{keys}]\
-\meta{puts, joins}\ \textbackslash end\{tenkzfree\}}
+\cmdsig{\textbackslash begin\{tenkzfree\}[\meta{keys}]\\
+\meta{puts, joins, regions}\ \textbackslash end\{tenkzfree\}}
 
 When the grid's geometry is wrong --- loops, side-by-side maps,
 anything a paper sketches freehand --- atoms are placed at
 coordinates and wired by hand.  The house glyphs, hues, and line
-widths still apply, so a free picture matches its grid neighbours.
+widths still apply, so a free picture matches its grid neighbours.  Its
+body executes once and remains open to ordinary semantic-style extensions,
+for example \tnval{group region/.append style=\{rounded corners=0pt\}}.
 
 \thumbtag{\tncmd{tnput}}%
 \cmdsig{\textbackslash tnput[\meta{keys}]\{\meta{name}\}%
@@ -717,12 +743,14 @@ widths still apply, so a free picture matches its grid neighbours.
 \noindent\begin{tabularx}{\linewidth}{@{}p{26mm}p{24mm}p{13mm}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \keyhead
-\texttt{route=} & \texttt{straight|hv|} \texttt{vh|curve} &
+\texttt{route=} & \texttt{straight|hv|} \texttt{vh|arc} &
   \texttt{straight} & how the wire runs \\
 \texttt{out=}, \texttt{in=} & \meta{angle} & --- &
-  tangents of a \texttt{curve} route \\
+  tangents of an \texttt{arc} route \\
 \texttt{label=} & \meta{math} & --- &
   label at the wire's midpoint \\
+\texttt{name=} & \meta{name} & --- &
+  expose the measured route and its label to a later region \\
 \texttt{role=} & \meta{role} & --- &
   \texttt{operator}, \texttt{marked}, \texttt{extra}, or
   \texttt{passive}; determines the wire's hue \\
@@ -737,25 +765,65 @@ widths still apply, so a free picture matches its grid neighbours.
 \end{tabularx}\par}
 \medskip
 
+\tnval{curve} remains the pre-0.6 compatibility alias for \tnval{arc}.
+
+\medskip
+
+\thumbtag{\tncmd{tnregion}}%
+\cmdsig{\textbackslash tnregion[\meta{keys}]\{\meta{member names}\}}
+
+\medskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}p{20mm}p{32mm}p{14mm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\keyhead
+\texttt{group} & --- & --- &
+  passive dashed grouping outline shared with \tncmd{tnspan}\tnval{[box]} \\
+\texttt{slot=} & \texttt{selected|secondary|} \texttt{complement|collar} &
+  \texttt{selected} & semantic region skin \\
+\texttt{outline} & --- & --- & suppress the slot fill \\
+\texttt{label=}, \texttt{label pos=} & \meta{math}, \meta{compass} &
+  ---, \texttt{north west} & outside label and its placement \\
+\texttt{name=} & \meta{name} & --- &
+  expose this measured region to a later region \\
+\bottomrule
+\end{tabularx}\par}
+\medskip
+
+Members may be earlier atoms from \tncmd{tnput}.  They may also be named
+\tncmd{tnjoin} routes or earlier named regions.  Their actual rendered ink --- including
+external bead labels, oblique routes, and route labels --- determines the
+enclosure.  An unlabelled \tnval{boundary} atom contributes its endpoint
+position and the usual daylight without inventing visible glyph ink.  Region
+fills occupy dependency-ordered background layers: an outer named region sits
+behind every region it contains, while outlines and labels remain above all
+fills.  Unknown, empty, or duplicate names stop compilation rather than
+silently dropping ink.
+
 \begin{tnexample}[
     formula   = {\textstyle\sum_{\alpha}
                  A_{\alpha}^{\!\top}\,T\,B_{\alpha}},
-    caption   = {typed ports and a directed wire},
+    caption   = {typed ports, named joins, and a measured region},
     index     = {The straight wire is the summed virtual index
                  $\alpha$; its \tnval{dir} barb points from $A$ to
                  $B$.  The curved return joins the \tnval{physical}
                  ports through $T$, contracting the physical vectors
                  $A_{\alpha}$, $B_{\alpha}$ against the matrix $T$.
-                 Joining ports of different kinds warns.},
+                 The region encloses both atoms and both named routes,
+                 but introduces no index.  Joining ports of different
+                 kinds warns.},
     label     = {ex:ref-free},
   ]
 % typed ports; the directed join reads argument order as
-% direction (out of a, into b); the curve carries T
+% direction (out of a, into b); the arc carries T
 \begin{tenkzfree}
   \tnput[ports={east:virtual, north:physical}]{a}{(0,0)}{A}
   \tnput[ports={west:virtual}]{b}{(14mm,0)}{B}
-  \tnjoin[dir]{a.east}{b.west}
-  \tnjoin[route=curve, out=90, in=90, label=T]{a.north}{b.north}
+  \tnjoin[name=jalpha, dir]{a.east}{b.west}
+  \tnjoin[name=jT, route=arc, out=90, in=90, label=T]
+    {a.north}{b.north}
+  \tnregion[slot=secondary, outline, label={$R$},
+            label pos=north east]{a,b,jalpha,jT}
 \end{tenkzfree}
 \end{tnexample}
 

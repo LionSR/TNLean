@@ -46,7 +46,7 @@
 \prop_new:N \l__tenkz_name_prop      % "r-c" -> tikz node name
 \seq_new:N \l__tenkz_rowtypes_seq    % per row: wire|ket|bra|op
 \seq_new:N \l__tenkz_rowmods_seq     % per row: comma list of fused/operator
-\seq_new:N \l__tenkz_spans_seq       % {r}{c}{k}{variant}{label}
+\seq_new:N \l__tenkz_spans_seq       % {r}{c}{k}{kind}{label-pos}{label}{valid}
 \seq_new:N \l__tenkz_cuts_seq        % {r}{c}{label}
 \seq_new:N \l__tenkz_bondlabels_seq  % {math}{c}{c'}
 % Boundary model.  An open virtual index is data: a matrix product with
@@ -460,11 +460,65 @@
 % swallows a paired partner's leg (that pairing now warns).
 \NewDocumentCommand \tnskip { }
   { \tenkz_record:nnn {skip}{}{} }
+\tl_new:N \l__tenkz_spankind_tl
+\tl_new:N \l__tenkz_spanlabelpos_tl
+\tl_new:N \l__tenkz_spanlength_tl
+\bool_new:N \l__tenkz_spanoptsvalid_bool
+\msg_new:nnn { tenkz } { span-length }
+  {
+    A~\token_to_str:N \tnspan~length~must~use~decimal~integer~syntax,
+    ~not~'#1'.
+  }
+\pgfkeys{
+  /tenkz/span/.is~family,
+  /tenkz/span/brace~above/.code={
+      \tl_set:Nn \l__tenkz_spankind_tl {brace~above}},
+  /tenkz/span/brace~below/.code={
+      \tl_set:Nn \l__tenkz_spankind_tl {brace~below}},
+  /tenkz/span/box/.code={\tl_set:Nn \l__tenkz_spankind_tl {box}},
+  /tenkz/span/label~pos/.code={
+      \tenkz_enclosure_label_position:nTF {#1}
+        { \tl_set:Nn \l__tenkz_spanlabelpos_tl {#1} }
+        {
+          \bool_set_false:N \l__tenkz_spanoptsvalid_bool
+          \def\pgf@marshal{
+            \pgfkeysvalueof{/errors/unknown~choice~value/.@cmd}}
+          \expandafter\pgf@marshal\expandafter{/tenkz/span/label~pos}
+            {#1}\pgfeov
+        }},
+}
+% A family `.unknown/.code' declaration dispatches through the family fallback
+% it is defining.  Install the fallback directly after all child keys exist.
+\pgfkeysdef{/tenkz/span/.unknown}
+  {
+    \bool_set_false:N \l__tenkz_spanoptsvalid_bool
+    \def\pgf@marshal{\pgfkeysvalueof{/errors/unknown~key/.@cmd}}
+    \expandafter\expandafter\expandafter\pgf@marshal
+      \expandafter\expandafter\expandafter
+      {\expandafter\pgfkeyscurrentkey\expandafter}
+      \expandafter{\pgfkeyscurrentvalue}\pgfeov
+  }
 \NewDocumentCommand \tnspan { O{brace~above} m m }
   {
+    \tl_set:Nn \l__tenkz_spankind_tl {brace~above}
+    \tl_set:Nn \l__tenkz_spanlabelpos_tl {north}
+    \bool_set_true:N \l__tenkz_spanoptsvalid_bool
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/span}{#1} }
+    \tl_set:Nn \l__tenkz_spanlength_tl {#2}
+    \tl_trim_spaces:N \l__tenkz_spanlength_tl
+    \regex_match:nVTF { \A [0-9]+ \Z } \l__tenkz_spanlength_tl
+      { \tl_set:Ne \l__tenkz_spanlength_tl
+          { \int_eval:n {\l__tenkz_spanlength_tl} } }
+      {
+        \bool_set_false:N \l__tenkz_spanoptsvalid_bool
+        \msg_error:nnV {tenkz}{span-length}\l__tenkz_spanlength_tl
+      }
     \seq_put_right:Ne \l__tenkz_spans_seq
       { { \int_use:N \l__tenkz_row_int }{ \int_use:N \l__tenkz_col_int }
-        { #2 }{ \exp_not:n{#1} }{ \exp_not:n{#3} } }
+        { \l__tenkz_spanlength_tl }{ \l__tenkz_spankind_tl }
+        { \l__tenkz_spanlabelpos_tl }
+        { \exp_not:n{#3} }
+        { \bool_if:NTF \l__tenkz_spanoptsvalid_bool {1}{0} } }
   }
 \NewDocumentCommand \tncut { O{} m }
   {
@@ -492,9 +546,62 @@
 \bool_new:N \l__tenkz_cphysicalrows_bool
 \tl_new:N \l__tenkz_crole_tl    % cell role word (empty = none)
 \tl_new:N \l__tenkz_cspec_tl    % cell species name (empty = none)
+\bool_new:N \l__tenkz_celloptsvalid_bool
 % \tnfuse options
 \int_new:N \l__tenkz_frows_int
 \tl_new:N \l__tenkz_fcombined_tl
+\tl_new:N \l__tenkz_cellinteger_tl
+\msg_new:nnn { tenkz } { cell-positive-integer }
+  { Cell~key~'#1'~needs~a~decimal~positive~integer,~not~'#2'. }
+\cs_new_protected:Npn \tenkz_cell_positive_integer:nnN #1#2#3
+  {
+    \tl_set:Nn \l__tenkz_cellinteger_tl {#2}
+    \tl_trim_spaces:N \l__tenkz_cellinteger_tl
+    \regex_match:nVTF { \A [0-9]+ \Z } \l__tenkz_cellinteger_tl
+      {
+        \int_compare:nNnTF {\l__tenkz_cellinteger_tl} > {0}
+          { \int_set:Nn #3 {\l__tenkz_cellinteger_tl} }
+          {
+            \bool_set_false:N \l__tenkz_celloptsvalid_bool
+            \msg_error:nnnV {tenkz}{cell-positive-integer}{#1}
+              \l__tenkz_cellinteger_tl
+          }
+      }
+      {
+        \bool_set_false:N \l__tenkz_celloptsvalid_bool
+        \msg_error:nnnV {tenkz}{cell-positive-integer}{#1}
+          \l__tenkz_cellinteger_tl
+      }
+  }
+\msg_new:nnn { tenkz } { face-slot-syntax }
+  { Cell~face~key~'#1'~contains~non-integer~slot~'#2'. }
+\cs_new_protected:Npn \tenkz_cell_face_slots:nN #1#2
+  {
+    \tl_if_empty:NF #2
+      {
+        \bool_lazy_all:nT
+          {
+            { ! \str_if_eq_p:Vn #2 {center} }
+            { ! \str_if_eq_p:Vn #2 {rows} }
+            { ! \str_if_eq_p:Vn #2 {none} }
+          }
+          {
+            \clist_map_inline:Vn #2
+              {
+                \tl_set:Nn \l__tenkz_cellinteger_tl {##1}
+                \tl_trim_spaces:N \l__tenkz_cellinteger_tl
+                \regex_match:nVTF { \A -? [0-9]+ \Z }
+                  \l__tenkz_cellinteger_tl
+                  { }
+                  {
+                    \bool_set_false:N \l__tenkz_celloptsvalid_bool
+                    \msg_error:nnnV {tenkz}{face-slot-syntax}{#1}
+                      \l__tenkz_cellinteger_tl
+                  }
+              }
+          }
+      }
+  }
 
 \pgfkeys{
   /tenkz/cell/.is~family,
@@ -502,14 +609,16 @@
   /tenkz/cell/box/.code={\tl_set:Nn \l__tenkz_cshape_tl {box}},
   /tenkz/cell/pill/.code={\tl_set:Nn \l__tenkz_cshape_tl {pill}},
   /tenkz/cell/mpo/.code={\tl_set:Nn \l__tenkz_cshape_tl {mpo}},
-  /tenkz/cell/wide/.code={\int_set:Nn \l__tenkz_cwide_int {#1}},
+  /tenkz/cell/wide/.code={
+      \tenkz_cell_positive_integer:nnN {wide}{#1} \l__tenkz_cwide_int},
   % wires = <k>: the glyph spans k ADJACENT wire rows as ONE atom (quantikz
   % \gate[k]) and TERMINATES each spanned row's wire at its west and east
   % edges -- a two-site gate U acts on C^d (x) C^d, so both wires end ON the
   % gate and none passes through.  The skin grows to cover the rows; the
   % label stays centred.  \tnX takes the same key (a gauge capsule spanning
   % k rows of a doubled wire).
-  /tenkz/cell/wires/.code={\int_set:Nn \l__tenkz_cwires_int {#1}},
+  /tenkz/cell/wires/.code={
+      \tenkz_cell_positive_integer:nnN {wires}{#1} \l__tenkz_cwires_int},
   % legs at = {c1,c2,...}: a wide glyph's physical legs sit at the named
   % SPANNED columns (1-based within the span) instead of one centred leg --
   % the RFP isometry U_{(i_1 i_2), j} keeps one output leg PER BLOCKED SITE
@@ -539,6 +648,11 @@
   /tenkz/cell/physical/up/.code    ={\tl_set:Nn \l__tenkz_cphys_tl {up}},
   /tenkz/cell/physical/down/.code  ={\tl_set:Nn \l__tenkz_cphys_tl {down}},
   /tenkz/cell/physical/updown/.code={\tl_set:Nn \l__tenkz_cphys_tl {updown}},
+  /tenkz/cell/physical/.unknown/.code={
+      \bool_set_false:N \l__tenkz_celloptsvalid_bool
+      \PackageError{tenkz}
+        {Choice~'\pgfkeys@was@choice'~unknown~in~cell~physical}
+        {Use~up,~down,~or~updown.}},
   % tri = l|r: canonical-form isometry skins.  tri=l is the left-canonical
   % A_L (flat side west = domain, apex east = codomain, and the isometry
   % condition sum_s A_L^s{}^dagger A_L^s = 1 reads left-to-right); tri=r
@@ -547,6 +661,10 @@
   /tenkz/cell/tri/.is~choice,
   /tenkz/cell/tri/l/.code={\tl_set:Nn \l__tenkz_cshape_tl {tril}},
   /tenkz/cell/tri/r/.code={\tl_set:Nn \l__tenkz_cshape_tl {trir}},
+  /tenkz/cell/tri/.unknown/.code={
+      \bool_set_false:N \l__tenkz_celloptsvalid_bool
+      \PackageError{tenkz}{Choice~'\pgfkeys@was@choice'~unknown~in~cell~tri}
+        {Use~l~or~r.}},
   /tenkz/cell/up/.store~in=\l__tenkz_cup_tl,
   /tenkz/cell/down/.store~in=\l__tenkz_cdown_tl,
   /tenkz/cell/label~pos/.store~in=\l__tenkz_clpos_tl,
@@ -564,13 +682,24 @@
   /tenkz/cell/role/marked/.code={\tl_set:Nn \l__tenkz_crole_tl {marked}},
   /tenkz/cell/role/extra/.code={\tl_set:Nn \l__tenkz_crole_tl {extra}},
   /tenkz/cell/role/passive/.code={\tl_set:Nn \l__tenkz_crole_tl {passive}},
-  /tenkz/cell/species/.code={\tenkz_species_check:n{#1}
-      \tl_set:Nn \l__tenkz_cspec_tl {#1}},
+  /tenkz/cell/role/.unknown/.code={
+      \bool_set_false:N \l__tenkz_celloptsvalid_bool
+      \PackageError{tenkz}{Choice~'\pgfkeys@was@choice'~unknown~in~cell~role}
+        {Use~operator,~marked,~extra,~or~passive.}},
+  /tenkz/cell/species/.code={
+      \tenkz_species_if_declared:nTF {#1}
+        { \tl_set:Nn \l__tenkz_cspec_tl {#1} }
+        {
+          \bool_set_false:N \l__tenkz_celloptsvalid_bool
+          \msg_error:nnn { tenkz } { unknown-species } {#1}
+        }},
   % \tnfuse: span=k is the 0.6 spelling (rows= already means row typing
   % at picture scope and would be its third meaning here); rows= stays
   % as the documented alias
-  /tenkz/cell/span/.code={\int_set:Nn \l__tenkz_frows_int {#1}},
-  /tenkz/cell/rows/.code={\int_set:Nn \l__tenkz_frows_int {#1}},
+  /tenkz/cell/span/.code={
+      \tenkz_cell_positive_integer:nnN {span}{#1} \l__tenkz_frows_int},
+  /tenkz/cell/rows/.code={
+      \tenkz_cell_positive_integer:nnN {rows}{#1} \l__tenkz_frows_int},
   % combined = west|east.  On \tnfuse: which side the single fused stub
   % leaves (empty defaults to west).  On a wires=k glyph (\tn or \tnX,
   % 0.6): the stated side presents ONE fused wire entering the glyph at
@@ -584,6 +713,12 @@
   % attachable (see the bond-scan warning).
   /tenkz/cell/combined/.store~in=\l__tenkz_fcombined_tl,
 }
+\pgfkeysdef{/tenkz/cell/.unknown}
+  {
+    \bool_set_false:N \l__tenkz_celloptsvalid_bool
+    \PackageError{tenkz}{Unknown~cell~key~'\pgfkeyscurrentname'}
+      {Check~the~cell~option~spelling.}
+  }
 
 \cs_new_protected:Npn \tenkz_cell_opts:n #1
   {
@@ -609,19 +744,28 @@
     % west, so the bar's default combined=west is unchanged
     \tl_clear:N \l__tenkz_fcombined_tl
     \tl_set:Nn \l__tenkz_gstrut_tl { \tenkz@glyphstrut }
+    \bool_set_true:N \l__tenkz_celloptsvalid_bool
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/cell}{#1} }
+    \tenkz_cell_face_slots:nN {legs~at} \l__tenkz_clegsat_tl
+    \tenkz_cell_face_slots:nN {up~at} \l__tenkz_cupat_tl
+    \tenkz_cell_face_slots:nN {down~at} \l__tenkz_cdownat_tl
+    \tenkz_cell_face_slots:nN {west~at} \l__tenkz_cwestat_tl
+    \tenkz_cell_face_slots:nN {east~at} \l__tenkz_ceastat_tl
     % Physical slots are local to wide=k for an ordinary interface face and
     % to wires=k for a physical= brick.  This must run at every parse because
     % later passes reparse the option string.
     \int_set_eq:NN \l__tenkz_cphysicalspan_int \l__tenkz_cwide_int
     \tl_if_empty:NF \l__tenkz_cphys_tl
       { \int_set_eq:NN \l__tenkz_cphysicalspan_int \l__tenkz_cwires_int }
-    \tenkz_normalize_physical_face:Nn \l__tenkz_clegsat_tl
-      {\l__tenkz_cphysicalspan_int}
-    \tenkz_normalize_physical_face:Nn \l__tenkz_cupat_tl
-      {\l__tenkz_cphysicalspan_int}
-    \tenkz_normalize_physical_face:Nn \l__tenkz_cdownat_tl
-      {\l__tenkz_cphysicalspan_int}
+    \bool_if:NT \l__tenkz_celloptsvalid_bool
+      {
+        \tenkz_normalize_physical_face:Nn \l__tenkz_clegsat_tl
+          {\l__tenkz_cphysicalspan_int}
+        \tenkz_normalize_physical_face:Nn \l__tenkz_cupat_tl
+          {\l__tenkz_cphysicalspan_int}
+        \tenkz_normalize_physical_face:Nn \l__tenkz_cdownat_tl
+          {\l__tenkz_cphysicalspan_int}
+      }
   }
 
 % Canonical face-port resolver.  This is the single source of truth for
@@ -1409,7 +1553,8 @@
       }
     \seq_if_empty:NF \l__tenkz_spans_seq
       {
-        \msg_warning:nnn {tenkz}{vertical-unsupported} {\token_to_str:N \tnspan~braces}
+        \msg_warning:nnn {tenkz}{vertical-unsupported}
+          {\token_to_str:N \tnspan~decorations}
         \seq_clear:N \l__tenkz_spans_seq
       }
     \seq_if_empty:NF \l__tenkz_cuts_seq
@@ -1448,6 +1593,7 @@
     \begin{tikzpicture}
       [ tenkz~every~picture,
         baseline={(0pt,\dim_use:N \l__tenkz_axis_dim)} ]
+      \pgfsetlayers{background,main}
       \tenkz_place_nodes:
       \tenkz_draw_bonds:
       \tenkz_compute_cups:
@@ -1545,16 +1691,43 @@
       {
         \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpb_tl
         \exp_args:NV \tenkz_cell_opts:n \l_tmpb_tl
-        \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
-        \str_case:Vn \l__tenkz_kind_tl
+        % `combined=' is warning-only on ordinary glyphs for compatibility,
+        % but a fusion bar has exactly one combined face and its documented
+        % domain is closed.  Reject an impossible bar side before allocating
+        % measured ink, registering its cells, or emitting topology events.
+        \str_if_eq:VnT \l__tenkz_kind_tl {fuse}
           {
-            {tn}   { \tenkz_node_tensor:nnV {#1}{#2} \l_tmpb_tl }
-            {tnc}  { \tenkz_node_tensor:nnV {#1}{#2} \l_tmpb_tl }
-            {tnx}  { \tenkz_node_simple:nnnV {#1}{#2}{on-wire~matrix} \l_tmpb_tl }
-            {dots} { \tenkz_node_dots:nn {#1}{#2} }
-            {ghost}{ \tenkz_node_ghost:nn {#1}{#2} }
-            {fuse} { \tenkz_node_fuse:nn {#1}{#2} }
+            \tl_if_empty:NF \l__tenkz_fcombined_tl
+              {
+                \bool_lazy_or:nnF
+                  { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {west} }
+                  { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {east} }
+                  {
+                    \bool_set_false:N \l__tenkz_celloptsvalid_bool
+                    \PackageError{tenkz}
+                      {combined=\tl_use:N \l__tenkz_fcombined_tl
+                        \c_space_tl is~not~a~fusion~side}
+                      {Use~combined=west~or~combined=east~on~a~fusion~bar.}
+                  }
+              }
           }
+        \bool_if:NTF \l__tenkz_celloptsvalid_bool
+          {
+            \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
+            \str_case:Vn \l__tenkz_kind_tl
+              {
+                {tn}   { \tenkz_node_tensor:nnV {#1}{#2} \l_tmpb_tl }
+                {tnc}  { \tenkz_node_tensor:nnV {#1}{#2} \l_tmpb_tl }
+                {tnx}  { \tenkz_node_simple:nnnV {#1}{#2}{on-wire~matrix} \l_tmpb_tl }
+                {dots} { \tenkz_node_dots:nn {#1}{#2} }
+                {ghost}{ \tenkz_node_ghost:nn {#1}{#2} }
+                {fuse} { \tenkz_node_fuse:nn {#1}{#2} }
+              }
+            \prop_get:NnNT \l__tenkz_name_prop {#1-#2} \l_tmpa_tl
+              { \tenkz_enclosure_register_existing:eV
+                  {cell:#1-#2} \l_tmpa_tl }
+          }
+          { \prop_remove:Nn \l__tenkz_kind_prop {#1-#2} }
       }
   }
 
@@ -1917,7 +2090,27 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
                       { \tl_set:Nn \l__tenkz_fcombined_tl {west} } } }
           } }
   }
+\tl_new:N \l__tenkz_fusebound_tl
 \cs_new_protected:Npn \tenkz_node_fuse:nn #1#2
+  {
+    \tenkz_enclosure_allocate:nN {cell:#1-#2} \l__tenkz_fusebound_tl
+    \begin{scope}[local~bounding~box=\l__tenkz_fusebound_tl]
+      \tenkz_node_fuse_aux:nn {#1}{#2}
+    \end{scope}
+    % Keep topology bookkeeping in the picture scope: the measurement scope
+    % above is deliberately local and must not swallow the bar's row claims.
+    \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+    \int_step_inline:nnn { #1 + 1 } { #1 + \l__tenkz_frows_int - 1 }
+      {
+        \prop_put:Nen \l__tenkz_kind_prop  {##1-#2} {fusec}
+        \prop_put:Nen \l__tenkz_owner_prop {##1-#2} {#2}
+        % Every row claimed by the bar denotes the same measured ink.  Register
+        % each continuation cell so a span on any crossed row resolves to it.
+        \tenkz_enclosure_register_existing:eV
+          {cell:##1-#2} \l__tenkz_fusebound_tl
+      }
+  }
+\cs_new_protected:Npn \tenkz_node_fuse_aux:nn #1#2
   {
     % Face notation is primary.  A centred west/east face is the fused
     % face; the opposite integer-list/rows face carries the separate bonds.
@@ -1964,14 +2157,6 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
                   { \l__tenkz_tmp_dim } { bond }
               }
           }
-      }
-    % the bar owns its column in every spanned row; continuation rows are
-    % marked `fusec` so the node pass does not draw the bar twice
-    \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
-    \int_step_inline:nnn { #1 + 1 } { #1 + \l__tenkz_frows_int - 1 }
-      {
-        \prop_put:Nen \l__tenkz_kind_prop  {##1-#2} {fusec}
-        \prop_put:Nen \l__tenkz_owner_prop {##1-#2} {#2}
       }
     % the bar label sits above the combined stub, clear of both wires
     \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
@@ -3441,7 +3626,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \cs_new_protected:Npn \tenkz_draw_decorations:
   {
     \seq_map_inline:Nn \l__tenkz_spans_seq
-      { \tenkz_draw_span:nnnnn ##1 }
+      { \tenkz_draw_span:nnnnnnn ##1 }
     \seq_map_inline:Nn \l__tenkz_cuts_seq
       { \tenkz_draw_cut:nnn ##1 }
     \seq_map_inline:Nn \l__tenkz_bondlabels_seq
@@ -3760,25 +3945,65 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
         + \tenkz@dim{\tenkz@r@fuseover} }
   }
 
-\cs_new_protected:Npn \tenkz_draw_span:nnnnn #1#2#3#4#5
+\clist_new:N \l__tenkz_spanmembers_clist
+\tl_new:N \l__tenkz_spanmembers_tl
+\tl_new:N \l__tenkz_spanstyle_tl
+\tl_new:N \l__tenkz_spanlabel_tl
+\tl_new:N \l__tenkz_spanname_tl
+\bool_new:N \l__tenkz_spanvalid_bool
+\msg_new:nnn { tenkz } { span-range }
+  {
+    A~\token_to_str:N \tnspan~at~row~#1,~column~#2~has~length~#3,~but~
+    this~picture~has~#4~columns.~Use~a~positive~length~whose~last~column~
+    remains~inside~the~grid.
+  }
+
+\cs_new_protected:Npn \tenkz_draw_span:nnnnnnn #1#2#3#4#5#6#7
+  {
+    \int_compare:nNnTF {#7} = {1}
+      { \bool_set_true:N \l__tenkz_spanvalid_bool }
+      { \bool_set_false:N \l__tenkz_spanvalid_bool }
+    \bool_if:NT \l__tenkz_spanvalid_bool
+      {
+        \bool_lazy_or:nnT
+          { \int_compare_p:nNn {#3} < {1} }
+          { \int_compare_p:nNn { #2 + #3 - 1 } > {\l__tenkz_ncols_int} }
+          {
+            \msg_error:nnxxxx {tenkz}{span-range}{#1}{#2}{#3}
+              {\int_use:N \l__tenkz_ncols_int}
+            \bool_set_false:N \l__tenkz_spanvalid_bool
+          }
+      }
+    \bool_if:NT \l__tenkz_spanvalid_bool
+      {
+        \str_case:nn {#4}
+          {
+            {brace~below}
+              { \tenkz_draw_span_brace:nnnnn {#1}{#2}{#3}{below}{#6} }
+            {brace~above}
+              { \tenkz_draw_span_brace:nnnnn {#1}{#2}{#3}{above}{#6} }
+            {box} { \tenkz_draw_span_box:nnnnn {#1}{#2}{#3}{#5}{#6} }
+          }
+        \bool_if:NT \l__tenkz_spanvalid_bool
+          { \tenkz@event{span|picture=\the\tenkz@pictureid|row=#1|col=#2|length=#3|kind=#4} }
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_span_brace:nnnnn #1#2#3#4#5
   {
     \dim_set:Nn \l__tenkz_x_dim
       { \tenkz_colx:n {#2} - \tenkz@dim{\tenkz@r@glyphbox} }
     \dim_set:Nn \l__tenkz_tmp_dim
       { \tenkz_colx:n { #2 + #3 - 1 } + \tenkz@dim{\tenkz@r@glyphbox} }
-    % the brace sits one daylight gap beyond the span's silhouette,
-    % measured over ITS columns only -- a brace over unlabeled cells is
-    % not pushed out by labels elsewhere in the row, and a box-mode
-    % brace hugs the (inscribed-label) boxes
-    \str_if_eq:nnTF {#4} {brace~below}
+    \str_if_eq:nnTF {#4} {below}
       {
         \tenkz_silhouette:nnnnN {#1} {#2} { #2 + #3 - 1 } {down}
           \l__tenkz_y_dim
         \dim_set:Nn \l__tenkz_y_dim
           { \tenkz_rowy:n {#1} - \l__tenkz_y_dim
             - \tenkz@dim{\tenkz@r@daylight} }
-        % brace bulges downward: trace right-to-left, label below
-        \tenkz_span_brace:NNnnn \l__tenkz_tmp_dim \l__tenkz_x_dim {north} {-1} {#5}
+        \tenkz_span_brace:NNnnn \l__tenkz_tmp_dim \l__tenkz_x_dim
+          {north} {-1} {#5}
       }
       {
         \tenkz_silhouette:nnnnN {#1} {#2} { #2 + #3 - 1 } {up}
@@ -3786,9 +4011,44 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
         \dim_set:Nn \l__tenkz_y_dim
           { \tenkz_rowy:n {#1} + \l__tenkz_y_dim
             + \tenkz@dim{\tenkz@r@daylight} }
-        % brace bulges upward: trace left-to-right, label above
-        \tenkz_span_brace:NNnnn \l__tenkz_x_dim \l__tenkz_tmp_dim {south} {1} {#5}
+        \tenkz_span_brace:NNnnn \l__tenkz_x_dim \l__tenkz_tmp_dim
+          {south} {1} {#5}
       }
+  }
+
+\cs_new_protected:Npn \tenkz_draw_span_box:nnnnn #1#2#3#4#5
+  {
+    \clist_clear:N \l__tenkz_spanmembers_clist
+    \int_step_inline:nnn {#2} { #2 + #3 - 1 }
+      {
+        \tl_set:Ne \l_tmpa_tl {cell:#1-##1}
+        \tenkz_enclosure_if_registered:VTF \l_tmpa_tl
+          { \clist_put_right:NV \l__tenkz_spanmembers_clist \l_tmpa_tl }
+          {
+            \prop_get:NnNT \l__tenkz_owner_prop {#1-##1} \l_tmpb_tl
+              {
+                \tl_set:Ne \l_tmpa_tl {cell:#1-\l_tmpb_tl}
+                \clist_if_in:NVF \l__tenkz_spanmembers_clist \l_tmpa_tl
+                  { \clist_put_right:NV \l__tenkz_spanmembers_clist \l_tmpa_tl }
+              }
+          }
+      }
+    \tl_set:Ne \l__tenkz_spanmembers_tl
+      { \clist_use:Nn \l__tenkz_spanmembers_clist {,} }
+    \tl_set:Nn \l__tenkz_spanstyle_tl {group~region}
+    \tl_clear:N \l__tenkz_spanlabel_tl
+    \tl_if_blank:nF {#5}
+      { \tl_set:Nn \l__tenkz_spanlabel_tl { $\tenkz@labelsize #5$ } }
+    \tl_clear:N \l__tenkz_spanname_tl
+    \tl_set:Nn \l__tenkz_spanlabelpos_tl {#4}
+    \tenkz_enclosure_draw:VVVVVTF
+      \l__tenkz_spanmembers_tl
+      \l__tenkz_spanstyle_tl
+      \l__tenkz_spanlabel_tl
+      \l__tenkz_spanlabelpos_tl
+      \l__tenkz_spanname_tl
+      { }
+      { \bool_set_false:N \l__tenkz_spanvalid_bool }
   }
 
 % the shared brace+label of a span, given the two endpoints (their order sets
