@@ -31,6 +31,17 @@ census produced this adoption:
 belong in dedicated tests that assert their expected diagnostics; they are not
 passing corpus entries.
 
+Four package-internal probes deliberately create no event records:
+`geom.tex`, `p_pitch.tex`, `p_species.tex`, and `plane_experiment.tex`. They use
+tenkz dimensions, keys, or TikZ styles without opening a tenkz environment. The
+driver names these four exceptions explicitly and rejects an empty `.tnlog` from
+every other fixture, so a broken event writer cannot silently pass the corpus.
+
+`gr_t7_coset.tex` is the one included fixture whose diagram geometry differs
+from the handoff source. Its two gray action boxes move 4 mm to the right so the
+`k_x^{-1}` label clears the next box under the measured-overlap audit; the
+formula and diagram topology are unchanged.
+
 Every standalone fixture begins with a one-line `% Regression:` header and has a
 `% Formula:` comment. Geometry-only fixtures state their geometry contract rather
 than inventing a tensor identity.
