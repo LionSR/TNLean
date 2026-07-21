@@ -156,10 +156,13 @@ structure BNTFusionIsometryFamily (Λ : Type*) [Fintype Λ] [DecidableEq Λ]
   fusionIsometry : ∀ α β : Λ,
     Matrix ((γ : Λ) × (Fin (chi.dim α β γ) × Fin (bondDim γ)))
       (Fin (bondDim α * bondDim β)) ℂ
-  /-- Each fusion map is an isometry.
+  /-- The additional full-support column-isometry condition on each fusion
+  map.
 
-  Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--993 of
-  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+  **Scope restriction (full-support fusion family):** The unrestricted source
+  statement permits a discarded common zero corner and does not assert this
+  identity. Documented in
+  `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
   isometry : ∀ α β : Λ, (fusionIsometry α β)ᴴ * fusionIsometry α β = 1
   /-- The fusion identity, site by site:
   `U_{α,β} (M_α M_β)^{ij} U_{α,β}† = ⊕_γ χ_{α,β,γ} ⊗ M_γ^{ij}`.

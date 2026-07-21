@@ -313,6 +313,42 @@ them.
     \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
 \end{definition}
 
+\begin{definition}[Active-support fusion coisometry family]
+    \label{def:mpdo_bnt_fusion_coisometry_family}
+    \lean{MPOTensor.BNTFusionCoisometryFamily}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        toBNTFusionIsometryFamily_of_fullSupport}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    An \emph{active-support fusion coisometry family} consists of the same
+    labelled tensors and positive diagonal matrices, together with maps
+    $U_{\alpha,\beta}$ satisfying
+    \[
+        U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1,
+    \]
+    the forward fusion identity
+    \[
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+          U_{\alpha,\beta}^\dagger
+        =G_{\alpha,\beta}^{ij},
+    \]
+    and exact reconstruction
+    \[
+        (M_\alpha M_\beta)^{ij}
+        =U_{\alpha,\beta}^\dagger
+          G_{\alpha,\beta}^{ij}U_{\alpha,\beta}.
+    \]
+    Zero-dimensional retained sums are permitted. If in addition
+    $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ for every pair, this family
+    gives the preceding full-support fusion-isometry family.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):} The source uses the
+    retained-row orientation of Proposition~4.13. Thus its fusion maps are
+    coisometries onto the active sectors; exact reconstruction records the
+    discarded common zero corner. This convention is documented in
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+\end{definition}
+
 For fixed labels $\alpha,\beta$, put
 $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
 \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}$.  Then
@@ -357,6 +393,28 @@ $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
     \tn[mpo, up=$i$, down=$j$]{G_{\alpha,\beta}}
 }
 \hfil\par
+
+\begin{lemma}[Weighted zipper identities on the active support]
+    \label{lem:mpdo_bnt_active_support_weighted_zipper}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        fusionCoisometry_mul_mulTensor}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        mulTensor_mul_fusionCoisometry_conjTranspose}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_coisometry_family}
+    An active-support fusion coisometry satisfies
+    \[
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+          =G_{\alpha,\beta}^{ij}U_{\alpha,\beta},
+        \qquad
+        (M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
+          =U_{\alpha,\beta}^\dagger G_{\alpha,\beta}^{ij}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Substitute exact reconstruction into the left-hand sides and use
+    $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$.
+\end{proof}
 
 \begin{theorem}[Weighted zipper identities]%
     \label{thm:mpdo_bnt_weighted_zipper}

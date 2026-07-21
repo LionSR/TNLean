@@ -571,6 +571,7 @@ import TNLean.MPS.MPDO.BNTMultiplicityNormalization
 import TNLean.MPS.MPDO.BNTTheoremWitness
 import TNLean.MPS.MPDO.BNTTheoremWitnessConsequences
 import TNLean.MPS.MPDO.BNTFusionIsometries
+import TNLean.MPS.MPDO.BNTFusionCoisometries
 import TNLean.MPS.MPDO.BNTFusionTensorClause
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BNTAssociativity

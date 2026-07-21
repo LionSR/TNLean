@@ -122,9 +122,13 @@ structure BNTFusionTensorClause (M : MPOTensor d D) where
   fusionIsometry : ∀ α β : Fin labelCount,
     Matrix ((γ : Fin labelCount) × (Fin (chi.dim α β γ) × Fin (bondDim γ)))
       (Fin (bondDim α * bondDim β)) ℂ
-  /-- Each fusion map is an isometry.
+  /-- The additional full-support column-isometry condition on each fusion
+  map.
 
-  Source: arXiv:1606.00608, Theorem 4.14(iii), lines 986--993. -/
+  **Scope restriction (full-support fusion family):** The unrestricted source
+  statement permits a discarded common zero corner and does not assert this
+  identity. Documented in
+  `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
   isometry : ∀ α β : Fin labelCount,
     (fusionIsometry α β)ᴴ * fusionIsometry α β = 1
   /-- The sitewise fusion identity for the concrete vertical BNT tensors.
