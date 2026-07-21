@@ -118,6 +118,271 @@ theorem verticalCoisometrySquare_isCoisometry {d n : ℕ}
     Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hU,
     Matrix.one_kronecker_one, Matrix.submatrix_one_equiv]
 
+private def verticalCopyLabelEquiv {g : ℕ} (dim mult : Fin g → ℕ) :
+    ((α : Fin g) × (Fin (mult α) × Fin (dim α))) ≃
+      (p : (α : Fin g) × Fin (mult α)) × Fin (dim p.1) where
+  toFun x := ⟨⟨x.1, x.2.1⟩, x.2.2⟩
+  invFun x := ⟨x.1.1, (x.1.2, x.2)⟩
+  left_inv x := by
+    rcases x with ⟨α, q, i⟩
+    rfl
+  right_inv x := by
+    rcases x with ⟨⟨α, q⟩, i⟩
+    rfl
+
+/-- The assembled vertical bond coordinates, grouped first by a retained BNT
+copy and then by a coordinate in its simple bond space.
+
+Source: CPSV16, Appendix C.4, lines 1955--1971. -/
+def verticalCopyCoordinateEquiv {g : ℕ} (dim mult : Fin g → ℕ) :
+    Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q) ≃
+      (p : (α : Fin g) × Fin (mult α)) × Fin (dim p.1) :=
+  (verticalSectorFinEquiv dim mult).symm.trans
+    (verticalCopyLabelEquiv dim mult)
+
+/-- The inverse copy-coordinate map is the canonical vertical-sector
+coordinate map.
+
+Source: CPSV16, Appendix C.4, lines 1955--1971. -/
+@[simp]
+theorem verticalCopyCoordinateEquiv_symm_apply
+    {g : ℕ} (dim mult : Fin g → ℕ)
+    (p : (α : Fin g) × Fin (mult α)) (i : Fin (dim p.1)) :
+    (verticalCopyCoordinateEquiv dim mult).symm ⟨p, i⟩ =
+      verticalSectorFinEquiv dim mult ⟨p.1, (p.2, i)⟩ := by
+  rfl
+
+private theorem verticalAssembledTensor_apply_copy_same
+    {g d : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor d (dim α))
+    (α : Fin g) (q : Fin (mult α)) (v : Fin d) (i j : Fin (dim α)) :
+    verticalAssembledTensor dim mult weight B v
+        (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
+        (verticalSectorFinEquiv dim mult ⟨α, (q, j)⟩) =
+      weight α q * B α v i j := by
+  unfold verticalAssembledTensor MPSTensor.toTensorFromBlocks
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    verticalSectorFinEquiv_outer_symm]
+  rw [Matrix.blockDiagonal'_apply_eq]
+  let p := finSigmaFinEquiv.symm (finSigmaFinEquiv ⟨α, q⟩)
+  have hp : p = ⟨α, q⟩ := finSigmaFinEquiv.symm_apply_apply ⟨α, q⟩
+  have hdim : dim p.1 = dim α := congrArg (fun s => dim s.1) hp
+  have hweight : weight p.1 p.2 = weight α q :=
+    congrArg (fun s => weight s.1 s.2) hp
+  let block (s : (α : Fin g) × Fin (mult α)) := B s.1 v
+  let packed (s : (α : Fin g) × Fin (mult α)) :
+      (r : (α : Fin g) × Fin (mult α)) ×
+        Matrix (Fin (dim r.1)) (Fin (dim r.1)) ℂ :=
+    ⟨s, block s⟩
+  have hpacked : packed p = packed ⟨α, q⟩ := congrArg packed hp
+  have hblock : HEq (block p) (block ⟨α, q⟩) :=
+    (Sigma.mk.inj_iff.mp hpacked).2
+  have hentry := (Fin.heq_fun₂_iff hdim.symm hdim.symm).mp hblock.symm i j
+  simp only [verticalCopyWeights, verticalCopyBlocks]
+  change weight p.1 p.2 * block p (Fin.cast _ i) (Fin.cast _ j) = _
+  rw [hweight]
+  exact congrArg (weight α q * ·) hentry.symm
+
+private theorem verticalAssembledTensor_apply_copy_ne
+    {g d : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor d (dim α))
+    {α β : Fin g} {q : Fin (mult α)} {r : Fin (mult β)}
+    (h : (⟨α, q⟩ : (α : Fin g) × Fin (mult α)) ≠ ⟨β, r⟩)
+    (v : Fin d) (i : Fin (dim α)) (j : Fin (dim β)) :
+    verticalAssembledTensor dim mult weight B v
+        (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
+        (verticalSectorFinEquiv dim mult ⟨β, (r, j)⟩) = 0 := by
+  have hflat : finSigmaFinEquiv ⟨α, q⟩ ≠ finSigmaFinEquiv ⟨β, r⟩ :=
+    fun hEq => h (finSigmaFinEquiv.injective hEq)
+  simp [verticalAssembledTensor, MPSTensor.toTensorFromBlocks,
+    Matrix.reindex_apply, Matrix.submatrix_apply,
+    verticalSectorFinEquiv_outer_symm, Matrix.blockDiagonal'_apply_ne,
+    hflat]
+
+/-- In retained-copy coordinates, the assembled vertical tensor is the
+block diagonal of its weighted simple blocks.
+
+Source: CPSV16, Appendix C.4, lines 1955--1971. -/
+theorem verticalAssembledTensor_reindex_copyCoordinates
+    {g d : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (A : (α : Fin g) → MPSTensor d (dim α)) (v : Fin d) :
+    verticalAssembledTensor dim mult weight A v =
+      Matrix.reindex (verticalCopyCoordinateEquiv dim mult).symm
+        (verticalCopyCoordinateEquiv dim mult).symm
+        (Matrix.blockDiagonal' fun p => weight p.1 p.2 • A p.1 v) := by
+  apply Matrix.ext
+  intro i j
+  obtain ⟨⟨p, ip⟩, rfl⟩ :=
+    (verticalCopyCoordinateEquiv dim mult).symm.surjective i
+  obtain ⟨⟨q, jq⟩, rfl⟩ :=
+    (verticalCopyCoordinateEquiv dim mult).symm.surjective j
+  simp only [Matrix.reindex_apply, Equiv.symm_symm,
+    Matrix.submatrix_apply, Equiv.apply_symm_apply]
+  by_cases hpq : p = q
+  · subst q
+    rw [Matrix.blockDiagonal'_apply_eq]
+    exact verticalAssembledTensor_apply_copy_same
+      dim mult weight A p.1 p.2 v ip jq
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hpq]
+    exact verticalAssembledTensor_apply_copy_ne
+      dim mult weight A hpq v ip jq
+
+/-- The canonical inclusion of one retained copy into the assembled vertical
+bond space.
+
+Source: CPSV16, Appendix C.4, lines 1955--1971. -/
+noncomputable def verticalCopyBlockInclusion
+    {g : ℕ} (dim mult : Fin g → ℕ)
+    (p : (α : Fin g) × Fin (mult α)) :
+    Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin (dim p.1)) ℂ :=
+  (Matrix.sigmaBlockInclusion
+    (fun q : (α : Fin g) × Fin (mult α) ↦ Fin (dim q.1)) p).submatrix
+      (verticalCopyCoordinateEquiv dim mult) (Equiv.refl _)
+
+/-- Every retained-copy inclusion is an isometry, including when its domain
+has dimension zero.
+
+Source: CPSV16, Appendix C.4, lines 1955--1971. -/
+theorem verticalCopyBlockInclusion_isometry
+    {g : ℕ} (dim mult : Fin g → ℕ)
+    (p : (α : Fin g) × Fin (mult α)) :
+    (verticalCopyBlockInclusion dim mult p)ᴴ *
+        verticalCopyBlockInclusion dim mult p = 1 := by
+  classical
+  unfold verticalCopyBlockInclusion
+  rw [Matrix.conjTranspose_submatrix,
+    Matrix.submatrix_mul_equiv _ _ _ (verticalCopyCoordinateEquiv dim mult) _,
+    Matrix.sigmaBlockInclusion_isometry,
+    Matrix.submatrix_one_equiv]
+
+/-- A retained-copy inclusion intertwines its weighted simple block with the
+assembled vertical tensor.
+
+Source: CPSV16, Appendix C.4, lines 1955--1971. -/
+theorem verticalAssembledTensor_mul_verticalCopyBlockInclusion
+    {g d : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (A : (α : Fin g) → MPSTensor d (dim α))
+    (p : (α : Fin g) × Fin (mult α)) (v : Fin d) :
+    verticalAssembledTensor dim mult weight A v *
+        verticalCopyBlockInclusion dim mult p =
+      verticalCopyBlockInclusion dim mult p *
+        (weight p.1 p.2 • A p.1 v) := by
+  classical
+  let blockIndex := fun q : (α : Fin g) × Fin (mult α) ↦ Fin (dim q.1)
+  let C := fun q : (α : Fin g) × Fin (mult α) ↦ weight q.1 q.2 • A q.1 v
+  let E := Matrix.sigmaBlockInclusion blockIndex p
+  have h := Matrix.blockDiagonal'_mul_sigmaBlockInclusion C p
+  have hdiag := verticalAssembledTensor_reindex_copyCoordinates
+    dim mult weight A v
+  have hleft : verticalAssembledTensor dim mult weight A v *
+      verticalCopyBlockInclusion dim mult p =
+        (Matrix.blockDiagonal' C * E).submatrix
+          (verticalCopyCoordinateEquiv dim mult) (Equiv.refl _) := by
+    rw [hdiag]
+    simpa only [verticalCopyBlockInclusion, blockIndex, C, E,
+      Matrix.reindex_apply, Equiv.symm_symm,
+      Matrix.submatrix_id_id] using
+      (Matrix.submatrix_mul_equiv (Matrix.blockDiagonal' C) E
+        (verticalCopyCoordinateEquiv dim mult)
+        (verticalCopyCoordinateEquiv dim mult) (Equiv.refl _))
+  have hright : verticalCopyBlockInclusion dim mult p *
+      (weight p.1 p.2 • A p.1 v) =
+        (E * C p).submatrix
+          (verticalCopyCoordinateEquiv dim mult) (Equiv.refl _) := by
+    have hC : (C p).submatrix (Equiv.refl _) (Equiv.refl _) = C p := by
+      rfl
+    calc
+      verticalCopyBlockInclusion dim mult p * C p =
+          verticalCopyBlockInclusion dim mult p *
+            (C p).submatrix (Equiv.refl _) (Equiv.refl _) := by
+        rw [hC]
+      _ = (E * C p).submatrix
+          (verticalCopyCoordinateEquiv dim mult) (Equiv.refl _) := by
+        simpa only [verticalCopyBlockInclusion, blockIndex, C, E] using
+          (Matrix.submatrix_mul_equiv E (C p)
+            (verticalCopyCoordinateEquiv dim mult)
+            (Equiv.refl _) (Equiv.refl _))
+  have hpull := congrArg
+    (fun X ↦ X.submatrix
+      (verticalCopyCoordinateEquiv dim mult) (Equiv.refl _)) h
+  exact hleft.trans (hpull.trans hright.symm)
+
+/-- The adjoint retained-copy inclusion satisfies the reverse intertwining
+identity.
+
+Source: CPSV16, Appendix C.4, lines 1955--1971. -/
+theorem verticalCopyBlockInclusion_conjTranspose_mul_verticalAssembledTensor
+    {g d : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (A : (α : Fin g) → MPSTensor d (dim α))
+    (p : (α : Fin g) × Fin (mult α)) (v : Fin d) :
+    (verticalCopyBlockInclusion dim mult p)ᴴ *
+        verticalAssembledTensor dim mult weight A v =
+      (weight p.1 p.2 • A p.1 v) *
+        (verticalCopyBlockInclusion dim mult p)ᴴ := by
+  classical
+  let blockIndex := fun q : (α : Fin g) × Fin (mult α) ↦ Fin (dim q.1)
+  let C := fun q : (α : Fin g) × Fin (mult α) ↦ weight q.1 q.2 • A q.1 v
+  let E := Matrix.sigmaBlockInclusion blockIndex p
+  have h := Matrix.sigmaBlockInclusion_conjTranspose_mul_blockDiagonal' C p
+  have hdiag := verticalAssembledTensor_reindex_copyCoordinates
+    dim mult weight A v
+  have hleft : (verticalCopyBlockInclusion dim mult p)ᴴ *
+      verticalAssembledTensor dim mult weight A v =
+        (Eᴴ * Matrix.blockDiagonal' C).submatrix
+          (Equiv.refl _) (verticalCopyCoordinateEquiv dim mult) := by
+    rw [hdiag]
+    simpa only [verticalCopyBlockInclusion, blockIndex, C, E,
+      Matrix.reindex_apply, Equiv.symm_symm, Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_id_id] using
+      (Matrix.submatrix_mul_equiv Eᴴ (Matrix.blockDiagonal' C)
+        (Equiv.refl _) (verticalCopyCoordinateEquiv dim mult)
+        (verticalCopyCoordinateEquiv dim mult))
+  have hright : (weight p.1 p.2 • A p.1 v) *
+      (verticalCopyBlockInclusion dim mult p)ᴴ =
+        (C p * Eᴴ).submatrix
+          (Equiv.refl _) (verticalCopyCoordinateEquiv dim mult) := by
+    have hC : (C p).submatrix (Equiv.refl _) (Equiv.refl _) = C p := by
+      rfl
+    calc
+      C p * (verticalCopyBlockInclusion dim mult p)ᴴ =
+          (C p).submatrix (Equiv.refl _) (Equiv.refl _) *
+            (verticalCopyBlockInclusion dim mult p)ᴴ := by
+        rw [hC]
+      _ = (C p * Eᴴ).submatrix
+          (Equiv.refl _) (verticalCopyCoordinateEquiv dim mult) := by
+        simpa only [verticalCopyBlockInclusion, blockIndex, C, E,
+          Matrix.conjTranspose_submatrix] using
+          (Matrix.submatrix_mul_equiv (C p) Eᴴ
+            (Equiv.refl _) (Equiv.refl _)
+            (verticalCopyCoordinateEquiv dim mult))
+  have hpull := congrArg
+    (fun X ↦ X.submatrix
+      (Equiv.refl _) (verticalCopyCoordinateEquiv dim mult)) h
+  exact hleft.trans (hpull.trans hright.symm)
+
+/-- Compression by a retained-copy inclusion selects its weighted simple
+block.
+
+Source: CPSV16, Appendix C.4, lines 1955--1971. -/
+theorem verticalCopyBlockInclusion_compression
+    {g d : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (A : (α : Fin g) → MPSTensor d (dim α))
+    (p : (α : Fin g) × Fin (mult α)) (v : Fin d) :
+    weight p.1 p.2 • A p.1 v =
+      (verticalCopyBlockInclusion dim mult p)ᴴ *
+        verticalAssembledTensor dim mult weight A v *
+          verticalCopyBlockInclusion dim mult p := by
+  rw [verticalCopyBlockInclusion_conjTranspose_mul_verticalAssembledTensor,
+    Matrix.mul_assoc, verticalCopyBlockInclusion_isometry, Matrix.mul_one]
+
 private def verticalProductSectorEquiv {g : ℕ} (dim mult : Fin g → ℕ) :
     ((α : Fin g) × (Fin (mult α) × Fin (dim α))) ×
       ((α : Fin g) × (Fin (mult α) × Fin (dim α))) ≃
@@ -290,55 +555,6 @@ theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors
     (hHorizontalTwo.hasInvariantProjectorClosure_verticalTensor (blockTwo M) hMTwo)
     (hasNoPeriodicVectors_verticalTensor_of_horizontalCF
       (blockTwo M) hMTwo hHorizontalTwo)
-
-private theorem verticalAssembledTensor_apply_copy_same
-    {g d : ℕ} (dim mult : Fin g → ℕ)
-    (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor d (dim α))
-    (α : Fin g) (q : Fin (mult α)) (v : Fin d) (i j : Fin (dim α)) :
-    verticalAssembledTensor dim mult weight B v
-        (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
-        (verticalSectorFinEquiv dim mult ⟨α, (q, j)⟩) =
-      weight α q * B α v i j := by
-  unfold verticalAssembledTensor MPSTensor.toTensorFromBlocks
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    verticalSectorFinEquiv_outer_symm]
-  rw [Matrix.blockDiagonal'_apply_eq]
-  let p := finSigmaFinEquiv.symm (finSigmaFinEquiv ⟨α, q⟩)
-  have hp : p = ⟨α, q⟩ := finSigmaFinEquiv.symm_apply_apply ⟨α, q⟩
-  have hdim : dim p.1 = dim α := congrArg (fun s => dim s.1) hp
-  have hweight : weight p.1 p.2 = weight α q :=
-    congrArg (fun s => weight s.1 s.2) hp
-  let block (s : (α : Fin g) × Fin (mult α)) := B s.1 v
-  let packed (s : (α : Fin g) × Fin (mult α)) :
-      (r : (α : Fin g) × Fin (mult α)) ×
-        Matrix (Fin (dim r.1)) (Fin (dim r.1)) ℂ :=
-    ⟨s, block s⟩
-  have hpacked : packed p = packed ⟨α, q⟩ := congrArg packed hp
-  have hblock : HEq (block p) (block ⟨α, q⟩) :=
-    (Sigma.mk.inj_iff.mp hpacked).2
-  have hentry := (Fin.heq_fun₂_iff hdim.symm hdim.symm).mp hblock.symm i j
-  simp only [verticalCopyWeights, verticalCopyBlocks]
-  change weight p.1 p.2 * block p (Fin.cast _ i) (Fin.cast _ j) = _
-  rw [hweight]
-  exact congrArg (weight α q * ·) hentry.symm
-
-private theorem verticalAssembledTensor_apply_copy_ne
-    {g d : ℕ} (dim mult : Fin g → ℕ)
-    (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor d (dim α))
-    {α β : Fin g} {q : Fin (mult α)} {r : Fin (mult β)}
-    (h : (⟨α, q⟩ : (α : Fin g) × Fin (mult α)) ≠ ⟨β, r⟩)
-    (v : Fin d) (i : Fin (dim α)) (j : Fin (dim β)) :
-    verticalAssembledTensor dim mult weight B v
-        (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
-        (verticalSectorFinEquiv dim mult ⟨β, (r, j)⟩) = 0 := by
-  have hflat : finSigmaFinEquiv ⟨α, q⟩ ≠ finSigmaFinEquiv ⟨β, r⟩ :=
-    fun hEq => h (finSigmaFinEquiv.injective hEq)
-  simp [verticalAssembledTensor, MPSTensor.toTensorFromBlocks,
-    Matrix.reindex_apply, Matrix.submatrix_apply,
-    verticalSectorFinEquiv_outer_symm, Matrix.blockDiagonal'_apply_ne,
-    hflat]
 
 /-- The retained tensor belonging to one ordered pair of vertical BNT copies.
 
@@ -1239,7 +1455,9 @@ theorem ambientInclusion_isometry {d : ℕ}
     _ = 1 := S.retainedInclusion_isometry x
 
 /-- The composite ambient inclusion intertwines an active weighted corner
-with the blocked vertical tensor. -/
+with the blocked vertical tensor.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 theorem ambient_intertwine {d : ℕ}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (M : MPOTensor d D)
@@ -1275,7 +1493,9 @@ theorem ambient_intertwine {d : ℕ}
       simp only [ambientInclusion, W, R, Matrix.mul_assoc]
 
 /-- The adjoint composite ambient inclusion satisfies the reverse
-intertwining identity. -/
+intertwining identity.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 theorem ambient_intertwine_adjoint {d : ℕ}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (M : MPOTensor d D)
@@ -1314,7 +1534,9 @@ theorem ambient_intertwine_adjoint {d : ℕ}
         Matrix.conjTranspose_conjTranspose, W, R, Matrix.mul_assoc]
 
 /-- Compression of the blocked vertical tensor by a composite ambient
-inclusion gives its active weighted corner. -/
+inclusion gives its active weighted corner.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 theorem ambient_compression {d : ℕ}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (M : MPOTensor d D)

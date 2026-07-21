@@ -2589,6 +2589,14 @@ physical indices, as in
 
 \begin{theorem}[Existence and inclusions of retained-product spectral data]
     \label{thm:mpdo_retained_product_spectral_family_exists}
+    \lean{MPOTensor.verticalCopyCoordinateEquiv}
+    \lean{MPOTensor.verticalCopyCoordinateEquiv_symm_apply}
+    \lean{MPOTensor.verticalAssembledTensor_reindex_copyCoordinates}
+    \lean{MPOTensor.verticalCopyBlockInclusion}
+    \lean{MPOTensor.verticalCopyBlockInclusion_isometry}
+    \lean{MPOTensor.verticalAssembledTensor_mul_verticalCopyBlockInclusion}
+    \lean{MPOTensor.verticalCopyBlockInclusion_conjTranspose_mul_verticalAssembledTensor}
+    \lean{MPOTensor.verticalCopyBlockInclusion_compression}
     \lean{MPOTensor.retainedProductBlockInclusion_isometry}
     \lean{MPOTensor.retainedVerticalProductTensor_mul_retainedProductBlockInclusion}
     \lean{MPOTensor.retainedProductBlockInclusion_conjTranspose_mul_retainedVerticalProductTensor}
@@ -2604,11 +2612,15 @@ physical indices, as in
     \lean{MPOTensor.RetainedProductSpectralFamily.ambient_compression}
     \leanok
     \uses{def:mpdo_retained_product_spectral_family,
-      thm:mpdo_weighted_vertical_product_block_normal_decomposition}
+      thm:mpdo_weighted_vertical_product_block_normal_decomposition,
+      thm:mpdo_retained_vertical_product_canonical_hypotheses}
     Suppose that the one-site vertical tensor has the stated exact
     coisometric reconstruction, that $M$ is horizontally canonical, and that
     $M$ generates positive operators.  Then simultaneous retained-product
-    spectral data exist.  The canonical
+    spectral data exist.  In copy coordinates, the assembled vertical tensor
+    is the direct sum of the weighted simple blocks.  The canonical inclusion
+    of each copy is an isometry, intertwines in both directions, and its
+    compression selects exactly that weighted block.  Likewise, the canonical
     inclusion of a copy pair, followed by its local corner isometry, is an
     isometry into the retained product bond space and intertwines in both
     directions.  Composing once more with the adjoint of the squared vertical
@@ -2629,8 +2641,11 @@ physical indices, as in
     The canonical copy-pair inclusions are isometries and select the weighted
     diagonal blocks of the retained product tensor.  Composition with each
     local isometry gives the retained inclusion and both intertwining
-    identities.  Finally, the Kronecker square of the vertical coisometry is a
-    coisometry, so its adjoint preserves the isometry relation.
+    identities.  Finally, write the blocked vertical tensor as
+    $T=W^\dagger CW$ and the ambient inclusion as $J=W^\dagger R$.  The
+    coisometry identity $WW^\dagger=1$ transports both retained intertwining
+    identities from $C$ to $T$; the compression identity then follows from
+    $J^\dagger J=1$.
 \end{proof}
 
 \begin{theorem}[Flattened reconstruction of the retained product]
