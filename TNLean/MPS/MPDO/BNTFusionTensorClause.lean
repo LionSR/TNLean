@@ -54,7 +54,13 @@ the fusion identity and in the length-one idempotent law for
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 943--951;
 Theorem 4.14(iii), lines 986--993; and Appendix C.4, lines 1929--1947 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`.
+
+**Scope restriction (full-support fusion family):** The fusion map below
+satisfies $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$. The unrestricted
+source statement allows a zero product corner and instead gives a coisometry
+onto the active direct sum together with exact reconstruction. Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
 structure BNTFusionTensorClause (M : MPOTensor d D) where
   /-- Number of BNT labels in the chosen vertical decomposition. -/
   labelCount : ℕ

@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.BNTTheoremData
 /-!
 # The fusion isometries of Theorem IV.13(iii)
 
-Statement (iii) of Theorem IV.13 of arXiv:1606.00608 asserts the existence of
-isometries $U_{\alpha,\beta}$ with
+This file studies the full-support specialization of statement (iii) of
+Theorem IV.13 of arXiv:1606.00608. It assumes matrices $U_{\alpha,\beta}$ with
 \[
   U_{\alpha,\beta}\, M_\alpha M_\beta\, U_{\alpha,\beta}^\dagger
     = \bigoplus_\gamma \chi_{\alpha,\beta,\gamma} \otimes M_\gamma,
@@ -59,8 +59,15 @@ Together with the length-one idempotent scalar law from statement (iii),
 and the positive trace-power witness into the algebra clause of statement (ii).
 
 The family is hypothesis-carrying: nothing here constructs the tensors, the
-chi matrices, or the isometries from an MPDO tensor. That construction is
-the Appendix C.3--C.4 obligation recorded in
+chi matrices, or the maps from an MPDO tensor.
+
+**Scope restriction (full-support fusion family):** The field
+$U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ excludes a common zero corner of
+the product tensor. The unrestricted source statement instead requires a
+coisometry onto the active sectors and exact reconstruction. This distinction
+is documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. The source-facing
+Appendix C.4 construction is tracked there and in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
 ## References
@@ -111,7 +118,13 @@ sum is realized block-diagonally over the labels, with the block of label
 of the tensor of `γ`.
 
 Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--993 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`.
+
+**Scope restriction (full-support fusion family):** This structure assumes
+$U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$. The source permits a discarded
+common zero corner and, in the displayed orientation, gives a coisometry onto
+the retained direct sum together with reconstruction. Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
 structure BNTFusionIsometryFamily (Λ : Type*) [Fintype Λ] [DecidableEq Λ]
     (p : ℕ) where
   /-- Bond dimension of the tensor of each label.
