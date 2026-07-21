@@ -22,7 +22,7 @@ Appendix C.4, lines 2020--2029.
   Appendix C.4, lines 2020--2029
 -/
 
-open scoped Matrix BigOperators Kronecker
+open scoped Matrix BigOperators ComplexOrder Kronecker
 
 noncomputable section
 
@@ -401,5 +401,60 @@ theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors
     (productRetainedEquiv dim mult)
     (mulTensor_verticalAssembledTensor_reindex dim mult weight B)
     hCanonical.1 hCanonical.2 p
+
+/-- Every retained copy-pair tensor has an exact decomposition into its
+nonzero normal corners, with the corner isometries retained.
+
+The active family may be empty.  Thus a zero-dimensional copy pair, or a
+copy-pair tensor whose every letter vanishes, contributes no artificial
+normal sector.  No division by the outer copy weight occurs in this theorem.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+theorem exists_weightedVerticalProductBlock_normalDecomposition
+    {g d D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α))) :
+    ∃ (r : ℕ) (localDim : Fin r → ℕ) (coefficient : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor (D * D) (localDim k))
+      (V : (k : Fin r) →
+        Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (localDim k)) ℂ),
+      (∀ k, 0 < localDim k) ∧
+      (∀ k, (0 : ℂ) < coefficient k) ∧
+      (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+      (∀ k, (V k)ᴴ * V k = 1) ∧
+      (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
+      (∀ (k : Fin r) (ab : Fin (D * D)),
+        weightedVerticalProductBlock dim mult weight B p ab * V k =
+          V k * (coefficient k • blocks k ab)) ∧
+      (∀ (k : Fin r) (ab : Fin (D * D)),
+        (V k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab =
+          (coefficient k • blocks k ab) * (V k)ᴴ) ∧
+      (∀ (k : Fin r) (ab : Fin (D * D)),
+        coefficient k • blocks k ab =
+          (V k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab * V k) ∧
+      (∀ ab : Fin (D * D),
+        weightedVerticalProductBlock dim mult weight B p ab =
+          ∑ k, V k * (coefficient k • blocks k ab) * (V k)ᴴ) ∧
+      MPSTensor.SameMPV₂Pos
+        (weightedVerticalProductBlock dim mult weight B p)
+        (MPSTensor.toTensorFromBlocks (d := D * D)
+          (μ := coefficient) blocks) ∧
+      (∑ k, localDim k) ≤ dim p.1.1 * dim p.2.1 := by
+  have hCanonical :=
+    weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors
+      dim mult weight B M U hU hReconstruct hHorizontal hM p
+  exact MPSTensor.exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
+    (weightedVerticalProductBlock dim mult weight B p)
+    hCanonical.1 hCanonical.2
 
 end MPOTensor

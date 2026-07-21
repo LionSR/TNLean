@@ -2547,6 +2547,27 @@ physical indices, as in
     periodic vector of the full retained product.
 \end{proof}
 
+\begin{theorem}[Normal-corner decomposition of a retained copy pair]
+    \label{thm:mpdo_weighted_vertical_product_block_normal_decomposition}
+    \lean{MPOTensor.exists_weightedVerticalProductBlock_normalDecomposition}
+    \leanok
+    \uses{thm:mpdo_weighted_vertical_product_block_canonical_hypotheses,
+      thm:projector_closure_canonical_form}
+    For every ordered pair of retained BNT copies, the weighted product tensor
+    has an exact orthogonal decomposition into positive multiples of normal
+    tensors.  The corresponding corner isometries are retained, intertwine in
+    both directions, and reconstruct every tensor letter.  The active family
+    is allowed to be empty; in particular, no normal block is introduced for
+    a zero-dimensional or identically zero copy-pair tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the canonical-form sufficient condition to the invariant-projector
+    closure and periodic-exclusion properties of the preceding theorem.  Its
+    spectral construction discards precisely the corners on which every
+    letter vanishes and retains the isometry of every nonzero corner.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
