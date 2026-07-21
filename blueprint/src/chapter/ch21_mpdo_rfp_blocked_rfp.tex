@@ -2488,6 +2488,34 @@ physical indices, as in
     and distribute the product of the two finite sums.
 \end{proof}
 
+\begin{theorem}[Canonical hypotheses for the retained vertical product]
+    \label{thm:mpdo_retained_vertical_product_canonical_hypotheses}
+    \lean{MPOTensor.verticalCoisometrySquare}
+    \lean{MPOTensor.verticalTensor_blockTwo_squared_coisometry_reconstruction}
+    \lean{MPSTensor.projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction}
+    \lean{MPOTensor.retainedVerticalProduct_projectorClosure_and_noPeriodicVectors}
+    \leanok
+    \uses{thm:mpdo_blocked_vertical_operator_representations,
+      def:mpdo_two_site_blocking}
+    Suppose that the vertical reading of $M$ is reconstructed from a retained
+    tensor $A$ by a coisometry $U$.  The two-site blocking is then reconstructed
+    from the product of two copies of $A$ by the Kronecker square of $U$.
+    Moreover, if $M$ is horizontally canonical and generates positive
+    operators, this retained product tensor has invariant-projector closure
+    and has no nontrivial periodic vectors.  No full-support assumption is
+    imposed on the retained bond space.
+\end{theorem}
+
+\begin{proof}\leanok
+    The Kronecker square of a coisometry is again a coisometry.  Expanding a
+    blocked vertical letter gives the product of the two one-site
+    reconstructions and hence the asserted exact compression formula.
+    Horizontal canonical form and positivity are preserved by two-site
+    blocking.  Invariant-projector closure descends to an exact reducing
+    compression, while a periodic vector in the compression would embed
+    isometrically as a periodic vector of the blocked vertical tensor.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}

@@ -4,6 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
+import TNLean.MPS.MPDO.VerticalCoisometry
+import TNLean.MPS.MPDO.HorizontalBlocking
+import TNLean.MPS.MPDO.VerticalSpectral
 import TNLean.MPS.Tactic.Basic
 
 /-!
@@ -22,6 +25,65 @@ Appendix C.4, lines 2020--2029.
 open scoped Matrix BigOperators Kronecker
 
 noncomputable section
+
+namespace MPSTensor
+
+/-- Projector closure and absence of periodic vectors pass through an exact
+coisometric reconstruction.
+
+If $U$ maps the ambient bond space onto retained coordinates, then $U^\dagger$
+is an isometry intertwining the retained tensor with the ambient tensor. Exact
+reconstruction makes its range reducing, so projector closure descends by
+compression and every peripheral eigenvector of the retained tensor is also
+one of the ambient tensor.
+
+Source: CPSV16, canonical nonzero-sector decomposition at lines 214--230. -/
+theorem projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction
+    {d D n : ℕ} (A : MPSTensor d D) (C : MPSTensor d n)
+    (U : Matrix (Fin n) (Fin D) ℂ) (hU : U * Uᴴ = 1)
+    (hreconstruct : ∀ i, A i = Uᴴ * C i * U)
+    (hClosure : HasInvariantProjectorClosure A)
+    (hPer : HasNoPeriodicVectors A) :
+    HasInvariantProjectorClosure C ∧ HasNoPeriodicVectors C := by
+  let V : Matrix (Fin D) (Fin n) ℂ := Uᴴ
+  have hV : Vᴴ * V = 1 := by
+    simpa [V] using hU
+  have hint : ∀ i, A i * V = V * C i := by
+    intro i
+    calc
+      A i * V = (Uᴴ * C i * U) * Uᴴ := by rw [hreconstruct]
+      _ = Uᴴ * C i * (U * Uᴴ) := by simp only [Matrix.mul_assoc]
+      _ = V * C i := by rw [hU, Matrix.mul_one]
+  have hComm : ∀ i, A i * (V * Vᴴ) = (V * Vᴴ) * A i := by
+    intro i
+    have hsupportLeft : A i * (V * Vᴴ) = A i := by
+      calc
+        A i * (V * Vᴴ) = (A i * V) * Vᴴ := (Matrix.mul_assoc _ _ _).symm
+        _ = (V * C i) * Vᴴ := by rw [hint]
+        _ = A i := by simpa [V] using (hreconstruct i).symm
+    have hsupportRight : (V * Vᴴ) * A i = A i := by
+      calc
+        (V * Vᴴ) * A i = (V * Vᴴ) * (V * C i * Vᴴ) := by
+          rw [show A i = V * C i * Vᴴ by simpa [V] using hreconstruct i]
+        _ = V * C i * Vᴴ := by
+          simp only [Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ V, hV,
+            Matrix.one_mul]
+        _ = A i := by simpa [V] using (hreconstruct i).symm
+    rw [hsupportLeft, hsupportRight]
+  have hcompress : (fun i => Vᴴ * A i * V) = C := by
+    funext i
+    calc
+      Vᴴ * A i * V = Vᴴ * (V * C i * Vᴴ) * V := by
+        rw [show A i = V * C i * Vᴴ by simpa [V] using hreconstruct i]
+      _ = C i := by
+        simp only [Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ V, hV,
+          Matrix.one_mul, Matrix.mul_one]
+  constructor
+  · rw [← hcompress]
+    exact hasInvariantProjectorClosure_compress_of_commutes A hClosure V hV hComm
+  · exact hPer.of_isometry_intertwine V hV hint
+
+end MPSTensor
 
 namespace MPOTensor
 
@@ -131,6 +193,39 @@ theorem verticalTensor_blockTwo_squared_coisometry_reconstruction
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [hReconstruct, hReconstruct, Matrix.conjTranspose_kronecker,
       ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
+
+/-- The squared retained product inherits projector closure and absence of
+periodic vectors from the blocked vertical tensor.
+
+The one-site coisometric reconstruction is squared exactly. Horizontal
+canonical form and positivity pass to two-site blocking, so the blocked
+vertical tensor has the two canonical-form hypotheses. The preceding
+coisometric transfer theorem then passes both hypotheses to the retained
+product tensor, including when its active support is smaller than the full
+product bond space.
+
+Source: CPSV16, Appendix C.4, lines 2015--2025. -/
+theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors
+    {d D n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    (U : Matrix (Fin n) (Fin d) ℂ) (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab = Uᴴ * A ab * U)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    let C :=
+      (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
+    MPSTensor.HasInvariantProjectorClosure C ∧
+      MPSTensor.HasNoPeriodicVectors C := by
+  dsimp only
+  have hsquare := verticalTensor_blockTwo_squared_coisometry_reconstruction
+    M A U hU hReconstruct
+  have hHorizontalTwo := hHorizontal.blockTwo
+  have hMTwo := hM.blockTwo
+  exact MPSTensor.projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction
+    (verticalTensor (blockTwo M))
+    (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
+    (verticalCoisometrySquare U) hsquare.1 hsquare.2
+    (hHorizontalTwo.hasInvariantProjectorClosure_verticalTensor (blockTwo M) hMTwo)
+    (hasNoPeriodicVectors_verticalTensor_of_horizontalCF
+      (blockTwo M) hMTwo hHorizontalTwo)
 
 private theorem verticalAssembledTensor_apply_copy_same
     {g d : ℕ} (dim mult : Fin g → ℕ)
