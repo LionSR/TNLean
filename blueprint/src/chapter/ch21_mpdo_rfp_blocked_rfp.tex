@@ -1,8 +1,26 @@
 \section{Two-site and positive-length physical blocking}
 
 The two-site block is the virtual contraction of two copies of $K$:
+% Formula: M^{(i_1,i_2),(j_1,j_2)}_{a,c}
+% =\sum_b K^{i_1,j_1}_{a,b}K^{i_2,j_2}_{b,c}.
+% Ink-to-index: the square M carries the grouped ket word (i_1,i_2), grouped
+% bra word (j_1,j_2), and outer virtual indices a,c.  The two K squares expose
+% the four constituent physical indices and share the virtual index b.
+% Contractions: the single east--west bond between the K tensors is summed;
+% every outer virtual leg and every ket/bra leg remains free.
+% Boundary signature: semantically both sides have two outer virtual indices,
+% one grouped ket word, and one grouped bra word.  The raw drawing has
+% (1,1,1,1) on the M side and (1,1,2,2) on the K side because it displays the
+% canonical grouping of the two physical letters rather than hiding them.
+% Source verdict: exact house-style reproduction of MPDO_K=MM.png from
+% Theorem 4.9, lines 851--856.  The source has no blocking enclosure.
 \begin{center}
-    \TNMPDOTwoSiteBlocking
+    \tnpic[physical=updown, tensor style=box]{%
+        \tn[mpo, up={$(i_1,i_2)$}, down={$(j_1,j_2)$}]{M}}
+    \qquad$=$\qquad
+    \tnpic[physical=updown, tensor style=box]{%
+        \tn[mpo, up=$i_1$, down=$j_1$]{K} &
+        \tn[mpo, up=$i_2$, down=$j_2$]{K}}
 \end{center}
 The two ket indices and the two bra indices are grouped into the blocked
 physical indices, as in

@@ -910,7 +910,63 @@ $\widehat{\cal K}$.
 
 \begin{figure}[!b]
     \centering
-    \TNMPDOBlockedRFPChannels
+    % Formula: \widehat{\mathcal T}(\widehat{\cal K}_2(X))
+    % =\widehat{\cal K}_3(X), followed by
+    % \widehat{\mathcal T}_{(12)3}(\widehat{\cal K}_3(X))
+    % =\widehat{\cal K}_4(X); the reverse row is the corresponding pair of
+    % \widehat{\mathcal S} identities.
+    % Ink-to-index: every \widehat{\cal K} box has west/east virtual indices
+    % and upper/lower physical indices.  Each dashed span groups two adjacent
+    % tensor bodies into one blocked local site and introduces no contraction.
+    % Contractions: only adjacent east--west virtual legs are summed.  All
+    % upper and lower physical legs, and both outer virtual legs, remain free.
+    % Boundary signatures (virtual-west, virtual-east, physical-up,
+    % physical-down): the two-, three-, and four-site panels have respectively
+    % (1,1,2,2), (1,1,3,3), and (1,1,4,4).  The arrows are physical channels,
+    % so their endpoint physical arities change as displayed.
+    % Source verdict: Appendix C.2, lines 1821--1825, specifies the two-step
+    % channels algebraically but has no dedicated figure.  The rows reproduce
+    % that composition using the local tensors already defined here.
+    \[
+        \widehat{\mathcal T}^{\,2}:\quad
+        \tnpic[compact, physical=updown, tensor style=box]{%
+            \tn[mpo]{\widehat{\cal K}}
+                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
+            \tn[mpo]{\widehat{\cal K}}}
+        \quad\xrightarrow{\widehat{\mathcal T}}\quad
+        \tnpic[compact, physical=updown, tensor style=box]{%
+            \tn[mpo]{\widehat{\cal K}} &
+            \tn[mpo]{\widehat{\cal K}} &
+            \tn[mpo]{\widehat{\cal K}}}
+        \quad\xrightarrow{\widehat{\mathcal T}_{(12)3}}\quad
+        \tnpic[compact, physical=updown, tensor style=box]{%
+            \tn[mpo]{\widehat{\cal K}}
+                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
+            \tn[mpo]{\widehat{\cal K}} &
+            \tn[mpo]{\widehat{\cal K}}
+                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
+            \tn[mpo]{\widehat{\cal K}}}
+    \]
+    \[
+        \widehat{\mathcal S}^{\,2}:\quad
+        \tnpic[compact, physical=updown, tensor style=box]{%
+            \tn[mpo]{\widehat{\cal K}}
+                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
+            \tn[mpo]{\widehat{\cal K}} &
+            \tn[mpo]{\widehat{\cal K}}
+                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
+            \tn[mpo]{\widehat{\cal K}}}
+        \quad\xrightarrow{\widehat{\mathcal S}_{(123)4}}\quad
+        \tnpic[compact, physical=updown, tensor style=box]{%
+            \tn[mpo]{\widehat{\cal K}} &
+            \tn[mpo]{\widehat{\cal K}} &
+            \tn[mpo]{\widehat{\cal K}}}
+        \quad\xrightarrow{\widehat{\mathcal S}}\quad
+        \tnpic[compact, physical=updown, tensor style=box]{%
+            \tn[mpo]{\widehat{\cal K}}
+                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
+            \tn[mpo]{\widehat{\cal K}}}
+    \]
     \caption{The superscripts in $\widehat{\mathcal T}^2$ and
     $\widehat{\mathcal S}^2$ denote successive overlapping applications.
     The dashed frames identify the two-site and four-site endpoints with one
