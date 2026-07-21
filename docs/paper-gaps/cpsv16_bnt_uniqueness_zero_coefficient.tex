@@ -5,7 +5,7 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 
 \title{BNT Uniqueness and Zero Coefficients in CPSV16}
 \author{}
@@ -88,6 +88,42 @@ declaration is
 \doclink{TNLean/MPS/CanonicalForm/BNTUniqueness.lean}.} This restricted result
 does not alter the counterexample above or validate the unrestricted source
 sentence.
+
+\section{The active-only consequence for Figure 11}
+
+The same distinction applies to the Figure~11 decomposition in Appendix~C.4.
+For a fixed ordered pair $(\alpha,\beta)$, the source writes the active normal
+corners of the product tensor in the form
+\begin{equation}
+  U_{\alpha,\beta}(M_\alpha M_\beta)^iU_{\alpha,\beta}^\dagger
+  =\bigoplus_\gamma
+    \chi_{\alpha,\beta,\gamma}\otimes
+      Z_{\alpha,\beta,\gamma}M_\gamma^i
+        Z_{\alpha,\beta,\gamma}^{-1}
+  \label{eq:figure11-active-decomposition}
+\end{equation}
+\cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}.  The index
+$\gamma$ in this display ranges over the normal sectors that occur with a
+nonzero multiplicity for the chosen pair.  BNT uniqueness does not imply that
+every candidate normal tensor occurs for every pair.
+
+In particular, the fiber of $\chi_{\alpha,\beta,\gamma}$ may be empty.  Such
+a fiber has no positive diagonal entry and contributes zero to every
+positive-length power sum.  If the whole product tensor $M_\alpha M_\beta$
+vanishes, all its $\chi$ fibers are empty and the right-hand side of
+\eqref{eq:figure11-active-decomposition} is the empty direct sum.  Adding an
+unrelated normal tensor with coefficient zero would again satisfy the weak
+spanning clause, but it would not turn that tensor into an active Figure~11
+corner.
+
+Thus the source-facing consequence of BNT comparison is active-only: every
+nonzero normal corner of a fixed product pair is gauge-phase equivalent to a
+normal sector $M_\gamma$, while absent sectors are omitted rather than
+represented by zero coefficients.  Equality of the global closed-chain sums
+over all $(\alpha,\beta)$ cannot strengthen this statement to nonempty support
+for each fixed pair.  The tensor-level reason and the treatment of zero pairs
+are recorded in
+\path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

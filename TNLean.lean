@@ -30,6 +30,7 @@ import TNLean.Algebra.SkolemNoetherUnitary
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
+import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Algebra.CommutingProjectionProduct
@@ -389,6 +390,7 @@ import TNLean.MPS.CanonicalForm.ProjectorClosure
 import TNLean.MPS.CanonicalForm.ProjectorClosureDecomposition
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.CanonicalForm.BNTTransport
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
@@ -487,6 +489,8 @@ import TNLean.MPS.MPDO.VerticalSectorIdentity
 import TNLean.MPS.MPDO.VerticalSectorRelabeling
 import TNLean.MPS.MPDO.VerticalSectorCoefficientComparison
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
+import TNLean.MPS.MPDO.VerticalProductFusionDecomposition
+import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
@@ -571,6 +575,7 @@ import TNLean.MPS.MPDO.BNTMultiplicityNormalization
 import TNLean.MPS.MPDO.BNTTheoremWitness
 import TNLean.MPS.MPDO.BNTTheoremWitnessConsequences
 import TNLean.MPS.MPDO.BNTFusionIsometries
+import TNLean.MPS.MPDO.BNTFusionCoisometries
 import TNLean.MPS.MPDO.BNTFusionTensorClause
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BNTAssociativity

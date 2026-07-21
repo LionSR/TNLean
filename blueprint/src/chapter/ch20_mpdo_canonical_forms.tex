@@ -2312,12 +2312,19 @@ tensor.  This is the contraction in
 \begin{theorem}[A nonzero vertical corner has a nonzero sector compression]
     \label{thm:mpdo_grouped_sector_compression_nonzero}
     \lean{MPOTensor.IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner}
+    \lean{MPOTensor.exists_rangeProjection_corner_ne_zero}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo_vertical_loops,
-        def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero}
+        def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero,
+        thm:cpsv_normal_mpv_phase_gauge}
     Let $M$ be horizontally canonical and let $P$ be a matrix for which
     $P\widetilde M_vP$ is nonzero for some vertical letter $v$.  Then the
     first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
+    Under the same horizontal canonical-form hypothesis, suppose in addition
+    that $A$ is a normal tensor, $V$ is an isometry, and the compression by
+    $V$ is a nonzero scalar multiple of an invertible conjugate of $A$.  Then
+    the range projector $VV^\dagger$ has a nonzero vertical corner and hence a
+    nonzero first-site compression.
     This is the separation step used in
     \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -2326,6 +2333,11 @@ tensor.  This is the contraction in
     first-site insertion by $P$ has the same matrix product vectors as zero.
     Lemma~L for the horizontal canonical form would then force the inserted
     tensor itself to vanish, contrary to the assumed nonzero corner.
+    For the range-projector specialization, normality supplies a nonzero
+    letter of $A$.  A nonzero scalar and an invertible conjugation preserve
+    this letter.  If every $VV^\dagger$ corner vanished, compressing by
+    $V^\dagger$ and $V$ and using $V^\dagger V=1$ would contradict the exact
+    gauge-corner identity.
 \end{proof}
 
 \begin{theorem}[The sector trace identity]
@@ -2730,6 +2742,11 @@ tensor.  This is the contraction in
 
 \begin{theorem}[Normalized physical maps of the grouped vertical sectors]
     \label{thm:mpdo_normalized_grouped_sector_maps}
+    \lean{MPOTensor.normalizedGroupedSectorMap}
+    \lean{MPOTensor.normalizedGroupedSectorMap_isometry}
+    \lean{MPOTensor.normalizedGroupedSectorMap_orthogonal}
+    \lean{MPOTensor.normalizedGroupedSectorMap_intertwining}
+    \lean{MPOTensor.normalizedGroupedSectorMap_corner}
     \lean{MPOTensor.IsMPDO.exists_normalized_grouped_sector_maps}
     \leanok
     \uses{thm:mpdo_grouped_sector_unitary_normalization,
@@ -3462,6 +3479,7 @@ tensor.  This is the contraction in
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \lean{MPOTensor.verticalCF_of_horizontalCF}
+    \lean{MPOTensor.IsHorizontalCF.exists_cpsvVerticalDecomposition}
     \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo}
     A tensor in horizontal canonical form that generates matrix product
@@ -3476,6 +3494,8 @@ tensor.  This is the contraction in
         U\widetilde MU^\dagger=B,\qquad
         \widetilde M=U^\dagger BU.
     \]
+    The latter declaration retains the literal CPSV16 basis-of-normal-tensors
+    predicate together with these same positive and coisometric data.
     This is \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
