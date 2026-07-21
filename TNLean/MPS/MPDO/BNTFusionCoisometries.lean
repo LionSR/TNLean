@@ -33,6 +33,8 @@ It permits an empty retained sum when the product tensor is zero.
   identity.
 * `BNTFusionCoisometryFamily.mulTensor_mul_fusionCoisometry_conjTranspose`:
   the right zipper identity.
+* `BNTFusionCoisometryFamily.mpo_mul_mpo_eq_sum`: the positive-length
+  closed-word product law.
 * `BNTFusionCoisometryFamily.toBNTFusionIsometryFamily_of_fullSupport`: passage
   to the stronger column-isometry structure under an explicit full-support
   identity.
@@ -98,6 +100,23 @@ namespace BNTFusionCoisometryFamily
 variable {Λ : Type*} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
 variable (Fam : BNTFusionCoisometryFamily Λ p)
 
+private theorem listProd_conj_of_conjTranspose_mul_self_fintype
+    {S T : Type*} [Fintype S] [Fintype T] [DecidableEq S] [DecidableEq T]
+    (W : Matrix S T ℂ) (hW : Wᴴ * W = 1)
+    {n : ℕ} (F : Fin (n + 1) → Matrix T T ℂ) :
+    (List.ofFn fun l => W * F l * Wᴴ).prod =
+      W * (List.ofFn F).prod * Wᴴ := by
+  induction n with
+  | zero => simp
+  | succ m ih =>
+    rw [List.ofFn_succ, List.prod_cons,
+      List.ofFn_succ (f := F), List.prod_cons]
+    have ih_step := ih (F ∘ Fin.succ)
+    simp only [Function.comp_def] at ih_step
+    rw [ih_step]
+    simp only [Matrix.mul_assoc]
+    rw [← Matrix.mul_assoc Wᴴ W, hW, Matrix.one_mul]
+
 /-- The fusion coisometry carries every product letter to its retained
 weighted direct sum. -/
 theorem fusionCoisometry_mul_mulTensor (α β : Λ) (i j : Fin p) :
@@ -119,6 +138,50 @@ theorem mulTensor_mul_fusionCoisometry_conjTranspose
           Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j := by
   rw [Fam.reconstruction]
   simp only [Matrix.mul_assoc, Fam.coisometry, Matrix.mul_one]
+
+/-- For every positive chain length, the product of two labelled closed-chain
+operators is the sum over retained labels with coefficients
+$\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$.
+
+Exact reconstruction telescopes along a nonempty word because the fusion map
+is a coisometry.  Cyclicity of trace then removes the outer fusion maps, while
+the retained block diagonal contributes the stated trace-power coefficients.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+theorem mpo_mul_mpo_eq_sum (L : ℕ) (hL : 0 < L) (α β : Λ) :
+    mpo (Fam.tensor α) L * mpo (Fam.tensor β) L =
+      ∑ γ : Λ, Fam.chi.tracePowerCoeff α β γ L • mpo (Fam.tensor γ) L := by
+  obtain ⟨n, rfl⟩ : ∃ n, L = n + 1 :=
+    ⟨L - 1, (Nat.succ_pred_eq_of_pos hL).symm⟩
+  rw [← mpo_mulTensor]
+  ext σ τ
+  rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
+  set U := Fam.fusionCoisometry α β
+  have hU : U * Uᴴ = 1 := Fam.coisometry α β
+  let G : Fin (n + 1) → Matrix
+      ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ)))
+      ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) ℂ :=
+    fun l => Matrix.blockDiagonal' fun γ =>
+      Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (σ l) (τ l)
+  set W := Uᴴ
+  have hW : Wᴴ * W = 1 := by
+    simpa [W] using hU
+  have hletters : (fun l : Fin (n + 1) => W * G l * Wᴴ) =
+      fun l => mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l) := by
+    funext l
+    simpa [W, U, G] using (Fam.reconstruction α β (σ l) (τ l)).symm
+  have hconj := listProd_conj_of_conjTranspose_mul_self_fintype W hW G
+  have htraceP : Matrix.trace (List.ofFn fun l =>
+      mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l)).prod =
+      Matrix.trace (List.ofFn G).prod := by
+    rw [← hletters, hconj, Matrix.trace_mul_comm,
+      ← Matrix.mul_assoc, hW, Matrix.one_mul]
+  rw [htraceP]
+  simp only [G]
+  rw [listProd_blockDiagonal'_kronecker, Matrix.trace_blockDiagonal']
+  simp_rw [Matrix.trace_kronecker, Fam.chi.trace_matrix_pow]
+  simp only [Matrix.sum_apply, Matrix.smul_apply, mpo_apply, mpoMatrixEntry,
+    evalWord_ofFn, smul_eq_mul]
 
 /-- Under the additional assertion that every active-support projection is the
 identity, an active fusion coisometry gives the stronger full-support fusion
