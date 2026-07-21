@@ -30,6 +30,7 @@ import TNLean.Algebra.SkolemNoetherUnitary
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
+import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Algebra.CommutingProjectionProduct
