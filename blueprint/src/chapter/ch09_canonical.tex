@@ -592,6 +592,27 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     intertwining identities.
 \end{proof}
 
+\begin{lemma}[Canonical hypotheses descend to dependent direct summands]
+    \label{lem:canonical_hypotheses_dependent_direct_summand}
+    \lean{MPSTensor.projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal}
+    \leanok
+    \uses{lem:matrix_sigma_block_inclusion,
+      def:invariant_projector_closure, def:no_periodic_vectors}
+    Suppose that, after a change of coordinates, $A$ is the dependent direct
+    sum of tensors $B_k$.  If $A$ has invariant-projector closure and no
+    nontrivial periodic vectors, then every $B_k$ has both properties.  The
+    assertion also applies to summands of dimension zero.
+\end{lemma}
+
+\begin{proof}\leanok
+    Transport the canonical inclusion of the $k$th summand back to the bond
+    coordinates of $A$.  This is an isometry which intertwines $B_k$ with
+    $A$ on both sides, and its range projection commutes with every letter of
+    $A$.  Projector closure therefore descends by exact compression.  A
+    periodic vector of $B_k$ would embed through the same isometry as a
+    periodic vector of $A$.
+\end{proof}
+
 \begin{theorem}[Sufficient condition for canonical form]
     \label{thm:projector_closure_canonical_form}
     \lean{MPSTensor.%

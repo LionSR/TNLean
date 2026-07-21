@@ -103,6 +103,99 @@ theorem HasNoPeriodicVectors.of_isometry_intertwine
   · exact hμ
   · exact hnorm
 
+/-- Projector closure and absence of periodic vectors descend to each block of
+a dependent block-diagonal decomposition, even when the block coordinates are
+reindexed by separate equivalences.
+
+The canonical inclusion of one dependent summand, transported back to the
+ambient coordinates, is an isometry intertwining the selected block with the
+ambient tensor on both sides.  Its range projection therefore commutes with
+every ambient letter, so projector closure passes to the compression; absence
+of periodic vectors passes through the same isometric intertwiner.
+
+Source: arXiv:1606.00608, canonical nonzero-sector decomposition at lines
+214--230. -/
+theorem projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal
+    {ι : Type*} [Finite ι] [DecidableEq ι]
+    (dim : ι → ℕ) (blockIndex : ι → Type*)
+    [(k : ι) → Finite (blockIndex k)]
+    (blockEquiv : (k : ι) → Fin (dim k) ≃ blockIndex k)
+    (A : MPSTensor d D) (B : (k : ι) → MPSTensor d (dim k))
+    (e : Fin D ≃ (k : ι) × blockIndex k)
+    (hblock : ∀ i, Matrix.reindex e e (A i) =
+      Matrix.blockDiagonal' fun k ↦
+        Matrix.reindex (blockEquiv k) (blockEquiv k) (B k i))
+    (hClosure : HasInvariantProjectorClosure A)
+    (hPer : HasNoPeriodicVectors A) (k : ι) :
+    HasInvariantProjectorClosure (B k) ∧ HasNoPeriodicVectors (B k) := by
+  classical
+  letI := Fintype.ofFinite ι
+  letI (l : ι) := Fintype.ofFinite (blockIndex l)
+  let E := Matrix.sigmaBlockInclusion blockIndex k
+  let V : Matrix (Fin D) (Fin (dim k)) ℂ :=
+    E.submatrix e (blockEquiv k)
+  have hV : Vᴴ * V = 1 := by
+    dsimp only [V]
+    rw [Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv _ _ _ e _,
+      Matrix.sigmaBlockInclusion_isometry,
+      Matrix.submatrix_one_equiv]
+  have hint : ∀ i, A i * V = V * B k i := by
+    intro i
+    let C := fun l ↦ Matrix.reindex (blockEquiv l) (blockEquiv l) (B l i)
+    have h := Matrix.blockDiagonal'_mul_sigmaBlockInclusion C k
+    have hleft : A i * V =
+        (Matrix.reindex e e (A i) * E).submatrix e (blockEquiv k) := by
+      simpa only [V, E, Matrix.reindex_apply, Matrix.submatrix_submatrix,
+        Equiv.symm_comp_self, Matrix.submatrix_id_id] using
+        (Matrix.submatrix_mul_equiv (Matrix.reindex e e (A i)) E
+          e e (blockEquiv k))
+    have hright : V * B k i =
+        (E * C k).submatrix e (blockEquiv k) := by
+      simpa only [V, E, C, Matrix.reindex_apply,
+        Matrix.submatrix_submatrix, Equiv.symm_comp_self,
+        Matrix.submatrix_id_id] using
+        (Matrix.submatrix_mul_equiv E (C k) e (blockEquiv k) (blockEquiv k))
+    rw [← hblock i] at h
+    have hpull := congrArg (fun M ↦ M.submatrix e (blockEquiv k)) h
+    exact hleft.trans (hpull.trans hright.symm)
+  have hintStar : ∀ i, Vᴴ * A i = B k i * Vᴴ := by
+    intro i
+    let C := fun l ↦ Matrix.reindex (blockEquiv l) (blockEquiv l) (B l i)
+    have h := Matrix.sigmaBlockInclusion_conjTranspose_mul_blockDiagonal' C k
+    have hleft : Vᴴ * A i =
+        (Eᴴ * Matrix.reindex e e (A i)).submatrix (blockEquiv k) e := by
+      simpa only [V, E, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+        Matrix.submatrix_submatrix, Equiv.symm_comp_self,
+        Matrix.submatrix_id_id] using
+        (Matrix.submatrix_mul_equiv Eᴴ (Matrix.reindex e e (A i))
+          (blockEquiv k) e e)
+    have hright : B k i * Vᴴ =
+        (C k * Eᴴ).submatrix (blockEquiv k) e := by
+      simpa only [V, E, C, Matrix.reindex_apply,
+        Matrix.conjTranspose_submatrix, Matrix.submatrix_submatrix,
+        Equiv.symm_comp_self, Matrix.submatrix_id_id] using
+        (Matrix.submatrix_mul_equiv (C k) Eᴴ
+          (blockEquiv k) (blockEquiv k) e)
+    rw [← hblock i] at h
+    have hpull := congrArg (fun M ↦ M.submatrix (blockEquiv k) e) h
+    exact hleft.trans (hpull.trans hright.symm)
+  have hComm : ∀ i, A i * (V * Vᴴ) = (V * Vᴴ) * A i := by
+    intro i
+    calc
+      A i * (V * Vᴴ) = (A i * V) * Vᴴ := (Matrix.mul_assoc _ _ _).symm
+      _ = (V * B k i) * Vᴴ := by rw [hint i]
+      _ = V * (B k i * Vᴴ) := Matrix.mul_assoc _ _ _
+      _ = V * (Vᴴ * A i) := by rw [hintStar i]
+      _ = (V * Vᴴ) * A i := (Matrix.mul_assoc _ _ _).symm
+  have hcompress : (fun i ↦ Vᴴ * A i * V) = B k := by
+    funext i
+    rw [Matrix.mul_assoc, hint i, ← Matrix.mul_assoc, hV, Matrix.one_mul]
+  constructor
+  · rw [← hcompress]
+    exact hasInvariantProjectorClosure_compress_of_commutes A hClosure V hV hComm
+  · exact hPer.of_isometry_intertwine V hV hint
+
 /-- The transfer map of an intertwined corner: if `A i * V = V * B i` for
 every letter, then conjugation by `V` intertwines the transfer maps,
 `E_A(V X V†) = V E_B(X) V†`.
