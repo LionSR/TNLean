@@ -119,20 +119,6 @@ theorem strict_growth_reaches_ceiling
   have := hbound 0
   omega
 
-/-- **Existence of ceiling-reaching step with explicit bound.**
-
-If additionally `a 0 ≥ 1`, then there exists `n₀ ≤ C - 1` with `a n₀ = C`. -/
-theorem strict_growth_reaches_ceiling_exists
-    {a : ℕ → ℕ} {C : ℕ}
-    (hmono : ∀ n, a n ≤ a (n + 1))
-    (hbound : ∀ n, a n ≤ C)
-    (hstrict : ∀ n, a n < C → a n < a (n + 1))
-    (hpos : 0 < a 0) (hCpos : 0 < C) :
-    ∃ n₀, n₀ ≤ C - 1 ∧ a n₀ = C := by
-  exact ⟨C - a 0,
-    by have := hbound 0; omega,
-    strict_growth_reaches_ceiling hmono hbound hstrict⟩
-
 /-! ### Part 2: rectSpan reaches ceiling from strict growth -/
 
 /-- **rectSpan at nilpIndex power reaches range under strict growth.**
