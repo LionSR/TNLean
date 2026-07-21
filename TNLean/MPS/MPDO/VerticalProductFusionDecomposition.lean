@@ -276,6 +276,24 @@ private theorem verticalAssembledTensor_apply_copy_ne
     verticalSectorFinEquiv_outer_symm, Matrix.blockDiagonal'_apply_ne,
     hflat]
 
+/-- The retained tensor belonging to one ordered pair of vertical BNT copies.
+
+Its scalar is the product of the two positive copy weights.  The definition
+also permits a zero-dimensional simple bond; such a copy pair contributes an
+empty block and is not discarded at this stage.
+
+Source: CPSV16, Appendix C.4, lines 2020--2025. -/
+noncomputable def weightedVerticalProductBlock
+    {g D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α))) :
+    MPSTensor (D * D) (dim p.1.1 * dim p.2.1) :=
+  fun ab ↦ (weight p.1.1 p.1.2 * weight p.2.1 p.2.2) •
+    (mulTensor (verticalBNTMPO (B p.1.1))
+      (verticalBNTMPO (B p.2.1))).toMPSTensor ab
+
 /-- The product of two assembled vertical tensors is block diagonal over
 pairs of active BNT copies. The block for copies `(α, q)` and `(β, r)` is the
 raw product tensor for `(α, β)`, multiplied by the product of their diagonal
@@ -296,18 +314,17 @@ theorem mulTensor_verticalAssembledTensor_reindex
           (verticalBNTMPO (verticalAssembledTensor dim mult weight B))).toMPSTensor ab) =
       Matrix.blockDiagonal' fun p :
           ((α : Fin g) × Fin (mult α)) × ((α : Fin g) × Fin (mult α)) =>
-        (weight p.1.1 p.1.2 * weight p.2.1 p.2.2) •
-          Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-            ((mulTensor (verticalBNTMPO (B p.1.1))
-              (verticalBNTMPO (B p.2.1))).toMPSTensor ab) := by
+        Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
+          (weightedVerticalProductBlock dim mult weight B p ab) := by
   classical
   obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective ab
   ext x y
   rcases x with ⟨⟨⟨α, q⟩, ⟨β, r⟩⟩, ⟨i, j⟩⟩
   rcases y with ⟨⟨⟨α', q'⟩, ⟨β', r'⟩⟩, ⟨i', j'⟩⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
-  simp [productRetainedEquiv, verticalProductSectorEquiv, toMPSTensor,
-    mulTensor_apply, verticalBNTMPO_apply]
+  simp [productRetainedEquiv, verticalProductSectorEquiv,
+    weightedVerticalProductBlock, toMPSTensor, mulTensor_apply,
+    verticalBNTMPO_apply]
   by_cases hp :
       ((⟨α, q⟩ : (α : Fin g) × Fin (mult α)),
         (⟨β, r⟩ : (α : Fin g) × Fin (mult α))) =
@@ -317,8 +334,9 @@ theorem mulTensor_verticalAssembledTensor_reindex
     simp only [Matrix.sum_apply, Matrix.kroneckerMap_apply,
       Matrix.blockDiagonal'_apply_eq,
       verticalAssembledTensor_apply_copy_same]
-    simp only [Matrix.smul_apply, smul_eq_mul]
-    simp only [Matrix.sum_apply, Matrix.kroneckerMap_apply]
+    simp only [Matrix.submatrix_apply, Equiv.symm_apply_apply,
+      Matrix.smul_apply, smul_eq_mul, Matrix.sum_apply,
+      Matrix.kroneckerMap_apply]
     rw [Finset.mul_sum]
     exact Finset.sum_congr rfl fun x _ => by ring
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hp]
@@ -335,5 +353,53 @@ theorem mulTensor_verticalAssembledTensor_reindex
       exact mul_zero _
     · rw [verticalAssembledTensor_apply_copy_ne dim mult weight B hleft]
       exact zero_mul _
+
+/-- Every ordered pair of retained vertical BNT copies inherits projector
+closure and absence of periodic vectors from the blocked vertical tensor.
+
+The conclusion includes zero-dimensional copy pairs.  It requires no
+nonvanishing hypothesis on the product of the two copy weights: a zero block
+is passed unchanged to the subsequent spectral decomposition, where it has no
+active normal summands.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors
+    {g d D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α))) :
+    MPSTensor.HasInvariantProjectorClosure
+        (weightedVerticalProductBlock dim mult weight B p) ∧
+      MPSTensor.HasNoPeriodicVectors
+        (weightedVerticalProductBlock dim mult weight B p) := by
+  let C := (mulTensor
+    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
+    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))).toMPSTensor
+  have hCanonical : MPSTensor.HasInvariantProjectorClosure C ∧
+      MPSTensor.HasNoPeriodicVectors C := by
+    simpa only [C] using
+      retainedVerticalProduct_projectorClosure_and_noPeriodicVectors M
+        (verticalAssembledTensor dim mult weight B) U hU hReconstruct
+        hHorizontal hM
+  exact MPSTensor.projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal
+    (fun p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α)) ↦ dim p.1.1 * dim p.2.1)
+    (fun p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α)) ↦
+        Fin (dim p.1.1) × Fin (dim p.2.1))
+    (fun _ ↦ finProdFinEquiv.symm) C
+    (weightedVerticalProductBlock dim mult weight B)
+    (productRetainedEquiv dim mult)
+    (mulTensor_verticalAssembledTensor_reindex dim mult weight B)
+    hCanonical.1 hCanonical.2 p
 
 end MPOTensor

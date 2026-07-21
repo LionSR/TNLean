@@ -2516,6 +2516,37 @@ physical indices, as in
     isometrically as a periodic vector of the blocked vertical tensor.
 \end{proof}
 
+\begin{theorem}[Canonical hypotheses for every retained copy pair]
+    \label{thm:mpdo_weighted_vertical_product_block_canonical_hypotheses}
+    \lean{MPOTensor.productRetainedEquiv}
+    \lean{MPOTensor.weightedVerticalProductBlock}
+    \lean{MPOTensor.mulTensor_verticalAssembledTensor_reindex}
+    \lean{MPOTensor.weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors}
+    \leanok
+    \uses{thm:mpdo_retained_vertical_product_canonical_hypotheses,
+      lem:canonical_hypotheses_dependent_direct_summand}
+    In the retained coordinates, the product tensor is the orthogonal direct
+    sum over ordered pairs of BNT copies.  Its summand indexed by
+    $((\alpha,q),(\beta,r))$ is
+    \[
+      \mu_{\alpha,q}\mu_{\beta,r}
+      \bigl(M_\alpha M_\beta\bigr).
+    \]
+    Every such summand has invariant-projector closure and has no nontrivial
+    periodic vectors.  This includes zero-dimensional summands and requires
+    no nonvanishing assumption on the displayed scalar.
+\end{theorem}
+
+\begin{proof}\leanok
+    The canonical inclusion of a dependent direct-sum block is an isometry.
+    After transporting this inclusion through the retained-coordinate
+    equivalence, it intertwines the chosen summand with the full retained
+    product tensor on both sides.  Its range projection therefore commutes
+    with every tensor letter.  Invariant-projector closure descends by exact
+    compression, and any periodic vector of the summand would embed as a
+    periodic vector of the full retained product.
+\end{proof}
+
 \begin{theorem}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
