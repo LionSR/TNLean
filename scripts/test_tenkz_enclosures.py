@@ -298,6 +298,9 @@ def main() -> int:
         # fail-closed grammar, including forward references and cross-kind
         # duplicate names.
         audit_cases = {
+            "malformed-event": """picture|id=1|lang=lattice
+site|picture=1|cell=not-a-cell|mode=removed
+""",
             "unknown-region-member": """picture|id=1|lang=free
 region|picture=1|lang=free|slot=selected|members=later|outline=0
 """,
