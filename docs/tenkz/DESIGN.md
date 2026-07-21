@@ -303,10 +303,12 @@ The free environment body is an execute-once customization layer: atoms,
 joins, and regions remain ordinary body commands, and the shared semantic
 TikZ styles (`group region`, `region selected`, and the other region slots)
 may be extended with `/.append style` without bypassing measured geometry.
-Every enclosure is drawn on the background layer, so later members cannot
-be covered by its fill.  The historical `/tenkz/region` key family remains
-the lattice option path for compatibility; public `\tnregion` dispatch does
-not rename document-level lattice extensions.
+Enclosure fills occupy automatically depth-ordered background layers; an
+outer named region is behind every named region it contains.  Outlines and
+labels remain above every fill, so nesting preserves both semantic colors and
+boundary ink, while later members cannot be covered.  The historical
+`/tenkz/region` key family remains the lattice option path for compatibility;
+public `\tnregion` dispatch does not rename document-level lattice extensions.
 
 ### 2.6 Setup and extension
 

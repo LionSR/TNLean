@@ -790,9 +790,11 @@ Members may be earlier atoms from \tncmd{tnput}.  They may also be named
 \tncmd{tnjoin} routes or earlier named regions.  Their actual rendered ink --- including
 external bead labels, oblique routes, and route labels --- determines the
 enclosure.  An unlabelled \tnval{boundary} atom contributes its endpoint
-position and the usual daylight without inventing visible glyph ink.  Regions
-are painted on the background layer.  Unknown, empty,
-or duplicate names stop compilation rather than silently dropping ink.
+position and the usual daylight without inventing visible glyph ink.  Region
+fills occupy dependency-ordered background layers: an outer named region sits
+behind every region it contains, while outlines and labels remain above all
+fills.  Unknown, empty, or duplicate names stop compilation rather than
+silently dropping ink.
 
 \begin{tnexample}[
     formula   = {\textstyle\sum_{\alpha}

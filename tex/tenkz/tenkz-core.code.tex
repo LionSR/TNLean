@@ -358,9 +358,11 @@
 \def\tenkz@event#1{\iftenkz@logopen
   \immediate\write\tenkz@log{#1}\fi}
 \def\tenkz@picturelang{none}
+\def\tenkz@enclosurereset{}
 \def\tenkz@beginpicture#1{\global\advance\tenkz@pictureuid by 1\relax
   \tenkz@pictureid=\tenkz@pictureuid
   \def\tenkz@picturelang{#1}%
+  \tenkz@enclosurereset
   \tenkz@event{picture|id=\the\tenkz@pictureid|lang=#1}}
 
 % Measured audit geometry.  Coordinates are written as integer scaled points,
@@ -1336,14 +1338,24 @@
 % measured rather than budgeted.  The renderer adds only the existing
 % daylight constant.
 \prop_new:N \g__tenkz_enclosure_prop
+\prop_new:N \g__tenkz_enclosure_depth_prop
 \int_new:N  \g__tenkz_enclosure_int
+\int_new:N  \l__tenkz_enclosure_depth_int
+\int_new:N  \l__tenkz_enclosure_max_depth_int
 \seq_new:N  \l__tenkz_enclosure_nodes_seq
 \tl_new:N   \l__tenkz_enclosure_fit_tl
 \tl_new:N   \l__tenkz_enclosure_node_tl
 \tl_new:N   \l__tenkz_enclosure_result_tl
+\tl_new:N   \l__tenkz_enclosure_layer_tl
+\clist_new:N \l__tenkz_enclosure_layers_clist
+\clist_new:N \l__tenkz_enclosure_layers_new_clist
 \dim_new:N  \l__tenkz_enclosure_dx_dim
 \dim_new:N  \l__tenkz_enclosure_dy_dim
 \bool_new:N \l__tenkz_enclosure_valid_bool
+\bool_new:N \l__tenkz_enclosure_main_layer_bool
+
+\cs_set_protected:Npn \tenkz@enclosurereset
+  { \int_set:Nn \l__tenkz_enclosure_max_depth_int {-1} }
 
 \msg_new:nnn { tenkz } { enclosure-duplicate }
   { Enclosure~member~name~'#1'~is~already~defined~in~this~picture. }
@@ -1393,6 +1405,7 @@
 \cs_new_protected:Npn \tenkz_enclosure_resolve:n #1
   {
     \seq_clear:N \l__tenkz_enclosure_nodes_seq
+    \int_zero:N \l__tenkz_enclosure_depth_int
     \bool_set_true:N \l__tenkz_enclosure_valid_bool
     \clist_map_inline:nn {#1}
       {
@@ -1401,6 +1414,14 @@
           {
             \seq_if_in:NVF \l__tenkz_enclosure_nodes_seq \l_tmpa_tl
               { \seq_put_right:NV \l__tenkz_enclosure_nodes_seq \l_tmpa_tl }
+            % An enclosure which contains a named region belongs one fill
+            % level farther back.  Atoms and joins have no depth entry.
+            \prop_get:NVNT \g__tenkz_enclosure_depth_prop \l_tmpb_tl \l_tmpc_tl
+              {
+                \int_set:Nn \l__tenkz_enclosure_depth_int
+                  { \int_max:nn { \l__tenkz_enclosure_depth_int }
+                      { \l_tmpc_tl + 1 } }
+              }
           }
           {
             \msg_error:nnn {tenkz}{enclosure-unknown}{##1}
@@ -1415,6 +1436,61 @@
     \tl_clear:N \l__tenkz_enclosure_fit_tl
     \seq_map_inline:Nn \l__tenkz_enclosure_nodes_seq
       { \tl_put_right:Nn \l__tenkz_enclosure_fit_tl {(##1)} }
+  }
+
+% Activate one automatically ordered fill layer.  Larger depth means an outer
+% region, so the layer list runs from the largest depth down to zero before
+% main ink.  Existing non-enclosure layers retain their relative positions;
+% unrelated regions at one depth retain declaration order on their layer.
+\cs_new_protected:Npn \tenkz_enclosure_activate_fill_layer:
+  {
+    \int_compare:nNnT { \l__tenkz_enclosure_depth_int } >
+      { \l__tenkz_enclosure_max_depth_int }
+      {
+        \int_step_inline:nnnn
+          { \l__tenkz_enclosure_max_depth_int + 1 } {1}
+          { \l__tenkz_enclosure_depth_int }
+          {
+            \use:e
+              { \exp_not:N \pgfdeclarelayer {tenkz-enclosure-fill-##1} }
+          }
+        \int_set_eq:NN \l__tenkz_enclosure_max_depth_int
+          \l__tenkz_enclosure_depth_int
+      }
+    \clist_set:Ne \l__tenkz_enclosure_layers_clist { \pgf@layerlist }
+    \clist_clear:N \l__tenkz_enclosure_layers_new_clist
+    \bool_set_false:N \l__tenkz_enclosure_main_layer_bool
+    \clist_map_inline:Nn \l__tenkz_enclosure_layers_clist
+      {
+        \regex_match:nnF { \A tenkz-enclosure-fill- } {##1}
+          {
+            \str_if_eq:nnT {##1} {main}
+              {
+                \bool_set_true:N \l__tenkz_enclosure_main_layer_bool
+                \int_step_inline:nnnn
+                  { \l__tenkz_enclosure_max_depth_int } {-1} {0}
+                  {
+                    \clist_put_right:Nn
+                      \l__tenkz_enclosure_layers_new_clist
+                      {tenkz-enclosure-fill-####1}
+                  }
+              }
+            \clist_put_right:Nn \l__tenkz_enclosure_layers_new_clist {##1}
+          }
+      }
+    \bool_if:NF \l__tenkz_enclosure_main_layer_bool
+      {
+        \int_step_inline:nnnn
+          { \l__tenkz_enclosure_max_depth_int } {-1} {0}
+          {
+            \clist_put_right:Nn \l__tenkz_enclosure_layers_new_clist
+              {tenkz-enclosure-fill-##1}
+          }
+        \clist_put_right:Nn \l__tenkz_enclosure_layers_new_clist {main}
+      }
+    \exp_args:NV \pgfsetlayers \l__tenkz_enclosure_layers_new_clist
+    \tl_set:Ne \l__tenkz_enclosure_layer_tl
+      { tenkz-enclosure-fill-\int_use:N \l__tenkz_enclosure_depth_int }
   }
 
 \prg_new_conditional:Npnn \tenkz_enclosure_if_registered:n #1 { T, F, TF }
@@ -1491,18 +1567,41 @@
         % ink instead of resolving only the inner outline.
         \tenkz_enclosure_fresh:N \l__tenkz_enclosure_result_tl
         \tl_if_blank:nF {#5}
-          { \tenkz_enclosure_register_existing:nV {#5}
-              \l__tenkz_enclosure_result_tl }
+          {
+            \tl_set:Ne \l_tmpa_tl { \int_use:N \tenkz@pictureid / #5 }
+            \prop_if_in:NVTF \g__tenkz_enclosure_prop \l_tmpa_tl
+              { \msg_error:nnn {tenkz}{enclosure-duplicate}{#5} }
+              {
+                \prop_gput:NVV \g__tenkz_enclosure_prop \l_tmpa_tl
+                  \l__tenkz_enclosure_result_tl
+                \prop_gput:NVx \g__tenkz_enclosure_depth_prop \l_tmpa_tl
+                  { \int_use:N \l__tenkz_enclosure_depth_int }
+              }
+          }
+        \tenkz_enclosure_activate_fill_layer:
         \begin{scope}[local~bounding~box=\l__tenkz_enclosure_result_tl]
-          \begin{pgfonlayer}{background}
+          % Fill and outline are separate passes.  Automatically depth-ordered
+          % fill layers put an outer named region below every region it
+          % contains, while all outlines remain above every fill with main
+          % ink.  Both passes use the same fit geometry, and the named fill
+          % node remains the label anchor.
+          \begin{pgfonlayer}{\l__tenkz_enclosure_layer_tl}
             \use:e
               {
                 \exp_not:N \node
-                  [#2, fit=\exp_not:V \l__tenkz_enclosure_fit_tl,
+                  [#2, draw=none,
+                   fit=\exp_not:V \l__tenkz_enclosure_fit_tl,
                    inner~sep=\tenkz@dim{\tenkz@r@daylight}]
                   (\exp_not:V \l__tenkz_enclosure_node_tl) {};
               }
           \end{pgfonlayer}
+          \use:e
+            {
+              \exp_not:N \node
+                [#2, fill=none,
+                 fit=\exp_not:V \l__tenkz_enclosure_fit_tl,
+                 inner~sep=\tenkz@dim{\tenkz@r@daylight}] {};
+            }
           \tl_if_blank:nF {#3}
             { \exp_args:NnnV \tenkz_enclosure_label:nnn {#4}{#3}
                 \l__tenkz_enclosure_node_tl }

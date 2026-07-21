@@ -19,6 +19,22 @@ SOURCE = r"""
 \usepackage{tenkz}
 \pagestyle{empty}
 \makeatletter
+\newif\iftenkzTestSecondaryMain
+\newif\iftenkzTestSelectedMain
+\def\tenkzTestSecondaryFillLayer{}
+\def\tenkzTestSelectedFillLayer{}
+\newcommand*{\tenkzTestSecondaryLayer}{%
+  \ifx\pgfonlayer@name\pgf@maintext
+    \global\tenkzTestSecondaryMaintrue
+  \else
+    \xdef\tenkzTestSecondaryFillLayer{\pgfonlayer@name}%
+  \fi}
+\newcommand*{\tenkzTestSelectedLayer}{%
+  \ifx\pgfonlayer@name\pgf@maintext
+    \global\tenkzTestSelectedMaintrue
+  \else
+    \xdef\tenkzTestSelectedFillLayer{\pgfonlayer@name}%
+  \fi}
 \ExplSyntaxOn
 % A named region with a deliberately tall external label must register the
 % composite outline+label box, not only its outline node.
@@ -85,10 +101,29 @@ SOURCE = r"""
 \begin{tenkzfree}
   \tnput[boundary]{left}{(0,0)}{}
   \tnput[boundary]{right}{(2,0)}{}
-  \tnregion[group, name=inner,
+  \tikzset{
+    region secondary/.append style={
+      execute at begin node=\tenkzTestSecondaryLayer},
+    region selected/.append style={
+      execute at begin node=\tenkzTestSelectedLayer}}
+  \tnregion[slot=secondary, name=inner,
     label={\rule{0pt}{12mm}$L$}, label pos=north]{left,right}
   \tenkzTestTallRegion{inner}
-  \tnregion[slot=secondary, outline]{inner}
+  \tnregion[slot=selected]{inner}
+  \iftenkzTestSecondaryMain\else
+    \errmessage{inner region outline was not drawn above region fills}
+  \fi
+  \iftenkzTestSelectedMain\else
+    \errmessage{outer region outline was not drawn on the main layer}
+  \fi
+  \def\tenkzTestInnerLayer{tenkz-enclosure-fill-0}
+  \def\tenkzTestOuterLayer{tenkz-enclosure-fill-1}
+  \ifx\tenkzTestSecondaryFillLayer\tenkzTestInnerLayer\else
+    \errmessage{inner region fill was not drawn at nesting depth zero}
+  \fi
+  \ifx\tenkzTestSelectedFillLayer\tenkzTestOuterLayer\else
+    \errmessage{outer region fill was not drawn behind the inner fill}
+  \fi
 \end{tenkzfree}
 \end{document}
 """
@@ -195,8 +230,8 @@ def main() -> int:
         if {(event.attrs["slot"], event.attrs["members"]) for event in regions} != {
             ("group", "p"),
             ("selected", "u0,u1,j0,j1,P"),
-            ("group", "left,right"),
-            ("secondary", "inner"),
+            ("secondary", "left,right"),
+            ("selected", "inner"),
         }:
             raise AssertionError("free-region records are incomplete")
         if {event.attrs.get("name") for event in regions} != {None, "P", "inner"}:
