@@ -2791,20 +2791,6 @@ referenceInclusion_isometry}
     Transport along equality of bond dimensions preserves these equations.
 \end{proof}
 
-\begin{definition}[Original-label corner family]
-    \label{def:mpdo_original_corner_family}
-    \lean{MPOTensor.RetainedProductSpectralFamily.OriginalCornerFamily}
-    \leanok
-    \uses{def:mpdo_retained_product_spectral_family}
-    An original-label corner family for the retained product records, for
-    every active corner of each copy pair, an original one-site BNT label, a
-    positive coefficient, and an isometric inclusion into the raw product
-    bond space.  Distinct corners belonging to one copy pair have orthogonal
-    ranges.  Each inclusion intertwines the raw product tensor with the stated
-    positive multiple of its original BNT representative, and the resulting
-    corners reconstruct every tensor letter exactly.
-\end{definition}
-
 \begin{theorem}[Positivity of active product coefficients]
     \label{thm:mpdo_active_product_coefficient_phase_pos}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
@@ -2866,6 +2852,73 @@ exists_unitaryNormalization}
     Normal-tensor rigidity then makes $X_j^\dagger X_j$ a positive real
     multiple of the identity.  Division by the positive square root gives a
     unitary matrix.
+\end{proof}
+
+\begin{definition}[Original-label corner family]
+    \label{def:mpdo_original_corner_family}
+    \lean{MPOTensor.RetainedProductSpectralFamily.OriginalCornerFamily}
+    \leanok
+    \uses{def:mpdo_retained_product_spectral_family}
+    An original-label corner family for the retained product records, for
+    every active corner of each copy pair, an original one-site BNT label, a
+    positive coefficient, and an isometric inclusion into the raw product
+    bond space.  Distinct corners belonging to one copy pair have orthogonal
+    ranges.  Each inclusion intertwines the raw product tensor with the stated
+    positive multiple of its original BNT representative, and the resulting
+    corners reconstruct every tensor letter exactly.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):} A copy pair with no
+    active corner is represented by an empty family; no unsupported corner is
+    inserted.  See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+\end{definition}
+
+\begin{theorem}[Positive original-label corner decomposition]
+    \label{thm:mpdo_original_corner_family_exists}
+    \lean{MPOTensor.RetainedProductSpectralFamily.exists_originalCornerFamily}
+    \leanok
+    \uses{def:mpdo_original_corner_family,
+      thm:mpdo_active_product_corner_blocked_bnt_coverage,
+      thm:mpdo_transported_vertical_sector_coefficient_comparison,
+      lem:mpdo_normalized_vertical_sector_positive_trace,
+      thm:mpdo_active_product_coefficient_phase_pos,
+      thm:mpdo_active_product_gauge_unitary_normalization,
+      thm:mpdo_normalized_grouped_sector_maps}
+    Let the active product corners be covered by blocked BNT representatives,
+    let the blocked representatives be identified with the original BNT by
+    the trace-ratio unitary conjugacies, and suppose that the active
+    gauge--phase coefficients are positive.  If
+    $X_j^\dagger X_j=\omega_j\Id$ with $\omega_j>0$, then every retained copy
+    pair has an original-label corner family.  Its coefficient at an active
+    corner is
+    \[
+      \frac{\lambda_j\zeta_j}{w_{\alpha,q}w_{\beta,r}}
+      \frac{\operatorname{tr}D_{\gamma(j)}}
+           {\operatorname{tr}D^{(2)}_{\sigma(\gamma(j))}},
+    \]
+    which is positive.  The normalized inclusions are isometries with
+    pairwise orthogonal ranges, intertwine the raw product tensor with these
+    positive multiples of the original BNT representatives, and reconstruct
+    every raw product letter exactly.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):} Empty active families
+    remain empty.  Exact weighted reconstruction and positivity of the outer
+    copy weight imply that the corresponding raw product vanishes.  See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Transport each local inclusion first by the normalized active comparison
+    gauge and then by the unitary identifying the blocked representative with
+    its original one-site label.  The first normalization preserves isometry
+    and orthogonality; the second unitary transport does likewise.  The two
+    conjugacy equations give the stated coefficient and intertwining identity.
+    Positivity follows from the active gauge--phase coefficient, the two
+    positive multiplicity traces, and the positive outer copy weight.
+    Conjugating each corner term through the two transports recovers its local
+    spectral term.  Summing these identities gives the weighted
+    reconstruction, and cancellation of the nonzero outer weight gives the
+    raw reconstruction.
 \end{proof}
 
 \begin{theorem}[Two-site closure of the two-site blocking]

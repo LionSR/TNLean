@@ -1538,6 +1538,11 @@ structure FlatBlockedBNTComparison {g₂ : ℕ}
 /-- The active normal corners of every retained copy pair, transported back
 to the original one-site BNT labels and normalized by isometries.
 
+**Local fix (Figure-11 fixed-pair support):** A copy pair with no active
+corner is represented by an empty family; no unsupported corner is inserted.
+Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 structure OriginalCornerFamily
     (S : RetainedProductSpectralFamily dim mult weight B) where
@@ -1586,6 +1591,74 @@ structure OriginalCornerFamily
       ∑ k, inclusion p k * (coefficient p k • B (label p k) ab) *
         (inclusion p k)ᴴ
 
+private noncomputable def unitaryTransportMap
+    {r m n : ℕ} (h : m = n) (W : Matrix (Fin r) (Fin n) ℂ)
+    (U : Matrix.unitaryGroup (Fin n) ℂ) :
+    Matrix (Fin r) (Fin m) ℂ :=
+  cast (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h.symm)
+    (W * (U : Matrix (Fin n) (Fin n) ℂ))
+
+private noncomputable def originalCornerLabel
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
+    (p : VerticalCopyPair mult) (k : Fin (S.count p)) : Fin g :=
+  sigma.symm (C.label (S.activeLabelEquiv.symm ⟨p, k⟩))
+
+private theorem localDim_eq_flatDim
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (p : VerticalCopyPair mult) (k : Fin (S.count p)) :
+    S.localDim p k = S.flatDim (S.activeLabelEquiv.symm ⟨p, k⟩) := by
+  change S.localDim p k =
+    S.localDim
+      (S.activeLabelEquiv (S.activeLabelEquiv.symm ⟨p, k⟩)).1
+      (S.activeLabelEquiv (S.activeLabelEquiv.symm ⟨p, k⟩)).2
+  rw [S.activeLabelEquiv.apply_symm_apply]
+
+private noncomputable def originalCornerCoefficient
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
+    (mult₂ : Fin g₂ → ℕ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (p : VerticalCopyPair mult) (k : Fin (S.count p)) : ℂ :=
+  let j := S.activeLabelEquiv.symm ⟨p, k⟩
+  let γ := originalCornerLabel S C sigma p k
+  ((S.coefficient p k * C.phase j) *
+      (verticalMultiplicityTrace weight γ /
+        verticalMultiplicityTrace weight₂ (sigma γ))) /
+    (weight p.1.1 p.1.2 * weight p.2.1 p.2.2)
+
+private noncomputable def originalCornerInclusion
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
+    (hDim : ∀ i, dim i = dim₂ (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
+    (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
+    (p : VerticalCopyPair mult) (k : Fin (S.count p)) :
+    Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (dim (originalCornerLabel S C sigma p k))) ℂ :=
+  let j := S.activeLabelEquiv.symm ⟨p, k⟩
+  let γ := originalCornerLabel S C sigma p k
+  let Vflat : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (S.flatDim j)) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (localDim_eq_flatDim S p k)) (S.localInclusion p k)
+  let W₂ := normalizedGroupedSectorMap (C.dim_eq j) Vflat
+    (C.gauge j) (omega j)
+  let hSigma : sigma γ = C.label j := sigma.apply_symm_apply _
+  let Wsigma : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (dim₂ (sigma γ))) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (congrArg dim₂ hSigma).symm) W₂
+  unitaryTransportMap (hDim γ) Wsigma (V γ)
+
 private theorem castBondColumns_isometry
     {r m n : ℕ} (V : Matrix (Fin r) (Fin m) ℂ)
     (hV : Vᴴ * V = 1) (h : m = n) :
@@ -1630,12 +1703,31 @@ private theorem castBondColumns_intertwining
   cases h
   simpa using hinter v
 
-private noncomputable def unitaryTransportMap
-    {r m n : ℕ} (h : m = n) (W : Matrix (Fin r) (Fin n) ℂ)
-    (U : Matrix.unitaryGroup (Fin n) ℂ) :
-    Matrix (Fin r) (Fin m) ℂ :=
-  cast (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h.symm)
-    (W * (U : Matrix (Fin n) (Fin n) ℂ))
+private theorem castBondColumns_corner
+    {r m n : ℕ} (A : Matrix (Fin m) (Fin m) ℂ)
+    (V : Matrix (Fin r) (Fin m) ℂ) (c : ℂ) (h : m = n) :
+    let A' := cast
+      (congrArg (fun k ↦ Matrix (Fin k) (Fin k) ℂ) h) A
+    let V' := cast
+      (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h) V
+    V' * (c • A') * V'ᴴ = V * (c • A) * Vᴴ := by
+  cases h
+  rfl
+
+private theorem castDependentTensor_eq
+    {ι : Type*} {e : ℕ} (bondDim : ι → ℕ)
+    (A : (i : ι) → MPSTensor e (bondDim i))
+    {i j : ι} (h : i = j) :
+    cast (congrArg (MPSTensor e) (congrArg bondDim h)) (A i) = A j := by
+  cases h
+  rfl
+
+private theorem castTensor_apply
+    {e m n : ℕ} (h : m = n) (A : MPSTensor e m) (v : Fin e) :
+    (cast (congrArg (MPSTensor e) h) A) v =
+      cast (congrArg (fun k ↦ Matrix (Fin k) (Fin k) ℂ) h) (A v) := by
+  cases h
+  rfl
 
 private theorem unitaryTransportMap_isometry
     {r m n : ℕ} (h : m = n) (W : Matrix (Fin r) (Fin n) ℂ)
@@ -1700,6 +1792,395 @@ private theorem unitaryTransportMap_corner
   simp only [unitaryTransportMap, cast_eq, Matrix.conjTranspose_mul]
   rw [hA']
   simp only [Matrix.mul_assoc, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+
+private theorem originalCornerInclusion_isometry
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
+    (hDim : ∀ i, dim i = dim₂ (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
+    (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
+    (hQ : ∀ j, ((Real.sqrt (omega j) : ℂ))⁻¹ •
+      (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (S.flatDim j)) ℂ)
+    (p : VerticalCopyPair mult) (k : Fin (S.count p)) :
+    (originalCornerInclusion S C sigma hDim V omega p k)ᴴ *
+        originalCornerInclusion S C sigma hDim V omega p k = 1 := by
+  let j := S.activeLabelEquiv.symm ⟨p, k⟩
+  let γ := originalCornerLabel S C sigma p k
+  let Vflat : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (S.flatDim j)) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (localDim_eq_flatDim S p k)) (S.localInclusion p k)
+  have hVflat : Vflatᴴ * Vflat = 1 :=
+    castBondColumns_isometry (S.localInclusion p k)
+      (S.localInclusion_isometry p k) (localDim_eq_flatDim S p k)
+  let W₂ := normalizedGroupedSectorMap (C.dim_eq j) Vflat
+    (C.gauge j) (omega j)
+  have hW₂ : W₂ᴴ * W₂ = 1 :=
+    normalizedGroupedSectorMap_isometry (C.dim_eq j) Vflat
+      (C.gauge j) (omega j) hVflat (hQ j)
+  let hSigma : sigma γ = C.label j := sigma.apply_symm_apply _
+  let Wsigma : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (dim₂ (sigma γ))) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (congrArg dim₂ hSigma).symm) W₂
+  have hWsigma : Wsigmaᴴ * Wsigma = 1 :=
+    castBondColumns_isometry W₂ hW₂ (congrArg dim₂ hSigma).symm
+  change (unitaryTransportMap (hDim γ) Wsigma (V γ))ᴴ *
+      unitaryTransportMap (hDim γ) Wsigma (V γ) = 1
+  exact unitaryTransportMap_isometry (hDim γ) Wsigma (V γ) hWsigma
+
+private theorem originalCornerInclusion_orthogonal
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
+    (hDim : ∀ i, dim i = dim₂ (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
+    (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
+    (p : VerticalCopyPair mult) (k l : Fin (S.count p)) (hkl : k ≠ l) :
+    (originalCornerInclusion S C sigma hDim V omega p k)ᴴ *
+        originalCornerInclusion S C sigma hDim V omega p l = 0 := by
+  let j₁ := S.activeLabelEquiv.symm ⟨p, k⟩
+  let j₂ := S.activeLabelEquiv.symm ⟨p, l⟩
+  let γ₁ := originalCornerLabel S C sigma p k
+  let γ₂ := originalCornerLabel S C sigma p l
+  let Vflat₁ : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (S.flatDim j₁)) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (localDim_eq_flatDim S p k)) (S.localInclusion p k)
+  let Vflat₂ : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (S.flatDim j₂)) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (localDim_eq_flatDim S p l)) (S.localInclusion p l)
+  have hVflat : Vflat₁ᴴ * Vflat₂ = 0 :=
+    castBondColumns_orthogonal (S.localInclusion p k)
+      (S.localInclusion p l) (S.localInclusion_orthogonal p k l hkl)
+      (localDim_eq_flatDim S p k) (localDim_eq_flatDim S p l)
+  let W₂₁ := normalizedGroupedSectorMap (C.dim_eq j₁) Vflat₁
+    (C.gauge j₁) (omega j₁)
+  let W₂₂ := normalizedGroupedSectorMap (C.dim_eq j₂) Vflat₂
+    (C.gauge j₂) (omega j₂)
+  have hW₂ : W₂₁ᴴ * W₂₂ = 0 :=
+    normalizedGroupedSectorMap_orthogonal (C.dim_eq j₁) (C.dim_eq j₂)
+      Vflat₁ Vflat₂ (C.gauge j₁) (C.gauge j₂) (omega j₁) (omega j₂)
+      hVflat
+  let hSigma₁ : sigma γ₁ = C.label j₁ := sigma.apply_symm_apply _
+  let hSigma₂ : sigma γ₂ = C.label j₂ := sigma.apply_symm_apply _
+  let Wsigma₁ : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (dim₂ (sigma γ₁))) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (congrArg dim₂ hSigma₁).symm) W₂₁
+  let Wsigma₂ : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (dim₂ (sigma γ₂))) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (congrArg dim₂ hSigma₂).symm) W₂₂
+  have hWsigma : Wsigma₁ᴴ * Wsigma₂ = 0 :=
+    castBondColumns_orthogonal W₂₁ W₂₂ hW₂
+      (congrArg dim₂ hSigma₁).symm (congrArg dim₂ hSigma₂).symm
+  change (unitaryTransportMap (hDim γ₁) Wsigma₁ (V γ₁))ᴴ *
+      unitaryTransportMap (hDim γ₂) Wsigma₂ (V γ₂) = 0
+  exact unitaryTransportMap_orthogonal (hDim γ₁) (hDim γ₂)
+    Wsigma₁ Wsigma₂ (V γ₁) (V γ₂) hWsigma
+
+private theorem originalCornerInclusion_weighted_intertwining
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
+    (mult₂ : Fin g₂ → ℕ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (hDim : ∀ i, dim i = dim₂ (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
+    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+      A₂ (sigma i) ab =
+        (verticalMultiplicityTrace weight i /
+          verticalMultiplicityTrace weight₂ (sigma i)) •
+        ((V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ) *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (B i ab) *
+          (V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ)ᴴ))
+    (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
+    (p : VerticalCopyPair mult) (k : Fin (S.count p))
+    (ab : Fin (D * D)) :
+    weightedVerticalProductBlock dim mult weight B p ab *
+        originalCornerInclusion S C sigma hDim V omega p k =
+      originalCornerInclusion S C sigma hDim V omega p k *
+        (((S.coefficient p k *
+            C.phase (S.activeLabelEquiv.symm ⟨p, k⟩)) *
+          (verticalMultiplicityTrace weight
+              (originalCornerLabel S C sigma p k) /
+            verticalMultiplicityTrace weight₂
+              (sigma (originalCornerLabel S C sigma p k)))) •
+          B (originalCornerLabel S C sigma p k) ab) := by
+  let j := S.activeLabelEquiv.symm ⟨p, k⟩
+  let γ := originalCornerLabel S C sigma p k
+  let c := S.coefficient p k * C.phase j
+  let t := verticalMultiplicityTrace weight γ /
+    verticalMultiplicityTrace weight₂ (sigma γ)
+  let Vflat : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (S.flatDim j)) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (localDim_eq_flatDim S p k)) (S.localInclusion p k)
+  have hx : S.activeLabelEquiv j = ⟨p, k⟩ :=
+    S.activeLabelEquiv.apply_symm_apply _
+  have hblock : cast
+      (congrArg (MPSTensor (D * D)) (localDim_eq_flatDim S p k))
+        (S.block p k) = S.flatBlock j := by
+    simpa only [flatDim, flatBlock] using
+      castDependentTensor_eq
+        (fun x : S.ActiveLabel ↦ S.localDim x.1 x.2)
+        (fun x : S.ActiveLabel ↦ S.block x.1 x.2) hx.symm
+  have hVflat : ∀ ab,
+      weightedVerticalProductBlock dim mult weight B p ab * Vflat =
+        Vflat * (S.coefficient p k • S.flatBlock j ab) := by
+    intro v
+    have hcast := castBondColumns_intertwining
+      (weightedVerticalProductBlock dim mult weight B p) (S.block p k)
+      (S.localInclusion p k) (S.coefficient p k)
+      (S.local_intertwine p k) (localDim_eq_flatDim S p k) v
+    rw [hblock] at hcast
+    simpa only [Vflat, Matrix.mul_smul] using hcast
+  have hGauged : ∀ v,
+      weightedVerticalProductBlock dim mult weight B p v * Vflat =
+        Vflat * (c •
+          ((C.gauge j : Matrix (Fin (S.flatDim j))
+              (Fin (S.flatDim j)) ℂ) *
+            cast (congrArg
+              (fun n ↦ Matrix (Fin n) (Fin n) ℂ) (C.dim_eq j))
+              (A₂ (C.label j) v) *
+            (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
+              (Fin (S.flatDim j)) ℂ))) := by
+    intro v
+    rw [hVflat v, C.block_eq j v]
+    rw [castTensor_apply (C.dim_eq j) (A₂ (C.label j)) v]
+    simp only [c, smul_smul]
+  let W₂ := normalizedGroupedSectorMap (C.dim_eq j) Vflat
+    (C.gauge j) (omega j)
+  have hW₂ : ∀ v,
+      weightedVerticalProductBlock dim mult weight B p v * W₂ =
+        W₂ * (c • A₂ (C.label j) v) := by
+    intro v
+    exact normalizedGroupedSectorMap_intertwining (C.dim_eq j)
+      (weightedVerticalProductBlock dim mult weight B p v)
+      (A₂ (C.label j) v) Vflat (C.gauge j) c (omega j) (hGauged v)
+  let hSigma : sigma γ = C.label j := sigma.apply_symm_apply _
+  let Wsigma : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (dim₂ (sigma γ))) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (congrArg dim₂ hSigma).symm) W₂
+  have hWsigma : ∀ v,
+      weightedVerticalProductBlock dim mult weight B p v * Wsigma =
+        Wsigma * (c • A₂ (sigma γ) v) := by
+    intro v
+    have hcast := castBondColumns_intertwining
+      (weightedVerticalProductBlock dim mult weight B p)
+      (A₂ (C.label j)) W₂ c hW₂ (congrArg dim₂ hSigma).symm v
+    have hAcast := castDependentTensor_eq dim₂ A₂ hSigma.symm
+    rw [hAcast] at hcast
+    simpa only [Wsigma] using hcast
+  change weightedVerticalProductBlock dim mult weight B p ab *
+      unitaryTransportMap (hDim γ) Wsigma (V γ) =
+    unitaryTransportMap (hDim γ) Wsigma (V γ) * ((c * t) • B γ ab)
+  exact unitaryTransportMap_intertwining (hDim γ)
+    (weightedVerticalProductBlock dim mult weight B p) (B γ) (A₂ (sigma γ))
+    Wsigma (V γ) c t hWsigma (hLetter γ) ab
+
+private theorem originalCornerInclusion_intertwining
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
+    (mult₂ : Fin g₂ → ℕ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (hWeight : ∀ α q, (0 : ℂ) < weight α q)
+    (hDim : ∀ i, dim i = dim₂ (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
+    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+      A₂ (sigma i) ab =
+        (verticalMultiplicityTrace weight i /
+          verticalMultiplicityTrace weight₂ (sigma i)) •
+        ((V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ) *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (B i ab) *
+          (V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ)ᴴ))
+    (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
+    (p : VerticalCopyPair mult) (k : Fin (S.count p))
+    (ab : Fin (D * D)) :
+    (mulTensor (verticalBNTMPO (B p.1.1))
+        (verticalBNTMPO (B p.2.1))).toMPSTensor ab *
+          originalCornerInclusion S C sigma hDim V omega p k =
+      originalCornerInclusion S C sigma hDim V omega p k *
+        (originalCornerCoefficient S C sigma mult₂ weight₂ p k •
+          B (originalCornerLabel S C sigma p k) ab) := by
+  let a := weight p.1.1 p.1.2 * weight p.2.1 p.2.2
+  have ha : a ≠ 0 :=
+    (mul_pos (hWeight p.1.1 p.1.2) (hWeight p.2.1 p.2.2)).ne'
+  apply smul_right_injective
+    (Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (dim (originalCornerLabel S C sigma p k))) ℂ) ha
+  calc
+    a • ((mulTensor (verticalBNTMPO (B p.1.1))
+          (verticalBNTMPO (B p.2.1))).toMPSTensor ab *
+        originalCornerInclusion S C sigma hDim V omega p k) =
+      weightedVerticalProductBlock dim mult weight B p ab *
+        originalCornerInclusion S C sigma hDim V omega p k := by
+          simp only [weightedVerticalProductBlock, a, Matrix.smul_mul]
+    _ = originalCornerInclusion S C sigma hDim V omega p k *
+        (((S.coefficient p k *
+            C.phase (S.activeLabelEquiv.symm ⟨p, k⟩)) *
+          (verticalMultiplicityTrace weight
+              (originalCornerLabel S C sigma p k) /
+            verticalMultiplicityTrace weight₂
+              (sigma (originalCornerLabel S C sigma p k)))) •
+          B (originalCornerLabel S C sigma p k) ab) :=
+      originalCornerInclusion_weighted_intertwining S C sigma mult₂ weight₂
+        hDim V hLetter omega p k ab
+    _ = a • (originalCornerInclusion S C sigma hDim V omega p k *
+        (originalCornerCoefficient S C sigma mult₂ weight₂ p k •
+          B (originalCornerLabel S C sigma p k) ab)) := by
+      simp only [Matrix.mul_smul, smul_smul, originalCornerCoefficient, a]
+      rw [mul_assoc, mul_div_cancel₀ _ ha]
+
+private theorem originalCornerTerm_weighted_eq
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
+    (mult₂ : Fin g₂ → ℕ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (hWeight : ∀ α q, (0 : ℂ) < weight α q)
+    (hDim : ∀ i, dim i = dim₂ (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
+    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+      A₂ (sigma i) ab =
+        (verticalMultiplicityTrace weight i /
+          verticalMultiplicityTrace weight₂ (sigma i)) •
+        ((V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ) *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (B i ab) *
+          (V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ)ᴴ))
+    (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
+    (homega : ∀ j, 0 < omega j)
+    (hGram : ∀ j,
+      (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ)ᴴ *
+        C.gauge j = (omega j : ℂ) • 1)
+    (p : VerticalCopyPair mult) (k : Fin (S.count p))
+    (ab : Fin (D * D)) :
+    (weight p.1.1 p.1.2 * weight p.2.1 p.2.2) •
+        (originalCornerInclusion S C sigma hDim V omega p k *
+          (originalCornerCoefficient S C sigma mult₂ weight₂ p k •
+            B (originalCornerLabel S C sigma p k) ab) *
+          (originalCornerInclusion S C sigma hDim V omega p k)ᴴ) =
+      S.localInclusion p k * (S.coefficient p k • S.block p k ab) *
+        (S.localInclusion p k)ᴴ := by
+  let j := S.activeLabelEquiv.symm ⟨p, k⟩
+  let γ := originalCornerLabel S C sigma p k
+  let c := S.coefficient p k * C.phase j
+  let t := verticalMultiplicityTrace weight γ /
+    verticalMultiplicityTrace weight₂ (sigma γ)
+  let a := weight p.1.1 p.1.2 * weight p.2.1 p.2.2
+  have ha : a ≠ 0 :=
+    (mul_pos (hWeight p.1.1 p.1.2) (hWeight p.2.1 p.2.2)).ne'
+  let Vflat : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (S.flatDim j)) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (localDim_eq_flatDim S p k)) (S.localInclusion p k)
+  let W₂ := normalizedGroupedSectorMap (C.dim_eq j) Vflat
+    (C.gauge j) (omega j)
+  let hSigma : sigma γ = C.label j := sigma.apply_symm_apply _
+  let Wsigma : Matrix (Fin (dim p.1.1 * dim p.2.1))
+      (Fin (dim₂ (sigma γ))) ℂ :=
+    cast (congrArg
+      (fun n ↦ Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin n) ℂ)
+      (congrArg dim₂ hSigma).symm) W₂
+  have hAcast := castDependentTensor_eq dim₂ A₂ hSigma.symm
+  have hSigmaCorner : Wsigma * (c • A₂ (sigma γ) ab) * Wsigmaᴴ =
+      W₂ * (c • A₂ (C.label j) ab) * W₂ᴴ := by
+    have hcast := castBondColumns_corner (A₂ (C.label j) ab) W₂ c
+      (congrArg dim₂ hSigma).symm
+    have hAcastLetter := congrFun hAcast ab
+    rw [castTensor_apply (congrArg dim₂ hSigma).symm
+      (A₂ (C.label j)) ab] at hAcastLetter
+    rw [hAcastLetter] at hcast
+    simpa only [Wsigma] using hcast
+  have hGaugeCorner : W₂ * (c • A₂ (C.label j) ab) * W₂ᴴ =
+      Vflat * (c •
+        ((C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) *
+          cast (congrArg (fun n ↦ Matrix (Fin n) (Fin n) ℂ) (C.dim_eq j))
+            (A₂ (C.label j) ab) *
+          (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
+            (Fin (S.flatDim j)) ℂ))) * Vflatᴴ := by
+    exact normalizedGroupedSectorMap_corner (C.dim_eq j)
+      (A₂ (C.label j) ab) Vflat (C.gauge j) c (omega j)
+      (homega j) (hGram j)
+  have hx : S.activeLabelEquiv j = ⟨p, k⟩ :=
+    S.activeLabelEquiv.apply_symm_apply _
+  have hblock : cast
+      (congrArg (MPSTensor (D * D)) (localDim_eq_flatDim S p k))
+        (S.block p k) = S.flatBlock j := by
+    simpa only [flatDim, flatBlock] using
+      castDependentTensor_eq
+        (fun x : S.ActiveLabel ↦ S.localDim x.1 x.2)
+        (fun x : S.ActiveLabel ↦ S.block x.1 x.2) hx.symm
+  have hLocalCorner : Vflat * (S.coefficient p k • S.flatBlock j ab) *
+      Vflatᴴ = S.localInclusion p k *
+        (S.coefficient p k • S.block p k ab) *
+          (S.localInclusion p k)ᴴ := by
+    have hcast := castBondColumns_corner (S.block p k ab)
+      (S.localInclusion p k) (S.coefficient p k)
+      (localDim_eq_flatDim S p k)
+    have hblockLetter := congrFun hblock ab
+    rw [castTensor_apply (localDim_eq_flatDim S p k) (S.block p k) ab]
+      at hblockLetter
+    rw [hblockLetter] at hcast
+    simpa only [Vflat] using hcast
+  have hscalar : a * ((c * t) / a) = c * t := by
+    calc
+      a * ((c * t) / a) = ((c * t) / a) * a := mul_comm _ _
+      _ = c * t := div_mul_cancel₀ _ ha
+  calc
+    a • (originalCornerInclusion S C sigma hDim V omega p k *
+        (originalCornerCoefficient S C sigma mult₂ weight₂ p k • B γ ab) *
+        (originalCornerInclusion S C sigma hDim V omega p k)ᴴ) =
+      originalCornerInclusion S C sigma hDim V omega p k *
+        ((c * t) • B γ ab) *
+        (originalCornerInclusion S C sigma hDim V omega p k)ᴴ := by
+          change a • (originalCornerInclusion S C sigma hDim V omega p k *
+              (((c * t) / a) • B γ ab) *
+                (originalCornerInclusion S C sigma hDim V omega p k)ᴴ) = _
+          simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+          rw [hscalar]
+    _ = Wsigma * (c • A₂ (sigma γ) ab) * Wsigmaᴴ :=
+      unitaryTransportMap_corner (hDim γ) (B γ ab) (A₂ (sigma γ) ab)
+        Wsigma (V γ) c t (hLetter γ ab)
+    _ = W₂ * (c • A₂ (C.label j) ab) * W₂ᴴ := hSigmaCorner
+    _ = Vflat * (c •
+        ((C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) *
+          cast (congrArg (fun n ↦ Matrix (Fin n) (Fin n) ℂ) (C.dim_eq j))
+            (A₂ (C.label j) ab) *
+          (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
+            (Fin (S.flatDim j)) ℂ))) * Vflatᴴ := hGaugeCorner
+    _ = Vflat * (S.coefficient p k • S.flatBlock j ab) * Vflatᴴ := by
+      rw [C.block_eq j ab,
+        castTensor_apply (C.dim_eq j) (A₂ (C.label j)) ab]
+      simp only [c, smul_smul]
+    _ = S.localInclusion p k * (S.coefficient p k • S.block p k ab) *
+        (S.localInclusion p k)ᴴ := hLocalCorner
 
 /-- The distinguished blocked reference inclusion transported to the bond
 dimension of an active product corner.
@@ -2136,6 +2617,116 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
   exact ⟨ω, hω, hGramOne,
     Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
       hω hGramOne⟩
+
+/-- Normalized active product corners form a positive decomposition in the
+original one-site BNT labels.
+
+**Local fix (Figure-11 fixed-pair support):** Empty active families are kept
+empty.  The exact local reconstruction then forces the corresponding weighted
+raw product to vanish, and positivity of the outer copy weight gives the raw
+reconstruction.  Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+theorem exists_originalCornerFamily
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂)
+    (hMult : ∀ α, 0 < mult α)
+    (hWeight : ∀ α q, (0 : ℂ) < weight α q)
+    (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (hWeight₂ : ∀ γ q, (0 : ℂ) < weight₂ γ q)
+    (sigma : Fin g ≃ Fin g₂) (hDim : ∀ i, dim i = dim₂ (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
+    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+      A₂ (sigma i) ab =
+        (verticalMultiplicityTrace weight i /
+          verticalMultiplicityTrace weight₂ (sigma i)) •
+        ((V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ) *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (B i ab) *
+          (V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ)ᴴ))
+    (hActivePos : ∀ j, (0 : ℂ) < S.flatCoefficient j * C.phase j)
+    (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
+    (homega : ∀ j, 0 < omega j)
+    (hGram : ∀ j,
+      (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ)ᴴ *
+        C.gauge j = (omega j : ℂ) • 1) :
+    Nonempty (OriginalCornerFamily S) := by
+  classical
+  have hQ : ∀ j, ((Real.sqrt (omega j) : ℂ))⁻¹ •
+      (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (S.flatDim j)) ℂ := fun j ↦
+    Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
+      (homega j) (hGram j)
+  refine ⟨{
+    label := originalCornerLabel S C sigma
+    coefficient := originalCornerCoefficient S C sigma mult₂ weight₂
+    coefficient_pos := ?_
+    inclusion := originalCornerInclusion S C sigma hDim V omega
+    inclusion_isometry := ?_
+    inclusion_orthogonal := ?_
+    intertwine := ?_
+    reconstruction := ?_ }⟩
+  · intro p k
+    let j := S.activeLabelEquiv.symm ⟨p, k⟩
+    let γ := originalCornerLabel S C sigma p k
+    have hx : S.activeLabelEquiv j = ⟨p, k⟩ :=
+      S.activeLabelEquiv.apply_symm_apply _
+    have hc : (0 : ℂ) < S.coefficient p k * C.phase j := by
+      have h := hActivePos j
+      change (0 : ℂ) < S.coefficient (S.activeLabelEquiv j).1
+        (S.activeLabelEquiv j).2 * C.phase j at h
+      rw [hx] at h
+      exact h
+    have ht : (0 : ℂ) < verticalMultiplicityTrace weight γ /
+        verticalMultiplicityTrace weight₂ (sigma γ) :=
+      div_pos (verticalMultiplicityTrace_pos hMult hWeight γ)
+        (verticalMultiplicityTrace_pos hMult₂ hWeight₂ (sigma γ))
+    have ha : (0 : ℂ) <
+        weight p.1.1 p.1.2 * weight p.2.1 p.2.2 :=
+      mul_pos (hWeight p.1.1 p.1.2) (hWeight p.2.1 p.2.2)
+    exact div_pos (mul_pos hc ht) ha
+  · exact fun p k ↦
+      originalCornerInclusion_isometry S C sigma hDim V omega hQ p k
+  · exact fun p k l hkl ↦
+      originalCornerInclusion_orthogonal S C sigma hDim V omega p k l hkl
+  · exact fun p k ab ↦
+      originalCornerInclusion_intertwining S C sigma mult₂ weight₂ hWeight
+        hDim V hLetter omega p k ab
+  · intro p ab
+    let a := weight p.1.1 p.1.2 * weight p.2.1 p.2.2
+    have ha : a ≠ 0 :=
+      (mul_pos (hWeight p.1.1 p.1.2) (hWeight p.2.1 p.2.2)).ne'
+    apply smul_right_injective
+      (Matrix (Fin (dim p.1.1 * dim p.2.1))
+        (Fin (dim p.1.1 * dim p.2.1)) ℂ) ha
+    calc
+      a • (mulTensor (verticalBNTMPO (B p.1.1))
+          (verticalBNTMPO (B p.2.1))).toMPSTensor ab =
+        weightedVerticalProductBlock dim mult weight B p ab := by
+          rfl
+      _ = ∑ k, S.localInclusion p k *
+          (S.coefficient p k • S.block p k ab) *
+            (S.localInclusion p k)ᴴ := S.local_reconstruction p ab
+      _ = ∑ k, a •
+          (originalCornerInclusion S C sigma hDim V omega p k *
+            (originalCornerCoefficient S C sigma mult₂ weight₂ p k •
+              B (originalCornerLabel S C sigma p k) ab) *
+            (originalCornerInclusion S C sigma hDim V omega p k)ᴴ) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        exact (originalCornerTerm_weighted_eq S C sigma mult₂ weight₂
+          hWeight hDim V hLetter omega homega hGram p k ab).symm
+      _ = a • ∑ k,
+          originalCornerInclusion S C sigma hDim V omega p k *
+            (originalCornerCoefficient S C sigma mult₂ weight₂ p k •
+              B (originalCornerLabel S C sigma p k) ab) *
+            (originalCornerInclusion S C sigma hDim V omega p k)ᴴ := by
+        rw [Finset.smul_sum]
 
 end RetainedProductSpectralFamily
 
