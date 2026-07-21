@@ -469,12 +469,34 @@
     \tenkz@glyphradius=0pt
   \fi}
 
+% PGF's public triangle corner anchors include `outer sep'.  These private
+% audit anchors use the shape's saved, pre-separation vertices instead; the
+% normal node transform is still applied by \pgfpointanchor.
+\expandafter\def\csname pgf@anchor@isosceles triangle@tenkz apex\endcsname{%
+  \trianglepoints
+  \pgfpointadd{\centerpoint}{%
+    \pgfmathrotatepointaround{\apex}{\pgfpointorigin}{\rotate}}}
+\expandafter\def\csname pgf@anchor@isosceles triangle@tenkz left corner\endcsname{%
+  \trianglepoints
+  \pgfpointadd{\centerpoint}{%
+    \pgfmathrotatepointaround{\lowerleft}{\pgfpointorigin}{\rotate}}}
+\expandafter\def\csname pgf@anchor@isosceles triangle@tenkz right corner\endcsname{%
+  \trianglepoints
+  \lowerleft
+  \pgf@xa=\pgf@x
+  \pgf@ya=-\pgf@y
+  \pgfpointadd{\centerpoint}{%
+    \pgfmathrotatepointaround{\pgfqpoint{\pgf@xa}{\pgf@ya}}%
+      {\pgfpointorigin}{\rotate}}}
+
 % Resolve the node's final PGF shape identity after every style addition has
 % run.  A semantic skin may be restyled from (say) circle to rectangle, or its
 % rounded corners may be enabled/disabled; the event describes that live node,
 % not the base style's starting shape or declared radius.
 \def\tenkz@resolveglyphshape#1#2{%
   \edef\tenkz@livepgfshape{\csname pgf@sh@ns@#1\endcsname}%
+  \tenkz@glyphouterxsep=\csname tenkz@glyphouterx@#2\endcsname\relax
+  \tenkz@glyphouterysep=\csname tenkz@glyphoutery@#2\endcsname\relax
   \def\tenkz@pgfcircle{circle}%
   \def\tenkz@pgfrectangle{rectangle}%
   \def\tenkz@pgftriangle{isosceles triangle}%
@@ -507,35 +529,48 @@
   \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=glyph|%
     id=\the\tenkz@inkowner|shape=\tenkz@glyphshape}}
 \def\tenkz@captureglyphgeometry#1#2#3{%
+  \tenkz@captureglyphgeometrynode{\tikzlastnode}{#1}{#2}{#3}}
+\def\tenkz@captureglyphgeometrynode#1#2#3#4{%
   \iftenkz@bboxcapture
     \ifnum\tenkz@pictureid>0\relax
       \global\advance\tenkz@inkuid by 1\relax
       \tenkz@inkowner=\tenkz@inkuid
-      \tenkz@resolveglyphshape{\tikzlastnode}{#3}%
+      \tenkz@resolveglyphshape{#1}{#4}%
       \tenkz@emitglyphinkuse
-      \tenkz@emitglyphgeometry{\tikzlastnode}%
+      \tenkz@emitglyphgeometry{#1}%
     \fi
   \fi
-  \global\expandafter\let\csname tenkz@glypharcflag@#3\endcsname\relax
-  \global\expandafter\let\csname tenkz@glypharc@#3\endcsname\relax
-  \global\expandafter\let\csname tenkz@glyphouterx@#3\endcsname\relax
-  \global\expandafter\let\csname tenkz@glyphoutery@#3\endcsname\relax}
+  \global\expandafter\let\csname tenkz@glypharcflag@#4\endcsname\relax
+  \global\expandafter\let\csname tenkz@glypharc@#4\endcsname\relax
+  \global\expandafter\let\csname tenkz@glyphouterx@#4\endcsname\relax
+  \global\expandafter\let\csname tenkz@glyphoutery@#4\endcsname\relax}
 \def\tenkz@emitglyphgeometry#1{%
   \begingroup
   \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{west}}%
   \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#1}{east}}%
   \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{south}}%
   \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#1}{north}}%
+  \def\tenkz@circle{circle}%
+  \ifx\tenkz@glyphshape\tenkz@circle
+    \ifdim\tenkz@glyphouterxsep<\tenkz@glyphouterysep
+      \tenkz@glyphouterxsep=\tenkz@glyphouterysep
+    \fi
+    \advance\tenkz@bboxxmin by \tenkz@glyphouterxsep
+    \advance\tenkz@bboxxmax by -\tenkz@glyphouterxsep
+    \advance\tenkz@bboxymin by \tenkz@glyphouterxsep
+    \advance\tenkz@bboxymax by -\tenkz@glyphouterxsep
+  \else
+    \advance\tenkz@bboxxmin by \tenkz@glyphouterxsep
+    \advance\tenkz@bboxxmax by -\tenkz@glyphouterxsep
+    \advance\tenkz@bboxymin by \tenkz@glyphouterysep
+    \advance\tenkz@bboxymax by -\tenkz@glyphouterysep
+  \fi
   \def\tenkz@roundrect{roundrect}%
   \ifx\tenkz@glyphshape\tenkz@roundrect
     \tenkz@glyphwidth=\tenkz@bboxxmax
     \advance\tenkz@glyphwidth by -\tenkz@bboxxmin
-    \advance\tenkz@glyphwidth by -\tenkz@glyphouterxsep
-    \advance\tenkz@glyphwidth by -\tenkz@glyphouterxsep
     \tenkz@glyphheight=\tenkz@bboxymax
     \advance\tenkz@glyphheight by -\tenkz@bboxymin
-    \advance\tenkz@glyphheight by -\tenkz@glyphouterysep
-    \advance\tenkz@glyphheight by -\tenkz@glyphouterysep
     \tenkz@glyphdiameter=\tenkz@glyphradius
     \advance\tenkz@glyphdiameter by \tenkz@glyphradius
     \ifdim\tenkz@glyphdiameter>\tenkz@glyphwidth
@@ -549,12 +584,22 @@
   \fi
   \def\tenkz@triangle{triangle}%
   \ifx\tenkz@glyphshape\tenkz@triangle
-    \pgfextractx{\tenkz@glyphxone}{\pgfpointanchor{#1}{apex}}%
-    \pgfextracty{\tenkz@glyphyone}{\pgfpointanchor{#1}{apex}}%
-    \pgfextractx{\tenkz@glyphxtwo}{\pgfpointanchor{#1}{left corner}}%
-    \pgfextracty{\tenkz@glyphytwo}{\pgfpointanchor{#1}{left corner}}%
-    \pgfextractx{\tenkz@glyphxthree}{\pgfpointanchor{#1}{right corner}}%
-    \pgfextracty{\tenkz@glyphythree}{\pgfpointanchor{#1}{right corner}}%
+    \pgfextractx{\tenkz@glyphxone}{\pgfpointanchor{#1}{tenkz apex}}%
+    \pgfextracty{\tenkz@glyphyone}{\pgfpointanchor{#1}{tenkz apex}}%
+    \pgfextractx{\tenkz@glyphxtwo}{\pgfpointanchor{#1}{tenkz left corner}}%
+    \pgfextracty{\tenkz@glyphytwo}{\pgfpointanchor{#1}{tenkz left corner}}%
+    \pgfextractx{\tenkz@glyphxthree}{\pgfpointanchor{#1}{tenkz right corner}}%
+    \pgfextracty{\tenkz@glyphythree}{\pgfpointanchor{#1}{tenkz right corner}}%
+    \tenkz@bboxxmin=\tenkz@glyphxone \tenkz@bboxxmax=\tenkz@glyphxone
+    \tenkz@bboxymin=\tenkz@glyphyone \tenkz@bboxymax=\tenkz@glyphyone
+    \ifdim\tenkz@glyphxtwo<\tenkz@bboxxmin \tenkz@bboxxmin=\tenkz@glyphxtwo\fi
+    \ifdim\tenkz@glyphxtwo>\tenkz@bboxxmax \tenkz@bboxxmax=\tenkz@glyphxtwo\fi
+    \ifdim\tenkz@glyphxthree<\tenkz@bboxxmin \tenkz@bboxxmin=\tenkz@glyphxthree\fi
+    \ifdim\tenkz@glyphxthree>\tenkz@bboxxmax \tenkz@bboxxmax=\tenkz@glyphxthree\fi
+    \ifdim\tenkz@glyphytwo<\tenkz@bboxymin \tenkz@bboxymin=\tenkz@glyphytwo\fi
+    \ifdim\tenkz@glyphytwo>\tenkz@bboxymax \tenkz@bboxymax=\tenkz@glyphytwo\fi
+    \ifdim\tenkz@glyphythree<\tenkz@bboxymin \tenkz@bboxymin=\tenkz@glyphythree\fi
+    \ifdim\tenkz@glyphythree>\tenkz@bboxymax \tenkz@bboxymax=\tenkz@glyphythree\fi
   \else
     \tenkz@glyphxone=0pt \tenkz@glyphyone=0pt
     \tenkz@glyphxtwo=0pt \tenkz@glyphytwo=0pt
@@ -568,29 +613,6 @@
     x1=\number\tenkz@glyphxone|y1=\number\tenkz@glyphyone|%
     x2=\number\tenkz@glyphxtwo|y2=\number\tenkz@glyphytwo|%
     x3=\number\tenkz@glyphxthree|y3=\number\tenkz@glyphythree}%
-  \endgroup}
-\def\tenkz@emitmanualglyphbbox#1{%
-  \begingroup
-  \global\advance\tenkz@inkuid by 1\relax
-  \tenkz@inkowner=\tenkz@inkuid
-  \tenkz@glyphradius=0pt
-  \edef\tenkz@livepgfshape{\csname pgf@sh@ns@#1\endcsname}%
-  \def\tenkz@pgfcircle{circle}%
-  \def\tenkz@pgfrectangle{rectangle}%
-  \def\tenkz@pgftriangle{isosceles triangle}%
-  \ifx\tenkz@livepgfshape\tenkz@pgfcircle
-    \def\tenkz@glyphshape{circle}%
-  \else\ifx\tenkz@livepgfshape\tenkz@pgfrectangle
-    \def\tenkz@glyphshape{rect}%
-  \else\ifx\tenkz@livepgfshape\tenkz@pgftriangle
-    \def\tenkz@glyphshape{triangle}%
-  \else
-    \def\tenkz@glyphshape{unsupported}%
-    \PackageError{tenkz}{Typed-map object '#1' has unsupported live shape
-      '\tenkz@livepgfshape'}{Use a circle, rectangle, or isosceles triangle.}%
-  \fi\fi\fi
-  \tenkz@emitglyphinkuse
-  \tenkz@emitglyphgeometry{#1}%
   \endgroup}
 \def\tenkz@emitwirebbox#1#2#3#4#5{%
   \begingroup
@@ -619,6 +641,8 @@
     append after command={\pgfextra{\tenkz@capturelabelbbox}}},
   tenkz audited glyph/.style 2 args={
     /utils/exec={\tenkz@installglyphaudit{#1}{#2}}},
+  tenkz audited glyph deferred/.style={
+    /utils/exec=\tenkz@installdeferredglyphaudit},
 }
 \def\tenkz@installglyphaudit#1#2{%
   \iftenkz@bboxcapture
@@ -632,6 +656,22 @@
           append after command={\noexpand\pgfextra{%
             \noexpand\tenkz@captureglyphgeometry{#1}{#2}%
               {\tenkz@glyphsnaptoken}}}}}%
+      \tenkz@installglyphsnapshot
+    \fi
+  \fi}
+\def\tenkz@recorddeferredglyph#1{%
+  \expandafter\xdef\csname tenkz@glyphsnaptoken@\tikzlastnode\endcsname{#1}}
+\def\tenkz@installdeferredglyphaudit{%
+  \iftenkz@bboxcapture
+    \ifnum\tenkz@pictureid>0\relax
+      \global\advance\tenkz@glyphsnapuid by 1\relax
+      \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
+      \edef\tenkz@installglyphsnapshot{%
+        \noexpand\tikzset{%
+          execute at end node={%
+            \noexpand\tenkz@snapshotglyphcorners{\tenkz@glyphsnaptoken}},%
+          append after command={\noexpand\pgfextra{%
+            \noexpand\tenkz@recorddeferredglyph{\tenkz@glyphsnaptoken}}}}}%
       \tenkz@installglyphsnapshot
     \fi
   \fi}

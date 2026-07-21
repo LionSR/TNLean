@@ -129,6 +129,12 @@
 \int_new:N \g__tenkzcd_mapordinal_int
 \seq_new:N \l__tenkzcd_addr_seq
 \dim_new:N \l__tenkzcd_mapgap_dim
+\dim_new:N \l__tenkzcd_mapwire_half_dim
+\dim_new:N \l__tenkzcd_mapwire_y_dim
+\dim_new:N \l__tenkzcd_mapwire_ymin_dim
+\dim_new:N \l__tenkzcd_mapwire_ymax_dim
+\dim_new:N \l__tenkzcd_maplabel_ymin_dim
+\dim_new:N \l__tenkzcd_maplabel_ymax_dim
 \quark_new:N \q__tenkzcd_map_scan_stop
 
 % ---------- keys ----------
@@ -958,31 +964,97 @@
     \tenkz@bboxlabeluse
     \tenkz@emitnodebbox{label}
       {tenkz-map-label-\the\tenkz@pictureid-#1}
-    \tenkz@emitmanualglyphbbox
-      {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
-        \int_use:N\l__tenkzcd_fromcol_int}
-    \tenkz@emitmanualglyphbbox
-      {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
-        \int_use:N\l__tenkzcd_tocol_int}
     \str_if_eq:nnTF {#2}{1}
-      { \dim_set:Nn \l_tmpa_dim {1.1pt} }
-      { \dim_set:Nn \l_tmpa_dim {\tenkz@wirewidth / 2} }
+      { \dim_set:Nn \l__tenkzcd_mapwire_half_dim {1.1pt} }
+      { \dim_set:Nn \l__tenkzcd_mapwire_half_dim {\tenkz@wirewidth / 2} }
+    \tenkz_cd_emit_map_wire_bboxes:n {#1}
+  }
+
+\cs_new_protected:Npn \tenkz_cd_emit_full_map_wire:
+  {
     \begingroup
       \tenkz@begininkuse{wire}
       \tenkz@emitwirebbox
         {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
           \int_use:N\l__tenkzcd_fromcol_int}{base~east}
-        {tenkz-map-label-\the\tenkz@pictureid-#1}{west}
-        {\l_tmpa_dim}
-    \endgroup
-    \begingroup
-      \tenkz@begininkuse{wire}
-      \tenkz@emitwirebbox
-        {tenkz-map-label-\the\tenkz@pictureid-#1}{east}
         {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
           \int_use:N\l__tenkzcd_tocol_int}{base~west}
-        {\l_tmpa_dim}
+        {\l__tenkzcd_mapwire_half_dim}
     \endgroup
+  }
+
+% A map label is `auto', hence normally offset from the horizontal path.  Only
+% split the measured baseline when the opaque label box actually covers the
+% stroke; otherwise the complete source-to-target segment remains visible.
+\cs_new_protected:Npn \tenkz_cd_emit_map_wire_bboxes:n #1
+  {
+    \pgfextracty{\l__tenkzcd_mapwire_y_dim}
+      {\pgfpointanchor
+        {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+          \int_use:N\l__tenkzcd_fromcol_int}{base~east}}
+    \dim_set:Nn \l__tenkzcd_mapwire_ymin_dim
+      {\l__tenkzcd_mapwire_y_dim - \l__tenkzcd_mapwire_half_dim}
+    \dim_set:Nn \l__tenkzcd_mapwire_ymax_dim
+      {\l__tenkzcd_mapwire_y_dim + \l__tenkzcd_mapwire_half_dim}
+    \pgfextracty{\l__tenkzcd_maplabel_ymin_dim}
+      {\pgfpointanchor{tenkz-map-label-\the\tenkz@pictureid-#1}{south}}
+    \pgfextracty{\l__tenkzcd_maplabel_ymax_dim}
+      {\pgfpointanchor{tenkz-map-label-\the\tenkz@pictureid-#1}{north}}
+    \dim_compare:nNnTF {\l__tenkzcd_maplabel_ymax_dim} >
+      {\l__tenkzcd_mapwire_ymin_dim}
+      {
+        \dim_compare:nNnTF {\l__tenkzcd_maplabel_ymin_dim} <
+          {\l__tenkzcd_mapwire_ymax_dim}
+          {
+            \coordinate (tenkz-map-left-cut-\the\tenkz@pictureid-#1) at
+              (tenkz-map-label-\the\tenkz@pictureid-#1.west |-
+               tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+                 \int_use:N\l__tenkzcd_fromcol_int.base~east);
+            \coordinate (tenkz-map-right-cut-\the\tenkz@pictureid-#1) at
+              (tenkz-map-label-\the\tenkz@pictureid-#1.east |-
+               tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+                 \int_use:N\l__tenkzcd_fromcol_int.base~east);
+            \begingroup
+              \tenkz@begininkuse{wire}
+              \tenkz@emitwirebbox
+                {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+                  \int_use:N\l__tenkzcd_fromcol_int}{base~east}
+                {tenkz-map-left-cut-\the\tenkz@pictureid-#1}{center}
+                {\l__tenkzcd_mapwire_half_dim}
+            \endgroup
+            \begingroup
+              \tenkz@begininkuse{wire}
+              \tenkz@emitwirebbox
+                {tenkz-map-right-cut-\the\tenkz@pictureid-#1}{center}
+                {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
+                  \int_use:N\l__tenkzcd_tocol_int}{base~west}
+                {\l__tenkzcd_mapwire_half_dim}
+            \endgroup
+          }
+          { \tenkz_cd_emit_full_map_wire: }
+      }
+      { \tenkz_cd_emit_full_map_wire: }
+  }
+
+\cs_new_protected:Npn \tenkz_cd_emit_map_objects:
+  {
+    \iftenkz@bboxcapture
+      \ifnum\tenkz@pictureid>0\relax
+        \int_step_inline:nn {\l__tenkzcd_maprows_int}
+          {
+            \int_step_inline:nn {\l__tenkzcd_mapcols_int}
+              {
+                \edef\tenkz@mapnode{tenkzmap-##1-####1}
+                \edef\tenkz@mapsnaptoken{%
+                  \csname tenkz@glyphsnaptoken@\tenkz@mapnode\endcsname}
+                \tenkz@captureglyphgeometrynode
+                  {\tenkz@mapnode}{rect}{0pt}{\tenkz@mapsnaptoken}
+                \global\expandafter\let
+                  \csname tenkz@glyphsnaptoken@\tenkz@mapnode\endcsname\relax
+              }
+          }
+      \fi
+    \fi
   }
 
 \cs_new_protected:Npn \tenkz_cd_measure_map:n #1
@@ -1039,12 +1111,12 @@
                column~sep=\dim_use:N \l__tenkzcd_mapgap_dim,
                row~sep=\tenkz@dim{\tenkz@r@maprowsep},
                nodes={inner~sep=1pt, outer~sep=0pt}, #1,
-               % Typed-map objects are measured after the matrix is built.
-               % Their final PGF shape remains customizable, but keeping the
-               % path corners sharp makes that later measurement exact.
-               nodes={sharp~corners}]
+               % Install only the live audit hook after passthrough styles;
+               % final shape and corner choices remain caller-controlled.
+               nodes={tenkz~audited~glyph~deferred}]
               { \tl_use:N \l__tenkzcd_body_tl };
           \end{scope}
+          \tenkz_cd_emit_map_objects:
           \bool_set_true:N \l__tenkzcd_mapdeclsvalid_bool
           \int_compare:nNnF
             { \seq_count:N \g__tenkzcd_maps_seq }
