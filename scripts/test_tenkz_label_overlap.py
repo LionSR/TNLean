@@ -49,6 +49,15 @@ SOURCE = r"""
 \begin{tenkz}
   \tn{} & \tn[pill]{} & \tnX{} & \tn[tri=l]{}
 \end{tenkz}
+% A final style override must change the emitted geometry too.  The small label
+% sits inside the rectangle's corner but outside its inscribed circle.
+\tikzset{tensor/.append style={
+  rectangle, minimum width=10mm, minimum height=10mm}}
+\begin{tenkzfree}
+  \tnput{reshaped}{(0,0)}{}
+  \node[tn label, inner sep=0pt] at (4.7mm,4.7mm)
+    {\rule{0.3mm}{0.3mm}};
+\end{tenkzfree}
 \end{document}
 """
 
@@ -99,13 +108,17 @@ def main() -> int:
 
         overlaps = [finding for finding in audit.findings
                     if finding.rule == "label-overlap"]
-        if not overlaps or not all("picture 1" in finding.msg for finding in overlaps):
+        overlap_pictures = {
+            picture_id for picture_id in (1, 7)
+            if any(f"picture {picture_id}" in finding.msg for finding in overlaps)
+        }
+        if overlap_pictures != {1, 7}:
             raise AssertionError(
-                "overlap finding was not confined to the unsafe picture: "
+                "overlap findings missed an unsafe picture: "
                 + "; ".join(finding.msg for finding in overlaps)
             )
         if any(f"picture {picture_id}" in finding.msg
-               for finding in overlaps for picture_id in (2, 3, 4, 5)):
+               for finding in overlaps for picture_id in (2, 3, 4, 5, 6)):
             raise AssertionError("audit rejected a safely spaced fixture")
 
         for picture_id in (1, 2):
@@ -151,6 +164,15 @@ def main() -> int:
         if shapes != {"circle", "roundrect", "triangle"}:
             raise AssertionError(f"core shape fixture emitted {shapes}")
 
+        reshaped = {
+            event.attrs.get("shape") for event in audit.events(7)
+            if event.kind == "glyph-geometry"
+        }
+        if reshaped != {"rect"}:
+            raise AssertionError(
+                f"final rectangle override emitted stale geometry: {reshaped}"
+            )
+
         exact = work / "exact-shapes.tnlog"
         exact.write_text(
             "picture|id=1|lang=free\n"
@@ -188,6 +210,21 @@ def main() -> int:
                 finding.rule == "bbox-coverage"
                 for finding in missing_ink_audit.findings) != 2:
             raise AssertionError("audit accepted unmeasured glyph/wire owners")
+
+        missing_class = work / "missing-ink-class.tnlog"
+        missing_class.write_text(
+            "picture|id=1|lang=free\n"
+            "atom|picture=1|name=a|kind=dot\n"
+            "ink-use|picture=1|id=1\n"
+            "bbox|picture=1|class=wire|id=1|owner=1|"
+            "xmin=0|xmax=1|ymin=0|ymax=1\n",
+            encoding="utf-8",
+        )
+        missing_class_status, missing_class_audit = audit_status(missing_class)
+        if missing_class_status != 1 or not any(
+                finding.rule == "malformed-event"
+                for finding in missing_class_audit.findings):
+            raise AssertionError("audit accepted an ink-use without class")
 
         grid_source = (ROOT / "tex/tenkz/tenkz-grid.code.tex").read_text(
             encoding="utf-8")
