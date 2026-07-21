@@ -958,25 +958,31 @@
     \tenkz@bboxlabeluse
     \tenkz@emitnodebbox{label}
       {tenkz-map-label-\the\tenkz@pictureid-#1}
-    \tenkz@emitnodebbox{glyph}
+    \tenkz@emitmanualglyphbbox
       {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
         \int_use:N\l__tenkzcd_fromcol_int}
-    \tenkz@emitnodebbox{glyph}
+    \tenkz@emitmanualglyphbbox
       {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
         \int_use:N\l__tenkzcd_tocol_int}
     \str_if_eq:nnTF {#2}{1}
       { \dim_set:Nn \l_tmpa_dim {1.1pt} }
       { \dim_set:Nn \l_tmpa_dim {\tenkz@wirewidth / 2} }
-    \tenkz@emitwirebbox
-      {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
-        \int_use:N\l__tenkzcd_fromcol_int}{base~east}
-      {tenkz-map-label-\the\tenkz@pictureid-#1}{west}
-      {\l_tmpa_dim}
-    \tenkz@emitwirebbox
-      {tenkz-map-label-\the\tenkz@pictureid-#1}{east}
-      {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
-        \int_use:N\l__tenkzcd_tocol_int}{base~west}
-      {\l_tmpa_dim}
+    \begingroup
+      \tenkz@begininkuse{wire}
+      \tenkz@emitwirebbox
+        {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+          \int_use:N\l__tenkzcd_fromcol_int}{base~east}
+        {tenkz-map-label-\the\tenkz@pictureid-#1}{west}
+        {\l_tmpa_dim}
+    \endgroup
+    \begingroup
+      \tenkz@begininkuse{wire}
+      \tenkz@emitwirebbox
+        {tenkz-map-label-\the\tenkz@pictureid-#1}{east}
+        {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
+          \int_use:N\l__tenkzcd_tocol_int}{base~west}
+        {\l_tmpa_dim}
+    \endgroup
   }
 
 \cs_new_protected:Npn \tenkz_cd_measure_map:n #1

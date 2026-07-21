@@ -487,20 +487,28 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 Every environment emits `picture|id=N|lang=L` at `\tenkz@beginpicture` (the
 only writer of `lang=`; `L` is one of `grid`, `cd`, `lattice`, `free`),
 then dialect events carrying an explicit `picture=N` back-reference.
-`warning`, `label-use`, and `bbox` events are cross-cutting (any dialect may
-emit them) and, like `boundary`, are stripped from a picture's content before
-dialect and empty-picture checks run — they are diagnostics and derived data,
-not topology. Every library-owned `tn label` style use emits `label-use` and
-one live-anchor rectangle
+`warning`, `label-use`, `ink-use`, `bbox`, and `glyph-geometry` events are
+cross-cutting (any dialect may emit them) and, like `boundary`, are stripped
+from a picture's content before dialect and empty-picture checks run — they are
+diagnostics and derived data, not topology. Every library-owned `tn label`
+style use emits `label-use` and one live-anchor rectangle
 `bbox|picture=...|class=label|id=...|xmin=...|xmax=...|ymin=...|ymax=...`.
-Coordinates are integer scaled points. Axis-aligned box/MPO glyph skins emit
-the same record with `class=glyph`; typed maps additionally emit sibling object
-boxes and their two visible, label-occluded wire segments with `class=wire`.
-Circular, rounded, or triangular glyphs, container nodes, and bent or compound
-paths do not emit a rectangle: their axis-aligned boxes contain non-ink area
-and would make a strict rectangle-intersection check unsound. The audit rejects
-a strict label/ink rectangle intersection, permits tangency, and rejects any mismatch
-between a picture's `label-use` and label-box counts.
+Coordinates are integer scaled points. Every core glyph skin emits a paired
+`ink-use` and exact live-node geometry: rectangles by their extents, circles by
+their extents and radius, rounded rectangles by their extents and production
+corner radius, and canonical triangles by their three live corner anchors.
+Typed maps additionally emit sibling object geometry and the two explicit
+visible, opaque-label-split wire rectangles. The audit rejects a strict
+intersection between a label and any sibling glyph/wire node, permits
+tangency, and rejects any label, glyph, or wire-node use without matching
+geometry.
+
+Arbitrary TikZ paths are deliberately outside this sibling-node contract. In
+particular, a label may annotate its parent bond, and curved or decorated paths
+cannot be replaced by whole-path axis-aligned boxes without inventing non-ink
+collisions. A path contributes to this audit only when its renderer exposes a
+visible segment as a node-like measured extent, as typed maps do after splitting
+the wire around their opaque label.
 
 The table below is generated from the `\tenkz@event{...}` call
 sites themselves (grep `tenkz@event{` across `tex/tenkz/*.code.tex`),

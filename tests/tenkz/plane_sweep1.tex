@@ -1,4 +1,4 @@
-% Regression: plane_sweep1 — renders Page 1: 3x3 grid of 4x4 PEPS sheets (frame=oblique, physical=up, boundary.
+% Regression: plane_sweep1 — oblique/compact region-label clearance sweep.
 % Formula: Page 1: 3x3 grid of 4x4 PEPS sheets (frame=oblique, physical=up, boundary
 % PLANE ORIENTATION sweep for tenkz oblique sheets.
 %   Page 1: 3x3 grid of 4x4 PEPS sheets (frame=oblique, physical=up, boundary
@@ -108,7 +108,7 @@
   {\planeratios{0.45}{0.55}%
    \begin{tenkzlattice}[rows=4, cols=4, frame=oblique, compact,
                         physical=up, boundary legs]
-     \tnregion[slot=selected, label=$R$]{(2-3, 2-3)}
+     \tnregion[slot=selected, label={\scriptscriptstyle R}]{(2-3, 2-3)}
    \end{tenkzlattice}}\\[3pt]
   {\small compact, $0.45/0.55$}
 \end{minipage}\hfill

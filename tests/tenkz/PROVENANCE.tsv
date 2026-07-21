@@ -175,7 +175,7 @@ pentagon_corrected.tex	standalone	tests/tenkz/pentagon_corrected.tex	compiles, e
 plane_experiment.tex	standalone	tests/tenkz/plane_experiment.tex	compiles and passes audit with an intentionally empty tnlog (bare-TikZ plane experiment)
 plane_mirror_probe.tex	standalone	tests/tenkz/plane_mirror_probe.tex	compiles, emits tnlog, and passes tenkz_audit
 plane_stress.tex	standalone	tests/tenkz/plane_stress.tex	compiles, emits tnlog, and passes tenkz_audit
-plane_sweep1.tex	standalone	tests/tenkz/plane_sweep1.tex	compiles, emits tnlog, and passes tenkz_audit
+plane_sweep1.tex	standalone	tests/tenkz/plane_sweep1.tex	compact 0.45/0.55 R label curated to scriptscriptstyle; compiles, emits tnlog, and passes tenkz_audit
 plane_sweep2.tex	standalone	tests/tenkz/plane_sweep2.tex	compiles, emits tnlog, and passes tenkz_audit
 plane_sweep2_v2.tex	standalone	tests/tenkz/plane_sweep2_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 plane_sweep3.tex	standalone	tests/tenkz/plane_sweep3.tex	compiles, emits tnlog, and passes tenkz_audit

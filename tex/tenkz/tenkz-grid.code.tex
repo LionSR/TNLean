@@ -2470,7 +2470,7 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
   {
     \tl_if_blank:VF \l__tenkz_pwlowlabel_tl
       {
-        \node[label, anchor=\tenkz_compass:n{south},
+        \node[tn~label, anchor=\tenkz_compass:n{south},
               shift={\tenkz_leg_vec:nn{1}
                 { \tenkz@dim{\tenkz@r@physleg}
                   + \tenkz@dim{\tenkz@r@labelclear} }}]
@@ -2762,7 +2762,7 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
       ++\tenkz_leg_vec:nn{-1}{\tenkz@dim{\tenkz@r@physleg}};
     \tl_if_blank:VF \l__tenkz_pwslotlab_tl
       {
-        \node[label, anchor=\tenkz_compass:n{north},
+        \node[tn~label, anchor=\tenkz_compass:n{north},
               shift={\tenkz_leg_vec:nn{-1}
                 { \tenkz@dim{\tenkz@r@physleg}
                   + \tenkz@dim{\tenkz@r@labelclear} }}]
@@ -3013,7 +3013,7 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
           {
             \tl_if_blank:VF \l_tmpb_tl
               {
-                \node[label,
+                \node[tn~label,
                       anchor=\tenkz_compass:n
                         { \str_if_eq:nnTF {#3} {north} {south} {north} },
                       shift={\tenkz_leg_vec:nn{#5}
