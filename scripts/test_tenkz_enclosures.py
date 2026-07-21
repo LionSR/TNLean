@@ -215,6 +215,36 @@ UNKNOWN_ROUTE_RECOVERY = r"""
 """
 
 
+ENCLOSURE_RECOVERY = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\begin{document}
+\begin{tenkzfree}
+  \tnput[box]{a}{(0,0)}{A}
+  \tnregion[name=bad]{missing}
+  \tnregion[name=good]{a}
+  \ExplSyntaxOn
+  \tenkz_enclosure_if_registered:nT {bad}
+    { \typeout{TENKZ-BAD-REGION-REGISTERED} }
+  \tenkz_enclosure_if_registered:nF {good}
+    { \typeout{TENKZ-GOOD-REGION-MISSING} }
+  \ExplSyntaxOff
+  \typeout{TENKZ-UNKNOWN-MEMBER-RECOVERED}
+\end{tenkzfree}
+\begin{tenkz}
+  \tnskip\tnspan[box]{1}{bad} &
+  \tn{A}\tnspan[box]{1}{good} &
+  \tn{B}\tnspan[box, label pos=around]{1}
+    {\typeout{TENKZ-BAD-CHOICE-INK}bad} &
+  \tn{C}\tnspan[shade=blue]{1}{\typeout{TENKZ-BAD-KEY-INK}bad} &
+  \tn{D}\tnspan[box]{1}{\typeout{TENKZ-GOOD-OPTION-SPAN-INK}good}
+  \typeout{TENKZ-EMPTY-SPAN-RECOVERED}
+\end{tenkz}
+\end{document}
+"""
+
+
 def compile_tex(
     engine: str, work: Path, name: str, source: str,
     env: dict[str, str], *, halt_on_error: bool = True,
@@ -418,6 +448,82 @@ region|picture=1|lang=free|slot=selected|members=a|outline=0|name=a
         if sum("|name=good" in line for line in recovery_joins) != 1:
             raise AssertionError(
                 f"valid recovery control emitted {recovery_joins!r}"
+            )
+
+        # Shared enclosure resolution is a transaction boundary for both
+        # free regions and measured box spans.  Under nonstop recovery an
+        # unknown free member and an empty grid span must leave neither a
+        # registry entry nor a semantic event, while later valid controls
+        # in the same pictures still commit normally.
+        enclosure_recovered = compile_tex(
+            engine, work, "enclosure-recovery", ENCLOSURE_RECOVERY,
+            env, halt_on_error=False,
+        )
+        if enclosure_recovered.returncode == 0:
+            raise AssertionError("enclosure recovery compilation succeeded")
+        for diagnostic in (
+            "Unknown enclosure member 'missing'",
+            "An enclosure needs at least one rendered member",
+            "Choice 'around' unknown",
+            "/tenkz/span/shade",
+            "passed 'blue'",
+        ):
+            if diagnostic not in enclosure_recovered.stdout:
+                print(enclosure_recovered.stdout)
+                raise AssertionError(
+                    f"enclosure recovery missed diagnostic {diagnostic!r}"
+                )
+        for marker in (
+            "TENKZ-UNKNOWN-MEMBER-RECOVERED",
+            "TENKZ-EMPTY-SPAN-RECOVERED",
+        ):
+            if marker not in enclosure_recovered.stdout:
+                print(enclosure_recovered.stdout)
+                raise AssertionError(
+                    f"enclosure fixture did not reach marker {marker!r}"
+                )
+        if "TENKZ-BAD-REGION-REGISTERED" in enclosure_recovered.stdout:
+            raise AssertionError("invalid free region entered the registry")
+        if "TENKZ-GOOD-REGION-MISSING" in enclosure_recovered.stdout:
+            raise AssertionError("valid free region missed the registry")
+        for marker in (
+            "TENKZ-BAD-CHOICE-INK",
+            "TENKZ-BAD-KEY-INK",
+        ):
+            if marker in enclosure_recovered.stdout:
+                raise AssertionError(
+                    f"invalid deferred span rendered label marker {marker!r}"
+                )
+        if "TENKZ-GOOD-OPTION-SPAN-INK" not in enclosure_recovered.stdout:
+            raise AssertionError("valid deferred span did not render its label")
+        enclosure_log = work / "enclosure-recovery.tnlog"
+        enclosure_events = enclosure_log.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        region_events = [
+            line for line in enclosure_events if line.startswith("region|")
+        ]
+        if any("|name=bad" in line for line in region_events):
+            raise AssertionError("invalid free region emitted a semantic event")
+        if sum("|name=good" in line for line in region_events) != 1:
+            raise AssertionError(
+                f"valid free-region control emitted {region_events!r}"
+            )
+        span_events = [
+            line for line in enclosure_events if line.startswith("span|")
+        ]
+        for column in ("1", "3", "4"):
+            if any(f"|col={column}|" in line for line in span_events):
+                raise AssertionError(
+                    f"invalid span in column {column} emitted a semantic event"
+                )
+        if sum("|col=2|" in line for line in span_events) != 1:
+            raise AssertionError(
+                f"valid box-span control emitted {span_events!r}"
+            )
+        if sum("|col=5|" in line for line in span_events) != 1:
+            raise AssertionError(
+                f"valid option-span control emitted {span_events!r}"
             )
 
     print("PASS: measured enclosure grammar, records, and failures are stable")

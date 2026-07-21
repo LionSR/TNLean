@@ -298,9 +298,6 @@
     % elbow's horizontal segment (pos 0.5 of -|/|- is the corner, so
     % 0.25/0.75 is the first/second segment's midpoint).
     \tl_clear:N \l__tenkz_jlabelnode_tl
-    % unknown routes fail CLOSED: silence here would drop the wire but
-    % keep the join event, and the audit stream would certify ink that
-    % was never drawn
     \tl_if_empty:NTF \l__tenkz_jname_tl
       { \tenkz_free_join_route:nn {#2}{#3} }
       {
@@ -317,7 +314,9 @@
 
 \cs_new_protected:Npn \tenkz_free_join_route:nn #1#2
   {
-    \str_case:VnF \l__tenkz_jroute_tl
+    % The public command validates the closed route vocabulary before any
+    % side effect, so this renderer only dispatches known cases.
+    \str_case:Vn \l__tenkz_jroute_tl
       {
         {straight} { \tenkz_free_label_node:n {0.5}
                      \tenkz_free_join_draw:nnnn {} {#1} { -- } {#2} }
@@ -331,11 +330,6 @@
                  {#1} { |- } {#2} }
         {arc}   { \tenkz_free_arc_join:nn {#1} {#2} }
         {curve} { \tenkz_free_arc_join:nn {#1} {#2} }
-      }
-      {
-        \PackageError{tenkz}
-          {Unknown~route~'\tl_use:N \l__tenkz_jroute_tl'}
-          {Routes:~straight,~hv,~vh,~arc~(alias:~curve).}
       }
   }
 
@@ -439,13 +433,16 @@
     \bool_if:NT \l__tenkz_froutline_bool
       { \tl_put_right:Nn \l__tenkz_frstyle_tl {,region~outline} }
     \clist_set:Nn \l__tenkz_frmembers_clist {#2}
-    \tenkz_enclosure_draw:VVVVV
+    \tenkz_enclosure_draw:VVVVVTF
       \l__tenkz_frmembers_clist
       \l__tenkz_frstyle_tl
       \l__tenkz_frlabel_tl
       \l__tenkz_frlabelpos_tl
       \l__tenkz_frname_tl
-    \tenkz@event{region|picture=\the\tenkz@pictureid|lang=free|slot=\tl_use:N \l__tenkz_frslot_tl|members=\clist_use:Nn \l__tenkz_frmembers_clist {,}|outline=\bool_if:NTF \l__tenkz_froutline_bool {1}{0}\tl_if_empty:NF \l__tenkz_frname_tl {|name=\tl_use:N \l__tenkz_frname_tl}}
+      {
+        \tenkz@event{region|picture=\the\tenkz@pictureid|lang=free|slot=\tl_use:N \l__tenkz_frslot_tl|members=\clist_use:Nn \l__tenkz_frmembers_clist {,}|outline=\bool_if:NTF \l__tenkz_froutline_bool {1}{0}\tl_if_empty:NF \l__tenkz_frname_tl {|name=\tl_use:N \l__tenkz_frname_tl}}
+      }
+      { }
   }
 
 \ExplSyntaxOff

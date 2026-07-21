@@ -46,7 +46,7 @@
 \prop_new:N \l__tenkz_name_prop      % "r-c" -> tikz node name
 \seq_new:N \l__tenkz_rowtypes_seq    % per row: wire|ket|bra|op
 \seq_new:N \l__tenkz_rowmods_seq     % per row: comma list of fused/operator
-\seq_new:N \l__tenkz_spans_seq       % {r}{c}{k}{variant}{label}
+\seq_new:N \l__tenkz_spans_seq       % {r}{c}{k}{kind}{label-pos}{label}{valid}
 \seq_new:N \l__tenkz_cuts_seq        % {r}{c}{label}
 \seq_new:N \l__tenkz_bondlabels_seq  % {math}{c}{c'}
 % Boundary model.  An open virtual index is data: a matrix product with
@@ -462,6 +462,7 @@
   { \tenkz_record:nnn {skip}{}{} }
 \tl_new:N \l__tenkz_spankind_tl
 \tl_new:N \l__tenkz_spanlabelpos_tl
+\bool_new:N \l__tenkz_spanoptsvalid_bool
 \pgfkeys{
   /tenkz/span/.is~family,
   /tenkz/span/brace~above/.code={
@@ -469,35 +470,39 @@
   /tenkz/span/brace~below/.code={
       \tl_set:Nn \l__tenkz_spankind_tl {brace~below}},
   /tenkz/span/box/.code={\tl_set:Nn \l__tenkz_spankind_tl {box}},
-  /tenkz/span/label~pos/.is~choice,
-  /tenkz/span/label~pos/north/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {north}},
-  /tenkz/span/label~pos/south/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {south}},
-  /tenkz/span/label~pos/east/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {east}},
-  /tenkz/span/label~pos/west/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {west}},
-  /tenkz/span/label~pos/north~east/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {north~east}},
-  /tenkz/span/label~pos/north~west/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {north~west}},
-  /tenkz/span/label~pos/south~east/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {south~east}},
-  /tenkz/span/label~pos/south~west/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {south~west}},
-  /tenkz/span/label~pos/center/.code={
-      \tl_set:Nn \l__tenkz_spanlabelpos_tl {center}},
+  /tenkz/span/label~pos/.code={
+      \tenkz_enclosure_label_position:nTF {#1}
+        { \tl_set:Nn \l__tenkz_spanlabelpos_tl {#1} }
+        {
+          \bool_set_false:N \l__tenkz_spanoptsvalid_bool
+          \def\pgf@marshal{
+            \pgfkeysvalueof{/errors/unknown~choice~value/.@cmd}}
+          \expandafter\pgf@marshal\expandafter{/tenkz/span/label~pos}
+            {#1}\pgfeov
+        }},
 }
+% A family `.unknown/.code' declaration dispatches through the family fallback
+% it is defining.  Install the fallback directly after all child keys exist.
+\pgfkeysdef{/tenkz/span/.unknown}
+  {
+    \bool_set_false:N \l__tenkz_spanoptsvalid_bool
+    \def\pgf@marshal{\pgfkeysvalueof{/errors/unknown~key/.@cmd}}
+    \expandafter\expandafter\expandafter\pgf@marshal
+      \expandafter\expandafter\expandafter
+      {\expandafter\pgfkeyscurrentkey\expandafter}
+      \expandafter{\pgfkeyscurrentvalue}\pgfeov
+  }
 \NewDocumentCommand \tnspan { O{brace~above} m m }
   {
     \tl_set:Nn \l__tenkz_spankind_tl {brace~above}
     \tl_set:Nn \l__tenkz_spanlabelpos_tl {north}
+    \bool_set_true:N \l__tenkz_spanoptsvalid_bool
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/span}{#1} }
     \seq_put_right:Ne \l__tenkz_spans_seq
       { { \int_use:N \l__tenkz_row_int }{ \int_use:N \l__tenkz_col_int }
         { #2 }{ \l__tenkz_spankind_tl }{ \l__tenkz_spanlabelpos_tl }
-        { \exp_not:n{#3} } }
+        { \exp_not:n{#3} }
+        { \bool_if:NTF \l__tenkz_spanoptsvalid_bool {1}{0} } }
   }
 \NewDocumentCommand \tncut { O{} m }
   {
@@ -3490,7 +3495,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \cs_new_protected:Npn \tenkz_draw_decorations:
   {
     \seq_map_inline:Nn \l__tenkz_spans_seq
-      { \tenkz_draw_span:nnnnnn ##1 }
+      { \tenkz_draw_span:nnnnnnn ##1 }
     \seq_map_inline:Nn \l__tenkz_cuts_seq
       { \tenkz_draw_cut:nnn ##1 }
     \seq_map_inline:Nn \l__tenkz_bondlabels_seq
@@ -3822,16 +3827,21 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     remains~inside~the~grid.
   }
 
-\cs_new_protected:Npn \tenkz_draw_span:nnnnnn #1#2#3#4#5#6
+\cs_new_protected:Npn \tenkz_draw_span:nnnnnnn #1#2#3#4#5#6#7
   {
-    \bool_set_true:N \l__tenkz_spanvalid_bool
-    \bool_lazy_or:nnT
-      { \int_compare_p:nNn {#3} < {1} }
-      { \int_compare_p:nNn { #2 + #3 - 1 } > {\l__tenkz_ncols_int} }
+    \int_compare:nNnTF {#7} = {1}
+      { \bool_set_true:N \l__tenkz_spanvalid_bool }
+      { \bool_set_false:N \l__tenkz_spanvalid_bool }
+    \bool_if:NT \l__tenkz_spanvalid_bool
       {
-        \msg_error:nnxxxx {tenkz}{span-range}{#1}{#2}{#3}
-          {\int_use:N \l__tenkz_ncols_int}
-        \bool_set_false:N \l__tenkz_spanvalid_bool
+        \bool_lazy_or:nnT
+          { \int_compare_p:nNn {#3} < {1} }
+          { \int_compare_p:nNn { #2 + #3 - 1 } > {\l__tenkz_ncols_int} }
+          {
+            \msg_error:nnxxxx {tenkz}{span-range}{#1}{#2}{#3}
+              {\int_use:N \l__tenkz_ncols_int}
+            \bool_set_false:N \l__tenkz_spanvalid_bool
+          }
       }
     \bool_if:NT \l__tenkz_spanvalid_bool
       {
@@ -3843,7 +3853,8 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
               { \tenkz_draw_span_brace:nnnnn {#1}{#2}{#3}{above}{#6} }
             {box} { \tenkz_draw_span_box:nnnnn {#1}{#2}{#3}{#5}{#6} }
           }
-        \tenkz@event{span|picture=\the\tenkz@pictureid|row=#1|col=#2|length=#3|kind=#4}
+        \bool_if:NT \l__tenkz_spanvalid_bool
+          { \tenkz@event{span|picture=\the\tenkz@pictureid|row=#1|col=#2|length=#3|kind=#4} }
       }
   }
 
@@ -3897,12 +3908,14 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     \tl_set:Nn \l__tenkz_spanlabel_tl { $\tenkz@labelsize #5$ }
     \tl_clear:N \l__tenkz_spanname_tl
     \tl_set:Nn \l__tenkz_spanlabelpos_tl {#4}
-    \tenkz_enclosure_draw:VVVVV
+    \tenkz_enclosure_draw:VVVVVTF
       \l__tenkz_spanmembers_tl
       \l__tenkz_spanstyle_tl
       \l__tenkz_spanlabel_tl
       \l__tenkz_spanlabelpos_tl
       \l__tenkz_spanname_tl
+      { }
+      { \bool_set_false:N \l__tenkz_spanvalid_bool }
   }
 
 % the shared brace+label of a span, given the two endpoints (their order sets
