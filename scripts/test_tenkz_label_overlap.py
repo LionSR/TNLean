@@ -394,6 +394,22 @@ def main() -> int:
                 + "; ".join(finding.msg for finding in exact_audit.findings)
             )
 
+        oversized_roundrect = work / "oversized-roundrect.tnlog"
+        oversized_roundrect.write_text(
+            "picture|id=1|lang=free\n"
+            "ink-use|picture=1|class=glyph|id=1|shape=roundrect\n"
+            "glyph-geometry|picture=1|owner=1|shape=roundrect|"
+            "xmin=0|xmax=10|ymin=0|ymax=10|radius=6|"
+            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n",
+            encoding="utf-8",
+        )
+        oversized_status, oversized_audit = audit_status(oversized_roundrect)
+        if oversized_status != 1 or not any(
+                finding.rule == "malformed-event"
+                and "exceeds half" in finding.msg
+                for finding in oversized_audit.findings):
+            raise AssertionError("audit clamped malformed roundrect geometry")
+
         missing_ink = work / "missing-ink-geometry.tnlog"
         missing_ink.write_text(
             "picture|id=1|lang=free\n"
