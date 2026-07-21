@@ -146,16 +146,6 @@ private noncomputable def blockedTensorRangeData
       (mem_range_vecMulLinear_pow_of_transpose_eigenvector
         (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
 
-private theorem BlockedTensorRangeData.rankOne_mem_cumulativeSpan_of_cumulativeSpan_eq_top
-    {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
-    {φ ψ : Fin D → ℂ}
-    (data : BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ)
-    {N : ℕ} (hcs : cumulativeSpan data.B N = ⊤) :
-    Matrix.vecMulVec φ ψ ∈ cumulativeSpan data.B (D + N + D) := by
-  exact vecMulVec_mem_cumulativeSpan_of_cumulativeSpan_eq_top
-    (d := blockPhysDim d L) (D := D)
-    data.B data.P data.Q φ ψ data.hφ_range data.hψ_range data.hP data.hQ hcs
-
 private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top
     {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
     {φ ψ : Fin D → ℂ}
@@ -171,19 +161,6 @@ private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top
       data.B data.P data.Q data.hP data.hQ
   exact hrange_le (vecMulVec_mem_range_mulLeft_mulRight
     data.P data.Q φ ψ data.hφ_range data.hψ_range)
-
-private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
-    {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
-    {φ ψ : Fin D → ℂ}
-    (data : BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ)
-    {N : ℕ} (hcs : cumulativeSpan data.B N = ⊤)
-    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan data.B 1) :
-    Matrix.vecMulVec φ ψ ∈ wordSpan data.B (D + N + D) := by
-  exact (range_comp_le_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
-    (d := blockPhysDim d L) (D := D)
-    data.B data.P data.Q data.hP data.hQ hcs hone)
-    (vecMulVec_mem_range_mulLeft_mulRight
-      data.P data.Q φ ψ data.hφ_range data.hψ_range)
 
 end LinearAlgebraLemmas
 
@@ -235,25 +212,6 @@ theorem exists_eigenvector_of_wordSpan_eq_top [NeZero D]
   exact ⟨σ, μ, φ, hμ, hφ, heig⟩
 
 end NonzeroTraceExtraction
-
-/-! ## Two-sided range embedding into word span -/
-
-section TwoSidedRange
-
-/-- Membership in `range (mulLeft P ∘ mulRight Q)` implies membership in
-`wordSpan B (m₁ + n + m₂)`, when `P ∈ wordSpan B m₁`, `Q ∈ wordSpan B m₂`,
-and `wordSpan B n = ⊤`. -/
-theorem range_comp_le_wordSpan
-    (B : MPSTensor d D) {m₁ m₂ : ℕ}
-    (P Q : Matrix (Fin D) (Fin D) ℂ)
-    (hP : P ∈ wordSpan B m₁) (hQ : Q ∈ wordSpan B m₂)
-    {n : ℕ} (htop : wordSpan B n = ⊤) :
-    LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) ≤
-      wordSpan B (m₁ + n + m₂) := by
-  rw [← biRectSpan_eq_range_of_wordSpan_eq_top (d := d) (D := D) P Q B htop]
-  exact biRectSpan_le_wordSpan (d := d) (D := D) B P Q hP hQ
-
-end TwoSidedRange
 
 /-! ## Main rank-one extraction -/
 
@@ -362,62 +320,6 @@ end WielandtLemma2b
 /-! ## Parametrized rank-one extraction lemmas -/
 
 section ExternalEigenvectors
-
-/-- **Rank-one element in a bounded cumulative span of the blocked tensor, from supplied
-word-eigenvector data and a cumulative spanning witness.**
-
-This is the cumulative analogue of the later exact-word-span result: the manufactured rank-one
-matrix lies in `T_{D + N + D}` of the blocked tensor as soon as `T_N` is already full. -/
-theorem exists_rankOne_in_cumulativeSpan_blockTensor_of_wordEigenvectors
-    [NeZero D]
-    (A : MPSTensor d D)
-    (L : ℕ)
-    (σ₀ τ₀ : Fin L → Fin d)
-    (φ ψ : Fin D → ℂ) (μ ν : ℂ)
-    (hμ : μ ≠ 0) (hν : ν ≠ 0)
-    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
-    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ)
-    {N : ℕ}
-    (hcs : cumulativeSpan (blockTensor (d := d) (D := D) A L) N = ⊤) :
-    Matrix.vecMulVec φ ψ ∈
-      cumulativeSpan (blockTensor (d := d) (D := D) A L) (D + N + D) := by
-  classical
-  let data :=
-    blockedTensorRangeData A L σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
-  have hcsB : cumulativeSpan data.B N = ⊤ := by
-    simpa [data.hB] using hcs
-  simpa [data.hB] using
-    data.rankOne_mem_cumulativeSpan_of_cumulativeSpan_eq_top hcsB
-
-/-- **Exact blocked rank-one extraction from cumulative spanning plus aperiodicity.**
-
-If the blocked tensor has full cumulative span at level `N` and also satisfies the padding
-hypothesis `1 ∈ wordSpan B 1`, then the same manufactured rank-one matrix already lies in the
-single exact-length word span `S_{D + N + D}(B)`. -/
-theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors_of_cumulativeSpan_of_aperiodic
-    [NeZero D]
-    (A : MPSTensor d D)
-    (L : ℕ)
-    (σ₀ τ₀ : Fin L → Fin d)
-    (φ ψ : Fin D → ℂ) (μ ν : ℂ)
-    (hμ : μ ≠ 0) (hν : ν ≠ 0)
-    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
-    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ)
-    {N : ℕ}
-    (hcs : cumulativeSpan (blockTensor (d := d) (D := D) A L) N = ⊤)
-    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
-      wordSpan (blockTensor (d := d) (D := D) A L) 1) :
-    Matrix.vecMulVec φ ψ ∈
-      wordSpan (blockTensor (d := d) (D := D) A L) (D + N + D) := by
-  classical
-  let data :=
-    blockedTensorRangeData A L σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
-  have hcsB : cumulativeSpan data.B N = ⊤ := by
-    simpa [data.hB] using hcs
-  have honeB : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan data.B 1 := by
-    simpa [data.hB] using hone
-  simpa [data.hB] using
-    data.rankOne_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic hcsB honeB
 
 /-- **Rank-one element in the word span of the blocked tensor, from supplied word-eigenvector
 data.**
