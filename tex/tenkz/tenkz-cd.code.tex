@@ -1038,7 +1038,11 @@
               [matrix~of~math~nodes,
                column~sep=\dim_use:N \l__tenkzcd_mapgap_dim,
                row~sep=\tenkz@dim{\tenkz@r@maprowsep},
-               nodes={inner~sep=1pt, outer~sep=0pt}, #1]
+               nodes={inner~sep=1pt, outer~sep=0pt}, #1,
+               % Typed-map objects are measured after the matrix is built.
+               % Their final PGF shape remains customizable, but keeping the
+               % path corners sharp makes that later measurement exact.
+               nodes={sharp~corners}]
               { \tl_use:N \l__tenkzcd_body_tl };
           \end{scope}
           \bool_set_true:N \l__tenkzcd_mapdeclsvalid_bool

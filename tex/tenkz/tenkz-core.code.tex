@@ -370,6 +370,8 @@
 \newdimen\tenkz@glyphradius
 \newdimen\tenkz@glyphradiusx
 \newdimen\tenkz@glyphradiusy
+\newdimen\tenkz@glyphouterxsep
+\newdimen\tenkz@glyphouterysep
 \newdimen\tenkz@glyphwidth
 \newdimen\tenkz@glyphheight
 \newdimen\tenkz@glyphdiameter
@@ -428,6 +430,10 @@
 % globally unique token, and `execute at end node' snapshots the state under
 % that token for the matching append-after callback to consume.
 \def\tenkz@snapshotglyphcorners#1{%
+  \pgfmathsetlength{\pgf@x}{\pgfkeysvalueof{/pgf/outer xsep}}%
+  \expandafter\xdef\csname tenkz@glyphouterx@#1\endcsname{\the\pgf@x}%
+  \pgfmathsetlength{\pgf@y}{\pgfkeysvalueof{/pgf/outer ysep}}%
+  \expandafter\xdef\csname tenkz@glyphoutery@#1\endcsname{\the\pgf@y}%
   \ifpgf@arccorners
     \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{1}%
     \expandafter\xdef\csname tenkz@glypharc@#1\endcsname{\pgf@corner@arc}%
@@ -439,6 +445,8 @@
   \tenkz@glyphradiusx=#1\relax
   \tenkz@glyphradiusy=#2\relax}
 \def\tenkz@readglyphcorners#1{%
+  \tenkz@glyphouterxsep=\csname tenkz@glyphouterx@#1\endcsname\relax
+  \tenkz@glyphouterysep=\csname tenkz@glyphoutery@#1\endcsname\relax
   \edef\tenkz@glypharcflag{\csname tenkz@glypharcflag@#1\endcsname}%
   \ifnum\tenkz@glypharcflag=1\relax
     \edef\tenkz@glypharcs{\csname tenkz@glypharc@#1\endcsname}%
@@ -481,6 +489,11 @@
       \def\tenkz@glyphshape{rect}%
     \fi
   \else\ifx\tenkz@livepgfshape\tenkz@pgftriangle
+    \tenkz@readglyphcorners{#2}%
+    \ifdim\tenkz@glyphradius>0pt
+      \PackageError{tenkz}{Audited triangle '#1' has rounded corners}%
+        {Rounded triangles are not representable by the audit geometry.}%
+    \fi
     \def\tenkz@glyphshape{triangle}%
     \tenkz@glyphradius=0pt
   \else
@@ -501,10 +514,12 @@
       \tenkz@resolveglyphshape{\tikzlastnode}{#3}%
       \tenkz@emitglyphinkuse
       \tenkz@emitglyphgeometry{\tikzlastnode}%
-      \global\expandafter\let\csname tenkz@glypharcflag@#3\endcsname\relax
-      \global\expandafter\let\csname tenkz@glypharc@#3\endcsname\relax
     \fi
-  \fi}
+  \fi
+  \global\expandafter\let\csname tenkz@glypharcflag@#3\endcsname\relax
+  \global\expandafter\let\csname tenkz@glypharc@#3\endcsname\relax
+  \global\expandafter\let\csname tenkz@glyphouterx@#3\endcsname\relax
+  \global\expandafter\let\csname tenkz@glyphoutery@#3\endcsname\relax}
 \def\tenkz@emitglyphgeometry#1{%
   \begingroup
   \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{west}}%
@@ -515,8 +530,12 @@
   \ifx\tenkz@glyphshape\tenkz@roundrect
     \tenkz@glyphwidth=\tenkz@bboxxmax
     \advance\tenkz@glyphwidth by -\tenkz@bboxxmin
+    \advance\tenkz@glyphwidth by -\tenkz@glyphouterxsep
+    \advance\tenkz@glyphwidth by -\tenkz@glyphouterxsep
     \tenkz@glyphheight=\tenkz@bboxymax
     \advance\tenkz@glyphheight by -\tenkz@bboxymin
+    \advance\tenkz@glyphheight by -\tenkz@glyphouterysep
+    \advance\tenkz@glyphheight by -\tenkz@glyphouterysep
     \tenkz@glyphdiameter=\tenkz@glyphradius
     \advance\tenkz@glyphdiameter by \tenkz@glyphradius
     \ifdim\tenkz@glyphdiameter>\tenkz@glyphwidth
@@ -555,7 +574,21 @@
   \global\advance\tenkz@inkuid by 1\relax
   \tenkz@inkowner=\tenkz@inkuid
   \tenkz@glyphradius=0pt
-  \def\tenkz@glyphshape{rect}%
+  \edef\tenkz@livepgfshape{\csname pgf@sh@ns@#1\endcsname}%
+  \def\tenkz@pgfcircle{circle}%
+  \def\tenkz@pgfrectangle{rectangle}%
+  \def\tenkz@pgftriangle{isosceles triangle}%
+  \ifx\tenkz@livepgfshape\tenkz@pgfcircle
+    \def\tenkz@glyphshape{circle}%
+  \else\ifx\tenkz@livepgfshape\tenkz@pgfrectangle
+    \def\tenkz@glyphshape{rect}%
+  \else\ifx\tenkz@livepgfshape\tenkz@pgftriangle
+    \def\tenkz@glyphshape{triangle}%
+  \else
+    \def\tenkz@glyphshape{unsupported}%
+    \PackageError{tenkz}{Typed-map object '#1' has unsupported live shape
+      '\tenkz@livepgfshape'}{Use a circle, rectangle, or isosceles triangle.}%
+  \fi\fi\fi
   \tenkz@emitglyphinkuse
   \tenkz@emitglyphgeometry{#1}%
   \endgroup}
@@ -585,18 +618,23 @@
     /utils/exec=\tenkz@bboxlabeluse,
     append after command={\pgfextra{\tenkz@capturelabelbbox}}},
   tenkz audited glyph/.style 2 args={
-    /utils/exec={%
+    /utils/exec={\tenkz@installglyphaudit{#1}{#2}}},
+}
+\def\tenkz@installglyphaudit#1#2{%
+  \iftenkz@bboxcapture
+    \ifnum\tenkz@pictureid>0\relax
       \global\advance\tenkz@glyphsnapuid by 1\relax
       \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
-      \xdef\tenkz@installglyphsnapshot{%
+      \edef\tenkz@installglyphsnapshot{%
         \noexpand\tikzset{%
           execute at end node={%
             \noexpand\tenkz@snapshotglyphcorners{\tenkz@glyphsnaptoken}},%
           append after command={\noexpand\pgfextra{%
             \noexpand\tenkz@captureglyphgeometry{#1}{#2}%
-              {\tenkz@glyphsnaptoken}}}}}}%
-      \tenkz@installglyphsnapshot},
-}
+              {\tenkz@glyphsnaptoken}}}}}%
+      \tenkz@installglyphsnapshot
+    \fi
+  \fi}
 
 % ---------- species (the 0.6 hue contract, clause 2) ----------
 % Species declare NAMES, never colors: `species={right,left}' (document

@@ -28,7 +28,8 @@ SOURCE = r"""
 \end{tenkzcd}
 
 % Safe: production spacing is derived from the same materialized label box.
-\begin{tenkzcd}[maps, species={channel}]
+% Matrix passthrough may change the live object shape; measurement follows it.
+\begin{tenkzcd}[maps, species={channel}, nodes={circle}]
   A & B
   \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
     {\rule{18mm}{0pt}\mathcal T}
@@ -79,6 +80,45 @@ INVALID_CORNERS = r"""
 \begin{tenkzfree}
   \tnput[box]{bad}{(0,0)}{}
 \end{tenkzfree}
+\end{document}
+"""
+
+ROUNDED_TRIANGLE = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tikzset{canonical tensor/.append style={rounded corners=1pt}}
+\begin{tenkz}
+  \tn[tri=l]{}
+\end{tenkz}
+\end{document}
+"""
+
+OVERSIZED_OUTER_SEP = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tikzset{box tensor/.append style={
+  minimum size=4pt, inner sep=0pt, outer sep=20pt, rounded corners=6pt}}
+\begin{tenkzfree}
+  \tnput[box]{bad}{(0,0)}{}
+\end{tenkzfree}
+\end{document}
+"""
+
+INACTIVE_SNAPSHOT = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\begin{document}
+\makeatletter
+\begin{tikzpicture}
+  \node[tree junction] at (0,0) {};
+\end{tikzpicture}
+\ifnum\tenkz@glyphsnapuid=0\relax\else
+  \PackageError{tenkz}{Inactive glyph audit allocated a snapshot token}{}
+\fi
+\makeatother
 \end{document}
 """
 
@@ -153,6 +193,14 @@ def main() -> int:
                     f"picture {picture_id} emitted incomplete geometry: "
                     f"bbox={bbox_classes}, kinds={geometry_kinds}"
                 )
+        map_shapes = {
+            event.attrs.get("shape") for event in audit.events(2)
+            if event.kind == "glyph-geometry"
+        }
+        if map_shapes != {"circle"}:
+            raise AssertionError(
+                f"typed-map object restyle emitted stale geometry: {map_shapes}"
+            )
         for picture_id in (3, 4, 5):
             events = audit.events(picture_id)
             uses = sum(event.kind == "label-use" for event in events)
@@ -221,6 +269,44 @@ def main() -> int:
         )
         if invalid_run.returncode == 0 or "unequal corner radii" not in invalid_run.stdout:
             raise AssertionError("audit accepted a non-isotropic rounded rectangle")
+
+        for filename, source, diagnostic in (
+            ("rounded-triangle.tex", ROUNDED_TRIANGLE, "has rounded corners"),
+            ("oversized-outer-sep.tex", OVERSIZED_OUTER_SEP,
+             "radius exceeds half its"),
+        ):
+            failure = work / filename
+            failure.write_text(source, encoding="utf-8")
+            failure_run = subprocess.run(
+                [engine, "-interaction=nonstopmode", "-halt-on-error", failure.name],
+                cwd=work,
+                env=env,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                timeout=120,
+            )
+            if failure_run.returncode == 0 or diagnostic not in failure_run.stdout:
+                raise AssertionError(
+                    f"audit accepted {filename}: {failure_run.stdout[-1000:]}"
+                )
+
+        inactive = work / "inactive-snapshot.tex"
+        inactive.write_text(INACTIVE_SNAPSHOT, encoding="utf-8")
+        inactive_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", inactive.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if inactive_run.returncode:
+            raise AssertionError(
+                "inactive audited glyph leaked snapshot state: "
+                + inactive_run.stdout[-1000:]
+            )
 
         exact = work / "exact-shapes.tnlog"
         exact.write_text(
