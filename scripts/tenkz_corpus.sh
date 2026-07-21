@@ -41,7 +41,7 @@ try:
     with provenance.open(encoding="utf-8", newline="") as stream:
         rows = list(csv.reader(stream, dialect="excel-tab"))
 except OSError as exc:
-    fail(f"cannot read tests/tenkz/PROVENANCE.tsv: {exc}")
+    fail(f"cannot read {provenance}: {exc}")
 
 header = ["source_file", "disposition", "adopted_path", "reason"]
 if not rows or rows[0] != header:

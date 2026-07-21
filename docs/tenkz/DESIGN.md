@@ -488,7 +488,9 @@ Every environment emits `picture|id=N|lang=L` at `\tenkz@beginpicture` (the
 only writer of `lang=`; `L` is one of `grid`, `cd`, `lattice`, `free`),
 then dialect events carrying an explicit `picture=N` back-reference.
 `warning`, `label-use`, `ink-use`, `bbox`, `glyph-geometry`, and
-`wire-geometry` events are cross-cutting (any dialect may emit them) and, like
+`wire-geometry` events are cross-cutting (any dialect may emit them).
+`label-anchor-site` is the corresponding lattice-only relation for a region
+corner label and its deliberately adjacent extreme site. These records, like
 `boundary`, are stripped from a picture's content before dialect and
 empty-picture checks run — they are diagnostics and derived data, not topology.
 Every library-owned `tn label`
@@ -503,11 +505,14 @@ and canonical triangles use their three centerline corner anchors plus the
 exact polygon-edge and vertex stroke band. Audited glyphs must have a live fill;
 draw-only customizations fail closed because their interior is not ink. Labels
 likewise use their visible live support after removing outer separation. A
-fill-only label emits `shape=rect,radius=0`; a sharp rectangular fill with a
-round-join stroke emits `shape=roundrect,radius=<half-stroke>`. The exact label
-contract requires an active positive-opacity background fill and positive text
-opacity. Rounded-corner fill paths are rejected because they can leave text-box
-corners uncovered. Audited labels and glyphs permit translation but reject
+transparent text-only label emits the materialized text-box rectangle, excluding
+both inner and outer separation. A fill-only label emits
+`shape=rect,radius=0`; a sharp rectangular fill with a round-join stroke emits
+`shape=roundrect,radius=<half-stroke>`. The exact label contract requires
+positive text opacity; an active fill also requires positive fill opacity, and
+an outline without a fill fails closed because its ring is not representable by
+this schema. Rounded-corner fill paths are rejected because they can leave
+text-box corners uncovered. Audited labels and glyphs permit translation but reject
 non-identity linear node transforms, and labels reject non-rectangle shapes.
 The snapshot observes the real post-adjustment outer separation and the actual
 path-use support, so the exact geometry is independent of stroke/fill color and
@@ -516,7 +521,9 @@ line joins, dashed or double strokes, zero opacity on active ink, shading,
 fading, path pictures, clipping, or multiple path-use/mode/outer-adjust passes.
 Typed maps additionally emit sibling object geometry and one exact
 `wire-geometry` record: the stroke-expanded endpoint rectangle minus the exact
-visible filled-and-stroked support of its owning label. The record names that
+visible filled-and-stroked support of its owning label. Typed-map measurement
+requires that inner label to use an opaque `tenkzPaper` fill, independently of
+the transparent general `tn label` default. The record names that
 label by its exact emitted bbox id in `cut-id`. For another measured label and
 a cut wire, an overlap with the owning label is reported once as a label-label
 overlap and suppresses the consequent wire diagnostic; when the two labels are
@@ -525,7 +532,10 @@ intersection with the visible difference. The audit
 rejects a strict
 intersection between a label and any sibling glyph/wire node, permits
 tangency, and rejects any label, glyph, or wire-node use without matching
-geometry. Typed-map path restyling may change colour, positive width, opacity,
+geometry. A lattice `label-anchor-site` relation permits only the corner
+label's intersection with the circle centered at its declared extreme site;
+all other sibling intersections remain errors. Typed-map path restyling may
+change colour, positive width, opacity,
 or ordinary/double stroke, but fails closed for path-local affine transforms,
 nonzero shortening, a path-local cap change, decoration, and pre/post actions;
 those effects invalidate the anchor-derived horizontal-rectangle model. The
@@ -562,7 +572,7 @@ not hand-maintained prose — the two drift out of step otherwise.
 |---|---|---|
 | `grid` | `atom`, `bond`, `faceports`, `pairleg`, `hole`, `cup`, `boundary`, `phtrace`, `pairtrace`, `trace`, `hooks` | `tenkz-grid.code.tex` |
 | `free` | `atom`, `join` | `tenkz-free.code.tex` |
-| `lattice` | `lattice`, `site`, `region`, `edge`, `cup`, `trace`, `pairtrace`, `boundary` | `tenkz-lattice.code.tex` |
+| `lattice` | `lattice`, `site`, `region`, `edge`, `cup`, `trace`, `pairtrace`, `label-anchor-site`, `boundary` | `tenkz-lattice.code.tex` |
 | `cd` | `cdcell`, `cdobject`, `cdmap`, `cdarrow`, `tree` | `tenkz-cd.code.tex` |
 
 Notes against the previous (wrong) table: grid never emits `leg`, `fuse`,

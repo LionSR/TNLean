@@ -114,7 +114,7 @@ DIALECT_KINDS = {
              "phtrace", "hooks", "cup", "hole", "warning", "boundary"},
     "free": {"atom", "join"},
     "lattice": {"lattice", "site", "region", "edge", "cup", "trace",
-                "pairtrace", "boundary", "warning"},
+                "pairtrace", "label-anchor-site", "boundary", "warning"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
 }
 
@@ -437,6 +437,8 @@ def _stroked_polygon_intersects_roundrect(
 FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "picture": {"id": _is_int, "lang": _any},
     "label-use": {"picture": _is_int},
+    "label-anchor-site": {"picture": _is_int, "label": _is_positive_int,
+                          "x": _is_int, "y": _is_int},
     "ink-use": {"picture": _is_int, "class": _enum("glyph", "wire"),
                 "id": _is_positive_int,
                 "shape": _enum("rect", "circle", "roundrect", "triangle")},
@@ -540,7 +542,8 @@ class Picture:
         """Events that denote ink.  Derived boundaries and warning
         diagnostics do not contribute to the canonical topology."""
         return [e for e in self.events
-                if e.kind not in {"bbox", "label-use", "ink-use",
+                if e.kind not in {"bbox", "label-use", "label-anchor-site",
+                                  "ink-use",
                                   "glyph-geometry", "wire-geometry",
                                   "boundary", "warning"}]
 
@@ -970,6 +973,63 @@ class Audit:
                     continue
                 labels_by_id[label_id] = label
 
+            label_anchor_sites: dict[int, tuple[int, int]] = {}
+            for event in pic.events:
+                if event.kind != "label-anchor-site":
+                    continue
+                if pic.lang != "lattice":
+                    self.hard(
+                        "dialect-mismatch",
+                        f"{self.log_path.name}:{event.line}",
+                        "label-anchor-site is valid only in a lattice picture",
+                    )
+                    continue
+                required = {"label", "x", "y"}
+                missing = sorted(required - event.attrs.keys())
+                if missing:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        "label-anchor-site event lacks required field(s): "
+                        + ", ".join(missing),
+                    )
+                    continue
+                if any(not _is_int(event.attrs[field]) for field in required):
+                    continue
+                label_id = int(event.attrs["label"])
+                if label_id <= 0:
+                    continue
+                if label_id in label_anchor_sites:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} repeats anchor site for label "
+                        f"bbox id={label_id}",
+                    )
+                    continue
+                if label_id not in labels_by_id:
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} anchor site references missing "
+                        f"label bbox id={label_id}",
+                    )
+                    continue
+                anchor_site = (int(event.attrs["x"]), int(event.attrs["y"]))
+                if not any(
+                        shape == "circle"
+                        and 2 * anchor_site[0] == bounds[0] + bounds[1]
+                        and 2 * anchor_site[1] == bounds[2] + bounds[3]
+                        for _, shape, bounds, _, _, _ in glyphs):
+                    self.hard(
+                        "malformed-event",
+                        f"{self.log_path.name}:{event.line}",
+                        f"picture {pic.ident} anchor site for label bbox "
+                        f"id={label_id} matches no circle glyph center",
+                    )
+                    continue
+                label_anchor_sites[label_id] = anchor_site
+
             valid_cut_wires: list[
                 tuple[Event, Rect, int, str, Rect, int, int]
             ] = []
@@ -1074,6 +1134,11 @@ class Audit:
                             f"id={wire_event.attrs['owner']}",
                         )
                 for event, shape, bounds, radius, stroke, points in glyphs:
+                    anchor_site = label_anchor_sites.get(label_id)
+                    if (shape == "circle" and anchor_site is not None
+                            and 2 * anchor_site[0] == bounds[0] + bounds[1]
+                            and 2 * anchor_site[1] == bounds[2] + bounds[3]):
+                        continue
                     if label_shape == "rect":
                         if shape == "rect":
                             intersects = _rects_intersect(bounds, label_rect)
