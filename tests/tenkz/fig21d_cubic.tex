@@ -1,0 +1,34 @@
+% Regression: fig21d_cubic — renders Z = tTr prod_{r,c,h} T^{[r,c,h]}_{l r u d f b}.
+% Formula: Z = tTr  prod_{r,c,h}  T^{[r,c,h]}_{l r u d f b}
+% fig21d_cubic — a 3x3x3 window of a cubic-lattice tensor network
+% (Orús review genre, Ann. Phys. 349, 117 (2014) / arXiv:1306.2164:
+% 3D PEPS and 3D classical partition functions):
+%
+%   Z = tTr  prod_{r,c,h}  T^{[r,c,h]}_{l r u d f b}
+%
+% one six-leg tensor per site, virtual bonds along the three axes of
+% the cube.  Numeric sheets=3 keeps the bare wire-sheet meaning (no
+% roles, no boxes); pairing supplies the site-wise vertical bonds, so
+% every nearest-neighbour pair of the 3x3x3 patch is joined.  The
+% custom sheet vector {0mm, 8.25mm} sets the vertical cube edge to ONE
+% lattice pitch (0.75 x 11mm), the exact length of the column edge, for
+% the equal-axis cube read; the depth edge foreshortens to 0.72 lp —
+% the cabinet projection of a cube.
+%
+% Near-coincidence arithmetic (why plane slant=0.40, not the stock
+% 0.45): an equal-axis stack interleaves the sheets with the window's
+% own height, so sheet h+1's site (r,c) lands near sheet h's site
+% (r+2,c-1) at offset lp x (|2 slant - 1|, |2 rise - 1|).  At the stock
+% slant 0.45 that is (0.10, 0.20) lp = 1.85mm, tangent to the 1.76mm
+% bead diameter (doubled-dot blobs, verified in ink); slant 0.40 moves
+% it to (0.20, 0.20) lp = 2.33mm and every bead separates.  The expert
+% sheet vector bypasses the planes-interleave guard, so this file is
+% also the stress probe for the practical equal-axis ceiling.
+\documentclass[border=6pt]{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkzlattice}[rows=3, cols=3, sheets=3, pairing,
+                     frame=oblique, plane slant=0.40,
+                     sheet vector={0mm, 8.25mm}]
+\end{tenkzlattice}
+\end{document}

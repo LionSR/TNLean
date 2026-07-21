@@ -914,6 +914,79 @@ SOURCE = r"""
 \end{document}
 """
 
+REGION_LABEL_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\dim_new:N \l__tenkzl_test_expected_x_dim
+\dim_new:N \l__tenkzl_test_expected_y_dim
+\dim_new:N \l__tenkzl_test_actual_x_dim
+\dim_new:N \l__tenkzl_test_actual_y_dim
+\dim_new:N \l__tenkzl_test_expected_m_dim
+\tl_new:N \l__tenkzl_test_anchor_tl
+\int_new:N \g__tenkzl_test_label_count_int
+\cs_new_eq:NN \__tenkzl_test_corner_label:nnnnnn
+  \tenkzl_corner_label:nnnnnn
+\cs_set_protected:Npn \tenkzl_corner_label:nnnnnn #1#2#3#4#5#6
+  {
+    \str_case:nn {#6}
+      {
+        {F} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
+          { \tenkz@r@latticemargin\tenkz@pitch } }
+        {N} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
+          { \tenkz@r@latticemargin\tenkz@pitch
+            - \tenkz@r@regionnest\tenkz@pitch * (2) } }
+        {O} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
+          { \tenkz@r@latticemargin\tenkz@pitch
+            - \tenkz@r@regionnest\tenkz@pitch * (1) } }
+      }
+    \dim_compare:nNnF { \l__tenkzl_m_dim } =
+      { \l__tenkzl_test_expected_m_dim }
+      { \tex_errmessage:D { region~label~lost~its~nesting~margin } }
+    \tenkzl_map:nn { \tenkzl_cx:n{#2} #3 \l__tenkzl_m_dim }
+                   { \tenkzl_cy:n{#4} #5 \l__tenkzl_m_dim }
+    \dim_set_eq:NN \l__tenkzl_test_expected_x_dim \l__tenkzl_px_dim
+    \dim_set_eq:NN \l__tenkzl_test_expected_y_dim \l__tenkzl_py_dim
+    \tl_set:Ne \l__tenkzl_test_anchor_tl
+      { \bool_if:NTF \l__tenkzl_oblique_bool
+          { \tenkzl_flipanchor:n {#1} } {#1} }
+    \__tenkzl_test_corner_label:nnnnnn {#1}{#2}{#3}{#4}{#5}{#6}
+    \pgfextractx \l__tenkzl_test_actual_x_dim
+      { \pgfpointanchor{tenkzl-region-label-probe}
+          {\l__tenkzl_test_anchor_tl} }
+    \pgfextracty \l__tenkzl_test_actual_y_dim
+      { \pgfpointanchor{tenkzl-region-label-probe}
+          {\l__tenkzl_test_anchor_tl} }
+    \dim_compare:nNnF { \l__tenkzl_test_actual_x_dim } =
+      { \l__tenkzl_test_expected_x_dim }
+      { \tex_errmessage:D { region~label~lost~its~semantic~x~anchor } }
+    \dim_compare:nNnF { \l__tenkzl_test_actual_y_dim } =
+      { \l__tenkzl_test_expected_y_dim }
+      { \tex_errmessage:D { region~label~lost~its~semantic~y~anchor } }
+    \int_gincr:N \g__tenkzl_test_label_count_int
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\begin{tenkzlattice}[rows=2, cols=2, boundary=none, outer legs=none]
+  \tnregion[label=F, label at=north west]{(1-2,1-2)}
+\end{tenkzlattice}
+\begin{tenkzlattice}[rows=3, cols=3, boundary=none, outer legs=none]
+  \tnregion[slot=secondary]{(1-3,1-3)}
+  \tnregion[inset=2, label=N, label at=north east]{(2,2)}
+\end{tenkzlattice}
+\begin{tenkzlattice}[
+    rows=2, cols=2, frame=oblique, boundary=none, outer legs=none]
+  \tnregion[inset=1, label=O, label at=south east]{(1-2,1-2)}
+\end{tenkzlattice}
+\ExplSyntaxOn
+\int_compare:nNnF { \g__tenkzl_test_label_count_int } = {3}
+  { \tex_errmessage:D { region~label~probe~count~was~not~three } }
+\ExplSyntaxOff
+\end{document}
+"""
+
 
 def events_by_picture(audit: Audit) -> dict[int, list[Event]]:
     """Typed events per picture, read from the audit's own parse
@@ -967,6 +1040,21 @@ def main() -> int:
         if run.returncode:
             print(run.stdout)
             print("FAIL: face-port fixture did not compile")
+            return 1
+        region_labels = work / "lattice-region-labels.tex"
+        region_labels.write_text(REGION_LABEL_SOURCE, encoding="utf-8")
+        region_label_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error",
+             region_labels.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if region_label_run.returncode:
+            print(region_label_run.stdout)
+            print("FAIL: lattice region-label fixture did not compile")
             return 1
         invalid_side = work / "invalid-lattice-side.tex"
         invalid_side.write_text(
