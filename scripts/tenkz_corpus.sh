@@ -59,6 +59,8 @@ if any(not name or Path(name).name != name or not name.endswith(".tex")
 if any(not record["reason"].strip() for record in records):
     fail("every PROVENANCE.tsv row needs a non-empty reason")
 
+# Independent handoff-census invariant: do not derive these values from the TSV
+# being checked.  A changed manifest must not redefine its own expected corpus.
 expected_counts = {"standalone": 257, "support": 1, "excluded": 20}
 actual_counts = Counter(record["disposition"] for record in records)
 if actual_counts != expected_counts:

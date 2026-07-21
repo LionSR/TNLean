@@ -67,6 +67,23 @@ SOURCE = r"""
   \tnput[pill]{sharp-pill}{(0,0)}{}
   \tnput[box]{rounded-box}{(20mm,0)}{}
 \end{tenkzfree}
+% A large outer separation is positioning whitespace, not glyph ink.
+\begingroup
+\tikzset{box tensor/.append style={
+  minimum size=4pt, inner sep=0pt, outer sep=20pt}}
+\begin{tenkzfree}
+  \tnput[box]{outer-gap}{(0,0)}{}
+  \node[tn label, inner sep=0pt] at (10pt,0) {\rule{1pt}{1pt}};
+\end{tenkzfree}
+\endgroup
+% Every matrix object is audited once, even without an incident map, and live
+% rounded-corner passthrough remains visible in the emitted shape.
+\begin{tenkzcd}[
+  maps, species={channel}, nodes={rectangle, rounded corners=2pt}
+]
+  A & B & C
+  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{f}
+\end{tenkzcd}
 \end{document}
 """
 
@@ -180,7 +197,13 @@ def main() -> int:
             )
         if any(f"picture {picture_id}" in finding.msg
                for finding in overlaps for picture_id in (2, 3, 4, 5, 6)):
-            raise AssertionError("audit rejected a safely spaced fixture")
+            raise AssertionError(
+                "audit rejected a safely spaced fixture: "
+                + "; ".join(finding.msg for finding in overlaps)
+            )
+        if any(f"picture {picture_id}" in finding.msg
+               for finding in overlaps for picture_id in (8, 9, 10)):
+            raise AssertionError("audit rejected live customized geometry")
 
         for picture_id in (1, 2):
             bbox_classes = {
@@ -200,6 +223,25 @@ def main() -> int:
         if map_shapes != {"circle"}:
             raise AssertionError(
                 f"typed-map object restyle emitted stale geometry: {map_shapes}"
+            )
+        map_glyphs = [event for event in audit.events(2)
+                      if event.kind == "glyph-geometry"]
+        if len(map_glyphs) != 2:
+            raise AssertionError(
+                f"typed-map objects were not audited exactly once: {len(map_glyphs)}"
+            )
+        map_wires = [event for event in audit.events(2)
+                     if event.kind == "bbox"
+                     and event.attrs.get("class") == "wire"]
+        if not map_wires or len(map_wires) > 2:
+            raise AssertionError(
+                f"typed-map emitted an invalid wire partition: {len(map_wires)}"
+            )
+        wire_heights = [int(event.attrs["ymax"]) - int(event.attrs["ymin"])
+                        for event in map_wires]
+        if any(height >= 65536 for height in wire_heights):
+            raise AssertionError(
+                f"typed-map wire bbox followed an offset label: {wire_heights}sp"
             )
         for picture_id in (3, 4, 5):
             events = audit.events(picture_id)
@@ -255,6 +297,26 @@ def main() -> int:
             raise AssertionError("sharp pill retained its declared corner radius")
         if corner_events[1].attrs.get("radius") != str(round(1.5 * 65536)):
             raise AssertionError("rounded box did not emit its live corner radius")
+
+        outer_gap = [event for event in audit.events(9)
+                     if event.kind == "glyph-geometry"]
+        if len(outer_gap) != 1:
+            raise AssertionError("outer-separation fixture lost glyph geometry")
+        if (int(outer_gap[0].attrs["xmax"])
+                - int(outer_gap[0].attrs["xmin"])) >= round(10 * 65536):
+            raise AssertionError("glyph geometry retained invisible outer separation")
+
+        rounded_map = [event for event in audit.events(10)
+                       if event.kind == "glyph-geometry"]
+        if len(rounded_map) != 3:
+            raise AssertionError(
+                "typed-map object census omitted or duplicated a cell: "
+                f"{len(rounded_map)}"
+            )
+        if ({event.attrs.get("shape") for event in rounded_map} != {"roundrect"}
+                or {event.attrs.get("radius") for event in rounded_map}
+                != {str(round(2 * 65536))}):
+            raise AssertionError("typed-map rounded-corner passthrough was not preserved")
 
         invalid = work / "invalid-corners.tex"
         invalid.write_text(INVALID_CORNERS, encoding="utf-8")
