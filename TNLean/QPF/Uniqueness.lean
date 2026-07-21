@@ -272,7 +272,6 @@ theorem posSemidef_fixedPoint_unique
     (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
     (hσ_fix : transferMap (d := d) (D := D) A σ = σ) :
     ∃ c : ℂ, σ = c • ρ := by
-  have _hσ_ne := hσ_ne
   exact posSemidef_fixedPoint_unique_of_irreducible A
     (injective_implies_irreducibleCP A hA) ρ σ hρ_psd hρ_ne hσ_psd hρ_fix hσ_fix
 
