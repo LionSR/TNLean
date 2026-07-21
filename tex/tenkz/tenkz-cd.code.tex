@@ -126,10 +126,39 @@
 \int_new:N \l__tenkzcd_torow_int
 \int_new:N \l__tenkzcd_tocol_int
 \int_new:N \l__tenkzcd_mapdecls_int
+\int_new:N \l__tenkzcd_mapdrawuses_int
+\int_new:N \l__tenkzcd_mapinvalid_int
+\int_new:N \l__tenkzcd_map_path_tokens_int
+\int_new:N \g__tenkzcd_mapdrawuses_int
+\int_new:N \g__tenkzcd_mapinvalid_int
 \int_new:N \g__tenkzcd_mapordinal_int
 \seq_new:N \l__tenkzcd_addr_seq
 \dim_new:N \l__tenkzcd_mapgap_dim
+\dim_new:N \l__tenkzcd_mapwire_outer_dim
+\dim_new:N \l__tenkzcd_mapwire_inner_dim
+\dim_new:N \g__tenkzcd_mapwire_outer_dim
+\dim_new:N \g__tenkzcd_mapwire_inner_dim
+\bool_new:N \g__tenkzcd_mapcaptureactive_bool
+\dim_new:N \l__tenkzcd_mapwire_y_dim
+\dim_new:N \l__tenkzcd_mapwire_xmin_dim
+\dim_new:N \l__tenkzcd_mapwire_xmax_dim
+\dim_new:N \l__tenkzcd_map_path_y_dim
+\dim_new:N \l__tenkzcd_maplabel_center_x_dim
+\dim_new:N \l__tenkzcd_maplabel_center_y_dim
+\dim_new:N \l__tenkzcd_maplabel_xmin_dim
+\dim_new:N \l__tenkzcd_maplabel_xmax_dim
+\dim_new:N \l__tenkzcd_maplabel_ymin_dim
+\dim_new:N \l__tenkzcd_maplabel_ymax_dim
 \quark_new:N \q__tenkzcd_map_scan_stop
+\cs_new_eq:NN \tenkz_cd_saved_map_usepath:n \scan_stop:
+\cs_new_eq:NN \tenkz_cd_saved_map_sync: \scan_stop:
+\tl_new:N \l__tenkzcd_map_base_transform_tl
+\tl_new:N \l__tenkzcd_map_transform_a_tl
+\tl_new:N \l__tenkzcd_map_transform_b_tl
+\tl_new:N \l__tenkzcd_map_transform_c_tl
+\tl_new:N \l__tenkzcd_map_transform_d_tl
+\tl_new:N \l__tenkzcd_map_transform_x_tl
+\tl_new:N \l__tenkzcd_map_transform_y_tl
 
 % ---------- keys ----------
 \pgfkeys{
@@ -798,10 +827,21 @@
     \exp_args:Nc \hbox_set:Nn
       { l__tenkzcd_map_label_\int_use:N \l__tenkzcd_mapdecls_int _box }
       {
+        \tenkz@bboxcapturefalse
+        \edef\tenkz@labelgeometrykey{map-\the\tenkz@pictureid-%
+          \int_use:N\l__tenkzcd_mapdecls_int}
         \begin{tikzpicture}[baseline]
           \node[tn~label, fill=tenkzPaper, outer~sep=0pt]
             { $\tenkz@labelsize #3$ };
         \end{tikzpicture}
+      }
+    \int_compare:nNnF
+      { \use:c { tenkz@labelopaque@map-\the\tenkz@pictureid-
+          \int_use:N\l__tenkzcd_mapdecls_int } }
+      = {1}
+      {
+        \PackageError{tenkz}{Typed-map~label~background~is~not~opaque}
+          {Use~fill~opacity=1~for~typed-map~labels.}
       }
     \dim_set:Nn \l_tmpa_dim
       { \exp_args:Nc \box_wd:N
@@ -867,18 +907,343 @@
       { \tl_put_right:Nn #4 {, #2~bond} }
   }
 
+\cs_new_protected:Npn \tenkz_cd_note_map_invalid:n #1
+  {
+    \int_compare:nNnT {\g__tenkzcd_mapinvalid_int} = {0}
+      { \int_gset:Nn \g__tenkzcd_mapinvalid_int {#1} }
+  }
+
+\cs_new_protected:Npn \tenkz_cd_read_map_transform:N #1
+  {
+    \pgfgettransformentries
+      \l__tenkzcd_map_transform_a_tl
+      \l__tenkzcd_map_transform_b_tl
+      \l__tenkzcd_map_transform_c_tl
+      \l__tenkzcd_map_transform_d_tl
+      \l__tenkzcd_map_transform_x_tl
+      \l__tenkzcd_map_transform_y_tl
+    \tl_set:Nx #1
+      {
+        \l__tenkzcd_map_transform_a_tl|
+        \l__tenkzcd_map_transform_b_tl|
+        \l__tenkzcd_map_transform_c_tl|
+        \l__tenkzcd_map_transform_d_tl|
+        \l__tenkzcd_map_transform_x_tl|
+        \l__tenkzcd_map_transform_y_tl
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_cd_map_softpath_move:nn #1#2
+  {
+    \int_compare:nNnF {\l__tenkzcd_map_path_tokens_int} = {0}
+      { \tenkz_cd_note_map_invalid:n {8} }
+    \int_incr:N \l__tenkzcd_map_path_tokens_int
+    \dim_set:Nn \l__tenkzcd_map_path_y_dim {#2}
+  }
+
+\cs_new_protected:Npn \tenkz_cd_map_softpath_line:nn #1#2
+  {
+    \int_compare:nNnF {\l__tenkzcd_map_path_tokens_int} = {1}
+      { \tenkz_cd_note_map_invalid:n {8} }
+    \int_incr:N \l__tenkzcd_map_path_tokens_int
+    \dim_compare:nNnF {#2} = {\l__tenkzcd_map_path_y_dim}
+      { \tenkz_cd_note_map_invalid:n {8} }
+  }
+
+\cs_new_protected:Npn \tenkz_cd_map_softpath_reject:nn #1#2
+  { \tenkz_cd_note_map_invalid:n {8} }
+
+\cs_new_protected:Npn \tenkz_cd_validate_map_softpath:
+  {
+    \group_begin:
+      \int_zero:N \l__tenkzcd_map_path_tokens_int
+      \pgfgetpath\l_tmpa_tl
+      \cs_set_eq:NN \pgfsyssoftpath@movetotoken
+        \tenkz_cd_map_softpath_move:nn
+      \cs_set_eq:NN \pgfsyssoftpath@linetotoken
+        \tenkz_cd_map_softpath_line:nn
+      \cs_set_eq:NN \pgfsyssoftpath@curvetosupportatoken
+        \tenkz_cd_map_softpath_reject:nn
+      \cs_set_eq:NN \pgfsyssoftpath@curvetosupportbtoken
+        \tenkz_cd_map_softpath_reject:nn
+      \cs_set_eq:NN \pgfsyssoftpath@curvetotoken
+        \tenkz_cd_map_softpath_reject:nn
+      \cs_set_eq:NN \pgfsyssoftpath@rectcornertoken
+        \tenkz_cd_map_softpath_reject:nn
+      \cs_set_eq:NN \pgfsyssoftpath@rectsizetoken
+        \tenkz_cd_map_softpath_reject:nn
+      \cs_set_eq:NN \pgfsyssoftpath@closepathtoken
+        \tenkz_cd_map_softpath_reject:nn
+      \cs_set_eq:NN \pgfsyssoftpath@specialroundtoken
+        \tenkz_cd_map_softpath_reject:nn
+      \tl_use:N \l_tmpa_tl
+      \int_compare:nNnF {\l__tenkzcd_map_path_tokens_int} = {2}
+        { \tenkz_cd_note_map_invalid:n {8} }
+    \group_end:
+  }
+
+\cs_new_protected:Npn \tenkz_cd_check_current_map_transform:
+  {
+    \tenkz_cd_read_map_transform:N \l_tmpa_tl
+    \tl_if_eq:NNF \l_tmpa_tl \l__tenkzcd_map_base_transform_tl
+      { \tenkz_cd_note_map_invalid:n {3} }
+  }
+
+% The emitted wire is an undecorated, unshortened horizontal rectangle between
+% the measured object anchors.  This hook runs after all public map styles, so
+% unsupported path-local state is observed without rewriting user options.
+\cs_new_protected:Npn \tenkz_cd_validate_map_declared_modes:
+  {
+    \group_begin:
+      \tikz@mode@clipfalse
+      \tikz@mode@fade@pathfalse
+      \tikz@mode@fade@scopefalse
+      \let\tikz@path@picture\pgfutil@empty
+      \tikz@mode
+      \iftikz@mode@clip
+        \tenkz_cd_note_map_invalid:n {11}
+      \fi
+      \iftikz@mode@fade@path
+        \tenkz_cd_note_map_invalid:n {12}
+      \fi
+      \iftikz@mode@fade@scope
+        \tenkz_cd_note_map_invalid:n {13}
+      \fi
+      \ifx\tikz@path@picture\pgfutil@empty\else
+        \tenkz_cd_note_map_invalid:n {14}
+      \fi
+    \group_end:
+  }
+
+\cs_new_protected:Npn \tenkz_cd_validate_map_path_state:
+  {
+    \iftikz@mode@clip
+      \tenkz_cd_note_map_invalid:n {11}
+    \fi
+    \iftikz@mode@fade@path
+      \tenkz_cd_note_map_invalid:n {12}
+    \fi
+    \iftikz@mode@fade@scope
+      \tenkz_cd_note_map_invalid:n {13}
+    \fi
+    \ifx\tikz@path@picture\pgfutil@empty\else
+      \tenkz_cd_note_map_invalid:n {14}
+    \fi
+    \group_begin:
+      \tikz@transform
+      \tenkz_cd_check_current_map_transform:
+    \group_end:
+    \dim_compare:nNnF {\pgf@shorten@start@additional} = {0pt}
+      { \tenkz_cd_note_map_invalid:n {4} }
+    \dim_compare:nNnF {\pgf@shorten@end@additional} = {0pt}
+      { \tenkz_cd_note_map_invalid:n {4} }
+    \tl_set:Nx \l_tmpa_tl {\tenkz@livecap}
+    \tl_if_eq:NnF \l_tmpa_tl {butt}
+      { \tenkz_cd_note_map_invalid:n {5} }
+    \tl_set:Nx \l_tmpa_tl {\tenkz@liveblendmode}
+    \tl_if_eq:NnF \l_tmpa_tl {normal}
+      { \tenkz_cd_note_map_invalid:n {16} }
+    \iftikz@decoratepath
+      \tenkz_cd_note_map_invalid:n {6}
+    \fi
+    \ifx\tikz@preactions\pgfutil@empty\else
+      \tenkz_cd_note_map_invalid:n {7}
+    \fi
+    \ifx\tikz@postactions\pgfutil@empty\else
+      \tenkz_cd_note_map_invalid:n {7}
+    \fi
+    \tl_set:Nx \l_tmpa_tl {\tikz@current@arrows}
+    \tl_if_eq:NnF \l_tmpa_tl {-}
+      { \tenkz_cd_note_map_invalid:n {9} }
+  }
+
 \cs_new_protected:Npn \tenkz_cd_map_path:nnn #1#2#3
   {
-    \draw[#1]
+    \tenkz@bboxcapturefalse
+    \int_gzero:N \g__tenkzcd_mapdrawuses_int
+    \int_gzero:N \g__tenkzcd_mapinvalid_int
+    \dim_gzero:N \g__tenkzcd_mapwire_outer_dim
+    \dim_gzero:N \g__tenkzcd_mapwire_inner_dim
+    \bool_gset_false:N \g__tenkzcd_mapcaptureactive_bool
+    \tenkz_cd_read_map_transform:N \l__tenkzcd_map_base_transform_tl
+    \cs_set_eq:NN \tenkz_cd_saved_map_sync: \pgflowlevelsynccm
+    \cs_set_protected:Npn \pgflowlevelsynccm
+      {
+        \tenkz_cd_check_current_map_transform:
+        \tenkz_cd_saved_map_sync:
+      }
+    \cs_set_eq:NN \tenkz_cd_saved_map_usepath:n \pgfusepath
+    \cs_set_protected:Npn \pgfusepath ##1
+      {
+        \bool_if:NT \g__tenkzcd_mapcaptureactive_bool
+          {
+            \tl_set:Nx \l_tmpa_tl {##1}
+            \tl_if_in:VnT \l_tmpa_tl {draw}
+              {
+                \tenkz_cd_validate_map_softpath:
+                \int_gincr:N \g__tenkzcd_mapdrawuses_int
+                % TikZ has expanded a double stroke to its total width here.
+                \dim_gset:Nn \g__tenkzcd_mapwire_outer_dim {\pgflinewidth}
+                \dim_gset:Nn \g__tenkzcd_mapwire_inner_dim {\pgfinnerlinewidth}
+                \dim_compare:nNnF {\g__tenkzcd_mapwire_outer_dim} > {0pt}
+                  { \tenkz_cd_note_map_invalid:n {10} }
+                \dim_compare:nNnT {\g__tenkzcd_mapwire_inner_dim} < {0pt}
+                  { \tenkz_cd_note_map_invalid:n {15} }
+                \dim_compare:nNnF {\g__tenkzcd_mapwire_inner_dim} <
+                  {\g__tenkzcd_mapwire_outer_dim}
+                  { \tenkz_cd_note_map_invalid:n {15} }
+                \ifx\tenkz@livedash\tenkz@empty\else
+                  \int_compare:nNnT {\g__tenkzcd_mapinvalid_int} = {0}
+                    { \int_gset:Nn \g__tenkzcd_mapinvalid_int {1} }
+                \fi
+                \pgf@xa=\tenkz@livestrokeopacity pt\relax
+                \ifdim\pgf@xa>0pt\else
+                  \int_compare:nNnT {\g__tenkzcd_mapinvalid_int} = {0}
+                    { \int_gset:Nn \g__tenkzcd_mapinvalid_int {2} }
+                \fi
+                % The PGF inner width is empty support only when the inner
+                % stroke is the opaque package paper colour.  A coloured
+                % inner stroke, or translucent paper over the outer stroke,
+                % remains visible ink and therefore has no geometric gap.
+                \dim_compare:nNnT {\g__tenkzcd_mapwire_inner_dim} > {0pt}
+                  {
+                    \tl_if_eq:VnF \pgfinnerstrokecolor {tenkzPaper}
+                      { \dim_gzero:N \g__tenkzcd_mapwire_inner_dim }
+                    \ifdim\pgf@xa=1pt\else
+                      \dim_gzero:N \g__tenkzcd_mapwire_inner_dim
+                    \fi
+                  }
+              }
+          }
+        \tenkz_cd_saved_map_usepath:n {##1}
+      }
+    \draw[line~cap=butt, #1, /utils/exec={
+      \tenkz_cd_validate_map_declared_modes:
+      \tikz@addoption{\tenkz_cd_validate_map_path_state:}}]
       (tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
         \int_use:N\l__tenkzcd_fromcol_int.base~east) --
       node[inner~sep=0pt, outer~sep=0pt, #2]
+        (tenkz-map-label-\the\tenkz@pictureid-#3)
         {
           \exp_args:Nc \box_use:N
             { l__tenkzcd_map_label_#3_box }
         }
       (tenkzmap-\int_use:N\l__tenkzcd_torow_int-
-        \int_use:N\l__tenkzcd_tocol_int.base~west);
+        \int_use:N\l__tenkzcd_tocol_int.base~west)
+      \pgfextra{\bool_gset_true:N \g__tenkzcd_mapcaptureactive_bool};
+    \cs_set_eq:NN \pgfusepath \tenkz_cd_saved_map_usepath:n
+    \cs_set_eq:NN \tenkz_cd_saved_map_usepath:n \scan_stop:
+    \cs_set_eq:NN \pgflowlevelsynccm \tenkz_cd_saved_map_sync:
+    \cs_set_eq:NN \tenkz_cd_saved_map_sync: \scan_stop:
+    \int_set_eq:NN \l__tenkzcd_mapdrawuses_int
+      \g__tenkzcd_mapdrawuses_int
+    \int_set_eq:NN \l__tenkzcd_mapinvalid_int
+      \g__tenkzcd_mapinvalid_int
+    \dim_set_eq:NN \l__tenkzcd_mapwire_outer_dim
+      \g__tenkzcd_mapwire_outer_dim
+    \dim_set_eq:NN \l__tenkzcd_mapwire_inner_dim
+      \g__tenkzcd_mapwire_inner_dim
+    \bool_gset_false:N \g__tenkzcd_mapcaptureactive_bool
+    \int_gzero:N \g__tenkzcd_mapdrawuses_int
+    \int_gzero:N \g__tenkzcd_mapinvalid_int
+    \dim_gzero:N \g__tenkzcd_mapwire_outer_dim
+    \dim_gzero:N \g__tenkzcd_mapwire_inner_dim
+    \tenkz@bboxcapturetrue
+    \int_compare:nNnTF {\l__tenkzcd_mapdrawuses_int} = {1}
+      { }
+      {
+        \bool_set_false:N \l__tenkzcd_mapvalid_bool
+        \PackageError{tenkz}{Typed-map~path~has~
+          \int_use:N\l__tenkzcd_mapdrawuses_int\space live~draw~uses}
+          {Use~one~ordinary~solid~or~fused~draw~path~for~a~typed~map.}
+      }
+    \bool_if:NT \l__tenkzcd_mapvalid_bool
+      {
+        \int_case:nnF {\l__tenkzcd_mapinvalid_int}
+          {
+            {1}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~a~dashed~stroke}
+                {Use~a~solid~stroke~for~typed-map~visible~geometry.}
+            }
+            {2}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~zero~draw~opacity}
+                {Use~positive~draw~opacity~for~typed-map~visible~geometry.}
+            }
+            {3}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~a~path-local~transform}
+                {Transform~the~whole~picture,~not~one~typed-map~path.}
+            }
+            {4}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~nonzero~shortening}
+                {Use~an~unshortened~typed-map~path.}
+            }
+            {5}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~changes~the~line~cap}
+                {Use~the~inherited~line~cap~for~typed-map~paths.}
+            }
+            {6}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~a~decoration}
+                {Use~an~undecorated~typed-map~path.}
+            }
+            {7}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~a~pre/post~action}
+                {Use~one~ordinary~draw~action~for~a~typed-map~path.}
+            }
+            {8}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~is~not~one~horizontal~line}
+                {Use~exactly~one~straight~horizontal~typed-map~path.}
+            }
+            {9}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~arrow~tips}
+                {Use~an~unarrowed~typed-map~path.}
+            }
+            {10}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~nonpositive~live~width}
+                {Use~a~positive~line~width~for~typed-map~visible~geometry.}
+            }
+            {11}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~clipping}
+                {Use~an~unclipped~typed-map~path.}
+            }
+            {12}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~path~fading}
+                {Use~an~unfaded~typed-map~path.}
+            }
+            {13}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~scope~fading}
+                {Use~an~unfaded~typed-map~scope.}
+            }
+            {14}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~a~path~picture}
+                {Use~a~typed-map~path~without~path-picture~ink.}
+            }
+            {15}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~invalid~double~geometry}
+                {Require~zero~inner~width~or~a~gap~smaller~than~the~outer~width.}
+            }
+            {16}{
+              \bool_set_false:N \l__tenkzcd_mapvalid_bool
+              \PackageError{tenkz}{Typed-map~path~has~a~non-normal~blend~mode}
+                {Use~blend~mode=normal~for~exact~typed-map~geometry.}
+            }
+          }
+          { }
+      }
   }
 
 \cs_new_protected:Npn \tenkz_cd_draw_map:nnnnnnn #1#2#3#4#5#6#7
@@ -933,15 +1298,131 @@
         \tenkz_cd_map_style:nnnN {#4}{#5}{#6} \l__tenkzcd_mapstyle_tl
         \exp_args:NV \tenkz_cd_map_path:nnn
           \l__tenkzcd_mapstyle_tl {#3}{#7}
-        \tenkz@event{cdmap|picture=\the\tenkz@pictureid|
-          from=\int_use:N\l__tenkzcd_fromrow_int-
-               \int_use:N\l__tenkzcd_fromcol_int|
-          to=\int_use:N\l__tenkzcd_torow_int-
-             \int_use:N\l__tenkzcd_tocol_int|
-          fused=#4|
-          role=\tl_if_blank:nTF {#5}{none}{#5}|
-          species=\tl_if_blank:nTF {#6}{none}{#6}}
+        \bool_if:NTF \l__tenkzcd_mapvalid_bool
+          {
+            \tenkz_cd_emit_map_bboxes:n {#7}
+            \tenkz@event{cdmap|picture=\the\tenkz@pictureid|
+              from=\int_use:N\l__tenkzcd_fromrow_int-
+                   \int_use:N\l__tenkzcd_fromcol_int|
+              to=\int_use:N\l__tenkzcd_torow_int-
+                 \int_use:N\l__tenkzcd_tocol_int|
+              fused=#4|
+              role=\tl_if_blank:nTF {#5}{none}{#5}|
+              species=\tl_if_blank:nTF {#6}{none}{#6}}
+          }
+          {
+            \tenkz@cleanupstoredlabelgeometry
+              {map-\the\tenkz@pictureid-#7}
+          }
       }
+  }
+
+% The typed-map overlap contract is measured from the production nodes, after
+% the path exists.  The wire is opaque-label-overpainted, so its visible ink is
+% its stroke-expanded outer rectangle minus the exact label support.  Its
+% transverse extent is reconstructed exactly from the integer centre and full
+% live outer width, retaining half-scaled-point boundaries for odd widths.
+\cs_new_protected:Npn \tenkz_cd_emit_map_bboxes:n #1
+  {
+    \tenkz@bboxlabeluse
+    \tenkz@emitstoredlabelbbox
+      {tenkz-map-label-\the\tenkz@pictureid-#1}
+      {map-\the\tenkz@pictureid-#1}
+    \edef\tenkz@maplabelbboxid{\the\tenkz@bboxuid}
+    \tenkz_cd_emit_map_wire_geometry:n {#1}
+    \tenkz@cleanupstoredlabelgeometry{map-\the\tenkz@pictureid-#1}
+  }
+
+% A map label is `auto', hence normally offset from the horizontal path.  The
+% exact visible wire is one horizontal rectangle minus that label's exact
+% rectangle or rounded rectangle.  Keeping the subtraction in one event avoids
+% approximating a rounded corner by axis-aligned boxes.
+\cs_new_protected:Npn \tenkz_cd_emit_map_wire_geometry:n #1
+  {
+    \pgfextractx{\l__tenkzcd_mapwire_xmin_dim}
+      {\pgfpointanchor
+        {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+          \int_use:N\l__tenkzcd_fromcol_int}{base~east}}
+    \pgfextractx{\l__tenkzcd_mapwire_xmax_dim}
+      {\pgfpointanchor
+        {tenkzmap-\int_use:N\l__tenkzcd_torow_int-
+          \int_use:N\l__tenkzcd_tocol_int}{base~west}}
+    \dim_compare:nNnT {\l__tenkzcd_mapwire_xmin_dim} >
+      {\l__tenkzcd_mapwire_xmax_dim}
+      {
+        \dim_set_eq:NN \l_tmpa_dim \l__tenkzcd_mapwire_xmin_dim
+        \dim_set_eq:NN \l__tenkzcd_mapwire_xmin_dim
+          \l__tenkzcd_mapwire_xmax_dim
+        \dim_set_eq:NN \l__tenkzcd_mapwire_xmax_dim \l_tmpa_dim
+      }
+    \pgfextracty{\l__tenkzcd_mapwire_y_dim}
+      {\pgfpointanchor
+        {tenkzmap-\int_use:N\l__tenkzcd_fromrow_int-
+          \int_use:N\l__tenkzcd_fromcol_int}{base~east}}
+    \pgfextractx{\l__tenkzcd_maplabel_center_x_dim}
+      {\pgfpointanchor{tenkz-map-label-\the\tenkz@pictureid-#1}{center}}
+    \pgfextracty{\l__tenkzcd_maplabel_center_y_dim}
+      {\pgfpointanchor{tenkz-map-label-\the\tenkz@pictureid-#1}{center}}
+    \dim_set:Nn \l__tenkzcd_maplabel_xmin_dim
+      { \l__tenkzcd_maplabel_center_x_dim
+        + \csname tenkz@labelxmin@map-\the\tenkz@pictureid-#1\endcsname }
+    \dim_set:Nn \l__tenkzcd_maplabel_xmax_dim
+      { \l__tenkzcd_maplabel_center_x_dim
+        + \csname tenkz@labelxmax@map-\the\tenkz@pictureid-#1\endcsname }
+    \dim_set:Nn \l__tenkzcd_maplabel_ymin_dim
+      { \l__tenkzcd_maplabel_center_y_dim
+        + \csname tenkz@labelymin@map-\the\tenkz@pictureid-#1\endcsname }
+    \dim_set:Nn \l__tenkzcd_maplabel_ymax_dim
+      { \l__tenkzcd_maplabel_center_y_dim
+        + \csname tenkz@labelymax@map-\the\tenkz@pictureid-#1\endcsname }
+    \edef\tenkz@maplabelshape{\csname tenkz@labelshape@map-
+      \the\tenkz@pictureid-#1\endcsname}
+    \dim_set:Nn \l_tmpa_dim {\csname tenkz@labelradius@map-
+      \the\tenkz@pictureid-#1\endcsname}
+    \begingroup
+      \tenkz@begininkuse{wire}
+      \tenkz@event{wire-geometry|picture=\the\tenkz@pictureid|%
+        owner=\the\tenkz@inkowner|shape=rect-minus-label|%
+        xmin=\number\l__tenkzcd_mapwire_xmin_dim|%
+        xmax=\number\l__tenkzcd_mapwire_xmax_dim|%
+        y=\number\l__tenkzcd_mapwire_y_dim|%
+        outer=\number\l__tenkzcd_mapwire_outer_dim|%
+        inner=\number\l__tenkzcd_mapwire_inner_dim|%
+        cut-shape=\tenkz@maplabelshape|%
+        cut-xmin=\number\l__tenkzcd_maplabel_xmin_dim|%
+        cut-xmax=\number\l__tenkzcd_maplabel_xmax_dim|%
+        cut-ymin=\number\l__tenkzcd_maplabel_ymin_dim|%
+        cut-ymax=\number\l__tenkzcd_maplabel_ymax_dim|%
+        cut-radius=\number\l_tmpa_dim|cut-id=\tenkz@maplabelbboxid}
+    \endgroup
+  }
+
+\cs_new_protected:Npn \tenkz_cd_emit_map_objects:
+  {
+    \iftenkz@bboxcapture
+      \ifnum\tenkz@pictureid>0\relax
+        \int_step_inline:nn {\l__tenkzcd_maprows_int}
+          {
+            \int_step_inline:nn {\l__tenkzcd_mapcols_int}
+              {
+                \edef\tenkz@mapnode{tenkzmap-##1-####1}
+                \expandafter\ifx\csname tenkz@glyphsnaptoken@%
+                  \tenkz@mapnode\endcsname\relax
+                  \PackageError{tenkz}{Audited map node '\tenkz@mapnode'
+                    has no captured path state}%
+                    {The deferred node did not run its owned PGF path callback.}%
+                \else
+                  \edef\tenkz@mapsnaptoken{%
+                    \csname tenkz@glyphsnaptoken@\tenkz@mapnode\endcsname}
+                  \tenkz@captureglyphgeometrynode
+                    {\tenkz@mapnode}{rect}{0pt}{\tenkz@mapsnaptoken}
+                  \global\expandafter\let
+                    \csname tenkz@glyphsnaptoken@\tenkz@mapnode\endcsname\relax
+                \fi
+              }
+          }
+      \fi
+    \fi
   }
 
 \cs_new_protected:Npn \tenkz_cd_measure_map:n #1
@@ -997,9 +1478,13 @@
               [matrix~of~math~nodes,
                column~sep=\dim_use:N \l__tenkzcd_mapgap_dim,
                row~sep=\tenkz@dim{\tenkz@r@maprowsep},
-               nodes={inner~sep=1pt, outer~sep=0pt}, #1]
+               nodes={inner~sep=1pt, outer~sep=0pt, fill=tenkzPaper}, #1,
+               % Install only the live audit hook after passthrough styles;
+               % final shape and corner choices remain caller-controlled.
+               nodes={tenkz~audited~glyph~deferred}]
               { \tl_use:N \l__tenkzcd_body_tl };
           \end{scope}
+          \tenkz_cd_emit_map_objects:
           \bool_set_true:N \l__tenkzcd_mapdeclsvalid_bool
           \int_compare:nNnF
             { \seq_count:N \g__tenkzcd_maps_seq }
@@ -1022,6 +1507,9 @@
                 declaration~cannot~be~measured~without~entering~an~opaque~
                 object.~Move~each~\string\tnarrow\space to~top~level.}
             }
+          \int_step_inline:nn {\l__tenkzcd_mapdecls_int}
+            { \tenkz@cleanupstoredlabelgeometry
+                {map-\the\tenkz@pictureid-##1} }
         \end{tikzpicture}
         \bool_gset_false:N \g__tenkzcd_inmaps_bool
         \int_gzero:N \g__tenkzcd_mapordinal_int

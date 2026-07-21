@@ -1,0 +1,8 @@
+% Regression: iso_h — preserves grid baseline placement after an empty mbox.
+% Formula: geometry-only; no tensor identity.
+\documentclass[border=3pt]{standalone}
+\usepackage{amsmath, amssymb}
+\usepackage{tenkz}
+\begin{document}
+\mbox{}\begin{tenkz} \tn{A} & \tn{B} \end{tenkz}
+\end{document}

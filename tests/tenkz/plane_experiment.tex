@@ -1,0 +1,177 @@
+% Regression: plane_experiment — renders depth axis vector = (planeslant, planerise) * latticepitch.
+% Formula: depth axis vector = (planeslant, planerise) * latticepitch
+% Shear experiments for the tenkz PLANE concept.
+% Target idioms:
+%   E1  RMP sec2fig4(b) top: sheared PEPS lattice, round dots, vertical
+%       physical legs, in-plane boundary stubs.
+%   E2  RMP GS2D / LHS6: oblique sheet contour + region outline in-frame,
+%       physical legs perpendicular (true vertical).
+%   E3  RMP sec2fig4(b) bottom: ket sheet over bra sheet, physical pairing
+%       verticals, right-edge virtual closure loops between the planes.
+%   E4  1804.04964 Thm gauge figure: single 4-leg tensor in the plane frame
+%       with gauge slots at half-edge positions.
+\documentclass{article}
+\usepackage{tenkz}
+\usepackage[margin=1.5cm]{geometry}
+\pagestyle{empty}
+
+% ---- candidate plane metrics (ratios of the lattice pitch) ----
+% depth axis vector = (planeslant, planerise) * latticepitch
+\def\planeslant{0.60}
+\def\planerise{0.42}
+\def\lp{0.75}   % latticepitch ratio of base pitch (11mm) -> 8.25mm; use cm directly here
+\def\PU{0.825}  % row pitch in cm  (0.75 * 11mm)
+\newcommand\planeXY[3][]{% #2=col #3=depthrow -> \px,\py
+  \pgfmathsetmacro\px{\PU*(#2) + \planeslant*\PU*(#3)}%
+  \pgfmathsetmacro\py{\planerise*\PU*(#3)}%
+}
+
+\begin{document}
+
+\section*{E1: sheared PEPS lattice (RMP sec2fig4b top)}
+\begin{tikzpicture}[tenkz every picture]
+  % bonds first
+  \foreach \r in {0,...,3}{
+    \foreach \c in {0,...,3}{
+      \planeXY{\c}{\r}
+      % row bonds (+ boundary stubs west/east)
+      \ifnum\c<3
+        \pgfmathsetmacro\qx{\PU*(\c+1) + \planeslant*\PU*\r}
+        \draw[bond] (\px,\py) -- (\qx,\py);
+      \fi
+      % depth bonds (+ stubs front/back)
+      \ifnum\r<3
+        \pgfmathsetmacro\qx{\PU*\c + \planeslant*\PU*(\r+1)}
+        \pgfmathsetmacro\qy{\planerise*\PU*(\r+1)}
+        \draw[bond] (\px,\py) -- (\qx,\qy);
+      \fi
+    }
+  }
+  % boundary stubs, in-plane directions
+  \foreach \r in {0,...,3}{
+    \planeXY{0}{\r}\draw[bond] (\px,\py) -- ++(-0.33,0);
+    \planeXY{3}{\r}\draw[bond] (\px,\py) -- ++(0.33,0);
+  }
+  \foreach \c in {0,...,3}{
+    \planeXY{\c}{0}\draw[bond] (\px,\py) -- ++(-0.33*\planeslant,-0.33*\planerise);
+    \planeXY{\c}{3}\draw[bond] (\px,\py) -- ++(0.33*\planeslant,0.33*\planerise);
+  }
+  % dots + vertical physical legs (paper frame, unsheared)
+  \foreach \r in {0,...,3}{
+    \foreach \c in {0,...,3}{
+      \planeXY{\c}{\r}
+      \draw[physical leg] (\px,\py) -- ++(0,0.42);
+      \node[tensor] at (\px,\py) {};
+    }
+  }
+\end{tikzpicture}
+
+\section*{E2: oblique sheet with region (RMP GS2D / LHS6)}
+\begin{tikzpicture}[tenkz every picture]
+  % sheet contour: rounded parallelogram = rounded rectangle mapped by the
+  % plane frame (drawn here as an explicit sheared path)
+  \begin{scope}[cm={1,0,\planeslant,\planerise,(0,0)}]
+    \draw[bond, rounded corners=10pt] (-1.1,-0.9) rectangle (3.6,3.4);
+    % region outline, also in-frame
+    \draw[region selected, rounded corners=5pt] (-0.35,0.62) rectangle (1.2,1.9);
+  \end{scope}
+  % lattice body (bonds in-frame, dots+physical in paper frame)
+  \foreach \r in {0,...,3}{
+    \foreach \c in {0,...,3}{
+      \planeXY{\c}{\r}
+      \ifnum\c<3
+        \pgfmathsetmacro\qx{\PU*(\c+1) + \planeslant*\PU*\r}
+        \draw[bond] (\px,\py) -- (\qx,\py);
+      \fi
+      \ifnum\r<3
+        \pgfmathsetmacro\qx{\PU*\c + \planeslant*\PU*(\r+1)}
+        \pgfmathsetmacro\qy{\planerise*\PU*(\r+1)}
+        \draw[bond] (\px,\py) -- (\qx,\qy);
+      \fi
+    }
+  }
+  \foreach \r in {0,...,3}{
+    \foreach \c in {0,...,3}{
+      \planeXY{\c}{\r}
+      \draw[physical leg] (\px,\py) -- ++(0,0.42);
+      \node[tensor] at (\px,\py) {};
+    }
+  }
+  \node[label] at (3.3,0.2) {$L$};
+\end{tikzpicture}
+
+\section*{E3: layered planes, ket over bra (RMP sec2fig4b bottom)}
+\begin{tikzpicture}[tenkz every picture]
+  \def\sep{2.6}  % inter-plane separation (cm) — candidate layersep x pitch
+  % --- bra sheet (below), physical legs point UP toward ket ---
+  \foreach \r in {0,...,3}{
+    \foreach \c in {0,...,3}{
+      \planeXY{\c}{\r}
+      \ifnum\c<3
+        \pgfmathsetmacro\qx{\PU*(\c+1) + \planeslant*\PU*\r}
+        \draw[bond] (\px,\py) -- (\qx,\py);
+      \fi
+      \ifnum\r<3
+        \pgfmathsetmacro\qx{\PU*\c + \planeslant*\PU*(\r+1)}
+        \pgfmathsetmacro\qy{\planerise*\PU*(\r+1)}
+        \draw[bond] (\px,\py) -- (\qx,\qy);
+      \fi
+    }
+  }
+  % --- ket sheet (above) ---
+  \foreach \r in {0,...,3}{
+    \foreach \c in {0,...,3}{
+      \planeXY{\c}{\r}
+      \pgfmathsetmacro\ky{\py+\sep}
+      \ifnum\c<3
+        \pgfmathsetmacro\qx{\PU*(\c+1) + \planeslant*\PU*\r}
+        \draw[bond] (\px,\ky) -- (\qx,\ky);
+      \fi
+      \ifnum\r<3
+        \pgfmathsetmacro\qx{\PU*\c + \planeslant*\PU*(\r+1)}
+        \pgfmathsetmacro\qy{\planerise*\PU*(\r+1)+\sep}
+        \draw[bond] (\px,\ky) -- (\qx,\qy);
+      \fi
+    }
+  }
+  % --- physical pairing: ket leg down, bra leg up, met midway ---
+  \foreach \r in {0,...,3}{
+    \foreach \c in {0,...,3}{
+      \planeXY{\c}{\r}
+      \draw[physical leg] (\px,\py) -- (\px,\py+\sep);
+    }
+  }
+  % --- east-edge virtual closure loops between the planes ---
+  \foreach \r in {0,...,3}{
+    \planeXY{3}{\r}
+    \pgfmathsetmacro\ky{\py+\sep}
+    \draw[trace] (\px,\ky) -- ++(0.55,0) -- ++(0,-\sep) -- (\px,\py);
+  }
+  % dots last
+  \foreach \r in {0,...,3}{
+    \foreach \c in {0,...,3}{
+      \planeXY{\c}{\r}
+      \node[tensor] at (\px,\py) {};
+      \pgfmathsetmacro\ky{\py+\sep}
+      \node[tensor] at (\px,\ky) {};
+    }
+  }
+\end{tikzpicture}
+
+\section*{E4: single tensor with gauge slots (1804.04964 Thm 3)}
+\begin{tikzpicture}[tenkz every picture]
+  % 4-leg tensor in the plane frame; x-legs horizontal, depth legs oblique,
+  % physical vertical; gauge matrices at half-edge parametric positions.
+  \planeXY{0}{0}
+  \draw[bond] (-1.3,0) -- (1.3,0);
+  \draw[bond] (-1.0*\planeslant,-1.0*\planerise) -- (1.0*\planeslant,1.0*\planerise);
+  \draw[physical leg] (0,0) -- (0,0.5);
+  \node[tensor] (A) at (0,0) {};
+  \node[label, anchor=north] at (0,-0.15) {$A$};
+  \node[on-wire matrix] at (0.8,0) {$\scriptstyle X^{-1}$};
+  \node[on-wire matrix] at (-0.8,0) {$\scriptstyle X$};
+  \node[on-wire matrix] at (0.62*\planeslant,0.62*\planerise) {$\scriptstyle Y$};
+  \node[on-wire matrix] at (-0.62*\planeslant,-0.62*\planerise) {$\scriptstyle Y^{-1}$};
+\end{tikzpicture}
+
+\end{document}

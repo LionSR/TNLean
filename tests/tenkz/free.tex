@@ -1,0 +1,18 @@
+% Regression: free — exercises free-placement pictures through \tnput/\tnjoin.
+% Formula: geometry-only; no tensor identity.
+\documentclass[border=6pt]{standalone}
+\usepackage{amsmath, amssymb}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkzfree}
+  \tnput[box]{A}{(0,0)}{A}
+  \tnput[dot]{B}{(2,0)}{B}
+  \tnput[pill]{C}{(4,0)}{C^{-1}}
+  \tnput[mpo]{D}{(2,-2)}{O}
+  \tnput[ring]{E}{(4,-2)}{X}
+  \tnjoin[route=straight]{A.east}{B.west}
+  \tnjoin[route=hv, label=$D$]{B.east}{C.west}
+  \tnjoin[route=curve, out=-90, in=90, fused]{B.south}{D.north}
+  \tnjoin[route=vh]{C.south}{D.east}
+\end{tenkzfree}
+\end{document}

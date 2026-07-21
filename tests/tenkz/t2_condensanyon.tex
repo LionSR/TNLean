@@ -1,0 +1,32 @@
+% Regression: t2_condensanyon — renders |psi(a, abar)> — an anyon a at the lower-west site pair and its.
+% Target: RMP 2011.12127 fig3_fig3-pepe_condensanyon.pdf (anyon pair on
+% the PEPS double layer).
+% Formula: |psi(a, abar)> — an anyon a at the lower-west site pair and its
+% conjugate at the upper-east site pair (large blue dots on BOTH sheets),
+% connected by TWO parallel red string operators (one per sheet) that run
+% diagonally across the double layer, dressing the crossed bonds with
+% small blue matrices.
+% Declarative attempt: tenkzplanes (the ket-over-bra oblique double layer)
+% with a \tnedge chain approximating the ket-sheet string as straight
+% distinguished-edge segments along the diagonal.
+% Honest gaps / blockers: \tnsite has no marking slot, so the anyonic
+% endpoint pairs cannot render as marked (blue) sites; \tnedge reaches
+% only the ket sheet, so the second (bra-sheet) string cannot be stated;
+% no lattice string primitive (ordered cell path -> smooth over-bond
+% curve with dressing marks), so the string renders as a kinked chain of
+% straight plaquette diagonals.
+\documentclass[varwidth=19cm, border=6pt]{standalone}
+\usepackage{amsmath, amssymb}
+\usepackage{tenkz}
+\begin{document}
+
+\[
+  \begin{tenkzplanes}[rows=4, cols=4]
+    % the ket-sheet string a ... abar along the main diagonal
+    \tnedge{(4,1)-(3,2)}
+    \tnedge{(3,2)-(2,3)}
+    \tnedge{(2,3)-(1,4)}
+  \end{tenkzplanes}
+\]
+
+\end{document}
