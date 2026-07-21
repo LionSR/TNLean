@@ -233,7 +233,7 @@ def main() -> int:
                  [event.kind for event in picture.events])
                 for picture in pictures
             ]
-            raise AssertionError(f"expected 7 pictures, found {summary}")
+            raise AssertionError(f"expected 8 pictures, found {summary}")
         if canonical_hash(pictures[0]) != canonical_hash(pictures[1]):
             raise AssertionError("no-feature controls changed structural topology")
 

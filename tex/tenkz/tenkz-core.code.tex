@@ -1392,7 +1392,7 @@
       { \msg_error:nnn {tenkz}{enclosure-duplicate}{#1} }
       { \prop_gput:NVn \g__tenkz_enclosure_prop \l_tmpa_tl {#2} }
   }
-\cs_generate_variant:Nn \tenkz_enclosure_register_existing:nn { eV, VV }
+\cs_generate_variant:Nn \tenkz_enclosure_register_existing:nn { eV }
 
 % Allocate the node name that a `local bounding box' scope will create, and
 % register it under semantic name #1 before the scope is drawn.
@@ -1609,7 +1609,6 @@
       }
   }
 \cs_generate_variant:Nn \tenkz_enclosure_draw:nnnnn { VVVVV }
-\cs_generate_variant:Nn \tenkz_enclosure_register_existing:nn { nV }
 
 % `\tnregion' is one grammatical class in two geometry dialects.  The public
 % command dispatches to the active picture rather than defining a duplicate
