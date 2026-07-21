@@ -31,6 +31,8 @@ Extracted from various files for reusability.
   multiplicativity for Kronecker products
 - `Matrix.trace_blockDiagonal'_mul`: the trace pairing with a dependent
   block-diagonal matrix is the sum over diagonal block compressions
+- `Matrix.sigmaBlockInclusion`: the canonical isometric inclusion of one
+  summand into a dependent direct sum
 - `Matrix.piProduct_mulVec_pureTensor`: a dependent product of matrices acts
   componentwise on a pure tensor
 - `Matrix.reindex_mulVec`: matrix reindexing intertwines matrix--vector action
@@ -75,6 +77,96 @@ theorem IsHermitian.star_mulVec_dotProduct {n : Type*} [Fintype n]
   rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
 
 /-! ## Dependent block-diagonal matrices -/
+
+/-- The canonical inclusion of the `k`-th summand into a dependent direct
+sum. -/
+noncomputable def sigmaBlockInclusion
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (dim : ι → Type*) [(k : ι) → Fintype (dim k)]
+    [(k : ι) → DecidableEq (dim k)] (k : ι) :
+    Matrix (Σ l, dim l) (dim k) ℂ :=
+  fun x a ↦ if x = ⟨k, a⟩ then 1 else 0
+
+/-- The canonical inclusion of a summand into a dependent direct sum is an
+isometry. -/
+theorem sigmaBlockInclusion_isometry
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (dim : ι → Type*) [(k : ι) → Fintype (dim k)]
+    [(k : ι) → DecidableEq (dim k)] (k : ι) :
+    (sigmaBlockInclusion dim k)ᴴ * sigmaBlockInclusion dim k = 1 := by
+  ext a b
+  by_cases h : a = b
+  · subst b
+    simp [sigmaBlockInclusion, Matrix.mul_apply, Matrix.conjTranspose_apply]
+  · simp [sigmaBlockInclusion, Matrix.mul_apply, Matrix.conjTranspose_apply,
+      h, Ne.symm h]
+
+/-- A dependent block-diagonal matrix preserves each canonical summand. -/
+theorem blockDiagonal'_mul_sigmaBlockInclusion
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {dim : ι → Type*} [(k : ι) → Fintype (dim k)]
+    [(k : ι) → DecidableEq (dim k)]
+    (B : (k : ι) → Matrix (dim k) (dim k) ℂ) (k : ι) :
+    Matrix.blockDiagonal' B * sigmaBlockInclusion dim k =
+      sigmaBlockInclusion dim k * B k := by
+  ext x a
+  rcases x with ⟨l, b⟩
+  by_cases h : l = k
+  · subst l
+    simp [sigmaBlockInclusion, Matrix.mul_apply,
+      Matrix.blockDiagonal'_apply]
+  · simp [sigmaBlockInclusion, Matrix.mul_apply,
+      Matrix.blockDiagonal'_apply, h]
+
+/-- The adjoint canonical inclusion intertwines a dependent block-diagonal
+matrix with its selected block. -/
+theorem sigmaBlockInclusion_conjTranspose_mul_blockDiagonal'
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {dim : ι → Type*} [(k : ι) → Fintype (dim k)]
+    [(k : ι) → DecidableEq (dim k)]
+    (B : (k : ι) → Matrix (dim k) (dim k) ℂ) (k : ι) :
+    (sigmaBlockInclusion dim k)ᴴ * Matrix.blockDiagonal' B =
+      B k * (sigmaBlockInclusion dim k)ᴴ := by
+  have h := congrArg Matrix.conjTranspose
+    (blockDiagonal'_mul_sigmaBlockInclusion (fun l => (B l)ᴴ) k)
+  simpa [Matrix.conjTranspose_mul, Matrix.blockDiagonal'_conjTranspose] using h
+
+/-- Compressing a dependent block-diagonal matrix to a canonical summand
+recovers the corresponding block. -/
+theorem sigmaBlockInclusion_compression
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {dim : ι → Type*} [(k : ι) → Fintype (dim k)]
+    [(k : ι) → DecidableEq (dim k)]
+    (B : (k : ι) → Matrix (dim k) (dim k) ℂ) (k : ι) :
+    (sigmaBlockInclusion dim k)ᴴ * Matrix.blockDiagonal' B *
+        sigmaBlockInclusion dim k = B k := by
+  rw [Matrix.mul_assoc, blockDiagonal'_mul_sigmaBlockInclusion,
+    ← Matrix.mul_assoc, sigmaBlockInclusion_isometry, Matrix.one_mul]
+
+/-- The range projection of a canonical summand inclusion commutes with every
+dependent block-diagonal matrix. -/
+theorem blockDiagonal'_commute_sigmaBlockInclusion_rangeProjection
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {dim : ι → Type*} [(k : ι) → Fintype (dim k)]
+    [(k : ι) → DecidableEq (dim k)]
+    (B : (k : ι) → Matrix (dim k) (dim k) ℂ) (k : ι) :
+    Matrix.blockDiagonal' B *
+        (sigmaBlockInclusion dim k * (sigmaBlockInclusion dim k)ᴴ) =
+      (sigmaBlockInclusion dim k * (sigmaBlockInclusion dim k)ᴴ) *
+        Matrix.blockDiagonal' B := by
+  calc
+    Matrix.blockDiagonal' B *
+          (sigmaBlockInclusion dim k * (sigmaBlockInclusion dim k)ᴴ) =
+        (sigmaBlockInclusion dim k * B k) *
+          (sigmaBlockInclusion dim k)ᴴ := by
+      rw [← Matrix.mul_assoc, blockDiagonal'_mul_sigmaBlockInclusion]
+    _ = sigmaBlockInclusion dim k *
+        (B k * (sigmaBlockInclusion dim k)ᴴ) := Matrix.mul_assoc _ _ _
+    _ = sigmaBlockInclusion dim k *
+        ((sigmaBlockInclusion dim k)ᴴ * Matrix.blockDiagonal' B) := by
+      rw [sigmaBlockInclusion_conjTranspose_mul_blockDiagonal']
+    _ = (sigmaBlockInclusion dim k * (sigmaBlockInclusion dim k)ᴴ) *
+        Matrix.blockDiagonal' B := (Matrix.mul_assoc _ _ _).symm
 
 /-- A dependent block-diagonal matrix pairs under the trace only with the
 diagonal block compressions of the other factor:
