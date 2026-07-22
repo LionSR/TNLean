@@ -21,11 +21,13 @@ arbitrary chain.  In the notation of lines~995--1010 of
 \cite{Cirac2016MPDO_arXiv}, this gives
 \begin{equation}
   \rho^{(N)}(M)
-    = \mu^{\otimes N}\,\widetilde U Q_N\widetilde U^\dagger,
+    \simeq_{\mathrm{LU}}
+      \mu^{\otimes N}\,\widetilde U Q_N\widetilde U^\dagger,
   \label{eq:source-chain-decomposition}
 \end{equation}
-where $\widetilde U$ is a sequential circuit assembled from the pairwise
-fusion maps.  The same passage asserts
+where $\simeq_{\mathrm{LU}}$ denotes local-unitary equivalence through the
+single-site unitaries of Proposition~4.13, and $\widetilde U$ is a sequential
+circuit assembled from the pairwise fusion maps.  The same passage asserts
 \begin{equation}
   [\mu^{\otimes N},\widetilde U Q_N\widetilde U^\dagger]=0.
   \label{eq:source-commutator}
@@ -54,27 +56,35 @@ the direct sum
       \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
   \label{eq:one-layer-q}
 \end{equation}
+Here each $P_\gamma$ acts on the common physical space of the vertically read
+tensor $M_\gamma$; in the source it is obtained from the terminal matrix
+$\operatorname{tr}(M_\gamma)$.  It does not act on the virtual bond space of
+$M_\gamma$.
 Length independence and positivity imply
 $\chi_{\alpha,\beta,\gamma}=I$ on each retained multiplicity space, hence
-$Q_{\alpha,\beta}$ is an orthogonal projection.  For the active-support
-fusion coisometry of Figure~11,
-\begin{equation}
-  U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=I,
-  \label{eq:coisometry}
-\end{equation}
-and therefore
-\begin{equation}
-  \widehat Q_{\alpha,\beta}
-    = U_{\alpha,\beta}^\dagger
-      Q_{\alpha,\beta}U_{\alpha,\beta}
-  \label{eq:transported-q}
-\end{equation}
-is an orthogonal projection on the product bond space.  This result is
-formalized for \leanid{MPOTensor.BNTFusionCoisometryFamily} and for the
-tensor-attached clause \leanid{MPOTensor.BNTFusionTensorClause}.  It uses the
-retained-row relation \eqref{eq:coisometry}; it does not require the additional
-full-support identity $U^\dagger U=I$.  The orientation issue is documented in
-\path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+$Q_{\alpha,\beta}$ is an orthogonal projection.  This statement is formalized
+for \leanid{MPOTensor.BNTFusionCoisometryFamily} and for the tensor-attached
+clause \leanid{MPOTensor.BNTFusionTensorClause}.
+
+The pairwise fusion coisometry acts on the virtual bond spaces of the tensors,
+whereas the terminal projections in \eqref{eq:one-layer-q} act on their common
+physical space.  Consequently, a direct conjugation of
+$Q_{\alpha,\beta}$ by one pairwise fusion map is not well typed.  The source
+instead inserts the fusion maps recursively into the tensor network and forms
+the sequential circuit $\widetilde U$.  The older virtual-bond construction in
+\leanid{MPOTensor.BNTFusionIsometryFamily} is a separate conditional statement:
+it assumes terminal projections on the bond spaces and a full-support fusion
+family.  It is not the terminal step of equation~\eqref{eq:source-chain-decomposition}.
+
+\paragraph{Local fix (Figure-11 fusion coisometry).}
+The active fusion map has the retained-row orientation
+$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$ recorded in
+\path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.  An earlier
+one-layer formulation attempted to use this relation to conjugate
+\eqref{eq:one-layer-q}.  That formulation has been removed: the coisometry
+acts on virtual indices, while the terminal matrices act on physical indices.
+The remaining virtual-bond transport is stated only for the older
+full-support family and is not identified with the source operator $Q_N$.
 
 \section{Remaining proof}
 
@@ -84,7 +94,7 @@ projection calculation alone.  A faithful proof still requires:
 \begin{enumerate}
   \item a recursively typed family $Q_N$ and the corresponding sequential
     product of active-support fusion coisometries;
-  \item the arbitrary-chain density-operator identity
+  \item the arbitrary-chain local-unitary equivalence
     \eqref{eq:source-chain-decomposition};
   \item the commutator identity \eqref{eq:source-commutator};
   \item the terminal spectral decomposition and its compatibility with the
