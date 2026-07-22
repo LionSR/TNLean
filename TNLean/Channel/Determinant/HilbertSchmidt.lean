@@ -47,7 +47,9 @@ variable {d : ℕ}
 
 section WolfStatements
 
-variable {T : MatEnd d}
+local notation "MatrixEnd" => ChannelDeterminant.Internal.MatrixEnd
+
+variable {T : MatrixEnd d}
 
 /-! ### Auxiliary lemmas for the forward direction of Wolf Theorem 6.1(2) -/
 

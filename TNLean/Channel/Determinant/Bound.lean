@@ -41,22 +41,22 @@ variable {d : ℕ}
 
 section WolfStatements
 
-abbrev MatAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
-abbrev MatEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
+local notation "MatrixAlg" => ChannelDeterminant.Internal.MatrixAlg
+local notation "MatrixEnd" => ChannelDeterminant.Internal.MatrixEnd
 
-variable {T : MatEnd d}
+variable {T : MatrixEnd d}
 
 private theorem trace_zero_hermitian_eq_smul_density_sub_density [NeZero d]
-    {X : MatAlg d} (hX : X.IsHermitian) (htrX : Matrix.trace X = 0) :
-    ∃ c : ℂ, 0 ≤ c ∧ ∃ ρ σ : MatAlg d,
+    {X : MatrixAlg d} (hX : X.IsHermitian) (htrX : Matrix.trace X = 0) :
+    ∃ c : ℂ, 0 ≤ c ∧ ∃ ρ σ : MatrixAlg d,
       ρ ∈ densityMatrices d ∧ σ ∈ densityMatrices d ∧ X = c • (ρ - σ) := by
   obtain ⟨ρ₀, hρ₀_mem⟩ :=
     densityMatrices_nonempty (D := d) (Nat.pos_of_ne_zero (NeZero.ne d))
   by_cases hX0 : X = 0
   · exact ⟨0, by simp only [Std.le_refl], ρ₀, ρ₀, hρ₀_mem, hρ₀_mem,
       by simp only [hX0, sub_self, smul_zero]⟩
-  · let Q₁ : MatAlg d := X⁺
-    let Q₂ : MatAlg d := X⁻
+  · let Q₁ : MatrixAlg d := X⁺
+    let Q₂ : MatrixAlg d := X⁻
     have hQ₁_psd : Q₁.PosSemidef :=
       Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
     have hQ₂_psd : Q₂.PosSemidef :=
@@ -80,8 +80,8 @@ private theorem trace_zero_hermitian_eq_smul_density_sub_density [NeZero d]
         simpa only using hc0
       apply hX0
       simp only [hX_decomp, hQ₁_zero, hQ₂_zero, sub_self]
-    let ρ : MatAlg d := c⁻¹ • Q₁
-    let σ : MatAlg d := c⁻¹ • Q₂
+    let ρ : MatrixAlg d := c⁻¹ • Q₁
+    let σ : MatrixAlg d := c⁻¹ • Q₂
     have hc_inv_nonneg : 0 ≤ c⁻¹ := inv_nonneg.2 hc_nonneg
     have hρ_mem : ρ ∈ densityMatrices d := by
       refine ⟨hQ₁_psd.smul hc_inv_nonneg, ?_⟩
@@ -98,13 +98,13 @@ private theorem trace_zero_hermitian_eq_smul_density_sub_density [NeZero d]
       c, ρ, σ]
 
 private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [NeZero d]
-    {T : MatEnd d} (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
-    {X : MatAlg d} (hX : X.IsHermitian) (htrX : Matrix.trace X = 0) :
+    {T : MatrixEnd d} (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    {X : MatrixAlg d} (hX : X.IsHermitian) (htrX : Matrix.trace X = 0) :
     ∃ C : ℝ, ∀ n : ℕ, ‖(T ^ n) X‖ ≤ C := by
   have hmap_density :
-      ∀ ρ : MatAlg d, ρ ∈ densityMatrices d → T ρ ∈ densityMatrices d :=
+      ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d → T ρ ∈ densityMatrices d :=
     fun ρ hρ => ⟨hPos ρ hρ.1, by rw [hTP ρ, hρ.2]⟩
-  have hiter_density : ∀ n : ℕ, ∀ ρ : MatAlg d, ρ ∈ densityMatrices d →
+  have hiter_density : ∀ n : ℕ, ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d →
       (T ^ n) ρ ∈ densityMatrices d := by
     intro n
     induction n with
@@ -116,9 +116,9 @@ private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [N
         rw [pow_succ']
         exact hmap_density ((T ^ n) ρ) (ih ρ hρ)
   have hbounded_density :
-      ∃ M : ℝ, ∀ ρ : MatAlg d, ρ ∈ densityMatrices d → ‖ρ‖ ≤ M := by
+      ∃ M : ℝ, ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d → ‖ρ‖ ≤ M := by
     have hbd : Bornology.IsBounded
-        {X : MatAlg d | X.PosSemidef ∧ ‖Matrix.trace X‖ ≤ 1} :=
+        {X : MatrixAlg d | X.PosSemidef ∧ ‖Matrix.trace X‖ ≤ 1} :=
       posSemidef_trace_bounded_isBounded (D := d) 1
     rw [isBounded_iff_forall_norm_le] at hbd
     obtain ⟨M, hM⟩ := hbd
@@ -143,15 +143,15 @@ private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [N
       mul_le_mul_of_nonneg_left (add_le_add hρ_orbit hσ_orbit) (norm_nonneg _)
 
 private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
-    {T : MatEnd d} (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    {T : MatrixEnd d} (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
     (μ : ℂ) (hμ : Module.End.HasEigenvalue T μ) :
     ‖μ‖ ≤ 1 := by
   obtain ⟨z, hz⟩ := hμ.exists_hasEigenvector
   have hz_eig : T z = μ • z := Module.End.mem_eigenspace_iff.mp hz.1
   have hz_ne : z ≠ 0 := hz.2
   by_cases htrz : Matrix.trace z = 0
-  · let x : MatAlg d := (1 / 2 : ℝ) • (z + zᴴ)
-    let y : MatAlg d := (1 / 2 : ℝ) • (Complex.I • (zᴴ - z))
+  · let x : MatrixAlg d := (1 / 2 : ℝ) • (z + zᴴ)
+    let y : MatrixAlg d := (1 / 2 : ℝ) • (Complex.I • (zᴴ - z))
     have hx_herm : x.IsHermitian := by
       ext i j
       simp only [smul_add, one_div, conjTranspose_apply, Matrix.add_apply, Matrix.smul_apply,

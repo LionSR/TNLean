@@ -39,15 +39,17 @@ variable {d : ℕ}
 
 section WolfStatements
 
-variable {T : MatEnd d}
+local notation "MatrixEnd" => ChannelDeterminant.Internal.MatrixEnd
+
+variable {T : MatrixEnd d}
 
 namespace ChannelDeterminant
 namespace Internal
 
 private theorem heisenberg_dual_det_eq_one [NeZero d]
-    {T : MatEnd d} (hdet : ‖channelDet T‖ = 1)
+    {T : MatrixEnd d} (hdet : ‖channelDet T‖ = 1)
     {r : ℕ} (K : Fin r → MatrixAlg d) (hK : ∀ X, T X = ∑ i, K i * X * (K i)ᴴ)
-    (Td : MatEnd d) (hTd : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i) :
+    (Td : MatrixEnd d) (hTd : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i) :
     ‖channelDet Td‖ = 1 := by
   let b : Module.Basis (Fin d × Fin d) ℂ (MatrixAlg d) :=
     Matrix.stdBasis ℂ (Fin d) (Fin d)
