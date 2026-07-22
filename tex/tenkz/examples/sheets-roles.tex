@@ -29,10 +29,14 @@
   outer legs=none (right)}\par\smallskip
 \begin{tenkzlattice}[rows=3, cols=3, sheets=2, pairing, frame=oblique,
                      plane slant=0.40, plane rise=0.45]
+  % The same ket-sheet virtual contraction is marked in both equivalent
+  % spellings; generated ket--bra pairings remain unchanged.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 \quad
 \begin{tenkzlattice}[rows=3, cols=3, sheets={ket, bra}, outer legs=none,
                      frame=oblique, plane slant=0.40, plane rise=0.45]
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 
 \medskip
@@ -45,6 +49,9 @@
 \textbf{(b) sheets=\{ket, op, bra\}: the window form}\par\smallskip
 \begin{tenkzlattice}[rows=3, cols=3, sheets={ket, op, bra},
                      frame=oblique]
+  % The marked middle-sheet bond is a virtual contraction of the local
+  % operator O; its two physical faces use the generated pairing interfaces.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 
 \medskip
@@ -52,6 +59,7 @@
 \textbf{(b') sheets=\{ket, op, bra\}, outer legs=none}\par\smallskip
 \begin{tenkzlattice}[rows=3, cols=3, sheets={ket, op, bra},
                      outer legs=none, frame=oblique]
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 
 \medskip
@@ -61,6 +69,9 @@
 \textbf{(c) sheets=\{ket, op, op, bra\}: PEPO evolution}\par\smallskip
 \begin{tenkzlattice}[rows=3, cols=3, sheets={ket, op, op, bra},
                      frame=oblique]
+  % Bottom-up sheets 1 and 2 are the second and first applied operators.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
+  \tnedge[role=marked]{(2,1,2)-(2,2,2)}
 \end{tenkzlattice}
 
 \medskip
@@ -69,6 +80,9 @@
 % pairing, no outer legs — the Phase-2 meaning, untouched.
 \textbf{(d) sheets=3, bare}\par\smallskip
 \begin{tenkzlattice}[rows=3, cols=3, sheets=3, frame=oblique]
+  % The marked middle-sheet segment is one representative bare virtual bond;
+  % no inter-sheet pairing is introduced by this body command.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 
 \medskip
@@ -80,6 +94,9 @@
 \begin{tenkzlattice}[rows=3, cols=3, sheets={ket, op, bra},
                      outer legs=none, frame=oblique,
                      open={(1,1),(2,2,1)}, trace={(3,3,0)}]
+  % Mark one ordinary operator-sheet virtual bond beside the generated open
+  % and traced physical interfaces.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 
 \end{document}

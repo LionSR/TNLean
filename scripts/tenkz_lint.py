@@ -21,6 +21,12 @@ Rules (findings exit 1 unless escaped):
            restyling under `\\tnset` and diverges between print and
            dark builds.
 
+  lattice-body
+           Every `tenkzlattice` body contains at least one native
+           `\\tnregion`, `\\tnedge`, or `\\tnsite` record.  Generated option
+           ink and body customization are separate parts of the language;
+           an empty specimen does not exercise their composition.
+
 Escape: a comment `% tenkz-lint: allow <rule> <reason>` on the finding's
 line or the line directly above suppresses that rule there (`allow all`
 suppresses every rule).  Escaped findings are reported but do not fail.
@@ -238,6 +244,17 @@ def lint_file(path: Path) -> list[Finding]:
                                         escaped(lineno, rule)))
 
     for body in scan_bodies(src):
+        if body.name == "tenkzlattice" and not re.search(
+                r"\\tn(?:region|edge|site)\b", body.text):
+            lineno = line_of(body.start)
+            key = (lineno, "lattice-body")
+            if key not in seen:
+                seen.add(key)
+                snippet = (raw_lines[lineno - 1].strip()
+                           if lineno <= len(raw_lines) else "")
+                findings.append(Finding(
+                    path, lineno, "lattice-body", snippet,
+                    escaped(lineno, "lattice-body")))
         if body.name in DOTS_ENVS:
             scan(mask_option_groups(body.text), body.start, DOTS_PATTERNS)
         if body.name in INK_ENVS:
