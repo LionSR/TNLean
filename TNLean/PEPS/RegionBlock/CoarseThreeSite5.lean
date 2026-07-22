@@ -132,11 +132,10 @@ two configurations to coincide. -/
 
 /-- **The three-way merge.** The global virtual configuration reading red-incident
 edges from `ζr`, the remaining blue-incident edges from `ζb`, and the rest from `ζc`. -/
-def triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+noncomputable def triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (ζr ζb ζc : VirtualConfig A) : VirtualConfig A :=
-  fun e => if IsRegionIncidentEdge (G := G) F.frame.red e then ζr e
-    else if IsRegionIncidentEdge (G := G) F.frame.blue e then ζb e
-    else ζc e
+  mergeVirtualConfig A (IsRegionIncidentEdge (G := G) F.frame.red) ζr
+    (mergeVirtualConfig A (IsRegionIncidentEdge (G := G) F.frame.blue) ζb ζc)
 
 omit [DecidableEq V] in
 /-- The red vertex product reads the merge unchanged: red-incident edges read `ζr`. -/
@@ -152,7 +151,7 @@ theorem redProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     rcases ie.2 with hie | hie
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
-  rw [triMerge, if_pos hrinc]
+  rw [triMerge, mergeVirtualConfig, if_pos hrinc]
 
 /-- The blue vertex product reads the merge unchanged: a blue-incident edge that is
 also red-incident is a red-to-blue crossing edge, where the agreement coincides. -/
@@ -168,10 +167,10 @@ theorem blueProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     rcases ie.2 with hie | hie
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
-  rw [triMerge]
   by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red ie.1
-  · rw [if_pos hr]; exact (h.rb F (isCrossing_rb_of_incident F hP hr hbinc)).symm
-  · rw [if_neg hr, if_pos hbinc]
+  · simp [triMerge, mergeVirtualConfig, hr, if_pos]
+    exact (h.rb F (isCrossing_rb_of_incident F hP hr hbinc)).symm
+  · simp [triMerge, mergeVirtualConfig, hr, hbinc, if_pos, if_neg]
 
 /-- The complement vertex product reads the merge unchanged: a complement-incident
 edge that is red-incident is a red-to-complement crossing edge, and one that is
@@ -189,13 +188,13 @@ theorem complProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     rcases ie.2 with hie | hie
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
-  rw [triMerge]
   by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red ie.1
-  · rw [if_pos hr]; exact (h.rc F (isCrossing_rc_of_incident F hP hr hcinc)).symm
-  · rw [if_neg hr]
-    by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue ie.1
-    · rw [if_pos hb]; exact (h.bc F (isCrossing_bc_of_incident F hP hb hcinc)).symm
-    · rw [if_neg hb]
+  · simp [triMerge, mergeVirtualConfig, hr, if_pos]
+    exact (h.rc F (isCrossing_rc_of_incident F hP hr hcinc)).symm
+  · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue ie.1
+    · simp [triMerge, mergeVirtualConfig, hr, hb, if_pos, if_neg]
+      exact (h.bc F (isCrossing_bc_of_incident F hP hb hcinc)).symm
+    · simp [triMerge, mergeVirtualConfig, hr, hb, if_neg]
 
 /-! ### The assembled physical configuration
 
@@ -433,7 +432,7 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
         isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
       rw [dif_pos hb, dif_pos hc]
     · funext e
-      simp only [triMerge, triFiberTriple]
+      simp only [triMerge, mergeVirtualConfig, triFiberTriple]
       by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
       · rw [if_pos hr, dif_pos hr]
       · rw [if_neg hr]
@@ -450,28 +449,32 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
       simp only [triFiberTriple, triFiberLegs]
       by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
       · rw [dif_pos hr]
-        have := hmerge' e; rw [triMerge, if_pos hr] at this; exact this.symm
+        have := hmerge' e; simp [triMerge, mergeVirtualConfig, hr, if_pos] at this; exact this.symm
       · rw [dif_neg hr]
     · funext e
       simp only [triFiberTriple, triFiberLegs]
       by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
       · rw [dif_pos hb]
         by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
-        · have := hmerge' e; rw [triMerge, if_pos hr] at this
+        · have := hmerge' e; simp [triMerge, mergeVirtualConfig, hr, if_pos] at this
           rw [← (hag.rb F (isCrossing_rb_of_incident F hP hr hb)), this]
-        · have := hmerge' e; rw [triMerge, if_neg hr, if_pos hb] at this; exact this.symm
+        · have := hmerge' e
+          simp [triMerge, mergeVirtualConfig, hr, hb, if_pos, if_neg] at this
+          exact this.symm
       · rw [dif_neg hb]
     · funext e
       simp only [triFiberTriple, triFiberLegs]
       by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
       · rw [dif_pos hc]
         by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
-        · have := hmerge' e; rw [triMerge, if_pos hr] at this
+        · have := hmerge' e; simp [triMerge, mergeVirtualConfig, hr, if_pos] at this
           rw [← (hag.rc F (isCrossing_rc_of_incident F hP hr hc)), this]
         · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
-          · have := hmerge' e; rw [triMerge, if_neg hr, if_pos hb] at this
+          · have := hmerge' e; simp [triMerge, mergeVirtualConfig, hr, hb, if_pos, if_neg] at this
             rw [← (hag.bc F (isCrossing_bc_of_incident F hP hb hc)), this]
-          · have := hmerge' e; rw [triMerge, if_neg hr, if_neg hb] at this; exact this.symm
+          · have := hmerge' e
+            simp [triMerge, mergeVirtualConfig, hr, hb, if_neg] at this
+            exact this.symm
       · rw [dif_neg hc]
   · -- Reading the free indices of a reconstruction recovers them.
     intro legs _
@@ -533,17 +536,11 @@ theorem agreeingTripleSum_collapse (F : CoherentCoarseBlockingFrame (G := G) (d 
   rw [Finset.sum_congr rfl (fun t ht => agreeing_summand_eq F hP σr σb σc
     (by rw [Finset.mem_filter] at ht; exact ht.2))]
   -- Group by merged configuration, count each fiber, and reassemble the closed state.
-  conv_lhs => rw [← Finset.sum_fiberwise (Finset.univ.filter
-    (fun t : VirtualConfig A × VirtualConfig A × VirtualConfig A =>
-      TripleAgrees F t.1 t.2.1 t.2.2))
-    (fun t => triMerge F t.1 t.2.1 t.2.2)
-    (fun t => triMergedSummand F σr σb σc (triMerge F t.1 t.2.1 t.2.2))]
-  rw [← sum_triMergedSummand F hP σr σb σc, Finset.smul_sum]
-  refine Finset.sum_congr rfl (fun η _ => ?_)
-  rw [Finset.filter_filter,
-    Finset.sum_congr rfl (g := fun _ => triMergedSummand F σr σb σc η)
-      (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
-    Finset.sum_const, triFiber_card F hP η]
+  rw [← sum_triMergedSummand F hP σr σb σc]
+  apply sum_comp_of_config_fiber_card
+  intro η
+  simpa only [Finset.filter_filter, Finset.mem_univ, true_and] using
+    triFiber_card F hP η
 
 open scoped Classical in
 /-- **The global fiber-collapse bijection.** The closed-state coefficient of the coarse

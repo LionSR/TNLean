@@ -459,15 +459,10 @@ theorem hostMerge_fiberwise_collapse (F : CoherentCoarseBlockingFrame (G := G) (
         HostPairAgrees F p.1 p.2), g (hostMerge F p.1 p.2)) =
       hostMergeFiberProd F • ∑ η : VirtualConfig A, g η := by
   classical
-  rw [← Finset.sum_fiberwise (Finset.univ.filter
-      (fun p : VirtualConfig A × VirtualConfig A => HostPairAgrees F p.1 p.2))
-    (fun p => hostMerge F p.1 p.2) (fun p => g (hostMerge F p.1 p.2))]
-  rw [Finset.smul_sum]
-  refine Finset.sum_congr rfl (fun η _ => ?_)
-  rw [Finset.filter_filter,
-    Finset.sum_congr rfl (g := fun _ => g η)
-      (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
-    Finset.sum_const, hostMergeFiber_card F η]
+  apply sum_comp_of_config_fiber_card
+  intro η
+  simpa only [Finset.filter_filter, Finset.mem_univ, true_and] using
+    hostMergeFiber_card F η
 
 /-! ### The relaxed-triple merge collapse
 

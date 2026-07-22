@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.Algebra
-import TNLean.PEPS.NormalFundamentalTheorem
 
 /-!
 # Region realization toward the region insertion transfer
@@ -218,94 +217,6 @@ noncomputable def regionInteriorBondProd (A : Tensor G d) (R : Finset V) : ℕ :
   ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e),
     A.bondDim e
 
-open scoped Classical in
-/-- Merge an agreeing pair of global virtual configurations into one global
-configuration: the region-incident edges read the first configuration, the
-remaining edges read the second. -/
-noncomputable def regionMerge (A : Tensor G d) (R : Finset V)
-    (p : VirtualConfig A × VirtualConfig A) : VirtualConfig A :=
-  fun e => if IsRegionIncidentEdge (G := G) R e then p.1 e else p.2 e
-
-omit [Fintype V] in
-/-- A region merge reads its first configuration on an edge incident to the region. -/
-theorem regionMerge_of_incident (A : Tensor G d) (R : Finset V)
-    (p : VirtualConfig A × VirtualConfig A) {e : Edge G}
-    (he : IsRegionIncidentEdge (G := G) R e) :
-    regionMerge (G := G) A R p e = p.1 e := by
-  rw [regionMerge, if_pos he]
-
-omit [Fintype V] in
-/-- A region merge reads its second configuration on an edge not incident to the region. -/
-theorem regionMerge_of_not_incident (A : Tensor G d) (R : Finset V)
-    (p : VirtualConfig A × VirtualConfig A) {e : Edge G}
-    (he : ¬ IsRegionIncidentEdge (G := G) R e) :
-    regionMerge (G := G) A R p e = p.2 e := by
-  rw [regionMerge, if_neg he]
-
-omit [Fintype V] in
-/-- The region vertex product reads the first configuration only through the
-region-incident edges, so it agrees with the merged configuration. -/
-theorem regionProd_eq_merge (A : Tensor G d) (R : Finset V)
-    (σ : RegionPhysicalConfig (V := V) (d := d) R)
-    (p : VirtualConfig A × VirtualConfig A) :
-    (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => p.1 ie.1) (σ w)) =
-      ∏ w : {w : V // w ∈ R},
-        A.component w.1 (fun ie => regionMerge (G := G) A R p ie.1) (σ w) := by
-  classical
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  -- An edge incident to `w ∈ R` is region-incident, where merge reads `p.1`.
-  have hinc : IsRegionIncidentEdge (G := G) R ie.1 := by
-    rcases ie.2 with hie | hie
-    · exact Or.inl (by rw [hie]; exact w.2)
-    · exact Or.inr (by rw [hie]; exact w.2)
-  rw [regionMerge_of_incident A R p hinc]
-
-omit [Fintype V] in
-/-- A vertex product reads the second configuration through a region merge if the two
-configurations agree on every edge incident to both the merge region and the product region. -/
-theorem regionProd_p2_eq_merge_of_incident_agree (A : Tensor G d) (T B : Finset V)
-    (σ : RegionPhysicalConfig (V := V) (d := d) B)
-    (p : VirtualConfig A × VirtualConfig A)
-    (hp : ∀ e : Edge G, IsRegionIncidentEdge (G := G) T e →
-      IsRegionIncidentEdge (G := G) B e → p.1 e = p.2 e) :
-    (∏ w : {w : V // w ∈ B}, A.component w.1 (fun ie => p.2 ie.1) (σ w)) =
-      ∏ w : {w : V // w ∈ B},
-        A.component w.1 (fun ie => regionMerge (G := G) A T p ie.1) (σ w) := by
-  classical
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  have hB : IsRegionIncidentEdge (G := G) B ie.1 := by
-    rcases ie.2 with hie | hie
-    · exact Or.inl (by rw [hie]; exact w.2)
-    · exact Or.inr (by rw [hie]; exact w.2)
-  by_cases hT : IsRegionIncidentEdge (G := G) T ie.1
-  · rw [regionMerge_of_incident A T p hT, hp ie.1 hT hB]
-  · rw [regionMerge_of_not_incident A T p hT]
-
-/-- The complement vertex product reads the second configuration only through the
-complement-incident edges, so it agrees with the merged configuration: on the
-edges internal to the complement `merge` reads `p.2` by definition, and on the
-boundary edges `p.1` and `p.2` agree. -/
-theorem complementProd_eq_merge (A : Tensor G d) (R : Finset V)
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
-    (p : VirtualConfig A × VirtualConfig A)
-    (hp : regionBoundaryLabel (G := G) A R p.1 = regionBoundaryLabel (G := G) A R p.2) :
-    (∏ w : {w : V // w ∈ Finset.univ \ R}, A.component w.1 (fun ie => p.2 ie.1) (τ w)) =
-      ∏ w : {w : V // w ∈ Finset.univ \ R},
-        A.component w.1 (fun ie => regionMerge (G := G) A R p ie.1) (τ w) := by
-  apply regionProd_p2_eq_merge_of_incident_agree
-  intro e hR hcompl
-  have hbdry : IsRegionBoundaryEdge (G := G) R e := by
-    rcases hR with hR1 | hR2 <;> rcases hcompl with hc1 | hc2
-    · exact absurd hR1 (Finset.mem_sdiff.mp hc1).2
-    · exact Or.inl ⟨hR1, (Finset.mem_sdiff.mp hc2).2⟩
-    · exact Or.inr ⟨(Finset.mem_sdiff.mp hc1).2, hR2⟩
-    · exact absurd hR2 (Finset.mem_sdiff.mp hc2).2
-  exact congrFun hp ⟨e, hbdry⟩
-
 /-! ### The cardinality collapse to the closed state coefficient
 
 Over each merged configuration `η` the agreeing pairs of an `η`-fiber are
@@ -379,11 +290,10 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
         rw [dif_pos (incident_of_boundary (G := G) R f.2), dif_pos f.2]
       · -- The reconstructed pair merges back to `η`.
         funext e
-        simp only [regionMerge, regionFiberPair]
         by_cases hinc : IsRegionIncidentEdge (G := G) R e
-        · rw [if_pos hinc, dif_pos hinc]
-        · rw [if_neg hinc, dif_neg (not_boundary_of_not_incident (G := G) R hinc),
-            dif_neg hinc]
+        · simp [regionMerge, mergeVirtualConfig, regionFiberPair, hinc]
+        · simp [regionMerge, mergeVirtualConfig, regionFiberPair, hinc,
+            not_boundary_of_not_incident (G := G) R hinc]
     · -- Reconstructing from the free indices of a fiber pair recovers the pair.
       intro p hp
       simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
@@ -489,18 +399,11 @@ theorem stateCoeff_eq_regionComplement (A : Tensor G d) (R : Finset V)
           regionBoundaryLabel (G := G) A R p.1 = regionBoundaryLabel (G := G) A R p.2),
         regionMergedSummand (G := G) A R σ τ (regionMerge (G := G) A R p) from ?_]
   · -- Group the agreeing pairs by their merged configuration.
-    rw [← Finset.sum_fiberwise (Finset.univ.filter
-        (fun p : VirtualConfig A × VirtualConfig A =>
-          regionBoundaryLabel (G := G) A R p.1 = regionBoundaryLabel (G := G) A R p.2))
-      (fun p => regionMerge (G := G) A R p)
-      (fun p => regionMergedSummand (G := G) A R σ τ (regionMerge (G := G) A R p))]
-    -- On each fiber the merged summand is constant, with the bond product as count.
-    rw [← sum_regionMergedSummand (G := G) A R σ τ, Finset.smul_sum]
-    refine Finset.sum_congr rfl (fun η _ => ?_)
-    rw [Finset.filter_filter,
-      Finset.sum_congr rfl (g := fun _ => regionMergedSummand (G := G) A R σ τ η)
-        (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
-      Finset.sum_const, regionFiber_card (G := G) A R η]
+    rw [← sum_regionMergedSummand (G := G) A R σ τ]
+    apply sum_comp_of_config_fiber_card
+    intro η
+    simpa only [Finset.filter_filter, Finset.mem_univ, true_and] using
+      regionFiber_card (G := G) A R η
   · -- Each agreeing summand is the merged summand at the merged configuration.
     refine Finset.sum_congr rfl (fun p hp => ?_)
     rw [Finset.mem_filter] at hp
