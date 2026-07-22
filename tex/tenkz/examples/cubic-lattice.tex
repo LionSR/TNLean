@@ -28,5 +28,8 @@
 \begin{tenkzlattice}[rows=3, cols=3, sheets=3, pairing,
                      frame=oblique, plane slant=0.40,
                      sheet vector={0mm, 8.25mm}]
+  % The marked middle-sheet bond is one representative virtual contraction
+  % between six-leg T tensors; generated bonds still contract all three axes.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 \end{document}

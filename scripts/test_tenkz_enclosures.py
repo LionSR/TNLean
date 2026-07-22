@@ -92,6 +92,7 @@ SOURCE = r"""
   \pgfkeysifdefined{/tenkz/region/label/.@cmd}{}{%
     \errmessage{legacy lattice region family missing}}
   \tnregion[slot=selected, label={$Q$}]{(1-2,2-3)}
+  \tnedge[role=marked]{(1,1,1)-(1,2,1)}
 \end{tenkzlattice}
 \ifnum\tenkzTestLatticeBodyRuns=1\relax\else
   \errmessage{three-sheet lattice body did not execute exactly once}
@@ -577,6 +578,25 @@ def main() -> int:
             "1-2,1-3,2-2,2-3"
         ):
             raise AssertionError("lattice public-region dispatch is incomplete")
+        lattice_edges = [
+            event for event in audit.events() if event.kind == "edge"
+        ]
+        if len(lattice_edges) != 1 or {
+            key: lattice_edges[0].attrs.get(key)
+            for key in ("from", "to", "role")
+        } != {"from": "1-1-1", "to": "1-2-1", "role": "marked"}:
+            raise AssertionError(
+                f"three-sheet body edge did not survive exactly once: {lattice_edges}"
+            )
+        generated_lattices = [
+            event for event in audit.events() if event.kind == "lattice"
+        ]
+        if len(generated_lattices) != 1 or generated_lattices[0].attrs.get(
+            "sheets"
+        ) != "3":
+            raise AssertionError(
+                "body customization did not coexist with generated lattice ink"
+            )
 
         # A non-empty lattice body is a live style-extension layer, not only
         # a command-recording buffer.  Raster comparison observes the final

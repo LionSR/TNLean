@@ -22,5 +22,8 @@
 \begin{document}
 \begin{tenkzlattice}[rows=3, cols=3, sheets={ket, op, bra},
                      frame=oblique]
+  % The marked middle-sheet segment is one virtual contraction in O; its
+  % physical faces remain contracted by the generated pairing interfaces.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 \end{document}

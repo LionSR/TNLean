@@ -23,5 +23,10 @@
 \begin{document}
 \begin{tenkzlattice}[rows=3, cols=3, sheets={ket, op, op, bra},
                      outer legs=none, frame=oblique]
+  % Sheet indices run bottom-up: these marked virtual contractions belong to
+  % O_2 on sheet 1 and O_1 on sheet 2.  Their three generated physical
+  % contractions per site remain unchanged.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
+  \tnedge[role=marked]{(2,1,2)-(2,2,2)}
 \end{tenkzlattice}
 \end{document}

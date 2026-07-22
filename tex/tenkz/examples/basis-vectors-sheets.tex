@@ -25,11 +25,15 @@
 \textbf{(a) tenkzlattice, sheets=2 + pairing}\par\smallskip
 \begin{tenkzlattice}[rows=3, cols=3, sheets=2, pairing, frame=oblique,
                      plane slant=0.40, plane rise=0.45]
+  % One ket-sheet virtual contraction is marked in both spellings below.
+  % The body record changes no boundary ownership or physical pairing.
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzlattice}
 
 \medskip
 \textbf{(a) the same picture as tenkzplanes}\par\smallskip
 \begin{tenkzplanes}[rows=3, cols=3]
+  \tnedge[role=marked]{(2,1,1)-(2,2,1)}
 \end{tenkzplanes}
 
 \medskip
