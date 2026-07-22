@@ -10,6 +10,7 @@ import http.server
 import json
 import socketserver
 import threading
+from html.parser import HTMLParser
 from pathlib import Path
 
 from playwright.sync_api import Page, sync_playwright
@@ -17,6 +18,7 @@ from playwright.sync_api import Page, sync_playwright
 
 EXPECTED_PICTURE_COUNTS = [2, 3, 3, 2, 5, 1]
 PAGES = ("ch-mpdo.html", "ch-mpdo_rfp.html")
+EXPECTED_WRAPPER_COUNTS = {"ch-mpdo.html": 2, "ch-mpdo_rfp.html": 4}
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -41,6 +43,87 @@ def serve(directory: Path):
         finally:
             server.shutdown()
             thread.join()
+
+
+class _GeneratedStructureParser(HTMLParser):
+    """Record raw paragraph and equation-block structure without HTML5 repair."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.in_paragraph = False
+        self.paragraph_parts: list[str] = []
+        self.events: list[tuple[str, str]] = []
+        self.wrapper_count = 0
+
+    def handle_starttag(
+        self, tag: str, attrs: list[tuple[str, str | None]]
+    ) -> None:
+        if tag == "p":
+            assert not self.in_paragraph, "generated source contains nested paragraphs"
+            self.in_paragraph = True
+            self.paragraph_parts = []
+        if tag == "div":
+            classes = dict(attrs).get("class", "") or ""
+            if "tenkz-equation" in classes.split():
+                assert not self.in_paragraph, (
+                    "generated source places a tenkz equation inside a paragraph"
+                )
+                self.wrapper_count += 1
+                self.events.append(("wrapper", ""))
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "p":
+            assert self.in_paragraph, "generated source closes an unopened paragraph"
+            text = " ".join("".join(self.paragraph_parts).split())
+            self.events.append(("paragraph", text))
+            self.in_paragraph = False
+            self.paragraph_parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self.in_paragraph:
+            self.paragraph_parts.append(data)
+
+
+def _assert_generated_blocks(root: Path) -> None:
+    """Check raw renderer output before a browser can repair invalid HTML."""
+    parsers: dict[str, _GeneratedStructureParser] = {}
+    for filename in PAGES:
+        parser = _GeneratedStructureParser()
+        parser.feed((root / filename).read_text(encoding="utf-8"))
+        parser.close()
+        assert not parser.in_paragraph, f"{filename} leaves a paragraph open"
+        assert parser.wrapper_count == EXPECTED_WRAPPER_COUNTS[filename], (
+            filename,
+            parser.wrapper_count,
+        )
+        parsers[filename] = parser
+
+    events = parsers["ch-mpdo_rfp.html"].events
+    prose_boundaries = (
+        (
+            "Its two Kronecker factors are the two bare cups:",
+            "This is the identity in",
+        ),
+        (
+            "Applying this inverse map to the doubled physical index",
+            "This is the single-block identity in",
+        ),
+    )
+    for preceding, following in prose_boundaries:
+        preceding_index = next(
+            index
+            for index, event in enumerate(events)
+            if event[0] == "paragraph" and preceding in event[1]
+        )
+        following_index = next(
+            index
+            for index, event in enumerate(events)
+            if event[0] == "paragraph" and following in event[1]
+        )
+        assert any(
+            event[0] == "wrapper"
+            for event in events[preceding_index + 1:following_index]
+        ), (preceding, following)
 
 
 def _equation_facts(page: Page) -> list[dict[str, object]]:
@@ -169,6 +252,7 @@ def main() -> int:
             parser.error(f"missing generated blueprint page: {root / filename}")
     if args.screenshot_dir:
         args.screenshot_dir.mkdir(parents=True, exist_ok=True)
+    _assert_generated_blocks(root)
 
     collected: list[dict[str, object]] = []
     mobile: list[dict[str, object]] = []

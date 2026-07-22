@@ -412,6 +412,7 @@ else:
     class tenkzequation(Environment):
         """A text-mode row of independently rendered tenkz picture units."""
 
+        blockType = True
         templateName = "TenkzEquation"
 
     class _TenkzSvgMixin:
