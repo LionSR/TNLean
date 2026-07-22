@@ -3,41 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Spectral.TransferOperatorGap
-import TNLean.Spectral.MPVOverlapDecay
-import TNLean.QPF.Assembly
-import TNLean.Channel.FixedPoint.CanonicalGauge
-import TNLean.Channel.Schwarz.Basic
-import Mathlib.Data.Matrix.Block
+import TNLean.Spectral.TransferOperatorGapCommon
+import TNLean.Spectral.MPVOverlapDecayRect
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.LinearAlgebra.Eigenspace.Basic
 
 /-!
 # Rectangular transfer-operator gap for the mixed transfer operator
 
-When two MPS tensors `A : MPSTensor d D₁` and `B : MPSTensor d D₂` have **different bond
-dimensions** `D₁ ≠ D₂`, the spectral radius of the rectangular mixed transfer operator
-`mixedTransferMap₂ A B` is strictly less than 1 (assuming both tensors are injective and
-normalized).
-
-This is the dimension-mismatch transfer-operator gap (cf. Wolf Theorem 6.6
-adapted to MPS transfer maps with rectangular bond dimensions): if the bond
-dimensions differ, then the overlap
-`∑ σ, mpv A σ * conj(mpv B σ)` decays to zero exponentially.
-
-## Main results
-
-* `mixedTransferSpectralRadius₂_lt_one_of_dim_ne`: strict transfer-operator gap
-  for dimension-mismatched normalized injective tensors
-* `mpvOverlap_tendsto_zero_of_dim_ne`: the MPV overlap tends to zero when `D₁ ≠ D₂`
-
-## Proof outline
-
-1. **Eigenvalue bound ≤ 1**: Frobenius-norm contraction adapted to the rectangular setting.
-2. **Equality case implies D₁ = D₂**: Block-embed into `Fin D₁ ⊕ Fin D₂`, apply
-   Kadison–Schwarz equality to extract Kraus-level intertwining, then show `ker X = 0`
-   and `ker X† = 0` using injectivity of the generators, which forces `D₁ = D₂`.
-3. Contraposition gives `D₁ ≠ D₂ ⟹ spectralRadius < 1`.
+This module proves the normalized bound $ρ(F_{AB}) ≤ 1$ for the rectangular mixed
+transfer operator.  The strict dimension-mismatch theorem for irreducible tensors
+is in `TransferOperatorGapNT`; its injective specialization is in
+`TransferOperatorGapInjective`.
 
 ## References
 
@@ -189,195 +166,10 @@ theorem spectralRadius_mixedTransfer₂_le_one
 
 end EigenvalueBound
 
-/-! ## Modulus-1 eigenvalue implies equal dimensions -/
-
-section DimensionEquality
-
-/-- Core algebraic lemma: if there is an eigenvector of `mixedTransferMap₂ A B` with eigenvalue
-of modulus 1, then `D₁ = D₂`.
-
-This is the rectangular analogue of `eigenvector_gives_gauge` from `TransferOperatorGap.lean`,
-but instead of constructing a gauge equivalence, we derive equality of dimensions. -/
-private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA : IsInjective A) (hB : IsInjective B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (X : Matrix (Fin D₁) (Fin D₂) ℂ) (μ : ℂ)
-    (hFX : mixedTransferMap₂ A B X = μ • X)
-    (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
-    D₁ = D₂ := by
-  classical
-  obtain ⟨ρA, hρA⟩ := injective_transfer_unique_fixed_point' A hA hA_norm
-  obtain ⟨ρB, hρB⟩ := injective_transfer_unique_fixed_point' B hB hB_norm
-  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1
-      (hρA.pos_def.isStrictlyPositive) with ⟨S0A, hS0A_unit, hρA_eq'⟩
-  have hρA_eq : ρA = S0Aᴴ * S0A := by
-    simpa [Matrix.star_eq_conjTranspose] using hρA_eq'
-  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1
-      (hρB.pos_def.isStrictlyPositive) with ⟨S0B, hS0B_unit, hρB_eq'⟩
-  have hρB_eq : ρB = S0Bᴴ * S0B := by
-    simpa [Matrix.star_eq_conjTranspose] using hρB_eq'
-  let SA : Matrix (Fin D₁) (Fin D₁) ℂ := S0Aᴴ
-  let SB : Matrix (Fin D₂) (Fin D₂) ℂ := S0Bᴴ
-  -- Determinant facts
-  have hSA_det : SA.det ≠ 0 :=
-    ((Matrix.isUnit_iff_isUnit_det (A := SA)).1
-      (by simpa [SA, Matrix.star_eq_conjTranspose] using IsUnit.star hS0A_unit)).ne_zero
-  have hSB_det : SB.det ≠ 0 :=
-    ((Matrix.isUnit_iff_isUnit_det (A := SB)).1
-      (by simpa [SB, Matrix.star_eq_conjTranspose] using IsUnit.star hS0B_unit)).ne_zero
-  have hSA_u := Ne.isUnit hSA_det
-  have hSB_u := Ne.isUnit hSB_det
-  have hSAh_det : (SAᴴ).det ≠ 0 := by
-    simpa [Matrix.det_conjTranspose] using star_ne_zero.mpr hSA_det
-  have hSBh_det : (SBᴴ).det ≠ 0 := by
-    simpa [Matrix.det_conjTranspose] using star_ne_zero.mpr hSB_det
-  have hSAh_u := Ne.isUnit hSAh_det
-  have hSBh_u := Ne.isUnit hSBh_det
-  have hSA_mul : SA * SAᴴ = ρA := by
-    calc SA * SAᴴ = S0Aᴴ * S0A := by simp [SA]
-    _ = ρA := by simpa using hρA_eq.symm
-  have hSB_mul : SB * SBᴴ = ρB := by
-    calc SB * SBᴴ = S0Bᴴ * S0B := by simp [SB]
-    _ = ρB := by simpa using hρB_eq.symm
-  let A' : MPSTensor d D₁ := gaugeTensor SA A
-  let B' : MPSTensor d D₂ := gaugeTensor SB B
-  let X' : Matrix (Fin D₁) (Fin D₂) ℂ := gaugeEigenvector SA SB X
-  have hcore := gauged_intertwining_core
-    (A := A) (B := B) (SA := SA) (SB := SB) (ρA := ρA) (ρB := ρB)
-    hSA_det hSB_det hSA_mul hSB_mul hρA.fixed hρB.fixed hA_norm hB_norm X μ hFX hμ hX
-  rcases hcore with ⟨_, _, hX'ne_raw, hInter1_raw, hInter2_raw⟩
-  have hX'ne : X' ≠ 0 := by
-    simpa [X', gaugeEigenvector] using hX'ne_raw
-  have hInter1 : ∀ i : Fin d, X' * (B' i)ᴴ = μ • ((A' i)ᴴ * X') := by
-    intro i
-    simpa [A', B', X', gaugeTensor, gaugeEigenvector, Matrix.conjTranspose_mul,
-      Matrix.conjTranspose_nonsing_inv, Matrix.mul_assoc] using hInter1_raw i
-  have hInter2 : ∀ i : Fin d, A' i * X' = μ • X' * B' i := by
-    intro i
-    simpa [A', B', X', gaugeTensor, gaugeEigenvector] using hInter2_raw i
-  have hA' : IsInjective A' := by
-    simpa [A'] using isInjective_conjugate (d := d) A hA SA hSA_det
-  have hB' : IsInjective B' := by
-    simpa [B'] using isInjective_conjugate (d := d) B hB SB hSB_det
-  exact dim_eq_of_gauged_intertwining A' B' X' μ hA' hB' hX'ne hInter1 hInter2
-
-end DimensionEquality
-
-/-! ## Main theorem -/
-
-section MainTheorem
-
-/-- **Dimension-mismatch transfer-operator gap**: the spectral radius of the rectangular
-mixed transfer operator is strictly less than 1 when the bond dimensions differ. -/
-theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
-    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA : IsInjective A) (hB : IsInjective B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hD : D₁ ≠ D₂) :
-    mixedTransferSpectralRadius₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B < 1 := by
-  classical
-  have hle :
-      mixedTransferSpectralRadius₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B ≤ 1 :=
-    spectralRadius_mixedTransfer₂_le_one (A := A) (B := B) hA_norm hB_norm
-  refine lt_of_le_of_ne hle ?_
-  intro hEq
-  -- Set `F` to be the continuous-linear version of the mixed transfer map.
-  rw [mixedTransferSpectralRadius₂_eq] at hEq
-  set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
-    (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
-  letI : NormedAddCommGroup
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    (Module.End.toContinuousLinearMap
-      (Matrix (Fin D₁) (Fin D₂) ℂ)).toLinearEquiv.finiteDimensional
-  letI : CompleteSpace
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    FiniteDimensional.complete ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ)
-  have hEqF : spectralRadius ℂ F = 1 := by
-    change spectralRadius ℂ F = 1 at hEq
-    exact hEq
-  -- If `spectralRadius = 1`, pick `μ ∈ spectrum` with `‖μ‖ = 1`.
-  -- Use `@` to keep the operator-norm topology on `E →L[ℂ] E` explicit.
-  obtain ⟨μ, hμ_spec, hμ_rad⟩ :=
-    @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (ContinuousLinearMap.toNormedRing :
-        NormedRing
-          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
-      (ContinuousLinearMap.toNormedAlgebra :
-        NormedAlgebra ℂ
-          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
-      inferInstance inferInstance (a := F)
-      (@spectrum.nonempty _
-        (ContinuousLinearMap.toNormedRing :
-          NormedRing
-            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
-        (ContinuousLinearMap.toNormedAlgebra :
-          NormedAlgebra ℂ
-            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
-        inferInstance inferInstance F)
-  have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := hμ_rad.trans hEqF
-  have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
-  have hμ_norm : ‖μ‖ = 1 := by
-    have : (‖μ‖₊ : ℝ) = (1 : ℝ) := by exact_mod_cast hμ_nnn
-    simpa [coe_nnnorm] using this
-  -- Convert `μ ∈ spectrum` to an eigenvalue of the linear map `mixedTransferMap₂ A B`.
-  let Φ :
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
-        ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
-  have h_spec :=
-    AlgEquiv.spectrum_eq Φ (mixedTransferMap₂ A B)
-  have hμ_spec' : μ ∈ spectrum ℂ (mixedTransferMap₂ A B) := by
-    have hμ_clm : μ ∈ spectrum ℂ
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
-          (mixedTransferMap₂ A B)) := by
-      change μ ∈ spectrum ℂ F
-      exact hμ_spec
-    exact h_spec ▸ hμ_clm
-  have hHas : Module.End.HasEigenvalue (mixedTransferMap₂ A B) μ :=
-    Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec'
-  obtain ⟨X, hX_mem, hX_ne⟩ := hHas.exists_hasEigenvector
-  have hFX : mixedTransferMap₂ A B X = μ • X :=
-    (Module.End.mem_eigenspace_iff).1 hX_mem
-  -- A modulus-one eigenvalue forces `D₁ = D₂`, contradicting `hD`.
-  have hDim : D₁ = D₂ :=
-    dim_eq_of_modulus_one_eigenvector (A := A) (B := B)
-      hA hB hA_norm hB_norm X μ hFX hμ_norm hX_ne
-  exact hD hDim
-
-/-- **Overlap decay for dimension-mismatched tensors.**
-
-`mpvOverlap A B N → 0` when `D₁ ≠ D₂`. -/
-theorem mpvOverlap_tendsto_zero_of_dim_ne
-    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA : IsInjective A) (hB : IsInjective B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hD : D₁ ≠ D₂) :
-    Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) := by
-  have hlt := mixedTransferSpectralRadius₂_lt_one_of_dim_ne A B hA hB hA_norm hB_norm hD
-  exact mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one A B hlt
-
-end MainTheorem
+/-!
+Strict dimension-mismatch consequences are intentionally downstream in
+`TransferOperatorGapNT` and `TransferOperatorGapInjective`.  This module contains
+only the shared rectangular spectral-radius bound.
+-/
 
 end MPSTensor

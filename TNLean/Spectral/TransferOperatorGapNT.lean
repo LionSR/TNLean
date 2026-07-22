@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Spectral.TransferOperatorGapRect
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Irreducible.FormII
@@ -243,6 +243,51 @@ theorem spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
   exact hAB <| modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     A B hA_irr hB_irr hA_left hB_left hEq.ge
 
+/-- **Mixed transfer iterates decay** for distinct irreducible left-canonical blocks. -/
+theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
+    (A B : MPSTensor d D)
+    (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hB_irr : IsIrreducibleTensor (d := d) (D := D) B)
+    (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hAB : ¬ GaugePhaseEquiv A B)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X)
+      Filter.atTop (nhds 0) := by
+  let Φ := Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+  let F' := Φ (mixedTransferMap A B)
+  letI : NormedAddCommGroup
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    Φ.toLinearEquiv.finiteDimensional
+  letI : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    FiniteDimensional.complete ℂ _
+  have hF : Filter.Tendsto (fun n => F' ^ n) Filter.atTop (nhds 0) :=
+    pow_tendsto_zero_of_spectralRadius_lt_one F' <| by
+      simpa only [F', Φ, mixedTransferSpectralRadius] using
+        spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
+          A B hA_irr hB_irr hA_left hB_left hAB
+  have hEval : Filter.Tendsto (fun n => (F' ^ n) X) Filter.atTop (nhds 0) := by
+    apply squeeze_zero_norm' (a := fun n => ‖F' ^ n‖ * ‖X‖)
+    · exact Filter.Eventually.of_forall fun n => (F' ^ n).le_opNorm X
+    · simpa using (tendsto_norm_zero.comp hF).mul_const ‖X‖
+  simpa only [F', Φ, map_pow] using hEval
+
 end SameDimension
 
 section SameDimensionOverlap
@@ -261,20 +306,9 @@ theorem mpvOverlap_tendsto_zero_of_irreducible_TP
     (hAB : ¬ GaugePhaseEquiv A B) :
     Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) := by
   exact mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one (A := A) (B := B) <| by
-    have hsq :
-        spectralRadius ℂ
-            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-              (mixedTransferMap A B)) < 1 := by
-      simpa only [mixedTransferSpectralRadius] using
-        spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
-          A B hA_irr hB_irr hA_left hB_left hAB
-    have hagree :
-        mixedTransferMap (d := d) (D := D) A B =
-          mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B := by
-      ext X
-      simp
-    rw [← hagree]
-    exact hsq
+    simpa only [mixedTransferMap₂_same_dim, mixedTransferSpectralRadius] using
+      spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
+        A B hA_irr hB_irr hA_left hB_left hAB
 
 end SameDimensionOverlap
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PiAlgebra.CanonicalFormSepAux
-import TNLean.Spectral.TransferOperatorGapRect
+import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.BNT.Separation

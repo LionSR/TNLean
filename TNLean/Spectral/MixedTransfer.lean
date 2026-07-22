@@ -165,12 +165,26 @@ lemma mixedTransferMap₂_apply {d D₁ D₂ : ℕ}
     mixedTransferMap₂ A B X = ∑ i : Fin d, A i * X * (B i)ᴴ := by
   simp [mixedTransferMap₂, Matrix.mul_assoc]
 
+/-- On square matrices, the rectangular mixed transfer map agrees with the
+original square mixed transfer map. -/
+@[simp]
+lemma mixedTransferMap₂_same_dim {d D : ℕ} (A B : MPSTensor d D) :
+    mixedTransferMap₂ A B = mixedTransferMap A B := by
+  ext X
+  simp only [mixedTransferMap₂_apply, mixedTransferMap_apply]
+
+/-- The same-dimension bridge is preserved by iteration. -/
+@[simp]
+lemma mixedTransferMap₂_pow_same_dim {d D : ℕ} (A B : MPSTensor d D) (n : ℕ) :
+    (mixedTransferMap₂ A B) ^ n = (mixedTransferMap A B) ^ n := by
+  rw [mixedTransferMap₂_same_dim]
+
 /-- When $A = B$, the rectangular mixed transfer operator is the standard transfer
-map.  This is the rectangular analogue of `mixedTransferMap_self`. -/
+map. This is the rectangular analogue of `mixedTransferMap_self`. -/
 @[simp]
 lemma mixedTransferMap₂_self {d D : ℕ} (A : MPSTensor d D) :
     mixedTransferMap₂ A A = transferMap (d := d) (D := D) A := by
-  ext X; simp only [mixedTransferMap₂_apply, transferMap_apply]
+  rw [mixedTransferMap₂_same_dim, mixedTransferMap_self]
 
 /-- Linearity of the rectangular mixed transfer operator in the first tensor. -/
 private lemma mixedTransferMap₂_smul_left (c : ℂ)
