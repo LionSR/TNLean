@@ -1103,6 +1103,53 @@ specialization of that Appendix~D definition.
     two.
 \end{proof}
 
+\begin{theorem}[Commuting nearest-neighbor terms for distinct multiplicity-one RFP sectors]%
+    \label{thm:rfp_multiplicity_one_bnt_nncph}
+    \lean{MPSTensor.IsBNTCanonicalForm.rfp_implies_nncph_basisDirectSum}
+    \leanok
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:is_nncph,
+        lem:nncph_from_adjacent_two_site_commutation}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
+    tensor. If $B$ is a renormalization fixed point, then for every $N>2$
+    its translated two-site parent interactions commute pairwise. Thus $B$
+    satisfies the nearest-neighbor commuting parent-Hamiltonian condition.
+
+    This statement treats one copy of every distinct sector. It does not
+    include repeated copies or arbitrary raw sector weights.
+\end{theorem}
+
+\begin{proof}\leanok
+    The fixed-point equation gives residual tensors $U_j$ whose matrix-entry
+    columns form one orthonormal family on the disjoint union of the sector
+    matrix spaces. On the tensor square of this disjoint union, let $Q$ be the
+    sum of the sector bond projectors, extended by zero between unequal
+    sectors. Write $L_j$ and $R_j$ for the left and right overlapping lifts
+    of the sector-$j$ bond projector. The single-sector relation and the
+    mixed-sector orthogonality give
+    \[
+        L_jR_j=R_jL_j,
+        \qquad
+        L_jR_k=0=R_jL_k \quad (j\ne k),
+    \]
+    where the latter identities follow from the shared one-site factor
+    $E_j^*E_k=0$ for the canonical summand inclusions $E_j$. Summing over the
+    sectors shows that the two adjacent placements of $Q$ commute.
+
+    If $U$ is the common isometry, then transport gives the identity
+    \[
+        (U\otimes U)Q(U^*\otimes U^*)=P_{G_2(B)},
+    \]
+    since the range on either side is
+    \[
+        \bigvee_j G_2(A_j)=G_2(B).
+    \]
+    Hence it is the complement of the canonical two-site parent interaction
+    of $B$. The two adjacent three-site parent terms therefore commute.
+    Cyclic transport gives adjacent commutation on every chain with $N>2$;
+    disjoint local terms commute by locality, which proves the claim.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbor parent ground spaces for distinct multiplicity-one RFP sectors]%
     \label{thm:rfp_multiplicity_one_bnt_parent_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}
