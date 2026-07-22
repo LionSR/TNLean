@@ -1423,10 +1423,15 @@ separate step.
 
 \begin{definition}[One fusion layer of the topological projector]%
     \label{def:mpdo_topological_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.conjugatedProjectorQBlock}
+    \lean{MPOTensor.BNTFusionTensorClause.projectorQBlock}
+    \lean{MPOTensor.BNTFusionTensorClause.conjugatedProjectorQBlock}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
     \lean{MPOTensor.BNTFusionIsometryFamily.conjugatedProjectorQBlock}
     \leanok
-    \uses{def:mpdo_bnt_fusion_isometry_family}
+    \uses{def:mpdo_bnt_fusion_coisometry_family,
+        def:mpdo_bnt_fusion_tensor_clause}
     Let $P_\gamma$ be operators on the terminal bond spaces.  Define one
     fusion layer of the recursive operator $Q$ by
     \[
@@ -1439,17 +1444,31 @@ separate step.
         \widehat Q_{\alpha,\beta}
           =U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}.
     \]
+    This is one pairwise step in the recursion of
+    \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (one fusion layer):} The arbitrary-chain
+    operator, the sequential fusion circuit, and the commuting Gibbs
+    decomposition are not asserted here.  The remaining statements are
+    recorded in
+    \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
 \end{definition}
 
 \begin{theorem}[Projection property of one fusion layer]%
     \label{thm:mpdo_topological_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_eq_unweighted}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_eq_unweighted}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_isStarProjection}
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         conjugatedProjectorQBlock_isOrthogonalProjection}
     \leanok
     \uses{def:mpdo_topological_projector_one_fusion,
-        thm:mpdo_pair_fusion_bnt_completeness,
         thm:mpdo_bnt_length_independent_zipper,
         thm:star_projection_coisometric_transport,
         thm:orthogonal_projection_star_projection_channel}
@@ -1462,9 +1481,10 @@ separate step.
           =\bigoplus_\gamma
              1_{r_{\alpha,\beta}^{\gamma}}\otimes P_\gamma
     \]
-    is self-adjoint and idempotent.  If the labelled tensors form a basis of
-    normal tensors, then $\widehat Q_{\alpha,\beta}$ is an orthogonal
-    projection.  This is the single recursive fusion step in
+    is self-adjoint and idempotent.  Since the active-support fusion map
+    satisfies $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$,
+    $\widehat Q_{\alpha,\beta}$ is an orthogonal projection.  This is the
+    single recursive fusion step in
     \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
@@ -1479,7 +1499,7 @@ separate step.
         =\bigoplus_\gamma(1\otimes P_\gamma^{2})
         =Q_{\alpha,\beta}.
     \]
-    By Theorem~\ref{thm:mpdo_pair_fusion_bnt_completeness},
+    The active-support coisometry satisfies
     $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$.  Therefore
     \[
       \widehat Q_{\alpha,\beta}^{\dagger}=\widehat Q_{\alpha,\beta},
