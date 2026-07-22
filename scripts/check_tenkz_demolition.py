@@ -30,7 +30,7 @@ RETIRED_LITERALS = (
     "tn_" + "motifs_mpdo.tex",
     "tn_" + "slide_catalogue.tex",
     "\\usetikzlibrary{" + "tn}",
-    "\\usepackage{" + "tn_diagrams}",
+    "\\usepackage{" + "tn_" + "diagrams}",
 )
 
 RETIRED_CALL = re.compile(r"\\TN[A-Z]")

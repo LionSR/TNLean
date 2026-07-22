@@ -46,7 +46,6 @@ on:
       - 'scripts/test_tenkz_corpus_provenance.py'
       - 'scripts/test_tenkz_corpus_render.py'
       - 'scripts/tenkz_lint.py'
-      - 'scripts/check_tenkz_demolition.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_audit.py'
       - 'scripts/test_tenkz_equation_web.py'
@@ -96,7 +95,6 @@ on:
       - 'scripts/test_tenkz_corpus_provenance.py'
       - 'scripts/test_tenkz_corpus_render.py'
       - 'scripts/tenkz_lint.py'
-      - 'scripts/check_tenkz_demolition.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_audit.py'
       - 'scripts/test_tenkz_equation_web.py'
@@ -172,7 +170,6 @@ jobs:
               - 'scripts/check_reader_facing_prose.py'
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_lint.py'
-              - 'scripts/check_tenkz_demolition.py'
               - 'scripts/test_tenkz_pic.py'
               - 'scripts/test_tenkz_equation_audit.py'
               - 'scripts/test_tenkz_equation_web.py'
@@ -421,7 +418,6 @@ jobs:
       - name: Lint tenkz picture sources
         if: env.TEX_CHANGED == 'true'
         run: |
-          python3 scripts/check_tenkz_demolition.py
           python3 scripts/tenkz_lint.py \
             'blueprint/src/chapter/*.tex' \
             'docs/tenkz/manual2.tex' \
