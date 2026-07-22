@@ -100,15 +100,12 @@ hypothesis not present in Theorem~4.14 or Appendix~C.4.
 
 \section{Formal realignment}
 
-The existing structure
-\leanid{MPOTensor.BNTFusionIsometryFamily} assumes
+The structure \leanid{MPOTensor.BNTFusionIsometryFamily} assumes
 $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=I$.  It remains mathematically
 valid as a conditional full-support structure, but it is not the unrestricted
-conclusion of the source theorem.  The tensor-attached structure
-\leanid{MPOTensor.BNTFusionTensorClause} inherits the same restriction.
-
-The source-facing construction tracked in \ghissue{4588} therefore uses a
-separate active-support fusion family with the following data:
+conclusion of the source theorem.  The source-facing structures
+\leanid{MPOTensor.BNTFusionCoisometryFamily} and
+\leanid{MPOTensor.BNTFusionTensorClause} instead use the following data:
 \begin{enumerate}
   \item positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$, allowing
     zero-dimensional multiplicity spaces;
@@ -122,9 +119,7 @@ the nonzero reducing corners give isometric inclusions into the product bond
 space, and their adjoints assemble into the required row coisometry.  No
 claim that the active projection is the identity is needed.
 
-A subsequent migration may replace uses of the stronger family by the
-active-support family after auditing which later results genuinely require
-full support.  Conversion to the former structure is permitted only under the
+Conversion to the stronger full-support structure is permitted only under the
 additional identity $U^\dagger U=I$, or an equivalent assertion that the
 product tensor has no discarded zero reducing corner.
 

@@ -25,6 +25,7 @@ import TNLean.MPS.MPDO.BNTFourfoldFusionIndices
 import TNLean.MPS.MPDO.BNTFusionCoisometries
 import TNLean.MPS.MPDO.BNTFusionIsometries
 import TNLean.MPS.MPDO.BNTFusionTensorClause
+import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTMarkovKeyFormula
 import TNLean.MPS.MPDO.BNTMarkovSectorProjectors

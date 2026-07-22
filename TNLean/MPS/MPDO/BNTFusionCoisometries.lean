@@ -183,6 +183,61 @@ theorem mpo_mul_mpo_eq_sum (L : ℕ) (hL : 0 < L) (α β : Λ) :
   simp only [Matrix.sum_apply, Matrix.smul_apply, mpo_apply, mpoMatrixEntry,
     evalWord_ofFn, smul_eq_mul]
 
+/-- The concrete MPO operator family of the labelled tensors in an active
+fusion decomposition.
+
+Source: arXiv:1606.00608, lines 962--966 and Appendix C.4,
+lines 2020--2029. -/
+noncomputable def toOperatorFamily :
+    BNTLabelOperatorFamily Λ
+      (fun L => Matrix (Fin L → Fin p) (Fin L → Fin p) ℂ) :=
+  ⟨fun L γ => mpo (Fam.tensor γ) L⟩
+
+@[simp]
+theorem toOperatorFamily_operator (L : ℕ) (γ : Λ) :
+    Fam.toOperatorFamily.operator L γ = mpo (Fam.tensor γ) L :=
+  rfl
+
+/-- An active fusion coisometry satisfies the same-length product law with
+the trace powers of its positive diagonal matrices.
+
+Source: arXiv:1606.00608, Theorem 4.14(ii)--(iii), lines 976--993, and
+Appendix C.4, lines 2020--2029. -/
+theorem toOperatorFamily_hasSameLengthProductForm :
+    Fam.toOperatorFamily.HasSameLengthProductForm
+      (BNTLabelCoefficientFamily.ofChi Fam.chi) := by
+  intro L hL α β
+  simpa [BNTLabelCoefficientFamily.ofChi_coeff] using
+    Fam.mpo_mul_mpo_eq_sum L hL α β
+
+/-- The positive diagonal matrices of an active fusion decomposition give the
+positive trace-power witness for its coefficient family.
+
+Source: arXiv:1606.00608, Theorem 4.14(ii), lines 976--985. -/
+noncomputable def toPositiveChiWitness :
+    PositiveBNTLabelChiTracePowerForm
+      (BNTLabelCoefficientFamily.ofChi Fam.chi) :=
+  PositiveBNTLabelChiTracePowerForm.ofChi Fam.chi Fam.posEntries
+
+/-- An active fusion coisometry together with the length-one idempotent law
+gives the BNT algebra clause for its concrete closed-chain operators.
+
+This is the retained-support form of implication (iii) to (ii) in
+arXiv:1606.00608, Theorem 4.14. Exact reconstruction ensures that no nonzero
+part of a product tensor is discarded.
+
+Source: arXiv:1606.00608, Theorem 4.14(ii)--(iii), lines 972--993, and
+Appendix C.4, lines 1929--1947 and 2020--2042. -/
+noncomputable def toBNTAlgebraClause
+    (m : BNTLabelTraceScalarFamily Λ)
+    (hIdempotent :
+      m.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi Fam.chi)) :
+    BNTAlgebraClause (BNTLabelCoefficientFamily.ofChi Fam.chi)
+      Fam.toOperatorFamily m where
+  positiveChi := Fam.toPositiveChiWitness
+  sameLengthProduct := Fam.toOperatorFamily_hasSameLengthProductForm
+  idempotent := hIdempotent
+
 /-- Under the additional assertion that every active-support projection is the
 identity, an active fusion coisometry gives the stronger full-support fusion
 family. -/

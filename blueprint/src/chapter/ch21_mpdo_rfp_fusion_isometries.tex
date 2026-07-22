@@ -782,16 +782,19 @@ weights in the length-independent case at
     coefficients $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{proof}
 
-\begin{definition}[BNT algebra clause derived from fusion isometries]%
+\begin{definition}[BNT algebra clause derived from fusion maps]%
     \label{def:mpdo_bnt_fusion_algebra_clause}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.toBNTAlgebraClause}
     \lean{MPOTensor.BNTFusionIsometryFamily.toBNTAlgebraClause}
     \leanok
     \uses{def:mpdo_bnt_algebra_clause,
+        def:mpdo_bnt_fusion_coisometry_family,
         def:mpdo_bnt_fusion_isometry_family,
         def:mpdo_bnt_label_idempotent_coefficient_form,
         def:mpdo_positive_bnt_label_chi_trace_power_form,
         thm:mpdo_fusion_same_length_product}
-    Suppose the fusion-isometry identity holds with positive diagonal matrices
+    Suppose an active-support fusion identity holds with positive diagonal
+    matrices
     $\chi_{\alpha,\beta,\gamma}$, and suppose the trace scalars satisfy the
     length-one idempotent law for the corresponding trace-power coefficients.
     The resulting BNT algebra clause has coefficients, for $L>0$,
@@ -814,27 +817,36 @@ weights in the length-independent case at
     implications involving the renormalization fixed-point condition.
 \end{definition}
 
-\begin{definition}[Fusion isometries for a vertical canonical decomposition]%
+\begin{definition}[Fusion coisometries for a vertical canonical decomposition]%
     \label{def:mpdo_bnt_fusion_tensor_clause}
     \lean{MPOTensor.BNTFusionTensorClause}
     \lean{MPOTensor.HasBNTFusionTensorClause}
     \leanok
     \uses{def:vertical_cf_mpdo,
-        def:mpdo_bnt_fusion_isometry_family,
+        def:mpdo_bnt_fusion_coisometry_family,
         def:mpdo_bnt_label_idempotent_coefficient_form}
     Choose a vertical canonical decomposition
     \[
         U\widetilde M U^\dagger
         =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
     \]
-    The fusion-isometry clause for this decomposition consists of positive
-    diagonal matrices $\chi_{\alpha,\beta,\gamma}$ and isometries
+    The fusion clause for this decomposition consists of positive diagonal
+    matrices $\chi_{\alpha,\beta,\gamma}$ and coisometries
     $U_{\alpha,\beta}$ satisfying
     \[
         U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^\dagger
         =\bigoplus_\gamma
         \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}.
+    \]
+    The maps obey $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, and their
+    adjoints reconstruct the product letters exactly:
+    \[
+        (M_\alpha M_\beta)^{ij}
+        =U_{\alpha,\beta}^\dagger
+          \left(\bigoplus_\gamma
+            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+          U_{\alpha,\beta}.
     \]
     The trace scalars $m_\alpha=\operatorname{tr}(\mu_\alpha)$ satisfy the
     length-one idempotent identity for the coefficients determined by these
@@ -844,7 +856,55 @@ weights in the length-independent case at
     \cite[Proposition~4.13, lines~943--951]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Fusion isometries imply the tensor-attached algebra clause]%
+\begin{theorem}[Renormalization fixed points have a BNT fusion clause]
+    \label{thm:mpdo_rfp_to_bnt_fusion_tensor_clause}
+    \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFP}
+    \leanok
+    \uses{def:is_rfp_via_ts,
+        def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_bnt_eventual_power_sums_multiplicity_comparison,
+        thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
+    Let $M$ be a horizontally canonical matrix product density operator that
+    is a renormalization fixed point.  Then a vertical canonical decomposition
+    of $M$ admits positive diagonal matrices
+    $\chi_{\alpha,\beta,\gamma}$ and active-support fusion coisometries
+    satisfying the preceding fusion clause.  In particular, the trace scalars
+    $m_\alpha=\operatorname{tr}(\mu_\alpha)$ obey
+    \[
+        m_\gamma=\sum_{\alpha,\beta}
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+        m_\alpha m_\beta.
+    \]
+    This is implication (i)$\Rightarrow$(iii) of
+    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}, proved in
+    \cite[Appendix~C.4, lines~1951--2042]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row maps
+    are coisometries onto the active sectors, and exact reconstruction records
+    the common zero corner omitted from the retained direct sum.  See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    Choose vertical canonical decompositions of the one-site and two-site
+    tensors.  The two physical channels identify their normal sectors and
+    yield the positive active-support fusion decomposition.  At every
+    sufficiently large chain length, the two decompositions of the blocked
+    closed-chain operator have linearly independent normal-sector operators.
+    Equality of their coefficients gives, in each sector, equality between
+    the power sums of the two-site multiplicity entries and those of the
+    products
+    \[
+        \mu_{\alpha,i}\mu_{\beta,j}
+        \chi_{\alpha,\beta,\gamma,k}.
+    \]
+    Positivity and the finite power-sum theorem identify the corresponding
+    multisets.  Summing their entries and using the normalization of the
+    transported two-site multiplicity matrices gives the displayed
+    length-one identity.  The positive fusion decomposition and this identity
+    together furnish the claimed clause.
+\end{proof}
+
+\begin{theorem}[Fusion coisometries imply the tensor-attached algebra clause]%
     \label{thm:mpdo_bnt_fusion_tensor_to_algebra_tensor}
     \lean{MPOTensor.BNTFusionTensorClause.toBNTAlgebraTensorClause}
     \lean{MPOTensor.HasBNTFusionTensorClause.to_hasBNTAlgebraTensorClause}
@@ -852,7 +912,7 @@ weights in the length-independent case at
     \uses{def:mpdo_bnt_algebra_tensor_clause,
         def:mpdo_bnt_fusion_algebra_clause,
         def:mpdo_bnt_fusion_tensor_clause}
-    Suppose the fusion-isometry clause holds for a chosen vertical canonical
+    Suppose the fusion-coisometry clause holds for a chosen vertical canonical
     decomposition.  Then the algebra clause holds for the same decomposition,
     with coefficients, for every positive chain length $L$,
     \[
