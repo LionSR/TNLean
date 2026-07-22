@@ -47,156 +47,101 @@ support of a positive mean-ergodic fixed point; it is not used to claim that
 products of fixed points are fixed. -/
 theorem transportedVerticalSector_composites_tracePreserving
     {g₁ g₂ d D : ℕ}
-    (dim₁ mult₁ : Fin g₁ → ℕ)
-    (weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ)
-    (dim₂ mult₂ : Fin g₂ → ℕ)
-    (weight₂ : (β : Fin g₂) → Fin (mult₂ β) → ℂ)
-    (hMult₁ : ∀ α, 0 < mult₁ α)
-    (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
-    (hMult₂ : ∀ β, 0 < mult₂ β)
-    (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
-    (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
-    (hBNT₁ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
-      (fun α ↦ ⟨dim₁ α, A₁ α⟩))
-    (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor (blockTwo M))
-      (fun β ↦ ⟨dim₂ β, A₂ β⟩))
-    (U₁ : Matrix
-      (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
-      (Fin d) ℂ)
-    (U₂ : Matrix
-      (Fin (∑ q : Fin (∑ β : Fin g₂, mult₂ β), verticalCopyDim dim₂ mult₂ q))
-      (Fin (d * d)) ℂ)
-    (hU₁ : U₁ * U₁ᴴ = 1)
-    (hU₂ : U₂ * U₂ᴴ = 1)
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d) (Fin d) ℂ)
-    (hTCPTP : IsKrausCPTP T)
-    (hSCPTP : IsKrausCPTP S)
-    (hForward₁ : ∀ ab, U₁ * verticalTensor M ab * U₁ᴴ =
-      verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab)
-    (hReconstruct₁ : ∀ ab, verticalTensor M ab =
-      U₁ᴴ * verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab * U₁)
-    (hForward₂ : ∀ ab, U₂ * verticalTensor (blockTwo M) ab * U₂ᴴ =
-      verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab)
-    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
-      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (hTphys : ∀ X, T (physClose1 M X) = physClose2 M X)
-    (hSphys : ∀ X, S (physClose2 M X) = physClose1 M X) :
-    Matrix.IsTracePreservingDirectSumMap
-        ((transportedVerticalSectorS dim₁ mult₁ dim₂ mult₂ weight₂ U₁ U₂ S).comp
-          (transportedVerticalSectorT dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T)) ∧
-      Matrix.IsTracePreservingDirectSumMap
-        ((transportedVerticalSectorT dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T).comp
-          (transportedVerticalSectorS dim₁ mult₁ dim₂ mult₂ weight₂ U₁ U₂ S)) ∧
-      Matrix.IsTracePreservingBetweenDirectSums
-        (transportedVerticalSectorT dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T) ∧
-      Matrix.IsTracePreservingBetweenDirectSums
-        (transportedVerticalSectorS dim₁ mult₁ dim₂ mult₂ weight₂ U₁ U₂ S) := by
+    (h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :
+    Matrix.IsTracePreservingDirectSumMap h.SbarTbar ∧
+      Matrix.IsTracePreservingDirectSumMap h.TbarSbar ∧
+      Matrix.IsTracePreservingBetweenDirectSums h.Tbar ∧
+      Matrix.IsTracePreservingBetweenDirectSums h.Sbar := by
   classical
-  let Tbar := transportedVerticalSectorT
-    dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T
-  let Sbar := transportedVerticalSectorS
-    dim₁ mult₁ dim₂ mult₂ weight₂ U₁ U₂ S
-  let F₁ := Sbar.comp Tbar
-  let F₂ := Tbar.comp Sbar
-  have hTbarpos (X : VerticalSectorAlgebra dim₁)
+  have hTbarpos (X : VerticalSectorAlgebra h.dim₁)
       (hX : IsVerticalSectorPosSemidef X) :
-      IsVerticalSectorPosSemidef (Tbar X) := by
+      IsVerticalSectorPosSemidef (h.Tbar X) := by
     exact transportedVerticalSectorT_posSemidef
-      dim₁ mult₁ weight₁ dim₂ mult₂ hMult₁ hWeight₁ U₁ U₂ T hTCPTP X hX
-  have hSbarpos (X : VerticalSectorAlgebra dim₂)
+      h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.hMult₁ h.hWeight₁ h.U₁ h.U₂ h.T h.hTCPTP X hX
+  have hSbarpos (X : VerticalSectorAlgebra h.dim₂)
       (hX : IsVerticalSectorPosSemidef X) :
-      IsVerticalSectorPosSemidef (Sbar X) := by
+      IsVerticalSectorPosSemidef (h.Sbar X) := by
     exact transportedVerticalSectorS_posSemidef
-      dim₁ mult₁ dim₂ mult₂ weight₂ hMult₂ hWeight₂ U₁ U₂ S hSCPTP X hX
-  have hF₁pos : Matrix.IsPositiveDirectSumMap F₁ := by
+      h.dim₁ h.mult₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₂ h.hWeight₂ h.U₁ h.U₂ h.S h.hSCPTP X hX
+  have hF₁pos : Matrix.IsPositiveDirectSumMap h.SbarTbar := by
     intro X hX
-    exact hSbarpos (Tbar X) (hTbarpos X hX)
-  have hF₂pos : Matrix.IsPositiveDirectSumMap F₂ := by
+    exact hSbarpos (h.Tbar X) (hTbarpos X hX)
+  have hF₂pos : Matrix.IsPositiveDirectSumMap h.TbarSbar := by
     intro X hX
-    exact hTbarpos (Sbar X) (hSbarpos X hX)
-  have hTbarle (X : VerticalSectorAlgebra dim₁)
+    exact hTbarpos (h.Sbar X) (hSbarpos X hX)
+  have hTbarle (X : VerticalSectorAlgebra h.dim₁)
       (hX : IsVerticalSectorPosSemidef X) :
-      verticalSectorTrace (Tbar X) ≤ verticalSectorTrace X :=
+      verticalSectorTrace (h.Tbar X) ≤ verticalSectorTrace X :=
     transportedVerticalSectorT_trace_le
-      dim₁ mult₁ weight₁ dim₂ mult₂ hMult₁ hWeight₁
-      U₁ hU₁ U₂ hU₂ T hTCPTP X hX
-  have hSbarle (X : VerticalSectorAlgebra dim₂)
+      h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.hMult₁ h.hWeight₁
+      h.U₁ h.hU₁ h.U₂ h.hU₂ h.T h.hTCPTP X hX
+  have hSbarle (X : VerticalSectorAlgebra h.dim₂)
       (hX : IsVerticalSectorPosSemidef X) :
-      verticalSectorTrace (Sbar X) ≤ verticalSectorTrace X :=
+      verticalSectorTrace (h.Sbar X) ≤ verticalSectorTrace X :=
     transportedVerticalSectorS_trace_le
-      dim₁ mult₁ dim₂ mult₂ weight₂ hMult₂ hWeight₂
-      U₁ hU₁ U₂ hU₂ S hSCPTP X hX
-  have hTbarTNI : Matrix.IsTraceNonincreasingBetweenDirectSums Tbar := by
+      h.dim₁ h.mult₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₂ h.hWeight₂
+      h.U₁ h.hU₁ h.U₂ h.hU₂ h.S h.hSCPTP X hX
+  have hTbarTNI : Matrix.IsTraceNonincreasingBetweenDirectSums h.Tbar := by
     intro X hX
     exact hTbarle X hX
-  have hSbarTNI : Matrix.IsTraceNonincreasingBetweenDirectSums Sbar := by
+  have hSbarTNI : Matrix.IsTraceNonincreasingBetweenDirectSums h.Sbar := by
     intro X hX
     exact hSbarle X hX
-  have hF₁TNI : Matrix.IsTraceNonincreasingBetweenDirectSums F₁ := by
+  have hF₁TNI : Matrix.IsTraceNonincreasingBetweenDirectSums h.SbarTbar := by
     intro X hX
-    exact (hSbarle (Tbar X) (hTbarpos X hX)).trans (hTbarle X hX)
-  have hF₂TNI : Matrix.IsTraceNonincreasingBetweenDirectSums F₂ := by
+    exact (hSbarle (h.Tbar X) (hTbarpos X hX)).trans (hTbarle X hX)
+  have hF₂TNI : Matrix.IsTraceNonincreasingBetweenDirectSums h.TbarSbar := by
     intro X hX
-    exact (hTbarle (Sbar X) (hSbarpos X hX)).trans (hSbarle X hX)
+    exact (hTbarle (h.Sbar X) (hSbarpos X hX)).trans (hSbarle X hX)
   obtain ⟨L₁, hL₁, hSpan₁⟩ :=
     exists_positive_verticalMultiplicityTraceBondContractionProductSpanTop_of_bnt
-      hBNT₁ weight₁ hMult₁ hWeight₁
+      h.hBNT₁ h.weight₁ h.hMult₁ h.hWeight₁
   obtain ⟨L₂, hL₂, hSpan₂⟩ :=
     exists_positive_verticalMultiplicityTraceBondContractionProductSpanTop_of_bnt
-      hBNT₂ weight₂ hMult₂ hWeight₂
+      h.hBNT₂ h.weight₂ h.hMult₂ h.hWeight₂
   let V₁ := weightedVerticalBondContraction
-    (verticalMultiplicityTrace weight₁) A₁
+    (verticalMultiplicityTrace h.weight₁) h.A₁
   let V₂ := weightedVerticalBondContraction
-    (verticalMultiplicityTrace weight₂) A₂
-  have hV₁fixed (X : Matrix (Fin D) (Fin D) ℂ) : F₁ (V₁ X) = V₁ X := by
-    change F₁ (fun α ↦ verticalMultiplicityTrace weight₁ α •
-      MPSTensor.contractBondMatrix (A₁ α) X) =
-        fun α ↦ verticalMultiplicityTrace weight₁ α •
-          MPSTensor.contractBondMatrix (A₁ α) X
-    simpa only [F₁, Tbar, Sbar] using
-      transportedVerticalSectorS_comp_T_fixed_contractBondMatrix_trace_smul
-        dim₁ mult₁ weight₁ dim₂ mult₂ weight₂ hMult₁ hWeight₁ hMult₂ hWeight₂
-        M A₁ A₂ U₁ U₂ T S hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ X
-        (hTphys X) (hSphys X)
-  have hV₂fixed (X : Matrix (Fin D) (Fin D) ℂ) : F₂ (V₂ X) = V₂ X := by
-    change F₂ (fun β ↦ verticalMultiplicityTrace weight₂ β •
-      MPSTensor.contractBondMatrix (A₂ β) X) =
-        fun β ↦ verticalMultiplicityTrace weight₂ β •
-          MPSTensor.contractBondMatrix (A₂ β) X
-    simpa only [F₂, Tbar, Sbar] using
-      transportedVerticalSectorT_comp_S_fixed_contractBondMatrix_trace_smul
-        dim₁ mult₁ weight₁ dim₂ mult₂ weight₂ hMult₁ hWeight₁ hMult₂ hWeight₂
-        M A₁ A₂ U₁ U₂ T S hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ X
-        (hTphys X) (hSphys X)
-  have hOne₁ : (1 : VerticalSectorAlgebra dim₁) ∈
+    (verticalMultiplicityTrace h.weight₂) h.A₂
+  have hV₁fixed (X : Matrix (Fin D) (Fin D) ℂ) : h.SbarTbar (V₁ X) = V₁ X := by
+    change h.SbarTbar (fun α ↦ verticalMultiplicityTrace h.weight₁ α •
+      MPSTensor.contractBondMatrix (h.A₁ α) X) =
+        fun α ↦ verticalMultiplicityTrace h.weight₁ α •
+          MPSTensor.contractBondMatrix (h.A₁ α) X
+    exact transportedVerticalSectorS_comp_T_fixed_contractBondMatrix_trace_smul
+      h.toVerticalSectorFixedGeneratorHypotheses X
+  have hV₂fixed (X : Matrix (Fin D) (Fin D) ℂ) : h.TbarSbar (V₂ X) = V₂ X := by
+    change h.TbarSbar (fun β ↦ verticalMultiplicityTrace h.weight₂ β •
+      MPSTensor.contractBondMatrix (h.A₂ β) X) =
+        fun β ↦ verticalMultiplicityTrace h.weight₂ β •
+          MPSTensor.contractBondMatrix (h.A₂ β) X
+    exact transportedVerticalSectorT_comp_S_fixed_contractBondMatrix_trace_smul
+      h.toVerticalSectorFixedGeneratorHypotheses X
+  have hOne₁ : (1 : VerticalSectorAlgebra h.dim₁) ∈
       Submodule.span ℂ (Set.range fun x : Fin L₁ → Matrix (Fin D) (Fin D) ℂ ↦
         (List.ofFn fun t ↦ V₁ (x t)).prod) := by
     simpa only [V₁] using
       one_mem_product_span_of_weightedVerticalBondContractions
-        (verticalMultiplicityTrace weight₁) A₁ hSpan₁
-  have hOne₂ : (1 : VerticalSectorAlgebra dim₂) ∈
+        (verticalMultiplicityTrace h.weight₁) h.A₁ hSpan₁
+  have hOne₂ : (1 : VerticalSectorAlgebra h.dim₂) ∈
       Submodule.span ℂ (Set.range fun x : Fin L₂ → Matrix (Fin D) (Fin D) ℂ ↦
         (List.ofFn fun t ↦ V₂ (x t)).prod) := by
     simpa only [V₂] using
       one_mem_product_span_of_weightedVerticalBondContractions
-        (verticalMultiplicityTrace weight₂) A₂ hSpan₂
+        (verticalMultiplicityTrace h.weight₂) h.A₂ hSpan₂
   have hF₁trace :=
     hF₁pos.tracePreserving_of_traceNonincreasing_of_fixed_product_span
       hF₁TNI V₁ L₁ hL₁ hV₁fixed hOne₁
   have hF₂trace :=
     hF₂pos.tracePreserving_of_traceNonincreasing_of_fixed_product_span
       hF₂TNI V₂ L₂ hL₂ hV₂fixed hOne₂
-  have hTbarTrace : Matrix.IsTracePreservingBetweenDirectSums Tbar :=
+  have hTbarTrace : Matrix.IsTracePreservingBetweenDirectSums h.Tbar :=
     Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing
       hTbarpos hTbarTNI hSbarTNI
         (Matrix.isTracePreservingBetweenDirectSums_iff_isTracePreservingDirectSumMap.mpr
           hF₁trace)
-  have hSbarTrace : Matrix.IsTracePreservingBetweenDirectSums Sbar :=
+  have hSbarTrace : Matrix.IsTracePreservingBetweenDirectSums h.Sbar :=
     Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing
       hSbarpos hSbarTNI hTbarTNI
         (Matrix.isTracePreservingBetweenDirectSums_iff_isTracePreservingDirectSumMap.mpr

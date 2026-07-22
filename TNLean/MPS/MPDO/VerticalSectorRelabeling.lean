@@ -87,32 +87,53 @@ theorem transportedVerticalSector_exists_unitaryBlockEquiv
                 ((V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ)ᴴ * Y *
                   (V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ))) := by
   classical
-  let Tbar := transportedVerticalSectorT
-    dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T
-  let Sbar := transportedVerticalSectorS
-    dim₁ mult₁ dim₂ mult₂ weight₂ U₁ U₂ S
-  letI : ∀ i, NeZero (dim₁ i) := fun i ↦ ⟨(hBNT₁.blocks_dim_pos i).ne'⟩
-  letI : ∀ j, NeZero (dim₂ j) := fun j ↦ ⟨(hBNT₂.blocks_dim_pos j).ne'⟩
-  have hTbar : Matrix.IsKrausDirectSumMap Tbar := by
+  let h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D) :=
+    { dim₁ := dim₁
+      mult₁ := mult₁
+      weight₁ := weight₁
+      dim₂ := dim₂
+      mult₂ := mult₂
+      weight₂ := weight₂
+      hMult₁ := hMult₁
+      hWeight₁ := hWeight₁
+      hMult₂ := hMult₂
+      hWeight₂ := hWeight₂
+      M := M
+      A₁ := A₁
+      A₂ := A₂
+      U₁ := U₁
+      U₂ := U₂
+      T := T
+      S := S
+      hForward₁ := hForward₁
+      hReconstruct₁ := hReconstruct₁
+      hForward₂ := hForward₂
+      hReconstruct₂ := hReconstruct₂
+      hTphys := hTphys
+      hSphys := hSphys
+      hBNT₁ := hBNT₁
+      hBNT₂ := hBNT₂
+      hU₁ := hU₁
+      hU₂ := hU₂
+      hTCPTP := hTCPTP
+      hSCPTP := hSCPTP }
+  letI : ∀ i, NeZero (h.dim₁ i) := fun i ↦ ⟨(h.hBNT₁.blocks_dim_pos i).ne'⟩
+  letI : ∀ j, NeZero (h.dim₂ j) := fun j ↦ ⟨(h.hBNT₂.blocks_dim_pos j).ne'⟩
+  have hTbar : Matrix.IsKrausDirectSumMap h.Tbar := by
     exact transportedVerticalSectorT_isKrausDirectSumMap
-      dim₁ mult₁ weight₁ dim₂ mult₂ hMult₁ hWeight₁ U₁ U₂ T hTCPTP.isKrausCP
-  have hSbar : Matrix.IsKrausDirectSumMap Sbar := by
+      h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.hMult₁ h.hWeight₁
+      h.U₁ h.U₂ h.T h.hTCPTP.isKrausCP
+  have hSbar : Matrix.IsKrausDirectSumMap h.Sbar := by
     exact transportedVerticalSectorS_isKrausDirectSumMap
-      dim₁ mult₁ dim₂ mult₂ weight₂ hMult₂ hWeight₂ U₁ U₂ S hSCPTP.isKrausCP
+      h.dim₁ h.mult₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₂ h.hWeight₂
+      h.U₁ h.U₂ h.S h.hSCPTP.isKrausCP
   obtain ⟨_, _, hTbarTP, hSbarTP⟩ :=
-    transportedVerticalSector_composites_tracePreserving
-      dim₁ mult₁ weight₁ dim₂ mult₂ weight₂
-      hMult₁ hWeight₁ hMult₂ hWeight₂ M A₁ A₂ hBNT₁ hBNT₂
-      U₁ U₂ hU₁ hU₂ T S hTCPTP hSCPTP
-      hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ hTphys hSphys
-  obtain ⟨hST, hTS⟩ := transportedVerticalSector_composites_eq_id
-    dim₁ mult₁ weight₁ dim₂ mult₂ weight₂
-    hMult₁ hWeight₁ hMult₂ hWeight₂ M A₁ A₂ hBNT₁ hBNT₂
-    U₁ U₂ hU₁ hU₂ T S hTCPTP hSCPTP
-    hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ hTphys hSphys
+    transportedVerticalSector_composites_tracePreserving h
+  obtain ⟨hST, hTS⟩ := transportedVerticalSector_composites_eq_id h
   obtain ⟨sigma, hDim, V, hVT, hVS⟩ :=
     Matrix.exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps
-      Tbar Sbar hTbar hSbar hTbarTP hSbarTP hST hTS
+      h.Tbar h.Sbar hTbar hSbar hTbarTP hSbarTP hST hTS
   exact ⟨sigma, hDim, V, hVT, hVS⟩
 
 end MPOTensor

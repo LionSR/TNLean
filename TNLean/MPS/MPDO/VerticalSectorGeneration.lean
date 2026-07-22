@@ -13,7 +13,15 @@ import Mathlib.LinearAlgebra.FixedSubmodule
 The proof of the general MPDO renormalization fixed-point theorem uses the
 fact that finite products of the weighted vertical bond contractions span the
 full direct product of the BNT matrix algebras.  This file derives that claim
-from simultaneous word-tuple span of the vertical BNT representatives.
+from simultaneous word-tuple span of the vertical BNT representatives.  It also
+packages the shared algebraic and analytic hypotheses for the subsequent
+positivity, identity, and trace-preservation results.
+
+## Main declarations
+
+* `MPOTensor.VerticalSectorHypotheses`: the common vertical-sector assumptions.
+* `MPOTensor.exists_vertical_weightedProduct_span_eq_top`: generation of the
+  full product algebra.
 
 ## References
 
@@ -64,6 +72,80 @@ theorem contractBondMatrix_single_mod_div
 end MPSTensor
 
 namespace MPOTensor
+
+/-- The full vertical-sector hypotheses used in the analytic argument of
+Appendix C.4.
+
+They extend the algebraic fixed-generator context by the normal-tensor,
+coisometry, and channel assumptions needed for positivity, trace
+preservation, and the trace-adjoint Schwarz inequalities.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1995. -/
+structure VerticalSectorHypotheses {g₁ g₂ d D : ℕ} : Type
+    extends VerticalSectorFixedGeneratorHypotheses (g₁ := g₁) (g₂ := g₂) (d := d) (D := D) where
+  /-- The one-site vertical tensors form a basis of normal tensors.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1980--1995. -/
+  hBNT₁ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+    (fun α ↦ ⟨dim₁ α, A₁ α⟩)
+  /-- The two-site vertical tensors form a basis of normal tensors.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1980--1995. -/
+  hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor (blockTwo M))
+    (fun β ↦ ⟨dim₂ β, A₂ β⟩)
+  /-- The one-site retained coordinate map is a coisometry.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hU₁ : U₁ * U₁ᴴ = 1
+  /-- The two-site retained coordinate map is a coisometry.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hU₂ : U₂ * U₂ᴴ = 1
+  /-- The physical refinement map is completely positive and trace preserving.
+
+  Source: arXiv:1606.00608, Definition 4.1 and Appendix C.4, lines 1972--1979. -/
+  hTCPTP : IsKrausCPTP T
+  /-- The physical coarse-graining map is completely positive and trace preserving.
+
+  Source: arXiv:1606.00608, Definition 4.1 and Appendix C.4, lines 1972--1979. -/
+  hSCPTP : IsKrausCPTP S
+
+namespace VerticalSectorHypotheses
+
+/-- The transported vertical-sector refinement map determined by the strong
+Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
+abbrev Tbar {g₁ g₂ d D : ℕ} (h : VerticalSectorHypotheses
+    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :=
+  h.toVerticalSectorFixedGeneratorHypotheses.Tbar
+
+/-- The transported vertical-sector coarse-graining map determined by the
+strong Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
+abbrev Sbar {g₁ g₂ d D : ℕ} (h : VerticalSectorHypotheses
+    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :=
+  h.toVerticalSectorFixedGeneratorHypotheses.Sbar
+
+/-- The coarse-graining--refinement composite determined by the strong
+Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
+abbrev SbarTbar {g₁ g₂ d D : ℕ} (h : VerticalSectorHypotheses
+    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :=
+  h.toVerticalSectorFixedGeneratorHypotheses.SbarTbar
+
+/-- The refinement--coarse-graining composite determined by the strong
+Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
+abbrev TbarSbar {g₁ g₂ d D : ℕ} (h : VerticalSectorHypotheses
+    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :=
+  h.toVerticalSectorFixedGeneratorHypotheses.TbarSbar
+
+end VerticalSectorHypotheses
+
 
 /-- The direct-product sector operator whose `α`-th sector is the scalar
 multiple $m_α M_α(X)$ obtained by contracting the common horizontal bond
