@@ -60,7 +60,7 @@ one-site translation operator to $Q_vB^{(p)}$ versus $Q_{v+1}B^{(p)}$ yields a
 contradiction unless $\lim_N|\langle V_N(A)|V_N(B)\rangle|=0$.
 
 \textbf{\Lean{} route.}\footnote{Formal declaration:
-\leanid{periodicOverlap_tendsto_zero_of_ne_period} in \leanid{Case1.lean}.}
+\leanid{periodicOverlap_tendsto_zero_of_ne_period} in \leanid{DifferentPeriod.lean}.}
 The same obstruction is realized spectrally. For a tensor $A$, write
 $\mathcal E_A$ and $\mathcal E_A^*$ for the transfer map and its adjoint,
 defined by
@@ -160,7 +160,7 @@ $A^i=e^{i\xi}UB^iU^\dagger$.
 \textbf{\Lean{} status.}\footnote{Formal declarations:
 \leanid{sectorMatch_propagation},
 \leanid{sectorTensor_proportional_of_blockedMatch}, and
-\leanid{periodicOverlap_gaugeEquiv_of_sector_match} in \leanid{Case3.lean}.}
+\leanid{periodicOverlap_gaugeEquiv_of_sector_match} in \leanid{SectorMatch.lean}.}
 The statements track this two-stage structure: the $T^l$ + Theorem~2.10
 staircase, followed by the $\Omega_u$ contraction and the
 $\kappa/\theta/\phi$ phase construction. The top-level theorem now invokes these
