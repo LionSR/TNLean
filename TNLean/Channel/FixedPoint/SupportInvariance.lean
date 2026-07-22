@@ -16,6 +16,15 @@ preserves the compressed algebra $P M_D(\mathbb C) P$.
 
 These statements depend only on a Kraus family and therefore belong to the
 channel layer. They specialize directly to MPS transfer maps.
+
+## Main declarations
+
+* `Kraus.lowerZero_of_posSemidef_fixedPoint`: support invariance for a
+  positive-semidefinite fixed point.
+* `Kraus.lowerZero_implies_invariance`: preservation of the corresponding
+  matrix corner.
+* `Kraus.invariantCompression_of_supportProj_fixed_by_cpMap`: invariant support
+  compression for a completely positive map.
 -/
 
 open scoped Matrix ComplexOrder BigOperators

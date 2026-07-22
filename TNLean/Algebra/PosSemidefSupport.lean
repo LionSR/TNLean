@@ -13,6 +13,18 @@ import TNLean.Algebra.OrthogonalProjection
 This file defines the spectral support projection for a Hermitian matrix on an
 arbitrary finite index type. Its positive-semidefinite and `Fin`-indexed APIs
 are specializations of that construction.
+
+## Main declarations
+
+* `Matrix.IsHermitian.supportProj`: the spectral projection onto the nonzero
+  eigenspaces of a Hermitian matrix.
+* `Matrix.IsHermitian.supportProj_mul_self` and
+  `Matrix.IsHermitian.mul_supportProj_self`: absorption on both sides.
+* `Matrix.PosSemidef.supportProj`: the positive-semidefinite specialization.
+* `Matrix.PosSemidef.isOrthogonalProjection_supportProj`: orthogonality of the
+  positive-semidefinite support projection.
+* `Matrix.supportProj_mul_conjTranspose_mul_self`: the support projection of
+  $B B^\dagger$ fixes $B$.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
