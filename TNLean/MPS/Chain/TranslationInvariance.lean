@@ -123,14 +123,6 @@ theorem ti_tensors_collapse_to_single_gauge
           (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := hX i
     simpa [smul_eq_mul, Matrix.mul_assoc] using hXi
 
-end MPSChainTensor
-
-open scoped Matrix
-
-namespace MPSChainTensor
-
-variable {d D n : ℕ}
-
 /-- **TI Reduction Corollary**.
 
 If `A` is injective and the constant chains `(A, …, A)` and `(B, …, B)` satisfy

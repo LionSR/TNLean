@@ -268,14 +268,6 @@ theorem piTraceMulRightPi_ker_eq_bot
 
 end PiGramMap
 
-end MPSTensor
-
-open scoped Matrix BigOperators
-
-namespace MPSTensor
-
-variable {d : ℕ}
-
 /-! ### Per-block and direct-sum gauge equivalence -/
 section FullMultiBlock
 

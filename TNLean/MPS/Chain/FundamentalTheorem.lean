@@ -25,7 +25,23 @@ argument for `n ≥ 3`; this step is not formalized here.
 
 open scoped Matrix
 
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- Rescaling every site tensor in a chain rescales the combined tensor by the
+same scalar. -/
+theorem chainCombinedTensor_smul_chain {n : ℕ}
+    (A : Fin n → MPSTensor d D) (ζ : ℂ) :
+    chainCombinedTensor (fun k i => ζ • A k i) = ζ • chainCombinedTensor A := by
+  funext j
+  simp [chainCombinedTensor]
+
+end MPSTensor
+
 namespace MPSChainTensor
+
+open MPSTensor
 
 variable {d D n : ℕ}
 
@@ -56,30 +72,6 @@ theorem fundamentalTheorem_injective_chain
     have := hX (finProdFinEquiv (k, i))
     simp only [MPSTensor.chainCombinedTensor_apply] at this
     exact this⟩
-
-end MPSChainTensor
-
-open scoped Matrix
-
-namespace MPSTensor
-
-variable {d D : ℕ}
-
-/-- Rescaling every site tensor in a chain rescales the combined tensor by the
-same scalar. -/
-theorem chainCombinedTensor_smul_chain {n : ℕ}
-    (A : Fin n → MPSTensor d D) (ζ : ℂ) :
-    chainCombinedTensor (fun k i => ζ • A k i) = ζ • chainCombinedTensor A := by
-  funext j
-  simp [chainCombinedTensor]
-
-end MPSTensor
-
-namespace MPSChainTensor
-
-open MPSTensor
-
-variable {d D n : ℕ}
 
 /-- **Injective-chain Fundamental Theorem up to a nonzero scalar.**
 
