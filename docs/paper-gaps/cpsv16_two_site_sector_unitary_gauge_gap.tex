@@ -1,0 +1,69 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Two-Site Sector Comparison Stops at an Invertible Gauge}
+\author{}
+\date{2026-07-23}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Appendix~C.4 of \cite{Cirac2016MPDO_arXiv} first matches the one-site and
+two-site normal tensors, up to relabelling, by
+\begin{equation}
+  A_\gamma
+  =e^{i\theta_\gamma}Z_\gamma M_\gamma Z_\gamma^{-1}
+  \label{eq:gauge-phase}
+\end{equation}
+at lines~2053--2056.  Line~2057 then invokes the result labelled
+\path{Prop:IV.12} to conclude both
+\begin{equation}
+  e^{i\theta_\gamma}=1
+  \qquad\text{and}\qquad
+  Z_\gamma=U_\gamma\ \text{unitary}.
+  \label{eq:unitary-upgrade}
+\end{equation}
+
+\section{Formal boundary}
+
+The current two-site comparison retains equality of the matched bond
+dimensions and the invertible matrix $Z_\gamma$ in
+\eqref{eq:gauge-phase}.  Positivity of the coefficients at two consecutive
+lengths proves $e^{i\theta_\gamma}=1$, so the resulting conjugacy is exact.
+This proves the invertible-gauge sub-result of lines~2053--2057.
+
+It does not yet prove the second part of \eqref{eq:unitary-upgrade}.
+The result labelled \path{Prop:IV.12} obtains unitary representatives by
+comparing every copy of a normal tensor with a common canonical target and
+proving proportionality of the corresponding Gram matrices.  The present
+one-site and two-site decompositions are constructed independently.  The
+available normal-tensor matching theorem therefore supplies an invertible
+conjugacy, but no common target or Gram-normalization contract from which that
+particular conjugacy can be rescaled to a unitary one.
+
+\section{Elimination plan}
+
+The missing unitary conclusion is tracked in
+\href{https://github.com/LionSR/TNLean/issues/4645}{issue 4645}.  A faithful
+completion must specialize the positivity argument of \path{Prop:IV.12} to the
+matched one-site and two-site sectors, construct their common canonical target,
+and prove equality up to a positive scalar of the two gauge Gram matrices.
+Rescaling the retained invertible gauge will then give a unitary gauge without
+adding a left-canonical or preassembled-gauge hypothesis.
+
+Until that common-target contract is proved, the formal declaration and its
+blueprint entry are explicitly restricted to phase-one invertible conjugacy.
+The full line-2057 unitary upgrade remains unformalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
