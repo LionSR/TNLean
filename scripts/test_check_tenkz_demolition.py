@@ -60,6 +60,17 @@ def main() -> int:
     retired_path = f"{retired_prefix}anything.tex"
     path_hits = guard.path_failures(retired_path)
     assert path_hits == [f"retired tracked path: {retired_path}"]
+    prefix_hits = guard.content_failures(
+        "docs/example.md", f"retired source: {retired_path}"
+    )
+    assert len(prefix_hits) == 1
+    assert "retired pipeline reference" in prefix_hits[0]
+
+    native_path = "tex/tenkz/tenkz.sty"
+    assert guard.path_failures(native_path) == []
+    assert guard.content_failures(
+        "docs/example.md", f"native source: {native_path}"
+    ) == []
 
     latex_line_break = "\\\\" + "TNLean"
     retired_call = "\\TN" + "Legacy"
