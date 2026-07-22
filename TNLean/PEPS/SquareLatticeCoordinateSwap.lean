@@ -134,6 +134,32 @@ theorem RegionInjectivityUnionClosure.transportCoordinateSwap
     rw [Region_map_union]
     exact h.union_injective hR hS
 
+/-- Coordinate swap sends the red block of a translated vertical edge to the red block of the
+transposed horizontal edge. -/
+theorem Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeRed
+    {width height xStart yStart : ℕ} :
+    Region.map squareLatticeCoordinateSwap
+        (normalSquareVerticalTranslatedEdgeRed xStart yStart) =
+      (normalSquareHorizontalTranslatedEdgeRed yStart xStart :
+        Finset (SquareLatticeVertex height width)) := by
+  simpa only [normalSquareVerticalTranslatedEdgeRed,
+    normalSquareHorizontalTranslatedEdgeRed, normalSquareRegionTVerticalBlock] using
+    Region_map_squareLatticeCoordinateSwap_contiguousRectangle
+      (width := width) (height := height) (xStart + 2) yStart 3 2
+
+/-- Coordinate swap sends the blue block of a translated vertical edge to the blue block of the
+transposed horizontal edge. -/
+theorem Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeBlue
+    {width height xStart yStart : ℕ} :
+    Region.map squareLatticeCoordinateSwap
+        (normalSquareVerticalTranslatedEdgeBlue xStart yStart) =
+      (normalSquareHorizontalTranslatedEdgeBlue yStart xStart :
+        Finset (SquareLatticeVertex height width)) := by
+  simpa only [normalSquareVerticalTranslatedEdgeBlue,
+    normalSquareHorizontalTranslatedEdgeBlue, normalSquareRegionTHorizontalBlock] using
+    Region_map_squareLatticeCoordinateSwap_contiguousRectangle
+      (width := width) (height := height) (xStart + 1) (yStart + 2) 2 3
+
 /-- Coordinate swap sends the distinguished translated vertical edge to the
 translated horizontal edge in the transposed frame. -/
 theorem Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge

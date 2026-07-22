@@ -859,8 +859,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
     \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
     \leanok
-    \uses{lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
-    The rotated counterpart of
+    The coordinate-swap counterpart of
     Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}.
     Under the same hypotheses on $A$ and $B$, for a translated vertical interior
     frame with two rows and two columns of margin, that is $2\le x_0$,
@@ -873,17 +872,19 @@ produces the global gauge family that relates the two tensors.
     bond-dimension equality on $e$.
 \end{theorem}
 
-\begin{proof}\leanok
-    The vertical translated frame, the horizontal frame rotated by a quarter
-    turn, likewise supplies for both $A$ and $B$ the shared one-edge interior
-    blocking datum,
-    \[
-        R_A = R_B,\qquad B_A = B_B,\qquad C_A = C_B,
-    \]
-    with the distinguished vertical edge $e$ as the unique crossing edge of the
-    red and blue blocks. Applying the per-edge gauge construction from a one-edge
-    blocking datum to the two blocking data yields the bond-dimension equality on
-    $e$ and the conjugating gauge $Z$.
+\begin{proof}
+    \lean{TNLean.PEPS.Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeRed}
+    \lean{TNLean.PEPS.Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeBlue}
+    \leanok
+    \uses{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
+    Interchange the two lattice coordinates. This graph isomorphism sends the
+    vertical translated frame to the horizontal translated frame, transposes the
+    rectangular injectivity hypotheses, and sends the distinguished vertical edge
+    to the distinguished horizontal edge. Apply
+    Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
+    to the transported tensors. Transporting its bond-dimension equality and
+    conjugating gauge back along the inverse coordinate swap gives the required
+    equality on $e$ and the matrix $Z$.
 \end{proof}
 
 \begin{definition}[Factorized local gauge datum]%
