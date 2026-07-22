@@ -8,16 +8,17 @@ import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Periodic.NormalizedSelfOverlap
 
 /-!
-# Bridges between basis-of-normal-tensors predicates
+# Implications between basis-of-normal-tensors predicates
 
-This module records the one-way connections between the three BNT surfaces used
+This module records the one-way connections between the three BNT predicates used
 in TNLean:
 
 * `IsCPSVBasisOfNormalTensors`, the source-faithful CPSV16 spectral predicate;
 * `IsBNT`, the algebraic eventual-block-injectivity predicate; and
 * `IsBNTCanonicalForm`, the stronger sector-decomposition canonical form.
 
-The bridges are deliberately implications, not equivalences.  In particular,
+The carrier comparisons below prove `IsCPSVBasisOfNormalTensors → IsBNT` and
+`IsBNTCanonicalForm → IsBNT`; neither converse is asserted.  In particular,
 `IsNormalTensor` contains spectral-radius and peripheral-spectrum data that are
 not recoverable merely by unfolding `IsNormal`, while `IsBNTCanonicalForm`
 contains normalization, irreducibility, left-canonicality, and distinctness data
