@@ -25,14 +25,14 @@ projections, then
 is a projection.  The source terminal matrix
 $\operatorname{tr}(M_\gamma)$ closes the horizontal operator leg of the
 vertically read tensor and therefore acts on its bond space.  In the present
-notation it is `physTraceTransfer (Fam.tensor γ)`.  This is distinct from the
-closed one-site operator `mpo (Fam.tensor γ) 1`, which acts on the common
+formalization this is the physical-trace transfer.  It is distinct from the
+closed one-site operator, which closes the bond leg and acts on the common
 horizontal space.
 
 **Local fix (terminal trace orientation):** The trace in the terminal matrix
 $\operatorname{tr}(M_\gamma)$ closes the horizontal operator leg and leaves
-the bond indices of $M_\gamma$.  It is `physTraceTransfer`, not the one-site
-closed operator `mpo _ 1`.  Documented in
+the bond indices of $M_\gamma$, rather than closing the bond leg to obtain a
+one-site operator.  Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex`.
 
 These are the one-fusion-step projector statements in the recursive
@@ -85,8 +85,10 @@ theorem fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose
         physTraceTransfer (mulTensor (Fam.tensor α) (Fam.tensor β)) *
           (Fam.fusionCoisometry α β)ᴴ =
       Fam.projectorQBlock (fun γ => physTraceTransfer (Fam.tensor γ)) α β := by
+  -- Distribute the terminal trace and apply the sitewise fusion identity.
   rw [physTraceTransfer, Matrix.mul_sum, Matrix.sum_mul]
   simp_rw [Fam.fusion]
+  -- Assemble the resulting summands into the dependent direct sum.
   unfold projectorQBlock physTraceTransfer
   ext ⟨γ, a, x⟩ ⟨δ, b, y⟩
   by_cases hγδ : γ = δ

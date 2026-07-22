@@ -1450,6 +1450,9 @@ separate step.
         \chi_{\alpha,\beta,\gamma}\otimes
           \operatorname{tr}(M_\gamma).
     \]
+    Indeed, summing the forward fusion identity over equal horizontal
+    operator indices and distributing matrix multiplication over this finite
+    sum gives the displayed terminal-trace identity.
     This is one pairwise step in the recursion of
     \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
 
@@ -1471,7 +1474,8 @@ separate step.
         conjugatedProjectorQBlock_isOrthogonalProjection}
     \leanok
     \uses{def:mpdo_topological_projector_one_fusion,
-        thm:mpdo_bnt_length_independent_zipper}
+        thm:mpdo_bnt_length_independent_zipper,
+        thm:star_projection_coisometric_transport}
     Let $P_\gamma$ be self-adjoint idempotents on the terminal bond space of
     $M_\gamma$.
     Suppose that the matrices $\chi_{\alpha,\beta,\gamma}$ have the
@@ -1501,6 +1505,11 @@ separate step.
         =\bigoplus_\gamma(1\otimes P_\gamma^{2})
         =Q_{\alpha,\beta}.
     \]
+    Finally, the coisometry identity
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$ and
+    Theorem~\ref{thm:star_projection_coisometric_transport} show that
+    $U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is an
+    orthogonal projection.
 \end{proof}
 
 \begin{definition}[Full-support specialization of one fusion layer]%
