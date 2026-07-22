@@ -9,6 +9,7 @@ import io
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 SCRIPT = Path(__file__).with_name("generate_import_aggregators.py")
 SPEC = importlib.util.spec_from_file_location("generate_import_aggregators", SCRIPT)
@@ -59,6 +60,18 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
             self.assertNotIn("Archive", root_text)
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(GENERATOR.update(root, check=True), 0)
+
+    def test_write_rejects_incomplete_root_coverage(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.write(root, "TNLean/Foo/Basic.lean", "def foo : Nat := 1\n")
+            output = io.StringIO()
+            with mock.patch.object(
+                GENERATOR, "check_root_coverage", return_value=["TNLean.Foo.Basic"]
+            ), contextlib.redirect_stdout(output):
+                self.assertEqual(GENERATOR.update(root, check=False), 1)
+            self.assertIn("production module is not reachable", output.getvalue())
+            self.assertFalse((root / "TNLean.lean").exists())
 
     def test_check_rejects_out_of_date_output(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
