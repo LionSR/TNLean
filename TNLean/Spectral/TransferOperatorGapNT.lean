@@ -254,7 +254,10 @@ theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X)
       Filter.atTop (nhds 0) := by
-  let Φ := Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+  let Φ :
+      (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
   let F' := Φ (mixedTransferMap A B)
   letI : NormedAddCommGroup
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
