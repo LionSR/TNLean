@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
-import TNLean.MPS.MPDO.BNTFusionIsometries
+import TNLean.MPS.MPDO.BNTFusionCoisometries
 
 /-!
-# Fusion isometries attached to an MPO tensor
+# Fusion coisometries attached to an MPO tensor
 
-This file attaches the fusion-isometry clause of arXiv:1606.00608,
+This file attaches the active-support fusion clause of arXiv:1606.00608,
 Theorem 4.14(iii), to the basis of normal tensors in a chosen vertical
 canonical decomposition of the original MPO tensor. The positive diagonal
 matrices in the fusion identity determine the coefficients in the algebra
@@ -39,7 +39,7 @@ noncomputable section
 
 namespace MPOTensor
 
-/-- The fusion-isometry clause of Theorem 4.14(iii), attached to a chosen
+/-- The active-support fusion clause of Theorem 4.14(iii), attached to a chosen
 vertical canonical decomposition of the MPO tensor \(M\).
 
 The tensors in the fusion identity are precisely the basis of normal tensors
@@ -56,10 +56,10 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 943--951;
 Theorem 4.14(iii), lines 986--993; and Appendix C.4, lines 1929--1947 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`.
 
-**Scope restriction (full-support fusion family):** The fusion map below
-satisfies $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$. The unrestricted
-source statement allows a zero product corner and instead gives a coisometry
-onto the active direct sum together with exact reconstruction. Documented in
+**Local fix (Figure-11 fusion coisometry):** The source uses the retained-row
+orientation of Proposition 4.13. Thus the fusion map satisfies
+$U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, while exact reconstruction
+records that the discarded common corner is zero. Documented in
 `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
 structure BNTFusionTensorClause (M : MPOTensor d D) where
   /-- Number of BNT labels in the chosen vertical decomposition. -/
@@ -116,31 +116,38 @@ structure BNTFusionTensorClause (M : MPOTensor d D) where
 
   Source: arXiv:1606.00608, Theorem 4.14(ii)--(iii), lines 976--993. -/
   chi_pos : chi.PosEntries
-  /-- The fusion isometry \(U_{\alpha,\beta}\) for each pair of BNT labels.
+  /-- The coisometry from a product bond space onto its active BNT sectors.
 
   Source: arXiv:1606.00608, Theorem 4.14(iii), lines 986--993. -/
-  fusionIsometry : ∀ α β : Fin labelCount,
+  fusionCoisometry : ∀ α β : Fin labelCount,
     Matrix ((γ : Fin labelCount) × (Fin (chi.dim α β γ) × Fin (bondDim γ)))
       (Fin (bondDim α * bondDim β)) ℂ
-  /-- The additional full-support column-isometry condition on each fusion
-  map.
+  /-- Each fusion map is a coisometry onto the retained direct sum.
 
-  **Scope restriction (full-support fusion family):** The unrestricted source
-  statement permits a discarded common zero corner and does not assert this
-  identity. Documented in
-  `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
-  isometry : ∀ α β : Fin labelCount,
-    (fusionIsometry α β)ᴴ * fusionIsometry α β = 1
+  Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+  fusionCoisometry_mul_conjTranspose : ∀ α β : Fin labelCount,
+    fusionCoisometry α β * (fusionCoisometry α β)ᴴ = 1
   /-- The sitewise fusion identity for the concrete vertical BNT tensors.
 
   Source: arXiv:1606.00608, Theorem 4.14(iii), label `Ualphabeta`,
   lines 986--993. -/
   fusion : ∀ (α β : Fin labelCount) (i j : Fin D),
-    fusionIsometry α β *
+    fusionCoisometry α β *
         (mulTensor (verticalBNTMPO (tensor α)) (verticalBNTMPO (tensor β))) i j *
-          (fusionIsometry α β)ᴴ =
+          (fusionCoisometry α β)ᴴ =
       Matrix.blockDiagonal' fun γ =>
         chi.matrix α β γ ⊗ₖ (verticalBNTMPO (tensor γ)) i j
+  /-- The active direct sum reconstructs each product letter, so any omitted
+  common corner is zero.
+
+  Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+  fusionReconstruction : ∀ (α β : Fin labelCount) (i j : Fin D),
+    (mulTensor (verticalBNTMPO (tensor α))
+      (verticalBNTMPO (tensor β))) i j =
+        (fusionCoisometry α β)ᴴ *
+          (Matrix.blockDiagonal' fun γ ↦
+            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (tensor γ)) i j) *
+          fusionCoisometry α β
   /-- The length-one idempotent identity for
   \(m_\alpha=\operatorname{tr}(\mu_\alpha)\).
 
@@ -154,16 +161,17 @@ namespace BNTFusionTensorClause
 
 variable {M : MPOTensor d D}
 
-/-- The fusion-isometry family carried by a tensor-attached fusion clause. -/
-def toBNTFusionIsometryFamily (H : BNTFusionTensorClause M) :
-    BNTFusionIsometryFamily (Fin H.labelCount) D where
+/-- The active-support fusion family carried by a tensor-attached clause. -/
+def toBNTFusionCoisometryFamily (H : BNTFusionTensorClause M) :
+    BNTFusionCoisometryFamily (Fin H.labelCount) D where
   bondDim := H.bondDim
   tensor := fun γ => verticalBNTMPO (H.tensor γ)
   chi := H.chi
   posEntries := H.chi_pos
-  fusionIsometry := H.fusionIsometry
-  isometry := H.isometry
+  fusionCoisometry := H.fusionCoisometry
+  coisometry := H.fusionCoisometry_mul_conjTranspose
   fusion := H.fusion
+  reconstruction := H.fusionReconstruction
 
 /-- **Tensor-attached implication (iii) to (ii) of Theorem 4.14.**
 
@@ -194,7 +202,7 @@ noncomputable def toBNTAlgebraTensorClause (H : BNTFusionTensorClause M) :
   forward := H.forward
   reconstruction := H.reconstruction
   coeffs := BNTLabelCoefficientFamily.ofChi H.chi
-  algebraClause := H.toBNTFusionIsometryFamily.toBNTAlgebraClause
+  algebraClause := H.toBNTFusionCoisometryFamily.toBNTAlgebraClause
     (verticalBNTTraceScalarFamily H.weight) H.idempotent
 
 /-- The chosen decomposition in a tensor-attached fusion clause is a vertical
@@ -205,7 +213,7 @@ theorem isVerticalCF (H : BNTFusionTensorClause M) : IsVerticalCF M :=
 
 end BNTFusionTensorClause
 
-/-- Existence of the fusion-isometry clause for a chosen vertical canonical
+/-- Existence of the active-support fusion clause for a chosen vertical canonical
 decomposition of \(M\).
 
 Source: arXiv:1606.00608, Theorem 4.14(iii), lines 986--993, and
@@ -215,7 +223,7 @@ def HasBNTFusionTensorClause (M : MPOTensor d D) : Prop :=
 
 namespace HasBNTFusionTensorClause
 
-/-- The tensor-attached fusion-isometry clause implies the tensor-attached
+/-- The tensor-attached active-support fusion clause implies the tensor-attached
 algebra clause, using the same vertical decomposition and the same positive
 diagonal chi matrices.
 
