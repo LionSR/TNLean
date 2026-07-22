@@ -13,7 +13,15 @@ import Mathlib.LinearAlgebra.FixedSubmodule
 The proof of the general MPDO renormalization fixed-point theorem uses the
 fact that finite products of the weighted vertical bond contractions span the
 full direct product of the BNT matrix algebras.  This file derives that claim
-from simultaneous word-tuple span of the vertical BNT representatives.
+from simultaneous word-tuple span of the vertical BNT representatives.  It also
+packages the shared algebraic and analytic hypotheses for the subsequent
+positivity, identity, and trace-preservation results.
+
+## Main declarations
+
+* `MPOTensor.VerticalSectorHypotheses`: the common vertical-sector assumptions.
+* `MPOTensor.exists_vertical_weightedProduct_span_eq_top`: generation of the
+  full product algebra.
 
 ## References
 
