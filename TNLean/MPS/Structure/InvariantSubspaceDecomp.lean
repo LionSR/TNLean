@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
 import TNLean.MPS.Structure.InvariantSubspaceDecomp.Basic
 
 /-!
@@ -110,19 +111,9 @@ private lemma mpv_twoBlockTensor_eq {n m N : ℕ}
 ### Spectral splitting and block extraction
 -/
 
-/-- Spectral decomposition auxiliary lemma for a Hermitian matrix (matrix form). -/
-private lemma orthProj_spectral_eq'
-    (P : Matrix (Fin D) (Fin D) ℂ) (hHerm : P.IsHermitian) :
-    P = (↑hHerm.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      Matrix.diagonal (fun j => (↑(hHerm.eigenvalues j) : ℂ)) *
-      (↑hHerm.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  have h := hHerm.spectral_theorem
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  simpa [Matrix.mul_assoc, Function.comp_def] using h
-
 /-- Common spectral and block construction underlying the general and strict
-invariant-subspace decompositions. The final two implications record exactly the
-additional dimension information needed by the strict variant. -/
+invariant-subspace decompositions. The trace identity records the first block's
+rank and lets the strict theorem derive both positivity bounds as corollaries. -/
 private theorem exists_twoBlock_decomp_of_lowerZero_aux
     (A : MPSTensor d D)
     (P : Matrix (Fin D) (Fin D) ℂ)
@@ -131,123 +122,47 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
     ∃ (n m : ℕ) (_ : n + m = D)
       (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
       SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) ∧
-        (P ≠ 0 → 0 < n) ∧ (P ≠ 1 → 0 < m) := by
+        (n : ℂ) = Matrix.trace P := by
   classical
-  -- Diagonalize the projection `P`.
-  let hHerm : P.IsHermitian := hP.1
-  let U : ↥(Matrix.unitaryGroup (Fin D) ℂ) := hHerm.eigenvectorUnitary
-  let Umat : Matrix (Fin D) (Fin D) ℂ := (U : Matrix (Fin D) (Fin D) ℂ)
-  let Pdiag : Matrix (Fin D) (Fin D) ℂ := star Umat * P * Umat
-  let f : Fin D → ℂ := fun j => (↑(hHerm.eigenvalues j) : ℂ)
-  have hPdiag_eq : Pdiag = Matrix.diagonal f := by
-    -- unpack the spectral theorem statement
-    have h := hHerm.conjStarAlgAut_star_eigenvectorUnitary
-    -- rewrite the conjugation automorphism in matrix form
-    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply, Function.comp_def] using h
-  -- `Pdiag` is idempotent, hence its diagonal entries are `0` or `1`.
-  have hU_mul_star : Umat * star Umat = 1 :=
-    Unitary.mul_star_self_of_mem U.2
-  have hPdiag_idem : Pdiag * Pdiag = Pdiag := by
-    -- `Pdiag` is conjugate to `P`, hence idempotent.
-    calc
-      Pdiag * Pdiag
-          = star Umat * P * (Umat * star Umat) * P * Umat := by
-              -- reassociate to expose `Umat * star Umat`
-              simp [Pdiag, Matrix.mul_assoc]
-      _ = star Umat * P * P * Umat := by
-              simp [hU_mul_star, Matrix.mul_assoc]
-      _ = star Umat * P * Umat := by
-              simp [hP.2, Matrix.mul_assoc]
-      _ = Pdiag := by
-              simp [Pdiag, Matrix.mul_assoc]
-  have hDiag_idem : Matrix.diagonal f * Matrix.diagonal f = Matrix.diagonal f := by
-    simpa [hPdiag_eq] using hPdiag_idem
-  have hf01 : ∀ j : Fin D, f j = 0 ∨ f j = 1 := by
-    intro j
-    -- extract the scalar idempotence from the diagonal idempotence
-    have hfun : (fun k => f k * f k) = f := by
-      -- compare diagonals
-      apply Matrix.diagonal_injective
-      simpa [Matrix.diagonal_mul_diagonal] using hDiag_idem
-    have hj : f j * f j = f j := by
-      simpa using congrArg (fun g => g j) hfun
-    exact IsIdempotentElem.iff_eq_zero_or_one.mp hj
-  -- Split the eigenbasis indices into the `1`-eigenspace and the `0`-eigenspace.
-  let p : Fin D → Prop := fun j => f j = 1
-  haveI : DecidablePred p := fun j => by
-    -- `p j` is an equality in `ℂ`, hence decidable.
-    infer_instance
-  let S : Type := { j : Fin D // p j }
-  let T : Type := { j : Fin D // ¬ p j }
-  let n : ℕ := Fintype.card S
-  let m : ℕ := Fintype.card T
+  obtain ⟨Umat, S, T, n, hn, eST, eS, hUU, hU'U, hPdiag_std, -, -, htrace, -⟩ :=
+    ProjectionSpectralSplit.ofOrthogonalProjection P hP
+  let m := Fintype.card T
   have hnm : n + m = D := by
-    -- Cardinality split induced by `Equiv.sumCompl p : S ⊕ T ≃ Fin D`.
-    have hST : Fintype.card (S ⊕ T) = D := by
-      -- Avoid `simp` rewriting `Fintype.card (S ⊕ T)` into `card S + card T`.
-      have h : Fintype.card (S ⊕ T) = Fintype.card (Fin D) :=
-        Fintype.card_congr (Equiv.sumCompl p)
-      have hfin : Fintype.card (Fin D) = D := by
-        simp [Fintype.card_fin]
-      exact h.trans hfin
-    have hsum : Fintype.card (S ⊕ T) = Fintype.card S + Fintype.card T := by
-      simp
-    -- rewrite the RHS in terms of `n` and `m`.
-    -- We avoid simp rewriting `Fintype.card T` into a subtraction form.
-    have hcard : Fintype.card S + Fintype.card T = D :=
-      hsum.symm.trans hST
-    simpa [n, m] using hcard
-  -- Auxiliary: `f` is `0` on the complement subtype.
-  have hfT : ∀ t : T, f t.1 = 0 := by
-    intro t
-    rcases hf01 t.1 with h0 | h1
-    · exact h0
-    · exfalso
-      exact t.2 h1
-  -- The basis equivalence `Fin D ≃ S ⊕ T`.
-  let eST : Fin D ≃ (S ⊕ T) := (Equiv.sumCompl p).symm
-  -- Conjugate the tensor by `U`.
-  let Aconj : MPSTensor d D := fun i => star Umat * A i * Umat
+    rw [hn]
+    simpa [m] using (Fintype.card_congr eST).symm
+  let Pdiag : Matrix (Fin D) (Fin D) ℂ := Umatᴴ * P * Umat
+  have hUmem : Umat ∈ Matrix.unitaryGroup (Fin D) ℂ :=
+    ⟨by simpa [Matrix.star_eq_conjTranspose] using hU'U,
+      by simpa [Matrix.star_eq_conjTranspose] using hUU⟩
+  let U : Matrix.unitaryGroup (Fin D) ℂ := ⟨Umat, hUmem⟩
+  let Aconj : MPSTensor d D := fun i => Umatᴴ * A i * Umat
   have hSame_conj : SameMPV A Aconj := sameMPV_conj_unitary (d := d) (D := D) A U
-  -- `Pdiag` is an orthogonal projection.
   have hPdiag : IsOrthogonalProjection Pdiag := by
-    refine ⟨?_, hPdiag_idem⟩
-    -- Since `Pdiag` is diagonal and idempotent, its diagonal entries are `0` or `1`, hence
-    -- self-adjoint, hence the whole matrix is Hermitian.
-    have hf_selfAdj : ∀ j : Fin D, IsSelfAdjoint (f j) := by
-      intro j
-      rcases hf01 j with h0 | h1
-      · simp [IsSelfAdjoint, h0]
-      · simp [IsSelfAdjoint, h1]
-    have hHermDiag : (Matrix.diagonal f).IsHermitian :=
-      (Matrix.isHermitian_diagonal_iff (d := f)).2 hf_selfAdj
-    simpa [hPdiag_eq] using hHermDiag
+    simpa [Pdiag] using
+      (IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
+        hP.isStarProjection Umat hUU).isOrthogonalProjection
   -- Lower-left block condition for the conjugated tensor.
   have hLower_conj : ∀ i : Fin d, (1 - Pdiag) * Aconj i * Pdiag = 0 := by
     intro i
-    have hStar_mul : star Umat * Umat = 1 := by
-      -- Avoid `simpa` simplifying the unitary identity to `True`.
-      simp [Umat]
-    have hOneSub : (1 - Pdiag) = star Umat * (1 - P) * Umat := by
-      -- `star U * (1-P) * U = 1 - star U * P * U`.
-      have : star Umat * (1 - P) * Umat = (1 - Pdiag) := by
-        simp [Pdiag, mul_sub, sub_mul, Matrix.mul_assoc, hStar_mul]
+    have hOneSub : (1 - Pdiag) = Umatᴴ * (1 - P) * Umat := by
+      have : Umatᴴ * (1 - P) * Umat = (1 - Pdiag) := by
+        simp [Pdiag, mul_sub, sub_mul, Matrix.mul_assoc, hU'U]
       exact this.symm
     calc
       (1 - Pdiag) * Aconj i * Pdiag
-          = (star Umat * (1 - P) * Umat) * (star Umat * A i * Umat) * (star Umat * P * Umat) := by
+          = (Umatᴴ * (1 - P) * Umat) * (Umatᴴ * A i * Umat) * (Umatᴴ * P * Umat) := by
               -- First rewrite `(1-Pdiag)` using `hOneSub`, then unfold `Aconj`/`Pdiag`.
               simp [hOneSub, Aconj, Pdiag]
-      _ = star Umat * ((1 - P) * A i * P) * Umat := by
-              -- Cancel `Umat * star Umat = 1`.
+      _ = Umatᴴ * ((1 - P) * A i * P) * Umat := by
+              -- Cancel `Umat * Umatᴴ = 1`.
               calc
-                (star Umat * (1 - P) * Umat) * (star Umat * A i * Umat) * (star Umat * P * Umat)
-                    = star Umat * (1 - P) * (Umat * star Umat) *
-                        A i * (Umat * star Umat) * P * Umat := by
+                (Umatᴴ * (1 - P) * Umat) * (Umatᴴ * A i * Umat) * (Umatᴴ * P * Umat)
+                    = Umatᴴ * (1 - P) * (Umat * Umatᴴ) *
+                        A i * (Umat * Umatᴴ) * P * Umat := by
                         noncomm_ring
-                _ = star Umat * (1 - P) * A i * P * Umat := by
-                        simp [hU_mul_star, Matrix.mul_assoc]
-                _ = star Umat * ((1 - P) * A i * P) * Umat := by
+                _ = Umatᴴ * (1 - P) * A i * P * Umat := by
+                        simp [hUU, Matrix.mul_assoc]
+                _ = Umatᴴ * ((1 - P) * A i * P) * Umat := by
                         noncomm_ring
       _ = 0 := by
               simp [hLower i]
@@ -259,45 +174,10 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
   let A11raw : Fin d → Matrix S S ℂ := fun i => (X i).toBlocks₁₁
   let A22raw : Fin d → Matrix T T ℂ := fun i => (X i).toBlocks₂₂
   -- Convert the direct blocks to `Fin n` / `Fin m` indices.
-  let eS : S ≃ Fin n := Fintype.equivFin S
   let eT : T ≃ Fin m := Fintype.equivFin T
   let A₁ : MPSTensor d n := fun i => Matrix.reindex eS eS (A11raw i)
   let A₂ : MPSTensor d m := fun i => Matrix.reindex eT eT (A22raw i)
-  have hn_pos : P ≠ 0 → 0 < n := by
-    intro hP0
-    apply Fintype.card_pos_iff.mpr
-    by_contra hempty
-    rw [not_nonempty_iff] at hempty
-    apply hP0
-    have hf_zero : ∀ j, f j = 0 := fun j =>
-      (hf01 j).resolve_right (fun h1 => (IsEmpty.false (α := S) ⟨j, h1⟩).elim)
-    rw [orthProj_spectral_eq' P hHerm]
-    have hdiag0 : Matrix.diagonal f = 0 := by
-      ext i k
-      simp [Matrix.diagonal_apply, hf_zero]
-    rw [hdiag0, Matrix.mul_zero, Matrix.zero_mul]
-  have hm_pos : P ≠ 1 → 0 < m := by
-    intro hP1
-    apply Fintype.card_pos_iff.mpr
-    by_contra hempty
-    rw [not_nonempty_iff] at hempty
-    apply hP1
-    have hf_one : ∀ j, f j = 1 := fun j =>
-      (hf01 j).resolve_left
-        (fun h0 =>
-          (IsEmpty.false (α := T)
-            ⟨j, fun (h1 : f j = 1) => absurd (h0.symm.trans h1) zero_ne_one⟩).elim)
-    rw [orthProj_spectral_eq' P hHerm]
-    have hdiag1 : Matrix.diagonal f = 1 := by
-      ext i k
-      simp only [Matrix.diagonal_apply, Matrix.one_apply]
-      split_ifs with heq
-      · subst heq
-        exact hf_one i
-      · rfl
-    rw [hdiag1, Matrix.mul_one, ← Matrix.star_eq_conjTranspose]
-    simp
-  refine ⟨n, m, hnm, A₁, A₂, ?_, hn_pos, hm_pos⟩
+  refine ⟨n, m, hnm, A₁, A₂, ?_, htrace⟩
   -- Final MPV equality.
   intro N σ
   -- Chain: A ~ Aconj ~ diagPart Aconj Pdiag ~ blockDiag(A₁,A₂).
@@ -323,48 +203,6 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
       _ = Matrix.trace (_root_.evalWord (fun i => Matrix.reindex eST eST
               ((diagPart (d := d) (D := D) Aconj Pdiag) i)) w) := by
                 simpa using congrArg Matrix.trace hEval_reindex.symm
-  -- Compute the projection matrix `Pdiag` in the `S ⊕ T` basis: it is `diag(1,0)`.
-  have hPdiag_std :
-      Matrix.reindex eST eST Pdiag =
-        Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ) := by
-    have hReindexDiag :
-        Matrix.reindex eST eST (Matrix.diagonal f) =
-          Matrix.diagonal (f ∘ eST.symm) := by
-      simp [Matrix.reindex_apply]
-    rw [hPdiag_eq, hReindexDiag]
-    ext x y
-    cases x with
-    | inl s =>
-        cases y with
-        | inl s' =>
-            by_cases h : s = s'
-            · subst h
-              -- On the `1`-eigenspace, the diagonal entries are `1`.
-              -- Here `s.2` is the defining property `f s.1 = 1`.
-              -- `Equiv.sumCompl p (Sum.inl s)` is definitionally `s.1`, so this is exactly `s.2`.
-              rw [Matrix.diagonal_apply_eq, Matrix.fromBlocks_apply₁₁]
-              change f ((Equiv.sumCompl p) (Sum.inl s)) = (1 : Matrix S S ℂ) s s
-              rw [Equiv.sumCompl_apply_inl]
-              simpa using s.2
-            · -- Off-diagonal entries vanish.
-              simp [Matrix.fromBlocks_apply₁₁, h]
-        | inr t =>
-            -- Off-diagonal blocks are zero.
-            simp [Matrix.fromBlocks_apply₁₂]
-    | inr t =>
-        cases y with
-        | inl s =>
-            simp [Matrix.fromBlocks_apply₂₁]
-        | inr t' =>
-            by_cases h : t = t'
-            · subst h
-              -- On the `0`-eigenspace, the diagonal entries are `0`.
-              -- On the `0`-eigenspace, `f t.1 = 0` by `hfT`.
-              rw [Matrix.diagonal_apply_eq, Matrix.fromBlocks_apply₂₂]
-              change f ((Equiv.sumCompl p) (Sum.inr t)) = (0 : Matrix T T ℂ) t t
-              rw [Equiv.sumCompl_apply_inr]
-              simpa using hfT t
-            · simp [Matrix.fromBlocks_apply₂₂, h]
   -- Show that the reindexed diagonal-part tensor is block diagonal with
   -- diagonal blocks `A11raw` and `A22raw`.
   have hLetter_block : ∀ i : Fin d,
@@ -495,7 +333,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
       (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
       SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
   rcases exists_twoBlock_decomp_of_lowerZero_aux A P hP hLower with
-    ⟨n, m, hnm, A₁, A₂, hSame, -, -⟩
+    ⟨n, m, hnm, A₁, A₂, hSame, -⟩
   exact ⟨n, m, hnm, A₁, A₂, hSame⟩
 
 
@@ -533,9 +371,26 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
       ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
         SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
   rcases exists_twoBlock_decomp_of_lowerZero_aux A P hP hLower with
-    ⟨n, m, hnm, A₁, A₂, hSame, hn_pos, hm_pos⟩
-  have hn_pos' : 0 < n := hn_pos hP0
-  have hm_pos' : 0 < m := hm_pos hP1
+    ⟨n, m, hnm, A₁, A₂, hSame, htrace⟩
+  have hn_pos : 0 < n := by
+    rw [Nat.pos_iff_ne_zero]
+    intro hn
+    apply hP0
+    apply (isOrthogonalProjection_posSemidef hP).trace_eq_zero_iff.mp
+    rw [← htrace, hn]
+    norm_num
+  have hm_pos : 0 < m := by
+    rw [Nat.pos_iff_ne_zero]
+    intro hm
+    apply hP1
+    symm
+    apply sub_eq_zero.mp
+    apply (isOrthogonalProjection_posSemidef hP.one_sub).trace_eq_zero_iff.mp
+    rw [Matrix.trace_sub, Matrix.trace_one, Fintype.card_fin, ← htrace]
+    have hn_eq_D : D = n := by
+      omega
+    have hn_eq_D' : (D : ℂ) = (n : ℂ) := by exact_mod_cast hn_eq_D
+    rw [hn_eq_D', sub_self]
   have hn_lt : n < D := by omega
   have hm_lt : m < D := by omega
   exact ⟨n, m, hnm, hn_lt, hm_lt, A₁, A₂, hSame⟩
