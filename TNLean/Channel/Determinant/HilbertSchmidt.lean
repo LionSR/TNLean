@@ -42,13 +42,12 @@ quantum channel, determinant, Hilbert-Schmidt norm, standard basis, AM-GM
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
-open ChannelDeterminant.Internal
 
 variable {d : ℕ}
 
 section WolfStatements
 
-variable {T : MatrixEnd d}
+variable {T : MatEnd d}
 
 /-! ### Auxiliary lemmas for the forward direction of Wolf Theorem 6.1(2) -/
 

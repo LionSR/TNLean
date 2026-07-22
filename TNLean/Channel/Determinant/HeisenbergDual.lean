@@ -34,21 +34,20 @@ quantum channel, Heisenberg dual, Kadison-Schwarz, multiplicative domain
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
-open ChannelDeterminant.Internal
 
 variable {d : ℕ}
 
 section WolfStatements
 
-variable {T : MatrixEnd d}
+variable {T : MatEnd d}
 
 namespace ChannelDeterminant
 namespace Internal
 
 private theorem heisenberg_dual_det_eq_one [NeZero d]
-    {T : MatrixEnd d} (hdet : ‖channelDet T‖ = 1)
+    {T : MatEnd d} (hdet : ‖channelDet T‖ = 1)
     {r : ℕ} (K : Fin r → MatrixAlg d) (hK : ∀ X, T X = ∑ i, K i * X * (K i)ᴴ)
-    (Td : MatrixEnd d) (hTd : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i) :
+    (Td : MatEnd d) (hTd : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i) :
     ‖channelDet Td‖ = 1 := by
   let b : Module.Basis (Fin d × Fin d) ℂ (MatrixAlg d) :=
     Matrix.stdBasis ℂ (Fin d) (Fin d)

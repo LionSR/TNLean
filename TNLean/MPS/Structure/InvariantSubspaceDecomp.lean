@@ -387,8 +387,10 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
     apply sub_eq_zero.mp
     apply (isOrthogonalProjection_posSemidef hP.one_sub).trace_eq_zero_iff.mp
     rw [Matrix.trace_sub, Matrix.trace_one, Fintype.card_fin, ← htrace]
-    norm_num [hm] at hnm ⊢
-    exact_mod_cast hnm.symm
+    have hn_eq_D : D = n := by
+      omega
+    have hn_eq_D' : (D : ℂ) = (n : ℂ) := by exact_mod_cast hn_eq_D
+    rw [hn_eq_D', sub_self]
   have hn_lt : n < D := by omega
   have hm_lt : m < D := by omega
   exact ⟨n, m, hnm, hn_lt, hm_lt, A₁, A₂, hSame⟩
