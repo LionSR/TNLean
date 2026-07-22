@@ -46,17 +46,6 @@ variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
 
-/-! ### The shared complement block `P₂`
-
-Both overlap geometries have complement block `R₂ \ R₁ = P₂`, so both complement couplings
-read the same `P₂` blocked-region weights `regionBlockedWeight A (R₂ \ R₁)`. -/
-
-omit [LinearOrder V] [DecidableRel G.Adj] in
-/-- The two overlap geometries share the complement block `R₂ \ R₁`. -/
-theorem overlap_complement_eq (R₁ R₂ : Finset V) :
-    (overlapLeftGeometry (V := V) R₁ R₂).complement =
-      (overlapRightGeometry (V := V) R₁ R₂).complement := rfl
-
 /-! ### Reducing a coupling combination to the `P₂` blocked-region weights
 
 The landed crossing collapse `blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq` reads, for
