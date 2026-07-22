@@ -74,33 +74,6 @@ noncomputable def virtualBondMatrix
       (BlockEntryIndex dim × BlockEntryIndex dim) ℂ :=
   ∑ j : Fin r, h.embeddedSectorVirtualBondMatrix j
 
-/-- The standard left pair-matrix construction preserves finite sums.
-
-Source: arXiv:1606.00608, Appendix B, lines 1305--1307. -/
-private theorem appendixBLeftPairMatrix_sum
-    {p ι : Type*} [Fintype p] [DecidableEq p] [Fintype ι]
-    (Q : ι → Matrix (p × p) (p × p) ℂ) :
-    appendixBLeftPairMatrix (∑ j, Q j) =
-      ∑ j, appendixBLeftPairMatrix (Q j) := by
-  classical
-  ext x y
-  simp [appendixBLeftPairMatrix, appendixBLeftPairMatrixAux,
-    Matrix.reindex_apply, Matrix.kroneckerMap_apply, Matrix.sum_apply,
-    Finset.sum_mul]
-
-/-- The standard right pair-matrix construction preserves finite sums.
-
-Source: arXiv:1606.00608, Appendix B, lines 1305--1307. -/
-private theorem appendixBRightPairMatrix_sum
-    {p ι : Type*} [Fintype p] [DecidableEq p] [Fintype ι]
-    (Q : ι → Matrix (p × p) (p × p) ℂ) :
-    appendixBRightPairMatrix (∑ j, Q j) =
-      ∑ j, appendixBRightPairMatrix (Q j) := by
-  classical
-  ext x y
-  simp [appendixBRightPairMatrix, appendixBRightPairMatrixAux,
-    Matrix.kroneckerMap_apply, Matrix.sum_apply, Finset.mul_sum]
-
 /-- The two adjacent placements of the equal-sector virtual bond projector
 commute.  The equal-sector terms are the single-sector Appendix B
 calculation; unequal-sector terms vanish by orthogonality of the canonical
@@ -557,19 +530,6 @@ theorem twoSiteBondSupportProjection_commute_lifts
         Matrix.reindexLinearEquiv_mul ℂ ℂ e e e
           (LinearMap.toMatrix' (rightPairLift (twoSiteBondSupportProjection B)))
           (LinearMap.toMatrix' (leftPairLift (twoSiteBondSupportProjection B)))
-
-/-- The canonical two-site support projector of the direct sum is
-idempotent.
-
-Source: arXiv:1606.00608, parent construction, lines 511--524. -/
-theorem twoSiteBondSupportProjection_idempotent
-    (B : (j : Fin r) → MPSTensor d (dim j)) :
-    twoSiteBondSupportProjection B * twoSiteBondSupportProjection B =
-      twoSiteBondSupportProjection B := by
-  rw [twoSiteBondSupportProjection_eq_complement]
-  change IsIdempotentElem (1 - parentInteraction (directSumTensor B) 2)
-  exact (show IsIdempotentElem (parentInteraction (directSumTensor B) 2) from
-    parentInteraction_idempotent (directSumTensor B) 2).one_sub
 
 /-- The canonical parent interaction of the multiplicity-one direct sum has
 commuting overlapping placements on three sites.

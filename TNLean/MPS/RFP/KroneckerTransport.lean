@@ -15,7 +15,7 @@ particular virtual bond operator, but its exported names remain Appendix B
 specific because they support that argument.
 -/
 
-open scoped Matrix Kronecker
+open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor
 
@@ -47,6 +47,33 @@ noncomputable abbrev appendixBRightPairMatrix
     {a : Type*} [Fintype a] [DecidableEq a]
     (B : Matrix (a × a) (a × a) ℂ) :=
   appendixBRightPairMatrixAux (s := a) B
+
+/-- The standard left pair-matrix construction preserves finite sums.
+
+Source: arXiv:1606.00608, Appendix B, lines 1305--1307. -/
+theorem appendixBLeftPairMatrix_sum
+    {p ι : Type*} [Fintype p] [DecidableEq p] [Fintype ι]
+    (Q : ι → Matrix (p × p) (p × p) ℂ) :
+    appendixBLeftPairMatrix (∑ j, Q j) =
+      ∑ j, appendixBLeftPairMatrix (Q j) := by
+  classical
+  ext x y
+  simp [appendixBLeftPairMatrix, appendixBLeftPairMatrixAux,
+    Matrix.reindex_apply, Matrix.kroneckerMap_apply, Matrix.sum_apply,
+    Finset.sum_mul]
+
+/-- The standard right pair-matrix construction preserves finite sums.
+
+Source: arXiv:1606.00608, Appendix B, lines 1305--1307. -/
+theorem appendixBRightPairMatrix_sum
+    {p ι : Type*} [Fintype p] [DecidableEq p] [Fintype ι]
+    (Q : ι → Matrix (p × p) (p × p) ℂ) :
+    appendixBRightPairMatrix (∑ j, Q j) =
+      ∑ j, appendixBRightPairMatrix (Q j) := by
+  classical
+  ext x y
+  simp [appendixBRightPairMatrix, appendixBRightPairMatrixAux,
+    Matrix.kroneckerMap_apply, Matrix.sum_apply, Finset.mul_sum]
 
 /-- A right-associated Kronecker product of three matrices. -/
 private noncomputable def tripleMatrix
