@@ -56,35 +56,45 @@ the direct sum
       \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
   \label{eq:one-layer-q}
 \end{equation}
-Here each $P_\gamma$ acts on the common physical space of the vertically read
-tensor $M_\gamma$; in the source it is obtained from the terminal matrix
-$\operatorname{tr}(M_\gamma)$.  It does not act on the virtual bond space of
-$M_\gamma$.
+Here each $P_\gamma$ acts on the bond space of the vertically read tensor
+$M_\gamma$.  The source terminal matrix $\operatorname{tr}(M_\gamma)$ closes
+the horizontal operator leg and leaves precisely these two bond indices.  In
+the formalization this matrix is the physical-trace transfer of $M_\gamma$.
 Length independence and positivity imply
 $\chi_{\alpha,\beta,\gamma}=I$ on each retained multiplicity space, hence
 $Q_{\alpha,\beta}$ is an orthogonal projection.  This statement is formalized
 for \leanid{MPOTensor.BNTFusionCoisometryFamily} and for the tensor-attached
 clause \leanid{MPOTensor.BNTFusionTensorClause}.
 
-The pairwise fusion coisometry acts on the virtual bond spaces of the tensors,
-whereas the terminal projections in \eqref{eq:one-layer-q} act on their common
-physical space.  Consequently, a direct conjugation of
-$Q_{\alpha,\beta}$ by one pairwise fusion map is not well typed.  The source
-instead inserts the fusion maps recursively into the tensor network and forms
-the sequential circuit $\widetilde U$.  The older virtual-bond construction in
-\leanid{MPOTensor.BNTFusionIsometryFamily} is a separate conditional statement:
-it assumes terminal projections on the bond spaces and a full-support fusion
-family.  It is not the terminal step of equation~\eqref{eq:source-chain-decomposition}.
+The pairwise fusion identity therefore gives the well-typed equality
+\begin{equation}
+  U_{\alpha,\beta}\,
+    \operatorname{tr}(M_\alpha M_\beta)\,
+    U_{\alpha,\beta}^{\dagger}
+  =\bigoplus_\gamma
+      \chi_{\alpha,\beta,\gamma}\otimes
+        \operatorname{tr}(M_\gamma).
+  \label{eq:one-layer-terminal-fusion}
+\end{equation}
+Moreover, $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$ implies that
+$U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is an
+orthogonal projection whenever $Q_{\alpha,\beta}$ is one.  The older family
+\leanid{MPOTensor.BNTFusionIsometryFamily} proves the same one-layer statement
+under the additional full-support hypothesis.  This is a specialization, not
+a construction with a different terminal space.
 
-\paragraph{Local fix (Figure-11 fusion coisometry).}
+\paragraph{Local fix (terminal trace orientation).}
 The active fusion map has the retained-row orientation
 $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$ recorded in
-\path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.  An earlier
-one-layer formulation attempted to use this relation to conjugate
-\eqref{eq:one-layer-q}.  That formulation has been removed: the coisometry
-acts on virtual indices, while the terminal matrices act on physical indices.
-The remaining virtual-bond transport is stated only for the older
-full-support family and is not identified with the source operator $Q_N$.
+\path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.  Pull request
+\#4640 temporarily interpreted the terminal trace as the one-site closed
+operator $O_1(M_\gamma)$.  That operator closes the bond leg and acts on the
+common horizontal space.  The terminal factor in the diagram defining $Q_N$
+has the opposite contraction: it closes the horizontal operator leg and acts
+on the bond space of $M_\gamma$.  The two contractions are visible separately
+in \path{Papers/1606.00608/MPDO_O_L_A_.png} and
+\path{Papers/1606.00608/MPDO_Structure.png}.  Equation
+\eqref{eq:one-layer-terminal-fusion} restores the latter contraction.
 
 \section{Remaining proof}
 
