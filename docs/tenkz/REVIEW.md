@@ -160,7 +160,9 @@ Headline decisions:
 2. **Repeated names**: chapter bodies are fully inline; no catalogue-like
    house layer remains.
 3. **Slides**: the dark theme uses the native package.
-4. **Web accessibility**: whole-equation SVG is accepted for display-adjacent
-   diagram atoms, with responsive reachability checked in browser tests.
+4. **Web accessibility**: display-adjacent diagram equations use the explicit
+   `tenkzequation` row. Each atom remains its own responsive SVG with
+   source-derived alternative text, while intervening operators remain
+   selectable; browser tests check the complete row.
 5. **Publication**: tenkz remains repository-internal for the present release
    cycle.
