@@ -820,7 +820,7 @@ formalization is supplied locally or upstream.
 The same audit was compared against the current non-Archive `sorry` surface.
 The remaining proof placeholders are the three Lorentz-normal-form statements
 in `TNLean/Channel/LorentzNormalForm.lean` and the cyclic contraction step in
-`TNLean/MPS/Periodic/Overlap/Case3.lean`.  None is discharged by the eight
+`TNLean/MPS/Periodic/Overlap/SectorMatch.lean`.  None is discharged by the eight
 sanctioned axioms: the Lorentz-normal-form statements require coercivity,
 compactness packaging, and the SL(2, C) Lorentz-orbit classification, while
 the periodic-overlap statement requires the cyclic sector-contraction theorem.
@@ -1036,7 +1036,7 @@ therefore remain load-bearing assumptions.
 
 The current non-Archive `sorry` sites are in
 `TNLean/Channel/LorentzNormalForm.lean` and
-`TNLean/MPS/Periodic/Overlap/Case3.lean`.  These do not import the Beigi or
+`TNLean/MPS/Periodic/Overlap/SectorMatch.lean`.  These do not import the Beigi or
 entropy axiom boundary as a direct missing step, and the operator-convexity
 axioms do not match their current goals.  No present `sorry` was closed by the
 remaining axioms in this recheck.
@@ -1053,7 +1053,7 @@ The present usefulness check is:
 - the former forward commutation axiom and `Axioms.beigi_nncph_to_rfp`: useful for the
   parent-Hamiltonian RFP--NNCPH equivalence at the date of this audit.  The
   forward axiom has since been eliminated. They do not supply the sector
-  phase-coboundary contraction in `Case3.lean`.
+  phase-coboundary contraction in `SectorMatch.lean`.
 - `strong_subadditivity` and `hayashi_ssa_equality_characterization`: useful
   for the entropy/MPDO Markov-chain branch.  They do not enter the Lorentz
   normal form file or the periodic-overlap contraction.
@@ -1900,7 +1900,7 @@ lake build -q --log-level=info
 The build still reports pre-existing warnings: style-header warnings, module
 docstring placement warnings, deprecated theorem names such as
 `tendsto_finset_sum`, and the existing `sorry` warning in
-`TNLean/MPS/Periodic/Overlap/Case3.lean`.
+`TNLean/MPS/Periodic/Overlap/SectorMatch.lean`.
 
 The compatibility repairs made while reaching this state are proof-level
 adaptations: explicit coercion/unfolding steps for continuous linear maps,

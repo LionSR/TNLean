@@ -29,9 +29,9 @@ Historical snapshot collected 2026-05-08 with
 
 | File | Lines | Sorry count | Notes |
 |---|---|---|---|
-| `TNLean/MPS/Periodic/Overlap/Case3.lean` | 456 | 6 | Periodic overlap Case 3 |
+| `TNLean/MPS/Periodic/Overlap/SectorMatch.lean` | 456 | 6 | Periodic overlap Case 3 |
 | `TNLean/MPS/Periodic/Overlap/Dichotomy.lean` | 90 | 4 | Overlap dichotomy assembly |
-| `TNLean/MPS/Periodic/Overlap/Case2.lean` | 394 | 3 | Periodic overlap Case 2 |
+| `TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean` | 394 | 3 | Periodic overlap Case 2 |
 | `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean` | 857 | 2 | Self-overlap convergence |
 | `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` | 937 | 3 | Unique ground state |
 | `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean` | 703 | 1 | Degenerate ground space |
@@ -40,7 +40,7 @@ Historical snapshot collected 2026-05-08 with
 | **Total MPS** | — | **20** | Excluding PEPS |
 
 As of 2026-06-17, the periodic-overlap cluster has been reduced to one live
-`sorry`, at `TNLean/MPS/Periodic/Overlap/Case3.lean`, for the
+`sorry`, at `TNLean/MPS/Periodic/Overlap/SectorMatch.lean`, for the
 `repeatedBlocks_of_blockedSectorGaugePhase` contraction and phase-assembly
 theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
@@ -214,7 +214,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 
 | File | Sorrys | Dependency |
 |---|---|---|
-| `Periodic/Overlap/Case3.lean` | 1 | Full-cycle contraction and phase assembly for repeated blocks (#873) |
+| `Periodic/Overlap/SectorMatch.lean` | 1 | Full-cycle contraction and phase assembly for repeated blocks (#873) |
 
 This remaining `sorry` cascades into `Periodic/FundamentalTheorem.lean`
 (Theorem 3.4 of arXiv:1708.00029), whose conditional proof takes the dichotomy
