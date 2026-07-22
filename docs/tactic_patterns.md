@@ -222,6 +222,39 @@ spectral split → block extraction → MPV calculation → strict bounds
   `α i + t * β j`.  The repetition is presently confined to one file, so
   retain it as a candidate rather than adding a general tactic.
 
+### blocked_vertical_triple_sum_reassociation — candidate
+- **Pattern:** reassociate the three finite sector sums in a blocked vertical expansion,
+  then use `map_sum` for scalar multiplication to factor the inner coefficient sums:
+  ```
+  ∑ α, ∑ β, ∑ γ, c α β γ • O γ
+    = ∑ γ, (∑ α, ∑ β, c α β γ) • O γ
+  ```
+- **Seen:** 2 occurrences in
+  `TNLean/MPS/MPDO/BNTFusionTensorClauseFromRFP.lean` and
+  `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` (2026-07-22).
+- **Abstraction (proposed):** first scout the finite-sum linear-map API for a general lemma
+  factoring a doubly indexed scalar sum out of a fixed vector. This remains below the ordinary
+  rule-of-three threshold, and no further occurrence is currently identified.
+- **Notes:** Both uses combine `Finset.sum_comm` with two `map_sum` calls for
+  `(smulAddHom ℂ _).flip`. Keep the explicit calculations until a third call site confirms that
+  their coefficient and codomain shapes support a materially smaller shared statement.
+
+### cpsv_matched_phase_coefficient_identity — candidate
+- **Pattern:** rewrite two sector-decomposition state expansions through a matched phase
+  bijection, then use eventual linear independence to identify their coefficients.
+- **Seen:** 2 occurrences in
+  `TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity.lean` and
+  `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` (2026-07-22).
+- **Abstraction (proposed):** generalize `coeff_identity_via_matched_mpv_phase` to accept
+  eventual linear independence of the chosen basis directly, while retaining its current
+  `IsBNTCanonicalForm` wrapper for existing consumers.
+- **Notes:** The existing theorem cannot be reused by the MPDO spectrum proof: it requires
+  `IsBNTCanonicalForm`, whose left-canonical and weight-normalization fields are absent from
+  the source-faithful `IsCPSVBasisOfNormalTensors` contract. The MPDO proof already reuses the
+  lower-level `coefficient_eventually_eq_of_eventually_linearIndependent` lemma. Keep this as
+  a candidate until another consumer justifies widening the public coefficient-identity API;
+  do not add stronger hypotheses merely to reuse the existing wrapper.
+
 ---
 
 ## Rejected
