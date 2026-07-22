@@ -156,6 +156,9 @@ def main() -> int:
         theme_source.replace("\\colorlet{tenkzOperator}{softred}\n", ""),
         "a missing semantic colour",
     )
+    custom_theme = theme_source.replace("orange!80!white", "black")
+    assert custom_theme != theme_source, "custom-hue fixture did not change the theme"
+    _assert_dark_theme_contract(core_source, custom_theme)
     _assert_contract_rejects(
         core_source,
         theme_source + "\\tikzset{every node/.style={minimum size=9mm}}\n",
