@@ -49,19 +49,108 @@ available normal-tensor matching theorem therefore supplies an invertible
 conjugacy, but no common target or Gram-normalization contract from which that
 particular conjugacy can be rescaled to a unitary one.
 
+The missing step occurs immediately before the comparison.  At line~2048 the
+source writes the algebra-side positive direct sum and the independently
+chosen two-site decomposition as physical vertical canonical forms, up to
+unitary changes of basis.  The displayed operator identity at lines~2049--2051
+then gives equality of all positive-length closed chains.  In the present
+formalization this implication yields equality of those closed chains and
+gauge-phase coverage of their normal representatives, but it does not produce
+an isometric physical inclusion of the algebra-side representative into the
+bond space of the two-site blocking.  Proposition~4.13, lines~1898--1921,
+compares actual physical sectors; it cannot be applied until this inclusion is
+available.
+
+\section{The circular corner construction}
+
+Fix a matched label and identify the two bond dimensions.  Write $A$ for the
+one-site representative, $B$ for the two-site representative, and $X$ for the
+retained invertible gauge, so that
+\begin{equation}
+  B^i=XA^iX^{-1}.
+  \label{eq:exact-gauge}
+\end{equation}
+The positive two-site vertical decomposition provides an isometric inclusion
+$W$ and a positive coefficient $\nu$ satisfying
+\begin{equation}
+  W^\dagger W=\mathbf{1},
+  \qquad
+  W^\dagger\widetilde M_{[2]}^iW=\nu B^i.
+  \label{eq:reference-corner}
+\end{equation}
+A natural candidate for a physical inclusion of the raw representative $A$
+is therefore a scalar multiple of $WX$.  This candidate is an isometry exactly
+after the missing Gram normalization.  Indeed, if
+\begin{equation}
+  X^\dagger X=\omega\mathbf{1},
+  \qquad \omega>0,
+  \label{eq:gram-scalar}
+\end{equation}
+then $V=\omega^{-1/2}WX$ satisfies
+\begin{equation}
+  V^\dagger V=\mathbf{1},
+  \qquad
+  V^\dagger\widetilde M_{[2]}^iV=\nu A^i.
+  \label{eq:raw-corner}
+\end{equation}
+Conversely, an independently derived positive isometric corner of the form
+\eqref{eq:raw-corner}, together with \eqref{eq:reference-corner}, is precisely
+the pair of physical corners to which the reflected marked-chain comparison of
+Proposition~4.13 applies.  It gives \eqref{eq:gram-scalar}.  Thus constructing
+the raw corner from $W$ and $X$ presupposes the Gram conclusion, while deriving
+the Gram conclusion by the available comparison presupposes the raw corner.
+
+This is also the boundary of the current formal results.  The exact gauge is
+retained by
+\path{BNTAlgebraTensorClause.TwoSiteExactSectorGauge.tensor_eq}.  The two-site
+reference corner follows from the positive weights, coisometry, and
+reconstruction in \path{CPSVVerticalDecomposition}.  The theorem
+\path{IsHorizontalCF.gramDressing_eq_of_two_grouped_corners} compares two
+positive corners of a common representative, and
+\path{IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq} turns that comparison into
+\eqref{eq:gram-scalar}.  However, the characterization
+\path{isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal} supplies
+only gauge-phase coverage from closed-chain equality.  It supplies no physical
+isometry.  Likewise,
+\path{FlatBlockedBNTComparison.exists_unitaryNormalization} treats an actual
+retained product corner, while \path{exists_originalCornerFamily} requires the
+unitary one-site/two-site identification before transporting such corners back
+to the original representatives.
+
+\section{Missing minimal-realization statement}
+
+The missing implication is a positive minimal-realization theorem.  In
+mathematical terms, it would state that if a horizontally canonical tensor
+generates positive operators at every length and its positive-length closed
+chains agree with those of a positive weighted direct sum of normal tensors,
+then the exact normal representatives of that direct sum admit isometric
+physical inclusions whose compressions recover the corresponding positive
+weighted tensor letters.  Applied to the algebra-side sum at
+lines~2049--2051, this would produce \eqref{eq:raw-corner} without assuming
+\eqref{eq:gram-scalar}.
+
+No current theorem derives this physical realization from positive-length
+closed-chain equality, and the cited source passage does not supply a separate
+proof of the lift made at line~2048.  This records a missing justification, not
+a counterexample: the desired implication may hold, but it requires a proof
+that is absent from both the cited passage and the current formal results.
+
 \section{Elimination plan}
 
-The missing unitary conclusion is tracked in
-\href{https://github.com/LionSR/TNLean/issues/4645}{issue 4645}.  A faithful
-completion must specialize the positivity argument of \path{Prop:IV.12} to the
-matched one-site and two-site sectors, construct their common canonical target,
-and prove equality up to a positive scalar of the two gauge Gram matrices.
-Rescaling the retained invertible gauge will then give a unitary gauge without
-adding a left-canonical or preassembled-gauge hypothesis.
+The unitary conclusion is tracked in
+\href{https://github.com/LionSR/TNLean/issues/4645}{issue 4645}, and the missing
+physical realization is tracked in
+\href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}.  A faithful
+completion must prove the minimal-realization statement above, obtain the two
+physical corners without assuming a Gram identity, and then specialize the
+positivity argument of \path{Prop:IV.12}.  Rescaling the retained invertible
+gauge will then give a unitary gauge without adding a left-canonical,
+preassembled-corner, or preassembled-gauge hypothesis.
 
 Until that common-target contract is proved, the formal declaration and its
 blueprint entry are explicitly restricted to phase-one invertible conjugacy.
-The full line-2057 unitary upgrade remains unformalized.
+Issues 4645 and 4648 therefore remain open, and the full line-2057 unitary
+upgrade remains unformalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}
