@@ -178,12 +178,12 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 
 Closeout (#4557): the shared catalogue now has zero `TNPEPS*` declarations,
 and the chapter tree has zero `TNPEPS*` calls.  The PEPS motif file, PEPS-only
-atom and helper wrappers, `peps_three_site` reference fixture, and PEPS-specific
-usage checker and CI flag were removed.  Every replacement environment has a
-nonempty, locally customizable body and an adjacent formula, ink-to-index,
-contraction, boundary, and source verdict.  The seven formerly hand-digitized
-region polygons are represented by `\tnregion` cell sets; none survive as
-coordinates.
+helper wrappers, `peps_three_site` reference fixture, and PEPS-specific usage
+checker and CI flag were removed.  `TNPEPSSite` remains as the documented
+generic site atom.  Every replacement environment has a nonempty, locally
+customizable body and an adjacent formula, ink-to-index, contraction, boundary,
+and source verdict.  The seven formerly hand-digitized region polygons are
+represented by `\tnregion` cell sets; none survive as coordinates.
 
 ## 5. channel/free genre (16 entries)
 
