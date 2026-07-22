@@ -3,4 +3,4 @@
 $pdf_mode = 1;
 $pdflatex = 'xelatex -synctex=1';
 @default_files = ('print.tex');
-$ENV{'TEXINPUTS'} = '../../tex/tn//:../../tex/tenkz//:' . ($ENV{'TEXINPUTS'} // '');
+$ENV{'TEXINPUTS'} = '../../tex/tenkz//:' . ($ENV{'TEXINPUTS'} // '');

@@ -32,7 +32,7 @@ source-faithfulness requirements.
 - `stale_issue_audit.md`
 - `tactic_development.md`
 - `tactic_patterns.md`
-- `tn_diagram_grammar.md`
+- `tenkz/`
 - `upgrade_4_29.md`
 
 When a TNLean rule concerns Lean docstrings or blueprint prose, put it in

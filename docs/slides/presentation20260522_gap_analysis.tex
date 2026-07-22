@@ -691,7 +691,18 @@ Pi-tensors don't span product algebra \\
 
 \column{0.44\textwidth}
 \begin{center}
-\SlideTNTransferMap{A}{\rho}
+% Formula: E_A(rho) = sum_i A^i rho (A^i)^dagger.
+% Ink: A is the ket tensor and the starred A is its bra-layer adjoint.
+% Contraction: the physical pair is summed; the east cup inserts rho.
+% Boundary: (virtual, physical) = (2, 0), the west pair is E_A(rho).
+% Source: arXiv:1606.00608, lines 219--223; blueprint Definition 2.1.8.
+\begin{tenkz}[
+    sandwich,
+    east={cup=$\rho$},
+    west label=$\mathcal E_A(\rho)$]
+  \tn{A} \\
+  \tn*{A}
+\end{tenkz}
 \end{center}
 \end{columns}
 

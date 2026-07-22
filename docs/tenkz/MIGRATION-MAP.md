@@ -1,16 +1,16 @@
-# tenkz migration map — old TN catalogue → tenkz (Phase-1 shim blueprint)
+# tenkz migration map — completed catalogue-to-native transition
 
-Generated 2026-07-17. READ-ONLY analysis of:
+Generated 2026-07-17 from the original migration census:
 
-- `tex/tn/tn_catalogue.tex` — all 114 `\TNDeclareDiagram` entries (every entry has ≥1 chapter call site; no chapter uses a non-catalogue `\TN` macro).
-- Call sites: `grep -rn '\\TN[A-Z]' blueprint/src/chapter/` (140 macro occurrences on 140 lines).
+- 114 catalogue entries, each with at least one chapter call site.
+- 140 chapter macro occurrences on 140 lines.
 - tenkz surface: `docs/tenkz/USAGE.md` (Phase-0, from the tenkz/06-manual stack worktree) + `docs/tenkz/WHATS-NEW-0.5.md` (0.5 additions + §Gaps = the 0.6 list) — both since superseded and deleted; the current surface is `docs/tenkz/manual2.tex` + `docs/tenkz/chapters2/`.
 
 Spelling note: the tenkz bodies sketched below were written against the
 0.5 surface and predate the 0.6 rename sweep — read `close west/east` as
 `west=cup` / `east={cup=$m$}`, `plane=` as `frame=`, and so on
-(CHANGES-0.6.md has the full table). The sketches are Phase-1 input, not
-user documentation; the shim PRs will spell them 0.6.
+(CHANGES-0.6.md has the full table). The sketches are historical migration
+evidence, not user documentation; the final chapter sources use 0.6 spellings.
 
 Chapter names below are relative to `blueprint/src/chapter/`, `.tex` dropped. Classes:
 
@@ -41,11 +41,11 @@ entry is empty iff its body calls no drawing macro at all — finds
 exactly **33**, and the review-side counts have been corrected to match.
 This table is the authoritative census.
 
-After issue #4556, the live residual is **13 catalogue declarations and 15
-chapter calls**, all PEPS entries assigned to issue #4557.  The twelve
-non-PEPS/shared declarations in that batch are gone, together with the unused
-symmetry-motif file and the three private MPDO factor-chain wrappers that had no
-remaining consumer.
+After issue #4556, **13 catalogue declarations and 15 chapter calls** remained,
+all in the PEPS chapters. Issue #4557 reduced both counts to zero. The exact
+demolition base therefore had no live catalogue records or chapter calls; only
+unused implementation and registry files remained. The non-PEPS batch also
+retired private helpers with no remaining consumer.
 
 At the original census, the 12 multi-use entries accounted for 38 occurrences
 (10+5+3+3+3+2×7); every other entry was single-use. Two multi-use entries
@@ -275,14 +275,17 @@ represented by `\tnregion` cell sets; none survive as coordinates.
 
 ---
 
-## Phase-1 batching suggestion (from the classes)
+## Completed migration sequence
 
-1. **PR 1a — unwrap the 33 empty-equation entries** (pure deletion; no tenkz needed; largest single shrink of the shim).
-2. **PR 1b — keys K1 + K5** (one-day keys), then the ch02/ch03 canonical MPS figures and the ch16/ch14 channel five (sets house style, per spec ordering).
-3. **PR 1c — the 12 `\tndefine` names** (as ordinary preamble macros, no catalogue).
-4. **PR 1d — tenkzcd batch** (5 fusion/pentagon entries in ch21_fusion_isometries).
-5. **PR 1e — tenkzlattice batch** (ch24 region entries; land K3/K4 here).
-6. **PR 1f — tenkzfree batch** (PEPS stars/graphs, AppendixB chains; decide K6/K7 vs fallbacks).
-7. **PR 1g — MPDO drawn remainder** (ch20/ch21 grid equations; K2 for TNMPDOBNTOperatorTraceClosure or demote it).
+1. The 33 empty-equation wrappers became exact displayed mathematics.
+2. Canonical MPS and channel figures moved to native grid bodies.
+3. Fusion and pentagon figures moved to `tenkzcd` and `\tntree`.
+4. Region figures moved to `tenkzlattice` cell sets.
+5. Irregular PEPS, MPDO, and Appendix B graphs moved to `tenkzfree` or exact
+   mathematics according to their cited sources.
+6. Repeated names were inlined or demoted; no catalogue-like preamble layer
+   survives.
 
-Exit criterion (spec): `grep -r '\\TN[A-Z]' blueprint/src/chapter/` returns nothing; every shim entry deleted at zero remaining uses.
+The chapter call count and catalogue declaration count are both zero. The
+exact retired-file census and persistent literal-zero checks are recorded in
+`DEMOLITION.md`.

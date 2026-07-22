@@ -151,7 +151,16 @@
 %---------- Frame 6: Matrix product states (diagram-led) ----------
 \begin{frame}{Matrix product states}
     \begin{center}
-    \SlideTNPeriodicMPS{A}{N}
+    % Formula: tr(A^{i_1} ... A^{i_N}), the coefficient of |i_1 ... i_N>.
+    % Ink: each A box has one physical index up and two virtual matrix indices.
+    % Contraction: horizontal bonds multiply the word; periodic closes its trace.
+    % Boundary: the emitted four-site schematic has (virtual, physical) = (0, 4);
+    % the symbolic N-site word has (0, N), with no virtual index open.
+    % Source: arXiv:1606.00608, Fig. I and lines 135--170.
+    \begin{tenkz}[compact, periodic, physical=up]
+      \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
+      \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+    \end{tenkz}
     \end{center}
     \vspace{0.4em}
     \textbf{Translation-invariant MPS~\cite{Cirac2017Annals}.} For $A = (A^i)_{i=0}^{d-1}$ with $A^i \in \MD$,
@@ -226,7 +235,23 @@
 \begin{frame}{Beyond the injective case --- where autonomy stalled}
     \vspace{-0.2em}
     \begin{center}
-    \SlideTNBlockingComparison{A}{L}
+    % Formula: A^(L),(i_1,...,i_L) = A^i_1 ... A^i_L, applied blockwise.
+    % Ink: the upper word exposes site indices; each lower box is one L-site block.
+    % Contraction: adjacent virtual bonds multiply each open word; no trace is taken.
+    % Boundary: each row has two open virtual indices and its displayed physical factors.
+    % Source: arXiv:1606.00608, Fig. I_Blocking and lines 227--230.
+    {\small unblocked:}\quad
+    \begin{tenkz}[compact, physical=up]
+      \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
+      \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+    \end{tenkz}
+
+    \vspace{0.5em}
+    {\small blocked into $L$-site tensors:}\quad
+    \begin{tenkz}[compact, physical=up]
+      \tn[pill, up=$I_1$]{A^{(L)}} & \tndots &
+      \tn[pill, up=$I_{N/L}$]{A^{(L)}}
+    \end{tenkz}
     \end{center}
     \vspace{0.2em}
     \[

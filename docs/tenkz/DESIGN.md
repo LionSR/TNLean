@@ -24,8 +24,8 @@
 | G12 | Cross-engine drift check: multiset of canonical graph hashes compared between print and web builds | tncalc | §5.5 |
 | G13 | Externalization-vs-audit policy (flag event at `\begin{document}`; CI owns the authoritative `.tnlog`) | tncalc | §5.5 |
 | G14 | Theme-may-only-bind-colors enforced structurally (build check rejects geometry keys in theme scope) | Quartet | §4.1 |
-| G15 | Auto-extracted per-chapter gallery with perceptual-hash dedup clusters as CI artifact | tnplain | §5.7 |
-| G16 | Compat-call countdown badge (prevents a permanently half-migrated state) | tnplain | §6 |
+| G15 | Adopted compile-and-audit corpus with render baselines | tnplain | §5.7 |
+| G16 | Literal-zero migration exit scan | tnplain | §6 |
 | G17 | Lint ban on literal `...`/`\ldots` inside picture bodies (must be `\tndots`) | tnplain | §5.7 |
 | G18 | Region-tracer day-1 fallback (fill mode = per-cell rounded squares; outline restricted to simply-connected sets until the notch algorithm matures) | tnplain | §1.3, §6 |
 | G19 | Governance: hard CI cap on the public API surface + "a new command requires a new grammatical class; a new builder key requires three existing figures it shortens" | tnplain | §2.7 |
@@ -40,7 +40,7 @@
 ### 0.2 Conflicts between judges, resolved
 
 1. **Winner split** (judge-author → Quartet; judges tufte + maintainer → tenkz). Resolved for tenkz on tally and 2/3 majority. Judge-author's preference is substantively honored: Quartet's five distinguishing assets (G1, G2/G3, G9, G10/G11, G23) are grafted, and his four concrete tenkz defects are fixed here — the `\tnfuse` signature contradiction (§2.1), the command-vs-key doctrine contradiction (§2.7), the polygon-mode honesty problem (§2.2), and the compressed Phase-1 hump (§6, split into scripted sub-batches with two gates).
-2. **Engine** (author: xelatex forecloses Lua for the hull tracer; tufte + maintainer: xelatex avoids a book-wide typography gamble). **Resolved: keep xelatex end-to-end** (print = xelatex; web = xelatex → .xdv → dvisvgm; gallery = xelatex). Two judges explicitly scored this as a tenkz advantage. The tracer is written in expl3 over bounded grids (≤ 12×12) with tnplain's day-1 fallback (G18). Escalation path is Open Question 1.
+2. **Engine** (author: xelatex forecloses Lua for the hull tracer; tufte + maintainer: xelatex avoids a book-wide typography gamble). **Resolved: keep xelatex end-to-end** (print and corpus = xelatex; web = xelatex → .xdv → dvisvgm). Two judges explicitly scored this as a tenkz advantage. The tracer is written in expl3 over bounded grids (≤ 12×12) with tnplain's day-1 fallback (G18). Escalation path is Open Question 1.
 3. **Row pairing mechanism** (maintainer offered `rows=` typing *and/or* `\contract{±n}`). **Resolved: `rows=` typing only, no new command.** Adjacent-layer pairing is a row-policy default; the per-cell escape is a `pair=+1|-1|none` key on `\tn`. This keeps the API surface flat and is consistent with the doctrine in §2.7.
 4. **Line-budget governance** (author wanted tnplain's CI cap; tnplain's own 800-line cap was busted by its own table, per judge-maintainer). **Resolved: cap the API, not the line count.** CI enforces exactly 4 environments + 17 exported commands (counted mechanically); per-file line budgets are an advisory CI report. A quantikz-scale grid engine cannot honestly promise 800 lines.
 5. **Migration regression mechanism** (pixel diff vs event-graph isomorphism). **Resolved: both.** Pixel diff with a whitelisted intentional-fix list (visual critique items) *and* the iso gate (G9); the iso gate is waivable per figure with a one-line justification, same discipline as paper-gap notes.
@@ -49,7 +49,7 @@
 
 ## 1. Final architecture
 
-### 1.1 File plan — `tex/tenkz/` (replaces `tex/tn/`)
+### 1.1 Native file plan
 
 ```
 tenkz.sty                 user entry point; version; loads all layers
@@ -59,12 +59,6 @@ tenkz-core.code.tex       L0  /tenkz/ pgfkeys tree; two-layer theme/semantic sty
                               event stream v2 (.tnlog, expl3 iow, per-picture ids, currfile src);
                               port-type registry (virtual/physical ONLY — morphism deleted);
                               theme scope guard (rejects geometry keys in themes, G14)
-tenkz-shapes.code.tex     L1  pgf shapes/pics with named TYPED leg anchors: bead, box,
-                              circle-matrix, triangles (tri=l/r), pill, diamond, mpo site,
-                              peps site, fusion junction, insertion ring, fixed-point dot,
-                              tree node. Visual-critique fixes live here: junction ≥ 0.9mm,
-                              solid 0.55pt insertion ring, pos=auto label quadrant (G7),
-                              dark theme recolors without reshaping. \tndeclareatom protocol (G8).
 tenkz-grid.code.tex       L2a the tenkz environment: expl3 +b body capture, tikz-cd/pgf-matrix
                               layout, expandable cell commands, implicit bond wiring, typed
                               rows= engine with auto-pairing (G2), fused-bond skin (G3),
@@ -77,20 +71,21 @@ tenkz-cd.code.tex         L2b tenkzcd: grid mode = tikz-cd verbatim + house arro
 tenkz-lattice.code.tex    L2c tenkzlattice: rows×cols site grid (dot or bond-only skins),
                               per-side openings, traces, and two-sheet cups; cell-set
                               algebra; rectilinear hull tracer WITH notches (fallback G18);
-                              \tnregion / \tnedge / \tnsite on semantic slots
+                              \tnregion / \tnedge / \tnsite on semantic slots; tenkzplanes
+                              is the maintained multi-sheet preset over this grammar
 tenkz-free.code.tex       L2d tenkzfree: tikzpicture preset + \tnput/\tnjoin; the only place
                               runtime port-type assertions fire (grid languages are type-safe
                               by construction)
-tenkz-compat.tex          migration shim; deleted at end of Phase 3
 scripts/tenkz_audit.py    .tnlog v2 consumer: canonicalizer, invariants, iso gate, drift check
-scripts/tenkz_gallery.py  auto-extracted per-chapter gallery + phash dedup clusters (G15)
+scripts/tenkz_corpus.sh   adopted compile-and-audit corpus and optional render baseline (G15)
 scripts/tenkz_lint.py     source lint: \ldots ban in picture bodies (G17), raw-ink lint for
                           tenkzfree and any residual raw tikzpicture
 blueprint/src/Packages/tenkz_pic.py
-                          plasTeX module: renders the 4 environments + \tnpic generically;
+                          plasTeX module: renders the four languages, tenkzplanes preset,
+                          and \tnpic generically;
                           per-body content-hash SVG cache; whole-equation reroute (G20)
-docs/tenkz/manual.tex     the citable quantikz-style manual (§7)
-docs/tenkz_style_guide.md replaces the TN sections of the blueprint style guide
+docs/tenkz/manual2.tex    the citable quantikz-style manual (§7)
+docs/tenkz/HACKING.md     operational build, audit, and visual-review guidance
 ```
 
 ### 1.2 Layering discipline
@@ -111,7 +106,7 @@ Every environment and `\tnpic` yields a **slice**: a TeX box whose declared axis
 
 ### 1.5 Engine and web pipeline
 
-One engine end-to-end: **xelatex** for print and gallery; **xelatex → .xdv → dvisvgm** for web SVG (dvisvgm reads xdv natively). The library is engine-neutral internally (no unicode-math dependency). plasTeX registers the four environments + `\tnpic` as verbatim-captured, standalone-compiled SVG units with per-body content-hash caching — one edited figure invalidates one SVG, not 114. Running-math formulas containing `\tnpic[inline]` are rerouted whole-equation to the SVG path (G20); the accessibility trade-off is documented and scoped (only equations containing inline atoms).
+One engine end-to-end: **xelatex** for print and the adopted corpus; **xelatex → .xdv → dvisvgm** for web SVG (dvisvgm reads xdv natively). The library is engine-neutral internally (no unicode-math dependency). plasTeX registers the native environments + `\tnpic` as verbatim-captured, standalone-compiled SVG units with per-body content-hash caching — one edited figure invalidates one SVG, not the whole book. Running-math formulas containing `\tnpic[inline]` are rerouted whole-equation to the SVG path (G20); the accessibility trade-off is documented and scoped (only equations containing inline atoms).
 
 ---
 
@@ -639,9 +634,16 @@ CI compares the **multiset of canonical graph hashes** between the xelatex print
 
 Per migrated entry: (a) pixel diff against the old render, with intentional changes whitelisted from the 221-defect fix list; (b) event-graph isomorphism of the typed contraction graph, waivable per figure with a one-line justification in the PR (same discipline as paper-gap notes).
 
-### 5.7 Lint and gallery layers (G15, G17)
+### 5.7 Lint and corpus layers (G15, G17)
 
-`tenkz_lint.py`: bans literal `...`/`\ldots` inside picture bodies (must be `\tndots`); raw-ink lint (off-theme colors, raw `line width=`) applies to `tenkzfree` bodies and any residual raw tikzpicture in chapters; escape `% tn-lint: allow ⟨rule⟩ ⟨reason⟩`. It runs as a CI step on every figure-touching PR. `tenkz_gallery.py` — auto-extracts every picture from the chapter files, compiles standalone in both themes, renders one page per chapter (image beside verbatim source), and publishes perceptual-hash dedup clusters, as render-level drift detection complementing the event-level topology advisory — is a **roadmap item, not yet built**: no such script exists in `scripts/` and no CI step runs it. (Found by the 2026-07 key-surface census; the gate before the next milestone close should either build it or drop this paragraph.)
+`tenkz_lint.py` bans literal `...`/`\ldots` inside picture bodies (use
+`\tndots`) and rejects raw off-theme ink in native environments; the escape is
+`% tn-lint: allow ⟨rule⟩ ⟨reason⟩`. The adopted corpus under `tests/tenkz/`
+compiles and audits through `scripts/tenkz_corpus.sh`, with optional 200-dpi
+render baselines for visual review. Focused regressions cover web capture,
+equation layout, labels, face ports, enclosures, torus closure, index routing,
+and tree topology. This maintained corpus replaces the proposed generated
+chapter-page and perceptual-hash pipeline.
 
 ### 5.8 Deleted from the audit
 
@@ -673,53 +675,34 @@ For scale, quantikz's public key surface is roughly 40 — tenkz is a wider lang
 
 ---
 
-## 6. Migration plan — 114 catalogue entries, 140 call sites, 35 chapter files
+## 6. Completed migration — 114 catalogue entries, 140 call sites
 
-**Invariant: every call site compiles at every commit.** Namespaces are disjoint (`\tn…` vs `\TN…`); both libraries load simultaneously during transition. A CI **countdown badge** (G16) displays remaining compat calls from Phase 1 until it reads zero.
+Every former call site now contains a native body or exact mathematics. The
+33 equation-only wrappers became displayed formulas; regular contractions use
+the grid language; fusion and map diagrams use `tenkzcd`; regions and sheets
+use `tenkzlattice`; irregular graphs use `tenkzfree`. The non-PEPS batch left
+13 declarations serving 15 PEPS calls, and the PEPS batch reduced both counts
+to zero.
 
-### Phase 0 — land tenkz beside tn (1 PR)
+The exact demolition base contained seven obsolete TeX files (2,353 lines)
+and four registry-pipeline files (2,831 lines), plus a separate two-line web
+template. They were unused after the chapter migration and were removed with
+their build paths and workflow hooks. `MIGRATION-MAP.md` retains the complete
+entry-by-entry disposition; `DEMOLITION.md` records the exact final census and
+persistent literal-zero gates.
 
-`tex/tenkz/` added; plasTeX registers the four environments + `\tnpic` as SVG-compiled units with per-body content hashing and the whole-equation reroute (G20); CI gains the three-pipeline smoke test (xelatex print, xdv→dvisvgm web, gallery) on the B1–B8 corpus, the lint layer, and the API-surface cap check. Region tracer ships with G18 fallbacks. New figures may use tenkz immediately — the zero-diagram chapters (ch11 FT proof, ch22 periodic, ch24 torus) are the first native clients and the live acceptance test. **Exit criterion:** B1–B8 render identically on all three pipelines; audit v2 runs green on the corpus; no `\TNDeclareDiagram` additions permitted from this point.
-
-### Phase 1 — the compatibility shim (script-assisted, 3 PRs — the judge-flagged hump is split)
-
-Generate `tenkz-compat.tex`; triage by the review's numbers, one PR per stream:
-
-- **PR 1a — the 33 empty-equation entries** → the shim emits the same math un-pictured (plain display math); a checklist issue lists the ~6 caption/content mismatches (ch26, ch20, ch02) for prose repair. No diff gate — there was never a drawing. The empty-picture audit check turns on.
-- **PR 1b — ~68 single-use drawn entries** → mechanical tenkz bodies (topology kept, geometry discarded), plus the **≥ 11 cd call sites** (pentagons, F-moves, storyboards, region-union proof) → `tenkzcd` bodies and the **10 `TNPEPSNormal*` region call sites** → `tenkzlattice` bodies.
-- **PR 1c — the ~12 genuinely multi-use entries** (`\TNGaugeConjugation` ×10, `\TNPEPSEdgeGaugeOrientation` ×5 — parameterized so each theorem shows its own scalars, `\TNGroundSpaceMap`, `\TNCondCOne/Two`, …) → `\tndefine` with arguments.
-
-**Gates per entry:** pixel diff (intentional fixes whitelisted from the visual critique) + event-graph isomorphism (waivable, G9). **Exit criterion:** every legacy name renders through tenkz — the book is visually uniform from Phase 1 onward, before any call site is rewritten; the old `tex/tn/` render path is no longer exercised by the book build.
-
-### Phase 2 — chapter-by-chapter inlining (35 small PRs, one per file)
-
-Replace each `\TNFoo` call with its compat body at the call site (a script prints the body to paste). Order: ch02/ch03 first (canonical MPS figures set the house style), then the pentagon and region chapters (largest visual wins), then the MPDO bulk (mostly deleting fake-equation figure wrappers). The linter reports per-entry remaining-use counts; an entry is deleted from the shim at count zero. The `\tndefine`d dozen survive — as ordinary macros in the blueprint preamble, not a catalogue (Open Question 2). **Exit criterion:** `grep -r '\\TN[A-Z]' blueprint/src/chapter/` is empty; countdown badge reads 0.
-
-### Phase 3 — demolition (1 PR)
-
-**Explicit DELETE list (verified line counts):**
-
-| Deleted | Lines |
-|---|---|
-| `tex/tn/tn_catalogue.tex` (all 114 registrations, `\TNDeclareDiagram`, roles/profiles/contexts metadata) | 2,213 |
-| `tex/tn/tn_library.tex` (~38 v/p/m×route connect macros, 22 trivalent macros, motif constructors) | 1,440 |
-| `tex/tn/tn_core.tex` (old port registry incl. `morphism`, old `.tnlog`, raw-`\def` layout profiles — 40 literals) | 763 |
-| `tex/tn/tn_motifs_peps.tex` (incl. 7 hand-digitized region polygons) | 787 |
-| `tex/tn/tn_motifs_mpdo.tex` | 281 |
-| `tex/tn/tn_motifs_symmetry.tex` | 149 |
-| `tex/tn/tn_atoms.tex` (hand-synced atom registry) | 148 |
-| `tex/tn/tn_slide_catalogue.tex` + the parallel Slide* interface (dark theme replaces it) | 139 |
-| `tenkz-compat.tex` itself | — |
-| Python: `scripts/check_tn_references.py`; per-macro plasTeX class manufacture; role/profile/contexts assert-equal checks; `_assert_no_chapter_local_tikz`; `assert_repeated_topologies_are_motifs` (hash/cache/jinja core survives inside `tenkz_pic.py`) | — |
-| The 5 frozen fusion-tree macros; the 33 equation-only "diagrams"; `morphism` as a port type; the three-engine split (web pinned to xelatex/xdv) | — |
-
-Nothing on this list survives in any form.
+The migration gates were source comparison, formula and ink-to-index comments,
+typed contraction and boundary accounting, event audit, and visual print/web
+inspection. Pixel resemblance to the retired rendering was never sufficient
+when the cited mathematics required different topology.
 
 ---
 
-## 7. Documentation plan — the manual (`docs/tenkz/manual.tex`)
+## 7. Documentation — the second-edition manual
 
-Quantikz-style citable artifact; arXiv-shippable (single `tenkz.sty` + code files + manual PDF); every boxed example compiles in CI and its SVG is pixel-tracked (the manual doubles as the regression corpus).
+`docs/tenkz/manual2.tex` is the quantikz-style citable artifact. Its examples
+compile in CI, while the larger adopted corpus supplies repository-wide audit
+and render coverage.
 
 1. **Install & ship** (½ page): two-line usage; arXiv shipping list; engine notes (xelatex; dvisvgm for SVG).
 2. **Tutorial** (5–6 pages): spine is literally B1→B8, one concept per boxed example, rendered output beside verbatim source; includes the **deliberate type-error demonstration** (G24: a physical–virtual `\tnjoin` and the compile error it produces).
@@ -727,33 +710,45 @@ Quantikz-style citable artifact; arXiv-shippable (single `tenkz.sty` + code file
 4. **The house style** (2–3 pages): glyph dictionary (glyph, key, mathematical meaning); semantic hue table and region slots; the metric table in geometry-appendix format (G23: constant, value, derivation from pitch, printed motivation); ellipsis and label-quadrant policies; the **canonical-spelling table** — one sanctioned drawing per semantic object (transfer map: sandwich vs opaque pill, and when each is correct); the **genre-ownership table** (G23) mapping every Tier-A/B/C use case in the brief to exactly one sub-language home.
 5. **Sub-language chapters:** tenkzcd (grid mode, polygon mode, the raw tikz-cd fallback shown side-by-side per G25, `\tntree` grammar including internal charges and module-tree marks); tenkzlattice (cell-set algebra, semantic roles, side policies, and stacked-sheet closures); tenkzfree (typed anchors, `\tnjoin`, and the escape policy: when free placement is legitimate).
 6. **Extension:** worked `\tndeclareatom` example (adding the RMP circle-matrix-on-wire glyph) documenting the typed-port contract; restyling via `\tnset` with the complete style-name table.
-7. **Migration appendix:** the `\TN*` → tenkz mapping table auto-generated from the Phase-1 shim; idiom conversions.
-8. **Troubleshooting:** real failure modes with cell-coordinate error messages (missing `{}`, trailing `\\`, unequal column counts, `&` under plasTeX and `align`), the **&-free fallback** (`\tndefine` route, named explicitly), externalization-vs-audit interaction, stale SVG cache.
-9. **Gallery = regression suite:** B1–B8 plus ~20 RMP reproductions and the blueprint's canonical set; doubles as the pixel-diff corpus. The auto-extracted per-chapter gallery (G15) is linked as the living companion.
+7. **Migration record:** `MIGRATION-MAP.md` preserves the original census,
+   entry dispositions, and idiom conversions without exposing a second API.
+8. **Troubleshooting:** real failure modes with cell-coordinate error messages
+   (missing `{}`, trailing `\\`, unequal column counts, `&` under plasTeX and
+   `align`), top-level equation siblings as the **&-free fallback**,
+   externalization-vs-audit interaction, and stale SVG cache.
+9. **Regression suite:** B1–B8, standalone examples, and the adopted corpus;
+   `scripts/tenkz_corpus.sh --render` produces the visual-review baseline.
 10. **Citation** (CITATION.cff + BibTeX; manual versioned with the package).
 
-Repo side: `docs/tenkz_style_guide.md` replaces the TN sections of the blueprint style guide. All chapter-facing names obey `docs/prose_style.md` — keys are `periodic`, `sandwich`, `conjugate`, `fused`, never software jargon.
+Repository guidance lives in `docs/blueprint_style_guide.md` and
+`docs/tenkz/HACKING.md`. All chapter-facing names obey `docs/prose_style.md` —
+keys are `periodic`, `sandwich`, `conjugate`, `fused`, never software jargon.
 
 ---
 
-## 8. Open questions for the maintainer (5)
+## 8. Questions considered during design
 
-1. **Hull-tracer escalation.** If the expl3 notched-outline tracer does not pass the B6 family by the Phase-1 exit, do we (a) accept a small Python helper that precomputes hull paths into an aux file (build-tool dependency in the TeX path), or (b) permanently restrict `outline` to simply-connected sets and render notched regions in `fill` mode? The engine stays xelatex either way.
-2. **The named dozen.** After Phase 2, do the ~12 multi-use `\tndefine` spellings (`\TNGaugeConjugation` descendants etc.) remain permanently in the blueprint preamble as house vocabulary, or is full inlining the end state with the canonical-spelling table as the only shared reference?
-3. **Slides scope.** The Slide* interface is deleted and `dark` theme replaces it — do slide decks migrate to tenkz within this project (adding slide sources to the Phase-2 workload), or is slide re-rendering deferred to a follow-up after Phase 3?
+1. **Hull-tracer escalation.** Should a stalled notched-outline tracer gain a
+   preprocessing helper, or should `outline` remain restricted to
+   simply-connected sets with `fill` mode for notched figures?
+2. **Repeated names.** Should the roughly dozen multi-use figures remain as
+   parameterized house spellings, or should full inlining leave only the
+   canonical-spelling table as shared reference?
+3. **Slides scope.** Should the dark-theme slide deck migrate with the package,
+   or should slide rendering remain a follow-up?
 4. **Inline-atom accessibility.** The whole-equation SVG reroute (G20) loses MathJax copyability/screen-reader text for every formula containing `\tnpic[inline]`. Acceptable for the public blueprint site as-is, or should chapter style restrict inline atoms to display-adjacent usage until an alt-text pipeline exists?
-5. **Publication.** Ship tenkz to CTAN/arXiv as a standalone citable package (manual as the citable artifact, fixed release cadence) at Phase-3 completion, or keep it repo-internal for one release cycle of soak time first?
+5. **Publication.** Should tenkz ship as a standalone citable package at
+   migration completion, or remain repository-internal for one release cycle?
 ---
 
-## 9. Maintainer decisions (recorded 2026-07-16)
+## 9. Final outcomes (updated after migration)
 
-The five §8 questions are resolved as follows (maintainer delegated to the recommended options):
+The final outcomes are:
 
 1. **Hull tracer**: pure expl3 rectilinear tracer with notches, no Python in the TeX path; if it
    stalls, `outline` restricts to simply-connected sets (fill mode covers notched figures).
-2. **The named dozen**: kept permanently as parameterized `\tndefine` house spellings in the
-   blueprint preamble; documented in the canonical-spelling table; capped at roughly a dozen.
-3. **Slides**: deferred past Phase 3; the `dark` theme replaces `Slide*` when decks are next touched.
+2. **The named dozen**: fully inlined; no catalogue-like house layer remains.
+3. **Slides**: migrated to the native package during catalogue demolition.
 4. **Inline-atom accessibility**: whole-equation SVG reroute accepted; style rule restricts inline
    atoms to display-adjacent prose; alt-text pipeline is follow-up work.
 5. **Publication**: repo-internal for one release cycle, then CTAN/arXiv.
@@ -769,8 +764,8 @@ The five §8 questions are resolved as follows (maintainer delegated to the reco
   -value windows, MPO-MPO products, zipper/pulling-through, fusion trees and the pentagon, MPDO
   purification, PEPS windows with notched regions, torus geometry — each shown as rendered output
   beside verbatim source.
-- **Galleries must be tightly cropped**: per-figure standalone-class pages (border ≤ 6pt), never
-  fixed large pages with centered figures (the old 18x12in audit gallery wasted the page).
+- **Rendered review artifacts must be tightly cropped**: per-figure standalone-class pages
+  (border ≤ 6pt), never fixed large pages with centered figures.
 - **Coverage matrix**: the manual ships a table mapping every figure genre of arXiv:2011.12127
   (RMP) and arXiv:2203.12563 to its tenkz spelling (or names the planned extension), so coverage
   is checkable rather than aspirational.

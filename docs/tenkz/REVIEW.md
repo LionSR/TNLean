@@ -1,6 +1,7 @@
 # TNLean Tensor-Network TikZ Library — Deep Review & Redesign Tournament
 
-*2026-07-16. Inputs: 9-agent source review of `tex/tn/` (5,970 lines TeX + ~2,800 lines Python),
+*2026-07-16. Inputs: 9-agent source review of the retired implementation
+(5,970 lines TeX + ~2,800 lines Python),
 257-page rendered-gallery visual critique (221 defects), figure-vocabulary extraction from
 arXiv:2011.12127 (66 figures viewed), arXiv:1804.04964 (214 inline diagrams), arXiv:2203.12563
 (122 inline diagrams), a quantikz interface study, and a 4-design/3-judge tournament.
@@ -43,8 +44,8 @@ the bottom layer is ahead of the community. But the interface inverts its own de
 ### Special-case explosion (the Torvalds failure)
 - Trivalent map: **22 macros for 1 primitive** (orientation × chirality × physical-variant as
   names, not keys). v/p/m × route: **~38 macros for 3 parametric families.**
-- A parallel `Slide*` interface duplicates chapter diagrams and has already drifted
-  (SlideTNTransferMap ≠ TNTransferMap).
+- A parallel slide-specific interface duplicates chapter diagrams and has already drifted
+  from the chapter rendering.
 - The atom registry is hand-synced metadata, already wrong (TNCompactTraceCell declared portless
   but composed via its InsertionW port).
 - Layout profiles: 40 literals ≈ 14 independent choices + one 0.8 scale factor; **92–273 numeric
@@ -134,31 +135,32 @@ Headline decisions:
   profiles are a scale factor and *cannot* be bypassed by literals. Every visual-critique defect
   class is closed at the style/shape layer (junction ≥ 0.9mm, solid insertion ring, `pos=auto`
   label quadrants, dark theme recolors-never-reshapes, `\tndots` the only legal ellipsis).
-- **One engine end-to-end**: xelatex for print/gallery, xelatex→xdv→dvisvgm for web; plasTeX
-  renders the four environments generically with per-body content-hash SVG caching (one edited
+- **One engine end-to-end**: xelatex for print and the adopted corpus,
+  xelatex→xdv→dvisvgm for web; plasTeX renders native environments
+  generically with per-body content-hash SVG caching (one edited
   figure invalidates one SVG, not 114).
 - **Audit v2**: identity from `file:line`, not a registry; type-safety by construction in the
   grids; hard error on *empty pictures* (would have caught all 33 fake diagrams); advisories for
   repeated topology (suggests `\tndefine`), region-role stability, transfer-map canonicality;
   cross-engine drift checked by comparing canonical graph-hash multisets.
-- **Migration in 4 phases, every call site compiling at every commit**: land beside old library →
-  compat shim in 3 scripted PRs (33 empty entries become plain math; ~68 single-use entries get
-  mechanical tenkz bodies; ~12 genuinely-reused entries become parameterized `\tndefine`s) →
-  35 chapter-by-chapter inlining PRs → demolition of all of `tex/tn/` (~5,920 lines) plus the
-  registry Python. Gates: pixel diff (with whitelisted intentional fixes) + event-graph
-  isomorphism (waivable with one-line justification).
+- **Completed migration**: 33 empty entries became exact mathematics; regular
+  contractions, maps, regions, and irregular graphs moved to their native
+  languages; the final 13 declarations and 15 PEPS calls then reached zero.
+  Source comparison, boundary accounting, event audit, and visual print/web
+  inspection were the acceptance gates.
 - **Manual as the citable artifact**, quantikz-structured: tutorial = benchmarks B1–B8, reference
   with per-command "why this is a command and not a key", the house-style chapter (glyph
-  dictionary, canonical-spelling table, genre-ownership table), gallery = regression suite.
+  dictionary, canonical-spelling table, genre-ownership table), backed by the
+  adopted regression corpus.
 
-## 6. Five open questions for you (from the spec §8)
+## 6. Resolved design outcomes
 
-1. **Hull tracer**: if the expl3 notched-outline tracer stalls, accept a Python pre-computation
-   helper in the TeX path, or restrict `outline` to simply-connected sets permanently?
-2. **The named dozen**: do the ~12 multi-use `\tndefine` spellings stay permanently as house
-   vocabulary in the blueprint preamble, or is full inlining the end state?
-3. **Slides**: migrate decks to the `dark` theme within this project, or defer past Phase 3?
-4. **Web accessibility**: whole-equation SVG reroute for inline atoms loses MathJax
-   copyability — acceptable, or restrict inline atoms until an alt-text pipeline exists?
-5. **Publication**: ship tenkz to CTAN/arXiv as a citable package at Phase-3 completion, or
-   soak repo-internal for one release cycle first?
+1. **Hull tracer**: the package keeps the pure TeX route; no preprocessing
+   helper enters the TeX build.
+2. **Repeated names**: chapter bodies are fully inline; no catalogue-like
+   house layer remains.
+3. **Slides**: the dark theme uses the native package.
+4. **Web accessibility**: whole-equation SVG is accepted for display-adjacent
+   diagram atoms, with responsive reachability checked in browser tests.
+5. **Publication**: tenkz remains repository-internal for the present release
+   cycle.
