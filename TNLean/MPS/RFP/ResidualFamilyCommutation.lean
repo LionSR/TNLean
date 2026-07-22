@@ -89,10 +89,10 @@ theorem virtualPairMatrices_comm
         appendixBLeftPairMatrix h.virtualBondMatrix := by
   classical
   rw [virtualBondMatrix, appendixBLeftPairMatrix_sum,
-    appendixBRightPairMatrix_sum, Finset.sum_mul, Finset.mul_sum]
+    appendixBRightPairMatrix_sum, Finset.sum_mul, Finset.sum_mul]
   apply Finset.sum_congr rfl
   intro j _
-  rw [Finset.mul_sum, Finset.sum_mul]
+  rw [Finset.mul_sum, Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro k _
   by_cases hjk : j = k
@@ -112,20 +112,15 @@ theorem virtualPairMatrices_comm
       (sectorPairInclusion (dim := dim) j)
       (sectorPairInclusion (dim := dim) k)
       (h.sectorVirtualBondMatrix j) (h.sectorVirtualBondMatrix k) horth]
-    have horth' :
-        (sectorPairInclusion (dim := dim) k)ᴴ *
-            sectorPairInclusion (dim := dim) j = 0 :=
-      Matrix.sigmaBlockInclusion_conjTranspose_mul_of_ne
-        (fun l ↦ Fin (dim l) × Fin (dim l)) (fun hkj ↦ hjk hkj.symm)
-    have hreverseProduct :
-        appendixBRightPairMatrix (h.embeddedSectorVirtualBondMatrix k) *
-            appendixBLeftPairMatrix (h.embeddedSectorVirtualBondMatrix j) = 0 := by
+    have h_reverse_product :
+        appendixBRightPairMatrix (h.embeddedSectorVirtualBondMatrix j) *
+            appendixBLeftPairMatrix (h.embeddedSectorVirtualBondMatrix k) = 0 := by
       simp only [embeddedSectorVirtualBondMatrix]
       exact appendixB_rightTransportedPairMatrix_mul_left_eq_zero_of_orthogonal
-        (sectorPairInclusion (dim := dim) k)
         (sectorPairInclusion (dim := dim) j)
-        (h.sectorVirtualBondMatrix k) (h.sectorVirtualBondMatrix j) horth'
-    simpa only [embeddedSectorVirtualBondMatrix] using hreverseProduct.symm
+        (sectorPairInclusion (dim := dim) k)
+        (h.sectorVirtualBondMatrix j) (h.sectorVirtualBondMatrix k) horth
+    simpa only [embeddedSectorVirtualBondMatrix] using h_reverse_product.symm
 
 /-- The common physical isometry belonging to simultaneous Appendix B data.
 
