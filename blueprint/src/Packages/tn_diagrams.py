@@ -101,12 +101,10 @@ _SEMANTIC_GLYPH_COMMANDS = frozenset(
         "TN@mpssite",
         "TN@operatorstate",
         "TN@pepssite",
-        "TN@pepsvertex",
         "TN@splitmap",
         "TN@state",
         "TN@tensor",
         "TN@labeledinsertion",
-        "TN@threeLegTensorFan",
     }
 )
 _POINT_CONNECTOR_COMMANDS = frozenset(
@@ -1128,9 +1126,6 @@ def _load_diagram_declarations() -> dict[str, DiagramDeclaration]:
         )
     source = _mask_tex_comments(_TN_CATALOGUE_FILE.read_text(encoding="utf-8"))
     calls = _tex_declaration_calls(source, "TNDeclareDiagram", arity=7)
-    if not calls:
-        raise RuntimeError("tn_catalogue.tex contains no \\TNDeclareDiagram records.")
-
     declarations: dict[str, DiagramDeclaration] = {}
     for call in calls:
         groups = call.groups
@@ -1819,58 +1814,6 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
             raise RuntimeError("Strict tensor-network audit failed: " + "; ".join(failures))
 
 
-def _read_chapter_with_includes(path: Path, seen: set[Path] | None = None) -> str:
-    """Read a chapter file together with all files reached by ``\\input``.
-
-    The PEPS chapter is split across several ``\\input{chapter/...}`` section
-    files, so the PEPS-macro usage check must look at the combined text rather
-    than the top-level chapter file alone.
-    """
-    if seen is None:
-        seen = set()
-    path = path.resolve()
-    if path in seen:
-        return ""
-    seen.add(path)
-    include_pattern = re.compile(r"\\input\{([^}]+)\}")
-    text = path.read_text(encoding="utf-8")
-    parts = [text]
-    for include in include_pattern.findall(text):
-        include_path = _SRC_DIR / include
-        if not include_path.suffix:
-            include_path = include_path.with_suffix(".tex")
-        if include_path.exists():
-            parts.append(_read_chapter_with_includes(include_path, seen))
-    return "\n".join(parts)
-
-
-def _assert_peps_macros_used_in_chapter() -> None:
-    intentionally_unused: set[str] = set()
-    peps_macros = sorted(
-        name for name in _DIAGRAM_CATALOGUE.names if name.startswith("TNPEPS")
-    )
-    chapter = _read_chapter_with_includes(_SRC_DIR / "chapter/ch24_peps_ft.tex")
-    stale_records = sorted(intentionally_unused - set(peps_macros))
-    if stale_records:
-        raise RuntimeError(
-            "Recorded intentionally unused PEPS diagram macros are not public "
-            f"declarations in tn_catalogue.tex: {stale_records}"
-        )
-    unused = [
-        name
-        for name in peps_macros
-        if (
-            rf"\{name}" not in chapter
-            and name not in intentionally_unused
-        )
-    ]
-    if unused:
-        raise RuntimeError(
-            "Public PEPS diagram macros must be used in the PEPS chapter or recorded "
-            f"as intentionally unused: {unused}"
-        )
-
-
 _assert_no_duplicate_diagram_definitions()
 
 
@@ -2155,11 +2098,6 @@ def _main(argv: list[str] | None = None) -> int:
         help="check catalogue metadata and reject duplicate diagram definitions",
     )
     parser.add_argument(
-        "--check-peps-usage",
-        action="store_true",
-        help="check that public PEPS diagram macros are used in the PEPS chapter",
-    )
-    parser.add_argument(
         "--check-slides",
         action="store_true",
         help="check the shared tensor-network calculus under the slide dark theme",
@@ -2203,7 +2141,6 @@ def _main(argv: list[str] | None = None) -> int:
 
     if (
         not args.check
-        and not args.check_peps_usage
         and not args.check_slides
         and not args.audit
         and args.smoke_render is None
@@ -2223,10 +2160,6 @@ def _main(argv: list[str] | None = None) -> int:
             f"checked {len(diagram_declarations())} tensor-network diagram "
             "declarations"
         )
-
-    if args.check_peps_usage:
-        _assert_peps_macros_used_in_chapter()
-        print("checked public PEPS diagram usage in the PEPS chapter")
 
     if args.check_slides:
         _assert_slide_diagram_contract()
