@@ -219,27 +219,14 @@ theorem complProd_eq_regionMerge_blue
       ∏ w : {w : V // w ∈ D.complement},
         A.component w.1 (fun ie => regionMerge (G := G) A D.blue p ie.1) (σcompl w) := by
   classical
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  -- `ie` is incident to `w ∈ complement`, so `w ∉ blue`.
-  have hwcompl : w.1 ∈ D.complement := w.2
-  have hwnotblue : w.1 ∉ D.blue := fun hb =>
-    (Finset.disjoint_left.mp D.blue_disjoint_complement) hb hwcompl
-  have hwinc : ie.1.1.1 = w.1 ∨ ie.1.1.2 = w.1 := ie.2
-  by_cases hinc : IsRegionIncidentEdge (G := G) D.blue ie.1
-  · -- `ie` is blue-incident and touches `w ∉ blue`: a boundary edge of the blue block,
-    -- where `p.1` and `p.2` agree.
-    have hbdry : IsRegionBoundaryEdge (G := G) D.blue ie.1 := by
-      rcases hinc with h1 | h2
-      · rcases hwinc with hw1 | hw2
-        · exact absurd (by rw [← hw1]; exact h1) hwnotblue
-        · refine Or.inl ⟨h1, ?_⟩; rw [hw2]; exact hwnotblue
-      · rcases hwinc with hw1 | hw2
-        · refine Or.inr ⟨?_, h2⟩; rw [hw1]; exact hwnotblue
-        · exact absurd (by rw [← hw2]; exact h2) hwnotblue
+  apply regionProd_subtype_congr
+  intro ie hie
+  by_cases hinc : IsRegionIncidentEdge (G := G) D.blue ie
+  · have hbdry : IsRegionBoundaryEdge (G := G) D.blue ie :=
+      isRegionBoundaryEdge_of_disjoint_incident (G := G) D.complement D.blue
+        D.blue_disjoint_complement.symm hie hinc
     rw [regionMerge, if_pos hinc]
-    have := congrFun hp ⟨ie.1, hbdry⟩
+    have := congrFun hp ⟨ie, hbdry⟩
     simpa [regionBoundaryLabel] using this.symm
   · rw [regionMerge, if_neg hinc]
 

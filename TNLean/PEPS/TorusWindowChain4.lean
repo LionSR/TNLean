@@ -154,13 +154,10 @@ theorem regionProd_p1_eq_merge_of_subset {T B : Finset V} (hBT : B ⊆ T)
     (∏ w : {w : V // w ∈ B}, A.component w.1 (fun ie => p.1 ie.1) (σ w)) =
       ∏ w : {w : V // w ∈ B},
         A.component w.1 (fun ie => regionMerge (G := G) A T p ie.1) (σ w) := by
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  have hinc : IsRegionIncidentEdge (G := G) T ie.1 := by
-    rcases ie.2 with hie | hie
-    · exact Or.inl (hBT (by rw [hie]; exact w.2))
-    · exact Or.inr (hBT (by rw [hie]; exact w.2))
+  apply regionProd_subtype_congr
+  intro ie hie
+  have hinc : IsRegionIncidentEdge (G := G) T ie :=
+    hie.elim (fun h => Or.inl (hBT h)) (fun h => Or.inr (hBT h))
   rw [regionMerge, if_pos hinc]
 
 /-- A vertex product over `B ⊆ univ \ T` reads `p.2` through the merge `regionMerge A T p`, given
@@ -177,23 +174,16 @@ theorem regionProd_p2_eq_merge_of_compl {T B : Finset V} (hBT : B ⊆ Finset.uni
       ∏ w : {w : V // w ∈ B},
         A.component w.1 (fun ie => regionMerge (G := G) A T p ie.1) (σ w) := by
   classical
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  have hwnotT : w.1 ∉ T := by have := hBT w.2; rw [Finset.mem_sdiff] at this; exact this.2
-  by_cases hinc : IsRegionIncidentEdge (G := G) T ie.1
-  · -- `ie` is `T`-incident and touches `w ∉ T`: a boundary edge of `T`.
-    have hwinc : ie.1.1.1 = w.1 ∨ ie.1.1.2 = w.1 := ie.2
-    have hbdry : IsRegionBoundaryEdge (G := G) T ie.1 := by
-      rcases hinc with h1 | h2
-      · rcases hwinc with hw1 | hw2
-        · exact absurd (by rw [← hw1]; exact h1) hwnotT
-        · refine Or.inl ⟨h1, ?_⟩; rw [hw2]; exact hwnotT
-      · rcases hwinc with hw1 | hw2
-        · refine Or.inr ⟨?_, h2⟩; rw [hw1]; exact hwnotT
-        · exact absurd (by rw [← hw2]; exact h2) hwnotT
+  apply regionProd_subtype_congr
+  intro ie hie
+  have hcompl : IsRegionIncidentEdge (G := G) (Finset.univ \ T) ie :=
+    hie.elim (fun h => Or.inl (hBT h)) (fun h => Or.inr (hBT h))
+  by_cases hinc : IsRegionIncidentEdge (G := G) T ie
+  · have hbdry : IsRegionBoundaryEdge (G := G) T ie :=
+      isRegionBoundaryEdge_of_disjoint_incident (G := G) (Finset.univ \ T) T
+        Finset.sdiff_disjoint hcompl hinc
     rw [regionMerge, if_pos hinc]
-    have := congrFun hp ⟨ie.1, hbdry⟩
+    have := congrFun hp ⟨ie, hbdry⟩
     simpa [regionBoundaryLabel] using this.symm
   · rw [regionMerge, if_neg hinc]
 
