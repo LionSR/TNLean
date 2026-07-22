@@ -401,8 +401,6 @@
 \newdimen\tenkz@bboxymax
 \newdimen\tenkz@bboxxa
 \newdimen\tenkz@bboxya
-\newdimen\tenkz@bboxxb
-\newdimen\tenkz@bboxyb
 \newif\iftenkz@bboxcapture
 \newif\iftenkz@identitylinear
 \newif\iftenkz@labelrectangle
@@ -1293,6 +1291,18 @@
 % message instead of a raw pgfkeys error; re-declaring the name
 % re-derives the styles with the same hue.
 \ExplSyntaxOn
+
+% ---------- shared syntax predicates ----------
+% This predicate recognizes a nonempty string of decimal digits.  Callers
+% retain their own range checks and diagnostics.
+\prg_new_conditional:Npnn \tenkz_token_if_decimal_digits:n #1 { T, F, TF }
+  {
+    \regex_match:nnTF { \A [0-9]+ \Z } {#1}
+      { \prg_return_true: }
+      { \prg_return_false: }
+  }
+\prg_generate_conditional_variant:Nnn \tenkz_token_if_decimal_digits:n
+  { V } { T, F, TF }
 
 % ---------- measured named enclosures ----------
 % Every enclosure consumes this ONE registry: a semantic member name maps to
