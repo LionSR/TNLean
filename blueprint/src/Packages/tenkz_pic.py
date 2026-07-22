@@ -52,14 +52,14 @@ Design decisions
    ``\newcounter{chapter}`` shim required because standalone is article-based
    and lacks the chapter counter that common's theorem numbering expects.
 
-TODO (G20, out of Phase-0 scope): the **whole-equation reroute** — running
-math containing ``\tnpic[inline]`` must be rerouted whole-equation to the
-SVG path, because MathJax cannot typeset the atom (spec §1.5, §9.4).
-Until it lands, ``\tnpic`` inside ``$...$``/``\[...\]`` and tenkz
-environments inside display math render an ``<img>`` inside MathJax input,
-which MathJax will not typeset; Phase-0 chapter style must keep pictures
-at top level or inside ``figure`` (display-adjacent usage, maintainer
-decision §9.4).
+5. **Equation rows (G20).**  Blueprint source marks a display-adjacent
+   diagram equation with ``tenkzequation``.  The wrapper keeps every captured
+   picture as its own SVG outside MathJax and lays the sibling pictures and
+   operator text out as one responsive row.  Equality signs and arrows remain
+   selectable instead of becoming part of one whole-equation image.  A bare
+   ``\tnpic`` inside ``$...$`` or ``\[...\]`` is still unsupported because
+   MathJax cannot typeset the emitted ``<img>``; ordinary TeX retains that
+   running-math capability.
 """
 
 from __future__ import annotations
@@ -407,7 +407,7 @@ except ImportError:  # standalone harness use; see the section comment above
 else:
 
     class tenkzequation(Environment):
-        """A text-mode row of independently rendered tenkz picture units."""
+        """A responsive text-mode row of independent SVG picture units."""
 
         blockType = True
         templateName = "TenkzEquation"
@@ -446,9 +446,8 @@ else:
                 return _missing_tools_html(unit_source)
             src = _svg_src(self, svg_path, output_dir)
             lang = _ENVIRONMENT_LANGS[self.nodeName]
-            # The verbatim unit source doubles as the alt text: it is the
-            # only faithful textual description available before the G20
-            # accessibility follow-up (maintainer decision §9.4).
+            # The verbatim unit source is the per-picture alternative text;
+            # tenkzequation keeps operators outside the image and selectable.
             return (
                 f'<img class="tenkz-pic tenkz-pic-{lang}" '
                 f'src="{escape(src, quote=True)}" '
@@ -493,10 +492,10 @@ else:
         ``\verb`` captures its argument, so cell separators (``&``),
         comments, and math inside the body survive untouched.
 
-        TODO (G20): running math containing ``\tnpic[inline]`` must be
-        rerouted whole-equation to the SVG path — MathJax cannot typeset
-        the atom this class emits.  Out of Phase-0 scope; until then
-        ``\tnpic`` is only supported outside math (see module docstring).
+        In blueprint source this command is supported at top level, including
+        as a child of ``tenkzequation``.  It must not appear inside MathJax
+        input: the explicit equation wrapper is the G20 web contract, while
+        ordinary TeX may continue to use the atom in running mathematics.
         """
 
         blockType = False

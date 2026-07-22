@@ -1,12 +1,13 @@
 % chapters2/ch-house.tex — the house style: the closed glyph dictionary,
 % live over one source; the hue table in the package's own ink; the
 % label and ellipsis doctrines; the canonical spellings; and the
-% geometry appendix transcribed from the constants of
-% tenkz-core.code.tex.
+% geometry appendix transcribed from the constants of the five package
+% modules.
 %
 % Sources: the corrected atoms corpus (atoms_test.tex) for the skins,
 % channel_test.tex for the canonical channel spelling, and the ratio
-% comments of tenkz-core.code.tex for the geometry table.
+% comments beside the named ratios in tex/tenkz/*.code.tex for the
+% geometry table.
 
 % live hue chips for the table in \S(house-hues): each chip is filled
 % from the package's colour register, so a \colorlet theme re-inks the
@@ -227,10 +228,11 @@ bypass them.''  \S\ref{sec:modes-metric} varies and measures the
 system.}  The package states each ratio's motivation once, in a
 comment beside its definition; this table transcribes those
 comments, so the design argument is on the record where a reader can
-dispute it.
+dispute it.  File-local frame ratios multiply the lattice pitch, and
+the coincidence floor multiplies the bead diameter; their value rows
+say so explicitly.
 
-% the table is set as three group-tables so a page may break between
-% the groups; each repeats the head row
+% the table is split into groups so a page may break between them
 \medskip
 {\footnotesize
 \noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{10mm}>{\raggedright\arraybackslash}X@{}}
@@ -250,15 +252,16 @@ base pitch & $11$\,mm & the one length; every ratio below
 \smallskip
 {\footnotesize
 \noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{10mm}>{\raggedright\arraybackslash}X@{}}
-\multicolumn{3}{@{}l}{\emph{ratios of the pitch}} \\
+\multicolumn{3}{@{}l}{\emph{core spacing and label ratios}} \\
 \midrule
 layer gap & $0.80$ & layers read as layers, not as two chains \\
 physical leg & $0.38$ & a labelled leg clears the bond-label band \\
 stub & $0.45$ & an open index: longer than a leg, shorter than a
   bond; also the reach of an inter-layer cup, so open and cup-closed
   ends share one silhouette \\
-trace clearance & $0.62$ & the trace racetrack clears the leg labels
-  on the outer row \\
+daylight & $0.15$ & pure separation beyond measured ink: about $8.5$
+  wire widths at the default pitch, so a return cannot fuse visually
+  with the silhouette it skirts \\
 label clearance & $0.12$ & the one clearance of every label band \\
 dot-label band & $0.30$ & the depth of a script-size dot label:
   clearance plus text \\
@@ -277,13 +280,81 @@ pair-trace reach & $0.40$ & the per-column racetrack's reach east of
   the leg axis: under one half, so its straight clears the
   neighbouring column's bands; wide enough that the racetrack caps
   read as turnarounds, not kinks \\
-region margin & $0.36$ & under half a pitch, so notches read; over
-  the glyph radius \\
 corner radius & $0.14$ & the rounding of traces and hulls \\
 inline leg & $0.26$ & the inline profile shrinks legs faster than
   the pitch \\
 inline clearance & $0.05$ & inline labels hug the ink to spare line
   height \\
+\bottomrule
+\end{tabularx}\par}
+\smallskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{10mm}>{\raggedright\arraybackslash}X@{}}
+\multicolumn{3}{@{}l}{\emph{glyph and fusion ratios}} \\
+\midrule
+inscribed glyph & $0.22$ & minimum side of a box and height of a pill;
+  also the lateral overhang of a span decoration \\
+on-wire glyph & $0.30$ & an insertion on a wire must read above the
+  wire it interrupts \\
+on-wire cap & $0.15$ & half the on-wire minimum closes its smallest
+  rectangle into a stadium \\
+fusion width & $0.075$ & a fusion bar reads as a wedge rather than a
+  second wire \\
+fusion overhang & $0.10$ & the bar visibly clasps its outer wire rows
+  and contributes the same amount to their silhouette \\
+\bottomrule
+\end{tabularx}\par}
+\smallskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{10mm}>{\raggedright\arraybackslash}X@{}}
+\multicolumn{3}{@{}l}{\emph{tree and typed-map ratios}} \\
+\midrule
+tree step & $0.55$ & sibling pitch and fusion depth agree, so a
+  balanced pair meets its junction at $45$ degrees \\
+tree root leg & $0.35$ & shorter than a fusion level, so the tree reads
+  as rooted rather than as one more leaf \\
+ribbon half-width & $0.065$ & a $0.13$-pitch band keeps two wire-weight
+  boundary curves distinct at compact scale \\
+tree-patch reach & $0.16$ & the three sectors stay distinct at the
+  sharpest four-leaf junction \\
+tree-patch control & $0.72$ & cubic controls leave a rounded nonzero
+  waist between the three sectors \\
+map column floor & $0.34$ & minimum air for an unlabelled map; measured
+  names enlarge the gap by their opaque band and two daylights \\
+map row separation & $0.50$ & adjacent family members remain distinct
+  small multiples \\
+\bottomrule
+\end{tabularx}\par}
+\smallskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}p{18mm}>{\raggedright\arraybackslash}X@{}}
+\multicolumn{3}{@{}l}{\emph{lattice and projected-frame ratios}} \\
+\midrule
+lattice pitch & $0.75$ base & compacts a finite window relative to the base
+  pitch \\
+lattice margin & $0.27$ base & $0.36$ lattice pitches: below half a site
+  so notches read, beyond the bead radius so hulls do not clip \\
+region inset unit & $0.075$ base & separates nested or coincident region
+  boundaries \\
+boundary leg & $0.30$ base & a cut lattice bond remains legible at the rim \\
+oblique slant & $0.45$ lattice & a depth neighbour never reads as a column
+  neighbour \\
+oblique rise & $0.60$ lattice & clears the physical-leg crossing threshold
+  while retaining a foreshortened sheet \\
+slab slant & $0.60$ lattice & the full-pitch showcase frame buys lateral leg
+  clearance at the cost of width drift \\
+slab rise & $0.55$ lattice & pairs with the steeper slab slant above the leg
+  threshold \\
+double-layer slant & $0.40$ lattice & maximizes pairing-leg clearance for
+  sheets up to four row levels deep \\
+double-layer rise & $0.45$ lattice & the squat stack avoids the ambiguous
+  $0.48$--$0.52$ tangent band \\
+sheet gap & $0.70$ lattice & disjoint sheets retain about one row-rise of air;
+  the full separation also grows with the row count \\
+coincidence floor & $1.25$ bead & multiplier of the bead diameter below
+  which expert-frame sites read as one blob \\
+plane-trace reach & $0.20$ base & stays west of the next depth neighbour's
+  bead while a sheet-local trace crosses in-plane bonds \\
 \bottomrule
 \end{tabularx}\par}
 \smallskip
@@ -297,8 +368,13 @@ wire width & $0.55$\,pt & the bond stroke, the reference width of
   the hierarchy \\
 emphasis width & $0.80$\,pt & region outlines and distinguished
   edges sit over wires \\
-junction floor & $0.9$\,mm & below about three wire widths a
+junction floor & $0.9$\,mm & below about $4.7$ wire widths a
   junction reads as dirt \\
+direction barb & $2.6$\,pt & the smallest direction mark that reads at
+  print size \\
+fused barb & $3.8$\,pt & spans both strokes of a doubled wire \\
+brace amplitude & $2.6$\,pt & the smallest readable brace, numerically
+  equal to the barb floor but semantically independent \\
 \bottomrule
 \end{tabularx}\par}
 \medskip

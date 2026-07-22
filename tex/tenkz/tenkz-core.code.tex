@@ -57,10 +57,10 @@
                                % braces.  It separates, never clears: WHAT must
                                % be cleared is the silhouette's business, and
                                % is measured, not budgeted.  0.15 pitch is
-                               % ~1.7mm at the default 11mm pitch (~3x the
-                               % wire width, so wire-weight ink never fuses
-                               % with the return at print size) and still
-                               % ~1mm at the inline pitch
+                               % ~1.7mm at the default 11mm pitch (~8.5x the
+                               % 0.55pt wire width, so wire-weight ink never
+                               % fuses with the return at print size) and
+                               % still ~1mm (~5.3 wire widths) inline
 \def\tenkz@r@labelclear{0.12}  % ONE clearance for every label band
 \def\tenkz@r@dotlabelband{0.30}% ONE label band for every external label:
                                % clearance + one line of script-size text.
@@ -111,7 +111,8 @@
 \def\tenkz@wirewidth{0.55pt}
 \def\tenkz@annwidth{0.40pt}
 \def\tenkz@emphwidth{0.80pt}
-\def\tenkz@junctionfloor{0.9mm}% below ~3x wire width a junction reads as dirt
+\def\tenkz@junctionfloor{0.9mm}% ~4.7x the 0.55pt wire width: below this
+                               % absolute floor a junction reads as dirt
 \def\tenkz@barblen{2.6pt}      % directionality barb; a print-size floor, not
                                % a ratio: below this the barb reads as dirt
 \def\tenkz@fusedbarblen{3.8pt} % barb spanning a doubled (fused) wire

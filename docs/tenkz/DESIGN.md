@@ -28,8 +28,8 @@
 | G16 | Literal-zero migration exit scan | tnplain | §6 |
 | G17 | Lint ban on literal `...`/`\ldots` inside picture bodies (must be `\tndots`) | tnplain | §5.7 |
 | G18 | Region-tracer day-1 fallback (fill mode = per-cell rounded squares; outline restricted to simply-connected sets until the notch algorithm matures) | tnplain | §1.3, §6 |
-| G19 | Governance: hard CI cap on the public API surface + "a new command requires a new grammatical class; a new builder key requires three existing figures it shortens" | tnplain | §2.7 |
-| G20 | Whole-equation SVG reroute for running math containing `\tnpic[inline]` (MathJax cannot typeset the atom) | tnplain | §1.5 |
+| G19 | Governance: measured public API surface + "a new command requires a new grammatical class; a new builder key requires three existing figures it shortens" | tnplain | §2.7 |
+| G20 | Explicit `tenkzequation` row keeps SVG diagram atoms outside MathJax while retaining copyable operator text | tnplain | §1.5 |
 | G21 | Sugar contract: every sugar and builder expands to primitives with byte-identical event streams | tncalc | §5.2 |
 | G22 | "Why this is a command and not a key" printed per command in the reference chapter | Quartet | §7 |
 | G23 | Genre-ownership table (every brief use case mapped to exactly one sub-language) + Knuth-grade geometry-appendix format (constant, value, derivation, printed motivation) | Quartet | §4.4, §7 |
@@ -42,7 +42,7 @@
 1. **Winner split** (judge-author → Quartet; judges tufte + maintainer → tenkz). Resolved for tenkz on tally and 2/3 majority. Judge-author's preference is substantively honored: Quartet's five distinguishing assets (G1, G2/G3, G9, G10/G11, G23) are grafted, and his four concrete tenkz defects are fixed here — the `\tnfuse` signature contradiction (§2.1), the command-vs-key doctrine contradiction (§2.7), the polygon-mode honesty problem (§2.2), and the compressed Phase-1 hump (§6, split into scripted sub-batches with two gates).
 2. **Engine** (author: xelatex forecloses Lua for the hull tracer; tufte + maintainer: xelatex avoids a book-wide typography gamble). **Resolved: keep xelatex end-to-end** (print and corpus = xelatex; web = xelatex → .xdv → dvisvgm). Two judges explicitly scored this as a tenkz advantage. The tracer is written in expl3 over bounded grids (≤ 12×12) with tnplain's day-1 fallback (G18). Escalation path is Open Question 1.
 3. **Row pairing mechanism** (maintainer offered `rows=` typing *and/or* `\contract{±n}`). **Resolved: `rows=` typing only, no new command.** Adjacent-layer pairing is a row-policy default; the per-cell escape is a `pair=+1|-1|none` key on `\tn`. This keeps the API surface flat and is consistent with the doctrine in §2.7.
-4. **Line-budget governance** (author wanted tnplain's CI cap; tnplain's own 800-line cap was busted by its own table, per judge-maintainer). **Resolved: cap the API, not the line count.** CI enforces exactly 4 environments + 17 exported commands (counted mechanically); per-file line budgets are an advisory CI report. A quantikz-scale grid engine cannot honestly promise 800 lines.
+4. **Line-budget governance** (author wanted tnplain's CI cap; tnplain's own 800-line cap was busted by its own table, per judge-maintainer). **Resolved: measure the API, not the line count.** The shipped surface has five public environments across four sub-languages (the fifth is the `tenkzplanes` preset), 17 exported commands, and 143 leaf keys. The recurring simplification gate records that census; per-file line budgets remain advisory. A quantikz-scale grid engine cannot honestly promise 800 lines.
 5. **Migration regression mechanism** (pixel diff vs event-graph isomorphism). **Resolved: both.** Pixel diff with a whitelisted intentional-fix list (visual critique items) *and* the iso gate (G9); the iso gate is waivable per figure with a one-line justification, same discipline as paper-gap notes.
 
 ---
@@ -55,7 +55,7 @@
 tenkz.sty                 user entry point; version; loads all layers
 tenkz-core.code.tex       L0  /tenkz/ pgfkeys tree; two-layer theme/semantic styles COMPLETED
                               for all styles (closes the 14/31 gap); semantic hue table;
-                              metric system: ONE pitch (11mm) + 8 documented ratios (§4.4);
+                              metric system: ONE pitch (11mm) + 38 documented ratios (§4.4);
                               event stream v2 (.tnlog, expl3 iow, per-picture ids, currfile src);
                               port-type registry (virtual/physical ONLY — morphism deleted);
                               theme scope guard (rejects geometry keys in themes, G14)
@@ -83,7 +83,7 @@ scripts/tenkz_lint.py     source lint: \ldots ban in picture bodies (G17), raw-i
 blueprint/src/Packages/tenkz_pic.py
                           plasTeX module: renders the four languages, tenkzplanes preset,
                           and \tnpic generically;
-                          per-body content-hash SVG cache; whole-equation reroute (G20)
+                          per-body content-hash SVG cache; explicit equation rows (G20)
 docs/tenkz/manual2.tex    the citable quantikz-style manual (§7)
 docs/tenkz/HACKING.md     operational build, audit, and visual-review guidance
 ```
@@ -106,13 +106,13 @@ Every environment and `\tnpic` yields a **slice**: a TeX box whose declared axis
 
 ### 1.5 Engine and web pipeline
 
-One engine end-to-end: **xelatex** for print and the adopted corpus; **xelatex → .xdv → dvisvgm** for web SVG (dvisvgm reads xdv natively). The library is engine-neutral internally (no unicode-math dependency). plasTeX registers the native environments + `\tnpic` as verbatim-captured, standalone-compiled SVG units with per-body content-hash caching — one edited figure invalidates one SVG, not the whole book. Running-math formulas containing `\tnpic[inline]` are rerouted whole-equation to the SVG path (G20); the accessibility trade-off is documented and scoped (only equations containing inline atoms).
+One engine end-to-end: **xelatex** for print and the adopted corpus; **xelatex → .xdv → dvisvgm** for web SVG (dvisvgm reads xdv natively). The library is engine-neutral internally (no unicode-math dependency). plasTeX registers the native environments + `\tnpic` as verbatim-captured, standalone-compiled SVG units with per-body content-hash caching — one edited figure invalidates one SVG, not the whole book. Blueprint equations containing diagram atoms use the explicit `tenkzequation` text-mode row (G20): every picture remains its own SVG outside MathJax, while equality signs, arrows, and other operator text remain selectable.
 
 ---
 
 ## 2. Complete public API
 
-**Surface: 4 environments + 17 commands + ~45 documented keys.** CI counts the exports; the cap is hard (G19). Every command's reference entry prints its "why not a key" justification (G22).
+**Surface: five public environments across four sub-languages + 17 commands + 143 documented leaf keys.** The recurring gate counts the surface (G19). Every command's reference entry prints its "why not a key" justification (G22).
 
 ### 2.1 `tenkz` — the contraction grid
 
@@ -166,7 +166,7 @@ override and may deliberately undercut this automatic clearance.
 
 Typed-map rows belong to the categorical diagram language, not to the tensor-network language. Their vertices are mathematical objects and their joining strokes are maps, not contracted indices. A `\tnpic` occurring in an object cell remains an opaque mathematical object; the adjacent typed-map stroke does not acquire tensor ports or enter its contraction graph. The modes `maps` and `polygon` are disjoint, while ordinary grid mode retains the complete tikz-cd arrow grammar.
 
-A family is written as small multiples: one complete domain--codomain row for each member, with the same number of object columns in every row. A finite family is displayed in full, rather than by selected representatives. Parameters may remain symbolic when the displayed row asserts a formula uniformly over all their values. The matrix is a math object and requires no separate sizing mode. In an ordinary TeX document it may occur in displayed or running mathematics. In blueprint chapter source, until the whole-equation web reroute (G20) lands, a `tenkzcd` must instead be a top-level block outside `$...$` and `\[...\]`; use `\par\noindent\hfil ... \hfil\par` for a centered nonfloating diagram, or a `figure` when a genuine float is intended.
+A family is written as small multiples: one complete domain--codomain row for each member, with the same number of object columns in every row. A finite family is displayed in full, rather than by selected representatives. Parameters may remain symbolic when the displayed row asserts a formula uniformly over all their values. The matrix is a math object and requires no separate sizing mode. In an ordinary TeX document it may occur in displayed or running mathematics. In blueprint chapter source a single `tenkzcd` is a top-level block outside `$...$` and `\[...\]`; a row with operators or sibling pictures uses `tenkzequation`. A genuine float still uses `figure`.
 
 For the CPSV refinement, the middle-subspin Hilbert space is
 
@@ -403,18 +403,18 @@ A command exists **iff** it introduces a new grammatical class: atom (`\tn`), on
 ```latex
 \[
   \begin{tenkz}[rows={op, ket}]
-    \tnfuse[rows=2]{V} & \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} \\
+    \tnfuse[span=2]{V} & \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} \\
                        & \tn{A}                                & \tndots & \tn{A}
   \end{tenkz}
   \;=\;
   \begin{tenkz}[rows={op, ket}]
-    \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} & \tnfuse[rows=2, combined=east]{V} \\
+    \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} & \tnfuse[span=2, combined=east]{V} \\
     \tn{B}                                & \tndots & \tn{B}      &
   \end{tenkz}
 \]
 ```
 
-`\tnfuse[rows=2]{V}` spans both wire rows: two east stubs feed the layer wires, one combined wire exits west in the fused doubled-stroke skin (mirrored via `combined=east` on the RHS). Axis defaults to the midline, so `=` aligns across both sides with no key.
+`\tnfuse[span=2]{V}` spans both wire rows: two east stubs feed the layer wires, one combined wire exits west in the fused doubled-stroke skin (mirrored via `combined=east` on the RHS). Axis defaults to the midline, so `=` aligns across both sides with no key.
 
 **B8 — Inline transfer-map atom inside `\sum` in running math**
 
@@ -424,7 +424,7 @@ $\E_A(X)=\sum_{i}\,\tnpic[sandwich, inline]{\tn{A^i} \\ \tn*{A^i}}\,(X)$
 and each summand is a congruence.
 ```
 
-On the web, any formula containing `\tnpic[inline]` is rerouted whole-equation to SVG (G20). **&-free fallback for hostile contexts** (`align`, footnotes, externalization): `\tndefine` the body outside the hostile context and use the defined macro inside — named explicitly in the troubleshooting chapter.
+Ordinary TeX may use this inline atom directly. Blueprint web source keeps it out of `$...$` and places display-adjacent diagram equations in `tenkzequation` (G20). The wrapper renders each picture independently and leaves its intervening operator text selectable. **&-free fallback for hostile contexts** (`align`, footnotes, externalization): state the same row explicitly with top-level siblings rather than placing an image inside MathJax input.
 
 ---
 
@@ -444,12 +444,12 @@ Two-layer split: **semantic styles** (what a mark means) bind to **theme slots**
 | `mpo tensor` | `\tn[mpo]` | 0.55pt | operator-layer skin |
 | `peps tensor` | lattice sites, `\tn[peps]` | 0.55pt | leg geometry fixed in L1 (no double-stroke defect) |
 | `fusion map` | `\tnfuse` | 0.55pt | trivalent glyph |
-| `tree junction` | `\tntree` nodes | dot ≥ 0.9mm | = 3.2 × wire width (print floor) |
+| `tree junction` | `\tntree` nodes | dot ≥ 0.9mm | absolute print floor, about 4.7 wire widths |
 | `bond` | virtual wires | 0.55pt | identical stroke to physical (type = direction) |
 | `fused bond` | `:fused` rows, `\tnfuse` output, `\tnjoin[fused]` | doubled 0.55pt | RMP index-bundle convention (G3) |
 | `physical leg` | leg stubs | 0.55pt | length 0.38·pitch |
 | `bond arrow` | `bond dir=` marks | 0.55pt head | MPO orientation (G4) |
-| `trace` | `periodic`/`trace=` arcs | 0.55pt | racetrack, clearance 0.55·pitch |
+| `trace` | `periodic`/`trace=` arcs | 0.55pt | racetrack outside the measured silhouette plus 0.15·pitch daylight |
 | `cut` | `\tncut` | 0.40pt dashed | |
 | `brace` | `\tnspan[brace *]` | 0.40pt | annotation ink |
 | `group region` | `\tnspan[box]`, `\tnregion[group]` | 0.40pt dashed, no fill | one meaning and one measured renderer in grid and free tiers |
@@ -477,11 +477,11 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 | `layer sep` | 0.80·pitch | double layers read as layers, not as two chains |
 | `physical leg` | 0.38·pitch | a labeled leg clears the bond label at script size |
 | `virtual stub` | 0.45·pitch | long enough to read as an open index, shorter than a bond so a dangling end is never mistaken for a contraction |
-| `trace clearance` | 0.55·pitch | racetrack clears leg labels on the outer row |
+| `daylight` | 0.15·pitch beyond the measured silhouette | pure separation keeps return and annotation ink from fusing with the ink it skirts |
 | `label clearance` | 0.12·pitch | one constant for every quadrant (G7) |
-| `junction diameter` | 3.2 × wire width (≥ 0.9mm) | below 3×, a junction is indistinguishable from a wire crossing at 600 dpi |
+| `junction diameter` | ≥ 0.9mm (about 4.7 × the 0.55pt wire width) | the absolute print floor keeps a junction distinct from a wire crossing |
 | `region margin` (`\tenkz@r@latticemargin`) | 0.27·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
-| `compact` / `inline` | 0.8 scale / em-based scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
+| `compact` / `inline` | 0.8 / 0.62 scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
 | `map column gap` | max(0.34·pitch, widest map-name band + 2·daylight) | the floor keeps a short composition compact; measured opaque label ink clears both adjacent objects without budgeting glyphs; explicit `column sep=` remains an opt-in override |
 | `map row gap` | 0.50·pitch | adjacent small multiples remain distinct without figure-scale leading; `row sep=` overrides it |
 
@@ -651,7 +651,10 @@ Contexts/role/profile hand-entered metadata and their assert-equal churn (now de
 
 ### 5.9 Key-surface census (2026-07 gate)
 
-142 leaf `/tenkz` pgfkeys, across 14 families — counted by parsing every `/tenkz(...)/.code`, `.store~in`, and `.is~choice` declaration in `tex/tenkz/*.code.tex`, excluding choice-value branches and family roots:
+143 leaf `/tenkz` pgfkeys, across 14 families — counted by collecting direct
+`.code`, `.store~in`, and `.is~choice` leaf declarations and expanding every
+`\tenkz_install_core_forwards:nn` call in `tex/tenkz/*.code.tex`; choice-value
+branches, family roots, and `.unknown` handlers are excluded:
 
 | Family | Leaf keys | Source |
 |---|---:|---|
@@ -659,7 +662,7 @@ Contexts/role/profile hand-entered metadata and their assert-equal churn (now de
 | `/tenkz/grid` | 23 | `tenkz-grid.code.tex` |
 | `/tenkz/cell` | 23 | `tenkz-grid.code.tex` |
 | `/tenkz/span` | 4 | `tenkz-grid.code.tex` |
-| `/tenkz/lattice` | 27 | `tenkz-lattice.code.tex` |
+| `/tenkz/lattice` | 28 | `tenkz-lattice.code.tex` |
 | `/tenkz/region` | 7 | `tenkz-lattice.code.tex` |
 | `/tenkz/edge` | 5 | `tenkz-lattice.code.tex` |
 | `/tenkz/site` | 3 | `tenkz-lattice.code.tex` |
@@ -669,7 +672,7 @@ Contexts/role/profile hand-entered metadata and their assert-equal churn (now de
 | `/tenkz/cd` | 8 | `tenkz-cd.code.tex` |
 | `/tenkz/tree` | 6 | `tenkz-cd.code.tex` |
 | `/tenkz/arrow` | 5 | `tenkz-cd.code.tex` |
-| **total** | **142** | |
+| **total** | **143** | |
 
 For scale, quantikz's public key surface is roughly 40 — tenkz is a wider language by design (four sub-languages, not one), but the ratio is worth carrying forward rather than re-discovering at the next gate. No family here is flagged for removal: this is a measurement, not a verdict. Pruning candidates (a family whose keys have exactly one call site across `tex/tenkz/examples/` and the blueprint chapters) are **0.9-freeze material** — the manual and reference chapter become the binding contract at 0.9 (GOAL.md), and a key still resting on a single call site at that point is the moment to cut it, not before. Record the count at every gate (issue #4158); prune later.
 
@@ -736,7 +739,7 @@ keys are `periodic`, `sandwich`, `conjugate`, `fused`, never software jargon.
    canonical-spelling table as shared reference?
 3. **Slides scope.** Should the dark-theme slide deck migrate with the package,
    or should slide rendering remain a follow-up?
-4. **Inline-atom accessibility.** The whole-equation SVG reroute (G20) loses MathJax copyability/screen-reader text for every formula containing `\tnpic[inline]`. Acceptable for the public blueprint site as-is, or should chapter style restrict inline atoms to display-adjacent usage until an alt-text pipeline exists?
+4. **Inline-atom accessibility.** Should the web renderer turn an entire equation containing `\tnpic[inline]` into one SVG, or should source mark display-adjacent diagram rows explicitly so operator text remains selectable?
 5. **Publication.** Should tenkz ship as a standalone citable package at
    migration completion, or remain repository-internal for one release cycle?
 ---
@@ -749,8 +752,9 @@ The final outcomes are:
    stalls, `outline` restricts to simply-connected sets (fill mode covers notched figures).
 2. **The named dozen**: fully inlined; no catalogue-like house layer remains.
 3. **Slides**: migrated to the native package during catalogue demolition.
-4. **Inline-atom accessibility**: whole-equation SVG reroute accepted; style rule restricts inline
-   atoms to display-adjacent prose; alt-text pipeline is follow-up work.
+4. **Inline-atom accessibility**: explicit `tenkzequation` rows are the web contract. Each diagram
+   atom is an SVG with source-derived alternative text, while the operators between atoms remain
+   selectable; true running-text atoms stay an ordinary-TeX capability.
 5. **Publication**: repo-internal for one release cycle, then CTAN/arXiv.
 
 ## 10. Additional hard requirements (maintainer, 2026-07-16)
@@ -862,20 +866,19 @@ row-to-self form. Resolution is local-wins: cell > row > side > picture.
 
 ### 12.4 The trace-clearance correction
 
-The §4.4 table fixed `trace clearance` at 0.55·pitch; the shipped source used 0.62, and the
-manual's fact-check ruled that the source wins. The audit then proved every constant wrong:
-with open legs facing the racetrack, leg (0.38) + label clearance (0.12) + script-size text
-exceeds 0.62, and the rendered trace loop collided with physical ink. The decided fix computes
-the racetrack ordinate additively from the outer row's occupied band —
+The first table fixed `trace clearance` at 0.55·pitch, while the early source
+used 0.62. Both constants predicted the outer row's ink and both failed when a
+different glyph or label changed that ink. An intermediate additive budget
+made the dependencies visible but still duplicated the drawing passes' model.
+The final rule measures instead:
 
-    trace y = row y ± ( glyph half-extent
-                        + physical leg + label band   (only when open legs face the loop)
-                        + trace margin )
+    trace ordinate = row axis ± (measured silhouette + daylight)
 
-with one new named ratio `trace margin` = 0.24·pitch and no user-facing key. The §4.4
-trace-clearance row is superseded; the claim "the racetrack clears leg labels on the outer
-row" becomes true by construction, for every glyph skin.
-<!-- The 0.62 constant still guards the drawing site until the band rule lands in source. -->
+The silhouette includes the rendered glyph edge, each facing physical leg and
+label band, pair-trace cap, external bead label, and fusion overhang. The sole
+added distance is `daylight = 0.15·pitch`, pure separation beyond the measured
+ink. There is no trace-clearance ratio to retune and no consumer predicts what
+another pass draws.
 
 ## 13. Cups and the canonical channel spellings
 
@@ -1109,6 +1112,47 @@ The gate asks three questions after each migration slice.
    use it; once an in-repository search reaches zero, delete the alias and its
    reference row rather than maintaining two names for one policy.
 
+### 17.2 Recurring simplification gate (2026-07-22)
+
+This run covered the native package and its manual after the catalogue
+demolition.
+
+1. **What grew ad hoc?** Documentation facts drifted from the mechanisms they
+   described. The geometry appendix still printed a fixed trace clearance even
+   though the renderer measures a silhouette and adds one daylight; it also
+   claimed to transcribe every ratio while omitting most of the 38 named
+   ratios. The web specification promised automatic whole-equation rerouting,
+   while the shipped and tested contract is the explicit `tenkzequation` row.
+   The appendix and web contract now state the implemented mechanisms.
+2. **Which two things are secretly one thing?** The lattice and free-region
+   commands expose one region grammar, but their parsing has different state
+   effects and their renderers consume different geometry. Issue #4608 owns the
+   shared declarative surface and its byte-identical event gate; this pass does
+   not fold that medium-risk parser change into documentation repair. The six
+   remaining implementation twins likewise stay in issue #4614 until each call
+   site is audited. Similar slide bodies stay local: extracting whole figures
+   would recreate the catalogue and remove the body that each slide may extend.
+3. **What would be deleted in a redesign?** The following compatibility
+   spellings remain part of the 0.6 transition surface. Counts are non-comment
+   source lines at `a49dacc74` across examples, the adopted corpus, blueprint
+   chapters, slides, and the manual.
+
+   | Compatibility spelling | Canonical spelling | Lines | Files |
+   |---|---|---:|---:|
+   | `boundary legs` | `boundary=open` | 96 | 46 |
+   | `label at=` | `label pos=` | 39 | 17 |
+   | `route=curve` | `route=arc` | 70 | 25 |
+   | `legs at=` | explicit face data | 27 | 17 |
+   | `chain axis=` | `frame=` | 5 | 4 |
+   | `boundary=periodic` | `west=trace, east=trace` | 2 | 1 |
+   | `combined=` | explicit fused-face data | 48 | 28 |
+   | `\tnfuse[rows=2]` | `\tnfuse[span=2]` | 1 | 1 |
+
+   These spellings are kept because the manual does not become the binding
+   contract until the 0.9 freeze. Before that freeze, rewrite every non-fixture
+   client to the canonical form. Delete an alias only when that count reaches
+   zero, removing its compatibility probe and manual row in the same change.
+
 
 ## 18. The silhouette (recorded 2026-07-18)
 
@@ -1141,8 +1185,8 @@ both are a name hung off ink.
 keeps a return wire or a brace from fusing visually with the ink it
 skirts.  It clears nothing — what must be cleared is the silhouette's
 business and is measured.  0.15 pitch is about 1.7 mm at the default
-11 mm pitch (roughly three wire widths, so it reads at print size) and
-still about 1 mm at the inline pitch.  It replaces the former
+11 mm pitch (roughly 8.5 of the 0.55 pt wire widths) and still about
+1 mm (roughly 5.3 wire widths) at the inline pitch.  It replaces the former
 `traceclear = 0.30`, which budgeted a worst-case glyph inside a fixed
 drop, and the braces' unnamed 0.20 offset.
 

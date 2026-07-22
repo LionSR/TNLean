@@ -56,10 +56,10 @@ padded with bare wire.
   one-row sugar for \texttt{ket|bra|op|wire} \\
 \texttt{sandwich} & --- & --- &
   \texttt{rows=\{ket, bra\}}, legs paired \\
-\texttt{boundary=} & \texttt{open|none} & \texttt{open} &
-  stubs at the row ends, or sealed \\
+\texttt{boundary=} & \texttt{open|none|}\newline \texttt{periodic} & \texttt{open} &
+  stubs at the row ends, sealed, or each row traced to itself \\
 \texttt{periodic} & --- & --- &
-  trace: each row closed to itself \\
+  compatibility alias for \texttt{boundary=periodic} \\
 \texttt{west label=}, \texttt{east label=} & \meta{math} & --- &
   boundary index at the stub tip \\
 \texttt{west=}, \texttt{east=} & \texttt{open|none|}\newline
@@ -78,6 +78,8 @@ padded with bare wire.
   per-site up-into-down trace (one-row pictures) \\
 \texttt{trace=} & \texttt{\{(physical, c-c)\}} & --- &
   per-column ket-into-bra trace \\
+\texttt{open=} & \texttt{\{(i,c),\ldots\}} & --- &
+  keep the selected inter-layer pairing legs open \\
 \texttt{bond dir=} & \texttt{right|left} & --- &
   arrows on every bond: out $=V$, in $=V^{*}$ \\
 \texttt{bond label=} & \texttt{\{\meta{m} at \meta{c}-\meta{c}\}} &
@@ -90,6 +92,8 @@ padded with bare wire.
   $0.8$ and $0.62$ pitch profiles \\
 \texttt{tensor style=} & \texttt{dot|box} & \texttt{dot} &
   glyph policy (Section~\ref{sec:ref-policy}) \\
+\texttt{species=} & \texttt{\{name,\ldots\}} & --- &
+  declare species names for atoms and typed lines \\
 \texttt{frame=} & \texttt{flat|vertical} & \texttt{flat} &
   rotates the whole grammar $90^\circ$: columns descend, legs point
   west/east, \tncmd{tndots} draws \texttt{\textbackslash vdots} \\
@@ -205,6 +209,10 @@ An empty label, \tnval{\textbackslash tn\{\}}, is an anonymous tensor
   span $k$ columns \\
 \texttt{wires=} & \meta{k} & \texttt{1} &
   span and terminate $k$ wire rows (also on \tncmd{tnX}) \\
+\texttt{combined=} & \texttt{west|east} & --- &
+  on a \texttt{wires=}$k$ \tncmd{tn} or \tncmd{tnX}, replace that
+  virtual face by one centred fused stub; on \tncmd{tnfuse}, choose the
+  side of its combined stub \\
 \texttt{legs at=} & \texttt{\{c,\ldots\}} & centre &
   compatibility alias: the same physical ports on both faces \\
 \texttt{up at=}, \texttt{down at=} & \texttt{center|\{c,\ldots\}} & centre &
@@ -277,6 +285,7 @@ with a capsule in the ket row expects no partner beneath it.}  With
 \to\mathbb{C}^{D_1 D_2}$: it consumes its side's boundary and leaves
 \emph{one} combined stub.\whynote{No key may change a picture's
 open-index count; the wedge does.}
+The compatibility key \tnkey{rows=} is an alias of \tnkey{span=}.
 The combined stub counts as one open virtual index, so fused
 equations balance.
 
@@ -393,6 +402,23 @@ records the resolved skin.  Example~\ref{ex:modes-schools} shows one
 window under both policies; \S\ref{ch:house} states which school a
 document should pick, and why.
 
+\medskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}p{29mm}p{23mm}p{11mm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\keyhead
+\texttt{pitch=} & \meta{length} & \texttt{11mm} &
+  the metric unit from which all house lengths derive \\
+\texttt{compact}, \texttt{inline} & --- & --- &
+  $0.8$ and $0.62$ pitch profiles \\
+\texttt{tensor style=} & \texttt{dot|box} & \texttt{dot} &
+  the unadorned tensor glyph \\
+\texttt{species=} & \texttt{\{name,\ldots\}} & --- &
+  declare names and assign their semantic-cycle hues \\
+\bottomrule
+\end{tabularx}\par}
+\medskip
+
 % =====================================================================
 \subsection{Maps, trees, and arrows: \tnenv{tenkzcd}}
 
@@ -429,8 +455,16 @@ arrow syntax of such matrices.
   slots on an $n$-gon; unset = matrix mode \\
 \texttt{radius=} & \meta{length} & \texttt{30mm} &
   circumradius of the polygon \\
-\multicolumn{4}{@{}l}{\emph{other keys pass through to the
-  picture} (\texttt{pitch=}, \texttt{tensor style=}, \ldots)} \\
+\texttt{pitch=} & \meta{length} & \texttt{11mm} &
+  the shared metric unit \\
+\texttt{compact}, \texttt{inline} & --- & --- &
+  the shared $0.8$ and $0.62$ pitch profiles \\
+\texttt{tensor style=} & \texttt{dot|box} & \texttt{dot} &
+  the shared glyph policy for embedded tensor pictures \\
+\texttt{species=} & \texttt{\{name,\ldots\}} & --- &
+  declare species names for trees and typed lines \\
+\multicolumn{4}{@{}l}{\emph{Other keys pass through to the underlying
+  commutative-diagram picture.}} \\
 \bottomrule
 \end{tabularx}\par}
 \medskip
@@ -457,6 +491,25 @@ floating or numbered figure is part of the grammar.
 \hspace*{2em}role=\meta{role}, species=\meta{name}]%
 \{\meta{bracketed word}\}\\
 \textbackslash tnarrow*[from=\meta{i}, to=\meta{j}]\{\meta{label}\}}
+
+\medskip
+{\footnotesize
+\noindent\begin{tabularx}{\linewidth}{@{}p{29mm}p{23mm}p{11mm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\keyhead
+\texttt{tree style=} & \texttt{wire|ribbon} & \texttt{wire} &
+  lines or their regular ribbon neighbourhood \\
+\texttt{role=} & \meta{role} & --- &
+  \texttt{operator}, \texttt{marked}, \texttt{extra}, or \texttt{passive} \\
+\texttt{species=} & \meta{name} & --- &
+  a species declared in the shared key space \\
+\texttt{pitch=} & \meta{length} & \texttt{11mm} &
+  the shared metric unit \\
+\texttt{compact}, \texttt{inline} & --- & --- &
+  the shared $0.8$ and $0.62$ pitch profiles \\
+\bottomrule
+\end{tabularx}\par}
+\medskip
 
 \noindent \tncmd{tntree} draws the fusion tree of a bracketed word,
 innermost pairs first: in
@@ -581,7 +634,8 @@ and \tnkey{label=}.  \tncmd{tnsite} removes a site and its bonds only with
   the region's fill-and-outline role \\
 \texttt{outline} & --- & --- &
   boundary only, no fill \\
-\texttt{label=}, \texttt{label at=} & \meta{math}, compass & --- &
+\texttt{label=}, \texttt{label pos=}, \texttt{label at=} &
+  \meta{math}, compass & --- &
   region label and its corner \\
 \texttt{name=} & \meta{id} & --- &
   bind the set for later set algebra \\
@@ -647,14 +701,15 @@ endpoints open rather than inventing a return path.
 \cmdsig{\textbackslash begin\{tenkzplanes\}[\meta{keys}]\
 \textbackslash end\{tenkzplanes\}}
 
-Two oblique sheets, ket over bra, with a site-wise pairing leg
-contracting each physical index --- the expectation-value object
-$\langle\Psi|\Psi\rangle$ of a two-dimensional state.  Cells listed
+The preset starts with an oblique ket sheet above an oblique bra sheet.
+A site-wise pairing leg contracts each physical index, giving the
+expectation-value object $\langle\Psi|\Psi\rangle$ of a two-dimensional state.  Cells listed
 in \tnkey{open=} keep their pairing legs dangling; cells listed in
 \tnkey{trace=} close by a wrap loop between the sheets, and trace
-beats open when a cell is listed in both.  The stack is fixed at
-\tnval{sheets=\{ket, bra\}}; anything else warns and draws the
-double layer (\S\ref{ch:trouble}).
+beats open when a cell is listed in both.  Every option is an ordinary
+\tnenv{tenkzlattice} key and overrides the corresponding preset state;
+in particular, \tnkey{sheets=} may replace the default
+\tnval{\{ket, bra\}} stack.
 
 \medskip
 {\footnotesize
@@ -663,8 +718,9 @@ double layer (\S\ref{ch:trouble}).
 \keyhead
 \texttt{rows=}, \texttt{cols=} & \meta{n} & --- &
   the window's extent \\
-\texttt{sheets=} & \texttt{\{ket, bra\}} & \texttt{\{ket, bra\}} &
-  the supported stack \\
+\texttt{sheets=} & \meta{n}\texttt{|}\newline
+  \texttt{\{ket,bra,\ldots\}} & \texttt{\{ket, bra\}} &
+  numeric sheets or a top-to-bottom role stack; overrides the preset stack \\
 \texttt{sheet sep=} & \meta{factor} & house &
   scales the inter-sheet gap \\
 \texttt{open=} & \texttt{\{(r,c),\ldots\}} & --- &
@@ -782,7 +838,8 @@ for example \tnval{group region/.append style=\{rounded corners=0pt\}}.
 \texttt{slot=} & \texttt{selected|secondary|} \texttt{complement|collar} &
   \texttt{selected} & semantic region skin \\
 \texttt{outline} & --- & --- & suppress the slot fill \\
-\texttt{label=}, \texttt{label pos=} & \meta{math}, \meta{compass} &
+\texttt{label=}, \texttt{label pos=}, \texttt{label at=} &
+  \meta{math}, \meta{compass} &
   ---, \texttt{north west} & outside label and its placement \\
 \texttt{name=} & \meta{name} & --- &
   expose this measured region to a later region \\
