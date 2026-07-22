@@ -1124,12 +1124,23 @@ specialization of that Appendix~D definition.
     columns form one orthonormal family on the disjoint union of the sector
     matrix spaces. On the tensor square of this disjoint union, let $Q$ be the
     sum of the sector bond projectors, extended by zero between unequal
-    sectors. The two adjacent placements of $Q$ commute within each sector.
-    Mixed-sector products vanish because their shared one-site factor is
-    $U_j^*U_k=0$ for $j\ne k$.
+    sectors. Write $L_j$ and $R_j$ for the left and right overlapping lifts
+    of the sector-$j$ bond projector. The single-sector relation and the
+    mixed-sector orthogonality give
+    \[
+        L_jR_j=R_jL_j,
+        \qquad
+        L_jR_k=0=R_kL_j \quad (j\ne k),
+    \]
+    where the latter identities follow from the shared one-site factor
+    $U_j^*U_k=0$. Summing over the sectors shows that the two adjacent
+    placements of $Q$ commute.
 
-    Transporting $Q$ by the tensor square of the common isometry gives the
-    orthogonal projector onto
+    If $U$ is the common isometry, then transport gives the identity
+    \[
+        (U\otimes U)Q(U^*\otimes U^*)=P_{G_2(B)},
+    \]
+    since the range on either side is
     \[
         \bigvee_j G_2(A_j)=G_2(B).
     \]
