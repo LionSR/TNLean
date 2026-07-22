@@ -20,6 +20,7 @@ on:
       - 'scripts/nolints-style.txt'
       - 'scripts/check_numbered_lean_files.py'
       - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
@@ -64,6 +65,7 @@ on:
       - 'scripts/nolints-style.txt'
       - 'scripts/check_numbered_lean_files.py'
       - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
@@ -144,6 +146,7 @@ jobs:
             module_policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
+              - 'scripts/lean_import_syntax.py'
               - 'scripts/test_lean_file_policies.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
@@ -276,7 +279,7 @@ jobs:
       # exemption is accepted only while its uncommented content is import-only.
       - name: Run oversized-file guard
         run: >
-          python3 scripts/check_oversized_lean_files.py
+          PYTHONPATH=scripts python3 scripts/check_oversized_lean_files.py
           --root .
           --import-only-aggregator TNLean.lean
 

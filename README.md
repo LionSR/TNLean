@@ -158,9 +158,18 @@ discrepancy is recorded as a mathematical note under `docs/paper-gaps/`.
 
 ## Organization of the source
 
-The file `TNLean.lean` collects everything that is imported as one library;
-legacy material in `TNLean/Archive/` is kept out of it. The source is grouped
-as follows.
+The generated file `TNLean.lean` collects everything imported as one library;
+legacy material in `TNLean/Archive/` is kept out of it. Directory aggregators
+are generated too. Never edit these aggregators by hand. After adding, moving,
+or removing a production `.lean` file, regenerate and check them with:
+
+```bash
+python3 scripts/generate_import_aggregators.py
+python3 scripts/generate_import_aggregators.py --check
+```
+
+See [`docs/import_structure.md`](docs/import_structure.md) for the hierarchy and
+Archive policy. The source is grouped as follows.
 
 | Path | Contents |
 |---|---|

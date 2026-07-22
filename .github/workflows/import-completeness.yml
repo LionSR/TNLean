@@ -1,0 +1,43 @@
+name: Import completeness
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'TNLean.lean'
+      - 'TNLean/**/*.lean'
+      - 'scripts/generate_import_aggregators.py'
+      - 'scripts/lean_import_syntax.py'
+      - 'scripts/test_generate_import_aggregators.py'
+      - '.github/workflows/import-completeness.yml'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'TNLean.lean'
+      - 'TNLean/**/*.lean'
+      - 'scripts/generate_import_aggregators.py'
+      - 'scripts/lean_import_syntax.py'
+      - 'scripts/test_generate_import_aggregators.py'
+      - '.github/workflows/import-completeness.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check generated import aggregators
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test import-aggregator generator
+        run: PYTHONPATH=scripts python3 scripts/test_generate_import_aggregators.py -v
+      - name: Check generated import aggregators
+        run: PYTHONPATH=scripts python3 scripts/generate_import_aggregators.py --check

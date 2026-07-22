@@ -245,6 +245,14 @@ class OversizedLeanFilePolicyTests(CapturedCheck):
         self.assertEqual(status, 1)
         self.assertIn("contains non-import Lean code", output)
 
+    def test_aggregator_with_invalid_module_segment_is_rejected(self) -> None:
+        self.write("TNLean.lean", "import TNLean.0Invalid\n")
+        status, output = self.capture(
+            oversized.check_files, self.root, set(), {"TNLean.lean"}
+        )
+        self.assertEqual(status, 1)
+        self.assertIn("contains non-import Lean code", output)
+
     def test_missing_aggregator_exemption_is_rejected(self) -> None:
         status, output = self.capture(
             oversized.check_files, self.root, set(), {"Missing.lean"}

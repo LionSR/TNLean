@@ -50,10 +50,10 @@ instance : DecidableRel adj3 := by unfold adj3; infer_instance
 
 def G3 : SimpleGraph V3 where
   Adj := adj3
-  symm := by
+  symm := ⟨by
     intro a b h
     unfold adj3 at *
-    fin_cases a <;> fin_cases b <;> simp_all
+    fin_cases a <;> fin_cases b <;> simp_all⟩
   loopless := ⟨by intro a; unfold adj3; fin_cases a <;> simp⟩
 
 instance : DecidableRel G3.Adj := by

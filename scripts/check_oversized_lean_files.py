@@ -13,13 +13,12 @@ file is split, remove it from the ``--known`` list.
 from __future__ import annotations
 
 import argparse
-import re
 from pathlib import Path
+
+from lean_import_syntax import pure_import_modules
 
 THRESHOLD: int = 1000
 EXCLUDE_DIRS: tuple[str, ...] = (".lake", "lake-packages", "tmp")
-IMPORT_COMMAND = re.compile(r"import\s+[A-Za-z_][A-Za-z0-9_'.]*(?:\.[A-Za-z0-9_']+)*")
-
 # This guidance is intentionally size-specific.  The numbered-name checker
 # gives complementary advice about choosing mathematical module names.
 SPLIT_GUIDANCE = (
@@ -46,61 +45,14 @@ def _count_lines(path: Path) -> int:
         return sum(1 for _ in handle)
 
 
-def _strip_lean_comments(source: str) -> tuple[str, str | None]:
-    """Remove nested block and line comments, or return a parse error."""
-    output: list[str] = []
-    index = 0
-    block_depth = 0
-    while index < len(source):
-        pair = source[index:index + 2]
-        if block_depth:
-            if pair == "/-":
-                block_depth += 1
-                index += 2
-            elif pair == "-/":
-                block_depth -= 1
-                index += 2
-            else:
-                if source[index] == "\n":
-                    output.append("\n")
-                index += 1
-        elif pair == "/-":
-            block_depth = 1
-            index += 2
-        elif pair == "--":
-            newline = source.find("\n", index + 2)
-            if newline == -1:
-                index = len(source)
-            else:
-                output.append("\n")
-                index = newline + 1
-        else:
-            output.append(source[index])
-            index += 1
-    if block_depth:
-        return "".join(output), "unterminated block comment"
-    return "".join(output), None
-
-
 def validate_import_aggregator(path: Path) -> str | None:
     """Return ``None`` exactly when *path* is a nonempty import-only Lean file."""
     try:
         source = path.read_text(encoding="utf-8")
     except (OSError, UnicodeError) as error:
         return f"cannot read file: {error}"
-    uncommented, error = _strip_lean_comments(source)
-    if error is not None:
-        return error
-    commands = [line.strip() for line in uncommented.splitlines() if line.strip()]
-    if not commands:
-        return "file contains no import commands"
-    for line_number, command in enumerate(commands, start=1):
-        if IMPORT_COMMAND.fullmatch(command) is None:
-            return (
-                "contains non-import Lean code after comments are removed "
-                f"(command {line_number}: {command!r})"
-            )
-    return None
+    _, error = pure_import_modules(source)
+    return error
 
 
 def _normalize_paths(root: Path, paths: list[str]) -> tuple[set[str], list[str]]:
