@@ -44,8 +44,8 @@ the bottom layer is ahead of the community. But the interface inverts its own de
 ### Special-case explosion (the Torvalds failure)
 - Trivalent map: **22 macros for 1 primitive** (orientation × chirality × physical-variant as
   names, not keys). v/p/m × route: **~38 macros for 3 parametric families.**
-- A parallel `Slide*` interface duplicates chapter diagrams and has already drifted
-  (SlideTNTransferMap ≠ TNTransferMap).
+- A parallel slide-specific interface duplicates chapter diagrams and has already drifted
+  from the chapter rendering.
 - The atom registry is hand-synced metadata, already wrong (TNCompactTraceCell declared portless
   but composed via its InsertionW port).
 - Layout profiles: 40 literals ≈ 14 independent choices + one 0.8 scale factor; **92–273 numeric
