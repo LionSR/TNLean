@@ -1,0 +1,26 @@
+name: Tenkz Demolition Guard
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: Check retired tenkz catalogue stays absent
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Scan tracked files for retired catalogue residue
+        run: python3 scripts/check_tenkz_demolition.py
