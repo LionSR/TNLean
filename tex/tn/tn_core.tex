@@ -714,14 +714,6 @@
     \TN@connectevent{physical}{#2}{#3}{trace-right}%
 }
 
-\newcommand{\TN@selectedpath}[2][]{%
-    \draw[tn selected path,#1] #2;%
-}
-
-\newcommand{\TN@factorpath}[2][]{%
-    \draw[tn factor region,#1] #2;%
-}
-
 \newcommand{\TN@vopenport}[3][]{%
     \TN@assertporttype{#2}{virtual}%
     \coordinate (#2Open) at ($(#2)+(#3)$);%

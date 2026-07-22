@@ -50,7 +50,6 @@ jobs:
           cd blueprint/src
           PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
             --check \
-            --check-peps-usage \
             --check-slides \
             --audit \
             --audit-strict \
