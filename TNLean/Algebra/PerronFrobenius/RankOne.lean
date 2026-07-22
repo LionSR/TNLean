@@ -78,8 +78,8 @@ variable {n : ℕ}
 
 /-- A square real matrix has the rank-one factorization of Appendix C.2,
 Lemma C.4 if it is an outer product of two vectors. -/
-def HasRankOneFactorization (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
-  ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b
+def HasRankOneFactorization {ι : Type*} (T : Matrix ι ι ℝ) : Prop :=
+  ∃ a b : ι → ℝ, T = Matrix.vecMulVec a b
 
 /-- The traces of all positive powers of `T` agree with the trace of `T`
 itself. This is the matrix-theoretic consequence of the ZCL step used in
@@ -94,11 +94,12 @@ which is invisible to traces of powers.  It is the algebraic conclusion needed
 after retaining the operator-valued ZCL identity in arXiv:1606.00608,
 Appendix C.2, lines 1489--1497. -/
 theorem hasRankOneFactorization_of_mul_self_eq_self
-    {T : Matrix (Fin n) (Fin n) ℝ}
+    {ι : Type*} [Fintype ι]
+    {T : Matrix ι ι ℝ}
     (hTT : T * T = T) (hTrace : Matrix.trace T = 1) :
     HasRankOneFactorization T := by
   classical
-  let f : (Fin n → ℝ) →ₗ[ℝ] (Fin n → ℝ) := Matrix.toLin' T
+  let f : (ι → ℝ) →ₗ[ℝ] (ι → ℝ) := Matrix.toLin' T
   have hf : IsIdempotentElem f := by
     change Matrix.toLin' T ∘ₗ Matrix.toLin' T = Matrix.toLin' T
     rw [← Matrix.toLin'_mul, hTT]
@@ -107,7 +108,7 @@ theorem hasRankOneFactorization_of_mul_self_eq_self
     rw [Matrix.trace_toLin'_eq, hTrace] at h
     exact_mod_cast h.symm
   rcases finrank_eq_one_iff'.mp hrank with ⟨u, hu, hspan⟩
-  let b : Fin n → ℝ := fun j ↦
+  let b : ι → ℝ := fun j ↦
     Classical.choose (hspan ⟨f (Pi.single j 1), LinearMap.mem_range_self f _⟩)
   refine ⟨u.1, b, ?_⟩
   ext i j
@@ -119,6 +120,34 @@ theorem hasRankOneFactorization_of_mul_self_eq_self
   change Classical.choose _ * u.1 i = f (Pi.single j 1) i at hb'
   rw [heval] at hb'
   simpa [b, Matrix.vecMulVec_apply, mul_comm] using hb'.symm
+
+/-- A strictly positive trace-one matrix with a rank-one factorization admits
+one whose two factors are strictly positive and have dot product one. -/
+theorem HasRankOneFactorization.exists_pos_factorization_of_pos_of_trace_eq_one
+    {ι : Type*} [Fintype ι] [Nonempty ι]
+    {T : Matrix ι ι ℝ} (hT : HasRankOneFactorization T)
+    (hpos : ∀ i j, 0 < T i j) (htrace : Matrix.trace T = 1) :
+    ∃ a b : ι → ℝ, (∀ i, 0 < a i) ∧ (∀ j, 0 < b j) ∧
+      T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
+  classical
+  obtain ⟨u, v, huv⟩ := hT
+  let i₀ : ι := Classical.choice inferInstance
+  let a : ι → ℝ := fun i ↦ T i i₀
+  let b : ι → ℝ := fun j ↦ T i₀ j / T i₀ i₀
+  have hcross (i j : ι) : T i j * T i₀ i₀ = T i i₀ * T i₀ j := by
+    rw [huv]
+    simp only [Matrix.vecMulVec_apply]
+    ring
+  have hab : T = Matrix.vecMulVec a b := by
+    ext i j
+    simp only [a, b, Matrix.vecMulVec_apply]
+    rw [← mul_div_assoc]
+    rw [eq_div_iff (ne_of_gt (hpos i₀ i₀))]
+    exact hcross i j
+  refine ⟨a, b, fun i ↦ hpos i i₀,
+    fun j ↦ div_pos (hpos i₀ j) (hpos i₀ i₀), hab, ?_⟩
+  rw [← Matrix.trace_vecMulVec, ← hab]
+  exact htrace
 
 /-- An idempotent matrix has constant traces of positive powers.  This recovers
 the display tr(T^N) = tr(T) in the proof of Lemma C.5 (arXiv:1606.00608,
