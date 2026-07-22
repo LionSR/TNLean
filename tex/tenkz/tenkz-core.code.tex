@@ -829,13 +829,21 @@
   \else\PackageError{tenkz}{Audited #2 node '#3' has invalid visible state}%
       {Use an ordinary filled, optionally round-stroked audited node.}%
   \fi}
+% shared by the label and glyph capture entry points below: neither ran
+% its owned PGF path callback (the node's audit style was never actually
+% applied), so there is no invalid-code register to read at all.  #2 is
+% the node to DISPLAY (not necessarily \tikzlastnode -- a deferred glyph
+% capture reports a saved node reference instead), #3 the invalid-code
+% lookup key to clean up
+\def\tenkz@nocapturedpathstate#1#2#3{%
+  \tenkz@cleanupglyphsnapshot{#3}%
+  \PackageError{tenkz}{Audited #1 node '#2' has no captured path state}%
+    {The node did not run its owned PGF path callback.}}
 \def\tenkz@capturelabelbbox#1{%
   \tenkz@checkrequiredlastauditowner{#1}%
   \iftenkz@auditownermatch
     \expandafter\ifx\csname tenkz@invalid@#1\endcsname\relax
-      \tenkz@cleanupglyphsnapshot{#1}%
-      \PackageError{tenkz}{Audited label node '\tikzlastnode' has no captured path state}%
-        {The node did not run its owned PGF path callback.}%
+      \tenkz@nocapturedpathstate{label}{\tikzlastnode}{#1}%
     \else
       \tenkz@capturelabelbboxstate{#1}%
     \fi
@@ -1102,9 +1110,7 @@
   \tenkz@cleanupvisiblesnapshot{#1}}
 \def\tenkz@captureglyphgeometrynode#1#2#3#4{%
   \expandafter\ifx\csname tenkz@invalid@#4\endcsname\relax
-    \tenkz@cleanupglyphsnapshot{#4}%
-    \PackageError{tenkz}{Audited glyph node '#1' has no captured path state}%
-      {The node did not run its owned PGF path callback.}%
+    \tenkz@nocapturedpathstate{glyph}{#1}{#4}%
   \else
     \edef\tenkz@visibleinvalid{\csname tenkz@invalid@#4\endcsname}%
     \ifnum\tenkz@visibleinvalid=0\relax
