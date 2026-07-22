@@ -119,8 +119,10 @@ basis of $\C^d$.
 		\label{eq:q1-contractivity}
 	\end{equation}
 	The dissipator $\Dd_L$ is \emph{Hamiltonian-independently contractive} (HIC)
-	if such $K_H,\gamma_H$ exist for every
-	$H=H^\dagger\in L^1_{\mathrm{loc}}$. As in
+	if there are constants $K\ge1$ and $\gamma>0$, depending only on $\Dd_L$,
+	such that the same estimate with $K_H,\gamma_H$ replaced by $K,\gamma$
+	holds for every $H=H^\dagger\in L^1_{\mathrm{loc}}$. Thus the constants are
+	uniform over the drive. As in
 	\sharedref{the Q2 definition}{def:q2-hic}, one may equivalently quantify
 	\eqref{eq:q1-contractivity} over all nonzero traceless Hermitian matrices:
 	for the Jordan decomposition $X=X_+-X_-$, such an $X$ equals
@@ -280,9 +282,10 @@ $N=U^\dagger LU$ is likewise nilpotent with one-dimensional kernel.
 	Write $A(t_0)=\sum_r\Dd_{M_r}$ as in \eqref{eq:q1-caratheodory},
 	diagonalize
 	$X=\sum_k\lambda_k\ketbra{e_k}{e_k}$, and set
-	$s_k=\operatorname{sgn}(\lambda_k)$. Expanding
-	$\Dd_M(X)=MXM^\dagger-\tfrac12\{M^\dagger M,X\}$ in this eigenbasis gives
-	the total-jump right-derivative identity
+	$s_k=\operatorname{sgn}(\lambda_k)$. Because $P_0YP_0=0$, the full right
+	derivative equals the signed-trace term in \eqref{eq:q1-directional-zero}.
+	Expanding $\Dd_M(X)=MXM^\dagger-\tfrac12\{M^\dagger M,X\}$ in this
+	eigenbasis for the total weighted-jump list gives
 	\begin{equation}
 		0=\tr\!(\operatorname{sgn}(X)\,Y)
 		=-\sum_{r}\sum_{k,l}|\lambda_k|\,(1-s_ks_l)
@@ -320,19 +323,34 @@ $N=U^\dagger LU$ is likewise nilpotent with one-dimensional kernel.
 	$\dot W=-iH(t)W$. Then
 	$\dot X=\Dd_{W(t)}(X)$ with $\Dd_{W(t)}\in\mathcal K$. Since unitary
 	conjugation preserves the trace norm, it suffices to estimate the larger
-	class of relaxed $\mathcal C$-valued controls. For $T>0$, define
+	class of relaxed $\mathcal C$-valued controls. For $T>0$, let
 	\begin{equation}
-		q_T=\sup\big\{\norm{X(T)}_1:\dot X=A(t)X,\ A(t)\in\mathcal C\ \text{a.e.},\
-		\norm{X(0)}_1=1\big\}.
+		\mathcal A_T=\big\{A\in L^\infty([0,T];
+		\operatorname{End}_{\R}(\mathsf V)):A(t)\in\mathcal C\text{ a.e.}\big\},
 	\end{equation}
-	By \cref{lem:q1-relaxed-compactness}, the supremum is attained and
-	$q_T\le1$. It is positive because the exponential of a constant control is
-	invertible. If $q_T=1$, a maximizing trajectory would have constant trace
-	norm, contrary to \cref{lem:q1-no-constant}. Hence $0<q_T<1$.
+	write $\Phi_A$ for the associated fundamental solution, and define
+	\begin{equation}
+		q_T=\sup_{A\in\mathcal A_T}
+		\sup_{\substack{X_0\in\mathsf V\\\norm{X_0}_1=1}}
+		\norm{\Phi_A(T,0)X_0}_1.
+	\end{equation}
+	This supremum ranges jointly over every measurable relaxed control and every
+	unit initial condition. To see that it is attained, apply
+	\cref{lem:q1-relaxed-compactness} to a maximizing sequence
+	$(A_n,X_{0,n})$: after passing to a subsequence, the initial data converge,
+	the controls converge weak-*, and the trajectories converge uniformly, so
+	the endpoint norms converge to an admissible maximum. Trace-norm
+	monotonicity gives $q_T\le1$. It is positive because the exponential of a
+	constant control is invertible. If $q_T=1$, a maximizing trajectory would
+	have constant trace norm, contrary to \cref{lem:q1-no-constant}. Hence
+	$0<q_T<1$.
 
-	Split $[s,t]$ into $\lfloor(t-s)/T\rfloor$ intervals of length $T$ and a
-	final interval of length less than $T$. The cocycle identity and trace-norm
-	monotonicity give \eqref{eq:q1-uniform-bound} with
+	For any control on $[s,t]$, its translate on each length-$T$ window belongs
+	to the same class $\mathcal A_T$. Therefore the same worst-case factor $q_T$
+	applies even though the controls on different windows need not agree. Split
+	$[s,t]$ into $\lfloor(t-s)/T\rfloor$ such intervals and a final interval of
+	length less than $T$. The cocycle identity and trace-norm monotonicity give
+	\eqref{eq:q1-uniform-bound} with
 	\begin{equation}
 		K=q_T^{-1}\ge1,\qquad \gamma=-\frac{\log q_T}{T}>0,
 		\label{eq:q1-constants}
