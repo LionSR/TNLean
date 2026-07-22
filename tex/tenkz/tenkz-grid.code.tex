@@ -555,14 +555,14 @@
 % its OWN further check (cell keys require > 0, \tnspan does not) and
 % its OWN error message, so this predicate owns only the shared syntax
 % test, not the callers' differing business rules
-\prg_new_conditional:Npnn \tenkz_token_if_decimal_digits:n #1 { p, T, F, TF }
+\prg_new_conditional:Npnn \tenkz_token_if_decimal_digits:n #1 { T, F, TF }
   {
     \regex_match:nnTF { \A [0-9]+ \Z } {#1}
       { \prg_return_true: }
       { \prg_return_false: }
   }
 \prg_generate_conditional_variant:Nnn \tenkz_token_if_decimal_digits:n
-  { V } { p, T, F, TF }
+  { V } { T, F, TF }
 \tl_new:N \l__tenkz_cellinteger_tl
 \msg_new:nnn { tenkz } { cell-positive-integer }
   { Cell~key~'#1'~needs~a~decimal~positive~integer,~not~'#2'. }
