@@ -239,6 +239,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   `(smulAddHom ℂ _).flip`. Keep the explicit calculations until a third call site confirms that
   their coefficient and codomain shapes support a materially smaller shared statement.
 
+### cpsv_matched_phase_coefficient_identity — candidate
+- **Pattern:** rewrite two sector-decomposition state expansions through a matched phase
+  bijection, then use eventual linear independence to identify their coefficients.
+- **Seen:** 2 occurrences in
+  `TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity.lean` and
+  `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` (2026-07-22).
+- **Abstraction (proposed):** generalize `coeff_identity_via_matched_mpv_phase` to accept
+  eventual linear independence of the chosen basis directly, while retaining its current
+  `IsBNTCanonicalForm` wrapper for existing consumers.
+- **Notes:** The existing theorem cannot be reused by the MPDO spectrum proof: it requires
+  `IsBNTCanonicalForm`, whose left-canonical and weight-normalization fields are absent from
+  the source-faithful `IsCPSVBasisOfNormalTensors` contract. The MPDO proof already reuses the
+  lower-level `coefficient_eventually_eq_of_eventually_linearIndependent` lemma. Keep this as
+  a candidate until another consumer justifies widening the public coefficient-identity API;
+  do not add stronger hypotheses merely to reuse the existing wrapper.
+
 ---
 
 ## Rejected

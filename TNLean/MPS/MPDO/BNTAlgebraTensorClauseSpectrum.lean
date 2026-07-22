@@ -544,7 +544,6 @@ noncomputable def toTwoSiteMultiplicitySpectrum
     intro γ
     let L := max L₀ 1
     have hL : L₀ ≤ L := le_max_left _ _
-    have hLPos : 0 < L := lt_of_lt_of_le Nat.zero_lt_one (le_max_right _ _)
     have hCoeffL := hCoeffAfter L hL γ
     have hCoeffSucc := hCoeffAfter (L + 1) (by omega) γ
     have hCross : zeta γ *
@@ -561,7 +560,8 @@ noncomputable def toTwoSiteMultiplicitySpectrum
       mul_pos (hPCoeffPos γ (L + 1)) (hQCoeffPos (sigma γ) L)
     have hzetaPos : (0 : ℂ) < zeta γ := by
       apply pos_of_mul_pos_left
-      · rwa [hCross]
+      · rw [hCross]
+        exact hPositiveRight
       · exact hPositiveFactor.le
     obtain ⟨hzetaRePos, hzetaIm⟩ := Complex.pos_iff.mp hzetaPos
     have hzetaEqReal : ((zeta γ).re : ℂ) = zeta γ :=
