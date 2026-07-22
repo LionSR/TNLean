@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.NormalFundamentalTheorem
+import TNLean.PEPS.RegionBlock.Basic
 
 /-!
 # Piecewise calculus for PEPS virtual configurations
@@ -13,10 +13,9 @@ configurations. Given a predicate on edges, `mergeVirtualConfig` reads one confi
 where the predicate holds and another configuration elsewhere. The region-specific
 `regionMerge` specializes this operation to the edges incident to a region.
 
-The vertex-product lemmas are included here so that insertion and coarse-blocking arguments
-can share the same configuration calculus without an import cycle. The final lemma packages
-the common step that groups a finite sum by merged configuration and collapses fibers of
-constant cardinality.
+The vertex-product lemmas compare products before and after merging configurations. The
+final lemma groups a finite sum by its merged configuration and collapses fibers of constant
+cardinality.
 -/
 
 open scoped BigOperators
@@ -65,7 +64,7 @@ theorem virtualConfigCongr_apply (A B : Tensor G d) (h : A.bondDim = B.bondDim)
 
 /-- Merge two virtual configurations, reading `left` where `select` holds and `right`
 elsewhere. The fibers may depend on the selected edge, as virtual bond dimensions do. -/
-noncomputable def mergeVirtualConfig (A : Tensor G d) (select : Edge G → Prop)
+noncomputable abbrev mergeVirtualConfig (A : Tensor G d) (select : Edge G → Prop)
     [DecidablePred select] (left right : VirtualConfig A) : VirtualConfig A :=
   fun e => if select e then left e else right e
 
