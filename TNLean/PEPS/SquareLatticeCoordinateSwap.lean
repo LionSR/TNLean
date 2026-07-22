@@ -28,6 +28,22 @@ def squareLatticeCoordinateSwapEquiv (width height : ℕ) :
     squareLatticeCoordinateSwapEquiv width height v = (v.2, v.1) :=
   rfl
 
+/-- Coordinate swap exchanges horizontal and vertical square-lattice neighbours. -/
+theorem squareLatticeHorizontalNeighbor_coordinateSwap {width height : ℕ}
+    {v w : SquareLatticeVertex width height} :
+    squareLatticeVerticalNeighbor (squareLatticeCoordinateSwapEquiv width height v)
+      (squareLatticeCoordinateSwapEquiv width height w) ↔
+      squareLatticeHorizontalNeighbor v w :=
+  Iff.rfl
+
+/-- Coordinate swap exchanges vertical and horizontal square-lattice neighbours. -/
+theorem squareLatticeVerticalNeighbor_coordinateSwap {width height : ℕ}
+    {v w : SquareLatticeVertex width height} :
+    squareLatticeHorizontalNeighbor (squareLatticeCoordinateSwapEquiv width height v)
+      (squareLatticeCoordinateSwapEquiv width height w) ↔
+        squareLatticeVerticalNeighbor v w :=
+  Iff.rfl
+
 /-- Coordinate swap as an isomorphism of finite square-lattice graphs. -/
 def squareLatticeCoordinateSwap {width height : ℕ} :
     squareLatticeGraph width height ≃g squareLatticeGraph height width where
@@ -35,11 +51,8 @@ def squareLatticeCoordinateSwap {width height : ℕ} :
   map_rel_iff' := by
     intro v w
     rw [squareLatticeGraph_adj, squareLatticeGraph_adj]
-    change squareLatticeHorizontalNeighbor (v.2, v.1) (w.2, w.1) ∨
-        squareLatticeVerticalNeighbor (v.2, v.1) (w.2, w.1) ↔
-      squareLatticeHorizontalNeighbor v w ∨ squareLatticeVerticalNeighbor v w
-    change squareLatticeVerticalNeighbor v w ∨ squareLatticeHorizontalNeighbor v w ↔ _
-    exact or_comm
+    rw [squareLatticeHorizontalNeighbor_coordinateSwap,
+      squareLatticeVerticalNeighbor_coordinateSwap, or_comm]
 
 @[simp] theorem squareLatticeCoordinateSwap_apply {width height : ℕ}
     (v : SquareLatticeVertex width height) :
