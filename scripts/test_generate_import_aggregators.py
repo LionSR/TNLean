@@ -61,17 +61,67 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(GENERATOR.update(root, check=True), 0)
 
-    def test_write_rejects_incomplete_root_coverage(self) -> None:
+    def test_generated_detection_is_independent_of_copyright_year(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
-            self.write(root, "TNLean/Foo/Basic.lean", "def foo : Nat := 1\n")
+            generated = self.write(
+                root,
+                "TNLean/Foo.lean",
+                GENERATOR.GENERATED_NOTICE.replace("2026", "2037")
+                + "\nimport TNLean.Foo.Basic\n",
+            )
+            self.assertTrue(GENERATOR.is_generated(generated))
+
+    def test_manifest_coverage_ignores_incidental_handwritten_imports(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.write(root, "TNLean/Foo/A.lean", "import TNLean.Foo.B\ndef a := 1\n")
+            self.write(root, "TNLean/Foo/B.lean", "def b := 2\n")
+            expected, sources = GENERATOR.build_expected_files(root)
+            foo_aggregator = root / "TNLean/Foo.lean"
+            expected[foo_aggregator] = expected[foo_aggregator].replace(
+                "import TNLean.Foo.B\n", ""
+            )
+
+            self.assertEqual(
+                GENERATOR.check_manifest_coverage(root, expected, sources),
+                ["TNLean.Foo.B"],
+            )
+
             output = io.StringIO()
             with mock.patch.object(
-                GENERATOR, "check_root_coverage", return_value=["TNLean.Foo.Basic"]
+                GENERATOR, "build_expected_files", return_value=(expected, sources)
             ), contextlib.redirect_stdout(output):
                 self.assertEqual(GENERATOR.update(root, check=False), 1)
-            self.assertIn("production module is not reachable", output.getvalue())
+            self.assertIn("absent from the generated import frontier", output.getvalue())
             self.assertFalse((root / "TNLean.lean").exists())
+
+    def test_check_rejects_omitted_import_despite_incidental_reachability(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.write(root, "TNLean/Foo/A.lean", "import TNLean.Foo.B\ndef a := 1\n")
+            self.write(root, "TNLean/Foo/B.lean", "def b := 2\n")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(GENERATOR.update(root, check=False), 0)
+            aggregator = root / "TNLean/Foo.lean"
+            aggregator.write_text(
+                aggregator.read_text(encoding="utf-8").replace(
+                    "import TNLean.Foo.B\n", ""
+                ),
+                encoding="utf-8",
+            )
+
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                self.assertEqual(GENERATOR.update(root, check=True), 1)
+            self.assertIn("out-of-date generated aggregator: TNLean/Foo.lean", output.getvalue())
+
+    def test_import_parser_rejects_digit_initial_name_segment(self) -> None:
+        self.assertEqual(GENERATOR.imported_modules("import TNLean.0Invalid\n"), set())
+        self.assertEqual(
+            GENERATOR.imported_modules("import TNLean.Valid_Name2\n"),
+            {"TNLean.Valid_Name2"},
+        )
 
     def test_check_rejects_out_of_date_output(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:

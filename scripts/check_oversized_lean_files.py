@@ -18,7 +18,8 @@ from pathlib import Path
 
 THRESHOLD: int = 1000
 EXCLUDE_DIRS: tuple[str, ...] = (".lake", "lake-packages", "tmp")
-IMPORT_COMMAND = re.compile(r"import\s+[A-Za-z_][A-Za-z0-9_'.]*(?:\.[A-Za-z0-9_']+)*")
+NAME_SEGMENT = r"[A-Za-z_][A-Za-z0-9_']*"
+IMPORT_COMMAND = re.compile(rf"import\s+{NAME_SEGMENT}(?:\.{NAME_SEGMENT})*")
 
 # This guidance is intentionally size-specific.  The numbered-name checker
 # gives complementary advice about choosing mathematical module names.

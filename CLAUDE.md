@@ -45,7 +45,8 @@ cd blueprint && leanblueprint pdf
 
 ## Architecture
 
-The source lives in `TNLean/` and is organized into **layers 0-6 with sublayers** (see `TNLean.lean` for the full import graph):
+The source lives in `TNLean/` and is organized into **layers 0-6 with sublayers**.
+See `docs/import_structure.md`; `TNLean.lean` is generated.
 
 | Layer | Modules | Content |
 |-------|---------|---------|
