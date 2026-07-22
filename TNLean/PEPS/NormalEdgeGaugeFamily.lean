@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.NormalEdgeBlockingInterior
 import TNLean.PEPS.NormalEdgeSingleCrossing
+import TNLean.PEPS.SquareLatticeCoordinateSwap
 import TNLean.PEPS.CoherentFrameInstance2
 import TNLean.Algebra.ScalarCommutant
 
@@ -314,39 +315,36 @@ theorem exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge
   subst he
   have hew : xStart + 3 ≤ width := by omega
   have heh : yStart + 3 ≤ height := by omega
+  let φ := squareLatticeCoordinateSwap (width := width) (height := height)
   let e := normalSquareVerticalTranslatedEdge xStart yStart hew heh
-  change ∃ (hEdge : A.bondDim e = B.bondDim e) (Z : GL (Fin (B.bondDim e)) ℂ)
-      (fwd : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ →
-        Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ),
-      ∀ M, fwd M =
-          (Z : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) *
-            Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
-            ((Z⁻¹ : GL (Fin (B.bondDim e)) ℂ) :
-              Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)
-  let DA := normalSquareVerticalTranslatedEdge_blockingDatum_interior
-      (κ := regionInjectivityDataOf A) hA hUA hx0 hy0 hxw hyh
-  let DB := normalSquareVerticalTranslatedEdge_blockingDatum_interior
-      (κ := regionInjectivityDataOf B) hB hUB hx0 hy0 hxw hyh
-  have hDAred : DA.red = normalSquareVerticalTranslatedEdgeRed xStart yStart := rfl
-  have hDAblue : DA.blue = normalSquareVerticalTranslatedEdgeBlue xStart yStart := rfl
-  have hred : DA.red = DB.red := rfl
-  have hblue : DA.blue = DB.blue := rfl
-  have hcompl : DA.complement = DB.complement := rfl
-  have hsingle : ∀ g, IsCrossingEdge (G := squareLatticeGraph width height) A DA.red DA.blue g
-      ↔ g = e := by
-    intro g
-    rw [hDAred, hDAblue]
-    exact isCrossingEdge_normalSquareVerticalTranslatedEdge (width := width) (height := height)
-      A (xStart := xStart) (yStart := yStart) hew heh g
-  have hRB : RegionBlockedTensorInjective (G := squareLatticeGraph width height) B DA.red := by
-    rw [hred]; exact regionBlockedTensorInjective_red DB
-  have hCB : RegionBlockedTensorInjective (G := squareLatticeGraph width height) B
-      (Finset.univ \ DA.red) := by
-    rw [hred]; exact regionBlockedTensorInjective_host DB hUB
-  obtain ⟨_, _, _, hEdge, Z, hZ⟩ :=
-    exists_regionEdgeGauge_of_blockingData (A := A) (B := B) (e := e) DA DB
-      hred hblue hcompl hbond hAB hd hposA hposB hsingle hRB hCB
-  exact ⟨hEdge, Z, _, hZ⟩
+  let e' := Edge.map φ e
+  have hbond' : (A.transport φ).bondDim = (B.transport φ).bondDim := by
+    funext g
+    simp only [Tensor.transport_bondDim]
+    rw [hbond]
+  have hposA' : ∀ g : Edge (squareLatticeGraph height width),
+      0 < (A.transport φ).bondDim g := fun g => hposA (Edge.map φ.symm g)
+  have hposB' : ∀ g : Edge (squareLatticeGraph height width),
+      0 < (B.transport φ).bondDim g := fun g => hposB (Edge.map φ.symm g)
+  have he' : e' = normalSquareHorizontalTranslatedEdge yStart xStart heh hew := by
+    dsimp only [e', e, φ]
+    exact Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hew heh
+  have hGauge := exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge
+    (width := height) (height := width) (A.transport φ) (B.transport φ)
+    (hA.transportCoordinateSwap A) (hUA.transportCoordinateSwap A)
+    (hB.transportCoordinateSwap B) (hUB.transportCoordinateSwap B)
+    hy0 hx0 hyh hxw hbond' (hAB.transport φ) hd hposA' hposB' e' he'
+  have hAedge : (A.transport φ).bondDim e' = A.bondDim e := by
+    simp only [e', φ, Tensor.transport_bondDim,
+      squareLatticeCoordinateSwap_symm,
+      Edge.map_squareLatticeCoordinateSwap_map]
+  have hBedge : (B.transport φ).bondDim e' = B.bondDim e := by
+    simp only [e', φ, Tensor.transport_bondDim,
+      squareLatticeCoordinateSwap_symm,
+      Edge.map_squareLatticeCoordinateSwap_map]
+  rw [hAedge, hBedge] at hGauge
+  simpa only [e] using hGauge
+
 
 end PEPS
 end TNLean
