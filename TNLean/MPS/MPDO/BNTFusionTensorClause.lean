@@ -162,8 +162,8 @@ namespace BNTFusionTensorClause
 
 variable {M : MPOTensor d D}
 
-/-- Forget the source BNT predicate carried by the fusion clause to the
-algebraic BNT predicate used by existing vertical-canonical-form consumers. -/
+/-- The source BNT predicate in the fusion clause entails the algebraic BNT
+predicate for its chosen vertical decomposition. -/
 theorem isBNT (H : BNTFusionTensorClause M) :
     MPSTensor.IsBNT (verticalTensor M) H.labelCount H.bondDim H.tensor :=
   H.isCPSVBNT.isBNT

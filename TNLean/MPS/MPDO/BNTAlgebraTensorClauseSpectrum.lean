@@ -22,8 +22,8 @@ the algebra-to-RFP implication.
 * `MPOTensor.BNTAlgebraTensorClause.toTwoSiteMultiplicitySpectrum` derives a two-site
   vertical canonical decomposition, its sector relabelling, and the multiplicity-spectrum
   comparison directly from the tensor algebra clause.
-* `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` forgets the
-  decomposition and retains the existing comparison interface.
+* `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` retains the
+  resulting multiplicity-spectrum comparison alone.
 
 ## References
 
@@ -66,8 +66,8 @@ structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
         H.weight x.1 x.2.2.1 * H.weight x.2.1 x.2.2.2.1 *
           H.algebraClause.positiveChi.chi.entry x.1 x.2.1 γ x.2.2.2.2
 
-/-- Forgetting the chosen two-site decomposition and relabelling gives the existing
-multiplicity-spectrum comparison interface.
+/-- The chosen two-site decomposition and relabelling determine the corresponding
+multiplicity-spectrum comparison.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -618,8 +618,8 @@ noncomputable def toTwoSiteMultiplicitySpectrum
         BNTMultiplicitySpectrumComparison.ofEventuallyEqualPowerSums] at hSpectrum
       convert hSpectrum using 1 <;> rfl }
 
-/-- The source-derived two-site multiplicity spectrum gives the existing comparison
-interface after forgetting its vertical decomposition and sector relabelling.
+/-- The source-derived two-site multiplicity spectrum entails the corresponding
+multiplicity-spectrum comparison.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/

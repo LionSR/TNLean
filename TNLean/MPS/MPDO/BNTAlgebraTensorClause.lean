@@ -174,8 +174,8 @@ structure BNTAlgebraTensorClause (M : MPOTensor d D) where
 
 namespace BNTAlgebraTensorClause
 
-/-- Forget the source BNT predicate carried by the tensor clause to the
-algebraic BNT predicate used by the vertical-canonical-form interface. -/
+/-- The source BNT predicate in the tensor clause entails the algebraic BNT
+predicate for its chosen vertical decomposition. -/
 theorem isBNT {M : MPOTensor d D} (H : BNTAlgebraTensorClause M) :
     MPSTensor.IsBNT (verticalTensor M) H.labelCount H.bondDim H.tensor :=
   H.isCPSVBNT.isBNT
