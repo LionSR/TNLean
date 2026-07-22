@@ -55,7 +55,6 @@ NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
         "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap2.lean",
         "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3.lean",
         "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3b.lean",
-        "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap4.lean",
         "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap5.lean",
         "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean",
         "TNLean/PEPS/TorusFundamentalTheorem2.lean",
