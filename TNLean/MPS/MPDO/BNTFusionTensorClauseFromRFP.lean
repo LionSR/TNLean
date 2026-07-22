@@ -375,7 +375,7 @@ theorem of_isRFPViaTS (M : MPOTensor d D)
     multiplicity_pos := D₁.multiplicity_pos
     weight_pos := D₁.weight_pos
     coisometry := D₁.coisometry
-    isBNT := D₁.isCPSVBNT.isBNT
+    isCPSVBNT := D₁.isCPSVBNT
     forward := D₁.forward
     reconstruction := D₁.reconstruction
     chi := chi
