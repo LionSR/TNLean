@@ -37,6 +37,26 @@ _PLACEHOLDER_WORKFLOWS = (
     _REPO_ROOT / ".github/workflows/docgen.yml",
 )
 _SLIDE_PREAMBLE = _REPO_ROOT / "docs/slides/preamble.tex"
+_SLIDE_THEME = _REPO_ROOT / "docs/slides/tn_library_dark.tex"
+_TENKZ_CORE = _REPO_ROOT / "tex/tenkz/tenkz-core.code.tex"
+
+_COLORLET_PATTERN = re.compile(
+    r"^\s*\\colorlet\{(tenkz[A-Za-z]+)\}\{([^}]*)\}\s*$", re.MULTILINE
+)
+_THEME_GEOMETRY_PATTERN = re.compile(
+    r"(?:baseline|scale|xshift|yshift|shape|font|line width|"
+    r"minimum (?:width|height|size)|inner sep|outer sep|rounded corners)\s*=",
+    re.IGNORECASE,
+)
+_EXPECTED_DARK_PALETTE = {
+    "tenkzInk": "white!94",
+    "tenkzPaper": "darkbg",
+    "tenkzPassive": "white!60",
+    "tenkzAction": "orange!80!white",
+    "tenkzMarked": "cyan!80!white",
+    "tenkzExtra": "magenta!75!white",
+    "tenkzOperator": "softred",
+}
 
 # Spec benchmark bodies (B1, B6, B8 of tenkz_final_spec.md §3), with the
 # minimum width (pt) a faithful render must exceed: an ink-stripped SVG of
@@ -87,6 +107,40 @@ def _svg_width_pt(svg_text: str) -> float:
     return float(match.group(1))
 
 
+def _without_tex_comments(source: str) -> str:
+    return re.sub(r"(?<!\\)%.*$", "", source, flags=re.MULTILINE)
+
+
+def _palette(source: str) -> dict[str, str]:
+    entries = _COLORLET_PATTERN.findall(_without_tex_comments(source))
+    palette = dict(entries)
+    assert len(palette) == len(entries), "palette contains duplicate semantic keys"
+    return palette
+
+
+def _assert_dark_theme_contract(core_source: str, theme_source: str) -> None:
+    core_palette = _palette(core_source)
+    theme_palette = _palette(theme_source)
+    assert core_palette, "native tenkz core declares no semantic palette"
+    assert theme_palette.keys() == core_palette.keys(), (
+        "slide theme semantic keys differ from the native tenkz core"
+    )
+    assert theme_palette == _EXPECTED_DARK_PALETTE, (
+        "slide theme no longer provides the expected dark palette hues"
+    )
+    assert not _THEME_GEOMETRY_PATTERN.search(_without_tex_comments(theme_source)), (
+        "slide theme must change colours only, not geometry or typography"
+    )
+
+
+def _assert_contract_rejects(core_source: str, theme_source: str, defect: str) -> None:
+    try:
+        _assert_dark_theme_contract(core_source, theme_source)
+    except AssertionError:
+        return
+    raise AssertionError(f"slide theme contract accepted {defect}")
+
+
 def main() -> int:
     missing_html = tenkz_pic._missing_tools_html(r"\tnpic{\tn{A}}")
     sentinel = tenkz_pic.MISSING_SVG_SENTINEL
@@ -106,7 +160,25 @@ def main() -> int:
     assert slide_preamble.index(package_loader) < slide_preamble.index(dark_palette), (
         "slide dark palette must load after the native tenkz package"
     )
-    print("PASS slide palette: native tenkz dark theme is loaded")
+    core_source = _TENKZ_CORE.read_text(encoding="utf-8")
+    theme_source = _SLIDE_THEME.read_text(encoding="utf-8")
+    _assert_dark_theme_contract(core_source, theme_source)
+    _assert_contract_rejects(
+        core_source,
+        theme_source.replace("\\colorlet{tenkzOperator}{softred}\n", ""),
+        "a missing semantic colour",
+    )
+    _assert_contract_rejects(
+        core_source,
+        theme_source.replace("orange!80!white", "black"),
+        "a changed dark-theme hue",
+    )
+    _assert_contract_rejects(
+        core_source,
+        theme_source + "\\tikzset{every node/.style={minimum size=9mm}}\n",
+        "a geometry assignment",
+    )
+    print("PASS slide palette: native dark theme preserves colours-only contract")
 
     chain = tenkz_pic.toolchain()
     if chain is None:
