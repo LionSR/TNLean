@@ -76,10 +76,7 @@ def is_generated(path: Path, source_root: Path) -> bool:
     if error is not None:
         return False
     provenance = GENERATED_PROVENANCE_RE.search(prefix)
-    if provenance is not None:
-        return provenance.group(1) == expected_module
-    # Migrate marker-bearing aggregators generated before module provenance was added.
-    return path == source_root.parent / f"{source_root.name}.lean" or path.with_suffix("").is_dir()
+    return provenance is not None and provenance.group(1) == expected_module
 
 
 def module_name(path: Path, repository_root: Path) -> str:

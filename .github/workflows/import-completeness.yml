@@ -38,6 +38,6 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test import-aggregator generator
-        run: python3 scripts/test_generate_import_aggregators.py -v
+        run: PYTHONPATH=scripts python3 scripts/test_generate_import_aggregators.py -v
       - name: Check generated import aggregators
-        run: python3 scripts/generate_import_aggregators.py --check
+        run: PYTHONPATH=scripts python3 scripts/generate_import_aggregators.py --check

@@ -87,22 +87,33 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
                 "TNLean/Copied.lean",
                 GENERATOR.GENERATED_NOTICE + "\nimport TNLean.Draft\n",
             )
+            self.write(root, "TNLean/Barrel/Leaf.lean", "def barrelLeaf := 3\n")
+            barrel = self.write(
+                root,
+                "TNLean/Barrel.lean",
+                GENERATOR.GENERATED_NOTICE + "\nimport TNLean.Barrel.Leaf\n",
+            )
             draft_before = draft.read_bytes()
             copied_before = copied.read_bytes()
+            barrel_before = barrel.read_bytes()
 
             self.assertFalse(GENERATOR.is_generated(draft, root / "TNLean"))
             self.assertFalse(GENERATOR.is_generated(copied, root / "TNLean"))
+            self.assertFalse(GENERATOR.is_generated(barrel, root / "TNLean"))
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(GENERATOR.update(root, check=False), 0)
 
             self.assertEqual(draft.read_bytes(), draft_before)
             self.assertEqual(copied.read_bytes(), copied_before)
+            self.assertEqual(barrel.read_bytes(), barrel_before)
             _, sources = GENERATOR.build_expected_files(root)
             self.assertIn(draft, sources)
             self.assertIn(copied, sources)
+            self.assertIn(barrel, sources)
             root_text = (root / "TNLean.lean").read_text(encoding="utf-8")
             self.assertIn("import TNLean.Draft\n", root_text)
             self.assertIn("import TNLean.Copied\n", root_text)
+            self.assertIn("import TNLean.Barrel\n", root_text)
 
     def test_stale_generated_aggregator_is_removed_after_directory_deletion(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
