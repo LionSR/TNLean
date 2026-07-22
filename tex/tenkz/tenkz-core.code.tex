@@ -1273,23 +1273,6 @@
     \fi
   \fi}
 
-% ---------- species (the 0.6 hue contract, clause 2) ----------
-% Species declare NAMES, never colors: `species={right,left}' (document
-% preamble via \tnset, or picture scope) assigns each new name the next
-% hue of the theme's semantic cycle and derives one style per glyph
-% family — `species <name> bond', `species <name> tensor', `species
-% <name> outline' — through the same indirection as the role styles, so
-% a theme rebinding the core hue slots recolours every species at one
-% point.  A name keeps its index (hence its hue) across redeclarations,
-% so a document-global declaration holds one hue per species over every
-% figure of a paper.  An undeclared species at a call site is an error.
-% Scope: the index registry is global (a hue, once assigned, is never
-% reassigned), but the derived styles are ordinary tikz styles, LOCAL to
-% the declaring group -- a picture-scope declaration ends with its
-% picture.  The call-site check therefore tests the derived style, not
-% the registry, so an out-of-scope species is reported by the curated
-% message instead of a raw pgfkeys error; re-declaring the name
-% re-derives the styles with the same hue.
 \ExplSyntaxOn
 
 % ---------- shared syntax predicates ----------
@@ -1657,6 +1640,24 @@
   }
 \NewDocumentCommand \tnregion { O{} m }
   { \tenkz_region_dispatch:nn {#1}{#2} }
+
+% ---------- species (the 0.6 hue contract, clause 2) ----------
+% Species declare NAMES, never colors: `species={right,left}' (document
+% preamble via \tnset, or picture scope) assigns each new name the next
+% hue of the theme's semantic cycle and derives one style per glyph
+% family — `species <name> bond', `species <name> tensor', `species
+% <name> outline' — through the same indirection as the role styles, so
+% a theme rebinding the core hue slots recolours every species at one
+% point.  A name keeps its index (hence its hue) across redeclarations,
+% so a document-global declaration holds one hue per species over every
+% figure of a paper.  An undeclared species at a call site is an error.
+% Scope: the index registry is global (a hue, once assigned, is never
+% reassigned), but the derived styles are ordinary tikz styles, LOCAL to
+% the declaring group -- a picture-scope declaration ends with its
+% picture.  The call-site check therefore tests the derived style, not
+% the registry, so an out-of-scope species is reported by the curated
+% message instead of a raw pgfkeys error; re-declaring the name
+% re-derives the styles with the same hue.
 \prop_new:N \g__tenkz_species_prop     % name -> 1-based declaration index
 \int_new:N  \g__tenkz_species_int
 % the semantic cycle: hue slots, in assignment order
