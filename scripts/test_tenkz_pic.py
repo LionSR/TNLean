@@ -36,6 +36,7 @@ _PLACEHOLDER_WORKFLOWS = (
     _REPO_ROOT / ".github/workflows/blueprint.yml",
     _REPO_ROOT / ".github/workflows/docgen.yml",
 )
+_SLIDE_PREAMBLE = _REPO_ROOT / "docs/slides/preamble.tex"
 
 # Spec benchmark bodies (B1, B6, B8 of tenkz_final_spec.md §3), with the
 # minimum width (pt) a faithful render must exceed: an ink-stripped SVG of
@@ -96,6 +97,16 @@ def main() -> int:
             f"{workflow}: placeholder guard drifted from the renderer sentinel"
         )
     print(f"PASS placeholder sentinel: {sentinel!r}")
+
+    slide_preamble = _SLIDE_PREAMBLE.read_text(encoding="utf-8")
+    package_loader = r"\usepackage{tenkz}"
+    dark_palette = r"\input{tn_library_dark}"
+    assert package_loader in slide_preamble, "slides lost the native tenkz package"
+    assert dark_palette in slide_preamble, "slides lost the native dark palette"
+    assert slide_preamble.index(package_loader) < slide_preamble.index(dark_palette), (
+        "slide dark palette must load after the native tenkz package"
+    )
+    print("PASS slide palette: native tenkz dark theme is loaded")
 
     chain = tenkz_pic.toolchain()
     if chain is None:
