@@ -756,11 +756,21 @@ produces the global gauge family that relates the two tensors.
     dimensions on that edge are equal. If $h_e:D_A(e)=D_B(e)$ is this
     equality, and if
     $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the induced algebra
-    isomorphism, then the insertion correspondence is
-    $Y=Z_e\,\phi_{h_e}(X)\,Z_e^{-1}$ for an invertible edge matrix $Z_e$.
-    \begin{center}
-        \TNGaugeConjugation{Z_e}{\phi_{h_e}(X)}{Z_e^{-1}}
-    \end{center}
+    isomorphism, then, for an invertible edge matrix $Z_e$, the insertion
+    correspondence is
+    % Formula/source: Papers/1804.04964/paper_normal.tex, lines 254--279
+    % and 576--582, identifies the bond insertion map as an algebra
+    % isomorphism and writes its inner-conjugation form Y=ZXZ^{-1}.
+    % Ink-to-index map: exact algebra is used here because X, phi_h_e(X),
+    % and Y are bond endomorphisms, not local tensors with physical legs.
+    % Contraction set: the two ordinary matrix products sum the two intermediate
+    % bond indices; there are no physical or PEPS lattice contractions.
+    % Type verdict: an endomorphism of the B-side edge bond space.
+    % Boundary signature: not applicable to the displayed algebra; no tensor
+    % boundary is asserted by this formula.
+    \[
+        Y=Z_e\,\phi_{h_e}(X)\,Z_e^{-1}.
+    \]
     This is the finite-dimensional matrix-algebra step in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
