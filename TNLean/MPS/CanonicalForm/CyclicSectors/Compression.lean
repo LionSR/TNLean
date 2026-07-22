@@ -104,20 +104,18 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       _ = A i := hSupp i
   have hIntertwineLetter : ∀ i : Fin d, A i * V = V * C i := by
     intro i
-    have htemp : (V * Vᴴ) * A i * (V * Vᴴ) * V = V * (Vᴴ * A i * V) := by
-      calc
-        (V * Vᴴ) * A i * (V * Vᴴ) * V = ((V * Vᴴ) * A i) * ((V * Vᴴ) * V) := by
-          rw [Matrix.mul_assoc]
-        _ = ((V * Vᴴ) * A i) * (V * (Vᴴ * V)) := by rw [Matrix.mul_assoc]
-        _ = ((V * Vᴴ) * A i) * (V * 1) := by rw [hV_iso]
-        _ = ((V * Vᴴ) * A i) * V := by simp
-        _ = (V * (Vᴴ * A i)) * V := by rw [Matrix.mul_assoc]
-        _ = V * ((Vᴴ * A i) * V) := by rw [Matrix.mul_assoc]
-        _ = V * (Vᴴ * A i * V) := rfl
     calc
       A i * V = (P * A i * P) * V := by rw [hSupp i]
       _ = (V * Vᴴ) * A i * (V * Vᴴ) * V := by rw [hV_range]
-      _ = V * (Vᴴ * A i * V) := by rw [htemp]
+      _ = ((V * Vᴴ) * A i * (V * Vᴴ)) * V := rfl
+      _ = ((V * Vᴴ) * A i) * ((V * Vᴴ) * V) := by rw [Matrix.mul_assoc]
+      _ = ((V * Vᴴ) * A i) * (V * (Vᴴ * V)) := by
+        rw [Matrix.mul_assoc V Vᴴ V]
+      _ = ((V * Vᴴ) * A i) * (V * 1) := by rw [hV_iso]
+      _ = ((V * Vᴴ) * A i) * V := by simp
+      _ = (V * (Vᴴ * A i)) * V := by rw [Matrix.mul_assoc V Vᴴ A i]
+      _ = V * ((Vᴴ * A i) * V) := by rw [Matrix.mul_assoc V (Vᴴ * A i) V]
+      _ = V * (Vᴴ * A i * V) := rfl
       _ = V * C i := rfl
   have hEvalCompression (w : List (Fin d)) :
       evalWord C w = Vᴴ * evalWord A w * V := by
