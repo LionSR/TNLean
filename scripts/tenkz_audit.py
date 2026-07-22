@@ -611,6 +611,20 @@ class Audit:
     def note(self, rule: str, where: str, msg: str) -> None:
         self.findings.append(Finding("NOTE", rule, where, msg))
 
+    def require_fields(self, event: Event, required: set[str],
+                        description: str) -> bool:
+        """True if `event` carries every field in `required`; otherwise
+        reports the standard malformed-event finding and returns False.
+        Callers still decide their own control flow (continue vs. return)
+        since that depends on whether the check runs inside a loop."""
+        missing = sorted(required - event.attrs.keys())
+        if missing:
+            self.hard("malformed-event", f"{self.log_path.name}:{event.line}",
+                      f"{description} event lacks required field(s): "
+                      + ", ".join(missing))
+            return False
+        return True
+
     def events(self, picture_id: Optional[int] = None) -> list[Event]:
         """Typed events already produced by `parse_log`, one picture or
         all of them.  The canonical accessor for consumers (tests, the
@@ -815,13 +829,7 @@ class Audit:
             for event in pic.events:
                 if event.kind != "bbox":
                     continue
-                missing = sorted(bbox_required - event.attrs.keys())
-                if missing:
-                    self.hard(
-                        "malformed-event",
-                        f"{self.log_path.name}:{event.line}",
-                        f"bbox event lacks required field(s): {', '.join(missing)}",
-                    )
+                if not self.require_fields(event, bbox_required, "bbox"):
                     continue
                 if (event.attrs["class"] not in {"label", "wire"}
                         or any(not _is_int(event.attrs[field])
@@ -843,14 +851,7 @@ class Audit:
                 shape = "rect"
                 radius = 0
                 if event.attrs["class"] == "label":
-                    missing = sorted(label_required - event.attrs.keys())
-                    if missing:
-                        self.hard(
-                            "malformed-event",
-                            f"{self.log_path.name}:{event.line}",
-                            "label bbox event lacks required field(s): "
-                            + ", ".join(missing),
-                        )
+                    if not self.require_fields(event, label_required, "label bbox"):
                         continue
                     if (event.attrs["shape"] not in {"rect", "roundrect"}
                             or not _is_nonnegative_int(event.attrs["radius"])):
@@ -886,14 +887,7 @@ class Audit:
             for event in pic.events:
                 if event.kind != "glyph-geometry":
                     continue
-                missing = sorted(glyph_required - event.attrs.keys())
-                if missing:
-                    self.hard(
-                        "malformed-event",
-                        f"{self.log_path.name}:{event.line}",
-                        "glyph-geometry event lacks required field(s): "
-                        + ", ".join(missing),
-                    )
+                if not self.require_fields(event, glyph_required, "glyph-geometry"):
                     continue
                 numeric = glyph_required - {"shape"}
                 if any(not _is_int(event.attrs[field]) for field in numeric):
@@ -941,14 +935,7 @@ class Audit:
             for event in pic.events:
                 if event.kind != "wire-geometry":
                     continue
-                missing = sorted(wire_required - event.attrs.keys())
-                if missing:
-                    self.hard(
-                        "malformed-event",
-                        f"{self.log_path.name}:{event.line}",
-                        "wire-geometry event lacks required field(s): "
-                        + ", ".join(missing),
-                    )
+                if not self.require_fields(event, wire_required, "wire-geometry"):
                     continue
                 numeric = wire_required - {"shape", "cut-shape"}
                 if any(not _is_int(event.attrs[field]) for field in numeric):
@@ -1049,14 +1036,7 @@ class Audit:
                     )
                     continue
                 required = {"label", "x", "y"}
-                missing = sorted(required - event.attrs.keys())
-                if missing:
-                    self.hard(
-                        "malformed-event",
-                        f"{self.log_path.name}:{event.line}",
-                        "label-anchor-site event lacks required field(s): "
-                        + ", ".join(missing),
-                    )
+                if not self.require_fields(event, required, "label-anchor-site"):
                     continue
                 if any(not _is_int(event.attrs[field]) for field in required):
                     continue
@@ -1259,14 +1239,7 @@ class Audit:
             for event in pic.events:
                 if event.kind != "ink-use":
                     continue
-                missing = sorted({"class", "id"} - event.attrs.keys())
-                if missing:
-                    self.hard(
-                        "malformed-event",
-                        f"{self.log_path.name}:{event.line}",
-                        "ink-use event lacks required field(s): "
-                        + ", ".join(missing),
-                    )
+                if not self.require_fields(event, {"class", "id"}, "ink-use"):
                     continue
                 if not _is_positive_int(event.attrs["id"]):
                     continue  # FIELD_VALIDATORS already reported the bad value.
