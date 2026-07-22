@@ -475,9 +475,12 @@ constant-norm trajectory, not an isolated zero derivative.
 
 \begin{remark}[Exact formalization status]
 \label{rem:hic-lean}
-The Lean kernel currently checks the algebraic obstruction and the explicit
-$4\times4$ example, but it does \emph{not} check
-\cref{thm:q2-uniform-hic}.
+The Lean development checks the finite-dimensional algebraic obstruction and
+the explicit $4\times4$ example, but not the uniform HIC statement
+\cref{thm:q2-uniform-hic}. In particular, it does not yet define HIC with the
+uniform quantifier order in \cref{def:q2-hic}, measurable relaxed controls, or
+the worst-case factor $q_T$ as a supremum over all controls and unit initial
+data.
 \par\smallskip\noindent
 \leanstatus{Channel/\allowbreak Semigroup/\allowbreak HamiltonianIndependent\allowbreak Contractivity}
 \par\smallskip\noindent
@@ -497,12 +500,18 @@ reducibility for every frozen Hamiltonian; full algebra generation in the
 example \eqref{eq:q2-example-data}; and the exact dissipator identity
 \eqref{eq:q2-example-dissipator}.
 
-The analytic relaxed-control theorem is not yet formalized. The present
-library lacks the required integrated infrastructure for the matrix trace
-norm, propagators with locally integrable coefficients, weak-* compactness of
-control selectors, and degenerate Hermitian eigenvalue perturbation. The
-formal file should therefore be read as a kernel-checked algebraic companion
-to the proof above, not as a formal verification of the full theorem.
+The companion module contains no \texttt{sorry} or additional axiom and
+builds successfully. The analytic relaxed-control theorem is nevertheless not
+formalized. Missing steps include full-matrix Lindblad extensions of relaxed
+generators, trace-norm monotonicity for measurable controls, propagators with
+locally integrable coefficients, weak-* compactness and endpoint attainment,
+the trace-norm directional derivative, the fixed-inertia lemma, exclusion of
+constant-norm relaxed trajectories, and iteration of the uniform factor
+$q_T$ over translated windows. Carath\'eodory's theorem is used in the
+manuscript only to choose a finite weighted-jump representation; no
+quantitative bound on the number of terms enters the conclusion. The formal
+file is therefore a kernel-checked algebraic companion, not a Lean proof of
+\cref{thm:q2-uniform-hic}.
 \end{remark}
 
 \ifstandalone

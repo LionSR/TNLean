@@ -433,11 +433,15 @@ $N=U^\dagger LU$ is likewise nilpotent with one-dimensional kernel.
 \end{remark}
 
 \begin{remark}[Exact formalization status]\label{rem:q1-lean}
-	As in \sharedref{the Q2 formalization remark}{rem:hic-lean}, the analytic
-	relaxed-control proof of \cref{thm:q1-main}(i) is not formalized. In
-	particular, the formalization does not include weak-$*$ compactness of
-	controls, propagators with locally integrable coefficients, the trace-norm
-	directional derivative, or degenerate Hermitian eigenvalue perturbation.
+	The Lean development formalizes the algebraic obstruction used inside the
+	proof, but not either conclusion of \cref{thm:q1-main}. In particular, it
+	does not yet define uniform HIC with the quantifier order in
+	\cref{def:q1-hic}, measurable relaxed controls, or the worst-case factor
+	$q_T$ as a supremum over all controls. It also lacks propagators with locally
+	integrable coefficients, weak-$*$ compactness and endpoint attainment, the
+	matrix trace-norm directional derivative, and the fixed-inertia perturbation
+	lemma. Thus the argument that produces one pair $(K,\gamma)$ uniformly over
+	all drives remains entirely informal.
 	\par\smallskip\noindent
 	\leanstatus{Channel/\allowbreak Semigroup/\allowbreak WeightedLowering\allowbreak Contractivity}
 	\par\smallskip\noindent
@@ -452,11 +456,13 @@ $N=U^\dagger LU$ is likewise nilpotent with one-dimensional kernel.
 	\end{itemize}
 	These declarations state that the shift is nilpotent, its kernel is exactly
 	the ground-state line, every nonzero invariant subspace contains that line,
-	and two nonzero invariant subspaces cannot be orthogonal. They do not
-	formalize \eqref{eq:q1-total-derivative}, the relaxed-control argument, or
-	the HIC theorem. The formal file is therefore a kernel-checked algebraic
-	companion to the proof, not a formal verification of
-	\cref{thm:q1-main}.
+	and two nonzero invariant subspaces cannot be orthogonal. The file contains
+	no \texttt{sorry} or additional axiom and builds successfully. It does not
+	formalize the Lindblad total-jump identity
+	\eqref{eq:q1-total-derivative}, the relaxed-control compactness and translated
+	window argument, the positive-rate HIC conclusion, or the zero-edge dark-state
+	conclusion. It is therefore a kernel-checked algebraic companion, not a Lean
+	proof of \cref{thm:q1-main}.
 \end{remark}
 
 \ifstandalone
