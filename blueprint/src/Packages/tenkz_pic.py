@@ -42,18 +42,15 @@ Design decisions
    pdftocairo rather than ``dvisvgm --pdf`` because the latter depends on
    exactly the Ghostscript facility whose absence triggers the fallback.
 
-3. **Cache key.**  ``sha256(library digest ‖ standalone document)[:16]``,
-   exactly the scheme proven by the old ``tn_diagrams.py`` pipeline (whose
-   hash/cache core survives here per the Phase-3 demolition list).  The
-   library digest folds in every file of ``tex/tenkz/`` plus
+3. **Cache key.**  ``sha256(library digest ‖ standalone document)[:16]``.
+   The library digest folds in every file of ``tex/tenkz/`` plus
    ``macros/common.tex``: a library edit re-renders everything (correct —
    every picture may look different), a body edit re-renders one SVG.
 
 4. **Standalone preamble.**  Units are compiled with ``macros/common`` in
    scope so picture labels may use blueprint macros, with the same
-   ``\newcounter{chapter}`` shim the old pipeline used (standalone is
-   article-based and lacks the chapter counter that common's theorem
-   numbering expects).
+   ``\newcounter{chapter}`` shim required because standalone is article-based
+   and lacks the chapter counter that common's theorem numbering expects.
 
 TODO (G20, out of Phase-0 scope): the **whole-equation reroute** — running
 math containing ``\tnpic[inline]`` must be rerouted whole-equation to the
@@ -170,8 +167,7 @@ def _tex_env() -> dict[str, str]:
     if kpsewhich is None:
         return env
     # When invoked from plasTeX the caller's environment can lack the TeX
-    # variables a homebrew/texlive split needs; resolve them once, exactly
-    # as the old tn_diagrams.py pipeline did.
+    # variables a Homebrew/TeX Live split needs; resolve them once here.
     for name in ("TEXMFCNF", "TEXMFROOT"):
         if env.get(name):
             continue
