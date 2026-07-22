@@ -39,22 +39,20 @@ $t\ge s\ge0$,
  \label{eq:q2-source-contractivity}
 \end{equation}
 The dissipator $\Dd$ is \emph{Hamiltonian-independently contractive} (HIC) if
+there are constants $K\ge1$ and $\gamma>0$, depending only on $\Dd$, such
+that for every $H=H^\dagger\in L^1_{\mathrm{loc}}$, every pair of states
+$\rho,\sigma$, and all $t\ge s\ge0$,
 \begin{equation}
-  \forall\,H=H^\dagger\in L^1_{\mathrm{loc}},\quad
-  \exists K_H,\gamma_H>0\quad\text{such that
-  \eqref{eq:q2-source-contractivity} holds.}
-  \label{eq:q2-hic-quantifiers}
+ \norm{\mathcal E^H_{t,s}(\rho-\sigma)}_1
+ \le K e^{-\gamma(t-s)}\norm{\rho-\sigma}_1.
+ \label{eq:q2-hic-quantifiers}
 \end{equation}
-Equivalently, one may quantify in \eqref{eq:q2-source-contractivity} over all
+Thus the constants in the HIC estimate are uniform over the drive.
+Equivalently, one may quantify in \eqref{eq:q2-hic-quantifiers} over all
 traceless Hermitian matrices: if $0\ne X=X^\dagger$ and $\tr X=0$, then
 $X=c(\rho-\sigma)$ for states $\rho,\sigma$, where
 $c=\norm{X}_1/2$ and $\rho=X_+/c$, $\sigma=X_-/c$.
 \end{definition}
-
-The quantifiers in \eqref{eq:q2-hic-quantifiers} are important: the definition
-allows the constants to depend on the drive. The result below proves the
-strictly stronger conclusion that one pair of constants works for every
-locally integrable Hamiltonian.
 
 \begin{theorem}[Resolution of Q2: uniform HIC]
 \label{thm:q2-uniform-hic}
@@ -316,9 +314,10 @@ write
 This is where the full-matrix weighted-jump extension following
 \eqref{eq:q2-caratheodory} is used. Diagonalize
 $X=\sum_k\lambda_k\ketbra{e_k}{e_k}$ and put
-$s_k=\operatorname{sgn}(\lambda_k)$. A direct expansion of the final trace in
-\eqref{eq:q2-directional-zero} for the \emph{total finite jump list}
-$\{M_{rj}\}_{r,j}$ gives
+$s_k=\operatorname{sgn}(\lambda_k)$. The fixed-inertia conclusion
+$P_0YP_0=0$ is essential here: it identifies the full right derivative with
+the signed-trace term in \eqref{eq:q2-directional-zero}. A direct expansion
+of that trace for the \emph{total finite jump list} $\{M_{rj}\}_{r,j}$ gives
 \begin{equation}
   0=-\sum_{k,l}|\lambda_k|(1-s_ks_l)
        \sum_{r,j}|\bra{e_l}M_{rj}\ket{e_k}|^2.
@@ -363,36 +362,61 @@ to obtain a bound uniform over the larger relaxed class of measurable
 $\mathcal C$-valued controls.
 
 \textbf{Step 2: a strict fixed-window factor.}
-For $T>0$, define
+For $T>0$, let
 \begin{equation}
- q_T=\sup\{\norm{X(T)}_1:
-       \dot X=A(t)X,\ A(t)\in\mathcal C\text{ a.e.},\ \norm{X(0)}_1=1\}.
+ \mathcal A_T=\big\{A\in L^\infty([0,T];
+ \operatorname{End}_{\R}(\mathsf V)):A(t)\in\mathcal C\text{ a.e.}\big\},
+\end{equation}
+and write $\Phi_A(t,s)$ for the fundamental solution of $\dot X=A(t)X$.
+Define the worst-case endpoint factor by the explicitly joint supremum
+\begin{equation}
+ q_T=\sup_{A\in\mathcal A_T}
+     \sup_{\substack{X_0\in\mathsf V\\ \norm{X_0}_1=1}}
+     \norm{\Phi_A(T,0)X_0}_1.
  \label{eq:q2-window-factor}
 \end{equation}
-The unit sphere of $\mathsf V$ is compact. By
-\cref{lem:q2-relaxed-compactness}, the admissible initial-control pairs are
-compact in the topology relevant to the endpoint map, so the supremum is
-attained. Trace-norm monotonicity gives $q_T\le1$. Also $q_T>0$: choose any
-constant control $A_0\in\mathcal K$. Its fundamental solution
+Thus $q_T$ depends only on $T$ and the compact control set $\mathcal C$, not
+on a chosen control.
+
+We spell out attainment, since it is the source of the uniform gap. Choose a
+maximizing sequence $(A_n,X_{0,n})$. Compactness of the unit sphere gives,
+after a subsequence, $X_{0,n}\to X_0$ with $\norm{X_0}_1=1$.
+\Cref{lem:q2-relaxed-compactness} gives a further subsequence and
+$A\in\mathcal A_T$ for which $A_n\stackrel{*}{\rightharpoonup}A$ and
+$\Phi_{A_n}(\cdot,0)X_{0,n}\to\Phi_A(\cdot,0)X_0$ uniformly. Hence the
+endpoint norms converge and $(A,X_0)$ attains $q_T$.
+
+Trace-norm monotonicity gives $q_T\le1$. Also $q_T>0$: choose any constant
+control $A_0\in\mathcal K$. Its fundamental solution
 $e^{TA_0}:\mathsf V\to\mathsf V$ is an invertible matrix exponential, so it
-maps every nonzero unit vector to a nonzero vector, and the supremum defining
-$q_T$ is positive. If $q_T=1$, a maximizing trajectory would satisfy
-$1=\norm{X(0)}_1\ge\norm{X(t)}_1\ge\norm{X(T)}_1=1$ for all $t\in[0,T]$,
-contradicting \cref{lem:q2-no-constant-trajectory}. Therefore
+maps every nonzero unit vector to a nonzero vector. If $q_T=1$, an attaining
+trajectory would satisfy
+$1=\norm{X(0)}_1\ge\norm{X(t)}_1\ge\norm{X(T)}_1=1$ for every
+$t\in[0,T]$, contradicting \cref{lem:q2-no-constant-trajectory}. Therefore
 \begin{equation}
   0<q_T<1.
   \label{eq:q2-q-strict}
 \end{equation}
-This is where weak-* control compactness, Arzel\`a--Ascoli, continuity of the
-integral equation, the fixed-inertia lemma, and the algebraic hypothesis enter.
+This is a qualitative compactness gap: no pointwise differential rate is
+needed. Without endpoint attainment, merely excluding exact constant-norm
+trajectories would not suffice. This is where weak-* control compactness,
+Arzel\`a--Ascoli, continuity of the integral equation, the fixed-inertia
+lemma, and the algebraic hypothesis enter.
 
 \textbf{Step 3: iteration.}
 Let $A$ be any interaction-frame control and let $a\ge0$. The translated
-control $A_a(\tau)=A(a+\tau)$ on $[0,T]$ is again a measurable
-$\mathcal C$-valued control, so the definition of $q_T$ gives the same
-operator-norm factor on every window $[a,a+T]$. By the cocycle identity for
-fundamental solutions, $n=\lfloor(t-s)/T\rfloor$ consecutive windows
-contribute the factor $q_T^n$. Trace-norm contractivity on the final interval
+control $A_a(\tau)=A(a+\tau)$, $0\le\tau\le T$, belongs to the same class
+$\mathcal A_T$. Moreover,
+$\Phi_A(a+T,a)=\Phi_{A_a}(T,0)$, so
+\eqref{eq:q2-window-factor} gives
+\begin{equation}
+ \norm{\Phi_A(a+T,a)X}_1\le q_T\norm{X}_1
+ \qquad\text{for every }A,a,X.
+\end{equation}
+The controls on different windows need not agree; each translated control is
+separately covered by the same worst-case supremum. By the cocycle identity,
+$n=\lfloor(t-s)/T\rfloor$ consecutive windows contribute the factor $q_T^n$.
+Trace-norm contractivity on the final interval
 of length less than $T$ then gives, for $r=t-s$,
 \begin{equation}
  \norm{\mathcal E^H_{t,s}(X)}_1
