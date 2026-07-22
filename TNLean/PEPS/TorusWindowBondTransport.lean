@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusWindowChain6
-import TNLean.PEPS.TorusWindowPeel4
+import TNLean.PEPS.TorusWindowPeeling.WindowIndependence
 
 /-!
 # The per-consecutive-window bond-insert transport through the injective overlap
@@ -20,7 +20,8 @@ sliding-arm rectangle of `staircaseUnion_eq_horizontalRectangle`.  This file bui
 ## The mechanism (no `univ \ S` inversion)
 
 The transport rests on two landed facts.  The window-independence of the bond insertion
-`bondInserted_windowIndependent` (`TNLean/PEPS/TorusWindowPeel4.lean`) says that two regions
+`bondInserted_windowIndependent`
+(`TNLean/PEPS/TorusWindowPeeling/WindowIndependence.lean`) says that two regions
 sharing the bond `g` as a boundary edge, with the inserted matrices' orientations agreeing, have
 *cross-proportional* assembled deformed states: the interior-bond product of one window times the
 state of the other matches the swapped product.  Scaling each window's bond insert by the *other*
