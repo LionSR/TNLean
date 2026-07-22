@@ -3,17 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.RegionBlock.Basic
-import TNLean.PEPS.VertexComplement.KernelDescent
+import TNLean.PEPS.ConfigurationCalculus
 
 /-!
 # Kernel descent for the blocked-region tensor
 
 This file proves that the blocked-region tensor family of an arbitrary finite
-region `R` is linearly independent, by finite kernel descent. The descent
-generalizes the vertex-complement descent of
-`TNLean.PEPS.VertexComplement.KernelDescent` from the region `V\{v}` to an
-arbitrary region `R`.
+region `R` is linearly independent, by finite kernel descent.
 
 The contraction region is `R`. Deleting one vertex `j ∈ R` at a time uses the
 one-sided inverse at `j`; the terminal empty region forces every boundary
