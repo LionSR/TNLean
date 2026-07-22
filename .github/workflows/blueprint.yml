@@ -87,8 +87,8 @@ jobs:
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
           fi
-          if grep -R "TikZ SVG unavailable" blueprint/web --include='*.html'; then
-            echo "::error::Blueprint contains unrendered TikZ SVG placeholders"
+          if grep -R "tenkz SVG unavailable" blueprint/web --include='*.html'; then
+            echo "::error::Blueprint contains unrendered tenkz SVG placeholders"
             exit 1
           fi
 

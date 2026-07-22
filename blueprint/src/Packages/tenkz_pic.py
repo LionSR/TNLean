@@ -84,6 +84,7 @@ _REPO_ROOT = _SRC_DIR.parents[1]
 _TENKZ_DIR = _REPO_ROOT / "tex/tenkz"
 _CACHE_DIR = _SRC_DIR / ".tenkz_svg_cache"
 _SVG_SUBDIR = "tenkz_svg"
+MISSING_SVG_SENTINEL = "tenkz SVG unavailable"
 
 # Every file that participates in rendering a unit.  All of them are folded
 # into the content hash: editing the library or the shared macros re-renders
@@ -392,7 +393,7 @@ def _svg_src(obj: object, svg_path: Path, output_dir: Path) -> str:
 def _missing_tools_html(unit_source: str) -> str:
     return (
         '<span class="tenkz-svg-missing">'
-        "tenkz SVG unavailable: install xelatex plus dvisvgm (with "
+        f"{MISSING_SVG_SENTINEL}: install xelatex plus dvisvgm (with "
         "Ghostscript/mutool) or pdftocairo to render "
         f"<code>{escape(unit_source)}</code>."
         "</span>"

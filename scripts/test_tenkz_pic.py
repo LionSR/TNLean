@@ -32,6 +32,11 @@ sys.path.insert(0, str(_REPO_ROOT / "blueprint/src/Packages"))
 
 import tenkz_pic
 
+_PLACEHOLDER_WORKFLOWS = (
+    _REPO_ROOT / ".github/workflows/blueprint.yml",
+    _REPO_ROOT / ".github/workflows/docgen.yml",
+)
+
 # Spec benchmark bodies (B1, B6, B8 of tenkz_final_spec.md §3), with the
 # minimum width (pt) a faithful render must exceed: an ink-stripped SVG of
 # B1 measures ~12pt (three letters), a real one ~95pt at 11mm pitch.
@@ -82,6 +87,16 @@ def _svg_width_pt(svg_text: str) -> float:
 
 
 def main() -> int:
+    missing_html = tenkz_pic._missing_tools_html(r"\tnpic{\tn{A}}")
+    sentinel = tenkz_pic.MISSING_SVG_SENTINEL
+    assert sentinel in missing_html, "missing-tool HTML lost its stable sentinel"
+    for workflow in _PLACEHOLDER_WORKFLOWS:
+        workflow_text = workflow.read_text(encoding="utf-8")
+        assert f'grep -R "{sentinel}"' in workflow_text, (
+            f"{workflow}: placeholder guard drifted from the renderer sentinel"
+        )
+    print(f"PASS placeholder sentinel: {sentinel!r}")
+
     chain = tenkz_pic.toolchain()
     if chain is None:
         print("FAIL: no SVG toolchain (need xelatex plus dvisvgm or pdftocairo)")

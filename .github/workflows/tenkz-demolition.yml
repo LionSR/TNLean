@@ -23,4 +23,6 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Scan tracked files for retired catalogue residue
-        run: python3 scripts/check_tenkz_demolition.py
+        run: |
+          python3 scripts/test_check_tenkz_demolition.py
+          python3 scripts/check_tenkz_demolition.py
