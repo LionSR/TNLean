@@ -106,7 +106,11 @@ theorem virtualConfigCongr_mergeVirtualConfig (A B : Tensor G d)
       mergeVirtualConfig B select (virtualConfigCongr A B h left)
         (virtualConfigCongr A B h right) := by
   ext e
-  by_cases he : select e <;> simp [he]
+  by_cases he : select e
+  · simp only [virtualConfigCongr_apply, mergeVirtualConfig_of_pos A select left right he,
+      mergeVirtualConfig_of_pos B select _ _ he]
+  · simp only [virtualConfigCongr_apply, mergeVirtualConfig_of_neg A select left right he,
+      mergeVirtualConfig_of_neg B select _ _ he]
 
 /-! ### Region specialization -/
 

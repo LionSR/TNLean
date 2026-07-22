@@ -169,9 +169,10 @@ theorem blueProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
   by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red ie.1
-  · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr]
+  · rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr]
     exact (h.rb F (isCrossing_rb_of_incident F hP hr hbinc)).symm
-  · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hbinc]
+  · rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
+      mergeVirtualConfig_of_pos A _ _ _ hbinc]
 
 /-- The complement vertex product reads the merge unchanged: a complement-incident
 edge that is red-incident is a red-to-complement crossing edge, and one that is
@@ -190,12 +191,14 @@ theorem complProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
   by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red ie.1
-  · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr]
+  · rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr]
     exact (h.rc F (isCrossing_rc_of_incident F hP hr hcinc)).symm
   · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue ie.1
-    · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb]
+    · rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
+        mergeVirtualConfig_of_pos A _ _ _ hb]
       exact (h.bc F (isCrossing_bc_of_incident F hP hb hcinc)).symm
-    · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb]
+    · rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
+        mergeVirtualConfig_of_neg A _ _ _ hb]
 
 /-! ### The assembled physical configuration
 
@@ -452,7 +455,7 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
       by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
       · rw [dif_pos hr]
         have := hmerge' e
-        simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr] at this
+        rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
         exact this.symm
       · rw [dif_neg hr]
     · funext e
@@ -461,10 +464,11 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
       · rw [dif_pos hb]
         by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
         · have := hmerge' e
-          simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr] at this
+          rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
           rw [← (hag.rb F (isCrossing_rb_of_incident F hP hr hb)), this]
         · have := hmerge' e
-          simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb] at this
+          rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
+            mergeVirtualConfig_of_pos A _ _ _ hb] at this
           exact this.symm
       · rw [dif_neg hb]
     · funext e
@@ -473,14 +477,16 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
       · rw [dif_pos hc]
         by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
         · have := hmerge' e
-          simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr] at this
+          rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
           rw [← (hag.rc F (isCrossing_rc_of_incident F hP hr hc)), this]
         · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
           · have := hmerge' e
-            simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb] at this
+            rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
+              mergeVirtualConfig_of_pos A _ _ _ hb] at this
             rw [← (hag.bc F (isCrossing_bc_of_incident F hP hb hc)), this]
           · have := hmerge' e
-            simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb] at this
+            rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
+              mergeVirtualConfig_of_neg A _ _ _ hb] at this
             exact this.symm
       · rw [dif_neg hc]
   · -- Reading the free indices of a reconstruction recovers them.

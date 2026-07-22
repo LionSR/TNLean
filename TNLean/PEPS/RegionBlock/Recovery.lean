@@ -293,17 +293,17 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
       · -- The reconstructed pair merges back to `η`.
         funext e
         by_cases hinc : IsRegionIncidentEdge (G := G) R e
-        · simp [regionMerge, mergeVirtualConfig, regionFiberPair, hinc]
-        · simp [regionMerge, mergeVirtualConfig, regionFiberPair, hinc,
-            not_boundary_of_not_incident (G := G) R hinc]
+        · rw [regionMerge_of_incident (G := G) A R _ hinc]
+          simp [regionFiberPair, hinc]
+        · rw [regionMerge_of_not_incident (G := G) A R _ hinc]
+          simp [regionFiberPair, hinc, not_boundary_of_not_incident (G := G) R hinc]
     · -- Reconstructing from the free indices of a fiber pair recovers the pair.
       intro p hp
       simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
       obtain ⟨hagree, hmerge⟩ := hp
       have hagree' : ∀ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
           p.1 f.1 = p.2 f.1 := fun f => congrFun hagree f
-      have hmerge' : ∀ e : Edge G,
-          (if IsRegionIncidentEdge (G := G) R e then p.1 e else p.2 e) = η e :=
+      have hmerge' : ∀ e : Edge G, regionMerge (G := G) A R p e = η e :=
         fun e => congrFun hmerge e
       refine Prod.ext ?_ ?_
       · -- First configuration.
@@ -311,7 +311,9 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
         simp only [regionFiberPair, regionFiberLegs]
         by_cases hinc : IsRegionIncidentEdge (G := G) R e
         · rw [dif_pos hinc]
-          have := hmerge' e; rw [if_pos hinc] at this; exact this.symm
+          have := hmerge' e
+          rw [regionMerge_of_incident (G := G) A R p hinc] at this
+          exact this.symm
         · rw [dif_neg hinc, if_neg hinc]
       · -- Second configuration.
         funext e
@@ -320,14 +322,17 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
         · rw [dif_pos hb]
           -- On a boundary edge the agreement and the merge identity force `p.2 e = η e`.
           have hinc := incident_of_boundary (G := G) R hb
-          have h1 := hmerge' e; rw [if_pos hinc] at h1
+          have h1 := hmerge' e
+          rw [regionMerge_of_incident (G := G) A R p hinc] at h1
           have h2 := hagree' ⟨e, hb⟩
           rw [← h1, h2]
         · rw [dif_neg hb]
           by_cases hinc : IsRegionIncidentEdge (G := G) R e
           · rw [dif_pos hinc, if_pos hinc]
           · rw [dif_neg hinc]
-            have := hmerge' e; rw [if_neg hinc] at this; exact this.symm
+            have := hmerge' e
+            rw [regionMerge_of_not_incident (G := G) A R p hinc] at this
+            exact this.symm
     · -- Reading the free indices of a reconstruction recovers them.
       intro h _
       funext e

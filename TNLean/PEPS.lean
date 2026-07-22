@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.CoherentFrameInstance
 import TNLean.PEPS.CoherentFrameInstance2
+import TNLean.PEPS.ConfigurationCalculus
 import TNLean.PEPS.CycleArcRegion
 import TNLean.PEPS.CycleBlockingData
 import TNLean.PEPS.CycleFundamentalTheorem
