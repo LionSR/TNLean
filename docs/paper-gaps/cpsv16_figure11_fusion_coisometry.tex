@@ -104,11 +104,12 @@ The existing structure
 \leanid{MPOTensor.BNTFusionIsometryFamily} assumes
 $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=I$.  It remains mathematically
 valid as a conditional full-support structure, but it is not the unrestricted
-conclusion of the source theorem.  The tensor-attached structure
-\leanid{MPOTensor.BNTFusionTensorClause} inherits the same restriction.
+conclusion of the source theorem.  It is retained only for results whose
+hypotheses explicitly require full support.
 
-The source-facing construction tracked in \ghissue{4588} therefore uses a
-separate active-support fusion family with the following data:
+The source-facing construction tracked in \ghissue{4588} uses the
+active-support family \leanid{MPOTensor.BNTFusionCoisometryFamily} with the
+following data:
 \begin{enumerate}
   \item positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$, allowing
     zero-dimensional multiplicity spaces;
@@ -122,9 +123,14 @@ the nonzero reducing corners give isometric inclusions into the product bond
 space, and their adjoints assemble into the required row coisometry.  No
 claim that the active projection is the identity is needed.
 
-A subsequent migration may replace uses of the stronger family by the
-active-support family after auditing which later results genuinely require
-full support.  Conversion to the former structure is permitted only under the
+The tensor-attached structure
+\leanid{MPOTensor.BNTFusionTensorClause} now uses this same active-support
+contract: it stores $UU^\dagger=I$, the forward fusion identity, and exact
+reconstruction.  The implication from the renormalization fixed-point maps is
+proved in
+\leanid{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}, completing the
+realignment tracked in \ghissue{4225}.  Conversion to the stronger
+\leanid{MPOTensor.BNTFusionIsometryFamily} remains permitted only under the
 additional identity $U^\dagger U=I$, or an equivalent assertion that the
 product tensor has no discarded zero reducing corner.
 
@@ -133,7 +139,9 @@ The phrase ``isometries $U_{\alpha,\beta}$'' in the source uses the same
 retained-row orientation as Proposition~4.13.  Interpreting it as
 $U^\dagger U=I$ strengthens the theorem and excludes legitimate zero product
 sectors.  The faithful Figure~11 conclusion is coisometry onto the active
-direct sum together with exact reconstruction.
+direct sum together with exact reconstruction.  The source-facing
+tensor-attached fusion clause and its renormalization-fixed-point construction
+now implement precisely this conclusion.
 
 \bibliographystyle{alpha}
 \bibliography{references}
