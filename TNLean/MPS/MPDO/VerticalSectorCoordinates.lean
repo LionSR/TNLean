@@ -425,6 +425,161 @@ def transportedVerticalSectorS
     transportSToVerticalCoordinates U₁ U₂ S ∘ₗ
       normalizedRetainedVerticalSectorEmbedding dim₂ mult₂ weight₂
 
+/-- The common vertical-sector hypotheses needed to identify the fixed
+one-site and two-site bond-contraction families.
+
+This is the source-faithful algebraic part of the Appendix C.4 context.  It
+does not include the normal-tensor spanning, coisometry, or channel
+hypotheses used by the later analytic argument.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1980. -/
+structure VerticalSectorFixedGeneratorHypotheses {g₁ g₂ d D : ℕ} where
+  /-- One-site simple-sector dimensions.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  dim₁ : Fin g₁ → ℕ
+  /-- One-site sector multiplicities.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  mult₁ : Fin g₁ → ℕ
+  /-- One-site multiplicity weights.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ
+  /-- Two-site simple-sector dimensions.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  dim₂ : Fin g₂ → ℕ
+  /-- Two-site sector multiplicities.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  mult₂ : Fin g₂ → ℕ
+  /-- Two-site multiplicity weights.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  weight₂ : (β : Fin g₂) → Fin (mult₂ β) → ℂ
+  /-- Every one-site multiplicity space is nontrivial.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hMult₁ : ∀ α, 0 < mult₁ α
+  /-- The one-site multiplicity weights are strictly positive.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q
+  /-- Every two-site multiplicity space is nontrivial.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hMult₂ : ∀ β, 0 < mult₂ β
+  /-- The two-site multiplicity weights are strictly positive.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q
+  /-- The MPDO tensor whose one-site and two-site vertical forms are compared.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1958. -/
+  M : MPOTensor d D
+  /-- The one-site vertical normal tensors.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α)
+  /-- The two-site vertical normal tensors.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β)
+  /-- The retained one-site vertical coordinate map.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  U₁ : Matrix
+    (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
+    (Fin d) ℂ
+  /-- The retained two-site vertical coordinate map.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  U₂ : Matrix
+    (Fin (∑ q : Fin (∑ β : Fin g₂, mult₂ β), verticalCopyDim dim₂ mult₂ q))
+    (Fin (d * d)) ℂ
+  /-- The physical refinement map.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
+  T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
+    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ
+  /-- The physical coarse-graining map.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
+  S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
+    Matrix (Fin d) (Fin d) ℂ
+  /-- The one-site vertical form is obtained by the retained coordinate map.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hForward₁ : ∀ ab, U₁ * verticalTensor M ab * U₁ᴴ =
+    verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab
+  /-- The retained one-site vertical form reconstructs the original tensor.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hReconstruct₁ : ∀ ab, verticalTensor M ab =
+    U₁ᴴ * verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab * U₁
+  /-- The two-site vertical form is obtained by the retained coordinate map.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hForward₂ : ∀ ab, U₂ * verticalTensor (blockTwo M) ab * U₂ᴴ =
+    verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab
+  /-- The retained two-site vertical form reconstructs the blocked tensor.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+  hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
+    U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂
+  /-- Refinement sends every one-site physical bond closure to its two-site
+  counterpart.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
+  hTphys : ∀ X, T (physClose1 M X) = physClose2 M X
+  /-- Coarse-graining sends every two-site physical bond closure back to its
+  one-site counterpart.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
+  hSphys : ∀ X, S (physClose2 M X) = physClose1 M X
+
+namespace VerticalSectorFixedGeneratorHypotheses
+
+/-- The transported vertical-sector refinement map determined by the weak
+Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
+def Tbar {g₁ g₂ d D : ℕ} (h : VerticalSectorFixedGeneratorHypotheses
+    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :
+    VerticalSectorAlgebra h.dim₁ →ₗ[ℂ] VerticalSectorAlgebra h.dim₂ :=
+  transportedVerticalSectorT h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.U₁ h.U₂ h.T
+
+/-- The transported vertical-sector coarse-graining map determined by the
+weak Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
+def Sbar {g₁ g₂ d D : ℕ} (h : VerticalSectorFixedGeneratorHypotheses
+    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :
+    VerticalSectorAlgebra h.dim₂ →ₗ[ℂ] VerticalSectorAlgebra h.dim₁ :=
+  transportedVerticalSectorS h.dim₁ h.mult₁ h.dim₂ h.mult₂ h.weight₂ h.U₁ h.U₂ h.S
+
+/-- The coarse-graining--refinement composite determined by the weak
+Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
+def SbarTbar {g₁ g₂ d D : ℕ} (h : VerticalSectorFixedGeneratorHypotheses
+    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :
+    VerticalSectorAlgebra h.dim₁ →ₗ[ℂ] VerticalSectorAlgebra h.dim₁ :=
+  h.Sbar.comp h.Tbar
+
+/-- The refinement--coarse-graining composite determined by the weak
+Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
+def TbarSbar {g₁ g₂ d D : ℕ} (h : VerticalSectorFixedGeneratorHypotheses
+    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :
+    VerticalSectorAlgebra h.dim₂ →ₗ[ℂ] VerticalSectorAlgebra h.dim₂ :=
+  h.Tbar.comp h.Sbar
+
+end VerticalSectorFixedGeneratorHypotheses
+
+
 /-- The transported refinement map sends multiplicity-trace-scaled one-site
 sector operators to the corresponding scaled two-site sector operators.
 

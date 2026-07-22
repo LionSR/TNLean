@@ -39,51 +39,22 @@ the later fixed-point structure argument of Appendix C.4, lines 1980--1993.
 Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
 theorem transportedVerticalSectorS_comp_T_fixed_contractBondMatrix_trace_smul
     {g₁ g₂ d D : ℕ}
-    (dim₁ mult₁ : Fin g₁ → ℕ)
-    (weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ)
-    (dim₂ mult₂ : Fin g₂ → ℕ)
-    (weight₂ : (β : Fin g₂) → Fin (mult₂ β) → ℂ)
-    (hMult₁ : ∀ α, 0 < mult₁ α)
-    (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
-    (hMult₂ : ∀ β, 0 < mult₂ β)
-    (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
-    (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
-    (U₁ : Matrix
-      (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
-      (Fin d) ℂ)
-    (U₂ : Matrix
-      (Fin (∑ q : Fin (∑ β : Fin g₂, mult₂ β), verticalCopyDim dim₂ mult₂ q))
-      (Fin (d * d)) ℂ)
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d) (Fin d) ℂ)
-    (hForward₁ : ∀ ab, U₁ * verticalTensor M ab * U₁ᴴ =
-      verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab)
-    (hReconstruct₁ : ∀ ab, verticalTensor M ab =
-      U₁ᴴ * verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab * U₁)
-    (hForward₂ : ∀ ab, U₂ * verticalTensor (blockTwo M) ab * U₂ᴴ =
-      verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab)
-    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
-      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (X : Matrix (Fin D) (Fin D) ℂ)
-    (hT : T (physClose1 M X) = physClose2 M X)
-    (hS : S (physClose2 M X) = physClose1 M X) :
-    ((transportedVerticalSectorS dim₁ mult₁ dim₂ mult₂ weight₂ U₁ U₂ S).comp
-      (transportedVerticalSectorT dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T))
-        (fun α => verticalMultiplicityTrace weight₁ α •
-          MPSTensor.contractBondMatrix (A₁ α) X) =
-      fun α => verticalMultiplicityTrace weight₁ α •
-        MPSTensor.contractBondMatrix (A₁ α) X := by
-  simp only [LinearMap.comp_apply]
+    (h : VerticalSectorFixedGeneratorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D))
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    h.SbarTbar (fun α => verticalMultiplicityTrace h.weight₁ α •
+      MPSTensor.contractBondMatrix (h.A₁ α) X) =
+      fun α => verticalMultiplicityTrace h.weight₁ α •
+        MPSTensor.contractBondMatrix (h.A₁ α) X := by
+  simp only [VerticalSectorFixedGeneratorHypotheses.SbarTbar,
+    VerticalSectorFixedGeneratorHypotheses.Sbar,
+    VerticalSectorFixedGeneratorHypotheses.Tbar, LinearMap.comp_apply]
   rw [transportedVerticalSectorT_contractBondMatrix_trace_smul
-    dim₁ mult₁ weight₁ dim₂ mult₂ weight₂ hMult₁ hWeight₁ M A₁ A₂ U₁ U₂ T
-    hReconstruct₁ hForward₂ X hT]
+    h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₁ h.hWeight₁
+    h.M h.A₁ h.A₂ h.U₁ h.U₂ h.T h.hReconstruct₁ h.hForward₂ X (h.hTphys X)]
   exact transportedVerticalSectorS_contractBondMatrix_trace_smul
-    dim₁ mult₁ weight₁ dim₂ mult₂ weight₂ hMult₂ hWeight₂ M A₁ A₂ U₁ U₂ S
-    hForward₁ hReconstruct₂ X hS
+    h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₂ h.hWeight₂
+    h.M h.A₁ h.A₂ h.U₁ h.U₂ h.S h.hForward₁ h.hReconstruct₂ X (h.hSphys X)
 
 /-- Every multiplicity-trace-scaled two-site vertical BNT bond contraction is
 fixed by the transported refinement--coarse-graining composite.
@@ -95,50 +66,21 @@ the later fixed-point structure argument of Appendix C.4, lines 1980--1993.
 Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
 theorem transportedVerticalSectorT_comp_S_fixed_contractBondMatrix_trace_smul
     {g₁ g₂ d D : ℕ}
-    (dim₁ mult₁ : Fin g₁ → ℕ)
-    (weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ)
-    (dim₂ mult₂ : Fin g₂ → ℕ)
-    (weight₂ : (β : Fin g₂) → Fin (mult₂ β) → ℂ)
-    (hMult₁ : ∀ α, 0 < mult₁ α)
-    (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
-    (hMult₂ : ∀ β, 0 < mult₂ β)
-    (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
-    (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
-    (U₁ : Matrix
-      (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
-      (Fin d) ℂ)
-    (U₂ : Matrix
-      (Fin (∑ q : Fin (∑ β : Fin g₂, mult₂ β), verticalCopyDim dim₂ mult₂ q))
-      (Fin (d * d)) ℂ)
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d) (Fin d) ℂ)
-    (hForward₁ : ∀ ab, U₁ * verticalTensor M ab * U₁ᴴ =
-      verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab)
-    (hReconstruct₁ : ∀ ab, verticalTensor M ab =
-      U₁ᴴ * verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab * U₁)
-    (hForward₂ : ∀ ab, U₂ * verticalTensor (blockTwo M) ab * U₂ᴴ =
-      verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab)
-    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
-      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (X : Matrix (Fin D) (Fin D) ℂ)
-    (hT : T (physClose1 M X) = physClose2 M X)
-    (hS : S (physClose2 M X) = physClose1 M X) :
-    ((transportedVerticalSectorT dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T).comp
-      (transportedVerticalSectorS dim₁ mult₁ dim₂ mult₂ weight₂ U₁ U₂ S))
-        (fun β => verticalMultiplicityTrace weight₂ β •
-          MPSTensor.contractBondMatrix (A₂ β) X) =
-      fun β => verticalMultiplicityTrace weight₂ β •
-        MPSTensor.contractBondMatrix (A₂ β) X := by
-  simp only [LinearMap.comp_apply]
+    (h : VerticalSectorFixedGeneratorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D))
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    h.TbarSbar (fun β => verticalMultiplicityTrace h.weight₂ β •
+      MPSTensor.contractBondMatrix (h.A₂ β) X) =
+      fun β => verticalMultiplicityTrace h.weight₂ β •
+        MPSTensor.contractBondMatrix (h.A₂ β) X := by
+  simp only [VerticalSectorFixedGeneratorHypotheses.TbarSbar,
+    VerticalSectorFixedGeneratorHypotheses.Tbar,
+    VerticalSectorFixedGeneratorHypotheses.Sbar, LinearMap.comp_apply]
   rw [transportedVerticalSectorS_contractBondMatrix_trace_smul
-    dim₁ mult₁ weight₁ dim₂ mult₂ weight₂ hMult₂ hWeight₂ M A₁ A₂ U₁ U₂ S
-    hForward₁ hReconstruct₂ X hS]
+    h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₂ h.hWeight₂
+    h.M h.A₁ h.A₂ h.U₁ h.U₂ h.S h.hForward₁ h.hReconstruct₂ X (h.hSphys X)]
   exact transportedVerticalSectorT_contractBondMatrix_trace_smul
-    dim₁ mult₁ weight₁ dim₂ mult₂ weight₂ hMult₁ hWeight₁ M A₁ A₂ U₁ U₂ T
-    hReconstruct₁ hForward₂ X hT
+    h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₁ h.hWeight₁
+    h.M h.A₁ h.A₂ h.U₁ h.U₂ h.T h.hReconstruct₁ h.hForward₂ X (h.hTphys X)
 
 end MPOTensor
