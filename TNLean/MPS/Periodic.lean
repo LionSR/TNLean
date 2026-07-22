@@ -17,12 +17,12 @@ import TNLean.MPS.Periodic.GlobalGauge
 import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
 import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.MPS.Periodic.Overlap
-import TNLean.MPS.Periodic.Overlap.Case1
-import TNLean.MPS.Periodic.Overlap.Case2
-import TNLean.MPS.Periodic.Overlap.Case3
-import TNLean.MPS.Periodic.Overlap.Case3Transport
 import TNLean.MPS.Periodic.Overlap.Dichotomy
+import TNLean.MPS.Periodic.Overlap.DifferentPeriod
 import TNLean.MPS.Periodic.Overlap.GaugePhase
+import TNLean.MPS.Periodic.Overlap.NoSectorMatch
+import TNLean.MPS.Periodic.Overlap.SectorMatch
+import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
 import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.Periodic.Overlap.SelfOverlapSetup
