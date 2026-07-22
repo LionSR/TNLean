@@ -95,14 +95,39 @@
     clause; constructing it from the MPDO tensor is a separate obligation.
 \end{definition}
 
+\begin{definition}[Source-derived two-site multiplicity spectrum]%
+    \label{def:mpdo_bnt_two_site_multiplicity_spectrum}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause}
+    For a tensor-attached BNT algebra clause, a source-derived two-site
+    multiplicity spectrum consists of a vertical canonical decomposition
+    \[
+        \widetilde{M^{(2)}}
+        =\bigoplus_\delta \nu_\delta\otimes A_\delta,
+    \]
+    a bijection $\sigma$ from the one-site sectors to its sectors such that
+    $M_\gamma$ and $A_{\sigma(\gamma)}$ generate the same matrix product
+    vectors at every positive length, and, for every $\gamma$, the multiset
+    equality
+    \[
+        \bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
+        =\bigl\{\mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}.
+    \]
+    This is the decomposition and comparison retained in
+    \cite[Appendix~C.4, lines~2046--2058]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{theorem}[The two-site multiplicity spectrum from the BNT algebra
     clause]%
     \label{thm:mpdo_bnt_algebra_tensor_clause_spectrum}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
-        toMultiplicitySpectrumComparison}
+        toTwoSiteMultiplicitySpectrum}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo,
         def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_two_site_multiplicity_spectrum,
         def:mpdo_bnt_multiplicity_spectrum_comparison,
         def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
     Let $M$ be an MPDO in horizontal canonical form, equipped with a
@@ -110,24 +135,24 @@
     \[
         \widetilde M=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
     \]
-    Choose a vertical canonical decomposition of the two-site blocking,
+    There is a vertical canonical decomposition of the two-site blocking,
     \[
         \widetilde{M^{(2)}}
         =\bigoplus_\delta \nu_\delta\otimes A_\delta.
     \]
-    Then the full-support one-site product expansion and the two-site
-    decomposition determine a bijection of their normal-tensor sectors.  With
-    this relabelling, positivity fixes the phase between matched sectors and,
-    for all sufficiently large $L$,
+    Its normal-tensor sectors admit a bijection $\sigma$ with the sectors of
+    the full-support one-site product expansion such that $M_\gamma$ and
+    $A_{\sigma(\gamma)}$ generate the same matrix product vectors at every
+    positive length and, for every $\gamma$,
     \[
-        \sum_r \nu_{\gamma,r}^{L}
-        =\sum_{\alpha,\beta,i,j,k}
-          \bigl(\mu_{\alpha,i}\mu_{\beta,j}
-            \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
+        \bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
+        =\bigl\{\mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}
     \]
-    Consequently the two sides agree as multisets, giving the
-    multiplicity-spectrum comparison of Appendix~C.4,
-    lines~2046--2058 of \cite{Cirac2016MPDO_arXiv}.
+    as multisets.  Thus the returned data retain both the actual two-site
+    decomposition and its relabelling; forgetting them gives the
+    multiplicity-spectrum comparison of Appendix~C.4, lines~2046--2058 of
+    \cite{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok

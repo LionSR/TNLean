@@ -19,8 +19,11 @@ the algebra-to-RFP implication.
 
 ## Main results
 
-* `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` derives the
-  two-site multiplicity-spectrum comparison directly from the tensor algebra clause.
+* `MPOTensor.BNTAlgebraTensorClause.toTwoSiteMultiplicitySpectrum` derives a two-site
+  vertical canonical decomposition, its sector relabelling, and the multiplicity-spectrum
+  comparison directly from the tensor algebra clause.
+* `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` forgets the
+  decomposition and retains the existing comparison interface.
 
 ## References
 
@@ -37,6 +40,50 @@ namespace MPOTensor
 
 namespace BNTAlgebraTensorClause
 
+/-- A source-derived two-site vertical canonical decomposition together with the
+sector relabelling and multiplicity-spectrum equality of Appendix C.4.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
+    (H : BNTAlgebraTensorClause M) where
+  /-- The vertical canonical decomposition of the two-site blocking from
+  arXiv:1606.00608, Appendix C.4, lines 2046--2049. -/
+  decomposition : CPSVVerticalDecomposition (blockTwo M)
+  /-- The bijection matching the one-site product sectors with the two-site sectors from
+  arXiv:1606.00608, Appendix C.4, lines 2050--2054. -/
+  relabel : Fin H.labelCount ≃ Fin decomposition.labelCount
+  /-- The matched one-site and two-site tensors generate the same positive-length matrix
+  product vectors, as in arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
+  sector_sameMPV : ∀ γ : Fin H.labelCount,
+    MPSTensor.SameMPV₂Pos (H.tensor γ) (decomposition.tensor (relabel γ))
+  /-- Equality with multiplicity between the matched two-site weights and the products of
+  one-site and chi weights from arXiv:1606.00608, Appendix C.4, lines 2054--2058. -/
+  spectrum_eq : ∀ γ : Fin H.labelCount,
+    Finset.univ.val.map (decomposition.weight (relabel γ)) =
+      Finset.univ.val.map fun x : BNTProductMultiplicityIndex
+          H.algebraClause.positiveChi.chi H.multiplicity γ =>
+        H.weight x.1 x.2.2.1 * H.weight x.2.1 x.2.2.2.1 *
+          H.algebraClause.positiveChi.chi.entry x.1 x.2.1 γ x.2.2.2.2
+
+/-- Forgetting the chosen two-site decomposition and relabelling gives the existing
+multiplicity-spectrum comparison interface.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+noncomputable def TwoSiteMultiplicitySpectrum.toComparison
+    {M : MPOTensor d D} {H : BNTAlgebraTensorClause M}
+    (S : TwoSiteMultiplicitySpectrum H) :
+    BNTMultiplicitySpectrumComparison H.algebraClause.positiveChi.chi
+      H.traceScalars where
+  oneDim := H.multiplicity
+  oneEntry := H.weight
+  oneTrace := fun α =>
+    (BNTAlgebraTensorClause.traceScalars_traceScalar H α).symm
+  twoDim := fun γ => S.decomposition.multiplicity (S.relabel γ)
+  twoEntry := fun γ => S.decomposition.weight (S.relabel γ)
+  spectrum_eq := S.spectrum_eq
+
 /-- The tensor-attached BNT algebra clause determines the multiplicity
 spectrum of a source-derived two-site vertical canonical decomposition.
 
@@ -48,11 +95,10 @@ independence derives the power-sum equality.
 
 Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-noncomputable def toMultiplicitySpectrumComparison
+noncomputable def toTwoSiteMultiplicitySpectrum
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
     (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
-    BNTMultiplicitySpectrumComparison H.algebraClause.positiveChi.chi
-      H.traceScalars := by
+    TwoSiteMultiplicitySpectrum H := by
   classical
   let chi := H.algebraClause.positiveChi.chi
   let productIndex (γ : Fin H.labelCount) :=
@@ -528,6 +574,14 @@ noncomputable def toMultiplicitySpectrumComparison
       exact hNorm
     rw [← hzetaEqReal, hRealOne]
     norm_num
+  have hSectorSameMPV : ∀ γ : Fin H.labelCount,
+      MPSTensor.SameMPV₂Pos (H.tensor γ) (D₂.tensor (sigma γ)) := by
+    intro γ L hL σ
+    have hMpv := hzetaMPV γ L hL σ
+    change (D₂.tensor (sigma γ)).mpv σ =
+      zeta γ ^ L * (H.tensor γ).mpv σ at hMpv
+    rw [hzetaOne γ, one_pow, one_mul] at hMpv
+    exact hMpv.symm
   have hPowerSums : ∀ γ : Fin H.labelCount, ∀ L : ℕ, L₀ < L →
       (∑ r, D₂.weight (sigma γ) r ^ L) =
         ∑ x : BNTProductMultiplicityIndex chi H.multiplicity γ,
@@ -544,15 +598,37 @@ noncomputable def toMultiplicitySpectrumComparison
       (fun x : productIndex γ ↦
         (H.weight x.1 x.2.2.1 * H.weight x.2.1 x.2.2.2.1 *
           chi.entry x.1 x.2.1 γ x.2.2.2.2) ^ L)
-  simpa only [chi] using
-    (BNTMultiplicitySpectrumComparison.ofEventuallyEqualPowerSums
+  let comparison :=
+    BNTMultiplicitySpectrumComparison.ofEventuallyEqualPowerSums
       chi H.traceScalars H.algebraClause.positiveChi.posEntries
       H.multiplicity H.weight H.weight_pos
       (fun α ↦ (BNTAlgebraTensorClause.traceScalars_traceScalar H α).symm)
       (fun γ ↦ D₂.multiplicity (sigma γ))
       (fun γ r ↦ D₂.weight (sigma γ) r)
       (fun γ r ↦ D₂.weight_pos (sigma γ) r)
-      hPowerSums)
+      hPowerSums
+  exact {
+    decomposition := D₂
+    relabel := sigma
+    sector_sameMPV := hSectorSameMPV
+    spectrum_eq := by
+      intro γ
+      have hSpectrum := comparison.spectrum_eq γ
+      dsimp only [comparison,
+        BNTMultiplicitySpectrumComparison.ofEventuallyEqualPowerSums] at hSpectrum
+      convert hSpectrum using 1 <;> rfl }
+
+/-- The source-derived two-site multiplicity spectrum gives the existing comparison
+interface after forgetting its vertical decomposition and sector relabelling.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+noncomputable def toMultiplicitySpectrumComparison
+    {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    BNTMultiplicitySpectrumComparison H.algebraClause.positiveChi.chi
+      H.traceScalars :=
+  (H.toTwoSiteMultiplicitySpectrum hHorizontal hM).toComparison
 
 end BNTAlgebraTensorClause
 
