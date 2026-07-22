@@ -751,7 +751,7 @@
 \bool_new:N \l__tenkzcd_aok_bool
 \cs_new_protected:Npn \tenkz_cd_arrow_endpoint:nn #1#2
   {
-    \regex_match:nnTF { \A \d+ \Z } {#2}
+    \tenkz_token_if_decimal_digits:nTF {#2}
       {
         \bool_lazy_and:nnF
           { \int_compare_p:nNn {#2} > {0} }
