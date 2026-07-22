@@ -56,8 +56,8 @@ lives beside it and always in the `%` comments.
 - `docs/tenkz/HACKING.md` — canonical build commands and the expl3/pgf
   pitfalls that have each shipped a bug. Read before editing any
   `.code.tex`.
-- `docs/tenkz/MIGRATION-MAP.md`, `DEMOLITION.md` — the old `tex/tn`
-  catalogue's exit path.
+- `docs/tenkz/MIGRATION-MAP.md`, `DEMOLITION.md` — the completed catalogue
+  migration and demolition record.
 - `docs/tenkz/manual2.tex` + `chapters2/` — the manual, second edition;
   at 0.9 it becomes the binding contract.
 - GitHub milestones 0.6–1.0 with their issues — the sequence. The spine
