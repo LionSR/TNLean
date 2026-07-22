@@ -115,19 +115,6 @@ namespace IsBNTCanonicalForm
 
 variable {P : SectorDecomposition d}
 
-/-- Every basis tensor in BNT canonical form is algebraically normal.
-
-The canonical-form irreducibility, left-canonicality, normalized self-overlap,
-and positive bond dimension imply eventual block injectivity.
-
-Source: CPSV21, arXiv:2011.12127, lines 1815--1830. -/
-theorem basis_isNormal (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
-    IsNormal (P.basis j) := by
-  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-  exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
-    (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
-      (hCF.basis_normalized_self_overlap j)
-
 /-- Forget a BNT canonical form to the algebraic BNT carried by its basis.
 
 The sector coefficient formula supplies the spanning clause, while

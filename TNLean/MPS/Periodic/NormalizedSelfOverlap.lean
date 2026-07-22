@@ -167,6 +167,19 @@ namespace MPSTensor.IsBNTCanonicalForm
 
 variable {d : ℕ} {P : SectorDecomposition d}
 
+/-- Every basis tensor in BNT canonical form is algebraically normal.
+
+The canonical-form irreducibility, left-canonicality, normalized self-overlap,
+and positive bond dimension imply eventual block injectivity.
+
+Source: CPSV21, arXiv:2011.12127, lines 1815--1830. -/
+theorem basis_isNormal (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
+    IsNormal (P.basis j) := by
+  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+  exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
+    (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
+      (hCF.basis_normalized_self_overlap j)
+
 /-- Every representative of a BNT canonical form is block injective at the
 common length $D^4$, where $D$ is the total bond dimension.
 
@@ -181,10 +194,7 @@ theorem basis_isNBlkInjective_totalDim_pow_four
       IsNBlkInjective (P.basis j) (P.totalDim ^ 4) := by
   intro j
   letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-  have hNormal : IsNormal (P.basis j) :=
-    isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
-      (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
-        (hCF.basis_normalized_self_overlap j)
+  have hNormal : IsNormal (P.basis j) := hCF.basis_isNormal j
   have hOwn : IsNBlkInjective (P.basis j) ((P.basisDim j) ^ 4) :=
     isNBlkInjective_pow_four_of_isNormal_leftCanonical
       (P.basis j) (hCF.basis_left_canonical j) hNormal
@@ -207,12 +217,8 @@ lines 1815--1837. -/
 theorem exists_common_basis_isNBlkInjective
     (hCF : IsBNTCanonicalForm P) :
     ∃ L : ℕ, 0 < L ∧ ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) L := by
-  have hNormal : ∀ j : Fin P.basisCount, IsNormal (P.basis j) := by
-    intro j
-    letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-    exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
-      (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
-        (hCF.basis_normalized_self_overlap j)
+  have hNormal : ∀ j : Fin P.basisCount, IsNormal (P.basis j) :=
+    hCF.basis_isNormal
   exact exists_common_isNBlkInjective_of_isNormal_leftCanonical
     P.basis hCF.basis_left_canonical (fun j ↦ (hCF.basis_dim_pos j).ne') hNormal
 
