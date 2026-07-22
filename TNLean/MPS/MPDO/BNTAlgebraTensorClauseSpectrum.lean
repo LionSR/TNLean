@@ -17,6 +17,11 @@ blocking.  The same-length product law identifies the sectorwise power sums,
 and positivity turns them into the multiplicity-spectrum comparison used in
 the algebra-to-RFP implication.
 
+## Main results
+
+* `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` derives the
+  two-site multiplicity-spectrum comparison directly from the tensor algebra clause.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
