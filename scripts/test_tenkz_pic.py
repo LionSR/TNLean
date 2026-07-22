@@ -32,6 +32,23 @@ sys.path.insert(0, str(_REPO_ROOT / "blueprint/src/Packages"))
 
 import tenkz_pic
 
+_PLACEHOLDER_WORKFLOWS = (
+    _REPO_ROOT / ".github/workflows/blueprint.yml",
+    _REPO_ROOT / ".github/workflows/docgen.yml",
+)
+_SLIDE_PREAMBLE = _REPO_ROOT / "docs/slides/preamble.tex"
+_SLIDE_THEME = _REPO_ROOT / "docs/slides/tn_library_dark.tex"
+_TENKZ_CORE = _REPO_ROOT / "tex/tenkz/tenkz-core.code.tex"
+
+_COLORLET_PATTERN = re.compile(
+    r"^\s*\\colorlet\{(tenkz[A-Za-z]+)\}\{([^}]*)\}\s*$", re.MULTILINE
+)
+_THEME_GEOMETRY_PATTERN = re.compile(
+    r"(?:baseline|scale|xshift|yshift|shape|font|line width|"
+    r"minimum (?:width|height|size)|inner sep|outer sep|rounded corners)\s*=",
+    re.IGNORECASE,
+)
+
 # Spec benchmark bodies (B1, B6, B8 of tenkz_final_spec.md §3), with the
 # minimum width (pt) a faithful render must exceed: an ink-stripped SVG of
 # B1 measures ~12pt (three letters), a real one ~95pt at 11mm pitch.
@@ -81,7 +98,74 @@ def _svg_width_pt(svg_text: str) -> float:
     return float(match.group(1))
 
 
+def _without_tex_comments(source: str) -> str:
+    return re.sub(r"(?<!\\)%.*$", "", source, flags=re.MULTILINE)
+
+
+def _palette(source: str) -> dict[str, str]:
+    entries = _COLORLET_PATTERN.findall(_without_tex_comments(source))
+    palette = dict(entries)
+    assert len(palette) == len(entries), "palette contains duplicate semantic keys"
+    return palette
+
+
+def _assert_dark_theme_contract(core_source: str, theme_source: str) -> None:
+    core_palette = _palette(core_source)
+    theme_palette = _palette(theme_source)
+    assert core_palette, "native tenkz core declares no semantic palette"
+    assert theme_palette.keys() == core_palette.keys(), (
+        "slide theme semantic keys differ from the native tenkz core"
+    )
+    assert not _THEME_GEOMETRY_PATTERN.search(_without_tex_comments(theme_source)), (
+        "slide theme must change colours only, not geometry or typography"
+    )
+
+
+def _assert_contract_rejects(core_source: str, theme_source: str, defect: str) -> None:
+    try:
+        _assert_dark_theme_contract(core_source, theme_source)
+    except AssertionError:
+        return
+    raise AssertionError(f"slide theme contract accepted {defect}")
+
+
 def main() -> int:
+    missing_html = tenkz_pic._missing_tools_html(r"\tnpic{\tn{A}}")
+    sentinel = tenkz_pic.MISSING_SVG_SENTINEL
+    assert sentinel in missing_html, "missing-tool HTML lost its stable sentinel"
+    for workflow in _PLACEHOLDER_WORKFLOWS:
+        workflow_text = workflow.read_text(encoding="utf-8")
+        assert f'grep -R "{sentinel}"' in workflow_text, (
+            f"{workflow}: placeholder guard drifted from the renderer sentinel"
+        )
+    print(f"PASS placeholder sentinel: {sentinel!r}")
+
+    slide_preamble = _SLIDE_PREAMBLE.read_text(encoding="utf-8")
+    package_loader = r"\usepackage{tenkz}"
+    dark_palette = r"\input{tn_library_dark}"
+    assert package_loader in slide_preamble, "slides lost the native tenkz package"
+    assert dark_palette in slide_preamble, "slides lost the native dark palette"
+    assert slide_preamble.index(package_loader) < slide_preamble.index(dark_palette), (
+        "slide dark palette must load after the native tenkz package"
+    )
+    core_source = _TENKZ_CORE.read_text(encoding="utf-8")
+    theme_source = _SLIDE_THEME.read_text(encoding="utf-8")
+    _assert_dark_theme_contract(core_source, theme_source)
+    _assert_contract_rejects(
+        core_source,
+        theme_source.replace("\\colorlet{tenkzOperator}{softred}\n", ""),
+        "a missing semantic colour",
+    )
+    custom_theme = theme_source.replace("orange!80!white", "black")
+    assert custom_theme != theme_source, "custom-hue fixture did not change the theme"
+    _assert_dark_theme_contract(core_source, custom_theme)
+    _assert_contract_rejects(
+        core_source,
+        theme_source + "\\tikzset{every node/.style={minimum size=9mm}}\n",
+        "a geometry assignment",
+    )
+    print("PASS slide palette: native dark theme preserves colours-only contract")
+
     chain = tenkz_pic.toolchain()
     if chain is None:
         print("FAIL: no SVG toolchain (need xelatex plus dvisvgm or pdftocairo)")

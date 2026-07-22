@@ -1,21 +1,12 @@
-% Dark-theme loader for TNLean's tensor-network calculus.
+% Dark palette for the native tenkz package.
 %
-% The shared TikZ library fixes all geometry, typography, and mathematical
-% meaning.  This file supplies only the dark palette and loads the six complete
-% diagrams used by the slide collection.
-\makeatletter
-\def\input@path{{../../tex/tn/}}
-\makeatother
-\usetikzlibrary{tn}
-
-\colorlet{tnInk}{white!94}
-\colorlet{tnSecondaryInk}{white!60}
-\colorlet{tnAccent}{orange!80!white}
-\colorlet{tnRegion}{cyan!80!white}
-\colorlet{tnSector}{magenta!75!white}
-\colorlet{tnPaper}{darkbg}
-\colorlet{tnTensorText}{darkbg}
-\colorlet{tnInsertionFill}{tnAccent}
-\colorlet{tnInsertionText}{darkbg}
-
-\input{tn_slide_catalogue}
+% This file intentionally changes colours only.  Geometry, port semantics,
+% contraction rules, and every diagram body remain local to tenkz and to the
+% slide that presents the mathematics.
+\colorlet{tenkzInk}{white!94}
+\colorlet{tenkzPaper}{darkbg}
+\colorlet{tenkzPassive}{white!60}
+\colorlet{tenkzAction}{orange!80!white}
+\colorlet{tenkzMarked}{cyan!80!white}
+\colorlet{tenkzExtra}{magenta!75!white}
+\colorlet{tenkzOperator}{softred}

@@ -10,7 +10,9 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'blueprint/src/**'
-      - 'tex/tn/**'
+      - 'tex/tenkz/**'
+      - 'tests/tenkz/**'
+      - 'docs/tenkz/**'
       - 'docs/slides/**'
       - '.github/workflows/blueprint.yml'
       - '.github/workflows/deploy-pages.yml'
@@ -20,6 +22,10 @@ on:
       - 'scripts/assemble-pages-site.sh'
       - 'scripts/fetch-latest-artifact.sh'
       - 'scripts/write_badges.py'
+      - 'scripts/tenkz_audit.py'
+      - 'scripts/tenkz_lint.py'
+      - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_equation_audit.py'
   workflow_dispatch:
 
 # Rapid pushes to main only need the newest build; actual Pages deployments
@@ -45,15 +51,16 @@ jobs:
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
 
-      - name: Check tensor-network diagram macros
+      - name: Check native tenkz sources and picture pipeline
         run: |
-          cd blueprint/src
-          PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
-            --check \
-            --check-slides \
-            --audit \
-            --audit-strict \
-            --smoke-render
+          python3 scripts/tenkz_lint.py \
+            'blueprint/src/chapter/*.tex' \
+            'docs/tenkz/manual2.tex' \
+            'docs/tenkz/chapters2/*.tex' \
+            'docs/slides/*.tex' \
+            'tex/tenkz/examples/*.tex'
+          python3 scripts/test_tenkz_pic.py
+          python3 scripts/test_tenkz_equation_audit.py
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
@@ -80,8 +87,8 @@ jobs:
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
           fi
-          if grep -R "TikZ SVG unavailable" blueprint/web --include='*.html'; then
-            echo "::error::Blueprint contains unrendered TikZ SVG placeholders"
+          if grep -R "tenkz SVG unavailable" blueprint/web --include='*.html'; then
+            echo "::error::Blueprint contains unrendered tenkz SVG placeholders"
             exit 1
           fi
 

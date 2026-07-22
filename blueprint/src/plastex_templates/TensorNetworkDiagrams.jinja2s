@@ -1,2 +1,0 @@
-name: TensorNetworkDiagram
-{{ obj.tn_svg_html }}

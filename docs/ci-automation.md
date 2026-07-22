@@ -240,11 +240,11 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **No label required** — this runs on all PRs automatically.
 
-The "PR CI" blueprint job and the "Blueprint" workflow also run
-`Packages/tn_diagrams.py --check --smoke-render` after the blueprint
-dependencies are installed. This checks the remaining tensor-network
-calculus invariants while the final empty catalogue pipeline awaits its
-follow-up demolition.
+The "PR CI" blueprint job and the "Blueprint" workflow validate native tenkz
+sources after the blueprint dependencies are installed. The focused source
+lint and topology tests run with the blueprint job; the dedicated corpus job
+compiles and audits the adopted regression set. Changes to visible figures also
+require rendered PDF and web inspection during review.
 
 ---
 

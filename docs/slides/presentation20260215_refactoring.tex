@@ -30,7 +30,7 @@
     {⊥}{{$\bot$}}1,
 }
 
-\title{\textbf{Systematic Lean~4 Proof Simplification:\\TNLean Refactoring Report}}
+\title{\textbf{Systematic Lean~4 Proof Simplification:\\{}TNLean Refactoring Report}}
 \subtitle{{\small 35 files audited, 15 reduced $\cdot$ 7 waves $\cdot$ 658 lines removed (12\%) $\cdot$ Lean 4 + Mathlib v4.27.0}}
 \date{}
 \author{}
@@ -278,26 +278,34 @@ TNLean/
     \begin{tikzpicture}[
         node distance=0.8cm and 1.2cm,
         every node/.style={font=\scriptsize, rounded corners=3pt, minimum height=0.55cm, minimum width=1.8cm, align=center},
-        layer/.style={fill=#1, text=white, draw=#1!70!black, thick},
+        layer/.style={text=white, thick},
         arr/.style={-{Stealth[length=4pt]}, thick, color=dimwhite!80}
     ]
         % Layer 0
-        \node[layer=gray!50!black] (alg) {Algebra/\\{\tiny BlockPerm, Skolem, Trace}};
+        \node[layer, fill=gray!50!black, draw=gray!35!black]
+          (alg) {Algebra/\\{\tiny BlockPerm, Skolem, Trace}};
 
         % Layer 1
-        \node[layer=deepblue, right=2.5cm of alg] (chan) {Channel/\\{\tiny PositiveMap, KS, Cesaro}};
+        \node[layer, fill=deepblue, draw=deepblue!70!black, right=2.5cm of alg]
+          (chan) {Channel/\\{\tiny PositiveMap, KS, Cesaro}};
 
         % Layer 2
-        \node[layer=deepblue!70!leangreen, below=0.8cm of chan] (qpf) {QPF/\\{\tiny PosDef, Uniqueness}};
+        \node[layer, fill=deepblue!70!leangreen,
+          draw=deepblue!50!leangreen, below=0.8cm of chan]
+          (qpf) {QPF/\\{\tiny PosDef, Uniqueness}};
 
         % Layer 3
-        \node[layer=leangreen!50!black, below=0.8cm of alg] (mps) {MPS/\\{\tiny Defs, Transfer, FundThm}};
+        \node[layer, fill=leangreen!50!black, draw=leangreen!35!black,
+          below=0.8cm of alg] (mps) {MPS/\\{\tiny Defs, Transfer, FundThm}};
 
         % Layer 4
-        \node[layer=amber!50!black, below right=0.8cm and 0.5cm of mps] (spec) {Spectral/\\{\tiny SpectralGap, MixedTrans}};
+        \node[layer, fill=amber!50!black, draw=amber!35!black,
+          below right=0.8cm and 0.5cm of mps]
+          (spec) {Spectral/\\{\tiny SpectralGap, MixedTrans}};
 
         % Layer 5
-        \node[layer=softred!50!black, below=0.8cm of spec] (pi) {PiAlgebra/\\{\tiny Construction, FTComplete}};
+        \node[layer, fill=softred!50!black, draw=softred!35!black,
+          below=0.8cm of spec] (pi) {PiAlgebra/\\{\tiny Construction, FTComplete}};
 
         % Arrows
         \draw[arr] (chan) -- (qpf);
@@ -692,7 +700,8 @@ theorem densityMatrices_isCompact :
     \begin{tikzpicture}[
         xscale=1.5, yscale=0.9,
         wave/.style={draw=leanblue, thick, rounded corners=3pt, minimum height=0.7cm, minimum width=2.2cm, font=\scriptsize},
-        agent/.style={fill=#1, text=white, rounded corners=2pt, minimum height=0.4cm, font=\tiny, inner sep=2pt}
+        agent/.style={text=white, rounded corners=2pt, minimum height=0.4cm,
+          font=\tiny, inner sep=2pt}
     ]
         % Timeline
         \draw[dimwhite, thick, -{Stealth[length=5pt]}] (0,0) -- (8,0);
@@ -710,24 +719,24 @@ theorem densityMatrices_isCompact :
         \node[font=\tiny\color{dimwhite}] at (-0.5, 0.5) {Agent 3};
 
         % Wave 1
-        \node[agent=deepblue] at (0.5, 2.5) {PosMap};
-        \node[agent=leangreen!50!black] at (0.5, 1.5) {Transfer};
-        \node[agent=gray!50!black] at (0.5, 0.5) {TracePair};
+        \node[agent, fill=deepblue] at (0.5, 2.5) {PosMap};
+        \node[agent, fill=leangreen!50!black] at (0.5, 1.5) {Transfer};
+        \node[agent, fill=gray!50!black] at (0.5, 0.5) {TracePair};
 
         % Wave 2
-        \node[agent=deepblue] at (1.7, 2.5) {KadSchwarz};
-        \node[agent=leangreen!50!black] at (1.7, 1.5) {CPPrim};
-        \node[agent=gray!50!black] at (1.7, 0.5) {Defs};
+        \node[agent, fill=deepblue] at (1.7, 2.5) {KadSchwarz};
+        \node[agent, fill=leangreen!50!black] at (1.7, 1.5) {CPPrim};
+        \node[agent, fill=gray!50!black] at (1.7, 0.5) {Defs};
 
         % Wave 3
-        \node[agent=deepblue] at (2.9, 2.5) {Cesaro};
-        \node[agent=leangreen!50!black] at (2.9, 1.5) {FundThm};
-        \node[agent=gray!50!black] at (2.9, 0.5) {Multi};
+        \node[agent, fill=deepblue] at (2.9, 2.5) {Cesaro};
+        \node[agent, fill=leangreen!50!black] at (2.9, 1.5) {FundThm};
+        \node[agent, fill=gray!50!black] at (2.9, 0.5) {Multi};
 
         % Wave 5
-        \node[agent=deepblue] at (5.3, 2.5) {Irred};
-        \node[agent=leangreen!50!black] at (5.3, 1.5) {SpecGap};
-        \node[agent=gray!50!black] at (5.3, 0.5) {MixTrans};
+        \node[agent, fill=deepblue] at (5.3, 2.5) {Irred};
+        \node[agent, fill=leangreen!50!black] at (5.3, 1.5) {SpecGap};
+        \node[agent, fill=gray!50!black] at (5.3, 0.5) {MixTrans};
 
         % etc label
         \node[font=\tiny\color{dimwhite}] at (4.1, 1.5) {\ldots};
@@ -817,15 +826,15 @@ theorem densityMatrices_isCompact :
         \begin{center}
         \begin{tikzpicture}[
             dir/.style={draw=dimwhite, thick, rounded corners=3pt, minimum height=0.6cm, minimum width=2cm, font=\small\color{white}},
-            ag/.style={fill=#1, text=white, rounded corners=2pt, font=\tiny, inner sep=3pt}
+            ag/.style={text=white, rounded corners=2pt, font=\tiny, inner sep=3pt}
         ]
             \node[dir] (c) at (0, 2) {Channel/};
             \node[dir] (m) at (0, 1) {MPS/};
             \node[dir] (a) at (0, 0) {Algebra/};
 
-            \node[ag=deepblue] (a1) at (2.5, 2) {Agent 1};
-            \node[ag=leangreen!50!black] (a2) at (2.5, 1) {Agent 2};
-            \node[ag=amber!50!black] (a3) at (2.5, 0) {Agent 3};
+            \node[ag, fill=deepblue] (a1) at (2.5, 2) {Agent 1};
+            \node[ag, fill=leangreen!50!black] (a2) at (2.5, 1) {Agent 2};
+            \node[ag, fill=amber!50!black] (a3) at (2.5, 0) {Agent 3};
 
             \draw[-{Stealth[length=4pt]}, leangreen, thick] (a1) -- (c);
             \draw[-{Stealth[length=4pt]}, leangreen, thick] (a2) -- (m);
