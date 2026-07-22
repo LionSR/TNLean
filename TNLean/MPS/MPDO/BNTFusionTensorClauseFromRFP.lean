@@ -353,16 +353,15 @@ theorem of_isRFPViaTS (M : MPOTensor d D)
       D₁.reconstruction D₂.reconstruction
       sigma hDim V hLetter hL
   obtain ⟨chi, U, hChiPos, hU, hFusion, hFusionReconstruction⟩ :=
-    transportedVerticalSector_exists_positiveFusionDecomposition
+    exists_positiveFusionDecomposition_of_unitaryBlockEquiv
       D₁.bondDim D₁.multiplicity D₁.weight
       D₂.bondDim D₂.multiplicity D₂.weight
       D₁.multiplicity_pos D₁.weight_pos
       D₂.multiplicity_pos D₂.weight_pos
-      M D₁.tensor D₂.tensor D₁.isCPSVBNT D₂.isCPSVBNT
+      M D₁.tensor D₂.tensor D₂.isCPSVBNT
       D₁.verticalCoisometry D₂.verticalCoisometry
-      D₁.coisometry D₂.coisometry T Smap hTCPTP hSCPTP
-      D₁.forward D₁.reconstruction D₂.forward D₂.reconstruction
-      hTphys hSphys hHorizontal hM
+      D₁.coisometry D₂.coisometry D₁.reconstruction D₂.reconstruction
+      sigma hDim V hLetter hHorizontal hM
   have hIdempotent := hasIdempotentCoefficientForm_of_blockedRepresentations
     D₁ D₂ sigma chi U hChiPos hU hFusion hFusionReconstruction
     hRepresentations
