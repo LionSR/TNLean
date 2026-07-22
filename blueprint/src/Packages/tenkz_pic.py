@@ -404,10 +404,16 @@ def _missing_tools_html(unit_source: str) -> str:
 
 
 try:
-    from plasTeX import Command, VerbatimEnvironment
+    from plasTeX import Command, Environment, VerbatimEnvironment
 except ImportError:  # standalone harness use; see the section comment above
     pass
 else:
+
+    class tenkzequation(Environment):
+        """A text-mode row of independently rendered tenkz picture units."""
+
+        blockType = True
+        templateName = "TenkzEquation"
 
     class _TenkzSvgMixin:
         """Shared rendering: compile the captured unit, emit one <img>."""

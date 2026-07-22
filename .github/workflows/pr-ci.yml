@@ -42,6 +42,8 @@ on:
       - 'scripts/test_tenkz_corpus_render.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_equation_audit.py'
+      - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_label_overlap.py'
       - 'scripts/test_tenkz_face_ports.py'
@@ -83,6 +85,8 @@ on:
       - 'scripts/test_tenkz_corpus_render.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_equation_audit.py'
+      - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_label_overlap.py'
       - 'scripts/test_tenkz_face_ports.py'
@@ -154,6 +158,8 @@ jobs:
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_lint.py'
               - 'scripts/test_tenkz_pic.py'
+              - 'scripts/test_tenkz_equation_audit.py'
+              - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_cd_map_labels.py'
               - 'scripts/test_tenkz_label_overlap.py'
               - 'scripts/test_tenkz_face_ports.py'
@@ -426,6 +432,10 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
 
+      - name: Test tenkz equation audit
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_equation_audit.py
+
       - name: Test measured tenkz typed-map label bands
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_cd_map_labels.py
@@ -503,6 +513,13 @@ jobs:
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
           fi
+
+      - name: Test tenkz equation web layout
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          python3 -m playwright install --with-deps chromium
+          python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
 
       - name: Generate lean_decls from blueprint .tex files
         id: lean-decls

@@ -41,6 +41,35 @@ div.proof_content {
 	height: auto;
 }
 
+/* A text-mode tensor-network equation keeps each SVG outside MathJax while
+ * laying the pictures and their operator text out as one equation row. */
+.tenkz-equation {
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+	contain: inline-size;
+	overflow-x: auto;
+	margin: .6rem auto;
+}
+
+.tenkz-equation-row {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center;
+	width: max-content;
+	min-width: 100%;
+	white-space: nowrap;
+}
+
+.tenkz-equation-row > .tenkz-pic {
+	display: inline-block;
+	flex: none;
+	margin: 0 .2rem;
+	max-width: 100%;
+	height: auto;
+}
+
 /* Dialect modifiers emitted beside .tenkz-pic — one class per tenkz
  * sub-language. No per-dialect styling yet; the hooks are reserved for
  * the Phase-1 migration (e.g. inline sizing for the \tnpic atom). */

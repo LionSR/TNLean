@@ -1797,11 +1797,25 @@ def scan_constructs(src: str) -> list[Construct]:
     return found
 
 
+_INLINE_EQUALITY_SPACE = r"(?:\s|\\[,;:!]|\\(?:quad|qquad)\b)*"
+_INLINE_EQUALITY_GLUE = re.compile(
+    rf"\${_INLINE_EQUALITY_SPACE}={_INLINE_EQUALITY_SPACE}\$"
+)
+
+
 def same_equation(sep: str) -> bool:
     """Heuristic: the comment-stripped source between two constructs is a
     single displayed equation's glue iff it contains `=`, crosses no
     math-mode boundary and no other environment, and is short.  This keeps
-    the check to `A = B` pairs like the gauge/blocking benchmarks."""
+    the check to `A = B` pairs like the gauge/blocking benchmarks.
+
+    A complete inline-math atom containing only a bare equality and standard
+    math-spacing commands is glue rather than a boundary.  Other inline math
+    remains a boundary so formulae between pictures cannot create false
+    equation-pair matches.
+    """
+    if _INLINE_EQUALITY_GLUE.fullmatch(sep.strip()):
+        return True
     if "=" not in sep:
         return False
     if any(tok in sep for tok in ("$", "\\[", "\\]", "&", "\\begin", "\\end")):

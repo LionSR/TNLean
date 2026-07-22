@@ -1,2 +1,7 @@
 name: TenkzPicture
 {{ obj.tenkz_svg_html }}
+
+name: TenkzEquation
+<div class="tenkz-equation">
+  <div class="tenkz-equation-row">{{ obj }}</div>
+</div>
