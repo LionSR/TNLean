@@ -24,7 +24,7 @@ multiplicative, and star-preserving identities.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Matrix Finset Complex KadisonSchwarz
+open Matrix Finset Complex
 
 namespace MPSTensor
 
@@ -119,25 +119,14 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       _ = (V * Vᴴ) * A i * (V * Vᴴ) * V := by rw [hV_range]
       _ = V * (Vᴴ * A i * V) := by rw [htemp]
       _ = V * C i := rfl
-  have hEvalIntertwine : ∀ w : List (Fin d), evalWord A w * V = V * evalWord C w := by
-    intro w
-    induction w with
-    | nil => rw [evalWord_nil, evalWord_nil, Matrix.one_mul, Matrix.mul_one]
-    | cons i w ih =>
-        rw [evalWord_cons, evalWord_cons]
-        calc
-          A i * evalWord A w * V = A i * (evalWord A w * V) := Matrix.mul_assoc _ _ _
-          _ = A i * (V * evalWord C w) := by rw [ih]
-          _ = (A i * V) * evalWord C w := (Matrix.mul_assoc _ _ _).symm
-          _ = (V * C i) * evalWord C w := by rw [hIntertwineLetter i]
-          _ = V * (C i * evalWord C w) := Matrix.mul_assoc _ _ _
   have hEvalCompression (w : List (Fin d)) :
       evalWord C w = Vᴴ * evalWord A w * V := by
     calc
       evalWord C w = 1 * evalWord C w := (Matrix.one_mul _).symm
       _ = (Vᴴ * V) * evalWord C w := by rw [hV_iso]
       _ = Vᴴ * (V * evalWord C w) := Matrix.mul_assoc _ _ _
-      _ = Vᴴ * (evalWord A w * V) := by rw [hEvalIntertwine w]
+      _ = Vᴴ * (evalWord A w * V) := by
+        rw [evalWord_intertwine A C V hIntertwineLetter w]
       _ = Vᴴ * evalWord A w * V := (Matrix.mul_assoc _ _ _).symm
   refine ⟨n, C, φ, V, htrace, ?_, ?_, ?_, ?_, ?_, ?_, hV_iso, hV_range, ?_⟩
   · apply φ.injective
