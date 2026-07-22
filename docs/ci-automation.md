@@ -241,12 +241,10 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 **No label required** — this runs on all PRs automatically.
 
 The "PR CI" blueprint job and the "Blueprint" workflow also run
-`Packages/tn_diagrams.py --check --check-peps-usage --smoke-render` after the
-blueprint dependencies are installed. This checks that public tensor-network
-diagram declarations in `tex/tn/tn_catalogue.tex` agree with their chapter and
-web uses, that every public PEPS diagram command is either used in Chapter 13a
-or explicitly recorded as intentionally unused, and that the registered
-diagrams render to SVG.
+`Packages/tn_diagrams.py --check --smoke-render` after the blueprint
+dependencies are installed. This checks the remaining tensor-network
+calculus invariants while the final empty catalogue pipeline awaits its
+follow-up demolition.
 
 ---
 

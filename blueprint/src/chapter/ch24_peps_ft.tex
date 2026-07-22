@@ -11,8 +11,20 @@ contracting the tensors along the edges. Each vertex carries one physical index
 $\sigma(v)\in\{0,\ldots,d-1\}$, and each edge $e$ carries a virtual index of
 bond dimension $D_e$ shared by its two endpoints. On a square lattice this is
 the picture
+% Formula: |Psi_A> = sum_sigma c_A(sigma)|sigma>, specialized here to a
+% finite 3-by-3 square graph.  Ink-to-index: each dot is A_v, each thin
+% in-plane segment contracts one shared virtual edge index, and each north
+% stub is the physical index sigma(v).
+% Contraction and boundary signature: all 12 graph edges are contracted; no
+% virtual boundary leg is present and the nine physical legs remain open, so
+% (V,P)=(0,9).  The central label identifies one representative local tensor.
+% Source verdict: exact finite square-graph specialization of
+% Papers/1804.04964/paper_normal.tex:961--979; the source theorem itself
+% applies to arbitrary finite simple graphs.
 \begin{center}
-    \TNPEPSLatticeState
+    \begin{tenkzlattice}[rows=3, cols=3, physical=up]
+        \tnsite[label=$A_v$]{(2,2)}
+    \end{tenkzlattice}
 \end{center}
 in which every black dot is a local tensor, the thin horizontal and vertical
 bonds are the virtual edges, and the short thick stub at each vertex is its
@@ -30,8 +42,44 @@ on the edges incident to $v$. Closing every virtual bond while keeping the
 physical legs open gives the full state tensor; fixing the legs to a
 configuration $\sigma$ evaluates the scalar $c_A(\sigma)$. On the five-vertex
 example graph this is
+% Formula: c_A(sigma)=sum_eta prod_{i=1}^5 A_i(eta_i,sigma_i), for the
+% source graph with cycle 1--2--3--4--5--1 and chord 2--5.
+% Ink-to-index: the six thin joins are precisely the six summed virtual edge
+% indices, while the five north legs are sigma_1,...,sigma_5.
+% Contraction and boundary signature: every virtual index is contracted and
+% the five physical indices remain visible, hence (V,P)=(0,5); fixing their
+% labels evaluates the displayed coefficient.
+% Source verdict: exact graph and contraction of
+% Papers/1804.04964/paper_normal.tex:961--979, redrawn in house notation.
 \begin{center}
-    \TNPEPSStateContraction
+    \begin{tenkzfree}
+        \tnput[ports={0:virtual,110:virtual,north:physical}]
+            {stateAone}{(-10mm,-5mm)}{A_1}
+        \tnput[ports={180:virtual,55:virtual,141:virtual,north:physical}]
+            {stateAtwo}{(8mm,-5mm)}{A_2}
+        \tnput[ports={235:virtual,155:virtual,north:physical}]
+            {stateAthree}{(16mm,6mm)}{A_3}
+        \tnput[ports={-25:virtual,190:virtual,north:physical}]
+            {stateAfour}{(4mm,15mm)}{A_4}
+        \tnput[ports={10:virtual,-70:virtual,-39:virtual,north:physical}]
+            {stateAfive}{(-10mm,10mm)}{A_5}
+        \tnput[boundary, ports={south:physical}]{statePone}{(-10mm,3mm)}{}
+        \tnput[boundary, ports={south:physical}]{statePtwo}{(8mm,3mm)}{}
+        \tnput[boundary, ports={south:physical}]{statePthree}{(16mm,14mm)}{}
+        \tnput[boundary, ports={south:physical}]{statePfour}{(4mm,23mm)}{}
+        \tnput[boundary, ports={south:physical}]{statePfive}{(-10mm,18mm)}{}
+        \tnjoin{stateAone.0}{stateAtwo.180}
+        \tnjoin{stateAtwo.55}{stateAthree.235}
+        \tnjoin{stateAthree.155}{stateAfour.-25}
+        \tnjoin{stateAfour.190}{stateAfive.10}
+        \tnjoin{stateAfive.-70}{stateAone.110}
+        \tnjoin{stateAtwo.141}{stateAfive.-39}
+        \tnjoin{stateAone.north}{statePone.south}
+        \tnjoin{stateAtwo.north}{statePtwo.south}
+        \tnjoin{stateAthree.north}{statePthree.south}
+        \tnjoin{stateAfour.north}{statePfour.south}
+        \tnjoin{stateAfive.north}{statePfive.south}
+    \end{tenkzfree}
 \end{center}
 
 A PEPS is \emph{injective} when at every vertex the physical vectors
@@ -39,8 +87,26 @@ $A_v(\eta_v,\cdot)\in\C^d$, indexed by the virtual configurations $\eta_v$ on
 the incident edges, are linearly independent; equivalently, the linear map they
 define from the coefficient space on virtual configurations into $\C^d$ has
 trivial kernel:
+% Formula: A_v : tensor_{e incident to v} C^{D_e} -> C^d with ker(A_v)=0.
+% Ink-to-index: the single west wire is the bundled family of all virtual
+% indices incident to v, and the east wire is the physical output.
+% Contraction and boundary signature: the map contracts no index internally;
+% it has one bundled virtual input and one physical output, (V,P)=(1,1).
+% Source verdict: exact arbitrary-degree map formulation of
+% Papers/1804.04964/paper_normal.tex:961--981, not a square-degree-four star.
 \begin{center}
-    \TNPEPSVertexInjectivityMap
+    \begin{tenkzfree}
+        \tnput[boundary, ports={east:virtual}, label pos=south]
+            {introInjectiveDomain}{(-18mm,0)}
+            {\displaystyle\bigotimes_{e\ni v}\C^{D_e}}
+        \tnput[box, ports={west:virtual,east:physical}]
+            {introInjectiveMap}{(0,0)}{A_v}
+        \tnput[boundary, ports={west:physical}, label pos=south]
+            {introInjectiveCodomain}{(18mm,0)}{\C^d}
+        \tnjoin{introInjectiveDomain.east}{introInjectiveMap.west}
+        \tnjoin{introInjectiveMap.east}{introInjectiveCodomain.west}
+    \end{tenkzfree}
+    \qquad $\ker A_v=\{0\}$.
 \end{center}
 It is \emph{normal} when blocking the tensors over suitable regions makes the
 blocked tensors injective, following

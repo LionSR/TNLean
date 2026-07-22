@@ -4,7 +4,28 @@ A translationally invariant PEPS lives on a torus: a finite square lattice whose
 opposite boundaries are identified, so that the two coordinates are read modulo
 the periods $n$ and $m$.
 \begin{center}
-    \TNPEPSTorusGeometry
+    % Formula/source: Papers/1804.04964/paper_normal.tex, lines 104--112,
+    % defines a translationally invariant PEPS by repeating one tensor on a
+    % regular lattice and contracting according to the lattice geometry;
+    % lines 1451--1471 state the normal-PEPS theorem on an n-by-m region.
+    % Ink-to-index map: the nine upper legs are the free physical indices of
+    % the displayed 3-by-3 window.  Every horizontal and vertical line is a
+    % virtual bond; the marked A is a representative of the tensor repeated
+    % at every site.
+    % Contraction set: twelve nearest-neighbour bonds inside the window are
+    % summed, and six further bonds identify the three west/east endpoint
+    % pairs and the three north/south endpoint pairs.  No virtual index stays
+    % open, while all nine physical indices remain free.
+    % Boundary signature: virtual=0 | physical=9.
+    % Source verdict: the source has no separate torus-geometry picture.  This
+    % is the house-style realization of the chapter's cyclic-coordinate
+    % definition; unlike the former open-boundary schematic, it displays the
+    % periodic contraction in both coordinate directions.
+    \begin{tenkzlattice}[
+        rows=3, cols=3, sheets={ket}, outer legs=top, frame=oblique,
+        west=trace, east=trace, north=trace, south=trace]
+        \tnsite[role=marked, label=$A$]{(1,2)}
+    \end{tenkzlattice}
 \end{center}
 Translations act on the vertices and edges. Transporting a tensor along a graph
 isomorphism $\phi$ relabels its coefficients by

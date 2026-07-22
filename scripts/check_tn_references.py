@@ -59,7 +59,6 @@ REFERENCE_CALLS = {
         r"\TNParallelSectorBus{b}{a}{0.5}{\beta}"
         r"\end{TNDiagram}"
     ),
-    "peps_three_site": r"\TNPEPSEdgeBlockingReduction",
 }
 
 EXPECTED_CONNECTIONS = {
