@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.CoarseThreeSite4
+import TNLean.PEPS.ConfigurationCalculus
 
 /-!
 # The three-region merge collapse for the normal PEPS theorem
@@ -151,7 +152,7 @@ theorem redProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     rcases ie.2 with hie | hie
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
-  rw [triMerge, mergeVirtualConfig, if_pos hrinc]
+  rw [triMerge, mergeVirtualConfig_of_pos A _ ζr _ hrinc]
 
 /-- The blue vertex product reads the merge unchanged: a blue-incident edge that is
 also red-incident is a red-to-blue crossing edge, where the agreement coincides. -/
@@ -168,9 +169,9 @@ theorem blueProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
   by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red ie.1
-  · simp [triMerge, mergeVirtualConfig, hr, if_pos]
+  · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr]
     exact (h.rb F (isCrossing_rb_of_incident F hP hr hbinc)).symm
-  · simp [triMerge, mergeVirtualConfig, hr, hbinc, if_pos, if_neg]
+  · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hbinc]
 
 /-- The complement vertex product reads the merge unchanged: a complement-incident
 edge that is red-incident is a red-to-complement crossing edge, and one that is
@@ -189,12 +190,12 @@ theorem complProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
   by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red ie.1
-  · simp [triMerge, mergeVirtualConfig, hr, if_pos]
+  · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr]
     exact (h.rc F (isCrossing_rc_of_incident F hP hr hcinc)).symm
   · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue ie.1
-    · simp [triMerge, mergeVirtualConfig, hr, hb, if_pos, if_neg]
+    · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb]
       exact (h.bc F (isCrossing_bc_of_incident F hP hb hcinc)).symm
-    · simp [triMerge, mergeVirtualConfig, hr, hb, if_neg]
+    · simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb]
 
 /-! ### The assembled physical configuration
 
@@ -432,13 +433,14 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
         isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
       rw [dif_pos hb, dif_pos hc]
     · funext e
-      simp only [triMerge, mergeVirtualConfig, triFiberTriple]
+      simp only [triMerge, triFiberTriple]
       by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
-      · rw [if_pos hr, dif_pos hr]
-      · rw [if_neg hr]
+      · rw [mergeVirtualConfig_of_pos A _ _ _ hr, dif_pos hr]
+      · rw [mergeVirtualConfig_of_neg A _ _ _ hr]
         by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
-        · rw [if_pos hb, dif_pos hb]
-        · rw [if_neg hb, dif_pos (complIncident_of_not_red_not_blue F hP hr hb)]
+        · rw [mergeVirtualConfig_of_pos A _ _ _ hb, dif_pos hb]
+        · rw [mergeVirtualConfig_of_neg A _ _ _ hb,
+            dif_pos (complIncident_of_not_red_not_blue F hP hr hb)]
   · -- Reconstructing from the free indices of a fiber triple recovers the triple.
     intro p hp
     simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
@@ -449,17 +451,20 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
       simp only [triFiberTriple, triFiberLegs]
       by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
       · rw [dif_pos hr]
-        have := hmerge' e; simp [triMerge, mergeVirtualConfig, hr, if_pos] at this; exact this.symm
+        have := hmerge' e
+        simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr] at this
+        exact this.symm
       · rw [dif_neg hr]
     · funext e
       simp only [triFiberTriple, triFiberLegs]
       by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
       · rw [dif_pos hb]
         by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
-        · have := hmerge' e; simp [triMerge, mergeVirtualConfig, hr, if_pos] at this
+        · have := hmerge' e
+          simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr] at this
           rw [← (hag.rb F (isCrossing_rb_of_incident F hP hr hb)), this]
         · have := hmerge' e
-          simp [triMerge, mergeVirtualConfig, hr, hb, if_pos, if_neg] at this
+          simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb] at this
           exact this.symm
       · rw [dif_neg hb]
     · funext e
@@ -467,13 +472,15 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
       by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
       · rw [dif_pos hc]
         by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
-        · have := hmerge' e; simp [triMerge, mergeVirtualConfig, hr, if_pos] at this
+        · have := hmerge' e
+          simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr] at this
           rw [← (hag.rc F (isCrossing_rc_of_incident F hP hr hc)), this]
         · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
-          · have := hmerge' e; simp [triMerge, mergeVirtualConfig, hr, hb, if_pos, if_neg] at this
+          · have := hmerge' e
+            simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb] at this
             rw [← (hag.bc F (isCrossing_bc_of_incident F hP hb hc)), this]
           · have := hmerge' e
-            simp [triMerge, mergeVirtualConfig, hr, hb, if_neg] at this
+            simp [triMerge, mergeVirtualConfig_of_pos, mergeVirtualConfig_of_neg, hr, hb] at this
             exact this.symm
       · rw [dif_neg hc]
   · -- Reading the free indices of a reconstruction recovers them.

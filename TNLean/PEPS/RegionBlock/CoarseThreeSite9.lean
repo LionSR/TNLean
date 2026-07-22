@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.CoarseThreeSite8
+import TNLean.PEPS.ConfigurationCalculus
 
 /-!
 # The relaxed-triple merge collapse for the normal PEPS theorem

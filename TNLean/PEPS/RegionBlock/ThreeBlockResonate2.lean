@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate
+import TNLean.PEPS.ConfigurationCalculus
 
 /-!
 # Three-block resonate engine: the middle strip and the endpoint inversions
@@ -225,10 +226,10 @@ theorem complProd_eq_regionMerge_blue
   · have hbdry : IsRegionBoundaryEdge (G := G) D.blue ie :=
       isRegionBoundaryEdge_of_disjoint_incident (G := G) D.complement D.blue
         D.blue_disjoint_complement.symm hie hinc
-    rw [regionMerge, if_pos hinc]
+    rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨ie, hbdry⟩
     simpa [regionBoundaryLabel] using this.symm
-  · rw [regionMerge, if_neg hinc]
+  · rw [regionMerge_of_not_incident (G := G) A _ p hinc]
 
 /-- On a boundary edge of the host `univ \ red`, the complement-side configuration
 `p.2` agrees with the configuration merged along the blue block, provided the pair
@@ -268,10 +269,10 @@ theorem hostLabel_p2_eq_hostLabel_regionMerge_blue
         rcases hinc with hb1 | hb2
         · exact absurd hb1 h1notblue
         · refine Or.inr ⟨h1notblue, hb2⟩
-    rw [regionMerge, if_pos hinc]
+    rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨f.1, hbdry⟩
     simpa [regionBoundaryLabel] using this.symm
-  · rw [regionMerge, if_neg hinc]
+  · rw [regionMerge_of_not_incident (G := G) A _ p hinc]
 
 open scoped Classical in
 /-- **The host-relative blue fiber cardinality.** The blue mirror of

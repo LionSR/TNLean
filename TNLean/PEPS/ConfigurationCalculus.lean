@@ -38,13 +38,11 @@ noncomputable def virtualConfigSplit (A : Tensor G d) (select : Edge G → Prop)
   Equiv.piEquivPiSubtypeProd select fun e => Fin (A.bondDim e)
 
 omit [Fintype V] in
-@[simp]
 theorem virtualConfigSplit_fst_apply (A : Tensor G d) (select : Edge G → Prop)
     [DecidablePred select] (ζ : VirtualConfig A) (e : {e : Edge G // select e}) :
     (virtualConfigSplit A select ζ).1 e = ζ e.1 := rfl
 
 omit [Fintype V] in
-@[simp]
 theorem virtualConfigSplit_snd_apply (A : Tensor G d) (select : Edge G → Prop)
     [DecidablePred select] (ζ : VirtualConfig A) (e : {e : Edge G // ¬ select e}) :
     (virtualConfigSplit A select ζ).2 e = ζ e.1 := rfl
@@ -55,7 +53,6 @@ noncomputable def virtualConfigCongr (A B : Tensor G d) (h : A.bondDim = B.bondD
   Equiv.piCongrRight fun e => finCongr (congrFun h e)
 
 omit [Fintype V] in
-@[simp]
 theorem virtualConfigCongr_apply (A B : Tensor G d) (h : A.bondDim = B.bondDim)
     (ζ : VirtualConfig A) (e : Edge G) :
     virtualConfigCongr A B h ζ e = Fin.cast (congrFun h e) (ζ e) := rfl
@@ -64,7 +61,7 @@ theorem virtualConfigCongr_apply (A B : Tensor G d) (h : A.bondDim = B.bondDim)
 
 /-- Merge two virtual configurations, reading `left` where `select` holds and `right`
 elsewhere. The fibers may depend on the selected edge, as virtual bond dimensions do. -/
-noncomputable abbrev mergeVirtualConfig (A : Tensor G d) (select : Edge G → Prop)
+noncomputable def mergeVirtualConfig (A : Tensor G d) (select : Edge G → Prop)
     [DecidablePred select] (left right : VirtualConfig A) : VirtualConfig A :=
   fun e => if select e then left e else right e
 
@@ -83,14 +80,12 @@ theorem mergeVirtualConfig_of_neg (A : Tensor G d) (select : Edge G → Prop)
   simp [mergeVirtualConfig, he]
 
 omit [Fintype V] in
-@[simp]
 theorem mergeVirtualConfig_self (A : Tensor G d) (select : Edge G → Prop)
     [DecidablePred select] (ζ : VirtualConfig A) : mergeVirtualConfig A select ζ ζ = ζ := by
   ext e
   by_cases he : select e <;> simp [mergeVirtualConfig, he]
 
 omit [Fintype V] in
-@[simp]
 theorem virtualConfigSplit_mergeVirtualConfig (A : Tensor G d) (select : Edge G → Prop)
     [DecidablePred select] (left right : VirtualConfig A) :
     virtualConfigSplit A select (mergeVirtualConfig A select left right) =
