@@ -13,9 +13,10 @@ and directory share a module name, the handwritten file remains authoritative
 and the nearest generated ancestor imports that file together with the
 uncovered descendant frontier. This preserves existing public module names
 without hiding descendants. A file is treated as generated only when it has
-the stable marker, contains imports and comments only, and occupies the root or
-a directory-aggregator path; copying the marker into handwritten code does not
-make that file disposable.
+the stable marker, contains imports and comments only, and carries an embedded
+module name matching its non-Archive path. This provenance lets the generator
+remove stale aggregators after their source directory disappears, while copying
+the marker into handwritten code does not make that file disposable.
 
 ## Conceptual layers
 

@@ -68,7 +68,7 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
             generated = self.write(
                 root,
                 "TNLean/Foo.lean",
-                GENERATOR.GENERATED_NOTICE.replace("2026", "2037")
+                GENERATOR.generated_notice("TNLean.Foo").replace("2026", "2037")
                 + "\nimport TNLean.Foo.Basic\n",
             )
             self.assertTrue(GENERATOR.is_generated(generated, root / "TNLean"))
@@ -103,6 +103,41 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
             root_text = (root / "TNLean.lean").read_text(encoding="utf-8")
             self.assertIn("import TNLean.Draft\n", root_text)
             self.assertIn("import TNLean.Copied\n", root_text)
+
+    def test_stale_generated_aggregator_is_removed_after_directory_deletion(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            leaf = self.write(root, "TNLean/Foo/Leaf.lean", "def leaf := 1\n")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(GENERATOR.update(root, check=False), 0)
+            aggregator = root / "TNLean/Foo.lean"
+            self.assertTrue(GENERATOR.is_generated(aggregator, root / "TNLean"))
+
+            leaf.unlink()
+            leaf.parent.rmdir()
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(GENERATOR.update(root, check=False), 0)
+
+            self.assertFalse(aggregator.exists())
+            self.assertNotIn(
+                "import TNLean.Foo\n",
+                (root / "TNLean.lean").read_text(encoding="utf-8"),
+            )
+
+    def test_archive_marker_file_is_never_deleted(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            archived = self.write(
+                root,
+                "TNLean/Archive/All.lean",
+                GENERATOR.generated_notice("TNLean.Archive.All")
+                + "\nimport TNLean.Archive.Old\n",
+            )
+            before = archived.read_bytes()
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(GENERATOR.update(root, check=False), 0)
+            self.assertEqual(archived.read_bytes(), before)
+            self.assertFalse(GENERATOR.is_generated(archived, root / "TNLean"))
 
     def test_manifest_coverage_ignores_incidental_handwritten_imports(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
