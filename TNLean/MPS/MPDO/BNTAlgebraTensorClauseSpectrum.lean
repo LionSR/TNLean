@@ -45,6 +45,12 @@ namespace BNTAlgebraTensorClause
 /-- A source-derived two-site vertical canonical decomposition together with the
 sector relabelling and multiplicity-spectrum equality of Appendix C.4.
 
+**Scope restriction (invertible gauge):** This structure records the matched
+sector MPVs and spectrum, but not the line-2057 unitary gauge conclusion.  The
+invertible-gauge sub-result and the missing common-target normalization contract
+are documented in
+`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
 Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
@@ -56,7 +62,13 @@ structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
   arXiv:1606.00608, Appendix C.4, lines 2050--2054. -/
   relabel : Fin H.labelCount ≃ Fin decomposition.labelCount
   /-- The matched one-site and two-site tensors generate the same positive-length matrix
-  product vectors, as in arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
+  product vectors.
+
+  **Scope restriction (invertible gauge):** This field does not record the
+  line-2057 unitary upgrade.  The restriction is documented in
+  `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
   sector_sameMPV : ∀ γ : Fin H.labelCount,
     MPSTensor.SameMPV₂Pos (H.tensor γ) (decomposition.tensor (relabel γ))
   /-- Equality with multiplicity between the matched two-site weights and the products of
@@ -71,6 +83,12 @@ structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
 /-- A source-derived two-site multiplicity spectrum together with exact invertible
 conjugacies between its paired normal tensors.
 
+**Scope restriction (invertible gauge):** This structure retains the phase-one
+invertible conjugacy from Appendix C.4, but not the line-2057 conclusion that the
+gauge may be chosen unitary.  The missing common-target normalization contract is
+documented in `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex` and
+tracked in issue 4645.
+
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure TwoSiteExactSectorGauge {M : MPOTensor d D}
@@ -79,13 +97,23 @@ structure TwoSiteExactSectorGauge {M : MPOTensor d D}
   arXiv:1606.00608, Appendix C.4, lines 2053--2055. -/
   bondDim_eq : ∀ γ : Fin H.labelCount,
     H.bondDim γ = decomposition.bondDim (relabel γ)
-  /-- The invertible gauge identifying each pair of normal tensors from
-  arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
+  /-- The invertible gauge identifying each pair of normal tensors.
+
+  **Scope restriction (invertible gauge):** This field does not assert that the
+  gauge is unitary.  The line-2057 upgrade is documented in
+  `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
+  Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
   gauge : ∀ γ : Fin H.labelCount,
     GL (Fin (decomposition.bondDim (relabel γ))) ℂ
   /-- The paired two-site tensor is the exact conjugate of the one-site tensor,
   with no residual scalar phase, as in arXiv:1606.00608, Appendix C.4,
-  lines 2053--2057. -/
+  lines 2053--2057.
+
+  **Scope restriction (invertible gauge):** Exactness here means phase one; the
+  conjugating gauge has not been proved unitary.  The missing line-2057 conclusion
+  is documented in
+  `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`. -/
   tensor_eq : ∀ (γ : Fin H.labelCount) (i : Fin (D * D)),
     decomposition.tensor (relabel γ) i =
       (gauge γ : Matrix (Fin (decomposition.bondDim (relabel γ)))
@@ -120,6 +148,12 @@ in `H`.  No renormalization maps or pre-existing one-site/two-site sector
 correspondence are assumed: full support of the two positive vertical
 decompositions derives the sector relabelling, and eventual BNT linear
 independence derives the power-sum equality.
+
+**Scope restriction (invertible gauge):** The result retains bond-dimension
+equality and phase-one invertible conjugacy, but does not prove the line-2057
+unitary upgrade.  The missing common-target normalization contract is documented
+in `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex` and tracked in
+issue 4645.
 
 Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/

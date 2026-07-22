@@ -119,14 +119,14 @@
     \cite[Appendix~C.4, lines~2046--2058]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Exact gauges for the source-derived two-site sectors]%
+\begin{definition}[Exact invertible gauges for the source-derived two-site sectors]%
     \label{def:mpdo_bnt_two_site_exact_sector_gauge}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge}
     \leanok
     \uses{def:mpdo_bnt_two_site_multiplicity_spectrum}
-    An exact sector gauge for a source-derived two-site multiplicity spectrum
-    additionally records, for every one-site sector $\gamma$, equality of bond
-    dimensions
+    The invertible-gauge sub-result for a source-derived two-site multiplicity
+    spectrum additionally records, for every one-site sector $\gamma$, equality
+    of bond dimensions
     \[
         d_\gamma=d_{\sigma(\gamma)}
     \]
@@ -139,6 +139,10 @@
     for every physical index $i$.  Thus the matched normal tensors have no
     residual scalar phase.  This is the exact invertible conjugacy retained
     from \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
+    It does not include the further conclusion on line~2057 that $Z_\gamma$
+    may be chosen unitary; that strengthening remains open.
+    % The full line-2057 unitary source step is tracked in issue 4645 and
+    % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
 \end{definition}
 
 \begin{theorem}[The two-site multiplicity spectrum from the BNT algebra
@@ -165,8 +169,8 @@
         \widetilde{M^{(2)}}
         =\bigoplus_\delta \nu_\delta\otimes A_\delta.
     \]
-    Its normal-tensor sectors admit a bijection $\sigma$ with the sectors of
-    the full-support one-site product expansion such that $M_\gamma$ and
+    Its normal-tensor sectors are in bijection, via $\sigma$, with the sectors
+    of the full-support one-site product expansion such that $M_\gamma$ and
     $A_{\sigma(\gamma)}$ generate the same matrix product vectors at every
     positive length and, for every $\gamma$,
     \[
@@ -182,7 +186,11 @@
         A_{\sigma(\gamma)}^i
         =Z_\gamma M_\gamma^i Z_\gamma^{-1}
     \]
-    exactly, as in lines~2053--2057.
+    exactly.  This is only the invertible-gauge sub-result of
+    lines~2053--2057: the further conclusion that $Z_\gamma$ may be chosen
+    unitary is not part of this statement and remains open.
+    % The full line-2057 unitary source step is tracked in issue 4645 and
+    % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
 \end{theorem}
 
 \begin{proof}\leanok
