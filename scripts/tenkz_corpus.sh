@@ -7,6 +7,66 @@ CORPUS="$REPO/tests/tenkz"
 # Test seam for the isolated manifest-mutation regression.
 PROVENANCE=${TENKZ_CORPUS_PROVENANCE:-"$CORPUS/PROVENANCE.tsv"}
 JOBS=${TENKZ_CORPUS_JOBS:-4}
+RENDER=0
+RENDER_DIR="$REPO/build/tenkz-corpus-render"
+RENDER_DIR_SET=0
+
+usage() {
+  cat <<'EOF'
+Usage: scripts/tenkz_corpus.sh [--render] [--render-dir DIRECTORY]
+
+Compile and audit the standalone tenkz regression corpus.  --render also
+produces deterministic 200-dpi PNGs; its default output directory is
+build/tenkz-corpus-render.
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --render)
+      if [[ "$RENDER" -eq 1 ]]; then
+        echo "FAIL: --render may be specified only once" >&2
+        exit 2
+      fi
+      RENDER=1
+      shift
+      ;;
+    --render-dir)
+      if [[ "$RENDER_DIR_SET" -eq 1 ]]; then
+        echo "FAIL: --render-dir may be specified only once" >&2
+        exit 2
+      fi
+      if [[ $# -lt 2 || -z "$2" || "$2" == -* ]]; then
+        echo "FAIL: --render-dir requires a non-empty directory" >&2
+        exit 2
+      fi
+      RENDER_DIR=$2
+      RENDER_DIR_SET=1
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "FAIL: unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ "$RENDER_DIR_SET" -eq 1 && "$RENDER" -ne 1 ]]; then
+  echo "FAIL: --render-dir requires --render" >&2
+  exit 2
+fi
+if [[ "$RENDER" -eq 1 && "$RENDER_DIR" != /* ]]; then
+  RENDER_DIR="$REPO/$RENDER_DIR"
+fi
+if [[ "${TENKZ_CORPUS_VALIDATE_ONLY:-0}" == 1 && "$RENDER" -eq 1 ]]; then
+  echo "FAIL: --render cannot be combined with TENKZ_CORPUS_VALIDATE_ONLY=1" >&2
+  exit 2
+fi
 
 if ! command -v python3 >/dev/null 2>&1; then
   echo "FAIL: tenkz corpus requires python3" >&2
@@ -175,7 +235,11 @@ if [[ "${TENKZ_CORPUS_VALIDATE_ONLY:-0}" == 1 ]]; then
   exit 0
 fi
 
-for command in timeout xelatex; do
+required_commands=(timeout xelatex)
+if [[ "$RENDER" -eq 1 ]]; then
+  required_commands+=(pdfinfo pdftocairo)
+fi
+for command in "${required_commands[@]}"; do
   if ! command -v "$command" >/dev/null 2>&1; then
     echo "FAIL: tenkz corpus requires $command" >&2
     exit 1
@@ -267,6 +331,14 @@ passed=$(find "$RESULTS" -maxdepth 1 -type f -name '*.ok' | wc -l | tr -d ' ')
 if [[ "$passed" -ne "$source_count" ]]; then
   echo "FAIL: compiled and audited $passed of $source_count corpus files" >&2
   exit 1
+fi
+
+if [[ "$RENDER" -eq 1 ]]; then
+  python3 "$REPO/scripts/tenkz_render_corpus.py" \
+    --input-dir "$WORK" \
+    --output-dir "$RENDER_DIR" \
+    --protect "$REPO" \
+    --protect "$CORPUS"
 fi
 
 echo "PASS: compiled and audited $passed standalone tenkz corpus files"

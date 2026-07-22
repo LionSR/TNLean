@@ -28,6 +28,11 @@ Render for visual review (exit codes do not review figures — eyes do):
 pdftocairo -png -r 200 -singlefile <file>.pdf <file>
 ```
 
+For repository-wide review, `scripts/tenkz_corpus.sh --render` compiles and
+audits the adopted corpus before producing a complete 200-dpi PNG baseline.
+The before/after checksum and visual-review discipline is specified in
+`tests/tenkz/README.md`.
+
 Audit the event stream after a compile: `scripts/tenkz_audit.py` over the
 produced `.tnlog`. `scripts/tenkz_lint.py` checks source conventions.
 The asymmetric-port regression is `python3 scripts/test_tenkz_face_ports.py`;
@@ -85,7 +90,8 @@ style; never pixel-mimic, and never draw what the source does not assert.
 
 ## Test corpus
 
-The in-repo acceptance set lives in `tex/tenkz/examples/`. The extended
-regression corpus is tracked by the corpus-adoption issue; until it
-lands in-repo, treat every package change as requiring: the examples
-compile, the manual compiles, and renders of anything touched are viewed.
+The in-repo acceptance set lives in `tex/tenkz/examples/`. The adopted
+extended regression corpus lives in `tests/tenkz/`; run
+`scripts/tenkz_corpus.sh` for compile-and-audit coverage and add `--render` for
+the repository-wide visual baseline. Every package change still requires the
+examples and manual to compile and renders of anything touched to be viewed.

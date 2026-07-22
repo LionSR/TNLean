@@ -1074,6 +1074,9 @@ them.
    between phases, under a pixel-identity regression gate: baseline renders first, byte-equal
    event streams and unchanged pages after. Two passes cleaned Phase 0; a third cleaned the
    grid, lattice, and cd modules after the Phase-0.5 growth.
+   The durable render contract is the corpus-wide 200-dpi before/after procedure in
+   `tests/tenkz/README.md`: issue #4158 requires equal fixture/page censuses and PNG checksums
+   for behavior-preserving work, while intentional changes require page-by-page visual review.
 2. **The mathematical referee.** Every figure is refereed against its formula: the formula is
    stated; the ink matches it exactly — open legs counted (no open legs = scalar), signatures
    balanced across `=`, the channel spelling canonical, conjugation on the bra layer, trace
