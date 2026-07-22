@@ -175,7 +175,7 @@ def toBNTFusionCoisometryFamily (H : BNTFusionTensorClause M) :
 
 /-- **Tensor-attached implication (iii) to (ii) of Theorem 4.14.**
 
-The fusion isometries for the BNT tensors in a chosen vertical canonical
+The fusion coisometries for the BNT tensors in a chosen vertical canonical
 decomposition give the algebra clause for the same decomposition. Its
 coefficients are the trace powers of the same positive diagonal matrices
 \(\chi_{\alpha,\beta,\gamma}\), and its trace scalars are
