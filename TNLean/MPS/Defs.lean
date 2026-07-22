@@ -17,6 +17,11 @@ This file contains the core definitions used throughout the MPS development:
 notions of injectivity, block injectivity, and normality. It also proves the
 basic gauge-invariance lemmas for `evalWord`, `SameMPV`, and eventual block
 injectivity.
+
+## Main declarations
+
+* `evalWord` — the matrix product associated with a word of physical indices
+* `evalWord_intertwine` — a rectangular letter intertwiner also intertwines every word
 -/
 
 open scoped Matrix
