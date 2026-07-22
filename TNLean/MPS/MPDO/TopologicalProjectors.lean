@@ -7,6 +7,7 @@ import TNLean.Algebra.OrthogonalProjection
 import TNLean.Channel.Irreducible.Basic
 import TNLean.MPS.MPDO.BNTFusionTensorClause
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
+import TNLean.MPS.MPDO.ZCL
 
 /-!
 # The local projectors in the length-independent fusion form
@@ -21,12 +22,18 @@ projections, then
     = \bigoplus_\gamma
         \chi_{\alpha,\beta,\gamma}\otimes P_\gamma
 \]
-is a projection.  The source terminal matrices $\operatorname{tr}(M_\gamma)$
-act on the common physical space of the vertically read tensors.  Transport
-through the sequential fusion circuit belongs to the arbitrary-chain
-construction.  The earlier full-support formulation instead gives a
-conditional projection statement for terminal operators on the virtual bond
-spaces.
+is a projection.  The source terminal matrix
+$\operatorname{tr}(M_\gamma)$ closes the horizontal operator leg of the
+vertically read tensor and therefore acts on its bond space.  In the present
+formalization this is the physical-trace transfer.  It is distinct from the
+closed one-site operator, which closes the bond leg and acts on the common
+horizontal space.
+
+**Local fix (terminal trace orientation):** The trace in the terminal matrix
+$\operatorname{tr}(M_\gamma)$ closes the horizontal operator leg and leaves
+the bond indices of $M_\gamma$, rather than closing the bond leg to obtain a
+one-site operator.  Documented in
+`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`.
 
 These are the one-fusion-step projector statements in the recursive
 construction at source lines 999--1010.  The spectral decomposition of the
@@ -46,7 +53,7 @@ variable {Λ : Type*} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
 variable (Fam : BNTFusionCoisometryFamily Λ p)
 
 /-- The single fusion layer of the operator $Q$ on the active product sectors,
-with terminal matrices $P_\gamma$.
+with terminal matrices $P_\gamma$ on the bond spaces of the final sectors.
 
 Source: arXiv:1606.00608, lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`.
@@ -56,13 +63,40 @@ operator at line 999 and its sequential fusion circuit are not asserted here.
 Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
 noncomputable def projectorQBlock
-    (P : Λ → Matrix (Fin p) (Fin p) ℂ)
+    (P : ∀ γ : Λ,
+      Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
     (α β : Λ) :
     Matrix ((γ : Λ) ×
-        (Fin (Fam.chi.dim α β γ) × Fin p))
+        (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ)))
       ((γ : Λ) ×
-        (Fin (Fam.chi.dim α β γ) × Fin p)) ℂ :=
+        (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) ℂ :=
   Matrix.blockDiagonal' fun γ => Fam.chi.matrix α β γ ⊗ₖ P γ
+
+/-- Fusing a pair and then closing its horizontal operator leg gives the
+one-layer block whose terminal matrices are the physical-trace transfers of
+the final sectors.
+
+Source: arXiv:1606.00608, the fusion identity at lines 986--993 and the
+terminal matrices in the recursive operator at lines 999--1010 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose
+    (α β : Λ) :
+    Fam.fusionCoisometry α β *
+        physTraceTransfer (mulTensor (Fam.tensor α) (Fam.tensor β)) *
+          (Fam.fusionCoisometry α β)ᴴ =
+      Fam.projectorQBlock (fun γ => physTraceTransfer (Fam.tensor γ)) α β := by
+  -- Distribute the terminal trace and apply the sitewise fusion identity.
+  rw [physTraceTransfer, Matrix.mul_sum, Matrix.sum_mul]
+  simp_rw [Fam.fusion]
+  -- Assemble the resulting summands into the dependent direct sum.
+  unfold projectorQBlock physTraceTransfer
+  ext ⟨γ, a, x⟩ ⟨δ, b, y⟩
+  by_cases hγδ : γ = δ
+  · subst δ
+    simp only [Matrix.sum_apply, Matrix.blockDiagonal'_apply_eq,
+      Matrix.kroneckerMap_apply, Finset.mul_sum]
+  · simp only [Matrix.sum_apply,
+      Matrix.blockDiagonal'_apply_ne _ _ _ hγδ, Finset.sum_const_zero]
 
 /-- In the length-independent case, the chi matrices in one active fusion
 layer are identities.
@@ -73,7 +107,8 @@ theorem projectorQBlock_eq_unweighted
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent)
-    (P : Λ → Matrix (Fin p) (Fin p) ℂ)
+    (P : ∀ γ : Λ,
+      Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
     (α β : Λ) :
     Fam.projectorQBlock P α β =
       Matrix.blockDiagonal' fun γ =>
@@ -93,7 +128,8 @@ theorem projectorQBlock_isStarProjection
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent)
-    (P : Λ → Matrix (Fin p) (Fin p) ℂ)
+    (P : ∀ γ : Λ,
+      Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
     (hP : ∀ γ : Λ, IsStarProjection (P γ))
     (α β : Λ) :
     IsStarProjection (Fam.projectorQBlock P α β) := by
@@ -111,6 +147,48 @@ theorem projectorQBlock_isStarProjection
     have hPγ : (P γ)ᴴ = P γ := by
       simpa [Matrix.star_eq_conjTranspose] using (hP γ).isSelfAdjoint.star_eq
     rw [hPγ]
+
+/-- The active fusion-layer operator transported to the product bond space by
+the fusion coisometry.
+
+Source: arXiv:1606.00608, lines 999--1010 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`.  The terminal operators act on the
+bond spaces of the final sectors, as required by this conjugation. -/
+noncomputable def conjugatedProjectorQBlock
+    (P : ∀ γ : Λ,
+      Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
+    (α β : Λ) :
+    Matrix (Fin (Fam.bondDim α * Fam.bondDim β))
+      (Fin (Fam.bondDim α * Fam.bondDim β)) ℂ :=
+  (Fam.fusionCoisometry α β)ᴴ * Fam.projectorQBlock P α β *
+    Fam.fusionCoisometry α β
+
+/-- Transporting a length-independent fusion-layer projection through the
+active-support fusion coisometry gives an orthogonal projection on the product
+bond space.
+
+Source: arXiv:1606.00608, the fusion map at lines 986--993 and the recursive
+projector at lines 999--1010 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`.
+
+**Local fix (Figure-11 fusion coisometry):** The proof uses
+$U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, the retained-row orientation of
+the source.  It does not assume that the active-support projection
+$U_{\alpha,\beta}^\dagger U_{\alpha,\beta}$ is the identity.  Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex` and
+`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+theorem conjugatedProjectorQBlock_isOrthogonalProjection
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent)
+    (P : ∀ γ : Λ,
+      Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
+    (hP : ∀ γ : Λ, IsStarProjection (P γ))
+    (α β : Λ) :
+    IsOrthogonalProjection (Fam.conjugatedProjectorQBlock P α β) :=
+  (IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
+    (Fam.projectorQBlock_isStarProjection c hχ hLI P hP α β)
+    (Fam.fusionCoisometry α β) (Fam.coisometry α β)).isOrthogonalProjection
 
 end MPOTensor.BNTFusionCoisometryFamily
 
@@ -130,13 +208,32 @@ chain.  Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
 noncomputable def projectorQBlock
     (H : BNTFusionTensorClause M)
-    (P : Fin H.labelCount → Matrix (Fin D) (Fin D) ℂ)
+    (P : ∀ γ : Fin H.labelCount,
+      Matrix (Fin (H.bondDim γ)) (Fin (H.bondDim γ)) ℂ)
     (α β : Fin H.labelCount) :
     Matrix ((γ : Fin H.labelCount) ×
-        (Fin (H.chi.dim α β γ) × Fin D))
+        (Fin (H.chi.dim α β γ) × Fin (H.bondDim γ)))
       ((γ : Fin H.labelCount) ×
-        (Fin (H.chi.dim α β γ) × Fin D)) ℂ :=
+        (Fin (H.chi.dim α β γ) × Fin (H.bondDim γ))) ℂ :=
   H.toBNTFusionCoisometryFamily.projectorQBlock P α β
+
+/-- Fusing two tensor-attached BNT sectors and closing their horizontal
+operator leg gives the source terminal block for one fusion layer.
+
+Source: arXiv:1606.00608, the fusion identity at lines 986--993 and the
+terminal matrices in the recursive operator at lines 999--1010 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose
+    (H : BNTFusionTensorClause M)
+    (α β : Fin H.labelCount) :
+    H.fusionCoisometry α β *
+        physTraceTransfer (mulTensor (verticalBNTMPO (H.tensor α))
+          (verticalBNTMPO (H.tensor β))) *
+          (H.fusionCoisometry α β)ᴴ =
+      H.projectorQBlock
+        (fun γ => physTraceTransfer (verticalBNTMPO (H.tensor γ))) α β :=
+  BNTFusionCoisometryFamily.fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose
+    H.toBNTFusionCoisometryFamily α β
 
 /-- Length independence makes the tensor-attached active fusion layer a
 self-adjoint idempotent when its terminal matrices are self-adjoint
@@ -147,11 +244,52 @@ Source: arXiv:1606.00608, lines 999--1010 of
 theorem projectorQBlock_isStarProjection
     (H : BNTFusionTensorClause M)
     (hLI : (BNTLabelCoefficientFamily.ofChi H.chi).LengthIndependent)
-    (P : Fin H.labelCount → Matrix (Fin D) (Fin D) ℂ)
+    (P : ∀ γ : Fin H.labelCount,
+      Matrix (Fin (H.bondDim γ)) (Fin (H.bondDim γ)) ℂ)
     (hP : ∀ γ : Fin H.labelCount, IsStarProjection (P γ))
     (α β : Fin H.labelCount) :
     IsStarProjection (H.projectorQBlock P α β) :=
   H.toBNTFusionCoisometryFamily.projectorQBlock_isStarProjection
+    (BNTLabelCoefficientFamily.ofChi H.chi)
+    (BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm H.chi)
+    hLI P hP α β
+
+/-- The tensor-attached active fusion layer transported to the product bond
+space.
+
+Source: arXiv:1606.00608, lines 999--1010 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`.  The terminal operators act on the
+dependent bond spaces of the final BNT sectors. -/
+noncomputable def conjugatedProjectorQBlock
+    (H : BNTFusionTensorClause M)
+    (P : ∀ γ : Fin H.labelCount,
+      Matrix (Fin (H.bondDim γ)) (Fin (H.bondDim γ)) ℂ)
+    (α β : Fin H.labelCount) :
+    Matrix (Fin (H.bondDim α * H.bondDim β))
+      (Fin (H.bondDim α * H.bondDim β)) ℂ :=
+  H.toBNTFusionCoisometryFamily.conjugatedProjectorQBlock P α β
+
+/-- A length-independent tensor-attached active fusion layer becomes an
+orthogonal projection on the product bond space after transport by its fusion
+coisometry.
+
+Source: arXiv:1606.00608, the fusion map at lines 986--993 and the recursive
+projector at lines 999--1010 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`.
+
+**Scope restriction (one fusion layer):** The arbitrary-chain recursion and
+the commuting Gibbs decomposition at lines 999--1016 remain separate.  This
+is documented in
+`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+theorem conjugatedProjectorQBlock_isOrthogonalProjection
+    (H : BNTFusionTensorClause M)
+    (hLI : (BNTLabelCoefficientFamily.ofChi H.chi).LengthIndependent)
+    (P : ∀ γ : Fin H.labelCount,
+      Matrix (Fin (H.bondDim γ)) (Fin (H.bondDim γ)) ℂ)
+    (hP : ∀ γ : Fin H.labelCount, IsStarProjection (P γ))
+    (α β : Fin H.labelCount) :
+    IsOrthogonalProjection (H.conjugatedProjectorQBlock P α β) :=
+  H.toBNTFusionCoisometryFamily.conjugatedProjectorQBlock_isOrthogonalProjection
     (BNTLabelCoefficientFamily.ofChi H.chi)
     (BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm H.chi)
     hLI P hP α β
@@ -163,16 +301,15 @@ namespace MPOTensor.BNTFusionIsometryFamily
 variable {g p : ℕ}
 variable (Fam : BNTFusionIsometryFamily (Fin g) p)
 
-/-- A conditional single fusion layer with terminal matrices $P_\gamma$ on
-the virtual bond spaces.
+/-- The full-support specialization of a single fusion layer, with terminal
+matrices $P_\gamma$ on the bond spaces of the final sectors.
 
 Source: arXiv:1606.00608, lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`.
 
-**Scope restriction (virtual-bond terminal operators):** The source terminal
-matrices $\operatorname{tr}(M_\gamma)$ act on a common physical space.  This
-definition instead gives a mathematically valid virtual-bond construction for
-the older full-support fusion family.  Documented in
+**Scope restriction (full-support fusion family):** The terminal spaces agree
+with the source contraction, but this older fusion family requires the active
+support to be the whole product bond space.  Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
 noncomputable def projectorQBlock
     (P : ∀ γ : Fin g,
@@ -190,9 +327,9 @@ are identities.
 Source: arXiv:1606.00608, lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`.
 
-**Scope restriction (virtual-bond terminal operators):** This identity
-concerns the conditional virtual-bond construction, not the physical terminal
-matrices in the source recursion.  Documented in
+**Scope restriction (full-support fusion family):** This identity uses the
+older fusion family in which the active support is the whole product bond
+space.  Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
 theorem projectorQBlock_eq_unweighted
     (c : BNTLabelCoefficientFamily (Fin g))
@@ -215,9 +352,9 @@ length independent.
 Source: arXiv:1606.00608, lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`.
 
-**Scope restriction (virtual-bond terminal operators):** This theorem concerns
-the conditional virtual-bond construction, not the physical terminal matrices
-in the source recursion.  Documented in
+**Scope restriction (full-support fusion family):** This theorem uses the
+older fusion family in which the active support is the whole product bond
+space.  Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
 theorem projectorQBlock_isStarProjection
     (c : BNTLabelCoefficientFamily (Fin g))
@@ -249,9 +386,10 @@ fusion map.
 Source: arXiv:1606.00608, lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`.
 
-**Scope restriction (virtual-bond terminal operators):** This transport is
-defined only for the older full-support fusion family.  It is not the
-sequential physical-space transport in the source recursion.  Documented in
+**Scope restriction (full-support fusion family):** This transport is defined
+only for the older family in which the active support is the whole product
+bond space.  It is one fusion layer, not the arbitrary sequential circuit.
+Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex` and
 `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
 noncomputable def conjugatedProjectorQBlock
@@ -271,11 +409,10 @@ Source: arXiv:1606.00608, BNT separation at lines 317--345, the fusion map at
 lines 986--993, and the recursive projector at lines 999--1010 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`.
 
-**Scope restriction (full-support virtual transport):** The BNT hypothesis and
+**Scope restriction (full-support fusion family):** The BNT hypothesis and
 length independence imply the additional full-support relation needed here.
-The theorem concerns virtual-bond terminal operators, not the physical
-terminal matrices or the sequential circuit of the source recursion.
-Documented in
+The theorem concerns one fusion layer, not the arbitrary sequential circuit
+of the source recursion.  Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex` and
 `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
 theorem conjugatedProjectorQBlock_isOrthogonalProjection
