@@ -10,10 +10,17 @@ import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
 
 This file closes the source's overlapping union-of-injective-regions lemma of the normal PEPS
 Fundamental Theorem (arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
-`Papers/1804.04964/paper_normal.tex`). The companions `UnionInjectivityOverlap`, `2`, `3`, `4`,
-and `5` land the two host three-block geometries, the first inverse application
-`overlap_firstStrip`, the right-geometry blue-side rebuild, the `P₀`-outer bridge, the host and
-difference reconstructions, and the overlap-crossing multiplicity collapse.
+`Papers/1804.04964/paper_normal.tex`). The preceding modules establish the surviving proof chain.
+`UnionInjectivityOverlap` defines the left and right three-block geometries and proves the first
+inverse application `overlap_firstStrip`. `UnionInjectivityOverlap2` proves the right-geometry
+blue-side rebuild and identifies the overlap-crossing edges. `UnionInjectivityOverlap3` constructs
+the `P₀`-outer and overlap-crossing glues, the indicator-gathering identities, and the bridge row
+with its coefficient identity. `UnionInjectivityOverlap3b` reduces the first strip through the
+crossing collapse and proves that the summed bridge row has vanishing right coupling.
+`UnionInjectivityOverlap5` supplies transport of physical configurations and blocked weights along
+region equalities, together with surjectivity of the fused physical leg. This file restricts the
+coefficient family to each `P₀`-outer fiber, applies that chain fiberwise, and extracts every union
+host coefficient from the vanishing fiber rows.
 
 ## The remaining obstruction and the fix
 
