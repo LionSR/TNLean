@@ -434,7 +434,7 @@ hypotheses used by the later analytic argument.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1980. -/
 structure VerticalSectorFixedGeneratorHypotheses {g₁ g₂ d D : ℕ} where
-  /-- One-site simple-sector dimensions and multiplicities.
+  /-- One-site simple-sector dimensions.
 
   Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
   dim₁ : Fin g₁ → ℕ
@@ -446,7 +446,7 @@ structure VerticalSectorFixedGeneratorHypotheses {g₁ g₂ d D : ℕ} where
 
   Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
   weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ
-  /-- Two-site simple-sector dimensions and multiplicities.
+  /-- Two-site simple-sector dimensions.
 
   Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
   dim₂ : Fin g₂ → ℕ
