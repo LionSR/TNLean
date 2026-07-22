@@ -119,15 +119,40 @@
     \cite[Appendix~C.4, lines~2046--2058]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{definition}[Exact gauges for the source-derived two-site sectors]%
+    \label{def:mpdo_bnt_two_site_exact_sector_gauge}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge}
+    \leanok
+    \uses{def:mpdo_bnt_two_site_multiplicity_spectrum}
+    An exact sector gauge for a source-derived two-site multiplicity spectrum
+    additionally records, for every one-site sector $\gamma$, equality of bond
+    dimensions
+    \[
+        d_\gamma=d_{\sigma(\gamma)}
+    \]
+    and an invertible matrix $Z_\gamma\in\operatorname{GL}(d_\gamma,\mathbb C)$
+    such that
+    \[
+        A_{\sigma(\gamma)}^i
+        =Z_\gamma M_\gamma^i Z_\gamma^{-1}
+    \]
+    for every physical index $i$.  Thus the matched normal tensors have no
+    residual scalar phase.  This is the exact invertible conjugacy retained
+    from \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{theorem}[The two-site multiplicity spectrum from the BNT algebra
     clause]%
     \label{thm:mpdo_bnt_algebra_tensor_clause_spectrum}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        toTwoSiteExactSectorGauge}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         toTwoSiteMultiplicitySpectrum}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo,
         def:mpdo_bnt_algebra_tensor_clause,
         def:mpdo_bnt_two_site_multiplicity_spectrum,
+        def:mpdo_bnt_two_site_exact_sector_gauge,
         def:mpdo_bnt_multiplicity_spectrum_comparison,
         def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
     Let $M$ be an MPDO in horizontal canonical form, equipped with a
@@ -151,7 +176,13 @@
     \]
     as multisets.  Thus this two-site decomposition and relabelling realize
     the multiplicity-spectrum comparison of Appendix~C.4, lines~2046--2058
-    of \cite{Cirac2016MPDO_arXiv}.
+    of \cite{Cirac2016MPDO_arXiv}.  Moreover, the paired bond dimensions agree
+    and there are invertible matrices $Z_\gamma$ satisfying
+    \[
+        A_{\sigma(\gamma)}^i
+        =Z_\gamma M_\gamma^i Z_\gamma^{-1}
+    \]
+    exactly, as in lines~2053--2057.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -168,9 +199,12 @@
     bijectively with those of the two-site vertical canonical decomposition.
     Normalization makes each matching scalar have modulus one, while
     positivity of two consecutive coefficients makes it positive; it is
-    therefore one.  Eventual linear independence of the basis vectors gives
-    the displayed equality of power sums.  The finite positive power-sum
-    identity then gives equality of the corresponding multisets.
+    therefore one.  The normal-tensor matching theorem also supplies equality
+    of the paired bond dimensions and an invertible gauge; after the scalar is
+    one, its gauge-phase relation is precisely the displayed exact conjugacy.
+    Eventual linear independence of the basis vectors gives the displayed
+    equality of power sums.  The finite positive power-sum identity then gives
+    equality of the corresponding multisets.
 \end{proof}
 
 \begin{lemma}[Idempotence for the canonical chi coefficients]%

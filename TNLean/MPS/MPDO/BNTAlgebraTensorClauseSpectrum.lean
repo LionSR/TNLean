@@ -22,6 +22,8 @@ the algebra-to-RFP implication.
 * `MPOTensor.BNTAlgebraTensorClause.toTwoSiteMultiplicitySpectrum` derives a two-site
   vertical canonical decomposition, its sector relabelling, and the multiplicity-spectrum
   comparison directly from the tensor algebra clause.
+* `MPOTensor.BNTAlgebraTensorClause.toTwoSiteExactSectorGauge` additionally retains the
+  bond-dimension identifications and exact invertible gauges of the paired sectors.
 * `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` retains the
   resulting multiplicity-spectrum comparison alone.
 
@@ -66,6 +68,32 @@ structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
         H.weight x.1 x.2.2.1 * H.weight x.2.1 x.2.2.2.1 *
           H.algebraClause.positiveChi.chi.entry x.1 x.2.1 γ x.2.2.2.2
 
+/-- A source-derived two-site multiplicity spectrum together with exact invertible
+conjugacies between its paired normal tensors.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure TwoSiteExactSectorGauge {M : MPOTensor d D}
+    (H : BNTAlgebraTensorClause M) extends TwoSiteMultiplicitySpectrum H where
+  /-- Equality of the paired one-site and two-site bond dimensions from
+  arXiv:1606.00608, Appendix C.4, lines 2053--2055. -/
+  bondDim_eq : ∀ γ : Fin H.labelCount,
+    H.bondDim γ = decomposition.bondDim (relabel γ)
+  /-- The invertible gauge identifying each pair of normal tensors from
+  arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
+  gauge : ∀ γ : Fin H.labelCount,
+    GL (Fin (decomposition.bondDim (relabel γ))) ℂ
+  /-- The paired two-site tensor is the exact conjugate of the one-site tensor,
+  with no residual scalar phase, as in arXiv:1606.00608, Appendix C.4,
+  lines 2053--2057. -/
+  tensor_eq : ∀ (γ : Fin H.labelCount) (i : Fin (D * D)),
+    decomposition.tensor (relabel γ) i =
+      (gauge γ : Matrix (Fin (decomposition.bondDim (relabel γ)))
+        (Fin (decomposition.bondDim (relabel γ))) ℂ) *
+      (cast (congrArg (MPSTensor (D * D)) (bondDim_eq γ)) (H.tensor γ)) i *
+      (↑((gauge γ)⁻¹) : Matrix (Fin (decomposition.bondDim (relabel γ)))
+        (Fin (decomposition.bondDim (relabel γ))) ℂ)
+
 /-- The chosen two-site decomposition and relabelling determine the corresponding
 multiplicity-spectrum comparison.
 
@@ -84,8 +112,8 @@ noncomputable def TwoSiteMultiplicitySpectrum.toComparison
   twoEntry := fun γ => S.decomposition.weight (S.relabel γ)
   spectrum_eq := S.spectrum_eq
 
-/-- The tensor-attached BNT algebra clause determines the multiplicity
-spectrum of a source-derived two-site vertical canonical decomposition.
+/-- The tensor-attached BNT algebra clause determines the two-site multiplicity
+spectrum together with exact invertible gauges of the paired normal tensors.
 
 The chosen one-site tensors and multiplicity entries are exactly those stored
 in `H`.  No renormalization maps or pre-existing one-site/two-site sector
@@ -95,10 +123,10 @@ independence derives the power-sum equality.
 
 Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-noncomputable def toTwoSiteMultiplicitySpectrum
+noncomputable def toTwoSiteExactSectorGauge
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
     (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
-    TwoSiteMultiplicitySpectrum H := by
+    TwoSiteExactSectorGauge H := by
   classical
   let chi := H.algebraClause.positiveChi.chi
   let productIndex (γ : Fin H.labelCount) :=
@@ -412,7 +440,26 @@ noncomputable def toTwoSiteMultiplicitySpectrum
     (Fintype.bijective_iff_injective_and_card f).2 ⟨hfInjective, hCard⟩
   let sigma : Fin H.labelCount ≃ Fin D₂.labelCount :=
     Equiv.ofBijective f hfBijective
-  choose zeta hzetaNe hzetaMPV using fun γ ↦ hfPhase γ
+  have hGaugeExists : ∀ γ : Fin H.labelCount,
+      ∃ hdim : H.bondDim γ = D₂.bondDim (sigma γ),
+        MPSTensor.GaugePhaseEquiv
+          (cast (congrArg (MPSTensor (D * D)) hdim) (H.tensor γ))
+          (D₂.tensor (sigma γ)) := by
+    intro γ
+    exact (hfPhase γ).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+      (H.isCPSVBNT.blocks_normal γ)
+      (D₂.isCPSVBNT.blocks_normal (sigma γ))
+  choose hdim hGaugePhase using hGaugeExists
+  choose gauge zeta hzetaNe hTensor using hGaugePhase
+  have hzetaMPV : ∀ (γ : Fin H.labelCount) (N : ℕ), 0 < N →
+      ∀ σ : Fin N → Fin (D * D),
+        MPSTensor.mpv (D₂.tensor (sigma γ)) σ =
+          zeta γ ^ N * MPSTensor.mpv (H.tensor γ) σ := by
+    intro γ N _hN σ
+    rw [MPSTensor.mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congrArg (MPSTensor (D * D)) (hdim γ)) (H.tensor γ))
+      (B := D₂.tensor (sigma γ)) (gauge γ) (zeta γ) (hTensor γ) N σ,
+      MPSTensor.mpv_cast_dim (hdim γ) (H.tensor γ) N σ]
   have hzetaNorm : ∀ γ, ‖zeta γ‖ = 1 := by
     intro γ
     have hHH : Tendsto
@@ -489,9 +536,7 @@ noncomputable def toTwoSiteMultiplicitySpectrum
               apply PiLp.ext
               intro σ
               have hMpv := hzetaMPV (sigma.symm δ) L hLPos σ
-              have hfδ : f (sigma.symm δ) = δ :=
-                sigma.apply_symm_apply δ
-              rw [hfδ] at hMpv
+              rw [sigma.apply_symm_apply δ] at hMpv
               simpa only [MPSTensor.mpvState_apply, PiLp.smul_apply,
                 smul_eq_mul] using hMpv
             rw [hMpvState, smul_smul]
@@ -616,7 +661,24 @@ noncomputable def toTwoSiteMultiplicitySpectrum
       have hSpectrum := comparison.spectrum_eq γ
       dsimp only [comparison,
         BNTMultiplicitySpectrumComparison.ofEventuallyEqualPowerSums] at hSpectrum
-      convert hSpectrum using 1 <;> rfl }
+      convert hSpectrum using 1 <;> rfl
+    bondDim_eq := hdim
+    gauge := gauge
+    tensor_eq := by
+      intro γ i
+      have hExact := hTensor γ i
+      rw [hzetaOne γ, one_smul] at hExact
+      exact hExact }
+
+/-- The exact sector gauges determine the source-derived two-site multiplicity spectrum.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+noncomputable def toTwoSiteMultiplicitySpectrum
+    {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    TwoSiteMultiplicitySpectrum H :=
+  (H.toTwoSiteExactSectorGauge hHorizontal hM).toTwoSiteMultiplicitySpectrum
 
 /-- The source-derived two-site multiplicity spectrum entails the corresponding
 multiplicity-spectrum comparison.
