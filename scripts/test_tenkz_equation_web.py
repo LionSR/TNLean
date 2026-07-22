@@ -8,6 +8,7 @@ import contextlib
 import functools
 import http.server
 import json
+import re
 import socketserver
 import threading
 from html.parser import HTMLParser
@@ -16,9 +17,75 @@ from pathlib import Path
 from playwright.sync_api import Page, sync_playwright
 
 
-EXPECTED_PICTURE_COUNTS = [2, 3, 3, 2, 5, 1]
-PAGES = ("ch-mpdo.html", "ch-mpdo_rfp.html")
-EXPECTED_WRAPPER_COUNTS = {"ch-mpdo.html": 2, "ch-mpdo_rfp.html": 4}
+EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3] + [2, 3, 2, 5, 1, 3, 3]
+PAGES = ("ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html")
+EXPECTED_WRAPPER_COUNTS = {
+    "ch-symmetry.html": 8,
+    "ch-mpdo.html": 2,
+    "ch-mpdo_rfp.html": 7,
+}
+
+
+def _tenkzequation_bodies(source: str) -> list[str]:
+    """Return top-level tenkzequation bodies in source order."""
+    token = re.compile(r"\\(?:begin|end)\{tenkzequation\}")
+    start: int | None = None
+    bodies: list[str] = []
+    for match in token.finditer(source):
+        if match.group(0).startswith(r"\begin"):
+            assert start is None, "tenkzequation environments must not nest"
+            start = match.end()
+        else:
+            assert start is not None, "tenkzequation closes without opening"
+            bodies.append(source[start:match.start()])
+            start = None
+    assert start is None, "tenkzequation remains unclosed"
+    return bodies
+
+
+def _assert_source_linked_groups(repo_root: Path) -> None:
+    """Pin every migrated sibling-picture row to its TeX source wrapper."""
+    symmetry = (
+        repo_root / "blueprint/src/chapter/ch12_symmetry.tex"
+    ).read_text(encoding="utf-8")
+    symmetry_bodies = _tenkzequation_bodies(symmetry)
+    symmetry_anchors = (
+        r"\tn[role=operator,up=$i$]{U(g)}",
+        r"\tnX{X_1(g^{-1})}",
+        "Condition C1, lines 328--334, states",
+        "Condition C2, lines 335--340, states",
+        "Conditions C2--C3, lines 335--347",
+        "Condition C1, lines 328--334, is",
+        "Condition C2, lines 335--340, is",
+        r"$\;=\;\mu\,$",
+    )
+    assert len(symmetry_bodies) == len(symmetry_anchors), len(symmetry_bodies)
+    for body, anchor in zip(symmetry_bodies, symmetry_anchors, strict=True):
+        assert anchor in body, anchor
+        assert body.count(r"\begin{tenkz}") == 2, anchor
+
+    blocked = (
+        repo_root / "blueprint/src/chapter/ch21_mpdo_rfp_blocked_rfp.tex"
+    ).read_text(encoding="utf-8")
+    blocked_bodies = _tenkzequation_bodies(blocked)
+    assert len(blocked_bodies) == 1, len(blocked_bodies)
+    assert blocked_bodies[0].count(r"\tnpic") == 2
+    assert r"\qquad$=$\qquad" in blocked_bodies[0]
+
+    channels = (
+        repo_root
+        / "blueprint/src/chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex"
+    ).read_text(encoding="utf-8")
+    channel_bodies = _tenkzequation_bodies(channels)
+    assert len(channel_bodies) == 2, len(channel_bodies)
+    for body, anchor in zip(
+        channel_bodies,
+        (r"$\widehat{\mathcal T}^{\,2}:\quad$", r"$\widehat{\mathcal S}^{\,2}:\quad$"),
+        strict=True,
+    ):
+        assert anchor in body, anchor
+        assert body.count(r"\tnpic") == 3, anchor
+        assert body.count(r"\xrightarrow") == 2, anchor
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -247,6 +314,8 @@ def main() -> int:
     parser.add_argument("--screenshot-dir", type=Path)
     args = parser.parse_args()
     root = args.web_root.resolve()
+    repo_root = Path(__file__).resolve().parent.parent
+    _assert_source_linked_groups(repo_root)
     for filename in PAGES:
         if not (root / filename).is_file():
             parser.error(f"missing generated blueprint page: {root / filename}")
@@ -261,6 +330,10 @@ def main() -> int:
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
+            # Several source-linked rows live in proofs, which the blueprint UI
+            # collapses by default.  Reveal them so geometry is measured rather
+            # than inferred from zero-sized hidden descendants.
+            page.add_style_tag(content=".proof_content { display: block !important; }")
             page.locator(".tenkz-equation").first.wait_for(state="visible")
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)

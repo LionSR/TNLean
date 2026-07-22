@@ -41,6 +41,12 @@ entry is empty iff its body calls no drawing macro at all — finds
 exactly **33**, and the review-side counts have been corrected to match.
 This table is the authoritative census.
 
+After issue #4556, the live residual is **13 catalogue declarations and 15
+chapter calls**, all PEPS entries assigned to issue #4557.  The twelve
+non-PEPS/shared declarations in that batch are gone, together with the unused
+symmetry-motif file and the three private MPDO factor-chain wrappers that had no
+remaining consumer.
+
 At the original census, the 12 multi-use entries accounted for 38 occurrences
 (10+5+3+3+3+2×7); every other entry was single-use. Two multi-use entries
 (`TNPEPSNormalRegionsRS`, `TNPEPSNormalRegionT`) had region-genre bodies; three
@@ -76,14 +82,14 @@ both K1 and K7.
 
 | catalogue entry | requested ink | disposition |
 |---|---|---|
-| TNBlocking | K1 long blocked word | supported by `\tnspan[box]` |
-| TNMPDOBlockedRFPChannels | K1 disjoint blocked factors | supported by independent spans |
-| TNMPDOTwoSiteBlocking | K1 two-site capability | capability tested abstractly; `Papers/1606.00608/MPDO_K=MM.png` contains no enclosure, so no source ink is assigned to this entry |
+| TNBlocking | K1 long blocked word | migrated inline in #4556 with `\tnspan[box]`; declaration removed |
+| TNMPDOBlockedRFPChannels | K1 disjoint blocked factors | migrated inline in #4556 with independent spans; declaration and private factor-chain wrappers removed |
+| TNMPDOTwoSiteBlocking | K1 two-site capability | migrated inline in #4556 without an enclosure, matching `Papers/1606.00608/MPDO_K=MM.png`; declaration removed |
 | TNPEPSEdgeBlockingReduction | K1 blocked row plus K7 graph region | both capabilities supported; catalogue migration remains separate |
 | TNPEPSNormalEdgeBlockingReduction | K1 blocked row halves | supported by independent spans |
-| TNMPDOBNTOperatorTraceClosure | K2 vertical closure | demoted to `[O_L(M_\alpha)]_{a,b}=\operatorname{tr}(\widehat M_\alpha^{a_1b_1}\cdots\widehat M_\alpha^{a_Lb_L})`; no generic closure key |
-| TNAppendixBAdjacentBondProjectors | K7 named subgraph groups | supported by atom-and-join member sets |
-| TNAppendixBPhysicalSupportTransport | K7 overlapping support regions | supported by named regions used as later members |
+| TNMPDOBNTOperatorTraceClosure | K2 vertical closure | demoted in #4556 to `[O_L(M_\alpha)]_{a,b}=\operatorname{tr}(\widehat M_\alpha^{a_1b_1}\cdots\widehat M_\alpha^{a_Lb_L})`; declaration removed and no generic closure key added |
+| TNAppendixBAdjacentBondProjectors | K7 named subgraph groups | migrated in #4556 as an inline support-location schematic built from named atoms and joins; declaration removed |
+| TNAppendixBPhysicalSupportTransport | K7 overlapping support regions | migrated in #4556 as an inline support-location schematic with symmetric named regions; declaration removed |
 | TNPEPSTorusGeometry | K4 torus identifications | owned by #4396; delivered by PR #4562; no enclosure work remains |
 
 ---
@@ -132,11 +138,11 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 
 | entry | uses | call sites | tenkz spelling sketch (the `\tndefine` body) | risk |
 |---|---:|---|---|---|
-| TNGaugeConjugation | 10 | ch23_algebraic_ft:77,1592,1594; ch12_symmetry:155,267,399,401; ch02_mps:227; ch03_single:227; ch24_peps_ft_edge_kernel_gauges:605 | `\tnpic[physical=up]{\tnX{#1} & \tn[up=$#2$]{A} & \tnX{#3}}` | trivial |
+| TNGaugeConjugation | 10 at the original census | ch23 uses migrated in #4392; the remaining seven ch02/ch03/ch12/ch24 uses migrated inline or to exact algebra in #4556 | inline `tenkz` gauge words, except the ch24 bond-endomorphism statement, which is exact algebra | declaration removed in #4556; the lower-level slide helper remains because slides still consume it |
 | TNPEPSEdgeGaugeOrientation | 5 before this migration | ch24_peps_ft_balanced_edge_scalars:34,109,127,147; ch24_peps_ft_foundations:87 before this migration | exact component equations adjacent to the five former call sites | demoted to the exact component equations; catalogue declaration and private motif removed |
-| TNGroundSpaceMap | 3 | ch13_parent_hamiltonian_injective_ground_spaces:42,525,546 | `\tnpic[periodic, physical=up]{\tn[up=$#2$]{} & \tn{} & \tndots & \tn[up=$#3$]{} & \tnX{#5}}` + length label | needs-judgment (source draws $X$ on the trace return wire; respell as on-row `\tnX` under `periodic` — same contraction) |
-| TNCondCOne | 3 | ch12_symmetry:757,838,1184 | `\tnpic[rows={op,ket}]{\tn{#1}\\ \tn[…]{A}} = \tnpic[physical=up]{\tnX{#2} & \tn{A} & \tnX{#2^\dagger}}` | trivial |
-| TNCondCTwo | 3 | ch12_symmetry:770,798,861 | `\tnpic[sandwich]{\tnX{#1} & \tn{A}\\ \tnX{#1^\dagger} & \tn*{A}} = \tnpic[sandwich]{\tn{A} & \tnX{#1}\\ \tn*{A} & \tnX{#1^\dagger}}` | trivial |
+| TNGroundSpaceMap | 3 | ch13_parent_hamiltonian_injective_ground_spaces, three former calls | migrated inline in #4556 as periodic words with on-row `\tnX` boundary insertions and explicit length braces | declaration and private external-trace motif removed; same cyclic contraction as the source |
+| TNCondCOne | 3 | ch12_symmetry, three former calls | migrated inline in #4556 as top-level local intertwining relations | declaration removed; the general gauge comments distinguish the source's unitary specialization |
+| TNCondCTwo | 3 | ch12_symmetry, three former calls | migrated inline in #4556 as doubled-space covariance relations with the bra action `\overline V` | declaration removed |
 | TNPermutationTwistLabeled | 2 before this migration | ch12_symmetry:591,593 | one inline three-panel chain `i \xrightarrow{\sigma_h} \sigma(h)(i) \xrightarrow{\sigma_g} \sigma(g)(\sigma(h)(i))`, with each index on the open upper physical stub | migrated inline in PR #4505; catalogue wrapper removed |
 | TNPEPSVertexInjectivityMap | 2 | ch24_peps_ft_foundations:224; ch24_peps_ft:43 | tenkzfree 5-leg star (`ports={…:virtual, north east:physical}`) `\longmapsto` math vector | needs-judgment (free-tier star) |
 | TNPEPSNormalRegionsRS | 2 before this migration | ch24_peps_ft_normal_square:91,1232 before this migration | two identical inline pairs of 5-by-5 `tenkzlattice` panels: the eight-cell notched region $R$ and the nine-cell square region $S$, each with boundary $(V,P)=(20,0)$ | migrated inline; declaration and private motif removed |
@@ -196,9 +202,9 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | TNPEPSGaugeCancellation | ch24_peps_ft_foundations:177 before this migration | exact component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
 | TNPEPSTINormalGaugeAbsorption | ch24_peps_ft_normal_square:1251 before this migration | inline tenkzfree: square tensor star `=` gauge-dressed star | migrated inline; catalogue declaration and private motif removed |
 | TNPEPSTwoInjectiveGaugeScalarReduction | ch24_peps_ft_edge_kernel_gauges:1056 before this migration | inline tenkzfree: three-leg fan `=` fan+$Z$ `=` fan+$U$ `=` fan+$W$ (4 panels) | migrated inline; catalogue declaration and private motif removed |
-| TNAppendixBAdjacentBondProjectors | ch13_parent_hamiltonian_commuting_gap:1307 | tenkzfree: 3 fusion nodes $U_0U_1U_2$ + 2 $\varphi$ sites, named joins, highlighted $P_{01},P_{12}$ | needs-judgment; K7 capability now exists |
-| TNAppendixBPhysicalSupportTransport | ch13_parent_hamiltonian_commuting_gap:1459 | same body + two overlapping named support regions above | needs-judgment; K7 capability now exists |
-| TNAppendixBChainTransport | ch13_parent_hamiltonian_commuting_gap:1718 | respell hexagon ring as `[periodic, physical=up]` 6-cell row ($h_i$, $h_{i+1}$ highlighted labels) `\xrightarrow{R^{(3)}_{i,\tau}}` 3-site open row | needs-judgment (layout redesign ring→periodic row; same contraction) |
+| TNAppendixBAdjacentBondProjectors | ch13_parent_hamiltonian_commuting_gap, former call | migrated inline in #4556 as a source-qualified support-location schematic; the projector equality remains exact algebra | declaration and private symmetry motif removed |
+| TNAppendixBPhysicalSupportTransport | ch13_parent_hamiltonian_commuting_gap, former call | migrated inline in #4556 with symmetric overlapping support regions; explicitly not a doubled operator network | declaration and private symmetry motif removed |
+| TNAppendixBChainTransport | ch13_parent_hamiltonian_commuting_gap, former call | demoted in #4556 to the two exact restriction intertwining identities | the paper supplies no standalone cyclic-chain picture; declaration removed |
 
 ## 6. drawn-single-use → inline tenkz grid body (38 entries)
 
@@ -209,7 +215,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | TNMPSLocal | ch02_mps:22 | `\tnpic[physical=up]{\tn[up=$i$]{A}}` | trivial |
 | TNMPSWord | ch02_mps:40 | `[physical=up]: \tn[up=$i$]{A} & \tn{A} & \tndots & \tn[up=$k$]{A}` + `\tnspan[brace below]{4}{L}` | trivial |
 | TNMPV | ch02_mps:152 | `[periodic, physical=up]: \tn[up=$i$]{A} & \tn{A} & \tndots & \tn[up=$k$]{A}` | trivial |
-| TNBlocking | ch02_mps:733 | word row + `\tnspan[box]` labelled $A$ over all cells | capability exists; migration remains separate |
+| TNBlocking | ch02_mps, former call | migrated inline in #4556 as a word row with `\tnspan[box]` labelled $A^{[L]}$ | declaration removed |
 | TNMPVOverlap | ch02_mps:850 | `[rows={ket,bra}, periodic]: \tn{A}&\tndots&\tn{A}\\ \tn*{B}&\tndots&\tn*{B}` | trivial |
 | TNTransferMap | ch02_mps:169 | `[sandwich, west label=$X$, east label=$\mathcal E_A(X)$]: \tn{A} \\ \tn*{A}` | trivial (K5 pair label $i$ optional) |
 | TNMPOCell | ch20_mpdo_foundations:12 | `[physical=updown]: \tn[mpo, up=$i$, down=$j$]{A}` | trivial |
@@ -221,17 +227,17 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
-| TNMPDOBlockedRFPChannels | ch21_mpdo_rfp_simple_local_refinement_channels:888 | math arrows $\widehat{\mathcal T},\widehat{\mathcal S}$ between `\tnpic` factor chains (2/3/4 cells) + blocked-site boxes | K1 capability exists; migration remains separate |
+| TNMPDOBlockedRFPChannels | ch21_mpdo_rfp_simple_local_refinement_channels, former call | migrated inline in #4556 as six top-level SVG-capable `\tnpic` siblings with channel arrows and independent blocked-site spans | declaration and private factor-chain wrappers removed |
 | TNMPDOHayashiSectorComparison | ch21_mpdo_rfp_simple_local_markov_factorization:555 | `R\cdot\tnpic[physical=updown, west label=$\beta_1$, east label=$\alpha_3$]{\tn[mpo, up=…, down=…]{\widetilde\kappa^{(k)}}} = p_k\,A^{(k)}\otimes B^{(k)}` | trivial |
 | TNBNTDecomposition | ch10_bnt:664 | demoted to the exact CPSV16 coefficient decomposition $A^i=X[\bigoplus_j(M_j\otimes A_j^i)]X^{-1}=\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}$; no diagram remains | exact plain mathematics: the paper explicitly warns that its graphical $j,q$ lines replace direct sums by tensor products and are not literal tensor-network legs |
 | TNMPDOBNTFusionIdentity | ch21_mpdo_rfp_fusion_isometries:318 | `\tnfuse[combined=west]{U_{\alpha\beta}} &` stacked $M_\alpha/M_\beta$ `& \tnfuse[combined=east]{U^\dagger} = \bigoplus_\gamma` weighted block (`\tnX{\chi_{\alpha\beta\gamma}}`) | trivial (`\tnfuse` + doubled combined stub exist) |
 | TNMPDOUnweightedZipperReconstruction | ch21_mpdo_rfp_fusion_isometries:499 | 3 zipper equations, each `\tnfuse` + `\tn[mpo]{H}` grids | trivial |
 | TNMPDOFusionTracePower | ch21_mpdo_rfp_fusion_isometries:520 | `[rows={op,op}, periodic]` $M_\alpha$ row over $M_\beta$ row `= \sum_\gamma` `[rows={wire,op}, periodic]` $\chi$ row over $M_\gamma$ row | trivial (the right rows are disjoint; only the left rows pair physically) |
 | TNMPDORecursiveStructureOperator | ch21_mpdo_rfp_fusion_isometries:813 | `tenkzfree`: degree-four $X_s$ boxes meet open $k_s,\alpha_s,\beta_s,\gamma_s$ copy rails; $\gamma_s$ and $\alpha_{s+1}$ share one open rail, and the final rail selects traced $M_{\gamma_r}$ with its physical pair open | source-faithful free-tier routing; no package change |
-| TNMPDOTwoSiteBlocking | ch21_mpdo_rfp_blocked_rfp:5 | `\tnpic[physical=updown]{\tn[mpo]{M}} = \tnpic[physical=updown]{\tn[mpo]{K}&\tn[mpo]{K}}` | source PNG has no grouping enclosure; test K1 only as an abstract two-site fixture |
+| TNMPDOTwoSiteBlocking | ch21_mpdo_rfp_blocked_rfp, former call | migrated inline in #4556 as `M=KK` with grouped physical labels and no enclosure | source PNG has no grouping enclosure; declaration removed |
 | TNMPDOBNTVerticalProduct | ch21_mpdo_rfp_simple_local_structure_capstone:48 | `[rows={op,op}]: \tn[mpo]{\mathcal K_y} \\ \tn[mpo]{\mathcal K_x}` `= 0\ (x\ne y)` | trivial |
 | TNMPDOBlockClosureMap | ch21_mpdo_rfp_algebra_tower:63 | `M_\alpha(X)=\tnpic[physical=updown, periodic]{\tn[mpo]{M_\alpha}&\tnX{X}}` (twice, for $M_\alpha$ and $A_\alpha$) | trivial |
-| TNMPDOBNTOperatorTraceClosure | ch21_mpdo_rfp_bnt_coefficients:32 | exact component trace formula | K2 demoted: the cited sources specify algebra, not an unambiguous reusable physical-axis closure |
+| TNMPDOBNTOperatorTraceClosure | ch21_mpdo_rfp_bnt_coefficients, former call | demoted in #4556 to the exact component trace formula | cited source specifies algebra, not an unambiguous reusable physical-axis closure; declaration removed |
 
 ### Symmetry / algebraic FT (ch12, ch23)
 
@@ -241,7 +247,7 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 | TNLinearTwist | ch12_symmetry:153 | `[rows={op:none,ket}]: \tn[role=operator,up=$i$]{U(g)} \\ \tn{A}` | trivial (`op:none` is required because $U(g)$ has no virtual legs) |
 | TNPermutationTwist | ch12_symmetry:549 | two inline one-site panels with upper physical labels $i$ and $\sigma(g)(i)$, joined by $\xrightarrow{\sigma_g}$ | migrated inline in PR #4505; catalogue wrapper removed |
 | TNTwistedTransfer | ch12_symmetry:616 | `[rows={ket,op,bra}, west label=$X$, east label=$\mathcal E_u(X)$]: \tn{A^{(n)}} \\ \tn{u} \\ \tn*{A^{(n')}}` | trivial |
-| TNStringOrderParameter | ch12_symmetry:634 | `[rows={ket,op,bra}]` word with `\tnghost` end cells in the op row, `\tndots`, length brace $L$ | trivial |
+| TNStringOrderParameter | ch12_symmetry, former call | migrated inline in #4556 as a closed doubled word with west $\Lambda$ cup, east identity cup, and an $L$-site brace | scalar boundary `(0,0,0,0)`; declaration and private string-word motif removed |
 | TNInternalTraceInsertion | ch23_algebraic_ft:372 | `[periodic, physical=up]: \tn[up=$i$]{} & \tnX{X} & \tn[up=$k$]{}` | trivial |
 | TNExternalTraceInsertion | ch23_algebraic_ft:377 | same contraction; source draws $Y$ on the trace return wire — respell as `[periodic]` with boundary `\tnX{Y}` | needs-judgment (return-wire fidelity vs respell; a `trace insert=` key would preserve layout) |
 
