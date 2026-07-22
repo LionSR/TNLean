@@ -401,8 +401,6 @@
 \newdimen\tenkz@bboxymax
 \newdimen\tenkz@bboxxa
 \newdimen\tenkz@bboxya
-\newdimen\tenkz@bboxxb
-\newdimen\tenkz@bboxyb
 \newif\iftenkz@bboxcapture
 \newif\iftenkz@identitylinear
 \newif\iftenkz@labelrectangle
@@ -467,13 +465,6 @@
       \tenkz@event{label-use|picture=\the\tenkz@pictureid}%
     \fi
   \fi}
-\def\tenkz@writebbox#1{%
-  \global\advance\tenkz@bboxuid by 1\relax
-  \tenkz@event{bbox|picture=\the\tenkz@pictureid|class=#1|%
-    id=\the\tenkz@bboxuid|owner=\the\tenkz@inkowner|%
-    xmin=\number\tenkz@bboxxmin|%
-    xmax=\number\tenkz@bboxxmax|ymin=\number\tenkz@bboxymin|%
-    ymax=\number\tenkz@bboxymax}}
 \def\tenkz@writelabelbbox{%
   \global\advance\tenkz@bboxuid by 1\relax
   \tenkz@event{bbox|picture=\the\tenkz@pictureid|class=label|%
@@ -614,11 +605,7 @@
 \def\tenkz@checkrequiredlastauditowner#1{%
   \tenkz@checklastauditowner{#1}%
   \iftenkz@auditownermatch\else
-    \edef\tenkz@currentauditowner{\tenkz@auditinstallowner}%
-    \edef\tenkz@intendedauditowner{#1}%
-    \ifx\tenkz@currentauditowner\tenkz@intendedauditowner
-      \tenkz@auditownermatchtrue
-    \fi
+    \tenkz@checkcurrentauditowner{#1}%
   \fi}
 \def\tenkz@incrementtokenslot#1#2{%
   \count@=\csname tenkz@#1@#2\endcsname\relax
@@ -1223,31 +1210,6 @@
     x2=\number\tenkz@glyphxtwo|y2=\number\tenkz@glyphytwo|%
     x3=\number\tenkz@glyphxthree|y3=\number\tenkz@glyphythree}%
   \endgroup}
-\def\tenkz@emitwirebbox#1#2#3#4#5{%
-  \begingroup
-  \pgfextractx{\tenkz@bboxxa}{\pgfpointanchor{#1}{#2}}%
-  \pgfextracty{\tenkz@bboxya}{\pgfpointanchor{#1}{#2}}%
-  \pgfextractx{\tenkz@bboxxb}{\pgfpointanchor{#3}{#4}}%
-  \pgfextracty{\tenkz@bboxyb}{\pgfpointanchor{#3}{#4}}%
-  \ifdim\tenkz@bboxxa<\tenkz@bboxxb
-    \tenkz@bboxxmin=\tenkz@bboxxa \tenkz@bboxxmax=\tenkz@bboxxb
-  \else
-    \tenkz@bboxxmin=\tenkz@bboxxb \tenkz@bboxxmax=\tenkz@bboxxa
-  \fi
-  \ifdim\tenkz@bboxya<\tenkz@bboxyb
-    \tenkz@bboxymin=\tenkz@bboxya \tenkz@bboxymax=\tenkz@bboxyb
-  \else
-    \tenkz@bboxymin=\tenkz@bboxyb \tenkz@bboxymax=\tenkz@bboxya
-  \fi
-  \advance\tenkz@bboxymin by -#5\relax
-  \advance\tenkz@bboxymax by  #5\relax
-  \tenkz@writebbox{wire}%
-  \endgroup}
-% This helper is intentionally tokenized outside ExplSyntax: TikZ's coordinate
-% parser requires the literal space in the `canvas cs:' delimiter.
-\def\tenkz@canvascoordinate#1#2#3{%
-  \coordinate (#1) at (canvas cs:x=#2,y=#3);}
-
 \tikzset{
   tenkz audited label/.style={
     /utils/exec=\tenkz@installlabelaudit},
@@ -1329,6 +1291,18 @@
 % message instead of a raw pgfkeys error; re-declaring the name
 % re-derives the styles with the same hue.
 \ExplSyntaxOn
+
+% ---------- shared syntax predicates ----------
+% This predicate recognizes a nonempty string of decimal digits.  Callers
+% retain their own range checks and diagnostics.
+\prg_new_conditional:Npnn \tenkz_token_if_decimal_digits:n #1 { T, F, TF }
+  {
+    \regex_match:nnTF { \A [0-9]+ \Z } {#1}
+      { \prg_return_true: }
+      { \prg_return_false: }
+  }
+\prg_generate_conditional_variant:Nnn \tenkz_token_if_decimal_digits:n
+  { V } { T, F, TF }
 
 % ---------- measured named enclosures ----------
 % Every enclosure consumes this ONE registry: a semantic member name maps to

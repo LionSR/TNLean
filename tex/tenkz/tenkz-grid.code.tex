@@ -506,7 +506,7 @@
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/span}{#1} }
     \tl_set:Nn \l__tenkz_spanlength_tl {#2}
     \tl_trim_spaces:N \l__tenkz_spanlength_tl
-    \regex_match:nVTF { \A [0-9]+ \Z } \l__tenkz_spanlength_tl
+    \tenkz_token_if_decimal_digits:VTF \l__tenkz_spanlength_tl
       { \tl_set:Ne \l__tenkz_spanlength_tl
           { \int_eval:n {\l__tenkz_spanlength_tl} } }
       {
@@ -557,7 +557,7 @@
   {
     \tl_set:Nn \l__tenkz_cellinteger_tl {#2}
     \tl_trim_spaces:N \l__tenkz_cellinteger_tl
-    \regex_match:nVTF { \A [0-9]+ \Z } \l__tenkz_cellinteger_tl
+    \tenkz_token_if_decimal_digits:VTF \l__tenkz_cellinteger_tl
       {
         \int_compare:nNnTF {\l__tenkz_cellinteger_tl} > {0}
           { \int_set:Nn #3 {\l__tenkz_cellinteger_tl} }
