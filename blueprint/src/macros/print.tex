@@ -14,6 +14,10 @@
 \renewcommand*\l@section{\@dottedtocline{1}{1.5em}{3em}}
 \makeatother
 
+% The web renderer gives sibling tenkz pictures a non-wrapping flex row.
+% Print keeps the exact centered layout used before the web-only wrapper.
+\newenvironment{tenkzequation}{\begin{center}}{\end{center}}
+
 
 % Print-side status badges for LeanBlueprint annotations.  The web build uses
 % plasTeX userdata to put the same information in theorem headers and graph

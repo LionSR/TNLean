@@ -1000,7 +1000,7 @@ this is the matrix-unit identity
     =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
 \]
 Its two Kronecker factors are the two bare cups:
-\begin{center}
+\begin{tenkzequation}
     % The upper inverse tensor and lower tensor contract through the doubled
     % physical index p.  Their four virtual legs remain open and are
     % identified pairwise by the tensor product of the two cups on the right.
@@ -1018,13 +1018,13 @@ Its two Kronecker factors are the two bare cups:
         \tnghost{} \\
         \tnghost{}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 This is the identity in
 \cite[Appendix~C.2, lines~1376--1380]{Cirac2016MPDO_arXiv}.
 
 Applying this inverse map to the doubled physical index and closing its
 virtual legs against a further copy of $K$ recovers $K$:
-\begin{center}
+\begin{tenkzequation}
     % K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the top
     % tensor closes both virtual legs against K^{-1} and keeps its physical
     % leg p open; K^{-1} contracts through the doubled physical index only
@@ -1044,7 +1044,7 @@ virtual legs against a further copy of $K$ recovers $K$:
     \begin{tenkz}[physical=up, tensor style=box]
         \tn[up=p]{K}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 This is the single-block identity in
 \cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.
 
@@ -1228,7 +1228,7 @@ This is the single-block identity in
         % pointwise in all four virtual indices.  Both sides have aggregate
         % boundary signature (virtual-west=2 | physical-up=1 |
         % virtual-east=2).
-        \begin{center}
+        \begin{tenkzequation}
             $\Bigl($
             \begin{tenkz}[compact, physical=down,
                           west label=$\alpha_1$, east label=$\beta_1$]
@@ -1256,7 +1256,7 @@ This is the single-block identity in
                           west label=$\beta_3$, east label=$\alpha_1$]
                 \tnX{R}
             \end{tenkz}
-        \end{center}
+        \end{tenkzequation}
     \caption{Applying $\mathcal K^{-1}$ at the first and third sites collapses
     the three-site contraction to
     $\mathcal K^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}$, where
@@ -1438,7 +1438,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity reads coefficientwise as follows.
 % Source comparison: Papers/1606.00608/MPDO_kappaab.png, from lines 1415--1438
 % of MPDO-22-12-17-2.tex, fixes the one-tensor four-leg topology.  The
 % normalized formula is Theorem thm:mpdo_inverse_map_hayashi_sector_comparison.
-\begin{center}
+\begin{tenkzequation}
 $R_{\beta_3,\alpha_1}\,$
 \tnpic[
     physical=updown,
@@ -1454,7 +1454,7 @@ $R_{\beta_3,\alpha_1}\,$
 $=
 p_k\,A^{(k)}_{\alpha_1,\beta_1}(l,l')\,
 B^{(k)}_{\alpha_3,\beta_3}(r,r').$
-\end{center}
+\end{tenkzequation}
 
 \begin{proof}
     \leanok
