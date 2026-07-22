@@ -22,6 +22,7 @@ product algebra automorphism, then applies the block-permutation decomposition t
 * `perBlockLinearExtension` — per-block linear map `T_k : M_{D_k} → M_{D_k}` from SameMPV
 * `piAlgEquiv` — the assembled product algebra automorphism
 * `piAlgEquiv_decomposition` — decomposition as block permutation + inner automorphisms
+* `piTrace_mul_right_eq_zero` — nondegeneracy of the product trace pairing
 * `piTraceMulRightPi` — per-block Gram map and its injectivity
 
 ## References
@@ -235,10 +236,28 @@ theorem piAlgEquiv_decomposition
 
 end Decomposition
 
-/-! ### Per-block Gram map -/
+/-! ### Product trace pairing and per-block Gram map -/
 section PiGramMap
 
 variable {r : ℕ} {dim : Fin r → ℕ}
+
+/-- The trace pairing on a finite product of full matrix algebras is nondegenerate. -/
+theorem piTrace_mul_right_eq_zero
+    (M : ∀ k : Fin r, Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (h : ∀ N : ∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+      ∑ k, Matrix.trace (M k * N k) = 0) :
+    M = 0 := by
+  classical
+  funext k
+  apply (Matrix.ext_iff_trace_mul_right (A := M k) (B := 0)).2
+  intro N_k
+  have hsum := h (Function.update 0 k N_k)
+  have htrace : Matrix.trace (M k * N_k) = 0 := by
+    rwa [Finset.sum_eq_single k
+      (fun j _ hj => by
+        rw [Function.update_of_ne hj, Pi.zero_apply, mul_zero, Matrix.trace_zero])
+      (fun hk => absurd (Finset.mem_univ k) hk), Function.update_self] at hsum
+  simpa using htrace
 
 /-- The per-block Gram map: `M ↦ (k, i) ↦ tr(M_k · A_k i)`. -/
 noncomputable def piTraceMulRightPi
