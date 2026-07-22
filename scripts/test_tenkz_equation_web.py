@@ -80,15 +80,26 @@ def _assert_desktop_rows(page: Page) -> None:
     assert all(fact["flexNowrap"] for fact in facts), facts
 
 
-def _assert_mobile_scroll(page: Page) -> None:
+def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
     facts = page.locator(".tenkz-equation").evaluate_all(
         """wrappers => wrappers.map(wrapper => {
+          const row = wrapper.querySelector(':scope > .tenkz-equation-row');
           const pictures = [...wrapper.querySelectorAll('.tenkz-pic')];
-          const first = pictures[0];
-          const last = pictures[pictures.length - 1];
+          const rowElements = [...row.children];
+          const first = row.firstElementChild;
+          const last = row.lastElementChild;
+          const parent = wrapper.parentElement;
+          const figure = wrapper.closest('figure');
+          const documentWidth = document.documentElement.clientWidth;
           wrapper.scrollLeft = 0;
           const wrapperAtStart = wrapper.getBoundingClientRect();
+          const parentAtStart = parent === null ? null : parent.getBoundingClientRect();
           const firstAtStart = first.getBoundingClientRect();
+          const allVisibleAtStart = rowElements.every(element => {
+            const rect = element.getBoundingClientRect();
+            return rect.left >= wrapperAtStart.left - 1
+              && rect.right <= wrapperAtStart.right + 1;
+          });
           const firstReachable = firstAtStart.left >= wrapperAtStart.left - 1
             && firstAtStart.right <= wrapperAtStart.right + 1;
           wrapper.scrollLeft = wrapper.scrollWidth;
@@ -97,13 +108,46 @@ def _assert_mobile_scroll(page: Page) -> None:
           const lastReachable = lastAtEnd.left >= wrapperAtEnd.left - 1
             && lastAtEnd.right <= wrapperAtEnd.right + 1;
           const localScroll = wrapper.scrollWidth > wrapper.clientWidth + 1;
+          const contained = wrapperAtStart.left >= -1
+            && wrapperAtStart.right <= documentWidth + 1
+            && wrapper.clientWidth <= documentWidth + 1
+            && (parentAtStart === null
+              || (wrapperAtStart.left >= parentAtStart.left - 1
+                && wrapperAtStart.right <= parentAtStart.right + 1));
+          const figureScroll = figure !== null
+            && figure.scrollWidth > figure.clientWidth + 1;
+          const round = value => Math.round(value * 10) / 10;
           wrapper.scrollLeft = 0;
-          return {firstReachable, lastReachable, localScroll};
+          return {
+            pictureCount: pictures.length,
+            contained,
+            localScroll,
+            firstReachable,
+            lastReachable,
+            allVisibleAtStart,
+            wrapperLeft: round(wrapperAtStart.left),
+            wrapperRight: round(wrapperAtStart.right),
+            wrapperWidth: wrapper.clientWidth,
+            wrapperScrollWidth: wrapper.scrollWidth,
+            rowWidth: round(row.getBoundingClientRect().width),
+            parentClass: parent === null ? null : parent.className,
+            parentWidth: parent === null ? null : parent.clientWidth,
+            parentScrollWidth: parent === null ? null : parent.scrollWidth,
+            figureWidth: figure === null ? null : figure.clientWidth,
+            figureScrollWidth: figure === null ? null : figure.scrollWidth,
+            figureScroll,
+          };
         })"""
     )
     assert any(fact["localScroll"] for fact in facts), facts
-    assert all(fact["firstReachable"] for fact in facts), facts
-    assert all(fact["lastReachable"] for fact in facts), facts
+    assert all(fact["contained"] for fact in facts), facts
+    assert not any(fact["figureScroll"] for fact in facts), facts
+    assert all(
+        fact["firstReachable"] and fact["lastReachable"]
+        if fact["localScroll"]
+        else fact["allVisibleAtStart"]
+        for fact in facts
+    ), facts
     document_facts = page.evaluate(
         """() => ({
           scrollWidth: document.documentElement.scrollWidth,
@@ -111,6 +155,7 @@ def _assert_mobile_scroll(page: Page) -> None:
         })"""
     )
     assert document_facts["scrollWidth"] <= document_facts["clientWidth"] + 1, document_facts
+    return facts
 
 
 def main() -> int:
@@ -126,6 +171,7 @@ def main() -> int:
         args.screenshot_dir.mkdir(parents=True, exist_ok=True)
 
     collected: list[dict[str, object]] = []
+    mobile: list[dict[str, object]] = []
     with serve(root) as base_url, sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
@@ -142,7 +188,7 @@ def main() -> int:
                     )
 
             page.set_viewport_size({"width": 360, "height": 800})
-            _assert_mobile_scroll(page)
+            mobile.extend(_assert_mobile_scroll(page))
             if args.screenshot_dir:
                 for index, wrapper in enumerate(page.locator(".tenkz-equation").all(), 1):
                     wrapper.screenshot(
@@ -157,7 +203,11 @@ def main() -> int:
     assert all(fact["directChildren"] for fact in collected), collected
     assert not any(fact["insideMathJax"] for fact in collected), collected
     assert not any(fact["visibleRawSource"] for fact in collected), collected
-    print(json.dumps({"equations": len(collected), "picture_counts": picture_counts}))
+    print(json.dumps({
+        "equations": len(collected),
+        "picture_counts": picture_counts,
+        "mobile": mobile,
+    }))
     return 0
 
 

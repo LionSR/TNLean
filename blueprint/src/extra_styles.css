@@ -44,7 +44,10 @@ div.proof_content {
 /* A text-mode tensor-network equation keeps each SVG outside MathJax while
  * laying the pictures and their operator text out as one equation row. */
 .tenkz-equation {
+	width: 100%;
+	min-width: 0;
 	max-width: 100%;
+	contain: inline-size;
 	overflow-x: auto;
 	margin: .6rem auto;
 }
