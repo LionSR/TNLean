@@ -11,7 +11,7 @@ import TNLean.Algebra.OrthogonalProjection
 # Support projections of finite Hermitian matrices
 
 This file defines the spectral support projection for a Hermitian matrix on an
-arbitrary finite index type. Its positive-semidefinite and `Fin`-indexed APIs
+arbitrary finite index type. Its positive-semidefinite and `Fin`-indexed versions
 are specializations of that construction.
 
 ## Main declarations
