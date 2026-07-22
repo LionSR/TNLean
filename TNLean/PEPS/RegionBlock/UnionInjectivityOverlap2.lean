@@ -54,23 +54,6 @@ variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
 
-/-! ### `P₀ ⊆ R₂ᶜ`: the right geometry red block contains the difference block
-
-In the right geometry `overlapRightGeometry R₁ R₂` the red block is `R₂ᶜ`, the blue
-block is the overlap `R₁ ∩ R₂`, and the complement block is `R₂ \ R₁`. The difference
-block `P₀ = R₁ \ R₂` lies inside `R₂ᶜ = red`, so every internal `P₁`--`P₀` edge has one
-endpoint in the blue block and one in the red block: it is a blue/red crossing edge of
-the right geometry. -/
-
-omit [LinearOrder V] [DecidableRel G.Adj] in
-/-- The difference block `R₁ \ R₂` lies inside the right geometry red block `R₂ᶜ`. -/
-theorem overlapRightGeometry_sdiff_subset_red (R₁ R₂ : Finset V) :
-    R₁ \ R₂ ⊆ (overlapRightGeometry (V := V) R₁ R₂).red := by
-  rw [overlapRightGeometry_red]
-  intro v hv
-  rw [Finset.mem_sdiff] at hv ⊢
-  exact ⟨Finset.mem_univ _, hv.2⟩
-
 /-! ### The right geometry blue-side host-weight collapse
 
 The right geometry `g := overlapRightGeometry R₁ R₂` has host `univ \ g.red = R₂`, blue
@@ -167,8 +150,7 @@ the right geometry's host `R₂` boundary (`P₁ ⊆ R₂`, `P₀ ∩ R₂ = ∅
 `R₂` boundary edges with both endpoints in `R₁`.
 
 In the right geometry these are blue/red crossing edges: the overlap `P₁` is the blue
-block, and `P₀ = R₁ \ R₂` lies inside the red block `R₂ᶜ`
-(`overlapRightGeometry_sdiff_subset_red`). -/
+block, and `P₀ = R₁ \ R₂` lies inside the red block `R₂ᶜ`. -/
 
 /-- An edge is a `P₁`--`P₀` crossing edge when exactly one endpoint lies in the overlap
 `R₁ ∩ R₂` and the other lies in the difference `R₁ \ R₂`. Both endpoints lie in `R₁`. -/
@@ -186,27 +168,6 @@ theorem isOverlapCrossingEdge_both_mem_R₁ {R₁ R₂ : Finset V} {eg : Edge G}
   rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · exact ⟨(Finset.mem_inter.mp h1).1, (Finset.mem_sdiff.mp h2).1⟩
   · exact ⟨(Finset.mem_sdiff.mp h1).1, (Finset.mem_inter.mp h2).1⟩
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- A `P₁`--`P₀` crossing edge is a boundary edge of `R₂`: its overlap endpoint lies in
-`R₂` while its difference endpoint lies outside `R₂`. -/
-theorem isRegionBoundaryEdge_R₂_of_overlapCrossing {R₁ R₂ : Finset V} {eg : Edge G}
-    (h : IsOverlapCrossingEdge (G := G) R₁ R₂ eg) :
-    IsRegionBoundaryEdge (G := G) R₂ eg := by
-  rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · exact Or.inl ⟨(Finset.mem_inter.mp h1).2, (Finset.mem_sdiff.mp h2).2⟩
-  · exact Or.inr ⟨(Finset.mem_sdiff.mp h1).2, (Finset.mem_inter.mp h2).2⟩
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- A `P₁`--`P₀` crossing edge is not a boundary edge of `R₁`: both endpoints lie in
-`R₁`. -/
-theorem not_isRegionBoundaryEdge_R₁_of_overlapCrossing {R₁ R₂ : Finset V} {eg : Edge G}
-    (h : IsOverlapCrossingEdge (G := G) R₁ R₂ eg) :
-    ¬ IsRegionBoundaryEdge (G := G) R₁ eg := by
-  obtain ⟨h1, h2⟩ := isOverlapCrossingEdge_both_mem_R₁ (G := G) h
-  rintro (⟨_, h2'⟩ | ⟨h1', _⟩)
-  · exact h2' h2
-  · exact h1' h1
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A `P₁`--`P₀` crossing edge is not a boundary edge of the union `R₁ ∪ R₂`: both
