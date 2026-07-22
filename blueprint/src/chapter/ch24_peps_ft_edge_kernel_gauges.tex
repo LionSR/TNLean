@@ -859,8 +859,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
     \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
     \leanok
-    \uses{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
-    The rotated counterpart of
+    The coordinate-swap counterpart of
     Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}.
     Under the same hypotheses on $A$ and $B$, for a translated vertical interior
     frame with two rows and two columns of margin, that is $2\le x_0$,
@@ -873,7 +872,11 @@ produces the global gauge family that relates the two tensors.
     bond-dimension equality on $e$.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}
+    \lean{TNLean.PEPS.Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeRed}
+    \lean{TNLean.PEPS.Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeBlue}
+    \leanok
+    \uses{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
     Interchange the two lattice coordinates. This graph isomorphism sends the
     vertical translated frame to the horizontal translated frame, transposes the
     rectangular injectivity hypotheses, and sends the distinguished vertical edge

@@ -113,7 +113,7 @@ theorem isCrossingEdge_normalSquareHorizontalTranslatedEdge
 /-- **The red-to-blue crossings of the translated vertical edge blocking are the
 single distinguished edge.**
 
-The rotated counterpart of
+The coordinate-swap counterpart of
 `isCrossingEdge_normalSquareHorizontalTranslatedEdge`.  The red block (the removed
 horizontal edge block) occupies the three columns `xStart + 2, …, xStart + 4` and the
 two rows `yStart, yStart + 1`; the blue block (the removed vertical edge block)
