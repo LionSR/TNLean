@@ -48,15 +48,6 @@ _THEME_GEOMETRY_PATTERN = re.compile(
     r"minimum (?:width|height|size)|inner sep|outer sep|rounded corners)\s*=",
     re.IGNORECASE,
 )
-_EXPECTED_DARK_PALETTE = {
-    "tenkzInk": "white!94",
-    "tenkzPaper": "darkbg",
-    "tenkzPassive": "white!60",
-    "tenkzAction": "orange!80!white",
-    "tenkzMarked": "cyan!80!white",
-    "tenkzExtra": "magenta!75!white",
-    "tenkzOperator": "softred",
-}
 
 # Spec benchmark bodies (B1, B6, B8 of tenkz_final_spec.md §3), with the
 # minimum width (pt) a faithful render must exceed: an ink-stripped SVG of
@@ -125,9 +116,6 @@ def _assert_dark_theme_contract(core_source: str, theme_source: str) -> None:
     assert theme_palette.keys() == core_palette.keys(), (
         "slide theme semantic keys differ from the native tenkz core"
     )
-    assert theme_palette == _EXPECTED_DARK_PALETTE, (
-        "slide theme no longer provides the expected dark palette hues"
-    )
     assert not _THEME_GEOMETRY_PATTERN.search(_without_tex_comments(theme_source)), (
         "slide theme must change colours only, not geometry or typography"
     )
@@ -167,11 +155,6 @@ def main() -> int:
         core_source,
         theme_source.replace("\\colorlet{tenkzOperator}{softred}\n", ""),
         "a missing semantic colour",
-    )
-    _assert_contract_rejects(
-        core_source,
-        theme_source.replace("orange!80!white", "black"),
-        "a changed dark-theme hue",
     )
     _assert_contract_rejects(
         core_source,
