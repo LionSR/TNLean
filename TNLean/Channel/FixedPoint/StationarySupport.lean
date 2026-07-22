@@ -5,8 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
-import TNLean.MPS.Core.OrthogonalProjectionInvariance
-import TNLean.MPS.Irreducible.FixedPointProjection
+import TNLean.Channel.FixedPoint.SupportInvariance
 
 /-!
 # Stationary support for irreducible channels
@@ -51,23 +50,10 @@ theorem support_proj_fixed
         MPSTensor.supportProj (D := D) ρ hρ_psd =
       E (MPSTensor.supportProj (D := D) ρ hρ_psd * X *
         MPSTensor.supportProj (D := D) ρ hρ_psd) := by
-  obtain ⟨r, K, hK⟩ := hE.cp
-  have hE_eq_transfer : E = MPSTensor.transferMap (d := r) (D := D) K := by
-    ext1 X
-    simp only [MPSTensor.transferMap_apply]
-    exact hK X
-  have hρ_fix' : MPSTensor.transferMap (d := r) (D := D) K ρ = ρ := by
-    simpa [hE_eq_transfer] using hρ_fix
-  let P : Mat := MPSTensor.supportProj (D := D) ρ hρ_psd
-  have hP_data :
-      IsOrthogonalProjection P ∧
-        (∀ i : Fin r, (1 - P) * K i * P = 0) := by
-    simpa [P] using
-      (MPSTensor.lowerZero_of_posSemidef_fixedPoint
-        (d := r) (D := D) K ρ hρ_psd hρ_fix')
+  have hInv :=
+    Kraus.invariantCompression_of_supportProj_fixed_by_cpMap hE.cp hρ_psd hρ_fix
   intro X
-  rw [hE_eq_transfer]
-  simpa [P] using MPSTensor.lowerZero_implies_invariance K P hP_data.1 hP_data.2 X
+  simpa [Kraus.stationaryProj, MPSTensor.supportProj] using hInv.2 X
 
 /-- Chosen stationary state of an irreducible channel. -/
 noncomputable def stationaryState

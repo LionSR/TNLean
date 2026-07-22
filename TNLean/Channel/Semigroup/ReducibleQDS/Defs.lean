@@ -7,7 +7,7 @@ import TNLean.Channel.Semigroup.LindbladForm
 import TNLean.Channel.Semigroup.Kernel
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.FixedPoint.Cesaro
-import TNLean.MPS.Irreducible.FixedPointProjection
+import TNLean.Algebra.OrthogonalProjection
 
 /-!
 # Reducible Quantum Dynamical Semigroups — Wolf Proposition 7.6

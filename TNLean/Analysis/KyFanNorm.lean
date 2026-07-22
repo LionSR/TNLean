@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.PosDef
+import TNLean.Algebra.PosSemidefSupport
 
 /-!
 # Sum of the largest eigenvalues of a Hermitian matrix (Ky Fan's principle)
@@ -277,57 +278,6 @@ theorem trace_eigenvectorUnitary_diagonal_mul (hA : A.IsHermitian) (w : n → �
   rw [key, Matrix.trace_mul_cycle, ← Matrix.mul_assoc, hU, Matrix.one_mul,
     hD, Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal]
   rfl
-
-/-- The conjugate by the eigenvector unitary of a `0/1` diagonal indicator is
-Hermitian. -/
-theorem eigenvectorUnitary_indicator_isHermitian (hA : A.IsHermitian) (S : Finset n) :
-    ((hA.eigenvectorUnitary : Matrix n n ℂ) *
-      Matrix.diagonal (fun i => if i ∈ S then (1 : ℂ) else 0) *
-      (star (hA.eigenvectorUnitary : Matrix n n ℂ))).IsHermitian := by
-  set U := (hA.eigenvectorUnitary : Matrix n n ℂ)
-  have hWh : (Matrix.diagonal (fun i => if i ∈ S then (1 : ℂ) else 0))ᴴ
-      = Matrix.diagonal (fun i => if i ∈ S then (1 : ℂ) else 0) := by
-    rw [Matrix.diagonal_conjTranspose]
-    congr 1; ext i; by_cases hi : i ∈ S <;> simp [hi]
-  unfold Matrix.IsHermitian
-  simp only [Matrix.conjTranspose_mul, Matrix.star_eq_conjTranspose,
-    Matrix.conjTranspose_conjTranspose, hWh, Matrix.mul_assoc]
-
-/-- The conjugate by the eigenvector unitary of a `0/1` diagonal indicator is
-idempotent. -/
-theorem eigenvectorUnitary_indicator_idem (hA : A.IsHermitian) (S : Finset n) :
-    let P := (hA.eigenvectorUnitary : Matrix n n ℂ) *
-      Matrix.diagonal (fun i => if i ∈ S then (1 : ℂ) else 0) *
-      (star (hA.eigenvectorUnitary : Matrix n n ℂ))
-    P * P = P := by
-  intro P
-  set U := (hA.eigenvectorUnitary : Matrix n n ℂ) with hUdef
-  set W := Matrix.diagonal (fun i => if i ∈ S then (1 : ℂ) else 0) with hW
-  have hU : (star U) * U = 1 := by
-    have := (hA.eigenvectorUnitary).2
-    rw [Matrix.mem_unitaryGroup_iff'] at this
-    exact this
-  have hWW : W * W = W := by
-    rw [hW, Matrix.diagonal_mul_diagonal]
-    congr 1; ext i; by_cases hi : i ∈ S <;> simp [hi]
-  change (U * W * star U) * (U * W * star U) = U * W * star U
-  simp only [Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc (star U) U (W * star U), hU, Matrix.one_mul,
-    ← Matrix.mul_assoc W W (star U), hWW]
-
-/-- The trace of the conjugated `0/1` indicator equals the size of the index set:
-the rank of the resulting projection. -/
-theorem eigenvectorUnitary_indicator_trace (hA : A.IsHermitian) (S : Finset n) :
-    Matrix.trace ((hA.eigenvectorUnitary : Matrix n n ℂ) *
-      Matrix.diagonal (fun i => if i ∈ S then (1 : ℂ) else 0) *
-      (star (hA.eigenvectorUnitary : Matrix n n ℂ))) = (S.card : ℂ) := by
-  set U := (hA.eigenvectorUnitary : Matrix n n ℂ) with hUdef
-  have hU : (star U) * U = 1 := by
-    have := (hA.eigenvectorUnitary).2
-    rw [Matrix.mem_unitaryGroup_iff'] at this
-    exact this
-  rw [Matrix.trace_mul_cycle, hU, Matrix.one_mul, Matrix.trace_diagonal]
-  rw [Finset.sum_ite_mem, Finset.univ_inter, Finset.sum_const, nsmul_eq_mul, mul_one]
 
 /-- **Achievability half of the Ky-Fan maximum principle** (Wolf Ch. 3, Lemma 3.1).
 There is an orthogonal projection `P` (Hermitian, idempotent) of rank

@@ -221,6 +221,7 @@ import TNLean.Channel.FixedPoint.DirectSumBlockPermutation
 import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.StationaryProjection
+import TNLean.Channel.FixedPoint.SupportInvariance
 import TNLean.Channel.FixedPoint.CornerFixedPoints
 import TNLean.Channel.FixedPoint.MaximalRank
 import TNLean.Channel.FixedPoint.MaximalSupportBasic

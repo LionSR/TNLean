@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.PerronFrobenius.Existence
-import TNLean.MPS.Irreducible.FixedPointProjection
+import TNLean.Algebra.PosSemidefSupport
 
 /-!
 # Similarity preserves irreducibility
@@ -20,7 +20,6 @@ an invariant projection for `E`.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
-open MPSTensor
 
 variable {D : ℕ}
 
@@ -34,93 +33,6 @@ noncomputable def similarityMap (C : Matrix (Fin D) (Fin D) ℂ)
     simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
   map_smul' a X := by
     simp [Matrix.mul_assoc]
-
-private noncomputable def supportInv
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    Matrix (Fin D) (Fin D) ℂ :=
-  let hH : ρ.IsHermitian := hρ.isHermitian
-  let U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
-  let invEig : Fin D → ℂ := fun i =>
-    if 0 < hH.eigenvalues i then ↑(1 / hH.eigenvalues i) else 0
-  U * Matrix.diagonal invEig * Uᴴ
-
-private lemma supportProj_eq_mul_supportInv
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    supportProj (D := D) ρ hρ = ρ * supportInv (D := D) ρ hρ := by
-  classical
-  let hH : ρ.IsHermitian := hρ.isHermitian
-  set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
-  set sgn : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
-  set invEig : Fin D → ℂ := fun i =>
-    if 0 < hH.eigenvalues i then ↑(1 / hH.eigenvalues i) else 0
-  have hUU : Uᴴ * U = 1 := by
-    simpa [U, Matrix.star_eq_conjTranspose] using
-      Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
-  have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
-      Function.comp_def] using hH.spectral_theorem
-  have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [supportProj, Matrix.PosSemidef.supportProj, U, sgn]
-  have hS_def : supportInv (D := D) ρ hρ = U * Matrix.diagonal invEig * Uᴴ := by
-    simp [supportInv, U, invEig]
-  have hmul : (fun i => (↑(hH.eigenvalues i) : ℂ) * invEig i) = sgn := by
-    ext i
-    by_cases hpos : 0 < hH.eigenvalues i
-    · have hne : hH.eigenvalues i ≠ 0 := ne_of_gt hpos
-      simp [sgn, invEig, hpos, hne]
-    · have hnonneg : 0 ≤ hH.eigenvalues i :=
-        (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ) i
-      have hz : hH.eigenvalues i = 0 := le_antisymm (not_lt.mp hpos) hnonneg
-      simp [sgn, invEig, hz]
-  rw [hP_def, hS_def, hρ_spec]
-  symm
-  rw [Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
-    ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
-    ← Matrix.mul_assoc (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ))),
-    Matrix.diagonal_mul_diagonal, hmul]
-  simp [Matrix.mul_assoc]
-
-private lemma supportInv_isHermitian
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    (supportInv (D := D) ρ hρ).IsHermitian := by
-  classical
-  let hH : ρ.IsHermitian := hρ.isHermitian
-  set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
-  set invEig : Fin D → ℂ := fun i =>
-    if 0 < hH.eigenvalues i then ↑(1 / hH.eigenvalues i) else 0
-  have hstar : star invEig = invEig := by
-    ext i
-    simp only [invEig, Pi.star_apply]
-    split <;> simp
-  change (U * Matrix.diagonal invEig * Uᴴ)ᴴ = U * Matrix.diagonal invEig * Uᴴ
-  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-    Matrix.conjTranspose_conjTranspose, Matrix.diagonal_conjTranspose,
-    hstar, Matrix.mul_assoc]
-
-private lemma supportProj_eq_supportInv_mul
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    supportProj (D := D) ρ hρ = supportInv (D := D) ρ hρ * ρ := by
-  have h := congrArg Matrix.conjTranspose (supportProj_eq_mul_supportInv (D := D) ρ hρ)
-  have hP_herm : (supportProj (D := D) ρ hρ).IsHermitian :=
-    supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ)
-  have hS_herm : (supportInv (D := D) ρ hρ).IsHermitian :=
-    supportInv_isHermitian (D := D) ρ hρ
-  have hρ_herm : ρ.IsHermitian := hρ.isHermitian
-  simpa [Matrix.conjTranspose_mul, hP_herm.eq, hS_herm.eq, hρ_herm.eq] using h
-
-private lemma supportProj_sandwich_eq
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    supportProj (D := D) ρ hρ * X * supportProj (D := D) ρ hρ =
-      ρ * (supportInv (D := D) ρ hρ * X * supportInv (D := D) ρ hρ) * ρ := by
-  calc
-    supportProj (D := D) ρ hρ * X * supportProj (D := D) ρ hρ
-        = (ρ * supportInv (D := D) ρ hρ) * X * supportProj (D := D) ρ hρ := by
-            rw [supportProj_eq_mul_supportInv (D := D) ρ hρ]
-    _ = (ρ * supportInv (D := D) ρ hρ) * X * (supportInv (D := D) ρ hρ * ρ) := by
-      rw [supportProj_eq_supportInv_mul (D := D) ρ hρ]
-    _ = ρ * (supportInv (D := D) ρ hρ * X * supportInv (D := D) ρ hρ) * ρ := by
-      simp [Matrix.mul_assoc]
 
 private lemma not_posDef_of_conj_projection_ne_one
     {Q C : Matrix (Fin D) (Fin D) ℂ}
@@ -195,11 +107,15 @@ theorem isIrreducibleMap_similarity
   let R : Matrix (Fin D) (Fin D) ℂ := C * Q * Cᴴ
   have hR_psd : R.PosSemidef := by
     simpa [R, Matrix.mul_assoc] using hQ_psd.mul_mul_conjTranspose_same C
-  let P : Matrix (Fin D) (Fin D) ℂ := supportProj (D := D) R hR_psd
-  have hP_proj : IsOrthogonalProjection P :=
-    isOrthogonalProjection_supportProj (D := D) (ρ := R) (hρ := hR_psd)
-  have hPR : P * R = R := supportProj_mul (D := D) (ρ := R) hR_psd
-  have hRP : R * P = R := mul_supportProj (D := D) (ρ := R) hR_psd
+  let P : Matrix (Fin D) (Fin D) ℂ := hR_psd.supportProj
+  have hP_proj : IsOrthogonalProjection P := hR_psd.isOrthogonalProjection_supportProj
+  have hPR : P * R = R := hR_psd.supportProj_mul_self
+  have hRP : R * P = R := hR_psd.mul_supportProj_self
+  obtain ⟨S, hPS⟩ := hR_psd.exists_supportProj_eq_mul
+  have hPS_right : P = R * S := by simpa [P] using hPS
+  have hPS_left : P = Sᴴ * R := by
+    have h := congrArg Matrix.conjTranspose hPS_right
+    simpa [Matrix.conjTranspose_mul, hP_proj.1.eq, hR_psd.isHermitian.eq] using h
   have hC_inv_mul : C⁻¹ * C = 1 := Matrix.nonsing_inv_mul C (Ne.isUnit hC)
   have hC_mul_inv : C * C⁻¹ = 1 := Matrix.mul_nonsing_inv C (Ne.isUnit hC)
   have hCstar : Cᴴ.det ≠ 0 := by
@@ -227,12 +143,12 @@ theorem isIrreducibleMap_similarity
   have hP_inv : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       P * E (P * X * P) * P = E (P * X * P) := by
     intro X
-    let S : Matrix (Fin D) (Fin D) ℂ := supportInv (D := D) R hR_psd
-    let Y : Matrix (Fin D) (Fin D) ℂ := Cᴴ * (S * X * S) * C
+    let Y : Matrix (Fin D) (Fin D) ℂ := Cᴴ * (S * X * Sᴴ) * C
     have hPXP : P * X * P = C * (Q * Y * Q) * Cᴴ := by
       calc
-        P * X * P = R * (S * X * S) * R := by
-          simpa [P, S, R] using supportProj_sandwich_eq (D := D) (ρ := R) hR_psd X
+        P * X * P = (R * S) * X * P := by rw [hPS_right]
+        _ = (R * S) * X * (Sᴴ * R) := by rw [hPS_left]
+        _ = R * (S * X * Sᴴ) * R := by simp only [Matrix.mul_assoc]
         _ = C * (Q * Y * Q) * Cᴴ := by
           simp [R, Y, Matrix.mul_assoc]
     have hQY : Q * similarityMap (D := D) C E (Q * Y * Q) * Q =
@@ -285,7 +201,7 @@ theorem isIrreducibleMap_similarity
   · right
     have hR_pd : R.PosDef := by
       by_contra hR_not_pd
-      exact (supportProj_ne_one_of_not_posDef R hR_psd hR_not_pd) (by simpa [P] using hP1)
+      exact hR_psd.supportProj_ne_one_of_not_posDef hR_not_pd (by simpa [P] using hP1)
     by_contra hQ1
     exact not_posDef_of_conj_projection_ne_one (D := D) hQ_proj hQ1 hC hR_pd
 

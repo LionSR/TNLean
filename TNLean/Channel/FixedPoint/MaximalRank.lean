@@ -56,38 +56,13 @@ ranks count the indices with $\lambda_i \neq 0$, which for nonnegative eigenvalu
 the indices with $\lambda_i > 0$. -/
 theorem rank_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
     (stationaryProj hρ_psd).rank = ρ.rank := by
-  classical
-  set hH : ρ.IsHermitian := hρ_psd.isHermitian with hHdef
-  set U : Mat := (hH.eigenvectorUnitary : Mat) with hUdef
-  set sgn : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0 with hsgndef
-  have hUU : Uᴴ * U = 1 := by
-    rw [← Matrix.star_eq_conjTranspose]
-    simp [hUdef]
-  have hdet : Uᴴ.det * U.det = 1 := by
-    rw [← Matrix.det_mul, hUU, Matrix.det_one]
-  have hUH_unit : IsUnit Uᴴ.det :=
-    isUnit_iff_ne_zero.mpr (left_ne_zero_of_mul_eq_one hdet)
-  have hU_unit : IsUnit U.det :=
-    isUnit_iff_ne_zero.mpr (right_ne_zero_of_mul_eq_one hdet)
-  have hconj_rank : ∀ w : Fin D → ℂ,
-      (U * Matrix.diagonal w * Uᴴ).rank = (Matrix.diagonal w).rank := by
-    intro w
-    rw [Matrix.rank_mul_eq_left_of_isUnit_det Uᴴ (U * Matrix.diagonal w) hUH_unit,
-      Matrix.rank_mul_eq_right_of_isUnit_det U (Matrix.diagonal w) hU_unit]
-  have hP_def : stationaryProj hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [stationaryProj, Matrix.PosSemidef.supportProj, hUdef, hsgndef]
-  have hρ_spec : ρ = U * Matrix.diagonal (fun j => (hH.eigenvalues j : ℂ)) * Uᴴ := by
-    simpa [hUdef, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
-      Function.comp_def] using hH.spectral_theorem
-  rw [hP_def, hconj_rank, Matrix.rank_diagonal]
-  conv_rhs => rw [hρ_spec]
-  rw [hconj_rank, Matrix.rank_diagonal]
-  refine Fintype.card_congr (Equiv.subtypeEquivRight fun i => ?_)
-  have hnn : 0 ≤ hH.eigenvalues i := (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd) i
-  by_cases h : 0 < hH.eigenvalues i
-  · simp [hsgndef, h, Complex.ofReal_ne_zero.mpr (ne_of_gt h)]
-  · have h0 : hH.eigenvalues i = 0 := le_antisymm (not_lt.mp h) hnn
-    simp [hsgndef, h0]
+  have hrank_re :=
+    (isOrthogonalProjection_stationaryProj hρ_psd).1.rank_eq_trace_re_of_idem
+      (isOrthogonalProjection_stationaryProj hρ_psd).2
+  have htrace : (stationaryProj hρ_psd).trace = (ρ.rank : ℂ) := by
+    simpa [stationaryProj] using hρ_psd.supportProj_trace
+  rw [htrace] at hrank_re
+  exact_mod_cast hrank_re
 
 /-- **The trace of the support projection is the rank.** In the spectral decomposition
 the support projection is $U\,\mathrm{diag}(\mathbf 1_{\lambda > 0})\,U^{\dagger}$, whose
@@ -95,40 +70,7 @@ trace counts the positive eigenvalues, and for a positive semidefinite matrix th
 is the rank. -/
 theorem trace_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
     (stationaryProj hρ_psd).trace = (ρ.rank : ℂ) := by
-  classical
-  set hH : ρ.IsHermitian := hρ_psd.isHermitian with hHdef
-  set U : Mat := (hH.eigenvectorUnitary : Mat) with hUdef
-  set sgn : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0 with hsgndef
-  have hUU : Uᴴ * U = 1 := by
-    rw [← Matrix.star_eq_conjTranspose]
-    simp [hUdef]
-  have hdet : Uᴴ.det * U.det = 1 := by
-    rw [← Matrix.det_mul, hUU, Matrix.det_one]
-  have hUH_unit : IsUnit Uᴴ.det :=
-    isUnit_iff_ne_zero.mpr (left_ne_zero_of_mul_eq_one hdet)
-  have hU_unit : IsUnit U.det :=
-    isUnit_iff_ne_zero.mpr (right_ne_zero_of_mul_eq_one hdet)
-  have hP_def : stationaryProj hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [stationaryProj, Matrix.PosSemidef.supportProj, hUdef, hsgndef]
-  have hρ_spec : ρ = U * Matrix.diagonal (fun j => (hH.eigenvalues j : ℂ)) * Uᴴ := by
-    simpa [hUdef, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
-      Function.comp_def] using hH.spectral_theorem
-  have hrank : ρ.rank = Fintype.card {i // (hH.eigenvalues i : ℂ) ≠ 0} := by
-    conv_lhs => rw [hρ_spec]
-    rw [Matrix.rank_mul_eq_left_of_isUnit_det Uᴴ
-        (U * Matrix.diagonal fun j => (hH.eigenvalues j : ℂ)) hUH_unit,
-      Matrix.rank_mul_eq_right_of_isUnit_det U
-        (Matrix.diagonal fun j => (hH.eigenvalues j : ℂ)) hU_unit, Matrix.rank_diagonal]
-  rw [hP_def, Matrix.trace_mul_comm, ← Matrix.mul_assoc, hUU, Matrix.one_mul,
-    Matrix.trace_diagonal, hrank, Fintype.card_subtype, hsgndef]
-  rw [Finset.sum_boole]
-  congr 2
-  refine Finset.filter_congr fun i _ => ?_
-  have hnn : 0 ≤ hH.eigenvalues i := (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd) i
-  by_cases h : 0 < hH.eigenvalues i
-  · simp [h, Complex.ofReal_ne_zero.mpr (ne_of_gt h)]
-  · have h0 : hH.eigenvalues i = 0 := le_antisymm (not_lt.mp h) hnn
-    simp [h0]
+  simpa [stationaryProj] using hρ_psd.supportProj_trace
 
 /-- **The support of a fixed point of maximum rank carries every fixed point.** Let $T$
 be a trace-preserving Kraus map and let $\rho$ be a positive semidefinite fixed point of
