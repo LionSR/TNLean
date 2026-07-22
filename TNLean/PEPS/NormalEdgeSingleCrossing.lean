@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.NormalEdgeBlockingInterior
 import TNLean.PEPS.RegionBlock.CoarseThreeSite2
+import TNLean.PEPS.SquareLatticeCoordinateSwap
 
 /-!
 # The single red-to-blue crossing of the translated edge blocking
@@ -131,48 +132,32 @@ theorem isCrossingEdge_normalSquareVerticalTranslatedEdge
         (normalSquareVerticalTranslatedEdgeRed xStart yStart)
         (normalSquareVerticalTranslatedEdgeBlue xStart yStart) g ↔
       g = normalSquareVerticalTranslatedEdge xStart yStart hx hy := by
+  let φ := squareLatticeCoordinateSwap (width := width) (height := height)
+  have htransport :
+      IsCrossingEdge (G := squareLatticeGraph width height) A
+          (normalSquareVerticalTranslatedEdgeRed xStart yStart)
+          (normalSquareVerticalTranslatedEdgeBlue xStart yStart) g ↔
+        IsCrossingEdge (G := squareLatticeGraph height width) (A.transport φ)
+          (normalSquareHorizontalTranslatedEdgeRed yStart xStart)
+          (normalSquareHorizontalTranslatedEdgeBlue yStart xStart) (Edge.map φ g) := by
+    have h := isCrossingEdge_Region_map A φ
+      (normalSquareVerticalTranslatedEdgeRed xStart yStart)
+      (normalSquareVerticalTranslatedEdgeBlue xStart yStart) g
+    rw [Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeRed,
+      Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeBlue] at h
+    exact h.symm
+  rw [htransport,
+    isCrossingEdge_normalSquareHorizontalTranslatedEdge (A.transport φ) hy hx]
   constructor
-  · rintro ⟨hRed, hBlue⟩
-    simp only [IsRegionBoundaryEdge, normalSquareVerticalTranslatedEdgeRed,
-      normalSquareVerticalTranslatedEdgeBlue, mem_squareLatticeContiguousRectangle] at hRed hBlue
-    have hadj := g.2.2
-    rw [squareLatticeGraph_adj, squareLatticeHorizontalNeighbor,
-      squareLatticeVerticalNeighbor] at hadj
-    have hlt : g.1.1.1.1 < g.1.2.1.1 ∨
-        (g.1.1.1.1 = g.1.2.1.1 ∧ g.1.1.2.1 < g.1.2.2.1) := by
-      have hlex : toLex g.1.1 < toLex g.1.2 := g.2.1
-      rw [Prod.Lex.toLex_lt_toLex] at hlex
-      rcases hlex with hxlt | ⟨hxe, hye⟩
-      · exact Or.inl hxlt
-      · exact Or.inr ⟨congrArg Fin.val hxe, hye⟩
-    have hyeq : ∀ {p q : Fin height}, p = q → p.1 = q.1 := fun h => congrArg Fin.val h
-    have hxeq : ∀ {p q : Fin width}, p = q → p.1 = q.1 := fun h => congrArg Fin.val h
-    apply Subtype.ext
-    have hcoord : g.1.1.1.1 = xStart + 2 ∧ g.1.1.2.1 = yStart + 1 ∧
-        g.1.2.1.1 = xStart + 2 ∧ g.1.2.2.1 = yStart + 2 := by
-      rcases hadj with ⟨hrow, hcol⟩ | ⟨hcol, hrow⟩
-      · -- Horizontal step: same row, but red rows and blue rows are disjoint.
-        exfalso
-        have hrow' := hyeq hrow
-        rcases hRed with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩ <;>
-          rcases hBlue with ⟨hb1, hb2⟩ | ⟨hb1, hb2⟩ <;> omega
-      · -- Vertical step: same column, adjacent rows.
-        have hcol' := hxeq hcol
-        rcases hRed with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩ <;>
-          rcases hBlue with ⟨hb1, hb2⟩ | ⟨hb1, hb2⟩ <;> omega
-    obtain ⟨hc1, hc2, hc3, hc4⟩ := hcoord
-    refine Prod.ext (Prod.ext (Fin.ext ?_) (Fin.ext ?_)) (Prod.ext (Fin.ext ?_) (Fin.ext ?_))
-    · simpa only [normalSquareVerticalTranslatedEdge] using hc1
-    · simpa only [normalSquareVerticalTranslatedEdge] using hc2
-    · simpa only [normalSquareVerticalTranslatedEdge] using hc3
-    · simpa only [normalSquareVerticalTranslatedEdge] using hc4
+  · intro h
+    apply (Edge.equiv φ).injective
+    change Edge.map φ g = Edge.map φ
+      (normalSquareVerticalTranslatedEdge xStart yStart hx hy)
+    rw [h]
+    dsimp only [φ]
+    exact (Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hx hy).symm
   · rintro rfl
-    refine ⟨?_, ?_⟩ <;>
-      simp only [IsRegionBoundaryEdge, normalSquareVerticalTranslatedEdgeRed,
-        normalSquareVerticalTranslatedEdgeBlue, normalSquareVerticalTranslatedEdge,
-        mem_squareLatticeContiguousRectangle]
-    · exact Or.inl ⟨⟨by omega, by omega, by omega, by omega⟩, by omega⟩
-    · exact Or.inr ⟨by omega, ⟨by omega, by omega, by omega, by omega⟩⟩
+    exact Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hx hy
 
 /-! ### The single-crossing hypothesis for the interior blocking data
 
