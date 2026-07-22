@@ -121,7 +121,8 @@ table) plus one-off wins from tncalc and tnplain — 26 grafts total, all record
 
 Headline decisions:
 
-- **Package `tenkz`**, 4 environments + 17 commands + ~45 keys, CI-capped API surface.
+- **Package `tenkz`**, five public environments across four sub-languages,
+  17 commands, and 143 leaf keys, measured at the recurring simplification gate.
   Sub-languages: `tenkz` (contraction grid: rows = layers, columns = sites, implicit bonds),
   `tenkzcd` (commutative diagrams: tikz-cd pass-through + `polygon=5` mode + `\tntree` fusion
   trees from bracketing words `(((a\,b)_x c)_y d)_e`), `tenkzlattice` (regions as cell-set
@@ -129,9 +130,10 @@ Headline decisions:
   the only place runtime port assertions remain).
 - **A 3-site periodic MPS word is one body line**; the transfer map is 2 lines with `sandwich`;
   no registration, no catalogue, no figure wrapper. `\tnpic{...}` is the bridge: an inline math
-  atom usable in running math, as a cd object, or as a lattice site skin.
+  atom usable in running math or as a cd object; the lattice sub-language owns its separate
+  `site=dot|none` policy.
 - **`morphism` port type deleted**; arrows live in tenkzcd with their own event species.
-- **Metrics**: one 11mm pitch + 8 documented ratios (each printed with its motivation);
+- **Metrics**: one 11mm pitch + 38 documented ratios (each printed with its motivation);
   profiles are a scale factor and *cannot* be bypassed by literals. Every visual-critique defect
   class is closed at the style/shape layer (junction ≥ 0.9mm, solid insertion ring, `pos=auto`
   label quadrants, dark theme recolors-never-reshapes, `\tndots` the only legal ellipsis).

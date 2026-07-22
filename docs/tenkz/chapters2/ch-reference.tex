@@ -56,10 +56,10 @@ padded with bare wire.
   one-row sugar for \texttt{ket|bra|op|wire} \\
 \texttt{sandwich} & --- & --- &
   \texttt{rows=\{ket, bra\}}, legs paired \\
-\texttt{boundary=} & \texttt{open|none} & \texttt{open} &
-  stubs at the row ends, or sealed \\
+\texttt{boundary=} & \texttt{open|none|}\newline \texttt{periodic} & \texttt{open} &
+  stubs at the row ends, sealed, or each row traced to itself \\
 \texttt{periodic} & --- & --- &
-  trace: each row closed to itself \\
+  compatibility alias for \texttt{boundary=periodic} \\
 \texttt{west label=}, \texttt{east label=} & \meta{math} & --- &
   boundary index at the stub tip \\
 \texttt{west=}, \texttt{east=} & \texttt{open|none|}\newline
@@ -209,6 +209,10 @@ An empty label, \tnval{\textbackslash tn\{\}}, is an anonymous tensor
   span $k$ columns \\
 \texttt{wires=} & \meta{k} & \texttt{1} &
   span and terminate $k$ wire rows (also on \tncmd{tnX}) \\
+\texttt{combined=} & \texttt{west|east} & --- &
+  on a \texttt{wires=}$k$ \tncmd{tn} or \tncmd{tnX}, replace that
+  virtual face by one centred fused stub; on \tncmd{tnfuse}, choose the
+  side of its combined stub \\
 \texttt{legs at=} & \texttt{\{c,\ldots\}} & centre &
   compatibility alias: the same physical ports on both faces \\
 \texttt{up at=}, \texttt{down at=} & \texttt{center|\{c,\ldots\}} & centre &
@@ -697,14 +701,15 @@ endpoints open rather than inventing a return path.
 \cmdsig{\textbackslash begin\{tenkzplanes\}[\meta{keys}]\
 \textbackslash end\{tenkzplanes\}}
 
-Two oblique sheets, ket over bra, with a site-wise pairing leg
-contracting each physical index --- the expectation-value object
-$\langle\Psi|\Psi\rangle$ of a two-dimensional state.  Cells listed
+The preset starts with an oblique ket sheet above an oblique bra sheet.
+A site-wise pairing leg contracts each physical index, giving the
+expectation-value object $\langle\Psi|\Psi\rangle$ of a two-dimensional state.  Cells listed
 in \tnkey{open=} keep their pairing legs dangling; cells listed in
 \tnkey{trace=} close by a wrap loop between the sheets, and trace
-beats open when a cell is listed in both.  The stack is fixed at
-\tnval{sheets=\{ket, bra\}}; anything else warns and draws the
-double layer (\S\ref{ch:trouble}).
+beats open when a cell is listed in both.  Every option is an ordinary
+\tnenv{tenkzlattice} key and overrides the corresponding preset state;
+in particular, \tnkey{sheets=} may replace the default
+\tnval{\{ket, bra\}} stack.
 
 \medskip
 {\footnotesize
@@ -713,8 +718,9 @@ double layer (\S\ref{ch:trouble}).
 \keyhead
 \texttt{rows=}, \texttt{cols=} & \meta{n} & --- &
   the window's extent \\
-\texttt{sheets=} & \texttt{\{ket, bra\}} & \texttt{\{ket, bra\}} &
-  the supported stack \\
+\texttt{sheets=} & \meta{n}\texttt{|}\newline
+  \texttt{\{ket,bra,\ldots\}} & \texttt{\{ket, bra\}} &
+  numeric sheets or a top-to-bottom role stack; overrides the preset stack \\
 \texttt{sheet sep=} & \meta{factor} & house &
   scales the inter-sheet gap \\
 \texttt{open=} & \texttt{\{(r,c),\ldots\}} & --- &

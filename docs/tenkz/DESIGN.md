@@ -28,7 +28,7 @@
 | G16 | Literal-zero migration exit scan | tnplain | §6 |
 | G17 | Lint ban on literal `...`/`\ldots` inside picture bodies (must be `\tndots`) | tnplain | §5.7 |
 | G18 | Region-tracer day-1 fallback (fill mode = per-cell rounded squares; outline restricted to simply-connected sets until the notch algorithm matures) | tnplain | §1.3, §6 |
-| G19 | Governance: hard CI cap on the public API surface + "a new command requires a new grammatical class; a new builder key requires three existing figures it shortens" | tnplain | §2.7 |
+| G19 | Governance: measured public API surface + "a new command requires a new grammatical class; a new builder key requires three existing figures it shortens" | tnplain | §2.7 |
 | G20 | Explicit `tenkzequation` row keeps SVG diagram atoms outside MathJax while retaining copyable operator text | tnplain | §1.5 |
 | G21 | Sugar contract: every sugar and builder expands to primitives with byte-identical event streams | tncalc | §5.2 |
 | G22 | "Why this is a command and not a key" printed per command in the reference chapter | Quartet | §7 |
@@ -42,7 +42,7 @@
 1. **Winner split** (judge-author → Quartet; judges tufte + maintainer → tenkz). Resolved for tenkz on tally and 2/3 majority. Judge-author's preference is substantively honored: Quartet's five distinguishing assets (G1, G2/G3, G9, G10/G11, G23) are grafted, and his four concrete tenkz defects are fixed here — the `\tnfuse` signature contradiction (§2.1), the command-vs-key doctrine contradiction (§2.7), the polygon-mode honesty problem (§2.2), and the compressed Phase-1 hump (§6, split into scripted sub-batches with two gates).
 2. **Engine** (author: xelatex forecloses Lua for the hull tracer; tufte + maintainer: xelatex avoids a book-wide typography gamble). **Resolved: keep xelatex end-to-end** (print and corpus = xelatex; web = xelatex → .xdv → dvisvgm). Two judges explicitly scored this as a tenkz advantage. The tracer is written in expl3 over bounded grids (≤ 12×12) with tnplain's day-1 fallback (G18). Escalation path is Open Question 1.
 3. **Row pairing mechanism** (maintainer offered `rows=` typing *and/or* `\contract{±n}`). **Resolved: `rows=` typing only, no new command.** Adjacent-layer pairing is a row-policy default; the per-cell escape is a `pair=+1|-1|none` key on `\tn`. This keeps the API surface flat and is consistent with the doctrine in §2.7.
-4. **Line-budget governance** (author wanted tnplain's CI cap; tnplain's own 800-line cap was busted by its own table, per judge-maintainer). **Resolved: cap the API, not the line count.** CI enforces exactly 4 environments + 17 exported commands (counted mechanically); per-file line budgets are an advisory CI report. A quantikz-scale grid engine cannot honestly promise 800 lines.
+4. **Line-budget governance** (author wanted tnplain's CI cap; tnplain's own 800-line cap was busted by its own table, per judge-maintainer). **Resolved: measure the API, not the line count.** The shipped surface has five public environments across four sub-languages (the fifth is the `tenkzplanes` preset), 17 exported commands, and 143 leaf keys. The recurring simplification gate records that census; per-file line budgets remain advisory. A quantikz-scale grid engine cannot honestly promise 800 lines.
 5. **Migration regression mechanism** (pixel diff vs event-graph isomorphism). **Resolved: both.** Pixel diff with a whitelisted intentional-fix list (visual critique items) *and* the iso gate (G9); the iso gate is waivable per figure with a one-line justification, same discipline as paper-gap notes.
 
 ---
@@ -55,7 +55,7 @@
 tenkz.sty                 user entry point; version; loads all layers
 tenkz-core.code.tex       L0  /tenkz/ pgfkeys tree; two-layer theme/semantic styles COMPLETED
                               for all styles (closes the 14/31 gap); semantic hue table;
-                              metric system: ONE pitch (11mm) + 8 documented ratios (§4.4);
+                              metric system: ONE pitch (11mm) + 38 documented ratios (§4.4);
                               event stream v2 (.tnlog, expl3 iow, per-picture ids, currfile src);
                               port-type registry (virtual/physical ONLY — morphism deleted);
                               theme scope guard (rejects geometry keys in themes, G14)
@@ -112,7 +112,7 @@ One engine end-to-end: **xelatex** for print and the adopted corpus; **xelatex �
 
 ## 2. Complete public API
 
-**Surface: 4 environments + 17 commands + ~45 documented keys.** CI counts the exports; the cap is hard (G19). Every command's reference entry prints its "why not a key" justification (G22).
+**Surface: five public environments across four sub-languages + 17 commands + 143 documented leaf keys.** The recurring gate counts the surface (G19). Every command's reference entry prints its "why not a key" justification (G22).
 
 ### 2.1 `tenkz` — the contraction grid
 
@@ -444,12 +444,12 @@ Two-layer split: **semantic styles** (what a mark means) bind to **theme slots**
 | `mpo tensor` | `\tn[mpo]` | 0.55pt | operator-layer skin |
 | `peps tensor` | lattice sites, `\tn[peps]` | 0.55pt | leg geometry fixed in L1 (no double-stroke defect) |
 | `fusion map` | `\tnfuse` | 0.55pt | trivalent glyph |
-| `tree junction` | `\tntree` nodes | dot ≥ 0.9mm | = 3.2 × wire width (print floor) |
+| `tree junction` | `\tntree` nodes | dot ≥ 0.9mm | absolute print floor, about 4.7 wire widths |
 | `bond` | virtual wires | 0.55pt | identical stroke to physical (type = direction) |
 | `fused bond` | `:fused` rows, `\tnfuse` output, `\tnjoin[fused]` | doubled 0.55pt | RMP index-bundle convention (G3) |
 | `physical leg` | leg stubs | 0.55pt | length 0.38·pitch |
 | `bond arrow` | `bond dir=` marks | 0.55pt head | MPO orientation (G4) |
-| `trace` | `periodic`/`trace=` arcs | 0.55pt | racetrack, clearance 0.55·pitch |
+| `trace` | `periodic`/`trace=` arcs | 0.55pt | racetrack outside the measured silhouette plus 0.15·pitch daylight |
 | `cut` | `\tncut` | 0.40pt dashed | |
 | `brace` | `\tnspan[brace *]` | 0.40pt | annotation ink |
 | `group region` | `\tnspan[box]`, `\tnregion[group]` | 0.40pt dashed, no fill | one meaning and one measured renderer in grid and free tiers |
@@ -479,7 +479,7 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 | `virtual stub` | 0.45·pitch | long enough to read as an open index, shorter than a bond so a dangling end is never mistaken for a contraction |
 | `daylight` | 0.15·pitch beyond the measured silhouette | pure separation keeps return and annotation ink from fusing with the ink it skirts |
 | `label clearance` | 0.12·pitch | one constant for every quadrant (G7) |
-| `junction diameter` | 3.2 × wire width (≥ 0.9mm) | below 3×, a junction is indistinguishable from a wire crossing at 600 dpi |
+| `junction diameter` | ≥ 0.9mm (about 4.7 × the 0.55pt wire width) | the absolute print floor keeps a junction distinct from a wire crossing |
 | `region margin` (`\tenkz@r@latticemargin`) | 0.27·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
 | `compact` / `inline` | 0.8 scale / em-based scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
 | `map column gap` | max(0.34·pitch, widest map-name band + 2·daylight) | the floor keeps a short composition compact; measured opaque label ink clears both adjacent objects without budgeting glyphs; explicit `column sep=` remains an opt-in override |
@@ -651,7 +651,10 @@ Contexts/role/profile hand-entered metadata and their assert-equal churn (now de
 
 ### 5.9 Key-surface census (2026-07 gate)
 
-142 leaf `/tenkz` pgfkeys, across 14 families — counted by parsing every `/tenkz(...)/.code`, `.store~in`, and `.is~choice` declaration in `tex/tenkz/*.code.tex`, excluding choice-value branches and family roots:
+143 leaf `/tenkz` pgfkeys, across 14 families — counted by collecting direct
+`.code`, `.store~in`, and `.is~choice` leaf declarations and expanding every
+`\tenkz_install_core_forwards:nn` call in `tex/tenkz/*.code.tex`; choice-value
+branches, family roots, and `.unknown` handlers are excluded:
 
 | Family | Leaf keys | Source |
 |---|---:|---|
@@ -659,7 +662,7 @@ Contexts/role/profile hand-entered metadata and their assert-equal churn (now de
 | `/tenkz/grid` | 23 | `tenkz-grid.code.tex` |
 | `/tenkz/cell` | 23 | `tenkz-grid.code.tex` |
 | `/tenkz/span` | 4 | `tenkz-grid.code.tex` |
-| `/tenkz/lattice` | 27 | `tenkz-lattice.code.tex` |
+| `/tenkz/lattice` | 28 | `tenkz-lattice.code.tex` |
 | `/tenkz/region` | 7 | `tenkz-lattice.code.tex` |
 | `/tenkz/edge` | 5 | `tenkz-lattice.code.tex` |
 | `/tenkz/site` | 3 | `tenkz-lattice.code.tex` |
@@ -669,7 +672,7 @@ Contexts/role/profile hand-entered metadata and their assert-equal churn (now de
 | `/tenkz/cd` | 8 | `tenkz-cd.code.tex` |
 | `/tenkz/tree` | 6 | `tenkz-cd.code.tex` |
 | `/tenkz/arrow` | 5 | `tenkz-cd.code.tex` |
-| **total** | **142** | |
+| **total** | **143** | |
 
 For scale, quantikz's public key surface is roughly 40 — tenkz is a wider language by design (four sub-languages, not one), but the ratio is worth carrying forward rather than re-discovering at the next gate. No family here is flagged for removal: this is a measurement, not a verdict. Pruning candidates (a family whose keys have exactly one call site across `tex/tenkz/examples/` and the blueprint chapters) are **0.9-freeze material** — the manual and reference chapter become the binding contract at 0.9 (GOAL.md), and a key still resting on a single call site at that point is the moment to cut it, not before. Record the count at every gate (issue #4158); prune later.
 
@@ -1182,8 +1185,8 @@ both are a name hung off ink.
 keeps a return wire or a brace from fusing visually with the ink it
 skirts.  It clears nothing — what must be cleared is the silhouette's
 business and is measured.  0.15 pitch is about 1.7 mm at the default
-11 mm pitch (roughly three wire widths, so it reads at print size) and
-still about 1 mm at the inline pitch.  It replaces the former
+11 mm pitch (roughly 8.5 of the 0.55 pt wire widths) and still about
+1 mm (roughly 5.3 wire widths) at the inline pitch.  It replaces the former
 `traceclear = 0.30`, which budgeted a worst-case glyph inside a fixed
 drop, and the braces' unnamed 0.20 offset.
 
