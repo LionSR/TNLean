@@ -85,12 +85,12 @@ both K1 and K7.
 | TNBlocking | K1 long blocked word | migrated inline in #4556 with `\tnspan[box]`; declaration removed |
 | TNMPDOBlockedRFPChannels | K1 disjoint blocked factors | migrated inline in #4556 with independent spans; declaration and private factor-chain wrappers removed |
 | TNMPDOTwoSiteBlocking | K1 two-site capability | migrated inline in #4556 without an enclosure, matching `Papers/1606.00608/MPDO_K=MM.png`; declaration removed |
-| TNPEPSEdgeBlockingReduction | K1 blocked row plus K7 graph region | both capabilities supported; catalogue migration remains separate |
-| TNPEPSNormalEdgeBlockingReduction | K1 blocked row halves | supported by independent spans |
+| TNPEPSEdgeBlockingReduction | K1 blocked row plus K7 graph region | migrated inline in #4557 as the exact five-site source graph with named regions, followed by the cyclic blocked word $A'_1,A'_2,A'_3$; declaration and private motif removed |
+| TNPEPSNormalEdgeBlockingReduction | K1 blocked row halves | migrated inline in #4557 as the source $7\times7$ regions followed by three independently customizable blocked tensors; declaration and private motif removed |
 | TNMPDOBNTOperatorTraceClosure | K2 vertical closure | demoted in #4556 to `[O_L(M_\alpha)]_{a,b}=\operatorname{tr}(\widehat M_\alpha^{a_1b_1}\cdots\widehat M_\alpha^{a_Lb_L})`; declaration removed and no generic closure key added |
 | TNAppendixBAdjacentBondProjectors | K7 named subgraph groups | migrated in #4556 as an inline support-location schematic built from named atoms and joins; declaration removed |
 | TNAppendixBPhysicalSupportTransport | K7 overlapping support regions | migrated in #4556 as an inline support-location schematic with symmetric named regions; declaration removed |
-| TNPEPSTorusGeometry | K4 torus identifications | owned by #4396; delivered by PR #4562; no enclosure work remains |
+| TNPEPSTorusGeometry | K4 torus identifications | migrated inline in #4557 using the capability delivered by PR #4562: a $3\times3$ lattice with both coordinate directions traced, six trace events, and boundary $(V,P)=(0,9)$; declaration and private motif removed |
 
 ---
 
@@ -144,9 +144,9 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 | TNCondCOne | 3 | ch12_symmetry, three former calls | migrated inline in #4556 as top-level local intertwining relations | declaration removed; the general gauge comments distinguish the source's unitary specialization |
 | TNCondCTwo | 3 | ch12_symmetry, three former calls | migrated inline in #4556 as doubled-space covariance relations with the bra action `\overline V` | declaration removed |
 | TNPermutationTwistLabeled | 2 before this migration | ch12_symmetry:591,593 | one inline three-panel chain `i \xrightarrow{\sigma_h} \sigma(h)(i) \xrightarrow{\sigma_g} \sigma(g)(\sigma(h)(i))`, with each index on the open upper physical stub | migrated inline in PR #4505; catalogue wrapper removed |
-| TNPEPSVertexInjectivityMap | 2 | ch24_peps_ft_foundations:224; ch24_peps_ft:43 | tenkzfree 5-leg star (`ports={…:virtual, north east:physical}`) `\longmapsto` math vector | needs-judgment (free-tier star) |
+| TNPEPSVertexInjectivityMap | 2 before this migration | ch24_peps_ft_foundations and ch24_peps_ft, former calls | two inline `tenkzfree` maps $\bigotimes_{e\ni v}\C^{D_e}\to\C^d$ with $\ker A_v=0$ and bundled boundary $(V,P)=(1,1)$ | migrated inline in #4557 for arbitrary vertex degree; declaration and private motif removed |
 | TNPEPSNormalRegionsRS | 2 before this migration | ch24_peps_ft_normal_square:91,1232 before this migration | two identical inline pairs of 5-by-5 `tenkzlattice` panels: the eight-cell notched region $R$ and the nine-cell square region $S$, each with boundary $(V,P)=(20,0)$ | migrated inline; declaration and private motif removed |
-| TNPEPSNormalRegionT | 2 | ch24_peps_ft_normal_square:95,1217 | `tenkzlattice` + `\tnregion[slot=selected, label=$T$]{…}` | trivial |
+| TNPEPSNormalRegionT | 2 before this migration | ch24_peps_ft_normal_square, former calls | two inline $6\times5$ `tenkzlattice` panels with exact source cell set $T=(1\mathbin{-}6,1\mathbin{-}5)\setminus((3\mathbin{-}5,1\mathbin{-}2)\cup(2\mathbin{-}3,3\mathbin{-}5))$ and boundary $(V,P)=(22,0)$ | migrated inline in #4557; declaration and private motif removed |
 | TNPEPSGaugeVertexAction | 2 before this migration | ch24_peps_ft_balanced_edge_scalars:206; ch24_peps_ft_foundations:106 before this migration | exact component equations adjacent to the two former call sites | demoted to the exact component equations; catalogue declaration and private motif removed |
 | TNLocalEqualityStep | 2 | ch23_algebraic_ft:409,1646 | `\tnpic[physical=up]{\tn{}&\tnX{#1}&\tn[up=$#3$]{}} = \tnpic[physical=up]{\tn{}&\tnX{#2}&\tn[up=$#3$]{}}` | trivial |
 | TNBoundaryRegrow | 2 at census; 1 before this migration | ch23_algebraic_ft:407 (migrated inline in #4403); ch13_parent_hamiltonian_injective_ground_spaces:638 (migrated here) | `[periodic, physical=up]: \tnX{X'} & \tn[up=$\sigma_1$]{A} & \tn{A} & \tndots & \tn[up=$\sigma_{L+1}$]{A}` + an `$L+1$ sites` brace | migrated inline here as the traced word defining $\Gamma_{L+1}(X')$ |
@@ -165,18 +165,25 @@ The wrapper (`TNEquationRow` around a single `\ensuremath`) draws nothing; Phase
 
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
-| TNPEPSEdgeBlockingReduction | ch24_peps_ft_edge_middle:215 | five-site patch (pentagon graph) with named free-tier regions `\rightsquigarrow` blocked 3-tensor row (`\tnpic` + `\tnspan[box]`) | needs-judgment; K1 and K7 capabilities now exist |
+| TNPEPSEdgeBlockingReduction | ch24_peps_ft_edge_middle, former call | inline `tenkzfree` five-site cycle with chord $(2,5)$ and named regions $A'_1,A'_2,A'_3$, `\rightsquigarrow` the periodic `\tnpic` word $A'_1,A'_2,A'_3$ in source cyclic order | migrated inline in #4557; the legacy order $A'_1,A'_3,A'_2$ was corrected; declaration and private motif removed |
 | TNPEPSInjectiveRegionUnionProof | ch24_peps_ft_normal_union:211 before this migration | four inline `tenkzfree` panels for the two inverse steps and the reinserted intersection, with boundary signatures $(0,3)$, $(4,1)$, $(3,2)$, and $(3,0)$ | migrated inline; declaration and private motif removed |
-| TNPEPSNormalRectangleCover | ch24_peps_ft_normal_square:242 | `tenkzlattice[rows=4, cols=4]` + overlapping `\tnregion[outline]` rectangles | trivial |
-| TNPEPSNormalEdgeComplementTopCollar | ch24_peps_ft_normal_square:517 | two lattice panels with `=`; complement + `slot=collar` regions | trivial |
+| TNPEPSNormalRectangleCover | ch24_peps_ft_normal_square, former call | inline $4\times4$ `tenkzlattice` schematic with independently customizable $2\times3$ and $3\times2$ outlined regions; it makes no cover claim, and the adjacent theorem records the present $T$- and $A_3$-cover obstruction | migrated inline in #4557; declaration and private motif removed |
+| TNPEPSNormalEdgeComplementTopCollar | ch24_peps_ft_normal_square, former call | two inline $7\times5$ lattice panels for the exact formal identity $T\cup C_1\cup C_2=A_3$, with $C_1=(6\mathbin{-}7,1\mathbin{-}3)$ and $C_2=(6\mathbin{-}7,3\mathbin{-}5)$ | migrated inline in #4557 from the source $T$ geometry and formal collar decomposition; declaration and private motif removed |
 | TNPEPSNormalOneSiteSeparation | ch24_peps_ft_normal_square:1173 | two inline 5-by-5 `tenkzlattice` panels; $R=(2\mathbin{-}4,2\mathbin{-}4)\setminus\{(4,4)\}$ and $S=(2\mathbin{-}4,2\mathbin{-}4)$ via region slots, with the present site $v=(4,4)$ marked in both and $R\subset S=R\cup\{v\}$ shown explicitly | migrated inline; no package change |
-| TNPEPSNormalEdgeBlockingReduction | ch24_peps_ft_normal_square:1236 | lattice panel `\rightsquigarrow` blocked grid row | needs-judgment (mixed lattice+grid display); `\tnspan[box]` exists |
-| TNPEPSNormalEdgeBlockingHypotheses | ch24_peps_ft_normal_square:1123 | single lattice panel with hypothesis regions | trivial |
-| TNPEPSNormalBlockingHypotheses | ch24_peps_ft_normal_capstone:33 | nested lattice panels (outer + two inner) with regions | trivial |
-| TNPEPSLatticeState | ch24_peps_ft:15 | `tenkzlattice[rows=3, cols=3, boundary legs, physical=up]` | capability delivered |
-| TNPEPSTorusGeometry | ch24_peps_ft_torus:7 | `tenkzlattice` patch + opposite-boundary trace closures | delivered by #4562 |
+| TNPEPSNormalEdgeBlockingReduction | ch24_peps_ft_normal_square, former call | inline exact $7\times7$ $A_1,A_2,A_3$ source partition `\Rightarrow` a customizable three-tensor `tenkzfree` chain with boundary $(V,P)=(2,3)$ | migrated inline in #4557; declaration and private motif removed |
+| TNPEPSNormalEdgeBlockingHypotheses | ch24_peps_ft_normal_square, former call | inline $7\times7$ lattice with the exact source regions $A_1=(4\mathbin{-}6,2\mathbin{-}3)$, $A_2=(3\mathbin{-}4,4\mathbin{-}6)$, complementary $A_3$, and distinguished edge | migrated inline in #4557 with boundary $(V,P)=(28,0)$; declaration and private motif removed |
+| TNPEPSNormalBlockingHypotheses | ch24_peps_ft_normal_capstone, former call | two inline native displays: the exact edge-blocking partition and the $R\subset S=R\cup\{v\}$ one-site comparison | migrated inline in #4557 as separate source-faithful hypotheses; declaration and private motif removed |
+| TNPEPSLatticeState | ch24_peps_ft, former call | inline finite $3\times3$ `tenkzlattice` with 12 internal virtual contractions, no virtual boundary legs, and nine open physical legs, hence $(V,P)=(0,9)$ | migrated inline in #4557 with a nonempty customizable body; declaration and private motif removed |
+| TNPEPSTorusGeometry | ch24_peps_ft_torus, former call | inline $3\times3$ `tenkzlattice` with west--east and north--south trace closure, six trace events, and boundary $(V,P)=(0,9)$ | migrated inline in #4557 using the both-axis torus capability delivered by PR #4562; declaration and private motif removed |
 
-Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all become `\tnregion` cell-set data (spec §migration table); none survive as coordinates.
+Closeout (#4557): the shared catalogue now has zero `TNPEPS*` declarations,
+and the chapter tree has zero `TNPEPS*` calls.  The PEPS motif file, PEPS-only
+atom and helper wrappers, `peps_three_site` reference fixture, and PEPS-specific
+usage checker and CI flag were removed.  Every replacement environment has a
+nonempty, locally customizable body and an adjacent formula, ink-to-index,
+contraction, boundary, and source verdict.  The seven formerly hand-digitized
+region polygons are represented by `\tnregion` cell sets; none survive as
+coordinates.
 
 ## 5. channel/free genre (16 entries)
 
@@ -194,10 +201,10 @@ Note: the 7 hand-digitized region polygons inside `tn_motifs_peps.tex` all becom
 
 | entry | call site | tenkz spelling sketch | risk |
 |---|---|---|---|
-| TNPEPSStateContraction | ch24_peps_ft:34 | tenkzfree: 5 `\tnput` (pentagon + chord), typed `\tnjoin`s, physical ports open | trivial (verbose) |
+| TNPEPSStateContraction | ch24_peps_ft, former call | inline `tenkzfree` exact five-site cycle $1$--$2$--$3$--$4$--$5$--$1$ with chord $(2,5)$, six contracted virtual indices, and five open physical legs, hence $(V,P)=(0,5)$ | migrated inline in #4557; declaration and private motif removed |
 | TNPEPSInjectiveRegionUnion | ch24_peps_ft_normal_union:204 before this migration | inline `tenkzfree` four-block $K_4$ with six internal virtual contractions and four open physical legs | migrated inline; declaration and private motif removed |
-| TNPEPSLocalTensorStar | ch24_peps_ft_foundations:39 | tenkzfree: one `\tnput[ports={north:virtual, south:virtual, east:virtual, west:virtual, north east:physical}]` star | trivial |
-| TNPEPSVertexScalarBalance | ch24_peps_ft_balanced_edge_scalars:8 | tenkzfree star; `\tnjoin[label=$c_{v,e}$]` per incident edge | trivial |
+| TNPEPSLocalTensorStar | ch24_peps_ft_foundations, former call | inline `tenkzfree` representative fan for the first, a typical, and the last incident edge, with intervening edges suppressed and exact arbitrary-degree signature $(V,P)=(\deg(v),1)$ | migrated inline in #4557; declaration and private motif removed |
+| TNPEPSVertexScalarBalance | ch24_peps_ft_balanced_edge_scalars, former call | inline `tenkzfree` arbitrary-degree representative fan with endpoint-scalar rings and adjacent exact condition $\prod_{e\ni v}c_{v,e}=1$ | migrated inline in #4557 with signature $(V,P)=(\deg(v),1)$; declaration and private motif removed |
 | TNPEPSEdgeGaugeAbsorption | ch24_peps_ft_edge_kernel_gauges:848 before this migration | exact component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
 | TNPEPSGaugeCancellation | ch24_peps_ft_foundations:177 before this migration | exact component equation adjacent to the former call site | demoted to the exact component equation; catalogue declaration and private motif removed |
 | TNPEPSTINormalGaugeAbsorption | ch24_peps_ft_normal_square:1251 before this migration | inline tenkzfree: square tensor star `=` gauge-dressed star | migrated inline; catalogue declaration and private motif removed |
