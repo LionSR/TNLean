@@ -139,16 +139,20 @@ theorem virtualPairMatrices_comm
       (sectorPairInclusion (dim := dim) j)
       (sectorPairInclusion (dim := dim) k)
       (h.sectorVirtualBondMatrix j) (h.sectorVirtualBondMatrix k) horth]
-    symm
     have horth' :
         (sectorPairInclusion (dim := dim) k)ᴴ *
             sectorPairInclusion (dim := dim) j = 0 :=
       Matrix.sigmaBlockInclusion_conjTranspose_mul_of_ne
         (fun l ↦ Fin (dim l) × Fin (dim l)) (fun hkj ↦ hjk hkj.symm)
-    exact appendixB_rightTransportedPairMatrix_mul_left_eq_zero_of_orthogonal
-      (sectorPairInclusion (dim := dim) k)
-      (sectorPairInclusion (dim := dim) j)
-      (h.sectorVirtualBondMatrix k) (h.sectorVirtualBondMatrix j) horth'
+    have hreverseProduct :
+        appendixBRightPairMatrix (h.embeddedSectorVirtualBondMatrix k) *
+            appendixBLeftPairMatrix (h.embeddedSectorVirtualBondMatrix j) = 0 := by
+      simp only [embeddedSectorVirtualBondMatrix]
+      exact appendixB_rightTransportedPairMatrix_mul_left_eq_zero_of_orthogonal
+        (sectorPairInclusion (dim := dim) k)
+        (sectorPairInclusion (dim := dim) j)
+        (h.sectorVirtualBondMatrix k) (h.sectorVirtualBondMatrix j) horth'
+    simpa only [embeddedSectorVirtualBondMatrix] using hreverseProduct.symm
 
 /-- The common physical isometry belonging to simultaneous Appendix B data.
 
