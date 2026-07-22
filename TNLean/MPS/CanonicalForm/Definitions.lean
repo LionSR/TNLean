@@ -58,15 +58,14 @@ The TN-Review formulation (`Papers/2011.12127/TN-Review-main.tex:1827-1830`)
 "the transfer operator is a primitive channel" is the same clause and is not
 duplicated.
 
-## Connections to existing strong predicates
+## Connections to existing predicates
 
-A connection is intentionally not provided here:
-
-* A BNT connection `IsCPSVBasisOfNormalTensors.of_isBNT` would require the implication
-  `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
-  block injectivity to the CPSV16 conditions of no nontrivial invariant projection,
-  unit spectral radius, and unique peripheral eigenvalue. That equivalence requires
-  Wielandt-style spectral arguments not developed at this layer.
+The separate module `TNLean.MPS.BNT.Bridge` provides the source-faithful one-way
+implication `IsCPSVBasisOfNormalTensors.isBNT`, using the proved implication
+`IsNormalTensor.isNormal` on each positive-dimensional block.  The converse is
+intentionally absent: algebraic eventual block injectivity does not by itself
+supply the spectral-radius-one normalization and peripheral-spectrum data stored
+by `IsNormalTensor`.
 
 ## Style
 
