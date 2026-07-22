@@ -362,14 +362,6 @@ variable {D : ℕ}
 noncomputable def supportProj (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     Matrix (Fin D) (Fin D) ℂ := hρ.supportProj
 
-/-- The `Fin`-indexed support projection is Hermitian. -/
-theorem supportProj_isHermitian (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    (supportProj ρ hρ).IsHermitian := hρ.supportProj_isHermitian
-
-/-- The `Fin`-indexed support projection is idempotent. -/
-theorem supportProj_idem (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    supportProj ρ hρ * supportProj ρ hρ = supportProj ρ hρ := hρ.supportProj_idem
-
 /-- The `Fin`-indexed support projection is orthogonal. -/
 theorem isOrthogonalProjection_supportProj (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosSemidef) : IsOrthogonalProjection (supportProj ρ hρ) :=
