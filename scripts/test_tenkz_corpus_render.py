@@ -299,6 +299,37 @@ Path(sys.argv[-1] + '.png').write_bytes(
         if (malformed_marker / "keep.txt").read_text(encoding="utf-8") != "user data\n":
             raise AssertionError("malformed-marker output directory was changed")
 
+        raced_output = work / "raced-output"
+        raced_output.mkdir()
+        original_write_manifests = render.write_manifests
+
+        def populate_destination_during_render(
+            stage: Path,
+            census: list[tuple[str, int]],
+            pngs: list[Path],
+        ) -> None:
+            original_write_manifests(stage, census, pngs)
+            (raced_output / "keep.txt").write_text("concurrent user data\n", encoding="utf-8")
+
+        with mock.patch.dict(
+            os.environ, {"FAKE_RENDER_VERSION": "race", "FAKE_RENDER_FAIL": ""}
+        ), mock.patch.object(
+            render, "require_tool", side_effect=lambda name: str(bin_dir / name)
+        ), mock.patch.object(
+            render, "write_manifests", side_effect=populate_destination_during_render
+        ):
+            try:
+                render.render_corpus(input_dir, raced_output, [])
+            except render.RenderError as exc:
+                if "changed while rendering" not in str(exc):
+                    raise AssertionError(f"race refusal was not explicit: {exc}") from exc
+            else:
+                raise AssertionError("destination populated during rendering was replaced")
+        if (raced_output / "keep.txt").read_text(encoding="utf-8") != (
+            "concurrent user data\n"
+        ):
+            raise AssertionError("concurrent user data was changed or deleted")
+
         restore_output = work / "restore-output"
         missing_stage = work / "missing-stage"
         restore_output.mkdir()

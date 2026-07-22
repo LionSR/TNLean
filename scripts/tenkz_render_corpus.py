@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
 import os
 import re
@@ -12,12 +13,15 @@ import stat
 import subprocess
 import sys
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Iterator
 
 
 DPI = 200
 MARKER_NAME = ".tenkz-corpus-render"
 MARKER_CONTENT = "tenkz-corpus-render-v1\n"
+_UNSET = object()
 
 
 class RenderError(RuntimeError):
@@ -42,6 +46,82 @@ def has_valid_ownership_marker(output_dir: Path) -> bool:
         return False
 
 
+def destination_snapshot(output_dir: Path) -> tuple[tuple[object, ...], ...] | None:
+    """Capture enough identity metadata to detect a destination changed during rendering."""
+    try:
+        root_status = output_dir.lstat()
+    except FileNotFoundError:
+        return None
+    except OSError as exc:
+        raise RenderError(f"cannot inspect render destination {output_dir}: {exc}") from exc
+
+    entries: list[tuple[object, ...]] = [
+        (".", root_status.st_mode, root_status.st_dev, root_status.st_ino,
+         root_status.st_size, root_status.st_mtime_ns, "")
+    ]
+    try:
+        for root, directories, files in os.walk(output_dir, followlinks=False):
+            directories.sort()
+            files.sort()
+            root_path = Path(root)
+            for name in [*directories, *files]:
+                path = root_path / name
+                status = path.lstat()
+                target = os.readlink(path) if stat.S_ISLNK(status.st_mode) else ""
+                entries.append(
+                    (
+                        path.relative_to(output_dir).as_posix(),
+                        status.st_mode,
+                        status.st_dev,
+                        status.st_ino,
+                        status.st_size,
+                        status.st_mtime_ns,
+                        target,
+                    )
+                )
+    except OSError as exc:
+        raise RenderError(f"cannot snapshot render destination {output_dir}: {exc}") from exc
+    return tuple(entries)
+
+
+@contextmanager
+def destination_lock(output_dir: Path) -> Iterator[None]:
+    """Serialize cooperating installers for one destination without replacing the lock inode."""
+    lock = output_dir.parent / f".{output_dir.name}.install.lock"
+    flags = os.O_RDWR | os.O_CREAT | os.O_NONBLOCK
+    flags |= getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(lock, flags, 0o600)
+    except OSError as exc:
+        raise RenderError(f"cannot open render destination lock {lock}: {exc}") from exc
+    try:
+        if not stat.S_ISREG(os.fstat(descriptor).st_mode):
+            raise RenderError(f"render destination lock is not a regular file: {lock}")
+        try:
+            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise RenderError(f"another render is installing at {output_dir}") from exc
+        yield
+    finally:
+        os.close(descriptor)
+
+
+def validate_output_dir(output_dir: Path) -> None:
+    if output_dir.is_symlink():
+        raise RenderError(f"output directory must not be a symlink: {output_dir}")
+    if output_dir.exists() and not output_dir.is_dir():
+        raise RenderError(f"output path exists and is not a directory: {output_dir}")
+    if (
+        output_dir.exists()
+        and any(output_dir.iterdir())
+        and not has_valid_ownership_marker(output_dir)
+    ):
+        raise RenderError(
+            f"refusing to replace nonempty directory without a valid regular "
+            f"{MARKER_NAME}: {output_dir}"
+        )
+
+
 def validate_paths(input_dir: Path, output_dir: Path, protected: list[Path]) -> None:
     if not input_dir.is_dir():
         raise RenderError(f"input directory does not exist: {input_dir}")
@@ -56,19 +136,7 @@ def validate_paths(input_dir: Path, output_dir: Path, protected: list[Path]) -> 
         raise RenderError("input and output directories must not contain one another")
     if output_dir in protected:
         raise RenderError(f"refusing to replace protected directory: {output_dir}")
-    if output_dir.is_symlink():
-        raise RenderError(f"output directory must not be a symlink: {output_dir}")
-    if output_dir.exists() and not output_dir.is_dir():
-        raise RenderError(f"output path exists and is not a directory: {output_dir}")
-    if (
-        output_dir.exists()
-        and any(output_dir.iterdir())
-        and not has_valid_ownership_marker(output_dir)
-    ):
-        raise RenderError(
-            f"refusing to replace nonempty directory without a valid regular "
-            f"{MARKER_NAME}: {output_dir}"
-        )
+    validate_output_dir(output_dir)
 
 
 def require_tool(name: str) -> str:
@@ -168,7 +236,31 @@ def write_manifests(stage: Path, census: list[tuple[str, int]], pngs: list[Path]
     (stage / "SHA256SUMS").write_text("\n".join(checksum_lines) + "\n", encoding="utf-8")
 
 
-def install_stage(stage: Path, output_dir: Path) -> None:
+def install_stage(
+    stage: Path,
+    output_dir: Path,
+    expected: tuple[tuple[object, ...], ...] | None | object = _UNSET,
+) -> None:
+    with destination_lock(output_dir):
+        install_stage_locked(stage, output_dir, expected)
+
+
+def install_stage_locked(
+    stage: Path,
+    output_dir: Path,
+    expected: tuple[tuple[object, ...], ...] | None | object,
+) -> None:
+    if expected is _UNSET:
+        validate_output_dir(output_dir)
+        expected = destination_snapshot(output_dir)
+    else:
+        current = destination_snapshot(output_dir)
+        if current != expected:
+            raise RenderError(
+                f"render destination changed while rendering; refusing to replace it: {output_dir}"
+            )
+        validate_output_dir(output_dir)
+
     backup = output_dir.parent / f".{output_dir.name}.previous.{os.getpid()}"
     if backup.exists():
         raise RenderError(f"stale render backup blocks installation: {backup}")
@@ -179,6 +271,21 @@ def install_stage(stage: Path, output_dir: Path) -> None:
             output_dir.rename(backup)
         except OSError as exc:
             raise RenderError(f"cannot stage prior baseline at {backup}: {exc}") from exc
+
+        actual = destination_snapshot(backup)
+        if actual != expected:
+            try:
+                backup.rename(output_dir)
+            except OSError as restore_exc:
+                raise RenderError(
+                    f"render destination changed while rendering; concurrent data is retained "
+                    f"at {backup}, but restoring it to {output_dir} failed: {restore_exc}"
+                ) from restore_exc
+            raise RenderError(
+                f"render destination changed while rendering; refusing to replace it: {output_dir}"
+            )
+    elif expected is not None:
+        raise RenderError(f"render destination changed while rendering: {output_dir}")
 
     try:
         stage.rename(output_dir)
@@ -216,6 +323,9 @@ def render_corpus(input_dir: Path, output_dir: Path, protected: list[Path]) -> t
     pdftocairo = require_tool("pdftocairo")
     pdfs = compiled_pdfs(input_dir)
     output_dir.parent.mkdir(parents=True, exist_ok=True)
+    with destination_lock(output_dir):
+        validate_paths(input_dir, output_dir, protected)
+        expected_output = destination_snapshot(output_dir)
     stage = Path(
         tempfile.mkdtemp(prefix=f".{output_dir.name}.staging.", dir=output_dir.parent)
     )
@@ -233,7 +343,7 @@ def render_corpus(input_dir: Path, output_dir: Path, protected: list[Path]) -> t
                 render_page(pdf, page, destination, pdftocairo)
                 pngs.append(destination)
         write_manifests(stage, census, pngs)
-        install_stage(stage, output_dir)
+        install_stage(stage, output_dir, expected_output)
     except Exception:
         if stage.exists():
             shutil.rmtree(stage)

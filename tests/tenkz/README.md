@@ -31,7 +31,10 @@ earlier successful corpus render. A successful rerun therefore contains no
 stale pages. Any failure before the completed directory swap leaves the last
 baseline untouched. Once that swap succeeds, the new baseline is authoritative;
 failure to remove the prior backup emits a warning with its exact retained path
-but does not invalidate or roll back the completed render.
+but does not invalidate or roll back the completed render. Installers for the
+same destination are serialized with a sibling lock, and the destination is
+compared with its pre-render snapshot after the atomic move; if it changed while
+rendering, the captured data is restored and the new baseline is refused.
 
 Each fixture has a directory containing zero-padded `page-NNN.png` files.
 `CENSUS.tsv` records the page count for every source, and `SHA256SUMS` records
