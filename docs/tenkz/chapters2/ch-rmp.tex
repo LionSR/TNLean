@@ -341,9 +341,11 @@ only, keeping dots, labels, and legs in the paper frame.
     label     = {ex:rmp-peps},
   ]
 % a 4x4 PEPS window: sheared bonds, per-site physical legs,
-% cut bonds dangling at the window boundary
+% cut bonds dangling at the window boundary; the marked central segment is
+% one representative virtual contraction and changes no index ownership
 \begin{tenkzlattice}[rows=4, cols=4, frame=oblique,
                      physical=up, boundary legs]
+  \tnedge[role=marked]{(2,2)-(2,3)}
 \end{tenkzlattice}
 \end{tnexample}
 
