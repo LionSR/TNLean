@@ -183,6 +183,53 @@ theorem mpo_mul_mpo_eq_sum (L : ℕ) (hL : 0 < L) (α β : Λ) :
   simp only [Matrix.sum_apply, Matrix.smul_apply, mpo_apply, mpoMatrixEntry,
     evalWord_ofFn, smul_eq_mul]
 
+/-- The concrete closed-chain operator family carried by a fusion
+coisometry family.
+
+Source: arXiv:1606.00608, lines 962--966. -/
+noncomputable def toOperatorFamily :
+    BNTLabelOperatorFamily Λ
+      (fun L ↦ Matrix (Fin L → Fin p) (Fin L → Fin p) ℂ) :=
+  ⟨fun L γ ↦ mpo (Fam.tensor γ) L⟩
+
+@[simp] lemma toOperatorFamily_operator (L : ℕ) (γ : Λ) :
+    Fam.toOperatorFamily.operator L γ = mpo (Fam.tensor γ) L := rfl
+
+/-- A fusion coisometry family satisfies the same-length product law with
+the coefficients determined by its positive diagonal chi matrices.
+
+Source: CPSV16, Theorem 4.14(ii)--(iii), lines 976--993, and Appendix C.4,
+lines 2020--2029. -/
+theorem toOperatorFamily_hasSameLengthProductForm :
+    Fam.toOperatorFamily.HasSameLengthProductForm
+      (BNTLabelCoefficientFamily.ofChi Fam.chi) := by
+  intro L hL α β
+  simpa [toOperatorFamily_operator, BNTLabelCoefficientFamily.ofChi_coeff]
+    using Fam.mpo_mul_mpo_eq_sum L hL α β
+
+/-- The positive chi witness determined by a fusion coisometry family.
+
+Source: CPSV16, Theorem 4.14(ii), lines 976--985. -/
+noncomputable def toPositiveChiWitness :
+    PositiveBNTLabelChiTracePowerForm
+      (BNTLabelCoefficientFamily.ofChi Fam.chi) :=
+  PositiveBNTLabelChiTracePowerForm.ofChi Fam.chi Fam.posEntries
+
+/-- The source-faithful active-support fusion clause, together with its
+idempotent trace-scalar law, implies the BNT algebra clause.
+
+Source: CPSV16, Theorem 4.14(ii)--(iii), lines 972--993, and Appendix C.4,
+lines 1929--1947 and 2020--2046. -/
+noncomputable def toBNTAlgebraClause
+    (m : BNTLabelTraceScalarFamily Λ)
+    (hIdempotent :
+      m.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi Fam.chi)) :
+    BNTAlgebraClause (BNTLabelCoefficientFamily.ofChi Fam.chi)
+      Fam.toOperatorFamily m where
+  positiveChi := Fam.toPositiveChiWitness
+  sameLengthProduct := Fam.toOperatorFamily_hasSameLengthProductForm
+  idempotent := hIdempotent
+
 /-- Under the additional assertion that every active-support projection is the
 identity, an active fusion coisometry gives the stronger full-support fusion
 family. -/
