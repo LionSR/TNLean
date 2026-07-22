@@ -51,10 +51,31 @@
 
         \column{0.43\textwidth}
         \begin{center}
-            \SlideTNPeriodicMPS{A}{N}
+            % Formula: tr(A^{i_1} ... A^{i_N}), the coefficient of |i_1 ... i_N>.
+            % Ink: each A box has one physical index up and two virtual matrix indices.
+            % Contraction: horizontal bonds multiply the word; periodic closes its trace.
+            % Boundary: (virtual, physical) = (0, N); no virtual index remains open.
+            % Source: arXiv:1606.00608, Fig. I and lines 135--170.
+            \begin{tenkz}[compact, periodic, physical=up]
+              \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
+              \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+            \end{tenkz}
 
             \vspace{1.2em}
-            \SlideTNGaugeConjugation{B}{A}{X}
+            % Formula: B^i = X A^i X^{-1}, with this exact multiplication order.
+            % Ink: open horizontal stubs are matrix indices; the upper stub is i.
+            % Contraction: X, A^i, and X^{-1} are multiplied along one virtual wire.
+            % Boundary: both sides have (virtual, physical) = (2, 1).
+            % Source: arXiv:1606.00608, Fig. I_B=XCX and lines 187--195.
+            \[
+              \begin{tenkz}[physical=up]
+                \tn[up=$i$]{B}
+              \end{tenkz}
+              \;=\;
+              \begin{tenkz}[physical=up]
+                \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+              \end{tenkz}
+            \]
         \end{center}
     \end{columns}
 

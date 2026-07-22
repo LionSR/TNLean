@@ -87,7 +87,15 @@
 
         \column{0.4\textwidth}
         \begin{center}
-            \SlideTNPeriodicMPS{A}{N}
+            % Formula: tr(A^{i_1} ... A^{i_N}), the coefficient of |i_1 ... i_N>.
+            % Ink: each A box has one physical index up and two virtual matrix indices.
+            % Contraction: horizontal bonds multiply the word; periodic closes its trace.
+            % Boundary: (virtual, physical) = (0, N); no virtual index remains open.
+            % Source: arXiv:1606.00608, Fig. I and lines 135--170.
+            \begin{tenkz}[compact, periodic, physical=up]
+              \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
+              \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+            \end{tenkz}
             \\ \vspace{0.5em}
             {\footnotesize Periodic Boundary Conditions (Trace)}
         \end{center}

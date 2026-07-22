@@ -3,11 +3,13 @@
 Talk decks for the TNLean project. Each deck is a self-contained `.tex` file
 that shares `preamble.tex` and `references.bib`.
 
-Tensor-network figures use the repository-wide calculus in `tex/tn/`. The file
-`tn_library_dark.tex` loads this calculus with `\usetikzlibrary{tn}`, overrides
-the shared `\colorlet` palette slots, and then loads the six complete diagrams from
-`tex/tn/tn_slide_catalogue.tex`. Tensor, map, state, expression, insertion,
-wire, and port meanings remain those of the shared calculus.
+Tensor-network figures use the native `tenkz` package in `tex/tenkz/`.
+`preamble.tex` loads the package and `tn_library_dark.tex` rebinds only its
+semantic colour slots for the dark Beamer theme.  Each slide keeps its complete,
+nonempty diagram body beside the formula and source comments that determine its
+mathematical meaning, so a deck can customize a figure locally without changing
+a hidden catalogue.  Tensor, wire, port, contraction, and boundary meanings
+remain those of `tenkz`.
 
 ## Naming
 
