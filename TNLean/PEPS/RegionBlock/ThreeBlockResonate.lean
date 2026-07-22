@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.RegionBlock.Recovery11
 import TNLean.PEPS.RegionBlock.BlockRangeCoincidence
 import TNLean.PEPS.NormalEdgeBlockingData
+import TNLean.PEPS.ConfigurationCalculus
 
 /-!
 # The three-block resonate engine for the normal PEPS Fundamental Theorem
@@ -436,10 +437,10 @@ theorem blueProd_eq_regionMerge_complement
   · have hbdry : IsRegionBoundaryEdge (G := G) D.complement ie :=
       isRegionBoundaryEdge_of_disjoint_incident (G := G) D.blue D.complement
         D.blue_disjoint_complement hie hinc
-    rw [regionMerge, if_pos hinc]
+    rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨ie, hbdry⟩
     simpa [regionBoundaryLabel] using this.symm
-  · rw [regionMerge, if_neg hinc]
+  · rw [regionMerge_of_not_incident (G := G) A _ p hinc]
 
 /-- On a boundary edge of the host `univ \ red`, the blue-side global configuration
 `p.2` agrees with the configuration merged along the complement block, provided the
@@ -484,10 +485,10 @@ theorem hostLabel_p2_eq_hostLabel_regionMerge_complement
         rcases hinc with hc1 | hc2
         · exact absurd hc1 h1notcompl
         · refine Or.inr ⟨h1notcompl, hc2⟩
-    rw [regionMerge, if_pos hinc]
+    rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨f.1, hbdry⟩
     simpa [regionBoundaryLabel] using this.symm
-  · rw [regionMerge, if_neg hinc]
+  · rw [regionMerge_of_not_incident (G := G) A _ p hinc]
 
 open scoped Classical in
 /-- **The host-relative fiber cardinality.** Among the boundary-agreeing pairs of
