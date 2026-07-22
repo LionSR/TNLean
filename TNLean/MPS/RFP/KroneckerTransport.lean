@@ -342,13 +342,14 @@ theorem appendixB_transportedPairMatrices_comm
         appendixBLeftPairMatrix (((U ⊗ₖ U) * B) * (Uᴴ ⊗ₖ Uᴴ)) := by
   rw [transportedPairProduct_left U B hU, transportedPairProduct_right U B hU, hB]
 
-/-- Orthogonal one-site isometries make a left transported pair matrix from
-one sector annihilate a right transported pair matrix from the other sector.
+/-- Orthogonal one-site embeddings make a left transported pair matrix from
+one summand annihilate a right transported pair matrix from the other summand.
 
-This is the cross-sector part of the common-isometry calculation: the shared
+This is the mixed-summand part of the transport calculation: the shared
 one-site factor contains `Uᴴ * V`, hence vanishes.
 
-Source: arXiv:1606.00608, equation `eq:III_isometry`, lines 549--554. -/
+Source: matrix identity underlying arXiv:1606.00608, Appendix B, lines
+1305--1307. -/
 theorem appendixB_leftTransportedPairMatrix_mul_right_eq_zero_of_orthogonal
     {p v w : Type*} [Fintype p] [DecidableEq p]
     [Fintype v] [Fintype w]
@@ -375,10 +376,11 @@ theorem appendixB_leftTransportedPairMatrix_mul_right_eq_zero_of_orthogonal
       simp only [Matrix.mul_assoc]
     _ = 0 := by rw [hCross]; simp
 
-/-- Orthogonal one-site isometries also make the reverse overlapping product
+/-- Orthogonal one-site embeddings also make the reverse overlapping product
 vanish.
 
-Source: arXiv:1606.00608, equation `eq:III_isometry`, lines 549--554. -/
+Source: matrix identity underlying arXiv:1606.00608, Appendix B, lines
+1305--1307. -/
 theorem appendixB_rightTransportedPairMatrix_mul_left_eq_zero_of_orthogonal
     {p v w : Type*} [Fintype p] [DecidableEq p]
     [Fintype v] [Fintype w]

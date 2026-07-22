@@ -12,10 +12,10 @@ import TNLean.MPS.RFP.ResidualFamilySupport
 
 This file constructs the equal-sector virtual bond projector for the disjoint
 union of the residual-pair spaces of a BNT family.  Its adjacent placements
-commute sectorwise, while mixed-sector products vanish by the cross-sector
-isometry equation.  Transport by the common physical isometry then gives the
-adjacent commutation relation for the canonical two-site support of the
-multiplicity-one direct sum.
+commute sectorwise, while mixed-sector products vanish by orthogonality of the
+canonical summand inclusions.  Transport by the common physical isometry then
+gives the adjacent commutation relation for the canonical two-site support of
+the multiplicity-one direct sum.
 
 Source: arXiv:1606.00608, equations `III_CFI_RFP` and `eq:III_isometry`, lines
 543--555, equations (3.16)--(3.18), lines 549--578, and Appendix B, lines
