@@ -194,7 +194,11 @@ def check_manifest_coverage(
     production_modules = {module_name(path, repository_root) for path in sources}
     represented: set[str] = set()
     visited_aggregators: set[str] = set()
-    pending = ["TNLean"]
+    pending = [
+        module_name(path, repository_root)
+        for path in expected
+        if path.parent == repository_root
+    ]
     while pending:
         current = pending.pop()
         if current in visited_aggregators:
