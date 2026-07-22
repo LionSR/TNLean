@@ -760,10 +760,7 @@ import TNLean.PEPS.TorusWindowChain5
 import TNLean.PEPS.TorusWindowChain6
 import TNLean.PEPS.TorusWindowExtraction
 import TNLean.PEPS.TorusWindowFamilyCrossing
-import TNLean.PEPS.TorusWindowPeel
-import TNLean.PEPS.TorusWindowPeel2
-import TNLean.PEPS.TorusWindowPeel3
-import TNLean.PEPS.TorusWindowPeel4
+import TNLean.PEPS.TorusWindowPeeling
 import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusWindowBondUniform
 import TNLean.PEPS.TorusWindowWitness
