@@ -55,12 +55,17 @@ private lemma overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
       have hEq := congrArg (fun v : MPVSpace d N => v σ) (hState N)
       simpa [mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hEq
 
-/-- A canonical-form phase class must occur among any basis of normal tensors
-spanning the same matrix product vectors.
+/-- Every sector of a full-support sector decomposition is represented in any
+basis of normal tensors for the same matrix product vectors.
 
-This is the forward implication of CPSV16, Proposition `prop:char-BNT`,
-lines 1135–1146. -/
-private theorem exists_phase_match_of_isCPSVBasisOfNormalTensors
+The nonzero copy weights make each sector coefficient nonzero infinitely
+often, excluding the unused-candidate counterexample to unrestricted BNT
+uniqueness.  This is the full-support direction used in the sector matching
+argument of CPSV16, Appendix A, lines 1135--1148 and 1182.
+
+Source: arXiv:1606.00608, Proposition 2.7 and Appendix A, lines 1135--1148
+and 1182 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
     {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
     {P : SectorDecomposition d} [∀ j, NeZero (P.basisDim j)]
     (B : (j : Fin g) → MPSTensor d (dimB j))
@@ -362,7 +367,7 @@ private theorem isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
       intro k
       obtain ⟨jClass, q, hEnum⟩ := classes.exists_enum_eq k
       obtain ⟨jBasis, hRepBasis⟩ :=
-        exists_phase_match_of_isCPSVBasisOfNormalTensors basis
+        P.exists_phase_match_of_isCPSVBasisOfNormalTensors basis
           hPNormal hPDistinct hBasisNormal hPBNT jClass
       have hBasisRep : MPVBlockPhaseEquiv (basis jBasis) (blocks (classes.repr jClass)) := by
         rw [← hPBasis jClass]

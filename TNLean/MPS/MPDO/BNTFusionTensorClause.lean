@@ -90,10 +90,11 @@ structure BNTFusionTensorClause (M : MPOTensor d D) where
 
   Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
   coisometry : verticalCoisometry * (verticalCoisometry)ᴴ = 1
-  /-- The chosen tensors form a basis of normal tensors of the vertical tensor.
+  /-- The chosen tensors form a CPSV16 basis of normal tensors of the vertical tensor.
 
   Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  isBNT : MPSTensor.IsBNT (verticalTensor M) labelCount bondDim tensor
+  isCPSVBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+    (fun α ↦ ⟨bondDim α, tensor α⟩)
   /-- Conjugating the vertical tensor gives the weighted BNT direct sum.
 
   Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
@@ -161,6 +162,12 @@ namespace BNTFusionTensorClause
 
 variable {M : MPOTensor d D}
 
+/-- Forget the source BNT predicate carried by the fusion clause to the
+algebraic BNT predicate used by existing vertical-canonical-form consumers. -/
+theorem isBNT (H : BNTFusionTensorClause M) :
+    MPSTensor.IsBNT (verticalTensor M) H.labelCount H.bondDim H.tensor :=
+  H.isCPSVBNT.isBNT
+
 /-- The active-support fusion family carried by a tensor-attached clause. -/
 def toBNTFusionCoisometryFamily (H : BNTFusionTensorClause M) :
     BNTFusionCoisometryFamily (Fin H.labelCount) D where
@@ -198,7 +205,7 @@ noncomputable def toBNTAlgebraTensorClause (H : BNTFusionTensorClause M) :
   multiplicity_pos := H.multiplicity_pos
   weight_pos := H.weight_pos
   coisometry := H.coisometry
-  isBNT := H.isBNT
+  isCPSVBNT := H.isCPSVBNT
   forward := H.forward
   reconstruction := H.reconstruction
   coeffs := BNTLabelCoefficientFamily.ofChi H.chi
