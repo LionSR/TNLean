@@ -86,31 +86,14 @@ omit [DecidableRel G.Adj] in
     exact this.2
   rw [assembleRegionσ, dif_neg hw]
 
-/-- An edge is incident to the region `R` when at least one endpoint lies in `R`.
-The vertex product over `R` reads a global virtual configuration only at the
-edges incident to `R`. -/
-def IsRegionIncidentEdge (R : Finset V) (e : Edge G) : Prop :=
-  e.1.1 ∈ R ∨ e.1.2 ∈ R
-
-instance (R : Finset V) (e : Edge G) : Decidable (IsRegionIncidentEdge (G := G) R e) := by
-  unfold IsRegionIncidentEdge; infer_instance
-
 omit [Fintype V] in
 /-- The vertex product over `R` reads a global virtual configuration only through
-the edges incident to `R`: two configurations agreeing on every `R`-incident edge
-give the same product. -/
+its `R`-incident edges. -/
 theorem regionProd_congr (R : Finset V) (σ : V → Fin d) {ζ ζ' : VirtualConfig A}
     (h : ∀ e : Edge G, IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
     (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w.1)) =
       ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ' ie.1) (σ w.1) := by
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  refine h ie.1 ?_
-  -- An edge incident to `w ∈ R` is incident to `R`.
-  rcases ie.2 with hie | hie
-  · exact Or.inl (by rw [hie]; exact w.2)
-  · exact Or.inr (by rw [hie]; exact w.2)
+  exact regionProd_subtype_congr R (fun w => σ w.1) h
 
 /-! ### Identity insertion on a region boundary edge
 

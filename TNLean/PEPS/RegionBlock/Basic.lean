@@ -54,6 +54,26 @@ def IsRegionBoundaryEdge (R : Finset V) (f : Edge G) : Prop :=
 instance (R : Finset V) (f : Edge G) : Decidable (IsRegionBoundaryEdge (G := G) R f) := by
   unfold IsRegionBoundaryEdge; infer_instance
 
+/-- An edge is incident to the region `R` when at least one endpoint lies in `R`. -/
+def IsRegionIncidentEdge (R : Finset V) (e : Edge G) : Prop :=
+  e.1.1 ∈ R ∨ e.1.2 ∈ R
+
+instance (R : Finset V) (e : Edge G) : Decidable (IsRegionIncidentEdge (G := G) R e) := by
+  unfold IsRegionIncidentEdge; infer_instance
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An edge incident to each of two disjoint regions crosses the boundary of the second. -/
+theorem isRegionBoundaryEdge_of_disjoint_incident (S T : Finset V)
+    (hST : Disjoint S T) {e : Edge G}
+    (hS : IsRegionIncidentEdge (G := G) S e)
+    (hT : IsRegionIncidentEdge (G := G) T e) : IsRegionBoundaryEdge (G := G) T e := by
+  have hdis := Finset.disjoint_left.mp hST
+  rcases hS with hS1 | hS2 <;> rcases hT with hT1 | hT2
+  · exact (hdis hS1 hT1).elim
+  · exact Or.inr ⟨fun h => hdis hS1 h, hT2⟩
+  · exact Or.inl ⟨hT1, fun h => hdis hS2 h⟩
+  · exact (hdis hS2 hT2).elim
+
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A boundary edge of `R` has at least one endpoint in `R`. -/
 theorem isRegionBoundaryEdge_touches (R : Finset V) {f : Edge G}
@@ -86,6 +106,22 @@ abbrev RegionPhysicalConfig (R : Finset V) : Type _ :=
 instance instFintypeRegionPhysicalConfig (R : Finset V) :
     Fintype (RegionPhysicalConfig (V := V) (d := d) R) :=
   inferInstance
+
+omit [Fintype V] in
+/-- The vertex product over `R` reads a virtual configuration only through edges incident to
+`R`: two configurations agreeing on every `R`-incident edge give the same product. -/
+theorem regionProd_subtype_congr (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R) {ζ ζ' : VirtualConfig A}
+    (h : ∀ e : Edge G, IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
+    (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) =
+      ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ' ie.1) (σ w) := by
+  refine Finset.prod_congr rfl (fun w _ => ?_)
+  congr 1
+  funext ie
+  refine h ie.1 ?_
+  rcases ie.2 with hie | hie
+  · exact Or.inl (by rw [hie]; exact w.2)
+  · exact Or.inr (by rw [hie]; exact w.2)
 
 /-- The boundary configuration read off a global virtual configuration: the
 labels on the edges crossing the boundary of `R`. -/

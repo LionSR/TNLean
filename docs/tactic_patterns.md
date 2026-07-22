@@ -36,6 +36,20 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### peps_prod_entry_congr — promoted
+- **Pattern:** product congruence followed by component-function extensionality:
+  `refine Finset.prod_congr rfl (fun w _ => ?_); congr 1; funext ie`.
+- **Seen:** 12 expanded occurrences across 10 PEPS files before promotion. Nine call sites
+  now use the shared lemma; one expanded occurrence is its proof, while the two occurrences
+  in `RegionBlock/Recovery.lean` remain for the #4522 owner (2026-07-22).
+- **Abstraction:** `regionProd_subtype_congr` in
+  `TNLean/PEPS/RegionBlock/Basic.lean`, supported by
+  `isRegionBoundaryEdge_of_disjoint_incident` for the repeated disjoint-region side goal.
+- **Notes:** the abstraction is a lemma rather than a tactic and quantifies over arbitrary
+  region physical configurations. The existing `regionProd_congr` statement is preserved
+  as a wrapper. The migrated PEPS slice loses 60 source lines (92 additions,
+  152 deletions); all existing theorem statements are unchanged.
+
 ### eta_cyclic_local_operator_transport — promoted
 - **Pattern:** reindexing a translated two-site bond into cyclic edge coordinates, then
   proving it is block diagonal with a single active edge factor.
@@ -124,29 +138,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   embedding. Record before a third coordinate-transport proof appears; confirm
   that their product-family goal shapes agree before promotion.
 
-### matrix_entry_cases — candidate
-- **Pattern:**
-  ```
-  ext i j
-  by_cases hij : i = j
-  · subst hij
-    ...
-  ```
-- **Seen:** 10 occurrences across >= 4 files
-  (`TNLean/Algebra/HermitianHelpers.lean:115`,
-  `TNLean/Algebra/HermitianHelpers.lean:144`,
-  `TNLean/Channel/ChoiJamiolkowski.lean:407`,
-  `TNLean/Channel/ChoiTypeMap.lean:308`, +6 more).
-- **Abstraction (proposed):** cross-cutting macro `matrix_entry_cases`
-  (in a new `TNLean/Tactic/Basic.lean`) that performs the entrywise
-  extensionality plus diagonal/off-diagonal split, leaving the two goals
-  named. Check first whether the diagonal-matrix Mathlib API
-  (`Matrix.diagonal_apply_ne` etc.) turns specific call sites into lemmas
-  instead. Also try `ext i j <;> grind` at a few call sites (with
-  `Matrix.diagonal_apply`-family lemmas `@[grind =]`-tagged if needed) —
-  the case split and entry arithmetic are squarely in `grind`'s scope;
-  unverified pending a build-capable session.
-
 ### clm_norm_instances — candidate
 - **Pattern:**
   ```
@@ -164,21 +155,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   need `letI` at all (likely an instance-resolution gap); either fix the
   underlying instance visibility once in a shared file, or provide a
   `clm_norm_instances` macro expanding to the block.
-
-### peps_prod_entry_congr — candidate
-- **Pattern:**
-  ```
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  ```
-- **Seen:** 12 occurrences across PEPS files
-  (`TNLean/PEPS/NormalFundamentalTheorem.lean:106`,
-  `TNLean/PEPS/RegionBlock/InsertResidual.lean:468`,
-  `TNLean/PEPS/RegionBlock/Recovery.lean:239`, +9 more).
-- **Abstraction (proposed):** likely a missing congruence lemma for
-  PEPS region products rather than a tactic; state it once in
-  `TNLean/PEPS/RegionBlock/` and `apply` it.
 
 ### filter_sum_split — candidate
 - **Pattern:**
@@ -249,6 +225,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 ---
 
 ## Rejected
+
+### matrix_entry_cases — rejected
+- **Pattern:** matrix extensionality followed by a diagonal/off-diagonal split:
+  `ext i j; by_cases hij : i = j; · subst hij`.
+- **Seen:** 10 candidate occurrences across 8 files in the #4528 audit.
+- **Reason:** The prototype macro hid only two idiomatic structural lines at each call site,
+  required eight new imports and a new cross-cutting tactic module, and increased total
+  source by nine lines (49 additions, 40 deletions). Its `try subst` implementation also
+  violated the fail-fast rule for promoted tactics. The occurrences share no mathematical
+  conclusion from which to extract a lemma, so keeping the explicit case split is clearer
+  and more Mathlib-style.
 
 ### RFP structural semantic helper split — rejected
 - **Pattern:** split `rfp_nt_structural_full_sqSum` into private matrix-unit

@@ -465,14 +465,9 @@ theorem regionProd_insertOverwrite (A : Tensor G d) (R : Finset V) {v : V}
       ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1)
         (restrictInsertPhysical (V := V) (d := d) R σ w) := by
   classical
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  -- An edge incident to `w ∈ R` is `R`-incident, where the overwrite is the identity.
-  refine insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ ?_
-  rcases ie.2 with hie | hie
-  · exact Or.inl (by rw [hie]; exact w.2)
-  · exact Or.inr (by rw [hie]; exact w.2)
+  apply regionProd_subtype_congr
+  intro ie hie
+  exact insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ hie
 
 open scoped Classical in
 /-- **The inserted-site multiplicity collapse.** Under inserted-site consistency, the blocked
