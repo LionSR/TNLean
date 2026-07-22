@@ -29,6 +29,12 @@ notation it is `physTraceTransfer (Fam.tensor γ)`.  This is distinct from the
 closed one-site operator `mpo (Fam.tensor γ) 1`, which acts on the common
 horizontal space.
 
+**Local fix (terminal trace orientation):** The trace in the terminal matrix
+$\operatorname{tr}(M_\gamma)$ closes the horizontal operator leg and leaves
+the bond indices of $M_\gamma$.  It is `physTraceTransfer`, not the one-site
+closed operator `mpo _ 1`.  Documented in
+`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`.
+
 These are the one-fusion-step projector statements in the recursive
 construction at source lines 999--1010.  The spectral decomposition of the
 terminal matrices, iteration along an arbitrary chain, and the commuting Gibbs
@@ -72,13 +78,7 @@ the final sectors.
 
 Source: arXiv:1606.00608, the fusion identity at lines 986--993 and the
 terminal matrices in the recursive operator at lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Local fix (terminal trace orientation):** The trace in the terminal matrix
-$\operatorname{tr}(M_\gamma)$ closes the horizontal operator leg and leaves
-the bond indices of $M_\gamma$.  It is `physTraceTransfer`, not the one-site
-closed operator `mpo _ 1`.  Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose
     (α β : Λ) :
     Fam.fusionCoisometry α β *
@@ -150,13 +150,8 @@ theorem projectorQBlock_isStarProjection
 the fusion coisometry.
 
 Source: arXiv:1606.00608, lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Local fix (terminal trace orientation):** The terminal operators act on the
-bond spaces of the final sectors, so this conjugation is well typed.  The
-opposite one-site closure `mpo _ 1` acts on the common horizontal space and is
-not used here.  Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`.  The terminal operators act on the
+bond spaces of the final sectors, as required by this conjugation. -/
 noncomputable def conjugatedProjectorQBlock
     (P : ∀ γ : Λ,
       Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
@@ -225,12 +220,7 @@ operator leg gives the source terminal block for one fusion layer.
 
 Source: arXiv:1606.00608, the fusion identity at lines 986--993 and the
 terminal matrices in the recursive operator at lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Local fix (terminal trace orientation):** The trace closes the horizontal
-operator leg and leaves the dependent bond space of the final BNT sector.
-Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose
     (H : BNTFusionTensorClause M)
     (α β : Fin H.labelCount) :
@@ -266,11 +256,8 @@ theorem projectorQBlock_isStarProjection
 space.
 
 Source: arXiv:1606.00608, lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Local fix (terminal trace orientation):** The terminal operators act on the
-dependent bond spaces of the final BNT sectors.  Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`.  The terminal operators act on the
+dependent bond spaces of the final BNT sectors. -/
 noncomputable def conjugatedProjectorQBlock
     (H : BNTFusionTensorClause M)
     (P : ∀ γ : Fin H.labelCount,
