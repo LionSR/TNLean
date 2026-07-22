@@ -28,10 +28,56 @@ product states, and the square lattice.
     complements. These two assumptions are collected as the normal PEPS
     blocking hypotheses; the same hypotheses give the corresponding edge and
     one-site consequences without restating the separate edge and one-site
-    assumptions.
-    \begin{center}
-        \TNPEPSNormalBlockingHypotheses
-    \end{center}
+    assumptions. The following two panels show their square-lattice source
+    realization; they do not restrict the abstract definition to this lattice.
+    \begin{tenkzequation}
+        % Formula verdict: A1=(4-6,2-3), A2=(3-4,4-6), and A3 is their
+        % complement in the 7-by-7 source frame; the marked edge
+        % (4,3)-(4,4) has one endpoint in A1 and the other in A2.
+        % Ink-to-index verdict: every dot is an ordinary tensor, every lattice
+        % edge is a virtual contraction, and the three fills encode the
+        % edge-centred disjoint cover used by the blocking hypothesis.
+        % Contraction/boundary verdict: the panel has 84 internal virtual
+        % contractions and 28 cut virtual bonds, with no exposed physical
+        % indices, hence boundary type (V,P)=(28,0).
+        % Source verdict: exact square-lattice specialization of the first
+        % hypothesis in arXiv:1804.04964, paper_normal.tex:1475--1499.
+        \begin{tenkzlattice}[rows=7, cols=7, boundary legs]
+            \tnregion[slot=selected, label={A_1},
+                label at=center]{(4-6,2-3)}
+            \tnregion[slot=secondary, label={A_2},
+                label at=center]{(3-4,4-6)}
+            \tnregion[slot=complement, outline, label={A_3},
+                label at=north]
+                {(1-7,1-7) - (4-6,2-3) - (3-4,4-6)}
+            \tnedge[distinguished]{(4,3)-(4,4)}
+        \end{tenkzlattice}
+        $\qquad\text{edge blocking}$
+    \end{tenkzequation}
+    \begin{tenkzequation}
+        % Formula verdict: R=(2-4,2-4)-(4,4), S=(2-4,2-4), and
+        % S=R union {v} for v=(4,4); the marked site is present in both panels.
+        % Ink-to-index verdict: every dot is an ordinary tensor and every
+        % lattice edge is a virtual contraction; region fills encode only the
+        % one-site set comparison, while the marked site identifies v.
+        % Contraction/boundary verdict: each 5-by-5 panel has 40 internal
+        % virtual contractions and 20 cut virtual bonds, with no exposed
+        % physical indices, hence boundary type (V,P)=(20,0).
+        % Source verdict: exact discrete form of the one-site comparison in
+        % arXiv:1804.04964, paper_normal.tex:1405--1429 and 1519--1544.
+        $\text{and}\qquad$
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=R, label at=center]
+                {(2-4,2-4) - (4,4)}
+            \tnsite[role=marked, label=$v$]{(4,4)}
+        \end{tenkzlattice}
+        $\qquad\subset\qquad$
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=S, label at=center]{(2-4,2-4)}
+            \tnsite[role=marked, label=$v$]{(4,4)}
+        \end{tenkzlattice}
+        $\qquad S=R\cup\{v\}$
+    \end{tenkzequation}
 \end{definition}
 
 \begin{theorem}[Square-lattice normal blocking hypotheses from margin covers]%
