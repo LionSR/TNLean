@@ -90,6 +90,70 @@ def run_driver(*arguments: str) -> subprocess.CompletedProcess[str]:
     )
 
 
+def test_repo_relative_render_dir(work: Path) -> None:
+    bin_dir = work / "driver-bin"
+    capture = work / "render-dir.txt"
+    bin_dir.mkdir()
+    write_executable(
+        bin_dir / "python3",
+        """#!/bin/sh
+if [ "$1" = "-" ]; then
+    cat >/dev/null
+    exit 0
+fi
+case "$1" in
+    */tenkz_render_corpus.py)
+        shift
+        while [ "$#" -gt 0 ]; do
+            if [ "$1" = "--output-dir" ]; then
+                printf '%s\n' "$2" > "$FAKE_RENDER_DIR_CAPTURE"
+                exit 0
+            fi
+            shift
+        done
+        exit 9
+        ;;
+esac
+exit 0
+""",
+    )
+    write_executable(
+        bin_dir / "xelatex",
+        """#!/bin/sh
+for source do :; done
+stem=${source%.tex}
+: > "$stem.pdf"
+printf 'picture|id=fake\n' > "$stem.tnlog"
+""",
+    )
+    for command in ("pdfinfo", "pdftocairo"):
+        write_executable(bin_dir / command, "#!/bin/sh\nexit 0\n")
+
+    env = os.environ.copy()
+    env["PATH"] = f"{bin_dir}{os.pathsep}{env['PATH']}"
+    env["FAKE_RENDER_DIR_CAPTURE"] = str(capture)
+    result = subprocess.run(
+        [
+            "bash",
+            str(DRIVER),
+            "--render",
+            "--render-dir",
+            "build/tenkz-relative-probe",
+        ],
+        cwd=ROOT / "tests" / "tenkz",
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=120,
+    )
+    if result.returncode:
+        raise AssertionError(result.stdout + result.stderr)
+    expected = ROOT / "build" / "tenkz-relative-probe"
+    if capture.read_text(encoding="utf-8").strip() != str(expected):
+        raise AssertionError("relative --render-dir was not anchored to the repository root")
+
+
 def main() -> int:
     bad_cli = [
         (("--unknown",), "unknown argument"),
@@ -223,6 +287,18 @@ Path(sys.argv[-1] + '.png').write_bytes(
         if (nonregular_marker / "keep.txt").read_text(encoding="utf-8") != "user data\n":
             raise AssertionError("non-regular-marker output directory was changed")
 
+        malformed_marker = work / "malformed-marker"
+        malformed_marker.mkdir()
+        (malformed_marker / "keep.txt").write_text("user data\n", encoding="utf-8")
+        (malformed_marker / render.MARKER_NAME).write_bytes(b"\xff\xfe")
+        rejected_malformed = run_renderer(input_dir, malformed_marker, bin_dir)
+        if rejected_malformed.returncode == 0 or "valid regular" not in rejected_malformed.stderr:
+            raise AssertionError("malformed UTF-8 ownership marker was accepted")
+        if "Traceback" in rejected_malformed.stderr:
+            raise AssertionError("malformed UTF-8 ownership marker escaped as a traceback")
+        if (malformed_marker / "keep.txt").read_text(encoding="utf-8") != "user data\n":
+            raise AssertionError("malformed-marker output directory was changed")
+
         restore_output = work / "restore-output"
         missing_stage = work / "missing-stage"
         restore_output.mkdir()
@@ -282,6 +358,8 @@ Path(sys.argv[-1] + '.png').write_bytes(
             raise AssertionError("missing compiled PDF was accepted")
         if tree_bytes(output_dir) != before_missing:
             raise AssertionError("preflight failure changed the last complete baseline")
+
+        test_repo_relative_render_dir(work)
 
     print("PASS: tenkz corpus render baseline replacement")
     return 0

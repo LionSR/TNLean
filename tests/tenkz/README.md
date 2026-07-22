@@ -22,8 +22,10 @@ scripts/tenkz_corpus.sh --render
 ```
 
 The default output is `build/tenkz-corpus-render/`. Use `--render-dir DIR` to
-name a different directory. The driver reports the absolute output path and
-replaces it only after the complete render succeeds. It refuses to replace a
+name a different directory; relative directories are resolved from the
+repository root, independent of the caller's working directory. The driver
+reports the absolute output path and replaces it only after the complete
+render succeeds. It refuses to replace a
 nonempty directory unless that directory carries the ownership marker from an
 earlier successful corpus render. A successful rerun therefore contains no
 stale pages. Any failure before the completed directory swap leaves the last

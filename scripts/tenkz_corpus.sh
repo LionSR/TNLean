@@ -60,6 +60,9 @@ if [[ "$RENDER_DIR_SET" -eq 1 && "$RENDER" -ne 1 ]]; then
   echo "FAIL: --render-dir requires --render" >&2
   exit 2
 fi
+if [[ "$RENDER" -eq 1 && "$RENDER_DIR" != /* ]]; then
+  RENDER_DIR="$REPO/$RENDER_DIR"
+fi
 if [[ "${TENKZ_CORPUS_VALIDATE_ONLY:-0}" == 1 && "$RENDER" -eq 1 ]]; then
   echo "FAIL: --render cannot be combined with TENKZ_CORPUS_VALIDATE_ONLY=1" >&2
   exit 2

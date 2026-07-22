@@ -38,7 +38,7 @@ def has_valid_ownership_marker(output_dir: Path) -> bool:
         return False
     try:
         return marker.read_text(encoding="utf-8") == MARKER_CONTENT
-    except OSError:
+    except (OSError, UnicodeError):
         return False
 
 
