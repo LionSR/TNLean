@@ -403,9 +403,25 @@ The following workflows run automatically:
 | **Issue Automation** (`issue-automation.yml`) | Issue opened/labeled/closed/reopened; PR opened/merged | Classifies new issues, posts Mathlib scouting reports, keeps tracking issues current (progress comments, sub-issue counts, `all-resolved` label — deterministic, no model), and scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), filing them with the `follow-up` label |
 | **Blueprint Lint** (`pr-ci.yml`, `blueprint` job) | PRs touching blueprint or Lean files | Validates LaTeX blueprint for broken labels and references |
 | **Lean Module Policy** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching Lean policy paths | Blocks ordinary files above 1000 lines and new numbered-sequel production modules; validates exact import-only aggregator exemptions |
+| **Import Completeness** (`import-completeness.yml`) | PRs and main pushes touching TNLean sources or generator files | Tests the generator and checks that every production module appears in the generated hierarchical import frontier |
 | **Lean Linter-Warning Sweep** (`housekeeping.yml`, `linter-sweep` job) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
 | **Lean Linter-Warning Auto-Fix** (`lean-linter-warning-autofix.yml`) | Manual dispatch | Runs the warning sweep and can open a guarded Lean-only PR when explicitly requested |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
+
+### Generated import aggregators
+
+`TNLean.lean` and the hierarchical directory aggregators are generated files;
+never edit them by hand. After adding, moving, or removing a production Lean
+module, run:
+
+```bash
+python3 scripts/generate_import_aggregators.py
+python3 scripts/generate_import_aggregators.py --check
+```
+
+The first command updates the hierarchy. The second is the same deterministic
+completeness check enforced by CI. `TNLean/Archive/` remains outside the
+production manifest; see `docs/import_structure.md` for details.
 
 ### Splitting large Lean modules
 

@@ -8,6 +8,7 @@ on:
       - 'TNLean.lean'
       - 'TNLean/**/*.lean'
       - 'scripts/generate_import_aggregators.py'
+      - 'scripts/lean_import_syntax.py'
       - 'scripts/test_generate_import_aggregators.py'
       - '.github/workflows/import-completeness.yml'
   pull_request:
@@ -16,6 +17,7 @@ on:
       - 'TNLean.lean'
       - 'TNLean/**/*.lean'
       - 'scripts/generate_import_aggregators.py'
+      - 'scripts/lean_import_syntax.py'
       - 'scripts/test_generate_import_aggregators.py'
       - '.github/workflows/import-completeness.yml'
   workflow_dispatch:

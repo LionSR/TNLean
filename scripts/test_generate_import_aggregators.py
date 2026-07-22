@@ -30,7 +30,7 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
         return {
             path.relative_to(root).as_posix(): path.read_bytes()
             for path in paths
-            if GENERATOR.is_generated(path)
+            if GENERATOR.is_generated(path, root / "TNLean")
         }
 
     def test_idempotent_and_preserves_shadowing_content(self) -> None:
@@ -64,13 +64,45 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
     def test_generated_detection_is_independent_of_copyright_year(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
+            self.write(root, "TNLean/Foo/Basic.lean", "def foo := 1\n")
             generated = self.write(
                 root,
                 "TNLean/Foo.lean",
                 GENERATOR.GENERATED_NOTICE.replace("2026", "2037")
                 + "\nimport TNLean.Foo.Basic\n",
             )
-            self.assertTrue(GENERATOR.is_generated(generated))
+            self.assertTrue(GENERATOR.is_generated(generated, root / "TNLean"))
+
+    def test_handwritten_marker_files_are_preserved_and_counted(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.write(root, "TNLean/Draft/Leaf.lean", "def leaf := 1\n")
+            draft = self.write(
+                root,
+                "TNLean/Draft.lean",
+                GENERATOR.GENERATED_NOTICE + "\ndef handwrittenDraft := 2\n",
+            )
+            copied = self.write(
+                root,
+                "TNLean/Copied.lean",
+                GENERATOR.GENERATED_NOTICE + "\nimport TNLean.Draft\n",
+            )
+            draft_before = draft.read_bytes()
+            copied_before = copied.read_bytes()
+
+            self.assertFalse(GENERATOR.is_generated(draft, root / "TNLean"))
+            self.assertFalse(GENERATOR.is_generated(copied, root / "TNLean"))
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(GENERATOR.update(root, check=False), 0)
+
+            self.assertEqual(draft.read_bytes(), draft_before)
+            self.assertEqual(copied.read_bytes(), copied_before)
+            _, sources = GENERATOR.build_expected_files(root)
+            self.assertIn(draft, sources)
+            self.assertIn(copied, sources)
+            root_text = (root / "TNLean.lean").read_text(encoding="utf-8")
+            self.assertIn("import TNLean.Draft\n", root_text)
+            self.assertIn("import TNLean.Copied\n", root_text)
 
     def test_manifest_coverage_ignores_incidental_handwritten_imports(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
