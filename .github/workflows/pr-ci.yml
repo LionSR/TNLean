@@ -48,6 +48,7 @@ on:
       - 'scripts/test_tenkz_label_overlap.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_enclosures.py'
+      - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_tree.py'
   pull_request:
@@ -91,6 +92,7 @@ on:
       - 'scripts/test_tenkz_label_overlap.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_enclosures.py'
+      - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_tree.py'
   workflow_dispatch:
@@ -164,6 +166,7 @@ jobs:
               - 'scripts/test_tenkz_label_overlap.py'
               - 'scripts/test_tenkz_face_ports.py'
               - 'scripts/test_tenkz_enclosures.py'
+              - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_tenkz_tree.py'
             corpus:
@@ -451,6 +454,10 @@ jobs:
       - name: Test measured tenkz grouping enclosures
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_enclosures.py
+
+      - name: Test source-linked PEPS torus geometry
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_peps_torus.py
 
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
