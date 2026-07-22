@@ -10,6 +10,34 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+RETIRED_PATHS = {
+    "/".join(("blueprint", "src", "Packages", "tn_" + "diagrams.py")),
+    "/".join(("blueprint", "src", "tn_" + "diagrams.sty")),
+    "/".join(
+        (
+            "blueprint",
+            "src",
+            "plastex_templates",
+            "TensorNetwork" + "Diagrams.jinja2s",
+        )
+    ),
+    "/".join(("scripts", "build_" + "tn_gallery.py")),
+    "/".join(("scripts", "check_" + "tn_references.py")),
+    "/".join(("docs", "tn_" + "diagram_grammar.md")),
+    "/".join(("docs", "tn_reference", "compact_trace_cell.png")),
+    "/".join(("docs", "tn_reference", "dense_fusion_tree.png")),
+    "/".join(("docs", "tn_reference", "parallel_sector_buses.png")),
+    "/".join(("docs", "tn_reference", "rotated_vertical_word.png")),
+    "/".join(("docs", "tn_reference", "straight_purification.png")),
+    "/".join(("tex", "tn", "tikzlibrary" + "tn.code.tex")),
+    "/".join(("tex", "tn", "tn_" + "atoms.tex")),
+    "/".join(("tex", "tn", "tn_" + "catalogue.tex")),
+    "/".join(("tex", "tn", "tn_" + "core.tex")),
+    "/".join(("tex", "tn", "tn_" + "library.tex")),
+    "/".join(("tex", "tn", "tn_" + "motifs_mpdo.tex")),
+    "/".join(("tex", "tn", "tn_" + "slide_catalogue.tex")),
+}
+
 RETIRED_PATH_PREFIXES = (
     "tex/" + "tn/",
     "docs/" + "tn_reference/",
@@ -49,9 +77,12 @@ def main() -> int:
 
     for path in files:
         relative = path.relative_to(ROOT).as_posix()
-        for prefix in RETIRED_PATH_PREFIXES:
-            if relative.startswith(prefix):
-                failures.append(f"retired tracked path: {relative}")
+        if relative in RETIRED_PATHS:
+            failures.append(f"retired tracked path: {relative}")
+        else:
+            for prefix in RETIRED_PATH_PREFIXES:
+                if relative.startswith(prefix):
+                    failures.append(f"retired tracked path: {relative}")
 
         text = path.read_text(encoding="utf-8", errors="replace")
         for line_number, line in enumerate(text.splitlines(), start=1):
