@@ -257,37 +257,6 @@ theorem rectSpan_eq_mulLeft_image_of_finrank_eq
     simp only [LinearMap.mulLeft_apply]
     exact RectSpanGrowth.mulLeft_mem_rectSpan_pow_succ A i₀ n hX
 
-/-- **All generators captured by i₀ when finrank stabilizes.**
-
-When `finrank(rectSpan P A n) = finrank(rectSpan P A (n+1))`, for every
-generator index `i` and every element `M ∈ wordSpan A n`, the projected
-product `P * (A i) * M` lies in the image of `(A i₀) ·` on `rectSpan P A n`.
-
-This is a direct reformulation of rectSpan = leftStep image, noting that
-`rectSpan P A (n+1) = P · wordSpan A (n+1)` and
-`wordSpan A (n+1) = Σᵢ (A i) · wordSpan A n`. -/
-theorem proj_gen_in_leftStep_of_finrank_eq
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
-    (hfin : finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
-            finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1)))
-    (i : Fin d) {M : Matrix (Fin D) (Fin D) ℂ}
-    (hM : M ∈ wordSpan A n) :
-    (A i₀) ^ D * ((A i) * M) ∈
-      Submodule.map (LinearMap.mulLeft ℂ (A i₀))
-        (rectSpan ((A i₀) ^ D) A n) := by
-  -- (A i₀)^D * (A i) * M = (A i₀)^D * ((A i) * M)
-  -- (A i) * M ∈ wordSpan A (n+1), so (A i₀)^D * ((A i) * M) ∈ rectSpan P A (n+1)
-  rw [← rectSpan_eq_mulLeft_image_of_finrank_eq A i₀ n hfin]
-  -- Need: (A i₀)^D * ((A i) * M) ∈ rectSpan ((A i₀)^D) A (n+1)
-  apply Submodule.mem_map.mpr
-  have hAiM : (A i) * M ∈ wordSpan A (n + 1) := by
-    have hAi : (A i) ∈ wordSpan A 1 := by
-      simpa [evalWord] using evalWord_mem_wordSpan A ([i] : List (Fin d))
-    have : (A i) * M ∈ (wordSpan A 1) * (wordSpan A n) :=
-      Submodule.mul_mem_mul hAi hM
-    simpa [Nat.add_comm] using (wordSpan_mul_le A 1 n) this
-  exact ⟨(A i) * M, hAiM, by simp [LinearMap.mulLeft_apply]⟩
-
 /-! ### Part 5: NilpIndex structural consequences
 
 Analogues of Part 4 for `P = (A i₀)^r` where `r = nilpIndex(toLin'(A i₀))`.
@@ -318,63 +287,6 @@ theorem rectSpan_nilpIndex_eq_mulLeft_image_of_finrank_eq
     obtain ⟨X, hX, rfl⟩ := Submodule.mem_map.mp hY
     simp only [LinearMap.mulLeft_apply]
     exact mulLeft_mem_rectSpan_nilpIndex_succ A i₀ n hX
-
-/-- **NilpIndex version of generator capture**: all generator products at
-the nilpIndex power are captured by the i₀ direction. -/
-theorem proj_gen_in_leftStep_nilpIndex_of_finrank_eq
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
-    (hfin : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-            finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)))
-    (i : Fin d) {M : Matrix (Fin D) (Fin D) ℂ}
-    (hM : M ∈ wordSpan A n) :
-    (A i₀) ^ nilpIndex (toLin' (A i₀)) * ((A i) * M) ∈
-      Submodule.map (LinearMap.mulLeft ℂ (A i₀))
-        (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) := by
-  rw [← rectSpan_nilpIndex_eq_mulLeft_image_of_finrank_eq A i₀ n hfin]
-  -- Need: P * (A i * M) ∈ rectSpan P A (n+1)
-  -- This follows because (A i * M) ∈ wordSpan A (n+1) and mulLeft P maps it into rectSpan
-  change (A i₀ ^ nilpIndex (toLin' (A i₀))) * ((A i) * M) ∈
-    rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)
-  apply Submodule.mem_map.mpr
-  have hAiM : (A i) * M ∈ wordSpan A (n + 1) := by
-    have hAi : (A i) ∈ wordSpan A 1 := by
-      simpa [evalWord] using evalWord_mem_wordSpan A ([i] : List (Fin d))
-    have : (A i) * M ∈ (wordSpan A 1) * (wordSpan A n) :=
-      Submodule.mul_mem_mul hAi hM
-    simpa [Nat.add_comm] using (wordSpan_mul_le A 1 n) this
-  exact ⟨(A i) * M, hAiM, by simp [LinearMap.mulLeft_apply]⟩
-
-/-! ### Part 6: Contrapositive — finrank stabilization ≠ range implies absorption
-
-The contrapositive of strict growth: if finrank stabilizes below the ceiling,
-then the rectSpan is a proper invariant subspace of range(mulLeft P) under
-the quotient action of generators via A_{i₀}. This is the algebraic condition
-contradicted under `IsNormal`. -/
-
-/-- **Negation of strict growth implies absorption.**
-
-If `finrank(rectSpan P A n) < D * D'` and `finrank(rectSpan P A n) =
-finrank(rectSpan P A (n+1))`, then `rectSpan P A n` is a proper subspace of
-`range(mulLeft P)` that absorbs all generator products via `A i₀`.
-
-Primitivity rules out this situation because normality eventually makes the
-rectangular span equal to the full range, whereas absorption after stabilization
-would keep it proper. -/
-theorem rectSpan_nilpIndex_proper_absorption
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
-    (hlt : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) <
-      D * ((A i₀) ^ D).rank)
-    (hfin : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-            finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1))) :
-    rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n ≠
-      LinearMap.range (LinearMap.mulLeft ℂ
-        ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
-  intro heq
-  -- If rectSpan = range, then finrank = D * D'
-  have hceiling : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-      D * ((A i₀) ^ D).rank := by
-    rw [heq, finrank_range_mulLeft, rank_pow_nilpIndex_eq A i₀]
-  omega
 
 end StrictGrowthReduction
 
@@ -538,16 +450,6 @@ private theorem rectSpan_nilpIndex_finrank_eq_at
     change finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + k + 1)) =
       finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + k + 1 + 1))
     exact Nat.le_antisymm hge hle
-
-/-- **Finrank permanence** (one-step): `finrank(R_n) = finrank(R_{n+1})` implies
-`finrank(R_{n+1}) = finrank(R_{n+2})`. -/
-theorem rectSpan_nilpIndex_finrank_permanence'
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
-    (hfin : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-            finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1))) :
-    finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)) =
-      finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 2)) :=
-  rectSpan_nilpIndex_finrank_eq_at A i₀ n hfin (n + 1) (by omega)
 
 /-! ### Part 4: Constant finrank from stabilization -/
 

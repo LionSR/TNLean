@@ -247,67 +247,6 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
         (isHermitian_smul_I_sub_conjTranspose X) h htrH⟩
 
-/-! ### Step 7: Auxiliary lemmas for the perturbation construction -/
-
-/-- **Negative eigenvalue of non-PSD Hermitian matrix.**
-
-If `H` is Hermitian, nonzero, with trace 0, then it has at least one negative eigenvalue. -/
-theorem exists_neg_eigenvalue_of_hermitian_ne_zero_trace_zero
-    {H : Matrix (Fin D) (Fin D) ℂ}
-    (hH : H.IsHermitian) (hne : H ≠ 0) (htr : H.trace = 0) :
-    ∃ i : Fin D, hH.eigenvalues i < 0 := by
-  have hnotpsd := not_posSemidef_of_hermitian_ne_zero_trace_eq_zero hH hne htr
-  rw [hH.posSemidef_iff_eigenvalues_nonneg] at hnotpsd
-  -- hnotpsd : ¬(0 ≤ hH.eigenvalues), where ≤ is the Pi ordering
-  by_contra hall
-  push Not at hall  -- hall : ∀ i, 0 ≤ hH.eigenvalues i
-  exact hnotpsd (Pi.le_def.mpr (fun i => hall i))
-
-/-- **Affine combination of `E^p`-fixed points is an `E^p`-fixed point.** -/
-theorem transferMap_pow_fixedPoint_add_smul
-    (A : MPSTensor d D)
-    {ρ H : Matrix (Fin D) (Fin D) ℂ} {p : ℕ}
-    (hρ : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
-    (hH : ((transferMap (d := d) (D := D) A) ^ p) H = H)
-    (t : ℂ) :
-    ((transferMap (d := d) (D := D) A) ^ p) (ρ + t • H) = ρ + t • H := by
-  rw [map_add, map_smul, hρ, hH]
-
-/-- **The perturbation `ρ + t • H` has positive trace when `trace(H) = 0`
-and `ρ` is PosDef, hence is nonzero.** -/
-theorem perturbation_ne_zero_of_trace_zero [NeZero D]
-    {ρ H : Matrix (Fin D) (Fin D) ℂ}
-    (hρ : ρ.PosDef)
-    (htr : H.trace = 0) (t : ℝ) :
-    ρ + (t : ℂ) • H ≠ 0 := by
-  intro h
-  have : (ρ + (t : ℂ) • H).trace = 0 := by rw [h]; simp [Matrix.trace]
-  rw [Matrix.trace_add, Matrix.trace_smul, htr, smul_zero, add_zero] at this
-  have htr_pos : (0 : ℝ) < (ρ.trace).re := by
-    rw [hρ.isHermitian.trace_eq_sum_eigenvalues]
-    simp only [Complex.re_sum]
-    exact Finset.sum_pos (fun i _ => hρ.eigenvalues_pos i)
-      ⟨⟨0, NeZero.pos D⟩, Finset.mem_univ _⟩
-  exact absurd this (ne_of_apply_ne Complex.re (ne_of_gt htr_pos))
-
-/-- **Upper bound on perturbation parameter.**
-
-For any PSD matrix `ρ + t • H`, the parameter `t` is bounded by the PosDef inner product
-condition: `PosSemidef.re_dotProduct_nonneg` gives `Re(v†(ρ + tH)v) ≥ 0`. -/
-theorem perturbation_psd_upper_bound
-    {ρ H : Matrix (Fin D) (Fin D) ℂ}
-    {t : ℝ} (ht_psd : (ρ + (t : ℂ) • H).PosSemidef)
-    (v : Fin D → ℂ) :
-    0 ≤ (star v ⬝ᵥ (ρ *ᵥ v)).re + t * (star v ⬝ᵥ (H *ᵥ v)).re := by
-  have h := ht_psd.re_dotProduct_nonneg v
-  rw [Matrix.add_mulVec, dotProduct_add, Matrix.smul_mulVec, dotProduct_smul,
-    smul_eq_mul] at h
-  have : ((t : ℂ) * (star v ⬝ᵥ H *ᵥ v)).re = t * (star v ⬝ᵥ H *ᵥ v).re := by
-    rw [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im]; ring
-  -- h uses RCLike.re while goal uses Complex.re; convert
-  change 0 ≤ (star v ⬝ᵥ ρ *ᵥ v + (t : ℂ) * (star v ⬝ᵥ H *ᵥ v)).re at h
-  rw [Complex.add_re] at h
-  linarith [this]
 
 end SpectralPerturbation
 
