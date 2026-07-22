@@ -225,8 +225,58 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     over global virtual configurations compatible with those data of the product
     of local tensor entries over the middle region $V\setminus\{u,v\}$.
     The graph-local contraction is read as a three-site chain:
+    % Formula (paper_normal.tex:981--1009): choose edge (1,5), set
+    % A'_1=A_5, A'_2=A_1, and block vertices {2,3,4} into A'_3; the resulting
+    % cyclic word is A'_1 A'_2 A'_3 in that order.
+    % Ink-to-index: the left panel has the source five-cycle and chord (2,5),
+    % with singleton endpoint regions A'_1,A'_2 and middle region A'_3.  The
+    % right panel contracts the three induced virtual bonds cyclically.
+    % Contraction and boundary signature: the graph panel has all six virtual
+    % edges contracted and five physical legs, (V,P)=(0,5); blocking groups
+    % those physical factors into three legs on the cyclic word, (0,3).
+    % Source verdict: exact source blocking and cyclic order.  The legacy
+    % catalogue word A'_1,A'_3,A'_2 did not match the source.
     \begin{center}
-        \TNPEPSEdgeBlockingReduction
+        \begin{tenkzfree}
+            \tnput[ports={0:virtual,110:virtual,north:physical}]
+                {blockAone}{(-10mm,-5mm)}{}
+            \tnput[ports={180:virtual,55:virtual,141:virtual,north:physical}]
+                {blockAtwo}{(8mm,-5mm)}{}
+            \tnput[ports={235:virtual,155:virtual,north:physical}]
+                {blockAthree}{(16mm,6mm)}{}
+            \tnput[ports={-25:virtual,190:virtual,north:physical}]
+                {blockAfour}{(4mm,15mm)}{}
+            \tnput[ports={10:virtual,-70:virtual,-39:virtual,north:physical}]
+                {blockAfive}{(-10mm,10mm)}{}
+            \tnput[boundary, ports={south:physical}]{blockPone}{(-10mm,3mm)}{}
+            \tnput[boundary, ports={south:physical}]{blockPtwo}{(8mm,3mm)}{}
+            \tnput[boundary, ports={south:physical}]{blockPthree}{(16mm,14mm)}{}
+            \tnput[boundary, ports={south:physical}]{blockPfour}{(4mm,23mm)}{}
+            \tnput[boundary, ports={south:physical}]{blockPfive}{(-10mm,18mm)}{}
+            \tnjoin[name=blockOneTwo]{blockAone.0}{blockAtwo.180}
+            \tnjoin[name=blockTwoThree]{blockAtwo.55}{blockAthree.235}
+            \tnjoin[name=blockThreeFour]{blockAthree.155}{blockAfour.-25}
+            \tnjoin[name=blockFourFive]{blockAfour.190}{blockAfive.10}
+            \tnjoin[name=blockFiveOne]{blockAfive.-70}{blockAone.110}
+            \tnjoin[name=blockTwoFive]{blockAtwo.141}{blockAfive.-39}
+            \tnjoin{blockAone.north}{blockPone.south}
+            \tnjoin{blockAtwo.north}{blockPtwo.south}
+            \tnjoin{blockAthree.north}{blockPthree.south}
+            \tnjoin{blockAfour.north}{blockPfour.south}
+            \tnjoin{blockAfive.north}{blockPfive.south}
+            \tnregion[slot=selected, label={$A'_2$}, label pos=south]
+                {blockAone}
+            \tnregion[slot=secondary, label={$A'_1$}, label pos=north west]
+                {blockAfive}
+            \tnregion[slot=collar, label={$A'_3$}, label pos=north east]
+                {blockAtwo,blockAthree,blockAfour,
+                 blockTwoThree,blockThreeFour}
+        \end{tenkzfree}
+        \(\quad\rightsquigarrow\quad\)
+        \tnpic[periodic, physical=up]{%
+            \tn[label pos=south]{A'_1} &
+            \tn[label pos=south]{A'_2} &
+            \tn[label pos=south]{A'_3}}
     \end{center}
 \end{definition}
 
