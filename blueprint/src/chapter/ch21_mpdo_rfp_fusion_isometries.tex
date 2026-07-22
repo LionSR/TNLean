@@ -935,23 +935,20 @@ weights in the length-independent case at
     %         \operatorname{tr}(M_{\alpha_{r+1}}).
     % Source verdict: CPSV16 lines 999--1008 and MPDO_Structure.png give this
     %   recursive coefficient graph.  The image is the source for the open
-    %   copy rails, repeated-step ellipsis, and terminal virtual trace.
+    %   copy rails, repeated-step ellipsis, and terminal horizontal trace.
     % Ink-to-index map: the four east ports of X_s, from top to bottom, are
     %   k_s, alpha_s, beta_s, gamma_s.  The first three meet distinct open
     %   copy rails.  For consecutive steps, gamma_s and alpha_{s+1} are two
     %   incidences on the same rail, which remains open above and below; the
     %   rail is a diagonal copy register and does not sum that label.  The
     %   ellipsis repeats precisely this routing.  On the terminal rail,
-    %   gamma_r meets both X_r and the selector port of M_{gamma_r}.  Only the
-    %   two virtual ports of M_{gamma_r} are contracted with one another; its
-    %   physical input and output remain open.
+    %   gamma_r meets both X_r and the selector port of M_{gamma_r}.  The two
+    %   horizontal operator ports of M_{gamma_r} are contracted with one
+    %   another, while its two bond ports remain open.  Thus the terminal
+    %   matrix acts on the label-dependent bond space of M_{gamma_r}.
     % Boundary signature: the r coefficient boxes have 3r+1 unique open copy
-    %   rails.  With the terminal physical pair, Q_N has semantic signature
-    %   (virtual-west, virtual-east, physical-up, physical-down)
-    %   = (0,0,3r+2,3r+2) = (0,0,3N-1,3N-1).
-    %   The four visible X boxes separated by the ellipsis expose 14 copy-rail
-    %   pairs plus the terminal physical pair, so the displayed event graph
-    %   has finite signature (0,0,15,15).
+    %   rails, together with the open terminal bond pair.  The bond dimension
+    %   depends on the terminal label gamma_r.
     % Projector caveat: lines 1010--1015 require length-independent structure
     %   coefficients and projector terminal traces before Q is a projector;
     %   the contraction displayed here asserts only the operator Q_N.
@@ -1011,8 +1008,8 @@ weights in the length-independent case at
             {Selector}{(102mm,0mm)}{}
 
         \tnput[mpo,
-            ports={north:physical,south:physical,west:physical,
-                south west:virtual,south east:virtual}]
+            ports={north:virtual,south:virtual,west:physical,
+                south west:physical,south east:physical}]
             {Mlast}{(116mm,0mm)}{M_{\gamma_r}}
 
         \foreach \name/\x in {
@@ -1025,9 +1022,9 @@ weights in the length-independent case at
             \tnput[boundary, ports={north:physical}]
                 {\name Bottom}{(\x mm,-20mm)}{}
         }
-        \tnput[boundary, ports={south:physical}]
+        \tnput[boundary, ports={south:virtual}]
             {Mtop}{(116mm,18mm)}{}
-        \tnput[boundary, ports={north:physical}]
+        \tnput[boundary, ports={north:virtual}]
             {Mbottom}{(116mm,-20mm)}{}
 
         \tnjoin{Xone.20}{Kone.west}
@@ -1424,19 +1421,33 @@ separate step.
 \begin{definition}[One fusion layer of the topological projector]%
     \label{def:mpdo_topological_projector_one_fusion}
     \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose}
     \lean{MPOTensor.BNTFusionTensorClause.projectorQBlock}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose}
     \leanok
     \uses{def:mpdo_bnt_fusion_coisometry_family,
         def:mpdo_bnt_fusion_tensor_clause}
-    Let $P_\gamma$ be operators on the common physical space of the vertically
-    read tensors.  Define one fusion layer of the recursive operator $Q$ by
+    Let $P_\gamma$ be operators on the bond space of the vertically read
+    tensor $M_\gamma$.  Define one fusion layer of the recursive operator $Q$
+    by
     \[
         Q_{\alpha,\beta}
           =\bigoplus_\gamma
              \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
     \]
     The source terminal matrices are
-    $P_\gamma=\operatorname{tr}(M_\gamma)$ after spectral refinement.
+    $P_\gamma=\operatorname{tr}(M_\gamma)$ after spectral refinement, where
+    the trace closes the horizontal operator leg and leaves the bond indices.
+    Before spectral refinement, the fusion identity implies
+    \[
+      U_{\alpha,\beta}\operatorname{tr}(M_\alpha M_\beta)
+        U_{\alpha,\beta}^{\dagger}
+      =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes
+          \operatorname{tr}(M_\gamma).
+    \]
     This is one pairwise step in the recursion of
     \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
 
@@ -1451,12 +1462,18 @@ separate step.
     \label{thm:mpdo_topological_projector_one_fusion}
     \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_eq_unweighted}
     \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.conjugatedProjectorQBlock}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
     \lean{MPOTensor.BNTFusionTensorClause.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.conjugatedProjectorQBlock}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
     \leanok
     \uses{def:mpdo_topological_projector_one_fusion,
         thm:mpdo_bnt_length_independent_zipper}
-    Let $P_\gamma$ be self-adjoint idempotents on the common terminal physical
-    space.
+    Let $P_\gamma$ be self-adjoint idempotents on the terminal bond space of
+    $M_\gamma$.
     Suppose that the matrices $\chi_{\alpha,\beta,\gamma}$ have the
     positive-length trace-power form of the label-coefficient family and that
     this family is independent of the positive chain length.  Then
@@ -1467,6 +1484,10 @@ separate step.
     \]
     is self-adjoint and idempotent.  This is the single recursive fusion step in
     \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+    Since the active fusion map satisfies
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$, the transported operator
+    $U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is also an
+    orthogonal projection on the product bond space.
 \end{theorem}
 \begin{proof}\leanok
     The trace-power hypothesis and length independence give
@@ -1482,35 +1503,35 @@ separate step.
     \]
 \end{proof}
 
-\begin{definition}[Full-support virtual-bond projector block]%
+\begin{definition}[Full-support specialization of one fusion layer]%
     \label{def:mpdo_full_support_virtual_projector_one_fusion}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
     \lean{MPOTensor.BNTFusionIsometryFamily.conjugatedProjectorQBlock}
     \leanok
     \uses{def:mpdo_bnt_fusion_isometry_family}
-    For a full-support fusion family, let $P_\gamma$ instead act on the virtual
-    bond space of $M_\gamma$.  Define
+    For a full-support fusion family, let $P_\gamma$ act on the bond space of
+    $M_\gamma$.  Define
     \[
-        Q^{\mathrm{vir}}_{\alpha,\beta}
+        Q^{\mathrm{fs}}_{\alpha,\beta}
           =\bigoplus_\gamma
              \chi_{\alpha,\beta,\gamma}\otimes P_\gamma,
         \qquad
-        \widehat Q^{\mathrm{vir}}_{\alpha,\beta}
+        \widehat Q^{\mathrm{fs}}_{\alpha,\beta}
           =U_{\alpha,\beta}^{\dagger}
-             Q^{\mathrm{vir}}_{\alpha,\beta}U_{\alpha,\beta}.
+             Q^{\mathrm{fs}}_{\alpha,\beta}U_{\alpha,\beta}.
     \]
-    This is a conditional construction on the virtual bond spaces, not the
-    terminal physical-space operator of
-    \cite[line~1010]{Cirac2016MPDO_arXiv}.
+    The terminal contraction is the same as in the source operator.  The
+    additional condition is that the active support is the whole product bond
+    space.
 
-    \textbf{Scope restriction (virtual-bond terminal operators):} The terminal
-    operators and the full-support identity are additional restrictions not
-    asserted in the arbitrary-chain source statement.  This distinction is
+    \textbf{Scope restriction (full-support fusion family):} Full support is
+    not an additional hypothesis of the arbitrary-chain source statement.
+    This distinction is
     documented in
     \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
 \end{definition}
 
-\begin{theorem}[Projection property of the full-support virtual-bond block]%
+\begin{theorem}[Projection property of the full-support specialization]%
     \label{thm:mpdo_full_support_virtual_projector_one_fusion}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_eq_unweighted}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_isStarProjection}
@@ -1523,26 +1544,26 @@ separate step.
         thm:orthogonal_projection_star_projection_channel}
     Suppose that the labelled tensors form a basis of normal tensors and the
     positive trace-power coefficients are independent of the positive chain
-    length.  If each $P_\gamma$ is a self-adjoint idempotent on the virtual
-    bond space, then $Q^{\mathrm{vir}}_{\alpha,\beta}$ is a self-adjoint
-    idempotent and $\widehat Q^{\mathrm{vir}}_{\alpha,\beta}$ is an orthogonal
+    length.  If each $P_\gamma$ is a self-adjoint idempotent on the bond space,
+    then $Q^{\mathrm{fs}}_{\alpha,\beta}$ is a self-adjoint idempotent and
+    $\widehat Q^{\mathrm{fs}}_{\alpha,\beta}$ is an orthogonal
     projection.
 \end{theorem}
 \begin{proof}\leanok
     Length independence gives
     $\chi_{\alpha,\beta,\gamma}=1$, hence
-    $(Q^{\mathrm{vir}}_{\alpha,\beta})^2
-      =Q^{\mathrm{vir}}_{\alpha,\beta}$ and
-    $(Q^{\mathrm{vir}}_{\alpha,\beta})^\dagger
-      =Q^{\mathrm{vir}}_{\alpha,\beta}$.
+    $(Q^{\mathrm{fs}}_{\alpha,\beta})^2
+      =Q^{\mathrm{fs}}_{\alpha,\beta}$ and
+    $(Q^{\mathrm{fs}}_{\alpha,\beta})^\dagger
+      =Q^{\mathrm{fs}}_{\alpha,\beta}$.
     The basis-of-normal-tensors completeness theorem gives
     $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, so
     \[
-      (\widehat Q^{\mathrm{vir}}_{\alpha,\beta})^2
-        =U_{\alpha,\beta}^{\dagger}Q^{\mathrm{vir}}_{\alpha,\beta}
+      (\widehat Q^{\mathrm{fs}}_{\alpha,\beta})^2
+        =U_{\alpha,\beta}^{\dagger}Q^{\mathrm{fs}}_{\alpha,\beta}
           (U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger})
-          Q^{\mathrm{vir}}_{\alpha,\beta}U_{\alpha,\beta}
-        =\widehat Q^{\mathrm{vir}}_{\alpha,\beta}.
+          Q^{\mathrm{fs}}_{\alpha,\beta}U_{\alpha,\beta}
+        =\widehat Q^{\mathrm{fs}}_{\alpha,\beta}.
     \]
 \end{proof}
 
