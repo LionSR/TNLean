@@ -913,6 +913,16 @@
       { \int_gset:Nn \g__tenkzcd_mapinvalid_int {#1} }
   }
 
+% the companion of \tenkz_cd_note_map_invalid:n's numbered reasons: reports
+% one typed-map validation failure with the doctrine's standard shape
+% (invalidate, then explain) so the sixteen reasons share one call instead
+% of retyping the bool-then-PackageError pair at each
+\cs_new_protected:Npn \tenkz_cd_map_error:nn #1#2
+  {
+    \bool_set_false:N \l__tenkzcd_mapvalid_bool
+    \PackageError{tenkz}{#1}{#2}
+  }
+
 \cs_new_protected:Npn \tenkz_cd_read_map_transform:N #1
   {
     \pgfgettransformentries
@@ -989,33 +999,12 @@
       { \tenkz_cd_note_map_invalid:n {3} }
   }
 
-% The emitted wire is an undecorated, unshortened horizontal rectangle between
-% the measured object anchors.  This hook runs after all public map styles, so
-% unsupported path-local state is observed without rewriting user options.
-\cs_new_protected:Npn \tenkz_cd_validate_map_declared_modes:
-  {
-    \group_begin:
-      \tikz@mode@clipfalse
-      \tikz@mode@fade@pathfalse
-      \tikz@mode@fade@scopefalse
-      \let\tikz@path@picture\pgfutil@empty
-      \tikz@mode
-      \iftikz@mode@clip
-        \tenkz_cd_note_map_invalid:n {11}
-      \fi
-      \iftikz@mode@fade@path
-        \tenkz_cd_note_map_invalid:n {12}
-      \fi
-      \iftikz@mode@fade@scope
-        \tenkz_cd_note_map_invalid:n {13}
-      \fi
-      \ifx\tikz@path@picture\pgfutil@empty\else
-        \tenkz_cd_note_map_invalid:n {14}
-      \fi
-    \group_end:
-  }
-
-\cs_new_protected:Npn \tenkz_cd_validate_map_path_state:
+% the four `tikz@mode'/`tikz@path@picture' checks both the declared-time
+% and the draw-time validator must make, byte-identical -- only the
+% RESET that precedes reading them (declared time re-derives the modes
+% from a clean \tikz@mode; draw time reads whatever the live path already
+% set) differs between the two callers below
+\cs_new_protected:Npn \tenkz_cd_note_map_mode_flags:
   {
     \iftikz@mode@clip
       \tenkz_cd_note_map_invalid:n {11}
@@ -1029,6 +1018,26 @@
     \ifx\tikz@path@picture\pgfutil@empty\else
       \tenkz_cd_note_map_invalid:n {14}
     \fi
+  }
+
+% The emitted wire is an undecorated, unshortened horizontal rectangle between
+% the measured object anchors.  This hook runs after all public map styles, so
+% unsupported path-local state is observed without rewriting user options.
+\cs_new_protected:Npn \tenkz_cd_validate_map_declared_modes:
+  {
+    \group_begin:
+      \tikz@mode@clipfalse
+      \tikz@mode@fade@pathfalse
+      \tikz@mode@fade@scopefalse
+      \let\tikz@path@picture\pgfutil@empty
+      \tikz@mode
+      \tenkz_cd_note_map_mode_flags:
+    \group_end:
+  }
+
+\cs_new_protected:Npn \tenkz_cd_validate_map_path_state:
+  {
+    \tenkz_cd_note_map_mode_flags:
     \group_begin:
       \tikz@transform
       \tenkz_cd_check_current_map_transform:
@@ -1152,8 +1161,7 @@
     \int_compare:nNnTF {\l__tenkzcd_mapdrawuses_int} = {1}
       { }
       {
-        \bool_set_false:N \l__tenkzcd_mapvalid_bool
-        \PackageError{tenkz}{Typed-map~path~has~
+        \tenkz_cd_map_error:nn {Typed-map~path~has~
           \int_use:N\l__tenkzcd_mapdrawuses_int\space live~draw~uses}
           {Use~one~ordinary~solid~or~fused~draw~path~for~a~typed~map.}
       }
@@ -1161,86 +1169,54 @@
       {
         \int_case:nnF {\l__tenkzcd_mapinvalid_int}
           {
-            {1}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~a~dashed~stroke}
-                {Use~a~solid~stroke~for~typed-map~visible~geometry.}
-            }
-            {2}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~zero~draw~opacity}
-                {Use~positive~draw~opacity~for~typed-map~visible~geometry.}
-            }
-            {3}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~a~path-local~transform}
-                {Transform~the~whole~picture,~not~one~typed-map~path.}
-            }
-            {4}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~nonzero~shortening}
-                {Use~an~unshortened~typed-map~path.}
-            }
-            {5}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~changes~the~line~cap}
-                {Use~the~inherited~line~cap~for~typed-map~paths.}
-            }
-            {6}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~a~decoration}
-                {Use~an~undecorated~typed-map~path.}
-            }
-            {7}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~a~pre/post~action}
-                {Use~one~ordinary~draw~action~for~a~typed-map~path.}
-            }
-            {8}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~is~not~one~horizontal~line}
-                {Use~exactly~one~straight~horizontal~typed-map~path.}
-            }
-            {9}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~arrow~tips}
-                {Use~an~unarrowed~typed-map~path.}
-            }
-            {10}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~nonpositive~live~width}
-                {Use~a~positive~line~width~for~typed-map~visible~geometry.}
-            }
-            {11}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~clipping}
-                {Use~an~unclipped~typed-map~path.}
-            }
-            {12}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~path~fading}
-                {Use~an~unfaded~typed-map~path.}
-            }
-            {13}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~scope~fading}
-                {Use~an~unfaded~typed-map~scope.}
-            }
-            {14}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~a~path~picture}
-                {Use~a~typed-map~path~without~path-picture~ink.}
-            }
-            {15}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~invalid~double~geometry}
-                {Require~zero~inner~width~or~a~gap~smaller~than~the~outer~width.}
-            }
-            {16}{
-              \bool_set_false:N \l__tenkzcd_mapvalid_bool
-              \PackageError{tenkz}{Typed-map~path~has~a~non-normal~blend~mode}
-                {Use~blend~mode=normal~for~exact~typed-map~geometry.}
-            }
+            {1}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~a~dashed~stroke}
+              {Use~a~solid~stroke~for~typed-map~visible~geometry.} }
+            {2}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~zero~draw~opacity}
+              {Use~positive~draw~opacity~for~typed-map~visible~geometry.} }
+            {3}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~a~path-local~transform}
+              {Transform~the~whole~picture,~not~one~typed-map~path.} }
+            {4}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~nonzero~shortening}
+              {Use~an~unshortened~typed-map~path.} }
+            {5}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~changes~the~line~cap}
+              {Use~the~inherited~line~cap~for~typed-map~paths.} }
+            {6}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~a~decoration}
+              {Use~an~undecorated~typed-map~path.} }
+            {7}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~a~pre/post~action}
+              {Use~one~ordinary~draw~action~for~a~typed-map~path.} }
+            {8}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~is~not~one~horizontal~line}
+              {Use~exactly~one~straight~horizontal~typed-map~path.} }
+            {9}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~arrow~tips}
+              {Use~an~unarrowed~typed-map~path.} }
+            {10}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~nonpositive~live~width}
+              {Use~a~positive~line~width~for~typed-map~visible~geometry.} }
+            {11}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~clipping}
+              {Use~an~unclipped~typed-map~path.} }
+            {12}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~path~fading}
+              {Use~an~unfaded~typed-map~path.} }
+            {13}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~scope~fading}
+              {Use~an~unfaded~typed-map~scope.} }
+            {14}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~a~path~picture}
+              {Use~a~typed-map~path~without~path-picture~ink.} }
+            {15}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~invalid~double~geometry}
+              {Require~zero~inner~width~or~a~gap~smaller~than~the~outer~width.} }
+            {16}{ \tenkz_cd_map_error:nn
+              {Typed-map~path~has~a~non-normal~blend~mode}
+              {Use~blend~mode=normal~for~exact~typed-map~geometry.} }
           }
           { }
       }
