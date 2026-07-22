@@ -58,3 +58,89 @@ theorem fundamentalTheorem_injective_chain
     exact this⟩
 
 end MPSChainTensor
+
+open scoped Matrix
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- Rescaling every site tensor in a chain rescales the combined tensor by the
+same scalar. -/
+theorem chainCombinedTensor_smul_chain {n : ℕ}
+    (A : Fin n → MPSTensor d D) (ζ : ℂ) :
+    chainCombinedTensor (fun k i => ζ • A k i) = ζ • chainCombinedTensor A := by
+  funext j
+  simp [chainCombinedTensor]
+
+end MPSTensor
+
+namespace MPSChainTensor
+
+open MPSTensor
+
+variable {d D n : ℕ}
+
+/-- **Injective-chain Fundamental Theorem up to a nonzero scalar.**
+
+For nonempty chains of positive bond dimension, if
+`GaugePhaseEquiv (chainCombinedTensor A) (chainCombinedTensor B)` and `A` is
+injective, there exist `Z_k ∈ GL(D, ℂ)` and `ζ ≠ 0` such that
+$$
+  B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}
+$$
+for all sites `k` and physical indices `i`. -/
+theorem fundamentalTheorem_injective_chain_gaugePhase
+    (A B : MPSChainTensor d D n)
+    (hn : 0 < n) (hD : 0 < D)
+    (hA : IsInjective A)
+    (hGauge : MPSTensor.GaugePhaseEquiv
+      (MPSTensor.chainCombinedTensor A)
+      (MPSTensor.chainCombinedTensor B)) :
+    ∃ Z : Fin n → GL (Fin D) ℂ,
+      ∃ ζ : ℂ, ζ ≠ 0 ∧
+        ∀ k : Fin n, ∀ i : Fin d,
+          B k i =
+            ζ • ((Z k : Matrix (Fin D) (Fin D) ℂ) * A k i *
+              (((Z (cyclicSucc k))⁻¹ : GL (Fin D) ℂ) :
+                Matrix (Fin D) (Fin D) ℂ)) := by
+  rcases hGauge with ⟨X, ζ, hζ, hX⟩
+  let B' : MPSChainTensor d D n := fun k i => ζ⁻¹ • B k i
+  have hCombinedGauge :
+      MPSTensor.GaugeEquiv
+        (MPSTensor.chainCombinedTensor A)
+        (MPSTensor.chainCombinedTensor B') := by
+    refine ⟨X, ?_⟩
+    intro j
+    calc
+      MPSTensor.chainCombinedTensor B' j
+          = ζ⁻¹ • MPSTensor.chainCombinedTensor B j := by
+              simpa [B'] using
+                congrFun (MPSTensor.chainCombinedTensor_smul_chain (A := B) (ζ := ζ⁻¹)) j
+      _ = ζ⁻¹ •
+            (ζ • ((X : Matrix (Fin D) (Fin D) ℂ) *
+              MPSTensor.chainCombinedTensor A j *
+              ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := by
+            rw [hX j]
+      _ = ((X : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.chainCombinedTensor A j *
+            ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+            simp [smul_smul, hζ]
+  have hSame :
+      MPSTensor.SameMPV
+        (MPSTensor.chainCombinedTensor A)
+        (MPSTensor.chainCombinedTensor B') :=
+    MPSTensor.GaugeEquiv.sameMPV hCombinedGauge
+  obtain ⟨Z, hZ⟩ := fundamentalTheorem_injective_chain A B' hn hD hA hSame
+  refine ⟨Z, ζ, hζ, ?_⟩
+  intro k i
+  calc
+    B k i
+        = ζ • B' k i := by
+            simp [B', smul_smul, hζ]
+    _ = ζ •
+          ((Z k : Matrix (Fin D) (Fin D) ℂ) * A k i *
+            (((Z (cyclicSucc k))⁻¹ : GL (Fin D) ℂ) :
+              Matrix (Fin D) (Fin D) ℂ)) := by
+          rw [hZ k i]
+
+end MPSChainTensor

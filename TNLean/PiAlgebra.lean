@@ -9,7 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PiAlgebra
 
 import TNLean.PiAlgebra.CanonicalFormSepAux
-import TNLean.PiAlgebra.Construction
-import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.GlobalSymmetry
-import TNLean.PiAlgebra.TIReduction

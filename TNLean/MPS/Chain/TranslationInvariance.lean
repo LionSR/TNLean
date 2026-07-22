@@ -124,3 +124,29 @@ theorem ti_tensors_collapse_to_single_gauge
     simpa [smul_eq_mul, Matrix.mul_assoc] using hXi
 
 end MPSChainTensor
+
+open scoped Matrix
+
+namespace MPSChainTensor
+
+variable {d D n : ℕ}
+
+/-- **TI Reduction Corollary**.
+
+If `A` is injective and the constant chains `(A, …, A)` and `(B, …, B)` satisfy
+`SameMPV` on their combined tensors, then `B` is gauge equivalent to `A` and
+`B` is injective. -/
+theorem ti_reduction_corollary
+    (A B : MPSTensor d D)
+    (hn : 0 < n)
+    (hA : MPSTensor.IsInjective A)
+    (hMPV : MPSTensor.SameMPV
+      (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
+      (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
+    (∃ X : GL (Fin D) ℂ, ∀ i : Fin d,
+      B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) ∧
+    MPSTensor.IsInjective B := by
+  obtain ⟨X, hGauge⟩ := ti_tensors_single_gauge A B hn hA hMPV
+  exact ⟨⟨X, hGauge⟩, MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩⟩
+
+end MPSChainTensor

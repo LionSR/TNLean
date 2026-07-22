@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
-import TNLean.PiAlgebra.Construction
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
+import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.LinearAlgebra.Pi
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.RingTheory.Noetherian.Defs
 
@@ -242,6 +243,24 @@ def wordEntryFamily
     (A : (k : Fin r) → MPSTensor d (dim k))
     (L : ℕ) : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
   fun x w => blockEntryValue (wordTuple A L w) x
+
+/-- Nondegeneracy of the product trace pairing used in the BiCF span criterion. -/
+theorem piTrace_mul_right_eq_zero
+    (M : ∀ k : Fin r, Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (h : ∀ N : ∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+      ∑ k, Matrix.trace (M k * N k) = 0) :
+    M = 0 := by
+  classical
+  funext k
+  apply (Matrix.ext_iff_trace_mul_right (A := M k) (B := 0)).2
+  intro N_k
+  have hsum := h (Function.update 0 k N_k)
+  have htrace : Matrix.trace (M k * N_k) = 0 := by
+    rwa [Finset.sum_eq_single k
+      (fun j _ hj => by
+        rw [Function.update_of_ne hj, Pi.zero_apply, mul_zero, Matrix.trace_zero])
+      (fun hk => absurd (Finset.mem_univ k) hk), Function.update_self] at hsum
+  simpa using htrace
 
 /-- The block-injective canonical-form property used by `HorizontalCFData`. -/
 def HasBiCF
