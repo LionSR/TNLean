@@ -355,6 +355,7 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalTraceDecomposition
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.BNT.Basic
+import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.BNT.Separation
 import TNLean.MPS.BNT.PermutationRigidityPrimitive
 import TNLean.MPS.BNT.Construction

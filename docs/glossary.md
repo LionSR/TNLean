@@ -63,12 +63,16 @@ is deliberately source-faithful.
 - **Sources:** arXiv:1606.00608,
   `Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`, and arXiv:2011.12127,
   Definition 4.2, `Papers/2011.12127/TN-Review-main.tex:1846-1850`.
-- **Sanctioned bridges:** use `MPSTensor.IsNormalTensor.isNormal` block by block
-  when `[NeZero (dim j)]` is available. There is no public equivalence between
-  the two BNT structures.
-- **Caveat:** their block index packaging also differs: the CPSV predicate uses
-  a sigma type of varying dimensions, whereas `IsBNT` takes an explicit
-  dimension family. Do not treat them as definitional aliases.
+- **Sanctioned bridges:**
+  `MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos` derives the positive
+  block dimensions needed by `MPSTensor.IsNormalTensor.isNormal`, and
+  `MPSTensor.IsCPSVBasisOfNormalTensors.isBNT` then forgets the spectral
+  normality data to produce `MPSTensor.IsBNT`.
+- **Caveat:** this is a one-way implication, not an equivalence. Their block
+  index packaging also differs: the CPSV predicate uses a sigma type of varying
+  dimensions, whereas `IsBNT` takes an explicit dimension family. Algebraic
+  eventual block injectivity does not recover spectral-radius-one normalization
+  or peripheral-spectrum data. Do not treat the predicates as aliases.
 
 ## Primitivity
 
@@ -400,6 +404,10 @@ model different levels of data and different sources.
 - **Source:** arXiv:1606.00608 §II, lines 271--301, and arXiv:2011.12127
   Definition 4.2 and two-layer display, lines 1846--1884.
 - **Sanctioned bridges:**
+  `MPSTensor.IsBNTCanonicalForm.basis_isNormal` projects algebraic normality of
+  each basis block, and `MPSTensor.IsBNTCanonicalForm.isBNT` forgets the sector
+  weights and canonical-form data to produce the algebraic basis predicate.
+  Further bridges are
   `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor`,
   `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical`, and the
   supplier declarations

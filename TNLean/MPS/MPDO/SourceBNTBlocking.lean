@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 
@@ -21,34 +22,6 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-private theorem bondDim_pos_of_mpvState_ne_zero {A : MPSTensor d D} {N : ℕ}
-    (hA : mpvState (d := d) A N ≠ 0) :
-    0 < D := by
-  by_contra hD
-  have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
-  subst D
-  apply hA
-  ext σ
-  simp [mpvState, mpv, coeff, Matrix.trace]
-
-/-- Every tensor in a basis of normal tensors has positive bond dimension.
-
-This follows from the eventual linear independence in the source BNT
-definition: each sufficiently long matrix product vector is nonzero.
-
-Source: arXiv:1606.00608, BNT definition at lines 271--274. -/
-theorem IsCPSVBasisOfNormalTensors.blocks_dim_pos
-    {g : ℕ} {dim : Fin g → ℕ}
-    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
-    (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
-    ∀ j, 0 < dim j := by
-  intro j
-  obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
-  have hN : N₀ < N₀ + 1 := by omega
-  have hne : mpvState (d := d) (B j) (N₀ + 1) ≠ 0 :=
-    (hLI (N₀ + 1) hN).ne_zero j
-  exact bondDim_pos_of_mpvState_ne_zero hne
 
 /-- A simultaneous length-`L` word span becomes a simultaneous one-letter
 span after blocking `L` physical sites. -/
