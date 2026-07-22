@@ -44,6 +44,7 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     \label{lem:cpsv_bnt_block_dimensions_positive}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos}
     \leanok
+    \uses{def:bnt_cpsv}
     Every block in a coefficient-form basis of normal tensors has positive
     bond dimension.
 \end{lemma}
@@ -387,6 +388,44 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     Apply Theorem~\ref{thm:cpsv_normal_tp_gauge}. The trace-preserving,
     primitive, irreducible representative is eventually block-injective, and
     gauge invariance transports this conclusion back to the original tensor.
+\end{proof}
+
+\begin{theorem}[A coefficient-form BNT is an algebraic BNT]
+    \label{thm:cpsv_bnt_is_bnt}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.isBNT}
+    \leanok
+    \uses{def:bnt, def:bnt_cpsv,
+        lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_normal_eventually_injective}
+    If $(A_j)_{j=1}^{g}$ is a coefficient-form basis of normal tensors for
+    $A$, then $(A_j)_{j=1}^{g}$ is an algebraic basis of normal tensors for
+    $A$. Only this implication from spectral normality to algebraic normality
+    is asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_normal_eventually_injective}
+    Every block has positive bond dimension, so spectral normality implies
+    eventual block injectivity for each block. The spanning identities and
+    eventual linear independence are unchanged.
+\end{proof}
+
+\begin{lemma}[Transport of an algebraic BNT along positive-length MPV equality]
+    \label{lem:bnt_of_same_mpv2_pos}
+    \lean{MPSTensor.IsBNT.of_sameMPV₂Pos}
+    \leanok
+    \uses{def:bnt, def:same_mpv2_pos}
+    Let $A$ and $A'$ have the same matrix product vectors at every positive
+    length. If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$, then
+    the same family is a basis of normal tensors for $A'$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:bnt, def:same_mpv2_pos}
+    Substitute the positive-length MPV equality into the spanning identity
+    for $A$. Normality and eventual linear independence depend only on the
+    family $(A_j)_{j=1}^{g}$.
 \end{proof}
 
 \begin{theorem}[Non-decaying rectangular overlap determines the bond dimension]
@@ -1557,6 +1596,41 @@ single family.
     \leanok
     This is the normality conclusion of
     Theorem~\ref{thm:bnt_primitivity_normality_from_self_overlap}.
+\end{proof}
+
+\begin{corollary}[Basis blocks of a BNT canonical form are normal]
+    \label{cor:sector_bnt_cf_basis_normal}
+    \lean{MPSTensor.IsBNTCanonicalForm.basis_isNormal}
+    \leanok
+    \uses{def:sector_bnt_cf, thm:bnt_normality_from_self_overlap}
+    If $P$ is in BNT canonical form, then every basis block $P_j$ is normal
+    in the algebraic sense of Definition~\ref{def:normal}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:bnt_normality_from_self_overlap}
+    Each basis block has positive bond dimension, is irreducible and
+    left-canonical, and has normalized self-overlap converging to $1$.
+    Corollary~\ref{thm:bnt_normality_from_self_overlap} applies to each block.
+\end{proof}
+
+\begin{theorem}[A BNT canonical form determines an algebraic BNT]
+    \label{thm:sector_bnt_cf_is_bnt}
+    \lean{MPSTensor.IsBNTCanonicalForm.isBNT}
+    \leanok
+    \uses{def:bnt, def:sector_bnt_cf,
+        cor:sector_bnt_cf_basis_normal}
+    If $P$ is in BNT canonical form, then its basis blocks form an algebraic
+    basis of normal tensors for the total tensor associated with $P$. Only
+    this implication from canonical form to algebraic BNT is asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:sector_bnt_cf_basis_normal, def:sector_weight_data}
+    The preceding corollary gives normality of every basis block. The sector
+    coefficient formula expresses the total MPV as a linear combination of
+    the basis MPVs at each positive length, and the BNT sector data give their
+    eventual linear independence.
 \end{proof}
 
 \begin{theorem}[Positive blocking preserves BNT canonical form]
