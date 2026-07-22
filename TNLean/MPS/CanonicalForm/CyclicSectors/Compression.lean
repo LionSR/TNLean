@@ -107,27 +107,17 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
     calc
       A i * V = (P * A i * P) * V := by rw [hSupp i]
       _ = (V * Vᴴ) * A i * (V * Vᴴ) * V := by rw [hV_range]
-      _ = V * (Vᴴ * A i * V) := by rw [hV_iso]; simp only [Matrix.mul_assoc, Matrix.mul_one]
+      _ = V * (Vᴴ * A i * V) * (Vᴴ * V) := by simp only [Matrix.mul_assoc]
+      _ = V * (Vᴴ * A i * V) := by rw [hV_iso, Matrix.mul_one]
       _ = V * C i := rfl
-  have hEvalIntertwine : ∀ w : List (Fin d), evalWord A w * V = V * evalWord C w := by
-    intro w
-    induction w with
-    | nil => rw [evalWord_nil, evalWord_nil, Matrix.one_mul, Matrix.mul_one]
-    | cons i w ih =>
-        rw [evalWord_cons, evalWord_cons]
-        calc
-          A i * evalWord A w * V = A i * (evalWord A w * V) := Matrix.mul_assoc _ _ _
-          _ = A i * (V * evalWord C w) := by rw [ih]
-          _ = (A i * V) * evalWord C w := (Matrix.mul_assoc _ _ _).symm
-          _ = (V * C i) * evalWord C w := by rw [hIntertwineLetter i]
-          _ = V * (C i * evalWord C w) := Matrix.mul_assoc _ _ _
   have hEvalCompression (w : List (Fin d)) :
       evalWord C w = Vᴴ * evalWord A w * V := by
     calc
       evalWord C w = 1 * evalWord C w := (Matrix.one_mul _).symm
       _ = (Vᴴ * V) * evalWord C w := by rw [hV_iso]
       _ = Vᴴ * (V * evalWord C w) := Matrix.mul_assoc _ _ _
-      _ = Vᴴ * (evalWord A w * V) := by rw [hEvalIntertwine w]
+      _ = Vᴴ * (evalWord A w * V) := by
+        rw [evalWord_intertwine A C V hIntertwineLetter w]
       _ = Vᴴ * evalWord A w * V := (Matrix.mul_assoc _ _ _).symm
   refine ⟨n, C, φ, V, htrace, ?_, ?_, ?_, ?_, ?_, ?_, hV_iso, hV_range, ?_⟩
   · apply φ.injective
@@ -135,9 +125,14 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
     rw [hφ_apply, hφ_apply]
     change expand (∑ i : Fin d, (C i)ᴴ * C i) = expand 1
     rw [map_sum]
-    simp_rw [cornerCompressionExpand_mul Umat eST eS hU'U,
-      ← cornerCompressionExpand_conjTranspose Umat eST eS, hLetter]
-    rw [hTP, hExpand_one]
+    calc
+      ∑ i : Fin d, expand ((C i)ᴴ * C i) = ∑ i : Fin d, (A i)ᴴ * A i := by
+        apply Finset.sum_congr rfl
+        intro i _
+        rw [cornerCompressionExpand_mul Umat eST eS hU'U,
+          ← cornerCompressionExpand_conjTranspose Umat eST eS, hLetter]
+      _ = P := hTP
+      _ = expand 1 := hExpand_one.symm
   · intro N σ
     let w := List.ofFn σ
     change Matrix.trace (evalWord C w) = Matrix.trace (P * evalWord A w)
