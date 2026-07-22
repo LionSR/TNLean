@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.MPDO.RetainedClass
 
 /-!
@@ -116,10 +117,11 @@ variable {d D : ℕ}
 /-- The BNT representatives in a particular grouped vertical decomposition
 form an algebraic BNT for the vertical tensor.
 
-The hypotheses are precisely the dimension, isometry, intertwining,
-reconstruction, and spectral-BNT clauses returned by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.  The proof does not
-choose a second vertical grouping.
+The hypotheses are precisely the isometry, intertwining, reconstruction, and
+spectral-BNT clauses returned by
+`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.  Positivity of the
+block dimensions follows from the spectral BNT hypothesis, so it is not an
+independent assumption.  The proof does not choose a second vertical grouping.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem isBNT_verticalTensor_of_grouping
@@ -127,7 +129,6 @@ theorem isBNT_verticalTensor_of_grouping
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
     (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
-    (hdimPos : ∀ k, 0 < dim k)
     (hiso : ∀ k, (V k)ᴴ * V k = 1)
     (hinter : ∀ k v,
       (V k)ᴴ * verticalTensor M v = (μ k • blocks k v) * (V k)ᴴ)
@@ -146,16 +147,6 @@ theorem isBNT_verticalTensor_of_grouping
       (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks) :=
     MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
       (verticalTensor M) μ blocks V hiso hinter hreconstruct
-  change MPSTensor.IsBNT (verticalTensor M) C.g
-    (fun j => dim (C.repr j)) (fun j => blocks (C.repr j))
-  refine ⟨?_, ?_, hBNT.eventually_li⟩
-  · intro j
-    letI : NeZero (dim (C.repr j)) := ⟨(hdimPos (C.repr j)).ne'⟩
-    exact (hBNT.blocks_normal j).isNormal
-  · intro N hN
-    obtain ⟨c, hc⟩ := hBNT.spans_mpv N hN
-    refine ⟨c, fun σ => ?_⟩
-    rw [hPositive N hN σ]
-    exact hc σ
+  exact hBNT.isBNT.of_sameMPV₂Pos hPositive.symm
 
 end MPOTensor

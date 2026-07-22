@@ -3429,9 +3429,9 @@ tensor.  This is the contraction in
     \leanok
     \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, def:bnt,
         def:bnt_cpsv, def:mpv_phase_class_data}
-    Let $M$ be in horizontal canonical form and put $T=\widetilde M$.  Suppose
-    that $B_k$ has positive bond dimension $d_k$, that $\mu_k\in\C$, and that
-    $V_k:\C^{d_k}\to\C^d$ is an isometry for $0\leq k<r$.  Assume, for every
+    Let $M$ be in horizontal canonical form and put $T=\widetilde M$.  Let
+    $B_k$ have bond dimension $d_k$, let $\mu_k\in\C$, and let
+    $V_k:\C^{d_k}\to\C^d$ be an isometry for $0\leq k<r$.  Assume, for every
     vertical letter $v$, that
     \[
         V_k^\dagger T_v=(\mu_k B_k^v)V_k^\dagger,
@@ -3455,7 +3455,8 @@ tensor.  This is the contraction in
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_normal_eventually_injective, thm:mpv_decomposition}
+    \uses{thm:cpsv_bnt_is_bnt, lem:bnt_of_same_mpv2_pos,
+        thm:mpv_decomposition}
     Put $C_k^v=\mu_kB_k^v$.  Induction on a word $w$ gives
     \[
         V_k^\dagger T^w=C_k^wV_k^\dagger.
@@ -3469,11 +3470,11 @@ tensor.  This is the contraction in
           =\sum_k\mu_k^{|w|}\tr(B_k^w)
           =V^{(|w|)}(A_{\mathrm{ret}})_w.
     \end{align*}
-    Hence the spectral BNT spanning identity for $A_{\mathrm{ret}}$ gives the
-    algebraic spanning identity for $T$ at every positive length.  Spectral
-    normality implies algebraic normality for every representative,
-    and the eventual linear independence assertion is unchanged.  These are
-    the three algebraic BNT conditions.
+    Thus $T$ and $A_{\mathrm{ret}}$ have the same matrix product vectors at
+    every positive length.  The spectral BNT hypothesis gives an algebraic BNT
+    for $A_{\mathrm{ret}}$ by Theorem~\ref{thm:cpsv_bnt_is_bnt}; in particular,
+    it supplies the required positive bond dimensions.  Lemma~\ref{lem:bnt_of_same_mpv2_pos}
+    then gives the same algebraic BNT for $T$.
 \end{proof}
 
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]

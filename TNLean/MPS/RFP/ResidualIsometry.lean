@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Periodic.NormalizedSelfOverlap
+import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.StructuralFull
 
@@ -397,14 +397,6 @@ namespace IsBNTCanonicalForm
 
 variable {P : SectorDecomposition d}
 
-/-- Every basis tensor in BNT canonical form is normal. -/
-private lemma basis_isNormal (hCF : IsBNTCanonicalForm P) (k : Fin P.basisCount) :
-    IsNormal (P.basis k) := by
-  letI : NeZero (P.basisDim k) := ⟨(hCF.basis_dim_pos k).ne'⟩
-  exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
-    (P.basis k) (hCF.basis_irreducible k) (hCF.basis_left_canonical k)
-      (hCF.basis_normalized_self_overlap k)
-
 /-- **Multiplicity-one characterization for the basis of normal tensors.**
 
 If `P` is in BNT canonical form, then the direct sum of its distinct basis
@@ -426,7 +418,7 @@ theorem isTransferIdempotent_basisDirectSum_iff (hCF : IsBNTCanonicalForm P) :
           mixedTransferMap₂ (P.basis j) (P.basis j') = 0) := by
   letI : ∀ k : Fin P.basisCount, NeZero (P.basisDim k) :=
     fun k => ⟨(hCF.basis_dim_pos k).ne'⟩
-  exact isTransferIdempotent_directSumTensor_iff P.basis (basis_isNormal hCF)
+  exact isTransferIdempotent_directSumTensor_iff P.basis hCF.basis_isNormal
     hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct
 
 /-- **Residual isometry family for a BNT basis direct sum.**
@@ -456,7 +448,7 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum
   letI : ∀ k : Fin P.basisCount, NeZero (P.basisDim k) :=
     fun k => ⟨(hCF.basis_dim_pos k).ne'⟩
   exact exists_residualIsometryFamily_of_isTransferIdempotent_directSum P.basis
-    (basis_isNormal hCF) hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct hRFP
+    hCF.basis_isNormal hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct hRFP
 
 end IsBNTCanonicalForm
 
