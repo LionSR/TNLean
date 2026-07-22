@@ -42,6 +42,7 @@ on:
       - 'scripts/test_tenkz_corpus_render.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_equation_audit.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_label_overlap.py'
@@ -84,6 +85,7 @@ on:
       - 'scripts/test_tenkz_corpus_render.py'
       - 'scripts/tenkz_lint.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_equation_audit.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_label_overlap.py'
@@ -156,6 +158,7 @@ jobs:
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_lint.py'
               - 'scripts/test_tenkz_pic.py'
+              - 'scripts/test_tenkz_equation_audit.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_cd_map_labels.py'
               - 'scripts/test_tenkz_label_overlap.py'
@@ -428,6 +431,10 @@ jobs:
       - name: Smoke-test tenkz picture pipeline
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
+
+      - name: Test tenkz equation audit
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_equation_audit.py
 
       - name: Test measured tenkz typed-map label bands
         if: env.TEX_CHANGED == 'true'
