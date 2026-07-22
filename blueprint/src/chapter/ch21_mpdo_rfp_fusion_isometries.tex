@@ -1423,37 +1423,40 @@ separate step.
 
 \begin{definition}[One fusion layer of the topological projector]%
     \label{def:mpdo_topological_projector_one_fusion}
-    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
-    \lean{MPOTensor.BNTFusionIsometryFamily.conjugatedProjectorQBlock}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock}
+    \lean{MPOTensor.BNTFusionTensorClause.projectorQBlock}
     \leanok
-    \uses{def:mpdo_bnt_fusion_isometry_family}
-    Let $P_\gamma$ be operators on the terminal bond spaces.  Define one
-    fusion layer of the recursive operator $Q$ by
+    \uses{def:mpdo_bnt_fusion_coisometry_family,
+        def:mpdo_bnt_fusion_tensor_clause}
+    Let $P_\gamma$ be operators on the common physical space of the vertically
+    read tensors.  Define one fusion layer of the recursive operator $Q$ by
     \[
         Q_{\alpha,\beta}
           =\bigoplus_\gamma
              \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
     \]
-    Its transport to the product bond space is
-    \[
-        \widehat Q_{\alpha,\beta}
-          =U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}.
-    \]
+    The source terminal matrices are
+    $P_\gamma=\operatorname{tr}(M_\gamma)$ after spectral refinement.
+    This is one pairwise step in the recursion of
+    \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (one fusion layer):} The arbitrary-chain
+    operator, the sequential fusion circuit, and the commuting Gibbs
+    decomposition are not asserted here.  The remaining statements are
+    recorded in
+    \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
 \end{definition}
 
 \begin{theorem}[Projection property of one fusion layer]%
     \label{thm:mpdo_topological_projector_one_fusion}
-    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_eq_unweighted}
-    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_isStarProjection}
-    \lean{MPOTensor.BNTFusionIsometryFamily.%
-        conjugatedProjectorQBlock_isOrthogonalProjection}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_eq_unweighted}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.projectorQBlock_isStarProjection}
     \leanok
     \uses{def:mpdo_topological_projector_one_fusion,
-        thm:mpdo_pair_fusion_bnt_completeness,
-        thm:mpdo_bnt_length_independent_zipper,
-        thm:star_projection_coisometric_transport,
-        thm:orthogonal_projection_star_projection_channel}
-    Let $P_\gamma$ be self-adjoint idempotents on the terminal bond spaces.
+        thm:mpdo_bnt_length_independent_zipper}
+    Let $P_\gamma$ be self-adjoint idempotents on the common terminal physical
+    space.
     Suppose that the matrices $\chi_{\alpha,\beta,\gamma}$ have the
     positive-length trace-power form of the label-coefficient family and that
     this family is independent of the positive chain length.  Then
@@ -1462,9 +1465,7 @@ separate step.
           =\bigoplus_\gamma
              1_{r_{\alpha,\beta}^{\gamma}}\otimes P_\gamma
     \]
-    is self-adjoint and idempotent.  If the labelled tensors form a basis of
-    normal tensors, then $\widehat Q_{\alpha,\beta}$ is an orthogonal
-    projection.  This is the single recursive fusion step in
+    is self-adjoint and idempotent.  This is the single recursive fusion step in
     \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
@@ -1479,16 +1480,69 @@ separate step.
         =\bigoplus_\gamma(1\otimes P_\gamma^{2})
         =Q_{\alpha,\beta}.
     \]
-    By Theorem~\ref{thm:mpdo_pair_fusion_bnt_completeness},
-    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$.  Therefore
+\end{proof}
+
+\begin{definition}[Full-support virtual-bond projector block]%
+    \label{def:mpdo_full_support_virtual_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
+    \lean{MPOTensor.BNTFusionIsometryFamily.conjugatedProjectorQBlock}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    For a full-support fusion family, let $P_\gamma$ instead act on the virtual
+    bond space of $M_\gamma$.  Define
     \[
-      \widehat Q_{\alpha,\beta}^{\dagger}=\widehat Q_{\alpha,\beta},
-      \qquad
-      \widehat Q_{\alpha,\beta}^{2}
-        =U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}
+        Q^{\mathrm{vir}}_{\alpha,\beta}
+          =\bigoplus_\gamma
+             \chi_{\alpha,\beta,\gamma}\otimes P_\gamma,
+        \qquad
+        \widehat Q^{\mathrm{vir}}_{\alpha,\beta}
+          =U_{\alpha,\beta}^{\dagger}
+             Q^{\mathrm{vir}}_{\alpha,\beta}U_{\alpha,\beta}.
+    \]
+    This is a conditional construction on the virtual bond spaces, not the
+    terminal physical-space operator of
+    \cite[line~1010]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (virtual-bond terminal operators):} The terminal
+    operators and the full-support identity are additional restrictions not
+    asserted in the arbitrary-chain source statement.  This distinction is
+    documented in
+    \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
+\end{definition}
+
+\begin{theorem}[Projection property of the full-support virtual-bond block]%
+    \label{thm:mpdo_full_support_virtual_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_eq_unweighted}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
+    \leanok
+    \uses{def:mpdo_full_support_virtual_projector_one_fusion,
+        thm:mpdo_pair_fusion_bnt_completeness,
+        thm:star_projection_coisometric_transport,
+        thm:orthogonal_projection_star_projection_channel}
+    Suppose that the labelled tensors form a basis of normal tensors and the
+    positive trace-power coefficients are independent of the positive chain
+    length.  If each $P_\gamma$ is a self-adjoint idempotent on the virtual
+    bond space, then $Q^{\mathrm{vir}}_{\alpha,\beta}$ is a self-adjoint
+    idempotent and $\widehat Q^{\mathrm{vir}}_{\alpha,\beta}$ is an orthogonal
+    projection.
+\end{theorem}
+\begin{proof}\leanok
+    Length independence gives
+    $\chi_{\alpha,\beta,\gamma}=1$, hence
+    $(Q^{\mathrm{vir}}_{\alpha,\beta})^2
+      =Q^{\mathrm{vir}}_{\alpha,\beta}$ and
+    $(Q^{\mathrm{vir}}_{\alpha,\beta})^\dagger
+      =Q^{\mathrm{vir}}_{\alpha,\beta}$.
+    The basis-of-normal-tensors completeness theorem gives
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, so
+    \[
+      (\widehat Q^{\mathrm{vir}}_{\alpha,\beta})^2
+        =U_{\alpha,\beta}^{\dagger}Q^{\mathrm{vir}}_{\alpha,\beta}
           (U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger})
-          Q_{\alpha,\beta}U_{\alpha,\beta}
-        =\widehat Q_{\alpha,\beta}.
+          Q^{\mathrm{vir}}_{\alpha,\beta}U_{\alpha,\beta}
+        =\widehat Q^{\mathrm{vir}}_{\alpha,\beta}.
     \]
 \end{proof}
 

@@ -1,0 +1,112 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{The Arbitrary-Chain Topological Projector Recursion}
+\author{}
+\date{2026-07-22}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+After Theorem~4.14, the source applies the fusion maps successively along an
+arbitrary chain.  In the notation of lines~995--1010 of
+\cite{Cirac2016MPDO_arXiv}, this gives
+\begin{equation}
+  \rho^{(N)}(M)
+    \simeq_{\mathrm{LU}}
+      \mu^{\otimes N}\,\widetilde U Q_N\widetilde U^\dagger,
+  \label{eq:source-chain-decomposition}
+\end{equation}
+where $\simeq_{\mathrm{LU}}$ denotes local-unitary equivalence through the
+single-site unitaries of Proposition~4.13, and $\widetilde U$ is a sequential
+circuit assembled from the pairwise fusion maps.  The same passage asserts
+\begin{equation}
+  [\mu^{\otimes N},\widetilde U Q_N\widetilde U^\dagger]=0.
+  \label{eq:source-commutator}
+\end{equation}
+When the coefficients are independent of the positive chain length, the
+diagonal entries of every $\chi_{\alpha,\beta,\gamma}$ belong to
+$\{0,1\}$.  Spectral decomposition of the terminal matrices then yields the
+length-independent form stated at lines~1013--1016:
+\begin{equation}
+  \rho^{(N)}(M)
+    = \sum_i \lambda_i P_i^{(N)}e^{-H_N},
+  \qquad
+  [P_i^{(N)},e^{-H_N}]=0,
+  \label{eq:source-gibbs-decomposition}
+\end{equation}
+where $H_N$ is a translationally invariant commuting nearest-neighbor
+Hamiltonian and the $P_i^{(N)}$ are orthogonal projections.
+
+\section{The formalized one-layer statement}
+
+For terminal orthogonal projections $P_\gamma$, one pairwise fusion step is
+the direct sum
+\begin{equation}
+  Q_{\alpha,\beta}
+    = \bigoplus_\gamma
+      \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
+  \label{eq:one-layer-q}
+\end{equation}
+Here each $P_\gamma$ acts on the common physical space of the vertically read
+tensor $M_\gamma$; in the source it is obtained from the terminal matrix
+$\operatorname{tr}(M_\gamma)$.  It does not act on the virtual bond space of
+$M_\gamma$.
+Length independence and positivity imply
+$\chi_{\alpha,\beta,\gamma}=I$ on each retained multiplicity space, hence
+$Q_{\alpha,\beta}$ is an orthogonal projection.  This statement is formalized
+for \leanid{MPOTensor.BNTFusionCoisometryFamily} and for the tensor-attached
+clause \leanid{MPOTensor.BNTFusionTensorClause}.
+
+The pairwise fusion coisometry acts on the virtual bond spaces of the tensors,
+whereas the terminal projections in \eqref{eq:one-layer-q} act on their common
+physical space.  Consequently, a direct conjugation of
+$Q_{\alpha,\beta}$ by one pairwise fusion map is not well typed.  The source
+instead inserts the fusion maps recursively into the tensor network and forms
+the sequential circuit $\widetilde U$.  The older virtual-bond construction in
+\leanid{MPOTensor.BNTFusionIsometryFamily} is a separate conditional statement:
+it assumes terminal projections on the bond spaces and a full-support fusion
+family.  It is not the terminal step of equation~\eqref{eq:source-chain-decomposition}.
+
+\paragraph{Local fix (Figure-11 fusion coisometry).}
+The active fusion map has the retained-row orientation
+$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$ recorded in
+\path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.  An earlier
+one-layer formulation attempted to use this relation to conjugate
+\eqref{eq:one-layer-q}.  That formulation has been removed: the coisometry
+acts on virtual indices, while the terminal matrices act on physical indices.
+The remaining virtual-bond transport is stated only for the older
+full-support family and is not identified with the source operator $Q_N$.
+
+\section{Remaining proof}
+
+Equations \eqref{eq:source-chain-decomposition}--
+\eqref{eq:source-gibbs-decomposition} are not consequences of the one-layer
+projection calculation alone.  A faithful proof still requires:
+\begin{enumerate}
+  \item a recursively typed family $Q_N$ and the corresponding sequential
+    product of active-support fusion coisometries;
+  \item the arbitrary-chain local-unitary equivalence
+    \eqref{eq:source-chain-decomposition};
+  \item the commutator identity \eqref{eq:source-commutator};
+  \item the terminal spectral decomposition and its compatibility with the
+    recursive sectors;
+  \item the construction of the commuting nearest-neighbor Hamiltonian and
+    the projections in \eqref{eq:source-gibbs-decomposition}.
+\end{enumerate}
+These steps are tracked in \ghissue{3950}.  Until they are proved, the
+one-layer projection theorem must not be cited as the arbitrary-chain theorem
+of lines~999--1016.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
