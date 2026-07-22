@@ -87,6 +87,37 @@ theorem transportedVerticalSector_exists_unitaryBlockEquiv
                 ((V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ)ᴴ * Y *
                   (V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ))) := by
   classical
+  let h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D) :=
+    { dim₁ := dim₁
+      mult₁ := mult₁
+      weight₁ := weight₁
+      dim₂ := dim₂
+      mult₂ := mult₂
+      weight₂ := weight₂
+      hMult₁ := hMult₁
+      hWeight₁ := hWeight₁
+      hMult₂ := hMult₂
+      hWeight₂ := hWeight₂
+      M := M
+      A₁ := A₁
+      A₂ := A₂
+      U₁ := U₁
+      U₂ := U₂
+      T := T
+      S := S
+      hForward₁ := hForward₁
+      hReconstruct₁ := hReconstruct₁
+      hForward₂ := hForward₂
+      hReconstruct₂ := hReconstruct₂
+      hTphys := hTphys
+      hSphys := hSphys
+      hBNT₁ := hBNT₁
+      hBNT₂ := hBNT₂
+      hU₁ := hU₁
+      hU₂ := hU₂
+      hTCPTP := hTCPTP
+      hSCPTP := hSCPTP }
   let Tbar := transportedVerticalSectorT
     dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T
   let Sbar := transportedVerticalSectorS
@@ -100,16 +131,8 @@ theorem transportedVerticalSector_exists_unitaryBlockEquiv
     exact transportedVerticalSectorS_isKrausDirectSumMap
       dim₁ mult₁ dim₂ mult₂ weight₂ hMult₂ hWeight₂ U₁ U₂ S hSCPTP.isKrausCP
   obtain ⟨_, _, hTbarTP, hSbarTP⟩ :=
-    transportedVerticalSector_composites_tracePreserving
-      dim₁ mult₁ weight₁ dim₂ mult₂ weight₂
-      hMult₁ hWeight₁ hMult₂ hWeight₂ M A₁ A₂ hBNT₁ hBNT₂
-      U₁ U₂ hU₁ hU₂ T S hTCPTP hSCPTP
-      hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ hTphys hSphys
-  obtain ⟨hST, hTS⟩ := transportedVerticalSector_composites_eq_id
-    dim₁ mult₁ weight₁ dim₂ mult₂ weight₂
-    hMult₁ hWeight₁ hMult₂ hWeight₂ M A₁ A₂ hBNT₁ hBNT₂
-    U₁ U₂ hU₁ hU₂ T S hTCPTP hSCPTP
-    hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ hTphys hSphys
+    transportedVerticalSector_composites_tracePreserving h
+  obtain ⟨hST, hTS⟩ := transportedVerticalSector_composites_eq_id h
   obtain ⟨sigma, hDim, V, hVT, hVS⟩ :=
     Matrix.exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps
       Tbar Sbar hTbar hSbar hTbarTP hSbarTP hST hTS
