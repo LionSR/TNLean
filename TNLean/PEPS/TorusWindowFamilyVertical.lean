@@ -11,8 +11,8 @@ import TNLean.PEPS.TorusWindowFamily
 
 The vertical staircase is the image of the horizontal staircase under coordinate
 interchange, with the side lengths exchanged.  This module keeps the public
-vertical API while deriving its geometry from `TorusWindowFamily` through
-`torusCoordinateSwapRegion`.
+vertical family of declarations while deriving its geometry from
+`TorusWindowFamily` through `torusCoordinateSwapRegion`.
 
 In staircase coordinates `s = (a, b)`, the resulting windows are the cyclic
 `L × K` rectangles
