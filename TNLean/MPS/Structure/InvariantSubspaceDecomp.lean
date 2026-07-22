@@ -138,16 +138,9 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
   let Aconj : MPSTensor d D := fun i => Umatᴴ * A i * Umat
   have hSame_conj : SameMPV A Aconj := sameMPV_conj_unitary (d := d) (D := D) A U
   have hPdiag : IsOrthogonalProjection Pdiag := by
-    refine ⟨?_, ?_⟩
-    · change (Umatᴴ * P * Umat)ᴴ = Umatᴴ * P * Umat
-      simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
-      rw [hP.1.eq]
-    · change (Umatᴴ * P * Umat) * (Umatᴴ * P * Umat) = Umatᴴ * P * Umat
-      calc
-        (Umatᴴ * P * Umat) * (Umatᴴ * P * Umat) =
-            Umatᴴ * P * (Umat * Umatᴴ) * P * Umat := by noncomm_ring
-        _ = Umatᴴ * P * P * Umat := by simp [hUU, Matrix.mul_assoc]
-        _ = Umatᴴ * P * Umat := by simp [Matrix.mul_assoc, hP.2]
+    simpa [Pdiag] using
+      (IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
+        hP.isStarProjection Umat hUU).isOrthogonalProjection
   -- Lower-left block condition for the conjugated tensor.
   have hLower_conj : ∀ i : Fin d, (1 - Pdiag) * Aconj i * Pdiag = 0 := by
     intro i
@@ -393,7 +386,7 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
     symm
     apply sub_eq_zero.mp
     apply (isOrthogonalProjection_posSemidef hP.one_sub).trace_eq_zero_iff.mp
-    rw [map_sub, Matrix.trace_one, Fintype.card_fin, ← htrace]
+    rw [Matrix.trace_sub, Matrix.trace_one, Fintype.card_fin, ← htrace]
     norm_num [hm] at hnm ⊢
     exact_mod_cast hnm.symm
   have hn_lt : n < D := by omega
