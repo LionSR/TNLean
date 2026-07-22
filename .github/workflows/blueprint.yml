@@ -24,6 +24,7 @@ on:
       - 'scripts/write_badges.py'
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_lint.py'
+      - 'scripts/check_tenkz_demolition.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_audit.py'
   workflow_dispatch:
@@ -53,6 +54,7 @@ jobs:
 
       - name: Check native tenkz sources and picture pipeline
         run: |
+          python3 scripts/check_tenkz_demolition.py
           python3 scripts/tenkz_lint.py \
             'blueprint/src/chapter/*.tex' \
             'docs/tenkz/manual2.tex' \
