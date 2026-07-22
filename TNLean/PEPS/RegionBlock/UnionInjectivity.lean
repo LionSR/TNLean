@@ -378,18 +378,12 @@ theorem complProd_overwrite_blueRedCrossing_eq
     (h : ∀ g : Edge G, ¬ IsBlueRedCrossingEdge (A := A) (e := e) D g → ζ g = ζ' g) :
     (∏ w : {w : V // w ∈ D.complement}, A.component w.1 (fun ie => ζ ie.1) (σcompl w)) =
       ∏ w : {w : V // w ∈ D.complement}, A.component w.1 (fun ie => ζ' ie.1) (σcompl w) := by
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1
-  funext ie
-  by_cases hcross : IsBlueRedCrossingEdge (A := A) (e := e) D ie.1
-  · have hinc : IsRegionIncidentEdge (G := G) D.complement ie.1 := by
-      have hwinc : ie.1.1.1 = w.1 ∨ ie.1.1.2 = w.1 := ie.2
-      rcases hwinc with hw | hw
-      · exact Or.inl (by rw [hw]; exact w.2)
-      · exact Or.inr (by rw [hw]; exact w.2)
-    exact absurd hinc
+  apply regionProd_subtype_congr
+  intro ie hie
+  by_cases hcross : IsBlueRedCrossingEdge (A := A) (e := e) D ie
+  · exact absurd hie
       (not_isRegionIncidentEdge_complement_of_blueRedCrossing (A := A) (e := e) D hcross)
-  · exact h ie.1 hcross
+  · exact h ie hcross
 
 open scoped Classical in
 /-- **The red/blue crossing fiber count.** Among the global configurations carrying the
