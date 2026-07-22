@@ -15,7 +15,7 @@ particular virtual bond operator, but its exported names remain Appendix B
 specific because they support that argument.
 -/
 
-open scoped Matrix Kronecker
+open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor
 
@@ -47,6 +47,33 @@ noncomputable abbrev appendixBRightPairMatrix
     {a : Type*} [Fintype a] [DecidableEq a]
     (B : Matrix (a × a) (a × a) ℂ) :=
   appendixBRightPairMatrixAux (s := a) B
+
+/-- The standard left pair-matrix construction preserves finite sums.
+
+Source: arXiv:1606.00608, Appendix B, lines 1305--1307. -/
+theorem appendixBLeftPairMatrix_sum
+    {p ι : Type*} [Fintype p] [DecidableEq p] [Fintype ι]
+    (Q : ι → Matrix (p × p) (p × p) ℂ) :
+    appendixBLeftPairMatrix (∑ j, Q j) =
+      ∑ j, appendixBLeftPairMatrix (Q j) := by
+  classical
+  ext x y
+  simp [appendixBLeftPairMatrix, appendixBLeftPairMatrixAux,
+    Matrix.reindex_apply, Matrix.kroneckerMap_apply, Matrix.sum_apply,
+    Finset.sum_mul]
+
+/-- The standard right pair-matrix construction preserves finite sums.
+
+Source: arXiv:1606.00608, Appendix B, lines 1305--1307. -/
+theorem appendixBRightPairMatrix_sum
+    {p ι : Type*} [Fintype p] [DecidableEq p] [Fintype ι]
+    (Q : ι → Matrix (p × p) (p × p) ℂ) :
+    appendixBRightPairMatrix (∑ j, Q j) =
+      ∑ j, appendixBRightPairMatrix (Q j) := by
+  classical
+  ext x y
+  simp [appendixBRightPairMatrix, appendixBRightPairMatrixAux,
+    Matrix.kroneckerMap_apply, Matrix.sum_apply, Finset.mul_sum]
 
 /-- A right-associated Kronecker product of three matrices. -/
 private noncomputable def tripleMatrix
@@ -314,5 +341,70 @@ theorem appendixB_transportedPairMatrices_comm
       appendixBRightPairMatrix (((U ⊗ₖ U) * B) * (Uᴴ ⊗ₖ Uᴴ)) *
         appendixBLeftPairMatrix (((U ⊗ₖ U) * B) * (Uᴴ ⊗ₖ Uᴴ)) := by
   rw [transportedPairProduct_left U B hU, transportedPairProduct_right U B hU, hB]
+
+/-- Orthogonal one-site embeddings make a left transported pair matrix from
+one summand annihilate a right transported pair matrix from the other summand.
+
+This is the mixed-summand part of the transport calculation: the shared
+one-site factor contains `Uᴴ * V`, hence vanishes.
+
+Source: matrix identity underlying arXiv:1606.00608, Appendix B, lines
+1305--1307. -/
+theorem appendixB_leftTransportedPairMatrix_mul_right_eq_zero_of_orthogonal
+    {p v w : Type*} [Fintype p] [DecidableEq p]
+    [Fintype v] [Fintype w]
+    (U : Matrix p v ℂ) (V : Matrix p w ℂ)
+    (B : Matrix (v × v) (v × v) ℂ) (C : Matrix (w × w) (w × w) ℂ)
+    (hUV : Uᴴ * V = 0) :
+    appendixBLeftPairMatrix (((U ⊗ₖ U) * B) * (Uᴴ ⊗ₖ Uᴴ)) *
+        appendixBRightPairMatrix (((V ⊗ₖ V) * C) * (Vᴴ ⊗ₖ Vᴴ)) = 0 := by
+  rw [leftPairMatrix_transport, rightPairMatrix_transport]
+  let LA := tripleMatrix U U (1 : Matrix p p ℂ)
+  let LHA := tripleMatrix Uᴴ Uᴴ (1 : Matrix p p ℂ)
+  let RA := tripleMatrix (1 : Matrix p p ℂ) V V
+  let RHA := tripleMatrix (1 : Matrix p p ℂ) Vᴴ Vᴴ
+  let LB := appendixBLeftPairMatrixAux (s := p) B
+  let RC := appendixBRightPairMatrixAux (s := p) C
+  have hCross : LHA * RA = 0 := by
+    dsimp [LHA, RA]
+    rw [tripleMatrix_mul]
+    simp only [Matrix.mul_one, Matrix.one_mul, hUV]
+    simp [tripleMatrix]
+  change ((LA * LB) * LHA) * ((RA * RC) * RHA) = 0
+  calc
+    _ = LA * LB * (LHA * RA) * RC * RHA := by
+      simp only [Matrix.mul_assoc]
+    _ = 0 := by rw [hCross]; simp
+
+/-- Orthogonal one-site embeddings also make the reverse overlapping product
+vanish.
+
+Source: matrix identity underlying arXiv:1606.00608, Appendix B, lines
+1305--1307. -/
+theorem appendixB_rightTransportedPairMatrix_mul_left_eq_zero_of_orthogonal
+    {p v w : Type*} [Fintype p] [DecidableEq p]
+    [Fintype v] [Fintype w]
+    (U : Matrix p v ℂ) (V : Matrix p w ℂ)
+    (B : Matrix (v × v) (v × v) ℂ) (C : Matrix (w × w) (w × w) ℂ)
+    (hUV : Uᴴ * V = 0) :
+    appendixBRightPairMatrix (((U ⊗ₖ U) * B) * (Uᴴ ⊗ₖ Uᴴ)) *
+        appendixBLeftPairMatrix (((V ⊗ₖ V) * C) * (Vᴴ ⊗ₖ Vᴴ)) = 0 := by
+  rw [rightPairMatrix_transport, leftPairMatrix_transport]
+  let RA := tripleMatrix (1 : Matrix p p ℂ) U U
+  let RHA := tripleMatrix (1 : Matrix p p ℂ) Uᴴ Uᴴ
+  let LA := tripleMatrix V V (1 : Matrix p p ℂ)
+  let LHA := tripleMatrix Vᴴ Vᴴ (1 : Matrix p p ℂ)
+  let RB := appendixBRightPairMatrixAux (s := p) B
+  let LC := appendixBLeftPairMatrixAux (s := p) C
+  have hCross : RHA * LA = 0 := by
+    dsimp [RHA, LA]
+    rw [tripleMatrix_mul]
+    simp only [Matrix.one_mul, Matrix.mul_one, hUV]
+    simp [tripleMatrix]
+  change ((RA * RB) * RHA) * ((LA * LC) * LHA) = 0
+  calc
+    _ = RA * RB * (RHA * LA) * LC * LHA := by
+      simp only [Matrix.mul_assoc]
+    _ = 0 := by rw [hCross]; simp
 
 end MPSTensor

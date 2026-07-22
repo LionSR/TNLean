@@ -31,6 +31,7 @@ import TNLean.MPS.RFP.KroneckerTransport
 import TNLean.MPS.RFP.NNCPHGroundSpace
 import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
+import TNLean.MPS.RFP.ResidualFamilyCommutation
 import TNLean.MPS.RFP.ResidualFamilySupport
 import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.RFP.ResidualWordSpan
