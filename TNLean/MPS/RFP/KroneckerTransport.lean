@@ -315,4 +315,67 @@ theorem appendixB_transportedPairMatrices_comm
         appendixBLeftPairMatrix (((U ⊗ₖ U) * B) * (Uᴴ ⊗ₖ Uᴴ)) := by
   rw [transportedPairProduct_left U B hU, transportedPairProduct_right U B hU, hB]
 
+/-- Orthogonal one-site isometries make a left transported pair matrix from
+one sector annihilate a right transported pair matrix from the other sector.
+
+This is the cross-sector part of the common-isometry calculation: the shared
+one-site factor contains `Uᴴ * V`, hence vanishes.
+
+Source: arXiv:1606.00608, equation `eq:III_isometry`, lines 549--554. -/
+theorem appendixB_leftTransportedPairMatrix_mul_right_eq_zero_of_orthogonal
+    {p v w : Type*} [Fintype p] [DecidableEq p]
+    [Fintype v] [Fintype w]
+    (U : Matrix p v ℂ) (V : Matrix p w ℂ)
+    (B : Matrix (v × v) (v × v) ℂ) (C : Matrix (w × w) (w × w) ℂ)
+    (hUV : Uᴴ * V = 0) :
+    appendixBLeftPairMatrix (((U ⊗ₖ U) * B) * (Uᴴ ⊗ₖ Uᴴ)) *
+        appendixBRightPairMatrix (((V ⊗ₖ V) * C) * (Vᴴ ⊗ₖ Vᴴ)) = 0 := by
+  rw [leftPairMatrix_transport, rightPairMatrix_transport]
+  let LA := tripleMatrix U U (1 : Matrix p p ℂ)
+  let LHA := tripleMatrix Uᴴ Uᴴ (1 : Matrix p p ℂ)
+  let RA := tripleMatrix (1 : Matrix p p ℂ) V V
+  let RHA := tripleMatrix (1 : Matrix p p ℂ) Vᴴ Vᴴ
+  let LB := appendixBLeftPairMatrixAux (s := p) B
+  let RC := appendixBRightPairMatrixAux (s := p) C
+  have hCross : LHA * RA = 0 := by
+    dsimp [LHA, RA]
+    rw [tripleMatrix_mul]
+    simp only [Matrix.mul_one, Matrix.one_mul, hUV]
+    simp [tripleMatrix]
+  change ((LA * LB) * LHA) * ((RA * RC) * RHA) = 0
+  calc
+    _ = LA * LB * (LHA * RA) * RC * RHA := by
+      simp only [Matrix.mul_assoc]
+    _ = 0 := by rw [hCross]; simp
+
+/-- Orthogonal one-site isometries also make the reverse overlapping product
+vanish.
+
+Source: arXiv:1606.00608, equation `eq:III_isometry`, lines 549--554. -/
+theorem appendixB_rightTransportedPairMatrix_mul_left_eq_zero_of_orthogonal
+    {p v w : Type*} [Fintype p] [DecidableEq p]
+    [Fintype v] [Fintype w]
+    (U : Matrix p v ℂ) (V : Matrix p w ℂ)
+    (B : Matrix (v × v) (v × v) ℂ) (C : Matrix (w × w) (w × w) ℂ)
+    (hUV : Uᴴ * V = 0) :
+    appendixBRightPairMatrix (((U ⊗ₖ U) * B) * (Uᴴ ⊗ₖ Uᴴ)) *
+        appendixBLeftPairMatrix (((V ⊗ₖ V) * C) * (Vᴴ ⊗ₖ Vᴴ)) = 0 := by
+  rw [rightPairMatrix_transport, leftPairMatrix_transport]
+  let RA := tripleMatrix (1 : Matrix p p ℂ) U U
+  let RHA := tripleMatrix (1 : Matrix p p ℂ) Uᴴ Uᴴ
+  let LA := tripleMatrix V V (1 : Matrix p p ℂ)
+  let LHA := tripleMatrix Vᴴ Vᴴ (1 : Matrix p p ℂ)
+  let RB := appendixBRightPairMatrixAux (s := p) B
+  let LC := appendixBLeftPairMatrixAux (s := p) C
+  have hCross : RHA * LA = 0 := by
+    dsimp [RHA, LA]
+    rw [tripleMatrix_mul]
+    simp only [Matrix.one_mul, Matrix.mul_one, hUV]
+    simp [tripleMatrix]
+  change ((RA * RB) * RHA) * ((LA * LC) * LHA) = 0
+  calc
+    _ = RA * RB * (RHA * LA) * LC * LHA := by
+      simp only [Matrix.mul_assoc]
+    _ = 0 := by rw [hCross]; simp
+
 end MPSTensor
