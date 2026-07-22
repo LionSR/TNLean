@@ -164,13 +164,6 @@ theorem overlapRightGeometry_univ_sdiff_red (R₁ R₂ : Finset V) :
   ext v
   simp only [Finset.mem_sdiff, Finset.mem_univ, true_and, not_not]
 
-omit [LinearOrder V] [DecidableRel G.Adj] in
-/-- The complement block is shared between the two overlap geometries: both read
-the residual coupling through `R₂ \ R₁`. -/
-theorem overlapRightGeometry_complement_eq_left (R₁ R₂ : Finset V) :
-    (overlapRightGeometry (V := V) R₁ R₂).complement =
-      (overlapLeftGeometry (V := V) R₁ R₂).complement := rfl
-
 /-! ### The two strips of the source two-step
 
 The source proof inverts the two injective regions in sequence. With the two

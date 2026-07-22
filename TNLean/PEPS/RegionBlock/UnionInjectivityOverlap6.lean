@@ -123,18 +123,6 @@ theorem p0OuterLabel_eq_of_R₁ {R₁ R₂ : Finset V} {q q' : VirtualConfig A}
   rw [p0OuterLabel, p0OuterLabel, this]
 
 omit [Fintype V] in
-/-- The union host boundary label determines the `P₀`-outer label: the `P₀`-outer edges are union
-boundary edges, so a configuration's `P₀`-outer label is read off its union host label. -/
-theorem p0OuterLabel_eq_of_union {R₁ R₂ : Finset V} {q q' : VirtualConfig A}
-    (h : regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q =
-      regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q') :
-    p0OuterLabel A R₁ R₂ q = p0OuterLabel A R₁ R₂ q' := by
-  funext f
-  have := congrFun h ⟨f.1, f.2.1⟩
-  rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply] at this
-  rw [p0OuterLabel, p0OuterLabel, this]
-
-omit [Fintype V] in
 /-- The union host boundary label is determined by the pair (`R₂` boundary label, `P₀`-outer
 label): the union boundary edges partition into `R₂` boundary edges and `P₀`-outer edges, so if
 two configurations share both their `R₂` and `P₀`-outer labels, they share their `R₁ ∪ R₂`
@@ -158,14 +146,6 @@ theorem regionBoundaryLabel_union_eq_of_R₂_p0Outer {R₁ R₂ : Finset V} {q q
 The `P₀`-restriction of a union host boundary configuration reads its values on the `P₀`-outer
 sub-edges. The fiber coefficient zeroes a coefficient family `c` off the `P₀`-fiber of a fixed
 reference `δ`. -/
-
-omit [Fintype V] in
-/-- The `P₀`-restriction of a union host boundary configuration: read off its `P₀`-outer
-sub-edges. A configuration's `P₀`-outer label is the `P₀`-restriction of its union host label. -/
-theorem p0OuterLabel_apply_subtype {R₁ R₂ : Finset V} (q : VirtualConfig A)
-    (f : {e : Edge G // IsP0OuterEdge (G := G) R₁ R₂ e}) :
-    p0OuterLabel A R₁ R₂ q f =
-      regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q ⟨f.1, f.2.1⟩ := rfl
 
 /-- The `P₀`-restriction of a union host boundary configuration: its values on the `P₀`-outer
 sub-edges. -/
