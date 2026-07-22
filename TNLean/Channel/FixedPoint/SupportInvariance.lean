@@ -15,8 +15,7 @@ satisfies $(1-P)K_iP=0$ for every Kraus operator. Consequently the Kraus map
 preserves the compressed algebra $P M_D(\mathbb C) P$.
 
 These statements depend only on a Kraus family and therefore belong to the
-channel layer. The corresponding MPS transfer-map results are compatibility
-wrappers around this API.
+channel layer. They specialize directly to MPS transfer maps.
 -/
 
 open scoped Matrix ComplexOrder BigOperators

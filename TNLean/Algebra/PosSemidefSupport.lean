@@ -44,7 +44,7 @@ theorem eigenvectorUnitary_indicator_idem (hA : A.IsHermitian) (S : Finset n) :
       (star (hA.eigenvectorUnitary : Matrix n n ℂ))
     P * P = P := by
   intro P
-  set U := (hA.eigenvectorUnitary : Matrix n n ℂ) with hUdef
+  set U := (hA.eigenvectorUnitary : Matrix n n ℂ)
   set W := Matrix.diagonal (fun i => if i ∈ S then (1 : ℂ) else 0) with hW
   have hU : (star U) * U = 1 := by
     have := (hA.eigenvectorUnitary).2
@@ -64,7 +64,7 @@ theorem eigenvectorUnitary_indicator_trace (hA : A.IsHermitian) (S : Finset n) :
     Matrix.trace ((hA.eigenvectorUnitary : Matrix n n ℂ) *
       Matrix.diagonal (fun i => if i ∈ S then (1 : ℂ) else 0) *
       (star (hA.eigenvectorUnitary : Matrix n n ℂ))) = (S.card : ℂ) := by
-  set U := (hA.eigenvectorUnitary : Matrix n n ℂ) with hUdef
+  set U := (hA.eigenvectorUnitary : Matrix n n ℂ)
   have hU : (star U) * U = 1 := by
     have := (hA.eigenvectorUnitary).2
     rw [Matrix.mem_unitaryGroup_iff'] at this
@@ -109,7 +109,7 @@ theorem supportProj_trace (hA : A.IsHermitian) :
 
 /-- The support projection P fixes the matrix A on the right: P A = A. -/
 theorem supportProj_mul_self (hA : A.IsHermitian) : hA.supportProj * A = A := by
-  set U := (hA.eigenvectorUnitary : Matrix n n ℂ) with hUdef
+  set U := (hA.eigenvectorUnitary : Matrix n n ℂ)
   have hspec := hA.spectral_theorem
   rw [Unitary.conjStarAlgAut_apply] at hspec
   set D := Matrix.diagonal ((RCLike.ofReal ∘ hA.eigenvalues : n → ℂ)) with hD
@@ -161,7 +161,7 @@ theorem one_sub_supportProj_mul_self (hA : A.IsHermitian) :
 A = U D Uᴴ, idempotence forces D² = D, hence λ² = λ per eigenvalue. -/
 theorem eigenvalues_sq_eq_self_of_idem (hA : A.IsHermitian) (hAi : A * A = A) (j : n) :
     hA.eigenvalues j * hA.eigenvalues j = hA.eigenvalues j := by
-  set U := (hA.eigenvectorUnitary : Matrix n n ℂ) with hUdef
+  set U := (hA.eigenvectorUnitary : Matrix n n ℂ)
   have hspec := hA.spectral_theorem
   rw [Unitary.conjStarAlgAut_apply] at hspec
   set D := Matrix.diagonal ((RCLike.ofReal ∘ hA.eigenvalues : n → ℂ)) with hD
@@ -346,48 +346,48 @@ namespace MPSTensor
 
 variable {D : ℕ}
 
-/-- Compatibility name for the support projection of a PSD matrix. -/
+/-- The `Fin`-indexed support projection of a positive-semidefinite matrix. -/
 noncomputable def supportProj (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     Matrix (Fin D) (Fin D) ℂ := hρ.supportProj
 
-/-- Compatibility alias: the support projection is Hermitian. -/
+/-- The `Fin`-indexed support projection is Hermitian. -/
 theorem supportProj_isHermitian (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     (supportProj ρ hρ).IsHermitian := hρ.supportProj_isHermitian
 
-/-- Compatibility alias: the support projection is idempotent. -/
+/-- The `Fin`-indexed support projection is idempotent. -/
 theorem supportProj_idem (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     supportProj ρ hρ * supportProj ρ hρ = supportProj ρ hρ := hρ.supportProj_idem
 
-/-- Compatibility alias: the support projection is orthogonal. -/
+/-- The `Fin`-indexed support projection is orthogonal. -/
 theorem isOrthogonalProjection_supportProj (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosSemidef) : IsOrthogonalProjection (supportProj ρ hρ) :=
   hρ.isOrthogonalProjection_supportProj
 
-/-- Compatibility alias for left absorption. -/
+/-- The `Fin`-indexed support projection absorbs its matrix on the left. -/
 theorem supportProj_mul (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     supportProj ρ hρ * ρ = ρ := hρ.supportProj_mul_self
 
-/-- Compatibility alias for right absorption. -/
+/-- The `Fin`-indexed support projection absorbs its matrix on the right. -/
 theorem mul_supportProj (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     ρ * supportProj ρ hρ = ρ := hρ.mul_supportProj_self
 
-/-- Compatibility alias for kernel inclusion. -/
+/-- The `Fin`-indexed support projection vanishes on the kernel of its matrix. -/
 theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
     (v : Fin D → ℂ) (hv : ρ *ᵥ v = 0) : supportProj ρ hρ *ᵥ v = 0 :=
   hρ.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hv
 
-/-- Compatibility alias for range factorization. -/
+/-- The `Fin`-indexed support projection factors through its matrix. -/
 theorem exists_supportProj_eq_mul (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     ∃ W : Matrix (Fin D) (Fin D) ℂ, supportProj ρ hρ = ρ * W :=
   hρ.exists_supportProj_eq_mul
 
-/-- Compatibility alias for nontriviality of the support projection. -/
+/-- The support projection of a nonzero `Fin`-indexed matrix is nonzero. -/
 theorem supportProj_ne_zero_of_ne_zero
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) (hne : ρ ≠ 0) :
     supportProj ρ hρ ≠ 0 := hρ.supportProj_ne_zero_of_ne_zero hne
 
-/-- Compatibility alias for properness of the support projection. -/
+/-- The support projection of a non-positive-definite `Fin`-indexed matrix is not one. -/
 theorem supportProj_ne_one_of_not_posDef
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) (hnotPD : ¬ ρ.PosDef) :
     supportProj ρ hρ ≠ 1 := hρ.supportProj_ne_one_of_not_posDef hnotPD

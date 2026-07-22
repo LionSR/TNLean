@@ -49,9 +49,7 @@ variable {d D : ℕ}
 
 /-! ## Fixed point ⇒ invariant support projection -/
 
-/-- Compatibility wrapper for the Kraus-family support-invariance theorem.
-
-If `ρ` is positive semidefinite and fixed by the MPS transfer map, then its
+/-- If `ρ` is positive semidefinite and fixed by the MPS transfer map, then its
 support projection is invariant under every tensor matrix. -/
 theorem lowerZero_of_posSemidef_fixedPoint
     (A : MPSTensor d D)
