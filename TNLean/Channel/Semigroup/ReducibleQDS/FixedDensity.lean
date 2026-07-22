@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Semigroup.ReducibleQDS.Defs
-import TNLean.MPS.Core.OrthogonalProjectionInvariance
+import TNLean.Channel.FixedPoint.SupportInvariance
 
 /-!
 # Fixed Density ↔ Kernel Element (Wolf Proposition 7.6, (1) ↔ (2)) and (1) → (3)
@@ -66,31 +66,6 @@ support of `ρ₀`. Taking the support projection therefore produces a nontrivia
 compression invariant under the whole semigroup.
 -/
 
-private theorem invariantCompression_of_supportProj_fixed_by_channel
-    {E : Mat →ₗ[ℂ] Mat} (hE : IsChannel E) {ρ : Mat}
-    (hρ_psd : ρ.PosSemidef) (hρ_fix : E ρ = ρ) :
-    let P := MPSTensor.supportProj (D := D) ρ hρ_psd
-    IsOrthogonalProjection P ∧
-      ∀ X : Mat, P * E (P * X * P) * P = E (P * X * P) := by
-  obtain ⟨r, K, hK⟩ := hE.cp
-  have hE_eq_transfer : E = MPSTensor.transferMap (d := r) (D := D) K := by
-    ext1 X
-    simp only [MPSTensor.transferMap_apply]
-    exact hK X
-  have hρ_fix' : MPSTensor.transferMap (d := r) (D := D) K ρ = ρ := by
-    simpa [hE_eq_transfer] using hρ_fix
-  let P := MPSTensor.supportProj (D := D) ρ hρ_psd
-  have hP_data :
-      IsOrthogonalProjection P ∧
-        (∀ i : Fin r, (1 - P) * K i * P = 0) := by
-    simpa [P] using
-      (MPSTensor.lowerZero_of_posSemidef_fixedPoint
-        (d := r) (D := D) K ρ hρ_psd hρ_fix')
-  refine ⟨hP_data.1, ?_⟩
-  intro X
-  rw [hE_eq_transfer]
-  exact MPSTensor.lowerZero_implies_invariance K P hP_data.1 hP_data.2 X
-
 private lemma not_posDef_of_proj_sandwich_eq_self
     {P ρ : Mat}
     (hP : IsOrthogonalProjection P)
@@ -140,9 +115,9 @@ theorem wolf_prop_7_6_one_implies_three
       IsOrthogonalProjection P ∧
         (∀ Y : Mat, P * expSemigroup L t (P * Y * P) * P =
           expSemigroup L t (P * Y * P)) := by
-    simpa [P] using
-      (invariantCompression_of_supportProj_fixed_by_channel
-        (D := D) hChannel hρ_psd (hρ_fix t ht))
+    simpa [P, Kraus.stationaryProj, MPSTensor.supportProj] using
+      (Kraus.invariantCompression_of_supportProj_fixed_by_cpMap
+        hChannel.cp hρ_psd (hρ_fix t ht))
   exact hInv.2 X
 
 end -- noncomputable section

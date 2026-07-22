@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.StationaryProjection
+import TNLean.Channel.FixedPoint.SupportInvariance
 import TNLean.Channel.Spectral.Support
 import TNLean.MPS.CanonicalForm.CyclicSectors.Compression
-import TNLean.MPS.Irreducible.FixedPointProjection
 
 /-!
 # Corner-restricted fixed points form a `*`-algebra (Wolf Corollary 6.6)
@@ -161,10 +161,7 @@ identity used to compress the channel. -/
 theorem stationaryProj_lowerZero (K : Fin d → Mat) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
     (hρ_fix : map K ρ = ρ) :
     ∀ i : Fin d, (1 - stationaryProj hρ_psd) * K i * stationaryProj hρ_psd = 0 := by
-  have hρ_fix' : MPSTensor.transferMap (d := d) (D := D) K ρ = ρ := by
-    simpa [map, MPSTensor.transferMap_apply] using hρ_fix
-  have h := MPSTensor.lowerZero_of_posSemidef_fixedPoint (d := d) (D := D) K ρ hρ_psd hρ_fix'
-  simpa [stationaryProj, MPSTensor.supportProj] using h.2
+  exact (lowerZero_of_posSemidef_fixedPoint K ρ hρ_psd hρ_fix).2
 
 /-- `Q * adjointMap K Q * Q = Q`, i.e. the corner unit `Q` is fixed by the
 corner-restricted map. -/
