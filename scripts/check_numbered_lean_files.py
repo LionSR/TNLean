@@ -63,9 +63,6 @@ NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
         "TNLean/PEPS/TorusWindowChain4.lean",
         "TNLean/PEPS/TorusWindowChain5.lean",
         "TNLean/PEPS/TorusWindowChain6.lean",
-        "TNLean/PEPS/TorusWindowPeel2.lean",
-        "TNLean/PEPS/TorusWindowPeel3.lean",
-        "TNLean/PEPS/TorusWindowPeel4.lean",
     }
 )
 

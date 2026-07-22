@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.TorusWindowPeel2
+import TNLean.PEPS.TorusWindowPeeling.BondInsertedRegion
 
 /-!
 # The single-bond peeling of the staircase end-pair equality
@@ -20,7 +20,8 @@ coefficients across `e`.
 ## The peeling
 
 The theorem `regionInsertedCoeff_eq_extendInsert_bondInserted` of
-`TNLean/PEPS/TorusWindowPeel2.lean` writes the region-inserted coefficient of an end window, with a
+`TNLean/PEPS/TorusWindowPeeling/BondInsertedRegion.lean` writes the region-inserted
+coefficient of an end window, with a
 matrix inserted on `e`, as the assembled deformed state of the corner-extended bond-inserted insert
 on the end pair `S`.  The end-pair equality `staircasePair_insert_eq_open` equates the two
 corner-extended inserts on `S`, hence their assembled deformed states.  Chaining the two rewriting

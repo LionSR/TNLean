@@ -215,7 +215,7 @@ completion, and shared-corner cancellation that produce the
 $\mathrm{univ} \setminus S$; the single-bond peeling of that equality onto the
 reference edge
 (\leanid{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase},
-\path{TNLean/PEPS/TorusWindowPeel3.lean}); the per-edge witness packaging and
+\path{TNLean/PEPS/TorusWindowPeeling/SingleBond.lean}); the per-edge witness packaging and
 the Skolem--Noether read-off
 (\path{TNLean/PEPS/TorusWindowWitness.lean},
 \path{TNLean/PEPS/TorusWindowMult.lean}); the per-step bond-insert transport
@@ -1013,7 +1013,7 @@ windows' external legs, with $e$ the single interior bond summed over in the
 end-pair contraction. This is the geometric content the bond-$e$ coefficient
 identity reads: the open legs of $S$ split into the left-window external legs and
 the right-window external legs, and the matrix on $e$ is the only datum the two
-windows share. These facts are in \path{TNLean/PEPS/TorusWindowPeel.lean}.
+windows share. These facts are in \path{TNLean/PEPS/TorusWindowPeeling/BoundaryGeometry.lean}.
 
 \subsection{The back half transfers with a window as witness region}
 
@@ -1096,7 +1096,7 @@ vocabularies the back half mixes: the \emph{deformed-window} inserts the
 overlapping-window staircase produces, and the \emph{region-inserted coefficient}
 $\text{\path{regionInsertedCoeff}}$ the per-edge gauge of Step~5 reads.  These were two
 parallel developments with no connecting lemma.  The bridge is now in
-\path{TNLean/PEPS/TorusWindowPeel2.lean}.
+\path{TNLean/PEPS/TorusWindowPeeling/BondInsertedRegion.lean}.
 
 The bond-inserted insert $\text{\path{bondInsertedRegionInsert}}\,A\,R\,f\,M$ on a region
 $R$ is the insert whose boundary configuration $\nu$ (read by the complement
@@ -1119,7 +1119,7 @@ contraction split.
 
 The single-bond peeling itself is
 $\text{\path{regionInsertedCoeff\_endWindows\_eq\_of\_staircase}}$ in
-\path{TNLean/PEPS/TorusWindowPeel3.lean}.  Feeding the end-pair equality
+\path{TNLean/PEPS/TorusWindowPeeling/SingleBond.lean}.  Feeding the end-pair equality
 $\text{\path{staircasePair\_insert\_eq\_open}}$ the bond-inserted inserts on the two end
 windows (and arbitrary inserts on the intermediate windows), all sharing one deformed
 state, and bridging both sides through
