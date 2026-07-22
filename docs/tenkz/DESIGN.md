@@ -403,18 +403,18 @@ A command exists **iff** it introduces a new grammatical class: atom (`\tn`), on
 ```latex
 \[
   \begin{tenkz}[rows={op, ket}]
-    \tnfuse[rows=2]{V} & \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} \\
+    \tnfuse[span=2]{V} & \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} \\
                        & \tn{A}                                & \tndots & \tn{A}
   \end{tenkz}
   \;=\;
   \begin{tenkz}[rows={op, ket}]
-    \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} & \tnfuse[rows=2, combined=east]{V} \\
+    \tn[mpo]{O}\tnspan[brace above]{3}{n} & \tndots & \tn[mpo]{O} & \tnfuse[span=2, combined=east]{V} \\
     \tn{B}                                & \tndots & \tn{B}      &
   \end{tenkz}
 \]
 ```
 
-`\tnfuse[rows=2]{V}` spans both wire rows: two east stubs feed the layer wires, one combined wire exits west in the fused doubled-stroke skin (mirrored via `combined=east` on the RHS). Axis defaults to the midline, so `=` aligns across both sides with no key.
+`\tnfuse[span=2]{V}` spans both wire rows: two east stubs feed the layer wires, one combined wire exits west in the fused doubled-stroke skin (mirrored via `combined=east` on the RHS). Axis defaults to the midline, so `=` aligns across both sides with no key.
 
 **B8 — Inline transfer-map atom inside `\sum` in running math**
 
@@ -481,7 +481,7 @@ One base: `pitch = 11mm` (display). Derived constants (name, value, motivation):
 | `label clearance` | 0.12·pitch | one constant for every quadrant (G7) |
 | `junction diameter` | ≥ 0.9mm (about 4.7 × the 0.55pt wire width) | the absolute print floor keeps a junction distinct from a wire crossing |
 | `region margin` (`\tenkz@r@latticemargin`) | 0.27·pitch | strictly < pitch/2 so single-site notches read; > glyph radius so hulls never clip glyphs |
-| `compact` / `inline` | 0.8 scale / em-based scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
+| `compact` / `inline` | 0.8 / 0.62 scale on pitch | profiles are one scale factor, not parallel constant lists — literals cannot bypass them |
 | `map column gap` | max(0.34·pitch, widest map-name band + 2·daylight) | the floor keeps a short composition compact; measured opaque label ink clears both adjacent objects without budgeting glyphs; explicit `column sep=` remains an opt-in override |
 | `map row gap` | 0.50·pitch | adjacent small multiples remain distinct without figure-scale leading; `row sep=` overrides it |
 

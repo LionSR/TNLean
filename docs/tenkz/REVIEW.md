@@ -10,7 +10,7 @@ Full reports: `wjchk4rdv.output` (source), `wyia43kx7.output` (visual), `ww2oeph
 
 ---
 
-## 1. Verdict on the current library
+## 1. Verdict on the retired library
 
 **The core calculus is genuinely good; everything above it institutionalizes the failure you
 sensed.** No published TN paper or package has typed ports, a semantic audit, or layout profiles —
