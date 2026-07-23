@@ -501,15 +501,31 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_commuting_bond_positive_eta_decomposition}
     Choose Beigi's chain-independent one-site unitary and the positive
-    neighboring operators $\eta_{q,h}$.  Expand every $\eta_{q,h}$ in matrix
-    units, separating each coefficient into a right factor at one site and a
-    left matrix unit at the next.  For a nonzero physical space, their common
-    finite index is nonempty and gives a positive virtual dimension.  For the
-    zero-dimensional physical space, take one virtual state and no physical
-    sectors.  Contracting adjacent factors reconstructs every
-    $\eta_{q,h}$, hence the physical-sector bond is exactly $B$.  The cyclic
-    contraction formula then gives the product of the translates of $B$ at
-    every length $N\geq2$.
+    neighboring operators $\eta_{q,h}$.  For a common matrix-unit index set
+    $\mathcal A$, write
+    \[
+        \eta_{q,h}\bigl((r,l),(r',l')\bigr)
+        =
+        \sum_{a\in\mathcal A}
+        R_a(q)_{r,r'}L_a(h)_{l,l'}.
+    \]
+    Thus the contraction of the right factor at one site with the left factor
+    at the next satisfies
+    \[
+        \sum_{a\in\mathcal A} R_a(q)\otimes L_a(h)=\eta_{q,h}.
+    \]
+    If $V$ is the resulting unitary change to the two-site sector
+    coordinates, this contraction gives
+    \[
+        B_{\mathrm{sec}}=VBV^\dagger,
+        \qquad
+        B_{\mathrm{phys}}
+        =V^\dagger B_{\mathrm{sec}}V=B.
+    \]
+    For a nonzero physical space, $\mathcal A$ is nonempty and gives a positive
+    virtual dimension.  For the zero-dimensional physical space, take one
+    virtual state and no physical sectors.  The cyclic contraction formula
+    then gives the product of the translates of $B$ at every length $N\geq2$.
 \end{proof}
 
 \begin{remark}[The scalar edge formula depends on the one-site coordinates]
