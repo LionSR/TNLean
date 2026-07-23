@@ -1380,7 +1380,78 @@
     #2~pairing~interface(s),~numbered~top-down~per~adjacent~facing~
     pair:~no~segment~matches.
   }
-% ---------- model bond derivation (record; the draw scan still draws) -----
+% ---------- model ownership and bond derivation -----------------------------
+% Ownership is topology, not drawing bookkeeping.  Resolve it from the parsed
+% cells before validation so the implicit-bond pass sees wide, tall, and
+% fusion continuations without depending on the later node-placement pass.
+\tl_new:N \l__tenkz_mdo_kind_tl
+\cs_new_protected:Npn \tenkz_model_record_owner:nn #1#2
+  {
+    \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpa_tl
+    \exp_args:NV \tenkz_cell_opts:n \l_tmpa_tl
+    \bool_if:NT \l__tenkz_celloptsvalid_bool
+      {
+        \str_case:Vn \l__tenkz_mdo_kind_tl
+          {
+            {tn}
+              {
+                \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                  { \prop_put:Nnn \l__tenkz_owner_prop {#1-##1} {#2} }
+                \int_step_inline:nnn {#1 + 1} {#1 + \l__tenkz_cwires_int - 1}
+                  {
+                    \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {tnv}
+                    \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                      { \prop_put:Nen \l__tenkz_owner_prop {##1-####1} {#2} }
+                  }
+              }
+            {tnc}
+              {
+                \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                  { \prop_put:Nnn \l__tenkz_owner_prop {#1-##1} {#2} }
+                \int_step_inline:nnn {#1 + 1} {#1 + \l__tenkz_cwires_int - 1}
+                  {
+                    \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {tnv}
+                    \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                      { \prop_put:Nen \l__tenkz_owner_prop {##1-####1} {#2} }
+                  }
+              }
+            {tnx}
+              {
+                \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+                \int_step_inline:nnn {#1 + 1} {#1 + \l__tenkz_cwires_int - 1}
+                  {
+                    \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {tnv}
+                    \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                      { \prop_put:Nen \l__tenkz_owner_prop {##1-####1} {#2} }
+                  }
+              }
+            {dots}  { \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2} }
+            {ghost} { \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2} }
+            {fuse}
+              {
+                \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+                \int_step_inline:nnn {#1 + 1} {#1 + \l__tenkz_frows_int - 1}
+                  {
+                    \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {fusec}
+                    \prop_put:Nen \l__tenkz_owner_prop {##1-#2} {#2}
+                  }
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkz_model_record_owners:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \prop_get:NeNT \l__tenkz_kind_prop {##1-####1}
+              \l__tenkz_mdo_kind_tl
+              { \tenkz_model_record_owner:nn {##1}{####1} }
+          }
+      }
+  }
+
 % The implicit bonds of a row become WIRE records BEFORE validation, using
 % the same predicates the draw-time scan trusts: a hole breaks the chain,
 % an empty column is transparent, one owner needs no internal bond, and a
@@ -1542,6 +1613,7 @@
     \tenkz_record_traces:
     % map the interface-addressed open=/trace= segments to rows
     \tenkz_record_interfaces:
+    \tenkz_model_record_owners:
     \tenkz_model_derive_bonds:
     \__tenkz_model_validate:
     \tenkz@beginpicture{grid}
