@@ -74,7 +74,14 @@
 
 % The same value as an fp factor of the pitch, for geometry arithmetic.
 \cs_new:Npn \__tenkz_metric_ratio:n #1
-  { \prop_item:Nn \g__tenkz_metric_value_prop {#1} }
+  {
+    \prop_if_in:NnTF \g__tenkz_metric_value_prop {#1}
+      { \prop_item:Nn \g__tenkz_metric_value_prop {#1} }
+      {
+        \msg_expandable_error:nnn {tenkz}{metric-unknown} {#1}
+        0
+      }
+  }
 
 % ---------- the core table (motivations abridged from tenkz-core) ----------
 \__tenkz_metric_declare:nnn {layersep} {0.80}
