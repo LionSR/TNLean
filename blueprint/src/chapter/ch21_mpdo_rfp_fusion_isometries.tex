@@ -1925,6 +1925,124 @@ separate step.
     $R_N$.
 \end{proof}
 
+\begin{definition}[Commuting topological Gibbs data above one site]%
+    \label{def:mpdo_topological_gibbs_data_at_least_two}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        terminalSpectralIndex_card_le_physicalDim}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalSpectralEmbedding}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        physicalIndexedTerminalEigenvalue}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        physicalIndexedTopologicalSpectralProjectorSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.retainedMultiplicityWeightEntry}
+    \lean{MPOTensor.BNTFusionTensorClause.retainedMultiplicityEnergyEntry}
+    \lean{MPOTensor.BNTFusionTensorClause.topologicalGibbsLocalTerm}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalGibbsHamiltonianSuccSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.HasTopologicalGibbsDecomposition}
+    \leanok
+    \uses{def:mpdo_terminal_spectral_refinement}
+    Let $\mu$ be the strictly positive diagonal multiplicity matrix in the
+    retained one-site coordinates.  Define
+    \[
+      h=\operatorname{diag}(-\log\mu)\otimes I
+    \]
+    on two adjacent sites.  For a chain of length $L=N+2$, let
+    \[
+      H_L=\sum_{i=1}^{L}h_{i,i+1},
+    \]
+    with periodic indices.
+
+    The terminal spectral family has cardinality at most the physical
+    one-site dimension $d$.  Fix an injection of its indices into
+    $\{1,\ldots,d\}$ and extend the remaining eigenvalues and projectors by
+    zero.
+
+    \textbf{Scope restriction (positive chains of length at least two):}
+    the local interaction is defined on two spins, so these data are indexed
+    by $L=N+2$.  The length-one boundary is recorded in
+    \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
+\end{definition}
+
+\begin{theorem}[Commuting Gibbs decomposition above one site]%
+    \label{thm:mpdo_topological_gibbs_at_least_two}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalGibbsLocalTerm_isHermitian}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalGibbsBondSuccSucc_commute}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        exp_neg_topologicalGibbsHamiltonianSuccSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        physicalIndexedTopologicalSpectralProjectorSucc_isOrthogonalProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        physicalIndexedTopologicalSpectralProjectorSucc_commutes_gibbsFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalDensityOperatorSucc_eq_sum_physicalIndexedProjector_mul_gibbsFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        singleKrausMap_physicalIndexedGibbsDecomposition_eq_mpo}
+    \lean{MPOTensor.BNTFusionTensorClause.hasTopologicalGibbsDecomposition}
+    \lean{MPOTensor.topologicalGibbsDecomposition_of_isRFPViaTS}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
+        def:mpdo_topological_gibbs_data_at_least_two,
+        thm:mpdo_terminal_spectral_projector_refinement}
+    Let $M$ be a matrix product density operator in horizontal canonical form
+    satisfying the renormalization fixed-point condition.  Select the fusion
+    clause supplied by that condition and suppose that its positive
+    trace-power coefficients are independent of the positive chain length.
+    For every $L\geq2$, the same two-site matrix $h$ is Hermitian, its
+    periodic translates commute pairwise, and
+    \[
+      e^{-H_L}=\mu^{\otimes L}.
+    \]
+    There are nonnegative numbers $\lambda_1,\ldots,\lambda_d$ and orthogonal
+    projections $P_1^{(L)},\ldots,P_d^{(L)}$ such that
+    \[
+      [P_i^{(L)},e^{-H_L}]=0,
+      \qquad
+      R_L=\sum_{i=1}^{d}\lambda_iP_i^{(L)}e^{-H_L}.
+    \]
+    Applying the adjoint retained-row map at every site reconstructs
+    $\rho^{(L)}(M)$ from the right-hand side.
+
+    \textbf{Scope restriction (positive chains of length at least two):}
+    the conclusion is proved for $L=N+2$.  Definition~4.8 of
+    \cite{Cirac2016MPDO_arXiv} defines $h$ on two spins but does not state a
+    length-one convention; see
+    \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_topological_density_decomposition,
+        cor:mpdo_topological_density_factor_commutator,
+        thm:mpdo_terminal_spectral_projector_refinement}
+    Each diagonal entry of $\mu$ is strictly positive, so its negative
+    logarithm is real.  The translated terms are diagonal, and each site
+    contributes once to their sum.  Exponentiating gives
+    $e^{-H_L}=\mu^{\otimes L}$.
+
+    Positivity of the multiplicities embeds one terminal mode for every
+    terminal spectral index into the retained coordinates.  The rank of the
+    retained-row coisometry is at most $d$, so the terminal family has at most
+    $d$ members.  Extend the eigenvalues and spectral projectors by zero along
+    an injection into $\{1,\ldots,d\}$.  The added zero projectors preserve
+    self-adjointness, idempotence, commutation, and the spectral sum.  Combine
+    that sum with the exponential identity and the exact adjoint
+    reconstruction of the retained density operator.
+\end{proof}
+
+\begin{theorem}[Source Gibbs statement at every positive length]%
+    \label{thm:mpdo_topological_gibbs_all_positive_lengths}
+    \uses{thm:mpdo_topological_gibbs_at_least_two}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_topological_gibbs_at_least_two}, the same conclusion
+    holds for every $L>0$, including $L=1$.
+
+    The cited passage does not specify how the two-site local term is
+    interpreted on a one-site periodic chain.  Consequently this unrestricted
+    source statement is not yet marked complete; see
+    \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
+\end{theorem}
+
 \begin{definition}[Full-support specialization of one fusion layer]%
     \label{def:mpdo_full_support_virtual_projector_one_fusion}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
