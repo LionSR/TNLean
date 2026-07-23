@@ -72,12 +72,14 @@
 \cs_new_protected:Npn \__tenkz_geom_require_kind:nnn #1#2#3
   {
     \prop_get:NnN \l__tenkz_geom_framekind_prop {#1} \l__tenkz_geom_tmp_tl
-    \quark_if_no_value:NT \l__tenkz_geom_tmp_tl
+    \quark_if_no_value:NTF \l__tenkz_geom_tmp_tl
       { \msg_error:nnn {tenkz}{geom-unknown-frame} {#1} }
-    \str_if_eq:VnF \l__tenkz_geom_tmp_tl {#2}
       {
-        \msg_error:nnxxxx {tenkz}{geom-frame-kind} {#1}
-          { \l__tenkz_geom_tmp_tl } {#3} {#2}
+        \str_if_eq:VnF \l__tenkz_geom_tmp_tl {#2}
+          {
+            \msg_error:nnxxxx {tenkz}{geom-frame-kind} {#1}
+              { \l__tenkz_geom_tmp_tl } {#3} {#2}
+          }
       }
   }
 \tl_new:N \l__tenkz_geom_tmp_tl

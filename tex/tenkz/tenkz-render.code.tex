@@ -136,18 +136,28 @@
 % Text never rotates.  The anchor is a pure function of the outward angle:
 % the label sits beyond the ink along that angle and anchors on its own
 % opposite side, in eight compass buckets.
+\fp_const:Nn \c__tenkz_render_octant_boundary_fp { 135 / 2 }
 \cs_new:Npn \__tenkz_render_label_anchor:n #1
   {
-    \fp_compare:nNnTF { cosd(#1) } > { cosd(67.5) }
+    \fp_compare:nNnTF { cosd(#1) } > { cosd(\c__tenkz_render_octant_boundary_fp) }
       {
-        \fp_compare:nNnTF { sind(#1) } > { cosd(67.5) } { south~west }
-          { \fp_compare:nNnTF { sind(#1) } < { -cosd(67.5) } { north~west } { west } }
+        \fp_compare:nNnTF { sind(#1) } > { cosd(\c__tenkz_render_octant_boundary_fp) }
+          { south~west }
+          {
+            \fp_compare:nNnTF { sind(#1) } < { -cosd(\c__tenkz_render_octant_boundary_fp) }
+              { north~west } { west }
+          }
       }
       {
-        \fp_compare:nNnTF { cosd(#1) } < { -cosd(67.5) }
+        \fp_compare:nNnTF { cosd(#1) } < { -cosd(\c__tenkz_render_octant_boundary_fp) }
           {
-            \fp_compare:nNnTF { sind(#1) } > { cosd(67.5) } { south~east }
-              { \fp_compare:nNnTF { sind(#1) } < { -cosd(67.5) } { north~east } { east } }
+            \fp_compare:nNnTF { sind(#1) } > { cosd(\c__tenkz_render_octant_boundary_fp) }
+              { south~east }
+              {
+                \fp_compare:nNnTF
+                  { sind(#1) } < { -cosd(\c__tenkz_render_octant_boundary_fp) }
+                  { north~east } { east }
+              }
           }
           { \fp_compare:nNnTF { sind(#1) } > { 0 } { south } { north } }
       }
