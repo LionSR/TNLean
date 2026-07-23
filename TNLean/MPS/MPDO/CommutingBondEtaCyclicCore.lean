@@ -74,7 +74,7 @@ def etaCyclicEdgeEquiv {K N d : ℕ} [NeZero N] (dl dr : Fin K → ℕ)
     (Fin N → Fin d) ≃
       Σ k : Fin N → Fin K,
         (n : Fin N) → EtaEdgeIndex dl dr (k n) (k (n + 1)) :=
-  ((Equiv.piCongrRight fun _ : Fin N ↦ e.symm).trans piSigmaEquiv).trans <|
+  ((Equiv.piCongrRight fun _ : Fin N ↦ e.symm).trans Equiv.piSigmaEquiv).trans <|
     Equiv.sigmaCongrRight fun k ↦ etaFixedSectorCyclicEdgeEquiv dl dr k
 
 @[simp] theorem etaCyclicEdgeEquiv_symm_apply {K N d : ℕ} [NeZero N]
@@ -86,7 +86,7 @@ def etaCyclicEdgeEquiv {K N d : ℕ} [NeZero N] (dl dr : Fin K → ℕ)
       e ⟨k n, (etaFixedSectorCyclicEdgeEquiv dl dr k).symm x n⟩ := by
   apply e.symm.injective
   simp [etaCyclicEdgeEquiv, Equiv.piCongrRight, Equiv.sigmaCongrRight,
-    piSigmaEquiv]
+    Equiv.piSigmaEquiv]
 
 end Matrix
 

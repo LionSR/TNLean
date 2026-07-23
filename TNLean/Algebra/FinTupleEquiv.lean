@@ -18,7 +18,7 @@ arbitrary remaining length.
 
 ## Main definitions
 
-* `piSigmaEquiv`: distributes a dependent sum pointwise over a function space.
+* `Equiv.piSigmaEquiv`: distributes a dependent sum pointwise over a function space.
 * `finThreeArrowEquiv`: identifies a function on `Fin 3` with a right-associated triple.
 * `finFourArrowEquiv`: identifies a function on `Fin 4` with a right-associated quadruple.
 * `finSuccArrowEquiv`: separates the first coordinate from a finite tuple.
@@ -47,6 +47,8 @@ initial coordinates from the remaining tuple.
 finite tuples, equivalence, product coordinates
 -/
 
+namespace Equiv
+
 /-- Distribute a dependent sum pointwise over a function space. -/
 def piSigmaEquiv
     {ι : Type*} {α : ι → Type*} {β : (i : ι) → α i → Type*} :
@@ -60,6 +62,8 @@ def piSigmaEquiv
   right_inv x := by
     obtain ⟨a, b⟩ := x
     rfl
+
+end Equiv
 
 /-- The canonical right-associated identification of a three-coordinate
 function with a triple. -/

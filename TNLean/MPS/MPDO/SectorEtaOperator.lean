@@ -54,7 +54,7 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1434--1464. -/
 def sectorChainEquiv (hη : EtaStructure ρ) (N : ℕ) :
     (Fin N → Fin d) ≃ SectorChainIndex hη N :=
   (Equiv.piCongrRight fun _ : Fin N => hη.decompB).trans
-    piSigmaEquiv
+    Equiv.piSigmaEquiv
 
 /-- Forming the congruence $U\kappa_{\beta,\alpha}U^\dagger$ on every local
 MPO matrix leaves the horizontal bond space unchanged. When $U$ is unitary,

@@ -78,7 +78,7 @@ Source: arXiv:1606.00608, density identity at line 999. -/
 def verticalCopyChainEquiv (H : BNTFusionTensorClause M) (N : ℕ) :
     (Fin (N + 1) → Fin H.verticalRetainedDim) ≃ H.VerticalCopyChainIndex N :=
   (Equiv.piCongrRight fun _ : Fin (N + 1) ↦
-    verticalCopyCoordinateEquiv H.bondDim H.multiplicity).trans piSigmaEquiv
+    verticalCopyCoordinateEquiv H.bondDim H.multiplicity).trans Equiv.piSigmaEquiv
 
 /-- The inverse chain-coordinate equivalence acts independently at every site.
 
