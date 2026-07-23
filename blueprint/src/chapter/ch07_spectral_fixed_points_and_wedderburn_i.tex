@@ -1,0 +1,949 @@
+\section{Conditional expectation from a faithful fixed point}
+
+This section follows~\cite[Section~6.4]{Wolf2012Quantum}; the conditional
+expectation is built from the fixed-point algebra of~\cite[Theorem~6.14]{Wolf2012Quantum}
+via~\cite[(1.40)]{Wolf2012Quantum}.
+The scalar conditional expectation $E_\sigma$ is the special case where
+the fixed-point $*$-subalgebra is the scalar algebra $\C\cdot\Id$
+(the primitive-channel case). The general irreducible case with
+nontrivial period requires the Wedderburn block decomposition
+of~\cite[Theorem~6.14]{Wolf2012Quantum}.
+% The nontrivial-period conditional expectation is outside the present
+% formal scope of this section.
+
+\begin{definition}[Conditional expectation]\label{def:is_conditional_expectation}
+    \lean{Kraus.IsConditionalExpectation}
+    \leanok
+    Given a $*$-subalgebra $S \subseteq \MN{D}$, a linear map
+    $P : \MN{D} \to \MN{D}$ is a conditional expectation onto $S$ if it is
+    idempotent, unital, has range contained in $S$, and satisfies
+    $P(X)=X$ for all $X \in S$.
+\end{definition}
+
+\begin{definition}[Scalar conditional expectation]\label{def:scalar_conditional_expectation}
+    \lean{Kraus.scalarConditionalExpectation}
+    \leanok
+    \uses{def:is_conditional_expectation}
+    For $\sigma \ge 0$ with $\tr(\sigma)\neq 0$, define
+    \[
+        E_\sigma(X) := \frac{\tr(\sigma X)}{\tr(\sigma)} \Id.
+    \]
+\end{definition}
+
+\begin{lemma}[Evaluation formula]\label{lem:scalar_conditional_expectation_apply}
+    \lean{Kraus.scalarConditionalExpectation_apply}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    $E_\sigma(X)=\dfrac{\tr(\sigma X)}{\tr(\sigma)} \Id$.
+\end{lemma}
+
+\begin{lemma}[Unitality]\label{thm:scalar_conditional_expectation_unital}
+    \lean{Kraus.scalarConditionalExpectation_unital}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    $E_\sigma(\Id)=\Id$.
+\end{lemma}
+
+\begin{lemma}[Idempotence]\label{thm:scalar_conditional_expectation_idempotent}
+    \lean{Kraus.scalarConditionalExpectation_idempotent}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    $E_\sigma(E_\sigma(X)) = E_\sigma(X)$ for all $X$.
+\end{lemma}
+
+\begin{lemma}[Range is scalar]\label{lem:scalar_conditional_expectation_range_scalar}
+    \lean{Kraus.scalarConditionalExpectation_range_scalar}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    For every $X$, there exists $c\in\C$ with $E_\sigma(X)=c\,\Id$.
+\end{lemma}
+
+\begin{lemma}[Fixes scalar operators]\label{lem:scalar_conditional_expectation_fixes_scalar}
+    \lean{Kraus.scalarConditionalExpectation_fixes_scalar}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    For $c\in\C$, $E_\sigma(c\,\Id)=c\,\Id$.
+\end{lemma}
+
+\begin{lemma}[Absorbs the adjoint map]\label{thm:scalar_conditional_expectation_absorbs_adjointMap}
+    \lean{Kraus.scalarConditionalExpectation_absorbs_adjointMap}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    If $T(\sigma)=\sigma$, then
+    $E_\sigma\circ T^* = E_\sigma$.
+\end{lemma}
+
+\begin{lemma}[Adjoint map absorbs scalar projection]
+    \label{thm:adjointMap_absorbs_scalarConditionalExpectation}
+    \lean{Kraus.adjointMap_absorbs_scalarConditionalExpectation}
+    \leanok
+    \uses{def:scalar_conditional_expectation, def:tp_kraus}
+    If $T$ is trace-preserving, then
+    $T^*\circ E_\sigma = E_\sigma$.
+\end{lemma}
+
+\begin{lemma}[Image lies in adjoint fixed points]
+    \label{lem:scalar_conditional_expectation_mem_adjointFixedPoints}
+    \lean{Kraus.scalarConditionalExpectation_mem_adjointFixedPoints}
+    \leanok
+    \uses{thm:adjointMap_absorbs_scalarConditionalExpectation}
+    For all $X$, $E_\sigma(X)$ is fixed by $T^*$.
+\end{lemma}
+
+\begin{theorem}[Scalar map is a conditional expectation]
+    \label{thm:scalar_conditional_expectation_isConditionalExpectation}
+    \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
+    \leanok
+    \uses{def:is_conditional_expectation, def:scalar_conditional_expectation,
+        def:tp_kraus,
+        thm:scalar_conditional_expectation_unital,
+        thm:scalar_conditional_expectation_idempotent,
+        lem:scalar_conditional_expectation_mem_adjointFixedPoints,
+        lem:scalar_conditional_expectation_fixes_scalar}
+    Let $K$ be trace-preserving, let $\rho>0$ be a positive-definite fixed
+    point of the associated channel $T(\rho)=\sum_i K_i\rho K_i^\dagger$ (so $T(\rho)=\rho$), and
+    assume every adjoint fixed point of $T^*$ is a scalar multiple of $\Id$.
+    Then $E_\rho$ is a conditional expectation onto the adjoint fixed-point
+    $*$-subalgebra.
+\end{theorem}
+
+\begin{lemma}[Complete positivity of the scalar conditional expectation]
+    \label{thm:scalar_conditional_expectation_isCPMap}
+    \lean{Kraus.scalarConditionalExpectation_isCPMap}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    For any positive semidefinite $\sigma$, the scalar conditional
+    expectation $E_\sigma$ is a completely positive map.
+\end{lemma}
+\begin{proof}\leanok
+    Write $S=\sqrt{\sigma}$ and define the Kraus family
+    $K_{j,i}=\ketbra{j}{i}\,S$ indexed by $(j,i)\in\{1,\ldots,D\}^2$.
+    Using $\ketbra{j}{i}\,M\,\ketbra{i}{j} = M_{ii} \ketbra{j}{j}$ and
+    summing first over $i$ and then over $j$,
+    \[
+        \sum_{j,i} K_{j,i}\,X\,K_{j,i}^\dagger
+        = \sum_j \ketbra{j}{j} \tr(SXS)
+        = \tr(\sigma X) \Id,
+    \]
+    where we used cyclicity of the trace and $S^2=\sigma$. Hence
+    $E_\sigma = (\tr(\sigma))^{-1}\cdot(X\mapsto\sum_{j,i}K_{j,i}XK_{j,i}^\dagger)$
+    is the Kraus map scaled by the non-negative real number
+    $(\tr(\sigma))^{-1}$, and therefore completely positive.
+\end{proof}
+
+\begin{lemma}[$\sigma$-trace preservation of the scalar conditional expectation]
+    \label{thm:scalar_conditional_expectation_preserves_weighted_trace}
+    \lean{Kraus.scalarConditionalExpectation_preserves_weighted_trace}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    If $\tr(\sigma)\neq 0$, then for every $X$
+    \[
+        \tr(\sigma\,E_\sigma(X))
+        = \tr(\sigma X).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Direct computation:
+    $\tr(\sigma\cdot\tfrac{\tr(\sigma X)}{\tr(\sigma)}\Id)
+        = \tfrac{\tr(\sigma X)}{\tr(\sigma)}\tr(\sigma)
+        = \tr(\sigma X)$.
+\end{proof}
+
+\section{Stationary support}
+
+This section develops the support-projection theory
+behind stationary states, following~\cite[Section~6.4, Propositions~6.10--6.11]{Wolf2012Quantum}.
+
+\begin{lemma}[Lower-triangular Kraus condition implies corner invariance]%
+    \label{lem:lower_zero_invariance}
+    \lean{MPSTensor.lowerZero_implies_invariance}
+    \leanok
+    Let $A$ be an MPS tensor and let $P$ be an orthogonal projection.
+    If, for every physical index~$i$,
+    \[
+        (\Id - P) A^i P = 0
+    \]
+    then
+    \[
+        P \E_A(P X P) P = \E_A(P X P)
+    \]
+    for all $X \in \MN{D}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the transfer map and use $(\Id - P) A^i P = 0$ to reduce
+    each Kraus term to the $P$-corner.
+\end{proof}
+
+\begin{lemma}[Support projection invariance]%
+    \label{thm:support_proj_fixed}
+    \lean{Channel.support_proj_fixed}
+    \leanok
+    \uses{def:channel}
+    Let $E$ be a quantum channel and $\rho \ge 0$ a positive
+    semidefinite fixed point ($E(\rho) = \rho$).
+    Let $P$ denote the support projection of~$\rho$.
+    Then
+    \[
+        P E(P X P) P = E(P X P)
+    \]
+    for all $X \in \MN{D}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:lower_zero_invariance}
+    Write $E$ in Kraus form $E(X) = \sum_i K_i X K_i^\dagger$.
+    From $E(\rho) = \rho$ and $\rho \ge 0$ one deduces
+    $(\Id - P) K_i P = 0$ for all~$i$.
+    Apply Lemma~\ref{lem:lower_zero_invariance}.
+\end{proof}
+
+\begin{definition}[Stationary state]\label{def:stationaryState}
+    \lean{Channel.stationaryState}
+    \leanok
+    \uses{def:channel, def:irreducible_cp}
+    For an irreducible channel $E$ on $\MN{D}$ (with $D \ge 1$),
+    the \emph{stationary state} is the unique density-matrix fixed
+    point $\rho_\infty$ satisfying $E(\rho_\infty) = \rho_\infty$,
+    $\rho_\infty > 0$, and $\tr(\rho_\infty) = 1$.
+    Uniqueness follows from the quantum Perron--Frobenius theorem
+    (Theorem~\ref{thm:qpf}).
+\end{definition}
+
+\begin{definition}[Stationary support]\label{def:stationarySupport}
+    \lean{Channel.stationarySupport}
+    \leanok
+    \uses{def:stationaryState}
+    The \emph{stationary support} of an irreducible channel~$E$
+    is the support projection of the stationary state
+    (Definition~\ref{def:stationaryState}).
+\end{definition}
+
+\begin{theorem}[Stationary support is full]%
+    \label{thm:stationarySupport_eq_one}
+    \lean{Channel.stationarySupport_eq_one}
+    \leanok
+    \uses{def:stationarySupport, def:irreducible_cp}
+    For an irreducible channel~$E$, the stationary support equals
+    the identity: $\mathrm{supp}(\rho_\infty) = \Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:support_proj_fixed}
+    The support projection $P$ of $\rho_\infty$ is an orthogonal
+    projection satisfying $P E(PXP) P = E(PXP)$ for all~$X$
+    (Lemma~\ref{thm:support_proj_fixed}).
+    By irreducibility, $P = 0$ or $P = \Id$.
+    Since $\rho_\infty \neq 0$, we have $P \neq 0$, so $P = \Id$.
+\end{proof}
+
+\begin{remark}[Stationary-support formulations]%
+    \label{rem:stationary_support_todo}
+    The non-trivial formulations needed here are the following results from
+    Wolf:
+    \begin{itemize}
+        \item the converse direction of~\cite[Proposition~6.10]{Wolf2012Quantum}:
+              if the support projection of every positive semidefinite fixed point
+              is full, then the channel is irreducible;
+        \item \cite[Proposition~6.11]{Wolf2012Quantum}: minimality of the
+              stationary support among invariant projections, without assuming
+              irreducibility.
+    \end{itemize}
+    These statements are not used elsewhere in this chapter.
+\end{remark}
+
+\subsection{Faithful compression onto the support sector}
+
+This subsection establishes the results on the corner algebra,
+$*$-structure, and compression of a PSD fixed point onto its support sector
+needed for~\cite[Corollary~6.6]{Wolf2012Quantum}: the corner carries a
+$\C$-algebra and $*$-structure, the two standard presentations of the corner
+are identified, and the compression of a PSD fixed point onto its support
+sector is positive definite.
+
+\begin{lemma}[Support projection annihilates the kernel]%
+    \label{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
+    \lean{MPSTensor.supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
+    \leanok
+    Let $\rho \succeq 0$ on $\C^D$ with support projection
+    $P = \mathrm{supp}(\rho)$. For every $v \in \C^D$, if $\rho\, v = 0$,
+    then $P\, v = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    Diagonalize $\rho = U\,\diag(\lambda)\,U^\dagger$ with
+    $\lambda_j \ge 0$. Writing $w := U^\dagger v$, the hypothesis
+    $\rho v = 0$ gives $\lambda_j\, w_j = 0$ for every $j$; hence $w_j = 0$
+    whenever $\lambda_j > 0$. The support projection acts as
+    $\diag(\chi_{\lambda_j > 0})$ in the eigenbasis, so
+    $P\,v = U\,\diag(\chi_{\lambda_j > 0})\,w = 0$.
+\end{proof}
+
+\begin{definition}[Corner submodule / idempotent-corner identification]%
+    \label{def:cornerSubmoduleCornerEquiv}
+    \lean{MatrixCorner.cornerSubmoduleCornerEquiv}
+    \leanok
+    For an idempotent $P \in \MN{D}$, the subspace
+    $\{X \mid P X P = X\}$ and the corner
+    $\{P\,X\,P \mid X \in \MN{D}\}$ are identified as $\C$-linear spaces by
+    the identity on underlying matrices.
+\end{definition}
+
+\begin{remark}[$\C$-algebra and $*$-structure on the corner]%
+    \label{rem:corner_algebra_star_instances}
+    \lean{MatrixCorner.instAlgebraComplexCorner}
+    \lean{MatrixCorner.cornerStar}
+    \lean{MatrixCorner.cornerStarRing}
+    \lean{MatrixCorner.cornerStarModuleComplex}
+    \leanok
+    The corner algebra associated to an idempotent already carries a ring
+    structure with unit~$P$. In the matrix case it also has
+    $\C$-module and $\C$-algebra structures and, under the additional
+    assumption $P^\dagger = P$, star, star ring, and star module
+    structures over~$\C$.
+\end{remark}
+
+\begin{theorem}[Faithful compression onto the support]%
+    \label{thm:compression_on_support_posDef}
+    \lean{Matrix.PosSemidef.compression_on_support_posDef}
+    \leanok
+    \uses{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
+    Let $\rho \succeq 0$ on $\C^D$ with support projection
+    $P = \mathrm{supp}(\rho)$, and let
+    $V : \C^D \to \C^k$ be a compression isometry satisfying
+    $V\,V^\dagger = \Id_k$ and $V^\dagger\,V = P$. Then the compression
+    \[
+        V\,\rho\,V^\dagger \in \MN{k}
+    \]
+    is positive definite.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
+    Hermiticity follows from Hermiticity of $\rho$ and the product-star
+    identity. For strict positivity, let $w \neq 0$, set
+    $u := V^\dagger w$, and note that $V V^\dagger = \Id_k$ forces
+    $u \neq 0$, while $V^\dagger V = P$ forces $P u = u$. The quadratic
+    form computes as
+    $w^\dagger (V\rho V^\dagger) w = u^\dagger \rho u$,
+    which is non-negative by positive semidefiniteness. If it vanishes, then
+    $\rho u = 0$, and by
+    Lemma~\ref{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero} also
+    $P u = 0$, contradicting $P u = u \neq 0$.
+\end{proof}
+
+\begin{theorem}[Corner-restricted fixed points form a $*$-algebra]%
+    \label{thm:cornerFixedPointsStarSubalgebra}
+    \lean{Kraus.cornerFixedPointsStarSubalgebra}
+    \leanok
+    \uses{thm:compression_on_support_posDef, rem:corner_algebra_star_instances,
+        thm:adjointFixedPointsStarSubalgebra, thm:support_proj_fixed}
+    Let $T^*(Y) = \sum_i K_i^\dagger Y K_i$ be a trace-preserving Schwarz map,
+    let $\rho \succeq 0$ satisfy $T(\rho) = \rho$ for the Schr\"odinger map
+    $T(X) = \sum_i K_i X K_i^\dagger$, and let $Q = \mathrm{supp}(\rho)$ be the
+    support projection of~$\rho$. Then
+    \[
+        \{Y \in Q\,\MN{D}\,Q \mid Q\,T^*(Y)\,Q = Y\}
+    \]
+    is a $*$-subalgebra of the corner algebra $Q\,\MN{D}\,Q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:compression_on_support_posDef, thm:adjointFixedPointsStarSubalgebra,
+        thm:support_proj_fixed}
+    The stated set is the fixed-point set of the compressed map $\widetilde{T}^*$
+    on the support sector. Since $\rho$ is a fixed point of $T$, the support
+    projection satisfies $(\Id - Q) K_i Q = 0$
+    (Theorem~\ref{thm:support_proj_fixed}), so the compressed family
+    $Q K_i Q$ is supported on the corner and is trace-preserving there,
+    $\sum_i (Q K_i Q)^\dagger (Q K_i Q) = Q$. Compress this family to the
+    support sector: the compressed map is unital, and the compression of $\rho$
+    onto the sector is positive definite
+    (Theorem~\ref{thm:compression_on_support_posDef}) and is a fixed point of
+    the compressed Schr\"odinger map. The structure theorem for fixed points of
+    unital Schwarz maps with a positive-definite fixed point
+    (Theorem~\ref{thm:adjointFixedPointsStarSubalgebra}) makes the compressed
+    fixed points a $*$-algebra. The compression isomorphism is multiplicative
+    and star-preserving, intertwines the compressed adjoint map with the
+    corner-restricted map, and transports this $*$-algebra structure back to the
+    corner.
+\end{proof}
+
+\section{Wedderburn decomposition of the fixed-point algebra}
+
+This section proves the structure theorem for the fixed-point
+algebra of a trace-preserving Kraus map, following~\cite[Theorems~6.12--6.14]{Wolf2012Quantum}. The proof uses the
+Jacobson radical characterization of semisimplicity together with the
+Wedderburn--Artin structure theorem for finite-dimensional semisimple
+algebras over an algebraically closed field.
+
+The algebraic core is the semisimplicity of an arbitrary $*$-subalgebra of a
+complex matrix algebra, from which the abstract Wedderburn--Artin decomposition
+follows. The fixed-point algebra of a trace-preserving Kraus map is then the
+special case used in this section.
+
+\begin{lemma}[A $*$-subalgebra of a matrix algebra is semisimple]%
+    \label{lem:starSubalgebra_isSemisimpleRing}
+    \lean{StarSubalgebra.isSemisimpleRing}
+    \leanok
+    Every $*$-subalgebra of $\MN{D}$ is a semisimple ring.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The subalgebra is finite-dimensional, hence Artinian, so its Jacobson
+    radical $J$ is nilpotent. If $x \in J$ then $x^*x \in J$, since the radical
+    is a two-sided ideal. In the matrix algebra $x^*x$ is positive
+    semidefinite, and a positive semidefinite nilpotent matrix vanishes: its
+    trace is a nilpotent complex number, hence zero, and the trace of $x^*x$
+    vanishes only when $x = 0$. Thus $J = 0$ and the subalgebra is semisimple.
+\end{proof}
+
+\begin{theorem}[Abstract Wedderburn--Artin decomposition for $*$-subalgebras]%
+    \label{thm:starSubalgebra_wedderburnArtin}
+    \lean{StarSubalgebra.exists_algEquiv_pi_matrix}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    There exist $n \in \N$ and dimensions $d_1,\ldots,d_n \ge 1$ such that every
+    $*$-subalgebra of $\MN{D}$ is $\C$-algebra isomorphic to
+    \[
+        \prod_{k=1}^{n} \MN{d_k}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    Combine semisimplicity (Lemma~\ref{lem:starSubalgebra_isSemisimpleRing})
+    with the Wedderburn--Artin structure theorem for finite-dimensional
+    semisimple algebras over the algebraically closed field $\C$.
+\end{proof}
+
+The abstract decomposition records only the ring structure. To realize it by a
+single unitary change of basis, as in~\cite[Theorem~6.14]{Wolf2012Quantum}, one
+uses the spatial feature of a $*$-subalgebra: it reduces orthogonally. Whenever a
+subspace is invariant, so is its orthogonal complement, so the representation
+space splits into mutually orthogonal invariant pieces rather than merely into a
+direct sum of them.
+
+\begin{lemma}[Orthogonal reducibility of a $*$-subalgebra]%
+    \label{lem:starSubalgebra_orthogonal_reducibility}
+    \lean{StarSubalgebra.orthogonal_mem_invtSubmodule}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, and let $W \subseteq \C^{D}$ be a
+    subspace invariant under every member of $S$, meaning $A\,W \subseteq W$ for
+    all $A \in S$. Then the orthogonal complement $W^{\perp}$ is also invariant
+    under every member of $S$: for each $A \in S$,
+    \[
+        A\, W^{\perp} \subseteq W^{\perp}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix $A \in S$. Since $S$ is closed under the adjoint, $A^{\dagger} \in S$,
+    and therefore $A^{\dagger} W \subseteq W$. For $v \in W^{\perp}$ and
+    $w \in W$,
+    \[
+        \langle w, A v \rangle = \langle A^{\dagger} w, v \rangle = 0,
+    \]
+    because $A^{\dagger} w \in W$ while $v$ is orthogonal to $W$. Hence
+    $A v \in W^{\perp}$.
+\end{proof}
+
+\begin{lemma}[Invariant subspaces split off orthogonally]%
+    \label{lem:starSubalgebra_isCompl_orthogonal}
+    \lean{StarSubalgebra.isCompl_orthogonal_of_invariant}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_reducibility}
+    With $S$ and $W$ as in
+    Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}, the representation
+    space decomposes as the orthogonal direct sum
+    \[
+        \C^{D} = W \oplus W^{\perp},
+    \]
+    in which the orthogonal complement $W^{\perp}$ is invariant under every
+    member of $S$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_reducibility}
+    In a finite-dimensional inner product space the orthogonal complement of a
+    subspace is a vector-space complement, which gives the orthogonal direct
+    sum. Invariance of $W^{\perp}$ is
+    Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}.
+\end{proof}
+
+Orthogonal reducibility is the inductive step behind a full orthogonal
+decomposition. A subspace with no proper nonzero invariant subspace is
+irreducible; a subspace that has one splits off its orthogonal complement, and
+both pieces are again invariant and strictly smaller. Iterating on dimension
+exhausts the space into irreducible pieces, mutually orthogonal because at each
+step the two pieces are.
+
+\begin{definition}[Irreducible invariant subspace]%
+    \label{def:starSubalgebra_irreducibleSubspace}
+    \lean{StarSubalgebra.IsIrreducibleSubspace}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. A subspace $W \subseteq \C^{D}$ is
+    irreducible under $S$ when it is nonzero, invariant under every member of $S$,
+    and its only invariant subspaces are $\{0\}$ and $W$ itself.
+\end{definition}
+
+\begin{lemma}[Orthogonal decomposition of an invariant subspace]%
+    \label{lem:starSubalgebra_orthogonal_irreducible_invariant}
+    \lean{StarSubalgebra.exists_orthogonal_irreducible_of_invariant}
+    \leanok
+    \uses{lem:starSubalgebra_isCompl_orthogonal, def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W \subseteq \C^{D}$ be invariant
+    under every member of $S$. Then $W$ is the sum of a finite family of pairwise
+    orthogonal subspaces contained in $W$, each irreducible under $S$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isCompl_orthogonal}
+    Induct on the dimension of $W$. If $W$ is zero the empty family works, and if
+    $W$ is irreducible the family $\{W\}$ works. Otherwise $W$ has a proper nonzero
+    invariant subspace $U$. By
+    Lemma~\ref{lem:starSubalgebra_isCompl_orthogonal} the orthogonal complement of
+    $U$ inside $W$ is invariant, and both $U$ and that complement are strictly
+    smaller than $W$ and span it. Their inductive decompositions consist of
+    subspaces lying inside $U$ and inside its complement respectively, hence are
+    orthogonal to one another; the two families together form the required family.
+\end{proof}
+
+\begin{theorem}[Orthogonal irreducible decomposition]%
+    \label{thm:starSubalgebra_orthogonal_irreducible_decomposition}
+    \lean{StarSubalgebra.exists_orthogonal_irreducible_decomposition}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_irreducible_invariant}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. Then $\C^{D}$ is the sum of a finite
+    family of pairwise orthogonal subspaces, each irreducible under $S$; that is,
+    $\C^{D}$ is an orthogonal direct sum of irreducible invariant subspaces.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_irreducible_invariant}
+    Apply Lemma~\ref{lem:starSubalgebra_orthogonal_irreducible_invariant} to the
+    whole space $W = \C^{D}$, which is invariant under every member of $S$.
+\end{proof}
+
+The irreducibility notion just used is simplicity in the language of modules. The
+members of $S$ act on $\C^{D}$ as the operators their matrices represent, making
+$\C^{D}$ a module over the algebra $S$.
+
+\begin{lemma}[Irreducible invariant subspaces are the simple submodules]%
+    \label{lem:starSubalgebra_irreducible_iff_simple}
+    \lean{StarSubalgebra.isInvariantSubspace_iff_exists_restrictScalars,
+      StarSubalgebra.isIrreducibleSubspace_restrictScalars_iff}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, acting on $\C^{D}$. A complex
+    subspace $W \subseteq \C^{D}$ is invariant under every member of $S$ if and
+    only if $W$ is the underlying complex subspace of a submodule of $\C^{D}$
+    over $S$. Under this identification an invariant subspace is irreducible
+    under $S$ precisely when, as a module over $S$, it is simple: nonzero, with
+    no submodule other than $\{0\}$ and itself.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    The underlying set of a submodule of $\C^{D}$ over $S$ is closed under
+    addition and under the action of every member of $S$; since the complex
+    scalars lie in $S$, it is a complex subspace, and it is invariant.
+    Conversely an invariant complex subspace $W$ is closed under addition and
+    under the action of every member of $S$, so $W$ underlies a submodule $q$
+    of $\C^{D}$ over $S$ with the same members. Under this correspondence the
+    submodules below $q$ are exactly the invariant subspaces below $W$:
+    \[
+        \{\, q' \subseteq q : q' \text{ a submodule over } S \,\}
+        =
+        \{\, W' \subseteq W : W' \text{ invariant under } S \,\}.
+    \]
+    Hence $q$ has a submodule other than $\{0\}$ and $q$ exactly when $W$ has
+    an invariant subspace other than $\{0\}$ and $W$: simplicity of $q$ as a
+    module over $S$ is irreducibility of $W$ under $S$.
+\end{proof}
+
+\begin{lemma}[Euclidean space is a semisimple module over the subalgebra]%
+    \label{lem:starSubalgebra_isSemisimpleModule}
+    \lean{StarSubalgebra.isSemisimpleModule_euclideanSpace}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. As a module over $S$, the space
+    $\C^{D}$ is semisimple: every submodule admits a complementary submodule.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    The ring $S$ is semisimple (Lemma~\ref{lem:starSubalgebra_isSemisimpleRing}),
+    and every module over a semisimple ring is semisimple.
+\end{proof}
+
+The next step towards the structure theorem groups the irreducible pieces by
+isomorphism type. The grouping is governed by Schur's lemma: a map commuting with
+$S$ between two pieces is either zero or an isomorphism, and over the complex
+numbers the commutant of $S$ on a single piece is the scalars.
+
+\begin{lemma}[Schur's lemma: an intertwiner of irreducible pieces is zero or an isomorphism]%
+    \label{lem:starSubalgebra_intertwiner_irreducible}
+    \lean{StarSubalgebra.intertwiner_zero_or_isomorphism}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. Let $f \colon \C^{D} \to \C^{D}$ be a linear operator that carries $W$ into
+    $W'$ and commutes on $W$ with every member of $S$, that is,
+    \[
+        f(A x) = A\,(f x)
+    \]
+    for every $A \in S$ and every $x \in W$. Then either $f$ is zero on $W$, or $f$ is
+    injective on $W$ and maps $W$ onto $W'$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    The vectors of $W$ annihilated by $f$ form a subspace of $W$ that is invariant under
+    $S$, because $f$ commutes with $S$ on $W$. By irreducibility of $W$ this kernel is
+    either all of $W$, in which case $f$ is zero on $W$, or trivial, in which case $f$ is
+    injective on $W$. Likewise the image of $W$ under $f$ is a subspace of $W'$ invariant
+    under $S$, so by irreducibility of $W'$ it is either trivial, again forcing $f$ to be
+    zero on $W$, or all of $W'$. Hence $f$ is zero on $W$, or it is injective on $W$ with
+    image $W'$.
+\end{proof}
+
+\begin{lemma}[Scalar commutant on an irreducible piece]%
+    \label{lem:starSubalgebra_scalar_commutant_irreducible}
+    \lean{StarSubalgebra.exists_eq_smul_of_commute_of_irreducible}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W \subseteq \C^{D}$ be irreducible
+    under $S$. Let $f \colon \C^{D} \to \C^{D}$ be a linear operator that maps $W$ into
+    itself and commutes on $W$ with every member of $S$, that is,
+    \[
+        f(A x) = A\,(f x)
+    \]
+    for every $A \in S$ and every $x \in W$. Then $f$ acts on $W$ as a scalar: there is a
+    complex number $c$ with
+    \[
+        f x = c\,x
+    \]
+    for every $x \in W$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Restricting $f$ to $W$ gives an operator on a nonzero finite-dimensional complex
+    vector space, which over the complex numbers has an eigenvalue $c$ together with an
+    eigenvector inside $W$. The set of vectors of $W$ on which $f$ acts as multiplication
+    by $c$ is a subspace contained in $W$; it is nonzero because it contains that
+    eigenvector, and it is invariant under $S$ because $f$ commutes with every member of
+    $S$ on $W$ while the scalar $c$ commutes with everything. By irreducibility this
+    subspace is all of $W$, so $f$ acts as multiplication by $c$ throughout $W$.
+\end{proof}
+
+Schur's lemma turns the qualitative notion of two pieces ``looking the same'' into a
+usable relation. Call a linear operator on $\C^{D}$ an intertwiner from $W$ into $W'$ when
+it carries $W$ into $W'$ and commutes on $W$ with every member of $S$. Two pieces are of
+the same type when some intertwiner between them does not vanish on the source; on
+irreducible pieces such an intertwiner is automatically an isomorphism.
+
+\begin{definition}[Intertwiner between subspaces]%
+    \label{def:starSubalgebra_intertwiner}
+    \lean{StarSubalgebra.IsIntertwiner}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be subspaces. A
+    linear operator $f \colon \C^{D} \to \C^{D}$ is an intertwiner from $W$ into
+    $W'$ when it carries $W$ into $W'$ and, for every $A \in S$ and every $x \in W$,
+    \[
+        f(A x) = A\,(f x).
+    \]
+\end{definition}
+
+An intertwiner whose source is irreducible scales the inner product by one nonnegative real
+factor; when the intertwiner does not vanish on the source, that factor is positive, so after
+rescaling it is an isometry. This is the metric ingredient that turns each same-type
+isomorphism into a partial isometry.
+
+\begin{lemma}[Intertwiner scales the inner product]%
+    \label{lem:starSubalgebra_intertwiner_inner_scale}
+    \lean{StarSubalgebra.exists_real_smul_inner_of_intertwiner}
+    \leanok
+    \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace,
+        lem:starSubalgebra_scalar_commutant_irreducible}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, let $W \subseteq \C^{D}$ be irreducible under $S$,
+    and let $f$ be an intertwiner from $W$ into a subspace $W'$. Then there is a
+    real number $c \ge 0$ such that for all $x, y \in W$,
+    \[
+        \langle f(x), f(y) \rangle = c\,\langle x, y \rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace,
+        lem:starSubalgebra_scalar_commutant_irreducible}
+    Following $f$ with its adjoint and the orthogonal projection $P_{W}$ onto $W$ gives an
+    operator $g = P_{W} f^{*} f$ that maps $W$ into itself, since the projection lands in $W$.
+    On $W$ it commutes with every member of $S$: for $A \in S$ the adjoint $A^{*}$ is again a
+    member, and combining the intertwining identity of $f$ with the pairing of the projected
+    adjoint against $W$ gives $g(A x) = A\,(g x)$ for $x \in W$. By Schur's lemma
+    (Lemma~\ref{lem:starSubalgebra_scalar_commutant_irreducible}) the operator $g$ acts on $W$
+    as a scalar, $g x = \lambda\,x$. Pairing with a vector $y \in W$ and using that $P_{W}$ is
+    invisible against $W$ gives $\langle f(x), f(y) \rangle = \langle g(x), y \rangle =
+    \overline{\lambda}\,\langle x, y \rangle$. Pairing a nonzero $x \in W$ with itself shows
+    that $c = \overline{\lambda} = \|f(x)\|^{2} / \|x\|^{2}$, a nonnegative real.
+\end{proof}
+
+\begin{lemma}[Nonzero intertwiner scales by a positive factor]%
+    \label{lem:starSubalgebra_intertwiner_inner_scale_pos}
+    \lean{StarSubalgebra.exists_pos_smul_inner_of_intertwiner_ne_zero}
+    \leanok
+    \uses{lem:starSubalgebra_intertwiner_inner_scale}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, let $W \subseteq \C^{D}$ be irreducible under $S$,
+    and let $f$ be an intertwiner from $W$ into a subspace $W'$ that does not vanish
+    on $W$. Then there is a real number $c > 0$ such that for all $x, y \in W$,
+    \[
+        \langle f(x), f(y) \rangle = c\,\langle x, y \rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_intertwiner_inner_scale}
+    The nonnegative factor from
+    Lemma~\ref{lem:starSubalgebra_intertwiner_inner_scale} satisfies $\|f(x)\|^{2} =
+    c\,\|x\|^{2}$. Choosing $x \in W$ with $f(x) \neq 0$ forces both squared norms to be
+    positive, so $c > 0$.
+\end{proof}
+
+\begin{definition}[Same type for invariant subspaces]%
+    \label{def:starSubalgebra_sameIsotype}
+    \lean{StarSubalgebra.SameIsotype}
+    \leanok
+    \uses{def:starSubalgebra_intertwiner}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be invariant
+    under $S$. The pieces $W$ and $W'$ are of the same type when there is an intertwiner from
+    $W$ into $W'$ that is not zero on $W$.
+\end{definition}
+
+\begin{lemma}[Same type is the existence of an isomorphism]%
+    \label{lem:starSubalgebra_sameIsotype_iso}
+    \lean{StarSubalgebra.sameIsotype_iff_exists_isomorphism}
+    \leanok
+    \uses{def:starSubalgebra_sameIsotype, lem:starSubalgebra_intertwiner_irreducible}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. Then $W$ and $W'$ are of the same type if and only if there is an intertwiner
+    from $W$ into $W'$ that is injective on $W$ and maps $W$ onto $W'$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_sameIsotype, lem:starSubalgebra_intertwiner_irreducible}
+    If $W$ and $W'$ are of the same type, then an intertwiner that is nonzero on $W$ is, by
+    Schur's lemma (Lemma~\ref{lem:starSubalgebra_intertwiner_irreducible}), injective on $W$
+    with image $W'$. Conversely, an intertwiner injective on $W$ with image $W'$ cannot
+    vanish on $W$, since $W'$ is nonzero, so the two pieces are of the same type.
+\end{proof}
+
+\begin{lemma}[Same-type pieces are unitarily identified]%
+    \label{lem:starSubalgebra_sameIsotype_isometry}
+    \lean{StarSubalgebra.exists_isometry_intertwiner_of_sameIsotype}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso, lem:starSubalgebra_intertwiner_inner_scale_pos}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. If $W$ is of the same type as $W'$, then there is an intertwiner $u$ from $W$
+    into $W'$ that maps $W$ onto $W'$ and preserves the inner product on $W$: for all
+    $x, y \in W$,
+    \[
+        \langle u(x), u(y) \rangle = \langle x, y \rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso, lem:starSubalgebra_intertwiner_inner_scale_pos}
+    Same type gives, by Lemma~\ref{lem:starSubalgebra_sameIsotype_iso}, an intertwiner $f$ that
+    is injective on $W$ with image $W'$. Since $W'$ is nonzero, $f$ does not vanish on $W$, so
+    by Lemma~\ref{lem:starSubalgebra_intertwiner_inner_scale_pos} there is a real number
+    $c > 0$ with $\langle f(x), f(y) \rangle = c\,\langle x, y \rangle$ for all $x, y \in W$.
+    Set $u = f / \sqrt{c}$. Scaling by the nonzero factor $1 / \sqrt{c}$ keeps the commuting
+    identity and the image $W'$, and turns the inner-product factor into one,
+    \[
+        \langle u(x), u(y) \rangle = \tfrac{1}{c}\langle f(x), f(y) \rangle = \langle x, y \rangle,
+    \]
+    so $u$ maps $W$ onto $W'$ and is an isometry on $W$.
+\end{proof}
+
+\begin{lemma}[Reflexivity of the same-type relation]%
+    \label{lem:starSubalgebra_sameIsotype_refl}
+    \lean{StarSubalgebra.sameIsotype_refl}
+    \leanok
+    \uses{def:starSubalgebra_sameIsotype, def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W \subseteq \C^{D}$ be irreducible under
+    $S$. Then $W$ is of the same type as itself.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_sameIsotype}
+    The identity operator carries $W$ into itself, commutes with every member of $S$, and is
+    nonzero on $W$ because $W$ is nonzero.
+\end{proof}
+
+\begin{lemma}[Symmetry of the same-type relation]%
+    \label{lem:starSubalgebra_sameIsotype_symm}
+    \lean{StarSubalgebra.sameIsotype_symm}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. If $W$ is of the same type as $W'$, then $W'$ is of the same type as $W$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso}
+    An isomorphism $f$ of $W$ onto $W'$ has an inverse $g$, obtained by projecting onto $W'$,
+    inverting on the subspace, and including back into $W$. For every $A \in S$ and
+    $w \in W'$, since $f$ is an intertwiner,
+    \[
+        g(A w) = f^{-1}(A w) = f^{-1}\bigl(A\,f(f^{-1} w)\bigr)
+        = f^{-1}\bigl(f(A\,f^{-1} w)\bigr) = A\,g(w),
+    \]
+    so $g$ is an intertwiner from $W'$ into $W$ that is injective on $W'$ with image $W$, and
+    the two pieces are of the same type in the reverse order.
+\end{proof}
+
+\begin{lemma}[Transitivity of the same-type relation]%
+    \label{lem:starSubalgebra_sameIsotype_trans}
+    \lean{StarSubalgebra.sameIsotype_trans}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W', W'' \subseteq \C^{D}$ be
+    irreducible under $S$. If $W$ is of the same type as $W'$ and $W'$ is of the same type as
+    $W''$, then $W$ is of the same type as $W''$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso}
+    Composing an isomorphism $f$ of $W$ onto $W'$ with an isomorphism $g$ of $W'$ onto $W''$
+    gives a map $g \circ f$ for which, for every $A \in S$ and $x \in W$,
+    \[
+        (g \circ f)(A x) = g(f(A x)) = g(A\,f(x)) = A\,g(f(x)) = A\,(g \circ f)(x),
+    \]
+    so it is an intertwiner from $W$ into $W''$ that is injective on $W$ with image $W''$,
+    which is nonzero on $W$ because $W''$ is nonzero.
+\end{proof}
+
+\begin{lemma}[The orthogonal projection onto an invariant subspace commutes with the subalgebra]%
+    \label{lem:starSubalgebra_projection_commutant}
+    \lean{StarSubalgebra.starProjection_toEuclideanLin_comm}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_reducibility}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W \subseteq \C^{D}$ be invariant under
+    $S$, with orthogonal projection $P$ onto $W$. Then for every $A \in S$,
+    \[
+        P(A x) = A\,(P x)
+    \]
+    holds for every $x \in \C^{D}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_reducibility}
+    Decompose $x = P x + P^{\perp} x$ into its projection onto $W$ and its orthogonal part,
+    where $P^{\perp}$ is the projection onto $W^{\perp}$. Each member of $S$ sends $P x$ into
+    $W$ (invariance) and $P^{\perp} x$ into $W^{\perp}$ (orthogonal reducibility,
+    Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}), so
+    \[
+        P(A x) = P\bigl(A\,P x + A\,P^{\perp} x\bigr) = A\,P x + P\bigl(A\,P^{\perp} x\bigr)
+        = A\,P x,
+    \]
+    because $A\,P x \in W$ is fixed by $P$ and $A\,P^{\perp} x \in W^{\perp}$ is annihilated by
+    $P$.
+\end{proof}
+
+\begin{lemma}[Pieces of different type are orthogonal]%
+    \label{lem:starSubalgebra_isOrtho_not_sameIsotype}
+    \lean{StarSubalgebra.isOrtho_of_not_sameIsotype}
+    \leanok
+    \uses{lem:starSubalgebra_intertwiner_irreducible, lem:starSubalgebra_projection_commutant,
+        lem:starSubalgebra_sameIsotype_iso}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. If $W$ and $W'$ are not of the same type, then $W$ and $W'$ are orthogonal.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_intertwiner_irreducible, lem:starSubalgebra_projection_commutant,
+        lem:starSubalgebra_sameIsotype_iso}
+    The orthogonal projection onto $W'$ commutes with every member of $S$
+    (Lemma~\ref{lem:starSubalgebra_projection_commutant}) and carries $W$ into $W'$, so it is
+    an intertwiner from $W$ into $W'$. By Schur's lemma
+    (Lemma~\ref{lem:starSubalgebra_intertwiner_irreducible}) it is either an isomorphism,
+    which would make the two pieces of the same type, or zero on $W$. Since the pieces are
+    not of the same type, the projection $P_{W'}$ onto $W'$ vanishes on $W$. For every
+    $x \in W$ and $y \in W'$ we have $P_{W'} y = y$ and $P_{W'} x = 0$, so self-adjointness
+    of $P_{W'}$ gives
+    \[
+        \langle x, y \rangle = \langle x, P_{W'} y \rangle = \langle P_{W'} x, y \rangle
+        = \langle 0, y \rangle = 0,
+    \]
+    that is, $W$ lies in the orthogonal complement of $W'$.
+\end{proof}
+
+Each isotypic component is the supremum of one same-type class; the suprema of two different
+classes are orthogonal, and the classes cover the whole family, so the components span
+$\C^{D}$.
+
+\begin{lemma}[Suprema of cross-type classes are orthogonal]%
+    \label{lem:starSubalgebra_isOrtho_sSup_not_sameIsotype}
+    \lean{StarSubalgebra.isOrtho_sSup_of_not_sameIsotype}
+    \leanok
+    \uses{lem:starSubalgebra_isOrtho_not_sameIsotype}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, and let $\mathcal{D}_1, \mathcal{D}_2$ be two sets
+    of subspaces irreducible under $S$. If no piece of $\mathcal{D}_1$ is of the same type as any
+    piece of $\mathcal{D}_2$, then
+    \[
+        \bigvee_{W \in \mathcal{D}_1} W \;\perp\; \bigvee_{W' \in \mathcal{D}_2} W'.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isOrtho_not_sameIsotype}
+    Each pair $W \in \mathcal{D}_1$, $W' \in \mathcal{D}_2$ is of different type, hence orthogonal
+    by Lemma~\ref{lem:starSubalgebra_isOrtho_not_sameIsotype}. Orthogonality to a fixed subspace
+    is preserved by suprema on each side, so the supremum of $\mathcal{D}_1$ is orthogonal to the
+    supremum of $\mathcal{D}_2$.
+\end{proof}
+
+An irreducible subspace of the supremum of a same-type class need not be one of its pieces,
+but its type is determined by the class.
+
+\begin{lemma}[Irreducible subspaces of a supremum inherit a type]%
+    \label{lem:starSubalgebra_sameIsotype_of_le_sSup}
+    \lean{StarSubalgebra.exists_sameIsotype_of_le_sSup}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace, def:starSubalgebra_sameIsotype}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, let $\mathcal{D}$ be a family of subspaces
+    irreducible under $S$, and let $W$ be a subspace irreducible under $S$ with
+    $W \le \bigvee_{W' \in \mathcal{D}} W'$. Then $W$ is of the same type as some piece of
+    $\mathcal{D}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isOrtho_not_sameIsotype}
+    Suppose $W$ is of a different type than every piece of $\mathcal{D}$. Pieces of different
+    type are orthogonal (Lemma~\ref{lem:starSubalgebra_isOrtho_not_sameIsotype}), so $W$ is
+    orthogonal to every piece of $\mathcal{D}$, hence to their supremum, hence to itself. An
+    irreducible subspace is nonzero, a contradiction.
+\end{proof}
