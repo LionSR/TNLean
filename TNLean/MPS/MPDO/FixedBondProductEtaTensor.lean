@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicTransport
+import TNLean.MPS.MPDO.FixedBondPositivePhysicalSectorConstructor
 import TNLean.MPS.MPDO.FixedBondProductTensor
 
 /-!
@@ -26,7 +27,7 @@ independent of the chain length.
 * arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1593.
 -/
 
-open scoped BigOperators Kronecker Matrix
+open scoped BigOperators ComplexOrder Kronecker Matrix
 
 namespace MPOTensor
 
@@ -272,28 +273,9 @@ Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
 `4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
 theorem nonempty_fixedProductTensorData (data : TranslationInvariantBondData d) :
     Nonempty (FixedProductTensorData data) := by
-  classical
-  by_cases hd : d = 0
-  · subst d
-    refine ⟨{
-      bondDim := 1
-      bondDim_pos := by omega
-      tensor := fun i ↦ Fin.elim0 i
-      mpo_eq_product := ?_ }⟩
-    intro N hN
-    ext sigma
-    exact Fin.elim0 (sigma ⟨0, by omega⟩)
-  · letI : NeZero d := ⟨hd⟩
-    obtain ⟨K, dl, dr, e, U, η, hU, _hdl, _hdr, _hη, hB⟩ :=
-      data.exists_positive_eta_pairBond_decomposition
-    refine ⟨{
-      bondDim := d * d
-      bondDim_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
-      tensor := changePhysicalBasis U
-        (cyclicEdgeWeightTensor (etaCyclicEdgeWeight dl dr e η))
-      mpo_eq_product := fun N hN ↦
-        data.mpo_changePhysicalBasis_cyclicEtaWeight_eq_product
-          dl dr e U η hU hB N hN }⟩
+  exact Nonempty.map
+    PositivePhysicalSectorFixedProductTensorData.repr
+    data.nonempty_positivePhysicalSectorFixedProductTensorData
 
 /-- A chosen exact matrix-product representation of the fixed commuting-bond
 product.
@@ -302,7 +284,40 @@ Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
 `4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
 noncomputable def fixedProductTensorData (data : TranslationInvariantBondData d) :
     FixedProductTensorData data :=
-  Classical.choice data.nonempty_fixedProductTensorData
+  data.positivePhysicalSectorFixedProductTensorData.repr
+
+/-- The positive physical-sector factorization retained by the exact selected
+fixed-product tensor.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
+1581--1589; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+noncomputable def fixedProductTensorDataPhysicalSectorFactorization
+    (data : TranslationInvariantBondData d) :
+    PhysicalSectorFactorization data.fixedProductTensorData.tensor :=
+  data.positivePhysicalSectorFixedProductTensorData.factorization
+
+/-- The physical bond reconstructed from the selected fixed-product
+factorization is the input commuting bond.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
+1581--1589; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+theorem fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq
+    (data : TranslationInvariantBondData d) :
+    data.fixedProductTensorDataPhysicalSectorFactorization.physicalBond =
+      data.bond :=
+  data.positivePhysicalSectorFixedProductTensorData.physicalBond_eq
+
+/-- The neighboring operators retained by the selected fixed-product
+factorization are positive semidefinite.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
+1581--1589; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+theorem fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
+    (data : TranslationInvariantBondData d) :
+    ∀ q h,
+      (data.fixedProductTensorDataPhysicalSectorFactorization
+        |>.neighboringOperator q h).PosSemidef :=
+  data.positivePhysicalSectorFixedProductTensorData.neighboring_pos
 
 end TranslationInvariantBondData
 
