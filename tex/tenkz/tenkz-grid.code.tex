@@ -1380,6 +1380,64 @@
     #2~pairing~interface(s),~numbered~top-down~per~adjacent~facing~
     pair:~no~segment~matches.
   }
+% ---------- model bond derivation (record; the draw scan still draws) -----
+% The implicit bonds of a row become WIRE records BEFORE validation, using
+% the same predicates the draw-time scan trusts: a hole breaks the chain,
+% an empty column is transparent, one owner needs no internal bond, and a
+% sparse fusion face contracts only the row slots it declares.  The scan in
+% \tenkz_draw_bonds: keeps drawing from its own walk until the shared
+% renderer consumes these records (S2); then the walk dies and the
+% derivation lives here alone.
+\int_new:N \l__tenkz_mdb_prev_int
+\tl_new:N  \l__tenkz_mdb_kind_tl
+\tl_new:N  \l__tenkz_mdb_oa_tl
+\tl_new:N  \l__tenkz_mdb_ob_tl
+\bool_new:N \l__tenkz_mdb_pa_bool
+\bool_new:N \l__tenkz_mdb_pb_bool
+\cs_new_protected:Npn \tenkz_model_derive_bonds:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_zero:N \l__tenkz_mdb_prev_int
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \tenkz_get:NeN \l__tenkz_kind_prop {##1-####1} \l__tenkz_mdb_kind_tl
+            \str_if_eq:VnTF \l__tenkz_mdb_kind_tl {skip}
+              { \int_zero:N \l__tenkz_mdb_prev_int }
+              {
+                \prop_if_in:NeT \l__tenkz_owner_prop {##1-####1}
+                  {
+                    \int_compare:nNnT { \l__tenkz_mdb_prev_int } > {0}
+                      {
+                        \tenkz_get:NeN \l__tenkz_owner_prop
+                          {##1-\int_use:N \l__tenkz_mdb_prev_int} \l__tenkz_mdb_oa_tl
+                        \tenkz_get:NeN \l__tenkz_owner_prop
+                          {##1-####1} \l__tenkz_mdb_ob_tl
+                        \tl_if_eq:NNF \l__tenkz_mdb_oa_tl \l__tenkz_mdb_ob_tl
+                          {
+                            \tenkz_cell_virtual_row_port:nnnN {##1}
+                              {\int_use:N \l__tenkz_mdb_prev_int}{east}
+                              \l__tenkz_mdb_pa_bool
+                            \tenkz_cell_virtual_row_port:nnnN {##1}
+                              {####1}{west} \l__tenkz_mdb_pb_bool
+                            \bool_lazy_and:nnT
+                              { \l__tenkz_mdb_pa_bool } { \l__tenkz_mdb_pb_bool }
+                              {
+                                \__tenkz_model_record_wire:e
+                                  {kind={index},
+                                   from={##1-\int_use:N \l__tenkz_mdb_prev_int},
+                                   to={##1-####1},
+                                   row={##1},origin={bond}}
+                              }
+                          }
+                      }
+                    \int_set:Nn \l__tenkz_mdb_prev_int {####1}
+                  }
+              }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_record_interfaces:
   {
     \prop_clear:N \l__tenkz_opencell_prop
@@ -1484,6 +1542,7 @@
     \tenkz_record_traces:
     % map the interface-addressed open=/trace= segments to rows
     \tenkz_record_interfaces:
+    \tenkz_model_derive_bonds:
     \__tenkz_model_validate:
     \tenkz@beginpicture{grid}
     \tenkz_emit_tracefacewarnings:
