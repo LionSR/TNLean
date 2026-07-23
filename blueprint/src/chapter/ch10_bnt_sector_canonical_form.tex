@@ -22,11 +22,12 @@ here feed the BNT canonical-form predicate below.
     A sector-weight tuple over $g$ basis blocks consists of multiplicities
     $r_j > 0$, nonzero weights $\mu_{j,q}$ for
     $q \in \{1,\ldots,r_j\}$, and the sector coefficients
-    \[
+    \begin{align}
         c_{S,j}^{(N)}
-        :=
+        &:=
         \sum_{q=1}^{r_j} \mu_{j,q}^N.
-    \]
+        \label{eq:bnt_sector_coeff_def}
+    \end{align}
     A \emph{sector decomposition} consists of the basis blocks
     $(A_j)_{j=1}^g$ together with these multiplicities and weights.
 \end{definition}
@@ -38,10 +39,7 @@ here feed the BNT canonical-form predicate below.
     \leanok
     \uses{def:sector_weight_data}
     Let the representative $A_j$ have bond dimension $D_j$, and let $D$ be
-    the bond dimension of the flattened sector tensor. Then
-    \[
-        D_j\leq D.
-    \]
+    the bond dimension of the flattened sector tensor. Then $D_j\leq D$.
     If every $D_j$ is positive and there are $g$ representatives, then also
     $g\leq D$.
 \end{theorem}
@@ -49,18 +47,19 @@ here feed the BNT canonical-form predicate below.
 \begin{proof}
     \leanok
     \uses{def:sector_weight_data}
-    Since $r_j>0$, choose one copy of $A_j$.  Its contribution $D_j$ is one
-    nonnegative summand in the total dimension of the flattened copy family,
+    Since $r_j>0$, choose one copy of $A_j$. Its contribution $D_j$ is one
+    non-negative summand in the total dimension of the flattened copy family,
     so $D_j\leq D$.
 
     For the second assertion, every representative has multiplicity
     $r_j\geq1$, and each copy has positive dimension $D_j>0$. Therefore
-    \[
+    \begin{align}
         g=\sum_j1
         \leq\sum_j r_j
         \leq\sum_j r_jD_j
         =D.
-    \]
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Physical blocking of a sector decomposition]%
@@ -69,13 +68,14 @@ here feed the BNT canonical-form predicate below.
     \leanok
     \uses{def:sector_weight_data, def:blocked_tensor}
     Let $P$ be a sector decomposition with representatives $A_j$,
-    multiplicities $r_j$, and copy weights $\mu_{j,q}$.  Its physical
+    multiplicities $r_j$, and copy weights $\mu_{j,q}$. Its physical
     $p$-site blocking has the same representative and copy indices, with
-    \[
-        A_j\longmapsto A_j^{[p]},
-        \qquad
-        \mu_{j,q}\longmapsto \mu_{j,q}^{p}.
-    \]
+    \begin{align}
+        A_j&\longmapsto A_j^{[p]},
+        \notag\\
+        \mu_{j,q}&\longmapsto \mu_{j,q}^{p}.
+        \notag
+    \end{align}
     The two-layer decomposition is
     \cite[lines~283--301]{Cirac2016MPDO_arXiv}.
     Its blocked form is an auxiliary construction for the planned formal proof
@@ -95,7 +95,7 @@ here feed the BNT canonical-form predicate below.
     \lean{MPSTensor.SectorDecomposition.blockTensor_flatBasis}
     \leanok
     \uses{def:sector_decomposition_block_tensor}
-    Physical blocking preserves the copy sets and bond dimensions.  On the
+    Physical blocking preserves the copy sets and bond dimensions. On the
     flattened copy index, the weight is raised to the $p$-th power and the
     representative is replaced by its $p$-site blocking.
 \end{theorem}
@@ -111,20 +111,22 @@ here feed the BNT canonical-form predicate below.
     \leanok
     \uses{def:sector_decomposition_block_tensor, thm:block_tensor_to_tensor_from_blocks}
     The coefficient of the blocked decomposition satisfies
-    \[
+    \begin{align}
         c_{P^{[p]},j}^{(N)}
-        =\sum_q\bigl(\mu_{j,q}^{p}\bigr)^N
+        =\sum_q(\mu_{j,q}^{p})^N
         =c_{P,j}^{(Np)}.
-    \]
+        \label{eq:bnt_sector_block_coeff}
+    \end{align}
     Moreover, blocking the tensor assembled from $P$ gives the same MPV family
     as the tensor assembled from the blocked sector decomposition.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:block_tensor_to_tensor_from_blocks}
-    The coefficient identity is $(\mu^p)^N=\mu^{pN}$.  The tensor identity is
-    Theorem~\ref{thm:block_tensor_to_tensor_from_blocks} applied to the
-    flattened copy family.
+    The coefficient identity in
+    (\ref{eq:bnt_sector_block_coeff}) is $(\mu^p)^N=\mu^{pN}$. The tensor
+    identity is Theorem~\ref{thm:block_tensor_to_tensor_from_blocks} applied to
+    the flattened copy family.
 \end{proof}
 
 \begin{lemma}[Sector decomposition formula]%
@@ -134,11 +136,12 @@ here feed the BNT canonical-form predicate below.
     \uses{def:sector_weight_data}
     For a sector decomposition $S$ with associated tensor $A_{\mathrm{tot}}$,
     the MPV satisfies
-    \[
+    \begin{align}
         V^{(N)}(A_{\mathrm{tot}})_\sigma
-        =
+        &=
         \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
-    \]
+        \label{eq:bnt_sector_decomp}
+    \end{align}
 \end{lemma}
 
 Two blocks are identified for canonical-form purposes when their MPV families
@@ -153,12 +156,7 @@ single family.
     \uses{def:mpv}
     Two blocks $A$ and $B$ are MPV-phase equivalent if there is a nonzero
     scalar $\zeta$ such that, for every positive system size~$N$ and every
-    physical word,
-    \[
-        V^{(N)}(B)_\sigma
-        =
-        \zeta^N V^{(N)}(A)_\sigma.
-    \]
+    physical word, $V^{(N)}(B)_\sigma=\zeta^N V^{(N)}(A)_\sigma$.
     The two bond dimensions are allowed to differ.
 \end{definition}
 
@@ -184,13 +182,8 @@ single family.
     \leanok
     For a finite family of blocks, put $j \sim k$ when there is a nonzero
     scalar factor $\zeta$ such that
-    \[
-        \ket{V^{(N)}(B_k)}
-        =
-        \zeta^N\ket{V^{(N)}(B_j)}
-    \]
-    for every positive length~$N$. The associated tuple enumerates the finite
-    quotient,
+    $\ket{V^{(N)}(B_k)}=\zeta^N\ket{V^{(N)}(B_j)}$ for every positive
+    length~$N$. The associated tuple enumerates the finite quotient,
     chooses one representative per class, enumerates that representative first
     in its class, records the scalar relating the representative to each member,
     and proves that distinct representatives are not MPV-phase equivalent. The
@@ -218,9 +211,7 @@ single family.
     \uses{def:mpv_phase_class_data}
     Let $F_k$ be a finite family of square matrices indexed by the original
     blocks. If $k=(j,q)$ enumerates the copies in the MPV phase classes, then
-    \[
-        \sum_j\sum_q F_{j,q}=\sum_k F_k.
-    \]
+    $\sum_j\sum_q F_{j,q}=\sum_k F_k$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -243,18 +234,21 @@ single family.
     independent; distinct same-dimension basis blocks are not gauge-phase
     equivalent after identifying equal bond dimensions; and the
     \cite[Section~2.3]{Cirac2016MPDO_arXiv} canonical-form normalization holds,
-    \[
-        \forall (j,q),\ |\mu_{j,q}| \le 1,
-        \qquad
-        \exists\, (j_*, q_*) : |\mu_{j_*, q_*}| = 1.
-    \]
+    \begin{align}
+        \forall (j,q),\quad &|\mu_{j,q}| \le 1,
+        \notag\\
+        \exists\, (j_*,q_*),\quad &|\mu_{j_*,q_*}| = 1.
+        \notag
+    \end{align}
     The MPV expansion takes the raw two-layer form
-    \[
+    \begin{align}
         V^{(N)}(P)_\sigma
-        =
-        \sum_{j=1}^{g} \left(\sum_{q=1}^{r_j} \mu_{j,q}^N\right)
+        &=
+        \sum_{j=1}^{g}
+        \left(\sum_{q=1}^{r_j} \mu_{j,q}^N\right)
         V^{(N)}(P_j)_\sigma,
-    \]
+        \label{eq:bnt_sector_raw_expansion}
+    \end{align}
     % Source: Cirac2016MPDO_arXiv \S~II.C lines 271--301; Cirac2021Matrix
     % Definition~4.2, Proposition~4.3, lines 1864--1884.
     matching \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
@@ -273,10 +267,8 @@ single family.
         def:peripheral_eigenvalues}
     Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
     with bond dimension $D$, and suppose that the peripheral eigenvalues of
-    its transfer map are exactly $\{z\in\mathbb C:z^m=1\}$. Then
-    \[
-        O_{AA}(mn)\longrightarrow m.
-    \]
+    its transfer map are exactly $\{z\in\C:z^m=1\}$. Then
+    $O_{AA}(mn)\longrightarrow m$.
 \end{theorem}
 
 \begin{theorem}[Primitivity and normality from normalized self-overlap]
@@ -286,24 +278,18 @@ single family.
     \uses{def:irreducible_tensor, def:mpv_overlap, def:normal,
         thm:bnt_periodic_self_overlap_tendsto, thm:normal_tp_primitive_irred}
     Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
-    If
-    \[
-        O_{AA}(N)\longrightarrow1,
-    \]
-    then the transfer map of $A$ is primitive and $A$ is normal.
+    If $O_{AA}(N)\longrightarrow1$, then the transfer map of $A$ is primitive
+    and $A$ is normal.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:bnt_periodic_self_overlap_tendsto,
         thm:normal_tp_primitive_irred}
-    Let $m$ be the peripheral period.  Along its multiples,
-    \[
-        O_{AA}(mn)\longrightarrow m.
-    \]
-    The assumed full limit gives $O_{AA}(mn)\to1$, hence $m=1$.  The transfer
-    map is therefore primitive, and irreducibility and left-canonicality give
-    normality.
+    Let $m$ be the peripheral period. Along its multiples,
+    $O_{AA}(mn)\longrightarrow m$. The assumed full limit gives
+    $O_{AA}(mn)\to1$, hence $m=1$. The transfer map is therefore primitive,
+    and irreducibility and left-canonicality give normality.
 \end{proof}
 
 \begin{corollary}[Normality from normalized self-overlap]
@@ -351,9 +337,9 @@ single family.
 \begin{proof}\leanok
     \uses{cor:sector_bnt_cf_basis_normal, def:sector_weight_data}
     The preceding corollary gives normality of every basis block. The sector
-    coefficient formula expresses the total MPV as a linear combination of
-    the basis MPVs at each positive length, and the BNT sector data give their
-    eventual linear independence.
+    coefficient formula (\ref{eq:bnt_sector_decomp}) expresses the total MPV
+    as a linear combination of the basis MPVs at each positive length, and the
+    BNT sector data give their eventual linear independence.
 \end{proof}
 
 \begin{theorem}[Positive blocking preserves BNT canonical form]
@@ -373,24 +359,16 @@ single family.
     For each representative $A_j$, normalized self-overlap gives peripheral
     period one, hence a primitive transfer map. Positive blocking therefore
     preserves irreducibility and left-canonical normalization. Moreover,
-    \[
-        O_{A_j^{[p]}A_j^{[p]}}(N)
-        =O_{A_jA_j}(Np)\longrightarrow1.
-    \]
+    $O_{A_j^{[p]}A_j^{[p]}}(N)=O_{A_jA_j}(Np)\longrightarrow1$.
     Let $F_N$ be the linear isomorphism induced by concatenating blocked words,
     from the blocked configuration space at length $N$ to the original one at
     length $Np$. For every representative,
-    \[
-        F_N\ket{V^{(N)}(A_j^{[p]})}
-        =\ket{V^{(Np)}(A_j)}.
-    \]
+    $F_N\ket{V^{(N)}(A_j^{[p]})}=\ket{V^{(Np)}(A_j)}$.
     Hence eventual linear independence is preserved. If two blocked
     representatives were gauge-phase equivalent, then for some nonzero
     $\zeta$ and every $N$,
-    \[
-        \ket{V^{(N)}(A_k^{[p]})}
-        =\zeta^N\ket{V^{(N)}(A_j^{[p]})}.
-    \]
+    $\ket{V^{(N)}(A_k^{[p]})}
+    =\zeta^N\ket{V^{(N)}(A_j^{[p]})}$.
     Writing these two vectors as $f_k$ and $f_j$ gives
     $1\cdot f_k=\zeta^N\cdot f_j$ in an eventually linearly independent
     family, and therefore $k=j$. Finally,
@@ -408,11 +386,9 @@ single family.
         thm:exact_pow_four_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ}
     Let $P$ be a BNT canonical form of total bond dimension $D$, with
-    representatives $A_j$ of bond dimensions $D_j$.  For every
+    representatives $A_j$ of bond dimensions $D_j$. For every
     $0\leq j<g$, the representative $A_j$ is $D^4$-block injective:
-    \[
-        S_{D^4}(A_j)=\MN{D_j}.
-    \]
+    $S_{D^4}(A_j)=\MN{D_j}$.
 \end{theorem}
 
 \begin{proof}
@@ -423,13 +399,10 @@ single family.
         thm:exact_pow_four_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ}
     The BNT hypotheses make $A_j$ irreducible and left-canonical, with
-    $O_{A_jA_j}(N)\to1$.  The preceding theorem therefore makes $A_j$ normal,
-    and quantum Wielandt gives
-    \[
-        S_{D_j^4}(A_j)=\MN{D_j}.
-    \]
+    $O_{A_jA_j}(N)\to1$. The preceding theorem therefore makes $A_j$ normal,
+    and quantum Wielandt gives $S_{D_j^4}(A_j)=\MN{D_j}$.
     By Theorem~\ref{thm:sector_basis_dimension_le_total_dimension},
-    $D_j^4\leq D^4$.  Write $D^4=D_j^4+k$ and apply positive-length
+    $D_j^4\leq D^4$. Write $D^4=D_j^4+k$ and apply positive-length
     propagation $k$ times.
 \end{proof}
 
@@ -443,9 +416,7 @@ and the combined-family linear independence.
     \leanok
     \uses{def:sector_weight_data}
     For every sector decomposition $P$, length $N$, and basis index $j$,
-    \[
-        c_N^{(j)} = \sum_{q=1}^{r_j} \mu_{j,q}^N.
-    \]
+    $c_N^{(j)} = \sum_{q=1}^{r_j} \mu_{j,q}^N$.
     % Source: two-layer BNT and coefficient-expansion displays,
     % Cirac2016MPDO_arXiv lines 287--301; Cirac2021Matrix lines 1864--1884.
     This is \cite[Section~2.3]{Cirac2016MPDO_arXiv}.
@@ -460,7 +431,8 @@ and the combined-family linear independence.
     \lean{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
     \leanok
     \uses{def:mpv_overlap, def:sector_bnt_cf}
-    If $P$ is a BNT canonical form and $j \neq k$, then $O_{P_j P_k}(N) \to 0$.
+    If $P$ is a BNT canonical form and $j \neq k$, then
+    $O_{P_j P_k}(N) \to 0$.
     % Source: normal-tensor overlap dichotomy, Cirac2016MPDO_arXiv lines
     % 1080--1091, with the gauge-phase distinctness clause at lines 264--279.
 \end{lemma}
@@ -480,11 +452,12 @@ and the combined-family linear independence.
         lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     Let $P$ and $Q$ each be a BNT canonical form, and suppose every mixed overlap
     $O_{P_j Q_k}(N)$ tends to $0$. Then the union family
-    \[
+    \begin{align}
         \bigl\{\ket{V^{(N)}(P_j)}\bigr\}_{j=1}^{g_P}
         \cup
         \bigl\{\ket{V^{(N)}(Q_k)}\bigr\}_{k=1}^{g_Q}
-    \]
+        \notag
+    \end{align}
     is linearly independent for all sufficiently large $N$.
     % Source: corollary at Cirac2016MPDO_arXiv lines 1121--1132; the BNT
     % linear-independence input is recorded at Cirac2021Matrix line 1850.
@@ -506,12 +479,12 @@ and the combined-family linear independence.
     \uses{def:sector_bnt_cf}
     Under the BNT canonical form, the
     \cite[Section~2.3]{Cirac2016MPDO_arXiv} unit-modulus existential provides
-    indices $(j_*, q_*)$ with $|\mu_{j_*, q_*}| = 1$.
+    indices $(j_*,q_*)$ with $|\mu_{j_*,q_*}| = 1$.
 \end{lemma}
 
 \begin{proof}\leanok
     The canonical-form normalization includes a unit-modulus weight
-    $|\mu_{j_*, q_*}| = 1$.
+    $|\mu_{j_*,q_*}| = 1$.
 \end{proof}
 
 \begin{example}[$C \oplus (1/2)C$, unequal-modulus admissibility]%
@@ -615,11 +588,12 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
     with unit-modulus per-copy scalars. Under the TP, primitive, and irreducible
     hypotheses the phase-class construction applies, and for distinct
     representatives $B_j$, $B_{j'}$ ($j \neq j'$) the cross-overlap decays,
-    \[
-        \lim_{N\to\infty} O_{B_j B_{j'}}(N) = 0,
-        \qquad
-        \lim_{N\to\infty} O_{B_j B_j}(N) = 1,
-    \]
+    \begin{align}
+        \lim_{N\to\infty} O_{B_j B_{j'}}(N)&=0,
+        \notag\\
+        \lim_{N\to\infty} O_{B_j B_j}(N)&=1,
+        \notag
+    \end{align}
     which gives the eventual linear-independence condition with no injectivity
     required. The resulting sector decomposition inherits the span and
     multiplicity conditions, and the bounded-weight and global-unit hypotheses
@@ -633,19 +607,16 @@ have MPV families related by
 $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ with $\zeta\neq0$. The normalized
 self-overlaps give $|O_{XX}(N)|\to 1$. The phase relation gives the
 cross-overlap identity
-\[
-    O_{YX}(N)=\zeta^N O_{XX}(N),
-    \qquad
-    |O_{YX}(N)|=|\zeta|^N |O_{XX}(N)|.
-\]
+\begin{align}
+    O_{YX}(N)&=\zeta^N O_{XX}(N),
+    \notag\\
+    |O_{YX}(N)|&=|\zeta|^N |O_{XX}(N)|.
+    \notag
+\end{align}
 Since the same normalization forces $|\zeta|=1$, this gives
 $|O_{YX}(N)|\to 1$.
 If their bond dimensions differed, the rectangular overlap-decay theorem would
-give
-\[
-    O_{YX}(N)\to 0,
-\]
-a contradiction.
+give $O_{YX}(N)\to 0$, a contradiction.
 
 \begin{lemma}[Total dimension after grouping by BNT representatives]%
     \label{lem:collapsed_bnt_sector_decomp_total_dim}
@@ -665,13 +636,14 @@ a contradiction.
     $q$th copy of representative $P_j$. Since $(j,q)\mapsto e(j,q)$ reindexes
     the original summands and each assigned summand has the representative's bond
     dimension,
-    \[
+    \begin{align}
         \sum_{j=1}^{g}\sum_{q=1}^{r_j}\dim(P_j)
-        =
+        &=
         \sum_{j=1}^{g}\sum_{q=1}^{r_j}D_{e(j,q)}
         =
         \sum_{k=1}^{r}D_k.
-    \]
+        \notag
+    \end{align}
     This is the equality between the collapsed total dimension and the original
     direct-sum dimension.
 \end{proof}
@@ -690,22 +662,18 @@ a contradiction.
     \uses{thm:rect_overlap_norm_one_dim_eq}
     Choose $\zeta\neq0$ with
     $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every positive length~$N$.
-    The
-    normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation
+    The normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation
     gives
-    \[
-        O_{YX}(N)=\zeta^N O_{XX}(N),
-        \qquad
-        |O_{YX}(N)|=|\zeta|^N |O_{XX}(N)|.
-    \]
+    \begin{align}
+        O_{YX}(N)&=\zeta^N O_{XX}(N),
+        \notag\\
+        |O_{YX}(N)|&=|\zeta|^N |O_{XX}(N)|.
+        \notag
+    \end{align}
     Since the same normalization forces $|\zeta|=1$, this gives
     $|O_{YX}(N)|\to 1$.
     If the two bond dimensions differed, the rectangular overlap-decay theorem
-    would force
-    \[
-        O_{YX}(N)\to 0,
-    \]
-    contradicting the preceding limit.
+    would force $O_{YX}(N)\to 0$, contradicting the preceding limit.
 \end{proof}
 
 \begin{theorem}[Gauge realization of prepared phase-equivalent NTs]%
@@ -718,10 +686,7 @@ a contradiction.
     bond dimensions $D_X$ and $D_Y$. If their MPV families differ by a nonzero
     scalar power, then $D_X=D_Y$, and after identifying the bond spaces there
     exist $G\in\GL_{D_Y}(\C)$ and $\zeta\in\C\setminus\{0\}$ such that, for every
-    physical index $i$,
-    \[
-        Y^i=\zeta G X^i G^{-1}.
-    \]
+    physical index $i$, $Y^i=\zeta G X^i G^{-1}$.
     The scalar is not asserted to be positive, and the gauge is not asserted to
     be unitary.
 \end{theorem}
@@ -828,13 +793,14 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     \label{thm:paperbnt_weight_normalization}
     \lean{MPSTensor.exists_weight_normalization}
     \leanok
-    For nonzero weights $\mu_1,\dots,\mu_r$ with $r\geq1$ there is a positive
+    For nonzero weights $\mu_1,\ldots,\mu_r$ with $r\geq1$ there is a positive
     real $m$ such that every normalized weight satisfies
-    \[
-        \Bigl|\frac{\mu_k}{m}\Bigr|\leq1,
-        \qquad
-        \frac{\mu_k}{m}\neq0,
-    \]
+    \begin{align}
+        \Bigl|\frac{\mu_k}{m}\Bigr|&\leq1,
+        \notag\\
+        \frac{\mu_k}{m}&\neq0,
+        \notag
+    \end{align}
     and at least one normalized weight has unit modulus,
     $|\mu_{k_0}/m|=1$.
     This is the normalization that
@@ -867,16 +833,18 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     blocked alphabet in the BNT canonical form of
     Definition~\ref{def:sector_bnt_cf}, such that for every positive length
     $N$,
-    \[
-        V^{(N)}\bigl(A^{[p]}\bigr)=m^{N}\,V^{(N)}(P).
-    \]
+    \begin{align}
+        V^{(N)}(A^{[p]})
+        &=m^{N}\,V^{(N)}(P).
+        \label{eq:bnt_sector_normalized_family}
+    \end{align}
     The scalar $m^{N}$ is the per-site normalization cost of the line-246
     weight choice; the hypotheses of
     Theorem~\ref{thm:paperbnt_supplier_after_blocking} are discharged rather
     than assumed.
 
     \textbf{Scope restriction (nonzero MPV family).} The source proposition
-    says ``for any tensor,'' but the zero MPV family cannot supply the global
+    says ``for any tensor'', but the zero MPV family cannot supply the global
     unit-modulus weight imposed immediately before it. The hypothesis above
     is exactly the exclusion of this degenerate case. This boundary is
     recorded in
@@ -896,13 +864,20 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     (Theorem~\ref{thm:paperbnt_weight_normalization}). By the weight-scaling
     identity of
     Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left},
-    \[
-        V^{(N)}\bigl(A^{[p]}\bigr)
-        = V^{(N)}\Bigl(\bigoplus_k \mu_k\,B_k\Bigr)
-        = V^{(N)}\Bigl(\bigoplus_k m\,\frac{\mu_k}{m}\,B_k\Bigr)
-        = m^{N}\,V^{(N)}\Bigl(\bigoplus_k \frac{\mu_k}{m}\,B_k\Bigr)
-        = m^{N}\,V^{(N)}(P),
-    \]
+    \begin{align}
+        V^{(N)}(A^{[p]})
+        &=
+        V^{(N)}\left(\bigoplus_k \mu_k\,B_k\right)
+        =
+        V^{(N)}\Bigl(\bigoplus_k
+        m\,\frac{\mu_k}{m}\,B_k\Bigr),
+        \notag\\
+        &=
+        m^{N}\,V^{(N)}\left(\bigoplus_k \frac{\mu_k}{m}\,B_k\right)
+        =
+        m^{N}\,V^{(N)}(P).
+        \notag
+    \end{align}
     where the last identity is the prepared supplier of
     Theorem~\ref{thm:paperbnt_supplier_prepared} applied to the normalized
     weights, which gives the BNT canonical form $P$.

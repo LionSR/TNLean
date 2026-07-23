@@ -41,7 +41,7 @@
 \begin{proof}\leanok
     \uses{def:bnt_cpsv}
     Eventual linear independence makes the matrix product vector of each block
-    nonzero at some positive length.  A tensor with zero bond dimension has
+    nonzero at some positive length. A tensor with zero bond dimension has
     zero matrix product vector at every length, which is a contradiction.
 \end{proof}
 
@@ -84,13 +84,10 @@
 \begin{proof}\leanok
     At every sufficiently large length the matrix product vectors of the basis
     members are linearly independent. A gauge-phase equivalence between two
-    distinct members would give, for a nonzero scalar $\zeta$,
-    \[
-        \ket{V^{(N)}(A_k)}
-        = \zeta^N\ket{V^{(N)}(A_j)}.
-    \]
-    Thus one vector would be a scalar multiple of the other, contradicting
-    linear independence.
+    distinct members would give
+    $\ket{V^{(N)}(A_k)}=\zeta^N\ket{V^{(N)}(A_j)}$ for a nonzero scalar
+    $\zeta$. Thus one vector would be a scalar multiple of the other,
+    contradicting linear independence.
 \end{proof}
 
 \begin{theorem}[Characterization by canonical-form representatives]
@@ -100,10 +97,11 @@
     \uses{def:bnt_cpsv, def:nt_cpsv, def:block_diagonal_tensor,
         def:same_mpv2_pos, def:blocks_not_gauge_phase_equiv}
     Let $A$ have a canonical-form MPV expansion
-    \[
+    \begin{align}
         \ket{V^{(N)}(A)}
-        = \sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
-    \]
+        &= \sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
+        \notag
+    \end{align}
     at every positive length, where the tensors $\widetilde A_k$ are normal
     tensors of positive bond dimension. Set
     $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Let $(A_j)_{j=1}^{g}$ be tensors of
@@ -113,11 +111,8 @@
         \item every $A_j$ is normal;
         \item for every $k\in K_{\mathrm{act}}$ there are an index $j$, an
               invertible matrix $X_k$, and a phase $e^{i\phi_k}$ such that
-              \[
-                  \widetilde A_k^i
-                  = e^{i\phi_k}X_kA_j^iX_k^{-1}
-              \]
-              for every physical index $i$;
+              $\widetilde A_k^i=e^{i\phi_k}X_kA_j^iX_k^{-1}$ for every
+              physical index $i$;
         \item no two distinct tensors $A_j$ and $A_{j'}$ are related in this
               way.
     \end{enumerate}
@@ -152,23 +147,27 @@
     Distinct unmatched representatives have vanishing mutual overlaps, and
     their overlaps with every $A_j$ also vanish. Explicitly, for $t\ne t'$ in
     $T$ and every $j$,
-    \[
-        O_{\widetilde A_t\widetilde A_{t'}}(N)\longrightarrow0,
-        \qquad
-        O_{\widetilde A_t A_j}(N)\longrightarrow0.
-    \]
+    \begin{align}
+        O_{\widetilde A_t\widetilde A_{t'}}(N)&\longrightarrow0,
+        \notag\\
+        O_{\widetilde A_t A_j}(N)&\longrightarrow0.
+        \notag
+    \end{align}
     By Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, the combined
     family
-    \[
+    \begin{align}
         \{\ket{V^{(N)}(\widetilde A_t)}:t\in T\}
         \cup \{\ket{V^{(N)}(A_j)}:1\leq j\leq g\}
-    \]
+        \notag
+    \end{align}
     is linearly independent for all sufficiently large $N$. Comparing the
     canonical-form expansion with the BNT expansion gives a relation
-    \[
+    \begin{align}
         \sum_{t\in T}c_{N,t}\ket{V^{(N)}(\widetilde A_t)}
-        +\sum_{j=1}^{g}\alpha_{N,j}\ket{V^{(N)}(A_j)}=0.
-    \]
+        +\sum_{j=1}^{g}\alpha_{N,j}\ket{V^{(N)}(A_j)}
+        &=0.
+        \notag
+    \end{align}
     Linear independence forces every $c_{N,t}$ to vanish. Hence the
     coefficient of every unmatched phase class vanishes for all sufficiently
     large $N$.
@@ -176,9 +175,7 @@
     summands, write $\mu_q$ for the corresponding canonical-form weight, and
     write $\zeta_q$ for the phase relating that summand to the chosen
     representative. Then
-    \[
-        c_{N,t}=\sum_{q\in t}(\zeta_q\mu_q)^N.
-    \]
+    $c_{N,t}=\sum_{q\in t}(\zeta_q\mu_q)^N$.
     Every base $\zeta_q\mu_q$ is nonzero because only active summands occur.
     Eventual vanishing of this finite geometric sum would imply vanishing at
     $N=0$, where its value is the positive number of summands in the class.
@@ -186,18 +183,16 @@
     the resulting MPV phase relation into the stated gauge-phase relation.
 
     Conversely, coverage gives, for each canonical-form summand,
-    \[
-        \ket{V^{(N)}(\widetilde A_k)}
-        = \zeta_k^N\ket{V^{(N)}(A_{j(k)})}.
-    \]
-    Hence
-    \[
+    $\ket{V^{(N)}(\widetilde A_k)}
+    =\zeta_k^N\ket{V^{(N)}(A_{j(k)})}$. Hence
+    \begin{align}
         \ket{V^{(N)}(A)}
-        = \sum_j
+        &= \sum_j
             \left(\sum_{k:j(k)=j}(\mu_k\zeta_k)^N\right)
-            \ket{V^{(N)}(A_j)},
-    \]
-    which is the required BNT span at every positive length. Pairwise
+            \ket{V^{(N)}(A_j)}.
+        \notag
+    \end{align}
+    This is the required BNT span at every positive length. Pairwise
     gauge-phase distinction and normality give eventual linear independence,
     completing the converse.
 \end{proof}
@@ -219,27 +214,29 @@
     \uses{thm:mpv_decomposition}
     Take physical dimension two and bond dimension one. Let $A_0$ be supported
     on physical symbol zero and let $A_1$ be supported on physical symbol one:
-    \[
-        A_0^0=1,\quad A_0^1=0,
-        \qquad
-        A_1^0=0,\quad A_1^1=1.
-    \]
+    \begin{align}
+        A_0^0&=1,
+        \notag\\
+        A_0^1&=0,
+        \notag\\
+        A_1^0&=0,
+        \notag\\
+        A_1^1&=1.
+        \notag
+    \end{align}
     Both transfer maps are the identity on the one-dimensional matrix algebra:
-    \[
-        \mathcal E_{A_j}(X)=X \qquad (j=0,1).
-    \]
-    Hence both tensors are normal. At every positive length,
-    \[
-        \ket{V^{(N)}(A_0)}=\ket{0\cdots0},
-        \qquad
-        \ket{V^{(N)}(A_1)}=\ket{1\cdots1}.
-    \]
+    $\E_{A_j}(X)=X$ for $j=0,1$. Hence both tensors are normal. At every
+    positive length,
+    \begin{align}
+        \ket{V^{(N)}(A_0)}&=\ket{0\cdots0},
+        \notag\\
+        \ket{V^{(N)}(A_1)}&=\ket{1\cdots1}.
+        \notag
+    \end{align}
     Thus $(A_0)$ and $(A_0,A_1)$ are both bases of normal tensors for $A_0$.
     Indeed, for every $N\geq 1$, the second expansion is
-    \[
-        \ket{V^{(N)}(A_0)}
-        =1\cdot\ket{V^{(N)}(A_0)}+0\cdot\ket{V^{(N)}(A_1)}.
-    \]
+    $\ket{V^{(N)}(A_0)}
+    =1\cdot\ket{V^{(N)}(A_0)}+0\cdot\ket{V^{(N)}(A_1)}$.
     Their index sets have cardinalities one and two, so they cannot be related
     by a bijection.
     % The missing converse-coverage condition is documented in
@@ -253,10 +250,11 @@
     \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos,
         def:block_diagonal_tensor, def:gauge_phase_equiv}
     Let $A$ have a canonical-form MPV expansion
-    \[
+    \begin{align}
         \ket{V^{(N)}(A)}
-        =\sum_{k=0}^{r-1}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
-    \]
+        &=\sum_{k=0}^{r-1}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
+        \notag
+    \end{align}
     at every positive length, where the tensors $\widetilde A_k$ are normal
     and have positive bond dimensions.
     Let $(A_j)_{j=0}^{g_1-1}$ and $(B_l)_{l=0}^{g_2-1}$ be two bases of normal
@@ -266,11 +264,8 @@
     is a bijection
     $e:\{0,\ldots,g_1-1\}\to\{0,\ldots,g_2-1\}$ such that the bond dimensions of
     $A_j$ and $B_{e(j)}$ agree and
-    \[
-        B_{e(j)}^i=\zeta_jX_jA_j^iX_j^{-1},
-        \qquad |\zeta_j|=1,
-    \]
-    for every $j$ and every physical index $i$.
+    $B_{e(j)}^i=\zeta_jX_jA_j^iX_j^{-1}$, with $|\zeta_j|=1$, for every $j$
+    and every physical index $i$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -281,36 +276,41 @@
     For each $A_j$, choose an active canonical-form block
     $\widetilde A_{\ell(j)}$ representing it, and then choose a member
     $B_{f(j)}$ representing that block. If $f(j)=f(j')$, then
-    \[
-        A_j\sim_{\mathrm{gp}}\widetilde A_{\ell(j)}
+    \begin{align}
+        A_j
+        &\sim_{\mathrm{gp}}\widetilde A_{\ell(j)}
         \sim_{\mathrm{gp}}B_{f(j)}
         =B_{f(j')}\sim_{\mathrm{gp}}\widetilde A_{\ell(j')}
         \sim_{\mathrm{gp}}A_{j'}.
-    \]
+        \notag
+    \end{align}
     Minimality of the first basis gives $j=j'$, so $f$ is injective.
     Reversing the roles of the two bases gives an injection in the other
     direction. Since both index sets are finite, $f$ is bijective; set $e=f$.
     Write the two relations through the chosen active block as
-    \[
+    \begin{align}
         \widetilde A_{\ell(j)}^i
-        =\zeta_{1,j}X_{1,j}A_j^iX_{1,j}^{-1},
-        \qquad
+        &=\zeta_{1,j}X_{1,j}A_j^iX_{1,j}^{-1},
+        \notag\\
         \widetilde A_{\ell(j)}^i
-        =\zeta_{2,j}X_{2,j}B_{e(j)}^iX_{2,j}^{-1}.
-    \]
+        &=\zeta_{2,j}X_{2,j}B_{e(j)}^iX_{2,j}^{-1}.
+        \notag
+    \end{align}
     Solving the second identity for $B_{e(j)}^i$ and using the first gives
-    \[
+    \begin{align}
         B_{e(j)}^i
-        =(\zeta_{2,j}^{-1}\zeta_{1,j})
+        &=(\zeta_{2,j}^{-1}\zeta_{1,j})
         (X_{2,j}^{-1}X_{1,j})A_j^i(X_{1,j}^{-1}X_{2,j}).
-    \]
+        \notag
+    \end{align}
     Denote the scalar and gauge in this identity by $\zeta_j$ and $X_j$.
     The gauge-phase relation gives
-    \[
+    \begin{align}
         O_{B_{e(j)}B_{e(j)}}(N)
-        =(\zeta_j\overline{\zeta_j})^N O_{A_jA_j}(N)
+        &=(\zeta_j\overline{\zeta_j})^N O_{A_jA_j}(N)
         =|\zeta_j|^{2N}O_{A_jA_j}(N).
-    \]
+        \notag
+    \end{align}
     Normality gives
     $O_{A_jA_j}(N)\to1$ and $O_{B_{e(j)}B_{e(j)}}(N)\to1$; hence the last
     identity forces $|\zeta_j|=1$.
@@ -353,13 +353,10 @@
     The irreducible Perron--Frobenius theorem gives positive definite right and
     left eigenvectors with positive eigenvalues $r$ and $t$. The spectral
     normalization gives $r=1$. Adjointness with respect to the trace pairing
-    gives
-    \[
-        r\,\Tr(\sigma\rho)=t\,\Tr(\sigma\rho).
-    \]
-    Since $\sigma$ and $\rho$ are positive definite, their pairing is nonzero,
-    hence $t=1$. Thus the Perron gauge is a pure similarity. Irreducibility and
-    primitivity are invariant under this similarity.
+    gives $r\,\Tr(\sigma\rho)=t\,\Tr(\sigma\rho)$. Since $\sigma$ and $\rho$
+    are positive definite, their pairing is nonzero, hence $t=1$. Thus the
+    Perron gauge is a pure similarity. Irreducibility and primitivity are
+    invariant under this similarity.
 \end{proof}
 
 \begin{theorem}[Spectral normality gives eventual block injectivity]
@@ -423,10 +420,7 @@
     \leanok
     \uses{def:mpv_overlap, def:irreducible_tensor, def:tp_kraus}
     Let $A$ and $B$ be irreducible trace-preserving tensors of positive,
-    possibly different, bond dimensions. If
-    \[
-        |O_{AB}(N)|\longrightarrow 1,
-    \]
+    possibly different, bond dimensions. If $|O_{AB}(N)|\longrightarrow 1$,
     then their bond dimensions are equal.
 \end{theorem}
 
@@ -449,17 +443,11 @@
         def:gauge_phase_equiv}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for some nonzero $\zeta\in\C$,
-    \[
-        \ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}
-        \qquad (N\geq 0).
-    \]
+    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ for $N\geq 0$.
     Then the bond dimensions are equal and there is an invertible matrix $X$
     and a scalar $\eta$ of unit modulus such that
-    \[
-        B^i=\eta X A^iX^{-1}
-    \]
-    for every physical letter $i$. This is the gauge recovery used in
-    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    $B^i=\eta X A^iX^{-1}$ for every physical letter $i$. This is the gauge
+    recovery used in \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -483,20 +471,16 @@
     \uses{def:nt_cpsv, def:mpv_overlap, def:gauge_phase_equiv}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Their self-overlaps satisfy
-    \[
-        O_{AA}(N)\longrightarrow 1,
-        \qquad O_{BB}(N)\longrightarrow 1.
-    \]
-    Moreover, either
-    \[
-        O_{AB}(N)\longrightarrow 0,
-    \]
-    or their bond dimensions are equal; call the common value $D$. Then there
-    are $X\in\GL_D(\C)$ and $\zeta\in\C$, with $|\zeta|=1$, such that
-    \[
-        B^i=\zeta X A^iX^{-1}
-    \]
-    for every physical letter $i$. In the latter case,
+    \begin{align}
+        O_{AA}(N)&\longrightarrow 1,
+        \notag\\
+        O_{BB}(N)&\longrightarrow 1.
+        \notag
+    \end{align}
+    Moreover, either $O_{AB}(N)\longrightarrow 0$, or their bond dimensions
+    are equal; call the common value $D$. Then there are $X\in\GL_D(\C)$ and
+    $\zeta\in\C$, with $|\zeta|=1$, such that
+    $B^i=\zeta X A^iX^{-1}$ for every physical letter $i$. In the latter case,
     $|O_{AB}(N)|\to 1$. This is
     \cite[Lemma~A.2]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -511,10 +495,14 @@
     equal-dimension overlap-decay theorem gives the same conclusion. In the
     remaining case, $B^i=\zeta X A^iX^{-1}$. By
     Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge}, $|\zeta|=1$. Hence
-    \[
-        O_{AB}(N)=\overline{\zeta}^{\,N}O_{AA}(N),
-        \qquad |O_{AB}(N)|=|O_{AA}(N)|\longrightarrow1.
-    \]
+    \begin{align}
+        O_{AB}(N)
+        &=\overline{\zeta}^{\,N}O_{AA}(N),
+        \notag\\
+        |O_{AB}(N)|
+        &=|O_{AA}(N)|\longrightarrow1.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Exact phase alternative for normal tensors]
@@ -524,10 +512,8 @@
     \uses{def:nt_cpsv, def:mpv_overlap, def:mpv_state}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Then either $O_{AB}(N)\to0$, or there is a phase
-    $\zeta\in\C$, with $|\zeta|=1$, such that for every chain length $N$,
-    \[
-        \ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}.
-    \]
+    $\zeta\in\C$, with $|\zeta|=1$, such that
+    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ for every chain length $N$.
     This is \cite[Corollary~A.3]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -548,19 +534,18 @@
     Let $A$ and $B$ be tensors, possibly with different bond dimensions, whose
     self-overlaps tend to one. Suppose that, for all sufficiently large $N$,
     there is $c_N\in\C$ such that
-    \[
-        \ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}.
-    \]
-    Then $|O_{AB}(N)|\to1$.
+    $\ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}$. Then $|O_{AB}(N)|\to1$.
 \end{theorem}
 
 \begin{proof}\leanok
     The proportionality relation gives
-    \[
-        O_{AB}(N)=c_NO_{BB}(N),
-        \qquad O_{AA}(N)=|c_N|^2O_{BB}(N).
-    \]
-    Hence $|c_N|^2\to1$ and therefore $|c_N|\to1$.  The first identity now
+    \begin{align}
+        O_{AB}(N)&=c_NO_{BB}(N),
+        \notag\\
+        O_{AA}(N)&=|c_N|^2O_{BB}(N).
+        \notag
+    \end{align}
+    Hence $|c_N|^2\to1$ and therefore $|c_N|\to1$. The first identity now
     gives $|O_{AB}(N)|\to1$.
 \end{proof}
 
@@ -574,10 +559,8 @@
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for all sufficiently large $N$, their matrix
     product vectors are proportional by a nonzero scalar. Then there is
-    $a\in\C$, with $|a|=1$, such that, for every positive $N$,
-    \[
-        \ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}.
-    \]
+    $a\in\C$, with $|a|=1$, such that
+    $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
     This is the one-normal-block consequence of
     \cite[Corollary~A.3 and the proof of Theorem~2.10]{Cirac2016MPDO_arXiv}.
     % Maintainer note: this determines only the unit-phase part for normalized
@@ -609,10 +592,8 @@
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for every positive $N$, their matrix product
     vectors are proportional by a nonzero scalar. Then there is $a\in\C$,
-    with $|a|=1$, such that, for every positive $N$,
-    \[
-        \ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}.
-    \]
+    with $|a|=1$, such that
+    $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
     This is the positive-length one-normal-block consequence of
     \cite[Corollary~A.3 and Theorem~2.10]{Cirac2016MPDO_arXiv}.
 \end{corollary}
@@ -662,13 +643,12 @@
     Let $(A_j)_{j=1}^g$ be a basis of normal tensors, with bond dimensions
     $D_j$. There is a positive integer $L$ such that the one-letter
     evaluations of the blocked tensors span the full product algebra:
-    \[
-        \spn_{\C}\left\{
-        \bigl((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i\bigr)
-        : 0\leq i<d^L
-        \right\}
-        = \prod_{j=1}^g \MN{D_j}.
-    \]
+    \begin{align}
+        \spn_{\C}\left\{((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i)
+        : 0\leq i<d^L\right\}
+        &= \prod_{j=1}^g \MN{D_j}.
+        \notag
+    \end{align}
     This is the existence form of simultaneous block injectivity associated
     with \cite[lines~317--345]{Cirac2016MPDO_arXiv}; no numerical bound on
     $L$ is asserted here.
@@ -694,12 +674,9 @@
     zero on the second. Multiplying the $g-1$ pairwise polynomials gives a
     selector for each block. Combining these selectors with the common
     length-$p$ word spans yields the full product-algebra span at
-    \[
-        L=p+(g-1)3(p+1).
-    \]
-    Conjugation by the Perron gauges preserves this span. Finally, a one-letter
-    evaluation of $A_j^{[L]}$ is precisely a length-$L$ word evaluation of
-    $A_j$.
+    $L=p+(g-1)3(p+1)$. Conjugation by the Perron gauges preserves this span.
+    Finally, a one-letter evaluation of $A_j^{[L]}$ is precisely a length-$L$
+    word evaluation of $A_j$.
 \end{proof}
 
 Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
@@ -714,17 +691,17 @@ $X=\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}X_{j,q}$. Then
 % source lines 304--313; it is rendered as Equation (23).
 % Index/type verdict: A^i_{alpha,beta} has physical index i and virtual indices
 % alpha,beta; j and q select direct-sum summands and are not contraction legs.
-\[
-    \begin{array}{rcl}
-        A^i
-        &=&X\left[\bigoplus_{j=1}^{g}
-            \left(M_j\otimes A_j^i\right)\right]X^{-1} \\
-        &=&\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
-            \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
-    \end{array}
-\]
-This is \cite[Section~2.3, Equations~(20a)--(21)]{Cirac2016MPDO_arXiv}. It is
-the decomposition used below to separate the normal blocks.
+\begin{align}
+    A^i
+    &=X\left[\bigoplus_{j=1}^{g}
+        \left(M_j\otimes A_j^i\right)\right]X^{-1}
+    =\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
+        \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+    \label{eq:bnt_found_canonical_decomp}
+\end{align}
+This is \cite[Section~2.3, Equations~(20a)--(21)]{Cirac2016MPDO_arXiv}.
+The decomposition (\ref{eq:bnt_found_canonical_decomp}) is used below to
+separate the normal blocks.
 
 The eventual linear-independence clause is produced from the asymptotic
 overlaps: diagonal overlaps tending to one and off-diagonal overlaps tending to
@@ -817,11 +794,12 @@ Section~\ref{sec:sector_bnt_strong_match}.
     tensors. Suppose the overlaps inside each family are asymptotically
     orthonormal, and suppose every mixed overlap
     $O_{A_jB_k}(N)$ tends to~$0$. Then the combined MPV family
-    \[
+    \begin{align}
         \{\ket{V^{(N)}(A_j)}\}_{j=1}^{g_A}
         \cup
         \{\ket{V^{(N)}(B_k)}\}_{k=1}^{g_B}
-    \]
+        \notag
+    \end{align}
     is linearly independent for all sufficiently large~$N$.
 \end{lemma}
 

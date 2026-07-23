@@ -12,10 +12,7 @@ then analyses its asymptotics through the overlaps.
     Let $v_1, \ldots, v_g$ and $w_1, \ldots, w_g$ be two linearly independent
     families in a complex vector space with the same span. Then there exists an
     invertible matrix $U \in \GL_g(\C)$ such that
-    \[
-        w_j = \sum_{i=1}^g U_{ij} v_i
-    \]
-    for every $j$.
+    $w_j = \sum_{i=1}^g U_{ij} v_i$ for every $j$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -66,13 +63,12 @@ equal block counts, then remove that restriction.
     $\ket{V^{(N)}(B_j)}=\sum_i u_{ij}^{(N)}\ket{V^{(N)}(A_i)}$. With
     $G_A(N)=(O_{A_iA_\ell}(N))_{i,\ell}$ and
     $b_j(N)=(O_{A_iB_j}(N))_i$, this gives
-    \[
-        G_A(N)\overline{u_j(N)}=b_j(N),
-        \qquad
-        O_{B_jB_j}(N)=u_j(N)^{\top}G_A(N)\overline{u_j(N)}.
-    \]
+    \begin{align}
+        G_A(N)\overline{u_j(N)} &= b_j(N), \notag\\
+        O_{B_jB_j}(N) &= u_j(N)^{\top}G_A(N)\overline{u_j(N)}. \notag
+    \end{align}
     If all mixed overlaps $O_{A_iB_j}(N)$ tended to $0$, then
-    $b_j(N)\to0$; since $G_A(N)\to I$, one obtains
+    $b_j(N)\to0$; since $G_A(N)\to\Id$, one obtains
     $\overline{u_j(N)}\to0$ and hence $u_j(N)\to0$. Thus
     $O_{B_jB_j}(N)\to0$, contradicting $O_{B_jB_j}(N)\to1$.
     Thus each $B_j$ has a matched block $A_{f(j)}$ with non-decaying mixed
@@ -94,11 +90,11 @@ equal block counts, then remove that restriction.
     converge to~$1$ and whose cross-overlaps within each
     family converge to~$0$.
     If for every system size~$N$,
-    \[
+    \begin{align}
         \spn_{\C}\{\ket{V^{(N)}(A_j)} : 1 \le j \le g_A\}
-        =
-        \spn_{\C}\{\ket{V^{(N)}(B_k)} : 1 \le k \le g_B\},
-    \]
+        &=
+        \spn_{\C}\{\ket{V^{(N)}(B_k)} : 1 \le k \le g_B\}, \notag
+    \end{align}
     then $g_A = g_B$, and there is a permutation $\pi$ of the common
     block index set such that $A_j$ and $B_{\pi(j)}$ have the same bond
     dimension and are gauge-phase equivalent for each~$j$.
@@ -141,14 +137,15 @@ the exact sector matching later in the chapter.
 \begin{proof}\leanok
     Suppose that for all sufficiently large $N$ one had
     $\ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}$. Then
-    \begin{equation}\label{eq:bnt_proportional_overlap_identities}
-        O_{AA}(N)=|c_N|^2O_{BB}(N),
-        \qquad
-        O_{AB}(N)=c_NO_{BB}(N).
-    \end{equation}
-    Since $O_{AA}(N)\to1$ and $O_{BB}(N)\to1$, the first identity in
+    \begin{align}
+        O_{AA}(N) &= |c_N|^2O_{BB}(N),
+        \label{eq:bnt_proportional_overlap_identities}\\
+        O_{AB}(N) &= c_NO_{BB}(N).
+        \label{eq:bnt_perm_mixed_overlap}
+    \end{align}
+    Since $O_{AA}(N)\to1$ and $O_{BB}(N)\to1$, the identity
     (\ref{eq:bnt_proportional_overlap_identities}) gives $|c_N|\to1$, and hence
-    $|O_{AB}(N)|\to1$. The irreducible
+    (\ref{eq:bnt_perm_mixed_overlap}) gives $|O_{AB}(N)|\to1$. The irreducible
     trace-preserving overlap decay theorem gives $O_{AB}(N)\to0$ when
     $A\not\sim_{\mathrm{gp}}B$, a contradiction.
 \end{proof}
@@ -173,15 +170,16 @@ determine equal characteristic polynomials, hence equal multisets of roots.
 \begin{proof}
     \leanok
     Let $e_m$ denote the $m$th elementary symmetric polynomial in the
-    eigenvalues, with $e_0 = 1$.
-    The Newton--Girard recursion
-    \[
-        m e_m = \sum_{i=1}^m (-1)^{i-1} e_{m-i} \tr(A^i)
-    \]
+    eigenvalues, with $e_0 = 1$. The Newton--Girard recursion
+    \begin{align}
+        m e_m
+        &= \sum_{i=1}^m (-1)^{i-1} e_{m-i} \tr(A^i)
+        \label{eq:bnt_power_newton_girard}
+    \end{align}
     expresses the coefficients of the characteristic polynomial in terms
-    of the power-sum traces $\tr(A^i)$.
-    Equal power sums for $A$ and $B$ therefore give equal coefficients,
-    hence equal characteristic polynomials.
+    of the power-sum traces $\tr(A^i)$. Equal power sums for $A$ and $B$
+    therefore give equal coefficients, hence equal characteristic
+    polynomials.
 \end{proof}
 
 The matched-sector comparison below applies the power-sum identities to a single
@@ -194,23 +192,18 @@ multiset with multiplicity.
     \label{lem:finite_geometric_sum_eventual_vanishing}
     \lean{MPSTensor.SectorWeightData.geom_sum_eventually_zero}
     \leanok
-    Let $w_1,\ldots,w_n$ be nonzero complex numbers.  If
-    \[
-        \sum_i c_i w_i^N=0
-    \]
-    for every sufficiently large $N$, then the same equality holds for every
-    nonnegative exponent.
+    Let $w_1,\ldots,w_n$ be nonzero complex numbers. If
+    $\sum_i c_i w_i^N=0$ for every sufficiently large $N$, then the same
+    equality holds for every non-negative exponent.
 \end{lemma}
 
 \begin{proof}\leanok
-    Induct on the number of terms.  Subtracting $w_1$ times the equality at
+    Induct on the number of terms. Subtracting $w_1$ times the equality at
     exponent $N$ from the equality at exponent $N+1$ gives
-    \[
-        \sum_{i=2}^{n} c_i(w_i-w_1)w_i^N=0.
-    \]
+    $\sum_{i=2}^{n} c_i(w_i-w_1)w_i^N=0$.
     The induction hypothesis yields this equality at every exponent, so the
     original sum $S_N=\sum_i c_iw_i^N$ satisfies $S_{N+1}=w_1S_N$ for every
-    $N$.  Since $S_N$ eventually vanishes and $w_1\ne0$, it follows that
+    $N$. Since $S_N$ eventually vanishes and $w_1\ne0$, it follows that
     $S_0=0$ and hence $S_N=0$ for every $N$.
 \end{proof}
 
@@ -219,23 +212,17 @@ multiset with multiplicity.
     \lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
     \leanok
     \uses{lem:finite_geometric_sum_eventual_vanishing}
-    Let $a_1,\ldots,a_m$ and $b_1,\ldots,b_n$ be nonzero complex numbers.  If
+    Let $a_1,\ldots,a_m$ and $b_1,\ldots,b_n$ be nonzero complex numbers. If
     their power sums agree for every sufficiently large exponent, then
-    \[
-        \sum_i a_i^k=\sum_j b_j^k
-    \]
-    for every nonnegative exponent $k$.
+    $\sum_i a_i^k=\sum_j b_j^k$ for every non-negative exponent $k$.
 \end{lemma}
 
 \begin{proof}\leanok
     Set $w_l=a_l$ for $l\leq m$ and $w_{m+l}=b_l$ for $l\leq n$, with
-    coefficients $c_l=1$ for $l\leq m$ and $c_l=-1$ for $l>m$.  Then
-    \[
-        \sum_{l=1}^{m+n}c_lw_l^k
-        =\sum_i a_i^k-\sum_j b_j^k.
-    \]
+    coefficients $c_l=1$ for $l\leq m$ and $c_l=-1$ for $l>m$. Then
+    $\sum_{l=1}^{m+n}c_lw_l^k=\sum_i a_i^k-\sum_j b_j^k$.
     The hypothesis makes this expression zero for every sufficiently large
-    $k$.  Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} makes it zero
+    $k$. Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} makes it zero
     for every $k$, which is the required power-sum equality.
 \end{proof}
 
@@ -278,9 +265,7 @@ multiset with multiplicity.
     \uses{thm:bounded_power_sum_multiset}
     Let $m\geq 1$ and let $\lambda_0,\ldots,\lambda_{m-1}\in\C$ be nonzero.
     Then there is an exponent $N$ with $1\leq N\leq m$ such that
-    \[
-        \sum_{q=0}^{m-1}\lambda_q^N\neq 0.
-    \]
+    $\sum_{q=0}^{m-1}\lambda_q^N\neq 0$.
     This is the consequence of the Appendix power-sum lemma used in the proof
     of Lemma~L
     \cite[Appendix~C.3, lines~1851--1858]{Cirac2016MPDO_arXiv}; the finite-range
@@ -309,8 +294,7 @@ multiset with multiplicity.
     \leanok
     \uses{thm:newton_girard}
     Construct diagonal matrices $\diag(\alpha)$ and
-    $\diag(\beta)$.
-    The power-sum hypothesis gives
+    $\diag(\beta)$. The power-sum hypothesis gives
     $\tr(\diag(\alpha)^k) = \tr(\diag(\beta)^k)$.
     By Theorem~\ref{thm:newton_girard}, the characteristic
     polynomials agree: $\prod_i (X - \alpha_i) = \prod_i (X - \beta_i)$.

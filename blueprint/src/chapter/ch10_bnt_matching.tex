@@ -36,9 +36,11 @@ hypothesis of the conditional proportional global gauge
     Let $P, Q$ be sector decompositions with weights $\mu_{j,q}$ and
     $\nu_{k,q'}$, and fix indices $j_0$, $\tilde k_0$, and a nonzero scalar
     $\zeta \in \C \setminus \{0\}$. Suppose that for every $N > N_0$,
-    \begin{equation}\label{eq:bnt_matched_sector_coeff_identity}
-        c_N^{(j_0)}(P) = \zeta^N \cdot c_N^{(\tilde k_0)}(Q).
-    \end{equation}
+    \begin{align}
+        c_N^{(j_0)}(P)
+        &= \zeta^N \cdot c_N^{(\tilde k_0)}(Q).
+        \label{eq:bnt_matched_sector_coeff_identity}
+    \end{align}
     Then the per-sector multiplicities agree, $r_{j_0}(P) = r_{\tilde k_0}(Q)$,
     and the rescaled per-copy weight multisets coincide.
     % Source: Cirac2016MPDO_arXiv Appendix MPV proof, lines 1184--1188
@@ -49,14 +51,16 @@ hypothesis of the conditional proportional global gauge
 
 \begin{proof}\leanok
     \uses{thm:bounded_power_sum_multiset}
-    Expand both sides of the coefficient identity~(\ref{eq:bnt_matched_sector_coeff_identity})
-    into per-copy power sums
+    Expand both sides of the coefficient identity
+    (\ref{eq:bnt_matched_sector_coeff_identity}) into per-copy power sums
     $\sum_q \mu_{j_0, q}^N$ and $\sum_{q'} \nu_{\tilde k_0, q'}^N$, and
     distribute $\zeta^N$ through the right-hand sum to obtain, for every
     $N > N_0$,
-    \[
-        \sum_q \mu_{j_0, q}^N = \sum_{q'} (\zeta \cdot \nu_{\tilde k_0, q'})^N.
-    \]
+    \begin{align}
+        \sum_q \mu_{j_0, q}^N
+        &= \sum_{q'} (\zeta \cdot \nu_{\tilde k_0, q'})^N.
+        \notag
+    \end{align}
     Extend to all positive exponents and apply the unequal-cardinality
     multiset-recovery lemma (Theorem~\ref{thm:bounded_power_sum_multiset}),
     using $\zeta \neq 0$ together with the weight non-vanishing assumption
@@ -74,9 +78,7 @@ hypothesis of the conditional proportional global gauge
     per-sector multiplicities agree and there is a permutation $\tau$ of
     the per-copy index set identifying the individual weights up to the
     gauge phase: for every $q$,
-    \[
-        \nu_{\tilde k_0, \tau(q)} = \zeta^{-1} \cdot \mu_{j_0, q}.
-    \]
+    $\nu_{\tilde k_0, \tau(q)} = \zeta^{-1} \cdot \mu_{j_0, q}$.
     % Source: Cirac2016MPDO_arXiv Appendix MPV proof, line 1188
     % (\mu_{j,q} = \nu_{j,q} e^{i\varphi_j}).
     This is the per-copy realisation of \cite[Appendix~A]{Cirac2016MPDO_arXiv}:
@@ -116,12 +118,9 @@ projection.
 
 \begin{proof}\leanok
     If the coefficient vanished for every $N\geq M$, the finite geometric-sum
-    extrapolation would make it vanish at every nonnegative exponent. However,
-    at exponent zero,
-    \[
-        c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0,
-    \]
-    which is impossible.
+    extrapolation would make it vanish at every non-negative exponent. However,
+    at exponent zero, $c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0$, which is
+    impossible.
 \end{proof}
 
 \begin{lemma}[Sector coefficient is not eventually zero]
@@ -161,20 +160,24 @@ projection.
     Suppose $j$ decays against every sector of $Q$, and let $T$ be the set of
     $P$-sectors with this property. For $j' \notin T$ the overlap dichotomy
     turns a non-decaying overlap with some $Q_{k(j')}$ into a gauge-phase
-    equivalence, hence a scalar $\omega_{j'} \in \C^\times$ with $V^{(N)}(P_{j'})
-        = \omega_{j'}^{N} V^{(N)}(Q_{k(j')})$, so $V^{(N)}(P_{j'})$ lies in the span
-    of $\{V^{(N)}(Q_k)\}_k$. The family $\{P_{j'} : j'\in T\}\cup\{Q_k\}_k$ then
-    has all pairwise cross-overlaps decaying, hence is eventually linearly
-    independent (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}).
-    Rewriting the common-MPV identity over this family,
-    \[
+    equivalence, hence a scalar $\omega_{j'} \in \C^\times$ with
+    $V^{(N)}(P_{j'}) = \omega_{j'}^{N} V^{(N)}(Q_{k(j')})$, so
+    $V^{(N)}(P_{j'})$ lies in the span of $\{V^{(N)}(Q_k)\}_k$. The family
+    $\{P_{j'} : j'\in T\}\cup\{Q_k\}_k$ then has all pairwise cross-overlaps
+    decaying, hence is eventually linearly independent
+    (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}). Rewriting the
+    common-MPV identity over this family,
+    \begin{align}
         \sum_{j'\in T} c_N^{(j')}\, V^{(N)}(P_{j'})
-        = \sum_{k}\Bigl(c_N^{(k)} - \sum_{j'\notin T,\, k(j')=k}
+        &= \sum_{k}\Bigl(c_N^{(k)}
+        - \sum_{j'\notin T,\, k(j')=k}
         c_N^{(j')}\omega_{j'}^{N}\Bigr) V^{(N)}(Q_k),
-    \]
-    exact coefficient extraction forces $c_N^{(j)} = 0$ at each fixed large $N$,
-    contradicting Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence a
-    matched sector $k$ exists; the gauge-phase equivalence is recovered from the
+        \notag
+    \end{align}
+    exact coefficient extraction forces $c_N^{(j)} = 0$ at each fixed large
+    $N$, contradicting
+    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence a matched
+    sector $k$ exists; the gauge-phase equivalence is recovered from the
     non-decaying overlap by the irreducible trace-preserving overlap dichotomy.
 \end{proof}
 
@@ -203,8 +206,9 @@ projection.
 
 Applying the exact matching once more with $P$ and $Q$ swapped gives the reverse
 direction; the basis-distinctness clause forces injectivity both ways, so
-$g_a = g_b$ and the source relabelling $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$
-holds on the full basis \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+$g_a = g_b$ and the source relabelling
+$B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ holds on the full basis
+\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[Bijective matching by symmetry]
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
@@ -214,13 +218,10 @@ holds on the full basis \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
         def:sector_bnt_cf, def:same_mpv2_pos}
     Let $P, Q$ be two BNT canonical forms with the same MPV family at every
     positive length. Then there is a bijection
-    \[
-        \beta : J(Q) \simeq J(P)
-    \]
-    such that for every $k \in J(Q)$ the bond dimensions match, the basis
-    tensors $P_{\beta(k)}$ and $Q_k$ are gauge-phase equivalent after
-    identifying the matched bond dimensions, and the basis cross-overlap does
-    not tend to zero.
+    $\beta : J(Q) \simeq J(P)$ such that for every $k \in J(Q)$ the bond
+    dimensions match, the basis tensors $P_{\beta(k)}$ and $Q_k$ are
+    gauge-phase equivalent after identifying the matched bond dimensions, and
+    the basis cross-overlap does not tend to zero.
 \end{theorem}
 
 \begin{proof}\leanok
