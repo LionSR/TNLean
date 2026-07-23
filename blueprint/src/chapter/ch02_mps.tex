@@ -13,15 +13,13 @@ boundary conditions (PBC).
     \leanok
     A (translation-invariant, PBC) \emph{MPS tensor} with
     physical dimension~$d$ and bond dimension~$D$ is a collection of matrices
-    \[
-        \{A^i\}_{i=0}^{d-1}, \qquad A^i \in \MN{D},
-    \]
-    indexed by a physical index $i \in \{0, \ldots, d{-}1\}$.
+    $\{A^i\}_{i=0}^{d-1}$, where $A^i \in \MN{D}$, indexed by a physical index
+    $i \in \{0, \ldots, d{-}1\}$.
     Such a tensor defines an MPV family. Diagrammatically,
     \begin{center}
         % A^i \in \MN{D}: the node is A, its upper leg is the physical
         % index i, and the open west/east legs are the two virtual
-        % matrix indices.  Boundary signature: (virtual-west=1 |
+        % matrix indices. Boundary signature: (virtual-west=1 |
         % virtual-east=1 | physical-up=1 | physical-down=0).
         \begin{tenkz}[physical=up]
             \tn[up=$i$]{A}
@@ -37,18 +35,20 @@ boundary conditions (PBC).
     \uses{def:mps_tensor}
     Given a word $w = (i_1, \ldots, i_L) \in \{0,\ldots,d{-}1\}^L$,
     the \emph{word evaluation} is the matrix product
-    \[
-        A^w :=  A^{i_1} A^{i_2} \cdots A^{i_L} \in  \MN{D},
-    \]
-    with the convention that the empty word evaluates to the identity:
-    $A^\varnothing = \Id_D$. In tensor-network notation,
+    \begin{align}
+        A^w
+        &:= A^{i_1} A^{i_2} \cdots A^{i_L} \in \MN{D}.
+        \label{eq:mps_word_eval}
+    \end{align}
+    The empty word evaluates to the identity, $A^\varnothing = \Id_D$.
+    In tensor-network notation,
     \begin{center}
         % A^w = A^{i_1} A^{i_2} \cdots A^{i_L}: horizontal bonds are
         % contracted matrix indices, the two outer virtual legs remain
-        % open, and the upper legs carry the letters of w.  The ellipsis
-        % and brace make the L-site word schematic.  The ink therefore
+        % open, and the upper legs carry the letters of w. The ellipsis
+        % and brace make the L-site word schematic. The ink therefore
         % displays three representative physical legs; the ellipsis carries
-        % the remaining L-3 factors.  Emitted boundary signature of this
+        % the remaining L-3 factors. Emitted boundary signature of this
         % finite schematic: (virtual-west=1 | virtual-east=1 |
         % physical-up=3 | physical-down=0).
         \begin{tenkz}[physical=up]
@@ -68,10 +68,8 @@ boundary conditions (PBC).
     \uses{def:eval_word}
     For a configuration $\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, let
     $w_\sigma=[\sigma_0,\ldots,\sigma_{N-1}]$. Then
-    \[
-        A^{w_\sigma}
-        =A^{\sigma_0}A^{\sigma_1}\cdots A^{\sigma_{N-1}}.
-    \]
+    $A^{w_\sigma}
+    =A^{\sigma_0}A^{\sigma_1}\cdots A^{\sigma_{N-1}}$.
 \end{lemma}
 
 \begin{proof}
@@ -112,29 +110,21 @@ boundary conditions (PBC).
     \leanok
     \uses{lem:center_scalar}
     Let $(A_i)_{i\in I}$ span $\MN{D}$, and let
-
-    \[
-        C:\C^{m_2}\otimes\C^D\longrightarrow
-          \C^{m_1}\otimes\C^D
-    \]
-
-    satisfy
-    \[
+    $C:\C^{m_2}\otimes\C^D\longrightarrow\C^{m_1}\otimes\C^D$ satisfy, for
+    every $i\in I$,
+    \begin{align}
         (\Id_{m_1}\otimes A_i)C
-          =C(\Id_{m_2}\otimes A_i)
-        \qquad (i\in I).
-    \]
+        &=C(\Id_{m_2}\otimes A_i).
+    \end{align}
     Then there is a matrix $F:\C^{m_2}\to\C^{m_1}$ such that
-    \[
-        C=F\otimes\Id_D.
-    \]
+    $C=F\otimes\Id_D$.
 \end{lemma}
 
 \begin{proof}\leanok
     Each $(a,b)$ multiplicity block of $C$ commutes with every $A_i$.
     Since the $A_i$ span the full matrix algebra,
     Lemma~\ref{lem:center_scalar} makes this block a scalar multiple of the
-    identity.  These scalars are the entries of $F$.
+    identity. These scalars are the entries of $F$.
 \end{proof}
 
 \begin{definition}[Matrix product vector]\label{def:mpv}
@@ -143,25 +133,27 @@ boundary conditions (PBC).
     \uses{def:eval_word}
     The \emph{matrix product vector} (MPV) of a tensor~$A$
     at system size~$N$ is the vector
-    \[
+    \begin{align}
         \ket{V^{(N)}(A)}
-        = \sum_{i_1, \ldots, i_N = 0}^{d-1}
+        &=
+        \sum_{i_1, \ldots, i_N = 0}^{d-1}
         \tr\!(A^{i_1} A^{i_2} \cdots A^{i_N})
         \ket{i_1, \ldots, i_N}
-        \in  (\C^d)^{\otimes N}.
-    \]
+        \in (\C^d)^{\otimes N}.
+        \label{eq:mps_mpv_state}
+    \end{align}
     Equivalently, for a configuration
     $\sigma = (i_1, \ldots, i_N) \in \{0,\ldots,d{-}1\}^N$, we write
-    \[
-        V^{(N)}(A)_\sigma := \tr\!(A^{i_1} A^{i_2} \cdots A^{i_N}).
-    \]
+    \begin{align}
+        V^{(N)}(A)_\sigma
+        &:= \tr\!(A^{i_1} A^{i_2} \cdots A^{i_N}).
+        \label{eq:mps_mpv_component}
+    \end{align}
     The coefficient function
-    $\sigma \mapsto V^{(N)}(A)_\sigma$ gives the components; the displayed
-    ket is the corresponding vector in $(\C^d)^{\otimes N}$.
-    For a general word $w$, we also write
-    \[
-        c_w(A) := \tr(A^w).
-    \]
+    $\sigma \mapsto V^{(N)}(A)_\sigma$ gives the components of the vector
+    in (\ref{eq:mps_mpv_state}); the displayed ket is the corresponding vector
+    in $(\C^d)^{\otimes N}$.
+    For a general word $w$, we also write $c_w(A) := \tr(A^w)$.
     The \emph{MPV family} generated by $A$ is the collection
     $\mc{V}(A) = \bigl\{\ket{V^{(N)}(A)}\bigr\}_{N \ge 1}$. The coefficient
     $V^{(N)}(A)_\sigma$ is the periodic contraction
@@ -170,9 +162,9 @@ boundary conditions (PBC).
         % = \tr(A^{i_1} \cdots A^{i_N}):
         % the periodic return closes the two outer virtual legs into the
         % trace, while the upper legs carry the physical configuration.
-        % The ellipsis and brace make the N-site ring schematic.  The ink
+        % The ellipsis and brace make the N-site ring schematic. The ink
         % displays three representative physical legs; the ellipsis carries
-        % the remaining N-3 factors.  Emitted boundary signature of this
+        % the remaining N-3 factors. Emitted boundary signature of this
         % finite schematic: (virtual-west=0 | virtual-east=0 |
         % physical-up=3 | physical-down=0).
         \begin{tenkz}[periodic, physical=up]
@@ -190,16 +182,18 @@ boundary conditions (PBC).
     \uses{def:mps_tensor}
     The \emph{transfer map} associated to a tensor~$A$ is the
     linear map $\E_A : \MN{D} \to \MN{D}$ defined by
-    \[
-        \E_A(X) =  \sum_{i=0}^{d-1} A^i X (A^i)^\dagger.
-    \]
+    \begin{align}
+        \E_A(X)
+        &= \sum_{i=0}^{d-1} A^i X (A^i)^\dagger.
+        \label{eq:mps_transfer_map}
+    \end{align}
     Diagrammatically, the transfer map is the double-layer contraction
     \begin{center}
         % \E_A(X) = \sum_i A^i X (A^i)^\dagger: the upper and starred
         % lower nodes are A and its conjugate, their paired physical
-        % legs sum i, and X rides the east cup (the input).  Traversing
+        % legs sum i, and X rides the east cup (the input). Traversing
         % the lower wire in the opposite direction supplies the transpose
-        % in the adjoint.  The west pair remains open as the matrix output.
+        % in the adjoint. The west pair remains open as the matrix output.
         % Boundary signature: (virtual-west=2 | virtual-east=0 |
         % physical-up=0 | physical-down=0).
         \begin{tenkz}[sandwich, east={cup=$X$}]
@@ -258,10 +252,12 @@ boundary conditions (PBC).
     Two tensors $A$ and $B$ of the same bond dimension~$D$ are
     \emph{gauge equivalent} if there exists an invertible matrix
     $X \in \GL_D(\C)$ such that, for every $i \in \{0,\ldots,d{-}1\}$,
-    \[
-        B^i =  X A^i X^{-1}.
-    \]
-    In tensor-network notation,
+    \begin{align}
+        B^i
+        &= X A^i X^{-1}.
+        \label{eq:mps_gauge_equiv}
+    \end{align}
+    In tensor-network notation, (\ref{eq:mps_gauge_equiv}) is represented by
     \begin{center}
         % Formula/source: Papers/1606.00608/MPDO-22-12-17-2.tex,
         % lines 187--195, draws B^i = X A^i X^{-1} as I_B=XCX.png.
@@ -276,9 +272,9 @@ boundary conditions (PBC).
             \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
         \end{tenkz}
     \end{center}
-    the black node denotes the tensor named in the surrounding formula,
-    the upper leg is the physical index~$i$, and the two red side nodes
-    denote the gauge matrices acting on the virtual legs.
+    where the black node denotes the tensor $A$, the upper leg is the physical
+    index~$i$, and the two red side nodes denote the gauge matrices acting on
+    the virtual legs.
 \end{definition}
 
 \begin{definition}[Same MPV]\label{def:same_mpv}
@@ -382,12 +378,8 @@ boundary conditions (PBC).
     \leanok
     \uses{def:eval_word}
     Let $\zeta A$ denote the tensor with matrices
-    $\{\zeta A^i\}_{i=0}^{d-1}$.
-    Then for any word $w$,
-    \[
-        (\zeta A)^w =  \zeta^{|w|} A^w,
-    \]
-    where $|w|$ is the length of~$w$.
+    $\{\zeta A^i\}_{i=0}^{d-1}$. Then, for any word $w$,
+    $(\zeta A)^w = \zeta^{|w|} A^w$, where $|w|$ is the length of~$w$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -401,13 +393,9 @@ boundary conditions (PBC).
     \leanok
     \uses{def:mpv, lem:eval_word_smul}
     Let $\zeta A$ denote the tensor with matrices
-    $\{\zeta A^i\}_{i=0}^{d-1}$.
-    Then for every $N$ and every configuration
+    $\{\zeta A^i\}_{i=0}^{d-1}$. Then, for every $N$ and every configuration
     $\sigma = (i_1, \ldots, i_N)$,
-    \[
-        V^{(N)}(\zeta A)_\sigma
-        =  \zeta^{N} V^{(N)}(A)_\sigma.
-    \]
+    $V^{(N)}(\zeta A)_\sigma = \zeta^{N} V^{(N)}(A)_\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -425,9 +413,11 @@ boundary conditions (PBC).
     Two tensors $A$ and $B$ are \emph{gauge-phase equivalent}
     if there exist $X \in \GL_D(\C)$ and $\zeta \in \C \setminus \{0\}$
     such that, for every physical index~$i$,
-    \[
-        B^i =  \zeta X A^i X^{-1}.
-    \]
+    \begin{align}
+        B^i
+        &= \zeta X A^i X^{-1}.
+        \label{eq:mps_gauge_phase_equiv}
+    \end{align}
 \end{definition}
 
 \begin{proof}\leanok
@@ -450,35 +440,36 @@ boundary conditions (PBC).
     Gauge-phase equivalence is symmetric after identifying equal bond
     dimensions. Moreover, suppose that $A$, $B$, and $C$ have identified bond
     dimensions, that $X_1$ and $X_2$ are invertible, that
-    $\zeta_1,\zeta_2\ne0$, and that
-    \[
-        B^i=\zeta_1X_1A^iX_1^{-1},
-        \qquad
-        C^i=\zeta_2X_2A^iX_2^{-1}
-    \]
-    for every physical index $i$. Then
-    \[
-        C^i=(\zeta_2\zeta_1^{-1})(X_2X_1^{-1})
-            B^i(X_1X_2^{-1}),
-    \]
+    $\zeta_1,\zeta_2\ne0$, and that, for every physical index $i$,
+    \begin{align}
+        B^i
+        &=\zeta_1X_1A^iX_1^{-1},\\
+        C^i
+        &=\zeta_2X_2A^iX_2^{-1}.
+    \end{align}
+    Then
+    \begin{align}
+        C^i
+        &=(\zeta_2\zeta_1^{-1})(X_2X_1^{-1})
+        B^i(X_1X_2^{-1}),
+        \label{eq:mps_gauge_phase_compose}
+    \end{align}
     so $B$ and $C$ are gauge-phase equivalent after the corresponding
     identification of their bond dimensions.
 \end{lemma}
 
 \begin{proof}\leanok
     Symmetry follows by replacing $(X,\zeta)$ with
-    $(X^{-1},\zeta^{-1})$. The displayed identity follows by substituting the
-    first gauge formula into the second.
+    $(X^{-1},\zeta^{-1})$. Formula (\ref{eq:mps_gauge_phase_compose}) follows
+    by substituting the first gauge formula into the second.
 \end{proof}
 
 \begin{lemma}[Gauge covariance of word evaluation]\label{lem:eval_word_gauge}
     \lean{MPSTensor.evalWord_gauge}
     \leanok
     \uses{def:eval_word}
-    If $B^i = X A^i X^{-1}$ for all~$i$, then for every word~$w$,
-    \[
-        B^w =  X A^w X^{-1}.
-    \]
+    If $B^i = X A^i X^{-1}$ for all~$i$, then
+    $B^w = X A^w X^{-1}$ for every word~$w$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -507,14 +498,9 @@ boundary conditions (PBC).
     \lean{MPSTensor.mpv_eq_pow_mul_of_gaugePhase}
     \leanok
     \uses{def:gauge_phase_equiv, def:mpv}
-    If, for every physical index~$i$,
-    \[
-        B^i = \zeta X A^i X^{-1},
-    \]
-    then for every system size~$N$ and configuration~$\sigma$ one has
-    \[
-        V^{(N)}(B)_\sigma = \zeta^N V^{(N)}(A)_\sigma.
-    \]
+    If $B^i = \zeta X A^i X^{-1}$ for every physical index~$i$, then for
+    every system size~$N$ and configuration~$\sigma$ one has
+    $V^{(N)}(B)_\sigma = \zeta^N V^{(N)}(A)_\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:eval_word_smul, lem:eval_word_gauge}
@@ -535,17 +521,19 @@ boundary conditions (PBC).
 
 The inverse-tensor characterization of injectivity says that $A$ is
 injective exactly when there is a tensor $A^{-1}$ such that
-$\sum_i (A^i)_{\alpha,\beta}(A^{-1,i})_{\alpha',\beta'}
-=\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$.  Thus contracting $A^{-1}$
-with $A$ through their common physical index identifies the two pairs of
-virtual indices:
+\begin{align}
+    \sum_i (A^i)_{\alpha,\beta}(A^{-1,i})_{\alpha',\beta'}
+    &=
+    \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \label{eq:mps_injective_inverse}
+\end{align}
+Thus (\ref{eq:mps_injective_inverse}) identifies the two pairs of virtual
+indices when $A^{-1}$ is contracted with $A$ through their common physical
+index. In shorthand,
 % Correct equation, not a figure: the source states the unindexed injective
-% identity in prose.  I_Injectivity.png illustrates the following, strictly
+% identity in prose. I_Injectivity.png illustrates the following, strictly
 % stronger block-injective identity with the additional j,j' index pair.
-\[
-    A^{-1}A=\Id
-\]
-This is the identity used in
+$A^{-1}A=\Id$. This is the identity used in
 \cite[Section~2.3, lines~324--331]{Cirac2016MPDO_arXiv}.
 
 \begin{definition}[$L$-block injectivity]\label{def:l_blk_injective}
@@ -553,8 +541,12 @@ This is the identity used in
     \leanok
     \uses{def:mps_tensor}
     A tensor~$A$ is \emph{$L$-block injective} if
-    $\spn_{\C}\{A^{i_1} \cdots A^{i_L}
-        : (i_1,\ldots,i_L) \in \{0,\ldots,d{-}1\}^L\} = \MN{D}$.
+    \begin{align}
+        \spn_{\C}\{A^{i_1} \cdots A^{i_L}
+        : (i_1,\ldots,i_L) \in \{0,\ldots,d{-}1\}^L\}
+        &= \MN{D}.
+        \label{eq:mps_block_injective}
+    \end{align}
     An injective tensor is $1$-block injective.
 \end{definition}
 
@@ -655,9 +647,11 @@ This is the identity used in
         \item scaling factors $\mu_1, \ldots, \mu_r \in \C$.
     \end{enumerate}
     The associated tensor is the block-diagonal tensor
-    \[
-        A^i =  \bigoplus_{k=1}^{r} \mu_k A_k^i.
-    \]
+    \begin{align}
+        A^i
+        &= \bigoplus_{k=1}^{r} \mu_k A_k^i.
+        \label{eq:mps_canonical_form}
+    \end{align}
     This block-injective formulation of the canonical form is used in
     \cite{PerezGarcia2007Matrix}; see also~\cite{Cirac2021Matrix} for the
     normal canonical form.
@@ -733,9 +727,10 @@ This is the identity used in
     and scaling factors $(\mu_k)_{k=1}^r$,
     the associated \emph{block-diagonal tensor} is the tensor of
     total bond dimension $D = \sum_{k=1}^r D_k$ defined by
-    \[
-        A^i =  \bigoplus_{k=1}^{r} \mu_k A_k^i.
-    \]
+    \begin{align}
+        A^i
+        &= \bigoplus_{k=1}^{r} \mu_k A_k^i.
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Word evaluation of a block-diagonal tensor]
@@ -745,9 +740,11 @@ This is the identity used in
     \uses{def:block_diagonal_tensor, def:eval_word}
     For a word $w$, the word evaluation of a block-diagonal tensor remains
     block diagonal:
-    \[
-        A^w = \bigoplus_k \mu_k^{|w|} A_k^w.
-    \]
+    \begin{align}
+        A^w
+        &= \bigoplus_k \mu_k^{|w|} A_k^w.
+        \label{eq:mps_block_word_eval}
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -760,15 +757,16 @@ This is the identity used in
     \leanok
     \uses{def:block_diagonal_tensor, def:mpv, lem:eval_word_block_diagonal_tensor}
     The MPV of a block-diagonal tensor decomposes as
-    \[
+    \begin{align}
         \ket{V^{(N)}(A)}
-        =  \sum_{k=1}^{r} \mu_k^N \ket{V^{(N)}(A_k)}.
-    \]
+        &= \sum_{k=1}^{r} \mu_k^N \ket{V^{(N)}(A_k)}.
+        \label{eq:mps_mpv_decomposition}
+    \end{align}
     Equivalently, for each configuration $\sigma$ one has
-    \[
+    \begin{align}
         V^{(N)}(A)_\sigma
-        =  \sum_{k=1}^{r} \mu_k^N V^{(N)}(A_k)_\sigma.
-    \]
+        &= \sum_{k=1}^{r} \mu_k^N V^{(N)}(A_k)_\sigma.
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -790,10 +788,11 @@ This is the identity used in
     $\{0,\ldots,d{-}1\}^L$ (hence physical dimension $d^L$) and the
     same bond dimension~$D$, whose matrices are indexed by words
     $(i_1, \ldots, i_L) \in \{0,\ldots,d{-}1\}^L$:
-    \[
+    \begin{align}
         (A^{[L]})^{(i_1, \ldots, i_L)}
-        =  A^{i_1} A^{i_2} \cdots A^{i_L}.
-    \]
+        &= A^{i_1} A^{i_2} \cdots A^{i_L}.
+        \label{eq:mps_blocked_tensor}
+    \end{align}
     Blocking coarse-grains $L$ neighbouring sites into one tensor: the inner
     virtual bonds are contracted, the $L$ physical legs merge into a single
     composite index, and the two outer bonds remain as the bond of $A^{[L]}$.
@@ -825,10 +824,8 @@ This is the identity used in
     If $w = (J_1, \ldots, J_m)$ is a word in the blocked alphabet,
     where each $J_k$ is an $L$-tuple in $\{0, \ldots, d{-}1\}^L$,
     then concatenating the block words gives a word $\widetilde{w}$
-    of length $mL$ in the original alphabet and one has
-    \[
-        (A^{[L]})^w = A^{\widetilde{w}}.
-    \]
+    of length $mL$ in the original alphabet and
+    $(A^{[L]})^w = A^{\widetilde{w}}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -845,13 +842,11 @@ This is the identity used in
     For each basis state $\sigma = (\sigma_1, \ldots, \sigma_N)$ of
     the blocked system, where each $\sigma_k$ is an $L$-tuple in
     $\{0, \ldots, d{-}1\}^L$, there exists a basis state
-    $\widetilde{\sigma} = (\widetilde{\sigma}_1, \ldots, \widetilde{\sigma}_{NL})$
+    $\widetilde{\sigma}
+    = (\widetilde{\sigma}_1, \ldots, \widetilde{\sigma}_{NL})$
     of the original system such that
-    \[
-        V^{(N)}(A^{[L]})_\sigma
-        =
-        V^{(NL)}(A)_{\widetilde{\sigma}}.
-    \]
+    $V^{(N)}(A^{[L]})_\sigma
+    = V^{(NL)}(A)_{\widetilde{\sigma}}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -902,12 +897,13 @@ This is the identity used in
     \uses{def:mpv_state}
     The \emph{MPV inner product} between two tensors $A$ and $B$
     at system size~$N$ is
-    \[
+    \begin{align}
         \braket{V^{(N)}(A)}{V^{(N)}(B)}
-        :=
+        &:=
         \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
         \overline{V^{(N)}(A)_\sigma} V^{(N)}(B)_\sigma,
-    \]
+        \label{eq:mps_inner_product}
+    \end{align}
     i.e.\ the Euclidean inner product on $\C^{d^N}$
     (conjugate-linear in the first argument).
 \end{definition}
@@ -919,22 +915,23 @@ This is the identity used in
     The \emph{MPV overlap} between two tensors $A$ (of bond
     dimension $D_1$) and $B$ (of bond dimension $D_2$)
     at system size~$N$ is
-    \[
+    \begin{align}
         O_{AB}(N)
-        :=
+        &:=
         \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
         V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma}.
-    \]
+        \label{eq:mps_overlap}
+    \end{align}
     Diagrammatically, the overlap contracts the MPV ring of $A$ against the
     conjugate ring of $B$ along their shared physical indices, both virtual
     rings closed by the trace:
     \begin{center}
         % O_{AB}(N) = \sum_\sigma V^{(N)}(A)_\sigma
         % \overline{V^{(N)}(B)_\sigma}: the ket row is the A ring and the
-        % starred bra row is the conjugate B ring.  Each vertical pairing
+        % starred bra row is the conjugate B ring. Each vertical pairing
         % sums one shared physical index; periodic closes both virtual
-        % rings.  Hence every index is contracted and the network is a
-        % scalar.  The brace makes the N-site contraction schematic.
+        % rings. Hence every index is contracted and the network is a
+        % scalar. The brace makes the N-site contraction schematic.
         % Boundary signature: (virtual-west=0 | virtual-east=0 |
         % physical-up=0 | physical-down=0).
         \begin{tenkz}[rows={ket, bra}, periodic]
@@ -943,15 +940,17 @@ This is the identity used in
         \end{tenkz}
     \end{center}
     This pairing is linear in the first MPV coefficient and conjugate-linear
-    in the second. By Lemma~\ref{lem:overlap_eq_inner}, it is the complex conjugate of
-    the Hilbert-space inner product from Definition~\ref{def:mpv_inner}.
+    in the second. By Lemma~\ref{lem:overlap_eq_inner}, it is the complex
+    conjugate of the Hilbert-space inner product from
+    Definition~\ref{def:mpv_inner}.
 \end{definition}
 
 \begin{lemma}[Overlap equals conjugate inner product]\label{lem:overlap_eq_inner}
     \lean{MPSTensor.mpvOverlap_eq_star_mpvInner}
     \leanok
     \uses{def:mpv_overlap, def:mpv_inner}
-    $O_{AB}(N) = \overline{\braket{V^{(N)}(A)}{V^{(N)}(B)}}$.
+    $O_{AB}(N)
+    = \overline{\braket{V^{(N)}(A)}{V^{(N)}(B)}}$.
 \end{lemma}
 
 \begin{proof}\leanok

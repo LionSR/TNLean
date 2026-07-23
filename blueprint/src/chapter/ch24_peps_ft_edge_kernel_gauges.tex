@@ -93,9 +93,9 @@ produces the global gauge family that relates the two tensors.
     The initial part of the descent datum gives $K_c(M_e)$. The finite descent
     lemma gives $K_c(M_e)\Longrightarrow K_c(\varnothing)$, and the terminal
     part gives $\forall\rho, c_{\rho}=0$. Thus every finite relation is
-    trivial, which is $\operatorname{inj}(T_{A,M_e})$. Vertex injectivity at
-    $u$ and $v$ gives $\operatorname{inj}(T_{A,u})$ and
-    $\operatorname{inj}(T_{A,v})$; the edge-blocked three-site injectivity at
+    trivial, which is $\inj(T_{A,M_e})$. Vertex injectivity at
+    $u$ and $v$ gives $\inj(T_{A,u})$ and
+    $\inj(T_{A,v})$; the edge-blocked three-site injectivity at
     $e$ follows.
 \end{proof}
 
@@ -108,13 +108,13 @@ produces the global gauge family that relates the two tensors.
         lem:peps_localCoeff_eq_zero_of_contract_zero,
         lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
     For a tensor map or blocked tensor family $T$, write
-    $\operatorname{inj}(T)$ for the assertion that $T$ is injective. If $A$
+    $\inj(T)$ for the assertion that $T$ is injective. If $A$
     is vertex-injective and every bond dimension is positive, then for every
     edge $e=(u,v)$,
     \[
-        \operatorname{inj}(T_{A,u}),\qquad
-        \operatorname{inj}(T_{A,V\setminus\{u,v\}}),\qquad
-        \operatorname{inj}(T_{A,v}).
+        \inj(T_{A,u}),\qquad
+        \inj(T_{A,V\setminus\{u,v\}}),\qquad
+        \inj(T_{A,v}).
     \]
     Here $T_{A,u}$ and $T_{A,v}$ are the two endpoint tensor maps, and
     $T_{A,V\setminus\{u,v\}}$ is the blocked middle tensor family. This is the
@@ -164,10 +164,10 @@ produces the global gauge family that relates the two tensors.
     boundary coefficient by surjectivity of the boundary labelling, which is
     where the positive bond dimensions are used to fill the interior virtual
     indices of a witness configuration.
-    The kernel descent theorem gives $\operatorname{inj}(T_{A,M_e})$. The same
+    The kernel descent theorem gives $\inj(T_{A,M_e})$. The same
     theorem, together with vertex injectivity at $u$ and $v$, gives
-    $\operatorname{inj}(T_{A,u})$, $\operatorname{inj}(T_{A,M_e})$, and
-    $\operatorname{inj}(T_{A,v})$ as the edge-blocked three-site injectivity
+    $\inj(T_{A,u})$, $\inj(T_{A,M_e})$, and
+    $\inj(T_{A,v})$ as the edge-blocked three-site injectivity
     assertion.
 \end{proof}
 
@@ -1388,8 +1388,8 @@ produces the global gauge family that relates the two tensors.
     \]
     Equivalently, for nonzero virtual leg spaces $\alpha,\beta,\gamma$, if one
     endomorphism of $\alpha\otimes\beta\otimes\gamma$ lies simultaneously in
-    the three subspaces $I_\alpha\otimes \operatorname{End}(\beta\otimes\gamma)$,
-    $\operatorname{End}(\alpha\otimes\beta)\otimes I_\gamma$, and the analogous
+    the three subspaces $I_\alpha\otimes \End(\beta\otimes\gamma)$,
+    $\End(\alpha\otimes\beta)\otimes I_\gamma$, and the analogous
     subspace with $I_\beta$ in the middle leg, then it is a scalar multiple of
     the identity. Thus the residual virtual operators are scalar multiples of
     the identity. This is the scalar step in the proof of
@@ -1705,7 +1705,7 @@ produces the global gauge family that relates the two tensors.
     $I_\alpha\otimes Z=U\otimes I_\gamma=W_{\alpha\gamma}\otimes I_\beta$ of the
     three residual gauges $Z$, $U$, $W$
     (Theorem~\ref{thm:peps_twoInjectiveGaugeScalarReduction}). Reading
-    \eqref{eq:peps_residual_equality} at the two endpoint choices shows that $g$
+    equation~(\ref{eq:peps_residual_equality}) at the two endpoint choices shows that $g$
     vanishes whenever two configurations differ at a bond and that its diagonal
     value is invariant under changing any single bond. Hence $g=\lambda I$ for a
     scalar $\lambda$, and invertibility forces $\lambda\neq0$.

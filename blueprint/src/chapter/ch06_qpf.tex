@@ -55,20 +55,25 @@ and~\cite{Evans1978Spectral}.
     \leanok
     Suppose $v^\dagger \rho v = 0$ for some $v \neq 0$.
     Since $\rho \ge 0$, this implies $\rho v = 0$.
-    The fixed-point equation gives
-    $v^\dagger \rho v = \sum_i ((A^i)^\dagger v)^\dagger
-        \rho ((A^i)^\dagger v)$.
+    Substituting the transfer-map formula
+    (\ref{eq:mps_transfer_map}) into the fixed-point equation gives
+    \begin{align}
+        v^\dagger \rho v
+        &= \sum_i ((A^i)^\dagger v)^\dagger
+        \rho ((A^i)^\dagger v).
+        \notag
+    \end{align}
     Each term is non-negative; if the sum is zero, then
     $\rho (A^i)^\dagger v = 0$ for all~$i$:
     the kernel of $\rho$ is invariant under all $(A^i)^\dagger$.
     Since the $\{A^i\}$ span $\MN{D}$, we have $\rho M v = 0$
     for every matrix $M$. Given any vector $w$, choose $M$ with
-    $M v = w$. Then $\rho w = 0$ for every $w$, so $\rho = 0$,
+    $Mv = w$. Then $\rho w = 0$ for every $w$, so $\rho = 0$,
     contradicting $\rho \neq 0$.
     In~\cite[Theorem~6.3(2)]{Wolf2012Quantum},
     the same conclusion is reached via the
     growth condition $(\Id + \E_A)^{D-1}(\rho) > 0$
-    of~\cite[Theorem~6.2, condition~(2)]{Wolf2012Quantum};
+    of~\cite[Theorem~6.2(2)]{Wolf2012Quantum};
     here the direct kernel argument is shorter under
     injectivity.
 \end{proof}
@@ -90,8 +95,8 @@ and~\cite{Evans1978Spectral}.
     (the complement of the kernel).
     A direct computation using the fixed-point equation
     $\E_A(\rho) = \rho$ shows that $Q$ is an invariant
-    projection for $\E_A$: it satisfies
-    $Q \E_A(Q X Q) Q = \E_A(Q X Q)$ for all~$X$.
+    projection for $\E_A$: for every $X$,
+    $Q\E_A(QXQ)Q=\E_A(QXQ)$.
     By irreducibility of $\E_A$
     (Definition~\ref{def:irreducible_cp}),
     every invariant projection is $0$ or $\Id$.
@@ -109,32 +114,32 @@ and~\cite{Evans1978Spectral}.
     \uses{def:irreducible_cp}
     Let $E$ be an irreducible completely positive map on $\MN{D}$,
     and let $A, B \ge 0$ be nonzero positive semidefinite matrices
-    with $\tr(B A) = 0$.
+    with $\tr(BA) = 0$.
     Then there exists $t$ with $1 \le t \le D - 1$ such that
-    \[
-        \tr(B \cdot E^t(A)) > 0.
-    \]
+    $\tr(BE^t(A)) > 0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     The growth theorem for irreducible CP maps
     (\cite[Theorem~6.2(2)]{Wolf2012Quantum}) gives
-    $(\Id + E)^{D-1}(A) > 0$ (positive definite).
+    $(\Id + E)^{D-1}(A) > 0$.
     Since $B \ge 0$ is nonzero,
-    $\tr(B \cdot (\Id + E)^{D-1}(A)) > 0$.
-    Expanding by the binomial theorem:
-    \[
-        \tr\left(B \cdot \sum_{k=0}^{D-1} \tbinom{D-1}{k} E^k(A)\right) > 0.
-    \]
-    Each term $\tr(B \cdot E^k(A)) \ge 0$ since both factors are PSD.
-    The $k = 0$ term vanishes by hypothesis
-    ($\tr(B A) = 0$).
-    Hence at least one $k \in \{1, \ldots, D-1\}$ contributes
+    $\tr(B(\Id + E)^{D-1}(A)) > 0$.
+    Expanding by the binomial theorem gives
+    \begin{align}
+        \tr\!\left(B\sum_{k=0}^{D-1}\binom{D-1}{k}E^k(A)\right)
+        &> 0.
+        \notag
+    \end{align}
+    Each term $\tr(BE^k(A))$ is non-negative since both factors are
+    positive semidefinite.
+    The $k = 0$ term vanishes by the hypothesis $\tr(BA) = 0$.
+    Hence at least one $k \in \{1,\ldots,D-1\}$ contributes
     a strictly positive term.
-    This is~\cite[Theorem~6.2(4)]{Wolf2012Quantum}:
-    item~(2) (growth condition) implies item~(4)
-    by a binomial expansion and PSD positivity argument.
+    This proves the implication (2)$\Rightarrow$(4) in
+    \cite[Theorem~6.2(4)]{Wolf2012Quantum} by a binomial expansion and
+    positivity.
 \end{proof}
 
 \section{Uniqueness}
@@ -145,7 +150,7 @@ and~\cite{Evans1978Spectral}.
     \uses{def:injective, def:transfer_map}
     Let $A$ be an injective MPS tensor.
     If $\rho, \sigma \ge 0$ are both nonzero fixed points of
-    $\E_A$, then $\sigma = c \rho$ for some $c \in \C$.
+    $\E_A$, then $\sigma = c\rho$ for some $c \in \C$.
 \end{theorem}
 
 \begin{proof}
@@ -153,16 +158,16 @@ and~\cite{Evans1978Spectral}.
     \uses{thm:psd_fp_pd}
     Both $\rho$ and $\sigma$ are positive definite by
     Theorem~\ref{thm:psd_fp_pd}.
-    Write $\rho = S S^\dagger$ via a spectral square root and set
-    $H = (S^\dagger)^{-1} \sigma S^{-1}$, which is Hermitian
+    Write $\rho = SS^\dagger$ via a spectral square root and set
+    $H = (S^\dagger)^{-1}\sigma S^{-1}$, which is Hermitian
     and positive definite.
     Let $c_0$ be the minimal eigenvalue of~$H$.
-    Then $\tau := \sigma - c_0 \rho$ is a PSD fixed point
-    which is \emph{not} positive definite
+    Then $\tau := \sigma - c_0\rho$ is a positive semidefinite fixed point
+    which is not positive definite
     (it has a zero eigenvalue by construction of~$c_0$).
     By Theorem~\ref{thm:psd_fp_pd}, $\tau$ must be zero,
-    giving $\sigma = c_0 \rho$.
-    In~\cite[Theorem~6.3, item~2]{Wolf2012Quantum} uniqueness is proved
+    giving $\sigma = c_0\rho$.
+    In~\cite[Theorem~6.3(2)]{Wolf2012Quantum}, uniqueness is proved
     via the growth condition of~\cite[Theorem~6.2]{Wolf2012Quantum};
     the same minimal-eigenvalue argument applies here, using the
     injective-tensor positive-definiteness
@@ -172,7 +177,7 @@ and~\cite{Evans1978Spectral}.
 \begin{remark}\leanok
     The proof produces a positive real scalar $c_0 > 0$:
     it is the minimal eigenvalue of the positive definite Hermitian
-    matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$.
+    matrix $H = (S^\dagger)^{-1}\sigma S^{-1}$.
 \end{remark}
 
 \begin{theorem}[Irreducible fixed-point uniqueness]\label{thm:psd_fp_unique_irred}
@@ -199,7 +204,7 @@ and~\cite{Evans1978Spectral}.
     Let $D \ge 1$ and let $E$ be an irreducible completely positive map
     on $\MN{D}$.
     Suppose $\rho, \sigma \ge 0$ are nonzero positive semidefinite matrices
-    satisfying $E(\rho) = r_1 \rho$ and $E(\sigma) = r_2 \sigma$
+    satisfying $E(\rho) = r_1\rho$ and $E(\sigma) = r_2\sigma$
     for real scalars $r_1, r_2 > 0$.
     Then $r_1 = r_2$.
 \end{theorem}
@@ -209,27 +214,28 @@ and~\cite{Evans1978Spectral}.
     \uses{thm:pf_eigenvector_existence, thm:psd_fp_pd_irred}
     Extract Kraus operators $K$ for $E$.
     Irreducibility of $E$ passes to the adjoint transfer map
-    $E^\dagger(\,\cdot\,) = \sum_i K_i^\dagger\,(\,\cdot\,)\,K_i$,
+    $E^\dagger(X) = \sum_i K_i^\dagger X K_i$,
     which is a positive CP map.
     The Perron--Frobenius existence theorem
     (Theorem~\ref{thm:pf_eigenvector_existence}) together with the
     irreducible positive-definiteness upgrade
     (Theorem~\ref{thm:psd_fp_pd_irred}) gives a positive definite
     eigenvector $\tau > 0$ with eigenvalue $t > 0$:
-    $E^\dagger(\tau) = t\,\tau$.
-    For any nonzero PSD $X$ with $E(X) = s X$,
-    the trace pairing identity yields
-    \[
-        s \cdot \tr(\tau X)
-        = \tr(\tau \cdot E(X))
-        = \tr(E^\dagger(\tau) \cdot X)
-        = t \cdot \tr(\tau X).
-    \]
-    Since $\tau > 0$ and $X \ge 0$, $X \neq 0$,
-    the scalar $\tr(\tau X) > 0$, so $s = t$.
-    Applying this to both $(\rho, r_1)$ and $(\sigma, r_2)$
+    $E^\dagger(\tau) = t\tau$.
+    For any nonzero positive semidefinite $X$ with $E(X) = sX$, the
+    trace-pairing identity (\ref{eq:schwarz_trace_adjoint_pairing}) yields
+    \begin{align}
+        s\tr(\tau X)
+        &= \tr(\tau E(X))
+        = \tr(E^\dagger(\tau)X)
+        = t\tr(\tau X).
+        \notag
+    \end{align}
+    Since $\tau > 0$ and $X \ge 0$, $X \neq 0$, the scalar
+    $\tr(\tau X) > 0$, so $s = t$.
+    Applying this to both $(\rho,r_1)$ and $(\sigma,r_2)$
     gives $r_1 = t = r_2$.
-    This is~\cite[Theorem~6.3, item~3]{Wolf2012Quantum}, the
+    This is~\cite[Theorem~6.3(3)]{Wolf2012Quantum}, the
     non-degeneracy of the spectral-radius eigenvalue for irreducible
     CP maps; the proof follows Wolf's dual-map trace argument.
 \end{proof}
@@ -241,8 +247,8 @@ and~\cite{Evans1978Spectral}.
     \leanok
     \uses{def:transfer_map}
     Assume $D \ge 1$. Let $A$ be an MPS tensor with
-    $\sum_i (A^i)^\dagger A^i = \Id$ (so that $\E_A$ is
-    trace-preserving).
+    $\sum_i (A^i)^\dagger A^i = \Id$, so that $\E_A$ is
+    trace-preserving.
     Then there exists $\rho \ge 0$, $\rho \neq 0$,
     with $\E_A(\rho) = \rho$.
 \end{theorem}
@@ -264,8 +270,8 @@ and~\cite{Evans1978Spectral}.
     \uses{def:injective, def:transfer_map}
     Assume $D \ge 1$. Let $A$ be an injective MPS tensor with
     $\sum_i (A^i)^\dagger A^i = \Id$.
-    Then the transfer map $\E_A$ has a unique PSD fixed point
-    $\rho$ (up to scaling), and $\rho$ is positive definite.
+    Then the transfer map $\E_A$ has a unique positive semidefinite fixed point
+    $\rho$ up to scaling, and $\rho$ is positive definite.
 \end{theorem}
 
 \begin{proof}
@@ -282,8 +288,8 @@ and~\cite{Evans1978Spectral}.
     \uses{def:irreducible_cp, def:transfer_map, thm:psd_fp_exists,
         thm:psd_fp_pd_irred, thm:psd_fp_unique_irred}
     Assume $D\ge 1$. Let $A$ be an MPS tensor such that its transfer map is
-    irreducible and $\sum_i (A^i)^\dagger A^i=\Id$ (so that $\E_A$ is
-    trace-preserving).
+    irreducible and $\sum_i (A^i)^\dagger A^i=\Id$, so that $\E_A$ is
+    trace-preserving.
     Then $\E_A$ has a unique positive definite fixed point, up to scalar
     multiple.
 \end{theorem}
@@ -301,20 +307,25 @@ and~\cite{Evans1978Spectral}.
     \lean{gauged_unital}
     \leanok
     Let $\E_A(\rho) = \rho$ and let $S$ be an invertible matrix with
-    $S S^\dagger = \rho$.
-    Define the gauged operators $A'^i = S^{-1} A^i S$.
-    Then $\sum_i A'^i (A'^i)^\dagger = \Id$, i.e.\ the gauged
+    $SS^\dagger = \rho$.
+    Define the gauged operators $A'^i = S^{-1}A^iS$.
+    Then $\sum_i A'^i(A'^i)^\dagger = \Id$, i.e.\ the gauged
     Kraus map is unital. This is the right-canonical normalization.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Expand each summand:
-    $(S^{-1} A^i S)(S^{-1} A^i S)^\dagger
-        = S^{-1} A^i \underbrace{S S^\dagger}_{\rho} (A^i)^\dagger (S^\dagger)^{-1}$.
-    Summing over $i$ and using $\sum_i A^i \rho (A^i)^\dagger = \rho$
-    gives $S^{-1} \rho (S^\dagger)^{-1}
-        = S^{-1} S S^\dagger (S^\dagger)^{-1} = \Id$.
+    For each~$i$,
+    $(S^{-1}A^iS)(S^{-1}A^iS)^\dagger
+    =S^{-1}A^i\rho(A^i)^\dagger(S^\dagger)^{-1}$.
+    Summing over~$i$ and using the fixed-point equation gives
+    \begin{align}
+        \sum_i A'^i(A'^i)^\dagger
+        &= S^{-1}\E_A(\rho)(S^\dagger)^{-1}
+        = S^{-1}\rho(S^\dagger)^{-1}
+        = \Id.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Left-canonical (trace-preserving) gauge]\label{thm:left_canonical_gauge}
@@ -323,7 +334,7 @@ and~\cite{Evans1978Spectral}.
     Let $\sigma$ be a fixed point of the adjoint transfer map
     $\sum_i (A^i)^\dagger \sigma A^i = \sigma$,
     and let $S$ be invertible with $S^\dagger S = \sigma$.
-    Define $A'^i = S A^i S^{-1}$.
+    Define $A'^i = SA^iS^{-1}$.
     Then $\sum_i (A'^i)^\dagger A'^i = \Id$, i.e.\ the gauged
     Kraus map is trace-preserving. This is the left-canonical
     normalization.
@@ -331,12 +342,16 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
-    Expand each summand:
-    $(S A^i S^{-1})^\dagger (S A^i S^{-1})
-        = (S^\dagger)^{-1} (A^i)^\dagger \underbrace{S^\dagger S}_{\sigma} A^i S^{-1}$.
-    Summing over $i$ and using $\sum_i (A^i)^\dagger \sigma A^i = \sigma$
-    gives $(S^\dagger)^{-1} \sigma S^{-1}
-        = (S^\dagger)^{-1} S^\dagger S S^{-1} = \Id$.
+    For each~$i$,
+    $(SA^iS^{-1})^\dagger(SA^iS^{-1})
+    =(S^\dagger)^{-1}(A^i)^\dagger\sigma A^iS^{-1}$.
+    Summing over~$i$ and using the adjoint fixed-point equation gives
+    \begin{align}
+        \sum_i(A'^i)^\dagger A'^i
+        &= (S^\dagger)^{-1}\sigma S^{-1}
+        = \Id.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Square-root trace-preserving gauge from an adjoint fixed point]%
@@ -347,19 +362,27 @@ and~\cite{Evans1978Spectral}.
     Let $\sigma$ be positive definite and satisfy
     $\sum_i (A^i)^\dagger \sigma A^i = \sigma$.
     Define
-    \[
-        B^i = \sigma^{1/2} A^i \sigma^{-1/2}.
-    \]
+    \begin{align}
+        B^i
+        &= \sigma^{1/2}A^i\sigma^{-1/2}.
+        \label{eq:qpf_tp_gauge}
+    \end{align}
     Then $B$ is trace-preserving:
     $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{theorem}
 
 \begin{proof}\leanok
     Since $\sigma^{1/2}$ is self-adjoint and
-    $\sigma^{1/2}\sigma^{1/2}=\sigma$, each summand becomes
-    $(\sigma^{1/2})^{-1}\,(A^i)^\dagger\sigma A^i\,\sigma^{-1/2}$.
-    Summing over $i$ and using the fixed-point equation leaves
-    $(\sigma^{1/2})^{-1}\sigma\sigma^{-1/2}=\Id$.
+    $\sigma^{1/2}\sigma^{1/2}=\sigma$, summing the products obtained from
+    (\ref{eq:qpf_tp_gauge}) gives
+    \begin{align}
+        \sum_i(B^i)^\dagger B^i
+        &= \sigma^{-1/2}
+        \left(\sum_i(A^i)^\dagger\sigma A^i\right)\sigma^{-1/2}
+        = \sigma^{-1/2}\sigma\sigma^{-1/2}
+        = \Id.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Square-root trace-preserving gauge is a gauge equivalence]%
@@ -367,14 +390,14 @@ and~\cite{Evans1978Spectral}.
     \lean{MPSTensor.gaugeEquiv_tpGauge}
     \leanok
     \uses{def:gauge_equiv}
-    If $\sigma$ is positive definite and
-    $B^i=\sigma^{1/2}A^i\sigma^{-1/2}$, then $A$ and $B$ are
-    gauge-equivalent.
+    If $\sigma$ is positive definite and $B$ is defined by
+    (\ref{eq:qpf_tp_gauge}), then $A$ and $B$ are gauge equivalent.
 \end{lemma}
 
 \begin{proof}\leanok
     The gauge matrix is $\sigma^{1/2}$, which is invertible because
-    $\sigma$ is positive definite.
+    $\sigma$ is positive definite. Thus (\ref{eq:qpf_tp_gauge}) has the form
+    of the gauge relation (\ref{eq:mps_gauge_equiv}).
 \end{proof}
 
 \begin{remark}\leanok
@@ -394,28 +417,29 @@ and~\cite{Evans1978Spectral}.
     \leanok
     \uses{def:irreducible_cp}
     Let $E$ be an irreducible completely positive map on $\MN{D}$,
-    let $C \in \MN{D}$ be invertible ($\det C \neq 0$), and let
+    let $C \in \MN{D}$ be invertible, with $\det C \neq 0$, and let
     $c > 0$.
-    Define the similarity-transformed map
-    \[
-        E'(X) = c \cdot C^{-1}\, E\!(C\,X\,C^\dagger)\,(C^\dagger)^{-1}.
-    \]
+    Define the similarity-transformed map by
+    \begin{align}
+        E'(X)
+        &= cC^{-1}E(CXC^\dagger)(C^\dagger)^{-1}.
+        \notag
+    \end{align}
     Then $E'$ is also irreducible.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:irreducible_cp}
-    Suppose $Q$ is an invariant projection for $E'$:
-    $Q \neq 0$, $Q \neq \Id$, and
-    $(\Id - Q) E'(Q X Q) Q = 0$ for all~$X$.
-    Setting $R = C Q C^\dagger$, the support projection~$P$ of $R$
+    Suppose $Q\neq0,\Id$ is an invariant projection for $E'$.
+    Thus $(\Id-Q)E'(QXQ)Q=0$ for every $X$.
+    Setting $R = CQC^\dagger$, the support projection~$P$ of $R$
     is an invariant projection for $E$.
     Irreducibility of $E$ forces $P = 0$ or $P = \Id$.
     The invertibility of $C$ then forces $Q = 0$ or $Q = \Id$,
     a contradiction.
     This is the full similarity version of~\cite[Proposition~6.6]{Wolf2012Quantum};
-    the scalar case ($C = \Id$) gives the scaling result stated next.
+    the scalar case $C = \Id$ gives the scaling result stated next.
 \end{proof}
 
 \begin{lemma}[Similarity is an involution]%
@@ -423,19 +447,24 @@ and~\cite{Evans1978Spectral}.
     \lean{similarityMap_similarityMap_inv}
     \leanok
     For any invertible $C \in \MN{D}$ and any linear map $E$ on $\MN{D}$,
-    the similarity transforms by $C$ and $C^{-1}$ compose to the identity:
-    \[
-        X \mapsto C(C^{-1}\, E(C\,X\,C^\dagger)\,(C^\dagger)^{-1})\,C^\dagger
-        = E(X).
-    \]
+    write $S_C(E)(X)=C^{-1}E(CXC^\dagger)(C^\dagger)^{-1}$ for the
+    similarity transform by $C$. The transforms by $C$ and $C^{-1}$ compose
+    to the identity:
+    \begin{align}
+        S_{C^{-1}}(S_C(E))(X)
+        &=C\left[C^{-1}E\!\left(C(C^{-1}X(C^\dagger)^{-1})C^\dagger\right)
+          (C^\dagger)^{-1}\right]C^\dagger \notag\\
+        &=E(X).
+        \label{eq:qpf_similarity_involution}
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     Direct computation: the inner conjugation
-    $C \cdot (C^{-1} X (C^\dagger)^{-1}) \cdot C^\dagger$ collapses to $X$
-    using $C C^{-1} = \Id$ and $(C^\dagger)^{-1} C^\dagger = \Id$, and the
-    outer conjugation by $C (\cdot) C^\dagger$ then cancels the inner
-    $C^{-1} (\cdot) (C^\dagger)^{-1}$ on $E(X)$ for the same reason.
+    $C(C^{-1}X(C^\dagger)^{-1})C^\dagger$ collapses to $X$
+    using $CC^{-1} = \Id$ and $(C^\dagger)^{-1}C^\dagger = \Id$, and the
+    outer conjugation by $C(\,\cdot\,)C^\dagger$ then cancels the inner
+    $C^{-1}(\,\cdot\,)(C^\dagger)^{-1}$ on $E(X)$ for the same reason.
 \end{proof}
 
 \begin{lemma}[Irreducibility is invariant under similarity]%
@@ -445,18 +474,18 @@ and~\cite{Evans1978Spectral}.
     \uses{def:irreducible_cp, lem:similarity_irred, lem:similarity_involution}
     For any invertible $C \in \MN{D}$ and any linear map $E$ on $\MN{D}$,
     the similarity transform
-    $X \mapsto C^{-1}\, E(C\,X\,C^\dagger)\,(C^\dagger)^{-1}$
+    $X \mapsto C^{-1}E(CXC^\dagger)(C^\dagger)^{-1}$
     is irreducible if and only if $E$ is.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:similarity_irred, lem:similarity_involution}
     The forward direction follows from Lemma~\ref{lem:similarity_irred}
-    applied with the inverse $C^{-1}$ (whose determinant is also nonzero):
+    applied with the inverse $C^{-1}$, whose determinant is also nonzero:
     if the similarity transform of $E$ by $C$ is irreducible, then so is its
     similarity transform by $C^{-1}$, which equals $E$ by
-    Lemma~\ref{lem:similarity_involution}. The reverse direction is
-    Lemma~\ref{lem:similarity_irred} itself (with $c = 1$).
+    (\ref{eq:qpf_similarity_involution}). The reverse direction is
+    Lemma~\ref{lem:similarity_irred} itself with $c = 1$.
 \end{proof}
 
 \begin{theorem}[Scaling preserves irreducibility]%
@@ -464,15 +493,16 @@ and~\cite{Evans1978Spectral}.
     \lean{isIrreducibleMap_smul}
     \leanok
     \uses{def:irreducible_cp}
-    If $E$ is an irreducible map and $c \neq 0$, then $c E$
+    If $E$ is an irreducible map and $c \neq 0$, then $cE$
     is also irreducible.
-    This is the scalar special case ($C = \Id$) of~\cite[Proposition~6.6]{Wolf2012Quantum}.
+    This is the scalar special case $C = \Id$ of
+    \cite[Proposition~6.6]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    An invariant projection for $c E$ is an invariant projection
-    for $E$ (scale out the nonzero constant from the commutation
-    relation).
+    An invariant projection for $cE$ is an invariant projection
+    for $E$, since the nonzero constant may be removed from the invariance
+    relation.
 \end{proof}
 
 \section{Perron--Frobenius eigenvector existence}%
@@ -493,15 +523,15 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \uses{def:positive_map}
     Let $E : \MN{D} \to \MN{D}$ be a positive linear map with
     $D > 0$, and assume that $E(\sigma) \neq 0$ for every nonzero
-    PSD matrix $\sigma$.
-    Then there exist a nonzero PSD matrix $\rho$ and a positive
-    real $r > 0$ such that $E(\rho) = r \rho$.
+    positive semidefinite matrix $\sigma$.
+    Then there exist a nonzero positive semidefinite matrix $\rho$ and a
+    positive real $r > 0$ such that $E(\rho) = r\rho$.
 
     This is the finite-dimensional Perron--Frobenius theorem for
     positive maps on matrix algebras
     (\cite[Theorem~6.5]{Wolf2012Quantum}; see also~\cite{Evans1978Spectral}).
     The proof applies Brouwer's fixed-point theorem to the
-    normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
+    normalization map $\rho \mapsto E(\rho)/\tr(E(\rho))$ on the
     compact convex set of density matrices.
 \end{theorem}
 
@@ -517,8 +547,8 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \begin{proof}\leanok
     If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
     so $\sum_i (A^i)^\dagger A^i = 0$.
-    Since each summand $(A^i)^\dagger A^i$ is PSD,
-    each $(A^i)^\dagger = 0$ and hence each $A^i = 0$.
+    Since each summand $(A^i)^\dagger A^i$ is positive semidefinite,
+    each $(A^i)^\dagger A^i = 0$ and hence each $A^i = 0$.
 \end{proof}
 
 \begin{theorem}[Positive-definite adjoint eigenvector for irreducible tensors]%
@@ -530,9 +560,9 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     and some $A^i \neq 0$.
     Then there exist a positive definite matrix~$\sigma$
     and a positive real $r > 0$ such that
-    $\E_A^\dagger(\sigma) = r \sigma$.
+    $\E_A^\dagger(\sigma) = r\sigma$.
 
-    This combines the general PF existence
+    This combines the general Perron--Frobenius existence
     (\cite[Theorem~6.5]{Wolf2012Quantum}) with the
     irreducible upgrade to positive definiteness
     (\cite[Theorem~6.3(2)]{Wolf2012Quantum});
@@ -546,26 +576,24 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     $\E_A^\dagger \neq 0$.
     Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
     Kraus map, it is positive. Irreducibility of $A$ transfers to the
-    adjoint transfer map. More precisely: if $P$ is invariant for
-    $\E_A$ (i.e.\ $(\Id - P)K_i P = 0$ for all Kraus operators $K_i$),
-    then taking adjoints gives $P K_i^\dagger (\Id - P) = 0$, which
-    means $\Id - P$ is invariant for $\E_A^\dagger$. Hence $\E_A$
+    adjoint transfer map. More precisely, if $P$ is invariant for
+    $\E_A$, so that $(\Id-P)K_iP=0$ for all Kraus operators $K_i$, then
+    taking adjoints gives $PK_i^\dagger(\Id-P)=0$, which means $\Id-P$
+    is invariant for $\E_A^\dagger$. Hence $\E_A$
     is irreducible if and only if $\E_A^\dagger$ is irreducible, and
     together with $\E_A^\dagger \neq 0$ this implies
-    $\E_A^\dagger(\tau) \neq 0$ for every nonzero PSD matrix $\tau$.
+    $\E_A^\dagger(\tau) \neq 0$ for every nonzero positive semidefinite
+    matrix $\tau$.
     Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
-    $\E_A^\dagger$, giving $\sigma_0 \ge 0$ (PSD, nonzero)
-    and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
-    Rescale: set $T^i = r^{-1/2} (A^i)^\dagger$.
-    Then $\E_T(\sigma_0) = \sigma_0$,
-    and $\E_T$ is irreducible
-    (by Theorem~\ref{thm:irred_map_smul},
-    since irreducibility of $\E_A$ transfers to the
-    adjoint and is preserved under scaling).
-    Since $\E_T$ is irreducible with a PSD fixed point,
-    the positive-definiteness upgrade
-    (Theorem~\ref{thm:psd_fp_pd_irred})
-    gives $\sigma_0$ positive definite.
+    $\E_A^\dagger$, giving $\sigma_0 \ge 0$, $\sigma_0\neq0$, and $r > 0$
+    with $\E_A^\dagger(\sigma_0) = r\sigma_0$.
+    Set $T^i = r^{-1/2}(A^i)^\dagger$.
+    Then $\E_T(\sigma_0) = \sigma_0$, and $\E_T$ is irreducible
+    by Theorem~\ref{thm:irred_map_smul}, since irreducibility of $\E_A$
+    transfers to the adjoint and is preserved under scaling.
+    Since $\E_T$ is irreducible with a positive semidefinite fixed point,
+    Theorem~\ref{thm:psd_fp_pd_irred} gives that $\sigma_0$ is positive
+    definite.
 \end{proof}
 
 \begin{theorem}[TP-gauge existence for irreducible tensors]%
@@ -575,15 +603,17 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \uses{def:irreducible_tensor, def:gauge_equiv}
     Let $A$ be an irreducible MPS tensor with $D > 0$
     and some $A^i \neq 0$.
-    Then there exist a positive real~$r$, a positive definite
-    matrix~$\sigma$, and a gauge-equivalent tensor~$B$ such that
-    \[
-        B^i = \sigma^{1/2} \cdot (r^{-1/2} A^i) \cdot \sigma^{-1/2}
-    \]
-    is trace-preserving:
-    $\sum_i (B^i)^\dagger B^i = \Id$.
+    Then there exist a positive real~$r$, a positive definite matrix~$\sigma$,
+    and a tensor~$B$ gauge-equivalent to $r^{-1/2}A$ such that
+    \begin{align}
+        B^i
+        &= \sigma^{1/2}(r^{-1/2}A^i)\sigma^{-1/2},
+        \label{eq:qpf_irred_tp_gauge}
+    \end{align}
+    and $\sum_i (B^i)^\dagger B^i = \Id$.
 
-    This is the ``spectral rescaling $+$ TP gauge'' step of~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    This is the ``spectral rescaling $+$ TP gauge'' step of
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     The similarity is generally non-unitary.
 \end{theorem}
 
@@ -592,14 +622,15 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
         lem:tp_gauge_equiv}
     By Theorem~\ref{thm:posDef_adjoint_eigenvector},
     obtain $\sigma$ positive definite and $r > 0$ with
-    $\E_A^\dagger(\sigma) = r \sigma$.
-    Set $c = r^{-1/2}$ and $A'^i = c A^i$.
+    $\E_A^\dagger(\sigma) = r\sigma$.
+    Set $c = r^{-1/2}$ and $A'^i = cA^i$.
     Then $\E_{A'}^\dagger(\sigma) = \sigma$.
     By the square-root trace-preserving gauge construction
-    (Theorem~\ref{thm:tp_gauge_from_adjoint_fixed}),
-    $B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
-    satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
-    Lemma~\ref{lem:tp_gauge_equiv} gives the required gauge equivalence.
+    (Theorem~\ref{thm:tp_gauge_from_adjoint_fixed}), the tensor defined by
+    (\ref{eq:qpf_irred_tp_gauge}) satisfies
+    $\sum_i (B^i)^\dagger B^i = \Id$.
+    Lemma~\ref{lem:tp_gauge_equiv} gives the required gauge equivalence to
+    $r^{-1/2}A$.
 \end{proof}
 
 \begin{theorem}[Unital-gauge existence for irreducible tensors]%
@@ -609,13 +640,14 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \uses{def:irreducible_tensor}
     Let $A$ be an irreducible MPS tensor with $D > 0$
     and some $A^i \neq 0$.
-    Then there exist a positive real~$r$, a positive definite
-    matrix~$\rho$, and a gauge-equivalent tensor~$B$ such that
-    \[
-        B^i = r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}
-    \]
-    is unital:
-    $\sum_i B^i(B^i)^\dagger = \Id$.
+    Then there exist a positive real~$r$, a positive definite matrix~$\rho$,
+    and a tensor~$B$ gauge-equivalent to $r^{-1/2}A$ such that
+    \begin{align}
+        B^i
+        &= r^{-1/2}\rho^{-1/2}A^i\rho^{1/2},
+        \label{eq:qpf_irred_unital_gauge}
+    \end{align}
+    and $\sum_i B^i(B^i)^\dagger = \Id$.
 
     This is the Perron--Frobenius unital-gauge orientation used in
     \cite[Theorem~4, lines~765--770]{PerezGarcia2007Matrix},
@@ -629,8 +661,9 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     family, and the nonzero Kraus hypothesis is preserved by taking adjoints.
     Translating the resulting adjoint eigenvector equation back gives
     $\E_A(\rho)=r\rho$ with $\rho$ positive definite and $r>0$. The unital
-    gauge theorem then gives the displayed unital representative, and the
-    same square-root similarity gives gauge equivalence to $r^{-1/2}A$.
+    gauge theorem then gives the representative
+    (\ref{eq:qpf_irred_unital_gauge}), and the same square-root similarity
+    gives gauge equivalence to $r^{-1/2}A$.
 \end{proof}
 
 \section{Exponential positivity for irreducible CP maps}
@@ -642,23 +675,25 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \uses{def:irreducible_cp}
     Let $E$ be an irreducible completely positive map on $\MN{D}$,
     let $A \ge 0$ be nonzero, and let $t > 0$.
-    Then the finite exponential truncation
-    \[
-        \sum_{k=0}^{D-1} \frac{t^k}{k!} E^k(A)
-    \]
-    is positive definite.
+    Then the finite exponential truncation satisfies
+    \begin{align}
+        \sum_{k=0}^{D-1}\frac{t^k}{k!}E^k(A)
+        &>0.
+        \label{eq:qpf_exp_truncation}
+    \end{align}
     This is the finite-sum core of~\cite[Theorem~6.2(3)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:orthogonal_trace_cond}
-    If a nonzero vector $v$ annihilated this quadratic form, then every term
-    $E^k(A)$ with $0 \le k \le D-1$ would annihilate $v$.
-    The growth theorem for irreducible CP maps
-    (that is, $(\Id + E)^{D-1}(A) > 0$ for irreducible $E$ and nonzero
-    PSD $A$, as established in the proof of
-    Theorem~\ref{thm:orthogonal_trace_cond}) then forces
+    If a nonzero vector $v$ annihilated the quadratic form in
+    (\ref{eq:qpf_exp_truncation}), then every term $E^k(A)$ with
+    $0 \le k \le D-1$ would annihilate $v$.
+    The growth theorem for irreducible CP maps, namely
+    $(\Id + E)^{D-1}(A) > 0$ for irreducible $E$ and nonzero
+    positive semidefinite $A$, as established in the proof of
+    Theorem~\ref{thm:orthogonal_trace_cond}, would then force
     $(\Id + E)^{D-1}(A)$ to annihilate $v$, contradicting its positive
     definiteness.
 \end{proof}
@@ -671,20 +706,21 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     Let $E$ be an irreducible completely positive map on $\MN{D}$,
     let $A \ge 0$ be nonzero, and let $t > 0$.
     Then
-    \[
-        \exp(tE)(A) = \sum_{k=0}^{\infty} \frac{t^k}{k!} E^k(A)
-    \]
-    is positive definite.
+    \begin{align}
+        \exp(tE)(A)
+        &= \sum_{k=0}^{\infty}\frac{t^k}{k!}E^k(A)>0.
+        \label{eq:qpf_exp_positive}
+    \end{align}
     This is~\cite[Theorem~6.2(3)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:exp_truncation_pd_irred}, the first $D$ terms already
-    form a positive definite matrix.
+    By Theorem~\ref{thm:exp_truncation_pd_irred}, the first $D$ terms in
+    (\ref{eq:qpf_exp_positive}) already form a positive definite matrix.
     Every remaining term is positive semidefinite, so the full exponential
-    series is the sum of a positive definite matrix and a positive semidefinite
-    tail.
+    series is the sum of a positive definite matrix and a positive
+    semidefinite tail.
 \end{proof}
 
 \section{Ergodicity of irreducible channels}
@@ -695,19 +731,22 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \leanok
     \uses{def:channel, def:irreducible_cp}
     Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$.
-    Then there exists a unique density matrix $\sigma$ such that $E(\sigma) = \sigma$.
-    Moreover $\sigma$ is positive definite.
+    Then there exists a unique density matrix $\sigma$ such that
+    $E(\sigma) = \sigma$.
+    Moreover, $\sigma$ is positive definite.
     This is the qualitative form of~\cite[Corollary~6.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:cesaro_fixedpoint}
-    Every Ces\`aro mean of a density matrix stays inside the compact convex set
-    of density matrices, so a subsequence converges.
-    Its limit is a fixed point by the telescoping argument, positive
-    definiteness follows from irreducibility, and uniqueness comes from the
-    uniqueness of positive semidefinite Perron eigenvectors at eigenvalue~$1$.
+    Every Ces\`aro mean (\ref{eq:channel_cesaro_mean}) of a density matrix
+    stays inside the compact convex set of density matrices, so a subsequence
+    converges.
+    Its limit is a fixed point by the telescope identity
+    (\ref{eq:channel_cesaro_telescope}), positive definiteness follows from
+    irreducibility, and uniqueness comes from the uniqueness of positive
+    semidefinite Perron eigenvectors at eigenvalue~$1$.
 \end{proof}
 
 \begin{theorem}[Ces\`aro convergence for irreducible channels]
@@ -718,11 +757,8 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
         thm:channel_density_fp_irred}
     Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$,
     and let $\rho$ be any density matrix.
-    Then the Ces\`aro means
-    \[
-        \frac{1}{N} \sum_{n=0}^{N-1} E^n(\rho)
-    \]
-    converge to the unique positive definite density-matrix fixed point of~$E$.
+    Then the Ces\`aro means (\ref{eq:channel_cesaro_mean}) converge to the
+    unique positive definite density-matrix fixed point of~$E$.
     This is~\cite[Corollary~6.3]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -743,7 +779,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \leanok
     \uses{def:irreducible_cp}
     Let $E$ be an irreducible completely positive map on $\MN{D}$.
-    Suppose $\rho > 0$ and $E(\rho) = r \rho$ with $r > 0$.
+    Suppose $\rho > 0$ and $E(\rho) = r\rho$ with $r > 0$.
     Then the spectral radius of $E$ is $r$.
     This is~\cite[Theorem~6.3(4)]{Wolf2012Quantum}.
 \end{theorem}
@@ -754,8 +790,9 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     eigenvalue, gauge by its square root, and rescale by $r^{-1}$.
     The resulting map is trace-preserving and has a positive definite fixed
     point, so $1$ is an eigenvalue. The spectral radius of a trace-preserving
-    map $F$ satisfies $\rho(F) \le 1$, since $\tr(F^n(X)) = \tr(X)$ for all
-    $n$ bounds the growth of iterates. Hence its spectral radius is~$1$.
+    map $F$ satisfies $\rho(F) \le 1$, since
+    $\tr(F^n(X)) = \tr(X)$ for all~$n$ bounds the growth of iterates.
+    Hence its spectral radius is~$1$.
     Undoing the similarity and scalar rescaling recovers the spectral radius
     of~$E$.
 \end{proof}
@@ -786,9 +823,15 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     of~\cite[Theorem~6.4]{Wolf2012Quantum} if there exist a positive real number $r$,
     a positive definite right eigenvector $\rho$, and a positive definite left
     eigenvector $\sigma$ for the adjoint map such that
-    $E(\rho) = r \rho$, $E^\dagger(\sigma) = r \sigma$, every positive semidefinite
-    right eigenvector for eigenvalue $r$ is a scalar multiple of $\rho$, and the
-    spectral radius of $E$ is equal to~$r$.
+    \begin{align}
+        E(\rho)
+        &=r\rho, \notag\\
+        E^\dagger(\sigma)
+        &=r\sigma,
+        \label{eq:qpf_spectral_eigenvectors}
+    \end{align}
+    every positive semidefinite right eigenvector for eigenvalue $r$ is a
+    scalar multiple of $\rho$, and the spectral radius of $E$ is equal to~$r$.
 \end{definition}
 
 \begin{theorem}[Irreducibility gives the spectral properties]
@@ -820,12 +863,12 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}
     \leanok
-    Gauge by the positive definite left eigenvector and rescale by the Perron
-    eigenvalue to obtain a trace-preserving map with a positive definite fixed
-    point.
-    A nontrivial invariant projection would then produce, by Ces\`aro averaging in
-    its corner algebra, a second positive semidefinite fixed point not proportional
-    to the Perron vector, contradicting the uniqueness clause in
+    Gauge by the positive definite left eigenvector in
+    (\ref{eq:qpf_spectral_eigenvectors}) and rescale by the Perron eigenvalue
+    to obtain a trace-preserving map with a positive definite fixed point.
+    A nontrivial invariant projection would then produce, by Ces\`aro averaging
+    in its corner algebra, a second positive semidefinite fixed point not
+    proportional to the Perron vector, contradicting the uniqueness clause in
     Definition~\ref{def:has_spectral_properties}.
 \end{proof}
 

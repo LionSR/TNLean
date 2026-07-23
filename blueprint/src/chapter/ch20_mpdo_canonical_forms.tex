@@ -157,7 +157,7 @@
     An MPO tensor is in \emph{vertical canonical form} if there are a basis of
     normal tensors $\{M_\alpha\}_\alpha$ for its vertically viewed tensor
     $\widetilde M$, positive diagonal matrices
-    $\mu_\alpha=\operatorname{diag}(\omega_{\alpha,0},\dots,\omega_{\alpha,r_\alpha-1})$
+    $\mu_\alpha=\diag(\omega_{\alpha,0},\dots,\omega_{\alpha,r_\alpha-1})$
     with $r_\alpha\geq1$,
     and a matrix $U$ from the physical space onto the retained nonzero sector
     space such that
@@ -2464,9 +2464,9 @@ tensor.  This is the contraction in
     equal-length tail words $\sigma,\tau$,
     \[
     \begin{split}
-      \operatorname{tr}\!\left(\mathcal R(A)^{rs}
+      \tr\!\left(\mathcal R(A)^{rs}
         M^{\sigma_1\tau_1}\cdots M^{\sigma_L\tau_L}\right)
-      ={}&\operatorname{tr}\!\left(\mathcal R(A^\sharp)^{rs}
+      ={}&\tr\!\left(\mathcal R(A^\sharp)^{rs}
         (M^\dagger)^{\sigma_L\tau_L}\cdots
         (M^\dagger)^{\sigma_1\tau_1}\right).
     \end{split}
@@ -2921,7 +2921,7 @@ tensor.  This is the contraction in
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
         = \bigl\langle\sigma\,\big|\,\rho^{(N)}(M)\,\big|\,\sigma\bigr\rangle,
     \]
-    since both equal $\operatorname{tr}\bigl(M^{\sigma_1\sigma_1}\cdots
+    since both equal $\tr\bigl(M^{\sigma_1\sigma_1}\cdots
         M^{\sigma_N\sigma_N}\bigr)$.
 \end{lemma}
 \begin{proof}\leanok

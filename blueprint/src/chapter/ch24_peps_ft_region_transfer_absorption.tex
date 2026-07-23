@@ -11,10 +11,10 @@
     tensors over the vertices of $R\cup\{v\}$ factors as the local tensor at the
     inserted site $v$ times the product over the vertices of $R$:
     \[
-        \prod_{w\in R\cup\{v\}}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma_w\bigr)
+        \prod_{w\in R\cup\{v\}}A_w\bigl(\zeta|_{\inc(w)},\sigma_w\bigr)
         =
-        A_v\bigl(\zeta|_{\operatorname{inc}(v)},\sigma_v\bigr)
-        \prod_{w\in R}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma|_R{}_w\bigr).
+        A_v\bigl(\zeta|_{\inc(v)},\sigma_v\bigr)
+        \prod_{w\in R}A_w\bigl(\zeta|_{\inc(w)},\sigma|_R{}_w\bigr).
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -37,8 +37,8 @@
         T_{A,R\cup\{v\}}^{\mu}(\sigma)
         =
         \sum_{\zeta:\,\zeta|_{\partial(R\cup\{v\})}=\mu}
-        A_v\bigl(\zeta|_{\operatorname{inc}(v)},\sigma_v\bigr)
-        \prod_{w\in R}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma|_R{}_w\bigr).
+        A_v\bigl(\zeta|_{\inc(v)},\sigma_v\bigr)
+        \prod_{w\in R}A_w\bigl(\zeta|_{\inc(w)},\sigma|_R{}_w\bigr).
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -136,7 +136,7 @@
     Transporting this back through
     Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} on $B$,
     and using that the boundary-edge orientation is an involution
-    ($\mathcal O_{R,f}\circ\mathcal O_{R,f}=\operatorname{id}$), gives the
+    ($\mathcal O_{R,f}\circ\mathcal O_{R,f}=\id$), gives the
     displayed equality.
 \end{proof}
 
@@ -311,7 +311,7 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     \end{aligned}
     \]
     The displayed equalities also use
-    $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\operatorname{id}$, the compatibility
+    $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\id$, the compatibility
     of $\mathcal O_{R,f}$ with transport, and
     $\omega_{R,\sigma|_R,\sigma|_{V\setminus R}}=\sigma$. Substituting these two
     identities into the assumed region equality and cancelling the shared

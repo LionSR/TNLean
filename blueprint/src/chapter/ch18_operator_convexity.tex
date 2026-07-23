@@ -179,7 +179,7 @@ matrix-order tools used independently of the Fundamental Theorem.
 \end{lemma}
 
 \begin{proof}\leanok
-    Write $A=U\,\operatorname{diag}(\mu)\,U^{\ast}$ by the spectral
+    Write $A=U\,\diag(\mu)\,U^{\ast}$ by the spectral
     theorem and set $w=U^{\ast}v$. Since $U$ is unitary,
     $p_i:=\lvert w_i\rvert^2$ satisfies $\sum_i p_i=\lVert v\rVert^2=1$,
     so $(p_i)$ is a probability distribution on $n$. The eigenvalues
@@ -831,8 +831,8 @@ of $A^s B^{1-s}$.
     the model space $\mathbb{C}^D\otimes\mathbb{C}^D$. Writing that product as
     $A^s\otimes(B^\top)^{1-s}$ and pairing it with the vectorization of $K^\top$,
     \[
-        \langle \operatorname{vec}K^\top,\,
-            (A^s\otimes(B^\top)^{1-s})\operatorname{vec}K^\top\rangle
+        \langle \opvec K^\top,\,
+            (A^s\otimes(B^\top)^{1-s})\opvec K^\top\rangle
         = \Re\tr(K^\dagger A^s K B^{1-s}),
     \]
     expresses the trace functional as the quadratic form

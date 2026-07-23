@@ -99,7 +99,7 @@
     \]
     The real trace matrix on this index set is
     \[
-        T^*_{k,h}=\operatorname{Re}\tr(\eta_{k,h}),
+        T^*_{k,h}=\re\tr(\eta_{k,h}),
         \qquad k,h\in I_*.
     \]
     Only the trace matrix is restricted: the physical direct sum still
@@ -312,7 +312,7 @@
     positive semidefiniteness makes every neighboring trace real and
     nonnegative, and the matrix
     \[
-        T^*_{k,h}=\operatorname{Re}\tr(\eta_{k,h})
+        T^*_{k,h}=\re\tr(\eta_{k,h})
     \]
     is primitive. Zero-weight summands remain in the physical direct sum but
     are not indices of $T^*$.
@@ -364,7 +364,7 @@
     weights $p_k\geq0$ with $\sum_k p_k=1$, and positive semidefinite
     neighboring operators $\eta_{k,h}$ such that the active trace matrix
     \[
-        T^*_{k,h}=\operatorname{Re}\tr(\eta_{k,h}),
+        T^*_{k,h}=\re\tr(\eta_{k,h}),
         \qquad k,h\in I_*:=\{j:p_j\ne0\},
     \]
     is primitive. There is also a real number $\lambda>0$ for which, upon
@@ -643,7 +643,7 @@
 \begin{proof}
     \leanok
     The finite-dimensional spectral theorem gives
-    $A=U\operatorname{diag}(\lambda_k)U^\dagger$, where the columns of $U$ are
+    $A=U\diag(\lambda_k)U^\dagger$, where the columns of $U$ are
     the vectors $u_k$. Expanding the diagonal matrix as the sum of its
     rank-one coordinate projections gives the stated identity.
 \end{proof}
@@ -676,7 +676,7 @@
     Let $T$ be a finite real square matrix. If
     \[
         T^2=T,
-        \qquad \operatorname{tr}(T)=1,
+        \qquad \tr(T)=1,
     \]
     then there are real vectors $a,b$ such that $T=a b^\top$.
 \end{theorem}
@@ -686,7 +686,7 @@
     \uses{def:matrix_trace_rankone_predicates}
     For an idempotent endomorphism $f$ one has
     \[
-        \operatorname{tr}(f)=\dim(\operatorname{range}(f)).
+        \tr(f)=\dim(\range(f)).
     \]
     Hence the range of $T$ has dimension one. Choosing a nonzero vector $a$
     spanning it expresses every column of $T$ as $b_j a$ for a scalar $b_j$,
@@ -701,7 +701,7 @@
     Let $T$ be a finite real square matrix with $T^2 = T$. Then for every
     positive integer $N$,
     \[
-        \operatorname{tr}(T^N) = \operatorname{tr}(T).
+        \tr(T^N) = \tr(T).
     \]
     This recovers the trace identity displayed in the proof of
     \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv} from idempotence.
@@ -747,7 +747,7 @@
     \]
     Then
     \[
-        \operatorname{rank}(P)=1.
+        \rank(P)=1.
     \]
 \end{theorem}
 
@@ -778,7 +778,7 @@
     \]
     then
     \[
-        \operatorname{rank}(T^2)=1.
+        \rank(T^2)=1.
     \]
     There are vectors $a,b\in\mathbb R^N$ such that
     \[
@@ -883,7 +883,7 @@ which is the displayed identity of
     \]
     so $T^N = T^2$ for every $N \geq 2$, and for every positive integer $N$,
     \[
-        \operatorname{tr}(T^N) = \operatorname{tr}(T).
+        \tr(T^N) = \tr(T).
     \]
 \end{theorem}
 
@@ -897,8 +897,8 @@ which is the displayed identity of
     operator $M$ to the finite-dimensional span of $l_1,\dots,l_n$: there it
     is an idempotent endomorphism of a finite free module, and cyclicity of
     the trace of a composition between that span and the coefficient space
-    identifies $\operatorname{tr}(T)$ with the trace of the restriction and
-    $\operatorname{tr}(T^2)$ with the trace of its square, which agree since
+    identifies $\tr(T)$ with the trace of the restriction and
+    $\tr(T^2)$ with the trace of its square, which agree since
     the restriction is idempotent.
 \end{proof}
 
@@ -917,7 +917,7 @@ which is the displayed identity of
     \uses{def:matrix_trace_rankone_predicates}
     In the setting of Theorem~\ref{thm:matrix_pairing_idempotent} with real
     scalars and linearly independent vectors $l_1,\dots,l_n$, if in addition
-    $\operatorname{tr}(T)=1$, then there are real vectors $a,b$ such that
+    $\tr(T)=1$, then there are real vectors $a,b$ such that
     $T = a b^\top$. This is the factorization $T_{k,h} = a_k b_h$ obtained in
     the proof of \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv} for the
     sector trace matrix, derived here from the displayed
@@ -1020,7 +1020,7 @@ which is the displayed identity of
     \]
     and for every positive integer $N$,
     \[
-        \operatorname{tr}(T^N) = \operatorname{tr}(T).
+        \tr(T^N) = \tr(T).
     \]
 \end{theorem}
 
@@ -1068,7 +1068,7 @@ which is the displayed identity of
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}
     \leanok
     \uses{def:mpdo_sector_pairing_data, def:matrix_trace_rankone_predicates}
-    Let $T$ be a sector trace matrix with $\operatorname{tr}(T)=1$, paired
+    Let $T$ be a sector trace matrix with $\tr(T)=1$, paired
     from sector tensors satisfying the zero-correlation-length identity of
     Definition~\ref{def:mpdo_sector_pairing_data}. If the closed sector
     tensors $|l_0), \dots, |l_{n-1})$ are linearly independent, then
@@ -1096,7 +1096,7 @@ which is the displayed identity of
     trace powers unconditionally. The idempotent trace-one criterion of
     Theorem~\ref{thm:matrix_idempotent_trace_one_rank_one} yields the
     factorization $T = a b^\top$, and taking traces gives
-    $\sum_k a_k b_k = \operatorname{tr}(T) = 1$. When the independence is not
+    $\sum_k a_k b_k = \tr(T) = 1$. When the independence is not
     assumed directly, Theorem~\ref{thm:mpdo_sector_tensors_independent}
     derives it from primitivity once each sector tensor lies in its own member
     of an independent family of subspaces.

@@ -24,7 +24,7 @@ Chapter~\ref{ch:ft_proof}.
 
 \begin{proof}
     \leanok
-    Testing against the matrix unit $E_{ji}$ gives $\tr(E_{ji} M) = M_{ij}$, so
+    Testing against the matrix unit $E_{ji}$ gives $\tr(M E_{ji}) = M_{ij}$, so
     $\tr(M N) = 0$ for all~$N$ forces every entry of~$M$ to vanish.
 \end{proof}
 
@@ -39,8 +39,9 @@ Chapter~\ref{ch:ft_proof}.
 \begin{proof}
     \leanok
     \uses{def:mpv}
-    The configuration $\sigma = w$ gives $V^{(|w|)}(A)_w = \tr(A^w)$. Equality of
-    the matrix-product vectors gives $V^{(N)}(A) = V^{(N)}(B)$ for all~$N$, so
+    By (\ref{eq:mps_mpv_component}), the configuration $\sigma = w$ gives
+    $V^{(|w|)}(A)_w = \tr(A^w)$. Equality of the matrix-product vectors gives
+    $V^{(N)}(A) = V^{(N)}(B)$ for all~$N$, so
     $\tr(A^w) = \tr(B^w)$.
 \end{proof}
 
@@ -53,9 +54,12 @@ family $\{A^i\}$ under the trace.
     \leanok
     \uses{def:mps_tensor}
     For a tensor~$A$, the trace pairing map $\Phi_A : \MN{D} \to \C^d$ is
-    \[
-        \Phi_A(M)_i = \tr(M A^i).
-    \]
+    defined by
+    \begin{align}
+        \Phi_A(M)_i
+        &= \tr(M A^i).
+        \label{eq:single_trace_pairing}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[The trace pairing map is injective for injective tensors]%
@@ -69,8 +73,9 @@ family $\{A^i\}$ under the trace.
 \begin{proof}
     \leanok
     \uses{thm:trace_nondeg}
-    If $\Phi_A(M) = 0$, then $\tr(M A^i) = 0$ for every~$i$. The $\{A^i\}$ span
-    $\MN{D}$, so $\tr(M N) = 0$ for all~$N$, and $M = 0$ by
+    If $\Phi_A(M) = 0$, then (\ref{eq:single_trace_pairing}) gives
+    $\tr(M A^i) = 0$ for every~$i$. The $\{A^i\}$ span $\MN{D}$, so
+    $\tr(M N) = 0$ for all~$N$, and $M = 0$ by
     Theorem~\ref{thm:trace_nondeg}.
 \end{proof}
 
@@ -79,19 +84,18 @@ family $\{A^i\}$ under the trace.
     \lean{MPSTensor.ker_bot_of_range_le}
     \leanok
     Let $\Phi, \Psi : V \to W$ be $\C$-linear maps with $V$ finite-dimensional.
-    If $\ker \Phi = \{0\}$ and $\operatorname{range} \Phi \subseteq
-        \operatorname{range} \Psi$, then $\ker \Psi = \{0\}$.
+    If $\ker \Phi = \{0\}$ and $\range \Phi \subseteq
+        \range \Psi$, then $\ker \Psi = \{0\}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    By rank--nullity, $\ker \Phi = \{0\}$ gives $\dim \operatorname{range} \Phi =
-        \dim V$, and the range inclusion gives
-    \[
-        \dim V = \dim \operatorname{range} \Phi
-        \le \dim \operatorname{range} \Psi \le \dim V,
-    \]
-    so $\dim \operatorname{range} \Psi = \dim V$ and $\ker \Psi = \{0\}$.
+    By rank--nullity, $\ker \Phi = \{0\}$ gives
+    $\dim \range \Phi = \dim V$, and the range inclusion gives
+    \begin{align}
+        \dim V &= \dim \range \Phi \le \dim \range \Psi \le \dim V.
+    \end{align}
+    so $\dim \range \Psi = \dim V$ and $\ker \Psi = \{0\}$.
 \end{proof}
 
 \begin{theorem}[The linear extension exists and is unique]\label{thm:linear_ext}
@@ -99,22 +103,22 @@ family $\{A^i\}$ under the trace.
     \leanok
     \uses{def:injective, def:same_mpv}
     If $A$ is injective and $A$, $B$ generate the same matrix-product vectors,
-    then there is a unique linear map $T : \MN{D} \to \MN{D}$ with $T(A^i) = B^i$
-    for all~$i$.
+    then there is a unique linear map $T : \MN{D} \to \MN{D}$ with
+    $T(A^i) = B^i$ for all~$i$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
     Length-two trace agreement gives $\Phi_A(A^i) = \Phi_B(B^i)$ for every~$i$.
-    The $\{A^i\}$ span $\MN{D}$, so $\operatorname{range} \Phi_A \subseteq
-        \operatorname{range} \Phi_B$. With $\ker \Phi_A = \{0\}$
+    The $\{A^i\}$ span $\MN{D}$, so $\range \Phi_A \subseteq
+        \range \Phi_B$. With $\ker \Phi_A = \{0\}$
     (Theorem~\ref{thm:trace_pairing_injective}),
     Lemma~\ref{lem:injectivity_transfer} gives $\ker \Phi_B = \{0\}$. Let $g$ be
     a left inverse of~$\Phi_B$ and set $T = g \circ \Phi_A$; then
-    \[
-        T(A^i) = g(\Phi_A(A^i)) = g(\Phi_B(B^i)) = B^i.
-    \]
+    \begin{align}
+        T(A^i) &= g(\Phi_A(A^i)) = g(\Phi_B(B^i)) = B^i.
+    \end{align}
     Uniqueness holds because the $\{A^i\}$ span $\MN{D}$.
 \end{proof}
 
@@ -129,22 +133,26 @@ family $\{A^i\}$ under the trace.
 \begin{proof}
     \leanok
     \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
-    Length-two trace agreement gives $\Phi_B(T(A^i)) = \Phi_B(B^i) =
-        \Phi_A(A^i)$; since the $\{A^i\}$ span $\MN{D}$ this extends to
-    $\Phi_B \circ T = \Phi_A$, so $\operatorname{range} \Phi_A =
-        \operatorname{range}(\Phi_B \circ T) \subseteq \operatorname{range} \Phi_B$. With
+    Length-two trace agreement gives
+    $\Phi_B(T(A^i)) = \Phi_B(B^i) = \Phi_A(A^i)$; since the $\{A^i\}$ span
+    $\MN{D}$, this extends to $\Phi_B \circ T = \Phi_A$, so
+    $\range \Phi_A = \range(\Phi_B \circ T) \subseteq \range \Phi_B$. With
     $\ker \Phi_A = \{0\}$ (Theorem~\ref{thm:trace_pairing_injective}),
     Lemma~\ref{lem:injectivity_transfer} makes $\Phi_B$ injective. Length-three
-    trace agreement gives, for all $i, j, k$,
-    \[
-        \Phi_B(T(A^i A^j))_k = \Phi_A(A^i A^j)_k = \tr(A^i A^j A^k)
-        = \tr(B^i B^j B^k) = \Phi_B(B^i B^j)_k,
-    \]
-    so injectivity of $\Phi_B$ yields $T(A^i A^j) = B^i B^j$. Extend in two
-    stages: for fixed~$j$, the maps $M \mapsto T(M A^j)$ and $M \mapsto T(M) B^j$
-    agree on the spanning $\{A^i\}$, hence $T(M A^j) = T(M) B^j$ for all~$M$;
-    then for fixed~$M$, the maps $N \mapsto T(M N)$ and $N \mapsto T(M) T(N)$
-    agree on the spanning $\{A^j\}$, hence $T(M N) = T(M) T(N)$ for all~$N$.
+    trace agreement gives, for all $i$, $j$, and $k$,
+    \begin{align}
+        \Phi_B(T(A^i A^j))_k
+        &= \Phi_A(A^i A^j)_k
+        = \tr(A^i A^j A^k)
+        = \tr(B^i B^j B^k)
+        = \Phi_B(B^i B^j)_k.
+    \end{align}
+    Hence injectivity of $\Phi_B$ yields
+    $T(A^i A^j) = B^i B^j$. Extend in two stages: for fixed~$j$, the maps
+    $M \mapsto T(M A^j)$ and $M \mapsto T(M) B^j$ agree on the spanning
+    $\{A^i\}$, hence $T(M A^j) = T(M) B^j$ for all~$M$; then for fixed~$M$,
+    the maps $N \mapsto T(M N)$ and $N \mapsto T(M) T(N)$ agree on the
+    spanning $\{A^j\}$, hence $T(M N) = T(M) T(N)$ for all~$N$.
 \end{proof}
 
 \section{Inner automorphism and the single-block theorem}
@@ -179,8 +187,10 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
 
 \begin{proof}
     \leanok
-    Choose~$X$ with $T(X) = \Id$. Then $T(\Id) = T(X) T(\Id) = T(X \Id) = T(X) =
-        \Id$.
+    Choose~$X$ with $T(X) = \Id$. Then
+    \begin{align}
+        T(\Id) &= T(X)T(\Id) = T(X\Id) = T(X) = \Id.
+    \end{align}
 \end{proof}
 
 \begin{lemma}[An injective tensor forces a nonzero partner]\label{lem:trace_ne_zero}
@@ -203,14 +213,14 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
 \begin{theorem}[Skolem--Noether]\label{thm:skolem_noether}
     \lean{MPSTensor.skolemNoether_matrix}
     \leanok
-    Every $\C$-algebra automorphism $f$ of $\MN{D}$ is inner: there is $X \in
-        \GL_{D}(\C)$ with $f(M) = X M X^{-1}$ for all~$M$.
+    Every $\C$-algebra automorphism $f$ of $\MN{D}$ is inner: there is
+    $X \in \GL_D(\C)$ with $f(M) = X M X^{-1}$ for all~$M$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Under the identification $\MN{D} \cong \operatorname{End}_{\C}(\C^D)$, every
-    algebra automorphism of $\operatorname{End}_{\C}(\C^D)$ is conjugation by an
+    Under the identification $\MN{D} \cong \End_{\C}(\C^D)$, every
+    algebra automorphism of $\End_{\C}(\C^D)$ is conjugation by an
     invertible linear map. Translating back gives the invertible~$X$.
 \end{proof}
 
@@ -220,7 +230,7 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
     \uses{def:injective, def:same_mpv, def:gauge_equiv}
     Let $A$ be an injective MPS tensor and $B$ a tensor of the same bond
     dimension. If $A$ and $B$ generate the same matrix-product vectors, then
-    there is $X \in \GL_{D}(\C)$ with $B^i = X A^i X^{-1}$ for all~$i$. In
+    there is $X \in \GL_D(\C)$ with $B^i = X A^i X^{-1}$ for all~$i$. In
     tensor-network notation the gauge conjugates the local tensor on its virtual
     legs, with the physical index~$i$ on the upper leg:
     \begin{center}
@@ -243,11 +253,12 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
     \leanok
     \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity,
         lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
-    Theorem~\ref{thm:linear_ext} gives the unique linear~$T$ with $T(A^i) = B^i$,
-    and Theorem~\ref{thm:linear_ext_mul} makes it multiplicative. It is nonzero:
-    otherwise $B^i = 0$ for all~$i$, against Lemma~\ref{lem:trace_ne_zero}. By
-    Theorem~\ref{thm:simplicity}, $T$ is bijective, and by
-    Lemma~\ref{lem:linear_map_to_alg} it fixes~$\Id$, so $T$ is a $\C$-algebra
-    automorphism. Theorem~\ref{thm:skolem_noether} gives $X \in \GL_{D}(\C)$ with
-    $T(M) = X M X^{-1}$; evaluating at $M = A^i$ gives $B^i = X A^i X^{-1}$.
+    Theorem~\ref{thm:linear_ext} gives the unique linear~$T$ with
+    $T(A^i) = B^i$, and Theorem~\ref{thm:linear_ext_mul} makes it
+    multiplicative. It is nonzero: otherwise $B^i = 0$ for all~$i$, against
+    Lemma~\ref{lem:trace_ne_zero}. By Theorem~\ref{thm:simplicity}, $T$ is
+    bijective, and by Lemma~\ref{lem:linear_map_to_alg} it fixes~$\Id$, so $T$
+    is a $\C$-algebra automorphism. Theorem~\ref{thm:skolem_noether} gives
+    $X \in \GL_D(\C)$ with $T(M) = X M X^{-1}$; evaluating at $M = A^i$
+    gives $B^i = X A^i X^{-1}$.
 \end{proof}

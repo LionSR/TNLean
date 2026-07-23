@@ -260,10 +260,10 @@ physical indices, as in
     Let the vertical sectors be labelled by $\alpha$, with simple matrix
     algebra $M_{d_\alpha}$ and positive diagonal multiplicity matrix
     $
-        \mu_\alpha=\operatorname{diag}
+        \mu_\alpha=\diag
         (\mu_{\alpha,0},\ldots,\mu_{\alpha,r_\alpha-1})
     $.
-    Write $m_\alpha=\operatorname{tr}(\mu_\alpha)$.  The normalized
+    Write $m_\alpha=\tr(\mu_\alpha)$.  The normalized
     embedding and the left partial trace are
     \[
         R_\mu\!\left(\bigoplus_\alpha X_\alpha\right)
@@ -271,7 +271,7 @@ physical indices, as in
             \frac{\mu_\alpha}{m_\alpha}\otimes X_\alpha,
         \qquad
         \widetilde R_\mu\!\left(\bigoplus_\alpha Y_\alpha\right)
-          =\bigoplus_\alpha \operatorname{tr}_{\mathrm{mult}}(Y_\alpha).
+          =\bigoplus_\alpha \tr_{\mathrm{mult}}(Y_\alpha).
     \]
     On a weighted sector,
     $\widetilde R_\mu(\lambda_\alpha\mu_\alpha\otimes X_\alpha)
@@ -306,7 +306,7 @@ physical indices, as in
           \longrightarrow \bigoplus_\alpha M_{d_\alpha}(\mathbb C),
         \qquad
         \widetilde R((Y_\alpha)_\alpha)
-          =\bigl(\operatorname{tr}_{\mathrm{mult}}(Y_\alpha)\bigr)_\alpha
+          =\bigl(\tr_{\mathrm{mult}}(Y_\alpha)\bigr)_\alpha
     \]
     is a direct-sum Kraus map.  Its restriction to the weighted sectors is
     the retraction in
@@ -332,7 +332,7 @@ physical indices, as in
         \rho_\alpha=m_\alpha^{-1}\mu_\alpha.
     \]
     The hypotheses give $\rho_\alpha\succeq0$ and
-    $\operatorname{tr}(\rho_\alpha)=1$.  Let $\mathcal P$ be the
+    $\tr(\rho_\alpha)=1$.  Let $\mathcal P$ be the
     orthogonally controlled preparation of these density matrices.  Thus
     \[
       [\mathcal P(Z)]_{\langle\alpha,(i,q)\rangle,
@@ -399,7 +399,7 @@ physical indices, as in
     entry of $\mu_\alpha$ is positive.  Then $m_\alpha\ne0$ for every
     $\alpha$, and
     \[
-        \widetilde R_\mu\circ R_\mu=\operatorname{id}.
+        \widetilde R_\mu\circ R_\mu=\id.
     \]
 \end{lemma}
 
@@ -409,9 +409,9 @@ physical indices, as in
     $m_\alpha=\sum_q\mu_{\alpha,q}>0$.  The Kronecker-product identity for
     the left partial trace then gives
     \[
-      \operatorname{tr}_{\mathrm{mult}}
+      \tr_{\mathrm{mult}}
         \left(m_\alpha^{-1}\mu_\alpha\otimes X_\alpha\right)
-      =m_\alpha^{-1}\operatorname{tr}(\mu_\alpha)X_\alpha
+      =m_\alpha^{-1}\tr(\mu_\alpha)X_\alpha
       =X_\alpha.
     \]
 \end{proof}
@@ -439,7 +439,7 @@ physical indices, as in
         \subseteq \prod_\alpha M_{d_\alpha}.
     \]
     Write $V_m$ for the specialization obtained by taking
-    $c_\alpha=m_\alpha=\operatorname{tr}(\mu_\alpha)$.
+    $c_\alpha=m_\alpha=\tr(\mu_\alpha)$.
 \end{definition}
 
 \begin{lemma}[Contraction against a matrix unit]
@@ -553,10 +553,10 @@ physical indices, as in
     positive,
     \[
         m_\alpha
-        =\sum_{q=0}^{\operatorname{mult}(\alpha)-1}\mu_{\alpha,q}>0.
+        =\sum_{q=0}^{\mult(\alpha)-1}\mu_{\alpha,q}>0.
     \]
     Apply the preceding theorem to the nonzero family
-    $c_\alpha=m_\alpha=\operatorname{tr}(\mu_\alpha)$.
+    $c_\alpha=m_\alpha=\tr(\mu_\alpha)$.
 \end{proof}
 
 \begin{theorem}[Fixed spanning contraction products determine an endomorphism]
@@ -616,7 +616,7 @@ physical indices, as in
     and let $F:\mathcal A\to\mathcal A$ be positive and trace preserving.
     Suppose that the trace adjoint $F^*$ satisfies the Schwarz inequality and
     that $F$ fixes a family $\rho=(\rho_\alpha)_\alpha$ for which every
-    $\rho_\alpha$ is positive definite.  If $\mathcal F=\operatorname{Fix}(F)$,
+    $\rho_\alpha$ is positive definite.  If $\mathcal F=\Fix(F)$,
     then, for every $L>0$,
     \[
         \dim C_L(\mathcal F)\leq\dim\mathcal F.
@@ -642,7 +642,7 @@ physical indices, as in
         U\left(\bigoplus_k\sigma_k\otimes X_k\right)U^*,
         \qquad X_k\in M_{h_k}(\mathbb C),
     \]
-    where $\operatorname{tr}(\sigma_k)=1$.  The parametrization
+    where $\tr(\sigma_k)=1$.  The parametrization
     $(X_k)_k\mapsto\bigoplus_k\sigma_k\otimes X_k$ is injective, since its
     left partial trace is $(X_k)_k$.  Every product of $L$ fixed points lies
     in the range of
@@ -681,7 +681,7 @@ physical indices, as in
         \dim C_L(\mathcal F)\leq\dim\mathcal F,
         \qquad \mathcal F=\{Y\in\mathcal A:F(Y)=Y\}.
     \]
-    Then $F=\operatorname{id}_{\mathcal A}$.
+    Then $F=\id_{\mathcal A}$.
 
     This is the finite-dimensional conclusion in
     \cite[Appendix~C.4, lines~1980--1993]{Cirac2016MPDO_arXiv}.  It does not
@@ -758,7 +758,7 @@ physical indices, as in
         C_L(V_c)=\mathcal A,
         \qquad F(V_c(X))=V_c(X)
     \]
-    for every bond matrix $X$.  Then $F=\operatorname{id}_{\mathcal A}$.
+    for every bond matrix $X$.  Then $F=\id_{\mathcal A}$.
     No product $V_c(X_1)\cdots V_c(X_L)$ is assumed to be fixed.
 
     This is the implication used for each transported square composite in
@@ -772,10 +772,10 @@ physical indices, as in
     gives
     \[
         \dim C_L(\mathcal F)\leq\dim\mathcal F,
-        \qquad \mathcal F=\operatorname{Fix}(F).
+        \qquad \mathcal F=\Fix(F).
     \]
     Since $C_L(V_c)=\mathcal A$ and $V_c(X)\in\mathcal F$, the preceding
-    theorem gives $F=\operatorname{id}_{\mathcal A}$.
+    theorem gives $F=\id_{\mathcal A}$.
 \end{proof}
 
 \begin{definition}[Retained coordinates for the vertical-sector algebra]
@@ -807,7 +807,7 @@ physical indices, as in
     \uses{def:mpdo_retained_vertical_sector_coordinates}
     The diagonal-summand extraction is a left inverse of the inclusion:
     \[
-        \pi\iota=\operatorname{id}.
+        \pi\iota=\id.
     \]
 \end{lemma}
 
@@ -859,7 +859,7 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    The identity $\pi\iota=\operatorname{id}$ gives
+    The identity $\pi\iota=\id$ gives
     $P^2=\iota\pi\iota\pi=\iota\pi$.
 \end{proof}
 
@@ -877,7 +877,7 @@ physical indices, as in
 
 \begin{proof}\leanok
     First extract the diagonal summands, then apply
-    $\widetilde R_\mu R_\mu=\operatorname{id}$.
+    $\widetilde R_\mu R_\mu=\id$.
 \end{proof}
 
 \begin{lemma}[Weighted vertical contraction in retained coordinates]
@@ -912,7 +912,7 @@ physical indices, as in
         A(X)=\sum_{a,b}X_{ba}A_{ab}.
     \]
     The order of the entries of $X$ is chosen so that
-    $A(X)_{ij}=\operatorname{tr}(M^{ij}X)$ when
+    $A(X)_{ij}=\tr(M^{ij}X)$ when
     $A_{ab,ij}=M^{ij}_{ab}$.
 \end{definition}
 
@@ -976,7 +976,7 @@ physical indices, as in
     \[
         \widetilde M(X)_{ij}
           =\sum_{a,b}X_{ba}M^{ij}_{ab}
-          =\operatorname{tr}(M^{ij}X)
+          =\tr(M^{ij}X)
           =M(X)_{ij}.
     \]
 \end{proof}
@@ -1320,7 +1320,7 @@ physical indices, as in
     $X_\alpha$ is positive semidefinite.  Its total sector trace is
     \[
         \Trsec(X)
-          =\sum_\alpha\operatorname{tr}(X_\alpha).
+          =\sum_\alpha\tr(X_\alpha).
     \]
 \end{definition}
 
@@ -1342,14 +1342,14 @@ physical indices, as in
     of $\mu_\alpha$ is positive.  The normalized embedding $R_\mu$ sends a
     positive sector family to a positive retained matrix and satisfies
     \[
-        \operatorname{tr}(R_\mu(X))
+        \tr(R_\mu(X))
           =\Trsec(X).
     \]
     Conversely, the sectorwise partial trace sends a positive retained matrix
     to a positive sector family and satisfies
     \[
         \Trsec(\widetilde R_\mu(Z))
-          =\operatorname{tr}(Z).
+          =\tr(Z).
     \]
     These trace identities follow by summing the traces of the diagonal
     sectors; deleting the off-diagonal sector entries does not change the
@@ -1360,8 +1360,8 @@ physical indices, as in
     A positive diagonal weight matrix has positive trace, and its Kronecker
     product with each positive $X_\alpha$ is positive.  Partial trace preserves
     positivity.  The two trace formulas follow from
-    $\operatorname{tr}(A\otimes B)=\operatorname{tr}(A)\operatorname{tr}(B)$
-    and the normalization by $\operatorname{tr}(\mu_\alpha)$.
+    $\tr(A\otimes B)=\tr(A)\tr(B)$
+    and the normalization by $\tr(\mu_\alpha)$.
 \end{proof}
 
 \begin{lemma}[Normalized embedding of multiplicity-trace-scaled sectors]
@@ -1371,7 +1371,7 @@ physical indices, as in
     \uses{def:mpdo_retained_vertical_sector_coordinates}
     Suppose that every multiplicity space is nonzero and every diagonal entry
     of $\mu_\alpha$ is positive.  For
-    $m_\alpha=\operatorname{tr}(\mu_\alpha)$,
+    $m_\alpha=\tr(\mu_\alpha)$,
     \[
         R_\mu\!\left(\bigoplus_\alpha m_\alpha X_\alpha\right)
           =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
@@ -1392,7 +1392,7 @@ physical indices, as in
     \lean{MPOTensor.retainedVerticalSectorPartialTrace_weightedBlockDiagonal}
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
-    For $m_\alpha=\operatorname{tr}(\mu_\alpha)$,
+    For $m_\alpha=\tr(\mu_\alpha)$,
     \[
         \widetilde R_\mu\!\left(
           \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
@@ -1404,7 +1404,7 @@ physical indices, as in
     Taking the partial trace over the multiplicity factor gives
     \[
         \widetilde R_\mu(\mu_\alpha\otimes X_\alpha)
-        =\operatorname{tr}(\mu_\alpha)X_\alpha
+        =\tr(\mu_\alpha)X_\alpha
         =m_\alpha X_\alpha.
     \]
 \end{proof}
@@ -1419,23 +1419,23 @@ physical indices, as in
     Let $U:\mathbb C^n\to\mathbb C^r$ satisfy $UU^\dagger=1$.  If $Z\geq0$,
     then
     \[
-        \operatorname{tr}(UZU^\dagger)\leq\operatorname{tr}(Z),
+        \tr(UZU^\dagger)\leq\tr(Z),
         \qquad
-        \operatorname{tr}(UZU^\dagger)=\operatorname{tr}(Z)
+        \tr(UZU^\dagger)=\tr(Z)
         \Longleftrightarrow U^\dagger UZ=Z.
     \]
     For every $W\in\mathbb C^{r\times r}$, one also has
-    $\operatorname{tr}(U^\dagger WU)=\operatorname{tr}(W)$.
+    $\tr(U^\dagger WU)=\tr(W)$.
 \end{lemma}
 
 \begin{proof}\leanok
     Put $P=U^\dagger U$.  The matrices $P$ and $1-P$ are orthogonal
     projections, and
     \[
-        \operatorname{tr}(UZU^\dagger)=\operatorname{tr}(PZ),
+        \tr(UZU^\dagger)=\tr(PZ),
         \qquad
-        \operatorname{tr}(Z)-\operatorname{tr}(PZ)
-          =\operatorname{tr}((1-P)Z)\geq0.
+        \tr(Z)-\tr(PZ)
+          =\tr((1-P)Z)\geq0.
     \]
     The last trace vanishes precisely when $(1-P)Z=0$.  The formula for $W$
     follows by cyclicity of trace and $UU^\dagger=1$.
@@ -1470,19 +1470,19 @@ physical indices, as in
     $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, the matrices $Z_T(X)$ and
     $Z_S(Y)$ are positive and
     \[
-        \operatorname{tr}(Z_T(X))
+        \tr(Z_T(X))
           =\Trsec(X),
         \qquad
-        \operatorname{tr}(Z_S(Y))
+        \tr(Z_S(Y))
           =\Trsec(Y).
     \]
     After the final compression and sectorwise partial trace,
     \[
         \Trsec(\widetilde T(X))
-          =\operatorname{tr}(U_2Z_T(X)U_2^\dagger),
+          =\tr(U_2Z_T(X)U_2^\dagger),
         \qquad
         \Trsec(\widetilde S(Y))
-          =\operatorname{tr}(U_1Z_S(Y)U_1^\dagger).
+          =\tr(U_1Z_S(Y)U_1^\dagger).
     \]
 \end{lemma}
 
@@ -1546,12 +1546,12 @@ physical indices, as in
     For a positive matrix $Z$ and a coisometry $U$, put
     $P=U^\dagger U$.  Then
     \[
-       \operatorname{tr}(UZU^\dagger)
-        =\operatorname{tr}(PZ)
-        \leq\operatorname{tr}(Z).
+       \tr(UZU^\dagger)
+        =\tr(PZ)
+        \leq\tr(Z).
     \]
     Since $1-P$ is an orthogonal projection, equality is equivalent to
-    $\operatorname{tr}((1-P)Z)=0$, hence to $(1-P)Z=0$.
+    $\tr((1-P)Z)=0$, hence to $(1-P)Z=0$.
 \end{proof}
 
 \begin{lemma}[Two-site support after refinement]
@@ -1668,8 +1668,8 @@ physical indices, as in
     Cyclicity of trace and the preceding support identity give
     \[
         \Trsec(\widetilde T(V_1(X)))
-        =\operatorname{tr}(U_2^\dagger U_2Z_T(V_1(X)))
-        =\operatorname{tr}(Z_T(V_1(X)))
+        =\tr(U_2^\dagger U_2Z_T(V_1(X)))
+        =\tr(Z_T(V_1(X)))
         =\Trsec(V_1(X)).
     \]
 \end{proof}
@@ -1692,8 +1692,8 @@ physical indices, as in
     Cyclicity of trace and the preceding support identity give
     \[
         \Trsec(\widetilde S(V_2(X)))
-        =\operatorname{tr}(U_1^\dagger U_1Z_S(V_2(X)))
-        =\operatorname{tr}(Z_S(V_2(X)))
+        =\tr(U_1^\dagger U_1Z_S(V_2(X)))
+        =\tr(Z_S(V_2(X)))
         =\Trsec(V_2(X)).
     \]
 \end{proof}
@@ -1720,8 +1720,8 @@ physical indices, as in
           \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)
         =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
     \]
-    Writing $m_\alpha=\operatorname{tr}(\mu_\alpha)$ and
-    $n_\beta=\operatorname{tr}(\nu_\beta)$, one has
+    Writing $m_\alpha=\tr(\mu_\alpha)$ and
+    $n_\beta=\tr(\nu_\beta)$, one has
     \[
         \widetilde T\!\left(
           \bigoplus_\alpha m_\alpha X_\alpha\right)
@@ -1883,12 +1883,12 @@ physical indices, as in
     \]
     For every positive semidefinite $X$, trace nonincrease gives
     \[
-      \operatorname{tr}(\Delta X)
-        =\operatorname{tr}(X)-\operatorname{tr}(F(X))\geq0.
+      \tr(\Delta X)
+        =\tr(X)-\tr(F(X))\geq0.
     \]
     Positivity of $F^*$ and self-duality of the positive semidefinite cone
     therefore give $\Delta\geq0$.  The fixed-point equation gives
-    $\operatorname{tr}(\rho\Delta)=0$, so positive definiteness of $\rho$
+    $\tr(\rho\Delta)=0$, so positive definiteness of $\rho$
     forces $\Delta=0$.  Thus $F^*(\mathbf 1)=\mathbf 1$, which is equivalent
     to trace preservation.
 \end{proof}
@@ -1901,7 +1901,7 @@ physical indices, as in
     \uses{def:direct_sum_full_matrix_extension}
     Let
     $\mathcal A=\bigoplus_{\alpha\in I}\mathcal M_{d_\alpha\times d_\alpha}$,
-    let $\iota:\mathcal A\to\operatorname{End}(\bigoplus_\alpha
+    let $\iota:\mathcal A\to\End(\bigoplus_\alpha
     \mathbb C^{d_\alpha})$ be the block-diagonal embedding, and let $\pi$ be
     diagonal compression.  For a linear map $F:\mathcal A\to\mathcal A$, set
     $\widehat F=\iota\circ F\circ\pi$.  Then:
@@ -1917,18 +1917,18 @@ physical indices, as in
     If $Y\geq0$, then $\pi(Y)\geq0$, and the trace identities for diagonal
     compression and block-diagonal embedding give
     \[
-      \operatorname{tr}(\widehat F(Y))
-        =\operatorname{tr}_{\mathcal A}(F(\pi(Y)))
-        \leq\operatorname{tr}_{\mathcal A}(\pi(Y))
-        =\operatorname{tr}(Y).
+      \tr(\widehat F(Y))
+        =\tr_{\mathcal A}(F(\pi(Y)))
+        \leq\tr_{\mathcal A}(\pi(Y))
+        =\tr(Y).
     \]
     This proves the first assertion.  For $X\in\mathcal A$, the identity
-    $\pi\circ\iota=\operatorname{id}_{\mathcal A}$ gives
+    $\pi\circ\iota=\id_{\mathcal A}$ gives
     \[
-      \operatorname{tr}_{\mathcal A}(F(X))
-        =\operatorname{tr}(\widehat F(\iota(X)))
-        =\operatorname{tr}(\iota(X))
-        =\operatorname{tr}_{\mathcal A}(X),
+      \tr_{\mathcal A}(F(X))
+        =\tr(\widehat F(\iota(X)))
+        =\tr(\iota(X))
+        =\tr_{\mathcal A}(X),
     \]
     whenever $\widehat F$ is trace preserving.
 \end{proof}
@@ -1941,8 +1941,8 @@ physical indices, as in
     $\mathcal A=\bigoplus_{\alpha\in I}\mathcal M_{d_\alpha\times d_\alpha}$
     be a finite sum of full matrix algebras, with total trace
     \[
-      \operatorname{tr}_{\mathcal A}(X)
-        =\sum_{\alpha\in I}\operatorname{tr}(X_\alpha).
+      \tr_{\mathcal A}(X)
+        =\sum_{\alpha\in I}\tr(X_\alpha).
     \]
     Let $F:\mathcal A\to\mathcal A$ be positive and trace nonincreasing.
     Suppose that $F(V_j)=V_j$ for every $j\in J$.  With
@@ -1968,7 +1968,7 @@ physical indices, as in
       C_L(\mathcal V)
         =\spn_{\C}\{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
     \]
-    Let $\iota:\mathcal A\to\operatorname{End}(\bigoplus_\alpha
+    Let $\iota:\mathcal A\to\End(\bigoplus_\alpha
     \mathbb C^{d_\alpha})$ be the block-diagonal embedding and let
     $\widehat F$ be the canonical full-matrix extension.  These maps satisfy
     \[
@@ -1981,7 +1981,7 @@ physical indices, as in
     carry the product-span hypothesis to the full matrix algebra.
     Theorem~\ref{thm:positive_map_trace_preserving_from_fixed_product_span}
     makes $\widehat F$ trace preserving.  Restricting to block-diagonal
-    matrices proves preservation of $\operatorname{tr}_{\mathcal A}$ by $F$.
+    matrices proves preservation of $\tr_{\mathcal A}$ by $F$.
 \end{proof}
 
 \begin{theorem}[Trace sandwich on finite sums of matrix algebras]
@@ -1999,10 +1999,10 @@ physical indices, as in
     For every positive $X\in\mathcal A$, positivity of $T$ and the two
     trace-nonincreasing inequalities give
     \[
-      \operatorname{tr}_{\mathcal A}(X)
-        =\operatorname{tr}_{\mathcal A}(S(T(X)))
-        \leq\operatorname{tr}_{\mathcal B}(T(X))
-        \leq\operatorname{tr}_{\mathcal A}(X).
+      \tr_{\mathcal A}(X)
+        =\tr_{\mathcal A}(S(T(X)))
+        \leq\tr_{\mathcal B}(T(X))
+        \leq\tr_{\mathcal A}(X).
     \]
     Hence the middle term equals the endpoints.  Equality extends from the
     positive cone to Hermitian matrices by positive and negative parts.  For
@@ -2047,21 +2047,21 @@ physical indices, as in
     appropriate total sector trace.
     For the individual maps,
     \[
-      \sum_\beta\operatorname{tr}(\widetilde T(X)_\beta)
-        =\sum_\alpha\operatorname{tr}(X_\alpha),
+      \sum_\beta\tr(\widetilde T(X)_\beta)
+        =\sum_\alpha\tr(X_\alpha),
       \qquad
-      \sum_\alpha\operatorname{tr}(\widetilde S(Y)_\alpha)
-        =\sum_\beta\operatorname{tr}(Y_\beta).
+      \sum_\alpha\tr(\widetilde S(Y)_\alpha)
+        =\sum_\beta\tr(Y_\beta).
     \]
     For the square composites,
     \[
-      \sum_\alpha\operatorname{tr}
+      \sum_\alpha\tr
         \bigl((\widetilde S\widetilde T)(X)_\alpha\bigr)
-        =\sum_\alpha\operatorname{tr}(X_\alpha),
+        =\sum_\alpha\tr(X_\alpha),
       \qquad
-      \sum_\beta\operatorname{tr}
+      \sum_\beta\tr
         \bigl((\widetilde T\widetilde S)(Y)_\beta\bigr)
-        =\sum_\beta\operatorname{tr}(Y_\beta).
+        =\sum_\beta\tr(Y_\beta).
     \]
     Neither of the stronger range inclusions
     \[
@@ -2087,11 +2087,11 @@ physical indices, as in
 
     For positive $X\in\mathcal A_1$, one has
     \[
-      \operatorname{tr}_{\mathcal A_1}(X)
-        =\operatorname{tr}_{\mathcal A_1}
+      \tr_{\mathcal A_1}(X)
+        =\tr_{\mathcal A_1}
           ((\widetilde S\widetilde T)(X))
-        \leq\operatorname{tr}_{\mathcal A_2}(\widetilde T(X))
-        \leq\operatorname{tr}_{\mathcal A_1}(X).
+        \leq\tr_{\mathcal A_2}(\widetilde T(X))
+        \leq\tr_{\mathcal A_1}(X).
     \]
     Theorem~\ref{thm:direct_sum_trace_preservation_sandwich} therefore makes
     $\widetilde T$ trace preserving.  Applying the same theorem to
@@ -2297,13 +2297,14 @@ physical indices, as in
     Under precisely the hypotheses of
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
     the transported maps satisfy
-    \[
+    \begin{align}
       \widetilde S\circ\widetilde T
-        =\operatorname{id}_{\mathcal A_1},
-      \qquad
+        &=\id_{\mathcal A_1},
+        \label{eq:mpdo_vsector_ST_id}\\
       \widetilde T\circ\widetilde S
-        =\operatorname{id}_{\mathcal A_2}.
-    \]
+        &=\id_{\mathcal A_2}.
+        \label{eq:mpdo_vsector_TS_id}
+    \end{align}
     Thus $\widetilde T$ and $\widetilde S$ are mutually inverse.  This is the
     identity-composition conclusion of
     \cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.
@@ -2328,7 +2329,9 @@ physical indices, as in
     Applying Theorem~
     \ref{thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity} first to
     $F=\widetilde S\circ\widetilde T$ and then to
-    $F=\widetilde T\circ\widetilde S$ proves the two identities.
+    $F=\widetilde T\circ\widetilde S$ proves
+    equations~(\ref{eq:mpdo_vsector_ST_id}) and
+    (\ref{eq:mpdo_vsector_TS_id}).
 \end{proof}
 
 \begin{theorem}[Unitary relabelling of transported vertical sectors]
@@ -2390,9 +2393,9 @@ physical indices, as in
     $\mu_\alpha$ and $\nu_\beta$ be the positive diagonal multiplicity
     matrices in the one-site and two-site vertical canonical forms, and set
     \[
-      m_\alpha=\operatorname{tr}(\mu_\alpha),
+      m_\alpha=\tr(\mu_\alpha),
       \qquad
-      n_\beta=\operatorname{tr}(\nu_\beta).
+      n_\beta=\tr(\nu_\beta).
     \]
     For every horizontal bond matrix $X$ and every sector $\alpha$,
     \[
@@ -2447,7 +2450,7 @@ physical indices, as in
     \ref{thm:mpdo_transported_vertical_sector_coefficient_comparison}, let
     \(B\) be the vertical reading of the two-site blocking, and write
     \[
-      O_L(A)=\operatorname{Tr}_{\mathrm{bond}}
+      O_L(A)=\Tr_{\mathrm{bond}}
         \bigl(A_{i_1}\cdots A_{i_L}\bigr)
     \]
     for the length-$L$ closed-chain operator.  If $L>0$, then the same
@@ -2458,12 +2461,12 @@ physical indices, as in
       O_L(B)
       &=\sum_\alpha
         \left(\frac{m_\alpha}{n_{\sigma(\alpha)}}\right)^L
-        \operatorname{tr}\!\left(\nu_{\sigma(\alpha)}^L\right)
+        \tr\!\left(\nu_{\sigma(\alpha)}^L\right)
         O_L\!\left(A^{(1)}_\alpha\right), \\
       O_L(B)
       &=\sum_{\alpha,\beta}
-        \operatorname{tr}(\mu_\alpha^L)
-        \operatorname{tr}(\mu_\beta^L)
+        \tr(\mu_\alpha^L)
+        \tr(\mu_\beta^L)
         O_L\!\left(A^{(1)}_\alpha\right)
         O_L\!\left(A^{(1)}_\beta\right).
     \end{aligned}
@@ -2483,7 +2486,7 @@ physical indices, as in
     The two-site vertical canonical form first gives
     \[
       O_L(B)=\sum_\delta
-        \operatorname{tr}(\nu_\delta^L)
+        \tr(\nu_\delta^L)
         O_L\!\left(A^{(2)}_\delta\right).
     \]
     Reindex this sum by $\delta=\sigma(\alpha)$.  The tensor-letter identity
@@ -2500,7 +2503,7 @@ physical indices, as in
     each copy by the one-site vertical canonical form,
     \[
       O_L(\widetilde M)=\sum_\alpha
-        \operatorname{tr}(\mu_\alpha^L)
+        \tr(\mu_\alpha^L)
         O_L\!\left(A^{(1)}_\alpha\right),
     \]
     and distribute the product of the two finite sums.
@@ -2913,8 +2916,8 @@ exists_unitaryNormalization}
     corner is
     \[
       \frac{\lambda_j\zeta_j}{w_{\alpha,q}w_{\beta,r}}
-      \frac{\operatorname{tr}D_{\gamma(j)}}
-           {\operatorname{tr}D^{(2)}_{\sigma(\gamma(j))}},
+      \frac{\tr D_{\gamma(j)}}
+           {\tr D^{(2)}_{\sigma(\gamma(j))}},
     \]
     which is positive.  The normalized inclusions are isometries with
     pairwise orthogonal ranges, intertwine the raw product tensor with these

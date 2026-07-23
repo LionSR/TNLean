@@ -87,8 +87,8 @@ section.
 \begin{proof}\leanok
     If $(A_i)_i$ is a Kraus family, trace preservation and cyclicity give
     \[
-        \operatorname{tr}\left(\left(\sum_i A_i^\dagger A_i\right)X\right)
-        =\operatorname{tr}(X)
+        \tr\left(\left(\sum_i A_i^\dagger A_i\right)X\right)
+        =\tr(X)
     \]
     for every $X$.  Nondegeneracy of the trace pairing implies
     $\sum_i A_i^\dagger A_i=\mathbf 1$.
@@ -146,8 +146,8 @@ section.
     Let $H$ and $K$ be finite-dimensional complex vector spaces, and let
     $V:H\to K$ satisfy $V^\dagger V=I_H$. Then the map
     \[
-        \Phi_V:\operatorname{End}_{\C}(H)\longrightarrow
-          \operatorname{End}_{\C}(K),
+        \Phi_V:\End_{\C}(H)\longrightarrow
+          \End_{\C}(K),
         \qquad \Phi_V(X)=VXV^\dagger,
     \]
     is trace-preserving and completely positive. This is the general
@@ -267,13 +267,13 @@ section.
     \lean{Matrix.tensorMapIdLM_isKrausCPTP}
     \leanok
     \uses{def:tensor_map_id, def:is_kraus_cptp}
-    Let $\mathcal S:\operatorname{End}_{\C}(H)\to
-        \operatorname{End}_{\C}(K)$ be trace-preserving and completely positive,
+    Let $\mathcal S:\End_{\C}(H)\to
+        \End_{\C}(K)$ be trace-preserving and completely positive,
     and let $R$ be another finite-dimensional space. Then
     \[
         \mathcal S\otimes\id_R:
-        \operatorname{End}_{\C}(H\otimes R)\longrightarrow
-        \operatorname{End}_{\C}(K\otimes R)
+        \End_{\C}(H\otimes R)\longrightarrow
+        \End_{\C}(K\otimes R)
     \]
     is trace-preserving and completely positive. If $(A_a)_a$ is a Kraus
     family for $\mathcal S$, then

@@ -91,7 +91,10 @@ scripts/__pycache__/
 Draft/
 Draft_OLD/
 *.bak*
+blueprint/src/.tenkz_svg_cache
 blueprint/src/.tenkz_svg_cache/
+blueprint/src/.tenkz_svg_cache/*
 .tenkz_svg_cache
+output/
 
 tex/RMP_TIKZ_SOURCE_CODE

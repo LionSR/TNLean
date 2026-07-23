@@ -5,8 +5,8 @@ theorem applies once those regions are available. The closure property that
 makes them available is that, for positive bond dimensions, the union of two
 injective regions is again injective,
 \[
-    \operatorname{inj}(A)\wedge\operatorname{inj}(B)
-    \Longrightarrow\operatorname{inj}(A\cup B).
+    \inj(A)\wedge\inj(B)
+    \Longrightarrow\inj(A\cup B).
 \]
 Writing $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$, and
 $P_3=(A\cup B)^c$, a boundary operator $X$ attached to $P_3$ that is annihilated
@@ -189,13 +189,13 @@ every finite union of injective regions.
     \uses{def:IsVertexInjective, lem:peps_regionUnionDecomposition_identities,
         lem:peps_regionUnionDecomposition_disjoint,
         lem:peps_injectiveRegion_union_contractionChain}
-    Let $V$ be a finite vertex set. Write $\operatorname{inj}(R)$ for the
+    Let $V$ be a finite vertex set. Write $\inj(R)$ for the
     assertion that the PEPS tensor blocked to the region $R\subseteq V$ is
     injective. For two possibly overlapping regions $A,B\subseteq V$,
     \[
-        \operatorname{inj}(A)\wedge\operatorname{inj}(B)
+        \inj(A)\wedge\inj(B)
         \Longrightarrow
-        \operatorname{inj}(A\cup B).
+        \inj(A\cup B).
     \]
     The union-injectivity proof in \cite[Section~4]{Molnar2018NormalPEPS}
     blocks the network into four parts $A\setminus B$, $A\cap B$, $B\setminus A$, and
@@ -562,7 +562,7 @@ every finite union of injective regions.
         \left(
         \prod_{f\in\partial R}G_f^X(\mu_f,\zeta_f)
         \right)
-        \prod_{v\in R}B_v(\zeta|_{\operatorname{inc}(v)},\tau_v),
+        \prod_{v\in R}B_v(\zeta|_{\inc(v)},\tau_v),
     \]
     where the sum ranges over global virtual configurations $\zeta$, and
     $G_f^X$ is the surviving gauge on the boundary edge $f$.
@@ -609,7 +609,7 @@ every finite union of injective regions.
     \[
         \sum_{\zeta}
         K_R^X(\mu,\zeta|_{\partial R})\,
-        \prod_{v\in R}B_v(\zeta|_{\operatorname{inc}(v)},\tau_v)
+        \prod_{v\in R}B_v(\zeta|_{\inc(v)},\tau_v)
         =
         \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
     \]
@@ -668,9 +668,9 @@ every finite union of injective regions.
     family $\{T_{\widetilde B,R}^{\mu}\}_{\mu}$ is linearly independent.
     Equivalently,
     \[
-        \operatorname{inj}(T_{B,R})
+        \inj(T_{B,R})
         \Longrightarrow
-        \operatorname{inj}(T_{\widetilde B,R}).
+        \inj(T_{\widetilde B,R}).
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -709,7 +709,7 @@ every finite union of injective regions.
     Let $A$ be vertex-injective, and assume that every virtual bond dimension is
     positive. Then every finite region $R$ has an injective blocked tensor:
     \[
-        \operatorname{inj}(R).
+        \inj(R).
     \]
 % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
 \end{theorem}
@@ -727,7 +727,7 @@ every finite union of injective regions.
         c_\rho=0\qquad\text{for every boundary configuration }\rho .
     \]
     Hence the family $\{T_{A,R}^{\rho}\}_\rho$ is linearly independent, which is
-    $\operatorname{inj}(R)$.
+    $\inj(R)$.
 \end{proof}
 
 \begin{theorem}[Union closure for a vertex-injective tensor]%
@@ -740,19 +740,19 @@ every finite union of injective regions.
     concrete region-injectivity predicate of $A$ satisfies union closure: for
     any two finite regions $R$ and $S$,
     \[
-        \operatorname{inj}(R)\wedge\operatorname{inj}(S)
+        \inj(R)\wedge\inj(S)
         \Longrightarrow
-        \operatorname{inj}(R\cup S).
+        \inj(R\cup S).
     \]
 % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
 \end{theorem}
 \begin{proof}\leanok
     The kernel descent theorem gives
     \[
-        \operatorname{inj}(Q)
+        \inj(Q)
     \]
     for every finite region $Q$. Taking $Q=R\cup S$ gives
-    $\operatorname{inj}(R\cup S)$, so the union-closure implication holds
+    $\inj(R\cup S)$, so the union-closure implication holds
     independently of the injectivity of $R$ and $S$.
 \end{proof}
 
@@ -766,9 +766,9 @@ every finite union of injective regions.
     concrete region-injectivity predicate of $A$ satisfies union closure: for
     any two finite regions $R$ and $S$,
     \[
-        \operatorname{inj}(R)\wedge\operatorname{inj}(S)
+        \inj(R)\wedge\inj(S)
         \Longrightarrow
-        \operatorname{inj}(R\cup S).
+        \inj(R\cup S).
     \]
     Thus injectivity of the two regions implies injectivity of their union;
     no single-vertex injectivity hypothesis is needed.

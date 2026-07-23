@@ -352,7 +352,7 @@ directly to periodic tensors.
     \leanok
     \uses{def:lcm_period, def:blocked_tensor}
     Given a finite family of tensors $(B_i)$ with designated periods $(p_i)$,
-    block each $B_i$ to the shared period $\operatorname{lcm}(p_i)$, so
+    block each $B_i$ to the shared period $\lcm(p_i)$, so
     every block lives in the same physical space.
 \end{definition}
 
@@ -368,7 +368,7 @@ directly to periodic tensors.
 \end{theorem}
 
 \begin{proof}\leanok
-    Each $p_i$ divides $\operatorname{lcm}(p_i)$.
+    Each $p_i$ divides $\lcm(p_i)$.
     Apply the divisibility monotonicity theorem for primitive blocked transfer maps
     to each family member separately.
 \end{proof}
@@ -1235,12 +1235,12 @@ unconditional result.
     \[
     \begin{aligned}
         O_{A_{u+1},B_{v+1}}(N)
-        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_{u+1}A^\tau)\,
-            \overline{\operatorname{tr}(Q_{v+1}B^\tau)}\\
-        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_{u+1}A^{T\tau})\,
-            \overline{\operatorname{tr}(Q_{v+1}B^{T\tau})}\\
-        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_uA^\tau)\,
-            \overline{\operatorname{tr}(Q_vB^\tau)}
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^\tau)\,
+            \overline{\tr(Q_{v+1}B^\tau)}\\
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^{T\tau})\,
+            \overline{\tr(Q_{v+1}B^{T\tau})}\\
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_uA^\tau)\,
+            \overline{\tr(Q_vB^\tau)}
         =O_{A_u,B_v}(N).
     \end{aligned}
     \]
@@ -1748,7 +1748,7 @@ unconditional result.
     \]
     Applying the block identity at the sector $u$ to each of these $m$-site
     blocks gives
-    \[
+    \begin{equation}\label{eq:pft_intermediate_block_identity}
         A_u^{i_1}F_{u+1}^{\mathbf i_1}
         A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
         \cdots
@@ -1759,9 +1759,9 @@ unconditional result.
         \widetilde B_{u+q+1}^{i_2}\widetilde F_{u+q+2}^{\mathbf i_2}
         \cdots
         \widetilde B_{u+q+m-1}^{i_m}\widetilde F_{u+q}^{\mathbf i_m}.
-    \]
-    For each $r\in\mathbb Z_m$, substituting $\mathbf i=\mathbf i_r$ in the
-    displayed identity gives
+    \end{equation}
+    For each $r\in\mathbb Z_m$, substituting $\mathbf i=\mathbf i_r$ in
+    equation~(\ref{eq:pft_intermediate_block_identity}) gives
     \[
         \widetilde F_{u+q+r}^{\mathbf i_r}
         =
@@ -1785,7 +1785,7 @@ unconditional result.
     \]
     Applying
     $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ to both
-    sides of the intermediate block-identity equation above and collecting the
+    sides of equation~(\ref{eq:pft_intermediate_block_identity}) and collecting the
     sector phases gives
     \[
         \begin{aligned}

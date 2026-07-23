@@ -11,13 +11,13 @@
         def:mpdo_bnt_label_idempotent_coefficient_form}
     Fix a coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$, BNT-label
     operators $O_L(M_\alpha)$, and trace scalars
-    $m_\alpha=\operatorname{tr}(\mu_\alpha)$. They satisfy the
+    $m_\alpha=\tr(\mu_\alpha)$. They satisfy the
     \emph{BNT algebra clause} when there is a length-independent family of
     positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ such that, for
     every $L>0$,
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}),
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L}),
     \]
     the same-length product law holds,
     \[
@@ -49,7 +49,7 @@
         U\widetilde M U^\dagger
         =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
         \qquad
-        \mu_\alpha=\operatorname{diag}
+        \mu_\alpha=\diag
         (\omega_{\alpha,0},\ldots,\omega_{\alpha,r_\alpha-1}).
     \]
     Separating the two factors of the doubled physical index of
@@ -58,7 +58,7 @@
         O_L(M_\alpha)=\operatorname{mpo}(\widehat M_\alpha,L),
         \qquad
         m_\alpha=\sum_q\omega_{\alpha,q}
-        =\operatorname{tr}(\mu_\alpha).
+        =\tr(\mu_\alpha).
     \]
     The chosen decomposition satisfies the tensor-attached BNT algebra clause
     when the tensors $M_\alpha$ form a basis of normal tensors and the BNT
@@ -80,7 +80,7 @@
     vertical canonical decompositions.  A multiplicity-spectrum comparison
     records
     \[
-        \operatorname{tr}(\mu_\alpha)=m_\alpha
+        \tr(\mu_\alpha)=m_\alpha
     \]
     and, for every $\gamma$, equality with multiplicity between the entries
     of $\nu_\gamma$ and the products
@@ -225,7 +225,7 @@
     \[
         m_\gamma
         =\sum_{\alpha,\beta}
-          \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+          \tr(\chi_{\alpha,\beta,\gamma})
           m_\alpha m_\beta.
     \]
 \end{lemma}
@@ -302,7 +302,7 @@
     two-site vertical multiplicity spectra have been compared as above.
     Then every two-site multiplicity matrix has the prescribed trace:
     \[
-        \operatorname{tr}(\nu_\gamma)
+        \tr(\nu_\gamma)
         = \sum_{\alpha,\beta,i,j,k}
           \mu_{\alpha,i}\mu_{\beta,j}
           \chi_{\alpha,\beta,\gamma,k}
@@ -420,7 +420,7 @@
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
         =c^{\chi,(L)}_{\alpha,\beta,\gamma}
-        =\operatorname{tr}\!\left(
+        =\tr\!\left(
             \chi_{\alpha,\beta,\gamma}^{\,L}
         \right),
     \]
@@ -431,7 +431,7 @@
     \[
         O_L(M_\alpha)O_L(M_\beta)
         =\sum_\gamma
-          \operatorname{tr}\!\left(
+          \tr\!\left(
               \chi_{\alpha,\beta,\gamma}^{\,L}
           \right)O_L(M_\gamma),
     \]
@@ -439,7 +439,7 @@
     \[
         m_\gamma
         =\sum_{\alpha,\beta}
-          \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+          \tr(\chi_{\alpha,\beta,\gamma})
           m_\alpha m_\beta.
     \]
 \end{theorem}
@@ -447,7 +447,7 @@
     The positive trace-power witness gives
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        =\operatorname{tr}\!\left(
+        =\tr\!\left(
             \chi_{\alpha,\beta,\gamma}^{\,L}
         \right).
     \]
@@ -500,11 +500,11 @@
     \[
         c^{(n)}_{i,j,k}
         =
-        \operatorname{tr}\!\left(
+        \tr\!\left(
             \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
         \right)
         =
-        \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
+        \tr\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
     \]
 \end{corollary}
 \begin{proof}\leanok

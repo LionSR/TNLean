@@ -13,7 +13,7 @@
     $\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}$.
     A diagonal $\chi$-family canonically determines the coefficient family
     $c^{(L)}_{\alpha,\beta,\gamma}
-        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})
+        = \tr(\chi_{\alpha,\beta,\gamma}^{L})
         = \sum_r\chi_{\alpha,\beta,\gamma,r}^{\,L}$, as in
     \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -33,7 +33,7 @@
     % of the factors \widehat M_alpha^{a_r b_r}=M_alpha^{(a_r,b_r)} are
     % contracted by the trace.
     % Contraction set: precisely the cyclic matrix-index contraction encoded by
-    % \operatorname{tr}; no physical index is summed.
+    % \tr; no physical index is summed.
     % Type verdict and boundary signature: the result is an operator on the
     % length-L horizontal physical space, with components indexed by
     % (\mathbf a,\mathbf b).  An exact displayed formula is preferable here
@@ -44,7 +44,7 @@
     \cite[lines~962--967]{Cirac2016MPDO_arXiv}:
     \[
         \bigl[O_L(M_\alpha)\bigr]_{\mathbf a,\mathbf b}
-        =\operatorname{tr}\!\left(
+        =\tr\!\left(
             \widehat M_\alpha^{a_1b_1}\cdots
             \widehat M_\alpha^{a_Lb_L}
           \right),
@@ -78,7 +78,7 @@
     \lean{MPOTensor.BNTLabelTraceScalarFamily}
     \leanok
     A BNT-label trace-scalar family records the scalars
-    $m_\alpha=\operatorname{tr}(\mu_\alpha)$ indexed by the fixed BNT labels
+    $m_\alpha=\tr(\mu_\alpha)$ indexed by the fixed BNT labels
     $\alpha$, as in the idempotent condition of \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -147,7 +147,7 @@
     compatible when, for every positive length $L$,
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
+        = \tr(\chi_{\alpha,\beta,\gamma}^{L}).
     \]
     The same matrix $\chi_{\alpha,\beta,\gamma}$ is used for all positive
     $L$.
@@ -162,7 +162,7 @@
     Under positive-length BNT-label trace-power form, for every $L>0$,
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
+        = \tr(\chi_{\alpha,\beta,\gamma}^{L}).
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -210,7 +210,7 @@
         lem:mpdo_bnt_label_chi_eq_trace_matrix_pow}
     A positive BNT-label $\chi$ witness gives, for every $L>0$, the formula
     $c^{(L)}_{\alpha,\beta,\gamma}
-        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{lemma}
 \begin{proof}\leanok
     Apply the trace reformulation of the positive-length trace-power identity
@@ -229,7 +229,7 @@
     \[
         O_L(M_\alpha)O_L(M_\beta)
         = \sum_\gamma
-        \operatorname{tr}\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
+        \tr\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
         \bigr) O_L(M_\gamma).
     \]
 \end{theorem}
@@ -250,7 +250,7 @@
     \[
         O_L(M_\alpha)O_L(M_\beta)
         = \sum_\gamma
-        \operatorname{tr}\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
+        \tr\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
         \bigr) O_L(M_\gamma).
     \]
 \end{theorem}
@@ -271,7 +271,7 @@
     \[
         m_\gamma =
         \sum_{\alpha,\beta}
-        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+        \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
     \]
 \end{theorem}
@@ -292,7 +292,7 @@
     \[
         m_\gamma =
         \sum_{\alpha,\beta}
-        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+        \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
     \]
 \end{theorem}
@@ -319,7 +319,7 @@
     $\chi$-matrix:
     \[
         c^{(n)}_{i,j,k}
-        = \operatorname{tr}
+        = \tr
         \bigl(    \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
         \bigr).
     \]
@@ -363,7 +363,7 @@
     For each positive blocked size $n$, each multiplication triple $(i,j,k)$,
     and every exponent $L$,
     \[
-        \operatorname{tr}(\chi_{n,i,j,k}^{\,L})
+        \tr(\chi_{n,i,j,k}^{\,L})
         = \sum_r \chi_{n,i,j,k,r}^{\,L}.
     \]
 \end{lemma}
@@ -402,7 +402,7 @@
     for every positive blocked size $n$,
     \[
         c^{(n)}_{i,j,k}
-        = \operatorname{tr}(\chi_{n,i,j,k}^{\,n}).
+        = \tr(\chi_{n,i,j,k}^{\,n}).
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -518,7 +518,7 @@
         lem:constant_power_sum_dichotomy}
     Suppose a BNT-label coefficient system is in trace-power form
     $c^{(L)}_{\alpha,\beta,\gamma}
-        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$
+        = \tr(\chi_{\alpha,\beta,\gamma}^{\,L})$
     with positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$, and is
     length independent. Then every diagonal entry
     $\chi_{\alpha,\beta,\gamma,r}$ lies in $\{0,1\}$, as stated in
@@ -667,11 +667,11 @@
     matrices:
     \[
         \sum_\delta
-        \operatorname{tr}(\chi_{\alpha,\beta,\delta}^{\,L})
-        \operatorname{tr}(\chi_{\delta,\gamma,\epsilon}^{\,L})
+        \tr(\chi_{\alpha,\beta,\delta}^{\,L})
+        \tr(\chi_{\delta,\gamma,\epsilon}^{\,L})
         = \sum_\delta
-        \operatorname{tr}(\chi_{\beta,\gamma,\delta}^{\,L})
-        \operatorname{tr}(\chi_{\alpha,\delta,\epsilon}^{\,L}).
+        \tr(\chi_{\beta,\gamma,\delta}^{\,L})
+        \tr(\chi_{\alpha,\delta,\epsilon}^{\,L}).
     \]
     In \cite[Section~4.5]{Cirac2016MPDO_arXiv} these restrictions, combined
     with the isometry statement, lead to a pentagon-like equation for the
