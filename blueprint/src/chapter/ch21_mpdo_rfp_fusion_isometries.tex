@@ -1738,8 +1738,7 @@ separate step.
     \lean{MPOTensor.%
         exists_topologicalDensityDecomposition_and_factorCommutation_of_isRFPViaTS}
     \leanok
-    \uses{def:mpdo_topological_density_operator,
-        thm:mpdo_topological_density_decomposition}
+    \uses{def:mpdo_topological_density_operator}
     Let $M$ be a matrix product density operator in horizontal canonical form
     satisfying the renormalization fixed-point condition.  There is one
     vertical canonical decomposition and one compatible family of fusion
@@ -1764,6 +1763,7 @@ separate step.
     No length-independence or projection hypothesis is imposed.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:mpdo_topological_density_decomposition}
     The two operators preserve the same direct-sum decomposition indexed by
     the configurations~$c$.  On each summand the first factor is a scalar
     multiple of the identity, so
