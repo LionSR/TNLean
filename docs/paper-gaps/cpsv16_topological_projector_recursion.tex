@@ -56,7 +56,7 @@ length-independent form stated at lines~1013--1016:
 where $H_N$ is a translationally invariant commuting nearest-neighbor
 Hamiltonian and the $P_i^{(N)}$ are orthogonal projections.
 
-\section{The formalized recursion and all-label density decomposition}
+\section{The formalized recursion, density decomposition, and commutator}
 
 For terminal orthogonal projections $P_\gamma$, one pairwise fusion step is
 the direct sum
@@ -181,31 +181,62 @@ $\mu^{\otimes N}$.  Hence
 line~999 with the source chain length~$N$ and no additional
 compatibility hypothesis.
 
-The assembled operator is
-\leanid{MPOTensor.BNTFusionTensorClause.topologicalDensityOperatorSucc}.  Its
-argument is one less than the positive source chain length.  The
-source-facing existence theorem is
-\leanid{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}; it
+In the namespace \leanid{MPOTensor.BNTFusionTensorClause}, the assembled
+operator is \leanid{topologicalDensityOperatorSucc}.  Its argument is one less
+than the positive source chain length.  The source-facing existence theorem
+is
+\path{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}; it
 chooses one vertical decomposition and proves both equalities in
 \eqref{eq:formalized-all-label-density} for every positive~$N$.
+
+\paragraph{The density-factor commutator.}
+In the same retained coordinates, the two factors are
+\begin{align}
+  A_N
+    &=
+      \bigoplus_c m(c)I_c,
+      \label{eq:formalized-multiplicity-factor}\\
+  B_N
+    &=
+      \bigoplus_c
+        W_{N,c}^{\dagger}Q_{N,c}W_{N,c}.
+      \label{eq:formalized-recursive-factor}
+\end{align}
+In the namespace \leanid{MPOTensor.BNTFusionTensorClause}, they are formalized
+as \leanid{multiplicityWeightOperatorSucc} and
+\leanid{recursiveTopologicalFactorSucc}.
+The first factor is scalar on every summand preserved by the second factor.
+Consequently,
+\begin{equation}
+  R_N=A_NB_N,
+  \qquad
+  [A_N,B_N]=0.
+  \label{eq:formalized-density-commutator}
+\end{equation}
+The source-facing theorem
+\path{MPOTensor.exists_topologicalDensityDecomposition_and_factorCommutation_of_isRFPViaTS}
+chooses the same vertical decomposition and fusion family for
+\eqref{eq:formalized-all-label-density} and
+\eqref{eq:formalized-density-commutator}.  This proves
+\eqref{eq:source-commutator} for every positive chain length.  It does not use
+length independence and does not assert that $Q_N$ or its transported factor
+is a projection.
 
 \section{Remaining proof}
 
 The all-label density identity
-\eqref{eq:source-chain-decomposition} is now formalized.  It does not by itself
-imply the next commutator or the later spectral statement.  A faithful proof
-of the remainder still requires:
+\eqref{eq:source-chain-decomposition} and its commutator
+\eqref{eq:source-commutator} are now formalized.  A faithful proof of the
+remainder still requires:
 \begin{enumerate}
-  \item the commutator identity \eqref{eq:source-commutator} for the assembled
-    operator;
   \item the terminal spectral decomposition and its compatibility with the
     recursive sectors;
   \item the construction of the commuting nearest-neighbor Hamiltonian and
     the projections in \eqref{eq:source-gibbs-decomposition}.
 \end{enumerate}
-The formalized density identity must not be cited as the commutator or the
-commuting Gibbs theorem of lines~1001--1016 until these remaining steps are
-proved.
+The formalized density identity and commutator must not be cited as the
+spectral refinement or the commuting Gibbs theorem of lines~1010--1016 until
+these remaining steps are proved.
 
 \bibliographystyle{alpha}
 \bibliography{references}

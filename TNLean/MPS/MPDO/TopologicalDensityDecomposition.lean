@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Algebra.Group.Commute.Hom
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
@@ -26,7 +27,9 @@ In a fixed copy configuration, the diagonal entry of the tensor power of the mul
 matrix is the product of the chosen positive weights.  The remaining factor is the recursive
 terminal operator transported back through the adjoint sequential fusion coisometry.  Taking
 the direct sum over all copy configurations gives the density operator in retained vertical
-coordinates.  Applying the adjoint vertical map reconstructs the original density exactly.
+coordinates.  The multiplicity-weight factor is scalar on every copy block, and therefore
+commutes with the reconstructed recursive factor.  Applying the adjoint vertical map
+reconstructs the original density exactly.
 
 ## References
 
@@ -204,6 +207,110 @@ def topologicalDensityOperatorSucc (H : BNTFusionTensorClause M) (N : ℕ) :
   Matrix.reindex (H.verticalCopyChainEquiv N).symm
     (H.verticalCopyChainEquiv N).symm
       (Matrix.blockDiagonal' fun p ↦ H.topologicalDensityBlock p)
+
+/-- The multiplicity-weight tensor power in retained positive-chain coordinates.
+
+On the block selected by a BNT-copy configuration `p`, this operator is the scalar
+`verticalMultiplicityChainWeight H p` times the identity on the simple-bond chain fiber.
+Thus it is the factor `μ⁽⊗ⁿ⁺¹⁾`, completed by the identity on the coordinates where it
+does not act.
+
+Source: arXiv:1606.00608, the multiplicity-weight factor and commutator at lines 999--1002.
+-/
+def multiplicityWeightOperatorSucc (H : BNTFusionTensorClause M) (N : ℕ) :
+    Matrix (Fin (N + 1) → Fin H.verticalRetainedDim)
+      (Fin (N + 1) → Fin H.verticalRetainedDim) ℂ :=
+  Matrix.reindex (H.verticalCopyChainEquiv N).symm
+    (H.verticalCopyChainEquiv N).symm
+      (Matrix.blockDiagonal' fun p ↦
+        H.verticalMultiplicityChainWeight p •
+          (1 : Matrix (H.VerticalCopyChainFiber p)
+            (H.VerticalCopyChainFiber p) ℂ))
+
+/-- The reconstructed recursive factor in retained positive-chain coordinates.
+
+On a fixed BNT-copy configuration, this is `Wᴴ Q W`.  The sequential fusion map `W` has
+the retained-row coisometry orientation, so the source embedding `\tilde U` is `Wᴴ`.
+The direct sum repeats the factor over the multiplicity coordinates on which it does not act.
+
+Source: arXiv:1606.00608, the recursive factor and commutator at lines 999--1002.
+-/
+def recursiveTopologicalFactorSucc (H : BNTFusionTensorClause M) (N : ℕ) :
+    Matrix (Fin (N + 1) → Fin H.verticalRetainedDim)
+      (Fin (N + 1) → Fin H.verticalRetainedDim) ℂ :=
+  Matrix.reindex (H.verticalCopyChainEquiv N).symm
+    (H.verticalCopyChainEquiv N).symm
+      (Matrix.blockDiagonal' fun p ↦
+        (H.verticalCopyChainFusionCoisometry p)ᴴ *
+          H.verticalCopyChainProjectorQ p *
+            H.verticalCopyChainFusionCoisometry p)
+
+/-- The all-label density operator is the product of its multiplicity-weight and recursive
+factors.
+
+The parameter `N` represents source chain length `N + 1`.  No length-independence or
+projection hypothesis is used.
+
+Source: arXiv:1606.00608, the density factorization at line 999.
+-/
+theorem topologicalDensityOperatorSucc_eq_multiplicityWeightOperatorSucc_mul
+    (H : BNTFusionTensorClause M) (N : ℕ) :
+    H.topologicalDensityOperatorSucc N =
+      H.multiplicityWeightOperatorSucc N * H.recursiveTopologicalFactorSucc N := by
+  unfold topologicalDensityOperatorSucc multiplicityWeightOperatorSucc
+    recursiveTopologicalFactorSucc topologicalDensityBlock
+  change
+    (Matrix.reindexRingEquiv ℂ (H.verticalCopyChainEquiv N).symm)
+        (Matrix.blockDiagonal' fun p ↦
+          H.verticalMultiplicityChainWeight p •
+            ((H.verticalCopyChainFusionCoisometry p)ᴴ *
+              H.verticalCopyChainProjectorQ p *
+                H.verticalCopyChainFusionCoisometry p)) =
+      (Matrix.reindexRingEquiv ℂ (H.verticalCopyChainEquiv N).symm)
+          (Matrix.blockDiagonal' fun p ↦
+            H.verticalMultiplicityChainWeight p •
+              (1 : Matrix (H.VerticalCopyChainFiber p)
+                (H.VerticalCopyChainFiber p) ℂ)) *
+        (Matrix.reindexRingEquiv ℂ (H.verticalCopyChainEquiv N).symm)
+          (Matrix.blockDiagonal' fun p ↦
+            (H.verticalCopyChainFusionCoisometry p)ᴴ *
+              H.verticalCopyChainProjectorQ p *
+                H.verticalCopyChainFusionCoisometry p)
+  rw [← map_mul, ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext p
+  simp only [Matrix.smul_mul, Matrix.one_mul]
+
+/-- The multiplicity-weight tensor power commutes with the reconstructed recursive factor.
+
+The parameter `N` represents source chain length `N + 1`.  The multiplicity-weight operator
+is scalar on every BNT-copy block, while the recursive factor preserves those blocks.  The
+commutator therefore vanishes without length independence, terminal spectral refinement, or
+any projection hypothesis.
+
+Source: arXiv:1606.00608, the commutator at lines 999--1002.
+-/
+theorem multiplicityWeightOperatorSucc_commute_recursiveTopologicalFactorSucc
+    (H : BNTFusionTensorClause M) (N : ℕ) :
+    Commute (H.multiplicityWeightOperatorSucc N)
+      (H.recursiveTopologicalFactorSucc N) := by
+  unfold multiplicityWeightOperatorSucc recursiveTopologicalFactorSucc
+  change Commute
+    ((Matrix.reindexRingEquiv ℂ (H.verticalCopyChainEquiv N).symm)
+      (Matrix.blockDiagonal' fun p ↦
+        H.verticalMultiplicityChainWeight p •
+          (1 : Matrix (H.VerticalCopyChainFiber p)
+            (H.VerticalCopyChainFiber p) ℂ)))
+    ((Matrix.reindexRingEquiv ℂ (H.verticalCopyChainEquiv N).symm)
+      (Matrix.blockDiagonal' fun p ↦
+        (H.verticalCopyChainFusionCoisometry p)ᴴ *
+          H.verticalCopyChainProjectorQ p *
+            H.verticalCopyChainFusionCoisometry p))
+  apply Commute.map
+  rw [commute_iff_eq, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext p
+  simp only [Matrix.smul_mul, Matrix.mul_smul, Matrix.one_mul, Matrix.mul_one]
 
 /-- The horizontal matrix obtained by fixing the two simple-bond coordinates of one vertical
 BNT tensor.
@@ -549,5 +656,29 @@ theorem exists_topologicalDensityDecomposition_of_isRFPViaTS
     ∃ H : BNTFusionTensorClause M, H.HasTopologicalDensityDecomposition := by
   obtain ⟨H⟩ := HasBNTFusionTensorClause.of_isRFPViaTS M hHorizontal hM hRFP
   exact ⟨H, H.hasTopologicalDensityDecomposition⟩
+
+/-- **Line-1001 density-factor commutator for an RFP MPDO.**
+
+A horizontal-canonical MPDO satisfying the source renormalization fixed-point condition
+admits one BNT fusion clause which gives both the all-label density decomposition and, at
+every positive chain length, the commutation of its multiplicity-weight tensor power with
+its reconstructed recursive factor.  The same clause is used for both assertions, with no
+caller-supplied compatibility hypothesis.
+
+Source: arXiv:1606.00608, Theorem 4.14 and the density-factor commutator at lines 999--1002.
+This theorem makes no length-independence, projection, spectral, Hamiltonian, or Gibbs-state
+assertion.
+-/
+theorem exists_topologicalDensityDecomposition_and_factorCommutation_of_isRFPViaTS
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) :
+    ∃ H : BNTFusionTensorClause M,
+      H.HasTopologicalDensityDecomposition ∧
+        ∀ N : ℕ, Commute (H.multiplicityWeightOperatorSucc N)
+          (H.recursiveTopologicalFactorSucc N) := by
+  obtain ⟨H, hDensity⟩ :=
+    exists_topologicalDensityDecomposition_of_isRFPViaTS M hHorizontal hM hRFP
+  exact ⟨H, hDensity,
+    H.multiplicityWeightOperatorSucc_commute_recursiveTopologicalFactorSucc⟩
 
 end MPOTensor
