@@ -14,6 +14,18 @@
 \begin{document}
 \maketitle
 
+\section{Status}
+
+Resolved for the source-defined domain of chain lengths $L\geq2$ by the
+source-facing theorem
+\begin{center}
+  \small\path{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}.
+\end{center}
+The theorem constructs the finite physical-complement extension, transports
+the retained projectors, and proves the literal physical density formula.
+The separate undefined length-one convention remains documented in
+\path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
+
 \section{Source statement}
 
 The theorem following Theorem~4.14 in
@@ -116,29 +128,28 @@ They are supported on $E^{\otimes N}$ and therefore annihilate every
 complementary and mixed-sector contribution.  The coisometry identity gives
 their projection identities, while equation~\eqref{eq:physical-chain-extension}
 reduces their commutation and the physical density formula to the retained
-equalities.  This finite physical extension is mathematically available; the
-remaining gap is its formalization.
+equalities.  The resolution below formalizes this finite physical extension.
 
-\section{Elimination plan}
+\section{Resolution}
 
-The missing formalization consists of the following steps.
+The formalization resolves the gap by the following steps.
 
 \begin{enumerate}
-  \item Prove equation~\eqref{eq:physical-energy-extension} from
+  \item It proves equation~\eqref{eq:physical-energy-extension} from
     $VV^\dagger=I_s$.
-  \item Define a fixed physical two-site interaction from
-    $k_{\mathrm{phys}}$ and prove the periodic exponential identity for every
+  \item It defines a fixed physical two-site interaction from
+    $k_{\mathrm{phys}}$ and proves the periodic exponential identity for every
     chain length at least two.
-  \item Transport the retained terminal projections to the physical chain
-    and prove their projection and commutation identities.
-  \item Combine these identities with exact vertical reconstruction to obtain
-    equation~\eqref{eq:physical-gibbs}.
+  \item It transports the retained terminal projections to the physical chain
+    and proves their projection, orthogonality, and commutation identities.
+  \item It combines these identities with exact vertical reconstruction to
+    obtain equation~\eqref{eq:physical-gibbs}.
 \end{enumerate}
 
 The separate one-site ambiguity in the two-site periodic interaction is
 recorded in
-\path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.  Resolving
-either gap does not resolve the other.
+\path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}; it is not
+resolved by the physical-complement construction.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -135,6 +135,7 @@ import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.PhysicalBlocking
+import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.MPDO.PhysicalSectorBlockedRFP
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.MPDO.PhysicalSectorBondPairwise
@@ -211,6 +212,7 @@ import TNLean.MPS.MPDO.ThermodynamicLimitCounterexample
 import TNLean.MPS.MPDO.TopologicalDensityDecomposition
 import TNLean.MPS.MPDO.TopologicalGibbsHamiltonian
 import TNLean.MPS.MPDO.TopologicalMultiplicityEnergy
+import TNLean.MPS.MPDO.TopologicalPhysicalGibbs
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.TopologicalTerminalSpectral

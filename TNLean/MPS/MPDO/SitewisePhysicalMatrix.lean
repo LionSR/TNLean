@@ -41,7 +41,7 @@ end Matrix
 
 namespace MPOTensor
 
-variable {d D e : ℕ}
+variable {d D e f : ℕ}
 
 open PhysicalSectorFactorization
 
@@ -51,6 +51,21 @@ noncomputable def sitewisePhysicalMatrix
     (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) :
     Matrix (Fin N → Fin e) (Fin N → Fin d) ℂ :=
   fun s t ↦ ∏ n : Fin N, V (s n) (t n)
+
+/-- Sitewise tensor powers preserve rectangular matrix multiplication. -/
+theorem sitewisePhysicalMatrix_mul
+    (V : Matrix (Fin e) (Fin d) ℂ)
+    (W : Matrix (Fin d) (Fin f) ℂ) (N : ℕ) :
+    sitewisePhysicalMatrix V N * sitewisePhysicalMatrix W N =
+      sitewisePhysicalMatrix (V * W) N := by
+  classical
+  ext s t
+  simp only [Matrix.mul_apply, sitewisePhysicalMatrix]
+  simp_rw [← Finset.prod_mul_distrib]
+  rw [← Fintype.piFinset_univ]
+  rw [← Finset.prod_univ_sum
+    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin d)))
+    (fun n a ↦ V (s n) a * W a (t n))]
 
 /-- Conjugate transpose commutes with the sitewise tensor power. -/
 theorem sitewisePhysicalMatrix_conjTranspose
