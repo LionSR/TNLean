@@ -1,0 +1,577 @@
+\section{Physical Symmetries Give Virtual Gauges}
+
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $M \in \MN{d}$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(A_M)^i := \sum_j M_{ij}\, A^j$.
+    When the matrix is a unitary $u$, the rotation is written $A_u$.
+\end{definition}
+
+\begin{lemma}[Matrix product vector under physical rotation]
+    \label{lem:mpv_rotate_physical}
+    \lean{MPSTensor.mpv_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:mpv}
+    For a length-$N$ physical configuration
+    $s=(s_0,\ldots,s_{N-1})$, physical rotation satisfies
+    \[
+        \tr((A_M)^{s_0}\cdots(A_M)^{s_{N-1}})
+        =\sum_{t\in\{0,\ldots,d-1\}^N}
+          \left(\prod_{n=0}^{N-1}M_{s_n,t_n}\right)
+          \tr(A^{t_0}\cdots A^{t_{N-1}}).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute $(A_M)^{s_n}=\sum_{t_n}M_{s_n,t_n}A^{t_n}$ at each
+    site, distribute the finite sums through the ordered matrix product, and
+    use linearity of the trace.
+\end{proof}
+
+\begin{corollary}[Periodic symmetry yields gauge equivalence up to a root of unity]%
+    \label{cor:symmetry_periodic_assembly}
+    \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    Suppose that for any two tensors in irreducible form~II with the same MPV
+    family there is $m > 0$ making them gauge equivalent up to an $m$-th root of
+    unity. Let $A$ be in irreducible form~II and
+    let $M$ be a matrix such that $B := A_M$ is also in irreducible form~II and
+    $\mc{V}(A) = \mc{V}(B)$. Then there is $m > 0$ such that $A$ and~$B$ are
+    gauge equivalent up to an $m$-th root of unity.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply the assumed equivalence to $A$ and $B$, which are in irreducible
+    form~II with $\mc{V}(A) = \mc{V}(B)$.
+\end{proof}
+
+\section{Virtual Representation Theorem}\label{sec:injective_symmetry_cocycle}
+
+With a full group of on-site symmetries (rather than just a single
+unitary), the resulting gauges determine a projective representation
+on the bond space.
+
+\begin{definition}[Twisted tensor]\label{def:twisted_tensor}
+    \lean{MPSTensor.twistedTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a group representation $U : G \to \GL_{d}(\C)$ on the physical
+    index, the \emph{$g$-twisted tensor} is defined, for each
+    $i \in \{0,\ldots,d{-}1\}$, by
+    \[
+        \widetilde{A}_g^i :=  \sum_{j=0}^{d-1} U(g)_{ij}\, A^j.
+    \]
+\end{definition}
+
+\begin{definition}[On-site symmetry]\label{def:on_site_symmetric}
+    \lean{MPSTensor.IsOnSiteSymmetric}
+    \leanok
+    \uses{def:twisted_tensor, def:same_mpv}
+    A tensor $A$ is \emph{on-site symmetric} under a group
+    representation $U : G \to \GL_{d}(\C)$ if $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$
+    for every $g \in G$.
+\end{definition}
+
+\begin{lemma}[Functoriality of twisting]\label{lem:twisted_tensor_mul}
+    \lean{MPSTensor.twistedTensor_mul}
+    \leanok
+    \uses{def:twisted_tensor}
+    The twisted tensor satisfies the composition law
+    \[
+        \widetilde{A}_{gh} =  \widetilde{(\widetilde{A}_h)}_g,
+    \]
+    i.e.\ twisting by $gh$ is the same as first twisting by~$h$
+    and then by~$g$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:twisted_tensor}
+    Expanding both sides using $U(gh) = U(g)\, U(h)$, then swapping
+    the order of summation.
+\end{proof}
+
+\begin{lemma}[Identity twist]\label{lem:twisted_tensor_one}
+    \lean{MPSTensor.twistedTensor_one}
+    \leanok
+    \uses{def:twisted_tensor}
+    Twisting by the identity group element is trivial:
+    $\widetilde{A}_1 = A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:twisted_tensor}
+    Since $U(1) = \Id_d$, each component reduces to
+    $\sum_j \delta_{ij}\, A^j = A^i$.
+\end{proof}
+
+\begin{lemma}[Symmetric twists are gauge equivalent]%
+    \label{lem:gauge_equiv_twisted}
+    \lean{MPSTensor.gaugeEquiv_twistedTensor_of_injective}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric}
+    If $A$ is injective and on-site symmetric under $U$, then
+    for every $g \in G$ the twisted tensor $\widetilde{A}_g$ is
+    gauge equivalent to~$A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:on_site_symmetric, thm:ft_single}
+    On-site symmetry gives
+    $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$, and the single-block
+    Fundamental Theorem turns this equality of MPV families into gauge
+    equivalence.
+\end{proof}
+
+\begin{remark}[Fundamental-Theorem route for injective symmetry]%
+    \label{rem:injective_symmetry_ft_route}
+    \uses{thm:ft_single, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar,
+        lem:twisted_tensor_mul, thm:virtual_rep_injective}
+    The injective virtual-representation theorem is not proved from string-order
+    rigidity. The on-site symmetry condition first identifies $A$ and
+    $\widetilde{A}_g$ as the same MPV family; the single-block Fundamental
+    Theorem gives the gauge in Lemma~\ref{lem:gauge_equiv_twisted}. Gauge
+    uniqueness and the twist composition law then give
+    Theorem~\ref{thm:virtual_rep_injective}. The string-order results later in
+    this chapter use this virtual representation as an input.
+\end{remark}
+
+\begin{theorem}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
+    \lean{MPSTensor.virtual_symmetry_eq}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric, lem:gauge_equiv_twisted}
+    If $A$ is injective and on-site symmetric under $U$, then
+    for every $g \in G$ there exist an invertible matrix $X(g) \in \GL_{D}(\C)$
+    and a nonzero scalar $\varphi(g) \in \C^{\times}$ (in fact $\varphi = 1$
+    in the single-block case) such that
+    $\widetilde{A}_g^{\,i} = \varphi(g)\, X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:gauge_equiv_twisted}
+    The physical action is transferred to the virtual level by the same
+    local move that replaces the twisted tensor by a gauge-conjugated one:
+    % Formula: (\widetilde A_g^i)_{ab}=\sum_j U(g)_{ij}(A^j)_{ab}.
+    % Source verdict: U(g) acts only on the physical index of A and has
+    % no virtual indices.
+    % Index map: i is the free upper physical index, j is the unique
+    % contracted index, and a,b are the free west/east virtual indices.
+    % Boundary: virtual-west=1 | virtual-east=1 | physical-up=1 |
+    % physical-down=0.
+    \begin{tenkzequation}
+        \begin{tenkz}[rows={op:none,ket}]
+            \tn[role=operator,up=$i$]{U(g)} \\
+            \tn{A}
+        \end{tenkz}
+        \qquad $\leadsto$ \qquad
+        % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
+        % lines 328--349, especially Condition C1, gives the unitary u,V
+        % specialization (V^\dagger = V^{-1}); the surrounding fundamental
+        % theorem supplies the analogous general GL gauge relation displayed here.
+        % Ink-to-index map: i is the free upper physical index; the two
+        % horizontal wires are the free virtual indices.
+        % Contraction set: only X(g)--A and A--X(g)^{-1} are summed.
+        % Type verdict: a rank-three twisted local tensor.
+        % Boundary signature: virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \begin{tenkz}[physical=up]
+            \tnX{X(g)} & \tn[up=$i$]{A} & \tnX{X(g)^{-1}}
+        \end{tenkz}
+    \end{tenkzequation}
+    Apply Lemma~\ref{lem:gauge_equiv_twisted} to obtain $X(g)$, then
+    set $\varphi(g) = 1$.
+\end{proof}
+
+\begin{lemma}[Gauge uniqueness up to scalar]\label{lem:gauge_unique_up_to_scalar}
+    \lean{MPSTensor.gauge_unique_up_to_scalar}
+    \leanok
+    \uses{def:injective, def:gauge_equiv, lem:center_scalar}
+    Let $A$ be an injective tensor.
+    If $X, Y \in \GL_{D}(\C)$ both satisfy
+    $B^i = X\, A^i\, X^{-1} = Y\, A^i\, Y^{-1}$
+    for all~$i$, then there exists a nonzero scalar $u \in \C^{\times}$
+    such that $Y = u \cdot X$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:injective, lem:center_scalar}
+    The matrix $Z = Y^{-1} X$ commutes with every $A^i$.
+    Since $A$ is injective, $\{A^i\}$ spans $\MN{D}$, so $Z$
+    lies in the centre of $\MN{D}$.
+    By Lemma~\ref{lem:center_scalar}, $Z$ is a scalar matrix.
+    Since $Z$ is invertible, that scalar is nonzero, and
+    $Y = u \cdot X$.
+\end{proof}
+
+\begin{theorem}[Gauge uniqueness from equality of MPV families]
+    \label{thm:gauge_unique_up_to_scalar_sameMPV}
+    \lean{MPSTensor.gauge_unique_up_to_scalar_of_sameMPV}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Let $A$ be an injective tensor and assume that $A$ and $B$ generate the
+    same MPV family.
+    If $X, Y \in \GL_{D}(\C)$ both satisfy
+    $B^i = X\, A^i\, X^{-1} = Y\, A^i\, Y^{-1}$ for all $i$, then there is a
+    nonzero scalar $u \in \C^{\times}$ such that $Y = u \cdot X$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:gauge_unique_up_to_scalar}
+    This is exactly Lemma~\ref{lem:gauge_unique_up_to_scalar}; the extra MPV
+    hypothesis specifies the setting in which the two gauges are usually
+    produced.
+\end{proof}
+
+\begin{definition}[Scalar 2-cochain]\label{def:scalar_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle}
+    \leanok
+    A \emph{scalar 2-cochain} on a group $G$ is a function
+    $\omega : G \times G \to \C^{\times}$.
+\end{definition}
+
+\begin{definition}[Projective representation]\label{def:projective_rep}
+    \lean{TNLean.Algebra.ProjectiveRepresentation}
+    \leanok
+    \uses{def:scalar_cocycle}
+    Given a scalar 2-cochain $\omega$, a \emph{projective representation}
+    of $G$ on $\C^D$ is a map $\rho : G \to \GL_{D}(\C)$ satisfying, for all
+    $g,h \in G$,
+    \[
+        \rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh).
+    \]
+\end{definition}
+
+\begin{lemma}[Associativity forces the cocycle condition]%
+    \label{lem:cocycle_of_assoc}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.cocycle_of_assoc}
+    \leanok
+    \uses{def:projective_rep, def:scalar_cocycle}
+    If $\rho$ is a projective representation with factor system $\omega$
+    and $D > 0$, then $\omega$ satisfies the 2-cocycle identity:
+    \[
+        \omega(g, h)\, \omega(gh, k)
+        = \omega(g, hk)\, \omega(h, k).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:projective_rep}
+    Expanding $\rho(g)\,(\rho(h) \rho(k))$ and
+    $(\rho(g) \rho(h)) \rho(k)$ using the projective
+    multiplication law and equating via matrix associativity.
+    The hypothesis $D > 0$ allows cancellation of the
+    invertible matrix factor.
+\end{proof}
+
+\begin{theorem}[Virtual representation theorem for injective MPS]%
+    \label{thm:virtual_rep_injective}
+    \lean{MPSTensor.virtual_rep_of_symmetric_injective}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric, def:projective_rep,
+        def:scalar_cocycle, lem:gauge_unique_up_to_scalar,
+        lem:twisted_tensor_mul}
+    Let $A$ be an injective MPS tensor that is on-site symmetric
+    under a group representation $U : G \to \GL_{d}(\C)$.
+    Then there exist:
+    \begin{enumerate}
+        \item a scalar 2-cochain
+              $\omega : G \times G \to \C^{\times}$, and
+        \item a map $\rho : G \to \GL_{D}(\C)$ satisfying, for all $g,h \in G$,
+              \[
+                  \rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh).
+              \]
+    \end{enumerate}
+    such that, defining the gauge matrices $X(g) := \rho(g^{-1})$,
+    one has, for every $g \in G$ and $i \in \{0,\ldots,d{-}1\}$,
+    \[
+        \widetilde{A}_g^i =  X(g)\, A^i\, X(g)^{-1}.
+    \]
+    In tensor-network notation, for each fixed~$g$ this is the local gauge
+    relation
+    \begin{center}
+        % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
+        % lines 328--349, gives the unitary u,V specialization
+        % (V^\dagger = V^{-1}); the surrounding fundamental theorem supplies
+        % the analogous general GL gauge relation displayed here.
+        % Ink-to-index map: i labels the free physical leg and the west/east
+        % wires carry the local tensor's two virtual indices.
+        % Contraction set: the two internal horizontal gauge bonds are summed.
+        % Type verdict: a rank-three local tensor for each fixed g.
+        % Boundary signature: virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \begin{tenkz}[physical=up]
+            \tnX{X(g)} & \tn[up=$i$]{A} & \tnX{X(g)^{-1}}
+        \end{tenkz}
+    \end{center}
+    with the black node denoting the tensor named in the surrounding
+    formula and the two red side nodes acting on the virtual legs.
+    In particular, $\rho$ is a projective representation of $G$ on the
+    bond space $\C^D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:on_site_symmetric, lem:gauge_equiv_twisted,
+        lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
+    Since $A$ is injective and on-site symmetric, each twisted tensor
+    $\widetilde{A}_g$ is gauge equivalent to~$A$
+    (Lemma~\ref{lem:gauge_equiv_twisted}).
+    Choose $X(g) \in \GL_{D}(\C)$ with
+    $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+
+    By functoriality (Lemma~\ref{lem:twisted_tensor_mul}), the product
+    $X(h)\, X(g)$ also intertwines $A$ with $\widetilde{A}_{gh}$.
+    Since $X(gh)$ does the same, gauge uniqueness
+    (Lemma~\ref{lem:gauge_unique_up_to_scalar}) gives a nonzero scalar
+    $\omega'(h,g)$ with $X(h)\, X(g) = \omega'(h,g)\, X(gh)$.
+
+    Defining $\rho(g) := X(g^{-1})$ converts this to the standard law:
+    $\rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh)$
+    where $\omega(g,h) := \omega'(h^{-1}, g^{-1})$.
+\end{proof}
+
+\begin{corollary}[2-cocycle identity for the factor system]%
+    \label{cor:virtual_rep_cocycle}
+    \lean{MPSTensor.virtual_rep_of_symmetric_injective_cocycle}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:cocycle_of_assoc}
+    If $D > 0$, the factor system $\omega$ from
+    Theorem~\ref{thm:virtual_rep_injective} satisfies the
+    2-cocycle identity for all $g,h,k \in G$:
+    \[
+        \omega(g, h)\, \omega(gh, k)
+        = \omega(g, hk)\, \omega(h, k).
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:cocycle_of_assoc}
+    Theorem~\ref{thm:virtual_rep_injective} gives $\rho$ and $\omega$.
+    By Lemma~\ref{lem:cocycle_of_assoc}, the cocycle identity follows
+    from associativity of matrix multiplication and invertibility of
+    the representation matrices.
+\end{proof}
+
+\section{Cohomology Classes of Virtual Symmetry Cocycles}
+
+Two cocycles may differ by a coboundary yet represent the same
+projective-representation class. The following definitions and results
+make this precise and establish the quotient $H^2(G,\C^{\times})$.
+
+\begin{definition}[Coboundary]\label{def:is_coboundary}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCoboundary}
+    \leanok
+    \uses{def:scalar_cocycle}
+    A scalar 2-cocycle $\omega$ is a \emph{coboundary} if there exists
+    $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
+    \[
+        \omega(g,h)
+        = \varphi(g) \varphi(h) \varphi(gh)^{-1}.
+    \]
+\end{definition}
+
+\begin{definition}[Cohomologous cocycles]\label{def:cohomologous_to}
+    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo}
+    \leanok
+    \uses{def:scalar_cocycle}
+    Two cocycles $\omega_1,\omega_2$ are \emph{cohomologous}
+    (written $\omega_1 \sim \omega_2$) if there exists
+    $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
+    \[
+        \omega_1(g,h)
+        = \varphi(g) \varphi(h) \varphi(gh)^{-1} \omega_2(g,h).
+    \]
+\end{definition}
+
+\begin{theorem}[Cohomology relation is an equivalence relation]%
+    \label{thm:cohomologous_equivalence}
+    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo.equivalence}
+    \leanok
+    \uses{def:cohomologous_to}
+    The relation ``cohomologous to'' is reflexive, symmetric, and
+    transitive on the set of scalar 2-cocycles.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:cohomologous_to}
+    Reflexivity: take $\varphi = 1$.
+    Symmetry: replace $\varphi$ by $\varphi^{-1}$.
+    Transitivity: compose the witnesses $\varphi$ and $\psi$ pointwise.
+\end{proof}
+
+\begin{lemma}[Coboundary iff cohomologous to the trivial cocycle]%
+    \label{lem:coboundary_iff_cohomologous_one}
+    \lean{TNLean.Algebra.ScalarCocycle.isCoboundary_iff_cohomologousTo_one}
+    \leanok
+    \uses{def:is_coboundary, def:cohomologous_to}
+    A cocycle $\omega$ is a coboundary if and only if
+    $\omega \sim \Id$, where $\Id(g,h) = 1$ for all $g,h$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
+    Both directions follow by absorbing or introducing the factor
+    $\Id(g,h) = 1$ via $x\cdot 1 = x$.
+\end{proof}
+
+\begin{theorem}[Gauge independence of the cocycle class]%
+    \label{thm:cocycle_gauge_independence}
+    \lean{MPSTensor.cohomologousTo_of_isInjective}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
+        def:cohomologous_to}
+    If the bond dimension satisfies $D \ge 1$ and two projective
+    representations $\rho_1,\rho_2$ (with cocycles
+    $\omega_1,\omega_2$) both arise as virtual representations of the
+    same injective MPS tensor $A$ under an on-site symmetry~$U$, then
+    $\omega_1 \sim \omega_2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
+        def:cohomologous_to}
+    For each $g$, gauge uniqueness gives a nonzero scalar $f(g)$ with
+    $X_2(g^{-1}) = f(g)\,X_1(g^{-1})$.
+    Equivalently, for each fixed $g$ the two local gauges
+    \begin{tenkzequation}
+        % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
+        % lines 328--349, gives the unitary u,V specialization
+        % (V^\dagger = V^{-1}); the surrounding fundamental theorem supplies
+        % the analogous general GL gauge relation used here.
+        % Ink-to-index map: i is free and the outer horizontal wires carry
+        % the west/east virtual indices for the first gauge choice.
+        % Contraction set: the two internal horizontal bonds are summed.
+        % Type verdict: a rank-three local tensor.
+        % Boundary signature: virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \begin{tenkz}[physical=up]
+            \tnX{X_1(g^{-1})} & \tn[up=$i$]{A} &
+            \tnX{X_1(g^{-1})^{-1}}
+        \end{tenkz}
+        \qquad and\qquad
+        % Formula/source: the same source passage, with the second virtual
+        % gauge X_2(g^{-1}) in place of X_1(g^{-1}).
+        % Ink-to-index map: i is free; the outer wires are the two virtual
+        % indices for the second gauge choice.
+        % Contraction set: the two internal horizontal bonds are summed.
+        % Type verdict: a rank-three local tensor, comparable to the left picture.
+        % Boundary signature: virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \begin{tenkz}[physical=up]
+            \tnX{X_2(g^{-1})} & \tn[up=$i$]{A} &
+            \tnX{X_2(g^{-1})^{-1}}
+        \end{tenkz}
+    \end{tenkzequation}
+    describe the same twisted tensor, so they differ by a scalar.
+    Substituting into the projective law and cancelling $X_1(g\cdot h)$
+    yields
+    $\omega_2(g,h) = f(g)\,f(h)\,f(gh)^{-1} \omega_1(g,h)$.
+\end{proof}
+
+\begin{definition}[Multiplicative 2-cocycle condition]\label{def:is_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle}
+    \leanok
+    A scalar 2-cochain $\omega \colon G \times G \to \C^{\times}$ is a
+    \emph{2-cocycle} if it satisfies, for all $g,h,k \in G$,
+    \[
+        \omega(g,h) \omega(gh,k) = \omega(g,hk) \omega(h,k).
+    \]
+\end{definition}
+
+\begin{definition}[Second cohomology quotient]\label{def:h2_cx}
+    \lean{TNLean.Algebra.H2}
+    \leanok
+    \uses{def:cohomologous_to, def:is_cocycle}
+    The second cohomology set is the quotient
+    \[
+        H^2(G,\C^{\times})
+        := Z^2(G,\C^{\times})/{\sim},
+    \]
+    where $\sim$ is the coboundary-equivalence relation.
+\end{definition}
+
+\begin{definition}[Projective equivalence]\label{def:projectively_equivalent}
+    \lean{TNLean.Algebra.ProjectivelyEquivalent}
+    \leanok
+    \uses{def:projective_rep, def:cohomologous_to}
+    Two projective representations are \emph{projectively equivalent}
+    when their factor systems are cohomologous.
+\end{definition}
+
+\begin{theorem}[Projective equivalence and cohomologous cocycles]%
+    \label{thm:projrep_equiv_iff_cohomologous}
+    \lean{TNLean.Algebra.projRep_equiv_iff_cohomologous}
+    \leanok
+    \uses{def:projectively_equivalent, def:cohomologous_to}
+    Let $\rho_1,\rho_2$ be projective representations with factor systems
+    $\omega_1,\omega_2$. Then
+    \[
+        \rho_1 \sim_{\mathrm{proj}} \rho_2
+        \iff
+        \omega_1 \sim \omega_2.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:projectively_equivalent}
+    This follows from the definition of projective equivalence as
+    cohomology-class equality for factor systems.
+\end{proof}
+
+\subsection{Non-triviality via the commutator phase}
+
+For an abelian symmetry group the cohomology class of a factor system is
+detected by an antisymmetric pairing, which gives a computable test for
+non-triviality.
+
+\begin{definition}[Commutator phase]\label{def:comm_phase}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase}
+    \leanok
+    \uses{def:scalar_cocycle}
+    The \emph{commutator phase} of a $2$-cochain $\omega$ at a pair $g,h$ is
+    $\beta_\omega(g,h) := \omega(g,h)\,\omega(h,g)^{-1}$.  It is defined for any
+    $\mathbb{C}^{\times}$-valued $2$-cochain, the cocycle condition is not needed.
+\end{definition}
+
+\begin{theorem}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_cohomologousTo}
+    \leanok
+    \uses{def:comm_phase, def:cohomologous_to}
+    If $\omega_1\sim\omega_2$ and $gh=hg$, then
+    $\beta_{\omega_1}(g,h)=\beta_{\omega_2}(g,h)$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:comm_phase, def:cohomologous_to}
+    Write $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$ for a
+    coboundary witness $\varphi$.  Substituting into the ratio and using
+    $gh=hg$ and the commutativity of $\mathbb{C}^{\times}$,
+    \[
+        \beta_{\omega_1}(g,h)
+        = \frac{\varphi(g)\varphi(h)\varphi(gh)^{-1}\,\omega_2(g,h)}
+        {\varphi(h)\varphi(g)\varphi(hg)^{-1}\,\omega_2(h,g)}
+        = \frac{\omega_2(g,h)}{\omega_2(h,g)}
+        = \beta_{\omega_2}(g,h),
+    \]
+    the $\varphi$-factors cancelling since $\varphi(gh)=\varphi(hg)$.
+\end{proof}
+
+\begin{definition}[Non-trivial cohomology class]\label{def:nontrivial_class}
+    \lean{TNLean.Algebra.ScalarCocycle.IsNontrivialClass}
+    \leanok
+    \uses{def:cohomologous_to}
+    A factor system $\omega$ has a \emph{non-trivial class} when it is not
+    cohomologous to the constant cocycle $1$.
+\end{definition}
+
+\begin{theorem}[Commutator-phase non-triviality test]\label{thm:nontrivial_of_comm_phase}
+    \lean{TNLean.Algebra.ScalarCocycle.isNontrivialClass_of_commPhase_ne_one}
+    \leanok
+    \uses{def:nontrivial_class, def:comm_phase, thm:comm_phase_invariant}
+    If a commuting pair $g,h$ has $\beta_\omega(g,h)\neq 1$, then $\omega$ has a
+    non-trivial class.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:comm_phase_invariant}
+    The trivial cocycle has commutator phase $1$ at every pair, so by
+    Theorem~\ref{thm:comm_phase_invariant} any cocycle cohomologous to it has
+    $\beta = 1$ at every commuting pair.  Contrapositively, $\beta_\omega(g,h)\neq
+        1$ for one commuting pair forces $\omega$ to be non-cohomologous to the
+    trivial cocycle.
+\end{proof}
