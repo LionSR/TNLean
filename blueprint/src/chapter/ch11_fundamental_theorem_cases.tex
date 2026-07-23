@@ -1,0 +1,229 @@
+\section{The equal and proportional cases}\label{sec:ft_equal_proportional_cases}
+
+% The CPSV16 proportional theorem is proved here for BNT canonical forms,
+% using the sector-matching witnesses of Chapter~\ref{ch:bnt}. The
+% per-block phases are not collapsed into a single global gauge on the total
+% tensor; that additional step needs the proportional coefficient identity and
+% is recorded conditionally above
+% (thm:sector_bnt_proportional_global_gauge_of_coeff_identity).
+\begin{theorem}[Multi-block fundamental theorem for normal tensors]%
+    \label{thm:cpgsv_multiblock_ft_source}
+    \lean{MPSTensor.fundamentalTheorem_proportional_canonicalForm}
+    \leanok
+    \uses{def:sector_bnt_cf, def:gauge_phase_equiv,
+        thm:sector_bnt_proportional_sector_match_witnesses}
+    Let $P$ and $Q$ be BNT canonical forms (Definition~\ref{def:sector_bnt_cf}),
+    with bases of normal tensors $(P_j)_{j=1}^{g_a}$ and $(Q_k)_{k=1}^{g_b}$. If
+    the total tensors $P_{\mathrm{tot}}$, $Q_{\mathrm{tot}}$ generate eventually
+    nonzero proportional MPV families --- for all sufficiently large $N$ there is
+    a nonzero scalar $c_N$ with $V^{(N)}(P_{\mathrm{tot}})=c_N
+        V^{(N)}(Q_{\mathrm{tot}})$ --- then $g_a=g_b$. After relabelling the basis of
+    normal tensors of $P$ by a bijection $\beta:J(Q)\simeq J(P)$, there are
+    scalars $\zeta_k \in \C$ with $|\zeta_k|=1$ and invertible matrices $Y_k$
+    such that, for every $k$ and every physical index~$i$,
+    \[
+        Q_k^i
+        =
+        \zeta_k\,Y_k\,P_{\beta(k)}^i\,Y_k^{-1}.
+    \]
+    Thus the paired normal tensors have the same bond dimension
+    ($\dim P_{\beta(k)}=\dim Q_k$) and the same gauge-phase class.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:sector_bnt_proportional_sector_match_witnesses}
+    The proportional sector-matching
+    Theorem~\ref{thm:sector_bnt_proportional_sector_match_witnesses}, applied to
+    the BNT canonical forms $P$ and $Q$, supplies the bijection $\beta$, the
+    bond-dimension equalities, the unit phases $\zeta_k$, and the block gauges
+    $Y_k$ with $Q_k^i = \zeta_k Y_k P_{\beta(k)}^i Y_k^{-1}$; the matching needs
+    no per-sector unit-modulus hypothesis.
+\end{proof}
+
+This is \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}; see also
+\cite[Theorem~IV.4 and Corollary~IV.5]{Cirac2021Matrix}. The statement is given on
+the BNT canonical-form surface (Definition~\ref{def:sector_bnt_cf}), which is the
+paper's ``$A$ and $B$ in canonical form'' with chosen bases of normal tensors;
+the reduction of an \emph{arbitrary} proportional-MPV pair to a common primitive
+block decomposition is
+Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} of
+Chapter~\ref{ch:canonical}.
+
+\begin{definition}[Left-canonical normalization]
+    \label{def:left_canonical_tensor}
+    \lean{MPSTensor.IsLeftCanonical}
+    \leanok
+    An MPS tensor $A=(A^i)_i$ is left-canonical when
+    \[
+        \sum_i (A^i)^\dagger A^i=\mathbb 1.
+    \]
+\end{definition}
+
+\begin{lemma}[Phase normalization for an irreducible gauge]
+    \label{lem:left_canonical_irreducible_phase_norm}
+    \lean{MPSTensor.gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible}
+    \leanok
+    \uses{def:left_canonical_tensor, def:irreducible_tensor,
+        thm:eigenvalue_unique_irred}
+    Let $A$ and $B$ be left-canonical tensors of common positive bond
+    dimension, with $B$ irreducible.  If $X$ is invertible, $\zeta\ne0$, and
+    \[
+        B^i=\zeta X A^iX^{-1}
+    \]
+    for every $i$, then $|\zeta|=1$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:eigenvalue_unique_irred}
+    Let $\rho$ be a nonzero positive fixed point of $\mathcal E_A$ and set
+    $\sigma=X\rho X^\dagger$. Then $\sigma$ is nonzero and positive, and
+    \[
+        \mathcal E_B(\sigma)=|\zeta|^2\sigma.
+    \]
+    The map $\mathcal E_B$ also has a nonzero positive fixed point.  Its
+    irreducibility therefore forces $|\zeta|^2=1$.
+\end{proof}
+
+\begin{lemma}[Unitary replacement with the same phase]
+    \label{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    \lean{MPSTensor.exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible}
+    \leanok
+    \uses{def:left_canonical_tensor, def:irreducible_tensor,
+        lem:left_canonical_irreducible_phase_norm, thm:psd_fp_unique_irred}
+    Let $A$ and $B$ be left-canonical irreducible tensors of common positive
+    bond dimension satisfying
+    \[
+        B^i=\zeta X A^iX^{-1}
+    \]
+    for an invertible $X$ and a nonzero scalar $\zeta$.  There is a unitary
+    matrix $U$, with the same scalar $\zeta$, such that $|\zeta|=1$ and
+    \[
+        B^i=\zeta U A^iU^\dagger
+    \]
+    for every $i$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:left_canonical_irreducible_phase_norm, thm:psd_fp_unique_irred}
+    Lemma~\ref{lem:left_canonical_irreducible_phase_norm} gives
+    $|\zeta|=1$.  Substitution into the left-canonical identities gives
+    \[
+        \sum_i A^{i\dagger}(X^\dagger X)A^i=X^\dagger X.
+    \]
+    Thus $X^\dagger X$ is a positive-semidefinite fixed point of the adjoint
+    transfer map of $A$.  Irreducibility gives
+    $X^\dagger X=c\mathbb 1$ for some $c>0$, so
+    $X^{-1}=c^{-1}X^\dagger$ and $U=c^{-1/2}X$ is unitary. Moreover,
+    \[
+        UA^iU^\dagger
+        =c^{-1}XA^iX^\dagger
+        =XA^iX^{-1}.
+    \]
+\end{proof}
+
+\begin{lemma}[Unitary gauge for left-canonical irreducible tensors]
+    \label{lem:left_canonical_irreducible_unitary_gauge}
+    \lean{MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible}
+    \leanok
+    \uses{def:left_canonical_tensor, def:gauge_phase_equiv,
+        def:irreducible_tensor,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    Let $A$ and $B$ be left-canonical irreducible tensors of common positive bond
+    dimension that are gauge-phase equivalent.  Then the gauge can be taken
+    unitary: there are a unitary matrix $U$ and a scalar $\zeta$ with
+    $|\zeta|=1$ such that, for every physical index~$i$,
+    \[
+        B^i=\zeta\,U A^i U^{\dagger}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    Unpack the gauge-phase equivalence as
+    $B^i=\zeta X A^iX^{-1}$ with $X$ invertible and $\zeta\ne0$.
+    Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    replaces $X$ by a unitary $U$ while retaining this same phase and proves
+    $|\zeta|=1$.
+\end{proof}
+
+\begin{corollary}[Canonical Form II unitary refinement of proportional matching]%
+    \label{cor:sector_bnt_proportional_unitary_sector_match}
+    \lean{MPSTensor.ft_sector_bnt_proportional_unitary_sector_match_witnesses}
+    \leanok
+    \uses{def:sector_bnt_cf, thm:cpgsv_multiblock_ft_source}
+    Under the hypotheses of
+    Theorem~\ref{thm:cpgsv_multiblock_ft_source}, there are a bijection
+    $\beta:J(Q)\simeq J(P)$, unitary matrices
+    $U_k\in\mathrm{U}(\dim Q_k)$, and phases $\zeta_k\in\C$ with
+    $|\zeta_k|=1$, such that $\dim P_{\beta(k)}=\dim Q_k$ and, for every $k$
+    and every physical index~$i$,
+    \[
+        Q_k^i
+        =
+        \zeta_k\,U_k\,P_{\beta(k)}^i\,U_k^\dagger.
+    \]
+    This is the proportional part of
+    \cite[Corollary~C.5]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:sector_bnt_proportional_sector_match_witnesses,
+        lem:left_canonical_irreducible_unitary_gauge}
+    The proportional sector-matching theorem gives a bijection $\beta$,
+    invertible matrices $X_k$, and unit-modulus phases $\zeta_k$ with
+    \[
+        Q_k^i=\zeta_k X_k P_{\beta(k)}^iX_k^{-1}.
+    \]
+    The matched tensors are left-canonical and irreducible. Hence
+    Lemma~\ref{lem:left_canonical_irreducible_unitary_gauge} gives unitary
+    matrices $U_k$ satisfying
+    \[
+        X_k P_{\beta(k)}^iX_k^{-1}
+        =U_kP_{\beta(k)}^iU_k^\dagger,
+    \]
+    and therefore
+    \[
+        Q_k^i=\zeta_k U_kP_{\beta(k)}^iU_k^\dagger.
+    \]
+\end{proof}
+
+% In the equal case the per-block phases and copy-weight identities assemble
+% into the unitary global gauge of
+% cor:sector_bnt_equal_unitary_global_gauge. Under proportional input, the
+% analogous total-tensor statement remains conditional on the proportional
+% coefficient identity.
+
+\begin{theorem}[Equal BNT canonical forms are globally conjugate]%
+    \label{thm:cpgsv_equal_case_source}
+    \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm}
+    \leanok
+    \uses{def:sector_bnt_cf, thm:sector_bnt_equal_mps_gaugeEquiv_literal}
+    Let $P$ and $Q$ be BNT canonical forms (Definition~\ref{def:sector_bnt_cf})
+    whose total tensors $P_{\mathrm{tot}}$, $Q_{\mathrm{tot}}$ generate the same
+    MPV family for every positive system size~$N$. Then their total bond
+    dimensions coincide; writing the common value as~$D$, there is one
+    invertible matrix
+    $X \in \GL_D(\C)$ such that, for every physical index~$i$,
+    \[
+        Q_{\mathrm{tot}}^i
+        =
+        X\,P_{\mathrm{tot}}^i\,X^{-1}.
+    \]
+
+    This is \cite[Corollary~2.11]{Cirac2016MPDO_arXiv} on the BNT
+    canonical-form surface; the canonical form of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}, a direct sum of normal tensors with
+    scalar weights, is a BNT canonical form. The reduction of an \emph{arbitrary}
+    pair of same-MPV tensors to a common BNT canonical form is
+    Chapter~\ref{ch:canonical}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:sector_bnt_equal_mps_gaugeEquiv_literal}
+    This is Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}. The BNT
+    comparison of Chapter~\ref{ch:bnt} provides the basis relabelling, the
+    per-block gauge-phase equivalences, and the copy-weight multiset matching,
+    which combine into the block-diagonal global gauge. The exact
+    linear-independence matching needs no per-sector unit-modulus hypothesis, and
+    the BNT canonical form needs no one-site injectivity.
+\end{proof}
+
+This is also \cite[Corollary~IV.5]{Cirac2021Matrix}.
