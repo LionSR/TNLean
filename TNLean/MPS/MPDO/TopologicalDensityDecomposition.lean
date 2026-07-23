@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
+import TNLean.Algebra.ListProduct
 import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
@@ -359,18 +360,6 @@ theorem changePhysicalBasis_verticalCoisometry_copy_ne
     Matrix.blockDiagonal'_apply_ne _ _ _ hpq, Pi.zero_apply,
     Matrix.zero_apply] using hAssembled
 
-private theorem list_prod_smul_ofFn {n : Type*} [Fintype n]
-    [DecidableEq n] {N : ℕ} (c : Fin N → ℂ)
-    (A : Fin N → Matrix n n ℂ) :
-    (List.ofFn fun i : Fin N ↦ c i • A i).prod =
-      (∏ i : Fin N, c i) • (List.ofFn A).prod := by
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      simp only [List.ofFn_succ, List.prod_cons, ih, Fin.prod_univ_succ,
-        Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-      rw [mul_comm (c 0)]
-
 /-- The recursive line-999 block has the fixed-copy closed-chain matrix entries.
 
 Source: arXiv:1606.00608, density identity at line 999.  The orientation of
@@ -413,7 +402,7 @@ theorem mpo_changePhysicalBasis_verticalCoisometry_copy_block
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
   simp_rw [H.verticalCopyChainEquiv_symm_apply]
   simp_rw [H.changePhysicalBasis_verticalCoisometry_copy_same]
-  rw [list_prod_smul_ofFn, Matrix.trace_smul,
+  rw [List.ofFn_prod_smul, Matrix.trace_smul,
     H.topologicalDensityBlock_apply_eq_weight_mul_trace]
   rfl
 
