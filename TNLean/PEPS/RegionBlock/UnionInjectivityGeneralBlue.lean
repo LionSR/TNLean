@@ -15,6 +15,14 @@ blue-side mirror of the complement-side fiber-collapse factorization, over a bar
 two-step inverse application of Lemma `injective_union` (arXiv:1804.04964, Section 3,
 lines 1324--1400 of `Papers/1804.04964/paper_normal.tex`) consumes.
 
+## Implementation notes
+
+The blue-side results are obtained from the complement-side results by interchanging
+the blue and complement blocks of `ThreeBlockGeometry`. The operation
+`ThreeBlockGeometry.swapBlueComplement` records this mathematical symmetry once; its
+reducible projections let later coupling identities unfold to the corresponding
+blue/complement formulas.
+
 ## References
 
 - [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled
@@ -38,7 +46,7 @@ variable (g : ThreeBlockGeometry V)
 This geometry involution, rather than square-lattice coordinate swap, is the exact
 symmetry of the declarations below: they hold for an arbitrary graph and exchange two
 configuration fibers, not two coordinate axes. -/
-abbrev ThreeBlockGeometry.swapBlueComplementMirror (g : ThreeBlockGeometry V) :
+abbrev ThreeBlockGeometry.swapBlueComplement (g : ThreeBlockGeometry V) :
     ThreeBlockGeometry V where
   red := g.red
   blue := g.complement
@@ -49,22 +57,39 @@ abbrev ThreeBlockGeometry.swapBlueComplementMirror (g : ThreeBlockGeometry V) :
   cover_univ := by rw [← g.cover_univ]; ac_rfl
 
 omit [LinearOrder V] in
-@[simp] theorem ThreeBlockGeometry.swapBlueComplementMirror_complPhysical
+/-- Swapping the blue and complement blocks leaves the red block unchanged. -/
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_red :
+    g.swapBlueComplement.red = g.red := rfl
+
+omit [LinearOrder V] in
+/-- The blue block after swapping is the original complement block. -/
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_blue :
+    g.swapBlueComplement.blue = g.complement := rfl
+
+omit [LinearOrder V] in
+/-- The complement block after swapping is the original blue block. -/
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_complement :
+    g.swapBlueComplement.complement = g.blue := rfl
+
+omit [LinearOrder V] in
+/-- The physical configuration on the swapped complement agrees with the original fused
+configuration after interchanging the blue and complement arguments. -/
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_complPhysical
     (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement) :
-    g.swapBlueComplementMirror.complPhysical σcompl σblue =
+    g.swapBlueComplement.complPhysical σcompl σblue =
       g.complPhysical σblue σcompl := by
   funext w
   by_cases hb : w.1 ∈ g.blue
   · have hc : w.1 ∉ g.complement := fun hw ↦
       (Finset.disjoint_left.mp g.blue_disjoint_complement) hb hw
-    simp [ThreeBlockGeometry.complPhysical, swapBlueComplementMirror, hb, hc]
+    simp [ThreeBlockGeometry.complPhysical, swapBlueComplement, hb, hc]
   · have hc : w.1 ∈ g.complement := by
       have hbc : w.1 ∈ g.blue ∪ g.complement := by
         rw [← g.sdiff_red_eq_blue_union_complement]
         exact w.2
       exact (Finset.mem_union.mp hbc).resolve_left hb
-    simp [ThreeBlockGeometry.complPhysical, swapBlueComplementMirror, hb, hc]
+    simp [ThreeBlockGeometry.complPhysical, swapBlueComplement, hb, hc]
 
 /-- The complement vertex product reads a global configuration only through the
 complement-incident edges, so it agrees with the configuration merged along the blue
@@ -81,7 +106,7 @@ theorem ThreeBlockGeometry.complProd_eq_regionMerge_blue
     (∏ w : {w : V // w ∈ g.complement}, A.component w.1 (fun ie => p.2 ie.1) (σcompl w)) =
       ∏ w : {w : V // w ∈ g.complement},
         A.component w.1 (fun ie => regionMerge (G := G) A g.blue p ie.1) (σcompl w) := by
-  exact g.swapBlueComplementMirror.blueProd_eq_regionMerge_complement σcompl p hp
+  exact g.swapBlueComplement.blueProd_eq_regionMerge_complement σcompl p hp
 
 /-- On a boundary edge of the host `univ \ red`, the complement-side configuration
 `p.2` agrees with the configuration merged along the blue block, provided the pair
@@ -97,8 +122,8 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_blue
     regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 =
       regionBoundaryLabel (G := G) A (Finset.univ \ g.red)
         (regionMerge (G := G) A g.blue p) := by
-  simpa [swapBlueComplementMirror] using
-    g.swapBlueComplementMirror.hostLabel_p2_eq_hostLabel_regionMerge_complement p hp
+  simpa [swapBlueComplement] using
+    g.swapBlueComplement.hostLabel_p2_eq_hostLabel_regionMerge_complement p hp
 open scoped Classical in
 /-- **The host-relative blue fiber cardinality.** The blue mirror of
 `threeBlockFiber_card`: among the blue-boundary-agreeing pairs whose complement-side
@@ -117,8 +142,8 @@ theorem ThreeBlockGeometry.threeBlockBlueFiber_card
             regionMerge (G := G) A g.blue p = η))).card =
       if regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry then
         regionInteriorBondProd (G := G) A g.blue else 0 := by
-  simpa [swapBlueComplementMirror] using
-    g.swapBlueComplementMirror.threeBlockFiber_card bdry η
+  simpa [swapBlueComplement] using
+    g.swapBlueComplement.threeBlockFiber_card bdry η
 
 open scoped Classical in
 /-- **The host-relative blue merge collapse.** The blue mirror of
@@ -151,7 +176,7 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single_blue
             ∏ w : {w : V // w ∈ g.complement},
               A.component w.1 (fun ie => ζ ie.1) (σcompl w) := by
   exact
-    g.swapBlueComplementMirror.threeBlockDoubleSum_eq_smul_single bdry σcompl σblue
+    g.swapBlueComplement.threeBlockDoubleSum_eq_smul_single bdry σcompl σblue
 
 open scoped Classical in
 /-- **The complement coupling coefficient.** The blue mirror of
@@ -166,7 +191,7 @@ noncomputable def ThreeBlockGeometry.threeBlockComplCoeff
     (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement)
     (bβ : RegionBoundaryConfig (G := G) A g.blue) : ℂ :=
-  g.swapBlueComplementMirror.threeBlockBlueCoeff bdry σcompl bβ
+  g.swapBlueComplement.threeBlockBlueCoeff bdry σcompl bβ
 
 open scoped Classical in
 /-- **The host-relative blue decoupling.** The blue mirror of
@@ -194,7 +219,7 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_complCoeff_sum_blue
         regionBlockedWeight (G := G) A g.blue bβ σblue *
           g.threeBlockComplCoeff bdry σcompl bβ := by
   exact
-    g.swapBlueComplementMirror.threeBlockDoubleSum_eq_blueCoeff_sum bdry σcompl σblue
+    g.swapBlueComplement.threeBlockDoubleSum_eq_blueCoeff_sum bdry σcompl σblue
 
 namespace ThreeBlockGeometry
 
@@ -217,10 +242,10 @@ theorem regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_
       ∑ bβ : RegionBoundaryConfig (G := G) A g.blue,
         g.threeBlockComplCoeff bdry σcompl bβ •
           regionBlockedWeight (G := G) A g.blue bβ σblue := by
-  rw [← g.swapBlueComplementMirror_complPhysical σblue σcompl]
+  rw [← g.swapBlueComplement_complPhysical σblue σcompl]
   exact
     ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
-      g.swapBlueComplementMirror bdry σcompl σblue
+      g.swapBlueComplement bdry σcompl σblue
 
 end ThreeBlockGeometry
 
