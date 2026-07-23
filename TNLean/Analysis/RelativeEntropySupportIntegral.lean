@@ -228,12 +228,14 @@ domain of positive-semidefinite `A` and `B` is the finite sum
   \sum_{i,j} r(\alpha_i,\beta_j,t)
     \lvert (U_A^\ast U_B)_{ij}\rvert^2,
 \]
-where `r` is `relativeEntropyScalar`.
+where `r` is zero when `β_j = 0` and is `relativeEntropyScalar` when
+`β_j > 0`. Thus no zero-over-zero quotient occurs in the definition.
 
-Under `ker B ⊆ ker A`, the terms with `β_j = 0` vanish by
-`relativeEntropyScalar_mul_overlap_normSq_eq_zero_of_kernel_le`. Thus this
-definition implements the support convention in the positive-semidefinite
-extension of Jenčová--Ruskai, arXiv:0903.2895v4, lines 717--720.
+Under `ker B ⊆ ker A`, this convention agrees with the totalized scalar
+expression because the terms with `β_j = 0` vanish by
+`relativeEntropyScalar_mul_overlap_normSq_eq_zero_of_kernel_le`. This
+implements the support convention in the positive-semidefinite extension of
+Jenčová--Ruskai, arXiv:0903.2895v4, lines 717--720.
 
 This is a spectral-coordinate expression. It has not yet been identified
 with the coordinate-free form of the matrix lift `(intAB)`, lines 423--427.
@@ -245,12 +247,14 @@ noncomputable def supportRelativeEntropySpectralIntegrand
     {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
     (t : ℝ) : ℝ :=
   ∑ i, ∑ j,
-    relativeEntropyScalar
-        (hA.isHermitian.eigenvalues i)
-        (hB.isHermitian.eigenvalues j) t *
-      Complex.normSq
-        ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
-          (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j)
+    if 0 < hB.isHermitian.eigenvalues j then
+      relativeEntropyScalar
+          (hA.isHermitian.eigenvalues i)
+          (hB.isHermitian.eigenvalues j) t *
+        Complex.normSq
+          ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+            (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j)
+    else 0
 
 open scoped Matrix.Norms.L2Operator in
 /-- Each weighted spectral term is integrable on the positive half-line and
@@ -337,6 +341,46 @@ theorem
   have hterm (i j : n) :=
     relativeEntropyScalar_mul_overlap_normSq_integrableOn_and_integral_of_kernel_le
       hA hB hker i j
+  have hpiece (i j : n) :
+      IntegrableOn
+        (fun t : ℝ =>
+          if 0 < hB.isHermitian.eigenvalues j then
+            relativeEntropyScalar
+                (hA.isHermitian.eigenvalues i)
+                (hB.isHermitian.eigenvalues j) t *
+              Complex.normSq
+                ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+                  (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j)
+          else 0)
+        (Ioi 0) ∧
+        ∫ t : ℝ in Ioi 0,
+          (if 0 < hB.isHermitian.eigenvalues j then
+            relativeEntropyScalar
+                (hA.isHermitian.eigenvalues i)
+                (hB.isHermitian.eigenvalues j) t *
+              Complex.normSq
+                ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+                  (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j)
+          else 0) =
+          hA.isHermitian.eigenvalues i *
+            (Real.log (hA.isHermitian.eigenvalues i) -
+              Real.log (hB.isHermitian.eigenvalues j)) *
+            Complex.normSq
+              ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+                (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) := by
+    by_cases hβpos : 0 < hB.isHermitian.eigenvalues j
+    · simpa only [hβpos, if_true] using hterm i j
+    · have hβzero : hB.isHermitian.eigenvalues j = 0 :=
+        le_antisymm (not_lt.mp hβpos) (hB.eigenvalues_nonneg j)
+      have hweight :=
+        eigenvalue_mul_overlap_normSq_eq_zero_of_kernel_le
+          hA hB hker i j hβzero
+      refine ⟨?_, ?_⟩
+      · simp only [hβpos, if_false]
+        exact integrableOn_zero
+      · simp only [hβzero, lt_self_iff_false, if_false, integral_zero, Real.log_zero,
+          sub_zero]
+        rw [mul_right_comm, hweight, zero_mul]
   have hintegral :
       ∫ t : ℝ in Ioi 0, supportRelativeEntropySpectralIntegrand hA hB t =
         ∑ i, ∑ j,
@@ -353,18 +397,18 @@ theorem
       rw [integral_finsetSum Finset.univ]
       · apply Finset.sum_congr rfl
         intro j _
-        exact (hterm i j).2
-      · exact fun j _ => (hterm i j).1
+        exact (hpiece i j).2
+      · exact fun j _ => (hpiece i j).1
     · intro i _
       apply integrable_finsetSum Finset.univ
-      exact fun j _ => (hterm i j).1
+      exact fun j _ => (hpiece i j).1
   have hintegrable :
       IntegrableOn (supportRelativeEntropySpectralIntegrand hA hB) (Ioi 0) := by
     unfold supportRelativeEntropySpectralIntegrand
     apply integrable_finsetSum Finset.univ
     intro i _
     apply integrable_finsetSum Finset.univ
-    exact fun j _ => (hterm i j).1
+    exact fun j _ => (hpiece i j).1
   exact ⟨hintegrable, hintegral⟩
 
 open scoped Matrix.Norms.L2Operator in
