@@ -81,8 +81,7 @@ theorem ThreeBlockGeometry.complProd_eq_regionMerge_blue
     (∏ w : {w : V // w ∈ g.complement}, A.component w.1 (fun ie => p.2 ie.1) (σcompl w)) =
       ∏ w : {w : V // w ∈ g.complement},
         A.component w.1 (fun ie => regionMerge (G := G) A g.blue p ie.1) (σcompl w) := by
-  simpa [swapBlueComplementMirror] using
-    g.swapBlueComplementMirror.blueProd_eq_regionMerge_complement σcompl p hp
+  exact g.swapBlueComplementMirror.blueProd_eq_regionMerge_complement σcompl p hp
 
 /-- On a boundary edge of the host `univ \ red`, the complement-side configuration
 `p.2` agrees with the configuration merged along the blue block, provided the pair
@@ -151,7 +150,7 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single_blue
               A.component w.1 (fun ie => ζ ie.1) (σblue w)) *
             ∏ w : {w : V // w ∈ g.complement},
               A.component w.1 (fun ie => ζ ie.1) (σcompl w) := by
-  simpa [swapBlueComplementMirror] using
+  exact
     g.swapBlueComplementMirror.threeBlockDoubleSum_eq_smul_single bdry σcompl σblue
 
 open scoped Classical in
@@ -194,7 +193,7 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_complCoeff_sum_blue
       ∑ bβ : RegionBoundaryConfig (G := G) A g.blue,
         regionBlockedWeight (G := G) A g.blue bβ σblue *
           g.threeBlockComplCoeff bdry σcompl bβ := by
-  simpa [swapBlueComplementMirror, threeBlockComplCoeff] using
+  exact
     g.swapBlueComplementMirror.threeBlockDoubleSum_eq_blueCoeff_sum bdry σcompl σblue
 
 namespace ThreeBlockGeometry
@@ -218,10 +217,10 @@ theorem regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_
       ∑ bβ : RegionBoundaryConfig (G := G) A g.blue,
         g.threeBlockComplCoeff bdry σcompl bβ •
           regionBlockedWeight (G := G) A g.blue bβ σblue := by
-  simpa [swapBlueComplementMirror, threeBlockComplCoeff] using
-    g.swapBlueComplementMirror.
-      regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
-        bdry σcompl σblue
+  rw [← g.swapBlueComplementMirror_complPhysical σblue σcompl]
+  exact
+    ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+      g.swapBlueComplementMirror bdry σcompl σblue
 
 end ThreeBlockGeometry
 
@@ -243,9 +242,12 @@ theorem regionInteriorBondProd_smul_geometryBlueWeight_eq
       ∑ bβ : RegionBoundaryConfig (G := G) A g.blue,
         g.threeBlockComplCoeff bdry σcompl bβ •
           regionBlockedWeight (G := G) A g.blue bβ := by
-  simpa [swapBlueComplementMirror, threeBlockComplCoeff] using
-    g.swapBlueComplementMirror.regionInteriorBondProd_smul_threeBlockComplWeight_eq
-      bdry σcompl
+  funext σblue
+  rw [Pi.smul_apply, Finset.sum_apply,
+    g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue
+      bdry σblue σcompl]
+  refine Finset.sum_congr rfl (fun bβ _ => ?_)
+  rw [Pi.smul_apply]
 
 end PEPS
 end TNLean
