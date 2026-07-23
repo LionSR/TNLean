@@ -376,6 +376,18 @@ definition and convexity argument directly to positive semidefinite pairs with
 $\ker B\subseteq\ker A$; see arXiv:0903.2895v4, lines 717--720.  Their singular
 equality argument then obtains the common relative-modular resolvent on the
 reference support and passes through functional calculus; see lines 766--793.
+The support-domain spectral integral is now also proved.  For positive
+semidefinite $A,B$ with $\ker B\subseteq\ker A$, its finite spectral integrand
+is integrable on $(0,\infty)$ and has integral $D(A\Vert B)$.  This proves the
+spectral content of $(\mathrm{J1})$, $(\mathrm{intspec})$, and
+$(\mathrm{intAB})$ together with the support convention at lines 717--720.
+\footnote{Formal declarations:
+\leanid{Matrix.quantumRelativeEntropy_spectral} and
+\leanid{Matrix.supportRelativeEntropySpectralIntegrand_integrableOn_and_integral_eq_quantumRelativeEntropy}
+in \path{TNLean/Analysis/RelativeEntropyResolventIntegral.lean}.}
+It does not yet identify that finite spectral sum with a coordinate-free
+support-resolvent quadratic form, and it gives no finite-family defect
+identity.
 Following the latter step, consider two positive semidefinite pairs $(A,B)$ and
 $(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
 $B$, and write
@@ -423,9 +435,14 @@ $\mathbf 1\otimes P_B^{\mathsf T}$, multiplication by
 $A\otimes\mathbf 1+t(\mathbf 1\otimes B^{\mathsf T})$ gives
 $\operatorname{vec}(B^{\mathsf T})$.  This uses only the generalized-inverse
 identity $(B^{-1/2}_{\mathrm{supp}})^2B=P_B$ and does not supply equality
-with the comparison resolver.  The remaining step is the support-domain
-relative-entropy defect identity and its zero-defect consequence, tracked in
-issue~\#4435.
+with the comparison resolver.  The new spectral integral theorem does not
+close this gap: one must first identify its integrand with the corresponding
+support-restricted quadratic form.  In the relative-modular formulation,
+$B^+=(B^{-1/2}_{\mathrm{supp}})^2$ occurs inside
+$t\mathbf 1+A\otimes(B^+)^{\mathsf T}$; for $t>0$, the inverse of this
+shifted operator on $\mathbf 1\otimes P_B^{\mathsf T}$ is an ordinary inverse.
+After this identification, the finite-family support-domain defect identity
+and its zero-defect consequence remain to be proved in issue~\#4435.
 
 The kernel inclusion belongs to the preceding source theorem that must derive
 the support-restricted common resolvents from equality in data processing.  That

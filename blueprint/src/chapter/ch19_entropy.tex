@@ -2544,8 +2544,9 @@ Theorem~\ref{thm:trace_norm_abs}.
       \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}\,dt
       =a(\log a-\log b).
     \]
-    This is the scalar identity underlying the spectral representation in
-    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4.
+    This is the scalar normalization $(\mathrm{intspec})$ in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S2.1,
+    lines~406--413.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -2558,6 +2559,96 @@ Theorem~\ref{thm:trace_norm_abs}.
     as $a-b$ is positive or negative, and is therefore integrable.  The
     fundamental theorem of calculus gives the stated value.
 \end{proof}
+
+\begin{theorem}[Hermitian trace-log spectral identity]
+    \label{thm:relative_entropy_hermitian_spectral}
+    \lean{Matrix.quantumRelativeEntropy_spectral}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $A$ and $B$ be Hermitian matrices of the same size, with spectral
+    resolutions
+    \[
+        A=\sum_i\alpha_i|u_i\rangle\langle u_i|,
+        \qquad
+        B=\sum_j\beta_j|v_j\rangle\langle v_j|.
+    \]
+    Write $w_{ij}=\langle u_i,v_j\rangle$, and use the total real logarithm,
+    for which $\log 0=0$.  Then
+    \[
+        D(A\Vert B)
+        =\sum_{i,j}\alpha_i
+          \bigl(\log\alpha_i-\log\beta_j\bigr)|w_{ij}|^2.
+    \]
+    This is the spectral form of the homogeneous trace-log identity
+    $(\mathrm{J1})$ in Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4, lines~277--287.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand both trace terms in eigenbases.  Unitarity of the overlap matrix
+    gives $\sum_j|w_{ij}|^2=1$, so
+    \[
+      \operatorname{Re}\operatorname{Tr}(A\log A)
+        =\sum_{i,j}\alpha_i\log(\alpha_i)|w_{ij}|^2,
+      \qquad
+      \operatorname{Re}\operatorname{Tr}(A\log B)
+        =\sum_{i,j}\alpha_i\log(\beta_j)|w_{ij}|^2.
+    \]
+    Subtraction gives the stated identity.
+\end{proof}
+
+\begin{theorem}[Support-domain spectral integral of relative entropy]
+    \label{thm:relative_entropy_support_spectral_integral}
+    \lean{Matrix.supportRelativeEntropySpectralIntegrand_integrableOn_and_integral_eq_quantumRelativeEntropy}
+    \leanok
+    \uses{def:quantum_relative_entropy,
+        lem:relative_entropy_scalar_resolvent_integral,
+        thm:relative_entropy_hermitian_spectral}
+    Let $A$ and $B$ be positive semidefinite matrices of the same size and
+    suppose that $\ker B\subseteq\ker A$.  With the spectral notation of the
+    preceding theorem, define, for $t>0$,
+    \[
+      I_{A,B}(t)=
+      \sum_{i,j}
+      \frac{
+        \alpha_i^2/(\alpha_i+t\beta_j)-\beta_j
+          +t\beta_j^2/(\alpha_i+t\beta_j)}
+        {1+t}
+      |w_{ij}|^2.
+    \]
+    The terms with $\beta_j=0$ vanish after multiplication by
+    $|w_{ij}|^2$.  The function $I_{A,B}$ is integrable on $(0,\infty)$, and
+    \[
+        \int_0^\infty I_{A,B}(t)\,dt=D(A\Vert B).
+    \]
+    The trace-log identity $(\mathrm{J1})$, the scalar normalization
+    $(\mathrm{intspec})$, and its matrix form $(\mathrm{intAB})$ occur in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, at lines~277--287,
+    406--413, and 423--427, respectively.  The support-domain extension is
+    given at lines~717--720.
+
+    This theorem concerns the spectral expression $I_{A,B}$.  It does not
+    assert a coordinate-free support-resolvent formula or a finite-family
+    defect identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\beta_j=0$, the kernel inclusion gives
+    $\alpha_i|w_{ij}|^2=0$, so the complete weighted term vanishes.  If
+    $\beta_j>0$, the scalar integral applies when $\alpha_i>0$, while the
+    term is identically zero when $\alpha_i=0$.  Since the double sum is
+    finite, integration term by term gives
+    \[
+      \int_0^\infty I_{A,B}(t)\,dt
+        =\sum_{i,j}\alpha_i
+          \bigl(\log\alpha_i-\log\beta_j\bigr)|w_{ij}|^2.
+    \]
+    The preceding theorem identifies the last sum with $D(A\Vert B)$.
+\end{proof}
+
+% Open in #4435: identify the spectral expression above with the
+% coordinate-free support-resolvent quadratic form, then prove the
+% finite-family defect identity.  Neither statement is claimed here.
 
 \begin{theorem}[Spectral resolvent representation of relative entropy]
     \label{thm:relative_entropy_resolvent_integral}

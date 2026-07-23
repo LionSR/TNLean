@@ -9,16 +9,20 @@ import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 import Mathlib.LinearAlgebra.Matrix.Vec
 
 /-!
-# Resolvent integral representation of positive-definite relative entropy
+# Resolvent integral representations of relative entropy
 
 This file proves the scalar logarithmic integral and the finite-dimensional
-spectral identities needed to express positive-definite quantum relative
-entropy through the resolvents of `X ↦ A * X + t • (X * B)`.
+spectral identities needed for resolvent representations of quantum relative
+entropy. It includes the support-domain spectral integrand for
+positive-semidefinite matrices and the coordinate-free resolvent formula for
+positive-definite matrices.
 
 ## Main results
 
 * `relativeEntropyScalar_integrableOn` and `integral_relativeEntropyScalar`
   give the coefficient-correct scalar improper integral.
+* `supportRelativeEntropySpectralIntegrand` gives the support-domain spectral
+  integrand for positive-semidefinite matrices.
 * `sourceA_resolvent_quadratic_spectral` and
   `sourceB_resolvent_quadratic_spectral` identify the two resolvent quadratic
   forms in eigenvalue coordinates.
@@ -42,7 +46,10 @@ namespace Matrix
 \[
  \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}.
 \]
-The coefficient `t` in the last term is essential. -/
+The coefficient `t` in the last term is essential.
+
+This is the scalar normalization `(intspec)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 406--413. -/
 noncomputable def relativeEntropyScalar (a b t : ℝ) : ℝ :=
   (a ^ 2 / (a + t * b) - b + t * b ^ 2 / (a + t * b)) / (1 + t)
 
@@ -153,8 +160,8 @@ private theorem relativeEntropyScalar_integrable_and_integral
 /-- The scalar (p=1) relative-entropy resolvent integrand is integrable on
 the positive half-line for positive `a` and `b`.
 
-This is the integrability part of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4. -/
+This is the integrability part of `(intspec)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 406--413. -/
 theorem relativeEntropyScalar_integrableOn {a b : ℝ}
     (ha : 0 < a) (hb : 0 < b) :
     IntegrableOn (relativeEntropyScalar a b) (Ioi 0) :=
@@ -166,14 +173,88 @@ theorem relativeEntropyScalar_integrableOn {a b : ℝ}
  \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}\,dt.
 \]
 
-This is the case `p=1` of the spectral integral in Jenčová--Ruskai,
-arXiv:0903.2895v4, §4.
+This is the scalar normalization `(intspec)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 406--413.
 -/
 theorem integral_relativeEntropyScalar {a b : ℝ}
     (ha : 0 < a) (hb : 0 < b) :
     ∫ t : ℝ in Ioi 0, relativeEntropyScalar a b t =
       a * (Real.log a - Real.log b) :=
   (relativeEntropyScalar_integrable_and_integral ha hb).2
+
+/-- If the first spectral value is zero and the reference spectral value and
+resolvent parameter are positive, then the scalar relative-entropy resolvent
+integrand vanishes.
+
+This is the zero-source boundary of `(intspec)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 406--413, used with the support convention
+in the positive-semidefinite extension at lines 717--720. -/
+theorem relativeEntropyScalar_zero_left {b t : ℝ} (hb : 0 < b) (ht : 0 < t) :
+    relativeEntropyScalar 0 b t = 0 := by
+  unfold relativeEntropyScalar
+  have htb : t * b ≠ 0 := mul_ne_zero ht.ne' hb.ne'
+  have h1 : 1 + t ≠ 0 := by positivity
+  field_simp
+  ring
+
+/-- If the reference scalar is zero and the weighted source scalar vanishes,
+then the complete weighted resolvent term vanishes for every parameter. -/
+theorem relativeEntropyScalar_mul_eq_zero_of_right_eq_zero
+    {a w t : ℝ} (haw : a * w = 0) :
+    relativeEntropyScalar a 0 t * w = 0 := by
+  rcases mul_eq_zero.mp haw with ha | hw
+  · subst a
+    simp [relativeEntropyScalar]
+  · subst w
+    simp
+
+/-- A weighted scalar resolvent term is integrable, with its
+expected logarithmic integral, provided a zero reference value annihilates
+the weighted source value.
+
+The logarithm is Mathlib's totalized logarithm, for which
+`Real.log 0 = 0`. When `b = 0`, the unweighted scalar factor is generally
+not integrable; the support hypothesis kills the complete weighted term
+before integration. The positive scalar identity is `(intspec)` in
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 406--413, while the
+zero-reference case implements the positive-semidefinite support extension
+at lines 717--720. -/
+theorem relativeEntropyScalar_mul_integrableOn_and_integral_of_nonneg
+    {a b w : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b)
+    (hsupport : b = 0 → a * w = 0) :
+    IntegrableOn (fun t : ℝ => relativeEntropyScalar a b t * w) (Ioi 0) ∧
+      ∫ t : ℝ in Ioi 0, relativeEntropyScalar a b t * w =
+        a * (Real.log a - Real.log b) * w := by
+  by_cases hb0 : b ≠ 0
+  · have hbpos : 0 < b := lt_of_le_of_ne hb (Ne.symm hb0)
+    by_cases ha0 : a ≠ 0
+    · have hapos : 0 < a := lt_of_le_of_ne ha (Ne.symm ha0)
+      have hscalar := relativeEntropyScalar_integrable_and_integral hapos hbpos
+      refine ⟨hscalar.1.mul_const w, ?_⟩
+      rw [integral_mul_const, hscalar.2]
+    · simp only [not_ne_iff] at ha0
+      subst a
+      have hzero :
+          EqOn (fun t : ℝ => relativeEntropyScalar 0 b t * w) 0 (Ioi 0) := by
+        intro t ht
+        change relativeEntropyScalar 0 b t * w = 0
+        rw [relativeEntropyScalar_zero_left hbpos ht, zero_mul]
+      refine ⟨integrableOn_zero.congr_fun hzero.symm measurableSet_Ioi, ?_⟩
+      rw [setIntegral_congr_fun measurableSet_Ioi hzero]
+      simp
+  · simp only [not_ne_iff] at hb0
+    have haw : a * w = 0 := hsupport hb0
+    have hzero (t : ℝ) : relativeEntropyScalar a b t * w = 0 := by
+      rw [hb0]
+      exact relativeEntropyScalar_mul_eq_zero_of_right_eq_zero haw
+    refine ⟨integrableOn_zero.congr_fun ?_ measurableSet_Ioi, ?_⟩
+    · intro t _
+      change 0 = relativeEntropyScalar a b t * w
+      exact (hzero t).symm
+    · rw [setIntegral_congr_fun measurableSet_Ioi fun t _ => hzero t]
+      rw [integral_zero]
+      rw [hb0, Real.log_zero]
+      rw [sub_zero, mul_right_comm a (Real.log a) w, haw, zero_mul]
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
@@ -502,8 +583,8 @@ expansion
  \sum_{i,j}\frac{\alpha_i^2}{\alpha_i+t\beta_j}|W_{ij}|^2.
 \]
 
-This is the first resolvent term of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4. -/
+This is the first resolvent term in the matrix lift `(intAB)` of
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 423--427. -/
 theorem sourceA_resolvent_quadratic_spectral {A B : Matrix n n ℂ}
     (hA : A.PosDef) (hB : B.PosDef) {t : ℝ} (ht : 0 < t) :
     sourceAResolventQuadratic A B t =
@@ -549,8 +630,8 @@ expansion
  \sum_{i,j}\frac{\beta_j^2}{\alpha_i+t\beta_j}|W_{ij}|^2.
 \]
 
-This is the second resolvent term of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4. -/
+This is the second resolvent term in the matrix lift `(intAB)` of
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 423--427. -/
 theorem sourceB_resolvent_quadratic_spectral {A B : Matrix n n ℂ}
     (hA : A.PosDef) (hB : B.PosDef) {t : ℝ} (ht : 0 < t) :
     sourceBResolventQuadratic A B t =
@@ -649,48 +730,309 @@ theorem sourceBResolventQuadratic_continuousOn {A B : Matrix n n ℂ}
     sourceB_resolvent_quadratic_spectral hA hB ht
 
 open scoped Matrix.Norms.L2Operator in
-/-- For positive-definite matrices, relative entropy is the spectral double
-sum
+/-- If the kernel of a positive-semidefinite reference matrix `B` is contained
+in the kernel of `A`, then a zero eigenvector of `B` has zero overlap with
+each positive spectral component of `A`.
+
+This lemma implements the support convention in the positive-semidefinite
+extension of Jenčová--Ruskai, arXiv:0903.2895v4, lines 717--720. It removes
+the formally nonintegrable zero-reference-eigenvalue terms from the
+support-domain relative-entropy resolvent integral. -/
+theorem eigenvalue_mul_overlap_eq_zero_of_kernel_le
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0)
+    (i j : n) (hβ : hB.isHermitian.eigenvalues j = 0) :
+    (hA.isHermitian.eigenvalues i : ℂ) *
+        (star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+          (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j = 0 := by
+  classical
+  let UA : Matrix n n ℂ := hA.isHermitian.eigenvectorUnitary
+  let UB : Matrix n n ℂ := hB.isHermitian.eigenvectorUnitary
+  have hBzero :
+      B *ᵥ ⇑(hB.isHermitian.eigenvectorBasis j) = 0 := by
+    rw [hB.isHermitian.mulVec_eigenvectorBasis, hβ, zero_smul]
+  have hAzero : A *ᵥ ⇑(hB.isHermitian.eigenvectorBasis j) = 0 :=
+    hker _ hBzero
+  have hAUBzero : (A * UB) *ᵥ Pi.single j 1 = 0 := by
+    rw [← Matrix.mulVec_mulVec]
+    change A *ᵥ
+      ((hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *ᵥ Pi.single j 1) = 0
+    rw [hB.isHermitian.eigenvectorUnitary_mulVec, hAzero]
+  have hstarAUBzero :
+      (star UA * (A * UB)) *ᵥ Pi.single j 1 = 0 := by
+    rw [← Matrix.mulVec_mulVec, hAUBzero, Matrix.mulVec_zero]
+  have hentryzero := congrFun hstarAUBzero i
+  simp only [Matrix.mulVec_single_one, Pi.zero_apply] at hentryzero
+  change (star UA * (A * UB)) i j = 0 at hentryzero
+  rw [hA.isHermitian.spectral_form] at hentryzero
+  have hUA : star UA * UA = 1 := by
+    simp [UA]
+  change
+    (star UA *
+      ((UA * Matrix.diagonal
+        (fun k => (hA.isHermitian.eigenvalues k : ℂ))) * star UA * UB)) i j = 0
+    at hentryzero
+  simp only [Matrix.mul_assoc] at hentryzero
+  rw [← Matrix.mul_assoc, hUA, Matrix.one_mul] at hentryzero
+  simp only [Matrix.diagonal_mul] at hentryzero
+  simpa only [UA, UB] using hentryzero
+
+open scoped Matrix.Norms.L2Operator in
+/-- Under the support inclusion `ker B ⊆ ker A`, a zero reference eigenvalue
+has zero weight in every spectral summand:
 \[
- D(A\Vert B)=\sum_{i,j}\alpha_i
-   (\log\alpha_i-\log\beta_j)|W_{ij}|^2.
+  \alpha_i\lvert (U_A^\ast U_B)_{ij}\rvert^2=0.
 \]
 
-This is the finite-dimensional spectral form of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4, specialized to `p=1`. -/
-theorem quantumRelativeEntropy_posDef_spectral {A B : Matrix n n ℂ}
-    (hA : A.PosDef) (hB : B.PosDef) :
-    quantumRelativeEntropy A B =
-      ∑ i, ∑ j,
+This is the nonnegative spectral-coefficient form used to implement the
+support convention in the positive-semidefinite extension of
+Jenčová--Ruskai, arXiv:0903.2895v4, lines 717--720. -/
+theorem eigenvalue_mul_overlap_normSq_eq_zero_of_kernel_le
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0)
+    (i j : n) (hβ : hB.isHermitian.eigenvalues j = 0) :
+    hA.isHermitian.eigenvalues i *
+        Complex.normSq
+          ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+            (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) = 0 := by
+  classical
+  have hcomp :=
+    eigenvalue_mul_overlap_eq_zero_of_kernel_le hA hB hker i j hβ
+  by_cases hα : hA.isHermitian.eigenvalues i ≠ 0
+  · have hαc : (hA.isHermitian.eigenvalues i : ℂ) ≠ 0 := by
+      exact_mod_cast hα
+    have hWij :
+        (star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+          (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j = 0 :=
+      (mul_eq_zero.mp hcomp).resolve_left hαc
+    simp [hWij]
+  · simp only [not_ne_iff] at hα
+    simp [hα]
+
+open scoped Matrix.Norms.L2Operator in
+/-- A zero eigenvalue of the reference matrix contributes identically zero to
+the support-domain scalar resolvent sum when `ker B ⊆ ker A`.
+
+The separate scalar factor need not be integrable when the reference
+eigenvalue is zero. The support condition instead annihilates its spectral
+weight before integration. This implements the support convention in the
+positive-semidefinite extension of Jenčová--Ruskai, arXiv:0903.2895v4,
+lines 717--720. -/
+theorem relativeEntropyScalar_mul_overlap_normSq_eq_zero_of_kernel_le
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0)
+    (i j : n) (hβ : hB.isHermitian.eigenvalues j = 0) (t : ℝ) :
+    relativeEntropyScalar
+          (hA.isHermitian.eigenvalues i)
+          (hB.isHermitian.eigenvalues j) t *
+        Complex.normSq
+          ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+            (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) = 0 := by
+  classical
+  have hweight :=
+    eigenvalue_mul_overlap_normSq_eq_zero_of_kernel_le hA hB hker i j hβ
+  by_cases hα : hA.isHermitian.eigenvalues i ≠ 0
+  · have hnormSq :
+        Complex.normSq
+          ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+            (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) = 0 :=
+      (mul_eq_zero.mp hweight).resolve_left hα
+    simp [hnormSq]
+  · simp only [not_ne_iff] at hα
+    simp [relativeEntropyScalar, hα, hβ]
+
+open scoped Matrix.Norms.L2Operator in
+/-- For `t > 0`, the spectral integrand for relative entropy on the support
+domain of positive-semidefinite `A` and `B` is the finite sum
+\[
+  \sum_{i,j} r(\alpha_i,\beta_j,t)
+    \lvert (U_A^\ast U_B)_{ij}\rvert^2,
+\]
+where `r` is `relativeEntropyScalar`.
+
+Under `ker B ⊆ ker A`, the terms with `β_j = 0` vanish by
+`relativeEntropyScalar_mul_overlap_normSq_eq_zero_of_kernel_le`. Thus this
+definition implements the support convention in the positive-semidefinite
+extension of Jenčová--Ruskai, arXiv:0903.2895v4, lines 717--720.
+
+This is a spectral-coordinate expression. It has not yet been identified
+with the coordinate-free form of the matrix lift `(intAB)`, lines 423--427.
+In the corresponding singular formula, `B⁺` occurs inside the shifted
+operator `t 1 + A ⊗ (B⁺)ᵀ`; for `t > 0`, the inverse of that shifted
+operator on the support is an ordinary inverse, not a pseudoinverse of the
+shifted operator. -/
+noncomputable def supportRelativeEntropySpectralIntegrand
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (t : ℝ) : ℝ :=
+  ∑ i, ∑ j,
+    relativeEntropyScalar
+        (hA.isHermitian.eigenvalues i)
+        (hB.isHermitian.eigenvalues j) t *
+      Complex.normSq
+        ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+          (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j)
+
+open scoped Matrix.Norms.L2Operator in
+/-- Each weighted spectral term is integrable on the positive half-line and
+has the expected logarithmic integral when `ker B ⊆ ker A`.
+
+The zero-reference terms implement the support convention in the
+positive-semidefinite extension of Jenčová--Ruskai, arXiv:0903.2895v4,
+lines 717--720. The positive scalar terms use `(intspec)`, §2.1,
+lines 406--413. -/
+theorem
+    relativeEntropyScalar_mul_overlap_normSq_integrableOn_and_integral_of_kernel_le
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0)
+    (i j : n) :
+    IntegrableOn
+      (fun t : ℝ =>
+        relativeEntropyScalar
+            (hA.isHermitian.eigenvalues i)
+            (hB.isHermitian.eigenvalues j) t *
+          Complex.normSq
+            ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+              (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j))
+      (Ioi 0) ∧
+      ∫ t : ℝ in Ioi 0,
+        relativeEntropyScalar
+              (hA.isHermitian.eigenvalues i)
+              (hB.isHermitian.eigenvalues j) t *
+            Complex.normSq
+              ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+                (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) =
         hA.isHermitian.eigenvalues i *
           (Real.log (hA.isHermitian.eigenvalues i) -
             Real.log (hB.isHermitian.eigenvalues j)) *
           Complex.normSq
             ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
               (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) := by
+  apply relativeEntropyScalar_mul_integrableOn_and_integral_of_nonneg
+  · exact hA.eigenvalues_nonneg i
+  · exact hB.eigenvalues_nonneg j
+  · exact eigenvalue_mul_overlap_normSq_eq_zero_of_kernel_le hA hB hker i j
+
+open scoped Matrix.Norms.L2Operator in
+/-- Each weighted scalar term in the support-domain spectral integrand is
+integrable on the positive half-line when `ker B ⊆ ker A`. -/
+theorem relativeEntropyScalar_mul_overlap_normSq_integrableOn_of_kernel_le
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0)
+    (i j : n) :
+    IntegrableOn
+      (fun t : ℝ =>
+        relativeEntropyScalar
+            (hA.isHermitian.eigenvalues i)
+            (hB.isHermitian.eigenvalues j) t *
+          Complex.normSq
+            ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+              (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j))
+      (Ioi 0) :=
+  (relativeEntropyScalar_mul_overlap_normSq_integrableOn_and_integral_of_kernel_le
+    hA hB hker i j).1
+
+open scoped Matrix.Norms.L2Operator in
+/-- The support-domain spectral integrand is integrable on the positive
+half-line, and its integral is the spectral relative-entropy sum, when
+`ker B ⊆ ker A`.
+
+The zero-reference terms implement the support convention in the
+positive-semidefinite extension of Jenčová--Ruskai, arXiv:0903.2895v4,
+lines 717--720; the finite matrix lift is `(intAB)`, §2.1,
+lines 423--427. -/
+theorem
+    supportRelativeEntropySpectralIntegrand_integrableOn_and_integral_of_kernel_le
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0) :
+    IntegrableOn (supportRelativeEntropySpectralIntegrand hA hB) (Ioi 0) ∧
+      ∫ t : ℝ in Ioi 0, supportRelativeEntropySpectralIntegrand hA hB t =
+        ∑ i, ∑ j,
+          hA.isHermitian.eigenvalues i *
+            (Real.log (hA.isHermitian.eigenvalues i) -
+              Real.log (hB.isHermitian.eigenvalues j)) *
+            Complex.normSq
+              ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+                (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) := by
   classical
-  let α : n → ℝ := hA.isHermitian.eigenvalues
-  let β : n → ℝ := hB.isHermitian.eigenvalues
+  have hterm (i j : n) :=
+    relativeEntropyScalar_mul_overlap_normSq_integrableOn_and_integral_of_kernel_le
+      hA hB hker i j
+  have hintegral :
+      ∫ t : ℝ in Ioi 0, supportRelativeEntropySpectralIntegrand hA hB t =
+        ∑ i, ∑ j,
+          hA.isHermitian.eigenvalues i *
+            (Real.log (hA.isHermitian.eigenvalues i) -
+              Real.log (hB.isHermitian.eigenvalues j)) *
+            Complex.normSq
+              ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+                (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) := by
+    unfold supportRelativeEntropySpectralIntegrand
+    rw [integral_finsetSum Finset.univ]
+    · apply Finset.sum_congr rfl
+      intro i _
+      rw [integral_finsetSum Finset.univ]
+      · apply Finset.sum_congr rfl
+        intro j _
+        exact (hterm i j).2
+      · exact fun j _ => (hterm i j).1
+    · intro i _
+      apply integrable_finsetSum Finset.univ
+      exact fun j _ => (hterm i j).1
+  have hintegrable :
+      IntegrableOn (supportRelativeEntropySpectralIntegrand hA hB) (Ioi 0) := by
+    unfold supportRelativeEntropySpectralIntegrand
+    apply integrable_finsetSum Finset.univ
+    intro i _
+    apply integrable_finsetSum Finset.univ
+    exact fun j _ => (hterm i j).1
+  exact ⟨hintegrable, hintegral⟩
+
+open scoped Matrix.Norms.L2Operator in
+/-- For Hermitian matrices, the totalized trace-log relative entropy is the
+spectral double sum
+\[
+ D(A\Vert B)=\sum_{i,j}\alpha_i
+   (\log\alpha_i-\log\beta_j)|W_{ij}|^2.
+\]
+
+Here the logarithm is Mathlib's totalized `Real.log`, in particular
+`Real.log 0 = 0`. For positive-semidefinite matrices on the physical support
+domain, this is the usual finite-dimensional relative-entropy expression.
+
+This is the finite-dimensional spectral form of the trace-log expression
+`(J1)` in Jenčová--Ruskai, arXiv:0903.2895v4, lines 277--287. -/
+theorem quantumRelativeEntropy_spectral {A B : Matrix n n ℂ}
+    (hA : A.IsHermitian) (hB : B.IsHermitian) :
+    quantumRelativeEntropy A B =
+      ∑ i, ∑ j,
+        hA.eigenvalues i *
+          (Real.log (hA.eigenvalues i) -
+            Real.log (hB.eigenvalues j)) *
+          Complex.normSq
+            ((star (hA.eigenvectorUnitary : Matrix n n ℂ) *
+              (hB.eigenvectorUnitary : Matrix n n ℂ)) i j) := by
+  classical
+  let α : n → ℝ := hA.eigenvalues
+  let β : n → ℝ := hB.eigenvalues
   let W : Matrix n n ℂ :=
-    star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
-      (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
+    star (hA.eigenvectorUnitary : Matrix n n ℂ) *
+      (hB.eigenvectorUnitary : Matrix n n ℂ)
   let P : n → n → ℝ := fun i j => Complex.normSq (W i j)
   have hWrow : W * star W = 1 := by
     simp only [W, star_mul, star_star, Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc
-      (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)]
+    rw [← Matrix.mul_assoc (hB.eigenvectorUnitary : Matrix n n ℂ)]
     rw [Unitary.mul_star_self_of_mem
-      hB.isHermitian.eigenvectorUnitary.prop, Matrix.one_mul]
-    exact Unitary.coe_star_mul_self hA.isHermitian.eigenvectorUnitary
+      hB.eigenvectorUnitary.prop, Matrix.one_mul]
+    exact Unitary.coe_star_mul_self hA.eigenvectorUnitary
   have hrow (i : n) : ∑ j, P i j = 1 := by
     exact TNLean.Klein.row_sum_normSq_eq_one hWrow i
   rw [quantumRelativeEntropy_eq_trace_mul_log_sub]
-  have hlogB : CFC.log B = hB.isHermitian.cfc Real.log := by
+  have hlogB : CFC.log B = hB.cfc Real.log := by
     rw [CFC.log]
-    exact Matrix.IsHermitian.cfc_eq hB.isHermitian Real.log
+    exact Matrix.IsHermitian.cfc_eq hB Real.log
   have hself : (Matrix.trace (A * CFC.log A)).re =
       ∑ i, ∑ j, α i * Real.log (α i) * P i j := by
-    have h := vonNeumannEntropy_eq_neg_trace_mul_log hA.isHermitian
+    have h := vonNeumannEntropy_eq_neg_trace_mul_log hA
     rw [vonNeumannEntropy] at h
     have hre : (Matrix.trace (A * CFC.log A)).re =
         ∑ i, α i * Real.log (α i) := by
@@ -707,13 +1049,53 @@ theorem quantumRelativeEntropy_posDef_spectral {A B : Matrix n n ℂ}
   have hcross : (Matrix.trace (A * CFC.log B)).re =
       ∑ i, ∑ j, α i * Real.log (β j) * P i j := by
     rw [hlogB, TNLean.Klein.re_trace_mul_cfc_eq_double_sum
-      hA.isHermitian hB.isHermitian Real.log]
+      hA hB Real.log]
   rw [hself, hcross, ← Finset.sum_sub_distrib]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [← Finset.sum_sub_distrib]
   refine Finset.sum_congr rfl fun j _ => ?_
   simp only [α, β, W, P]
   ring
+
+open scoped Matrix.Norms.L2Operator in
+/-- The positive-definite specialization of
+`quantumRelativeEntropy_spectral`. -/
+theorem quantumRelativeEntropy_posDef_spectral {A B : Matrix n n ℂ}
+    (hA : A.PosDef) (hB : B.PosDef) :
+    quantumRelativeEntropy A B =
+      ∑ i, ∑ j,
+        hA.isHermitian.eigenvalues i *
+          (Real.log (hA.isHermitian.eigenvalues i) -
+            Real.log (hB.isHermitian.eigenvalues j)) *
+          Complex.normSq
+            ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+              (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) :=
+  quantumRelativeEntropy_spectral hA.isHermitian hB.isHermitian
+
+open scoped Matrix.Norms.L2Operator in
+/-- For positive-semidefinite `A` and `B` with `ker B ⊆ ker A`, the
+support-domain spectral integrand is integrable on `(0, ∞)` and its integral
+is the totalized trace-log relative entropy:
+\[
+  \int_0^\infty I_{A,B}(t)\,dt = D(A\Vert B).
+\]
+
+The spectral trace-log identity is `(J1)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, lines 277--287. The kernel condition and zero-reference
+terms implement the positive-semidefinite extension at lines 717--720. -/
+theorem
+    supportRelativeEntropySpectralIntegrand_integrableOn_and_integral_eq_quantumRelativeEntropy
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0) :
+    IntegrableOn (supportRelativeEntropySpectralIntegrand hA hB) (Ioi 0) ∧
+      ∫ t : ℝ in Ioi 0, supportRelativeEntropySpectralIntegrand hA hB t =
+        quantumRelativeEntropy A B := by
+  have hfinite :=
+    supportRelativeEntropySpectralIntegrand_integrableOn_and_integral_of_kernel_le
+      hA hB hker
+  refine ⟨hfinite.1, ?_⟩
+  rw [hfinite.2]
+  exact (quantumRelativeEntropy_spectral hA.isHermitian hB.isHermitian).symm
 
 open scoped Matrix.Norms.L2Operator in
 /-- Simultaneous multiplication of two positive-definite arguments by a
@@ -737,7 +1119,8 @@ theorem quantumRelativeEntropy_smul_posDef {A B : Matrix n n ℂ}
 
 /-- The two-source resolvent integrand for positive-definite relative entropy.
 The source-`B` term carries the coefficient `t` required by the scalar
-representation. -/
+representation. This is the matrix lift `(intAB)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 423--427. -/
 noncomputable def relativeEntropyResolventIntegrand
     (A B : Matrix n n ℂ) (t : ℝ) : ℝ :=
   (sourceAResolventQuadratic A B t - (Matrix.trace B).re +
@@ -799,8 +1182,8 @@ private lemma relativeEntropyResolventIntegrand_eq_spectral
 /-- The coefficient-correct positive-definite relative-entropy resolvent
 integrand is integrable on `(0, ∞)`.
 
-This is the integrability assertion accompanying Jenčová--Ruskai,
-arXiv:0903.2895v4, §4. -/
+This is the integrability assertion accompanying `(intAB)` in
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 423--427. -/
 theorem relativeEntropyResolventIntegrand_integrableOn
     {A B : Matrix n n ℂ} (hA : A.PosDef) (hB : B.PosDef) :
     IntegrableOn (relativeEntropyResolventIntegrand A B) (Ioi 0) := by
@@ -868,8 +1251,8 @@ For positive-definite `A` and `B`,
 Both source families, and the coefficient `t` on the source-`B` family, are
 part of the statement.
 
-This is the finite-dimensional specialization of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4, specialized to `p=1`. -/
+This is the finite-dimensional specialization of `(intAB)` in
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 423--427. -/
 theorem quantumRelativeEntropy_resolvent_integral
     {A B : Matrix n n ℂ} (hA : A.PosDef) (hB : B.PosDef) :
     quantumRelativeEntropy A B =
