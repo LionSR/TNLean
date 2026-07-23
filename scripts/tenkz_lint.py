@@ -27,6 +27,10 @@ Rules (findings exit 1 unless escaped):
            ink and body customization are separate parts of the language;
            an empty specimen does not exercise their composition.
 
+  rmp-*    Canonical RMP case files additionally require the six provenance
+           headers, preamble-free source, canonical spellings, public names,
+           at most 88 characters per line, and at most 100 lines per case.
+
 Escape: a comment `% tenkz-lint: allow <rule> <reason>` on the finding's
 line or the line directly above suppresses that rule there (`allow all`
 suppresses every rule).  Escaped findings are reported but do not fail.
@@ -45,6 +49,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from tenkz_audit import ENVIRONMENT_LANGS
+from tenkz_language import load_registry
 
 # Bodies scanned for the dots rule: the grid languages whose cells feed
 # the implicit wire.  (tenkzcd cells are math objects and tenkzfree has
@@ -66,6 +71,36 @@ INK_PATTERNS = [
 ]
 
 ESCAPE_RE = re.compile(r"%\s*tenkz-lint:\s*allow\s+(\S+)(?:\s+(.*\S))?")
+
+
+def registry_alias_patterns() -> list[re.Pattern[str]]:
+    """Safe source patterns for compatibility keys declared by the registry."""
+    aliases = {
+        entry.fields[1]
+        for entry in load_registry()
+        if entry.kind == "key" and entry.fields[4] != "canonical"
+    }
+    value_aliases = {
+        entry.fields[1]
+        for entry in load_registry()
+        if entry.kind == "alias"
+    }
+    # `rows` is canonical at picture scope and needs command-aware parsing;
+    # periodic has a dedicated boundary-sensitive expression below.
+    aliases.discard("rows")
+    aliases.discard("periodic")
+    patterns = [
+        re.compile(r"\b" + re.escape(name).replace(r"\ ", r"\s+") + r"(?:\s*=|\b)")
+        for name in sorted(aliases)
+    ]
+    patterns.extend(
+        re.compile(re.escape(spelling).replace(r"\ ", r"\s*").replace("=", r"\s*=\s*"))
+        for spelling in sorted(value_aliases)
+    )
+    return patterns
+
+
+RMP_REGISTRY_ALIAS_PATTERNS = registry_alias_patterns()
 
 
 @dataclass
@@ -259,6 +294,30 @@ def lint_file(path: Path) -> list[Finding]:
             scan(mask_option_groups(body.text), body.start, DOTS_PATTERNS)
         if body.name in INK_ENVS:
             scan(body.text, body.start, INK_PATTERNS)
+    if "rmp" in path.parts and "cases" in path.parts:
+        required = ("Target", "Formula", "Ink", "Boundary", "Source", "Capabilities")
+        for header in required:
+            if not re.search(rf"^%\s*{header}:\s*\S", raw, re.MULTILINE):
+                findings.append(Finding(
+                    path, 1, "rmp-header", f"missing % {header}: header", False))
+        source_rules = [
+            ("rmp-preamble", re.compile(r"\\(?:documentclass|usepackage|begin\{document\})")),
+            ("rmp-private", re.compile(r"\\(?:__tenkz|tenkz@|tenkz_[A-Za-z])")),
+            ("rmp-macro", re.compile(r"\\(?:newcommand|def|NewDocumentCommand)\b")),
+            ("rmp-raw-ink", re.compile(r"\\(?:draw|fill|filldraw|shade|node|path|tikzset)\b")),
+            ("rmp-alias", re.compile(r"(?<!boundary=)\bperiodic\b")),
+            ("rmp-metadata", re.compile(r"^%\s*Fixture\s*:", re.MULTILINE)),
+        ]
+        source_rules.extend(("rmp-alias", pattern) for pattern in RMP_REGISTRY_ALIAS_PATTERNS)
+        scan(src, 0, source_rules)
+        if len(raw_lines) > 100:
+            findings.append(Finding(
+                path, 101, "rmp-lines", f"{len(raw_lines)} lines; maximum is 100", False))
+        for lineno, line in enumerate(raw_lines, 1):
+            if len(line) > 88:
+                findings.append(Finding(
+                    path, lineno, "rmp-width", line.strip(),
+                    escaped(lineno, "rmp-width")))
     findings.sort(key=lambda f: (f.line, f.rule))
     return findings
 

@@ -1,0 +1,30 @@
+% Target: rmp-iii-a-pentagon-mixed
+% Formula: ^2F ^3F = ^3F ^2F ^2F — a horizontal MPO string (red,
+% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Boundary: Resolved by the public environment; open indices remain explicit.
+% Source: paper TN-Review-main.tex line 1325; paper-context-only; no author drawing
+%   source
+% Capabilities: coherence, fusion-tree
+\[
+  \begin{tenkzfree}
+    % the splitting vertex: root in from below, two legs out the top
+    \tnput[dot, ports={south:physical}]{V}{(0,0)}{}
+    \tnjoin[dir]{0mm,-16mm}{V.south}
+    \tnjoin[dir, route=arc, out=130, in=-90]{V.north west}{-8mm,14mm}
+    \tnjoin[dir, route=arc, out=50, in=-90]{V.north east}{8mm,14mm}
+    % the MPO string, below the vertex, crossing the root leg
+    \tnjoin[dir]{-9mm,-9mm}{9mm,-9mm}
+  \end{tenkzfree}
+  \;=\;
+  \begin{tenkzfree}
+    \tnput[dot, ports={south:physical}]{W}{(0,0)}{}
+    \tnjoin[dir]{0mm,-12mm}{W.south}
+    \tnjoin[dir, route=arc, out=130, in=-90]{W.north west}{-8mm,18mm}
+    \tnjoin[dir, route=arc, out=50, in=-90]{W.north east}{8mm,18mm}
+    % the string, above the vertex, crossing BOTH split legs
+    \tnjoin[dir]{-13mm,11mm}{13mm,11mm}
+  \end{tenkzfree}
+\]
+\[
+  {}^{2}F\,{}^{3}F \;=\; {}^{3}F\,{}^{2}F\,{}^{2}F
+\]

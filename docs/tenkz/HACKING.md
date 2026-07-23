@@ -1,97 +1,155 @@
 # Hacking on tenkz
 
-<!-- The operational knowledge a new contributor (human or agent) needs
-     before touching tex/tenkz. The design rationale lives in DESIGN.md;
-     this file is how not to lose an afternoon. -->
+`LANGUAGE.md` is the public semantic contract.  `ARCHITECTURE.md` owns the
+internal pipeline.  This file is the operational checklist for changing and
+debugging the package.
 
-## Canonical invocations
+## Fast build loop
 
-Compile any test or example standalone, from its own directory:
+Compile a standalone example from its own directory.  Keep the timeout: an
+expl3 loop over an expanded `\q_no_value` otherwise looks like a slow run.
 
-```
+```sh
 timeout 120 env TEXINPUTS="<repo>/tex/tenkz//:" \
   xelatex -interaction=nonstopmode -halt-on-error <file>.tex
 ```
 
-ALWAYS keep the timeout: expl3 loops on expanded `\q_no_value` (see below)
-run forever, and a hung xelatex looks exactly like a slow one. The manual
-takes `timeout 150` and two passes, from `docs/tenkz/`:
+Build the compact manual twice for contents and references:
 
-```
-cd docs/tenkz && timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
+```sh
+cd docs/tenkz
+timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
+  xelatex -interaction=nonstopmode -halt-on-error manual2.tex
+timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
   xelatex -interaction=nonstopmode -halt-on-error manual2.tex
 ```
 
-Render for visual review (exit codes do not review figures — eyes do):
+The generated language reference is
+`chapters2/generated-language-reference.tex`.  Regenerate it from the
+executable registry at `tex/tenkz/tenkz-language-registry.tex`; parser-facing
+language code lives in `tex/tenkz/tenkz-language.code.tex`.  Do not edit the
+generated file as an independent vocabulary list.  The manual has a short
+fallback so a clean pre-generation checkout still compiles.
 
+The RMP book has a separate driver and interface:
+
+```sh
+scripts/tenkz_rmp.sh check --id <target>
+scripts/tenkz_rmp.sh check --section <section>
+scripts/tenkz_rmp.sh check --all
+scripts/tenkz_rmp.sh book --all
+scripts/tenkz_rmp.sh render --all
+scripts/tenkz_rmp.sh compare --all --source-root tex/RMP_TIKZ_SOURCE_CODE
 ```
-pdftocairo -png -r 200 -singlefile <file>.pdf <file>
+
+The reviewed campaign verdict is stored in `tests/tenkz/rmp/verdict.toml`.
+Its digest covers the manifest, every case and mapped fixture, the package
+implementation, the audit/lint/build scripts, and the book style.  The book
+shows `digest-stale` instead of carrying a verdict across any covered change;
+refresh the record only after rerunning the source, print, SVG, and page-review
+gates.
+
+The ordinary 257-fixture corpus keeps its existing default interface:
+
+```sh
+scripts/tenkz_corpus.sh
+scripts/tenkz_corpus.sh --render
 ```
 
-For repository-wide review, `scripts/tenkz_corpus.sh --render` compiles and
-audits the adopted corpus before producing a complete 200-dpi PNG baseline.
-The before/after checksum and visual-review discipline is specified in
-`tests/tenkz/README.md`.
+Both suites may share lower-level helpers; neither frontend changes the
+other's defaults.
 
-Audit the event stream after a compile: `scripts/tenkz_audit.py` over the
-produced `.tnlog`. `scripts/tenkz_lint.py` checks source conventions.
-The asymmetric-port regression is `python3 scripts/test_tenkz_face_ports.py`;
-it checks face arities and contraction multiplicities, not only compilation.
+## Audit and visual review
 
-## expl3 and pgf pitfalls that have each shipped a bug here
+After compiling, audit the exact event stream used by the rendering and lint
+the source:
 
-1. **Never expand `\q_no_value`.** A failed `\prop_get` leaves it in the
-   output token list and TeX loops forever. Use `\tenkz_get:NeN` (the
-   house accessor in tenkz-grid) or TF-conditional forms.
-2. **Integer factors sit RIGHT of `*` in `\dimexpr`**, or use
-   `\dim_eval`. And never write `0.5\tenkz@dim{...}` in a pgfkeys VALUE:
-   pgf's dimension parser detaches the leading factor from the `\dimexpr`
-   and misreads it (this drew lens-shaped capsules once). Name the
-   derived ratio in the metric block instead (`wireglyphcap`).
-3. **`##1` doubling** inside `\int_step_inline:nnn` bodies within
-   `\cs_new_protected`.
-4. **Registers are not numbers in prop keys.** Keying a prop with an
-   unexpanded int register token silently never matches; normalize with
-   `\int_eval:n` first (this disabled label clearance for multi-row
-   racetracks once).
-5. **Catcode-12 colons.** Document input has catcode-12 `:`, expl3 code
-   catcode-11. Str-normalize (`\tl_to_str:n`) before delimited parsing of
-   user input (`rows=`, `ports=`), then use `\str_if_in:` etc. —
-   `\tl_if_in:` on str-normalized material fails silently.
-6. **`\use:e` passes `#` literally** (no doubling) — relevant when
-   assembling node option lists.
-7. **pgfkeys splits at literal commas only** and truncates an unbraced
-   value at a second `=`. Brace any label value that may contain commas
-   or `=` (documented at the `trace=` key).
-8. **`\iow` writes need explicit `\int_use`** — event lines with bare
-   registers write register tokens, not numbers.
-9. **Picture ids nest.** `\tenkz@pictureuid` is global, `\tenkz@pictureid`
-   group-local; a nested `\tnpic` must not clobber its parent's id.
+```sh
+python3 scripts/tenkz_audit.py <job>.tnlog
+python3 scripts/tenkz_lint.py <source>.tex
+```
 
-## The metric doctrine, operationally
+Render every affected PDF and inspect it.  Exit status is not visual review.
 
-One 11mm pitch; every distance is a named `\tenkz@r@*` ratio in
-tenkz-core's metric block with a motivation comment. Two constants matter
-for clearance work: the **silhouette** (measured ink extent — see
-`\tenkz_silhouette:nnnnN` in tenkz-grid and DESIGN.md "The silhouette")
-and **daylight** (`\tenkz@r@daylight`, the one separation gap). Never add
-a clearance constant that predicts what another pass draws: measure via
-the silhouette, separate via daylight.
+```sh
+mkdir -p tmp/pdfs/tenkz
+pdftocairo -png -r 200 -singlefile <file>.pdf \
+  tmp/pdfs/tenkz/<name>
+```
 
-## Faithfulness discipline for figures
+Inspect labels, clipped ink, crossings, region contours, paired pages, and
+section transitions.  A meaningful geometry change requires a fresh render.
+Generated PDFs and PNGs are build artifacts, not committed source.
 
-Every figure source states its formula and the ink-to-index
-correspondence in `%` comments. Both sides of a pictured equation carry
-the same boundary signature (the `.tnlog` `boundary|...` line). No open
-legs = a scalar; a map keeps its input/output legs open. The applied
-channel is `[sandwich, east={cup=$X$}]` — a west cup feeds the ADJOINT.
-When reproducing a paper figure, reproduce its mathematics in house
-style; never pixel-mimic, and never draw what the source does not assert.
+## Source and event checks
 
-## Test corpus
+- Each figure states `Formula`, `Ink`, `Boundary`, `Source`, and
+  `Capabilities` in its source header where the corpus format requires them.
+- A diagrammatic equation has the intended boundary signature on both sides.
+- A matrix keeps two open virtual indices, a doubled-space map keeps four,
+  and a scalar keeps none.
+- The applied channel is `[sandwich, east={cup=$X$}]`; a west cup feeds the
+  adjoint.
+- Canonical sources do not use aliases, private control sequences, raw
+  `tikzpicture`, whole-figure macros, or undocumented coordinate escapes.
+- `\tndeclareatom` declarations have complete typed ports.  There is no
+  public `\tndefine` mechanism.
 
-The in-repo acceptance set lives in `tex/tenkz/examples/`. The adopted
-extended regression corpus lives in `tests/tenkz/`; run
-`scripts/tenkz_corpus.sh` for compile-and-audit coverage and add `--render` for
-the repository-wide visual baseline. Every package change still requires the
-examples and manual to compile and renders of anything touched to be viewed.
+## Architecture checks
+
+Before editing a stage, read its five-line contract.  Maintain the direction
+
+```text
+language -> model -> style/atoms -> geometry -> dialect layout -> rendering -> events
+```
+
+Validation ends before measurement.  Rendering neither parses user syntax nor
+changes topology.  Public names come from the executable registry; private
+names follow `\__tenkz_<owner>_...:`.  Unsupported requested ink is a coded
+error, never a warning followed by omission.
+
+## expl3 and PGF traps
+
+These mistakes have shipped bugs here.
+
+1. Never expand `\q_no_value`.  Use the house accessor or a TF form of
+   `\prop_get`.
+2. Integer factors sit to the right of `*` in `\dimexpr`; prefer
+   `\dim_eval:n`.  Do not put a leading decimal factor before a dimension
+   macro in a pgfkeys value.
+3. Double parameter tokens inside nested inline mappings: `##1` in the body
+   of an `\int_step_inline:nnn` defined by another macro.
+4. Normalize integer registers with `\int_eval:n` before using them as
+   property keys.
+5. User-input colons have catcode 12.  String-normalize before parsing
+   `rows=`, `ports=`, and similar delimited forms.
+6. `\use:e` passes `#` literally; do not double it there.
+7. PGF keys split at literal commas and an unbraced value can be truncated at
+   a second equals sign.  Brace values containing either character.
+8. Expand integer registers explicitly in `\iow` event writes.
+9. Picture IDs nest: the global UID and group-local current ID have different
+   ownership.  An inline `\tnpic` must not clobber its parent.
+
+## Geometry discipline
+
+One base pitch controls the metric.  Repeated dimensions are named ratios.
+Clearance uses the measured silhouette plus the single daylight separation;
+do not add a constant that predicts what another pass will draw.
+
+Useful focused regressions include:
+
+```sh
+python3 scripts/test_tenkz_face_ports.py
+python3 scripts/test_tenkz_label_overlap.py
+python3 scripts/test_tenkz_enclosures.py
+```
+
+Run the focused test while iterating, then the affected corpus or benchmark
+section, then the repository gates appropriate to the change.
+
+## Historical design records
+
+Superseded design proposals, migration inventories, reviews, and 0.6
+worklists live under `docs/tenkz/history/`.  They explain earlier decisions but
+do not define current syntax.  Do not revive a spelling from history without
+passing the extension gates in `LANGUAGE.md`.

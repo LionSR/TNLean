@@ -1,0 +1,21 @@
+% Target: rmp-iii-a-torus-one
+% Formula: A noncontractible MPO loop with crossing tensor i labels a torus state.
+% Ink: Canonical public tenkzfree closed horizontal and vertical cycles.
+% Boundary: Both MPO cycles are closed; the diagram is a scalar torus sector.
+% Source: paper TN-Review-main.tex line 1584; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 553-562
+% Capabilities: free-graph, torus-cycle, crossing-tensor
+\[
+  \begin{tenkzfree}
+    \tnput[box]{i}{(0mm,-7mm)}{i}
+    \tnput[mpo]{W}{(-14mm,0mm)}{}
+    \tnput[mpo]{E}{(14mm,0mm)}{}
+    \tnput[mpo]{N}{(0mm,8mm)}{}
+    \tnput[mpo]{S}{(0mm,-14mm)}{}
+    \tnjoin[route=arc, out=90, in=90]{W.north}{E.north}
+    \tnjoin[route=arc, out=-90, in=-90]{E.south}{W.south}
+    \tnjoin[route=arc, out=180, in=180]{N.west}{S.west}
+    \tnjoin[route=arc, out=0, in=0]{S.east}{N.east}
+    \tnjoin{N.south}{i.north} \tnjoin{i.south}{S.north}
+  \end{tenkzfree}.
+\]

@@ -1,0 +1,21 @@
+% Target: rmp-iii-a-pentagon-mpo
+% Formula: the MPO-wire fusion move c -> (a, b):
+% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Boundary: Resolved by the public environment; open indices remain explicit.
+% Source: paper TN-Review-main.tex line 1317; paper-context-only; no author drawing
+%   source
+% Capabilities: coherence, fusion-tree
+\[
+  \begin{tenkzfree}
+    % wire endpoints (paper: gray wedges), typed virtual on the used anchors
+    \tnput[dot, label pos=west, ports={east:virtual}]{n}{(0,0)}{n}
+    \tnput[dot, label pos=south,
+           ports={west:virtual, north:virtual, south:virtual}]{m}{(16mm,0)}{m}
+    \tnput[dot, label pos=east, ports={west:virtual}]{j}{(30mm,9mm)}{j}
+    \tnput[dot, label pos=east, ports={west:virtual}]{k}{(30mm,-9mm)}{k}
+    % c: n -> m (straight), then the split a: m -> j and b: m -> k (curved)
+    \tnjoin[dir, label=c]{n.east}{m.west}
+    \tnjoin[dir, route=arc, out=50, in=195, label=a]{m.north}{j.west}
+    \tnjoin[dir, route=arc, out=-50, in=165, label=b]{m.south}{k.west}
+  \end{tenkzfree}
+\]

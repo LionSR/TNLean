@@ -1,0 +1,17 @@
+% Target: rmp-iii-a-proof-two
+% Formula: F_{alpha beta}^gamma fuses stacked O_beta,O_alpha into O_gamma.
+% Ink: Canonical public tenkz two-row fusion equation with an explicit F box.
+% Boundary: Two incoming MPO wires become one outgoing MPO wire on each side.
+% Source: paper TN-Review-main.tex line 1407; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 376-385
+% Capabilities: grid, fusion-map, equation-composition
+\[
+  \begin{tenkz}[rows={op:operator, op:operator}, tensor style=box]
+    \tn{\beta} & \tn[box, wires=2]{F_{\alpha\beta}^{\gamma}}\\
+    \tn{\alpha} &
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={op:operator}, tensor style=box]
+    \tn[box]{F_{\alpha\beta}^{\gamma}} & \tn{\gamma}
+  \end{tenkz}.
+\]

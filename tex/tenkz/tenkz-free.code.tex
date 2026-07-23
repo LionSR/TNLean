@@ -1,5 +1,9 @@
-% tenkz-free — L2d: sanctioned free placement for genuinely non-grid
-% diagrams (MERA, lassos, star tensors).  The only tier with runtime
+% Input: validated free atoms, typed ports, joins, regions, and positions.
+% Output: normalized graph records plus free-layout routing ink.
+% Owned state: named atoms, port types, routed joins, and enclosure membership.
+% Invariants: every join resolves two compatible ports before drawing.
+% Next stage: shared event services emit the resolved model used for rendering.
+% tenkz-free supports genuinely non-grid diagrams and is the only tier with runtime
 % port-type assertions: the grid languages are type-safe by construction.
 %
 % \tnput places any L1 glyph with typed anchors recorded in the port registry;
@@ -547,11 +551,12 @@
   /tenkz/free~region/slot/collar/.code={
       \tl_set:Nn \l__tenkz_frslot_tl {collar}
       \tl_set:Nn \l__tenkz_frstyle_tl {region~collar}},
+  /tenkz/free~region/slot/neutral/.code={
+      \tl_set:Nn \l__tenkz_frslot_tl {neutral}
+      \tl_set:Nn \l__tenkz_frstyle_tl {region~neutral}},
   /tenkz/free~region/slot/.unknown/.code={
       \bool_set_false:N \l__tenkz_frkeys_valid_bool
-      \PackageError{tenkz}
-        {Choice~'\pgfkeys@was@choice'~unknown~in~free-region~slot}
-        {Use~selected,~secondary,~complement,~or~collar.}},
+      \msg_error:nnn {tenkz}{region-slot}{\pgfkeys@was@choice}},
   /tenkz/free~region/outline/.code={
       \bool_set_true:N \l__tenkz_froutline_bool},
   /tenkz/free~region/label/.store~in=\l__tenkz_frlabel_tl,

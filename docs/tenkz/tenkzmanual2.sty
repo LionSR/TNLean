@@ -1,4 +1,4 @@
-% tenkzmanual2.sty — typographic system for the tenkz manual, second edition.
+% tenkzmanual2.sty - typographic system for the compact tenkz manual.
 %
 % Loaded by docs/tenkz/manual2.tex only.  The page is an asymmetric grid:
 % a 112 mm text column and a 50 mm margin column.  Mathematics lives in the
@@ -9,7 +9,7 @@
 % back, so the rendered output is produced by the exact source shown.  If an
 % example stops compiling, the manual stops compiling.
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{tenkzmanual2}[2026/07/17 v2.0 tenkz manual second-edition typography]
+\ProvidesPackage{tenkzmanual2}[2026/07/22 v2.1 compact tenkz manual typography]
 
 % ---------------------------------------------------------------------------
 %  Page grid (Tufte-lite, one-sided; margin column on the right)
@@ -20,7 +20,7 @@
   top=25mm, bottom=30mm, headsep=7mm, head=14pt]{geometry}
 
 \RequirePackage{amsmath, amssymb}
-\RequirePackage{booktabs, array, tabularx, multicol}
+\RequirePackage{booktabs, array, tabularx, longtable, multicol}
 \RequirePackage{fancyvrb}
 \RequirePackage{needspace}
 \RequirePackage{fancyhdr}
@@ -405,7 +405,7 @@
 % ---------------------------------------------------------------------------
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\itshape The \texttt{tenkz} manual\quad second edition}
+\fancyhead[L]{\small\itshape The \texttt{tenkz} language manual}
 \fancyhead[R]{\small\thepage}
 \renewcommand{\headrulewidth}{0pt}
 

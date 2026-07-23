@@ -1,0 +1,19 @@
+% Target: rmp-ii-spectrum-transfer
+% Formula: eig(rho_n) = eig(rho^R E^n rho^L), up to the cut.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: rho^R and rho^L lie on opposite rails; four virtual ends remain open around
+%   the ladder.
+% Source: paper TN-Review-main.tex line 427; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 500-518
+% Capabilities: grid, typed-ports
+\[
+  \mathrm{eig}\left(
+  % ket rail: rho^R then four A beads; bra rail: four conj(A) beads
+  % then rho^L; ghosts carry each rail past the other's fixed point
+  \begin{tenkz}[rows={ket,bra}]
+    \tnX{\rho^R} & \tn{} & \tn{} & \tn{} & \tn{} & \tnghost{}\\
+    \tnghost{} & \tn*{}\tnspan[brace below]{4}{n} & \tn*{} & \tn*{} &
+      \tn*{} & \tnX{\rho^L}
+  \end{tenkz}
+  \right)
+\]

@@ -1,0 +1,22 @@
+% Target: rmp-ii-boundary-state
+% Formula: rho_R factorizes through the A and B boundary lassos and sigma_partial R.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: The east cup closes the virtual pair, the west side is sealed, and physical
+%   legs stay open.
+% Source: paper TN-Review-main.tex line 807; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 618-649
+% Capabilities: grid, typed-ports
+\[
+  \rho_R \;=\;
+  \begin{tenkz}[rows={ket:nopair, bra}, boundary=none, east=cup]
+    \tn{} & \tnX{}\\
+    \tn*{} & \tnX{}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[rows={ket:nopair, bra}, boundary=none, east=cup]
+    \tn[box]{U^{A}_{I}} &
+      \tnX{\sigma^{A}}\tnspan[brace above]{2}{\sigma_{\partial R}} &
+      \tnX{\sigma^{B}}\\
+    \tn*[box]{U^{A}_{I}} & \tnX{\sigma^{A}} & \tnX{\sigma^{B}}
+  \end{tenkz}
+\]

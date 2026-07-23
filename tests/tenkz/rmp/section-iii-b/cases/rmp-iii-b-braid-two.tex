@@ -1,0 +1,22 @@
+% Target: rmp-iii-b-braid-two
+% Formula: The second braid panel exchanges the a and b strings around i and j.
+% Ink: Canonical public tenkzfree interlaced arcs and four marked anyon sites.
+% Boundary: Four lattice legs and six string endpoints are open.
+% Source: paper TN-Review-main.tex line 1676; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 826-862
+% Capabilities: free-graph, multi-strand-braid, crossing-order
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{j}{(0mm,-8mm)}{j}
+    \tnput[dot]{i}{(12mm,-8mm)}{i}
+    \tnput[dot]{a}{(12mm,8mm)}{a}
+    \tnput[dot]{b}{(0mm,8mm)}{b}
+    \tnjoin{-9mm,-8mm}{j.west} \tnjoin{i.east}{21mm,-8mm}
+    \tnjoin{-9mm,8mm}{b.west} \tnjoin{a.east}{21mm,8mm}
+    \tnjoin[route=arc, out=90, in=-90]{b.north}{-4mm,16mm}
+    \tnjoin[route=arc, out=-45, in=135]{b.south east}{i.north west}
+    \tnjoin[route=arc, out=-90, in=90]{i.south}{12mm,-16mm}
+    \tnjoin[route=arc, out=45, in=225]{j.north east}{a.south west}
+    \tnjoin[route=arc, out=90, in=-90]{a.north}{16mm,16mm}
+  \end{tenkzfree}
+\]

@@ -1,0 +1,25 @@
+% Target: rmp-ii-mpu-brickwork
+% Formula: U^(N) is the product of alternating u and v brickwork layers.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: The U word and brickwork keep all six circuit wires open at both ends.
+% Source: paper TN-Review-main.tex line 387; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 450-464
+% Capabilities: grid, typed-ports
+\[
+  % LHS: six simple MPU tensors on the virtual wire
+  \begin{tenkz}[rows={op}]
+    \tn[box]{U} & \tn[box]{U} & \tn[box]{U} &
+      \tn[box]{U} & \tn[box]{U} & \tn[box]{U}
+  \end{tenkz}
+  \;=\;
+  % RHS: the brick circuit, rotated to the reference's frame - wires
+  % vertical, u layer first (west column = top layer before rotation)
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, frame=vertical]
+    \tn[box, wires=2]{u} & \\
+    & \tn[box, wires=2]{v} \\
+    \tn[box, wires=2]{u} & \\
+    & \tn[box, wires=2]{v} \\
+    \tn[box, wires=2]{u} & \\
+    &
+  \end{tenkz}
+\]

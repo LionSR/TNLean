@@ -1,0 +1,20 @@
+% Target: rmp-ii-local-purification
+% Formula: O = X^-1 (sum_k A^k tensor conjugate(A^k)) X.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: The outer doubled virtual rails and O's four indices are open; the A pair
+%   is contracted.
+% Source: paper TN-Review-main.tex line 369; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 317-338
+% Capabilities: grid, typed-ports
+\[
+  % LHS: the 4-leg MPDO tensor O
+  \begin{tenkz}[physical=updown]
+    \tn[box]{O}
+  \end{tenkz}
+  \;=\;
+  % RHS: X^{-1} capsule | A over conj(A) | X capsule
+  \begin{tenkz}[rows={op, op}]
+    \tnX[wires=2]{X^{-1}} & \tn[box]{A} & \tnX[wires=2]{X}\\
+    & \tn*[box]{A} &
+  \end{tenkz}
+\]

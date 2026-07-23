@@ -1,0 +1,26 @@
+% Target: rmp-ii-boundary-lasso
+% Formula: A^I = U^A_I sigma^A and B^Ibar = sigma^B U^B_Ibar.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: The A lasso seals its west side; the B lasso seals its east side; physical
+%   legs stay open.
+% Source: paper TN-Review-main.tex line 804; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 597-617
+% Capabilities: grid, typed-ports
+\[
+  \begin{tenkz}[physical=up, west=none]
+    \tn{}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[physical=up, west=none]
+    \tn[box]{U^{A}_{I}} & \tnX[label pos=north]{\sigma^{A}}
+  \end{tenkz}
+\]
+\[
+  \begin{tenkz}[physical=up, east=none]
+    \tn{}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[physical=up, east=none]
+    \tnX[label pos=south]{\sigma^{B}} & \tn[box]{U^{B}_{\bar{I}}}
+  \end{tenkz}
+\]

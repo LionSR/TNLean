@@ -1,0 +1,22 @@
+% Target: rmp-iii-b-braid-three
+% Formula: R_{j,a} replaces the upper a-j crossing in the third braid panel.
+% Ink: Canonical public tenkzfree braid strands with an explicit R_{j,a} box.
+% Boundary: Four lattice legs and five string endpoints are open.
+% Source: paper TN-Review-main.tex line 1679; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 863-899
+% Capabilities: free-graph, braid-resolver, crossing-order
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{j}{(0mm,-8mm)}{j}
+    \tnput[dot]{i}{(12mm,-8mm)}{i}
+    \tnput[dot]{b}{(0mm,8mm)}{b}
+    \tnput[box]{R}{(15mm,5mm)}{\mathcal R_{j,a}}
+    \tnjoin{-9mm,-8mm}{j.west} \tnjoin{i.east}{21mm,-8mm}
+    \tnjoin{-9mm,8mm}{b.west} \tnjoin{R.east}{23mm,8mm}
+    \tnjoin[route=arc, out=90, in=-90]{b.north}{-4mm,16mm}
+    \tnjoin[route=arc, out=-45, in=135]{b.south east}{i.north west}
+    \tnjoin[route=arc, out=-90, in=90]{i.south}{12mm,-16mm}
+    \tnjoin[route=arc, out=45, in=225]{j.north east}{R.south west}
+    \tnjoin{R.north}{15mm,16mm}
+  \end{tenkzfree}
+\]

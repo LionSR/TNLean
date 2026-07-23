@@ -1,0 +1,20 @@
+% Target: rmp-ii-mps-marginal
+% Formula: marginals rho_kept = Tr_traced |psi><psi|.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: The state has five open physical legs; the marginal traces the last two
+%   ket-bra pairs.
+% Source: paper TN-Review-main.tex line 327; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 269-304
+% Capabilities: grid, typed-ports
+\[
+\begin{gathered}
+  \begin{tenkz}[physical=down]
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \end{tenkz}
+  \\[1em]
+  \begin{tenkz}[rows={ket:nopair, bra}, trace={(physical, 4-5)}]
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \end{tenkz}
+\end{gathered}
+\]

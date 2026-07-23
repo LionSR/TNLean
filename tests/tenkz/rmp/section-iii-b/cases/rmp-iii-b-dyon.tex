@@ -1,0 +1,19 @@
+% Target: rmp-iii-b-dyon
+% Formula: A dyon carries charge alpha inside a flux disk with string h.
+% Ink: Canonical public tenkzfree charge, flux region, and open string records.
+% Boundary: Four lattice legs, one physical leg, and one h-string tail are open.
+% Source: paper TN-Review-main.tex line 1655; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 688-703
+% Capabilities: free-graph, marked-region, open-string
+\[
+  \begin{tenkzfree}
+    \tnput[pill, label pos=south]{flux}{(0,0)}{h}
+    \tnput[box, label pos=north]{charge}{(7mm,0)}{\alpha}
+    \tnjoin{-15mm,0mm}{flux.west}
+    \tnjoin{flux.east}{15mm,0mm}
+    \tnjoin{0mm,-15mm}{flux.south}
+    \tnjoin{flux.north}{0mm,15mm}
+    \tnjoin{flux}{0mm,8mm}
+    \tnjoin[route=arc, out=45, in=225, label=h]{charge.east}{18mm,14mm}
+  \end{tenkzfree}
+\]

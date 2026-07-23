@@ -1,0 +1,2173 @@
+schema_version = 1
+
+[corpus]
+published_targets = 92
+paper_placements = 94
+author_workbench_targets = 38
+total_targets = 130
+author_source_mapped = 82
+paper_context_only = 10
+
+[[target]]
+id = "rmp-ii-peps-projection"
+corpus = "published"
+section = "section-ii"
+order = 1
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-projection.tex"
+formula = "|Psi> = ((x)_{v in V} A[v]) (x)_{e in E} |phi)_e."
+ink = "Canonical public tenkzlattice environment; no raw TikZ."
+boundary = "The 4x4 sheet has open virtual legs on every side and one open physical leg per site."
+source = "paper TN-Review-main.tex line 250; author source ImagesReview Section II/ImagesReview Section II.tex lines 237-257"
+capabilities = ["lattice", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_pairs.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "237-257"
+placements = [{ order = 1, line = 250, asset = "fig2_fig2-pepe_sec2fig1.pdf" }]
+
+[[target]]
+id = "rmp-ii-triangle-network"
+corpus = "published"
+section = "section-ii"
+order = 2
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-triangle-network.tex"
+formula = "psi_ijk = sum_{alpha,beta,gamma} A^i_{gamma alpha} B^j_{alpha beta} C^k_{beta gamma}."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "The three physical spokes are open; alpha, beta, and gamma form the contracted triangle."
+source = "paper TN-Review-main.tex line 322; author source ImagesReview Section II/ImagesReview Section II.tex lines 258-268"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_triangle.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "258-268"
+placements = [{ order = 2, line = 322, asset = "fig2_fig2-pepe_sec2fig3.pdf" }]
+
+[[target]]
+id = "rmp-ii-mps-marginal"
+corpus = "published"
+section = "section-ii"
+order = 3
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mps-marginal.tex"
+formula = "marginals rho_kept = Tr_traced |psi><psi|."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The state has five open physical legs; the marginal traces the last two ket-bra pairs."
+source = "paper TN-Review-main.tex line 327; author source ImagesReview Section II/ImagesReview Section II.tex lines 269-304"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/rmpfig2_test.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "269-304"
+placements = [{ order = 3, line = 327, asset = "fig2_fig2-pepe_sec2fig4aMPS.pdf" }]
+
+[[target]]
+id = "rmp-ii-peps-marginal"
+corpus = "published"
+section = "section-ii"
+order = 4
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-marginal.tex"
+formula = "marginals rho_kept = Tr_traced |psi><psi|."
+ink = "Canonical public tenkzlattice, tenkzplanes environments; no raw TikZ."
+boundary = "The state sheet is open; the doubled sheet traces the declared complement."
+source = "paper TN-Review-main.tex line 331; author source ImagesReview Section II/ImagesReview Section II.tex lines 269-304"
+capabilities = ["lattice", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/rmpfig2_test.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "269-304"
+placements = [{ order = 4, line = 331, asset = "fig2_fig2-pepe_secfig4bPEPS.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpo-sheet"
+corpus = "published"
+section = "section-ii"
+order = 5
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpo-sheet.tex"
+formula = "The 4-valent MPO tensor has directed virtual wire a: j -> k."
+ink = "Canonical public tenkz, tenkzfree environments; no raw TikZ."
+boundary = "West/east virtual and north/south physical ports are open in both depictions."
+source = "paper TN-Review-main.tex line 361; author source ImagesReview Section II/ImagesReview Section II.tex lines 305-316"
+capabilities = ["grid", "free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_mpo.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "305-316"
+placements = [{ order = 5, line = 361, asset = "fig2_fig2-pepe_sec2fig5MPO.pdf" }]
+
+[[target]]
+id = "rmp-ii-pepo-sheet"
+corpus = "published"
+section = "section-ii"
+order = 6
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-pepo-sheet.tex"
+formula = "O = sum_{s,s'} C(prod_r M_r^{s_r s'_r}) |s_1..s_N><s'_1..s'_N|."
+ink = "Canonical public tenkzlattice environment; no raw TikZ."
+boundary = "All sheet-edge virtual legs and both physical operator legs per site are open."
+source = "paper TN-Review-main.tex line 363; author source ImagesReview Section II/ImagesReview Section II.tex lines 305-316"
+capabilities = ["lattice", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_pepo5.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "305-316"
+placements = [{ order = 6, line = 363, asset = "fig2_fig2-pepe_sec2fig5PEPO.pdf" }]
+
+[[target]]
+id = "rmp-ii-local-purification"
+corpus = "published"
+section = "section-ii"
+order = 7
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-local-purification.tex"
+formula = "O = X^-1 (sum_k A^k tensor conjugate(A^k)) X."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The outer doubled virtual rails and O's four indices are open; the A pair is contracted."
+source = "paper TN-Review-main.tex line 369; author source ImagesReview Section II/ImagesReview Section II.tex lines 317-338"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_purifyO.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "317-338"
+placements = [{ order = 7, line = 369, asset = "fig2_fig2-pepe_sec2fig6-1.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpu-unitarity"
+corpus = "published"
+section = "section-ii"
+order = 8
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-unitarity.tex"
+formula = "U^\\dagger U = I for the blocked two-site MPU tensor."
+ink = "Canonical public tenkz and tenkzfree environments; no raw TikZ."
+boundary = "The west and east cups contract a and b; the remaining physical pair is the identity."
+source = "paper TN-Review-main.tex line 378; author source ImagesReview Section II/ImagesReview Section II.tex lines 393-404"
+capabilities = ["grid", "free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_mpucond.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "393-404"
+placements = [{ order = 8, line = 378, asset = "fig2_fig2-pepe_sec2fig8a1.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpu-blocking"
+corpus = "published"
+section = "section-ii"
+order = 9
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-blocking.tex"
+formula = "The blocked two-site sandwich factors through cup contractions a and b."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The blocked sandwich and cup factors expose the same unmatched outer virtual rails."
+source = "paper TN-Review-main.tex line 379; author source ImagesReview Section II/ImagesReview Section II.tex lines 405-432"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_mpublock.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "405-432"
+placements = [{ order = 9, line = 379, asset = "fig2_fig2-pepe_sec2fig8a2.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpu-splitting"
+corpus = "published"
+section = "section-ii"
+order = 10
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-splitting.tex"
+formula = "U = uv, with the virtual index contracted between u and v."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "The U atom has four open legs; each factorization contracts only the central u-v leg and leaves four external legs open."
+source = "paper TN-Review-main.tex line 383; author source ImagesReview Section II/ImagesReview Section II.tex lines 433-449"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_mpusplit.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "433-449"
+placements = [{ order = 10, line = 383, asset = "fig2_fig2-pepe_sec2fig8b1.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpu-brickwork"
+corpus = "published"
+section = "section-ii"
+order = 11
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-brickwork.tex"
+formula = "U^(N) is the product of alternating u and v brickwork layers."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The U word and brickwork keep all six circuit wires open at both ends."
+source = "paper TN-Review-main.tex line 387; author source ImagesReview Section II/ImagesReview Section II.tex lines 450-464"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_mpubrick.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "450-464"
+placements = [{ order = 11, line = 387, asset = "fig2_fig2-pepe_sec2fig8b2.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpu-wrap"
+corpus = "published"
+section = "section-ii"
+order = 12
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-wrap.tex"
+formula = "The MPU implements the left-moving shift operator."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Four upper and four lower legs are open; the alternating turns leave one virtual endpoint open at each end."
+source = "paper TN-Review-main.tex line 391; author source ImagesReview Section II/ImagesReview Section II.tex lines 465-472"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_wrap9a.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "465-472"
+placements = [{ order = 12, line = 391, asset = "fig2_fig2-pepe_sec2fig9a.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpu-two-shift"
+corpus = "published"
+section = "section-ii"
+order = 13
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-two-shift.tex"
+formula = "The MPU combines one left-moving and one right-moving shift."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Each row has four upper and four lower open legs and two open virtual endpoints; the turn orientation reverses between rows."
+source = "paper TN-Review-main.tex line 395; author source ImagesReview Section II/ImagesReview Section II.tex lines 473-483"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_twoshift.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "473-483"
+placements = [{ order = 13, line = 395, asset = "fig2_fig2-pepe_fig7.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpu-normal-form"
+corpus = "published"
+section = "section-ii"
+order = 14
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-normal-form.tex"
+formula = "A virtual MPO line pulls through a PEPS tensor without changing the state."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Each PEPS atom has four virtual and one physical open leg; each marked virtual path has two open endpoints."
+source = "paper TN-Review-main.tex line 404; author source ImagesReview Section II/ImagesReview Section II.tex lines 339-357"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_mpuflow.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "339-357"
+placements = [{ order = 14, line = 404, asset = "fig2_fig2-pepe_sec2fig7-1.pdf" }]
+
+[[target]]
+id = "rmp-ii-reduced-density"
+corpus = "published"
+section = "section-ii"
+order = 15
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-reduced-density.tex"
+formula = "rho_n = Tr[rho^R A^n rho^L (A^*)^n]."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "rho^R and rho^L close both virtual ends; all ket and bra physical legs remain open."
+source = "paper TN-Review-main.tex line 421; author source ImagesReview Section II/ImagesReview Section II.tex lines 484-499"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard03_v3.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "484-499"
+placements = [{ order = 15, line = 421, asset = "fig2_fig2-pepe_sec2fig8.pdf" }]
+
+[[target]]
+id = "rmp-ii-spectrum-rho"
+corpus = "published"
+section = "section-ii"
+order = 16
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-spectrum-rho.tex"
+formula = "eig(rho_n), where rho_n = Tr[rho^R A^n rho^L (A^*)^n]."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Both virtual ends close through rho^R and rho^L; the physical ket-bra legs remain open."
+source = "paper TN-Review-main.tex line 425; author source ImagesReview Section II/ImagesReview Section II.tex lines 484-499"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard04_v3.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "484-499"
+placements = [{ order = 16, line = 425, asset = "fig2_fig2-pepe_fig9-1.pdf" }]
+
+[[target]]
+id = "rmp-ii-spectrum-transfer"
+corpus = "published"
+section = "section-ii"
+order = 17
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-spectrum-transfer.tex"
+formula = "eig(rho_n) = eig(rho^R E^n rho^L), up to the cut."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "rho^R and rho^L lie on opposite rails; four virtual ends remain open around the ladder."
+source = "paper TN-Review-main.tex line 427; author source ImagesReview Section II/ImagesReview Section II.tex lines 500-518"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_eigladder.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "500-518"
+placements = [{ order = 17, line = 427, asset = "fig2_fig2-pepe_fig9-2.pdf" }]
+
+[[target]]
+id = "rmp-ii-spectrum-fixed-points"
+corpus = "published"
+section = "section-ii"
+order = 18
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-spectrum-fixed-points.tex"
+formula = "eig(rho^L rho^R) = eig(rho^R rho^L)."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Each fixed-point factor has one cup closure and two virtual ends open on the other side."
+source = "paper TN-Review-main.tex line 429; author source ImagesReview Section II/ImagesReview Section II.tex lines 519-534"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_eigladder.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "519-534"
+placements = [{ order = 18, line = 429, asset = "fig2_fig2-pepe_fig9-3.pdf" }]
+
+[[target]]
+id = "rmp-ii-blocking"
+corpus = "published"
+section = "section-ii"
+order = 19
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-blocking.tex"
+formula = "A^s_{alpha beta} = sum_gamma B^{s_1}_{alpha gamma} B^{s_2}_{gamma beta}."
+ink = "Canonical public tenkz atoms; no raw TikZ."
+boundary = "The one-site and two-site words have matching open virtual ends and physical legs."
+source = "paper TN-Review-main.tex line 513; author source ImagesReview Section II/ImagesReview Section II.tex lines 535-540"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_blocking.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "535-540"
+placements = [{ order = 19, line = 513, asset = "fig2_fig2-pepe_sec2fig11a1.pdf" }]
+
+[[target]]
+id = "rmp-ii-staircase"
+corpus = "published"
+section = "section-ii"
+order = 20
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-staircase.tex"
+formula = "|psi> = V_5 V_4 V_3 V_2 |0>, with V_k : H_beta -> H_i tensor H_beta."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The initial state closes the input; each isometry exposes one output and the final bond."
+source = "paper TN-Review-main.tex line 514; author source ImagesReview Section II/ImagesReview Section II.tex lines 541-546"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_staircase.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "541-546"
+placements = [{ order = 20, line = 514, asset = "fig2_fig2-pepe_sec2fig11a2.pdf" }]
+
+[[target]]
+id = "rmp-ii-circuit"
+corpus = "published"
+section = "section-ii"
+order = 21
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-circuit.tex"
+formula = "|psi> = (prod_{layers l} (x)_k U^{(l)}_k) |0>."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The initial state closes the input; four circuit wires remain open after the gates."
+source = "paper TN-Review-main.tex line 518; author source ImagesReview Section II/ImagesReview Section II.tex lines 547-571"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard11_v4.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "547-571"
+placements = [{ order = 21, line = 518, asset = "fig2_fig2-pepe_sec2fig11b.pdf" }]
+
+[[target]]
+id = "rmp-ii-sv17"
+corpus = "published"
+section = "section-ii"
+order = 22
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-sv17.tex"
+formula = "A many-body state is approximated by a blocked MPS, whose k-site marginal is rho_k."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The state panels expose physical legs; rho_k closes both virtual ends of the ket-bra word."
+source = "paper TN-Review-main.tex line 621; paper-context-only; no author drawing source"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_sv17.tex"
+placements = [{ order = 22, line = 621, asset = "fig2_SV17.PNG" }]
+
+[[target]]
+id = "rmp-ii-canonical-left"
+corpus = "published"
+section = "section-ii"
+order = 23
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-canonical-left.tex"
+formula = "[A_L^s]_{alpha,beta} is the left-canonical tensor."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The west alpha, east beta, and downward physical s indices are open."
+source = "paper TN-Review-main.tex line 661; author source ImagesReview Section II/ImagesReview Section II.tex lines 192-198"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard02_ALdef.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "192-198"
+placements = [{ order = 23, line = 661, asset = "fig2_fig2-pepe_AL.pdf" }]
+
+[[target]]
+id = "rmp-ii-canonical-right"
+corpus = "published"
+section = "section-ii"
+order = 24
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-canonical-right.tex"
+formula = "[A_R^s]_{alpha,beta} is the right-canonical tensor."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The west alpha, east beta, and downward physical s indices are open."
+source = "paper TN-Review-main.tex line 661; author source ImagesReview Section II/ImagesReview Section II.tex lines 199-207"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard02_ALdef.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "199-207"
+placements = [{ order = 24, line = 661, asset = "fig2_fig2-pepe_AR.pdf" }]
+
+[[target]]
+id = "rmp-ii-ortho-right"
+corpus = "published"
+section = "section-ii"
+order = 25
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-ortho-right.tex"
+formula = "sum_s A_R^s (A_R^s)^dagger = 1."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The east cup contracts the right indices; the west ket-bra pair remains open."
+source = "paper TN-Review-main.tex line 663; author source ImagesReview Section II/ImagesReview Section II.tex lines 171-180"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard01_v3.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "171-180"
+placements = [{ order = 25, line = 663, asset = "fig2_fig2-pepe_orthoR.pdf" }]
+
+[[target]]
+id = "rmp-ii-ortho-left"
+corpus = "published"
+section = "section-ii"
+order = 26
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-ortho-left.tex"
+formula = "sum_s (A_L^s)^dagger A_L^s = 1."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The west cup contracts the left indices; the east ket-bra pair remains open."
+source = "paper TN-Review-main.tex line 663; author source ImagesReview Section II/ImagesReview Section II.tex lines 181-191"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard01_v3.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "181-191"
+placements = [{ order = 26, line = 663, asset = "fig2_fig2-pepe_orthoL.pdf" }]
+
+[[target]]
+id = "rmp-ii-tangent-projector"
+corpus = "published"
+section = "section-ii"
+order = 27
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-tangent-projector.tex"
+formula = "P_T(A) = sum_i P_L^(i-1) tensor I_i tensor P_R^(i+1) - sum_i P_L^i tensor P_R^(i+1)."
+ink = "Canonical public tenkz and tenkzfree environments; no raw TikZ."
+boundary = "Each block closes only at its internal cup; the identity wire and all displayed outer and physical endpoints stay open."
+source = "paper TN-Review-main.tex line 667; author source ImagesReview Section II/ImagesReview Section II.tex lines 572-589"
+capabilities = ["grid", "free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard10_v3.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "572-589"
+placements = [{ order = 27, line = 667, asset = "fig2_fig2-pepe_PTA.pdf" }]
+
+[[target]]
+id = "rmp-ii-boundary-lasso"
+corpus = "published"
+section = "section-ii"
+order = 28
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-boundary-lasso.tex"
+formula = "A^I = U^A_I sigma^A and B^Ibar = sigma^B U^B_Ibar."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The A lasso seals its west side; the B lasso seals its east side; physical legs stay open."
+source = "paper TN-Review-main.tex line 804; author source ImagesReview Section II/ImagesReview Section II.tex lines 597-617"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lassodef.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "597-617"
+placements = [{ order = 28, line = 804, asset = "fig2_fig2-pepe_Figboundary-theorya-1.pdf" }]
+
+[[target]]
+id = "rmp-ii-boundary-region"
+corpus = "published"
+section = "section-ii"
+order = 29
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-boundary-region.tex"
+formula = "|psi> = sum_{I,Ibar} A^I_{partial R} B^Ibar_{partial R}."
+ink = "Canonical public tenkzlattice, tenkz environments; no raw TikZ."
+boundary = "The sheet exterior is open; the reduced pair seals outer virtual sides at partial R."
+source = "paper TN-Review-main.tex line 806; author source ImagesReview Section II/ImagesReview Section II.tex lines 650-684"
+capabilities = ["grid", "lattice", "regions", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lassoC.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "650-684"
+placements = [{ order = 29, line = 806, asset = "fig2_fig2-pepe_Figboundary-theoryc.pdf" }]
+
+[[target]]
+id = "rmp-ii-boundary-state"
+corpus = "published"
+section = "section-ii"
+order = 30
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-boundary-state.tex"
+formula = "rho_R factorizes through the A and B boundary lassos and sigma_partial R."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The east cup closes the virtual pair, the west side is sealed, and physical legs stay open."
+source = "paper TN-Review-main.tex line 807; author source ImagesReview Section II/ImagesReview Section II.tex lines 618-649"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_rhoR.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "618-649"
+placements = [{ order = 30, line = 807, asset = "fig2_fig2-pepe_Figboundary-theoryb-1.pdf" }]
+
+[[target]]
+id = "rmp-ii-rfp-isometry"
+corpus = "published"
+section = "section-ii"
+order = 31
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-rfp-isometry.tex"
+formula = "A^{i_1} A^{i_2} = sum_j U_{(i_1 i_2),j} A^j."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Both sides keep the outer virtual legs and the two blocked physical outputs open."
+source = "paper TN-Review-main.tex line 914; author source ImagesReview Section II/ImagesReview Section II.tex lines 685-701"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard08_v3.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "685-701"
+placements = [{ order = 31, line = 914, asset = "fig2_fig2-pepe_AAeqUA.pdf" }]
+
+[[target]]
+id = "rmp-ii-zcl-mpdo"
+corpus = "published"
+section = "section-ii"
+order = 32
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-zcl-mpdo.tex"
+formula = "For E = tr_phys(M), the zero-correlation condition is E composed with E = E."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Every physical pair is traced; only the west and east virtual ends remain open."
+source = "paper TN-Review-main.tex line 939; author source ImagesReview Section II/ImagesReview Section II.tex lines 702-713"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard12_v3.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "702-713"
+placements = [{ order = 32, line = 939, asset = "fig2_fig2-pepe_ZCL-MPDO.pdf" }]
+
+[[target]]
+id = "rmp-ii-channels-ts"
+corpus = "published"
+section = "section-ii"
+order = 33
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-channels-ts.tex"
+formula = "The two-site and one-site MPDO tensors are related by channels T and S."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Both MPDO words keep west/east virtual and up/down physical legs open."
+source = "paper TN-Review-main.tex line 955; author source ImagesReview Section II/ImagesReview Section II.tex lines 714-727"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_tands.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "714-727"
+placements = [{ order = 33, line = 955, asset = "fig2_fig2-pepe_TandS.pdf" }]
+
+[[target]]
+id = "rmp-ii-mpdo-ol"
+corpus = "published"
+section = "section-ii"
+order = 34
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpdo-ol.tex"
+formula = "O_L(M) is the length-L periodic MPDO transfer word."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Periodic closure seals the virtual word; each M keeps its two physical operator legs open."
+source = "paper TN-Review-main.tex line 968; author source ImagesReview Section II/ImagesReview Section II.tex lines 728-741"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/hard05_v4.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "728-741"
+placements = [{ order = 34, line = 968, asset = "fig2_fig2-pepe_MPDO-O_L.pdf" }]
+
+[[target]]
+id = "rmp-ii-peps-rg"
+corpus = "published"
+section = "section-ii"
+order = 35
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-rg.tex"
+formula = "A renormalized 2x2 PEPS plaquette decomposes into the four source panels (a)-(d)."
+ink = "Canonical public tenkzlattice, tenkz environments; no raw TikZ."
+boundary = "Each PEPS factor keeps its exterior legs open; the final bead closes only its virtual ring."
+source = "paper TN-Review-main.tex line 1025; author source ImagesReview Section II/ImagesReview Section II.tex lines 742-800"
+capabilities = ["grid", "lattice", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_rgfp4.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "742-800"
+placements = [{ order = 35, line = 1025, asset = "fig2_fig2-pepe_newfig12.pdf" }]
+
+[[target]]
+id = "rmp-ii-inverse-renormalization"
+corpus = "published"
+section = "section-ii"
+order = 36
+case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-inverse-renormalization.tex"
+formula = "One MPS site splits into two sites, and one PEPS site splits into a 2x2 patch."
+ink = "Canonical public tenkz, tenkzlattice environments; no raw TikZ."
+boundary = "Both arrows preserve the open outer virtual and physical boundary signatures."
+source = "paper TN-Review-main.tex line 1056; author source ImagesReview Section II/ImagesReview Section II.tex lines 801-831"
+capabilities = ["grid", "lattice", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_renorm13.tex"
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "801-831"
+placements = [{ order = 36, line = 1056, asset = "fig2_fig2-pepe_newfig13.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-symmetry-sector"
+corpus = "published"
+section = "section-iii-a"
+order = 37
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-symmetry-sector.tex"
+formula = "|Psi> = sum_i Tr{ A_1^{i_1} A_2^{i_2} ... A_n^{i_n} } |i_1...i_n>"
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1184; author source ImagesReview Section III/ImagesReview Section III.tex lines 114-132"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/p3_trace_word.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "114-132"
+placements = [{ order = 37, line = 1184, asset = "fig3_fig3-pepe_Salphag.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-f-symbol"
+corpus = "published"
+section = "section-iii-a"
+order = 38
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-f-symbol.tex"
+formula = "((a b)_e c)_d = sum_{f,chi,eta} (F_{abc}^d)^{e mu nu}_{f chi eta} (a (b c)_f)_d"
+ink = "Canonical public tenkz composition commands; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1294; author source ImagesReview Section III/ImagesReview Section III.tex lines 249-288"
+capabilities = ["coherence", "fusion-tree"]
+paper_context_only = false
+fixture = "tests/tenkz/p3_eq5_fsymbol.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "249-288"
+placements = [{ order = 38, line = 1294, asset = "fig3_fig3-pepe_TensorFsymply.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-boundary-algebra-n"
+corpus = "published"
+section = "section-iii-a"
+order = 39
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-boundary-algebra-n.tex"
+formula = "A^(N) = {Tr[X A_1...A_N] : X} is the size-N MPO algebra."
+ink = "Canonical public tenkz periodic N-site word with boundary matrix X."
+boundary = "The virtual word is traced; all N physical indices are open."
+source = "paper TN-Review-main.tex line 1298; author source ImagesReview Section III/ImagesReview Section III.tex lines 133-163"
+capabilities = ["grid", "periodic-closure", "boundary-insertion"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_ared_loop.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "133-163"
+placements = [{ order = 39, line = 1298, asset = "fig3_fig3-pepe_ANred.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-boundary-algebra"
+corpus = "published"
+section = "section-iii-a"
+order = 40
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-boundary-algebra.tex"
+formula = "A = {Tr[X A] : X} is the size-independent local MPO algebra."
+ink = "Canonical public tenkz one-site periodic word with boundary matrix X."
+boundary = "The virtual index is traced; the one physical index is open."
+source = "paper TN-Review-main.tex line 1302; author source ImagesReview Section III/ImagesReview Section III.tex lines 133-163"
+capabilities = ["grid", "periodic-closure", "boundary-insertion"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_ared.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "133-163"
+placements = [{ order = 40, line = 1302, asset = "fig3_fig3-pepe_Ared.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-pentagon-physical"
+corpus = "published"
+section = "section-iii-a"
+order = 41
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-pentagon-physical.tex"
+formula = "^2F ^1F = ^1F ^2F ^2F — a physical string (black, vertical,"
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1312; paper-context-only; no author drawing source"
+capabilities = ["coherence", "fusion-tree"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_pentagon3.tex"
+placements = [{ order = 41, line = 1312, asset = "fig3_pentagon3.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-pentagon-mpo"
+corpus = "published"
+section = "section-iii-a"
+order = 42
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-pentagon-mpo.tex"
+formula = "the MPO-wire fusion move c -> (a, b):"
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1317; paper-context-only; no author drawing source"
+capabilities = ["coherence", "fusion-tree"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_pentagon2.tex"
+placements = [{ order = 42, line = 1317, asset = "fig3_pentagon2.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-pentagon-mixed"
+corpus = "published"
+section = "section-iii-a"
+order = 43
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-pentagon-mixed.tex"
+formula = "^2F ^3F = ^3F ^2F ^2F — a horizontal MPO string (red,"
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1325; paper-context-only; no author drawing source"
+capabilities = ["coherence", "fusion-tree"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_pentagon4.tex"
+placements = [{ order = 43, line = 1325, asset = "fig3_pentagon4.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-pentagon-peps"
+corpus = "published"
+section = "section-iii-a"
+order = 44
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-pentagon-peps.tex"
+formula = "^3F ^3F = ^4F ^3F ^3F — re-association of a two-vertex"
+ink = "Canonical public tenkz composition commands; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1329; paper-context-only; no author drawing source"
+capabilities = ["lattice", "regions", "typed-ports"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_pentagon5.tex"
+placements = [{ order = 44, line = 1329, asset = "fig3_pentagon5.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-fusion-tensor"
+corpus = "published"
+section = "section-iii-a"
+order = 45
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-fusion-tensor.tex"
+formula = "the associator on splitting trees with three unlabeled legs,"
+ink = "Canonical public tenkz composition commands; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1340; paper-context-only; no author drawing source"
+capabilities = ["coherence", "fusion-tree"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_fusion.tex"
+placements = [{ order = 45, line = 1340, asset = "fig3_fusion.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-mpo-tensor"
+corpus = "published"
+section = "section-iii-a"
+order = 46
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-mpo-tensor.tex"
+formula = "the 4-valent MPO tensor — red virtual MPO wire a: j -> k"
+ink = "Canonical public tenkz, tenkzfree environments; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1341; paper-context-only; no author drawing source"
+capabilities = ["grid", "typed-ports"]
+equivalent_to = "rmp-ii-mpo-sheet"
+paper_context_only = true
+fixture = "tests/tenkz/t2_mpo.tex"
+placements = [{ order = 46, line = 1341, asset = "fig3_mpo.pdf" }, { order = 94, line = 2620, asset = "fig3_mpo.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-peps-tensor"
+corpus = "published"
+section = "section-iii-a"
+order = 47
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-peps-tensor.tex"
+formula = "the trivalent junction of physical/fusion wires around the"
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1342; paper-context-only; no author drawing source"
+capabilities = ["lattice", "regions", "typed-ports"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_peps.tex"
+placements = [{ order = 47, line = 1342, asset = "fig3_peps.pdf" }, { order = 92, line = 2476, asset = "fig3_peps.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-coproduct"
+corpus = "published"
+section = "section-iii-a"
+order = 48
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-coproduct.tex"
+formula = "Delta sends the local boundary element XA to the two-site word XAA."
+ink = "Canonical public tenkz equation between one-site and two-site words."
+boundary = "Both sides have one open west and one open east virtual index."
+source = "paper TN-Review-main.tex line 1350; author source ImagesReview Section III/ImagesReview Section III.tex lines 133-248"
+capabilities = ["grid", "equation-composition", "boundary-insertion"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_ared_loop.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "133-248"
+placements = [{ order = 48, line = 1350, asset = "fig3_fig3-pepe_DeltaAred.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-pulling-through"
+corpus = "published"
+section = "section-iii-a"
+order = 49
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-pulling-through.tex"
+formula = "The full MPO-algebra string pulls through the PEPS plaquette."
+ink = "Canonical public tenkzfree four-arm ring before-and-after equation."
+boundary = "Four external PEPS legs and two MPO string ends remain open."
+source = "paper TN-Review-main.tex line 1356; author source ImagesReview Section III/ImagesReview Section III.tex lines 414-447"
+capabilities = ["free-graph", "pulling-through", "rotated-action"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_eq50_pull.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "414-447"
+placements = [{ order = 49, line = 1356, asset = "fig3_fig3-pepe_eq50redarrows.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-commuting-hamiltonian"
+corpus = "published"
+section = "section-iii-a"
+order = 50
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-commuting-hamiltonian.tex"
+formula = "(rho = the 6-site MPO word A x A x A x A x A x A on the red"
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1389; author source ImagesReview Section III/ImagesReview Section III.tex lines 289-304"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_hamilcommu.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "289-304"
+placements = [{ order = 50, line = 1389, asset = "fig3_fig3-pepe_hamilcommu.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-proof-one"
+corpus = "published"
+section = "section-iii-a"
+order = 51
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-proof-one.tex"
+formula = "V_alpha reduces O_alpha acting on A to the original MPS tensor A."
+ink = "Canonical public tenkz local reduction equation with V_alpha."
+boundary = "Both sides have the same two virtual and one physical open legs."
+source = "paper TN-Review-main.tex line 1403; author source ImagesReview Section III/ImagesReview Section III.tex lines 363-375"
+capabilities = ["grid", "local-intertwiner", "equation-composition"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptmpo_cross.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "363-375"
+placements = [{ order = 51, line = 1403, asset = "fig3_fig3-pepe_proof1.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-proof-two"
+corpus = "published"
+section = "section-iii-a"
+order = 52
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-proof-two.tex"
+formula = "F_{alpha beta}^gamma fuses stacked O_beta,O_alpha into O_gamma."
+ink = "Canonical public tenkz two-row fusion equation with an explicit F box."
+boundary = "Two incoming MPO wires become one outgoing MPO wire on each side."
+source = "paper TN-Review-main.tex line 1407; author source ImagesReview Section III/ImagesReview Section III.tex lines 376-385"
+capabilities = ["grid", "fusion-map", "equation-composition"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptintertwin.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "376-385"
+placements = [{ order = 52, line = 1407, asset = "fig3_fig3-pepe_proof2.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-proof-three"
+corpus = "published"
+section = "section-iii-a"
+order = 53
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-proof-three.tex"
+formula = "V_beta V_alpha = lambda(alpha,beta;gamma) V_gamma F_alpha,beta^gamma."
+ink = "Canonical public tenkz equation comparing sequential and fused reductions."
+boundary = "Both reduction networks expose the same MPO and MPS interfaces."
+source = "paper TN-Review-main.tex line 1412; author source ImagesReview Section III/ImagesReview Section III.tex lines 386-411"
+capabilities = ["grid", "local-intertwiner", "fusion-map"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptgh_box.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "386-411"
+placements = [{ order = 53, line = 1412, asset = "fig3_fig3-pepe_proof3.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-ghz-state"
+corpus = "published"
+section = "section-iii-a"
+order = 54
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-ghz-state.tex"
+formula = "|CZX> = blocking of (x)_{i,j} |GHZ_ij> ,"
+ink = "Canonical public tenkzlattice environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1446; author source ImagesReview Section III/ImagesReview Section III.tex lines 329-356"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_czx.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "329-356"
+placements = [{ order = 54, line = 1446, asset = "fig3_fig3-pepe_GHZstatecompleted.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-ghz-tensor"
+corpus = "published"
+section = "section-iii-a"
+order = 55
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-ghz-tensor.tex"
+formula = "G_down = |0000> + |1111> is the four-leg GHZ copy tensor."
+ink = "Canonical public tenkz four-leg box with one physical orientation."
+boundary = "Two virtual and two physical GHZ indices remain open."
+source = "paper TN-Review-main.tex line 1449; author source ImagesReview Section III/ImagesReview Section III.tex lines 357-362"
+capabilities = ["grid", "four-leg-atom", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_czx.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "357-362"
+placements = [{ order = 55, line = 1449, asset = "fig3_fig3-pepe_ghzdown.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-hadamard"
+corpus = "published"
+section = "section-iii-a"
+order = 56
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-hadamard.tex"
+formula = "H = 2^-1/2 [[1,1],[1,-1]] is the local Hadamard map."
+ink = "Canonical public tenkz one-input one-output matrix box."
+boundary = "Exactly one input and one output matrix index remain open."
+source = "paper TN-Review-main.tex line 1449; author source ImagesReview Section III/ImagesReview Section III.tex lines 357-362"
+capabilities = ["grid", "map-atom", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_czx.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "357-362"
+placements = [{ order = 56, line = 1449, asset = "fig3_fig3-pepe_Hmatrix.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-spt-mpo"
+corpus = "published"
+section = "section-iii-a"
+order = 57
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-spt-mpo.tex"
+formula = "Pulling O_g through A deposits the physical action U_g on A."
+ink = "Canonical public tenkzfree PEPS star, crossing boxes, and g-string arcs."
+boundary = "Four virtual legs, one physical leg, and two g-string ends are open."
+source = "paper TN-Review-main.tex line 1459; author source ImagesReview Section III/ImagesReview Section III.tex lines 414-447"
+capabilities = ["free-graph", "pulling-through", "crossing-order"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptmpo_cross.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "414-447"
+placements = [{ order = 57, line = 1459, asset = "fig3_fig3-pepe_newSPTMPO.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-spt-intertwiner"
+corpus = "published"
+section = "section-iii-a"
+order = 58
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-spt-intertwiner.tex"
+formula = "X_gh fuses O_g O_h to O_gh and obeys the local associativity move."
+ink = "Canonical public tenkz stacked MPO words with an explicit X_gh fusion box."
+boundary = "Two incoming MPO interfaces fuse to one outgoing gh interface."
+source = "paper TN-Review-main.tex line 1466; author source ImagesReview Section III/ImagesReview Section III.tex lines 448-467"
+capabilities = ["grid", "fusion-map", "equation-composition"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptintertwin.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "448-467"
+placements = [{ order = 58, line = 1466, asset = "fig3_fig3-pepe_sptintertwin-gh.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-g-injective-projector"
+corpus = "published"
+section = "section-iii-a"
+order = 59
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-g-injective-projector.tex"
+formula = "P_G = |G|^-1 sum_g L_g on the four virtual legs."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1483; author source ImagesReview Section III/ImagesReview Section III.tex lines 468-520"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_eq54_ginj.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "468-520"
+placements = [{ order = 59, line = 1483, asset = "fig3_fig3-pepe_Eq54Ginjred.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-mpo-action"
+corpus = "published"
+section = "section-iii-a"
+order = 60
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-mpo-action.tex"
+formula = "u_g on the physical leg equals w_g,v_g actions on four virtual legs."
+ink = "Canonical public tenkzfree PEPS star with five explicit action atoms."
+boundary = "The transformed tensor keeps four virtual and one physical open legs."
+source = "paper TN-Review-main.tex line 1492; author source ImagesReview Section III/ImagesReview Section III.tex lines 538-552"
+capabilities = ["free-graph", "virtual-action", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptgh_box.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "538-552"
+placements = [{ order = 60, line = 1492, asset = "fig3_fig3-pepe_Eq60.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-mpo-injective"
+corpus = "published"
+section = "section-iii-a"
+order = 61
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-mpo-injective.tex"
+formula = "A PEPS tensor equals its virtual MPO ring pulled around the tensor."
+ink = "Canonical public tenkzfree PEPS star and four-site MPO closure."
+boundary = "Five PEPS legs remain open; the surrounding MPO is closed."
+source = "paper TN-Review-main.tex line 1505; author source ImagesReview Section III/ImagesReview Section III.tex lines 521-537"
+capabilities = ["free-graph", "ring-closure", "pulling-through"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_peps.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "521-537"
+placements = [{ order = 61, line = 1505, asset = "fig3_fig3-pepe_MPOinjnog.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-torus-one"
+corpus = "published"
+section = "section-iii-a"
+order = 62
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-torus-one.tex"
+formula = "A noncontractible MPO loop with crossing tensor i labels a torus state."
+ink = "Canonical public tenkzfree closed horizontal and vertical cycles."
+boundary = "Both MPO cycles are closed; the diagram is a scalar torus sector."
+source = "paper TN-Review-main.tex line 1584; author source ImagesReview Section III/ImagesReview Section III.tex lines 553-562"
+capabilities = ["free-graph", "torus-cycle", "crossing-tensor"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptintertwin.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "553-562"
+placements = [{ order = 62, line = 1584, asset = "fig3_fig3-pepe_Eq61.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-torus-two"
+corpus = "published"
+section = "section-iii-a"
+order = 63
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-torus-two.tex"
+formula = "Enlarged horizontal O_g and vertical O_h strings cross on the PEPS."
+ink = "Canonical public tenkzlattice with orthogonal distinguished MPO paths."
+boundary = "The 5x5 PEPS patch is open; both MPO strings cross its boundary."
+source = "paper TN-Review-main.tex line 1594; author source ImagesReview Section III/ImagesReview Section III.tex lines 572-603"
+capabilities = ["lattice", "orthogonal-strings", "crossing-tensor"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptintertwin.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "572-603"
+placements = [{ order = 63, line = 1594, asset = "fig3_fig3-pepe_Eq62.pdf" }]
+
+[[target]]
+id = "rmp-iii-a-torus-three"
+corpus = "published"
+section = "section-iii-a"
+order = 64
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-torus-three.tex"
+formula = "Sliding O_g through O_h conjugates h to ghg^{-1} at the crossing."
+ink = "Canonical public tenkzfree before-and-after crossing equation."
+boundary = "Four MPO string ends are open on each side of the equation."
+source = "paper TN-Review-main.tex line 1605; author source ImagesReview Section III/ImagesReview Section III.tex lines 563-603"
+capabilities = ["free-graph", "crossing-tensor", "string-slide"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_sptintertwin.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "563-603"
+placements = [{ order = 64, line = 1605, asset = "fig3_fig3-pepe_neweq60.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-anyon-pair"
+corpus = "published"
+section = "section-iii-b"
+order = 65
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-anyon-pair.tex"
+formula = "|psi(a,a^*)> is an open anyon string with endpoints i and i^*."
+ink = "Canonical public tenkzlattice sites and distinguished path edges."
+boundary = "The 3x3 PEPS patch is open; the anyon string has two endpoints."
+source = "paper TN-Review-main.tex line 1645; author source ImagesReview Section III/ImagesReview Section III.tex lines 644-660"
+capabilities = ["lattice", "path-string", "marked-endpoints"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_condensanyon.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "644-660"
+placements = [{ order = 65, line = 1645, asset = "fig3_fig3-pepe_Anyonia.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-idempotent"
+corpus = "published"
+section = "section-iii-b"
+order = 66
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-idempotent.tex"
+formula = "ring_j( T_i ) = delta_{i,j} T_i — the virtual MPO string"
+ink = "Canonical public tenkzfree MPO ring and central PEPS tensor."
+boundary = "The MPO tail and five tensor legs are open on both sides."
+source = "paper TN-Review-main.tex line 1649; author source ImagesReview Section III/ImagesReview Section III.tex lines 661-687"
+capabilities = ["free-graph", "ring-closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_idempotent.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "661-687"
+placements = [{ order = 66, line = 1649, asset = "fig3_fig3-pepe_Idempotent.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-dyon"
+corpus = "published"
+section = "section-iii-b"
+order = 67
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-dyon.tex"
+formula = "A dyon carries charge alpha inside a flux disk with string h."
+ink = "Canonical public tenkzfree charge, flux region, and open string records."
+boundary = "Four lattice legs, one physical leg, and one h-string tail are open."
+source = "paper TN-Review-main.tex line 1655; author source ImagesReview Section III/ImagesReview Section III.tex lines 688-703"
+capabilities = ["free-graph", "marked-region", "open-string"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_condensanyon.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "688-703"
+placements = [{ order = 67, line = 1655, asset = "fig3_fig3-pepe_DyonfoGinj.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-self-braiding"
+corpus = "published"
+section = "section-iii-b"
+order = 68
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-self-braiding.tex"
+formula = "ring_j wound twice = e^{i phi_j} ring_j — the anyon-j MPO"
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1662; author source ImagesReview Section III/ImagesReview Section III.tex lines 704-738"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_seljbraid.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "704-738"
+placements = [{ order = 68, line = 1662, asset = "fig3_fig3-pepe_seljbraidanyon.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-r-tensor-left"
+corpus = "published"
+section = "section-iii-b"
+order = 69
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-r-tensor-left.tex"
+formula = "The unresolved R move braids an i-string through three b,a,b strands."
+ink = "Canonical public tenkzfree strands, marked crossings, and open endpoints."
+boundary = "Two lattice rails and four string ends remain open."
+source = "paper TN-Review-main.tex line 1668; author source ImagesReview Section III/ImagesReview Section III.tex lines 739-772"
+capabilities = ["free-graph", "multi-strand-braid", "crossing-order"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_braidpat1.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "739-772"
+placements = [{ order = 69, line = 1668, asset = "fig3_fig3-pepe_Rtensorpart1.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-r-tensor-right"
+corpus = "published"
+section = "section-iii-b"
+order = 70
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-r-tensor-right.tex"
+formula = "R_{i,b} resolves the i-string crossing of the b,a,b triple."
+ink = "Canonical public tenkzfree R box, strands, and marked endpoints."
+boundary = "Two lattice rails and three upper string ends remain open."
+source = "paper TN-Review-main.tex line 1669; author source ImagesReview Section III/ImagesReview Section III.tex lines 773-798"
+capabilities = ["free-graph", "braid-resolver", "crossing-order"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_braidpat1.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "773-798"
+placements = [{ order = 70, line = 1669, asset = "fig3_fig3-pepe_Rtensorpart2.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-braid-one"
+corpus = "published"
+section = "section-iii-b"
+order = 71
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-braid-one.tex"
+formula = "The first braid panel moves string a past anyon i and string b."
+ink = "Canonical public tenkzfree two-rail patch with two crossing strings."
+boundary = "Four lattice legs and four string endpoints are open."
+source = "paper TN-Review-main.tex line 1675; author source ImagesReview Section III/ImagesReview Section III.tex lines 799-825"
+capabilities = ["free-graph", "multi-strand-braid", "crossing-order"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_braidpat1.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "799-825"
+placements = [{ order = 71, line = 1675, asset = "fig3_fig3-pepe_Braidpat1.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-braid-two"
+corpus = "published"
+section = "section-iii-b"
+order = 72
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-braid-two.tex"
+formula = "The second braid panel exchanges the a and b strings around i and j."
+ink = "Canonical public tenkzfree interlaced arcs and four marked anyon sites."
+boundary = "Four lattice legs and six string endpoints are open."
+source = "paper TN-Review-main.tex line 1676; author source ImagesReview Section III/ImagesReview Section III.tex lines 826-862"
+capabilities = ["free-graph", "multi-strand-braid", "crossing-order"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_braidpat1.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "826-862"
+placements = [{ order = 72, line = 1676, asset = "fig3_fig3-pepe_braidpart2.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-braid-three"
+corpus = "published"
+section = "section-iii-b"
+order = 73
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-braid-three.tex"
+formula = "R_{j,a} replaces the upper a-j crossing in the third braid panel."
+ink = "Canonical public tenkzfree braid strands with an explicit R_{j,a} box."
+boundary = "Four lattice legs and five string endpoints are open."
+source = "paper TN-Review-main.tex line 1679; author source ImagesReview Section III/ImagesReview Section III.tex lines 863-899"
+capabilities = ["free-graph", "braid-resolver", "crossing-order"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_braidpat1.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "863-899"
+placements = [{ order = 73, line = 1679, asset = "fig3_fig3-pepe_braidpart3.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-braid-four"
+corpus = "published"
+section = "section-iii-b"
+order = 74
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-braid-four.tex"
+formula = "R_{i,b} and R_{j,a} resolve the final two-string braid."
+ink = "Canonical public tenkzfree stacked resolver boxes and open braid strands."
+boundary = "Two lattice rails and four string endpoints are open."
+source = "paper TN-Review-main.tex line 1680; author source ImagesReview Section III/ImagesReview Section III.tex lines 900-924"
+capabilities = ["free-graph", "braid-resolver", "crossing-order"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_braidpat1.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "900-924"
+placements = [{ order = 74, line = 1680, asset = "fig3_fig3-pepe_braidpart4.pdf" }]
+
+[[target]]
+id = "rmp-iii-b-condensation"
+corpus = "published"
+section = "section-iii-b"
+order = 75
+case = "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-condensation.tex"
+formula = "A doubled anyon string joins paired endpoints on ket and bra sheets."
+ink = "Canonical public tenkzplanes with a marked path on the visible sheet."
+boundary = "Both 4x4 sheets are open; paired string endpoints stay uncontracted."
+source = "paper TN-Review-main.tex line 1697; author source ImagesReview Section III/ImagesReview Section III.tex lines 925-953"
+capabilities = ["lattice-preset", "double-layer-string", "marked-endpoints"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_condensanyon.tex"
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "925-953"
+placements = [{ order = 75, line = 1697, asset = "fig3_fig3-pepe_condensanyon.pdf" }]
+
+[[target]]
+id = "rmp-iv-ground-space-1d"
+corpus = "published"
+section = "section-iv-v-app"
+order = 76
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-ground-space-1d.tex"
+formula = "|psi(X)> = sum_{s_1..s_N} tr( X A^{s_1} A^{s_2} ... A^{s_N} )"
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 1995; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 46-54"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_gs1d.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "46-54"
+placements = [{ order = 76, line = 1995, asset = "fig4_fig4-pepe_GS1D.pdf" }]
+
+[[target]]
+id = "rmp-iv-ground-space-2d"
+corpus = "published"
+section = "section-iv-v-app"
+order = 77
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-ground-space-2d.tex"
+formula = "|psi(X)> = sum_{s} X( {beta_r} ) C( prod_r A^{s_r} ) |s>,"
+ink = "Canonical public tenkzlattice environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 2006; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 55-70"
+capabilities = ["lattice", "regions", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_gs2d.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "55-70"
+placements = [{ order = 77, line = 2006, asset = "fig4_fig4-pepe_GS2D.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-lhs-one"
+corpus = "published"
+section = "section-iv-v-app"
+order = 78
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-lhs-one.tex"
+formula = "sum A^{i_1} B^{i_2} L(i_3) |i_1 i_2 i_3>"
+ink = "A--B and one uncovered wire close through the boundary tensor L."
+boundary = "Both virtual ends close into L; A, B, and L retain physical legs."
+source = "paper TN-Review-main.tex line 2053; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 79-86 (Ltensor)"
+capabilities = ["free-graph", "closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs1.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "79-86"
+placements = [{ order = 78, line = 2053, asset = "fig4_fig4-pepe_LHS1.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-rhs-one"
+corpus = "published"
+section = "section-iv-v-app"
+order = 79
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-rhs-one.tex"
+formula = "sum B^{i_2} C^{i_3} R(i_1) |i_1 i_2 i_3>"
+ink = "One uncovered wire followed by B--C closes through boundary tensor R."
+boundary = "Both virtual ends close into R; B, C, and R retain physical legs."
+source = "paper TN-Review-main.tex line 2054; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 71-78 (Rtensor)"
+capabilities = ["free-graph", "closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs1.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "71-78"
+placements = [{ order = 79, line = 2054, asset = "fig4_fig4-pepe_RHS1.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-lhs-two"
+corpus = "published"
+section = "section-iv-v-app"
+order = 80
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-lhs-two.tex"
+formula = "Applying the inverse of B leaves A, an exposed site, and L."
+ink = "A and the two virtual indices exposed by the inverse sit above L."
+boundary = "The outer end closes through L; two virtual and two physical legs open."
+source = "paper TN-Review-main.tex line 2058; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 95-102 (Ltensor2)"
+capabilities = ["free-graph", "closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs2.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "95-102"
+placements = [{ order = 80, line = 2058, asset = "fig4_fig4-pepe_LHS2.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-rhs-two"
+corpus = "published"
+section = "section-iv-v-app"
+order = 81
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-rhs-two.tex"
+formula = "Applying the inverse of B leaves R, an exposed site, and C."
+ink = "The two virtual indices exposed by the inverse and C sit above R."
+boundary = "The outer end closes through R; two virtual and two physical legs open."
+source = "paper TN-Review-main.tex line 2059; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 87-94 (Rtensor2)"
+capabilities = ["free-graph", "closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs2.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "87-94"
+placements = [{ order = 81, line = 2059, asset = "fig4_fig4-pepe_RHS2.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-lhs-three"
+corpus = "published"
+section = "section-iv-v-app"
+order = 82
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-lhs-three.tex"
+formula = "Growing B back gives A--B, one exposed site, and boundary tensor L."
+ink = "A--B and the two exposed interior virtual indices lie above L."
+boundary = "The outer end closes through L; two virtual and three physical legs open."
+source = "paper TN-Review-main.tex line 2063; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 103-111 (Ltensor3)"
+capabilities = ["free-graph", "closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs3.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "103-111"
+placements = [{ order = 82, line = 2063, asset = "fig4_fig4-pepe_LHS3.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-rhs-three"
+corpus = "published"
+section = "section-iv-v-app"
+order = 83
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-rhs-three.tex"
+formula = "Growing B back gives boundary tensor R, B, one exposed site, and C."
+ink = "B and C flank the two exposed interior virtual indices above R."
+boundary = "Both outer ends close through R; two virtual and three physical legs open."
+source = "paper TN-Review-main.tex line 2064; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 112-121 (Rtensor3)"
+capabilities = ["free-graph", "closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs3.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "112-121"
+placements = [{ order = 83, line = 2064, asset = "fig4_fig4-pepe_RHS3.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-lhs-four"
+corpus = "published"
+section = "section-iv-v-app"
+order = 84
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-lhs-four.tex"
+formula = "The inverse S removes the jointly injective pair A--B from the L side."
+ink = "Four open index legs rise from the boundary tensor L."
+boundary = "L exposes two virtual and two physical indices, all upward."
+source = "paper TN-Review-main.tex line 2068; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 134-141 (Ltensor4)"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs4.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "134-141"
+placements = [{ order = 84, line = 2068, asset = "fig4_fig4-pepe_LHS4.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-rhs-four"
+corpus = "published"
+section = "section-iv-v-app"
+order = 85
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-rhs-four.tex"
+formula = "S acts on the R-side word consisting of an uncovered wire, B, and C."
+ink = "Four-leg inverse S acts on R's escaped index and B above boundary R."
+boundary = "S has two open outputs; two virtual legs and C's physical leg open."
+source = "paper TN-Review-main.tex line 2069; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 122-133 (Rtensor4)"
+capabilities = ["free-graph", "closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs4.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "122-133"
+placements = [{ order = 85, line = 2069, asset = "fig4_fig4-pepe_RHS4.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-lhs-five"
+corpus = "published"
+section = "section-iv-v-app"
+order = 86
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-lhs-five.tex"
+formula = "After inversion, the L boundary condition retains two open indices."
+ink = "Boundary tensor L is the only atom and carries two explicit upper ports."
+boundary = "L has no virtual boundary stubs; its two upper indices remain open."
+source = "paper TN-Review-main.tex line 2073; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 142-147 (Ltensor5)"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs5.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "142-147"
+placements = [{ order = 86, line = 2073, asset = "fig4_fig4-pepe_LHS5.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-rhs-five"
+corpus = "published"
+section = "section-iv-v-app"
+order = 87
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-rhs-five.tex"
+formula = "The right boundary condition reduces to X attached to the tensor C."
+ink = "C closes into X on the east, with one open virtual leg to the west."
+boundary = "C and X keep upward physical legs; C's west virtual leg stays open."
+source = "paper TN-Review-main.tex line 2074; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 148-155 (Rtensor5)"
+capabilities = ["free-graph", "closure", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs5.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "148-155"
+placements = [{ order = 87, line = 2074, asset = "fig4_fig4-pepe_RHS5.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-lhs-six"
+corpus = "published"
+section = "section-iv-v-app"
+order = 88
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-lhs-six.tex"
+formula = "A two-dimensional R-boundary window surrounds its retained interior."
+ink = "The retained B--C patch is outlined inside the R boundary window."
+boundary = "The outer R window cuts virtual bonds; every lattice site remains open."
+source = "paper TN-Review-main.tex line 2083; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 156-172 (growing back R)"
+capabilities = ["lattice", "regions", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs6.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "156-172"
+placements = [{ order = 88, line = 2083, asset = "fig4_fig4-pepe_LHS6.pdf" }]
+
+[[target]]
+id = "rmp-iv-intersection-rhs-six"
+corpus = "published"
+section = "section-iv-v-app"
+order = 89
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-rhs-six.tex"
+formula = "A two-dimensional L-boundary window surrounds its retained interior."
+ink = "The retained A--B patch is outlined inside the L boundary window."
+boundary = "The outer L window cuts virtual bonds; every lattice site remains open."
+source = "paper TN-Review-main.tex line 2084; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 173-190 (growing back L)"
+capabilities = ["lattice", "regions", "typed-ports"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_lhsrhs6.tex"
+author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
+author_lines = "173-190"
+placements = [{ order = 89, line = 2084, asset = "fig4_fig4-pepe_RHS6.pdf" }]
+
+[[target]]
+id = "rmp-app-toric-primal"
+corpus = "published"
+section = "section-iv-v-app"
+order = 90
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-app-toric-primal.tex"
+formula = "Gauss law g_1 g_2 g_3^{-1} g_4^{-1} = e. The PEPS tensor blocks one"
+ink = "Canonical public tenkzlattice environment; no raw TikZ."
+boundary = "Resolved by the public environment; open indices remain explicit."
+source = "paper TN-Review-main.tex line 2456; paper-context-only; no author drawing source"
+capabilities = ["lattice", "regions", "typed-ports"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_tcprimal_v2.tex"
+placements = [{ order = 90, line = 2456, asset = "fig_app_tc-primal" }]
+
+[[target]]
+id = "rmp-app-toric-dual"
+corpus = "published"
+section = "section-iv-v-app"
+order = 91
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-app-toric-dual.tex"
+formula = "physical spins = differences of adjacent plaquette colours"
+ink = "A selected three-by-three sheet with two dashed internal diagonals."
+boundary = "The four retained mid-side sites expose the plaquette-colour legs."
+source = "paper TN-Review-main.tex line 2462; paper-context-only; no author drawing source"
+capabilities = ["lattice", "regions", "typed-ports"]
+paper_context_only = true
+fixture = "tests/tenkz/t2_tcdual_v2.tex"
+placements = [{ order = 91, line = 2462, asset = "fig_app_tc-dual" }]
+
+[[target]]
+id = "rmp-app-czx-state"
+corpus = "published"
+section = "section-iv-v-app"
+order = 92
+case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-app-czx-state.tex"
+formula = "|CZX> is obtained by blocking the plaquette GHZ product into sites."
+ink = "Four neutral outlined blocks overlap a three-by-three array of red sites."
+boundary = "The displayed patch has open virtual bonds on every outer lattice site."
+source = "paper TN-Review-main.tex line 2511; author source ImagesReview Section V/ImagesReview Section V.tex lines 147-219"
+capabilities = ["lattice", "regions", "semantic-roles"]
+paper_context_only = false
+fixture = "tests/tenkz/t2_czx.tex"
+author_source = "ImagesReview Section V/ImagesReview Section V.tex"
+author_lines = "147-219"
+placements = [{ order = 93, line = 2511, asset = "fig_app_CZXstate.pdf" }]
+
+[[target]]
+id = "rmp-workbench-ii-newfig7"
+corpus = "author-workbench"
+section = "section-ii"
+order = 1
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-newfig7.tex"
+formula = "The red left shift and blue right shift form a two-layer MPU."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Three bricks expose separate red and blue shifted virtual paths, with their four outer endpoints open."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 156-170; archival output newfig7.pdf"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "156-170"
+placements = []
+
+[[target]]
+id = "rmp-workbench-ii-projector-on-pta"
+corpus = "author-workbench"
+section = "section-ii"
+order = 2
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-projector-on-pta.tex"
+formula = "The archival tangent projector is a difference of two canonical sandwich sums."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The first summand seals outer virtual sides; the second closes only its east pair."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 208-236; archival output projectoronPTA.pdf"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "208-236"
+placements = []
+fixture = "tests/tenkz/hard10_v3.tex"
+
+[[target]]
+id = "rmp-workbench-ii-peps-rg-workbench"
+corpus = "author-workbench"
+section = "section-ii"
+order = 3
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-peps-rg-workbench.tex"
+formula = "A unitary U acts on the four physical legs of a 2x2 PEPS plaquette."
+ink = "Canonical public tenkzlattice environment; no raw TikZ."
+boundary = "The 2x2 plaquette keeps every sheet-edge virtual leg and each physical leg open."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 742-800; archival output FigPEPSRG.pdf"
+capabilities = ["lattice", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "742-800"
+placements = []
+fixture = "tests/tenkz/t2_rgfp4.tex"
+
+[[target]]
+id = "rmp-workbench-ii-positive-mpo-old"
+corpus = "author-workbench"
+section = "section-ii"
+order = 4
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-positive-mpo-old.tex"
+formula = "O = X^-1 (sum_k A^k tensor conjugate(A^k)) X."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "O has four open ports; each capsule branches one outer virtual leg into the two A rails, whose physical legs form one open vertical line."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 317-335; archival output sec2fig6old.pdf"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "317-335"
+placements = []
+
+[[target]]
+id = "rmp-workbench-ii-peps-gauge-old"
+corpus = "author-workbench"
+section = "section-ii"
+order = 5
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-peps-gauge-old.tex"
+formula = "One marked virtual input on A is carried to three marked outputs on B."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Both PEPS atoms keep four virtual and one physical leg open; the marked branch has one incoming and three outgoing virtual endpoints."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 358-373; archival output sec2fig7old.pdf"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "358-373"
+placements = []
+
+[[target]]
+id = "rmp-workbench-ii-peps-gauge-without-a"
+corpus = "author-workbench"
+section = "section-ii"
+order = 6
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-peps-gauge-without-a.tex"
+formula = "The unlabeled PEPS relation carries two marked virtual legs across B."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Each PEPS atom has four virtual and one physical open leg; each marked route has two open virtual endpoints."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 374-389; archival output newfig7woa.pdf"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "374-389"
+placements = []
+
+[[target]]
+id = "rmp-workbench-ii-mpu-wrap-second"
+corpus = "author-workbench"
+section = "section-ii"
+order = 7
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-mpu-wrap-second.tex"
+formula = "Two stacked MPU rows implement opposite local shift orientations."
+ink = "Canonical public tenkzfree environment; no raw TikZ."
+boundary = "Each row has four upper and four lower open legs and two open virtual endpoints; the turn orientation reverses between rows."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 473-483; archival output sec2fig7c (b).pdf"
+capabilities = ["free-graph", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "473-483"
+placements = []
+
+[[target]]
+id = "rmp-workbench-ii-v-tensor-definition"
+corpus = "author-workbench"
+section = "section-ii"
+order = 8
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-v-tensor-definition.tex"
+formula = "V is the tangent-space tensor orthogonal to the MPS tensor A."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "West and east cups close the virtual pair; the V and conjugate-A legs remain open."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 590-596; archival output DefV.pdf"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "590-596"
+placements = []
+
+[[target]]
+id = "rmp-workbench-ii-boundary-a-old"
+corpus = "author-workbench"
+section = "section-ii"
+order = 9
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-boundary-a-old.tex"
+formula = "A^I = U^A_I sigma^A on the region boundary."
+ink = "Canonical public tenkzlattice region and tenkz boundary atoms."
+boundary = "The lattice exterior is open; the reduced A-B pair seals its outer virtual sides."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 597-617; archival output Figboundary-theory (a)old.pdf"
+capabilities = ["grid", "lattice", "regions", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "597-617"
+placements = []
+
+[[target]]
+id = "rmp-workbench-ii-boundary-b-old"
+corpus = "author-workbench"
+section = "section-ii"
+order = 10
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-boundary-b-old.tex"
+formula = "B^Ibar = sigma^B U^B_Ibar on the complementary boundary."
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "The A factorization opens east; the B factorization opens west; physical legs stay open."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 618-649; archival output Figboundary-theory (b)old.pdf"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "618-649"
+placements = []
+
+[[target]]
+id = "rmp-workbench-ii-peps-fine-graining"
+corpus = "author-workbench"
+section = "section-ii"
+order = 11
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-peps-fine-graining.tex"
+formula = "One PEPS tensor is fine-grained into a 2x2 tensor patch."
+ink = "Canonical public tenkzlattice environments; no raw TikZ."
+boundary = "The one-site and 2x2 sheets expose matching outer virtual and physical boundaries."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 742-800; archival output figrenorm2D.pdf"
+capabilities = ["lattice", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "742-800"
+placements = []
+fixture = "tests/tenkz/t2_renorm13.tex"
+
+[[target]]
+id = "rmp-workbench-ii-historical-composite"
+corpus = "author-workbench"
+section = "section-ii"
+order = 12
+case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-historical-composite.tex"
+formula = "The archival composite pairs one-to-two MPS and one-to-four PEPS splittings."
+ink = "Canonical public tenkz and tenkzlattice environments; no raw TikZ."
+boundary = "Both archival arrows preserve their open virtual and physical boundary signatures."
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 801-831; archival output ImagesReview Section II.pdf"
+capabilities = ["grid", "lattice", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section II/ImagesReview Section II.tex"
+author_lines = "801-831"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-eq50"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 13
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-eq50.tex"
+formula = "A single boundary tensor represents the local Eq. 50 map."
+ink = "Canonical public tenkz one-site boundary atom."
+boundary = "One west and one east virtual leg remain open."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 133-135; archival output Eq50.pdf"
+capabilities = ["grid", "local-map"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "133-135"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-eq51"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 14
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-eq51.tex"
+formula = "X followed by an MPO word gives the extended boundary action."
+ink = "Canonical public tenkz X insertion, finite MPO word, and lower closure."
+boundary = "The word has an open west X interface and an open east interface."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 136-143; archival output Eq51.pdf"
+capabilities = ["grid", "boundary-insertion", "closure"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "136-143"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-eq52"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 15
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-eq52.tex"
+formula = "X contracted with one MPO tensor defines the local action."
+ink = "Canonical public tenkz two-atom word with X and one MPO atom."
+boundary = "The local word is closed on its west side and open to the east."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 144-149; archival output Eq52.pdf"
+capabilities = ["grid", "boundary-insertion", "closure"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "144-149"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-diagram-one"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 16
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-diagram-one.tex"
+formula = "Delta(XA) equals X contracted with a two-site tensor word."
+ink = "Canonical public tenkz one-site to two-site coproduct equation."
+boundary = "Both sides expose the same west and east virtual interfaces."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 150-163; archival output Dia1.pdf"
+capabilities = ["grid", "coproduct", "equation-composition"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "150-163"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-diagram-two"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 17
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-diagram-two.tex"
+formula = "Closing the virtual boundary of Y gives the scalar diagram."
+ink = "Canonical public tenkz single Y atom with periodic virtual closure."
+boundary = "The virtual interface is closed; the diagram is a scalar."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 164-169; archival output Dia2.pdf"
+capabilities = ["grid", "periodic-closure", "scalar"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "164-169"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-diagram-three"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 18
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-diagram-three.tex"
+formula = "The north-west and south-east rotated boundary actions agree."
+ink = "Canonical public tenkzfree four-arm closures with lambda insertions."
+boundary = "Each side has four directed external legs and one closed inner ring."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 170-197; archival output Dia3.pdf"
+capabilities = ["free-graph", "rotated-action", "ring-closure"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "170-197"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-historical-composite"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 19
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-historical-composite.tex"
+formula = "Historical composite of the four rotated boundary actions."
+ink = "Canonical public tenkzlattice environment; no raw TikZ."
+boundary = "Resolved by the public environment; archival boundary contract is explicit."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 170-197; archival output ImagesReview Section III.pdf"
+capabilities = ["lattice", "regions", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "170-197"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-diagram-four"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 20
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-diagram-four.tex"
+formula = "The closed four-leg tensor equals Delta^3 of the local map."
+ink = "Canonical public tenkzfree four-arm tensor and local-map expression."
+boundary = "The four-arm side is closed; the local-map side is virtual-scalar."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 198-210; archival output Dia4.pdf"
+capabilities = ["free-graph", "four-arm-closure", "coproduct"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "198-210"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-eq50-reduced"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 21
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-eq50-reduced.tex"
+formula = "Two stacked local tensors are reduced between left and right maps."
+ink = "Canonical public tenkz two-row word with vertical boundary maps."
+boundary = "Two west and two east virtual legs remain open."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 211-219; archival output Eq50red.pdf"
+capabilities = ["grid", "stacked-word", "boundary-map"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "211-219"
+placements = []
+fixture = "tests/tenkz/t2_eq50_pull.tex"
+
+[[target]]
+id = "rmp-workbench-iii-dual-reduced"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 22
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-dual-reduced.tex"
+formula = "X_ab^c intertwines the stacked a,b wires with the c wire."
+ink = "Canonical public tenkz stacked-wire to single-wire fusion equation."
+boundary = "Two incoming virtual wires fuse to one outgoing virtual wire."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 220-248; archival output Adualred.pdf"
+capabilities = ["grid", "fusion-map", "equation-composition"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "220-248"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-f-symbol-simplified-a"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 23
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-f-symbol-simplified-a.tex"
+formula = "The simplified F-symbol is represented by one MPO tensor."
+ink = "Canonical public tenkz composition commands; no raw TikZ."
+boundary = "Resolved by the public environment; archival boundary contract is explicit."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 249-251; archival output TensorFsymplya.pdf"
+capabilities = ["coherence", "fusion-tree"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "249-251"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-mpo-representation"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 24
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-mpo-representation.tex"
+formula = "O_a is the product of the local MPO tensors on wire a."
+ink = "Canonical public tenkz five-site MPO word labelled by a."
+boundary = "The MPO word has one open west and one open east virtual index."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 252-258; archival output Oa rep.pdf"
+capabilities = ["grid", "mpo-word", "bond-label"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "252-258"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-f-tensor"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 25
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-f-tensor.tex"
+formula = "F relates sectors b,c,d,e around the crossing of a and c."
+ink = "Canonical public tenkzfree directed crossing with six sector labels."
+boundary = "Four diagonal sector pairs and two directed axes remain open."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 259-288; archival output tensorF.pdf"
+capabilities = ["free-graph", "directed-crossing", "sector-labels"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "259-288"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-eq59-now"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 26
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-eq59-now.tex"
+formula = "|G|^-1 sum_g of four L_g actions is the G-injective projector."
+ink = "Canonical public tenkzfree four inward L_g actions and projector ring."
+boundary = "Four directed virtual legs are open; the projector ring is closed."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 305-328; archival output Eq59now.pdf"
+capabilities = ["free-graph", "group-average", "ring-closure"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "305-328"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-ghz-state-workbench"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 27
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-ghz-state-workbench.tex"
+formula = "The cluster-state workbench alternates up and down GHZ copy tensors."
+ink = "Canonical public tenkzlattice 3x4 staggered GHZ pattern."
+boundary = "Horizontal copy bonds are open at the left and right boundaries."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 329-356; archival output ghzstate.pdf"
+capabilities = ["lattice", "staggered-sites", "copy-tensor"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "329-356"
+placements = []
+fixture = "tests/tenkz/t2_czx.tex"
+
+[[target]]
+id = "rmp-workbench-iii-ghz-up"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 28
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-ghz-up.tex"
+formula = "The upward GHZ copy tensor identifies its four binary indices."
+ink = "Canonical public tenkz four-leg atom with upward copy orientation."
+boundary = "Two virtual and two physical copy indices remain open."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 357-362; archival output ghzup.pdf"
+capabilities = ["grid", "four-leg-atom", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "357-362"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-g-injective-pull"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 29
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-g-injective-pull.tex"
+formula = "A virtual g-string pulls through a G-injective PEPS tensor."
+ink = "Canonical public tenkzfree PEPS star with opposite g-string corners."
+boundary = "Five PEPS legs and two g-string ends remain open on each side."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 414-447; archival output Ginjpullt.pdf"
+capabilities = ["free-graph", "pulling-through", "open-string"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "414-447"
+placements = []
+fixture = "tests/tenkz/t2_eq50_pull.tex"
+
+[[target]]
+id = "rmp-workbench-iii-intertwining-mpo"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 30
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-intertwining-mpo.tex"
+formula = "(per site, MPO virtual spaces):"
+ink = "Canonical public tenkz environment; no raw TikZ."
+boundary = "Resolved by the public environment; archival boundary contract is explicit."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 448-467; archival output interMPO.pdf"
+capabilities = ["grid", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "448-467"
+placements = []
+fixture = "tests/tenkz/t2_sptintertwin.tex"
+
+[[target]]
+id = "rmp-workbench-iii-mpo-injective-white"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 31
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-mpo-injective-white.tex"
+formula = "A virtual MPO corner pulls through a white PEPS tensor unchanged."
+ink = "Canonical public tenkzfree PEPS star with before-and-after corner paths."
+boundary = "Five PEPS legs and two MPO string ends remain open on each side."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 501-520; archival output MPOInjPEPSwhite.pdf"
+capabilities = ["free-graph", "pulling-through", "open-string"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "501-520"
+placements = []
+fixture = "tests/tenkz/t2_peps.tex"
+
+[[target]]
+id = "rmp-workbench-iii-mpo-on-peps-definition"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 32
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-mpo-on-peps-definition.tex"
+formula = "MPO(A) is the four-site virtual ring surrounding one PEPS tensor A."
+ink = "Canonical public tenkzfree central atom and four-site MPO ring."
+boundary = "The MPO is closed; the PEPS tensor retains five open legs."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 521-537; archival output DefofMPOonjPEPSten.pdf"
+capabilities = ["free-graph", "ring-closure", "definition"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "521-537"
+placements = []
+fixture = "tests/tenkz/t2_peps.tex"
+
+[[target]]
+id = "rmp-workbench-iii-eq60-now"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 33
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-eq60-now.tex"
+formula = "u_g on the physical leg pulls through to w_g and v_g virtual actions."
+ink = "Canonical public tenkzfree PEPS star with physical and virtual rings."
+boundary = "Five transformed tensor legs remain open."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 538-552; archival output Eq60now.pdf"
+capabilities = ["free-graph", "virtual-action", "typed-ports"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "538-552"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-enlarged-mpo-black"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 34
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-enlarged-mpo-black.tex"
+formula = "A marked insertion replaces one tensor in an enlarged MPO word."
+ink = "Canonical public tenkz four-site MPO word with one marked box."
+boundary = "The enlarged MPO has open west and east virtual interfaces."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 553-562; archival output enlargeMPOblack.pdf"
+capabilities = ["grid", "mpo-word", "marked-insertion"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "553-562"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-eq59"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 35
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-eq59.tex"
+formula = "A marked MPO loop winds around a noncontractible torus cycle."
+ink = "Canonical public tenkzfree closed loop with one crossing insertion i."
+boundary = "The MPO cycle is closed; the torus diagram is scalar."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 563-603; archival output Eq59.pdf"
+capabilities = ["free-graph", "torus-cycle", "crossing-tensor"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "563-603"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-g-injective-mpo"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 36
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-g-injective-mpo.tex"
+formula = "Four local MPO tensors meet at one G-injective plaquette."
+ink = "Canonical public tenkzfree square of four labelled MPO atoms."
+boundary = "Eight labelled virtual half-edges remain open around the plaquette."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 604-621; archival output GinjMPO.pdf"
+capabilities = ["free-graph", "four-site-plaquette", "sector-labels"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "604-621"
+placements = []
+
+[[target]]
+id = "rmp-workbench-iii-peps-renormalization-one"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 37
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-peps-renormalization-one.tex"
+formula = "Four PEPS tensors occupy the edges of one renormalization plaquette."
+ink = "Canonical public tenkzfree square with four edge-centred PEPS atoms."
+boundary = "Eight external half-edges remain open around the plaquette."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 622-630; archival output PEPSrenorm1.pdf"
+capabilities = ["free-graph", "four-site-plaquette", "renormalization"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "622-630"
+placements = []
+fixture = "tests/tenkz/t2_rgfp4.tex"
+
+[[target]]
+id = "rmp-workbench-iii-peps-renormalization-two"
+corpus = "author-workbench"
+section = "section-iii-a"
+order = 38
+case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-peps-renormalization-two.tex"
+formula = "A 2x2 PEPS block renormalizes to one effective four-leg tensor."
+ink = "Canonical public tenkzlattice block-to-site equation."
+boundary = "Both sides expose one effective leg in each lattice direction."
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 631-643; archival output PEPSrenom2.pdf"
+capabilities = ["lattice", "blocking", "equation-composition"]
+paper_context_only = false
+author_source = "ImagesReview Section III/ImagesReview Section III.tex"
+author_lines = "631-643"
+placements = []
+fixture = "tests/tenkz/t2_rgfp4.tex"

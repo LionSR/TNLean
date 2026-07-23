@@ -1,0 +1,21 @@
+% Target: rmp-iii-b-r-tensor-left
+% Formula: The unresolved R move braids an i-string through three b,a,b strands.
+% Ink: Canonical public tenkzfree strands, marked crossings, and open endpoints.
+% Boundary: Two lattice rails and four string ends remain open.
+% Source: paper TN-Review-main.tex line 1668; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 739-772
+% Capabilities: free-graph, multi-strand-braid, crossing-order
+\[
+  \begin{tenkzfree}
+    \tnput[dot, label pos=west]{i}{(0mm,-10mm)}{i}
+    \tnput[dot]{bL}{(-7mm,10mm)}{b}
+    \tnput[dot]{a}{(0mm,10mm)}{a}
+    \tnput[dot]{bR}{(7mm,10mm)}{b}
+    \tnjoin{-14mm,-10mm}{i.west} \tnjoin{i.east}{14mm,-10mm}
+    \tnjoin{-14mm,10mm}{bL.west} \tnjoin{bR.east}{14mm,10mm}
+    \tnjoin{i.south}{0mm,-18mm}
+    \tnjoin[route=arc, out=135, in=-90]{i.north west}{bL.south}
+    \tnjoin[route=arc, out=90, in=-90]{i.north}{a.south}
+    \tnjoin[route=arc, out=45, in=-90]{i.north east}{bR.south}
+  \end{tenkzfree}
+\]

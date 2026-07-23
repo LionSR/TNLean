@@ -196,7 +196,8 @@ if tracked.returncode != 0:
     fail("cannot verify tracked corpus files with git: " + tracked.stderr.strip())
 tracked_fixtures = {
     line for line in tracked.stdout.splitlines()
-    if line.endswith((".tex", ".inc"))
+    if Path(line).parent == Path("tests/tenkz")
+    and line.endswith((".tex", ".inc"))
 }
 actual_fixtures = {
     f"tests/tenkz/{name}" for name in actual_tex

@@ -1,0 +1,185 @@
+% tenkzrmpbenchmark.sty -- typography for the tenkz RMP benchmark book.
+%
+% This package owns pages, listings, tables, and comparison furniture only.
+% It deliberately defines no tenkz command, key, alias, atom, or drawing rule.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tenkzrmpbenchmark}[2026/07/22 v0.1 RMP benchmark typography]
+
+\RequirePackage[a4paper,landscape,inner=17mm,outer=14mm,top=16mm,bottom=17mm,
+  headheight=14pt,headsep=6mm]{geometry}
+\RequirePackage{amsmath,amssymb,booktabs,array,tabularx,longtable,multicol}
+\RequirePackage{xcolor,graphicx,fancyhdr,fancyvrb,ragged2e,url,tenkz}
+
+\definecolor{RMPAccent}{HTML}{305F72}
+\definecolor{RMPQuiet}{gray}{0.38}
+\definecolor{RMPRule}{gray}{0.72}
+\definecolor{RMPPaper}{HTML}{F8F7F2}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{RMPQuiet}{tenkz RMP benchmark}}
+\fancyhead[RO]{\small\textcolor{RMPQuiet}{source-first laboratory book}}
+\fancyfoot[LE,RO]{\thepage}
+\renewcommand\headrulewidth{0.35pt}
+\setlength\parindent{0pt}
+\setlength\parskip{4pt}
+
+\newcommand\RMPMethodPages{%
+  \section{Method and source authority}
+  Each target is governed by its LaTeX source.  Prebuilt paper and workbench
+  PDFs are not evidence.  A successful check validates the manifest and case
+  headers, lints canonical source, compiles a disposable standalone wrapper,
+  and audits the versioned event stream used by the rendering.
+
+  \begin{description}
+    \item[Published corpus.] Ninety-two targets appear in paper order at
+      ninety-four placements.
+    \item[Author-workbench archive.] Thirty-eight targets appear in author
+      source order.  Aggregate outputs remain explicitly historical.
+    \item[Missing author drawing source.] Ten published targets are labelled
+      \emph{paper-context-only}; the label never implies a recovered block.
+    \item[One source.] The complete listing and the vector rendering on every
+      spread consume the same case path recorded in the manifest.
+  \end{description}
+}
+
+\newcommand\RMPSetCampaignVerdict[4]{%
+  \def\rmpDigestVerdict{#1}%
+  \def\rmpSourceVerdict{#2}%
+  \def\rmpPrintVerdict{#3}%
+  \def\rmpWebVerdict{#4}%
+}
+
+\newcommand\RMPAtlasBegin{%
+  \section{Compact atlas and coverage matrix}
+  \begin{center}
+  \begin{tabular}{@{}lll@{}}\toprule
+    Corpus & Section & Targets \\\midrule
+}
+\newcommand\RMPAtlasRow[3]{#1 & #2 & #3 \\
+}
+\newcommand\RMPAtlasEnd{\bottomrule\end{tabular}\end{center}\clearpage}
+
+\newcommand\RMPPart[1]{\clearpage\part{#1}}
+\newcommand\rmpPendingSection{}
+\newcommand\RMPSection[1]{\gdef\rmpPendingSection{#1}}
+
+% Begin a stable spread on an even (verso) page.  If the next page is odd,
+% consume it as an intentionally blank interleaf before setting the source.
+\newcommand\RMPBeginVerso{%
+  \clearpage
+  \ifodd\value{page}\thispagestyle{empty}\null\clearpage\fi
+  \ifx\rmpPendingSection\empty\else
+    \section{\rmpPendingSection}%
+    \global\let\rmpPendingSection\empty
+  \fi
+}
+
+% Event fields are line-oriented and use `|' as their natural delimiter.
+% Add discretionary breaks without changing or abbreviating the audited text.
+\ExplSyntaxOn
+\cs_new_protected:Npn \rmp_break_event:n #1
+  {
+    \tl_set:Nn \l_tmpa_tl {#1}
+    \tl_replace_all:Nnn \l_tmpa_tl {;~} {\par}
+    \tl_replace_all:Nnn \l_tmpa_tl {|} {|\allowbreak{}}
+    \tl_use:N \l_tmpa_tl
+  }
+\NewDocumentCommand \RMPEvent { m } { \rmp_break_event:n {#1} }
+\cs_new_protected:Npn \rmp_identifier:n #1
+  {
+    \tl_set:Nn \l_tmpa_tl {#1}
+    \tl_replace_all:Nnn \l_tmpa_tl {-} {-\allowbreak{}}
+    \texttt{\tl_use:N \l_tmpa_tl}
+  }
+\NewDocumentCommand \RMPIdentifier { m } { \rmp_identifier:n {#1} }
+\ExplSyntaxOff
+
+\newcounter{rmpfirstline}
+\newcounter{rmplastline}
+\newcommand\RMPSourceListing[2]{%
+  \ifnum#2>52
+    \setcounter{rmpfirstline}{#2}\divide\value{rmpfirstline} by 2
+    \begin{minipage}[t]{.49\linewidth}
+      \VerbatimInput[numbers=left,numbersep=5pt,fontsize=\tiny,
+        baselinestretch=.78,lastline=\arabic{rmpfirstline}]{#1}
+    \end{minipage}\hfill
+    \setcounter{rmplastline}{\value{rmpfirstline}}\stepcounter{rmplastline}
+    \begin{minipage}[t]{.49\linewidth}
+      \VerbatimInput[numbers=left,firstnumber=last,numbersep=5pt,
+        fontsize=\tiny,baselinestretch=.78,
+        firstline=\arabic{rmplastline}]{#1}
+    \end{minipage}
+  \else
+    \VerbatimInput[numbers=left,numbersep=6pt,fontsize=\scriptsize,
+      baselinestretch=.88]{#1}
+  \fi
+}
+
+% The first command stores the manifest-side fields.  TeX supports at most
+% nine parameters, so the generated index immediately follows it with
+% \RMPCaseEvidence, which owns the build-side fields and emits both pages.
+\newcommand\RMPCaseSpread[9]{%
+  \def\rmpID{#1}\def\rmpCorpus{#2}\def\rmpSection{#3}\def\rmpOrder{#4}%
+  \def\rmpFormula{#5}\def\rmpInk{#6}\def\rmpBoundary{#7}%
+  \def\rmpSource{#8}\def\rmpCapabilities{#9}%
+}
+
+% The ninth argument is the temporary standalone vector PDF compiled from the
+% case path printed on the facing page.  This package only fits that artifact;
+% it adds no drawing ink.
+\newcommand\RMPCaseEvidence[9]{%
+  \RMPBeginVerso
+  \phantomsection\addcontentsline{toc}{subsection}{\rmpID}
+  {\Large\bfseries\textcolor{RMPAccent}{\rmpID}\par}
+  \smallskip
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{27mm}X>{\bfseries}p{27mm}X@{}}
+    Corpus & \rmpCorpus & Section/order & \rmpSection~/ \rmpOrder \\
+    Formula & \multicolumn{3}{X}{\rmpFormula} \\
+    Ink & \multicolumn{3}{X}{\rmpInk} \\
+    Boundary & \multicolumn{3}{X}{\rmpBoundary} \\
+    Source & \multicolumn{3}{X}{\rmpSource} \\
+    Capabilities & \multicolumn{3}{X}{\rmpCapabilities} \\
+    Placement & \multicolumn{3}{X}{#1; #2} \\
+  \end{tabularx}
+  \medskip{\color{RMPRule}\hrule}\smallskip
+  \RMPSourceListing{#7}{#8}
+
+  \clearpage
+  {\Large\bfseries\textcolor{RMPAccent}{\rmpID}\quad vector rendering\par}
+  \vspace{5mm}
+  \begin{center}
+    \begin{minipage}[c][.52\textheight][c]{.90\linewidth}
+      \centering
+      \includegraphics[width=.88\linewidth,height=.46\textheight,
+        keepaspectratio]{#9}
+    \end{minipage}
+  \end{center}
+  {\color{RMPRule}\hrule}\smallskip
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{44mm}X@{}}
+    Audited model signature & \RMPEvent{#3} \\
+    Standalone dimensions & #4 \\
+    Case SHA-256 & \nolinkurl{#5} \\
+    Fixture SHA-256 & \nolinkurl{#6} \\
+    Verdict & \rmpDigestVerdict; \rmpSourceVerdict; \rmpPrintVerdict;
+      \rmpWebVerdict \\
+  \end{tabularx}
+}
+
+\newcommand\RMPGrammarIndexBegin{%
+  \clearpage\section{Grammar and capability index}
+  \begin{longtable}{@{}p{38mm}p{14mm}>{\RaggedRight\arraybackslash}p{190mm}@{}}\toprule
+    Capability & Uses & Targets \\\midrule\endhead
+}
+\newcommand\RMPGrammarRow[3]{\texttt{#1} & #2 & \sloppy #3 \\
+}
+\newcommand\RMPGrammarIndexEnd{\bottomrule\end{longtable}}
+
+\newcommand\RMPVerdictTablesBegin{%
+  \clearpage\section{Derived verdict table}
+  \begin{longtable}{@{}p{58mm}p{38mm}p{32mm}p{34mm}p{55mm}@{}}\toprule
+    Target & Digest & Source & Print & Web \\\midrule\endhead
+}
+\newcommand\RMPVerdictRow[5]{\RMPIdentifier{#1} & #2 & #3 & #4 & #5 \\
+}
+\newcommand\RMPVerdictTablesEnd{\bottomrule\end{longtable}}
