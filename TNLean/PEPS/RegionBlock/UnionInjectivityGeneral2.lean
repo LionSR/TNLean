@@ -655,7 +655,8 @@ theorem ThreeBlockGeometry.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq
           regionBlockedWeight (G := G) A g.complement bc' σcompl := by
   classical
   -- Group the constrained coupling sum by the complement boundary configuration.
-  rw [threeBlockComplCoeff, ← Finset.sum_fiberwise_of_maps_to
+  rw [threeBlockComplCoeff, ThreeBlockGeometry.threeBlockBlueCoeff,
+    ← Finset.sum_fiberwise_of_maps_to
     (s := Finset.univ.filter
       (fun q : VirtualConfig A =>
         regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q = bdry ∧

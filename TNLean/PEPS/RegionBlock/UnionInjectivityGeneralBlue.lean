@@ -35,10 +35,10 @@ variable (g : ThreeBlockGeometry V)
 
 /-- Exchange the blue and complement roles while leaving the red block fixed.
 
-This local geometry involution, rather than square-lattice coordinate swap, is the exact
+This geometry involution, rather than square-lattice coordinate swap, is the exact
 symmetry of the declarations below: they hold for an arbitrary graph and exchange two
 configuration fibers, not two coordinate axes. -/
-private def ThreeBlockGeometry.swapBlueComplementMirror (g : ThreeBlockGeometry V) :
+abbrev ThreeBlockGeometry.swapBlueComplementMirror (g : ThreeBlockGeometry V) :
     ThreeBlockGeometry V where
   red := g.red
   blue := g.complement
@@ -49,7 +49,7 @@ private def ThreeBlockGeometry.swapBlueComplementMirror (g : ThreeBlockGeometry 
   cover_univ := by rw [← g.cover_univ]; ac_rfl
 
 omit [LinearOrder V] in
-@[simp] private theorem ThreeBlockGeometry.swapBlueComplementMirror_complPhysical
+@[simp] theorem ThreeBlockGeometry.swapBlueComplementMirror_complPhysical
     (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement) :
     g.swapBlueComplementMirror.complPhysical σcompl σblue =
