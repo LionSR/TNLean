@@ -250,7 +250,8 @@ private noncomputable def emptyFusionHistoryIndexEquiv
     intro b
     rfl
 
-/-- The empty-chain recursive bond dimension is the bond dimension of the initial label. -/
+/-- With an empty appended-label list, the recursive bond dimension of the one-site
+base tensor is the bond dimension of the initial label. -/
 private def emptyFusionBondEquiv
     (Fam : BNTFusionCoisometryFamily Λ p) (α : Λ) :
     Fin (fusionChainBondDim Fam α []) ≃ Fin (Fam.bondDim α) :=
@@ -327,26 +328,6 @@ private def appendFusionOutputEquiv
       ⟨⟨δ, h⟩, ⟨γ, m, b⟩⟩ :=
   rfl
 
-private theorem smul_blockDiagonal_apply_eq
-    {ι : Type*} [DecidableEq ι] {n : ι → Type*}
-    (s : ℂ) (B : ∀ a : ι, Matrix (n a) (n a) ℂ) (a : ι) (x y : n a) :
-    (s • Matrix.blockDiagonal' B) ⟨a, x⟩ ⟨a, y⟩ = s * B a x y := by
-  change s * Matrix.blockDiagonal' B ⟨a, x⟩ ⟨a, y⟩ = s * B a x y
-  rw [Matrix.blockDiagonal'_apply_eq]
-
-private theorem smul_blockDiagonal_apply_ne
-    {ι : Type*} [DecidableEq ι] {n : ι → Type*}
-    (s : ℂ) (B : ∀ a : ι, Matrix (n a) (n a) ℂ)
-    {a a' : ι} (x : n a) (y : n a') (haa' : a ≠ a') :
-    (s • Matrix.blockDiagonal' B) ⟨a, x⟩ ⟨a', y⟩ = 0 := by
-  change s * Matrix.blockDiagonal' B ⟨a, x⟩ ⟨a', y⟩ = 0
-  rw [Matrix.blockDiagonal'_apply_ne _ _ _ haa', mul_zero]
-
-private theorem smul_matrix_apply
-    {m n : Type*} (s : ℂ) (A : Matrix m n ℂ) (x : m) (y : n) :
-    (s • A) x y = s * A x y :=
-  rfl
-
 /-- Flattening the nested fusion blocks after one appended label gives the recursive blocks
 indexed by the extended histories. -/
 private theorem appendFusionOutput_blockDiagonal
@@ -379,7 +360,7 @@ private theorem appendFusionOutput_blockDiagonal
       · subst m'
         simp only [recursiveProjectorQ, fusionHistoryWeight,
           Matrix.blockDiagonal'_apply_eq]
-        rw [smul_blockDiagonal_apply_eq, smul_matrix_apply]
+        simp only [Matrix.smul_apply, Matrix.blockDiagonal'_apply_eq, smul_eq_mul]
         simp [DiagonalChiFamily.matrix, Matrix.kroneckerMap_apply, mul_assoc]
       · have hext :
           (⟨δ, h, m⟩ : FusionHistoryData Fam α (β :: previous) γ) ≠ ⟨δ, h, m'⟩ := by
@@ -395,7 +376,7 @@ private theorem appendFusionOutput_blockDiagonal
         simp only [recursiveProjectorQ]
         rw [Matrix.blockDiagonal'_apply_eq,
           Matrix.blockDiagonal'_apply_ne _ _ _ hhistory,
-          smul_blockDiagonal_apply_eq]
+          Matrix.smul_apply, Matrix.blockDiagonal'_apply_eq, smul_eq_mul]
         simp [DiagonalChiFamily.matrix, Matrix.kroneckerMap_apply, hm]
     · have hext :
           (⟨γ, ⟨δ, h, m⟩⟩ : FusionHistory Fam α (β :: previous)) ≠
@@ -404,7 +385,7 @@ private theorem appendFusionOutput_blockDiagonal
           exact hγ (congrArg Sigma.fst heq)
       simp only [recursiveProjectorQ]
       rw [Matrix.blockDiagonal'_apply_eq]
-      rw [smul_blockDiagonal_apply_ne _ _ _ _ hγ,
+      rw [Matrix.smul_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hγ, smul_eq_mul, mul_zero,
         Matrix.blockDiagonal'_apply_ne _ _ _ hext]
   · have hext :
         (⟨γ, ⟨δ, h, m⟩⟩ : FusionHistory Fam α (β :: previous)) ≠

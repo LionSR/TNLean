@@ -15,6 +15,11 @@ in dependent sums and a dependent sum of functions.
 
 * `Equiv.piSigmaEquiv`: distributes a dependent sum pointwise over a function space.
 
+## Main statements
+
+* `Equiv.piSigmaEquiv_apply`: describes the forward map.
+* `Equiv.piSigmaEquiv_symm_apply`: describes the inverse map at one index.
+
 ## Tags
 
 dependent sum, function space, equivalence
@@ -35,5 +40,19 @@ def piSigmaEquiv
   right_inv x := by
     obtain ⟨a, b⟩ := x
     rfl
+
+/-- The forward map separates the first and second coordinates pointwise. -/
+@[simp] theorem piSigmaEquiv_apply
+    {ι : Type*} {α : ι → Type*} {β : (i : ι) → α i → Type*}
+    (x : (i : ι) → Σ a, β i a) :
+    piSigmaEquiv x = ⟨fun i ↦ (x i).1, fun i ↦ (x i).2⟩ :=
+  rfl
+
+/-- The inverse map recombines the two functions at each index. -/
+@[simp] theorem piSigmaEquiv_symm_apply
+    {ι : Type*} {α : ι → Type*} {β : (i : ι) → α i → Type*}
+    (x : Σ a : (i : ι) → α i, (i : ι) → β i (a i)) (i : ι) :
+    (piSigmaEquiv.symm x) i = ⟨x.1 i, x.2 i⟩ :=
+  rfl
 
 end Equiv

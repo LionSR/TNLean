@@ -15,8 +15,8 @@ whose factors are indexed by `Fin`.
 
 ## Main results
 
-* `List.ofFn_prod_sum`: distributes an ordered product over finite sums.
-* `List.ofFn_prod_smul`: extracts the product of scalar coefficients.
+* `List.prod_ofFn_sum`: distributes an ordered product over finite sums.
+* `List.prod_ofFn_smul`: extracts the product of scalar coefficients.
 -/
 
 open scoped BigOperators
@@ -25,7 +25,7 @@ namespace List
 
 /-- An ordered product of finite sums is the sum over all choices of the corresponding
 ordered products. -/
-theorem ofFn_prod_sum {R J : Type*} [Semiring R] [Fintype J]
+theorem prod_ofFn_sum {R J : Type*} [Semiring R] [Fintype J]
     {N : ℕ} (f : Fin N → J → R) :
     (List.ofFn fun n : Fin N ↦ ∑ j : J, f n j).prod =
       ∑ choice : Fin N → J, (List.ofFn fun n ↦ f n (choice n)).prod := by
@@ -41,7 +41,7 @@ theorem ofFn_prod_sum {R J : Type*} [Semiring R] [Fintype J]
       simp [Fin.consEquiv]
 
 /-- Scalars extract from an ordered product as their commutative product. -/
-theorem ofFn_prod_smul {𝕜 R : Type*} [CommSemiring 𝕜] [Semiring R] [Algebra 𝕜 R]
+theorem prod_ofFn_smul {𝕜 R : Type*} [CommSemiring 𝕜] [Semiring R] [Algebra 𝕜 R]
     {N : ℕ} (c : Fin N → 𝕜) (A : Fin N → R) :
     (List.ofFn fun n : Fin N ↦ c n • A n).prod =
       (∏ n : Fin N, c n) • (List.ofFn A).prod := by

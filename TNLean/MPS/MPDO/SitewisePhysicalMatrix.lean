@@ -113,10 +113,10 @@ theorem evalWord_changePhysicalBasis_ofFn
             (List.ofFn fun i : Fin N ↦ (x i).2) := by
   rw [evalWord_ofFn]
   simp_rw [changePhysicalBasis_apply_eq_sum]
-  rw [List.ofFn_prod_sum]
+  rw [List.prod_ofFn_sum]
   apply Finset.sum_congr rfl
   intro x _
-  rw [List.ofFn_prod_smul, evalWord_ofFn]
+  rw [List.prod_ofFn_smul, evalWord_ofFn]
 
 /-- Acting on every site by `V` sends the MPO of `M` to the MPO obtained by
 changing every local physical matrix by `V`.

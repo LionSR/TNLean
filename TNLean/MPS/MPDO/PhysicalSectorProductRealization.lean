@@ -61,7 +61,6 @@ noncomputable def sectorCoordinateChainEquiv
       F.sectorFinEquiv.symm ⟨k n, x n⟩ := by
   simp [sectorCoordinateChainEquiv, physicalConfigEquiv,
     physicalFinEquiv, sectorChainEquiv]
-  rfl
 
 /-- Encoding the transformed one-site physical indices by `Fin` commutes with
 forming the periodic MPO. -/
@@ -176,8 +175,8 @@ private noncomputable def sectorEdgeChainEquiv
       F.sectorFinEquiv.symm
         ⟨k n, (F.cyclicEdgeEquiv k).symm x n⟩ := by
   simp [sectorEdgeChainEquiv, sectorCoordinateChainEquiv,
-    physicalConfigEquiv, physicalFinEquiv, sectorChainEquiv]
-  rfl
+    physicalConfigEquiv, physicalFinEquiv, sectorChainEquiv,
+    Equiv.sigmaCongrRight_symm, Equiv.sigmaCongrRight_apply]
 
 /-- The physical-sector cyclic coordinates are the eta cyclic coordinates
 after swapping the one-site `(left, right)` ordering. -/

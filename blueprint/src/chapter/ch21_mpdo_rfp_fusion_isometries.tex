@@ -1521,7 +1521,9 @@ separate step.
     \leanok
     \uses{def:mpdo_bnt_fusion_coisometry_family}
     Fix an initial label $\alpha$ and append labels successively along a
-    finite chain.  A fusion history records, at every step, the preceding
+    finite chain.  For total chain length $N\geq1$, the appended-label list
+    has length $N-1$; the symbols $W_N$ and $Q_N$ below refer to this total
+    chain length.  A fusion history records, at every step, the preceding
     final label, the new final label, and an index in the corresponding
     multiplicity space.  If $h$ ends at $\gamma(h)$, let
     \[
@@ -1555,9 +1557,10 @@ separate step.
     \leanok
     \uses{def:mpdo_topological_projector_recursion,
         def:mpo_physical_trace_transfer}
-    For every initial label and every finite list of appended labels, the
-    sequential fusion map $W_N$ is a retained-row coisometry.  Letter by letter,
-    it carries the left-associated product tensor to the recursive direct sum:
+    For every initial label and every finite list of appended labels, let
+    $N\geq1$ be one plus the length of that list.  The sequential fusion map
+    $W_N$ is a retained-row coisometry.  Letter by letter, it carries the
+    left-associated product tensor to the recursive direct sum:
     \[
       W_N M_{\alpha,\boldsymbol\beta}^{i,j}W_N^\dagger
       =Q_N\bigl((M_\gamma^{i,j})_\gamma\bigr).
@@ -1596,9 +1599,10 @@ separate step.
     \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
 \end{theorem}
 \begin{proof}\leanok\uses{thm:mpdo_bnt_length_independent_zipper}
-    The empty chain is the unique empty fusion history.  For the induction
-    step, tensor the preceding coisometry with the identity on the new bond,
-    apply the induction hypothesis, and then apply the pairwise fusion
+    The base case has no appended labels and represents the one-site chain;
+    its fusion history is unique.  For the induction step, tensor the
+    preceding coisometry with the identity on the new bond, apply the
+    induction hypothesis, and then apply the pairwise fusion
     identity in each history block.  Reindexing the nested direct sum adjoins
     the new final label and multiplicity coordinate to the preceding history.
     Summing the letterwise equality over equal physical indices gives the
@@ -1636,12 +1640,12 @@ separate step.
         def:mpdo_bnt_fusion_tensor_clause,
         def:mpo_physical_trace_transfer}
     For a chain of positive length $N$, choose at every site a BNT label
-    $\alpha_n$ and a diagonal coordinate $q_n$ of $\mu_{\alpha_n}$.  Let
-    $n=N-1$ in the successor-indexed formal statement, so its parameter $n$
-    represents the physical length $n+1=N$.
+    $\alpha_j$ and a diagonal coordinate $q_j$ of $\mu_{\alpha_j}$.  Let
+    $L=N-1$ in the successor-indexed formal statement, so its parameter $L$
+    represents the physical length $L+1=N$.
     \[
       m(\boldsymbol\alpha,\boldsymbol q)
-        =\prod_{n=0}^{N-1}(\mu_{\alpha_n})_{q_n,q_n}.
+        =\prod_{j=0}^{N-1}(\mu_{\alpha_j})_{q_j,q_j}.
     \]
     The first label is the initial label of the recursive fusion, while the
     remaining labels are appended in the physical order
