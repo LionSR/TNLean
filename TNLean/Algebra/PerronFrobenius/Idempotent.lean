@@ -107,6 +107,20 @@ theorem IsPrimitive.smul_of_pos [DecidableEq n]
   rw [smul_pow, Matrix.smul_apply]
   exact mul_pos (pow_pos hc m) (hpos i j)
 
+/-- If a primitive real matrix has equal second and third powers, then its
+square is strictly positive entrywise. -/
+theorem IsPrimitive.pow_two_pos_of_pow_two_eq_pow_three
+    [DecidableEq n] [Nonempty n] {T : Matrix n n ℝ}
+    (hT : T.IsPrimitive) (h : T ^ 2 = T ^ 3) (i j : n) :
+    0 < (T ^ 2) i j := by
+  obtain ⟨m, _, hpos⟩ := hT.exists_pos_pow
+  have htwom_pos : 0 < (T ^ (m + m)) i j := by
+    rw [pow_add, Matrix.mul_apply]
+    exact Finset.sum_pos (fun k _ ↦ mul_pos (hpos i k) (hpos k j))
+      Finset.univ_nonempty
+  rw [← pow_eq_pow_two_of_pow_two_eq_pow_three h (m + m) (by omega)]
+  exact htwom_pos
+
 /-- If a primitive nonnegative real matrix has equal second and third powers,
 then its square has rank one.
 
@@ -118,18 +132,11 @@ theorem IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three
     [DecidableEq n] [Nonempty n] {T : Matrix n n ℝ}
     (hT : T.IsPrimitive) (h : T ^ 2 = T ^ 3) :
     (T ^ 2).rank = 1 := by
-  obtain ⟨m, hm, hpos⟩ := hT.exists_pos_pow
-  have htwom_pos (i j : n) : 0 < (T ^ (m + m)) i j := by
-    rw [pow_add, Matrix.mul_apply]
-    exact Finset.sum_pos (fun k _ ↦ mul_pos (hpos i k) (hpos k j))
-      Finset.univ_nonempty
-  have hsq_pos (i j : n) : 0 < (T ^ 2) i j := by
-    rw [← pow_eq_pow_two_of_pow_two_eq_pow_three h (m + m) (by omega)]
-    exact htwom_pos i j
   have hsq_idem : T ^ 2 * T ^ 2 = T ^ 2 := by
     rw [← pow_add]
     exact pow_eq_pow_two_of_pow_two_eq_pow_three h 4 (by omega)
-  exact rank_eq_one_of_pos_of_mul_self_eq_self hsq_pos hsq_idem
+  exact rank_eq_one_of_pos_of_mul_self_eq_self
+    (hT.pow_two_pos_of_pow_two_eq_pow_three h) hsq_idem
 
 /-- If a primitive nonnegative real matrix has equal second and third powers,
 then its square has the form $a b^{\mathsf T}$ for real vectors satisfying
@@ -140,20 +147,20 @@ coefficient in arXiv:1606.00608, Appendix C.2, Proposition 4to2, lines
 1606--1616.  It factors `T ^ 2`, not the one-step matrix `T` printed at
 line 1613. -/
 theorem IsPrimitive.exists_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three
-    {N : ℕ} [NeZero N] {T : Matrix (Fin N) (Fin N) ℝ}
+    [DecidableEq n] [Nonempty n] {T : Matrix n n ℝ}
     (hT : T.IsPrimitive) (h : T ^ 2 = T ^ 3) :
-    ∃ a b : Fin N → ℝ, T ^ 2 = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
+    ∃ a b : n → ℝ, T ^ 2 = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
   have hsq_idem : T ^ 2 * T ^ 2 = T ^ 2 := by
     rw [← pow_add]
     exact pow_eq_pow_two_of_pow_two_eq_pow_three h 4 (by omega)
   have hrank := hT.rank_pow_two_eq_one_of_pow_two_eq_pow_three h
-  let f : (Fin N → ℝ) →ₗ[ℝ] (Fin N → ℝ) := Matrix.toLin' (T ^ 2)
+  let f : (n → ℝ) →ₗ[ℝ] (n → ℝ) := Matrix.toLin' (T ^ 2)
   have hf : IsIdempotentElem f := by
     change Matrix.toLin' (T ^ 2) ∘ₗ Matrix.toLin' (T ^ 2) = Matrix.toLin' (T ^ 2)
     rw [← Matrix.toLin'_mul, hsq_idem]
   have hrange : Module.finrank ℝ (LinearMap.range f) = 1 := by
     rw [Matrix.rank_eq_finrank_range_toLin (T ^ 2)
-      (Pi.basisFun ℝ (Fin N)) (Pi.basisFun ℝ (Fin N)), Matrix.toLin_eq_toLin'] at hrank
+      (Pi.basisFun ℝ n) (Pi.basisFun ℝ n), Matrix.toLin_eq_toLin'] at hrank
     exact hrank
   have htrace : Matrix.trace (T ^ 2) = 1 := by
     have hproj := (LinearMap.isProj_range_iff_isIdempotentElem f).2 hf |>.trace
@@ -165,5 +172,22 @@ theorem IsPrimitive.exists_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three
   refine ⟨a, b, hab, ?_⟩
   rw [← Matrix.trace_vecMulVec, ← hab]
   exact htrace
+
+/-- If a primitive nonnegative real matrix has equal second and third powers,
+then its square factors as an outer product of two strictly positive vectors
+whose dot product is one. -/
+theorem IsPrimitive.exists_pos_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three
+    [DecidableEq n] [Nonempty n] {T : Matrix n n ℝ}
+    (hT : T.IsPrimitive) (h : T ^ 2 = T ^ 3) :
+    ∃ a b : n → ℝ, (∀ i, 0 < a i) ∧ (∀ j, 0 < b j) ∧
+      T ^ 2 = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
+  obtain ⟨a, b, hab, hdot⟩ :=
+    hT.exists_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three h
+  have htrace : Matrix.trace (T ^ 2) = 1 := by
+    rw [hab, Matrix.trace_vecMulVec]
+    exact hdot
+  exact Matrix.HasRankOneFactorization.exists_pos_factorization_of_pos_of_trace_eq_one
+    (T := T ^ 2) ⟨a, b, hab⟩
+    (hT.pow_two_pos_of_pow_two_eq_pow_three h) htrace
 
 end Matrix
