@@ -13,10 +13,14 @@ import TNLean.MPS.MPDO.VerticalProductPairBlocks
 /-!
 # Density decomposition by recursive fusion histories
 
-This file combines the vertical canonical form with the recursive fusion circuit.  At every
-positive chain length `N`, the retained physical coordinates split as a direct sum over one
-BNT label and one multiplicity coordinate at each site.  The appended-label list inside the
-fixed-label recursion has length `N - 1`: its initial label is the label at the first site.
+This file combines the vertical canonical form with the recursive fusion circuit.  Its
+successor-indexed definitions use a parameter `N` for a physical chain of length `N + 1`.
+The retained physical coordinates split as a direct sum over one BNT label and one
+multiplicity coordinate at each site.  For a configuration `p`, the label at `p 0` is initial,
+and the remaining `N` labels occur physically in the order `p 1, ..., p N`.
+`reverseAppendedLabels p` stores them in the reverse list `p N, ..., p 1` only so that the
+definition is structurally recursive.  The tensor product and sequential fusion coisometry
+remain ordered by the physical chain `p 0, ..., p N`.
 
 In a fixed copy configuration, the diagonal entry of the tensor power of the multiplicity
 matrix is the product of the chosen positive weights.  The remaining factor is the recursive
@@ -202,8 +206,10 @@ def topologicalDensityBlock (H : BNTFusionTensorClause M) {N : ℕ}
         H.verticalCopyChainFusionCoisometry p)
 
 /-- The positive-length density operator in retained vertical coordinates, summed over every
-initial label, every appended label, and every multiplicity coordinate.  Its chain length is
-`N + 1`; the corresponding recursive appended-label list has length `N`.
+initial label, every appended label, and every multiplicity coordinate.  The parameter `N`
+represents physical chain length `N + 1`, so there are `N` appended physical labels after the
+initial site.  Their reverse list is used only by the structural recursion; all tensor factors
+remain in physical chain order.
 
 Source: arXiv:1606.00608, density identity at line 999. -/
 def topologicalDensityOperatorSucc (H : BNTFusionTensorClause M) (N : ℕ) :
