@@ -49,7 +49,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from tenkz_audit import ENVIRONMENT_LANGS
-from tenkz_language import load_registry
+from tenkz_language import load_registry, parse_status
 
 # Bodies scanned for the dots rule: the grid languages whose cells feed
 # the implicit wire.  (tenkzcd cells are math objects and tenkzfree has
@@ -78,7 +78,7 @@ def registry_alias_patterns() -> list[re.Pattern[str]]:
     aliases = {
         entry.fields[1]
         for entry in load_registry()
-        if entry.kind == "key" and entry.fields[4] != "canonical"
+        if entry.kind == "key" and parse_status(entry.fields[4])[0] == "alias"
     }
     value_aliases = {
         entry.fields[1]
