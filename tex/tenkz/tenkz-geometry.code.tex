@@ -170,6 +170,7 @@
 
 \cs_new_protected:Npn \__tenkz_geom_place_cell:nnnn #1#2#3#4
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {cell}{#2}{#3}{#4} } }
+\cs_generate_variant:Nn \__tenkz_geom_place_cell:nnnn { nnee }
 \cs_new_protected:Npn \__tenkz_geom_place_rel:nnnn #1#2#3#4
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {rel}{#2}{#3}{#4} } }
 \cs_new_protected:Npn \__tenkz_geom_place_mid:nnn #1#2#3
