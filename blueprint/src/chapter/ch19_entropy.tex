@@ -2572,15 +2572,16 @@ Theorem~\ref{thm:trace_norm_abs}.
         \qquad
         B=\sum_j\beta_j|v_j\rangle\langle v_j|.
     \]
-    Write $w_{ij}=\langle u_i,v_j\rangle$, and use the total real logarithm,
-    for which $\log 0=0$.  Then
+    Write $w_{ij}=\langle u_i,v_j\rangle$, and use the total real logarithm:
+    $\log 0=0$, while $\log x=\log|x|$ for $x<0$.  Then
     \[
         D(A\Vert B)
         =\sum_{i,j}\alpha_i
           \bigl(\log\alpha_i-\log\beta_j\bigr)|w_{ij}|^2.
     \]
-    This is the spectral form of the homogeneous trace-log identity
-    $(\mathrm{J1})$ in Jen\v{c}ov\'a--Ruskai,
+    This is an algebraic totalized extension to arbitrary Hermitian matrices
+    of the homogeneous trace-log identity $(\mathrm{J1})$, which
+    Jen\v{c}ov\'a--Ruskai state for strictly positive matrices in
     arXiv:0903.2895v4, lines~277--287.
 \end{theorem}
 
@@ -2608,18 +2609,33 @@ Theorem~\ref{thm:trace_norm_abs}.
     suppose that $\ker B\subseteq\ker A$.  With the spectral notation of the
     preceding theorem, define, for $t>0$,
     \[
-      I_{A,B}(t)=
-      \sum_{i,j}
-      \frac{
-        \alpha_i^2/(\alpha_i+t\beta_j)-\beta_j
-          +t\beta_j^2/(\alpha_i+t\beta_j)}
-        {1+t}
-      |w_{ij}|^2.
+      r_{ij}(t)=
+      \begin{cases}
+        0, & \beta_j=0,\\[2mm]
+        \displaystyle
+        \frac{
+          \alpha_i^2/(\alpha_i+t\beta_j)-\beta_j
+            +t\beta_j^2/(\alpha_i+t\beta_j)}
+          {1+t},
+          & \beta_j>0,
+      \end{cases}
+      \qquad
+      I_{A,B}(t)=\sum_{i,j}r_{ij}(t)|w_{ij}|^2.
     \]
-    The terms with $\beta_j=0$ vanish after multiplication by
-    $|w_{ij}|^2$.  The function $I_{A,B}$ is integrable on $(0,\infty)$, and
+    Thus no ordinary quotient with $\alpha_i=\beta_j=0$ is used.  Define also
     \[
-        \int_0^\infty I_{A,B}(t)\,dt=D(A\Vert B).
+      e_{ij}=
+      \begin{cases}
+        0, & \beta_j=0,\\
+        \alpha_i\bigl(\log\alpha_i-\log\beta_j\bigr)|w_{ij}|^2,
+          & \beta_j>0.
+      \end{cases}
+    \]
+    The function $I_{A,B}$ is integrable on $(0,\infty)$, and
+    \[
+        \int_0^\infty I_{A,B}(t)\,dt
+        =\sum_{i,j}e_{ij}
+        =D(A\Vert B).
     \]
     The trace-log identity $(\mathrm{J1})$, the scalar normalization
     $(\mathrm{intspec})$, and its matrix form $(\mathrm{intAB})$ occur in
@@ -2634,16 +2650,17 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     If $\beta_j=0$, the kernel inclusion gives
-    $\alpha_i|w_{ij}|^2=0$, so the complete weighted term vanishes.  If
-    $\beta_j>0$, the scalar integral applies when $\alpha_i>0$, while the
-    term is identically zero when $\alpha_i=0$.  Since the double sum is
-    finite, integration term by term gives
+    $\alpha_i|w_{ij}|^2=0$, and both $r_{ij}$ and $e_{ij}$ are defined to be
+    zero.  If $\beta_j>0$, the scalar integral applies when $\alpha_i>0$,
+    while the term is identically zero when $\alpha_i=0$.  Since the double
+    sum is finite, integration term by term gives
     \[
       \int_0^\infty I_{A,B}(t)\,dt
-        =\sum_{i,j}\alpha_i
-          \bigl(\log\alpha_i-\log\beta_j\bigr)|w_{ij}|^2.
+        =\sum_{i,j}e_{ij}.
     \]
-    The preceding theorem identifies the last sum with $D(A\Vert B)$.
+    The kernel inclusion also shows that replacing each $\beta_j=0$ summand
+    in the preceding theorem by zero does not change its value.  Hence that
+    theorem identifies the last sum with $D(A\Vert B)$.
 \end{proof}
 
 % Open in #4435: identify the spectral expression above with the
