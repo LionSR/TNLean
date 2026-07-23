@@ -110,16 +110,6 @@ def consumer_files() -> dict[Path, str]:
     return files
 
 
-def _key_pattern(name: str) -> re.Pattern[str]:
-    escaped = re.escape(name)
-    # A key appears as `name=` or as a bare flag word inside an option list;
-    # word boundaries keep `in=` from matching `\tnjoin=` style noise.
-    return re.compile(
-        rf"(?<![\\a-zA-Z@]){escaped}\s*=|"
-        rf"(?<![\\a-zA-Z@]){escaped}(?=\s*(?:,|$))"
-    )
-
-
 def _command_pattern(name: str) -> re.Pattern[str]:
     return re.compile(rf"\\{re.escape(name)}(?![a-zA-Z])")
 
@@ -206,6 +196,14 @@ def _top_level_option_parts(payload: str) -> list[str]:
     return [part for part in parts if part]
 
 
+def _option_key_names(payload: str) -> list[str]:
+    """Return exact top-level key names, preserving repeated occurrences."""
+    return [
+        part.partition("=")[0].strip().replace("~", " ")
+        for part in _top_level_option_parts(payload)
+    ]
+
+
 def _environment_options(text: str) -> list[str]:
     payloads: list[str] = []
     pattern = re.compile(r"\\begin\{tenkz(?:cd|lattice|free|planes)?\}")
@@ -288,28 +286,39 @@ def scoped_option_groups(
 def row_consumers(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, set[str]]:
     """Distinct consumer files per registry row, keyed by a stable row id."""
     consumers: dict[str, set[str]] = {}
-    scoped = scoped_consumer_text(corpus)
+    scoped = scoped_option_groups(corpus)
     for entry in entries:
         if entry.kind == "key":
             scope, name = entry.fields[0], entry.fields[1].replace("~", " ")
             row_id = f"key:{scope}:{name}"
-            pattern = _key_pattern(name)
-            sources = scoped[scope]
+            hits = {
+                str(path.relative_to(ROOT))
+                for path, payloads in scoped[scope].items()
+                if any(
+                    name in _option_key_names(payload)
+                    for payload in payloads
+                )
+            }
         elif entry.kind == "command":
             row_id = f"command:{entry.fields[0]}"
             pattern = _command_pattern(entry.fields[0])
             sources = corpus
+            hits = {
+                str(path.relative_to(ROOT))
+                for path, text in sources.items()
+                if pattern.search(text)
+            }
         elif entry.kind == "environment":
             row_id = f"environment:{entry.fields[0]}"
             pattern = re.compile(rf"\\begin\{{{re.escape(entry.fields[0])}\}}")
             sources = corpus
+            hits = {
+                str(path.relative_to(ROOT))
+                for path, text in sources.items()
+                if pattern.search(text)
+            }
         else:
             continue
-        hits = {
-            str(path.relative_to(ROOT))
-            for path, text in sources.items()
-            if pattern.search(text)
-        }
         consumers[row_id] = hits
     return consumers
 
@@ -350,11 +359,12 @@ def alias_records(entries: list[Entry]) -> list[tuple[str, str, str | None]]:
 
 def meters(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, dict]:
     escape_usage = 0
-    scoped = scoped_consumer_text(corpus)
+    scoped = scoped_option_groups(corpus)
     for scope, name in escape_rows(entries):
-        pattern = _key_pattern(name)
         escape_usage += sum(
-            len(pattern.findall(text)) for text in scoped[scope].values()
+            _option_key_names(payload).count(name)
+            for payloads in scoped[scope].values()
+            for payload in payloads
         )
 
     cases = manifest_case_paths()
@@ -464,12 +474,11 @@ def flags(entries: list[Entry], corpus: dict[Path, str]) -> list[dict[str, str]]
     for scope, names in sorted(by_scope.items()):
         invocations: dict[str, set[tuple[Path, int]]] = {}
         for name in names:
-            pattern = _key_pattern(name)
             invocations[name] = {
                 (path, index)
                 for path, payloads in groups[scope].items()
                 for index, payload in enumerate(payloads)
-                if pattern.search(payload)
+                if name in _option_key_names(payload)
             }
         for i, first in enumerate(sorted(names)):
             hits_first = invocations[first]

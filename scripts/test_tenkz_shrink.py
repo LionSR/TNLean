@@ -92,6 +92,27 @@ def test_sugar_expansion_checks_every_token() -> None:
             fragment,
             errors,
         )
+    changed_enum = [
+        Entry(
+            entry.kind,
+            (
+                *entry.fields[:4],
+                "sugar(trace style=bogus)",
+                entry.fields[5],
+            ),
+        )
+        if entry.kind == "key"
+        and entry.fields[0] == "picture"
+        and entry.fields[1] == "physical"
+        else entry
+        for entry in entries
+    ]
+    errors = check(changed_enum)
+    assert any(
+        "sugar row picture:physical replacement value 'bogus'"
+        in error
+        for error in errors
+    ), errors
 
 
 def test_alias_replacements_are_registered_vocabulary() -> None:
@@ -155,11 +176,11 @@ def test_alias_replacements_are_registered_vocabulary() -> None:
     ), errors
 
 
-def test_bare_key_pattern_accepts_end_of_options() -> None:
-    pattern = tenkz_shrink._key_pattern("open")
-    assert pattern.search("rows=wire, open")
-    assert pattern.search("open, rows=wire")
-    assert pattern.search("open")
+def test_option_key_names_distinguish_bare_keys_from_values() -> None:
+    assert tenkz_shrink._option_key_names("rows=wire, open") == ["rows", "open"]
+    assert tenkz_shrink._option_key_names("open, rows=wire") == ["open", "rows"]
+    assert tenkz_shrink._option_key_names("boundary=open") == ["boundary"]
+    assert tenkz_shrink._option_key_names("rows={ket,op,bra}") == ["rows"]
 
 
 def test_escape_usage_is_scoped_to_picture_options() -> None:
@@ -168,10 +189,11 @@ def test_escape_usage_is_scoped_to_picture_options() -> None:
         path: "The spectral radius, then "
         r"\begin{tenkz}[rows=wire, radius=2]\tn{A}\end{tenkz}"
     }
-    scoped = tenkz_shrink.scoped_consumer_text(corpus)
-    pattern = tenkz_shrink._key_pattern("radius")
+    scoped = tenkz_shrink.scoped_option_groups(corpus)
     assert sum(
-        len(pattern.findall(text)) for text in scoped["picture"].values()
+        tenkz_shrink._option_key_names(payload).count("radius")
+        for payloads in scoped["picture"].values()
+        for payload in payloads
     ) == 1
 
 
@@ -184,9 +206,14 @@ def test_setup_consumers_include_picture_options() -> None:
             r"\tnpic[inline, tensor style=box]{\tn{B}}"
         )
     }
-    scoped = tenkz_shrink.scoped_consumer_text(corpus)["setup"][path]
+    scoped = tenkz_shrink.scoped_option_groups(corpus)["setup"][path]
+    names = {
+        name
+        for payload in scoped
+        for name in tenkz_shrink._option_key_names(payload)
+    }
     for key in ("pitch", "compact", "inline", "tensor style"):
-        assert tenkz_shrink._key_pattern(key).search(scoped), key
+        assert key in names
 
 
 def test_cooccurrence_is_measured_per_invocation() -> None:

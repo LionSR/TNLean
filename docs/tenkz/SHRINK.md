@@ -45,7 +45,7 @@ benchmark cases — the measured cost of hand-routed arcs, burned down by the
 strings landing (#4701, #4705). M6's baseline names the overloads the 1.0
 kernel deletes; it must never rise on the way there.
 
-### Verdicts on the 55 baseline flags
+### Verdicts on the 56 baseline flags
 
 Low-consumer rows. The demand corpus is the benchmark plus the blueprint;
 rows below three consumers either carry a dated justification or die at
@@ -78,6 +78,7 @@ their named landing.
 | flag:consumers:key:picture:bond dir | tombstoned at S4 in favour of wire `dir=`; expiry 0.9 |
 | flag:consumers:key:picture:layer sep | folds into the metric/size classes at the equation landing; expiry 0.9 |
 | flag:consumers:key:picture:north | keep-because: the four side policies are one kernel concept and north is required by two-dimensional frames; expiry 0.9 |
+| flag:consumers:key:picture:open | keep-because: the cell-set boundary algebra is kernel and gains consumers as `open=` spreads; expiry 0.9 |
 | flag:consumers:key:picture:pairing | folds into declared skin pairings and wires at the language landing; expiry 0.9 |
 | flag:consumers:key:picture:plane lean | folds into `frame=` subkeys at S3; expiry 0.9 |
 | flag:consumers:key:picture:polygon | dies with the cd dialect at S4; expiry 0.9 |

@@ -313,6 +313,15 @@ def check(entries: list[Entry]) -> list[str]:
                     f"sugar row {scope}:{name} expansion names non-kernel "
                     f"token(s): {', '.join(unknown)}"
                 )
+                continue
+            for target, value in expansion:
+                value_error = _enum_value_error(
+                    target,
+                    value,
+                    key_vocabulary[(scope, target)],
+                )
+                if value_error is not None:
+                    errors.append(f"sugar row {scope}:{name} {value_error}")
         if ledger == "alias":
             try:
                 replacement, _sunset = parse_alias_payload(payload)
