@@ -237,6 +237,43 @@ def test_setup_consumers_include_picture_options() -> None:
         assert key in names
 
 
+def test_setup_consumers_include_only_forwarded_tree_options() -> None:
+    path = ROOT / "synthetic.tex"
+    corpus = {
+        path: (
+            r"\tntree[pitch=9mm, compact, inline, species=fermion, "
+            r"tree style=ribbon, role=operator]{(a\,b)_c}"
+        )
+    }
+    scoped = tenkz_shrink.scoped_option_groups(corpus)
+    setup_names = {
+        name
+        for payload in scoped["setup"][path]
+        for name in tenkz_shrink._option_key_names(payload)
+    }
+    object_names = {
+        name
+        for payload in scoped["object"][path]
+        for name in tenkz_shrink._option_key_names(payload)
+    }
+    assert setup_names == {"pitch", "compact", "inline"}
+    assert object_names == {
+        "pitch",
+        "compact",
+        "inline",
+        "species",
+        "tree style",
+        "role",
+    }
+    entries = [
+        Entry("key", ("setup", "species", "name-list", "empty", "kernel", "")),
+        Entry("key", ("object", "species", "declared-name", "empty", "kernel", "")),
+    ]
+    consumers = tenkz_shrink.row_consumers(entries, corpus)
+    assert consumers["key:setup:species"] == set()
+    assert consumers["key:object:species"] == {"synthetic.tex"}
+
+
 def test_cooccurrence_is_measured_per_invocation() -> None:
     entries = [
         Entry(

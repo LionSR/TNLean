@@ -52,6 +52,9 @@ _SCOPE_COMMANDS = {
     "region": ("tnregion",),
     "annotation": ("tnspan",),
 }
+_SETUP_COMMAND_FORWARDS = {
+    "tntree": {"pitch", "compact", "inline"},
+}
 
 
 def strip_comments(text: str) -> str:
@@ -204,6 +207,15 @@ def _option_key_names(payload: str) -> list[str]:
     ]
 
 
+def _forwarded_options(payload: str, keys: set[str]) -> str:
+    """Keep only option parts whose keys are forwarded to another scope."""
+    return ",".join(
+        part
+        for part in _top_level_option_parts(payload)
+        if part.partition("=")[0].strip().replace("~", " ") in keys
+    )
+
+
 def _environment_options(text: str) -> list[str]:
     payloads: list[str] = []
     pattern = re.compile(r"\\begin\{tenkz(?:cd|lattice|free|planes)?\}")
@@ -276,7 +288,11 @@ def scoped_option_groups(
         scoped["setup"][path] = [
             *_brace_argument(text, "tnset", 1),
             *picture_options,
-            *_command_options(text, "tntree"),
+            *(
+                _forwarded_options(payload, keys)
+                for command, keys in _SETUP_COMMAND_FORWARDS.items()
+                for payload in _command_options(text, command)
+            ),
         ]
         scoped["atom-declaration"][path] = _brace_argument(
             text, "tndeclareatom", 2
