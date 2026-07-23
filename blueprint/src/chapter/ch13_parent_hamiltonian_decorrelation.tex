@@ -32,7 +32,7 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     For finite-dimensional spaces $H_L$ and $H_R$,
     \[
-        \operatorname{tr}_R(\mathbf 1_{L\otimes R})
+        \tr_R(\mathbf 1_{L\otimes R})
         =(\dim H_R)\mathbf 1_L.
     \]
 \end{lemma}
@@ -41,7 +41,7 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     In product-basis coordinates,
     \[
-        \bigl(\operatorname{tr}_R\mathbf 1_{L\otimes R}\bigr)_{ij}
+        \bigl(\tr_R\mathbf 1_{L\otimes R}\bigr)_{ij}
         =\sum_k\delta_{ij}
         =(\dim H_R)\delta_{ij}.
     \]
@@ -54,8 +54,8 @@ fixes the original operator.  These are the support-projector identities used in
     For every operator $M$ on $H_L$ and every operator $\rho$ on
     $H_L\otimes H_R$,
     \[
-        \operatorname{tr}((M\otimes\mathbf 1_R)\rho)
-        =\operatorname{tr}(M\operatorname{tr}_R\rho).
+        \tr((M\otimes\mathbf 1_R)\rho)
+        =\tr(M\tr_R\rho).
     \]
 \end{lemma}
 
@@ -71,7 +71,7 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     \uses{lem:trace_lift_left_factor_mul}
     Let $\rho$ be positive semidefinite on $H_L\otimes H_R$, and let $P_L$ be
-    the orthogonal projector onto the support of $\operatorname{tr}_R\rho$.
+    the orthogonal projector onto the support of $\tr_R\rho$.
     Then
     \[
         (P_L\otimes\mathbf 1_R)\rho=\rho.
@@ -81,10 +81,10 @@ fixes the original operator.  These are the support-projector identities used in
 \begin{proof}
     \leanok
     Set $Q_L=\mathbf 1_L-P_L$.  Since
-    $Q_L\operatorname{tr}_R\rho=0$, the adjoint identity gives
+    $Q_L\tr_R\rho=0$, the adjoint identity gives
     \[
-        \operatorname{tr}\bigl((Q_L\otimes\mathbf 1_R)\rho\bigr)
-        =\operatorname{tr}(Q_L\operatorname{tr}_R\rho)=0.
+        \tr\bigl((Q_L\otimes\mathbf 1_R)\rho\bigr)
+        =\tr(Q_L\tr_R\rho)=0.
     \]
     Positivity of $\rho$ then implies
     $(Q_L\otimes\mathbf 1_R)\rho=0$.  Finally,
@@ -125,7 +125,7 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     For an operator $\rho$ on $H_L\otimes H_R$, define
     \[
-        (\operatorname{tr}_L\rho)_{r,s}
+        (\tr_L\rho)_{r,s}
         =\sum_l \rho_{(l,r),(l,s)}.
     \]
 \end{definition}
@@ -136,17 +136,17 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     \uses{def:partial_trace_left}
     If $\rho=\rho^\dagger$, then
-    $\operatorname{tr}_L\rho=(\operatorname{tr}_L\rho)^\dagger$.
+    $\tr_L\rho=(\tr_L\rho)^\dagger$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Entrywise Hermiticity gives
     \[
-        \overline{(\operatorname{tr}_L\rho)_{r,s}}
+        \overline{(\tr_L\rho)_{r,s}}
         =\sum_k\overline{\rho_{(k,r),(k,s)}}
         =\sum_k\rho_{(k,s),(k,r)}
-        =(\operatorname{tr}_L\rho)_{s,r}.
+        =(\tr_L\rho)_{s,r}.
     \]
 \end{proof}
 
@@ -156,7 +156,7 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     \uses{def:partial_trace_left}
     For finite-dimensional $H_L$ and $H_R$, if $\rho\geq 0$, then
-    $\operatorname{tr}_L\rho\geq 0$.
+    $\tr_L\rho\geq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -164,7 +164,7 @@ fixes the original operator.  These are the support-projector identities used in
     If $\rho^{(k)}$ is the principal submatrix indexed by
     $\{k\}\times H_R$, then
     \[
-        (\operatorname{tr}_L\rho)_{r,s}
+        (\tr_L\rho)_{r,s}
         =\sum_k\rho_{(k,r),(k,s)}
         =\sum_k\rho^{(k)}_{r,s}.
     \]
@@ -179,8 +179,8 @@ fixes the original operator.  These are the support-projector identities used in
     \uses{def:partial_trace_left}
     For every operator $M$ on $H_R$,
     \[
-        \operatorname{tr}((\mathbf 1_L\otimes M)\rho)
-        =\operatorname{tr}(M\operatorname{tr}_L\rho).
+        \tr((\mathbf 1_L\otimes M)\rho)
+        =\tr(M\tr_L\rho).
     \]
 \end{lemma}
 
@@ -188,11 +188,11 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     Expanding in product bases gives
     \[
-        \operatorname{tr}((\mathbf 1_L\otimes M)\rho)
+        \tr((\mathbf 1_L\otimes M)\rho)
         =\sum_{l,r}\sum_{k,s}\delta_{l,k}M_{rs}
           \rho_{(k,s),(l,r)}
         =\sum_{r,s}M_{rs}\sum_l\rho_{(l,s),(l,r)}
-        =\operatorname{tr}(M\operatorname{tr}_L\rho).
+        =\tr(M\tr_L\rho).
     \]
 \end{proof}
 
@@ -202,7 +202,7 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     \uses{thm:partial_trace_left_pos,lem:trace_lift_right_factor_mul}
     Let $\rho$ be positive semidefinite.  If $P_R$ is the support projector of
-    $\operatorname{tr}_L\rho$, then
+    $\tr_L\rho$, then
     \[
         (\mathbf 1_L\otimes P_R)\rho=\rho.
     \]
@@ -212,10 +212,10 @@ fixes the original operator.  These are the support-projector identities used in
     \leanok
     Set $Q=\mathbf 1_R-P_R$.  The preceding trace identity gives
     \[
-        \operatorname{tr}\bigl((\mathbf 1_L\otimes Q)\rho\bigr)
-        =\operatorname{tr}\bigl(Q\operatorname{tr}_L\rho\bigr)=0,
+        \tr\bigl((\mathbf 1_L\otimes Q)\rho\bigr)
+        =\tr\bigl(Q\tr_L\rho\bigr)=0,
     \]
-    since $P_R$ is the support projector of $\operatorname{tr}_L\rho$.
+    since $P_R$ is the support projector of $\tr_L\rho$.
     Positivity of $\rho$ then gives
     $(\mathbf 1_L\otimes Q)\rho=0$, and hence
     $(\mathbf 1_L\otimes P_R)\rho=\rho$.
@@ -393,9 +393,9 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \leanok
     The two reduced operators are
     \[
-        \rho_{AX}=\operatorname{tr}_B P,
+        \rho_{AX}=\tr_B P,
         \qquad
-        \rho_{XB}=\operatorname{tr}_A P.
+        \rho_{XB}=\tr_A P.
     \]
 \end{definition}
 
@@ -483,7 +483,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \leanok
     \uses{def:partial_trace_left}
     For a Hermitian operator $P$, let $P_{AX}$ and $P_{XB}$ be the support projectors of
-    $\operatorname{tr}_B P$ and $\operatorname{tr}_A P$, respectively, as in
+    $\tr_B P$ and $\tr_A P$, respectively, as in
     \cite[Appendix~D.2, lines 2225--2229]{Cirac2016MPDO_arXiv}.  Write
     $\widehat P_{AX}$ and $\widehat P_{XB}$ for their lifts to the tripartite
     space.
@@ -626,9 +626,9 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     factors whose lifts commute and whose ranges satisfy the source
     ground-space intersection condition
     \[
-        \operatorname{ran}P
-        =\operatorname{ran}\widehat P_{AX}
-          \cap\operatorname{ran}\widehat P_{XB}.
+        \ran P
+        =\ran\widehat P_{AX}
+          \cap\ran\widehat P_{XB}.
     \]
     Thus $Q_{AX}=\mathbf 1-P_{AX}$ and
     $Q_{XB}=\mathbf 1-P_{XB}$ are exactly the commuting parent terms of
@@ -657,9 +657,9 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \]
     Then
     \[
-        \operatorname{ran}P
-        =\operatorname{ran}\widehat P_{AX}\cap
-          \operatorname{ran}\widehat P_{XB}
+        \ran P
+        =\ran\widehat P_{AX}\cap
+          \ran\widehat P_{XB}
         \quad\Longleftrightarrow\quad
         \widehat P_{AX}\widehat P_{XB}=P.
     \]
@@ -674,9 +674,9 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     $\widehat P_{AX}\widehat P_{XB}$ precisely when it is fixed by both
     commuting idempotents. Hence
     \[
-        \operatorname{ran}(\widehat P_{AX}\widehat P_{XB})
-        =\operatorname{ran}\widehat P_{AX}\cap
-          \operatorname{ran}\widehat P_{XB}.
+        \ran(\widehat P_{AX}\widehat P_{XB})
+        =\ran\widehat P_{AX}\cap
+          \ran\widehat P_{XB}.
     \]
     The product is again an orthogonal projector.  Orthogonal projectors with
     equal ranges are equal, giving the forward implication; the reverse

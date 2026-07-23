@@ -23,7 +23,7 @@ them.
     $$T_n : M_D(\mathbb{C}) \to \mathcal{A}_n, \qquad
         S_n : \mathcal{A}_n \to M_D(\mathbb{C})$$
     such that
-    $$T_n \circ S_n = \operatorname{id}_{\mathcal{A}_n},
+    $$T_n \circ S_n = \id_{\mathcal{A}_n},
         \qquad S_n \circ T_n = E_n,$$
     where $E_n$ denotes the blocked transfer map.
 \end{definition}
@@ -50,7 +50,7 @@ them.
 \end{theorem}
 \begin{proof}\leanok
     Apply the definition at blocked size $n = 1$.
-    If $E_1 = S_1 \circ T_1$ and $T_1 \circ S_1 = \operatorname{id}$, then
+    If $E_1 = S_1 \circ T_1$ and $T_1 \circ S_1 = \id$, then
     $$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1.$$
     Since $E_1$ is the original transfer map, this is exactly transfer-map
     idempotence.
@@ -674,14 +674,14 @@ weights in the length-independent case at
     operator family $O_L(M_\gamma)$, and the positive diagonal matrices give
     the positive trace-power witness for the coefficient family
     $c^{(L)}_{\alpha,\beta,\gamma}
-        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
+        = \tr(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{definition}
 
 \begin{figure}[ht]
     \centering
     % Formula:
     %   O_L(M_\alpha)O_L(M_\beta)
-    %     = \sum_\gamma \operatorname{tr}
+    %     = \sum_\gamma \tr
     %       (\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
     % Source verdict: CPSV16 Theorem 4.14(ii)--(iii), source TeX lines
     %   962--991, states the formula algebraically.  MPDO_O_L_A_.png fixes
@@ -722,7 +722,7 @@ weights in the length-independent case at
         left, the bra legs of the $M_\alpha$ operator are contracted with the
         ket legs of the $M_\beta$ operator. On the right, the multiplicity loop
         and the $M_\gamma$ loop are disjoint; the former contributes
-        $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$. Thus the diagram is
+        $\tr(\chi_{\alpha,\beta,\gamma}^{L})$. Thus the diagram is
         the trace-power product law of
         \cite[Theorem~4.14(ii)--(iii), equations~(87) and~(89),
         lines~962--991]{Cirac2016MPDO_arXiv}.}
@@ -749,7 +749,7 @@ weights in the length-independent case at
     \[
         O_L(M_\alpha)\, O_L(M_\beta)
         = \sum_{\gamma}
-        \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})\,
+        \tr(\chi_{\alpha,\beta,\gamma}^{L})\,
         O_L(M_\gamma).
     \]
     This derives the product law of
@@ -768,18 +768,18 @@ weights in the length-independent case at
     $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$ removes the outer maps.  In
     the full-support case one may equivalently use the isometric orientation:
     \[
-        \operatorname{tr}\bigl(U_{\alpha,\beta} W
+        \tr\bigl(U_{\alpha,\beta} W
         U_{\alpha,\beta}^\dagger\bigr)
-        = \operatorname{tr}\bigl(W U_{\alpha,\beta}^\dagger
+        = \tr\bigl(W U_{\alpha,\beta}^\dagger
         U_{\alpha,\beta}\bigr)
-        = \operatorname{tr}(W).
+        = \tr(W).
     \]
     By the fusion identity the
     conjugated letters are the block-diagonal tensor-product letters of the
     weighted direct sum. Their word product splits block by block with the
     diagonal factors accumulating into $\chi_{\alpha,\beta,\gamma}^{L}$;
     taking the trace block by block and factor by factor yields the
-    coefficients $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
+    coefficients $\tr(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{proof}
 
 \begin{definition}[BNT algebra clause derived from fusion isometries]%
@@ -797,7 +797,7 @@ weights in the length-independent case at
     The resulting BNT algebra clause has coefficients, for $L>0$,
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}),
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L}),
     \]
     and records positivity of every diagonal entry. The product law is
     \[
@@ -845,7 +845,7 @@ weights in the length-independent case at
             \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
           U_{\alpha,\beta}.
     \]
-    The trace scalars $m_\alpha=\operatorname{tr}(\mu_\alpha)$ satisfy the
+    The trace scalars $m_\alpha=\tr(\mu_\alpha)$ satisfy the
     length-one idempotent identity for the coefficients determined by these
     same diagonal matrices.  This is statement (iii) of
     \cite[Theorem~4.14, lines~986--993]{Cirac2016MPDO_arXiv}, attached to the
@@ -880,7 +880,7 @@ weights in the length-independent case at
     multiplicity entries.  Summing this multiset identity gives
     \[
       m_\gamma=\sum_{\alpha,\beta}
-        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+        \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta,
     \]
     which completes the fusion clause.
@@ -899,7 +899,7 @@ weights in the length-independent case at
     with coefficients, for every positive chain length $L$,
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}),
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L}),
     \]
     determined by the same diagonal matrices.  Thus statement (iii) implies
     statement (ii) of
@@ -912,13 +912,13 @@ weights in the length-independent case at
     \[
         O_L(M_\alpha)O_L(M_\beta)
         =\sum_\gamma
-        \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+        \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
     \]
-    Writing $m_\alpha=\operatorname{tr}(\mu_\alpha)$, the assumed length-one
+    Writing $m_\alpha=\tr(\mu_\alpha)$, the assumed length-one
     idempotent identity is
     \[
         m_\gamma=\sum_{\alpha,\beta}
-        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
+        \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
     \]
     These are the product and idempotent identities of the algebra clause.
     Retaining the chosen vertical decomposition and the same diagonal matrices
@@ -932,7 +932,7 @@ weights in the length-independent case at
     %                    \beta_1,\ldots,\beta_r\\k_1,\ldots,k_r}}
     %         \left(\prod_{s=1}^{r}
     %           \chi_{\alpha_s,\beta_s,\alpha_{s+1},k_s}\right)
-    %         \operatorname{tr}(M_{\alpha_{r+1}}).
+    %         \tr(M_{\alpha_{r+1}}).
     % Source verdict: CPSV16 lines 999--1008 and MPDO_Structure.png give this
     %   recursive coefficient graph.  The image is the source for the open
     %   copy rails, repeated-step ellipsis, and terminal horizontal trace.
@@ -1067,7 +1067,7 @@ weights in the length-independent case at
         \tnjoin{Mlast.south}{Mbottom.north}
     \end{tenkzfree}
     \caption{The recursive contraction defining the structure operator $Q$,
-        with terminal factor $\operatorname{tr}(M_{\gamma_r})$
+        with terminal factor $\tr(M_{\gamma_r})$
         \cite[lines~999--1008]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_recursive_structure_operator}
 \end{figure}
@@ -1440,15 +1440,15 @@ separate step.
              \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
     \]
     The source terminal matrices are
-    $P_\gamma=\operatorname{tr}(M_\gamma)$ after spectral refinement, where
+    $P_\gamma=\tr(M_\gamma)$ after spectral refinement, where
     the trace closes the horizontal operator leg and leaves the bond indices.
     Before spectral refinement, the fusion identity implies
     \[
-      U_{\alpha,\beta}\operatorname{tr}(M_\alpha M_\beta)
+      U_{\alpha,\beta}\tr(M_\alpha M_\beta)
         U_{\alpha,\beta}^{\dagger}
       =\bigoplus_\gamma
         \chi_{\alpha,\beta,\gamma}\otimes
-          \operatorname{tr}(M_\gamma).
+          \tr(M_\gamma).
     \]
     Indeed, summing the forward fusion identity over equal horizontal
     operator indices and distributing matrix multiplication over this finite
@@ -1567,8 +1567,8 @@ separate step.
     \]
     Consequently, after closing the horizontal operator index,
     \[
-      W_N\operatorname{tr}(M_{\alpha,\boldsymbol\beta})W_N^\dagger
-      =Q_N\bigl((\operatorname{tr}(M_\gamma))_\gamma\bigr).
+      W_N\tr(M_{\alpha,\boldsymbol\beta})W_N^\dagger
+      =Q_N\bigl((\tr(M_\gamma))_\gamma\bigr).
     \]
     Exact reconstruction gives the reverse identities
     \[
@@ -1577,9 +1577,9 @@ separate step.
           Q_N\bigl((M_\gamma^{i,j})_\gamma\bigr)
           W_N,
       \qquad
-      \operatorname{tr}(M_{\alpha,\boldsymbol\beta})
+      \tr(M_{\alpha,\boldsymbol\beta})
         =W_N^\dagger
-          Q_N\bigl((\operatorname{tr}(M_\gamma))_\gamma\bigr)
+          Q_N\bigl((\tr(M_\gamma))_\gamma\bigr)
           W_N.
     \]
     If the positive trace-power coefficients are independent of the positive
@@ -1641,7 +1641,7 @@ separate step.
     diagonal multiplicity matrices $\mu_\gamma$.  Then every terminal
     transfer matrix
     \[
-        T_\gamma=\operatorname{tr}(M_\gamma)
+        T_\gamma=\tr(M_\gamma)
     \]
     is positive semidefinite.  This supplies the positivity needed for the
     spectral decomposition invoked in
@@ -1699,7 +1699,7 @@ separate step.
     resulting retained-row sequential coisometry for the configuration~$c$,
     and set
     \[
-      Q_{N,c}=Q_N\bigl((\operatorname{tr}(M_\gamma))_\gamma\bigr).
+      Q_{N,c}=Q_N\bigl((\tr(M_\gamma))_\gamma\bigr).
     \]
     The corresponding density block is
     \[
@@ -1945,7 +1945,7 @@ separate step.
     Let $\mu$ be the strictly positive diagonal multiplicity matrix in the
     retained one-site coordinates.  Define
     \[
-      h=\operatorname{diag}(-\log\mu)\otimes I
+      h=\diag(-\log\mu)\otimes I
     \]
     on two adjacent sites.  For a chain of length $L=N+2$, let
     \[

@@ -332,7 +332,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     If $A \in \MN{D}$ is positive semidefinite, then
     \[
-        \operatorname{Re}\tr(A^2) \le \left(\operatorname{Re}\tr(A)\right)^2 .
+        \re\tr(A^2) \le \left(\re\tr(A)\right)^2 .
     \]
 \end{theorem}
 
@@ -351,10 +351,10 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \lean{Matrix.IsHermitian.posSemidef_of_trace_re_nonneg_of_card_sub_one_mul_trace_sq_re_le}
     \leanok
     Let $A\in\MN{D}$ be Hermitian and suppose that
-    $\operatorname{Re}\tr(A)\ge0$. If
+    $\re\tr(A)\ge0$. If
     \[
-        (D-1)\operatorname{Re}\tr(A^2)
-        \le \left(\operatorname{Re}\tr(A)\right)^2 ,
+        (D-1)\re\tr(A^2)
+        \le \left(\re\tr(A)\right)^2 ,
     \]
     then $A$ is positive semidefinite.
 
@@ -392,7 +392,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
         S_k(A) = \sum_{i=1}^{k}\lambda_i ,
     \]
     the sum of the $k$ largest (signed) eigenvalues. Indices beyond $D$ contribute
-    zero, so the value stabilizes at $\operatorname{Re}\tr(A)$ once $k$ reaches
+    zero, so the value stabilizes at $\re\tr(A)$ once $k$ reaches
     $D$.
 
     The \emph{Ky-Fan $k$-norm} $\|A\|_{(k)}$ is by definition the sum of the $k$
@@ -412,7 +412,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     For every Hermitian $A\in\MN{D}$ and every $k\ge0$ there is an orthogonal
     projection $P$ of rank $\min(k,D)$ with
     \[
-        \operatorname{Re}\tr(PA) = S_k(A) .
+        \re\tr(PA) = S_k(A) .
     \]
 \end{theorem}
 
@@ -420,7 +420,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \uses{def:ky_fan_norm}
     Diagonalize $A=U\,\diag(\lambda_i)\,U^\dagger$ and take $P$ to be the
     projection onto the span of the eigenvectors with the $\min(k,D)$ largest
-    eigenvalues. Then $\operatorname{Re}\tr(PA)=\sum_{i\le k}\lambda_i=S_k(A)$.
+    eigenvalues. Then $\re\tr(PA)=\sum_{i\le k}\lambda_i=S_k(A)$.
 \end{proof}
 
 \begin{theorem}[Upper bound for the largest-eigenvalue sum]
@@ -431,14 +431,14 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     For every Hermitian $A\in\MN{D}$ and every orthogonal projection $P$ of rank
     $k<D$,
     \[
-        \operatorname{Re}\tr(PA) \le S_k(A) .
+        \re\tr(PA) \le S_k(A) .
     \]
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:ky_fan_norm}
     Conjugating $P$ by $U$ gives an orthogonal projection $Q$ of the same rank,
-    and $\operatorname{Re}\tr(PA)=\sum_i w_i\lambda_i$ where $w_i$ are the
+    and $\re\tr(PA)=\sum_i w_i\lambda_i$ where $w_i$ are the
     diagonal entries of $Q$. Each $w_i$ lies in $[0,1]$ and the weights sum to
     $\tr P = k$. With the threshold $c=\lambda_{k+1}$,
     \[
@@ -456,11 +456,11 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     \uses{def:ky_fan_norm, thm:ky_fan_achievability, thm:ky_fan_upper_bound}
     Let $A\in\MN{D}$ be Hermitian and $0\le k<D$. Then the sum of its $k$ largest
-    eigenvalues is the largest value of $\operatorname{Re}\tr(PA)$ attained by an
+    eigenvalues is the largest value of $\re\tr(PA)$ attained by an
     orthogonal projection $P$ of rank $k$:
     \[
         S_k(A) = \max_{P^2=P=P^\dagger,\ \tr P = k}
-            \operatorname{Re}\tr(PA) .
+            \re\tr(PA) .
     \]
     This is Ky Fan's maximum principle \cite{Fan1949Theorem}; see also
     \cite[Problem~I.6.15, Exercise~II.1.13]{Bhatia1997Matrix}. For a positive
@@ -898,7 +898,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     \uses{def:has_bounded_orbits}
     Let $f:V\to V$ have bounded orbits. If
-    $x\in\operatorname{range}(f-\Id_V)$, then
+    $x\in\range(f-\Id_V)$, then
     \[
         A_N(x)\longrightarrow 0.
     \]
@@ -923,7 +923,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
     Then
     \[
-        V=\ker(f-\Id_V)\oplus\operatorname{range}(f-\Id_V).
+        V=\ker(f-\Id_V)\oplus\range(f-\Id_V).
     \]
 \end{lemma}
 
@@ -942,7 +942,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \uses{def:has_bounded_orbits, lem:mean_ergodic_complementarity}
     Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
     The \emph{mean-ergodic projection} $P_f:V\to V$ is the projection onto
-    $\ker(f-\Id_V)$ along $\operatorname{range}(f-\Id_V)$.
+    $\ker(f-\Id_V)$ along $\range(f-\Id_V)$.
 \end{definition}
 
 \begin{theorem}[Finite-dimensional mean-ergodic theorem]
@@ -963,7 +963,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
     converge to $P_f x$. Moreover,
     \[
-        \operatorname{range}(P_f)=\ker(f-\Id_V),\qquad
+        \range(P_f)=\ker(f-\Id_V),\qquad
         P_f^2=P_f,\qquad fP_f=P_f=P_f f,
     \]
     and $P_f x=x$ if and only if $f x=x$.
@@ -978,7 +978,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \[
         x=P_f x+(x-P_f x),\qquad
         P_f x\in\ker(f-\Id_V),\qquad
-        x-P_f x\in\operatorname{range}(f-\Id_V).
+        x-P_f x\in\range(f-\Id_V).
     \]
     The fixed component has constant Ces\`aro averages, whereas the averages of
     the second component tend to zero by
@@ -989,7 +989,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
     we have $fP_f=P_f$. Moreover,
     \[
-        (f-\Id_V)x\in\operatorname{range}(f-\Id_V),
+        (f-\Id_V)x\in\range(f-\Id_V),
         \qquad P_f\bigl((f-\Id_V)x\bigr)=0,
     \]
     so $P_f(fx)=P_f x$ and hence $P_f f=P_f$. The range and idempotence
@@ -1080,7 +1080,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     bounded orbits, and its mean-ergodic projection $P_T$ is positive and
     trace-preserving. Its range is precisely the fixed-point space of $T$:
     \[
-        \operatorname{range}(P_T)=\ker(T-\Id),
+        \range(P_T)=\ker(T-\Id),
         \qquad
         P_T(X)=X \iff T(X)=X.
     \]
@@ -1140,7 +1140,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \[
         (P_T^*)^2=P_T^*,
         \qquad
-        \operatorname{range}(P_T^*)=\ker(T^*-\Id),
+        \range(P_T^*)=\ker(T^*-\Id),
     \]
     and
     \[
@@ -1171,7 +1171,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
     Hence
     \[
-        Y\in\operatorname{range}(P_T^*)
+        Y\in\range(P_T^*)
         \quad\Longleftrightarrow\quad P_T^*(Y)=Y
         \quad\Longleftrightarrow\quad T^*(Y)=Y
         \quad\Longleftrightarrow\quad Y\in\ker(T^*-\Id).
@@ -1194,7 +1194,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \[
         P_T^*(\Id)=\Id,
         \qquad (P_T^*)^2=P_T^*,
-        \qquad \operatorname{range}(P_T^*)=\ker(T^*-\Id),
+        \qquad \range(P_T^*)=\ker(T^*-\Id),
     \]
     and $P_T^*(Y)=Y$ if and only if $T^*(Y)=Y$.
     This is the adjoint projection used in the proof of
@@ -1826,7 +1826,7 @@ matching the weighted-trace argument in
     The fixed-point set of a complex-linear map
     $E:\MN{D}\to\MN{D}$ is
     \[
-        \operatorname{Fix}(E)=\{X\in\MN{D}:E(X)=X\}.
+        \Fix(E)=\{X\in\MN{D}:E(X)=X\}.
     \]
 \end{definition}
 
@@ -1883,7 +1883,7 @@ matching the weighted-trace argument in
         \qquad(A\in\MN{D}).
     \]
     If the trace-pairing adjoint $E^*$ has a positive definite fixed point
-    $\rho>0$, then $\operatorname{Fix}(E)$ is a $*$-subalgebra of $\MN{D}$.
+    $\rho>0$, then $\Fix(E)$ is a $*$-subalgebra of $\MN{D}$.
 
     In the terminology introduced immediately before
     \cite[Example~5.3]{Wolf2012Quantum}, a \emph{Schwarz map} is precisely a

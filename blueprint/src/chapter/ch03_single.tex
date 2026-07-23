@@ -79,19 +79,19 @@ family $\{A^i\}$ under the trace.
     \lean{MPSTensor.ker_bot_of_range_le}
     \leanok
     Let $\Phi, \Psi : V \to W$ be $\C$-linear maps with $V$ finite-dimensional.
-    If $\ker \Phi = \{0\}$ and $\operatorname{range} \Phi \subseteq
-        \operatorname{range} \Psi$, then $\ker \Psi = \{0\}$.
+    If $\ker \Phi = \{0\}$ and $\range \Phi \subseteq
+        \range \Psi$, then $\ker \Psi = \{0\}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    By rank--nullity, $\ker \Phi = \{0\}$ gives $\dim \operatorname{range} \Phi =
+    By rank--nullity, $\ker \Phi = \{0\}$ gives $\dim \range \Phi =
         \dim V$, and the range inclusion gives
     \[
-        \dim V = \dim \operatorname{range} \Phi
-        \le \dim \operatorname{range} \Psi \le \dim V,
+        \dim V = \dim \range \Phi
+        \le \dim \range \Psi \le \dim V,
     \]
-    so $\dim \operatorname{range} \Psi = \dim V$ and $\ker \Psi = \{0\}$.
+    so $\dim \range \Psi = \dim V$ and $\ker \Psi = \{0\}$.
 \end{proof}
 
 \begin{theorem}[The linear extension exists and is unique]\label{thm:linear_ext}
@@ -107,8 +107,8 @@ family $\{A^i\}$ under the trace.
     \leanok
     \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
     Length-two trace agreement gives $\Phi_A(A^i) = \Phi_B(B^i)$ for every~$i$.
-    The $\{A^i\}$ span $\MN{D}$, so $\operatorname{range} \Phi_A \subseteq
-        \operatorname{range} \Phi_B$. With $\ker \Phi_A = \{0\}$
+    The $\{A^i\}$ span $\MN{D}$, so $\range \Phi_A \subseteq
+        \range \Phi_B$. With $\ker \Phi_A = \{0\}$
     (Theorem~\ref{thm:trace_pairing_injective}),
     Lemma~\ref{lem:injectivity_transfer} gives $\ker \Phi_B = \{0\}$. Let $g$ be
     a left inverse of~$\Phi_B$ and set $T = g \circ \Phi_A$; then
@@ -131,8 +131,8 @@ family $\{A^i\}$ under the trace.
     \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
     Length-two trace agreement gives $\Phi_B(T(A^i)) = \Phi_B(B^i) =
         \Phi_A(A^i)$; since the $\{A^i\}$ span $\MN{D}$ this extends to
-    $\Phi_B \circ T = \Phi_A$, so $\operatorname{range} \Phi_A =
-        \operatorname{range}(\Phi_B \circ T) \subseteq \operatorname{range} \Phi_B$. With
+    $\Phi_B \circ T = \Phi_A$, so $\range \Phi_A =
+        \range(\Phi_B \circ T) \subseteq \range \Phi_B$. With
     $\ker \Phi_A = \{0\}$ (Theorem~\ref{thm:trace_pairing_injective}),
     Lemma~\ref{lem:injectivity_transfer} makes $\Phi_B$ injective. Length-three
     trace agreement gives, for all $i, j, k$,
@@ -209,8 +209,8 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
 
 \begin{proof}
     \leanok
-    Under the identification $\MN{D} \cong \operatorname{End}_{\C}(\C^D)$, every
-    algebra automorphism of $\operatorname{End}_{\C}(\C^D)$ is conjugation by an
+    Under the identification $\MN{D} \cong \End_{\C}(\C^D)$, every
+    algebra automorphism of $\End_{\C}(\C^D)$ is conjugation by an
     invertible linear map. Translating back gives the invertible~$X$.
 \end{proof}
 

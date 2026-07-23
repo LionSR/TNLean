@@ -8,12 +8,12 @@ argument is applied when closing the boundaries
 \cite[Section~IV.C]{Cirac2021Matrix}. For a vector
 $\psi=\Gamma_{M+1}(X)$, the closure property asks that the two
 boundary-crossing restrictions
-$\operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)$ and
-$\operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ agree. The
+$\Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)$ and
+$\Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)$ agree. The
 symbols $\tau^\pm_\eta(\mu)$ index these restrictions, and the matrices
 $Y_i(\tau)$ below satisfy
 \[
-    \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+    \Res^{\tau}_{i,L_0+1}(\psi)
     =
     \Gamma_{L_0+1}(Y_i(\tau)).
 \]
@@ -121,9 +121,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     nonempty complementary words $\nu$ of length $M+1-(L_0+1)$, such that,
     for every physical letter $j$ and every word $\alpha$ of length $L_0$,
     \[
-        \operatorname{tr}\left(A^j X A^\alpha A^\nu\right)
+        \tr\left(A^j X A^\alpha A^\nu\right)
         =
-        \operatorname{tr}\left(A^j A^\alpha Y_\nu\right).
+        \tr\left(A^j A^\alpha Y_\nu\right).
     \]
 \end{lemma}
 
@@ -137,21 +137,21 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     after deleting the first letter from the window and reading the complement,
     so the ground-space representation gives
     \[
-        \operatorname{tr}\left(A^\alpha A^\nu A^jX\right)
+        \tr\left(A^\alpha A^\nu A^jX\right)
         =
-        \operatorname{tr}\left(A^jA^\alpha Y_\nu\right).
+        \tr\left(A^jA^\alpha Y_\nu\right).
     \]
     Cyclicity of the trace gives
     \[
-        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
+        \tr\left(A^jX A^\alpha A^\nu\right)
         =
-        \operatorname{tr}\left(A^\alpha A^\nu A^jX\right).
+        \tr\left(A^\alpha A^\nu A^jX\right).
     \]
     Therefore
     \[
-        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
+        \tr\left(A^jX A^\alpha A^\nu\right)
         =
-        \operatorname{tr}\left(A^jA^\alpha Y_\nu\right).
+        \tr\left(A^jA^\alpha Y_\nu\right).
     \]
 \end{proof}
 
@@ -187,9 +187,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
     gives
     \begin{equation}\label{eq:ph_normal_closing_trace_window}
-        \operatorname{tr}\left(A^jX A^\alpha A^\nu\right)
+        \tr\left(A^jX A^\alpha A^\nu\right)
         =
-        \operatorname{tr}\left(A^jA^\alpha Y_\nu\right)
+        \tr\left(A^jA^\alpha Y_\nu\right)
     \end{equation}
     Put
     \[
@@ -198,12 +198,12 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     For every physical letter $j$,
     equation~(\ref{eq:ph_normal_closing_trace_window}) gives
     \[
-        \operatorname{tr}(A^j Z)=0 .
+        \tr(A^j Z)=0 .
     \]
     Since the matrices $A^j$ span the full matrix algebra, the trace pairing
     gives
     \[
-        \bigl(\forall j,\ \operatorname{tr}(A^j Z)=0\bigr)
+        \bigl(\forall j,\ \tr(A^j Z)=0\bigr)
         \quad\Longrightarrow\quad
         Z=0 .
     \]
@@ -228,9 +228,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     nonempty complementary words $\nu$ of length $M+1-(L_0+1)$, such that, for
     every word $\alpha$ of length $L_0$ and every word $\beta$ of length $L_0$,
     \[
-        \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
+        \tr\left(A^\beta X A^\alpha A^\nu\right)
         =
-        \operatorname{tr}\left(A^\beta A^\alpha Y_\nu\right).
+        \tr\left(A^\beta A^\alpha Y_\nu\right).
     \]
 \end{theorem}
 
@@ -272,9 +272,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     Suppose that, for every word $\alpha$ of length $L_0$, every word $\beta$
     of length $L_0$, and every complementary word $\nu$,
     \[
-        \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
+        \tr\left(A^\beta X A^\alpha A^\nu\right)
         =
-        \operatorname{tr}\left(A^\beta A^\alpha Y_\nu\right).
+        \tr\left(A^\beta A^\alpha Y_\nu\right).
     \]
     Then, for every word $\alpha$ of length $L_0$ and every complementary word
     $\nu$,
@@ -326,9 +326,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     Theorem~\ref{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
     gives, for every word $\beta$ of length $L_0$,
     \[
-        \operatorname{tr}\left(A^\beta X A^\alpha A^\nu\right)
+        \tr\left(A^\beta X A^\alpha A^\nu\right)
         =
-        \operatorname{tr}\left(A^\beta A^\alpha Y_\nu\right).
+        \tr\left(A^\beta A^\alpha Y_\nu\right).
     \]
     Theorem~\ref{thm:block_window_matrix_equation_trace_word_products} then
     gives the displayed matrix equation.
@@ -493,11 +493,11 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     \[
         B^+_{\eta,\mu}(\psi)
         =
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi),
+        \Res^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi),
         \qquad
         B^-_{\eta,\mu}(\psi)
         =
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \Res^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
     With $R_j$ as in Lemma~\ref{lem:first_letter_restrictions_determine},
     \[
@@ -576,9 +576,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     \]
     then for every $\eta$,
     \[
-        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
 \end{lemma}
 
@@ -607,9 +607,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     For every boundary letter $\eta$ and complementary word $\mu$, the two
     restrictions crossing the periodic cut satisfy
     \[
-        \operatorname{Res}^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
+        \Res^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \Res^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
 \end{lemma}
 
@@ -619,11 +619,11 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     $Y_M(\tau^+_\eta(\mu))$ and
     $Y_{M+1-L_0}(\tau^-_\eta(\mu))$ such that
     \[
-        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),
         \qquad
-        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
+        \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
     \]
@@ -650,15 +650,15 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        \Res^{\tau}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
     Suppose that, for every outside letter $\eta$,
     \[
-        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
     Then there are boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ such that, for every complementary position $k$,
@@ -710,7 +710,7 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        \Res^{\tau}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
@@ -743,9 +743,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     For each boundary letter $\eta$,
     Lemma~\ref{lem:closed_boundary_restriction_from_right_products} gives
     \[
-        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
     Applying these equalities,
     Lemma~\ref{lem:closure_property_auxiliary_product_from_closing_restrictions}
@@ -840,7 +840,7 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        \Res^{\tau}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
@@ -907,7 +907,7 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        \Res^{\tau}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
@@ -1031,9 +1031,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     \]
     Then, for every boundary letter $\eta$,
     \[
-        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
 \end{theorem}
 
@@ -1082,7 +1082,7 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     \]
     be an open-chain representation. Assume that for all $i$ and $\tau$,
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A).
+        \Res^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A).
     \]
     In local coordinate notation, fix a nonempty word $\mu$ on the sites outside
     the two cyclic windows. For every outside letter $\eta$, choose the two outside
@@ -1098,9 +1098,9 @@ is derived from the cyclic-window constraints crossing the periodic cut.
     {Cirac2021Matrix}; it is not notation from the source.
     The corresponding boundary-crossing restriction equality is
     \[
-        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+        \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
         =
-        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
     \]
 \end{theorem}
 

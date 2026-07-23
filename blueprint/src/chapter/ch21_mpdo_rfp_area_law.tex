@@ -96,15 +96,15 @@
     $S(ABC)=S_{a+b+c}$ immediately. Tracing out $C$ leaves the first $a+b$
     sites,
     \[
-        \operatorname{tr}_C(\rho_{ABC})\cong\rho^{(a+b)},
+        \tr_C(\rho_{ABC})\cong\rho^{(a+b)},
     \]
     so $S(AB)=S_{a+b}$. Tracing out $A$ and $C$ leaves the middle $b$ sites,
     while tracing out $A$ leaves the final $b+c$ sites; translation invariance
     gives
     \[
-        \operatorname{tr}_{A,C}(\rho_{ABC})\cong\rho^{(b)},
+        \tr_{A,C}(\rho_{ABC})\cong\rho^{(b)},
         \qquad
-        \operatorname{tr}_{A}(\rho_{ABC})\cong\rho^{(b+c)}.
+        \tr_{A}(\rho_{ABC})\cong\rho^{(b+c)}.
     \]
     Hence $S(B)=S_b$ and $S(BC)=S_{b+c}$.
 \end{proof}
@@ -147,8 +147,8 @@
     \uses{def:mpo_tensor}
     Let $M$ have physical dimension two and bond dimension three, with
     \[
-        M^{00}=\operatorname{diag}(1,0,0),\qquad
-        M^{11}=\operatorname{diag}(0,1,-1),\qquad
+        M^{00}=\diag(1,0,0),\qquad
+        M^{11}=\diag(0,1,-1),\qquad
         M^{01}=M^{10}=0.
     \]
 \end{definition}
@@ -254,8 +254,8 @@
     \uses{def:tensor_map_id}
     For a linear map $\Psi_B$ and a bipartite matrix $\rho_{AB}$, define
     \[
-      (\operatorname{id}_A\otimes\Psi_B)(\rho_{AB})
-        =\Sigma_{B'A}\bigl((\Psi_B\otimes\operatorname{id}_A)
+      (\id_A\otimes\Psi_B)(\rho_{AB})
+        =\Sigma_{B'A}\bigl((\Psi_B\otimes\id_A)
           (\Sigma_{AB}(\rho_{AB}))\bigr),
     \]
     where $\Sigma$ denotes the canonical exchange of the two tensor factors.
@@ -269,8 +269,8 @@
     For linear maps $\Phi_A$ and $\Psi_B$, set
     \[
       (\Phi_A\otimes\Psi_B)(\rho)
-        =(\operatorname{id}_{A'}\otimes\Psi_B)
-          ((\Phi_A\otimes\operatorname{id}_B)(\rho)).
+        =(\id_{A'}\otimes\Psi_B)
+          ((\Phi_A\otimes\id_B)(\rho)).
     \]
 \end{definition}
 
@@ -281,7 +281,7 @@
     \uses{def:is_kraus_cptp, def:tensor_map_id}
     If $\Phi_A$ is trace-preserving completely positive and
     $\rho_{AB}\geq0$, then
-    $(\Phi_A\otimes\operatorname{id}_B)(\rho)\geq0$.
+    $(\Phi_A\otimes\id_B)(\rho)\geq0$.
 \end{lemma}
 
 \begin{lemma}[Positivity under a map on the second tensor factor]
@@ -292,7 +292,7 @@
       lem:mpdo_tensor_map_id_pos}
     If $\Psi_B$ is trace-preserving completely positive and
     $\rho_{AB}\geq0$, then
-    $(\operatorname{id}_A\otimes\Psi_B)(\rho)\geq0$.
+    $(\id_A\otimes\Psi_B)(\rho)\geq0$.
 \end{lemma}
 
 \begin{lemma}[Positivity under independent maps]
@@ -314,7 +314,7 @@
     trace-preserving completely positive map whose input and output matrix
     algebras may have different dimensions. Then
     \[
-      I(A':B)_{(\Phi_A\otimes\operatorname{id}_B)(\rho)}
+      I(A':B)_{(\Phi_A\otimes\id_B)(\rho)}
         \leq I(A:B)_\rho.
     \]
 \end{theorem}
@@ -324,10 +324,10 @@
     \uses{lem:mpdo_tensor_map_id_pos,
       thm:mutual_information_monotone_tripartite}
     Choose a rectangular Stinespring isometry for $\Phi_A$. Conjugating by
-    $W=V_A\otimes\operatorname{id}_B$ gives
+    $W=V_A\otimes\id_B$ gives
     $\omega_{A'EB}=W\rho_{AB}W^\dagger$. Since
-    $W=V_A\otimes\operatorname{id}_B$ and
-    $V_A^\dagger V_A=\operatorname{id}_A$, its marginals satisfy
+    $W=V_A\otimes\id_B$ and
+    $V_A^\dagger V_A=\id_A$, its marginals satisfy
     \[
       \omega_{A'E}=V_A\rho_A V_A^\dagger,\qquad
       \omega_B=\rho_B.
@@ -341,8 +341,8 @@
     \]
     Hence $I(A'E:B)_\omega=I(A:B)_\rho$. The defining Stinespring identity is
     \[
-      \operatorname{tr}_E(\omega_{A'EB})
-        =(\Phi_A\otimes\operatorname{id}_B)(\rho_{AB}).
+      \tr_E(\omega_{A'EB})
+        =(\Phi_A\otimes\id_B)(\rho_{AB}).
     \]
     Strong subadditivity in the form
     \[
@@ -360,7 +360,7 @@
     trace-preserving completely positive map whose input and output matrix
     algebras may have different dimensions. Then
     \[
-      I(A:B')_{(\operatorname{id}_A\otimes\Psi_B)(\rho)}
+      I(A:B')_{(\id_A\otimes\Psi_B)(\rho)}
         \leq I(A:B)_\rho.
     \]
 \end{theorem}
@@ -504,7 +504,7 @@
     operators, and satisfy the local renormalization fixed-point equations.
     Then
     \[
-      \operatorname{tr}\rho^{(N)}(M)\neq0
+      \tr\rho^{(N)}(M)\neq0
       \qquad (N\geq1).
     \]
 \end{lemma}
@@ -686,7 +686,7 @@
           \otimes (\mathbb C^{d_K})^{\otimes L}
     \]
     and trace the ancillary factor. Denote this map by
-    $\operatorname{Tr}_{\mathrm{anc},L}$. It is the blockwise analogue of the
+    $\Tr_{\mathrm{anc},L}$. It is the blockwise analogue of the
     one-site ancillary trace in
     Definition~\ref{def:mpdo_ancillary_trace_map}.
 \end{definition}
@@ -696,7 +696,7 @@
     \lean{MPOTensor.blockAncillaryTraceMap_isKrausCPTP}
     \leanok
     \uses{def:block_ancillary_trace, def:is_kraus_cptp}
-    The map $\operatorname{Tr}_{\mathrm{anc},L}$ is trace-preserving and
+    The map $\Tr_{\mathrm{anc},L}$ is trace-preserving and
     completely positive.
 \end{theorem}
 
@@ -716,14 +716,14 @@
     If $X$ is an operator on a spin--ancilla block, then for
     $i,j\in [d]^L$,
     \[
-      \operatorname{Tr}_{\mathrm{anc},L}(X)_{i,j}
+      \Tr_{\mathrm{anc},L}(X)_{i,j}
         =\sum_{\kappa\in[d_K]^L}X_{(i,\kappa),(j,\kappa)}.
     \]
     For $i,j\in[d]^L$ and $x,y\in[d]^K$, applying the ancillary traces to
     both blocks across the cut $L\mid K$ gives
     \[
-      \bigl[(\operatorname{Tr}_{\mathrm{anc},L}\otimes
-        \operatorname{Tr}_{\mathrm{anc},K})(X)\bigr]_{(i,x),(j,y)}
+      \bigl[(\Tr_{\mathrm{anc},L}\otimes
+        \Tr_{\mathrm{anc},K})(X)\bigr]_{(i,x),(j,y)}
       =\sum_{\kappa\in[d_K]^L}\sum_{\lambda\in[d_K]^K}
         X_{((i,\kappa),(x,\lambda)),((j,\kappa),(y,\lambda))}.
     \]
@@ -759,7 +759,7 @@
 
     \[
       \rho^{(N)}(M)
-      =\operatorname{Tr}_{\mathrm{anc},N}
+      =\Tr_{\mathrm{anc},N}
         \left(\lvert V^{(N)}(\widetilde A)\rangle
           \!\langle V^{(N)}(\widetilde A)\rvert\right),
       \qquad
@@ -781,8 +781,8 @@
 
     \[
       \sigma^{(N)}_{L:K}(M)
-      =\left(\operatorname{Tr}_{\mathrm{anc},L}\otimes
-        \operatorname{Tr}_{\mathrm{anc},K}\right)
+      =\left(\Tr_{\mathrm{anc},L}\otimes
+        \Tr_{\mathrm{anc},K}\right)
         \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right).
     \]
 
@@ -801,7 +801,7 @@
     The coefficient formula for one block gives
 
     \[
-      \operatorname{Tr}_{\mathrm{anc},N}
+      \Tr_{\mathrm{anc},N}
         \left(\lvert V^{(N)}(\widetilde A)\rangle
           \!\langle V^{(N)}(\widetilde A)\rvert\right)_{\sigma,\tau}
       =\sum_{\kappa\in[d_K]^N}
@@ -829,8 +829,8 @@
     purifying MPS tensor.  Then
     \[
       \sigma^{(N)}_{L:K}(M)
-      =\left(\operatorname{Tr}_{\mathrm{anc},L}\otimes
-        \operatorname{Tr}_{\mathrm{anc},K}\right)
+      =\left(\Tr_{\mathrm{anc},L}\otimes
+        \Tr_{\mathrm{anc},K}\right)
         \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right).
     \]
 \end{theorem}
@@ -852,8 +852,8 @@
     independent of the cut, such that for every decomposition $N=L+K$,
     \[
       \sigma^{(N)}_{L:K}(M)
-      =\left(\operatorname{Tr}_{\mathrm{anc},L}\otimes
-        \operatorname{Tr}_{\mathrm{anc},K}\right)
+      =\left(\Tr_{\mathrm{anc},L}\otimes
+        \Tr_{\mathrm{anc},K}\right)
         \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right),
     \]
     where $\widetilde A$ is the purifying MPS tensor associated with $A$.
@@ -940,8 +940,8 @@
     \[
       I_L(M)
       =I\!\left(
-        (\operatorname{Tr}_{\mathrm{anc},L}\otimes
-          \operatorname{Tr}_{\mathrm{anc},N-L})
+        (\Tr_{\mathrm{anc},L}\otimes
+          \Tr_{\mathrm{anc},N-L})
         \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:N-L}\right)\right)
       \leq I\!\left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:N-L}\right)
       \leq4\log D'.
@@ -973,7 +973,7 @@
     \]
     Then the ordinary complex rank of $P$ satisfies
     \[
-      \operatorname{rank}_{\C} P\le D^2.
+      \rank_{\C} P\le D^2.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -994,7 +994,7 @@
     Let $K$ be a field, let $A$ be a finite matrix over $K$, and let
     $a\in K$ be nonzero.  Then
     \[
-      \operatorname{rank}_{K}(aA)=\operatorname{rank}_{K}A.
+      \rank_{K}(aA)=\rank_{K}A.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -1010,8 +1010,8 @@
     $\iota:K\hookrightarrow L$ be the inclusion, and let $A$ be a finite
     matrix over $K$.  Then
     \[
-      \operatorname{rank}_{L}\!\left((\iota(A_{ij}))_{ij}\right)
-      =\operatorname{rank}_{K} A.
+      \rank_{L}\!\left((\iota(A_{ij}))_{ij}\right)
+      =\rank_{K} A.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -1098,10 +1098,10 @@
     Let $X$ and $Y$ be finite sets and let $P=(P_{x,y})_{x\in X,y\in Y}$
     be a joint probability distribution.  With natural logarithms,
     \[
-        I(X:Y)_P\leq \log\operatorname{rank}_{\R}P.
+        I(X:Y)_P\leq \log\rank_{\R}P.
     \]
     Equivalently, with logarithms to base two,
-    $2^{I(X:Y)_P}\leq\operatorname{rank}_{\R}P$.
+    $2^{I(X:Y)_P}\leq\rank_{\R}P$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:probability_entropy_le_log_card_support}
@@ -1134,7 +1134,7 @@
     $\varepsilon S(\beta)\geq0$, so the selected endpoint has mutual
     information no smaller than the original distribution.
     Repeating the construction leaves at most
-    $\operatorname{rank}_{\R}P$ nonzero rows.  Finally,
+    $\rank_{\R}P$ nonzero rows.  Finally,
     $I(X:Y)\leq H(X)$, and the entropy of a distribution supported on $k$
     points is at most $\log k$.
 \end{proof}
@@ -1162,10 +1162,10 @@
     not change rank by Theorem~\ref{thm:matrix_rank_scalar_extension}; hence
     Theorem~\ref{thm:mpo_diagonal_cut_rank} gives
     \[
-      \operatorname{rank}_{\R}P\leq D^2.
+      \rank_{\R}P\leq D^2.
     \]
     Theorem~\ref{thm:classical_mutual_information_le_log_rank} gives
-    $I(X:Y)_P\leq\log\operatorname{rank}_{\R}P$, and monotonicity of the
+    $I(X:Y)_P\leq\log\rank_{\R}P$, and monotonicity of the
     logarithm gives the result.
 \end{proof}
 
@@ -1183,7 +1183,7 @@
     $\rho^{(N)}(M)$ is diagonal for every $N>0$.  For configurations $x$ and
     $y$ on the two consecutive blocks, define
     \[
-      W_{x,y}=\operatorname{Re}\rho^{(L+R)}(M)_{(x,y),(x,y)},\qquad
+      W_{x,y}=\re\rho^{(L+R)}(M)_{(x,y),(x,y)},\qquad
       Z=\sum_{x,y}W_{x,y},\qquad
       \widehat P=Z^{-1}W.
     \]
@@ -1197,7 +1197,7 @@
     For every MPO tensor $M$ and cut lengths $L,R$, the total diagonal
     coefficient mass satisfies
     \[
-      Z=\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M).
+      Z=\re\tr\rho^{(L+R)}(M).
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -1205,8 +1205,8 @@
     split $(x,y)$ on $L$ and $R$ sites gives
     \[
       Z=\sum_{x,y}W_{x,y}
-      =\sum_\sigma\operatorname{Re}\rho^{(L+R)}(M)_{\sigma,\sigma}
-      =\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M).
+      =\sum_\sigma\re\rho^{(L+R)}(M)_{\sigma,\sigma}
+      =\re\tr\rho^{(L+R)}(M).
     \]
 \end{proof}
 
@@ -1264,7 +1264,7 @@
     Since the chain operator is diagonal,
     \[
       Z=\sum_{x,y}W_{x,y}
-      =\operatorname{Re}\operatorname{tr}\rho^{(L+R)}(M),
+      =\re\tr\rho^{(L+R)}(M),
     \]
     so the trace positivity hypothesis supplies the required normalization.
 \end{proof}
@@ -1301,18 +1301,18 @@
     Then
     \[
         \operatorname{OSR}(\rho)
-        =\dim\operatorname{range}\mathcal R_\rho
-        =\dim\operatorname{span}\{\rho_{ij}:1\leq i,j\leq d_A\}.
+        =\dim\range\mathcal R_\rho
+        =\dim\spn\{\rho_{ij}:1\leq i,j\leq d_A\}.
     \]
 \end{theorem}
 \begin{proof}\leanok
     The range of $\mathcal R_\rho$ is the span of the blocks. If
     $\rho=\sum_{t=1}^{r}A_t\otimes B_t$, every block belongs to
-    $\operatorname{span}\{B_1,\ldots,B_r\}$, so the range dimension is at most
+    $\spn\{B_1,\ldots,B_r\}$, so the range dimension is at most
     $r$. Conversely, choose a basis $B_1,\ldots,B_s$ of the block span and
     expand each block as $\rho_{ij}=\sum_t(A_t)_{ij}B_t$. This gives
     $\rho=\sum_{t=1}^{s}A_t\otimes B_t$, where
-    $s=\dim\operatorname{range}\mathcal R_\rho$.
+    $s=\dim\range\mathcal R_\rho$.
 \end{proof}
 
 \begin{theorem}[Channel of a faithful bipartite marginal]
@@ -1325,14 +1325,14 @@
       thm:operator_schmidt_coefficient_space}
     Let $\rho\geq0$ be a bipartite complex matrix whose first marginal is
     faithful. Choose an eigenbasis in which
-    $\operatorname{tr}_B\rho=\operatorname{diag}(p_1,\ldots,p_{d_A})$ with
+    $\tr_B\rho=\diag(p_1,\ldots,p_{d_A})$ with
     every $p_i>0$, and define the linear map $\Phi_\rho$ on matrix units by
     \[
         \Phi_\rho(E_{ij})=\frac{\rho_{ij}}{\sqrt{p_ip_j}}.
     \]
     Then $\Phi_\rho$ is completely positive and trace preserving,
     \[
-        \dim\operatorname{range}\Phi_\rho=\operatorname{OSR}(\rho),
+        \dim\range\Phi_\rho=\operatorname{OSR}(\rho),
     \]
     and application of $\Phi_\rho$ to the first half of
     $\sum_{i,j}\sqrt{p_ip_j}\,E_{ij}\otimes E_{ij}$, followed by restoring the
@@ -1370,7 +1370,7 @@
     they do not bound the ordinary rank of either marginal.
     For example, a bond-one tensor can generate $q^{\otimes N}$ for a full-rank
     one-site density matrix $q$. Thus its $L$-site marginal has rank
-    $\operatorname{rank}(q)^L$, although its mutual information vanishes. The
+    $\rank(q)^L$, although its mutual information vanishes. The
     unrestricted estimate therefore requires a direct operator-Schmidt
     argument not supplied by the cited proof.
 
@@ -1630,7 +1630,7 @@
         =
         \sum_{\lambda\in
             \operatorname{roots}\chi_{c\,(R_mR_m^\dagger)(L_L^\dagger L_L)}}
-            -\operatorname{Re}(\lambda)\log\operatorname{Re}(\lambda),
+            -\re(\lambda)\log\re(\lambda),
     \]
     with roots counted with algebraic multiplicity.
 \end{lemma}
@@ -1679,7 +1679,7 @@
         \sum_{\lambda\in
             \operatorname{roots}\chi_{c\,(R_{N-L}R_{N-L}^\dagger)
                 (L_L^\dagger L_L)}}
-            -\operatorname{Re}(\lambda)\log\operatorname{Re}(\lambda).
+            -\re(\lambda)\log\re(\lambda).
     \]
     Since $1\le L<\lfloor N/2\rfloor$, the four lengths
     $L$, $L+1$, $N-L$, and $N-(L+1)$ are positive. The RFP Gram-collapse lemma
@@ -1739,11 +1739,11 @@
 \end{lemma}
 \begin{proof}\leanok
     The reduced state is $\rho_L \propto W W^\dagger$, where the amplitude matrix
-    $W(u, w) = \langle u\,w\,|\,V^{(N)}(A)\rangle = \operatorname{tr}
+    $W(u, w) = \langle u\,w\,|\,V^{(N)}(A)\rangle = \tr
         \bigl(A^{u_1}\cdots A^{u_L}\, A^{w_1}\cdots A^{w_{N-L}}\bigr)$ factors through
     the two bond pairs cut by the block boundary. Writing the trace as a sum over
     the bond index pair $(a, b)\in\{1,\dots,D\}^2$ exhibits $W = L'R'$ with $L'$
-    having $D^2$ columns, so $\operatorname{rank}\rho_L \le \operatorname{rank} W
+    having $D^2$ columns, so $\rank\rho_L \le \rank W
         \le D^2$.
 \end{proof}
 

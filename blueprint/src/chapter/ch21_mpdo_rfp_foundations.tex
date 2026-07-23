@@ -246,7 +246,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \[
         \psi_A(\sigma,\kappa)
         =
-        \operatorname{tr}\!\left(
+        \tr\!\left(
             A^{(\sigma_0,\kappa_0)}
             A^{(\sigma_1,\kappa_1)}
             \cdots
@@ -264,7 +264,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \uses{def:mpdo_right_partial_trace_map}
     For a matrix $X$ on the spin--ancilla space, the ancillary trace map is
     \[
-        \bigl[\operatorname{tr}_a(X)\bigr]_{ij}
+        \bigl[\tr_a(X)\bigr]_{ij}
         =
         \sum_k X_{(i,k),(j,k)} .
     \]
@@ -301,7 +301,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \[
         \rho^{(N)}(M)
         =
-        \operatorname{tr}_a
+        \tr_a
         \bigl(
             |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
         \bigr),
@@ -316,7 +316,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
     The spin reduction obtained by tracing the ancillary index is
     trace-preserving completely positive: the ancillary trace map
-    $\operatorname{tr}_a$ satisfies Definition~\ref{def:is_kraus_cptp}.
+    $\tr_a$ satisfies Definition~\ref{def:is_kraus_cptp}.
     This is the structure described immediately after Definition~4.3 in
     \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -365,7 +365,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \[
         \rho^{(N)}(M)
         =
-        \operatorname{tr}_a
+        \tr_a
         \bigl(
             |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
         \bigr),
@@ -727,8 +727,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
             \otimes \overline{\Bigl(\prod_l A^{(\tau_l,\kappa_l)}\Bigr)}.
     \]
     Tracing this sum and using
-    $\operatorname{tr}(X\otimes\overline Y)
-    =\operatorname{tr}(X)\,\overline{\operatorname{tr}(Y)}$ gives the coefficient
+    $\tr(X\otimes\overline Y)
+    =\tr(X)\,\overline{\tr(Y)}$ gives the coefficient
     of the ancillary trace at every $\sigma,\tau$. The equation holds at every
     length, so no positive-length restriction is needed.
 \end{proof}
@@ -807,12 +807,12 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \[
         Q=\begin{pmatrix}1&0&0\\0&0&1\\0&0&0\end{pmatrix}.
     \]
-    Since $\operatorname{tr}(Q^N)=1$ for every $N>0$, all positive-length MPOs
+    Since $\tr(Q^N)=1$ for every $N>0$, all positive-length MPOs
     equal the scalar density operator $1$ and are purified by the scalar
     pure-state RFP tensor $A=1$. At length zero the MPO is the positive scalar
     $3$, so the tensor is an MPDO at every length. Its physical-trace transfer
     is the nonzero matrix $Q$. However,
-    $Q^2=\operatorname{diag}(1,0,0)$ is not a positive scalar multiple of $Q$,
+    $Q^2=\diag(1,0,0)$ is not a positive scalar multiple of $Q$,
     because the $(2,3)$ entry is lost on squaring. Thus source ZCL fails. The
     global equation cannot detect this nilpotent bond sector.
 \end{proof}

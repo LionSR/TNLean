@@ -38,7 +38,7 @@ properties for finite-dimensional quantum systems.
 \end{definition}
 
 Wolf records the equivalent formula
-$\lVert A\rVert_1=\operatorname{tr}\lvert A\rvert$
+$\lVert A\rVert_1=\tr\lvert A\rvert$
 \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}; this is
 Theorem~\ref{thm:trace_norm_abs}.
 
@@ -55,8 +55,8 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     The singular-value sequence satisfies $s_i(A) = 0$ for all
-    $i \geq \operatorname{rank}(A)$, so summing over the support and summing
-    over $\{0,\ldots,\operatorname{rank}(A)-1\}$ give the same value.
+    $i \geq \rank(A)$, so summing over the support and summing
+    over $\{0,\ldots,\rank(A)-1\}$ give the same value.
 \end{proof}
 
 \begin{theorem}[Elementary trace-norm properties]
@@ -99,9 +99,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     of $A^\dagger A$,
     \[
         \lVert A\rVert_{\mathrm{tr}}
-        =\operatorname{Re}\bigl(\operatorname{tr}\lvert A\rvert\bigr).
+        =\re\bigl(\tr\lvert A\rvert\bigr).
     \]
-    This is the formula $\lVert A\rVert_1=\operatorname{tr}[\lvert A\rvert]$
+    This is the formula $\lVert A\rVert_1=\tr[\lvert A\rvert]$
     of \cite[Chapter~8, Section~8.1]{Wolf2012Quantum}; the trace of the
     positive-semidefinite matrix $\lvert A\rvert$ is real.
 \end{theorem}
@@ -112,17 +112,17 @@ Theorem~\ref{thm:trace_norm_abs}.
     $A$, is represented by $A^\dagger A$, so the singular values of $A$ are
     $s_i(A)=\sqrt{\lambda_i}$ with $\lambda_0,\ldots,\lambda_{D-1}$ the
     eigenvalues of $A^\dagger A$. Diagonalizing
-    $A^\dagger A=U\operatorname{diag}(\lambda_i)U^\dagger$ gives
-    $\lvert A\rvert=U\operatorname{diag}(\sqrt{\lambda_i})U^\dagger$, hence
+    $A^\dagger A=U\diag(\lambda_i)U^\dagger$ gives
+    $\lvert A\rvert=U\diag(\sqrt{\lambda_i})U^\dagger$, hence
     \[
         \lVert A\rVert_{\mathrm{tr}}
         =\sum_{i=0}^{D-1}s_i(A)
         =\sum_{i=0}^{D-1}\sqrt{\lambda_i}
-        =\operatorname{tr}\lvert A\rvert
-        =\operatorname{Re}\bigl(\operatorname{tr}\lvert A\rvert\bigr),
+        =\tr\lvert A\rvert
+        =\re\bigl(\tr\lvert A\rvert\bigr),
     \]
     where the last step uses that $\lvert A\rvert$ is positive semidefinite,
-    so $\operatorname{tr}\lvert A\rvert\geq 0$ is real.
+    so $\tr\lvert A\rvert\geq 0$ is real.
 \end{proof}
 
 \begin{theorem}[Trace-norm homogeneity]
@@ -145,8 +145,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     the positive-semidefinite square root,
     $\lvert cA\rvert=\lvert c\rvert\,\lvert A\rvert$. Linearity of the trace
     gives
-    $\operatorname{tr}\lvert cA\rvert
-    =\lvert c\rvert\,\operatorname{tr}\lvert A\rvert$, and the claim follows
+    $\tr\lvert cA\rvert
+    =\lvert c\rvert\,\tr\lvert A\rvert$, and the claim follows
     from Theorem~\ref{thm:trace_norm_abs}.
 \end{proof}
 
@@ -182,9 +182,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     uniqueness of the positive-semidefinite square root gives
     $\lvert AV\rvert=V^\dagger\lvert A\rvert V$. Cyclicity of the trace then
     yields
-    $\operatorname{tr}\lvert AV\rvert
-    =\operatorname{tr}(\lvert A\rvert\,VV^\dagger)
-    =\operatorname{tr}\lvert A\rvert$. For the two-sided case,
+    $\tr\lvert AV\rvert
+    =\tr(\lvert A\rvert\,VV^\dagger)
+    =\tr\lvert A\rvert$. For the two-sided case,
     $\lVert UAV\rVert_{\mathrm{tr}}=\lVert UA\rVert_{\mathrm{tr}}=\lVert A\rVert_{\mathrm{tr}}$
     by applying the right and left cases in turn.
 \end{proof}
@@ -228,10 +228,10 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     \uses{thm:trace_norm_abs}
-    Diagonalizing $A^\dagger A=V\operatorname{diag}(\lambda_i)V^\dagger$ gives
-    $\lvert A\rvert=V\operatorname{diag}(\sqrt{\lambda_i})V^\dagger$, so
+    Diagonalizing $A^\dagger A=V\diag(\lambda_i)V^\dagger$ gives
+    $\lvert A\rvert=V\diag(\sqrt{\lambda_i})V^\dagger$, so
     \[
-        \operatorname{tr}\lvert A\rvert=\sum_{i=0}^{D-1}\sqrt{\lambda_i},
+        \tr\lvert A\rvert=\sum_{i=0}^{D-1}\sqrt{\lambda_i},
     \]
     and the claim follows from Theorem~\ref{thm:trace_norm_abs}.
 \end{proof}
@@ -247,11 +247,11 @@ Theorem~\ref{thm:trace_norm_abs}.
     For every $A\in\MN{D}$,
     \[
         \lVert A\rVert_{\mathrm{tr}}
-        =\max\left\{\bigl|\operatorname{tr}[A^\dagger U]\bigr|
+        =\max\left\{\bigl|\tr[A^\dagger U]\bigr|
         \;\middle|\; UU^\dagger=\Id\right\},
     \]
     and the maximum is attained: some unitary $U$ satisfies
-    $\operatorname{tr}[A^\dagger U]=\lVert A\rVert_{\mathrm{tr}}$.
+    $\tr[A^\dagger U]=\lVert A\rVert_{\mathrm{tr}}$.
     See \cite[Chapter~8, Eq.~(8.11)]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -262,7 +262,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     unitary. Expanding the trace in this basis and applying the
     Cauchy--Schwarz inequality,
     \[
-        \bigl|\operatorname{tr}[A^\dagger U]\bigr|
+        \bigl|\tr[A^\dagger U]\bigr|
         =\Bigl|\sum_{i}\langle Av_i,\,Uv_i\rangle\Bigr|
         \le\sum_{i}\lVert Av_i\rVert\,\lVert Uv_i\rVert
         =\sum_{i}\sqrt{\lambda_i}
@@ -283,7 +283,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     $(w_i)_{i}$ of $\C^D$ and let $U$ be the unitary with $Uv_i=w_i$ for all
     $i$. Then
     \[
-        \operatorname{tr}[A^\dagger U]
+        \tr[A^\dagger U]
         =\sum_{i}\langle Av_i,\,w_i\rangle
         =\sum_{\lambda_i\neq0}\frac{\lVert Av_i\rVert^2}{\sqrt{\lambda_i}}
         =\sum_{i}\sqrt{\lambda_i}
@@ -312,15 +312,15 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{proof}\leanok
     \uses{thm:trace_norm_variational}
     Choose by Theorem~\ref{thm:trace_norm_variational} a unitary $U$ with
-    $\operatorname{tr}[(A+B)^\dagger U]=\lVert A+B\rVert_{\mathrm{tr}}$.
+    $\tr[(A+B)^\dagger U]=\lVert A+B\rVert_{\mathrm{tr}}$.
     Splitting the trace and applying the upper-bound half of the same
     theorem to $A$ and to $B$ separately,
     \[
         \lVert A+B\rVert_{\mathrm{tr}}
-        =\bigl|\operatorname{tr}[A^\dagger U]
-              +\operatorname{tr}[B^\dagger U]\bigr|
-        \le\bigl|\operatorname{tr}[A^\dagger U]\bigr|
-          +\bigl|\operatorname{tr}[B^\dagger U]\bigr|
+        =\bigl|\tr[A^\dagger U]
+              +\tr[B^\dagger U]\bigr|
+        \le\bigl|\tr[A^\dagger U]\bigr|
+          +\bigl|\tr[B^\dagger U]\bigr|
         \le\lVert A\rVert_{\mathrm{tr}}+\lVert B\rVert_{\mathrm{tr}}.
     \]
 \end{proof}
@@ -334,7 +334,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     into orthogonal positive parts, $H^\pm\ge0$ and $H^+H^-=0$. Then
     \[
         \lVert H\rVert_{\mathrm{tr}}
-        =\operatorname{tr}[H^+]+\operatorname{tr}[H^-].
+        =\tr[H^+]+\tr[H^-].
     \]
 \end{lemma}
 
@@ -348,8 +348,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     so $H^++H^-=\sqrt{H^\dagger H}=|H|$. Hence
     \[
         \lVert H\rVert_{\mathrm{tr}}
-        =\operatorname{tr}|H|
-        =\operatorname{tr}[H^+]+\operatorname{tr}[H^-]
+        =\tr|H|
+        =\tr[H^+]+\tr[H^-]
     \]
     by Theorem~\ref{thm:trace_norm_abs}.
 \end{proof}
@@ -369,9 +369,9 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     Diagonalize
-    $A=U\operatorname{diag}(\lambda_1,\dots,\lambda_D)\,U^\dagger$ and set
+    $A=U\diag(\lambda_1,\dots,\lambda_D)\,U^\dagger$ and set
     \[
-        \Pi=U\operatorname{diag}
+        \Pi=U\diag
         \bigl(\chi(\lambda_1),\dots,\chi(\lambda_D)\bigr)\,U^\dagger,
     \]
     where $\chi$ is the indicator function of $(0,\infty)$. Each claim is
@@ -386,8 +386,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.PosSemidef.re_trace_mul_le_of_le_one}
     \leanok
     Let $X,C\in\MN{D}$ with $X\ge0$. If $C\ge0$, then
-    $\operatorname{tr}[CX]\ge0$; if $C\le\Id$, then
-    $\operatorname{tr}[CX]\le\operatorname{tr}[X]$.
+    $\tr[CX]\ge0$; if $C\le\Id$, then
+    $\tr[CX]\le\tr[X]$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -395,8 +395,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     The first bound is Lemma~\ref{lem:psd_trace_product_nonneg}. For the
     second,
     \[
-        \operatorname{tr}[X]-\operatorname{tr}[CX]
-        =\operatorname{tr}[(\Id-C)X]\ge0
+        \tr[X]-\tr[CX]
+        =\tr[(\Id-C)X]\ge0
     \]
     by the same lemma, since $\Id-C\ge0$.
 \end{proof}
@@ -425,7 +425,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     let $H\in\MN{D}$ be Hermitian, with Jordan decompositions $H=P_+-P_-$
     and $T(H)=Q_+-Q_-$. Then
     \[
-        \operatorname{tr}[Q_+]\le\operatorname{tr}[P_+].
+        \tr[Q_+]\le\tr[P_+].
     \]
 \end{lemma}
 
@@ -439,13 +439,13 @@ Theorem~\ref{thm:trace_norm_abs}.
     Lemma~\ref{lem:positive_part_support_projection}, so that
     $\Pi_+T(H)=Q_+$ and $0\le\Pi_+\le\Id$. Then
     \[
-        \operatorname{tr}[Q_+]
-        =\operatorname{tr}[\Pi_+T(P_+)]-\operatorname{tr}[\Pi_+T(P_-)]
-        \le\operatorname{tr}[\Pi_+T(P_+)]
-        \le\operatorname{tr}[T(P_+)]
-        =\operatorname{tr}[P_+],
+        \tr[Q_+]
+        =\tr[\Pi_+T(P_+)]-\tr[\Pi_+T(P_-)]
+        \le\tr[\Pi_+T(P_+)]
+        \le\tr[T(P_+)]
+        =\tr[P_+],
     \]
-    where the first inequality uses $\operatorname{tr}[\Pi_+T(P_-)]\ge0$
+    where the first inequality uses $\tr[\Pi_+T(P_-)]\ge0$
     and the second uses $\Pi_+\le\Id$ together with $T(P_+)\ge0$
     (Lemma~\ref{lem:psd_trace_pairing_bounds}); the final step is trace
     preservation.
@@ -470,13 +470,13 @@ Theorem~\ref{thm:trace_norm_abs}.
       lem:positive_map_hermitian}
     Write $H=P_+-P_-$ and $T(H)=Q_+-Q_-$ for the Jordan decompositions.
     Applying Lemma~\ref{lem:positive_part_trace_estimate} to $H$ and to
-    $-H$ gives $\operatorname{tr}[Q_+]\le\operatorname{tr}[P_+]$ and
-    $\operatorname{tr}[Q_-]\le\operatorname{tr}[P_-]$, so by the Jordan
+    $-H$ gives $\tr[Q_+]\le\tr[P_+]$ and
+    $\tr[Q_-]\le\tr[P_-]$, so by the Jordan
     trace-norm formula (Lemma~\ref{lem:trace_norm_jordan}),
     \[
         \lVert T(H)\rVert_{\mathrm{tr}}
-        =\operatorname{tr}[Q_+]+\operatorname{tr}[Q_-]
-        \le\operatorname{tr}[P_+]+\operatorname{tr}[P_-]
+        =\tr[Q_+]+\tr[Q_-]
+        \le\tr[P_+]+\tr[P_-]
         =\lVert H\rVert_{\mathrm{tr}}.
     \]
 \end{proof}
@@ -624,7 +624,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     real parts of the roots of its characteristic polynomial $\chi_\rho$:
     \[
         S(\rho) = \sum_{\lambda \in \mathrm{roots}(\chi_\rho)}
-        \bigl({-}\operatorname{Re}(\lambda)\, \log \operatorname{Re}(\lambda)\bigr).
+        \bigl({-}\re(\lambda)\, \log \re(\lambda)\bigr).
     \]
 \end{lemma}
 
@@ -642,17 +642,17 @@ Theorem~\ref{thm:trace_norm_abs}.
     Let $\rho$ be a Hermitian matrix and let $\log\rho$ be its logarithm defined
     through the functional calculus. Then
     \[
-        S(\rho) = -\operatorname{Re}\bigl(\operatorname{tr}(\rho\,\log\rho)\bigr).
+        S(\rho) = -\re\bigl(\tr(\rho\,\log\rho)\bigr).
     \]
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:von_neumann_entropy}
     A Hermitian matrix and its logarithm are simultaneously diagonalized by a
-    unitary $U$ with $\rho = U\operatorname{diag}(\lambda_i)U^*$, so
+    unitary $U$ with $\rho = U\diag(\lambda_i)U^*$, so
     \[
-        \operatorname{tr}(\rho\,\log\rho)
-            = \operatorname{tr}\!\bigl(U\operatorname{diag}(\lambda_i\log\lambda_i)U^*\bigr)
+        \tr(\rho\,\log\rho)
+            = \tr\!\bigl(U\diag(\lambda_i\log\lambda_i)U^*\bigr)
             = \sum_i \lambda_i\log\lambda_i.
     \]
     Its negative is $\sum_i\bigl({-}\lambda_i\log\lambda_i\bigr) = S(\rho)$. Zero
@@ -664,12 +664,12 @@ Theorem~\ref{thm:trace_norm_abs}.
     The logarithm is the totalized real logarithm, with
     $\log x = \log\lvert x\rvert$ and $\log 0 = 0$; both sides of the identity
     use it on every eigenvalue, so the equality holds for an arbitrary Hermitian
-    matrix. It coincides with the physical entropy $-\operatorname{tr}(\rho\log\rho)$
+    matrix. It coincides with the physical entropy $-\tr(\rho\log\rho)$
     precisely when $\rho$ is positive semidefinite. In that case (a density
     matrix $\rho$, positive semidefinite with unit trace) the eigenvalues
     $\lambda_i$ are nonnegative, $\rho\,\log\rho$ is Hermitian with real trace,
     and the real-part extraction is superfluous: the identity reduces to the
-    standard expression $S(\rho) = -\operatorname{tr}(\rho\log\rho)$.
+    standard expression $S(\rho) = -\tr(\rho\log\rho)$.
 \end{remark}
 
 \begin{definition}[Quantum relative entropy]\label{def:quantum_relative_entropy}
@@ -678,7 +678,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     For matrices $\rho,\sigma\in \MN{D}$, define the trace-log expression
     \[
         D(\rho\Vert\sigma)
-            = \operatorname{Re}\operatorname{tr}\bigl(\rho(\log\rho-\log\sigma)\bigr).
+            = \re\tr\bigl(\rho(\log\rho-\log\sigma)\bigr).
     \]
     On the physical domain where $\rho$ is a density matrix and $\sigma$ is
     positive definite, this is the Umegaki relative entropy.
@@ -692,8 +692,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     For matrices $\rho,\sigma\in \MN{D}$,
     \[
         D(\rho\Vert\sigma)
-            = \operatorname{Re}\operatorname{tr}(\rho\log\rho)
-              - \operatorname{Re}\operatorname{tr}(\rho\log\sigma).
+            = \re\tr(\rho\log\rho)
+              - \re\tr(\rho\log\sigma).
     \]
 \end{lemma}
 
@@ -741,7 +741,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     If $\rho$ is Hermitian, then
     \[
         D(\rho\Vert\sigma)
-            = -S(\rho)-\operatorname{Re}\operatorname{tr}(\rho\log\sigma).
+            = -S(\rho)-\re\tr(\rho\log\sigma).
     \]
 \end{theorem}
 
@@ -749,12 +749,12 @@ Theorem~\ref{thm:trace_norm_abs}.
     Apply Lemma~\ref{lem:quantum_relative_entropy_trace_split} to write
     \[
         D(\rho\Vert\sigma)
-            = \operatorname{Re}\operatorname{tr}(\rho\log\rho)
-              - \operatorname{Re}\operatorname{tr}(\rho\log\sigma).
+            = \re\tr(\rho\log\rho)
+              - \re\tr(\rho\log\sigma).
     \]
     The trace-logarithm identity
     \[
-        \operatorname{Re}\operatorname{tr}(\rho\log\rho)=-S(\rho)
+        \re\tr(\rho\log\rho)=-S(\rho)
     \]
     then gives the result.
 \end{proof}
@@ -778,9 +778,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     sums equal to $1$, because the two eigenbases are orthonormal. A trace
     computation gives
     \[
-        \operatorname{Re}\operatorname{tr}(\rho\log\rho)=\sum_i p_i\log p_i,
+        \re\tr(\rho\log\rho)=\sum_i p_i\log p_i,
         \qquad
-        \operatorname{Re}\operatorname{tr}(\rho\log\sigma)
+        \re\tr(\rho\log\sigma)
             =\sum_{i,j} p_i\,P_{ij}\log q_j,
     \]
     so that
@@ -818,7 +818,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     eigenbasis $\{\ket{f_j}\}$ of $\sigma$, so the cross term reduces to a scalar
     sum over the eigenvalues $q_j$ of $\sigma$,
     \[
-        \operatorname{Re}\operatorname{tr}\bigl(\rho\log\sigma_\varepsilon'\bigr)
+        \re\tr\bigl(\rho\log\sigma_\varepsilon'\bigr)
           = \sum_j \bra{f_j}\rho\ket{f_j}\,
             \log\!\bigl((1+\varepsilon D)^{-1}(q_j+\varepsilon)\bigr).
     \]
@@ -900,11 +900,11 @@ Theorem~\ref{thm:trace_norm_abs}.
     For $s\in[0,1)$ consider the approximant
     \[
         g_s(\rho,\sigma)
-            =\frac{\operatorname{tr}\rho
-                -\operatorname{Re}\operatorname{tr}(\rho^s\sigma^{1-s})}{1-s}.
+            =\frac{\tr\rho
+                -\re\tr(\rho^s\sigma^{1-s})}{1-s}.
     \]
-    The trace $\operatorname{tr}\rho$ is real-affine in the pair, hence convex,
-    while $(\rho,\sigma)\mapsto\operatorname{Re}\operatorname{tr}(\rho^s
+    The trace $\tr\rho$ is real-affine in the pair, hence convex,
+    while $(\rho,\sigma)\mapsto\re\tr(\rho^s
     \sigma^{1-s})$ is jointly concave by the $K=\Id$ case of the Lieb concavity
     theorem (Corollary~\ref{cor:lieb_concavity_id}). Their difference, scaled by
     the nonnegative factor $(1-s)^{-1}$, is therefore jointly convex, so each
@@ -1025,9 +1025,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     Lemma~\ref{lem:log_conj_unitary}, so that
     \[
         D(U\rho U^\dagger \,\Vert\, U\sigma U^\dagger)
-            = \operatorname{Re}\operatorname{tr}\!\bigl(
+            = \re\tr\!\bigl(
                 U\rho(\log\rho-\log\sigma)U^\dagger\bigr)
-            = \operatorname{Re}\operatorname{tr}\!\bigl(
+            = \re\tr\!\bigl(
                 \rho(\log\rho-\log\sigma)\bigr)
             = D(\rho\Vert\sigma),
     \]
@@ -1077,14 +1077,14 @@ Theorem~\ref{thm:trace_norm_abs}.
         = (\log\rho - \log\sigma) \otimes \mathbf 1$. Hence
     \[
         D(\rho \otimes \tau \,\Vert\, \sigma \otimes \tau)
-            = \operatorname{Re}\operatorname{tr}\!\bigl(
+            = \re\tr\!\bigl(
                 (\rho(\log\rho - \log\sigma)) \otimes \tau\bigr)
-            = \operatorname{Re}\bigl(
-                \operatorname{tr}(\rho(\log\rho - \log\sigma))
-                \cdot \operatorname{tr}\tau\bigr),
+            = \re\bigl(
+                \tr(\rho(\log\rho - \log\sigma))
+                \cdot \tr\tau\bigr),
     \]
     where the trace of a tensor product factors as a product of traces. As
-    $\operatorname{tr}\tau = 1$, the right-hand side is $D(\rho\Vert\sigma)$.
+    $\tr\tau = 1$, the right-hand side is $D(\rho\Vert\sigma)$.
 \end{proof}
 
 \begin{lemma}[Root-of-unity character-sum orthogonality]
@@ -1134,13 +1134,13 @@ Theorem~\ref{thm:trace_norm_abs}.
     \uses{lem:root_of_unity_orthogonality}
     Fix a dimension $d \ge 1$ and a primitive $d$-th root of unity $\zeta$, and
     let $X$ be the cyclic shift $\lvert i\rangle \mapsto \lvert i+1\rangle$ and
-    $Z = \operatorname{diag}(\zeta^0,\dots,\zeta^{d-1})$ the clock operator. For
+    $Z = \diag(\zeta^0,\dots,\zeta^{d-1})$ the clock operator. For
     every matrix $M$ on $\mathbb{C}^d$, the uniform average of the conjugations
     by the $d^2$ Weyl operators $W(a,b) = X^a Z^b$ is the completely depolarizing
     channel:
     \[
         \frac{1}{d^2} \sum_{a,b=0}^{d-1} W(a,b)\,M\,W(a,b)^{\dagger}
-            = \frac{\operatorname{tr} M}{d}\,\mathbf 1.
+            = \frac{\tr M}{d}\,\mathbf 1.
     \]
 \end{theorem}
 
@@ -1153,9 +1153,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     otherwise; the result is $d$ times the diagonal part of $M$. The shift
     average $\sum_{a} X^{a} (\operatorname{diagonal} v) (X^{a})^{\dagger}$
     cyclically permutes the diagonal entries, so each diagonal position receives
-    the full sum $\sum_{k} v_k = \operatorname{tr} M$, giving
-    $(\operatorname{tr} M)\,\mathbf 1$. Combining the two factors of $d$ with the
-    prefactor $d^{-2}$ leaves $(\operatorname{tr} M / d)\,\mathbf 1$.
+    the full sum $\sum_{k} v_k = \tr M$, giving
+    $(\tr M)\,\mathbf 1$. Combining the two factors of $d$ with the
+    prefactor $d^{-2}$ leaves $(\tr M / d)\,\mathbf 1$.
 \end{proof}
 
 \begin{lemma}[Twirl as partial trace tensored with the maximally mixed ancilla]
@@ -1199,7 +1199,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{proof}\leanok
     The identity is positive definite and $d_C^{-1}>0$, so $\tau_C$ is positive
     definite.  Moreover,
-    $\operatorname{tr}\tau_C=d_C^{-1}\operatorname{tr}\mathbf 1_C=1$.
+    $\tr\tau_C=d_C^{-1}\tr\mathbf 1_C=1$.
 \end{proof}
 
 \begin{lemma}[Reindexing invariance of the quantum relative entropy]
@@ -1476,7 +1476,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \leanok
     \uses{def:support_inverse_square_root}
     Let $\sigma$ be positive semidefinite on $H_L\otimes H_R$, and set
-    $\tau=\operatorname{tr}_R\sigma$.  The Petz transpose formula on the
+    $\tau=\tr_R\sigma$.  The Petz transpose formula on the
     support of $\tau$ is
     \[
         \mathcal R_\sigma(X)=\sqrt\sigma\,
@@ -1525,10 +1525,10 @@ Theorem~\ref{thm:trace_norm_abs}.
     \uses{def:partial_trace_support_petz_map,
         lem:support_inverse_square_root_sandwich}
     Let $P_\tau$ be the orthogonal projector onto the support of
-    $\tau=\operatorname{tr}_R\sigma$.  Then, for every matrix $X$,
+    $\tau=\tr_R\sigma$.  Then, for every matrix $X$,
     \[
-        \operatorname{tr}(\mathcal R_\sigma(X))
-        =\operatorname{tr}(P_\tau X).
+        \tr(\mathcal R_\sigma(X))
+        =\tr(P_\tau X).
     \]
 \end{lemma}
 
@@ -1536,10 +1536,10 @@ Theorem~\ref{thm:trace_norm_abs}.
     \uses{lem:support_inverse_square_root_sandwich}
     Cyclicity of the trace and the defining property of the partial trace give
     \[
-        \operatorname{tr}(\mathcal R_\sigma(X))
-        =\operatorname{tr}(\tau^{-1/2}_{\mathrm{supp}}
+        \tr(\mathcal R_\sigma(X))
+        =\tr(\tau^{-1/2}_{\mathrm{supp}}
           X\tau^{-1/2}_{\mathrm{supp}}\tau)
-        =\operatorname{tr}((\tau^{-1/2}_{\mathrm{supp}}
+        =\tr((\tau^{-1/2}_{\mathrm{supp}}
           \tau\tau^{-1/2}_{\mathrm{supp}})X).
     \]
     The factor in parentheses is $P_\tau$.
@@ -1552,7 +1552,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \uses{def:support_proj, def:partial_trace_left,
         def:mpdo_state_preparation_map}
     Put $Q_\tau=\mathbf 1_L-P_\tau$ and
-    $\omega_R=\operatorname{tr}_L\sigma$.  The complementary term is
+    $\omega_R=\tr_L\sigma$.  The complementary term is
     \[
         \mathcal C_\sigma(X)=Q_\tau XQ_\tau\otimes\omega_R.
     \]
@@ -1584,20 +1584,20 @@ Theorem~\ref{thm:trace_norm_abs}.
     \uses{def:partial_trace_petz_complement}
     If $\sigma$ has trace one, then
     \[
-        \operatorname{tr}(\mathcal C_\sigma(X))
-        =\operatorname{tr}(Q_\tau X).
+        \tr(\mathcal C_\sigma(X))
+        =\tr(Q_\tau X).
     \]
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:partial_trace_petz_complement}
-    Since $\operatorname{tr}(\omega_R)=\operatorname{tr}(\sigma)=1$ and
+    Since $\tr(\omega_R)=\tr(\sigma)=1$ and
     $Q_\tau^2=Q_\tau$, factorization and cyclicity of the trace give
     \[
-        \operatorname{tr}(\mathcal C_\sigma(X))
-        =\operatorname{tr}(Q_\tau XQ_\tau)
-        =\operatorname{tr}(Q_\tau^2X)
-        =\operatorname{tr}(Q_\tau X).
+        \tr(\mathcal C_\sigma(X))
+        =\tr(Q_\tau XQ_\tau)
+        =\tr(Q_\tau^2X)
+        =\tr(Q_\tau X).
     \]
 \end{proof}
 
@@ -1633,14 +1633,14 @@ Theorem~\ref{thm:trace_norm_abs}.
         lem:partial_trace_support_petz_map_trace,
         lem:partial_trace_petz_complement_trace}
     The two summands are completely positive.  Since
-    $\operatorname{tr}(\omega_R)=1$, the complementary term satisfies
+    $\tr(\omega_R)=1$, the complementary term satisfies
     \[
-        \operatorname{tr}(\mathcal C_\sigma(X))
-        =\operatorname{tr}(Q_\tau X).
+        \tr(\mathcal C_\sigma(X))
+        =\tr(Q_\tau X).
     \]
     Adding this identity to
-    $\operatorname{tr}(\mathcal R_\sigma(X))
-      =\operatorname{tr}(P_\tau X)$ gives trace preservation.
+    $\tr(\mathcal R_\sigma(X))
+      =\tr(P_\tau X)$ gives trace preservation.
 \end{proof}
 
 \begin{theorem}[Agreement on the marginal support]
@@ -1669,9 +1669,9 @@ Theorem~\ref{thm:trace_norm_abs}.
         Matrix.IsHermitian.mul_supportProj_self}
     \leanok
     Let $A$ be Hermitian, with spectral decomposition
-    $A=U\operatorname{diag}(\lambda_i)U^\dagger$. Its support projection is
+    $A=U\diag(\lambda_i)U^\dagger$. Its support projection is
     \[
-        P_A=U\operatorname{diag}(\mathbf 1_{\lambda_i\ne 0})U^\dagger.
+        P_A=U\diag(\mathbf 1_{\lambda_i\ne 0})U^\dagger.
     \]
 \end{definition}
 
@@ -1736,7 +1736,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     Let $X$ be a matrix on $H_L\otimes H_R$, let $w\in H_L$, and let
     $(e_r)_r$ be the distinguished orthonormal basis of $H_R$. Then
     \[
-        \langle w,(\operatorname{tr}_R X)w\rangle
+        \langle w,(\tr_R X)w\rangle
         =\sum_r\langle w\otimes e_r,X(w\otimes e_r)\rangle.
     \]
 \end{theorem}
@@ -1759,24 +1759,24 @@ Theorem~\ref{thm:trace_norm_abs}.
     be any matrix on the same space such that
     $\ker\sigma\subseteq\ker\rho$. Then
     \[
-        \ker(\operatorname{tr}_R\sigma)
-        \subseteq\ker(\operatorname{tr}_R\rho).
+        \ker(\tr_R\sigma)
+        \subseteq\ker(\tr_R\rho).
     \]
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:partial_trace_quadratic_form_split,
         thm:matrix_action_single_basis_vector_lift}
-    If $w\in\ker(\operatorname{tr}_R\sigma)$, then
+    If $w\in\ker(\tr_R\sigma)$, then
     \[
-        0=\langle w,(\operatorname{tr}_R\sigma)w\rangle
+        0=\langle w,(\tr_R\sigma)w\rangle
         =\sum_r\langle w\otimes e_r,\sigma(w\otimes e_r)\rangle.
     \]
     Each summand is nonnegative and therefore vanishes. Positive
     semidefiniteness shows that
     $\sigma(w\otimes e_r)=0$ for every $r$, so the joint kernel inclusion gives
     $\rho(w\otimes e_r)=0$. Summing the diagonal components over $r$ yields
-    $(\operatorname{tr}_R\rho)w=0$.
+    $(\tr_R\rho)w=0$.
 \end{proof}
 
 \begin{theorem}[The first marginal lies in the Petz support domain]
@@ -1788,8 +1788,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     Let $\rho$ and $\sigma$ be positive semidefinite matrices on
     $H_L\otimes H_R$ such that $\ker\sigma\subseteq\ker\rho$. Then
     \[
-        \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\rho)
-        =\mathcal R_\sigma(\operatorname{tr}_R\rho).
+        \widehat{\mathcal R}_\sigma(\tr_R\rho)
+        =\mathcal R_\sigma(\tr_R\rho).
     \]
 \end{theorem}
 
@@ -1798,18 +1798,18 @@ Theorem~\ref{thm:trace_norm_abs}.
         thm:support_projection_absorption_kernel_inclusion,
         thm:partial_trace_petz_channel_supported_agreement}
     Kernel inclusion descends through the partial trace, giving
-    $\ker(\operatorname{tr}_R\sigma)\subseteq
-    \ker(\operatorname{tr}_R\rho)$. The preceding absorption lemma therefore
+    $\ker(\tr_R\sigma)\subseteq
+    \ker(\tr_R\rho)$. The preceding absorption lemma therefore
     yields
-    $P_\tau(\operatorname{tr}_R\rho)P_\tau
-      =\operatorname{tr}_R\rho$, where
-    $\tau=\operatorname{tr}_R\sigma$. The supported-agreement theorem gives
+    $P_\tau(\tr_R\rho)P_\tau
+      =\tr_R\rho$, where
+    $\tau=\tr_R\sigma$. The supported-agreement theorem gives
     \[
-        P_\tau(\operatorname{tr}_R\rho)P_\tau
-        =\operatorname{tr}_R\rho
+        P_\tau(\tr_R\rho)P_\tau
+        =\tr_R\rho
         \;\Longrightarrow\;
-        \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\rho)
-        =\mathcal R_\sigma(\operatorname{tr}_R\rho).
+        \widehat{\mathcal R}_\sigma(\tr_R\rho)
+        =\mathcal R_\sigma(\tr_R\rho).
     \]
 \end{proof}
 
@@ -1823,7 +1823,7 @@ Theorem~\ref{thm:trace_norm_abs}.
         thm:marginal_support_left_absorption}
     For every positive semidefinite $\sigma$,
     \[
-        \mathcal R_\sigma(\operatorname{tr}_R\sigma)=\sigma.
+        \mathcal R_\sigma(\tr_R\sigma)=\sigma.
     \]
 \end{theorem}
 
@@ -1846,7 +1846,7 @@ Theorem~\ref{thm:trace_norm_abs}.
         thm:partial_trace_petz_channel_supported_agreement}
     For every positive semidefinite $\sigma$,
     \[
-        \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\sigma)=\sigma.
+        \widehat{\mathcal R}_\sigma(\tr_R\sigma)=\sigma.
     \]
 \end{theorem}
 
@@ -1890,10 +1890,10 @@ Theorem~\ref{thm:trace_norm_abs}.
     invariant under the cyclic swap $AB \mapsto BA$:
     \[
         \sum_{\lambda \in \mathrm{roots}(\chi_{AB})}
-        \bigl({-}\operatorname{Re}(\lambda)\log\operatorname{Re}(\lambda)\bigr)
+        \bigl({-}\re(\lambda)\log\re(\lambda)\bigr)
         =
         \sum_{\mu \in \mathrm{roots}(\chi_{BA})}
-        \bigl({-}\operatorname{Re}(\mu)\log\operatorname{Re}(\mu)\bigr),
+        \bigl({-}\re(\mu)\log\re(\mu)\bigr),
     \]
     with roots counted with algebraic multiplicity.
 \end{lemma}
@@ -2144,16 +2144,16 @@ Theorem~\ref{thm:trace_norm_abs}.
     positive definite for $\varepsilon > 0$. The reference
     $(\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon}$ is then a positive definite
     tensor product, whose logarithm splits, so the cross trace term evaluates to
-    $-\log d_A + \operatorname{Re}\operatorname{tr}(\rho_R\log\rho_{R,\varepsilon})$.
+    $-\log d_A + \re\tr(\rho_R\log\rho_{R,\varepsilon})$.
     As $\varepsilon \to 0^+$ the support condition makes the zero eigenvalues of
     $\rho_R$ contribute nothing, so
     \[
-        \operatorname{Re}\operatorname{tr}\bigl(
+        \re\tr\bigl(
             \rho\,\log((\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon})\bigr)
             \to -\log d_A - S(\rho_R).
     \]
     Since $D(\rho \,\|\, \sigma)
-        = -S(\rho) - \operatorname{Re}\operatorname{tr}(\rho\log\sigma)$, the
+        = -S(\rho) - \re\tr(\rho\log\sigma)$, the
     evaluation follows.
 \end{proof}
 
@@ -2236,7 +2236,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     $\rho_{R,\varepsilon} = (1 + d_R\varepsilon)^{-1}(\rho_R + \varepsilon\mathbf 1)$,
     which is positive definite, and passes to the limit
     \[
-        \operatorname{Re}\operatorname{tr}\bigl(
+        \re\tr\bigl(
             \rho\,\log((\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon})\bigr)
             \to -\log d_A - S(\rho_R)
         \qquad (\varepsilon \to 0^+),
@@ -2342,7 +2342,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \uses{def:quantum_relative_entropy}
     Let $\rho$ and $\sigma$ be positive semidefinite matrices such that
     $\ker\sigma\subseteq\ker\rho$, and let $\tau$ be positive semidefinite with
-    $\operatorname{tr}\tau=1$.  Then
+    $\tr\tau=1$.  Then
     \[
         D(\rho\otimes\tau\,\Vert\,\sigma\otimes\tau)
         =D(\rho\,\Vert\,\sigma).
@@ -2365,7 +2365,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     the trace of the remaining tensor product gives
     \[
         D(\rho\otimes\tau\,\Vert\,\sigma\otimes\tau)
-        =D(\rho\,\Vert\,\sigma)\operatorname{tr}\tau
+        =D(\rho\,\Vert\,\sigma)\tr\tau
         =D(\rho\,\Vert\,\sigma).
     \]
 \end{proof}
@@ -2589,10 +2589,10 @@ Theorem~\ref{thm:trace_norm_abs}.
     Expand both trace terms in eigenbases.  Unitarity of the overlap matrix
     gives $\sum_j|w_{ij}|^2=1$, so
     \[
-      \operatorname{Re}\operatorname{Tr}(A\log A)
+      \re\Tr(A\log A)
         =\sum_{i,j}\alpha_i\log(\alpha_i)|w_{ij}|^2,
       \qquad
-      \operatorname{Re}\operatorname{Tr}(A\log B)
+      \re\Tr(A\log B)
         =\sum_{i,j}\alpha_i\log(\beta_j)|w_{ij}|^2.
     \]
     Subtraction gives the stated identity.
@@ -2689,15 +2689,15 @@ Theorem~\ref{thm:trace_norm_abs}.
     Define
     \[
       Q_{A P_B}(t)
-        =\operatorname{Re}\left\langle
-            \operatorname{vec}((A P_B)^{\top}),
-            S_t^+\operatorname{vec}((A P_B)^{\top})
+        =\re\left\langle
+            \opvec((A P_B)^{\top}),
+            S_t^+\opvec((A P_B)^{\top})
           \right\rangle,
       \qquad
       Q_B(t)
-        =\operatorname{Re}\left\langle
-            \operatorname{vec}(B^{\top}),
-            S_t^+\operatorname{vec}(B^{\top})
+        =\re\left\langle
+            \opvec(B^{\top}),
+            S_t^+\opvec(B^{\top})
           \right\rangle.
     \]
     With the spectral notation of
@@ -2713,12 +2713,12 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
     Consequently,
     \[
-      \frac{Q_{A P_B}(t)-\operatorname{Re}\operatorname{Tr}B+tQ_B(t)}{1+t}
+      \frac{Q_{A P_B}(t)-\re\Tr B+tQ_B(t)}{1+t}
         =I_{A,B}(t).
     \]
     This function is continuous on $(0,\infty)$.  If
     $\ker B\subseteq\ker A$, then $A P_B=A$, so $Q_{A P_B}(t)$ equals the
-    quadratic form with source $\operatorname{vec}(A^{\top})$.
+    quadratic form with source $\opvec(A^{\top})$.
 
     This is the support-projected form of $(\mathrm{intAB})$ in
     Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S2.1,
@@ -2792,18 +2792,18 @@ Theorem~\ref{thm:trace_norm_abs}.
     $w_{ij}=\langle u_i,v_j\rangle$.  Let $L_A$ and $R_B$ denote left and
     right multiplication, $L_A(X)=AX$ and $R_B(X)=XB$.  Then, for $t>0$,
     \begin{align*}
-      \operatorname{Re}\langle A,(L_A+tR_B)^{-1}A\rangle_{\rm HS}
+      \re\langle A,(L_A+tR_B)^{-1}A\rangle_{\rm HS}
         &=\sum_{i,j}\frac{\alpha_i^2}{\alpha_i+t\beta_j}|w_{ij}|^2,\\
-      \operatorname{Re}\langle B,(L_A+tR_B)^{-1}B\rangle_{\rm HS}
+      \re\langle B,(L_A+tR_B)^{-1}B\rangle_{\rm HS}
         &=\sum_{i,j}\frac{\beta_j^2}{\alpha_i+t\beta_j}|w_{ij}|^2.
     \end{align*}
     Both quadratic forms are continuous on $(0,\infty)$.  Moreover,
     \[
       D(A\Vert B)=\int_0^\infty
       \frac{
-        \operatorname{Re}\langle A,(L_A+tR_B)^{-1}A\rangle_{\rm HS}
-        -\operatorname{Re}\operatorname{Tr}B
-        +t\operatorname{Re}\langle B,(L_A+tR_B)^{-1}B\rangle_{\rm HS}}
+        \re\langle A,(L_A+tR_B)^{-1}A\rangle_{\rm HS}
+        -\re\Tr B
+        +t\re\langle B,(L_A+tR_B)^{-1}B\rangle_{\rm HS}}
       {1+t}\,dt,
     \]
     and the displayed integrand is continuous and integrable on the positive
@@ -2912,9 +2912,9 @@ Theorem~\ref{thm:trace_norm_abs}.
         \sum_g\left\|
           T_g^{-1/2}(B_g)-T_g^{1/2}(\Lambda_t)
         \right\|_{\mathrm{HS}}^2
-        =\sum_g\operatorname{Re}
+        =\sum_g\re
           \langle B_g,T_g^{-1}(B_g)\rangle_{\mathrm{HS}}
-          -\operatorname{Re}
+          -\re
           \langle B,T^{-1}(B)\rangle_{\mathrm{HS}}.
     \]
     This is the positive-definite, fixed-$t$ identity in
@@ -2925,8 +2925,8 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     Write $S_g$ for the positive definite matrix representing $T_g$ under
-    the vectorization $X\mapsto\operatorname{vec}(X^{\mathsf T})$, and put
-    $b_g=\operatorname{vec}(B_g^{\mathsf T})$ and
+    the vectorization $X\mapsto\opvec(X^{\mathsf T})$, and put
+    $b_g=\opvec(B_g^{\mathsf T})$ and
     $x=S^{-1}\sum_g b_g$.  For the residual $r_g=b_g-S_gx$, direct expansion
     gives
     \[
@@ -2939,7 +2939,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \[
       \|S_g^{-1/2}b_g-S_g^{1/2}x\|^2
         =\|S_g^{-1/2}r_g\|^2
-        =\operatorname{Re}\langle r_g,S_g^{-1}r_g\rangle.
+        =\re\langle r_g,S_g^{-1}r_g\rangle.
     \]
     Summing proves the identity.
 \end{proof}
@@ -2955,9 +2955,9 @@ Theorem~\ref{thm:trace_norm_abs}.
       \sum_g\left\|
         T_g^{-1/2}(A_g)-T_g^{1/2}(\Gamma_t)
       \right\|_{\rm HS}^2
-      =\sum_g\operatorname{Re}
+      =\sum_g\re
         \langle A_g,T_g^{-1}(A_g)\rangle_{\rm HS}
-       -\operatorname{Re}\langle A,T^{-1}(A)\rangle_{\rm HS}.
+       -\re\langle A,T^{-1}(A)\rangle_{\rm HS}.
     \]
     This is the second defect family in Jen\v{c}ov\'a--Ruskai,
     arXiv:0903.2895v4, \S4 and Appendix.
@@ -2966,8 +2966,8 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{proof}\leanok
     Apply the residual identity of
     Theorem~\ref{thm:weyl_resolvent_defect_identity} with
-    $a_g=\operatorname{vec}(A_g^{\mathsf T})$ and
-    $\bar a=\operatorname{vec}(A^{\mathsf T})$.  Thus
+    $a_g=\opvec(A_g^{\mathsf T})$ and
+    $\bar a=\opvec(A^{\mathsf T})$.  Thus
     \[
       \sum_g\langle a_g,S_g^{-1}a_g\rangle
         -\langle\bar a,S^{-1}\bar a\rangle
@@ -2997,17 +2997,17 @@ Theorem~\ref{thm:trace_norm_abs}.
         thm:weyl_sourceA_resolvent_defect_identity}
     For the positive definite finite-Weyl family, let
     \[
-      \operatorname{Def}_A(t)=
-        \sum_g\operatorname{Re}\langle A_g,T_g^{-1}(A_g)\rangle_{\rm HS}
-        -\operatorname{Re}\langle A,T^{-1}(A)\rangle_{\rm HS}
+      \Def_A(t)=
+        \sum_g\re\langle A_g,T_g^{-1}(A_g)\rangle_{\rm HS}
+        -\re\langle A,T^{-1}(A)\rangle_{\rm HS}
     \]
-    and define $\operatorname{Def}_B(t)$ analogously, with the real parts of
+    and define $\Def_B(t)$ analogously, with the real parts of
     the corresponding source-$B$ pairings.  Then both defects are
     nonnegative and continuous for $t>0$, and
     \[
       \sum_gD(A_g\Vert B_g)-D(A\Vert B)
       =\int_0^\infty
-        \frac{\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)}{1+t}\,dt.
+        \frac{\Def_A(t)+t\Def_B(t)}{1+t}\,dt.
     \]
     The integrand is continuous, nonnegative, and integrable on
     $(0,\infty)$.  The coefficient of the source-$B$ defect is exactly $t$,
@@ -3031,9 +3031,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     \uses{thm:weyl_resolvent_defect_identity}
     Under the hypotheses and notation of the preceding theorem, suppose that
     \begin{equation}\label{eq:weyl_resolvent_zero_defect_hyp}
-        \sum_g\operatorname{Re}
+        \sum_g\re
           \langle B_g,T_g^{-1}(B_g)\rangle_{\mathrm{HS}}
-          -\operatorname{Re}
+          -\re
           \langle B,T^{-1}(B)\rangle_{\mathrm{HS}}=0.
     \end{equation}
     Then, for every Weyl index $g$,
@@ -3070,7 +3070,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \[
       \sum_gD(A_g\Vert B_g)-D(A\Vert B)=0.
     \]
-    Then $\operatorname{Def}_B(t)=0$ for every $t>0$, and consequently
+    Then $\Def_B(t)=0$ for every $t>0$, and consequently
     \[
       T_g^{-1}(B_g)=T^{-1}(B)
     \]
@@ -3088,8 +3088,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     Theorem~\ref{thm:weyl_relative_entropy_gap_integral} is nonnegative and
     has integral zero, hence it vanishes almost everywhere.  Its continuity
     improves this to vanishing at every $t>0$.  Since
-    $\operatorname{Def}_A(t)\geq0$, $\operatorname{Def}_B(t)\geq0$, and
-    $t/(1+t)>0$, it follows that $\operatorname{Def}_B(t)=0$.  Theorem
+    $\Def_A(t)\geq0$, $\Def_B(t)\geq0$, and
+    $t/(1+t)>0$, it follows that $\Def_B(t)=0$.  Theorem
     \ref{thm:weyl_resolvent_zero_defect} now gives the common solution.
 \end{proof}
 
@@ -3117,14 +3117,14 @@ Theorem~\ref{thm:trace_norm_abs}.
     resolvent satisfies
     \[
       \left(A\otimes\mathbf 1+t\,\mathbf 1\otimes B^{\mathsf T}\right)^{-1}
-        \operatorname{vec}(B^{\mathsf T})
+        \opvec(B^{\mathsf T})
       =\left(t\mathbf 1+\Delta_{A,B}\right)^{-1}
-        \operatorname{vec}(\mathbf 1^{\mathsf T}),
+        \opvec(\mathbf 1^{\mathsf T}),
     \]
     and
     \[
-      \sqrt{\Delta_{A,B}}\,\operatorname{vec}(\mathbf 1^{\mathsf T})
-        =\operatorname{vec}\!\left(
+      \sqrt{\Delta_{A,B}}\,\opvec(\mathbf 1^{\mathsf T})
+        =\opvec\!\left(
           (\sqrt A\,(\sqrt B)^{-1})^{\mathsf T}\right).
     \]
     These are the positive-square-root specializations of the passage from
@@ -3173,14 +3173,14 @@ Theorem~\ref{thm:trace_norm_abs}.
     For matrices $M$ and $P$, column-stacking vectorization satisfies
     \[
       \left(\mathbf 1\otimes P^{\mathsf T}\right)
-        \operatorname{vec}(M^{\mathsf T})
-      =\operatorname{vec}\!\left((MP)^{\mathsf T}\right).
+        \opvec(M^{\mathsf T})
+      =\opvec\!\left((MP)^{\mathsf T}\right).
     \]
 \end{lemma}
 
 \begin{proof}\leanok
     This is the Kronecker vectorization identity
-    $(B\otimes A)\operatorname{vec}(X)=\operatorname{vec}(AXB^{\mathsf T})$
+    $(B\otimes A)\opvec(X)=\opvec(AXB^{\mathsf T})$
     with $A=P^{\mathsf T}$, $B=\mathbf 1$, and $X=M^{\mathsf T}$.
 \end{proof}
 
@@ -3196,8 +3196,8 @@ Theorem~\ref{thm:trace_norm_abs}.
       \left(A\otimes\mathbf 1+t(\mathbf 1\otimes B^{\mathsf T})\right)
       (\mathbf 1\otimes P_B^{\mathsf T})
       \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
-      \operatorname{vec}(\mathbf 1^{\mathsf T})
-      =\operatorname{vec}(B^{\mathsf T}).
+      \opvec(\mathbf 1^{\mathsf T})
+      =\opvec(B^{\mathsf T}).
     \]
 \end{lemma}
 
@@ -3227,8 +3227,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
     The Kronecker vectorization identity gives
     \[
-      C\operatorname{vec}(\mathbf 1^{\mathsf T})
-        =\operatorname{vec}(B^{\mathsf T}),
+      C\opvec(\mathbf 1^{\mathsf T})
+        =\opvec(B^{\mathsf T}),
     \]
     which is the claim.
 \end{proof}
@@ -3242,8 +3242,8 @@ Theorem~\ref{thm:trace_norm_abs}.
     $B^+=(B^{-1/2}_{\mathrm{supp}})^2$.  Then
     \[
       \sqrt{A\otimes(B^+)^{\mathsf T}}\,
-        \operatorname{vec}(\mathbf 1^{\mathsf T})
-      =\operatorname{vec}\!\left(
+        \opvec(\mathbf 1^{\mathsf T})
+      =\opvec\!\left(
         (\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
     \]
 \end{lemma}
@@ -3258,7 +3258,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \]
     Uniqueness of the positive square root gives the corresponding Kronecker
     factorization.  Applying the Kronecker vectorization identity to
-    $\operatorname{vec}(\mathbf 1^{\mathsf T})$ gives the stated equation.
+    $\opvec(\mathbf 1^{\mathsf T})$ gives the stated equation.
 \end{proof}
 
 \begin{lemma}[Relative modular square-root ratio on the support]
@@ -3302,22 +3302,22 @@ Theorem~\ref{thm:trace_norm_abs}.
     By Lemma~\ref{lem:support_relative_modular_sqrt_evaluation},
     \[
       \sqrt{A\otimes(B^+)^{\mathsf T}}\,
-        \operatorname{vec}(\mathbf 1^{\mathsf T})
-      =\operatorname{vec}\!\left(
+        \opvec(\mathbf 1^{\mathsf T})
+      =\opvec\!\left(
         (\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
     \]
     Setting $Q=\mathbf 1\otimes P_B^{\mathsf T}$ and applying the common-
     resolvent lemma (Lemma~\ref{lem:positive_sqrt_from_common_resolvents}) gives
     \[
-      \operatorname{vec}\!\left(
+      \opvec\!\left(
         (\sqrt A\,B^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right)
-      =\operatorname{vec}\!\left(
+      =\opvec\!\left(
         (\sqrt C\,D^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right).
     \]
     Since
     \[
-      \operatorname{vec}(X^{\mathsf T})
-        =\operatorname{vec}(Y^{\mathsf T})\quad\Longrightarrow\quad X=Y,
+      \opvec(X^{\mathsf T})
+        =\opvec(Y^{\mathsf T})\quad\Longrightarrow\quad X=Y,
     \]
     injectivity of vectorization gives the conclusion.
 \end{proof}
@@ -3478,13 +3478,13 @@ Theorem~\ref{thm:trace_norm_abs}.
     Lemma~\ref{lem:log_kronecker_possemidef} into the cross term of the relative
     entropy and using the two partial-trace adjoint identities gives
     \[
-        \operatorname{Re}\operatorname{tr}
+        \re\tr
         \bigl(\omega_{XY}\log(\omega_X\otimes\omega_Y)\bigr)
         =-S(\omega_X)-S(\omega_Y).
     \]
     The asserted formula follows from
     $D(\rho\,\|\,\sigma)=-S(\rho)
-        -\operatorname{Re}\operatorname{tr}(\rho\log\sigma)$.
+        -\re\tr(\rho\log\sigma)$.
 \end{proof}
 
 \begin{theorem}[SSA equality as saturation for the product marginals]

@@ -508,7 +508,7 @@ the boundary of a projective simplex.
     \[
         T_C(\ket{v}\bra{v})
         =
-        \operatorname{diag}\!\left(
+        \diag\!\left(
             (d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2
         \right)
         -\ket{v}\bra{v}.
@@ -577,7 +577,7 @@ the boundary of a projective simplex.
     \]
     then
     \[
-        \operatorname{diag}(a_i)-\ket{v}\bra{v}\ge 0 .
+        \diag(a_i)-\ket{v}\bra{v}\ge 0 .
     \]
 \end{lemma}
 
@@ -589,12 +589,12 @@ the boundary of a projective simplex.
         =\sum_i \frac{|v_i|^2}{a_i}\le 1
     \]
     under the same zero-term convention.  Lemma~\ref{lem:rankone_complement_from_unit_bound}
-    gives $I-\ket{p}\bra{p}\ge0$.  If $S=\operatorname{diag}(\sqrt{a_i})$, then
+    gives $I-\ket{p}\bra{p}\ge0$.  If $S=\diag(\sqrt{a_i})$, then
     the support condition gives
     \[
         S\bigl(I-\ket{p}\bra{p}\bigr)S^\dagger
         =
-        \operatorname{diag}(a_i)-\ket{v}\bra{v}.
+        \diag(a_i)-\ket{v}\bra{v}.
     \]
     Conjugation by $S$ preserves positive semidefiniteness, which proves the
     claim.
@@ -621,7 +621,7 @@ the boundary of a projective simplex.
 \begin{proof}
     \leanok
     The matrix in Lemma~\ref{lem:choi_type_map_rankone} has the form
-    $\operatorname{diag}(a_i)-\ket{v}\bra{v}$.  Each $a_i$ is nonnegative.  Since
+    $\diag(a_i)-\ket{v}\bra{v}$.  Each $a_i$ is nonnegative.  Since
     $n\le d-2$, the coefficient $d-n$ is positive; hence $a_i=0$ forces
     $v_i=0$.  The hypotheses of
     Lemma~\ref{lem:diagonal_rankone_schur_complement} therefore apply and give
@@ -1271,7 +1271,7 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     when it is a finite sum of pure-state projectors of Schmidt rank at most $n$,
     \[
         \rho=\sum_i\ket{\psi_i}\bra{\psi_i},
-        \qquad \operatorname{SR}(\psi_i)\le n.
+        \qquad \SR(\psi_i)\le n.
     \]
 \end{definition}
 
@@ -1374,7 +1374,7 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
         lem:rank_one_ampliation_choi_compression,
         thm:choi_right_compression_quadratic_form, thm:schmidt_rank_choi_test_iff}
     For a pure state $\ket{\psi}\bra{\psi}$ on the square bipartite system
-    $\MN{D}\otimes\MN{D}$ with $\operatorname{SR}(\psi)\le n$ and
+    $\MN{D}\otimes\MN{D}$ with $\SR(\psi)\le n$ and
     $1\le n<D$, applying $T_n$ to the first factor keeps the result positive
     semidefinite:
     \[
@@ -1386,11 +1386,11 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     \leanok
     The map $T_n$ is $n$-positive for $1\le n<D$.  Write $\psi$ through the maximally
     entangled vector as $\psi=\psi_X$ for a square matrix $X$ on the right factor with
-    $\operatorname{rank}(X)=\operatorname{SR}(\psi)\le n$.  Then
+    $\rank(X)=\SR(\psi)\le n$.  Then
     $(T_n\otimes\id)(\ket{\psi}\bra{\psi})$ is the right-factor Choi compression of
     $T_n$ by $X$.  Its quadratic form on any vector $\eta$ is the Choi quadratic form
     of $T_n$ on $R_X^\dagger\eta$, whose Schmidt rank is at most
-    $\operatorname{rank}(X)\le n$.  The Schmidt-rank Choi criterion makes that form
+    $\rank(X)\le n$.  The Schmidt-rank Choi criterion makes that form
     nonnegative, so the compression is positive semidefinite.
 \end{proof}
 
@@ -1403,7 +1403,7 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
         lem:rank_one_ampliation_choi_compression,
         thm:choi_right_compression_quadratic_form, thm:schmidt_rank_choi_test_iff}
     For a pure state $\ket{\psi}\bra{\psi}$ on the square bipartite system
-    $\MN{D}\otimes\MN{D}$ with $\operatorname{SR}(\psi)\le n$ and any $n$-positive map
+    $\MN{D}\otimes\MN{D}$ with $\SR(\psi)\le n$ and any $n$-positive map
     $T$, applying $T$ to the first factor keeps the result positive semidefinite:
     \[
         (T\otimes\id)(\ket{\psi}\bra{\psi})\ge 0.
@@ -1414,11 +1414,11 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     \leanok
     Write $\psi$ through the maximally entangled vector as $\psi=\psi_X$ for a square
     matrix $X$ on the right factor with
-    $\operatorname{rank}(X)=\operatorname{SR}(\psi)\le n$.  Then
+    $\rank(X)=\SR(\psi)\le n$.  Then
     $(T\otimes\id)(\ket{\psi}\bra{\psi})$ is the right-factor Choi compression of $T$
     by $X$, and its quadratic form on a vector $\eta$ equals the Choi quadratic form
     $C_T$ of $T$ evaluated on $R_X^\dagger\eta$, a vector of Schmidt rank at most
-    $\operatorname{rank}(X)\le n$.  Because $T$ is $n$-positive,
+    $\rank(X)\le n$.  Because $T$ is $n$-positive,
     \[
         \langle R_X^\dagger\eta,\, C_T\, R_X^\dagger\eta\rangle\ge 0,
     \]
@@ -1537,18 +1537,18 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     Every real-linear functional $g$ on the space of square complex matrices is the
     trace form of a Hermitian matrix: there is a Hermitian $H_0$ with
     \[
-        g(X)=\operatorname{Re}\tr(X H_0)
+        g(X)=\re\tr(X H_0)
         \qquad\text{for every Hermitian }X.
     \]
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The real bilinear pairing $(X,H)\mapsto\operatorname{Re}\tr(X H)$ is nondegenerate,
+    The real bilinear pairing $(X,H)\mapsto\re\tr(X H)$ is nondegenerate,
     because on the diagonal pair $(H,H^{\dagger})$ it equals the squared Frobenius norm
-    $\operatorname{Re}\tr(H H^{\dagger})=\sum_{i,j}\lvert H_{ij}\rvert^2$, which is positive
+    $\re\tr(H H^{\dagger})=\sum_{i,j}\lvert H_{ij}\rvert^2$, which is positive
     unless $H=0$.  Hence the map sending $H$ to the functional
-    $X\mapsto\operatorname{Re}\tr(X H)$ is an injective real-linear map from the matrix
+    $X\mapsto\re\tr(X H)$ is an injective real-linear map from the matrix
     space to its real dual.  These two spaces have the same finite real dimension, so the
     map is also surjective, and every $g$ is represented by some $H$.  Replacing $H$ by
     its Hermitian part $\tfrac12(H+H^{\dagger})$ keeps the value on Hermitian inputs,
@@ -1567,9 +1567,9 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     Let $\rho$ be a trace-one Hermitian bipartite state whose Schmidt number exceeds $n$.
     Then there is a Hermitian operator $W$ with
     \[
-        \operatorname{Re}\tr(W\rho)<0,
+        \re\tr(W\rho)<0,
         \qquad
-        \operatorname{Re}\bra{\psi}W\ket{\psi}\ge 0
+        \re\bra{\psi}W\ket{\psi}\ge 0
         \quad\text{for every $\psi$ of Schmidt rank at most }n.
     \]
     This is the only-if direction of Wolf's Proposition~3.3
@@ -1584,11 +1584,11 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     closed convex set $\{\rho\}$ from the compact convex set $S_n$ by a continuous
     real-linear functional $f$ and a constant $c$ with $f(\rho)<c<f(\sigma)$ for every
     $\sigma\in S_n$.  Representing $f$ as the trace form of a Hermitian $H_0$ and setting
-    $W=H_0-c\,\Id$ gives $\operatorname{Re}\tr(W\rho)=f(\rho)-c<0$.  For a vector $\psi$
+    $W=H_0-c\,\Id$ gives $\re\tr(W\rho)=f(\rho)-c<0$.  For a vector $\psi$
     of Schmidt rank at most $n$ the projector $\ket{\psi}\bra{\psi}$, after
     normalization by $\lVert\psi\rVert^2$, is a trace-one state of $S_n$, so its value
     under $f$ is at least $c$; multiplying back by the squared norm gives
-    $\operatorname{Re}\bra{\psi}W\ket{\psi}\ge 0$, with the zero vector giving the value
+    $\re\bra{\psi}W\ket{\psi}\ge 0$, with the zero vector giving the value
     $0$ directly.
 \end{proof}
 
@@ -1601,9 +1601,9 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     Let $\rho$ be a trace-one Hermitian bipartite state.  Then the Schmidt number of
     $\rho$ exceeds $n$ if and only if there is a Hermitian operator $W$ with
     \[
-        \operatorname{Re}\tr(W\rho)<0,
+        \re\tr(W\rho)<0,
         \qquad
-        \operatorname{Re}\bra{\psi}W\ket{\psi}\ge 0
+        \re\bra{\psi}W\ket{\psi}\ge 0
         \quad\text{for every $\psi$ of Schmidt rank at most }n.
     \]
     This is Wolf's Proposition~3.3 \cite[Chapter~3, Proposition~3.3]{Wolf2012Quantum}: a
@@ -1617,8 +1617,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     (\ref{thm:exists_entanglement_witness}).  For the converse, suppose $\rho$ had Schmidt
     number at most $n$, so $\rho=\sum_i\ket{\psi_i}\bra{\psi_i}$ with each $\psi_i$ of
     Schmidt rank at most $n$.  By linearity of the trace,
-    $\operatorname{Re}\tr(W\rho)=\sum_i\operatorname{Re}\tr\!\bigl(W\ket{\psi_i}\bra{\psi_i}\bigr)$,
-    a sum of nonnegative terms, contradicting $\operatorname{Re}\tr(W\rho)<0$.  This
+    $\re\tr(W\rho)=\sum_i\re\tr\!\bigl(W\ket{\psi_i}\bra{\psi_i}\bigr)$,
+    a sum of nonnegative terms, contradicting $\re\tr(W\rho)<0$.  This
     converse uses no density-matrix hypotheses on $\rho$.
 \end{proof}
 
@@ -1648,7 +1648,7 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
         thm:schmidt_rank_choi_test_iff, thm:exists_entanglement_witness}
     Assume $D>0$.  Let $W$ be a Hermitian operator on $\C^D\otimes\C^D$ with
     \[
-        \operatorname{Re}\bra{\psi}W\ket{\psi}\ge 0
+        \re\bra{\psi}W\ket{\psi}\ge 0
         \quad\text{for every $\psi$ of Schmidt rank at most }n.
     \]
     Then $W$ is the Choi matrix of an $n$-positive map $T$.  This is the

@@ -352,7 +352,7 @@ directly to periodic tensors.
     \leanok
     \uses{def:lcm_period, def:blocked_tensor}
     Given a finite family of tensors $(B_i)$ with designated periods $(p_i)$,
-    block each $B_i$ to the shared period $\operatorname{lcm}(p_i)$, so
+    block each $B_i$ to the shared period $\lcm(p_i)$, so
     every block lives in the same physical space.
 \end{definition}
 
@@ -368,7 +368,7 @@ directly to periodic tensors.
 \end{theorem}
 
 \begin{proof}\leanok
-    Each $p_i$ divides $\operatorname{lcm}(p_i)$.
+    Each $p_i$ divides $\lcm(p_i)$.
     Apply the divisibility monotonicity theorem for primitive blocked transfer maps
     to each family member separately.
 \end{proof}
@@ -1235,12 +1235,12 @@ unconditional result.
     \[
     \begin{aligned}
         O_{A_{u+1},B_{v+1}}(N)
-        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_{u+1}A^\tau)\,
-            \overline{\operatorname{tr}(Q_{v+1}B^\tau)}\\
-        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_{u+1}A^{T\tau})\,
-            \overline{\operatorname{tr}(Q_{v+1}B^{T\tau})}\\
-        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_uA^\tau)\,
-            \overline{\operatorname{tr}(Q_vB^\tau)}
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^\tau)\,
+            \overline{\tr(Q_{v+1}B^\tau)}\\
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^{T\tau})\,
+            \overline{\tr(Q_{v+1}B^{T\tau})}\\
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_uA^\tau)\,
+            \overline{\tr(Q_vB^\tau)}
         =O_{A_u,B_v}(N).
     \end{aligned}
     \]

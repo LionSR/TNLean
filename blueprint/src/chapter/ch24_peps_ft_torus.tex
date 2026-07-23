@@ -29,7 +29,7 @@ the periods $n$ and $m$.
 \end{center}
 Translations act on the vertices and edges. Transporting a tensor along a graph
 isomorphism $\phi$ relabels its coefficients by
-$\operatorname{Coeff}_{A^\phi}(\sigma)=\operatorname{Coeff}_A(\sigma\circ\phi)$,
+$\Coeff_{A^\phi}(\sigma)=\Coeff_A(\sigma\circ\phi)$,
 so two tensors generating the same state still do after transport. This is the
 setting in which the normal Fundamental Theorem specializes to a single
 site-independent tensor and produces the global phase of
@@ -91,9 +91,9 @@ site-independent tensor and produces the global phase of
     For every graph isomorphism $\phi:G\simeq G'$ and every physical
     configuration $\sigma$ on the vertices of $G'$,
     \[
-        \operatorname{Coeff}_{A^\phi}(\sigma)
+        \Coeff_{A^\phi}(\sigma)
         =
-        \operatorname{Coeff}_{A}(\sigma\circ\phi).
+        \Coeff_{A}(\sigma\circ\phi).
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -117,13 +117,13 @@ site-independent tensor and produces the global phase of
 \begin{proof}\leanok
     By Theorem~\ref{thm:peps_stateCoeff_transport},
     \[
-        \operatorname{Coeff}_{A^\phi}(\sigma)
+        \Coeff_{A^\phi}(\sigma)
         =
-        \operatorname{Coeff}_{A}(\sigma\circ\phi)
+        \Coeff_{A}(\sigma\circ\phi)
         =
-        \operatorname{Coeff}_{B}(\sigma\circ\phi)
+        \Coeff_{B}(\sigma\circ\phi)
         =
-        \operatorname{Coeff}_{B^\phi}(\sigma),
+        \Coeff_{B^\phi}(\sigma),
     \]
     where the middle equality is the assumed equality of state coefficients.
 \end{proof}
@@ -151,19 +151,19 @@ site-independent tensor and produces the global phase of
     If $A$ is translation invariant on the discrete torus, then for every
     translation $\tau_{a,b}$ and every physical configuration $\sigma$,
     \[
-        \operatorname{Coeff}_{A}(\sigma\circ\tau_{a,b})
+        \Coeff_{A}(\sigma\circ\tau_{a,b})
         =
-        \operatorname{Coeff}_{A}(\sigma).
+        \Coeff_{A}(\sigma).
     \]
 \end{theorem}
 \begin{proof}\leanok
     Theorem~\ref{thm:peps_stateCoeff_transport} gives
     \[
-        \operatorname{Coeff}_{A}(\sigma\circ\tau_{a,b})
+        \Coeff_{A}(\sigma\circ\tau_{a,b})
         =
-        \operatorname{Coeff}_{A^{\tau_{a,b}}}(\sigma)
+        \Coeff_{A^{\tau_{a,b}}}(\sigma)
         =
-        \operatorname{Coeff}_{A}(\sigma),
+        \Coeff_{A}(\sigma),
     \]
     where the second equality substitutes $A^{\tau_{a,b}}=A$ from translation
     invariance.
@@ -732,7 +732,7 @@ site-independent tensor and produces the global phase of
     contracting the added block $S\setminus R$ between the boundary of $R$ and
     the boundary of $S$.  The bare corner extension is
     \[
-        \overline{\operatorname{Ext}}_{R\subseteq S}(C)_{\nu,\sigma}
+        \overline{\Ext}_{R\subseteq S}(C)_{\nu,\sigma}
         =
         \sum_{\mu\in \partial R}
         C_{\mu,\sigma|_R}\,
@@ -740,7 +740,7 @@ site-independent tensor and produces the global phase of
     \]
     The normalized corner extension of $C$ from $R$ to $S$ is the region insert
     \[
-        \operatorname{Ext}_{R\subseteq S}(C)_{\nu,\sigma}
+        \Ext_{R\subseteq S}(C)_{\nu,\sigma}
         =
         P_{V\setminus S}^{-1}
         \sum_{\mu\in \partial R}
@@ -763,7 +763,7 @@ site-independent tensor and produces the global phase of
     \[
         \Psi_{A,R,C}
         =
-        \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}.
+        \Psi_{A,S,\Ext_{R\subseteq S}(C)}.
     \]
 \end{theorem}
 \begin{proof}
@@ -772,7 +772,7 @@ site-independent tensor and produces the global phase of
     $S\setminus R$ from the complement $V\setminus S$.  The corner-extension
     sum contracts the added block first, giving the pointwise identity
     \[
-        \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}(\tau)
+        \Psi_{A,S,\Ext_{R\subseteq S}(C)}(\tau)
         =
         P_{V\setminus S}^{-1}\,P_{V\setminus S}\,
         \Psi_{A,R,C}(\tau)
@@ -797,9 +797,9 @@ site-independent tensor and produces the global phase of
     $C_1$ and $C_2$ whose deformed states agree.  Let $U$ be their
     $(L+1)\times K$ union.  Then their extensions to $U$ agree:
     \[
-        \operatorname{Ext}_{W_1\subseteq U}(C_1)
+        \Ext_{W_1\subseteq U}(C_1)
         =
-        \operatorname{Ext}_{W_2\subseteq U}(C_2).
+        \Ext_{W_2\subseteq U}(C_2).
     \]
 \end{theorem}
 \begin{proof}
@@ -808,24 +808,24 @@ site-independent tensor and produces the global phase of
     single-window deformed state as the deformed state on $U$ with the
     corresponding extended insert:
     \[
-        \Psi_{A,U,\operatorname{Ext}_{W_1\subseteq U}(C_1)}
+        \Psi_{A,U,\Ext_{W_1\subseteq U}(C_1)}
         =
         \Psi_{A,W_1,C_1}
         =
         \Psi_{A,W_2,C_2}
         =
-        \Psi_{A,U,\operatorname{Ext}_{W_2\subseteq U}(C_2)}.
+        \Psi_{A,U,\Ext_{W_2\subseteq U}(C_2)}.
     \]
     Since $U$ is injective, equality of the two $U$-states implies equality
     of the two inserts:
     \[
-        \Psi_{A,U,\operatorname{Ext}_{W_1\subseteq U}(C_1)}
+        \Psi_{A,U,\Ext_{W_1\subseteq U}(C_1)}
         =
-        \Psi_{A,U,\operatorname{Ext}_{W_2\subseteq U}(C_2)}
+        \Psi_{A,U,\Ext_{W_2\subseteq U}(C_2)}
         \quad\Longrightarrow\quad
-        \operatorname{Ext}_{W_1\subseteq U}(C_1)
+        \Ext_{W_1\subseteq U}(C_1)
         =
-        \operatorname{Ext}_{W_2\subseteq U}(C_2).
+        \Ext_{W_2\subseteq U}(C_2).
     \]
 \end{proof}
 
@@ -844,9 +844,9 @@ site-independent tensor and produces the global phase of
     If the deformed states of the two end-window inserts agree, then their
     extensions to the staircase patch $P$ have equal deformed states:
     \[
-        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq P}(C_0)}
+        \Psi_{A,P,\Ext_{W_{\mathrm{right}}\subseteq P}(C_0)}
         =
-        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})}.
+        \Psi_{A,P,\Ext_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})}.
     \]
 \end{theorem}
 \begin{proof}
@@ -854,13 +854,13 @@ site-independent tensor and produces the global phase of
     Applying Theorem~\ref{thm:peps_corner_extension_state_preserves} to each
     end window gives
     \[
-        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq P}(C_0)}
+        \Psi_{A,P,\Ext_{W_{\mathrm{right}}\subseteq P}(C_0)}
         =
         \Psi_{A,W_{\mathrm{right}},C_0}
         =
         \Psi_{A,W_{\mathrm{left}},C_{\mathrm{end}}}
         =
-        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})},
+        \Psi_{A,P,\Ext_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})},
     \]
     where the middle equality is the hypothesis.
 \end{proof}
@@ -941,19 +941,19 @@ site-independent tensor and produces the global phase of
     The corner extension is linear in the inserted boundary coefficients.  For
     nested regions $R\subseteq S\subseteq P$, the bare extension satisfies
     \[
-        \overline{\operatorname{Ext}}_{S\subseteq P}
-        \bigl(\overline{\operatorname{Ext}}_{R\subseteq S}(C)\bigr)
+        \overline{\Ext}_{S\subseteq P}
+        \bigl(\overline{\Ext}_{R\subseteq S}(C)\bigr)
         =
         P_{V\setminus S}\,
-        \overline{\operatorname{Ext}}_{R\subseteq P}(C)
+        \overline{\Ext}_{R\subseteq P}(C)
     \]
     without a positivity assumption.  If all bond dimensions are positive, the
     normalized corner extension is transitive:
     \[
-        \operatorname{Ext}_{S\subseteq P}
-        \bigl(\operatorname{Ext}_{R\subseteq S}(C)\bigr)
+        \Ext_{S\subseteq P}
+        \bigl(\Ext_{R\subseteq S}(C)\bigr)
         =
-        \operatorname{Ext}_{R\subseteq P}(C).
+        \Ext_{R\subseteq P}(C).
     \]
 \end{theorem}
 \begin{proof}
@@ -1007,15 +1007,15 @@ site-independent tensor and produces the global phase of
     positive and that the added block $Q=S\setminus R$ is blocked-tensor
     injective.  If a region insert $C$ on $R$ has zero corner extension,
     \[
-        \operatorname{Ext}_{R\subseteq S}(C)=0,
+        \Ext_{R\subseteq S}(C)=0,
     \]
     then $C=0$.
 \end{theorem}
 \begin{proof}
     \leanok
     Since all bond dimensions are positive, $P_{V\setminus S}\ne 0$.
-    Thus $\operatorname{Ext}_{R\subseteq S}(C)=0$ is equivalent to
-    $\overline{\operatorname{Ext}}_{R\subseteq S}(C)=0$.  Fix the physical
+    Thus $\Ext_{R\subseteq S}(C)=0$ is equivalent to
+    $\overline{\Ext}_{R\subseteq S}(C)=0$.  Fix the physical
     configuration $\sigma_R$ on $R$.  Let
     \[
         \rho:\partial R \simeq \partial(V\setminus R)
@@ -1108,9 +1108,9 @@ site-independent tensor and produces the global phase of
     that $S\setminus R$ is blocked-tensor injective.  If two inserts on $R$
     have the same corner extension to $S$,
     \[
-        \operatorname{Ext}_{R\subseteq S}(C_1)
+        \Ext_{R\subseteq S}(C_1)
         =
-        \operatorname{Ext}_{R\subseteq S}(C_2),
+        \Ext_{R\subseteq S}(C_2),
     \]
     then $C_1=C_2$.
 \end{theorem}
@@ -1118,7 +1118,7 @@ site-independent tensor and produces the global phase of
     \leanok
     By linearity,
     \[
-        \operatorname{Ext}_{R\subseteq S}(C_1-C_2)=0.
+        \Ext_{R\subseteq S}(C_1-C_2)=0.
     \]
     Theorem~\ref{thm:peps_extend_insert_kernel_trivial_added_injective}
     applied to the added block $S\setminus R$ gives $C_1-C_2=0$, hence
@@ -1141,9 +1141,9 @@ site-independent tensor and produces the global phase of
     positive.
     If two inserts $X$ and $Y$ on $S$ have equal extensions to $S\cup Q$,
     \[
-        \operatorname{Ext}_{S\subseteq S\cup Q}(X)
+        \Ext_{S\subseteq S\cup Q}(X)
         =
-        \operatorname{Ext}_{S\subseteq S\cup Q}(Y),
+        \Ext_{S\subseteq S\cup Q}(Y),
     \]
     then $X=Y$.  Thus the injective completed corner can be cancelled from an
     open-boundary equality, without assuming injectivity of the torus
@@ -1350,9 +1350,9 @@ site-independent tensor and produces the global phase of
     equal one common state, then the two end-window inserts have equal corner
     extensions to $S$:
     \[
-        \operatorname{Ext}_{W_0\subseteq S}(C_0)
+        \Ext_{W_0\subseteq S}(C_0)
         =
-        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1}).
+        \Ext_{W_{L+K-1}\subseteq S}(C_{L+K-1}).
     \]
 \end{theorem}
 \begin{proof}
@@ -1408,7 +1408,7 @@ site-independent tensor and produces the global phase of
     \[
         C_B(W_0,e,M;\sigma|_{W_0},\sigma|_{V\setminus W_0})
         =
-        \Psi_{B,S,\operatorname{Ext}_{W_0\subseteq S}(C_0)}(\sigma),
+        \Psi_{B,S,\Ext_{W_0\subseteq S}(C_0)}(\sigma),
     \]
     and
     \[
@@ -1416,13 +1416,13 @@ site-independent tensor and produces the global phase of
             \sigma|_{W_{L+K-1}},\sigma|_{V\setminus W_{L+K-1}})
         =
         \Psi_{B,S,
-        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1})}(\sigma).
+        \Ext_{W_{L+K-1}\subseteq S}(C_{L+K-1})}(\sigma).
     \]
     The open-boundary equality on the staircase end pair gives
     \[
-        \operatorname{Ext}_{W_0\subseteq S}(C_0)
+        \Ext_{W_0\subseteq S}(C_0)
         =
-        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1}),
+        \Ext_{W_{L+K-1}\subseteq S}(C_{L+K-1}),
     \]
     and hence the two coefficients are equal.
 \end{proof}

@@ -148,9 +148,9 @@ maps.
     A vector $\psi\in\C^{D}\otimes\C^{k}$ is identified with its coefficient
     matrix $C_\psi\in \MN{D,k}(\C)$.  Its Schmidt rank is
     \[
-        \operatorname{SR}(\psi)=\rank(C_\psi).
+        \SR(\psi)=\rank(C_\psi).
     \]
-    We write $\operatorname{SR}(\psi)\le r$ for the corresponding bounded-rank
+    We write $\SR(\psi)\le r$ for the corresponding bounded-rank
     condition.
 \end{definition}
 
@@ -162,7 +162,7 @@ maps.
     \uses{def:schmidt_rank}
     The zero vector has Schmidt rank zero, every vector satisfies
     \[
-        \operatorname{SR}(\psi)\le \min(D,k),
+        \SR(\psi)\le \min(D,k),
     \]
     and every product vector $u\otimes v$ has Schmidt rank at most one.
 \end{theorem}
@@ -170,10 +170,10 @@ maps.
 \begin{proof}
     \leanok
     The zero-vector claim is $\rank(0)=0$.  For the dimension bounds,
-    $\operatorname{SR}(\psi)=\rank(C_\psi)\le D$ and
-    $\operatorname{SR}(\psi)=\rank(C_\psi)\le k$ follow from the row-rank and
+    $\SR(\psi)=\rank(C_\psi)\le D$ and
+    $\SR(\psi)=\rank(C_\psi)\le k$ follow from the row-rank and
     column-rank bounds on a $D\times k$ matrix, hence
-    $\operatorname{SR}(\psi)\le \min(D,k)$.  For a product vector, each column
+    $\SR(\psi)\le \min(D,k)$.  For a product vector, each column
     of $C_{u\otimes v}$ is a scalar multiple of $u$, so the column span has
     dimension at most one.
 \end{proof}
@@ -197,10 +197,10 @@ maps.
     \uses{def:schmidt_rank, def:schmidt_singular_values}
     The Schmidt singular values are indexed from zero.  The nonzero Schmidt
     singular values of $\psi$ are exactly those with index below
-    $\operatorname{SR}(\psi)$.  Equivalently, for zero-based indexing,
+    $\SR(\psi)$.  Equivalently, for zero-based indexing,
     \[
         s_k(\psi)=0 \quad\Longleftrightarrow\quad
-        \operatorname{SR}(\psi)\le k .
+        \SR(\psi)\le k .
     \]
 \end{theorem}
 
@@ -216,8 +216,8 @@ maps.
     \lean{Matrix.HasSchmidtRankLE.mono}
     \leanok
     \uses{def:schmidt_rank}
-    If $\operatorname{SR}(\psi)\le k$ and $k\le l$, then
-    $\operatorname{SR}(\psi)\le l$.
+    If $\SR(\psi)\le k$ and $k\le l$, then
+    $\SR(\psi)\le l$.
 \end{lemma}
 
 \begin{lemma}[Rank factorization through a coordinate space]
@@ -247,7 +247,7 @@ maps.
     a normalized vector $\psi$ of Schmidt rank at most $n$ is the Ky-Fan
     $n$-norm of $\rho$:
     \[
-        \max_{\operatorname{SR}(\psi)\le n,\ \|\psi\|=1}
+        \max_{\SR(\psi)\le n,\ \|\psi\|=1}
             |\braket{\phi}{\psi}|^2 = \|\rho\|_{(n)} .
     \]
     Because $\rho$ is positive semidefinite, this norm is the sum of its $n$
@@ -302,7 +302,7 @@ maps.
     \lean{Matrix.maximalSchmidtOverlap_eq_kyFanNorm_top}
     \leanok
     \uses{def:schmidt_rank, def:ky_fan_norm}
-    At the top index $n=D$ the Schmidt-rank constraint $\operatorname{SR}(\psi)\le D$
+    At the top index $n=D$ the Schmidt-rank constraint $\SR(\psi)\le D$
     is vacuous, so the largest squared overlap is the Ky-Fan $D$-norm of $\rho$,
     \[
         \max_{\|\psi\|=1} |\braket{\phi}{\psi}|^2 = \|\rho\|_{(D)} ,
@@ -631,7 +631,7 @@ maps.
     \]
     satisfies
     \[
-      \operatorname{SR}(\psi_X)=\rank X.
+      \SR(\psi_X)=\rank X.
     \]
 \end{theorem}
 
@@ -654,9 +654,9 @@ maps.
     \[
       \psi_{(i,p)}=D^{-1/2}X_{i,p}
       \quad\text{and}\quad
-      \rank X=\operatorname{SR}(\psi).
+      \rank X=\SR(\psi).
     \]
-    In particular, if $\operatorname{SR}(\psi)\le r$, then $X$ may be chosen
+    In particular, if $\SR(\psi)\le r$, then $X$ may be chosen
     with $\rank X\le r$.
 \end{theorem}
 
@@ -690,7 +690,7 @@ maps.
     \[
       C_\psi = D^{-1/2}X,
     \]
-    so $\operatorname{rank}(C_\psi)=\operatorname{rank}(X)$, since
+    so $\rank(C_\psi)=\rank(X)$, since
     multiplication by a nonzero scalar preserves rank.
 \end{proof}
 
@@ -772,7 +772,7 @@ maps.
       \langle\psi,\tau_T\psi\rangle\ge 0
     \]
     for every $\psi\in\C^D\otimes\C^D$ with
-    $\operatorname{SR}(\psi)\le k$.
+    $\SR(\psi)\le k$.
 \end{theorem}
 
 \begin{proof}
@@ -798,7 +798,7 @@ maps.
       \langle\psi,\tau_T\psi\rangle\ge 0
     \]
     for every $\psi\in\C^D\otimes\C^D$ with
-    $\operatorname{SR}(\psi)\le k$, then $T$ is $k$-positive.
+    $\SR(\psi)\le k$, then $T$ is $k$-positive.
 \end{theorem}
 
 \begin{proof}
@@ -809,7 +809,7 @@ maps.
     $\langle\eta,C_T(X)\eta\rangle$ with
     $\langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle$, and
     Lemma~\ref{lem:right_tensor_adjoint_schmidt_rank} gives
-    $\operatorname{SR}(R_X^\dagger\eta)\le k$.  Thus every quadratic form of
+    $\SR(R_X^\dagger\eta)\le k$.  Thus every quadratic form of
     $C_T(X)$ is nonnegative.  Over a complex finite-dimensional space,
     polarization recovers Hermiticity from this real nonnegative quadratic
     form condition, so $C_T(X)$ is positive semidefinite.
@@ -826,7 +826,7 @@ maps.
       \langle\psi,\tau_T\psi\rangle\ge 0
     \]
     for every $\psi\in\C^D\otimes\C^D$ with
-    $\operatorname{SR}(\psi)\le k$.
+    $\SR(\psi)\le k$.
 \end{theorem}
 
 \begin{proof}
@@ -1161,7 +1161,7 @@ maps.
     The trace-pairing adjoint $E^* : \MN{D'} \to \MN{D}$ of a linear map
     $E : \MN{D} \to \MN{D'}$ between matrix algebras of possibly different
     dimensions is the adjoint for the bilinear pairing
-    $(A,B)\mapsto \operatorname{tr}(AB)$.
+    $(A,B)\mapsto \tr(AB)$.
 \end{definition}
 
 \begin{theorem}[Trace-pairing adjoint identity]\label{thm:trace_pairing_adjoint_identity}
@@ -1171,7 +1171,7 @@ maps.
     For every linear map $E : \MN{D} \to \MN{D'}$, every $\rho \in \MN{D'}$,
     and every $X \in \MN{D}$, one has
     \[
-        \operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X)).
+        \tr(E^*(\rho)X)=\tr(\rho E(X)).
     \]
 \end{theorem}
 
@@ -1179,9 +1179,9 @@ maps.
     \leanok
     Write $X=\sum_{i,j} X_{ij}e_{ij}$ in the standard matrix units and use
     linearity in $X$.  For $X=e_{ij}$ one has
-    $\operatorname{tr}(E^*(\rho)e_{ij})=(E^*(\rho))_{ji}$, while the definition
+    $\tr(E^*(\rho)e_{ij})=(E^*(\rho))_{ji}$, while the definition
     of $E^*$ gives
-    $(E^*(\rho))_{ji}=\operatorname{tr}(\rho E(e_{ij}))$.
+    $(E^*(\rho))_{ji}=\tr(\rho E(e_{ij}))$.
 \end{proof}
 
 \begin{theorem}[Trace-pairing adjoint is involutive]\label{thm:trace_pairing_adjoint_involutive}
@@ -1196,14 +1196,14 @@ maps.
     \leanok
     Fix $X\in\MN{D}$ and an arbitrary matrix $N\in\MN{D'}$.  The adjoint
     identity
-    $\operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X))$, applied first
+    $\tr(E^*(\rho)X)=\tr(\rho E(X))$, applied first
     to $E^* : \MN{D'} \to \MN{D}$ and then to $E$, gives
     \[
-        \operatorname{tr}((E^*)^*(X)N)
-        = \operatorname{tr}(X E^*(N))
-        = \operatorname{tr}(E^*(N)X)
-        = \operatorname{tr}(N E(X))
-        = \operatorname{tr}(E(X)N).
+        \tr((E^*)^*(X)N)
+        = \tr(X E^*(N))
+        = \tr(E^*(N)X)
+        = \tr(N E(X))
+        = \tr(E(X)N).
     \]
     Both $(E^*)^*(X)$ and $E(X)$ lie in $\MN{D'}$, so, since this holds for
     every $N\in\MN{D'}$, nondegeneracy of the trace pairing on $\MN{D'}$
@@ -1214,7 +1214,7 @@ maps.
     \label{thm:psd_trace_pairing_self_dual}
     \lean{Matrix.PosSemidef.of_forall_trace_mul_nonneg}
     \leanok
-    Let $A \in \MN{D}$ be Hermitian.  If $\operatorname{tr}(AB)\geq 0$ for every
+    Let $A \in \MN{D}$ be Hermitian.  If $\tr(AB)\geq 0$ for every
     positive semidefinite matrix $B$, then $A\geq 0$.
 \end{theorem}
 
@@ -1222,7 +1222,7 @@ maps.
     \leanok
     Test the hypothesis on rank-one positive semidefinite matrices
     $B=xx^\dagger$.  The identity
-    $\operatorname{tr}(Axx^\dagger)=x^\dagger A x$ and the hypothesis give
+    $\tr(Axx^\dagger)=x^\dagger A x$ and the hypothesis give
     $x^\dagger A x\geq 0$ for every vector $x$, so the Hermitian matrix $A$ is
     positive semidefinite.
 \end{proof}
@@ -1241,14 +1241,14 @@ maps.
     positivity of $E$ gives $E(A^\dagger)=E(A)^\dagger$, and hence for matrix
     units $e_{ij}$,
     \[
-        \overline{\operatorname{tr}(\rho E(e_{ij}))}
-        =\operatorname{tr}(E(e_{ij})^\dagger\rho)
-        =\operatorname{tr}(E(e_{ji})\rho)
-        =\operatorname{tr}(\rho E(e_{ji})).
+        \overline{\tr(\rho E(e_{ij}))}
+        =\tr(E(e_{ij})^\dagger\rho)
+        =\tr(E(e_{ji})\rho)
+        =\tr(\rho E(e_{ji})).
     \]
     For every $B\geq 0$, the adjoint identity gives
     \[
-        \operatorname{tr}(E^*(\rho)B)=\operatorname{tr}(\rho E(B)).
+        \tr(E^*(\rho)B)=\tr(\rho E(B)).
     \]
     Since $E(B)\geq 0$, the right side is nonnegative by positivity of the
     trace product of two positive semidefinite matrices.  Self-duality of the
@@ -1335,7 +1335,7 @@ maps.
     $\rho\in\MN{m}$ such that, for every $A\in\MN{md}$,
     \[
         E(A)=\Id_m\otimes
-        \operatorname{tr}_m\!\left((\rho\otimes\Id_d)A\right).
+        \tr_m\!\left((\rho\otimes\Id_d)A\right).
     \]
     This is the one-factor case of
     \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.
@@ -1377,7 +1377,7 @@ maps.
 
     Finally, on simple tensors,
     \[
-        \operatorname{tr}_m\!\left((\rho\otimes\Id_d)(Y\otimes X)\right)
+        \tr_m\!\left((\rho\otimes\Id_d)(Y\otimes X)\right)
         =\tr(\rho Y)X=R(Y\otimes X).
     \]
     Since matrix units are simple tensors, linearity proves the formula for
@@ -1401,7 +1401,7 @@ maps.
     and, for every $A\in\MN{D}$,
     \[
         E(A)=U\left(\bigoplus_k \Id_{m_k}\otimes
-        \operatorname{tr}_{m_k}\!\left(
+        \tr_{m_k}\!\left(
           (\rho_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*.
     \]
     Equivalently, cyclicity of the partial trace permits the factor
@@ -1426,8 +1426,8 @@ maps.
     matrix $\rho_k$.  Taking the direct sum and conjugating back proves the
     formula.  Entrywise expansion of the partial trace gives
     \[
-      \operatorname{tr}_{m_k}((\rho_k\otimes\Id)A_{kk})
-      =\operatorname{tr}_{m_k}(A_{kk}(\rho_k\otimes\Id)).
+      \tr_{m_k}((\rho_k\otimes\Id)A_{kk})
+      =\tr_{m_k}(A_{kk}(\rho_k\otimes\Id)).
     \]
 \end{proof}
 
@@ -1463,12 +1463,12 @@ maps.
     For block matrices write $\rho_{pq}$ and $X_{pq}$ for their
     $\MN{D}$-valued blocks.  Expanding the trace by blocks gives
     \[
-        \operatorname{tr}((E^*)^{(k)}(\rho)X)
-        =\sum_{p,q}\operatorname{tr}(E^*(\rho_{pq})X_{qp}).
+        \tr((E^*)^{(k)}(\rho)X)
+        =\sum_{p,q}\tr(E^*(\rho_{pq})X_{qp}).
     \]
     The trace-adjoint identity changes each summand to
-    $\operatorname{tr}(\rho_{pq}E(X_{qp}))$, and summing the blocks back gives
-    $\operatorname{tr}(\rho E^{(k)}(X))$.  Nondegeneracy of the trace pairing
+    $\tr(\rho_{pq}E(X_{qp}))$, and summing the blocks back gives
+    $\tr(\rho E^{(k)}(X))$.  Nondegeneracy of the trace pairing
     identifies the two adjoints.
 \end{proof}
 
@@ -1586,12 +1586,12 @@ maps.
 \begin{theorem}[Range inclusion implies right factorization]
     \lean{Douglas.factorization_of_range_mulVecLin_le}
     \leanok
-    If $\operatorname{ran}(A) \subseteq \operatorname{ran}(B)$, then
+    If $\ran(A) \subseteq \ran(B)$, then
     there exists $C$ such that $A = B C$.
 \end{theorem}
 
 \begin{proof}
-    In finite dimensions, $\operatorname{ran}(A) \subseteq \operatorname{ran}(B)$
+    In finite dimensions, $\ran(A) \subseteq \ran(B)$
     implies $A = B (B^\dagger B)^{\dagger} B^\dagger A$, where $(B^\dagger B)^{\dagger}$
     denotes the Moore--Penrose pseudoinverse. Set $C = (B^\dagger B)^{\dagger} B^\dagger A$.
 \end{proof}
@@ -1599,7 +1599,7 @@ maps.
 \begin{theorem}[Vectorwise range criterion implies factorization]
     \lean{Douglas.factorization_of_forall_mulVec_mem_range}
     \leanok
-    If $A v \in \operatorname{ran}(B)$ for every vector $v$, then
+    If $A v \in \ran(B)$ for every vector $v$, then
     there exists $C$ with $A = B C$.
 \end{theorem}
 
