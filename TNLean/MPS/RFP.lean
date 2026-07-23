@@ -16,6 +16,7 @@ import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.BNTWeightCounterexample
 import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
+import TNLean.MPS.RFP.BeigiLoopBNTIdentification
 import TNLean.MPS.RFP.BeigiLoopFixedPoint
 import TNLean.MPS.RFP.BeigiLoopInjectivity
 import TNLean.MPS.RFP.BeigiLoopSchmidtSupport
