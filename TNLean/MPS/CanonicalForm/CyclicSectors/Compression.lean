@@ -102,20 +102,16 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
         simp only [Matrix.mul_assoc]
       _ = P * A i * P := by rw [hV_range]
       _ = A i := hSupp i
+  have hPV : P * V = V := by
+    rw [← hV_range, Matrix.mul_assoc, hV_iso, Matrix.mul_one]
   have hIntertwineLetter : ∀ i : Fin d, A i * V = V * C i := by
     intro i
     calc
       A i * V = (P * A i * P) * V := by rw [hSupp i]
-      _ = (V * Vᴴ) * A i * (V * Vᴴ) * V := by rw [hV_range]
-      _ = ((V * Vᴴ) * A i * (V * Vᴴ)) * V := rfl
-      _ = ((V * Vᴴ) * A i) * ((V * Vᴴ) * V) := by rw [Matrix.mul_assoc]
-      _ = ((V * Vᴴ) * A i) * (V * (Vᴴ * V)) := by
-        rw [Matrix.mul_assoc V Vᴴ V]
-      _ = ((V * Vᴴ) * A i) * (V * 1) := by rw [hV_iso]
-      _ = ((V * Vᴴ) * A i) * V := by simp
-      _ = (V * (Vᴴ * A i)) * V := by rw [Matrix.mul_assoc V Vᴴ A i]
-      _ = V * ((Vᴴ * A i) * V) := by rw [Matrix.mul_assoc V (Vᴴ * A i) V]
-      _ = V * (Vᴴ * A i * V) := rfl
+      _ = P * A i * (P * V) := by rw [Matrix.mul_assoc (P * A i) P V]
+      _ = P * A i * V := by rw [hPV]
+      _ = (V * Vᴴ) * A i * V := by rw [hV_range]
+      _ = V * (Vᴴ * A i * V) := by simp only [Matrix.mul_assoc]
       _ = V * C i := rfl
   have hEvalCompression (w : List (Fin d)) :
       evalWord C w = Vᴴ * evalWord A w * V := by
@@ -130,7 +126,6 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
   · apply φ.injective
     apply Subtype.ext
     rw [hφ_apply, hφ_apply]
-    change expand (∑ i : Fin d, (C i)ᴴ * C i) = expand 1
     rw [map_sum]
     have hsum : (∑ i : Fin d, expand ((C i)ᴴ * C i)) = (∑ i : Fin d, (A i)ᴴ * A i) := by
       refine Finset.sum_congr rfl ?_
