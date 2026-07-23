@@ -15,6 +15,15 @@ decomposition used to build it.  The retained local witness is an explicit
 `PhysicalSectorFactorization` whose neighboring operators are the positive
 matrices in the commuting-bond decomposition.
 
+## Main definitions and statements
+
+* `TranslationInvariantBondData.PositivePhysicalSectorFixedProductTensorData`
+  packages the exact tensor and its retained positive physical sectors.
+* `TranslationInvariantBondData.nonempty_positivePhysicalSectorFixedProductTensorData`
+  constructs the enriched fixed-product witness.
+* `TranslationInvariantBondData.positivePhysicalSectorFixedProductTensorData`
+  selects one enriched witness.
+
 ## References
 
 * arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1605.
