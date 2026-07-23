@@ -346,9 +346,17 @@ def expand_args(args: list[str]) -> list[Path]:
 # metric table become hard errors and these counts become the ratchet.
 
 RENDER_STAGE_FILES = {"tenkz-render.code.tex"}
-_INK_TOKEN = re.compile(r"\\(?:draw|path|node|fill|filldraw|shade|pgf[a-z@]*)\b")
+# The pgf alternative names DRAWING primitives only; the pgfkeys keyval
+# machinery is parser plumbing that legitimately lives outside the renderer.
+_INK_TOKEN = re.compile(
+    r"\\(?:draw|path|node|fill|filldraw|shade"
+    r"|pgf(?:path|point|usepath|text|node|setlinewidth|setstrokecolor"
+    r"|setfillcolor|stroke|fill|transform)[a-z@]*)\b"
+)
 _DECIMAL = re.compile(r"(?<![\w@.])\d*\.\d+")
-_METRIC_LINE = re.compile(r"tenkz@r@|tenkz@basepitch|tenkz@pitch")
+# Only metric-table DEFINITIONS are exempt; a stray literal multiplying a
+# metric macro in drawing code is exactly the debt this meter measures.
+_METRIC_LINE = re.compile(r"\\def\\tenkz@(?:r@[a-z]+|basepitch|pitch)\b|\\tenkz@pitch=")
 
 
 def census(repo: Path) -> int:

@@ -43,6 +43,11 @@
     \int_zero:N \l__tenkz_model_next_int
     \bool_set_false:N \l__tenkz_model_validated_bool
     \tl_clear:N \l__tenkz_model_last_tl
+    \cs_set_eq:NN \__tenkz_model_record_atom:n \__tenkz_model_record_atom_live:n
+    \cs_set_eq:NN \__tenkz_model_record_wire:n \__tenkz_model_record_wire_live:n
+    \cs_set_eq:NN \__tenkz_model_record_mark:n \__tenkz_model_record_mark_live:n
+    \cs_set_eq:NN \__tenkz_model_record_frame:n \__tenkz_model_record_frame_live:n
+    \cs_set_eq:NN \__tenkz_model_record_picture:n \__tenkz_model_record_picture_live:n
   }
 
 % Shared constructor: #1 class word, #2 comma list of required fields,
@@ -80,17 +85,17 @@
 % requirements are the LANGUAGE-1.0 minima a record cannot exist without;
 % richer validation belongs to the language stage that produced the
 % declaration.
-\cs_new_protected:Npn \__tenkz_model_record_atom:n #1
+\cs_new_protected:Npn \__tenkz_model_record_atom_live:n #1
   { \__tenkz_model_record:nnn {atom} {kind} {#1} }
-\cs_new_protected:Npn \__tenkz_model_record_wire:n #1
+\cs_new_protected:Npn \__tenkz_model_record_wire_live:n #1
   { \__tenkz_model_record:nnn {wire} {kind} {#1} }
-\cs_new_protected:Npn \__tenkz_model_record_mark:n #1
+\cs_new_protected:Npn \__tenkz_model_record_mark_live:n #1
   { \__tenkz_model_record:nnn {mark} {form} {#1} }
-\cs_new_protected:Npn \__tenkz_model_record_frame:n #1
+\cs_new_protected:Npn \__tenkz_model_record_frame_live:n #1
   { \__tenkz_model_record:nnn {frame} {map} {#1} }
 
 % Picture-level fields merge; the picture is a single record without an id.
-\cs_new_protected:Npn \__tenkz_model_record_picture:n #1
+\cs_new_protected:Npn \__tenkz_model_record_picture_live:n #1
   {
     \bool_if:NTF \l__tenkz_model_validated_bool
       { \msg_error:nn {tenkz}{model-frozen} }
@@ -103,6 +108,14 @@
   }
 \cs_new_protected:Npn \__tenkz_model_put_picture_field:nn #1#2
   { \prop_put:Nnn \l__tenkz_model_picture_prop {#1} {#2} }
+
+% The public names bind to the live bodies; validate rebinds them to the
+% refuser and reset restores them, so reset always yields a writable store.
+\cs_new_eq:NN \__tenkz_model_record_atom:n \__tenkz_model_record_atom_live:n
+\cs_new_eq:NN \__tenkz_model_record_wire:n \__tenkz_model_record_wire_live:n
+\cs_new_eq:NN \__tenkz_model_record_mark:n \__tenkz_model_record_mark_live:n
+\cs_new_eq:NN \__tenkz_model_record_frame:n \__tenkz_model_record_frame_live:n
+\cs_new_eq:NN \__tenkz_model_record_picture:n \__tenkz_model_record_picture_live:n
 
 % Validation freezes the store for the rest of the picture group: the
 % constructors are LOCALLY rebound to the refuser, so the enclosing

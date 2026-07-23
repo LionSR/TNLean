@@ -69,9 +69,17 @@ xargs -0 -n 1 -P "$JOBS" bash -c 'compile_one "$1"' _ <"$WORK/sources.list"
 CURRENT="$WORK/current.sha256"
 (
   cd "$WORK"
-  for log in *.tnlog; do
-    python3 -c 'import hashlib,sys; print(hashlib.sha256(open(sys.argv[1],"rb").read()).hexdigest(), "", sys.argv[1])' "$log"
-  done | LC_ALL=C sort -k3
+  # Every compiled source must have produced its event log: a fixture that
+  # compiles but emits no .tnlog would otherwise vanish from the baseline
+  # silently (the corpus script guards the same invariant).
+  while IFS= read -r -d '' src; do
+    stem="$(basename "${src%.tex}")"
+    if [[ ! -f "$stem.tnlog" ]]; then
+      echo "FAIL: $stem compiled without emitting $stem.tnlog" >&2
+      exit 1
+    fi
+    python3 -c 'import hashlib,sys; print(hashlib.sha256(open(sys.argv[1],"rb").read()).hexdigest(), "", sys.argv[1])' "$stem.tnlog"
+  done <sources.list | LC_ALL=C sort -k2
 ) >"$CURRENT"
 
 count=$(wc -l <"$CURRENT" | tr -d ' ')
