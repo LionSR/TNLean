@@ -60,19 +60,6 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1435--1450. -/
 abbrev SectorChainIndex (F : PhysicalSectorFactorization K) (N : ℕ) :=
   Σ k : Fin N → Fin F.sectorCount, SectorChainFiber F k
 
-private def piSigmaEquiv
-    {ι : Type*} {α : ι → Type*} {β : (i : ι) → α i → Type*} :
-    ((i : ι) → Σ a, β i a) ≃
-      Σ a : (i : ι) → α i, (i : ι) → β i (a i) where
-  toFun x := ⟨fun i ↦ (x i).1, fun i ↦ (x i).2⟩
-  invFun x i := ⟨x.1 i, x.2 i⟩
-  left_inv x := by
-    funext i
-    exact Sigma.eta (x i)
-  right_inv x := by
-    obtain ⟨a, b⟩ := x
-    rfl
-
 /-- Applying the one-site sector decomposition at every site identifies the
 physical chain with the direct sum of its sector fibers.
 
