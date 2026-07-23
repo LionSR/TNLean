@@ -445,9 +445,17 @@
   { \int_use:N \l__tenkz_row_int - \int_use:N \l__tenkz_col_int }
 \cs_new_protected:Npn \tenkz_record:nnn #1#2#3
   {
+    % parse the options ONCE, here; the memo hands the resolution to every
+    % later pass, and the model record carries the normalized fields
+    \tenkz_cell_opts:n {#2}
     \__tenkz_model_record_atom:e
       {kind={#1},at={\tenkz_cell_key:},
-       options={\exp_not:n{#2}},label={\exp_not:n{#3}}}
+       options={\exp_not:n{#2}},label={\exp_not:n{#3}},
+       skin={\bool_if:NT \l__tenkz_cshapeexplicit_bool {\exp_not:V \l__tenkz_cshape_tl}},
+       wide={\int_use:N \l__tenkz_cwide_int},
+       wires={\int_use:N \l__tenkz_cwires_int},
+       role={\exp_not:V \l__tenkz_crole_tl},
+       species={\exp_not:V \l__tenkz_cspec_tl}}
     \prop_put:Nen \l__tenkz_kind_prop  { \tenkz_cell_key: } {#1}
     \prop_put:Nen \l__tenkz_opts_prop  { \tenkz_cell_key: } {#2}
     \prop_put:Nen \l__tenkz_label_prop { \tenkz_cell_key: } {#3}
@@ -628,10 +636,10 @@
 
 \pgfkeys{
   /tenkz/cell/.is~family,
-  /tenkz/cell/dot/.code={\tl_set:Nn \l__tenkz_cshape_tl {dot}},
-  /tenkz/cell/box/.code={\tl_set:Nn \l__tenkz_cshape_tl {box}},
-  /tenkz/cell/pill/.code={\tl_set:Nn \l__tenkz_cshape_tl {pill}},
-  /tenkz/cell/mpo/.code={\tl_set:Nn \l__tenkz_cshape_tl {mpo}},
+  /tenkz/cell/dot/.code={\tl_set:Nn \l__tenkz_cshape_tl {dot}\bool_set_true:N \l__tenkz_cshapeexplicit_bool},
+  /tenkz/cell/box/.code={\tl_set:Nn \l__tenkz_cshape_tl {box}\bool_set_true:N \l__tenkz_cshapeexplicit_bool},
+  /tenkz/cell/pill/.code={\tl_set:Nn \l__tenkz_cshape_tl {pill}\bool_set_true:N \l__tenkz_cshapeexplicit_bool},
+  /tenkz/cell/mpo/.code={\tl_set:Nn \l__tenkz_cshape_tl {mpo}\bool_set_true:N \l__tenkz_cshapeexplicit_bool},
   /tenkz/cell/wide/.code={
       \tenkz_cell_positive_integer:nnN {wide}{#1} \l__tenkz_cwide_int},
   % wires = <k>: the glyph spans k ADJACENT wire rows as ONE atom (quantikz
@@ -682,8 +690,8 @@
   % mirrors it for A_R.  Label: inside under the box policy (if it fits),
   % beside in a free quadrant under the dot policy.
   /tenkz/cell/tri/.is~choice,
-  /tenkz/cell/tri/l/.code={\tl_set:Nn \l__tenkz_cshape_tl {tril}},
-  /tenkz/cell/tri/r/.code={\tl_set:Nn \l__tenkz_cshape_tl {trir}},
+  /tenkz/cell/tri/l/.code={\tl_set:Nn \l__tenkz_cshape_tl {tril}\bool_set_true:N \l__tenkz_cshapeexplicit_bool},
+  /tenkz/cell/tri/r/.code={\tl_set:Nn \l__tenkz_cshape_tl {trir}\bool_set_true:N \l__tenkz_cshapeexplicit_bool},
   /tenkz/cell/tri/.unknown/.code={
       \bool_set_false:N \l__tenkz_celloptsvalid_bool
       \PackageError{tenkz}{Choice~'\pgfkeys@was@choice'~unknown~in~cell~tri}
@@ -743,11 +751,12 @@
       {Check~the~cell~option~spelling.}
   }
 
-\cs_new_protected:Npn \tenkz_cell_opts:n #1
+\cs_new_protected:Npn \tenkz_cell_opts_parse:n #1
   {
     % the default skin is the glyph policy (tensor style=dot|box), resolved
     % here at option-parse time; explicit per-cell skins override it below
     \tl_set:Ne \l__tenkz_cshape_tl { \tenkz@tensorstyle }
+    \bool_set_false:N \l__tenkz_cshapeexplicit_bool
     \tl_clear:N \l__tenkz_cup_tl   \tl_clear:N \l__tenkz_cdown_tl
     \tl_clear:N \l__tenkz_clpos_tl \tl_clear:N \l__tenkz_clshift_tl
     \int_set:Nn \l__tenkz_cwide_int {1}
@@ -788,6 +797,99 @@
           {\l__tenkz_cphysicalspan_int}
         \tenkz_normalize_physical_face:Nn \l__tenkz_cdownat_tl
           {\l__tenkz_cphysicalspan_int}
+      }
+  }
+
+
+% ---------- resolved options: one parse per distinct string ----------------
+% Within one picture the parser is a pure function of its option string
+% (the skin policy and strut are picture options, fixed before the body).
+% The resolved locals are snapshotted per distinct string at first parse
+% and restored on every repeat; \tenkz_record:nnn primes the memo, so a
+% recorded cell's options are parsed ONCE, at record time, and every later
+% pass restores the resolution instead of reparsing.  The memo lives in a
+% picture-local prop, so grouping retires it with the picture.
+\prop_new:N \l__tenkz_optmemo_prop
+\tl_new:N \l__tenkz_optmemo_tl
+\bool_new:N \l__tenkz_cshapeexplicit_bool
+\cs_new_protected:Npn \tenkz_cell_opts_snapshot:n #1
+  {
+    \tl_set:Ne \l__tenkz_optmemo_tl
+      {
+        \tl_set:Nn \exp_not:N \l__tenkz_cshape_tl
+          { \exp_not:V \l__tenkz_cshape_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_cup_tl
+          { \exp_not:V \l__tenkz_cup_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_cdown_tl
+          { \exp_not:V \l__tenkz_cdown_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_clpos_tl
+          { \exp_not:V \l__tenkz_clpos_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_clshift_tl
+          { \exp_not:V \l__tenkz_clshift_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_clegsat_tl
+          { \exp_not:V \l__tenkz_clegsat_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_cupat_tl
+          { \exp_not:V \l__tenkz_cupat_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_cdownat_tl
+          { \exp_not:V \l__tenkz_cdownat_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_cwestat_tl
+          { \exp_not:V \l__tenkz_cwestat_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_ceastat_tl
+          { \exp_not:V \l__tenkz_ceastat_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_cphys_tl
+          { \exp_not:V \l__tenkz_cphys_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_crole_tl
+          { \exp_not:V \l__tenkz_crole_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_cspec_tl
+          { \exp_not:V \l__tenkz_cspec_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_fcombined_tl
+          { \exp_not:V \l__tenkz_fcombined_tl }
+        \tl_set:Nn \exp_not:N \l__tenkz_gstrut_tl
+          { \exp_not:V \l__tenkz_gstrut_tl }
+        \int_set:Nn \exp_not:N \l__tenkz_cwide_int
+          { \int_use:N \l__tenkz_cwide_int }
+        \int_set:Nn \exp_not:N \l__tenkz_cwires_int
+          { \int_use:N \l__tenkz_cwires_int }
+        \int_set:Nn \exp_not:N \l__tenkz_frows_int
+          { \int_use:N \l__tenkz_frows_int }
+        \int_set:Nn \exp_not:N \l__tenkz_cphysicalspan_int
+          { \int_use:N \l__tenkz_cphysicalspan_int }
+        \bool_if:NTF \l__tenkz_cnolegs_bool
+          { \bool_set_true:N  \exp_not:N \l__tenkz_cnolegs_bool }
+          { \bool_set_false:N \exp_not:N \l__tenkz_cnolegs_bool }
+        \bool_if:NTF \l__tenkz_cphysicalrows_bool
+          { \bool_set_true:N  \exp_not:N \l__tenkz_cphysicalrows_bool }
+          { \bool_set_false:N \exp_not:N \l__tenkz_cphysicalrows_bool }
+        \bool_if:NTF \l__tenkz_celloptsvalid_bool
+          { \bool_set_true:N  \exp_not:N \l__tenkz_celloptsvalid_bool }
+          { \bool_set_false:N \exp_not:N \l__tenkz_celloptsvalid_bool }
+        \bool_if:NTF \l__tenkz_cshapeexplicit_bool
+          { \bool_set_true:N  \exp_not:N \l__tenkz_cshapeexplicit_bool }
+          { \bool_set_false:N \exp_not:N \l__tenkz_cshapeexplicit_bool }
+      }
+    \prop_put:NnV \l__tenkz_optmemo_prop {#1} \l__tenkz_optmemo_tl
+  }
+\cs_generate_variant:Nn \tenkz_cell_opts_snapshot:n { V }
+% The key carries every policy input of the parse: the skin policy, the
+% strut policy (by meaning), and the species-declaration epoch.  A mid-body
+% \tnset changes the key, so the next consumer reparses under the new
+% policy -- the draw-time-policy contract of the 0.7 surface (adv_leak).
+\tl_new:N \l__tenkz_optmemokey_tl
+\cs_new_protected:Npn \tenkz_cell_opts:n #1
+  {
+    \tl_set:Ne \l__tenkz_optmemokey_tl
+      {
+        \int_use:N \g__tenkz_species_int |
+        \tenkz@tensorstyle |
+        \cs_meaning:N \tenkz@glyphstrut |
+        \exp_not:n {#1}
+      }
+    \prop_get:NVNTF \l__tenkz_optmemo_prop \l__tenkz_optmemokey_tl
+        \l__tenkz_optmemo_tl
+      { \tl_use:N \l__tenkz_optmemo_tl }
+      {
+        \tenkz_cell_opts_parse:n {#1}
+        \tenkz_cell_opts_snapshot:V \l__tenkz_optmemokey_tl
       }
   }
 
