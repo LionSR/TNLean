@@ -21,6 +21,15 @@ normality.
 This is the implication needed to recover the block-injectivity content of a
 basis of normal tensors from the normalized representatives.
 
+## Main results
+
+* `isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one`:
+  normalized self-overlap implies primitivity and normality;
+* `IsBNTCanonicalForm.basis_isNormal`: every canonical-form basis block is
+  algebraically normal;
+* `IsBNTCanonicalForm.exists_common_basis_isNBlkInjective`: all basis blocks
+  are block injective at one common length.
+
 ## References
 
 * [Cirac--Pérez-García--Schuch--Verstraete, arXiv:2011.12127, lines 1815--1837]
