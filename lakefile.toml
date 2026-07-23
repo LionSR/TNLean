@@ -1,6 +1,7 @@
 name = "TNLean"
 version = "0.1.0"
 keywords = ["math"]
+# The default target builds the whole TNLean library.
 defaultTargets = ["TNLean"]
 
 [leanOptions]

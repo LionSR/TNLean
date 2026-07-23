@@ -1,0 +1,20 @@
+% Target: rmp-iii-a-torus-three
+% Formula: Sliding O_g through O_h conjugates h to ghg^{-1} at the crossing.
+% Ink: Canonical public tenkzfree before-and-after crossing equation.
+% Boundary: Four MPO string ends are open on each side of the equation.
+% Source: paper TN-Review-main.tex line 1605; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 563-603
+% Capabilities: free-graph, crossing-tensor, string-slide
+\[
+  \begin{tenkzfree}
+    \tnput[box]{x}{(0mm,0mm)}{h}
+    \tnjoin{-16mm,0mm}{x.west} \tnjoin[label=O_g]{x.east}{16mm,0mm}
+    \tnjoin{0mm,-16mm}{x.south} \tnjoin{x.north}{0mm,16mm}
+  \end{tenkzfree}
+  =
+  \begin{tenkzfree}
+    \tnput[box]{x}{(0mm,0mm)}{ghg^{-1}}
+    \tnjoin{-16mm,0mm}{x.west} \tnjoin[label=O_g]{x.east}{16mm,0mm}
+    \tnjoin{0mm,-16mm}{x.south} \tnjoin{x.north}{0mm,16mm}
+  \end{tenkzfree}.
+\]

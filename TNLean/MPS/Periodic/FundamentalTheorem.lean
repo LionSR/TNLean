@@ -45,7 +45,7 @@ The proportional theorem `thm:bd` is stated in two forms:
   depends on the remaining Case-3 contraction with \(F_u\), \(\Omega_u\), and the
   phases \(\kappa_v\) from arXiv:1708.00029, Appendix A, lines 1023--1117,
   formalized as `sectorTensor_proportional_of_blockedMatch` in
-  `TNLean.MPS.Periodic.Overlap.Case3`. Subsequent results using the `_of_isPeriodic`
+  `TNLean.MPS.Periodic.Overlap.SectorMatch`. Subsequent results using the `_of_isPeriodic`
   variant therefore inherit that obligation and should not be treated as unconditional.
 
 The Z-gauge construction (the scalar-entry part of `thm:bdequal`) is fully proved.
@@ -153,8 +153,8 @@ paper's content that proportional total MPVs force non-vanishing per-block overl
 **Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
 its proof transitively depends on admitted lemmas in the split overlap development:
 `TNLean.MPS.Periodic.Overlap.SelfOverlap` for self-overlap and cyclic-sector setup,
-`TNLean.MPS.Periodic.Overlap.Case2` for the no-sector-match decay route,
-`TNLean.MPS.Periodic.Overlap.Case3` for the sector-match repeated-block route, and
+`TNLean.MPS.Periodic.Overlap.NoSectorMatch` for the no-sector-match decay route,
+`TNLean.MPS.Periodic.Overlap.SectorMatch` for the sector-match repeated-block route, and
 `TNLean.MPS.Periodic.Overlap.Dichotomy` for the final dichotomy and eventual
 linear-independence statement. Subsequent users of this constructor therefore inherit
 those obligations and
@@ -398,7 +398,7 @@ equivalence.
 its proof still uses the remaining Case-3 contraction with \(F_u\), \(\Omega_u\), and
 the phases \(\kappa_v\) from arXiv:1708.00029, Appendix A, lines 1023--1117,
 formalized as `sectorTensor_proportional_of_blockedMatch` in
-`TNLean.MPS.Periodic.Overlap.Case3`. Subsequent users of this theorem inherit that
+`TNLean.MPS.Periodic.Overlap.SectorMatch`. Subsequent users of this theorem inherit that
 obligation: this variant is a convenience reformulation, not an unconditional
 strengthening. -/
 theorem fundamentalTheorem_periodic_proportional_of_isPeriodic

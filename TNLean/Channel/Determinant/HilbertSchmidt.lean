@@ -42,11 +42,12 @@ quantum channel, determinant, Hilbert-Schmidt norm, standard basis, AM-GM
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
-open ChannelDeterminant.Internal
 
 variable {d : ℕ}
 
 section WolfStatements
+
+local notation "MatrixEnd" => ChannelDeterminant.Internal.MatrixEnd
 
 variable {T : MatrixEnd d}
 

@@ -29,13 +29,14 @@ decomposition.
 * `MPOTensor.PhysicalSectorFactorization.sum_cyclicActive_trace_mul_trace_eq_pow_two`.
 * `MPOTensor.PhysicalSectorFactorization.sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two`.
 * `MPOTensor.PhysicalSectorFactorization.sum_cyclicActive_partialTraceRight_threeSiteSectorClosure`.
+* `MPOTensor.PhysicalSectorFactorization.cyclicActiveTwoStepBoundaryContraction_eq_separated`.
 
 ## Reference
 
 * arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1606--1617.
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix BigOperators ComplexOrder Kronecker
 
 namespace MPOTensor.PhysicalSectorFactorization
 
@@ -144,5 +145,147 @@ theorem sum_cyclicActive_partialTraceRight_threeSiteSectorClosure
   classical
   simp_rw [F.partialTraceRight_threeSiteSectorClosure]
   rw [← Finset.sum_smul, F.sum_cyclicActive_trace_mul_trace_eq_pow_two hpos q h]
+
+/-- The unnormalized fourth-region boundary contraction on cyclic-active
+sectors.  Its coefficient is the restricted two-step trace matrix
+$T_C^2$.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active restriction):** The coefficient is the square of
+the restricted trace matrix.  It is not replaced by the one-step matrix
+printed at source line 1613.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+noncomputable def cyclicActiveUnnormalizedTwoStepBoundaryContraction
+    (F : PhysicalSectorFactorization K)
+    (kFirst kLast : F.CyclicActiveSector) :
+    Matrix (Fin (F.rightDim kLast) × Fin (F.leftDim kFirst))
+      (Fin (F.rightDim kLast) × Fin (F.leftDim kFirst)) ℂ :=
+  ∑ q, ∑ h,
+    ((F.cyclicActiveSectorTraceMatrix ^ 2) q h : ℂ) •
+      (Matrix.partialTraceRight (F.neighboringOperator kLast q) ⊗ₖ
+        Matrix.partialTraceLeft (F.neighboringOperator h kFirst))
+
+/-- The fourth-region boundary contraction with the normalized two-step
+coefficient on cyclic-active sectors.  The two outer neighboring operators
+retain one partial trace each.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active restriction):** The coefficient is the square of
+the restricted normalized trace matrix, not the one-step coefficient printed
+at source line 1613.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+noncomputable def cyclicActiveTwoStepBoundaryContraction
+    (F : PhysicalSectorFactorization K) (lam : ℝ)
+    (kFirst kLast : F.CyclicActiveSector) :
+    Matrix (Fin (F.rightDim kLast) × Fin (F.leftDim kFirst))
+      (Fin (F.rightDim kLast) × Fin (F.leftDim kFirst)) ℂ :=
+  ∑ q, ∑ h,
+    (((lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2) q h : ℂ) •
+      (Matrix.partialTraceRight (F.neighboringOperator kLast q) ⊗ₖ
+        Matrix.partialTraceLeft (F.neighboringOperator h kFirst))
+
+/-- Rescaling the restricted trace matrix by a positive scalar extracts the
+corresponding square from the unnormalized fourth-region boundary.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active restriction):** This identity relates $T_C^2$ to
+$(\lambda^{-1}T_C)^2$ and does not identify either square with $T_C$.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem cyclicActiveUnnormalizedTwoStepBoundaryContraction_eq_smul
+    (F : PhysicalSectorFactorization K) (lam : ℝ) (hlam : 0 < lam)
+    (kFirst kLast : F.CyclicActiveSector) :
+    F.cyclicActiveUnnormalizedTwoStepBoundaryContraction kFirst kLast =
+      ((lam : ℂ) ^ 2) •
+        F.cyclicActiveTwoStepBoundaryContraction lam kFirst kLast := by
+  classical
+  ext x y
+  simp only [cyclicActiveUnnormalizedTwoStepBoundaryContraction,
+    cyclicActiveTwoStepBoundaryContraction, Matrix.sum_apply,
+    Matrix.smul_apply, smul_eq_mul]
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro q _
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro h _
+  have hcoeff :
+      (F.cyclicActiveSectorTraceMatrix ^ 2) q h =
+        lam ^ 2 *
+          ((lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2) q h := by
+    rw [show F.cyclicActiveSectorTraceMatrix ^ 2 =
+        F.cyclicActiveSectorTraceMatrix * F.cyclicActiveSectorTraceMatrix by
+          simp [pow_two],
+      show (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2 =
+        (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) *
+          (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) by simp [pow_two],
+      Matrix.mul_apply, Matrix.mul_apply]
+    simp only [Matrix.smul_apply, smul_eq_mul]
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro r _
+    field_simp [ne_of_gt hlam]
+  rw [hcoeff, Complex.ofReal_mul]
+  push_cast
+  ring
+
+/-- The separated boundary operators associated with positive factors of the
+normalized two-step cyclic-active coefficient.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active restriction):** The factors belong to
+$(\lambda^{-1}T_C)^2$ and do not factor the one-step matrix.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+noncomputable def cyclicActiveSeparatedBoundary
+    (F : PhysicalSectorFactorization K)
+    (a b : F.CyclicActiveSector → ℝ)
+    (kFirst kLast : F.CyclicActiveSector) :
+    Matrix (Fin (F.rightDim kLast) × Fin (F.leftDim kFirst))
+      (Fin (F.rightDim kLast) × Fin (F.leftDim kFirst)) ℂ :=
+  (∑ q, ((a q : ℂ) •
+      Matrix.partialTraceRight (F.neighboringOperator kLast q))) ⊗ₖ
+    (∑ h, ((b h : ℂ) •
+      Matrix.partialTraceLeft (F.neighboringOperator h kFirst)))
+
+/-- A rank-one factorization of the normalized two-step coefficient separates
+the two surviving fourth-region boundaries.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active restriction):** This theorem uses a factorization
+of $(\lambda^{-1}T_C)^2$.  It neither identifies $T_C$ with its square nor
+uses the unreduced sector matrix.  See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem cyclicActiveTwoStepBoundaryContraction_eq_separated
+    (F : PhysicalSectorFactorization K) (lam : ℝ)
+    (a b : F.CyclicActiveSector → ℝ)
+    (hab : (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2 =
+      Matrix.vecMulVec a b)
+    (kFirst kLast : F.CyclicActiveSector) :
+    F.cyclicActiveTwoStepBoundaryContraction lam kFirst kLast =
+      F.cyclicActiveSeparatedBoundary a b kFirst kLast := by
+  classical
+  ext x y
+  simp only [cyclicActiveTwoStepBoundaryContraction,
+    cyclicActiveSeparatedBoundary, Matrix.sum_apply, Matrix.smul_apply,
+    Matrix.kroneckerMap_apply, smul_eq_mul]
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro q _
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro h _
+  have hentry := congrFun (congrFun hab q) h
+  simp only [Matrix.vecMulVec_apply] at hentry
+  rw [hentry, Complex.ofReal_mul]
+  ring
 
 end MPOTensor.PhysicalSectorFactorization

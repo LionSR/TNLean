@@ -471,9 +471,7 @@
     \uses{def:mpdo_translation_invariant_bond_data,
         def:mpdo_eta_local_structure_data,
         def:mpdo_fixed_bond_product_tensor,
-        thm:mpdo_commuting_bond_positive_eta_decomposition,
-        thm:mpdo_eta_pair_bond_cyclic_product_transport,
-        thm:mpdo_cyclic_edge_weight_tensor}
+        thm:mpdo_commuting_bond_positive_eta_decomposition}
     Let $B\geq0$ be a two-site bond whose periodic translates commute.  There
     is a positive integer $R$ and a matrix-product tensor $C$ of virtual
     dimension $R$, both independent of the chain length, such that for every
@@ -481,29 +479,123 @@
     \[
         \rho^{(N)}(C)=\prod_{n=0}^{N-1}B_{n,n+1}.
     \]
-    When $d>0$, the construction has $R=d^2$; when $d=0$, one may take
-    $R=1$.
-    No normality, zero-correlation-length, or scalar normalization hypothesis
-    is required.
+    The construction gives a positive $R$ independent of $N$.  No normality,
+    zero-correlation-length, or scalar normalization hypothesis is required.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
-        thm:mpdo_eta_pair_bond_cyclic_product_transport,
-        thm:mpdo_cyclic_edge_weight_tensor}
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition}
     Choose Beigi's chain-independent one-site unitary and the positive
-    neighboring operators $\eta_{q,h}$.  In the resulting sector coordinates,
-    the entries of the bond product are
+    neighboring operators $\eta_{q,h}$.  For a common matrix-unit index set
+    $\mathcal A$, write
     \[
-        \prod_{n=0}^{N-1}
-        (\eta_{k_n,k_{n+1}})_{(r_n,l_{n+1}),(r_n',l_{n+1}')},
+        \eta_{q,h}\bigl((r,l),(r',l')\bigr)
+        =
+        \sum_{a\in\mathcal A}
+        R_a(q)_{r,r'}L_a(h)_{l,l'}.
     \]
-    with weight zero unless the ket and bra sector labels agree at each site.
-    The cyclic edge-weight tensor generates this product at every length.
-    Conjugating that tensor by the inverse one-site coordinate change gives
-    $C$ in the original physical coordinates.  Tensor-power unitary
-    conjugation carries its closed operators to the products of the original
-    translates of $B$.
+    Thus the contraction of the right factor at one site with the left factor
+    at the next satisfies
+    \[
+        \sum_{a\in\mathcal A} R_a(q)\otimes L_a(h)=\eta_{q,h}.
+    \]
+    If $V$ is the resulting unitary change to the two-site sector
+    coordinates, this contraction gives
+    \[
+        \widetilde B=VBV^\dagger,
+        \qquad
+        B_{\mathrm{phys}}
+        =V^\dagger \widetilde B V=B.
+    \]
+    For a nonzero physical space, $\mathcal A$ is nonempty and gives a positive
+    virtual dimension.  For the zero-dimensional physical space, take one
+    virtual state and no physical sectors.  The cyclic contraction formula
+    then gives the product of the translates of $B$ at every length $N\geq2$.
+\end{proof}
+
+\begin{theorem}[Positive physical sectors of the selected fixed tensor]
+    \label{thm:mpdo_fixed_bond_positive_physical_sector_representative}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      exists_positive_physicalSectorFactorization_fixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      PositivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      nonempty_positivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      positivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.etaSectorFinEquiv}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sectorCoordinateBond_etaPair_decomposition}
+    \leanok
+    \uses{thm:mpdo_eta_fixed_bond_product_tensor}
+    Let $C$ be the selected fixed tensor of the preceding theorem.  There are
+    physical sectors
+    \[
+        \mathbb C^d
+        \cong
+        \bigoplus_{q=0}^{K-1}H_q^L\otimes H_q^R,
+    \]
+    a unitary $U$, and matrices $L_\beta(q)$ and $R_\alpha(q)$ such that,
+    writing $C_{\beta,\alpha}$ for the physical matrix at fixed virtual
+    indices,
+    \[
+        U C_{\beta,\alpha}U^\dagger
+        =
+        \bigoplus_{q=0}^{K-1}
+          L_\beta(q)\otimes R_\alpha(q).
+    \]
+    The neighboring operators
+    \[
+        \eta_{q,h}
+        =
+        \sum_a R_a(q)\otimes L_a(h)
+    \]
+    are positive semidefinite.  If $U_2$ denotes the induced two-site change
+    of coordinates, then
+    \[
+        B
+        =
+        U_2^\dagger
+        \left[
+          \bigoplus_{q,h}
+          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}
+        \right]
+        U_2.
+    \]
+    Thus the physical-sector factorization belongs to the same tensor $C$
+    whose closed operators are the fixed products of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take the physical-sector factorization retained with $C$.  Its defining
+    one-site identity is
+    \[
+        U C_{\beta,\alpha}U^\dagger
+        =
+        \bigoplus_q L_\beta(q)\otimes R_\alpha(q).
+    \]
+    Contracting the adjacent right and left factors gives
+    \[
+        \eta_{q,h}=\sum_a R_a(q)\otimes L_a(h)\succeq0,
+    \]
+    where positivity is the retained neighboring-operator property.  Finally,
+    the retained bond identity is
+    \[
+        B
+        =
+        U_2^\dagger
+        \left[
+          \bigoplus_{q,h}
+          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}
+        \right]
+        U_2.
+    \]
 \end{proof}
 
 \begin{remark}[The scalar edge formula depends on the one-site coordinates]
@@ -1109,19 +1201,99 @@
     two trace factors by $\lambda^{-1}$ gives the normalized identity.
 \end{proof}
 
-% Tracked in https://github.com/LionSR/TNLean/issues/4445.
-\begin{remark}[Open fourth-region coordinate identification]
-    \notready
-    Theorem~\ref{thm:mpdo_source_zcl_iterated_marginal_stability} gives the
-    required equality of normalized marginals, while
-    Theorem~\ref{thm:mpdo_cyclic_active_three_boundary_trace} and
-    Theorem~\ref{thm:mpdo_cyclic_active_deletion} give the local coefficient
-    and the deletion of vanishing cyclic summands.  It remains to
-    transport the marginal equality through the complete physical-sector
-    direct sum, retaining the two outer partial traces.  This must be done
-    without identifying $T_C$ with $T_C^2$ or $T_C$ with the unreduced Beigi
-    matrix.
-\end{remark}
+\begin{theorem}[Cyclic-active fourth-region factorization]
+    \label{thm:mpdo_cyclic_active_fourth_region_factorization}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_source_zcl_iterated_marginal_stability,
+      thm:mpdo_cyclic_active_three_boundary_trace,
+      thm:mpdo_cyclic_active_deletion}
+    Let $\mathcal K$ be injective and have source zero correlation length,
+    and suppose its neighboring operators are positive semidefinite.  There
+    are $\lambda>0$ and strictly positive functions $a,b$ on the
+    cyclic-active sectors, normalized by $a\mathbin{\boldsymbol\cdot}b=1$,
+    such that every fourth-region marginal is a direct sum over retained
+    sector words of the unchanged interior neighboring product tensored with
+    the separated left and right boundary factors determined by $a$ and $b$.
+
+    % Local fix (cyclic-active restriction): the coefficient being factorized
+    % is $(\lambda^{-1}T_C)^2$, obtained from one additional source-ZCL
+    % marginal replacement and three traced boundary sites. No equality
+    % between $T_C$ and $T_C^2$ is used. This correction is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    The additional marginal replacement leaves the retained interior product
+    unchanged and produces the two-step coefficient on the cyclic-active
+    sectors.  Its positive rank-one factorization separates the two surviving
+    boundary sums.  All sector words leaving the cyclic-active support vanish
+    before the two outer partial traces are evaluated.
+\end{proof}
+
+\begin{theorem}[Cyclic-active Markov decomposition at every cut]
+    \label{thm:mpdo_cyclic_active_markov_all_cuts}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_cyclic_active_fourth_region_factorization,
+      def:hayashi_markov_decomposition}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_cyclic_active_fourth_region_factorization}, for
+    arbitrary $A,C\geq 0$, the fourth-region marginal on consecutive regions
+    of lengths $A$, $1$, and $C$ admits a Hayashi Markov decomposition.
+    The middle site decomposes as the direct sum of its left and right sector
+    factors.  Each block is the tensor product of normalized positive left
+    and right path states, and its probability is the product of their
+    unnormalized traces divided by the positive periodic normalization.
+
+    % Local fix (cyclic-active restriction): the block weights and path states
+    % arise from the factorization of $(\lambda^{-1}T_C)^2$ described above.
+    % This correction is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Separate the retained chain at the distinguished middle site.  The
+    retained neighboring factors split into the left and right path products,
+    while the two cyclic endpoint factors become their respective boundary
+    matrices.  Normalize each positive block by its trace, using an arbitrary
+    trace-one positive matrix when the block vanishes.  The trace-one identity
+    for the full marginal shows that the resulting nonnegative block weights
+    sum to one.
+\end{proof}
+
+\begin{theorem}[Physical-sector factorization and ZCL imply SAL]
+    \label{thm:mpdo_physical_sector_factorization_zcl_sal}
+    \lean{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_cyclic_active_markov_all_cuts,
+      thm:mpdo_all_cut_markov_implies_sal,
+      thm:mpdo_physical_support_restriction_sal}
+    Let $\mathcal K$ have positive bond dimension and be injective, and let
+    $F$ be a physical-sector factorization of $\mathcal K$.  Suppose every
+    neighboring operator $\eta^F_{q,h}$ is positive semidefinite.  If the
+    physical-trace transfer of $\mathcal K$ has source zero correlation
+    length, then $\mathcal K$ saturates the area law.
+
+    % **Scope restriction (physical-sector factorization):** The theorem
+    % assumes the factorization F and positivity of every neighboring
+    % operator.  CPSV16 Proposition 4to2, lines 1597--1619, starts instead
+    % from a translation-invariant commuting bond and the original source
+    % tensor.  The selected fixed tensor now has the required positive
+    % factorization, but the normality and blocking comparison with the source
+    % tensor remains; see docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity of the neighboring operators makes every nonempty
+    sector-coordinate chain operator positive.  Source zero correlation
+    length makes its trace nonzero.  Apply the preceding theorem with
+    $A=m-1$ and $C=N-m-1$ at every admissible cut, then use the all-cut
+    Markov criterion.  Finally transport saturation through the physical
+    isometry of $F$.
+\end{proof}
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}

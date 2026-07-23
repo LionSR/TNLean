@@ -1,4 +1,8 @@
-% tenkz-lattice — L2c: lattice-region schematics.
+% Input: validated lattice topology, regions, and projected-frame policy.
+% Output: normalized atoms/connections/regions plus lattice-specific layout ink.
+% Owned state: projected basis, sheets, cell sets, obstacles, and boundary signature.
+% Invariants: body commands only record; geometry and drawing follow validation.
+% Next stage: shared event services emit the resolved model used for rendering.
 %
 %   \begin{tenkzlattice}[keys]  body  \end{tenkzlattice}
 %
@@ -1126,11 +1130,11 @@
       {\tl_set:Nn \l__tenkzl_rslot_tl {complement}},
   /tenkz/region/slot/collar/.code=
       {\tl_set:Nn \l__tenkzl_rslot_tl {collar}},
+  /tenkz/region/slot/neutral/.code=
+      {\tl_set:Nn \l__tenkzl_rslot_tl {neutral}},
   /tenkz/region/slot/.unknown/.code={
       \bool_set_false:N \l__tenkzl_region_valid_bool
-      \PackageError{tenkz}
-        {Choice~'\pgfkeys@was@choice'~unknown~in~lattice-region~slot}
-        {Use~selected,~secondary,~complement,~or~collar.}},
+      \msg_error:nnn {tenkz}{region-slot}{\pgfkeys@was@choice}},
   /tenkz/region/outline/.code=
       {\bool_set_true:N \l__tenkzl_routline_bool},
   /tenkz/region/label/.store~in=\l__tenkzl_rlabel_tl,

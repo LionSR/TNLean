@@ -1,0 +1,30 @@
+% Target: rmp-workbench-iii-intertwining-mpo
+% Formula: (per site, MPO virtual spaces):
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Resolved by the public environment; archival boundary contract is explicit.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex lines
+%   448-467; archival output interMPO.pdf
+% Capabilities: grid, typed-ports
+\[
+  % LHS: gh at site 1, then X_gh, then (g over h) at sites 2 and 3
+  \begin{tenkz}[rows={op:operator}, tensor style=box]
+    \tn{gh}
+  \end{tenkz}
+  \!
+  \begin{tenkz}[rows={op:operator, op:operator}, west=none,
+                tensor style=box]
+    \tn[box, wires=2, no legs]{X_{gh}} & \tn{g} & \tn{g}\\
+                                       & \tn{h} & \tn{h}
+  \end{tenkz}
+  \;=\;
+  % RHS: gh at sites 1 and 2, then X_gh, then (g over h) at site 3
+  \begin{tenkz}[rows={op:operator}, tensor style=box]
+    \tn{gh} & \tn{gh}
+  \end{tenkz}
+  \!
+  \begin{tenkz}[rows={op:operator, op:operator}, west=none,
+                tensor style=box]
+    \tn[box, wires=2, no legs]{X_{gh}} & \tn{g}\\
+                                       & \tn{h}
+  \end{tenkz}
+\]

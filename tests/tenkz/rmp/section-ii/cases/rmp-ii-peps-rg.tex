@@ -1,0 +1,68 @@
+% Target: rmp-ii-peps-rg
+% Formula: A renormalized 2x2 PEPS plaquette decomposes into the four source panels
+%   (a)-(d).
+% Ink: Canonical public tenkzlattice, tenkz environments; no raw TikZ.
+% Boundary: Each PEPS factor keeps its exterior legs open; the final bead closes only
+%   its virtual ring.
+% Source: paper TN-Review-main.tex line 1025; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 742-800
+% Capabilities: grid, lattice, typed-ports
+(a) the renormalized plaquette:
+\[
+  \begin{tenkzlattice}[rows=2, cols=2, frame=oblique, outer legs=both,
+                       physical=up]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
+\]
+
+(b) original tensor $\otimes$ disentangled product states:
+\[
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, outer legs=both,
+                       physical=up]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
+  \;\otimes\;
+  % three 1-leg beads: leg up / leg east / leg west
+  \begin{tenkz}[physical=up, west=none, east=none]
+    \tn{}
+  \end{tenkz}
+  \;
+  \begin{tenkz}[west=none]
+    \tn{}
+  \end{tenkz}
+  \;
+  \begin{tenkz}[east=none]
+    \tn{}
+  \end{tenkz}
+\]
+
+(c) original tensor $\otimes$ a generating matrix product:
+\[
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, outer legs=both,
+                       physical=up]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
+  \;\otimes\;
+  % two bonded 3-leg tensors, outer virtual sides sealed
+  \begin{tenkz}[physical=up, west=none, east=none]
+    \tn{} & \tn{}
+  \end{tenkz}
+\]
+
+(d) two copies of the original tensor $\otimes$ the traced bead:
+\[
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, outer legs=both,
+                       physical=up]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
+  \;\otimes\;
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, outer legs=both,
+                       physical=up]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
+  \;\otimes\;
+  % the bead whose virtual wire closes on itself: hooks trace closure
+  \begin{tenkz}[physical=up, boundary=periodic, trace style=hooks]
+    \tn{}
+  \end{tenkz}
+\]

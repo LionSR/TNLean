@@ -1,0 +1,22 @@
+% Target: rmp-iii-a-commuting-hamiltonian
+% Formula: (rho = the 6-site MPO word A x A x A x A x A x A on the red
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Resolved by the public environment; open indices remain explicit.
+% Source: paper TN-Review-main.tex line 1389; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 289-304
+% Capabilities: grid, typed-ports
+\[
+  % LHS: h . rho -- gate above, contracted with the up legs of sites 3,4
+  \begin{tenkz}[rows={op:none, op:operator}, tensor style=box]
+    \tnskip & \tnskip & \tn[pill, wide=2, down at={1,2}]{h} & & \tnskip
+      & \tnskip \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \end{tenkz}
+  \;=\;
+  % RHS: rho . h -- the same gate below, contracted with the down legs
+  \begin{tenkz}[rows={op:operator, op:none}, tensor style=box]
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tnskip & \tnskip & \tn[pill, wide=2, up at={1,2}]{h} & & \tnskip
+      & \tnskip
+  \end{tenkz}
+\]

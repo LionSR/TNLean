@@ -1,0 +1,19 @@
+% Target: rmp-ii-staircase
+% Formula: |psi> = V_5 V_4 V_3 V_2 |0>, with V_k : H_beta -> H_i tensor H_beta.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: The initial state closes the input; each isometry exposes one output and
+%   the final bond.
+% Source: paper TN-Review-main.tex line 514; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 541-546
+% Capabilities: grid, typed-ports
+\[
+  \lvert\psi\rangle \;=\;
+  % rows = wires; V_k spans wires (k, k+1) at column k+1; |0> feeds wire 1
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, west=none]
+    \tn[dot]{\lvert 0\rangle} & \tn[box, wires=2]{V} & & & \\
+    & & \tn[box, wires=2]{V} & & \\
+    & & & \tn[box, wires=2]{V} & \\
+    & & & & \tn[box, wires=2]{V}\\
+    & & & &
+  \end{tenkz}
+\]

@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep
-import TNLean.MPS.Periodic.Overlap.Case1
-import TNLean.MPS.Periodic.Overlap.Case2
-import TNLean.MPS.Periodic.Overlap.Case3
+import TNLean.MPS.Periodic.Overlap.DifferentPeriod
+import TNLean.MPS.Periodic.Overlap.NoSectorMatch
+import TNLean.MPS.Periodic.Overlap.SectorMatch
 import TNLean.MPS.Periodic.Overlap.Dichotomy
 
 /-!
@@ -22,10 +22,10 @@ The supporting modules are:
   self-overlap.
 * `TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep` — the spectral
   non-repetition crux (off-diagonal vanishing).
-* `TNLean.MPS.Periodic.Overlap.Case1` — different periods imply orthogonality.
-* `TNLean.MPS.Periodic.Overlap.Case2` — equal period with no sector match
+* `TNLean.MPS.Periodic.Overlap.DifferentPeriod` — different periods imply orthogonality.
+* `TNLean.MPS.Periodic.Overlap.NoSectorMatch` — equal period with no sector match
   implies orthogonality.
-* `TNLean.MPS.Periodic.Overlap.Case3` — equal period with a sector match yields
+* `TNLean.MPS.Periodic.Overlap.SectorMatch` — equal period with a sector match yields
   repeated blocks.
 * `TNLean.MPS.Periodic.Overlap.Dichotomy` — the source proposition
   `equal-or-orthogonal-generalized` and eventual linear independence.

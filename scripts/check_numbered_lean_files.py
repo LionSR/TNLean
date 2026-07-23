@@ -24,9 +24,6 @@ ARCHIVE_ROOT = "TNLean/Archive/"
 # for their mathematical responsibility, then use a concept-named aggregator.
 NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
     {
-        "TNLean/MPS/Periodic/Overlap/Case1.lean",
-        "TNLean/MPS/Periodic/Overlap/Case2.lean",
-        "TNLean/MPS/Periodic/Overlap/Case3.lean",
         "TNLean/PEPS/CoherentFrameInstance2.lean",
         "TNLean/PEPS/NormalSquareFundamentalTheorem2.lean",
         "TNLean/PEPS/RegionBlock/CoarseThreeSite10.lean",

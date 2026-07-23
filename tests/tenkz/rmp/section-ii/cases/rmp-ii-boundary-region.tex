@@ -1,0 +1,19 @@
+% Target: rmp-ii-boundary-region
+% Formula: |psi> = sum_{I,Ibar} A^I_{partial R} B^Ibar_{partial R}.
+% Ink: Canonical public tenkzlattice, tenkz environments; no raw TikZ.
+% Boundary: The sheet exterior is open; the reduced pair seals outer virtual sides at
+%   partial R.
+% Source: paper TN-Review-main.tex line 806; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 650-684
+% Capabilities: grid, lattice, regions, typed-ports
+\[
+  \begin{tenkzlattice}[rows=5, cols=6, frame=oblique,
+                       physical=up, outer legs=both]
+    \tnregion[label=$R$, label pos=center]{(2-4,2-5)}
+  \end{tenkzlattice}
+  \;=\;
+  \begin{tenkz}[physical=up, boundary=none,
+                bond label={$\partial R$ at 1-2}]
+    \tn[label pos=south]{A^{I}} & \tn[label pos=south]{B^{\bar{I}}}
+  \end{tenkz}
+\]

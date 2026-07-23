@@ -1,0 +1,18 @@
+% Target: rmp-ii-reduced-density
+% Formula: rho_n = Tr[rho^R A^n rho^L (A^*)^n].
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: rho^R and rho^L close both virtual ends; all ket and bra physical legs
+%   remain open.
+% Source: paper TN-Review-main.tex line 421; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 484-499
+% Capabilities: grid, typed-ports
+\[
+  \rho_n \;=\;
+  % ket rail: A^{s_1} .. A^{s_4}, up legs open; bra rail: conjugates, down
+  % legs open; the cups + on-bend dots are the trace through rho^R / rho^L.
+  \begin{tenkz}[rows={ket:nopair, bra},
+                west={cup=$\rho^R$}, east={cup=$\rho^L$}]
+    \tn{} & \tn{} & \tn{} & \tn{}\\
+    \tn*{} & \tn*{} & \tn*{} & \tn*{}
+  \end{tenkz}
+\]

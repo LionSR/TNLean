@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.MPDO.BNTTheoremData
 import TNLean.MPS.MPDO.VerticalCF
 
@@ -142,10 +143,11 @@ structure BNTAlgebraTensorClause (M : MPOTensor d D) where
 
   Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
   coisometry : verticalCoisometry * (verticalCoisometry)ᴴ = 1
-  /-- The chosen tensors form a basis of normal tensors of the vertical tensor.
+  /-- The chosen tensors form a CPSV16 basis of normal tensors of the vertical tensor.
 
   Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  isBNT : MPSTensor.IsBNT (verticalTensor M) labelCount bondDim tensor
+  isCPSVBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+    (fun α ↦ ⟨bondDim α, tensor α⟩)
   /-- Conjugating the vertical tensor gives the weighted BNT direct sum.
 
   Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
@@ -171,6 +173,12 @@ structure BNTAlgebraTensorClause (M : MPOTensor d D) where
     (verticalBNTOperatorFamily tensor) (verticalBNTTraceScalarFamily weight)
 
 namespace BNTAlgebraTensorClause
+
+/-- The source BNT predicate in the tensor clause entails the algebraic BNT
+predicate for its chosen vertical decomposition. -/
+theorem isBNT {M : MPOTensor d D} (H : BNTAlgebraTensorClause M) :
+    MPSTensor.IsBNT (verticalTensor M) H.labelCount H.bondDim H.tensor :=
+  H.isCPSVBNT.isBNT
 
 /-- The chosen decomposition in a tensor-attached BNT algebra clause is a
 vertical canonical form of the underlying MPO tensor. -/

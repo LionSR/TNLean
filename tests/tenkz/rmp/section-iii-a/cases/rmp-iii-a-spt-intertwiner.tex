@@ -1,0 +1,17 @@
+% Target: rmp-iii-a-spt-intertwiner
+% Formula: X_gh fuses O_g O_h to O_gh and obeys the local associativity move.
+% Ink: Canonical public tenkz stacked MPO words with an explicit X_gh fusion box.
+% Boundary: Two incoming MPO interfaces fuse to one outgoing gh interface.
+% Source: paper TN-Review-main.tex line 1466; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 448-467
+% Capabilities: grid, fusion-map, equation-composition
+\[
+  \begin{tenkz}[rows={op:operator, op:operator}, tensor style=box]
+    \tn{g} & \tn{g} & \tn[box, wires=2]{X_{gh}}\\
+    \tn{h} & \tn{h} &
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={op:operator}, tensor style=box]
+    \tn[box]{X_{gh}} & \tn{gh} & \tn{gh}
+  \end{tenkz}.
+\]

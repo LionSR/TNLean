@@ -1,18 +1,11 @@
-% manual2.tex — the tenkz manual, second edition.
+% manual2.tex - the compact, citable tenkz language manual.
 %
-% A new document, not a revision of manual.tex: the page is an asymmetric
-% grid with a 50 mm margin column, and every example is one measured unit —
-% formula in the margin, rendered diagram first, quiet source block beneath,
-% ink-to-index correspondence as a numbered sidenote.  All examples are
-% live-compiled through tenkzmanual2.sty; nothing rendered here is pasted.
-%
-% Compile from docs/tenkz/ (two passes for the table of contents):
-%
+% Build twice from docs/tenkz/:
 %   TEXINPUTS="../../tex/tenkz//:" xelatex manual2.tex
 %
 \documentclass[11pt]{article}
 \usepackage{tenkzmanual2}
-\usepackage[colorlinks=true, linkcolor=tenkzMarked,
+\usepackage[colorlinks=true,linkcolor=tenkzMarked,
             urlcolor=tenkzMarked]{hyperref}
 \pdfstringdefDisableCommands{%
   \def\tncmd#1{\textbackslash #1}%
@@ -21,288 +14,98 @@
   \def\tnval#1{#1}%
   \def\tnfile#1{#1}%
 }
-\hypersetup{pdftitle={The tenkz manual, second edition},
+\hypersetup{pdftitle={The tenkz language manual},
             pdfauthor={The TNLean project}}
 
 \newcommand\pkg{\texttt{tenkz}}
 
 \begin{document}
 
-% =====================================================================
-%  Title page — the hero row is live: three diagrams compiled from the
-%  package on every run, including the canonical channel spelling.
-% =====================================================================
 \thispagestyle{empty}
 \begin{fullwidth}
   \centering
-  \vspace*{10mm}
-  {\Huge The \pkg{} manual\par}
-  \vspace{2.5mm}
-  {\Large second edition \quad---\quad the equation is the diagram\par}
+  \vspace*{16mm}
+  {\Huge The \pkg{} language manual\par}
+  \vspace{3mm}
+  {\Large a compact contract for tensor-network diagrams\par}
   \vspace{4mm}
-  {documenting \pkg{} 0.6 \quad---\quad 17 July 2026 \quad---\quad
-   The TNLean project\par}
-  \vspace{14mm}
+  {The TNLean project \quad---\quad July 2026\par}
+  \vspace{16mm}
 
-  % an open matrix-product word: the stubs ARE the matrix indices
-  \begin{tenkz}[physical=up, west label=$\alpha$, east label=$\beta$]
+  \begin{tenkz}[physical=up,west label=$\alpha$,
+                east label=$\beta$]
     \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[up=$i_3$]{A}
   \end{tenkz}
-  \hspace{11mm}
-  % E_A(X) = sum_i A^i X (A^i)^dagger — the canonical channel spelling:
-  % X rides the east cup (the input: it contracts the column indices),
-  % the west pair stays open (the output is a matrix)
-  \begin{tenkz}[sandwich, east={cup=$X$}]
+  \hspace{13mm}
+  \begin{tenkz}[sandwich,east={cup=$X$}]
     \tn{A} \\
     \tn*{A}
   \end{tenkz}
-  \hspace{11mm}
-  % rho_n: all physical legs open, both bends capped by fixed points
-  % (rho^L, the fixed point of E_A^*, caps the west; rho^R, the fixed
-  % point of E_A, caps the east)
-  \begin{tenkz}[rows={ket:nopair, bra},
-                west={cup=$\rho^L$}, east={cup=$\rho^R$}]
-    \tn[up=$s_1$]{} & \tndots & \tn[up=$s_n$]{}\\
-    \tn*[down=$s'_1$]{} & \tndots & \tn*[down=$s'_n$]{}
-  \end{tenkz}
+  \hspace{13mm}
+  \begin{tenkzlattice}[rows=3,cols=3,boundary=open]
+    \tnregion[slot=selected,label=$R$]{(1-2,1-2)}
+  \end{tenkzlattice}
 
-  \vspace{14mm}
-  \begin{minipage}{0.8\mfullwidth}
-    \small
-    A tensor-network diagram is a formula, and \pkg{} treats it as one:
-    rows are layers, columns are sites, bonds are implicit, and an open
-    index is a protruding stub --- a picture with no open legs is a
-    scalar, never a matrix.  This manual states the mathematics of each
-    picture before the picture, in the margin beside it; every rendered
-    diagram is produced, at compile time, by the exact source printed
-    under it.  The three diagrams above are the first three proofs: an
-    open matrix-product word $\smash{A^{i_1}A^{i_2}A^{i_3}}$ with its
-    boundary indices $\alpha,\beta$; the quantum channel
-    $\smash{\mathcal{E}_A(X)=\sum_i A^i X A^{i\dagger}}$ applied to $X$,
-    its output legs open because the output is a matrix; and a reduced
-    density matrix whose bends are capped by the fixed points
-    $\rho^L,\rho^R$.
+  \vspace{16mm}
+  \begin{minipage}{0.78\mfullwidth}
+    \large
+    A picture chooses one layout; its options declare topology and
+    policy; its body declares atoms, connections, regions, and
+    annotations.
   \end{minipage}
 \end{fullwidth}
 
 \clearpage
 \setcounter{tocdepth}{1}
 \tableofcontents
-\bigskip
 
-% =====================================================================
-%  How to read this manual — skeleton-owned; the living model of the
-%  example unit that every chapter uses.  Examples here are numbered 0.n.
-% =====================================================================
-\section*{How to read this manual}
-\addcontentsline{toc}{section}{How to read this manual}
-
-Every example in this manual is one measured unit, read in the order a
-working physicist reads: the \emph{formula} stands in the margin; the
-\emph{rendered diagram} comes first in the text column, because the
-diagram is the object under discussion; the \emph{source} that produced
-it follows in a quiet block, with its \verb|%| comments intact --- the
-comments state the mathematics and are part of the pedagogy; and the
-\emph{ink-to-index correspondence} hangs beside the unit as a numbered
-sidenote.\sidenote{Sidenotes look like this.  They carry the
-correspondence between ink and indices, design notes, and quoted
-\tnfile{.tnlog} lines.}  Nothing is pasted: each unit is written to an
-auxiliary file at compile time and read back, so the render is produced
-by the exact source shown.
-
-\begin{tnexample}[
-    formula   = {\mathcal{E}_A(X)=\sum_i A^i X A^{i\dagger}},
-    caption   = {the channel applied to $X$},
-    index     = {The east cup is the input: $X$ bridges the ket layer
-                 (top) and the bra layer (bottom).  The vertical wire is
-                 the summed physical index $i$.  The west pair stays
-                 open: the output is a matrix, so the picture must keep
-                 two stubs.},
-    signature = {boundary|virtual-west=2|virtual-east=0},
-    label     = {ex:channel-applied},
-  ]
-% E_A(X) = sum_i A^i X (A^i)^dagger : X rides the east cup
-% (the input side); the west ket/bra pair stays open, because
-% the output is a matrix, not a scalar
-\begin{tenkz}[sandwich, east={cup=$X$}]
-  \tn{A} \\
-  \tn*{A}
-\end{tenkz}
-\end{tnexample}
-
-Example~\ref{ex:channel-applied} is the manual's canonical channel: the
-applied map closes only its input side.  The unapplied map
-$\mathcal{E}_A$ keeps all four virtual legs open --- same source, no cup.
-Two sides of a diagrammatic equation are the same kind of object only if
-their boundary signatures agree, and each picture writes its signature to
-the \tnfile{.tnlog} event stream; the margin quotes the signature line
-whenever it carries the argument.
-
-When one key is under discussion, the manual varies that key and nothing
-else, in aligned panels compiled from a single shared source; the varied
-key appears in the source as the option \tnkey{variant} and is printed
-beneath each panel:
-
-\begin{tnmultiples}[
-    caption  = {one word, three boundary closures},
-    formula  = {A^{i}B^{j}},
-    index    = {\tnval{boundary=open} keeps the virtual matrix indices
-                as stubs; \tnval{boundary=none} seals them --- a scalar
-                for each $i,j$; \tnval{periodic} closes the row to
-                itself, the trace.},
-    variants = {{boundary=open}{boundary=open},
-                {boundary=none}{boundary=none},
-                {periodic}{periodic}},
-    label    = {ex:read-closures},
-  ]
-% one source, three closures: only `variant' changes
-\begin{tenkz}[physical=up, variant]
-  \tn[up=$i$]{A} & \tn[up=$j$]{B}
-\end{tenkz}
-\end{tnmultiples}
-
-The margin column also carries thumb-tags\thumbtag{\tnkey{boundary=}}
-at every reference entry, so the reference chapter can be navigated by
-riffling, and the back page is a one-page quick-reference card of the
-whole language.
-
-% =====================================================================
-%  Chapters (one file per chapter; they run on, Tufte-handout style —
-%  the page budget is spent on examples, not on chapter-break whitespace)
-% =====================================================================
 \input{chapters2/ch-mathematics}
+\input{chapters2/ch-modes}
 \input{chapters2/ch-tutorial}
 \input{chapters2/ch-worked}
-\input{chapters2/ch-modes}
-\input{chapters2/ch-rmp}
 \input{chapters2/ch-reference}
 \input{chapters2/ch-house}
+\input{chapters2/ch-rmp}
 \input{chapters2/ch-trouble}
+\appendix
+\input{chapters2/ch-compatibility}
 
-% =====================================================================
-%  Back page — the quick-reference card (content owned by the
-%  troubleshooting chapter's writer; one line per object).
-% =====================================================================
-\begin{quickrefcard}
-  \qrsection{Environments}
-  \qritem{tenkz}{the contraction grid: rows are layers, columns are
-    sites; bonds implicit}
-  \qritem{tenkzcd}{typed maps, commutative diagrams, and fusion trees}
-  \qritem{tenkzlattice}{lattice windows and regions}
-  \qritem{tenkzplanes}{ket-over-bra double layer}
-  \qritem{tenkzfree}{typed free placement}
-  \qritem{\textbackslash tnpic[keys]\{cells\}}{inline picture in text
-    or math}
+\begin{quickrefcard}[The tenkz language at a glance]
+  \qrsection{Choose one layout}
+  \qritem{tenkz}{regular one-dimensional contractions}
+  \qritem{tenkzlattice}{lattices, sheets, and regions}
+  \qritem{tenkzcd}{maps, fusion trees, and coherence diagrams}
+  \qritem{tenkzfree}{irregular typed graphs}
+  \qritem{tenkzplanes}{the ket-over-bra lattice preset}
+  \qritem{\textbackslash tnpic}{inline composition wrapper for tenkz}
 
-  \qrsection{Cell commands (tenkz)}
-  \qritem{\textbackslash tn[opts]\{A\}}{tensor atom;
-    \textbackslash tn* = the conjugate}
-  \qritem{\textbackslash tnX\{X\}}{matrix on the wire, no physical
-    leg; \texttt{wires=k} spans k rows}
-  \qritem{\textbackslash tnfuse[span=k]\{V\}}{fusing wedge; its
-    combined leg is one open index; \texttt{combined=west|east}}
-  \qritem{\textbackslash tndots}{ellipsis; wires pass through}
-  \qritem{\textbackslash tnskip}{hole: the tensor is deleted, its
-    indices stay open}
-  \qritem{\textbackslash tnghost\{\}}{invisible anchor; pairing onto
-    it warns}
-  \qritem{\textbackslash tnspan[brace above|below|box, label pos=]
-    \{n\}\{L\}}{brace or box over n bodies}
-  \qritem{\textbackslash tncut\{S\}}{dashed cut across the bond east
-    of the cell; adds no index}
+  \qrsection{Five word classes}
+  \qritem{atoms}{tn, tnX, tnfuse, tnput, tntree}
+  \qritem{connections}{implicit bonds, tnjoin, tnarrow, cups, traces}
+  \qritem{regions}{tnregion, tnspan, tncut, labels}
+  \qritem{composition}{TeX equations, alignment, and tnpic}
+  \qritem{setup}{tnset, species, themes, tndeclareatom}
 
-  \qrsection{Picture keys (tenkz)}
-  \qritem{rows=\{ket:nopair, bra\}}{row types ket, bra, op, wire, with
-    modifiers}
-  \qritem{physical=up|down|updown|none}{one-row sugar for
-    ket|bra|op|wire}
-  \qritem{sandwich}{rows=\{ket, bra\}, physical legs paired}
-  \qritem{boundary=open|none}{stubs (default) or sealed ends}
-  \qritem{periodic}{trace: each row closed to itself}
-  \qritem{west=cup, east=\{cup=$X$\}}{cup tying adjacent rows;
-    optional matrix on the bend}
-  \qritem{west label=, east label=}{boundary index labels at the stub
-    tips}
-  \qritem{layer sep=f}{multiply the inter-layer gap}
-  \qritem{trace=physical}{per-site up-into-down trace (one row)}
-  \qritem{trace=\{(physical, 2-3)\}}{per-column partial trace;
-    the braces are load-bearing}
-  \qritem{bond dir=right|left}{directed bonds: arrow out $=V$, in
-    $=V^{*}$}
-  \qritem{bond label=\{$D$ at 1-2\}}{label one bond}
-  \qritem{align=row}{the row set on the math axis}
-  \qritem{pitch=, compact, inline}{the metric}
-  \qritem{tensor style=dot|box}{glyph policy}
-  \qritem{frame=vertical}{rotate the chain grammar: bonds run
-    south, physical legs point west}
-  \qritem{\textbackslash tnset\{keys\}}{rebind the shared key space
-    document-wide}
+  \qrsection{Boundary facts}
+  \qritem{open}{the default keeps matrix or map indices visible}
+  \qritem{boundary=none}{seals an object}
+  \qritem{boundary=periodic}{returns each row to itself}
+  \qritem{west=cup / east=cup}{connects adjacent layers}
+  \qritem{.tnlog}{records the resolved boundary signature}
 
-  \qrsection{Row modifiers (rows=)}
-  \qritem{:open, :none}{per-row boundary policy}
-  \qritem{:nopair}{keep this row's physical legs open}
-  \qritem{:dir right, :dir left}{directed row}
-  \qritem{:fused, :operator}{bond flavour: doubled, operator}
+  \qrsection{Canonical habits}
+  \qritem{one layout}{choose from topology, not silhouette}
+  \qritem{explicit scope}{document, picture, object, connection}
+  \qritem{typed ports}{virtual joins virtual; physical joins physical}
+  \qritem{role/species}{semantic style, never topology}
+  \qritem{route=arc}{canonical spelling; curve is compatibility only}
 
-  \qrsection{Cell keys (\textbackslash tn)}
-  \qritem{dot, box, pill, mpo}{glyph override}
-  \qritem{wide=k}{span k columns}
-  \qritem{wires=k}{span and terminate k wire rows}
-  \qritem{legs at=\{1,2\}}{compatibility alias for both physical faces}
-  \qritem{up at=, down at=}{face ports: center or span-local columns}
-  \qritem{west at=, east at=}{virtual face ports: center or row slots}
-  \qritem{tri=l|r}{canonical isometry triangle}
-  \qritem{up=\{$i$\}, down=\{$j$\}}{physical-leg labels}
-  \qritem{label pos=, label shift=}{atom-label placement}
-  \qritem{no legs}{suppress physical legs}
-
-  \qrsection{Lattices (tenkzlattice)}
-  \qritem{rows=, cols=, site=none}{the window}
-  \qritem{frame=oblique}{the sheared PEPS sheet}
-  \qritem{physical=up, boundary legs}{legs on sites and rim}
-  \qritem{west=trace, east=trace}{periodic same-sheet closure of the
-    column axis; north/south close the row axis}
-  \qritem{\textbackslash tnregion[slot=, label=, label at=, inset=,
-    outline, name=]\{(1-3, 2-4)\}}{region; named sets compose:
-    \texttt{R - (2,2)}}
-  \qritem{\textbackslash tnedge[role=, style=, label=, none]
-    \{(2,3)-(2,4)\}}{decorate, label, or suppress one edge}
-  \qritem{\textbackslash tnsite[removed, role=, label=]\{(2,2)\}}
-    {remove or decorate one site}
-
-  \qrsection{Planes (tenkzplanes)}
-  \qritem{rows=, cols=, sheets=\{ket, bra\}}{the double layer,
-    site-wise pairing}
-  \qritem{open=\{(1-4, 2)\}}{cells keeping dangling stubs}
-  \qritem{sheet sep=, trace=}{the gap; traced cells}
-
-  \qrsection{Maps, trees, and arrows (tenkzcd)}
-  \qritem{maps}{headless typed maps composed from left to right;
-    one family member per row}
-  \qritem{\textbackslash tnarrow[from=\{(r,c)\},
-    to=\{(r,c+1)\}, species=s]\{T\}}{map $T$ of species $s$;
-    use \texttt{role=} instead for a semantic role}
-  \qritem{\textbackslash tntree\{(((a\,b)\_x\,c)\_y\,d)\_e\}}{fusion
-    tree from a bracketed word}
-  \qritem{\textbackslash tnarrow[from=1, to=2]\{F\}}{arrow between
-    slots; starred = other side}
-  \qritem{polygon=5, radius=}{slots on a polygon}
-
-  \qrsection{Free placement (tenkzfree)}
-  \qritem{\textbackslash tnput[shape, ports=]\{n\}\{(x,y)\}\{A\}}{typed node}
-  \qritem{\textbackslash tnjoin[name=, route=, \ldots]\{a.E\}\{b.W\}}{%
-    named measured wire; routes straight|hv|vh|arc (curve is the 0.5 alias)}
-  \qritem{\textbackslash tnregion[group|slot=, outline, label=,
-    label pos=, name=]\{members\}}{measured enclosure over earlier atoms,
-    named joins, or named regions}
-
-  \qrsection{The event stream}
-  \qritem{.tnlog}{one \texttt{picture|atom|bond|boundary} line per
-    event, beside the PDF}
-  \qritem{boundary|virtual-west=..|..}{the signature: two sides of an
-    equation must log matching lines}
-  \qritem{faceports|face=..|arity=..}{the declared arity of one face}
-  \qritem{pairleg|upper=..|lower=..}{one event per physical contraction}
+  \qrsection{Verification}
+  \qritem{xelatex}{compile the exact source}
+  \qritem{tenkz\_audit.py}{audit the versioned semantic event stream}
+  \qritem{tenkz\_lint.py}{reject non-canonical source}
+  \qritem{pdftocairo}{render and inspect the affected pages}
+  \qritem{tenkz\_rmp.sh}{build the separate 130-target benchmark book}
 \end{quickrefcard}
 
 \end{document}

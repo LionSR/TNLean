@@ -16,6 +16,7 @@ import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTClosingSelection
 import TNLean.MPS.MPDO.BNTCoefficients
@@ -25,6 +26,7 @@ import TNLean.MPS.MPDO.BNTFourfoldFusionIndices
 import TNLean.MPS.MPDO.BNTFusionCoisometries
 import TNLean.MPS.MPDO.BNTFusionIsometries
 import TNLean.MPS.MPDO.BNTFusionTensorClause
+import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTMarkovKeyFormula
 import TNLean.MPS.MPDO.BNTMarkovSectorProjectors
@@ -77,6 +79,17 @@ import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
 import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
 import TNLean.MPS.MPDO.CompleteZipperFusionSupport
+import TNLean.MPS.MPDO.CyclicActiveAreaLaw
+import TNLean.MPS.MPDO.CyclicActiveCutCoordinates
+import TNLean.MPS.MPDO.CyclicActiveCutRegrouping
+import TNLean.MPS.MPDO.CyclicActiveCutStates
+import TNLean.MPS.MPDO.CyclicActiveFourthRegion
+import TNLean.MPS.MPDO.CyclicActiveFourthRegionContraction
+import TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula
+import TNLean.MPS.MPDO.CyclicActiveMarkov
+import TNLean.MPS.MPDO.CyclicActiveMarkovDecomposition
+import TNLean.MPS.MPDO.CyclicActiveMarkovNormalization
+import TNLean.MPS.MPDO.CyclicActiveRetainedCoordinates
 import TNLean.MPS.MPDO.CyclicActiveSectorRestriction
 import TNLean.MPS.MPDO.CyclicActiveThreeBoundaryTrace
 import TNLean.MPS.MPDO.CyclicEdgeWeightTensor
@@ -87,6 +100,8 @@ import TNLean.MPS.MPDO.DiagonalFiniteChain
 import TNLean.MPS.MPDO.EtaPreparation
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.MPDO.FirstSiteBlocking
+import TNLean.MPS.MPDO.FixedBondPositivePhysicalSectorConstructor
+import TNLean.MPS.MPDO.FixedBondPositivePhysicalSectorRepresentative
 import TNLean.MPS.MPDO.FixedBondProductEtaTensor
 import TNLean.MPS.MPDO.FixedBondProductTensor
 import TNLean.MPS.MPDO.FusionIsometries
@@ -161,6 +176,7 @@ import TNLean.MPS.MPDO.PhysicalSupportBondTransport
 import TNLean.MPS.MPDO.PhysicalSupportProductTransport
 import TNLean.MPS.MPDO.PhysicalSupportRestriction
 import TNLean.MPS.MPDO.PhysicalSupportSALTransport
+import TNLean.MPS.MPDO.PositiveMinimalRealizationCounterexample
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.PureRFPSAL
@@ -192,7 +208,10 @@ import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.MPDO.SourceZCLMarginal
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.MPDO.ThermodynamicLimitCounterexample
+import TNLean.MPS.MPDO.TopologicalDensityDecomposition
+import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.TopologicalProjectors
+import TNLean.MPS.MPDO.TopologicalTerminalSpectral
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.VerticalBNTConstruction

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusWindowChain3
+import TNLean.PEPS.ConfigurationCalculus
 
 /-!
 # Transitivity of the corner extension across nested regions
@@ -98,7 +99,7 @@ theorem regionBoundaryLabel_regionMerge_of_subset_left {T H : Finset V} (hHT : H
     rcases isRegionBoundaryEdge_touches (G := G) H f.2 with h1 | h2
     · exact Or.inl (hHT h1)
     · exact Or.inr (hHT h2)
-  rw [regionMerge, if_pos hinc]
+  rw [regionMerge_of_incident (G := G) A _ p hinc]
 
 /-- A boundary edge of the host `univ \ K` with `K ⊆ univ \ T`, read off the merge
 `regionMerge A T p`, equals the value of `p.2`, provided the pair agrees on the `T`-boundary.
@@ -138,10 +139,10 @@ theorem regionBoundaryLabel_regionMerge_compl_of_subset {T K : Finset V}
         rcases hinc with hc1 | hc2
         · exact absurd hc1 h1notT
         · exact Or.inr ⟨h1notT, hc2⟩
-    rw [regionMerge, if_pos hinc]
+    rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨f.1, hbdry⟩
     simpa [regionBoundaryLabel] using this
-  · rw [regionMerge, if_neg hinc]
+  · rw [regionMerge_of_not_incident (G := G) A _ p hinc]
 
 omit [Fintype V] in
 /-- A vertex product over `B ⊆ T` reads `p.1` through the merge `regionMerge A T p`: edges
@@ -158,7 +159,7 @@ theorem regionProd_p1_eq_merge_of_subset {T B : Finset V} (hBT : B ⊆ T)
   intro ie hie
   have hinc : IsRegionIncidentEdge (G := G) T ie :=
     hie.elim (fun h => Or.inl (hBT h)) (fun h => Or.inr (hBT h))
-  rw [regionMerge, if_pos hinc]
+  rw [regionMerge_of_incident (G := G) A _ p hinc]
 
 /-- A vertex product over `B ⊆ univ \ T` reads `p.2` through the merge `regionMerge A T p`, given
 the pair agrees on the `T`-boundary: an edge incident to `B` either misses `T` (where the merge
@@ -182,10 +183,10 @@ theorem regionProd_p2_eq_merge_of_compl {T B : Finset V} (hBT : B ⊆ Finset.uni
   · have hbdry : IsRegionBoundaryEdge (G := G) T ie :=
       isRegionBoundaryEdge_of_disjoint_incident (G := G) (Finset.univ \ T) T
         Finset.sdiff_disjoint hcompl hinc
-    rw [regionMerge, if_pos hinc]
+    rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨ie, hbdry⟩
     simpa [regionBoundaryLabel] using this.symm
-  · rw [regionMerge, if_neg hinc]
+  · rw [regionMerge_of_not_incident (G := G) A _ p hinc]
 
 /-! ### The two-sub-block merge collapse -/
 

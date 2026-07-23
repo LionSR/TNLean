@@ -1,0 +1,14 @@
+% Target: rmp-iv-ground-space-1d
+% Formula: |psi(X)> = sum_{s_1..s_N} tr( X A^{s_1} A^{s_2} ... A^{s_N} )
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Resolved by the public environment; open indices remain explicit.
+% Source: paper TN-Review-main.tex line 1995; author source ImagesReview Section
+%   IV/ImagesReview Section IV.tex lines 46-54
+% Capabilities: grid, typed-ports
+\[
+  |\psi(X)\rangle \;=\;
+  \begin{tenkz}[rows={ket, wire}, west=cup, east=cup]
+    \tn[box]{A} & \tn[box]{A} & \tn[box]{A} & \tndots & \tn[box]{A}\\
+    \tnghost{} & \tnghost{} & \tnghost{} & \tnX{X} & \tnghost{}
+  \end{tenkz}
+\]

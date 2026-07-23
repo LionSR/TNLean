@@ -90,16 +90,16 @@ The current `sorry` occurrences in the split periodic-overlap files are:
 
 - `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean:607`,
   `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`, tracked by #1807.
-- `TNLean/MPS/Periodic/Overlap/Case2.lean:164`,
+- `TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean:164`,
   `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`,
   tracked by #448.
-- `TNLean/MPS/Periodic/Overlap/Case3.lean:129`,
+- `TNLean/MPS/Periodic/Overlap/SectorMatch.lean:129`,
   `sectorGaugePhaseEquiv_succ_of_cyclicTransport`, tracked by #450.
-- `TNLean/MPS/Periodic/Overlap/Case3.lean:266`,
+- `TNLean/MPS/Periodic/Overlap/SectorMatch.lean:266`,
   `sectorMatch_propagation`, tracked by #450.
-- `TNLean/MPS/Periodic/Overlap/Case3.lean:323`,
+- `TNLean/MPS/Periodic/Overlap/SectorMatch.lean:323`,
   `repeatedBlocks_of_blockedSectorGaugePhase`, tracked by #450.
-- `TNLean/MPS/Periodic/Overlap/Case3.lean:439`,
+- `TNLean/MPS/Periodic/Overlap/SectorMatch.lean:439`,
   `periodicOverlap_gaugeEquiv_of_sector_match`, tracked by #450.
 - `TNLean/MPS/Periodic/Overlap/Dichotomy.lean:58`,
   `periodicOverlapDichotomy`, tracked by #81.

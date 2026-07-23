@@ -61,8 +61,9 @@
         =\operatorname{tr}(\mu_\alpha).
     \]
     The chosen decomposition satisfies the tensor-attached BNT algebra clause
-    when the BNT algebra clause holds for precisely these operators and these
-    trace scalars.  This is the data in
+    when the tensors $M_\alpha$ form a basis of normal tensors and the BNT
+    algebra clause holds for precisely these operators and these trace
+    scalars.  This is the data in
     \cite[Theorem~4.14(ii), lines~972--993, and Appendix~C.4,
         lines~2046--2064]{Cirac2016MPDO_arXiv}; it does not include a comparison
     with a two-site vertical canonical decomposition.
@@ -93,6 +94,126 @@
     definition does not require this comparison to follow from a BNT algebra
     clause; constructing it from the MPDO tensor is a separate obligation.
 \end{definition}
+
+\begin{definition}[Source-derived two-site multiplicity spectrum]%
+    \label{def:mpdo_bnt_two_site_multiplicity_spectrum}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause}
+    For a tensor-attached BNT algebra clause, a source-derived two-site
+    multiplicity spectrum consists of a vertical canonical decomposition
+    \[
+        \widetilde{M^{(2)}}
+        =\bigoplus_\delta \nu_\delta\otimes A_\delta,
+    \]
+    a bijection $\sigma$ from the one-site sectors to its sectors such that
+    $M_\gamma$ and $A_{\sigma(\gamma)}$ generate the same matrix product
+    vectors at every positive length, and, for every $\gamma$, the multiset
+    equality
+    \[
+        \bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
+        =\bigl\{\mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}.
+    \]
+    This is the decomposition and comparison retained in
+    \cite[Appendix~C.4, lines~2046--2058]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Exact invertible gauges for the source-derived two-site sectors]%
+    \label{def:mpdo_bnt_two_site_exact_sector_gauge}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge}
+    \leanok
+    \uses{def:mpdo_bnt_two_site_multiplicity_spectrum}
+    The invertible-gauge sub-result for a source-derived two-site multiplicity
+    spectrum additionally records, for every one-site sector $\gamma$, equality
+    of bond dimensions
+    \[
+        d_\gamma=d_{\sigma(\gamma)}
+    \]
+    and an invertible matrix $Z_\gamma\in\operatorname{GL}(d_\gamma,\mathbb C)$
+    such that
+    \[
+        A_{\sigma(\gamma)}^i
+        =Z_\gamma M_\gamma^i Z_\gamma^{-1}
+    \]
+    for every physical index $i$.  Thus the matched normal tensors have no
+    residual scalar phase.  This is the exact invertible conjugacy retained
+    from \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
+    It does not include the further conclusion on line~2057 that $Z_\gamma$
+    may be chosen unitary; that strengthening remains open.
+    % The full line-2057 unitary source step is tracked in issue 4645 and
+    % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
+\end{definition}
+
+\begin{theorem}[The two-site multiplicity spectrum from the BNT algebra
+    clause]%
+    \label{thm:mpdo_bnt_algebra_tensor_clause_spectrum}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        toTwoSiteExactSectorGauge}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        toTwoSiteMultiplicitySpectrum}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo,
+        def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_two_site_multiplicity_spectrum,
+        def:mpdo_bnt_two_site_exact_sector_gauge,
+        def:mpdo_bnt_multiplicity_spectrum_comparison,
+        def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
+    Let $M$ be an MPDO in horizontal canonical form, equipped with a
+    tensor-attached BNT algebra clause
+    \[
+        \widetilde M=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+    \]
+    There is a vertical canonical decomposition of the two-site blocking,
+    \[
+        \widetilde{M^{(2)}}
+        =\bigoplus_\delta \nu_\delta\otimes A_\delta.
+    \]
+    Its normal-tensor sectors are in bijection, via $\sigma$, with the sectors
+    of the full-support one-site product expansion such that $M_\gamma$ and
+    $A_{\sigma(\gamma)}$ generate the same matrix product vectors at every
+    positive length and, for every $\gamma$,
+    \[
+        \bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
+        =\bigl\{\mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}
+    \]
+    as multisets.  Thus this two-site decomposition and relabelling realize
+    the multiplicity-spectrum comparison of Appendix~C.4, lines~2046--2058
+    of \cite{Cirac2016MPDO_arXiv}.  Moreover, the paired bond dimensions agree
+    and there are invertible matrices $Z_\gamma$ satisfying
+    \[
+        A_{\sigma(\gamma)}^i
+        =Z_\gamma M_\gamma^i Z_\gamma^{-1}
+    \]
+    exactly.  This is only the invertible-gauge sub-result of
+    lines~2053--2057: the further conclusion that $Z_\gamma$ may be chosen
+    unitary is not part of this statement and remains open.
+    % The full line-2057 unitary source step is tracked in issue 4645 and
+    % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Multiplying the two one-site decompositions and using the BNT algebra law
+    expresses the two-site closed chain in the basis $M_\gamma$, with
+    coefficient
+    \[
+      \sum_{\alpha,\beta,i,j,k}
+        \bigl(\mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
+    \]
+    All these coefficients are positive.  Hence every basis sector occurs,
+    and the characterization of bases of normal tensors matches these sectors
+    bijectively with those of the two-site vertical canonical decomposition.
+    Normalization makes each matching scalar have modulus one, while
+    positivity of two consecutive coefficients makes it positive; it is
+    therefore one.  The normal-tensor matching theorem also supplies equality
+    of the paired bond dimensions and an invertible gauge; after the scalar is
+    one, its gauge-phase relation is precisely the displayed exact conjugacy.
+    Eventual linear independence of the basis vectors gives the displayed
+    equality of power sums.  The finite positive power-sum identity then gives
+    equality of the corresponding multisets.
+\end{proof}
 
 \begin{lemma}[Idempotence for the canonical chi coefficients]%
     \label{lem:mpdo_bnt_idempotent_coefficient_form_of_chi}

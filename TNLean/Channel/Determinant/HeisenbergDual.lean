@@ -34,11 +34,12 @@ quantum channel, Heisenberg dual, Kadison-Schwarz, multiplicative domain
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
-open ChannelDeterminant.Internal
 
 variable {d : ℕ}
 
 section WolfStatements
+
+local notation "MatrixEnd" => ChannelDeterminant.Internal.MatrixEnd
 
 variable {T : MatrixEnd d}
 

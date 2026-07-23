@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.CoarseThreeSite8
+import TNLean.PEPS.ConfigurationCalculus
 
 /-!
 # The relaxed-triple merge collapse for the normal PEPS theorem
@@ -394,19 +395,16 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
       rw [dif_pos hc, dif_pos hg, dif_pos hc]
     · -- The reconstruction merges back to `η`.
       funext e
-      simp only [hostMerge, regionMerge, hostFiberPair]
+      simp only [hostFiberPair]
       by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
-      · rw [if_pos hc, dif_pos hc]
-      · rw [if_neg hc, dif_neg hc]
+      · rw [hostMerge_complement F hc, dif_pos hc]
+      · rw [hostMerge_not_complement F hc, dif_neg hc]
   · -- Reconstructing from the free indices of a fiber pair recovers the pair.
     intro p hp
     simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
     obtain ⟨hagree, hmerge⟩ := hp
-    -- `hostMerge p.1 p.2 = regionMerge complement (p.2, p.1)`: complement-incident reads
-    -- `p.2`, the rest `p.1`.
-    have hmerge' : ∀ e : Edge G,
-        (if IsRegionIncidentEdge (G := G) F.frame.complement e then p.2 e else p.1 e) = η e := by
-      intro e; have := congrFun hmerge e; rwa [hostMerge, regionMerge] at this
+    have hmerge' : ∀ e : Edge G, hostMerge F p.1 p.2 e = η e :=
+      fun e => congrFun hmerge e
     refine Prod.ext ?_ ?_
     · -- First component (the blue configuration `p.1`).
       funext e
@@ -416,17 +414,22 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
         by_cases hbc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e
         · -- On a blue-to-complement crossing the agreement and merge force `p.1 e = η e`.
           rw [dif_pos hbc]
-          have h1 := hmerge' e; rw [if_pos hc] at h1
+          have h1 := hmerge' e
+          rw [hostMerge_complement F hc] at h1
           rw [hagree e hbc, h1]
         · rw [dif_neg hbc]
       · rw [dif_neg hc]
-        have := hmerge' e; rw [if_neg hc] at this; exact this.symm
+        have := hmerge' e
+        rw [hostMerge_not_complement F hc] at this
+        exact this.symm
     · -- Second component (the complement configuration `p.2`).
       funext e
       simp only [hostFiberPair, hostFiberLegs]
       by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
       · rw [dif_pos hc]
-        have := hmerge' e; rw [if_pos hc] at this; exact this.symm
+        have := hmerge' e
+        rw [hostMerge_complement F hc] at this
+        exact this.symm
       · rw [dif_neg hc]
   · -- Reading the free indices of a reconstruction recovers them.
     intro legs _
@@ -459,15 +462,10 @@ theorem hostMerge_fiberwise_collapse (F : CoherentCoarseBlockingFrame (G := G) (
         HostPairAgrees F p.1 p.2), g (hostMerge F p.1 p.2)) =
       hostMergeFiberProd F • ∑ η : VirtualConfig A, g η := by
   classical
-  rw [← Finset.sum_fiberwise (Finset.univ.filter
-      (fun p : VirtualConfig A × VirtualConfig A => HostPairAgrees F p.1 p.2))
-    (fun p => hostMerge F p.1 p.2) (fun p => g (hostMerge F p.1 p.2))]
-  rw [Finset.smul_sum]
-  refine Finset.sum_congr rfl (fun η _ => ?_)
-  rw [Finset.filter_filter,
-    Finset.sum_congr rfl (g := fun _ => g η)
-      (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
-    Finset.sum_const, hostMergeFiber_card F η]
+  apply sum_comp_of_config_fiber_card
+  intro η
+  simpa only [Finset.filter_filter, Finset.mem_univ, true_and] using
+    hostMergeFiber_card F η
 
 /-! ### The relaxed-triple merge collapse
 

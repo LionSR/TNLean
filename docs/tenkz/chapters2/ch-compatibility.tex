@@ -1,0 +1,25 @@
+% Compatibility is quarantined from the canonical tutorial and reference.
+\section{Compatibility spellings}\label{ch:compatibility}
+
+Compatibility aliases read older documents.  New manual, benchmark, test, and
+blueprint sources use canonical spellings.  This registry-generated table is
+the exhaustive alias list.
+
+\IfFileExists{chapters2/generated-language-aliases.tex}{%
+  \noindent\input{chapters2/generated-language-aliases.tex}%
+}{%
+  \begin{quote}\small
+  The generated alias table is not present.  Generate it from the executable
+  language registry before publishing the manual.
+  \end{quote}
+}
+
+Aliases normalize to the same semantic events as their replacements and may
+not change type, default, scope, or diagnostics.  The canonical-only linter is
+authoritative for benchmark cases: replace an alias instead of adding a
+manifest exception.  Historical records in \tnfile{docs/tenkz/history/} do not
+define supported aliases.
+
+There is no compatibility form of \tncmd{tndefine}: it was an aspirational
+promise, not a shipped public grammar.  Typed custom atoms use
+\tncmd{tndeclareatom}.

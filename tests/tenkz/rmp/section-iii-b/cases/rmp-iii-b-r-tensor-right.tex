@@ -1,0 +1,22 @@
+% Target: rmp-iii-b-r-tensor-right
+% Formula: R_{i,b} resolves the i-string crossing of the b,a,b triple.
+% Ink: Canonical public tenkzfree R box, strands, and marked endpoints.
+% Boundary: Two lattice rails and three upper string ends remain open.
+% Source: paper TN-Review-main.tex line 1669; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 773-798
+% Capabilities: free-graph, braid-resolver, crossing-order
+\[
+  \begin{tenkzfree}
+    \tnput[dot, label pos=west]{i}{(0mm,-10mm)}{i}
+    \tnput[box]{R}{(0mm,0mm)}{\mathcal R_{i,b}}
+    \tnput[dot]{bL}{(-7mm,10mm)}{b}
+    \tnput[dot]{a}{(0mm,10mm)}{a}
+    \tnput[dot]{bR}{(7mm,10mm)}{b}
+    \tnjoin{-14mm,-10mm}{i.west} \tnjoin{i.east}{14mm,-10mm}
+    \tnjoin{-14mm,10mm}{bL.west} \tnjoin{bR.east}{14mm,10mm}
+    \tnjoin{i.north}{R.south}
+    \tnjoin[route=arc, out=135, in=-90]{R.north west}{bL.south}
+    \tnjoin{R.north}{a.south}
+    \tnjoin[route=arc, out=45, in=-90]{R.north east}{bR.south}
+  \end{tenkzfree}
+\]

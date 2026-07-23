@@ -1,5 +1,8 @@
-% tenkz-core — L0: semantic hues, theme slots, styles, the metric system,
-% the label-placement constants, and the event stream.
+% Input: normalized model records and global semantic style policy.
+% Output: styles, metrics, geometry services, diagnostics, and versioned events.
+% Owned state: semantic themes, measurements, enclosure registry, and event writer.
+% Invariants: drawing never parses picture syntax or mutates validated topology.
+% Next stage: dialect front ends translate their syntax into shared services.
 %
 % Metric doctrine: ONE base pitch; every repeated distance is a named ratio
 % of it.  Profiles (compact, inline) are a scale factor applied at the base,
@@ -57,10 +60,10 @@
                                % braces.  It separates, never clears: WHAT must
                                % be cleared is the silhouette's business, and
                                % is measured, not budgeted.  0.15 pitch is
-                               % ~1.7mm at the default 11mm pitch (~3x the
-                               % wire width, so wire-weight ink never fuses
-                               % with the return at print size) and still
-                               % ~1mm at the inline pitch
+                               % ~1.7mm at the default 11mm pitch (~8.5x the
+                               % 0.55pt wire width, so wire-weight ink never
+                               % fuses with the return at print size) and
+                               % still ~1mm (~5.3 wire widths) inline
 \def\tenkz@r@labelclear{0.12}  % ONE clearance for every label band
 \def\tenkz@r@dotlabelband{0.30}% ONE label band for every external label:
                                % clearance + one line of script-size text.
@@ -111,7 +114,8 @@
 \def\tenkz@wirewidth{0.55pt}
 \def\tenkz@annwidth{0.40pt}
 \def\tenkz@emphwidth{0.80pt}
-\def\tenkz@junctionfloor{0.9mm}% below ~3x wire width a junction reads as dirt
+\def\tenkz@junctionfloor{0.9mm}% ~4.7x the 0.55pt wire width: below this
+                               % absolute floor a junction reads as dirt
 \def\tenkz@barblen{2.6pt}      % directionality barb; a print-size floor, not
                                % a ratio: below this the barb reads as dirt
 \def\tenkz@fusedbarblen{3.8pt} % barb spanning a doubled (fused) wire
@@ -128,27 +132,6 @@
 % automatic-site families such as tenkzlattice.
 \def\tenkz@tensorstyle{dot}
 \def\tenkz@tensorskin{tensor}
-
-% ---------- pgfkeys front door ----------
-\def\tnset#1{\pgfqkeys{/tenkz}{#1}}
-\pgfkeys{
-  /tenkz/.is family,
-  % pitch= rebases the metric: it writes the BASE pitch and rederives the
-  % working pitch from it, so a later profile scales the configured value
-  % (\tnset{pitch=20mm, compact} = 16mm) instead of silently discarding it
-  /tenkz/pitch/.code={\tenkz@basepitch=#1\relax
-                      \tenkz@pitch=\tenkz@basepitch},
-  /tenkz/compact/.code={\tenkz@pitch=0.8\tenkz@basepitch},
-  /tenkz/inline/.code={\tenkz@pitch=0.62\tenkz@basepitch
-                       \let\tenkz@labelsize\scriptscriptstyle
-                       \let\tenkz@r@physleg\tenkz@r@inlinephysleg
-                       \let\tenkz@r@labelclear\tenkz@r@inlinelabelclear},
-  /tenkz/tensor style/.is choice,
-  /tenkz/tensor style/dot/.code={\def\tenkz@tensorstyle{dot}%
-                                  \def\tenkz@tensorskin{tensor}},
-  /tenkz/tensor style/box/.code={\def\tenkz@tensorstyle{box}%
-                                  \def\tenkz@tensorskin{box tensor}},
-}
 
 % Label mathematics is script-size by default: glyphs are compact marks, not
 % text boxes, and the surrounding equation stays visually dominant.
@@ -333,6 +316,8 @@
       fill=tenkzPassive!8!tenkzPaper, densely dashed,
       line width=\tenkz@emphwidth},
   region collar/.style={draw=tenkzExtra, fill=tenkzExtra!10!tenkzPaper,
+      line width=\tenkz@emphwidth},
+  region neutral/.style={draw=tenkzInk, fill=tenkzPaper,
       line width=\tenkz@emphwidth},
   region outline/.style={fill=none},
   distinguished edge/.style={draw=tenkzAction, line width=\tenkz@emphwidth},
@@ -1722,10 +1707,6 @@
       }
     \exp_args:NV \tikzset \l_tmpa_tl
   }
-\pgfkeys{
-  /tenkz/species/.code={\tenkz_species_declare:n{#1}},
-}
-
 % ---------- shared core-forward installer ----------
 % \tenkz_install_core_forwards:nn {<family>}{<comma list>}: install, in
 % pgfkeys family /tenkz/<family>, one pass-through key per name in the
@@ -1739,28 +1720,7 @@
 % /tenkz/join) do NOT call this: pitch/compact/inline pick the picture's
 % metric once, not per atom, so those families never had these keys and
 % do not gain them here -- an existing pattern, not a new exemption.
-\msg_new:nnn { tenkz } { internal }
-  { Internal~error:~#1. }
-\cs_new_protected:Npn \tenkz_install_core_forward_one:nn #1#2
-  {
-    \str_case:nnF {#2}
-      {
-        {pitch}        {\pgfkeys{/tenkz/#1/pitch/.code=
-                          {\pgfqkeys{/tenkz}{pitch=##1}}}}
-        {compact}      {\pgfkeys{/tenkz/#1/compact/.code=
-                          {\pgfqkeys{/tenkz}{compact}}}}
-        {inline}       {\pgfkeys{/tenkz/#1/inline/.code=
-                          {\pgfqkeys{/tenkz}{inline}}}}
-        {tensor~style} {\pgfkeys{/tenkz/#1/tensor~style/.code=
-                          {\pgfqkeys{/tenkz}{tensor~style=##1}}}}
-        {species}      {\pgfkeys{/tenkz/#1/species/.code=
-                          {\pgfqkeys{/tenkz}{species={##1}}}}}
-      }
-      { \msg_error:nnn { tenkz } { internal }
-          { unknown~core~forward~name~'#2'~(tenkz\_install\_core\_forwards) } }
-  }
-\cs_new_protected:Npn \tenkz_install_core_forwards:nn #1#2
-  { \clist_map_inline:nn {#2} { \tenkz_install_core_forward_one:nn {#1}{##1} } }
+% Installed by tenkz-language.code.tex from the public registry vocabulary.
 
 % ---------- the cell-set algebra (shared by every tier) ----------
 % One addressing algebra serves every tier: terms `(r,c)` |

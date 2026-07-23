@@ -1,0 +1,18 @@
+% Target: rmp-ii-blocking
+% Formula: A^s_{alpha beta} = sum_gamma B^{s_1}_{alpha gamma} B^{s_2}_{gamma beta}.
+% Ink: Canonical public tenkz atoms; no raw TikZ.
+% Boundary: The one-site and two-site words have matching open virtual ends and
+%   physical legs.
+% Source: paper TN-Review-main.tex line 513; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 535-540
+% Capabilities: grid, typed-ports
+\[
+  % one 3-leg site  ->  two 3-leg sites sharing a new bond
+  \begin{tenkz}[physical=up]
+    \tn{}
+  \end{tenkz}
+  \;\longrightarrow\;
+  \begin{tenkz}[physical=up]
+    \tn{} & \tn{}
+  \end{tenkz}
+\]

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PiSigmaEquiv
 import TNLean.MPS.MPDO.CommutingBondEtaDecomposition
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 
@@ -31,20 +32,6 @@ abbrev EtaSiteIndex (K : ℕ) (dl dr : Fin K → ℕ) :=
 /-- The neighboring index carried by the cyclic edge from sector \(q\) to sector \(h\). -/
 abbrev EtaEdgeIndex {K : ℕ} (dl dr : Fin K → ℕ) (q h : Fin K) :=
   Fin (dr q) × Fin (dl h)
-
-/-- Distribute a dependent sum pointwise over a finite family. -/
-private def etaPiSigmaEquiv
-    {ι : Type*} {α : ι → Type*} {β : (i : ι) → α i → Type*} :
-    ((i : ι) → Σ a, β i a) ≃
-      Σ a : (i : ι) → α i, (i : ι) → β i (a i) where
-  toFun x := ⟨fun i ↦ (x i).1, fun i ↦ (x i).2⟩
-  invFun x i := ⟨x.1 i, x.2 i⟩
-  left_inv x := by
-    funext i
-    exact Sigma.eta (x i)
-  right_inv x := by
-    obtain ⟨a, b⟩ := x
-    rfl
 
 /-- For a fixed cyclic sector configuration, regroup the site factors
 \((R_n,L_n)\) into the edge factors \((R_n,L_{n+1})\). -/
@@ -87,7 +74,7 @@ def etaCyclicEdgeEquiv {K N d : ℕ} [NeZero N] (dl dr : Fin K → ℕ)
     (Fin N → Fin d) ≃
       Σ k : Fin N → Fin K,
         (n : Fin N) → EtaEdgeIndex dl dr (k n) (k (n + 1)) :=
-  ((Equiv.piCongrRight fun _ : Fin N ↦ e.symm).trans etaPiSigmaEquiv).trans <|
+  ((Equiv.piCongrRight fun _ : Fin N ↦ e.symm).trans Equiv.piSigmaEquiv).trans <|
     Equiv.sigmaCongrRight fun k ↦ etaFixedSectorCyclicEdgeEquiv dl dr k
 
 @[simp] theorem etaCyclicEdgeEquiv_symm_apply {K N d : ℕ} [NeZero N]
@@ -98,8 +85,7 @@ def etaCyclicEdgeEquiv {K N d : ℕ} [NeZero N] (dl dr : Fin K → ℕ)
     (etaCyclicEdgeEquiv dl dr e).symm ⟨k, x⟩ n =
       e ⟨k n, (etaFixedSectorCyclicEdgeEquiv dl dr k).symm x n⟩ := by
   apply e.symm.injective
-  simp [etaCyclicEdgeEquiv, Equiv.piCongrRight, Equiv.sigmaCongrRight,
-    etaPiSigmaEquiv]
+  simp [etaCyclicEdgeEquiv, Equiv.piCongrRight, Equiv.sigmaCongrRight]
 
 end Matrix
 
