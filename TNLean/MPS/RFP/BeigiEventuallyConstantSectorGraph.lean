@@ -111,7 +111,8 @@ theorem hasEventuallyConstantCycleWeightSum_of_parentGroundSpace
   have htwo : 2 < N := (Nat.le_max_right N₀ 2).trans_lt hN
   rw [F.cycleWeightSum_edgeWeight_eq hNpos]
   simpa only [edgeWeight] using
-    (F.parentHamiltonianGroundSpaceES_finrank_eq htwo).symm.trans (hparent N hN₀)
+    (F.parentHamiltonianGroundSpaceES_finrank_eq (Nat.le_of_lt htwo)).symm.trans
+      (hparent N hN₀)
 
 /-- If the parent-ground-space dimension is eventually constant, then at
 every length greater than two it equals the number of positive sector loops.
@@ -132,7 +133,7 @@ theorem parentHamiltonianGroundSpaceES_finrank_eq_card_loop
         ∑ c : F.OrderedCycle N,
           ∏ n : Fin N,
             Module.finrank ℂ (F.edgeGroundSpace (c.1 n) (c.1 (n + 1))) :=
-      F.parentHamiltonianGroundSpaceES_finrank_eq hN
+      F.parentHamiltonianGroundSpaceES_finrank_eq (Nat.le_of_lt hN)
     _ = cycleWeightSum F.edgeWeight hNpos := by
       simpa only [edgeWeight] using (F.cycleWeightSum_edgeWeight_eq hNpos).symm
     _ = Fintype.card (Loop F.edgeWeight) := cycleWeightSum_eq_card_loop hconst hNpos

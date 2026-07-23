@@ -27,9 +27,11 @@ conditions are equivalent:\footnote{Local source:
   \forall N>2,\; |V^{(N)}(A)\rangle
   \text{ is a ground state of a NNCPH}.
 \end{align}
-The formal implications below use the same range $N>2$. No claim is made for
-$N=2$, where the two periodic length-two windows traverse the same sites in
-opposite orders.
+The formal implications below use the same range $N>2$.  This range is
+independent of Beigi's ordered-cycle formula.  At $N=2$, the two periodic
+length-two windows traverse the same sites in opposite orders; the sector-graph
+dimension formula below now treats this convention without extending the CPSV
+equivalence to length two.
 The preceding definition constructs
 \begin{align}
   H_L^{(N)}=\sum_{j=0}^{N-1}\tau_j(P_L^\perp)
@@ -315,13 +317,16 @@ used in this construction.
 
 For a finite sector graph,
 \leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
-constructs the finite directed graph and proves the $N>2$ specialization of
-Beigi's ordered-cycle ground-space dimension formula.  Beigi states this
-formula for every periodic length, while the present restriction matches the
-NNCPH range in Theorem~3.10(iii).  No chain-level ground-space equation,
-eventual degeneracy, or canonical-form datum is assumed in this sector-graph
-theorem.  The remaining lengths $N=1,2$ require separate periodic-window
-conventions and are tracked by \ghissue{4400}.
+proves Beigi's ordered-cycle ground-space dimension formula for every $N\geq2$.
+Its period-two specialization
+\leanid{MPSTensor.BeigiSectorGraphData.}
+\hspace{0pt}\leanid{parentHamiltonianGroundSpaceES_finrank_eq_two}
+retains the two orientations: if $a\ne b$, then $(a,b)$ and $(b,a)$ are
+distinct ordered cycles, exactly as stated in Beigi, arXiv:1105.1019v2,
+Section~III, equations~(2)--(4), source lines 509--512.  No chain-level
+ground-space equation, eventual degeneracy, or canonical-form datum is assumed
+in these sector-graph theorems.  Only $N=1$ still requires a separate
+periodic-interaction convention and remains open in \ghissue{4400}.
 
 The remaining finite graph comparison in Beigi's Section~IV is now proved
 without an axiom.  For a finite directed graph with nonnegative integral edge weights,
