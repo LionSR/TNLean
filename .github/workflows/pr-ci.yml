@@ -176,7 +176,7 @@ jobs:
               - 'tests/tenkz/**'
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_corpus.sh'
-      - 'scripts/tenkz_golden.sh'
+              - 'scripts/tenkz_golden.sh'
               - 'scripts/tenkz_render_corpus.py'
               - 'scripts/test_tenkz_corpus_provenance.py'
               - 'scripts/test_tenkz_corpus_render.py'

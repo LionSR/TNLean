@@ -350,7 +350,7 @@ RENDER_STAGE_FILES = {"tenkz-render.code.tex"}
 # machinery is parser plumbing that legitimately lives outside the renderer.
 _INK_TOKEN = re.compile(
     r"\\(?:draw|path|node|fill|filldraw|shade"
-    r"|pgf(?:path|point|usepath|text|node|setlinewidth|setstrokecolor"
+    r"|pgf(?:path|usepath|text|node|setlinewidth|setstrokecolor"
     r"|setfillcolor|stroke|fill|transform)[a-z@]*)\b"
 )
 _DECIMAL = re.compile(r"(?<![\w@.])\d*\.\d+")
