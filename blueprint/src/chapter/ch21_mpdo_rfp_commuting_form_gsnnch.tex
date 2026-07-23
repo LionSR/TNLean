@@ -483,21 +483,6 @@
     zero-correlation-length, or scalar normalization hypothesis is required.
 \end{theorem}
 
-% Blueprint deferral (#4664): the following constructor-support declarations
-% are intentionally not tagged here as completed results:
-% MPOTensor.TranslationInvariantBondData.
-%   PositivePhysicalSectorFixedProductTensorData,
-% MPOTensor.TranslationInvariantBondData.
-%   nonempty_positivePhysicalSectorFixedProductTensorData,
-% MPOTensor.TranslationInvariantBondData.
-%   fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq,
-% MPOTensor.TranslationInvariantBondData.
-%   fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos,
-% MPOTensor.PhysicalSectorFactorization.etaSectorFinEquiv, and
-% MPOTensor.PhysicalSectorFactorization.
-%   sectorCoordinateBond_etaPair_decomposition.
-% Issue #4664 owns their paper-facing blueprint entries and source audit.
-
 \begin{proof}\leanok
     \uses{thm:mpdo_commuting_bond_positive_eta_decomposition}
     Choose Beigi's chain-independent one-site unitary and the positive
@@ -526,6 +511,91 @@
     virtual dimension.  For the zero-dimensional physical space, take one
     virtual state and no physical sectors.  The cyclic contraction formula
     then gives the product of the translates of $B$ at every length $N\geq2$.
+\end{proof}
+
+\begin{theorem}[Positive physical sectors of the selected fixed tensor]
+    \label{thm:mpdo_fixed_bond_positive_physical_sector_representative}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      exists_positive_physicalSectorFactorization_fixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      PositivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      nonempty_positivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      positivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.etaSectorFinEquiv}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sectorCoordinateBond_etaPair_decomposition}
+    \leanok
+    \uses{thm:mpdo_eta_fixed_bond_product_tensor}
+    Let $C$ be the selected fixed tensor of the preceding theorem.  There are
+    physical sectors
+    \[
+        \mathbb C^d
+        \cong
+        \bigoplus_{q=0}^{K-1}H_q^L\otimes H_q^R,
+    \]
+    a unitary $U$, and matrices $L_\beta(q)$ and $R_\alpha(q)$ such that,
+    writing $C_{\beta,\alpha}$ for the physical matrix at fixed virtual
+    indices,
+    \[
+        U C_{\beta,\alpha}U^\dagger
+        =
+        \bigoplus_{q=0}^{K-1}
+          L_\beta(q)\otimes R_\alpha(q).
+    \]
+    The neighboring operators
+    \[
+        \eta_{q,h}
+        =
+        \sum_a R_a(q)\otimes L_a(h)
+    \]
+    are positive semidefinite.  If $U_2$ denotes the induced two-site change
+    of coordinates, then
+    \[
+        B
+        =
+        U_2^\dagger
+        \left[
+          \bigoplus_{q,h}
+          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}
+        \right]
+        U_2.
+    \]
+    Thus the physical-sector factorization belongs to the same tensor $C$
+    whose closed operators are the fixed products of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take the physical-sector factorization retained with $C$.  Its defining
+    one-site identity is
+    \[
+        U C_{\beta,\alpha}U^\dagger
+        =
+        \bigoplus_q L_\beta(q)\otimes R_\alpha(q).
+    \]
+    Contracting the adjacent right and left factors gives
+    \[
+        \eta_{q,h}=\sum_a R_a(q)\otimes L_a(h)\succeq0,
+    \]
+    where positivity is the retained neighboring-operator property.  Finally,
+    the retained bond identity is
+    \[
+        B
+        =
+        U_2^\dagger
+        \left[
+          \bigoplus_{q,h}
+          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}
+        \right]
+        U_2.
+    \]
 \end{proof}
 
 \begin{remark}[The scalar edge formula depends on the one-site coordinates]
@@ -1210,8 +1280,10 @@
     % **Scope restriction (physical-sector factorization):** The theorem
     % assumes the factorization F and positivity of every neighboring
     % operator.  CPSV16 Proposition 4to2, lines 1597--1619, starts instead
-    % from a translation-invariant commuting bond.  The missing non-circular
-    % construction is recorded in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+    % from a translation-invariant commuting bond and the original source
+    % tensor.  The selected fixed tensor now has the required positive
+    % factorization, but the normality and blocking comparison with the source
+    % tensor remains; see docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
 \begin{proof}\leanok
