@@ -107,14 +107,6 @@ def verticalMultiplicityChainWeight (H : BNTFusionTensorClause M) {N : ℕ}
     (p : Fin (N + 1) → H.VerticalCopy) : ℂ :=
   ∏ n : Fin (N + 1), H.weight (p n).1 (p n).2
 
-private def piSnocEquiv {N : ℕ} {f : Fin (N + 1) → Type*} :
-    ((i : Fin (N + 1)) → f i) ≃
-      ((i : Fin N) → f i.castSucc) × f (Fin.last N) where
-  toFun x := ⟨Fin.init x, x (Fin.last N)⟩
-  invFun x := Fin.snoc x.1 x.2
-  left_inv x := by simp
-  right_inv x := by simp
-
 /-- Restriction of a fixed-copy chain fibre to all sites except the last one. -/
 private def verticalCopyChainFiberInit (H : BNTFusionTensorClause M) {N : ℕ}
     (p : Fin (N + 2) → H.VerticalCopy) (x : H.VerticalCopyChainFiber p) :
@@ -144,7 +136,7 @@ def verticalCopyChainBondEquiv (H : BNTFusionTensorClause M) :
         intro b
         rfl }
   | N + 1, p =>
-      piSnocEquiv.trans <|
+      ((Fin.snocEquiv _).symm.trans (Equiv.prodComm _ _)).trans <|
         (Equiv.prodCongr
           (H.verticalCopyChainBondEquiv (Fin.init p))
           (Equiv.refl (Fin (H.bondDim (p (Fin.last (N + 1))).1)))).trans
