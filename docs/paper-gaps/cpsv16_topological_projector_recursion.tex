@@ -280,19 +280,26 @@ and hence
 This is formalized by
 \leanid{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}.
 
-\section{Remaining proof}
+\section{Commuting Gibbs conclusion}
 
 The all-label density identity
-\eqref{eq:source-chain-decomposition} and its commutator
-\eqref{eq:source-commutator}, together with the terminal spectral refinement
-\eqref{eq:formalized-terminal-spectral-refinement}, are now formalized.  A
-faithful proof of the remainder still requires the construction of the
-translationally invariant commuting nearest-neighbor Hamiltonian and the
-identification of
-\eqref{eq:formalized-terminal-density-refinement} with the Gibbs form in
-\eqref{eq:source-gibbs-decomposition}.  The terminal refinement must not be
-cited as the commuting Gibbs theorem of lines~1013--1016 until that remaining
-step is proved.
+\eqref{eq:source-chain-decomposition}, its commutator
+\eqref{eq:source-commutator}, and the terminal spectral refinement
+\eqref{eq:formalized-terminal-spectral-refinement} are now combined with an
+explicit commuting nearest-neighbor Hamiltonian.  For every chain length
+$N\geq2$, the two-site interaction is the logarithmic multiplicity energy on
+its first site and the identity on its second site.  Its periodic translates
+are diagonal and commute, and their negative exponential is
+$\mu^{\otimes N}$.  The terminal spectral family has cardinality at most the
+physical one-site dimension~$d$ and is extended by zero to exactly $d$
+indices.  This proves the Gibbs form in
+\eqref{eq:source-gibbs-decomposition} for $N\geq2$.
+
+The cited source defines the local term on two spins but gives no separate
+convention for a one-site periodic chain.  The remaining length-one boundary,
+and the reason that the unrestricted source statement is not yet marked
+complete, are recorded in
+\path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

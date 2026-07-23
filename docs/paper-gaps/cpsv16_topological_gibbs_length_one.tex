@@ -1,0 +1,80 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{The Length-One Boundary of the Topological Gibbs Decomposition}
+\author{}
+\date{2026-07-23}
+
+\begin{document}
+\maketitle
+
+\section{Source range}
+
+The final paragraph of the proof following Theorem~4.14 in
+\cite[lines~1013--1016]{Cirac2016MPDO_arXiv} writes
+\[
+  \rho^{(N)}(M)
+    =\sum_{i=1}^{d}\lambda_iP_i^{(N)}e^{-H_N},
+  \qquad
+  [P_i^{(N)},e^{-H_N}]=0,
+\]
+where $H_N=\sum_i h_{i,i+1}$ is a translationally invariant commuting
+nearest-neighbor Hamiltonian.  Definition~4.8
+\cite[lines~831--850]{Cirac2016MPDO_arXiv} defines the local interaction by
+letting a matrix $h$ act on the first two spins and translating that
+two-spin operator around the chain.
+
+\section{The formalized range}
+
+Let $\mu$ be the strictly positive diagonal one-site multiplicity matrix in
+the retained coordinates.  Define the two-site matrix
+\[
+  h=\operatorname{diag}(-\log\mu)\otimes I.
+\]
+For every chain length $N\geq2$, its periodic translates are well-defined,
+diagonal, Hermitian, and pairwise commuting.  Every site occurs once as the
+first site of a translated term, hence
+\[
+  \exp\left(-\sum_i h_{i,i+1}\right)=\mu^{\otimes N}.
+\]
+Combining this equality with the terminal spectral refinement proves the
+displayed Gibbs decomposition for every $N\geq2$.
+
+The terminal spectral sectors are naturally indexed by pairs
+$(\gamma,k)$.  Positivity of every multiplicity shows that one such sector
+embeds into each retained copy, and the coisometry rank bound gives
+\[
+  \#\{(\gamma,k)\}\leq d.
+\]
+Choose the resulting injection into $\{1,\ldots,d\}$ and extend both the
+terminal eigenvalues and projectors by zero.  The added zero matrices are
+self-adjoint idempotents and commute with the Gibbs factor, so this gives
+exactly $d$ summands without asserting that the number of nonzero terminal
+sectors equals~$d$.
+
+\section{Length one}
+
+At $N=1$, Definition~4.8 supplies neither a two-spin window nor a convention
+for the coincident periodic bond $h_{1,1}$.  Replacing it by the one-site
+matrix $\operatorname{diag}(-\log\mu)$, or collapsing the two tensor factors,
+would add a convention not stated in the cited passage.  The formal theorem
+therefore has the following explicit scope restriction:
+\[
+  N\geq2.
+\]
+The unrestricted source statement remains unmarked until a source-supported
+length-one convention is identified.  Such a convention would remove the
+restriction by defining $H_1$ and proving
+$e^{-H_1}=\mu$; no other part of the terminal spectral argument needs to
+change.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
