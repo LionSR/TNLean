@@ -28,6 +28,13 @@
       }
   }
 \ExplSyntaxOff
+\ExplSyntaxOn
+% A containing scope may itself own geometry.  The picture must discard this
+% resolved placement before reusing the same frame and placement names.
+\__tenkz_geom_frame_declare_rotation:nnnn {gridflat}{0}{100}{100}
+\__tenkz_geom_place_cell:nnnn {cell:1-1} {gridflat} {0} {0}
+\__tenkz_geom_resolve:
+\ExplSyntaxOff
 \begin{tenkz}[bond dir=right, rows={ket:dir left}]
   \tn{A} & \tn{B} & \tn{C}
 \end{tenkz}

@@ -1562,6 +1562,7 @@
 \cs_new_protected:Npn \tenkz_render:nn #1#2
   {
     \group_begin:
+    \__tenkz_geom_reset:
     \__tenkz_model_reset:
     \__tenkz_model_record_picture:n { lang = {grid} }
     \prop_clear:N \l__tenkz_kind_prop

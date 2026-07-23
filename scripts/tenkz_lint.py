@@ -367,17 +367,17 @@ def census(repo: Path) -> int:
     ink_total = decimal_total = 0
     primitive_violations: list[tuple[Path, int, str]] = []
     for path in sorted((repo / "tex" / "tenkz").glob("*.code.tex")):
-        if path.name in RENDER_STAGE_FILES:
-            continue
+        is_renderer = path.name in RENDER_STAGE_FILES
         ink = decimals = 0
         for lineno, line in enumerate(
             strip_comments(path.read_text(encoding="utf-8")).splitlines(), 1
         ):
-            ink += len(_INK_TOKEN.findall(line))
-            primitive_violations.extend(
-                (path, lineno, match.group())
-                for match in _RENDER_PRIMITIVE_REF.finditer(line)
-            )
+            if not is_renderer:
+                ink += len(_INK_TOKEN.findall(line))
+                primitive_violations.extend(
+                    (path, lineno, match.group())
+                    for match in _RENDER_PRIMITIVE_REF.finditer(line)
+                )
             if path.name in METRIC_TABLE_FILES:
                 continue
             if not _METRIC_LINE.search(line):
