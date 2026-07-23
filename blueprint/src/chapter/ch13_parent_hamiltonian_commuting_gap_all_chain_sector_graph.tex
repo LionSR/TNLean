@@ -1,0 +1,479 @@
+\begin{remark}[Basic-vector coefficients and nearest-neighbor local-term commutation]%
+    \label{rem:product_pair_projectors}
+    \lean{MPSTensor.productPairWindow}
+    \lean{MPSTensor.productPairWindow_one}
+    \lean{MPSTensor.productPairState}
+    \lean{MPSTensor.productPairState_one}
+    \lean{MPSTensor.HasProductPairMPV}
+    \lean{MPSTensor.HasProductPairLocalProjectors}
+    \lean{MPSTensor.HasProductPairLocalProjectors.of_commuting_localTerms}
+    \lean{MPSTensor.HasProductPairLocalProjectors.isNNCPH}
+    \lean{MPSTensor.ProductPairBridge}
+    \lean{MPSTensor.ProductPairBridge.localTerm_idempotent}
+    \lean{MPSTensor.ProductPairBridge.commuting_twoSite_localTerms}
+    \lean{MPSTensor.ProductPairBridge.isNNCPH}
+    \lean{MPSTensor.AppendixBStructuralData}
+    \lean{MPSTensor.AppendixBStructuralData.exists_ofRFP}
+    \lean{MPSTensor.AppendixBStructuralData.ofRFP}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude}
+    \lean{MPSTensor.AppendixBStructuralData.coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.coreTensor_apply}
+    \lean{MPSTensor.AppendixBStructuralData.coreTensor_pair_orthogonality}
+    \lean{MPSTensor.cyclicVirtualSucc}
+    \lean{MPSTensor.AppendixBStructuralData.cyclicVirtualPairState}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState}
+    \lean{MPSTensor.AppendixBStructuralData.cyclicVirtualPairState_two_eq_twoSiteAmplitude}
+    \lean{MPSTensor.trace_gauge_boundary}
+    \lean{MPSTensor.GaugeEquiv.groundSpace_le}
+    \lean{MPSTensor.GaugeEquiv.groundSpace_eq}
+    \lean{MPSTensor.AppendixBStructuralData.gaugeEquiv_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.groundSpace_eq_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_eq_cyclicVirtualPairState}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_eq_productPairState_one}
+    \lean{MPSTensor.AppendixBProductPairExtraction}
+    \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization}
+    \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndCommutation}
+    \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOverlapCommutation}
+    \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndAdjacentCommutation}
+    \lean{MPSTensor.AppendixBProductPairExtraction.toProductPairBridge}
+    \lean{MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms}
+    \lean{MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction}
+    \lean{MPSTensor.rfp_implies_nncph_of_appendixBExtraction}
+    \lean{MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction}
+    \leanok
+    \uses{thm:trace_eval_word_eq_sum_cyclic,
+        lem:appendixB_basis_change_parent_interaction,
+        def:appendixB_two_site_basic_space, def:appendixB_qax,
+        def:appendixB_qxb, lem:appendixB_qax_qxb_parent_interaction,
+        lem:appendixB_three_site_parent_lifts,
+        lem:appendixB_lift_commutator_parent_terms, lem:local_term_idempotent}
+    The Appendix~B structural form supplies
+    \[
+        A^i=X\Lambda U^iX^{-1}.
+    \]
+    In the source unit pair-index convention, the residual tensor satisfies
+    \[
+        \sum_i
+        \overline{(U^i)_{\alpha,\beta}}\,
+        (U^i)_{\alpha',\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Therefore the residual core tensor $\Lambda U^i$ satisfies the weighted
+    pair-index relation
+    \[
+        \sum_i
+        \overline{(\Lambda U^i)_{\alpha,\beta}}\,
+        (\Lambda U^i)_{\alpha',\beta'}
+        =
+        \lambda_\alpha\lambda_{\alpha'}
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    This is an orthogonality relation after summing over the physical letter
+    $i$. It is not a coefficient identity for a fixed physical word
+    $\sigma$.
+    The coefficient associated to the source basic-vector formula is
+    \[
+        C_L(\sigma)
+        =
+        \sum_{\alpha_0,\ldots,\alpha_{L-1}}
+        \prod_{t=0}^{L-1}
+        \Lambda_{\alpha_t}
+        (U^{\sigma_t})_{\alpha_t,\alpha_{t+1}},
+        \qquad \alpha_L=\alpha_0.
+    \]
+    This is the coefficient expression for the source vector
+    \[
+        |V^{(L)}(A_j)\rangle
+        =
+        U^{\otimes L}|\varphi_j\rangle^{\otimes L},\qquad
+        |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
+    \]
+    where $\varphi_j$ is shared by $b_t$ and $a_{t+1}$ and $U$ acts on
+    $(a_t,b_t)$.
+    At length two, this cyclic coefficient is the structural two-site amplitude:
+    \[
+        C_2(\sigma)=\phi_2(\sigma).
+    \]
+    The change of basis does not alter either the local spaces \(G_L\) or the
+    periodic MPS coefficients:
+    \[
+        G_L(A)=G_L(\Lambda U).
+    \]
+    It therefore also leaves the canonical parent interaction unchanged:
+    \[
+        q_L(A)=q_L(\Lambda U).
+    \]
+    At length two, the Appendix~B two-site basic support is
+    \(G_2(\Lambda U)\), and the coefficient-space representatives
+    \(\widehat Q_{AX}\) and \(\widehat Q_{XB}\) are the two copies of
+    \(q_2(\Lambda U)\) before they are lifted to the \(AX\) and \(XB\) faces.
+    Hence
+    \[
+        \widehat Q_{AX}=q_2(A),\qquad \widehat Q_{XB}=q_2(A),
+    \]
+    as coefficient-space representatives. On the three-site window their two
+    lifts give the local identifications
+    \[
+        h_0^{(3)}(A,2)=(\widehat Q_{AX})_{AX},\qquad
+        h_1^{(3)}(A,2)=(\widehat Q_{XB})_{XB}.
+    \]
+    Consequently, for every chain length \(L\geq1\), the original tensor has
+    the same cyclic coefficient formula:
+    \[
+        V^{(L)}(A)_\sigma=C_L(\sigma).
+    \]
+    In particular, the corresponding two-site amplitude is
+    \[
+        \phi_2(a,b)
+        =
+        V^{(2)}(A)(a,b)
+        =
+        V^{(2)}(\Lambda U)(a,b).
+    \]
+    Thus the one-pair case of the factorization is already verified for the core
+    tensor:
+    \[
+        V^{(2)}(\Lambda U)(\sigma)
+        =
+        \phi_2(\sigma_0,\sigma_1).
+    \]
+    The even-chain physical-pair factorization is the following condition, for a
+    positive number $n$ of pairs,
+    \[
+        V^{(2n)}(A)(\sigma)
+        =
+        \prod_{p=0}^{n-1}
+        \phi_2\bigl(\sigma_{2p},\sigma_{2p+1}\bigr).
+    \]
+    The case $n=0$ is not part of this condition: the empty-chain MPV
+    coefficient is the virtual bond dimension, whereas the empty product on the
+    right-hand side is $1$.
+    The first equality, $V^{(L)}(\Lambda U)_\sigma=C_L(\sigma)$, is the trace
+    expansion of the closed matrix product and is the coefficient form of
+    $U^{\otimes L}\varphi_j^{\otimes L}$. The remaining coefficient step is
+    to relate this source expression, with the physical word $\sigma$ fixed, to
+    the even-chain physical-pair factorization above.
+    On a three-site chain, the two adjacent length-two local terms are the
+    \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
+    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation} constructs the
+    adjacent physical support projectors from the basic-vector expression and
+    proves the overlapping relation
+    \[
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
+        =
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
+    \]
+    Theorem~\ref{thm:three_site_commutator_chain_transport} transports this
+    identity around a periodic chain.  Consequently, for every $N>2$ and every
+    pair of sites $i,j\in\mathbb Z/N\mathbb Z$,
+    \[
+        h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2).
+    \]
+    Definition~\ref{def:appendixB_chain_local_projectors} collects these maps
+    into a commuting idempotent family; idempotency is
+    Lemma~\ref{lem:local_term_idempotent}.  Together with
+    Lemma~\ref{lem:parent_hamiltonian_ff}, this gives the zero-energy equation
+    for $V^{(N)}(A)$.  Neither conclusion requires the even-chain
+    physical-pair factorization displayed above.  That factorization remains a
+    separate conditional coefficient statement.  The full source implication
+    additionally requires removal of the left-canonical hypothesis and the
+    ground-space spanning equation.  The coefficient-space analogue of the
+    local kernel-intersection equation is
+    Theorem~\ref{thm:appendixB_definition_d2_coefficient_analogue}; identifying
+    its hatted maps with the source projectors remains separate and is not
+    needed for the chain commutator.
+\end{remark}
+
+\begin{theorem}[Even-chain factorization and ground-space spanning give all-chain NNCPH]%
+    \label{thm:appendixB_product_pair_has_nncph_ground_spaces}
+    \lean{MPSTensor.ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning}
+    \lean{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning}
+    \leanok
+    \uses{rem:product_pair_projectors, def:has_nncph_ground_spaces,
+        def:parent_hamiltonian_ground_space_spanning}
+    Suppose the conditional even-chain hypotheses give commuting two-site parent
+    terms for a tensor \(B\). If the nearest-neighbor parent Hamiltonian also
+    satisfies the ground-space spanning equation of
+    Definition~\ref{def:parent_hamiltonian_ground_space_spanning}, with BNT
+    components \(A_1,\ldots,A_g\), then \(B\) satisfies the all-chain
+    nearest-neighbor commuting parent-Hamiltonian ground-space condition of
+    Definition~\ref{def:has_nncph_ground_spaces}.
+
+    In particular, if a normal left-canonical RFP tensor has nonzero bond
+    dimension, the same conditional Appendix~B hypotheses, and the same
+    ground-space spanning equation, then it satisfies the full all-chain condition in
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \uses{lem:parent_hamiltonian_ff, def:has_nncph_ground_space}
+    \leanok
+    The conditional hypotheses give \(h_i h_j=h_j h_i\) for all translated
+    two-site local terms. Lemma~\ref{lem:parent_hamiltonian_ff} gives
+    \(h_iV^{(N)}(B)=0\). For every \(N>2\), the spanning hypothesis supplies
+    \[
+        \ker H_2^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
+    \]
+    These are exactly the three clauses in
+    Definition~\ref{def:has_nncph_ground_space}, uniformly in \(N\).
+\end{proof}
+
+\begin{theorem}[Eventual dimension of nearest-neighbor parent ground spaces]%
+    \label{thm:nncph_eventual_ground_space_dimension}
+    \lean{MPSTensor.HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq}
+    \leanok
+    \uses{def:sector_weight_data, def:has_nncph_ground_spaces}
+    Let $P$ be a sector decomposition with representatives
+    $A_1,\ldots,A_g$ and total tensor $B$. Suppose that the vectors
+    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
+    sufficiently large $N$, and that $B$ satisfies the all-chain
+    nearest-neighbor commuting parent-Hamiltonian ground-space condition with
+    these representatives. Then there is $N_0$ such that, for every $N>N_0$,
+    \[
+        \dim_{\C}\ker H_2^{(N)}(B)=g.
+    \]
+    Thus the ground-state degeneracy is eventually constant, as required in
+    \cite[Section~IV]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:bnt_span, def:has_nncph_ground_spaces}
+    Choose $N_0\geq2$ beyond the linear-independence threshold. For $N>N_0$,
+    the ground-space spanning equation gives
+    \[
+        \ker H_2^{(N)}(B)
+        =\spn\{\ket{V^{(N)}(A_j)}:j=1,\ldots,g\}.
+    \]
+    Identifying these vectors with their coefficient functions preserves
+    linear independence. The dimension of their span is therefore $g$.
+\end{proof}
+
+\begin{definition}[Two-site parent-interaction matrix]%
+    \label{def:two_site_parent_interaction_matrix}
+    \lean{MPSTensor.twoSiteParentInteractionMatrix}
+    \leanok
+    Let $A$ be a matrix product tensor.  Write its canonical two-site parent
+    interaction in the ordered-pair basis of the two-site physical Hilbert
+    space, and denote the resulting matrix by $Q_A$.
+\end{definition}
+
+\begin{theorem}[Hermitian commuting overlapping parent interactions]%
+    \label{thm:two_site_parent_interaction_commuting_overlaps}
+    \lean{MPSTensor.IsNNCPH.twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_commute}
+    \leanok
+    \uses{def:two_site_parent_interaction_matrix}
+    Suppose that the canonical length-two parent terms of $A$ commute on a
+    three-site chain.  Then $Q_A$ is Hermitian, and its natural placements on
+    the first and last pairs of a three-fold tensor product commute:
+    \[
+        (Q_A\otimes\mathbf 1)(\mathbf 1\otimes Q_A)
+        =
+        (\mathbf 1\otimes Q_A)(Q_A\otimes\mathbf 1).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The parent interaction is the orthogonal projector onto the orthogonal
+    complement of the local matrix product space, hence is Hermitian.
+    Transporting the adjacent three-site parent-term commutator to the common
+    left-associated tensor-product basis gives the displayed identity.
+\end{proof}
+
+\begin{theorem}[Spatial block actions of the two-site parent interaction]%
+    \label{thm:two_site_parent_interaction_spatial_blocks}
+    \lean{MPSTensor.IsNNCPH.exists_unitary_blockActions_of_twoSiteParentInteractionMatrix}
+    \leanok
+    \uses{thm:two_site_parent_interaction_commuting_overlaps}
+    Under the preceding hypothesis, there are positive integers
+    $d_q,m_q$, a unitary identification
+    \[
+        \mathcal H\cong\bigoplus_q
+        \mathcal H_{q,l}\otimes\mathcal H_{q,r},
+    \]
+    and Hermitian matrices $R_q$ on
+    $\mathcal H\otimes\mathcal H_{q,l}$ and $S_q$ on
+    $\mathcal H_{q,r}\otimes\mathcal H$ such that, after conjugating the
+    middle site by this unitary,
+    \[
+        Q_A=\bigoplus_q(R_q\otimes\mathbf 1_{q,r})
+        \qquad\text{on the first pair},
+    \]
+    and
+    \[
+        Q_A=\bigoplus_q(\mathbf 1_{q,l}\otimes S_q)
+        \qquad\text{on the last pair}.
+    \]
+    This is the spatial decomposition of
+    \cite[Lemma~2.1]{Beigi2012Classification} for the canonical parent
+    interaction.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the finite-dimensional spatial decomposition for two Hermitian
+    overlapping operators to $Q_A$ in both positions, using
+    Theorem~\ref{thm:two_site_parent_interaction_commuting_overlaps}.
+\end{proof}
+
+\begin{definition}[Finite sector graph]\label{def:beigi_sector_graph}
+    \lean{MPSTensor.BeigiSectorGraphData}
+    \lean{MPSTensor.BeigiSectorGraphData.unitary_mul_conjTranspose}
+    \lean{MPSTensor.BeigiSectorGraphData.edgeGroundSpace}
+    \lean{MPSTensor.BeigiSectorGraphData.IsEdge}
+    \lean{MPSTensor.BeigiSectorGraphData.OrderedCycle}
+    \leanok
+    Suppose that a one-site unitary identifies the physical Hilbert space with
+    a finite direct sum
+    \[
+        \mathcal H\cong\bigoplus_a
+        \mathcal H_{a,l}\otimes\mathcal H_{a,r},
+    \]
+    and that in these coordinates the complementary two-site interaction is
+    \[
+        \bigoplus_{a,b}
+        \mathbf 1_{a,l}\otimes P_{a,b}\otimes\mathbf 1_{b,r},
+    \]
+    where each $P_{a,b}$ is an orthogonal projector.  The directed edge
+    $a\to b$ is present precisely when $\ran P_{a,b}$ is nonzero.
+    An ordered cycle of length $N$ is a sequence $(a_0,\ldots,a_{N-1})$ for
+    which every cyclically adjacent edge $a_n\to a_{n+1}$ is present.  Cyclic
+    rotations are not identified.  This is the graph following equation~(2)
+    of \cite[Section~III]{Beigi2012Classification}.
+\end{definition}
+
+\begin{theorem}[Symmetric spatial form of a commuting positive interaction]
+    \label{thm:commuting_positive_interaction_symmetric_spatial_form}
+    \lean{Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute}
+    \lean{Matrix.etaPairSpatialBlockEquiv}
+    \leanok
+    Let $B\geq0$ be a two-site operator whose overlapping placements commute:
+    \[
+        (B\otimes\mathbf 1)(\mathbf 1\otimes B)
+        =
+        (\mathbf 1\otimes B)(B\otimes\mathbf 1).
+    \]
+    There are positive integers $d_{q,l},d_{q,r}$, a one-site unitary $U$,
+    and positive semidefinite operators $\eta_{q,h}$ on
+    $\mathcal H_{q,r}\otimes\mathcal H_{h,l}$ such that
+    \[
+        (U\otimes U)^*B(U\otimes U)
+        =\bigoplus_{q,h}
+          \mathbf 1_{q,l}\otimes\eta_{q,h}\otimes\mathbf 1_{h,r}.
+    \]
+    This is the symmetric two-sided form obtained from
+    \cite[Lemma~2.1 and Section~III, equation~(2)]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the spatial decomposition to the two overlapping placements of $B$.
+    In the resulting coordinates, matrix entries vanish unless both the left
+    and right sector labels agree.  For fixed sectors $q,h$, choose unit
+    vectors $l_0\in\mathcal H_{q,l}$ and
+    $r_0\in\mathcal H_{h,r}$ and define
+    \[
+      \langle r,l|\eta_{q,h}|r',l'\rangle
+      =\langle l_0,r;l,r_0|\widetilde B|l_0,r';l',r_0\rangle,
+      \qquad
+      \widetilde B=(U\otimes U)^*B(U\otimes U).
+    \]
+    The left block action makes the right outer factor an identity, while the
+    right block action makes the left outer factor an identity.  Hence the
+    displayed matrix element is independent of the chosen outer coordinates
+    and gives the stated direct sum.  Each $\eta_{q,h}$ is a compression of
+    the positive semidefinite matrix $\widetilde B$, so it is positive
+    semidefinite.
+\end{proof}
+
+\begin{theorem}[Sector graph of a commuting parent interaction]
+    \label{thm:nncph_beigi_sector_graph}
+    \lean{MPSTensor.IsNNCPH.nonempty_beigiSectorGraphData}
+    \lean{MPSTensor.IsNNCPH.beigiSectorGraphData}
+    \lean{MPSTensor.twoSiteParentInteractionMatrix_isStarProjection}
+    \lean{MPSTensor.twoSiteParentGroundProjectorMatrix_isStarProjection}
+    \lean{MPSTensor.twoSiteParentGroundProjectorMatrix_posSemidef}
+    \lean{MPSTensor.IsNNCPH.twoSiteParentGroundProjectorMatrix_overlappingLifts_commute}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    Suppose that the canonical length-two parent terms of $A$ commute on a
+    three-site chain.  Then the complementary two-site interaction admits a
+    finite sector graph as in Definition~\ref{def:beigi_sector_graph}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:commuting_positive_interaction_symmetric_spatial_form}
+    The canonical two-site parent interaction $Q_A$ is an orthogonal
+    projector.  Thus $\mathbf 1-Q_A$ is a positive semidefinite orthogonal
+    projector.  The overlapping placements of $\mathbf 1-Q_A$ commute because
+    those of $Q_A$ commute.  Apply
+    Theorem~\ref{thm:commuting_positive_interaction_symmetric_spatial_form} to
+    obtain
+    \[
+      (U\otimes U)^*(\mathbf 1-Q_A)(U\otimes U)
+      =\bigoplus_{q,h}
+        \mathbf 1_{q,l}\otimes\eta_{q,h}\otimes\mathbf 1_{h,r}.
+    \]
+    The left-hand side is idempotent, so every block on the right is
+    idempotent.  Evaluating the two outer identity factors at fixed unit
+    vectors gives $\eta_{q,h}^2=\eta_{q,h}$.  Since $\eta_{q,h}\geq0$, each
+    $\eta_{q,h}$ is an orthogonal projector and therefore defines the required
+    edge projection.
+\end{proof}
+
+\begin{theorem}[Ordered-cycle ground-space dimension formula]
+    \label{thm:beigi_ordered_cycle_ground_space_dimension}
+    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    For every $N\geq 2$, the periodic ground-space dimension is
+    \[
+        \dim\ker H_N
+        =
+        \sum_{(a_0,\ldots,a_{N-1})}
+        \prod_{n=0}^{N-1}
+        \dim\ran P_{a_n,a_{n+1}},
+    \]
+    where the sum is over ordered cycles and the indices are read modulo $N$.
+    This is equations~(3)--(4) of
+    \cite[Section~III]{Beigi2012Classification} for chains of length at least
+    two.  The one-site periodic interaction requires a separate convention.
+\end{theorem}
+
+\begin{proof}\leanok
+    The translated parent interactions commute.  Hence the ordered product of
+    their complementary orthogonal projectors is the projector onto
+    $\ker H_N$.  In the cyclic sector coordinates this product is block
+    diagonal, with the block indexed by $(a_0,\ldots,a_{N-1})$ equal to the
+    tensor product of the adjacent projectors $P_{a_n,a_{n+1}}$.  Taking the
+    trace gives the product of their ranks.  A sequence containing a missing
+    edge contributes zero, leaving exactly the displayed ordered-cycle sum.
+\end{proof}
+
+\begin{theorem}[Period-two ordered-cycle ground-space dimension formula]
+    \label{thm:beigi_ordered_cycle_ground_space_dimension_two}
+    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_two}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    At period two, the ground-space dimension is
+    \[
+        \dim\ker H_2
+        =
+        \sum_{\substack{a\to b\\ b\to a}}
+        \dim\ran P_{a,b}\,
+        \dim\ran P_{b,a}.
+    \]
+    The sum is over ordered pairs: if $a\ne b$, then $(a,b)$ and $(b,a)$
+    are distinct summands.  This is the length-two convention stated after
+    equation~(4) of \cite[Section~III]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:beigi_ordered_cycle_ground_space_dimension}
+    Specialize the ordered-cycle formula to $N=2$.  Its two cyclic factors are
+    $P_{a,b}$ and $P_{b,a}$, which gives the displayed product of ranks.
+\end{proof}
