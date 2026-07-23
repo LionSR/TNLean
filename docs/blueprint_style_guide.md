@@ -71,15 +71,14 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
       Reuse the surrounding entry's own label as the prefix gist rather than
       re-describing the whole statement; drop words already implied by the
       chapter prefix.
-    - **Use a multi-line `align` when a display carries more than one
-      logically distinct equation.** Do not pack several equalities into one
-      line with `\qquad` or commas merely to avoid a line break. Give each
-      distinct equation its own aligned line (`&=`) and, when either line is
-      referenced later, its own `\label{}` ending in a short
-      line-distinguishing suffix (`_lhs`/`_rhs`, `_plus`/`_minus`, or the
-      varying symbol). A genuine single chain of equalities (`a=b=c=d`) stays
-      one aligned derivation. Referring to "the last equality" within that same
-      chain is acceptable; references to a different earlier display must use
+    - **Keep aligned derivations dense.** A short equality chain such as
+      `$a=b=c=d$` should normally occupy one aligned line, not four lines with
+      one equality per line. Break a derivation across lines only when the
+      intermediate expressions are long, independently referenced, or require
+      separate explanation. If a display carries several logically distinct
+      equations, give each its own aligned line rather than joining them with
+      `\qquad` or commas. Give a line its own `\label{}` only when that line is
+      independently cited. References to a different earlier display must use
       its label.
 
 ## Proof Sketches Must Match Lean
