@@ -47,8 +47,10 @@ Extracted from various files for reusability.
   vanishes only if every summand vanishes
 - `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
   variant
-- `Matrix.PosSemidef.mulVec_eq_zero_of_sum_mulVec_eq_zero`: kernel containment for
-  finite sums of positive-semidefinite matrices
+- `Matrix.PosSemidef.mulVec_eq_zero_of_sum_mulVec_eq_zero_of_mem`: kernel containment
+  for finite sums over a finite set
+- `Matrix.PosSemidef.mulVec_eq_zero_of_sum_mulVec_eq_zero`: the finite-family
+  specialization
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: binary specializations of kernel
   containment for positive-semidefinite sums
 - `Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec`: a positive
